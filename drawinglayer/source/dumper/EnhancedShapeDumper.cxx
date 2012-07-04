@@ -841,6 +841,18 @@ void EnhancedShapeDumper::dumpEnhancedCustomShapePathService(uno::Reference< bea
         if(anotherAny >>= aStretchY)
             dumpStretchYAsAttribute(aStretchY);
     }
+    {
+        uno::Any anotherAny = xPropSet->getPropertyValue("TextFrames");
+        uno::Sequence< drawing::EnhancedCustomShapeTextFrame > aTextFrames;
+        if(anotherAny >>= aTextFrames)
+            dumpTextFramesAsElement(aTextFrames);
+    }
+    {
+        uno::Any anotherAny = xPropSet->getPropertyValue("GluePoints");
+        uno::Sequence< drawing::EnhancedCustomShapeParameterPair > aGluePoints;
+        if(anotherAny >>= aGluePoints)
+            dumpGluePointsAsElement(aGluePoints);
+    }
 }
 
 void EnhancedShapeDumper::dumpCoordinatesAsElement(uno::Sequence< drawing::EnhancedCustomShapeParameterPair > aCoordinates)
@@ -880,6 +892,40 @@ void EnhancedShapeDumper::dumpStretchXAsAttribute(sal_Int32 aStretchX)
 void EnhancedShapeDumper::dumpStretchYAsAttribute(sal_Int32 aStretchY)
 {
     xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("stretchY"), "%" SAL_PRIdINT32, aStretchY);
+}
+
+void EnhancedShapeDumper::dumpTextFramesAsElement(uno::Sequence< drawing::EnhancedCustomShapeTextFrame > aTextFrames)
+{
+    xmlTextWriterStartElement(xmlWriter, BAD_CAST( "TextFrames" ));
+    sal_Int32 nLength = aTextFrames.getLength();
+    for (sal_Int32 i = 0; i < nLength; ++i)
+    {
+        xmlTextWriterStartElement(xmlWriter, BAD_CAST( "EnhancedCustomShapeTextFrame" ));
+        {
+        xmlTextWriterStartElement(xmlWriter, BAD_CAST( "TopLeft" ));
+        dumpEnhancedCustomShapeParameterPair(aTextFrames[i].TopLeft);
+        xmlTextWriterEndElement( xmlWriter );
+
+        xmlTextWriterStartElement(xmlWriter, BAD_CAST( "BottomRight" ));
+        dumpEnhancedCustomShapeParameterPair(aTextFrames[i].BottomRight);
+        xmlTextWriterEndElement( xmlWriter );
+        }
+        xmlTextWriterEndElement( xmlWriter );
+    }
+    xmlTextWriterEndElement( xmlWriter );
+}
+
+void EnhancedShapeDumper::dumpGluePointsAsElement(uno::Sequence< drawing::EnhancedCustomShapeParameterPair > aGluePoints)
+{
+    xmlTextWriterStartElement(xmlWriter, BAD_CAST( "GluePoints" ));
+    sal_Int32 nLength = aGluePoints.getLength();
+    for (sal_Int32 i = 0; i < nLength; ++i)
+    {
+        xmlTextWriterStartElement(xmlWriter, BAD_CAST( "EnhancedCustomShapeParameterPair" ));
+        dumpEnhancedCustomShapeParameterPair(aGluePoints[i]);
+        xmlTextWriterEndElement( xmlWriter );
+    }
+    xmlTextWriterEndElement( xmlWriter );
 }
 
 

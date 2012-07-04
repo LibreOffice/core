@@ -43,6 +43,7 @@
 #include <com/sun/star/drawing/EnhancedCustomShapeParameter.hpp>
 
 #include <com/sun/star/drawing/EnhancedCustomShapeSegment.hpp>
+#include <com/sun/star/drawing/EnhancedCustomShapeTextFrame.hpp>
 
 #ifndef EnhancedShapeDumper_hxx
 #define EnhancedShapeDumper_hxx
@@ -125,6 +126,8 @@ public:
     void dumpSegmentsAsElement(com::sun::star::uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeSegment > aSegments);
     void dumpStretchXAsAttribute(sal_Int32 aStretchX);
     void dumpStretchYAsAttribute(sal_Int32 aStretchY);
+    void dumpTextFramesAsElement(com::sun::star::uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeTextFrame > aTextFrames);
+    void dumpGluePointsAsElement(com::sun::star::uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeParameterPair > aGluePoints);
 
 private:
     xmlTextWriterPtr xmlWriter;
