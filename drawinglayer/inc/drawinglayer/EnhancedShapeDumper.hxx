@@ -91,6 +91,9 @@ public:
     void dumpMirroredYAsAttribute(sal_Bool bMirroredY);
     void dumpTextRotateAngleAsAttribute(double aTextRotateAngle);
     void dumpAdjustmentValuesAsElement(com::sun::star::uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeAdjustmentValue> aAdjustmentValues);
+    void dumpExtrusionAsElement(com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > aExtrusion);
+    void dumpPathAsElement(com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > aPath);
+    void dumpTextPathAsElement(com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > aTextPath);
 
 private:
     xmlTextWriterPtr xmlWriter;

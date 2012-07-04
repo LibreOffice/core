@@ -433,93 +433,77 @@ void EnhancedShapeDumper::dumpEnhancedCustomShapeGeometryService(uno::Reference<
         if(anotherAny >>= aAdjustmentValues)
             dumpAdjustmentValuesAsElement(aAdjustmentValues);
     }
+    {
+        uno::Any anotherAny = xPropSet->getPropertyValue("Extrusion");
+        uno::Sequence< beans::PropertyValue > aExtrusion;
+        if(anotherAny >>= aExtrusion)
+            dumpExtrusionAsElement(aExtrusion);
+    }
+    {
+        uno::Any anotherAny = xPropSet->getPropertyValue("Path");
+        uno::Sequence< beans::PropertyValue > aPath;
+        if(anotherAny >>= aPath)
+            dumpPathAsElement(aPath);
+    }
+    {
+        uno::Any anotherAny = xPropSet->getPropertyValue("TextPath");
+        uno::Sequence< beans::PropertyValue > aTextPath;
+        if(anotherAny >>= aTextPath)
+            dumpTextPathAsElement(aTextPath);
+    }
 }
 void EnhancedShapeDumper::dumpTypeAsAttribute(rtl::OUString sType)
-    {
-        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("type"), "%s",
-            rtl::OUStringToOString(sType, RTL_TEXTENCODING_UTF8).getStr());
-    }
+{
+    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("type"), "%s",
+        rtl::OUStringToOString(sType, RTL_TEXTENCODING_UTF8).getStr());
+}
 
 void EnhancedShapeDumper::dumpViewBoxAsElement(awt::Rectangle aViewBox)
-    {
-        xmlTextWriterStartElement(xmlWriter, BAD_CAST( "ViewBox" ));
-        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("x"), "%" SAL_PRIdINT32, aViewBox.X);
-        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("y"), "%" SAL_PRIdINT32, aViewBox.Y);
-        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("width"), "%" SAL_PRIdINT32, aViewBox.Width);
-        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("height"), "%" SAL_PRIdINT32, aViewBox.Height);
-        xmlTextWriterEndElement( xmlWriter );
-    }
+{
+    xmlTextWriterStartElement(xmlWriter, BAD_CAST( "ViewBox" ));
+    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("x"), "%" SAL_PRIdINT32, aViewBox.X);
+    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("y"), "%" SAL_PRIdINT32, aViewBox.Y);
+    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("width"), "%" SAL_PRIdINT32, aViewBox.Width);
+    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("height"), "%" SAL_PRIdINT32, aViewBox.Height);
+    xmlTextWriterEndElement( xmlWriter );
+}
 
 void EnhancedShapeDumper::dumpMirroredXAsAttribute(sal_Bool bMirroredX)
-    {
-        if(bMirroredX)
-            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("mirroredX"), "%s", "true");
-        else
-            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("mirroredX"), "%s", "false");
-    }
+{
+    if(bMirroredX)
+        xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("mirroredX"), "%s", "true");
+    else
+        xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("mirroredX"), "%s", "false");
+}
 
 void EnhancedShapeDumper::dumpMirroredYAsAttribute(sal_Bool bMirroredY)
-    {
-        if(bMirroredY)
-            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("mirroredY"), "%s", "true");
-        else
-            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("mirroredY"), "%s", "false");
-    }
+{
+    if(bMirroredY)
+        xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("mirroredY"), "%s", "true");
+    else
+        xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("mirroredY"), "%s", "false");
+}
 
 void EnhancedShapeDumper::dumpTextRotateAngleAsAttribute(double aTextRotateAngle)
-    {
-            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textRotateAngle"), "%f", aTextRotateAngle);
-    }
+{
+    xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textRotateAngle"), "%f", aTextRotateAngle);
+}
 
 void EnhancedShapeDumper::dumpAdjustmentValuesAsElement(uno::Sequence< drawing::EnhancedCustomShapeAdjustmentValue> aAdjustmentValues)
+{
+    xmlTextWriterStartElement(xmlWriter, BAD_CAST( "AdjustmentValues" ));
+    sal_Int32 nLength = aAdjustmentValues.getLength();
+    for (sal_Int32 i = 0; i < nLength; ++i)
     {
-        xmlTextWriterStartElement(xmlWriter, BAD_CAST( "AdjustmentValues" ));
-        sal_Int32 nLength = aAdjustmentValues.getLength();
-        for (sal_Int32 i = 0; i < nLength; ++i)
-        {
-            xmlTextWriterStartElement(xmlWriter, BAD_CAST( "EnhancedCustomShapeAdjustmentValue" ));
-            uno::Any aAny = aAdjustmentValues[i].Value;
-            rtl::OUString sValue;
-            if(aAny >>= sValue)
-            {
-                xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("value"), "%s",
-                    rtl::OUStringToOString(sValue, RTL_TEXTENCODING_UTF8).getStr());
-            }
-            switch(aAdjustmentValues[i].State)
-            {
-                case beans::PropertyState_DIRECT_VALUE:
-                    xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("propertyState"), "%s", "DIRECT_VALUE");
-                    break;
-                case beans::PropertyState_DEFAULT_VALUE:
-                    xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("propertyState"), "%s", "DEFAULT_VALUE");
-                    break;
-                case beans::PropertyState_AMBIGUOUS_VALUE:
-                    xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("propertyState"), "%s", "AMBIGUOUS_VALUE");
-                    break;
-                default:
-                    break;
-            }
-            xmlTextWriterEndElement( xmlWriter );
-        }
-        xmlTextWriterEndElement( xmlWriter );
-    }
-
-void EnhancedShapeDumper::dumpPropertyValueAsElement(beans::PropertyValue aPropertyValue)
-    {
-        xmlTextWriterStartElement(xmlWriter, BAD_CAST( "PropertyValue" ));
-
-        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("name"), "%s",
-            rtl::OUStringToOString(aPropertyValue.Name, RTL_TEXTENCODING_UTF8).getStr());
-        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("handle"), "%" SAL_PRIdINT32, aPropertyValue.Handle);
-
-        uno::Any aAny = aPropertyValue.Value;
+        xmlTextWriterStartElement(xmlWriter, BAD_CAST( "EnhancedCustomShapeAdjustmentValue" ));
+        uno::Any aAny = aAdjustmentValues[i].Value;
         rtl::OUString sValue;
         if(aAny >>= sValue)
         {
             xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("value"), "%s",
                 rtl::OUStringToOString(sValue, RTL_TEXTENCODING_UTF8).getStr());
         }
-        switch(aPropertyValue.State)
+        switch(aAdjustmentValues[i].State)
         {
             case beans::PropertyState_DIRECT_VALUE:
                 xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("propertyState"), "%s", "DIRECT_VALUE");
@@ -535,4 +519,71 @@ void EnhancedShapeDumper::dumpPropertyValueAsElement(beans::PropertyValue aPrope
         }
         xmlTextWriterEndElement( xmlWriter );
     }
+    xmlTextWriterEndElement( xmlWriter );
+}
+
+void EnhancedShapeDumper::dumpPropertyValueAsElement(beans::PropertyValue aPropertyValue)
+{
+    xmlTextWriterStartElement(xmlWriter, BAD_CAST( "PropertyValue" ));
+
+    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("name"), "%s",
+        rtl::OUStringToOString(aPropertyValue.Name, RTL_TEXTENCODING_UTF8).getStr());
+    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("handle"), "%" SAL_PRIdINT32, aPropertyValue.Handle);
+
+    uno::Any aAny = aPropertyValue.Value;
+    rtl::OUString sValue;
+    if(aAny >>= sValue)
+    {
+        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("value"), "%s",
+            rtl::OUStringToOString(sValue, RTL_TEXTENCODING_UTF8).getStr());
+    }
+    switch(aPropertyValue.State)
+    {
+        case beans::PropertyState_DIRECT_VALUE:
+            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("propertyState"), "%s", "DIRECT_VALUE");
+            break;
+        case beans::PropertyState_DEFAULT_VALUE:
+            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("propertyState"), "%s", "DEFAULT_VALUE");
+            break;
+        case beans::PropertyState_AMBIGUOUS_VALUE:
+            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("propertyState"), "%s", "AMBIGUOUS_VALUE");
+            break;
+        default:
+            break;
+    }
+    xmlTextWriterEndElement( xmlWriter );
+}
+
+void EnhancedShapeDumper::dumpExtrusionAsElement(uno::Sequence< beans::PropertyValue > aExtrusion)
+{
+    xmlTextWriterStartElement(xmlWriter, BAD_CAST( "Extrusion" ));
+    sal_Int32 nLength = aExtrusion.getLength();
+    for (sal_Int32 i = 0; i < nLength; ++i)
+    {
+        dumpPropertyValueAsElement(aExtrusion[i]);
+    }
+    xmlTextWriterEndElement( xmlWriter );
+}
+
+void EnhancedShapeDumper::dumpPathAsElement(uno::Sequence< beans::PropertyValue > aPath)
+{
+    xmlTextWriterStartElement(xmlWriter, BAD_CAST( "Path" ));
+    sal_Int32 nLength = aPath.getLength();
+    for (sal_Int32 i = 0; i < nLength; ++i)
+    {
+        dumpPropertyValueAsElement(aPath[i]);
+    }
+    xmlTextWriterEndElement( xmlWriter );
+}
+
+void EnhancedShapeDumper::dumpTextPathAsElement(uno::Sequence< beans::PropertyValue > aTextPath)
+{
+    xmlTextWriterStartElement(xmlWriter, BAD_CAST( "TextPath" ));
+    sal_Int32 nLength = aTextPath.getLength();
+    for (sal_Int32 i = 0; i < nLength; ++i)
+    {
+        dumpPropertyValueAsElement(aTextPath[i]);
+    }
+    xmlTextWriterEndElement( xmlWriter );
+}
 
