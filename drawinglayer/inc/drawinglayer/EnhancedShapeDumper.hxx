@@ -123,6 +123,8 @@ public:
     void dumpEnhancedCustomShapePathService(com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > xPropSet);
     void dumpCoordinatesAsElement(com::sun::star::uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeParameterPair > aCoordinates);
     void dumpSegmentsAsElement(com::sun::star::uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeSegment > aSegments);
+    void dumpStretchXAsAttribute(sal_Int32 aStretchX);
+    void dumpStretchYAsAttribute(sal_Int32 aStretchY);
 
 private:
     xmlTextWriterPtr xmlWriter;

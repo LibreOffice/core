@@ -829,6 +829,18 @@ void EnhancedShapeDumper::dumpEnhancedCustomShapePathService(uno::Reference< bea
         if(anotherAny >>= aSegments)
             dumpSegmentsAsElement(aSegments);
     }
+    {
+        uno::Any anotherAny = xPropSet->getPropertyValue("StretchX");
+        sal_Int32 aStretchX;
+        if(anotherAny >>= aStretchX)
+            dumpStretchXAsAttribute(aStretchX);
+    }
+    {
+        uno::Any anotherAny = xPropSet->getPropertyValue("StretchY");
+        sal_Int32 aStretchY;
+        if(anotherAny >>= aStretchY)
+            dumpStretchYAsAttribute(aStretchY);
+    }
 }
 
 void EnhancedShapeDumper::dumpCoordinatesAsElement(uno::Sequence< drawing::EnhancedCustomShapeParameterPair > aCoordinates)
@@ -858,6 +870,16 @@ void EnhancedShapeDumper::dumpSegmentsAsElement(uno::Sequence< drawing::Enhanced
         xmlTextWriterEndElement( xmlWriter );
     }
     xmlTextWriterEndElement( xmlWriter );
+}
+
+void EnhancedShapeDumper::dumpStretchXAsAttribute(sal_Int32 aStretchX)
+{
+    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("stretchX"), "%" SAL_PRIdINT32, aStretchX);
+}
+
+void EnhancedShapeDumper::dumpStretchYAsAttribute(sal_Int32 aStretchY)
+{
+    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("stretchY"), "%" SAL_PRIdINT32, aStretchY);
 }
 
 
