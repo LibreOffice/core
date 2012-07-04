@@ -1030,6 +1030,18 @@ void EnhancedShapeDumper::dumpEnhancedCustomShapeTextPathService(uno::Reference<
         if(anotherAny >>= bTextPath)
             dumpTextPathAsAttribute(bTextPath);
     }
+    {
+        uno::Any anotherAny = xPropSet->getPropertyValue("TextPathMode");
+        drawing::EnhancedCustomShapeTextPathMode eTextPathMode;
+        if(anotherAny >>= eTextPathMode)
+            dumpTextPathModeAsAttribute(eTextPathMode);
+    }
+    {
+        uno::Any anotherAny = xPropSet->getPropertyValue("ScaleX");
+        sal_Bool bScaleX;
+        if(anotherAny >>= bScaleX)
+            dumpScaleXAsAttribute(bScaleX);
+    }
 }
 
 void EnhancedShapeDumper::dumpTextPathAsAttribute(sal_Bool bTextPath)
@@ -1040,3 +1052,28 @@ void EnhancedShapeDumper::dumpTextPathAsAttribute(sal_Bool bTextPath)
         xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textPath"), "%s", "false");
 }
 
+void EnhancedShapeDumper::dumpTextPathModeAsAttribute(drawing::EnhancedCustomShapeTextPathMode eTextPathMode)
+{
+    switch(eTextPathMode)
+    {
+        case drawing::EnhancedCustomShapeTextPathMode_NORMAL:
+            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textPathMode"), "%s", "NORMAL");
+            break;
+        case drawing::EnhancedCustomShapeTextPathMode_PATH:
+            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textPathMode"), "%s", "PATH");
+            break;
+        case drawing::EnhancedCustomShapeTextPathMode_SHAPE:
+            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textPathMode"), "%s", "SHAPE");
+            break;
+        default:
+            break;
+    }
+}
+
+void EnhancedShapeDumper::dumpScaleXAsAttribute(sal_Bool bScaleX)
+{
+    if(bScaleX)
+        xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("scaleX"), "%s", "true");
+    else
+        xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("scaleX"), "%s", "false");
+}

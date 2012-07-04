@@ -46,6 +46,8 @@
 #include <com/sun/star/drawing/EnhancedCustomShapeTextFrame.hpp>
 #include <com/sun/star/awt/Size.hpp>
 
+#include <com/sun/star/drawing/EnhancedCustomShapeTextPathMode.hpp>
+
 #ifndef EnhancedShapeDumper_hxx
 #define EnhancedShapeDumper_hxx
 
@@ -139,6 +141,8 @@ public:
     // EnhancedCustomShapePath.idl
     void dumpEnhancedCustomShapeTextPathService(com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > xPropSet);
     void dumpTextPathAsAttribute(sal_Bool bTextPath);
+    void dumpTextPathModeAsAttribute(com::sun::star::drawing::EnhancedCustomShapeTextPathMode eTextPathMode);
+    void dumpScaleXAsAttribute(sal_Bool bScaleX);
 
 private:
     xmlTextWriterPtr xmlWriter;
