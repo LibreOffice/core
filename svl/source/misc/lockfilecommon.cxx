@@ -65,7 +65,7 @@ LockFileCommon::LockFileCommon( const ::rtl::OUString& aOrigURL, const uno::Refe
     ::rtl::OUString aShareURLString = aDocURL.GetPartBeforeLastName();
     aShareURLString += aPrefix;
     aShareURLString += aDocURL.GetName();
-    aShareURLString += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "%23" ) ); // '#'
+    aShareURLString += "%23"; // '#'
     m_aURL = INetURLObject( aShareURLString ).GetMainURL( INetURLObject::NO_DECODE );
 }
 
@@ -193,7 +193,7 @@ uno::Sequence< ::rtl::OUString > LockFileCommon::ParseEntry( const uno::Sequence
     SvtUserOptions aUserOpt;
     ::rtl::OUString aName = aUserOpt.GetFirstName();
     if ( !aName.isEmpty() )
-        aName += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( " " ) );
+        aName += " ";
     aName += aUserOpt.GetLastName();
 
     return aName;

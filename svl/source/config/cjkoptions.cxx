@@ -34,7 +34,6 @@
 using namespace ::com::sun::star::uno;
 using namespace ::rtl;
 
-#define C2U(cChar) OUString(RTL_CONSTASCII_USTRINGPARAM(cChar))
 #define CFG_READONLY_DEFAULT sal_False
 
 class SvtCJKOptions_Impl : public utl::ConfigItem
@@ -92,7 +91,7 @@ namespace
 }
 
 SvtCJKOptions_Impl::SvtCJKOptions_Impl() :
-    utl::ConfigItem(C2U("Office.Common/I18N/CJK")),
+    utl::ConfigItem("Office.Common/I18N/CJK"),
     bIsLoaded(sal_False),
     bCJKFont(sal_True),
     bVerticalText(sal_True),
@@ -157,15 +156,15 @@ void SvtCJKOptions_Impl::Load()
         rPropertyNames.realloc(9);
         OUString* pNames = rPropertyNames.getArray();
 
-        pNames[0] = C2U("CJKFont");
-        pNames[1] = C2U("VerticalText");
-        pNames[2] = C2U("AsianTypography");
-        pNames[3] = C2U("JapaneseFind");
-        pNames[4] = C2U("Ruby");
-        pNames[5] = C2U("ChangeCaseMap");
-        pNames[6] = C2U("DoubleLines");
-        pNames[7] = C2U("EmphasisMarks");
-        pNames[8] = C2U("VerticalCallOut");
+        pNames[0] = "CJKFont";
+        pNames[1] = "VerticalText";
+        pNames[2] = "AsianTypography";
+        pNames[3] = "JapaneseFind";
+        pNames[4] = "Ruby";
+        pNames[5] = "ChangeCaseMap";
+        pNames[6] = "DoubleLines";
+        pNames[7] = "EmphasisMarks";
+        pNames[8] = "VerticalCallOut";
 
         EnableNotification( rPropertyNames );
     }

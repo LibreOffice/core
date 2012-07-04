@@ -163,7 +163,7 @@ css::uno::Any Content::execute(
     }
     switch (c) {
     case '1':
-        uri += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+        uri += "/";
         break;
     case '2':
         if (uri.getLength() > 0 && uri[uri.getLength() - 1] == '/') {
@@ -231,18 +231,16 @@ void Test::finish() {
 
 void Test::testNormalizedMakeRelative() {
     css::uno::Sequence< css::uno::Any > args(2);
-    args[0] <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Local"));
-    args[1] <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Office"));
+    args[0] <<= rtl::OUString("Local");
+    args[1] <<= rtl::OUString("Office");
     css::uno::Reference< css::ucb::XContentProviderManager >(
         (css::uno::Reference< css::lang::XMultiComponentFactory >(
             m_context->getServiceManager(), css::uno::UNO_QUERY_THROW)->
          createInstanceWithArgumentsAndContext(
-             rtl::OUString(
-                 RTL_CONSTASCII_USTRINGPARAM(
-                     "com.sun.star.ucb.UniversalContentBroker")),
+             rtl::OUString("com.sun.star.ucb.UniversalContentBroker"),
              args, m_context)),
         css::uno::UNO_QUERY_THROW)->registerContentProvider(
-            new Provider, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("test")),
+            new Provider, rtl::OUString("test"),
             true);
     struct Data {
         char const * base;
@@ -402,9 +400,7 @@ void Test::testFindFirstURLInText() {
     CharClass charClass(
         css::uno::Reference< css::lang::XMultiServiceFactory >(
             m_context->getServiceManager(), css::uno::UNO_QUERY_THROW),
-        com::sun::star::lang::Locale(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("en")),
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("US")), rtl::OUString()));
+        com::sun::star::lang::Locale("en", "US", ""));
     for (std::size_t i = 0; i < SAL_N_ELEMENTS(tests); ++i) {
         rtl::OUString input(rtl::OUString::createFromAscii(tests[i].input));
         xub_StrLen begin = 0;

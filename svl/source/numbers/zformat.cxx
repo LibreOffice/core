@@ -56,7 +56,7 @@ namespace {
 struct Gregorian
     : public rtl::StaticWithInit<const ::rtl::OUString, Gregorian> {
     const ::rtl::OUString operator () () {
-        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("gregorian"));
+        return ::rtl::OUString("gregorian");
     }
 };
 
@@ -940,9 +940,9 @@ SvNumberformat::SvNumberformat(String& rString,
                         // e.g. Thai T speciality
                         if (pSc->GetNatNumModifier() && !NumFor[nIndex].GetNatNum().IsSet())
                         {
-                            String aNat( RTL_CONSTASCII_USTRINGPARAM( "[NatNum"));
-                            aNat += String::CreateFromInt32( pSc->GetNatNumModifier());
-                            aNat += ']';
+                            rtl::OUString aNat( "[NatNum");
+                            aNat += rtl::OUString::valueOf( pSc->GetNatNumModifier());
+                            aNat += "]";
                             sStr.Insert( aNat, 0);
                             NumFor[nIndex].SetNatNumNum( pSc->GetNatNumModifier(), false );
                         }
@@ -966,10 +966,10 @@ SvNumberformat::SvNumberformat(String& rString,
                                 NumFor[nIndex].GetNatNum().GetLang() ==
                                 LANGUAGE_DONTKNOW)
                         {
-                            String aLID( RTL_CONSTASCII_USTRINGPARAM( "[$-"));
-                            aLID += String::CreateFromInt32( sal_Int32(
-                                        eLanguage), 16 ).ToUpperAscii();
-                            aLID += ']';
+                            rtl::OUString aLID("[$-");
+                            aLID += rtl::OUString::valueOf( sal_Int32(
+                                        eLanguage), 16 ).toAsciiUpperCase();
+                            aLID += "]";
                             sStr.Insert( aLID, 0);
                             NumFor[nIndex].SetNatNumLang( eLanguage);
                         }

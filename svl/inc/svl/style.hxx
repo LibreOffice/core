@@ -276,7 +276,7 @@ public:
 
 protected:
     SfxStyleSheet() // do not use! needed by MSVC at compile time to satisfy ImplInheritanceHelper2
-        : SfxStyleSheetBase(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("dummy")),
+        : SfxStyleSheetBase(rtl::OUString("dummy"),
             NULL, SFX_STYLE_FAMILY_ALL, 0)
     {
         assert(false);

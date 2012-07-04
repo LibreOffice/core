@@ -807,9 +807,7 @@ INetContentType INetContentTypes::GetContentTypeFromURL(UniString const &
         if (aToken.EqualsIgnoreCaseAscii(INETTYPE_URL_PROT_FILE))
             if (rURL.GetChar(rURL.Len() - 1) == '/') // folder
                 if (rURL.Len() > RTL_CONSTASCII_LENGTH("file:///"))
-                    if (WildCard(UniString(RTL_CONSTASCII_USTRINGPARAM(
-                                               "*/{*}/"))).
-                            Matches(rURL)) // special folder
+                    if (WildCard("*/{*}/").Matches(rURL)) // special folder
                         eTypeID = CONTENT_TYPE_X_CNT_FSYSSPECIALFOLDER;
                     else
                         // drive? -> "file:///?|/"

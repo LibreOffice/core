@@ -61,15 +61,15 @@ SvxMacro::~SvxMacro()
 {
     if(eType==STARBASIC)
     {
-        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SVX_MACRO_LANGUAGE_STARBASIC));
+        return ::rtl::OUString(SVX_MACRO_LANGUAGE_STARBASIC);
     }
     else if(eType==JAVASCRIPT)
     {
-        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SVX_MACRO_LANGUAGE_JAVASCRIPT));
+        return ::rtl::OUString(SVX_MACRO_LANGUAGE_JAVASCRIPT);
     }
     else if(eType==EXTENDED_STYPE)
     {
-        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SVX_MACRO_LANGUAGE_SF));
+        return ::rtl::OUString(SVX_MACRO_LANGUAGE_SF);
 
     }
     return aLibName;

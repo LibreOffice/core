@@ -146,14 +146,8 @@ bool SvxAsianConfig::GetStartEndChars(
     css::uno::Reference< css::beans::XPropertySet > el(
         v.get< css::uno::Reference< css::beans::XPropertySet > >(),
         css::uno::UNO_SET_THROW);
-    startChars =
-        el->getPropertyValue(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("StartCharacters"))).
-        get< rtl::OUString >();
-    endChars =
-        el->getPropertyValue(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("EndCharacters"))).
-        get< rtl::OUString >();
+    startChars = el->getPropertyValue("StartCharacters").get< rtl::OUString >();
+    endChars = el->getPropertyValue("EndCharacters").get< rtl::OUString >();
     return true;
 }
 
@@ -183,24 +177,16 @@ void SvxAsianConfig::SetStartEndChars(
             css::uno::Reference< css::beans::XPropertySet > el(
                 v.get< css::uno::Reference< css::beans::XPropertySet > >(),
                 css::uno::UNO_SET_THROW);
-            el->setPropertyValue(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("StartCharacters")),
-                css::uno::makeAny(*startChars));
-            el->setPropertyValue(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("EndCharacters")),
-                css::uno::makeAny(*endChars));
+            el->setPropertyValue("StartCharacters", css::uno::makeAny(*startChars));
+            el->setPropertyValue("EndCharacters", css::uno::makeAny(*endChars));
         } else {
             css::uno::Reference< css::beans::XPropertySet > el(
                 (css::uno::Reference< css::lang::XSingleServiceFactory >(
                     set, css::uno::UNO_QUERY_THROW)->
                  createInstance()),
                 css::uno::UNO_QUERY_THROW);
-            el->setPropertyValue(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("StartCharacters")),
-                css::uno::makeAny(*startChars));
-            el->setPropertyValue(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("EndCharacters")),
-                css::uno::makeAny(*endChars));
+            el->setPropertyValue("StartCharacters", css::uno::makeAny(*startChars));
+            el->setPropertyValue("EndCharacters", css::uno::makeAny(*endChars));
             css::uno::Any v2(css::uno::makeAny(el));
             try {
                 set->insertByName(name, v2);

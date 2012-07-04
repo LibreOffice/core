@@ -168,11 +168,11 @@ sal_uInt16 SvtLanguageOptions::GetScriptTypeOfLanguage( sal_uInt16 nLang )
 // -----------------------------------------------------------------------------
 
 SvtSystemLanguageOptions::SvtSystemLanguageOptions() :
-    utl::ConfigItem( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("System/L10N") ))
+    utl::ConfigItem( "System/L10N")
 {
     uno::Sequence< rtl::OUString > aPropertyNames(1);
     rtl::OUString* pNames = aPropertyNames.getArray();
-    pNames[0] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("SystemLocale"));
+    pNames[0] = "SystemLocale";
     uno::Sequence< uno::Any > aValues = GetProperties( aPropertyNames );
 
     if ( aValues.getLength() )

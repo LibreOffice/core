@@ -178,10 +178,7 @@ Result normalizePrefix(
         #endif
             (css::uno::Reference< css::ucb::XCommandProcessor >(
                    content, css::uno::UNO_QUERY_THROW)->execute(
-                       css::ucb::Command(
-                           rtl::OUString(
-                               RTL_CONSTASCII_USTRINGPARAM(
-                                   "getCasePreservingURL")),
+                       css::ucb::Command("getCasePreservingURL",
                            -1, css::uno::Any()),
                        0,
                        css::uno::Reference< css::ucb::XCommandEnvironment >())
@@ -292,22 +289,17 @@ URIHelper::normalizedMakeRelative(
     css::uno::Reference< css::lang::XMultiComponentFactory > componentFactory(
         context->getServiceManager());
     if (!componentFactory.is()) {
-        throw css::uno::RuntimeException(
-            rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
-                    "component context has no service manager")),
+        throw css::uno::RuntimeException("component context has no service manager",
             css::uno::Reference< css::uno::XInterface >());
     }
     css::uno::Sequence< css::uno::Any > args(2);
-    args[0] <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Local"));
-    args[1] <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Office"));
+    args[0] <<= rtl::OUString("Local");
+    args[1] <<= rtl::OUString("Office");
     css::uno::Reference< css::ucb::XContentProvider > broker;
     try {
         broker = css::uno::Reference< css::ucb::XContentProvider >(
             componentFactory->createInstanceWithArgumentsAndContext(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM(
-                        "com.sun.star.ucb.UniversalContentBroker")),
+                "com.sun.star.ucb.UniversalContentBroker",
                 args, context),
             css::uno::UNO_QUERY_THROW);
     } catch (css::uno::RuntimeException &) {
@@ -315,9 +307,7 @@ URIHelper::normalizedMakeRelative(
     } catch (css::uno::Exception &) {
         css::uno::Any exception(cppu::getCaughtException());
         throw css::lang::WrappedTargetRuntimeException(
-            rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
-                    "creating com.sun.star.ucb.UniversalContentBroker failed")),
+            "creating com.sun.star.ucb.UniversalContentBroker failed",
             css::uno::Reference< css::uno::XInterface >(),
             exception);
     }
@@ -340,9 +330,7 @@ rtl::OUString URIHelper::simpleNormalizedMakeRelative(
                  com::sun::star::beans::XPropertySet >(
                     comphelper::getProcessServiceFactory(),
                     com::sun::star::uno::UNO_QUERY_THROW)->
-                 getPropertyValue(
-                     rtl::OUString(
-                         RTL_CONSTASCII_USTRINGPARAM("DefaultContext")))),
+                 getPropertyValue("DefaultContext")),
                 com::sun::star::uno::UNO_QUERY_THROW),
             baseUriReference, uriReference));
     return rel.is() ? rel->getUriReference() : uriReference;

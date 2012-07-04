@@ -35,7 +35,6 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-#define ASCII_STR(s)    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(s) )
 #define CFG_READONLY_DEFAULT    sal_False
 
 // SvtCJKOptions_Impl ----------------------------------------------------------
@@ -114,7 +113,7 @@ sal_Bool SvtCTLOptions_Impl::IsReadOnly(SvtCTLOptions::EOption eOption) const
 //------------------------------------------------------------------------------
 SvtCTLOptions_Impl::SvtCTLOptions_Impl() :
 
-    utl::ConfigItem( ASCII_STR("Office.Common/I18N/CTL") ),
+    utl::ConfigItem("Office.Common/I18N/CTL"),
 
     m_bIsLoaded             ( sal_False ),
     m_bCTLFontEnabled       ( sal_False ),
@@ -242,12 +241,12 @@ void SvtCTLOptions_Impl::Load()
     {
         rPropertyNames.realloc(6);
         rtl::OUString* pNames = rPropertyNames.getArray();
-        pNames[0] = ASCII_STR("CTLFont");
-        pNames[1] = ASCII_STR("CTLSequenceChecking");
-        pNames[2] = ASCII_STR("CTLCursorMovement");
-        pNames[3] = ASCII_STR("CTLTextNumerals");
-        pNames[4] = ASCII_STR("CTLSequenceCheckingRestricted");
-        pNames[5] = ASCII_STR("CTLSequenceCheckingTypeAndReplace");
+        pNames[0] = "CTLFont";
+        pNames[1] = "CTLSequenceChecking";
+        pNames[2] = "CTLCursorMovement";
+        pNames[3] = "CTLTextNumerals";
+        pNames[4] = "CTLSequenceCheckingRestricted";
+        pNames[5] = "CTLSequenceCheckingTypeAndReplace";
         EnableNotification( rPropertyNames );
     }
     Sequence< Any > aValues = GetProperties( rPropertyNames );

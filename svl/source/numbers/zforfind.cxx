@@ -549,8 +549,8 @@ short ImpSvNumberInputScan::GetMonth( const String& rString, xub_StrLen& nPos )
 {
     // #102136# The correct English form of month September abbreviated is
     // SEPT, but almost every data contains SEP instead.
-    static const String aSeptCorrect( RTL_CONSTASCII_USTRINGPARAM( "SEPT" ) );
-    static const String aSepShortened( RTL_CONSTASCII_USTRINGPARAM( "SEP" ) );
+    static const String aSeptCorrect(RTL_CONSTASCII_USTRINGPARAM("SEPT") );
+    static const String aSepShortened(RTL_CONSTASCII_USTRINGPARAM("SEP") );
 
     short res = 0;      // no month found
 
@@ -1738,9 +1738,7 @@ input for the following reasons:
     uno::Reference< lang::XMultiServiceFactory > xSMgr =
         ::comphelper::getProcessServiceFactory();
     uno::Reference< ::com::sun::star::i18n::XCalendar3 > xCal(
-            xSMgr->createInstance( ::rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM(
-                        "com.sun.star.i18n.LocaleCalendar" ) ) ),
+            xSMgr->createInstance( "com.sun.star.i18n.LocaleCalendar" ),
             uno::UNO_QUERY );
     for ( const entry* p = cals; p->lan; ++p )
     {

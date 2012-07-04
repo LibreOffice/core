@@ -921,15 +921,12 @@ sal_uInt32 SvNumberFormatter::ImpGenerateCL( LanguageType eLnge, bool bNoAdditio
             if ( aLoadedLocale.Language != aLocale.Language ||
                     aLoadedLocale.Country != aLocale.Country )
             {
-                String aMsg( RTL_CONSTASCII_USTRINGPARAM(
-                            "SvNumerFormatter::ImpGenerateCL: locales don't match:"));
-                LocaleDataWrapper::outputCheckMessage(
-                        xLocaleData->appendLocaleInfo( aMsg ));
+                rtl::OUString aMsg("SvNumerFormatter::ImpGenerateCL: locales don't match:");
+                LocaleDataWrapper::outputCheckMessage( xLocaleData->appendLocaleInfo( aMsg ));
             }
             // test XML locale data FormatElement entries
             {
-                uno::Sequence< i18n::FormatElement > xSeq =
-                    xLocaleData->getAllFormats();
+                uno::Sequence< i18n::FormatElement > xSeq = xLocaleData->getAllFormats();
                 // A test for completeness of formatindex="0" ...
                 // formatindex="47" is not needed here since it is done in
                 // ImpGenerateFormats().
@@ -938,30 +935,26 @@ sal_uInt32 SvNumberFormatter::ImpGenerateCL( LanguageType eLnge, bool bNoAdditio
                 for ( sal_Int32 j = 0; j < xSeq.getLength(); j++ )
                 {
                     sal_Int16 nIdx = xSeq[j].formatIndex;
-                    String aDupes;
+                    rtl::OUString aDupes;
                     for ( sal_Int32 i = 0; i < xSeq.getLength(); i++ )
                     {
                         if ( i != j && xSeq[i].formatIndex == nIdx )
                         {
-                            aDupes += String::CreateFromInt32( i );
-                            aDupes += '(';
-                            aDupes += String( xSeq[i].formatKey );
-                            aDupes += ')';
-                            aDupes += ' ';
+                            aDupes += rtl::OUString::valueOf( i );
+                            aDupes += "(";
+                            aDupes += rtl::OUString( xSeq[i].formatKey );
+                            aDupes += ") ";
                         }
                     }
-                    if ( aDupes.Len() )
+                    if ( !aDupes.isEmpty() )
                     {
-                        String aMsg( RTL_CONSTASCII_USTRINGPARAM(
-                                    "XML locale data FormatElement formatindex dupe: "));
-                        aMsg += String::CreateFromInt32( nIdx );
-                        aMsg.AppendAscii( RTL_CONSTASCII_STRINGPARAM(
-                                    "\nFormatElements: "));
-                        aMsg += String::CreateFromInt32( j );
-                        aMsg += '(';
-                        aMsg += String( xSeq[j].formatKey );
-                        aMsg += ')';
-                        aMsg += ' ';
+                        rtl::OUString aMsg("XML locale data FormatElement formatindex dupe: ");
+                        aMsg += rtl::OUString::valueOf( nIdx );
+                        aMsg += "\nFormatElements: ";
+                        aMsg += rtl::OUString::valueOf( j );
+                        aMsg += "(";
+                        aMsg += rtl::OUString( xSeq[j].formatKey );
+                        aMsg += ") ";
                         aMsg += aDupes;
                         LocaleDataWrapper::outputCheckMessage(
                                 xLocaleData->appendLocaleInfo( aMsg ));
@@ -1746,13 +1739,11 @@ SvNumberformat* SvNumberFormatter::ImpInsertFormat(
             if (LocaleDataWrapper::areChecksEnabled() &&
                     rCode.Index != NF_CURRENCY_1000DEC2_CCC )
             {
-                String aMsg( RTL_CONSTASCII_USTRINGPARAM(
-                            "SvNumberFormatter::ImpInsertFormat: no [$...] on currency format code, index "));
-                aMsg += String::CreateFromInt32( rCode.Index );
-                aMsg.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ":\n"));
-                aMsg += String( rCode.Code );
-                LocaleDataWrapper::outputCheckMessage(
-                        xLocaleData->appendLocaleInfo( aMsg));
+                rtl::OUString aMsg("SvNumberFormatter::ImpInsertFormat: no [$...] on currency format code, index ");
+                aMsg += rtl::OUString::valueOf( rCode.Index );
+                aMsg += ":\n";
+                aMsg += rCode.Code;
+                LocaleDataWrapper::outputCheckMessage( xLocaleData->appendLocaleInfo( aMsg));
             }
         }
     }
@@ -1766,13 +1757,11 @@ SvNumberformat* SvNumberFormatter::ImpInsertFormat(
     {
         if (LocaleDataWrapper::areChecksEnabled())
         {
-            String aMsg( RTL_CONSTASCII_USTRINGPARAM(
-                        "SvNumberFormatter::ImpInsertFormat: bad format code, index "));
-            aMsg += String::CreateFromInt32( rCode.Index );
-            aMsg += '\n';
-            aMsg += String( rCode.Code );
-            LocaleDataWrapper::outputCheckMessage(
-                    xLocaleData->appendLocaleInfo( aMsg));
+            rtl::OUString aMsg( "SvNumberFormatter::ImpInsertFormat: bad format code, index " );
+            aMsg += rtl::OUString::valueOf( rCode.Index );
+            aMsg += "\n";
+            aMsg += rCode.Code;
+            LocaleDataWrapper::outputCheckMessage( xLocaleData->appendLocaleInfo( aMsg));
         }
         delete pFormat;
         return NULL;
@@ -1798,13 +1787,11 @@ SvNumberformat* SvNumberFormatter::ImpInsertFormat(
                         break;
                     default:
                     {
-                        String aMsg( RTL_CONSTASCII_USTRINGPARAM(
-                                    "SvNumberFormatter::ImpInsertFormat: dup format code, index "));
-                        aMsg += String::CreateFromInt32( rCode.Index );
-                        aMsg += '\n';
-                        aMsg += String( rCode.Code );
-                        LocaleDataWrapper::outputCheckMessage(
-                                xLocaleData->appendLocaleInfo( aMsg));
+                        rtl::OUString aMsg("SvNumberFormatter::ImpInsertFormat: dup format code, index ");
+                        aMsg += rtl::OUString::valueOf( rCode.Index );
+                        aMsg += "\n";
+                        aMsg += rCode.Code;
+                        LocaleDataWrapper::outputCheckMessage( xLocaleData->appendLocaleInfo( aMsg));
                     }
                 }
             }
@@ -1815,13 +1802,11 @@ SvNumberformat* SvNumberFormatter::ImpInsertFormat(
         {
             if (LocaleDataWrapper::areChecksEnabled())
             {
-                String aMsg( RTL_CONSTASCII_USTRINGPARAM(
-                            "SvNumberFormatter::ImpInsertFormat: too many format codes, index "));
-                aMsg += String::CreateFromInt32( rCode.Index );
-                aMsg += '\n';
-                aMsg += String( rCode.Code );
-                LocaleDataWrapper::outputCheckMessage(
-                        xLocaleData->appendLocaleInfo( aMsg));
+                rtl::OUString aMsg( "SvNumberFormatter::ImpInsertFormat: too many format codes, index ");
+                aMsg += rtl::OUString::valueOf( rCode.Index );
+                aMsg += "\n";
+                aMsg +=  rCode.Code;
+                LocaleDataWrapper::outputCheckMessage( xLocaleData->appendLocaleInfo( aMsg));
             }
             delete pFormat;
             return NULL;
@@ -1831,15 +1816,13 @@ SvNumberformat* SvNumberFormatter::ImpInsertFormat(
     {
         if (LocaleDataWrapper::areChecksEnabled())
         {
-            String aMsg( RTL_CONSTASCII_USTRINGPARAM(
-                        "ImpInsertFormat: can't insert number format key pos: "));
-            aMsg += String::CreateFromInt32( nPos );
-            aMsg.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ", code index "));
-            aMsg += String::CreateFromInt32( rCode.Index );
-            aMsg += '\n';
-            aMsg += String( rCode.Code );
-            LocaleDataWrapper::outputCheckMessage(
-                    xLocaleData->appendLocaleInfo( aMsg));
+            rtl::OUString aMsg( "ImpInsertFormat: can't insert number format key pos: ");
+            aMsg += rtl::OUString::valueOf( sal_Int32( nPos ) );
+            aMsg += ", code index ";
+            aMsg += rtl::OUString::valueOf( rCode.Index );
+            aMsg += "\n";
+            aMsg += rCode.Code;
+            LocaleDataWrapper::outputCheckMessage( xLocaleData->appendLocaleInfo( aMsg));
         }
         delete pFormat;
         return NULL;
@@ -1970,11 +1953,9 @@ sal_Int32 SvNumberFormatter::ImpGetFormatCodeIndex(
                 || nTabOff == NF_CURRENCY_1000INT_RED
                 || nTabOff == NF_CURRENCY_1000DEC2_CCC))
     {   // currency entries with decimals might not exist, e.g. Italian Lira
-        String aMsg( RTL_CONSTASCII_USTRINGPARAM(
-                    "SvNumberFormatter::ImpGetFormatCodeIndex: not found: "));
-        aMsg += String::CreateFromInt32( nTabOff );
-        LocaleDataWrapper::outputCheckMessage( xLocaleData->appendLocaleInfo(
-                    aMsg));
+        rtl::OUString aMsg( "SvNumberFormatter::ImpGetFormatCodeIndex: not found: " );
+        aMsg += rtl::OUString::valueOf( nTabOff );
+        LocaleDataWrapper::outputCheckMessage( xLocaleData->appendLocaleInfo(aMsg));
     }
     if ( nLen )
     {
@@ -2178,14 +2159,10 @@ void SvNumberFormatter::ImpGenerateFormats( sal_uInt32 CLOffset, bool bNoAdditio
     if (pStdFormat)
     {
         // This is _the_ standard format.
-        if (LocaleDataWrapper::areChecksEnabled() &&
-                pStdFormat->GetType() != NUMBERFORMAT_NUMBER)
-        {
-            String aMsg( RTL_CONSTASCII_USTRINGPARAM(
-                        "SvNumberFormatter::ImpGenerateFormats: General format not NUMBER"));
-            LocaleDataWrapper::outputCheckMessage(
-                    xLocaleData->appendLocaleInfo( aMsg));
-        }
+        if (LocaleDataWrapper::areChecksEnabled() && pStdFormat->GetType() != NUMBERFORMAT_NUMBER)
+                LocaleDataWrapper::outputCheckMessage( xLocaleData->
+                    appendLocaleInfo( "SvNumberFormatter::ImpGenerateFormats: General format not NUMBER"));
+
         pStdFormat->SetType( NUMBERFORMAT_NUMBER );
         pStdFormat->SetStandard();
         pStdFormat->SetLastInsertKey( SV_MAX_ANZ_STANDARD_FORMATE );
@@ -2193,12 +2170,8 @@ void SvNumberFormatter::ImpGenerateFormats( sal_uInt32 CLOffset, bool bNoAdditio
     else
     {
         if (LocaleDataWrapper::areChecksEnabled())
-        {
-            String aMsg( RTL_CONSTASCII_USTRINGPARAM(
-                        "SvNumberFormatter::ImpGenerateFormats: General format not insertable, nothing will work"));
-            LocaleDataWrapper::outputCheckMessage(
-                    xLocaleData->appendLocaleInfo( aMsg));
-        }
+                LocaleDataWrapper::outputCheckMessage( xLocaleData->
+                    appendLocaleInfo( "SvNumberFormatter::ImpGenerateFormats: General format not insertable, nothing will work"));
     }
 
     // Boolean
@@ -2541,24 +2514,24 @@ void SvNumberFormatter::ImpGenerateFormats( sal_uInt32 CLOffset, bool bNoAdditio
     aSingleFormatCode.Usage = i18n::KNumberFormatUsage::FRACTION_NUMBER;
 
      // # ?/?
-    aSingleFormatCode.Code = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "# ?/?" ) );
+    aSingleFormatCode.Code = "# ?/?";
     ImpInsertFormat( aSingleFormatCode,
         CLOffset + SetIndexTable( NF_FRACTION_1, ZF_STANDARD_FRACTION ));
 
     // # ??/??
     //! "??/" would be interpreted by the compiler as a trigraph for '\'
-    aSingleFormatCode.Code = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "# ?\?/?\?" ) );
+    aSingleFormatCode.Code = "# ?\?/?\?";
     ImpInsertFormat( aSingleFormatCode,
         CLOffset + SetIndexTable( NF_FRACTION_2, ZF_STANDARD_FRACTION+1 ));
 
     // # ?/4
-    aSingleFormatCode.Code = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "# ?/4" ) );
+    aSingleFormatCode.Code = "# ?/4";
     ImpInsertNewStandardFormat( aSingleFormatCode,
         CLOffset + SetIndexTable( NF_FRACTION_3, ZF_STANDARD_FRACTION+2 ),
         SV_NUMBERFORMATTER_VERSION_FIXED_FRACTION );
 
     // # ??/100
-    aSingleFormatCode.Code = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "# ?\?/100" ) );
+    aSingleFormatCode.Code = "# ?\?/100";
     ImpInsertNewStandardFormat( aSingleFormatCode,
         CLOffset + SetIndexTable( NF_FRACTION_4, ZF_STANDARD_FRACTION+3 ),
         SV_NUMBERFORMATTER_VERSION_FIXED_FRACTION );
@@ -3448,12 +3421,9 @@ void SvNumberFormatter::GetCompatibilityCurrency( String& rSymbol, String& rAbbr
     if ( j >= nCurrencies )
     {
         if (LocaleDataWrapper::areChecksEnabled())
-        {
-            String aMsg( RTL_CONSTASCII_USTRINGPARAM(
-                        "GetCompatibilityCurrency: none?"));
-            LocaleDataWrapper::outputCheckMessage(
-                    xLocaleData->appendLocaleInfo( aMsg));
-        }
+               LocaleDataWrapper::outputCheckMessage( xLocaleData->
+                   appendLocaleInfo( "GetCompatibilityCurrency: none?"));
+
         rSymbol = xLocaleData->getCurrSymbol();
         rAbbrev = xLocaleData->getCurrBankSymbol();
     }
