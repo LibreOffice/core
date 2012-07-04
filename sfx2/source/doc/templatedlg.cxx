@@ -10,6 +10,7 @@
 #include "templatedlg.hxx"
 
 #include "inputdlg.hxx"
+#include "templatesearchview.hxx"
 
 #include <comphelper/processfactory.hxx>
 #include <sfx2/filedlghelper.hxx>
@@ -76,6 +77,7 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
       mpViewBar( new ToolBox(this, SfxResId(TBX_ACTION_VIEW))),
       mpActionBar( new ToolBox(this, SfxResId(TBX_ACTION_ACTION))),
       mpTemplateBar( new ToolBox(this, SfxResId(TBX_ACTION_TEMPLATES))),
+      mpSearchView(new TemplateSearchView(this)),
       maView(new TemplateFolderView(this,SfxResId(TEMPLATE_VIEW))),
       mnSelectionCount(0),
       mxDesktop(comphelper::getProcessServiceFactory()->createInstance( "com.sun.star.frame.Desktop" ),uno::UNO_QUERY )
@@ -152,6 +154,8 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
 
     mpSearchEdit->SetSizePixel(aSearchSize);
     mpSearchEdit->SetPosPixel(Point(PADDING_DLG_BORDER,aActionPos.Y()+aActionSize.getHeight()));
+    mpSearchEdit->SetUpdateDataHdl(LINK(this,SfxTemplateManagerDlg,SearchUpdateHdl));
+    mpSearchEdit->EnableUpdateData();
 
     maView->SetStyle(WB_VSCROLL);
     maView->SetColor(GetBackground().GetColor());
@@ -507,6 +511,20 @@ IMPL_LINK(SfxTemplateManagerDlg, OpenTemplateHdl, ThumbnailViewItem*, pItem)
     return 0;
 }
 
+IMPL_LINK (SfxTemplateManagerDlg, SearchUpdateHdl, Edit*, pEdit)
+{
+    // if the search view is hidden, hide the folder view and display search one
+    if (!mpSearchView->IsVisible())
+    {
+        mpSearchView->Show();
+        maView->Hide();
+    }
+
+    mpSearchView->Clear();
+
+    return 0;
+}
+
 void SfxTemplateManagerDlg::OnTemplateImport ()
 {
     sal_Int16 nDialogType =
@@ -609,6 +627,14 @@ void SfxTemplateManagerDlg::OnTemplateSearch ()
     SetSizePixel(aWinSize);
     maView->SetPosPixel(aPos);
     maButtonClose.SetPosPixel(aClosePos);
+
+    // Hide search view
+    if (bVisible)
+    {
+        mpSearchView->Hide();
+        maView->Show();
+    }
+
     mpSearchEdit->Show(!bVisible);
 }
 

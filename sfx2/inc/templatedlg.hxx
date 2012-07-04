@@ -18,6 +18,8 @@
 class Edit;
 class PopupMenu;
 class TemplateFolderView;
+class TemplateSearchView;
+class ThumbnailView;
 class ThumbnailViewItem;
 class ToolBox;
 
@@ -62,6 +64,8 @@ private:
 
     DECL_LINK(OpenTemplateHdl, ThumbnailViewItem*);
 
+    DECL_LINK(SearchUpdateHdl, Edit*);
+
     void OnTemplateImport ();
     void OnTemplateSearch ();
     void OnTemplateEdit ();
@@ -83,6 +87,7 @@ private:
     ToolBox *mpViewBar;
     ToolBox *mpActionBar;
     ToolBox *mpTemplateBar;
+    TemplateSearchView *mpSearchView;
     TemplateFolderView *maView;
     PopupMenu *mpCreateMenu;
     PopupMenu *mpActionMenu;
