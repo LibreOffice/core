@@ -59,8 +59,6 @@
 #include <cstddef>
 #include "sal/types.h"
 
-#include "pq_common.hxx"
-
 /** jbu: This source has been copied from sal/inc/internal/allocator.hxx,
          because it is not a public interface. Thx a lot for figuring this
          out.
@@ -153,14 +151,14 @@ public:
        are not enabled, e.g. GCC under Linux and it is
        in general not desired to compile sal with exceptions
        enabled. */
-    pointer allocate (size_type n, const void* UNUSED(hint) = 0)
+    pointer allocate (size_type n, SAL_UNUSED_PARAMETER const void* = 0)
     {
         return reinterpret_cast<pointer>(
             rtl_allocateMemory(sal_uInt32(n * sizeof(T))));
     }
 
     //-----------------------------------------
-    void deallocate (pointer p, size_type UNUSED(n))
+    void deallocate (pointer p, SAL_UNUSED_PARAMETER size_type)
     {
         rtl_freeMemory(p);
     }
