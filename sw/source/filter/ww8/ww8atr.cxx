@@ -3036,6 +3036,14 @@ void AttributeOutputBase::TextField( const SwFmtFld& rField )
             }
         }
         break;
+        case RES_MACROFLD:
+            sStr.ASSIGN_CONST_ASC(" MACROBUTTON");
+            sStr += pFld->GetPar1();
+            sStr.SearchAndReplaceAscii("StarOffice.Standard.Modul1.", String(' '));
+            sStr += String(' ');
+            sStr += lcl_GetExpandedField(*pFld);
+            GetExport().OutputField( pFld, ww::eMACROBUTTON, sStr );
+            break;
     default:
         bWriteExpand = true;
         break;
