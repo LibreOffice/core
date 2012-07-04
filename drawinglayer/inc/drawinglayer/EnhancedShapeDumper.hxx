@@ -78,6 +78,10 @@ public:
     void dumpOriginAsElement(com::sun::star::drawing::EnhancedCustomShapeParameterPair aOrigin);
     void dumpExtrusionColorAsAttribute(sal_Bool bExtrusionColor);
 
+    // EnhancedCustomShapeGeometry.idl
+    void dumpEnhancedCustomShapeGeometryService(com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > xPropSet);
+    void dumpTypeAsAttribute(rtl::OUString sType);
+
 private:
     xmlTextWriterPtr xmlWriter;
 };

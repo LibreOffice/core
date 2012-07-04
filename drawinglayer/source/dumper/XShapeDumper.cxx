@@ -1818,7 +1818,12 @@ namespace {
             EnhancedShapeDumper enhancedDumper(xmlWriter);
             enhancedDumper.dumpEnhancedCustomShapeExtrusionService(xPropSet);
         }
+        if(xServiceInfo->supportsService("com.sun.star.drawing.EnhancedCustomShapeGeometry"))
+        {
+            EnhancedShapeDumper enhancedDumper(xmlWriter);
+            enhancedDumper.dumpEnhancedCustomShapeGeometryService(xPropSet);
         }
+        }   // end of the 'try' block
         catch (com::sun::star::beans::UnknownPropertyException &e)
         {
             printf("Problem in the XShapeDumper");

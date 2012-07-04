@@ -391,3 +391,21 @@ void EnhancedShapeDumper::dumpExtrusionColorAsAttribute(sal_Bool bExtrusionColor
         xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("extrusionColor"), "%s", "false");
 }
 
+// ------------------------------------------------------
+// ---------- EnhancedCustomShapeGeometry.idl -----------
+// ------------------------------------------------------
+
+void EnhancedShapeDumper::dumpEnhancedCustomShapeGeometryService(uno::Reference< beans::XPropertySet > xPropSet)
+{
+    {
+        uno::Any anotherAny = xPropSet->getPropertyValue("Type");
+        rtl::OUString sType;
+        if(anotherAny >>= sType)
+            dumpTypeAsAttribute(sType);
+    }
+}
+void EnhancedShapeDumper::dumpTypeAsAttribute(rtl::OUString sType)
+    {
+        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("type"), "%s",
+            rtl::OUStringToOString(sType, RTL_TEXTENCODING_UTF8).getStr());
+    }
