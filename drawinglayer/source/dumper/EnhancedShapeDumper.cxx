@@ -865,6 +865,18 @@ void EnhancedShapeDumper::dumpEnhancedCustomShapePathService(uno::Reference< bea
         if(anotherAny >>= aGluePointType)
             dumpGluePointTypeAsAttribute(aGluePointType);
     }
+    {
+        uno::Any anotherAny = xPropSet->getPropertyValue("ExtrusionAllowed");
+        sal_Bool bExtrusionAllowed;
+        if(anotherAny >>= bExtrusionAllowed)
+            dumpExtrusionAllowedAsAttribute(bExtrusionAllowed);
+    }
+    {
+        uno::Any anotherAny = xPropSet->getPropertyValue("ConcentricGradientFillAllowed");
+        sal_Bool bConcentricGradientFillAllowed;
+        if(anotherAny >>= bConcentricGradientFillAllowed)
+            dumpConcentricGradientFillAllowedAsAttribute(bConcentricGradientFillAllowed);
+    }
 }
 
 void EnhancedShapeDumper::dumpCoordinatesAsElement(uno::Sequence< drawing::EnhancedCustomShapeParameterPair > aCoordinates)
@@ -954,6 +966,22 @@ void EnhancedShapeDumper::dumpGluePointLeavingDirectionsAsElement(uno::Sequence<
 void EnhancedShapeDumper::dumpGluePointTypeAsAttribute(sal_Int32 aGluePointType)
 {
     xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("gluePointType"), "%" SAL_PRIdINT32, aGluePointType);
+}
+
+void EnhancedShapeDumper::dumpExtrusionAllowedAsAttribute(sal_Bool bExtrusionAllowed)
+{
+    if(bExtrusionAllowed)
+        xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("extrusionAllowed"), "%s", "true");
+    else
+        xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("extrusionAllowed"), "%s", "false");
+}
+
+void EnhancedShapeDumper::dumpConcentricGradientFillAllowedAsAttribute(sal_Bool bConcentricGradientFillAllowed)
+{
+    if(bConcentricGradientFillAllowed)
+        xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("concentricGradientFillAllowed"), "%s", "true");
+    else
+        xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("concentricGradientFillAllowed"), "%s", "false");
 }
 
 

@@ -130,6 +130,8 @@ public:
     void dumpGluePointsAsElement(com::sun::star::uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeParameterPair > aGluePoints);
     void dumpGluePointLeavingDirectionsAsElement(com::sun::star::uno::Sequence< double > aGluePointLeavingDirections);
     void dumpGluePointTypeAsAttribute(sal_Int32 aGluePointType);
+    void dumpExtrusionAllowedAsAttribute(sal_Bool bExtrusionAllowed);
+    void dumpConcentricGradientFillAllowedAsAttribute(sal_Bool bConcentricGradientFillAllowed);
 
 private:
     xmlTextWriterPtr xmlWriter;
