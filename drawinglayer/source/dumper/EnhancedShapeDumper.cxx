@@ -451,6 +451,18 @@ void EnhancedShapeDumper::dumpEnhancedCustomShapeGeometryService(uno::Reference<
         if(anotherAny >>= aTextPath)
             dumpTextPathAsElement(aTextPath);
     }
+    {
+        uno::Any anotherAny = xPropSet->getPropertyValue("Equations");
+        uno::Sequence< rtl::OUString > aEquations;
+        if(anotherAny >>= aEquations)
+            dumpEquationsAsElement(aEquations);
+    }
+    {
+        uno::Any anotherAny = xPropSet->getPropertyValue("Handles");
+        uno::Sequence< beans::PropertyValues > aHandles;
+        if(anotherAny >>= aHandles)
+            dumpHandlesAsElement(aHandles);
+    }
 }
 void EnhancedShapeDumper::dumpTypeAsAttribute(rtl::OUString sType)
 {
@@ -583,6 +595,39 @@ void EnhancedShapeDumper::dumpTextPathAsElement(uno::Sequence< beans::PropertyVa
     for (sal_Int32 i = 0; i < nLength; ++i)
     {
         dumpPropertyValueAsElement(aTextPath[i]);
+    }
+    xmlTextWriterEndElement( xmlWriter );
+}
+
+void EnhancedShapeDumper::dumpEquationsAsElement(uno::Sequence< rtl::OUString > aEquations)
+{
+    xmlTextWriterStartElement(xmlWriter, BAD_CAST( "Equations" ));
+    sal_Int32 nLength = aEquations.getLength();
+    for (sal_Int32 i = 0; i < nLength; ++i)
+    {
+        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("name"), "%s",
+            rtl::OUStringToOString(aEquations[i], RTL_TEXTENCODING_UTF8).getStr());
+    }
+    xmlTextWriterEndElement( xmlWriter );
+}
+
+// PropertyValues specifies a sequence of PropertyValue instances.
+// so in this case it's a Sequence of a Sequence of a PropertyValue instances.
+// Welcome to Sequenception again.
+void EnhancedShapeDumper::dumpHandlesAsElement(uno::Sequence< beans::PropertyValues > aHandles)
+{
+    xmlTextWriterStartElement(xmlWriter, BAD_CAST( "Handles" ));
+    sal_Int32 nSequenceLength = aHandles.getLength();
+    for (sal_Int32 i = 0; i < nSequenceLength; ++i)
+    {
+        xmlTextWriterStartElement(xmlWriter, BAD_CAST( "PropertyValues" ));
+        uno::Sequence< beans::PropertyValue > propertyValueSequence = aHandles[i];
+        sal_Int32 nLength = propertyValueSequence.getLength();
+        for (sal_Int32 j = 0; j < nLength; ++j)
+        {
+            dumpPropertyValueAsElement(propertyValueSequence[j]);
+        }
+        xmlTextWriterEndElement( xmlWriter );
     }
     xmlTextWriterEndElement( xmlWriter );
 }

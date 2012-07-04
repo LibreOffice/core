@@ -27,6 +27,7 @@
  */
 
 #include <libxml/xmlwriter.h>
+
 #include <drawinglayer/drawinglayerdllapi.h>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
@@ -38,6 +39,7 @@
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/beans/PropertyValues.hpp>
 
 #ifndef EnhancedShapeDumper_hxx
 #define EnhancedShapeDumper_hxx
@@ -94,6 +96,8 @@ public:
     void dumpExtrusionAsElement(com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > aExtrusion);
     void dumpPathAsElement(com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > aPath);
     void dumpTextPathAsElement(com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > aTextPath);
+    void dumpEquationsAsElement(com::sun::star::uno::Sequence< rtl::OUString > aEquations);
+    void dumpHandlesAsElement(com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValues > aHandles);
 
 private:
     xmlTextWriterPtr xmlWriter;
