@@ -949,7 +949,7 @@ sal_uInt32 SvNumberFormatter::ImpGenerateCL( LanguageType eLnge, bool bNoAdditio
                     if ( !aDupes.isEmpty() )
                     {
                         rtl::OUString aMsg("XML locale data FormatElement formatindex dupe: ");
-                        aMsg += rtl::OUString::valueOf( nIdx );
+                        aMsg += rtl::OUString::valueOf( sal_Int32(nIdx) );
                         aMsg += "\nFormatElements: ";
                         aMsg += rtl::OUString::valueOf( j );
                         aMsg += "(";
@@ -1740,7 +1740,7 @@ SvNumberformat* SvNumberFormatter::ImpInsertFormat(
                     rCode.Index != NF_CURRENCY_1000DEC2_CCC )
             {
                 rtl::OUString aMsg("SvNumberFormatter::ImpInsertFormat: no [$...] on currency format code, index ");
-                aMsg += rtl::OUString::valueOf( rCode.Index );
+                aMsg += rtl::OUString::valueOf( sal_Int32(rCode.Index) );
                 aMsg += ":\n";
                 aMsg += rCode.Code;
                 LocaleDataWrapper::outputCheckMessage( xLocaleData->appendLocaleInfo( aMsg));
@@ -1758,7 +1758,7 @@ SvNumberformat* SvNumberFormatter::ImpInsertFormat(
         if (LocaleDataWrapper::areChecksEnabled())
         {
             rtl::OUString aMsg( "SvNumberFormatter::ImpInsertFormat: bad format code, index " );
-            aMsg += rtl::OUString::valueOf( rCode.Index );
+            aMsg += rtl::OUString::valueOf( sal_Int32(rCode.Index) );
             aMsg += "\n";
             aMsg += rCode.Code;
             LocaleDataWrapper::outputCheckMessage( xLocaleData->appendLocaleInfo( aMsg));
@@ -1788,7 +1788,7 @@ SvNumberformat* SvNumberFormatter::ImpInsertFormat(
                     default:
                     {
                         rtl::OUString aMsg("SvNumberFormatter::ImpInsertFormat: dup format code, index ");
-                        aMsg += rtl::OUString::valueOf( rCode.Index );
+                        aMsg += rtl::OUString::valueOf( sal_Int32(rCode.Index) );
                         aMsg += "\n";
                         aMsg += rCode.Code;
                         LocaleDataWrapper::outputCheckMessage( xLocaleData->appendLocaleInfo( aMsg));
@@ -1803,7 +1803,7 @@ SvNumberformat* SvNumberFormatter::ImpInsertFormat(
             if (LocaleDataWrapper::areChecksEnabled())
             {
                 rtl::OUString aMsg( "SvNumberFormatter::ImpInsertFormat: too many format codes, index ");
-                aMsg += rtl::OUString::valueOf( rCode.Index );
+                aMsg += rtl::OUString::valueOf( sal_Int32(rCode.Index) );
                 aMsg += "\n";
                 aMsg +=  rCode.Code;
                 LocaleDataWrapper::outputCheckMessage( xLocaleData->appendLocaleInfo( aMsg));
@@ -1819,7 +1819,7 @@ SvNumberformat* SvNumberFormatter::ImpInsertFormat(
             rtl::OUString aMsg( "ImpInsertFormat: can't insert number format key pos: ");
             aMsg += rtl::OUString::valueOf( sal_Int32( nPos ) );
             aMsg += ", code index ";
-            aMsg += rtl::OUString::valueOf( rCode.Index );
+            aMsg += rtl::OUString::valueOf( sal_Int32(rCode.Index) );
             aMsg += "\n";
             aMsg += rCode.Code;
             LocaleDataWrapper::outputCheckMessage( xLocaleData->appendLocaleInfo( aMsg));
