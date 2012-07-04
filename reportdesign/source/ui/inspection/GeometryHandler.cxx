@@ -129,6 +129,7 @@ namespace rptui
 //........................................................................
 using namespace ::com::sun::star;
 
+namespace{
 // comparing two property instances
 struct PropertyCompare : public ::std::binary_function< beans::Property, ::rtl::OUString , bool >
 {
@@ -196,6 +197,22 @@ void lcl_convertFormulaTo(const uno::Any& _aPropertyValue,uno::Any& _rControlVal
         _rControlValue <<= aFormula.getUndecoratedContent();
     }
 }
+
+// return value rounded to the nearest multiple of base
+// if equidistant of two multiples, round up (for positive numbers)
+// T is assumed to be an integer type
+template <typename T, T base> T lcl_round(T value)
+{
+    OSL_ENSURE(value >= 0, "lcl_round: positive numbers only please");
+    const T threshold = (base % 2 == 0) ? (base/2) : (base/2 + 1);
+    const T rest = value % base;
+    if ( rest >= threshold )
+        return value + (base - rest);
+    else
+        return value - rest;
+}
+
+} // anonymous namespace
 // -----------------------------------------------------------------------------
 bool GeometryHandler::impl_isDataField(const ::rtl::OUString& _sName) const
 {
@@ -635,6 +652,8 @@ void SAL_CALL GeometryHandler::setPropertyValue(const ::rtl::OUString & Property
                 {
                     sal_Int32 nNewValue = 0;
                     Value >>= nNewValue;
+                    OSL_ENSURE(nNewValue >= 0, "A position/dimension should not be negative!");
+                    nNewValue = lcl_round<sal_Int32, 10>(nNewValue);
                     awt::Point aAwtPoint = xSourceReportComponent->getPosition();
                     awt::Size aAwtSize = xSourceReportComponent->getSize();
                     if ( nId == PROPERTY_ID_POSITIONX )
