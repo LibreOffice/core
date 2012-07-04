@@ -40,6 +40,7 @@
 #include <com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/PropertyValues.hpp>
+#include <com/sun/star/drawing/EnhancedCustomShapeParameter.hpp>
 
 #ifndef EnhancedShapeDumper_hxx
 #define EnhancedShapeDumper_hxx
@@ -58,6 +59,7 @@ public:
     void dumpEnhancedCustomShapeParameterPair(com::sun::star::drawing::EnhancedCustomShapeParameterPair aParameterPair);
     void dumpDirection3D(com::sun::star::drawing::Direction3D aDirection3D);
     void dumpPropertyValueAsElement(com::sun::star::beans::PropertyValue aPropertyValue);
+    void dumpEnhancedCustomShapeParameter(com::sun::star::drawing::EnhancedCustomShapeParameter aParameter);
 
     // EnhancedCustomShapeExtrusion.idl
     void dumpEnhancedCustomShapeExtrusionService(com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > xPropSet);

@@ -736,5 +736,17 @@ void EnhancedShapeDumper::dumpRefRAsAttribute(sal_Int32 aRefR)
     xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("refR"), "%" SAL_PRIdINT32, aRefR);
 }
 
+void EnhancedShapeDumper::dumpEnhancedCustomShapeParameter(drawing::EnhancedCustomShapeParameter aParameter)
+{
+    uno::Any aAny = aParameter.Value;
+    rtl::OUString sValue;
+    if(aAny >>= sValue)
+    {
+        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("value"), "%s",
+            rtl::OUStringToOString(sValue, RTL_TEXTENCODING_UTF8).getStr());
+    }
+    sal_Int32 aType = aParameter.Type;
+    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("type"), "%" SAL_PRIdINT32, aType);
+}
 
 
