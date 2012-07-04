@@ -560,6 +560,8 @@ $(call gb_LinkTarget_get_target,$(1)) : LIBRARY_X64 :=
 $(call gb_LinkTarget_get_headers_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : PCH_NAME :=
 $(call gb_LinkTarget_get_target,$(1)) : PCHOBJS :=
+$(call gb_LinkTarget_get_target,$(1)) : PCHOBJEX :=
+$(call gb_LinkTarget_get_target,$(1)) : PCHOBJNOEX :=
 $(call gb_LinkTarget_get_headers_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : PDBFILE :=
 $(call gb_LinkTarget_get_target,$(1)) : EXTRAOBJECTLISTS :=
@@ -876,10 +878,7 @@ $(call gb_CxxObject_get_target,$(2)) : \
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_LinkTarget_get_dep_target,$(1)) : CXXOBJECTS += $(2)
 $(call gb_LinkTarget_get_dep_target,$(1)) : $(call gb_CxxObject_get_dep_target,$(2))
-# It is not known by this time (or at least I don't know how to find out) which
-# PCH variant will be used, so depend on both.
 $(call gb_CxxObject_get_target,$(2)) : $(call gb_PrecompiledHeader_get_timestamp,$(1))
-$(call gb_CxxObject_get_target,$(2)) : $(call gb_NoexPrecompiledHeader_get_timestamp,$(1))
 endif
 
 endef
@@ -1016,6 +1015,9 @@ endef
 
 define gb_LinkTarget_add_noexception_object
 $(call gb_LinkTarget_add_cxxobject,$(1),$(2),$(gb_LinkTarget_NOEXCEPTIONFLAGS) $(call gb_LinkTarget__get_cxxflags,$(3)))
+# noexception objects are rare, so generate matching .pch only when needed
+$(call gb_CxxObject_get_target,$(2)) : $(call gb_NoexPrecompiledHeader_get_timestamp,$(1))
+$(call gb_LinkTarget_get_target,$(1)) : PCHOBJS = $$(PCHOBJEX) $$(PCHOBJNOEX)
 endef
 
 define gb_LinkTarget_add_exception_object
@@ -1197,7 +1199,9 @@ $(call gb_LinkTarget_get_clean_target,$(1)) : $(call gb_NoexPrecompiledHeader_ge
 $(call gb_NoexPrecompiledHeader_get_target,$(3)) : $(2).cxx
 
 $(call gb_LinkTarget_get_target,$(1)) : PCH_NAME := $(3)
-$(call gb_LinkTarget_get_target,$(1)) : PCHOBJS = $(call gb_PrecompiledHeader_get_target,$(3)).obj $(call gb_NoexPrecompiledHeader_get_target,$(3)).obj
+$(call gb_LinkTarget_get_target,$(1)) : PCHOBJEX = $(call gb_PrecompiledHeader_get_target,$(3)).obj
+$(call gb_LinkTarget_get_target,$(1)) : PCHOBJNOEX = $(call gb_NoexPrecompiledHeader_get_target,$(3)).obj
+$(call gb_LinkTarget_get_target,$(1)) : PCHOBJS = $$(PCHOBJEX)
 
 $(call gb_LinkTarget_get_headers_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : DEFS := $$(DEFS) -DPRECOMPILED_HEADERS
