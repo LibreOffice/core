@@ -10644,6 +10644,10 @@ dnl ===================================================================
 dnl ENABLE_LIBRSVG is set to "" (for NO), SYSTEM or INTERNAL. The
 dnl SYSTEM_LIBRSVG, SYSTEM_GDKPIXBUF etc are redundant.
 
+dnl FIXME: RSVG is a hard dependency now as the impress masterpages use it
+dnl FIXME: thus the --enable-rsvg=no is not really an option anymore and we
+dnl should error out in that case. leaving as is for now as this might be an
+dnl unwelcome buildbreaker otherwise
 ENABLE_LIBRSVG=""
 LIBRSVG_CFLAGS=""
 LIBRSVG_LIBS=""
