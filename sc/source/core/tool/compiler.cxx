@@ -44,6 +44,7 @@
 #include <unotools/transliterationwrapper.hxx>
 #include <tools/urlobj.hxx>
 #include <rtl/math.hxx>
+#include <rtl/ustring.hxx>
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -163,9 +164,9 @@ void ScCompiler::fillFromAddInCollectionEnglishName( NonConstOpCodeMapPtr xMap )
         const ScUnoAddInFuncData* pFuncData = pColl->GetFuncData(i);
         if (pFuncData)
         {
-            String aName;
+            ::rtl::OUString aName;
             if (pFuncData->GetExcelName( LANGUAGE_ENGLISH_US, aName))
-                xMap->putExternalSoftly( aName, pFuncData->GetOriginalName());
+                xMap->putExternalSoftly( String(aName), pFuncData->GetOriginalName());
             else
                 xMap->putExternalSoftly( pFuncData->GetUpperName(),
                         pFuncData->GetOriginalName());
@@ -5193,7 +5194,9 @@ void ScCompiler::CreateStringFromIndex(rtl::OUStringBuffer& rBuffer,FormulaToken
 // -----------------------------------------------------------------------------
 void ScCompiler::LocalizeString( String& rName )
 {
-    ScGlobal::GetAddInCollection()->LocalizeString( rName );
+    ::rtl::OUString prName(rName);
+    ScGlobal::GetAddInCollection()->LocalizeString( prName );
+    rName = String(prName);
 }
 // -----------------------------------------------------------------------------
 
@@ -5237,9 +5240,9 @@ void ScCompiler::fillAddInToken(::std::vector< ::com::sun::star::sheet::FormulaO
         {
             if ( _bIsEnglish )
             {
-                String aName;
+                ::rtl::OUString aName;
                 if (pFuncData->GetExcelName( LANGUAGE_ENGLISH_US, aName))
-                    aEntry.Name = aName;
+                    aEntry.Name = String(aName);
                 else
                     aEntry.Name = pFuncData->GetUpperName();
             }
