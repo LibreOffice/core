@@ -1354,7 +1354,9 @@ void GetLineIndex(SvxBoxItem &rBox, short nLineThickness, short nSpace, sal_uInt
 
     ::editeng::SvxBorderLine aLine;
     aLine.SetBorderLineStyle( eStyle );
-    aLine.SetWidth( nLineThickness );
+    double const fConverted( (table::BorderLineStyle::NONE == eStyle) ? 0.0 :
+            ::editeng::ConvertBorderWidthFromWord(eStyle, nLineThickness));
+    aLine.SetWidth(fConverted);
 
     //No AUTO for borders as yet, so if AUTO, use BLACK
     if (nCol == 0)
@@ -1363,7 +1365,7 @@ void GetLineIndex(SvxBoxItem &rBox, short nLineThickness, short nSpace, sal_uInt
     aLine.SetColor(SwWW8ImplReader::GetCol(nCol));
 
     if (pSize)
-        pSize[nWWIndex] = nLineThickness+nSpace;
+        pSize[nWWIndex] = fConverted + nSpace;
 
     rBox.SetLine(&aLine, nOOIndex);
     rBox.SetDistance(nSpace, nOOIndex);

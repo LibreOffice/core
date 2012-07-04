@@ -1791,13 +1791,6 @@ lcl_lineToSvxLine(const table::BorderLine& rLine, SvxBorderLine& rSvxLine, sal_B
                 sal_uInt16( bConvert ? MM100_TO_TWIP(rLine.InnerLineWidth) : rLine.InnerLineWidth  ),
                 sal_uInt16( bConvert ? MM100_TO_TWIP(rLine.LineDistance )  : rLine.LineDistance  ));
     }
-    else
-    {
-        if (DOUBLE == rSvxLine.GetBorderLineStyle())
-        {   // fdo#46112: divide width by 3 for outer line, gap, inner line
-           rSvxLine.ScaleMetrics(1, 3);
-        }
-    }
 
     sal_Bool bRet = !rSvxLine.isEmpty();
     return bRet;

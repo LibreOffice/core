@@ -179,12 +179,18 @@ static OString OutTBLBorderLine(RtfExport &rExport, const SvxBorderLine* pLine, 
                 break;
         }
 
+        double const fConverted( ::editeng::ConvertBorderWidthToWord(
+                    pLine->GetBorderLineStyle(), pLine->GetWidth()) );
         if ( 255 >= pLine->GetWidth() ) // That value comes from RTF specs
         {
-            aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRW).append((sal_Int32)pLine->GetWidth());
+            aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRW).append(
+                    static_cast<sal_Int32>(fConverted));
         }
         else
-            aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRTH OOO_STRING_SVTOOLS_RTF_BRDRW).append((sal_Int32)pLine->GetWidth() / 2);
+        {   // use \brdrth to double the value range...
+            aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRTH OOO_STRING_SVTOOLS_RTF_BRDRW);
+            aRet.append(static_cast<sal_Int32>(fConverted) / 2);
+        }
 
         aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRCF);
         aRet.append((sal_Int32)rExport.GetColor(pLine->GetColor()));

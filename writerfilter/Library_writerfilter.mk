@@ -60,6 +60,7 @@ $(eval $(call gb_Library_use_libraries,writerfilter,\
     comphelper \
     cppu \
     cppuhelper \
+    editeng \
     i18nisolang1 \
     i18nutil \
     msfilter \

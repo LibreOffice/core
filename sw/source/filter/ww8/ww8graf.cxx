@@ -1570,10 +1570,6 @@ sal_Int32 SwWW8ImplReader::MatchSdrBoxIntoFlyBoxItem(const Color& rLineColor,
 
         aLine.SetWidth( nLineThick ); // No conversion here, nLineThick is already in twips
         aLine.SetBorderLineStyle(nIdx);
-        if (table::BorderLineStyle::DOUBLE == nIdx)
-        {  // fdo#43249: divide width by 3 for outer line, gap, inner line
-           aLine.ScaleMetrics(1, 3);
-        }
 
         for(sal_uInt16 nLine = 0; nLine < 4; ++nLine)
             rBox.SetLine(new SvxBorderLine( aLine ), nLine);

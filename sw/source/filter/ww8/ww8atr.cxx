@@ -4057,7 +4057,8 @@ WW8_BRC WW8Export::TranslateBorderLine(const SvxBorderLine& rLine,
     // what SwRTFWriter::OutRTFBorder does in the RTF filter Eventually it
     // would be nice if all this functionality was in the one place
     WW8_BRC aBrc;
-    sal_uInt16 nWidth = rLine.GetWidth();
+    sal_uInt16 nWidth = ::editeng::ConvertBorderWidthToWord(
+            rLine.GetBorderLineStyle(), rLine.GetWidth());
     sal_uInt8 brcType = 0, nColCode = 0;
 
     if( nWidth )                                // Linie ?
