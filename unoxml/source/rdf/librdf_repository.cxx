@@ -32,6 +32,7 @@
 #include <boost/bind.hpp>
 
 #include <libxslt/security.h>
+#include <libxml/parser.h>
 
 #include <redland.h>
 
@@ -871,6 +872,11 @@ bool formatNeedsBaseURI(::sal_Int16 i_Format)
     return true;
 }
 
+xmlParserInputPtr myExtEntityLoader( const char* /*URL*/, const char* /*ID*/, xmlParserCtxtPtr /*context*/)
+{
+	return NULL;
+}
+
 //void SAL_CALL
 uno::Reference<rdf::XNamedGraph> SAL_CALL
 librdf_Repository::importGraph(::sal_Int16 i_Format,
@@ -948,6 +954,9 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
                 "librdf_new_parser failed", *this);
     }
 
+    xmlExternalEntityLoader oldExtEntityLoader = xmlGetExternalEntityLoader();
+    xmlSetExternalEntityLoader( myExtEntityLoader);
+
     uno::Sequence<sal_Int8> buf;
     uno::Reference<io::XSeekable> xSeekable(i_xInStream, uno::UNO_QUERY);
     // UGLY: if only that redland junk could read streams...
@@ -972,6 +981,8 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
             "librdf_Repository::importGraph: "
             "librdf_model_context_add_statements failed", *this);
     }
+
+    xmlSetExternalEntityLoader( oldExtEntityLoader);
     return getGraph(i_xGraphName);
 }
 
