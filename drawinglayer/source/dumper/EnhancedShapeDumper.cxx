@@ -680,6 +680,18 @@ void EnhancedShapeDumper::dumpEnhancedCustomShapeHandleService(uno::Reference< b
         if(anotherAny >>= aRefY)
             dumpRefYAsAttribute(aRefY);
     }
+    {
+        uno::Any anotherAny = xPropSet->getPropertyValue("RefAngle");
+        sal_Int32 aRefAngle;
+        if(anotherAny >>= aRefAngle)
+            dumpRefAngleAsAttribute(aRefAngle);
+    }
+    {
+        uno::Any anotherAny = xPropSet->getPropertyValue("RefR");
+        sal_Int32 aRefR;
+        if(anotherAny >>= aRefR)
+            dumpRefRAsAttribute(aRefR);
+    }
 }
 
 void EnhancedShapeDumper::dumpSwitchedAsAttribute(sal_Bool bSwitched)
@@ -713,5 +725,16 @@ void EnhancedShapeDumper::dumpRefYAsAttribute(sal_Int32 aRefY)
 {
     xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("refY"), "%" SAL_PRIdINT32, aRefY);
 }
+
+void EnhancedShapeDumper::dumpRefAngleAsAttribute(sal_Int32 aRefAngle)
+{
+    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("refAngle"), "%" SAL_PRIdINT32, aRefAngle);
+}
+
+void EnhancedShapeDumper::dumpRefRAsAttribute(sal_Int32 aRefR)
+{
+    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("refR"), "%" SAL_PRIdINT32, aRefR);
+}
+
 
 

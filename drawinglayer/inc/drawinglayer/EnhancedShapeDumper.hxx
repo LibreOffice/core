@@ -106,6 +106,8 @@ public:
     void dumpPolarAsElement(com::sun::star::drawing::EnhancedCustomShapeParameterPair aPolar);
     void dumpRefXAsAttribute(sal_Int32 aRefX);
     void dumpRefYAsAttribute(sal_Int32 aRefY);
+    void dumpRefAngleAsAttribute(sal_Int32 aRefAngle);
+    void dumpRefRAsAttribute(sal_Int32 aRefR);
 
 private:
     xmlTextWriterPtr xmlWriter;
