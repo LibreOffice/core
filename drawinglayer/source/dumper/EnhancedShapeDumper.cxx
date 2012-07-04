@@ -638,5 +638,16 @@ void EnhancedShapeDumper::dumpHandlesAsElement(uno::Sequence< beans::PropertyVal
 
 void EnhancedShapeDumper::dumpEnhancedCustomShapeHandleService(uno::Reference< beans::XPropertySet > xPropSet)
 {
-
+    {
+        uno::Any anotherAny = xPropSet->getPropertyValue("MirroredX");
+        sal_Bool bMirroredX;
+        if(anotherAny >>= bMirroredX)
+            dumpMirroredXAsAttribute(bMirroredX);
+    }
+    {
+        uno::Any anotherAny = xPropSet->getPropertyValue("MirroredY");
+        sal_Bool bMirroredY;
+        if(anotherAny >>= bMirroredY)
+            dumpMirroredYAsAttribute(bMirroredY);
+    }
 }
