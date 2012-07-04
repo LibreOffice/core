@@ -93,29 +93,33 @@ public class FileUtilities {
     // Filter by mode, and/or in future by filename/wildcard
     static private boolean doAccept(String filename, int byMode, String byFilename)
     {
-	android.util.Log.d("debug", "doAccept : " + filename + " mode " + byMode + " byFilename " + byFilename);
-	if (byMode == ALL && byFilename == "")
-	    return true;
-	// check extension
-	if (byMode != ALL) {
-	    if (mExtnMap.get (getExtension (filename)) != byMode)
-		return false;
-	}
-	if (byFilename != "") {
-	    // FIXME return false on a non-match
-	}
-	return true;
+    android.util.Log.d("debug", "doAccept : " + filename + " mode " + byMode + " byFilename " + byFilename);
+    if (byMode == ALL && byFilename == ""){
+        if( filename.startsWith(".")){//ignore hidden files
+            return false;
+        }
+        return true;
+    }
+    // check extension
+    if (byMode != ALL) {
+        if (mExtnMap.get (getExtension (filename)) != byMode)
+        return false;
+    }
+    if (byFilename != "") {
+        // FIXME return false on a non-match
+    }
+    return true;
     }
 
     static FileFilter getFileFilter(final int mode)
     {
-	return new FileFilter() {
-	    public boolean accept(File pathname) {
-		if (pathname.isDirectory())
-		    return true;
-		return doAccept(pathname.getName(), mode, "");
-	    }
-	};
+    return new FileFilter() {
+        public boolean accept(File pathname) {
+        if (pathname.isDirectory())
+            return true;
+        return doAccept(pathname.getName(), mode, "");
+        }
+    };
     }
 
     static FilenameFilter getFilenameFilter(final int mode)

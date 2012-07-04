@@ -10,6 +10,7 @@ package org.libreoffice.ui;
 
 import org.libreoffice.R;
 
+
 import java.io.File;
 
 import android.content.Context;
@@ -20,6 +21,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.graphics.BitmapFactory;
+import android.graphics.Bitmap;
 
 public class GridItemAdapter extends BaseAdapter{
 	Context mContext;
@@ -77,24 +80,37 @@ public class GridItemAdapter extends BaseAdapter{
 			// get layout from mobile.xml
 			gridView = inflater.inflate(R.layout.file_explorer_grid_item, null);
 
-			// set value into textview
-			TextView textView = (TextView) gridView
-					.findViewById(R.id.grid_item_label);
-			textView.setText(filePaths[position].getName());
-			// set image based on selected text
-			ImageView imageView = (ImageView) gridView
-					.findViewById(R.id.grid_item_image);
-			if( filePaths[position].isDirectory() ) // Is a folder
-			{
-				// Eventually have thumbnails of each sub file on a black circle
-				// For now just a folder icon
-				imageView.setImageResource(R.drawable.folder);
-			}
-			else
-			{
-			    switch (FileUtilities.getType(filePaths[position].getName()))
-			    {
-			    case FileUtilities.DOC:
+            // set value into textview
+            TextView textView = (TextView) gridView
+                    .findViewById(R.id.grid_item_label);
+            textView.setText(filePaths[position].getName());
+            // set image based on selected text
+            ImageView imageView = (ImageView) gridView
+                    .findViewById(R.id.grid_item_image);
+            if( filePaths[position].isDirectory() ) // Is a folder
+            {
+                // Eventually have thumbnails of each sub file on a black circle
+                // For now just a folder icon
+                imageView.setImageResource(R.drawable.folder);
+            }
+            else
+            {
+                File thumbnailFile = new File( filePaths[position].getParent() , "."
+            + filePaths[position].getName().split("[.]")[0] + ".png");
+                BitmapFactory factory = new BitmapFactory();
+                Bitmap thumb = factory.decodeFile( thumbnailFile.getAbsolutePath() );
+                if(thumb != null){
+                    Log.i( "GRID" , "true" );
+                }else{
+                    Log.i( "GRID" , thumbnailFile.getAbsolutePath() );
+                }
+                switch (FileUtilities.getType(filePaths[position].getName()))
+                {
+                case FileUtilities.DOC:
+                    if( thumb != null){
+                        imageView.setImageBitmap( thumb );
+                        break;
+                    }
 				imageView.setImageResource(R.drawable.writer);
 				break;
 			    case FileUtilities.CALC:

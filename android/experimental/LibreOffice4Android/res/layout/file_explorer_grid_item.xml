@@ -12,8 +12,8 @@
     
 	<ImageView
         android:id="@+id/grid_item_image"
-        android:layout_width="50dp"
-        android:layout_height="75dp"
+        android:layout_width="100dp"
+        android:layout_height="142dp"
         android:paddingTop="15dp"
         android:paddingBottom="10dp"
         android:layout_gravity="center" >

@@ -107,8 +107,8 @@ public class DocumentLoader
     // We pre-render this many pages preceding and succeeding the currently
     // viewed one, i.e. the total number of rendered pages kept is
     // PAGECACHE_PLUSMINUS*2+1.
-    private static final int PAGECACHE_PLUSMINUS = 2;
-    private static final int PAGECACHE_SIZE = PAGECACHE_PLUSMINUS*2 + 1;
+    private static int PAGECACHE_PLUSMINUS = 2;
+    private static int PAGECACHE_SIZE = PAGECACHE_PLUSMINUS*2 + 1;
 
     long timingOverhead;
     XComponentContext context;
@@ -157,7 +157,6 @@ public class DocumentLoader
                 flipper.setOutAnimation(outToLeft);
 
                 flipper.showNext();
-                
                 ((PageViewer)flipper.getChildAt((flipper.getDisplayedChild() + PAGECACHE_PLUSMINUS) % PAGECACHE_SIZE)).display(((PageViewer)flipper.getCurrentView()).currentPageNumber + PAGECACHE_PLUSMINUS);
                 return true;
             } else if (event2.getX() - event1.getX() > 120) {
@@ -491,8 +490,11 @@ public class DocumentLoader
         void display(int number)
         {
             Log.i(TAG, "PageViewer display(" + number + ")");
-            if (number >= 0)
+            if (number >= 0){
+                waitView = new TextView(DocumentLoader.this);
                 waitView.setText("Page " + (number+1) + ", wait...");
+                addView(waitView, 0, matchParent);
+            }
             currentPageNumber = number;
             state = PageState.NONEXISTENT;
 
@@ -520,7 +522,6 @@ public class DocumentLoader
             waitView.setGravity(Gravity.CENTER);
             waitView.setBackgroundColor(Color.WHITE);
             waitView.setTextColor(Color.BLACK);
-            addView(waitView, 0, matchParent);
 
             display(number);
         }
@@ -719,8 +720,9 @@ public class DocumentLoader
           //flipper = new ViewFlipper(this);
 			flipper = (ViewFlipper)findViewById( R.id.page_flipper );
             matchParent = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-
             flipper.removeViewAt( 0 );	
+
+
             currentPage = 0;
             openPageWithPrefetching( currentPage );
             /*
@@ -923,7 +925,8 @@ public class DocumentLoader
         }
     }
 
-    protected void onDestroy(){
+    protected void onDestroy()
+    {
         super.onDestroy();
         //Save the thumbnail of the first page as the grid image.
         // Could easily make a new (larger) thumb but recycling
@@ -974,23 +977,27 @@ public class DocumentLoader
      * load page && fill cache
      * if page is */
     public void openPageWithPrefetching( int number ){
-    	//as a first draft clear an refill "cache" on load.
-    	//should move views where "cache window" overlaps 
-    	
-    	flipper.removeAllViews();
-    	flipper.addView(new PageViewer(number), 0, matchParent);
-    	
+        //as a first draft clear an refill "cache" on load.
+        //should move views where "cache window" overlaps
+        Log.i( TAG , Integer.toString( pageCount ) );
+        //flipper.removeAllViews();
+        flipper.addView(new PageViewer(number), 0, matchParent);
+
         for (int i = 0; i < PAGECACHE_PLUSMINUS; i++){
-        	if( number + i+1 >= 0 && number + i+1 < pageCount){//pageCount will always be correctly defined when this is called (famous last words)
-        		flipper.addView(new PageViewer( number + i+1), i+1, matchParent);
-        	}
+            if( number + i+1 >= 0 && number + i+1 < pageCount){//pageCount will always be defined when this is called (famous last words)
+                flipper.addView(new PageViewer( number + i+1), i+1, matchParent);
+            }else{
+                flipper.addView( new PageViewer(  pageCount - 1), i+1, matchParent );
+            }
         }
         for (int i = 0; i < PAGECACHE_PLUSMINUS; i++){
-        	if( number - i+1 >= 0 && number - i+1 < pageCount){
+            if( number - i+1 >= 0 && number - i+1 < pageCount){
                 flipper.addView(new PageViewer( number - (i+1)), PAGECACHE_PLUSMINUS + i+1, matchParent);
-        	}
+            }else{
+                flipper.addView( new PageViewer( 0 ), PAGECACHE_PLUSMINUS + i+1, matchParent );
+            }
         }
-	
+
     }
 }
 

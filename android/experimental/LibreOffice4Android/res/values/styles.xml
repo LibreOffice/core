@@ -9,4 +9,8 @@
         <item name="android:background">#bb000000</item>
     </style>
     
+    <style name="grayBackground">
+        <item name="android:background">#dd000000</item>
+    </style>
+
 </resources>
