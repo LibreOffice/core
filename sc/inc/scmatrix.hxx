@@ -32,8 +32,8 @@
 #include "global.hxx"
 #include "types.hxx"
 #include "formula/errorcodes.hxx"
-#include <tools/string.hxx>
 #include "scdllapi.h"
+#include <rtl/ustring.hxx>
 
 #include <boost/intrusive_ptr.hpp>
 
@@ -53,12 +53,12 @@ struct ScMatrixValue
 {
     union {
         double fVal;
-        const String* pS;
+        const ::rtl::OUString* pS;
     };
     ScMatValType nType;
 
     /// Only valid if ScMatrix methods indicate so!
-    const String& GetString() const { return pS ? *pS : EMPTY_STRING; }
+    const ::rtl::OUString& GetString() const { return pS ? *pS : EMPTY_OUSTRING; }
 
     /// Only valid if ScMatrix methods indicate that this is no string!
     sal_uInt16 GetError() const         { return GetDoubleErrorValue( fVal); }
@@ -92,7 +92,7 @@ struct ScMatrixValue
         if (!pS)
             return r.pS == NULL;
 
-        return GetString().Equals(r.GetString());
+        return GetString().equals(r.GetString());
     }
 
     bool operator!= (const ScMatrixValue& r) const
@@ -274,8 +274,8 @@ public:
 
     void PutDouble( double fVal, SCSIZE nC, SCSIZE nR);
     void PutDouble( double fVal, SCSIZE nIndex);
-    void PutString( const String& rStr, SCSIZE nC, SCSIZE nR);
-    void PutString( const String& rStr, SCSIZE nIndex);
+    void PutString( const ::rtl::OUString& rStr, SCSIZE nC, SCSIZE nR);
+    void PutString( const ::rtl::OUString& rStr, SCSIZE nIndex);
     void PutEmpty( SCSIZE nC, SCSIZE nR);
     /// Jump FALSE without path
     void PutEmptyPath( SCSIZE nC, SCSIZE nR);
@@ -303,15 +303,15 @@ public:
     double GetDouble( SCSIZE nIndex) const;
 
     /// @return empty string if empty or empty path, else string content.
-    const String& GetString( SCSIZE nC, SCSIZE nR) const;
+    const ::rtl::OUString& GetString( SCSIZE nC, SCSIZE nR) const;
     /// @return empty string if empty or empty path, else string content.
-    const String& GetString( SCSIZE nIndex) const;
+    const ::rtl::OUString& GetString( SCSIZE nIndex) const;
 
     /** @returns the matrix element's string if one is present, otherwise the
         numerical value formatted as string, or in case of an error the error
         string is returned; an empty string for empty, a "FALSE" string for
         empty path. */
-    String GetString( SvNumberFormatter& rFormatter, SCSIZE nC, SCSIZE nR) const;
+    ::rtl::OUString GetString( SvNumberFormatter& rFormatter, SCSIZE nC, SCSIZE nR) const;
 
     /// @ATTENTION: If bString the ScMatrixValue->pS may still be NULL to indicate
     /// an empty string!

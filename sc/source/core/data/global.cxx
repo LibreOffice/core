@@ -110,6 +110,7 @@ CollatorWrapper* ScGlobal::pCaseCollator = NULL;
 IntlWrapper*    ScGlobal::pScIntlWrapper = NULL;
 sal_Unicode     ScGlobal::cListDelimiter = ',';
 String*         ScGlobal::pEmptyString = NULL;
+::rtl::OUString*       ScGlobal::pEmptyOUString = NULL;
 String*         ScGlobal::pStrClipDocName = NULL;
 
 SvxBrushItem*   ScGlobal::pEmptyBrushItem = NULL;
@@ -520,6 +521,11 @@ const String& ScGlobal::GetEmptyString()
     return *pEmptyString;
 }
 
+const ::rtl::OUString& ScGlobal::GetEmptyOUString()
+{
+    return *pEmptyOUString;
+}
+
 ImageList* ScGlobal::GetOutlineSymbols()
 {
     ImageList*& rpImageList = pOutlineBitmaps;
@@ -531,6 +537,7 @@ ImageList* ScGlobal::GetOutlineSymbols()
 void ScGlobal::Init()
 {
     pEmptyString = new String;
+    pEmptyOUString = new ::rtl::OUString;
 
     //  Die Default-Sprache fuer Zahlenformate (ScGlobal::eLnge)
     //  muss immer LANGUAGE_SYSTEM sein
@@ -680,6 +687,7 @@ void ScGlobal::Clear()
     ScDocumentPool::DeleteVersionMaps();
 
     DELETEZ(pEmptyString);
+    DELETEZ(pEmptyOUString);
 }
 
 //------------------------------------------------------------------------
