@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAADH////w\u003d",
+        "filename": "moz/makefile.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2012-07-04T09:00:29Z",
+      "side": 1,
+      "message": "Maybe the dmake equivalent of\n\nifneq($(shell ld --version |grep \"Ubuntu\\|Debian\"),)\n?",
+      "revId": "e01e329d8299b2bd3344294c9e570f631aba13b2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
