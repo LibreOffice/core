@@ -95,10 +95,10 @@ my_javaenv = \
 .IF "$(OS)" == "WNT" && "$(OOO_TEST_SOFFICE)" == ""
 OOO_EXTRACT_TO:=$(shell cygpath -m `mktemp -dt ooosmoke.XXXXXX`)
 $(MISC)/$(TARGET)/installation.flag : $(shell \
-        ls $(installationtest_instset)/OOo_*_install-arc_$(defaultlangiso).zip)
+        ls $(installationtest_instset)/Apache_OpenOffice_*_install-arc_$(defaultlangiso).zip)
     $(COMMAND_ECHO)$(MKDIRHIER) $(@:d)
-    $(COMMAND_ECHO)unzip -q $(installationtest_instset)/OOo_*_install-arc_$(defaultlangiso).zip -d "$(OOO_EXTRACT_TO)"
-    $(COMMAND_ECHO)mv "$(OOO_EXTRACT_TO)"/OOo_*_install-arc_$(defaultlangiso) "$(OOO_EXTRACT_TO)"/opt
+    $(COMMAND_ECHO)unzip -q $(installationtest_instset)/Apache_OpenOffice_*_install-arc_$(defaultlangiso).zip -d "$(OOO_EXTRACT_TO)"
+    $(COMMAND_ECHO)mv "$(OOO_EXTRACT_TO)"/Apache_OpenOffice_*_install-arc_$(defaultlangiso) "$(OOO_EXTRACT_TO)"/opt
     $(COMMAND_ECHO)echo "$(OOO_EXTRACT_TO)" > $@
 .END
 
