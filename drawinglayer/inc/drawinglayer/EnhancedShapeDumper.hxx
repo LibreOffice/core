@@ -44,6 +44,7 @@
 
 #include <com/sun/star/drawing/EnhancedCustomShapeSegment.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeTextFrame.hpp>
+#include <com/sun/star/awt/Size.hpp>
 
 #ifndef EnhancedShapeDumper_hxx
 #define EnhancedShapeDumper_hxx
@@ -132,6 +133,8 @@ public:
     void dumpGluePointTypeAsAttribute(sal_Int32 aGluePointType);
     void dumpExtrusionAllowedAsAttribute(sal_Bool bExtrusionAllowed);
     void dumpConcentricGradientFillAllowedAsAttribute(sal_Bool bConcentricGradientFillAllowed);
+    void dumpTextPathAllowedAsAttribute(sal_Bool bTextPathAllowed);
+    void dumpSubViewSizeAsElement(com::sun::star::uno::Sequence< com::sun::star::awt::Size > aSubViewSize);
 
 private:
     xmlTextWriterPtr xmlWriter;

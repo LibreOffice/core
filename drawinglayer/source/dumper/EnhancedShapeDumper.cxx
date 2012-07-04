@@ -877,6 +877,18 @@ void EnhancedShapeDumper::dumpEnhancedCustomShapePathService(uno::Reference< bea
         if(anotherAny >>= bConcentricGradientFillAllowed)
             dumpConcentricGradientFillAllowedAsAttribute(bConcentricGradientFillAllowed);
     }
+    {
+        uno::Any anotherAny = xPropSet->getPropertyValue("TextPathAllowed");
+        sal_Bool bTextPathAllowed;
+        if(anotherAny >>= bTextPathAllowed)
+            dumpTextPathAllowedAsAttribute(bTextPathAllowed);
+    }
+    {
+        uno::Any anotherAny = xPropSet->getPropertyValue("SubViewSize");
+        uno::Sequence< awt::Size > aSubViewSize;
+        if(anotherAny >>= aSubViewSize)
+            dumpSubViewSizeAsElement(aSubViewSize);
+    }
 }
 
 void EnhancedShapeDumper::dumpCoordinatesAsElement(uno::Sequence< drawing::EnhancedCustomShapeParameterPair > aCoordinates)
@@ -984,4 +996,24 @@ void EnhancedShapeDumper::dumpConcentricGradientFillAllowedAsAttribute(sal_Bool 
         xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("concentricGradientFillAllowed"), "%s", "false");
 }
 
+void EnhancedShapeDumper::dumpTextPathAllowedAsAttribute(sal_Bool bTextPathAllowed)
+{
+    if(bTextPathAllowed)
+        xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textPathAllowed"), "%s", "true");
+    else
+        xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textPathAllowed"), "%s", "false");
+}
 
+void EnhancedShapeDumper::dumpSubViewSizeAsElement(uno::Sequence< awt::Size > aSubViewSize)
+{
+    xmlTextWriterStartElement(xmlWriter, BAD_CAST( "SubViewSize" ));
+    sal_Int32 nLength = aSubViewSize.getLength();
+    for (sal_Int32 i = 0; i < nLength; ++i)
+    {
+        xmlTextWriterStartElement(xmlWriter, BAD_CAST( "Size" ));
+        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("width"), "%" SAL_PRIdINT32, aSubViewSize[i].Width);
+        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("height"), "%" SAL_PRIdINT32, aSubViewSize[i].Height);
+        xmlTextWriterEndElement( xmlWriter );
+    }
+    xmlTextWriterEndElement( xmlWriter );
+}
