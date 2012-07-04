@@ -1185,7 +1185,7 @@ $(call gb_LinkTarget_get_clean_target,$(1)) : $(foreach sdi,$(2),$(call gb_SdiTa
 
 endef
 
-define gb_LinkTarget__add_precompiled_header_impl
+define gb_LinkTarget__set_precompiled_header_impl
 $(call gb_LinkTarget__add_internal_headers,$(1),$(call gb_PrecompiledHeader_get_target,$(3)))
 $(call gb_LinkTarget_get_clean_target,$(1)) : $(call gb_PrecompiledHeader_get_clean_target,$(3))
 $(call gb_PrecompiledHeader_get_target,$(3)) : $(2).cxx
@@ -1214,11 +1214,16 @@ endif
 
 endef
 
-define gb_LinkTarget_add_precompiled_header
+define gb_LinkTarget_set_precompiled_header
 ifeq ($(gb_ENABLE_PCH),$(true))
-$(call gb_LinkTarget__add_precompiled_header_impl,$(1),$(2),$(notdir $(2)))
+$(call gb_LinkTarget__set_precompiled_header_impl,$(1),$(2),$(notdir $(2)))
 endif
 
+endef
+
+define gb_LinkTarget_add_precompiled_header
+$$(call gb_Output_error,\
+ gb_LinkTarget_add_precompiled_header: use gb_LinkTarget_set_precompiled_header instead.)
 endef
 
 define gb_LinkTarget_add_external_headers

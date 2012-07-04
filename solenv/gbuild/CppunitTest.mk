@@ -353,6 +353,7 @@ $(eval $(foreach method,\
 	add_package_headers \
 	use_package \
 	use_packages \
+	set_precompiled_header \
 	add_precompiled_header \
 	add_sdi_headers \
 	add_cflags \

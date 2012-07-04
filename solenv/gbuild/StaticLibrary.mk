@@ -118,6 +118,7 @@ $(eval $(foreach method,\
 	use_external_project \
 	use_static_libraries \
 	add_sdi_headers \
+	set_precompiled_header \
 	add_precompiled_header \
 	set_warnings_not_errors \
 	set_generated_cxx_suffix \

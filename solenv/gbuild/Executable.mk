@@ -138,6 +138,7 @@ $(eval $(foreach method,\
 	use_packages \
 	use_unpacked \
 	add_sdi_headers \
+	set_precompiled_header \
 	add_precompiled_header \
 	add_nativeres \
 	set_warnings_not_errors \

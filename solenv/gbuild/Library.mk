@@ -223,6 +223,7 @@ $(eval $(foreach method,\
 	use_unpacked \
 	add_package_headers \
 	add_sdi_headers \
+	set_precompiled_header \
 	add_precompiled_header \
 	export_objects_list \
 	add_nativeres \
