@@ -112,6 +112,8 @@ public:
     void dumpRefRAsAttribute(sal_Int32 aRefR);
     void dumpRangeXMinimumAsElement(com::sun::star::drawing::EnhancedCustomShapeParameter aRangeXMinimum);
     void dumpRangeXMaximumAsElement(com::sun::star::drawing::EnhancedCustomShapeParameter aRangeXMaximum);
+    void dumpRangeYMinimumAsElement(com::sun::star::drawing::EnhancedCustomShapeParameter aRangeYMinimum);
+    void dumpRangeYMaximumAsElement(com::sun::star::drawing::EnhancedCustomShapeParameter aRangeXMaximum);
 
 private:
     xmlTextWriterPtr xmlWriter;
