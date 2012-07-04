@@ -35,7 +35,7 @@ using namespace ::com::sun::star;
 BorderHandler::BorderHandler( bool bOOXML ) :
 LoggedProperties(dmapper_logger, "BorderHandler"),
 m_nCurrentBorderPosition( BORDER_TOP ),
-m_nLineWidth(26), // Word default
+m_nLineWidth(15), // Word default, in twips
 m_nLineType(0),
 m_nLineColor(0),
 m_nLineDistance(0),
@@ -70,7 +70,7 @@ void BorderHandler::lcl_attribute(Id rName, Value & rVal)
         break;
         case NS_rtf::LN_DPTLINEWIDTH: // 0x2871
             //  width of a single line in 1/8 pt, max of 32 pt -> twip * 5 / 2.
-            m_nLineWidth = ConversionHelper::convertTwipToMM100( nIntValue * 5 / 2 );
+            m_nLineWidth = nIntValue * 5 / 2;
         break;
         case NS_rtf::LN_BRCTYPE:    // 0x2872
             m_nLineType = nIntValue;

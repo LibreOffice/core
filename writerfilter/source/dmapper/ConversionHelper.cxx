@@ -22,6 +22,7 @@
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/style/NumberingType.hpp>
+#include <editeng/borderline.hxx>
 #include <ooxml/resourceids.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <tools/color.hxx>
@@ -110,8 +111,7 @@ sal_Int32 MakeBorderLine( sal_Int32 nSprmValue, table::BorderLine2& rToFill )
     sal_Int32 nLineType       = ((nSprmValue & 0xff00) >> 8);
     sal_Int32 nLineColor    = (nSprmValue & 0xff0000)>>16;
     sal_Int32 nLineDistance = (((nSprmValue & 0x3f000000)>>24) * 2540 + 36)/72L;
-    sal_Int32 nLineThickness = TWIP_TO_MM100(nLineThicknessTwip);
-    MakeBorderLine( nLineThickness, nLineType, nLineColor, rToFill, false);
+    MakeBorderLine( nLineThicknessTwip, nLineType, nLineColor, rToFill, false);
     return nLineDistance;
 }
 void MakeBorderLine( sal_Int32 nLineThickness,   sal_Int32 nLineType,
@@ -202,7 +202,9 @@ void MakeBorderLine( sal_Int32 nLineThickness,   sal_Int32 nLineType,
     }
 
     rToFill.LineStyle = nLineStyle;
-    rToFill.LineWidth = sal_uInt32( nLineThickness );
+    double const fConverted( (NONE == nLineStyle) ? 0.0 :
+        ::editeng::ConvertBorderWidthFromWord(nLineStyle, nLineThickness));
+    rToFill.LineWidth = convertTwipToMM100(fConverted);
     rToFill.Color = nLineColor;
 }
 

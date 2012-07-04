@@ -322,7 +322,12 @@ long BorderWidthImpl::GetLine1( long nWidth ) const
 {
     long result = static_cast<long>(m_nRate1);
     if ( ( m_nFlags & CHANGE_LINE1 ) > 0 )
-        result = static_cast<long>(m_nRate1 * nWidth);
+    {
+        long const nConstant2 = (m_nFlags & CHANGE_LINE2) ? 0 : m_nRate2;
+        long const nConstantD = (m_nFlags & CHANGE_DIST ) ? 0 : m_nRateGap;
+        result = std::max<long>(0,
+            static_cast<long>(m_nRate1 * nWidth) - (nConstant2 + nConstantD));
+    }
     return result;
 }
 
@@ -330,7 +335,12 @@ long BorderWidthImpl::GetLine2( long nWidth ) const
 {
     long result = static_cast<long>(m_nRate2);
     if ( ( m_nFlags & CHANGE_LINE2 ) > 0 )
-        result = static_cast<long>(m_nRate2 * nWidth);
+    {
+        long const nConstant1 = (m_nFlags & CHANGE_LINE1) ? 0 : m_nRate1;
+        long const nConstantD = (m_nFlags & CHANGE_DIST ) ? 0 : m_nRateGap;
+        result = std::max<long>(0,
+            static_cast<long>(m_nRate2 * nWidth) - (nConstant1 + nConstantD));
+    }
     return result;
 }
 
@@ -338,7 +348,12 @@ long BorderWidthImpl::GetGap( long nWidth ) const
 {
     long result = static_cast<long>(m_nRateGap);
     if ( ( m_nFlags & CHANGE_DIST ) > 0 )
-        result = static_cast<long>(m_nRateGap * nWidth);
+    {
+        long const nConstant1 = (m_nFlags & CHANGE_LINE1) ? 0 : m_nRate1;
+        long const nConstant2 = (m_nFlags & CHANGE_LINE2) ? 0 : m_nRate2;
+        result = std::max<long>(0,
+            static_cast<long>(m_nRateGap * nWidth) - (nConstant1 + nConstant2));
+    }
 
     // Avoid having too small distances (less than 0.1pt)
     if ( result < MINGAPWIDTH && m_nRate1 > 0 && m_nRate2 > 0 )
@@ -387,6 +402,11 @@ long BorderWidthImpl::GuessWidth( long nLine1, long nLine2, long nGap )
     else if ( !bGapChange && nWidthGap < 0 )
         bInvalid = true;
 
+    // non-constant line width factors must sum to 1
+    assert((((bLine1Change) ? m_nRate1 : 0) +
+            ((bLine2Change) ? m_nRate2 : 0) +
+            ((bGapChange) ? m_nRateGap : 0)) - 1.0 < 0.00001 );
+
     double nWidth = 0.0;
     if ( (!bInvalid) && (!aToCompare.empty()) )
     {
@@ -397,11 +417,10 @@ long BorderWidthImpl::GuessWidth( long nLine1, long nLine2, long nGap )
             bInvalid = ( nWidth != *pIt );
             ++pIt;
         }
-        if ( bInvalid )
-            nWidth = 0.0;
+        nWidth = (bInvalid) ?  0.0 : nLine1 + nLine2 + nGap;
     }
 
-    return long( nWidth );
+    return nWidth;
 }
 
 /** Utility class storing the border line width, style and colors. The widths

@@ -1410,8 +1410,10 @@ static void impl_borderLine( FSHelperPtr pSerializer, sal_Int32 elementToken, co
     {
         // Compute the sz attribute
 
+        double const fConverted( ::editeng::ConvertBorderWidthToWord(
+                pBorderLine->GetBorderLineStyle(), pBorderLine->GetWidth()));
         // The unit is the 8th of point
-        sal_Int32 nWidth = sal_Int32( pBorderLine->GetWidth() / 2.5 );
+        sal_Int32 nWidth = sal_Int32( fConverted / 2.5 );
         sal_uInt16 nMinWidth = 2;
         sal_uInt16 nMaxWidth = 96;
 

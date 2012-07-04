@@ -581,7 +581,7 @@ void Test::testN758883()
     uno::Reference<beans::XPropertySet> xPropertySet(getStyles("PageStyles")->getByName("Default"), uno::UNO_QUERY);
     sal_Int32 nValue = 0;
     xPropertySet->getPropertyValue("LeftMargin") >>= nValue;
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(820), nValue);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(794), nValue);
 
     // No assert for the 3rd problem: see the comment in the test doc.
 

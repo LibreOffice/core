@@ -117,6 +117,127 @@ SvxBorderLine::SvxBorderLine( const Color *pCol, long nWidth,
         aColor = *pCol;
 }
 
+static const double THINTHICK_SMALLGAP_line2 = 15.0;
+static const double THINTHICK_SMALLGAP_gap   = 15.0;
+static const double THINTHICK_LARGEGAP_line1 = 30.0;
+static const double THINTHICK_LARGEGAP_line2 = 15.0;
+static const double THICKTHIN_SMALLGAP_line1 = 15.0;
+static const double THICKTHIN_SMALLGAP_gap   = 15.0;
+static const double THICKTHIN_LARGEGAP_line1 = 15.0;
+static const double THICKTHIN_LARGEGAP_line2 = 30.0;
+static const double OUTSET_line1 = 15.0;
+static const double INSET_line2  = 15.0;
+
+double
+ConvertBorderWidthFromWord(SvxBorderStyle const eStyle, double const fWidth)
+{
+    switch (eStyle)
+    {
+        // Single lines
+        case SOLID:
+        case DOTTED:
+        case DASHED:
+            return fWidth;
+            break;
+
+        // Double lines
+        case DOUBLE:
+            return fWidth * 3.0;
+            break;
+
+        case THINTHICK_MEDIUMGAP:
+        case THICKTHIN_MEDIUMGAP:
+        case EMBOSSED:
+        case ENGRAVED:
+            return fWidth * 2.0;
+            break;
+
+        case THINTHICK_SMALLGAP:
+            return fWidth + THINTHICK_SMALLGAP_line2 + THINTHICK_SMALLGAP_gap;
+            break;
+
+        case THINTHICK_LARGEGAP:
+            return fWidth + THINTHICK_LARGEGAP_line1 + THINTHICK_LARGEGAP_line2;
+            break;
+
+        case THICKTHIN_SMALLGAP:
+            return fWidth + THICKTHIN_SMALLGAP_line1 + THICKTHIN_SMALLGAP_gap;
+            break;
+
+        case THICKTHIN_LARGEGAP:
+            return fWidth + THICKTHIN_LARGEGAP_line1 + THICKTHIN_LARGEGAP_line2;
+            break;
+
+        case OUTSET:
+            return (fWidth * 2.0) + OUTSET_line1;
+            break;
+
+        case INSET:
+            return (fWidth * 2.0) + INSET_line2;
+            break;
+
+        default:
+            assert(false); // should only be called for known border style
+            return 0;
+            break;
+    }
+}
+
+double
+ConvertBorderWidthToWord(SvxBorderStyle const eStyle, double const fWidth)
+{
+    switch (eStyle)
+    {
+        // Single lines
+        case SOLID:
+        case DOTTED:
+        case DASHED:
+            return fWidth;
+            break;
+
+        // Double lines
+        case DOUBLE:
+            return fWidth / 3.0;
+            break;
+
+        case THINTHICK_MEDIUMGAP:
+        case THICKTHIN_MEDIUMGAP:
+        case EMBOSSED:
+        case ENGRAVED:
+            return fWidth / 2.0;
+            break;
+
+        case THINTHICK_SMALLGAP:
+            return fWidth - THINTHICK_SMALLGAP_line2 - THINTHICK_SMALLGAP_gap;
+            break;
+
+        case THINTHICK_LARGEGAP:
+            return fWidth - THINTHICK_LARGEGAP_line1 - THINTHICK_LARGEGAP_line2;
+            break;
+
+        case THICKTHIN_SMALLGAP:
+            return fWidth - THICKTHIN_SMALLGAP_line1 - THICKTHIN_SMALLGAP_gap;
+            break;
+
+        case THICKTHIN_LARGEGAP:
+            return fWidth - THICKTHIN_LARGEGAP_line1 - THICKTHIN_LARGEGAP_line2;
+            break;
+
+        case OUTSET:
+            return (fWidth / 2.0) - OUTSET_line1;
+            break;
+
+        case INSET:
+            return (fWidth / 2.0) - INSET_line2;
+            break;
+
+        default:
+            assert(false); // should only be called for known border style
+            return 0;
+            break;
+    }
+}
+
 /** Get the BorderWithImpl object corresponding to the given #nStyle, all the
     units handled by the resulting object are Twips and the
     BorderWidthImpl::GetLine1() corresponds to the Outer Line.
@@ -144,35 +265,41 @@ BorderWidthImpl SvxBorderLine::getWidthImpl( SvxBorderStyle nStyle )
         case DOUBLE:
             aImpl = BorderWidthImpl(
                     CHANGE_LINE1 | CHANGE_LINE2 | CHANGE_DIST,
-                    1.0, 1.0, 1.0 );
+                    // fdo#46112 fdo#38542 fdo#43249:
+                    // non-constant witdths must sum to 1
+                    1.0/3.0, 1.0/3.0, 1.0/3.0 );
             break;
 
         case THINTHICK_SMALLGAP:
-            aImpl = BorderWidthImpl( CHANGE_LINE1, 1.0, 15.0, 15.0 );
+            aImpl = BorderWidthImpl( CHANGE_LINE1, 1.0,
+                    THINTHICK_SMALLGAP_line2, THINTHICK_SMALLGAP_gap );
             break;
 
         case THINTHICK_MEDIUMGAP:
             aImpl = BorderWidthImpl(
                     CHANGE_LINE1 | CHANGE_LINE2 | CHANGE_DIST,
-                    1.0, 0.5, 0.5 );
+                    0.5, 0.25, 0.25 );
             break;
 
         case THINTHICK_LARGEGAP:
-            aImpl = BorderWidthImpl( CHANGE_DIST, 30.0, 15.0, 1.0 );
+            aImpl = BorderWidthImpl( CHANGE_DIST,
+                    THINTHICK_LARGEGAP_line1, THINTHICK_LARGEGAP_line2, 1.0 );
             break;
 
         case THICKTHIN_SMALLGAP:
-            aImpl = BorderWidthImpl( CHANGE_LINE2, 15.0, 1.0, 15.0 );
+            aImpl = BorderWidthImpl( CHANGE_LINE2, THICKTHIN_SMALLGAP_line1,
+                    1.0, THICKTHIN_SMALLGAP_gap );
             break;
 
         case THICKTHIN_MEDIUMGAP:
             aImpl = BorderWidthImpl(
                     CHANGE_LINE1 | CHANGE_LINE2 | CHANGE_DIST,
-                    0.5, 1.0, 0.5 );
+                    0.25, 0.5, 0.25 );
             break;
 
         case THICKTHIN_LARGEGAP:
-            aImpl = BorderWidthImpl( CHANGE_DIST, 15.0, 30.0, 1.0 );
+            aImpl = BorderWidthImpl( CHANGE_DIST, THICKTHIN_LARGEGAP_line1,
+                    THICKTHIN_LARGEGAP_line2, 1.0 );
             break;
 
         // Engraved / Embossed
@@ -185,7 +312,7 @@ BorderWidthImpl SvxBorderLine::getWidthImpl( SvxBorderStyle nStyle )
         case ENGRAVED:
             aImpl = BorderWidthImpl(
                     CHANGE_LINE1 | CHANGE_LINE2 | CHANGE_DIST,
-                    0.5, 0.5, 1.0 );
+                    0.25, 0.25, 0.5 );
             break;
 
         // Inset / Outset
@@ -196,13 +323,13 @@ BorderWidthImpl SvxBorderLine::getWidthImpl( SvxBorderStyle nStyle )
         case OUTSET:
             aImpl = BorderWidthImpl(
                     CHANGE_LINE2 | CHANGE_DIST,
-                    15.0, 1.0, 1.0 );
+                    OUTSET_line1, 0.5, 0.5 );
             break;
 
         case INSET:
             aImpl = BorderWidthImpl(
                     CHANGE_LINE1 | CHANGE_DIST,
-                    1.0, 15.0, 1.0 );
+                    0.5, INSET_line2, 0.5 );
             break;
     }
 

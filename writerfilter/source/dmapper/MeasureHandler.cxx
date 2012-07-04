@@ -95,7 +95,9 @@ sal_Int32 MeasureHandler::getMeasureValue() const
     {
         // TODO m_nUnit 3 - twip, other values unknown :-(
         if( m_nUnit == 3 || sal::static_int_cast<Id>(m_nUnit) == NS_ooxml::LN_Value_ST_TblWidth_dxa)
+        {
             nRet = ConversionHelper::convertTwipToMM100( m_nMeasureValue );
+        }
         //todo: handle additional width types:
         //NS_ooxml::LN_Value_ST_TblWidth_nil, NS_ooxml::LN_Value_ST_TblWidth_pct,
         //NS_ooxml::LN_Value_ST_TblWidth_dxa, NS_ooxml::LN_Value_ST_TblWidth_auto;
