@@ -109,23 +109,6 @@ void TemplateView::Paint (const Rectangle &rRect)
     mpProcessor->process(aSeq);
 }
 
-void TemplateView::InsertItem (const TemplateViewItem *pItem)
-{
-    TemplateViewItem *pCloneItem = new TemplateViewItem(*this,this);
-
-    pCloneItem->mnId = pItem->mnId;
-    pCloneItem->maText = pItem->maText;
-    pCloneItem->setPath(pItem->getPath());
-    pCloneItem->setFileType(pItem->getFileType());
-    pCloneItem->maPreview1 = pItem->maPreview1;
-
-    mItemList.push_back(pCloneItem);
-
-    CalculateItemPositions();
-
-    Invalidate();
-}
-
 void TemplateView::InsertItems (const std::vector<TemplateViewItem*> &rTemplates)
 {
     for (size_t i = 0, n = rTemplates.size(); i < n; ++i )
