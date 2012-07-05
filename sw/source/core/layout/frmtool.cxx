@@ -2702,7 +2702,12 @@ SwPageFrm * InsertNewPage( SwPageDesc &rDesc, SwFrm *pUpper,
     SwDoc *pDoc = ((SwLayoutFrm*)pUpper)->GetFmt()->GetDoc();
     SwFrmFmt *pFmt = 0;
     if (bFirst)
+    {
         pFmt = rDesc.GetFirstFmt();
+        // If there is no first format, use what is relevant anyway.
+        if (!pFmt)
+            pFmt = bOdd ? rDesc.GetRightFmt() : rDesc.GetLeftFmt();
+    }
     else
         pFmt = bOdd ? rDesc.GetRightFmt() : rDesc.GetLeftFmt();
     //Wenn ich kein FrmFmt fuer die Seite gefunden habe, muss ich eben
