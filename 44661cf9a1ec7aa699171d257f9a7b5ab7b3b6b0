@@ -1,0 +1,259 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAADH///+E\u003d",
+        "filename": "sc/source/core/tool/addincol.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 462,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2012-07-05T13:27:13Z",
+      "side": 1,
+      "message": "Just a hint: these operator+\u003d lines create temporary OUString instances (actually two per statement in this case) de/allocating memory that could be avoided by using an OUStringBuffer of a sufficient initial size (i.e. length of aServiceName plus \u0027.\u0027 plus length of pFuncNameArray[nFuncPos]) and use OUStringBuffer::append() to concatenate and a final OUStringBuffer::makeStringAndClear() call to create the OUString. However, I think it doesn\u0027t matter that much here, just to make you aware of how that could be done.",
+      "revId": "44661cf9a1ec7aa699171d257f9a7b5ab7b3b6b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAADH///+A\u003d",
+        "filename": "sc/source/core/tool/addincol.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 643,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2012-07-05T13:27:13Z",
+      "side": 1,
+      "message": "The xub_StrLen (defined to sal_uInt16) is wrong now, OUString positions such as returned by lastIndexOf() are sal_Int32 instead.",
+      "revId": "44661cf9a1ec7aa699171d257f9a7b5ab7b3b6b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAADH///98\u003d",
+        "filename": "sc/source/core/tool/addincol.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 644,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2012-07-05T13:27:13Z",
+      "side": 1,
+      "message": "So that means to also change comparisons with STRING_NOTFOUND (which is defined to 0xFFFF), lastIndexOf() returns -1 if not found, so the condition here can be simplified to\n\n    if (nPos \u003e 0)",
+      "revId": "44661cf9a1ec7aa699171d257f9a7b5ab7b3b6b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAADH///94\u003d",
+        "filename": "sc/source/core/tool/addincol.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 934,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2012-07-05T13:27:13Z",
+      "side": 1,
+      "message": "This should not need another temporary OUString anymore (not related to your changes, proper operator\u003d() have been implemented meanwhile) and instead simply be\n aLocalU \u003d \"###\";",
+      "revId": "44661cf9a1ec7aa699171d257f9a7b5ab7b3b6b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAADH///90\u003d",
+        "filename": "sc/source/core/tool/addincol.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 946,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2012-07-05T13:27:13Z",
+      "side": 1,
+      "message": "Same here,\n aDescU \u003d \"###\";",
+      "revId": "44661cf9a1ec7aa699171d257f9a7b5ab7b3b6b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAADH///9w\u003d",
+        "filename": "sc/source/core/tool/addincol.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 948,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2012-07-05T13:27:13Z",
+      "side": 1,
+      "message": "This can simply be\n ::rtl::OUString aDescription( aDescU );",
+      "revId": "44661cf9a1ec7aa699171d257f9a7b5ab7b3b6b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAADH///9s\u003d",
+        "filename": "sc/source/core/tool/addincol.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 971,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2012-07-05T13:27:13Z",
+      "side": 1,
+      "message": "aArgName \u003d \"###\";",
+      "revId": "44661cf9a1ec7aa699171d257f9a7b5ab7b3b6b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAADH///9o\u003d",
+        "filename": "sc/source/core/tool/addincol.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 981,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2012-07-05T13:27:13Z",
+      "side": 1,
+      "message": "aArgName \u003d \"###\";",
+      "revId": "44661cf9a1ec7aa699171d257f9a7b5ab7b3b6b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAADH///9k\u003d",
+        "filename": "sc/source/core/tool/addincol.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 990,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2012-07-05T13:27:13Z",
+      "side": 1,
+      "message": "Temporary conversion ctors are unnecessary here now, so\n aDesc.aName \u003d aArgName;\n aDesc.aDescription \u003d aArgDesc;",
+      "revId": "44661cf9a1ec7aa699171d257f9a7b5ab7b3b6b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAADH///9g\u003d",
+        "filename": "sc/source/core/tool/addincol.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1165,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2012-07-05T13:27:13Z",
+      "side": 1,
+      "message": "aDesc.aName \u003d aDesc.aDescription \u003d \"###\";",
+      "revId": "44661cf9a1ec7aa699171d257f9a7b5ab7b3b6b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAADH///9c\u003d",
+        "filename": "sc/source/core/tool/addincol.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1319,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2012-07-05T13:27:13Z",
+      "side": 1,
+      "message": "For this !...getLength() we now have isEmpty(), so\n if (aDesc.isEmpty())",
+      "revId": "44661cf9a1ec7aa699171d257f9a7b5ab7b3b6b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAADH///9Y\u003d",
+        "filename": "sc/source/core/tool/addincol.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1609,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2012-07-05T13:27:13Z",
+      "side": 1,
+      "message": "As the aString member variable now is of type OUString the temporary isn\u0027t needed anymore, so this\n\n rtl::OUString aUStr;\n rNewRes \u003e\u003e\u003d aUStr;\n aString \u003d ::rtl::OUString( aUStr );\n\ninstead can simply be\n\n rNewRes \u003e\u003e\u003d aString;",
+      "revId": "44661cf9a1ec7aa699171d257f9a7b5ab7b3b6b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAADH///9U\u003d",
+        "filename": "sc/source/core/tool/compiler.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 5199,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2012-07-05T13:27:13Z",
+      "side": 1,
+      "message": "In our convention a leading small p indicates a pointer, this should be aName instead of prName. There\u0027s also a converting String::operator\u003d(const OUString\u0026) so this temporary String can be simplified to\n\n ::rtl::OUString aName(rName);\n ScGlobal::GetAddInCollection()-\u003eLocalizeString( aName );\n rName \u003d aName;",
+      "revId": "44661cf9a1ec7aa699171d257f9a7b5ab7b3b6b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAADH///9Q\u003d",
+        "filename": "sc/source/core/tool/compiler.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 5245,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2012-07-05T13:27:13Z",
+      "side": 1,
+      "message": "Same here,\n\n aEntry.Name \u003d aName;\n\nis sufficient, with the additional benefit that once we also converted aEntry.Name to OUString there wouldn\u0027t be a superfluous automatic back and forth conversion.",
+      "revId": "44661cf9a1ec7aa699171d257f9a7b5ab7b3b6b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAADH///9M\u003d",
+        "filename": "sc/source/filter/excel/xiroot.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 282,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2012-07-05T13:27:13Z",
+      "side": 1,
+      "message": "Using the automatic conversion should work here\n\n return aScName;",
+      "revId": "44661cf9a1ec7aa699171d257f9a7b5ab7b3b6b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
