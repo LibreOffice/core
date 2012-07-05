@@ -715,8 +715,8 @@ int GraphiteLayout::GetTextBreak(long maxmnWidth, long char_extra, int factor) c
         if (mvChar2BaseGlyph[i] != -1)
         {
             if (
-                (mvCharBreaks[i] > -25 || (mvCharBreaks[i-1] > 0 && mvCharBreaks[i-1] < 25)) &&
-                (mvCharBreaks[i-1] < 25 || (mvCharBreaks[i] < 0 && mvCharBreaks[i] > -25))
+                (mvCharBreaks[i] > -35 || (mvCharBreaks[i-1] > 0 && mvCharBreaks[i-1] < 35)) &&
+                (mvCharBreaks[i-1] < 35 || (mvCharBreaks[i] < 0 && mvCharBreaks[i] > -35))
                )
             {
                 nLastBreak = static_cast<int>(i);
