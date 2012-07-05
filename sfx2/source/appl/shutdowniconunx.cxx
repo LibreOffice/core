@@ -1,4 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 #ifdef ENABLE_QUICKSTART_APPLET
 
@@ -85,7 +102,7 @@ static void menu_deactivate_cb( GtkWidget *pMenu )
 
 static GdkPixbuf * ResIdToPixbuf( sal_uInt16 nResId )
 {
-    ResId aResId( SV_ICON_SMALL_START + nResId, *pVCLResMgr );
+    ResId aResId( nResId, *pVCLResMgr );
     BitmapEx aIcon( aResId );
     Bitmap pInSalBitmap = aIcon.GetBitmap();
     AlphaMask pInSalAlpha = aIcon.GetAlpha();
@@ -159,7 +176,7 @@ static void add_item( GtkMenuShell *pMenuShell, const char *pAsciiURL,
                                     RTL_TEXTENCODING_UTF8);
     }
 
-    GdkPixbuf *pPixbuf= ResIdToPixbuf( nResId );
+    GdkPixbuf *pPixbuf = ResIdToPixbuf( SV_ICON_SMALL_START + nResId );
     GtkWidget *pImage = gtk_image_new_from_pixbuf( pPixbuf );
     g_object_unref( G_OBJECT( pPixbuf ) );
 
@@ -269,6 +286,7 @@ static void populate_menu( GtkWidget *pMenu )
          pShutdownIcon->GetResString( STR_QUICKSTART_FILEOPEN ),
          G_CALLBACK( open_file_cb ));
 
+
     pMenuItem = gtk_separator_menu_item_new();
     gtk_menu_shell_append( pMenuShell, pMenuItem );
 
@@ -361,7 +379,7 @@ void SAL_DLLPUBLIC_EXPORT plugin_init_sys_tray()
 
     pVCLResMgr = ResMgr::CreateResMgr("vcl");
 
-    GdkPixbuf *pPixbuf = ResIdToPixbuf( SV_ICON_ID_OFFICE );
+    GdkPixbuf *pPixbuf = ResIdToPixbuf( SV_ICON_SMALL_START + SV_ICON_ID_OFFICE );
     pTrayIcon = gtk_status_icon_new_from_pixbuf(pPixbuf);
     g_object_unref( pPixbuf );
 
@@ -369,10 +387,10 @@ void SAL_DLLPUBLIC_EXPORT plugin_init_sys_tray()
                   "tooltip_text", aLabel.getStr(), NULL);
 
     GtkWidget *pMenu = gtk_menu_new();
+    g_signal_connect(pTrayIcon,  "button-press-event",
+                     G_CALLBACK(display_menu_cb), pMenu);
     g_signal_connect (pMenu, "deactivate",
                       G_CALLBACK (menu_deactivate_cb), NULL);
-    g_signal_connect(pTrayIcon,  "button_press_event",
-                     G_CALLBACK(display_menu_cb), pMenu);
 
     // disable shutdown
     pShutdownIcon->SetVeto( true );

@@ -2846,8 +2846,8 @@ void Frame::implts_setIconOnWindow()
             try
             {
                 css::uno::Reference< css::beans::XPropertySetInfo > const xPSI( xSet->getPropertySetInfo(), css::uno::UNO_SET_THROW );
-                if ( xPSI->hasPropertyByName( CONTROLLER_PROPNAME_ICONID ) )
-                    xSet->getPropertyValue( CONTROLLER_PROPNAME_ICONID ) >>= nIcon;
+                if ( xPSI->hasPropertyByName( "IconId" ) )
+                    xSet->getPropertyValue( "IconId" ) >>= nIcon;
             }
             catch( css::uno::Exception& )
             {

@@ -1,30 +1,21 @@
 # -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t -*-
-#*************************************************************************
 #
-# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+# This file is part of the LibreOffice project.
 #
-# Copyright 2000, 2011 Oracle and/or its affiliates.
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
-# OpenOffice.org - a multi-platform office productivity suite
+# This file incorporates work covered by the following license notice:
 #
-# This file is part of OpenOffice.org.
+#   Licensed to the Apache Software Foundation (ASF) under one or more
+#   contributor license agreements. See the NOTICE file distributed
+#   with this work for additional information regarding copyright
+#   ownership. The ASF licenses this file to you under the Apache
+#   License, Version 2.0 (the "License"); you may not use this file
+#   except in compliance with the License. You may obtain a copy of
+#   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
-# OpenOffice.org is free software: you can redistribute it and/or modify
-# it under the terms of the GNU Lesser General Public License version 3
-# only, as published by the Free Software Foundation.
-#
-# OpenOffice.org is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU Lesser General Public License version 3 for more details
-# (a copy is included in the LICENSE file that accompanied this code).
-#
-# You should have received a copy of the GNU Lesser General Public License
-# version 3 along with OpenOffice.org.  If not, see
-# <http://www.openoffice.org/license.html>
-# for a copy of the LGPLv3 License.
-#
-#*************************************************************************
 
 $(eval $(call gb_Library_Library,sfx))
 
@@ -47,9 +38,7 @@ $(eval $(call gb_Library_set_include,sfx,\
     $$(INCLUDE) \
 ))
 
-$(eval $(call gb_Library_add_defs,sfx,\
-    -DSFX2_DLLIMPLEMENTATION \
-))
+$(eval $(call gb_Library_add_defs,sfx,-DSFX2_DLLIMPLEMENTATION))
 
 ifeq ($(ENABLE_SYSTRAY_GTK),TRUE)
 $(eval $(call gb_Library_add_defs,sfx,\
@@ -134,7 +123,6 @@ $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/config/evntconf \
     sfx2/source/control/bindings \
     sfx2/source/control/ctrlitem \
-    sfx2/source/control/dispatch \
     sfx2/source/control/minfitem \
     sfx2/source/control/msg \
     sfx2/source/control/msgpool \
@@ -249,6 +237,21 @@ $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/view/viewprn \
     sfx2/source/view/viewsh \
 ))
+
+# i116803: crash in impress when
+# "opening stylist, select graphic style, select modify from context menu, cancel dialog, close stylist"
+# only on unxlngi6 and unxlngi6.pro platform
+ifeq ($(OS),LINUX)
+$(eval $(call gb_Library_add_cxxobjects,sfx,\
+       sfx2/source/control/dispatch \
+    , $(gb_COMPILERNOOPTFLAGS) $(gb_LinkTarget_EXCEPTIONFLAGS) \
+))
+else
+$(eval $(call gb_Library_add_exception_objects,sfx,\
+       sfx2/source/control/dispatch \
+))
+endif
+
 
 $(eval $(call gb_SdiTarget_SdiTarget,sfx2/sdi/sfxslots,sfx2/sdi/sfx))
 

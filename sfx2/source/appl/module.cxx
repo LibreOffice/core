@@ -1,31 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
-
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 #include <stdio.h>
 #include <tools/rcid.h>
@@ -385,17 +375,9 @@ FieldUnit SfxModule::GetModuleFieldUnit( ::com::sun::star::uno::Reference< ::com
     // find the module
     SfxModule const * pModule = GetActiveModule( pViewFrame );
     ENSURE_OR_RETURN( pModule != NULL, "SfxModule::GetModuleFieldUnit: no SfxModule for the given frame!", FUNIT_100TH_MM );
-
-    SfxPoolItem const * pItem = pModule->GetItem( SID_ATTR_METRIC );
-    if ( pItem == NULL )
-    {
-        SAL_WARN(
-            "sfx2.appl",
-            "SfxModule::GetFieldUnit: no metric item in the module implemented"
-                " by '" << typeid(*pModule).name() << "'!");
-        return FUNIT_100TH_MM;
-    }
-    return (FieldUnit)( (SfxUInt16Item*)pItem )->GetValue();
+	if ( pModule )
+		return pModule->GetFieldUnit();
+	return FUNIT_INCH;
 }
 
 FieldUnit SfxModule::GetCurrentFieldUnit()
@@ -405,7 +387,6 @@ FieldUnit SfxModule::GetCurrentFieldUnit()
     if ( pModule )
     {
         const SfxPoolItem* pItem = pModule->GetItem( SID_ATTR_METRIC );
-        DBG_ASSERT( pItem, "GetFieldUnit(): no item" );
         if ( pItem )
             eUnit = (FieldUnit)( (SfxUInt16Item*)pItem )->GetValue();
     }
@@ -418,7 +399,6 @@ FieldUnit SfxModule::GetFieldUnit() const
 {
     FieldUnit eUnit = FUNIT_INCH;
     const SfxPoolItem* pItem = GetItem( SID_ATTR_METRIC );
-    DBG_ASSERT( pItem, "GetFieldUnit(): no item" );
     if ( pItem )
         eUnit = (FieldUnit)( (SfxUInt16Item*)pItem )->GetValue();
     return eUnit;

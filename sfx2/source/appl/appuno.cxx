@@ -1,30 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1300)
 #pragma warning( disable : 4290 )
@@ -133,6 +124,34 @@ using namespace ::com::sun::star::io;
 
 #define PROTOCOLHANDLER_SERVICENAME     "com.sun.star.frame.ProtocolHandler"
 
+#include <sfxslots.hxx>
+
+// needs to be converted to a better data structure
+SfxFormalArgument aFormalArgs[] = {
+    SFX_ARGUMENT(SID_DEFAULTFILENAME,"SuggestedSaveAsName",SfxStringItem),
+    SFX_ARGUMENT(SID_DEFAULTFILEPATH,"SuggestedSaveAsDir",SfxStringItem),
+    SFX_ARGUMENT(SID_DOCINFO_AUTHOR,"VersionAuthor",SfxStringItem),
+    SFX_ARGUMENT(SID_DOCINFO_COMMENTS,"VersionComment",SfxStringItem),
+    SFX_ARGUMENT(SID_FILE_FILTEROPTIONS,"FilterOptions",SfxStringItem),
+    SFX_ARGUMENT(SID_FILTER_NAME,"FilterName",SfxStringItem),
+//    SFX_ARGUMENT(SID_FILE_NAME,"FileName",SfxStringItem),
+    SFX_ARGUMENT(SID_FILE_NAME,"URL",SfxStringItem),
+    SFX_ARGUMENT(SID_OPTIONS,"OpenFlags",SfxStringItem),
+    SFX_ARGUMENT(SID_OVERWRITE,"Overwrite",SfxBoolItem),
+    SFX_ARGUMENT(SID_PASSWORD,"Password",SfxStringItem),
+    SFX_ARGUMENT(SID_PASSWORDINTERACTION,"PasswordInteraction",SfxBoolItem),
+    SFX_ARGUMENT(SID_REFERER,"Referer",SfxStringItem),
+    SFX_ARGUMENT(SID_SAVETO,"SaveTo",SfxBoolItem),
+    SFX_ARGUMENT(SID_TEMPLATE_NAME,"TemplateName",SfxStringItem),
+    SFX_ARGUMENT(SID_TEMPLATE_REGIONNAME,"TemplateRegion",SfxStringItem),
+//    SFX_ARGUMENT(SID_TEMPLATE_REGIONNAME,"Region",SfxStringItem),
+//    SFX_ARGUMENT(SID_TEMPLATE_NAME,"Name",SfxStringItem),
+    SFX_ARGUMENT(SID_UNPACK,"Unpacked",SfxBoolItem),
+    SFX_ARGUMENT(SID_VERSION,"Version",SfxInt16Item),
+};
+
+static sal_uInt16 nMediaArgsCount = sizeof(aFormalArgs) / sizeof (SfxFormalArgument);
+
 static char const sTemplateRegionName[] = "TemplateRegionName";
 static char const sTemplateName[] = "TemplateName";
 static char const sAsTemplate[] = "AsTemplate";
@@ -185,8 +204,16 @@ static char const sModifyPasswordInfo[] = "ModifyPasswordInfo";
 static char const sSuggestedSaveAsDir[] = "SuggestedSaveAsDir";
 static char const sSuggestedSaveAsName[] = "SuggestedSaveAsName";
 static char const sEncryptionData[] = "EncryptionData";
+static char const sFailOnWarning[] = "FailOnWarning";
 static char const sDocumentService[] = "DocumentService";
 
+static bool isMediaDescriptor( sal_uInt16 nSlotId )
+{
+	return ( nSlotId == SID_OPENDOC || nSlotId == SID_EXPORTDOC ||
+             nSlotId == SID_SAVEASDOC || nSlotId == SID_SAVEDOC ||
+             nSlotId == SID_SAVETO || nSlotId == SID_EXPORTDOCASPDF ||
+             nSlotId == SID_DIRECTEXPORTDOCASPDF );
+}
 
 void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& rArgs, SfxAllItemSet& rSet, const SfxSlot* pSlot )
 {
@@ -206,7 +233,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
         return;
 
     const ::com::sun::star::beans::PropertyValue* pPropsVal = rArgs.getConstArray();
-    if ( !pSlot->IsMode(SFX_SLOT_METHOD) )
+	if ( !pSlot->IsMode(SFX_SLOT_METHOD) )
     {
         // slot is a property
         const SfxType* pType = pSlot->GetType();
@@ -325,9 +352,11 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
         sal_Int32 nFoundArgs = 0;
 #endif
         // slot is a method
-        for ( sal_uInt16 nArgs=0; nArgs<pSlot->nArgDefCount; nArgs++ )
+		bool bIsMediaDescriptor = isMediaDescriptor( nSlotId );
+		sal_uInt16 nMaxArgs = bIsMediaDescriptor ? nMediaArgsCount : pSlot->nArgDefCount;
+        for ( sal_uInt16 nArgs=0; nArgs<nMaxArgs; nArgs++ )
         {
-            const SfxFormalArgument &rArg = pSlot->GetFormalArgument( nArgs );
+			const SfxFormalArgument &rArg = bIsMediaDescriptor ? aFormalArgs[nArgs] : pSlot->GetFormalArgument( nArgs );
             SfxPoolItem* pItem = rArg.CreateItem();
             if ( !pItem )
             {
@@ -475,8 +504,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                 }
             }
         }
-        else if ( nSlotId == SID_OPENDOC || nSlotId == SID_EXPORTDOC || nSlotId == SID_SAVEASDOC || nSlotId == SID_SAVEDOC ||
-                  nSlotId == SID_SAVETO || nSlotId == SID_EXPORTDOCASPDF || nSlotId == SID_DIRECTEXPORTDOCASPDF )
+        else if ( bIsMediaDescriptor )
         {
             for ( sal_uInt16 n=0; n<nCount; n++ )
             {
@@ -498,17 +526,17 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                 else if ( aName == sStatusInd )
                 {
                     Reference< ::com::sun::star::task::XStatusIndicator > xVal;
-                    sal_Bool bOK = ((rProp.Value >>= xVal) && xVal.is());
+                    sal_Bool bOK = (rProp.Value >>= xVal);
                     DBG_ASSERT( bOK, "invalid type for StatusIndicator" );
-                    if (bOK)
+                    if (bOK && xVal.is())
                         rSet.Put( SfxUnoAnyItem( SID_PROGRESS_STATUSBAR_CONTROL, rProp.Value ) );
                 }
                 else if ( aName == sInteractionHdl )
                 {
                     Reference< ::com::sun::star::task::XInteractionHandler > xVal;
-                    sal_Bool bOK = ((rProp.Value >>= xVal) && xVal.is());
+                    sal_Bool bOK = (rProp.Value >>= xVal);
                     DBG_ASSERT( bOK, "invalid type for InteractionHandler" );
-                    if (bOK)
+                    if (bOK && xVal.is())
                         rSet.Put( SfxUnoAnyItem( SID_INTERACTIONHANDLER, rProp.Value ) );
                 }
                 else if ( aName == sViewData )
@@ -578,6 +606,14 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                     DBG_ASSERT( bOK, "invalid type for OpenNewView" );
                     if (bOK)
                         rSet.Put( SfxBoolItem( SID_OPEN_NEW_VIEW, bVal ) );
+                }
+                else if ( aName == sFailOnWarning )
+                {
+                    sal_Bool bVal = sal_False;
+                    sal_Bool bOK = (rProp.Value >>= bVal);
+                    DBG_ASSERT( bOK, "invalid type for FailOnWarning" );
+                    if (bOK)
+                        rSet.Put( SfxBoolItem( SID_FAIL_ON_WARNING, bVal ) );
                 }
                 else if ( aName == sViewId )
                 {
@@ -974,11 +1010,13 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
     else
     {
         // slot is a method
-        sal_uInt16 nFormalArgs = pSlot->GetFormalArgumentCount();
+		bool bIsMediaDescriptor = isMediaDescriptor( nSlotId );
+		sal_uInt16 nFormalArgs = bIsMediaDescriptor ? nMediaArgsCount : pSlot->GetFormalArgumentCount();
         for ( sal_uInt16 nArg=0; nArg<nFormalArgs; ++nArg )
         {
             // check every formal argument of the method
             const SfxFormalArgument &rArg = pSlot->GetFormalArgument( nArg );
+
             sal_uInt16 nWhich = rSet.GetPool()->GetWhich( rArg.nSlotId );
             if ( rSet.GetItemState( nWhich ) == SFX_ITEM_SET ) //???
             {
@@ -997,8 +1035,7 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
         }
 
         // special treatment for slots that are *not* meant to be recorded as slots (except SaveAs/To)
-        if ( nSlotId == SID_OPENDOC || nSlotId == SID_EXPORTDOC || nSlotId == SID_SAVEASDOC ||  nSlotId == SID_SAVEDOC ||
-             nSlotId == SID_SAVETO || nSlotId == SID_EXPORTDOCASPDF || nSlotId == SID_DIRECTEXPORTDOCASPDF )
+        if ( bIsMediaDescriptor )
         {
             sal_Int32 nAdditional=0;
             if ( rSet.GetItemState( SID_PROGRESS_STATUSBAR_CONTROL ) == SFX_ITEM_SET )
@@ -1026,6 +1063,8 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
             if ( rSet.GetItemState( SID_TEMPLATE ) == SFX_ITEM_SET )
                 nAdditional++;
             if ( rSet.GetItemState( SID_OPEN_NEW_VIEW ) == SFX_ITEM_SET )
+                nAdditional++;
+            if ( rSet.GetItemState( SID_FAIL_ON_WARNING ) == SFX_ITEM_SET )
                 nAdditional++;
             if ( rSet.GetItemState( SID_VIEW_ID ) == SFX_ITEM_SET )
                 nAdditional++;
@@ -1099,7 +1138,6 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                 nAdditional++;
             if ( rSet.GetItemState( SID_ENCRYPTIONDATA ) == SFX_ITEM_SET )
                 nAdditional++;
-                nAdditional++;
             if ( rSet.GetItemState( SID_SUGGESTEDSAVEASNAME ) == SFX_ITEM_SET )
                 nAdditional++;
             if ( rSet.GetItemState( SID_DOC_SERVICE ) == SFX_ITEM_SET )
@@ -1131,11 +1169,12 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                 if ( !pSlot->IsMode(SFX_SLOT_METHOD) && nId == rSet.GetPool()->GetWhich( pSlot->GetSlotId() ) )
                     continue;
 
-                sal_uInt16 nFormalArgs = pSlot->GetFormalArgumentCount();
+				bool bIsMediaDescriptor = isMediaDescriptor( nSlotId );
+				sal_uInt16 nFormalArgs = bIsMediaDescriptor ? nMediaArgsCount : pSlot->nArgDefCount;
                 sal_uInt16 nArg;
                 for ( nArg=0; nArg<nFormalArgs; ++nArg )
                 {
-                    const SfxFormalArgument &rArg = pSlot->GetFormalArgument( nArg );
+					const SfxFormalArgument &rArg = bIsMediaDescriptor ? aFormalArgs[nArg] : pSlot->GetFormalArgument( nArg );
                     sal_uInt16 nWhich = rSet.GetPool()->GetWhich( rArg.nSlotId );
                     if ( nId == nWhich )
                         break;
@@ -1144,8 +1183,7 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                 if ( nArg<nFormalArgs )
                     continue;
 
-                if ( nSlotId == SID_OPENDOC || nSlotId == SID_EXPORTDOC || nSlotId == SID_SAVEASDOC ||  nSlotId == SID_SAVEDOC ||
-                     nSlotId == SID_SAVETO || nSlotId == SID_EXPORTDOCASPDF || nSlotId == SID_DIRECTEXPORTDOCASPDF )
+                if ( bIsMediaDescriptor )
                 {
                     if ( nId == SID_DOCFRAME )
                         continue;
@@ -1460,6 +1498,11 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
             if ( rSet.GetItemState( SID_OPEN_NEW_VIEW, sal_False, &pItem ) == SFX_ITEM_SET )
             {
                 pValue[nActProp].Name = rtl::OUString(sOpenNewView);
+                pValue[nActProp++].Value <<= ( ((SfxBoolItem*)pItem)->GetValue() );
+            }
+            if ( rSet.GetItemState( SID_FAIL_ON_WARNING, sal_False, &pItem ) == SFX_ITEM_SET )
+            {
+                pValue[nActProp].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sFailOnWarning));
                 pValue[nActProp++].Value <<= ( ((SfxBoolItem*)pItem)->GetValue() );
             }
             if ( rSet.GetItemState( SID_VIEW_ID, sal_False, &pItem ) == SFX_ITEM_SET )

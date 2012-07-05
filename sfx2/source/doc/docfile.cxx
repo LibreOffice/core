@@ -1,30 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 #include <sfx2/docfile.hxx>
 #include "sfx2/signaturestate.hxx"
@@ -991,20 +982,19 @@ namespace
     }
 }
 
-//------------------------------------------------------------------
-sal_Bool SfxMedium::LockOrigFileOnDemand( sal_Bool bLoading, sal_Bool bNoUI )
+// returns true if the document can be opened for editing ( even if it should be a copy )
+// otherwise the document should be opened readonly
+// if user cancel the loading the ERROR_ABORT is set
+bool SfxMedium::LockOrigFileOnDemand( sal_Bool bLoading, sal_Bool bNoUI )
 {
-    // returns true if the document can be opened for editing ( even if it should be a copy )
-    // otherwise the document should be opened readonly
-    // if user cancel the loading the ERROR_ABORT is set
-    sal_Bool bResult = sal_False;
-
     if (!IsLockingUsed())
-    {
-        return sal_True;
-    }
+        return true;
 
-    if ( !GetURLObject().HasError() ) try
+    if ( GetURLObject().HasError() )
+        return false;
+
+    bool bResult = false;
+    try
     {
         if ( pImp->m_bLocked && bLoading && ::utl::LocalFileHelper::IsLocalFile( GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) ) )
         {
@@ -1044,8 +1034,7 @@ sal_Bool SfxMedium::LockOrigFileOnDemand( sal_Bool bLoading, sal_Bool bNoUI )
                     ::ucbhelper::Content aContent( GetURLObject().GetMainURL( INetURLObject::NO_DECODE ), xDummyEnv );
                     aContent.getPropertyValue( ::rtl::OUString( "IsReadOnly"  ) ) >>= bContentReadonly;
                 }
-                catch( const uno::Exception& )
-                {}
+                catch( const uno::Exception& ) {}
 
 #if EXTRA_ACL_CHECK
                 // This block was introduced as a fix to i#102464, but removing
@@ -1063,9 +1052,7 @@ sal_Bool SfxMedium::LockOrigFileOnDemand( sal_Bool bLoading, sal_Bool bNoUI )
 #endif
 
                 if ( bContentReadonly )
-                {
                     pImp->m_originallyReadOnly = true;
-                }
             }
 
             // do further checks only if the file not readonly in fs
@@ -1108,7 +1095,7 @@ sal_Bool SfxMedium::LockOrigFileOnDemand( sal_Bool bLoading, sal_Bool bNoUI )
                                     // in this case it should be ignored if system file locking is anyway active
                                     if ( bUseSystemLock || !IsOOoLockFileUsed() )
                                     {
-                                        bResult = sal_True;
+                                        bResult = true;
                                         // take the ownership over the lock file
                                         aLockFile.OverwriteOwnLockFile();
                                     }
@@ -1130,7 +1117,7 @@ sal_Bool SfxMedium::LockOrigFileOnDemand( sal_Bool bLoading, sal_Bool bNoUI )
                                             xHandler->handle( xIgnoreRequestImpl.get() );
 
                                             ::rtl::Reference< ::ucbhelper::InteractionContinuation > xSelected = xIgnoreRequestImpl->getSelection();
-                                            bResult = (  uno::Reference< task::XInteractionApprove >( xSelected.get(), uno::UNO_QUERY ).is() );
+                                            bResult = uno::Reference< task::XInteractionApprove >( xSelected.get(), uno::UNO_QUERY ).is();
                                         }
                                     }
                                 }
@@ -1140,7 +1127,7 @@ sal_Bool SfxMedium::LockOrigFileOnDemand( sal_Bool bLoading, sal_Bool bNoUI )
                                     // in this case it should be ignored if system file locking is anyway active
                                     if ( bUseSystemLock || !IsOOoLockFileUsed() )
                                     {
-                                        bResult = sal_True;
+                                        bResult = true;
                                         // take the ownership over the lock file
                                         aLockFile.OverwriteOwnLockFile();
                                     }
@@ -1150,7 +1137,7 @@ sal_Bool SfxMedium::LockOrigFileOnDemand( sal_Bool bLoading, sal_Bool bNoUI )
                                 // but it is ignored while deciding whether the document should be opened for editing or not
                                 if ( !bResult && !IsOOoLockFileUsed() )
                                 {
-                                    bResult = sal_True;
+                                    bResult = true;
                                     // take the ownership over the lock file
                                     aLockFile.OverwriteOwnLockFile();
                                 }
@@ -1183,7 +1170,7 @@ sal_Bool SfxMedium::LockOrigFileOnDemand( sal_Bool bLoading, sal_Bool bNoUI )
                                       && aOwnData[LOCKFILE_USERURL_ID].equals( aData[LOCKFILE_USERURL_ID] ) )
                                     {
                                         // this is own lock from the same installation, it could remain because of crash
-                                        bResult = sal_True;
+                                        bResult = true;
                                     }
                                 }
 
@@ -1219,8 +1206,8 @@ sal_Bool SfxMedium::LockOrigFileOnDemand( sal_Bool bLoading, sal_Bool bNoUI )
         {
             // the error should be set in case it is storing process
             // or the document has been opened for editing explicitly
+            SFX_ITEMSET_ARG( pSet, pReadOnlyItem, SfxBoolItem, SID_DOC_READONLY, sal_False );
 
-        SFX_ITEMSET_ARG( pSet, pReadOnlyItem, SfxBoolItem, SID_DOC_READONLY, sal_False );
             if ( !bLoading || (pReadOnlyItem && !pReadOnlyItem->GetValue()) )
                 SetError( ERRCODE_IO_ACCESSDENIED, ::rtl::OUString( OSL_LOG_PREFIX  ) );
             else
@@ -1233,7 +1220,7 @@ sal_Bool SfxMedium::LockOrigFileOnDemand( sal_Bool bLoading, sal_Bool bNoUI )
     }
     catch( const uno::Exception& )
     {
-        OSL_FAIL( "Unexpected problem by locking, high probability, that the content could not be created" );
+        OSL_FAIL( "Locking exception: high probability, that the content has not been created" );
     }
     return bResult;
 }
@@ -2927,6 +2914,24 @@ SfxMedium::SfxMedium( const uno::Reference < embed::XStorage >& rStor, const Str
 {
     String aType = SfxFilter::GetTypeFromStorage( rStor );
     pFilter = SFX_APP()->GetFilterMatcher().GetFilter4EA( aType );
+    DBG_ASSERT( pFilter, "No Filter for storage found!" );
+
+    Init_Impl();
+    pImp->xStorage = rStor;
+    pImp->bDisposeStorage = sal_False;
+
+    // always take BaseURL first, could be overwritten by ItemSet
+    GetItemSet()->Put( SfxStringItem( SID_DOC_BASEURL, rBaseURL ) );
+    if ( p )
+        GetItemSet()->Put( *p );
+}
+
+SfxMedium::SfxMedium( const uno::Reference < embed::XStorage >& rStor, const String& rBaseURL, const String& rTypeName, const SfxItemSet* p, sal_Bool bRootP )
+:   IMPL_CTOR( bRootP, 0 ),	// bRoot, pURLObj
+    pSet(0),
+    pImp( new SfxMedium_Impl( this ))
+{
+	pFilter = SFX_APP()->GetFilterMatcher().GetFilter4EA( rTypeName );
     DBG_ASSERT( pFilter, "No Filter for storage found!" );
 
     Init_Impl();
