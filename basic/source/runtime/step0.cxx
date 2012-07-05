@@ -335,54 +335,57 @@ void SbiRuntime::StepGET()
 inline bool checkUnoStructCopy( bool bVBA, SbxVariableRef& refVal, SbxVariableRef& refVar )
 {
     SbxDataType eVarType = refVar->GetType();
+    SbxDataType eValType = refVal->GetType();
 
-    if ( !( !bVBA|| ( bVBA && refVar->GetType() != SbxEMPTY ) ) )
+    if ( !( !bVBA|| ( bVBA && refVar->GetType() != SbxEMPTY ) ) || !refVar->CanWrite() )
         return false;
 
+    if ( eValType != SbxOBJECT )
+        return false;
+    // we seem to be duplicating parts of SbxValue=operator, maybe we should just move this to
+    // there :-/ not sure if for every '=' we would want struct handling
     if( eVarType != SbxOBJECT )
+    {
+        if ( refVar->IsFixed() )
+            return false;
+    }
+    // #115826: Exclude ProcedureProperties to avoid call to Property Get procedure
+    else if( refVar->ISA(SbProcedureProperty) )
         return false;
 
     SbxObjectRef xValObj = (SbxObject*)refVal->GetObject();
     if( !xValObj.Is() || xValObj->ISA(SbUnoAnyObject) )
         return false;
 
-    // #115826: Exclude ProcedureProperties to avoid call to Property Get procedure
-    if( refVar->ISA(SbProcedureProperty) )
-        return false;
-
-    SbxObjectRef xVarObj = (SbxObject*)refVar->GetObject();
-    SbxDataType eValType = refVal->GetType();
-    if( eValType == SbxOBJECT )
+    SbUnoObject* pUnoVal =  PTR_CAST(SbUnoObject,(SbxObject*)xValObj);
+    SbUnoStructRefObject* pUnoStructVal = PTR_CAST(SbUnoStructRefObject,(SbxObject*)xValObj);
+    Any aAny = pUnoVal ? pUnoVal->getUnoAny() : pUnoStructVal->getUnoAny();
+    if (  aAny.getValueType().getTypeClass() == TypeClass_STRUCT )
     {
+        refVar->SetType( SbxOBJECT );
+        SbxObjectRef xVarObj = (SbxObject*)refVar->GetObject();
         SbUnoObject* pUnoObj = PTR_CAST(SbUnoObject,(SbxObject*)xVarObj);
         SbUnoStructRefObject* pUnoStructObj = PTR_CAST(SbUnoStructRefObject,(SbxObject*)xVarObj);
 
-        SbUnoObject* pUnoVal =  PTR_CAST(SbUnoObject,(SbxObject*)xValObj);
-        SbUnoStructRefObject* pUnoStructVal = PTR_CAST(SbUnoStructRefObject,(SbxObject*)xValObj);
-
-        if ( ( !pUnoObj && !pUnoStructObj ) || ( !pUnoVal && !pUnoStructVal ) )
+        if ( ( !pUnoVal && !pUnoStructVal ) )
             return false;
-        Any aAny = pUnoVal ? pUnoVal->getUnoAny() : pUnoStructVal->getUnoAny();
 
-        if (  aAny.getValueType().getTypeClass() == TypeClass_STRUCT )
+        String sClassName = pUnoVal ? pUnoVal->GetClassName() : pUnoStructVal->GetClassName();
+        String sName = pUnoVal ? pUnoVal->GetName() : pUnoStructVal->GetName();
+
+        if ( pUnoStructObj )
         {
-            String sClassName = pUnoVal ? pUnoVal->GetClassName() : pUnoStructVal->GetClassName();
-            String sName = pUnoVal ? pUnoVal->GetName() : pUnoStructVal->GetName();
-
-            if ( pUnoObj )
-            {
-                SbUnoObject* pNewUnoObj = new SbUnoObject( sName, aAny );
-                // #70324: adopt ClassName
-                pNewUnoObj->SetClassName( sClassName );
-                refVar->PutObject( pNewUnoObj );
-                return true;
-            }
-            else
-            {
-                StructRefInfo aInfo = pUnoStructObj->getStructInfo();
-                aInfo.setValue( aAny );
-            }
+            StructRefInfo aInfo = pUnoStructObj->getStructInfo();
+            aInfo.setValue( aAny );
         }
+        else
+        {
+            SbUnoObject* pNewUnoObj = new SbUnoObject( sName, aAny );
+            // #70324: adopt ClassName
+            pNewUnoObj->SetClassName( sClassName );
+            refVar->PutObject( pNewUnoObj );
+        }
+        return true;
     }
     return false;
 }
