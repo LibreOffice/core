@@ -227,11 +227,11 @@ ConvertBorderWidthToWord(SvxBorderStyle const eStyle, double const fWidth)
             break;
 
         case OUTSET:
-            return (fWidth / 2.0) - OUTSET_line1;
+            return (fWidth - OUTSET_line1) / 2.0;
             break;
 
         case INSET:
-            return (fWidth / 2.0) - INSET_line2;
+            return (fWidth - INSET_line2) / 2.0;
             break;
 
         default:
