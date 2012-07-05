@@ -588,7 +588,14 @@ uno::Any DomainMapper_Impl::GetPropertyFromStyleSheet(PropertyIds eId)
             }
         }
         //search until the property is set or no parent is available
-        pEntry = GetStyleSheetTable()->FindParentStyleSheet(pEntry->sBaseStyleIdentifier);
+        StyleSheetEntryPtr pNewEntry = GetStyleSheetTable()->FindParentStyleSheet(pEntry->sBaseStyleIdentifier);
+
+        SAL_WARN_IF( pEntry == pNewEntry, "writerfilter", "circular loop in style hierarchy?");
+
+        if (pEntry == pNewEntry) //fdo#49587
+            break;
+
+        pEntry = pNewEntry;
     }
     return uno::Any();
 }
