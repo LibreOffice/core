@@ -8,6 +8,10 @@ get_SHA_for_change() {
 	SHA=`ssh ${GERRITHOST?} gerrit query --all-approvals change:$1|grep ref|tail -1|cut -d: -f2`
 }
 
+get_REVISION_for_change() {
+	REVISION=`ssh ${GERRITHOST?} gerrit query --all-approvals change:$1|grep revision|tail -1|cut -d: -f2`
+}
+
 ask_tristate() {
 	case $1 in
 		[yY] | [yY][Ee][Ss] | [+] )
@@ -159,8 +163,8 @@ case "$1" in
 			;;
 		esac
 		read -p "please type a friendly comment$MESSAGEREQ: " MESSAGE
-		get_SHA_for_change $CHANGEID
-		ssh ${GERRITHOST?} gerrit review -m \"$MESSAGE\" $VERIFIEDFLAG $CODEREVIEWFLAG $SHA
+		get_REVISION_for_change $CHANGEID
+		ssh ${GERRITHOST?} gerrit review -m \"$MESSAGE\" $VERIFIEDFLAG $CODEREVIEWFLAG $REVISION
 	;;
 	checkout)
 		get_SHA_for_change $2
