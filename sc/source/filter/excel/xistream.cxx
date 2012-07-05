@@ -822,7 +822,9 @@ sal_Size XclImpStream::CopyToStream( SvStream& rOutStrm, sal_Size nBytes )
         {
             sal_Size nReadSize = ::std::min( nBytesLeft, nMaxBuffer );
             nRet += Read( pnBuffer, nReadSize );
-            rOutStrm.Write( pnBuffer, nReadSize );
+            // writing more bytes than read results in invalid memory access
+            SAL_WARN_IF(nRet != nReadSize, "sc", "read less bytes than requested");
+            rOutStrm.Write( pnBuffer, nRet );
             nBytesLeft -= nReadSize;
         }
 
