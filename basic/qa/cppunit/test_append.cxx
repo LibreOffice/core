@@ -6,30 +6,18 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-
-#include <sal/types.h>
-#include "cppunit/TestAssert.h"
-#include "cppunit/TestFixture.h"
-#include "cppunit/extensions/HelperMacros.h"
-#include "cppunit/plugin/TestPlugIn.h"
-
-#include <test/bootstrapfixture.hxx>
-
+#include "basictest.hxx"
 #include "osl/file.hxx"
 #include "osl/process.h"
 
-#include "basic/sbstar.hxx"
 #include "basic/sbmod.hxx"
 #include "basic/sbmeth.hxx"
-#include "basic/basrdll.hxx"
 namespace
 {
-    class EnableTest : public test::BootstrapFixture
+    class EnableTest : public BasicTestBase
     {
-        private:
-        bool mbError;
         public:
-        EnableTest() : mbError(false) {};
+        EnableTest() {};
         void testDimEnable();
         void testEnableRuntime();
         // Adds code needed to register the test suite
@@ -41,63 +29,53 @@ namespace
 
         // End of test suite definition
         CPPUNIT_TEST_SUITE_END();
-
-        DECL_LINK( BasicErrorHdl, StarBASIC * );
-        bool HasError() { return mbError; }
-        BasicDLL& basicDLL()
-        {
-            static BasicDLL maDll; // we need a dll instance for resouce manager etc.
-            return maDll;
-        }
     };
 
-IMPL_LINK( EnableTest, BasicErrorHdl, StarBASIC *, /*pBasic*/)
-{
-    fprintf(stderr,"Got error: \n\t%s!!!\n", rtl::OUStringToOString( StarBASIC::GetErrorText(), RTL_TEXTENCODING_UTF8 ).getStr() );
-    mbError = true;
-    return 0;
-}
+rtl::OUString sTestEnableRuntime(
+    "Function Test as Integer\n"
+    "Dim Enable as Integer\n"
+    "Enable = 1\n"
+    "Enable = Enable + 2\n"
+    "Test = Enable\n"
+    "End Function\n"
+);
+
+rtl::OUString sTestDimEnable(
+    "Sub Test\n"
+    "Dim Enable as String\n"
+    "End Sub\n"
+);
 
 void EnableTest::testEnableRuntime()
 {
     CPPUNIT_ASSERT_MESSAGE( "No resource manager", basicDLL().GetBasResMgr() != NULL );
     StarBASICRef pBasic = new StarBASIC();
+    ResetError();
     StarBASIC::SetGlobalErrorHdl( LINK( this, EnableTest, BasicErrorHdl ) );
 
-    rtl::OUString    sSource("Function Test as Integer\n");
-    sSource += rtl::OUString("Dim Enable as Integer\n");
-    sSource += rtl::OUString("Enable = 1\n");
-    sSource += rtl::OUString("Enable = Enable + 2\n");
-    sSource += rtl::OUString("Test = Enable\n");
-    sSource += rtl::OUString("End Function\n");
-
-    SbModule* pMod = pBasic->MakeModule( rtl::OUString( "TestModule" ), sSource );
+    SbModule* pMod = pBasic->MakeModule( rtl::OUString( "TestModule" ), sTestEnableRuntime );
     pMod->Compile();
-    CPPUNIT_ASSERT_MESSAGE("testEnableRuntime fails with compile error",!mbError );
+    CPPUNIT_ASSERT_MESSAGE("testEnableRuntime fails with compile error",!HasError() );
     SbMethod* pMeth = static_cast<SbMethod*>(pMod->Find( rtl::OUString("Test"),  SbxCLASS_METHOD ));
     CPPUNIT_ASSERT_MESSAGE("testEnableRuntime no method found", pMeth );
     SbxVariableRef refTemp = pMeth;
     // forces a broadcast
     SbxVariableRef pNew = new  SbxMethod( *((SbxMethod*)pMeth));
     CPPUNIT_ASSERT(pNew->GetInteger() == 3 );
-    StarBASIC::SetGlobalErrorHdl( Link() );
-
 }
+
 void EnableTest::testDimEnable()
 {
     CPPUNIT_ASSERT_MESSAGE( "No resource manager", basicDLL().GetBasResMgr() != NULL );
     StarBASICRef pBasic = new StarBASIC();
     StarBASIC::SetGlobalErrorHdl( LINK( this, EnableTest, BasicErrorHdl ) );
 
-    rtl::OUString sSource("Sub Test\n");
-    sSource += rtl::OUString("Dim Enable as String\n");
-    sSource += rtl::OUString("End Sub\n");
+    ResetError();
 
-    SbModule* pMod = pBasic->MakeModule( rtl::OUString( "TestModule" ), sSource );
+    SbModule* pMod = pBasic->MakeModule( rtl::OUString( "TestModule" ), sTestDimEnable );
     pMod->Compile();
 
-    CPPUNIT_ASSERT_MESSAGE("Dim causes compile error", !mbError );
-    StarBASIC::SetGlobalErrorHdl( Link() );
+    CPPUNIT_ASSERT_MESSAGE("Dim causes compile error", !HasError() );
 }
 
   // Put the test suite in the registry
