@@ -52,19 +52,22 @@ XMLTextHeaderFooterContext::XMLTextHeaderFooterContext( SvXMLImport& rImport, sa
                        const uno::Reference<
                             xml::sax::XAttributeList > &,
                         const Reference < XPropertySet > & rPageStylePropSet,
-                       sal_Bool bFooter, sal_Bool bLft ) :
+                       sal_Bool bFooter, sal_Bool bLft, sal_Bool bFrst ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
     xPropSet( rPageStylePropSet ),
     sOn( bFooter ? OUString(RTL_CONSTASCII_USTRINGPARAM( "FooterIsOn" )) : OUString(RTL_CONSTASCII_USTRINGPARAM( "HeaderIsOn" )) ),
     sShareContent( bFooter ? OUString(RTL_CONSTASCII_USTRINGPARAM( "FooterIsShared" ))
                                                       : OUString(RTL_CONSTASCII_USTRINGPARAM( "HeaderIsShared" )) ),
+    sShareContentFirst( bFooter ? OUString("FooterIsSharedFirst" ) : OUString( "HeaderIsSharedFirst" ) ),
     sText( bFooter ? OUString(RTL_CONSTASCII_USTRINGPARAM( "FooterText" )) : OUString(RTL_CONSTASCII_USTRINGPARAM( "HeaderText" )) ),
+    sTextFirst(bFooter ? OUString("FooterTextFirst") : OUString("HeaderTextFirst")),
     sTextLeft( bFooter ?  OUString(RTL_CONSTASCII_USTRINGPARAM( "FooterTextLeft" ))
                                                      : OUString(RTL_CONSTASCII_USTRINGPARAM( "HeaderTextLeft" )) ),
     bInsertContent( sal_True ),
-    bLeft( bLft )
+    bLeft( bLft ),
+    bFirst( bFrst )
 {
-    if( bLeft )
+    if( bLeft || bFirst )
     {
         Any aAny;
 
@@ -73,14 +76,29 @@ XMLTextHeaderFooterContext::XMLTextHeaderFooterContext( SvXMLImport& rImport, sa
 
         if( bOn )
         {
-            aAny = xPropSet->getPropertyValue( sShareContent );
-            sal_Bool bShared = *(sal_Bool *)aAny.getValue();
-            if( bShared )
+            if (bLeft)
             {
-                // Don't share headers any longer
-                bShared = sal_False;
-                aAny.setValue( &bShared, ::getBooleanCppuType() );
-                xPropSet->setPropertyValue( sShareContent, aAny );
+                aAny = xPropSet->getPropertyValue( sShareContent );
+                sal_Bool bShared = *(sal_Bool *)aAny.getValue();
+                if( bShared )
+                {
+                    // Don't share headers any longer
+                    bShared = sal_False;
+                    aAny.setValue( &bShared, ::getBooleanCppuType() );
+                    xPropSet->setPropertyValue( sShareContent, aAny );
+                }
+            }
+            if (bFirst)
+            {
+                aAny = xPropSet->getPropertyValue( sShareContentFirst );
+                sal_Bool bSharedFirst = *(sal_Bool *)aAny.getValue();
+                if( bSharedFirst )
+                {
+                    // Don't share first/right headers any longer
+                    bSharedFirst = sal_False;
+                    aAny.setValue( &bSharedFirst, ::getBooleanCppuType() );
+                    xPropSet->setPropertyValue( sShareContentFirst, aAny );
+                }
             }
         }
         else
@@ -108,11 +126,14 @@ SvXMLImportContext *XMLTextHeaderFooterContext::CreateChildContext(
         {
             sal_Bool bRemoveContent = sal_True;
             Any aAny;
-            if( bLeft )
+            if( bLeft || bFirst )
             {
                 // Headers and footers are switched on already,
                 // and they aren't shared.
-                aAny = xPropSet->getPropertyValue( sTextLeft );
+                if (bLeft)
+                    aAny = xPropSet->getPropertyValue( sTextLeft );
+                else
+                    aAny = xPropSet->getPropertyValue( sTextFirst );
             }
             else
             {
@@ -139,6 +160,14 @@ SvXMLImportContext *XMLTextHeaderFooterContext::CreateChildContext(
                     bShared = sal_True;
                     aAny.setValue( &bShared, ::getBooleanCppuType() );
                     xPropSet->setPropertyValue( sShareContent, aAny );
+                }
+                aAny = xPropSet->getPropertyValue( sShareContentFirst );
+                sal_Bool bSharedFirst = *(sal_Bool *)aAny.getValue();
+                if( !bSharedFirst )
+                {
+                    bSharedFirst = sal_True;
+                    aAny.setValue( &bSharedFirst, ::getBooleanCppuType() );
+                    xPropSet->setPropertyValue( sShareContentFirst, aAny );
                 }
 
                 aAny = xPropSet->getPropertyValue( sText );

@@ -83,10 +83,14 @@ XMLTextMasterPageContext::XMLTextMasterPageContext( SvXMLImport& rImport,
 ,   bInsertFooter( sal_False )
 ,   bInsertHeaderLeft( sal_False )
 ,   bInsertFooterLeft( sal_False )
+,   bInsertHeaderFirst( sal_False )
+,   bInsertFooterFirst( sal_False )
 ,   bHeaderInserted( sal_False )
 ,   bFooterInserted( sal_False )
 ,   bHeaderLeftInserted( sal_False )
 ,   bFooterLeftInserted( sal_False )
+,   bHeaderFirstInserted( sal_False )
+,   bFooterFirstInserted( sal_False )
 {
     OUString sName, sDisplayName;
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
@@ -173,6 +177,7 @@ XMLTextMasterPageContext::XMLTextMasterPageContext( SvXMLImport& rImport,
 
         bInsertHeader = bInsertFooter = sal_True;
         bInsertHeaderLeft = bInsertFooterLeft = sal_True;
+        bInsertHeaderFirst = bInsertFooterFirst = sal_True;
     }
 }
 
@@ -190,7 +195,7 @@ SvXMLImportContext *XMLTextMasterPageContext::CreateChildContext(
     const SvXMLTokenMap& rTokenMap =
         GetImport().GetTextImport()->GetTextMasterPageElemTokenMap();
 
-    sal_Bool bInsert = sal_False, bFooter = sal_False, bLeft = sal_False;
+    sal_Bool bInsert = sal_False, bFooter = sal_False, bLeft = sal_False, bFirst = sal_False;
     switch( rTokenMap.Get( nPrefix, rLocalName ) )
     {
     case XML_TOK_TEXT_MP_HEADER:
@@ -215,13 +220,21 @@ SvXMLImportContext *XMLTextMasterPageContext::CreateChildContext(
         if( bInsertFooterLeft && bFooterInserted && !bFooterLeftInserted )
             bInsert = bFooter = bLeft = sal_True;
         break;
+    case XML_TOK_TEXT_MP_HEADER_FIRST:
+        if( bInsertHeaderFirst && bHeaderInserted && !bHeaderFirstInserted )
+            bInsert = bFirst = sal_True;
+        break;
+    case XML_TOK_TEXT_MP_FOOTER_FIRST:
+        if( bInsertFooterFirst && bFooterInserted && !bFooterFirstInserted )
+            bInsert = bFooter = bFirst = sal_True;
+        break;
     }
 
     if( bInsert && xStyle.is() )
     {
         pContext = CreateHeaderFooterContext( nPrefix, rLocalName,
                                                     xAttrList,
-                                                    bFooter, bLeft );
+                                                    bFooter, bLeft, bFirst );
     }
     else
     {
@@ -237,14 +250,15 @@ SvXMLImportContext *XMLTextMasterPageContext::CreateHeaderFooterContext(
             const ::rtl::OUString& rLocalName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
             const sal_Bool bFooter,
-            const sal_Bool bLeft )
+            const sal_Bool bLeft,
+            const sal_Bool bFirst )
 {
     Reference < XPropertySet > xPropSet( xStyle, UNO_QUERY );
     return new XMLTextHeaderFooterContext( GetImport(),
                                                 nPrefix, rLocalName,
                                                 xAttrList,
                                                 xPropSet,
-                                                bFooter, bLeft );
+                                                bFooter, bLeft, bFirst );
 }
 
 void XMLTextMasterPageContext::Finish( sal_Bool bOverwrite )

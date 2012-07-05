@@ -43,10 +43,14 @@ class XMLOFF_DLLPUBLIC XMLTextMasterPageContext : public SvXMLStyleContext
     sal_Bool bInsertFooter;
     sal_Bool bInsertHeaderLeft;
     sal_Bool bInsertFooterLeft;
+    sal_Bool bInsertHeaderFirst;
+    sal_Bool bInsertFooterFirst;
     sal_Bool bHeaderInserted;
     sal_Bool bFooterInserted;
     sal_Bool bHeaderLeftInserted;
     sal_Bool bFooterLeftInserted;
+    sal_Bool bHeaderFirstInserted;
+    sal_Bool bFooterFirstInserted;
 
     SAL_DLLPRIVATE ::com::sun::star::uno::Reference <
         ::com::sun::star::style::XStyle > Create();
@@ -74,7 +78,8 @@ public:
             const ::rtl::OUString& rLocalName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
             const sal_Bool bFooter,
-            const sal_Bool bLeft );
+            const sal_Bool bLeft,
+            const sal_Bool bFirst );
 
     virtual void Finish( sal_Bool bOverwrite );
 };

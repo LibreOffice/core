@@ -36,11 +36,14 @@ class XMLTextHeaderFooterContext: public SvXMLImportContext
 
     const ::rtl::OUString sOn;
     const ::rtl::OUString sShareContent;
+    const ::rtl::OUString sShareContentFirst;
     const ::rtl::OUString sText;
+    const ::rtl::OUString sTextFirst;
     const ::rtl::OUString sTextLeft;
 
     sal_Bool    bInsertContent : 1;
     sal_Bool    bLeft : 1;
+    sal_Bool    bFirst : 1;
 
 public:
     TYPEINFO();
@@ -51,7 +54,7 @@ public:
                     ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
             const ::com::sun::star::uno::Reference <
                        ::com::sun::star::beans::XPropertySet > & rPageStylePropSet,
-               sal_Bool bFooter, sal_Bool bLft );
+               sal_Bool bFooter, sal_Bool bLft, sal_Bool bFrst );
 
     virtual ~XMLTextHeaderFooterContext();
 
