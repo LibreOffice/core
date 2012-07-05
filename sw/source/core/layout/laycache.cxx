@@ -60,6 +60,7 @@
 //
 #include <pam.hxx>
 #include <docsh.hxx>
+#include <poolfmt.hxx>
 #include <com/sun/star/document/XDocumentInfoSupplier.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
@@ -651,7 +652,11 @@ sal_Bool SwLayHelper::CheckInsertPage()
             bNextPageOdd = !bNextPageOdd;
             bInsertEmpty = sal_True;
         }
+        // If the page style is changing, we'll have a first page.
         bool bNextPageFirst = pDesc != rpPage->GetPageDesc();
+        // Considering the page after the first page would be confusing.
+        if (rpPage->GetPageDesc() == pDoc->GetPageDescFromPool(RES_POOLPAGE_FIRST))
+            bNextPageFirst = false;
         ::InsertNewPage( (SwPageDesc&)*pDesc, rpPage->GetUpper(),
                          bNextPageOdd, bNextPageFirst, bInsertEmpty, sal_False, rpPage->GetNext() );
         if ( bEnd )
