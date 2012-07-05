@@ -1,0 +1,7 @@
+[gerrit]
+host=logerrit
+port=29418
+project=core
+defaultremote=logerrit
+defaultbranch=master
+
