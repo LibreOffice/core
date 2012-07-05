@@ -98,7 +98,6 @@ SlideFragmentHandler::~SlideFragmentHandler() throw()
         // Import notesMaster
         PowerPointImport& rFilter = dynamic_cast< PowerPointImport& >( getFilter() );
         OUString aNotesFragmentPath = getFragmentPathFromFirstType( CREATE_OFFICEDOC_RELATION_TYPE( "notesMaster" ) );
-        printf("notesMaster: %s\n", ::rtl::OUStringToOString(aNotesFragmentPath, RTL_TEXTENCODING_UTF8).getStr() );
 
         std::vector< SlidePersistPtr >& rMasterPages( rFilter.getMasterPages() );
         std::vector< SlidePersistPtr >::iterator aIter( rMasterPages.begin() );
