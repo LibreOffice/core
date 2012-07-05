@@ -177,6 +177,11 @@ void MakeBorderLine( sal_Int32 nLineThickness,   sal_Int32 nLineType,
         case 21:
         case 23:
             nLineStyle = DOUBLE;
+            // HACK HACK HACK - only for libreoffice-3-5!
+            // this is a workaround for the fix for fdo#46112, which actually
+            // broke the DOCX/RTF import because the ODF import calls the
+            // same UNO API function: multiply by 3 here to offset divide by 3.
+            nLineThickness *= 3;
             break;
         case 11:
         case 13: //Don't have thin thick thin, so use thick thin
