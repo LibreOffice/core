@@ -281,6 +281,10 @@ void CustomAnimationEffect::setNode( const ::com::sun::star::uno::Reference< ::c
     }
 
     mfAbsoluteDuration = mfDuration;
+    double fRepeatCount = 1.0;
+    if( (mxNode->getRepeatCount()) >>= fRepeatCount )
+        mfAbsoluteDuration *= fRepeatCount;
+
     checkForText();
 }
 
@@ -755,7 +759,9 @@ void CustomAnimationEffect::setDuration( double fDuration )
     {
         double fScale = fDuration / mfDuration;
         mfDuration = fDuration;
-        mfAbsoluteDuration = mfDuration;
+        double fRepeatCount = 1.0;
+        getRepeatCount() >>= fRepeatCount;
+        mfAbsoluteDuration = mfDuration * fRepeatCount;
 
         // calculate effect duration and get target shape
         Reference< XEnumerationAccess > xEnumerationAccess( mxNode, UNO_QUERY );
@@ -954,7 +960,12 @@ sal_Int16 CustomAnimationEffect::getFill() const
 void CustomAnimationEffect::setRepeatCount( const Any& rRepeatCount )
 {
     if( mxNode.is() )
+    {
         mxNode->setRepeatCount( rRepeatCount );
+        double fRepeatCount = 1.0;
+        rRepeatCount >>= fRepeatCount;
+        mfAbsoluteDuration = mfDuration * fRepeatCount;
+    }
 }
 
 // --------------------------------------------------------------------
