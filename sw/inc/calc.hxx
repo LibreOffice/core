@@ -25,14 +25,16 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _CALC_HXX
-#define _CALC_HXX
+
+#ifndef SW_CALC_HXX
+#define SW_CALC_HXX
+
+#include <vector>
 
 #include <unotools/syslocale.hxx>
 
-#ifndef __SBX_SBXVALUE //autogen
 #include <basic/sbxvar.hxx>
-#endif
+
 #include "swdllapi.h"
 
 class CharClass;
