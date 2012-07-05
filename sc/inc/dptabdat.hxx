@@ -156,6 +156,7 @@ public:
                                                      ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > >& rData) = 0;
     virtual void                    CalcResults(CalcInfo& rInfo, bool bAutoShow) = 0;
     virtual const ScDPCacheTable&   GetCacheTable() const = 0;
+    virtual void ClearCacheTable() = 0;
 
                                     // overloaded in ScDPGroupTableData:
     virtual sal_Bool                    IsBaseForGroup(long nDim) const;

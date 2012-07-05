@@ -1478,6 +1478,7 @@ sal_uLong ScDBDocFunc::RefreshPivotTables(ScDPObject* pDPObj, bool bApi)
     for (; it != itEnd; ++it)
     {
         ScDPObject* pObj = *it;
+        pObj->SyncAllDimensionMembers();
 
         // This action is intentionally not undoable since it modifies cache.
         DataPilotUpdate(pObj, pObj, false, bApi);

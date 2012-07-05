@@ -241,6 +241,12 @@ public:
 
     void                BuildAllDimensionMembers();
 
+    /**
+     * Remove in the save data entries for members that don't exist anymore.
+     * This is called during pivot table refresh.
+     */
+    void SyncAllDimensionMembers();
+
     static bool         HasRegisteredSources();
     static com::sun::star::uno::Sequence<rtl::OUString> GetRegisteredSources();
     static com::sun::star::uno::Reference<com::sun::star::sheet::XDimensionsSupplier>

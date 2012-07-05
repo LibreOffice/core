@@ -699,6 +699,23 @@ void ScDPObject::BuildAllDimensionMembers()
     pSaveData->BuildAllDimensionMembers(GetTableData());
 }
 
+void ScDPObject::SyncAllDimensionMembers()
+{
+    if (!pSaveData)
+        return;
+
+    // #i111857# don't always create empty mpTableData for external service.
+    // Ideally, xSource should be used instead of mpTableData.
+    if (pServDesc)
+        return;
+
+    ScDPTableData* pData = GetTableData();
+    // Refresh the cache wrapper since the cache may have changed.
+    pData->ClearCacheTable();
+    pData->CreateCacheTable();
+    pSaveData->SyncAllDimensionMembers(pData);
+}
+
 bool ScDPObject::GetMemberNames( sal_Int32 nDim, Sequence<OUString>& rNames )
 {
     vector<ScDPLabelData::Member> aMembers;

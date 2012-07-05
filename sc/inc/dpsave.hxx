@@ -33,6 +33,7 @@
 
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <boost/unordered_map.hpp>
+#include <boost/unordered_set.hpp>
 #include <boost/scoped_ptr.hpp>
 
 #include <com/sun/star/sheet/XDimensionsSupplier.hpp>
@@ -122,6 +123,7 @@ private:
     ::com::sun::star::sheet::DataPilotFieldLayoutInfo* pLayoutInfo; // (level)
 
 public:
+    typedef boost::unordered_set<rtl::OUString, rtl::OUStringHash> MemberSetType;
     typedef boost::unordered_map <rtl::OUString, ScDPSaveMember*, rtl::OUStringHash> MemberHash;
     typedef std::list <ScDPSaveMember*> MemberList;
 
@@ -230,6 +232,8 @@ public:
     void UpdateMemberVisibility(const ::boost::unordered_map< ::rtl::OUString, bool, ::rtl::OUStringHash>& rData);
 
     bool HasInvisibleMember() const;
+
+    void RemoveObsoleteMembers(const MemberSetType& rMembers);
 };
 
 
@@ -344,6 +348,7 @@ public:
     SC_DLLPUBLIC ScDPDimensionSaveData* GetDimensionData(); // create if not there
     void SetDimensionData( const ScDPDimensionSaveData* pNew ); // copied
     void BuildAllDimensionMembers(ScDPTableData* pData);
+    void SyncAllDimensionMembers(ScDPTableData* pData);
 
     /**
      * Check whether a dimension has one or more invisible members.
