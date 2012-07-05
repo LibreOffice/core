@@ -66,6 +66,7 @@
 #define PAPERSIZE_POSTCARD_JP   46
 #define PAPERSIZE_A6            56
 #define PAPERSIZE_SCREEN_16_9   78
+#define PAPERSIZE_SCREEN_16_10  79
 
 #endif
 
