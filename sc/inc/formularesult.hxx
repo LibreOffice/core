@@ -151,11 +151,13 @@ public:
     void SetResultError( sal_uInt16 nErr );
 
     /** Set direct double. Shouldn't be used externally except in
-        ScFormulaCell for rounded CalcAsShown or SetErrCode(). If
-        ScMatrixFormulaCellToken the token isn't replaced but upper left result
-        is modified instead, but only if it was of type formula::svDouble before or not
-        set at all. */
-    void SetDouble( double f );
+        ScFormulaCell for rounded CalcAsShown or SetErrCode() or
+        SetResultDouble(), see there for condition. If
+        ScMatrixFormulaCellToken the token isn't replaced but upper
+        left result is modified instead, but only if it was of type
+        formula::svDouble before or not set at all.
+     */
+    SC_DLLPUBLIC void SetDouble( double f );
 
     /** Return value if type formula::svDouble or formula::svHybridCell or formula::svMatrixCell and upper
         left formula::svDouble, else 0.0 */
