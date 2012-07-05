@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAADH///8Q\u003d",
+        "filename": ".gitreview",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1000087
+      },
+      "writtenOn": "2012-07-05T22:37:13Z",
+      "side": 1,
+      "message": "If you set this to \u0027gerrit.libreoffice.org\u0027, you won\u0027t need an ssh host alias (but then you might need to set the gerrit username either using git config or by manually entering it, if your username is different than your workstation login).  Even so, that strikes me as being preferable to requiring an ssh host alias.",
+      "revId": "8d38ff3c3bd199ba4ba7d7782d79440b848fa350",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAADH///8M\u003d",
+        "filename": ".gitreview",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1000087
+      },
+      "writtenOn": "2012-07-05T22:37:13Z",
+      "side": 1,
+      "message": "This will cause git-review to use \"logerrit\" as the name of the git remote, instead of \"gerrit\".  That\u0027s fine, but I\u0027m curious why?",
+      "revId": "8d38ff3c3bd199ba4ba7d7782d79440b848fa350",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAADH///8I\u003d",
+        "filename": ".gitreview",
+        "patchSetId": 1
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1000087
+      },
+      "writtenOn": "2012-07-05T22:37:13Z",
+      "side": 1,
+      "message": "This should already be the default, but I guess it doesn\u0027t hurt.",
+      "revId": "8d38ff3c3bd199ba4ba7d7782d79440b848fa350",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
