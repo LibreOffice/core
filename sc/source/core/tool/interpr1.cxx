@@ -4622,7 +4622,7 @@ public:
         return mbColVec ? mrMat.GetDouble(0, i) : mrMat.GetDouble(i, 0);
     }
 
-    const String& GetString(SCSIZE i) const
+    const rtl::OUString& GetString(SCSIZE i) const
     {
         return mbColVec ? mrMat.GetString(0, i) : mrMat.GetString(i, 0);
     }
@@ -4716,7 +4716,7 @@ static void lcl_GetLastMatch( SCSIZE& rIndex, const VectorMatrixAccessor& rMat,
     }
     else if (rMat.IsString(rIndex))
     {
-        String aStr( rMat.GetString(rIndex));
+        rtl::OUString aStr( rMat.GetString(rIndex));
         if (bReverse)
             while (rIndex > 0 && rMat.IsString(rIndex-1) &&
                     aStr == rMat.GetString(rIndex-1))
