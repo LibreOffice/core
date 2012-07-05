@@ -364,7 +364,6 @@ inline bool checkUnoStructCopy( bool bVBA, SbxVariableRef& refVal, SbxVariableRe
     {
         refVar->SetType( SbxOBJECT );
         SbxObjectRef xVarObj = (SbxObject*)refVar->GetObject();
-        SbUnoObject* pUnoObj = PTR_CAST(SbUnoObject,(SbxObject*)xVarObj);
         SbUnoStructRefObject* pUnoStructObj = PTR_CAST(SbUnoStructRefObject,(SbxObject*)xVarObj);
 
         if ( ( !pUnoVal && !pUnoStructVal ) )
