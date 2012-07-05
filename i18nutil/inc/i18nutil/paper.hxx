@@ -117,11 +117,12 @@ enum Paper
     PAPER_ARCHC,
     PAPER_ARCHD,
     PAPER_ARCHE,
-    PAPER_SCREEN_16_9
+    PAPER_SCREEN_16_9,
+    PAPER_SCREEN_16_10
 };
 
 // defined for 'equal size' test with the implementation array
-#define NUM_PAPER_ENTRIES   (PAPER_SCREEN_16_9 - PAPER_A0 + 1)
+#define NUM_PAPER_ENTRIES   (PAPER_SCREEN_16_10 - PAPER_A0 + 1)
 
 // ---------
 // - Paper -

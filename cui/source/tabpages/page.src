@@ -470,6 +470,7 @@ StringArray RID_SVXSTRARY_PAPERSIZE_DRAW
         < "Dia Slide" ; PAPERSIZE_DIA ; > ;
         < "Screen 4:3" ; PAPERSIZE_SCREEN_4_3 ; > ;
         < "Screen 16:9" ; PAPERSIZE_SCREEN_16_9 ; > ;
+        < "Screen 16:10" ; PAPERSIZE_SCREEN_16_10 ; > ;
         < "Japanese Postcard" ; PAPERSIZE_POSTCARD_JP; > ;
     };
 };

@@ -154,7 +154,8 @@ static PageDesc aDinTab[] =
     { IN2MM100( 18 ),    IN2MM100( 24 ),     "ARCHC",  NULL },
     { IN2MM100( 24 ),    IN2MM100( 36 ),     "ARCHD",  NULL },
     { IN2MM100( 36 ),    IN2MM100( 48 ),     "ARCHE",  NULL },
-    { MM2MM100( 157.5),  MM2MM100( 280 ),    NULL,  NULL } //Screen 16:9
+    { MM2MM100( 157.5),  MM2MM100( 280 ),    NULL,  NULL }, //Screen 16:9
+    { MM2MM100( 175 ),   MM2MM100( 280 ),    NULL,  NULL }  //Screen 16:10
 
 };
 
