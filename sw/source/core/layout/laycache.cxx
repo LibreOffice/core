@@ -651,8 +651,9 @@ sal_Bool SwLayHelper::CheckInsertPage()
             bNextPageOdd = !bNextPageOdd;
             bInsertEmpty = sal_True;
         }
+        bool bNextPageFirst = pDesc != rpPage->GetPageDesc();
         ::InsertNewPage( (SwPageDesc&)*pDesc, rpPage->GetUpper(),
-                         bNextPageOdd, nPgNum == 1, bInsertEmpty, sal_False, rpPage->GetNext() );
+                         bNextPageOdd, bNextPageFirst, bInsertEmpty, sal_False, rpPage->GetNext() );
         if ( bEnd )
         {
             OSL_ENSURE( rpPage->GetNext(), "No new page?" );
