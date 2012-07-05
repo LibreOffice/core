@@ -2838,6 +2838,11 @@ void EffectSequenceHelper::setAnimateForm( CustomAnimationTextGroupPtr pTextGrou
         EffectSequence aEffects( pTextGroup->maEffects );
         pTextGroup->reset();
 
+        SAL_WARN_IF(aEffects.empty(), "sd", "EffectSequenceHelper::setAnimateForm effects empty" );
+
+        if (aEffects.empty())
+            return;
+
         EffectSequence::iterator aIter( aEffects.begin() );
         const EffectSequence::iterator aEnd( aEffects.end() );
 
