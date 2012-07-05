@@ -160,7 +160,7 @@ void ImportExcel::Formula(
                 ExcelToSc::SetError( *pCell, eErr );
 
             if (!rtl::math::isNan(fCurVal))
-                pCell->SetHybridDouble(fCurVal);
+                pCell->SetResultDouble(fCurVal);
         }
 
         GetXFRangeBuffer().SetXF( aScPos, nXF );

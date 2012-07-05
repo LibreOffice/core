@@ -500,6 +500,14 @@ public:
     void            SetHybridFormula( const rtl::OUString& r,
                                     const formula::FormulaGrammar::Grammar eGrammar )
                         { aResult.SetHybridFormula( r); eTempGrammar = eGrammar; }
+
+    /** For import only: set a double result.
+        Use this instead of SetHybridDouble() if there is no (temporary)
+        formula string because the formula is present as a token array, as it
+        is the case for binary Excel import.
+     */
+    void            SetResultDouble( double n )     { aResult.SetDouble( n); }
+
     void            SetErrCode( sal_uInt16 n );
     inline bool     IsHyperLinkCell() const { return pCode && pCode->IsHyperLink(); }
     EditTextObject* CreateURLObject() ;
