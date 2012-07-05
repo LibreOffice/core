@@ -37,7 +37,6 @@
 #include "global.hxx"
 #include "dptabsrc.hxx"
 #include "dputil.hxx"
-#include "stlalgorithm.hxx"
 
 #include <sal/types.h>
 #include "comphelper/string.hxx"
