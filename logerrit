@@ -159,7 +159,9 @@ case "$1" in
 			;;
 		esac
 		read -p "please type a friendly comment$MESSAGEREQ: " MESSAGE
-		echo ssh ${GERRITHOST?} gerrit review -m '\"'$MESSAGE'\"' $VERIFIEDFLAG $CODEREVIEWFLAG $CHANGEID
+		get_SHA_for_change $CHANGEID
+		echo ssh ${GERRITHOST?} gerrit review -m '\"'$MESSAGE'\"' $VERIFIEDFLAG $CODEREVIEWFLAG $SHA
+		ssh ${GERRITHOST?} gerrit review -m \"$MESSAGE\" $VERIFIEDFLAG $CODEREVIEWFLAG $SHA
 	;;
 	checkout)
 		get_SHA_for_change $2
