@@ -34,6 +34,7 @@
 #include "global.hxx"
 #include "dptabsrc.hxx"
 #include "dputil.hxx"
+#include "stlalgorithm.hxx"
 
 #include <sal/types.h>
 #include "comphelper/string.hxx"
@@ -729,6 +730,30 @@ bool ScDPSaveDimension::HasInvisibleMember() const
     return false;
 }
 
+void ScDPSaveDimension::RemoveObsoleteMembers(const MemberSetType& rMembers)
+{
+    maMemberHash.clear();
+    MemberList aNew;
+    MemberList::iterator it = maMemberList.begin(), itEnd = maMemberList.end();
+    for (; it != itEnd; ++it)
+    {
+        ScDPSaveMember* pMem = *it;
+        if (rMembers.count(pMem->GetName()))
+        {
+            // This member still exists.
+            maMemberHash.insert(MemberHash::value_type(pMem->GetName(), pMem));
+            aNew.push_back(pMem);
+        }
+        else
+        {
+            // This member no longer exists.
+            delete pMem;
+        }
+    }
+
+    maMemberList.swap(aNew);
+}
+
 ScDPSaveData::ScDPSaveData() :
     pDimensionData( NULL ),
     nColumnGrandMode( SC_DPSAVEMODE_DONTKNOW ),
@@ -1255,6 +1280,46 @@ void ScDPSaveData::BuildAllDimensionMembers(ScDPTableData* pData)
     }
 
     mbDimensionMembersBuilt = true;
+}
+
+void ScDPSaveData::SyncAllDimensionMembers(ScDPTableData* pData)
+{
+    typedef boost::unordered_map<rtl::OUString, long, rtl::OUStringHash> NameIndexMap;
+
+    // First, build a dimension name-to-index map.
+    NameIndexMap aMap;
+    long nColCount = pData->GetColumnCount();
+    for (long i = 0; i < nColCount; ++i)
+        aMap.insert(NameIndexMap::value_type(pData->getDimensionName(i), i));
+
+    NameIndexMap::const_iterator itMapEnd = aMap.end();
+
+    DimsType::iterator it = aDimList.begin(), itEnd = aDimList.end();
+    for (it = aDimList.begin(); it != itEnd; ++it)
+    {
+        const ::rtl::OUString& rDimName = it->GetName();
+        if (rDimName.isEmpty())
+            // empty dimension name. It must be data layout.
+            continue;
+
+        NameIndexMap::const_iterator itMap = aMap.find(rDimName);
+        if (itMap == itMapEnd)
+            // dimension name not in the data. This should never happen!
+            continue;
+
+        ScDPSaveDimension::MemberSetType aMemNames;
+        long nDimIndex = itMap->second;
+        const std::vector<SCROW>& rMembers = pData->GetColumnEntries(nDimIndex);
+        size_t nMemberCount = rMembers.size();
+        for (size_t j = 0; j < nMemberCount; ++j)
+        {
+            const ScDPItemData* pMemberData = pData->GetMemberById(nDimIndex, rMembers[j]);
+            rtl::OUString aMemName = pData->GetFormattedString(nDimIndex, *pMemberData);
+            aMemNames.insert(aMemName);
+        }
+
+        it->RemoveObsoleteMembers(aMemNames);
+    }
 }
 
 bool ScDPSaveData::HasInvisibleMember(const OUString& rDimName) const

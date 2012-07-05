@@ -56,6 +56,12 @@ class ScRange;
 struct ScDPValueData;
 struct ScQueryParam;
 
+/**
+ * Despite the name, this class is only a wrapper to the actual cache, to
+ * provide filtering on the raw data based on the query filter and/or page
+ * field filters. I will rename this class to a more appropriate name in the
+ * future.
+ */
 class SC_DLLPUBLIC ScDPCacheTable
 {
     struct RowFlag
