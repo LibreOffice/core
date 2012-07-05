@@ -1136,7 +1136,7 @@ Region::Region( const basegfx::B2DPolyPolygon& rPolyPoly )
     DBG_CTOR( Region, ImplDbgTestRegion );
     DBG_CHKOBJ( &rPolyPoly, PolyPolygon, NULL );
 
-    mpImplRegion = new ImplRegion( rPolyPoly );
+    ImplCreatePolyPolyRegion( rPolyPoly );
 }
 
 // -----------------------------------------------------------------------
@@ -1222,6 +1222,16 @@ void Region::ImplCreatePolyPolyRegion( const PolyPolygon& rPolyPoly )
     }
     else
         mpImplRegion = (ImplRegion*)(&aImplEmptyRegion);
+}
+
+// -----------------------------------------------------------------------
+
+void Region::ImplCreatePolyPolyRegion( const basegfx::B2DPolyPolygon& rPolyPoly )
+{
+    if (rPolyPoly.count()==0 || rPolyPoly.getB2DRange().isEmpty())
+        mpImplRegion = (ImplRegion*)(&aImplEmptyRegion);
+    else
+        mpImplRegion = new ImplRegion( rPolyPoly );
 }
 
 // -----------------------------------------------------------------------
