@@ -26,8 +26,8 @@
  *
  ************************************************************************/
 
-#ifndef _SBXVAR_HXX
-#define _SBXVAR_HXX
+#ifndef SBXVAR_HXX
+#define SBXVAR_HXX
 
 #include <rtl/ustring.hxx>
 #include <tools/string.hxx>
@@ -35,8 +35,6 @@
 #include <basic/sbxcore.hxx>
 #include "basicdllapi.h"
 
-#ifndef __SBX_SBXVALUES_HXX
-#define __SBX_SBXVALUES_HXX
 
 class SbxDecimal;
 
@@ -98,13 +96,6 @@ struct SbxValues
     SbxValues( void* _pData ): pData( _pData ), eType(SbxPOINTER) {}
 
 };
-
-#endif
-
-#ifndef __SBX_SBXVALUE
-#define __SBX_SBXVALUE
-
-struct SbxValues;
 
 class BASIC_DLLPUBLIC SbxValue : public SbxBase
 {
@@ -285,11 +276,6 @@ inline SbxValue& SbxValue::operator|=( const SbxValue& r )
 inline SbxValue& SbxValue::operator^=( const SbxValue& r )
 { Compute( SbxXOR, r ); return *this; }
 
-#endif
-
-#ifndef __SBX_SBXVARIABLE_HXX
-#define __SBX_SBXVARIABLE_HXX
-
 class SbxArray;
 class SbxInfo;
 
@@ -379,8 +365,6 @@ public:
 SV_DECL_REF(SbxVariable)
 #endif
 
-#endif
-
-#endif  // _SBXVAR_HXX
+#endif  // SBXVAR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
