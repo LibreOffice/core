@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "AAAADH///8A\u003d",
+        "filename": ".gitreview",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2012-07-05T23:11:54Z",
+      "side": 1,
+      "message": "We are already asking devs to setup an alias:\nhttps://wiki.documentfoundation.org/Development/gerrit/setup\n\nIn the end you need to write something into your .ssh/config for nontrivial work anyway to set the port and the ssh key, so I used an alias there -- esp. to make direct use of the \"ssh logerrit gerrit ...\" easily possible for (nonscripted) ad-hoc actions.",
+      "parentUuid": "AAAADH///8M\u003d",
+      "revId": "8d38ff3c3bd199ba4ba7d7782d79440b848fa350",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAADH///8I\u003d",
         "filename": ".gitreview",
         "patchSetId": 1
