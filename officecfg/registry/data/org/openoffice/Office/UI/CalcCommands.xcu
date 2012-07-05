@@ -1239,7 +1239,7 @@
             </node>
             <node oor:name=".uno:DataMenu" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">Data</value>
+                    <value xml:lang="en-US">~Data</value>
                 </prop>
             </node>
             <node oor:name=".uno:DataPilotMenu" oor:op="replace">

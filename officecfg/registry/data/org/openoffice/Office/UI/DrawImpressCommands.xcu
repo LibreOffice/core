@@ -1563,7 +1563,7 @@
             </node>
             <node oor:name=".uno:ModifyMenu" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">Modify</value>
+                    <value xml:lang="en-US">~Modify</value>
                 </prop>
             </node>
             <node oor:name=".uno:PreviewDisplayQualityMenu" oor:op="replace">
@@ -1578,7 +1578,7 @@
             </node>
             <node oor:name=".uno:SlideShowMenu" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">Slide Show</value>
+                    <value xml:lang="en-US">~Slide Show</value>
                 </prop>
             </node>
             <node oor:name=".uno:SnapLinesMenu" oor:op="replace">
