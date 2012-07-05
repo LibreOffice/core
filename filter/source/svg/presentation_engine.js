@@ -4117,9 +4117,9 @@ aColorSpaceOutMap = [ 'rgb', 'hsl' ];
 var CLOCKWISE               = 0;
 var COUNTERCLOCKWISE        = 1;
 
-aClockDirectionInMap = { 'clockwise': CLOCKWISE, 'counterclockwise': COUNTERCLOCKWISE };
+aClockDirectionInMap = { 'clockwise': CLOCKWISE, 'counter-clockwise': COUNTERCLOCKWISE };
 
-aClockDirectionOutMap = [ 'clockwise', 'counterclockwise' ];
+aClockDirectionOutMap = [ 'clockwise', 'counter-clockwise' ];
 
 
 // Attribute Value Types
