@@ -57,6 +57,7 @@ private:
     SAL_DLLPRIVATE void             ImplCopyData();
     SAL_DLLPRIVATE void             ImplCreateRectRegion( const Rectangle& rRect );
     SAL_DLLPRIVATE void             ImplCreatePolyPolyRegion( const PolyPolygon& rPolyPoly );
+    SAL_DLLPRIVATE void             ImplCreatePolyPolyRegion( const basegfx::B2DPolyPolygon& rPolyPoly );
     SAL_DLLPRIVATE void             ImplPolyPolyRegionToBandRegionFunc();
     SAL_DLLPRIVATE inline void      ImplPolyPolyRegionToBandRegion();
     SAL_DLLPRIVATE const ImplRegion*    ImplGetImplRegion() const { return mpImplRegion; }
