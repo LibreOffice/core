@@ -197,7 +197,18 @@ void XclImpChangeTrack::ReadFormula( ScTokenArray*& rpTokenArray, const ScAddres
     // converter in each formula)
     SvMemoryStream aMemStrm;
     aMemStrm << (sal_uInt16) 0x0001 << nFmlSize;
-    pStrm->CopyToStream( aMemStrm, nFmlSize );
+    size_t nRead = pStrm->CopyToStream( aMemStrm, nFmlSize );
+
+    // survive reading invalid streams!
+    // if we can't read as many bytes as required just don't use them and
+    // assume that this part is broken
+    if(nRead != nFmlSize)
+    {
+        rpTokenArray = NULL;
+        pStrm->Ignore(1);
+        return;
+    }
+
     XclImpStream aFmlaStrm( aMemStrm, GetRoot() );
     aFmlaStrm.StartNextRecord();
     XclImpChTrFmlConverter aFmlConv( GetRoot(), *this );
