@@ -412,7 +412,7 @@ bool ScDPCache::InitFromDoc(ScDocument* pDoc, const ScRange& rRange)
 
             if (!aData.IsEmpty())
             {
-                maEmptyRows.insert_back(nRow, nRow+1, false);
+                maEmptyRows.insert_back(i, i+1, false);
                 rField.mnNumFormat = nNumFormat;
             }
         }
@@ -1208,6 +1208,26 @@ void ScDPCache::Dump() const
                 cout << "    group item count: " << fld.mpGroup->maItems.size() << endl;
                 dumpItems(*this, i, fld.mpGroup->maItems, fld.maItems.size());
             }
+        }
+    }
+
+    {
+        struct { SCROW start; SCROW end; bool empty; } aRange;
+        cout << "* empty rows: " << endl;
+        mdds::flat_segment_tree<SCROW, bool>::const_iterator it = maEmptyRows.begin(), itEnd = maEmptyRows.end();
+        if (it != itEnd)
+        {
+            aRange.start = it->first;
+            aRange.empty = it->second;
+            ++it;
+        }
+
+        for (; it != itEnd; ++it)
+        {
+            aRange.end = it->first-1;
+            cout << "    rows " << aRange.start << "-" << aRange.end << ": " << (aRange.empty ? "empty" : "not-empty") << endl;
+            aRange.start = it->first;
+            aRange.empty = it->second;
         }
     }
 
