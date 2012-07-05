@@ -36,6 +36,18 @@
 #define INIT_VIEW_COLS 3
 #define INIT_VIEW_LINES 1
 
+BitmapEx lcl_ScaleImg (const BitmapEx &rImg, long width, long height)
+{
+    BitmapEx aImg = rImg;
+
+    int sWidth = std::min(aImg.GetSizePixel().getWidth(),width);
+    int sHeight = std::min(aImg.GetSizePixel().getHeight(),height);
+
+    aImg.Scale(Size(sWidth,sHeight),BMP_SCALE_INTERPOLATE);
+
+    return aImg;
+}
+
 BitmapEx lcl_fetchThumbnail (const rtl::OUString &msURL, long width, long height)
 {
     using namespace ::com::sun::star;
@@ -142,15 +154,7 @@ BitmapEx lcl_fetchThumbnail (const rtl::OUString &msURL, long width, long height
         aThumbnail = aReader.Read ();
     }
 
-    int sWidth = std::min(aThumbnail.GetSizePixel().getWidth(),width);
-    int sHeight = std::min(aThumbnail.GetSizePixel().getHeight(),height);
-
-    aThumbnail.Scale(Size(sWidth,sHeight),BMP_SCALE_INTERPOLATE);
-
-    // Note that the preview is returned without scaling it to the desired
-    // width.  This gives the caller the chance to take advantage of a
-    // possibly larger resolution then was asked for.
-    return aThumbnail;
+    return lcl_ScaleImg(aThumbnail,width,height);
 }
 
 // Display template items depending on the generator application
@@ -425,8 +429,33 @@ void TemplateFolderView::sortOverlayItems(const boost::function<bool (const Thum
     mpItemView->sortItems(func);
 }
 
-bool TemplateFolderView::createRegion(const rtl::OUString &rName, const std::set<const ThumbnailViewItem*> &rItems)
+sal_uInt16 TemplateFolderView::createRegion(const rtl::OUString &rName)
 {
+    sal_uInt16 nRegionId = mpDocTemplates->GetRegionCount();    // Next regionId
+
+    if (!mpDocTemplates->InsertDir(rName,nRegionId))
+        return false;
+
+    rtl::OUString aRegionName = rName;
+
+    if (aRegionName.getLength() > (sal_Int32)mpItemAttrs->nMaxTextLenght)
+    {
+        aRegionName = aRegionName.copy(0,mpItemAttrs->nMaxTextLenght-3);
+        aRegionName += "...";
+    }
+
+    TemplateFolderViewItem* pItem = new TemplateFolderViewItem( *this, this );
+    pItem->mnId = nRegionId+1;
+    pItem->maText = aRegionName;
+    pItem->setSelectClickHdl(LINK(this,ThumbnailView,OnFolderSelected));
+
+    mItemList.push_back(pItem);
+
+    CalculateItemPositions();
+
+    if ( IsReallyVisible() && IsUpdateMode() )
+        Invalidate();
+
     return true;
 }
 

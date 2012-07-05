@@ -498,7 +498,9 @@ IMPL_LINK(SfxTemplateManagerDlg, MoveMenuSelectHdl, Menu*, pMenu)
 
             if (!aName.isEmpty())
             {
-                if (!maView->createRegion(aName,maSelTemplates))
+                sal_uInt16 nNewRegionId = maView->createRegion(aName);
+
+                if (nNewRegionId && !maView->moveTemplates(maSelTemplates,nNewRegionId))
                 {
                 }
             }
