@@ -53,11 +53,6 @@ namespace com
             {
                 class XNameAccess;
             }
-            namespace beans
-            {
-                struct PropertyValue;
-                class XPropertySet;
-            }
         }
     }
 }

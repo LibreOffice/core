@@ -46,7 +46,6 @@
 #include <cppuhelper/implbase9.hxx>
 #include <svtools/cliplistener.hxx>
 
-class ResMgr;
 struct FmFoundRecordInformation;
 struct FmSearchContext;
 

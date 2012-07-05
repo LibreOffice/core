@@ -47,15 +47,9 @@ namespace comphelper
     class NamedValueCollection;
 }
 
-class VCLXWindow;
 namespace dbaui
 {
-    class OQueryView;
     class OQueryContainerWindow;
-    class OTableConnectionData;
-    class OTableWindowData;
-    class OAddTableDlg;
-    class OTableFieldDesc;
     class OQueryTableWindow;
 
     class OQueryController;

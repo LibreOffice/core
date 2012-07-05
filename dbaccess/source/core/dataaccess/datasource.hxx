@@ -56,7 +56,6 @@ namespace dbaccess
 {
 
 class OSharedConnectionManager;
-class OChildCommitListen_Impl;
 
 //============================================================
 //= ODatabaseSource

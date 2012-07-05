@@ -35,11 +35,6 @@
 
 
 
-namespace com { namespace sun { namespace star { namespace util {
-    class XNumberFormatsSupplier;
-    class XNumberFormatter;
-}}}}
-
 namespace dbaccess
 {
     typedef ::cppu::ImplHelper5<    ::com::sun::star::sdb::XSQLQueryComposer,
@@ -47,9 +42,6 @@ namespace dbaccess
                                     ::com::sun::star::sdbcx::XTablesSupplier,
                                     ::com::sun::star::sdbcx::XColumnsSupplier,
                                     ::com::sun::star::lang::XServiceInfo    > OQueryComposer_BASE;
-
-    class OPrivateColumns;
-    class OPrivateTables;
 
     class OQueryComposer :  public ::comphelper::OBaseMutex,
                             public OSubComponent,

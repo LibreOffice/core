@@ -33,7 +33,6 @@
 
 namespace dbaui
 {
-    class OQueryTableConnectionData;
     class OTableListBoxControl;
     class OQueryTableView;
     class OJoinControl;

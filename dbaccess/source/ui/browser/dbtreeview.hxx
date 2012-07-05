@@ -24,7 +24,6 @@
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
-class SvTreeListBox;
 class SvLBoxTreeList;
 namespace dbaui
 {

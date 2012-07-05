@@ -37,7 +37,6 @@ class MnemonicGenerator;
 
 namespace dbaui
 {
-    class IControlActionListener;
     class IApplicationController;
     class OApplicationView;
     class OApplicationDetailView;

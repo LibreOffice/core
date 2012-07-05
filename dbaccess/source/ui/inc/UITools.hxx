@@ -35,9 +35,7 @@ namespace com { namespace sun { namespace star {
     namespace container
     {
         class XNameAccess;
-        class XIndexAccess;
         class XHierarchicalNameContainer;
-        class XNameContainer;
     }
     namespace lang
     {
@@ -58,10 +56,6 @@ namespace com { namespace sun { namespace star {
         struct URL;
         class XNumberFormatter;
     }
-    namespace frame
-    {
-        class XModel;
-    }
     namespace ucb { class XContent; }
 
 }}}
@@ -76,14 +70,11 @@ class ToolBox;
 class Font;
 class SvNumberFormatter;
 class SfxFilter;
-class SvLBoxEntry;
 
 // .........................................................................
 namespace dbaui
 {
 // .........................................................................
-    //class ODsnTypeCollection;
-    class DBTreeListBox;
 
     /** creates a new connection and appends the eventlistener
         @param  _rsDataSourceName       name of the datasource

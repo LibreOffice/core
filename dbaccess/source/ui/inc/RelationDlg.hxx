@@ -33,7 +33,6 @@ namespace dbaui
 {
     class OJoinTableView;
     class OTableListBoxControl;
-    class ORelationTableConnectionData;
     //========================================================================
     class ORelationDialog : public ModalDialog
                             ,public IRelationControlInterface

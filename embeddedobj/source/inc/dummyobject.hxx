@@ -40,13 +40,6 @@ namespace com { namespace sun { namespace star {
     namespace embed {
         class XStorage;
     }
-    namespace frame {
-        class XModel;
-        class XFrame;
-    }
-    namespace lang {
-        class XMultiServiceFactory;
-    }
     namespace util {
         class XCloseListener;
     }

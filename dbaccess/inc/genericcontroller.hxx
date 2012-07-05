@@ -62,7 +62,6 @@ namespace dbtools
 }
 
 class Window;
-class VCLXWindow;
 namespace dbaui
 {
     class ODataView;

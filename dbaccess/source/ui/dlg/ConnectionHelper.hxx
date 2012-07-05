@@ -37,8 +37,6 @@ namespace dbaui
         PATH_NOT_KNOWN
     };
 
-    class IDatabaseSettingsDialog;
-
     class OConnectionHelper : public OGenericAdministrationPage
     {
         sal_Bool            m_bUserGrabFocus : 1;

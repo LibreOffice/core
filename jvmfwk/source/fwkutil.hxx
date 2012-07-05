@@ -121,11 +121,6 @@ enum FileStatus
  */
 FileStatus checkFileURL(const rtl::OUString & path);
 
-
-struct PluginLibrary;
-class VersionInfo;
-class CJavaInfo;
-
 bool isAccessibilitySupportDesired();
 
 rtl::OUString buildClassPathFromDirectory(const rtl::OUString & relPath);

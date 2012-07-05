@@ -49,12 +49,10 @@
 
 class FixedText;
 class PushButton;
-class SvxNumberFormatShell;
 class ScrollBar;
 class Button;
 class ListBox;
 class Control;
-class SvNumberFormatter;
 
 namespace dbaui
 {
@@ -64,7 +62,6 @@ namespace dbaui
     class OPropEditCtrl;
     class OPropNumericEditCtrl;
     class OFieldDescription;
-    class OTypeInfo;
     class OPropColumnEditCtrl;
     //==================================================================
     class OFieldDescControl : public TabPage

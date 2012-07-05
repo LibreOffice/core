@@ -28,7 +28,6 @@
 namespace dbaui
 {
     class OTableDesignView;
-    class OTypeInfo;
     //==================================================================
     class OTableRowView : public ::svt::EditBrowseBox
                         ,public IClipboardTest

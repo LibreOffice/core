@@ -38,9 +38,7 @@ namespace dbaui
     /*
         the class OConnectionLine represents the graphical line between the to two windows
     **/
-    class OConnectionLineData;
     class OTableConnection;
-    class OTableWindow;
     class OConnectionLine
     {
         OTableConnection*       m_pTabConn;

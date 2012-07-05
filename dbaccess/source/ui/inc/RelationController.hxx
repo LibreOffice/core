@@ -22,15 +22,9 @@
 #include "JoinController.hxx"
 #include "RelationDesignView.hxx"
 
-class VCLXWindow;
 class WaitObject;
 namespace dbaui
 {
-    class OTableConnectionData;
-    class OTableWindowData;
-    class OAddTableDlg;
-    class OTableFieldDesc;
-    class OTableWindow;
     class ORelationController : public OJoinController
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    m_xTables;

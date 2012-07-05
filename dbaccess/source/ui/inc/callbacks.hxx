@@ -24,7 +24,6 @@
 #include <sot/formats.hxx>
 #include <com/sun/star/container/XContainer.hpp>
 
-class CommandEvent;
 class SvLBoxEntry;
 class String;
 class Point;

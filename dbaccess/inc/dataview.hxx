@@ -29,7 +29,6 @@
 #include <memory>
 
 class FixedLine;
-class SvtMiscOptions;
 namespace dbaui
 {
     class IController;

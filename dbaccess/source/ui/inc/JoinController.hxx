@@ -34,13 +34,10 @@ namespace comphelper
     class NamedValueCollection;
 }
 
-class VCLXWindow;
 namespace dbaui
 {
     class OAddTableDlg;
     class AddTableDialogContext;
-    class OTableConnectionData;
-    class OTableWindowData;
     class OTableWindow;
     typedef OSingleDocumentController OJoinController_BASE;
 

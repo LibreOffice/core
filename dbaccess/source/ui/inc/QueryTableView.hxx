@@ -37,7 +37,6 @@ namespace dbaui
 
     //========================================================================
     class OQueryTabWinUndoAct;
-    class OQueryTabConnUndoAction;
     class OQueryTableConnection;
     class OQueryTableWindow;
     class OQueryDesignView;

@@ -53,12 +53,7 @@ namespace dbaui
         eOk
     };
 
-    class OQueryViewSwitch;
-    class OAddTableDlg;
-    class OQueryTableWindow;
     class OSelectionBrowseBox;
-    class OTableConnection;
-    class OQueryTableConnectionData;
     class OQueryContainerWindow;
 
     class OQueryDesignView : public OQueryView

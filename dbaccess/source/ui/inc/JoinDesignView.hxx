@@ -30,8 +30,6 @@
 
 namespace dbaui
 {
-    class OTableConnection;
-    class OConnectionLineData;
     class OJoinController;
     class OScrollWindowHelper;
     class OJoinTableView;

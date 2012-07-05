@@ -44,7 +44,6 @@
 namespace dbaccess
 {
 
-class DatabaseDataSource;
 typedef ::cppu::WeakComponentImplHelper4<   ::com::sun::star::chart2::data::XDatabaseDataProvider
                                           , ::com::sun::star::container::XChild
                                           , ::com::sun::star::chart::XComplexDescriptionAccess

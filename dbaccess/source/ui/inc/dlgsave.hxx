@@ -26,12 +26,7 @@
 #include <vcl/msgbox.hxx>
 
 namespace com { namespace sun { namespace star {
-    namespace container {
-        class XNameAccess;
-        class XHierarchicalNameAccess;
-    }
     namespace sdbc {
-        class XDatabaseMetaData;
         class XConnection;
     }
 }}}

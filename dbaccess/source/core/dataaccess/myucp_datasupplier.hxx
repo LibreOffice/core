@@ -28,7 +28,6 @@
 namespace dbaccess {
 
 struct DataSupplier_Impl;
-class OContentHelper;
 
 class DataSupplier : public ucbhelper::ResultSetDataSupplier
 {

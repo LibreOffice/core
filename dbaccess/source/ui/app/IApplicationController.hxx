@@ -25,7 +25,6 @@
 #include "callbacks.hxx"
 
 class SvTreeListBox;
-class SvLBoxEntry;
 
 //........................................................................
 namespace dbaui

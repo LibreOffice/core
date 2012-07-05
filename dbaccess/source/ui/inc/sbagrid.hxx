@@ -224,7 +224,6 @@ namespace dbaui
     // SbaGridControl
     //==================================================================
     //------------------------------------------------------------------
-    class UnoDataBrowserController;
     class SbaGridControl : public FmGridControl
     {
         friend class SbaGridHeader;

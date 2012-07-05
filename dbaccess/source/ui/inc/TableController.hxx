@@ -30,11 +30,9 @@
 #include <com/sun/star/sdbcx/XKeysSupplier.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 
-class FixedText;
 namespace dbaui
 {
     class OTableRow;
-    class OFieldDescription;
     typedef OSingleDocumentController   OTableController_BASE;
     class OTableController : public OTableController_BASE
     {

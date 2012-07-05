@@ -25,9 +25,6 @@
 #include "dsntypes.hxx"
 
 namespace com { namespace sun { namespace star {
-    namespace beans {
-        class XPropertySet;
-    }
     namespace sdbc {
         class XConnection;
         class XDriver;

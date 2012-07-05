@@ -44,8 +44,6 @@ namespace dbaccess
     //==========================================================================
     //= OTableContainer
     //==========================================================================
-    class OTable;
-    class OTableContainer;
     class OContainerMediator;
 
     class OTableContainer :  public OFilteredContainer,

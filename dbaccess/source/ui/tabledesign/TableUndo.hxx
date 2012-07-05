@@ -76,7 +76,6 @@ namespace dbaui
         virtual ~OTableDesignCellUndoAct();
     };
 
-    class OTypeInfo;
     //========================================================================
     class OTableEditorTypeSelUndoAct : public OTableEditorUndoAct
     {

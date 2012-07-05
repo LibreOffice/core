@@ -47,12 +47,10 @@
 
 #include <memory>
 
-class ListBox;
 class SvLBoxEntry;
 class SvTreeListBox;
 class TransferableHelper;
 class TransferableClipboardListener;
-class SfxFilter;
 
 namespace com { namespace sun { namespace star {
     namespace container {

@@ -27,7 +27,6 @@
 #include "QueryViewSwitch.hxx"
 #include <vcl/dockwin.hxx>
 
-class FixedLine;
 //.........................................................................
 namespace dbaui
 {

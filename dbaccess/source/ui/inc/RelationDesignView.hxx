@@ -29,10 +29,6 @@
 
 namespace dbaui
 {
-    class OAddTableDlg;
-    class OTableConnection;
-    class ORelationTableConnectionData;
-    class OConnectionLineData;
     class ORelationController;
 
     class ORelationDesignView : public OJoinDesignView

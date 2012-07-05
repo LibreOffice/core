@@ -28,7 +28,6 @@
 namespace dbaui
 {
     class OFieldDescription;
-    class OTypeInfo;
     class OTableRow
     {
     private:

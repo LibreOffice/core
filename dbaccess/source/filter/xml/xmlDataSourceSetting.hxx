@@ -26,7 +26,6 @@
 namespace dbaxml
 {
     class ODBFilter;
-    class OXMLDataSource;
     class OXMLDataSourceSetting : public SvXMLImportContext
     {
         ::com::sun::star::beans::PropertyValue m_aSetting;

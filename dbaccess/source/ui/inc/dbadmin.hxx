@@ -46,7 +46,6 @@ namespace dbaui
 //=========================================================================
 //= ODbAdminDialog
 //=========================================================================
-class OGeneralPage;
 class ODbDataSourceAdministrationHelper;
 /** tab dialog for administrating the office wide registered data sources
 */

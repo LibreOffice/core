@@ -62,9 +62,7 @@ namespace dbaccess
     //==========================================================================
     //= OQueryContainer
     //==========================================================================
-    class OQueryContainer;
     class OContainerListener;
-    class OQuery;
     class OQueryContainer   : public ODefinitionContainer
                             , public OQueryContainer_Base
     {

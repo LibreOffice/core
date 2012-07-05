@@ -48,13 +48,10 @@ namespace com { namespace sun { namespace star {
 
 #define COLUMN_POSITION_NOT_FOUND   ((sal_Int32)-1)
 
-class Window;
 class SvNumberFormatter;
 namespace dbaui
 {
     class OFieldDescription;
-    class OTypeInfo;
-    class OWizTypeSelect;
     class ODatabaseExport
     {
     public:

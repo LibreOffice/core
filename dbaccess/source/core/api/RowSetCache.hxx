@@ -50,8 +50,6 @@ namespace connectivity
 namespace dbaccess
 {
     class OCacheSet;
-    class ORowSetDataColumns;
-    class ORowSetCacheClone;
 
     class ORowSetCache
     {

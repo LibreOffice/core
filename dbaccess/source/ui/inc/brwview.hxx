@@ -36,7 +36,6 @@ namespace com { namespace sun { namespace star { namespace awt {
 }}}}
 
 // =========================================================================
-class ResMgr;
 class Splitter;
 
 namespace dbaui
