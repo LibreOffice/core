@@ -1172,9 +1172,9 @@
     <anim:par smil:begin="indefinite" smil:fill="hold">
     <anim:par smil:begin="0" smil:fill="hold">
     <anim:par smil:begin="0" smil:fill="hold" pres:node-type="on-click" pres:preset-class="emphasis" pres:preset-id="ooo-emphasis-darken">
-        <anim:animateColor smil:dur="0.5" smil:fill="hold" smil:attributeName="color" smil:by="hsl(0,-12%,-25%)" anim:color-interpolation="hsl" anim:color-interpolation-direction="clockwise"/>
-        <anim:animateColor smil:dur="0.5" smil:fill="hold" smil:attributeName="fill-color" smil:by="hsl(0,-12%,-25%)" anim:color-interpolation="hsl" anim:color-interpolation-direction="clockwise"/>
-        <anim:animateColor smil:dur="0.5" smil:fill="hold" smil:attributeName="stroke-color" smil:by="hsl(0,-12%,-25%)" anim:color-interpolation="hsl" anim:color-interpolation-direction="clockwise"/>
+        <anim:animateColor smil:dur="0.5" smil:fill="hold" smil:attributeName="color" smil:by="hsl(0,-12%,-25%)" anim:color-interpolation="hsl" anim:color-interpolation-direction="counterclockwise"/>
+        <anim:animateColor smil:dur="0.5" smil:fill="hold" smil:attributeName="fill-color" smil:by="hsl(0,-12%,-25%)" anim:color-interpolation="hsl" anim:color-interpolation-direction="counterclockwise"/>
+        <anim:animateColor smil:dur="0.5" smil:fill="hold" smil:attributeName="stroke-color" smil:by="hsl(0,-12%,-25%)" anim:color-interpolation="hsl" anim:color-interpolation-direction="counterclockwise"/>
         <anim:set smil:dur="0.5" smil:fill="hold" smil:attributeName="fill" smil:to="solid"/>
     </anim:par>
     </anim:par>
@@ -1200,9 +1200,9 @@
     <anim:par smil:begin="indefinite" smil:fill="hold">
     <anim:par smil:begin="0" smil:fill="hold">
     <anim:par smil:begin="0" smil:fill="hold" pres:node-type="on-click" pres:preset-class="emphasis" pres:preset-id="ooo-emphasis-lighten">
-        <anim:animateColor smil:dur="0.5" smil:fill="hold" smil:attributeName="color" smil:by="hsl(0,12%,25%)" anim:color-interpolation="hsl" anim:color-interpolation-direction="clockwise"/>
-        <anim:animateColor smil:dur="0.5" smil:fill="hold" smil:attributeName="fill-color" smil:by="hsl(0,12%,25%)" anim:color-interpolation="hsl" anim:color-interpolation-direction="clockwise"/>
-        <anim:animateColor smil:dur="0.5" smil:fill="hold" smil:attributeName="stroke-color" smil:by="hsl(0,12%,25%)" anim:color-interpolation="hsl" anim:color-interpolation-direction="clockwise"/>
+        <anim:animateColor smil:dur="0.5" smil:fill="hold" smil:attributeName="color" smil:by="hsl(0,12%,25%)" anim:color-interpolation="hsl" anim:color-interpolation-direction="counterclockwise"/>
+        <anim:animateColor smil:dur="0.5" smil:fill="hold" smil:attributeName="fill-color" smil:by="hsl(0,12%,25%)" anim:color-interpolation="hsl" anim:color-interpolation-direction="counterclockwise"/>
+        <anim:animateColor smil:dur="0.5" smil:fill="hold" smil:attributeName="stroke-color" smil:by="hsl(0,12%,25%)" anim:color-interpolation="hsl" anim:color-interpolation-direction="counterclockwise"/>
         <anim:set smil:dur="0.5" smil:fill="hold" smil:attributeName="fill" smil:to="solid"/>
     </anim:par>
     </anim:par>
