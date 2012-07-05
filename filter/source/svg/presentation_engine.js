@@ -7933,8 +7933,10 @@ ClippingFunctor.prototype.perform = function( nT, nWidth, nHeight )
 {
     var aClipPoly = this.aParametricPolyPolygon.perform( this.bForwardParameterSweep ? nT : (1 - nT) );
 
-    if( this.bFlip )
-        aClipPoly.changeOrientation();
+    // Note: even if the reverse method involves flipping we don't need to
+    // change the clip-poly orientation because we utilize the 'nonzero'
+    // clip-rule.
+    // See: http://www.w3.org/TR/SVG11/painting.html#FillRuleProperty
 
     if( this.bSubtractPolygon )
     {
