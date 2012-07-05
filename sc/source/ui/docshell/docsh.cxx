@@ -116,6 +116,8 @@
 #include <vector>
 #include <boost/shared_ptr.hpp>
 
+#define SC_LIBO_PROD_NAME "LibreOffice"
+
 using namespace com::sun::star;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::UNO_QUERY;
@@ -363,7 +365,12 @@ void ScDocShell::AfterXMLLoading(sal_Bool bRet)
 
     if (pModificator)
     {
+        sal_uInt16 nRecalcState = aDocument.GetHardRecalcState();
+        //temporarily set hard-recalc to prevent calling ScFormulaCell::Notify()
+        //which will set the cells dirty.
+        aDocument.SetHardRecalcState(2);
         delete pModificator;
+        aDocument.SetHardRecalcState(nRecalcState);
         pModificator = NULL;
     }
     else
@@ -422,9 +429,14 @@ sal_Bool ScDocShell::LoadXML( SfxMedium* pLoadMedium, const ::com::sun::star::un
     if ( nError )
         pLoadMedium->SetError( nError, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
 
+    uno::Reference<document::XDocumentPropertiesSupplier> xDPS(GetModel(), uno::UNO_QUERY_THROW);
+    uno::Reference<document::XDocumentProperties> xDocProps = xDPS->getDocumentProperties();
+    rtl::OUString sGenerator(xDocProps->getGenerator());
+    if(!sGenerator.match(SC_LIBO_PROD_NAME))
+        DoHardRecalc(false);
+
     aDocument.SetXMLFromWrapper( false );
     AfterXMLLoading(bRet);
-    aDocument.SetImportingLiboGenDoc(false);
     //! row heights...
 
     return bRet;

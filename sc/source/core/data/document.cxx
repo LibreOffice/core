@@ -3410,7 +3410,6 @@ void ScDocument::CompileXML()
     if ( pValidationList )
         pValidationList->CompileXML();
 
-    SetDirty();
     SetAutoCalc( bOldAutoCalc );
 }
 

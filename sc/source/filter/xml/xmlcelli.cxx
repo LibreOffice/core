@@ -757,8 +757,7 @@ void ScXMLTableRowCellContext::AddTextCellToDoc( const ScAddress& rCurrentPos,
                 pFCell->SetHybridString( *pOUText );
             else
                 bDoIncrement = false;
-            if(rXMLImport.GetDocument()->IsImportingLiboGenDoc())
-                pFCell->ResetDirty();
+            pFCell->ResetDirty();
         }
     }
     else
@@ -793,8 +792,7 @@ void ScXMLTableRowCellContext::AddNumberCellToDoc( const ScAddress& rCurrentPos 
         {
             ScFormulaCell* pFCell = static_cast<ScFormulaCell*>(pCell);
             pFCell->SetHybridDouble( fValue );
-            if(rXMLImport.GetDocument()->IsImportingLiboGenDoc())
-                pFCell->ResetDirty();
+            pFCell->ResetDirty();
         }
     }
     else
@@ -1025,8 +1023,7 @@ void ScXMLTableRowCellContext::AddNonMatrixFormulaCell( const ScAddress& rCellPo
                 pFCell->SetHybridString( *pOUTextValue );
             else
                 pFCell->SetHybridDouble( fValue );
-            if(pDoc->IsImportingLiboGenDoc())
-                pFCell->ResetDirty();
+            pFCell->ResetDirty();
         }
         else if ( aText[0] == '\'' && aText.getLength() > 1 )
         {

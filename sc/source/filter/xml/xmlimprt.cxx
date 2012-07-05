@@ -52,6 +52,7 @@
 
 #include "xmlimprt.hxx"
 #include "document.hxx"
+#include "docsh.hxx"
 #include "docuno.hxx"
 #include "nameuno.hxx"
 #include "xmlbodyi.hxx"
@@ -99,7 +100,6 @@
 #define SC_REPEAT_ROW "repeat-row"
 #define SC_FILTER "filter"
 #define SC_PRINT_RANGE "print-range"
-#define SC_LIBO_PROD_NAME "LibreOffice"
 
 using namespace com::sun::star;
 using namespace ::xmloff::token;
@@ -2811,12 +2811,6 @@ throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::R
         xActionLockable->addActionLock();
 
     pDoc->EnableAdjustHeight(false);
-
-     uno::Reference<document::XDocumentPropertiesSupplier> xDPS(GetModel(), uno::UNO_QUERY_THROW);
-     uno::Reference<document::XDocumentProperties> xDocProps = xDPS->getDocumentProperties();
-     rtl::OUString sGenerator(xDocProps->getGenerator());
-     if(sGenerator.match(SC_LIBO_PROD_NAME))
-        pDoc->SetImportingLiboGenDoc(true);
 }
 
 // XServiceInfo
