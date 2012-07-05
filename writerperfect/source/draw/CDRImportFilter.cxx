@@ -86,7 +86,7 @@ throw (RuntimeException)
     sFileName = OUStringToOString(sURL, RTL_TEXTENCODING_INFO_ASCII);
 
     // An XML import service: what we push sax messages to..
-    OUString sXMLImportService ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.comp.Draw.XMLOasisImporter" ) );
+    OUString sXMLImportService ( "com.sun.star.comp.Draw.XMLOasisImporter" );
     Reference < XDocumentHandler > xInternalHandler( comphelper::ComponentContext( mxContext ).createComponent( sXMLImportService ), UNO_QUERY );
 
     // The XImporter sets up an empty target document for XDocumentHandler to write to..
@@ -145,14 +145,14 @@ throw( com::sun::star::uno::RuntimeException )
     WPXSvInputStream input( xInputStream );
 
     if (libcdr::CDRDocument::isSupported(&input))
-        sTypeName = OUString( RTL_CONSTASCII_USTRINGPARAM ( "draw_CorelDraw_Document" ) );
+        sTypeName = OUString( "draw_CorelDraw_Document" );
 
     if (sTypeName.getLength())
     {
         if ( location == Descriptor.getLength() )
         {
             Descriptor.realloc(nLength+1);
-            Descriptor[location].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TypeName"));
+            Descriptor[location].Name = ::rtl::OUString( "TypeName" );
         }
 
         Descriptor[location].Value <<=sTypeName;
@@ -190,7 +190,7 @@ throw (RuntimeException)
 #ifdef DEBUG
     std::cerr << "CDRImportFilter_getImplementationName" << std::endl;
 #endif
-    return OUString ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.comp.Draw.CDRImportFilter" ) );
+    return OUString ( "com.sun.star.comp.Draw.CDRImportFilter" );
 }
 
 #define SERVICE_NAME1 "com.sun.star.document.ImportFilter"
@@ -211,8 +211,8 @@ throw (RuntimeException)
 #endif
     Sequence < OUString > aRet(2);
     OUString *pArray = aRet.getArray();
-    pArray[0] =  OUString ( RTL_CONSTASCII_USTRINGPARAM ( SERVICE_NAME1 ) );
-    pArray[1] =  OUString ( RTL_CONSTASCII_USTRINGPARAM ( SERVICE_NAME2 ) );
+    pArray[0] =  OUString ( SERVICE_NAME1 );
+    pArray[1] =  OUString ( SERVICE_NAME2 );
     return aRet;
 }
 #undef SERVICE_NAME2
