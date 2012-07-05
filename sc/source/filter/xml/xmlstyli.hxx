@@ -296,7 +296,8 @@ public:
             const ::rtl::OUString& rLocalName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
             const sal_Bool bFooter,
-            const sal_Bool bLeft );
+            const sal_Bool bLeft,
+            const sal_Bool bFirst );
 
     virtual void Finish( sal_Bool bOverwrite );
 };
