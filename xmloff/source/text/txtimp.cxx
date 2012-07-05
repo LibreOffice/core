@@ -30,40 +30,21 @@
 #include <vector>
 
 #include <boost/scoped_array.hpp>
-#include <boost/tuple/tuple.hpp>
 
-#include <tools/solar.h>
-#include <tools/debug.hxx>
 #include <svl/svstdarr.hxx>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
-#include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
-#include <com/sun/star/text/XTextCursor.hpp>
 #include <com/sun/star/text/XChapterNumberingSupplier.hpp>
 #include <com/sun/star/text/XTextFramesSupplier.hpp>
 #include <com/sun/star/text/XTextGraphicObjectsSupplier.hpp>
 #include <com/sun/star/text/XTextEmbeddedObjectsSupplier.hpp>
-#include <com/sun/star/text/TextContentAnchorType.hpp>
-#include <com/sun/star/text/XTextFrame.hpp>
 #include <com/sun/star/text/XFormField.hpp>
-#include <com/sun/star/drawing/XShapes.hpp>
-#include <com/sun/star/util/DateTime.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/ucb/XAnyCompareFactory.hpp>
-#include <com/sun/star/container/XNamed.hpp>
-#include <xmloff/xmltoken.hxx>
 #include "xmloff/xmlnmspe.hxx"
 #include <xmloff/txtstyli.hxx>
-#include <xmloff/families.hxx>
-#include <xmloff/xmlnumfi.hxx>
 #include <xmloff/xmlnumi.hxx>
-#include <xmloff/xmlictxt.hxx>
-#include <xmloff/xmlimppr.hxx>
 
 #include "txtparai.hxx"
-#include <xmloff/txtimp.hxx>
 #include <xmloff/txtprmap.hxx>
 #include "xmloff/txtimppr.hxx"
 #include <xmloff/xmlimp.hxx>
@@ -72,13 +53,10 @@
 #include "XMLTextListItemContext.hxx"
 #include "XMLTextListBlockContext.hxx"
 #include "XMLTextFrameContext.hxx"
-#include "XMLPropertyBackpatcher.hxx"
 #include "XMLTextFrameHyperlinkContext.hxx"
 #include "XMLSectionImportContext.hxx"
 #include "XMLIndexTOCContext.hxx"
 #include <xmloff/XMLFontStylesContext.hxx>
-#include <xmloff/ProgressBarHelper.hxx>
-#include <xmloff/nmspmap.hxx>
 #include <xmloff/XMLEventsImportContext.hxx>
 #include "XMLTrackedChangesImportContext.hxx"
 #include "XMLChangeImportContext.hxx"
