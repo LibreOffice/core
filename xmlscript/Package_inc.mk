@@ -10,7 +10,7 @@
 $(eval $(call gb_Package_Package,xmlscript_inc,$(SRCDIR)/xmlscript))
 
 # headers
-$(eval $(call gb_Package_add_file,xmlscript_inc,inc/xmlscript/xcrdllapi.h,inc/xmlscript/xcrdllapi.h))
+$(eval $(call gb_Package_add_file,xmlscript_inc,inc/xmlscript/xmlscriptdllapi.h,inc/xmlscript/xmlscriptdllapi.h))
 $(eval $(call gb_Package_add_file,xmlscript_inc,inc/xmlscript/xml_helper.hxx,inc/xmlscript/xml_helper.hxx))
 $(eval $(call gb_Package_add_file,xmlscript_inc,inc/xmlscript/xmldlg_imexp.hxx,inc/xmlscript/xmldlg_imexp.hxx))
 $(eval $(call gb_Package_add_file,xmlscript_inc,inc/xmlscript/xmllib_imexp.hxx,inc/xmlscript/xmllib_imexp.hxx))

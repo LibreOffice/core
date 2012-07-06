@@ -51,7 +51,7 @@ $(eval $(call gb_Pagein_add_objects,common,\
     $(if $(findstring TRUE,$(ENABLE_KDE)),vclplug_kde) \
     basegfx \
     sot \
-    xcr \
+    xmlscript \
     sb \
     stocservices \
     bootstrap \

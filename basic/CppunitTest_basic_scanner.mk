@@ -20,7 +20,7 @@ $(eval $(call gb_CppunitTest_use_libraries,basic_scanner, \
     tl \
     utl \
     vcl \
-    xcr \
+    xmlscript \
     $(gb_STDLIBS) \
 ))
 

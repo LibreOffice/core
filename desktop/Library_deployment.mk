@@ -46,7 +46,7 @@ $(eval $(call gb_Library_use_libraries,deployment,\
     tl \
     ucbhelper \
     utl \
-    xcr \
+    xmlscript \
     $(gb_STDLIBS) \
 ))
 

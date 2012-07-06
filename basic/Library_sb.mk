@@ -57,7 +57,7 @@ $(eval $(call gb_Library_use_libraries,sb,\
 	tl \
 	utl \
 	vcl \
-	xcr \
+	xmlscript \
 	$(gb_STDLIBS) \
 ))
 

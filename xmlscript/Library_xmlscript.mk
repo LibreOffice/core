@@ -7,15 +7,15 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Library_Library,xcr))
+$(eval $(call gb_Library_Library,xmlscript))
 
-$(eval $(call gb_Library_use_package,xcr,xmlscript_inc))
+$(eval $(call gb_Library_use_package,xmlscript,xmlscript_inc))
 
-$(eval $(call gb_Library_set_componentfile,xcr,xmlscript/util/xcr))
+$(eval $(call gb_Library_set_componentfile,xmlscript,xmlscript/util/xmlscript))
 
-$(eval $(call gb_Library_use_sdk_api,xcr))
+$(eval $(call gb_Library_use_sdk_api,xmlscript))
 
-$(eval $(call gb_Library_use_libraries,xcr,\
+$(eval $(call gb_Library_use_libraries,xmlscript,\
     comphelper \
     cppu \
     cppuhelper \
@@ -23,18 +23,18 @@ $(eval $(call gb_Library_use_libraries,xcr,\
     $(gb_STDLIBS) \
 ))
 
-$(eval $(call gb_Library_set_include,xcr,\
+$(eval $(call gb_Library_set_include,xmlscript,\
     -I$(SRCDIR)/xmlscript/source/inc \
     $$(INCLUDE) \
 ))
 
 
-$(eval $(call gb_Library_add_defs,xcr,\
-    -DXCR_DLLIMPLEMENTATION \
+$(eval $(call gb_Library_add_defs,xmlscript,\
+    -DXMLSCRIPT_DLLIMPLEMENTATION \
 ))
 
 
-$(eval $(call gb_Library_add_exception_objects,xcr,\
+$(eval $(call gb_Library_add_exception_objects,xmlscript,\
     xmlscript/source/misc/unoservices \
     xmlscript/source/xml_helper/xml_byteseq \
     xmlscript/source/xml_helper/xml_element \

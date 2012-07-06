@@ -52,7 +52,7 @@ $(eval $(call gb_Library_use_libraries,dlgprov,\
 	ucbhelper \
 	vbahelper \
 	vcl \
-	xcr \
+	xmlscript \
 	$(gb_STDLIBS) \
 ))
 

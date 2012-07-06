@@ -59,7 +59,7 @@ $(eval $(call gb_Library_use_libraries,basctl,\
 	utl \
 	ucbhelper \
 	vcl \
-	xcr \
+	xmlscript \
 	$(gb_STDLIBS) \
 ))
 

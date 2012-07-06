@@ -10,7 +10,7 @@
 $(eval $(call gb_Module_Module,xmlscript))
 
 $(eval $(call gb_Module_add_targets,xmlscript,\
-    Library_xcr \
+    Library_xmlscript \
     Package_inc \
 ))
 

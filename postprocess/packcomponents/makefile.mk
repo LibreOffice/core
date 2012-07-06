@@ -126,7 +126,7 @@ my_components = \
     component/uui/util/uui \
     component/xmloff/source/transform/xof \
     component/xmloff/util/xo \
-    component/xmlscript/util/xcr \
+    component/xmlscript/util/xmlscript \
     component/xmlsecurity/util/xmlsecurity \
     component/xmlsecurity/util/xsec_fw \
 

@@ -32,7 +32,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 
 #include "xmlscript/xmlns.h"
-#include "xmlscript/xcrdllapi.h"
+#include "xmlscript/xmlscriptdllapi.h"
 
 namespace xmlscript
 {
@@ -42,7 +42,7 @@ namespace xmlscript
 // HACK C++ struct to transport info. Later the container
 // itself should do the export/import and use exportet XML
 // functionality from xmlscript
-struct XCR_DLLPUBLIC LibDescriptor
+struct XMLSCRIPT_DLLPUBLIC LibDescriptor
 {
     ::rtl::OUString aName;
     ::rtl::OUString aStorageURL;
@@ -53,7 +53,7 @@ struct XCR_DLLPUBLIC LibDescriptor
     sal_Bool bPreload;
 };
 
-struct XCR_DLLPUBLIC LibDescriptorArray
+struct XMLSCRIPT_DLLPUBLIC LibDescriptorArray
 {
     LibDescriptor* mpLibs;
     sal_Int32 mnLibCount;
@@ -65,27 +65,27 @@ struct XCR_DLLPUBLIC LibDescriptorArray
 
 };
 
-XCR_DLLPUBLIC void
+XMLSCRIPT_DLLPUBLIC void
 SAL_CALL exportLibraryContainer(
     ::com::sun::star::uno::Reference<
     ::com::sun::star::xml::sax::XExtendedDocumentHandler > const & xOut,
     const LibDescriptorArray* pLibArray )
         SAL_THROW( (::com::sun::star::uno::Exception) );
 
-XCR_DLLPUBLIC ::com::sun::star::uno::Reference<
+XMLSCRIPT_DLLPUBLIC ::com::sun::star::uno::Reference<
     ::com::sun::star::xml::sax::XDocumentHandler >
 SAL_CALL importLibraryContainer( LibDescriptorArray* pLibArray )
         SAL_THROW( (::com::sun::star::uno::Exception) );
 
 
-XCR_DLLPUBLIC void
+XMLSCRIPT_DLLPUBLIC void
 SAL_CALL exportLibrary(
     ::com::sun::star::uno::Reference<
     ::com::sun::star::xml::sax::XExtendedDocumentHandler > const & xOut,
     const LibDescriptor& rLib )
         SAL_THROW( (::com::sun::star::uno::Exception) );
 
-XCR_DLLPUBLIC ::com::sun::star::uno::Reference<
+XMLSCRIPT_DLLPUBLIC ::com::sun::star::uno::Reference<
     ::com::sun::star::xml::sax::XDocumentHandler >
 SAL_CALL importLibrary( LibDescriptor& rLib )
         SAL_THROW( (::com::sun::star::uno::Exception) );

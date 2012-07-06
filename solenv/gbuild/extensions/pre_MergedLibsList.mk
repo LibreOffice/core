@@ -55,7 +55,7 @@ gb_MERGEDLIBS := \
 	ucb1 \
 	ucpfile1 \
 	uui \
-	xcr \
+	xmlscript \
 	xo \
 
 endif

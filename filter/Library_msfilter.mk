@@ -43,7 +43,7 @@ $(eval $(call gb_Library_use_libraries,msfilter,\
 	vcl \
 	svl \
 	sot \
-	xcr \
+	xmlscript \
 	utl \
 	tl \
 	comphelper \

@@ -377,7 +377,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     wpftdraw \
     wpftwriter \
     writerfilter \
-    xcr \
+    xmlscript \
     xmlfa \
     xmlfd \
     xo \

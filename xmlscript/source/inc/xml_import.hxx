@@ -28,6 +28,12 @@
 #if ! defined _XMLSCRIPT_XML_IMPORT_HXX_
 #define _XMLSCRIPT_XML_IMPORT_HXX_
 
+#include <osl/mutex.hxx>
+#include <osl/diagnose.h>
+#include <rtl/ustrbuf.hxx>
+#include <tools/diagnose_ex.h>
+#include <comphelper/processfactory.hxx>
+
 #include "com/sun/star/xml/input/XRoot.hpp"
 #include "com/sun/star/xml/sax/XExtendedDocumentHandler.hpp"
 

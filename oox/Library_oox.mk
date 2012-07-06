@@ -73,7 +73,7 @@ $(eval $(call gb_Library_use_libraries,oox,\
     utl \
     vcl \
     xo \
-    xcr \
+    xmlscript \
     $(gb_STDLIBS) \
 ))
 

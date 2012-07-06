@@ -18,7 +18,7 @@ $(eval $(call gb_CppunitTest_use_libraries,basic_enable, \
     tl \
     utl \
     vcl \
-    xcr \
+    xmlscript \
     test \
     $(gb_STDLIBS) \
 ))

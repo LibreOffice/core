@@ -51,7 +51,7 @@ $(eval $(call gb_Library_use_libraries,dbmm,\
     ucbhelper \
     utl \
     vcl \
-    xcr \
+    xmlscript \
     $(gb_STDLIBS) \
 ))
 
