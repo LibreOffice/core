@@ -71,7 +71,7 @@ struct ThumbnailViewItem
 
     ThumbnailViewItem (ThumbnailView &rView, Window *pParent);
 
-    ~ThumbnailViewItem ();
+    virtual ~ThumbnailViewItem ();
 
     bool isVisible () const { return mbVisible; }
 
