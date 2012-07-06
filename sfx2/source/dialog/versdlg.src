@@ -136,7 +136,7 @@ ModalDialog DLG_COMMENTS
     {
         Pos = MAP_APPFONT ( 6 , 6 ) ;
         Size = MAP_APPFONT ( 168 , 10 ) ;
-        Text [ en-US ] = "Date and time : " ;
+        Text [ en-US ] = "Date and time: " ;
     };
     FixedText FT_SAVEDBY
     {
