@@ -365,12 +365,12 @@ void ScDocShell::AfterXMLLoading(sal_Bool bRet)
 
     if (pModificator)
     {
-        sal_uInt16 nRecalcState = aDocument.GetHardRecalcState();
+        bool bRecalcState = aDocument.GetHardRecalcState();
         //temporarily set hard-recalc to prevent calling ScFormulaCell::Notify()
         //which will set the cells dirty.
-        aDocument.SetHardRecalcState(2);
+        aDocument.SetHardRecalcState(true);
         delete pModificator;
-        aDocument.SetHardRecalcState(nRecalcState);
+        aDocument.SetHardRecalcState(bRecalcState);
         pModificator = NULL;
     }
     else

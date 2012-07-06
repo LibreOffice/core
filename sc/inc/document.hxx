@@ -340,7 +340,7 @@ private:
     sal_uInt16              nSrcVer;                        // file version (load/save)
     SCROW               nSrcMaxRow;                     // number of lines to load/save
     sal_uInt16              nFormulaTrackCount;
-    sal_uInt16              nHardRecalcState;               // 0: soft, 1: hard-warn, 2: hard
+    bool                bHardRecalcState;               // false: soft, true: hard
     SCTAB               nVisibleTab;                    // for OLE etc.
 
     ScLkUpdMode         eLinkMode;
@@ -1668,8 +1668,8 @@ public:
     sal_uInt16              GetFormulaTrackCount() const { return nFormulaTrackCount; }
     bool                IsInFormulaTree( ScFormulaCell* pCell ) const;
     bool                IsInFormulaTrack( ScFormulaCell* pCell ) const;
-    sal_uInt16              GetHardRecalcState() { return nHardRecalcState; }
-    void                SetHardRecalcState( sal_uInt16 nVal ) { nHardRecalcState = nVal; }
+    bool                GetHardRecalcState() { return bHardRecalcState; }
+    void                SetHardRecalcState( bool bVal ) { bHardRecalcState = bVal; }
     void                StartAllListeners();
     const ScFormulaCell*    GetFormulaTree() const { return pFormulaTree; }
     bool                HasForcedFormulas() const { return bHasForcedFormulas; }

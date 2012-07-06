@@ -87,7 +87,7 @@ void ScDocument::Broadcast( const ScHint& rHint )
 {
     if ( !pBASM )
         return ;    // Clipboard or Undo
-    if ( !nHardRecalcState )
+    if ( !bHardRecalcState )
     {
         ScBulkBroadcast aBulkBroadcast( pBASM);     // scoped bulk broadcast
         bool bIsBroadcasted = false;
@@ -130,7 +130,7 @@ void ScDocument::AreaBroadcast( const ScHint& rHint )
 {
     if ( !pBASM )
         return ;    // Clipboard or Undo
-    if ( !nHardRecalcState )
+    if ( !bHardRecalcState )
     {
         ScBulkBroadcast aBulkBroadcast( pBASM);     // scoped bulk broadcast
         if ( pBASM->AreaBroadcast( rHint ) )
@@ -153,7 +153,7 @@ void ScDocument::AreaBroadcastInRange( const ScRange& rRange, const ScHint& rHin
 {
     if ( !pBASM )
         return ;    // Clipboard or Undo
-    if ( !nHardRecalcState )
+    if ( !bHardRecalcState )
     {
         ScBulkBroadcast aBulkBroadcast( pBASM);     // scoped bulk broadcast
         if ( pBASM->AreaBroadcastInRange( rRange, rHint ) )
@@ -295,7 +295,7 @@ void ScDocument::CalcFormulaTree( bool bOnlyForced, bool bNoProgress )
     //! _nicht_ SetAutoCalc( true ) weil das evtl. CalcFormulaTree( true )
     //! aufruft, wenn vorher disabled war und bHasForcedFormulas gesetzt ist
     bAutoCalc = true;
-    if ( nHardRecalcState )
+    if ( bHardRecalcState )
         CalcAll();
     else
     {

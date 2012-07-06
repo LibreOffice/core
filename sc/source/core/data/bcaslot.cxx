@@ -151,8 +151,6 @@ bool ScBroadcastAreaSlot::CheckHardRecalcStateCondition() const
     {   // this is more hypothetical now, check existed for old SV_PTRARR_SORT
         if ( !pDoc->GetHardRecalcState() )
         {
-            pDoc->SetHardRecalcState( 1 );
-
             SfxObjectShell* pShell = pDoc->GetDocumentShell();
             OSL_ENSURE( pShell, "Missing DocShell :-/" );
 
@@ -160,7 +158,7 @@ bool ScBroadcastAreaSlot::CheckHardRecalcStateCondition() const
                 pShell->SetError( SCWARN_CORE_HARD_RECALC, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
 
             pDoc->SetAutoCalc( false );
-            pDoc->SetHardRecalcState( 2 );
+            pDoc->SetHardRecalcState( true );
         }
         return true;
     }

@@ -1786,7 +1786,7 @@ void ScDocShell::GetState( SfxItemSet &rSet )
         switch (nWhich)
         {
             case FID_AUTO_CALC:
-                if ( (sal_Bool) aDocument.GetHardRecalcState() )
+                if ( aDocument.GetHardRecalcState() )
                     rSet.DisableItem( nWhich );
                 else
                     rSet.Put( SfxBoolItem( nWhich, aDocument.GetAutoCalc() ) );
