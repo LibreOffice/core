@@ -477,7 +477,10 @@ SfxViewVersionDialog_Impl::SfxViewVersionDialog_Impl ( Window *pParent, SfxVersi
         aEdit.SetReadOnly( sal_True );
     }
     else
+    {
+        aDateTimeText.Hide();
         aCloseButton.Hide();
+    }
 }
 
 IMPL_LINK( SfxViewVersionDialog_Impl, ButtonHdl, Button*, pButton )
