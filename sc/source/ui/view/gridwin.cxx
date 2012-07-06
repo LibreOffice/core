@@ -4113,6 +4113,9 @@ sal_Int8 ScGridWindow::DropTransferObj( ScTransferObj* pTransObj, SCCOL nDestPos
                 String aUndo = ScGlobal::GetRscString( bIsMove ? STR_UNDO_MOVE : STR_UNDO_COPY );
                 pDocSh->GetUndoManager()->EnterListAction( aUndo, aUndo );
 
+                SCsCOL nCorrectCursorPosCol = 0;
+                SCsROW nCorrectCursorPosRow = 0;
+
                 bDone = sal_True;
                 if ( meDragInsertMode != INS_NONE )
                 {
@@ -4126,11 +4129,13 @@ sal_Int8 ScGridWindow::DropTransferObj( ScTransferObj* pTransObj, SCCOL nDestPos
                                  nDestPosX == aSource.aStart.Col() && nDestPosY < aSource.aStart.Row() )
                             {
                                 bDone = aSource.Move( 0, nSizeY, 0, pSourceDoc );
+                                nCorrectCursorPosRow = nSizeY;
                             }
                             else if ( meDragInsertMode == INS_CELLSRIGHT &&
                                       nDestPosY == aSource.aStart.Row() && nDestPosX < aSource.aStart.Col() )
                             {
                                 bDone = aSource.Move( nSizeX, 0, 0, pSourceDoc );
+                                nCorrectCursorPosCol = nSizeX;
                             }
                         }
                         pDocSh->UpdateOle( pViewData );
@@ -4189,8 +4194,8 @@ sal_Int8 ScGridWindow::DropTransferObj( ScTransferObj* pTransObj, SCCOL nDestPos
                 {
                     pView->MarkRange( aDest, false, false );
 
-                    SCCOL nDCol = pViewData->GetCurX() - aSource.aStart.Col();
-                    SCROW nDRow = pViewData->GetCurY() - aSource.aStart.Row();
+                    SCCOL nDCol = pViewData->GetCurX() - aSource.aStart.Col() + nCorrectCursorPosCol;
+                    SCROW nDRow = pViewData->GetCurY() - aSource.aStart.Row() + nCorrectCursorPosRow;
                     pView->SetCursor( aDest.aStart.Col() + nDCol, aDest.aStart.Row() + nDRow );
                 }
 
