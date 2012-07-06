@@ -946,8 +946,17 @@ sal_Bool DrawDocShell::SaveAsOwnFormat( SfxMedium& rMedium )
 
         if( aLayoutName.Len() )
         {
-            String aOldPageLayoutName = mpDoc->GetSdPage(0, PK_STANDARD)->GetLayoutName();
-            mpDoc->RenameLayoutTemplate(aOldPageLayoutName, aLayoutName);
+            sal_uInt32 nCount = mpDoc->GetMasterSdPageCount(PK_STANDARD);
+            for(sal_uInt32 i = 0; i < nCount; i++)
+            {
+                String aOldPageLayoutName = mpDoc->GetMasterSdPage(i, PK_STANDARD)->GetLayoutName();
+                String aNewLayoutName = aLayoutName;
+                // Don't add suffix for the first master page
+                if( i > 0 )
+                    aNewLayoutName += String::CreateFromInt32(i);
+
+                mpDoc->RenameLayoutTemplate(aOldPageLayoutName, aNewLayoutName);
+            }
         }
     }
 
