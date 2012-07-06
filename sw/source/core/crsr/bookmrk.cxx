@@ -116,11 +116,12 @@ namespace sw { namespace mark
         }
     }
 
-    //We consider the CH_TXT_ATR_FIELDSTART and CH_TXT_ATR_FIELDEND
-    //themselves to be part of the covered range
+    // For fieldmarks, the CH_TXT_ATR_FIELDSTART and CH_TXT_ATR_FIELDEND
+    // themselves are part of the covered range. This is guaranteed by
+    // TextFieldmark::InitDoc/lcl_AssureFieldMarksSet.
     bool MarkBase::IsCoveringPosition(const SwPosition& rPos) const
     {
-        return rPos >= GetMarkStart() && rPos <= GetMarkEnd();
+        return GetMarkStart() <= rPos && rPos < GetMarkEnd();
     }
 
     void MarkBase::SetMarkPos(const SwPosition& rNewPos)
