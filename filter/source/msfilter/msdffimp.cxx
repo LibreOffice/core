@@ -2604,15 +2604,13 @@ void DffPropertyReader::ApplyAttributes( SvStream& rIn, SfxItemSet& rSet, DffObj
     {
         sal_Int32 nVal = static_cast< sal_Int32 >( GetPropertyValue( DFF_Prop_shadowOffsetX ) );
         rManager.ScaleEmu( nVal );
-        if ( nVal )
-            rSet.Put( SdrShadowXDistItem( nVal ) );
+        rSet.Put( SdrShadowXDistItem( nVal ) );
     }
     if ( IsProperty( DFF_Prop_shadowOffsetY ) )
     {
         sal_Int32 nVal = static_cast< sal_Int32 >( GetPropertyValue( DFF_Prop_shadowOffsetY ) );
         rManager.ScaleEmu( nVal );
-        if ( nVal )
-            rSet.Put( SdrShadowYDistItem( nVal ) );
+        rSet.Put( SdrShadowYDistItem( nVal ) );
     }
     if ( IsProperty( DFF_Prop_fshadowObscured ) )
     {
