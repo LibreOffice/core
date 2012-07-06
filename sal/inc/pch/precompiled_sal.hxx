@@ -7,11 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef PRECOMPILED_SAL_HXX
-#define PRECOMPILED_SAL_HXX
-
-#ifdef PRECOMPILED_HEADERS
-
 #include <vector>
 #include <map>
 #include <list>
@@ -30,10 +25,5 @@
 #include <boost/unordered_set.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <boost/bind.hpp>
-
-#endif
-
-#endif // PRECOMPILED_SAL_HXX
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

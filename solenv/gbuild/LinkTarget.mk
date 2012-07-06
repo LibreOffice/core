@@ -1206,8 +1206,6 @@ $(call gb_LinkTarget_get_target,$(1)) : PCHOBJNOEX = $(call gb_NoexPrecompiledHe
 $(call gb_LinkTarget_get_target,$(1)) : PCHOBJS = $$(PCHOBJEX)
 
 $(call gb_LinkTarget_get_headers_target,$(1)) \
-$(call gb_LinkTarget_get_target,$(1)) : DEFS := $$(DEFS) -DPRECOMPILED_HEADERS
-$(call gb_LinkTarget_get_headers_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : PCH_DEFS := $$(DEFS)
 $(call gb_LinkTarget_get_headers_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : PCH_CXXFLAGS := $$(T_CXXFLAGS) $(call gb_LinkTarget__get_cxxflags,$(1))
@@ -1217,7 +1215,6 @@ ifeq ($(gb_FULLDEPS),$(true))
 	$(call gb_NoexPrecompiledHeader_get_dep_target,$(3))
 $(call gb_PrecompiledHeader_get_timestamp,$(1)) : $(call gb_PrecompiledHeader_get_target,$(3))
 $(call gb_NoexPrecompiledHeader_get_timestamp,$(1)) : $(call gb_NoexPrecompiledHeader_get_target,$(3))
-$(call gb_LinkTarget_get_dep_target,$(1)) : DEFS := $$(DEFS) -DPRECOMPILED_HEADERS
 $(call gb_LinkTarget_get_dep_target,$(1)) : PCH_DEFS := $$(DEFS)
 $(call gb_LinkTarget_get_dep_target,$(1)) : PCH_CXXFLAGS := $$(T_CXXFLAGS) $(call gb_LinkTarget__get_cxxflags,$(1))
 endif

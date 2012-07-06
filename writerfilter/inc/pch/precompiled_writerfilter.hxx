@@ -7,11 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef PRECOMPILED_WRITERFILTER_HXX
-#define PRECOMPILED_WRITERFILTER_HXX
-
-#ifdef PRECOMPILED_HEADERS
-
 #include <iostream>
 #include <sstream>
 #include <vector>
@@ -42,9 +37,5 @@
 #include <boost/scoped_ptr.hpp>
 #include <boost/scoped_array.hpp>
 #include <boost/type.hpp>
-
-#endif
-
-#endif // PRECOMPILED_WRITERFILTER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

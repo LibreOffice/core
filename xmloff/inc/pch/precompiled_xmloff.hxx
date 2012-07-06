@@ -16,8 +16,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifdef PRECOMPILED_HEADERS
-
 #include <iostream>
 #include <sstream>
 #include <vector>
@@ -48,9 +46,6 @@
 #include <boost/scoped_ptr.hpp>
 #include <boost/scoped_array.hpp>
 #include <boost/type.hpp>
-
-#ifndef PRECOMPILED_XMLOFF_HXX
-#define PRECOMPILED_XMLOFF_HXX
 
 #if 1
 //---MARKER---
@@ -1277,9 +1272,5 @@
 #endif
 
 #endif
-
-#endif
-
-#endif // PRECOMPILED_XMLOFF_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
