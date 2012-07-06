@@ -475,6 +475,7 @@ SfxViewVersionDialog_Impl::SfxViewVersionDialog_Impl ( Window *pParent, SfxVersi
         aOKButton.Hide();
         aCancelButton.Hide();
         aEdit.SetReadOnly( sal_True );
+        SetText( SfxResId( STR_VIEWVERSIONCOMMENT ) );
     }
     else
     {

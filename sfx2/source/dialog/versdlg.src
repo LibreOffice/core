@@ -185,3 +185,7 @@ String DLG_COMMENTS
 {
     Text [ en-US ] = "Version comment" ;
 };
+String STR_VIEWVERSIONCOMMENT
+{
+    Text [ en-US ] = "View Version Comment" ;
+};
