@@ -543,8 +543,8 @@ void SAL_CALL ThumbnailViewAcc::deselectAccessibleChild( sal_Int32 nChildIndex )
     const SolarMutexGuard aSolarGuard;
     // Because of the single selection we can reset the whole selection when
     // the specified child is currently selected.
-    if (isAccessibleChildSelected(nChildIndex))
-        ;
+//FIXME TODO    if (isAccessibleChildSelected(nChildIndex))
+//FIXME TODO        ;
 }
 
 sal_Int64 SAL_CALL ThumbnailViewAcc::getSomething( const uno::Sequence< sal_Int8 >& rId ) throw( uno::RuntimeException )
