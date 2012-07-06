@@ -519,17 +519,18 @@ bool TemplateFolderView::moveTemplates(std::set<const ThumbnailViewItem *> &rIte
         std::set<const ThumbnailViewItem*>::iterator aSelIter;
         for ( aSelIter = rItems.begin(); aSelIter != rItems.end(); ++aSelIter )
         {
-            sal_uInt16 nTargetRegion = pTarget->mnId-1;
-            sal_uInt16 nTargetIdx = pTarget->maTemplates.back()->mnId; // Last Assigned in filesystem is mnId-1
+            const TemplateViewItem *pViewItem = static_cast<const TemplateViewItem*>(*aSelIter);
 
-            if (!mpDocTemplates->Move(nTargetRegion,nTargetIdx,mpItemView->getRegionId(),(*aSelIter)->mnId-1))
+            sal_uInt16 nTargetRegion = pTarget->mnId-1;
+            sal_uInt16 nTargetIdx = mpDocTemplates->GetCount(nTargetRegion);    // Next Idx
+
+            if (!mpDocTemplates->Move(nTargetRegion,nTargetIdx,nSrcRegionId,pViewItem->mnId-1))
             {
                 ret = false;
                 continue;
             }
 
             // move template to destination
-            const TemplateViewItem *pViewItem = static_cast<const TemplateViewItem*>(*aSelIter);
 
             TemplateViewItem *pTemplateItem = new TemplateViewItem(*mpItemView,mpItemView);
             pTemplateItem->mnId = nTargetIdx + 1;
