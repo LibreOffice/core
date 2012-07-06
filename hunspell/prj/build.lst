@@ -1,3 +1,0 @@
-hun     hunspell        :       solenv ICU:icu NULL
-hun     hunspell              usr1    -       all hun_mkout NULL
-hun     hunspell              nmake   -       all hun_hunspell NULL

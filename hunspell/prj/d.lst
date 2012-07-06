@@ -1,5 +1,0 @@
-..\%__SRC%\lib\lib*.*        %_DEST%\lib%_EXT%\lib*.*
-..\%__SRC%\slb\libhunspell.lib        %_DEST%\lib%_EXT%\libhunspell.lib
-
-mkdir: %_DEST%\inc%_EXT%\hunspell
-..\%__SRC%\inc\*.hxx         %_DEST%\inc%_EXT%\hunspell\*.hxx

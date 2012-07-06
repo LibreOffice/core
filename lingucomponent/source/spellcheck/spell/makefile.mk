@@ -73,6 +73,11 @@ SHL1IMPLIB=		i$(REALNAME)
 SHL1DEPN=		$(SHL1LIBS)
 SHL1DEF=		$(MISC)$/$(SHL1TARGET).def
 
+# Hunspell is a static library.  Avoid the definition
+#     LIBHUNSPELL_DLL_EXPORTED __declspec(dllimport)
+#
+CDEFS+=-DHUNSPELL_STATIC
+
 SHL1VERSIONMAP=$(SOLARENV)/src/component.map
 
 # build DEF file
