@@ -325,7 +325,8 @@ long BorderWidthImpl::GetLine1( long nWidth ) const
         long const nConstant2 = (m_nFlags & CHANGE_LINE2) ? 0 : m_nRate2;
         long const nConstantD = (m_nFlags & CHANGE_DIST ) ? 0 : m_nRateGap;
         result = std::max<long>(0,
-            static_cast<long>(m_nRate1 * nWidth) - (nConstant2 + nConstantD));
+                    static_cast<long>((m_nRate1 * nWidth) + 0.5)
+                        - (nConstant2 + nConstantD));
     }
     return result;
 }
@@ -338,7 +339,8 @@ long BorderWidthImpl::GetLine2( long nWidth ) const
         long const nConstant1 = (m_nFlags & CHANGE_LINE1) ? 0 : m_nRate1;
         long const nConstantD = (m_nFlags & CHANGE_DIST ) ? 0 : m_nRateGap;
         result = std::max<long>(0,
-            static_cast<long>(m_nRate2 * nWidth) - (nConstant1 + nConstantD));
+                    static_cast<long>((m_nRate2 * nWidth) + 0.5)
+                        - (nConstant1 + nConstantD));
     }
     return result;
 }
@@ -351,7 +353,8 @@ long BorderWidthImpl::GetGap( long nWidth ) const
         long const nConstant1 = (m_nFlags & CHANGE_LINE1) ? 0 : m_nRate1;
         long const nConstant2 = (m_nFlags & CHANGE_LINE2) ? 0 : m_nRate2;
         result = std::max<long>(0,
-            static_cast<long>(m_nRateGap * nWidth) - (nConstant1 + nConstant2));
+                    static_cast<long>((m_nRateGap * nWidth) + 0.5)
+                        - (nConstant1 + nConstant2));
     }
 
     // Avoid having too small distances (less than 0.1pt)
