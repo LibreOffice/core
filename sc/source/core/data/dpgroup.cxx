@@ -784,9 +784,9 @@ const ScDPCacheTable& ScDPGroupTableData::GetCacheTable() const
     return pSourceData->GetCacheTable();
 }
 
-void ScDPGroupTableData::ClearCacheTable()
+void ScDPGroupTableData::ReloadCacheTable()
 {
-    pSourceData->ClearCacheTable();
+    pSourceData->ReloadCacheTable();
 }
 
 void ScDPGroupTableData::FillGroupValues(vector<SCROW>& rItems, const vector<long>& rDims)

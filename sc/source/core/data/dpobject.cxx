@@ -499,6 +499,12 @@ void ScDPObject::CreateObjects()
             ScDPTableData* pData = GetTableData();
             if (pData)
             {
+                if (pSaveData)
+                    // Make sure to transfer these flags to the table data
+                    // since they may have changed.
+                    pData->SetEmptyFlags(pSaveData->GetIgnoreEmptyRows(), pSaveData->GetRepeatIfEmpty());
+
+                pData->ReloadCacheTable();
                 ScDPSource* pSource = new ScDPSource( pData );
                 xSource = pSource;
             }
@@ -709,8 +715,7 @@ void ScDPObject::SyncAllDimensionMembers()
     ScDPTableData* pData = GetTableData();
     // Refresh the cache wrapper since the cache may have changed.
     pData->SetEmptyFlags(pSaveData->GetIgnoreEmptyRows(), pSaveData->GetRepeatIfEmpty());
-    pData->ClearCacheTable();
-    pData->CreateCacheTable();
+    pData->ReloadCacheTable();
     pSaveData->SyncAllDimensionMembers(pData);
 }
 
