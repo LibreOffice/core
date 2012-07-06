@@ -134,7 +134,7 @@ ModalDialog DLG_TEMPLATE_MANAGER
     {
         ImageBitmap = Bitmap
         {
-            File = "ln053.png";
+            File = "signet.png";
         };
     };
 
