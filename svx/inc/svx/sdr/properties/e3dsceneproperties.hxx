@@ -36,7 +36,7 @@ namespace sdr
 
         public:
             // basic constructor
-            E3dSceneProperties(SdrObject& rObj);
+            explicit E3dSceneProperties(SdrObject& rObj);
 
             // constructor for copying, but using new object
             E3dSceneProperties(const E3dSceneProperties& rProps, SdrObject& rObj);

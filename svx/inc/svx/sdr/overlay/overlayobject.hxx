@@ -116,7 +116,7 @@ namespace sdr
             void allowAntiAliase(bool bNew);
 
         public:
-            OverlayObject(Color aBaseColor);
+            explicit OverlayObject(Color aBaseColor);
             virtual ~OverlayObject();
 
             // get OverlayManager

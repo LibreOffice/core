@@ -39,7 +39,7 @@ namespace sdr
 
         public:
             // basic constructor
-            CircleProperties(SdrObject& rObj);
+            explicit CircleProperties(SdrObject& rObj);
 
             // constructor for copying, but using new object
             CircleProperties(const CircleProperties& rProps, SdrObject& rObj);

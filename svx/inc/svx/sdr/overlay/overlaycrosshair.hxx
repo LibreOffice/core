@@ -35,7 +35,7 @@ namespace sdr
             virtual drawinglayer::primitive2d::Primitive2DSequence createOverlayObjectPrimitive2DSequence();
 
         public:
-            OverlayCrosshairStriped(const basegfx::B2DPoint& rBasePos);
+            explicit OverlayCrosshairStriped(const basegfx::B2DPoint& rBasePos);
             virtual ~OverlayCrosshairStriped();
 
             // react on stripe definition change

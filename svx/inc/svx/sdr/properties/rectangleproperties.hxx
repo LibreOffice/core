@@ -37,7 +37,7 @@ namespace sdr
 
         public:
             // basic constructor
-            RectangleProperties(SdrObject& rObj);
+            explicit RectangleProperties(SdrObject& rObj);
 
             // constructor for copying, but using new object
             RectangleProperties(const RectangleProperties& rProps, SdrObject& rObj);

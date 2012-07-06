@@ -51,7 +51,7 @@ namespace sdr
         public:
 
             // basic constructor, used from SdrObject.
-            ViewContactOfSdrMediaObj( SdrMediaObj& rMediaObj );
+            explicit ViewContactOfSdrMediaObj( SdrMediaObj& rMediaObj );
             virtual ~ViewContactOfSdrMediaObj();
 
         public:

@@ -39,7 +39,7 @@ namespace sdr
 
         public:
             // basic constructor
-            MeasureProperties(SdrObject& rObj);
+            explicit MeasureProperties(SdrObject& rObj);
 
             // constructor for copying, but using new object
             MeasureProperties(const MeasureProperties& rProps, SdrObject& rObj);

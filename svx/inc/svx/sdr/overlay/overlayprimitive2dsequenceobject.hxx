@@ -45,7 +45,7 @@ namespace sdr
             drawinglayer::geometry::ViewInformation2D impCreateViewInformation2D(OutputDevice& rOutputDevice) const;
 
         public:
-            OverlayPrimitive2DSequenceObject(const drawinglayer::primitive2d::Primitive2DSequence& rSequence);
+            explicit OverlayPrimitive2DSequenceObject(const drawinglayer::primitive2d::Primitive2DSequence& rSequence);
 
             virtual ~OverlayPrimitive2DSequenceObject();
 

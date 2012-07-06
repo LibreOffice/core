@@ -54,7 +54,7 @@ class SdrHelpLine {
         sal_Int32 nStepWidth, Color aColA, Color aColB, sal_Bool bHorizontal) const;
 
 public:
-    SdrHelpLine(SdrHelpLineKind eNewKind=SDRHELPLINE_POINT): eKind(eNewKind) {}
+    explicit SdrHelpLine(SdrHelpLineKind eNewKind=SDRHELPLINE_POINT): eKind(eNewKind) {}
     SdrHelpLine(SdrHelpLineKind eNewKind, const Point& rNewPos): aPos(rNewPos), eKind(eNewKind) {}
     bool operator==(const SdrHelpLine& rCmp) const { return aPos==rCmp.aPos && eKind==rCmp.eKind; }
     bool operator!=(const SdrHelpLine& rCmp) const { return !operator==(rCmp); }

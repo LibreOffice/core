@@ -46,7 +46,7 @@ protected:
     sal_uInt8 aData[32];
 
 public:
-    SetOfByte(sal_Bool bInitVal = sal_False)
+    explicit SetOfByte(sal_Bool bInitVal = sal_False)
     {
         memset(aData, bInitVal ? 0xFF : 0x00, sizeof(aData));
     }

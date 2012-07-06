@@ -59,7 +59,7 @@ class SdrPreRenderDevice
     VirtualDevice                                       maPreRenderDevice;
 
 public:
-    SdrPreRenderDevice(OutputDevice& rOriginal);
+    explicit SdrPreRenderDevice(OutputDevice& rOriginal);
     ~SdrPreRenderDevice();
 
     void PreparePreRenderDevice();

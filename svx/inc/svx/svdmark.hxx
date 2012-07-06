@@ -160,7 +160,7 @@ protected:
     sal_uInt16                                          mnUser;       // z.B. fuer CopyObjects, mitkopieren von Edges
 
 public:
-    SdrMark(SdrObject* pNewObj = 0L, SdrPageView* pNewPageView = 0L);
+    explicit SdrMark(SdrObject* pNewObj = 0L, SdrPageView* pNewPageView = 0L);
     SdrMark(const SdrMark& rMark);
     virtual ~SdrMark();
 

@@ -39,7 +39,7 @@ namespace sdr
             virtual drawinglayer::primitive2d::Primitive2DSequence createOverlayObjectPrimitive2DSequence();
 
         public:
-            OverlayHelplineStriped(
+            explicit OverlayHelplineStriped(
                 const basegfx::B2DPoint& rBasePos,
                 SdrHelpLineKind eNewKind = SDRHELPLINE_POINT);
             virtual ~OverlayHelplineStriped();

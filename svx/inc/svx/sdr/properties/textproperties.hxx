@@ -47,7 +47,7 @@ namespace sdr
 
         public:
             // basic constructor
-            TextProperties(SdrObject& rObj);
+            explicit TextProperties(SdrObject& rObj);
 
             // constructor for copying, but using new object
             TextProperties(const TextProperties& rProps, SdrObject& rObj);

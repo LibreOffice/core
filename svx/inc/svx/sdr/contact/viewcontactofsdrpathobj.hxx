@@ -44,7 +44,7 @@ namespace sdr
 
         public:
             // basic constructor, used from SdrObject.
-            ViewContactOfSdrPathObj(SdrPathObj& rTextObj);
+            explicit ViewContactOfSdrPathObj(SdrPathObj& rTextObj);
             virtual ~ViewContactOfSdrPathObj();
 
         protected:

@@ -62,7 +62,7 @@ namespace sdr
             virtual void ForceDefaultAttributes();
 
             // basic constructor
-            CustomShapeProperties(SdrObject& rObj);
+            explicit CustomShapeProperties(SdrObject& rObj);
 
             // constructor for copying, but using new object
             CustomShapeProperties(const CustomShapeProperties& rProps, SdrObject& rObj);

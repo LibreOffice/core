@@ -51,7 +51,7 @@ namespace sdr
 
         public:
             // basic constructor
-            PageProperties(SdrObject& rObj);
+            explicit PageProperties(SdrObject& rObj);
 
             // constructor for copying, but using new object
             PageProperties(const PageProperties& rProps, SdrObject& rObj);

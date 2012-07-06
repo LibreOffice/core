@@ -53,7 +53,7 @@ namespace sdr
 
         public:
             // basic constructor
-            AttributeProperties(SdrObject& rObj);
+            explicit AttributeProperties(SdrObject& rObj);
 
             // constructor for copying, but using new object
             AttributeProperties(const AttributeProperties& rProps, SdrObject& rObj);

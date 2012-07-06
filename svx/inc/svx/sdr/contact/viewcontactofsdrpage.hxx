@@ -43,7 +43,7 @@ namespace sdr
             ViewContactOfSdrPage&                       mrParentViewContactOfSdrPage;
 
         public:
-            ViewContactOfPageSubObject(ViewContactOfSdrPage& rParentViewContactOfSdrPage);
+            explicit ViewContactOfPageSubObject(ViewContactOfSdrPage& rParentViewContactOfSdrPage);
             virtual ~ViewContactOfPageSubObject();
 
             virtual ViewContact* GetParentContact() const;
@@ -65,7 +65,7 @@ namespace sdr
             virtual drawinglayer::primitive2d::Primitive2DSequence createViewIndependentPrimitive2DSequence() const;
 
         public:
-            ViewContactOfPageBackground(ViewContactOfSdrPage& rParentViewContactOfSdrPage);
+            explicit ViewContactOfPageBackground(ViewContactOfSdrPage& rParentViewContactOfSdrPage);
             virtual ~ViewContactOfPageBackground();
         };
     } // end of namespace contact
@@ -84,7 +84,7 @@ namespace sdr
             virtual drawinglayer::primitive2d::Primitive2DSequence createViewIndependentPrimitive2DSequence() const;
 
         public:
-            ViewContactOfPageShadow(ViewContactOfSdrPage& rParentViewContactOfSdrPage);
+            explicit ViewContactOfPageShadow(ViewContactOfSdrPage& rParentViewContactOfSdrPage);
             virtual ~ViewContactOfPageShadow();
         };
     } // end of namespace contact
@@ -103,7 +103,7 @@ namespace sdr
             virtual drawinglayer::primitive2d::Primitive2DSequence createViewIndependentPrimitive2DSequence() const;
 
         public:
-            ViewContactOfPageFill(ViewContactOfSdrPage& rParentViewContactOfSdrPage);
+            explicit ViewContactOfPageFill(ViewContactOfSdrPage& rParentViewContactOfSdrPage);
             virtual ~ViewContactOfPageFill();
         };
     } // end of namespace contact
@@ -122,7 +122,7 @@ namespace sdr
             virtual drawinglayer::primitive2d::Primitive2DSequence createViewIndependentPrimitive2DSequence() const;
 
         public:
-            ViewContactOfMasterPage(ViewContactOfSdrPage& rParentViewContactOfSdrPage);
+            explicit ViewContactOfMasterPage(ViewContactOfSdrPage& rParentViewContactOfSdrPage);
             virtual ~ViewContactOfMasterPage();
         };
     } // end of namespace contact
@@ -141,7 +141,7 @@ namespace sdr
             virtual drawinglayer::primitive2d::Primitive2DSequence createViewIndependentPrimitive2DSequence() const;
 
         public:
-            ViewContactOfOuterPageBorder(ViewContactOfSdrPage& rParentViewContactOfSdrPage);
+            explicit ViewContactOfOuterPageBorder(ViewContactOfSdrPage& rParentViewContactOfSdrPage);
             virtual ~ViewContactOfOuterPageBorder();
         };
     } // end of namespace contact
@@ -160,7 +160,7 @@ namespace sdr
             virtual drawinglayer::primitive2d::Primitive2DSequence createViewIndependentPrimitive2DSequence() const;
 
         public:
-            ViewContactOfInnerPageBorder(ViewContactOfSdrPage& rParentViewContactOfSdrPage);
+            explicit ViewContactOfInnerPageBorder(ViewContactOfSdrPage& rParentViewContactOfSdrPage);
             virtual ~ViewContactOfInnerPageBorder();
         };
     } // end of namespace contact
@@ -179,7 +179,7 @@ namespace sdr
             virtual drawinglayer::primitive2d::Primitive2DSequence createViewIndependentPrimitive2DSequence() const;
 
         public:
-            ViewContactOfPageHierarchy(ViewContactOfSdrPage& rParentViewContactOfSdrPage);
+            explicit ViewContactOfPageHierarchy(ViewContactOfSdrPage& rParentViewContactOfSdrPage);
             virtual ~ViewContactOfPageHierarchy();
 
             virtual sal_uInt32 GetObjectCount() const;
@@ -275,7 +275,7 @@ namespace sdr
             }
 
             // basic constructor, used from SdrPage.
-            ViewContactOfSdrPage(SdrPage& rObj);
+            explicit ViewContactOfSdrPage(SdrPage& rObj);
             virtual ~ViewContactOfSdrPage();
 
             // Access to possible sub-hierarchy

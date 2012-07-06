@@ -50,7 +50,7 @@ namespace sdr
 
         public:
             // basic constructor/destructor
-            PagePrimitiveExtractor(ViewObjectContactOfPageObj& rVOC);
+            explicit PagePrimitiveExtractor(ViewObjectContactOfPageObj& rVOC);
             virtual ~PagePrimitiveExtractor();
 
             // LazyInvalidate request. Supported here to not automatically

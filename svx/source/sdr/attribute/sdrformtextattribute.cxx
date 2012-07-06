@@ -175,7 +175,7 @@ namespace drawinglayer
             unsigned                                mbFormTextMirror : 1;   // change orientation
             unsigned                                mbFormTextOutline : 1;  // show contour of objects
 
-            ImpSdrFormTextAttribute(const SfxItemSet& rSet)
+            explicit ImpSdrFormTextAttribute(const SfxItemSet& rSet)
             :   mnRefCount(0),
                 mnFormTextDistance(((const XFormTextDistanceItem&)rSet.Get(XATTR_FORMTXTDISTANCE)).GetValue()),
                 mnFormTextStart(((const XFormTextStartItem&)rSet.Get(XATTR_FORMTXTSTART)).GetValue()),

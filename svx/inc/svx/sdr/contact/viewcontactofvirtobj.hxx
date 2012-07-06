@@ -41,7 +41,7 @@ namespace sdr
 
         public:
             // basic constructor, used from SdrObject.
-            ViewContactOfVirtObj(SdrVirtObj& rObj);
+            explicit ViewContactOfVirtObj(SdrVirtObj& rObj);
             virtual ~ViewContactOfVirtObj();
 
             // Access to possible sub-hierarchy

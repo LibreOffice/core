@@ -113,7 +113,7 @@ class SVX_DLLPUBLIC SvxViewHint : public SfxHint
 public:
     enum HintType { SVX_HINT_VIEWCHANGED };
     TYPEINFO();
-    SvxViewHint (HintType eType);
+    explicit SvxViewHint (HintType eType);
     HintType GetHintType (void) const;
 
 private:

@@ -75,7 +75,7 @@ private:
 public:
     TYPEINFO();
 
-    SdrUnoObj(const String& rModelName, sal_Bool bOwnsModel = sal_True);
+    explicit SdrUnoObj(const String& rModelName, sal_Bool bOwnsModel = sal_True);
     SdrUnoObj(const String& rModelName,
         const ::com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rxSFac,
         sal_Bool bOwnsModel = sal_True);

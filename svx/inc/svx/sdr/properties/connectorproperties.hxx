@@ -39,7 +39,7 @@ namespace sdr
 
         public:
             // basic constructor
-            ConnectorProperties(SdrObject& rObj);
+            explicit ConnectorProperties(SdrObject& rObj);
 
             // constructor for copying, but using new object
             ConnectorProperties(const ConnectorProperties& rProps, SdrObject& rObj);

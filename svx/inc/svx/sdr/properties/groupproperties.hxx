@@ -48,7 +48,7 @@ namespace sdr
 
         public:
             // basic constructor
-            GroupProperties(SdrObject& rObj);
+            explicit GroupProperties(SdrObject& rObj);
 
             // copy constructor
             GroupProperties(const GroupProperties& rProps, SdrObject& rObj);

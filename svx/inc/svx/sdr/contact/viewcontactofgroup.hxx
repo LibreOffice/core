@@ -49,7 +49,7 @@ namespace sdr
 
         public:
             // basic constructor, used from SdrObject.
-            ViewContactOfGroup(SdrObjGroup& rGroup);
+            explicit ViewContactOfGroup(SdrObjGroup& rGroup);
             virtual ~ViewContactOfGroup();
 
         protected:

@@ -44,7 +44,7 @@ namespace sdr
 
         public:
             // basic constructor, used from SdrObject.
-            ViewContactOfSdrEdgeObj(SdrEdgeObj& rEdgeObj);
+            explicit ViewContactOfSdrEdgeObj(SdrEdgeObj& rEdgeObj);
             virtual ~ViewContactOfSdrEdgeObj();
 
         protected:

@@ -198,7 +198,7 @@ protected:
 
 public:
     TYPEINFO();
-    SdrView(SdrModel* pModel1, OutputDevice* pOut = 0L);
+    explicit SdrView(SdrModel* pModel1, OutputDevice* pOut = 0L);
     virtual ~SdrView();
 
     // Default sind alle Dispatcher aktiviert. Will die App z.B. fuer

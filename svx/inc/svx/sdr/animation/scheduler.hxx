@@ -50,7 +50,7 @@ namespace sdr
 
         public:
             // constructor/destructor
-            Event(sal_uInt32 nTime);
+            explicit Event(sal_uInt32 nTime);
             SVX_DLLPUBLIC virtual ~Event();
 
             // access to mpNext

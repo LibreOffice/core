@@ -56,7 +56,7 @@ namespace sdr { namespace contact {
             return ((SdrUnoObj&)GetSdrObject());
         }
 
-        ViewContactOfUnoControl( SdrUnoObj& _rUnoObject );
+        explicit ViewContactOfUnoControl( SdrUnoObj& _rUnoObject );
         virtual ~ViewContactOfUnoControl();
 
         /** access control to selected members

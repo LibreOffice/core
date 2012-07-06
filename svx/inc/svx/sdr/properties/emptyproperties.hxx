@@ -52,7 +52,7 @@ namespace sdr
 
         public:
             // basic constructor
-            EmptyProperties(SdrObject& rObj);
+            explicit EmptyProperties(SdrObject& rObj);
 
             // constructor for copying, but using new object
             EmptyProperties(const EmptyProperties& rProps, SdrObject& rObj);

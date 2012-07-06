@@ -53,7 +53,7 @@ namespace sdr
             SdrPage* GetSdrPage() const;
 
             // basic constructor, used from SdrPageView.
-            ObjectContactOfPageView(SdrPageWindow& rPageWindow);
+            explicit ObjectContactOfPageView(SdrPageWindow& rPageWindow);
             virtual ~ObjectContactOfPageView();
 
             // LazyInvalidate request. This is used from the VOCs to mark that they

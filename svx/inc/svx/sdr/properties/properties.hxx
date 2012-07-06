@@ -90,7 +90,7 @@ namespace sdr
 
         public:
             // basic constructor, used from SdrObject.
-            BaseProperties(SdrObject& rObj);
+            explicit BaseProperties(SdrObject& rObj);
 
             // constructor for copying, but using new object. Used from the Clone()
             // method.

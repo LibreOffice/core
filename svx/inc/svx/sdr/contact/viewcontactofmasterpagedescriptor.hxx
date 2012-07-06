@@ -51,7 +51,7 @@ namespace sdr
 
         public:
             // basic constructor
-            ViewContactOfMasterPageDescriptor(sdr::MasterPageDescriptor& rDescriptor);
+            explicit ViewContactOfMasterPageDescriptor(sdr::MasterPageDescriptor& rDescriptor);
 
             // The destructor.
             virtual ~ViewContactOfMasterPageDescriptor();

@@ -52,7 +52,7 @@ namespace sdr
 
         public:
             // basic constructor, used from SdrObject.
-            ViewContactOfE3dScene(E3dScene& rScene);
+            explicit ViewContactOfE3dScene(E3dScene& rScene);
 
             // access to SdrObject
             E3dScene& GetE3dScene() const

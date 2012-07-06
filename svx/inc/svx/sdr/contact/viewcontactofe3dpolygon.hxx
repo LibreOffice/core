@@ -37,7 +37,7 @@ namespace sdr
         {
         public:
             // basic constructor, used from SdrObject.
-            ViewContactOfE3dPolygon(E3dPolygonObj& rPolygon);
+            explicit ViewContactOfE3dPolygon(E3dPolygonObj& rPolygon);
             virtual ~ViewContactOfE3dPolygon();
 
             // access to SdrObject

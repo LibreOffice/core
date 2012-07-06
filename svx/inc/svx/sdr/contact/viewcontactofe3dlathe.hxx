@@ -37,7 +37,7 @@ namespace sdr
         {
         public:
             // basic constructor, used from SdrObject.
-            ViewContactOfE3dLathe(E3dLatheObj& rLathe);
+            explicit ViewContactOfE3dLathe(E3dLatheObj& rLathe);
             virtual ~ViewContactOfE3dLathe();
 
             // access to SdrObject

@@ -191,7 +191,7 @@ protected:
 
 public:
     SdrHdl();
-    SdrHdl(const Point& rPnt, SdrHdlKind eNewKind=HDL_MOVE);
+    explicit SdrHdl(const Point& rPnt, SdrHdlKind eNewKind=HDL_MOVE);
     virtual ~SdrHdl();
 
     const ::sdr::overlay::OverlayObjectList& getOverlayObjectList() const { return maOverlayGroup; }
@@ -281,7 +281,7 @@ private:
     SVX_DLLPRIVATE void CallColorChangeLink();
 
 public:
-    SdrHdlColor(const Point& rRef, Color aCol = Color(COL_BLACK), const Size& rSize = Size(11, 11), sal_Bool bLum = sal_False);
+    explicit SdrHdlColor(const Point& rRef, Color aCol = Color(COL_BLACK), const Size& rSize = Size(11, 11), sal_Bool bLum = sal_False);
     virtual ~SdrHdlColor();
 
     sal_Bool IsUseLuminance() const { return bUseLuminance; }
@@ -391,7 +391,7 @@ class E3dVolumeMarker : public SdrHdl
     virtual void CreateB2dIAObject();
 
 public:
-    E3dVolumeMarker(const basegfx::B2DPolyPolygon& rWireframePoly);
+    explicit E3dVolumeMarker(const basegfx::B2DPolyPolygon& rWireframePoly);
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -466,7 +466,7 @@ private:
     SVX_DLLPRIVATE sal_Bool operator!=(const SdrHdlList&) const      { return sal_False; }
 
 public:
-    SdrHdlList(SdrMarkView* pV);
+    explicit SdrHdlList(SdrMarkView* pV);
     ~SdrHdlList();
     void Clear();
 

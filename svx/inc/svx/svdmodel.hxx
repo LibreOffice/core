@@ -140,8 +140,8 @@ public:
 public:
     TYPEINFO();
 
-    SdrHint(SdrHintKind eNewHint);
-    SdrHint(const SdrObject& rNewObj);
+    explicit SdrHint(SdrHintKind eNewHint);
+    explicit SdrHint(const SdrObject& rNewObj);
 
     void SetPage(const SdrPage* pNewPage);
     void SetObject(const SdrObject* pNewObj);
@@ -309,8 +309,8 @@ public:
     // Zeichenobjekte verwenden moechte. Setzt man degegen nur vom abstrakten
     // Basisobjekt SdrObject abgeleitete Objekte ein, so ist man frei in der
     // Wahl des Pools.
-    SdrModel(SfxItemPool* pPool=NULL, ::comphelper::IEmbeddedHelper* pPers=NULL, sal_Bool bLoadRefCounts = LOADREFCOUNTS);
-    SdrModel(const String& rPath, SfxItemPool* pPool=NULL, ::comphelper::IEmbeddedHelper* pPers=NULL, sal_Bool bLoadRefCounts = LOADREFCOUNTS);
+    explicit SdrModel(SfxItemPool* pPool=NULL, ::comphelper::IEmbeddedHelper* pPers=NULL, sal_Bool bLoadRefCounts = LOADREFCOUNTS);
+    explicit SdrModel(const String& rPath, SfxItemPool* pPool=NULL, ::comphelper::IEmbeddedHelper* pPers=NULL, sal_Bool bLoadRefCounts = LOADREFCOUNTS);
     SdrModel(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers, bool bUseExtColorTable, sal_Bool bLoadRefCounts = LOADREFCOUNTS);
     SdrModel(const String& rPath, SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* pPers, bool bUseExtColorTable, sal_Bool bLoadRefCounts = LOADREFCOUNTS);
     virtual ~SdrModel();

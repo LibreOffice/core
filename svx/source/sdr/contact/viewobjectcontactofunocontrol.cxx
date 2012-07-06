@@ -434,7 +434,7 @@ namespace sdr { namespace contact {
     {
         const SdrPageView&  m_rPageView;
     public:
-        SdrPageViewAccess( const SdrPageView& _rPageView ) : m_rPageView( _rPageView ) { }
+        explicit SdrPageViewAccess( const SdrPageView& _rPageView ) : m_rPageView( _rPageView ) { }
 
         virtual ~SdrPageViewAccess() {}
 
@@ -476,7 +476,7 @@ namespace sdr { namespace contact {
     private:
         Reference< XControlContainer >& m_rControlContainer;
     public:
-        InvisibleControlViewAccess( Reference< XControlContainer >& _inout_ControlContainer )
+        explicit InvisibleControlViewAccess( Reference< XControlContainer >& _inout_ControlContainer )
             :m_rControlContainer( _inout_ControlContainer )
         {
         }
@@ -605,7 +605,7 @@ namespace sdr { namespace contact {
         ::basegfx::B2DHomMatrix         m_aZoomLevelNormalization;
 
     public:
-        ViewObjectContactOfUnoControl_Impl( ViewObjectContactOfUnoControl* _pAntiImpl );
+        explicit ViewObjectContactOfUnoControl_Impl( ViewObjectContactOfUnoControl* _pAntiImpl );
 
         /** disposes the instance, which is nonfunctional afterwards
         */
@@ -901,7 +901,7 @@ namespace sdr { namespace contact {
             ) const;
 
     public:
-        LazyControlCreationPrimitive2D( const ::rtl::Reference< ViewObjectContactOfUnoControl_Impl >& _pVOCImpl )
+        explicit LazyControlCreationPrimitive2D( const ::rtl::Reference< ViewObjectContactOfUnoControl_Impl >& _pVOCImpl )
             :m_pVOCImpl( _pVOCImpl )
         {
             ENSURE_OR_THROW( m_pVOCImpl.is(), "Illegal argument." );

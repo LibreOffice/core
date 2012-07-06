@@ -36,7 +36,7 @@ namespace sdr
 
         public:
             // basic constructor
-            E3dSphereProperties(SdrObject& rObj);
+            explicit E3dSphereProperties(SdrObject& rObj);
 
             // constructor for copying, but using new object
             E3dSphereProperties(const E3dSphereProperties& rProps, SdrObject& rObj);

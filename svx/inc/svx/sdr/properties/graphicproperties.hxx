@@ -39,7 +39,7 @@ namespace sdr
 
         public:
             // basic constructor
-            GraphicProperties(SdrObject& rObj);
+            explicit GraphicProperties(SdrObject& rObj);
 
             // constructor for copying, but using new object
             GraphicProperties(const GraphicProperties& rProps, SdrObject& rObj);

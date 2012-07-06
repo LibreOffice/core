@@ -61,7 +61,7 @@ namespace sdr
             }
 
             // basic constructor, destructor
-            ViewContactOfGraphic(SdrGrafObj& rGrafObj);
+            explicit ViewContactOfGraphic(SdrGrafObj& rGrafObj);
             virtual ~ViewContactOfGraphic();
 
             // #i102380#

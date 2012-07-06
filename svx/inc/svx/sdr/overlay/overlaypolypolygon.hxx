@@ -48,7 +48,7 @@ namespace sdr
             virtual drawinglayer::primitive2d::Primitive2DSequence createOverlayObjectPrimitive2DSequence();
 
         public:
-            OverlayPolyPolygonStriped(const basegfx::B2DPolyPolygon& rPolyPolygon);
+            explicit OverlayPolyPolygonStriped(const basegfx::B2DPolyPolygon& rPolyPolygon);
             virtual ~OverlayPolyPolygonStriped();
 
             // change geometry

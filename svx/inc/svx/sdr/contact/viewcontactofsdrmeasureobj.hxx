@@ -44,7 +44,7 @@ namespace sdr
 
         public:
             // basic constructor, used from SdrObject.
-            ViewContactOfSdrMeasureObj(SdrMeasureObj& rMeasureObj);
+            explicit ViewContactOfSdrMeasureObj(SdrMeasureObj& rMeasureObj);
             virtual ~ViewContactOfSdrMeasureObj();
 
         protected:

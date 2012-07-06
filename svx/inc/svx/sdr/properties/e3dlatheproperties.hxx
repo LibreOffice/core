@@ -37,7 +37,7 @@ namespace sdr
 
         public:
             // basic constructor
-            E3dLatheProperties(SdrObject& rObj);
+            explicit E3dLatheProperties(SdrObject& rObj);
 
             // constructor for copying, but using new object
             E3dLatheProperties(const E3dLatheProperties& rProps, SdrObject& rObj);

@@ -42,7 +42,7 @@ namespace sdr
             void*                                           mpData;
 
         public:
-            ItemChangeBroadcaster(const SdrObject& rObj);
+            explicit ItemChangeBroadcaster(const SdrObject& rObj);
             ~ItemChangeBroadcaster();
 
             sal_uInt32 GetRectangleCount() const;

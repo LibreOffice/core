@@ -39,7 +39,7 @@ namespace sdr
 
         public:
             // basic constructor
-            CaptionProperties(SdrObject& rObj);
+            explicit CaptionProperties(SdrObject& rObj);
 
             // constructor for copying, but using new object
             CaptionProperties(const CaptionProperties& rProps, SdrObject& rObj);

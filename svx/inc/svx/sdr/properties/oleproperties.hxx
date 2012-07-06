@@ -33,7 +33,7 @@ namespace sdr
         protected:
         public:
             // basic constructor
-            OleProperties(SdrObject& rObj);
+            explicit OleProperties(SdrObject& rObj);
 
             // constructor for copying, but using new object
             OleProperties(const OleProperties& rProps, SdrObject& rObj);

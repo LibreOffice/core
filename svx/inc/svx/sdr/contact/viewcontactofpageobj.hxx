@@ -55,7 +55,7 @@ namespace sdr
             virtual drawinglayer::primitive2d::Primitive2DSequence createViewIndependentPrimitive2DSequence() const;
         public:
             // basic constructor, used from SdrObject.
-            ViewContactOfPageObj(SdrPageObj& rPageObj);
+            explicit ViewContactOfPageObj(SdrPageObj& rPageObj);
             virtual ~ViewContactOfPageObj();
 
             // #WIP# React on changes of the object of this ViewContact

@@ -58,7 +58,7 @@ namespace sdr
             }
 
             // basic constructor, used from SdrObject.
-            ViewContactOfSdrOle2Obj(SdrOle2Obj& rOle2Obj);
+            explicit ViewContactOfSdrOle2Obj(SdrOle2Obj& rOle2Obj);
             virtual ~ViewContactOfSdrOle2Obj();
 
             // helper for creating a OLE sequence for this object. It takes care od attributes, needed
