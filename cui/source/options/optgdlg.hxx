@@ -50,8 +50,6 @@ private:
     CheckBox            aExtHelpCB;
     CheckBox            aHelpAgentCB;
     PushButton          aHelpAgentResetBtn;
-    FixedText           aHelpFormatFT;
-    ListBox             aHelpFormatLB;
 
     FixedLine           aFileDlgFL;
     ReadOnlyImage       aFileDlgROImage;

@@ -62,31 +62,6 @@ TabPage OFA_TP_MISC
         Size = MAP_APPFONT( WHOLE_WIDTH - COL3, RSC_CD_CHECKBOX_HEIGHT );
         Text [ en-US ] = "~Extended tips";
     };
-#if ENABLE_HELP_FORMATTING
-    FixedText FT_HELPFORMAT
-    {
-        Pos = MAP_APPFONT( COL1, OFFS_TEXTBOX_FIXEDTEXT(ROW2) );
-        Size = MAP_APPFONT( DIFF( COL1, COL3 ), RSC_CD_FIXEDTEXT_HEIGHT );
-        Text [ en-US ] = "Help ~formatting";
-    };
-    ListBox LB_HELPFORMAT
-    {
-        HelpID = "cui:ListBox:OFA_TP_MISC:LB_HELPFORMAT";
-        Pos = MAP_APPFONT( COL3, ROW2 );
-        Size = MAP_APPFONT( WHOLE_WIDTH - COL4, 50 );
-        DropDown = TRUE ;
-        Border = TRUE ;
-        TabStop = TRUE ;
-        StringList [ en-US ] =
-        {
-            < "Default" ; > ;
-            < "High Contrast #1" ; > ;
-            < "High Contrast #2" ; > ;
-            < "High Contrast Black" ; > ;
-            < "High Contrast White" ; > ;
-        };
-    };
-#endif
     CheckBox CB_HELPAGENT
     {
         HelpID = "cui:CheckBox:OFA_TP_MISC:CB_HELPAGENT";

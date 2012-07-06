@@ -21,8 +21,6 @@
 
 // defines for positions and sizes ---------------------------------------
 
-#define ENABLE_HELP_FORMATTING 0
-
 #define WHOLE_WIDTH             248
 #define EDIT_WIDTH              30
 #define UNIT_WIDTH              40
@@ -39,11 +37,7 @@
 #define ROWSPACE                RSC_SP_CTRL_DESC_Y
 #define ROW0                    3
 #define ROW1                    (ROW0 +RSC_CD_FIXEDLINE_HEIGHT+ROWSPACE)
-#if ENABLE_HELP_FORMATTING
-#define ROW2                    (ROW1 +RSC_CD_CHECKBOX_HEIGHT+ROWSPACE)
-#else
 #define ROW2                    (ROW1)
-#endif
 #define ROW3                    (ROW2 +RSC_CD_DROPDOWN_HEIGHT+ROWSPACE)
 #define ROW4                    (ROW3 +RSC_CD_PUSHBUTTON_HEIGHT+ROWSPACE)
 #define ROW5                    (ROW4 +RSC_CD_FIXEDLINE_HEIGHT+ROWSPACE)
@@ -99,10 +93,8 @@
 #define CB_EXTHELP                  12
 #define CB_HELPAGENT                13
 #define PB_HELPAGENT_RESET          14
-#define FT_HELPFORMAT               15
-#define LB_HELPFORMAT               16
-#define CB_EXPERIMENTAL             18
-#define CB_MACRORECORDER            20
+#define CB_EXPERIMENTAL             15
+#define CB_MACRORECORDER            16
 
 #define FL_TWOFIGURE                40
 #define FT_INTERPRET                41

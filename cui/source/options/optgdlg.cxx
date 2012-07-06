@@ -200,8 +200,6 @@ OfaMiscTabPage::OfaMiscTabPage(Window* pParent, const SfxItemSet& rSet ) :
     aExtHelpCB          ( this, CUI_RES( CB_EXTHELP ) ),
     aHelpAgentCB        ( this, CUI_RES( CB_HELPAGENT ) ),
     aHelpAgentResetBtn  ( this, CUI_RES( PB_HELPAGENT_RESET ) ),
-    aHelpFormatFT       ( this, CUI_RES( FT_HELPFORMAT ) ),
-    aHelpFormatLB       ( this, CUI_RES( LB_HELPFORMAT ) ),
     aFileDlgFL          ( this, CUI_RES( FL_FILEDLG ) ),
     aFileDlgROImage     ( this, CUI_RES( FI_FILEDLG_RO ) ),
     aFileDlgCB          ( this, CUI_RES( CB_FILEDLG ) ),
@@ -219,11 +217,6 @@ OfaMiscTabPage::OfaMiscTabPage(Window* pParent, const SfxItemSet& rSet ) :
     aMacroRecorderCB    ( this, CUI_RES( CB_MACRORECORDER ) )
 {
     FreeResource();
-
-#if !defined(ENABLE_HELP_FORMATTING)
-    aHelpFormatFT.Hide();
-    aHelpFormatLB.Hide();
-#endif
 
     if (!lcl_HasSystemFilePicker())
     {
@@ -334,22 +327,6 @@ OfaMiscTabPage::OfaMiscTabPage(Window* pParent, const SfxItemSet& rSet ) :
     aToolTipsCB.SetClickHdl( aLink );
     aHelpAgentCB.SetClickHdl( aLink );
     aHelpAgentResetBtn.SetClickHdl( LINK( this, OfaMiscTabPage, HelpAgentResetHdl_Impl ) );
-
-    //fill default names as user data
-    static const char* aHelpFormatNames[] =
-    {
-        "Default",
-        "HighContrast1",
-        "HighContrast2",
-        "HighContrastBlack",
-        "HighContrastWhite"
-    };
-
-    for ( sal_uInt16 i = 0; i < aHelpFormatLB.GetEntryCount(); i++ )
-    {
-        String* pData = new String( rtl::OUString::createFromAscii( aHelpFormatNames[i] ) );
-        aHelpFormatLB.SetEntryData( i, pData );
-    }
 }
 
 #ifdef WNT
@@ -364,10 +341,6 @@ IMPL_LINK_NOARG(OfaMiscTabPage, OnFileDlgToggled)
 
 OfaMiscTabPage::~OfaMiscTabPage()
 {
-    for(sal_uInt16 i = 0; i < aHelpFormatLB.GetEntryCount(); i++)
-    {
-        delete static_cast< String* >( aHelpFormatLB.GetEntryData(i) );
-    }
 }
 
 // -----------------------------------------------------------------------
@@ -393,12 +366,6 @@ sal_Bool OfaMiscTabPage::FillItemSet( SfxItemSet& rSet )
     bChecked = aHelpAgentCB.IsChecked();
     if ( bChecked != aHelpAgentCB.GetSavedValue() )
         aHelpOptions.SetHelpAgentAutoStartMode( bChecked );
-    sal_uInt16 nHelpFormatPos = aHelpFormatLB.GetSelectEntryPos();
-    if ( nHelpFormatPos != LISTBOX_ENTRY_NOTFOUND &&
-         nHelpFormatPos != aHelpFormatLB.GetSavedValue() )
-    {
-        aHelpOptions.SetHelpStyleSheet( *static_cast< String* >( aHelpFormatLB.GetEntryData( nHelpFormatPos ) ) );
-    }
 
     if ( aFileDlgCB.IsChecked() != aFileDlgCB.GetSavedValue() )
     {
@@ -469,20 +436,10 @@ void OfaMiscTabPage::Reset( const SfxItemSet& rSet )
     aToolTipsCB.Check( aHelpOptions.IsHelpTips() );
     aExtHelpCB.Check( aHelpOptions.IsHelpTips() && aHelpOptions.IsExtendedHelp() );
     aHelpAgentCB.Check( aHelpOptions.IsHelpAgentAutoStartMode() );
-    String sStyleSheet = aHelpOptions.GetHelpStyleSheet();
-    for ( sal_uInt16 i = 0; i < aHelpFormatLB.GetEntryCount(); ++i )
-    {
-        if ( *static_cast< String* >( aHelpFormatLB.GetEntryData(i) ) == sStyleSheet )
-        {
-            aHelpFormatLB.SelectEntryPos(i);
-            break;
-        }
-    }
 
     aToolTipsCB.SaveValue();
     aExtHelpCB.SaveValue();
     aHelpAgentCB.SaveValue();
-    aHelpFormatLB.SaveValue();
     HelpCheckHdl_Impl( &aHelpAgentCB );
 
     SvtMiscOptions aMiscOpt;
