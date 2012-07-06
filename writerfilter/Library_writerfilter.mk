@@ -31,8 +31,11 @@ $(eval $(call gb_Library_use_custom_headers,writerfilter,\
 	writerfilter/source \
 ))
 
+$(eval $(call gb_Library_set_precompiled_header,writerfilter,$(SRCDIR)/writerfilter/inc/pch/precompiled_writerfilter))
+
 $(eval $(call gb_Library_set_include,writerfilter,\
     $$(INCLUDE) \
+    -I$(SRCDIR)/writerfilter/inc/pch \
     -I$(SRCDIR)/writerfilter/inc \
     -I$(SRCDIR)/writerfilter/source \
 ))
