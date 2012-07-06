@@ -288,15 +288,15 @@ void TemplateFolderView::Populate ()
             aRegionName += "...";
         }
 
+        TemplateFolderViewItem* pItem = new TemplateFolderViewItem( *this, this );
+        pItem->mnId = i+1;
+        pItem->maText = aRegionName;
+        pItem->setSelectClickHdl(LINK(this,ThumbnailView,OnFolderSelected));
+
         sal_uInt16 nEntries = mpDocTemplates->GetCount(i);
 
         if (nEntries)
         {
-            TemplateFolderViewItem* pItem = new TemplateFolderViewItem( *this, this );
-            pItem->mnId = i+1;
-            pItem->maText = aRegionName;
-            pItem->setSelectClickHdl(LINK(this,ThumbnailView,OnFolderSelected));
-
             /// Preview first 2 thumbnails for folder
             pItem->maPreview1 = lcl_fetchThumbnail(mpDocTemplates->GetPath(i,0),
                                                    THUMBNAIL_MAX_WIDTH*0.75,
@@ -328,9 +328,9 @@ void TemplateFolderView::Populate ()
 
                 pItem->maTemplates.push_back(pTemplateItem);
             }
-
-            mItemList.push_back(pItem);
         }
+
+        mItemList.push_back(pItem);
     }
 
     CalculateItemPositions();
