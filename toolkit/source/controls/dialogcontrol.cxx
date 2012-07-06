@@ -186,6 +186,19 @@ UnoControlDialogModel::UnoControlDialogModel( const Reference< XMultiServiceFact
 UnoControlDialogModel::UnoControlDialogModel( const UnoControlDialogModel& rModel )
     : ControlModelContainerBase( rModel )
 {
+    // need to clone BASEPROPERTY_USERFORMCONTAINEES too
+    Reference< XNameContainer > xSrcNameCont( const_cast< UnoControlDialogModel& >(rModel).getPropertyValue( GetPropertyName( BASEPROPERTY_USERFORMCONTAINEES ) ), UNO_QUERY );
+    Reference<XNameContainer > xNameCont( new SimpleNamedThingContainer< XControlModel >() );
+
+    uno::Sequence< rtl::OUString > sNames = xSrcNameCont->getElementNames();
+    rtl::OUString* pName = sNames.getArray();
+    rtl::OUString* pNamesEnd = pName + sNames.getLength();
+    for ( ; pName != pNamesEnd; ++pName )
+    {
+        if ( xSrcNameCont->hasByName( *pName ) )
+            xNameCont->insertByName( *pName, xSrcNameCont->getByName( *pName ) );
+    }
+    setFastPropertyValue_NoBroadcast( BASEPROPERTY_USERFORMCONTAINEES, makeAny( xNameCont ) );
 }
 
 UnoControlDialogModel::~UnoControlDialogModel()
