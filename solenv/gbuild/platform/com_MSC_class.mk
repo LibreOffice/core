@@ -91,6 +91,7 @@ endef
 # PrecompiledHeader class
 
 gb_PrecompiledHeader_get_enableflags = -Yu$(1).hxx \
+	-FI$(1).hxx \
 	-Fp$(call gb_PrecompiledHeader_get_target,$(1))
 
 define gb_PrecompiledHeader__command
@@ -110,6 +111,7 @@ endef
 # NoexPrecompiledHeader class
 
 gb_NoexPrecompiledHeader_get_enableflags = -Yu$(1).hxx \
+	-FI$(1).hxx \
 	-Fp$(call gb_NoexPrecompiledHeader_get_target,$(1))
 
 define gb_NoexPrecompiledHeader__command
