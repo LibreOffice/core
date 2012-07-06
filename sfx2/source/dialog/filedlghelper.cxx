@@ -721,34 +721,36 @@ IMPL_LINK_NOARG(FileDialogHelper_Impl, TimeOutHdl_Impl)
             // proper position and painting a frame
 
             Bitmap aBmp = maGraphic.GetBitmap();
+            if ( !aBmp.IsEmpty() )
+            {
+                // scale the bitmap to the correct size
+                sal_Int32 nOutWidth  = xFilePicker->getAvailableWidth();
+                sal_Int32 nOutHeight = xFilePicker->getAvailableHeight();
+                sal_Int32 nBmpWidth  = aBmp.GetSizePixel().Width();
+                sal_Int32 nBmpHeight = aBmp.GetSizePixel().Height();
 
-            // scale the bitmap to the correct size
-            sal_Int32 nOutWidth  = xFilePicker->getAvailableWidth();
-            sal_Int32 nOutHeight = xFilePicker->getAvailableHeight();
-            sal_Int32 nBmpWidth  = aBmp.GetSizePixel().Width();
-            sal_Int32 nBmpHeight = aBmp.GetSizePixel().Height();
+                double nXRatio = (double) nOutWidth / nBmpWidth;
+                double nYRatio = (double) nOutHeight / nBmpHeight;
 
-            double nXRatio = (double) nOutWidth / nBmpWidth;
-            double nYRatio = (double) nOutHeight / nBmpHeight;
+                if ( nXRatio < nYRatio )
+                    aBmp.Scale( nXRatio, nXRatio );
+                else
+                    aBmp.Scale( nYRatio, nYRatio );
 
-            if ( nXRatio < nYRatio )
-                aBmp.Scale( nXRatio, nXRatio );
-            else
-                aBmp.Scale( nYRatio, nYRatio );
+                // Convert to true color, to allow CopyPixel
+                aBmp.Convert( BMP_CONVERSION_24BIT );
 
-            // Convert to true color, to allow CopyPixel
-            aBmp.Convert( BMP_CONVERSION_24BIT );
+                // and copy it into the Any
+                SvMemoryStream aData;
 
-            // and copy it into the Any
-            SvMemoryStream aData;
+                aData << aBmp;
 
-            aData << aBmp;
+                const Sequence < sal_Int8 > aBuffer(
+                    static_cast< const sal_Int8* >(aData.GetData()),
+                    aData.GetEndOfData() );
 
-            const Sequence < sal_Int8 > aBuffer(
-                static_cast< const sal_Int8* >(aData.GetData()),
-                aData.GetEndOfData() );
-
-            aAny <<= aBuffer;
+                aAny <<= aBuffer;
+            }
         }
     }
 
