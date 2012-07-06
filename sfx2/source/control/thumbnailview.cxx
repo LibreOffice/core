@@ -957,7 +957,6 @@ void ThumbnailView::SelectItem( sal_uInt16 nItemId )
         mnSelItemId = nItemId;
 
         bool bNewOut = IsReallyVisible() && IsUpdateMode();
-        bool bNewLine = false;
 
         // if necessary scroll to the visible area
         if ( mbScroll && nItemId )
@@ -966,12 +965,10 @@ void ThumbnailView::SelectItem( sal_uInt16 nItemId )
             if ( nNewLine < mnFirstLine )
             {
                 mnFirstLine = nNewLine;
-                bNewLine = true;
             }
             else if ( nNewLine > (sal_uInt16)(mnFirstLine+mnVisLines-1) )
             {
                 mnFirstLine = (sal_uInt16)(nNewLine-mnVisLines+1);
-                bNewLine = true;
             }
         }
 
