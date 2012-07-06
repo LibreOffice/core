@@ -282,7 +282,7 @@ void TemplateFolderView::Populate ()
     {
         rtl::OUString aRegionName(mpDocTemplates->GetFullRegionName(i));
 
-        if (aRegionName.getLength() > mpItemAttrs->nMaxTextLenght)
+        if ((sal_uInt32)aRegionName.getLength() > mpItemAttrs->nMaxTextLenght)
         {
             aRegionName = aRegionName.copy(0,mpItemAttrs->nMaxTextLenght-3);
             aRegionName += "...";
@@ -313,7 +313,7 @@ void TemplateFolderView::Populate ()
                 rtl::OUString aURL = mpDocTemplates->GetPath(i,j);
                 rtl::OUString aType = SvFileInformationManager::GetDescription(INetURLObject(aURL));
 
-                if (aName.getLength() > mpItemAttrs->nMaxTextLenght)
+                if ((sal_uInt32)aName.getLength() > mpItemAttrs->nMaxTextLenght)
                 {
                     aName = aName.copy(0,mpItemAttrs->nMaxTextLenght-3);
                     aName += "...";
@@ -438,7 +438,7 @@ sal_uInt16 TemplateFolderView::createRegion(const rtl::OUString &rName)
 
     rtl::OUString aRegionName = rName;
 
-    if (aRegionName.getLength() > (sal_Int32)mpItemAttrs->nMaxTextLenght)
+    if ((sal_uInt32)aRegionName.getLength() > mpItemAttrs->nMaxTextLenght)
     {
         aRegionName = aRegionName.copy(0,mpItemAttrs->nMaxTextLenght-3);
         aRegionName += "...";
