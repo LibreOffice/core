@@ -708,6 +708,7 @@ void ScDPObject::SyncAllDimensionMembers()
 
     ScDPTableData* pData = GetTableData();
     // Refresh the cache wrapper since the cache may have changed.
+    pData->SetEmptyFlags(pSaveData->GetIgnoreEmptyRows(), pSaveData->GetRepeatIfEmpty());
     pData->ClearCacheTable();
     pData->CreateCacheTable();
     pSaveData->SyncAllDimensionMembers(pData);
