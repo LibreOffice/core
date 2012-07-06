@@ -3729,7 +3729,8 @@ void wwSectionManager::SetUseOn(wwSection &rSection)
     UseOnPage eUseBase = bMirror ? nsUseOnPage::PD_MIRROR : nsUseOnPage::PD_ALL;
     UseOnPage eUse = eUseBase;
     if (!bEven)
-        eUse = (UseOnPage)(eUse | nsUseOnPage::PD_HEADERSHARE | nsUseOnPage::PD_FOOTERSHARE | nsUseOnPage::PD_HEADERSHAREFIRST | nsUseOnPage::PD_FOOTERSHAREFIRST);
+        eUse = (UseOnPage)(eUse | nsUseOnPage::PD_HEADERSHARE | nsUseOnPage::PD_FOOTERSHARE);
+    eUse = (UseOnPage)(eUse | nsUseOnPage::PD_HEADERSHAREFIRST | nsUseOnPage::PD_FOOTERSHAREFIRST);
 
     OSL_ENSURE(rSection.mpPage, "Makes no sense to call me with no pages to set");
     if (rSection.mpPage)
