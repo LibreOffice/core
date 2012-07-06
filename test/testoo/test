@@ -5,4 +5,4 @@ cd $BASE
 TESTSPACE=$BASE/../testspace
 mkdir -p $TESTSPACE
 ant routine.test > $TESTSPACE/test.log 2>&1
- 
+  
