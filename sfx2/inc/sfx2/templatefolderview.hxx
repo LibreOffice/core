@@ -61,7 +61,7 @@ public:
 
     bool removeTemplate (const sal_uInt16 nItemId);
 
-    bool moveTemplates (std::set<const ThumbnailViewItem*> &rItems, const sal_uInt16 nTargetItem);
+    bool moveTemplates (std::set<const ThumbnailViewItem*> &rItems, const sal_uInt16 nTargetItem, bool bCopy);
 
     void copyFrom (TemplateFolderViewItem *pItem, const rtl::OUString &rPath);
 

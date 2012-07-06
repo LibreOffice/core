@@ -500,8 +500,14 @@ IMPL_LINK(SfxTemplateManagerDlg, MoveMenuSelectHdl, Menu*, pMenu)
             {
                 sal_uInt16 nNewRegionId = maView->createRegion(aName);
 
-                if (nNewRegionId && !maView->moveTemplates(maSelTemplates,nNewRegionId))
+                if (nNewRegionId)
                 {
+                    // Move templates to desired folder if for some reason move fails
+                    // try copying them.
+                    if (!maView->moveTemplates(maSelTemplates,nNewRegionId,false) &&
+                            !maView->moveTemplates(maSelTemplates,nNewRegionId,true))
+                    {
+                    }
                 }
             }
         }
@@ -519,7 +525,12 @@ IMPL_LINK(SfxTemplateManagerDlg, MoveMenuSelectHdl, Menu*, pMenu)
     }
     else
     {
-        if (!maView->moveTemplates(maSelTemplates,maView->GetItemId(nMenuId-MNI_MOVE_FOLDER_BASE)))
+        // Try to move the template, if isnt possible try to copy it.
+
+        sal_uInt16 nItemId = maView->GetItemId(nMenuId-MNI_MOVE_FOLDER_BASE);
+
+        if (!maView->moveTemplates(maSelTemplates,nItemId,false) &&
+                !maView->moveTemplates(maSelTemplates,nItemId,true))
         {
         }
     }

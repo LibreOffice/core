@@ -495,7 +495,8 @@ bool TemplateFolderView::removeTemplate (const sal_uInt16 nItemId)
     return true;
 }
 
-bool TemplateFolderView::moveTemplates(std::set<const ThumbnailViewItem *> &rItems, const sal_uInt16 nTargetItem)
+bool TemplateFolderView::moveTemplates(std::set<const ThumbnailViewItem *> &rItems,
+                                       const sal_uInt16 nTargetItem, bool bCopy)
 {
     bool ret = true;
     bool refresh = false;
@@ -516,15 +517,22 @@ bool TemplateFolderView::moveTemplates(std::set<const ThumbnailViewItem *> &rIte
 
     if (pTarget && pSrc)
     {
+        sal_uInt16 nTargetRegion = pTarget->mnId-1;
+        sal_uInt16 nTargetIdx = mpDocTemplates->GetCount(nTargetRegion);    // Next Idx
+
         std::set<const ThumbnailViewItem*>::iterator aSelIter;
-        for ( aSelIter = rItems.begin(); aSelIter != rItems.end(); ++aSelIter )
+        for ( aSelIter = rItems.begin(); aSelIter != rItems.end(); ++aSelIter, ++nTargetIdx )
         {
             const TemplateViewItem *pViewItem = static_cast<const TemplateViewItem*>(*aSelIter);
 
-            sal_uInt16 nTargetRegion = pTarget->mnId-1;
-            sal_uInt16 nTargetIdx = mpDocTemplates->GetCount(nTargetRegion);    // Next Idx
+            bool bOK;
 
-            if (!mpDocTemplates->Move(nTargetRegion,nTargetIdx,nSrcRegionId,pViewItem->mnId-1))
+            if (bCopy)
+                bOK = mpDocTemplates->Copy(nTargetRegion,nTargetIdx,nSrcRegionId,pViewItem->mnId-1);
+            else
+                bOK = mpDocTemplates->Move(nTargetRegion,nTargetIdx,nSrcRegionId,pViewItem->mnId-1);
+
+            if (!bOK)
             {
                 ret = false;
                 continue;
@@ -541,19 +549,22 @@ bool TemplateFolderView::moveTemplates(std::set<const ThumbnailViewItem *> &rIte
 
             pTarget->maTemplates.push_back(pTemplateItem);
 
-            // remove template for overlay and from cached data
-
-            std::vector<TemplateViewItem*>::iterator pIter;
-            for (pIter = pSrc->maTemplates.begin(); pIter != pSrc->maTemplates.end(); ++pIter)
+            if (!bCopy)
             {
-                if ((*pIter)->mnId == pViewItem->mnId)
+                // remove template for overlay and from cached data
+
+                std::vector<TemplateViewItem*>::iterator pIter;
+                for (pIter = pSrc->maTemplates.begin(); pIter != pSrc->maTemplates.end(); ++pIter)
                 {
-                    delete *pIter;
+                    if ((*pIter)->mnId == pViewItem->mnId)
+                    {
+                        delete *pIter;
 
-                    pSrc->maTemplates.erase(pIter);
+                        pSrc->maTemplates.erase(pIter);
 
-                    mpItemView->RemoveItem(pViewItem->mnId);
-                    break;
+                        mpItemView->RemoveItem(pViewItem->mnId);
+                        break;
+                    }
                 }
             }
 
