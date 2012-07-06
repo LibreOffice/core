@@ -130,14 +130,6 @@ ModalDialog DLG_TEMPLATE_MANAGER
         TabStop = TRUE;
     };
 
-    Image IMG_ONLINE_REPOSITORY
-    {
-        ImageBitmap = Bitmap
-        {
-            File = "signet.png";
-        };
-    };
-
     Image IMG_CREATE_TEXT
     {
         ImageBitmap = Bitmap
