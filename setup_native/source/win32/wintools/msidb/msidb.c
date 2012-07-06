@@ -82,21 +82,17 @@ static BOOL msidbImportStorages(LPCWSTR dbfile, LPCWSTR wdir, LPWSTR storageName
         lstrcatW(storagePath, delim);
         lstrcatW(storagePath, storageNames[i]);
 
-        /* WINE_MESSAGE("Importing from %s\n", wine_dbgstr_w(storagePath)); */
-
         rec = MsiCreateRecord(2);
         MsiRecordSetStringW(rec, 1, storageNames[i]);
         r = MsiRecordSetStreamW(rec, 2, storagePath);
         if (r != ERROR_SUCCESS)
         {
-            /* WINE_MESSAGE("Error setting storage %d\n", r); */
             return FALSE;
         }
 
         r = MsiViewExecute(view, rec);
         if (r != ERROR_SUCCESS)
         {
-            /* WINE_MESSAGE("Unable to update with storage record %d\n", r); */
             return FALSE;
         }
 
@@ -133,10 +129,9 @@ static BOOL msidbExportStorage(LPCWSTR dbfile, LPCWSTR wdir, LPWSTR storageName)
 
     if ((r = MsiRecordReadStream(rec, 2, 0, &dataLen)) != ERROR_SUCCESS)
     {
-        /* WINE_MESSAGE("Problem reading stream, error %d %d %d (%d)\n", r, r == ERROR_INVALID_HANDLE, r == ERROR_INVALID_PARAMETER, dataLen ); */
         return FALSE;
     }
-    /* WINE_MESSAGE("Exporting storage %s using query %s\n", storageNameA, queryBuffer); */
+
     if ((dataBuffer = malloc(dataLen)) == NULL) return FALSE;
     if (MsiRecordReadStream(rec, 2, dataBuffer, &dataLen) != ERROR_SUCCESS) return FALSE;
 
@@ -195,14 +190,12 @@ static BOOL msidbImportStreams(LPCWSTR dbfile, LPCWSTR wdir, LPWSTR streamNames[
         r = MsiRecordSetStreamW(rec, 2, streamPath);
         if (r != ERROR_SUCCESS)
         {
-            /* WINE_MESSAGE("Error setting stream %d (%s)\n", r, wine_dbgstr_w(streamNames[i])); */
             return FALSE;
         }
 
         r = MsiViewExecute(view, rec);
         if (r != ERROR_SUCCESS)
         {
-            /* WINE_MESSAGE("Unable to update with stream record %d\n", r); */
             return FALSE;
         }
 
@@ -319,7 +312,6 @@ static BOOL msidbImportTables(LPCWSTR dbfile, LPCWSTR wdir, LPWSTR tables[], BOO
 
     if (r != ERROR_SUCCESS)
     {
-        /* WINE_MESSAGE("Error while opening db: %d %d %d %d\n", r == ERROR_BAD_PATHNAME, r == ERROR_FUNCTION_FAILED, r == ERROR_INVALID_HANDLE, r == ERROR_INVALID_PARAMETER); */
         return FALSE;
     }
 
@@ -336,12 +328,6 @@ static BOOL msidbImportTables(LPCWSTR dbfile, LPCWSTR wdir, LPWSTR tables[], BOO
                 if (strcmp(fileName, ".") == 0 || strcmp(fileName, "..") == 0) continue;
                 tableFile = strdupAtoW(CP_ACP, fileName);
                 r = MsiDatabaseImportW(dbhandle, wdir, tableFile);
-
-                if (r != ERROR_SUCCESS)
-                {
-                    /* WINE_MESSAGE("Failed to import %s from %s\n", wine_dbgstr_w(tableFile), wine_dbgstr_w(wdir)); */
-                }
-
                 free(tableFile);
             }
         }
@@ -360,11 +346,6 @@ static BOOL msidbImportTables(LPCWSTR dbfile, LPCWSTR wdir, LPWSTR tables[], BOO
             lstrcatW(tableFile, ext);
 
             r = MsiDatabaseImportW(dbhandle, wdir, tableFile);
-            if (r != ERROR_SUCCESS)
-            {
-                /* WINE_MESSAGE("Error while importing %s: %d %d %d %d\n", wine_dbgstr_w(tableFile), r == ERROR_BAD_PATHNAME, r == ERROR_FUNCTION_FAILED, r == ERROR_INVALID_HANDLE, r == ERROR_INVALID_PARAMETER); */
-            }
-
             free(tableFile);
 
             if (r != ERROR_SUCCESS)
@@ -426,21 +407,11 @@ static BOOL msidbExportTables(LPCWSTR dbfile, LPCWSTR wdir, LPWSTR tables[])
                 lstrcatW(tableFile, ext);
 
                 r = MsiDatabaseExportW(dbhandle, tableName, wdir, tableFile);
-#ifdef DEBUG
-                if (r != ERROR_SUCCESS)
-                {
-                    /* WINE_MESSAGE("Failed to export %s. Reason: functionfailed(%d) invalidparam(%d) badpath(%d)\n",wine_dbgstr_w(tableFile), r==ERROR_FUNCTION_FAILED, r==ERROR_INVALID_PARAMETER, r==ERROR_BAD_PATHNAME ); */
-                }
-#endif
+
                 free(tableFile);
                 MsiCloseHandle(rec);
             }
-#ifdef DEBUG
-            else
-            {
-                /* WINE_MESSAGE("Failed with error. Size is now %d. Error: %d %d %d\n", size, r == ERROR_MORE_DATA, r == ERROR_INVALID_HANDLE, r == ERROR_INVALID_PARAMETER); */
-            }
-#endif
+
             r = MsiViewFetch(tableListView, &rec);
         }
 
@@ -579,11 +550,6 @@ int wmain(int argc, WCHAR *argv[])
     if (storageName)
         if (!msidbExportStorage(dbfile, wdir, storageName))
             return 6;
-
-    /*for (i = 0; i < 10; i++)
-      {
-      WINE_MESSAGE("%s\t%s\t%s\t%s\t%s\n", wine_dbgstr_w(iTables[i]), wine_dbgstr_w(oTables[i]), wine_dbgstr_w(streamName), wine_dbgstr_w(streamFiles[i]), wine_dbgstr_w(storageNames[i]));
-      }*/
 
     return 0;
 }

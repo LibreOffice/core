@@ -61,186 +61,193 @@ static const char * commandNames[COMMANDS] =
 
 static void parseDate(LPCWSTR value, SYSTEMTIME *time)
 {
-  LPWSTR field;
-  uint len = 4*sizeof(WCHAR);
+    LPWSTR field;
+    uint len = 4*sizeof(WCHAR);
 
-  if (lstrlenW(value) != 19) return;
-  field = malloc(len + sizeof(WCHAR));
-  if (field == NULL) return;
-  memcpy(field, value, len);
-  field[4] = L'\0';
-  time->wYear = atoiW(field);
+    if (lstrlenW(value) != 19) return;
+    field = malloc(len + sizeof(WCHAR));
+    if (field == NULL) return;
+    memcpy(field, value, len);
+    field[4] = L'\0';
+    time->wYear = atoiW(field);
 
-  len = 2 * sizeof(WCHAR);
-  memcpy(field, &(value[5]), len);
-  field[2] = '\0';
-  time->wMonth = atoiW(field);
+    len = 2 * sizeof(WCHAR);
+    memcpy(field, &(value[5]), len);
+    field[2] = '\0';
+    time->wMonth = atoiW(field);
 
-  memcpy(field, &(value[8]), len);
-  time->wDay = atoiW(field);
+    memcpy(field, &(value[8]), len);
+    time->wDay = atoiW(field);
 
-  memcpy(field, &(value[11]), len);
-  time->wHour = atoiW(field);
+    memcpy(field, &(value[11]), len);
+    time->wHour = atoiW(field);
 
-  memcpy(field, &(value[14]), len);
-  time->wMinute = atoiW(field);
+    memcpy(field, &(value[14]), len);
+    time->wMinute = atoiW(field);
 
-  memcpy(field, &(value[17]), len);
-  time->wSecond = atoiW(field);
+    memcpy(field, &(value[17]), len);
+    time->wSecond = atoiW(field);
 
-  free(field);
+    free(field);
 }
 
 static BOOL msiinfoDisplayProperties(LPWSTR dbfile)
 {
-  MSIHANDLE dbhandle, infohandle;
-  uint i, r, dataType;
-  INT iVal;
-  FILETIME ftVal;
-  SYSTEMTIME sysTime;
-  LPWSTR szVal = NULL;
-  DWORD size;
-  r = MsiOpenDatabaseW(dbfile, (LPWSTR) MSIDBOPEN_READONLY, &dbhandle);
-  if (r != ERROR_SUCCESS)
-  {
-    return FALSE;
-  }
-
-  r = MsiGetSummaryInformationW(dbhandle, 0, 0, &infohandle);
-  if (r != ERROR_SUCCESS)
-  {
-    return FALSE;
-  }
-  for (i = 0; i < COMMANDS; i++)
-  {
-    MsiSummaryInfoGetPropertyW(infohandle, commandMap[i][1], &dataType,
-                               &iVal, &ftVal, szVal, &size);
-
-    wprintf(L"%-24s", commandNames[i]);
-    if (dataType == VT_LPSTR)
+    MSIHANDLE dbhandle, infohandle;
+    uint i, r, dataType;
+    INT iVal;
+    FILETIME ftVal;
+    SYSTEMTIME sysTime;
+    LPWSTR szVal = NULL;
+    DWORD size;
+    r = MsiOpenDatabaseW(dbfile, (LPWSTR) MSIDBOPEN_READONLY, &dbhandle);
+    if (r != ERROR_SUCCESS)
     {
-      if (szVal!=NULL) wprintf(L"%ls (%d)\n", szVal, lstrlenW(szVal));
-      else wprintf(L"\n");
+        return FALSE;
     }
-    else if (dataType == VT_FILETIME)
-    {
-      FileTimeToSystemTime(&ftVal, &sysTime);
-      wprintf(L"%04d/%02d/%02d %02d:%02d:%02d\n", sysTime.wYear, sysTime.wMonth,
-         sysTime.wDay, sysTime.wHour, sysTime.wMinute, sysTime.wSecond);
-    }
-    else
-    {
-      wprintf(L"%d\n", iVal);
-    }
-  }
 
-  MsiCloseHandle(infohandle);
-  return TRUE;
+    r = MsiGetSummaryInformationW(dbhandle, 0, 0, &infohandle);
+    if (r != ERROR_SUCCESS)
+    {
+        return FALSE;
+    }
+    for (i = 0; i < COMMANDS; i++)
+    {
+        MsiSummaryInfoGetPropertyW(infohandle, commandMap[i][1], &dataType,
+                                   &iVal, &ftVal, szVal, &size);
+
+        wprintf(L"%-24s", commandNames[i]);
+        if (dataType == VT_LPSTR)
+        {
+            if (szVal!=NULL) wprintf(L"%ls (%d)\n", szVal, lstrlenW(szVal));
+            else wprintf(L"\n");
+        }
+        else if (dataType == VT_FILETIME)
+        {
+            FileTimeToSystemTime(&ftVal, &sysTime);
+            wprintf(L"%04d/%02d/%02d %02d:%02d:%02d\n", sysTime.wYear, sysTime.wMonth,
+                    sysTime.wDay, sysTime.wHour, sysTime.wMinute, sysTime.wSecond);
+        }
+        else
+        {
+            wprintf(L"%d\n", iVal);
+        }
+    }
+
+    MsiCloseHandle(infohandle);
+    return TRUE;
 }
 
 static BOOL msiinfoUpdateProperty(MSIHANDLE infoHandle, uint property, uint dataType, LPCWSTR value)
 {
-  uint r;
-  int iVal = 0;
-  FILETIME ftVal;
-  SYSTEMTIME sysTime = {0};
-  LPCWSTR szVal = NULL;
+    uint r;
+    int iVal = 0;
+    FILETIME ftVal;
+    SYSTEMTIME sysTime = {0};
+    LPCWSTR szVal = NULL;
 
-  if (dataType == VT_LPSTR) szVal = value;
-  else if (dataType == VT_FILETIME)
-  {
-    parseDate(value, &sysTime);
-    SystemTimeToFileTime(&sysTime, &ftVal);
-  }
-  else
-    iVal = atoiW(value);
+    if (dataType == VT_LPSTR) szVal = value;
+    else if (dataType == VT_FILETIME)
+    {
+        parseDate(value, &sysTime);
+        SystemTimeToFileTime(&sysTime, &ftVal);
+    }
+    else
+        iVal = atoiW(value);
 
-  r = MsiSummaryInfoSetPropertyW(infoHandle, property, dataType, iVal, &ftVal, szVal);
-  if (r != ERROR_SUCCESS)
-  {
-    wprintf(L"Problem updating property: %d %d %d %d\n", r == ERROR_DATATYPE_MISMATCH, r == ERROR_FUNCTION_FAILED, ERROR_UNKNOWN_PROPERTY, ERROR_UNSUPPORTED_TYPE);
-    return FALSE;
-  }
+    r = MsiSummaryInfoSetPropertyW(infoHandle, property, dataType, iVal, &ftVal, szVal);
+    if (r != ERROR_SUCCESS)
+    {
+        wprintf(L"Problem updating property: %d %d %d %d\n", r == ERROR_DATATYPE_MISMATCH, r == ERROR_FUNCTION_FAILED, ERROR_UNKNOWN_PROPERTY, ERROR_UNSUPPORTED_TYPE);
+        return FALSE;
+    }
 
-  return TRUE;
+    return TRUE;
 }
 
 static void usage(void)
 {
-  WINE_MESSAGE(
-    "Usage: msiinfo {database} [[-b]-d] {options} {data}\n"
-    "\nOptions:\n"
-    "  -c <cp>       Specify codepage\n"
-    "  -t <title>    Specify title\n"
-    "  -j <subject>  Specify subject\n"
-    "  -a <author>   Specify author\n"
-    "  -k <keywords> Specify keywords\n"
-    "  -o <comment>  Specify comments\n"
-    "  -p <template> Specify template\n"
-    "  -l <author>   Specify last author\n"
-    "  -v <revno>    Specify revision number\n"
-    "  -s <date>     Specify last printed date\n"
-    "  -r <date>     Specify creation date\n"
-    "  -q <date>     Specify date of last save\n"
-    "  -g <pages>    Specify page count\n"
-    "  -w <words>    Specify word count\n"
-    "  -h <chars>    Specify character count\n"
-    "  -n <appname>  Specify application which created the database\n"
-    "  -u <security> Specify security (0: none, 2: read only (rec.) 3: read only (enforced)\n");
+    wprintf(
+        L"Usage: msiinfo {database} [[-b]-d] {options} {data}\n"
+        L"\nOptions:\n"
+        L"  -c <cp>       Specify codepage\n"
+        L"  -t <title>    Specify title\n"
+        L"  -j <subject>  Specify subject\n"
+        L"  -a <author>   Specify author\n"
+        L"  -k <keywords> Specify keywords\n"
+        L"  -o <comment>  Specify comments\n"
+        L"  -p <template> Specify template\n"
+        L"  -l <author>   Specify last author\n"
+        L"  -v <revno>    Specify revision number\n"
+        L"  -s <date>     Specify last printed date\n"
+        L"  -r <date>     Specify creation date\n"
+        L"  -q <date>     Specify date of last save\n"
+        L"  -g <pages>    Specify page count\n"
+        L"  -w <words>    Specify word count\n"
+        L"  -h <chars>    Specify character count\n"
+        L"  -n <appname>  Specify application which created the database\n"
+        L"  -u <security> Specify security (0: none, 2: read only (rec.) 3: read only (enforced)\n");
 }
 
 int wmain(int argc, WCHAR *argv[])
 {
-  WCHAR *dbfile = NULL;
-  uint i = 0;
-  MSIHANDLE dbhandle, infohandle;
-  uint r;
-  LPWSTR value = 0;
+    WCHAR *dbfile = NULL;
+    uint i = 0;
+    MSIHANDLE dbhandle, infohandle;
+    uint r;
+    LPWSTR value = 0;
+    static const WCHAR h1[] = {'/', '?', 0};
+    static const WCHAR h2[] = {'-', '?', 0};
 
-  if (argc > 1)
-  {
-    dbfile = argv[1];
-    argv++; argc--;
-  }
+    if (argc > 1)
+    {
+        dbfile = argv[1];
+        argv++; argc--;
+    }
 
-  if (argc == 1)
-  {
+    if (strcmpW(dbfile, h1) == 0 || strcmpW(dbfile, h2) == 0)
+    {
+        usage();
+        return 0;
+    }
+    else if (argc == 1)
+    {
+        msiinfoDisplayProperties(dbfile);
+        return 0;
+    }
+
+    r = MsiOpenDatabaseW(dbfile, (LPWSTR) MSIDBOPEN_TRANSACT, &dbhandle);
+    if (r != ERROR_SUCCESS) return 1;
+    r = MsiGetSummaryInformationW(dbhandle, 0, 20, &infohandle);
+    if (r != ERROR_SUCCESS) return 2;
+
+    while (argv[1] && argv[1][0] == '-')
+    {
+        switch (argv[1][1])
+        {
+        case '?':
+        case 'h':
+            usage();
+            return 0;
+        default:
+            for (i = 0; i < COMMANDS; i++)
+            {
+                if (commandMap[i][0] == argv[1][1])
+                {
+                    argv++; argc--;
+                    value = argv[1];
+                    msiinfoUpdateProperty(infohandle, commandMap[i][1], commandMap[i][2], value);
+                    break;
+                }
+            }
+            break;
+        }
+        argv++; argc--;
+    }
+
+    MsiSummaryInfoPersist(infohandle);
+    MsiDatabaseCommit(dbhandle);
+    MsiCloseHandle(dbhandle);
     msiinfoDisplayProperties(dbfile);
     return 0;
-  }
-
-  r = MsiOpenDatabaseW(dbfile, (LPWSTR) MSIDBOPEN_TRANSACT, &dbhandle);
-  if (r != ERROR_SUCCESS) return 1;
-  r = MsiGetSummaryInformationW(dbhandle, 0, 20, &infohandle);
-  if (r != ERROR_SUCCESS) return 2;
-
-  while (argv[1] && argv[1][0] == '-')
-  {
-    switch (argv[1][1])
-    {
-    case '?':
-    case 'h':
-      usage();
-      return 0;
-    default:
-      for (i = 0; i < COMMANDS; i++)
-      {
-    if (commandMap[i][0] == argv[1][1])
-    {
-      argv++; argc--;
-      value = argv[1];
-      msiinfoUpdateProperty(infohandle, commandMap[i][1], commandMap[i][2], value);
-      break;
-    }
-      }
-      break;
-    }
-    argv++; argc--;
-  }
-
-  MsiSummaryInfoPersist(infohandle);
-  MsiDatabaseCommit(dbhandle);
-  MsiCloseHandle(dbhandle);
-  msiinfoDisplayProperties(dbfile);
-  return 0;
 }

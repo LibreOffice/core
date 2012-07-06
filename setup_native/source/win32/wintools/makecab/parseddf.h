@@ -20,11 +20,11 @@ typedef enum DDFLOGLEVEL { DDFLOG_ERR = 1, DDFLOG_WRN, DDFLOG_MSG } DDFLOGLEVEL;
 
 typedef struct DDFSRCFILE
 {
-  char fileName[MAX_PATH];
-  char cabName[DDF_MAX_CABNAME];
-  BOOL extract;
-  TCOMP cmpType;
-  struct DDFSRCFILE * next;
+    char fileName[MAX_PATH];
+    char cabName[DDF_MAX_CABNAME];
+    BOOL extract;
+    TCOMP cmpType;
+    struct DDFSRCFILE * next;
 } DDFSRCFILE;
 
 unsigned int ParseDdf(char * ddfFile, PCCAB vars, DDFSRCFILE ** srcListH, unsigned int v);
