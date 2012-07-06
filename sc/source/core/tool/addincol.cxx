@@ -74,8 +74,8 @@ using namespace com::sun::star;
 
 //------------------------------------------------------------------------
 
-ScUnoAddInFuncData::ScUnoAddInFuncData( const String& rNam, const String& rLoc,
-                                        const String& rDesc,
+ScUnoAddInFuncData::ScUnoAddInFuncData( const ::rtl::OUString& rNam, const ::rtl::OUString& rLoc,
+                                        const ::rtl::OUString& rDesc,
                                         sal_uInt16 nCat, const rtl::OString& sHelp,
                                         const uno::Reference<reflection::XIdlMethod>& rFunc,
                                         const uno::Any& rO,
@@ -175,7 +175,7 @@ void ScUnoAddInFuncData::SetCompNames( const uno::Sequence< sheet::LocalizedName
     bCompInitialized = sal_True;
 }
 
-sal_Bool ScUnoAddInFuncData::GetExcelName( LanguageType eDestLang, String& rRetExcelName ) const
+sal_Bool ScUnoAddInFuncData::GetExcelName( LanguageType eDestLang, ::rtl::OUString& rRetExcelName ) const
 {
     const uno::Sequence<sheet::LocalizedName>& rSequence = GetCompNames();
     long nSeqLen = rSequence.getLength();
@@ -287,7 +287,7 @@ uno::Reference<uno::XComponentContext> getContext(uno::Reference<lang::XMultiSer
     try {
         uno::Reference<beans::XPropertySet> xPropset(xMSF, uno::UNO_QUERY);
         xPropset->getPropertyValue(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultContext"))) >>= xCtx;
+            ::rtl::OUString("DefaultContext")) >>= xCtx;
     }
     catch ( uno::Exception & ) {
     }
@@ -304,7 +304,7 @@ void ScUnoAddInCollection::Initialize()
     {
         uno::Reference<container::XEnumeration> xEnum =
                         xEnAc->createContentEnumeration(
-                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SCADDINSUPPLIER_SERVICE)) );
+                            rtl::OUString(SCADDINSUPPLIER_SERVICE) );
         if ( xEnum.is() )
         {
             //  loop through all AddIns
@@ -355,7 +355,7 @@ void ScUnoAddInCollection::Initialize()
 }
 // -----------------------------------------------------------------------------
 
-sal_uInt16 lcl_GetCategory( const String& rName )
+sal_uInt16 lcl_GetCategory( const ::rtl::OUString& rName )
 {
     static const sal_Char* aFuncNames[SC_FUNCGROUP_COUNT] =
     {
@@ -374,7 +374,7 @@ sal_uInt16 lcl_GetCategory( const String& rName )
         "Add-In"            // ID_FUNCTION_GRP_ADDINS
     };
     for (sal_uInt16 i=0; i<SC_FUNCGROUP_COUNT; i++)
-        if ( rName.EqualsAscii( aFuncNames[i] ) )
+        if ( rName.equalsAscii( aFuncNames[i] ) )
             return i+1;                             // IDs start at 1
 
     return ID_FUNCTION_GRP_ADDINS;  // if not found, use Add-In group
@@ -404,7 +404,7 @@ void ScUnoAddInCollection::ReadConfiguration()
     ScAddInCfg& rAddInConfig = SC_MOD()->GetAddInCfg();
 
     // additional, temporary config item for the compatibility names
-    ScLinkConfigItem aAllLocalesConfig( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( CFGPATH_ADDINS )), CONFIG_MODE_ALL_LOCALES );
+    ScLinkConfigItem aAllLocalesConfig( rtl::OUString(CFGPATH_ADDINS), CONFIG_MODE_ALL_LOCALES );
     // CommitLink is not used (only reading values)
 
     const rtl::OUString sSlash('/');
@@ -421,7 +421,7 @@ void ScUnoAddInCollection::ReadConfiguration()
 
         rtl::OUString aFunctionsPath = aServiceName;
         aFunctionsPath += sSlash;
-        aFunctionsPath += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( CFGSTR_ADDINFUNCTIONS) );
+        aFunctionsPath += rtl::OUString(CFGSTR_ADDINFUNCTIONS);
 
         uno::Sequence<rtl::OUString> aFunctionNames = rAddInConfig.GetNodeNames( aFunctionsPath );
         sal_Int32 nNewCount = aFunctionNames.getLength();
@@ -457,9 +457,11 @@ void ScUnoAddInCollection::ReadConfiguration()
             ppFuncData[nFuncPos+nOld] = NULL;
 
             // stored function name: (service name).(function)
-            String aFuncName( aServiceName );
-            aFuncName += '.';
-            aFuncName += String( pFuncNameArray[nFuncPos] );
+            rtl::OUStringBuffer aFuncNameBuffer( aServiceName.getLength()+1+pFuncNameArray[nFuncPos].getLength());
+            aFuncNameBuffer.append(aServiceName);
+            aFuncNameBuffer.append('.');
+            aFuncNameBuffer.append(pFuncNameArray[nFuncPos]);
+            rtl::OUString aFuncName = aFuncNameBuffer.makeStringAndClear();
 
             // skip the function if already known (read from old AddIn service)
 
@@ -479,11 +481,11 @@ void ScUnoAddInCollection::ReadConfiguration()
                 uno::Sequence<rtl::OUString> aFuncPropNames(CFG_FUNCPROP_COUNT);
                 rtl::OUString* pNameArray = aFuncPropNames.getArray();
                 pNameArray[CFG_FUNCPROP_DISPLAYNAME] = aFuncPropPath;
-                pNameArray[CFG_FUNCPROP_DISPLAYNAME] += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( CFGSTR_DISPLAYNAME) );
+                pNameArray[CFG_FUNCPROP_DISPLAYNAME] += rtl::OUString(CFGSTR_DISPLAYNAME);
                 pNameArray[CFG_FUNCPROP_DESCRIPTION] = aFuncPropPath;
-                pNameArray[CFG_FUNCPROP_DESCRIPTION] += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( CFGSTR_DESCRIPTION ));
+                pNameArray[CFG_FUNCPROP_DESCRIPTION] += rtl::OUString(CFGSTR_DESCRIPTION);
                 pNameArray[CFG_FUNCPROP_CATEGORY] = aFuncPropPath;
-                pNameArray[CFG_FUNCPROP_CATEGORY] += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( CFGSTR_CATEGORY) );
+                pNameArray[CFG_FUNCPROP_CATEGORY] += rtl::OUString(CFGSTR_CATEGORY);
 
                 uno::Sequence<uno::Any> aFuncProperties = rAddInConfig.GetProperties( aFuncPropNames );
                 if ( aFuncProperties.getLength() == CFG_FUNCPROP_COUNT )
@@ -501,7 +503,7 @@ void ScUnoAddInCollection::ReadConfiguration()
                 uno::Sequence<sheet::LocalizedName> aCompNames;
 
                 rtl::OUString aCompPath = aFuncPropPath;
-                aCompPath += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( CFGSTR_COMPATIBILITYNAME ));
+                aCompPath += rtl::OUString(CFGSTR_COMPATIBILITYNAME);
                 uno::Sequence<rtl::OUString> aCompPropNames( &aCompPath, 1 );
 
                 uno::Sequence<uno::Any> aCompProperties = aAllLocalesConfig.GetProperties( aCompPropNames );
@@ -546,7 +548,7 @@ void ScUnoAddInCollection::ReadConfiguration()
                 long nCallerPos = SC_CALLERPOS_NONE;
 
                 rtl::OUString aArgumentsPath = aFuncPropPath;
-                aArgumentsPath += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( CFGSTR_PARAMETERS) );
+                aArgumentsPath += rtl::OUString(CFGSTR_PARAMETERS);
 
                 uno::Sequence<rtl::OUString> aArgumentNames = rAddInConfig.GetNodeNames( aArgumentsPath );
                 sal_Int32 nArgumentCount = aArgumentNames.getLength();
@@ -567,9 +569,9 @@ void ScUnoAddInCollection::ReadConfiguration()
                         aOneArgPath += sSlash;
 
                         pPropNameArray[nIndex] = aOneArgPath;
-                        pPropNameArray[nIndex++] += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( CFGSTR_DISPLAYNAME ));
+                        pPropNameArray[nIndex++] += rtl::OUString(CFGSTR_DISPLAYNAME);
                         pPropNameArray[nIndex] = aOneArgPath;
-                        pPropNameArray[nIndex++] += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( CFGSTR_DESCRIPTION ));
+                        pPropNameArray[nIndex++] += rtl::OUString(CFGSTR_DESCRIPTION);
                     }
 
                     uno::Sequence<uno::Any> aArgProperties = rAddInConfig.GetProperties( aArgPropNames );
@@ -639,11 +641,11 @@ void ScUnoAddInCollection::ReadConfiguration()
 
 void ScUnoAddInCollection::LoadComponent( const ScUnoAddInFuncData& rFuncData )
 {
-    String aFullName = rFuncData.GetOriginalName();
-    xub_StrLen nPos = aFullName.SearchBackward( (sal_Unicode) '.' );
-    if ( nPos != STRING_NOTFOUND && nPos > 0 )
+    ::rtl::OUString aFullName = rFuncData.GetOriginalName();
+    sal_Int32 nPos = aFullName.lastIndexOf( (sal_Unicode) '.' );
+    if ( nPos > 0 )
     {
-        String aServiceName = aFullName.Copy( 0, nPos );
+        ::rtl::OUString aServiceName = aFullName.copy( 0, nPos );
 
         uno::Reference<lang::XMultiServiceFactory> xServiceFactory = comphelper::getProcessServiceFactory();
         uno::Reference<uno::XInterface> xInterface( xServiceFactory->createInstance( aServiceName ) );
@@ -653,8 +655,8 @@ void ScUnoAddInCollection::LoadComponent( const ScUnoAddInFuncData& rFuncData )
     }
 }
 
-sal_Bool ScUnoAddInCollection::GetExcelName( const String& rCalcName,
-                                        LanguageType eDestLang, String& rRetExcelName )
+sal_Bool ScUnoAddInCollection::GetExcelName( const ::rtl::OUString& rCalcName,
+                                        LanguageType eDestLang, ::rtl::OUString& rRetExcelName )
 {
     const ScUnoAddInFuncData* pFuncData = GetFuncData( rCalcName );
     if ( pFuncData )
@@ -662,7 +664,7 @@ sal_Bool ScUnoAddInCollection::GetExcelName( const String& rCalcName,
     return false;
 }
 
-sal_Bool ScUnoAddInCollection::GetCalcName( const String& rExcelName, String& rRetCalcName )
+sal_Bool ScUnoAddInCollection::GetCalcName( const ::rtl::OUString& rExcelName, ::rtl::OUString& rRetCalcName )
 {
     if (!bInitialized)
         Initialize();
@@ -805,7 +807,7 @@ void ScUnoAddInCollection::ReadFromAddIn( const uno::Reference<uno::XInterface>&
         lang::Locale aLocale( MsLangId::convertLanguageToLocale( eOfficeLang ));
         xAddIn->setLocale( aLocale );
 
-        String aServiceName = String( xName->getServiceName() );
+        ::rtl::OUString aServiceName = ::rtl::OUString( xName->getServiceName() );
         ScUnoAddInHelpIdGenerator aHelpIdGenerator( xName->getServiceName() );
 
         //! pass XIntrospection to ReadFromAddIn
@@ -814,8 +816,7 @@ void ScUnoAddInCollection::ReadFromAddIn( const uno::Reference<uno::XInterface>&
         if ( xManager.is() )
         {
             uno::Reference<beans::XIntrospection> xIntro(
-                                    xManager->createInstance(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                        "com.sun.star.beans.Introspection" ))),
+                                    xManager->createInstance(rtl::OUString("com.sun.star.beans.Introspection")),
                                     uno::UNO_QUERY );
             if ( xIntro.is() )
             {
@@ -888,9 +889,9 @@ void ScUnoAddInCollection::ReadFromAddIn( const uno::Reference<uno::XInterface>&
                                     rtl::OUString aFuncU = xFunc->getName();
 
                                     // stored function name: (service name).(function)
-                                    String aFuncName = aServiceName;
-                                    aFuncName += '.';
-                                    aFuncName += String( aFuncU );
+                                    ::rtl::OUString aFuncName = aServiceName;
+                                    aFuncName += ::rtl::OUString( '.' );
+                                    aFuncName += ::rtl::OUString( aFuncU );
 
                                     sal_Bool bValid = sal_True;
                                     long nVisibleCount = 0;
@@ -918,7 +919,7 @@ void ScUnoAddInCollection::ReadFromAddIn( const uno::Reference<uno::XInterface>&
                                     if (bValid)
                                     {
                                         sal_uInt16 nCategory = lcl_GetCategory(
-                                            String(
+                                            ::rtl::OUString(
                                             xAddIn->getProgrammaticCategoryName(
                                             aFuncU ) ) );
 
@@ -932,9 +933,9 @@ void ScUnoAddInCollection::ReadFromAddIn( const uno::Reference<uno::XInterface>&
                                         }
                                         catch(uno::Exception&)
                                         {
-                                            aLocalU = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "###" ));
+                                            aLocalU = "###";
                                         }
-                                        String aLocalName = String( aLocalU );
+                                        ::rtl::OUString aLocalName = ::rtl::OUString( aLocalU );
 
                                         rtl::OUString aDescU;
                                         try
@@ -944,9 +945,9 @@ void ScUnoAddInCollection::ReadFromAddIn( const uno::Reference<uno::XInterface>&
                                         }
                                         catch(uno::Exception&)
                                         {
-                                            aDescU = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "###" ));
+                                            aDescU = "###";
                                         }
-                                        String aDescription = String( aDescU );
+                                        ::rtl::OUString aDescription( aDescU );
 
                                         ScAddInArgDesc* pVisibleArgs = NULL;
                                         if ( nVisibleCount > 0 )
@@ -969,7 +970,7 @@ void ScUnoAddInCollection::ReadFromAddIn( const uno::Reference<uno::XInterface>&
                                                     }
                                                     catch(uno::Exception&)
                                                     {
-                                                        aArgName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "###" ));
+                                                        aArgName = "###";
                                                     }
                                                     rtl::OUString aArgDesc;
                                                     try
@@ -979,7 +980,7 @@ void ScUnoAddInCollection::ReadFromAddIn( const uno::Reference<uno::XInterface>&
                                                     }
                                                     catch(uno::Exception&)
                                                     {
-                                                        aArgName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "###" ));
+                                                        aArgName = "###";
                                                     }
 
                                                     sal_Bool bOptional =
@@ -987,8 +988,8 @@ void ScUnoAddInCollection::ReadFromAddIn( const uno::Reference<uno::XInterface>&
                                                           eArgType == SC_ADDINARG_VARARGS );
 
                                                     aDesc.eType = eArgType;
-                                                    aDesc.aName = String( aArgName );
-                                                    aDesc.aDescription = String( aArgDesc );
+                                                    aDesc.aName = aArgName;
+                                                    aDesc.aDescription = aArgDesc;
                                                     aDesc.bOptional = bOptional;
                                                     //! initialize aInternalName only from config?
                                                     aDesc.aInternalName = pParArr[nParamPos].aName;
@@ -1048,7 +1049,7 @@ void lcl_UpdateFunctionList( ScFunctionList& rFunctionList, const ScUnoAddInFunc
     }
 }
 
-const ScAddInArgDesc* lcl_FindArgDesc( const ScUnoAddInFuncData& rFuncData, const String& rArgIntName )
+const ScAddInArgDesc* lcl_FindArgDesc( const ScUnoAddInFuncData& rFuncData, const ::rtl::OUString& rArgIntName )
 {
     long nArgCount = rFuncData.GetArgumentCount();
     const ScAddInArgDesc* pArguments = rFuncData.GetArguments();
@@ -1061,7 +1062,7 @@ const ScAddInArgDesc* lcl_FindArgDesc( const ScUnoAddInFuncData& rFuncData, cons
 }
 
 void ScUnoAddInCollection::UpdateFromAddIn( const uno::Reference<uno::XInterface>& xInterface,
-                                            const String& rServiceName )
+                                            const ::rtl::OUString& rServiceName )
 {
     uno::Reference<lang::XLocalizable> xLoc( xInterface, uno::UNO_QUERY );
     if ( xLoc.is() )        // optional in new add-ins
@@ -1083,8 +1084,7 @@ void ScUnoAddInCollection::UpdateFromAddIn( const uno::Reference<uno::XInterface
     if ( xManager.is() )
     {
         uno::Reference<beans::XIntrospection> xIntro(
-                                xManager->createInstance(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                    "com.sun.star.beans.Introspection" ))),
+                                xManager->createInstance(rtl::OUString("com.sun.star.beans.Introspection")),
                                 uno::UNO_QUERY );
         if ( xIntro.is() )
         {
@@ -1105,9 +1105,9 @@ void ScUnoAddInCollection::UpdateFromAddIn( const uno::Reference<uno::XInterface
                         rtl::OUString aFuncU = xFunc->getName();
 
                         // stored function name: (service name).(function)
-                        String aFuncName = rServiceName;
-                        aFuncName += '.';
-                        aFuncName += String( aFuncU );
+                        ::rtl::OUString aFuncName = rServiceName;
+                        aFuncName += ::rtl::OUString( '.' );
+                        aFuncName += ::rtl::OUString( aFuncU );
 
                         // internal names are skipped because no FuncData exists
                         ScUnoAddInFuncData* pOldData = const_cast<ScUnoAddInFuncData*>( GetFuncData( aFuncName ) );
@@ -1164,7 +1164,7 @@ void ScUnoAddInCollection::UpdateFromAddIn( const uno::Reference<uno::XInterface
                                                 aDesc.aDescription = pOldArgDesc->aDescription;
                                             }
                                             else
-                                                aDesc.aName = aDesc.aDescription = rtl::OUString("###");
+                                                aDesc.aName = aDesc.aDescription = "###";
 
                                             sal_Bool bOptional =
                                                 ( eArgType == SC_ADDINARG_VALUE_OR_ARRAY ||
@@ -1198,13 +1198,13 @@ void ScUnoAddInCollection::UpdateFromAddIn( const uno::Reference<uno::XInterface
     }
 }
 
-String ScUnoAddInCollection::FindFunction( const String& rUpperName, sal_Bool bLocalFirst )
+::rtl::OUString ScUnoAddInCollection::FindFunction( const ::rtl::OUString& rUpperName, sal_Bool bLocalFirst )
 {
     if (!bInitialized)
         Initialize();
 
     if (nFuncCount == 0)
-        return EMPTY_STRING;
+        return EMPTY_OUSTRING;
 
     if ( bLocalFirst )
     {
@@ -1230,10 +1230,10 @@ String ScUnoAddInCollection::FindFunction( const String& rUpperName, sal_Bool bL
             return iLook->second->GetOriginalName();
     }
 
-    return EMPTY_STRING;
+    return EMPTY_OUSTRING;
 }
 
-const ScUnoAddInFuncData* ScUnoAddInCollection::GetFuncData( const String& rName, bool bComplete )
+const ScUnoAddInFuncData* ScUnoAddInCollection::GetFuncData( const ::rtl::OUString& rName, bool bComplete )
 {
     if (!bInitialized)
         Initialize();
@@ -1264,7 +1264,7 @@ const ScUnoAddInFuncData* ScUnoAddInCollection::GetFuncData( long nIndex )
     return NULL;
 }
 
-void ScUnoAddInCollection::LocalizeString( String& rName )
+void ScUnoAddInCollection::LocalizeString( ::rtl::OUString& rName )
 {
     if (!bInitialized)
         Initialize();
@@ -1317,8 +1317,8 @@ sal_Bool ScUnoAddInCollection::FillFunctionDescFromData( const ScUnoAddInFuncDat
     rDesc.nCategory = rFuncData.GetCategory();
     rDesc.sHelpId = rFuncData.GetHelpId();
 
-    String aDesc = rFuncData.GetDescription();
-    if (!aDesc.Len())
+    ::rtl::OUString aDesc = rFuncData.GetDescription();
+    if (aDesc.isEmpty())
         aDesc = rFuncData.GetLocalName();      // use name if no description is available
     rDesc.pFuncDesc = new ::rtl::OUString( aDesc );
 
@@ -1343,8 +1343,8 @@ sal_Bool ScUnoAddInCollection::FillFunctionDescFromData( const ScUnoAddInFuncDat
             // no empty names...
             if ( rDesc.ppDefArgNames[nArg]->isEmpty() )
             {
-                String aDefName( RTL_CONSTASCII_USTRINGPARAM("arg") );
-                aDefName += String::CreateFromInt32( nArg+1 );
+                ::rtl::OUString aDefName("arg");
+                aDefName += ::rtl::OUString::valueOf( nArg+1 );
                 *rDesc.ppDefArgNames[nArg] = aDefName;
             }
 
@@ -1365,7 +1365,7 @@ sal_Bool ScUnoAddInCollection::FillFunctionDescFromData( const ScUnoAddInFuncDat
 
 //------------------------------------------------------------------------
 
-ScUnoAddInCall::ScUnoAddInCall( ScUnoAddInCollection& rColl, const String& rName,
+ScUnoAddInCall::ScUnoAddInCall( ScUnoAddInCollection& rColl, const ::rtl::OUString& rName,
                                 long nParamCount ) :
     bValidCount( false ),
     nErrCode( errNoCode ),      // before function was called
@@ -1606,9 +1606,7 @@ void ScUnoAddInCall::SetResult( const uno::Any& rNewRes )
 
         case uno::TypeClass_STRING:
             {
-                rtl::OUString aUStr;
-                rNewRes >>= aUStr;
-                aString = String( aUStr );
+                rNewRes >>= aString;
                 bHasString = sal_True;
             }
             break;
@@ -1742,11 +1740,11 @@ void ScUnoAddInCall::SetResult( const uno::Any& rNewRes )
                             long nColCount = pRowArr[nRow].getLength();
                             const rtl::OUString* pColArr = pRowArr[nRow].getConstArray();
                             for (nCol=0; nCol<nColCount; nCol++)
-                                xMatrix->PutString( String( pColArr[nCol] ),
+                                xMatrix->PutString( ::rtl::OUString( pColArr[nCol] ),
                                     static_cast<SCSIZE>(nCol),
                                     static_cast<SCSIZE>(nRow) );
                             for (nCol=nColCount; nCol<nMaxColCount; nCol++)
-                                xMatrix->PutString( EMPTY_STRING,
+                                xMatrix->PutString( EMPTY_OUSTRING,
                                         static_cast<SCSIZE>(nCol),
                                         static_cast<SCSIZE>(nRow) );
                         }
