@@ -18,12 +18,12 @@
  */
 
 
-#include <svx/sdr/contact/objectcontacttools.hxx>
 #include <vcl/outdev.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <vcl/gdimtf.hxx>
 #include <basegfx/tools/canvastools.hxx>
+#include <drawinglayer/processor2d/processorfromoutputdevice.hxx>
 #include <drawinglayer/processor2d/vclmetafileprocessor2d.hxx>
 #include <drawinglayer/processor2d/vclpixelprocessor2d.hxx>
 #include <drawinglayer/processor2d/canvasprocessor.hxx>
@@ -35,9 +35,9 @@ using namespace com::sun::star;
 
 //////////////////////////////////////////////////////////////////////////////
 
-namespace sdr
+namespace drawinglayer
 {
-    namespace contact
+    namespace processor2d
     {
         drawinglayer::processor2d::BaseProcessor2D* createBaseProcessor2DFromOutputDevice(
             OutputDevice& rTargetOutDev,
@@ -87,8 +87,8 @@ namespace sdr
 #endif
             }
         }
-    } // end of namespace contact
-} // end of namespace sdr
+    } // end of namespace processor2d
+} // end of namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////
 // eof

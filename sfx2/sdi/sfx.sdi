@@ -4508,6 +4508,30 @@ SfxVoidItem Options SID_OPTIONS
     GroupId = GID_OPTIONS;
 ]
 
+SfxVoidItem TemplateManager SID_TEMPLATE_MANAGER
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = TRUE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Asynchron;
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_APPLICATION;
+]
+
 //--------------------------------------------------------------------------
 SfxVoidItem Organizer SID_ORGANIZER
 ()

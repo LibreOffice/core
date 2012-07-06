@@ -26,11 +26,11 @@
  *
  ************************************************************************/
 
-#ifndef _SDR_CONTACT_OBJECTCONTACTTOOLS_HXX
-#define _SDR_CONTACT_OBJECTCONTACTTOOLS_HXX
+#ifndef _PROCESSOR_FROM_OUTPUTDEVICE_HXX
+#define _PROCESSOR_FROM_OUTPUTDEVICE_HXX
 
 #include <drawinglayer/geometry/viewinformation2d.hxx>
-#include "svx/svxdllapi.h"
+#include "drawinglayer/drawinglayerdllapi.h"
 
 //////////////////////////////////////////////////////////////////////////////
 // predeclarations
@@ -43,23 +43,23 @@ namespace drawinglayer { namespace processor2d {
 
 //////////////////////////////////////////////////////////////////////////////
 
-namespace sdr
+namespace drawinglayer
 {
-    namespace contact
+    namespace processor2d
     {
         // create a mating VCL-Provessor for given OutputDevice. This includes
         // looking for MetaFile-recording. The returned renderer changes owner,
         // deletion is duty of the caller
-        SVX_DLLPUBLIC drawinglayer::processor2d::BaseProcessor2D* createBaseProcessor2DFromOutputDevice(
+        DRAWINGLAYER_DLLPUBLIC drawinglayer::processor2d::BaseProcessor2D* createBaseProcessor2DFromOutputDevice(
             OutputDevice& rTargetOutDev,
             const drawinglayer::geometry::ViewInformation2D& rViewInformation2D);
 
-    } // end of namespace contact
-} // end of namespace sdr
+    } // end of namespace processor2d
+} // end of namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////
 
-#endif //_SDR_CONTACT_OBJECTCONTACTTOOLS_HXX
+#endif //_PROCESSOR_FROM_OUTPUTDEVICE_HXX
 
 // eof
 

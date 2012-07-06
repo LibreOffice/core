@@ -1,0 +1,48 @@
+/*
+ * Copyright 2012 LibreOffice contributors.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#include "inputdlg.hrc"
+
+ModalDialog DLG_INPUT_BOX
+{
+    OutputSize = TRUE;
+    SVLook = TRUE;
+    Moveable = TRUE;
+    Closeable = TRUE;
+    Size = MAP_APPFONT ( 215, 40 );
+
+    FixedText LABEL_INPUT_TEXT
+    {
+        Pos = MAP_APPFONT(5,6);
+        Size = MAP_APPFONT(80,10);
+    };
+
+    Edit EDT_INPUT_FIELD
+    {
+        Border = TRUE;
+        Pos = MAP_APPFONT(90,5);
+        Size = MAP_APPFONT(120,10);
+    };
+
+    PushButton BTN_INPUT_OK
+    {
+        Pos = MAP_APPFONT(125,20);
+        Size = MAP_APPFONT(40,15);
+        TabStop = TRUE;
+        DefButton = TRUE;
+        Text [en-US] = "Accept";
+    };
+
+    PushButton BTN_INPUT_CANCEL
+    {
+        Pos = MAP_APPFONT(170,20);
+        Size = MAP_APPFONT(40,15);
+        TabStop = TRUE;
+        Text [en-US] = "Cancel";
+    };
+};

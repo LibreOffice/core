@@ -53,6 +53,7 @@
 #include "comphelper/configurationhelper.hxx"
 
 #include <svtools/addresstemplate.hxx>
+#include <svtools/miscopt.hxx>
 #include <svl/visitem.hxx>
 #include <unotools/intlwrapper.hxx>
 
@@ -125,6 +126,7 @@
 #include "sorgitm.hxx"
 #include "sfx2/sfxhelp.hxx"
 #include <sfx2/zoomitem.hxx>
+#include "templatedlg.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
@@ -547,6 +549,14 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             break;
         }
 
+        case SID_TEMPLATE_MANAGER:
+        {
+            SfxTemplateManagerDlg dlg;
+            dlg.Execute();
+            bDone = true;
+            break;
+        }
+
         // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         case SID_ORGANIZER:
         {
@@ -812,6 +822,17 @@ void SfxApplication::MiscState_Impl(SfxItemSet &rSet)
                                          isShowing()));
                     else
                         rSet.DisableItem(SID_SHOW_IME_STATUS_WINDOW);
+                    break;
+
+                case SID_TEMPLATE_MANAGER:
+                    {
+                        SvtMiscOptions aMiscOptions;
+                        if ( !aMiscOptions.IsExperimentalMode() )
+                        {
+                           rSet.DisableItem( nWhich );
+                           rSet.Put( SfxVisibilityItem( nWhich, sal_False ) );
+                        }
+                    }
                     break;
 
                 default:

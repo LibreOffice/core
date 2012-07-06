@@ -2,7 +2,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2000, 2011 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -66,7 +66,7 @@ $(eval $(call gb_Library_use_libraries,svt,\
 ))
 
 $(eval $(call gb_Library_use_externals,svt,\
-	icuuc \
+    icuuc \
     jpeg \
 ))
 

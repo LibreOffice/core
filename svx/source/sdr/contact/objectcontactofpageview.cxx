@@ -32,7 +32,7 @@
 #include <drawinglayer/processor2d/vclprocessor2d.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
-#include <svx/sdr/contact/objectcontacttools.hxx>
+#include <drawinglayer/processor2d/processorfromoutputdevice.hxx>
 #include <com/sun/star/rendering/XSpriteCanvas.hpp>
 #include <svx/unoapi.hxx>
 
@@ -250,8 +250,9 @@ namespace sdr
                 pOutDev->SetLayoutMode(0); // reset, default is no BiDi/RTL
 
                 // create renderer
-                drawinglayer::processor2d::BaseProcessor2D* pProcessor2D = createBaseProcessor2DFromOutputDevice(
-                    rTargetOutDev, getViewInformation2D());
+                drawinglayer::processor2d::BaseProcessor2D* pProcessor2D =
+                    drawinglayer::processor2d::createBaseProcessor2DFromOutputDevice(
+                        rTargetOutDev, getViewInformation2D());
 
                 if(pProcessor2D)
                 {

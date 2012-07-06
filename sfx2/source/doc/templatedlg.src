@@ -1,0 +1,280 @@
+/*
+ * Copyright 2012 LibreOffice contributors.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#include "doc.hrc"
+#include "templatedlg.hrc"
+#include "helpid.hrc"
+
+String STR_CREATE_TEXT
+{
+    Text [ en-US ] = "Text Document Template";
+};
+
+String STR_CREATE_SHEET
+{
+    Text [ en-US ] = "Spreedsheet Template";
+};
+
+String STR_CREATE_PRESENT
+{
+    Text [ en-US ] = "Presentation Template";
+};
+
+String STR_CREATE_DRAW
+{
+    Text [ en-US ] = "Drawing Template";
+};
+
+String STR_ACTION_SORT_NAME
+{
+    Text [ en-US ] = "Sort by name";
+};
+
+String STR_MOVE_NEW
+{
+    Text [ en-US ] = "New folder";
+};
+
+String STR_MOVE_DELETE
+{
+    Text [ en-US ] = "No folder";
+};
+
+String STR_INPUT_NEW
+{
+    Text [ en-US ] = "Enter folder name:";
+};
+
+ModalDialog DLG_TEMPLATE_MANAGER
+{
+    HelpId = CMD_SID_TEMPLATE_MANAGER;
+    OutputSize = TRUE;
+    SVLook = TRUE;
+    Moveable = TRUE;
+    Closeable = TRUE;
+    Hide = TRUE;
+    Size = MAP_APPFONT ( 290 , 250 );
+    Text [en-US] = "Template Manager";
+
+    PushButton BTN_SELECT_ALL
+    {
+        Pos = MAP_APPFONT(10,5);
+        Size = MAP_APPFONT(50,14);
+        TabStop = TRUE;
+        DefButton = TRUE;
+        Text [en-US] = "All";
+    };
+
+    PushButton BTN_SELECT_DOCS
+    {
+        Pos = MAP_APPFONT(60,5);
+        Size = MAP_APPFONT(50,14);
+        TabStop = TRUE;
+        Text [en-US] = "Documents";
+    };
+
+    PushButton BTN_SELECT_PRESENTATIONS
+    {
+        Pos = MAP_APPFONT(110,5);
+        Size = MAP_APPFONT(50,14);
+        TabStop = TRUE;
+        Text [en-US] = "Presentations";
+    };
+
+    PushButton BTN_SELECT_SHEETS
+    {
+        Pos = MAP_APPFONT(160,5);
+        Size = MAP_APPFONT(50,14);
+        TabStop = TRUE;
+        Text [en-US] = "Spreedsheets";
+    };
+
+    PushButton BTN_SELECT_DRAWS
+    {
+        Pos = MAP_APPFONT(210,5);
+        Size = MAP_APPFONT(50,14);
+        TabStop = TRUE;
+        Text [en-US] = "Drawings";
+    };
+
+    ImageButton BTN_SELECTION_MODE
+    {
+        Pos = MAP_APPFONT(265,5);
+        Size = MAP_APPFONT(14,14);
+        TabStop = TRUE;
+
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap { File = "select.png" ; };
+        };
+
+        QuickHelpText [en-US] = "Enables selecting items by just clicking in the thumbnail or title.";
+    };
+
+    PushButton BTN_TEMPLATE_CLOSE
+    {
+        Size = MAP_APPFONT(50,14);
+        TabStop = TRUE;
+        Text [en-US] = "Close";
+    };
+
+    Control TEMPLATE_VIEW
+    {
+        Pos = MAP_APPFONT(5,30);
+        Size = MAP_APPFONT(280,220);
+        TabStop = TRUE;
+    };
+
+    Image IMG_ONLINE_REPOSITORY
+    {
+        ImageBitmap = Bitmap
+        {
+            File = "ln053.png";
+        };
+    };
+
+    Image IMG_CREATE_TEXT
+    {
+        ImageBitmap = Bitmap
+        {
+            File = "create_text.png";
+        };
+    };
+
+    Image IMG_CREATE_SHEET
+    {
+        ImageBitmap = Bitmap
+        {
+            File = "create_sheet.png";
+        };
+    };
+
+    Image IMG_CREATE_PRESENT
+    {
+        ImageBitmap = Bitmap
+        {
+            File = "create_present.png";
+        };
+    };
+
+    Image IMG_CREATE_DRAW
+    {
+        ImageBitmap = Bitmap
+        {
+            File = "create_draw.png";
+        };
+    };
+
+    Image IMG_ACTION_SORT
+    {
+        ImageBitmap = Bitmap
+        {
+            File = "sortascending.png";
+        };
+    };
+
+
+    ToolBox TBX_ACTION_VIEW
+    {
+        SVLook = TRUE ;
+        TabStop = TRUE ;
+        Pos = MAP_APPFONT ( 4 , 22 ) ;
+
+        ItemList =
+        {
+            ToolBoxItem
+            {
+                Identifier = TBI_TEMPLATE_CREATE;
+                Text [ en-US ] = "Create a template" ;
+
+                ItemImage = Image
+                {
+                    ImageBitmap = Bitmap { File = "create_text.png" ; };
+                };
+            };
+
+            ToolBoxItem
+            {
+                Identifier = TBI_TEMPLATE_IMPORT ;
+                Text [ en-US ] = "Import a template" ;
+
+                ItemImage = Image
+                {
+                    ImageBitmap = Bitmap { File = "import.png" ; };
+                };
+            };
+        };
+    };
+
+    ToolBox TBX_ACTION_ACTION
+    {
+        SVLook = TRUE ;
+        TabStop = TRUE ;
+        Pos = MAP_APPFONT ( 4 , 22 ) ;
+
+        ItemList =
+        {
+            ToolBoxItem
+            {
+                Identifier = TBI_TEMPLATE_SEARCH;
+                Text [en-US] = "Search";
+
+                ItemImage = Image
+                {
+                    ImageBitmap = Bitmap { File = "search.png" ; };
+                };
+            };
+
+            ToolBoxItem
+            {
+                Identifier = TBI_TEMPLATE_ACTION;
+                Text [en-US] = "Action Menu";
+
+                ItemImage = Image
+                {
+                    ImageBitmap = Bitmap { File = "exec_action.png" ; };
+                };
+            };
+        };
+    };
+
+    ToolBox TBX_ACTION_TEMPLATES
+    {
+        SVLook = TRUE ;
+        TabStop = TRUE ;
+        Pos = MAP_APPFONT ( 4 , 22 ) ;
+        Hide = TRUE;
+
+        ItemList =
+        {
+            ToolBoxItem
+            {
+                Identifier = TBI_TEMPLATE_EDIT;
+                Text [ en-US ] = "Edit";
+            };
+
+            ToolBoxItem
+            {
+                Identifier = TBI_TEMPLATE_PROPERTIES;
+                Text [ en-US ] = "Properties";
+            };
+
+            ToolBoxItem
+            {
+                Identifier = TBI_TEMPLATE_MOVE;
+                Text [ en-US ] = "Move to folder" ;
+            };
+
+            ToolBoxItem
+            {
+                Identifier = TBI_TEMPLATE_DELETE;
+                Text [ en-US ] = "Delete";
+            };
+        };
+    };
+};

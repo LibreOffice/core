@@ -55,7 +55,7 @@
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
 #include <editeng/brkitem.hxx>
 #include <sfx2/dispatch.hxx>
-#include <svx/sdr/contact/objectcontacttools.hxx>
+#include <drawinglayer/processor2d/processorfromoutputdevice.hxx>
 #include <vcl/svapp.hxx>
 
 #define BUTTON_WIDTH 30
@@ -211,7 +211,7 @@ void SwPageBreakWin::Paint( const Rectangle& )
     // Create the processor and process the primitives
     const drawinglayer::geometry::ViewInformation2D aNewViewInfos;
     drawinglayer::processor2d::BaseProcessor2D * pProcessor =
-        sdr::contact::createBaseProcessor2DFromOutputDevice(
+        drawinglayer::processor2d::createBaseProcessor2DFromOutputDevice(
                     *this, aNewViewInfos );
 
     pProcessor->process( aGhostedSeq );

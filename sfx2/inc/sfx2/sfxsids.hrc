@@ -340,6 +340,8 @@
 // Floating Window Template
 #define SID_STYLE_DESIGNER                  (SID_SFX_START + 539)
 
+#define SID_TEMPLATE_MANAGER                (SID_SFX_START + 1726)
+
 // Organizer
 #define SID_ORGANIZER                       (SID_SFX_START + 540)
 #define SID_TEMPLATE_ADDRESSBOKSOURCE       (SID_SFX_START + 1655)

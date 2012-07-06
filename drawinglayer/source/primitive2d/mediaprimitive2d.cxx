@@ -21,7 +21,6 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
-#include <avmedia/mediawindow.hxx>
 #include <svtools/grfmgr.hxx>
 #include <drawinglayer/primitive2d/graphicprimitive2d.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
@@ -48,12 +47,9 @@ namespace drawinglayer
                     getBackgroundColor()));
             xRetval[0] = xRefBackground;
 
-            // try to get graphic snapshot
-            const Graphic aGraphic(avmedia::MediaWindow::grabFrame(getURL(), true));
-
-            if(GRAPHIC_BITMAP == aGraphic.GetType() || GRAPHIC_GDIMETAFILE == aGraphic.GetType())
+            if(GRAPHIC_BITMAP == maSnapshot.GetType() || GRAPHIC_GDIMETAFILE == maSnapshot.GetType())
             {
-                const GraphicObject aGraphicObject(aGraphic);
+                const GraphicObject aGraphicObject(maSnapshot);
                 const GraphicAttr aGraphicAttr;
                 xRetval.realloc(2);
                 xRetval[0] = xRefBackground;
@@ -101,12 +97,14 @@ namespace drawinglayer
             const basegfx::B2DHomMatrix& rTransform,
             const rtl::OUString& rURL,
             const basegfx::BColor& rBackgroundColor,
-            sal_uInt32 nDiscreteBorder)
+            sal_uInt32 nDiscreteBorder,
+            const Graphic &rSnapshot)
         :   BufferedDecompositionPrimitive2D(),
             maTransform(rTransform),
             maURL(rURL),
             maBackgroundColor(rBackgroundColor),
-            mnDiscreteBorder(nDiscreteBorder)
+            mnDiscreteBorder(nDiscreteBorder),
+            maSnapshot(rSnapshot)
         {
         }
 

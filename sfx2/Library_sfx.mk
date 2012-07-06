@@ -2,7 +2,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2000, 2011 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -60,9 +60,11 @@ $(eval $(call gb_Library_add_defs,sfx,\
 endif
 
 $(eval $(call gb_Library_use_libraries,sfx,\
+    basegfx \
     comphelper \
     cppu \
     cppuhelper \
+    drawinglayer \
     fwe \
     i18nisolang1 \
     sal \
@@ -143,6 +145,14 @@ $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/control/shell \
     sfx2/source/control/sorgitm \
     sfx2/source/control/statcach \
+    sfx2/source/control/templateview \
+    sfx2/source/control/templateviewitem \
+    sfx2/source/control/templatefolderview \
+    sfx2/source/control/templatefolderviewitem \
+    sfx2/source/control/templatesearchview \
+    sfx2/source/control/thumbnailviewitem \
+    sfx2/source/control/thumbnailviewacc \
+    sfx2/source/control/thumbnailview \
     sfx2/source/control/unoctitm \
     sfx2/source/dialog/alienwarn \
     sfx2/source/dialog/basedlgs \
@@ -152,6 +162,7 @@ $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/dialog/filedlghelper \
     sfx2/source/dialog/filtergrouping \
     sfx2/source/dialog/itemconnect \
+    sfx2/source/dialog/inputdlg \
     sfx2/source/dialog/mailmodel \
     sfx2/source/dialog/mgetempl \
     sfx2/source/dialog/navigat \
@@ -212,6 +223,7 @@ $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/doc/sfxmodelfactory \
     sfx2/source/doc/syspath \
     sfx2/source/doc/zoomitem \
+    sfx2/source/doc/templatedlg \
     sfx2/source/explorer/nochaos \
     sfx2/source/inet/inettbc \
     sfx2/source/menu/mnuitem \

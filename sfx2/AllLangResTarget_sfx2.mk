@@ -2,7 +2,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2000, 2011 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -37,10 +37,10 @@ $(eval $(call gb_AllLangResTarget_add_srs,sfx,\
 $(eval $(call gb_SrsTarget_SrsTarget,sfx/res))
 
 $(eval $(call gb_SrsTarget_use_packages,sfx/res,\
-	sfx2_inc \
-	svl_inc \
-	svtools_inc \
-	tools_inc \
+    sfx2_inc \
+    svl_inc \
+    svtools_inc \
+    tools_inc \
 ))
 
 $(eval $(call gb_SrsTarget_set_include,sfx/res,\
@@ -57,11 +57,13 @@ $(eval $(call gb_SrsTarget_add_files,sfx/res,\
     sfx2/source/appl/sfx.src \
     sfx2/source/bastyp/bastyp.src \
     sfx2/source/bastyp/fltfnc.src \
+    sfx2/source/control/templateview.src \
     sfx2/source/dialog/alienwarn.src \
     sfx2/source/dialog/dialog.src \
     sfx2/source/dialog/dinfdlg.src \
     sfx2/source/dialog/dinfedt.src \
     sfx2/source/dialog/filedlghelper.src \
+    sfx2/source/dialog/inputdlg.src \
     sfx2/source/dialog/mailwindow.src \
     sfx2/source/dialog/mgetempl.src \
     sfx2/source/dialog/newstyle.src \
@@ -81,6 +83,7 @@ $(eval $(call gb_SrsTarget_add_files,sfx/res,\
     sfx2/source/doc/graphhelp.src \
     sfx2/source/doc/new.src \
     sfx2/source/doc/templatelocnames.src \
+    sfx2/source/doc/templatedlg.src \
     sfx2/source/menu/menu.src \
     sfx2/source/view/view.src \
 ))

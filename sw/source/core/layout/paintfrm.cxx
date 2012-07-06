@@ -114,7 +114,7 @@
 #include <drawinglayer/primitive2d/discreteshadowprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textlayoutdevice.hxx>
-#include <svx/sdr/contact/objectcontacttools.hxx>
+#include <drawinglayer/processor2d/processorfromoutputdevice.hxx>
 #include <svx/unoapi.hxx>
 #include <comphelper/sequenceasvector.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
@@ -4962,7 +4962,7 @@ drawinglayer::processor2d::BaseProcessor2D * SwFrm::CreateProcessor2D( ) const
             0.0,
             uno::Sequence< beans::PropertyValue >() );
 
-    return  sdr::contact::createBaseProcessor2DFromOutputDevice(
+    return  drawinglayer::processor2d::createBaseProcessor2DFromOutputDevice(
                     *getRootFrm()->GetCurrShell()->GetOut(),
                     aNewViewInfos );
 }

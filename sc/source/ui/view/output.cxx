@@ -45,7 +45,7 @@
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#include <svx/sdr/contact/objectcontacttools.hxx>
+#include <drawinglayer/processor2d/processorfromoutputdevice.hxx>
 #include <vcl/lineinfo.hxx>
 #include <vcl/gradient.hxx>
 #include <svx/unoapi.hxx>
@@ -1804,7 +1804,7 @@ drawinglayer::processor2d::BaseProcessor2D* ScOutputData::CreateProcessor2D( )
             0.0,
             uno::Sequence< beans::PropertyValue >() );
 
-    return sdr::contact::createBaseProcessor2DFromOutputDevice(
+    return drawinglayer::processor2d::createBaseProcessor2DFromOutputDevice(
                     *pDev, aNewViewInfos );
 }
 

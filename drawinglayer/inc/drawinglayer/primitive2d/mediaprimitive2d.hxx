@@ -34,6 +34,7 @@
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/color/bcolor.hxx>
+#include <vcl/graph.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -65,6 +66,8 @@ namespace drawinglayer
             /// discrete border (in 'pixels')
             sal_uInt32                                  mnDiscreteBorder;
 
+            const Graphic                               maSnapshot;
+
         protected:
             /// local decomposition
             virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
@@ -75,7 +78,8 @@ namespace drawinglayer
                 const basegfx::B2DHomMatrix& rTransform,
                 const rtl::OUString& rURL,
                 const basegfx::BColor& rBackgroundColor,
-                sal_uInt32 nDiscreteBorder);
+                sal_uInt32 nDiscreteBorder,
+                const Graphic &rSnapshot);
 
             /// data read access
             const basegfx::B2DHomMatrix& getTransform() const { return maTransform; }

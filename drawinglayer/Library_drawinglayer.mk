@@ -34,13 +34,12 @@ $(eval $(call gb_Library_set_include,drawinglayer,\
 ))
 
 $(eval $(call gb_Library_add_defs,drawinglayer,\
-	-DDRAWINGLAYER_DLLIMPLEMENTATION \
+    -DDRAWINGLAYER_DLLIMPLEMENTATION \
 ))
 
 $(eval $(call gb_Library_use_sdk_api,drawinglayer))
 
 $(eval $(call gb_Library_use_libraries,drawinglayer,\
-    avmedia \
     basegfx \
     canvastools \
     comphelper \
@@ -155,6 +154,7 @@ $(eval $(call gb_Library_add_exception_objects,drawinglayer,\
     drawinglayer/source/processor2d/helperwrongspellrenderer \
     drawinglayer/source/processor2d/hittestprocessor2d \
     drawinglayer/source/processor2d/linegeometryextractor2d \
+    drawinglayer/source/processor2d/processorfromoutputdevice \
     drawinglayer/source/processor2d/textaspolygonextractor2d \
     drawinglayer/source/processor2d/vclhelperbitmaprender \
     drawinglayer/source/processor2d/vclhelperbitmaptransform \

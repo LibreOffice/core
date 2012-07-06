@@ -31,6 +31,7 @@
 #include <svx/svdomedia.hxx>
 #include <svx/sdr/contact/viewobjectcontactofsdrmediaobj.hxx>
 #include <drawinglayer/primitive2d/mediaprimitive2d.hxx>
+#include <avmedia/mediawindow.hxx>
 
 namespace sdr { namespace contact {
 
@@ -150,7 +151,8 @@ namespace sdr
             const sal_uInt32 nPixelBorder(4L);
             const drawinglayer::primitive2d::Primitive2DReference xRetval(
                 new drawinglayer::primitive2d::MediaPrimitive2D(
-                    aTransform, rURL, aBackgroundColor, nPixelBorder));
+                    aTransform, rURL, aBackgroundColor, nPixelBorder,
+                            avmedia::MediaWindow::grabFrame(rURL, true)));
 
             return drawinglayer::primitive2d::Primitive2DSequence(&xRetval, 1);
         }
