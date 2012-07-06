@@ -38,7 +38,6 @@ $(eval $(call gb_Library_set_precompiled_header,sal,$(SRCDIR)/sal/inc/pch/precom
 
 $(eval $(call gb_Library_set_include,sal,\
 	$$(INCLUDE) \
-	-I$(SRCDIR)/sal/inc/pch \
 	-I$(SRCDIR)/sal/inc \
 ))
 

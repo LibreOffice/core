@@ -37,7 +37,6 @@ $(eval $(call gb_Library_set_include,file,\
 	$$(INCLUDE) \
 	-I$(SRCDIR)/connectivity/inc \
 	-I$(SRCDIR)/connectivity/source/inc \
-	-I$(SRCDIR)/connectivity/inc/pch \
 ))
 
 $(eval $(call gb_Library_use_sdk_api,file))

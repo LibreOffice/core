@@ -35,7 +35,6 @@ $(eval $(call gb_Library_set_precompiled_header,writerfilter,$(SRCDIR)/writerfil
 
 $(eval $(call gb_Library_set_include,writerfilter,\
     $$(INCLUDE) \
-    -I$(SRCDIR)/writerfilter/inc/pch \
     -I$(SRCDIR)/writerfilter/inc \
     -I$(SRCDIR)/writerfilter/source \
 ))
