@@ -36,6 +36,8 @@
 #define INIT_VIEW_COLS 3
 #define INIT_VIEW_LINES 1
 
+void lcl_updateThumbnails (TemplateFolderViewItem *pItem);
+
 BitmapEx lcl_ScaleImg (const BitmapEx &rImg, long width, long height)
 {
     BitmapEx aImg = rImg;
@@ -576,6 +578,11 @@ bool TemplateFolderView::moveTemplates(std::set<const ThumbnailViewItem *> &rIte
 
     if (refresh)
     {
+        lcl_updateThumbnails(pSrc);
+        lcl_updateThumbnails(pTarget);
+
+        CalculateItemPositions();
+
         Invalidate();
         mpItemView->Invalidate();
     }
@@ -677,6 +684,26 @@ IMPL_LINK_NOARG(TemplateFolderView, OverlayCloseHdl)
 {
     showOverlay(false);
     return 0;
+}
+
+void lcl_updateThumbnails (TemplateFolderViewItem *pItem)
+{
+    // Update folder thumbnails
+    for (size_t i = 0, n = pItem->maTemplates.size(); i < 2 && i < n; ++i)
+    {
+        if (i == 0)
+        {
+            pItem->maPreview1 = lcl_ScaleImg(pItem->maTemplates[i]->maPreview1,
+                                            THUMBNAIL_MAX_WIDTH*0.75,
+                                            THUMBNAIL_MAX_HEIGHT*0.75);
+        }
+        else
+        {
+            pItem->maPreview1 = lcl_ScaleImg(pItem->maTemplates[i]->maPreview1,
+                                            THUMBNAIL_MAX_WIDTH*0.75,
+                                            THUMBNAIL_MAX_HEIGHT*0.75);
+        }
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
