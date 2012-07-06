@@ -663,7 +663,7 @@ void ImplDrawFrame( OutputDevice *const pDev, Rectangle& rRect,
          bFlatBorders )
         nStyle |= FRAME_DRAW_MONO;
 
-    if( !(nStyle & FRAME_DRAW_NWF) &&
+    if( (nStyle & FRAME_DRAW_NWF)!=FRAME_DRAW_NWF &&
         pWin && pWin->IsNativeControlSupported(CTRL_FRAME, PART_BORDER) )
     {
         ImplControlValue aControlValue( nStyle |
