@@ -297,40 +297,29 @@ void TemplateFolderView::Populate ()
 
         sal_uInt16 nEntries = mpDocTemplates->GetCount(i);
 
-        if (nEntries)
+        for (sal_uInt16 j = 0; j < nEntries; ++j)
         {
-            /// Preview first 2 thumbnails for folder
-            pItem->maPreview1 = lcl_fetchThumbnail(mpDocTemplates->GetPath(i,0),
-                                                   THUMBNAIL_MAX_WIDTH*0.75,
-                                                   THUMBNAIL_MAX_HEIGHT*0.75);
+            rtl::OUString aName = mpDocTemplates->GetName(i,j);
+            rtl::OUString aURL = mpDocTemplates->GetPath(i,j);
+            rtl::OUString aType = SvFileInformationManager::GetDescription(INetURLObject(aURL));
 
-            if ( nEntries > 2 )
-                pItem->maPreview2 = lcl_fetchThumbnail(mpDocTemplates->GetPath(i,1),
-                                                       THUMBNAIL_MAX_WIDTH*0.75,
-                                                       THUMBNAIL_MAX_HEIGHT*0.75);
-
-            for (sal_uInt16 j = 0; j < nEntries; ++j)
+            if ((sal_uInt32)aName.getLength() > mpItemAttrs->nMaxTextLenght)
             {
-                rtl::OUString aName = mpDocTemplates->GetName(i,j);
-                rtl::OUString aURL = mpDocTemplates->GetPath(i,j);
-                rtl::OUString aType = SvFileInformationManager::GetDescription(INetURLObject(aURL));
-
-                if ((sal_uInt32)aName.getLength() > mpItemAttrs->nMaxTextLenght)
-                {
-                    aName = aName.copy(0,mpItemAttrs->nMaxTextLenght-3);
-                    aName += "...";
-                }
-
-                TemplateViewItem *pTemplateItem = new TemplateViewItem(*mpItemView,mpItemView);
-                pTemplateItem->mnId = j+1;
-                pTemplateItem->maText = aName;
-                pTemplateItem->setPath(aURL);
-                pTemplateItem->setFileType(aType);
-                pTemplateItem->maPreview1 = lcl_fetchThumbnail(aURL,THUMBNAIL_MAX_WIDTH,THUMBNAIL_MAX_HEIGHT);
-
-                pItem->maTemplates.push_back(pTemplateItem);
+                aName = aName.copy(0,mpItemAttrs->nMaxTextLenght-3);
+                aName += "...";
             }
+
+            TemplateViewItem *pTemplateItem = new TemplateViewItem(*mpItemView,mpItemView);
+            pTemplateItem->mnId = j+1;
+            pTemplateItem->maText = aName;
+            pTemplateItem->setPath(aURL);
+            pTemplateItem->setFileType(aType);
+            pTemplateItem->maPreview1 = lcl_fetchThumbnail(aURL,THUMBNAIL_MAX_WIDTH,THUMBNAIL_MAX_HEIGHT);
+
+            pItem->maTemplates.push_back(pTemplateItem);
         }
+
+        lcl_updateThumbnails(pItem);
 
         mItemList.push_back(pItem);
     }
@@ -486,9 +475,14 @@ bool TemplateFolderView::removeTemplate (const sal_uInt16 nItemId)
                     pItem->maTemplates.erase(pIter);
 
                     mpItemView->RemoveItem(nItemId);
+
                     break;
                 }
             }
+
+            lcl_updateThumbnails(pItem);
+
+            CalculateItemPositions();
 
             break;
         }
@@ -609,6 +603,10 @@ void TemplateFolderView::copyFrom (TemplateFolderViewItem *pItem, const rtl::OUS
         pTemplate->setFileType(SvFileInformationManager::GetDescription(INetURLObject(rPath)));
 
         pItem->maTemplates.push_back(pTemplate);
+
+        lcl_updateThumbnails(pItem);
+
+        CalculateItemPositions();
     }
 }
 
@@ -699,7 +697,7 @@ void lcl_updateThumbnails (TemplateFolderViewItem *pItem)
         }
         else
         {
-            pItem->maPreview1 = lcl_ScaleImg(pItem->maTemplates[i]->maPreview1,
+            pItem->maPreview2 = lcl_ScaleImg(pItem->maTemplates[i]->maPreview1,
                                             THUMBNAIL_MAX_WIDTH*0.75,
                                             THUMBNAIL_MAX_HEIGHT*0.75);
         }
