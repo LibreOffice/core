@@ -226,11 +226,13 @@ gb_GenCxxObject_get_source = $(WORKDIR)/$(1).$(gb_LinkTarget_CXX_SUFFIX_$(2))
 
 $(call gb_GenCxxObject_get_target,%) :
 	test -f $(GEN_CXX_SOURCE) || (echo "Missing generated source file $(GEN_CXX_SOURCE)" && false)
+	$(eval $(gb_CxxObject__set_pchflags))
 	$(call gb_CxxObject__command,$@,$*,$(GEN_CXX_SOURCE),$(call gb_GenCxxObject_get_dep_target,$*))
 
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_GenCxxObject_get_dep_target,%) :
 	$(if $(wildcard $@),touch $@,\
+	  $(eval $(gb_CxxObject__set_pchflags))\
 	  $(call gb_Object__command_dep,$@,$(call gb_GenCxxObject_get_target,$*)))
 
 endif
