@@ -535,8 +535,9 @@ void ThumbnailView::ImplTracking( const Point& rPos, bool bRepeat )
     }
 }
 
-void ThumbnailView::ImplEndTracking( const Point& rPos, bool bCancel )
+void ThumbnailView::ImplEndTracking(const Point& /*rPos*/, bool const /*bCancel*/)
 {
+    //FIXME TODO
 }
 
 IMPL_LINK (ThumbnailView, OnFolderSelected, ThumbnailViewItem*, pItem)

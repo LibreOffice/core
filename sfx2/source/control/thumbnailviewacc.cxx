@@ -545,6 +545,7 @@ void SAL_CALL ThumbnailViewAcc::deselectAccessibleChild( sal_Int32 nChildIndex )
     // the specified child is currently selected.
 //FIXME TODO    if (isAccessibleChildSelected(nChildIndex))
 //FIXME TODO        ;
+    (void) nChildIndex;
 }
 
 sal_Int64 SAL_CALL ThumbnailViewAcc::getSomething( const uno::Sequence< sal_Int8 >& rId ) throw( uno::RuntimeException )
