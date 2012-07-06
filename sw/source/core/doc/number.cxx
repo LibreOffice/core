@@ -750,6 +750,8 @@ String SwNumRule::MakeRefNumString( const SwNodeNum& rNodeNum,
     if ( rNodeNum.GetLevelInListTree() >= 0 )
     {
         sal_Bool bOldHadPrefix = sal_True;
+        bool bFirstIteration = true;
+        ::rtl::OUString sOldPrefix;
 
         const SwNodeNum* pWorkingNodeNum( &rNodeNum );
         do
@@ -785,26 +787,44 @@ String SwNumRule::MakeRefNumString( const SwNodeNum& rNodeNum,
 
                 if (nStrip)
                 {
-                        aPrevStr.Erase( 0, nStrip );
-                        aExtremities.nPrefixChars -= nStrip;
-                        nLen -= nStrip;
+                    aPrevStr.Erase( 0, nStrip );
+                    aExtremities.nPrefixChars -= nStrip;
+                    nLen -= nStrip;
                 }
 
-                if ( bOldHadPrefix &&
+                if ((bFirstIteration || bOldHadPrefix) &&
                      aExtremities.nSuffixChars &&
                      !aExtremities.nPrefixChars
                    )
                 {
-                        aPrevStr.Erase( nLen - aExtremities.nSuffixChars, aExtremities.nSuffixChars );
+                    int nStrip2 = aPrevStr.Len();
+                    while (aPrevStr.Len() - nStrip2 < aExtremities.nSuffixChars)
+                    {
+                        char const cur = aPrevStr.GetChar(nStrip2);
+                        if  (!bFirstIteration && '\t' != cur && ' ' != cur)
+                        {
+                            break;
+                        }
+                        --nStrip2;
+                    }
+                    if (nStrip2 < aPrevStr.Len())
+                    {
+                        aPrevStr.Erase(nStrip2, aPrevStr.Len() - nStrip2);
+                    }
                 }
+                else if (sOldPrefix.getLength())
+                {
+                    aRefNumStr.Insert(sOldPrefix, 0);
+                }
+                sOldPrefix = ::rtl::OUString();
+
                 bOldHadPrefix = ( aExtremities.nPrefixChars >  0);
 
                 aRefNumStr.Insert( aPrevStr, 0 );
-
             }
             else if ( aRefNumStr.Len() > 0 )
             {
-                aRefNumStr.Insert( rtl::OUString(" "), 0 );
+                sOldPrefix += " ";
                 bOldHadPrefix = true;
             }
 
@@ -823,6 +843,7 @@ String SwNumRule::MakeRefNumString( const SwNodeNum& rNodeNum,
             {
                 break;
             }
+            bFirstIteration = false;
         } while ( pWorkingNodeNum &&
                   pWorkingNodeNum->GetLevelInListTree() >= 0 &&
                   static_cast<sal_uInt8>(pWorkingNodeNum->GetLevelInListTree()) >= nRestrictInclToThisLevel );
