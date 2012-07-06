@@ -31,6 +31,7 @@
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/geometry/RealPoint2D.hpp>
 #include <com/sun/star/util/DateTime.hpp>
+#include <com/sun/star/drawing/BitmapMode.hpp>
 #include <unotools/streamwrap.hxx>
 #include <filter/msfilter/svdfppt.hxx>
 #include <svx/xpoly.hxx>
@@ -7378,6 +7379,15 @@ void ApplyCellAttributes( const SdrObject* pObj, Reference< XCell >& xCell )
                         RTL_TEXTENCODING_ASCII_US);
 
                     xPropSet->setPropertyValue( OUString("FillBitmapURL"), Any( aURL ) );
+
+                    const XFillBmpStretchItem aStretchItem(( const XFillBmpStretchItem&)pObj->GetMergedItem( XATTR_FILLBMP_STRETCH ));
+                    const XFillBmpTileItem aTileItem(( const XFillBmpTileItem&)pObj->GetMergedItem( XATTR_FILLBMP_TILE ));
+                    if( aTileItem.GetValue() )
+                        xPropSet->setPropertyValue( "FillBitmapMode", Any( com::sun::star::drawing::BitmapMode_REPEAT ) );
+                    else if( aStretchItem.GetValue() )
+                        xPropSet->setPropertyValue( "FillBitmapMode", Any( com::sun::star::drawing::BitmapMode_STRETCH ) );
+                    else
+                        xPropSet->setPropertyValue( "FillBitmapMode", Any( com::sun::star::drawing::BitmapMode_NO_REPEAT ) );
                 }
             break;
             case XFILL_NONE :
