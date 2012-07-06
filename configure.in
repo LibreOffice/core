@@ -6856,7 +6856,7 @@ dnl Test whether to include category-B fonts
 dnl ===================================================================
 WITH_CATB_FONTS=
 AC_MSG_CHECKING([whether to include category B fonts])
-if test "x$enable_category_b_fonts" = "xyes"; then
+if test "x$enable_category_b_fonts" = "xyes" && test "x$with_fonts" != "xno"; then
    AC_MSG_RESULT([yes])
    BUILD_TYPE="$BUILD_TYPE CATB_FONTS"
    WITH_CATB_FONTS=YES
