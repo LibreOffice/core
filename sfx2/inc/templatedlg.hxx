@@ -64,7 +64,7 @@ private:
 
     DECL_LINK(OpenTemplateHdl, ThumbnailViewItem*);
 
-    DECL_LINK(SearchUpdateHdl, Edit*);
+    DECL_LINK(SearchUpdateHdl, void*);
 
     void OnTemplateImport ();
     void OnTemplateSearch ();

@@ -559,7 +559,7 @@ IMPL_LINK(SfxTemplateManagerDlg, OpenTemplateHdl, ThumbnailViewItem*, pItem)
     return 0;
 }
 
-IMPL_LINK (SfxTemplateManagerDlg, SearchUpdateHdl, Edit*, pEdit)
+IMPL_LINK_NOARG(SfxTemplateManagerDlg, SearchUpdateHdl)
 {
     // if the search view is hidden, hide the folder view and display search one
     if (!mpSearchView->IsVisible())
