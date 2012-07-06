@@ -10,7 +10,7 @@
 #ifndef THUMBNAILVIEW_HXX
 #define THUMBNAILVIEW_HXX
 
-#include "svtools/svtdllapi.h"
+#include "sfx2/dllapi.h"
 
 #include <vector>
 #include <boost/function.hpp>
@@ -169,7 +169,7 @@ public:
  *
  **/
 
-class SVT_DLLPUBLIC ThumbnailView : public Control
+class SFX2_DLLPUBLIC ThumbnailView : public Control
 {
 public:
 
@@ -295,23 +295,23 @@ protected:
 
     void CalculateItemPositions ();
 
-    SVT_DLLPRIVATE void         ImplInit();
-    SVT_DLLPRIVATE void         ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
-    SVT_DLLPRIVATE void         ImplInitScrollBar();
-    SVT_DLLPRIVATE void         ImplDeleteItems();
-    SVT_DLLPRIVATE void         ImplDraw();
+    SFX2_DLLPRIVATE void         ImplInit();
+    SFX2_DLLPRIVATE void         ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
+    SFX2_DLLPRIVATE void         ImplInitScrollBar();
+    SFX2_DLLPRIVATE void         ImplDeleteItems();
+    SFX2_DLLPRIVATE void         ImplDraw();
     using Window::ImplScroll;
-    SVT_DLLPRIVATE bool         ImplScroll( const Point& rPos );
-    SVT_DLLPRIVATE size_t       ImplGetItem( const Point& rPoint, bool bMove = false ) const;
-    SVT_DLLPRIVATE ThumbnailViewItem*    ImplGetItem( size_t nPos );
-    SVT_DLLPRIVATE ThumbnailViewItem*    ImplGetFirstItem();
-    SVT_DLLPRIVATE sal_uInt16          ImplGetVisibleItemCount() const;
-    SVT_DLLPRIVATE ThumbnailViewItem*    ImplGetVisibleItem( sal_uInt16 nVisiblePos );
-    SVT_DLLPRIVATE void         ImplInsertItem( ThumbnailViewItem *const pItem, const size_t nPos );
-    SVT_DLLPRIVATE void            ImplFireAccessibleEvent( short nEventId, const ::com::sun::star::uno::Any& rOldValue, const ::com::sun::star::uno::Any& rNewValue );
-    SVT_DLLPRIVATE bool         ImplHasAccessibleListeners();
-    SVT_DLLPRIVATE void         ImplTracking( const Point& rPos, bool bRepeat );
-    SVT_DLLPRIVATE void         ImplEndTracking( const Point& rPos, bool bCancel );
+    SFX2_DLLPRIVATE bool         ImplScroll( const Point& rPos );
+    SFX2_DLLPRIVATE size_t       ImplGetItem( const Point& rPoint, bool bMove = false ) const;
+    SFX2_DLLPRIVATE ThumbnailViewItem*    ImplGetItem( size_t nPos );
+    SFX2_DLLPRIVATE ThumbnailViewItem*    ImplGetFirstItem();
+    SFX2_DLLPRIVATE sal_uInt16          ImplGetVisibleItemCount() const;
+    SFX2_DLLPRIVATE ThumbnailViewItem*    ImplGetVisibleItem( sal_uInt16 nVisiblePos );
+    SFX2_DLLPRIVATE void         ImplInsertItem( ThumbnailViewItem *const pItem, const size_t nPos );
+    SFX2_DLLPRIVATE void            ImplFireAccessibleEvent( short nEventId, const ::com::sun::star::uno::Any& rOldValue, const ::com::sun::star::uno::Any& rNewValue );
+    SFX2_DLLPRIVATE bool         ImplHasAccessibleListeners();
+    SFX2_DLLPRIVATE void         ImplTracking( const Point& rPos, bool bRepeat );
+    SFX2_DLLPRIVATE void         ImplEndTracking( const Point& rPos, bool bCancel );
     DECL_DLLPRIVATE_LINK( ImplScrollHdl, ScrollBar* );
     DECL_DLLPRIVATE_LINK( ImplTimerHdl, void* );
 
