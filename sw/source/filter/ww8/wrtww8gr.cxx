@@ -630,8 +630,9 @@ void SwWW8WrGrf::WritePICFHeader(SvStream& rStrm, const sw::Frame &rFly,
     substitute the final size and loose on retaining the scaling factor but
     still keep the correct display size anyway.
     */
-    if ( (aGrTwipSz.Width() > SHRT_MAX) || (aGrTwipSz.Height() > SHRT_MAX)
-        || (aGrTwipSz.Width() < 0 ) || (aGrTwipSz.Height() < 0) )
+    const bool bIsSubstitutedSize = (aGrTwipSz.Width() > SHRT_MAX) || (aGrTwipSz.Height() > SHRT_MAX) ||
+                                    (aGrTwipSz.Width() < 0 ) || (aGrTwipSz.Height() < 0);
+    if ( bIsSubstitutedSize )
     {
         aGrTwipSz.Width() = nWidth;
         aGrTwipSz.Height() = nHeight;
@@ -646,26 +647,51 @@ void SwWW8WrGrf::WritePICFHeader(SvStream& rStrm, const sw::Frame &rFly,
     Set_UInt16(pArr, msword_cast<sal_uInt16>(aGrTwipSz.Width()));
     Set_UInt16(pArr, msword_cast<sal_uInt16>(aGrTwipSz.Height()));
 
-    if( aGrTwipSz.Width() + nXSizeAdd )             // set mx
+    if ( aGrTwipSz.Width() + nXSizeAdd )             // set mx
     {
-        double fVal = nWidth * 1000.0 / (aGrTwipSz.Width() + nXSizeAdd);
-        Set_UInt16( pArr, (sal_uInt16)::rtl::math::round(fVal) );
+        if ( !bIsSubstitutedSize )
+        {
+            const double fVal = nWidth * 1000.0 / (aGrTwipSz.Width() + nXSizeAdd );
+            Set_UInt16( pArr, (sal_uInt16)::rtl::math::round(fVal) );
+        }
+        else
+        {
+            Set_UInt16( pArr, 1000 );
+        }
     }
     else
-        pArr += 2;
-
-    if( aGrTwipSz.Height() + nYSizeAdd )            // set my
     {
-        double fVal = nHeight * 1000.0 / (aGrTwipSz.Height() + nYSizeAdd);
-        Set_UInt16( pArr, (sal_uInt16)::rtl::math::round(fVal) );
+        pArr += 2;
+    }
+
+    if ( aGrTwipSz.Height() + nYSizeAdd )            // set my
+    {
+        if ( !bIsSubstitutedSize )
+        {
+            const double fVal = nHeight * 1000.0 / (aGrTwipSz.Height() + nYSizeAdd);
+            Set_UInt16( pArr, (sal_uInt16)::rtl::math::round(fVal) );
+        }
+        else
+        {
+            Set_UInt16( pArr, 1000 );
+        }
     }
     else
+    {
         pArr += 2;
+    }
 
-    Set_UInt16( pArr, nCropL );                     // set dxaCropLeft
-    Set_UInt16( pArr, nCropT );                     // set dyaCropTop
-    Set_UInt16( pArr, nCropR );                     // set dxaCropRight
-    Set_UInt16( pArr, nCropB );                     // set dyaCropBottom
+    if ( !bIsSubstitutedSize )
+    {
+        Set_UInt16( pArr, nCropL );                     // set dxaCropLeft
+        Set_UInt16( pArr, nCropT );                     // set dyaCropTop
+        Set_UInt16( pArr, nCropR );                     // set dxaCropRight
+        Set_UInt16( pArr, nCropB );                     // set dyaCropBottom
+    }
+    else
+    {
+        pArr += 8;
+    }
 
     rStrm.Write( aArr, nHdrLen );
 }
