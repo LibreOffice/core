@@ -37,7 +37,6 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/reflection/XIdlMethod.hpp>
 #include <com/sun/star/sheet/LocalizedName.hpp>
-#include <tools/string.hxx>
 #include <i18npool/lang.h>
 #include <rtl/ustring.h>
 #include "scdllapi.h"
@@ -54,7 +53,7 @@ class ScUnoAddInFuncData;
 class ScFuncDesc;
 
 
-typedef ::boost::unordered_map< String, const ScUnoAddInFuncData*, ScStringHashCode, ::std::equal_to< String > > ScAddInHashMap;
+typedef ::boost::unordered_map< ::rtl::OUString, const ScUnoAddInFuncData*, ScStringHashCode, ::std::equal_to< ::rtl::OUString > > ScAddInHashMap;
 
 
 enum ScAddInArgumentType
@@ -77,9 +76,9 @@ enum ScAddInArgumentType
 
 struct ScAddInArgDesc
 {
-    String              aInternalName;      // used to match configuration and reflection information
-    String              aName;
-    String              aDescription;
+    ::rtl::OUString         aInternalName;      // used to match configuration and reflection information
+    ::rtl::OUString         aName;
+    ::rtl::OUString         aDescription;
     ScAddInArgumentType eType;
     sal_Bool                bOptional;
 };
@@ -87,24 +86,24 @@ struct ScAddInArgDesc
 class ScUnoAddInFuncData
 {
 private:
-    String              aOriginalName;      // kept in formula
-    String              aLocalName;         // for display
-    String              aUpperName;         // for entering formulas
-    String              aUpperLocal;        // for entering formulas
-    String              aDescription;
+    ::rtl::OUString     aOriginalName;      // kept in formula
+    ::rtl::OUString     aLocalName;         // for display
+    ::rtl::OUString     aUpperName;         // for entering formulas
+    ::rtl::OUString     aUpperLocal;        // for entering formulas
+    ::rtl::OUString     aDescription;
     com::sun::star::uno::Reference< com::sun::star::reflection::XIdlMethod> xFunction;
     com::sun::star::uno::Any            aObject;
     long                nArgCount;
     ScAddInArgDesc*     pArgDescs;
     long                nCallerPos;
-    sal_uInt16              nCategory;
+    sal_uInt16          nCategory;
     rtl::OString        sHelpId;
     mutable com::sun::star::uno::Sequence< com::sun::star::sheet::LocalizedName> aCompNames;
     mutable sal_Bool        bCompInitialized;
 
 public:
-                ScUnoAddInFuncData( const String& rNam, const String& rLoc,
-                                    const String& rDesc,
+                ScUnoAddInFuncData( const ::rtl::OUString& rNam, const ::rtl::OUString& rLoc,
+                                    const ::rtl::OUString& rDesc,
                                     sal_uInt16 nCat, const rtl::OString&,
                                     const com::sun::star::uno::Reference<
                                         com::sun::star::reflection::XIdlMethod>& rFunc,
@@ -113,22 +112,22 @@ public:
                                     long nCP );
                 ~ScUnoAddInFuncData();
 
-    const String&           GetOriginalName() const     { return aOriginalName; }
-    const String&           GetLocalName() const        { return aLocalName; }
-    const String&           GetUpperName() const        { return aUpperName; }
-    const String&           GetUpperLocal() const       { return aUpperLocal; }
+    const ::rtl::OUString&  GetOriginalName() const     { return aOriginalName; }
+    const ::rtl::OUString&  GetLocalName() const        { return aLocalName; }
+    const ::rtl::OUString&  GetUpperName() const        { return aUpperName; }
+    const ::rtl::OUString&  GetUpperLocal() const       { return aUpperLocal; }
     const com::sun::star::uno::Reference< com::sun::star::reflection::XIdlMethod>&   GetFunction() const
                                                         { return xFunction; }
     const com::sun::star::uno::Any& GetObject() const   { return aObject; }
     long                    GetArgumentCount() const    { return nArgCount; }
     const ScAddInArgDesc*   GetArguments() const        { return pArgDescs; }
     long                    GetCallerPos() const        { return nCallerPos; }
-    const String&           GetDescription() const      { return aDescription; }
-    sal_uInt16                  GetCategory() const         { return nCategory; }
+    const ::rtl::OUString&  GetDescription() const      { return aDescription; }
+    sal_uInt16              GetCategory() const         { return nCategory; }
     const rtl::OString      GetHelpId() const           { return sHelpId; }
 
     const com::sun::star::uno::Sequence< com::sun::star::sheet::LocalizedName>&  GetCompNames() const;
-    sal_Bool                    GetExcelName( LanguageType eDestLang, String& rRetExcelName ) const;
+    sal_Bool                    GetExcelName( LanguageType eDestLang, ::rtl::OUString& rRetExcelName ) const;
 
     void    SetFunction( const com::sun::star::uno::Reference< com::sun::star::reflection::XIdlMethod>& rNewFunc,
                          const com::sun::star::uno::Any& rNewObj );
@@ -155,7 +154,7 @@ private:
                                 com::sun::star::uno::XInterface>& xInterface );
     void        UpdateFromAddIn( const com::sun::star::uno::Reference<
                                   com::sun::star::uno::XInterface>& xInterface,
-                                const String& rServiceName );
+                                const ::rtl::OUString& rServiceName );
     void        LoadComponent( const ScUnoAddInFuncData& rFuncData );
 
 public:
@@ -163,12 +162,12 @@ public:
                 ~ScUnoAddInCollection();
 
                         /// User enetered name. rUpperName MUST already be upper case!
-    String              FindFunction( const String& rUpperName, sal_Bool bLocalFirst );
+    ::rtl::OUString     FindFunction( const ::rtl::OUString& rUpperName, sal_Bool bLocalFirst );
 
                         // rName is the exact Name.
                         // Only if bComplete is set, the function reference and argument types
                         // are initialized (component may have to be loaded).
-    const ScUnoAddInFuncData*   GetFuncData( const String& rName, bool bComplete = false );
+    const ScUnoAddInFuncData*   GetFuncData( const ::rtl::OUString& rName, bool bComplete = false );
 
                         /** For enumeration in ScCompiler::OpCodeMap::getAvailableMappings().
                             @param nIndex
@@ -178,15 +177,15 @@ public:
 
     void                Clear();
 
-    void                LocalizeString( String& rName );    // modify rName - input: exact name
+    void                LocalizeString( ::rtl::OUString& rName );    // modify rName - input: exact name
 
     long                GetFuncCount();
     sal_Bool                FillFunctionDesc( long nFunc, ScFuncDesc& rDesc );
 
     static sal_Bool         FillFunctionDescFromData( const ScUnoAddInFuncData& rFuncData, ScFuncDesc& rDesc );
 
-    sal_Bool                GetExcelName( const String& rCalcName, LanguageType eDestLang, String& rRetExcelName );
-    sal_Bool                GetCalcName( const String& rExcelName, String& rRetCalcName );
+    sal_Bool                GetExcelName( const ::rtl::OUString& rCalcName, LanguageType eDestLang, ::rtl::OUString& rRetExcelName );
+    sal_Bool                GetCalcName( const ::rtl::OUString& rExcelName, ::rtl::OUString& rRetCalcName );
                                 // both leave rRet... unchanged, if no matching name is found
 };
 
@@ -203,7 +202,7 @@ private:
     sal_uInt16                      nErrCode;
     sal_Bool                        bHasString;
     double                      fValue;
-    String                      aString;
+    ::rtl::OUString             aString;
     ScMatrixRef                 xMatrix;
     com::sun::star::uno::Reference<com::sun::star::sheet::XVolatileResult> xVarRes;
 
@@ -212,7 +211,7 @@ private:
 
 public:
                     // exact name
-                    ScUnoAddInCall( ScUnoAddInCollection& rColl, const String& rName,
+                    ScUnoAddInCall( ScUnoAddInCollection& rColl, const ::rtl::OUString& rName,
                                     long nParamCount );
                     ~ScUnoAddInCall();
 
@@ -234,7 +233,7 @@ public:
     bool                HasMatrix() const       { return xMatrix.get(); }
     sal_Bool                HasVarRes() const       { return ( xVarRes.is() ); }
     double              GetValue() const        { return fValue; }
-    const String&       GetString() const       { return aString; }
+    const ::rtl::OUString&       GetString() const       { return aString; }
     ScMatrixRef         GetMatrix() const       { return xMatrix; }
     com::sun::star::uno::Reference<com::sun::star::sheet::XVolatileResult>
                         GetVarRes() const       { return xVarRes; }
