@@ -26,8 +26,7 @@
 #define BTN_EDIT            14
 #define GB_STD                  15
 #define IMG_LOCK                16
-#define IMG_LOCK_HC             17
-#define BTN_DELETE              18
+#define BTN_DELETE              17
 
 #endif // SVX_DBREGISTER_HRC
 

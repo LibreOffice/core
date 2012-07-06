@@ -88,13 +88,13 @@ struct OptPath_Impl
 {
     SvtDefaultOptions           m_aDefOpt;
     Image                       m_aLockImage;
-    Image                       m_aLockImageHC;
     String                      m_sMultiPathDlg;
     Reference< XPropertySet >   m_xPathSettings;
 
-    OptPath_Impl(const ResId& rLockRes, const ResId& rLockResHC) :
-        m_aLockImage(rLockRes),
-        m_aLockImageHC(rLockResHC){}
+    OptPath_Impl(const ResId& rLockRes)
+        : m_aLockImage(rLockRes)
+    {
+    }
 };
 
 // struct PathUserData_Impl ----------------------------------------------
@@ -219,7 +219,7 @@ SvxPathTabPage::SvxPathTabPage( Window* pParent, const SfxItemSet& rSet ) :
     aPathBtn        ( this, CUI_RES( BTN_PATH ) ),
     pHeaderBar      ( NULL ),
     pPathBox        ( NULL ),
-    pImpl           ( new OptPath_Impl( CUI_RES(IMG_LOCK), CUI_RES(IMG_LOCK_HC) ) ),
+    pImpl           ( new OptPath_Impl( CUI_RES(IMG_LOCK) ) ),
     xDialogListener ( new ::svt::DialogClosedListener() )
 
 {

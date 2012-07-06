@@ -27,8 +27,7 @@
 #define BTN_STANDARD            14
 #define GB_STD                  15
 #define IMG_LOCK                16
-#define IMG_LOCK_HC             17
-#define STR_MULTIPATHDLG        18
+#define STR_MULTIPATHDLG        17
 
 #endif
 
