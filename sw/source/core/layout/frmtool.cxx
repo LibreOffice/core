@@ -2701,13 +2701,10 @@ SwPageFrm * InsertNewPage( SwPageDesc &rDesc, SwFrm *pUpper,
     SwPageFrm *pRet;
     SwDoc *pDoc = ((SwLayoutFrm*)pUpper)->GetFmt()->GetDoc();
     SwFrmFmt *pFmt = 0;
-    if (bFirst)
-    {
+    // rDesc can't know if the first page will be 'left' or 'right', so if
+    // first is shared, let's ignore first here.
+    if (bFirst && !rDesc.IsHeaderSharedFirst())
         pFmt = rDesc.GetFirstFmt();
-        // If there is no first format, use what is relevant anyway.
-        if (!pFmt)
-            pFmt = bOdd ? rDesc.GetRightFmt() : rDesc.GetLeftFmt();
-    }
     else
         pFmt = bOdd ? rDesc.GetRightFmt() : rDesc.GetLeftFmt();
     //Wenn ich kein FrmFmt fuer die Seite gefunden habe, muss ich eben

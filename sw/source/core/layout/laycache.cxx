@@ -654,9 +654,6 @@ sal_Bool SwLayHelper::CheckInsertPage()
         }
         // If the page style is changing, we'll have a first page.
         bool bNextPageFirst = pDesc != rpPage->GetPageDesc();
-        // Considering the page after the first page would be confusing.
-        if (rpPage->GetPageDesc() == pDoc->GetPageDescFromPool(RES_POOLPAGE_FIRST))
-            bNextPageFirst = false;
         ::InsertNewPage( (SwPageDesc&)*pDesc, rpPage->GetUpper(),
                          bNextPageOdd, bNextPageFirst, bInsertEmpty, sal_False, rpPage->GetNext() );
         if ( bEnd )
