@@ -106,6 +106,7 @@ public:
     //ods, xls, xlsx filter tests
     void testRangeNameXLS();
     void testRangeNameXLSX();
+    void testHardRecalcODS();
     void testFunctionsODS();
     void testDatabaseRangesODS();
     void testDatabaseRangesXLS();
@@ -139,6 +140,7 @@ public:
     CPPUNIT_TEST_SUITE(ScFiltersTest);
     CPPUNIT_TEST(testRangeNameXLS);
     CPPUNIT_TEST(testRangeNameXLSX);
+    CPPUNIT_TEST(testHardRecalcODS);
     CPPUNIT_TEST(testFunctionsODS);
     CPPUNIT_TEST(testDatabaseRangesODS);
     CPPUNIT_TEST(testDatabaseRangesXLS);
@@ -309,6 +311,24 @@ void ScFiltersTest::testRangeNameXLSX()
 
     ScDocument* pDoc = xDocSh->GetDocument();
     testRangeNameImpl(pDoc);
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testHardRecalcODS()
+{
+    const rtl::OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("hard-recalc."));
+    ScDocShellRef xDocSh = loadDoc( aFileNameBase, ODS );
+    xDocSh->DoHardRecalc(true);
+
+    CPPUNIT_ASSERT_MESSAGE("Failed to load functions.*", xDocSh.Is());
+    ScDocument* pDoc = xDocSh->GetDocument();
+    rtl::OUString aCSVFileName;
+
+    //test hard recalc: document has an incorrect cached formula result
+    //hard recalc should have updated to the correct result
+    createCSVPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("hard-recalc.")), aCSVFileName);
+    testFile(aCSVFileName, pDoc, 0);
 
     xDocSh->DoClose();
 }
