@@ -177,9 +177,10 @@ const ScDPCacheTable& ScDatabaseDPData::GetCacheTable() const
     return aCacheTable;
 }
 
-void ScDatabaseDPData::ClearCacheTable()
+void ScDatabaseDPData::ReloadCacheTable()
 {
     aCacheTable.clear();
+    CreateCacheTable();
 }
 
 // -----------------------------------------------------------------------

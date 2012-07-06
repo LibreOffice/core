@@ -228,9 +228,10 @@ const ScDPCacheTable& ScSheetDPData::GetCacheTable() const
     return aCacheTable;
 }
 
-void ScSheetDPData::ClearCacheTable()
+void ScSheetDPData::ReloadCacheTable()
 {
     aCacheTable.clear();
+    CreateCacheTable();
 }
 
 ScSheetSourceDesc::ScSheetSourceDesc(ScDocument* pDoc) :

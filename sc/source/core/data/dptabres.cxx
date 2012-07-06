@@ -1347,7 +1347,6 @@ void ScDPResultMember::FillMemberResults( uno::Sequence<sheet::MemberResult>* pS
                                             const String* pMemberName,
                                             const String* pMemberCaption )
 {
-//  stack_printer __stack_printer__("ScDPResultMember::FillMemberResults");
     //  IsVisible() test is in ScDPResultDimension::FillMemberResults
     //  (not on data layout dimension)
 
