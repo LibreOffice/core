@@ -37,10 +37,6 @@
 #include "rtl/ustring.hxx"
 #include "dpmacros.hxx"
 
-#include <vector>
-
-#include <boost/unordered_map.hpp>
-
 /**
  * When assigning a string value, you can also assign an interned string
  * whose life-cycle is managed by the pivot cache that it belongs to.  Those

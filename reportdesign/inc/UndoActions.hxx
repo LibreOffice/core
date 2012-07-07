@@ -56,7 +56,6 @@
 
 #include <functional>
 #include <memory>
-#include <boost/shared_ptr.hpp>
 
 namespace dbaui
 {

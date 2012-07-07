@@ -45,8 +45,6 @@ class SwRowFrm;
 // --> #i35911#
 class SwObjsMarkedAsTmpConsiderWrapInfluence;
 class SwAnchoredObject;
-// --> #i40155#
-#include <vector>
 // --> #i65250#
 #include <boost/unordered_map.hpp>
 class SwFlowFrm;

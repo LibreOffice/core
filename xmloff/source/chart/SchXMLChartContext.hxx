@@ -38,7 +38,6 @@
 #include "transporttypes.hxx"
 
 #include <list>
-#include <map>
 
 class SchXMLImportHelper;
 

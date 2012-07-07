@@ -26,7 +26,6 @@
 
 #include <list>
 #include <map>
-#include <set>
 
 class SvXMLExport;
 namespace com { namespace sun { namespace star {
