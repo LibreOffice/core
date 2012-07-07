@@ -98,7 +98,8 @@ endef
 
 gb_PrecompiledHeader_get_enableflags = -Yu$(1).hxx \
 	-FI$(1).hxx \
-	-Fp$(call gb_PrecompiledHeader_get_target,$(1))
+	-Fp$(call gb_PrecompiledHeader_get_target,$(1)) \
+	$(gb_PCHWARNINGS)
 
 define gb_PrecompiledHeader__command
 $(call gb_Output_announce,$(2),$(true),PCH,1)
@@ -118,7 +119,8 @@ endef
 
 gb_NoexPrecompiledHeader_get_enableflags = -Yu$(1).hxx \
 	-FI$(1).hxx \
-	-Fp$(call gb_NoexPrecompiledHeader_get_target,$(1))
+	-Fp$(call gb_NoexPrecompiledHeader_get_target,$(1)) \
+	$(gb_PCHWARNINGS)
 
 define gb_NoexPrecompiledHeader__command
 $(call gb_Output_announce,$(2),$(true),PCH,1)

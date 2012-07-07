@@ -220,6 +220,12 @@ ifeq ($(VCVER),100)
 
 endif
 
+gb_PCHWARNINGS = \
+	-we4650 \
+	-we4651 \
+	-we4652 \
+	-we4653 \
+
 gb_STDLIBS := \
 	advapi32.lib \
 
