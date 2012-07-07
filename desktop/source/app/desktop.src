@@ -28,16 +28,6 @@
 #include "desktop.hrc"
 
 
-String STR_RECOVER_QUERY
-{
-    Text [ en-US ] = "Should the file \"$1\" be restored?" ;
-};
-
-String STR_RECOVER_TITLE
-{
-    Text [ en-US ] = "File Recovery" ;
-};
-
 WarningBox STR_RECOVER_PREPARED
 {
     Message [ en-US ] = "An unrecoverable error has occurred.\n\nAll modified files have been saved and can\nprobably be recovered at program restart." ;
@@ -56,11 +46,6 @@ String STR_BOOTSTRAP_ERR_DIR_MISSING
 String STR_BOOTSTRAP_ERR_PATH_INVALID
 {
     Text [ en-US ] = "The installation path is invalid.";
-};
-
-String STR_BOOTSTRAP_ERR_NO_PATH
-{
-    Text [ en-US ] = "The installation path is not available.";
 };
 
 String STR_BOOTSTRAP_ERR_INTERNAL
@@ -103,29 +88,9 @@ String STR_ASK_START_SETUP_MANUALLY
     Text [ en-US ] = "Start the setup application to repair the installation from the CD or the folder containing the installation packages.";
 };
 
-String STR_CONFIG_ERR_SETTINGS_INCOMPLETE
-{
-    Text [ en-US ] = "The startup settings for accessing the central configuration are incomplete. ";
-};
-
-String STR_CONFIG_ERR_CANNOT_CONNECT
-{
-    Text [ en-US ] = "A connection to the central configuration could not be established. ";
-};
-
-String STR_CONFIG_ERR_RIGHTS_MISSING
-{
-    Text [ en-US ] = "You cannot access the central configuration because of missing access rights. ";
-};
-
 String STR_CONFIG_ERR_ACCESS_GENERAL
 {
     Text [ en-US ] = "A general error occurred while accessing your central configuration. ";
-};
-
-String STR_CONFIG_ERR_NO_WRITE_ACCESS
-{
-    Text [ en-US ] = "The changes to your personal settings cannot be stored centrally because of missing access rights. ";
 };
 
 String STR_BOOTSTRAP_ERR_CFG_DATAACCESS
@@ -211,11 +176,6 @@ InfoBox INFOBOX_EXPIRED
     Buttons = WB_OK ;
     DefButton = WB_DEF_OK ;
     Message [ en-US ] = "This Evaluation Version has expired. To find out more about %PRODUCTNAME,\nvisit http://www.oracle.com/us/products/applications/open-office.";
-};
-
-String STR_TITLE_EXPIRED
-{
-    Text [ en-US ] = "%PRODUCTNAME %PRODUCTVERSION";
 };
 
 String STR_BOOTSTRAP_ERR_NO_PATHSET_SERVICE
