@@ -34,22 +34,10 @@ template <class COLLECTION>
 inline void         erase_container(
                         COLLECTION &        o_rCollection );
 
-/// Version for std::map
-template <class COLLECTION>
-void                erase_map_of_heap_ptrs(
-                        COLLECTION &        o_rCollection );
-
 /// Version for other containers than std::map, with non-pair value_type.
 template <class COLLECTION>
 void                erase_container_of_heap_ptrs(
                         COLLECTION &        o_rCollection );
-
-template <class VECTOR_ELEM>
-void                adjust_vector_size(
-                        std::vector<VECTOR_ELEM> &
-                                            io_rVector,
-                        uintt               i_nSize,
-                        const VECTOR_ELEM & i_nFill );
 
 
 template <class KEY, class VAL>
@@ -82,13 +70,6 @@ bool                contains(
                         const COLLECTION &  i_collection,
                         const VALUE &       i_value );
 
-// Object oriented for_each:
-template <class COLLECTION, class CLASS, class MEMFUNC>
-void                call_for_each(
-                        const COLLECTION &  i_rList,
-                        CLASS *             io_pThis,
-                        MEMFUNC             i_fMethod );
-
 
 
 
@@ -97,22 +78,6 @@ template <class COLLECTION>
 inline void
 erase_container( COLLECTION & o_rCollection )
 {
-    o_rCollection.erase( o_rCollection.begin(),
-                         o_rCollection.end() );
-}
-
-template <class COLLECTION>
-void
-erase_map_of_heap_ptrs( COLLECTION & o_rCollection )
-{
-    typename COLLECTION::iterator itEnd = o_rCollection.end();
-    for ( typename COLLECTION::iterator it = o_rCollection.begin();
-          it != itEnd;
-          ++it )
-    {
-        delete (*it).second;
-    }
-
     o_rCollection.erase( o_rCollection.begin(),
                          o_rCollection.end() );
 }
@@ -132,25 +97,6 @@ erase_container_of_heap_ptrs( COLLECTION & o_rCollection )
     o_rCollection.erase( o_rCollection.begin(),
                          o_rCollection.end() );
 }
-
-template <class VECTOR_ELEM>
-void
-adjust_vector_size( std::vector<VECTOR_ELEM> & io_rVector,
-                    uintt                      i_nSize,
-                    const VECTOR_ELEM &        i_nFill )
-{
-    if ( io_rVector.size() > i_nSize )
-    {
-        io_rVector.erase( io_rVector.begin() + i_nSize, io_rVector.end() );
-    }
-    else
-    {
-        io_rVector.reserve(i_nSize);
-        while ( io_rVector.size() <  i_nSize )
-            io_rVector.push_back(i_nFill);
-    }
-}
-
 
 template <class KEY, class VAL>
 const VAL *
@@ -197,20 +143,6 @@ contains( const COLLECTION &  i_collection,
     return std::find(i_collection.begin(), i_collection.end(), i_value)
            !=
            i_collection.end();
-}
-
-template <class COLLECTION, class CLASS, class MEMFUNC>
-void
-call_for_each( const COLLECTION &  i_rList,
-               CLASS *             io_pThis,
-               MEMFUNC             i_fMethod )
-{
-    typename COLLECTION::const_iterator it = i_rList.begin();
-    typename COLLECTION::const_iterator itEnd = i_rList.end();
-    for ( ; it != itEnd; ++it )
-    {
-        (io_pThis->*i_fMethod)(*it);
-    }
 }
 
 

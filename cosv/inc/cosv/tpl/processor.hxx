@@ -56,25 +56,6 @@ class ConstProcessorClient
                             ProcessorIfc &  io_processor ) const = 0;
 };
 
-/** Implements an acyclic visitor pattern. This is the abstract
-    base for the classes to be processed (the "visitables").
-*/
-class ProcessorClient
-{
-  public:
-    virtual             ~ProcessorClient() {}
-
-    void                Accept(
-                            ProcessorIfc &  io_processor )
-                            { do_Accept(io_processor); }
-  private:
-    virtual void        do_Accept(
-                            ProcessorIfc &  io_processor ) = 0;
-};
-
-
-
-
 
 /** Typed base for "visitor" classes, leaving the visited
     object const.
@@ -141,35 +122,6 @@ CheckedCall( ProcessorIfc &  io_processor,
     if (pProcessor != 0)
         pProcessor->Process(io_client);
 }
-
-template <class C>
-inline void
-AssertedCall( ProcessorIfc &  io_processor,
-              const C &       i_client )
-{
-    ConstProcessor<C> *
-        pProcessor = dynamic_cast< csv::ConstProcessor<C> * >
-                        (&io_processor);
-    csv_assert( pProcessor != 0
-                && "csv::AssertedCall() failed. Processed object did not match processor." );
-    pProcessor->Process(i_client);
-}
-
-template <class C>
-inline void
-AssertedCall( ProcessorIfc &  io_processor,
-              C &             io_client )
-{
-    Processor<C> *
-        pProcessor = dynamic_cast< csv::Processor<C> * >
-                        (&io_processor);
-    csv_assert( pProcessor != 0
-                && "csv::AssertedCall() failed. Processed object did not match processor." );
-    pProcessor->Process(io_client);
-}
-
-
-
 
 }   // namespace csv
 #endif
