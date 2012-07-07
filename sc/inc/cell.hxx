@@ -448,6 +448,7 @@ public:
     sal_uInt16      GetErrCode();   // interpret first if necessary
     sal_uInt16      GetRawError();  // don't interpret, just return code or result error
     short           GetFormatType() const                   { return nFormatType; }
+    void            SetFormatType( short nFType )           { nFormatType = nFType; }
     sal_uLong       GetFormatIndex() const                  { return nFormatIndex; }
     void            GetFormatInfo( short& nType, sal_uLong& nIndex ) const
                         { nType = nFormatType; nIndex = nFormatIndex; }

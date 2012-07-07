@@ -254,7 +254,6 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
     {
         if (nCellType == util::NumberFormat::TEXT)
             bFormulaTextResult = true;
-        nCellType = util::NumberFormat::UNDEFINED;
     }
     rXMLImport.GetStylesImportHelper()->SetAttributes(pStyleName, pCurrencySymbol, nCellType);
 }
@@ -1023,6 +1022,7 @@ void ScXMLTableRowCellContext::AddNonMatrixFormulaCell( const ScAddress& rCellPo
                 pFCell->SetHybridString( *pOUTextValue );
             else
                 pFCell->SetHybridDouble( fValue );
+            pFCell->SetFormatType( nCellType );
             pFCell->ResetDirty();
         }
         else if ( aText[0] == '\'' && aText.getLength() > 1 )
