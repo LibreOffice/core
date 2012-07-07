@@ -604,45 +604,58 @@ void HeaderBar::ImplDrawItem( OutputDevice* pDev,
             bDraw = sal_False;
 
         if ( bDraw )
-        {
-            long nArrowY;
-            if ( aTxtSize.Height() )
-                nArrowY = nTxtPosY+(aTxtSize.Height()/2);
-            else if ( aImageSize.Width() && aImageSize.Height() )
-                nArrowY = nImagePosY+(aImageSize.Height()/2);
+            if( pWin && pWin->IsNativeControlSupported(CTRL_LISTHEADER, PART_ARROW) )
+            {
+                aCtrlRegion=Rectangle(Point(nArrowX,aRect.Top()),Size(nArrowWidth,aRect.GetHeight()));
+                // control value passes 1 if arrow points down, 0 otherwise
+                aControlValue.setNumericVal((nBits&HIB_DOWNARROW)?1:0);
+                nState|=CTRL_STATE_ENABLED;
+                if(bHigh)
+                    nState|=CTRL_STATE_PRESSED;
+                pWin->DrawNativeControl( CTRL_LISTHEADER, PART_ARROW,
+                                         aCtrlRegion, nState, aControlValue,
+                                         rtl::OUString() );
+            }
             else
             {
-                if ( nBits & HIB_TOP )
-                    nArrowY = aRect.Top()+1;
-                else if ( nBits & HIB_BOTTOM )
-                    nArrowY = aRect.Bottom()-HEAD_ARROWSIZE2-1;
+                long nArrowY;
+                if ( aTxtSize.Height() )
+                    nArrowY = nTxtPosY+(aTxtSize.Height()/2);
+                else if ( aImageSize.Width() && aImageSize.Height() )
+                    nArrowY = nImagePosY+(aImageSize.Height()/2);
                 else
-                    nArrowY = aRect.Top()+((aRect.GetHeight()-HEAD_ARROWSIZE2)/2);
+                {
+                    if ( nBits & HIB_TOP )
+                        nArrowY = aRect.Top()+1;
+                    else if ( nBits & HIB_BOTTOM )
+                        nArrowY = aRect.Bottom()-HEAD_ARROWSIZE2-1;
+                    else
+                        nArrowY = aRect.Top()+((aRect.GetHeight()-HEAD_ARROWSIZE2)/2);
+                }
+                nArrowY -= HEAD_ARROWSIZE1-1;
+                if ( nBits & HIB_DOWNARROW )
+                {
+                    pDev->SetLineColor( rStyleSettings.GetLightColor() );
+                    pDev->DrawLine( Point( nArrowX, nArrowY ),
+                                    Point( nArrowX+HEAD_ARROWSIZE2, nArrowY ) );
+                    pDev->DrawLine( Point( nArrowX, nArrowY ),
+                                    Point( nArrowX+HEAD_ARROWSIZE1, nArrowY+HEAD_ARROWSIZE2 ) );
+                    pDev->SetLineColor( rStyleSettings.GetShadowColor() );
+                    pDev->DrawLine( Point( nArrowX+HEAD_ARROWSIZE1, nArrowY+HEAD_ARROWSIZE2 ),
+                                    Point( nArrowX+HEAD_ARROWSIZE2, nArrowY ) );
+                }
+                else
+                {
+                    pDev->SetLineColor( rStyleSettings.GetLightColor() );
+                    pDev->DrawLine( Point( nArrowX, nArrowY+HEAD_ARROWSIZE2 ),
+                                    Point( nArrowX+HEAD_ARROWSIZE1, nArrowY ) );
+                    pDev->SetLineColor( rStyleSettings.GetShadowColor() );
+                    pDev->DrawLine( Point( nArrowX, nArrowY+HEAD_ARROWSIZE2 ),
+                                    Point( nArrowX+HEAD_ARROWSIZE2, nArrowY+HEAD_ARROWSIZE2 ) );
+                    pDev->DrawLine( Point( nArrowX+HEAD_ARROWSIZE2, nArrowY+HEAD_ARROWSIZE2 ),
+                                    Point( nArrowX+HEAD_ARROWSIZE1, nArrowY ) );
+                }
             }
-            nArrowY -= HEAD_ARROWSIZE1-1;
-            if ( nBits & HIB_DOWNARROW )
-            {
-                pDev->SetLineColor( rStyleSettings.GetLightColor() );
-                pDev->DrawLine( Point( nArrowX, nArrowY ),
-                                Point( nArrowX+HEAD_ARROWSIZE2, nArrowY ) );
-                pDev->DrawLine( Point( nArrowX, nArrowY ),
-                                Point( nArrowX+HEAD_ARROWSIZE1, nArrowY+HEAD_ARROWSIZE2 ) );
-                pDev->SetLineColor( rStyleSettings.GetShadowColor() );
-                pDev->DrawLine( Point( nArrowX+HEAD_ARROWSIZE1, nArrowY+HEAD_ARROWSIZE2 ),
-                                Point( nArrowX+HEAD_ARROWSIZE2, nArrowY ) );
-            }
-            else
-            {
-                pDev->SetLineColor( rStyleSettings.GetLightColor() );
-                pDev->DrawLine( Point( nArrowX, nArrowY+HEAD_ARROWSIZE2 ),
-                                Point( nArrowX+HEAD_ARROWSIZE1, nArrowY ) );
-                pDev->SetLineColor( rStyleSettings.GetShadowColor() );
-                pDev->DrawLine( Point( nArrowX, nArrowY+HEAD_ARROWSIZE2 ),
-                                Point( nArrowX+HEAD_ARROWSIZE2, nArrowY+HEAD_ARROWSIZE2 ) );
-                pDev->DrawLine( Point( nArrowX+HEAD_ARROWSIZE2, nArrowY+HEAD_ARROWSIZE2 ),
-                                Point( nArrowX+HEAD_ARROWSIZE1, nArrowY ) );
-            }
-        }
     }
 
     // Gegebenenfalls auch UserDraw aufrufen
