@@ -31,7 +31,6 @@
 
 #include <basegfx/vector/b2dvector.hxx>
 #include <drawinglayer/attribute/fontattribute.hxx>
-#include <sfx2/dllapi.h>
 #include <osl/mutex.hxx>
 #include <vcl/bitmapex.hxx>
 
@@ -59,7 +58,7 @@ struct ThumbnailItemAttributes
     drawinglayer::attribute::FontAttribute aFontAttr;
 };
 
-class SFX2_DLLPUBLIC ThumbnailViewItem
+class ThumbnailViewItem
 {
 public:
 
