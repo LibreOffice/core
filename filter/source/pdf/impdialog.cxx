@@ -42,6 +42,7 @@
 #include "com/sun/star/container/XIndexAccess.hpp"
 #include "com/sun/star/frame/XController.hpp"
 #include "com/sun/star/view/XSelectionSupplier.hpp"
+#include "com/sun/star/security/XDocumentDigitalSignatures.hpp"
 
 #include <boost/shared_ptr.hpp>
 
@@ -1697,19 +1698,20 @@ ImpPDFTabSigningPage::~ImpPDFTabSigningPage()
 
 IMPL_LINK_NOARG( ImpPDFTabSigningPage, ClickmaPbSignSelectCert )
 {
-    // Certificate selection dialog will pop up
-    /*
-    Reference< dcss::xml::crypto::XSecurityEnvironment > xSecEnv;
-    Reference< XComponentContext > mxCtx;
 
-    XMLSignatureHelper aSignatureHelper( mxCtx );
-    if ( aSignatureHelper.Init() )
-        xSecEnv = aSignatureHelper.GetSecurityEnvironment();
+    uno::Sequence< uno::Any > aArgs( 2 );
+    aArgs[0] <<= rtl::OUString("1.2");
+    aArgs[1] <<= sal_False;
 
-    SignatureInformations maCurrentSignatureInformations = maSignatureHelper.GetSignatureInformations();
-    CertificateChooser aChooser( this, mxCtx, xSecEnv, maCurrentSignatureInformations );
-    aChooser.Execute();
-    */
+    Reference< security::XDocumentDigitalSignatures > xSigner(
+        comphelper::getProcessServiceFactory()->createInstanceWithArguments(
+            rtl::OUString( "com.sun.star.security.DocumentDigitalSignatures"  ), aArgs ),
+        uno::UNO_QUERY );
+
+    if ( !xSigner.is() )
+        return 0;
+
+    Reference< security::XCertificate > xCert = xSigner->chooseCertificate();
 
     return 0;
 }
