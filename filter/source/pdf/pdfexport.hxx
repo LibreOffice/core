@@ -122,6 +122,8 @@ private:
     OUString                msSignLocation;
     OUString                msSignContact;
     OUString                msSignReason;
+    OUString                msSignPassword;
+    Reference< security::XCertificate > maSignCertificate;
 
     void                    ImplWriteWatermark( ::vcl::PDFWriter& rWriter, const Size& rPageSize );
 public:

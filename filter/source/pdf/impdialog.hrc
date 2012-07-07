@@ -202,10 +202,12 @@
 
 //controls for digital signatures tab page
 #define CB_SIGN_PDF          170
-#define FT_SIGN_LOCATION     171
-#define ED_SIGN_LOCATION     172
-#define FT_SIGN_CONTACT      173
-#define ED_SIGN_CONTACT      174
-#define FT_SIGN_REASON       175
-#define ED_SIGN_REASON       176
-#define BTN_SIGN_SELECT_CERT 177
+#define FT_SIGN_PASSWORD     171
+#define ED_SIGN_PASSWORD     172
+#define FT_SIGN_LOCATION     173
+#define ED_SIGN_LOCATION     174
+#define FT_SIGN_CONTACT      175
+#define ED_SIGN_CONTACT      176
+#define FT_SIGN_REASON       177
+#define ED_SIGN_REASON       178
+#define BTN_SIGN_SELECT_CERT 179

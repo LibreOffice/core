@@ -41,6 +41,7 @@
 
 #include "com/sun/star/io/XOutputStream.hpp"
 #include "com/sun/star/beans/XMaterialHolder.hpp"
+#include "com/sun/star/security/XCertificate.hpp"
 #include "com/sun/star/lang/Locale.hpp"
 
 #include <boost/scoped_ptr.hpp>
@@ -631,8 +632,10 @@ The following structure describes the permissions used in PDF security
 
         bool                            SignPDF;
         rtl::OUString                   SignLocation;
+        rtl::OUString                   SignPassword;
         rtl::OUString                   SignReason;
         rtl::OUString                   SignContact;
+        com::sun::star::uno::Reference< com::sun::star::security::XCertificate> SignCertificate;
 
         com::sun::star::lang::Locale    DocumentLocale; // defines the document default language
         sal_uInt32                      DPIx, DPIy;     // how to handle MapMode( MAP_PIXEL )
@@ -668,7 +671,8 @@ The following structure describes the permissions used in PDF security
                 SignPDF( false ),
                 DPIx( 0 ),
                 DPIy( 0 ),
-                ColorMode( PDFWriter::DrawColor )
+                ColorMode( PDFWriter::DrawColor ),
+                SignCertificate( 0 )
         {}
     };
 

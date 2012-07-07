@@ -843,9 +843,23 @@ TabPage  RID_PDF_TAB_SIGNING
         Text[ en-US ] = "Select c~ertificate...";
     };
 
-    FixedText FT_SIGN_LOCATION
+    FixedText FT_SIGN_PASSWORD
     {
         Pos = MAP_APPFONT( 12, 35 );
+        Size = MAP_APPFONT( 109, 10 );
+        Text[ en-US ] = "Certificate Password";
+    };
+
+    Edit ED_SIGN_PASSWORD
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 102, 35 ) ;
+        Size = MAP_APPFONT ( 68 , 12 ) ;
+    };
+
+    FixedText FT_SIGN_LOCATION
+    {
+        Pos = MAP_APPFONT( 12, 48 );
         Size = MAP_APPFONT( 109, 10 );
         Text[ en-US ] = "Location";
     };
@@ -853,13 +867,13 @@ TabPage  RID_PDF_TAB_SIGNING
     Edit ED_SIGN_LOCATION
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 122, 35 ) ;
-        Size = MAP_APPFONT ( 48 , 12 ) ;
+        Pos = MAP_APPFONT ( 102, 48 ) ;
+        Size = MAP_APPFONT ( 68 , 12 ) ;
     };
 
     FixedText FT_SIGN_CONTACT
     {
-        Pos = MAP_APPFONT( 12, 48 );
+        Pos = MAP_APPFONT( 12, 61 );
         Size = MAP_APPFONT( 109, 10 );
         Text[ en-US ] = "Contact Information";
     };
@@ -867,13 +881,13 @@ TabPage  RID_PDF_TAB_SIGNING
     Edit ED_SIGN_CONTACT
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 122, 48 ) ;
-        Size = MAP_APPFONT ( 48 , 12 ) ;
+        Pos = MAP_APPFONT ( 102, 61 ) ;
+        Size = MAP_APPFONT ( 68 , 12 ) ;
     };
 
     FixedText FT_SIGN_REASON
     {
-        Pos = MAP_APPFONT( 12, 61 );
+        Pos = MAP_APPFONT( 12, 74 );
         Size = MAP_APPFONT( 109, 10 );
         Text[ en-US ] = "Reason";
     };
@@ -881,8 +895,8 @@ TabPage  RID_PDF_TAB_SIGNING
     Edit ED_SIGN_REASON
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 122, 61 ) ;
-        Size = MAP_APPFONT ( 48 , 12 ) ;
+        Pos = MAP_APPFONT ( 102, 74 ) ;
+        Size = MAP_APPFONT ( 68 , 12 ) ;
     };
 
 };

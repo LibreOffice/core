@@ -151,9 +151,11 @@ protected:
     sal_Bool                    mbExportBmkToPDFDestination;
 
     sal_Bool                    mbSignPDF;
+    ::rtl::OUString             msSignPassword;
     ::rtl::OUString             msSignLocation;
     ::rtl::OUString             msSignContact;
     ::rtl::OUString             msSignReason;
+    com::sun::star::uno::Reference< com::sun::star::security::XCertificate > maSignCertificate;
 
     ::rtl::OUString             maWatermarkText;
 
@@ -441,6 +443,8 @@ public:
 class ImpPDFTabSigningPage : public SfxTabPage
 {
     CheckBox                    maCbSignPDF;
+    FixedText                   maFtSignPassword;
+    Edit                        maEdSignPassword;
     FixedText                   maFtSignLocation;
     Edit                        maEdSignLocation;
     FixedText                   maFtSignContactInfo;
@@ -448,6 +452,7 @@ class ImpPDFTabSigningPage : public SfxTabPage
     FixedText                   maFtSignReason;
     Edit                        maEdSignReason;
     PushButton                  maPbSignSelectCert;
+    com::sun::star::uno::Reference< com::sun::star::security::XCertificate > maSignCertificate;
 
     DECL_LINK( ToggleSignPDFHdl, void* );
     DECL_LINK( ClickmaPbSignSelectCert, void* );

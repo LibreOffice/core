@@ -249,9 +249,6 @@ ImpPDFTabDialog::ImpPDFTabDialog( Window* pParent,
 
 //prepare values for digital signatures
     mbSignPDF = maConfigItem.ReadBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "SignPDF" ) ), sal_False );
-    //msSignLocation = maConfigItem.ReadString( OUString( RTL_CONSTASCII_USTRINGPARAM( "SignatureLocation" ) ), "" );
-    //msSignContact = maConfigItem.ReadString( OUString( RTL_CONSTASCII_USTRINGPARAM( "SignatureContactInfo" ) ), "" );
-    //msSignReason = maConfigItem.ReadString( OUString( RTL_CONSTASCII_USTRINGPARAM( "SignatureReason" ) ), "" );
 
 //queue the tab pages for later creation (created when first shown)
     AddTabPage( RID_PDF_TAB_SIGNING, ImpPDFTabSigningPage::Create, 0 );
@@ -416,7 +413,7 @@ Sequence< PropertyValue > ImpPDFTabDialog::GetFilterData()
 
     Sequence< PropertyValue > aRet( maConfigItem.GetFilterData() );
 
-    int nElementAdded = 9;
+    int nElementAdded = 11;
 
     aRet.realloc( aRet.getLength() + nElementAdded );
 
@@ -470,6 +467,14 @@ Sequence< PropertyValue > ImpPDFTabDialog::GetFilterData()
 
     aRet[ nLength - nElementAdded ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "SignatureContactInfo" ) );
     aRet[ nLength - nElementAdded ].Value <<= msSignContact;
+    nElementAdded--;
+
+    aRet[ nLength - nElementAdded ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "SignaturePassword" ) );
+    aRet[ nLength - nElementAdded ].Value <<= msSignPassword;
+    nElementAdded--;
+
+    aRet[ nLength - nElementAdded ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "SignatureCertificate" ) );
+    aRet[ nLength - nElementAdded ].Value <<= maSignCertificate;
     nElementAdded--;
 
     return aRet;
@@ -1678,13 +1683,16 @@ ImpPDFTabSigningPage::ImpPDFTabSigningPage( Window* pParent,
     SfxTabPage( pParent, PDFFilterResId( RID_PDF_TAB_SIGNING ), rCoreSet ),
 
     maCbSignPDF( this, PDFFilterResId( CB_SIGN_PDF ) ),
+    maFtSignPassword( this, PDFFilterResId( FT_SIGN_PASSWORD ) ),
+    maEdSignPassword( this, PDFFilterResId( ED_SIGN_PASSWORD ) ),
     maFtSignLocation( this, PDFFilterResId( FT_SIGN_LOCATION ) ),
     maEdSignLocation( this, PDFFilterResId( ED_SIGN_LOCATION ) ),
     maFtSignContactInfo( this, PDFFilterResId( FT_SIGN_CONTACT ) ),
     maEdSignContactInfo( this, PDFFilterResId( ED_SIGN_CONTACT ) ),
     maFtSignReason( this, PDFFilterResId( FT_SIGN_REASON ) ),
     maEdSignReason( this, PDFFilterResId( ED_SIGN_REASON ) ),
-    maPbSignSelectCert( this, PDFFilterResId( BTN_SIGN_SELECT_CERT ) )
+    maPbSignSelectCert( this, PDFFilterResId( BTN_SIGN_SELECT_CERT ) ),
+    maSignCertificate()
 {
     FreeResource();
 
@@ -1711,7 +1719,7 @@ IMPL_LINK_NOARG( ImpPDFTabSigningPage, ClickmaPbSignSelectCert )
     if ( !xSigner.is() )
         return 0;
 
-    Reference< security::XCertificate > xCert = xSigner->chooseCertificate();
+    maSignCertificate = xSigner->chooseCertificate();
 
     return 0;
 }
@@ -1728,8 +1736,10 @@ void ImpPDFTabSigningPage::GetFilterConfigItem( ImpPDFTabDialog* paParent  )
 {
     paParent->mbSignPDF = maCbSignPDF.IsChecked();
     paParent->msSignLocation = maEdSignLocation.GetText();
+    paParent->msSignPassword = maEdSignPassword.GetText();
     paParent->msSignContact = maEdSignContactInfo.GetText();
     paParent->msSignReason = maEdSignReason.GetText();
+    paParent->maSignCertificate = maSignCertificate;
 
 }
 
@@ -1739,6 +1749,7 @@ void ImpPDFTabSigningPage::SetFilterConfigItem( const  ImpPDFTabDialog* paParent
 
     maCbSignPDF.SetToggleHdl( LINK( this, ImpPDFTabSigningPage, ToggleSignPDFHdl ) );
     maEdSignLocation.Enable( false );
+    maEdSignPassword.Enable( false );
     maEdSignContactInfo.Enable( false );
     maEdSignReason.Enable( false );
     maPbSignSelectCert.Enable( false );
@@ -1746,15 +1757,18 @@ void ImpPDFTabSigningPage::SetFilterConfigItem( const  ImpPDFTabDialog* paParent
     if (paParent->mbSignPDF)
     {
         maCbSignPDF.Check();
+        maEdSignPassword.SetText(paParent->msSignPassword);
         maEdSignLocation.SetText(paParent->msSignLocation);
         maEdSignContactInfo.SetText(paParent->msSignContact);
         maEdSignReason.SetText(paParent->msSignReason);
+        maSignCertificate = paParent->maSignCertificate;
     }
 }
 
 // -----------------------------------------------------------------------------
 IMPL_LINK_NOARG(ImpPDFTabSigningPage, ToggleSignPDFHdl)
 {
+    maEdSignPassword.Enable( maCbSignPDF.IsChecked() );
     maEdSignLocation.Enable( maCbSignPDF.IsChecked() );
     maEdSignContactInfo.Enable( maCbSignPDF.IsChecked() );
     maEdSignReason.Enable( maCbSignPDF.IsChecked() );

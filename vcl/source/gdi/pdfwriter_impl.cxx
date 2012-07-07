@@ -6175,6 +6175,8 @@ bool PDFWriterImpl::finalizeSignature()
     }
 
     // 3- create the PKCS#7 object using NSS
+    // use  m_aContext.SignCertificate and m_aContext.SignPassword as certificate and private key password
+    // SignCertificate->getEncoded is DER encoded certificate
 
     // 4- overwrite the PKCS7 content to the m_nSignatureContentOffset
     CHECK_RETURN( (osl_File_E_None == osl_setFilePos( m_aFile, osl_Pos_Absolut, m_nSignatureContentOffset ) ) );

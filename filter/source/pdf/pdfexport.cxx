@@ -562,6 +562,10 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                     rFilterData[ nData ].Value >>= msSignReason;
                 else if ( rFilterData[ nData ].Name == "SignatureContactInfo" )
                     rFilterData[ nData ].Value >>= msSignContact;
+                else if ( rFilterData[ nData ].Name == "SignaturePassword" )
+                    rFilterData[ nData ].Value >>= msSignPassword;
+                else if ( rFilterData[ nData ].Name == "SignatureCertificate" )
+                    rFilterData[ nData ].Value >>= maSignCertificate;
             }
             aContext.URL        = aURL.GetMainURL(INetURLObject::DECODE_TO_IURI);
 
@@ -794,6 +798,8 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
             aContext.SignLocation = msSignLocation;
             aContext.SignContact = msSignContact;
             aContext.SignReason = msSignReason;
+            aContext.SignPassword = msSignPassword;
+            aContext.SignCertificate = maSignCertificate;
 
 // all context data set, time to create the printing device
             PDFWriter*          pPDFWriter = new PDFWriter( aContext, xEnc );
