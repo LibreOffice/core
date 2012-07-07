@@ -27,7 +27,7 @@ enum FILTER_APPLICATION
     FILTER_APP_DRAW
 };
 
-class TemplateFolderView : public ThumbnailView
+class SFX2_DLLPUBLIC TemplateFolderView : public ThumbnailView
 {
 public:
 
