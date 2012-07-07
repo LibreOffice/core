@@ -34,6 +34,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/help.hxx>
 #include <vcl/image.hxx>
+#include <vcl/salnativewidgets.hxx>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 
 // =======================================================================
@@ -320,6 +321,11 @@ void HeaderBar::ImplDrawItem( OutputDevice* pDev,
                               const Rectangle* pRect,
                               sal_uLong )
 {
+    Window *const pWin = (pDev->GetOutDevType()==OUTDEV_WINDOW) ? (Window*) pDev : NULL;
+    ImplControlValue aControlValue(0);
+    Rectangle aCtrlRegion;
+    ControlState nState(0);
+
     Rectangle aRect = rItemRect;
 
     // Wenn kein Platz, dann brauchen wir auch nichts ausgeben
@@ -346,35 +352,61 @@ void HeaderBar::ImplDrawItem( OutputDevice* pDev,
     HeaderBarItemBits       nBits = pItem->mnBits;
     const StyleSettings&    rStyleSettings = GetSettings().GetStyleSettings();
 
-    // Border muss nicht gemalt werden
-    aRect.Top()     += mnBorderOff1;
-    aRect.Bottom()  -= mnBorderOff2;
-
-    // Hintergrund loeschen
-    if ( !pRect || bDrag )
+    if( pWin && pWin->IsNativeControlSupported(CTRL_WINDOW_BACKGROUND, PART_ENTIRE_CONTROL) )
     {
-        if ( bDrag )
+        aCtrlRegion=aRect;
+        pWin->DrawNativeControl( CTRL_WINDOW_BACKGROUND, PART_ENTIRE_CONTROL,
+                                 aCtrlRegion, nState, aControlValue,
+                                 rtl::OUString() );
+
+    }
+    else
+    {
+        // Border muss nicht gemalt werden
+        aRect.Top()     += mnBorderOff1;
+        aRect.Bottom()  -= mnBorderOff2;
+
+        // Hintergrund loeschen
+        if ( !pRect || bDrag )
         {
-            pDev->SetLineColor();
-            pDev->SetFillColor( rStyleSettings.GetCheckedColor() );
-            pDev->DrawRect( aRect );
+            if ( bDrag )
+            {
+                pDev->SetLineColor();
+                pDev->SetFillColor( rStyleSettings.GetCheckedColor() );
+                pDev->DrawRect( aRect );
+            }
+            else
+                pDev->DrawWallpaper( aRect, GetBackground() );
         }
-        else
-            pDev->DrawWallpaper( aRect, GetBackground() );
     }
 
-    // Trennlinie malen
-    pDev->SetLineColor( rStyleSettings.GetDarkShadowColor() );
-    pDev->DrawLine( Point( aRect.Right(), aRect.Top() ),
-                    Point( aRect.Right(), aRect.Bottom() ) );
-
-    // ButtonStyle malen
-    // avoid 3D borders
     Color aSelectionTextColor( COL_TRANSPARENT );
-    if( bHigh )
-        DrawSelectionBackground( aRect, 1, sal_True, sal_False, sal_False, &aSelectionTextColor );
-    else if ( !mbButtonStyle || (nBits & HIB_FLAT) )
-        DrawSelectionBackground( aRect, 0, sal_True, sal_False, sal_False, &aSelectionTextColor );
+
+    if( pWin && pWin->IsNativeControlSupported(CTRL_LISTHEADER, PART_BUTTON) )
+    {
+        aCtrlRegion=aRect;
+        aControlValue.setTristateVal(BUTTONVALUE_ON);
+        nState|=CTRL_STATE_ENABLED;
+        if(bHigh)
+            nState|=CTRL_STATE_PRESSED;
+        pWin->DrawNativeControl( CTRL_LISTHEADER, PART_BUTTON,
+                                 aCtrlRegion, nState, aControlValue,
+                                 rtl::OUString() );
+    }
+    else
+    {
+        // Trennlinie malen
+        pDev->SetLineColor( rStyleSettings.GetDarkShadowColor() );
+        pDev->DrawLine( Point( aRect.Right(), aRect.Top() ),
+                        Point( aRect.Right(), aRect.Bottom() ) );
+
+        // ButtonStyle malen
+        // avoid 3D borders
+        if( bHigh )
+            DrawSelectionBackground( aRect, 1, sal_True, sal_False, sal_False, &aSelectionTextColor );
+        else if ( !mbButtonStyle || (nBits & HIB_FLAT) )
+            DrawSelectionBackground( aRect, 0, sal_True, sal_False, sal_False, &aSelectionTextColor );
+    }
 
     // Wenn kein Platz, dann brauchen wir auch nichts ausgeben
     if ( aRect.GetWidth() < 1 )
