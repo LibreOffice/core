@@ -14,8 +14,10 @@
 
 class TemplateViewItem;
 
-struct TemplateFolderViewItem : public ThumbnailViewItem
+class TemplateFolderViewItem : public ThumbnailViewItem
 {
+public:
+
     BitmapEx maPreview2;
     std::vector<TemplateViewItem*> maTemplates;
 

@@ -58,8 +58,10 @@ struct ThumbnailItemAttributes
     drawinglayer::attribute::FontAttribute aFontAttr;
 };
 
-struct ThumbnailViewItem
+class ThumbnailViewItem
 {
+public:
+
     ThumbnailView &mrParent;
     sal_uInt16 mnId;
     bool mbVisible;
