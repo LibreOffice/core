@@ -172,6 +172,7 @@ typedef sal_uInt32      ControlPart;
 #define PART_TRACK_VERT_AREA        205
 #define PART_THUMB_HORZ             210 // Also used as toolbar grip
 #define PART_THUMB_VERT             211 // Also used as toolbar grip
+#define PART_ARROW                  220
 #define PART_MENU_ITEM              250
 #define PART_MENU_ITEM_CHECK_MARK   251
 #define PART_MENU_ITEM_RADIO_MARK   252

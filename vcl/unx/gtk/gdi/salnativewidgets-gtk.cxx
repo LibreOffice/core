@@ -641,7 +641,7 @@ sal_Bool GtkSalGraphics::IsNativeControlSupported( ControlType nType, ControlPar
             break;
 
         case CTRL_LISTHEADER:
-            if(nPart == PART_BUTTON)
+            if(nPart == PART_BUTTON || nPart == PART_ARROW)
                 return true;
             break;
     }
@@ -940,7 +940,10 @@ sal_Bool GtkSalGraphics::drawNativeControl(    ControlType nType,
     }
     else if(nType==CTRL_LISTHEADER)
     {
-        returnVal = NWPaintGTKListHeader( gdkDrawable, nType, nPart, aCtrlRect, aClip, nState, aValue, rCaption );
+        if(nPart == PART_BUTTON)
+            returnVal = NWPaintGTKListHeader( gdkDrawable, nType, nPart, aCtrlRect, aClip, nState, aValue, rCaption );
+        else if(nPart == PART_ARROW)
+            returnVal = NWPaintGTKArrow( gdkDrawable, nType, nPart, aCtrlRect, aClip, nState, aValue, rCaption );
     }
 
     if( pixmap )
@@ -1203,6 +1206,34 @@ sal_Bool GtkSalGraphics::getNativeControlRegion(  ControlType nType,
 /************************************************************************
  * Individual control drawing functions
  ************************************************************************/
+sal_Bool GtkSalGraphics::NWPaintGTKArrow(
+            GdkDrawable* gdkDrawable,
+            ControlType, ControlPart,
+            const Rectangle& rControlRectangle,
+            const clipList& rClipList,
+            ControlState nState, const ImplControlValue& aValue,
+            const OUString& )
+{
+    GtkArrowType arrowType(aValue.getNumericVal()&1?GTK_ARROW_DOWN:GTK_ARROW_UP);
+    GtkStateType stateType(nState&CTRL_STATE_PRESSED?GTK_STATE_ACTIVE:GTK_STATE_NORMAL);
+
+    GdkRectangle clipRect;
+    for( clipList::const_iterator it = rClipList.begin(); it != rClipList.end(); ++it )
+    {
+        clipRect.x = it->Left();
+        clipRect.y = it->Top();
+        clipRect.width = it->GetWidth();
+        clipRect.height = it->GetHeight();
+
+        gtk_paint_arrow(m_pWindow->style,gdkDrawable,GTK_STATE_NORMAL,GTK_SHADOW_NONE,&clipRect,
+                m_pWindow,"arrow",arrowType,true,
+                rControlRectangle.Left(),
+                rControlRectangle.Top(),
+                rControlRectangle.GetWidth(),
+                rControlRectangle.GetHeight());
+    }
+}
+
 sal_Bool GtkSalGraphics::NWPaintGTKListHeader(
             GdkDrawable* gdkDrawable,
             ControlType, ControlPart,
