@@ -94,6 +94,7 @@ public:
     void SAL_CALL addAuthorToTrustedSources( const ::com::sun::star::uno::Reference< ::com::sun::star::security::XCertificate >& Author ) throw (::com::sun::star::uno::RuntimeException);
     void SAL_CALL addLocationToTrustedSources( const ::rtl::OUString& Location ) throw (::com::sun::star::uno::RuntimeException);
 
+    ::com::sun::star::uno::Reference< ::com::sun::star::security::XCertificate > SAL_CALL chooseCertificate( ) throw (::com::sun::star::uno::RuntimeException);
 };
 
 com::sun::star::uno::Reference< com::sun::star::uno::XInterface > SAL_CALL DocumentDigitalSignatures_CreateInstance(
