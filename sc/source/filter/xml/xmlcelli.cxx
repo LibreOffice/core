@@ -996,6 +996,15 @@ void ScXMLTableRowCellContext::AddNonFormulaCells( const ScAddress& rCellPos )
     }
 }
 
+namespace{
+
+bool isErrOrNA(const rtl::OUString& rStr)
+{
+    return (rStr.indexOf("Err:")  > -1) || (rStr.indexOf("#N/A") > -1);
+}
+
+}
+
 void ScXMLTableRowCellContext::AddNonMatrixFormulaCell( const ScAddress& rCellPos )
 {
     ScDocument* pDoc = rXMLImport.GetDocument();
@@ -1007,8 +1016,7 @@ void ScXMLTableRowCellContext::AddNonMatrixFormulaCell( const ScAddress& rCellPo
     pExtRefGuard.reset(new ScExternalRefManager::ApiGuard(pDoc));
 
     //if this is an "Err:###" or "#N/A" then use text:p value
-    if( bFormulaTextResult && pOUTextContent &&
-        (pOUTextContent->match("Err:") || pOUTextContent->match("#N/A")) )
+    if( bFormulaTextResult && pOUTextContent && isErrOrNA(*pOUTextContent) )
         pOUTextValue.reset(*pOUTextContent);
 
     ScBaseCell* pNewCell = NULL;
