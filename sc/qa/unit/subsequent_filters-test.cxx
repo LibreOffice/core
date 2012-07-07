@@ -108,6 +108,7 @@ public:
     void testRangeNameXLSX();
     void testHardRecalcODS();
     void testFunctionsODS();
+    void testCachedFormulaResultsODS();
     void testDatabaseRangesODS();
     void testDatabaseRangesXLS();
     void testDatabaseRangesXLSX();
@@ -142,6 +143,7 @@ public:
     CPPUNIT_TEST(testRangeNameXLSX);
     CPPUNIT_TEST(testHardRecalcODS);
     CPPUNIT_TEST(testFunctionsODS);
+    CPPUNIT_TEST(testCachedFormulaResultsODS);
     CPPUNIT_TEST(testDatabaseRangesODS);
     CPPUNIT_TEST(testDatabaseRangesXLS);
     CPPUNIT_TEST(testDatabaseRangesXLSX);
@@ -353,6 +355,31 @@ void ScFiltersTest::testFunctionsODS()
     createCSVPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("mathematical-functions.")), aCSVFileName);
     testFile(aCSVFileName, pDoc, 2, PureString);
     //test informations functions
+    createCSVPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("information-functions.")), aCSVFileName);
+    testFile(aCSVFileName, pDoc, 3);
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testCachedFormulaResultsODS()
+{
+    const rtl::OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("functions."));
+    ScDocShellRef xDocSh = loadDoc( aFileNameBase, ODS );
+
+    CPPUNIT_ASSERT_MESSAGE("Failed to load functions.*", xDocSh.Is());
+    ScDocument* pDoc = xDocSh->GetDocument();
+    rtl::OUString aCSVFileName;
+
+    //test cached formula results of logical functions
+    createCSVPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("logical-functions.")), aCSVFileName);
+    testFile(aCSVFileName, pDoc, 0);
+    //test cached formula results of spreadsheet functions
+    createCSVPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("spreadsheet-functions.")), aCSVFileName);
+    testFile(aCSVFileName, pDoc, 1);
+    //test cached formula results of mathematical functions
+    createCSVPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("mathematical-functions.")), aCSVFileName);
+    testFile(aCSVFileName, pDoc, 2, PureString);
+    //test cached formula results of informations functions
     createCSVPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("information-functions.")), aCSVFileName);
     testFile(aCSVFileName, pDoc, 3);
 
