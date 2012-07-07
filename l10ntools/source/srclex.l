@@ -28,6 +28,8 @@
 #if (__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 2))
 #pragma GCC diagnostic ignored "-Wunused-function"
 #pragma GCC diagnostic ignored "-Wunused-label"
+#endif
+#if (__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 6))
 #pragma GCC diagnostic ignored "-Wunused-but-set-variable"
 #endif
 #elif defined __SINPRO_CC
@@ -154,8 +156,8 @@ void YYWarning();
 	WorkOnTokenSet( TEXTREFID, yytext );
 }
 
-[a-zA-Z0-9_]+[ \t]*"="[\t ]*([ \t]*"//".*\n)*.*	| 
-[a-zA-Z0-9_]+[ \t]*"=".*	{ 
+[a-zA-Z0-9_]+[ \t]*"="[\t ]*([ \t]*"//".*\n)*.*	|
+[a-zA-Z0-9_]+[ \t]*"=".*	{
 /* ASSIGNMENT  Typ = ...  */
  WorkOnTokenSet( ASSIGNMENT, yytext );
 }

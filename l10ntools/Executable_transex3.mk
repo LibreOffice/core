@@ -39,6 +39,8 @@ $(eval $(call gb_Executable_add_scanners,transex3,\
     l10ntools/source/srclex \
 ))
 
+$(call gb_LexTarget_get_scanner_target,l10ntools/source/srclex) : T_LEXFLAGS := -w
+
 $(eval $(call gb_Executable_use_static_libraries,transex3,\
     transex \
 ))

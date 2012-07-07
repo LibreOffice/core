@@ -17,7 +17,7 @@
 #endif
 
 /* table of possible token ids */
-#include "tokens.h"                          
+#include "tokens.h"
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -27,6 +27,8 @@
 #if (__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 2))
 #pragma GCC diagnostic ignored "-Wunused-function"
 #pragma GCC diagnostic ignored "-Wunused-label"
+#endif
+#if (__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 6))
 #pragma GCC diagnostic ignored "-Wunused-but-set-variable"
 #endif
 #elif defined __SINPRO_CC
@@ -154,7 +156,7 @@ int bText=0;
 		c2 = c3;
 		c3 = yyinput();
 		pChar[0] = c3;
-		WorkOnTokenSet( COMMEND, pChar );                          
+		WorkOnTokenSet( COMMEND, pChar );
 	}
 }
 
