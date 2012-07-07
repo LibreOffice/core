@@ -30,7 +30,6 @@
 #include <sfx2/app.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/fcontnr.hxx>
-#include <sfx2/sfxsids.hrc>
 #include <sfx2/linkmgr.hxx>
 #include <svl/stritem.hxx>
 #include <vcl/msgbox.hxx>

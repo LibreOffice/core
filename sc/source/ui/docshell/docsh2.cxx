@@ -26,31 +26,12 @@
  *
  ************************************************************************/
 
-#include <svx/svdpage.hxx>
-
-
-#include <svx/xtable.hxx>
-
 #include "scitems.hxx"
-#include <tools/gen.hxx>
-#include <svtools/ctrltool.hxx>
-#include <editeng/flstitem.hxx>
 #include <svx/drawitem.hxx>
-#include <sfx2/printer.hxx>
-#include <svl/smplhint.hxx>
-#include <svx/svditer.hxx>
-#include <svx/svdobj.hxx>
-#include <svx/svdoole2.hxx>
-#include <vcl/svapp.hxx>
 #include <svl/asiancfg.hxx>
 #include <editeng/forbiddencharacterstable.hxx>
 #include <editeng/unolingu.hxx>
 #include <rtl/logfile.hxx>
-
-#include <comphelper/processfactory.hxx>
-#include <basic/sbstar.hxx>
-#include <basic/basmgr.hxx>
-#include <sfx2/app.hxx>
 
 #include "drwlayer.hxx"
 #include "stlpool.hxx"

@@ -39,13 +39,9 @@
 #include <sfx2/app.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/printer.hxx>
-#include <svtools/ctrltool.hxx>
-#include <svx/pageitem.hxx>
 #include <svx/postattr.hxx>
-#include <unotools/localedatawrapper.hxx>
 #include <unotools/misccfg.hxx>
 #include <vcl/virdev.hxx>
-#include <vcl/svapp.hxx>
 #include <vcl/msgbox.hxx>
 
 #include "docsh.hxx"

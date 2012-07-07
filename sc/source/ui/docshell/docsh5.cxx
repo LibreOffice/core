@@ -27,12 +27,10 @@
  ************************************************************************/
 
 #include "scitems.hxx"
-#include <vcl/svapp.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/waitobj.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/bindings.hxx>
-#include <svl/smplhint.hxx>
 
 #include <com/sun/star/script/vba/XVBACompatibility.hpp>
 
@@ -58,11 +56,6 @@
 #include "waitoff.hxx"
 #include "sizedev.hxx"
 #include "clipparam.hxx"
-#include <basic/sbstar.hxx>
-#include <basic/basmgr.hxx>
-
-#include <memory>
-#include <vector>
 
 // defined in docfunc.cxx
 void VBA_InsertModule( ScDocument& rDoc, SCTAB nTab, const rtl::OUString& sModuleName, const rtl::OUString& sModuleSource );

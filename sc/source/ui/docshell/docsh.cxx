@@ -27,40 +27,22 @@
  ************************************************************************/
 
 #include "scitems.hxx"
-#include <editeng/eeitem.hxx>
-#include <editeng/svxenum.hxx>
 #include <editeng/justifyitem.hxx>
-#include <svx/algitem.hxx>
-
 #include <sot/clsids.hxx>
-#include <unotools/securityoptions.hxx>
-#include <tools/stream.hxx>
-#include <tools/string.hxx>
-#include <tools/urlobj.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/waitobj.hxx>
-#include <svtools/ctrltool.hxx>
-#include <svtools/sfxecode.hxx>
-#include <svl/zforlist.hxx>
 #include <svl/PasswordHelper.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dinfdlg.hxx>
 #include <sfx2/docfile.hxx>
-#include <sfx2/docfilt.hxx>
 #include <sfx2/fcontnr.hxx>
-#include <sfx2/evntconf.hxx>
-#include <sfx2/sfx.hrc>
 #include <sfx2/objface.hxx>
-#include <svl/srchitem.hxx>
-#include <unotools/fltrcfg.hxx>
 #include <svl/documentlockfile.hxx>
 #include <svl/sharecontrolfile.hxx>
-#include <unotools/charclass.hxx>
 #include "chgtrack.hxx"
 #include "chgviset.hxx"
-#include <sfx2/request.hxx>
 #include <com/sun/star/awt/Key.hpp>
 #include <com/sun/star/awt/KeyModifier.hpp>
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
@@ -71,8 +53,6 @@
 #include <com/sun/star/task/XJob.hpp>
 #include <com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/XAcceleratorConfiguration.hpp>
-#include <basic/sbstar.hxx>
-#include <basic/basmgr.hxx>
 
 #include "scabstdlg.hxx"
 #include <sot/formats.hxx>

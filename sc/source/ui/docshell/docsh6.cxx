@@ -29,7 +29,6 @@
 #include "scitems.hxx"
 
 #include <svx/pageitem.hxx>
-#include <vcl/virdev.hxx>
 #include <sfx2/linkmgr.hxx>
 
 #include "docsh.hxx"
@@ -46,16 +45,12 @@
 #include "interpre.hxx"
 #include "calcconfig.hxx"
 
-#include "formula/FormulaCompiler.hxx"
-#include "comphelper/processfactory.hxx"
-#include "vcl/msgbox.hxx"
+#include <vcl/msgbox.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/util/XChangesBatch.hpp>
-
-#include <boost/unordered_set.hpp>
 
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::lang::XMultiServiceFactory;

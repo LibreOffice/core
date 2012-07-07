@@ -28,23 +28,10 @@
 
 #include "sc.hrc"
 
-#include <stdio.h>
-#include <ctype.h>
-#include <stdlib.h>
-#include <osl/endian.h>
 #include <i18npool/mslangid.hxx>
-#include <tools/string.hxx>
-#include <rtl/math.hxx>
-#include <svtools/htmlout.hxx>
-#include <svl/zforlist.hxx>
 #include <sot/formats.hxx>
 #include <sfx2/mieclip.hxx>
-#include <unotools/charclass.hxx>
-#include <unotools/collatorwrapper.hxx>
-#include <unotools/calendarwrapper.hxx>
 #include <com/sun/star/i18n/CalendarFieldIndex.hpp>
-#include <unotools/transliterationwrapper.hxx>
-#include <vector>
 
 #include "global.hxx"
 #include "scerrors.hxx"
@@ -64,19 +51,14 @@
 #include "compiler.hxx"
 #include "warnbox.hxx"
 #include "clipparam.hxx"
-
 #include "impex.hxx"
-
-// ause
 #include "editutil.hxx"
 #include "patattr.hxx"
 #include "docpool.hxx"
 #include "stringutil.hxx"
 
 #include "globstr.hrc"
-#include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
-#include <osl/module.hxx>
 
 //========================================================================
 

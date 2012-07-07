@@ -29,12 +29,10 @@
 #include <stdio.h>
 #include <tools/urlobj.hxx>
 #include <svl/converter.hxx>
-#include <svl/zforlist.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/types.hxx>
 #include <ucbhelper/content.hxx>
-#include <unotools/sharedunocomponent.hxx>
 #include <svx/txenctab.hxx>
 #include <svx/dbcharsethelper.hxx>
 

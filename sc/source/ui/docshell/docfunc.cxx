@@ -27,28 +27,21 @@
  ************************************************************************/
 
 #include "scitems.hxx"
-#include <editeng/eeitem.hxx>
 
 #include <sfx2/app.hxx>
 #include <editeng/editobj.hxx>
 #include <sfx2/linkmgr.hxx>
-#include <svx/svdundo.hxx>
 #include <sfx2/bindings.hxx>
-#include <sfx2/printer.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/sound.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/waitobj.hxx>
-#include <svl/zforlist.hxx>
 #include <svl/PasswordHelper.hxx>
 
-#include <basic/sbstar.hxx>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/script/ModuleType.hpp>
 #include <com/sun/star/script/XLibraryContainer.hpp>
 #include <com/sun/star/script/vba/XVBAModuleInfo.hpp>
-
-#include <list>
 
 #include "docfunc.hxx"
 
