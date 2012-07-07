@@ -2768,6 +2768,32 @@ void Test::testPivotTableEmptyRows()
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
 
+    // Modify the source to remove member 'A', then refresh the table.
+    m_pDoc->SetString(1, 2, 0, "B");
+
+    std::set<ScDPObject*> aRefs;
+    sal_uLong nErr = pDPs->ReloadCache(pDPObj, aRefs);
+    CPPUNIT_ASSERT_MESSAGE("Failed to reload cache.", !nErr);
+    CPPUNIT_ASSERT_MESSAGE("There should only be one pivot table linked to this cache.",
+                           aRefs.size() == 1 && *aRefs.begin() == pDPObj);
+
+    pDPObj->ClearTableData();
+    aOutRange = refresh(pDPObj);
+
+    {
+        // Expected output table content.  0 = empty cell
+        const char* aOutputCheck[][2] = {
+            { "Name", 0 },
+            { "B", "3" },
+            { "C", "3" },
+            { "D", "4" },
+            { "Total Result", "10" },
+        };
+
+        bSuccess = checkDPTableOutput<2>(m_pDoc, aOutRange, aOutputCheck, "Ignore empty rows");
+        CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
+    }
+
     pDPs->FreeTable(pDPObj);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be no more tables.", pDPs->GetCount(), static_cast<size_t>(0));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("There shouldn't be any more cache stored.",
