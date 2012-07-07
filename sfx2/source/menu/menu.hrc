@@ -39,7 +39,6 @@
 #define EDT_TEXT             12
 #define GRP_FUNCTIONS        22
 
-#define STR_MENU_CFGITEM                    RID_SFX_MENU_START+1
 #define STR_MENU_ADDONS                     RID_SFX_MENU_START+2
 #define STR_MENU_ADDONHELP                  RID_SFX_MENU_START+3
 

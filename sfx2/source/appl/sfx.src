@@ -18,8 +18,3 @@
 
 #include <sfx2/sfx.hrc>
 
-String STR_ACCTITLE_PRODUCTIVITYTOOLS
-{
-    Text [ en-US ] = "%PRODUCTNAME";
-};
-

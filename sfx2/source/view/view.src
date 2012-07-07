@@ -30,10 +30,6 @@ String STR_NOSTARTPRINTER
 {
     Text [ en-US ] = "Could not start printer.\nPlease check your printer configuration." ;
 };
-String STR_PRINTER_NOTAVAIL
-{
-    Text [ en-US ] = "This document has been formatted for the printer $1. The specified printer is not available. \nDo you want to use the standard printer $2 ?" ;
-};
 String STR_PRINT_OPTIONS
 {
     Text [ en-US ] = "Options..." ;
@@ -45,14 +41,6 @@ String STR_PRINT_OPTIONS_TITLE
 String STR_ERROR_PRINTER_BUSY
 {
     Text [ en-US ] = "Printer busy" ;
-};
-String STR_ERROR_PRINT
-{
-    Text [ en-US ] = "Error while printing" ;
-};
-String STR_PRINTING
-{
-    Text [ en-US ] = "Printing" ;
 };
 String STR_PAGE
 {
@@ -77,14 +65,6 @@ String STR_PRINT_NEWSIZE
 String STR_PRINT_NEWORISIZE
 {
     Text [ en-US ] = "The page size and orientation have been modified.\nWould you like to save the new settings in the\nactive document?" ;
-};
-String STR_PREVIEW_DOCINFO
-{
-    Text [ en-US ] = "<html><body BGCOLOR=\"#c0c0c0\"><font FACE=\"Arial\"><dl><dt><b>Title:</b><dd>$(TITEL)<dt><b>Subject:</b><dd>$(THEME)<dt><b>Keywords:</b><dd>$(KEYWORDS)<dt><b>Description:</b><dd>$(TEXT)</dl></font></body></html>" ;
-};
-String STR_PREVIEW_NODOCINFO
-{
-    Text [ en-US ] = "<HTML><BODY BGCOLOR=\"#c0c0c0\"><BR><BR><P><FONT FACE=\"Arial\"><B>No document properties found.</B></FONT></P></BODY></HTML>" ;
 };
  // -----------------------------------------------------------------------
 InfoBox MSG_CANT_CLOSE

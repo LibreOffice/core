@@ -25,7 +25,6 @@
 #define MSG_ERR_NO_WEBBROWSER_FOUND                 (RID_SFX_APP_START+7)
 #define MSG_ERR_NO_ABS_URI_REF                  (RID_SFX_APP_START+8)
 #define MSG_CANT_QUIT                           (RID_SFX_APP_START+10)
-#define STR_ISMODIFIED                          (RID_SFX_APP_START+11)
 
 #define RID_FULLSCREENTOOLBOX                   (RID_SFX_APP_START+42)
 #define RID_ENVTOOLBOX                          (RID_SFX_APP_START+44)
@@ -35,7 +34,6 @@
 #define RID_STR_HLPFILENOTEXIST                 (RID_SFX_APP_START+68)
 
 #define RID_STR_HELP                            (RID_SFX_APP_START+79)
-#define RID_STR_NOAUTOSTARTHELPAGENT            (RID_SFX_APP_START+80)
 #define RID_HELPBAR                             (RID_SFX_APP_START+81)
 #define RID_SPECIALCONFIG_ERROR                 (RID_SFX_APP_START+82)
 
@@ -73,8 +71,6 @@
 #define STR_HELP_BUTTON_NEXT                    (RID_SFX_APP_START+129)
 #define STR_HELP_BUTTON_PRINT                   (RID_SFX_APP_START+130)
 #define STR_HELP_BUTTON_SOURCEVIEW              (RID_SFX_APP_START+131)
-#define STR_HELP_FIRST_MESSAGE                  (RID_SFX_APP_START+132)
-#define STR_HELP_FIRST_HTML                     (RID_SFX_APP_START+133)
 
 #define STR_QUICKSTART_EXIT                     (RID_SFX_APP_START+134)
 #define STR_QUICKSTART_TIP                      (RID_SFX_APP_START+135)
@@ -129,7 +125,6 @@
 #define RID_SVXSTR_GRFILTER_FORMATERROR         (RID_SFX_APP_START + 200)
 #define RID_SVXSTR_GRFILTER_VERSIONERROR        (RID_SFX_APP_START + 201)
 #define RID_SVXSTR_GRFILTER_FILTERERROR         (RID_SFX_APP_START + 202)
-#define RID_SVXSTR_GRFILTER_TOOBIG              (RID_SFX_APP_START + 203)
 
 // For the License Information dialog box
 #define DLG_HELP_LICENSING                      (RID_SFX_APP_START + 204)
