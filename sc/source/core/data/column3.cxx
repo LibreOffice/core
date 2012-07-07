@@ -1339,7 +1339,7 @@ bool ScColumn::SetString( SCROW nRow, SCTAB nTabP, const String& rString,
                         }
                     }
                 }
-                else
+                else if (!aParam.mbSetTextCellFormat)
                 {
                     // Only check if the string is a regular number.
                     const LocaleDataWrapper* pLocale = aParam.mpNumFormatter->GetLocaleData();
