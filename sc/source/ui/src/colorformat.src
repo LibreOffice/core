@@ -38,13 +38,13 @@ ModalDialog RID_SCDLG_DATABAR
     Closeable = TRUE;
     OkButton BTN_OK
     {
-        Pos = MAP_APPFONT ( 160, 180 );
+        Pos = MAP_APPFONT ( 120, 180 );
         Size = MAP_APPFONT ( 30, 14 );
         TabStop = TRUE;
     };
     CancelButton BTN_CANCEL
     {
-        Pos = MAP_APPFONT ( 120, 180 );
+        Pos = MAP_APPFONT ( 160, 180 );
         Size = MAP_APPFONT ( 30, 14 );
         TabStop = TRUE;
     };
