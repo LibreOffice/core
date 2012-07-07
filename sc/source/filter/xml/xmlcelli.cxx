@@ -187,6 +187,11 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
                 {
                     ::sax::Converter::convertDouble(fValue, sValue);
                     bIsEmpty = false;
+
+                    //if office:value="0", treat like text in case the formula
+                    //result is "Err:###" or "#N/A" until we confirm otherwise
+                    if(fValue == 0.0)
+                        bFormulaTextResult = true;
                 }
             }
             break;
@@ -1000,6 +1005,11 @@ void ScXMLTableRowCellContext::AddNonMatrixFormulaCell( const ScAddress& rCellPo
 
     ::boost::scoped_ptr<ScExternalRefManager::ApiGuard> pExtRefGuard;
     pExtRefGuard.reset(new ScExternalRefManager::ApiGuard(pDoc));
+
+    //if this is an "Err:###" or "#N/A" then use text:p value
+    if( bFormulaTextResult && pOUTextContent &&
+        (pOUTextContent->match("Err:") || pOUTextContent->match("#N/A")) )
+        pOUTextValue.reset(*pOUTextContent);
 
     ScBaseCell* pNewCell = NULL;
 
