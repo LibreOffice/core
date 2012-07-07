@@ -1953,7 +1953,7 @@ void ScChangeActionContent::PutValueToDoc(
                             aDestMark.SetMarkArea( aRange );
                             pDoc->InsertMatrixFormula( aPos.Col(), aPos.Row(),
                                 aRange.aEnd.Col(), aRange.aEnd.Row(),
-                                aDestMark, EMPTY_STRING,
+                                aDestMark, EMPTY_OUSTRING,
                                 ((const ScFormulaCell*)pCell)->GetCode() );
                         }
                         break;

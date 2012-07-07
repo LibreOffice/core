@@ -34,7 +34,6 @@
 #include <set>
 #include <stack>
 
-#include <tools/string.hxx>
 #include <tools/datetime.hxx>
 #include <tools/mempool.hxx>
 #include <unotools/options.hxx>
