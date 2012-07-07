@@ -142,6 +142,8 @@ typedef sal_uInt32      ControlType;
 // nets between elements of listviews
 // with nodes
 #define CTRL_LISTNET            171
+// for list headers
+#define CTRL_LISTHEADER         172
 
 
 /* Control Parts:

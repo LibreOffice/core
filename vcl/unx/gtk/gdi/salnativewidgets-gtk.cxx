@@ -639,6 +639,11 @@ sal_Bool GtkSalGraphics::IsNativeControlSupported( ControlType nType, ControlPar
             if(nPart == PART_SEPARATOR_VERT || nPart == PART_SEPARATOR_HORZ)
                 return true;
             break;
+
+        case CTRL_LISTHEADER:
+            if(nPart == PART_BUTTON)
+                return true;
+            break;
     }
 
     return false;
@@ -929,10 +934,13 @@ sal_Bool GtkSalGraphics::drawNativeControl(    ControlType nType,
     {
         returnVal = NWPaintGTKFixedLine( gdkDrawable, nType, nPart, aCtrlRect, aClip, nState, aValue, rCaption );
     }
-
-    if(nType==CTRL_FRAME)
+    else if(nType==CTRL_FRAME)
     {
         returnVal = NWPaintGTKFrame( gdkDrawable, nType, nPart, aCtrlRect, aClip, nState, aValue, rCaption);
+    }
+    else if(nType==CTRL_LISTHEADER)
+    {
+        returnVal = NWPaintGTKListHeader( gdkDrawable, nType, nPart, aCtrlRect, aClip, nState, aValue, rCaption );
     }
 
     if( pixmap )
@@ -1195,6 +1203,47 @@ sal_Bool GtkSalGraphics::getNativeControlRegion(  ControlType nType,
 /************************************************************************
  * Individual control drawing functions
  ************************************************************************/
+sal_Bool GtkSalGraphics::NWPaintGTKListHeader(
+            GdkDrawable* gdkDrawable,
+            ControlType, ControlPart,
+            const Rectangle& rControlRectangle,
+            const clipList& rClipList,
+            ControlState nState, const ImplControlValue&,
+            const OUString& )
+{
+    GtkStateType    stateType;
+    GtkShadowType    shadowType;
+    NWEnsureGTKTreeView( m_nXScreen );
+    GtkWidget* &treeview(gWidgetData[m_nXScreen].gTreeView);
+    GtkTreeViewColumn* column=gtk_tree_view_get_column(GTK_TREE_VIEW(treeview),0);
+    GtkWidget* button=gtk_tree_view_column_get_widget(column);
+    while(button && !GTK_IS_BUTTON(button))
+        button=gtk_widget_get_parent(button);
+    if(!button)
+        // Shouldn't ever happen
+        return false;
+    gtk_widget_realize(button);
+    NWConvertVCLStateToGTKState( nState, &stateType, &shadowType );
+    NWSetWidgetState( button, nState, stateType );
+
+    GdkRectangle clipRect;
+    for( clipList::const_iterator it = rClipList.begin(); it != rClipList.end(); ++it )
+    {
+        clipRect.x = it->Left();
+        clipRect.y = it->Top();
+        clipRect.width = it->GetWidth();
+        clipRect.height = it->GetHeight();
+
+        gtk_paint_box(button->style,gdkDrawable,stateType,shadowType,&clipRect,
+                button,"button",
+                rControlRectangle.Left()-1,
+                rControlRectangle.Top(),
+                rControlRectangle.GetWidth()+1,
+                rControlRectangle.GetHeight());
+    }
+    return true;
+}
+
 sal_Bool GtkSalGraphics::NWPaintGTKFixedLine(
             GdkDrawable* gdkDrawable,
             ControlType, ControlPart nPart,
@@ -4338,6 +4387,17 @@ static void NWEnsureGTKTreeView( SalX11Screen nScreen )
     if( !gWidgetData[nScreen].gTreeView )
     {
         gWidgetData[nScreen].gTreeView = gtk_tree_view_new ();
+
+        // Columns will be used for tree header rendering
+        GtkCellRenderer* renderer=gtk_cell_renderer_text_new();
+        GtkTreeViewColumn* column=gtk_tree_view_column_new_with_attributes("",renderer,"text",0,NULL);
+        gtk_tree_view_column_set_widget(column,gtk_label_new(""));
+        gtk_tree_view_append_column(GTK_TREE_VIEW(gWidgetData[nScreen].gTreeView), column);
+
+        // Add one more column so that some engines like clearlooks did render separators between columns
+        column=gtk_tree_view_column_new_with_attributes("",renderer,"text",0,NULL);
+        gtk_tree_view_append_column(GTK_TREE_VIEW(gWidgetData[nScreen].gTreeView), column);
+
         NWAddWidgetToCacheWindow( gWidgetData[nScreen].gTreeView, nScreen );
     }
 }
