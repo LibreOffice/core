@@ -48,7 +48,6 @@
 
 #include <svtools/parhtml.hxx>
 #include <sot/formats.hxx>
-#define SOT_FORMATSTR_ID_STARCALC_30 SOT_FORMATSTR_ID_STARCALC
 
 #include "scitems.hxx"      // fuer tbxctrls etc.
 #include "scmod.hxx"
