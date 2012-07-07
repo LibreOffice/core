@@ -41,7 +41,6 @@ namespace connectivity
         using ::com::sun::star::uno::RuntimeException;
         using ::com::sun::star::sdbc::XResultSetMetaData;
 
-        class OBoundParam;
         typedef ::cppu::ImplHelper5<    ::com::sun::star::sdbc::XPreparedStatement,
                                         ::com::sun::star::sdbc::XParameters,
                                         ::com::sun::star::sdbc::XPreparedBatchExecution,

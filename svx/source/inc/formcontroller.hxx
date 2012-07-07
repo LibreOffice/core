@@ -102,7 +102,6 @@ typedef ::std::map< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTe
 typedef ::std::vector< FmFilterRow > FmFilterRows;
 typedef ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController > > FmFormControllers;
 
-class FmFormView;
 class Window;
 
 namespace svxform

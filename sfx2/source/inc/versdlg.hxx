@@ -26,7 +26,6 @@
 #include <svtools/svmedit.hxx>
 #include <sfx2/basedlgs.hxx>
 
-class SfxObjectShell;
 class SfxViewFrame;
 struct SfxVersionInfo;
 

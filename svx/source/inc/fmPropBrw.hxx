@@ -38,7 +38,6 @@ public:
     SFX_DECL_CHILDWINDOW(FmPropBrwMgr);
 };
 
-class FmPropControl;
 class SfxBindings;
 class FmFormShell;
 //========================================================================

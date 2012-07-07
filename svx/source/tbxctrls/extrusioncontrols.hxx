@@ -40,16 +40,12 @@
 #include <svtools/popupwindowcontroller.hxx>
 #include <svtools/popupmenucontrollerbase.hxx>
 
-class SfxBindings;
-class SfxStatusForwarder;
 class ValueSet;
 
 //========================================================================
 
 namespace svx
 {
-class ToolboxButtonColorUpdater;
-
 class ExtrusionDirectionWindow : public svtools::ToolbarMenu
 {
 public:

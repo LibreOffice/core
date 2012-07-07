@@ -23,7 +23,6 @@
 
 class SfxDocumentTemplates;
 class SfxOrganizeListBox_Impl;
-class SfxObjectShell;
 struct _FileListEntry;
 
 //=========================================================================

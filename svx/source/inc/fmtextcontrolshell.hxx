@@ -49,7 +49,6 @@ class SfxItemSet;
 class SfxAllItemSet;
 class SfxBindings;
 class SfxViewFrame;
-class Window;
 class SfxApplication;
 
 //........................................................................

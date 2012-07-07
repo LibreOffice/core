@@ -29,11 +29,6 @@
 #include <boost/scoped_ptr.hpp>
 #include <boost/noncopyable.hpp>
 
-namespace svl
-{
-    class IUndoManager;
-}
-
 //......................................................................................................................
 namespace sfx2
 {

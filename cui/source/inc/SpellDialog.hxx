@@ -54,9 +54,6 @@
 
 #include <set>
 
-class ScrollBar;
-class TextEngine;
-class ExtTextView;
 namespace svx{ class SpellUndoAction_Impl;}
 
 // forward ---------------------------------------------------------------

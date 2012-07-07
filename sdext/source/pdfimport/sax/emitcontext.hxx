@@ -29,8 +29,6 @@
 
 namespace pdfi
 {
-    class PDFIProcessor;
-    class StyleContainer;
     class SaxEmitter : public XmlEmitter
     {
     private:

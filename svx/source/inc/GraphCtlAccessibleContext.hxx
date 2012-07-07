@@ -66,7 +66,6 @@ namespace com { namespace sun { namespace star { namespace awt {
 
 class Rectangle;
 class GraphCtrl;
-class Window;
 class SdrObject;
 class SdrModel;
 class SdrPage;

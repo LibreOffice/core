@@ -45,8 +45,6 @@ namespace css = ::com::sun::star;
 
 namespace sdext { namespace presenter {
 
-class PresenterPaneContainer;
-
 namespace {
     typedef ::cppu::WeakComponentImplHelper1 <
         css::drawing::framework::XResourceFactory

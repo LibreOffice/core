@@ -62,6 +62,7 @@ class SfxMacroInfoItem;
 class SfxConfigGroupListBox_Impl;
 class SfxConfigFunctionListBox_Impl;
 class SfxAcceleratorConfigPage;
+class SfxStringItem;
 
 class SfxAccCfgTabListBox_Impl : public SvTabListBox
 {

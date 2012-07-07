@@ -27,10 +27,6 @@
 
 #include <com/sun/star/frame/XFrame.hpp>
 
-class Menu;
-class SfxMacroInfoItem;
-class SvxMacroItem;
-
 class SvxEventConfigPage : public _SvxMacroTabPage
 {
     FixedText                           aSaveInText;

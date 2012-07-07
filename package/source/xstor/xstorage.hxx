@@ -64,11 +64,6 @@
 #define STOR_MESS_PREREVERT 3
 #define STOR_MESS_REVERTED  4
 
-namespace cppu
-{
-    class OTypeCollection;
-}
-
 //================================================
 // a common implementation for an entry
 

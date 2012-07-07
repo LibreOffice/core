@@ -24,7 +24,6 @@
 #include <sfx2/viewfrm.hxx>                  // SvBorder
 
 class SfxViewFrame;
-class SfxObjectShell;
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/awt/XTopWindow.hpp>
 #include <com/sun/star/awt/XWindow.hpp>

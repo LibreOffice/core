@@ -21,8 +21,6 @@
 
 #include <tools/solar.h>
 
-class Range;
-
 class BitSet
 {
 private:

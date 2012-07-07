@@ -43,7 +43,6 @@ class FmShowColsDialog;
 class SvxZoomDialog;
 class FmInputRecordNoDialog;
 class SvxJSearchOptionsDialog;
-class FmFormShell;
 class SvxNewDictionaryDialog;
 class SvxNameDialog;
 

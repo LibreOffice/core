@@ -35,8 +35,6 @@
 #include <vcl/timer.hxx>
 #include <basegfx/matrix/b3dhommatrix.hxx>
 
-class E3dScene;
-
 /*************************************************************************
 |*
 |* Parameters for the interaction of a 3D object

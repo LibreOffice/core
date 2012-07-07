@@ -26,7 +26,6 @@
 // predefines
 
 class E3dCompoundObject;
-class E3dScene;
 
 //////////////////////////////////////////////////////////////////////////////
 /** support extracting the minimal depth of a 3d object in it's scene

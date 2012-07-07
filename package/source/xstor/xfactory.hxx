@@ -27,8 +27,6 @@
 #include <cppuhelper/implbase2.hxx>
 
 
-class OStorage;
-
 class OStorageFactory : public ::cppu::WeakImplHelper2< ::com::sun::star::lang::XSingleServiceFactory,
                                                 ::com::sun::star::lang::XServiceInfo >
 {

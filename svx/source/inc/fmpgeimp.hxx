@@ -44,22 +44,9 @@
 #include "svx/svxdllapi.h"
 #include <map>
 
-class SvStream;
 class FmFormObj;
 class FmFormPage;
 class SdrObject;
-
-namespace com { namespace sun { namespace star {
-    namespace container {
-        class XIndexContainer;
-    }
-    namespace io {
-        class XObjectOutputStream;
-        class XObjectInputStream;
-    }
-}}}
-
-class SdrObjList;
 
 //==================================================================
 // FmFormPageImpl

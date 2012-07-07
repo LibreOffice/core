@@ -42,7 +42,6 @@
 // forward ---------------------------------------------------------------
 
 class SvxLineSpacingItem;
-class SvxParagraphControllerItem;
 
 // class SvxStdParagraphTabPage ------------------------------------------
 

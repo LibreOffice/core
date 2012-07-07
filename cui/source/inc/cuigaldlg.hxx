@@ -55,7 +55,6 @@
 // - Forwards -
 // ------------
 
-class Gallery;
 class GalleryTheme;
 class SearchProgress;
 class TakeProgress;

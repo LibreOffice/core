@@ -51,7 +51,6 @@ namespace com{namespace sun{namespace star{
 namespace linguistic2{
     class XDictionary;
     class XSpellChecker1;
-    class XSpellChecker;
 }}}}
 
 // forward ---------------------------------------------------------------

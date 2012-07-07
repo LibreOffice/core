@@ -35,8 +35,6 @@
 
 namespace pdfi
 {
-    class  PDFIProcessor;
-    class  StyleContainer;
     struct HyperlinkElement;
     struct TextElement;
     struct ParagraphElement;
@@ -45,7 +43,6 @@ namespace pdfi
     struct ImageElement;
     struct PageElement;
     struct DocumentElement;
-    struct EmitContext;
     struct Element;
 
     /** To be visited by all tree element types

@@ -38,12 +38,8 @@
 
 class _SfxMacroTabPage;
 class SvTabListBox;
-class Edit;
 class String;
 
-class SfxConfigGroupListBox_Impl;
-class SfxConfigFunctionListBox_Impl;
-class _HeaderTabListBox;
 class _SfxMacroTabPage_Impl;
 
 class _SfxMacroTabPage : public SfxTabPage

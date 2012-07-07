@@ -24,9 +24,6 @@
 #include <sfx2/basedlgs.hxx>
 
 class SfxObjectShell;
-class SfxFrameWindow;
-
-class SfxFrame;
 class GDIMetaFile;
 
 class SfxPreviewBase_Impl : public Window

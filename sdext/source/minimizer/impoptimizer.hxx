@@ -30,9 +30,6 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-class Point;
-class Size;
-
 // -------------
 // - PDFExport -
 // -------------

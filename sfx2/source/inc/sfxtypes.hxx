@@ -40,9 +40,6 @@
 #endif
 #endif
 
-class SfxShell;
-class Timer;
-
 //------------------------------------------------------------------------
 
 // Macro for the Call-Profiler under WinNT

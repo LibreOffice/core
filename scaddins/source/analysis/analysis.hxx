@@ -36,7 +36,6 @@
 #include "analysishelper.hxx"
 
 
-class FuncData;
 class FuncDataList;
 class ConvertDataList;
 class ResMgr;

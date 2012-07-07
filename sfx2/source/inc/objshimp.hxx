@@ -45,8 +45,6 @@ struct MarkData_Impl
     SfxViewFrame* pFrame;
 };
 
-class SfxFrame;
-class SfxToolBoxConfig;
 class SfxBasicManagerHolder;
 
 struct SfxObjectShell_Impl : public ::sfx2::IMacroDocumentAccess

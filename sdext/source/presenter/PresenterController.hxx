@@ -69,7 +69,6 @@ class PresenterPaneAnimator;
 class PresenterPaneContainer;
 class PresenterPaneBorderPainter;
 class PresenterTheme;
-class PresenterScreen;
 class PresenterWindowManager;
 
 namespace {

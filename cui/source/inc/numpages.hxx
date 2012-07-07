@@ -38,7 +38,6 @@
 class SvxNumRule;
 class SvxBmpNumValueSet;
 class SvxNumValueSet;
-class ValueSet;
 class SvxNumberingPreview;
 class SvxBrushItem;
 

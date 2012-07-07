@@ -44,8 +44,6 @@ class HeaderBar;
 #endif
 #include <readonlyimage.hxx>
 
-class SfxFilter;
-
 namespace svx {
     class SecurityOptionsDialog;
 }

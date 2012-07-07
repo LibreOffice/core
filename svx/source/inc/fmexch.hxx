@@ -27,8 +27,6 @@
 
 #include <svx/svxdllapi.h>
 
-class FmFormShell;
-class FmFormPage;
 class SvLBoxEntry;
 
 //========================================================================

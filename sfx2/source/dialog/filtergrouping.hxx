@@ -24,8 +24,6 @@
 #include <com/sun/star/container/XEnumeration.hpp>
 #include "filedlgimpl.hxx"
 
-class SfxFilterMatcherIter;
-
 //........................................................................
 namespace sfx2
 {

@@ -44,13 +44,7 @@
 #include <svtools/svtreebx.hxx>
 #include <vcl/image.hxx>
 
-class BasicManager;
-class SfxSlotPool;
-class SfxStringItem;
-class SfxFontItem;
 class SfxMacroInfoItem;
-struct SfxStyleInfo_Impl;
-struct SfxStylesInfo_Impl;
 
 namespace css = ::com::sun::star;
 

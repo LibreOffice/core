@@ -51,7 +51,6 @@ namespace css = ::com::sun::star;
 
 namespace sdext { namespace presenter {
 
-class PresenterWindowManager;
 class PresenterController;
 
 namespace {

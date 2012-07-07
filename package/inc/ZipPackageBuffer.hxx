@@ -24,8 +24,6 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <cppuhelper/implbase3.hxx>
 
-class ZipPackage;
-
 class ZipPackageBuffer : public ::cppu::WeakImplHelper3
 <
     com::sun::star::io::XInputStream,

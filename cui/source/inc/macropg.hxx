@@ -59,10 +59,7 @@ typedef ::std::vector< EventDisplayName >   EventDisplayNames;
 
 class _SvxMacroTabPage;
 class SvTabListBox;
-class Edit;
-class String;
 
-class _HeaderTabListBox;
 class _SvxMacroTabPage_Impl;
 
 

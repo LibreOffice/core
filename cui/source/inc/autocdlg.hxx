@@ -36,7 +36,6 @@
 #include <vcl/metric.hxx>
 #include <svx/langbox.hxx>
 
-class SvxAutoCorrect;
 class CharClass;
 class CollatorWrapper;
 class SmartTagMgr;

@@ -34,7 +34,6 @@
 namespace com{namespace sun{namespace star{
 namespace linguistic2{
     class XHyphenator;
-    class XPossibleHyphens;
 }}}}
 
 class SvxSpellWrapper;

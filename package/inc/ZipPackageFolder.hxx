@@ -38,8 +38,6 @@ namespace packages
 }
 } } }
 
-class ZipFile;
-class ZipPackage;
 class ZipOutputStream;
 struct ZipEntry;
 typedef void* rtlRandomPool;

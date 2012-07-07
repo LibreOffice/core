@@ -48,15 +48,11 @@
 
 #include <boost/noncopyable.hpp>
 
-class SdrObject;
-
 
 namespace accessibility
 {
 
-class AccessibleShapeInfo;
 class AccessibleShapeTreeInfo;
-class IAccessibleParent;
 
 typedef ::cppu::ImplInheritanceHelper1< AccessibleContextBase, ::com::sun::star::accessibility::XAccessibleExtendedComponent > AccessibleCellBase;
 

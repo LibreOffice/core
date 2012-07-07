@@ -51,10 +51,8 @@
 #include <comphelper/componentcontext.hxx>
 #include <rtl/ref.hxx>
 
-//class SdrPageViewWinRec;
 class SdrPageWindow;
 
-class SdrPageView;
 class SdrObject;
 class FmFormObj;
 class FmFormModel;
@@ -63,7 +61,6 @@ class FmFormShell;
 class Window;
 class OutputDevice;
 class SdrUnoObj;
-class SdrView;
 
 namespace com { namespace sun { namespace star {
     namespace awt {

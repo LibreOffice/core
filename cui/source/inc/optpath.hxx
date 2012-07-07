@@ -46,7 +46,6 @@ class HeaderBar;
 
 // forward ---------------------------------------------------------------
 
-class SvTabListBox;
 namespace svx
 {
     class OptHeaderTabListBox;

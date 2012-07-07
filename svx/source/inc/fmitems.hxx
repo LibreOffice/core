@@ -32,12 +32,6 @@
 #include <svl/poolitem.hxx>
 #include <comphelper/uno3.hxx>
 
-namespace com { namespace sun { namespace star {
-    namespace uno {
-        class Any;
-    }
-}}}
-
 //==================================================================
 class FmInterfaceItem : public SfxPoolItem
 {

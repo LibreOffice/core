@@ -24,7 +24,6 @@
 // ----------------
 
 class SvStream;
-class SvMemoryStreamStream;
 
 class GalleryCodec
 {

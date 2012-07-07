@@ -48,7 +48,6 @@ class SvxCharMapData;
 namespace svx
 {
     struct SvxShowCharSetItem;
-    class SvxShowCharSetVirtualAcc;
 }
 // class SvxCharacterMap -------------------------------------------------
 // the main purpose of this dialog is to enable the use of characters

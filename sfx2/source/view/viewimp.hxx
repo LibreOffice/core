@@ -32,7 +32,6 @@
 #include <vcl/print.hxx>
 #include <queue>
 
-class SfxOfficeDispatch;
 class SfxBaseController;
 
 typedef SfxShell* SfxShellPtr_Impl;

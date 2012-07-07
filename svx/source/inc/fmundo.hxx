@@ -53,14 +53,6 @@
 class FmFormModel;
 class FmFormObj;
 class SdrObject;
-class FmXFormView;
-
-namespace com { namespace sun { namespace star {
-    namespace awt {
-        class XControl;
-        class XControlContainer;
-    }
-}}}
 
 //==================================================================
 // FmUndoPropertyAction

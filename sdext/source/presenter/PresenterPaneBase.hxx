@@ -53,7 +53,6 @@ namespace cssu = ::com::sun::star::uno;
 namespace sdext { namespace presenter {
 
 class PresenterController;
-class PresenterTextView;
 
 namespace {
     typedef ::cppu::WeakComponentImplHelper4 <

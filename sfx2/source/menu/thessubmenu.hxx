@@ -27,10 +27,6 @@
 #include <vcl/menu.hxx>
 #include <sfx2/mnuitem.hxx>
 
-class SfxBindings;
-class PopupMenu;
-class Menu;
-
 namespace css = ::com::sun::star;
 
 class SfxThesSubMenuHelper

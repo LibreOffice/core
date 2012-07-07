@@ -40,7 +40,6 @@
 class ZipOutputStream;
 class ZipPackageFolder;
 class ZipFile;
-class ByteGrabber;
 namespace com { namespace sun { namespace star {
     namespace container { class XNameContainer; }
     namespace io { class XStream; class XOutputStream; class XInputStream; class XSeekable; class XActiveDataStreamer; }

@@ -45,8 +45,6 @@ namespace css = ::com::sun::star;
 
 namespace sdext { namespace presenter {
 
-class PresenterClockInternalTimer;
-
 /** The timer allows tasks to be scheduled for execution at a specified time
     in the future.
 */

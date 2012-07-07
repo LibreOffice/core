@@ -49,7 +49,6 @@ namespace beans{
 namespace linguistic2{
     class XDictionary;
     class XDictionaryList;
-    class XSpellChecker;
 }}}}
 
 class SvLBoxEntry;

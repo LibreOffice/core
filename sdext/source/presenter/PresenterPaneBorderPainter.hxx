@@ -44,10 +44,6 @@
 
 namespace css = ::com::sun::star;
 
-namespace sdext { namespace tools {
-    class ConfigurationAccess;
-} }
-
 namespace sdext { namespace presenter {
 
 class PresenterPane;

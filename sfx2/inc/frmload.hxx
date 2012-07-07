@@ -46,8 +46,6 @@
 class SfxFilter;
 class SfxFilterMatcher;
 
-class SfxFrameWeak;
-
 class SAL_DLLPRIVATE SfxFrameLoader_Impl : public ::cppu::WeakImplHelper2< ::com::sun::star::frame::XSynchronousFrameLoader, ::com::sun::star::lang::XServiceInfo >
 {
     ::comphelper::ComponentContext  m_aContext;

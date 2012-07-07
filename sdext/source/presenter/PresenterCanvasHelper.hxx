@@ -34,8 +34,6 @@ namespace css = ::com::sun::star;
 
 namespace sdext { namespace presenter {
 
-class PresenterController;
-
 /** Collection of functions to ease the life of a canvas user.
 */
 class PresenterCanvasHelper

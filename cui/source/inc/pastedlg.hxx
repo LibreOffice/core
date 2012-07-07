@@ -44,7 +44,6 @@
 *************************************************************************/
 
 struct TransferableObjectDescriptor;
-class DataFlavorExVecor;
 class TransferableDataHelper;
 
 class SvPasteObjectDialog : public ModalDialog
