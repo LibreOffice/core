@@ -109,6 +109,7 @@ public:
     void testHardRecalcODS();
     void testFunctionsODS();
     void testCachedFormulaResultsODS();
+    void testCachedMatrixFormulaResultsODS();
     void testDatabaseRangesODS();
     void testDatabaseRangesXLS();
     void testDatabaseRangesXLSX();
@@ -144,6 +145,7 @@ public:
     CPPUNIT_TEST(testHardRecalcODS);
     CPPUNIT_TEST(testFunctionsODS);
     CPPUNIT_TEST(testCachedFormulaResultsODS);
+    CPPUNIT_TEST(testCachedMatrixFormulaResultsODS);
     CPPUNIT_TEST(testDatabaseRangesODS);
     CPPUNIT_TEST(testDatabaseRangesXLS);
     CPPUNIT_TEST(testDatabaseRangesXLSX);
@@ -323,7 +325,7 @@ void ScFiltersTest::testHardRecalcODS()
     ScDocShellRef xDocSh = loadDoc( aFileNameBase, ODS );
     xDocSh->DoHardRecalc(true);
 
-    CPPUNIT_ASSERT_MESSAGE("Failed to load functions.*", xDocSh.Is());
+    CPPUNIT_ASSERT_MESSAGE("Failed to load hard-recalc.*", xDocSh.Is());
     ScDocument* pDoc = xDocSh->GetDocument();
     rtl::OUString aCSVFileName;
 
@@ -382,6 +384,25 @@ void ScFiltersTest::testCachedFormulaResultsODS()
     //test cached formula results of informations functions
     createCSVPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("information-functions.")), aCSVFileName);
     testFile(aCSVFileName, pDoc, 3);
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testCachedMatrixFormulaResultsODS()
+{
+    const rtl::OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("matrix."));
+    ScDocShellRef xDocSh = loadDoc( aFileNameBase, ODS);
+
+    CPPUNIT_ASSERT_MESSAGE("Failed to load matrix.*", xDocSh.Is());
+    ScDocument* pDoc = xDocSh->GetDocument();
+
+    //test matrix
+    rtl::OUString aCSVFileName;
+    createCSVPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("matrix.")), aCSVFileName);
+    testFile(aCSVFileName, pDoc, 0);
+    //test matrix with errors
+    createCSVPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("matrix2.")), aCSVFileName);
+    testFile(aCSVFileName, pDoc, 1);
 
     xDocSh->DoClose();
 }
