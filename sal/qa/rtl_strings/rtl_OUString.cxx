@@ -153,7 +153,7 @@ static sal_Bool test_rtl_OUString_ctor_005( hTestResult hRtlTestResult )
                 hRtlTestResult,
                 aUStr == aUStr1,
                 "New OUString from the first n characters of unicode string",
-                "ctor_004"
+                "ctor_005"
                 )
             );
 
