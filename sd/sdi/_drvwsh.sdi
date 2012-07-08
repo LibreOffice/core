@@ -75,6 +75,11 @@ interface DrawView
         ExecMethod = FuTemporary ;
         StateMethod = GetMenuState ;
     ]
+    SID_COMPRESS_GRAPHIC
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
     SID_CUT // ole : no, status : ?
     [
         ExecMethod = FuSupport ;

@@ -2,7 +2,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2000, 2011 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -100,6 +100,7 @@ $(eval $(call gb_Library_add_exception_objects,svx,\
     svx/source/dialog/connctrl \
     svx/source/dialog/_contdlg \
     svx/source/dialog/contwnd \
+    svx/source/dialog/compressgraphicdialog \
     svx/source/dialog/ctredlin \
     svx/source/dialog/databaseregistrationui \
     svx/source/dialog/dialcontrol \

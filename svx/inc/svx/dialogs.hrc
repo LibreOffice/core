@@ -243,6 +243,7 @@
 #define RID_SVXTBX_STYLE                    (RID_SVX_START + 120)
 
 #define RID_SVXDLG_PASSWORD                 (RID_SVX_START + 141)
+#define RID_SVXDLG_COMPRESSGRAPHICS         (RID_SVX_START + 142)
 
 // Dialog for functions
 #define RID_SVXDLG_CALCFUNC                 (RID_SVX_START + 206)

@@ -71,9 +71,9 @@ namespace sd {
 
 void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
 {
-    // Status der Menueintraege, bzw. Buttons
-    // Einfachselektion
+    // Status of menu entries (Buttons,...)
 
+    // Single selection
     const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
     sal_uLong nMarkCount = rMarkList.GetMarkCount();
 
@@ -119,6 +119,7 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
             SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_REVERSE_ORDER ) ||
             SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_ORIGINAL_SIZE ) ||
             SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_SAVE_GRAPHIC ) ||
+            SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_COMPRESS_GRAPHIC ) ||
             SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_TEXTATTR_DLG ) )
         {
             const SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
@@ -140,6 +141,7 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
             if ( !( pObj->ISA( SdrGrafObj ) ) )
             {
                 rSet.DisableItem(SID_SAVE_GRAPHIC);
+                rSet.DisableItem(SID_COMPRESS_GRAPHIC);
             }
 
             // Wenn es sich um kein Gruppenobjekt oder 3D-Objekt handelt

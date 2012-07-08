@@ -262,6 +262,11 @@
     Command = ".uno:ExternalEdit" ; \
     Text [ en-US ] = "Edit with External Tool..." ; \
 
+#define ITEM_COMPRESS_GRAPHIC \
+    Identifier = SID_COMPRESS_GRAPHIC ; \
+    Command = ".uno:CompressGraphic" ; \
+    Text [ en-US ] = "Compress Graphic..." ; \
+
 #define ITEM_SAVE_GRAPHIC \
     Identifier = SID_SAVE_GRAPHIC ; \
     Command = ".uno:SaveGraphic" ; \

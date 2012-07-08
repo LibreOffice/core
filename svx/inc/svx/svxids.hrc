@@ -936,9 +936,10 @@
 #define SID_EXTERNAL_EDIT                               (SID_SVX_START+1113)
 #define SID_ATTR_PAGE_SHARED_FIRST                      (SID_SVX_START+1114)
 #define SID_SAVE_GRAPHIC                                (SID_SVX_START+1115)
+#define SID_COMPRESS_GRAPHIC                            (SID_SVX_START+1116)
 
 // IMPORTANT NOTE: adjust SID_SVX_FIRSTFREE, when adding new slot id
-#define SID_SVX_FIRSTFREE                               (SID_SAVE_GRAPHIC + 1)
+#define SID_SVX_FIRSTFREE                               (SID_COMPRESS_GRAPHIC + 1)
 
 // --------------------------------------------------------------------------
 // Overflow check for slot IDs

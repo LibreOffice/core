@@ -5996,6 +5996,30 @@ SfxVoidItem SaveGraphic SID_SAVE_GRAPHIC
     GroupId = GID_MODIFY;
 ]
 
+SfxVoidItem CompressGraphic SID_COMPRESS_GRAPHIC
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* config: */
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_MODIFY;
+]
+
 //--------------------------------------------------------------------------
 SfxBoolItem Init3D SID_3D_INIT
 

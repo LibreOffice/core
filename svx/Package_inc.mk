@@ -554,5 +554,6 @@ $(eval $(call gb_Package_add_file,svx_inc,inc/svx/fmdpage.hxx,svx/fmdpage.hxx))
 $(eval $(call gb_Package_add_file,svx_inc,inc/svx/sxmtpitm.hxx,svx/sxmtpitm.hxx))
 $(eval $(call gb_Package_add_file,svx_inc,inc/svx/extedit.hxx,svx/extedit.hxx))
 $(eval $(call gb_Package_add_file,svx_inc,inc/svx/graphichelper.hxx,svx/graphichelper.hxx))
+$(eval $(call gb_Package_add_file,svx_inc,inc/svx/compressgraphicdialog.hxx,svx/compressgraphicdialog.hxx))
 
 # vim: set noet sw=4 ts=4:
