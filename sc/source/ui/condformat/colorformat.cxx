@@ -222,8 +222,7 @@ void ScDataBarSettingsDlg::Init()
     }
     maBtnOk.SetClickHdl( LINK( this, ScDataBarSettingsDlg, OkBtnHdl ) );
 
-    Point aPoint = maLbTypeMax.GetPosPixel();
-    aPoint.Y() += 50;
+    Point aPoint(maLbTypeMax.GetPosPixel().X(), maFtMax.GetPosPixel().Y());
     maLbTypeMax.SetPosPixel(aPoint);
 
     maLbTypeMin.SetSelectHdl( LINK( this, ScDataBarSettingsDlg, TypeSelectHdl ) );
