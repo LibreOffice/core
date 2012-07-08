@@ -2208,7 +2208,7 @@ XclExpCellTable::XclExpCellTable( const XclExpRoot& rRoot ) :
     // find used area (non-empty cells)
     SCCOL nLastUsedScCol;
     SCROW nLastUsedScRow;
-    rDoc.GetTableArea( nScTab, nLastUsedScCol, nLastUsedScRow );
+    rDoc.GetFormattedAndUsedArea( nScTab, nLastUsedScCol, nLastUsedScRow );
 
     if(nLastUsedScCol > nMaxScCol)
         nLastUsedScCol = nMaxScCol;
