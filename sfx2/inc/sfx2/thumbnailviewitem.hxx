@@ -33,6 +33,7 @@
 #include <drawinglayer/attribute/fontattribute.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/bitmapex.hxx>
+#include "sfx2/dllapi.h"
 
 #include <com/sun/star/accessibility/XAccessible.hpp>
 
@@ -58,7 +59,7 @@ struct ThumbnailItemAttributes
     drawinglayer::attribute::FontAttribute aFontAttr;
 };
 
-class ThumbnailViewItem
+class SFX2_DLLPUBLIC ThumbnailViewItem
 {
 public:
 
