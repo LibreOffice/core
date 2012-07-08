@@ -549,7 +549,7 @@ IMPL_LINK(SfxTemplateManagerDlg, OpenTemplateHdl, ThumbnailViewItem*, pItem)
 
     try
     {
-        mxDesktop->loadComponentFromURL(pTemplateItem->getPath(),rtl::OUString("_blank"), 0, aArgs );
+        mxDesktop->loadComponentFromURL(pTemplateItem->getPath(),rtl::OUString("_default"), 0, aArgs );
     }
     catch( const uno::Exception& )
     {
