@@ -479,10 +479,10 @@ void StatusBar::ImplDrawItem( sal_Bool bOffScreen, sal_uInt16 nPos, sal_Bool bDr
         {
             // draw separator
             Point aFrom( aRect.TopLeft() );
-            aFrom.X()--;
+            aFrom.X()-=4;
             aFrom.Y()++;
             Point aTo( aRect.BottomLeft() );
-            aTo.X()--;
+            aTo.X()-=4;
             aTo.Y()--;
 
             DecorationView aDecoView( this );
