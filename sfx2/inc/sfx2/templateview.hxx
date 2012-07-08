@@ -10,6 +10,7 @@
 #ifndef TEMPLATEVIEW_HXX
 #define TEMPLATEVIEW_HXX
 
+#include <sfx2/templateproperties.hxx>
 #include <sfx2/thumbnailview.hxx>
 #include <vcl/image.hxx>
 
@@ -33,7 +34,7 @@ public:
 
     virtual void Paint (const Rectangle &rRect);
 
-    void InsertItems (const std::vector<TemplateViewItem*> &rTemplates);
+    void InsertItems (const std::vector<TemplateItemProperties> &rTemplates);
 
     void setDblClickHdl (const Link &rLink) { maDblClickHdl = rLink; }
 

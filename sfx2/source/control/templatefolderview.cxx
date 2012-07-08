@@ -206,20 +206,18 @@ class FolderFilter_Application
 {
 public:
 
-    FolderFilter_Application ( SfxDocumentTemplates *pDocTemplates, FILTER_APPLICATION eApp)
+    FolderFilter_Application (FILTER_APPLICATION eApp)
         : meApp(eApp)
     {
-        maFilterFunc = ViewFilter_Application(pDocTemplates,eApp);
     }
 
     bool operator () (const ThumbnailViewItem *pItem)
     {
         TemplateFolderViewItem *pFolderItem = (TemplateFolderViewItem*)pItem;
 
-        std::vector<TemplateViewItem*> &rTemplates = pFolderItem->maTemplates;
+        std::vector<TemplateItemProperties> &rTemplates = pFolderItem->maTemplates;
 
         size_t nVisCount = 0;
-        ThumbnailViewItem *pTemplateItem;
 
         // Clear thumbnails
         pFolderItem->maPreview1.Clear();
@@ -227,27 +225,48 @@ public:
 
         for (size_t i = 0, n = rTemplates.size(); i < n; ++i)
         {
-            pTemplateItem = rTemplates[i];
-
-            if (maFilterFunc(pTemplateItem))
+            if (isValid(rTemplates[i].aType))
             {
                 ++nVisCount;
 
                 // Update the thumbnails
                 if (nVisCount == 1)
-                    pFolderItem->maPreview1 = pTemplateItem->maPreview1;
+                    pFolderItem->maPreview1 = rTemplates[i].aThumbnail;
                 else if (nVisCount == 2)
-                    pFolderItem->maPreview2 = pTemplateItem->maPreview1;
+                    pFolderItem->maPreview2 = rTemplates[i].aThumbnail;
             }
         }
 
         return nVisCount;
     }
 
+    bool isValid (const rtl::OUString &rType) const
+    {
+        bool bRet = false;
+
+        if (meApp == FILTER_APP_WRITER)
+        {
+            bRet = rType == "OpenDocument Text" || rType == "OpenDocument Text Template";
+        }
+        else if (meApp == FILTER_APP_CALC)
+        {
+            bRet = rType == "OpenDocument Spreadsheet" || rType == "OpenDocument Spreadsheet Template";
+        }
+        else if (meApp == FILTER_APP_IMPRESS)
+        {
+            bRet = rType == "OpenDocument Presentation" || rType == "OpenDocument Presentation Template";
+        }
+        else if (meApp == FILTER_APP_DRAW)
+        {
+            bRet = rType == "OpenDocument Drawing" || rType == "OpenDocument Drawing Template";
+        }
+
+        return bRet;
+    }
+
 private:
 
     FILTER_APPLICATION meApp;
-    boost::function<bool (const ThumbnailViewItem*)> maFilterFunc;
 };
 
 TemplateFolderView::TemplateFolderView ( Window* pParent, const ResId& rResId, bool bDisableTransientChildren)
@@ -309,14 +328,15 @@ void TemplateFolderView::Populate ()
                 aName += "...";
             }
 
-            TemplateViewItem *pTemplateItem = new TemplateViewItem(*mpItemView,mpItemView);
-            pTemplateItem->mnId = j+1;
-            pTemplateItem->maText = aName;
-            pTemplateItem->setPath(aURL);
-            pTemplateItem->setFileType(aType);
-            pTemplateItem->maPreview1 = lcl_fetchThumbnail(aURL,THUMBNAIL_MAX_WIDTH,THUMBNAIL_MAX_HEIGHT);
+            TemplateItemProperties aProperties;;
+            aProperties.nId = j+1;
+            aProperties.nRegionId = i;
+            aProperties.aName = aName;
+            aProperties.aPath = aURL;
+            aProperties.aType = aType;
+            aProperties.aThumbnail = lcl_fetchThumbnail(aURL,THUMBNAIL_MAX_WIDTH,THUMBNAIL_MAX_HEIGHT);
 
-            pItem->maTemplates.push_back(pTemplateItem);
+            pItem->maTemplates.push_back(aProperties);
         }
 
         lcl_updateThumbnails(pItem);
@@ -357,7 +377,7 @@ void TemplateFolderView::showOverlay (bool bVisible)
         // Check if the folder view needs to be filtered
         if (mbFilteredResults)
         {
-            filterItems(FolderFilter_Application(mpDocTemplates,meFilterOption));
+            filterItems(FolderFilter_Application(meFilterOption));
 
             mbFilteredResults = false;
             meFilterOption = FILTER_APP_NONE;
@@ -385,30 +405,24 @@ void TemplateFolderView::filterTemplatesByApp (const FILTER_APPLICATION &eApp)
     }
     else
     {
-        filterItems(FolderFilter_Application(mpDocTemplates,eApp));
+        filterItems(FolderFilter_Application(eApp));
     }
 }
 
-std::vector<std::pair<sal_uInt16,std::vector<ThumbnailViewItem*> > >
-TemplateFolderView::getFilteredItems(const boost::function<bool (const ThumbnailViewItem*) > &rFunc) const
+std::vector<TemplateItemProperties>
+TemplateFolderView::getFilteredItems(const boost::function<bool (const TemplateItemProperties&) > &rFunc) const
 {
-    std::vector<ThumbnailViewItem*> aRegionItems;
-    std::vector<std::pair<sal_uInt16,std::vector<ThumbnailViewItem*> > > aItems;
+    std::vector<TemplateItemProperties> aItems;
 
     for (size_t i = 0; i < mItemList.size(); ++i)
     {
         TemplateFolderViewItem *pFolderItem = static_cast<TemplateFolderViewItem*>(mItemList[i]);
 
-        sal_uInt16 nRegionId = pFolderItem->mnId-1;
-
         for (size_t j = 0; j < pFolderItem->maTemplates.size(); ++j)
         {
             if (rFunc(pFolderItem->maTemplates[j]))
-                aRegionItems.push_back(pFolderItem->maTemplates[j]);
+                aItems.push_back(pFolderItem->maTemplates[j]);
         }
-
-        aItems.push_back(std::make_pair(nRegionId,aRegionItems));
-        aRegionItems.clear();
     }
 
     return aItems;
@@ -465,13 +479,11 @@ bool TemplateFolderView::removeTemplate (const sal_uInt16 nItemId)
         {
 
             TemplateFolderViewItem *pItem = static_cast<TemplateFolderViewItem*>(mItemList[i]);
-            std::vector<TemplateViewItem*>::iterator pIter;
+            std::vector<TemplateItemProperties>::iterator pIter;
             for (pIter = pItem->maTemplates.begin(); pIter != pItem->maTemplates.end(); ++pIter)
             {
-                if ((*pIter)->mnId == nItemId)
+                if (pIter->nId == nItemId)
                 {
-                    delete *pIter;
-
                     pItem->maTemplates.erase(pIter);
 
                     mpItemView->RemoveItem(nItemId);
@@ -536,26 +548,25 @@ bool TemplateFolderView::moveTemplates(std::set<const ThumbnailViewItem *> &rIte
 
             // move template to destination
 
-            TemplateViewItem *pTemplateItem = new TemplateViewItem(*mpItemView,mpItemView);
-            pTemplateItem->mnId = nTargetIdx + 1;
-            pTemplateItem->maText = pViewItem->maText;
-            pTemplateItem->setPath(pViewItem->getPath());
-            pTemplateItem->setFileType(pViewItem->getFileType());
-            pTemplateItem->maPreview1 = pViewItem->maPreview1;
+            TemplateItemProperties aTemplateItem;
+            aTemplateItem.nId = nTargetIdx + 1;
+            aTemplateItem.nRegionId = nTargetRegion;
+            aTemplateItem.aName = pViewItem->maText;
+            aTemplateItem.aPath = pViewItem->getPath();
+            aTemplateItem.aType = pViewItem->getFileType();
+            aTemplateItem.aThumbnail = pViewItem->maPreview1;
 
-            pTarget->maTemplates.push_back(pTemplateItem);
+            pTarget->maTemplates.push_back(aTemplateItem);
 
             if (!bCopy)
             {
-                // remove template for overlay and from cached data
+                // remove template from overlay and from cached data
 
-                std::vector<TemplateViewItem*>::iterator pIter;
+                std::vector<TemplateItemProperties>::iterator pIter;
                 for (pIter = pSrc->maTemplates.begin(); pIter != pSrc->maTemplates.end(); ++pIter)
                 {
-                    if ((*pIter)->mnId == pViewItem->mnId)
+                    if (pIter->nId == pViewItem->mnId)
                     {
-                        delete *pIter;
-
                         pSrc->maTemplates.erase(pIter);
 
                         mpItemView->RemoveItem(pViewItem->mnId);
@@ -595,14 +606,15 @@ void TemplateFolderView::copyFrom (TemplateFolderViewItem *pItem, const rtl::OUS
 
     if (mpDocTemplates->CopyFrom(nRegionId,nId,aPath))
     {
-        TemplateViewItem *pTemplate = new TemplateViewItem(*mpItemView,mpItemView);
-        pTemplate->mnId = nId;
-        pTemplate->maText = mpDocTemplates->GetName(nRegionId,nId);
-        pTemplate->maPreview1 = lcl_fetchThumbnail(rPath,128,128);
-        pTemplate->setPath(rPath);
-        pTemplate->setFileType(SvFileInformationManager::GetDescription(INetURLObject(rPath)));
+        TemplateItemProperties aTemplate;
+        aTemplate.nId = nId;
+        aTemplate.nRegionId = nRegionId;
+        aTemplate.aName = mpDocTemplates->GetName(nRegionId,nId);
+        aTemplate.aThumbnail = lcl_fetchThumbnail(rPath,128,128);
+        aTemplate.aPath = rPath;
+        aTemplate.aType = SvFileInformationManager::GetDescription(INetURLObject(rPath));
 
-        pItem->maTemplates.push_back(pTemplate);
+        pItem->maTemplates.push_back(aTemplate);
 
         lcl_updateThumbnails(pItem);
 
@@ -691,13 +703,13 @@ void lcl_updateThumbnails (TemplateFolderViewItem *pItem)
     {
         if (i == 0)
         {
-            pItem->maPreview1 = lcl_ScaleImg(pItem->maTemplates[i]->maPreview1,
+            pItem->maPreview1 = lcl_ScaleImg(pItem->maTemplates[i].aThumbnail,
                                             THUMBNAIL_MAX_WIDTH*0.75,
                                             THUMBNAIL_MAX_HEIGHT*0.75);
         }
         else
         {
-            pItem->maPreview2 = lcl_ScaleImg(pItem->maTemplates[i]->maPreview1,
+            pItem->maPreview2 = lcl_ScaleImg(pItem->maTemplates[i].aThumbnail,
                                             THUMBNAIL_MAX_WIDTH*0.75,
                                             THUMBNAIL_MAX_HEIGHT*0.75);
         }

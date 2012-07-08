@@ -72,9 +72,9 @@ public:
         : maKeyword(rKeyword)
     {}
 
-    bool operator() (const ThumbnailViewItem *pItem)
+    bool operator() (const TemplateItemProperties &rItem)
     {
-        return pItem->maText.indexOf(maKeyword) != -1;
+        return rItem.aName.indexOf(maKeyword) != -1;
     }
 
 private:
@@ -575,25 +575,19 @@ IMPL_LINK_NOARG(SfxTemplateManagerDlg, SearchUpdateHdl)
     {
         mpSearchView->Clear();
 
-        std::vector<std::pair<sal_uInt16,std::vector<ThumbnailViewItem*> > > aItems =
+        std::vector<TemplateItemProperties> aItems =
                 maView->getFilteredItems(SearchView_Keyword(aKeyword));
 
         size_t nCounter = 0;
         for (size_t i = 0; i < aItems.size(); ++i)
         {
-            sal_uInt16 nRegionId = aItems[i].first;
-            std::vector<ThumbnailViewItem*> &rRegionItems = aItems[i].second;
+            TemplateItemProperties *pItem = &aItems[i];
 
-            for (size_t j = 0; j < rRegionItems.size(); ++j)
-            {
-                TemplateViewItem *pItem = static_cast<TemplateViewItem*>(rRegionItems[j]);
-
-                mpSearchView->AppendItem(++nCounter,nRegionId,
-                                         pItem->mnId-1,
-                                         pItem->maText,
-                                         pItem->getPath(),
-                                         pItem->maPreview1);
-            }
+            mpSearchView->AppendItem(++nCounter,pItem->nRegionId,
+                                     pItem->nId-1,
+                                     pItem->aName,
+                                     pItem->aPath,
+                                     pItem->aThumbnail);
         }
 
         mpSearchView->Invalidate();

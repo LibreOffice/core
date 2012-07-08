@@ -32,8 +32,6 @@ TemplateFolderViewItem::TemplateFolderViewItem (ThumbnailView &rView, Window *pP
 
 TemplateFolderViewItem::~TemplateFolderViewItem ()
 {
-    for (size_t i = 0; i < maTemplates.size(); ++i)
-        delete maTemplates[i];
 }
 
 void TemplateFolderViewItem::calculateItemsPosition (sal_uInt32 nMaxTextLenght)

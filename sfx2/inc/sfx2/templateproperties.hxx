@@ -6,10 +6,23 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-...
+
+#ifndef __SFX2_TEMPLATEPROPERTIES_HXX__
+#define __SFX2_TEMPLATEPROPERTIES_HXX__
+
+#include <rtl/ustring.hxx>
+#include <vcl/bitmapex.hxx>
+
+struct TemplateItemProperties
+{
+    sal_uInt16 nId;
+    sal_uInt16 nRegionId;
+    rtl::OUString aName;
+    rtl::OUString aPath;
+    rtl::OUString aType;
+    BitmapEx aThumbnail;
+};
+
+#endif // __SFX2_TEMPLATEPROPERTIES_HXX__
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
-
-#ifndef TEMPLATEPROPERTIES_HXX
-#define TEMPLATEPROPERTIES_HXX
-
-#endif // TEMPLATEPROPERTIES_HXX

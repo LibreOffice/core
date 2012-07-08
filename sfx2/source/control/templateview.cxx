@@ -107,18 +107,18 @@ void TemplateView::Paint (const Rectangle &rRect)
     mpProcessor->process(aSeq);
 }
 
-void TemplateView::InsertItems (const std::vector<TemplateViewItem*> &rTemplates)
+void TemplateView::InsertItems (const std::vector<TemplateItemProperties> &rTemplates)
 {
     for (size_t i = 0, n = rTemplates.size(); i < n; ++i )
     {
         TemplateViewItem *pItem = new TemplateViewItem(*this,this);
-        TemplateViewItem *pCur = rTemplates[i];
+        const TemplateItemProperties *pCur = &rTemplates[i];
 
-        pItem->mnId = pCur->mnId;
-        pItem->maText = pCur->maText;
-        pItem->setPath(pCur->getPath());
-        pItem->setFileType(pCur->getFileType());
-        pItem->maPreview1 = pCur->maPreview1;
+        pItem->mnId = pCur->nId;
+        pItem->maText = pCur->aName;
+        pItem->setPath(pCur->aPath);
+        pItem->setFileType(pCur->aType);
+        pItem->maPreview1 = pCur->aThumbnail;
         pItem->setSelectClickHdl(LINK(this,ThumbnailView,OnFolderSelected));
 
         mItemList.push_back(pItem);

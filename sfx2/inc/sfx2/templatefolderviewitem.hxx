@@ -10,6 +10,7 @@
 #ifndef TEMPLATEFOLDERVIEWITEM_HXX
 #define TEMPLATEFOLDERVIEWITEM_HXX
 
+#include <sfx2/templateproperties.hxx>
 #include <sfx2/thumbnailviewitem.hxx>
 
 class TemplateViewItem;
@@ -19,7 +20,7 @@ class TemplateFolderViewItem : public ThumbnailViewItem
 public:
 
     BitmapEx maPreview2;
-    std::vector<TemplateViewItem*> maTemplates;
+    std::vector<TemplateItemProperties> maTemplates;
 
     TemplateFolderViewItem (ThumbnailView &rView, Window *pParent);
 

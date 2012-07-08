@@ -12,6 +12,7 @@
 
 #include <set>
 
+#include <sfx2/templateproperties.hxx>
 #include <sfx2/thumbnailview.hxx>
 
 class SfxDocumentTemplates;
@@ -49,8 +50,8 @@ public:
 
     void filterTemplatesByApp (const FILTER_APPLICATION &eApp);
 
-    std::vector<std::pair<sal_uInt16,std::vector<ThumbnailViewItem*> > >
-        getFilteredItems (const boost::function<bool (const ThumbnailViewItem*) > &rFunc) const;
+    std::vector<TemplateItemProperties>
+        getFilteredItems (const boost::function<bool (const TemplateItemProperties&) > &rFunc) const;
 
     void sortOverlayItems (const boost::function<bool (const ThumbnailViewItem*,
                                                        const ThumbnailViewItem*) > &func);
