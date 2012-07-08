@@ -41,6 +41,7 @@ StringArray STR_ARR_SVT_LANGUAGE_TABLE
         < "[None]" ; LANGUAGE_NONE ; > ;
         < "Unknown" ; LANGUAGE_DONTKNOW ; > ;
         < "Default" ; LANGUAGE_SYSTEM ; > ;
+        < "Default" ; LANGUAGE_USER_SYSTEM_CONFIG ; > ;
         < "Afrikaans (South Africa)" ; LANGUAGE_AFRIKAANS ; > ;
         < "Albanian" ; LANGUAGE_ALBANIAN ; > ;
         < "Arabic" ; LANGUAGE_ARABIC_PRIMARY_ONLY ; > ;

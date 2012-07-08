@@ -1355,7 +1355,7 @@ OfaLanguagesTabPage::OfaLanguagesTabPage( Window* pParent, const SfxItemSet& rSe
     aComplexLanguageLB.InsertDefaultLanguage( ::com::sun::star::i18n::ScriptType::COMPLEX );
 
     aLocaleSettingLB.SetLanguageList( LANG_LIST_ALL     | LANG_LIST_ONLY_KNOWN, sal_False, sal_False, sal_False);
-    aLocaleSettingLB.InsertDefaultLanguage( ::com::sun::star::i18n::ScriptType::WEAK );
+    aLocaleSettingLB.InsertSystemLanguage( );
 
     const NfCurrencyTable& rCurrTab = SvNumberFormatter::GetTheCurrencyTable();
     const NfCurrencyEntry& rCurr = SvNumberFormatter::GetCurrencyEntry( LANGUAGE_SYSTEM );
@@ -1697,7 +1697,7 @@ void OfaLanguagesTabPage::Reset( const SfxItemSet& rSet )
     if ( !sLang.isEmpty() )
         aLocaleSettingLB.SelectLanguage(lcl_LangStringToLangType(sLang));
     else
-        aLocaleSettingLB.SelectLanguage( LANGUAGE_SYSTEM );
+        aLocaleSettingLB.SelectLanguage( LANGUAGE_USER_SYSTEM_CONFIG );
     sal_Bool bReadonly = pLangConfig->aSysLocaleOptions.IsReadOnly(SvtSysLocaleOptions::E_LOCALE);
     aLocaleSettingLB.Enable(!bReadonly);
     aLocaleSettingFT.Enable(!bReadonly);
@@ -1904,7 +1904,7 @@ IMPL_LINK( OfaLanguagesTabPage, LocaleSettingHdl, SvxLanguageBox*, pBox )
     }
 
     sal_uInt16 nPos;
-    if ( eLang == LANGUAGE_SYSTEM )
+    if ( eLang == LANGUAGE_USER_SYSTEM_CONFIG )
         nPos = aCurrencyLB.GetEntryPos( (void*) NULL );
     else
     {

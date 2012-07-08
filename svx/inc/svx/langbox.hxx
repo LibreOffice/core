@@ -89,6 +89,7 @@ public:
 
     sal_uInt16          InsertLanguage( const LanguageType eLangType, sal_uInt16 nPos = LISTBOX_APPEND );
     sal_uInt16          InsertDefaultLanguage( sal_Int16 nType, sal_uInt16 nPos = LISTBOX_APPEND );
+    sal_uInt16          InsertSystemLanguage( sal_uInt16 nPos = LISTBOX_APPEND );
     sal_uInt16          InsertLanguage( const LanguageType eLangType,
                             sal_Bool bCheckEntry, sal_uInt16 nPos = LISTBOX_APPEND );
     void            RemoveLanguage( const LanguageType eLangType );
