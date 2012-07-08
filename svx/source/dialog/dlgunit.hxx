@@ -28,6 +28,8 @@
 #ifndef _SVX_DLG_DLGUNIT_HXX
 #define _SVX_DLG_DLGUNIT_HXX
 
+#include <svx/svdtrans.hxx>
+
 inline String GetUnitString( long nVal_100, FieldUnit eFieldUnit, sal_Unicode cSep )
 {
     String aVal = rtl::OUString::valueOf(static_cast<sal_Int64>(
