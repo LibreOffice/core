@@ -1102,5 +1102,12 @@ void ScNotes::erase(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, bool bFo
     }
 }
 
+void ScNotes::CreateAllNoteCaptions(SCTAB nTab)
+{
+    for(iterator itr = begin(), itrEnd = end(); itr != itrEnd; ++itr)
+    {
+        itr->second->GetOrCreateCaption(ScAddress(itr->first.first, itr->first.second, nTab));
+    }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

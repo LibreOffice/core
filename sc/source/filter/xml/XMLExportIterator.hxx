@@ -31,6 +31,7 @@
 
 #include <vector>
 #include <list>
+#include <set>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/table/CellRangeAddress.hpp>
@@ -41,6 +42,7 @@
 #include "global.hxx"
 #include "detfunc.hxx"
 #include "detdata.hxx"
+#include "postit.hxx"
 
 class   ScHorizontalCellIterator;
 struct  ScMyCell;
@@ -355,7 +357,30 @@ struct ScMyExportAnnotation
     bool operator<(const ScMyExportAnnotation& rAnno) const;
 };
 
+struct ScNoteExportData
+{
+    SCROW nRow;
+    SCCOL nCol;
+    ScPostIt* pNote;
+
+    bool operator<(const ScNoteExportData& r) const
+    {
+        if(nRow < r.nRow)
+            return true;
+        else if(nRow > r.nRow)
+            return false;
+        else
+        {
+            if(nCol < r.nCol)
+                return true;
+            else
+                return false;
+        }
+    }
+};
+
 typedef ::std::list< ScMyExportAnnotation > ScMyExportAnnotationList;
+typedef ::std::set< ScNoteExportData > ScMyNoteExportDataList;
 
 class ScMyNotEmptyCellsIterator
 {
@@ -371,6 +396,8 @@ class ScMyNotEmptyCellsIterator
     ScMyAreaLinksContainer*             pAreaLinks;
     ScMyDetectiveObjContainer*          pDetectiveObj;
     ScMyDetectiveOpContainer*           pDetectiveOp;
+    ScMyNoteExportDataList              maNoteExportList;
+    ScMyNoteExportDataList::iterator  maNoteExportListItr;
 
     ScXMLExport&                rExport;
     ScHorizontalCellIterator*   pCellItr;

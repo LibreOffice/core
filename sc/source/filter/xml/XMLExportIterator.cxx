@@ -676,6 +676,7 @@ void ScMyNotEmptyCellsIterator::Clear()
         OSL_FAIL("not all Annotations saved");
         aAnnotations.clear();
     }
+    maNoteExportList.clear();
     pCellItr = NULL;
     pShapes = NULL;
     pNoteShapes = NULL;
@@ -768,6 +769,7 @@ void ScMyNotEmptyCellsIterator::HasAnnotation(ScMyCell& aCell)
     //  aCell.xCell.set(xCellRange->getCellByPosition(aCell.aCellAddress.Column, aCell.aCellAddress.Row));
 }
 
+
 void ScMyNotEmptyCellsIterator::SetCurrentTable(const SCTAB nTable,
     uno::Reference<sheet::XSpreadsheet>& rxTable)
 {
@@ -777,11 +779,27 @@ void ScMyNotEmptyCellsIterator::SetCurrentTable(const SCTAB nTable,
     aLastAddress.Sheet = nTable;
     if (nCurrentTable != nTable)
     {
+        maNoteExportList.clear();
         nCurrentTable = nTable;
         if (pCellItr)
             delete pCellItr;
         pCellItr = new ScHorizontalCellIterator(rExport.GetDocument(), nCurrentTable, 0, 0,
             static_cast<SCCOL>(rExport.GetSharedData()->GetLastColumn(nCurrentTable)), static_cast<SCROW>(rExport.GetSharedData()->GetLastRow(nCurrentTable)));
+
+        ScNotes* pNotes = rExport.GetDocument()->GetNotes(nTable);
+        if(pNotes)
+        {
+            for(ScNotes::iterator itr = pNotes->begin(), itrEnd = pNotes->end(); itr != itrEnd; ++itr)
+            {
+                ScNoteExportData aExportData;
+                aExportData.nCol = itr->first.first;
+                aExportData.nRow = itr->first.second;
+                aExportData.pNote = itr->second;
+                maNoteExportList.insert( aExportData );
+            }
+        }
+        maNoteExportListItr = maNoteExportList.begin();
+
         xTable.set(rxTable);
         xCellRange.set(xTable, uno::UNO_QUERY);
         uno::Reference<sheet::XSheetAnnotationsSupplier> xSheetAnnotationsSupplier (xTable, uno::UNO_QUERY);
@@ -832,25 +850,57 @@ void ScMyNotEmptyCellsIterator::SkipTable(SCTAB nSkip)
         pDetectiveOp->SkipTable(nSkip);
 }
 
+namespace {
+
+bool IsNoteBeforeNextCell(const SCCOL nCol, const SCROW nRow, const table::CellAddress& rAddress)
+{
+    if(nRow < rAddress.Row)
+        return true;
+    else if(nRow > rAddress.Row)
+        return false;
+    else
+    {
+        if(nCol < rAddress.Column)
+            return true;
+        else
+            return false;
+    }
+}
+
+}
+
 bool ScMyNotEmptyCellsIterator::GetNext(ScMyCell& aCell, ScFormatRangeStyles* pCellStyles)
 {
     table::CellAddress  aAddress( nCurrentTable, MAXCOL + 1, MAXROW + 1 );
 
     UpdateAddress( aAddress );
-    if( pShapes )
-        pShapes->UpdateAddress( aAddress );
-    if( pNoteShapes )
-        pNoteShapes->UpdateAddress( aAddress );
-    if( pEmptyDatabaseRanges )
-        pEmptyDatabaseRanges->UpdateAddress( aAddress );
-    if( pMergedRanges )
-        pMergedRanges->UpdateAddress( aAddress );
-    if( pAreaLinks )
-        pAreaLinks->UpdateAddress( aAddress );
-    if( pDetectiveObj )
-        pDetectiveObj->UpdateAddress( aAddress );
-    if( pDetectiveOp )
-        pDetectiveOp->UpdateAddress( aAddress );
+    if( (maNoteExportListItr != maNoteExportList.end()) && IsNoteBeforeNextCell(maNoteExportListItr->nCol, maNoteExportListItr->nRow, aAddress) )
+    {
+        //we have a note before the new cell
+        aAddress.Column = maNoteExportListItr->nCol;
+        aAddress.Row = maNoteExportListItr->nRow;
+        ++maNoteExportListItr;
+    }
+    else
+    {
+        if(maNoteExportListItr != maNoteExportList.end() && maNoteExportListItr->nCol == aAddress.Column && maNoteExportListItr->nRow == aAddress.Row)
+            ++maNoteExportListItr;
+
+        if( pShapes )
+            pShapes->UpdateAddress( aAddress );
+        if( pNoteShapes )
+            pNoteShapes->UpdateAddress( aAddress );
+        if( pEmptyDatabaseRanges )
+            pEmptyDatabaseRanges->UpdateAddress( aAddress );
+        if( pMergedRanges )
+            pMergedRanges->UpdateAddress( aAddress );
+        if( pAreaLinks )
+            pAreaLinks->UpdateAddress( aAddress );
+        if( pDetectiveObj )
+            pDetectiveObj->UpdateAddress( aAddress );
+        if( pDetectiveOp )
+            pDetectiveOp->UpdateAddress( aAddress );
+    }
 
     bool bFoundCell((aAddress.Column <= MAXCOL) && (aAddress.Row <= MAXROW));
     if( bFoundCell )

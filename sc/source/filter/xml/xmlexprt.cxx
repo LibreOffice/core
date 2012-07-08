@@ -659,12 +659,10 @@ void ScXMLExport::CollectSharedData(sal_Int32& nTableCount, sal_Int32& nShapesCo
         CreateSharedData(nTableCount);
 
     pCellStyles->AddNewTable(nTableCount - 1);
-    pDoc->InitializeAllNoteCaptions(true);
-    if (!HasDrawPages(xSpreadDoc))
-        return;
 
     for (SCTAB nTable = 0; nTable < nTableCount; ++nTable)
     {
+        pDoc->GetNotes(nTable)->CreateAllNoteCaptions(nTable);
         nCurrentTable = sal::static_int_cast<sal_uInt16>(nTable);
         uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xIndex->getByIndex(nTable), uno::UNO_QUERY);
         if (!xDrawPageSupplier.is())
