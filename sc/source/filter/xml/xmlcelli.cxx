@@ -760,7 +760,6 @@ void ScXMLTableRowCellContext::AddTextCellToDoc( const ScAddress& rCurrentPos,
                 pFCell->SetHybridString( *pOUText );
             else
                 bDoIncrement = false;
-            pFCell->SetFormatType( nCellType );
             pFCell->ResetDirty();
         }
     }
@@ -1030,7 +1029,6 @@ void ScXMLTableRowCellContext::AddNonMatrixFormulaCell( const ScAddress& rCellPo
                 pFCell->SetHybridString( *pOUTextValue );
             else
                 pFCell->SetHybridDouble( fValue );
-            pFCell->SetFormatType( nCellType );
             pFCell->ResetDirty();
         }
         else if ( aText[0] == '\'' && aText.getLength() > 1 )
@@ -1083,7 +1081,6 @@ void ScXMLTableRowCellContext::AddFormulaCell( const ScAddress& rCellPos )
                         pFCell->SetHybridString( *pOUTextValue );
                     else
                         pFCell->SetHybridDouble( fValue );
-                    pFCell->SetFormatType( nCellType );
                     pFCell->ResetDirty();
                 }
             }
