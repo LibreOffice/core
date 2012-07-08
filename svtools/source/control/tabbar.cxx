@@ -1328,8 +1328,12 @@ private:
 
 }
 
-void TabBar::Paint( const Rectangle& )
+void TabBar::Paint( const Rectangle& rect )
 {
+    if(IsNativeControlSupported(CTRL_WINDOW_BACKGROUND,PART_ENTIRE_CONTROL))
+        DrawNativeControl(CTRL_WINDOW_BACKGROUND,PART_ENTIRE_CONTROL,rect,
+                CTRL_STATE_ENABLED,ImplControlValue(0),rtl::OUString());
+
     // Items berechnen und ausgeben
     sal_uInt16 nItemCount = (sal_uInt16)mpItemList->size();
     if (!nItemCount)
