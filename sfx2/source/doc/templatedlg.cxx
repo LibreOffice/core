@@ -272,7 +272,13 @@ IMPL_LINK_NOARG(SfxTemplateManagerDlg,ViewDrawsHdl)
 void SfxTemplateManagerDlg::MouseButtonDown( const MouseEvent& rMEvt )
 {
     if (!maView->GetActiveClipRegion().IsInside(rMEvt.GetPosPixel()) && maView->isOverlayVisible())
+    {
+        maSelTemplates.clear();
+        mpTemplateBar->Hide();
+        mpViewBar->Show();
+
         maView->showOverlay(false);
+    }
 }
 
 IMPL_LINK_NOARG (SfxTemplateManagerDlg, CloseHdl)
@@ -281,9 +287,12 @@ IMPL_LINK_NOARG (SfxTemplateManagerDlg, CloseHdl)
     return 0;
 }
 
-
 IMPL_LINK_NOARG(SfxTemplateManagerDlg, CloseOverlayHdl)
 {
+    maSelTemplates.clear();
+    mpTemplateBar->Hide();
+    mpViewBar->Show();
+
     maView->showOverlay(false);
     return 0;
 }
