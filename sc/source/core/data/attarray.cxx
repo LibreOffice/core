@@ -1732,7 +1732,7 @@ bool ScAttrArray::GetFirstVisibleAttr( SCROW& rFirstRow ) const
 
 const SCROW SC_VISATTR_STOP = 84;
 
-bool ScAttrArray::GetLastVisibleAttr( SCROW& rLastRow, SCROW nLastData, bool bFullFormattedArea ) const
+bool ScAttrArray::GetLastVisibleAttr( SCROW& rLastRow, SCROW nLastData ) const
 {
     OSL_ENSURE( nCount, "nCount == 0" );
 
