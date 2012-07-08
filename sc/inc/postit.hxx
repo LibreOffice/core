@@ -311,7 +311,7 @@ public:
 
     void erase(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, bool bForgetCaption = false);
 
-
+    void CreateAllNoteCaptions(SCTAB nTab);
 };
 
 // ============================================================================
