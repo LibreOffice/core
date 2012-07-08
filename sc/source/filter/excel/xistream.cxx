@@ -824,7 +824,7 @@ sal_Size XclImpStream::CopyToStream( SvStream& rOutStrm, sal_Size nBytes )
             nRet += Read( pnBuffer, nReadSize );
             // writing more bytes than read results in invalid memory access
             SAL_WARN_IF(nRet != nReadSize, "sc", "read less bytes than requested");
-            rOutStrm.Write( pnBuffer, nRet );
+            rOutStrm.Write( pnBuffer, nReadSize );
             nBytesLeft -= nReadSize;
         }
 
