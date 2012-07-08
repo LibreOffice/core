@@ -128,7 +128,7 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
     Size aActionSize = mpActionBar->CalcMinimumWindowSizePixel();
     Size aTemplateSize = mpTemplateBar->CalcMinimumWindowSizePixel();
 
-    aActionSize.setWidth(2*aActionSize.getWidth());
+    aActionSize.setWidth(3*aActionSize.getWidth());
     aViewSize.setWidth(aWinSize.getWidth()-aActionSize.getWidth()-mpViewBar->GetPosPixel().X());
     aTemplateSize.setWidth(aWinSize.getWidth());
 
