@@ -215,6 +215,8 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
     // Set dialog to correct dimensions
     SetSizePixel(aWinSize);
 
+    centerTopButtons();
+
     mpViewBar->Show();
     mpActionBar->Show();
 
@@ -753,6 +755,36 @@ void SfxTemplateManagerDlg::OnTemplateDelete ()
         else
             ++pIter;
     }
+}
+
+void SfxTemplateManagerDlg::centerTopButtons()
+{
+    Point aFirstBtnPos = aButtonAll.GetPosPixel();
+
+    Size aSelBtnSize = maButtonSelMode.GetOutputSize(); // Last button in the list
+    Size aBtnSize = aButtonAll.GetOutputSize();
+    Size aWinSize = GetOutputSize();
+
+    long nTotalWidth = aSelBtnSize.getWidth() + aBtnSize.getWidth()*5;
+    long nSpace = (aWinSize.getWidth() - nTotalWidth)/2;
+
+    Point aBtnPos(nSpace,aFirstBtnPos.getY());
+    aButtonAll.SetPosPixel(aBtnPos);
+
+    aBtnPos.setX(aBtnPos.getX() + aBtnSize.getWidth());
+    aButtonDocs.SetPosPixel(aBtnPos);
+
+    aBtnPos.setX(aBtnPos.getX() + aBtnSize.getWidth());
+    aButtonPresents.SetPosPixel(aBtnPos);
+
+    aBtnPos.setX(aBtnPos.getX() + aBtnSize.getWidth());
+    aButtonSheets.SetPosPixel(aBtnPos);
+
+    aBtnPos.setX(aBtnPos.getX() + aBtnSize.getWidth());
+    aButtonDraws.SetPosPixel(aBtnPos);
+
+    aBtnPos.setX(aBtnPos.getX() + aBtnSize.getWidth());
+    maButtonSelMode.SetPosPixel(aBtnPos);
 }
 
 void lcl_createTemplate(uno::Reference< com::sun::star::frame::XComponentLoader > xDesktop,

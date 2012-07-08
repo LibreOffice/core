@@ -104,8 +104,8 @@ ModalDialog DLG_TEMPLATE_MANAGER
 
     ImageButton BTN_SELECTION_MODE
     {
-        Pos = MAP_APPFONT(265,5);
-        Size = MAP_APPFONT(14,14);
+        Pos = MAP_APPFONT(260,5);
+        Size = MAP_APPFONT(20,14);
         TabStop = TRUE;
 
         ButtonImage = Image

@@ -72,6 +72,8 @@ private:
     void OnTemplateProperties ();
     void OnTemplateDelete ();
 
+    void centerTopButtons ();
+
 private:
 
     PushButton aButtonAll;
