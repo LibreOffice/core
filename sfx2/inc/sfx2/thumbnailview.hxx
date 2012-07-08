@@ -15,6 +15,7 @@
 #include <vector>
 #include <boost/function.hpp>
 
+#include <sfx2/thumbnailviewitem.hxx>
 #include <vcl/ctrl.hxx>
 #include <vcl/timer.hxx>
 
@@ -25,7 +26,6 @@ class HelpEvent;
 class KeyEvent;
 class DataChangedEvent;
 class ScrollBar;
-struct ThumbnailViewItem;
 typedef ::std::vector< ThumbnailViewItem* > ValueItemList;
 
 class ThumbnailItemAttributes;
