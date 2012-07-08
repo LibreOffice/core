@@ -2599,7 +2599,11 @@ sal_Bool GtkSalGraphics::NWPaintGTKTabItem( ControlType nType, ControlPart,
 
         case CTRL_TAB_ITEM:
         {
+            const TabitemValue* tiValue = static_cast<const TabitemValue *>(&aValue);
             stateType = ( nState & CTRL_STATE_SELECTED ) ? GTK_STATE_NORMAL : GTK_STATE_ACTIVE;
+            GtkPositionType gapSide(GTK_POS_BOTTOM);
+            if(tiValue->isAtBottom())
+                gapSide=GTK_POS_TOP;
 
             // First draw the background
             gtk_paint_flat_box(gWidgetData[m_nXScreen].gNotebookWidget->style, pixmap,
@@ -2615,7 +2619,7 @@ sal_Bool GtkSalGraphics::NWPaintGTKTabItem( ControlType nType, ControlPart,
 
             gtk_paint_extension( gWidgetData[m_nXScreen].gNotebookWidget->style, pixmap, stateType, GTK_SHADOW_OUT, NULL, gWidgetData[m_nXScreen].gNotebookWidget,
                 (char *)"tab", (tabRect.Left() - pixmapRect.Left()), (tabRect.Top() - pixmapRect.Top()),
-                tabRect.GetWidth(), tabRect.GetHeight(), GTK_POS_BOTTOM );
+                tabRect.GetWidth(), tabRect.GetHeight(), gapSide);
 
             g_object_steal_data(G_OBJECT(pixmap),tabPrelitDataName);
 

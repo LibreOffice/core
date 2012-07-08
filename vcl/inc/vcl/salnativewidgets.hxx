@@ -363,16 +363,20 @@ class VCL_DLLPUBLIC SliderValue : public ImplControlValue
 #define TABITEM_RIGHTALIGNED   0x002   // the tabitem is aligned with the right border of the TabControl
 #define TABITEM_FIRST_IN_GROUP 0x004   // the tabitem is the first in group of tabitems
 #define TABITEM_LAST_IN_GROUP  0x008   // the tabitem is the last in group of tabitems
+/* This constant is independent from the ones above */
+#define TABITEM_IS_AT_BOTTOM   0x001   // the tabitem at the bottom of the TabControl
 
 class VCL_DLLPUBLIC TabitemValue : public ImplControlValue
 {
     public:
         unsigned int    mnAlignment;
+        unsigned int    mnPosition;
 
         inline TabitemValue()
         : ImplControlValue( CTRL_TAB_ITEM, BUTTONVALUE_DONTKNOW, 0 )
         {
             mnAlignment = 0;
+            mnPosition = 0;
         };
         virtual ~TabitemValue();
         virtual TabitemValue* clone() const;
@@ -383,6 +387,7 @@ class VCL_DLLPUBLIC TabitemValue : public ImplControlValue
         sal_Bool isNotAligned() const   { return (mnAlignment & (TABITEM_LEFTALIGNED | TABITEM_RIGHTALIGNED)) == 0; }
         sal_Bool isFirst() const        { return (mnAlignment & TABITEM_FIRST_IN_GROUP) != 0; }
         sal_Bool isLast() const         { return (mnAlignment & TABITEM_LAST_IN_GROUP) != 0; }
+        sal_Bool isAtBottom() const     { return (mnPosition & TABITEM_IS_AT_BOTTOM) != 0; }
 };
 
 /* SpinbuttonValue:
