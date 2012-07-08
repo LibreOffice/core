@@ -795,7 +795,10 @@ void ScXMLTableRowCellContext::AddNumberCellToDoc( const ScAddress& rCurrentPos 
         if ( pCell && pCell->GetCellType() == CELLTYPE_FORMULA )
         {
             ScFormulaCell* pFCell = static_cast<ScFormulaCell*>(pCell);
-            pFCell->SetHybridDouble( fValue );
+            if( bFormulaTextResult && pOUTextValue && !pOUTextValue->isEmpty() )
+                pFCell->SetHybridString( *pOUTextValue );
+            else
+                pFCell->SetHybridDouble( fValue );
             pFCell->ResetDirty();
         }
     }
@@ -1052,15 +1055,6 @@ void ScXMLTableRowCellContext::AddNonMatrixFormulaCell( const ScAddress& rCellPo
     }
 }
 
-namespace{
-
-bool isErrOrNA(const rtl::OUString& rStr)
-{
-    return (rStr.indexOf("Err:")  > -1) || (rStr.indexOf("#N/A") > -1);
-}
-
-}
-
 void ScXMLTableRowCellContext::AddFormulaCell( const ScAddress& rCellPos )
 {
     if( cellExists(rCellPos) )
@@ -1068,10 +1062,6 @@ void ScXMLTableRowCellContext::AddFormulaCell( const ScAddress& rCellPos )
         SetContentValidation( rCellPos );
         OSL_ENSURE(((nColsRepeated == 1) && (nRepeatedRows == 1)), "repeated cells with formula not possible now");
         rXMLImport.GetStylesImportHelper()->AddCell(rCellPos);
-
-        //if this is an "Err:###" or "#N/A" then use text:p value
-        if( bFormulaTextResult && pOUTextContent && isErrOrNA(*pOUTextContent) )
-            pOUTextValue.reset(*pOUTextContent);
 
         //add matrix
         if(bIsMatrix)
@@ -1115,6 +1105,15 @@ void ScXMLTableRowCellContext::AddFormulaCell( const ScAddress& rCellPos )
     }
 }
 
+namespace{
+
+bool isErrOrNA(const rtl::OUString& rStr)
+{
+    return (rStr.indexOf("Err:")  > -1) || (rStr.indexOf("#N/A") > -1);
+}
+
+}
+
 void ScXMLTableRowCellContext::EndElement()
 {
     if( bHasTextImport && rXMLImport.GetRemoveLastChar() )
@@ -1130,6 +1129,10 @@ void ScXMLTableRowCellContext::EndElement()
             aTextImport->ResetCursor();
         }
     }
+
+    //if this is an "Err:###" or "#N/A" then use text:p value
+    if( bFormulaTextResult && pOUTextContent && isErrOrNA(*pOUTextContent) )
+        pOUTextValue.reset(*pOUTextContent);
 
     ScAddress aCellPos = rXMLImport.GetTables().GetCurrentCellPos();
     if( aCellPos.Col() > 0 && nRepeatedRows > 1 )
