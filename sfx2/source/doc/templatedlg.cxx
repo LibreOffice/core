@@ -186,6 +186,7 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
     maView->setItemStateHdl(LINK(this,SfxTemplateManagerDlg,TVFolderStateHdl));
     maView->setTemplateStateHdl(LINK(this,SfxTemplateManagerDlg,TVTemplateStateHdl));
     maView->setOverlayDblClickHdl(LINK(this,SfxTemplateManagerDlg,OpenTemplateHdl));
+    maView->setOverlayCloseHdl(LINK(this,SfxTemplateManagerDlg,CloseOverlayHdl));
 
     mpSearchView->SetSizePixel(aThumbSize);
     mpSearchView->setItemMaxTextLength(ITEM_MAX_TEXT_LENGTH);
@@ -277,6 +278,13 @@ void SfxTemplateManagerDlg::MouseButtonDown( const MouseEvent& rMEvt )
 IMPL_LINK_NOARG (SfxTemplateManagerDlg, CloseHdl)
 {
     Close();
+    return 0;
+}
+
+
+IMPL_LINK_NOARG(SfxTemplateManagerDlg, CloseOverlayHdl)
+{
+    maView->showOverlay(false);
     return 0;
 }
 

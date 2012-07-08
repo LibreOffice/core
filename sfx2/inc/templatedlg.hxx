@@ -48,6 +48,7 @@ private:
     virtual void MouseButtonDown( const MouseEvent& rMEvt );
 
     DECL_LINK(CloseHdl, void*);
+    DECL_LINK(CloseOverlayHdl, void*);
 
     DECL_LINK(OnClickSelectionMode, ImageButton*);
 

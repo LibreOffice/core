@@ -287,7 +287,6 @@ TemplateFolderView::TemplateFolderView ( Window* pParent, const ResId& rResId, b
 
     mpItemView->setItemStateHdl(LINK(this,TemplateFolderView,TVTemplateStateHdl));
     mpItemView->setChangeNameHdl(LINK(this,TemplateFolderView,ChangeNameHdl));
-    mpItemView->setCloseHdl(LINK(this,TemplateFolderView,OverlayCloseHdl));
 }
 
 TemplateFolderView::~TemplateFolderView()
@@ -392,6 +391,11 @@ void TemplateFolderView::showOverlay (bool bVisible)
 void TemplateFolderView::setOverlayDblClickHdl(const Link &rLink)
 {
     mpItemView->setDblClickHdl(rLink);
+}
+
+void TemplateFolderView::setOverlayCloseHdl(const Link &rLink)
+{
+    mpItemView->setCloseHdl(rLink);
 }
 
 void TemplateFolderView::filterTemplatesByApp (const FILTER_APPLICATION &eApp)
@@ -688,12 +692,6 @@ IMPL_LINK(TemplateFolderView, ChangeNameHdl, TemplateView*, pView)
     }
 
     return true;
-}
-
-IMPL_LINK_NOARG(TemplateFolderView, OverlayCloseHdl)
-{
-    showOverlay(false);
-    return 0;
 }
 
 void lcl_updateThumbnails (TemplateFolderViewItem *pItem)

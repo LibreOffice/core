@@ -48,6 +48,8 @@ public:
 
     void setOverlayDblClickHdl (const Link &rLink);
 
+    void setOverlayCloseHdl (const Link &rLink);
+
     void filterTemplatesByApp (const FILTER_APPLICATION &eApp);
 
     std::vector<TemplateItemProperties>
@@ -77,8 +79,6 @@ private:
     DECL_LINK(TVTemplateStateHdl, const ThumbnailViewItem*);
 
     DECL_LINK(ChangeNameHdl, TemplateView*);
-
-    DECL_LINK(OverlayCloseHdl, void*);
 
 private:
 
