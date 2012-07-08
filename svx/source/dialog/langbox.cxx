@@ -349,6 +349,10 @@ sal_uInt16 SvxLanguageBox::ImplInsertLanguage( const LanguageType nLangType, sal
         nRealLang = MsLangId::resolveSystemLanguageByScriptType(nRealLang, nType);
         aStrEntry.AppendAscii(" - ");
         aStrEntry.Append(m_pLangTable->GetString( nRealLang ));
+    } else if (nRealLang == LANGUAGE_USER_SYSTEM_CONFIG) {
+        nRealLang = MsLangId::getSystemLanguage();
+        aStrEntry.AppendAscii(" - ");
+        aStrEntry.Append(m_pLangTable->GetString( nRealLang ));
     }
 
     aStrEntry = ApplyLreOrRleEmbedding( aStrEntry );
@@ -381,6 +385,13 @@ sal_uInt16 SvxLanguageBox::ImplInsertLanguage( const LanguageType nLangType, sal
 sal_uInt16 SvxLanguageBox::InsertDefaultLanguage( sal_Int16 nType, sal_uInt16 nPos )
 {
     return ImplInsertLanguage( LANGUAGE_SYSTEM, nPos, nType );
+}
+
+//------------------------------------------------------------------------
+
+sal_uInt16 SvxLanguageBox::InsertSystemLanguage( sal_uInt16 nPos )
+{
+    return ImplInsertLanguage( LANGUAGE_USER_SYSTEM_CONFIG, nPos, ::com::sun::star::i18n::ScriptType::WEAK );
 }
 
 //------------------------------------------------------------------------
