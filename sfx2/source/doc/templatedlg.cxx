@@ -176,7 +176,6 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
     mpSearchEdit->EnableUpdateData();
 
     maView->SetStyle(WB_VSCROLL);
-    maView->SetColor(GetBackground().GetColor());
     maView->SetSizePixel(aThumbSize);
     maView->setItemMaxTextLength(ITEM_MAX_TEXT_LENGTH);
 

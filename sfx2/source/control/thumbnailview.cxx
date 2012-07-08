@@ -52,8 +52,7 @@ enum
 };
 
 ThumbnailView::ThumbnailView (Window *pParent, WinBits nWinStyle, bool bDisableTransientChildren)
-    : Control( pParent, nWinStyle ),
-    maColor( pParent->GetBackground().GetColor() )
+    : Control( pParent, nWinStyle )
 {
     ImplInit();
     mbIsTransientChildrenDisabled = bDisableTransientChildren;
@@ -106,6 +105,7 @@ void ThumbnailView::ImplInit()
     mbSelectionMode = false;
     mbActive = true;
     maFilterFunc = ViewFilterAll();
+    maColor = GetSettings().GetStyleSettings().GetDialogColor();
 
     // Create the processor and process the primitives
     const drawinglayer::geometry::ViewInformation2D aNewViewInfos;
