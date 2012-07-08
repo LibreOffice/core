@@ -469,7 +469,8 @@ sal_Bool DrawDocShell::ConvertFrom( SfxMedium& rMedium )
         mpDoc->StopWorkStartupDelay();
         bRet = SdPPTFilter( rMedium, *this, sal_True ).Import();
     }
-    else if (aFilterName.match("impress8" ) || aFilterName.match("draw8"))
+    else if (aFilterName.indexOf("impress8") >= 0 ||
+             aFilterName.indexOf("draw8") >= 0)
     {
         // TODO/LATER: nobody is interested in the error code?!
         mpDoc->CreateFirstPages();
@@ -478,7 +479,8 @@ sal_Bool DrawDocShell::ConvertFrom( SfxMedium& rMedium )
         bRet = SdXMLFilter( rMedium, *this, sal_True ).Import( nError );
 
     }
-    else if (aFilterName.match("StarOffice XML (Draw)") || aFilterName.match("StarOffice XML (Impress)"))
+    else if (aFilterName.indexOf("StarOffice XML (Draw)") >= 0 ||
+             aFilterName.indexOf("StarOffice XML (Impress)") >= 0)
     {
         // TODO/LATER: nobody is interested in the error code?!
         mpDoc->CreateFirstPages();
@@ -595,25 +597,27 @@ sal_Bool DrawDocShell::ConvertTo( SfxMedium& rMedium )
         const rtl::OUString aTypeName( pMediumFilter->GetTypeName() );
         SdFilter*           pFilter = NULL;
 
-        if( aTypeName.match( "graphic_HTML" ) )
+        if( aTypeName.indexOf( "graphic_HTML" ) >= 0 )
         {
             pFilter = new SdHTMLFilter( rMedium, *this, sal_True );
         }
-        else if( aTypeName.match( "MS_PowerPoint_97" ) )
+        else if( aTypeName.indexOf( "MS_PowerPoint_97" ) >= 0 )
         {
             pFilter = new SdPPTFilter( rMedium, *this, sal_True );
             ((SdPPTFilter*)pFilter)->PreSaveBasic();
         }
-        else if ( aTypeName.match( "CGM_Computer_Graphics_Metafile" ) )
+        else if ( aTypeName.indexOf( "CGM_Computer_Graphics_Metafile" ) >= 0 )
         {
             pFilter = new SdCGMFilter( rMedium, *this, sal_True );
         }
-        else if( aTypeName.match( "draw8" ) || aTypeName.match( "impress8" ) )
+        else if( aTypeName.indexOf( "draw8" ) >= 0 ||
+                 aTypeName.indexOf( "impress8" ) >= 0 )
         {
             pFilter = new SdXMLFilter( rMedium, *this, sal_True );
             UpdateDocInfoForSave();
         }
-        else if( aTypeName.match( "StarOffice_XML_Impress" ) || aTypeName.match( "StarOffice_XML_Draw" ) )
+        else if( aTypeName.indexOf( "StarOffice_XML_Impress" ) >= 0 ||
+                 aTypeName.indexOf( "StarOffice_XML_Draw" ) >= 0 )
         {
             pFilter = new SdXMLFilter( rMedium, *this, sal_True, SDXMLMODE_Normal, SOFFICE_FILEFORMAT_60 );
             UpdateDocInfoForSave();
