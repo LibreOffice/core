@@ -355,8 +355,7 @@ SvXMLImportContext *ScXMLTableRowCellContext::CreateChildContext( sal_uInt16 nPr
 
             ScAddress aCellPos = rXMLImport.GetTables().GetCurrentCellPos();
 
-            if( ((nCellType == util::NumberFormat::TEXT) || bFormulaTextResult) &&
-                !rXMLImport.GetTables().IsPartOfMatrix(aCellPos.Col(), aCellPos.Row()) )
+            if( ((nCellType == util::NumberFormat::TEXT) || bFormulaTextResult) )
             {
                 if (!bHasTextImport)
                 {
@@ -746,7 +745,7 @@ void ScXMLTableRowCellContext::AddTextCellToDoc( const ScAddress& rCurrentPos,
         const SCCOL nCurrentCol, const ::boost::optional< rtl::OUString >& pOUText )
 {
     bool bDoIncrement = true;
-    if( rXMLImport.GetTables().IsPartOfMatrix(rCurrentPos.Col(), rCurrentPos.Row()) )
+    if( rXMLImport.GetTables().IsPartOfMatrix(rCurrentPos) )
     {
         ScBaseCell* pCell = rXMLImport.GetDocument()->GetCell( rCurrentPos );
         bDoIncrement = ( pCell && pCell->GetCellType() == CELLTYPE_FORMULA );
@@ -761,6 +760,7 @@ void ScXMLTableRowCellContext::AddTextCellToDoc( const ScAddress& rCurrentPos,
                 pFCell->SetHybridString( *pOUText );
             else
                 bDoIncrement = false;
+            pFCell->SetFormatType( nCellType );
             pFCell->ResetDirty();
         }
     }
@@ -789,7 +789,7 @@ void ScXMLTableRowCellContext::AddTextCellToDoc( const ScAddress& rCurrentPos,
 
 void ScXMLTableRowCellContext::AddNumberCellToDoc( const ScAddress& rCurrentPos )
 {
-    if( rXMLImport.GetTables().IsPartOfMatrix(rCurrentPos.Col(), rCurrentPos.Row()) )
+    if( rXMLImport.GetTables().IsPartOfMatrix(rCurrentPos) )
     {
         ScBaseCell* pCell = rXMLImport.GetDocument()->GetCell( rCurrentPos );
         if ( pCell && pCell->GetCellType() == CELLTYPE_FORMULA )
@@ -996,15 +996,6 @@ void ScXMLTableRowCellContext::AddNonFormulaCells( const ScAddress& rCellPos )
     }
 }
 
-namespace{
-
-bool isErrOrNA(const rtl::OUString& rStr)
-{
-    return (rStr.indexOf("Err:")  > -1) || (rStr.indexOf("#N/A") > -1);
-}
-
-}
-
 void ScXMLTableRowCellContext::AddNonMatrixFormulaCell( const ScAddress& rCellPos )
 {
     ScDocument* pDoc = rXMLImport.GetDocument();
@@ -1014,10 +1005,6 @@ void ScXMLTableRowCellContext::AddNonMatrixFormulaCell( const ScAddress& rCellPo
 
     ::boost::scoped_ptr<ScExternalRefManager::ApiGuard> pExtRefGuard;
     pExtRefGuard.reset(new ScExternalRefManager::ApiGuard(pDoc));
-
-    //if this is an "Err:###" or "#N/A" then use text:p value
-    if( bFormulaTextResult && pOUTextContent && isErrOrNA(*pOUTextContent) )
-        pOUTextValue.reset(*pOUTextContent);
 
     ScBaseCell* pNewCell = NULL;
 
@@ -1065,6 +1052,15 @@ void ScXMLTableRowCellContext::AddNonMatrixFormulaCell( const ScAddress& rCellPo
     }
 }
 
+namespace{
+
+bool isErrOrNA(const rtl::OUString& rStr)
+{
+    return (rStr.indexOf("Err:")  > -1) || (rStr.indexOf("#N/A") > -1);
+}
+
+}
+
 void ScXMLTableRowCellContext::AddFormulaCell( const ScAddress& rCellPos )
 {
     if( cellExists(rCellPos) )
@@ -1072,9 +1068,13 @@ void ScXMLTableRowCellContext::AddFormulaCell( const ScAddress& rCellPos )
         SetContentValidation( rCellPos );
         OSL_ENSURE(((nColsRepeated == 1) && (nRepeatedRows == 1)), "repeated cells with formula not possible now");
         rXMLImport.GetStylesImportHelper()->AddCell(rCellPos);
-        if (!bIsMatrix)
-            AddNonMatrixFormulaCell( rCellPos );
-        else
+
+        //if this is an "Err:###" or "#N/A" then use text:p value
+        if( bFormulaTextResult && pOUTextContent && isErrOrNA(*pOUTextContent) )
+            pOUTextValue.reset(*pOUTextContent);
+
+        //add matrix
+        if(bIsMatrix)
         {
             if (nMatrixCols > 0 && nMatrixRows > 0)
             {
@@ -1083,8 +1083,24 @@ void ScXMLTableRowCellContext::AddFormulaCell( const ScAddress& rCellPos )
                         rCellPos.Col() + nMatrixCols - 1,
                         rCellPos.Row() + nMatrixRows - 1,
                         pOUFormula->first, pOUFormula->second, eGrammar);
+
+                //add the cached formula result of the first matrix position
+                ScFormulaCell* pFCell =
+                    static_cast<ScFormulaCell*>( rXMLImport.GetDocument()->GetCell(rCellPos) );
+                if(pFCell)
+                {
+                    if( bFormulaTextResult && pOUTextValue && !pOUTextValue->isEmpty() )
+                        pFCell->SetHybridString( *pOUTextValue );
+                    else
+                        pFCell->SetHybridDouble( fValue );
+                    pFCell->SetFormatType( nCellType );
+                    pFCell->ResetDirty();
+                }
             }
         }
+        else
+            AddNonMatrixFormulaCell( rCellPos );
+
         SetAnnotation( rCellPos );
         SetDetectiveObj( rCellPos );
         SetCellRangeSource( rCellPos );

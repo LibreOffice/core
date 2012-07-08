@@ -40,27 +40,9 @@
 #include "XMLTableShapeResizer.hxx"
 #include "formula/grammar.hxx"
 #include "tabprotection.hxx"
-
-#include <vector>
-#include <list>
-#include <boost/ptr_container/ptr_vector.hpp>
+#include "rangelst.hxx"
 
 class ScXMLImport;
-
-struct ScMatrixRange
-{
-    rtl::OUString sFormula;
-    rtl::OUString sFormulaNmsp;
-    formula::FormulaGrammar::Grammar eGrammar;
-    ScRange aScRange;
-    ScMatrixRange(const ScRange& rScRange, const rtl::OUString& rFormula, const rtl::OUString& rFormulaNmsp, const formula::FormulaGrammar::Grammar eGrammarP) :
-        sFormula(rFormula),
-        sFormulaNmsp(rFormulaNmsp),
-        eGrammar(eGrammarP),
-        aScRange(rScRange)
-    {
-    }
-};
 
 struct ScXMLTabProtectionData
 {
@@ -77,8 +59,6 @@ struct ScXMLTabProtectionData
 class ScMyTables
 {
 private:
-    typedef std::list<ScMatrixRange>    ScMyMatrixRangeList;
-
     ScXMLImport&                        rImport;
 
     ScMyOLEFixer                        aFixupOLEs;
@@ -89,8 +69,8 @@ private:
     ::com::sun::star::uno::Reference < ::com::sun::star::drawing::XShapes > xShapes;
     rtl::OUString                       sCurrentSheetName;
     ScAddress                           maCurrentCellPos;
+    ScRangeList                         maMatrixRangeList;
     ScXMLTabProtectionData              maProtectionData;
-    ScMyMatrixRangeList                 aMatrixRangeList;
     sal_Int32                           nCurrentColStylePos;
     sal_Int16                           nCurrentDrawPage;
     sal_Int16                           nCurrentXShapes;
@@ -132,18 +112,13 @@ public:
                                                const rtl::OUString &rRangeList);
 
     void                                AddMatrixRange( const SCCOL nStartColumn,
-                                                const SCROW nStartRow,
-                                                const SCCOL nEndColumn,
-                                                const SCROW nEndRow,
-                                                const rtl::OUString& rFormula,
-                                                const rtl::OUString& rFormulaNmsp,
-                                                const formula::FormulaGrammar::Grammar );
-
-    bool                                IsPartOfMatrix( const SCCOL nColumn, const SCROW nRow);
-    void                                SetMatrix( const ScRange& rScRange,
-                                                const rtl::OUString& rFormula,
-                                                const rtl::OUString& rFormulaNmsp,
-                                                const formula::FormulaGrammar::Grammar );
+                                            const SCROW nStartRow,
+                                            const SCCOL nEndColumn,
+                                            const SCROW nEndRow,
+                                            const rtl::OUString& rFormula,
+                                            const rtl::OUString& rFormulaNmsp,
+                                            const formula::FormulaGrammar::Grammar );
+    bool                                IsPartOfMatrix( const ScAddress& rScAddress) const;
 };
 
 #endif

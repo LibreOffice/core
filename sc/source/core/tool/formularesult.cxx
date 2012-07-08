@@ -398,11 +398,16 @@ void ScFormulaResult::SetHybridDouble( double f )
     ResetToDefaults();
     if (mbToken && mpToken)
     {
-        String aString( GetString());
-        String aFormula( GetHybridFormula());
-        mpToken->DecRef();
-        mpToken = new ScHybridCellToken( f, aString, aFormula);
-        mpToken->IncRef();
+        if(GetType() == formula::svMatrixCell)
+            SetDouble(f);
+        else
+        {
+            String aString( GetString());
+            String aFormula( GetHybridFormula());
+            mpToken->DecRef();
+            mpToken = new ScHybridCellToken( f, aString, aFormula);
+            mpToken->IncRef();
+        }
     }
     else
     {

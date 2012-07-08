@@ -207,18 +207,7 @@ void ScMyTables::DeleteTable()
     rImport.GetStylesImportHelper()->SetStylesToRanges();
     rImport.SetStylesToRangesFinished();
 
-    //#i48793#; has to be set before protection
-    if (!aMatrixRangeList.empty())
-    {
-        ScMyMatrixRangeList::iterator aItr = aMatrixRangeList.begin();
-        ScMyMatrixRangeList::iterator aEndItr = aMatrixRangeList.end();
-        while(aItr != aEndItr)
-        {
-            SetMatrix(aItr->aScRange, aItr->sFormula, aItr->sFormulaNmsp, aItr->eGrammar);
-            ++aItr;
-        }
-        aMatrixRangeList.clear();
-    }
+    maMatrixRangeList.RemoveAll();
 
     if (rImport.GetDocument() && maProtectionData.mbProtected)
     {
@@ -294,62 +283,30 @@ void ScMyTables::AddMatrixRange(
         nStartColumn, nStartRow, maCurrentCellPos.Tab(),
         nEndColumn, nEndRow, maCurrentCellPos.Tab()
     );
-    ScMatrixRange aMRange(aScRange, rFormula, rFormulaNmsp, eGrammar);
-    aMatrixRangeList.push_back(aMRange);
-}
 
-bool ScMyTables::IsPartOfMatrix(const SCCOL nColumn, const SCROW nRow)
-{
-    bool bResult(false);
-    if (!aMatrixRangeList.empty())
-    {
-        ScMyMatrixRangeList::iterator aItr(aMatrixRangeList.begin());
-        ScMyMatrixRangeList::iterator aEndItr(aMatrixRangeList.end());
-        bool bReady(false);
-        while(!bReady && aItr != aEndItr)
-        {
-            if (maCurrentCellPos.Tab() > aItr->aScRange.aStart.Tab())
-            {
-                OSL_FAIL("should never hapen, because the list should be cleared in DeleteTable");
-                aItr = aMatrixRangeList.erase(aItr);
-            }
-            else if ((nRow > aItr->aScRange.aEnd.Row()) && (nColumn > aItr->aScRange.aEnd.Col()))
-            {
-                SetMatrix(aItr->aScRange, aItr->sFormula, aItr->sFormulaNmsp, aItr->eGrammar);
-                aItr = aMatrixRangeList.erase(aItr);
-            }
-            else if (nColumn < aItr->aScRange.aStart.Col())
-                bReady = true;
-            else if ( nColumn >= aItr->aScRange.aStart.Col() && nColumn <= aItr->aScRange.aEnd.Col() &&
-                      nRow >= aItr->aScRange.aStart.Row() && nRow <= aItr->aScRange.aEnd.Row() )
-            {
-                bReady = true;
-                bResult = true;
-            }
-            else
-                ++aItr;
-        }
-    }
-    return bResult;
-}
+    maMatrixRangeList.Append(aScRange);
 
-void ScMyTables::SetMatrix(const ScRange& rScRange, const rtl::OUString& rFormula,
-        const rtl::OUString& rFormulaNmsp, const formula::FormulaGrammar::Grammar eGrammar)
-{
     ScDocument* pDoc = rImport.GetDocument();
     ScMarkData aMark;
-    aMark.SetMarkArea( rScRange );
-    aMark.SelectTable( rScRange.aStart.Tab(), sal_True );
+    aMark.SetMarkArea( aScRange );
+    aMark.SelectTable( aScRange.aStart.Tab(), sal_True );
     ScTokenArray* pCode = new ScTokenArray;
     pCode->AddStringXML( rFormula );
     if( (eGrammar == formula::FormulaGrammar::GRAM_EXTERNAL) && !rFormulaNmsp.isEmpty() )
         pCode->AddStringXML( rFormulaNmsp );
     pDoc->InsertMatrixFormula(
-        rScRange.aStart.Col(), rScRange.aStart.Row(),
-        rScRange.aEnd.Col(), rScRange.aEnd.Row(),
+        aScRange.aStart.Col(), aScRange.aStart.Row(),
+        aScRange.aEnd.Col(), aScRange.aEnd.Row(),
         aMark, EMPTY_STRING, pCode, eGrammar );
     delete pCode;
     pDoc->IncXMLImportedFormulaCount( rFormula.getLength() );
+}
+
+bool ScMyTables::IsPartOfMatrix(const ScAddress& rScAddress) const
+{
+    if (!maMatrixRangeList.empty())
+        return maMatrixRangeList.In(rScAddress);
+    return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
