@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAL3////w\u003d",
+        "filename": "sc/inc/addincol.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2012-07-08T20:41:11Z",
+      "side": 1,
+      "message": "We should use rtl::OUStringHash for rtl::OUString to prevent temporary copies.\n\nstd::equal_to\u003c rtl::OUString \u003e is the default parameter in this case so we can leave it out.",
+      "revId": "90802038fc7fb7bb98acfb132bf3fc6b10e29a63",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAL3////s\u003d",
+        "filename": "sc/source/core/tool/addincol.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 892,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2012-07-08T20:41:11Z",
+      "side": 1,
+      "message": "using rtl::OUStringBuffere here looks like a good idea",
+      "revId": "90802038fc7fb7bb98acfb132bf3fc6b10e29a63",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAL3////o\u003d",
+        "filename": "sc/source/core/tool/addincol.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1108,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2012-07-08T20:41:11Z",
+      "side": 1,
+      "message": "another place for OUStringBuffer",
+      "revId": "90802038fc7fb7bb98acfb132bf3fc6b10e29a63",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAL3////k\u003d",
+        "filename": "sc/source/core/tool/addincol.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1743,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2012-07-08T20:41:11Z",
+      "side": 1,
+      "message": "no need for a temporary object in this case",
+      "revId": "90802038fc7fb7bb98acfb132bf3fc6b10e29a63",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAL3////c\u003d",
+        "filename": "sc/source/core/tool/compiler.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2012-07-08T20:41:11Z",
+      "side": 1,
+      "message": "no need for a temporary object in this case, will be automatically generated",
+      "revId": "90802038fc7fb7bb98acfb132bf3fc6b10e29a63",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAL3////g\u003d",
+        "filename": "sc/source/core/tool/compiler.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 5245,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2012-07-08T20:41:11Z",
+      "side": 1,
+      "message": "no need for a temporary object in this case, just use aEntry.Name \u003d aName;",
+      "revId": "90802038fc7fb7bb98acfb132bf3fc6b10e29a63",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAL3////Y\u003d",
+        "filename": "sc/source/filter/excel/xeformula.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2346,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2012-07-08T20:41:11Z",
+      "side": 1,
+      "message": "No need for the temporary object in this case, will be generated automatically.",
+      "revId": "90802038fc7fb7bb98acfb132bf3fc6b10e29a63",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
