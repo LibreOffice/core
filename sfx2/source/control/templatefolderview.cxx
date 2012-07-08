@@ -468,6 +468,18 @@ sal_uInt16 TemplateFolderView::createRegion(const rtl::OUString &rName)
     return true;
 }
 
+bool TemplateFolderView::removeRegion(const sal_uInt16 nItemId)
+{
+    sal_uInt16 nRegionId = nItemId - 1;
+
+    if (!mpDocTemplates->Delete(nRegionId,USHRT_MAX))
+        return false;
+
+    RemoveItem(nItemId);
+
+    return true;
+}
+
 bool TemplateFolderView::removeTemplate (const sal_uInt16 nItemId)
 {
     sal_uInt16 nRegionId = mpItemView->getRegionId();

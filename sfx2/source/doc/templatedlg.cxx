@@ -310,6 +310,9 @@ IMPL_LINK_NOARG(SfxTemplateManagerDlg,TBXViewHdl)
     case TBI_TEMPLATE_IMPORT:
         OnTemplateImport();
         break;
+    case TBI_TEMPLATE_FOLDER_DEL:
+        OnFolderDelete();
+        break;
     default:
         break;
     }
@@ -418,7 +421,10 @@ IMPL_LINK(SfxTemplateManagerDlg, TVFolderStateHdl, const ThumbnailViewItem*, pIt
     if (pItem->isSelected())
     {
         if (maSelFolders.empty())
+        {
             mpViewBar->EnableItem(TBI_TEMPLATE_IMPORT,true);
+            mpViewBar->ShowItem(TBI_TEMPLATE_FOLDER_DEL);
+        }
 
         maSelFolders.insert(pItem);
     }
@@ -427,7 +433,10 @@ IMPL_LINK(SfxTemplateManagerDlg, TVFolderStateHdl, const ThumbnailViewItem*, pIt
         maSelFolders.erase(pItem);
 
         if (maSelFolders.empty())
+        {
             mpViewBar->EnableItem(TBI_TEMPLATE_IMPORT,false);
+            mpViewBar->HideItem(TBI_TEMPLATE_FOLDER_DEL);
+        }
     }
 
     return 0;
@@ -757,6 +766,18 @@ void SfxTemplateManagerDlg::OnTemplateDelete ()
     {
         if (maView->removeTemplate((*pIter)->mnId))
             maSelTemplates.erase(pIter++);
+        else
+            ++pIter;
+    }
+}
+
+void SfxTemplateManagerDlg::OnFolderDelete()
+{
+    std::set<const ThumbnailViewItem*>::const_iterator pIter;
+    for (pIter = maSelFolders.begin(); pIter != maSelFolders.end();)
+    {
+        if (maView->removeRegion((*pIter)->mnId))
+            maSelFolders.erase(pIter++);
         else
             ++pIter;
     }

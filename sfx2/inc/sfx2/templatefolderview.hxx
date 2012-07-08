@@ -62,6 +62,8 @@ public:
 
     sal_uInt16 createRegion (const rtl::OUString &rName);
 
+    bool removeRegion (const sal_uInt16 nItemId);
+
     bool removeTemplate (const sal_uInt16 nItemId);
 
     bool moveTemplates (std::set<const ThumbnailViewItem*> &rItems, const sal_uInt16 nTargetItem, bool bCopy);

@@ -195,6 +195,13 @@ ModalDialog DLG_TEMPLATE_MANAGER
                     ImageBitmap = Bitmap { File = "import.png" ; };
                 };
             };
+
+            ToolBoxItem
+            {
+                Identifier = TBI_TEMPLATE_FOLDER_DEL;
+                Hide = TRUE;
+                Text [ en-US ] = "Delete";
+            };
         };
     };
 
