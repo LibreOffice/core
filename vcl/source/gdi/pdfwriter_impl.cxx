@@ -6155,6 +6155,10 @@ bool PDFWriterImpl::emitSignature()
 
 bool PDFWriterImpl::finalizeSignature()
 {
+
+    if (!m_aContext.SignCertificate.is())
+        return false;
+
     // 1- calculate last ByteRange value
     sal_uInt64 nOffset = ~0U;
     CHECK_RETURN( (osl_File_E_None == osl_getFilePos( m_aFile, &nOffset ) ) );
@@ -6177,6 +6181,13 @@ bool PDFWriterImpl::finalizeSignature()
     // 3- create the PKCS#7 object using NSS
     // use  m_aContext.SignCertificate and m_aContext.SignPassword as certificate and private key password
     // SignCertificate->getEncoded is DER encoded certificate
+    com::sun::star::uno::Sequence< sal_Int8 > derEncoded = m_aContext.SignCertificate->getEncoded();
+
+    if (!derEncoded.hasElements())
+        return false;
+
+    sal_Int8* n_derArray = derEncoded.getArray();
+    sal_Int32 n_derLength = derEncoded.getLength();
 
     // 4- overwrite the PKCS7 content to the m_nSignatureContentOffset
     CHECK_RETURN( (osl_File_E_None == osl_setFilePos( m_aFile, osl_Pos_Absolut, m_nSignatureContentOffset ) ) );
