@@ -222,7 +222,7 @@ function getDefaultCharCodeDictionary()
 }
 
 
-function slideOnMouseDown( aEvt )
+function slideOnMouseUp( aEvt )
 {
     if (!aEvt)
         aEvt = window.event;
@@ -236,7 +236,11 @@ function slideOnMouseDown( aEvt )
 
     if( 0 != nOffset )
         dispatchEffects( nOffset );
+    return true; // the click has been handled
 }
+
+document.handleClick = slideOnMouseUp;
+
 
 /** Event handler for mouse wheel events in slide mode.
  *  based on http://adomas.org/javascript-mouse-wheel/
@@ -309,7 +313,7 @@ function mouseHandlerDispatch( aEvt, anAction )
 }
 
 //Set mouse event handler.
-document.onmousedown = function( aEvt ) { return mouseHandlerDispatch( aEvt, MOUSE_DOWN ); };
+document.onmouseup = function( aEvt ) { return mouseHandlerDispatch( aEvt, MOUSE_UP ); };
 //document.onmousemove = function( aEvt ) { return mouseHandlerDispatch( aEvt, MOUSE_MOVE ); };
 
 /** Function to supply the default mouse handler dictionary.
@@ -324,13 +328,17 @@ function getDefaultMouseHandlerDictionary()
     mouseHandlerDict[INDEX_MODE] = new Object();
 
     // slide mode
-    mouseHandlerDict[SLIDE_MODE][MOUSE_DOWN]
-        = function( aEvt ) { return slideOnMouseDown( aEvt ); };
+    mouseHandlerDict[SLIDE_MODE][MOUSE_UP]
+        //= function( aEvt ) { return slideOnMouseDown( aEvt ); };
+        = function( aEvt ) { return ( aSlideShow.aEventMultiplexer ) ?
+                                        aSlideShow.aEventMultiplexer.notifyMouseClick( aEvt )
+                                        : slideOnMouseUp( aEvt ); };
+
     mouseHandlerDict[SLIDE_MODE][MOUSE_WHEEL]
         = function( aEvt ) { return slideOnMouseWheel( aEvt ); };
 
     // index mode
-    mouseHandlerDict[INDEX_MODE][MOUSE_DOWN]
+    mouseHandlerDict[INDEX_MODE][MOUSE_UP]
         = function( aEvt ) { return toggleSlideIndex(); };
 //    mouseHandlerDict[INDEX_MODE][MOUSE_MOVE]
 //        = function( aEvt ) { return theSlideIndexPage.updateSelection( aEvt ); };
@@ -1433,7 +1441,7 @@ var NAVDBG = new DebugPrinter();
 NAVDBG.off();
 
 var ANIMDBG = new DebugPrinter();
-ANIMDBG.on();
+ANIMDBG.off();
 
 var aRegisterEventDebugPrinter = new DebugPrinter();
 aRegisterEventDebugPrinter.off();
@@ -5047,11 +5055,11 @@ NodeContext.prototype.makeSourceEventElement = function( sId, aEventBaseElem )
         return null;
     }
 
-    if( !this.aAnimationNodeMap[ sId ] )
+    if( !this.aSourceEventElementMap[ sId ] )
     {
-        this.aAnimationNodeMap[ sId ] = new SourceEventElement( aEventBaseElem, this.aContext.aEventMultiplexer );
+        this.aSourceEventElementMap[ sId ] = new SourceEventElement( sId, aEventBaseElem, this.aContext.aEventMultiplexer );
     }
-    return this.aAnimationNodeMap[ sId ];
+    return this.aSourceEventElementMap[ sId ];
 };
 
 
@@ -5323,7 +5331,7 @@ BaseNode.prototype.resolve = function()
         {
             this.aActivationEvent = makeDelay( bind( this, this.activate ), this.getBegin().getOffset() + this.nStartDelay );
         }
-        registerEvent( this.getBegin(), this.aActivationEvent, this.aNodeContext );
+        registerEvent( this.getId(), this.getBegin(), this.aActivationEvent, this.aNodeContext );
 
         return true;
     }
@@ -9378,6 +9386,7 @@ function SlideAnimations( aSlideShowContext )
     this.aAnimatedElementMap = new Object();
     this.aSourceEventElementMap = new Object();
     this.aNextEffectEventArray = new NextEffectEventArray();
+    this.aInteractiveAnimationSequenceMap = new Object();
     this.aEventMultiplexer = new EventMultiplexer( aSlideShowContext.aTimerEventQueue );
     this.aRootNode = null;
     this.bElementsParsed = false;
@@ -9385,6 +9394,11 @@ function SlideAnimations( aSlideShowContext )
     this.aContext.aAnimationNodeMap = this.aAnimationNodeMap;
     this.aContext.aAnimatedElementMap = this.aAnimatedElementMap;
     this.aContext.aSourceEventElementMap = this.aSourceEventElementMap;
+
+    // We set up a low priority for the invocation of document.handleClick
+    // in order to make clicks on shapes, that start interactive animation
+    // sequence (on click), have an higher priority.
+    this.aEventMultiplexer.registerMouseClickHandler( document, 100 );
 }
 
 
@@ -9433,7 +9447,12 @@ SlideAnimations.prototype.start = function()
     if( !this.bElementsParsed )
         return false;
 
-    aSlideShow.setSlideEvents( this.aNextEffectEventArray, this.aEventMultiplexer );
+    this.chargeSourceEvents();
+    this.chargeInterAnimEvents();
+
+    aSlideShow.setSlideEvents( this.aNextEffectEventArray,
+                               this.aInteractiveAnimationSequenceMap,
+                               this.aEventMultiplexer );
 
     if( this.aContext.bFirstRun == undefined )
         this.aContext.bFirstRun = true;
@@ -9489,7 +9508,21 @@ SlideAnimations.prototype.clearNextEffectEvents = function()
     this.aContext.bFirstRun = undefined;
 };
 
+SlideAnimations.prototype.chargeSourceEvents = function()
+{
+    for( var id in this.aSourceEventElementMap )
+    {
+        this.aSourceEventElementMap[id].charge();
+    }
+};
 
+SlideAnimations.prototype.chargeInterAnimEvents = function()
+{
+    for( var id in this.aInteractiveAnimationSequenceMap )
+    {
+        this.aInteractiveAnimationSequenceMap[id].chargeEvents();
+    }
+};
 
 /**********************************************************************************************
  *      Event classes and helper functions
@@ -9578,7 +9611,7 @@ function makeDelay( aFunctor, nTimeout )
 
 
 // ------------------------------------------------------------------------------------------ //
-function registerEvent( aTiming, aEvent, aNodeContext )
+function registerEvent( nNodeId, aTiming, aEvent, aNodeContext )
 {
     var aSlideShowContext = aNodeContext.aContext;
     var eTimingType = aTiming.getType();
@@ -9603,6 +9636,14 @@ function registerEvent( aTiming, aEvent, aNodeContext )
             log( 'registerEvent: next effect event array not initialized' );
             return;
         }
+        var aInteractiveAnimationSequenceMap =
+            aSlideShowContext.aInteractiveAnimationSequenceMap;
+        if( !aInteractiveAnimationSequenceMap )
+        {
+            log( 'registerEvent: interactive animation sequence map not initialized' );
+            return;
+        }
+
         switch( eTimingType )
         {
             case EVENT_TIMING:
@@ -9618,6 +9659,12 @@ function registerEvent( aTiming, aEvent, aNodeContext )
                     }
                     var aSourceEventElement = aNodeContext.makeSourceEventElement( sEventBaseElemId, aEventBaseElem );
 
+                    if( !aInteractiveAnimationSequenceMap[ nNodeId ] )
+                    {
+                        var aInteractiveAnimationSequence = new InteractiveAnimationSequence( nNodeId );
+                        aInteractiveAnimationSequenceMap[ nNodeId ] = aInteractiveAnimationSequence;
+                    }
+
                     var bEventRegistered = false;
                     switch( eEventType )
                     {
@@ -9629,7 +9676,12 @@ function registerEvent( aTiming, aEvent, aNodeContext )
                             log( 'generateEvent: not handled event type: ' + eEventType );
                     }
                     if( bEventRegistered )
-                        aSourceEventElement.addEventListener( eEventType  );
+                    {
+                        var aStartEvent = aInteractiveAnimationSequenceMap[ nNodeId ].getStartEvent();
+                        var aEndEvent = aInteractiveAnimationSequenceMap[ nNodeId ].getEndEvent();
+                        aEventMultiplexer.registerEvent( eEventType, aSourceEventElement.getId(), aStartEvent );
+                        aEventMultiplexer.registerEvent( EVENT_TRIGGER_END_EVENT, nNodeId, aEndEvent );
+                    }
                 }
                 else  // no base event element present
                 {
@@ -9680,82 +9732,173 @@ registerEvent.DBG = function( aTiming, nTime )
 
 
 // ------------------------------------------------------------------------------------------ //
-function SourceEventElement( aElement, aEventMultiplexer )
+function SourceEventElement( sId, aElement, aEventMultiplexer )
 {
-    this.nId = getUniqueId();
+    this.sId = sId;
     this.aElement = aElement;
     this.aEventMultiplexer = aEventMultiplexer;
-    this.aEventListenerStateArray = new Array();
+
+    this.aEventMultiplexer.registerMouseClickHandler( this, 1000 );
+
+    this.bClickHandled = false;
+    this.bIsPointerOver = false;
+    this.aElement.addEventListener( 'mouseover', bind2( SourceEventElement.prototype.onMouseEnter, this), false );
+    this.aElement.addEventListener( 'mouseout', bind2( SourceEventElement.prototype.onMouseLeave, this), false );
 }
 
-
 SourceEventElement.prototype.getId = function()
+{
+    return this.sId;
+};
+
+SourceEventElement.prototype.onMouseEnter = function()
+{
+    this.bIsPointerOver = true;
+};
+
+SourceEventElement.prototype.onMouseLeave = function()
+{
+    this.bIsPointerOver = false;
+};
+
+SourceEventElement.prototype.charge = function()
+{
+    this.bClickHandled = false;
+};
+
+SourceEventElement.prototype.handleClick = function( aMouseEvent )
+{
+    if( !this.bIsPointerOver ) return false;
+
+    if( this.bClickHandled )
+        return true;
+
+    this.aEventMultiplexer.notifyEvent( EVENT_TRIGGER_ON_CLICK, this.getId() );
+    aSlideShow.update();
+    this.bClickHandled = true;
+    return true;
+};
+
+
+
+// ------------------------------------------------------------------------------------------ //
+function InteractiveAnimationSequence( nId )
+{
+    this.nId = nId;
+    this.bIsRunning = false;
+    this.aStartEvent = null;
+    this.aEndEvent = null;
+}
+
+InteractiveAnimationSequence.prototype.getId = function()
 {
     return this.nId;
 };
 
-SourceEventElement.prototype.isEqualTo = function( aSourceEventElement )
+InteractiveAnimationSequence.prototype.getStartEvent = function()
 {
-    return ( this.getId() == aSourceEventElement.getId() );
-};
-
-SourceEventElement.prototype.onClick = function()
-{
-    this.aEventMultiplexer.notifyClickEvent( this );
-};
-
-SourceEventElement.prototype.isEventListenerRegistered = function( eEventType )
-{
-    return this.aEventListenerStateArray[ eEventType ];
-};
-
-SourceEventElement.prototype.addEventListener = function( eEventType )
-{
-    if( !this.aElement )
-        return false;
-
-    this.aEventListenerStateArray[ eEventType ] = true;
-    switch( eEventType )
+    if( !this.aStartEvent )
     {
-        case EVENT_TRIGGER_ON_CLICK:
-            this.aElement.addEventListener( 'click', this.onClick, false );
-            break;
-        default:
-            log( 'SourceEventElement.addEventListener: not handled event type: ' + eEventType );
-            return false;
+        this.aStartEvent =
+            makeEvent( bind2( InteractiveAnimationSequence.prototype.start, this ) );
     }
-    return true;
+    return this.aStartEvent;
 };
 
-SourceEventElement.prototype.removeEventListener = function( eEventType )
+InteractiveAnimationSequence.prototype.getEndEvent = function()
 {
-    if( !this.aElement )
-        return false;
-
-    this.aEventListenerStateArray[ eEventType ] = false;
-    switch( eEventType )
+    if( !this.aEndEvent )
     {
-        case EVENT_TRIGGER_ON_CLICK:
-            this.aElement.removeEventListener( 'click', this.onClick, false );
-            break;
-        default:
-            log( 'SourceEventElement.removeEventListener: not handled event type: ' + eEventType );
-            return false;
+        this.aEndEvent =
+            makeEvent( bind2( InteractiveAnimationSequence.prototype.end, this ) );
     }
-    return true;
+    return this.aEndEvent;
 };
 
+InteractiveAnimationSequence.prototype.chargeEvents = function()
+{
+    if( this.aStartEvent )      this.aStartEvent.charge();
+    if( this.aEndEvent )        this.aEndEvent.charge();
+};
+
+InteractiveAnimationSequence.prototype.isRunning = function()
+{
+    return this.bIsRunning;
+};
+
+InteractiveAnimationSequence.prototype.start = function()
+{
+    aSlideShow.notifyInteractiveAnimationSequenceStart( this.getId() );
+    this.bIsRunning = true;
+};
+
+InteractiveAnimationSequence.prototype.end = function()
+{
+    aSlideShow.notifyInteractiveAnimationSequenceEnd( this.getId() );
+    this.bIsRunning = false;
+};
+
+// ------------------------------------------------------------------------------------------ //
+/** class PriorityEntry
+ *  It provides an entry type for priority queues.
+ *  Higher is the value of nPriority higher is the priority of the created entry.
+ *
+ *  @param aValue
+ *      The object to be prioritized.
+ *  @param nPriority
+ *      An integral number representing the object priority.
+ *
+ */
+function PriorityEntry( aValue, nPriority )
+{
+    this.aValue = aValue;
+    this.nPriority = nPriority;
+}
+
+/** EventEntry.compare
+ *  Compare priority of two entries.
+ *
+ *  @param aLhsEntry
+ *      An instance of type PriorityEntry.
+ *  @param aRhsEntry
+ *      An instance of type PriorityEntry.
+ *  @return {Boolean}
+ *      True if the first entry has higher priority of the second entry,
+ *      false otherwise.
+ */
+PriorityEntry.compare = function( aLhsEntry, aRhsEntry )
+{
+    return ( aLhsEntry.nPriority < aRhsEntry.nPriority );
+};
 
 // ------------------------------------------------------------------------------------------ //
 function EventMultiplexer( aTimerEventQueue )
 {
     this.aTimerEventQueue = aTimerEventQueue;
     this.aEventMap = new Object();
+    this.aMouseClickHandlerSet = new PriorityQueue( PriorityEntry.compare );
     this.aSkipEffectEvent = null;
     this.aRewindCurrentEffectEvent = null;
     this.aRewindLastEffectEvent = null;
 }
 
+EventMultiplexer.prototype.registerMouseClickHandler = function( aHandler, nPriority )
+{
+    var aHandlerEntry = new PriorityEntry( aHandler, nPriority );
+    this.aMouseClickHandlerSet.push( aHandlerEntry );
+};
+
+EventMultiplexer.prototype.notifyMouseClick = function( aMouseEvent )
+{
+    var aMouseClickHandlerSet = this.aMouseClickHandlerSet;
+    var nSize = aMouseClickHandlerSet.size();
+    for( var i = 0; i < nSize; ++i )
+    {
+        var aHandlerEntry = aMouseClickHandlerSet.aSequence[i];
+        if( aHandlerEntry.aValue.handleClick( aMouseEvent ) )
+            break;
+    }
+};
 
 EventMultiplexer.prototype.registerEvent = function( eEventType, aNotifierId, aEvent )
 {
@@ -11284,12 +11427,17 @@ function SlideShow()
     this.aTimerEventQueue = new TimerEventQueue( this.aTimer );
     this.aActivityQueue = new ActivityQueue( this.aTimer );
     this.aNextEffectEventArray = null;
+    this.aInteractiveAnimationSequenceMap = null;
     this.aEventMultiplexer = null;
 
-    this.aContext = new SlideShowContext( this.aTimerEventQueue, this.aEventMultiplexer,
-                                          this.aNextEffectEventArray, this.aActivityQueue );
+    this.aContext = new SlideShowContext( this.aTimerEventQueue,
+                                          this.aEventMultiplexer,
+                                          this.aNextEffectEventArray,
+                                          this.aInteractiveAnimationSequenceMap,
+                                          this.aActivityQueue );
     this.nCurrentEffect = 0;
     this.eDirection = FORWARD;
+    this.nTotalInteracAnimSeqRunning = 0;
     this.bIsIdle = true;
     this.bIsEnabled = true;
     this.bIsRewinding = false;
@@ -11299,19 +11447,27 @@ function SlideShow()
 }
 
 
-SlideShow.prototype.setSlideEvents = function( aNextEffectEventArray, aEventMultiplexer )
+SlideShow.prototype.setSlideEvents = function( aNextEffectEventArray,
+                                               aInteractiveAnimationSequenceMap,
+                                               aEventMultiplexer )
 {
     if( !aNextEffectEventArray )
         log( 'SlideShow.setSlideEvents: aNextEffectEventArray is not valid' );
+
+    if( !aInteractiveAnimationSequenceMap )
+        log( 'SlideShow.setSlideEvents:aInteractiveAnimationSequenceMap  is not valid' );
 
     if( !aEventMultiplexer )
         log( 'SlideShow.setSlideEvents: aEventMultiplexer is not valid' );
 
     this.aContext.aNextEffectEventArray = aNextEffectEventArray;
     this.aNextEffectEventArray = aNextEffectEventArray;
+    this.aContext.aInteractiveAnimationSequenceMap = aInteractiveAnimationSequenceMap;
+    this.aInteractiveAnimationSequenceMap = aInteractiveAnimationSequenceMap;
     this.aContext.aEventMultiplexer = aEventMultiplexer;
     this.aEventMultiplexer = aEventMultiplexer;
     this.nCurrentEffect = 0;
+    this.nTotalInteracAnimSeqRunning = 0;
 };
 
 SlideShow.prototype.createSlideTransition = function( aSlideTransitionHandler, aLeavingSlide, aEnteringSlide, aTransitionEndEvent )
@@ -11361,6 +11517,11 @@ SlideShow.prototype.isRunning = function()
     return !this.bIsIdle;
 };
 
+SlideShow.prototype.isInterAnimSeqRunning = function()
+{
+    return ( this.nTotalInteracAnimSeqRunning > 0 );
+};
+
 SlideShow.prototype.isEnabled = function()
 {
     return this.bIsEnabled;
@@ -11393,10 +11554,26 @@ SlideShow.prototype.notifyTransitionEnd = function( nSlideIndex )
     }
 };
 
+SlideShow.prototype.notifyInteractiveAnimationSequenceStart = function( nNodeId )
+{
+    ++this.nTotalInteracAnimSeqRunning;
+};
+
+SlideShow.prototype.notifyInteractiveAnimationSequenceEnd = function( nNodeId )
+{
+    assert( this.nTotalInteracAnimSeqRunning > 0,
+            'SlideShow.notifyInteractiveAnimationSequenceStart: ' +
+            'the total number of running interactive application is zero' );
+    --this.nTotalInteracAnimSeqRunning;
+};
+
 SlideShow.prototype.nextEffect = function()
 {
     if( !this.isEnabled() )
         return false;
+
+    if( this.isInterAnimSeqRunning() )
+        return true;
 
     if( this.isRunning() )
     {
@@ -11443,6 +11620,9 @@ SlideShow.prototype.skipEffect = function()
     if( this.bIsSkipping || this.bIsRewinding )
         return true;
 
+    if( this.isInterAnimSeqRunning() )
+        return true;
+
     if( this.isRunning() )
     {
         this.skipCurrentEffect();
@@ -11476,6 +11656,9 @@ SlideShow.prototype.skipEffect = function()
 SlideShow.prototype.skipAllEffects = function()
 {
     if( this.bIsSkippingAll )
+        return true;
+
+    if( this.isInterAnimSeqRunning() )
         return true;
 
     this.bIsSkippingAll = true;
@@ -11512,6 +11695,9 @@ SlideShow.prototype.rewindEffect = function()
 {
     if( this.bIsSkipping || this.bIsRewinding )
         return;
+
+    if( this.isInterAnimSeqRunning() )
+        return true;
 
     if( this.nCurrentEffect == 0 )
     {
@@ -11717,11 +11903,12 @@ var aSlideShow = null;
 
 
 // ------------------------------------------------------------------------------------------ //
-function SlideShowContext( aTimerEventQueue, aEventMultiplexer, aNextEffectEventArray, aActivityQueue)
+function SlideShowContext( aTimerEventQueue, aEventMultiplexer, aNextEffectEventArray, aInteractiveAnimationSequenceMap, aActivityQueue)
 {
     this.aTimerEventQueue = aTimerEventQueue;
     this.aEventMultiplexer = aEventMultiplexer;
     this.aNextEffectEventArray = aNextEffectEventArray;
+    this.aInteractiveAnimationSequenceMap = aInteractiveAnimationSequenceMap;
     this.aActivityQueue = aActivityQueue;
     this.bIsSkipping = false;
 }
