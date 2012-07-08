@@ -40,11 +40,6 @@ String STR_MOVE_NEW
     Text [ en-US ] = "New folder";
 };
 
-String STR_MOVE_DELETE
-{
-    Text [ en-US ] = "No folder";
-};
-
 String STR_INPUT_NEW
 {
     Text [ en-US ] = "Enter folder name:";

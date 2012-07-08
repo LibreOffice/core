@@ -395,7 +395,6 @@ IMPL_LINK(SfxTemplateManagerDlg, TBXDropdownHdl, ToolBox*, pBox)
         pMoveMenu->InsertSeparator();
 
         pMoveMenu->InsertItem(MNI_MOVE_NEW,SfxResId(STR_MOVE_NEW).toString());
-        pMoveMenu->InsertItem(MNI_MOVE_DELETE,SfxResId(STR_MOVE_DELETE).toString());
 
         pMoveMenu->Execute(pBox,pBox->GetItemRect(TBI_TEMPLATE_MOVE),
                             POPUPMENU_EXECUTE_DOWN);
@@ -528,17 +527,6 @@ IMPL_LINK(SfxTemplateManagerDlg, MoveMenuSelectHdl, Menu*, pMenu)
                     }
                 }
             }
-        }
-    }
-    else if (nMenuId == MNI_MOVE_DELETE)
-    {
-        std::set<const ThumbnailViewItem*>::const_iterator pIter;
-        for (pIter = maSelTemplates.begin(); pIter != maSelTemplates.end();)
-        {
-            if (maView->removeTemplate((*pIter)->mnId))
-                maSelTemplates.erase(pIter++);
-            else
-                ++pIter;
         }
     }
     else
