@@ -591,6 +591,11 @@ IMPL_LINK_NOARG(SfxTemplateManagerDlg, SearchUpdateHdl)
 
         mpSearchView->Invalidate();
     }
+    else
+    {
+        mpSearchView->Hide();
+        maView->Show();
+    }
 
     return 0;
 }
