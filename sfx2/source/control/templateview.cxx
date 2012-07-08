@@ -45,6 +45,7 @@ TemplateView::TemplateView (Window *pParent, SfxDocumentTemplates *pTemplates)
 
 TemplateView::~TemplateView ()
 {
+    delete mpEditName;
 }
 
 void TemplateView::setRegionId (const sal_uInt16 nRegionId)
