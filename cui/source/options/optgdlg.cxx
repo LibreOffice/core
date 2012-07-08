@@ -1355,7 +1355,7 @@ OfaLanguagesTabPage::OfaLanguagesTabPage( Window* pParent, const SfxItemSet& rSe
     aComplexLanguageLB.InsertDefaultLanguage( ::com::sun::star::i18n::ScriptType::COMPLEX );
 
     aLocaleSettingLB.SetLanguageList( LANG_LIST_ALL     | LANG_LIST_ONLY_KNOWN, sal_False, sal_False, sal_False);
-    aLocaleSettingLB.InsertDefaultLanguage( ::com::sun::star::i18n::ScriptType::WEAK );
+    aLocaleSettingLB.InsertSystemLanguage( );
 
     const NfCurrencyTable& rCurrTab = SvNumberFormatter::GetTheCurrencyTable();
     const NfCurrencyEntry& rCurr = SvNumberFormatter::GetCurrencyEntry( LANGUAGE_SYSTEM );
