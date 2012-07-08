@@ -320,12 +320,12 @@ void ScCondFrmtEntry::Init()
     Point aPointCol = maLbColMiddle.GetPosPixel();
     Point aPointEdDataBar = maEdDataBarMin.GetPosPixel();
     Point aPointLbDataBar = maLbDataBarMaxType.GetPosPixel();
-    const long nMovePos = 250;
+    const long nMovePos = maLbEntryTypeMiddle.GetSizePixel().Width() * 1.2;
     aPointLb.X() += nMovePos;
     aPointEd.X() += nMovePos;
     aPointCol.X() += nMovePos;
-    aPointEdDataBar.X() += 1.5*nMovePos;
-    aPointLbDataBar.X() += 1.5*nMovePos;
+    aPointEdDataBar.X() += 2*nMovePos;
+    aPointLbDataBar.X() += 2*nMovePos;
     maLbEntryTypeMiddle.SetPosPixel(aPointLb);
     maEdMiddle.SetPosPixel(aPointEd);
     maLbColMiddle.SetPosPixel(aPointCol);
@@ -444,6 +444,10 @@ void ScCondFrmtEntry::HideCondElements()
 
 void ScCondFrmtEntry::SetCondType()
 {
+    maEdVal1.SetSizePixel(maEdVal2.GetSizePixel());
+    Point aPoint(maLbCondType.GetPosPixel().X() + maLbCondType.GetSizePixel().Width() + LogicToPixel(Size(5,1), MapMode(MAP_APPFONT)).getWidth(),
+            maEdVal1.GetPosPixel().Y());
+    maEdVal1.SetPosPixel(aPoint);
     maEdVal1.Show();
     maEdVal2.Show();
     maLbStyle.Show();
@@ -562,6 +566,10 @@ void ScCondFrmtEntry::SetFormulaType()
     SwitchToType(FORMULA);
     HideColorScaleElements();
     HideDataBarElements();
+    maEdVal1.SetPosPixel(maLbCondType.GetPosPixel());
+    Size aSize(maEdVal2.GetPosPixel().X() + maEdVal2.GetSizePixel().Width() - maLbCondType.GetPosPixel().X(), maEdVal1.GetSizePixel().Height());
+    maEdVal1.SetPosPixel(maLbCondType.GetPosPixel());
+    maEdVal1.SetSizePixel(aSize);
     maEdVal1.Show();
     maEdVal2.Hide();
     maLbCondType.Hide();
@@ -569,8 +577,6 @@ void ScCondFrmtEntry::SetFormulaType()
     maFtCondition.Show();
     maWdPreview.Show();
     maFtStyle.Show();
-    Size aSize(440, 30);
-    maEdVal1.SetSizePixel(aSize);
 }
 
 void ScCondFrmtEntry::Select()
@@ -894,14 +900,11 @@ IMPL_LINK_NOARG( ScCondFrmtEntry, ConditionTypeSelectHdl )
 {
     if(maLbCondType.GetSelectEntryPos() == 6 || maLbCondType.GetSelectEntryPos() == 7)
     {
-        maEdVal1.SetSizePixel(maEdVal2.GetSizePixel());
         maEdVal2.Show();
     }
     else
     {
         maEdVal2.Hide();
-        Size aSize(440, 30);
-        maEdVal1.SetSizePixel(aSize);
     }
     return 0;
 }
