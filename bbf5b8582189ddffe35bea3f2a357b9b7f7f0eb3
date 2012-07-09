@@ -87,6 +87,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAL3///9A\u003d",
+        "filename": "sw/source/core/crsr/swcrsr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 450,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-07-09T12:07:52Z",
+      "side": 1,
+      "message": "agree with translation but here it looks (at least in my eyes) as if the comment was originally for some other piece of code that is not existent anymore... thus I deleted the comment.",
+      "parentUuid": "AAAAL3///9s\u003d",
+      "revId": "bbf5b8582189ddffe35bea3f2a357b9b7f7f0eb3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAL3///9o\u003d",
         "filename": "sw/source/core/crsr/swcrsr.cxx",
         "patchSetId": 1
