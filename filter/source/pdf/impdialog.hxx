@@ -148,6 +148,14 @@ protected:
     sal_Int32                   mnViewPDFMode;
     sal_Bool                    mbConvertOOoTargets;
     sal_Bool                    mbExportBmkToPDFDestination;
+
+    sal_Bool                    mbSignPDF;
+    ::rtl::OUString             msSignPassword;
+    ::rtl::OUString             msSignLocation;
+    ::rtl::OUString             msSignContact;
+    ::rtl::OUString             msSignReason;
+    com::sun::star::uno::Reference< com::sun::star::security::XCertificate > maSignCertificate;
+
     ::rtl::OUString             maWatermarkText;
 
 public:
@@ -157,6 +165,7 @@ public:
     friend class                ImpPDFTabOpnFtrPage;
     friend class                ImpPDFTabSecurityPage;
     friend class                ImpPDFTabLinksPage;
+    friend class                ImpPDFTabSigningPage;
 
     ImpPDFTabDialog( Window* pParent,
                      Sequence< PropertyValue >& rFilterData,
@@ -427,6 +436,36 @@ public:
     void    SetFilterConfigItem( const ImpPDFTabDialog* paParent );
 
     void    ImplPDFALinkControl( sal_Bool bEnableLaunch );
+};
+
+//class to implement the digital signing
+class ImpPDFTabSigningPage : public SfxTabPage
+{
+    CheckBox                    maCbSignPDF;
+    FixedText                   maFtSignPassword;
+    Edit                        maEdSignPassword;
+    FixedText                   maFtSignLocation;
+    Edit                        maEdSignLocation;
+    FixedText                   maFtSignContactInfo;
+    Edit                        maEdSignContactInfo;
+    FixedText                   maFtSignReason;
+    Edit                        maEdSignReason;
+    PushButton                  maPbSignSelectCert;
+    com::sun::star::uno::Reference< com::sun::star::security::XCertificate > maSignCertificate;
+
+    DECL_LINK( ToggleSignPDFHdl, void* );
+    DECL_LINK( ClickmaPbSignSelectCert, void* );
+
+public:
+    ImpPDFTabSigningPage( Window* pParent,
+                          const SfxItemSet& rSet );
+
+    ~ImpPDFTabSigningPage();
+    static SfxTabPage*      Create( Window* pParent,
+                                    const SfxItemSet& rAttrSet );
+
+    void    GetFilterConfigItem( ImpPDFTabDialog* paParent);
+    void    SetFilterConfigItem( const ImpPDFTabDialog* paParent );
 };
 
 #endif // IMPDIALOG_HXX

@@ -817,6 +817,91 @@ TabPage  RID_PDF_TAB_SECURITY
 };
 
 //----------------------------------------------------------
+//tab page for PDF Export, digital signatures
+TabPage  RID_PDF_TAB_SIGNING
+{
+    HelpId = HID_FILTER_PDF_SIGNING ;
+    Text [ en-US ] = "Digital Signatures";
+    TAB_PDF_SIZE;
+    Hide = TRUE;
+
+    CheckBox CB_SIGN_PDF
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 164 , 16 ) ;
+        TabStop = TRUE ;
+        WordBreak = TRUE ;
+        Text[ en-US ] = "Sign PDF file" ;
+    };
+
+    PushButton BTN_SIGN_SELECT_CERT
+    {
+        TabStop = TRUE ;
+        Disable = TRUE ;
+        Pos = MAP_APPFONT ( 12, 17 ) ;
+        Size = MAP_APPFONT ( 120 , 13 ) ;
+        Text[ en-US ] = "Select c~ertificate...";
+    };
+
+    FixedText FT_SIGN_PASSWORD
+    {
+        Pos = MAP_APPFONT( 12, 35 );
+        Size = MAP_APPFONT( 109, 10 );
+        Text[ en-US ] = "Certificate Password";
+    };
+
+    Edit ED_SIGN_PASSWORD
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 102, 35 ) ;
+        Size = MAP_APPFONT ( 68 , 12 ) ;
+    };
+
+    FixedText FT_SIGN_LOCATION
+    {
+        Pos = MAP_APPFONT( 12, 48 );
+        Size = MAP_APPFONT( 109, 10 );
+        Text[ en-US ] = "Location";
+    };
+
+    Edit ED_SIGN_LOCATION
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 102, 48 ) ;
+        Size = MAP_APPFONT ( 68 , 12 ) ;
+    };
+
+    FixedText FT_SIGN_CONTACT
+    {
+        Pos = MAP_APPFONT( 12, 61 );
+        Size = MAP_APPFONT( 109, 10 );
+        Text[ en-US ] = "Contact Information";
+    };
+
+    Edit ED_SIGN_CONTACT
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 102, 61 ) ;
+        Size = MAP_APPFONT ( 68 , 12 ) ;
+    };
+
+    FixedText FT_SIGN_REASON
+    {
+        Pos = MAP_APPFONT( 12, 74 );
+        Size = MAP_APPFONT( 109, 10 );
+        Text[ en-US ] = "Reason";
+    };
+
+    Edit ED_SIGN_REASON
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 102, 74 ) ;
+        Size = MAP_APPFONT ( 68 , 12 ) ;
+    };
+
+};
+
+//----------------------------------------------------------
 //tab page for PDF Export, links management
 TabPage  RID_PDF_TAB_LINKS
 {
@@ -929,6 +1014,11 @@ TabDialog  RID_PDF_EXPORT_DLG
             {
                 Identifier = RID_PDF_TAB_SECURITY;
                 Text [ en-US ] = "Security";
+            };
+            PageItem
+            {
+                Identifier = RID_PDF_TAB_SIGNING;
+                Text [ en-US ] = "Digital Signatures";
             };
         };
     };

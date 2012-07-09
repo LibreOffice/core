@@ -143,7 +143,9 @@ interface XDocumentDigitalSignatures : com::sun::star::uno::XInterface
     void    addAuthorToTrustedSources( [in] com::sun::star::security::XCertificate Author );
     void    addLocationToTrustedSources( [in] string Location );
 
-
+    /**  This method shows CertificateChooser dialog, used by document and PDF signing
+     */
+    com::sun::star::security::XCertificate chooseCertificate();
 
 } ;
 

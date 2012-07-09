@@ -41,6 +41,7 @@
 
 #include "com/sun/star/io/XOutputStream.hpp"
 #include "com/sun/star/beans/XMaterialHolder.hpp"
+#include "com/sun/star/security/XCertificate.hpp"
 #include "com/sun/star/lang/Locale.hpp"
 
 #include <boost/scoped_ptr.hpp>
@@ -197,7 +198,8 @@ public:
 
     enum WidgetType
     {
-        PushButton, RadioButton, CheckBox, Edit, ListBox, ComboBox, Hierarchy
+        PushButton, RadioButton, CheckBox, Edit, ListBox, ComboBox, Hierarchy,
+        Signature
     };
 
     enum WidgetState
@@ -449,6 +451,28 @@ public:
         }
     };
 
+    struct SignatureWidget: public AnyWidget
+    {
+        // Use Sig prefix for members to avoid conflict with
+        // the Location member of the AnyWidget which spcifies the coordinates
+        // of the signature
+
+        rtl::OUString                    SigLocation;
+        rtl::OUString                    SigReason;
+        rtl::OUString                    SigContactInfo;
+        bool                             SigHidden;
+
+        SignatureWidget()
+                : AnyWidget( vcl::PDFWriter::Signature ),
+                  SigHidden( true )
+        {}
+
+        virtual AnyWidget* Clone() const
+        {
+            return new SignatureWidget( *this );
+        }
+    };
+
     enum ExportDataFormat { HTML, XML, FDF, PDF };
 // see 3.6.1 of PDF 1.4 ref for details, used for 8.1 PDF v 1.4 ref also
 // These emuns are treated as integer while reading/writing to configuration
@@ -606,6 +630,13 @@ The following structure describes the permissions used in PDF security
         PDFWriter::PDFEncryptionProperties  Encryption;
         PDFWriter::PDFDocInfo           DocumentInfo;
 
+        bool                            SignPDF;
+        rtl::OUString                   SignLocation;
+        rtl::OUString                   SignPassword;
+        rtl::OUString                   SignReason;
+        rtl::OUString                   SignContact;
+        com::sun::star::uno::Reference< com::sun::star::security::XCertificate> SignCertificate;
+
         com::sun::star::lang::Locale    DocumentLocale; // defines the document default language
         sal_uInt32                      DPIx, DPIy;     // how to handle MapMode( MAP_PIXEL )
                                                         // 0 here specifies a default handling
@@ -637,9 +668,11 @@ The following structure describes the permissions used in PDF security
                 InitialPage( 1 ),
                 OpenBookmarkLevels( -1 ),
                 Encryption(),
+                SignPDF( false ),
                 DPIx( 0 ),
                 DPIy( 0 ),
-                ColorMode( PDFWriter::DrawColor )
+                ColorMode( PDFWriter::DrawColor ),
+                SignCertificate( 0 )
         {}
     };
 

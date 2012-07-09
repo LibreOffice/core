@@ -28,6 +28,7 @@
 
 #include <documentdigitalsignatures.hxx>
 #include <xmlsecurity/digitalsignaturesdialog.hxx>
+#include <xmlsecurity/certificatechooser.hxx>
 #include <xmlsecurity/certificateviewer.hxx>
 #include <xmlsecurity/macrosecurity.hxx>
 #include <xmlsecurity/biginteger.hxx>
@@ -423,6 +424,28 @@ void DocumentDigitalSignatures::showCertificate(
 
     return bFound;
 }
+
+Reference< css::security::XCertificate > DocumentDigitalSignatures::chooseCertificate() throw (RuntimeException)
+{
+    Reference< dcss::xml::crypto::XSecurityEnvironment > xSecEnv;
+
+    XMLSignatureHelper aSignatureHelper( mxCtx );
+    if ( aSignatureHelper.Init() )
+        xSecEnv = aSignatureHelper.GetSecurityEnvironment();
+
+    CertificateChooser aChooser( NULL, mxCtx, xSecEnv, aSignatureHelper.GetSignatureInformations());
+
+    if (aChooser.Execute() != RET_OK)
+        return Reference< css::security::XCertificate >(0);
+
+    Reference< css::security::XCertificate > xCert = aChooser.GetSelectedCertificate();
+
+    if ( !xCert.is() )
+        return Reference< css::security::XCertificate >(0);
+
+    return xCert;
+}
+
 
 ::sal_Bool DocumentDigitalSignatures::isLocationTrusted( const ::rtl::OUString& Location ) throw (RuntimeException)
 {
