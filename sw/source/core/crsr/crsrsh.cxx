@@ -2874,8 +2874,8 @@ sal_Bool SwCrsrShell::IsCrsrReadonly() const
         {
             return sal_False;
         }
-
-        return sal_True;
+        else
+            return sal_True;
     }
     return sal_False;
 }
@@ -3201,7 +3201,8 @@ String SwCrsrShell::GetCrsrDescr() const
 
 void lcl_FillRecognizerData( uno::Sequence< rtl::OUString >& rSmartTagTypes,
                              uno::Sequence< uno::Reference< container::XStringKeyMap > >& rStringKeyMaps,
-                             const SwWrongList& rSmartTagList, xub_StrLen nCurrent )
+                             const SwWrongList& rSmartTagList,
+                             xub_StrLen nCurrent )
 {
     // Insert smart tag information
     std::vector< rtl::OUString > aSmartTagTypes;
