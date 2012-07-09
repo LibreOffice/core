@@ -11735,7 +11735,7 @@ sal_Int32 PDFWriterImpl::createControl( const PDFWriter::AnyWidget& rControl, sa
     if( nPageNr < 0 || nPageNr >= (sal_Int32)m_aPages.size() )
         return -1;
 
-    bool sigHidden(false);
+    bool sigHidden(true);
     sal_Int32 nNewWidget = m_aWidgets.size();
     m_aWidgets.push_back( PDFWidget() );
 
