@@ -612,10 +612,9 @@ sal_uLong ScDocument::AddValidationEntry( const ScValidationData& rNew )
         pValidationList = new ScValidationDataList;
 
     sal_uLong nMax = 0;
-    sal_uInt16 nCount = pValidationList->Count();
-    for (sal_uInt16 i=0; i<nCount; i++)
+    for( ScValidationDataList::iterator it = pValidationList->begin(); it != pValidationList->end(); ++it )
     {
-        const ScValidationData* pData = (*pValidationList)[i];
+        const ScValidationData* pData = *it;
         sal_uLong nKey = pData->GetKey();
         if ( pData->EqualEntries( rNew ) )
             return nKey;

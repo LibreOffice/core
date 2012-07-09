@@ -151,10 +151,10 @@ public:
 
     sal_Bool            EqualEntries( const ScValidationData& r ) const;    // for undo
 
-    //  sort (using PTRARR) by index
+    //  sort (using std::set) by index
     //  operator== only for sorting
-    sal_Bool operator ==( const ScValidationData& r ) const { return nKey == r.nKey; }
-    sal_Bool operator < ( const ScValidationData& r ) const { return nKey <  r.nKey; }
+    bool operator ==( const ScValidationData& r ) const { return nKey == r.nKey; }
+    bool operator < ( const ScValidationData& r ) const { return nKey <  r.nKey; }
 
 private:
     /** Tries to fill the passed collection with list validation entries.
@@ -180,20 +180,21 @@ private:
 //  list of contitions:
 //
 
-typedef ScValidationData* ScValidationDataPtr;
+struct CompareScValidationDataPtr
+{
+  bool operator()( ScValidationData* const& lhs, ScValidationData* const& rhs ) const { return (*lhs)<(*rhs); }
+};
 
-SV_DECL_PTRARR_SORT(ScValidationEntries_Impl, ScValidationDataPtr, SC_COND_GROW)
-
-class ScValidationDataList : public ScValidationEntries_Impl
+class ScValidationDataList : public std::set<ScValidationData*, CompareScValidationDataPtr>
 {
 public:
-        ScValidationDataList() {}
-        ScValidationDataList(const ScValidationDataList& rList);
-        ScValidationDataList(ScDocument* pNewDoc, const ScValidationDataList& rList);
-        ~ScValidationDataList() {}
+    ScValidationDataList() {}
+    ScValidationDataList(const ScValidationDataList& rList);
+    ScValidationDataList(ScDocument* pNewDoc, const ScValidationDataList& rList);
+    ~ScValidationDataList() {}
 
     void    InsertNew( ScValidationData* pNew )
-                { if (!Insert(pNew)) delete pNew; }
+                { if (!insert(pNew).second) delete pNew; }
 
     ScValidationData* GetData( sal_uInt32 nKey );
 

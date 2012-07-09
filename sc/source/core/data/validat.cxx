@@ -54,11 +54,6 @@
 #include <memory>
 
 using namespace formula;
-//------------------------------------------------------------------------
-
-SV_IMPL_OP_PTRARR_SORT( ScValidationEntries_Impl, ScValidationDataPtr );
-
-//------------------------------------------------------------------------
 
 //
 //  Eintrag fuer Gueltigkeit (es gibt nur eine Bedingung)
@@ -885,14 +880,12 @@ bool ScValidationData::IsListValid( ScBaseCell* pCell, const ScAddress& rPos ) c
 // ============================================================================
 
 ScValidationDataList::ScValidationDataList(const ScValidationDataList& rList) :
-    ScValidationEntries_Impl()
+    std::set<ScValidationData*, CompareScValidationDataPtr>()
 {
     //  fuer Ref-Undo - echte Kopie mit neuen Tokens!
 
-    sal_uInt16 nCount = rList.Count();
-
-    for (sal_uInt16 i=0; i<nCount; i++)
-        InsertNew( rList[i]->Clone() );
+    for( iterator it = rList.begin(); it != rList.end(); ++it )
+        InsertNew( (*it)->Clone() );
 
     //!     sortierte Eintraege aus rList schneller einfuegen ???
 }
@@ -902,10 +895,8 @@ ScValidationDataList::ScValidationDataList(ScDocument* pNewDoc,
 {
     //  fuer neues Dokument - echte Kopie mit neuen Tokens!
 
-    sal_uInt16 nCount = rList.Count();
-
-    for (sal_uInt16 i=0; i<nCount; i++)
-        InsertNew( rList[i]->Clone(pNewDoc) );
+    for( iterator it = rList.begin(); it != rList.end(); ++it )
+        InsertNew( (*it)->Clone(pNewDoc) );
 
     //!     sortierte Eintraege aus rList schneller einfuegen ???
 }
@@ -914,10 +905,9 @@ ScValidationData* ScValidationDataList::GetData( sal_uInt32 nKey )
 {
     //! binaer suchen
 
-    sal_uInt16 nCount = Count();
-    for (sal_uInt16 i=0; i<nCount; i++)
-        if ((*this)[i]->GetKey() == nKey)
-            return (*this)[i];
+    for( iterator it = begin(); it != end(); ++it )
+        if( (*it)->GetKey() == nKey )
+            return *it;
 
     OSL_FAIL("ScValidationDataList: Eintrag nicht gefunden");
     return NULL;
@@ -925,35 +915,32 @@ ScValidationData* ScValidationDataList::GetData( sal_uInt32 nKey )
 
 void ScValidationDataList::CompileXML()
 {
-    sal_uInt16 nCount = Count();
-    for (sal_uInt16 i=0; i<nCount; i++)
-        (*this)[i]->CompileXML();
+    for( iterator it = begin(); it != end(); ++it )
+        (*it)->CompileXML();
 }
 
 void ScValidationDataList::UpdateReference( UpdateRefMode eUpdateRefMode,
                                 const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz )
 {
-    sal_uInt16 nCount = Count();
-    for (sal_uInt16 i=0; i<nCount; i++)
-        (*this)[i]->UpdateReference( eUpdateRefMode, rRange, nDx, nDy, nDz);
+    for( iterator it = begin(); it != end(); ++it )
+        (*it)->UpdateReference( eUpdateRefMode, rRange, nDx, nDy, nDz);
 }
 
 void ScValidationDataList::UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos )
 {
-    sal_uInt16 nCount = Count();
-    for (sal_uInt16 i=0; i<nCount; i++)
-        (*this)[i]->UpdateMoveTab( nOldPos, nNewPos );
+    for( iterator it = begin(); it != end(); ++it )
+        (*it)->UpdateMoveTab( nOldPos, nNewPos );
 }
 
 sal_Bool ScValidationDataList::operator==( const ScValidationDataList& r ) const
 {
     // fuer Ref-Undo - interne Variablen werden nicht verglichen
 
-    sal_uInt16 nCount = Count();
-    sal_Bool bEqual = ( nCount == r.Count() );
-    for (sal_uInt16 i=0; i<nCount && bEqual; i++)           // Eintraege sind sortiert
-        if ( !(*this)[i]->EqualEntries(*r[i]) )         // Eintraege unterschiedlich ?
-            bEqual = false;
+    sal_uInt16 nCount = size();
+    sal_Bool bEqual = ( nCount == r.size() );
+    for( const_iterator it1 = begin(), it2 = r.begin(); it1 != end() && bEqual; ++it1, ++it2 ) // Eintraege sind sortiert
+        if ( !(*it1)->EqualEntries(**it2) )         // Eintraege unterschiedlich ?
+            bEqual = sal_False;
 
     return bEqual;
 }

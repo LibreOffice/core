@@ -409,7 +409,9 @@ ScDocument::~ScDocument()
 
     if (pValidationList)
     {
-        pValidationList->DeleteAndDestroy( 0, pValidationList->Count() );
+        for( ScValidationDataList::iterator it = pValidationList->begin(); it != pValidationList->end(); ++it )
+            delete *it;
+        pValidationList->clear();
         DELETEZ(pValidationList);
     }
     delete pRangeName;
@@ -452,7 +454,9 @@ void ScDocument::InitClipPtrs( ScDocument* pSourceDoc )
 
     if (pValidationList)
     {
-        pValidationList->DeleteAndDestroy( 0, pValidationList->Count() );
+        for(ScValidationDataList::iterator it = pValidationList->begin(); it != pValidationList->end(); ++it )
+            delete *it;
+        pValidationList->clear();
         DELETEZ(pValidationList);
     }
 
