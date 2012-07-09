@@ -11102,17 +11102,15 @@ EOF
         oldJAVA_HOME=$JAVA_HOME
         if test "$JAVACISGCJ" = "yes"; then
             JAVA_HOME=; export JAVA_HOME
-            ant_cmd="$ANT -Dbuild.compiler=gcj -buildfile conftest.xml 1>&2"
-        else
-            ant_cmd="$ANT -buildfile conftest.xml 1>&2"
+            ant_gcj="-Dbuild.compiler=gcj"
         fi
-        AC_TRY_EVAL(ant_cmd)
+        AC_TRY_COMMAND("$ANT" $ant_gcj -buildfile conftest.xml 1>&2)
         if test $? = 0 -a -f ./conftest.class; then
             AC_MSG_RESULT([Ant works])
             if test -z "$WITH_ANT_HOME"; then
-                ANT_HOME=`$ANT -diagnostics | $EGREP "ant.home :" | $SED -e "s#ant.home : ##g"`
+                ANT_HOME=`"$ANT" -diagnostics | $EGREP "ant.home :" | $SED -e "s#ant.home : ##g"`
                 if test -z "$ANT_HOME"; then
-                    ANT_HOME=`echo $ANT | $SED -n "s/\/bin\/ant.*\$//p"`
+                    ANT_HOME=`echo "$ANT" | $SED -n "s/\/bin\/ant.*\$//p"`
                 fi
             else
                 ANT_HOME="$WITH_ANT_HOME"
@@ -11177,7 +11175,7 @@ EOF
     ant_minminor1=`echo $ant_minver | cut -d"." -f2`
 
     AC_MSG_CHECKING([whether Ant is >= $ant_minver])
-    ant_version=`$ANT -version | $AWK '{ print $4; }'`
+    ant_version=`"$ANT" -version | $AWK '{ print $4; }'`
     ant_version_major=`echo $ant_version | cut -d. -f1`
     ant_version_minor=`echo $ant_version | cut -d. -f2`
     echo "configure: ant_version $ant_version " >&5
@@ -11221,11 +11219,9 @@ EOF
 
         if test "$JAVACISGCJ" = "yes"; then
             JAVA_HOME=; export JAVA_HOME
-            ant_cmd="$ANT -Dbuild.compiler=gcj -buildfile conftest.xml 1>&2"
-        else
-            ant_cmd="$ANT -buildfile conftest.xml 1>&2"
+            ant_gcj="-Dbuild.compiler=gcj"
         fi
-        AC_TRY_EVAL(ant_cmd)
+        AC_TRY_COMMAND("$ANT" $ant_gcj -buildfile conftest.xml 1>&2)
         if test $? = 0 -a -f ./conftest.class; then
             AC_MSG_RESULT([yes])
             rm -rf confdir
