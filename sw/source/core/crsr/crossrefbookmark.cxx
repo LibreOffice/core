@@ -26,11 +26,11 @@
  *
  ************************************************************************/
 
-
 #include <crossrefbookmark.hxx>
 #include <ndtxt.hxx>
 
 using ::rtl::OUString;
+
 namespace sw { namespace mark
 {
     CrossRefBookmark::CrossRefBookmark(const SwPaM& rPaM,
@@ -41,11 +41,13 @@ namespace sw { namespace mark
         : Bookmark(rPaM, rCode, rName, rShortName)
     {
         if(rPaM.HasMark())
+        {
             OSL_ENSURE((rPaM.GetMark()->nNode == rPaM.GetPoint()->nNode &&
                 rPaM.Start()->nContent.GetIndex() == 0 &&
                 rPaM.End()->nContent.GetIndex() == rPaM.GetPoint()->nNode.GetNode().GetTxtNode()->Len()),
                 "<CrossRefBookmark::CrossRefBookmark(..)>"
                 "- creation of cross-reference bookmark with an expanded PaM that does not expand over exactly one whole paragraph.");
+        }
         SetMarkPos(*rPaM.Start());
         if(rName.isEmpty())
             m_aName = MarkBase::GenerateNewName(rPrefix);

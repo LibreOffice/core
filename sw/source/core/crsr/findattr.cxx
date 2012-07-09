@@ -50,7 +50,6 @@
 #include <swundo.hxx>
 #include <crsskip.hxx>
 
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
@@ -79,7 +78,6 @@ int CmpAttr( const SfxPoolItem& rItem1, const SfxPoolItem& rItem2 )
     return rItem1 == rItem2;
 }
 
-
 const SwTxtAttr* GetFrwrdTxtHint( const SwpHints& rHtsArr, sal_uInt16& rPos,
                                     xub_StrLen nCntntPos )
 {
@@ -93,7 +91,6 @@ const SwTxtAttr* GetFrwrdTxtHint( const SwpHints& rHtsArr, sal_uInt16& rPos,
     return 0; // invalid text attribute
 }
 
-
 const SwTxtAttr* GetBkwrdTxtHint( const SwpHints& rHtsArr, sal_uInt16& rPos,
                                   xub_StrLen nCntntPos )
 {
@@ -106,7 +103,6 @@ const SwTxtAttr* GetBkwrdTxtHint( const SwpHints& rHtsArr, sal_uInt16& rPos,
     }
     return 0; // invalid text attribute
 }
-
 
 void lcl_SetAttrPam( SwPaM & rPam, xub_StrLen nStart, const xub_StrLen* pEnde,
                         const sal_Bool bSaveMark )
@@ -152,6 +148,7 @@ sal_Bool lcl_Search( const SwTxtNode& rTxtNd, SwPaM& rPam,
 {
     if ( !rTxtNd.HasHints() )
         return sal_False;
+
     const SwTxtAttr *pTxtHt = 0;
     sal_Bool bForward = fnMove == fnMoveForward;
     sal_uInt16 nPos = bForward ? 0 : rTxtNd.GetSwpHints().Count();
@@ -210,15 +207,12 @@ public:
     int SetAttrBwd( const SwTxtAttr& rAttr );
 };
 
-
-
 SwAttrCheckArr::SwAttrCheckArr( const SfxItemSet& rSet, int bFwd,
                                 int bNoCollections )
     : aCmpSet( *rSet.GetPool(), RES_CHRATR_BEGIN, RES_TXTATR_END-1 )
 {
     aCmpSet.Put( rSet, sal_False );
     bNoColls = 0 != bNoCollections;
-
     bForward = 0 != bFwd;
 
     // determine area of Fnd/Stack array (Min/Max)
@@ -355,13 +349,18 @@ int SwAttrCheckArr::SetAttrFwd( const SwTxtAttr& rAttr )
             nWhch = pIter->FirstWhich();
             while( nWhch &&
                 SFX_ITEM_SET != pSet->GetItemState( nWhch, sal_True, &pTmpItem ) )
+            {
                 nWhch = pIter->NextWhich();
+            }
             if( !nWhch )
                 pTmpItem = NULL;
         }
     }
     else
+    {
         pTmpItem = &rAttr.GetAttr();
+    }
+
     while( pTmpItem )
     {
         SfxItemState eState = aCmpSet.GetItemState( nWhch, sal_False, &pItem );
@@ -468,7 +467,9 @@ int SwAttrCheckArr::SetAttrFwd( const SwTxtAttr& rAttr )
             nWhch = pIter->NextWhich();
             while( nWhch &&
                 SFX_ITEM_SET != pSet->GetItemState( nWhch, sal_True, &pTmpItem ) )
+            {
                 nWhch = pIter->NextWhich();
+            }
             if( !nWhch )
                 break;
         }
@@ -477,7 +478,6 @@ int SwAttrCheckArr::SetAttrFwd( const SwTxtAttr& rAttr )
     }
     return Found();
 }
-
 
 int SwAttrCheckArr::SetAttrBwd( const SwTxtAttr& rAttr )
 {
@@ -513,7 +513,9 @@ int SwAttrCheckArr::SetAttrBwd( const SwTxtAttr& rAttr )
         }
     }
     else
+    {
         pTmpItem = &rAttr.GetAttr();
+    }
     while( pTmpItem )
     {
         SfxItemState eState = aCmpSet.GetItemState( nWhch, sal_False, &pItem );
@@ -628,7 +630,6 @@ int SwAttrCheckArr::SetAttrBwd( const SwTxtAttr& rAttr )
     return Found();
 }
 
-
 xub_StrLen SwAttrCheckArr::Start() const
 {
     xub_StrLen nStart = nNdStt;
@@ -640,7 +641,6 @@ xub_StrLen SwAttrCheckArr::Start() const
     return nStart;
 }
 
-
 xub_StrLen SwAttrCheckArr::End() const
 {
     _SwSrchChrAttr* pArrPtr = pFndArr;
@@ -651,7 +651,6 @@ xub_StrLen SwAttrCheckArr::End() const
 
     return nEnd;
 }
-
 
 int SwAttrCheckArr::CheckStack()
 {
@@ -686,8 +685,6 @@ int SwAttrCheckArr::CheckStack()
     return nFound == aCmpSet.Count();
 }
 
-
-
 int lcl_SearchForward( const SwTxtNode& rTxtNd, SwAttrCheckArr& rCmpArr,
                             SwPaM& rPam )
 {
@@ -710,6 +707,7 @@ int lcl_SearchForward( const SwTxtNode& rTxtNd, SwAttrCheckArr& rCmpArr,
     if( rCmpArr.Found() )
     {
         for( ; nPos < rHtArr.Count(); ++nPos )
+        {
             if( !rCmpArr.SetAttrFwd( *( pAttr = rHtArr.GetStart( nPos )) ) )
             {
                 if( rCmpArr.GetNdStt() < *pAttr->GetStart() )
@@ -722,6 +720,7 @@ int lcl_SearchForward( const SwTxtNode& rTxtNd, SwAttrCheckArr& rCmpArr,
                 // continue search
                 break;
             }
+        }
 
         if( nPos == rHtArr.Count() && rCmpArr.Found() )
         {
@@ -733,6 +732,7 @@ int lcl_SearchForward( const SwTxtNode& rTxtNd, SwAttrCheckArr& rCmpArr,
     }
 
     for( ; nPos < rHtArr.Count(); ++nPos )
+    {
         if( rCmpArr.SetAttrFwd( *( pAttr = rHtArr.GetStart( nPos )) ) )
         {
             // Do multiple start at that position? Do also check those:
@@ -740,24 +740,30 @@ int lcl_SearchForward( const SwTxtNode& rTxtNd, SwAttrCheckArr& rCmpArr,
             while( ++nPos < rHtArr.Count() && nSttPos ==
                     *( pAttr = rHtArr.GetStart( nPos ))->GetStart() &&
                     rCmpArr.SetAttrFwd( *pAttr ) )
+            {
                 ;
+            }
             if( !rCmpArr.Found() )
                 continue;
 
             // then we have our search area
             if( (nSttPos = rCmpArr.Start()) > (nEndPos = rCmpArr.End()) )
+            {
                 return sal_False;
+            }
             lcl_SetAttrPam( rPam, nSttPos, &nEndPos, sal_True );
             return sal_True;
         }
+    }
 
     if( !rCmpArr.CheckStack() ||
         (nSttPos = rCmpArr.Start()) > (nEndPos = rCmpArr.End()) )
+    {
         return sal_False;
+    }
     lcl_SetAttrPam( rPam, nSttPos, &nEndPos, sal_True );
     return sal_True;
 }
-
 
 int lcl_SearchBackward( const SwTxtNode& rTxtNd, SwAttrCheckArr& rCmpArr,
                             SwPaM& rPam )
@@ -806,6 +812,7 @@ int lcl_SearchBackward( const SwTxtNode& rTxtNd, SwAttrCheckArr& rCmpArr,
     }
 
     while( nPos )
+    {
         if( rCmpArr.SetAttrBwd( *( pAttr = rHtArr.GetEnd( --nPos )) ) )
         {
             // Do multiple start at that position? Do also check those:
@@ -822,18 +829,22 @@ int lcl_SearchBackward( const SwTxtNode& rTxtNd, SwAttrCheckArr& rCmpArr,
 
             // then we have our search area
             if( (nSttPos = rCmpArr.Start()) > (nEndPos = rCmpArr.End()) )
+            {
                 return sal_False;
+            }
             lcl_SetAttrPam( rPam, nSttPos, &nEndPos, sal_False );
             return sal_True;
         }
+    }
 
     if( !rCmpArr.CheckStack() ||
         (nSttPos = rCmpArr.Start()) > (nEndPos = rCmpArr.End()) )
+    {
         return sal_False;
+    }
     lcl_SetAttrPam( rPam, nSttPos, &nEndPos, sal_False );
     return sal_True;
 }
-
 
 int lcl_Search( const SwCntntNode& rCNd, const SfxItemSet& rCmpSet, sal_Bool bNoColls )
 {
@@ -854,7 +865,9 @@ int lcl_Search( const SwCntntNode& rCNd, const SfxItemSet& rCmpSet, sal_Bool bNo
             nWhich = rCmpSet.GetWhichByPos( aIter.GetCurPos() );
             if( SFX_ITEM_SET != rNdSet.GetItemState( nWhich, !bNoColls, &pNdItem )
                 || CmpAttr( *pNdItem, rNdSet.GetPool()->GetDefaultItem( nWhich ) ))
+            {
                 return sal_False;
+            }
         }
         else
         {
@@ -870,7 +883,6 @@ int lcl_Search( const SwCntntNode& rCNd, const SfxItemSet& rCmpSet, sal_Bool bNo
     }
     return sal_True; // found
 }
-
 
 sal_Bool SwPaM::Find( const SfxPoolItem& rAttr, sal_Bool bValue, SwMoveFn fnMove,
                     const SwPaM *pRegion, sal_Bool bInReadOnly )
@@ -954,7 +966,6 @@ sal_Bool SwPaM::Find( const SfxPoolItem& rAttr, sal_Bool bValue, SwMoveFn fnMove
     delete pPam;
     return bFound;
 }
-
 
 typedef int (*FnSearchAttr)( const SwTxtNode&, SwAttrCheckArr&, SwPaM& );
 
@@ -1070,7 +1081,6 @@ struct SwFindParaAttr : public SwFindParas
     virtual int Find( SwPaM* , SwMoveFn , const SwPaM*, sal_Bool bInReadOnly );
     virtual int IsReplaceMode() const;
 };
-
 
 int SwFindParaAttr::Find( SwPaM* pCrsr, SwMoveFn fnMove, const SwPaM* pRegion,
                             sal_Bool bInReadOnly )
@@ -1196,7 +1206,9 @@ int SwFindParaAttr::Find( SwPaM* pCrsr, SwMoveFn fnMove, const SwPaM* pRegion,
                 // reset all that are not set with pool defaults
                 if( !IsInvalidItem( pItem ) && SFX_ITEM_SET !=
                     pReplSet->GetItemState( pItem->Which(), sal_False ))
+                {
                     aSet.Put( pPool->GetDefaultItem( pItem->Which() ));
+                }
 
                 if( aIter.IsAtEnd() )
                     break;
@@ -1208,11 +1220,9 @@ int SwFindParaAttr::Find( SwPaM* pCrsr, SwMoveFn fnMove, const SwPaM* pRegion,
 
         return FIND_NO_RING;
     }
-
     else
         return FIND_FOUND;
 }
-
 
 int SwFindParaAttr::IsReplaceMode() const
 {
@@ -1255,7 +1265,5 @@ sal_uLong SwCursor::Find( const SfxItemSet& rSet, sal_Bool bNoCollections,
 
     return nRet;
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

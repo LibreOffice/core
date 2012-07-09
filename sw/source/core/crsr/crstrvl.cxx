@@ -116,7 +116,6 @@ sal_Bool SwCrsrShell::GotoNextNum()
     return bRet;
 }
 
-
 sal_Bool SwCrsrShell::GotoPrevNum()
 {
     sal_Bool bRet = GetDoc()->GotoPrevNum( *pCurCrsr->GetPoint() );
@@ -165,6 +164,7 @@ sal_Bool SwCrsrShell::GotoHeaderTxt()
     // found header, search 1. content frame
     while( pFrm && !pFrm->IsCntntFrm() )
         pFrm = pFrm->GetLower();
+
     if( pFrm )
     {
         SET_CURR_SHELL( this );
@@ -528,9 +528,11 @@ sal_Bool SwCrsrShell::GotoNxtPrvTOXMark( sal_Bool bNext )
     _SetGetExpFld aFndGEF( aFndPos ), aCurGEF( rPos );
 
     if( rPos.nNode.GetIndex() < GetDoc()->GetNodes().GetEndOfExtras().GetIndex() )
+    {
         // also at collection use only the first frame
         aCurGEF.SetBodyPos( *rPos.nNode.GetNode().
                         GetCntntNode()->getLayoutFrm( GetLayout(), &aPt, &rPos, sal_False ) );
+    }
     {
         const SfxPoolItem* pItem;
         const SwCntntFrm* pCFrm;
@@ -627,7 +629,6 @@ void lcl_MakeFldLst( _SetGetExpFlds& rLst, const SwFieldType& rFldType,
             }
         }
 }
-
 
 sal_Bool SwCrsrShell::MoveFldType( const SwFieldType* pFldType, sal_Bool bNext,
                                             sal_uInt16 nSubType, sal_uInt16 nResType )
@@ -740,7 +741,6 @@ sal_Bool SwCrsrShell::MoveFldType( const SwFieldType* pFldType, sal_Bool bNext,
     return bRet;
 }
 
-
 sal_Bool SwCrsrShell::GotoFld( const SwFmtFld& rFld )
 {
     sal_Bool bRet = sal_False;
@@ -763,7 +763,6 @@ sal_Bool SwCrsrShell::GotoFld( const SwFmtFld& rFld )
     return bRet;
 }
 
-
 void SwCrsrShell::GotoOutline( sal_uInt16 nIdx )
 {
     SwCursor* pCrsr = getShellCrsr( true );
@@ -780,7 +779,6 @@ void SwCrsrShell::GotoOutline( sal_uInt16 nIdx )
     if( !pCrsr->IsSelOvr() )
         UpdateCrsr(SwCrsrShell::SCROLLWIN|SwCrsrShell::CHKRANGE|SwCrsrShell::READONLY);
 }
-
 
 sal_Bool SwCrsrShell::GotoOutline( const String& rName )
 {
@@ -881,7 +879,6 @@ sal_uInt16 SwCrsrShell::GetOutlinePos( sal_uInt8 nLevel )
     return USHRT_MAX; // no more left
 }
 
-
 sal_Bool SwCrsrShell::MakeOutlineSel( sal_uInt16 nSttPos, sal_uInt16 nEndPos,
                                     sal_Bool bWithChildren )
 {
@@ -939,7 +936,6 @@ sal_Bool SwCrsrShell::MakeOutlineSel( sal_uInt16 nSttPos, sal_uInt16 nEndPos,
         UpdateCrsr(SwCrsrShell::SCROLLWIN|SwCrsrShell::CHKRANGE|SwCrsrShell::READONLY);
     return bRet;
 }
-
 
 /// jump to reference marker
 sal_Bool SwCrsrShell::GotoRefMark( const String& rRefMark, sal_uInt16 nSubType,
@@ -1627,7 +1623,6 @@ sal_Bool SwCrsrShell::SelectTxtAttr( sal_uInt16 nWhich, sal_Bool bExpand,
     return bRet;
 }
 
-
 sal_Bool SwCrsrShell::GotoINetAttr( const SwTxtINetFmt& rAttr )
 {
     sal_Bool bRet = sal_False;
@@ -1648,7 +1643,6 @@ sal_Bool SwCrsrShell::GotoINetAttr( const SwTxtINetFmt& rAttr )
     }
     return bRet;
 }
-
 
 const SwFmtINetFmt* SwCrsrShell::FindINetAttr( const String& rName ) const
 {
@@ -2038,7 +2032,6 @@ const SwRedline* SwCrsrShell::GotoRedline( sal_uInt16 nArrPos, sal_Bool bSelect 
     return pFnd;
 }
 
-
 sal_Bool SwCrsrShell::SelectNxtPrvHyperlink( sal_Bool bNext )
 {
     SwNodes& rNds = GetDoc()->GetNodes();
@@ -2093,6 +2086,7 @@ sal_Bool SwCrsrShell::SelectNxtPrvHyperlink( sal_Bool bNext )
                 }
         }
     }
+
     // then check all the Flys with a URL or imapge map
     {
         const SwFrmFmts* pFmts = GetDoc()->GetSpzFrmFmts();

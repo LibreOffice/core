@@ -40,7 +40,6 @@
 #include <rtl/random.h>
 #include <xmloff/odffields.hxx>
 
-
 SV_IMPL_REF( SwServerObject )
 
 using namespace ::sw::mark;
@@ -76,6 +75,7 @@ namespace
     {
         SwPosition& rStart = pField->GetMarkStart();
         SwPosition& rEnd = pField->GetMarkEnd();
+
         SwTxtNode const*const pStartTxtNode =
             rStart.nNode.GetNode().GetTxtNode();
         SwTxtNode const*const pEndTxtNode = rEnd.nNode.GetNode().GetTxtNode();
@@ -83,8 +83,10 @@ namespace
         xub_StrLen nEndPos = ( rEnd == rStart ||  rEnd.nContent.GetIndex() == 0 ) ?
             rEnd.nContent.GetIndex() : rEnd.nContent.GetIndex() - 1;
         const sal_Unicode ch_end=pEndTxtNode->GetTxt().GetChar( nEndPos );
+
         SwPaM aStartPaM(rStart);
         SwPaM aEndPaM(rEnd);
+
         io_pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_UI_REPLACE, NULL);
         if( ( ch_start != aStartMark ) && ( aEndMark != CH_TXT_ATR_FORMELEMENT ) )
         {
@@ -171,7 +173,6 @@ namespace sw { namespace mark
         // putting the counter in front of the random parts will speed up string comparisons
         return aResult.append(nCount++).append(sUniquePostfix).makeStringAndClear();
     }
-
 
     void MarkBase::Modify( const SfxPoolItem *pOld, const SfxPoolItem *pNew )
     {

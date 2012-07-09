@@ -34,7 +34,6 @@ sal_Bool SwCrsrShell::IsStartWord( sal_Int16 nWordType ) const
 {
     return pCurCrsr->IsStartWord( nWordType );
 }
-
 sal_Bool SwCrsrShell::IsEndWord( sal_Int16 nWordType ) const
 {
     return pCurCrsr->IsEndWord( nWordType );
@@ -49,12 +48,10 @@ sal_Bool SwCrsrShell::IsStartSentence() const
 {
     return pCurCrsr->IsStartEndSentence( false );
 }
-
 sal_Bool SwCrsrShell::IsEndSentence() const
 {
     return pCurCrsr->IsStartEndSentence( true );
 }
-
 
 sal_Bool SwCrsrShell::GoStartWord()
 {
@@ -64,6 +61,7 @@ sal_Bool SwCrsrShell::GoEndWord()
 {
     return CallCrsrFN( &SwCursor::GoEndWord );
 }
+
 sal_Bool SwCrsrShell::GoNextWord()
 {
     return CallCrsrFN( &SwCursor::GoNextWord );
@@ -72,15 +70,16 @@ sal_Bool SwCrsrShell::GoPrevWord()
 {
     return CallCrsrFN( &SwCursor::GoPrevWord );
 }
+
 sal_Bool SwCrsrShell::GoNextSentence()
 {
     return CallCrsrFN( &SwCursor::GoNextSentence );
 }
+
 sal_Bool SwCrsrShell::GoEndSentence()
 {
     return CallCrsrFN( &SwCursor::GoEndSentence );
 }
-
 sal_Bool SwCrsrShell::GoStartSentence()
 {
     return CallCrsrFN( &SwCursor::GoStartSentence );

@@ -41,7 +41,6 @@ SwUnoCrsr::SwUnoCrsr( const SwPosition &rPos, SwPaM* pRing )
     bRemainInSection( sal_True ),
     bSkipOverHiddenSections( sal_False ),
     bSkipOverProtectSections( sal_False )
-
 {}
 
 SwUnoCrsr::~SwUnoCrsr()
@@ -93,7 +92,6 @@ SwUnoTableCrsr * SwUnoTableCrsr::Clone() const
     }
     return pNewCrsr;
 }
-
 
 bool SwUnoCrsr::IsReadOnlyAvailable() const
 {
@@ -187,6 +185,7 @@ sal_Bool SwUnoCrsr::IsSelOvr( int eFlags )
                 sal_uInt16 nCnt = 0;
                 if( pCNd && !bMoveDown )
                     nCnt = pCNd->Len();
+
                 GetPoint()->nContent.Assign( pCNd, nCnt );
             }
             else
@@ -199,8 +198,6 @@ sal_Bool SwUnoCrsr::IsSelOvr( int eFlags )
     }
     return SwCursor::IsSelOvr( eFlags );
 }
-
-
 
 SwUnoTableCrsr::SwUnoTableCrsr(const SwPosition& rPos)
     : SwCursor(rPos,0,false), SwUnoCrsr(rPos), SwTableCursor(rPos), aTblSel(rPos,0,false)
@@ -234,7 +231,9 @@ void SwUnoTableCrsr::MakeBoxSels()
     if( GetPoint()->nNode.GetIndex() && GetMark()->nNode.GetIndex() &&
             0 != ( pCNd = GetCntntNode() ) && pCNd->getLayoutFrm( pCNd->GetDoc()->GetCurrentLayout() ) &&
             0 != ( pCNd = GetCntntNode(sal_False) ) && pCNd->getLayoutFrm( pCNd->GetDoc()->GetCurrentLayout() ) )
+    {
         bMakeTblCrsrs = GetDoc()->GetCurrentLayout()->MakeTblCrsrs( *this );
+    }
 
     if ( !bMakeTblCrsrs )
     {

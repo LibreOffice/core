@@ -121,7 +121,6 @@ sal_Bool SwCrsrShell::GotoFtnTxt()
     return bRet;
 }
 
-
 sal_Bool SwCursor::GotoFtnAnchor()
 {
     // jump from footnote to anchor
@@ -138,7 +137,6 @@ sal_Bool SwCursor::GotoFtnAnchor()
                 SwCrsrSaveState aSaveState( *this );
 
                 SwTxtNode& rTNd = (SwTxtNode&)pTxtFtn->GetTxtNode();
-
                 GetPoint()->nNode = rTNd;
                 GetPoint()->nContent.Assign( &rTNd, *pTxtFtn->GetStart() );
 
@@ -169,6 +167,7 @@ inline sal_Bool CmpLE( const SwTxtFtn& rFtn, sal_uLong nNd, xub_StrLen nCnt )
     sal_uLong nTNd = rFtn.GetTxtNode().GetIndex();
     return nTNd < nNd || ( nTNd == nNd && *rFtn.GetStart() <= nCnt );
 }
+
 inline sal_Bool CmpL( const SwTxtFtn& rFtn, sal_uLong nNd, xub_StrLen nCnt )
 {
     sal_uLong nTNd = rFtn.GetTxtNode().GetIndex();
@@ -220,7 +219,9 @@ sal_Bool SwCursor::GotoNextFtnAnchor()
         }
     }
     else if( nPos < rFtnArr.Count() )
+    {
         pTxtFtn = rFtnArr[ nPos ];
+    }
 
     sal_Bool bRet = 0 != pTxtFtn;
     if( bRet )
@@ -274,10 +275,14 @@ sal_Bool SwCursor::GotoPrevFtnAnchor()
             }
         }
         else
+        {
             pTxtFtn = 0;
+        }
     }
     else if( nPos )
+    {
         pTxtFtn = rFtnArr[ nPos-1 ];
+    }
 
     sal_Bool bRet = 0 != pTxtFtn;
     if( bRet )
@@ -337,8 +342,5 @@ sal_Bool SwCrsrShell::GotoFlyAnchor()
                     SwCrsrShell::READONLY );
     return bRet;
 }
-
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

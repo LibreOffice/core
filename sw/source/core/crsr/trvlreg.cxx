@@ -27,8 +27,6 @@
 #include <pamtyp.hxx>
 #include <section.hxx>
 
-
-
 sal_Bool GotoPrevRegion( SwPaM& rCurCrsr, SwPosRegion fnPosRegion,
                         sal_Bool bInReadOnly )
 {
@@ -40,7 +38,9 @@ sal_Bool GotoPrevRegion( SwPaM& rCurCrsr, SwPosRegion fnPosRegion,
     do {
         while( aIdx.GetIndex() &&
             0 == ( pNd = aIdx.GetNode().StartOfSectionNode()->GetSectionNode()) )
+        {
             aIdx--;
+        }
 
         if( pNd ) // is there another section node?
         {
@@ -75,14 +75,12 @@ sal_Bool GotoPrevRegion( SwPaM& rCurCrsr, SwPosRegion fnPosRegion,
                 }
                 rCurCrsr.GetPoint()->nContent.Assign( pCNd, pCNd->Len() );
             }
-
             rCurCrsr.GetPoint()->nNode = aIdx;
             return sal_True;
         }
     } while( pNd );
     return sal_False;
 }
-
 
 sal_Bool GotoNextRegion( SwPaM& rCurCrsr, SwPosRegion fnPosRegion,
                         sal_Bool bInReadOnly )
@@ -131,14 +129,12 @@ sal_Bool GotoNextRegion( SwPaM& rCurCrsr, SwPosRegion fnPosRegion,
                 }
                 rCurCrsr.GetPoint()->nContent.Assign( pCNd, pCNd->Len() );
             }
-
             rCurCrsr.GetPoint()->nNode = aIdx;
             return sal_True;
         }
     } while( pNd );
     return sal_False;
 }
-
 
 sal_Bool GotoCurrRegion( SwPaM& rCurCrsr, SwPosRegion fnPosRegion,
                         sal_Bool bInReadOnly )
@@ -170,7 +166,6 @@ sal_Bool GotoCurrRegion( SwPaM& rCurCrsr, SwPosRegion fnPosRegion,
     }
     return 0 != pCNd;
 }
-
 
 sal_Bool GotoCurrRegionAndSkip( SwPaM& rCurCrsr, SwPosRegion fnPosRegion,
                                 sal_Bool bInReadOnly )
@@ -218,8 +213,6 @@ sal_Bool GotoCurrRegionAndSkip( SwPaM& rCurCrsr, SwPosRegion fnPosRegion,
     return sal_False;
 }
 
-
-
 sal_Bool SwCursor::MoveRegion( SwWhichRegion fnWhichRegion, SwPosRegion fnPosRegion )
 {
     SwCrsrSaveState aSaveState( *this );
@@ -238,7 +231,6 @@ sal_Bool SwCrsrShell::MoveRegion( SwWhichRegion fnWhichRegion, SwPosRegion fnPos
         UpdateCrsr();
     return bRet;
 }
-
 
 sal_Bool SwCursor::GotoRegion( const String& rName )
 {
@@ -274,7 +266,5 @@ sal_Bool SwCrsrShell::GotoRegion( const String& rName )
                     SwCrsrShell::READONLY );
     return bRet;
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

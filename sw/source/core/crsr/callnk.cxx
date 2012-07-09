@@ -27,7 +27,6 @@
  ************************************************************************/
 
 #include <hintids.hxx>
-
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <fmtcntnt.hxx>
 #include <txatbase.hxx>
@@ -44,9 +43,7 @@
 #include <ndtxt.hxx>
 #include <flyfrm.hxx>
 #include <breakit.hxx>
-
 #include<vcl/window.hxx>
-
 
 SwCallLink::SwCallLink( SwCrsrShell & rSh, sal_uLong nAktNode, xub_StrLen nAktCntnt,
                         sal_uInt8 nAktNdTyp, long nLRPos, bool bAktSelection )
@@ -55,7 +52,6 @@ SwCallLink::SwCallLink( SwCrsrShell & rSh, sal_uLong nAktNode, xub_StrLen nAktCn
       bHasSelection( bAktSelection )
 {
 }
-
 
 SwCallLink::SwCallLink( SwCrsrShell & rSh )
     : rShell( rSh )
@@ -69,8 +65,10 @@ SwCallLink::SwCallLink( SwCrsrShell & rSh )
     bHasSelection = ( *pCrsr->GetPoint() != *pCrsr->GetMark() );
 
     if( rNd.IsTxtNode() )
+    {
         nLeftFrmPos = SwCallLink::getLayoutFrm( rShell.GetLayout(), (SwTxtNode&)rNd, nCntnt,
                                             !rShell.ActionPend() );
+    }
     else
     {
         nLeftFrmPos = 0;
@@ -173,9 +171,9 @@ SwCallLink::~SwCallLink()
         {
             if( nCmp == nAktCntnt && pCurCrsr->HasMark() ) // left & select
                 ++nCmp;
+
             if ( ((SwTxtNode*)pCNd)->HasHints() )
             {
-
                 const SwpHints &rHts = ((SwTxtNode*)pCNd)->GetSwpHints();
                 sal_uInt16 n;
                 xub_StrLen nStart;
@@ -223,10 +221,12 @@ SwCallLink::~SwCallLink()
             }
         }
         else
+        {
             // If travelling more than one character with home/end/.. then
             // always call ChgLnk, because it can not be determined here what
             // has changed. Something may have changed.
             rShell.CallChgLnk();
+        }
     }
 
     const SwFrm* pFrm;
@@ -244,7 +244,9 @@ SwCallLink::~SwCallLink()
 
         if( rStNd.EndOfSectionNode()->StartOfSectionIndex() > nNode ||
             nNode > rStNd.EndOfSectionIndex() )
+        {
             rShell.GetFlyMacroLnk().Call( (void*)pFlyFrm->GetFmt() );
+        }
     }
 }
 
@@ -254,10 +256,13 @@ long SwCallLink::getLayoutFrm( const SwRootFrm* pRoot, SwTxtNode& rNd, xub_StrLe
     if ( pFrm && !pFrm->IsHiddenNow() )
     {
         if( pFrm->HasFollow() )
+        {
             while( 0 != ( pNext = (SwTxtFrm*)pFrm->GetFollow() ) &&
                     nCntPos >= pNext->GetOfst() )
+            {
                 pFrm = pNext;
-
+            }
+        }
         return pFrm->Frm().Left();
     }
     return 0;

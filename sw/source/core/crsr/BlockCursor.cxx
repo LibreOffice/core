@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <IBlockCursor.hxx>
 #include <viscrs.hxx>
 #include "BlockCursor.hxx"
@@ -32,6 +31,7 @@ class SwBlockCursor : public IBlockCursor
     SwShellCrsr aCursor;
     Point *pStartPt;
     Point *pEndPt;
+
 public:
     SwBlockCursor( const SwCrsrShell& rCrsrSh, const SwPosition &rPos ) :
         aCursor( rCrsrSh, rPos ), pStartPt(0), pEndPt(0) {}

@@ -44,8 +44,6 @@ public:
     static long getLayoutFrm( const SwRootFrm*, SwTxtNode& rNd, xub_StrLen nCntPos, sal_Bool bCalcFrm );
 };
 
-
-
 #endif  // _CALLNK_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

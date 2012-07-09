@@ -26,12 +26,9 @@
  *
  ************************************************************************/
 
-
 #include <com/sun/star/util/SearchOptions.hpp>
 #include <com/sun/star/util/SearchFlags.hpp>
-
 #include <comphelper/string.hxx>
-
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 
@@ -48,7 +45,6 @@
 #include <swundo.hxx>
 #include <UndoInsert.hxx>
 #include <breakit.hxx>
-
 #include <docsh.hxx>
 #include <PostItMgr.hxx>
 #include <viewsh.hxx>
@@ -89,7 +85,6 @@ String& lcl_CleanStr( const SwTxtNode& rNd, xub_StrLen nStart,
 
         bNewHint       = false;
         bNewSoftHyphen = false;
-
         xub_StrLen nStt = 0;
 
         // Check if next stop is a hint.
@@ -419,6 +414,7 @@ bool SwPaM::DoSearch( const SearchOptions& rSearchOpt, utl::TextSearch& rSTxt,
     // if the search string contains a soft hypen,
     // we don't strip them from the text:
     bool bRemoveSoftHyphens = true;
+
     if ( bRegSearch )
     {
         const rtl::OUString a00AD(RTL_CONSTASCII_USTRINGPARAM("\\x00AD"));
@@ -497,6 +493,7 @@ bool SwPaM::DoSearch( const SearchOptions& rSearchOpt, utl::TextSearch& rSTxt,
                     n < aFltArr.size() && aFltArr[ n ] <= nStart;
                     ++n, ++nNew )
                     ;
+
                 nStart = nNew;
                 for( n = 0, nNew = nEnde;
                     n < aFltArr.size() && aFltArr[ n ] < nEnde;
@@ -522,7 +519,9 @@ bool SwPaM::DoSearch( const SearchOptions& rSearchOpt, utl::TextSearch& rSTxt,
     delete pScriptIter;
 
     if ( bFound )
+    {
         return true;
+    }
     else if( ( bChkEmptyPara && !nStart && !nTxtLen ) || bChkParaEnd )
     {
         *GetPoint() = *pPam->GetPoint();
@@ -612,12 +611,10 @@ int SwFindParaText::Find( SwPaM* pCrsr, SwMoveFn fnMove,
     return bFnd ? FIND_FOUND : FIND_NOT_FOUND;
 }
 
-
 int SwFindParaText::IsReplaceMode() const
 {
     return bReplace;
 }
-
 
 sal_uLong SwCursor::Find( const SearchOptions& rSearchOpt, sal_Bool bSearchInNotes,
                         SwDocPositions nStart, SwDocPositions nEnde,
@@ -637,13 +634,16 @@ sal_uLong SwCursor::Find( const SearchOptions& rSearchOpt, sal_Bool bSearchInNot
 
     sal_Bool bSearchSel = 0 != (rSearchOpt.searchFlag & SearchFlags::REG_NOT_BEGINOFLINE);
     if( bSearchSel )
+    {
         eFndRngs = (FindRanges)(eFndRngs | FND_IN_SEL);
+    }
     SwFindParaText aSwFindParaText( rSearchOpt, bSearchInNotes, bReplace, *this );
     sal_uLong nRet = FindAll( aSwFindParaText, nStart, nEnde, eFndRngs, bCancel );
     pDoc->SetOle2Link( aLnk );
     if( nRet && bReplace )
+    {
         pDoc->SetModified();
-
+    }
     if (bStartUndo)
     {
         SwRewriter rewriter(MakeUndoReplaceRewriter(
@@ -694,6 +694,5 @@ String *ReplaceBackReferences( const SearchOptions& rSearchOpt, SwPaM* pPam )
     }
     return pRet;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

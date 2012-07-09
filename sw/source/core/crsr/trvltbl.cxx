@@ -27,7 +27,6 @@
  ************************************************************************/
 
 #include <hintids.hxx>
-
 #include <vcl/svapp.hxx>
 #include <editeng/protitem.hxx>
 #include <crsrsh.hxx>
@@ -85,7 +84,9 @@ sal_Bool SwCrsrShell::GoNextCell( sal_Bool bAppendLine )
         if( !aCellStt.GetNode().IsStartNode() )
         {
             if( pCrsr->HasMark() || !bAppendLine )
+            {
                 bRet = sal_False;
+            }
             else
             {
                 // if there is no list anymore then create new one
@@ -109,7 +110,6 @@ sal_Bool SwCrsrShell::GoNextCell( sal_Bool bAppendLine )
     }
     return bRet;
 }
-
 
 sal_Bool SwCrsrShell::GoPrevCell()
 {
@@ -291,7 +291,6 @@ sal_Bool SwCrsrShell::SelTbl()
     return sal_True;
 }
 
-
 sal_Bool SwCrsrShell::SelTblBox()
 {
     // if we're in a table, create a table cursor, and select the cell
@@ -309,10 +308,8 @@ sal_Bool SwCrsrShell::SelTblBox()
     OSL_ENSURE( !pFrm->IsInTab() == !(pStartNode != NULL),
                 "Schroedinger's table: We're in a box, and also we aren't." );
 #endif
-
     if( pStartNode == NULL )
         return sal_False;
-
 
     SET_CURR_SHELL( this );
 
@@ -326,16 +323,13 @@ sal_Bool SwCrsrShell::SelTblBox()
 
     // select the complete box with our shiny new pTblCrsr
     // 1. delete mark, and move point to first content node in box
-
     pTblCrsr->DeleteMark();
     *(pTblCrsr->GetPoint()) = SwPosition( *pStartNode );
     pTblCrsr->Move( fnMoveForward, fnGoNode );
-
     // 2. set mark, and move point to last content node in box
     pTblCrsr->SetMark();
     *(pTblCrsr->GetPoint()) = SwPosition( *(pStartNode->EndOfSectionNode()) );
     pTblCrsr->Move( fnMoveBackward, fnGoNode );
-
     // 3. exchange
     pTblCrsr->Exchange();
 
@@ -428,7 +422,6 @@ bool lcl_FindNextCell( SwNodeIndex& rIdx, sal_Bool bInReadOnly )
             aTmp.Assign( *pCNd->EndOfSectionNode(), +1 );
         }
     }
-
     rIdx = *pCNd;
     return true;
 }
@@ -488,11 +481,9 @@ bool lcl_FindPrevCell( SwNodeIndex& rIdx, sal_Bool bInReadOnly  )
             aTmp.Assign( *pCNd->StartOfSectionNode(), - 1 );
         }
     }
-
     rIdx = *pCNd;
     return true;
 }
-
 
 sal_Bool GotoPrevTable( SwPaM& rCurCrsr, SwPosTable fnPosTbl,
                         sal_Bool bInReadOnly )
@@ -557,7 +548,6 @@ sal_Bool GotoPrevTable( SwPaM& rCurCrsr, SwPosTable fnPosTbl,
     return sal_False;
 }
 
-
 sal_Bool GotoNextTable( SwPaM& rCurCrsr, SwPosTable fnPosTbl,
                         sal_Bool bInReadOnly )
 {
@@ -610,7 +600,6 @@ sal_Bool GotoNextTable( SwPaM& rCurCrsr, SwPosTable fnPosTbl,
     return sal_False;
 }
 
-
 sal_Bool GotoCurrTable( SwPaM& rCurCrsr, SwPosTable fnPosTbl,
                         sal_Bool bInReadOnly )
 {
@@ -644,7 +633,6 @@ sal_Bool GotoCurrTable( SwPaM& rCurCrsr, SwPosTable fnPosTbl,
 
     return sal_True;
 }
-
 
 sal_Bool SwCursor::MoveTable( SwWhichTable fnWhichTbl, SwPosTable fnPosTbl )
 {
@@ -699,11 +687,12 @@ sal_Bool SwCrsrShell::MoveTable( SwWhichTable fnWhichTbl, SwPosTable fnPosTbl )
         if( bCheckPos &&
             pCrsr->GetPoint()->nNode.GetIndex() == nPtNd &&
             pCrsr->GetPoint()->nContent.GetIndex() == nPtCnt )
+        {
             bRet = sal_False;
+        }
     }
     return bRet;
 }
-
 
 sal_Bool SwCrsrShell::IsTblComplex() const
 {
@@ -712,7 +701,6 @@ sal_Bool SwCrsrShell::IsTblComplex() const
         return pFrm->FindTabFrm()->GetTable()->IsTblComplex();
     return sal_False;
 }
-
 
 sal_Bool SwCrsrShell::IsTblComplexForChart()
 {
@@ -729,7 +717,6 @@ sal_Bool SwCrsrShell::IsTblComplexForChart()
             sSel = GetBoxNms();
         bRet = pTNd->GetTable().IsTblComplexForChart( sSel );
     }
-
     EndAction();
 
     return bRet;
@@ -784,7 +771,6 @@ String SwCrsrShell::GetBoxNms() const
     return sNm;
 }
 
-
 sal_Bool SwCrsrShell::GotoTable( const String& rName )
 {
     SwCallLink aLk( *this ); // watch Crsr-Moves
@@ -797,7 +783,6 @@ sal_Bool SwCrsrShell::GotoTable( const String& rName )
     }
     return bRet;
 }
-
 
 sal_Bool SwCrsrShell::CheckTblBoxCntnt( const SwPosition* pPos )
 {
@@ -862,7 +847,6 @@ sal_Bool SwCrsrShell::CheckTblBoxCntnt( const SwPosition* pPos )
     return 0 != pChkBox;
 }
 
-
 void SwCrsrShell::SaveTblBoxCntnt( const SwPosition* pPos )
 {
     if( IsSelTblCells() || !IsAutoUpdateCells() )
@@ -902,7 +886,6 @@ void SwCrsrShell::SaveTblBoxCntnt( const SwPosition* pPos )
     }
 }
 
-
 void SwCrsrShell::ClearTblBoxCntnt()
 {
     delete pBoxIdx, pBoxIdx = 0;
@@ -915,14 +898,12 @@ sal_Bool SwCrsrShell::EndAllTblBoxEdit()
     ViewShell *pSh = this;
     do {
         if( pSh->IsA( TYPE( SwCrsrShell ) ) )
+        {
             bRet |= ((SwCrsrShell*)pSh)->CheckTblBoxCntnt(
                         ((SwCrsrShell*)pSh)->pCurCrsr->GetPoint() );
-
+        }
     } while( this != (pSh = (ViewShell *)pSh->GetNext()) );
     return bRet;
 }
-
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

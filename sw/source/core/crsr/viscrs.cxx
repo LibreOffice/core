@@ -77,8 +77,6 @@ SwVisCrsr::SwVisCrsr( const SwCrsrShell * pCShell )
 #endif
 }
 
-
-
 SwVisCrsr::~SwVisCrsr()
 {
 #ifdef SW_CRSR_TIMER
@@ -91,9 +89,6 @@ SwVisCrsr::~SwVisCrsr()
 
     pCrsrShell->GetWin()->SetCursor( 0 );
 }
-
-
-
 
 void SwVisCrsr::Show()
 {
@@ -121,8 +116,6 @@ void SwVisCrsr::Show()
     }
 }
 
-
-
 void SwVisCrsr::Hide()
 {
     if( bIsVisible )
@@ -140,7 +133,6 @@ void SwVisCrsr::Hide()
 }
 
 #ifdef SW_CRSR_TIMER
-
 void SwVisCrsr::Timeout()
 {
     OSL_ENSURE( !bIsDragCrsr, "stop timer before" );
@@ -158,7 +150,6 @@ sal_Bool SwCrsrShell::ChgCrsrTimerFlag( sal_Bool bTimerOn )
     return pVisCrsr->ChgTimerFlag( bTimerOn );
 }
 
-
 sal_Bool SwVisCrsr::ChgTimerFlag( sal_Bool bFlag )
 {
     bOld = bTimerOn;
@@ -170,9 +161,7 @@ sal_Bool SwVisCrsr::ChgTimerFlag( sal_Bool bFlag )
     bTimerOn = bFlag;
     return bOld;
 }
-
 #endif
-
 
 void SwVisCrsr::_SetPosAndShow()
 {
@@ -218,7 +207,6 @@ void SwVisCrsr::_SetPosAndShow()
                           CURSOR_DIRECTION_RTL :
                           CURSOR_DIRECTION_LTR );
                 }
-
                 if ( pFrm->IsRightToLeft() )
                 {
                     const OutputDevice *pOut = pCrsrShell->GetOut();
@@ -262,7 +250,6 @@ void SwVisCrsr::_SetPosAndShow()
         aTxtCrsr.Show();
     }
 }
-
 
 SwSelPaintRects::SwSelPaintRects( const SwCrsrShell& rCSh )
 :   SwRects( 0 ),
@@ -416,7 +403,6 @@ void SwSelPaintRects::Paint( const Rectangle& /*rRect*/ )
     // nothing to do with overlays
 }
 
-
 // check current MapMode of the shell and set possibly the static members.
 // Optional set the parameters pX, pY
 void SwSelPaintRects::Get1PixelInLogic( const ViewShell& rSh,
@@ -443,12 +429,9 @@ void SwSelPaintRects::Get1PixelInLogic( const ViewShell& rSh,
         *pY = nPixPtY;
 }
 
-
-
 SwShellCrsr::SwShellCrsr( const SwCrsrShell& rCShell, const SwPosition &rPos )
     : SwCursor(rPos,0,false), SwSelPaintRects(rCShell), pPt(SwPaM::GetPoint())
 {}
-
 
 SwShellCrsr::SwShellCrsr( const SwCrsrShell& rCShell, const SwPosition &rPos,
                             const Point& rPtPos, SwPaM* pRing )
@@ -456,12 +439,10 @@ SwShellCrsr::SwShellCrsr( const SwCrsrShell& rCShell, const SwPosition &rPos,
     aPtPt(rPtPos), pPt(SwPaM::GetPoint())
 {}
 
-
 SwShellCrsr::SwShellCrsr( SwShellCrsr& rICrsr )
     : SwCursor(rICrsr), SwSelPaintRects(*rICrsr.GetShell()),
     aMkPt(rICrsr.GetMkPos()), aPtPt(rICrsr.GetPtPos()), pPt(SwPaM::GetPoint())
 {}
-
 SwShellCrsr::~SwShellCrsr() {}
 
 
@@ -488,9 +469,11 @@ void SwShellCrsr::FillRects()
         (GetMark()->nNode == GetPoint()->nNode ||
         (GetMark()->nNode.GetNode().IsCntntNode() &&
          GetMark()->nNode.GetNode().GetCntntNode()->getLayoutFrm( GetShell()->GetLayout() ) )   ))
-        GetShell()->GetLayout()->CalcFrmRects( *this, GetShell()->IsTableMode() );  //swmod 071107//swmod 071225
+    {
+        //swmod 071107 //swmod 071225
+        GetShell()->GetLayout()->CalcFrmRects( *this, GetShell()->IsTableMode() );
+    }
 }
-
 
 void SwShellCrsr::Show()
 {
@@ -524,7 +507,6 @@ void SwShellCrsr::Invalidate( const SwRect& rRect )
     while( this != pTmp );
 }
 
-
 void SwShellCrsr::Hide()
 {
     SwShellCrsr * pTmp = this;
@@ -537,7 +519,6 @@ SwCursor* SwShellCrsr::Create( SwPaM* pRing ) const
 {
     return new SwShellCrsr( *GetShell(), *GetPoint(), GetPtPos(), pRing );
 }
-
 
 short SwShellCrsr::MaxReplaceArived()
 {
@@ -553,7 +534,9 @@ short SwShellCrsr::MaxReplaceArived()
                   *pSh = pShell;
         do {
             for( nActCnt = 0; pSh->ActionPend(); ++nActCnt )
+            {
                 pSh->EndAction();
+            }
             aArr.push_back( nActCnt );
         } while( pShell != ( pSh = (ViewShell*)pSh->GetNext() ) );
 
@@ -564,13 +547,17 @@ short SwShellCrsr::MaxReplaceArived()
         for( sal_uInt16 n = 0; n < aArr.size(); ++n )
         {
             for( nActCnt = aArr[n]; nActCnt--; )
+            {
                 pSh->StartAction();
+            }
             pSh = (ViewShell*)pSh->GetNext();
         }   //swmod 071107 //swmod 071225
     }
     else
+    {
         // otherwise from the Basic, and than switch to RET_YES
         nRet = RET_YES;
+    }
 
     return nRet;
 }
@@ -598,7 +585,6 @@ sal_Bool SwShellCrsr::IsAtValidPos( sal_Bool bPoint ) const
     return SwCursor::IsAtValidPos( bPoint );
 }
 
-
 SwShellTableCrsr::SwShellTableCrsr( const SwCrsrShell& rCrsrSh,
                                     const SwPosition& rPos )
     : SwCursor(rPos,0,false), SwShellCrsr(rCrsrSh, rPos), SwTableCursor(rPos)
@@ -624,22 +610,25 @@ SwCursor* SwShellTableCrsr::Create( SwPaM* pRing ) const
 {
     return SwShellCrsr::Create( pRing );
 }
+
 short SwShellTableCrsr::MaxReplaceArived()
 {
     return SwShellCrsr::MaxReplaceArived();
 }
+
 void SwShellTableCrsr::SaveTblBoxCntnt( const SwPosition* pPos )
 {
     SwShellCrsr::SaveTblBoxCntnt( pPos );
 }
-
 
 void SwShellTableCrsr::FillRects()
 {
     // Calculate the new rectangles. If the cursor is still "parked" do nothing
     if( !aSelBoxes.Count() || bParked ||
         !GetPoint()->nNode.GetIndex() )
+    {
         return;
+    }
 
     SwRegionRects aReg( GetShell()->VisArea() );
     SwNodes& rNds = GetDoc()->GetNodes();
@@ -683,14 +672,15 @@ void SwShellTableCrsr::FillRects()
     Insert( &aReg, 0 );
 }
 
-
 // Check if the SPoint is within the Table-SSelection.
 sal_Bool SwShellTableCrsr::IsInside( const Point& rPt ) const
 {
     // Calculate the new rectangles. If the cursor is still "parked" do nothing
     if( !aSelBoxes.Count() || bParked ||
         !GetPoint()->nNode.GetIndex()  )
+    {
         return sal_False;
+    }
 
     SwNodes& rNds = GetDoc()->GetNodes();
     for( sal_uInt16 n = 0; n < aSelBoxes.Count(); ++n )
@@ -702,7 +692,9 @@ sal_Bool SwShellTableCrsr::IsInside( const Point& rPt ) const
 
         SwFrm* pFrm = pCNd->getLayoutFrm( GetShell()->GetLayout(), &GetPtPos() );
         while( pFrm && !pFrm->IsCellFrm() )
+        {
             pFrm = pFrm->GetUpper();
+        }
         OSL_ENSURE( pFrm, "Node not in a table" );
         if( pFrm && pFrm->Frm().IsInside( rPt ) )
             return sal_True;

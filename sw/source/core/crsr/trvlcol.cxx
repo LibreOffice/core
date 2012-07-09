@@ -25,8 +25,6 @@
 #include <viscrs.hxx>
 #include <callnk.hxx>
 
-
-
 SwLayoutFrm* GetCurrColumn( const SwLayoutFrm* pLayFrm )
 {
     while( pLayFrm && !pLayFrm->IsColumnFrm() )
@@ -34,13 +32,11 @@ SwLayoutFrm* GetCurrColumn( const SwLayoutFrm* pLayFrm )
     return (SwLayoutFrm*)pLayFrm;
 }
 
-
 SwLayoutFrm* GetNextColumn( const SwLayoutFrm* pLayFrm )
 {
     SwLayoutFrm* pActCol = GetCurrColumn( pLayFrm );
     return pActCol ? (SwLayoutFrm*)pActCol->GetNext() : 0;
 }
-
 
 SwLayoutFrm* GetPrevColumn( const SwLayoutFrm* pLayFrm )
 {
@@ -48,12 +44,10 @@ SwLayoutFrm* GetPrevColumn( const SwLayoutFrm* pLayFrm )
     return pActCol ? (SwLayoutFrm*)pActCol->GetPrev() : 0;
 }
 
-
 SwCntntFrm* GetColumnStt( const SwLayoutFrm* pColFrm )
 {
     return pColFrm ? (SwCntntFrm*)pColFrm->ContainsCntnt() : 0;
 }
-
 
 SwCntntFrm* GetColumnEnd( const SwLayoutFrm* pColFrm )
 {
@@ -70,13 +64,11 @@ SwCntntFrm* GetColumnEnd( const SwLayoutFrm* pColFrm )
     return pRet;
 }
 
-
 SwWhichColumn fnColumnPrev = &GetPrevColumn;
 SwWhichColumn fnColumnCurr = &GetCurrColumn;
 SwWhichColumn fnColumnNext = &GetNextColumn;
 SwPosColumn fnColumnStart = &GetColumnStt;
 SwPosColumn fnColumnEnd = &GetColumnEnd;
-
 
 sal_Bool SwCrsrShell::MoveColumn( SwWhichColumn fnWhichCol, SwPosColumn fnPosCol )
 {
@@ -115,7 +107,5 @@ sal_Bool SwCrsrShell::MoveColumn( SwWhichColumn fnWhichCol, SwPosColumn fnPosCol
     }
     return bRet;
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

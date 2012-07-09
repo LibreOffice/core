@@ -28,10 +28,10 @@
 
 #include <com/sun/star/util/SearchOptions.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
+
 #include <hintids.hxx>
 #include <svx/svdmodel.hxx>
 #include <editeng/frmdiritem.hxx>
-
 #include <SwSmartTagMgr.hxx>
 #include <doc.hxx>
 #include <rootfrm.hxx>
@@ -66,9 +66,7 @@
 #include <vcl/svapp.hxx>
 #include <numrule.hxx>
 #include <IGrammarContact.hxx>
-
 #include <globals.hrc>
-
 #include <comcore.hrc>
 
 using namespace com::sun::star;
@@ -76,13 +74,11 @@ using namespace util;
 
 TYPEINIT2(SwCrsrShell,ViewShell,SwModify);
 
-
 /**
  * Delete all overlapping Cursors from a Cursor ring.
  * @param pointer to SwCursor (ring)
  */
 void CheckRange( SwCursor* );
-
 
 /**
  * Check if pCurCrsr points into already existing ranges and delete those.
@@ -124,9 +120,6 @@ void CheckRange( SwCursor* pCurCrsr )
 // SwCrsrShell
 // -----------
 
-
-
-
 SwPaM * SwCrsrShell::CreateCrsr()
 {
     // don't create Crsr in a table Selection (sic!)
@@ -145,7 +138,6 @@ SwPaM * SwCrsrShell::CreateCrsr()
     UpdateCrsr( SwCrsrShell::SCROLLWIN );
     return pNew;
 }
-
 
 /**
  * Delete current Cursor, making the following one the current.
@@ -168,7 +160,6 @@ sal_Bool SwCrsrShell::DestroyCrsr()
     UpdateCrsr();
     return sal_True;
 }
-
 
 /**
  * Create and return a new shell cursor.
@@ -224,7 +215,6 @@ SwPaM* SwCrsrShell::GetCrsr( sal_Bool bMakeTblCrsr ) const
     return pCurCrsr;
 }
 
-
 void SwCrsrShell::StartAction()
 {
     if( !ActionPend() )
@@ -236,13 +226,14 @@ void SwCrsrShell::StartAction()
         nAktNdTyp = rNd.GetNodeType();
         bAktSelection = *pCurCrsr->GetPoint() != *pCurCrsr->GetMark();
         if( rNd.IsTxtNode() )
+        {
             nLeftFrmPos = SwCallLink::getLayoutFrm( GetLayout(), (SwTxtNode&)rNd, nAktCntnt, sal_True );
+        }
         else
             nLeftFrmPos = 0;
     }
     ViewShell::StartAction(); // to the ViewShell
 }
-
 
 void SwCrsrShell::EndAction( const sal_Bool bIdleEnd )
 {
@@ -324,9 +315,7 @@ void SwCrsrShell::EndAction( const sal_Bool bIdleEnd )
     }
 }
 
-
 #ifdef DBG_UTIL
-
 void SwCrsrShell::SttCrsrMove()
 {
     OSL_ENSURE( nCrsrMove < USHRT_MAX, "To many nested CrsrMoves." );
@@ -341,9 +330,7 @@ void SwCrsrShell::EndCrsrMove( const sal_Bool bIdleEnd )
     if( !--nCrsrMove )
         bInCMvVisportChgd = sal_False;
 }
-
 #endif
-
 
 sal_Bool SwCrsrShell::LeftRight( sal_Bool bLeft, sal_uInt16 nCnt, sal_uInt16 nMode,
                                  sal_Bool bVisualAllowed )
@@ -396,9 +383,8 @@ sal_Bool SwCrsrShell::LeftRight( sal_Bool bLeft, sal_uInt16 nCnt, sal_uInt16 nMo
     }
 
     if( bRet )
-    {
         UpdateCrsr();
-    }
+
     return bRet;
 }
 
@@ -412,9 +398,7 @@ void SwCrsrShell::MarkListLevel( const String& sListId,
             pDoc->MarkListLevel( sMarkedListId, nMarkedListLevel, sal_False );
 
         if ( sListId.Len() > 0 )
-        {
             pDoc->MarkListLevel( sListId, nListLevel, sal_True );
-        }
 
         sMarkedListId = sListId;
         nMarkedListLevel = nListLevel;
@@ -471,8 +455,10 @@ sal_Bool SwCrsrShell::UpDown( sal_Bool bUp, sal_uInt16 nCnt )
         {
             CrsrFlag eUpdtMode = SwCrsrShell::SCROLLWIN;
             if( !bTableMode )
+            {
                 eUpdtMode = (CrsrFlag) (eUpdtMode
                             | SwCrsrShell::UPDOWN | SwCrsrShell::CHKRANGE);
+            }
             UpdateCrsr( static_cast<sal_uInt16>(eUpdtMode) );
         }
     }
@@ -500,7 +486,9 @@ sal_Bool SwCrsrShell::LRMargin( sal_Bool bLeft, sal_Bool bAPI)
     {
         const SwTxtNode * pTxtNd = _GetCrsr()->GetNode()->GetTxtNode();
         if ( pTxtNd && pTxtNd->HasVisibleNumberingOrBullet() )
+        {
             SetInFrontOfLabel( sal_True );
+        }
     }
     else if ( !bLeft )
     {
@@ -519,7 +507,6 @@ sal_Bool SwCrsrShell::IsAtLRMargin( sal_Bool bLeft, sal_Bool bAPI ) const
     const SwShellCrsr* pTmpCrsr = getShellCrsr( true );
     return pTmpCrsr->IsAtLeftRightMargin( bLeft, bAPI );
 }
-
 
 sal_Bool SwCrsrShell::SttEndDoc( sal_Bool bStt )
 {
@@ -572,13 +559,16 @@ sal_Bool SwCrsrShell::MovePage( SwWhichPage fnWhichPage, SwPosPage fnPosPage )
                                                 fnPosPage, pCurCrsr )  ) &&
             !pCurCrsr->IsSelOvr( nsSwCursorSelOverFlags::SELOVER_TOGGLE |
                                  nsSwCursorSelOverFlags::SELOVER_CHANGEPOS ))
+        {
             UpdateCrsr();
+        }
         else
+        {
             bRet = sal_False;
+        }
     }
     return bRet;
 }
-
 
 sal_Bool SwCrsrShell::MovePara(SwWhichPara fnWhichPara, SwPosPara fnPosPara )
 {
@@ -589,7 +579,6 @@ sal_Bool SwCrsrShell::MovePara(SwWhichPara fnWhichPara, SwPosPara fnPosPara )
         UpdateCrsr();
     return bRet;
 }
-
 
 sal_Bool SwCrsrShell::MoveSection( SwWhichSection fnWhichSect,
                                 SwPosSection fnPosSect)
@@ -603,10 +592,7 @@ sal_Bool SwCrsrShell::MoveSection( SwWhichSection fnWhichSect,
 
 }
 
-
 // position cursor
-
-
 SwFrm* lcl_IsInHeaderFooter( const SwNodeIndex& rIdx, Point& rPt )
 {
     SwFrm* pFrm = 0;
@@ -616,8 +602,10 @@ SwFrm* lcl_IsInHeaderFooter( const SwNodeIndex& rIdx, Point& rPt )
         SwCntntFrm *pCntFrm = pCNd->getLayoutFrm( pCNd->GetDoc()->GetCurrentLayout(), &rPt, 0, sal_False );
         pFrm = pCntFrm ? pCntFrm->GetUpper() : NULL;
         while( pFrm && !pFrm->IsHeaderFrm() && !pFrm->IsFooterFrm() )
+        {
             pFrm = pFrm->IsFlyFrm() ? ((SwFlyFrm*)pFrm)->AnchorFrm()
                                     : pFrm->GetUpper();
+        }
     }
     return pFrm;
 }
@@ -732,7 +720,9 @@ int SwCrsrShell::SetCrsr( const Point &rLPt, sal_Bool bOnlyText, bool bBlock )
     // #i41424# Only update the marked number levels if necessary
     // Force update of marked number levels if necessary.
     if ( bNewInFrontOfLabel || bOldInFrontOfLabel )
+    {
         pCurCrsr->_SetInFrontOfLabel( !bNewInFrontOfLabel );
+    }
     SetInFrontOfLabel( bNewInFrontOfLabel );
 
     if( !pCrsr->IsSelOvr( nsSwCursorSelOverFlags::SELOVER_CHANGEPOS ) )
@@ -767,10 +757,8 @@ int SwCrsrShell::SetCrsr( const Point &rLPt, sal_Bool bOnlyText, bool bBlock )
             }
         }
     }
-
     return bRet;
 }
-
 
 void SwCrsrShell::TblCrsrToCursor()
 {
@@ -852,7 +840,6 @@ void SwCrsrShell::ClearMark()
     }
 }
 
-
 void SwCrsrShell::NormalizePam(sal_Bool bPointFirst)
 {
     SwCallLink aLk( *this ); // watch Crsr-Moves; call Link if needed
@@ -913,7 +900,6 @@ sal_Bool SwCrsrShell::ChgCurrPam( const Point & rPt,
     return sal_False;
 }
 
-
 void SwCrsrShell::KillPams()
 {
     // Does any exist for deletion?
@@ -945,7 +931,6 @@ void SwCrsrShell::KillPams()
     }
     UpdateCrsr( SwCrsrShell::SCROLLWIN );
 }
-
 
 int SwCrsrShell::CompareCursor( CrsrCompareType eType ) const
 {
@@ -993,14 +978,11 @@ int SwCrsrShell::CompareCursor( CrsrCompareType eType ) const
     return nRet;
 }
 
-
 sal_Bool SwCrsrShell::IsSttPara() const
 {   return( pCurCrsr->GetPoint()->nContent == 0 ? sal_True : sal_False ); }
 
-
 sal_Bool SwCrsrShell::IsEndPara() const
 {   return( pCurCrsr->GetPoint()->nContent == pCurCrsr->GetCntntNode()->Len() ? sal_True : sal_False ); }
-
 
 sal_Bool SwCrsrShell::IsInFrontOfLabel() const
 {
@@ -1031,7 +1013,6 @@ sal_Bool SwCrsrShell::GotoPage( sal_uInt16 nPage )
     return bRet;
 }
 
-
 void SwCrsrShell::GetPageNum( sal_uInt16 &rnPhyNum, sal_uInt16 &rnVirtNum,
                               sal_Bool bAtCrsrPos, const sal_Bool bCalcFrm )
 {
@@ -1052,11 +1033,9 @@ void SwCrsrShell::GetPageNum( sal_uInt16 &rnPhyNum, sal_uInt16 &rnVirtNum,
     rnVirtNum = pPg? pPg->GetVirtPageNum() : 1;
 }
 
-
 sal_uInt16 SwCrsrShell::GetNextPrevPageNum( sal_Bool bNext )
 {
     SET_CURR_SHELL( this );
-
     // page number: first visible page or the one at the cursor
     const SwPageFrm *pPg = Imp()->GetFirstVisPage();
     if( pPg )
@@ -1091,7 +1070,6 @@ sal_uInt16 SwCrsrShell::GetNextPrevPageNum( sal_Bool bNext )
     // pPg has to exist with a default of 1 for the special case "Writerstart"
     return pPg ? pPg->GetPhyPageNum() : USHRT_MAX;
 }
-
 
 sal_uInt16 SwCrsrShell::GetPageCnt()
 {
@@ -1137,10 +1115,8 @@ sal_Bool SwCrsrShell::GoPrevCrsr()
         UpdateCrsr();
         pCurCrsr->Show();
     }
-
     return sal_True;
 }
-
 
 void SwCrsrShell::Paint( const Rectangle &rRect)
 {
@@ -1177,8 +1153,6 @@ void SwCrsrShell::Paint( const Rectangle &rRect)
     if( bSVCrsrVis && bVis ) // also show SV cursor again
         pVisCrsr->Show();
 }
-
-
 
 void SwCrsrShell::VisPortChgd( const SwRect & rRect )
 {
@@ -1288,10 +1262,10 @@ class SwNotifyAccAboutInvalidTextSelections
             mrCrsrSh.InvalidateAccessibleParaTextSelection();
         }
 };
+
 void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, sal_Bool bIdleEnd )
 {
     SET_CURR_SHELL( this );
-
     ClearUpCrsrs();
 
     // In a BasicAction the cursor must be updated, e.g. to create the
@@ -1319,7 +1293,6 @@ void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, sal_Bool bIdleEnd )
     }
     if ( IsInHeaderFooter() != IsHeaderFooterEdit() )
         ToggleHeaderFooterEdit();
-
 
     // #i27301#
     SwNotifyAccAboutInvalidTextSelections aInvalidateTextSelections( *this );
@@ -1948,8 +1921,10 @@ sal_Bool SwCrsrShell::Pop( sal_Bool bOldCrsr )
             pCurCrsr->GetMkPos() = pOldStk->GetMkPos();
         }
         else
+        {
             // no selection so revoke old one and set to old position
             pCurCrsr->DeleteMark();
+        }
         *pCurCrsr->GetPoint() = *pOldStk->GetPoint();
         pCurCrsr->GetPtPos() = pOldStk->GetPtPos();
         delete pOldStk;
@@ -2000,7 +1975,6 @@ void SwCrsrShell::Combine()
         UpdateCrsr(); // update current cursor
 }
 
-
 void SwCrsrShell::HideCrsrs()
 {
     if( !bHasFocus || bBasicHideCrsr )
@@ -2017,8 +1991,6 @@ void SwCrsrShell::HideCrsrs()
     pAktCrsr->Hide();
 }
 
-
-
 void SwCrsrShell::ShowCrsrs( sal_Bool bCrsrVis )
 {
     if( !bHasFocus || bAllProtect || bBasicHideCrsr )
@@ -2032,8 +2004,6 @@ void SwCrsrShell::ShowCrsrs( sal_Bool bCrsrVis )
         pVisCrsr->Show();
 }
 
-
-
 void SwCrsrShell::ShowCrsr()
 {
     if( !bBasicHideCrsr )
@@ -2042,8 +2012,6 @@ void SwCrsrShell::ShowCrsr()
         UpdateCrsr();
     }
 }
-
-
 void SwCrsrShell::HideCrsr()
 {
     if( !bBasicHideCrsr )
@@ -2055,15 +2023,12 @@ void SwCrsrShell::HideCrsr()
     }
 }
 
-
 void SwCrsrShell::ShLooseFcs()
 {
     if( !bBasicHideCrsr )
         HideCrsrs();
     bHasFocus = sal_False;
 }
-
-
 void SwCrsrShell::ShGetFcs( sal_Bool bUpdate )
 {
     bHasFocus = sal_True;
@@ -2118,11 +2083,13 @@ void SwCrsrShell::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
         ( nWhich < RES_MSG_BEGIN || nWhich >= RES_MSG_END ||
             nWhich == RES_FMT_CHG || nWhich == RES_UPDATE_ATTR ||
             nWhich == RES_ATTRSET_CHG ))
+    {
         // messages are not forwarded
         // #i6681#: RES_UPDATE_ATTR is implicitly unset in
         // SwTxtNode::Insert(SwTxtHint*, sal_uInt16); we react here and thus do
         // not need to send the expensive RES_FMT_CHG in Insert.
         CallChgLnk();
+    }
 
     if( aGrfArrivedLnk.IsSet() &&
         ( RES_GRAPHIC_ARRIVED == nWhich || RES_GRAPHIC_SWAPIN == nWhich ))
@@ -2140,7 +2107,6 @@ sal_Bool SwCrsrShell::HasSelection() const
             *pCrsr->GetPoint() != *pCrsr->GetMark())
         ? sal_True : sal_False );
 }
-
 
 void SwCrsrShell::CallChgLnk()
 {
@@ -2343,12 +2309,13 @@ sal_uInt16 SwCrsrShell::GetCrsrCnt( sal_Bool bAll ) const
     {
         if( bAll || ( ((SwPaM*)pTmp)->HasMark() &&
                 *((SwPaM*)pTmp)->GetPoint() != *((SwPaM*)pTmp)->GetMark()))
+        {
             ++n;
+        }
         pTmp = pTmp->GetNext();
     }
     return n;
 }
-
 
 sal_Bool SwCrsrShell::IsStartOfDoc() const
 {
@@ -2361,7 +2328,6 @@ sal_Bool SwCrsrShell::IsStartOfDoc() const
         GetDoc()->GetNodes().GoNext( &aIdx );
     return aIdx == pCurCrsr->GetPoint()->nNode;
 }
-
 
 sal_Bool SwCrsrShell::IsEndOfDoc() const
 {
@@ -2443,7 +2409,9 @@ void SwCrsrShell::_ParkPams( SwPaM* pDelRg, SwShellCrsr** ppDelRing )
             }
 
             if( bDelete )
+            {
                 delete pTmpDel; // invalidate old area
+            }
             else
             {
                 pTmpDel->GetPoint()->nContent.Assign( 0, 0 );
@@ -2487,13 +2455,17 @@ void SwCrsrShell::ParkCrsr( const SwNodeIndex &rIdx )
             pNew->GetPoint()->nNode = *pNode->StartOfSectionNode();
         }
         else
+        {
             // Also on the start node itself. Then we need to request the start
             // node always via its end node! (StartOfSelection of StartNode is
             // the parent)
             pNew->GetPoint()->nNode = *pNode->EndOfSectionNode()->StartOfSectionNode();
+        }
     }
     else
+    {
         pNew->GetPoint()->nNode = *pNode->StartOfSectionNode();
+    }
     pNew->SetMark();
     pNew->GetPoint()->nNode = *pNode->EndOfSectionNode();
 
@@ -2526,7 +2498,6 @@ void SwCrsrShell::ParkCrsr( const SwNodeIndex &rIdx )
     } while ( this != (pTmp = (ViewShell*)pTmp->GetNext() ));
     delete pNew;
 }
-
 
 /** Copy constructor
 
@@ -2588,8 +2559,6 @@ SwCrsrShell::SwCrsrShell( SwDoc& rDoc, Window *pInitWin,
     mbMacroExecAllowed = true;
 }
 
-
-
 SwCrsrShell::~SwCrsrShell()
 {
     // if it is not the last view then at least the field should be updated
@@ -2647,11 +2616,12 @@ sal_Bool SwCrsrShell::ShouldWait() const
             pPam->End()->nNode.GetIndex();
 }
 
-
 sal_uInt16 SwCrsrShell::UpdateTblSelBoxes()
 {
     if( pTblCrsr && ( pTblCrsr->IsChgd() || !pTblCrsr->GetBoxesCount() ))
+    {
          GetLayout()->MakeTblCrsrs( *pTblCrsr );
+    }
     return pTblCrsr ? pTblCrsr->GetBoxesCount() : 0;
 }
 
@@ -2869,7 +2839,6 @@ sal_Bool SwCrsrShell::FindValidCntntNode( sal_Bool bOnlyText )
     return bOk;
 }
 
-
 sal_Bool SwCrsrShell::IsCrsrReadonly() const
 {
     if ( GetViewOptions()->IsReadonly() ||
@@ -2930,7 +2899,6 @@ sal_Bool SwCrsrShell::HasReadonlySel() const
         else
         {
             const SwPaM* pCrsr = pCurCrsr;
-
             do {
                 if( pCrsr->HasReadonlySel( GetViewOptions()->IsFormView() ) )
                     bRet = sal_True;
@@ -3151,14 +3119,11 @@ void SwCrsrShell::ClearUpCrsrs()
     while (pCrsr != pStartCrsr)
     {
         pTmpCrsr = (SwPaM *) pCrsr->GetNext();
-
         if ( ! lcl_CrsrOk(*pCrsr))
         {
             delete pCrsr;
-
             bChanged = true;
         }
-
         pCrsr = pTmpCrsr;
     }
 
@@ -3403,6 +3368,5 @@ void SwCrsrShell::GetSmartTagTerm( const Point& rPt, SwRect& rSelectRect,
         }
     }
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

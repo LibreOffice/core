@@ -60,7 +60,6 @@
 
 using namespace ::com::sun::star::i18n;
 
-
 static const sal_uInt16 coSrchRplcThreshold = 60000;
 
 struct _PercentHdl
@@ -326,7 +325,6 @@ sal_Bool SwCursor::IsSelOvr( int eFlags )
                 }
             }
         }
-
     }
 
     const SwNode* pNd = &GetPoint()->nNode.GetNode();
@@ -342,7 +340,9 @@ sal_Bool SwCursor::IsSelOvr( int eFlags )
             while( 0 != ( pFrm = ( bGoNxt ? pFrm->GetNextCntntFrm()
                                           : pFrm->GetPrevCntntFrm() )) &&
                     0 == pFrm->Frm().Height() )
+            {
                 ;
+            }
 
             // #i72394# skip to prev/next valid paragraph with a layout in case
             // the first search did not succeed:
@@ -466,7 +466,9 @@ sal_Bool SwCursor::IsSelOvr( int eFlags )
                     // table in table
                     const SwTableNode* pOuterTableNd = pMyNd->FindTableNode();
                     if ( pOuterTableNd )
+                    {
                         pMyNd = pOuterTableNd;
+                    }
                     else
                     {
                         SwCntntNode* pCNd = (SwCntntNode*)pMyNd;
@@ -494,7 +496,6 @@ sal_Bool SwCursor::IsSelOvr( int eFlags )
 #else
 #define IDX     aCellStt
 #endif
-
 
 sal_Bool SwCursor::IsInProtectTable( sal_Bool bMove, sal_Bool bChgCrsr )
 {
@@ -536,8 +537,10 @@ sal_Bool SwCursor::IsInProtectTable( sal_Bool bMove, sal_Bool bChgCrsr )
     if( !bMove )
     {
         if( bChgCrsr )
+        {
             // restore the last save position
             RestoreSavePos();
+        }
         return sal_True; // Crsr stays at old position
     }
 
@@ -708,7 +711,6 @@ SwMoveFnCollection* SwCursor::MakeFindRange( SwDocPositions nStart,
                 ? fnMoveForward : fnMoveBackward;
 }
 
-
 sal_uLong lcl_FindSelection( SwFindParas& rParas, SwCursor* pCurCrsr,
                         SwMoveFn fnMove, SwCursor*& pFndRing,
                         SwPaM& aRegion, FindRanges eFndRngs,
@@ -834,7 +836,6 @@ sal_uLong lcl_FindSelection( SwFindParas& rParas, SwCursor* pCurCrsr,
     return nFound;
 }
 
-
 int lcl_MakeSelFwrd( const SwNode& rSttNd, const SwNode& rEndNd,
                         SwPaM& rPam, int bFirst )
 {
@@ -849,24 +850,29 @@ int lcl_MakeSelFwrd( const SwNode& rSttNd, const SwNode& rEndNd,
         rPam.GetPoint()->nNode = rSttNd;
         pCNd = rNds.GoNext( &rPam.GetPoint()->nNode );
         if( !pCNd )
+        {
             return sal_False;
+        }
         pCNd->MakeStartIndex( &rPam.GetPoint()->nContent );
     }
     else if( rSttNd.GetIndex() > rPam.GetPoint()->nNode.GetIndex() ||
              rPam.GetPoint()->nNode.GetIndex() >= rEndNd.GetIndex() )
+    {
         // not in this section
         return sal_False;
+    }
 
     rPam.SetMark();
     rPam.GetPoint()->nNode = rEndNd;
     pCNd = rNds.GoPrevious( &rPam.GetPoint()->nNode );
     if( !pCNd )
+    {
         return sal_False;
+    }
     pCNd->MakeEndIndex( &rPam.GetPoint()->nContent );
 
     return *rPam.GetMark() < *rPam.GetPoint();
 }
-
 
 int lcl_MakeSelBkwrd( const SwNode& rSttNd, const SwNode& rEndNd,
                         SwPaM& rPam, int bFirst )
@@ -1059,7 +1065,6 @@ sal_uLong SwCursor::FindAll( SwFindParas& rParas,
     return nFound;
 }
 
-
 void SwCursor::FillFindPos( SwDocPositions ePos, SwPosition& rPos ) const
 {
     sal_Bool bIsStart = sal_True;
@@ -1072,24 +1077,20 @@ void SwCursor::FillFindPos( SwDocPositions ePos, SwPosition& rPos ) const
         rPos.nNode = *rNds.GetEndOfContent().StartOfSectionNode();
         pCNd = rNds.GoNext( &rPos.nNode );
         break;
-
     case DOCPOS_END:
         rPos.nNode = rNds.GetEndOfContent();
         pCNd = rNds.GoPrevious( &rPos.nNode );
         bIsStart = sal_False;
         break;
-
     case DOCPOS_OTHERSTART:
         rPos.nNode = *rNds[ sal_uLong(0) ];
         pCNd = rNds.GoNext( &rPos.nNode );
         break;
-
     case DOCPOS_OTHEREND:
         rPos.nNode = *rNds.GetEndOfContent().StartOfSectionNode();
         pCNd = rNds.GoPrevious( &rPos.nNode );
         bIsStart = sal_False;
         break;
-
 //  case DOCPOS_CURR:
     default:
         rPos = *GetPoint();
@@ -1108,7 +1109,6 @@ short SwCursor::MaxReplaceArived()
 {
     return RET_YES;
 }
-
 
 sal_Bool SwCursor::IsStartWord( sal_Int16 nWordType ) const
 {
@@ -1219,7 +1219,6 @@ sal_Bool SwCursor::IsStartEndSentence( bool bEnd ) const
         aCrsr.GoSentence( bEnd ? SwCursor::END_SENT : SwCursor::START_SENT );
         bRet = aOrigPos == *aCrsr.GetPoint();
     }
-
     return bRet;
 }
 
@@ -1393,7 +1392,6 @@ sal_Bool SwCursor::SelectWordWT( ViewShell* pViewShell, sal_Int16 nWordType, con
     return bRet;
 }
 
-
 static String lcl_MaskDeletedRedlines( const SwTxtNode* pTxtNd )
 {
     String aRes;
@@ -1489,7 +1487,6 @@ sal_Bool SwCursor::GoSentence( SentenceMoveType eMoveType )
     return bRet;
 }
 
-
 sal_Bool SwCursor::ExpandToSentenceBorders()
 {
     sal_Bool bRes = sal_False;
@@ -1533,14 +1530,12 @@ sal_Bool SwCursor::ExpandToSentenceBorders()
     return bRes;
 }
 
-
 sal_Bool SwTableCursor::LeftRight( sal_Bool bLeft, sal_uInt16 nCnt, sal_uInt16 /*nMode*/,
     sal_Bool /*bVisualAllowed*/, sal_Bool /*bSkipHidden*/, sal_Bool /*bInsertCrsr*/ )
 {
     return bLeft ? GoPrevCell( nCnt )
                  : GoNextCell( nCnt );
 }
-
 
 // calculate cursor bidi level: extracted from LeftRight()
 const SwCntntFrm*
@@ -1660,7 +1655,6 @@ sal_Bool SwCursor::LeftRight( sal_Bool bLeft, sal_uInt16 nCnt, sal_uInt16 nMode,
                             break;
                     }
                 }
-
                 mnRowSpanOffset = 0;
             }
         }
@@ -1692,7 +1686,6 @@ sal_Bool SwCursor::LeftRight( sal_Bool bLeft, sal_uInt16 nCnt, sal_uInt16 nMode,
                 }
             }
         }
-
         --nCnt;
     }
 
@@ -1855,7 +1848,6 @@ sal_Bool SwCursor::UpDown( sal_Bool bUp, sal_uInt16 nCnt,
 
         DoSetBidiLevelUpDown(); // calculate cursor bidi level
     }
-
     return bRet;
 }
 
@@ -1901,7 +1893,6 @@ sal_Bool SwCursor::SttEndDoc( sal_Bool bStt )
                     !IsSelOvr( nsSwCursorSelOverFlags::SELOVER_TOGGLE |
                                nsSwCursorSelOverFlags::SELOVER_CHANGEPOS |
                                nsSwCursorSelOverFlags::SELOVER_ENABLEREVDIREKTION );
-
     return bRet;
 }
 
@@ -2050,7 +2041,6 @@ sal_Bool SwCursor::MovePara(SwWhichPara fnWhichPara, SwPosPara fnPosPara )
                        nsSwCursorSelOverFlags::SELOVER_CHANGEPOS );
 }
 
-
 sal_Bool SwCursor::MoveSection( SwWhichSection fnWhichSect,
                                 SwPosSection fnPosSect)
 {
@@ -2088,8 +2078,6 @@ void SwCursor::RestoreSavePos()
     }
 }
 
-
-
 SwTableCursor::SwTableCursor( const SwPosition &rPos, SwPaM* pRing )
     : SwCursor( rPos, pRing, false )
 {
@@ -2100,7 +2088,6 @@ SwTableCursor::SwTableCursor( const SwPosition &rPos, SwPaM* pRing )
 }
 
 SwTableCursor::~SwTableCursor() {}
-
 
 sal_Bool lcl_SeekEntry( const SwSelBoxes& rTmp, const SwStartNode* pSrch, sal_uInt16& rFndPos )
 {
@@ -2129,7 +2116,6 @@ sal_Bool lcl_SeekEntry( const SwSelBoxes& rTmp, const SwStartNode* pSrch, sal_uI
     }
     return sal_False;
 }
-
 
 SwCursor* SwTableCursor::MakeBoxSels( SwCursor* pAktCrsr )
 {
@@ -2162,8 +2148,9 @@ SwCursor* SwTableCursor::MakeBoxSels( SwCursor* pAktCrsr )
             pSttNd = pCur->GetPoint()->nNode.GetNode().FindTableBoxStartNode();
             if( !pCur->HasMark() || !pSttNd ||
                 pSttNd != pCur->GetMark()->nNode.GetNode().FindTableBoxStartNode() )
+            {
                 bDel = sal_True;
-
+            }
             else if( lcl_SeekEntry( aTmp, pSttNd, nPos ))
             {
                 SwNodeIndex aIdx( *pSttNd, 1 );
@@ -2238,7 +2225,6 @@ SwCursor* SwTableCursor::MakeBoxSels( SwCursor* pAktCrsr )
     }
     return pAktCrsr;
 }
-
 
 void SwTableCursor::InsertBox( const SwTableBox& rTblBox )
 {
@@ -2330,7 +2316,6 @@ void SwTableCursor::ParkCrsr()
     bParked = sal_True;
 }
 
-
 sal_Bool SwTableCursor::HasReadOnlyBoxSel() const
 {
     sal_Bool bRet = sal_False;
@@ -2342,6 +2327,5 @@ sal_Bool SwTableCursor::HasReadOnlyBoxSel() const
         }
     return bRet;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

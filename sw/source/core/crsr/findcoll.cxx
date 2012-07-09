@@ -26,9 +26,7 @@
  *
  ************************************************************************/
 
-
 #include <tools/resid.hxx>
-
 #include <swcrsr.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
@@ -51,7 +49,6 @@ struct SwFindParaFmtColl : public SwFindParas
     virtual int IsReplaceMode() const;
 };
 
-
 int SwFindParaFmtColl::Find( SwPaM* pCrsr, SwMoveFn fnMove, const SwPaM* pRegion,
                             sal_Bool bInReadOnly )
 {
@@ -60,7 +57,9 @@ int SwFindParaFmtColl::Find( SwPaM* pCrsr, SwMoveFn fnMove, const SwPaM* pRegion
         bInReadOnly = sal_False;
 
     if( !pCrsr->Find( *pFmtColl, fnMove, pRegion, bInReadOnly ) )
+    {
         nRet = FIND_NOT_FOUND;
+    }
     else if( pReplColl )
     {
         pCrsr->GetDoc()->SetTxtFmtColl( *pCrsr, (SwTxtFmtColl*)pReplColl );
@@ -68,7 +67,6 @@ int SwFindParaFmtColl::Find( SwPaM* pCrsr, SwMoveFn fnMove, const SwPaM* pRegion
     }
     return nRet;
 }
-
 
 int SwFindParaFmtColl::IsReplaceMode() const
 {
@@ -112,7 +110,5 @@ sal_uLong SwCursor::Find( const SwTxtFmtColl& rFmtColl,
     }
     return nRet;
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
