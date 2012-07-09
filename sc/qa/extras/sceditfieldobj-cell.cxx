@@ -39,7 +39,7 @@
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 
-#define NUMBER_OF_TESTS 6
+#define NUMBER_OF_TESTS 7
 
 namespace sc_apitest {
 
@@ -55,6 +55,8 @@ public:
     virtual uno::Reference<text::XTextRange> getTextRange();
     virtual bool isAttachSupported() { return true; }
 
+    void testEditFieldProperties();
+
     CPPUNIT_TEST_SUITE(ScEditFieldObj_Cell);
 
     // XPropertySet
@@ -68,6 +70,10 @@ public:
     // XTextContent
     CPPUNIT_TEST(testGetAnchor);
     CPPUNIT_TEST(testAttach);
+
+    // Tests specific to this service implementation.
+    CPPUNIT_TEST(testEditFieldProperties);
+
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -162,6 +168,38 @@ uno::Reference<text::XTextRange> ScEditFieldObj_Cell::getTextRange()
     uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
     uno::Reference<text::XTextRange> xRange(xCursor, UNO_QUERY_THROW);
     return xRange;
+}
+
+void ScEditFieldObj_Cell::testEditFieldProperties()
+{
+    CPPUNIT_ASSERT_MESSAGE("component doesn't exist.", mxComponent.is());
+    uno::Reference<lang::XMultiServiceFactory> xSM(mxComponent, UNO_QUERY_THROW);
+
+    {
+        // Test properties of date time field.
+        uno::Reference<text::XTextField> xField(
+            xSM->createInstance("com.sun.star.text.textfield.DateTime"), UNO_QUERY_THROW);
+        uno::Reference<beans::XPropertySet> xPropSet(xField, UNO_QUERY_THROW);
+
+        uno::Reference<beans::XPropertySetInfo> xInfo = xPropSet->getPropertySetInfo();
+        CPPUNIT_ASSERT_MESSAGE("failed to retrieve property set info.", xInfo.is());
+
+        CPPUNIT_ASSERT_MESSAGE("Calc's date time field should have 'IsFixed' property.",
+                               xInfo->hasPropertyByName("IsFixed"));
+    }
+
+    {
+        // Test properties of document title field.
+        uno::Reference<text::XTextField> xField(
+            xSM->createInstance("com.sun.star.text.textfield.docinfo.Title"), UNO_QUERY_THROW);
+        uno::Reference<beans::XPropertySet> xPropSet(xField, UNO_QUERY_THROW);
+
+        uno::Reference<beans::XPropertySetInfo> xInfo = xPropSet->getPropertySetInfo();
+        CPPUNIT_ASSERT_MESSAGE("failed to retrieve property set info.", xInfo.is());
+
+        CPPUNIT_ASSERT_MESSAGE("Calc's title field shouldn't have 'IsFixed' property.",
+                               !xInfo->hasPropertyByName("IsFixed"));
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScEditFieldObj_Cell);
