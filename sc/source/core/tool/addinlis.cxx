@@ -59,8 +59,8 @@ ScAddInListener* ScAddInListener::CreateListener(
 ScAddInListener::ScAddInListener( uno::Reference<sheet::XVolatileResult> xVR, ScDocument* pDoc ) :
     xVolRes( xVR )
 {
-    pDocs = new ScAddInDocs( 1 );
-    pDocs->Insert( pDoc );
+    pDocs = new ScAddInDocs();
+    pDocs->insert( pDoc );
 }
 
 ScAddInListener::~ScAddInListener()
@@ -91,11 +91,11 @@ void ScAddInListener::RemoveDocument( ScDocument* pDocumentP )
     while(iter != aAllListeners.end())
     {
         ScAddInDocs* p = (*iter)->pDocs;
-        sal_uInt16 nFoundPos;
-        if ( p->Seek_Entry( pDocumentP, &nFoundPos ) )
+        ScAddInDocs::iterator iter2 = p->find( pDocumentP );
+        if( iter2 != p->end() )
         {
-            p->Remove( nFoundPos );
-            if ( p->Count() == 0 )
+            p->erase( iter2 );
+            if ( p->empty() )
             {
                 if ( (*iter)->xVolRes.is() )
                     (*iter)->xVolRes->removeResultListener( *iter );
@@ -126,11 +126,9 @@ void SAL_CALL ScAddInListener::modified( const ::com::sun::star::sheet::ResultEv
 
     Broadcast( ScHint( SC_HINT_DATACHANGED, ScAddress(), NULL ) );
 
-    const ScDocument** ppDoc = (const ScDocument**) pDocs->GetData();
-    sal_uInt16 nCount = pDocs->Count();
-    for ( sal_uInt16 j=0; j<nCount; j++, ppDoc++ )
+    for ( ScAddInDocs::iterator it = pDocs->begin(); it != pDocs->end(); ++it )
     {
-        ScDocument* pDoc = (ScDocument*)*ppDoc;
+        ScDocument* pDoc = *it;
         pDoc->TrackFormulas();
         pDoc->GetDocumentShell()->Broadcast( SfxSimpleHint( FID_DATACHANGED ) );
     }

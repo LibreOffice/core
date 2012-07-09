@@ -31,6 +31,7 @@
 
 #include <svl/broadcast.hxx>
 #include <svl/svarray.hxx>
+#include <set>
 
 #include "callform.hxx"
 
@@ -45,8 +46,7 @@ SV_DECL_PTRARR_SORT( ScAddInAsyncs, ScAddInAsyncPtr, 4 )
 extern ScAddInAsyncs theAddInAsyncTbl;  // in adiasync.cxx
 
 class ScDocument;
-typedef ScDocument* ScAddInDocPtr;
-SV_DECL_PTRARR_SORT( ScAddInDocs, ScAddInDocPtr, 1 )
+class ScAddInDocs : public std::set<ScDocument*> {};
 
 class String;
 
@@ -78,9 +78,9 @@ public:
     ParamType       GetType() const         { return meType; }
     double          GetValue() const        { return nVal; }
     const String&   GetString() const       { return *pStr; }
-    sal_Bool            HasDocument( ScDocument* pDoc ) const
-                        { return pDocs->Seek_Entry( pDoc ); }
-    void            AddDocument( ScDocument* pDoc ) { pDocs->Insert( pDoc ); }
+    bool            HasDocument( ScDocument* pDoc ) const
+                        { return pDocs->find( pDoc ) != pDocs->end(); }
+    void            AddDocument( ScDocument* pDoc ) { pDocs->insert( pDoc ); }
 
     // Vergleichsoperatoren fuer PtrArrSort
     sal_Bool operator < ( const ScAddInAsync& r ) { return nHandle <  r.nHandle; }

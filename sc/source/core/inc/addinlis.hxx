@@ -67,10 +67,10 @@ public:
     static void RemoveDocument( ScDocument* pDocument );
 
     bool HasDocument( ScDocument* pDoc ) const
-         { return pDocs->Seek_Entry( pDoc ); }
+         { return pDocs->find( pDoc ) != pDocs->end(); }
 
     void AddDocument( ScDocument* pDoc )
-         { pDocs->Insert( pDoc ); }
+         { pDocs->insert( pDoc ); }
 
     const com::sun::star::uno::Any& GetResult() const
           { return aResult; }

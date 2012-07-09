@@ -44,8 +44,6 @@ static ScAddInAsync aSeekObj;
 
 SV_IMPL_OP_PTRARR_SORT( ScAddInAsyncs, ScAddInAsyncPtr );
 
-SV_IMPL_PTRARR_SORT( ScAddInDocs, ScAddInDocPtr );
-
 extern "C" {
 void CALLTYPE ScAddInAsyncCallBack( double& nHandle, void* pData )
 {
@@ -71,8 +69,8 @@ ScAddInAsync::ScAddInAsync(sal_uLong nHandleP, FuncData* pFuncData, ScDocument* 
     meType(pFuncData->GetAsyncType()),
     bValid( false )
 {
-    pDocs = new ScAddInDocs( 1 );
-    pDocs->Insert( pDoc );
+    pDocs = new ScAddInDocs();
+    pDocs->insert( pDoc );
     theAddInAsyncTbl.Insert( this );
 }
 
@@ -137,11 +135,9 @@ void ScAddInAsync::CallBack( sal_uLong nHandleP, void* pData )
     p->bValid = sal_True;
     p->Broadcast( ScHint( SC_HINT_DATACHANGED, ScAddress(), NULL ) );
 
-    const ScDocument** ppDoc = (const ScDocument**) p->pDocs->GetData();
-    sal_uInt16 nCount = p->pDocs->Count();
-    for ( sal_uInt16 j=0; j<nCount; j++, ppDoc++ )
+    for ( ScAddInDocs::iterator it = p->pDocs->begin(); it != p->pDocs->end(); ++it )
     {
-        ScDocument* pDoc = (ScDocument*)*ppDoc;
+        ScDocument* pDoc = *it;
         pDoc->TrackFormulas();
         pDoc->GetDocumentShell()->Broadcast( SfxSimpleHint( FID_DATACHANGED ) );
     }
@@ -159,11 +155,11 @@ void ScAddInAsync::RemoveDocument( ScDocument* pDocumentP )
         for ( ; nPos-- >0; ppAsync-- )
         {   // rueckwaerts wg. Pointer-Aufrueckerei im Array
             ScAddInDocs* p = ((ScAddInAsync*)*ppAsync)->pDocs;
-            sal_uInt16 nFoundPos;
-            if ( p->Seek_Entry( pDocumentP, &nFoundPos ) )
+            ScAddInDocs::iterator iter2 = p->find( pDocumentP );
+            if( iter2 != p->end() )
             {
-                p->Remove( nFoundPos );
-                if ( p->Count() == 0 )
+                p->erase( iter2 );
+                if ( p->empty() )
                 {   // dieses AddIn wird nicht mehr benutzt
                     ScAddInAsync* pAsync = (ScAddInAsync*)*ppAsync;
                     theAddInAsyncTbl.Remove( nPos );
