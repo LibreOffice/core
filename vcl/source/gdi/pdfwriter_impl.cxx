@@ -6091,7 +6091,6 @@ bool PDFWriterImpl::emitSignature()
 
     sal_uInt64 nOffset = ~0U;
     CHECK_RETURN( (osl_File_E_None == osl_getFilePos( m_aFile, &nOffset ) ) );
-    DBG_ASSERT( aError == osl_File_E_None, "could not get file position" );
 
     m_nSignatureContentOffset = nOffset + aLine.getLength();
 
