@@ -112,7 +112,7 @@ void lcl_SetAttrPam( SwPaM& rPam, xub_StrLen nStart, const xub_StrLen* pEnd,
         nCntntPos = rPam.GetMark()->nContent.GetIndex();
     else
         nCntntPos = rPam.GetPoint()->nContent.GetIndex();
-    sal_Bool bTstEnd = rPam.GetPoint()->nNode == rPam.GetMark()->nNode;
+    bool bTstEnd = rPam.GetPoint()->nNode == rPam.GetMark()->nNode;
 
     SwCntntNode* pCNd = rPam.GetCntntNode();
     rPam.GetPoint()->nContent.Assign( pCNd, nStart );
@@ -414,7 +414,7 @@ int SwAttrCheckArr::SetAttrFwd( const SwTxtAttr& rAttr )
                     }
                 }
 
-            sal_Bool bContinue = sal_False;
+            bool bContinue = false;
 
             if( SFX_ITEM_DONTCARE == eState  )
             {
@@ -431,7 +431,7 @@ int SwAttrCheckArr::SetAttrFwd( const SwTxtAttr& rAttr )
                     else if( pCmp->nEnd < aTmp.nEnd ) // extend?
                         pCmp->nEnd = aTmp.nEnd;
 
-                    bContinue = sal_True;
+                    bContinue = true;
                 }
             }
             // Will the attribute become valid?
@@ -439,7 +439,7 @@ int SwAttrCheckArr::SetAttrFwd( const SwTxtAttr& rAttr )
             {
                 pFndArr[ nWhch - nArrStart ] = aTmp;
                 ++nFound;
-                bContinue = sal_True;
+                bContinue = true;
             }
 
             // then is has to go on the stack
