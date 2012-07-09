@@ -1800,6 +1800,22 @@ SwFrm* sw_FormatNextCntntForKeep( SwTabFrm* pTabFrm )
     return pNxt;
 }
 
+namespace {
+    bool AreAllRowsKeepWithNext( const SwRowFrm* pFirstRowFrm )
+    {
+        bool bRet = pFirstRowFrm != 0 &&
+                    pFirstRowFrm->ShouldRowKeepWithNext();
+
+        while ( bRet && pFirstRowFrm->GetNext() != 0 )
+        {
+            pFirstRowFrm = dynamic_cast<const SwRowFrm*>(pFirstRowFrm->GetNext());
+            bRet = pFirstRowFrm != 0 &&
+                   pFirstRowFrm->ShouldRowKeepWithNext();
+        }
+
+        return bRet;
+    }
+}
 void SwTabFrm::MakeAll()
 {
     if ( IsJoinLocked() || StackHack::IsLocked() || StackHack::Count() > 50 )
@@ -2334,9 +2350,15 @@ void SwTabFrm::MakeAll()
         //
         SwFrm* pIndPrev = GetIndPrev();
         const SwRowFrm* pFirstNonHeadlineRow = GetFirstNonHeadlineRow();
+        // #i120016# if this row wants to keep, allow split in case that all rows want to keep with next,
+        // the table can not move forward as it is the first one and a split is in general allowed.
+        const bool bAllowSplitOfRow = ( bTableRowKeep &&
+                                        AreAllRowsKeepWithNext( pFirstNonHeadlineRow ) ) &&
+                                      !pIndPrev &&
+                                      !bDontSplit;
 
         if ( pFirstNonHeadlineRow && nUnSplitted > 0 &&
-             ( !bTableRowKeep || pFirstNonHeadlineRow->GetNext() || !pFirstNonHeadlineRow->ShouldRowKeepWithNext() ) &&
+             ( !bTableRowKeep || pFirstNonHeadlineRow->GetNext() || !pFirstNonHeadlineRow->ShouldRowKeepWithNext() || bAllowSplitOfRow ) &&
              ( !bDontSplit || !pIndPrev ) )
         {
             // #i29438#
@@ -2420,11 +2442,15 @@ void SwTabFrm::MakeAll()
                     // An existing follow flow line has to be removed.
                     //
                     if ( HasFollowFlowLine() )
+                    {
                         RemoveFollowFlowLine();
+                    }
 
-                    const bool bSplitError = !Split( nDeadLine, bTryToSplit, bTableRowKeep );
+                    const bool bSplitError = !Split( nDeadLine, bTryToSplit, ( bTableRowKeep && !bAllowSplitOfRow ) );
                     if( !bTryToSplit && !bSplitError && nUnSplitted > 0 )
+                    {
                         --nUnSplitted;
+                    }
 
                     // #i29771# Two tries to split the table
                     // If an error occurred during splitting. We start a second
@@ -2454,7 +2480,7 @@ void SwTabFrm::MakeAll()
                         continue;
                     }
 
-                      bTryToSplit = !bSplitError;
+                    bTryToSplit = !bSplitError;
 
                     //To avoid oscillations the Follow must become valid now
                     if ( GetFollow() )
