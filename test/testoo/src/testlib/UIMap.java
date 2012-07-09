@@ -335,4 +335,21 @@ public class UIMap {
     public static final VclDialog SortWarningDlg = dialog("sc:ModalDialog:RID_SCDLG_SORT_WARNING");
     public static final VclButton SortWarningDlg_Extend = button("sc:PushButton:RID_SCDLG_SORT_WARNING:BTN_EXTSORT");
     public static final VclButton SortWarningDlg_Current = button("sc:PushButton:RID_SCDLG_SORT_WARNING:BTN_CURSORT");
+    // Spreadsheet: "Sheet" dialog
+    public static final VclDialog SCInsertSheetDlg = dialog("sc:ModalDialog:RID_SCDLG_INSERT_TABLE");
+    public static final VclButton SCBeforeCurrentSheet = button("sc:RadioButton:RID_SCDLG_INSERT_TABLE:RB_BEFORE");
+    public static final VclButton SCAfterCurrentSheet = button("sc:RadioButton:RID_SCDLG_INSERT_TABLE:RB_BEHIND");
+    public static final VclButton SCNewSheet = button("sc:RadioButton:RID_SCDLG_INSERT_TABLE:RB_NEW");
+    public static final VclButton SCNewSheetFromFile = button("sc:RadioButton:RID_SCDLG_INSERT_TABLE:RB_FROMFILE");
+    public static final VclEditBox SCNewSheetName = editbox("sc:Edit:RID_SCDLG_INSERT_TABLE:ED_TABNAME");
+    public static final VclField SCSheetNumber = field("sc:NumericField:RID_SCDLG_INSERT_TABLE:NF_COUNT");
+    public static final VclListBox SCFromFileSheetList = listbox("sc:MultiListBox:RID_SCDLG_INSERT_TABLE:LB_TABLES");
+    public static final VclButton SCFromFileBrowse = button("sc:PushButton:RID_SCDLG_INSERT_TABLE:BTN_BROWSE");
+    public static final VclButton SCFromFileLink = button("sc:CheckBox:RID_SCDLG_INSERT_TABLE:CB_LINK");
+    // Spreadsheet: "Select Sheets" dialog
+    public static final VclDialog SCSelectSheetsDlg = dialog(".uno:SelectTables");
+    public static final VclListBox SCSheetsList = listbox("SC_HID_SELECTTABLES");
+
+
+
 }

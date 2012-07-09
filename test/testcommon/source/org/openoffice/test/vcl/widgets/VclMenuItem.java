@@ -100,7 +100,9 @@ public class VclMenuItem {
                 if (item == null)
                     continue;
                 String itemText = path[path.length - 1];
-                if (item.getTextWithoutMneumonic().contains(itemText)) {
+//              if (item.getTextWithoutMneumonic().contains(itemText)) {
+                //Change "contains" into "equals" to avoid the blocking while search for menu item
+                if (item.getTextWithoutMneumonic().equals(itemText)) {
                     return item.getId();
                 }
             }
