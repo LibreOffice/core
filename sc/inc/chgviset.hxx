@@ -29,7 +29,6 @@
 #define SC_CHGVISET_HXX
 
 #include <tools/datetime.hxx>
-#include <tools/string.hxx>
 #include "rangelst.hxx"
 #include "scdllapi.h"
 
@@ -50,8 +49,8 @@ private:
     utl::TextSearch*    pCommentSearcher;
     DateTime            aFirstDateTime;
     DateTime            aLastDateTime;
-    String              aAuthorToShow;
-    String              aComment;
+    ::rtl::OUString     aAuthorToShow;
+    ::rtl::OUString     aComment;
     ScRangeList         aRangeList;
     ScChgsDateMode      eDateMode;
     sal_Bool                bShowIt;
@@ -108,16 +107,16 @@ public:
     sal_Bool                HasAuthor() const {return bIsAuthor;}
     void                SetHasAuthor(sal_Bool nFlag=sal_True) {bIsAuthor=nFlag;}
 
-    String              GetTheAuthorToShow()const {return aAuthorToShow;}
-    void                SetTheAuthorToShow(const String& aString){aAuthorToShow=aString;}
+    ::rtl::OUString     GetTheAuthorToShow()const {return aAuthorToShow;}
+    void                SetTheAuthorToShow(const ::rtl::OUString& aString){aAuthorToShow=aString;}
 
     sal_Bool                HasComment() const {return bIsComment;}
     void                SetHasComment(sal_Bool nFlag=sal_True) {bIsComment=nFlag;}
 
-    String              GetTheComment()const {return aComment;}
-    void                SetTheComment(const String& aString);
+    ::rtl::OUString     GetTheComment()const {return aComment;}
+    void                SetTheComment(const ::rtl::OUString& aString);
 
-    sal_Bool                IsValidComment(const String* pCommentStr) const;
+    sal_Bool            IsValidComment(const ::rtl::OUString* pCommentStr) const;
 
     sal_Bool                IsEveryoneButMe() const {return bEveryoneButMe;}
     void                SetEveryoneButMe(sal_Bool nFlag=sal_True) {bEveryoneButMe=nFlag;}
