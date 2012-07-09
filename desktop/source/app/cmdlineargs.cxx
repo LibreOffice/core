@@ -217,7 +217,7 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
                         bStartEvent     = false;
                         bDisplaySpec    = false;
                    }
-                   else if ( aArg.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM( "-view" )))
+                   else if ( oArg.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM( "view" )))
                    {
                         // open in viewmode
                         bOpenEvent      = false;
@@ -229,7 +229,7 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
                         bStartEvent     = false;
                         bDisplaySpec    = false;
                    }
-                   else if ( aArg.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM( "-show" )))
+                   else if ( oArg.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM( "show" )))
                    {
                         // open in viewmode
                         bOpenEvent      = false;
