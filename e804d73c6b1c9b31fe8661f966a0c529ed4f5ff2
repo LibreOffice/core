@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAL3///7c\u003d",
+        "filename": "sc/source/core/tool/addincol.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 810,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2012-07-09T19:54:08Z",
+      "side": 1,
+      "message": "This temporary object is unnecesary",
+      "revId": "e804d73c6b1c9b31fe8661f966a0c529ed4f5ff2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
