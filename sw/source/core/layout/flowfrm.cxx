@@ -924,6 +924,10 @@ sal_Bool SwFrm::WrongPageDesc( SwPageFrm* pNew )
                            : pNew->OnRightPage();
     if ( !pDesc )
         pDesc = pNew->FindPageDesc();
+
+    SwPageFrm* pPrevFrm = dynamic_cast<SwPageFrm*>(pNew->GetPrev());
+    bool bFirst = pPrevFrm && pPrevFrm->GetPageDesc() != pDesc && !pDesc->IsFirstShared();
+
     const SwFlowFrm *pNewFlow = pNew->FindFirstBodyCntnt();
     // Did we find ourselves?
     if( pNewFlow == pFlow )
@@ -934,7 +938,7 @@ sal_Bool SwFrm::WrongPageDesc( SwPageFrm* pNew )
             ? pNewFlow->GetFrm()->GetAttrSet()->GetPageDesc().GetPageDesc():0;
 
     return ( pNew->GetPageDesc() != pDesc ||   //  own desc ?
-        pNew->GetFmt() != (bOdd ? pDesc->GetRightFmt() : pDesc->GetLeftFmt()) ||
+        pNew->GetFmt() != (bFirst ? pDesc->GetFirstFmt() : (bOdd ? pDesc->GetRightFmt() : pDesc->GetLeftFmt())) ||
         ( pNewDesc && pNewDesc == pDesc ) );
 }
 

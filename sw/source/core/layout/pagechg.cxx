@@ -1105,8 +1105,13 @@ void SwFrm::CheckPageDescs( SwPageFrm *pStart, sal_Bool bNotifyFields )
         sal_Bool bCheckEmpty = pPage->IsEmptyPage();
         sal_Bool bActOdd = pPage->OnRightPage();
         sal_Bool bOdd = pPage->WannaRightPage();
-        SwFrmFmt *pFmtWish = bOdd ? pDesc->GetRightFmt()
-                                  : pDesc->GetLeftFmt();
+        SwPageFrm* pPrevFrm = dynamic_cast<SwPageFrm*>(pPage->GetPrev());
+        bool bFirst = pPrevFrm && pPrevFrm->GetPageDesc() != pPage->GetPageDesc() && !pDesc->IsFirstShared();
+        SwFrmFmt *pFmtWish = 0;
+        if (bFirst)
+            pFmtWish = pDesc->GetFirstFmt();
+        else
+            pFmtWish = bOdd ? pDesc->GetRightFmt() : pDesc->GetLeftFmt();
 
         if ( bActOdd != bOdd ||
              pDesc != pPage->GetPageDesc() ||       //falscher Desc
@@ -1315,6 +1320,9 @@ SwPageFrm *SwFrm::InsertPage( SwPageFrm *pPrevPage, sal_Bool bFtn )
     OSL_ENSURE( pDesc, "Missing PageDesc" );
     if( !(bWishedOdd ? pDesc->GetRightFmt() : pDesc->GetLeftFmt()) )
         bWishedOdd = !bWishedOdd;
+    bool bWishedFirst = pDesc != pPrevPage->GetPageDesc();
+    if (bWishedFirst && !pDesc->GetFirstFmt())
+        bWishedFirst = false;
 
     SwDoc *pDoc = pPrevPage->GetFmt()->GetDoc();
     SwFrmFmt *pFmt;
@@ -1342,7 +1350,10 @@ SwPageFrm *SwFrm::InsertPage( SwPageFrm *pPrevPage, sal_Bool bFtn )
         else
             bCheckPages = sal_True;
     }
-    pFmt = bWishedOdd ? pDesc->GetRightFmt() : pDesc->GetLeftFmt();
+    if (bWishedFirst && !pDesc->IsFirstShared())
+        pFmt = pDesc->GetFirstFmt();
+    else
+        pFmt = bWishedOdd ? pDesc->GetRightFmt() : pDesc->GetLeftFmt();
     OSL_ENSURE( pFmt, "Descriptor without format." );
     SwPageFrm *pPage = new SwPageFrm( pFmt, pRoot, pDesc );
     pPage->Paste( pRoot, pSibling );
