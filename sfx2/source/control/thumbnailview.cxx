@@ -540,7 +540,7 @@ void ThumbnailView::ImplEndTracking(const Point& /*rPos*/, bool const /*bCancel*
     //FIXME TODO
 }
 
-IMPL_LINK (ThumbnailView, OnFolderSelected, ThumbnailViewItem*, pItem)
+IMPL_LINK (ThumbnailView, OnItemSelected, ThumbnailViewItem*, pItem)
 {
     maItemStateHdl.Call(pItem);
     return 0;
@@ -804,7 +804,7 @@ void ThumbnailView::InsertItem( sal_uInt16 nItemId, const BitmapEx& rImage,
     pItem->mnId     = nItemId;
     pItem->maPreview1 = rImage;
     pItem->maText   = rText;
-    pItem->setSelectClickHdl(LINK(this,ThumbnailView,OnFolderSelected));
+    pItem->setSelectClickHdl(LINK(this,ThumbnailView,OnItemSelected));
     ImplInsertItem( pItem, nPos );
 }
 

@@ -311,7 +311,7 @@ void TemplateFolderView::Populate ()
         TemplateFolderViewItem* pItem = new TemplateFolderViewItem( *this, this );
         pItem->mnId = i+1;
         pItem->maText = aRegionName;
-        pItem->setSelectClickHdl(LINK(this,ThumbnailView,OnFolderSelected));
+        pItem->setSelectClickHdl(LINK(this,ThumbnailView,OnItemSelected));
 
         sal_uInt16 nEntries = mpDocTemplates->GetCount(i);
 
@@ -456,7 +456,7 @@ sal_uInt16 TemplateFolderView::createRegion(const rtl::OUString &rName)
     TemplateFolderViewItem* pItem = new TemplateFolderViewItem( *this, this );
     pItem->mnId = nRegionId+1;
     pItem->maText = aRegionName;
-    pItem->setSelectClickHdl(LINK(this,ThumbnailView,OnFolderSelected));
+    pItem->setSelectClickHdl(LINK(this,ThumbnailView,OnItemSelected));
 
     mItemList.push_back(pItem);
 
