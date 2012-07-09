@@ -2774,9 +2774,9 @@ sal_Bool SwCrsrShell::FindValidCntntNode( sal_Bool bOnlyText )
 
         for( int nLoopCnt = 0; !bOk && nLoopCnt < 2; ++nLoopCnt )
         {
-            sal_Bool bWeiter;
+            bool bContinue;
             do {
-                bWeiter = sal_False;
+                bContinue = false;
                 while( 0 != ( pCNd = (rNds.*funcGoSection)( &rNdIdx,
                                             sal_True, !IsReadOnlyAvailable() )) )
                 {
@@ -2815,10 +2815,10 @@ sal_Bool SwCrsrShell::FindValidCntntNode( sal_Bool bOnlyText )
                     {
                         // continue search
                         bOk = sal_False;
-                        bWeiter = sal_True;
+                        bContinue = true;
                     }
                 }
-            } while( bWeiter );
+            } while( bContinue );
 
             if( !bOk )
             {
@@ -3000,7 +3000,7 @@ bool SwCrsrShell::SelectHiddenRange()
 
 sal_uLong SwCrsrShell::Find( const SearchOptions& rSearchOpt,
                              sal_Bool bSearchInNotes,
-                             SwDocPositions eStart, SwDocPositions eEnde,
+                             SwDocPositions eStart, SwDocPositions eEnd,
                              sal_Bool& bCancel,
                              FindRanges eRng,
                              int bReplace )
@@ -3009,7 +3009,7 @@ sal_uLong SwCrsrShell::Find( const SearchOptions& rSearchOpt,
         GetCrsr();
     delete pTblCrsr, pTblCrsr = 0;
     SwCallLink aLk( *this ); // watch Crsr-Moves; call Link if needed
-    sal_uLong nRet = pCurCrsr->Find( rSearchOpt, bSearchInNotes, eStart, eEnde,
+    sal_uLong nRet = pCurCrsr->Find( rSearchOpt, bSearchInNotes, eStart, eEnd,
                                      bCancel, eRng, bReplace );
     if( nRet || bCancel )
         UpdateCrsr();
@@ -3017,7 +3017,7 @@ sal_uLong SwCrsrShell::Find( const SearchOptions& rSearchOpt,
 }
 
 sal_uLong SwCrsrShell::Find( const SwTxtFmtColl& rFmtColl,
-                             SwDocPositions eStart, SwDocPositions eEnde,
+                             SwDocPositions eStart, SwDocPositions eEnd,
                              sal_Bool& bCancel,
                              FindRanges eRng,
                              const SwTxtFmtColl* pReplFmt )
@@ -3026,7 +3026,7 @@ sal_uLong SwCrsrShell::Find( const SwTxtFmtColl& rFmtColl,
         GetCrsr();
     delete pTblCrsr, pTblCrsr = 0;
     SwCallLink aLk( *this ); // watch Crsr-Moves; call Link if needed
-    sal_uLong nRet = pCurCrsr->Find( rFmtColl, eStart, eEnde, bCancel, eRng,
+    sal_uLong nRet = pCurCrsr->Find( rFmtColl, eStart, eEnd, bCancel, eRng,
                                      pReplFmt );
     if( nRet )
         UpdateCrsr();
@@ -3035,7 +3035,7 @@ sal_uLong SwCrsrShell::Find( const SwTxtFmtColl& rFmtColl,
 
 sal_uLong SwCrsrShell::Find( const SfxItemSet& rSet,
                              sal_Bool bNoCollections,
-                             SwDocPositions eStart, SwDocPositions eEnde,
+                             SwDocPositions eStart, SwDocPositions eEnd,
                              sal_Bool& bCancel,
                              FindRanges eRng,
                              const SearchOptions* pSearchOpt,
@@ -3045,7 +3045,7 @@ sal_uLong SwCrsrShell::Find( const SfxItemSet& rSet,
         GetCrsr();
     delete pTblCrsr, pTblCrsr = 0;
     SwCallLink aLk( *this ); // watch Crsr-Moves; call Link if needed
-    sal_uLong nRet = pCurCrsr->Find( rSet, bNoCollections, eStart, eEnde,
+    sal_uLong nRet = pCurCrsr->Find( rSet, bNoCollections, eStart, eEnd,
                                      bCancel, eRng, pSearchOpt, rReplSet );
     if( nRet )
         UpdateCrsr();

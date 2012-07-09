@@ -104,7 +104,7 @@ const SwTxtAttr* GetBkwrdTxtHint( const SwpHints& rHtsArr, sal_uInt16& rPos,
     return 0; // invalid text attribute
 }
 
-void lcl_SetAttrPam( SwPaM& rPam, xub_StrLen nStart, const xub_StrLen* pEnde,
+void lcl_SetAttrPam( SwPaM& rPam, xub_StrLen nStart, const xub_StrLen* pEnd,
                      const sal_Bool bSaveMark )
 {
     xub_StrLen nCntntPos;
@@ -112,19 +112,19 @@ void lcl_SetAttrPam( SwPaM& rPam, xub_StrLen nStart, const xub_StrLen* pEnde,
         nCntntPos = rPam.GetMark()->nContent.GetIndex();
     else
         nCntntPos = rPam.GetPoint()->nContent.GetIndex();
-    sal_Bool bTstEnde = rPam.GetPoint()->nNode == rPam.GetMark()->nNode;
+    sal_Bool bTstEnd = rPam.GetPoint()->nNode == rPam.GetMark()->nNode;
 
     SwCntntNode* pCNd = rPam.GetCntntNode();
     rPam.GetPoint()->nContent.Assign( pCNd, nStart );
     rPam.SetMark(); // Point == GetMark
 
     // Point points to end of search area or end of attribute
-    if( pEnde )
+    if( pEnd )
     {
-        if( bTstEnde && *pEnde > nCntntPos )
+        if( bTstEnd && *pEnd > nCntntPos )
             rPam.GetPoint()->nContent = nCntntPos;
         else
-            rPam.GetPoint()->nContent = *pEnde;
+            rPam.GetPoint()->nContent = *pEnd;
     }
 }
 
@@ -1236,7 +1236,7 @@ int SwFindParaAttr::IsReplaceMode() const
 
 /// search for attributes
 sal_uLong SwCursor::Find( const SfxItemSet& rSet, sal_Bool bNoCollections,
-                          SwDocPositions nStart, SwDocPositions nEnde,
+                          SwDocPositions nStart, SwDocPositions nEnd,
                           sal_Bool& bCancel, FindRanges eFndRngs,
                           const SearchOptions* pSearchOpt,
                           const SfxItemSet* pReplSet )
@@ -1259,7 +1259,7 @@ sal_uLong SwCursor::Find( const SfxItemSet& rSet, sal_Bool bNoCollections,
     SwFindParaAttr aSwFindParaAttr( rSet, bNoCollections, pSearchOpt,
                                     pReplSet, *this );
 
-    sal_uLong nRet = FindAll( aSwFindParaAttr, nStart, nEnde, eFndRngs, bCancel );
+    sal_uLong nRet = FindAll( aSwFindParaAttr, nStart, nEnd, eFndRngs, bCancel );
     pDoc->SetOle2Link( aLnk );
     if( nRet && bReplace )
         pDoc->SetModified();
