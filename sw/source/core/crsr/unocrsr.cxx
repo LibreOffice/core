@@ -41,7 +41,8 @@ SwUnoCrsr::SwUnoCrsr( const SwPosition &rPos, SwPaM* pRing )
     bRemainInSection( sal_True ),
     bSkipOverHiddenSections( sal_False ),
     bSkipOverProtectSections( sal_False )
-{}
+{
+}
 
 SwUnoCrsr::~SwUnoCrsr()
 {
@@ -98,8 +99,7 @@ bool SwUnoCrsr::IsReadOnlyAvailable() const
     return true;
 }
 
-const SwCntntFrm*
-SwUnoCrsr::DoSetBidiLevelLeftRight( sal_Bool &, sal_Bool, sal_Bool )
+const SwCntntFrm* SwUnoCrsr::DoSetBidiLevelLeftRight( sal_Bool&, sal_Bool, sal_Bool )
 {
     return 0; // not for uno cursor
 }
@@ -217,9 +217,8 @@ sal_Bool SwUnoTableCrsr::IsSelOvr( int eFlags )
     if( !bRet )
     {
         const SwTableNode* pTNd = GetPoint()->nNode.GetNode().FindTableNode();
-        bRet = !(pTNd == GetDoc()->GetNodes()[ GetSavePos()->nNode ]->
-                FindTableNode() && (!HasMark() ||
-                pTNd == GetMark()->nNode.GetNode().FindTableNode() ));
+        bRet = !(pTNd == GetDoc()->GetNodes()[ GetSavePos()->nNode ]->FindTableNode() &&
+                 (!HasMark() || pTNd == GetMark()->nNode.GetNode().FindTableNode() ));
     }
     return bRet;
 }
@@ -228,9 +227,12 @@ void SwUnoTableCrsr::MakeBoxSels()
 {
     const SwCntntNode* pCNd;
     bool bMakeTblCrsrs = true;
-    if( GetPoint()->nNode.GetIndex() && GetMark()->nNode.GetIndex() &&
-            0 != ( pCNd = GetCntntNode() ) && pCNd->getLayoutFrm( pCNd->GetDoc()->GetCurrentLayout() ) &&
-            0 != ( pCNd = GetCntntNode(sal_False) ) && pCNd->getLayoutFrm( pCNd->GetDoc()->GetCurrentLayout() ) )
+    if( GetPoint()->nNode.GetIndex() &&
+        GetMark()->nNode.GetIndex() &&
+        0 != ( pCNd = GetCntntNode() ) &&
+        pCNd->getLayoutFrm( pCNd->GetDoc()->GetCurrentLayout() ) &&
+        0 != ( pCNd = GetCntntNode(sal_False) ) &&
+        pCNd->getLayoutFrm( pCNd->GetDoc()->GetCurrentLayout() ) )
     {
         bMakeTblCrsrs = GetDoc()->GetCurrentLayout()->MakeTblCrsrs( *this );
     }

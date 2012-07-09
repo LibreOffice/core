@@ -55,11 +55,11 @@ SwWhichPara fnParaNext  = &GoNextPara;
 SwPosPara fnParaStart   = &aFwrd;
 SwPosPara fnParaEnd     = &aBwrd;
 
-SwWhichSection fnSectionPrev    = &GoPrevSection;
-SwWhichSection fnSectionCurr    = &GoCurrSection;
-SwWhichSection fnSectionNext    = &GoNextSection;
-SwPosSection fnSectionStart     = &aFwrd;
-SwPosSection fnSectionEnd       = &aBwrd;
+SwWhichSection fnSectionPrev = &GoPrevSection;
+SwWhichSection fnSectionCurr = &GoCurrSection;
+SwWhichSection fnSectionNext = &GoNextSection;
+SwPosSection fnSectionStart  = &aFwrd;
+SwPosSection fnSectionEnd    = &aBwrd;
 
 // Travelling in tables
 sal_Bool GotoPrevTable( SwPaM&, SwPosTable, sal_Bool bInReadOnly );
@@ -69,8 +69,8 @@ sal_Bool GotoNextTable( SwPaM&, SwPosTable, sal_Bool bInReadOnly );
 SwWhichTable fnTablePrev = &GotoPrevTable;
 SwWhichTable fnTableCurr = &GotoCurrTable;
 SwWhichTable fnTableNext = &GotoNextTable;
-SwPosTable fnTableStart = &aFwrd;
-SwPosTable fnTableEnd = &aBwrd;
+SwPosTable fnTableStart  = &aFwrd;
+SwPosTable fnTableEnd    = &aBwrd;
 
 // Travelling in regions
 sal_Bool GotoPrevRegion( SwPaM&, SwPosRegion, sal_Bool bInReadOnly );
@@ -82,8 +82,8 @@ SwWhichRegion fnRegionPrev = &GotoPrevRegion;
 SwWhichRegion fnRegionCurr = &GotoCurrRegion;
 SwWhichRegion fnRegionCurrAndSkip = &GotoCurrRegionAndSkip;
 SwWhichRegion fnRegionNext = &GotoNextRegion;
-SwPosRegion fnRegionStart = &aFwrd;
-SwPosRegion fnRegionEnd = &aBwrd;
+SwPosRegion fnRegionStart  = &aFwrd;
+SwPosRegion fnRegionEnd    = &aBwrd;
 
 SwMoveFn fnMoveBackward = &aBwrd;
 SwMoveFn fnMoveForward  = &aFwrd;
@@ -94,7 +94,7 @@ SwWhichPara GetfnParaCurr()
 }
 SwPosPara GetfnParaStart()
 {
-     return  fnParaStart;
+    return fnParaStart;
 }
 SwWhichTable GetfnTablePrev()
 {
@@ -102,7 +102,7 @@ SwWhichTable GetfnTablePrev()
 }
 SwPosPara GetfnParaEnd()
 {
-     return  fnParaEnd;
+    return fnParaEnd;
 }
 SwPosTable GetfnTableStart()
 {

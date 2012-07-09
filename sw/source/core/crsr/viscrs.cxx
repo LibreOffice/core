@@ -172,7 +172,7 @@ void SwVisCrsr::_SetPosAndShow()
         nTmpY = -nTmpY;
         aTxtCrsr.SetOrientation( 900 );
         aRect = SwRect( pCrsrShell->aCharRect.Pos(),
-           Size( pCrsrShell->aCharRect.Height(), nTmpY ) );
+                        Size( pCrsrShell->aCharRect.Height(), nTmpY ) );
         aRect.Pos().X() += pCrsrShell->aCrsrHeight.X();
         if( pCrsrShell->IsOverwriteCrsr() )
             aRect.Pos().Y() += aRect.Width();
@@ -181,7 +181,7 @@ void SwVisCrsr::_SetPosAndShow()
     {
         aTxtCrsr.SetOrientation( 0 );
         aRect = SwRect( pCrsrShell->aCharRect.Pos(),
-           Size( pCrsrShell->aCharRect.Width(), nTmpY ) );
+                        Size( pCrsrShell->aCharRect.Width(), nTmpY ) );
         aRect.Pos().Y() += pCrsrShell->aCrsrHeight.X();
     }
 
@@ -195,7 +195,8 @@ void SwVisCrsr::_SetPosAndShow()
         if( rNode.IsTxtNode() )
         {
             const SwTxtNode& rTNd = *rNode.GetTxtNode();
-            const SwFrm* pFrm = rTNd.getLayoutFrm( pCrsrShell->GetLayout(), 0, 0, sal_False );
+            const SwFrm* pFrm = rTNd.getLayoutFrm( pCrsrShell->GetLayout(),
+                                                   0, 0, sal_False );
             if ( pFrm )
             {
                 const SwScriptInfo* pSI = ((SwTxtFrm*)pFrm)->GetScriptInfo();
@@ -227,14 +228,14 @@ void SwVisCrsr::_SetPosAndShow()
         ::SwCalcPixStatics( pCrsrShell->GetOut() );
         ::SwAlignRect( aRect, (ViewShell*)pCrsrShell );
     }
-    if( !pCrsrShell->IsOverwriteCrsr() || bIsDragCrsr ||
-        pCrsrShell->IsSelection() )
+    if( !pCrsrShell->IsOverwriteCrsr() || bIsDragCrsr || pCrsrShell->IsSelection() )
         aRect.Width( 0 );
 
     aTxtCrsr.SetSize( aRect.SSize() );
 
     aTxtCrsr.SetPos( aRect.Pos() );
-    if ( !pCrsrShell->IsCrsrReadonly()  || pCrsrShell->GetViewOptions()->IsSelectionInReadonly() )
+    if ( !pCrsrShell->IsCrsrReadonly() ||
+         pCrsrShell->GetViewOptions()->IsSelectionInReadonly() )
     {
         if ( pCrsrShell->GetDrawView() )
             ((SwDrawView*)pCrsrShell->GetDrawView())->SetAnimationEnabled(
@@ -252,9 +253,7 @@ void SwVisCrsr::_SetPosAndShow()
 }
 
 SwSelPaintRects::SwSelPaintRects( const SwCrsrShell& rCSh )
-:   SwRects( 0 ),
-    pCShell( &rCSh ),
-    mpCursorOverlay(0)
+     : SwRects( 0 ), pCShell( &rCSh ), mpCursorOverlay(0)
 {
 }
 
@@ -357,9 +356,7 @@ void SwSelPaintRects::Show()
                 // create correct selection
                 mpCursorOverlay = new sdr::overlay::OverlaySelection(
                     sdr::overlay::OVERLAY_TRANSPARENT,
-                    aHighlight,
-                    aNewRanges,
-                    true);
+                    aHighlight, aNewRanges, true );
 
                 xTargetOverlay->add(*mpCursorOverlay);
             }
@@ -431,20 +428,25 @@ void SwSelPaintRects::Get1PixelInLogic( const ViewShell& rSh,
 
 SwShellCrsr::SwShellCrsr( const SwCrsrShell& rCShell, const SwPosition &rPos )
     : SwCursor(rPos,0,false), SwSelPaintRects(rCShell), pPt(SwPaM::GetPoint())
-{}
+{
+}
 
 SwShellCrsr::SwShellCrsr( const SwCrsrShell& rCShell, const SwPosition &rPos,
-                            const Point& rPtPos, SwPaM* pRing )
+                          const Point& rPtPos, SwPaM* pRing )
     : SwCursor(rPos, pRing, false), SwSelPaintRects(rCShell), aMkPt(rPtPos),
-    aPtPt(rPtPos), pPt(SwPaM::GetPoint())
-{}
+      aPtPt(rPtPos), pPt(SwPaM::GetPoint())
+{
+}
 
 SwShellCrsr::SwShellCrsr( SwShellCrsr& rICrsr )
     : SwCursor(rICrsr), SwSelPaintRects(*rICrsr.GetShell()),
-    aMkPt(rICrsr.GetMkPos()), aPtPt(rICrsr.GetPtPos()), pPt(SwPaM::GetPoint())
-{}
-SwShellCrsr::~SwShellCrsr() {}
+      aMkPt(rICrsr.GetMkPos()), aPtPt(rICrsr.GetPtPos()), pPt(SwPaM::GetPoint())
+{
+}
 
+SwShellCrsr::~SwShellCrsr()
+{
+}
 
 bool SwShellCrsr::IsReadOnlyAvailable() const
 {
@@ -466,9 +468,9 @@ void SwShellCrsr::FillRects()
     if( HasMark() &&
         GetPoint()->nNode.GetNode().IsCntntNode() &&
         GetPoint()->nNode.GetNode().GetCntntNode()->getLayoutFrm( GetShell()->GetLayout() ) &&
-        (GetMark()->nNode == GetPoint()->nNode ||
-        (GetMark()->nNode.GetNode().IsCntntNode() &&
-         GetMark()->nNode.GetNode().GetCntntNode()->getLayoutFrm( GetShell()->GetLayout() ) )   ))
+        ( GetMark()->nNode == GetPoint()->nNode ||
+          ( GetMark()->nNode.GetNode().IsCntntNode() &&
+            GetMark()->nNode.GetNode().GetCntntNode()->getLayoutFrm( GetShell()->GetLayout() ))))
     {
         //swmod 071107 //swmod 071225
         GetShell()->GetLayout()->CalcFrmRects( *this, GetShell()->IsTableMode() );
@@ -489,22 +491,18 @@ void SwShellCrsr::Invalidate( const SwRect& rRect )
 {
     SwShellCrsr * pTmp = this;
 
-    do
-    {
+    do {
         pTmp->SwSelPaintRects::Invalidate( rRect );
 
         // skip any non SwShellCrsr objects in the ring
         // see also: SwAutoFormat::DeleteSel()
         Ring* pTmpRing = pTmp;
         pTmp = 0;
-        do
-        {
+        do {
             pTmpRing = pTmpRing->GetNext();
             pTmp = dynamic_cast<SwShellCrsr*>(pTmpRing);
-        }
-        while ( !pTmp );
-    }
-    while( this != pTmp );
+        } while ( !pTmp );
+    } while( this != pTmp );
 }
 
 void SwShellCrsr::Hide()
@@ -569,8 +567,7 @@ void SwShellCrsr::SaveTblBoxCntnt( const SwPosition* pPos )
 
 sal_Bool SwShellCrsr::UpDown( sal_Bool bUp, sal_uInt16 nCnt )
 {
-    return SwCursor::UpDown( bUp, nCnt,
-                            &GetPtPos(), GetShell()->GetUpDownX() );
+    return SwCursor::UpDown( bUp, nCnt, &GetPtPos(), GetShell()->GetUpDownX() );
 }
 
 // if <true> than the cursor can be set to the position.
@@ -602,9 +599,14 @@ SwShellTableCrsr::SwShellTableCrsr( const SwCrsrShell& rCrsrSh,
     GetPtPos() = rPtPt;
 }
 
-SwShellTableCrsr::~SwShellTableCrsr() {}
+SwShellTableCrsr::~SwShellTableCrsr()
+{
+}
 
-void SwShellTableCrsr::SetMark()                { SwShellCrsr::SetMark(); }
+void SwShellTableCrsr::SetMark()
+{
+    SwShellCrsr::SetMark();
+}
 
 SwCursor* SwShellTableCrsr::Create( SwPaM* pRing ) const
 {

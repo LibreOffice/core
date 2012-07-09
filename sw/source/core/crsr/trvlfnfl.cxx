@@ -83,8 +83,9 @@ sal_Bool SwCrsrShell::GotoFtnTxt()
                    _GetCrsr()->GetPoint()->nNode.GetNode().GetTxtNode() : NULL;
         if( pTxtNd )
         {
-            const SwFrm *pFrm = pTxtNd->getLayoutFrm( GetLayout(), &_GetCrsr()->GetSttPos(),
-                                                 _GetCrsr()->Start() );
+            const SwFrm* pFrm = pTxtNd->getLayoutFrm( GetLayout(),
+                                                      &_GetCrsr()->GetSttPos(),
+                                                      _GetCrsr()->Start() );
             const SwFtnBossFrm* pFtnBoss;
             sal_Bool bSkip = pFrm && pFrm->IsInFtn();
             while( pFrm && 0 != ( pFtnBoss = pFrm->FindFtnBossFrm() ) )

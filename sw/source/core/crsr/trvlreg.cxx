@@ -28,7 +28,7 @@
 #include <section.hxx>
 
 sal_Bool GotoPrevRegion( SwPaM& rCurCrsr, SwPosRegion fnPosRegion,
-                        sal_Bool bInReadOnly )
+                         sal_Bool bInReadOnly )
 {
     SwNodeIndex aIdx( rCurCrsr.GetPoint()->nNode );
     SwSectionNode* pNd = aIdx.GetNode().FindSectionNode();
@@ -83,7 +83,7 @@ sal_Bool GotoPrevRegion( SwPaM& rCurCrsr, SwPosRegion fnPosRegion,
 }
 
 sal_Bool GotoNextRegion( SwPaM& rCurCrsr, SwPosRegion fnPosRegion,
-                        sal_Bool bInReadOnly )
+                         sal_Bool bInReadOnly )
 {
     SwNodeIndex aIdx( rCurCrsr.GetPoint()->nNode );
     SwSectionNode* pNd = aIdx.GetNode().FindSectionNode();
@@ -137,7 +137,7 @@ sal_Bool GotoNextRegion( SwPaM& rCurCrsr, SwPosRegion fnPosRegion,
 }
 
 sal_Bool GotoCurrRegion( SwPaM& rCurCrsr, SwPosRegion fnPosRegion,
-                        sal_Bool bInReadOnly )
+                         sal_Bool bInReadOnly )
 {
     SwSectionNode* pNd = rCurCrsr.GetNode()->FindSectionNode();
     if( !pNd )

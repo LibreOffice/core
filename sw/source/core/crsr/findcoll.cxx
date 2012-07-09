@@ -41,16 +41,17 @@ struct SwFindParaFmtColl : public SwFindParas
     const SwTxtFmtColl *pFmtColl, *pReplColl;
     SwCursor& rCursor;
     SwFindParaFmtColl( const SwTxtFmtColl& rFmtColl,
-                        const SwTxtFmtColl* pRpColl, SwCursor& rCrsr )
+                       const SwTxtFmtColl* pRpColl, SwCursor& rCrsr )
         : pFmtColl( &rFmtColl ), pReplColl( pRpColl ), rCursor( rCrsr )
-    {}
+    {
+    }
     virtual ~SwFindParaFmtColl() {}
     virtual int Find( SwPaM* , SwMoveFn , const SwPaM*, sal_Bool bInReadOnly );
     virtual int IsReplaceMode() const;
 };
 
 int SwFindParaFmtColl::Find( SwPaM* pCrsr, SwMoveFn fnMove, const SwPaM* pRegion,
-                            sal_Bool bInReadOnly )
+                             sal_Bool bInReadOnly )
 {
     int nRet = FIND_FOUND;
     if( bInReadOnly && pReplColl )
@@ -74,9 +75,9 @@ int SwFindParaFmtColl::IsReplaceMode() const
 }
 
 /// search for Format-Collections
-sal_uLong SwCursor::Find( const SwTxtFmtColl& rFmtColl,
-                    SwDocPositions nStart, SwDocPositions nEnde, sal_Bool& bCancel,
-                    FindRanges eFndRngs, const SwTxtFmtColl* pReplFmtColl )
+sal_uLong SwCursor::Find( const SwTxtFmtColl& rFmtColl, SwDocPositions nStart,
+                          SwDocPositions nEnde, sal_Bool& bCancel,
+                          FindRanges eFndRngs, const SwTxtFmtColl* pReplFmtColl )
 {
     // switch off OLE-notifications
     SwDoc* pDoc = GetDoc();

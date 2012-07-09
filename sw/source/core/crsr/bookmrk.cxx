@@ -48,30 +48,28 @@ using namespace ::com::sun::star::uno;
 
 namespace
 {
-    static void lcl_FixPosition(SwPosition& rPos)
+    static void lcl_FixPosition( SwPosition& rPos )
     {
         // make sure the position has 1) the proper node, and 2) a proper index
         SwTxtNode* pTxtNode = rPos.nNode.GetNode().GetTxtNode();
         if(pTxtNode == NULL && rPos.nContent.GetIndex() > 0)
         {
-            OSL_TRACE(
-                "bookmrk.cxx::lcl_FixPosition"
-                " - illegal position: %d without proper TxtNode", rPos.nContent.GetIndex());
+            OSL_TRACE( "bookmrk.cxx::lcl_FixPosition - illegal position:"
+                       " %d without proper TxtNode", rPos.nContent.GetIndex() );
             rPos.nContent.Assign(NULL, 0);
         }
         else if(pTxtNode != NULL && rPos.nContent.GetIndex() > pTxtNode->Len())
         {
-            OSL_TRACE(
-                "bookmrk.cxx::lcl_FixPosition"
-                " - illegal position: %d is beyond %d", rPos.nContent.GetIndex(), pTxtNode->Len());
+            OSL_TRACE( "bookmrk.cxx::lcl_FixPosition - illegal position:"
+                       " %d is beyond %d", rPos.nContent.GetIndex(), pTxtNode->Len() );
             rPos.nContent.Assign(pTxtNode, pTxtNode->Len());
         }
     };
 
-    static void lcl_AssureFieldMarksSet(Fieldmark* const pField,
-        SwDoc* const io_pDoc,
-        const sal_Unicode aStartMark,
-        const sal_Unicode aEndMark)
+    static void lcl_AssureFieldMarksSet( Fieldmark* const pField,
+                                         SwDoc* const io_pDoc,
+                                         const sal_Unicode aStartMark,
+                                         const sal_Unicode aEndMark )
     {
         SwPosition& rStart = pField->GetMarkStart();
         SwPosition& rEnd = pField->GetMarkEnd();
@@ -79,7 +77,8 @@ namespace
         SwTxtNode const*const pStartTxtNode =
             rStart.nNode.GetNode().GetTxtNode();
         SwTxtNode const*const pEndTxtNode = rEnd.nNode.GetNode().GetTxtNode();
-        const sal_Unicode ch_start=pStartTxtNode->GetTxt().GetChar(rStart.nContent.GetIndex());
+        const sal_Unicode ch_start =
+            pStartTxtNode->GetTxt().GetChar( rStart.nContent.GetIndex() );
         xub_StrLen nEndPos = ( rEnd == rStart ||  rEnd.nContent.GetIndex() == 0 ) ?
             rEnd.nContent.GetIndex() : rEnd.nContent.GetIndex() - 1;
         const sal_Unicode ch_end=pEndTxtNode->GetTxt().GetChar( nEndPos );
@@ -108,16 +107,16 @@ namespace sw { namespace mark
     // MarkBase
     // --------
 
-    MarkBase::MarkBase(const SwPaM& aPaM,
-        const ::rtl::OUString& rName)
-        : SwModify(0)
-        , m_pPos1(new SwPosition(*(aPaM.GetPoint())))
-        , m_aName(rName)
+    MarkBase::MarkBase( const SwPaM& aPaM,
+                        const ::rtl::OUString& rName )
+        : SwModify( 0 )
+        , m_pPos1( new SwPosition(*(aPaM.GetPoint())) )
+        , m_aName( rName )
     {
         lcl_FixPosition(*m_pPos1);
-        if (aPaM.HasMark() && (*aPaM.GetMark() != *aPaM.GetPoint()))
+        if ( aPaM.HasMark() && ( *aPaM.GetMark() != *aPaM.GetPoint() ) )
         {
-            MarkBase::SetOtherMarkPos(*(aPaM.GetMark()));
+            MarkBase::SetOtherMarkPos( *(aPaM.GetMark()) );
             lcl_FixPosition(*m_pPos2);
         }
     }
@@ -130,17 +129,17 @@ namespace sw { namespace mark
         return GetMarkStart() <= rPos && rPos < GetMarkEnd();
     }
 
-    void MarkBase::SetMarkPos(const SwPosition& rNewPos)
+    void MarkBase::SetMarkPos( const SwPosition& rNewPos )
     {
         ::boost::scoped_ptr<SwPosition>(new SwPosition(rNewPos)).swap(m_pPos1);
     }
 
-    void MarkBase::SetOtherMarkPos(const SwPosition& rNewPos)
+    void MarkBase::SetOtherMarkPos( const SwPosition& rNewPos )
     {
         ::boost::scoped_ptr<SwPosition>(new SwPosition(rNewPos)).swap(m_pPos2);
     }
 
-    rtl::OUString MarkBase::ToString( ) const
+    rtl::OUString MarkBase::ToString() const
     {
         rtl::OUStringBuffer buf;
         buf.appendAscii(RTL_CONSTASCII_STRINGPARAM("Mark: ( Name, [ Node1, Index1 ] ): ( "));
@@ -154,9 +153,10 @@ namespace sw { namespace mark
     }
 
     MarkBase::~MarkBase()
-    { }
+    {
+    }
 
-    ::rtl::OUString MarkBase::GenerateNewName(const ::rtl::OUString& rPrefix)
+    ::rtl::OUString MarkBase::GenerateNewName( const ::rtl::OUString& rPrefix )
     {
         static rtlRandomPool aPool = rtl_random_createPool();
         static ::rtl::OUString sUniquePostfix;
@@ -167,7 +167,8 @@ namespace sw { namespace mark
             sal_Int32 nRandom;
             ::rtl::OUStringBuffer sUniquePostfixBuffer;
             rtl_random_getBytes(aPool, &nRandom, sizeof(nRandom));
-            sUniquePostfix = ::rtl::OUStringBuffer(13).append('_').append(static_cast<sal_Int32>(abs(nRandom))).makeStringAndClear();
+            sUniquePostfix = ::rtl::OUStringBuffer(13).append('_')
+                    .append(static_cast<sal_Int32>(abs(nRandom))).makeStringAndClear();
             nCount = 0;
         }
         // putting the counter in front of the random parts will speed up string comparisons
@@ -188,33 +189,36 @@ namespace sw { namespace mark
     // -----------------
 
     // TODO: everything else uses MarkBase::GenerateNewName ?
-    NavigatorReminder::NavigatorReminder(const SwPaM& rPaM)
+    NavigatorReminder::NavigatorReminder( const SwPaM& rPaM )
         : MarkBase(rPaM, rtl::OUString("__NavigatorReminder__"))
-    { }
+    {
+    }
 
     // -------
     // UnoMark
     // -------
 
-    UnoMark::UnoMark(const SwPaM& aPaM)
+    UnoMark::UnoMark( const SwPaM& aPaM )
         : MarkBase(aPaM, MarkBase::GenerateNewName(rtl::OUString("__UnoMark__")))
-    { }
+    {
+    }
 
     // -----------
     // DdeBookmark
     // -----------
 
-    DdeBookmark::DdeBookmark(const SwPaM& aPaM)
+    DdeBookmark::DdeBookmark( const SwPaM& aPaM )
         : MarkBase(aPaM, MarkBase::GenerateNewName(rtl::OUString("__DdeLink__")))
         , m_aRefObj(NULL)
-    { }
+    {
+    }
 
-    void DdeBookmark::SetRefObject(SwServerObject* pObj)
+    void DdeBookmark::SetRefObject( SwServerObject* pObj )
     {
         m_aRefObj = pObj;
     }
 
-    void DdeBookmark::DeregisterFromDoc(SwDoc* const pDoc)
+    void DdeBookmark::DeregisterFromDoc( SwDoc* const pDoc )
     {
         if(m_aRefObj.Is())
             pDoc->GetLinkManager().RemoveServer(m_aRefObj);
@@ -237,10 +241,10 @@ namespace sw { namespace mark
     // Bookmark
     // --------
 
-    Bookmark::Bookmark(const SwPaM& aPaM,
-        const KeyCode& rCode,
-        const ::rtl::OUString& rName,
-        const ::rtl::OUString& rShortName)
+    Bookmark::Bookmark( const SwPaM& aPaM,
+                        const KeyCode& rCode,
+                        const ::rtl::OUString& rName,
+                        const ::rtl::OUString& rShortName )
         : DdeBookmark(aPaM)
         , ::sfx2::Metadatable()
         , m_aCode(rCode)
@@ -249,9 +253,9 @@ namespace sw { namespace mark
         m_aName = rName;
     }
 
-    void Bookmark::InitDoc(SwDoc* const io_pDoc)
+    void Bookmark::InitDoc( SwDoc* const io_pDoc )
     {
-        if (io_pDoc->GetIDocumentUndoRedo().DoesUndo())
+        if ( io_pDoc->GetIDocumentUndoRedo().DoesUndo() )
         {
             io_pDoc->GetIDocumentUndoRedo().AppendUndo(
                     new SwUndoInsBookmark(*this));
@@ -299,14 +303,14 @@ namespace sw { namespace mark
     // Fieldmark
     // ---------
 
-    Fieldmark::Fieldmark(const SwPaM& rPaM)
+    Fieldmark::Fieldmark( const SwPaM& rPaM )
         : MarkBase(rPaM, MarkBase::GenerateNewName(rtl::OUString("__Fieldmark__")))
     {
         if(!IsExpanded())
             SetOtherMarkPos(GetMarkPos());
     }
 
-    rtl::OUString Fieldmark::ToString( ) const
+    rtl::OUString Fieldmark::ToString() const
     {
         rtl::OUStringBuffer buf;
         buf.appendAscii(RTL_CONSTASCII_STRINGPARAM(
@@ -325,7 +329,7 @@ namespace sw { namespace mark
         return buf.makeStringAndClear( );
     }
 
-    void Fieldmark::Invalidate( )
+    void Fieldmark::Invalidate()
     {
         // TODO: Does exist a better solution to trigger a format of the
         //       fieldmark portion? If yes, please use it.
@@ -337,32 +341,36 @@ namespace sw { namespace mark
     // TextFieldmark
     // -------------
 
-    TextFieldmark::TextFieldmark(const SwPaM& rPaM)
-        : Fieldmark(rPaM)
-    { }
-
-    void TextFieldmark::InitDoc(SwDoc* const io_pDoc)
+    TextFieldmark::TextFieldmark( const SwPaM& rPaM )
+        : Fieldmark( rPaM )
     {
-        lcl_AssureFieldMarksSet(this, io_pDoc, CH_TXT_ATR_FIELDSTART, CH_TXT_ATR_FIELDEND);
+    }
+
+    void TextFieldmark::InitDoc( SwDoc* const io_pDoc )
+    {
+        lcl_AssureFieldMarksSet( this, io_pDoc,
+                                 CH_TXT_ATR_FIELDSTART, CH_TXT_ATR_FIELDEND );
     }
 
     // -----------------
     // CheckboxFieldmark
     // -----------------
 
-    CheckboxFieldmark::CheckboxFieldmark(const SwPaM& rPaM)
-        : Fieldmark(rPaM)
-    { }
-
-    void CheckboxFieldmark::InitDoc(SwDoc* const io_pDoc)
+    CheckboxFieldmark::CheckboxFieldmark( const SwPaM& rPaM )
+        : Fieldmark( rPaM )
     {
-        lcl_AssureFieldMarksSet(this, io_pDoc, CH_TXT_ATR_FIELDSTART, CH_TXT_ATR_FORMELEMENT);
+    }
+
+    void CheckboxFieldmark::InitDoc( SwDoc* const io_pDoc )
+    {
+        lcl_AssureFieldMarksSet( this, io_pDoc,
+                                 CH_TXT_ATR_FIELDSTART, CH_TXT_ATR_FORMELEMENT );
 
         // For some reason the end mark is moved from 1 by the Insert: we don't
         // want this for checkboxes
-        this->GetMarkEnd( ).nContent--;
+        this->GetMarkEnd().nContent--;
     }
-    void CheckboxFieldmark::SetChecked(bool checked)
+    void CheckboxFieldmark::SetChecked( bool checked )
     {
         if ( IsChecked() != checked )
         {

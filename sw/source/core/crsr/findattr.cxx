@@ -79,7 +79,7 @@ int CmpAttr( const SfxPoolItem& rItem1, const SfxPoolItem& rItem2 )
 }
 
 const SwTxtAttr* GetFrwrdTxtHint( const SwpHints& rHtsArr, sal_uInt16& rPos,
-                                    xub_StrLen nCntntPos )
+                                  xub_StrLen nCntntPos )
 {
     while( rPos < rHtsArr.Count() )
     {
@@ -104,8 +104,8 @@ const SwTxtAttr* GetBkwrdTxtHint( const SwpHints& rHtsArr, sal_uInt16& rPos,
     return 0; // invalid text attribute
 }
 
-void lcl_SetAttrPam( SwPaM & rPam, xub_StrLen nStart, const xub_StrLen* pEnde,
-                        const sal_Bool bSaveMark )
+void lcl_SetAttrPam( SwPaM& rPam, xub_StrLen nStart, const xub_StrLen* pEnde,
+                     const sal_Bool bSaveMark )
 {
     xub_StrLen nCntntPos;
     if( bSaveMark )
@@ -143,8 +143,8 @@ void lcl_SetAttrPam( SwPaM & rPam, xub_StrLen nStart, const xub_StrLen* pEnde,
     @return Returns <true> if found, <false> otherwise.
 */
 sal_Bool lcl_Search( const SwTxtNode& rTxtNd, SwPaM& rPam,
-                    const SfxPoolItem& rCmpItem,
-                    SwMoveFn fnMove, sal_Bool bValue )
+                     const SfxPoolItem& rCmpItem, SwMoveFn fnMove,
+                     sal_Bool bValue )
 {
     if ( !rTxtNd.HasHints() )
         return sal_False;
@@ -173,7 +173,8 @@ struct _SwSrchChrAttr
     _SwSrchChrAttr( const SfxPoolItem& rItem,
                     xub_StrLen nStart, xub_StrLen nAnyEnd )
         : nWhich( rItem.Which() ), nStt( nStart ), nEnd( nAnyEnd )
-    {}
+    {
+    }
 };
 
 class SwAttrCheckArr
@@ -193,8 +194,14 @@ public:
     void SetNewSet( const SwTxtNode& rTxtNd, const SwPaM& rPam );
 
     /// how many attributes are there in total?
-    sal_uInt16 Count() const    { return aCmpSet.Count(); }
-    int Found() const       { return nFound == aCmpSet.Count(); }
+    sal_uInt16 Count() const
+    {
+        return aCmpSet.Count();
+    }
+    int Found() const
+    {
+        return nFound == aCmpSet.Count();
+    }
     int CheckStack();
 
     xub_StrLen Start() const;
@@ -306,9 +313,9 @@ void SwAttrCheckArr::SetNewSet( const SwTxtNode& rTxtNd, const SwPaM& rPam )
     }
 }
 
-static bool
-lcl_IsAttributeIgnorable(xub_StrLen const nNdStart, xub_StrLen const nNdEnd,
-        _SwSrchChrAttr const& rTmp)
+static bool lcl_IsAttributeIgnorable( xub_StrLen const nNdStart,
+                                      xub_StrLen const nNdEnd,
+                                      _SwSrchChrAttr const& rTmp )
 {
     // #i115528#: if there is a paragraph attribute, it has been added by the
     // SwAttrCheckArr ctor, and nFound is 1.
@@ -686,7 +693,7 @@ int SwAttrCheckArr::CheckStack()
 }
 
 int lcl_SearchForward( const SwTxtNode& rTxtNd, SwAttrCheckArr& rCmpArr,
-                            SwPaM& rPam )
+                       SwPaM& rPam )
 {
     xub_StrLen nEndPos, nSttPos;
     rCmpArr.SetNewSet( rTxtNd, rPam );
@@ -766,7 +773,7 @@ int lcl_SearchForward( const SwTxtNode& rTxtNd, SwAttrCheckArr& rCmpArr,
 }
 
 int lcl_SearchBackward( const SwTxtNode& rTxtNd, SwAttrCheckArr& rCmpArr,
-                            SwPaM& rPam )
+                        SwPaM& rPam )
 {
     xub_StrLen nEndPos, nSttPos;
     rCmpArr.SetNewSet( rTxtNd, rPam );
@@ -846,7 +853,8 @@ int lcl_SearchBackward( const SwTxtNode& rTxtNd, SwAttrCheckArr& rCmpArr,
     return sal_True;
 }
 
-int lcl_Search( const SwCntntNode& rCNd, const SfxItemSet& rCmpSet, sal_Bool bNoColls )
+int lcl_Search( const SwCntntNode& rCNd, const SfxItemSet& rCmpSet,
+                sal_Bool bNoColls )
 {
     // search only hard attribution?
     if( bNoColls && !rCNd.HasSwAttrSet() )
@@ -885,7 +893,7 @@ int lcl_Search( const SwCntntNode& rCNd, const SfxItemSet& rCmpSet, sal_Bool bNo
 }
 
 sal_Bool SwPaM::Find( const SfxPoolItem& rAttr, sal_Bool bValue, SwMoveFn fnMove,
-                    const SwPaM *pRegion, sal_Bool bInReadOnly )
+                      const SwPaM *pRegion, sal_Bool bInReadOnly )
 {
     // determine which attribute is searched:
     sal_uInt16 nWhich = rAttr.Which();
@@ -970,7 +978,8 @@ sal_Bool SwPaM::Find( const SfxPoolItem& rAttr, sal_Bool bValue, SwMoveFn fnMove
 typedef int (*FnSearchAttr)( const SwTxtNode&, SwAttrCheckArr&, SwPaM& );
 
 sal_Bool SwPaM::Find( const SfxItemSet& rSet, sal_Bool bNoColls, SwMoveFn fnMove,
-                    const SwPaM *pRegion, sal_Bool bInReadOnly, sal_Bool bMoveFirst )
+                      const SwPaM *pRegion, sal_Bool bInReadOnly,
+                      sal_Bool bMoveFirst )
 {
     SwPaM* pPam = MakeRegion( fnMove, pRegion );
 
@@ -1076,14 +1085,17 @@ struct SwFindParaAttr : public SwFindParas
         : bValue( bNoCollection ), pSet( &rSet ), pReplSet( pRSet ),
           pSearchOpt( pOpt ), rCursor( rCrsr ),pSTxt( 0 ) {}
 
-    virtual ~SwFindParaAttr()   { delete pSTxt; }
+    virtual ~SwFindParaAttr()
+    {
+        delete pSTxt;
+    }
 
     virtual int Find( SwPaM* , SwMoveFn , const SwPaM*, sal_Bool bInReadOnly );
     virtual int IsReplaceMode() const;
 };
 
 int SwFindParaAttr::Find( SwPaM* pCrsr, SwMoveFn fnMove, const SwPaM* pRegion,
-                            sal_Bool bInReadOnly )
+                          sal_Bool bInReadOnly )
 {
     // replace string (only if text given and search is not parameterized)?
     sal_Bool bReplaceTxt = pSearchOpt && ( !pSearchOpt->replaceString.isEmpty() ||
@@ -1232,20 +1244,22 @@ int SwFindParaAttr::IsReplaceMode() const
 
 /// search for attributes
 sal_uLong SwCursor::Find( const SfxItemSet& rSet, sal_Bool bNoCollections,
-                    SwDocPositions nStart, SwDocPositions nEnde, sal_Bool& bCancel,
-                    FindRanges eFndRngs,
-                    const SearchOptions* pSearchOpt, const SfxItemSet* pReplSet )
+                          SwDocPositions nStart, SwDocPositions nEnde,
+                          sal_Bool& bCancel, FindRanges eFndRngs,
+                          const SearchOptions* pSearchOpt,
+                          const SfxItemSet* pReplSet )
 {
     // switch off OLE-notifications
     SwDoc* pDoc = GetDoc();
     Link aLnk( pDoc->GetOle2Link() );
     pDoc->SetOle2Link( Link() );
 
-    sal_Bool bReplace = ( pSearchOpt && ( !pSearchOpt->replaceString.isEmpty() ||
-                                    !rSet.Count() ) ) ||
-                    (pReplSet && pReplSet->Count());
+    sal_Bool bReplace = ( pSearchOpt &&
+                            ( !pSearchOpt->replaceString.isEmpty() ||
+                              !rSet.Count() ) ) ||
+                          ( pReplSet && pReplSet->Count() );
     bool const bStartUndo = pDoc->GetIDocumentUndoRedo().DoesUndo() && bReplace;
-    if (bStartUndo)
+    if ( bStartUndo )
     {
         pDoc->GetIDocumentUndoRedo().StartUndo( UNDO_REPLACE, NULL );
     }
@@ -1253,7 +1267,7 @@ sal_uLong SwCursor::Find( const SfxItemSet& rSet, sal_Bool bNoCollections,
     SwFindParaAttr aSwFindParaAttr( rSet, bNoCollections, pSearchOpt,
                                     pReplSet, *this );
 
-    sal_uLong nRet = FindAll(aSwFindParaAttr, nStart, nEnde, eFndRngs, bCancel );
+    sal_uLong nRet = FindAll( aSwFindParaAttr, nStart, nEnde, eFndRngs, bCancel );
     pDoc->SetOle2Link( aLnk );
     if( nRet && bReplace )
         pDoc->SetModified();

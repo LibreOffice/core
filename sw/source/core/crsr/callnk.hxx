@@ -37,11 +37,11 @@ public:
 
     SwCallLink( SwCrsrShell & rSh );
     SwCallLink( SwCrsrShell & rSh, sal_uLong nAktNode, xub_StrLen nAktCntnt,
-                                    sal_uInt8 nAktNdTyp, long nLRPos,
-                                    bool bAktSelection );
+                sal_uInt8 nAktNdTyp, long nLRPos, bool bAktSelection );
     ~SwCallLink();
 
-    static long getLayoutFrm( const SwRootFrm*, SwTxtNode& rNd, xub_StrLen nCntPos, sal_Bool bCalcFrm );
+    static long getLayoutFrm( const SwRootFrm*, SwTxtNode& rNd,
+                              xub_StrLen nCntPos, sal_Bool bCalcFrm );
 };
 
 #endif  // _CALLNK_HXX

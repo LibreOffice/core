@@ -30,7 +30,7 @@
 #include <pamtyp.hxx>
 
 sal_Bool SwPaM::Find( const SwFmt& rFmt, SwMoveFn fnMove,
-                        const SwPaM *pRegion, sal_Bool bInReadOnly  )
+                      const SwPaM *pRegion, sal_Bool bInReadOnly )
 {
     sal_Bool bFound = sal_False;
     sal_Bool bSrchForward = fnMove == fnMoveForward;

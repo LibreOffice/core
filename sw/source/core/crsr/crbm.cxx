@@ -42,16 +42,17 @@ namespace
 {
     struct CrsrStateHelper
     {
-        CrsrStateHelper(SwCrsrShell& rShell)
+        CrsrStateHelper( SwCrsrShell& rShell )
             : m_aLink(rShell)
             , m_pCrsr(rShell.GetSwCrsr())
             , m_aSaveState(*m_pCrsr)
-        { }
+        {
+        }
 
-        void SetCrsrToMark(::sw::mark::IMark const * const pMark)
+        void SetCrsrToMark( ::sw::mark::IMark const * const pMark )
         {
             *(m_pCrsr->GetPoint()) = pMark->GetMarkStart();
-            if(pMark->IsExpanded())
+            if( pMark->IsExpanded() )
             {
                 m_pCrsr->SetMark();
                 *(m_pCrsr->GetMark()) = pMark->GetMarkEnd();
@@ -76,42 +77,40 @@ namespace
         SwCrsrSaveState m_aSaveState;
     };
 
-    static bool lcl_ReverseMarkOrderingByEnd(const IDocumentMarkAccess::pMark_t& rpFirst,
-        const IDocumentMarkAccess::pMark_t& rpSecond)
+    static bool lcl_ReverseMarkOrderingByEnd( const IDocumentMarkAccess::pMark_t& rpFirst,
+                                              const IDocumentMarkAccess::pMark_t& rpSecond)
     {
         return rpFirst->GetMarkEnd() > rpSecond->GetMarkEnd();
     }
 
-    static bool lcl_IsInvisibleBookmark(IDocumentMarkAccess::pMark_t pMark)
+    static bool lcl_IsInvisibleBookmark( IDocumentMarkAccess::pMark_t pMark )
     {
         return IDocumentMarkAccess::GetType(*pMark) != IDocumentMarkAccess::BOOKMARK;
     }
 }
 
 // at CurCrsr.SPoint
-::sw::mark::IMark* SwCrsrShell::SetBookmark(
-    const KeyCode& rCode,
-    const ::rtl::OUString& rName,
-    const ::rtl::OUString& rShortName,
-    IDocumentMarkAccess::MarkType eMark)
+::sw::mark::IMark* SwCrsrShell::SetBookmark( const KeyCode& rCode,
+                                             const ::rtl::OUString& rName,
+                                             const ::rtl::OUString& rShortName,
+                                             IDocumentMarkAccess::MarkType eMark )
 {
     StartAction();
-    ::sw::mark::IMark* pMark = getIDocumentMarkAccess()->makeMark(
-        *GetCrsr(),
-        rName,
-        eMark);
+    ::sw::mark::IMark* pMark = getIDocumentMarkAccess()->makeMark( *GetCrsr(),
+                                                                   rName,
+                                                                   eMark );
     ::sw::mark::IBookmark* pBookmark = dynamic_cast< ::sw::mark::IBookmark* >(pMark);
-    if(pBookmark)
+    if( pBookmark )
     {
-        pBookmark->SetKeyCode(rCode);
-        pBookmark->SetShortName(rShortName);
+        pBookmark->SetKeyCode( rCode );
+        pBookmark->SetShortName( rShortName );
     }
     EndAction();
     return pMark;
 }
 // set CurCrsr.SPoint
 
-bool SwCrsrShell::GotoMark(const ::sw::mark::IMark* const pMark, bool bAtStart)
+bool SwCrsrShell::GotoMark( const ::sw::mark::IMark* const pMark, bool bAtStart )
 {
     // watch Crsr-Moves
     CrsrStateHelper aCrsrSt(*this);
@@ -120,7 +119,8 @@ bool SwCrsrShell::GotoMark(const ::sw::mark::IMark* const pMark, bool bAtStart)
     else
         *(aCrsrSt.m_pCrsr)->GetPoint() = pMark->GetMarkEnd();
 
-    if(aCrsrSt.RollbackIfIllegal()) return false;
+    if ( aCrsrSt.RollbackIfIllegal() )
+        return false;
 
     UpdateCrsr(SwCrsrShell::SCROLLWIN|SwCrsrShell::CHKRANGE|SwCrsrShell::READONLY);
     return true;
@@ -132,7 +132,8 @@ bool SwCrsrShell::GotoMark(const ::sw::mark::IMark* const pMark)
     CrsrStateHelper aCrsrSt(*this);
     aCrsrSt.SetCrsrToMark(pMark);
 
-    if(aCrsrSt.RollbackIfIllegal()) return false;
+    if ( aCrsrSt.RollbackIfIllegal() )
+        return false;
 
     UpdateCrsr(SwCrsrShell::SCROLLWIN|SwCrsrShell::CHKRANGE|SwCrsrShell::READONLY);
     return true;
@@ -150,24 +151,25 @@ bool SwCrsrShell::GoNextBookmark()
             bind(&::sw::mark::IMark::StartsAfter, _2, _1)), // finds the first that is starting after
         pMarkAccess->getBookmarksEnd(),
         back_inserter(vCandidates),
-        &lcl_IsInvisibleBookmark);
+        &lcl_IsInvisibleBookmark );
 
     // watch Crsr-Moves
     CrsrStateHelper aCrsrSt(*this);
     IDocumentMarkAccess::const_iterator_t ppMark = vCandidates.begin();
-    for(; ppMark!=vCandidates.end(); ++ppMark)
+    for( ; ppMark != vCandidates.end(); ++ppMark )
     {
-        aCrsrSt.SetCrsrToMark(ppMark->get());
-        if(!aCrsrSt.RollbackIfIllegal())
+        aCrsrSt.SetCrsrToMark( ppMark->get() );
+        if( !aCrsrSt.RollbackIfIllegal() )
             break; // found legal move
     }
-    if(ppMark==vCandidates.end())
+    if( ppMark == vCandidates.end() )
     {
         SttEndDoc(false);
         return false;
     }
 
-    UpdateCrsr(SwCrsrShell::SCROLLWIN|SwCrsrShell::CHKRANGE|SwCrsrShell::READONLY);
+    UpdateCrsr( SwCrsrShell::SCROLLWIN | SwCrsrShell::CHKRANGE |
+                SwCrsrShell::READONLY );
     return true;
 }
 
@@ -185,28 +187,25 @@ bool SwCrsrShell::GoPrevBookmark()
             *GetCrsr()->GetPoint(),
             bind(&::sw::mark::IMark::StartsAfter, _2, _1)),
         back_inserter(vCandidates),
-        &lcl_IsInvisibleBookmark);
-    sort(
-        vCandidates.begin(),
-        vCandidates.end(),
-        &lcl_ReverseMarkOrderingByEnd);
+        &lcl_IsInvisibleBookmark );
+    sort( vCandidates.begin(), vCandidates.end(), &lcl_ReverseMarkOrderingByEnd );
 
     // watch Crsr-Moves
     CrsrStateHelper aCrsrSt(*this);
     IDocumentMarkAccess::const_iterator_t ppMark = vCandidates.begin();
-    for(; ppMark!=vCandidates.end(); ++ppMark)
+    for( ; ppMark != vCandidates.end(); ++ppMark )
     {
         // ignoring those not ending before the Crsr
         // (we were only able to eliminate those starting
         // behind the Crsr by the upper_bound(..)
         // above)
-        if(!(**ppMark).EndsBefore(*GetCrsr()->GetPoint()))
+        if( !(**ppMark).EndsBefore( *GetCrsr()->GetPoint() ) )
             continue;
-        aCrsrSt.SetCrsrToMark(ppMark->get());
-        if(!aCrsrSt.RollbackIfIllegal())
+        aCrsrSt.SetCrsrToMark( ppMark->get() );
+        if( !aCrsrSt.RollbackIfIllegal() )
             break; // found legal move
     }
-    if(ppMark==vCandidates.end())
+    if( ppMark == vCandidates.end() )
     {
         SttEndDoc(true);
         return false;
@@ -225,32 +224,34 @@ bool SwCrsrShell::IsFormProtected()
 {
     // TODO: Refactor
     SwPosition pos(*GetCrsr()->GetPoint());
-    return getIDocumentMarkAccess()->getFieldmarkFor(pos);
+    return getIDocumentMarkAccess()->getFieldmarkFor( pos );
 }
 
 ::sw::mark::IFieldmark* SwCrsrShell::GetFieldmarkAfter()
 {
     SwPosition pos(*GetCrsr()->GetPoint());
-    return getIDocumentMarkAccess()->getFieldmarkAfter(pos);
+    return getIDocumentMarkAccess()->getFieldmarkAfter( pos );
 }
 
 ::sw::mark::IFieldmark* SwCrsrShell::GetFieldmarkBefore()
 {
     SwPosition pos(*GetCrsr()->GetPoint());
-    return getIDocumentMarkAccess()->getFieldmarkBefore(pos);
+    return getIDocumentMarkAccess()->getFieldmarkBefore( pos );
 }
 
 bool SwCrsrShell::GotoFieldmark(::sw::mark::IFieldmark const * const pMark)
 {
-    if(pMark==NULL) return false;
+    if ( pMark == NULL )
+        return false;
 
     // watch Crsr-Moves
     CrsrStateHelper aCrsrSt(*this);
-    aCrsrSt.SetCrsrToMark(pMark);
+    aCrsrSt.SetCrsrToMark( pMark );
     aCrsrSt.m_pCrsr->GetPoint()->nContent++;
     aCrsrSt.m_pCrsr->GetMark()->nContent--;
 
-    if(aCrsrSt.RollbackIfIllegal()) return false;
+    if ( aCrsrSt.RollbackIfIllegal() )
+        return false;
 
     UpdateCrsr(SwCrsrShell::SCROLLWIN|SwCrsrShell::CHKRANGE|SwCrsrShell::READONLY);
     return true;

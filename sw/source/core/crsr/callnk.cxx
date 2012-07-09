@@ -45,15 +45,15 @@
 #include <breakit.hxx>
 #include<vcl/window.hxx>
 
-SwCallLink::SwCallLink( SwCrsrShell & rSh, sal_uLong nAktNode, xub_StrLen nAktCntnt,
-                        sal_uInt8 nAktNdTyp, long nLRPos, bool bAktSelection )
-    : rShell( rSh ), nNode( nAktNode ), nCntnt( nAktCntnt ),
-      nNdTyp( nAktNdTyp ), nLeftFrmPos( nLRPos ),
-      bHasSelection( bAktSelection )
+SwCallLink::SwCallLink( SwCrsrShell& rSh, sal_uLong nAktNode,
+                        xub_StrLen nAktCntnt, sal_uInt8 nAktNdTyp,
+                        long nLRPos, bool bAktSelection )
+    : rShell( rSh ), nNode( nAktNode ), nCntnt( nAktCntnt ), nNdTyp( nAktNdTyp ),
+      nLeftFrmPos( nLRPos ), bHasSelection( bAktSelection )
 {
 }
 
-SwCallLink::SwCallLink( SwCrsrShell & rSh )
+SwCallLink::SwCallLink( SwCrsrShell& rSh )
     : rShell( rSh )
 {
     // remember SPoint-values of current cursor
@@ -66,8 +66,10 @@ SwCallLink::SwCallLink( SwCrsrShell & rSh )
 
     if( rNd.IsTxtNode() )
     {
-        nLeftFrmPos = SwCallLink::getLayoutFrm( rShell.GetLayout(), (SwTxtNode&)rNd, nCntnt,
-                                            !rShell.ActionPend() );
+        nLeftFrmPos = SwCallLink::getLayoutFrm( rShell.GetLayout(),
+                                                (SwTxtNode&)rNd,
+                                                nCntnt,
+                                                !rShell.ActionPend() );
     }
     else
     {
@@ -83,33 +85,33 @@ SwCallLink::SwCallLink( SwCrsrShell & rSh )
     }
 }
 
-void lcl_notifyRow(const SwCntntNode* pNode, SwCrsrShell& rShell)
+void lcl_notifyRow( const SwCntntNode* pNode, SwCrsrShell& rShell )
 {
     if ( pNode != NULL )
     {
         SwFrm *myFrm = pNode->getLayoutFrm( rShell.GetLayout() );
-        if (myFrm!=NULL)
+        if ( myFrm != NULL )
         {
             // We need to emulated a change of the row height in order
             // to have the complete row redrawn
             SwRowFrm* pRow = myFrm->FindRowFrm();
             if ( pRow )
             {
-                const SwTableLine* pLine = pRow->GetTabLine( );
+                const SwTableLine* pLine = pRow->GetTabLine();
                 // Avoid redrawing the complete row if there are no nested tables
                 bool bHasTable = false;
                 SwFrm *pCell = pRow->GetLower();
-                for (; pCell && !bHasTable; pCell = pCell->GetNext())
+                for ( ; pCell && !bHasTable; pCell = pCell->GetNext() )
                 {
                     SwFrm *pContent = pCell->GetLower();
-                    for (; pContent && !bHasTable; pContent = pContent->GetNext())
-                        if (pContent->GetType() == FRM_TAB)
+                    for ( ; pContent && !bHasTable; pContent = pContent->GetNext() )
+                        if ( pContent->GetType() == FRM_TAB )
                             bHasTable = true;
                 }
-                if (bHasTable)
+                if ( bHasTable )
                 {
                     SwFmtFrmSize pSize = pLine->GetFrmFmt()->GetFrmSize();
-                    pRow->ModifyNotification(NULL, &pSize);
+                    pRow->ModifyNotification( NULL, &pSize );
                 }
             }
         }
@@ -124,15 +126,15 @@ SwCallLink::~SwCallLink()
     // If travelling over Nodes check formats and register them anew at the
     // new Node.
     SwPaM* pCurCrsr = rShell.IsTableMode() ? rShell.GetTblCrs() : rShell.GetCrsr();
-    SwCntntNode * pCNd = pCurCrsr->GetCntntNode();
+    SwCntntNode* pCNd = pCurCrsr->GetCntntNode();
     if( !pCNd )
         return;
 
-    lcl_notifyRow(pCNd, rShell);
+    lcl_notifyRow( pCNd, rShell );
 
-    const SwDoc *pDoc=rShell.GetDoc();
-    const SwCntntNode *pNode = NULL;
-    if ( ( pDoc != NULL && nNode < pDoc->GetNodes( ).Count( ) ) )
+    const SwDoc* pDoc = rShell.GetDoc();
+    const SwCntntNode* pNode = NULL;
+    if ( ( pDoc != NULL && nNode < pDoc->GetNodes().Count() ) )
     {
         pNode = pDoc->GetNodes()[nNode]->GetCntntNode();
     }
@@ -164,20 +166,20 @@ SwCallLink::~SwCallLink()
     {
         // If travelling with left/right only and the frame is
         // unchanged (columns!) then check text hints.
-        if( nLeftFrmPos == SwCallLink::getLayoutFrm( rShell.GetLayout(), (SwTxtNode&)*pCNd, nAktCntnt,
-                                                    !rShell.ActionPend() ) &&
-            (( nCmp = nCntnt ) + 1 == nAktCntnt ||          // Right
-            nCntnt -1 == ( nCmp = nAktCntnt )) )            // Left
+        if( nLeftFrmPos == SwCallLink::getLayoutFrm( rShell.GetLayout(),
+                (SwTxtNode&)*pCNd, nAktCntnt, !rShell.ActionPend() ) &&
+            ( ( nCmp = nCntnt ) + 1 == nAktCntnt ||  // Right
+              nCntnt -1 == ( nCmp = nAktCntnt )) )   // Left
         {
             if( nCmp == nAktCntnt && pCurCrsr->HasMark() ) // left & select
                 ++nCmp;
 
             if ( ((SwTxtNode*)pCNd)->HasHints() )
             {
-                const SwpHints &rHts = ((SwTxtNode*)pCNd)->GetSwpHints();
+                const SwpHints& rHts = ((SwTxtNode*)pCNd)->GetSwpHints();
                 sal_uInt16 n;
                 xub_StrLen nStart;
-                const xub_StrLen *pEnd;
+                const xub_StrLen* pEnd;
 
                 for( n = 0; n < rHts.Count(); n++ )
                 {
@@ -230,14 +232,14 @@ SwCallLink::~SwCallLink()
     }
 
     const SwFrm* pFrm;
-    const SwFlyFrm *pFlyFrm;
-    if( !rShell.ActionPend() && 0 != ( pFrm = pCNd->getLayoutFrm(rShell.GetLayout(),0,0,sal_False) ) &&
+    const SwFlyFrm* pFlyFrm;
+    if( !rShell.ActionPend() &&
+        0 != ( pFrm = pCNd->getLayoutFrm(rShell.GetLayout(),0,0,sal_False) ) &&
         0 != ( pFlyFrm = pFrm->FindFlyFrm() ) && !rShell.IsTableMode() )
     {
         const SwNodeIndex* pIndex = pFlyFrm->GetFmt()->GetCntnt().GetCntntIdx();
         OSL_ENSURE( pIndex, "Fly without Cntnt" );
-
-        if (!pIndex)
+        if ( !pIndex )
             return;
 
         const SwNode& rStNd = pIndex->GetNode();

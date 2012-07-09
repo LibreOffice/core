@@ -33,14 +33,14 @@ using ::rtl::OUString;
 
 namespace sw { namespace mark
 {
-    CrossRefBookmark::CrossRefBookmark(const SwPaM& rPaM,
-        const KeyCode& rCode,
-        const OUString& rName,
-        const OUString& rShortName,
-        const OUString& rPrefix)
+    CrossRefBookmark::CrossRefBookmark( const SwPaM& rPaM,
+                                        const KeyCode& rCode,
+                                        const OUString& rName,
+                                        const OUString& rShortName,
+                                        const OUString& rPrefix )
         : Bookmark(rPaM, rCode, rName, rShortName)
     {
-        if(rPaM.HasMark())
+        if( rPaM.HasMark() )
         {
             OSL_ENSURE((rPaM.GetMark()->nNode == rPaM.GetPoint()->nNode &&
                 rPaM.Start()->nContent.GetIndex() == 0 &&
@@ -48,17 +48,17 @@ namespace sw { namespace mark
                 "<CrossRefBookmark::CrossRefBookmark(..)>"
                 "- creation of cross-reference bookmark with an expanded PaM that does not expand over exactly one whole paragraph.");
         }
-        SetMarkPos(*rPaM.Start());
-        if(rName.isEmpty())
+        SetMarkPos( *rPaM.Start() );
+        if( rName.isEmpty() )
             m_aName = MarkBase::GenerateNewName(rPrefix);
     }
 
-    void CrossRefBookmark::SetMarkPos(const SwPosition& rNewPos)
+    void CrossRefBookmark::SetMarkPos( const SwPosition& rNewPos )
     {
-        OSL_PRECOND(rNewPos.nNode.GetNode().GetTxtNode(),
+        OSL_PRECOND( rNewPos.nNode.GetNode().GetTxtNode(),
             "<sw::mark::CrossRefBookmark::SetMarkPos(..)>"
             " - new bookmark position for cross-reference bookmark doesn't mark text node");
-        OSL_PRECOND(rNewPos.nContent.GetIndex() == 0,
+        OSL_PRECOND( rNewPos.nContent.GetIndex() == 0,
             "<sw::mark::CrossRefBookmark::SetMarkPos(..)>"
             " - new bookmark position for cross-reference bookmark doesn't mark start of text node");
         MarkBase::SetMarkPos(rNewPos);
@@ -66,36 +66,40 @@ namespace sw { namespace mark
 
     SwPosition& CrossRefBookmark::GetOtherMarkPos() const
     {
-        OSL_PRECOND(false,
+        OSL_PRECOND( false,
             "<sw::mark::CrossRefBookmark::GetOtherMarkPos(..)>"
-            " - this should never be called!");
+            " - this should never be called!" );
         return *static_cast<SwPosition*>(NULL);
     }
 
     const char CrossRefHeadingBookmark_NamePrefix[] = "__RefHeading__";
 
-    CrossRefHeadingBookmark::CrossRefHeadingBookmark(const SwPaM& rPaM,
-        const KeyCode& rCode,
-        const OUString& rName,
-        const OUString& rShortName)
-        : CrossRefBookmark(rPaM, rCode, rName, rShortName, rtl::OUString(CrossRefHeadingBookmark_NamePrefix))
-    { }
+    CrossRefHeadingBookmark::CrossRefHeadingBookmark( const SwPaM& rPaM,
+                                                      const KeyCode& rCode,
+                                                      const OUString& rName,
+                                                      const OUString& rShortName )
+        : CrossRefBookmark(rPaM, rCode, rName, rShortName,
+                           rtl::OUString(CrossRefHeadingBookmark_NamePrefix))
+    {
+    }
 
-    bool CrossRefHeadingBookmark::IsLegalName(const ::rtl::OUString& rName)
+    bool CrossRefHeadingBookmark::IsLegalName( const ::rtl::OUString& rName )
     {
         return rName.matchAsciiL(RTL_CONSTASCII_STRINGPARAM(CrossRefHeadingBookmark_NamePrefix));
     }
 
     const char CrossRefNumItemBookmark_NamePrefix[] = "__RefNumPara__";
 
-    CrossRefNumItemBookmark::CrossRefNumItemBookmark(const SwPaM& rPaM,
-        const KeyCode& rCode,
-        const OUString& rName,
-        const OUString& rShortName)
-        : CrossRefBookmark(rPaM, rCode, rName, rShortName, rtl::OUString(CrossRefNumItemBookmark_NamePrefix))
-    { }
+    CrossRefNumItemBookmark::CrossRefNumItemBookmark( const SwPaM& rPaM,
+                                                      const KeyCode& rCode,
+                                                      const OUString& rName,
+                                                      const OUString& rShortName )
+        : CrossRefBookmark( rPaM, rCode, rName, rShortName,
+                            rtl::OUString(CrossRefNumItemBookmark_NamePrefix) )
+    {
+    }
 
-    bool CrossRefNumItemBookmark::IsLegalName(const ::rtl::OUString& rName)
+    bool CrossRefNumItemBookmark::IsLegalName( const ::rtl::OUString& rName )
     {
         return rName.matchAsciiL(RTL_CONSTASCII_STRINGPARAM(CrossRefNumItemBookmark_NamePrefix));
     }

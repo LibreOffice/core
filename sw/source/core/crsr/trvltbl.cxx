@@ -72,7 +72,7 @@ sal_Bool SwCrsrShell::GoNextCell( sal_Bool bAppendLine )
                 if ( !pTblNd )
                     pTblNd = IsCrsrInTbl();
                 pTableBox = & pTableBox->FindEndOfRowSpan( pTblNd->GetTable(),
-                                                           (sal_uInt16)(pTableBox->getRowSpan() + pCrsr->GetCrsrRowSpanOffset() ) );
+                    (sal_uInt16)(pTableBox->getRowSpan() + pCrsr->GetCrsrRowSpanOffset() ) );
                 pTableBoxStartNode = pTableBox->GetSttNd();
             }
         }
@@ -626,9 +626,10 @@ sal_Bool GotoCurrTable( SwPaM& rCurCrsr, SwPosTable fnPosTbl,
     if ( pTxtNode )
     {
         rCurCrsr.GetPoint()->nNode = *pTxtNode;
-        rCurCrsr.GetPoint()->nContent.Assign( pTxtNode, fnPosTbl == fnMoveBackward ?
-                                                        pTxtNode->Len() :
-                                                        0 );
+        rCurCrsr.GetPoint()->nContent.Assign( pTxtNode,
+                                              fnPosTbl == fnMoveBackward
+                                                  ? pTxtNode->Len()
+                                                  : 0 );
     }
 
     return sal_True;
@@ -677,14 +678,15 @@ sal_Bool SwCrsrShell::MoveTable( SwWhichTable fnWhichTbl, SwPosTable fnPosTbl )
 
     bRet = pCrsr->MoveTable( fnWhichTbl, fnPosTbl );
 
-    if( bRet )
+    if ( bRet )
     {
         // #i45028# - set "top" position for repeated headline rows
         pCrsr->GetPtPos() = Point();
 
-        UpdateCrsr(SwCrsrShell::SCROLLWIN|SwCrsrShell::CHKRANGE|SwCrsrShell::READONLY);
+        UpdateCrsr( SwCrsrShell::SCROLLWIN | SwCrsrShell::CHKRANGE |
+                    SwCrsrShell::READONLY );
 
-        if( bCheckPos &&
+        if ( bCheckPos &&
             pCrsr->GetPoint()->nNode.GetIndex() == nPtNd &&
             pCrsr->GetPoint()->nContent.GetIndex() == nPtCnt )
         {
