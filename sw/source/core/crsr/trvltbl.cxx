@@ -297,7 +297,6 @@ sal_Bool SwCrsrShell::SelTblBox()
     OSL_ENSURE( !pFrm->IsInTab() == !(pStartNode != NULL),
                 "Schroedinger's table: We're in a box, and also we aren't." );
 #endif
-
     if( pStartNode == NULL )
         return sal_False;
 
@@ -313,7 +312,6 @@ sal_Bool SwCrsrShell::SelTblBox()
 
     // select the complete box with our shiny new m_pTblCrsr
     // 1. delete mark, and move point to first content node in box
-
     m_pTblCrsr->DeleteMark();
     *(m_pTblCrsr->GetPoint()) = SwPosition( *pStartNode );
     m_pTblCrsr->Move( fnMoveForward, fnGoNode );
@@ -415,7 +413,6 @@ static bool lcl_FindNextCell( SwNodeIndex& rIdx, sal_Bool bInReadOnly )
             aTmp.Assign( *pCNd->EndOfSectionNode(), +1 );
         }
     }
-
     rIdx = *pCNd;
     return true;
 }
@@ -475,7 +472,6 @@ static bool lcl_FindPrevCell( SwNodeIndex& rIdx, sal_Bool bInReadOnly  )
             aTmp.Assign( *pCNd->StartOfSectionNode(), - 1 );
         }
     }
-
     rIdx = *pCNd;
     return true;
 }
@@ -703,7 +699,6 @@ bool SwCrsrShell::IsTblComplexForChart()
             sSel = GetBoxNms();
         bRet = pTNd->GetTable().IsTblComplexForChart( sSel );
     }
-
     EndAction();
 
     return bRet;

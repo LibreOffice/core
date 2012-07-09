@@ -18,7 +18,6 @@
  */
 
 #include <tools/resid.hxx>
-
 #include <swcrsr.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>

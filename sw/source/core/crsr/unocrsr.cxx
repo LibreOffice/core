@@ -30,7 +30,6 @@ SwUnoCrsr::SwUnoCrsr( const SwPosition &rPos, SwPaM* pRing )
     bRemainInSection( sal_True ),
     bSkipOverHiddenSections( sal_False ),
     bSkipOverProtectSections( sal_False )
-
 {}
 
 SwUnoCrsr::~SwUnoCrsr()
@@ -172,6 +171,7 @@ sal_Bool SwUnoCrsr::IsSelOvr( int eFlags )
                 sal_uInt16 nCnt = 0;
                 if( pCNd && !bMoveDown )
                     nCnt = pCNd->Len();
+
                 GetPoint()->nContent.Assign( pCNd, nCnt );
             }
             else

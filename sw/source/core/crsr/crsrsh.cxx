@@ -19,10 +19,10 @@
 
 #include <com/sun/star/util/SearchOptions.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
+
 #include <hintids.hxx>
 #include <svx/svdmodel.hxx>
 #include <editeng/frmdiritem.hxx>
-
 #include <SwSmartTagMgr.hxx>
 #include <doc.hxx>
 #include <rootfrm.hxx>
@@ -57,7 +57,6 @@
 #include <vcl/svapp.hxx>
 #include <numrule.hxx>
 #include <IGrammarContact.hxx>
-
 #include <globals.hrc>
 #include <comcore.hrc>
 
@@ -111,6 +110,7 @@ void CheckRange( SwCursor* pCurCrsr )
 // -----------
 // SwCrsrShell
 // -----------
+
 SwPaM * SwCrsrShell::CreateCrsr()
 {
     // don't create Crsr in a table Selection (sic!)
@@ -375,6 +375,7 @@ sal_Bool SwCrsrShell::LeftRight( sal_Bool bLeft, sal_uInt16 nCnt, sal_uInt16 nMo
     {
         UpdateCrsr();
     }
+
     return bRet;
 }
 
@@ -754,7 +755,6 @@ int SwCrsrShell::SetCrsr( const Point &rLPt, sal_Bool bOnlyText, bool bBlock )
             }
         }
     }
-
     return bRet;
 }
 
@@ -1046,7 +1046,6 @@ void SwCrsrShell::GetPageNum( sal_uInt16 &rnPhyNum, sal_uInt16 &rnVirtNum,
 sal_uInt16 SwCrsrShell::GetNextPrevPageNum( sal_Bool bNext )
 {
     SET_CURR_SHELL( this );
-
     // page number: first visible page or the one at the cursor
     const SwPageFrm *pPg = Imp()->GetFirstVisPage();
     if( pPg )
@@ -1126,7 +1125,6 @@ sal_Bool SwCrsrShell::GoPrevCrsr()
         UpdateCrsr();
         m_pCurCrsr->Show();
     }
-
     return sal_True;
 }
 
@@ -1271,10 +1269,10 @@ class SwNotifyAccAboutInvalidTextSelections
             mrCrsrSh.InvalidateAccessibleParaTextSelection();
         }
 };
+
 void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, sal_Bool bIdleEnd )
 {
     SET_CURR_SHELL( this );
-
     ClearUpCrsrs();
 
     // In a BasicAction the cursor must be updated, e.g. to create the
@@ -3082,14 +3080,11 @@ void SwCrsrShell::ClearUpCrsrs()
     while (pCrsr != pStartCrsr)
     {
         pTmpCrsr = (SwPaM *) pCrsr->GetNext();
-
         if ( ! lcl_CrsrOk(*pCrsr))
         {
             delete pCrsr;
-
             bChanged = true;
         }
-
         pCrsr = pTmpCrsr;
     }
 

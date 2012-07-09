@@ -19,9 +19,7 @@
 
 #include <com/sun/star/util/SearchOptions.hpp>
 #include <com/sun/star/util/SearchFlags.hpp>
-
 #include <comphelper/string.hxx>
-
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 
@@ -38,7 +36,6 @@
 #include <swundo.hxx>
 #include <UndoInsert.hxx>
 #include <breakit.hxx>
-
 #include <docsh.hxx>
 #include <PostItMgr.hxx>
 #include <viewsh.hxx>
@@ -81,7 +78,6 @@ lcl_CleanStr(const SwTxtNode& rNd, xub_StrLen const nStart, xub_StrLen& rEnd,
 
         bNewHint       = false;
         bNewSoftHyphen = false;
-
         xub_StrLen nStt = 0;
 
         // Check if next stop is a hint.
@@ -417,6 +413,7 @@ bool SwPaM::DoSearch( const SearchOptions& rSearchOpt, utl::TextSearch& rSTxt,
     // if the search string contains a soft hypen,
     // we don't strip them from the text:
     bool bRemoveSoftHyphens = true;
+
     if ( bRegSearch )
     {
         const OUString a00AD("\\x00AD");
@@ -500,6 +497,7 @@ bool SwPaM::DoSearch( const SearchOptions& rSearchOpt, utl::TextSearch& rSTxt,
                     n < aFltArr.size() && aFltArr[ n ] <= nStart;
                     ++n, ++nNew )
                     ;
+
                 nStart = nNew;
                 for( n = 0, nNew = nEnd;
                     n < aFltArr.size() && aFltArr[ n ] < nEnd;

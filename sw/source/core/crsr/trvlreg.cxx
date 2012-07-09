@@ -73,7 +73,6 @@ sal_Bool GotoPrevRegion( SwPaM& rCurCrsr, SwPosRegion fnPosRegion,
                 }
                 rCurCrsr.GetPoint()->nContent.Assign( pCNd, pCNd->Len() );
             }
-
             rCurCrsr.GetPoint()->nNode = aIdx;
             return sal_True;
         }
@@ -128,7 +127,6 @@ sal_Bool GotoNextRegion( SwPaM& rCurCrsr, SwPosRegion fnPosRegion,
                 }
                 rCurCrsr.GetPoint()->nContent.Assign( pCNd, pCNd->Len() );
             }
-
             rCurCrsr.GetPoint()->nNode = aIdx;
             return sal_True;
         }

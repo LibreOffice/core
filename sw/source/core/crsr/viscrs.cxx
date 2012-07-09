@@ -138,7 +138,6 @@ void SwVisCrsr::_SetPosAndShow()
                           CURSOR_DIRECTION_RTL :
                           CURSOR_DIRECTION_LTR );
                 }
-
                 if ( pFrm->IsRightToLeft() )
                 {
                     const OutputDevice *pOut = m_pCrsrShell->GetOut();
@@ -351,7 +350,6 @@ SwShellCrsr::SwShellCrsr( SwShellCrsr& rICrsr )
     : SwCursor(rICrsr), SwSelPaintRects(*rICrsr.GetShell()),
     aMkPt(rICrsr.GetMkPos()), aPtPt(rICrsr.GetPtPos()), pPt(SwPaM::GetPoint())
 {}
-
 SwShellCrsr::~SwShellCrsr() {}
 
 bool SwShellCrsr::IsReadOnlyAvailable() const
@@ -509,10 +507,12 @@ SwCursor* SwShellTableCrsr::Create( SwPaM* pRing ) const
 {
     return SwShellCrsr::Create( pRing );
 }
+
 short SwShellTableCrsr::MaxReplaceArived()
 {
     return SwShellCrsr::MaxReplaceArived();
 }
+
 void SwShellTableCrsr::SaveTblBoxCntnt( const SwPosition* pPos )
 {
     SwShellCrsr::SaveTblBoxCntnt( pPos );

@@ -31,6 +31,7 @@ class SwBlockCursor : public IBlockCursor
     SwShellCrsr aCursor;
     Point *pStartPt;
     Point *pEndPt;
+
 public:
     SwBlockCursor( const SwCrsrShell& rCrsrSh, const SwPosition &rPos ) :
         aCursor( rCrsrSh, rPos ), pStartPt(0), pEndPt(0) {}
