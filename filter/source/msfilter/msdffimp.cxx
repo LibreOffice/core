@@ -4393,6 +4393,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                         // before clearing the GeometryItem we have to store the current Coordinates
                         const uno::Any* pAny = ((SdrCustomShapeGeometryItem&)aGeometryItem).GetPropertyValueByName( sPath, sCoordinates );
                         Rectangle aPolyBoundRect;
+                        Point aStartPt( 0,0 );
                         if ( pAny && ( *pAny >>= seqCoordinates ) && ( seqCoordinates.getLength() >= 4 ) )
                         {
                             sal_Int32 nPtNum, nNumElemVert = seqCoordinates.getLength();
@@ -4408,6 +4409,11 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                                 aXP[ (sal_uInt16)nPtNum ] = aP;
                             }
                             aPolyBoundRect = Rectangle( aXP.GetBoundRect() );
+                            if ( nNumElemVert >= 3 )
+                            { // arc first command is always wr -- clockwise arc
+                                // the parameters are : (left,top),(right,bottom),start(x,y),end(x,y)
+                                aStartPt = aXP[2];
+                            }
                         }
                         else
                             aPolyBoundRect = Rectangle( -21600, 0, 21600, 43200 );  // defaulting
@@ -4432,6 +4438,18 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                             else
                             {
                                 fNumber = 270.0;
+                                //normal situation:if endAngle != 90,there will be a direct_value,but for damaged curve,the endAngle need to recalculate.
+                                Point cent = aPolyBoundRect.Center();
+                                if ( aStartPt.Y() == cent.Y() )
+                                    fNumber = ( aStartPt.X() >= cent.X() ) ? 0:180.0;
+                                else if ( aStartPt.X() == cent.X() )
+                                    fNumber = ( aStartPt.Y() >= cent.Y() ) ? 90.0: 270.0;
+                                else
+                                {
+                                    fNumber = atan2( double( aStartPt.X() - cent.X() ),double( aStartPt.Y() - cent.Y() ) )+ F_PI; // 0..2PI
+                                    fNumber /= F_PI180; // 0..360.0
+                                }
+                                nEndAngle = NormAngle360( - (sal_Int32)fNumber * 100 );
                                 seqAdjustmentValues[ 0 ].Value <<= fNumber;
                                 seqAdjustmentValues[ 0 ].State = com::sun::star::beans::PropertyState_DIRECT_VALUE;     // so this value will properly be stored
                             }
