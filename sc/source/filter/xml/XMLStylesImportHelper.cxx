@@ -355,7 +355,7 @@ void ScMyStylesImportHelper::AddDefaultRange(const ScRange& rRange)
         }
         else
         {
-            OSL_FAIL("to much columns");
+            OSL_FAIL("too much columns");
         }
     }
     else
