@@ -1763,10 +1763,10 @@ void PDFWriterImpl::PDFPage::appendWaveLine( sal_Int32 nWidth, sal_Int32 nY, sal
         m_nInheritedPageHeight( 842 ), // default A4
         m_eInheritedOrientation( PDFWriter::Portrait ),
         m_nCurrentPage( -1 ),
-        m_nResourceDict( -1 ),
         m_nSignatureObject( -1 ),
         m_nSignatureContentOffset( 0 ),
         m_nSignatureLastByteRangeNoOffset( 0 ),
+        m_nResourceDict( -1 ),
         m_nFontDictObject( -1 ),
         m_pCodec( NULL ),
         m_aDocDigest( rtl_digest_createMD5() ),
