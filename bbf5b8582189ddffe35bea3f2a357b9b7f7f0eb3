@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAL3///98\u003d",
+        "filename": "sw/source/core/crsr/crstrvl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 680,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2012-07-09T11:01:17Z",
+      "side": 1,
+      "message": "Thats no OOo/#iXXXX# bug, those did not exist back then ;)",
+      "revId": "bbf5b8582189ddffe35bea3f2a357b9b7f7f0eb3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAL3///94\u003d",
+        "filename": "sw/source/core/crsr/findattr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1128,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2012-07-09T11:01:17Z",
+      "side": 1,
+      "message": "not a OOo bug either",
+      "revId": "bbf5b8582189ddffe35bea3f2a357b9b7f7f0eb3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAL3///90\u003d",
+        "filename": "sw/source/core/crsr/findtxt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2012-07-09T11:01:17Z",
+      "side": 1,
+      "message": "likely no OOo bugs either (but old internal StarDivision ones)",
+      "revId": "bbf5b8582189ddffe35bea3f2a357b9b7f7f0eb3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAL3///9w\u003d",
+        "filename": "sw/source/core/crsr/swcrsr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2012-07-09T11:01:17Z",
+      "side": 1,
+      "message": "not an OOo bug-id",
+      "revId": "bbf5b8582189ddffe35bea3f2a357b9b7f7f0eb3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAL3///9s\u003d",
+        "filename": "sw/source/core/crsr/swcrsr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 450,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2012-07-09T11:01:17Z",
+      "side": 1,
+      "message": "// we permit these?",
+      "revId": "bbf5b8582189ddffe35bea3f2a357b9b7f7f0eb3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAL3///9o\u003d",
+        "filename": "sw/source/core/crsr/swcrsr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 679,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2012-07-09T11:01:17Z",
+      "side": 1,
+      "message": "not a OOo bug ref",
+      "revId": "bbf5b8582189ddffe35bea3f2a357b9b7f7f0eb3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAL3///9k\u003d",
+        "filename": "sw/source/core/crsr/trvlfnfl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2012-07-09T11:01:17Z",
+      "side": 1,
+      "message": "not a OOo bug",
+      "revId": "bbf5b8582189ddffe35bea3f2a357b9b7f7f0eb3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
