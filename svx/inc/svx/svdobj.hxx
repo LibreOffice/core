@@ -340,24 +340,6 @@ public:
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-// To make things more safe, allow users of the object to register at it. The users need to be derived
-// from SdrObjectUser to get a call. The users do not need to call RemoveObjectUser() at the object
-// when they get called from PageInDestruction().
-class SdrObject;
-
-class SdrObjectUser
-{
-public:
-    virtual void ObjectInDestruction(const SdrObject& rObject) = 0;
-
-protected:
-    ~SdrObjectUser() {}
-};
-
-// typedef for GetParentContacts()
-typedef ::std::vector< SdrObjectUser* > ObjectUserVector;
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //
 //   @@@@  @@@@@  @@@@@@ @@@@@  @@@@  @@@@@@
