@@ -42,8 +42,6 @@ ScAddInAsyncs theAddInAsyncTbl;
 static ScAddInAsync aSeekObj;
 
 
-SV_IMPL_OP_PTRARR_SORT( ScAddInAsyncs, ScAddInAsyncPtr );
-
 extern "C" {
 void CALLTYPE ScAddInAsyncCallBack( double& nHandle, void* pData )
 {
@@ -71,7 +69,7 @@ ScAddInAsync::ScAddInAsync(sal_uLong nHandleP, FuncData* pFuncData, ScDocument* 
 {
     pDocs = new ScAddInDocs();
     pDocs->insert( pDoc );
-    theAddInAsyncTbl.Insert( this );
+    theAddInAsyncTbl.insert( this );
 }
 
 
@@ -93,11 +91,11 @@ ScAddInAsync::~ScAddInAsync()
 
 ScAddInAsync* ScAddInAsync::Get( sal_uLong nHandleP )
 {
-    sal_uInt16 nPos;
     ScAddInAsync* pRet = 0;
     aSeekObj.nHandle = nHandleP;
-    if ( theAddInAsyncTbl.Seek_Entry( &aSeekObj, &nPos ) )
-        pRet = theAddInAsyncTbl[ nPos ];
+    ScAddInAsyncs::iterator it = theAddInAsyncTbl.find( &aSeekObj );
+    if ( it != theAddInAsyncTbl.end() )
+        pRet = *it;
     aSeekObj.nHandle = 0;
     return pRet;
 }
@@ -113,7 +111,7 @@ void ScAddInAsync::CallBack( sal_uLong nHandleP, void* pData )
     if ( !p->HasListeners() )
     {
         // nicht im dTor wg. theAddInAsyncTbl.DeleteAndDestroy in ScGlobal::Clear
-        theAddInAsyncTbl.Remove( p );
+        theAddInAsyncTbl.erase( p );
         delete p;
         return ;
     }
@@ -147,25 +145,20 @@ void ScAddInAsync::CallBack( sal_uLong nHandleP, void* pData )
 
 void ScAddInAsync::RemoveDocument( ScDocument* pDocumentP )
 {
-    sal_uInt16 nPos = theAddInAsyncTbl.Count();
-    if ( nPos )
+    if ( !theAddInAsyncTbl.empty() )
     {
-        const ScAddInAsync** ppAsync =
-            (const ScAddInAsync**) theAddInAsyncTbl.GetData() + nPos - 1;
-        for ( ; nPos-- >0; ppAsync-- )
+        for( ScAddInAsyncs::reverse_iterator iter1 = theAddInAsyncTbl.rbegin(); iter1 != theAddInAsyncTbl.rend(); ++iter1 )
         {   // rueckwaerts wg. Pointer-Aufrueckerei im Array
-            ScAddInDocs* p = ((ScAddInAsync*)*ppAsync)->pDocs;
+            ScAddInAsync* pAsync = *iter1;
+            ScAddInDocs* p = pAsync->pDocs;
             ScAddInDocs::iterator iter2 = p->find( pDocumentP );
             if( iter2 != p->end() )
             {
                 p->erase( iter2 );
                 if ( p->empty() )
                 {   // dieses AddIn wird nicht mehr benutzt
-                    ScAddInAsync* pAsync = (ScAddInAsync*)*ppAsync;
-                    theAddInAsyncTbl.Remove( nPos );
+                    theAddInAsyncTbl.erase( --(iter1.base()) );
                     delete pAsync;
-                    ppAsync = (const ScAddInAsync**) theAddInAsyncTbl.GetData()
-                        + nPos;
                 }
             }
         }

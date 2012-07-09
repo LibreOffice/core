@@ -30,7 +30,6 @@
 #define SC_ADIASYNC_HXX
 
 #include <svl/broadcast.hxx>
-#include <svl/svarray.hxx>
 #include <set>
 
 #include "callform.hxx"
@@ -39,11 +38,6 @@ extern "C" {
 void CALLTYPE ScAddInAsyncCallBack( double& nHandle, void* pData );
 }
 
-
-class ScAddInAsync;
-typedef ScAddInAsync* ScAddInAsyncPtr;
-SV_DECL_PTRARR_SORT( ScAddInAsyncs, ScAddInAsyncPtr, 4 )
-extern ScAddInAsyncs theAddInAsyncTbl;  // in adiasync.cxx
 
 class ScDocument;
 class ScAddInDocs : public std::set<ScDocument*> {};
@@ -83,9 +77,17 @@ public:
     void            AddDocument( ScDocument* pDoc ) { pDocs->insert( pDoc ); }
 
     // Vergleichsoperatoren fuer PtrArrSort
-    sal_Bool operator < ( const ScAddInAsync& r ) { return nHandle <  r.nHandle; }
-    sal_Bool operator ==( const ScAddInAsync& r ) { return nHandle == r.nHandle; }
+    bool operator< ( const ScAddInAsync& r ) const { return nHandle <  r.nHandle; }
+    bool operator==( const ScAddInAsync& r ) const { return nHandle == r.nHandle; }
 };
+
+struct CompareScAddInAsync
+{
+  bool operator()( ScAddInAsync* const& lhs, ScAddInAsync* const& rhs ) const { return (*lhs)<(*rhs); }
+};
+class ScAddInAsyncs : public std::set<ScAddInAsync*, CompareScAddInAsync> {};
+
+extern ScAddInAsyncs theAddInAsyncTbl;  // in adiasync.cxx
 
 
 

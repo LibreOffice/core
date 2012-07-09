@@ -643,7 +643,11 @@ void ScGlobal::InitTextHeight(SfxItemPool* pPool)
 void ScGlobal::Clear()
 {
     // asyncs _vor_ ExitExternalFunc zerstoeren!
-    theAddInAsyncTbl.DeleteAndDestroy( 0, theAddInAsyncTbl.Count() );
+    for( ScAddInAsyncs::iterator it = theAddInAsyncTbl.begin(); it != theAddInAsyncTbl.end(); ++it )
+    {
+        delete *it;
+    }
+    theAddInAsyncTbl.clear();
     ExitExternalFunc();
     DELETEZ(pAutoFormat);
     DELETEZ(pSearchItem);
