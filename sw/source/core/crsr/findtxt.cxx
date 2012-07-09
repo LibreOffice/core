@@ -546,8 +546,6 @@ bool SwPaM::DoSearch( const SearchOptions& rSearchOpt, utl::TextSearch& rSTxt,
             // if backward search, switch point and mark
             if( !bSrchForward )
                 Exchange();
-            //bFound = sal_True;
-            //break;
             return true;
         }
     }

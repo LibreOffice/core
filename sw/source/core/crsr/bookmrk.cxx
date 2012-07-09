@@ -64,7 +64,7 @@ namespace
                        " %d is beyond %d", rPos.nContent.GetIndex(), pTxtNode->Len() );
             rPos.nContent.Assign(pTxtNode, pTxtNode->Len());
         }
-    };
+    }
 
     static void lcl_AssureFieldMarksSet( Fieldmark* const pField,
                                          SwDoc* const io_pDoc,
@@ -263,7 +263,6 @@ namespace sw { namespace mark
         io_pDoc->SetModified();
     }
 
-    // ::sfx2::Metadatable
     ::sfx2::IXmlIdRegistry& Bookmark::GetRegistry()
     {
         SwDoc *const pDoc( GetMarkPos().GetDoc() );

@@ -266,8 +266,6 @@ void SwAttrCheckArr::SetNewSet( const SwTxtNode& rTxtNd, const SwPaM& rPam )
         return ;
 
     const SfxItemSet& rSet = rTxtNd.GetSwAttrSet();
-//  if( !rSet.Count() )
-//      return;
 
     SfxItemIter aIter( aCmpSet );
     const SfxPoolItem* pItem = aIter.GetCurItem();
@@ -295,10 +293,6 @@ void SwAttrCheckArr::SetNewSet( const SwTxtNode& rTxtNd, const SwPaM& rPam )
             if( RES_TXTATR_END <= (nWhich = pItem->Which() ))
                 break; // end of text attributes
 
-//JP 27.02.95: wenn nach defaults gesucht wird, dann muss man bis zum Pool
-//              runter
-//          if( SFX_ITEM_SET == rSet.GetItemState( nWhich, !bNoColls, &pFndItem )
-//                && *pFndItem == *pItem )
             if( CmpAttr( rSet.Get( nWhich, !bNoColls ), *pItem ) )
             {
                 pFndArr[ nWhich - nArrStart ] =
@@ -1117,8 +1111,6 @@ int SwFindParaAttr::Find( SwPaM* pCrsr, SwMoveFn fnMove, const SwPaM* pRegion,
             {
                 // first attributes
                 if( !aSrchPam.Find( *pSet, bValue, fnMove, &aRegion, bInReadOnly, bMoveFirst ) )
-//JP 17.11.95: was ist mit Attributen in leeren Absaetzen !!
-//                  || *pCrsr->GetMark() == *pCrsr->GetPoint() )    // kein Bereich ??
                     return FIND_NOT_FOUND;
                 bMoveFirst = sal_True;
 

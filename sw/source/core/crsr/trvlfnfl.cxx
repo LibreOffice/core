@@ -214,7 +214,6 @@ sal_Bool SwCursor::GotoNextFtnAnchor()
                         pTxtFtn = rFtnArr[ ++nPos ];
                         break; // found
                     }
-//                  pTxtFtn = 0;
                 }
             }
         }
