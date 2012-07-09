@@ -318,7 +318,31 @@ void ScFilterDlg::Init( const SfxItemSet& rArgSet )
                 maCondLbArr[i]->Disable();
             }
             else
-                aValStr = rItem.maString;
+            {
+                if (rItem.maString.isEmpty())
+                {
+                    if (rItem.meType == ScQueryEntry::ByValue)
+                        pDoc->GetFormatTable()->GetInputLineString( rItem.mfVal, 0, aValStr);
+                    else if (rItem.meType == ScQueryEntry::ByDate)
+                    {
+                        SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
+                        pFormatter->GetInputLineString( rItem.mfVal,
+                                pFormatter->GetStandardFormat( NUMBERFORMAT_DATE), aValStr);
+                    }
+                    else
+                    {
+                        SAL_WARN( "sc", "ScFilterDlg::Init: empty query string, really?");
+                        aValStr = rItem.maString;
+                    }
+                }
+                else
+                {
+                    // XXX NOTE: if not ByString we just assume this has been
+                    // set to a proper string corresponding to the numeric
+                    // value earlier!
+                    aValStr = rItem.maString;
+                }
+            }
         }
         else if ( i == 0 )
         {
