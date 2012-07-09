@@ -9151,14 +9151,12 @@ AC_SUBST(POPPLER_LIBS)
 
 
 if test "$ENABLE_PRESENTER_SCREEN" = "YES" -o "$ENABLE_MINIMIZER" = "YES" -o "$ENABLE_PDFIMPORT" = "YES"; then
-   AC_MSG_CHECKING([for sdext module])
    BUILD_TYPE="$BUILD_TYPE SDEXT"
 fi
 
 AC_MSG_CHECKING([whether to build the Wiki Publisher extension])
 if test "x$enable_ext_wiki_publisher" = "xyes" -a "x$enable_extension_integration" != "xno" -a "$with_java" != "no"; then
   AC_MSG_RESULT([yes])
-  AC_MSG_CHECKING([for swext module])
   ENABLE_MEDIAWIKI=YES
   BUILD_TYPE="$BUILD_TYPE SWEXT"
   if test  "x$with_java" = "xno"; then
