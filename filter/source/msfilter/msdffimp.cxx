@@ -2664,7 +2664,7 @@ void DffPropertyReader::ApplyAttributes( SvStream& rIn, SfxItemSet& rSet, DffObj
     }
     ApplyLineAttributes( rSet, rObjData.eShapeType ); // #i28269#
     ApplyFillAttributes( rIn, rSet, rObjData );
-    if ( rObjData.eShapeType != mso_sptNil )
+    if ( rObjData.eShapeType != mso_sptNil || IsProperty( DFF_Prop_pVertices ) )
     {
         ApplyCustomShapeGeometryAttributes( rIn, rSet, rObjData );
         ApplyCustomShapeTextAttributes( rSet );
