@@ -2703,7 +2703,7 @@ SwPageFrm * InsertNewPage( SwPageDesc &rDesc, SwFrm *pUpper,
     SwFrmFmt *pFmt = 0;
     // rDesc can't know if the first page will be 'left' or 'right', so if
     // first is shared, let's ignore first here.
-    if (bFirst && !rDesc.IsHeaderSharedFirst())
+    if (bFirst && !rDesc.IsFirstShared())
         pFmt = rDesc.GetFirstFmt();
     else
         pFmt = bOdd ? rDesc.GetRightFmt() : rDesc.GetLeftFmt();

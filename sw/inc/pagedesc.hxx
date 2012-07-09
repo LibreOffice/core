@@ -134,10 +134,8 @@ namespace nsUseOnPage
     const UseOnPage PD_FOOTERSHARE    = 0x0080;
     const UseOnPage PD_NOHEADERSHARE  = 0xFFBF; // For internal use only.
     const UseOnPage PD_NOFOOTERSHARE  = 0xFF7F; // For internal use only.
-    const UseOnPage PD_HEADERSHAREFIRST = 0x0100;
-    const UseOnPage PD_NOHEADERSHAREFIRST = 0xFEFF;
-    const UseOnPage PD_FOOTERSHAREFIRST = 0x0200;
-    const UseOnPage PD_NOFOOTERSHAREFIRST = 0xFDFF;
+    const UseOnPage PD_FIRSTSHARE = 0x0100;
+    const UseOnPage PD_NOFIRSTSHARE = 0xFEFF;
 }
 
 class SW_DLLPUBLIC SwPageDesc : public SwModify
@@ -189,10 +187,8 @@ public:
     inline sal_Bool IsFooterShared() const;
     inline void ChgHeaderShare( sal_Bool bNew );
     inline void ChgFooterShare( sal_Bool bNew );
-    sal_Bool IsHeaderSharedFirst() const;
-    void ChgHeaderShareFirst( sal_Bool bNew );
-    sal_Bool IsFooterSharedFirst() const;
-    void ChgFooterShareFirst( sal_Bool bNew );
+    sal_Bool IsFirstShared() const;
+    void ChgFirstShare( sal_Bool bNew );
 
     inline void      SetUseOn( UseOnPage eNew );
     inline UseOnPage GetUseOn() const;

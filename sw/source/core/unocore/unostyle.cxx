@@ -145,8 +145,7 @@ sal_uInt16 lcl_ConvertFNToRES(sal_uInt16 nFNId)
         case FN_UNO_FOOTER_SHARE_CONTENT:
         case FN_UNO_HEADER_SHARE_CONTENT:   nRes = SID_ATTR_PAGE_SHARED;
         break;
-        case FN_UNO_FOOTER_SHARE_FIRST_CONTENT:
-        case FN_UNO_HEADER_SHARE_FIRST_CONTENT:   nRes = SID_ATTR_PAGE_SHARED_FIRST;
+        case FN_UNO_FIRST_SHARE_CONTENT:   nRes = SID_ATTR_PAGE_SHARED_FIRST;
         break;
         case FN_UNO_FOOTER_HEIGHT:
         case FN_UNO_HEADER_HEIGHT:          nRes = SID_ATTR_PAGE_SIZE;
@@ -3001,9 +3000,10 @@ void SAL_CALL SwXPageStyle::SetPropertyValues_Impl(
                 case FN_UNO_HEADER_BODY_DISTANCE:
                 case FN_UNO_HEADER_IS_DYNAMIC_DISTANCE:
                 case FN_UNO_HEADER_SHARE_CONTENT:
-                case FN_UNO_HEADER_SHARE_FIRST_CONTENT:
                 case FN_UNO_HEADER_HEIGHT:
                 case FN_UNO_HEADER_EAT_SPACING:
+
+                case FN_UNO_FIRST_SHARE_CONTENT:
 
                 case FN_UNO_FOOTER_ON:
                 case FN_UNO_FOOTER_BACKGROUND:
@@ -3013,7 +3013,6 @@ void SAL_CALL SwXPageStyle::SetPropertyValues_Impl(
                 case FN_UNO_FOOTER_BODY_DISTANCE:
                 case FN_UNO_FOOTER_IS_DYNAMIC_DISTANCE:
                 case FN_UNO_FOOTER_SHARE_CONTENT:
-                case FN_UNO_FOOTER_SHARE_FIRST_CONTENT:
                 case FN_UNO_FOOTER_HEIGHT:
                 case FN_UNO_FOOTER_EAT_SPACING:
                 {
@@ -3054,9 +3053,7 @@ void SAL_CALL SwXPageStyle::SetPropertyValues_Impl(
                         // kein break;
                         case FN_UNO_HEADER_SHARE_CONTENT:       nRes = SID_ATTR_PAGE_SHARED;
                         break;
-                        case FN_UNO_FOOTER_SHARE_FIRST_CONTENT: bFooter = sal_True;
-                        // no break;
-                        case FN_UNO_HEADER_SHARE_FIRST_CONTENT: nRes = SID_ATTR_PAGE_SHARED_FIRST;
+                        case FN_UNO_FIRST_SHARE_CONTENT: nRes = SID_ATTR_PAGE_SHARED_FIRST;
                         break;
                         case FN_UNO_FOOTER_HEIGHT:              bFooter = sal_True;
                         // kein break;
@@ -3267,9 +3264,10 @@ uno::Sequence< uno::Any > SAL_CALL SwXPageStyle::GetPropertyValues_Impl(
                 case FN_UNO_HEADER_BODY_DISTANCE:
                 case FN_UNO_HEADER_IS_DYNAMIC_DISTANCE:
                 case FN_UNO_HEADER_SHARE_CONTENT:
-                case FN_UNO_HEADER_SHARE_FIRST_CONTENT:
                 case FN_UNO_HEADER_HEIGHT:
                 case FN_UNO_HEADER_EAT_SPACING:
+
+                case FN_UNO_FIRST_SHARE_CONTENT:
 
                 case FN_UNO_FOOTER_ON:
                 case FN_UNO_FOOTER_BACKGROUND:
@@ -3279,7 +3277,6 @@ uno::Sequence< uno::Any > SAL_CALL SwXPageStyle::GetPropertyValues_Impl(
                 case FN_UNO_FOOTER_BODY_DISTANCE:
                 case FN_UNO_FOOTER_IS_DYNAMIC_DISTANCE:
                 case FN_UNO_FOOTER_SHARE_CONTENT:
-                case FN_UNO_FOOTER_SHARE_FIRST_CONTENT:
                 case FN_UNO_FOOTER_HEIGHT:
                 case FN_UNO_FOOTER_EAT_SPACING:
                 {
@@ -3332,9 +3329,7 @@ uno::Sequence< uno::Any > SAL_CALL SwXPageStyle::GetPropertyValues_Impl(
                             // kein break;
                             case FN_UNO_HEADER_SHARE_CONTENT:   nRes = SID_ATTR_PAGE_SHARED;
                             break;
-                            case FN_UNO_FOOTER_SHARE_FIRST_CONTENT: bFooter = sal_True;
-                            // no break;
-                            case FN_UNO_HEADER_SHARE_FIRST_CONTENT: nRes = SID_ATTR_PAGE_SHARED_FIRST;
+                            case FN_UNO_FIRST_SHARE_CONTENT: nRes = SID_ATTR_PAGE_SHARED_FIRST;
                             break;
                             case FN_UNO_FOOTER_HEIGHT:          bFooter = sal_True;
                             // kein break;
@@ -3387,8 +3382,7 @@ MakeObject:
                     const SwFrmFmt* pFrmFmt = 0;
                     sal_Bool bShare = (bHeader && rDesc.IsHeaderShared())||
                                     (!bHeader && rDesc.IsFooterShared());
-                    bool bShareFirst = (bHeader && rDesc.IsHeaderSharedFirst())||
-                                    (!bHeader && rDesc.IsFooterSharedFirst());
+                    bool bShareFirst = rDesc.IsFirstShared();
                     // TextLeft returns the left content if there is one,
                     // Text and TextRight return the master content.
                     // TextRight does the same as Text and is for

@@ -63,7 +63,7 @@ SwPageDesc::SwPageDesc( const String& rName, SwFrmFmt *pFmt, SwDoc *pDc ) :
     pFollow( this ),
     nRegHeight( 0 ),
     nRegAscent( 0 ),
-    eUse( (UseOnPage)(nsUseOnPage::PD_ALL | nsUseOnPage::PD_HEADERSHARE | nsUseOnPage::PD_FOOTERSHARE | nsUseOnPage::PD_HEADERSHAREFIRST | nsUseOnPage::PD_FOOTERSHAREFIRST ) ),
+    eUse( (UseOnPage)(nsUseOnPage::PD_ALL | nsUseOnPage::PD_HEADERSHARE | nsUseOnPage::PD_FOOTERSHARE | nsUseOnPage::PD_FIRSTSHARE ) ),
     bLandscape( sal_False ),
     aFtnInfo()
 {
@@ -352,30 +352,17 @@ sal_Bool SwPageDesc::IsFollowNextPageOfNode( const SwNode& rNd ) const
     return bRet;
 }
 
-sal_Bool SwPageDesc::IsHeaderSharedFirst() const
+sal_Bool SwPageDesc::IsFirstShared() const
 {
-    return eUse & nsUseOnPage::PD_HEADERSHAREFIRST ? sal_True : sal_False;
+    return eUse & nsUseOnPage::PD_FIRSTSHARE ? sal_True : sal_False;
 }
 
-void SwPageDesc::ChgHeaderShareFirst( sal_Bool bNew )
+void SwPageDesc::ChgFirstShare( sal_Bool bNew )
 {
     if ( bNew )
-        eUse = (UseOnPage) (eUse | nsUseOnPage::PD_HEADERSHAREFIRST);
+        eUse = (UseOnPage) (eUse | nsUseOnPage::PD_FIRSTSHARE);
     else
-        eUse = (UseOnPage) (eUse & nsUseOnPage::PD_NOHEADERSHAREFIRST);
-}
-
-sal_Bool SwPageDesc::IsFooterSharedFirst() const
-{
-    return eUse & nsUseOnPage::PD_FOOTERSHAREFIRST ? sal_True : sal_False;
-}
-
-void SwPageDesc::ChgFooterShareFirst( sal_Bool bNew )
-{
-    if ( bNew )
-        eUse = (UseOnPage) (eUse | nsUseOnPage::PD_FOOTERSHAREFIRST);
-    else
-        eUse = (UseOnPage) (eUse & nsUseOnPage::PD_NOFOOTERSHAREFIRST);
+        eUse = (UseOnPage) (eUse & nsUseOnPage::PD_NOFIRSTSHARE);
 }
 
 /*************************************************************************

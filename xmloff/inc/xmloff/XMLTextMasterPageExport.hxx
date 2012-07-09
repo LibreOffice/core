@@ -35,14 +35,14 @@ class XMLOFF_DLLPUBLIC XMLTextMasterPageExport : public XMLPageExport
     const ::rtl::OUString sHeaderText;
     const ::rtl::OUString sHeaderOn;
     const ::rtl::OUString sHeaderShareContent;
-    const ::rtl::OUString sHeaderShareContentFirst;
     const ::rtl::OUString sHeaderTextFirst;
     const ::rtl::OUString sHeaderTextLeft;
+
+    const ::rtl::OUString sFirstShareContent;
 
     const ::rtl::OUString sFooterText;
     const ::rtl::OUString sFooterOn;
     const ::rtl::OUString sFooterShareContent;
-    const ::rtl::OUString sFooterShareContentFirst;
     const ::rtl::OUString sFooterTextFirst;
     const ::rtl::OUString sFooterTextLeft;
 

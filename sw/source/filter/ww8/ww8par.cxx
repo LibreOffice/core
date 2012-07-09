@@ -3730,7 +3730,7 @@ void wwSectionManager::SetUseOn(wwSection &rSection)
     UseOnPage eUse = eUseBase;
     if (!bEven)
         eUse = (UseOnPage)(eUse | nsUseOnPage::PD_HEADERSHARE | nsUseOnPage::PD_FOOTERSHARE);
-    eUse = (UseOnPage)(eUse | nsUseOnPage::PD_HEADERSHAREFIRST | nsUseOnPage::PD_FOOTERSHAREFIRST);
+    eUse = (UseOnPage)(eUse | nsUseOnPage::PD_FIRSTSHARE);
 
     OSL_ENSURE(rSection.mpPage, "Makes no sense to call me with no pages to set");
     if (rSection.mpPage)
@@ -3738,7 +3738,7 @@ void wwSectionManager::SetUseOn(wwSection &rSection)
     if (rSection.mpTitlePage)
     {
         rSection.mpTitlePage->WriteUseOn(
-            (UseOnPage) (eUseBase | nsUseOnPage::PD_HEADERSHARE | nsUseOnPage::PD_FOOTERSHARE | nsUseOnPage::PD_HEADERSHAREFIRST | nsUseOnPage::PD_FOOTERSHAREFIRST));
+            (UseOnPage) (eUseBase | nsUseOnPage::PD_HEADERSHARE | nsUseOnPage::PD_FOOTERSHARE | nsUseOnPage::PD_FIRSTSHARE));
     }
 }
 

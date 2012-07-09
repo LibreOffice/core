@@ -2100,7 +2100,7 @@ void SwDoc::CopyPageDesc( const SwPageDesc& rSrcDesc, SwPageDesc& rDstDesc,
         CopyHeader( rSrcDesc.GetLeft(), rDstDesc.GetLeft() );
     else
         rDstDesc.GetLeft().SetFmtAttr( rDstDesc.GetMaster().GetHeader() );
-    if( !rDstDesc.IsHeaderSharedFirst() )
+    if( !rDstDesc.IsFirstShared() )
         CopyHeader( rSrcDesc.GetFirst(), rDstDesc.GetFirst() );
     else
         rDstDesc.GetFirst().SetFmtAttr( rDstDesc.GetMaster().GetHeader() );
@@ -2109,7 +2109,7 @@ void SwDoc::CopyPageDesc( const SwPageDesc& rSrcDesc, SwPageDesc& rDstDesc,
         CopyFooter( rSrcDesc.GetLeft(), rDstDesc.GetLeft() );
     else
         rDstDesc.GetLeft().SetFmtAttr( rDstDesc.GetMaster().GetFooter() );
-    if( !rDstDesc.IsFooterSharedFirst() )
+    if( !rDstDesc.IsFirstShared() )
         CopyFooter( rSrcDesc.GetFirst(), rDstDesc.GetFirst() );
     else
         rDstDesc.GetFirst().SetFmtAttr( rDstDesc.GetMaster().GetFooter() );

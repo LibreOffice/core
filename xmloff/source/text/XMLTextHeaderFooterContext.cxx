@@ -58,7 +58,7 @@ XMLTextHeaderFooterContext::XMLTextHeaderFooterContext( SvXMLImport& rImport, sa
     sOn( bFooter ? OUString(RTL_CONSTASCII_USTRINGPARAM( "FooterIsOn" )) : OUString(RTL_CONSTASCII_USTRINGPARAM( "HeaderIsOn" )) ),
     sShareContent( bFooter ? OUString(RTL_CONSTASCII_USTRINGPARAM( "FooterIsShared" ))
                                                       : OUString(RTL_CONSTASCII_USTRINGPARAM( "HeaderIsShared" )) ),
-    sShareContentFirst( bFooter ? OUString("FooterIsSharedFirst" ) : OUString( "HeaderIsSharedFirst" ) ),
+    sShareContentFirst( "FirstIsShared" ),
     sText( bFooter ? OUString(RTL_CONSTASCII_USTRINGPARAM( "FooterText" )) : OUString(RTL_CONSTASCII_USTRINGPARAM( "HeaderText" )) ),
     sTextFirst(bFooter ? OUString("FooterTextFirst") : OUString("HeaderTextFirst")),
     sTextLeft( bFooter ?  OUString(RTL_CONSTASCII_USTRINGPARAM( "FooterTextLeft" ))
@@ -160,14 +160,6 @@ SvXMLImportContext *XMLTextHeaderFooterContext::CreateChildContext(
                     bShared = sal_True;
                     aAny.setValue( &bShared, ::getBooleanCppuType() );
                     xPropSet->setPropertyValue( sShareContent, aAny );
-                }
-                aAny = xPropSet->getPropertyValue( sShareContentFirst );
-                sal_Bool bSharedFirst = *(sal_Bool *)aAny.getValue();
-                if( !bSharedFirst )
-                {
-                    bSharedFirst = sal_True;
-                    aAny.setValue( &bSharedFirst, ::getBooleanCppuType() );
-                    xPropSet->setPropertyValue( sShareContentFirst, aAny );
                 }
 
                 aAny = xPropSet->getPropertyValue( sText );

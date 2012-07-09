@@ -661,10 +661,9 @@ included in c-context files, so c++ style stuff will cause problems.
 #define FN_MATH_BASELINE_ALIGNMENT          (FN_EXTRA2 + 115)
 
 #define FN_EMBEDDED_OBJECT                  (FN_EXTRA2 + 116)
-#define FN_UNO_HEADER_SHARE_FIRST_CONTENT   (FN_EXTRA2 + 117)
-#define FN_UNO_FOOTER_SHARE_FIRST_CONTENT   (FN_EXTRA2 + 118)
-#define FN_UNO_HEADER_FIRST                 (FN_EXTRA2 + 119)
-#define FN_UNO_FOOTER_FIRST                 (FN_EXTRA2 + 120)
+#define FN_UNO_FIRST_SHARE_CONTENT          (FN_EXTRA2 + 117)
+#define FN_UNO_HEADER_FIRST                 (FN_EXTRA2 + 118)
+#define FN_UNO_FOOTER_FIRST                 (FN_EXTRA2 + 119)
 
 /*------------------------------------------------ --------------------
     Area: Help
