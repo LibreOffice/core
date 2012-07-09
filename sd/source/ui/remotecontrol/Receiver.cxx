@@ -25,7 +25,13 @@
  *
  ************************************************************************/
 #include "Receiver.hxx"
-
+#include <cstring>
+#include <com/sun/star/frame/XFramesSupplier.hpp>
+#include <comphelper/processfactory.hxx>
+using namespace sd;
+using namespace ::com::sun::star::presentation;
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::frame;
 Receiver::Receiver()
 {
     g_type_init ();
@@ -35,34 +41,48 @@ Receiver::~Receiver()
 {
 }
 
-void Receiver::parseCommand(char* aCommand, XSlideShowController *aController)
+void Receiver::parseCommand( char* aCommand, sal_Int32 size, XSlideShowController *aController )
 {
+    uno::Reference< lang::XMultiServiceFactory > xServiceManager(
+            ::comphelper::getProcessServiceFactory(), uno::UNO_QUERY_THROW );
+
+    uno::Reference< XFramesSupplier > xFramesSupplier( xServiceManager->createInstance(
+        "com.sun.star.frame.Desktop" ) , UNO_QUERY_THROW );
+    uno::Reference< frame::XFrame > xFrame = xFramesSupplier->getActiveFrame();
+
+    Reference<XPresentationSupplier> xPS ( xFrame->getController()->getModel(), UNO_QUERY_THROW);
+
+    Reference<XPresentation2> xPresentation(xPS->getPresentation(), UNO_QUERY_THROW);
+
+    Reference<XSlideShowController> xSlideShowController(xPresentation->getController(), UNO_QUERY_THROW);
+
     JsonParser *parser;
     JsonNode *root;
     GError *error;
 
     parser = json_parser_new ();
     error = NULL;
-    json_parser_load_from_data( parser, aCommand, aCommand.size, error );
+    json_parser_load_from_data( parser, aCommand, size, &error );
 
     if (error) {
     }
 
     root = json_parser_get_root( parser );
     JsonObject *aObject = json_node_get_object( root );
-    char* aInstruction = json_node_get_string( json_object_get_member( "command" ) );
+    const char* aInstruction = json_node_get_string( json_object_get_member( aObject, "command" ) );
 
-    switch ( aInstruction )
+    if ( strcmp( aInstruction, "transition_next" ) )
     {
-    case "transition_next":
-        aController->gotoNextEffect();
+        xSlideShowController->gotoNextEffect();
       // Next slide;
-        break;
-    case "transition_previous":
-        aController->gotoPreviousEffect();
-        break;
-    case "goto_slide":
-        //
-        break;
-    };
+    }
+    else if ( strcmp( aInstruction, "transition_previous" ) )
+    {
+        xSlideShowController->gotoPreviousEffect();
+    }
+    else if ( strcmp( aInstruction, "goto_slide" ) )
+    {
+
+    }
+
 }

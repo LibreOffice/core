@@ -10,9 +10,12 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
-
+#include <osl/socket.hxx>
 //#include <com/sun/star/presentation/AnimationEffect.hpp>
 
+#include <salhelper/thread.hxx>
+
+#include "Receiver.hxx"
 
 /**
 * The port for use for the main communication between LibO and remote control app.
@@ -20,28 +23,22 @@
 #define PORT 1599
 
 
-class XSlideShowController;
-
-class Receiver;
-
 namespace sd
 {
 
-    class Server
+    class Server : public salhelper::Thread
         {
         public:
             Server();
             ~Server();
-            void setPresentationController( XSlideShowController aController) { mController = aController; }
         private:
-            int mSocket;
-//     static vector<Server> our_mServerList;
-
-            void listen();
+            osl::AcceptorSocket mSocket;
+            osl::StreamSocket mStreamSocket;
+            void listenThread();
             Receiver mReceiver;
-//             Transmitter mTransmitter;
+            void execute();
         };
-    }
+
 }
 
 #endif // _SD_IMPRESSREMOTE_SERVER_HXX
