@@ -33,30 +33,25 @@ Receiver::Receiver()
 
 Receiver::~Receiver()
 {
-    
-    
 }
 
 void Receiver::parseCommand(char* aCommand, XSlideShowController *aController)
 {
-    
-    
     JsonParser *parser;
     JsonNode *root;
     GError *error;
-  
+
     parser = json_parser_new ();
     error = NULL;
     json_parser_load_from_data( parser, aCommand, aCommand.size, error );
-    
+
     if (error) {
-    
     }
-  
+
     root = json_parser_get_root( parser );
     JsonObject *aObject = json_node_get_object( root );
     char* aInstruction = json_node_get_string( json_object_get_member( "command" ) );
-  
+
     switch ( aInstruction )
     {
     case "transition_next":
@@ -69,7 +64,5 @@ void Receiver::parseCommand(char* aCommand, XSlideShowController *aController)
     case "goto_slide":
         //
         break;
-    }; 
-    
-    
+    };
 }

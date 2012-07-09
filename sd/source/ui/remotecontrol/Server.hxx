@@ -7,7 +7,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-#include <sys/types.h> 
+#include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
 
@@ -33,13 +33,11 @@ namespace sd
             Server();
             ~Server();
             void setPresentationController( XSlideShowController aController) { mController = aController; }
-            
         private:
             int mSocket;
 //     static vector<Server> our_mServerList;
 
             void listen();
-            
             Receiver mReceiver;
 //             Transmitter mTransmitter;
         };

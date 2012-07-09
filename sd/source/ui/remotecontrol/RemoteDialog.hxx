@@ -12,10 +12,8 @@ namespace sd
         {
         public:
             RemoteDialog();
-            ~RemoteDialog();	
-            
+            ~RemoteDialog();
         private:
-	    
             //int mSocket;
         };
     }

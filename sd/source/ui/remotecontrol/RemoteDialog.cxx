@@ -3,16 +3,9 @@
 
 RemoteDialog::RemoteDialog()
 {
-  
-  
-  
-  
 }
 
 RemoteDialog::~RemoteDialog()
 {
-  
-  
-  
 }
 

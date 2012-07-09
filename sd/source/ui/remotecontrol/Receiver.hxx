@@ -18,16 +18,16 @@
 
 namespace sd
 {
-    
+
 class Receiver
 {
 public:
     Receiver();
     ~Receiver();
-    void parseCommand(char* aCommand, XSlideShowController *aController);    
-    
+    void parseCommand(char* aCommand, XSlideShowController *aController);
+
 private:
-    
+
 
 }
 
