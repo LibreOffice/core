@@ -1811,6 +1811,23 @@ sal_Bool SwFrm::WannaRightPage() const
     return bOdd;
 }
 
+bool SwFrm::OnFirstPage() const
+{
+    bool bRet = false;
+    const SwPageFrm *pPage = FindPageFrm();
+
+    if (pPage)
+    {
+        const SwPageFrm* pPrevFrm = dynamic_cast<const SwPageFrm*>(pPage->GetPrev());
+        if (pPrevFrm)
+        {
+            const SwPageDesc* pDesc = pPage->GetPageDesc();
+            bRet = pPrevFrm->GetPageDesc() != pDesc && !pDesc->IsFirstShared();
+        }
+    }
+    return bRet;
+}
+
 /*************************************************************************
 |*
 |*    SwFrm::GetVirtPageNum()

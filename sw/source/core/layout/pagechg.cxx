@@ -1105,8 +1105,7 @@ void SwFrm::CheckPageDescs( SwPageFrm *pStart, sal_Bool bNotifyFields )
         sal_Bool bCheckEmpty = pPage->IsEmptyPage();
         sal_Bool bActOdd = pPage->OnRightPage();
         sal_Bool bOdd = pPage->WannaRightPage();
-        SwPageFrm* pPrevFrm = dynamic_cast<SwPageFrm*>(pPage->GetPrev());
-        bool bFirst = pPrevFrm && pPrevFrm->GetPageDesc() != pPage->GetPageDesc() && !pDesc->IsFirstShared();
+        bool bFirst = pPage->OnFirstPage();
         SwFrmFmt *pFmtWish = 0;
         if (bFirst)
             pFmtWish = pDesc->GetFirstFmt();

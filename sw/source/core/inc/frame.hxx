@@ -671,6 +671,7 @@ public:
     sal_uInt16 GetVirtPageNum() const;  // page number with offset
     sal_Bool OnRightPage() const { return 0 != GetPhyPageNum() % 2; };
     sal_Bool WannaRightPage() const;
+    bool OnFirstPage() const;
 
     inline const  SwLayoutFrm *GetPrevLayoutLeaf() const;
     inline const  SwLayoutFrm *GetNextLayoutLeaf() const;
