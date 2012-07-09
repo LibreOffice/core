@@ -132,15 +132,14 @@ String& lcl_CleanStr( const SwTxtNode& rNd, xub_StrLen nStart,
                 case RES_TXTATR_META:
                 case RES_TXTATR_METAFIELD:
                     {
-                        // JP 06.05.98: mit Bug 50100 werden sie als Trenner erwuenscht und nicht
-                        //              mehr zum Wort dazu gehoerend.
-                        // MA 23.06.98: mit Bug 51215 sollen sie konsequenterweise auch am
-                        //              Satzanfang und -ende ignoriert werden wenn sie Leer sind.
-                        //              Dazu werden sie schlicht entfernt. Fuer den Anfang entfernen
-                        //              wir sie einfach.
-                        //              Fuer das Ende merken wir uns die Ersetzungen und entferenen
-                        //              hinterher alle am Stringende (koenten ja 'normale' 0x7f drinstehen
-                           sal_Bool bEmpty = RES_TXTATR_FIELD != pHt->Which() ||
+                        // Since #i50100# they are desired as separators and
+                        // belong not any longer to a word.
+                        // Since #i51215# they should also be ignored at a
+                        // beginning/end of a sentence if blank. Those are
+                        // simply removed if first. If at the end, we keep the
+                        // replacement and remove afterwards all at a string's
+                        // end (might be normal 0x7f).
+                        sal_Bool bEmpty = RES_TXTATR_FIELD != pHt->Which() ||
                             !(static_cast<SwTxtFld const*>(pHt)
                                 ->GetFld().GetFld()->ExpandField(true).Len());
                         if ( bEmpty && nStart == nAkt )
@@ -233,8 +232,7 @@ sal_uInt8 SwPaM::Find( const SearchOptions& rSearchOpt, sal_Bool bSearchInNotes 
     SwNodeIndex& rNdIdx = pPam->GetPoint()->nNode;
     SwIndex& rCntntIdx = pPam->GetPoint()->nContent;
 
-    // Wenn am Anfang/Ende, aus dem Node moven
-    // beim leeren Node nicht weiter
+    // If a beginning/end, from out of node; stop if empty node
     if( bSrchForward
         ? ( rCntntIdx.GetIndex() == pPam->GetCntntNode()->Len() &&
             rCntntIdx.GetIndex() )
@@ -250,14 +248,9 @@ sal_uInt8 SwPaM::Find( const SearchOptions& rSearchOpt, sal_Bool bSearchInNotes 
         rCntntIdx.Assign( pNd, nTmpPos );
     }
 
-    /*
-     * Ist bFound == sal_True, dann wurde der String gefunden und in
-     * nStart und nEnde steht der gefundenen String
-     */
+    // If bFound is true then the string was found and is between nStart and nEnd
     sal_Bool bFound = sal_False;
-    /*
-     * StartPostion im Text oder Anfangsposition
-     */
+    // start position in text or initial position
     sal_Bool bFirst = sal_True;
     SwCntntNode * pNode;
 
@@ -487,15 +480,15 @@ bool SwPaM::DoSearch( const SearchOptions& rSearchOpt, utl::TextSearch& rSTxt,
         if( nSearchScript == nCurrScript &&
             (rSTxt.*fnMove->fnSearch)( sCleanStr, &nStart, &nEnde, 0 ))
         {
-            // setze den Bereich richtig
+            // set section correctly
             *GetPoint() = *pPam->GetPoint();
             SetMark();
 
-            // Start und Ende wieder korrigieren !!
+            // adjust start and end
             if( !aFltArr.empty() )
             {
                 xub_StrLen n, nNew;
-                // bei Rueckwaertssuche die Positionen temp. vertauschen
+                // if backward search, switch positions temporarily
                 if( !bSrchForward ) { n = nStart; nStart = nEnde; nEnde = n; }
 
                 for( n = 0, nNew = nStart;
@@ -509,14 +502,15 @@ bool SwPaM::DoSearch( const SearchOptions& rSearchOpt, utl::TextSearch& rSTxt,
                     ;
                 nEnde = nNew;
 
-                // bei Rueckwaertssuche die Positionen temp. vertauschen
+                // if backward search, switch positions temporarily
                 if( !bSrchForward ) { n = nStart; nStart = nEnde; nEnde = n; }
             }
-            GetMark()->nContent = nStart;       // Startposition setzen
+            GetMark()->nContent = nStart;
             GetPoint()->nContent = nEnde;
 
-            if( !bSrchForward )         // rueckwaerts Suche?
-                Exchange();             // Point und Mark tauschen
+            // if backward search, switch point and mark
+            if( !bSrchForward )
+                Exchange();
             bFound = sal_True;
             break;
         }
@@ -539,8 +533,9 @@ bool SwPaM::DoSearch( const SearchOptions& rSearchOpt, utl::TextSearch& rSTxt,
             1 == Abs( (int)( GetPoint()->nNode.GetIndex() -
                             GetMark()->nNode.GetIndex()) ) )
         {
-            if( !bSrchForward )         // rueckwaerts Suche?
-                Exchange();             // Point und Mark tauschen
+            // if backward search, switch point and mark
+            if( !bSrchForward )
+                Exchange();
             //bFound = sal_True;
             //break;
             return true;
@@ -549,7 +544,7 @@ bool SwPaM::DoSearch( const SearchOptions& rSearchOpt, utl::TextSearch& rSTxt,
     return bFound;
 }
 
-// Parameter fuers Suchen und Ersetzen von Text
+/// parameters for search and replace in text
 struct SwFindParaText : public SwFindParas
 {
     const SearchOptions& rSearchOpt;
@@ -579,14 +574,13 @@ int SwFindParaText::Find( SwPaM* pCrsr, SwMoveFn fnMove,
     sal_Bool bFnd = (sal_Bool)pCrsr->Find( rSearchOpt, bSearchInNotes, aSTxt, fnMove, pRegion, bInReadOnly );
 
 
-    if( bFnd && bReplace )          // String ersetzen ??
+    if( bFnd && bReplace ) // replace string
     {
-        // Replace-Methode vom SwDoc benutzen
+        // use replace method in SwDoc
         const bool bRegExp(SearchAlgorithms_REGEXP == rSearchOpt.algorithmType);
         SwIndex& rSttCntIdx = pCrsr->Start()->nContent;
         xub_StrLen nSttCnt = rSttCntIdx.GetIndex();
-        // damit die Region auch verschoben wird, in den Shell-Cursr-Ring
-        // mit aufnehmen !!
+        // add to shell-cursor-ring so that the regions will be moved enventually
         Ring *pPrev(0);
         if( bRegExp )
         {
@@ -603,7 +597,7 @@ int SwFindParaText::Find( SwPaM* pCrsr, SwMoveFn fnMove,
 
         if( bRegExp )
         {
-            // und die Region wieder herausnehmen:
+            // and remove region again
             Ring *p, *pNext = (Ring*)pRegion;
             do {
                 p = pNext;
@@ -629,7 +623,7 @@ sal_uLong SwCursor::Find( const SearchOptions& rSearchOpt, sal_Bool bSearchInNot
                         sal_Bool& bCancel,
                         FindRanges eFndRngs, int bReplace )
 {
-    // OLE-Benachrichtigung abschalten !!
+    // switch off OLE-notifications
     SwDoc* pDoc = GetDoc();
     Link aLnk( pDoc->GetOle2Link() );
     pDoc->SetOle2Link( Link() );

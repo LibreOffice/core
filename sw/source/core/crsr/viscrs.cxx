@@ -143,7 +143,7 @@ void SwVisCrsr::Hide()
 
 void SwVisCrsr::Timeout()
 {
-    OSL_ENSURE( !bIsDragCrsr, "Timer vorher abschalten" );
+    OSL_ENSURE( !bIsDragCrsr, "stop timer before" );
     if( bIsVisible )
     {
         if ( !pCrsrShell->GetWin() ) // SwFrmFmt::GetGraphic suspends Win temporarily!
@@ -674,7 +674,7 @@ void SwShellTableCrsr::FillRects()
         while( pFrm && !pFrm->IsCellFrm() )
             pFrm = pFrm->GetUpper();
 
-        OSL_ENSURE( pFrm, "Node nicht in einer Tabelle" );
+        OSL_ENSURE( pFrm, "Node not in a table" );
 
         while ( pFrm )
         {
@@ -709,7 +709,7 @@ sal_Bool SwShellTableCrsr::IsInside( const Point& rPt ) const
         SwFrm* pFrm = pCNd->getLayoutFrm( GetShell()->GetLayout(), &GetPtPos() );
         while( pFrm && !pFrm->IsCellFrm() )
             pFrm = pFrm->GetUpper();
-        OSL_ENSURE( pFrm, "Node nicht in einer Tabelle" );
+        OSL_ENSURE( pFrm, "Node not in a table" );
         if( pFrm && pFrm->Frm().IsInside( rPt ) )
             return sal_True;
     }

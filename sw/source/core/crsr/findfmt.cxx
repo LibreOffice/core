@@ -37,7 +37,7 @@ sal_Bool SwPaM::Find( const SwFmt& rFmt, SwMoveFn fnMove,
     sal_Bool bSrchForward = fnMove == fnMoveForward;
     SwPaM* pPam = MakeRegion( fnMove, pRegion );
 
-    // Wenn am Anfang/Ende, aus dem Node moven
+    // if at beginning/end then move it out of the node
     if( bSrchForward
         ? pPam->GetPoint()->nContent.GetIndex() == pPam->GetCntntNode()->Len()
         : !pPam->GetPoint()->nContent.GetIndex() )
@@ -59,18 +59,19 @@ sal_Bool SwPaM::Find( const SwFmt& rFmt, SwMoveFn fnMove,
     {
         if( 0 != ( bFound = (pNode->GetFmtColl() == &rFmt) ))
         {
-            // wurde die FormatCollection gefunden, dann handelt es sich auf
-            // jedenfall um einen SwCntntNode !!
+            // if a FormatCollection is found then it is definitely a SwCntntNode
 
-            // FORWARD:  SPoint an das Ende, GetMark zum Anfanf vom Node
-            // BACKWARD: SPoint zum Anfang, GetMark an das Ende vom Node
-            // und immer nach der Logik: inkl. Start, exkl. End !!!
+            // FORWARD:  SPoint at the end, GetMark at the beginning of the node
+            // BACKWARD: SPoint at the beginning, GetMark at the end of the node
+            // always: incl. start and incl. end
             *GetPoint() = *pPam->GetPoint();
             SetMark();
             pNode->MakeEndIndex( &GetPoint()->nContent );
             GetMark()->nContent = 0;
-            if( !bSrchForward )         // rueckwaerts Suche?
-                Exchange();             // SPoint und GetMark tauschen
+
+            // if backward search, switch point and mark
+            if( !bSrchForward )
+                Exchange();
             break;
         }
     }

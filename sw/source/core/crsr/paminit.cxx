@@ -62,7 +62,7 @@ SwWhichSection fnSectionNext    = &GoNextSection;
 SwPosSection fnSectionStart     = &aFwrd;
 SwPosSection fnSectionEnd       = &aBwrd;
 
-// Travelling in Tabellen
+// Travelling in tables
 sal_Bool GotoPrevTable( SwPaM&, SwPosTable, sal_Bool bInReadOnly );
 sal_Bool GotoCurrTable( SwPaM&, SwPosTable, sal_Bool bInReadOnly );
 sal_Bool GotoNextTable( SwPaM&, SwPosTable, sal_Bool bInReadOnly );
@@ -73,7 +73,7 @@ SwWhichTable fnTableNext = &GotoNextTable;
 SwPosTable fnTableStart = &aFwrd;
 SwPosTable fnTableEnd = &aBwrd;
 
-// Travelling in Bereichen
+// Travelling in regions
 sal_Bool GotoPrevRegion( SwPaM&, SwPosRegion, sal_Bool bInReadOnly );
 sal_Bool GotoCurrRegion( SwPaM&, SwPosRegion, sal_Bool bInReadOnly );
 sal_Bool GotoCurrRegionAndSkip( SwPaM&, SwPosRegion, sal_Bool bInReadOnly );
