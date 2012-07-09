@@ -247,6 +247,39 @@ int TextSearch::SearchFrwrd( const String & rStr, xub_StrLen* pStart,
     return nRet;
 }
 
+sal_Bool TextSearch::SearchForward( const ::rtl::OUString &rStr,
+                    sal_Int32* pStart, sal_Int32* pEnd,
+                    ::com::sun::star::util::SearchResult* pRes)
+{
+    sal_Bool nRet = sal_False;
+    try
+    {
+        if( xTextSearch.is() )
+        {
+            SearchResult aRet( xTextSearch->searchForward(
+                                                    rStr, *pStart, *pEnd ));
+            if( aRet.subRegExpressions > 0 )
+            {
+                nRet = sal_True;
+                // the XTextsearch returns in startOffset the higher position
+                // and the endposition is allways exclusive.
+                // The caller of this function will have in startPos the
+                // lower pos. and end
+                *pStart = aRet.startOffset[ 0 ];
+                *pEnd = aRet.endOffset[ 0 ];
+                if( pRes )
+                    *pRes = aRet;
+            }
+        }
+    }
+    catch ( Exception& )
+    {
+        SAL_WARN( "unotools.i18n", "SearchForward: Exception caught!" );
+    }
+    return nRet;
+}
+
+
 int TextSearch::SearchBkwrd( const String & rStr, xub_StrLen* pStart,
                             xub_StrLen* pEnde, SearchResult* pRes )
 {

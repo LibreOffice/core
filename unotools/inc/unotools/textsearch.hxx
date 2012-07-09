@@ -159,6 +159,9 @@ public:
     int SearchFrwrd( const String &rStr,
                     xub_StrLen* pStart, xub_StrLen* pEnde,
                     ::com::sun::star::util::SearchResult* pSrchResult = 0 );
+    sal_Bool SearchForward( const ::rtl::OUString &rStr,
+                    sal_Int32* pStart, sal_Int32* pEnd,
+                    ::com::sun::star::util::SearchResult* pRes = 0 );
     int SearchBkwrd( const String &rStr,
                     xub_StrLen* pStart, xub_StrLen* pEnde,
                     ::com::sun::star::util::SearchResult* pSrchResult = 0 );
