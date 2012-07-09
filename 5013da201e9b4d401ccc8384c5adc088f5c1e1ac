@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAL3///+g\u003d",
+        "filename": "sw/source/core/crsr/findfmt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2012-07-09T10:10:19Z",
+      "side": 1,
+      "message": "While at it this bool can also be const ...",
+      "revId": "5013da201e9b4d401ccc8384c5adc088f5c1e1ac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
