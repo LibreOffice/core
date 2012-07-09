@@ -1508,7 +1508,29 @@ sal_Bool EmbeddedObjectContainer::StoreChildren(sal_Bool _bOasisFormat,sal_Bool 
                 try
                 {
                     //TODO/LATER: only storing if changed!
-                    xPersist->storeOwn();
+                    //xPersist->storeOwn(); //commented, i120168
+
+            // begin:all charts will be persited as xml format on disk when saving, which is time consuming.
+                    // '_bObjectsOnly' mean we are storing to alien formats.
+                    //  'isStorageElement' mean current object is NOT an MS OLE format. (may also include in future), i120168
+                    if (_bObjectsOnly && (nCurState == embed::EmbedStates::LOADED || nCurState == embed::EmbedStates::RUNNING)
+                        && (pImpl->mxStorage->isStorageElement( *pIter ) ))
+                    {
+                        uno::Reference< util::XModifiable > xModifiable( xObj->getComponent(), uno::UNO_QUERY );
+                        if ( xModifiable.is() && xModifiable->isModified())
+                        {
+                            xPersist->storeOwn();
+                        }
+                        else
+                        {
+                            //do nothing.embeded model is not modified, no need to persist.
+                        }
+                    }
+                    else //the embeded object is in active status, always store back it.
+                    {
+                        xPersist->storeOwn();
+                    }
+                    //end i120168
                 }
                 catch (const uno::Exception&)
                 {
