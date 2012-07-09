@@ -114,7 +114,6 @@ $(eval $(call gb_Library_add_libs,sd,\
     $(shell pkg-config --libs glib-2.0 json-glib-1.0) \
 ))
 
-
 $(eval $(call gb_Library_set_componentfile,sd,sd/util/sd))
 
 $(eval $(call gb_Library_add_exception_objects,sd,\

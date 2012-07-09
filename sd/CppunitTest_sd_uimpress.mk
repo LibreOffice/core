@@ -36,9 +36,13 @@ $(eval $(call gb_CppunitTest_add_defs,sd_uimpress,\
     -DSD_DLLIMPLEMENTATION \
 ))
 
-$(eval $(call gb_CppunitTest_use_api,sd_uimpress,\
+$(eval $(call gb_CppunitTest_use_sdk_api,sd_uimpress,\
     offapi \
     udkapi \
+))
+
+$(eval $(call gb_CppunitTest_add_libs,sd_uimpress,\
+    $(shell pkg-config --libs glib-2.0 json-glib-1.0) \
 ))
 
 $(eval $(call gb_CppunitTest_use_library_objects,sd_uimpress,sd))
