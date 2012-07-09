@@ -4198,7 +4198,10 @@ void PPTWriter::ImplCreateTextShape( EscherPropertyContainer& rPropOpt, EscherSo
 
 void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& aSolverContainer, PageType ePageType, sal_Bool bMasterPage, int nPageNumber )
 {
-    sal_uInt32  nInstance, nGroups, nShapes, nShapeCount, nPer, nLastPer, nIndices, nGroupLevel = 0, nOlePictureId;
+    // #119551# PPT does not support groups of polygons and text (MS patch KB2289187)
+    // sal_uInt32  nGroupLevel = 0;
+
+    sal_uInt32  nInstance, nGroups, nShapes, nShapeCount, nPer, nLastPer, nIndices, nOlePictureId;
     sal_uInt16  nEffectCount;
     ::com::sun::star::awt::Point   aTextRefPoint;
 
@@ -4456,8 +4459,9 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                         aPolygon.Rotate( aRect.TopLeft(), (sal_uInt16)( mnAngle / 10 ) );
                         if ( ImplGetText() )
                         {
-                            mpPptEscherEx->EnterGroup( 0,0 );
-                            nGroupLevel = mpPptEscherEx->GetGroupLevel();
+                            // #119551# PPT does not support groups of polygons and text (MS patch KB2289187)
+                            // mpPptEscherEx->EnterGroup( 0,0 );
+                            // nGroupLevel = mpPptEscherEx->GetGroupLevel();
                             bNeedText = sal_False;
                             bAdditionalText = sal_True;
                             mnTextSize = 0;
@@ -4654,7 +4658,8 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                     aTextRefPoint = ::com::sun::star::awt::Point( maRect.Left(), maRect.Top() );
                     mnTextSize = 0;
                     bAdditionalText = sal_True;
-                    mpPptEscherEx->EnterGroup( &maRect,0 );
+                    // #119551# PPT does not support groups of polygons and text (MS patch KB2289187)
+                    // mpPptEscherEx->EnterGroup( &maRect,0 );
                 }
                 mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
                 sal_uInt32 nFlags = 0xa00;                                  // Flags: Connector | HasSpt
@@ -4672,8 +4677,9 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
             {
                 if ( ImplGetText() )
                 {
-                    mpPptEscherEx->EnterGroup( 0,0 );
-                    nGroupLevel = mpPptEscherEx->GetGroupLevel();
+                    // #119551# PPT does not support groups of polygons and text (MS patch KB2289187)
+                    // mpPptEscherEx->EnterGroup( 0,0 );
+                    // nGroupLevel = mpPptEscherEx->GetGroupLevel();
                     bAdditionalText = sal_True;
                     mnTextSize = 0;
                 }
@@ -4691,8 +4697,9 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
             {
                 if ( ImplGetText() )
                 {
-                    mpPptEscherEx->EnterGroup( 0,0 );
-                    nGroupLevel = mpPptEscherEx->GetGroupLevel();
+                    // #119551# PPT does not support groups of polygons and text (MS patch KB2289187)
+                    // mpPptEscherEx->EnterGroup( 0,0 );
+                    // nGroupLevel = mpPptEscherEx->GetGroupLevel();
                     bAdditionalText = sal_True;
                     mnTextSize = 0;
                 }
@@ -4710,8 +4717,9 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
             {
                 if ( ImplGetText() )
                 {
-                    mpPptEscherEx->EnterGroup( 0,0 );
-                    nGroupLevel = mpPptEscherEx->GetGroupLevel();
+                    // #119551# PPT does not support groups of polygons and text (MS patch KB2289187)
+                    // mpPptEscherEx->EnterGroup( 0,0 );
+                    // nGroupLevel = mpPptEscherEx->GetGroupLevel();
                     bAdditionalText = sal_True;
                     mnTextSize = 0;
                 }
@@ -4729,8 +4737,9 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
             {
                 if ( ImplGetText() )
                 {
-                    mpPptEscherEx->EnterGroup( 0,0 );
-                    nGroupLevel = mpPptEscherEx->GetGroupLevel();
+                    // #119551# PPT does not support groups of polygons and text (MS patch KB2289187)
+                    // mpPptEscherEx->EnterGroup( 0,0 );
+                    // nGroupLevel = mpPptEscherEx->GetGroupLevel();
                     bAdditionalText = sal_True;
                     mnTextSize = 0;
                 }
@@ -4787,8 +4796,22 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                     else
                     {
                         ImplCreateShape( ESCHER_ShpInst_PictureFrame, 0xa00, aSolverContainer );
+                        const Rectangle aOldRect100thmm(aRect100thmm);
+
                         if ( aPropOpt.CreateGraphicProperties( mXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "GraphicURL" ) ), sal_False, sal_True ) )
+                        {
                             aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x800080 );
+
+                            if(aOldRect100thmm != aRect100thmm)
+                            {
+                                // #119536# graphic has been adapted (rotated) so that it can be saved without angle,
+                                // adapt local values as needed
+                                maPosition = ImplMapPoint( ::com::sun::star::awt::Point( aRect100thmm.Left(), aRect100thmm.Top() ) );
+                                maSize = ImplMapSize( ::com::sun::star::awt::Size ( aRect100thmm.GetWidth(), aRect100thmm.GetHeight() ) );
+                                maRect = Rectangle( Point( maPosition.X, maPosition.Y ), Size( maSize.Width, maSize.Height ) );
+                                mnAngle = 0;
+                            }
+                        }
                     }
                 }
             }
@@ -5462,8 +5485,10 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                 mnAngle += 0x8000;
                 mnAngle &=~0xffff;  // nAngle auf volle Gradzahl runden
                 aPropOpt.AddOpt( ESCHER_Prop_Rotation, mnAngle );
-                mpPptEscherEx->SetGroupSnapRect( nGroupLevel, maRect );
-                mpPptEscherEx->SetGroupLogicRect( nGroupLevel, maRect );
+
+                // #119551# PPT does not support groups of polygons and text (MS patch KB2289187)
+                // mpPptEscherEx->SetGroupSnapRect( nGroupLevel, maRect );
+                // mpPptEscherEx->SetGroupLogicRect( nGroupLevel, maRect );
             }
             if ( !pClientTextBox )
                 pClientTextBox = new SvMemoryStream( 0x200, 0x200 );
@@ -5485,7 +5510,9 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
             delete pClientTextBox, pClientTextBox = NULL;
 
             mpPptEscherEx->CloseContainer();  // ESCHER_SpContainer
-            mpPptEscherEx->LeaveGroup();
+
+            // #119551# PPT does not support groups of polygons and text (MS patch KB2289187)
+            // mpPptEscherEx->LeaveGroup();
         }
     }
     ClearGroupTable();                              // gruppierungen wegschreiben, sofern noch irgendwelche offen sind, was eigendlich nicht sein sollte
