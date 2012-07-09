@@ -102,6 +102,10 @@ namespace
 
 namespace sw { namespace mark
 {
+    // --------
+    // MarkBase
+    // --------
+
     MarkBase::MarkBase(const SwPaM& aPaM,
         const ::rtl::OUString& rName)
         : SwModify(0)
@@ -178,13 +182,26 @@ namespace sw { namespace mark
         }
     }
 
+    // -----------------
+    // NavigatorReminder
+    // -----------------
+
+    // TODO: everything else uses MarkBase::GenerateNewName ?
     NavigatorReminder::NavigatorReminder(const SwPaM& rPaM)
-        : MarkBase(rPaM, rtl::OUString("__NavigatorReminder__"))    //<-- everything else uses MarkBase::GenerateNewName ?
+        : MarkBase(rPaM, rtl::OUString("__NavigatorReminder__"))
     { }
+
+    // -------
+    // UnoMark
+    // -------
 
     UnoMark::UnoMark(const SwPaM& aPaM)
         : MarkBase(aPaM, MarkBase::GenerateNewName(rtl::OUString("__UnoMark__")))
     { }
+
+    // -----------
+    // DdeBookmark
+    // -----------
 
     DdeBookmark::DdeBookmark(const SwPaM& aPaM)
         : MarkBase(aPaM, MarkBase::GenerateNewName(rtl::OUString("__DdeLink__")))
@@ -214,6 +231,10 @@ namespace sw { namespace mark
             m_aRefObj->SetNoServer();
         }
     }
+
+    // --------
+    // Bookmark
+    // --------
 
     Bookmark::Bookmark(const SwPaM& aPaM,
         const KeyCode& rCode,
@@ -266,7 +287,6 @@ namespace sw { namespace mark
 
     uno::Reference< rdf::XMetadatable > Bookmark::MakeUnoObject()
     {
-        // create new SwXBookmark
         SwDoc *const pDoc( GetMarkPos().GetDoc() );
         OSL_ENSURE(pDoc, "Bookmark::MakeUnoObject: no doc?");
         const uno::Reference< rdf::XMetadatable> xMeta(
@@ -274,6 +294,9 @@ namespace sw { namespace mark
         return xMeta;
     }
 
+    // ---------
+    // Fieldmark
+    // ---------
 
     Fieldmark::Fieldmark(const SwPaM& rPaM)
         : MarkBase(rPaM, MarkBase::GenerateNewName(rtl::OUString("__Fieldmark__")))
@@ -303,11 +326,15 @@ namespace sw { namespace mark
 
     void Fieldmark::Invalidate( )
     {
-        // @TODO: Does exist a better solution to trigger a format of the
-        //        fieldmark portion? If yes, please use it.
+        // TODO: Does exist a better solution to trigger a format of the
+        //       fieldmark portion? If yes, please use it.
         SwPaM aPaM( this->GetMarkPos(), this->GetOtherMarkPos() );
         aPaM.InvalidatePaM();
     }
+
+    // -------------
+    // TextFieldmark
+    // -------------
 
     TextFieldmark::TextFieldmark(const SwPaM& rPaM)
         : Fieldmark(rPaM)
@@ -317,6 +344,10 @@ namespace sw { namespace mark
     {
         lcl_AssureFieldMarksSet(this, io_pDoc, CH_TXT_ATR_FIELDSTART, CH_TXT_ATR_FIELDEND);
     }
+
+    // -----------------
+    // CheckboxFieldmark
+    // -----------------
 
     CheckboxFieldmark::CheckboxFieldmark(const SwPaM& rPaM)
         : Fieldmark(rPaM)

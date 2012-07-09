@@ -331,7 +331,6 @@ SwCntntNode* GoPreviousNds( SwNodeIndex * pIdx, sal_Bool bChk )
     return pNd;
 }
 
-// ----------------------------------------------------------------------
 
 SwPaM::SwPaM( const SwPosition& rPos, SwPaM* pRing )
     : Ring( pRing )
@@ -815,7 +814,6 @@ SwCntntNode* GetNode( SwPaM & rPam, sal_Bool& rbFirst, SwMoveFn fnMove,
     return pNd;
 }
 
-// ----------------------------------------------------------------------
 
 void GoStartDoc( SwPosition * pPos )
 {
@@ -1055,10 +1053,9 @@ String SwPaM::GetTxt() const
 
     SwNodeIndex aNodeIndex = Start()->nNode;
 
-    /* The first node can be the end node. A first end node must be
-       handled, too. There fore do ... while and no incrementing of
-       aNodeIndex in the first pass.
-     */
+    // The first node can be already the end node.
+    // A first end node must be handled, too. Therefore do-while and no
+    // incrementing of aNodeIndex in the first pass.
     bool bFirst = true;
     do
     {

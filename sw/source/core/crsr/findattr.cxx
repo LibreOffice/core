@@ -120,7 +120,7 @@ void lcl_SetAttrPam( SwPaM & rPam, xub_StrLen nStart, const xub_StrLen* pEnde,
 
     SwCntntNode* pCNd = rPam.GetCntntNode();
     rPam.GetPoint()->nContent.Assign( pCNd, nStart );
-    rPam.SetMark();     // Point == GetMark
+    rPam.SetMark(); // Point == GetMark
 
     // Point points to end of search area or end of attribute
     if( pEnde )
@@ -1122,7 +1122,7 @@ int SwFindParaAttr::Find( SwPaM* pCrsr, SwMoveFn fnMove, const SwPaM* pRegion,
                 pSTxt = new utl::TextSearch( aTmp );
             }
 
-            // todo/mba: searching for attributes in Outliner text?!
+            // TODO: searching for attributes in Outliner text?!
             sal_Bool bSearchInNotes = sal_False;
 
             // #i24665#: continue search in correct section (pTextRegion)

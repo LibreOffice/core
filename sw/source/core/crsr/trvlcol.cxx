@@ -93,7 +93,7 @@ sal_Bool SwCrsrShell::MoveColumn( SwWhichColumn fnWhichCol, SwPosColumn fnPosCol
                 SwCallLink aLk( *this ); // watch Crsr-Moves; call Link if needed
                 SwCrsrSaveState aSaveState( *pCurCrsr );
 
-                pCnt->Calc();                   // ???
+                pCnt->Calc();
 
                 Point aPt( pCnt->Frm().Pos() + pCnt->Prt().Pos() );
                 if( fnPosCol == GetColumnEnd )

@@ -42,7 +42,7 @@
 #include <pam.hxx>
 #include <ndtxt.hxx>
 #include <fldbas.hxx>
-#include <swtable.hxx>      // SwTxtFld
+#include <swtable.hxx>
 #include <docary.hxx>
 #include <txtfld.hxx>
 #include <fmtfld.hxx>
@@ -58,7 +58,7 @@
 #include <docfld.hxx>
 #include <expfld.hxx>
 #include <reffld.hxx>
-#include <flddat.hxx>       // SwTxtFld
+#include <flddat.hxx>
 #include <cellatr.hxx>
 #include <swundo.hxx>
 #include <redline.hxx>
@@ -906,11 +906,11 @@ sal_Bool SwCrsrShell::MakeOutlineSel( sal_uInt16 nSttPos, sal_uInt16 nEndPos,
 
     if( bWithChildren )
     {
-        const int nLevel = pEndNd->GetTxtNode()->GetAttrOutlineLevel()-1;//<-end.zhaojianwei
+        const int nLevel = pEndNd->GetTxtNode()->GetAttrOutlineLevel()-1;
         for( ++nEndPos; nEndPos < rOutlNds.Count(); ++nEndPos )
         {
             pEndNd = rOutlNds[ nEndPos ];
-            const int nNxtLevel = pEndNd->GetTxtNode()->GetAttrOutlineLevel()-1;//<-end,zhaojianwei
+            const int nNxtLevel = pEndNd->GetTxtNode()->GetAttrOutlineLevel()-1;
             if( nNxtLevel <= nLevel )
                 break; // EndPos is now on the next one
         }
@@ -2127,7 +2127,7 @@ sal_Bool SwCrsrShell::SelectNxtPrvHyperlink( sal_Bool bNext )
         SET_CURR_SHELL( this );
         SwCallLink aLk( *this );
 
-        // find a text attribute ?
+        // found a text attribute ?
         if( pFndAttr )
         {
             SwCrsrSaveState aSaveState( *pCurCrsr );
@@ -2144,7 +2144,7 @@ sal_Bool SwCrsrShell::SelectNxtPrvHyperlink( sal_Bool bNext )
                 bRet = sal_True;
             }
         }
-        // find a draw object ?
+        // found a draw object ?
         else if( RES_DRAWFRMFMT == pFndFmt->Which() )
         {
             const SdrObject* pSObj = pFndFmt->FindSdrObject();
@@ -2152,7 +2152,7 @@ sal_Bool SwCrsrShell::SelectNxtPrvHyperlink( sal_Bool bNext )
             MakeSelVisible();
             bRet = sal_True;
         }
-        else        // then is it a fly
+        else // then is it a fly
         {
             SwFlyFrm* pFly = pFndFmt->GetFrm(&aPt, sal_False );
             if( pFly )

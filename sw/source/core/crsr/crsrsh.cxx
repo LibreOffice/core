@@ -59,10 +59,10 @@
 #include <scriptinfo.hxx>
 #include <globdoc.hxx>
 #include <pamtyp.hxx>
-#include <mdiexp.hxx>           // ...Percent()
+#include <mdiexp.hxx>
 #include <fmteiro.hxx>
-#include <wrong.hxx> // SMARTTAGS
-#include <unotextrange.hxx> // SMARTTAGS
+#include <wrong.hxx>
+#include <unotextrange.hxx>
 #include <vcl/svapp.hxx>
 #include <numrule.hxx>
 #include <IGrammarContact.hxx>
@@ -83,7 +83,6 @@ TYPEINIT2(SwCrsrShell,ViewShell,SwModify);
  */
 void CheckRange( SwCursor* );
 
-//-----------------------------------------------------------------------
 
 /**
  * Check if pCurCrsr points into already existing ranges and delete those.
@@ -112,22 +111,20 @@ void CheckRange( SwCursor* pCurCrsr )
         else
             if( *pStt < *pTmpEnd )
                 pTmpDel = pTmp;
-        /*
-         * If Point or Mark is within the Crsr range, we
-         * need to remove the old range. Take note that Point does
-         * not belong to the range anymore.
-         */
+
+         // If Point or Mark is within the Crsr range, we need to remove the old
+        // range. Take note that Point does not belong to the range anymore.
         pTmp = (SwPaM*)pTmp->GetNext();
         delete pTmpDel;         // Remove old range
         pTmpDel = 0;
     }
 }
 
+// -----------
+// SwCrsrShell
+// -----------
 
 
-/**
- Methods of SwCrsrShell
- */
 
 
 SwPaM * SwCrsrShell::CreateCrsr()
@@ -164,7 +161,7 @@ sal_Bool SwCrsrShell::DestroyCrsr()
     if(pCurCrsr->GetNext() == pCurCrsr)
         return sal_False;
 
-    SwCallLink aLk( *this );        // watch Crsr-Moves
+    SwCallLink aLk( *this ); // watch Crsr-Moves
     SwCursor* pNextCrsr = (SwCursor*)pCurCrsr->GetNext();
     delete pCurCrsr;
     pCurCrsr = dynamic_cast<SwShellCrsr*>(pNextCrsr);
@@ -206,7 +203,7 @@ SwPaM* SwCrsrShell::GetCrsr( sal_Bool bMakeTblCrsr ) const
     {
         if( bMakeTblCrsr && pTblCrsr->IsCrsrMovedUpdt() )
         {
-            //don't re-create 'parked'(?) cursors
+            //don't re-create 'parked' cursors
             const SwCntntNode* pCNd;
             if( pTblCrsr->GetPoint()->nNode.GetIndex() &&
                 pTblCrsr->GetMark()->nNode.GetIndex() &&
@@ -243,7 +240,7 @@ void SwCrsrShell::StartAction()
         else
             nLeftFrmPos = 0;
     }
-    ViewShell::StartAction();           // to the ViewShell
+    ViewShell::StartAction(); // to the ViewShell
 }
 
 
@@ -261,8 +258,8 @@ void SwCrsrShell::EndAction( const sal_Bool bIdleEnd )
     if( 1 == nStartAction )
         GetDoc()->UpdateNumRule();
 
-    // Task: 76923: dont show the cursor in the ViewShell::EndAction() - call.
-    //              Only the UpdateCrsr shows the cursor.
+    // #i76923#: Don't show the cursor in the ViewShell::EndAction() - call.
+    //           Only the UpdateCrsr shows the cursor.
     sal_Bool bSavSVCrsrVis = bSVCrsrVis;
     bSVCrsrVis = sal_False;
 
@@ -295,7 +292,7 @@ void SwCrsrShell::EndAction( const sal_Bool bIdleEnd )
             if( bCallChgLnk && bChgCallFlag && aChgLnk.IsSet() )
             {
                 aChgLnk.Call( this );
-                bChgCallFlag = sal_False;       // reset flag
+                bChgCallFlag = sal_False; // reset flag
             }
         }
         return;
@@ -363,20 +360,16 @@ sal_Bool SwCrsrShell::LeftRight( sal_Bool bLeft, sal_uInt16 nCnt, sal_uInt16 nMo
     if( pBlockCrsr )
         pBlockCrsr->clearPoints();
 
-    //
     // 1. CASE: Cursor is in front of label. A move to the right
     // will simply reset the bInFrontOfLabel flag:
-    //
     SwShellCrsr* pShellCrsr = getShellCrsr( true );
     if ( !bLeft && pShellCrsr->IsInFrontOfLabel() )
     {
         SetInFrontOfLabel( sal_False );
         bRet = sal_True;
     }
-    //
     // 2. CASE: Cursor is at beginning of numbered paragraph. A move
     // to the left will simply set the bInFrontOfLabel flag:
-    //
     else if ( bLeft && 0 == pShellCrsr->GetPoint()->nContent.GetIndex() &&
              !pShellCrsr->IsInFrontOfLabel() && !pShellCrsr->HasMark() &&
              0 != ( pTxtNd = pShellCrsr->GetNode()->GetTxtNode() ) &&
@@ -385,9 +378,7 @@ sal_Bool SwCrsrShell::LeftRight( sal_Bool bLeft, sal_uInt16 nCnt, sal_uInt16 nMo
         SetInFrontOfLabel( sal_True );
         bRet = sal_True;
     }
-    //
     // 3. CASE: Regular cursor move. Reset the bInFrontOfLabel flag:
-    //
     else
     {
         const sal_Bool bSkipHidden = !GetViewOptions()->IsShowHiddenChar();
@@ -684,7 +675,7 @@ int SwCrsrShell::SetCrsr( const Point &rLPt, sal_Bool bOnlyText, bool bBlock )
         // same table column and not in header/footer -> back
         return bRet;
 
-    // Toggle the Header/Footer mode if needed
+    // toggle the header/footer mode if needed
     bool bInHeaderFooter = pFrm && ( pFrm->IsHeaderFrm() || pFrm->IsFooterFrm() );
     if ( bInHeaderFooter != IsHeaderFooterEdit() )
         ToggleHeaderFooterEdit();
@@ -1262,7 +1253,7 @@ static void lcl_CheckHiddenSection( SwNodeIndex& rIdx )
     }
 }
 
-// Try to set the cursor to the next visible content node.
+/// Try to set the cursor to the next visible content node.
 static void lcl_CheckHiddenPara( SwPosition& rPos )
 {
     SwNodeIndex aTmp( rPos.nNode );
@@ -1280,7 +1271,7 @@ static void lcl_CheckHiddenPara( SwPosition& rPos )
         rPos = SwPosition( aTmp, SwIndex( pTxtNd, 0 ) );
 }
 
-// #i27301# - helper class, which notifies the accessibility about invalid text
+// #i27301# - helper class that notifies the accessibility about invalid text
 // selections in its destructor
 class SwNotifyAccAboutInvalidTextSelections
 {
@@ -1304,7 +1295,7 @@ void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, sal_Bool bIdleEnd )
     ClearUpCrsrs();
 
     // In a BasicAction the cursor must be updated, e.g. to create the
-    // TableCursor.  EndAction now calls UpdateCrsr!
+    // TableCursor. EndAction now calls UpdateCrsr!
     if( ActionPend() && BasicActionPend() )
     {
         if ( eFlags & SwCrsrShell::READONLY )
@@ -1359,8 +1350,7 @@ void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, sal_Bool bIdleEnd )
         Point aTmpMk( pITmpCrsr->GetMkPos() );
         SwPosition* pPos = pITmpCrsr->GetPoint();
 
-        // JP 30.04.99: Bug 65475
-        // if Point/Mark in hidden sections, move them out
+        // Bug 65475 (1999) - if Point/Mark in hidden sections, move them out
         lcl_CheckHiddenSection( pPos->nNode );
         lcl_CheckHiddenSection( pITmpCrsr->GetMark()->nNode );
 
@@ -1456,7 +1446,7 @@ void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, sal_Bool bIdleEnd )
                 (void) bResult; // non-debug: unused
             }
 
-            pVisCrsr->Hide();       // always hide visible Cursor
+            pVisCrsr->Hide(); // always hide visible Cursor
             // scroll Cursor to visible area
             if( (eFlags & SwCrsrShell::SCROLLWIN) &&
                 (HasSelection() || eFlags & SwCrsrShell::READONLY ||
@@ -1486,7 +1476,7 @@ void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, sal_Bool bIdleEnd )
                 aCrsrHeight.X() = 0;
                 aCrsrHeight.Y() = aTmpState.aRealHeight.Y() < 0 ?
                                   -aCharRect.Width() : aCharRect.Height();
-                pVisCrsr->Show();           // show again
+                pVisCrsr->Show(); // show again
             }
             eMvState = MV_NONE;  // state for cursor travelling - GetCrsrOfst
             if( pTblFrm && Imp()->IsAccessible() )
@@ -1506,7 +1496,7 @@ void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, sal_Bool bIdleEnd )
         delete pTblCrsr, pTblCrsr = 0;
     }
 
-    pVisCrsr->Hide();       // always hide visible Cursor
+    pVisCrsr->Hide(); // always hide visible Cursor
 
     // are we perhaps in a protected / hidden Section ?
     {
@@ -1522,7 +1512,7 @@ void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, sal_Bool bIdleEnd )
             if( !FindValidCntntNode( !HasDrawView() ||
                     0 == Imp()->GetDrawView()->GetMarkedObjectList().GetMarkCount()))
             {
-                // everything protected / hidden -> special Mode
+                // everything protected/hidden -> special mode
                 if( bAllProtect && !IsReadOnlyAvailable() &&
                     pSectNd->GetSection().IsProtectFlag() )
                     bChgState = sal_False;
@@ -1654,7 +1644,7 @@ void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, sal_Bool bIdleEnd )
                         CallChgLnk();       // notify UI!
                     }
                     bAllProtect = sal_False;
-                    bAgainst = sal_True;        // look for the right Frm again
+                    bAgainst = sal_True; // look for the right Frm again
                 }
             }
         } while( bAgainst );
@@ -1759,7 +1749,7 @@ void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, sal_Bool bIdleEnd )
         }
     }
 
-    eMvState = MV_NONE;     // state for cursor tavelling - GetCrsrOfst
+    eMvState = MV_NONE; // state for cursor tavelling - GetCrsrOfst
 
     if( pFrm && Imp()->IsAccessible() )
         Imp()->InvalidateAccessibleCursorPosition( pFrm );
@@ -1784,7 +1774,7 @@ void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, sal_Bool bIdleEnd )
     }
 
     if( bSVCrsrVis )
-        pVisCrsr->Show();           // show again
+        pVisCrsr->Show(); // show again
 }
 
 void SwCrsrShell::RefreshBlockCursor()
@@ -2537,7 +2527,6 @@ void SwCrsrShell::ParkCrsr( const SwNodeIndex &rIdx )
     delete pNew;
 }
 
-//=========================================================================
 
 /** Copy constructor
 
@@ -2884,8 +2873,7 @@ sal_Bool SwCrsrShell::FindValidCntntNode( sal_Bool bOnlyText )
 sal_Bool SwCrsrShell::IsCrsrReadonly() const
 {
     if ( GetViewOptions()->IsReadonly() ||
-         // Formular view
-         GetViewOptions()->IsFormView() )
+         GetViewOptions()->IsFormView() /* Formular view */ )
     {
         SwFrm *pFrm = GetCurrFrm( sal_False );
         const SwFlyFrm* pFly;
@@ -3002,10 +2990,8 @@ sal_Bool SwCrsrShell::IsInRightToLeftText( const Point* pPt ) const
     return FRMDIR_VERT_TOP_LEFT == nDir || FRMDIR_HORI_RIGHT_TOP == nDir;
 }
 
-//
-// If the current cursor position is inside a hidden range, the hidden range
-// is selected:
-//
+/// If the current cursor position is inside a hidden range, the hidden range
+/// is selected.
 bool SwCrsrShell::SelectHiddenRange()
 {
     bool bRet = false;
@@ -3160,10 +3146,8 @@ void SwCrsrShell::ClearUpCrsrs()
     SwPaM * pTmpCrsr;
     bool bChanged = false;
 
-    /*
-       For all entries in the ring except the start entry delete the
-       entry if it is invalid.
-    */
+    // For all entries in the ring except the start entry delete the entry if
+    // it is invalid.
     while (pCrsr != pStartCrsr)
     {
         pTmpCrsr = (SwPaM *) pCrsr->GetNext();
@@ -3193,11 +3177,9 @@ void SwCrsrShell::ClearUpCrsrs()
             aNodes.GoNext( &aIdx );
         if( pNode == NULL || lcl_NodeContext( *pNode ) != pStart )
         {
-            /*
-              If the start entry of the ring is invalid replace it with a
-              cursor pointing to the beginning of the first content node in
-              the document.
-            */
+            // If the start entry of the ring is invalid replace it with a
+            // cursor pointing to the beginning of the first content node in the
+            // document.
             aIdx = (*(aNodes.GetEndOfContent().StartOfSectionNode()));
             pNode = aNodes.GoNext( &aIdx );
         }
@@ -3214,10 +3196,8 @@ void SwCrsrShell::ClearUpCrsrs()
         bChanged = true;
     }
 
-    /*
-      If at least one of the cursors in the ring have been deleted or
-      replaced, remove the table cursor.
-    */
+    // If at least one of the cursors in the ring have been deleted or replaced,
+    // remove the table cursor.
     if (pTblCrsr != NULL && bChanged)
         TblCrsrToCursor();
 }
@@ -3381,11 +3361,10 @@ void SwCrsrShell::GetSmartTagTerm( const Point& rPt, SwRect& rSelectRect,
             xub_StrLen nLineEnd = GetCrsr()->GetPoint()->nContent.GetIndex();
             Pop(sal_False);
 
-            // make sure the selection build later from the
-            // data below does not include footnotes and other
-            // "in word" character to the left and right in order
-            // to preserve those. Therefore count those "in words"
-            // in order to modify the selection accordingly.
+            // make sure the selection build later from the data below does not
+            // include footnotes and other "in word" character to the left and
+            // right in order to preserve those. Therefore count those "in
+            // words" in order to modify the selection accordingly.
             const sal_Unicode* pChar = aText.GetBuffer();
             xub_StrLen nLeft = 0;
             while (pChar && *pChar++ == CH_TXTATR_INWORD)
@@ -3400,9 +3379,10 @@ void SwCrsrShell::GetSmartTagTerm( const Point& rPt, SwRect& rSelectRect,
             *pCrsr->GetPoint() = aPos;
             pCrsr->SetMark();
             ExtendSelection( sal_True, nLen - nLeft - nRight );
-            //no determine the rectangle in the current line
+            // do not determine the rectangle in the current line
             xub_StrLen nWordStart = (nBegin + nLeft) < nLineStart ? nLineStart : nBegin + nLeft;
-            //take one less than the line end - otherwise the next line would be calculated
+            // take one less than the line end - otherwise the next line would
+            // be calculated
             xub_StrLen nWordEnd = (nBegin + nLen - nLeft - nRight) > nLineEnd ? nLineEnd : (nBegin + nLen - nLeft - nRight);
             Push();
             pCrsr->DeleteMark();

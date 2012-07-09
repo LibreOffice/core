@@ -120,7 +120,7 @@ void lcl_notifyRow(const SwCntntNode* pNode, SwCrsrShell& rShell)
 
 SwCallLink::~SwCallLink()
 {
-    if( !nNdTyp || !rShell.bCallChgLnk )        // see ctor
+    if( !nNdTyp || !rShell.bCallChgLnk ) // see ctor
         return ;
 
     // If travelling over Nodes check formats and register them anew at the

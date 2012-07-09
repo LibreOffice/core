@@ -54,10 +54,9 @@
 #include <breakit.hxx>
 #include <crsskip.hxx>
 #include <vcl/msgbox.hxx>
-#include <mdiexp.hxx>           // ...Percent()
-#include <statstr.hrc>          // ResId fuer Statusleiste
-#include <redline.hxx>      // SwRedline
-
+#include <mdiexp.hxx>
+#include <statstr.hrc>
+#include <redline.hxx>
 
 using namespace ::com::sun::star::i18n;
 
@@ -337,7 +336,7 @@ sal_Bool SwCursor::IsSelOvr( int eFlags )
         if( pFrm && pFrm->IsValid() && 0 == pFrm->Frm().Height() &&
             0 != ( nsSwCursorSelOverFlags::SELOVER_CHANGEPOS & eFlags ) )
         {
-            // skip to the next / prev valid paragraph with a layout
+            // skip to the next/prev valid paragraph with a layout
             SwNodeIndex& rPtIdx = GetPoint()->nNode;
             int bGoNxt = pSavePos->nNode < rPtIdx.GetIndex();
             while( 0 != ( pFrm = ( bGoNxt ? pFrm->GetNextCntntFrm()
@@ -345,8 +344,8 @@ sal_Bool SwCursor::IsSelOvr( int eFlags )
                     0 == pFrm->Frm().Height() )
                 ;
 
-            // #i72394# skip to prev /next valid paragraph
-            // with a layout in case the first search did not succeed:
+            // #i72394# skip to prev/next valid paragraph with a layout in case
+            // the first search did not succeed:
             if( !pFrm )
             {
                 bGoNxt = !bGoNxt;
@@ -361,7 +360,7 @@ sal_Bool SwCursor::IsSelOvr( int eFlags )
             SwCntntNode* pCNd;
             if( pFrm && 0 != (pCNd = (SwCntntNode*)pFrm->GetNode()) )
             {
-                // set this cntntNode as new position
+                // set this CntntNode as new position
                 rPtIdx = *pCNd;
                 pNd = pCNd;
 
@@ -464,7 +463,7 @@ sal_Bool SwCursor::IsSelOvr( int eFlags )
                     ::CheckNodesRange( GetMark()->nNode,
                                        GetPoint()->nNode, sal_True ))
                 {
-                    // TABLE IN TABLE
+                    // table in table
                     const SwTableNode* pOuterTableNd = pMyNd->FindTableNode();
                     if ( pOuterTableNd )
                         pMyNd = pOuterTableNd;
@@ -722,7 +721,7 @@ sal_uLong lcl_FindSelection( SwFindParas& rParas, SwCursor* pCurCrsr,
     int bSrchBkwrd = fnMove == fnMoveBackward, bEnde = sal_False;
     SwPaM *pTmpCrsr = pCurCrsr, *pSaveCrsr = pCurCrsr;
 
-    // only create progress-bar for ShellCrsr
+    // only create progress bar for ShellCrsr
     bool bIsUnoCrsr = 0 != dynamic_cast<SwUnoCrsr*>(pCurCrsr);
     _PercentHdl* pPHdl = 0;
     sal_uInt16 nCrsrCnt = 0;
@@ -945,7 +944,7 @@ sal_uLong SwCursor::FindAll( SwFindParas& rParas,
         // put cursor as copy of current into ring
         // chaining points always to first created, so forward
         SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        std::auto_ptr< SwCursor > pSav( Create( this ) );   // save the current cursor
+        std::auto_ptr< SwCursor > pSav( Create( this ) ); // save the current cursor
         SAL_WNODEPRECATED_DECLARATIONS_POP
 
         // if already outside of body text search from this position or start at
@@ -1337,7 +1336,7 @@ sal_Bool SwCursor::SelectWordWT( ViewShell* pViewShell, sal_Int16 nWordType, con
         // set the cursor to the layout position
         Point aPt( *pPt );
         pLayout->GetCrsrOfst( GetPoint(), aPt );
-    }   //swmod 071107//swmod 071225
+    }   //swmod 071107 //swmod 071225
 
     const SwTxtNode* pTxtNd = GetNode()->GetTxtNode();
     if( pTxtNd && pBreakIt->GetBreakIter().is() )
@@ -1394,7 +1393,6 @@ sal_Bool SwCursor::SelectWordWT( ViewShell* pViewShell, sal_Int16 nWordType, con
     return bRet;
 }
 
-//-----------------------------------------------------------------------------
 
 static String lcl_MaskDeletedRedlines( const SwTxtNode* pTxtNd )
 {
@@ -1623,9 +1621,9 @@ sal_Bool SwCursor::LeftRight( sal_Bool bLeft, sal_uInt16 nCnt, sal_uInt16 nMode,
             break;
 
         // If we were located inside a covered cell but our position has been
-        // corrected, we check if the last move has moved the cursor to a different
-        // table cell. In this case we set the cursor to the stored covered position
-        // and redo the move:
+        // corrected, we check if the last move has moved the cursor to a
+        // different table cell. In this case we set the cursor to the stored
+        // covered position and redo the move:
         if ( mnRowSpanOffset )
         {
             const SwNode* pOldTabBoxSttNode = aOldNodeIdx.GetNode().FindTableBoxStartNode();
@@ -1799,10 +1797,10 @@ sal_Bool SwCursor::UpDown( sal_Bool bUp, sal_uInt16 nCnt,
 
         if ( bAdjustTableCrsr && !bUp )
         {
-            // Special case: We have a table cursor but the start box
-            // has more than one paragraph. If we want to go down, we have to
-            // set the point to the last frame in the table box. This is
-            // only necessary if we do not already have a table selection
+            // Special case: We have a table cursor but the start box has more
+            // than one paragraph. If we want to go down, we have to set the
+            // point to the last frame in the table box. This is only necessary
+            // if we do not already have a table selection
             const SwStartNode* pTblNd = GetNode( sal_True )->FindTableBoxStartNode();
             OSL_ENSURE( pTblNd, "pTblCrsr without SwTableNode?" );
 
@@ -2015,13 +2013,13 @@ sal_Bool SwCursor::GotoTblBox( const String& rName )
 
 sal_Bool SwCursor::MovePara(SwWhichPara fnWhichPara, SwPosPara fnPosPara )
 {
-    //for optimization test something before
+    // for optimization test something before
     const SwNode* pNd = &GetPoint()->nNode.GetNode();
     bool bShortCut = false;
     if ( fnWhichPara == fnParaCurr )
     {
         // #i41048#
-        // If fnWhichPara == fnParaCurr, (*fnWhichPara)( *this, fnPosPara )
+        // If fnWhichPara == fnParaCurr then (*fnWhichPara)( *this, fnPosPara )
         // can already move the cursor to a different text node. In this case
         // we better check if IsSelOvr().
         const SwCntntNode* pCntntNd = pNd->GetCntntNode();
@@ -2135,7 +2133,7 @@ sal_Bool lcl_SeekEntry( const SwSelBoxes& rTmp, const SwStartNode* pSrch, sal_uI
 
 SwCursor* SwTableCursor::MakeBoxSels( SwCursor* pAktCrsr )
 {
-    if( bChg )      // ???
+    if( bChg )
     {
         if( bParked )
         {

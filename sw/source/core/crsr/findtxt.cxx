@@ -121,7 +121,6 @@ String& lcl_CleanStr( const SwTxtNode& rNd, xub_StrLen nStart,
             const SwTxtAttr* pHt = (*pHts)[n];
             if ( pHt->HasDummyChar() && (nStt >= nStart) )
             {
-                //JP 17.05.00: Task 75806 ask for ">=" and not for ">"
                    switch( pHt->Which() )
                 {
                 case RES_TXTATR_FLYCNT:
@@ -263,7 +262,7 @@ sal_uInt8 SwPaM::Find( const SearchOptions& rSearchOpt, sal_Bool bSearchInNotes 
     sal_Bool bChkParaEnd = bRegSearch && 1 == rSearchOpt.searchString.getLength() &&
                       !rSearchOpt.searchString.compareToAscii( "$" );
 
-//    LanguageType eLastLang = 0;
+    // LanguageType eLastLang = 0;
     while( 0 != ( pNode = ::GetNode( *pPam, bFirst, fnMove, bInReadOnly ) ))
     {
         if( pNode->IsTxtNode() )
@@ -276,11 +275,12 @@ sal_uInt8 SwPaM::Find( const SearchOptions& rSearchOpt, sal_Bool bSearchInNotes 
             nStart = rCntntIdx.GetIndex();
 
             /* #i80135# */
-            // if there are SwPostItFields inside our current node text, we split the text into seperate pieces
-            // and search for text inside the pieces as well as inside the fields
+            // if there are SwPostItFields inside our current node text, we
+            // split the text into seperate pieces and search for text inside
+            // the pieces as well as inside the fields
             const SwpHints *pHts = ((SwTxtNode*)pNode)->GetpSwpHints();
 
-            // count postitfields by looping over all fields
+            // count PostItFields by looping over all fields
             xub_StrLen aNumberPostits = 0;
             xub_StrLen aIgnore = 0;
             if (pHts && bSearchInNotes)
@@ -392,7 +392,8 @@ sal_uInt8 SwPaM::Find( const SearchOptions& rSearchOpt, sal_Bool bSearchInNotes 
             }
             else
             {
-                // if there is no SwPostItField inside or searching inside notes is disabled, we search the whole length just like before
+                // if there is no SwPostItField inside or searching inside notes
+                // is disabled, we search the whole length just like before
                 bFound = DoSearch(rSearchOpt,rSTxt,fnMove,bSrchForward,bRegSearch,bChkEmptyPara,bChkParaEnd,
                             nStart,nEnde,nTxtLen, pNode,pPam);
             }
@@ -415,7 +416,8 @@ bool SwPaM::DoSearch( const SearchOptions& rSearchOpt, utl::TextSearch& rSTxt,
     String sCleanStr;
     std::vector<sal_uLong> aFltArr;
     LanguageType eLastLang = 0;
-    // if the search string contains a soft hypen, we don't strip them from the text:
+    // if the search string contains a soft hypen,
+    // we don't strip them from the text:
     bool bRemoveSoftHyphens = true;
     if ( bRegSearch )
     {
@@ -452,9 +454,9 @@ bool SwPaM::DoSearch( const SearchOptions& rSearchOpt, utl::TextSearch& rSTxt,
     while ( (bSrchForward && nStart < nStringEnd) ||
             (! bSrchForward && nStart > nStringEnd) )
     {
-        // SearchAlgorithms_APPROXIMATE works on a per word base
-        // so we have to provide the text searcher with the correct
-        // locale, because it uses the breakiterator
+        // SearchAlgorithms_APPROXIMATE works on a per word base so we have to
+        // provide the text searcher with the correct locale, because it uses
+        // the break-iterator
         if ( pScriptIter )
         {
             nEnde = pScriptIter->GetScriptChgPos();
@@ -514,9 +516,8 @@ bool SwPaM::DoSearch( const SearchOptions& rSearchOpt, utl::TextSearch& rSTxt,
             bFound = sal_True;
             break;
         }
-
         nStart = nEnde;
-    } // end of script while
+    }
 
     delete pScriptIter;
 

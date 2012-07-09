@@ -223,8 +223,10 @@ sal_Bool SwCrsrShell::_SelTblRowOrCol( bool bRow, bool bRowSimple )
         }
         else
         {
-            pStt = aCells[ bVert ? (bRow ? 0 : 3) : (bRow ? 2 : 1) ]->GetTabBox();  // will become point of table cursor
-            pEnd = aCells[ bVert ? (bRow ? 3 : 0) : (bRow ? 1 : 2) ]->GetTabBox();  // will become mark of table cursor
+            // will become point of table cursor
+            pStt = aCells[ bVert ? (bRow ? 0 : 3) : (bRow ? 2 : 1) ]->GetTabBox();
+            // will become mark of table cursor
+            pEnd = aCells[ bVert ? (bRow ? 3 : 0) : (bRow ? 1 : 2) ]->GetTabBox();
         }
     }
 
@@ -280,8 +282,8 @@ sal_Bool SwCrsrShell::SelTbl()
     pTblCrsr->GetPoint()->nNode = *pTblNd;
     pTblCrsr->Move( fnMoveForward, fnGoCntnt );
     pTblCrsr->SetMark();
-    // set MkPos 'close' to the master table, otherwise we might get problems with the
-    // repeated headlines check in UpdateCrsr():
+    // set MkPos 'close' to the master table, otherwise we might get problems
+    // with the repeated headlines check in UpdateCrsr():
     pTblCrsr->GetMkPos() = pMasterTabFrm->IsVertical() ? pMasterTabFrm->Frm().TopRight() : pMasterTabFrm->Frm().TopLeft();
     pTblCrsr->GetPoint()->nNode = *pTblNd->EndOfSectionNode();
     pTblCrsr->Move( fnMoveBackward, fnGoCntnt );
@@ -344,15 +346,19 @@ sal_Bool SwCrsrShell::SelTblBox()
     return sal_True;
 }
 
-// return the next non-protected cell inside a table
-//      rIdx    - is on a table node
-//  return:
-//      true  - Idx points to content in a suitable cell
-//      false - could not find a suitable cell
+// TODO: provide documentation
+/** get the next non-protected cell inside a table
+
+    @param[in,out] rIdx is on a table node
+    @param bInReadOnly  ???
+
+    @return <false> if no suitable cell could be found, otherwise <rIdx> points
+            to content in a suitable cell and <true> is returned.
+*/
 bool lcl_FindNextCell( SwNodeIndex& rIdx, sal_Bool bInReadOnly )
 {
     // check protected cells
-    SwNodeIndex aTmp( rIdx, 2 );            // TableNode + StartNode
+    SwNodeIndex aTmp( rIdx, 2 ); // TableNode + StartNode
 
     // the resulting cell should be in that table:
     const SwTableNode* pTblNd = rIdx.GetNode().GetTableNode();
@@ -427,10 +433,10 @@ bool lcl_FindNextCell( SwNodeIndex& rIdx, sal_Bool bInReadOnly )
     return true;
 }
 
-// comments see lcl_FindNextCell
+/// see lcl_FindNextCell()
 bool lcl_FindPrevCell( SwNodeIndex& rIdx, sal_Bool bInReadOnly  )
 {
-    SwNodeIndex aTmp( rIdx, -2 );       // TableNode + EndNode
+    SwNodeIndex aTmp( rIdx, -2 ); // TableNode + EndNode
 
     const SwNode* pTableEndNode = &rIdx.GetNode();
     const SwTableNode* pTblNd = pTableEndNode->StartOfSectionNode()->GetTableNode();
@@ -496,9 +502,8 @@ sal_Bool GotoPrevTable( SwPaM& rCurCrsr, SwPosTable fnPosTbl,
     SwTableNode* pTblNd = aIdx.GetNode().FindTableNode();
     if( pTblNd )
     {
-        // #i26532#: If we are inside a table, we may not go backward
-        // to the table start node, because we would miss any tables
-        // inside this table.
+        // #i26532#: If we are inside a table, we may not go backward to the
+        // table start node, because we would miss any tables inside this table.
         SwTableNode* pInnerTblNd = 0;
         SwNodeIndex aTmpIdx( aIdx );
         while( aTmpIdx.GetIndex() &&
@@ -713,9 +718,8 @@ sal_Bool SwCrsrShell::IsTblComplexForChart()
 {
     sal_Bool bRet = sal_False;
 
-    StartAction();  // IsTblComplexForChart() may trigger table formatting
-                    // we better do that inside an action
-
+    // Here we may trigger table formatting so we better do that inside an action
+    StartAction();
     const SwTableNode* pTNd = pCurCrsr->GetPoint()->nNode.GetNode().FindTableNode();
     if( pTNd )
     {

@@ -25,6 +25,6 @@ struct SwPosition;
 
 IBlockCursor *createBlockCursor(const SwCrsrShell& rCrsrSh, const SwPosition &rPos);
 
-#endif  //_BLOCKURSOR_HXX
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
