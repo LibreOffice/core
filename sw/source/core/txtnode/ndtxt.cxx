@@ -2389,6 +2389,8 @@ void SwTxtNode::NumRuleChgd()
         SvxLRSpaceItem& rLR = (SvxLRSpaceItem&)GetSwAttrSet().GetLRSpace();
         NotifyClients( &rLR, &rLR );
     }
+
+    SetWordCountDirty( true );
 }
 
 // -> #i27615#
@@ -3840,6 +3842,8 @@ void SwTxtNode::RemoveFromList()
         mpList = 0;
         delete mpNodeNum;
         mpNodeNum = 0L;
+
+        SetWordCountDirty( true );
     }
 }
 
