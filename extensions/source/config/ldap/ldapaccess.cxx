@@ -283,7 +283,7 @@ void LdapConnection::loadModule()
     {
 #if defined WNT
         s_Ldap_Module = osl_loadModuleRelativeAscii(
-            &thisModule, "nsldap32v50.dll", 0);
+            &thisModule, "wldap32.dll", 0);
 #elif defined WITH_OPENLDAP
         s_Ldap_Module = osl_loadModuleAscii(
             ("libldap-" SAL_STRINGIFY(LDAP_VENDOR_VERSION_MAJOR) "."

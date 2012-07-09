@@ -252,6 +252,7 @@ gb_Library_PLAINLIBS_NONE += \
 	version \
 	wininet \
 	winspool \
+	wldap32 \
 	ws2_32 \
 
 gb_Library_LAYER := \

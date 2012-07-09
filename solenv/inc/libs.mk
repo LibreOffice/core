@@ -112,7 +112,7 @@ MOZBASELIBST=$(STATIC) -lnspr4 -lxpcombase_s $(DYNAMIC)
 .ENDIF			# "$(GUI)$(COM)"=="WNTGCC"
 MOZBASELIB=-lnspr4 -lxpcom
 .IF "$(GUI)$(COM)"=="WNTGCC"
-LDAPSDKLIB=-lnsldap32v50
+LDAPSDKLIB=-lwldap32
 .ELSE			# "$(GUI)$(COM)"=="WNTGCC"
 .IF "$(WITH_OPENLDAP)" == "YES"
 LDAPSDKLIB=-lldap
@@ -412,7 +412,7 @@ EXTLIB=iext.lib
 SOTLIB=isot.lib
 MOZBASELIBST=nspr4_s.lib xpcombase_s.lib
 MOZBASELIB=nspr4.lib xpcom.lib
-LDAPSDKLIB=nsldap32v50.lib
+LDAPSDKLIB=wldap32.lib
 PAPILIB=ipap.lib
 SFX2LIB=sfx.lib
 SFXLIB=$(SFX2LIB)

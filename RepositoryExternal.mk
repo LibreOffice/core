@@ -1368,12 +1368,6 @@ $(call gb_LinkTarget_use_libraries,$(1),\
 	ws2_32 \
 )
 
-ifeq ($(WITH_LDAP),YES)
-$(call gb_LinkTarget_add_libs,$(1),\
-	nsldap32v50.lib \
-)
-endif
-
 endif
 
 endef

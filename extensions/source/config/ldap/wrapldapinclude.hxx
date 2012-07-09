@@ -31,10 +31,24 @@
 #    define LDAP_CALL
 #endif
 #else
+#ifdef WNT
+#include <windows.h>
+#include <winldap.h>
+#ifndef LDAP_API
+#    define LDAP_API(rt) rt
+#endif
+#ifndef LDAP_CALL
+#    define LDAP_CALL
+#endif
+#ifndef LDAP_NO_ATTRS
+#    define LDAP_NO_ATTRS "1.1"
+#endif
+#else // !defined WNT
 #ifndef LDAP_INCLUDED
 #define LDAP_INCLUDED
 #include <ldap/ldap.h>
 #endif // LDAP_INCLUDED
+#endif // WNT
 #endif
 
 #ifdef WNT
