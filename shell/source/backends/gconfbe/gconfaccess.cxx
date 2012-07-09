@@ -568,6 +568,22 @@ ConfigurationValue const ConfigurationValues[] =
         SETTING_WORK_DIRECTORY, // so that the existence of the dir can be checked
     },
 
+    {
+        SETTING_USER_GIVENNAME,
+        "/desktop/gnome/url-handlers/mailto/command", // dummy
+        RTL_CONSTASCII_STRINGPARAM("givenname"),
+        sal_True,
+        SETTING_USER_GIVENNAME
+    },
+
+    {
+        SETTING_USER_SURNAME,
+        "/desktop/gnome/url-handlers/mailto/command", // dummy
+        RTL_CONSTASCII_STRINGPARAM("sn"),
+        sal_True,
+        SETTING_USER_SURNAME
+    },
+
 #ifdef ENABLE_LOCKDOWN
     {
         SETTING_WRITER_DEFAULT_DOC_FORMAT,
@@ -607,22 +623,6 @@ ConfigurationValue const ConfigurationValues[] =
         RTL_CONSTASCII_STRINGPARAM("AutoSaveTimeIntervall"),
         sal_False,
         SETTING_AUTO_SAVE
-    },
-
-    {
-        SETTING_USER_GIVENNAME,
-        "/desktop/gnome/url-handlers/mailto/command", // dummy
-        RTL_CONSTASCII_STRINGPARAM("givenname"),
-        sal_True,
-        SETTING_USER_GIVENNAME
-    },
-
-    {
-        SETTING_USER_SURNAME,
-        "/desktop/gnome/url-handlers/mailto/command", // dummy
-        RTL_CONSTASCII_STRINGPARAM("sn"),
-        sal_True,
-        SETTING_USER_SURNAME
     },
 
     {

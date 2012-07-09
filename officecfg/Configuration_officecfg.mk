@@ -161,7 +161,7 @@ $(eval $(call gb_Configuration_add_spool_modules,registry,officecfg/registry/dat
 	org/openoffice/Setup-math.xcu \
 	org/openoffice/Setup-report.xcu \
 	org/openoffice/Setup-start.xcu \
-	org/openoffice/UserProfile-gconflockdown.xcu \
+	org/openoffice/UserProfile-unixdesktop.xcu \
 	org/openoffice/VCL-gconflockdown.xcu \
 	org/openoffice/VCL-unixdesktop.xcu \
 	org/openoffice/Office/Accelerators-macosx.xcu \

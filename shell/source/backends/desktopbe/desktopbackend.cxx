@@ -173,7 +173,7 @@ css::uno::Any Default::getPropertyValue(rtl::OUString const & PropertyName)
       || PropertyName == "SourceViewFontName" || PropertyName == "WorkPathVariable" || PropertyName == "ooInetFTPProxyName"
       || PropertyName == "ooInetFTPProxyPort" || PropertyName == "ooInetHTTPProxyName" || PropertyName == "ooInetHTTPProxyPort"
       || PropertyName == "ooInetHTTPSProxyName" || PropertyName == "ooInetHTTPSProxyPort" || PropertyName == "ooInetNoProxy"
-      || PropertyName == "ooInetProxyType" )
+      || PropertyName == "ooInetProxyType" || PropertyName == "givenname" || PropertyName == "sn" )
     {
         return css::uno::makeAny(css::beans::Optional< css::uno::Any >());
     }
@@ -214,6 +214,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance(
                 RTL_CONSTASCII_USTRINGPARAM("system.desktop-environment"))) >>=
             desktop;
     }
+
     // Fall back to the default if the specific backend is not available:
     css::uno::Reference< css::uno::XInterface > backend;
     if ( desktop == "GNOME" ) {

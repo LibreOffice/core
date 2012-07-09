@@ -307,6 +307,7 @@ MY_FILES_main += \
     $(MY_MOD)/org/openoffice/Office/Common-unx.xcu \
     $(MY_MOD)/org/openoffice/Office/Paths-unixdesktop.xcu \
     $(MY_MOD)/org/openoffice/Office/Paths-unxwnt.xcu \
+    $(MY_MOD)/org/openoffice/UserProfile-unixdesktop.xcu \
     $(MY_MOD)/org/openoffice/VCL-unixdesktop.xcu
         # Inet-unixdesktop.xcu must come after Inet.xcu
         # VCL-unixdesktop.xcu must come after VCL.xcu
@@ -466,7 +467,6 @@ MY_DEPS_gnome = main
 MY_FILES_gnome += \
     $(MY_MOD)/org/openoffice/Office/Common-gconflockdown.xcu \
     $(MY_MOD)/org/openoffice/Office/Recovery-gconflockdown.xcu \
-    $(MY_MOD)/org/openoffice/UserProfile-gconflockdown.xcu \
     $(MY_MOD)/org/openoffice/VCL-gconflockdown.xcu
 .END
 .IF "$(ENABLE_GIO)" == "TRUE"
