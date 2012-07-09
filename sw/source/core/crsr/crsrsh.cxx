@@ -304,7 +304,7 @@ void SwCrsrShell::EndAction( const sal_Bool bIdleEnd )
     sal_uInt16 nParm = SwCrsrShell::CHKRANGE;
     if ( !bIdleEnd )
         nParm |= SwCrsrShell::SCROLLWIN;
-//    if( !IsViewLocked() )
+
     UpdateCrsr( nParm, bIdleEnd );      // Show Cursor changes
 
     {
@@ -1181,7 +1181,7 @@ void SwCrsrShell::Paint( const Rectangle &rRect)
     if( bHasFocus && !bBasicHideCrsr )
     {
         SwShellCrsr* pAktCrsr = pTblCrsr ? pTblCrsr : pCurCrsr;
-//      pAktCrsr->Invalidate( aRect );
+
         if( !ActionPend() )
         {
             // damit nicht rechts/unten die Raender abgeschnitten werden

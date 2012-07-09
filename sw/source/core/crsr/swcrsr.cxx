@@ -812,7 +812,6 @@ sal_uLong lcl_FindSelection( SwFindParas& rParas, SwCursor* pCurCrsr,
                     if(RET_CANCEL == nRet)
                     {
                         bCancel = sal_True;
-                        //unwind() ??
                     }
                     break;
                 }
@@ -1112,8 +1111,6 @@ void SwCursor::FillFindPos( SwDocPositions ePos, SwPosition& rPos ) const
         pCNd = rNds.GoPrevious( &rPos.nNode );
         bIsStart = sal_False;
         break;
-
-//  case DOCPOS_CURR:
     default:
         rPos = *GetPoint();
     }
@@ -1634,8 +1631,6 @@ sal_Bool SwCursor::LeftRight( sal_Bool bLeft, sal_uInt16 nCnt, sal_uInt16 nMode,
     else
         fnGo = CRSR_SKIP_CELLS == nMode ? fnGoCntntCells : fnGoCntnt;
 
-    // OSL_ENSURE( not in covered cell )
-
     while( nCnt )
     {
         SwNodeIndex aOldNodeIdx( GetPoint()->nNode );
@@ -1992,7 +1987,7 @@ sal_Bool SwCursor::GoPrevNextCell( sal_Bool bNext, sal_uInt16 nCnt )
     return !IsInProtectTable( sal_True );
 }
 
-sal_Bool SwTableCursor::GotoTable( const String& /*rName*/ )
+sal_Bool SwTableCursor::GotoTable( const String& )
 {
     return sal_False; // invalid action
 }

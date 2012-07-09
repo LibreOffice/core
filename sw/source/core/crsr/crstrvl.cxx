@@ -892,7 +892,7 @@ sal_uInt16 SwCrsrShell::GetOutlinePos( sal_uInt8 nLevel )
     {
         pNd = rNds.GetOutLineNds()[ nPos ];
 
-        if( ((SwTxtNode*)pNd)->GetAttrOutlineLevel()-1 <= nLevel )//<-end,zhaojianwei
+        if( ((SwTxtNode*)pNd)->GetAttrOutlineLevel()-1 <= nLevel )
             return nPos;
 
     }

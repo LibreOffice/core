@@ -711,15 +711,6 @@ sal_Bool SwPaM::HasReadonlySel( bool bFormView ) const
                         if( nSttIdx <= nIdx && nEndIdx >= nIdx &&
                             rCntnt.GetCntntIdx()->GetNode().GetNodes().IsDocNodes() )
                         {
-/*                          // ist es keine gelinkte Section, dann kann sie auch
-                            // nicht mitselektiert werden
-                            const SwSection& rSect = *pFmt->GetSection();
-                            if( CONTENT_SECTION == rSect.GetType() )
-                            {
-                                RestoreSavePos();
-                                return sal_True;
-                            }
-*/
                             bRet = sal_True;
                             break;
                         }
@@ -813,10 +804,7 @@ SwCntntNode* GetNode( SwPaM & rPam, sal_Bool& rbFirst, SwMoveFn fnMove,
             sal_Bool bSrchForward = fnMove == fnMoveForward;
             SwNodes& rNodes = aPos.nNode.GetNodes();
 
-            // zum naechsten / vorherigen ContentNode
-// Funktioniert noch alles, wenn die Uerbpruefung vom ueberspringen der
-// Sektions herausgenommen wird ??
-//          if( (*fnMove->fnNds)( rNodes, &aPos.nNode ) )
+            // go to next/previous CntntNode
             while( sal_True )
             {
                 pNd = bSrchForward

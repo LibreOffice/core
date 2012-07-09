@@ -537,12 +537,11 @@ bool SwPaM::DoSearch( const SearchOptions& rSearchOpt, utl::TextSearch& rSTxt,
             Move( fnMoveForward, fnGoCntnt ) &&
             (!bSrchForward || pSttNd != &GetPoint()->nNode.GetNode()) &&
             1 == Abs( (int)( GetPoint()->nNode.GetIndex() -
-                            GetMark()->nNode.GetIndex()) ) )
+                             GetMark()->nNode.GetIndex()) ) )
         {
-            if( !bSrchForward )         // rueckwaerts Suche?
-                Exchange();             // Point und Mark tauschen
-            //bFound = sal_True;
-            //break;
+            // if backward search, switch point and mark
+            if( !bSrchForward )
+                Exchange();
             return true;
         }
     }
