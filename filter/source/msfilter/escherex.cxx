@@ -1453,7 +1453,43 @@ sal_Bool EscherPropertyContainer::CreateGraphicProperties(
             }
 
             if ( eBitmapMode == ::com::sun::star::drawing::BitmapMode_REPEAT )
-                AddOpt( ESCHER_Prop_fillType, ESCHER_FillTexture );
+            {
+                sal_Int32 nSizeX = 0,nSizeY = 0,nOffsetX = 0,nOffsetY = 0,nPosOffsetX = 0,nPosOffsetY = 0;
+                if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet,
+                        String( RTL_CONSTASCII_USTRINGPARAM( "FillBitmapSizeX" ) ), sal_True ) )
+                {
+                    aAny >>= nSizeX;
+                }
+                if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet,
+                        String( RTL_CONSTASCII_USTRINGPARAM( "FillBitmapSizeY" ) ), sal_True ) )
+                {
+                    aAny >>= nSizeY;
+                }
+                if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet,
+                        String( RTL_CONSTASCII_USTRINGPARAM( "FillBitmapOffsetX" ) ), sal_True ) )
+                {
+                    aAny >>= nOffsetX;
+                }
+                if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet,
+                        String( RTL_CONSTASCII_USTRINGPARAM( "FillBitmapOffsetY" ) ), sal_True ) )
+                {
+                    aAny >>= nOffsetY;
+                }
+                if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet,
+                        String( RTL_CONSTASCII_USTRINGPARAM( "FillBitmapPositionOffsetX" ) ), sal_True ) )
+                {
+                    aAny >>= nPosOffsetX;
+                }
+                if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet,
+                        String( RTL_CONSTASCII_USTRINGPARAM( "FillBitmapPositionOffsetY" ) ), sal_True ) )
+                {
+                    aAny >>= nPosOffsetY;
+                }
+                if(nSizeX == -100 && nSizeY == -100 && nOffsetX == 0 && nOffsetY == 0 && nPosOffsetX == 0 && nPosOffsetY == 0)
+                    AddOpt( ESCHER_Prop_fillType, ESCHER_FillPicture );
+                else
+                    AddOpt( ESCHER_Prop_fillType, ESCHER_FillTexture );
+            }
             else
                 AddOpt( ESCHER_Prop_fillType, ESCHER_FillPicture );
 
