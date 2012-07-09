@@ -37,7 +37,7 @@
 
 sal_Bool SwCrsrShell::CallCrsrFN( FNCrsr fnCrsr )
 {
-    SwCallLink aLk( *this );        // Crsr-Moves ueberwachen,
+    SwCallLink aLk( *this ); // watch Crsr-Moves
     SwCursor* pCrsr = getShellCrsr( true );
     sal_Bool bRet = (pCrsr->*fnCrsr)();
     if( bRet )
@@ -48,7 +48,7 @@ sal_Bool SwCrsrShell::CallCrsrFN( FNCrsr fnCrsr )
 
 sal_Bool SwCursor::GotoFtnTxt()
 {
-    // springe aus dem Content zur Fussnote
+    // jump from content to footnote
     sal_Bool bRet = sal_False;
     SwTxtNode* pTxtNd = GetPoint()->nNode.GetNode().GetTxtNode();
 
@@ -124,11 +124,11 @@ sal_Bool SwCrsrShell::GotoFtnTxt()
 
 sal_Bool SwCursor::GotoFtnAnchor()
 {
-    // springe aus der Fussnote zum Anker
+    // jump from footnote to anchor
     const SwNode* pSttNd = GetNode()->FindFootnoteStartNode();
     if( pSttNd )
     {
-        // durchsuche alle Fussnoten im Dokument nach diesem StartIndex
+        // search in all footnotes in document for this StartIndex
         const SwTxtFtn* pTxtFtn;
         const SwFtnIdxs& rFtnArr = pSttNd->GetDoc()->GetFtnIdxs();
         for( sal_uInt16 n = 0; n < rFtnArr.Count(); ++n )
@@ -151,12 +151,12 @@ sal_Bool SwCursor::GotoFtnAnchor()
 
 sal_Bool SwCrsrShell::GotoFtnAnchor()
 {
-    // springe aus der Fussnote zum Anker
-    SwCallLink aLk( *this );        // Crsr-Moves ueberwachen,
+    // jump from footnote to anchor
+    SwCallLink aLk( *this ); // watch Crsr-Moves
     sal_Bool bRet = pCurCrsr->GotoFtnAnchor();
     if( bRet )
     {
-        // BUG 5996: Tabellen-Kopfzeile sonderbehandeln
+        // special treatment for table header row
         pCurCrsr->GetPtPos() = Point();
         UpdateCrsr( SwCrsrShell::SCROLLWIN | SwCrsrShell::CHKRANGE |
                     SwCrsrShell::READONLY );
@@ -183,15 +183,14 @@ sal_Bool SwCursor::GotoNextFtnAnchor()
 
     if( rFtnArr.SeekEntry( GetPoint()->nNode, &nPos ))
     {
-        // es gibt eine Fussnote mit dem Index, suche also die
-        // naechstgelegene
+        // there is a footnote with this index, so search also for the next one
         if( nPos < rFtnArr.Count() )
         {
             sal_uLong nNdPos = GetPoint()->nNode.GetIndex();
             xub_StrLen nCntPos = GetPoint()->nContent.GetIndex();
 
             pTxtFtn = rFtnArr[ nPos ];
-            // suche vorewaerts zur naechsten
+            // search forwards
             if( CmpLE( *pTxtFtn, nNdPos, nCntPos ) )
             {
                 pTxtFtn = 0;
@@ -199,13 +198,13 @@ sal_Bool SwCursor::GotoNextFtnAnchor()
                 {
                     pTxtFtn = rFtnArr[ nPos ];
                     if( !CmpLE( *pTxtFtn, nNdPos, nCntPos ) )
-                        break;      // gefunden
+                        break; // found
                     pTxtFtn = 0;
                 }
             }
             else if( nPos )
             {
-                // suche rueckwaerts zur vorherigen
+                // search backwards
                 pTxtFtn = 0;
                 while( nPos )
                 {
@@ -213,7 +212,7 @@ sal_Bool SwCursor::GotoNextFtnAnchor()
                     if( CmpLE( *pTxtFtn, nNdPos, nCntPos ) )
                     {
                         pTxtFtn = rFtnArr[ ++nPos ];
-                        break;      // gefunden
+                        break; // found
                     }
                 }
             }
@@ -243,13 +242,12 @@ sal_Bool SwCursor::GotoPrevFtnAnchor()
 
     if( rFtnArr.SeekEntry( GetPoint()->nNode, &nPos ) )
     {
-        // es gibt eine Fussnote mit dem Index, suche also die
-        // naechstgelegene
+        // there is a footnote with this index, so search also for the next one
         sal_uLong nNdPos = GetPoint()->nNode.GetIndex();
         xub_StrLen nCntPos = GetPoint()->nContent.GetIndex();
 
         pTxtFtn = rFtnArr[ nPos ];
-        // suche vorwaerts zur naechsten
+        // search forwards
         if( CmpL( *pTxtFtn, nNdPos, nCntPos ))
         {
             for( ++nPos; nPos < rFtnArr.Count(); ++nPos )
@@ -264,13 +262,13 @@ sal_Bool SwCursor::GotoPrevFtnAnchor()
         }
         else if( nPos )
         {
-            // suche rueckwaerts zur vorherigen
+            // search backwards
             pTxtFtn = 0;
             while( nPos )
             {
                 pTxtFtn = rFtnArr[ --nPos ];
                 if( CmpL( *pTxtFtn, nNdPos, nCntPos ))
-                    break;      // gefunden
+                    break; // found
                 pTxtFtn = 0;
             }
         }
@@ -303,9 +301,7 @@ sal_Bool SwCrsrShell::GotoPrevFtnAnchor()
     return CallCrsrFN( &SwCursor::GotoPrevFtnAnchor );
 }
 
-// springe aus dem Rahmen zum Anker
-
-
+/// jump from border to anchor
 sal_Bool SwCrsrShell::GotoFlyAnchor()
 {
     SET_CURR_SHELL( this );
@@ -314,13 +310,13 @@ sal_Bool SwCrsrShell::GotoFlyAnchor()
         pFrm = pFrm->GetUpper();
     } while( pFrm && !pFrm->IsFlyFrm() );
 
-    if( !pFrm )     // ist kein FlyFrame
+    if( !pFrm ) // no FlyFrame
         return sal_False;
 
-    SwCallLink aLk( *this );        // Crsr-Moves ueberwachen,
+    SwCallLink aLk( *this ); // watch Crsr-Moves
     SwCrsrSaveState aSaveState( *pCurCrsr );
 
-    // springe in den BodyFrame, der am naechsten vom Fly liegt
+    // jump in BodyFrame closest to FlyFrame
     SwRect aTmpRect( aCharRect );
     if( !pFrm->Frm().IsInside( aTmpRect ))
         aTmpRect = pFrm->Frm();

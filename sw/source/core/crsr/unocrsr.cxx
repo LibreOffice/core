@@ -49,23 +49,23 @@ SwUnoCrsr::~SwUnoCrsr()
     SwDoc* pDoc = GetDoc();
     if( !pDoc->IsInDtor() )
     {
-        // dann muss der Cursor aus dem Array ausgetragen werden
+        // then remove cursor from array
         SwUnoCrsrTbl& rTbl = (SwUnoCrsrTbl&)pDoc->GetUnoCrsrTbl();
         sal_uInt16 nDelPos = rTbl.GetPos( this );
 
         if( USHRT_MAX != nDelPos )
             rTbl.Remove( nDelPos );
         else {
-            OSL_ENSURE( !this, "UNO Cursor nicht mehr im Array" );
+            OSL_ENSURE( !this, "UNO cursor not anymore in array" );
         }
     }
 
-    // den gesamten Ring loeschen!
+    // delete the whole ring
     while( GetNext() != this )
     {
         Ring* pNxt = GetNext();
-        pNxt->MoveTo( 0 );      // ausketten
-        delete pNxt;            // und loeschen
+        pNxt->MoveTo( 0 ); // remove from chain
+        delete pNxt;       // and delete
     }
 }
 
@@ -211,7 +211,7 @@ SwUnoTableCrsr::SwUnoTableCrsr(const SwPosition& rPos)
 SwUnoTableCrsr::~SwUnoTableCrsr()
 {
     while( aTblSel.GetNext() != &aTblSel )
-        delete aTblSel.GetNext();           // und loeschen
+        delete aTblSel.GetNext();
 }
 
 sal_Bool SwUnoTableCrsr::IsSelOvr( int eFlags )

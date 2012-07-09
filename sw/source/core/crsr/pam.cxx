@@ -52,20 +52,11 @@
 
 #include <xmloff/odffields.hxx>
 
-// fuer den dummen ?MSC-? Compiler
+// for the dump "MSC-" compiler
 inline xub_StrLen GetSttOrEnd( sal_Bool bCondition, const SwCntntNode& rNd )
 {
     return bCondition ? 0 : rNd.Len();
 }
-
-/*************************************************************************
-|*
-|*  SwPosition
-|*
-|*  Beschreibung        PAM.DOC
-|*
-*************************************************************************/
-
 
 SwPosition::SwPosition( const SwNodeIndex & rNodeIndex, const SwIndex & rCntnt )
     : nNode( rNodeIndex ), nContent( rCntnt )
@@ -238,16 +229,16 @@ sal_Bool lcl_ChkOneRange( CHKSECTION eSec, sal_Bool bChkSections,
     if( !bChkSections )
         return sal_True;
 
-    // suche die umspannende Section
+    // search the surrounding section
     const SwNodes& rNds = rBaseEnd.GetNodes();
     const SwNode *pTmp, *pNd = rNds[ nStt ];
     if( !pNd->IsStartNode() )
         pNd = pNd->StartOfSectionNode();
 
     if( pNd == rNds[ nEnd ]->StartOfSectionNode() )
-        return sal_True;        // der gleiche StartNode, die selbe Section
+        return sal_True; // same StartNode, same section
 
-    // steht schon auf einem GrundSection Node ? Fehler !!!
+    // already on a base node => error
     if( !pNd->StartOfSectionIndex() )
         return sal_False;
 
@@ -289,7 +280,7 @@ sal_Bool CheckNodesRange( const SwNodeIndex& rStt,
         return lcl_ChkOneRange( eSec, bChkSection,
                             rNds.GetEndOfRedlines(), nStt, nEnd );
 
-    return sal_False;       // liegt irgendwo dazwischen, FEHLER
+    return sal_False; // somewhere in between => error
 }
 
 
@@ -341,14 +332,6 @@ SwCntntNode* GoPreviousNds( SwNodeIndex * pIdx, sal_Bool bChk )
 }
 
 // ----------------------------------------------------------------------
-
-/*************************************************************************
-|*
-|*  SwPointAndMark
-|*
-|*  Beschreibung        PAM.DOC
-|*
-*************************************************************************/
 
 SwPaM::SwPaM( const SwPosition& rPos, SwPaM* pRing )
     : Ring( pRing )
@@ -519,9 +502,7 @@ void SwPaM::Exchange()
 }
 #endif
 
-// Bewegen des Cursors
-
-
+/// movement of cursor
 sal_Bool SwPaM::Move( SwMoveFn fnMove, SwGoInDoc fnGo )
 {
     sal_Bool bRet = (*fnGo)( *this, fnMove );
@@ -531,42 +512,34 @@ sal_Bool SwPaM::Move( SwMoveFn fnMove, SwGoInDoc fnGo )
     return bRet;
 }
 
+/** make a new region
 
-/*************************************************************************
-|*
-|*    void SwPaM::MakeRegion( SwMoveFn, SwPaM*, const SwPaM* )
-|*
-|*    Beschreibung      Setzt den 1. SwPaM auf den uebergebenen SwPaM
-|*                      oder setzt auf den Anfang oder Ende vom Document.
-|*                      SPoint bleibt auf der Position stehen, GetMark aendert
-|*                      sich entsprechend !
-|*
-|*    Parameter         SwDirection     gibt an, ob an Anfang / Ende
-|*                      SwPaM *         der zu setzende Bereich
-|*                      const SwPaM&    der enventuell vorgegeben Bereich
-|*    Return-Werte      SwPaM*          der entsprehend neu gesetzte Bereich
-|*
-*************************************************************************/
+    Sets the first SwPaM onto the given SwPaM, or to the beginning or end of a
+    document. SPoint stays at its position, GetMark will be changed respectively.
 
+    @param fnMove  Contains information if beginning or end of document.
+    @param pOrigRg The given region.
 
+    @return Newly created area.
+*/
 SwPaM* SwPaM::MakeRegion( SwMoveFn fnMove, const SwPaM * pOrigRg )
 {
     SwPaM* pPam;
     if( pOrigRg == 0 )
     {
         pPam = new SwPaM( *m_pPoint );
-        pPam->SetMark();                    // setze Anfang fest
-        pPam->Move( fnMove, fnGoSection);       // an Anfang / Ende vom Node
+        pPam->SetMark(); // set beginning
+        pPam->Move( fnMove, fnGoSection); // to beginning or end of a node
 
-        // stelle SPoint wieder auf alte Position, GetMark auf das "Ende"
+        // set SPoint onto its old position; set GetMark to the "end"
         pPam->Exchange();
     }
     else
     {
-        pPam = new SwPaM( *(SwPaM*)pOrigRg );   // die Suchregion ist vorgegeben
-        // sorge dafuer, dass SPoint auf dem "echten" StartPunkt steht
-        // FORWARD  --> SPoint immer kleiner  als GetMark
-        // BACKWARD --> SPoint immer groesser als GetMark
+        pPam = new SwPaM( *(SwPaM*)pOrigRg ); // given search area
+        // make sure that SPoint is on the "real" start position
+        // FORWARD: SPoint always smaller than GetMark
+        // BACKWARD: SPoint always bigger than GetMark
         if( (pPam->GetMark()->*fnMove->fnCmpOp)( *pPam->GetPoint() ) )
             pPam->Exchange();
     }
@@ -585,10 +558,9 @@ SwPaM & SwPaM::Normalize(sal_Bool bPointFirst)
     return *this;
 }
 
+/// return page number at cursor (for reader and page bound frames)
 sal_uInt16 SwPaM::GetPageNum( sal_Bool bAtPoint, const Point* pLayPos )
 {
-    // return die Seitennummer am Cursor
-    // (fuer Reader + Seitengebundene Rahmen)
     const SwCntntFrm* pCFrm;
     const SwPageFrm *pPg;
     const SwCntntNode *pNd ;
@@ -626,8 +598,7 @@ const SwFrm* lcl_FindEditInReadonlyFrm( const SwFrm& rFrm )
     return pRet;
 }
 
-// steht in etwas geschuetztem oder in die Selektion umspannt
-// etwas geschuetztes.
+/// is in protected section or selection surrounds something protected
 sal_Bool SwPaM::HasReadonlySel( bool bFormView ) const
 {
     sal_Bool bRet = sal_False;
@@ -681,8 +652,7 @@ sal_Bool SwPaM::HasReadonlySel( bool bFormView ) const
                 bRet = sal_True;
         }
 
-        // oder sollte eine geschuetzte Section innerhalb der
-        // Selektion liegen?
+        // protected section in selection
         if( !bRet )
         {
             sal_uLong nSttIdx = GetMark()->nNode.GetIndex(),
@@ -694,8 +664,8 @@ sal_Bool SwPaM::HasReadonlySel( bool bFormView ) const
                 nEndIdx = nTmp;
             }
 
-            // wenn ein geschuetzter Bereich zwischen den Nodes stehen soll,
-            // muss die Selektion selbst schon x Nodes umfassen.
+            // If a protected section should be between nodes, then the
+            // selection needs to contain already x nodes.
             // (TxtNd, SectNd, TxtNd, EndNd, TxtNd )
             if( nSttIdx + 3 < nEndIdx )
             {
@@ -759,15 +729,10 @@ sal_Bool SwPaM::HasReadonlySel( bool bFormView ) const
     return bRet;
 }
 
-//--------------------  Suche nach Formaten( FormatNamen ) -----------------
-
-// die Funktion gibt in Suchrichtung den folgenden Node zurueck.
-// Ist in der Richtung keiner mehr vorhanden oder ist dieser ausserhalb
-// des Bereiches, wird ein 0 Pointer returnt.
-// Das rbFirst gibt an, ob es man zu erstenmal einen Node holt. Ist das der
-// Fall, darf die Position vom Pam nicht veraendert werden!
-
-
+/// This function returns the next node in direction of search. If there is no
+/// left or the next is out of the area, then a null-pointer is returned.
+/// @param rbFirst If <true> than first time request. If so than the position of
+///        the PaM must not be changed!
 SwCntntNode* GetNode( SwPaM & rPam, sal_Bool& rbFirst, SwMoveFn fnMove,
                         sal_Bool bInReadOnly )
 {
@@ -798,7 +763,7 @@ SwCntntNode* GetNode( SwPaM & rPam, sal_Bool& rbFirst, SwMoveFn fnMove,
             }
         }
 
-        if( !pNd )          // steht Cursor auf keinem ContentNode ?
+        if( !pNd ) // is the cursor not on a CntntNode?
         {
             SwPosition aPos( *rPam.GetPoint() );
             sal_Bool bSrchForward = fnMove == fnMoveForward;
@@ -813,23 +778,22 @@ SwCntntNode* GetNode( SwPaM & rPam, sal_Bool& rbFirst, SwMoveFn fnMove,
                 if( pNd )
                 {
                     aPos.nContent.Assign( pNd, ::GetSttOrEnd( bSrchForward,*pNd ));
-                    // liegt Position immer noch im Bereich ?
+                    // is the position still in the area
                     if( (aPos.*fnMove->fnCmpOp)( *rPam.GetMark() ) )
                     {
-                        // nur in der AutoTextSection koennen Node stehen, die
-                        // nicht angezeigt werden !!
+                        // only in AutoTextSection can be nodes that are hidden
                         if( 0 == ( pFrm = pNd->getLayoutFrm( pNd->GetDoc()->GetCurrentLayout() ) ) ||
                             ( !bInReadOnly && pFrm->IsProtected() ) ||
                             ( pFrm->IsTxtFrm() &&
                                 ((SwTxtFrm*)pFrm)->IsHiddenNow() ) )
                         {
                             pNd = 0;
-                            continue;       // suche weiter
+                            continue;
                         }
                         *(SwPosition*)rPam.GetPoint() = aPos;
                     }
                     else
-                        pNd = 0;            // kein gueltiger Node
+                        pNd = 0; // no valid node
                     break;
                 }
                 break;
@@ -841,14 +805,11 @@ SwCntntNode* GetNode( SwPaM & rPam, sal_Bool& rbFirst, SwMoveFn fnMove,
 
 // ----------------------------------------------------------------------
 
-// hier folgen die Move-Methoden ( Foward, Backward; Content, Node, Doc )
-
-
 void GoStartDoc( SwPosition * pPos )
 {
     SwNodes& rNodes = pPos->nNode.GetNodes();
     pPos->nNode = *rNodes.GetEndOfContent().StartOfSectionNode();
-    // es muss immer ein ContentNode gefunden werden !!
+    // we always need to find a ContentNode!
     SwCntntNode* pCNd = rNodes.GoNext( &pPos->nNode );
     if( pCNd )
         pCNd->MakeStartIndex( &pPos->nContent );
@@ -867,30 +828,28 @@ void GoEndDoc( SwPosition * pPos )
 
 void GoStartSection( SwPosition * pPos )
 {
-    // springe zum Anfang der Section
+    // jump to section's beginning
     SwNodes& rNodes = pPos->nNode.GetNodes();
     sal_uInt16 nLevel = rNodes.GetSectionLevel( pPos->nNode );
     if( pPos->nNode < rNodes.GetEndOfContent().StartOfSectionIndex() )
         nLevel--;
     do { rNodes.GoStartOfSection( &pPos->nNode ); } while( nLevel-- );
 
-    // steht jetzt schon auf einem CntntNode
+    // already on a CntntNode
     pPos->nNode.GetNode().GetCntntNode()->MakeStartIndex( &pPos->nContent );
 }
 
-// gehe an das Ende der akt. Grund-Section
-
-
+/// go to the end of the current base section
 void GoEndSection( SwPosition * pPos )
 {
-    // springe zum Anfang/Ende der Section
+    // jump to section's beginning/end
     SwNodes& rNodes = pPos->nNode.GetNodes();
     sal_uInt16 nLevel = rNodes.GetSectionLevel( pPos->nNode );
     if( pPos->nNode < rNodes.GetEndOfContent().StartOfSectionIndex() )
         nLevel--;
     do { rNodes.GoEndOfSection( &pPos->nNode ); } while( nLevel-- );
 
-    // steht jetzt auf einem EndNode, also zum vorherigen CntntNode
+    // now on a EndNode, thus to the previous CntntNode
     if( GoPreviousNds( &pPos->nNode, sal_True ) )
         pPos->nNode.GetNode().GetCntntNode()->MakeEndIndex( &pPos->nContent );
 }
@@ -955,14 +914,13 @@ sal_Bool GoInCntntCellsSkipHidden( SwPaM & rPam, SwMoveFn fnMove )
 
 
 
-// --------- Funktionsdefinitionen fuer die SwCrsrShell --------------
 
 
 sal_Bool GoPrevPara( SwPaM & rPam, SwPosPara aPosPara )
 {
     if( rPam.Move( fnMoveBackward, fnGoNode ) )
     {
-        // steht immer auf einem ContentNode !
+        // always on a CntntNode
         SwPosition& rPos = *rPam.GetPoint();
         SwCntntNode * pNd = rPos.nNode.GetNode().GetCntntNode();
         rPos.nContent.Assign( pNd,
@@ -981,14 +939,14 @@ sal_Bool GoCurrPara( SwPaM & rPam, SwPosPara aPosPara )
     {
         xub_StrLen nOld = rPos.nContent.GetIndex(),
                    nNew = aPosPara == fnMoveForward ? 0 : pNd->Len();
-        // stand er schon auf dem Anfang/Ende dann zum naechsten/vorherigen
+        // if already at beginning/end then to the next/previous
         if( nOld != nNew )
         {
             rPos.nContent.Assign( pNd, nNew );
             return sal_True;
         }
     }
-    // den Node noch etwas bewegen ( auf den naechsten/vorh. CntntNode)
+    // move node to next/previous CntntNode
     if( ( aPosPara==fnParaStart && 0 != ( pNd =
             GoPreviousNds( &rPos.nNode, sal_True ))) ||
         ( aPosPara==fnParaEnd && 0 != ( pNd =
@@ -1006,7 +964,7 @@ sal_Bool GoNextPara( SwPaM & rPam, SwPosPara aPosPara )
 {
     if( rPam.Move( fnMoveForward, fnGoNode ) )
     {
-        // steht immer auf einem ContentNode !
+        // always on a CntntNode
         SwPosition& rPos = *rPam.GetPoint();
         SwCntntNode * pNd = rPos.nNode.GetNode().GetCntntNode();
         rPos.nContent.Assign( pNd,
@@ -1021,14 +979,14 @@ sal_Bool GoNextPara( SwPaM & rPam, SwPosPara aPosPara )
 sal_Bool GoCurrSection( SwPaM & rPam, SwMoveFn fnMove )
 {
     SwPosition& rPos = *rPam.GetPoint();
-    SwPosition aSavePos( rPos );        // eine Vergleichsposition
+    SwPosition aSavePos( rPos ); // position for comparison
     SwNodes& rNds = aSavePos.nNode.GetNodes();
     (rNds.*fnMove->fnSection)( &rPos.nNode );
     SwCntntNode *pNd;
     if( 0 == ( pNd = rPos.nNode.GetNode().GetCntntNode()) &&
         0 == ( pNd = (*fnMove->fnNds)( &rPos.nNode, sal_True )) )
     {
-        rPos = aSavePos;        // Cusror nicht veraendern
+        rPos = aSavePos; // do not change cursor
         return sal_False;
     }
 
@@ -1041,14 +999,14 @@ sal_Bool GoCurrSection( SwPaM & rPam, SwMoveFn fnMove )
 sal_Bool GoNextSection( SwPaM & rPam, SwMoveFn fnMove )
 {
     SwPosition& rPos = *rPam.GetPoint();
-    SwPosition aSavePos( rPos );        // eine Vergleichsposition
+    SwPosition aSavePos( rPos ); // position for comparison
     SwNodes& rNds = aSavePos.nNode.GetNodes();
     rNds.GoEndOfSection( &rPos.nNode );
 
-    // kein weiterer ContentNode vorhanden ?
+    // no other CntntNode existent?
     if( !GoInCntnt( rPam, fnMoveForward ) )
     {
-        rPos = aSavePos;        // Cusror nicht veraendern
+        rPos = aSavePos; // do not change cursor
         return sal_False;
     }
     (rNds.*fnMove->fnSection)( &rPos.nNode );
@@ -1062,14 +1020,14 @@ sal_Bool GoNextSection( SwPaM & rPam, SwMoveFn fnMove )
 sal_Bool GoPrevSection( SwPaM & rPam, SwMoveFn fnMove )
 {
     SwPosition& rPos = *rPam.GetPoint();
-    SwPosition aSavePos( rPos );        // eine Vergleichsposition
+    SwPosition aSavePos( rPos ); // position for comparison
     SwNodes& rNds = aSavePos.nNode.GetNodes();
     rNds.GoStartOfSection( &rPos.nNode );
 
-    // kein weiterer ContentNode vorhanden ?
+    // no further CntntNode existent?
     if( !GoInCntnt( rPam, fnMoveBackward ))
     {
-        rPos = aSavePos;        // Cusror nicht veraendern
+        rPos = aSavePos; // do not change cursor
         return sal_False;
     }
     (rNds.*fnMove->fnSection)( &rPos.nNode );

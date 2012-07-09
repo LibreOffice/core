@@ -111,7 +111,7 @@ namespace
     EndAction();
     return pMark;
 }
-// setzt CurCrsr.SPoint
+// set CurCrsr.SPoint
 
 bool SwCrsrShell::GotoMark(const ::sw::mark::IMark* const pMark, bool bAtStart)
 {

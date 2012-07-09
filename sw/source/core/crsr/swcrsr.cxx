@@ -164,10 +164,8 @@ sal_Bool SwCursor::IsSkipOverProtectSections() const
     return !IsReadOnlyAvailable();
 }
 
-
-// Das CreateNewSavePos ist virtual, damit abgeleitete Klassen vom Cursor
-// gegebenenfalls eigene SaveObjecte anlegen und in den virtuellen
-// Check-Routinen verwenden koennen.
+// CreateNewSavePos is virtual so that derived classes of cursor can implement
+// own SaveObjects if needed and validate them in the virtual check routines.
 void SwCursor::SaveState()
 {
     _SwCursor_SavePos* pNew = CreateNewSavePos();
@@ -190,8 +188,7 @@ _SwCursor_SavePos* SwCursor::CreateNewSavePos() const
     return new _SwCursor_SavePos( *this );
 }
 
-// stelle fest, ob sich der Point ausserhalb des Content-Bereichs
-// vom Nodes-Array befindet
+/// determine if point is outside of the node-array's content area
 sal_Bool SwCursor::IsNoCntnt() const
 {
     return GetPoint()->nNode.GetIndex() <
@@ -235,13 +232,11 @@ sal_Bool SwCursor::IsSelOvr( int eFlags )
         return sal_True;
     }
 
-// neu: Bereiche ueberpruefen
-// Anfang
     if( pSavePos->nNode != GetPoint()->nNode.GetIndex() &&
-        //JP 28.10.97: Bug 45129 - im UI-ReadOnly ist alles erlaubt
+        // (1997) in UI-ReadOnly everything is allowed
         ( !pDoc->GetDocShell() || !pDoc->GetDocShell()->IsReadOnlyUI() ))
     {
-        // teste doch mal die neuen Sections:
+        // check new sections
         SwNodeIndex& rPtIdx = GetPoint()->nNode;
         const SwSectionNode* pSectNd = rPtIdx.GetNode().FindSectionNode();
         if( pSectNd &&
@@ -250,12 +245,12 @@ sal_Bool SwCursor::IsSelOvr( int eFlags )
         {
             if( 0 == ( nsSwCursorSelOverFlags::SELOVER_CHANGEPOS & eFlags ) )
             {
-                // dann wars das schon
+                // then we're already done
                 RestoreSavePos();
                 return sal_True;
             }
 
-            // dann setze den Cursor auf die neue Position:
+            // set cursor to new position:
             SwNodeIndex aIdx( rPtIdx );
             xub_StrLen nCntntPos = pSavePos->nCntnt;
             int bGoNxt = pSavePos->nNode < rPtIdx.GetIndex();
@@ -282,23 +277,22 @@ sal_Bool SwCursor::IsSelOvr( int eFlags )
                     rPtIdx = aIdx;
                     if( 0 == ( pCNd = rPtIdx.GetNode().GetCntntNode() ) )
                     {
-                        // dann auf den Anfang vom Doc
+                        // then to the beginning of the document
                         rPtIdx = rNds.GetEndOfExtras();
                         pCNd = rNds.GoNext( &rPtIdx );
                     }
                 }
             }
 
-            // ContentIndex noch anmelden:
+            // register ContentIndex:
             xub_StrLen nTmpPos = bIsValidPos ? (bGoNxt ? 0 : pCNd->Len()) : nCntntPos;
             GetPoint()->nContent.Assign( pCNd, nTmpPos );
             if( !bIsValidPos || !bValidNodesRange ||
-                // sollten wir in einer Tabelle gelandet sein?
                 IsInProtectTable( sal_True ) )
                 return sal_True;
         }
 
-        // oder sollte eine geschuetzte Section innerhalb der Selektion liegen?
+        // is there a protected section in the section?
         if( HasMark() && bSkipOverProtectSections)
         {
             sal_uLong nSttIdx = GetMark()->nNode.GetIndex(),
@@ -318,12 +312,11 @@ sal_Bool SwCursor::IsSelOvr( int eFlags )
                 if( rProtect.IsCntntProtected() )
                 {
                     const SwFmtCntnt& rCntnt = pFmt->GetCntnt(sal_False);
-                    OSL_ENSURE( rCntnt.GetCntntIdx(), "wo ist der SectionNode?" );
+                    OSL_ENSURE( rCntnt.GetCntntIdx(), "No SectionNode?" );
                     sal_uLong nIdx = rCntnt.GetCntntIdx()->GetIndex();
                     if( nSttIdx <= nIdx && nEndIdx >= nIdx )
                     {
-                        // ist es keine gelinkte Section, dann kann sie auch
-                        // nicht mitselektiert werden
+                        // if it is no linked section then we cannot select it
                         const SwSection& rSect = *pFmt->GetSection();
                         if( CONTENT_SECTION == rSect.GetType() )
                         {
@@ -336,8 +329,6 @@ sal_Bool SwCursor::IsSelOvr( int eFlags )
         }
 
     }
-// Ende
-// neu: Bereiche ueberpruefen
 
     const SwNode* pNd = &GetPoint()->nNode.GetNode();
     if( pNd->IsCntntNode() && !dynamic_cast<SwUnoCrsr*>(this) )
@@ -374,11 +365,10 @@ sal_Bool SwCursor::IsSelOvr( int eFlags )
                 rPtIdx = *pCNd;
                 pNd = pCNd;
 
-                // ContentIndex noch anmelden:
+                // register ContentIndex:
                 xub_StrLen nTmpPos = bGoNxt ? 0 : pCNd->Len();
                 GetPoint()->nContent.Assign( pCNd, nTmpPos );
 
-                    // sollten wir in einer Tabelle gelandet sein?
                 if( IsInProtectTable( sal_True ) )
                     pFrm = 0;
             }
@@ -388,11 +378,11 @@ sal_Bool SwCursor::IsSelOvr( int eFlags )
         {
             DeleteMark();
             RestoreSavePos();
-            return sal_True;        // ohne Frames geht gar nichts!
+            return sal_True; // we need a frame
         }
     }
 
-    // darf der Cursor in geschuetzen "Nodes" stehen?
+    // is the cursor allowed to be in a protected node?
     if( 0 == ( nsSwCursorSelOverFlags::SELOVER_CHANGEPOS & eFlags ) && !IsAtValidPos() )
     {
         DeleteMark();
@@ -403,13 +393,12 @@ sal_Bool SwCursor::IsSelOvr( int eFlags )
     if( !HasMark() )
         return sal_False;
 
-    //JP 19.08.98: teste mal auf ungueltige Selektion - sprich ueber
-    //              GrundSections:
+    // check for invalid sections
     if( !::CheckNodesRange( GetMark()->nNode, GetPoint()->nNode, sal_True ))
     {
         DeleteMark();
         RestoreSavePos();
-        return sal_True;        // ohne Frames geht gar nichts!
+        return sal_True; // we need a frame
     }
 
     const SwTableNode* pPtNd = pNd->FindTableNode();
@@ -419,25 +408,26 @@ sal_Bool SwCursor::IsSelOvr( int eFlags )
     {
         DeleteMark();
         RestoreSavePos();
-        return sal_True;        // ohne Frames geht gar nichts!
+        return sal_True; // we need a frame
     }
 
     const SwTableNode* pMrkNd = pNd->FindTableNode();
 
-    // beide in keinem oder beide im gleichen TableNode
+    // both in no or in same table node
     if( ( !pMrkNd && !pPtNd ) || pPtNd == pMrkNd )
         return sal_False;
 
-    // in unterschiedlichen Tabellen oder nur Mark in der Tabelle
+    // in different tables or only mark in table
     if( ( pPtNd && pMrkNd ) || pMrkNd )
-    {                       // dann lasse das nicht zu, alte Pos zurueck
+    {
+        // not allowed, so go back to old position
         RestoreSavePos();
-        // Crsr bleibt an der alten Position
+        // Crsr stays at old position
         return sal_True;
     }
 
-    // ACHTUNG: dieses kann nicht im TableMode geschehen !!
-    if( pPtNd )     // nur Point in Tabelle, dann gehe hinter/vor diese
+    // Note: this cannot happen in TableMode
+    if( pPtNd )     // if only Point in Table then go behind/in front of table
     {
         if( nsSwCursorSelOverFlags::SELOVER_CHANGEPOS & eFlags )
         {
@@ -445,12 +435,11 @@ sal_Bool SwCursor::IsSelOvr( int eFlags )
                     (( nsSwCursorSelOverFlags::SELOVER_TOGGLE & eFlags ) ? pSavePos->nNode
                                                  : GetMark()->nNode.GetIndex());
 
-            do {
-                // in Schleife fuer Tabelle hinter Tabelle
+            do { // loop for table after table
                 sal_uLong nSEIdx = pPtNd->EndOfSectionIndex();
-                sal_uLong nSttEndTbl = nSEIdx + 1; // dflt. Sel. nach unten
+                sal_uLong nSttEndTbl = nSEIdx + 1;
 
-                if( bSelTop )                               // Sel. nach oben
+                if( bSelTop )
                     nSttEndTbl = rNds[ nSEIdx ]->StartOfSectionIndex() - 1;
 
                 GetPoint()->nNode = nSttEndTbl;
@@ -459,7 +448,6 @@ sal_Bool SwCursor::IsSelOvr( int eFlags )
                 if( pMyNd->IsSectionNode() || ( pMyNd->IsEndNode() &&
                     pMyNd->StartOfSectionNode()->IsSectionNode() ) )
                 {
-                    // die lassen wir zu:
                     pMyNd = bSelTop
                         ? rNds.GoPrevSection( &GetPoint()->nNode,sal_True,sal_False )
                         : rNds.GoNextSection( &GetPoint()->nNode,sal_True,sal_False );
@@ -472,7 +460,8 @@ sal_Bool SwCursor::IsSelOvr( int eFlags )
                         continue;
                 }
 
-                if( pMyNd->IsCntntNode() &&      // ist es ein ContentNode ??
+                // we permit these
+                if( pMyNd->IsCntntNode() &&
                     ::CheckNodesRange( GetMark()->nNode,
                                        GetPoint()->nNode, sal_True ))
                 {
@@ -495,11 +484,11 @@ sal_Bool SwCursor::IsSelOvr( int eFlags )
             } while( sal_True );
         }
 
-        // dann verbleibe auf der alten Position
+        // stay on old position
         RestoreSavePos();
-        return sal_True;        // Crsr bleibt an der alten Position
+        return sal_True;
     }
-    return sal_False;       // was bleibt noch ??
+    return sal_False;
 }
 
 #if defined( UNX )
@@ -551,17 +540,15 @@ sal_Bool SwCursor::IsInProtectTable( sal_Bool bMove, sal_Bool bChgCrsr )
         if( bChgCrsr )
             // restore the last save position
             RestoreSavePos();
-        return sal_True;        // Crsr bleibt an der alten Position
+        return sal_True; // Crsr stays at old position
     }
 
-    // wir stehen in einer geschuetzten TabellenZelle
-    // von Oben nach Unten Traveln ?
+    // We are in a protected table cell. Traverse top to bottom?
     if( pSavePos->nNode < GetPoint()->nNode.GetIndex() )
     {
-        // suche die naechste "gueltige" Box
-
-        // folgt nach dem EndNode der Zelle ein weiterer StartNode, dann
-        // gibt es auch eine naechste Zelle
+        // search next valid box
+        // if there is another StartNode after the EndNode of a cell then
+        // there is another cell
 #if defined( UNX )
         SwNodeIndex* pCellStt = new SwNodeIndex( *GetNode()->
                         FindTableBoxStartNode()->EndOfSectionNode(), 1 );
@@ -582,7 +569,7 @@ GoNextCell:
         } while( bProt );
 
 SetNextCrsr:
-        if( !bProt )        // eine freie Zelle gefunden
+        if( !bProt ) // found free cell
         {
             GetPoint()->nNode = IDX;
 #if defined( UNX )
@@ -597,31 +584,30 @@ SetNextCrsr:
             return IsSelOvr( nsSwCursorSelOverFlags::SELOVER_TOGGLE |
                              nsSwCursorSelOverFlags::SELOVER_CHANGEPOS );
         }
-        // am Ende der Tabelle, also setze hinter diese
-        IDX++;     // auf den naechsten Node
+        // end of table, so go to next node
+        IDX++;
         SwNode* pNd;
         if( ( pNd = &IDX.GetNode())->IsEndNode() || HasMark())
         {
-            // Tabelle allein in einem FlyFrame oder SSelection,
-            // dann verbleibe auf der alten Position
+            // if only table in FlyFrame or SSelection then stay on old position
             if( bChgCrsr )
                 RestoreSavePos();
 #if defined( UNX )
             delete pCellStt;
 #endif
-            return sal_True;        // Crsr bleibt an der alten Position
+            return sal_True;
         }
         else if( pNd->IsTableNode() && IDX++ )
             goto GoNextCell;
 
-        bProt = sal_False;      // Index steht jetzt auf einem ContentNode
+        bProt = sal_False; // index is now on a content node
         goto SetNextCrsr;
     }
 
-    // suche die vorherige "gueltige" Box
+    // search for the previous valid box
     {
-        // liegt vor dem StartNode der Zelle ein weiterer EndNode, dann
-        // gibt es auch eine vorherige Zelle
+        // if there is another EndNode in front of the StartNode than there
+        // exists a previous cell
 #if defined( UNX )
         SwNodeIndex* pCellStt = new SwNodeIndex(
                     *GetNode()->FindTableBoxStartNode(), -1 );
@@ -643,7 +629,7 @@ GoPrevCell:
         } while( bProt );
 
 SetPrevCrsr:
-        if( !bProt )        // eine freie Zelle gefunden
+        if( !bProt ) // found free cell
         {
             GetPoint()->nNode = IDX;
 #if defined( UNX )
@@ -658,28 +644,27 @@ SetPrevCrsr:
             return IsSelOvr( nsSwCursorSelOverFlags::SELOVER_TOGGLE |
                              nsSwCursorSelOverFlags::SELOVER_CHANGEPOS );
         }
-        // am Start der Tabelle, also setze vor diese
-        IDX--;     // auf den naechsten Node
+        // at the beginning of a table, so go to next node
+        IDX--;
         if( ( pNd = &IDX.GetNode())->IsStartNode() || HasMark() )
         {
-            // Tabelle allein in einem FlyFrame oder Selektion,
-            // dann verbleibe auf der alten Position
+            // if only table in FlyFrame or SSelection then stay on old position
             if( bChgCrsr )
                 RestoreSavePos();
 #if defined( UNX )
             delete pCellStt;
 #endif
-            return sal_True;        // Crsr bleibt an der alten Position
+            return sal_True;
         }
         else if( pNd->StartOfSectionNode()->IsTableNode() && IDX-- )
             goto GoPrevCell;
 
-        bProt = sal_False;      // Index steht jetzt auf einem ContentNode
+        bProt = sal_False; // index is now on a content node
         goto SetPrevCrsr;
     }
 }
 
-// sal_True: an die Position kann der Cursor gesetzt werden
+/// Return <true> if cursor can be set to this position
 sal_Bool SwCursor::IsAtValidPos( sal_Bool bPoint ) const
 {
     const SwDoc* pDoc = GetDoc();
@@ -692,7 +677,7 @@ sal_Bool SwCursor::IsAtValidPos( sal_Bool bPoint ) const
         return sal_False;
     }
 
-        //JP 28.10.97: Bug 45129 - im UI-ReadOnly ist alles erlaubt
+    // #i45129# - in UI-ReadOnly everything is allowed
     if( !pDoc->GetDocShell() || !pDoc->GetDocShell()->IsReadOnlyUI() )
         return sal_True;
 
@@ -710,7 +695,7 @@ sal_Bool SwCursor::IsAtValidPos( sal_Bool bPoint ) const
 
 void SwCursor::SaveTblBoxCntnt( const SwPosition* ) {}
 
-// setze den SRange fuer das Suchen im Dokument
+/// set range for search in document
 SwMoveFnCollection* SwCursor::MakeFindRange( SwDocPositions nStart,
                                 SwDocPositions nEnd, SwPaM* pRange ) const
 {
@@ -718,8 +703,7 @@ SwMoveFnCollection* SwCursor::MakeFindRange( SwDocPositions nStart,
     FillFindPos( nStart, *pRange->GetMark() );
     FillFindPos( nEnd, *pRange->GetPoint() );
 
-    // bestimme die Richtung, in der zu suchen ist
-    // ( GetPoint > GetMark -> vorwaerts, sonst rueckwaerts )
+    // determine direction of search
     return ( DOCPOS_START == nStart || DOCPOS_OTHERSTART == nStart ||
               (DOCPOS_CURR == nStart &&
                 (DOCPOS_END == nEnd || DOCPOS_OTHEREND == nEnd ) ))
@@ -755,8 +739,8 @@ sal_uLong lcl_FindSelection( SwFindParas& rParas, SwCursor* pCurCrsr,
 
     do {
         aRegion.SetMark();
-        // egal in welche Richtung, SPoint ist immer groesser als Mark,
-        // wenn der Suchbereich gueltig ist !!
+        // independent from search direction: SPoint is always bigger than mark
+        // if the search area is valid
         SwPosition *pSttPos = aRegion.GetMark(),
                         *pEndPos = aRegion.GetPoint();
         *pSttPos = *pTmpCrsr->Start();
@@ -767,7 +751,7 @@ sal_uLong lcl_FindSelection( SwFindParas& rParas, SwCursor* pCurCrsr,
         if( !nCrsrCnt && !pPHdl && !bIsUnoCrsr )
             pPHdl = new _PercentHdl( aRegion );
 
-        // solange gefunden und nicht auf gleicher Position haengen bleibt
+        // as long as found and not at same position
         while(  *pSttPos <= *pEndPos &&
                 0 != ( nFndRet = rParas.Find( pCurCrsr, fnMove,
                                             &aRegion, bInReadOnly )) &&
@@ -777,9 +761,7 @@ sal_uLong lcl_FindSelection( SwFindParas& rParas, SwCursor* pCurCrsr,
         {
             if( !( FIND_NO_RING & nFndRet ))
             {
-                // Bug 24084: Ring richtig herum aufbauen -> gleiche Mimik
-                //            wie beim CreateCrsr !!!!
-
+                // #i24084# - create ring similar to the one in CreateCrsr
                 SwCursor* pNew = pCurCrsr->Create( pFndRing );
                 if( !pFndRing )
                     pFndRing = pNew;
@@ -818,14 +800,15 @@ sal_uLong lcl_FindSelection( SwFindParas& rParas, SwCursor* pCurCrsr,
             }
 
             if( bSrchBkwrd )
-                // bewege pEndPos vor den gefundenen Bereich
+                // move pEndPos in front of the found area
                 *pEndPos = *pCurCrsr->Start();
             else
-                // bewege pSttPos hinter den gefundenen Bereich
+                // move pSttPos behind the found area
                 *pSttPos = *pCurCrsr->End();
 
-            if( *pSttPos == *pEndPos )      // im Bereich, aber am Ende
-                break;                      // fertig
+            if( *pSttPos == *pEndPos )
+                // in area but at the end => done
+                break;
 
             if( !nCrsrCnt && pPHdl )
             {
@@ -844,7 +827,7 @@ sal_uLong lcl_FindSelection( SwFindParas& rParas, SwCursor* pCurCrsr,
 
     } while( pTmpCrsr != pSaveCrsr );
 
-    if( nFound && !pFndRing )       // falls kein Ring aufgebaut werden soll
+    if( nFound && !pFndRing ) // if no ring should be created
         pFndRing = pCurCrsr->Create();
 
     delete pPHdl;
@@ -872,7 +855,8 @@ int lcl_MakeSelFwrd( const SwNode& rSttNd, const SwNode& rEndNd,
     }
     else if( rSttNd.GetIndex() > rPam.GetPoint()->nNode.GetIndex() ||
              rPam.GetPoint()->nNode.GetIndex() >= rEndNd.GetIndex() )
-        return sal_False;       // steht nicht in dieser Section
+        // not in this section
+        return sal_False;
 
     rPam.SetMark();
     rPam.GetPoint()->nNode = rEndNd;
@@ -904,7 +888,7 @@ int lcl_MakeSelBkwrd( const SwNode& rSttNd, const SwNode& rEndNd,
     }
     else if( rEndNd.GetIndex() > rPam.GetPoint()->nNode.GetIndex() ||
              rPam.GetPoint()->nNode.GetIndex() >= rSttNd.GetIndex() )
-        return sal_False;       // steht nicht in dieser Section
+        return sal_False;       // not in this section
 
     rPam.SetMark();
     rPam.GetPoint()->nNode = rEndNd;
@@ -916,10 +900,8 @@ int lcl_MakeSelBkwrd( const SwNode& rSttNd, const SwNode& rEndNd,
     return *rPam.GetPoint() < *rPam.GetMark();
 }
 
-
-// diese Methode "sucht" fuer alle Anwendungsfaelle, denn in SwFindParas
-// steht immer die richtigen Parameter und die entsprechende Find-Methode
-
+// this method "searches" for all use cases because in SwFindParas is always the
+// correct parameters and respective search method
 sal_uLong SwCursor::FindAll( SwFindParas& rParas,
                             SwDocPositions nStart, SwDocPositions nEnde,
                             FindRanges eFndRngs, sal_Bool& bCancel )
@@ -927,7 +909,7 @@ sal_uLong SwCursor::FindAll( SwFindParas& rParas,
     bCancel = sal_False;
     SwCrsrSaveState aSaveState( *this );
 
-    // Region erzeugen, ohne das diese in den Ring aufgenommen wird !
+    // create region without adding it to the ring
     SwPaM aRegion( *GetPoint() );
     SwMoveFn fnMove = MakeFindRange( nStart, nEnde, &aRegion );
 
@@ -938,18 +920,17 @@ sal_uLong SwCursor::FindAll( SwFindParas& rParas,
     SwCursor* pFndRing = 0;
     SwNodes& rNds = GetDoc()->GetNodes();
 
-    // suche in Bereichen ?
+    // search in sections?
     if( FND_IN_SEL & eFndRngs )
     {
-        // String nicht im Bereich gefunden, dann erhalte alle Bereiche,
-        // der Cursor beleibt unveraendert
+        // if string was not found in region then get all sections (cursors
+        // stays unchanged)
         if( 0 == ( nFound = lcl_FindSelection( rParas, this, fnMove,
                                                 pFndRing, aRegion, eFndRngs,
                                                 bInReadOnly, bCancel ) ))
             return nFound;
 
-        // der String wurde ein- bis mehrmals gefunden. Das steht alles
-        // im neuen Crsr-Ring. Darum hebe erstmal den alten Ring auf
+        // found string at least once; it's all in new Crsr ring thus delete old one
         while( GetNext() != this )
             delete GetNext();
 
@@ -961,14 +942,14 @@ sal_uLong SwCursor::FindAll( SwFindParas& rParas,
     }
     else if( FND_IN_OTHER & eFndRngs )
     {
-        // Cursor als Kopie vom akt. und in den Ring aufnehmen
-        // Verkettung zeigt immer auf den zuerst erzeugten, also vorwaerts
+        // put cursor as copy of current into ring
+        // chaining points always to first created, so forward
         SAL_WNODEPRECATED_DECLARATIONS_PUSH
         std::auto_ptr< SwCursor > pSav( Create( this ) );   // save the current cursor
         SAL_WNODEPRECATED_DECLARATIONS_POP
 
-        // wenn schon ausserhalb vom Bodytext, suche von der Position,
-        // ansonsten beginne mit der 1. GrundSection
+        // if already outside of body text search from this position or start at
+        // 1. base section
         if( bMvBkwrd
             ? lcl_MakeSelBkwrd( rNds.GetEndOfExtras(),
                     *rNds.GetEndOfPostIts().StartOfSectionNode(),
@@ -985,7 +966,7 @@ sal_uLong SwCursor::FindAll( SwFindParas& rParas,
 
         if( !nFound )
         {
-            // den alten wieder zurueck
+            // put back the old one
             *GetPoint() = *pSav->GetPoint();
             if( pSav->HasMark() )
             {
@@ -1000,17 +981,16 @@ sal_uLong SwCursor::FindAll( SwFindParas& rParas,
 
         if( !( FND_IN_SELALL & eFndRngs ))
         {
-            // es sollte nur einer gesucht werden, also fuege in dazu
-            // egal in welche Richtung, SPoint ist immer groesser als Mark,
-            // wenn der Suchbereich gueltig ist !!
+            // there should only be a single one, thus add it
+            // independent from search direction: SPoint is always bigger than
+            // mark if the search area is valid
             *GetPoint() = *pFndRing->GetPoint();
             SetMark();
             *GetMark() = *pFndRing->GetMark();
         }
         else
         {
-            // es  wurde ein- bis mehrmals gefunden. Das steht alles
-            // im neuen Crsr-Ring. Darum hebe erstmal den alten Ring auf
+            // found string at least once; it's all in new Crsr ring thus delete old one
             while( GetNext() != this )
                 delete GetNext();
 
@@ -1041,7 +1021,7 @@ sal_uLong SwCursor::FindAll( SwFindParas& rParas,
 
         if( !nFound )
         {
-            // den alten wieder zurueck
+            // put back the old one
             *GetPoint() = *pSav->GetPoint();
             if( pSav->HasMark() )
             {
@@ -1064,9 +1044,8 @@ sal_uLong SwCursor::FindAll( SwFindParas& rParas,
     }
     else
     {
-        // ist ein GetMark gesetzt, dann wird bei gefundenem Object
-        // der GetMark beibehalten !! Dadurch kann ein Bereich mit der Suche
-        // aufgespannt werden.
+        // if a GetMark is set then keep the GetMark of the found object
+        // This allows spanning an area with this search.
         SwPosition aMarkPos( *GetMark() );
         int bMarkPos = HasMark() && !eFndRngs;
 
@@ -1621,7 +1600,7 @@ sal_Bool SwCursor::LeftRight( sal_Bool bLeft, sal_uInt16 nCnt, sal_uInt16 nMode,
     const SwCntntFrm* pSttFrm = // may side-effect bLeft!
         DoSetBidiLevelLeftRight(bLeft, bVisualAllowed, bInsertCrsr);
 
-    // kann der Cursor n-mal weiterverschoben werden ?
+    // can the cursor be moved n times?
     SwCrsrSaveState aSave( *this );
     SwMoveFn fnMove = bLeft ? fnMoveBackward : fnMoveForward;
 
@@ -1777,8 +1756,8 @@ sal_Bool SwCursor::UpDown( sal_Bool bUp, sal_uInt16 nCnt,
     SwTableCursor* pTblCrsr = dynamic_cast<SwTableCursor*>(this);
     sal_Bool bAdjustTableCrsr = sal_False;
 
-    // vom Tabellen Crsr Point/Mark in der gleichen Box ??
-    // dann stelle den Point an den Anfang der Box
+    // If the point/mark of the table cursor in the same box then set cursor to
+    // beginning of the box
     if( pTblCrsr && GetNode( sal_True )->StartOfSectionNode() ==
                     GetNode( sal_False )->StartOfSectionNode() )
     {
@@ -1808,8 +1787,7 @@ sal_Bool SwCursor::UpDown( sal_Bool bUp, sal_uInt16 nCnt,
                 aPt.X() - pFrm->Frm().Left();
         }
 
-        // Bei Fussnoten ist auch die Bewegung in eine andere Fussnote erlaubt.
-        // aber keine Selection!!
+        // It is allowed to move footnotes in other footnotes but not sections
         const sal_Bool bChkRange = pFrm->IsInFtn() && !HasMark()
                                     ? sal_False : sal_True;
         const SwPosition aOldPos( *GetPoint() );
@@ -1842,13 +1820,13 @@ sal_Bool SwCursor::UpDown( sal_Bool bUp, sal_uInt16 nCnt,
             --nCnt;
         }
 
+        // iterate over whole number of items?
         if( !nCnt && !IsSelOvr( nsSwCursorSelOverFlags::SELOVER_TOGGLE |
-                                nsSwCursorSelOverFlags::SELOVER_CHANGEPOS ) )  // die gesamte Anzahl durchlaufen ?
+                                nsSwCursorSelOverFlags::SELOVER_CHANGEPOS ) )
         {
             if( !pTblCrsr )
             {
-                // dann versuche den Cursor auf die Position zu setzen,
-                // auf halber Heohe vom Char-Rectangle
+                // try to position the cursor at half of the char-rect's height
                 pFrm = GetCntntNode()->getLayoutFrm( GetDoc()->GetCurrentLayout(), &aPt, GetPoint() );
                 SwCrsrMoveState eTmpState( MV_UPDOWN );
                 eTmpState.bSetInReadOnly = bInReadOnly;
@@ -1912,9 +1890,8 @@ sal_Bool SwCursor::IsAtLeftRightMargin( sal_Bool bLeft, sal_Bool bAPI ) const
 sal_Bool SwCursor::SttEndDoc( sal_Bool bStt )
 {
     SwCrsrSaveState aSave( *this );
-
-    // Springe beim Selektieren nie ueber Section-Grenzen !!
-    // kann der Cursor weiterverschoben werden ?
+    // Never jump over section boundaries during selection!
+    // Can the cursor still moved on?
     SwMoveFn fnMove = bStt ? fnMoveBackward : fnMoveForward;
     sal_Bool bRet = (!HasMark() || !IsNoCntnt() ) &&
                     Move( fnMove, fnGoDoc ) &&
@@ -1932,8 +1909,8 @@ sal_Bool SwCursor::GoPrevNextCell( sal_Bool bNext, sal_uInt16 nCnt )
     if( !pTblNd )
         return sal_False;
 
-    // liegt vor dem StartNode der Cell ein weiterer EndNode, dann
-    // gibt es auch eine vorherige Celle
+    // If there is another EndNode in front of the cell's StartNode then there
+    // exists a previous cell
     SwCrsrSaveState aSave( *this );
     SwNodeIndex& rPtIdx = GetPoint()->nNode;
 
@@ -2000,7 +1977,7 @@ sal_Bool SwCursor::GotoTable( const String& rName )
         SwTable* pTmpTbl = SwTable::FindTable( GetDoc()->FindTblFmtByName( rName ) );
         if( pTmpTbl )
         {
-            // eine Tabelle im normalen NodesArr
+            // a table in a normal nodes array
             SwCrsrSaveState aSave( *this );
             GetPoint()->nNode = *pTmpTbl->GetTabSortBoxes()[ 0 ]->
                                 GetSttNd()->FindTableNode();
@@ -2017,7 +1994,7 @@ sal_Bool SwCursor::GotoTblBox( const String& rName )
     const SwTableNode* pTblNd = GetPoint()->nNode.GetNode().FindTableNode();
     if( pTblNd )
     {
-        // erfrage die Box, mit dem Nanen
+        // retrieve box by name
         const SwTableBox* pTblBox = pTblNd->GetTable().GetTblBox( rName );
         if( pTblBox && pTblBox->GetSttNd() &&
             ( !pTblBox->GetFrmFmt()->GetProtect().IsCntntProtected() ||
@@ -2158,7 +2135,7 @@ SwCursor* SwTableCursor::MakeBoxSels( SwCursor* pAktCrsr )
     {
         if( bParked )
         {
-            // wieder in den Inhalt schieben
+            // move back into content
             Exchange();
             Move( fnMoveForward );
             Exchange();
@@ -2168,12 +2145,12 @@ SwCursor* SwTableCursor::MakeBoxSels( SwCursor* pAktCrsr )
 
         bChg = sal_False;
 
-        // temp Kopie anlegen, damit alle Boxen, fuer die schon Cursor
-        // existieren, entfernt werden koennen.
+        // create temporary copies so that all boxes that
+        // have already cursors can be removed
         SwSelBoxes aTmp;
         aTmp.Insert( &aSelBoxes );
 
-        //Jetzt die Alten und die neuen abgleichen.
+        // compare old and new ones
         SwNodes& rNds = pAktCrsr->GetDoc()->GetNodes();
         sal_uInt16 nPos;
         const SwStartNode* pSttNd;
@@ -2331,11 +2308,10 @@ sal_Bool SwTableCursor::IsCrsrMovedUpdt()
     return sal_True;
 }
 
-
-// Parke den Tabellen-Cursor auf dem StartNode der Boxen.
+/// park table cursor on the boxes' start node
 void SwTableCursor::ParkCrsr()
 {
-    // Index aus dem TextNode abmelden
+    // de-register index from text node
     SwNode* pNd = &GetPoint()->nNode.GetNode();
     if( !pNd->IsStartNode() )
         pNd = pNd->StartOfSectionNode();

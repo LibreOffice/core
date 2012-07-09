@@ -90,7 +90,7 @@ sal_Bool SwCrsrShell::MoveColumn( SwWhichColumn fnWhichCol, SwPosColumn fnPosCol
             if( pCnt )
             {
                 SET_CURR_SHELL( this );
-                SwCallLink aLk( *this );        // Crsr-Moves ueberwachen, evt. Link callen
+                SwCallLink aLk( *this ); // watch Crsr-Moves; call Link if needed
                 SwCrsrSaveState aSaveState( *pCurCrsr );
 
                 pCnt->Calc();                   // ???

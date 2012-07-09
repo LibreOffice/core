@@ -37,9 +37,7 @@
 #include <SwRewriter.hxx>
 #include <comcore.hrc>
 
-//------------------ Methoden der CrsrShell ---------------------------
-
-// Parameter fuer das Suchen vom FormatCollections
+/// parameters for a search for FormatCollections
 struct SwFindParaFmtColl : public SwFindParas
 {
     const SwTxtFmtColl *pFmtColl, *pReplColl;
@@ -77,15 +75,12 @@ int SwFindParaFmtColl::IsReplaceMode() const
     return 0 != pReplColl;
 }
 
-
-// Suchen nach Format-Collections
-
-
+/// search for Format-Collections
 sal_uLong SwCursor::Find( const SwTxtFmtColl& rFmtColl,
                     SwDocPositions nStart, SwDocPositions nEnde, sal_Bool& bCancel,
                     FindRanges eFndRngs, const SwTxtFmtColl* pReplFmtColl )
 {
-    // OLE-Benachrichtigung abschalten !!
+    // switch off OLE-notifications
     SwDoc* pDoc = GetDoc();
     Link aLnk( pDoc->GetOle2Link() );
     pDoc->SetOle2Link( Link() );
