@@ -1564,14 +1564,16 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
 
                 case ANGLEELLIPSE :
                 {
-                    if(aNewB2DPolygon.count() > 1L)
+                    if ( nPntCount )
                     {
-                        // #i76201# Add conversion to closed polygon when first and last points are equal
-                        basegfx::tools::checkClosed(aNewB2DPolygon);
-                        aNewB2DPolyPolygon.append(aNewB2DPolygon);
+                        if(aNewB2DPolygon.count() > 1L)
+                        {
+                            // #i76201# Add conversion to closed polygon when first and last points are equal
+                            basegfx::tools::checkClosed(aNewB2DPolygon);
+                            aNewB2DPolyPolygon.append(aNewB2DPolygon);
+                        }
+                        aNewB2DPolygon.clear();
                     }
-
-                    aNewB2DPolygon.clear();
                 }
                 case ANGLEELLIPSETO :
                 {
