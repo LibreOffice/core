@@ -314,9 +314,6 @@ class ScFormatFilterPluginImpl : public ScFormatFilterPlugin {
     virtual String         GetHTMLRangeNameList( ScDocument* pDoc, const String& rOrigName );
 
     // various export filters
-#if ENABLE_LOTUS123_EXPORT
-    virtual FltError ScExportLotus123( SvStream&, ScDocument*, ExportFormatLotus, CharSet eDest );
-#endif
     virtual FltError ScExportExcel5( SfxMedium&, ScDocument*, ExportFormatExcel eFormat, CharSet eDest );
     virtual FltError ScExportDif( SvStream&, ScDocument*, const ScAddress& rOutPos, const CharSet eDest,
                                  sal_uInt32 nDifOption = SC_DIFOPT_EXCEL );
