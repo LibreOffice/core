@@ -643,12 +643,13 @@ sal_Bool ImplSdPPTImport::Import()
                     {
                         sal_uInt32 nTitleInstance = TSS_TYPE_PAGETITLE;
                         sal_uInt32 nOutlinerInstance = TSS_TYPE_BODY;
-//                      sal_Bool bSwapStyleSheet = pSlideLayout->eLayout == PPT_LAYOUT_TITLEMASTERSLIDE;
-//                      if ( bSwapStyleSheet )
-//                      {
-//                          nTitleInstance = TSS_TYPE_TITLE;
-//                          nOutlinerInstance = TSS_TYPE_SUBTITLE;
-//                      }
+                        const PptSlideLayoutAtom* pSlideLayout = GetSlideLayoutAtom();
+                        sal_Bool bSwapStyleSheet = pSlideLayout->eLayout == PPT_LAYOUT_TITLEMASTERSLIDE;
+                        if ( bSwapStyleSheet )
+                        {
+                            nTitleInstance = TSS_TYPE_TITLE;
+                            nOutlinerInstance = TSS_TYPE_SUBTITLE;
+                        }
                         /////////////////////
                         // titelstylesheet //
                         /////////////////////
@@ -2316,7 +2317,7 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
     {
         if ( eAktPageKind == PPT_MASTERPAGE )
         {
-            sal_Bool bCreatePlaceHolder = ( pTextObj->GetInstance() != TSS_TYPE_SUBTITLE ) && ( pTextObj->GetInstance() != TSS_TYPE_UNUSED );
+            sal_Bool bCreatePlaceHolder = ( pTextObj->GetInstance() != TSS_TYPE_UNUSED );
             sal_Bool bIsHeaderFooter = ( ePresKind == PRESOBJ_HEADER) || (ePresKind == PRESOBJ_FOOTER)
                                         || (ePresKind == PRESOBJ_DATETIME) || (ePresKind == PRESOBJ_SLIDENUMBER);
             if ( bCreatePlaceHolder && ( pTextObj->GetInstance() == TSS_TYPE_TEXT_IN_SHAPE ) )
@@ -2348,6 +2349,11 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
                         rItemSet.Put( (SdrTextLowerDistItem&)pText->GetMergedItem( SDRATTR_TEXT_LOWERDIST ) );
                         rItemSet.Put( (SdrTextVertAdjustItem&)pText->GetMergedItem( SDRATTR_TEXT_VERTADJUST ) );
                         rItemSet.Put( (SdrTextHorzAdjustItem&)pText->GetMergedItem( SDRATTR_TEXT_HORZADJUST ) );
+                        if (  pTextObj->GetInstance() ==  TSS_TYPE_TITLE
+                            || pTextObj->GetInstance() == TSS_TYPE_SUBTITLE)
+                        {
+                            rItemSet.Put( pText->GetMergedItemSet() );
+                        }
                     }
                     pText->NbcSetStyleSheet( pSheet2, sal_False );
                 }
