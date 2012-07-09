@@ -450,8 +450,8 @@ IMPL_LINK( SfxNewFileDialog_Impl, TemplateSelect, ListBox *, EMPTYARG )
     if ( !MORE_BTN(GetState()) )
         // Dialog nicht aufgeklappt
         return 0;
-
-    aPrevTimer.Start();
+    if ( aPreviewBtn.IsChecked() )
+        aPrevTimer.Start();
     return 0;
 }
 
@@ -628,6 +628,7 @@ SfxNewFileDialog_Impl::SfxNewFileDialog_Impl(
             MORE_BTN(AddWindow(&aPreviewBtn));
             MORE_BTN(AddWindow(&aPreviewWin));
             aPreviewBtn.SetClickHdl(LINK(this, SfxNewFileDialog_Impl, PreviewClick));
+            aTemplateLb.SetSelectHdl(LINK(this, SfxNewFileDialog_Impl, TemplateSelect));
         }
         else
         {
