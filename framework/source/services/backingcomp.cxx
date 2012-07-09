@@ -468,9 +468,7 @@ void SAL_CALL BackingComp::attachFrame( /*IN*/ const css::uno::Reference< css::f
                 static_cast< ::cppu::OWeakObject* >(this));
 
     if (!m_xWindow.is())
-        throw css::uno::RuntimeException(
-                ::rtl::OUString("instance seams to be not or wrong initialized"),
-                static_cast< ::cppu::OWeakObject* >(this));
+        return; // disposed
 
     // safe the frame reference
     m_xFrame = xFrame;
