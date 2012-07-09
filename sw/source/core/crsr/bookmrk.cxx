@@ -178,8 +178,9 @@ namespace sw { namespace mark
         }
     }
 
+    // TODO: everything else uses MarkBase::GenerateNewName ?
     NavigatorReminder::NavigatorReminder(const SwPaM& rPaM)
-        : MarkBase(rPaM, rtl::OUString("__NavigatorReminder__"))    //<-- everything else uses MarkBase::GenerateNewName ?
+        : MarkBase(rPaM, rtl::OUString("__NavigatorReminder__"))
     { }
 
     UnoMark::UnoMark(const SwPaM& aPaM)
@@ -265,14 +266,12 @@ namespace sw { namespace mark
 
     uno::Reference< rdf::XMetadatable > Bookmark::MakeUnoObject()
     {
-        // create new SwXBookmark
         SwDoc *const pDoc( GetMarkPos().GetDoc() );
         OSL_ENSURE(pDoc, "Bookmark::MakeUnoObject: no doc?");
         const uno::Reference< rdf::XMetadatable> xMeta(
                 SwXBookmark::CreateXBookmark(*pDoc, *this), uno::UNO_QUERY);
         return xMeta;
     }
-
 
     Fieldmark::Fieldmark(const SwPaM& rPaM)
         : MarkBase(rPaM, MarkBase::GenerateNewName(rtl::OUString("__Fieldmark__")))
@@ -302,8 +301,8 @@ namespace sw { namespace mark
 
     void Fieldmark::Invalidate( )
     {
-        // @TODO: Does exist a better solution to trigger a format of the
-        //        fieldmark portion? If yes, please use it.
+        // TODO: Does exist a better solution to trigger a format of the
+        //       fieldmark portion? If yes, please use it.
         SwPaM aPaM( this->GetMarkPos(), this->GetOtherMarkPos() );
         aPaM.InvalidatePaM();
     }

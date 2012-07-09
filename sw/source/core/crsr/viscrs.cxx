@@ -38,13 +38,13 @@
 #include <viewimp.hxx>
 #include <dview.hxx>
 #include <rootfrm.hxx>
-#include <txtfrm.hxx>     // SwTxtFrm
+#include <txtfrm.hxx>
 #include <docary.hxx>
 #include <extinput.hxx>
 #include <ndtxt.hxx>
 #include <scriptinfo.hxx>
-#include <mdiexp.hxx>     // GetSearchDialog
-#include <comcore.hrc>    // ResId for query when (switching to?) Search & Replace
+#include <mdiexp.hxx>
+#include <comcore.hrc>
 
 #include <svx/sdr/overlay/overlaymanager.hxx>
 #include <svx/sdrpaintwindow.hxx>
@@ -73,7 +73,7 @@ SwVisCrsr::SwVisCrsr( const SwCrsrShell * pCShell )
 
 #ifdef SW_CRSR_TIMER
     bTimerOn = sal_True;
-    SetTimeout( 50 );       // 50 millisecond delay
+    SetTimeout( 50 ); // 50 millisecond delay
 #endif
 }
 
@@ -83,7 +83,7 @@ SwVisCrsr::~SwVisCrsr()
 {
 #ifdef SW_CRSR_TIMER
     if( bTimerOn )
-        Stop();     // stop timer
+        Stop(); // stop timer
 #endif
 
     if( bIsVisible && aTxtCrsr.IsVisible() )
@@ -106,11 +106,11 @@ void SwVisCrsr::Show()
 #ifdef SW_CRSR_TIMER
         {
             if( bTimerOn )
-                Start();            // start timer
+                Start();    // start timer
             else
             {
                 if( IsActive() )
-                    Stop();         // stop timer
+                    Stop(); // stop timer
 
                 _SetPosAndShow();
             }
@@ -131,7 +131,7 @@ void SwVisCrsr::Hide()
 
 #ifdef SW_CRSR_TIMER
         if( IsActive() )
-            Stop();         // stop timer
+            Stop(); // stop timer
 #endif
 
         if( aTxtCrsr.IsVisible() )      // Shouldn't the flags be in effect?
@@ -164,7 +164,7 @@ sal_Bool SwVisCrsr::ChgTimerFlag( sal_Bool bFlag )
     bOld = bTimerOn;
     if( !bFlag && bIsVisible && IsActive() )
     {
-        Stop();          // stop timer
+        Stop(); // stop timer
         _SetPosAndShow();
     }
     bTimerOn = bFlag;
@@ -263,7 +263,6 @@ void SwVisCrsr::_SetPosAndShow()
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
 
 SwSelPaintRects::SwSelPaintRects( const SwCrsrShell& rCSh )
 :   SwRects( 0 ),
@@ -347,9 +346,9 @@ void SwSelPaintRects::Show()
 
             if (xTargetOverlay.is())
             {
-                // #i97672# get the system's highlight color and limit it to the maximum
-                // allowed luminance. This is needed to react on too bright highlight colors
-                // which would otherwise vive a bad visualisation.
+                // #i97672# get the system's highlight color and limit it to the
+                // maximum allowed luminance. This is needed to react on too bright
+                // highlight colors which would otherwise vive a bad visualisation.
                 const OutputDevice *pOut = Application::GetDefaultDevice();
                 Color aHighlight(pOut->GetSettings().GetStyleSettings().GetHighlightColor());
                 const SvtOptionsDrawinglayer aSvtOptionsDrawinglayer;
@@ -394,12 +393,10 @@ void SwSelPaintRects::Invalidate( const SwRect& rRect )
     SwRects::Remove( 0, nSz );
     SwRects::Insert( &aReg, 0 );
 
-    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     // If the selection is to the right or at the bottom, outside the
     // visible area, it is never aligned on one pixel at the right/bottom.
     // This has to be determined here and if that is the case the
     // rectangle has to be expanded.
-    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     if( GetShell()->bVisPortChgd && 0 != ( nSz = Count()) )
     {
         SwSelPaintRects::Get1PixelInLogic( *GetShell() );
@@ -503,9 +500,8 @@ void SwShellCrsr::Show()
     } while( this != ( pTmp = dynamic_cast<SwShellCrsr*>(pTmp->GetNext()) ) );
 }
 
-
-    // This rectangle gets painted anew, therefore the SSelection in this
-    // area is invalid.
+// This rectangle gets painted anew, therefore the SSelection in this
+// area is invalid.
 void SwShellCrsr::Invalidate( const SwRect& rRect )
 {
     SwShellCrsr * pTmp = this;
@@ -515,7 +511,7 @@ void SwShellCrsr::Invalidate( const SwRect& rRect )
         pTmp->SwSelPaintRects::Invalidate( rRect );
 
         // skip any non SwShellCrsr objects in the ring
-        // (see:SwAutoFormat::DeleteSel()
+        // see also: SwAutoFormat::DeleteSel()
         Ring* pTmpRing = pTmp;
         pTmp = 0;
         do
@@ -570,7 +566,7 @@ short SwShellCrsr::MaxReplaceArived()
             for( nActCnt = aArr[n]; nActCnt--; )
                 pSh->StartAction();
             pSh = (ViewShell*)pSh->GetNext();
-        }   //swmod 071107//swmod 071225
+        }   //swmod 071107 //swmod 071225
     }
     else
         // otherwise from the Basic, and than switch to RET_YES
@@ -590,7 +586,7 @@ sal_Bool SwShellCrsr::UpDown( sal_Bool bUp, sal_uInt16 nCnt )
                             &GetPtPos(), GetShell()->GetUpDownX() );
 }
 
-// TRUE: The cursor can be set to the position.
+// if <true> than the cursor can be set to the position.
 sal_Bool SwShellCrsr::IsAtValidPos( sal_Bool bPoint ) const
 {
     if( GetShell() && ( GetShell()->IsAllProtect() ||
@@ -640,8 +636,7 @@ void SwShellTableCrsr::SaveTblBoxCntnt( const SwPosition* pPos )
 
 void SwShellTableCrsr::FillRects()
 {
-    // Calculate the new rectangles.
-    // JP 16.01.98: If the cursor is still "parked" do nothing!!
+    // Calculate the new rectangles. If the cursor is still "parked" do nothing
     if( !aSelBoxes.Count() || bParked ||
         !GetPoint()->nNode.GetIndex() )
         return;
@@ -656,7 +651,7 @@ void SwShellTableCrsr::FillRects()
         SwNodeIndex aIdx( *pSttNd );
            SwCntntNode* pCNd = rNds.GoNextSection( &aIdx, sal_True, sal_False );
 
-        // TABLE IN TABLE
+        // table in table
         // (see also lcl_FindTopLevelTable in unoobj2.cxx for a different
         // version to do this)
         const SwTableNode* pCurTblNd = pCNd->FindTableNode();
@@ -692,8 +687,7 @@ void SwShellTableCrsr::FillRects()
 // Check if the SPoint is within the Table-SSelection.
 sal_Bool SwShellTableCrsr::IsInside( const Point& rPt ) const
 {
-    // Calculate the new rectangles.
-    // JP 16.01.98: If the cursor is still "parked" do nothing!!
+    // Calculate the new rectangles. If the cursor is still "parked" do nothing
     if( !aSelBoxes.Count() || bParked ||
         !GetPoint()->nNode.GetIndex()  )
         return sal_False;

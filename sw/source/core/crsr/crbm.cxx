@@ -59,7 +59,7 @@ namespace
             }
         }
 
-        // returns true if the Cursor had been rolled back
+        /// returns true if the Cursor had been rolled back
         bool RollbackIfIllegal()
         {
             if(m_pCrsr->IsSelOvr(nsSwCursorSelOverFlags::SELOVER_CHECKNODESSECTION
