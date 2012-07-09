@@ -61,49 +61,6 @@ public:
 
 
 
-#if ENABLE_LOTUS123_EXPORT
-class ExportWK1 : public ExportTyp
-{
-private:
-    sal_uInt8               GenFormByte( const ScPatternAttr& );
-    void                Bof();
-    void                Eof();
-    void                Calcmode();
-    void                Calcorder();
-    void                Split();
-    void                Sync();
-    void                Dimensions();
-    void                Window1();
-    void                Colw();
-    void                Blank( const sal_uInt16 nC, const sal_uInt16 nR, const ScPatternAttr& );
-    void                Number( const sal_uInt16 nC, const sal_uInt16 nR, const double f, const ScPatternAttr& );
-    void                Label( const sal_uInt16 nC, const sal_uInt16 nR, const String&, const ScPatternAttr& );
-    void                Formula( const sal_uInt16 nC, const sal_uInt16 nR, const ScFormulaCell*, const ScPatternAttr& );
-    void                Protect();
-    void                Footer();
-    void                Header();
-    void                Margins();
-    void                Labelfmt();
-    void                Calccount();
-    void                Cursorw12();
-    void                WKString( const sal_uInt16 nC, const sal_uInt16 nR, const ScFormulaCell*, const ScPatternAttr& );
-    void                Snrange();
-    void                Hidcol();
-    void                Cpi();
-public:
-
-    static  const sal_uInt16    WK1MAXCOL;
-    static  const sal_uInt16    WK1MAXROW;
-
-    inline              ExportWK1( SvStream& r, ScDocument* p, CharSet e ) :
-                            ExportTyp( r, p, e ) {};
-
-    FltError            Write();
-};
-#endif
-
-
-
 class ExportBiff5 : public ExportTyp, protected XclExpRoot
 {
 private:

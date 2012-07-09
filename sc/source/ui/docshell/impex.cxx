@@ -2238,9 +2238,6 @@ class ScFormatFilterMissing : public ScFormatFilterPlugin {
     virtual ScEEAbsImport *CreateHTMLImport( ScDocument*, const String&, const ScRange&, bool ) { return NULL; }
     virtual String         GetHTMLRangeNameList( ScDocument*, const String& ) { return String(); }
 
-#if ENABLE_LOTUS123_EXPORT
-    virtual FltError ScExportLotus123( SvStream&, ScDocument*, ExportFormatLotus, CharSet ) RETURN_ERROR
-#endif
     virtual FltError ScExportExcel5( SfxMedium&, ScDocument*, ExportFormatExcel, CharSet ) RETURN_ERROR
     virtual FltError ScExportDif( SvStream&, ScDocument*, const ScAddress&, const CharSet, sal_uInt32 ) RETURN_ERROR
     virtual FltError ScExportDif( SvStream&, ScDocument*, const ScRange&, const CharSet, sal_uInt32 ) RETURN_ERROR

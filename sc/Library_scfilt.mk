@@ -128,8 +128,6 @@ $(eval $(call gb_Library_add_exception_objects,scfilt,\
 	sc/source/filter/html/htmlexp2 \
 	sc/source/filter/html/htmlimp \
 	sc/source/filter/html/htmlpars \
-	sc/source/filter/lotus/expop \
-	sc/source/filter/lotus/export \
 	sc/source/filter/lotus/filter \
 	sc/source/filter/lotus/lotattr \
 	sc/source/filter/lotus/lotform \

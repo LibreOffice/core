@@ -32,8 +32,6 @@
 #include <tools/string.hxx>
 #include <rtl/textenc.h>
 
-#define ENABLE_LOTUS123_EXPORT 0
-
 class SfxMedium;
 class SvStream;
 
@@ -112,9 +110,6 @@ class ScFormatFilterPlugin {
     virtual String         GetHTMLRangeNameList( ScDocument* pDoc, const String& rOrigName ) = 0;
 
     // various export filters
-#if ENABLE_LOTUS123_EXPORT
-    virtual FltError ScExportLotus123( SvStream&, ScDocument*, ExportFormatLotus, CharSet eDest ) = 0;
-#endif
     virtual FltError ScExportExcel5( SfxMedium&, ScDocument*, ExportFormatExcel eFormat, CharSet eDest ) = 0;
     virtual FltError ScExportDif( SvStream&, ScDocument*, const ScAddress& rOutPos, const CharSet eDest,
                                  sal_uInt32 nDifOption = SC_DIFOPT_EXCEL ) = 0;
