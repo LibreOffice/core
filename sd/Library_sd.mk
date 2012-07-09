@@ -27,6 +27,10 @@
 
 $(eval $(call gb_Library_Library,sd))
 
+$(eval $(call gb_Library_use_externals,sd,\
+    gtk \
+))
+
 $(eval $(call gb_SdiTarget_SdiTarget,sd/sdi/sdslots,sd/sdi/sdslots))
 
 $(eval $(call gb_SdiTarget_set_include,sd/sdi/sdslots,\
@@ -34,6 +38,7 @@ $(eval $(call gb_SdiTarget_set_include,sd/sdi/sdslots,\
     -I$(SRCDIR)/sd/sdi \
     $$(INCLUDE) \
 ))
+
 
 $(eval $(call gb_SdiTarget_SdiTarget,sd/sdi/sdgslots,sd/sdi/sdgslots))
 
@@ -316,6 +321,8 @@ $(eval $(call gb_Library_add_exception_objects,sd,\
     sd/source/ui/presenter/PresenterPreviewCache \
     sd/source/ui/presenter/PresenterTextView \
     sd/source/ui/presenter/SlideRenderer \
+    sd/source/ui/remotecontrol/Server \
+    sd/source/ui/remotecontrol/Receiver \
     sd/source/ui/slideshow/PaneHider \
     sd/source/ui/slideshow/SlideShowRestarter \
     sd/source/ui/slideshow/showwin \
