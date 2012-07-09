@@ -76,9 +76,9 @@ int SwFindParaFmtColl::IsReplaceMode() const
 }
 
 /// search for Format-Collections
-sal_uLong SwCursor::Find( const SwTxtFmtColl& rFmtColl,
-                    SwDocPositions nStart, SwDocPositions nEnde, sal_Bool& bCancel,
-                    FindRanges eFndRngs, const SwTxtFmtColl* pReplFmtColl )
+sal_uLong SwCursor::Find( const SwTxtFmtColl& rFmtColl, SwDocPositions nStart,
+                          SwDocPositions nEnd, sal_Bool& bCancel,
+                          FindRanges eFndRngs, const SwTxtFmtColl* pReplFmtColl )
 {
     // switch off OLE-notifications
     SwDoc* pDoc = GetDoc();
@@ -100,7 +100,7 @@ sal_uLong SwCursor::Find( const SwTxtFmtColl& rFmtColl,
 
     SwFindParaFmtColl aSwFindParaFmtColl( rFmtColl, pReplFmtColl, *this );
 
-    sal_uLong nRet = FindAll( aSwFindParaFmtColl, nStart, nEnde, eFndRngs, bCancel );
+    sal_uLong nRet = FindAll( aSwFindParaFmtColl, nStart, nEnd, eFndRngs, bCancel );
     pDoc->SetOle2Link( aLnk );
 
     if( nRet && pReplFmtColl )

@@ -58,8 +58,8 @@ using namespace util;
 
 String *ReplaceBackReferences( const SearchOptions& rSearchOpt, SwPaM* pPam );
 
-String& lcl_CleanStr( const SwTxtNode& rNd, xub_StrLen nStart,
-                      xub_StrLen& rEnde, std::vector<sal_uLong> &rArr, String& rRet,
+String& lcl_CleanStr( const SwTxtNode& rNd, xub_StrLen nStart, xub_StrLen& rEnd,
+                      std::vector<sal_uLong> &rArr, String& rRet,
                       bool bRemoveSoftHyphen )
 {
     rRet = rNd.GetTxt();
@@ -72,7 +72,7 @@ String& lcl_CleanStr( const SwTxtNode& rNd, xub_StrLen nStart,
     xub_StrLen nHintStart = STRING_LEN;
     bool bNewHint       = true;
     bool bNewSoftHyphen = true;
-    const xub_StrLen nEnd = rEnde;
+    const xub_StrLen nEnd = rEnd;
     std::vector<sal_uInt16> aReplaced;
 
     do
@@ -144,7 +144,7 @@ String& lcl_CleanStr( const SwTxtNode& rNd, xub_StrLen nStart,
                         if ( bEmpty && nStart == nAkt )
                            {
                             rArr.push_back( nAkt );
-                            --rEnde;
+                            --rEnd;
                             rRet.Erase( nAkt, 1 );
                            }
                         else
@@ -165,9 +165,9 @@ String& lcl_CleanStr( const SwTxtNode& rNd, xub_StrLen nStart,
 
         if ( bNewSoftHyphen )
         {
-              rArr.push_back( nAkt );
-            --rEnde;
-               rRet.Erase( nAkt, 1 );
+            rArr.push_back( nAkt );
+            --rEnd;
+            rRet.Erase( nAkt, 1 );
             ++nSoftHyphen;
         }
     }
@@ -180,7 +180,7 @@ String& lcl_CleanStr( const SwTxtNode& rNd, xub_StrLen nStart,
         {
             rRet.Erase( nTmp );
             rArr.push_back( nTmp );
-            --rEnde;
+            --rEnd;
         }
     }
 
@@ -253,7 +253,7 @@ sal_uInt8 SwPaM::Find( const SearchOptions& rSearchOpt, sal_Bool bSearchInNotes 
     sal_Bool bFirst = sal_True;
     SwCntntNode * pNode;
 
-    xub_StrLen nStart, nEnde, nTxtLen;
+    xub_StrLen nStart, nEnd, nTxtLen;
 
     sal_Bool bRegSearch = SearchAlgorithms_REGEXP == rSearchOpt.algorithmType;
     sal_Bool bChkEmptyPara = bRegSearch && 2 == rSearchOpt.searchString.getLength() &&
@@ -269,9 +269,9 @@ sal_uInt8 SwPaM::Find( const SearchOptions& rSearchOpt, sal_Bool bSearchInNotes 
         {
             nTxtLen = ((SwTxtNode*)pNode)->GetTxt().Len();
             if( rNdIdx == pPam->GetMark()->nNode )
-                nEnde = pPam->GetMark()->nContent.GetIndex();
+                nEnd = pPam->GetMark()->nContent.GetIndex();
             else
-                nEnde = bSrchForward ? nTxtLen : 0;
+                nEnd = bSrchForward ? nTxtLen : 0;
             nStart = rCntntIdx.GetIndex();
 
             /* #i80135# */
@@ -287,8 +287,8 @@ sal_uInt8 SwPaM::Find( const SearchOptions& rSearchOpt, sal_Bool bSearchInNotes 
             {
                 if (!bSrchForward)
                 {
-                    xub_StrLen swap = nEnde;
-                    nEnde = nStart;
+                    xub_StrLen swap = nEnd;
+                    nEnd = nStart;
                     nStart = swap;
                 }
 
@@ -299,7 +299,7 @@ sal_uInt8 SwPaM::Find( const SearchOptions& rSearchOpt, sal_Bool bSearchInNotes 
                     if ( (pTxtAttr->Which()==RES_TXTATR_FIELD) &&
                                 (pTxtAttr->GetFld().GetFld()->Which()==RES_POSTITFLD))
                     {
-                        if ( (aPos >= nStart) && (aPos <= nEnde) )
+                        if ( (aPos >= nStart) && (aPos <= nEnd) )
                             aNumberPostits++;
                         else
                         {
@@ -311,8 +311,8 @@ sal_uInt8 SwPaM::Find( const SearchOptions& rSearchOpt, sal_Bool bSearchInNotes 
 
                 if (!bSrchForward)
                 {
-                    xub_StrLen swap = nEnde;
-                    nEnde = nStart;
+                    xub_StrLen swap = nEnd;
+                    nEnd = nStart;
                     nStart = swap;
                 }
 
@@ -352,27 +352,29 @@ sal_uInt8 SwPaM::Find( const SearchOptions& rSearchOpt, sal_Bool bSearchInNotes 
             {
                 // now we have to split
                 xub_StrLen nStartInside = 0;
-                xub_StrLen nEndeInside = 0;
+                xub_StrLen nEndInside = 0;
                 sal_Int16 aLoop= bSrchForward ? aStart : aNumberPostits;
 
                 while ( (aLoop>=0) && (aLoop<=aNumberPostits))
                 {
                     if (bSrchForward)
                     {
-                        nStartInside =  aLoop==0 ? nStart : *(*pHts)[GetPostIt(aLoop+aIgnore-1,pHts)]->GetStart()+1;
-                        nEndeInside = aLoop==aNumberPostits? nEnde : *(*pHts)[GetPostIt(aLoop+aIgnore,pHts)]->GetStart();
-                        nTxtLen = nEndeInside-nStartInside;
+                        nStartInside = aLoop==0 ? nStart : *(*pHts)[GetPostIt(aLoop+aIgnore-1,pHts)]->GetStart()+1;
+                        nEndInside = aLoop==aNumberPostits ? nEnd : *(*pHts)[GetPostIt(aLoop+aIgnore,pHts)]->GetStart();
+                        nTxtLen = nEndInside - nStartInside;
                     }
                     else
                     {
                         nStartInside =  aLoop==aNumberPostits ? nStart : *(*pHts)[GetPostIt(aLoop+aIgnore,pHts)]->GetStart();
-                        nEndeInside = aLoop==0 ? nEnde : *(*pHts)[GetPostIt(aLoop+aIgnore-1,pHts)]->GetStart()+1;
-                        nTxtLen = nStartInside-nEndeInside;
+                        nEndInside = aLoop==0 ? nEnd : *(*pHts)[GetPostIt(aLoop+aIgnore-1,pHts)]->GetStart()+1;
+                        nTxtLen = nStartInside - nEndInside;
                     }
                     // search inside the text between a note
-                    bFound = DoSearch(rSearchOpt,rSTxt,fnMove,bSrchForward,bRegSearch,bChkEmptyPara,bChkParaEnd,
-                                nStartInside,nEndeInside,nTxtLen, pNode,pPam);
-                    if (bFound)
+                    bFound = DoSearch( rSearchOpt, rSTxt, fnMove, bSrchForward,
+                                       bRegSearch, bChkEmptyPara, bChkParaEnd,
+                                       nStartInside, nEndInside, nTxtLen, pNode,
+                                       pPam );
+                    if ( bFound )
                         break;
                     else
                     {
@@ -394,8 +396,9 @@ sal_uInt8 SwPaM::Find( const SearchOptions& rSearchOpt, sal_Bool bSearchInNotes 
             {
                 // if there is no SwPostItField inside or searching inside notes
                 // is disabled, we search the whole length just like before
-                bFound = DoSearch(rSearchOpt,rSTxt,fnMove,bSrchForward,bRegSearch,bChkEmptyPara,bChkParaEnd,
-                            nStart,nEnde,nTxtLen, pNode,pPam);
+                bFound = DoSearch( rSearchOpt, rSTxt, fnMove, bSrchForward,
+                                   bRegSearch, bChkEmptyPara, bChkParaEnd,
+                                   nStart, nEnd, nTxtLen, pNode, pPam );
             }
             if (bFound)
                 break;
@@ -406,9 +409,10 @@ sal_uInt8 SwPaM::Find( const SearchOptions& rSearchOpt, sal_Bool bSearchInNotes 
 }
 
 bool SwPaM::DoSearch( const SearchOptions& rSearchOpt, utl::TextSearch& rSTxt,
-                    SwMoveFn fnMove,
-                    sal_Bool bSrchForward, sal_Bool bRegSearch, sal_Bool bChkEmptyPara, sal_Bool bChkParaEnd,
-                    xub_StrLen &nStart, xub_StrLen &nEnde, xub_StrLen nTxtLen,SwNode* pNode, SwPaM* pPam)
+                      SwMoveFn fnMove, sal_Bool bSrchForward, sal_Bool bRegSearch,
+                      sal_Bool bChkEmptyPara, sal_Bool bChkParaEnd,
+                      xub_StrLen &nStart, xub_StrLen &nEnd, xub_StrLen nTxtLen,
+                      SwNode* pNode, SwPaM* pPam)
 {
     bool bFound = false;
     SwNodeIndex& rNdIdx = pPam->GetPoint()->nNode;
@@ -433,10 +437,10 @@ bool SwPaM::DoSearch( const SearchOptions& rSearchOpt, utl::TextSearch& rSTxt,
     }
 
     if( bSrchForward )
-        lcl_CleanStr( *(SwTxtNode*)pNode, nStart, nEnde,
+        lcl_CleanStr( *(SwTxtNode*)pNode, nStart, nEnd,
                         aFltArr, sCleanStr, bRemoveSoftHyphens );
     else
-        lcl_CleanStr( *(SwTxtNode*)pNode, nEnde, nStart,
+        lcl_CleanStr( *(SwTxtNode*)pNode, nEnd, nStart,
                         aFltArr, sCleanStr, bRemoveSoftHyphens );
 
     SwScriptIterator* pScriptIter = 0;
@@ -450,7 +454,7 @@ bool SwPaM::DoSearch( const SearchOptions& rSearchOpt, utl::TextSearch& rSTxt,
         nSearchScript = pBreakIt->GetRealScriptOfText( rSearchOpt.searchString, 0 );
     }
 
-    xub_StrLen nStringEnd = nEnde;
+    xub_StrLen nStringEnd = nEnd;
     while ( (bSrchForward && nStart < nStringEnd) ||
             (! bSrchForward && nStart > nStringEnd) )
     {
@@ -459,14 +463,14 @@ bool SwPaM::DoSearch( const SearchOptions& rSearchOpt, utl::TextSearch& rSTxt,
         // the break-iterator
         if ( pScriptIter )
         {
-            nEnde = pScriptIter->GetScriptChgPos();
+            nEnd = pScriptIter->GetScriptChgPos();
             nCurrScript = pScriptIter->GetCurrScript();
             if ( nSearchScript == nCurrScript )
             {
                 const LanguageType eCurrLang =
                         ((SwTxtNode*)pNode)->GetLang( bSrchForward ?
                                                       nStart :
-                                                      nEnde );
+                                                      nEnd );
 
                 if ( eCurrLang != eLastLang )
                 {
@@ -480,7 +484,7 @@ bool SwPaM::DoSearch( const SearchOptions& rSearchOpt, utl::TextSearch& rSTxt,
         }
 
         if( nSearchScript == nCurrScript &&
-            (rSTxt.*fnMove->fnSearch)( sCleanStr, &nStart, &nEnde, 0 ))
+            (rSTxt.*fnMove->fnSearch)( sCleanStr, &nStart, &nEnd, 0 ))
         {
             // set section correctly
             *GetPoint() = *pPam->GetPoint();
@@ -491,24 +495,24 @@ bool SwPaM::DoSearch( const SearchOptions& rSearchOpt, utl::TextSearch& rSTxt,
             {
                 xub_StrLen n, nNew;
                 // if backward search, switch positions temporarily
-                if( !bSrchForward ) { n = nStart; nStart = nEnde; nEnde = n; }
+                if( !bSrchForward ) { n = nStart; nStart = nEnd; nEnd = n; }
 
                 for( n = 0, nNew = nStart;
                     n < aFltArr.size() && aFltArr[ n ] <= nStart;
                     ++n, ++nNew )
                     ;
                 nStart = nNew;
-                for( n = 0, nNew = nEnde;
-                    n < aFltArr.size() && aFltArr[ n ] < nEnde;
+                for( n = 0, nNew = nEnd;
+                    n < aFltArr.size() && aFltArr[ n ] < nEnd;
                     ++n, ++nNew )
                     ;
-                nEnde = nNew;
 
+                nEnd = nNew;
                 // if backward search, switch positions temporarily
-                if( !bSrchForward ) { n = nStart; nStart = nEnde; nEnde = n; }
+                if( !bSrchForward ) { n = nStart; nStart = nEnd; nEnd = n; }
             }
             GetMark()->nContent = nStart;
-            GetPoint()->nContent = nEnde;
+            GetPoint()->nContent = nEnd;
 
             // if backward search, switch point and mark
             if( !bSrchForward )
@@ -516,7 +520,7 @@ bool SwPaM::DoSearch( const SearchOptions& rSearchOpt, utl::TextSearch& rSTxt,
             bFound = sal_True;
             break;
         }
-        nStart = nEnde;
+        nStart = nEnd;
     }
 
     delete pScriptIter;
@@ -618,9 +622,8 @@ int SwFindParaText::IsReplaceMode() const
 
 
 sal_uLong SwCursor::Find( const SearchOptions& rSearchOpt, sal_Bool bSearchInNotes,
-                        SwDocPositions nStart, SwDocPositions nEnde,
-                        sal_Bool& bCancel,
-                        FindRanges eFndRngs, int bReplace )
+                          SwDocPositions nStart, SwDocPositions nEnd,
+                          sal_Bool& bCancel, FindRanges eFndRngs, int bReplace )
 {
     // switch off OLE-notifications
     SwDoc* pDoc = GetDoc();
@@ -637,7 +640,7 @@ sal_uLong SwCursor::Find( const SearchOptions& rSearchOpt, sal_Bool bSearchInNot
     if( bSearchSel )
         eFndRngs = (FindRanges)(eFndRngs | FND_IN_SEL);
     SwFindParaText aSwFindParaText( rSearchOpt, bSearchInNotes, bReplace, *this );
-    sal_uLong nRet = FindAll( aSwFindParaText, nStart, nEnde, eFndRngs, bCancel );
+    sal_uLong nRet = FindAll( aSwFindParaText, nStart, nEnd, eFndRngs, bCancel );
     pDoc->SetOle2Link( aLnk );
     if( nRet && bReplace )
         pDoc->SetModified();
