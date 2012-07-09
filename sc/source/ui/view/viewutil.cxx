@@ -179,7 +179,7 @@ sal_Bool ScViewUtil::IsActionShown( const ScChangeAction& rAction,
         rAction.GetDescription(aTmp, &rDocument);
         aBuf.append(aTmp);
         aBuf.append(sal_Unicode(')'));
-        String aComStr = aBuf.makeStringAndClear();
+        rtl::OUString aComStr = aBuf.makeStringAndClear();
 
         if(!rSettings.IsValidComment(&aComStr))
             return false;
