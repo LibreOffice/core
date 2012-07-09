@@ -2073,7 +2073,7 @@ sal_uInt16 ToolBox::ImplCalcBreaks( long nWidth, long* pMaxLineWidth, sal_Bool b
             else if ( it->meType == TOOLBOXITEM_SEPARATOR )
             {
                 nCurWidth = it->mnSepSize;
-                if ( ( it != lastVisible ) && (nLineWidth+nCurWidth+nMenuWidth > nWidthTotal) )
+                if ( !ImplIsFloatingMode() && ( it != lastVisible ) && (nLineWidth+nCurWidth+nMenuWidth > nWidthTotal) )
                     bBreak = sal_True;
             }
             // treat breaks as separators, except when using old style toolbars (ie. no menu button)
