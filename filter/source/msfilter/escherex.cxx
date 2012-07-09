@@ -1450,17 +1450,6 @@ sal_Bool EscherPropertyContainer::CreateGraphicProperties(
                     pGraphicAttr->SetMirrorFlags( BMP_MIRROR_HORZ );
                 if ( bIsGraphicMtf )
                     AddOpt( ESCHER_Prop_Rotation, ( ( ((sal_Int32)nAngle << 16 ) / 10 ) + 0x8000 ) &~ 0xffff );
-                else
-                {
-                    pGraphicAttr->SetRotation( nAngle );
-                    if ( nAngle && pShapeBoundRect )   // up to xp ppoint does not rotate bitmaps !
-                    {
-                        Polygon aPoly( *pShapeBoundRect );
-                        aPoly.Rotate( pShapeBoundRect->TopLeft(), nAngle );
-                        *pShapeBoundRect = aPoly.GetBoundRect();
-                        bSuppressRotation = sal_True;
-                    }
-                }
             }
 
             if ( eBitmapMode == ::com::sun::star::drawing::BitmapMode_REPEAT )
