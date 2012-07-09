@@ -27,18 +27,19 @@ namespace sd
 {
 
     class Server : public salhelper::Thread
-        {
+    {
         public:
+	    static void setup();
+        private:
             Server();
             ~Server();
-        private:
+	    static Server *spServer;
             osl::AcceptorSocket mSocket;
             osl::StreamSocket mStreamSocket;
             void listenThread();
             Receiver mReceiver;
             void execute();
-        };
-
+    };
 }
 
 #endif // _SD_IMPRESSREMOTE_SERVER_HXX

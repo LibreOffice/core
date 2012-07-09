@@ -88,10 +88,19 @@ void Server::execute()
 
 }
 
+Server *sd::Server::spServer = NULL;
+
+void Server::setup()
+{
+  if (spServer)
+    return;
+
+  spServer = new Server();
+  spServer->launch();
+}
+
 void SdDLL::RegisterRemotes()
 {
   fprintf( stderr, "Register our remote control goodness\n" );
-  Server server;
-  server.launch();
-  // FIXME: create a thread
+  sd::Server::setup();
 }

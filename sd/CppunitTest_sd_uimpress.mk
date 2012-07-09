@@ -36,7 +36,7 @@ $(eval $(call gb_CppunitTest_add_defs,sd_uimpress,\
     -DSD_DLLIMPLEMENTATION \
 ))
 
-$(eval $(call gb_CppunitTest_use_sdk_api,sd_uimpress,\
+$(eval $(call gb_CppunitTest_use_api,sd_uimpress,\
     offapi \
     udkapi \
 ))
