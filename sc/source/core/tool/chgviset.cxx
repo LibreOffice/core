@@ -89,21 +89,21 @@ ScChangeViewSettings& ScChangeViewSettings::operator=( const ScChangeViewSetting
     return *this;
 }
 
-sal_Bool ScChangeViewSettings::IsValidComment(const String* pCommentStr) const
+sal_Bool ScChangeViewSettings::IsValidComment(const ::rtl::OUString* pCommentStr) const
 {
     sal_Bool nTheFlag=sal_True;
 
     if(pCommentSearcher!=NULL)
     {
         xub_StrLen nStartPos = 0;
-        xub_StrLen nEndPos = pCommentStr->Len();
+        xub_StrLen nEndPos = (sal_uInt16)pCommentStr->getLength();
 
-        nTheFlag=sal::static_int_cast<sal_Bool>(pCommentSearcher->SearchFrwrd( *pCommentStr, &nStartPos, &nEndPos));
+        nTheFlag=sal::static_int_cast<sal_Bool>(pCommentSearcher->SearchFrwrd( String(*pCommentStr), &nStartPos, &nEndPos));
     }
     return nTheFlag;
 }
 
-void ScChangeViewSettings::SetTheComment(const String& rString)
+void ScChangeViewSettings::SetTheComment(const ::rtl::OUString& rString)
 {
     aComment=rString;
     if(pCommentSearcher!=NULL)
@@ -112,7 +112,7 @@ void ScChangeViewSettings::SetTheComment(const String& rString)
         pCommentSearcher=NULL;
     }
 
-    if(rString.Len()>0)
+    if(rString.getLength()>0)
     {
         utl::SearchParam aSearchParam( rString,
             utl::SearchParam::SRCH_REGEXP,false,false,false );
