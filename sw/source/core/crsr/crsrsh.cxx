@@ -86,18 +86,19 @@ void CheckRange( SwCursor* );
  */
 void CheckRange( SwCursor* pCurCrsr )
 {
-    const SwPosition *pStt = pCurCrsr->Start(),
-        *pEnd = pCurCrsr->GetPoint() == pStt ? pCurCrsr->GetMark() : pCurCrsr->GetPoint();
+    const SwPosition* pStt = pCurCrsr->Start();
+    const SwPosition* pEnd = pCurCrsr->GetPoint() == pStt
+                                 ? pCurCrsr->GetMark() : pCurCrsr->GetPoint();
 
-    SwPaM *pTmpDel = 0,
-          *pTmp = (SwPaM*)pCurCrsr->GetNext();
+    SwPaM* pTmpDel = 0;
+    SwPaM* pTmp = (SwPaM*)pCurCrsr->GetNext();
 
     // Search the complete ring
     while( pTmp != pCurCrsr )
     {
-        const SwPosition *pTmpStt = pTmp->Start(),
-                        *pTmpEnd = pTmp->GetPoint() == pTmpStt ?
-                                        pTmp->GetMark() : pTmp->GetPoint();
+        const SwPosition* pTmpStt = pTmp->Start();
+        const SwPosition* pTmpEnd = pTmp->GetPoint() == pTmpStt
+                                        ? pTmp->GetMark() : pTmp->GetPoint();
         if( *pStt <= *pTmpStt )
         {
             if( *pEnd > *pTmpStt || ( *pEnd == *pTmpStt && *pEnd == *pTmpEnd ) )

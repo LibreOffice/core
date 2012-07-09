@@ -98,8 +98,8 @@ void SwVisCrsr::Show()
 
         // display at all?
         if( pCrsrShell->VisArea().IsOver( pCrsrShell->aCharRect ) )
-#ifdef SW_CRSR_TIMER
         {
+#ifdef SW_CRSR_TIMER
             if( bTimerOn )
                 Start();    // start timer
             else
@@ -109,10 +109,10 @@ void SwVisCrsr::Show()
 
                 _SetPosAndShow();
             }
-        }
 #else
             _SetPosAndShow();
 #endif
+        }
     }
 }
 

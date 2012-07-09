@@ -202,7 +202,8 @@ enum CHKSECTION { Chk_Both, Chk_One, Chk_None };
 
 CHKSECTION lcl_TstIdx( sal_uLong nSttIdx, sal_uLong nEndIdx, const SwNode& rEndNd )
 {
-    sal_uLong nStt = rEndNd.StartOfSectionIndex(), nEnd = rEndNd.GetIndex();
+    sal_uLong nStt = rEndNd.StartOfSectionIndex();
+    sal_uLong nEnd = rEndNd.GetIndex();
     CHKSECTION eSec = nStt < nSttIdx && nEnd >= nSttIdx ? Chk_One : Chk_None;
     if( nStt < nEndIdx && nEnd >= nEndIdx )
         return( eSec == Chk_One ? Chk_Both : Chk_One );
