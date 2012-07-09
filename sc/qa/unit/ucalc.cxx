@@ -362,6 +362,15 @@ void Test::testInput()
     bTest = test == "'apple'";
     CPPUNIT_ASSERT_MESSAGE("Text content should have retained the first apostrophe.", bTest);
 
+    // Customized string handling policy.
+    ScSetStringParam aParam;
+    aParam.mbDetectNumberFormat = false;
+    aParam.mbSetTextCellFormat = true;
+    aParam.mbHandleApostrophe = false;
+    m_pDoc->SetString(0, 0, 0, "000123", &aParam);
+    m_pDoc->GetString(0, 0, 0, test);
+    CPPUNIT_ASSERT_MESSAGE("Text content should have been treated as string, not number.", test == "000123");
+
     m_pDoc->DeleteTab(0);
 }
 
