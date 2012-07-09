@@ -60,7 +60,7 @@ public class BVTFunction {
      */
     @Before
     public void setUp() throws Exception {
-        setUp();
+        initApp();
     }
 
 
@@ -69,17 +69,17 @@ public class BVTFunction {
         String file = testFile("export_pdf.odt");
         String exportTo = fullPath("temp/odt.pdf");
 
-        startcenter.menuItem("File->Open...").select();
+        app.dispatch(".uno:Open", 3);
         submitOpenDlg(file);
         writer.waitForExistence(10, 2);
-        writer.menuItem("File->Export as PDF...").select();
+        app.dispatch(".uno:ExportToPDF");
         PDFGeneralPage.ok();
         FileUtil.deleteFile(exportTo);
         submitSaveDlg(exportTo);
         assertTrue("PDF is exported?", new File(exportTo).exists());
 
         // Via toolbar
-        writer.menuItem("File->New->Text Document").select();
+        app.dispatch("private:factory/swriter", 3);
         assertTrue(toolbox(".HelpId:standardbar").exists(5));
         button(".uno:ExportDirectToPDF").click();
         assertEquals("PDF - Portable Document Format (.pdf)", FileSave_FileType.getSelText());
@@ -95,9 +95,9 @@ public class BVTFunction {
     public void testPrintDialog()
     {
         //Create a new text document
-        startcenter.menuItem("File->New->Text Document").select();
+        app.dispatch("private:factory/swriter", 3);
         sleep(3);
-        writer.menuItem("File->Print...").select();
+        app.dispatch(".uno:Print", 3);
         assertTrue(File_PrintDlg.exists(5));
         File_PrintDlg.cancel();
     }
@@ -107,26 +107,26 @@ public class BVTFunction {
      *
      */
     @Test
-    @Ignore
     public void testJavaDialog()
     {
 
         //Create a new text document and launch a Wizards dialog which need JVM work correctly.
-        startcenter.menuItem("File->New->Text Document").select();
+        app.dispatch("private:factory/swriter", 3);
         File tempfile=new File(app.getUserInstallation(),"user/template/myAgendaTemplate.ott");
         FileUtil.deleteFile(tempfile);
         sleep(3);
-        writer.menuItem("File->Wizards->Agenda").select();
+        app.dispatch("service:com.sun.star.wizards.agenda.CallWizard?start");
         sleep(5);
         assertTrue(Wizards_AgendaDialog.exists(10));
         Wizards_AgendaDialog_FinishButton.click();
         sleep(10);
         writer.focus();
         sleep(1);
-        writer.menuItem("Edit->Select All").select();
+        app.dispatch(".uno:SelectAll", 3);
         typeKeys("<$copy>");
         //System.out.println("now txt:"+app.getClipboard());
-        assertTrue(app.getClipboard().startsWith("<Name>"));
+//      assertTrue(app.getClipboard().startsWith("<Name>"));
+        assertNotNull(app.getClipboard());
     }
 
     /**
@@ -136,7 +136,7 @@ public class BVTFunction {
     @Test
     public void testMacroToolsOrgDialog()
     {
-        startcenter.menuItem("Tools->Macros->Organize Dialogs").select();
+        app.dispatch(".uno:MacroOrganizer?TabId:short=1");
         assertTrue(MacroDialogsPage.exists(5));
         MacroDialogsPage.cancel();
     }
@@ -149,11 +149,8 @@ public class BVTFunction {
     @Test
     public void testAboutDialog()
     {
-        if (SystemUtil.isMac()) {
-            app.dispatch(".uno:About");
-        } else {
-            startcenter.menuItem("Help->About OpenOffice.org").select();
-        }
+
+        app.dispatch(".uno:About");
         assertTrue(AboutDialog.exists(5));
         AboutDialog.ok();
     }
@@ -170,12 +167,12 @@ public class BVTFunction {
         String bmp_red = testFile("pure_red_64x64.bmp");
 
         //Create a new text document
-        startcenter.menuItem("File->New->Text Document").select();
+        app.dispatch("private:factory/swriter", 3);
         sleep(3);
 
         //Insert a picture fully filled with green
         writer.click(400, 400);
-        writer.menuItem("Insert->Picture->From File...").select();
+        app.dispatch(".uno:InsertGraphic", 3);
         submitOpenDlg(bmp_green);
         sleep(3);
         writer.click(0.5, 0.5);
@@ -187,7 +184,7 @@ public class BVTFunction {
         assertNotNull("Green rectangle: " + rectangle, rectangle);
 
         //insert another picture
-        writer.menuItem("Insert->Picture->From File...").select();
+        app.dispatch(".uno:InsertGraphic", 3);
         submitOpenDlg(bmp_red);
         sleep(3);
         writer.click(0.5, 0.5);
@@ -204,11 +201,11 @@ public class BVTFunction {
         String bmp_red = testFile("pure_red_64x64.bmp");
 
         //Create a new text document
-        startcenter.menuItem("File->New->Spreadsheet").select();
+        app.dispatch("private:factory/scalc", 3);
         sleep(3);
 
         //Insert a picture fully filled with green
-        calc.menuItem("Insert->Picture->From File...").select();
+        app.dispatch(".uno:InsertGraphic", 3);
         submitOpenDlg(bmp_green);
         sleep(3);
         calc.click(0.5, 0.5);
@@ -221,7 +218,7 @@ public class BVTFunction {
 //      assertEquals(new Rectangle(0,0,64,64), rectangle);
         CalcUtil.selectRange("C1");
         //insert another picture
-        calc.menuItem("Insert->Picture->From File...").select();
+        app.dispatch(".uno:InsertGraphic", 3);
         submitOpenDlg(bmp_red);
         sleep(3);
         calc.click(0.5, 0.5);
@@ -237,12 +234,12 @@ public class BVTFunction {
         String bmp_red = testFile("pure_red_64x64.bmp");
 
         //Create a new text document
-        startcenter.menuItem("File->New->Presentation").select();
+        app.dispatch("private:factory/simpress?slot=6686");
         PresentationWizard.ok();
         sleep(3);
 
         //Insert a picture fully filled with green
-        impress.menuItem("Insert->Picture->From File...").select();
+        app.dispatch(".uno:InsertGraphic", 3);
         submitOpenDlg(bmp_green);
         sleep(3);
         impress.click(5,5);
@@ -255,7 +252,7 @@ public class BVTFunction {
 //      assertEquals(new Rectangle(0,0,64,64), rectangle);
 
         //insert another picture
-        impress.menuItem("Insert->Picture->From File...").select();
+        app.dispatch(".uno:InsertGraphic", 3);
         submitOpenDlg(bmp_red);
         sleep(3);
         impress.click(1, 1);
@@ -268,10 +265,10 @@ public class BVTFunction {
     @Test
     public void testSlideShow() throws Exception {
         String file = testFile("slideshow.odp");
-        startcenter.menuItem("File->Open...").select();
+        app.dispatch(".uno:Open", 3);
         submitOpenDlg(file);
         impress.waitForExistence(10, 2);
-        impress.menuItem("Slide Show->Slide Show").select();
+        app.dispatch(".uno:Presentation", 3);
         sleep(3);
         Rectangle rectangle = GraphicsUtil.findRectangle(SlideShow.getScreenRectangle(), 0xFFFF0000);
         assertNotNull("1st slide appears", rectangle);
@@ -295,10 +292,10 @@ public class BVTFunction {
     @Test
     public void testFind() {
         String file = testFile("find.odt");
-        startcenter.menuItem("File->Open...").select();
+        app.dispatch(".uno:Open", 3);
         submitOpenDlg(file);
         writer.waitForExistence(10, 2);
-        writer.menuItem("Edit->Find & Replace...").select();
+        app.dispatch(".uno:SearchDialog", 3);
         FindDlg_For.setText("OpenOffice");
         FindDlg_Find.click();
         sleep(1);
@@ -316,7 +313,7 @@ public class BVTFunction {
         msgbox("Search key replaced 3 times.").ok();
         FindDlg.close();
         sleep(1);
-        writer.menuItem("Edit->Select All").select();
+        app.dispatch(".uno:SelectAll", 3);
         typeKeys("<$copy>");
         assertEquals("Apache Awesome OpenOffice is comprised of six personal productivity applications: a word processor (and its web-authoring component), spreadsheet, presentation graphics, drawing, equation editor, and database. Awesome OpenOffice is released on Windows, Solaris, Linux and Macintosh operation systems, with more communities joining, including a mature FreeBSD port. Awesome OpenOffice is localized, supporting over 110 languages worldwide. ", app.getClipboard());
     }
@@ -357,38 +354,38 @@ public class BVTFunction {
 
         };
         //Create a new text document
-        startcenter.menuItem("File->New->Spreadsheet").select();
+        app.dispatch("private:factory/scalc", 3);
         sleep(3);
 
         CalcUtil.selectRange("C5");
         typeKeys("1<enter>");
         CalcUtil.selectRange("C5:C10");
-        calc.menuItem("Edit->Fill->Down").select();
+        app.dispatch(".uno:FillDown", 3);
         assertArrayEquals("Fill Down:", expected1, CalcUtil.getCellTexts("C5:C10"));
 
         CalcUtil.selectRange("D10");
         typeKeys("2<enter>");
         CalcUtil.selectRange("D5:D10");
-        calc.menuItem("Edit->Fill->Up").select();
+        app.dispatch(".uno:FillUp", 3);
         assertArrayEquals("Fill Up:", expected2, CalcUtil.getCellTexts("D5:D10"));
 
         CalcUtil.selectRange("A1");
         typeKeys("Hi friends<enter>");
         CalcUtil.selectRange("A1:D1");
-        calc.menuItem("Edit->Fill->Right").select();
+        app.dispatch(".uno:FillRight", 3);
         assertArrayEquals("Fill Right:", expected3, CalcUtil.getCellTexts("A1:D1"));
 
         CalcUtil.selectRange("D2");
         typeKeys("99999.999<enter>");
         CalcUtil.selectRange("A2:D2");
-        calc.menuItem("Edit->Fill->Left").select();
+        app.dispatch(".uno:FillLeft", 3);
         assertArrayEquals("Fill left:", expected4, CalcUtil.getCellTexts("A2:D2"));
 
         CalcUtil.selectRange("E1");
         typeKeys("99999.999<tab>-10<enter>");
 
         CalcUtil.selectRange("E1:F5");
-        calc.menuItem("Edit->Fill->Series...").select();
+        app.dispatch(".uno:FillSeries", 3);
         FillSeriesDlg.ok();
         sleep(1);
         assertArrayEquals("Fill series..", expected5, CalcUtil.getCellTexts("E1:F5"));
@@ -435,40 +432,40 @@ public class BVTFunction {
 
         };
         String file = testFile("sort.ods");
-        startcenter.menuItem("File->Open...").select();
+        app.dispatch(".uno:Open", 3);
         submitOpenDlg(file);
         calc.waitForExistence(10, 2);
         CalcUtil.selectRange("A1:A10");
-        calc.menuItem("Data->Sort...").select();
+        app.dispatch(".uno:DataSort");
         SortWarningDlg_Current.click();
-        assertEquals("Column A", SortPage_By1.getSelText());
+        assertEquals(1, SortPage_By1.getSelIndex());
         SortPage.ok();
         sleep(1);
         assertArrayEquals("Sorted Data", expected1, CalcUtil.getCellTexts("A1:A10"));
         CalcUtil.selectRange("B1:C10");
-        calc.menuItem("Data->Sort...").select();
+        app.dispatch(".uno:DataSort");
 
-        SortPage_By1.select("Column C");
+        SortPage_By1.select(2);
         SortPage_Descending1.check();
         assertFalse(SortPage_By3.isEnabled());
         assertFalse(SortPage_Ascending3.isEnabled());
         assertFalse(SortPage_Descending3.isEnabled());
-        SortPage_By2.select("Column B");
+        SortPage_By2.select(1);
         assertTrue(SortPage_By3.isEnabled());
         assertTrue(SortPage_Ascending3.isEnabled());
         assertTrue(SortPage_Descending3.isEnabled());
         SortPage_Descending2.check();
-        SortPage_By2.select("- undefined -");
+        SortPage_By2.select(0);
         assertFalse(SortPage_By3.isEnabled());
         assertFalse(SortPage_Ascending3.isEnabled());
         assertFalse(SortPage_Descending3.isEnabled());
-        SortPage_By2.select("Column B");
+        SortPage_By2.select(1);
         SortPage.ok();
         sleep(1);
 
         assertArrayEquals("Sorted Data", expected2, CalcUtil.getCellTexts("B1:C10"));
         CalcUtil.selectRange("D1:D7");
-        calc.menuItem("Data->Sort...").select();
+        app.dispatch(".uno:DataSort");
         SortWarningDlg_Current.click();
         SortOptionsPage.select();
         SortOptionsPage_RangeContainsColumnLabels.uncheck();
@@ -479,7 +476,7 @@ public class BVTFunction {
         assertArrayEquals("Sorted Data", expected3, CalcUtil.getCellTexts("D1:D7"));
 
         CalcUtil.selectRange("E1:E10");
-        calc.menuItem("Data->Sort...").select();
+        app.dispatch(".uno:DataSort");
         SortWarningDlg_Current.click();
         SortPage.ok();
         sleep(1);
@@ -497,11 +494,11 @@ public class BVTFunction {
     public void testInsertChartInDraw() throws Exception{
 
         // Create a new drawing document
-        startcenter.menuItem("File->New->Drawing").select();
+        app.dispatch("private:factory/sdraw", 3);
         sleep(3);
 
         // Insert a chart
-        draw.menuItem("Insert->Chart...").select();
+        app.dispatch(".uno:InsertObjectChart", 3);
         sleep(3);
 
         // Verify if the chart is inserted successfully
@@ -522,11 +519,11 @@ public class BVTFunction {
     public void testInsertChartInDocument() throws Exception{
 
         // Create a new text document
-        startcenter.menuItem("File->New->Text Document").select();
+        app.dispatch("private:factory/swriter", 3);
         sleep(3);
 
         // Insert a chart
-        writer.menuItem("Insert->Object->Chart...").select();
+        app.dispatch(".uno:InsertObjectChart", 3);
         sleep(3);
 
         // Verify if the chart is inserted successfully
@@ -547,11 +544,11 @@ public class BVTFunction {
     public void testInsertChartInSpreadsheet() throws Exception{
 
         // Create a new spreadsheet document
-        startcenter.menuItem("File->New->Spreadsheet").select();
+        app.dispatch("private:factory/scalc", 3);
         sleep(3);
 
         // Insert a chart
-        calc.menuItem("Insert->Chart...").select();
+        app.dispatch(".uno:InsertObjectChart", 3);
         sleep(3);
         Chart_Wizard.ok();
 
@@ -573,12 +570,12 @@ public class BVTFunction {
     public void testInsertChartInPresentation() throws Exception{
 
         // Create a new presentation document
-        startcenter.menuItem("File->New->Presentation").select();
+        app.dispatch("private:factory/simpress?slot=6686");
         PresentationWizard.ok();
         sleep(3);
 
         // Insert a chart
-        impress.menuItem("Insert->Chart...").select();
+        app.dispatch(".uno:InsertObjectChart", 3);
         sleep(3);
 
         // Verify if the chart is inserted successfully
@@ -599,19 +596,17 @@ public class BVTFunction {
     public void testInsertTableInDraw() throws Exception{
 
         // Create a new drawing document
-        startcenter.menuItem("File->New->Drawing").select();
+        app.dispatch("private:factory/sdraw", 3);
         sleep(3);
 
         // Insert a table
-        draw.menuItem("Insert->Table...").select();
+        app.dispatch(".uno:InsertTable", 3);
         InsertTable.ok();
         sleep(3);
 
         // Verify if the table toolbar is active
-//      assertTrue(Table_Toolbar.exists(3));
+        assertTrue(Table_Toolbar.exists(3));
 
-        // Check the statusbar to verify if the table is inserted successfully
-        assertEquals("Table selected", StatusBar.getItemText(0));
         // Focus on edit pane
         draw.click(5,5);
         sleep(1);
@@ -628,19 +623,19 @@ public class BVTFunction {
     public void testInsertTableInDocument() throws Exception{
 
         // Create a new text document
-        startcenter.menuItem("File->New->Text Document").select();
+        app.dispatch("private:factory/swriter", 3);
         sleep(3);
 
         // Insert a table
-        writer.menuItem("Insert->Table...").select();
+        app.dispatch(".uno:InsertTable", 3);
         writer_InsertTable.ok();
         sleep(3);
 
         // Verify if the table toolbar is active
         assertTrue(Table_Toolbar.exists(3));
 
-        // Check the statusbar to verify if the table is inserted successfully
-        assertEquals("Table1:A1", StatusBar.getItemText(7));
+//      // Check the statusbar to verify if the table is inserted successfully
+//      assertEquals("Table1:A1", StatusBar.getItemText(7));
         // Focus on edit pane
         writer.click(5,5);
         sleep(1);
@@ -657,20 +652,20 @@ public class BVTFunction {
     public void testInsertTableInPresentation() throws Exception{
 
         // Create a new presentation document
-        startcenter.menuItem("File->New->Presentation").select();
+        app.dispatch("private:factory/simpress?slot=6686");
         PresentationWizard.ok();
         sleep(3);
 
         // Insert a table
-        impress.menuItem("Insert->Table...").select();
+        app.dispatch(".uno:InsertTable", 3);
         InsertTable.ok();
         sleep(3);
 
         // Verify if the table toolbar is active
         assertTrue(Table_Toolbar.exists(3));
 
-        // Check the statusbar to verify if the table is inserted successfully
-        assertEquals("Table selected", StatusBar.getItemText(0));
+//      // Check the statusbar to verify if the table is inserted successfully
+//      assertEquals("Table selected", StatusBar.getItemText(0));
         // Focus on edit pane
         impress.click(5,5);
         sleep(1);
@@ -688,7 +683,7 @@ public class BVTFunction {
     public void testInsertFunctionInSCViaSumButton() throws Exception{
 
         // Create a new spreadsheet document
-        startcenter.menuItem("File->New->Spreadsheet").select();
+        app.dispatch("private:factory/scalc", 3);
         sleep(3);
 
         // Insert source numbers
@@ -720,7 +715,7 @@ public class BVTFunction {
     public void testInsertFunctionInSCViaInputbar() throws Exception{
 
         // Create a new spreadsheet document
-        startcenter.menuItem("File->New->Spreadsheet").select();
+        app.dispatch("private:factory/scalc", 3);
         sleep(3);
 
         // Insert source numbers and expected result
@@ -752,7 +747,7 @@ public class BVTFunction {
     public void testInsertFunctionInSCViaFunctionWizard() throws Exception{
 
         // Create a new spreadsheet document
-        startcenter.menuItem("File->New->Spreadsheet").select();
+        app.dispatch("private:factory/scalc", 3);
         sleep(3);
 
         // Insert source number
@@ -764,7 +759,7 @@ public class BVTFunction {
 
         // Insert a function via Function Wizard Dialog: ABS
         CalcUtil.selectRange("B1");
-        calc.menuItem("Insert->Function...").select();
+        app.dispatch(".uno:FunctionDialog", 3);
         SC_FunctionWizardDlg_FunctionList.doubleClick(5,5);
 
         SC_FunctionWizardDlg_Edit1.inputKeys("A1");

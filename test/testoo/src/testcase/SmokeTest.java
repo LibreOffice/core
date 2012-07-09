@@ -55,7 +55,7 @@ public class SmokeTest {
         testFile("TestExtension.oxt");
         String file = testFile("smoketestdoc.sxw");
         // Open sample file smoketestdoc.sxw
-        startcenter.menuItem("File->Open...").select();
+        app.dispatch(".uno:Open", 3);
         submitOpenDlg(file);
         writer.waitForEnabled(10, 2);
         // Run test cases

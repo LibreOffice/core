@@ -200,8 +200,8 @@ public class UIMap {
     public static final VclComboBox math_EditSymbolsDlgSymbol = combobox("starmath:ComboBox:RID_SYMDEFINEDIALOG:4");
     public static final VclListBox math_EditSymbolsDlgFont = listbox("starmath:ListBox:RID_SYMDEFINEDIALOG:1");
     public static final VclComboBox math_EditSymbolsDlgTypeface = combobox("starmath:ComboBox:RID_SYMDEFINEDIALOG:3");
-    public static final VclDialog Wizards_AgendaDialog = dialog("41051");
-    public static final VclButton Wizards_AgendaDialog_FinishButton = button("41055");
+    public static final VclDialog Wizards_AgendaDialog = dialog("WIZARDS_HID_AGWIZ");
+    public static final VclButton Wizards_AgendaDialog_FinishButton = button("WIZARDS_HID_AGWIZ_CREATE");
     public static final VclTabPage MacroDialogsPage = tabpage("basctl:TabPage:RID_TP_DLGS");
     public static final VclDialog AboutDialog = dialog(".uno:About");
     public static final VclButton math_ElementsRelations = button("STARMATH_HID_SMA_RELATIONS_CAT");

@@ -92,29 +92,29 @@ public class SortOptionsIncludeFormats {
         String[][] dataWithCurrencyFormats = new String[][] {
                 {"Units"},
                 {"$32.00"},
-                {"57.00 €"},
-                {"₤ 74"},
+                {"57.00 \u20ac"},
+                {"\u20a4 74"},
                 {"R$ 50.00"},
-                {"ج.م. 27.00"},
-                {"7.00 руб."},
+                {"\u062c.\u0645. 27.00"},
+                {"7.00 \u0440\u0443\u0431."},
         };
         String[][] expectedSortedResultIncludeFormat = new String[][] {
                 {"Units"},
-                {"7.00 руб."},
-                {"ج.م. 27.00"},
+                {"7.00 \u0440\u0443\u0431."},
+                {"\u062c.\u0645. 27.00"},
                 {"$32.00"},
                 {"R$ 50.00"},
-                {"57.00 €"},
-                {"₤ 74"},
+                {"57.00 \u20ac"},
+                {"\u20a4 74"},
         };
         String[][] expectedSortedResultExcludeFormat = new String[][] {
                 {"Units"},
                 {"$7.00"},
-                {"27.00 €"},
-                {"₤ 32"},
+                {"27.00 \u20ac"},
+                {"\u20a4 32"},
                 {"R$ 50.00"},
-                {"ج.م. 57.00"},
-                {"74.00 руб."},
+                {"\u062c.\u0645. 57.00"},
+                {"74.00 \u0440\u0443\u0431."},
         };
         CalcUtil.selectRange("A1");
         typeKeys("Units<down>32<down>57<down>74<down>50<down>27<down>7");
@@ -131,13 +131,13 @@ public class SortOptionsIncludeFormats {
         typeKeys("<ctrl 1>");
         FormatCellsDlg_NumbersPage.select();
         FormatCellsDlg_NumbersPageCategory.select("Currency");
-        FormatCellsDlg_NumbersPageCurrencyFormat.select("€ Spanish (Spain)");
+        FormatCellsDlg_NumbersPageCurrencyFormat.select("\u20ac Spanish (Spain)");
         FormatCellsDlg_NumbersPage.ok();
         CalcUtil.selectRange("A4");
         typeKeys("<ctrl 1>");
         FormatCellsDlg_NumbersPage.select();
         FormatCellsDlg_NumbersPageCategory.select("Currency");
-        FormatCellsDlg_NumbersPageCurrencyFormat.select("₤ Latin");
+        FormatCellsDlg_NumbersPageCurrencyFormat.select("\u20a4 Latin");
         FormatCellsDlg_NumbersPage.ok();
         CalcUtil.selectRange("A5");
         typeKeys("<ctrl 1>");
@@ -149,13 +149,13 @@ public class SortOptionsIncludeFormats {
         typeKeys("<ctrl 1>");
         FormatCellsDlg_NumbersPage.select();
         FormatCellsDlg_NumbersPageCategory.select("Currency");
-        FormatCellsDlg_NumbersPageCurrencyFormat.select("ج.م. Arabic (Egypt)");
+        FormatCellsDlg_NumbersPageCurrencyFormat.select("\u062c.\u0645. Arabic (Egypt)");
         FormatCellsDlg_NumbersPage.ok();
         CalcUtil.selectRange("A7");
         typeKeys("<ctrl 1>");
         FormatCellsDlg_NumbersPage.select();
         FormatCellsDlg_NumbersPageCategory.select("Currency");
-        FormatCellsDlg_NumbersPageCurrencyFormat.select("руб. Russian");
+        FormatCellsDlg_NumbersPageCurrencyFormat.select("\u0440\u0443\u0431. Russian");
         FormatCellsDlg_NumbersPage.ok();
 
         // "Data->Sort...", check "Range contains column labels", check "Include formats", sort first by "Units", "Ascending"

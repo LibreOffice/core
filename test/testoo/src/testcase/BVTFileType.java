@@ -99,7 +99,7 @@ public class BVTFileType {
     private void saveNewDocument(String file) {
         String saveTo = fullPath("temp/" + file);
         //Create a new text document
-        startcenter.menuItem("File->New->Text Document").select();
+        app.dispatch("private:factory/swriter", 3);
         sleep(3);
 
         // Input some text by keyboard
@@ -107,7 +107,7 @@ public class BVTFileType {
 
         String text = "~!@#$%^&*()_+QWERTYUIOP{}|:LKJHGFDSAZXCVBNM<>? ";
         typeText(text);
-        writer.menuItem("Edit->Select All").select();
+        app.dispatch(".uno:SelectAll", 3);
         app.setClipboard(".wrong");
         sleep(1);
         typeKeys("<$copy>");
@@ -119,14 +119,14 @@ public class BVTFileType {
         // Set the text style
         writer.openContextMenu();
 //      menuItem("Text Properties...").select();
-        menuItem("Character...").select();
+        app.dispatch(".uno:FontDialog", 3);
         EffectsPage.select();
-        EffectsPage_Color.select("Magenta");
+        EffectsPage_Color.select(6);
         EffectsPage.ok();
         sleep(2);
 
         //Save the text document
-        writer.menuItem("File->Save As...").select();
+        app.dispatch(".uno:SaveAs");
         FileUtil.deleteFile(saveTo);
         submitSaveDlg(saveTo);
         if (AlienFormatDlg.exists(3))
@@ -134,14 +134,14 @@ public class BVTFileType {
 
 
         // Close it by clicking main menu
-        writer.menuItem("File->Close").select();
+        app.dispatch(".uno:CloseDoc", 3);
         openStartcenter();
         // Reopen the saved file
-        startcenter.menuItem("File->Open...").select();
+        app.dispatch(".uno:Open", 3);
         submitOpenDlg(saveTo);
         writer.waitForExistence(10, 2);
 
-        writer.menuItem("Edit->Select All").select();
+        app.dispatch(".uno:SelectAll", 3);
         app.setClipboard(".wrong");
         typeKeys("<$copy>");
         sleep(1);
@@ -185,20 +185,20 @@ public class BVTFileType {
     private void saveNewSpreadsheet(String file) {
         String saveTo = fullPath("temp/" + file);
         String text = "Hello Openoffice";
-        startcenter.menuItem("File->New->Spreadsheet").select();
+        app.dispatch("private:factory/scalc");
         calc.waitForExistence(10, 2);
         CalcUtil.selectRange("A65536");
         typeKeys(text);
-        calc.menuItem("File->Save As...").select();
+        app.dispatch(".uno:SaveAs");
         FileUtil.deleteFile(saveTo);
         submitSaveDlg(saveTo);
         if (AlienFormatDlg.exists(3))
             AlienFormatDlg.ok();
         // Close it by clicking main menu
-        calc.menuItem("File->Close").select();
+        app.dispatch(".uno:CloseDoc");
         openStartcenter();
         // Reopen the saved file
-        startcenter.menuItem("File->Open...").select();
+        app.dispatch(".uno:Open");
         submitOpenDlg(saveTo);
         calc.waitForExistence(10, 2);
         Assert.assertEquals("The typed text is saved!", text, CalcUtil.getCellText("A65536"));
@@ -239,29 +239,29 @@ public class BVTFileType {
     private void saveNewPresentation(String file) {
         String saveTo = fullPath("temp/" + file);
         String text = "Hello Openoffice";
-        startcenter.menuItem("File->New->Presentation").select();
+        app.dispatch("private:factory/simpress?slot=6686");
         PresentationWizard.ok();
         impress.click(0.01, 0.01);
         typeKeys(text);
         sleep(2);
         impress.doubleClick(0.1, 0.5);
 
-        impress.menuItem("File->Save As...").select();
+        app.dispatch(".uno:SaveAs");
         FileUtil.deleteFile(saveTo);
         submitSaveDlg(saveTo);
         if (AlienFormatDlg.exists(3))
             AlienFormatDlg.ok();
         // Close it by clicking main menu
-        impress.menuItem("File->Close").select();
+        app.dispatch(".uno:CloseDoc", 3);
         openStartcenter();
         // Reopen the saved file
-        startcenter.menuItem("File->Open...").select();
+        app.dispatch(".uno:Open", 3);
         submitOpenDlg(saveTo);
         impress.waitForExistence(10, 2);
         sleep(2);
         impress.click(3, 3);
         typeKeys("<tab><enter>");
-        impress.menuItem("Edit->Select All").select();
+        app.dispatch(".uno:SelectAll", 3);
 //      app.setClipboard(".wrong");
         typeKeys("<$copy>");
         sleep(1);
@@ -274,7 +274,7 @@ public class BVTFileType {
     /**
      * Test save a new drawing as .odg
      */
-    @Ignore("There is bug in draw")
+    @Test
     public void testSaveNewODG() throws Exception {
         saveNewDrawing("draw_saveas.odg");
     }
@@ -282,7 +282,7 @@ public class BVTFileType {
     /**
      * Test save a new drawing as .otg
      */
-    @Ignore("There is bug in draw")
+    @Test
     public void testSaveNewOTG() throws Exception {
         saveNewDrawing("draw_saveas.otg");
     }
@@ -290,7 +290,7 @@ public class BVTFileType {
     /**
      * Test save a new drawing as .sxd
      */
-    @Ignore("There is bug in draw")
+    @Test
     public void testSaveNewSXD() throws Exception {
         saveNewDrawing("draw_saveas.sxd");
     }
@@ -298,7 +298,7 @@ public class BVTFileType {
     /**
      * Test save a new drawing as .std
      */
-    @Ignore("There is bug in draw")
+    @Test
     public void testSaveNewSTD() throws Exception {
         saveNewDrawing("draw_saveas.std");
     }
@@ -318,11 +318,11 @@ public class BVTFileType {
         String bmp_green = testFile("pure_green_64x64.bmp");
 
         // Create a new drawing document
-        startcenter.menuItem("File->New->Drawing").select();
+        app.dispatch("private:factory/sdraw", 3);
         sleep(3);
 
         // Insert a picture fully filled with green
-        draw.menuItem("Insert->Picture->From File...").select();
+        app.dispatch(".uno:InsertGraphic", 3);
         submitOpenDlg(bmp_green);
         sleep(3);
         // Focus on edit pane
@@ -334,7 +334,7 @@ public class BVTFileType {
         assertNotNull("Green rectangle: " + rectangle, rectangle);
 
         // Save the drawing
-        draw.menuItem("File->Save As...").select();
+        app.dispatch(".uno:SaveAs");
         FileUtil.deleteFile(saveTo);
         submitSaveDlg(saveTo);
         // If the format is supported by OO1.0, ask whether to change to the latest format
@@ -342,11 +342,11 @@ public class BVTFileType {
             AlienFormatDlg.ok();    // Keep the current format
 
         // Close it by clicking main menu
-        draw.menuItem("File->Close").select();
+        app.dispatch(".uno:CloseDoc", 3);
         openStartcenter();
 
         // Reopen the saved file
-        startcenter.menuItem("File->Open...").select();
+        app.dispatch(".uno:Open", 3);
         submitOpenDlg(saveTo);
         draw.waitForExistence(10, 2);
 
@@ -394,7 +394,7 @@ public class BVTFileType {
         String saveTo = fullPath("temp/" + filename);
 
         // Create a new math
-        startcenter.menuItem("File->New->Formula").select();
+        app.dispatch("private:factory/smath", 3);
         sleep(3);
 
         // Verify if the Elements window is active
@@ -403,7 +403,7 @@ public class BVTFileType {
         // Insert a formula
         String text = "5 times 3 = 15";
         typeText(text);
-        math_EditWindow.menuItem("Edit->Select All").select();
+        app.dispatch(".uno:Select", 3);
         typeKeys("<$copy>");
         sleep(1);
 
@@ -411,7 +411,7 @@ public class BVTFileType {
         assertEquals("The typed formula into math", text, app.getClipboard());
 
         // Save the formula
-        math_EditWindow.menuItem("File->Save As...").select();
+        app.dispatch(".uno:SaveAs");
         FileUtil.deleteFile(saveTo);
         submitSaveDlg(saveTo);
         // If the format is supported by OO1.0, ask whether to change to the latest format
@@ -419,22 +419,22 @@ public class BVTFileType {
             AlienFormatDlg.ok();    // Keep the current format
 
         // Close it by clicking main menu
-        math_EditWindow.menuItem("File->Close").select();
+        app.dispatch(".uno:CloseDoc", 3);
         openStartcenter();
 
         // Reopen the saved file
-        startcenter.menuItem("File->Open...").select();
+        app.dispatch(".uno:Open", 3);
         submitOpenDlg(saveTo);
         math_EditWindow.waitForExistence(10, 2);
 
         // Verify if the formula still exists in the file
-        math_EditWindow.menuItem("Edit->Select All").select();
+        app.dispatch(".uno:Select", 3);
         typeKeys("<$copy>");
         sleep(1);
         assertEquals("The typed formula into math is saved", text, app.getClipboard());
 
         // Close the file to avoid the app closing the Elements window automatically
-        math_EditWindow.menuItem("File->Close").select();
+        app.dispatch(".uno:CloseDoc", 3);
     }
 
     @AfterClass
