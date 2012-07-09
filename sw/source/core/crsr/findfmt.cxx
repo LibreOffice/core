@@ -34,7 +34,7 @@ sal_Bool SwPaM::Find( const SwFmt& rFmt, SwMoveFn fnMove,
                         const SwPaM *pRegion, sal_Bool bInReadOnly  )
 {
     sal_Bool bFound = sal_False;
-    sal_Bool bSrchForward = fnMove == fnMoveForward;
+    const bool bSrchForward = (fnMove == fnMoveForward);
     SwPaM* pPam = MakeRegion( fnMove, pRegion );
 
     // if at beginning/end then move it out of the node
