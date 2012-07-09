@@ -36,6 +36,7 @@
 #include <fmtfordr.hxx>
 #include <fmtfld.hxx>
 #include <fmtornt.hxx>
+#include <fmtsrnd.hxx>
 #include <ftninfo.hxx>
 #include <tgrditem.hxx>
 #include <viewopt.hxx>
@@ -2079,6 +2080,10 @@ void lcl_MoveAllLowerObjs( SwFrm* pFrm, const Point& rOffset )
             const Point aNewAnchorPos( ( aCurrAnchorPos + rOffset ) );
             pAnchoredDrawObj->DrawObj()->SetAnchorPos( aNewAnchorPos );
             pAnchoredDrawObj->SetLastObjRect( pAnchoredDrawObj->GetObjRect().SVRect() );
+
+            // clear contour cache if contour wrapping is enabled #i100684#
+            if ( pAnchoredDrawObj->GetFrmFmt().GetSurround().IsContour() )
+                ClrContourCache( pAnchoredDrawObj->GetDrawObj() );
         }
         // --> OD 2009-08-20 #i92511#
         // cache for object rectangle inclusive spaces has to be invalidated.
