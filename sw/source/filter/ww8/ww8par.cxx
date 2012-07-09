@@ -4580,31 +4580,27 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
 
     if (!mbNewDoc)
     {
-        // in ein Dokument einfuegen ?
-        // Da immer ganze Zeile eingelesen werden, muessen
-        // evtl. Zeilen eingefuegt / aufgebrochen werden
-        //
+        // inserting into an existing document:
+        // As only complete paragraphs are inserted, the current one
+        // needs to be splitted - once or even twice.
         const SwPosition* pPos = pPaM->GetPoint();
-        SwTxtNode const*const pSttNd = pPos->nNode.GetNode().GetTxtNode();
 
-        sal_uInt16 nCntPos = pPos->nContent.GetIndex();
+        // split current paragraph to get new paragraph for the insertion
+        rDoc.SplitNode( *pPos, false );
 
-        // EinfuegePos nicht in leerer Zeile
-        if (nCntPos && pSttNd->GetTxt().getLength())
-            rDoc.SplitNode( *pPos, false );            // neue Zeile erzeugen
-
-        if (pSttNd->GetTxt().getLength())
-        {   // EinfuegePos nicht am Ende der Zeile
-            rDoc.SplitNode( *pPos, false );    // neue Zeile
-            pPaM->Move( fnMoveBackward );   // gehe in leere Zeile
+        // another split, if insertion position was not at the end of the current paragraph.
+        SwTxtNode const*const pTxtNd = pPos->nNode.GetNode().GetTxtNode();
+        if ( pTxtNd->GetTxt().getLength() )
+        {
+            rDoc.SplitNode( *pPos, false );
+            // move PaM back to the newly empty paragraph
+            pPaM->Move( fnMoveBackward );
         }
 
-        // verhinder das Einlesen von Tabellen in Fussnoten / Tabellen
-        sal_uLong nNd = pPos->nNode.GetIndex();
-        bReadNoTbl = 0 != pSttNd->FindTableNode() ||
-            ( nNd < rDoc.GetNodes().GetEndOfInserts().GetIndex() &&
-            rDoc.GetNodes().GetEndOfInserts().StartOfSectionIndex()
-            < nNd );
+        // suppress insertion of tables inside footnotes.
+        const sal_uLong nNd = pPos->nNode.GetIndex();
+        bReadNoTbl = ( nNd < rDoc.GetNodes().GetEndOfInserts().GetIndex() &&
+                       rDoc.GetNodes().GetEndOfInserts().StartOfSectionIndex() < nNd );
 
     }
 
