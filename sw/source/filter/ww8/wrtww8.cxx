@@ -2539,20 +2539,39 @@ void MSWordExportBase::WriteText()
                 ;
             else if ( !IsInTable() ) //No sections in table
             {
-                ReplaceCr( (char)0xc ); // indicator for Page/Section-Break
+                //#120140# Do not need to insert a page/section break after a section end. Check this case first
+                sal_Bool bNeedExportBreakHere = sal_True;
+                if ( aIdx.GetNode().IsTxtNode() )
+                {
+                    SwTxtNode *pTempNext = aIdx.GetNode().GetTxtNode();
+                    if ( pTempNext )
+                    {
+                        const SfxPoolItem * pTempItem = NULL;
+                        if (pTempNext->GetpSwAttrSet() && SFX_ITEM_SET == pTempNext->GetpSwAttrSet()->GetItemState(RES_PAGEDESC, false, &pTempItem)
+                            && pTempItem && ((SwFmtPageDesc*)pTempItem)->GetRegisteredIn())
+                        {
+                            //Next node has a new page style which means this node is a section end. Do not insert another page/section break here
+                            bNeedExportBreakHere = sal_False;
+                        }
+                    }
+                }
+                if (bNeedExportBreakHere)  //#120140# End of check
+                {
+                    ReplaceCr( (char)0xc ); // indicator for Page/Section-Break
 
-                const SwSectionFmt* pParentFmt = rSect.GetFmt()->GetParent();
-                if ( !pParentFmt )
-                    pParentFmt = (SwSectionFmt*)0xFFFFFFFF;
+                    const SwSectionFmt* pParentFmt = rSect.GetFmt()->GetParent();
+                    if ( !pParentFmt )
+                        pParentFmt = (SwSectionFmt*)0xFFFFFFFF;
 
-                sal_uLong nRstLnNum;
-                if ( aIdx.GetNode().IsCntntNode() )
-                    nRstLnNum = ((SwCntntNode&)aIdx.GetNode()).GetSwAttrSet().
-                                            GetLineNumber().GetStartValue();
-                else
-                    nRstLnNum = 0;
+                    sal_uLong nRstLnNum;
+                    if ( aIdx.GetNode().IsCntntNode() )
+                        nRstLnNum = ((SwCntntNode&)aIdx.GetNode()).GetSwAttrSet().
+                                                GetLineNumber().GetStartValue();
+                    else
+                        nRstLnNum = 0;
 
-                AppendSection( pAktPageDesc, pParentFmt, nRstLnNum );
+                    AppendSection( pAktPageDesc, pParentFmt, nRstLnNum );
+                }
             }
         }
         else if ( pNd->IsStartNode() )
@@ -2723,7 +2742,6 @@ void WW8Export::WriteFkpPlcUsw()
              the existence of an ObjectPool dir is necessary for triggering
              some magic. cmc
             */
-            /* Similiarly having msvbasic storage seems to also trigger creating this stream */
             GetWriter().GetStorage().OpenSotStorage(OUString(SL::aObjectPool),
                 STREAM_READWRITE | STREAM_SHARE_DENYALL);
         }

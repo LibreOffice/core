@@ -3485,7 +3485,8 @@ sal_uLong WW8Export::ReplaceCr( sal_uInt8 nChar )
                 nUCode = 0x0;
             }
             //And the para is not of len 0, then replace this cr with the mark
-            if( nChar == 0x0e || nUCode == 0x0d )
+            //#120140# If there is a cr before a column break, need replace the cr. So remove the "nChar==0x0e" check.
+            if( nUCode == 0x0d )
                 bReplaced = false;
             else
             {
