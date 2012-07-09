@@ -2339,7 +2339,7 @@ void XclExpFmlaCompImpl::AppendMacroCallToken( const XclExpExtFuncData& rExtFunc
 
 void XclExpFmlaCompImpl::AppendAddInCallToken( const XclExpExtFuncData& rExtFuncData, sal_uInt8 nSpaces )
 {
-    String aXclFuncName;
+    ::rtl::OUString aXclFuncName;
     if( mxData->mpLinkMgr && ScGlobal::GetAddInCollection()->GetExcelName( rExtFuncData.maFuncName, GetUILanguage(), aXclFuncName ) )
     {
         sal_uInt16 nExtSheet, nExtName;
