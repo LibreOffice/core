@@ -99,16 +99,8 @@ int main(int argc, char **argv) {
         rtl::OUString(module.c_str(), module.size(), osl_getThreadTextEncoding()),
         sDir, sDir);
 
-    try
-    {
-        if (!indexer.indexDocuments()) {
-            std::cerr << rtl::OUStringToOString(indexer.getErrorMessage(), osl_getThreadTextEncoding()).getStr()  << std::endl;
-            return 2;
-        }
-    }
-    catch (CLuceneError &e)
-    {
-        std::cerr << e.what() << std::endl;
+    if (!indexer.indexDocuments()) {
+        std::cerr << rtl::OUStringToOString(indexer.getErrorMessage(), osl_getThreadTextEncoding()).getStr()  << std::endl;
         return 2;
     }
     return 0;

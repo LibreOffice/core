@@ -34,7 +34,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <osl/file.hxx>
 #include <osl/thread.h>
-
+#include <boost/scoped_ptr.hpp>
 #include <algorithm>
 
 #include "LuceneHelper.hxx"
@@ -51,44 +51,51 @@ HelpIndexer::HelpIndexer(rtl::OUString const &lang, rtl::OUString const &module,
     d_contentDir = srcDir + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/content"));
 }
 
-bool HelpIndexer::indexDocuments() {
-    if (!scanForFiles()) {
+bool HelpIndexer::indexDocuments()
+{
+    if (!scanForFiles())
+        return false;
+
+    try
+    {
+        rtl::OUString sLang = d_lang.getToken(0, '-');
+        bool bUseCJK = sLang == "ja" || sLang == "ko" || sLang == "zh";
+
+        // Construct the analyzer appropriate for the given language
+        boost::scoped_ptr<lucene::analysis::Analyzer> analyzer;
+        if (bUseCJK)
+            analyzer.reset(new lucene::analysis::LanguageBasedAnalyzer(L"cjk"));
+        else
+            analyzer.reset(new lucene::analysis::standard::StandardAnalyzer());
+
+        rtl::OUString ustrSystemPath;
+        osl::File::getSystemPathFromFileURL(d_indexDir, ustrSystemPath);
+
+        rtl::OString indexDirStr = rtl::OUStringToOString(ustrSystemPath, osl_getThreadTextEncoding());
+        lucene::index::IndexWriter writer(indexDirStr.getStr(), analyzer.get(), true);
+        //Double limit of tokens allowed, otherwise we'll get a too-many-tokens
+        //exception for ja help. Could alternative ignore the exception and get
+        //truncated results as per java-Lucene apparently
+        writer.setMaxFieldLength(lucene::index::IndexWriter::DEFAULT_MAX_FIELD_LENGTH*2);
+
+        // Index the identified help files
+        Document doc;
+        for (std::set<rtl::OUString>::iterator i = d_files.begin(); i != d_files.end(); ++i) {
+            helpDocument(*i, &doc);
+            writer.addDocument(&doc);
+            doc.clear();
+        }
+        writer.optimize();
+
+        // Optimize the index
+        writer.optimize();
+    }
+    catch (CLuceneError &e)
+    {
+        d_error = rtl::OUString::createFromAscii(e.what());
         return false;
     }
 
-    rtl::OUString sLang = d_lang.getToken(0, '-');
-    bool bUseCJK = sLang == "ja" || sLang == "ko" || sLang == "zh";
-
-    // Construct the analyzer appropriate for the given language
-    lucene::analysis::Analyzer *analyzer;
-    if (bUseCJK)
-        analyzer = new lucene::analysis::LanguageBasedAnalyzer(L"cjk");
-    else
-        analyzer = new lucene::analysis::standard::StandardAnalyzer();
-
-    rtl::OUString ustrSystemPath;
-    osl::File::getSystemPathFromFileURL(d_indexDir, ustrSystemPath);
-
-    rtl::OString indexDirStr = rtl::OUStringToOString(ustrSystemPath, osl_getThreadTextEncoding());
-    lucene::index::IndexWriter writer(indexDirStr.getStr(), analyzer, true);
-    //Double limit of tokens allowed, otherwise we'll get a too-many-tokens
-    //exception for ja help. Could alternative ignore the exception and get
-    //truncated results as per java-Lucene apparently
-    writer.setMaxFieldLength(lucene::index::IndexWriter::DEFAULT_MAX_FIELD_LENGTH*2);
-
-    // Index the identified help files
-    Document doc;
-    for (std::set<rtl::OUString>::iterator i = d_files.begin(); i != d_files.end(); ++i) {
-        helpDocument(*i, &doc);
-        writer.addDocument(&doc);
-        doc.clear();
-    }
-    writer.optimize();
-
-    // Optimize the index
-    writer.optimize();
-
-    delete analyzer;
     return true;
 }
 
