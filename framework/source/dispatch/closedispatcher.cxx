@@ -283,13 +283,6 @@ void SAL_CALL CloseDispatcher::dispatchWithNotification(const css::util::URL&   
 */
 IMPL_LINK_NOARG(CloseDispatcher, impl_asyncCallback)
 {
-    SolarMutexReleaser aReleaser;
-    doClose();
-    return 0;
-}
-
-void CloseDispatcher::doClose()
-{
     try
     {
 
@@ -318,7 +311,7 @@ void CloseDispatcher::doClose()
     // frame already dead ?!
     // Nothing to do !
     if (! xCloseFrame.is())
-        return;
+        return 0;
 
     sal_Bool bCloseFrame           = sal_False;
     sal_Bool bEstablishBackingMode = sal_False;
@@ -474,7 +467,7 @@ void CloseDispatcher::doClose()
     {
     }
 
-    return;
+    return 0;
 }
 
 //-----------------------------------------------
