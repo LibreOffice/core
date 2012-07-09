@@ -4,11 +4,9 @@
 #include <netinet/in.h>
 #include <vector>
 
+#include "sddll.hxx"
 #include "Server.hxx"
 #include "Receiver.hxx"
-
-
-
 
 #include <boost/thread.hpp>
 using namespace std;
@@ -96,3 +94,11 @@ void Server::listenThread()
 //     delete this;
 //   }
 // }
+
+
+void SdDLL::RegisterRemotes()
+{
+  fprintf( stderr, "Register our remote control goodness\n" );
+  // FIXME: create a thread
+  // FIXME: convert the above socket code to use sal/inc/osl/socket.hxx etc.
+}

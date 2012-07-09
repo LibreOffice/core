@@ -45,6 +45,7 @@
 class SdDLL
 {
 protected:
+    static void     RegisterRemotes();
     static void     RegisterFactorys();
     static void     RegisterInterfaces();
     static void     RegisterControllers();
