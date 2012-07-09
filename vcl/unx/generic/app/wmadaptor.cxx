@@ -1038,8 +1038,9 @@ void WMAdaptor::setWMName( X11SalFrame* pFrame, const String& rWMName ) const
         bOnce = false;
         XTextProperty aTestProp = { NULL, None, 0, 0 };
         const char *pText = "trustme";
+        char* pT = const_cast<char*>(pText);
         XmbTextListToTextProperty( m_pDisplay,
-                                   &const_cast<char*>(pText),
+                                   &pT,
                                    1,
                                    XStdICCTextStyle,
                                    &aTestProp );
