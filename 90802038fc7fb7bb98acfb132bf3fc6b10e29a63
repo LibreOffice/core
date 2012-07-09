@@ -36,6 +36,40 @@
     },
     {
       "key": {
+        "uuid": "AAAAL3///+0\u003d",
+        "filename": "sc/source/core/tool/addincol.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 938,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2012-07-09T09:57:13Z",
+      "side": 1,
+      "message": "aLocalU is already OUString, no need for yet another conversion, so that would be simply\n\n ::rtl::OUString aLocalName( aLocalU );\n\nHowever, aLocalU was a temporary OUString used to obtain the value from getDisplayFunctionName() and then assign it to String, this can be eliminated now and instead of aLocalU the aLocalName can be used, just declare it above instead of aLocalU.",
+      "revId": "90802038fc7fb7bb98acfb132bf3fc6b10e29a63",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAL3///+w\u003d",
+        "filename": "sc/source/core/tool/addincol.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 950,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2012-07-09T09:57:13Z",
+      "side": 1,
+      "message": "Here the same, the temporary aDescU isn\u0027t needed anymore, directly use aDescription instead.",
+      "revId": "90802038fc7fb7bb98acfb132bf3fc6b10e29a63",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAL3////o\u003d",
         "filename": "sc/source/core/tool/addincol.cxx",
         "patchSetId": 2
