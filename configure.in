@@ -924,6 +924,16 @@ ADDITIONAL_REPOSITORIES="../ext_libraries"
 SCPDEFS=""
 
 dnl ===================================================================
+dnl Check configure script vs. configure.in
+dnl ===================================================================
+AC_MSG_CHECKING([whether configure is up-to-date])
+if test "configure" -ot "configure.in"; then
+   AC_MSG_RESULT([no])
+   AC_MSG_ERROR([configure is not up-to-date, run autoconf first!])
+else
+   AC_MSG_RESULT([yes])
+fi
+dnl ===================================================================
 dnl Message.
 dnl ===================================================================
 echo "********************************************************************"
@@ -952,14 +962,6 @@ dnl ===================================================================
 dnl Configure pre-requisites.
 dnl ===================================================================
 cat /dev/null > warn
-
-AC_MSG_CHECKING([whether configure is up-to-date])
-if test "configure" -ot "configure.in"; then
-   AC_MSG_RESULT([no])
-   AC_MSG_ERROR([configure is not up-to-date, run autoconf first!])
-else
-   AC_MSG_RESULT([yes])
-fi
 
 AC_PROG_EGREP
 AC_PROG_AWK
