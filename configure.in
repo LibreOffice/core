@@ -3927,7 +3927,7 @@ else
 fi
 
 # find if gnumake support file function
-AC_MSG_CHECKING([for GNU support for (file function])
+AC_MSG_CHECKING([whether GNU make supports the 'file' function])
 TESTGMAKEFILEFUNC="`mktemp -d -t tst.XXXXXX`"
 cat > $TESTGMAKEFILEFUNC/Makefile << EOF
 \$(file >test.txt,Success )
@@ -10782,7 +10782,7 @@ if test "$with_system_gettext" = yes; then
     AC_MSG_RESULT([yes])
 elif test "$with_system_gettext" = no; then
     SYSTEM_GETTEXT=NO
-    AC_MSG_RESULT([yes])
+    AC_MSG_RESULT([no])
 else
     AC_MSG_ERROR([bad --with-system-gettext=$with_system_gettext])
 fi
