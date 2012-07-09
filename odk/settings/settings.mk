@@ -173,21 +173,32 @@ DELRECURSIVE=rm -rf
 COPY=cp
 URLPREFIX=file://
 
+COMID=gcc3
+CPPU_ENV=gcc3
+
 # Include UDK version numbers
 include $(PRJ)/include/udkversion.mk
 
+#SALLIB=-luno_sal
+#CPPULIB=-luno_cppu
+#CPPUHELPERLIB=-luno_cppuhelperC52
+#SALHELPERLIB=-luno_salhelperC52
+#REGLIB=-lreg
+#STORELIB=-lstore
 SALLIB=-luno_sal
 CPPULIB=-luno_cppu
-CPPUHELPERLIB=-luno_cppuhelperC52
-SALHELPERLIB=-luno_salhelperC52
+CPPUHELPERLIB=-luno_cppuhelper$(COMID)
+SALHELPERLIB=-luno_salhelper$(COMID)
 REGLIB=-lreg
 STORELIB=-lstore
 
 EMPTYSTRING=
 PATH_SEPARATOR=:
 
-CC_FLAGS_JNI=-c -KPIC
-CC_FLAGS=-c -KPIC -xldscope=hidden
+#CC_FLAGS_JNI=-c -KPIC
+#CC_FLAGS=-c -KPIC -xldscope=hidden
+CC_FLAGS_JNI=-c -fpic
+CC_FLAGS=-c -fpic -fvisibility=hidden
 ifeq "$(DEBUG)" "yes"
 CC_FLAGS_JNI+=-g
 CC_FLAGS+=-g
@@ -198,11 +209,14 @@ SDK_JAVA_INCLUDES = -I"$(OO_SDK_JAVA_HOME)/include" -I"$(OO_SDK_JAVA_HOME)/inclu
 # define for used compiler necessary for UNO
 # -DCPPU_ENV=sunpro5 -- sunpro cc 5.x solaris sparc/intel
 
-CC_DEFINES_JNI=-DUNX -DSOLARIS -DCPPU_ENV=sunpro5
-CC_DEFINES=-DUNX -DSOLARIS -DSPARC -DCPPU_ENV=sunpro5  -DHAVE_GCC_VISIBILITY_FEATURE
+#CC_DEFINES_JNI=-DUNX -DSOLARIS -DCPPU_ENV=sunpro5
+CC_DEFINES_JNI=-DUNX -DSOLARIS -DCPPU_ENV=$(CPPU_ENV) -DGCC -DGXX_INCLUDE_PATH=$(SDK_GXX_INCLUDE_PATH)
+#CC_DEFINES=-DUNX -DSOLARIS -DSPARC -DCPPU_ENV=sunpro5  -DHAVE_GCC_VISIBILITY_FEATURE
+CC_DEFINES=-DUNX -DSOLARIS -DSPARC -DCPPU_ENV=$(CPPU_ENV)  -DHAVE_GCC_VISIBILITY_FEATURE -DGCC -DGXX_INCLUDE_PATH=$(SDK_GXX_INCLUDE_PATH)
 CC_OUTPUT_SWITCH=-o 
 
-LIBRARY_LINK_FLAGS=-w -mt -z combreloc -PIC -temp=/tmp '-R$$ORIGIN' -z text -norunpath -G -Bdirect -Bdynamic -lpthread -lCrun -lc -lm
+#LIBRARY_LINK_FLAGS=-w -mt -z combreloc -PIC -temp=/tmp '-R$$ORIGIN' -z text -norunpath -G -Bdirect -Bdynamic -lpthread -lCrun -lc -lm
+LIBRARY_LINK_FLAGS=-w -mt -z combreloc -fPIC -PIC -temp=/tmp '-R$$ORIGIN' -z text -norunpath -G -Bdirect -Bdynamic -lpthread -lCrun -lc -lm
 # means if used CC is lower then version 5.5 use option -instance=static
 ifeq ($(OO_SDK_CC_55_OR_HIGHER),)
 LIBRARY_LINK_FLAGS+=-instances=static
