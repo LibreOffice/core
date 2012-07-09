@@ -62,7 +62,6 @@ $(eval $(call gb_JunitTest_add_classes,sfx2_complex,\
     complex.sfx2.DocumentInfo \
     complex.sfx2.DocumentProperties \
     complex.sfx2.DocumentMetadataAccess \
-    complex.sfx2.UndoManager \
     complex.sfx2.DocumentEvents \
 ))
 # fd#35663 fails currently:
