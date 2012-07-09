@@ -302,7 +302,7 @@ gb_Library_LAYER := \
 	$(foreach lib,$(gb_Library_EXTENSIONLIBS),$(lib):OXT) \
 
 define gb_Library__get_rpath
-$(if $(1),$(strip '-Wl,-rpath,$(1)' '-L$(gb_Library_OUTDIRLOCATION)'))
+$(if $(1),$(strip '-Wl,-rpath,$(1)' -L$(gb_Library_OUTDIRLOCATION)))
 #JAD#'-Wl,-rpath-link,$(gb_Library_OUTDIRLOCATION)'
 endef
 
@@ -312,7 +312,6 @@ endef
 
 define gb_Library_Library_platform
 $(call gb_LinkTarget_get_target,$(2)) : RPATH := $(call gb_Library_get_rpath,$(1))
-
 endef
 
 
@@ -364,7 +363,7 @@ gb_CppunitTest_get_filename = $(gb_CppunitTest_SYSPRE)$(1)$(gb_CppunitTest_EXT)
 gb_CppunitTest_get_libfilename = $(gb_CppunitTest_get_filename)
 
 define gb_CppunitTest_CppunitTest_platform
-$(call gb_LinkTarget_get_target,$(2)) : RPATH :=
+$(call gb_LinkTarget_get_target,$(2)) : RPATH := -L$(gb_Library_OUTDIRLOCATION)
 
 endef
 
@@ -408,8 +407,8 @@ define gb_InstallModuleTarget_InstallModuleTarget_platform
 $(call gb_InstallModuleTarget_add_defs,$(1),\
 	$(gb_CPUDEFS) \
 	$(gb_OSDEFS) \
-	-DCOMID=C52 \
-	-DCOMNAME=sunpro5 \
+	-DCOMID=gcc3 \
+	-DCOMNAME=gcc3 \
 	$(if $(filter TRUE,$(SOLAR_JAVA)),-DSOLAR_JAVA) \
 )
 

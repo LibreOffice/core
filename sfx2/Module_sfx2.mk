@@ -37,7 +37,7 @@ $(eval $(call gb_Module_add_subsequentcheck_targets,sfx2,\
 ))
 endif
 
-ifneq (,$(filter LINUX DRAGONFLY OPENBSD FREEBSD NETBSD, $(OS)))
+ifneq (,$(filter LINUX DRAGONFLY OPENBSD FREEBSD NETBSD SOLARIS, $(OS)))
 ifeq ($(ENABLE_SYSTRAY_GTK),TRUE)
 $(eval $(call gb_Module_add_targets,sfx2,\
     Library_qstart \
