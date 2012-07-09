@@ -6185,8 +6185,11 @@ bool PDFWriterImpl::finalizeSignature()
     if (!derEncoded.hasElements())
         return false;
 
+#if 0
+    // FIXME TODO
     sal_Int8* n_derArray = derEncoded.getArray();
     sal_Int32 n_derLength = derEncoded.getLength();
+#endif
 
     // 4- overwrite the PKCS7 content to the m_nSignatureContentOffset
     CHECK_RETURN( (osl_File_E_None == osl_setFilePos( m_aFile, osl_Pos_Absolut, m_nSignatureContentOffset ) ) );
