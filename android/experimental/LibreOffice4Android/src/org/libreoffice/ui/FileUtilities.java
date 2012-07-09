@@ -61,6 +61,8 @@ public class FileUtilities {
         mExtnMap.put(".ppt",  IMPRESS);
         mExtnMap.put(".pptx", IMPRESS);
 
+        mExtnMap.put(".odd",  DRAWING);
+        mExtnMap.put(".sxd",  DRAWING);
         mExtnMap.put(".svg",  DRAWING);
         mExtnMap.put(".vsd",  DRAWING);
         mExtnMap.put(".wpg",  DRAWING);
