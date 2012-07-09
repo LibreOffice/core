@@ -635,12 +635,11 @@ The following structure describes the permissions used in PDF security
         rtl::OUString                   SignPassword;
         rtl::OUString                   SignReason;
         rtl::OUString                   SignContact;
-        com::sun::star::uno::Reference< com::sun::star::security::XCertificate> SignCertificate;
-
         com::sun::star::lang::Locale    DocumentLocale; // defines the document default language
         sal_uInt32                      DPIx, DPIy;     // how to handle MapMode( MAP_PIXEL )
                                                         // 0 here specifies a default handling
         PDFWriter::ColorMode            ColorMode;
+        com::sun::star::uno::Reference< com::sun::star::security::XCertificate> SignCertificate;
 
         PDFWriterContext() :
                 RelFsys( false ), //i56629, i49415?, i64585?
