@@ -20,7 +20,6 @@
 #include "crsrsh.hxx"
 #include "ndtxt.hxx"
 #include <docary.hxx>
-
 #include "IMark.hxx"
 #include "callnk.hxx"
 #include "swcrsr.hxx"
@@ -110,6 +109,7 @@ bool SwCrsrShell::GotoMark(const ::sw::mark::IMark* const pMark, bool bAtStart)
         *(aCrsrSt.m_pCrsr)->GetPoint() = pMark->GetMarkStart();
     else
         *(aCrsrSt.m_pCrsr)->GetPoint() = pMark->GetMarkEnd();
+
     if(aCrsrSt.RollbackIfIllegal()) return false;
 
     UpdateCrsr(SwCrsrShell::SCROLLWIN|SwCrsrShell::CHKRANGE|SwCrsrShell::READONLY);
@@ -239,6 +239,7 @@ bool SwCrsrShell::GotoFieldmark(::sw::mark::IFieldmark const * const pMark)
     aCrsrSt.SetCrsrToMark(pMark);
     aCrsrSt.m_pCrsr->GetPoint()->nContent++;
     aCrsrSt.m_pCrsr->GetMark()->nContent--;
+
     if(aCrsrSt.RollbackIfIllegal()) return false;
 
     UpdateCrsr(SwCrsrShell::SCROLLWIN|SwCrsrShell::CHKRANGE|SwCrsrShell::READONLY);

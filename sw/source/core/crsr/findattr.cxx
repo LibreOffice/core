@@ -138,6 +138,7 @@ static sal_Bool lcl_Search( const SwTxtNode& rTxtNd, SwPaM& rPam,
 {
     if ( !rTxtNd.HasHints() )
         return sal_False;
+
     const SwTxtAttr *pTxtHt = 0;
     sal_Bool bForward = fnMove == fnMoveForward;
     sal_uInt16 nPos = bForward ? 0 : rTxtNd.GetSwpHints().Count();
@@ -202,7 +203,6 @@ SwAttrCheckArr::SwAttrCheckArr( const SfxItemSet& rSet, int bFwd,
 {
     aCmpSet.Put( rSet, sal_False );
     bNoColls = 0 != bNoCollections;
-
     bForward = 0 != bFwd;
 
     // determine area of Fnd/Stack array (Min/Max)
@@ -340,6 +340,7 @@ int SwAttrCheckArr::SetAttrFwd( const SwTxtAttr& rAttr )
     }
     else
         pTmpItem = &rAttr.GetAttr();
+
     while( pTmpItem )
     {
         SfxItemState eState = aCmpSet.GetItemState( nWhch, sal_False, &pItem );
@@ -491,6 +492,7 @@ int SwAttrCheckArr::SetAttrBwd( const SwTxtAttr& rAttr )
     }
     else
         pTmpItem = &rAttr.GetAttr();
+
     while( pTmpItem )
     {
         SfxItemState eState = aCmpSet.GetItemState( nWhch, sal_False, &pItem );
@@ -713,12 +715,14 @@ static int lcl_SearchForward( const SwTxtNode& rTxtNd, SwAttrCheckArr& rCmpArr,
                     *( pAttr = rHtArr.GetStart( nPos ))->GetStart() &&
                     rCmpArr.SetAttrFwd( *pAttr ) )
                 ;
+
             if( !rCmpArr.Found() )
                 continue;
 
             // then we have our search area
             if( (nSttPos = rCmpArr.Start()) > (nEndPos = rCmpArr.End()) )
                 return sal_False;
+
             lcl_SetAttrPam( rPam, nSttPos, &nEndPos, sal_True );
             return sal_True;
         }
@@ -726,6 +730,7 @@ static int lcl_SearchForward( const SwTxtNode& rTxtNd, SwAttrCheckArr& rCmpArr,
     if( !rCmpArr.CheckStack() ||
         (nSttPos = rCmpArr.Start()) > (nEndPos = rCmpArr.End()) )
         return sal_False;
+
     lcl_SetAttrPam( rPam, nSttPos, &nEndPos, sal_True );
     return sal_True;
 }
@@ -794,6 +799,7 @@ static int lcl_SearchBackward( const SwTxtNode& rTxtNd, SwAttrCheckArr& rCmpArr,
             // then we have our search area
             if( (nSttPos = rCmpArr.Start()) > (nEndPos = rCmpArr.End()) )
                 return sal_False;
+
             lcl_SetAttrPam( rPam, nSttPos, &nEndPos, sal_False );
             return sal_True;
         }
@@ -801,6 +807,7 @@ static int lcl_SearchBackward( const SwTxtNode& rTxtNd, SwAttrCheckArr& rCmpArr,
     if( !rCmpArr.CheckStack() ||
         (nSttPos = rCmpArr.Start()) > (nEndPos = rCmpArr.End()) )
         return sal_False;
+
     lcl_SetAttrPam( rPam, nSttPos, &nEndPos, sal_False );
     return sal_True;
 }
@@ -1173,7 +1180,6 @@ int SwFindParaAttr::Find( SwPaM* pCrsr, SwMoveFn fnMove, const SwPaM* pRegion,
 
         return FIND_NO_RING;
     }
-
     else
         return FIND_FOUND;
 }

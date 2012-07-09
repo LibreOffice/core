@@ -41,7 +41,6 @@
 
 #include <IMark.hxx>
 #include <hints.hxx>
-
 #include <xmloff/odffields.hxx>
 
 // for the dump "MSC-" compiler
@@ -69,7 +68,6 @@ SwPosition::SwPosition( SwCntntNode & rNode, const xub_StrLen nOffset )
     : nNode( rNode ), nContent( &rNode, nOffset )
 {
 }
-
 
 SwPosition::SwPosition( const SwPosition & rPos )
     : nNode( rPos.nNode ), nContent( rPos.nContent )
@@ -347,7 +345,6 @@ SwPaM::SwPaM( const SwNodeIndex& rMark, const SwNodeIndex& rPoint,
     {
         m_pPoint->nNode += nPointOffset;
     }
-
     m_Bound1.nContent.Assign( m_Bound1.nNode.GetNode().GetCntntNode(), 0 );
     m_Bound2.nContent.Assign( m_Bound2.nNode.GetNode().GetCntntNode(), 0 );
 }
@@ -369,7 +366,6 @@ SwPaM::SwPaM( const SwNode& rMark, const SwNode& rPoint,
     {
         m_pPoint->nNode += nPointOffset;
     }
-
     m_Bound1.nContent.Assign( m_Bound1.nNode.GetNode().GetCntntNode(), 0 );
     m_Bound2.nContent.Assign( m_Bound2.nNode.GetNode().GetCntntNode(), 0 );
 }
@@ -484,7 +480,6 @@ bool SwPaM::Move( SwMoveFn fnMove, SwGoInDoc fnGo )
     const bool bRet = (*fnGo)( *this, fnMove );
 
     m_bIsInFrontOfLabel = false;
-
     return bRet;
 }
 
@@ -530,7 +525,6 @@ SwPaM & SwPaM::Normalize(bool bPointFirst)
         {
             Exchange();
         }
-
     return *this;
 }
 

@@ -66,6 +66,7 @@ namespace
     {
         SwPosition& rStart = pField->GetMarkStart();
         SwPosition& rEnd = pField->GetMarkEnd();
+
         SwTxtNode const*const pStartTxtNode =
             rStart.nNode.GetNode().GetTxtNode();
         SwTxtNode const*const pEndTxtNode = rEnd.nNode.GetNode().GetTxtNode();
@@ -76,6 +77,7 @@ namespace
         const sal_Unicode ch_end = pEndTxtNode->GetTxt()[nEndPos];
         SwPaM aStartPaM(rStart);
         SwPaM aEndPaM(rEnd);
+
         io_pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_UI_REPLACE, NULL);
         if( ( ch_start != aStartMark ) && ( aEndMark != CH_TXT_ATR_FORMELEMENT ) )
         {

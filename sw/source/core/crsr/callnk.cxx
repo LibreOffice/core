@@ -18,7 +18,6 @@
  */
 
 #include <hintids.hxx>
-
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <fmtcntnt.hxx>
 #include <txatbase.hxx>
@@ -35,7 +34,6 @@
 #include <ndtxt.hxx>
 #include <flyfrm.hxx>
 #include <breakit.hxx>
-
 #include<vcl/window.hxx>
 
 SwCallLink::SwCallLink( SwCrsrShell & rSh, sal_uLong nAktNode, xub_StrLen nAktCntnt,
@@ -162,9 +160,9 @@ SwCallLink::~SwCallLink()
         {
             if( nCmp == nAktCntnt && pCurCrsr->HasMark() ) // left & select
                 ++nCmp;
+
             if ( ((SwTxtNode*)pCNd)->HasHints() )
             {
-
                 const SwpHints &rHts = ((SwTxtNode*)pCNd)->GetSwpHints();
                 sal_uInt16 n;
                 xub_StrLen nStart;

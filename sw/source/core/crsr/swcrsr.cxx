@@ -522,6 +522,7 @@ sal_Bool SwCursor::IsInProtectTable( sal_Bool bMove, sal_Bool bChgCrsr )
         if( bChgCrsr )
             // restore the last save position
             RestoreSavePos();
+
         return sal_True; // Crsr stays at old position
     }
 
@@ -1029,18 +1030,15 @@ void SwCursor::FillFindPos( SwDocPositions ePos, SwPosition& rPos ) const
         rPos.nNode = *rNds.GetEndOfContent().StartOfSectionNode();
         pCNd = rNds.GoNext( &rPos.nNode );
         break;
-
     case DOCPOS_END:
         rPos.nNode = rNds.GetEndOfContent();
         pCNd = rNds.GoPrevious( &rPos.nNode );
         bIsStart = false;
         break;
-
     case DOCPOS_OTHERSTART:
         rPos.nNode = *rNds[ sal_uLong(0) ];
         pCNd = rNds.GoNext( &rPos.nNode );
         break;
-
     case DOCPOS_OTHEREND:
         rPos.nNode = *rNds.GetEndOfContent().StartOfSectionNode();
         pCNd = rNds.GoPrevious( &rPos.nNode );
@@ -1173,7 +1171,6 @@ sal_Bool SwCursor::IsStartEndSentence( bool bEnd ) const
         aCrsr.GoSentence( bEnd ? SwCursor::END_SENT : SwCursor::START_SENT );
         bRet = aOrigPos == *aCrsr.GetPoint();
     }
-
     return bRet;
 }
 
@@ -1346,7 +1343,6 @@ sal_Bool SwCursor::SelectWordWT( ViewShell* pViewShell, sal_Int16 nWordType, con
     }
     return bRet;
 }
-
 
 static String lcl_MaskDeletedRedlines( const SwTxtNode* pTxtNd )
 {
@@ -1607,7 +1603,6 @@ sal_Bool SwCursor::LeftRight( sal_Bool bLeft, sal_uInt16 nCnt, sal_uInt16 nMode,
                             break;
                     }
                 }
-
                 mnRowSpanOffset = 0;
             }
         }
@@ -1639,7 +1634,6 @@ sal_Bool SwCursor::LeftRight( sal_Bool bLeft, sal_uInt16 nCnt, sal_uInt16 nMode,
                 }
             }
         }
-
         --nCnt;
     }
 
@@ -1802,7 +1796,6 @@ sal_Bool SwCursor::UpDown( sal_Bool bUp, sal_uInt16 nCnt,
 
         DoSetBidiLevelUpDown(); // calculate cursor bidi level
     }
-
     return bRet;
 }
 
@@ -1848,7 +1841,6 @@ sal_Bool SwCursor::SttEndDoc( sal_Bool bStt )
                     !IsSelOvr( nsSwCursorSelOverFlags::SELOVER_TOGGLE |
                                nsSwCursorSelOverFlags::SELOVER_CHANGEPOS |
                                nsSwCursorSelOverFlags::SELOVER_ENABLEREVDIREKTION );
-
     return bRet;
 }
 

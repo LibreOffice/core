@@ -155,6 +155,7 @@ sal_Bool SwCrsrShell::GotoHeaderTxt()
     // found header, search 1. content frame
     while( pFrm && !pFrm->IsCntntFrm() )
         pFrm = pFrm->GetLower();
+
     if( pFrm )
     {
         SET_CURR_SHELL( this );
@@ -533,6 +534,7 @@ sal_Bool SwCrsrShell::GotoNxtPrvTOXMark( sal_Bool bNext )
         // also at collection use only the first frame
         aCurGEF.SetBodyPos( *rPos.nNode.GetNode().
                         GetCntntNode()->getLayoutFrm( GetLayout(), &aPt, &rPos, sal_False ) );
+
     {
         const SfxPoolItem* pItem;
         const SwCntntFrm* pCFrm;
@@ -2096,6 +2098,7 @@ bool SwCrsrShell::SelectNxtPrvHyperlink( bool bNext )
                 }
         }
     }
+
     // then check all the Flys with a URL or imapge map
     {
         const SwFrmFmts* pFmts = GetDoc()->GetSpzFrmFmts();
