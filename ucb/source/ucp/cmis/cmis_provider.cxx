@@ -26,13 +26,15 @@
  * instead of those above.
  */
 
+#include <stdio.h>
+
 #include <ucbhelper/contentidentifier.hxx>
 #include <ucbhelper/contenthelper.hxx>
 #include <com/sun/star/ucb/ContentCreationException.hpp>
-#include "cmis_provider.hxx"
-#include "cmis_content.hxx"
 
-#include <stdio.h>
+#include "cmis_content.hxx"
+#include "cmis_provider.hxx"
+#include "cmis_repo_content.hxx"
 
 using namespace com::sun::star;
 
@@ -54,8 +56,17 @@ ContentProvider::queryContent(
 
     try
     {
-        xContent = new ::cmis::Content( m_xSMgr, this, Identifier );
-        registerNewContent( xContent );
+        URL aUrl( Identifier->getContentIdentifier( ) );
+        if ( aUrl.getRepositoryId( ).isEmpty( ) )
+        {
+            xContent = new RepoContent( m_xSMgr, this, Identifier );
+            registerNewContent( xContent );
+        }
+        else
+        {
+            xContent = new Content( m_xSMgr, this, Identifier );
+            registerNewContent( xContent );
+        }
     }
     catch ( com::sun::star::ucb::ContentCreationException const & )
     {

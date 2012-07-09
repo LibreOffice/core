@@ -14,7 +14,7 @@
 
 #include <ucbhelper/resultset.hxx>
 
-#include "cmis_content.hxx"
+#include "children_provider.hxx"
 
 namespace cmis
 {
@@ -23,13 +23,10 @@ namespace cmis
 
     struct ResultListEntry
     {
-        ::rtl::OUString aId;
-        com::sun::star::uno::Reference< com::sun::star::ucb::XContentIdentifier > xId;
         com::sun::star::uno::Reference< com::sun::star::ucb::XContent > xContent;
         com::sun::star::uno::Reference< com::sun::star::sdbc::XRow > xRow;
-        libcmis::ObjectPtr pObject;
 
-        ResultListEntry( libcmis::ObjectPtr pObj ) : pObject( pObj )
+        ResultListEntry( com::sun::star::uno::Reference< com::sun::star::ucb::XContent > xCnt ) : xContent( xCnt )
         {
         }
 
@@ -43,7 +40,7 @@ namespace cmis
     class DataSupplier : public ucbhelper::ResultSetDataSupplier
     {
         private:
-            com::sun::star::uno::Reference< ::cmis::Content > mxContent;
+            ChildrenProvider* m_pChildrenProvider;
             com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > m_xSMgr;
             sal_Int32 mnOpenMode;
             bool mbCountFinal;
@@ -52,7 +49,8 @@ namespace cmis
 
         public:
             DataSupplier( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rxSMgr,
-                const com::sun::star::uno::Reference< Content >& rContent, sal_Int32 nOpenMode );
+                ChildrenProvider* pChildrenProvider, sal_Int32 nOpenMode );
+
             virtual ~DataSupplier();
 
             virtual rtl::OUString queryContentIdentifierString( sal_uInt32 nIndex );

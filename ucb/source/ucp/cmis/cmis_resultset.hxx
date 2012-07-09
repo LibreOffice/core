@@ -12,12 +12,14 @@
 
 #include <ucbhelper/resultsethelper.hxx>
 
+#include "children_provider.hxx"
+
 namespace cmis
 {
 
     class DynamicResultSet : public ::ucbhelper::ResultSetImplHelper
     {
-        com::sun::star::uno::Reference< Content > m_xContent;
+        ChildrenProvider* m_pChildrenProvider;
         com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment > m_xEnv;
 
         private:
@@ -25,12 +27,14 @@ namespace cmis
             virtual void initDynamic();
 
         public:
+
             DynamicResultSet(
                     const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rxSMgr,
-                    const com::sun::star::uno::Reference< Content >& rxContent,
+                    ChildrenProvider* pChildrenProvider,
                     const com::sun::star::ucb::OpenCommandArgument2& rCommand,
                     const com::sun::star::uno::Reference<
                     com::sun::star::ucb::XCommandEnvironment >& rxEnv );
+
     };
 }
 

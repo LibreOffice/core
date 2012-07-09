@@ -18,11 +18,11 @@ namespace cmis
 {
     DynamicResultSet::DynamicResultSet(
         const Reference< XMultiServiceFactory >& rxSMgr,
-        const Reference< Content >& rxContent,
+        ChildrenProvider* pChildrenProvider,
         const OpenCommandArgument2& rCommand,
         const Reference< XCommandEnvironment >& rxEnv ) :
             ResultSetImplHelper( rxSMgr, rCommand ),
-            m_xContent( rxContent ),
+            m_pChildrenProvider( pChildrenProvider ),
             m_xEnv( rxEnv )
     {
     }
@@ -31,7 +31,7 @@ namespace cmis
     {
         m_xResultSet1 = new ::ucbhelper::ResultSet(
             m_xSMgr, m_aCommand.Properties,
-            new DataSupplier( m_xSMgr, m_xContent, m_aCommand.Mode ), m_xEnv );
+            new DataSupplier( m_xSMgr, m_pChildrenProvider, m_aCommand.Mode ), m_xEnv );
     }
 
     void DynamicResultSet::initDynamic()

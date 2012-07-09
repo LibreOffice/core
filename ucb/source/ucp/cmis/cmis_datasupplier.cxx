@@ -29,8 +29,8 @@ namespace cmis
     typedef std::vector< ResultListEntry* > ResultList;
 
     DataSupplier::DataSupplier( const uno::Reference< lang::XMultiServiceFactory >& rxSMgr,
-        const uno::Reference< ::cmis::Content >& rContent, sal_Int32 nOpenMode )
-        : mxContent(rContent), m_xSMgr(rxSMgr), mnOpenMode(nOpenMode), mbCountFinal(false)
+        ChildrenProvider* pChildrenProvider, sal_Int32 nOpenMode )
+        : m_pChildrenProvider( pChildrenProvider ), m_xSMgr(rxSMgr), mnOpenMode(nOpenMode), mbCountFinal(false)
     {
     }
 
@@ -39,132 +39,52 @@ namespace cmis
         if ( mbCountFinal )
             return true;
 
-        libcmis::ObjectPtr pObject = mxContent->getObject();
-        libcmis::Folder* pFolder = dynamic_cast< libcmis::Folder* >( pObject.get( ) );
-        if ( NULL != pFolder )
+        list< uno::Reference< ucb::XContent > > aChildren = m_pChildrenProvider->getChildren( );
+
+        // Loop over the results and filter them
+        for ( list< uno::Reference< ucb::XContent > >::iterator it = aChildren.begin();
+                it != aChildren.end(); ++it )
         {
-            // Get the children from pObject
-            try
+            rtl::OUString sContentType = ( *it )->getContentType( );
+            bool bIsFolder = sContentType != CMIS_FILE_TYPE;
+            if ( ( mnOpenMode == ucb::OpenMode::FOLDERS && bIsFolder ) ||
+                 ( mnOpenMode == ucb::OpenMode::DOCUMENTS && !bIsFolder ) ||
+                 ( mnOpenMode == ucb::OpenMode::ALL ) )
             {
-                vector< libcmis::ObjectPtr > children = pFolder->getChildren( );
-
-                // Loop over the results and filter them
-                for ( vector< libcmis::ObjectPtr >::iterator it = children.begin();
-                        it != children.end(); ++it )
-                {
-                    bool bIsFolder = ( *it )->getBaseType( ) == "cmis:folder";
-                    if ( ( mnOpenMode == ucb::OpenMode::FOLDERS && bIsFolder ) ||
-                         ( mnOpenMode == ucb::OpenMode::DOCUMENTS && !bIsFolder ) ||
-                         ( mnOpenMode == ucb::OpenMode::ALL ) )
-                    {
-                        maResults.push_back( new ResultListEntry( *it ) );
-                    }
-                }
-                mbCountFinal = sal_True;
-
-                return true;
-            }
-            catch ( const libcmis::Exception& e )
-            {
-                SAL_INFO( "cmisucp", "Exception thrown: " << e.what() );
-                return false;
+                maResults.push_back( new ResultListEntry( *it ) );
             }
         }
+        mbCountFinal = sal_True;
 
-        return false;
+        return true;
     }
 
     DataSupplier::~DataSupplier()
     {
+        while ( maResults.size( ) > 0 )
+        {
+            ResultListEntry* back = maResults.back( );
+            maResults.pop_back( );
+            delete( back );
+        }
     }
 
     ::rtl::OUString DataSupplier::queryContentIdentifierString( sal_uInt32 nIndex )
     {
-        if ( nIndex < maResults.size() )
-        {
-            ::rtl::OUString aId = maResults[ nIndex ]->aId;
-            if ( aId.getLength() )
-            {
-                // Already cached.
-                return aId;
-            }
-        }
-
-        if ( getResult( nIndex ) )
-        {
-            string sObjectPath;
-            vector< string > paths = maResults[nIndex]->pObject->getPaths( );
-            if ( !paths.empty( ) )
-                sObjectPath = paths.front( );
-            else
-            {
-                // Handle the unfiled objects with their id...
-                // They manage to sneak here if we don't have the permission to get the object
-                // parents (and then the path)
-                sObjectPath += "#" + maResults[nIndex]->pObject->getId( );
-            }
-
-            // Get the URL from the Path
-            URL aUrl( mxContent->getIdentifier( )->getContentIdentifier( ) );
-            aUrl.setObjectPath( STD_TO_OUSTR( sObjectPath ) );
-            rtl::OUString aId = aUrl.asString( );
-
-            maResults[ nIndex ]->aId = aId;
-            return aId;
-        }
-
-        return ::rtl::OUString();
+        return queryContentIdentifier( nIndex )->getContentIdentifier( );
     }
 
     uno::Reference< ucb::XContentIdentifier > DataSupplier::queryContentIdentifier( sal_uInt32 nIndex )
     {
-        if ( nIndex < maResults.size() )
-        {
-            uno::Reference< ucb::XContentIdentifier > xId = maResults[ nIndex ]->xId;
-            if ( xId.is() )
-            {
-                // Already cached.
-                return xId;
-            }
-        }
-
-        ::rtl::OUString aId = queryContentIdentifierString( nIndex );
-        if ( aId.getLength() )
-        {
-            uno::Reference< ucb::XContentIdentifier > xId = new ucbhelper::ContentIdentifier( aId );
-            maResults[ nIndex ]->xId = xId;
-            return xId;
-        }
-
-        return uno::Reference< ucb::XContentIdentifier >();
+        return queryContent( nIndex )->getIdentifier( );
     }
 
     uno::Reference< ucb::XContent > DataSupplier::queryContent( sal_uInt32 nIndex )
     {
-        if ( nIndex < maResults.size() )
-        {
-            uno::Reference< ucb::XContent > xContent = maResults[ nIndex ]->xContent;
-            if ( xContent.is() )
-            {
-                // Already cached.
-                return xContent;
-            }
-        }
+        if ( nIndex > maResults.size() )
+            getData( );
 
-        uno::Reference< ucb::XContentIdentifier > xId = queryContentIdentifier( nIndex );
-        if ( xId.is() )
-        {
-            try
-            {
-                uno::Reference< ucb::XContent > xContent = mxContent->getProvider()->queryContent( xId );
-                maResults[ nIndex ]->xContent = xContent;
-                return xContent;
-            }
-            catch ( ucb::IllegalIdentifierException& )
-            {
-            }
-        }
-        return uno::Reference< ucb::XContent >();
+        return maResults[ nIndex ]->xContent;
     }
 
     sal_Bool DataSupplier::getResult( sal_uInt32 nIndex )

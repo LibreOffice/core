@@ -57,8 +57,8 @@
 #include <ucbhelper/std_inputstream.hxx>
 #include <ucbhelper/std_outputstream.hxx>
 #include <ucbhelper/propertyvalueset.hxx>
-#include <ucbhelper/simpleauthenticationrequest.hxx>
 
+#include "auth_provider.hxx"
 #include "cmis_content.hxx"
 #include "cmis_provider.hxx"
 #include "cmis_resultset.hxx"
@@ -71,64 +71,6 @@ using namespace std;
 
 namespace
 {
-    class AuthProvider : public libcmis::AuthProvider
-    {
-        const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment>& m_xEnv;
-        rtl::OUString m_sUrl;
-        rtl::OUString m_sBindingUrl;
-
-        public:
-            AuthProvider ( const com::sun::star::uno::Reference<
-                                   com::sun::star::ucb::XCommandEnvironment>& xEnv,
-                           rtl::OUString sUrl,
-                           rtl::OUString sBindingUrl ):
-                m_xEnv( xEnv ), m_sUrl( sUrl ), m_sBindingUrl( sBindingUrl ) { }
-
-            bool authenticationQuery( string& username, string& password );
-    };
-
-    bool AuthProvider::authenticationQuery( string& username, string& password )
-    {
-        if ( m_xEnv.is() )
-        {
-            uno::Reference< task::XInteractionHandler > xIH
-                = m_xEnv->getInteractionHandler();
-
-            if ( xIH.is() )
-            {
-                rtl::Reference< ucbhelper::SimpleAuthenticationRequest > xRequest
-                    = new ucbhelper::SimpleAuthenticationRequest(
-                        m_sUrl, m_sBindingUrl, ::rtl::OUString(),
-                        STD_TO_OUSTR( username ),
-                        STD_TO_OUSTR( password ),
-                        ::rtl::OUString(), true, false );
-                xIH->handle( xRequest.get() );
-
-                rtl::Reference< ucbhelper::InteractionContinuation > xSelection
-                    = xRequest->getSelection();
-
-                if ( xSelection.is() )
-                {
-                    // Handler handled the request.
-                    uno::Reference< task::XInteractionAbort > xAbort(
-                        xSelection.get(), uno::UNO_QUERY );
-                    if ( !xAbort.is() )
-                    {
-                        const rtl::Reference<
-                            ucbhelper::InteractionSupplyAuthentication > & xSupp
-                            = xRequest->getAuthenticationSupplier();
-
-                        username = OUSTR_TO_STDSTR( xSupp->getUserName() );
-                        password = OUSTR_TO_STDSTR( xSupp->getPassword() );
-
-                        return true;
-                    }
-                }
-            }
-        }
-        return false;
-    }
-
     util::DateTime lcl_boostToUnoTime( boost::posix_time::ptime boostTime )
     {
         util::DateTime unoTime;
@@ -152,11 +94,13 @@ namespace
 namespace cmis
 {
     Content::Content( const uno::Reference< lang::XMultiServiceFactory >& rxSMgr,
-        ContentProvider *pProvider, const uno::Reference< ucb::XContentIdentifier >& Identifier)
+        ContentProvider *pProvider, const uno::Reference< ucb::XContentIdentifier >& Identifier,
+        libcmis::ObjectPtr pObject )
             throw ( ucb::ContentCreationException )
         : ContentImplHelper( rxSMgr, pProvider, Identifier ),
         m_pProvider( pProvider ),
         m_pSession( NULL ),
+        m_pObject( pObject ),
         m_bTransient( false )
     {
         // Split the URL into bits
@@ -457,12 +401,6 @@ namespace cmis
         }
 
         return bExists;
-    }
-
-    void Content::queryChildren( ContentRefList& /*rChildren*/ )
-    {
-        SAL_INFO( "cmisucp", "TODO - Content::queryChildren()" );
-        // TODO Implement me
     }
 
     uno::Any Content::open(const ucb::OpenCommandArgument2 & rOpenCommand,
@@ -1208,6 +1146,42 @@ namespace cmis
         {
             return uno::Sequence< ucb::ContentInfo >();
         }
+    }
+
+    list< uno::Reference< ucb::XContent > > Content::getChildren( )
+    {
+        list< uno::Reference< ucb::XContent > > results;
+        SAL_INFO( "cmisucp", "Content::getChildren() " << m_sURL );
+
+        libcmis::Folder* pFolder = dynamic_cast< libcmis::Folder* >( getObject( ).get( ) );
+        if ( NULL != pFolder )
+        {
+            // Get the children from pObject
+            try
+            {
+                vector< libcmis::ObjectPtr > children = pFolder->getChildren( );
+
+                // Loop over the results
+                for ( vector< libcmis::ObjectPtr >::iterator it = children.begin();
+                        it != children.end(); ++it )
+                {
+                    // TODO Cache the objects
+
+                    URL aUrl( m_sURL );
+                    aUrl.setObjectPath( m_sObjectPath + STD_TO_OUSTR( ( *it )->getName( ) ) );
+                    uno::Reference< ucb::XContentIdentifier > xId = new ucbhelper::ContentIdentifier( aUrl.asString( ) );
+                    uno::Reference< ucb::XContent > xContent = new Content( m_xSMgr, m_pProvider, xId, *it );
+
+                    results.push_back( xContent );
+                }
+            }
+            catch ( const libcmis::Exception& e )
+            {
+                SAL_INFO( "cmisucp", "Exception thrown: " << e.what() );
+            }
+        }
+
+        return results;
     }
 
     void Content::setCmisProperty( std::string sName, std::string sValue )

@@ -30,6 +30,7 @@
 #define CMIS_CONTENT_HXX
 
 #include "cmis_url.hxx"
+#include "children_provider.hxx"
 
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
@@ -64,7 +65,9 @@ namespace cmis
 #define CMIS_FOLDER_TYPE "application/vnd.sun.staroffice.cmis-folder"
 
 class ContentProvider;
-class Content : public ::ucbhelper::ContentImplHelper, public com::sun::star::ucb::XContentCreator
+class Content : public ::ucbhelper::ContentImplHelper,
+                public com::sun::star::ucb::XContentCreator,
+                public ChildrenProvider
 {
 private:
     ContentProvider*       m_pProvider;
@@ -95,8 +98,6 @@ private:
 private:
     typedef rtl::Reference< Content > ContentRef;
     typedef std::list< ContentRef > ContentRefList;
-
-    void queryChildren( ContentRefList& rChildren );
 
     com::sun::star::uno::Any open(const com::sun::star::ucb::OpenCommandArgument2 & rArg,
         const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment > & xEnv )
@@ -131,7 +132,8 @@ private:
 public:
     Content( const com::sun::star::uno::Reference<
         com::sun::star::lang::XMultiServiceFactory >& rxSMgr, ContentProvider *pProvider,
-        const com::sun::star::uno::Reference< com::sun::star::ucb::XContentIdentifier >& Identifier)
+        const com::sun::star::uno::Reference< com::sun::star::ucb::XContentIdentifier >& Identifier,
+        libcmis::ObjectPtr pObject = libcmis::ObjectPtr( ) )
             throw ( com::sun::star::ucb::ContentCreationException );
 
     Content( const com::sun::star::uno::Reference<
@@ -188,6 +190,8 @@ public:
     com::sun::star::uno::Sequence< com::sun::star::ucb::ContentInfo >
         queryCreatableContentsInfo( const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment >& xEnv )
                 throw( com::sun::star::uno::RuntimeException );
+
+    virtual std::list< com::sun::star::uno::Reference< com::sun::star::ucb::XContent > > getChildren( );
 
     libcmis::ObjectPtr getObject( ) throw ( libcmis::Exception );
 };

@@ -54,6 +54,8 @@ namespace cmis
             rtl::OUString& getObjectId( );
             rtl::OUString& getBindingUrl( );
             rtl::OUString& getRepositoryId( );
+            rtl::OUString& getUsername( ) { return m_sUser; }
+            rtl::OUString& getPassword( ) { return m_sPass; }
             void setObjectPath( rtl::OUString sPath );
 
             rtl::OUString asString( );
