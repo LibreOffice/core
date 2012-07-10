@@ -1126,6 +1126,19 @@ void ODatabaseMetaDataResultSet::openSpecialColumns(sal_Bool _bRowVer,const Any&
                                     const ::rtl::OUString& table,sal_Int32 scope,   sal_Bool nullable )
                                     throw(SQLException, RuntimeException)
 {
+    // Some ODBC drivers really don't like getting an empty string as tableName
+    // E.g. psqlodbc up to at least version 09.01.0100 segfaults
+    if (table.isEmpty())
+    {
+        const char errMsg[] = "ODBC: Trying to get special columns of empty table name";
+        const char SQLState[] = "HY009";
+        throw SQLException( ::rtl::OUString(errMsg, sizeof(errMsg) - sizeof(errMsg[0]), RTL_TEXTENCODING_ASCII_US),
+                            *this,
+                            ::rtl::OUString(SQLState, sizeof(SQLState) - sizeof(SQLState[0]), RTL_TEXTENCODING_ASCII_US),
+                            -1,
+                            Any() );
+    }
+
     const ::rtl::OUString *pSchemaPat = NULL;
 
     if(schema.toChar() != '%')
