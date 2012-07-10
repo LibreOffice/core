@@ -58,17 +58,17 @@ MenuItemStatusListener::statusChanged(const FeatureStateEvent& Event)
     //For some reason, URLs can slip through as labels, we make sure
     //this doesn't happen.
     if ((Event.State >>= oULabel) &&
-        !oULabel.matchAsciiL ("private:", 8, 0) &&
-        !oULabel.matchAsciiL (".uno:", 5, 0)    &&
-        !oULabel.matchAsciiL ("slot:", 5, 0)    &&
-        !oULabel.matchAsciiL ("service:", 8, 0) &&
-        !oULabel.matchAsciiL (".cmd:", 5, 0)    &&
-        !oULabel.matchAsciiL ("macro:///", 5, 0))
+        !oULabel.match ("private:", 0) &&
+        !oULabel.match (".uno:", 0)    &&
+        !oULabel.match ("slot:", 0)    &&
+        !oULabel.match ("service:", 0) &&
+        !oULabel.match (".cmd:", 0)    &&
+        !oULabel.match ("macro:///", 0))
     {
         oULabel = oULabel.replace ((sal_Unicode)0x007e, (sal_Unicode)0x005f);
         gchar* label = g_utf16_to_utf8 (oULabel.getStr(),
-                                 oULabel.getLength(),
-                                 NULL, NULL, NULL);
+                                        oULabel.getLength(),
+                                        NULL, NULL, NULL);
         info->setLabel (label);
         g_free (label);
     }
