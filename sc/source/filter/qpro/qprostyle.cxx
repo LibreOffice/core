@@ -55,10 +55,10 @@
 
 ScQProStyle::ScQProStyle()
 {
-    rtl_fillMemory (maAlign, sizeof (maAlign), 0);
-    rtl_fillMemory (maFont, sizeof (maFont), 0);
-    rtl_fillMemory (maFontRecord, sizeof (maFontRecord), 0);
-    rtl_fillMemory (maFontHeight, sizeof (maFontHeight), 0);
+    rtl_zeroMemory (maAlign, sizeof (maAlign));
+    rtl_zeroMemory (maFont, sizeof (maFont));
+    rtl_zeroMemory (maFontRecord, sizeof (maFontRecord));
+    rtl_zeroMemory (maFontHeight, sizeof (maFontHeight));
 }
 
 void ScQProStyle::SetFormat( ScDocument *pDoc, sal_uInt8 nCol, sal_uInt16 nRow, SCTAB nTab, sal_uInt16 nStyle )

@@ -444,7 +444,7 @@ public:
     VolumeInfo( sal_uInt32 nMask ): _nMask( nMask )
     {
         _aInfo.uStructSize = sizeof( oslVolumeInfo );
-        rtl_fillMemory( &_aInfo.uValidFields, sizeof( oslVolumeInfo ) - sizeof( sal_uInt32 ), 0 );
+        rtl_zeroMemory( &_aInfo.uValidFields, sizeof( oslVolumeInfo ) - sizeof( sal_uInt32 ) );
         _aInfo.pDeviceHandle = &_aDevice._aHandle;
     }
 
@@ -692,7 +692,7 @@ public:
     FileStatus( sal_uInt32 nMask ): _nMask( nMask )
     {
         _aStatus.uStructSize = sizeof( oslFileStatus );
-        rtl_fillMemory( &_aStatus.uValidFields, sizeof( oslFileStatus ) - sizeof( sal_uInt32 ), 0 );
+        rtl_zeroMemory( &_aStatus.uValidFields, sizeof( oslFileStatus ) - sizeof( sal_uInt32 ) );
     }
 
     /** Destructor.
