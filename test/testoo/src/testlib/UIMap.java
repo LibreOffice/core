@@ -24,13 +24,17 @@
 package testlib;
 import java.io.File;
 
+import org.openoffice.test.OpenOffice;
 import org.openoffice.test.vcl.IDList;
+import org.openoffice.test.vcl.client.Constant;
 import org.openoffice.test.vcl.widgets.VclApp;
 import org.openoffice.test.vcl.widgets.VclButton;
 import org.openoffice.test.vcl.widgets.VclComboBox;
 import org.openoffice.test.vcl.widgets.VclControl;
 import org.openoffice.test.vcl.widgets.VclDialog;
+import org.openoffice.test.vcl.widgets.VclDockingWin;
 import org.openoffice.test.vcl.widgets.VclEditBox;
+import org.openoffice.test.vcl.widgets.VclField;
 import org.openoffice.test.vcl.widgets.VclListBox;
 import org.openoffice.test.vcl.widgets.VclMenuItem;
 import org.openoffice.test.vcl.widgets.VclMessageBox;
@@ -39,8 +43,6 @@ import org.openoffice.test.vcl.widgets.VclTabControl;
 import org.openoffice.test.vcl.widgets.VclTabPage;
 import org.openoffice.test.vcl.widgets.VclToolBox;
 import org.openoffice.test.vcl.widgets.VclWindow;
-import org.openoffice.test.vcl.widgets.VclField;
-import org.openoffice.test.vcl.widgets.VclDockingWin;
 
 /**
  * Define all UI controls in the class.
@@ -49,9 +51,9 @@ import org.openoffice.test.vcl.widgets.VclDockingWin;
  */
 public class UIMap {
     private static IDList idList = new IDList(new File("./ids"));
-    public static final VclMessageBox ActiveMsgBox = new VclMessageBox(idList.getId("UID_ACTIVE"));
-    public static final VclMessageBox MsgBox_AdditionalRowsNotSaved = new VclMessageBox(idList.getId("UID_ACTIVE"), "Additional rows were not saved.");
-    public static final VclTabControl ActiveTabControl = new VclTabControl(idList.getId("UID_ACTIVE"));
+    public static final VclMessageBox ActiveMsgBox = new VclMessageBox(Constant.UID_ACTIVE);
+    public static final VclMessageBox MsgBox_AdditionalRowsNotSaved = new VclMessageBox(Constant.UID_ACTIVE, "Additional rows were not saved.");
+    public static final VclTabControl ActiveTabControl = new VclTabControl(Constant.UID_ACTIVE);
 
     public static VclEditBox editbox(String id) {
         return new VclEditBox(idList.getId(id));
@@ -71,7 +73,7 @@ public class UIMap {
     }
 
     public static VclTabPage tabpage(String id) {
-        return new VclTabPage(idList.getId(id), ActiveTabControl);
+        return new VclTabPage(idList.getId(id));
     }
 
     public static VclListBox listbox(String id) {
@@ -112,8 +114,8 @@ public class UIMap {
     public static VclDockingWin dockingwin(String id){
         return new VclDockingWin(idList.getId(id));
     }
-
-    public static final VclApp app = new VclApp(null);
+    public static final OpenOffice oo = new OpenOffice(null);
+    public static final VclApp app = VclApp.getDefault();
     public static final VclWindow writer = window("SW_HID_EDIT_WIN");
     public static final VclWindow startcenter = window("FWK_HID_BACKINGWINDOW");
     public static final VclWindow calc = window("SC_HID_SC_WIN_GRIDWIN");

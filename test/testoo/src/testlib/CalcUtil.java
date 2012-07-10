@@ -26,12 +26,16 @@ package testlib;
 import static org.openoffice.test.vcl.Tester.*;
 import static testlib.UIMap.*;
 
+import java.lang.reflect.Array;
 import java.util.StringTokenizer;
+import java.util.logging.Logger;
 
 
 
 
 public class CalcUtil {
+
+    private static Logger LOG = Logger.getLogger(CalcUtil.class.getName());
 
     /**
      * Select a range.
@@ -221,7 +225,34 @@ public class CalcUtil {
                 break;
             }
         }
+
+        LOG.info("Text of range [" + range + "]:\n" + arrayToString(texts));
         return texts;
     }
 
+    private static String arrayToString(Object array) {
+        if (array == null)
+            return "null";
+        if (!array.getClass().isArray())
+            return array.toString();
+
+        int len = Array.getLength(array);
+        String ret = "{";
+        for (int i= 0; i < len; i++) {
+            Object el = Array.get(array, i);
+            if (el == null) {
+                ret += "null";
+            } else if (el.getClass().isArray()) {
+                ret += arrayToString(el);
+            } else {
+                ret += "\"" + el + "\"";
+            }
+
+            if (i + 1 != len)
+                ret += ",";
+
+        }
+        ret += "}";
+        return ret;
+    }
 }

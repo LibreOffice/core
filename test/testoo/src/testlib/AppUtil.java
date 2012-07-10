@@ -56,66 +56,15 @@ public class AppUtil extends Tester {
         } else if (SystemUtil.isLinux()) {
 
         }
-//      patch();
     }
 
-    /**
-     * This method is used to start OpenOffice and make it ready for testing.
-     *
-     * @param cleanUserInstallation if use a totally clean user installation data
-     * @param userInstallation Specify user installation directory. If it's null, the default will be used.
-     */
-    public static void initApp(boolean cleanUserInstallation, String userInstallation) {
-        File newUserInstallation = userInstallation == null ? app.getDefaultUserInstallation() : new File(fullPath(userInstallation));
-        if (!newUserInstallation.equals(app.getUserInstallation())) {
-            // user installation changed...
-            app.kill();
-            app.setUserInstallation(userInstallation == null ? null : newUserInstallation);
-        }
-
-        patch(cleanUserInstallation);
-
-        //try to reset application
-        for (int i = 0; i < 3; i++) {
-            try {
-                if (app.exists()) {
-                    app.reset();
-                    openStartcenter();
-                    if (startcenter.exists(2))
-                        return;
-                }
-            } catch (Exception e){
-
-            }
-
-            app.kill();
-            if (app.start() != 0)
-                throw new Error("OpenOffice can't be started! Testing aborted!");
-            sleep(3); // this sleep is important.
-            app.waitForExistence(30, 5);
-        }
-    }
-
-    /**
-     * @see initApp(boolean cleanUserInstallation, String userInstallation)
-     */
-    public static void initApp(boolean cleanUserInstallation) {
-        initApp(cleanUserInstallation, System.getProperty("openoffice.userinstallation"));
-    }
-
-    /**
-     * @see initApp(boolean cleanUserInstallation, String userInstallation)
-     */
-    public static void initApp() {
-        initApp(false);
-    }
 
     public static void openStartcenter() {
         if (startcenter.exists())
             return;
 
         if (SystemUtil.isMac()) {
-            SystemUtil.execScript("osascript -e 'tell app \"OpenOffice.org\" to activate'", false);
+            SystemUtil.execScript("osascript -e 'tell app \"OpenOffice.org\" to activate'");
             typeKeys("<command n>");
         }
 
@@ -189,30 +138,6 @@ public class AppUtil extends Tester {
         }
         FileSave_FileType.click();
         sleep(1);
-    }
-
-    /**
-     * In order to automatically test OO, some settings/files need to be modified
-     */
-    public static void patch(boolean force) {
-        File userInstallationDir = app.getUserInstallation();
-        File patchMark = new File(userInstallationDir, "automationenabled");
-        if (!force && patchMark.exists())
-            return;
-
-        // remove user installation dir
-        app.kill();
-        sleep(1);
-        FileUtil.deleteFile(userInstallationDir);
-        app.start();
-        sleep(10);
-        app.kill();
-        sleep(1);
-
-        FileUtil.copyFile(new File("patch/Common.xcu"), new File(userInstallationDir, "user/registry/data/org/openoffice/Office/Common.xcu"));
-        FileUtil.copyFile(new File("patch/Setup.xcu"), new File(userInstallationDir, "user/registry/data/org/openoffice/Setup.xcu"));
-        FileUtil.copyFile(new File("patch/registrymodifications.xml"), new File(userInstallationDir, "user/registrymodifications.xcu"));
-        FileUtil.writeStringToFile(patchMark.getAbsolutePath(), "patched for automation");
     }
 
     public static void handleBlocker(final VclWindow... windows) {
