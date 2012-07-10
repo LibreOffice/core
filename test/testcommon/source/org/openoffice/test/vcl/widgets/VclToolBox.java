@@ -24,7 +24,6 @@
 package org.openoffice.test.vcl.widgets;
 
 import org.openoffice.test.vcl.client.Constant;
-import org.openoffice.test.vcl.client.SmartId;
 
 
 /**
@@ -35,16 +34,14 @@ import org.openoffice.test.vcl.client.SmartId;
  */
 public class VclToolBox extends VclDockingWin {
 
-    public VclToolBox(SmartId id) {
-        super(id);
-    }
 
-    /**
-     * Define a vcl tool bar
-     * @param uid the string id
-     */
     public VclToolBox(String uid) {
         super(uid);
+    }
+
+
+    public VclToolBox(VclApp app, String id) {
+        super(app, id);
     }
 
     /**

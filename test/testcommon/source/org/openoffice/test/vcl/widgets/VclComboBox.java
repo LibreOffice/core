@@ -24,7 +24,6 @@
 package org.openoffice.test.vcl.widgets;
 
 import org.openoffice.test.vcl.client.Constant;
-import org.openoffice.test.vcl.client.SmartId;
 
 /**
  * Proxy used to access Vcl Combo Box
@@ -32,17 +31,12 @@ import org.openoffice.test.vcl.client.SmartId;
  */
 public class VclComboBox extends VclControl {
 
-    public VclComboBox(SmartId id) {
+    public VclComboBox(String id) {
         super(id);
     }
 
-    /**
-     * Define VclComboBox with String id
-     *
-     * @param uid
-     */
-    public VclComboBox(String uid) {
-        super(uid);
+    public VclComboBox(VclApp app, String id) {
+        super(app, id);
     }
 
     /**

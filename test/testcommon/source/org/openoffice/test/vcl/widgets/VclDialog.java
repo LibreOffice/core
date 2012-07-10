@@ -24,7 +24,6 @@
 package org.openoffice.test.vcl.widgets;
 
 import org.openoffice.test.vcl.client.Constant;
-import org.openoffice.test.vcl.client.SmartId;
 
 
 
@@ -33,18 +32,17 @@ import org.openoffice.test.vcl.client.SmartId;
  */
 public class VclDialog extends VclWindow {
 
-    /**
-     * Define the dialog with its string ID
-     * @param id
-     */
-    public VclDialog(String uid) {
-        super(uid);
-    }
 
-
-    public VclDialog(SmartId id) {
+    public VclDialog(String id) {
         super(id);
     }
+
+
+
+    public VclDialog(VclApp app, String id) {
+        super(app, id);
+    }
+
 
 
     /**

@@ -34,7 +34,7 @@ import java.util.logging.Logger;
  */
 public class Handshaker implements CommunicationListener, Constant {
 
-    private static Logger logger = Logger.getLogger("com.ibm.vclhook");
+    private static Logger logger = Logger.getLogger("Handshaker");
 
     private CommunicationManager communicationManager = null;
 

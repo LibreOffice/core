@@ -37,13 +37,6 @@ import java.util.List;
  */
 public class CommandCaller implements CommunicationListener, Constant {
 
-    public static interface WinInfoReceiver {
-        void onStartReceiving();
-        void addWinInfo(SmartId id, long type, String t1);
-        void onFinishReceiving();
-
-    }
-
     private ByteArrayOutputStream dataOutput = new ByteArrayOutputStream(1024);
 
     private ByteArrayInputStream dataInput = null;
@@ -68,6 +61,7 @@ public class CommandCaller implements CommunicationListener, Constant {
 
     public CommandCaller(CommunicationManager communicationManager) {
         this.communicationManager = communicationManager;
+        communicationManager.addListener(this);
     }
 
     private void write(byte[] bytes) {
@@ -457,7 +451,7 @@ public class CommandCaller implements CommunicationListener, Constant {
      * @param args the arguments. The arguments can be Integer, Long, Boolean and String.
      * @return The return can be Integer, Long, String and Boolean or an Object[] includes these types of object.
      */
-    public synchronized Object callCommand(int methodId, Object[] args) {
+    public synchronized Object callCommand(int methodId, Object... args) {
         beginBlock();
         writeUShort(SICommand);
         writeUShort(methodId);
@@ -471,23 +465,27 @@ public class CommandCaller implements CommunicationListener, Constant {
         return null;
     }
 
+    public synchronized Object callCommand(int methodId) {
+        return callCommand(methodId, (Object)null);
+    }
+
     /**
      *  Tell automation server to execute a 'StatementControl'
-     * @param uid the control ID
+     * @param id the control ID
      * @param methodId the method ID defined Constant class
      * @param args the arguments. The arguments can be Integer, Long, Boolean and String.
      * @return The return can be Integer, Long, String and Boolean or an Object[] includes these types of object.
      */
-    public synchronized Object callControl(SmartId uid, int methodId, Object[] args){
+    public synchronized Object callControl(String id, int methodId, Object... args){
         beginBlock();
-        if (uid.getSid() != null) {
-            writeUShort(SIStringControl);
-            writeString(uid.getSid());
-        } else {
+        try {
+            long noId = Long.parseLong(id);
             writeUShort(SIControl);
-            writeULong(uid.getId());
+            writeULong(noId);
+        } catch (NumberFormatException e) {
+            writeUShort(SIStringControl);
+            writeString(id);
         }
-
         writeUShort(methodId);
         writeParams(args);
         endBlock();
@@ -515,7 +513,7 @@ public class CommandCaller implements CommunicationListener, Constant {
      * @param id the slot ID
      * @param args the slot args
      */
-    public synchronized void callSlot(int id, Object[] args) {
+    public synchronized void callSlot(int id, Object... args) {
         beginBlock();
         writeUShort(SISlot);
         writeUShort(id);

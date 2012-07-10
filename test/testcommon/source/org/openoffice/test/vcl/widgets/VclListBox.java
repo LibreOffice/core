@@ -24,22 +24,20 @@
 package org.openoffice.test.vcl.widgets;
 
 import org.openoffice.test.vcl.client.Constant;
-import org.openoffice.test.vcl.client.SmartId;
 
 
 public class VclListBox extends VclControl  {
 
-    /**
-     * Construct the list box with its string ID
-     * @param uid
-     */
-    public VclListBox(String uid) {
-        super(uid);
-    }
 
-    public VclListBox(SmartId id) {
+    public VclListBox(String id) {
         super(id);
     }
+
+
+    public VclListBox(VclApp app, String id) {
+        super(app, id);
+    }
+
 
     /**
      * Returns the number of entries in a TreeListBox.

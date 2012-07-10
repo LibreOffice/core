@@ -24,7 +24,6 @@
 package org.openoffice.test.vcl.widgets;
 
 import org.openoffice.test.vcl.client.Constant;
-import org.openoffice.test.vcl.client.SmartId;
 
 /**
  * Proxy to access VCL tab control
@@ -32,16 +31,16 @@ import org.openoffice.test.vcl.client.SmartId;
  */
 public class VclTabControl extends VclControl {
 
-    /**
-     * Construct the tab folder with its string ID
-     * @param uid
-     */
-    public VclTabControl(String uid) {
-        super(uid);
+    public VclTabControl() {
+        super(Constant.UID_ACTIVE);
     }
 
-    public VclTabControl(SmartId id) {
+    public VclTabControl(String id) {
         super(id);
+    }
+
+    public VclTabControl(VclApp app, String id) {
+        super(app, id);
     }
 
     /**
@@ -110,16 +109,7 @@ public class VclTabControl extends VclControl {
      * @param nTabResID
      *            The resource ID of the specified Tab page in Tab Dialog
      */
-    public void setPage(SmartId nTabResID) {
-        invoke(Constant.M_SetPage, new Object[] { nTabResID.getSid() == null ? nTabResID.getId() : nTabResID.getSid()});
-    }
-
-    /**
-     * Change to the specified tab page
-     * @param widget the TabPage widget (Type: 372)
-     * @throws Exception
-     */
-    public void setPage(VclControl widget) {
-        setPage(widget.getUID());
+    public void setPage(String id) {
+        invoke(Constant.M_SetPage, new Object[] {id});
     }
 }

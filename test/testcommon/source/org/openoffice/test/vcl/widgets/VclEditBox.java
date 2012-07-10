@@ -24,7 +24,6 @@
 package org.openoffice.test.vcl.widgets;
 
 import org.openoffice.test.vcl.client.Constant;
-import org.openoffice.test.vcl.client.SmartId;
 
 /**
  * Proxy used to access VCL EditField/MultiLineEditField
@@ -32,17 +31,16 @@ import org.openoffice.test.vcl.client.SmartId;
  */
 public class VclEditBox extends VclControl {
 
-    /**
-     * Construct the control with its string ID
-     * @param uid
-     */
-    public VclEditBox(String uid) {
-        super(uid);
+
+    public VclEditBox(String id) {
+        super(id);
     }
 
-    public VclEditBox(SmartId smartId) {
-        super(smartId);
+
+    public VclEditBox(VclApp app, String id) {
+        super(app, id);
     }
+
 
     /**
      * Set the text of edit box

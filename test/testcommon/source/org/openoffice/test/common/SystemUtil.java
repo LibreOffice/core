@@ -19,8 +19,6 @@
  *
  *************************************************************/
 
-
-
 package org.openoffice.test.common;
 
 import java.awt.Toolkit;
@@ -75,11 +73,6 @@ public class SystemUtil {
         return OSNAME.startsWith("Mac");
     }
 
-    public static String getEnv(String name, String defaultValue) {
-        String value = System.getenv(name);
-        return value == null ? defaultValue : value;
-    }
-
     /**
      * Set the contents of the clipboard to the provided text
      */
@@ -116,8 +109,7 @@ public class SystemUtil {
      */
     public static String getClipboardText() {
         Transferable contents = getTransferable();
-        if (contents == null
-                || !contents.isDataFlavorSupported(DataFlavor.stringFlavor))
+        if (contents == null || !contents.isDataFlavorSupported(DataFlavor.stringFlavor))
             return "";
         try {
             return (String) contents.getTransferData(DataFlavor.stringFlavor);
@@ -143,77 +135,100 @@ public class SystemUtil {
 
     /**
      * Execute a script and waiting it for finishing
+     *
      * @param content
      * @return
      */
     public static int execScript(String content) {
-        return execScript(content, false);
+        StringBuffer output = new StringBuffer();
+        int code = execScript(content, output, output);
+        LOG.info(content + "\n" + "Exit Code: " + code + "\n" + output);
+        return code;
     }
 
     /**
-     * Execute a script. bat on Windows, bash on Linux
+     * Execute a script and waiting it for finishing
      * @param content
-     * @param spawn
+     * @param output
+     * @param error
      * @return
      */
-    public static int execScript(String content, boolean spawn) {
+    public static int execScript(String content, StringBuffer output, StringBuffer error) {
         File file = null;
         try {
-            file = FileUtil
-                    .getUniqueFile(SCRIPT_TEMP_DIR, "tempscript", ".bat");
+            file = FileUtil.getUniqueFile(SCRIPT_TEMP_DIR, "tempscript", ".bat");
             FileUtil.writeStringToFile(file.getAbsolutePath(), content);
             String[] cmd;
             if (isWindows())
                 cmd = new String[] { file.getAbsolutePath() };
             else
                 cmd = new String[] { "sh", file.getAbsolutePath() };
-            StringBuffer output = new StringBuffer();
-            int code = exec(cmd, null, spawn, output, output);
-            LOG.info(content + "\n" + "Exit Code: " + code + "\n" + output);
-            return code;
+            return exec(cmd, null, null, output, error);
         } catch (Exception e) {
             return -1;
         } finally {
-            if (file != null) {
-                try {
-                    file.deleteOnExit();
-                } catch (Exception e) {
-                    // ignore
-                }
-            }
+            if (file != null && !file.delete())
+                file.deleteOnExit();
         }
     }
 
-    public static int exec(String[] command, String workingDir, boolean spawn,
-            StringBuffer output, StringBuffer error) {
-        Process process = null;
-        File dir = workingDir == null ? null : new File(workingDir);
-        int code = 0;
+    /**
+     * Start a background process
+     * @param cmd
+     * @param env
+     * @param dir
+     * @param output
+     * @param error
+     * @return
+     */
+    public static Process backgroundExec(String[] cmd, String[] env, File dir, StringBuffer output, StringBuffer error) {
         try {
-            process = Runtime.getRuntime().exec(command, null, dir);
+            Process process = Runtime.getRuntime().exec(cmd, env, dir);
+            StreamPump inputPump = new StreamPump(output, process.getInputStream());
+            StreamPump errorPump = new StreamPump(error, process.getErrorStream());
+            inputPump.start();
+            errorPump.start();
+            return process;
         } catch (Exception e) {
-            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
+     * Execute the command and wait for its finishing
+     * @param cmd
+     * @param env
+     * @param dir
+     * @param output
+     * @param error
+     * @return
+     */
+    public static int exec(String[] cmd, String[] env, File dir, StringBuffer output, StringBuffer error) {
+        Process process = null;
+        try {
+            process = Runtime.getRuntime().exec(cmd, env, dir);
+        } catch (Exception e) {
             return -1;
         }
+
         StreamPump inputPump = new StreamPump(output, process.getInputStream());
         StreamPump errorPump = new StreamPump(error, process.getErrorStream());
         inputPump.start();
         errorPump.start();
+
         try {
-            if (!spawn) {
-                code = process.waitFor();
-                inputPump.join();
-                errorPump.join();
-            }
+            int code = process.waitFor();
+            inputPump.join();
+            errorPump.join();
             return code;
         } catch (InterruptedException e) {
-            e.printStackTrace();
-            return -1;
+            return -2;
         }
     }
 
     /**
      * Make the current thread sleep some seconds.
+     *
      * @param second
      */
     public static void sleep(double second) {
@@ -243,8 +258,7 @@ public class SystemUtil {
             } else {
                 // exec("ps -x -eo command", output, output);
             }
-            BufferedReader reader = new BufferedReader(new StringReader(
-                    output.toString()));
+            BufferedReader reader = new BufferedReader(new StringReader(output.toString()));
             String line = null;
             while ((line = reader.readLine()) != null) {
                 ret.add(line);

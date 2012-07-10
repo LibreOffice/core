@@ -24,7 +24,6 @@
 package org.openoffice.test.vcl.widgets;
 
 import org.openoffice.test.vcl.client.Constant;
-import org.openoffice.test.vcl.client.SmartId;
 import org.openoffice.test.vcl.client.VclHookException;
 
 /**
@@ -35,25 +34,28 @@ public class VclMessageBox extends VclControl {
 
     private String message = null;
 
-
-    public VclMessageBox(SmartId id) {
-        super(id);
+    public VclMessageBox() {
+        super(Constant.UID_ACTIVE);
     }
 
-    /**
-     * Construct the active message box with a given message.
-     * The message can be used to distinguish message boxes.
-     * @param msg
-     */
-    public VclMessageBox(SmartId id, String msg) {
+    public VclMessageBox(String id) {
         super(id);
-        this.message = msg;
     }
 
     public VclMessageBox(String id, String msg) {
         super(id);
         this.message = msg;
     }
+
+    public VclMessageBox(VclApp app, String id) {
+        super(app, id);
+    }
+
+    public VclMessageBox(VclApp app, String id, String msg) {
+        super(app, id);
+        this.message = msg;
+    }
+
 
     /**
      * Get the message on the message box
@@ -69,7 +71,7 @@ public class VclMessageBox extends VclControl {
             if (!exists)
                 return false;
 
-            if (WINDOW_MESSBOX != getType())
+            if (Constant.WINDOW_MESSBOX != getType())
                 return false;
 
             if (message != null) {

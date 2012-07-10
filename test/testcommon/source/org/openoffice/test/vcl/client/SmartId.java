@@ -26,7 +26,7 @@ package org.openoffice.test.vcl.client;
 
 /**
  * ID of GUI controls may have two types: number or string.
- * From AOO3.4, all IDs should be string.
+ * @deprecated From AOO3.4, all IDs should be string
  */
 public class SmartId {
 

@@ -21,15 +21,16 @@
 
 package org.openoffice.test.vcl.widgets;
 
-import java.io.File;
-import java.net.MalformedURLException;
-import java.util.Properties;
+import java.io.IOException;
 
-import org.openoffice.test.common.FileUtil;
+import org.openoffice.test.OpenOffice;
 import org.openoffice.test.common.SystemUtil;
 import org.openoffice.test.vcl.Tester;
+import org.openoffice.test.vcl.client.CommandCaller;
+import org.openoffice.test.vcl.client.CommunicationManager;
 import org.openoffice.test.vcl.client.Constant;
-import org.openoffice.test.vcl.client.VclHook;
+import org.openoffice.test.vcl.client.Handshaker;
+import org.openoffice.test.vcl.client.WinInfoReceiver;
 
 /**
  * This class provides a proxy to interact with OpenOffice application.
@@ -37,165 +38,65 @@ import org.openoffice.test.vcl.client.VclHook;
  */
 public class VclApp {
 
-    private String port = System.getProperty("openoffice.automation.port", "12479");
+    private static VclApp defaultInstance = null;
 
-    private File userInstallation = null;
+    protected CommunicationManager communicationManager = null;
 
-    private File defaultUserInstallation = null;
+    protected CommandCaller caller = null;
 
-    private File home = null;
+    protected OpenOffice openOffice = null;
 
-    private String args = null;
+    public VclApp() {
+        this(OpenOffice.getDefault());
+    }
 
-    private boolean automationEnabled = true;
+    public VclApp(OpenOffice openOffice) {
+        this("localhost", openOffice.getAutomationPort());
+        this.openOffice = openOffice;
+    }
 
-    /**
-     * Construct VclApp with the home path of OpenOffice. The home is the
-     * directory which contains soffice.bin.
-     *
-     * @param appHome
-     */
-    public VclApp(String appHome) {
-        if (appHome == null)
-            appHome = System.getProperty("openoffice.home");
-        if (appHome == null)
-            appHome = System.getenv("OPENOFFICE_HOME");
-        if (appHome == null) {
-            if (SystemUtil.isWindows()) {
-                appHome = "C:/Program Files/OpenOffice.org 3/program";
-                if (!new File(appHome).exists())
-                    appHome = "C:/Program Files (x86)/OpenOffice.org 3/program";
-            } else if (SystemUtil.isMac()) {
-                appHome = "/Applications/OpenOffice.org.app/Contents/MacOS";
-            } else {
-                appHome = "/opt/openoffice.org3/program";
+    public VclApp(String host, int port) {
+        communicationManager = new CommunicationManager(host, port);
+        caller = new CommandCaller(communicationManager);
+        new Handshaker(communicationManager);
+    }
+
+    public static VclApp getDefault() {
+        if (defaultInstance == null) {
+            defaultInstance = new VclApp();
+        }
+
+        return defaultInstance;
+    }
+
+    public void setWinInfoReceiver(WinInfoReceiver receiver) {
+        caller.setWinInfoReceiver(receiver);
+    }
+
+    public void start() {
+        if (openOffice != null) {
+            openOffice.start();
+        }
+
+        communicationManager.start();
+    }
+
+    public OpenOffice getOpenOffice() {
+        return this.openOffice;
+    }
+
+    public void close() {
+        try {
+            dispatch(".uno:Quit");
+            SystemUtil.sleep(3);
+        } finally {
+            communicationManager.stop();
+            if (openOffice != null) {
+                openOffice.kill();
             }
         }
-
-        home = new File(appHome);
-
-        File bootstrapFile = new File(home, "bootstraprc");
-        if (!bootstrapFile.exists())
-            bootstrapFile = new File(home, "bootstrap.ini");
-        if (!bootstrapFile.exists())
-            throw new RuntimeException("OpenOffice can not be found or it's broken.");
-
-        Properties props = FileUtil.loadProperties(bootstrapFile);
-        String defaultUserInstallationPath = props.getProperty("UserInstallation");
-        String sysUserConfig = null;
-        if (SystemUtil.isWindows()) {
-            sysUserConfig = System.getenv("APPDATA");
-        } else if (SystemUtil.isMac()) {
-            sysUserConfig = System.getProperty("user.home") + "/Library/Application Support";
-        } else {
-            sysUserConfig = System.getProperty("user.home");
-        }
-
-        defaultUserInstallationPath = defaultUserInstallationPath.replace("$ORIGIN", home.getAbsolutePath()).replace("$SYSUSERCONFIG", sysUserConfig);
-        defaultUserInstallation = new File(defaultUserInstallationPath);
     }
 
-    /**
-     * Set UserInstallation directory. When openoffice is launched, the argument
-     * "-env:UserInstallation" will be enabled.
-     *
-     * @param dir
-     *            user installation directory. If null is given, the default
-     *            will be used.
-     */
-    public void setUserInstallation(File dir) {
-        userInstallation = dir;
-    }
-
-    /**
-     * Get UserInstallation directory
-     *
-     * @return
-     */
-    public File getUserInstallation() {
-        return userInstallation == null ? defaultUserInstallation : userInstallation;
-    }
-
-    /**
-     * Get default UserInstallation directory
-     *
-     * @return
-     */
-    public File getDefaultUserInstallation() {
-        return defaultUserInstallation;
-    }
-
-    /**
-     * Get installation directory of OpenOffice.
-     *
-     * @return
-     */
-    public File getHome() {
-        return home;
-    }
-
-    /**
-     * Set other command line arguments
-     *
-     * @param args
-     */
-    public void setArgs(String args) {
-        this.args = args;
-    }
-
-    public boolean isAutomationEnabled() {
-        return automationEnabled;
-    }
-
-    public void setAutomationEnabled(boolean automationEnabled) {
-        this.automationEnabled = automationEnabled;
-    }
-
-    /**
-     * Kill OpenOffice
-     */
-    public void kill() {
-        if (SystemUtil.isWindows()) {
-            SystemUtil.execScript("taskkill /F /IM soffice.bin /IM soffice.exe", false);
-        } else {
-            SystemUtil.execScript("killall -9 soffice soffice.bin", false);
-        }
-
-    }
-
-    /**
-     * Start OpenOffice
-     *
-     * @return
-     */
-    public int start() {
-        String cmd = null;
-
-        if (SystemUtil.isWindows()) {
-            cmd = "\"" + home + "\\soffice.exe\"";
-        } else {
-            cmd = "cd \"" + home + "\" ; ./soffice";
-        }
-
-        if (automationEnabled) {
-            cmd += " -norestore -quickstart=no -nofirststartwizard -enableautomation -automationport=" + port;
-        }
-
-        if (userInstallation != null) {
-            try {
-                String url = userInstallation.toURL().toString();
-                url = url.replace("file:/", "file:///");
-                cmd += " -env:UserInstallation=" + url;
-            } catch (MalformedURLException e) {
-                // ignore never to occur
-            }
-        }
-
-        if (args != null)
-            cmd += " " + args;
-
-        return SystemUtil.execScript(cmd, true);
-    }
 
     /**
      * Activate the document window at the given index
@@ -204,7 +105,7 @@ public class VclApp {
      * @return
      */
     public void activateDoc(int i) {
-        VclHook.invokeCommand(Constant.RC_ActivateDocument, new Object[] { i + 1 });
+        caller.callCommand(Constant.RC_ActivateDocument, new Object[] { i + 1 });
     }
 
     /**
@@ -213,7 +114,7 @@ public class VclApp {
      * Note: this method requires automation enabled.
      */
     public void reset() {
-        VclHook.invokeCommand(Constant.RC_ResetApplication);
+        caller.callCommand(Constant.RC_ResetApplication);
     }
 
     /**
@@ -221,14 +122,14 @@ public class VclApp {
      * @return
      */
     public boolean existsSysDialog() {
-        return (Boolean) VclHook.invokeCommand(Constant.RC_ExistsSysDialog);
+        return (Boolean) caller.callCommand(Constant.RC_ExistsSysDialog);
     }
 
     /**
      * Note: this method requires automation enabled.
      */
     public void closeSysDialog() {
-        VclHook.invokeCommand(Constant.RC_CloseSysDialog);
+        caller.callCommand(Constant.RC_CloseSysDialog);
     }
 
     /**
@@ -236,7 +137,7 @@ public class VclApp {
      * @return
      */
     public String getClipboard() {
-        return (String) VclHook.invokeCommand(Constant.RC_GetClipboard);
+        return (String) caller.callCommand(Constant.RC_GetClipboard);
     }
 
     /**
@@ -244,7 +145,7 @@ public class VclApp {
      * @param content
      */
     public void setClipboard(String content) {
-        VclHook.invokeCommand(Constant.RC_SetClipboard, content);
+        caller.callCommand(Constant.RC_SetClipboard, content);
     }
 
     /**
@@ -253,7 +154,12 @@ public class VclApp {
      * @return
      */
     public boolean exists() {
-        return VclHook.available();
+        try {
+            communicationManager.connect();
+            return true;
+        } catch (IOException e) {
+            return false;
+        }
     }
 
     /**
@@ -297,7 +203,7 @@ public class VclApp {
      * @return
      */
     public int getDocCount() {
-        return (Integer) VclHook.invokeCommand(Constant.RC_GetDocumentCount);
+        return (Integer) caller.callCommand(Constant.RC_GetDocumentCount);
     }
 
     /**
@@ -306,7 +212,7 @@ public class VclApp {
      * @param url
      */
     public void dispatch(String url) {
-        VclHook.invokeUNOSlot(url);
+        caller.callUNOSlot(url);
     }
 
     private static final int CONST_WSTimeout = 701;
@@ -322,8 +228,8 @@ public class VclApp {
      * @param time timeout
      */
     public void dispatch(String url, double time) {
-        VclHook.invokeUNOSlot(url);
-        int result = (Integer) VclHook.invokeCommand(Constant.RC_WaitSlot, (int) time * 1000);
+        caller.callUNOSlot(url);
+        int result = (Integer) caller.callCommand(Constant.RC_WaitSlot, (int) time * 1000);
         if (result == CONST_WSTimeout)
             throw new RuntimeException("Timeout to execute the dispatch!");
     }

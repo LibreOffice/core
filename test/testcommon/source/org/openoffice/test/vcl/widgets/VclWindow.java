@@ -34,17 +34,16 @@ import org.openoffice.test.vcl.client.SmartId;
  */
 public class VclWindow extends VclControl {
 
-    /**
-     * Define a VCL window
-     * @param uid the string id
-     */
+
     public VclWindow(String uid) {
         super(uid);
     }
 
-    public VclWindow(SmartId id) {
-        super(id);
+
+    public VclWindow(VclApp app, String id) {
+        super(app, id);
     }
+
 
     /**
      * Get the title of the window

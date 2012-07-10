@@ -24,7 +24,6 @@
 package org.openoffice.test.vcl.widgets;
 
 import org.openoffice.test.vcl.client.Constant;
-import org.openoffice.test.vcl.client.SmartId;
 
 
 /**
@@ -34,17 +33,12 @@ import org.openoffice.test.vcl.client.SmartId;
  */
 public class VclButton extends VclControl {
 
-    /**
-     * Construct the control with its String id
-     * @param uid
-     */
-    public VclButton(String uid) {
-        super(uid);
+    public VclButton(String id) {
+        super(id);
     }
 
-
-    public VclButton(SmartId id) {
-        super(id);
+    public VclButton(VclApp app, String id) {
+        super(app, id);
     }
 
     /**

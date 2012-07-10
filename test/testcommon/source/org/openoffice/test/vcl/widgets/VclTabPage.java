@@ -23,30 +23,25 @@
 
 package org.openoffice.test.vcl.widgets;
 
-import org.openoffice.test.vcl.client.SmartId;
+import org.openoffice.test.vcl.client.Constant;
 
 
 public class VclTabPage extends VclDialog {
 
-    private VclTabControl tabControl = null;
-
-    public VclTabPage(SmartId id, VclTabControl tabControl) {
+    public VclTabPage(String id) {
         super(id);
-        this.tabControl = tabControl;
     }
 
-    public VclTabPage(String uid, VclTabControl tabControl) {
-        super(uid);
-        this.tabControl = tabControl;
-    }
 
+    public VclTabPage(VclApp app, String id) {
+        super(app, id);
+    }
 
     /**
      * Selects the tab page to be active.
      *
      */
     public void select() {
-        if (tabControl != null)
-            tabControl.setPage(this.getUID());
+        app.caller.callControl(Constant.UID_ACTIVE, Constant.M_SetPage, new Object[] {getId()});
     }
 }

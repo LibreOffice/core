@@ -32,8 +32,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 
-import org.openoffice.test.vcl.client.SmartId;
-
 /**
  *
  * The class is used to read an from external files to replace the id in the code.
@@ -104,7 +102,7 @@ public class IDList {
         }
     }
 
-    public SmartId getId(String id) {
+    public String getId(String id) {
         String value = map.get(id);
         if (value == null) {
             int i = id.indexOf("_");
@@ -116,13 +114,6 @@ public class IDList {
             //The external definition overwrites the id.
             id = value;
 
-        try {
-            //Try to convert ID to number ID for old build.
-            //From OO3.4 all IDs should be string.
-            return new SmartId(Long.parseLong(id));
-        } catch (NumberFormatException e) {
-
-        }
-        return new SmartId(id);
+        return id;
     }
 }

@@ -24,13 +24,12 @@
 package org.openoffice.test.vcl.widgets;
 
 import org.openoffice.test.vcl.client.Constant;
-import org.openoffice.test.vcl.client.VclHook;
 
 /**
  * Define VCL menu on a window
  *
  */
-public class VclMenu {
+public class VclMenu extends VclWidget {
 
     private VclControl window = null;
 
@@ -39,8 +38,14 @@ public class VclMenu {
      *
      */
     public VclMenu() {
-
+        super();
     }
+
+
+    public VclMenu(VclApp app) {
+        super(app);
+    }
+
 
     /**
      * Construct the menu on the given window
@@ -49,6 +54,7 @@ public class VclMenu {
      */
     public VclMenu(VclControl window) {
         this.window = window;
+        this.app = window.app;
     }
 
     /**
@@ -59,7 +65,7 @@ public class VclMenu {
      */
     public int getItemCount() {
         use();
-        return ((Long) VclHook.invokeCommand(Constant.RC_MenuGetItemCount)).intValue();
+        return ((Long) app.caller.callCommand(Constant.RC_MenuGetItemCount)).intValue();
     }
 
     /**
@@ -70,7 +76,7 @@ public class VclMenu {
      */
     public VclMenuItem getItem(int index) {
         use();
-        long id = ((Long) VclHook.invokeCommand(Constant.RC_MenuGetItemId, new Object[] { new Integer(index + 1) })).intValue();
+        long id = ((Long) app.caller.callCommand(Constant.RC_MenuGetItemId, new Object[] { new Integer(index + 1) })).intValue();
         if (id == 0)
             return null;
         return new VclMenuItem(this, (int) id);

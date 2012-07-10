@@ -24,7 +24,6 @@
 package org.openoffice.test.vcl.widgets;
 
 import org.openoffice.test.vcl.client.Constant;
-import org.openoffice.test.vcl.client.SmartId;
 
 /**
  * VCL status bar proxy
@@ -32,12 +31,12 @@ import org.openoffice.test.vcl.client.SmartId;
  */
 public class VclStatusBar extends VclControl {
 
-    public VclStatusBar(SmartId id) {
+    public VclStatusBar(String id) {
         super(id);
     }
 
-    public VclStatusBar(String uid) {
-        super(uid);
+    public VclStatusBar(VclApp app, String id) {
+        super(app, id);
     }
 
     /**

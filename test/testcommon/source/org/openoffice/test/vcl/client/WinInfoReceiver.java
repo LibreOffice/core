@@ -18,59 +18,13 @@
  * under the License.
  *
  *************************************************************/
+package org.openoffice.test.vcl.client;
 
+public interface WinInfoReceiver {
+    void onStartReceiving();
 
+    void addWinInfo(SmartId id, long type, String t1);
 
-package org.openoffice.test.vcl.widgets;
+    void onFinishReceiving();
 
-import org.openoffice.test.vcl.client.Constant;
-
-/**
- * Proxy used to access all VCL field controls
- *
- */
-public class VclField extends VclEditBox{
-
-
-    public VclField(String id) {
-        super(id);
-    }
-
-
-    public VclField(VclApp app, String id) {
-        super(app, id);
-    }
-
-
-    /**
-     * Move one entry higher of Field
-     *
-     */
-    public void more() {
-        invoke(Constant.M_More);
-    }
-
-    /**
-     * Move one entry lower of Field
-     *
-     */
-    public void less() {
-        invoke(Constant.M_Less);
-    }
-
-    /**
-     * Goes to the maximum value of Field
-     *
-     */
-    public void toMax() {
-        invoke(Constant.M_ToMax);
-    }
-
-
-    /**
-     * Goes to the minimum value of Field
-     */
-    public void toMin() {
-        invoke(Constant.M_ToMin);
-    }
 }

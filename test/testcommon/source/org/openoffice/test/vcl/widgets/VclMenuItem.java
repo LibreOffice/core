@@ -26,12 +26,11 @@ package org.openoffice.test.vcl.widgets;
 import org.openoffice.test.common.SystemUtil;
 import org.openoffice.test.vcl.Tester;
 import org.openoffice.test.vcl.client.Constant;
-import org.openoffice.test.vcl.client.VclHook;
 
 /**
  *
  */
-public class VclMenuItem {
+public class VclMenuItem extends VclWidget {
 
     private int id = -1;
 
@@ -45,6 +44,7 @@ public class VclMenuItem {
      * @param id
      */
     public VclMenuItem(int id) {
+        super();
         this.id = id;
     }
 
@@ -55,6 +55,7 @@ public class VclMenuItem {
      * @param path
      */
     public VclMenuItem(String path) {
+        super();
         this.path = path.split("->");
     }
 
@@ -65,8 +66,10 @@ public class VclMenuItem {
      * @param id
      */
     public VclMenuItem(VclMenu menu, int id) {
+        super();
         this.id = id;
         this.menu = menu;
+        this.app = menu.app;
     }
 
     /**
@@ -76,15 +79,17 @@ public class VclMenuItem {
      * @param path
      */
     public VclMenuItem(VclMenu menu, String path) {
+        super();
         this.path = path.split("->");
         this.menu = menu;
+        this.app = menu.app;
     }
 
     private Object invoke(int methodId) {
         int id = getId();
         if (id == -1)
             throw new RuntimeException("Menu item '" + path[path.length - 1] + "' can be found!");
-        return VclHook.invokeCommand(methodId, new Object[] { id });
+        return app.caller.callCommand(methodId, new Object[] { id });
     }
 
     /**

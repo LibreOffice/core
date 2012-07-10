@@ -24,7 +24,6 @@
 package org.openoffice.test.vcl.widgets;
 
 import org.openoffice.test.vcl.client.Constant;
-import org.openoffice.test.vcl.client.SmartId;
 
 
 
@@ -41,9 +40,13 @@ public class VclDockingWin extends VclWindow {
         super(uid);
     }
 
-    public VclDockingWin(SmartId id) {
-        super(id);
+
+
+    public VclDockingWin(VclApp app, String id) {
+        super(app, id);
     }
+
+
 
     /**
      * Docks a window on one edge of the desktop.
