@@ -63,9 +63,9 @@ SERVLETAPI_JAR := $(SOLARVER)$/$(INPATH)$/bin$(UPDMINOREXT)$/servlet-api.jar
 .IF "$(JAVACISGCJ)"=="yes"
 JAVA_HOME=
 .EXPORT : JAVA_HOME
-BUILD_ACTION=$(ANT) -Dbuild.label="build-$(RSCREVISION)" -Dbuild.compiler=gcj -Dservletapi.jar=$(SERVLETAPI_JAR) -f $(ANT_BUILDFILE) compile build-jar
+BUILD_ACTION="$(ANT)" -Dbuild.label="build-$(RSCREVISION)" -Dbuild.compiler=gcj -Dservletapi.jar=$(SERVLETAPI_JAR) -f $(ANT_BUILDFILE) compile build-jar
 .ELSE
-BUILD_ACTION=$(ANT) -Dbuild.label="build-$(RSCREVISION)" -f $(ANT_BUILDFILE) -Dservletapi.jar=$(SERVLETAPI_JAR) compile build-jar
+BUILD_ACTION="$(ANT)" -Dbuild.label="build-$(RSCREVISION)" -f $(ANT_BUILDFILE) -Dservletapi.jar=$(SERVLETAPI_JAR) compile build-jar
 .ENDIF
 
 .ENDIF # $(SOLAR_JAVA)!= ""
