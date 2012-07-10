@@ -434,7 +434,7 @@ SwField * SwField::CopyField() const
     Beschreibung: Numerierung expandieren
  --------------------------------------------------------------------*/
 
-String FormatNumber(sal_uInt16 nNum, sal_uInt32 nFormat)
+String FormatNumber(sal_uInt32 nNum, sal_uInt32 nFormat)
 {
     if(SVX_NUM_PAGEDESC == nFormat)
         return  String::CreateFromInt32( nNum );

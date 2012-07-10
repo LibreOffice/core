@@ -881,7 +881,7 @@ void SwSetExpField::SetValue( const double& rAny )
     SwValueField::SetValue(rAny);
 
     if( IsSequenceFld() )
-        sExpand = FormatNumber( (sal_uInt16)GetValue(), GetFormat() );
+        sExpand = FormatNumber( (sal_uInt32)GetValue(), GetFormat() );
     else
         sExpand = ((SwValueFieldType*)GetTyp())->ExpandValue( rAny,
                                                 GetFormat(), GetLanguage());
