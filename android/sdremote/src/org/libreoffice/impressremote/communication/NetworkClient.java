@@ -4,26 +4,25 @@ import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-import android.content.Context;
-import android.content.ServiceConnection;
-
 /**
  * Standard Network client. Connects to a server using Sockets.
  *
  * @author Andrzej J.R. Hunt
- *
  */
 public class NetworkClient extends Client {
 
 	private static final int PORT = 1599;
 
+	private Socket mSocket;
+
 	public NetworkClient(String ipAddress) {
 
-		Socket aSocket;
+		System.out.println("Attempting to open port.");
 		try {
-			aSocket = new Socket(ipAddress, PORT);
-			mInputStream = aSocket.getInputStream();
-			mOutputStream = aSocket.getOutputStream();
+			mSocket = new Socket(ipAddress, PORT);
+			System.out.println("We seem to have opened.");
+			mInputStream = mSocket.getInputStream();
+			mOutputStream = mSocket.getOutputStream();
 		} catch (UnknownHostException e) {
 			// TODO Tell the user we have a problem
 			e.printStackTrace();
@@ -32,6 +31,16 @@ public class NetworkClient extends Client {
 			e.printStackTrace();
 		}
 
+	}
+
+	@Override
+	public void closeConnection() {
+		try {
+			mSocket.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 }

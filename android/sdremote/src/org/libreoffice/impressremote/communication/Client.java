@@ -1,10 +1,7 @@
 package org.libreoffice.impressremote.communication;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 
@@ -19,14 +16,21 @@ import org.json.JSONObject;
  * methods.
  *
  * @author Andrzej J.R. Hunt
- *
  */
 public abstract class Client {
 
-	private static final String CHARSET = "UTF-16";
+	private static final String CHARSET = "UTF-8";
 
 	protected InputStream mInputStream;
 	protected OutputStream mOutputStream;
+
+	public abstract void closeConnection();
+
+	private Receiver mReceiver;
+
+	public void setReceiver(Receiver aReceiver) {
+		aReceiver = mReceiver;
+	}
 
 	private void listen() {
 		ByteArrayBuffer aBuffer = new ByteArrayBuffer(10);
@@ -65,7 +69,7 @@ public abstract class Client {
 			throw new Error("Specified network encoding [" + CHARSET
 					+ " not available.");
 		}
-		parseCommand(aCommandString);
+		mReceiver.parseCommand(aCommandString);
 
 	}
 

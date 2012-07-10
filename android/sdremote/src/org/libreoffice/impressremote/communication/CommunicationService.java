@@ -4,6 +4,7 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
+import android.os.Messenger;
 
 public class CommunicationService extends Service {
 
@@ -22,9 +23,18 @@ public class CommunicationService extends Service {
 		NETWORK, BLUETOOTH
 	};
 
+	public static final int MSG_SLIDE_CHANGED = 1;
+	public static final int MSG_SLIDE_PREVIEW = 2;
+
 	private Transmitter mTransmitter;
 
 	private Client mClient;
+
+	private Receiver mReceiver = new Receiver();
+
+	public void setActivityMessenger(Messenger aActivityMessenger) {
+		mReceiver.setActivityMessenger(aActivityMessenger);
+	}
 
 	@Override
 	public IBinder onBind(Intent intent) {
@@ -35,7 +45,6 @@ public class CommunicationService extends Service {
 	@Override
 	public void onCreate() {
 		// TODO Create a notification (if configured).
-
 	}
 
 	@Override
@@ -45,7 +54,6 @@ public class CommunicationService extends Service {
 
 	public Transmitter getTransmitter() {
 		return mTransmitter;
-
 	}
 
 	public void connectTo(Protocol aProtocol, String address) {
@@ -53,6 +61,7 @@ public class CommunicationService extends Service {
 		case NETWORK:
 			mClient = new NetworkClient(address);
 			mTransmitter = new Transmitter(mClient);
+			mClient.setReceiver(mReceiver);
 			break;
 
 		}
@@ -60,7 +69,7 @@ public class CommunicationService extends Service {
 	}
 
 	public void disconnect() {
-
+		mClient.closeConnection();
 	}
 
 }
