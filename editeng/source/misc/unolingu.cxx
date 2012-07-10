@@ -367,23 +367,13 @@ void SvxLinguConfigUpdate::UpdateAll( sal_Bool bForceCheck )
 }
 
 
-sal_Int32 SvxLinguConfigUpdate::CalcDataFilesChangedCheckValue()
-{
-    RTL_LOGFILE_CONTEXT( aLog, "svx: SvxLinguConfigUpdate::CalcDataFilesChangedCheckValue" );
-
-    sal_Int32 nHashVal = 0;
-    // nothing to be checked anymore since those old directory paths are gone by now
-    return nHashVal;
-}
-
-
 sal_Bool SvxLinguConfigUpdate::IsNeedUpdateAll( sal_Bool bForceCheck )
 {
     RTL_LOGFILE_CONTEXT( aLog, "svx: SvxLinguConfigUpdate::IsNeedUpdateAll" );
     if (nNeedUpdating == -1 || bForceCheck )    // need to check if updating is necessary
     {
         // calculate hash value for current data files
-        sal_Int32 nCurrentDataFilesChangedCheckValue = CalcDataFilesChangedCheckValue();
+        sal_Int32 nCurrentDataFilesChangedCheckValue = 0;
 
         // compare hash value and check value to see if anything has changed
         // and thus the configuration needs to be updated

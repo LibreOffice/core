@@ -59,8 +59,6 @@ class SvxLinguConfigUpdate
                                     // n ==  0 => already updated, nothing to be done
                                     // n ==  1 => needs to be updated
 
-    static sal_Int32 CalcDataFilesChangedCheckValue();
-
 public:
 
     EDITENG_DLLPUBLIC static void UpdateAll( sal_Bool bForceCheck = sal_False );
