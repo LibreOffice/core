@@ -1083,8 +1083,21 @@ void Dialog::SetModalInputMode( sal_Bool bModal )
             mpPrevExecuteDlg->EnableInput( sal_True, sal_True, sal_True, this );
             // ensure continued modality of prev dialog
             // do not change modality counter
-            mpPrevExecuteDlg->SetModalInputMode( sal_False );
-            mpPrevExecuteDlg->SetModalInputMode( sal_True );
+
+
+            // #i119994# need find the last modal dialog before reactive it
+            Dialog * pPrevModalDlg = mpPrevExecuteDlg;
+
+            while( pPrevModalDlg && !pPrevModalDlg->IsModalInputMode() )
+                pPrevModalDlg = pPrevModalDlg->mpPrevExecuteDlg;
+
+            if( pPrevModalDlg &&
+            ( pPrevModalDlg == mpPrevExecuteDlg
+                || !pPrevModalDlg->IsWindowOrChild( this, sal_True ) ) )
+            {
+                mpPrevExecuteDlg->SetModalInputMode( sal_False );
+                mpPrevExecuteDlg->SetModalInputMode( sal_True );
+            }
         }
     }
 }
