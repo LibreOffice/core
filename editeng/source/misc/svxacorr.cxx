@@ -103,7 +103,6 @@ static const sal_Char sImplWordChars[] = "-'";
 
 void EncryptBlockName_Imp( String& rName );
 
-_SV_IMPL_SORTAR_ALG( SvxAutocorrWordList, SvxAutocorrWordPtr )
 TYPEINIT0(SvxAutoCorrect)
 
 typedef SvxAutoCorrectLanguageLists* SvxAutoCorrectLanguageListsPtr;
@@ -219,62 +218,11 @@ static CollatorWrapper& GetCollatorWrapper()
 }
 
 
-void SvxAutocorrWordList::DeleteAndDestroy( sal_uInt16 nP, sal_uInt16 nL )
-{
-    if( nL )
-    {
-        OSL_ENSURE( nP < nA && nP + nL <= nA, "ERR_VAR_DEL" );
-        for( sal_uInt16 n=nP; n < nP + nL; n++ )
-            delete *((SvxAutocorrWordPtr*)pData+n);
-        SvPtrarr::Remove( nP, nL );
-    }
-}
-
-
 // Keep the list sorted ...
-sal_Bool SvxAutocorrWordList::Seek_Entry( const SvxAutocorrWordPtr aE, sal_uInt16* pP ) const
+bool CompareSvxAutocorrWordList::operator()( SvxAutocorrWord* const& lhs, SvxAutocorrWord* const& rhs ) const
 {
-    register sal_uInt16 nO  = SvxAutocorrWordList_SAR::Count(),
-            nM,
-            nU = 0;
-
-    if( nO > 0 )
-    {
-        CollatorWrapper& rCmp = ::GetCollatorWrapper();
-        nO--;
-
-        // quick check of the end of the list
-        if (rCmp.compareString( aE->GetShort(),
-                                (*((SvxAutocorrWordPtr*)pData + nO))->GetShort() ) > 0)
-        {
-            if( pP ) *pP = nO + 1;
-            return sal_False;
-        }
-
-        // Incredibly crude sort algorithm, should use some partitioning search.
-        while( nU <= nO )
-        {
-            nM = nU + ( nO - nU ) / 2;
-            long nCmp = rCmp.compareString( aE->GetShort(),
-                        (*((SvxAutocorrWordPtr*)pData + nM))->GetShort() );
-            if( 0 == nCmp )
-            {
-                if( pP ) *pP = nM;
-                return sal_True;
-            }
-            else if( 0 < nCmp )
-                nU = nM + 1;
-            else if( nM == 0 )
-            {
-                if( pP ) *pP = nU;
-                return sal_False;
-            }
-            else
-                nO = nM - 1;
-        }
-    }
-    if( pP ) *pP = nU;
-    return sal_False;
+    CollatorWrapper& rCmp = ::GetCollatorWrapper();
+    return rCmp.compareString( lhs->GetShort(), rhs->GetShort() ) < 0;
 }
 
 static void lcl_ClearTable(boost::ptr_map<LanguageType, SvxAutoCorrectLanguageLists>& rLangTable)
@@ -1710,9 +1658,9 @@ static const SvxAutocorrWord* lcl_SearchWordsInList(
 {
     const SvxAutocorrWordList* pAutoCorrWordList = pList->GetAutocorrWordList();
     TransliterationWrapper& rCmp = GetIgnoreTranslWrapper();
-    for( xub_StrLen nPos = 0; nPos < pAutoCorrWordList->Count(); ++nPos )
+    for( SvxAutocorrWordList::iterator it = pAutoCorrWordList->begin(); it != pAutoCorrWordList->end(); ++it )
     {
-        const SvxAutocorrWord* pFnd = (*pAutoCorrWordList)[ nPos ];
+        const SvxAutocorrWord* pFnd = *it;
         const String& rChk = pFnd->GetShort();
         if( nEndPos >= rChk.Len() )
         {
@@ -2157,9 +2105,9 @@ void SvxAutoCorrectLanguageLists::SaveExceptList_Imp(
 SvxAutocorrWordList* SvxAutoCorrectLanguageLists::LoadAutocorrWordList()
 {
     if( pAutocorr_List )
-        pAutocorr_List->DeleteAndDestroy( 0, pAutocorr_List->Count() );
+        pAutocorr_List->DeleteAndDestroyAll();
     else
-        pAutocorr_List = new SvxAutocorrWordList( 16 );
+        pAutocorr_List = new SvxAutocorrWordList();
 
     try
     {
@@ -2208,7 +2156,7 @@ void SvxAutoCorrectLanguageLists::SetAutocorrWordList( SvxAutocorrWordList* pLis
     if( !pAutocorr_List )
     {
         OSL_ENSURE( !this, "No valid list" );
-        pAutocorr_List = new SvxAutocorrWordList( 16 );
+        pAutocorr_List = new SvxAutocorrWordList();
     }
     nFlags |= ChgWordLstLoad;
 }
@@ -2473,7 +2421,7 @@ void SvxAutoCorrectLanguageLists::MakeUserStorage_Impl()
 sal_Bool SvxAutoCorrectLanguageLists::MakeBlocklist_Imp( SvStorage& rStg )
 {
     String sStrmName( pXMLImplAutocorr_ListStr, RTL_TEXTENCODING_MS_1252 );
-    sal_Bool bRet = sal_True, bRemove = !pAutocorr_List || !pAutocorr_List->Count();
+    sal_Bool bRet = sal_True, bRemove = !pAutocorr_List || pAutocorr_List->empty();
     if( !bRemove )
     {
         SvStorageStreamRef refList = rStg.OpenSotStream( sStrmName,
@@ -2550,11 +2498,11 @@ sal_Bool SvxAutoCorrectLanguageLists::PutText( const String& rShort,
     // Update the word list
     if( bRet )
     {
-        sal_uInt16 nPos;
         SvxAutocorrWord* pNew = new SvxAutocorrWord( rShort, rLong, sal_True );
-        if( pAutocorr_List->Seek_Entry( pNew, &nPos ) )
+        SvxAutocorrWordList::iterator it = pAutocorr_List->find( pNew );
+        if( it != pAutocorr_List->end() )
         {
-            if( !(*pAutocorr_List)[ nPos ]->IsTextOnly() )
+            if( !(*it)->IsTextOnly() )
             {
                 // Still have to remove the Storage
                 String sStgNm( rShort );
@@ -2566,10 +2514,11 @@ sal_Bool SvxAutoCorrectLanguageLists::PutText( const String& rShort,
                 if( xStg->IsContained( sStgNm ) )
                     xStg->Remove( sStgNm );
             }
-            pAutocorr_List->DeleteAndDestroy( nPos );
+            delete *it;
+            pAutocorr_List->erase( it );
         }
 
-        if( pAutocorr_List->Insert( pNew ) )
+        if( pAutocorr_List->insert( pNew ).second )
         {
             bRet = MakeBlocklist_Imp( *xStg );
             xStg = 0;
@@ -2603,7 +2552,7 @@ sal_Bool SvxAutoCorrectLanguageLists::PutText( const String& rShort,
         if( bRet )
         {
             SvxAutocorrWord* pNew = new SvxAutocorrWord( rShort, sLong, sal_False );
-            if( pAutocorr_List->Insert( pNew ) )
+            if( pAutocorr_List->insert( pNew ).second )
             {
                 SotStorageRef xStor = new SotStorage( sUserAutoCorrFile, STREAM_READWRITE, sal_True );
                 MakeBlocklist_Imp( *xStor );
@@ -2631,11 +2580,11 @@ sal_Bool SvxAutoCorrectLanguageLists::DeleteText( const String& rShort )
     sal_Bool bRet = xStg.Is() && SVSTREAM_OK == xStg->GetError();
     if( bRet )
     {
-        sal_uInt16 nPos;
         SvxAutocorrWord aTmp( rShort, rShort );
-        if( pAutocorr_List->Seek_Entry( &aTmp, &nPos ) )
+        SvxAutocorrWordList::iterator it = pAutocorr_List->find( &aTmp );
+        if( it != pAutocorr_List->end() )
         {
-            SvxAutocorrWord* pFnd = (*pAutocorr_List)[ nPos ];
+            SvxAutocorrWord* pFnd = *it;
             if( !pFnd->IsTextOnly() )
             {
                 String aName( rShort );
@@ -2651,7 +2600,8 @@ sal_Bool SvxAutoCorrectLanguageLists::DeleteText( const String& rShort )
 
             }
             // Update the word list
-            pAutocorr_List->DeleteAndDestroy( nPos );
+            delete pFnd;
+            pAutocorr_List->erase( it );
             MakeBlocklist_Imp( *xStg );
             xStg = 0;
         }
@@ -2660,5 +2610,18 @@ sal_Bool SvxAutoCorrectLanguageLists::DeleteText( const String& rShort )
     }
     return bRet;
 }
+
+SvxAutocorrWordList::~SvxAutocorrWordList()
+{
+    DeleteAndDestroyAll();
+}
+
+void SvxAutocorrWordList::DeleteAndDestroyAll()
+{
+    for( const_iterator it = begin(); it != end(); ++it )
+        delete *it;
+    clear();
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

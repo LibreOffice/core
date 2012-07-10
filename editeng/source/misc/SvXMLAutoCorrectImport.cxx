@@ -145,9 +145,9 @@ SvXMLWordContext::SvXMLWordContext(
             bOnlyTxt = sal_True;
         }
     }
-    SvxAutocorrWordPtr pNew = new SvxAutocorrWord( sWrong, sRight, bOnlyTxt );
+    SvxAutocorrWord* pNew = new SvxAutocorrWord( sWrong, sRight, bOnlyTxt );
 
-    if( !rLocalRef.pAutocorr_List->Insert( pNew ) )
+    if( !rLocalRef.pAutocorr_List->insert( pNew ).second )
         delete pNew;
 }
 

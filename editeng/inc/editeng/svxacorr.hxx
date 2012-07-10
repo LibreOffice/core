@@ -31,7 +31,6 @@
 
 #include <com/sun/star/embed/XStorage.hpp>
 #include <tools/rtti.hxx>
-#include <svl/svarray.hxx>
 #include <i18npool/lang.h>
 #include <tools/time.hxx>
 #include <tools/date.hxx>
@@ -40,6 +39,7 @@
 #include "editeng/editengdllapi.h"
 
 #include <map>
+#include <set>
 #include <boost/ptr_container/ptr_map.hpp>
 
 class CharClass;
@@ -128,8 +128,17 @@ public:
     sal_Bool IsTextOnly() const                         { return bIsTxtOnly; }
 };
 
-typedef SvxAutocorrWord* SvxAutocorrWordPtr;
-SV_DECL_PTRARR_SORT_DEL_VISIBILITY( SvxAutocorrWordList, SvxAutocorrWordPtr, 10, EDITENG_DLLPUBLIC)
+struct CompareSvxAutocorrWordList
+{
+  bool operator()( SvxAutocorrWord* const& lhs, SvxAutocorrWord* const& rhs ) const;
+};
+class EDITENG_DLLPUBLIC SvxAutocorrWordList : public std::set<SvxAutocorrWord*, CompareSvxAutocorrWordList>
+{
+public:
+    // free any objects still in the set
+    ~SvxAutocorrWordList();
+    void DeleteAndDestroyAll();
+};
 
 class EDITENG_DLLPUBLIC SvxAutoCorrectLanguageLists
 {

@@ -1011,16 +1011,15 @@ sal_Bool OfaAutocorrReplacePage::FillItemSet( SfxItemSet& )
         if(eCurLang != eLang) // the current language is treated later
         {
             SvxAutocorrWordList* pWordList = pAutoCorrect->LoadAutocorrWordList(eCurLang);
-            sal_uInt16 nWordListCount = pWordList->Count();
             sal_uInt16 nDoubleStringArrayCount = rDoubleStringArray.size();
             sal_uInt16 nPos = nDoubleStringArrayCount;
             sal_uInt16 nLastPos = nPos;
             // 1st run: delete or change entries:
 
 
-            for( sal_uInt16 nWordListPos = nWordListCount; nWordListPos; nWordListPos-- )
+            for( SvxAutocorrWordList::reverse_iterator it2 = pWordList->rbegin(); it2 != pWordList->rend(); ++it2 )
             {
-                SvxAutocorrWordPtr pWordPtr = pWordList->GetObject(nWordListPos - 1);
+                SvxAutocorrWord* pWordPtr = *it2;
                 String sEntry(pWordPtr->GetShort());
                 // formatted text is only in Writer
                 sal_Bool bFound = !bSWriter && !pWordPtr->IsTextOnly();
@@ -1069,7 +1068,6 @@ sal_Bool OfaAutocorrReplacePage::FillItemSet( SfxItemSet& )
     aDoubleStringTable.clear();
     // and now the current selection
     SvxAutocorrWordList* pWordList = pAutoCorrect->LoadAutocorrWordList(eLang);
-    sal_uInt16 nWordListCount = pWordList->Count();
     sal_uInt16 nListBoxCount = (sal_uInt16)aReplaceTLB.GetEntryCount();
 
     aReplaceTLB.SetUpdateMode(sal_False);
@@ -1077,10 +1075,9 @@ sal_Bool OfaAutocorrReplacePage::FillItemSet( SfxItemSet& )
     sal_uInt16 nLastListBoxPos = nListBoxPos;
     // 1st run: delete or change entries:
 
-    sal_uInt16 i;
-    for( i = nWordListCount; i; i-- )
+    for( SvxAutocorrWordList::reverse_iterator it = pWordList->rbegin(); it != pWordList->rend(); ++it )
     {
-        SvxAutocorrWordPtr pWordPtr = pWordList->GetObject(i- 1);
+        SvxAutocorrWord* pWordPtr = *it;
         String sEntry(pWordPtr->GetShort());
         // formatted text is only in Writer
         sal_Bool bFound = !bSWriter && !pWordPtr->IsTextOnly();
@@ -1113,7 +1110,7 @@ sal_Bool OfaAutocorrReplacePage::FillItemSet( SfxItemSet& )
 
     }
     nListBoxCount = (sal_uInt16)aReplaceTLB.GetEntryCount();
-    for(i = 0; i < nListBoxCount; i++ )
+    for( sal_uInt16 i = 0; i < nListBoxCount; i++ )
     {
         // now there should only be new entries left
         SvLBoxEntry*  pEntry = aReplaceTLB.GetEntry( i );
@@ -1194,9 +1191,9 @@ void OfaAutocorrReplacePage::RefillReplaceBox(sal_Bool bFromReset,
         SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
         SvxAutocorrWordList* pWordList = pAutoCorrect->LoadAutocorrWordList(eLang);
         aReplaceTLB.SetUpdateMode(sal_False);
-        for(sal_uInt16 i = 0; i < pWordList->Count(); i++)
+        for( SvxAutocorrWordList::iterator it = pWordList->begin(); it != pWordList->end(); ++it )
         {
-            SvxAutocorrWordPtr pWordPtr = pWordList->GetObject(i);
+            SvxAutocorrWord* pWordPtr = *it;
             sal_Bool bTextOnly = pWordPtr->IsTextOnly();
             // formatted text is only in Writer
             if(bSWriter || bTextOnly)
