@@ -204,20 +204,21 @@ namespace {
         OUString GetPrinterSelection (sal_Int32 nPageCount, sal_Int32 nCurrentPageIndex) const
         {
             sal_Int32 nContent = static_cast<sal_Int32>(mrProperties.getIntValue( "PrintContent", 0 ));
-            OUString sFullRange = ::rtl::OUStringBuffer()
-                 .append(static_cast<sal_Int32>(1))
-                 .append(static_cast<sal_Unicode>('-'))
-                 .append(nPageCount).makeStringAndClear();
 
             if (nContent == 0) // all pages/slides
             {
+                OUString sFullRange = ::rtl::OUStringBuffer()
+                     .append(static_cast<sal_Int32>(1))
+                     .append(static_cast<sal_Unicode>('-'))
+                     .append(nPageCount).makeStringAndClear();
+
                 return sFullRange;
             }
 
             if (nContent == 1) // range
             {
                 OUString sValue = mrProperties.getStringValue("PageRange");
-                return sValue.isEmpty() ? sFullRange : sValue;
+                return sValue.isEmpty() ? OUString::valueOf(nCurrentPageIndex + 1) : sValue;
             }
 
             if (nContent == 2 && // selection
@@ -369,9 +370,10 @@ namespace {
     class DialogCreator : Resource
     {
     public:
-        DialogCreator (bool bImpress)
+        DialogCreator (bool bImpress, sal_Int16 nCurPage)
             : Resource(SdResId(_STR_IMPRESS_PRINT_UI_OPTIONS))
             , mbImpress(bImpress)
+            , mnCurPage(nCurPage)
         {
             ProcessResource();
         }
@@ -398,6 +400,7 @@ namespace {
         ::std::vector<beans::PropertyValue> maProperties;
         ::std::vector<sal_Int32> maSlidesPerPage;
         bool mbImpress;
+        sal_Int16 mnCurPage;
 
         void ProcessResource()
         {
@@ -634,7 +637,7 @@ namespace {
             AddDialogControl( vcl::PrinterOptionsHelper::getEditControlOpt( "",
                                 ".HelpID:vcl:PrintDialog:PageRange:Edit" ,
                                 "PageRange" ,
-                                "",
+                                OUString::valueOf(mnCurPage + 1),
                                 aPageRangeOpt )
                             );
 
@@ -1197,7 +1200,7 @@ public:
         , mpPrintView()
         , mbHasOrientationWarningBeenShown(false)
     {
-        DialogCreator aCreator( mrBase.GetDocShell()->GetDocumentType() == DOCUMENT_TYPE_IMPRESS );
+        DialogCreator aCreator( mrBase.GetDocShell()->GetDocumentType() == DOCUMENT_TYPE_IMPRESS, GetCurrentPageIndex() );
         m_aUIProperties = aCreator.GetDialogControls();
         maSlidesPerPage = aCreator.GetSlidesPerPage();
 
