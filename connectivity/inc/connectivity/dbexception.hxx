@@ -167,22 +167,6 @@ public:
     */
     SQLExceptionIteratorHelper( const ::com::sun::star::sdbc::SQLException& _rChainStart );
 
-    /** constructs an iterator instance from an SQLWarning
-
-        @param _rChainStart
-            the start of the exception chain to iterate. Must live as long as the iterator
-            instances lives, at least.
-    */
-    SQLExceptionIteratorHelper( const ::com::sun::star::sdbc::SQLWarning& _rChainStart );
-
-    /** constructs an iterator instance from an SQLContext
-
-        @param _rChainStart
-            the start of the exception chain to iterate. Must live as long as the iterator
-            instances lives, at least.
-    */
-    SQLExceptionIteratorHelper( const ::com::sun::star::sdb::SQLContext& _rChainStart );
-
     /** constructs an iterator instance from an SQLExceptionInfo
 
         @param _rErrorInfo

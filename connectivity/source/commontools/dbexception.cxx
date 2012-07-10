@@ -288,20 +288,6 @@ SQLExceptionIteratorHelper::SQLExceptionIteratorHelper( const ::com::sun::star::
 }
 
 //------------------------------------------------------------------------------
-SQLExceptionIteratorHelper::SQLExceptionIteratorHelper( const ::com::sun::star::sdbc::SQLWarning& _rChainStart )
-    :m_pCurrent( &_rChainStart )
-    ,m_eCurrentType( SQLExceptionInfo::SQL_WARNING )
-{
-}
-
-//------------------------------------------------------------------------------
-SQLExceptionIteratorHelper::SQLExceptionIteratorHelper( const ::com::sun::star::sdb::SQLContext& _rChainStart )
-    :m_pCurrent( &_rChainStart )
-    ,m_eCurrentType( SQLExceptionInfo::SQL_CONTEXT )
-{
-}
-
-//------------------------------------------------------------------------------
 void SQLExceptionIteratorHelper::current( SQLExceptionInfo& _out_rInfo ) const
 {
     switch ( m_eCurrentType )
