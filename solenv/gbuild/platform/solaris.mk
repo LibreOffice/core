@@ -147,6 +147,7 @@ gb_LinkTarget_LDFLAGS += \
 endif
 
 #JAD#	-Wl,-rpath-link,$(SYSBASE)/lib:$(SYSBASE)/usr/lib \
+
 gb_LinkTarget_LDFLAGS += \
 	-L$(SYSBASE)/lib \
 	-L$(SYSBASE)/usr/lib \
@@ -301,9 +302,9 @@ gb_Library_LAYER := \
 	$(foreach lib,$(gb_Library_UNOVERLIBS),$(lib):URELIB) \
 	$(foreach lib,$(gb_Library_EXTENSIONLIBS),$(lib):OXT) \
 
-define gb_Library__get_rpath
-$(if $(1),$(strip '-Wl,-rpath,$(1)' -L$(gb_Library_OUTDIRLOCATION)))
 #JAD#'-Wl,-rpath-link,$(gb_Library_OUTDIRLOCATION)'
+define gb_Library__get_rpath
+$(if $(1),$(strip '-Wl,-rpath,$(1)'))
 endef
 
 define gb_Library_get_rpath
@@ -363,7 +364,7 @@ gb_CppunitTest_get_filename = $(gb_CppunitTest_SYSPRE)$(1)$(gb_CppunitTest_EXT)
 gb_CppunitTest_get_libfilename = $(gb_CppunitTest_get_filename)
 
 define gb_CppunitTest_CppunitTest_platform
-$(call gb_LinkTarget_get_target,$(2)) : RPATH := -L$(gb_Library_OUTDIRLOCATION)
+$(call gb_LinkTarget_get_target,$(2)) : RPATH :=
 
 endef
 
