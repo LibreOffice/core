@@ -260,12 +260,7 @@ void SvxLinguConfigUpdate::UpdateAll( sal_Bool bForceCheck )
                         xLngSvcMgr->getConfiguredServices( aService, aLocale ));
                 Sequence< OUString > aAvailSvcs(
                         xLngSvcMgr->getAvailableServices( aService, aLocale ));
-#if OSL_DEBUG_LEVEL > 1
-                const OUString * pCfgSvcs   = aCfgSvcs.getConstArray();
-                const OUString * pAvailSvcs = aAvailSvcs.getConstArray();
-                (void) pCfgSvcs;
-                (void) pAvailSvcs;
-#endif
+
                 aCfgSvcs = lcl_RemoveMissingEntries( aCfgSvcs, aAvailSvcs );
 
                 aCurSvcs[k][ pNodeName[i] ] = aCfgSvcs;
@@ -286,14 +281,6 @@ void SvxLinguConfigUpdate::UpdateAll( sal_Bool bForceCheck )
                         lcl_GetLastFoundSvcs( aCfg, aLastFoundList , pAvailLocale[i] ));
                 Sequence< OUString > aNewSvcs =
                         lcl_GetNewEntries( aLastSvcs, aAvailSvcs );
-#if OSL_DEBUG_LEVEL > 1
-                const OUString * pAvailSvcs = aAvailSvcs.getConstArray();
-                const OUString * pLastSvcs  = aLastSvcs.getConstArray();
-                const OUString * pNewSvcs   = aNewSvcs.getConstArray();
-                (void) pAvailSvcs;
-                (void) pLastSvcs;
-                (void) pNewSvcs;
-#endif
 
                 OUString aCfgLocaleStr( MsLangId::convertLanguageToIsoString(
                                             SvxLocaleToLanguage( pAvailLocale[i] ) ) );
@@ -312,15 +299,6 @@ void SvxLinguConfigUpdate::UpdateAll( sal_Bool bForceCheck )
             {
                 Sequence< OUString > aSvcImplNames(
                         xLngSvcMgr->getAvailableServices( aService, pAvailLocale[i] ) );
-
-#if OSL_DEBUG_LEVEL > 1
-                sal_Int32 nSvcs = aSvcImplNames.getLength();
-                const OUString *pSvcImplName = aSvcImplNames.getConstArray();
-                for (sal_Int32 j = 0;  j < nSvcs;  ++j)
-                {
-                    OUString aImplName( pSvcImplName[j] );
-                }
-#endif
 
                 OUString aCfgLocaleStr( MsLangId::convertLanguageToIsoString(
                                             SvxLocaleToLanguage( pAvailLocale[i] ) ) );
@@ -349,15 +327,6 @@ void SvxLinguConfigUpdate::UpdateAll( sal_Bool bForceCheck )
                     aCfgEntryName += OUString::valueOf( (sal_Unicode) '/' );
                     aCfgEntryName += (*aIt).first;
 
-#if OSL_DEBUG_LEVEL > 1
-                    Sequence< OUString > aSvcImplNames( (*aIt).second );
-                    sal_Int32 nSvcs = aSvcImplNames.getLength();
-                    const OUString *pSvcImplName = aSvcImplNames.getConstArray();
-                    for (sal_Int32 j = 0;  j < nSvcs;  ++j)
-                    {
-                        OUString aImplName( pSvcImplName[j] );
-                    }
-#endif
                     pNewValue->Name  = aCfgEntryName;
                     pNewValue->Value <<= (*aIt).second;
                     ++pNewValue;
