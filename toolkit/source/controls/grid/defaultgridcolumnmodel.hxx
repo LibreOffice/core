@@ -33,8 +33,6 @@
 namespace toolkit
 {
 
-//enum broadcast_type { column_added, column_removed, column_changed};
-
 typedef ::cppu::WeakComponentImplHelper2    <   ::com::sun::star::awt::grid::XGridColumnModel
                                             ,   ::com::sun::star::lang::XServiceInfo
                                             >   DefaultGridColumnModel_Base;

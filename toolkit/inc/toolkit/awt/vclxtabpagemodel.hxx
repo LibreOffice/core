@@ -58,7 +58,6 @@ public:
     // ::com::sun::star::awt::XDevice,
     ::com::sun::star::awt::DeviceInfo SAL_CALL getInfo() throw(::com::sun::star::uno::RuntimeException);
 
-    // virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) { return ImplGetPropertyIds( aIds ); }
     UnoControlModel*    Clone() const { return new VCLXTabPageModel( *this ); }
 
     // ::com::sun::star::beans::XMultiPropertySet

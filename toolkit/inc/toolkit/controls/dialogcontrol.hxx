@@ -126,7 +126,6 @@ public:
     DECLIMPL_SERVICEINFO( UnoDialogControl, szServiceName2_UnoControlDialog )
 
 protected:
-   // virtual void ImplModelPropertiesChanged( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyChangeEvent >& rEvents ) throw(::com::sun::star::uno::RuntimeException);
     virtual void PrepareWindowDescriptor( ::com::sun::star::awt::WindowDescriptor& rDesc );
     virtual void ImplModelPropertiesChanged( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyChangeEvent >& rEvents ) throw(::com::sun::star::uno::RuntimeException);
 protected:

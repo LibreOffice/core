@@ -95,9 +95,6 @@ public:
 
          // XElementAccess
      virtual ::com::sun::star::uno::Type SAL_CALL getElementType() throw (::com::sun::star::uno::RuntimeException);
-     //{
-         //return ::getCppuType((com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >*)0);
-    //}
 
     virtual sal_Bool SAL_CALL hasElements() throw (::com::sun::star::uno::RuntimeException);
 
