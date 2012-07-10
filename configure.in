@@ -11436,7 +11436,6 @@ if test -z "$with_branding" -o "$with_branding" = "no"; then
     AC_MSG_RESULT([none])
 else
     INTRO_BITMAP="$with_branding/intro.png"
-    ABOUT_BACKGROUND_SVG="$with_branding/about.svg"
     FLAT_LOGO_SVG="$with_branding/flat_logo.svg"
     STARTCENTER_LEFT_BITMAP="$with_branding/backing_left.png"
     STARTCENTER_RIGHT_BITMAP="$with_branding/backing_right.png"
@@ -11444,7 +11443,6 @@ else
     STARTCENTER_RTL_RIGHT_BITMAP="$with_branding/backing_rtl_right.png"
     STARTCENTER_SPACE_BITMAP="$with_branding/backing_space.png"
     for i in $INTRO_BITMAP \
-             $ABOUT_BACKGROUND_SVG \
              $FLAT_LOGO_SVG \
              $STARTCENTER_LEFT_BITMAP \
              $STARTCENTER_RIGHT_BITMAP \
