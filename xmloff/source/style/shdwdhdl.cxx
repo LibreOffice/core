@@ -60,7 +60,7 @@ sal_Bool XMLShadowedPropHdl::exportXML( OUString& rStrExpValue, const Any& rValu
     {
         if( bValue )
         {
-            rStrExpValue = OUString( RTL_CONSTASCII_USTRINGPARAM( "1pt 1pt" ) );
+            rStrExpValue = "1pt 1pt";
         }
         else
         {

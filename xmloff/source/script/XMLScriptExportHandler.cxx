@@ -34,7 +34,7 @@ using ::com::sun::star::beans::PropertyValue;
 
 
 XMLScriptExportHandler::XMLScriptExportHandler() :
-    sURL(RTL_CONSTASCII_USTRINGPARAM("Script"))
+    sURL("Script")
 {
 }
 

@@ -46,8 +46,7 @@ XMLAutoMarkFileContext::XMLAutoMarkFileContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName) :
         SvXMLImportContext(rImport, nPrefix, rLocalName),
-        sIndexAutoMarkFileURL(
-            RTL_CONSTASCII_USTRINGPARAM("IndexAutoMarkFileURL"))
+        sIndexAutoMarkFileURL("IndexAutoMarkFileURL")
 {
 }
 

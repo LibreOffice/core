@@ -44,7 +44,7 @@ const OUString& UnoInterfaceToUniqueIdentifierMapper::registerReference( const R
     }
     else
     {
-        OUString aId( RTL_CONSTASCII_USTRINGPARAM( "id" ) );
+        OUString aId( "id" );
         aId += OUString::valueOf( mnNextId++ );
         return (*maEntries.insert( IdMap_t::value_type( aId, rInterface ) ).first).first;
     }

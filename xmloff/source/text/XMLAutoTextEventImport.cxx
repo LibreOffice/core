@@ -119,8 +119,7 @@ Sequence< OUString > SAL_CALL
 
 OUString SAL_CALL XMLAutoTextEventImport_getImplementationName() throw()
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM(
-        "com.sun.star.comp.Writer.XMLOasisAutotextEventsImporter" ) );
+    return OUString( "com.sun.star.comp.Writer.XMLOasisAutotextEventsImporter" );
 }
 
 Reference< XInterface > SAL_CALL XMLAutoTextEventImport_createInstance(

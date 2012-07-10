@@ -36,10 +36,10 @@ using ::com::sun::star::uno::Any;
 
 
 XMLStarBasicContextFactory::XMLStarBasicContextFactory() :
-    sEventType(RTL_CONSTASCII_USTRINGPARAM("EventType")),
-    sLibrary(RTL_CONSTASCII_USTRINGPARAM("Library")),
-    sMacroName(RTL_CONSTASCII_USTRINGPARAM("MacroName")),
-    sStarBasic(RTL_CONSTASCII_USTRINGPARAM("StarBasic"))
+    sEventType("EventType"),
+    sLibrary("Library"),
+    sMacroName("MacroName"),
+    sStarBasic("StarBasic")
 {
 }
 
@@ -83,7 +83,7 @@ SvXMLImportContext* XMLStarBasicContextFactory::CreateContext(
         sMacroNameVal.copy(0,rApp.getLength()).equalsIgnoreAsciiCase( rApp ) &&
         ':' == sMacroNameVal[rApp.getLength()] )
     {
-        sLibraryVal = OUString(RTL_CONSTASCII_USTRINGPARAM("StarOffice"));
+        sLibraryVal = "StarOffice";
         sMacroNameVal = sMacroNameVal.copy( rApp.getLength()+1 );
     }
     else if( sMacroNameVal.getLength() > rDoc.getLength()+1 &&

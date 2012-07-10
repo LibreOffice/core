@@ -35,9 +35,9 @@ using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Any;
 
 XMLScriptContextFactory::XMLScriptContextFactory() :
-    sEventType(RTL_CONSTASCII_USTRINGPARAM("EventType")),
-    sScript(RTL_CONSTASCII_USTRINGPARAM("Script")),
-    sURL(RTL_CONSTASCII_USTRINGPARAM("Script"))
+    sEventType("EventType"),
+    sScript("Script"),
+    sURL("Script")
 {
 }
 

@@ -150,7 +150,7 @@ XMLTextShapeStyleContext::XMLTextShapeStyleContext( SvXMLImport& rImport,
         sal_Bool /*bDefaultStyle*/ ) :
     XMLShapeStyleContext( rImport, nPrfx, rLName, xAttrList, rStyles,
                           nFamily ),
-    sIsAutoUpdate( RTL_CONSTASCII_USTRINGPARAM( "IsAutoUpdate" ) ),
+    sIsAutoUpdate( "IsAutoUpdate" ),
     bAutoUpdate( sal_False )
 {
 }

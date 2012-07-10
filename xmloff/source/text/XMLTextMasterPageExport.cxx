@@ -37,17 +37,17 @@ using namespace ::xmloff::token;
 
 XMLTextMasterPageExport::XMLTextMasterPageExport( SvXMLExport& rExp ) :
     XMLPageExport( rExp ),
-    sHeaderText( RTL_CONSTASCII_USTRINGPARAM( "HeaderText" ) ),
-    sHeaderOn( RTL_CONSTASCII_USTRINGPARAM( "HeaderIsOn" ) ),
-    sHeaderShareContent( RTL_CONSTASCII_USTRINGPARAM( "HeaderIsShared" ) ),
+    sHeaderText( "HeaderText" ),
+    sHeaderOn( "HeaderIsOn" ),
+    sHeaderShareContent( "HeaderIsShared" ),
     sHeaderTextFirst( "HeaderTextFirst" ),
-    sHeaderTextLeft( RTL_CONSTASCII_USTRINGPARAM( "HeaderTextLeft" ) ),
+    sHeaderTextLeft( "HeaderTextLeft" ),
     sFirstShareContent( "FirstIsShared" ),
-    sFooterText( RTL_CONSTASCII_USTRINGPARAM( "FooterText" ) ),
-    sFooterOn( RTL_CONSTASCII_USTRINGPARAM( "FooterIsOn" ) ),
-    sFooterShareContent( RTL_CONSTASCII_USTRINGPARAM( "FooterIsShared" ) ),
+    sFooterText( "FooterText" ),
+    sFooterOn( "FooterIsOn" ),
+    sFooterShareContent( "FooterIsShared" ),
     sFooterTextFirst( "FooterTextFirst" ),
-    sFooterTextLeft( RTL_CONSTASCII_USTRINGPARAM( "FooterTextLeft" ) )
+    sFooterTextLeft( "FooterTextLeft" )
 {
 }
 

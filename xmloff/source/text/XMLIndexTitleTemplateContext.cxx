@@ -35,10 +35,6 @@ using ::xmloff::token::IsXMLToken;
 using ::xmloff::token::XML_STYLE_NAME;
 
 
-const sal_Char sAPI_Title[] = "Title";
-const sal_Char sAPI_ParaStyleHeading[] = "ParaStyleHeading";
-
-
 TYPEINIT1( XMLIndexTitleTemplateContext, SvXMLImportContext );
 
 XMLIndexTitleTemplateContext::XMLIndexTitleTemplateContext(
@@ -47,8 +43,8 @@ XMLIndexTitleTemplateContext::XMLIndexTitleTemplateContext(
     sal_uInt16 nPrfx,
     const OUString& rLocalName)
 :   SvXMLImportContext(rImport, nPrfx, rLocalName)
-,   sTitle(RTL_CONSTASCII_USTRINGPARAM(sAPI_Title))
-,   sParaStyleHeading(RTL_CONSTASCII_USTRINGPARAM(sAPI_ParaStyleHeading))
+,   sTitle("Title")
+,   sParaStyleHeading("ParaStyleHeading")
 ,   bStyleNameOK(sal_False)
 ,   rTOCPropertySet(rPropSet)
 {

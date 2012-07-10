@@ -88,7 +88,7 @@ void XMLGraphicsDefaultStyle::SetDefaults()
     if( !xFact.is() )
         return;
 
-    Reference< XPropertySet > xDefaults( xFact->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.Defaults") ) ), UNO_QUERY );
+    Reference< XPropertySet > xDefaults( xFact->createInstance( "com.sun.star.drawing.Defaults" ), UNO_QUERY );
     if( !xDefaults.is() )
         return;
                                             // SJ: #i114750#
@@ -105,7 +105,7 @@ void XMLGraphicsDefaultStyle::SetDefaults()
     ) )
         bWordWrapDefault = sal_False;
 
-    const OUString sTextWordWrap( RTL_CONSTASCII_USTRINGPARAM( "TextWordWrap" ) );
+    const OUString sTextWordWrap( "TextWordWrap" );
     Reference< XPropertySetInfo > xInfo( xDefaults->getPropertySetInfo() );
     if ( xInfo->hasPropertyByName( sTextWordWrap ) )
         xDefaults->setPropertyValue( sTextWordWrap, Any( bWordWrapDefault ) );
