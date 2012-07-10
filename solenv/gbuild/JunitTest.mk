@@ -51,10 +51,7 @@ $(call gb_JunitTest_get_target,%) :
             $(DEFS) \
             org.junit.runner.JUnitCore \
             $(CLASSES) > $@.log 2>&1 || \
-		(grep -v -e 'at org.junit.' \
-			-e 'at java.lang.reflect.' \
-			-e 'at sun.reflect.' $@.log \
-		&& echo "see full error log at $@.log" \
+		(cat $@.log \
 		&& echo "to rerun just this failed test without all others, run:" \
 		&& echo && echo "    make $@" && echo \
 		&& echo "cd into the module dir to run the tests faster" \
