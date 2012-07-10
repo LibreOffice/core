@@ -27,6 +27,7 @@
 #include "Receiver.hxx"
 #include <cstring>
 #include <com/sun/star/frame/XFramesSupplier.hpp>
+#include <com/sun/star/uno/RuntimeException.hpp>
 #include <comphelper/processfactory.hxx>
 using namespace sd;
 using namespace ::com::sun::star::presentation;
@@ -41,48 +42,83 @@ Receiver::~Receiver()
 {
 }
 
-void Receiver::parseCommand( char* aCommand, sal_Int32 size, XSlideShowController *aController )
+void Receiver::executeCommand( JsonObject *aObject, Reference<XSlideShowController> xSlideShowController )
 {
-    uno::Reference< lang::XMultiServiceFactory > xServiceManager(
+    const char* aInstruction = json_node_get_string( json_object_get_member( aObject, "command" ) );
+
+    fprintf( stderr, "instruction:%s\n", aInstruction );
+
+    if ( strcmp( aInstruction, "transition_next" ) == 0 )
+    {
+
+        xSlideShowController->gotoNextEffect();
+      // Next slide;
+    }
+    else if ( strcmp( aInstruction, "transition_previous" ) == 0 )
+    {
+        xSlideShowController->gotoPreviousEffect();
+    }
+    else if ( strcmp( aInstruction, "goto_slide" ) == 0 )
+    {
+        //
+    }
+
+}
+
+void Receiver::parseCommand( const char* aCommand, sal_Int32 size, XSlideShowController *aController )
+{
+    Reference<XSlideShowController> xSlideShowController;
+    try {
+        uno::Reference< lang::XMultiServiceFactory > xServiceManager(
             ::comphelper::getProcessServiceFactory(), uno::UNO_QUERY_THROW );
-
-    uno::Reference< XFramesSupplier > xFramesSupplier( xServiceManager->createInstance(
+        uno::Reference< XFramesSupplier > xFramesSupplier( xServiceManager->createInstance(
         "com.sun.star.frame.Desktop" ) , UNO_QUERY_THROW );
-    uno::Reference< frame::XFrame > xFrame = xFramesSupplier->getActiveFrame();
+        uno::Reference< frame::XFrame > xFrame ( xFramesSupplier->getActiveFrame(), UNO_QUERY_THROW );
+        Reference<XPresentationSupplier> xPS ( xFrame->getController()->getModel(), UNO_QUERY_THROW);
+        Reference<XPresentation2> xPresentation(xPS->getPresentation(), UNO_QUERY_THROW);
+        // Throws an exception if now slideshow running
+       xSlideShowController =  Reference<XSlideShowController>( xPresentation->getController(), UNO_QUERY_THROW );
+    }
+    catch ( com::sun::star::uno::RuntimeException &e )
+    {
+        return;
+    }
 
-    Reference<XPresentationSupplier> xPS ( xFrame->getController()->getModel(), UNO_QUERY_THROW);
-
-    Reference<XPresentation2> xPresentation(xPS->getPresentation(), UNO_QUERY_THROW);
-
-    Reference<XSlideShowController> xSlideShowController(xPresentation->getController(), UNO_QUERY_THROW);
-
+    // Parsing
     JsonParser *parser;
     JsonNode *root;
     GError *error;
 
-    parser = json_parser_new ();
+    parser = json_parser_new();
     error = NULL;
     json_parser_load_from_data( parser, aCommand, size, &error );
 
     if (error) {
+        g_error_free( error );
+        g_object_unref( parser );
     }
 
     root = json_parser_get_root( parser );
     JsonObject *aObject = json_node_get_object( root );
-    const char* aInstruction = json_node_get_string( json_object_get_member( aObject, "command" ) );
 
-    if ( strcmp( aInstruction, "transition_next" ) )
-    {
-        xSlideShowController->gotoNextEffect();
-      // Next slide;
-    }
-    else if ( strcmp( aInstruction, "transition_previous" ) )
-    {
-        xSlideShowController->gotoPreviousEffect();
-    }
-    else if ( strcmp( aInstruction, "goto_slide" ) )
-    {
+    executeCommand( aObject, xSlideShowController );
 
-    }
+    g_object_unref( parser );
 
 }
+
+// void preparePreview(sal_Int32 aSlideNumber, Reference<SlideShowController> aController)
+// {
+//     uno::Reference< XDrawPage > aSlide( aController->getSlideByIndex( aSlideNumber ) );
+//
+//     uno::Reference< lang::XMultiServiceFactory > xServiceManager(
+//             ::comphelper::getProcessServiceFactory(), uno::UNO_QUERY_THROW );
+//
+//     uno::Reference< XGraphicExportFilter > xGraphicExportFilter( xServiceManager->createInstance(
+//         "com.sun.star.drawing.GraphicExportFilter" ) , UNO_QUERY_THROW );
+//
+//     xGraphicExportFilter->setSource( aSlide );
+
+
+
+// }

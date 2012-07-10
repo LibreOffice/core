@@ -21,10 +21,10 @@ class Receiver
 public:
     Receiver();
     ~Receiver();
-    void parseCommand( char* aCommand, sal_Int32 size, XSlideShowController *aController );
+    void parseCommand( const char* aCommand, sal_Int32 size, XSlideShowController *aController );
 
 private:
-
+    void executeCommand( JsonObject *aObject, Reference<XSlideShowController> aController );
 
 };
 

@@ -22,6 +22,7 @@
 */
 #define PORT 1599
 
+#define CHARSET RTL_TEXTENCODING_UTF8
 
 namespace sd
 {

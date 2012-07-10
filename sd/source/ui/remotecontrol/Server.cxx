@@ -16,10 +16,8 @@ using rtl::OUString;
 using rtl::OString;
 
 Server::Server()
-:  Thread( "ServerThread" ), mSocket(), mStreamSocket(), mReceiver()
+:  Thread( "ServerThread" ), mSocket(), mReceiver()
 {
-
-//         boost::thread t( boost::bind(&Server::listenThread, this ))
 
 }
 
@@ -30,36 +28,39 @@ Server::~Server()
 // Run as a thread
 void Server::listenThread()
 {
-    char aTemp;
-    vector<char> aBuffer;
+    // TODO: decryption
     while (true)
     {
+        vector<char> aBuffer;
         int aRet;
+        char aTemp;
         while ( (aRet = mStreamSocket.read( &aTemp, 1)) && aTemp != 0x0d ) // look for newline
         {
             aBuffer.push_back( aTemp );
-            // TODO: decryption
         }
         if (aRet != 1) // Error reading or connection closed
         {
             return;
         }
-        OUString aLengthString = OUString( &aBuffer.front(), aBuffer.size(), RTL_TEXTENCODING_UNICODE );
-        OString aTempStr;
-        aLengthString.convertToString( &aTempStr, RTL_TEXTENCODING_ASCII_US, 0);
-        const sal_Char* aLengthChar = aTempStr.getStr();
+        aBuffer.push_back('\0');
+        OString aTempStr( &aBuffer.front() );
 
+        const sal_Char* aLengthChar = aTempStr.getStr();
         sal_Int32 aLen = strtol( aLengthChar, NULL, 10);
 
-        char *aMessage = new char[aLen];
+        char *aMessage = new char[aLen+1];
+        aMessage[aLen] = '\0';
 
-        if( mStreamSocket.read( (void*) aMessage, aLen ) != aLen)// Error reading or connection closed
+        if( mStreamSocket.read( (void*) aMessage, aLen ) != aLen) // Error reading or connection closed
         {
+            delete [] aMessage;
             return;
         }
-        // Parse.
-        mReceiver.parseCommand( aMessage, aLen, NULL );
 
+        aTempStr = OString( aMessage ); //, (sal_Int32) aLen, CHARSET, 0u
+        const sal_Char* aCommandChar = aTempStr.getStr();
+
+        mReceiver.parseCommand( aCommandChar, aTempStr.getLength(), NULL );
         delete [] aMessage;
 
         // TODO: deal with transmision errors gracefully.
@@ -69,20 +70,20 @@ void Server::listenThread()
 
 void Server::execute()
 {
-
-    osl::SocketAddr aAddr( "", PORT );
+    osl::SocketAddr aAddr( "0", PORT );
     if ( !mSocket.bind( aAddr ) )
     {
         // Error binding
     }
 
-    if ( !mSocket.listen() )
+    if ( !mSocket.listen(3) )
     {
         // Error listening
     }
     while ( true )
     {
         mSocket.acceptConnection( mStreamSocket );
+        fprintf( stderr, "Accepted a connection!\n" );
         listenThread();
     }
 
@@ -103,4 +104,5 @@ void SdDLL::RegisterRemotes()
 {
   fprintf( stderr, "Register our remote control goodness\n" );
   sd::Server::setup();
+
 }
