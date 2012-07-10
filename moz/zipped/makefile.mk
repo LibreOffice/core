@@ -158,12 +158,12 @@ $(MISC)$/remove_old_nss_libs : $(MISC)$/unpacked_$(TARGET)_lib \
 $(MISC)$/unpacked_$(TARGET)_inc $(BIN)$/mozruntime.zip
     $(foreach,lib,$(LIBLIST) rm -f $(LB)$/$(lib) &&) \
     	echo >& $(NULLDEV)
-    $(foreach,lib,$(NSS_RUNTIMELIST) zip -d $(BIN)$/mozruntime.zip $(DLLPRE)$(lib:f)$(DLLPOST) &&) \
+    chmod u+w $(BIN)$/mozruntime.zip && zip -d $(BIN)$/mozruntime.zip $(foreach,lib,$(NSS_RUNTIMELIST) $(DLLPRE)$(lib:f)$(DLLPOST)) && \
     	echo >& $(NULLDEV)
-    rm -r -f $(INCCOM)$/nss &&) \
+    rm -r -f $(INCCOM)$/nss && \
         echo >& $(NULLDEV)
-    rm -r -f $(INCCOM)$/nspr &&) \
+    rm -r -f $(INCCOM)$/nspr && \
         echo >& $(NULLDEV)
-    $(TOUCH) $@     
+    $(TOUCH) $@
 
 .ENDIF   # unpack mozab zips
