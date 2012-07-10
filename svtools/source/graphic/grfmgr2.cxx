@@ -301,7 +301,7 @@ sal_Bool GraphicManager::ImplCreateOutput( OutputDevice* pOutputDevice,
     Point           aOutPoint;
     Size            aOutSize;
     const Size&     rBitmapSizePixels = rBitmapEx.GetSizePixel();
-    long            nStartX, nStartY, nEndX, nEndY;
+    long            nStartX(-1), nStartY(-1), nEndX(-1), nEndY(-1);
     bool            isHorizontalMirrored = ( rAttr.GetMirrorFlags() & BMP_MIRROR_HORZ ) != 0;
     bool            isVerticalMirrored   = ( rAttr.GetMirrorFlags() & BMP_MIRROR_VERT ) != 0;
 
