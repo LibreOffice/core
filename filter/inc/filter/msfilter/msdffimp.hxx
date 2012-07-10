@@ -190,9 +190,8 @@ public:
     ~SvxMSDffShapeOrders();
 };
 
-// the following two will be sorted explicitly:
+// the following will be sorted explicitly:
 SV_DECL_PTRARR_SORT_DEL_VISIBILITY( SvxMSDffShapeInfos, SvxMSDffShapeInfo_Ptr, 16, MSFILTER_DLLPUBLIC )
-SV_DECL_PTRARR_SORT_VISIBILITY( SvxMSDffShapeTxBxSort, SvxMSDffShapeOrder*, 16, MSFILTER_DLLPUBLIC )
 
 #define SVXMSDFF_SETTINGS_CROP_BITMAPS      1
 #define SVXMSDFF_SETTINGS_IMPORT_PPT        2
@@ -864,11 +863,19 @@ struct SvxMSDffShapeOrder
     SvxMSDffShapeOrder( sal_uLong nId ):
         nShapeId( nId ), nTxBxComp( 0 ), pFly( 0 ), nHdFtSection( 0 ), pObj( 0 ){}
 
-    sal_Bool operator==( const SvxMSDffShapeOrder& rEntry ) const
+    bool operator==( const SvxMSDffShapeOrder& rEntry ) const
     { return (nTxBxComp == rEntry.nTxBxComp); }
-    sal_Bool operator<( const SvxMSDffShapeOrder& rEntry ) const
+    bool operator<( const SvxMSDffShapeOrder& rEntry ) const
     { return (nTxBxComp < rEntry.nTxBxComp); }
 };
+
+// the following will be sorted explicitly:
+struct CompareSvxMSDffShapeTxBxSort
+{
+  bool operator()( SvxMSDffShapeOrder* const& lhs, SvxMSDffShapeOrder* const& rhs ) const { return (*lhs)<(*rhs); }
+};
+class MSFILTER_DLLPUBLIC SvxMSDffShapeTxBxSort : public std::set<SvxMSDffShapeOrder*,CompareSvxMSDffShapeTxBxSort> {};
+
 
 #endif
 

@@ -4595,40 +4595,40 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
 
         for (sal_uInt16 nShapeNum=0; nShapeNum < nShapeCount; nShapeNum++)
         {
-            const SvxMSDffShapeOrder *pOrder =
+            SvxMSDffShapeOrder *pOrder =
                 (*pMSDffManager->GetShapeOrders())[nShapeNum];
             // Pointer in neues Sort-Array einfuegen
             if (pOrder->nTxBxComp && pOrder->pFly)
-                aTxBxSort.Insert(pOrder);
+                aTxBxSort.insert(pOrder);
         }
         // zu verkettende Rahmen jetzt verketten
-        sal_uInt16 nTxBxCount = aTxBxSort.Count();
-        if( nTxBxCount )
+        if( !aTxBxSort.empty() )
         {
             SwFmtChain aChain;
-            for (sal_uInt16 nTxBxNum=0; nTxBxNum < nTxBxCount; nTxBxNum++)
+            for( SvxMSDffShapeTxBxSort::iterator it = aTxBxSort.begin(); it != aTxBxSort.end(); ++it )
             {
-                SvxMSDffShapeOrder *pOrder =
-                    aTxBxSort.GetObject(nTxBxNum);
+                SvxMSDffShapeOrder *pOrder = *it;
 
                 // Fly-Frame-Formate initialisieren
                 SwFlyFrmFmt* pFlyFmt     = pOrder->pFly;
                 SwFlyFrmFmt* pNextFlyFmt = 0;
                 SwFlyFrmFmt* pPrevFlyFmt = 0;
                 // ggfs. Nachfolger ermitteln
-                if( 1+nTxBxNum < nTxBxCount )
+                SvxMSDffShapeTxBxSort::iterator tmpIter1 = it;
+                tmpIter1++;
+                if( tmpIter1 != aTxBxSort.end() )
                 {
-                    SvxMSDffShapeOrder *pNextOrder =
-                        aTxBxSort.GetObject(nTxBxNum+1);
+                    SvxMSDffShapeOrder *pNextOrder = *tmpIter1;
                     if ((0xFFFF0000 & pOrder->nTxBxComp)
                            == (0xFFFF0000 & pNextOrder->nTxBxComp))
                         pNextFlyFmt = pNextOrder->pFly;
                 }
                 // ggfs. Vorgaenger ermitteln
-                if( nTxBxNum )
+                if( it != aTxBxSort.begin() )
                 {
-                    SvxMSDffShapeOrder *pPrevOrder =
-                        aTxBxSort.GetObject(nTxBxNum-1);
+                    SvxMSDffShapeTxBxSort::iterator tmpIter2 = it;
+                    tmpIter2--;
+                    SvxMSDffShapeOrder *pPrevOrder = *tmpIter2;
                     if ((0xFFFF0000 & pOrder->nTxBxComp)
                            == (0xFFFF0000 & pPrevOrder->nTxBxComp))
                         pPrevFlyFmt = pPrevOrder->pFly;

@@ -5720,8 +5720,6 @@ void SvxMSDffManager::RemoveFromShapeOrder( SdrObject* pObject ) const
 
 SV_IMPL_OP_PTRARR_SORT( SvxMSDffShapeInfos,     SvxMSDffShapeInfo_Ptr   );
 
-SV_IMPL_OP_PTRARR_SORT( SvxMSDffShapeTxBxSort,  SvxMSDffShapeOrder*  );
-
 
 //---------------------------------------------------------------------------
 //  exported class: Public Methods
