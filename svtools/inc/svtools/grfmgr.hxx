@@ -458,7 +458,7 @@ public:
     sal_Bool                IsSwappedOut() const { return( mbAutoSwapped || maGraphic.IsSwapOut() ); }
     void                    SetSwapState();
 
-    sal_Bool                Draw(
+    bool                    Draw(
                                 OutputDevice* pOut,
                                 const Point& rPt,
                                 const Size& rSz,

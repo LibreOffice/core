@@ -513,7 +513,7 @@ void GraphicObject::ReleaseFromCache()
     mpMgr->ReleaseFromCache( *this );
 }
 
-sal_Bool GraphicObject::Draw( OutputDevice* pOut, const Point& rPt, const Size& rSz,
+bool GraphicObject::Draw( OutputDevice* pOut, const Point& rPt, const Size& rSz,
                           const GraphicAttr* pAttr, sal_uLong nFlags )
 {
     GraphicAttr         aAttr( pAttr ? *pAttr : GetAttr() );
@@ -522,7 +522,7 @@ sal_Bool GraphicObject::Draw( OutputDevice* pOut, const Point& rPt, const Size& 
     const sal_uInt32    nOldDrawMode = pOut->GetDrawMode();
     sal_Bool                bCropped = aAttr.IsCropped();
     sal_Bool                bCached = sal_False;
-    sal_Bool                bRet;
+    bool bRet;
 
     // #i29534# Provide output rects for PDF writer
     Rectangle           aCropRect;
