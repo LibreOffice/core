@@ -55,7 +55,6 @@ class Window;
 
 class SvxLinguConfigUpdate
 {
-    static sal_Int32    nCurrentDataFilesChangedCheckValue;
     static sal_Int16    nNeedUpdating;  // n == -1 => needs to be checked
                                     // n ==  0 => already updated, nothing to be done
                                     // n ==  1 => needs to be updated

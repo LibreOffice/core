@@ -208,7 +208,6 @@ Sequence< OUString > lcl_MergeSeq(
 }
 
 sal_Int16 SvxLinguConfigUpdate::nNeedUpdating = -1;
-sal_Int32 SvxLinguConfigUpdate::nCurrentDataFilesChangedCheckValue = -1;
 
 void SvxLinguConfigUpdate::UpdateAll( sal_Bool bForceCheck )
 {
@@ -341,7 +340,6 @@ void SvxLinguConfigUpdate::UpdateAll( sal_Bool bForceCheck )
                 }
             }
         }
-        OSL_ENSURE( nCurrentDataFilesChangedCheckValue != -1, "SvxLinguConfigUpdate::UpdateAll DataFilesChangedCheckValue not yet calculated!" );
         Any aAny;
 
         // for the time being (developer builds until OOo 3.0)
@@ -352,7 +350,6 @@ void SvxLinguConfigUpdate::UpdateAll( sal_Bool bForceCheck )
         // Since the check is on-demand occuring and executed once it should
         // not be too troublesome.
         // In OOo 3.0 we will not need the respective code anymore at all.
-//      aAny <<= nCurrentDataFilesChangedCheckValue;
         aAny <<= (sal_Int32) -1;    // keep the value set to 'need to check'
 
         aCfg.SetProperty( A2OU( "DataFilesChangedCheckValue" ), aAny );
@@ -386,7 +383,7 @@ sal_Bool SvxLinguConfigUpdate::IsNeedUpdateAll( sal_Bool bForceCheck )
     if (nNeedUpdating == -1 || bForceCheck )    // need to check if updating is necessary
     {
         // calculate hash value for current data files
-        nCurrentDataFilesChangedCheckValue = CalcDataFilesChangedCheckValue();
+        sal_Int32 nCurrentDataFilesChangedCheckValue = CalcDataFilesChangedCheckValue();
 
         // compare hash value and check value to see if anything has changed
         // and thus the configuration needs to be updated
