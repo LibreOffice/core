@@ -1810,34 +1810,23 @@ void SwTable::ExpandColumnSelection( SwSelBoxes& rBoxes, long &rMin, long &rMax 
     sal_uInt16 nLineCnt = aLines.size();
     sal_uInt16 nBoxCnt = rBoxes.Count();
     sal_uInt16 nBox = 0;
-    for( sal_uInt16 nRow = 0; nRow < nLineCnt && nBox < nBoxCnt; ++nRow )
-    {
-        SwTableLine* pLine = aLines[nRow];
-        OSL_ENSURE( pLine, "Missing table line" );
-        sal_uInt16 nCols = pLine->GetTabBoxes().size();
-        for( sal_uInt16 nCol = 0; nCol < nCols; ++nCol )
-        {
-            SwTableBox* pBox = pLine->GetTabBoxes()[nCol];
-            OSL_ENSURE( pBox, "Missing table box" );
-            if( pBox == rBoxes[nBox] )
-            {
-                lcl_CheckMinMax( rMin, rMax, *pLine, nCol, nBox == 0 );
-                if( ++nBox >= nBoxCnt )
-                    break;
-            }
-        }
-    }
-    nBox = 0;
     for( sal_uInt16 nRow = 0; nRow < nLineCnt; ++nRow )
     {
         SwTableLine* pLine = aLines[nRow];
+        OSL_ENSURE( pLine, "Missing table line" );
         sal_uInt16 nCols = pLine->GetTabBoxes().size();
         long nLeft = 0;
         long nRight = 0;
         for( sal_uInt16 nCurrBox = 0; nCurrBox < nCols; ++nCurrBox )
         {
-            nLeft = nRight;
             SwTableBox* pBox = pLine->GetTabBoxes()[nCurrBox];
+            OSL_ENSURE( pBox, "Missing table box" );
+            if( nBox < nBoxCnt && pBox == rBoxes[nBox])
+            {
+                    lcl_CheckMinMax( rMin, rMax, *pLine, nCurrBox, nBox == 0 );
+                    ++nBox;
+            }
+            nLeft = nRight;
             nRight += pBox->GetFrmFmt()->GetFrmSize().GetWidth();
             if( nLeft >= rMin && nRight <= rMax )
                 rBoxes.Insert( pBox );
