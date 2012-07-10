@@ -282,8 +282,7 @@ void LdapConnection::loadModule()
     if ( !s_Ldap_Module )
     {
 #if defined WNT
-        s_Ldap_Module = osl_loadModuleRelativeAscii(
-            &thisModule, "wldap32.dll", 0);
+        s_Ldap_Module = osl_loadModuleAscii("wldap32.dll", 0);
 #elif defined WITH_OPENLDAP
         s_Ldap_Module = osl_loadModuleAscii(
             ("libldap-" SAL_STRINGIFY(LDAP_VENDOR_VERSION_MAJOR) "."
@@ -295,7 +294,7 @@ void LdapConnection::loadModule()
             &thisModule, "libldap50.so", 0);
 #endif
 
-        if ( s_Ldap_Module != NULL )
+        if ( s_Ldap_Module )
         {
             s_p_unbind_s = (t_ldap_unbind_s)(osl_getFunctionSymbol(s_Ldap_Module, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ldap_unbind_s")).pData));
             s_p_simple_bind_s = (t_ldap_simple_bind_s)(osl_getFunctionSymbol(s_Ldap_Module, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ldap_simple_bind_s")).pData));
