@@ -28,6 +28,7 @@ import static testlib.UIMap.*;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
@@ -50,7 +51,12 @@ public class LongRun {
      */
     @Before
     public void setUp() throws Exception {
-        initApp();
+        app.start();
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        app.close();
     }
 
     Rectangle rect = new Rectangle(400, 200, 60, 60);
@@ -129,7 +135,7 @@ public class LongRun {
             saveNewDrawing("draw_saveas.std");
             long end = System.currentTimeMillis();
             LOG.info("Iterator: " + i + ", Elapsed Hours: " + ((end - start) / 3600000));
-            SystemUtil.execScript("ps -eo vsz,rss,comm | grep soffice.bin", false);
+            SystemUtil.execScript("ps -eo vsz,rss,comm | grep soffice.bin");
         }
     }
 

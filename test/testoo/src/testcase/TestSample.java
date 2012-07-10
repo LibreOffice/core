@@ -24,14 +24,10 @@
 package testcase;
 
 
-import static org.openoffice.test.vcl.Tester.sleep;
-import static testlib.AppUtil.fullPath;
-import static testlib.AppUtil.handleBlocker;
-import static testlib.AppUtil.initApp;
-import static testlib.AppUtil.openStartcenter;
-import static testlib.AppUtil.submitOpenDlg;
-import static testlib.AppUtil.submitSaveDlg;
+import static org.openoffice.test.vcl.Tester.*;
+import static testlib.AppUtil.*;
 import static testlib.UIMap.*;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -121,7 +117,7 @@ public class TestSample {
      */
     @Before
     public void setUp() {
-        initApp();
+        app.start();
 
         FileUtil.deleteFile(fullPath("temp"));
         File temp = new File(fullPath("temp"));

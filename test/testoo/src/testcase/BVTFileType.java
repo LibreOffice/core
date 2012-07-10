@@ -33,10 +33,9 @@ import static testlib.UIMap.*;
 
 import java.awt.Rectangle;
 
-import org.junit.AfterClass;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.openoffice.test.common.FileUtil;
@@ -53,13 +52,14 @@ public class BVTFileType {
     @Rule
     public Log LOG = new Log();
 
-
-    /**
-     * @throws java.lang.Exception
-     */
     @Before
     public void setUp() throws Exception {
-        initApp();
+        app.start();
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        app.close();
     }
 
     /**
@@ -241,6 +241,7 @@ public class BVTFileType {
         String text = "Hello Openoffice";
         app.dispatch("private:factory/simpress?slot=6686");
         PresentationWizard.ok();
+        sleep(1);
         impress.click(0.01, 0.01);
         typeKeys(text);
         sleep(2);
@@ -435,10 +436,5 @@ public class BVTFileType {
 
         // Close the file to avoid the app closing the Elements window automatically
         app.dispatch(".uno:CloseDoc", 3);
-    }
-
-    @AfterClass
-    public static void afterClass() {
-        app.kill();
     }
 }

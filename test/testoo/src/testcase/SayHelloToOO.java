@@ -27,6 +27,7 @@ import static org.junit.Assert.*;
 import static testlib.AppUtil.*;
 import static testlib.UIMap.*;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -50,17 +51,25 @@ public class SayHelloToOO {
     @Rule
     public Log LOG = new Log();
 
+
     /**
-     * initApp helps us to do
-     * 1. Patch the OpenOffice to enable automation if necessary.
-     * 2. Start OpenOffice with automation enabled if necessary.
-     * 3. Reset OpenOffice to startcenter.
-     *
-     * @throws java.lang.Exception
+     * Do some setup task before running test
+     * @throws Exception
      */
     @Before
     public void setUp() throws Exception {
-        initApp();
+        //Start OpenOffice
+        app.start();
+    }
+
+    /**
+     * Clean task after testing
+     * @throws Exception
+     */
+    @After
+    public void tearDown() throws Exception {
+        //Close OpenOffice
+        app.close();
     }
 
     /**

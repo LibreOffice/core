@@ -34,14 +34,13 @@ import static testlib.UIMap.*;
 import java.awt.Rectangle;
 import java.io.File;
 
-import org.junit.AfterClass;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.openoffice.test.common.FileUtil;
 import org.openoffice.test.common.GraphicsUtil;
-import org.openoffice.test.common.SystemUtil;
 
 import testlib.CalcUtil;
 import testlib.Log;
@@ -55,12 +54,14 @@ public class BVTFunction {
     @Rule
     public Log LOG = new Log();
 
-    /**
-     * @throws java.lang.Exception
-     */
     @Before
     public void setUp() throws Exception {
-        initApp();
+        app.start();
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        app.close();
     }
 
 
@@ -77,14 +78,10 @@ public class BVTFunction {
         FileUtil.deleteFile(exportTo);
         submitSaveDlg(exportTo);
         assertTrue("PDF is exported?", new File(exportTo).exists());
-
-        // Via toolbar
-        app.dispatch("private:factory/swriter", 3);
         assertTrue(toolbox(".HelpId:standardbar").exists(5));
         button(".uno:ExportDirectToPDF").click();
         assertEquals("PDF - Portable Document Format (.pdf)", FileSave_FileType.getSelText());
         FileSave.cancel();
-
     }
 
     /**
@@ -112,7 +109,7 @@ public class BVTFunction {
 
         //Create a new text document and launch a Wizards dialog which need JVM work correctly.
         app.dispatch("private:factory/swriter", 3);
-        File tempfile=new File(app.getUserInstallation(),"user/template/myAgendaTemplate.ott");
+        File tempfile=new File(oo.getUserInstallation(),"user/template/myAgendaTemplate.ott");
         FileUtil.deleteFile(tempfile);
         sleep(3);
         app.dispatch("service:com.sun.star.wizards.agenda.CallWizard?start");
@@ -767,10 +764,5 @@ public class BVTFunction {
 
         // Verify if the calculated result is equal to the expected result
         assertEquals("The calculated result", expectedResult, CalcUtil.getCellText("B1"));
-    }
-
-    @AfterClass
-    public static void afterClass() {
-        app.kill();
     }
 }
