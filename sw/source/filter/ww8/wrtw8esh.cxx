@@ -2091,6 +2091,15 @@ SwEscherEx::SwEscherEx(SvStream* pStrm, WW8Export& rWW8Wrt)
             {
                 const SvxBrushItem* pBrush = (const SvxBrushItem*)pItem;
                 WriteBrushAttr(*pBrush, aPropOpt);
+
+                SvxGraphicPosition ePos = pBrush->GetGraphicPos();
+                if( ePos != GPOS_NONE && ePos != GPOS_AREA )
+                {
+                    /* #i56806# 0x033F parameter specifies a 32-bit field of shape boolean properties.
+                    0x10001 means fBackground and fUsefBackground flag are true thus background
+                    picture will be shown as "tiled" fill.*/
+                    aPropOpt.AddOpt( ESCHER_Prop_fBackground, 0x10001 );
+                }
             }
             aPropOpt.AddOpt( ESCHER_Prop_lineColor, 0x8000001 );
             aPropOpt.AddOpt( ESCHER_Prop_fNoLineDrawDash, 0x00080008 );

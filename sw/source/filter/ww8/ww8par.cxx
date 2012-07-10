@@ -3803,6 +3803,10 @@ void wwSectionManager::SetSegmentToPageDesc(const wwSection &rSection,
 
     SwFrmFmt &rFmt = rPage.GetMaster();
 
+    if(mrReader.pWDop->fUseBackGroundInAllmodes)  // #i56806# Make sure mrReader is initialized
+        mrReader.GrafikCtor();
+
+
     if (mrReader.pWDop->fUseBackGroundInAllmodes && mrReader.pMSDffManager)
     {
         Rectangle aRect(0, 0, 100, 100); //A dummy, we don't care about the size
