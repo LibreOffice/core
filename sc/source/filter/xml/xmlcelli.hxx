@@ -45,6 +45,7 @@
 #include <boost/optional.hpp>
 
 class ScXMLImport;
+class ScFormulaCell;
 struct ScXMLAnnotationData;
 
 class ScXMLTableRowCellContext : public SvXMLImportContext
@@ -90,6 +91,7 @@ class ScXMLTableRowCellContext : public SvXMLImportContext
     bool HasSpecialContent() const;
     bool CellsAreRepeated() const;
 
+    void SetFormulaCell             ( ScFormulaCell* pFCell ) const;
     void AddTextCellToDoc           ( const ScAddress& rScCurrentPos, const SCCOL nCurrentCol,
                                       const ::boost::optional< rtl::OUString >& pOUText );
     void AddNumberCellToDoc         ( const ScAddress& rScCurrentPos );

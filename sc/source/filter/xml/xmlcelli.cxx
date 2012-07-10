@@ -741,6 +741,19 @@ void ScXMLTableRowCellContext::SetCellRangeSource( const ScAddress& rPosition )
     }
 }
 
+void ScXMLTableRowCellContext::SetFormulaCell(ScFormulaCell* pFCell) const
+{
+    if(pFCell)
+    {
+        if( bFormulaTextResult && pOUTextValue && !pOUTextValue->isEmpty() )
+            pFCell->SetHybridString( *pOUTextValue );
+        else
+            pFCell->SetHybridDouble( fValue );
+        if( !pFCell->GetCode()->IsRecalcModeAlways() )
+            pFCell->ResetDirty();
+    }
+}
+
 void ScXMLTableRowCellContext::AddTextCellToDoc( const ScAddress& rCurrentPos,
         const SCCOL nCurrentCol, const ::boost::optional< rtl::OUString >& pOUText )
 {
@@ -795,12 +808,7 @@ void ScXMLTableRowCellContext::AddNumberCellToDoc( const ScAddress& rCurrentPos 
         if ( pCell && pCell->GetCellType() == CELLTYPE_FORMULA )
         {
             ScFormulaCell* pFCell = static_cast<ScFormulaCell*>(pCell);
-            if( bFormulaTextResult && pOUTextValue && !pOUTextValue->isEmpty() )
-                pFCell->SetHybridString( *pOUTextValue );
-            else
-                pFCell->SetHybridDouble( fValue );
-            if( !pFCell->GetCode()->IsRecalcModeAlways() )
-                pFCell->ResetDirty();
+            SetFormulaCell(pFCell);
         }
     }
     else
@@ -1027,12 +1035,7 @@ void ScXMLTableRowCellContext::AddNonMatrixFormulaCell( const ScAddress& rCellPo
             delete pCode;
 
             ScFormulaCell* pFCell = static_cast<ScFormulaCell*>(pNewCell);
-            if( bFormulaTextResult && pOUTextValue && !pOUTextValue->isEmpty() )
-                pFCell->SetHybridString( *pOUTextValue );
-            else
-                pFCell->SetHybridDouble( fValue );
-            if( !(pFCell->GetCode()->IsRecalcModeOnLoad() || !pFCell->GetCode()->IsRecalcModeOnLoadOnce()) )
-                pFCell->ResetDirty();
+            SetFormulaCell(pFCell);
         }
         else if ( aText[0] == '\'' && aText.getLength() > 1 )
         {
@@ -1078,15 +1081,7 @@ void ScXMLTableRowCellContext::AddFormulaCell( const ScAddress& rCellPos )
                 //add the cached formula result of the first matrix position
                 ScFormulaCell* pFCell =
                     static_cast<ScFormulaCell*>( rXMLImport.GetDocument()->GetCell(rCellPos) );
-                if(pFCell)
-                {
-                    if( bFormulaTextResult && pOUTextValue && !pOUTextValue->isEmpty() )
-                        pFCell->SetHybridString( *pOUTextValue );
-                    else
-                        pFCell->SetHybridDouble( fValue );
-                    if( !pFCell->GetCode()->IsRecalcModeAlways() )
-                        pFCell->ResetDirty();
-                }
+                SetFormulaCell(pFCell);
             }
         }
         else
