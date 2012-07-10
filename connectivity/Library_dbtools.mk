@@ -74,7 +74,6 @@ endif
 #connectivity/source/commontools/RowFunctionParser.cxx disable optimization?
 
 $(eval $(call gb_Library_add_noexception_objects,dbtools,\
-	connectivity/source/commontools/AutoRetrievingBase \
 	connectivity/source/simpledbt/refbase \
 ))
 
@@ -93,6 +92,7 @@ $(call gb_LexTarget_get_scanner_target,connectivity/source/parse/sqlflex) : T_LE
 
 
 $(eval $(call gb_Library_add_exception_objects,dbtools,\
+	connectivity/source/commontools/AutoRetrievingBase \
 	connectivity/source/commontools/predicateinput \
 	connectivity/source/commontools/ConnectionWrapper \
 	connectivity/source/commontools/TConnection \
