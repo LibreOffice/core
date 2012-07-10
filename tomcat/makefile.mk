@@ -50,9 +50,9 @@ PATCH_FILES=tomcat.patch
 BUILD_DIR=jakarta-servletapi-5
 
 .IF "$(JAVACISGCJ)"=="yes"
-BUILD_ACTION=$(ANT)
+BUILD_ACTION="$(ANT)"
 .ELSE
-BUILD_ACTION=$(ANT) -Dant.build.javac.source=$(JAVA_SOURCE_VER) -Dant.build.javac.target=$(JAVA_TARGET_VER)
+BUILD_ACTION="$(ANT)" -Dant.build.javac.source=$(JAVA_SOURCE_VER) -Dant.build.javac.target=$(JAVA_TARGET_VER)
 .ENDIF
 
 # --- Targets ------------------------------------------------------

@@ -57,9 +57,9 @@ ANT_OPTS+="-Dfile.encoding=ISO-8859-1"
 .IF "$(JAVACISGCJ)"=="yes"
 JAVA_HOME=
 .EXPORT : JAVA_HOME
-BUILD_ACTION=$(ANT) -Dbuild.label="build-$(RSCREVISION)" -Dbuild.compiler=gcj -f $(ANT_BUILDFILE) jar
+BUILD_ACTION="$(ANT)" -Dbuild.label="build-$(RSCREVISION)" -Dbuild.compiler=gcj -f $(ANT_BUILDFILE) jar
 .ELSE
-BUILD_ACTION=$(ANT) -Dbuild.label="build-$(RSCREVISION)" -f $(ANT_BUILDFILE) jar
+BUILD_ACTION="$(ANT)" -Dbuild.label="build-$(RSCREVISION)" -f $(ANT_BUILDFILE) jar
 .ENDIF
 
 .ENDIF # $(SOLAR_JAVA)!= ""

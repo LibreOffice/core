@@ -51,7 +51,7 @@ TARFILE_ROOTDIR=src
 
 PATCH_FILES=saxon-9.0.0.7-bj.patch
 
-BUILD_ACTION=$(ANT) $(ANT_FLAGS) -Dsolarbindir=$(SOLARBINDIR) jar-bj 
+BUILD_ACTION="$(ANT)" $(ANT_FLAGS) -Dsolarbindir=$(SOLARBINDIR) jar-bj
 
 OUT2CLASS= saxon-build$/9.0.0.7$/bj$/saxon9.jar
 
