@@ -2343,7 +2343,7 @@ void XclExpFmlaCompImpl::AppendAddInCallToken( const XclExpExtFuncData& rExtFunc
     if( mxData->mpLinkMgr && ScGlobal::GetAddInCollection()->GetExcelName( rExtFuncData.maFuncName, GetUILanguage(), aXclFuncName ) )
     {
         sal_uInt16 nExtSheet, nExtName;
-        if( mxData->mpLinkMgr->InsertAddIn( nExtSheet, nExtName, String(aXclFuncName) ) )
+        if( mxData->mpLinkMgr->InsertAddIn( nExtSheet, nExtName, aXclFuncName ) )
         {
             AppendNameXToken( nExtSheet, nExtName, nSpaces );
             return;

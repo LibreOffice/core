@@ -166,7 +166,7 @@ void ScCompiler::fillFromAddInCollectionEnglishName( NonConstOpCodeMapPtr xMap )
         {
             ::rtl::OUString aName;
             if (pFuncData->GetExcelName( LANGUAGE_ENGLISH_US, aName))
-                xMap->putExternalSoftly( String(aName), pFuncData->GetOriginalName());
+                xMap->putExternalSoftly( aName, pFuncData->GetOriginalName());
             else
                 xMap->putExternalSoftly( pFuncData->GetUpperName(),
                         pFuncData->GetOriginalName());
@@ -5242,7 +5242,7 @@ void ScCompiler::fillAddInToken(::std::vector< ::com::sun::star::sheet::FormulaO
             {
                 ::rtl::OUString aName;
                 if (pFuncData->GetExcelName( LANGUAGE_ENGLISH_US, aName))
-                    aEntry.Name = String(aName);
+                    aEntry.Name = aName;
                 else
                     aEntry.Name = pFuncData->GetUpperName();
             }

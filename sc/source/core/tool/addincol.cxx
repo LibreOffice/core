@@ -889,9 +889,11 @@ void ScUnoAddInCollection::ReadFromAddIn( const uno::Reference<uno::XInterface>&
                                     rtl::OUString aFuncU = xFunc->getName();
 
                                     // stored function name: (service name).(function)
-                                    ::rtl::OUString aFuncName = aServiceName;
-                                    aFuncName += ::rtl::OUString( '.' );
-                                    aFuncName += ::rtl::OUString( aFuncU );
+                                    rtl::OUStringBuffer aFuncNameBuffer( aServiceName.getLength()+1+aFuncU.getLength());
+                                    aFuncNameBuffer.append(aServiceName);
+                                    aFuncNameBuffer.append('.');
+                                    aFuncNameBuffer.append(aFuncU);
+                                    rtl::OUString aFuncName = aFuncNameBuffer.makeStringAndClear();
 
                                     sal_Bool bValid = sal_True;
                                     long nVisibleCount = 0;
@@ -919,35 +921,31 @@ void ScUnoAddInCollection::ReadFromAddIn( const uno::Reference<uno::XInterface>&
                                     if (bValid)
                                     {
                                         sal_uInt16 nCategory = lcl_GetCategory(
-                                            ::rtl::OUString(
-                                            xAddIn->getProgrammaticCategoryName(
-                                            aFuncU ) ) );
+                                                xAddIn->getProgrammaticCategoryName( aFuncU ) );
 
                                         rtl::OString sHelpId = aHelpIdGenerator.GetHelpId( aFuncU );
 
-                                        rtl::OUString aLocalU;
+                                        ::rtl::OUString aLocalName;
                                         try
                                         {
-                                            aLocalU = xAddIn->
+                                            aLocalName = xAddIn->
                                                 getDisplayFunctionName( aFuncU );
                                         }
                                         catch(uno::Exception&)
                                         {
-                                            aLocalU = "###";
+                                            aLocalName = "###";
                                         }
-                                        ::rtl::OUString aLocalName = ::rtl::OUString( aLocalU );
 
-                                        rtl::OUString aDescU;
+                                        ::rtl::OUString aDescription;
                                         try
                                         {
-                                            aDescU = xAddIn->
+                                            aDescription = xAddIn->
                                                 getFunctionDescription( aFuncU );
                                         }
                                         catch(uno::Exception&)
                                         {
-                                            aDescU = "###";
+                                            aDescription = "###";
                                         }
-                                        ::rtl::OUString aDescription( aDescU );
 
                                         ScAddInArgDesc* pVisibleArgs = NULL;
                                         if ( nVisibleCount > 0 )
@@ -1105,9 +1103,11 @@ void ScUnoAddInCollection::UpdateFromAddIn( const uno::Reference<uno::XInterface
                         rtl::OUString aFuncU = xFunc->getName();
 
                         // stored function name: (service name).(function)
-                        ::rtl::OUString aFuncName = rServiceName;
-                        aFuncName += ::rtl::OUString( '.' );
-                        aFuncName += ::rtl::OUString( aFuncU );
+                        rtl::OUStringBuffer aFuncNameBuffer( rServiceName.getLength()+1+aFuncU.getLength());
+                        aFuncNameBuffer.append(rServiceName);
+                        aFuncNameBuffer.append('.');
+                        aFuncNameBuffer.append(aFuncU);
+                        rtl::OUString aFuncName = aFuncNameBuffer.makeStringAndClear();
 
                         // internal names are skipped because no FuncData exists
                         ScUnoAddInFuncData* pOldData = const_cast<ScUnoAddInFuncData*>( GetFuncData( aFuncName ) );
@@ -1740,7 +1740,7 @@ void ScUnoAddInCall::SetResult( const uno::Any& rNewRes )
                             long nColCount = pRowArr[nRow].getLength();
                             const rtl::OUString* pColArr = pRowArr[nRow].getConstArray();
                             for (nCol=0; nCol<nColCount; nCol++)
-                                xMatrix->PutString( ::rtl::OUString( pColArr[nCol] ),
+                                xMatrix->PutString( pColArr[nCol],
                                     static_cast<SCSIZE>(nCol),
                                     static_cast<SCSIZE>(nRow) );
                             for (nCol=nColCount; nCol<nMaxColCount; nCol++)
