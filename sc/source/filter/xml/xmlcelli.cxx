@@ -760,7 +760,8 @@ void ScXMLTableRowCellContext::AddTextCellToDoc( const ScAddress& rCurrentPos,
                 pFCell->SetHybridString( *pOUText );
             else
                 bDoIncrement = false;
-            pFCell->ResetDirty();
+            if( !pFCell->GetCode()->IsRecalcModeAlways() )
+                pFCell->ResetDirty();
         }
     }
     else
@@ -798,7 +799,8 @@ void ScXMLTableRowCellContext::AddNumberCellToDoc( const ScAddress& rCurrentPos 
                 pFCell->SetHybridString( *pOUTextValue );
             else
                 pFCell->SetHybridDouble( fValue );
-            pFCell->ResetDirty();
+            if( !pFCell->GetCode()->IsRecalcModeAlways() )
+                pFCell->ResetDirty();
         }
     }
     else
@@ -1029,7 +1031,8 @@ void ScXMLTableRowCellContext::AddNonMatrixFormulaCell( const ScAddress& rCellPo
                 pFCell->SetHybridString( *pOUTextValue );
             else
                 pFCell->SetHybridDouble( fValue );
-            pFCell->ResetDirty();
+            if( !(pFCell->GetCode()->IsRecalcModeOnLoad() || !pFCell->GetCode()->IsRecalcModeOnLoadOnce()) )
+                pFCell->ResetDirty();
         }
         else if ( aText[0] == '\'' && aText.getLength() > 1 )
         {
@@ -1081,7 +1084,8 @@ void ScXMLTableRowCellContext::AddFormulaCell( const ScAddress& rCellPos )
                         pFCell->SetHybridString( *pOUTextValue );
                     else
                         pFCell->SetHybridDouble( fValue );
-                    pFCell->ResetDirty();
+                    if( !pFCell->GetCode()->IsRecalcModeAlways() )
+                        pFCell->ResetDirty();
                 }
             }
         }
