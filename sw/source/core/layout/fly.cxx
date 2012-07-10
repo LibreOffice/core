@@ -2559,7 +2559,8 @@ static SwTwips lcl_CalcAutoWidth( const SwLayoutFrm& rFrm )
             nMin = ((SwTxtFrm*)pFrm)->CalcFitToContent();
             const SvxLRSpaceItem &rSpace =
                 ((SwTxtFrm*)pFrm)->GetTxtNode()->GetSwAttrSet().GetLRSpace();
-            nMin += rSpace.GetRight() + rSpace.GetTxtLeft() + rSpace.GetTxtFirstLineOfst();
+            if (!((SwTxtFrm*)pFrm)->IsLocked())
+                nMin += rSpace.GetRight() + rSpace.GetTxtLeft() + rSpace.GetTxtFirstLineOfst();
         }
         else if ( pFrm->IsTabFrm() )
         {
