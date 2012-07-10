@@ -89,6 +89,8 @@ public class VclApp {
         try {
             dispatch(".uno:Quit");
             SystemUtil.sleep(3);
+        } catch(Exception e) {
+
         } finally {
             communicationManager.stop();
             if (openOffice != null) {
