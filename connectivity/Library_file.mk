@@ -56,10 +56,6 @@ $(eval $(call gb_Library_use_libraries,file,\
 	$(gb_STDLIBS) \
 ))
 
-$(eval $(call gb_Library_add_noexception_objects,file,\
-	connectivity/source/drivers/file/quotedstring \
-))
-
 $(eval $(call gb_Library_add_exception_objects,file,\
 	connectivity/source/drivers/file/FCatalog \
 	connectivity/source/drivers/file/FColumns \
@@ -79,6 +75,7 @@ $(eval $(call gb_Library_add_exception_objects,file,\
 	connectivity/source/drivers/file/fanalyzer \
 	connectivity/source/drivers/file/fcode \
 	connectivity/source/drivers/file/fcomp \
+	connectivity/source/drivers/file/quotedstring \
 ))
 
 # vim: set noet sw=4 ts=4:
