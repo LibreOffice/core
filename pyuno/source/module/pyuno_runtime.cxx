@@ -590,8 +590,7 @@ PyRef Runtime::any2PyObject (const Any &a ) const
     }
     }
     //We shouldn't be here...
-    Py_INCREF( Py_None );
-    return Py_None;
+    assert(false);
 }
 
 static Sequence< Type > invokeGetTypes( const Runtime & r , PyObject * o )
