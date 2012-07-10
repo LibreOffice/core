@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAL3///44\u003d",
+        "filename": "sc/source/core/tool/chgviset.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2012-07-10T19:18:00Z",
+      "side": 1,
+      "message": "OUString lengths are sal_Int32, while xub_StrLen is sal_uInt16. When changing string types ideally these should be adapted to the corresponding types and not simply casted, especially not anymore with an old C-style reinterpret cast.\n\nProblem here is of course that the SearchFrwrd() method takes xub_StrLen\u0026 arguments, in these cases usually either the underlying called method has to be changed together with the caller, or temporary variables be introduced that are passed to the method.\n\nAs the variables here aren\u0027t further used, using these old types and a cast without temporaries is ok in this case, but when casting down checks for an overflow (and thus integer wrap-around) should be provided (and in this case truncated instead), here this is more theoretically because a comment most probably is not longer than 64k characters, but ...\n\nSo, for correctness that could be\n\n xub_StrLen nEndPos \u003d static_cast\u003cxub_StrLen\u003e( ::std::min( pCommentStr-\u003egetLength(), static_cast\u003csal_Int32\u003e(STRING_MAXLEN)));",
+      "revId": "f8e538f68e1bce1af8ce4c74ee25c7b733d7f049",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAL3///4s\u003d",
+        "filename": "sc/source/core/tool/chgviset.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2012-07-10T19:18:00Z",
+      "side": 1,
+      "message": "Preferably\n\n if (!rString.isEmpty())",
+      "revId": "f8e538f68e1bce1af8ce4c74ee25c7b733d7f049",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
