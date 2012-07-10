@@ -11,9 +11,15 @@
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
+#include <msi.h>
+#include <msiquery.h>
 
-typedef enum ERRCOND { ERRA = 0x1, ERRB = 0x2, ERRC = 0x4, ERRD = 0x8, ERRE = 0x10, ERRF = 0x20 } ERRCOND;
-static unsigned int err;
+#define MSITRANSFORM_ERROR_ADDEXISTINGROW   0x01
+#define MSITRANSFORM_ERROR_DELMISSINGROW    0x02
+#define MSITRANSFORM_ERROR_ADDEXISTINGTABLE 0x04
+#define MSITRANSFORM_ERROR_DELMISSINGTABLE  0x08
+#define MSITRANSFORM_ERROR_UPDATEMISSINGROW 0x10
+#define MSITRANSFORM_ERROR_CHANGECODEPAGE   0x20
 
 void usage(void)
 {
@@ -31,14 +37,34 @@ void usage(void)
         "  f  Change codepage\n");
 }
 
-void generatePatch(char * basedb, char * refdb, char * transFile)
+BOOL generateTransform(char * basedb, char * refdb, char * transFile, unsigned int err)
 {
+    MSIHANDLE dbHandle, refHandle;
+    UINT r;
+    r = MsiOpenDatabase(basedb, MSIDBOPEN_READONLY, &dbHandle);
+    if (r != ERROR_SUCCESS) return FALSE;
+    r = MsiOpenDatabase (refdb, MSIDBOPEN_READONLY, &refHandle);
+    if (r != ERROR_SUCCESS) return FALSE;
+
+    /* TODO: This isn't implemented in Wine */
+    r = MsiDatabaseGenerateTransform(dbHandle, refHandle, transFile, 0, 0);
+    if (r != ERROR_SUCCESS)
+    {
+        MsiCloseHandle(dbHandle);
+        MsiCloseHandle(refHandle);
+        return FALSE;
+    }
+    r = MsiCreateTransformSummaryInfo(dbHandle, refHandle, transFile, err, 0);
+    MsiCloseHandle(dbHandle);
+    MsiCloseHandle(refHandle);
+
+    return TRUE;
 }
 
 int main(int argc, char *argv[])
 {
     char * genFiles[3] = {0, 0, 0};
-    unsigned int i = 0;
+    unsigned int i, err = 0;
     err = 0;
 
     /* Get parameters */
@@ -73,17 +99,22 @@ int main(int argc, char *argv[])
         {
             switch(tolower(argv[1][i]))
             {
-            case 'a': err |= ERRA; break;
-            case 'b': err |= ERRB; break;
-            case 'c': err |= ERRC; break;
-            case 'd': err |= ERRD; break;
-            case 'e': err |= ERRE; break;
-            case 'f': err |= ERRF; break;
-            }
+            case 'a': err |= MSITRANSFORM_ERROR_ADDEXISTINGROW; break;
+            case 'b': err |= MSITRANSFORM_ERROR_DELMISSINGROW; break;
+            case 'c': err |= MSITRANSFORM_ERROR_ADDEXISTINGTABLE; break;
+            case 'd': err |= MSITRANSFORM_ERROR_DELMISSINGTABLE; break;
+            case 'e': err |= MSITRANSFORM_ERROR_UPDATEMISSINGROW; break;
+            case 'f': err |= MSITRANSFORM_ERROR_CHANGECODEPAGE; break;
+              }
         }
     }
 
-    generatePatch(genFiles[0], genFiles[1], genFiles[2]);
+    /* Perform transformation */
+    if (!generateTransform(genFiles[0], genFiles[1], genFiles[2], err))
+    {
+        printf("An error occurred and the transform could not be generated\n");
+        return 3;
+    }
 
     return 0;
 }
