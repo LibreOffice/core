@@ -2865,15 +2865,16 @@ sal_Bool GtkSalGraphics::NWPaintGTKToolbar(
             }
             else if( nPart == PART_SEPARATOR_HORZ || nPart == PART_SEPARATOR_VERT )
             {
-                gint separator_height, separator_width, wide_separators;
+                const double shim = 0.2;
+
+#if GTK_CHECK_VERSION(2,10,0)
+                gint separator_height, separator_width, wide_separators = 0;
 
                 gtk_widget_style_get (gWidgetData[m_nXScreen].gSeparator,
                                       "wide-separators",  &wide_separators,
                                       "separator-width",  &separator_width,
                                       "separator-height", &separator_height,
                                       NULL);
-
-                const double shim = 0.2;
 
                 if (wide_separators)
                 {
@@ -2891,6 +2892,7 @@ sal_Bool GtkSalGraphics::NWPaintGTKToolbar(
                                        w * (1 - 2*shim), separator_width);
                 }
                 else
+#endif
                 {
                     if (nPart == PART_SEPARATOR_VERT)
                         gtk_paint_vline (gWidgetData[m_nXScreen].gSeparator->style, gdkDrawable,
