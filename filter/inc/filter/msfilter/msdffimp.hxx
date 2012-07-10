@@ -43,6 +43,7 @@
 #include <filter/msfilter/msfilterdllapi.h>
 #include <sot/storage.hxx>
 #include <vector>
+#include <set>
 #include <boost/ptr_container/ptr_vector.hpp>
 
 class Graphic;
@@ -318,19 +319,21 @@ struct MSFILTER_DLLPUBLIC SvxMSDffImportRec
     SvxMSDffImportRec(const SvxMSDffImportRec& rCopy);
     ~SvxMSDffImportRec();
 
-    sal_Bool operator==( const SvxMSDffImportRec& rEntry ) const
+    bool operator==( const SvxMSDffImportRec& rEntry ) const
     {   return nShapeId == rEntry.nShapeId; }
-    sal_Bool operator<( const SvxMSDffImportRec& rEntry ) const
+    bool operator<( const SvxMSDffImportRec& rEntry ) const
     {   return nShapeId < rEntry.nShapeId;  }
 
 private:
     SvxMSDffImportRec &operator=(const SvxMSDffImportRec&);
 };
 
-typedef SvxMSDffImportRec* MSDffImportRec_Ptr;
-
 /** list of all SvxMSDffImportRec instances of/for a group */
-SV_DECL_PTRARR_SORT_DEL_VISIBILITY( MSDffImportRecords, MSDffImportRec_Ptr, 16, MSFILTER_DLLPUBLIC )
+struct CompareMSDffImportRecords
+{
+  bool operator()( SvxMSDffImportRec* const& lhs, SvxMSDffImportRec* const& rhs ) const { return (*lhs)<(*rhs); }
+};
+class MSFILTER_DLLPUBLIC MSDffImportRecords : public std::set<SvxMSDffImportRec*,CompareMSDffImportRecords> {};
 
 /** block of parameters for import/export for a single call of
     ImportObjAtCurrentStreamPos() */
@@ -348,10 +351,10 @@ struct SvxMSDffImportData
         { aNewRect = Rectangle(left, top, right, bottom); }
     sal_Bool HasParRect() const { return aParentRect.IsEmpty(); }
     sal_Bool HasNewRect() const { return aNewRect.IsEmpty()   ; }
-    sal_Bool HasRecords() const { return 0 != aRecords.Count(); }
-    sal_uInt16 GetRecCount() const { return aRecords.Count();  }
-    SvxMSDffImportRec*  GetRecord(sal_uInt16 iRecord) const
-        { return aRecords.GetObject( iRecord ); }
+    bool empty() const { return aRecords.empty(); }
+    size_t size() const { return aRecords.size(); }
+    MSDffImportRecords::const_iterator begin() const { return aRecords.begin();  }
+    MSDffImportRecords::const_iterator end() const { return aRecords.end();  }
 };
 
 struct DffObjData

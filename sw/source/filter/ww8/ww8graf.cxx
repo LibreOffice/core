@@ -2549,10 +2549,10 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
     // eingelesenes Objekt (kann eine ganze Gruppe sein) jetzt korrekt
     // positionieren usw.
 
-    OSL_ENSURE(!((aData.GetRecCount() != 1) && bReplaceable),
+    OSL_ENSURE(!((aData.size() != 1) && bReplaceable),
         "Replaceable drawing with > 1 entries ?");
 
-    if (aData.GetRecCount() != 1)
+    if (aData.size() != 1)
         bReplaceable = false;
 
     SvxMSDffImportRec* pRecord = 0;
@@ -2560,10 +2560,9 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
         Get the record for top level object, so we can get the word anchoring
         and wrapping information for it.
     */
-    sal_uInt16 nRecCount = aData.GetRecCount();
-    for (sal_uInt16 nTxbx=0; nTxbx < nRecCount; ++nTxbx )
+    for (MSDffImportRecords::const_iterator it = aData.begin(); it != aData.end(); ++it )
     {
-        pRecord = aData.GetRecord( nTxbx );
+        pRecord = *it;
         if (pRecord && pRecord->pObj == pObject)
             break;
         else
@@ -2660,12 +2659,11 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
             /*
                 Insert text if necessary into textboxes contained in groups.
             */
-            if (aData.HasRecords())
+            if (!aData.empty())
             {
-                sal_uInt16 nCount = aData.GetRecCount();
-                for (sal_uInt16 nTxbx=0; nTxbx < nCount; ++nTxbx)
+                for (MSDffImportRecords::const_iterator it = aData.begin(); it != aData.end(); ++it)
                 {
-                    pRecord = aData.GetRecord(nTxbx);
+                    pRecord = *it;
                     if (pRecord && pRecord->pObj && pRecord->aTextId.nTxBxS)
                     { // #i52825# pRetFrmFmt can be NULL
                         pRetFrmFmt = MungeTextIntoDrawBox(pRecord->pObj,

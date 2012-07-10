@@ -5624,7 +5624,7 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
             if( pOrgObj )
             {
                 pImpRec->pObj = pOrgObj;
-                rImportData.aRecords.Insert( pImpRec );
+                rImportData.aRecords.insert( pImpRec );
             }
 
             if( pTextObj && (pOrgObj != pTextObj) )
@@ -5632,7 +5632,7 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
                 // Modify ShapeId (must be unique)
                 pImpRec->nShapeId |= 0x8000000;
                 pTextImpRec->pObj = pTextObj;
-                rImportData.aRecords.Insert( pTextImpRec );
+                rImportData.aRecords.insert( pTextImpRec );
             }
 
             // Eintrag in Z-Order-Liste um Zeiger auf dieses Objekt ergaenzen
@@ -5722,9 +5722,6 @@ SV_IMPL_OP_PTRARR_SORT( SvxMSDffShapeInfos,     SvxMSDffShapeInfo_Ptr   );
 
 SV_IMPL_OP_PTRARR_SORT( SvxMSDffShapeTxBxSort,  SvxMSDffShapeOrder*  );
 
-
-// Liste aller SvxMSDffImportRec fuer eine Gruppe
-SV_IMPL_OP_PTRARR_SORT(MSDffImportRecords, MSDffImportRec_Ptr)
 
 //---------------------------------------------------------------------------
 //  exported class: Public Methods

@@ -562,9 +562,7 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf(SdrTextObj* pTextObj,
                 SfxItemSet aAttrSet( rDoc.GetAttrPool(), RES_FRMATR_BEGIN,
                     RES_FRMATR_END-1 );
 
-                SvxMSDffImportRec *pRecord =
-                    (aData.HasRecords() && (1 == aData.GetRecCount() ) ) ?
-                    aData.GetRecord( 0 ) : 0;
+                SvxMSDffImportRec *pRecord = (1 == aData.size()) ? *aData.begin() : 0;
 
                 if( pRecord )
                 {

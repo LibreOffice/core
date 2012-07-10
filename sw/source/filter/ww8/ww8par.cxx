@@ -859,7 +859,7 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
         {
             // Import-Record-Liste ergaenzen
             pImpRec->pObj = pObj;
-            rImportData.aRecords.Insert( pImpRec );
+            rImportData.aRecords.insert( pImpRec );
 
             // Eintrag in Z-Order-Liste um Zeiger auf dieses Objekt ergaenzen
             /*Only store objects which are not deep inside the tree*/
@@ -3680,7 +3680,7 @@ void wwSectionManager::SetSegmentToPageDesc(const wwSection &rSection,
         SdrObject* pObject = 0;
         if (mrReader.pMSDffManager->GetShape(0x401, pObject, aData))
         {
-            SvxMSDffImportRec * pRec = aData.GetRecord(0);
+            SvxMSDffImportRec * pRec = *aData.begin();
 
             // Only handle shape if it is a background shape
             if ((pRec->nFlags & 0x400) != 0)
