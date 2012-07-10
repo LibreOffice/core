@@ -144,7 +144,9 @@ bool PersistentMap::get( OString * value, OString const & key ) const
     catch (DbException & exc) {
         throw_rtexc( exc.get_errno(), exc.what() );
     }
+#ifndef _MSC_VER
     return false; // avoiding warning
+#endif
 }
 
 //______________________________________________________________________________
@@ -192,7 +194,9 @@ bool PersistentMap::erase( OString const & key, bool flush_immediately )
     catch (DbException & exc) {
         throw_rtexc( exc.get_errno(), exc.what() );
     }
+#ifndef _MSC_VER
     return false; // avoiding warning
+#endif
 }
 
 //______________________________________________________________________________
@@ -231,7 +235,9 @@ t_string2string_map PersistentMap::getEntries() const
     catch (DbException & exc) {
         throw_rtexc( exc.get_errno(), exc.what() );
     }
+#ifndef _MSC_VER
     return t_string2string_map(); // avoiding warning
+#endif
 }
 
 }
