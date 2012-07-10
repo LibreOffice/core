@@ -604,6 +604,7 @@ void HeaderBar::ImplDrawItem( OutputDevice* pDev,
             bDraw = sal_False;
 
         if ( bDraw )
+        {
             if( pWin && pWin->IsNativeControlSupported(CTRL_LISTHEADER, PART_ARROW) )
             {
                 aCtrlRegion=Rectangle(Point(nArrowX,aRect.Top()),Size(nArrowWidth,aRect.GetHeight()));
@@ -656,6 +657,7 @@ void HeaderBar::ImplDrawItem( OutputDevice* pDev,
                                     Point( nArrowX+HEAD_ARROWSIZE1, nArrowY ) );
                 }
             }
+        }
     }
 
     // Gegebenenfalls auch UserDraw aufrufen
