@@ -90,67 +90,67 @@ $(call gb_LexTarget_get_scanner_target,connectivity/source/parse/sqlflex) : T_LE
 
 $(eval $(call gb_Library_add_exception_objects,dbtools,\
 	connectivity/source/commontools/AutoRetrievingBase \
-	connectivity/source/commontools/predicateinput \
-	connectivity/source/commontools/ConnectionWrapper \
-	connectivity/source/commontools/TConnection \
-	connectivity/source/commontools/conncleanup \
-	connectivity/source/commontools/dbtools \
-	connectivity/source/commontools/dbtools2 \
-	connectivity/source/commontools/dbexception \
+	connectivity/source/commontools/BlobHelper \
 	connectivity/source/commontools/CommonTools \
+	connectivity/source/commontools/ConnectionWrapper \
+	connectivity/source/commontools/DateConversion \
+	connectivity/source/commontools/DriversConfig \
+	connectivity/source/commontools/FDatabaseMetaDataResultSet \
+	connectivity/source/commontools/FDatabaseMetaDataResultSetMetaData \
+	connectivity/source/commontools/FValue \
+	connectivity/source/commontools/ParamterSubstitution \
+	connectivity/source/commontools/RowFunctionParser \
 	connectivity/source/commontools/TColumnsHelper \
-	connectivity/source/commontools/TTableHelper \
-	connectivity/source/commontools/TKeys \
-	connectivity/source/commontools/TKey \
-	connectivity/source/commontools/TKeyColumns \
-	connectivity/source/commontools/TIndexes \
+	connectivity/source/commontools/TConnection \
+	connectivity/source/commontools/TDatabaseMetaDataBase \
 	connectivity/source/commontools/TIndex \
 	connectivity/source/commontools/TIndexColumns \
-	connectivity/source/commontools/DateConversion \
-	connectivity/source/commontools/FDatabaseMetaDataResultSetMetaData \
-	connectivity/source/commontools/FDatabaseMetaDataResultSet \
-	connectivity/source/commontools/TDatabaseMetaDataBase \
+	connectivity/source/commontools/TIndexes \
+	connectivity/source/commontools/TKey \
+	connectivity/source/commontools/TKeyColumns \
+	connectivity/source/commontools/TKeys \
 	connectivity/source/commontools/TPrivilegesResultSet \
 	connectivity/source/commontools/TSkipDeletedSet \
-	connectivity/source/commontools/dbmetadata \
 	connectivity/source/commontools/TSortIndex \
+	connectivity/source/commontools/TTableHelper \
+	connectivity/source/commontools/conncleanup \
 	connectivity/source/commontools/dbcharset \
-	connectivity/source/commontools/propertyids \
-	connectivity/source/commontools/FValue \
-	connectivity/source/commontools/paramwrapper \
-	connectivity/source/commontools/statementcomposer \
-	connectivity/source/commontools/RowFunctionParser \
-	connectivity/source/commontools/sqlerror \
-	connectivity/source/commontools/filtermanager \
-	connectivity/source/commontools/parameters \
-	connectivity/source/commontools/ParamterSubstitution \
-	connectivity/source/commontools/DriversConfig \
-	connectivity/source/commontools/formattedcolumnvalue \
-	connectivity/source/commontools/BlobHelper \
-	connectivity/source/commontools/warningscontainer \
 	connectivity/source/commontools/dbconversion \
-	connectivity/source/simpledbt/charset_s \
-	connectivity/source/simpledbt/dbtfactory \
-	connectivity/source/simpledbt/parsenode_s \
-	connectivity/source/simpledbt/parser_s \
-	connectivity/source/simpledbt/staticdbtools_s \
-	connectivity/source/sdbcx/VDescriptor \
-	connectivity/source/sdbcx/VCollection \
-	connectivity/source/sdbcx/VColumn \
-	connectivity/source/sdbcx/VIndexColumn \
-	connectivity/source/sdbcx/VKeyColumn \
-	connectivity/source/sdbcx/VUser \
-	connectivity/source/sdbcx/VGroup \
-	connectivity/source/sdbcx/VTable \
-	connectivity/source/sdbcx/VKey \
-	connectivity/source/sdbcx/VIndex \
-	connectivity/source/sdbcx/VCatalog \
-	connectivity/source/sdbcx/VView \
+	connectivity/source/commontools/dbexception \
+	connectivity/source/commontools/dbmetadata \
+	connectivity/source/commontools/dbtools \
+	connectivity/source/commontools/dbtools2 \
+	connectivity/source/commontools/filtermanager \
+	connectivity/source/commontools/formattedcolumnvalue \
+	connectivity/source/commontools/parameters \
+	connectivity/source/commontools/paramwrapper \
+	connectivity/source/commontools/predicateinput \
+	connectivity/source/commontools/propertyids \
+	connectivity/source/commontools/sqlerror \
+	connectivity/source/commontools/statementcomposer \
+	connectivity/source/commontools/warningscontainer \
 	connectivity/source/parse/PColumn \
 	connectivity/source/parse/internalnode \
 	connectivity/source/parse/sqliterator \
 	connectivity/source/parse/sqlnode \
 	connectivity/source/resource/sharedresources \
+	connectivity/source/sdbcx/VCatalog \
+	connectivity/source/sdbcx/VCollection \
+	connectivity/source/sdbcx/VColumn \
+	connectivity/source/sdbcx/VDescriptor \
+	connectivity/source/sdbcx/VGroup \
+	connectivity/source/sdbcx/VIndex \
+	connectivity/source/sdbcx/VIndexColumn \
+	connectivity/source/sdbcx/VKey \
+	connectivity/source/sdbcx/VKeyColumn \
+	connectivity/source/sdbcx/VTable \
+	connectivity/source/sdbcx/VUser \
+	connectivity/source/sdbcx/VView \
+	connectivity/source/simpledbt/charset_s \
+	connectivity/source/simpledbt/dbtfactory \
+	connectivity/source/simpledbt/parsenode_s \
+	connectivity/source/simpledbt/parser_s \
+	connectivity/source/simpledbt/staticdbtools_s \
 ))
 
 # vim: set noet sw=4 ts=4:
