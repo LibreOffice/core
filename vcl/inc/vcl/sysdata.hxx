@@ -55,7 +55,14 @@ class UIView;
 #endif
 
 #if defined( WNT )
+#if _MSC_VER >= 1200
+#pragma warning(push)
+#pragma warning(disable:4201)
+#endif
 #include <windef.h>
+#if _MSC_VER >= 1200
+#pragma warning(pop)
+#endif
 #endif
 
 // -----------------
