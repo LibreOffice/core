@@ -2243,23 +2243,24 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
                 {
                     rIn >> nTmp;
                     nCommand = EnhancedCustomShapeSegmentCommand::UNKNOWN;
-                    nCnt = (sal_Int16)( nTmp & 0xfff );
-                    switch( nTmp >> 12 )
+                    nCnt = (sal_Int16)( nTmp & 0x1fff );//Last 13 bits for segment points number
+                    switch( nTmp >> 13 )//First 3 bits for command type
                     {
                         case 0x0: nCommand = EnhancedCustomShapeSegmentCommand::LINETO; if ( !nCnt ) nCnt = 1; break;
-                        case 0x1: nCommand = EnhancedCustomShapeSegmentCommand::LINETO; if ( !nCnt ) nCnt = 1; break;   // seems to the relative lineto
-                        case 0x4: nCommand = EnhancedCustomShapeSegmentCommand::MOVETO; if ( !nCnt ) nCnt = 1; break;
-                        case 0x2: nCommand = EnhancedCustomShapeSegmentCommand::CURVETO; if ( !nCnt ) nCnt = 1; break;
-                        case 0x3: nCommand = EnhancedCustomShapeSegmentCommand::CURVETO; if ( !nCnt ) nCnt = 1; break;  // seems to be the relative curveto
-                        case 0x8: nCommand = EnhancedCustomShapeSegmentCommand::ENDSUBPATH; nCnt = 0; break;
-                        case 0x6: nCommand = EnhancedCustomShapeSegmentCommand::CLOSESUBPATH; nCnt = 0; break;
-                        case 0xa:
-                        case 0xb:
+                        case 0x1: nCommand = EnhancedCustomShapeSegmentCommand::CURVETO; if ( !nCnt ) nCnt = 1; break;
+                        case 0x2: nCommand = EnhancedCustomShapeSegmentCommand::MOVETO; if ( !nCnt ) nCnt = 1; break;
+                        case 0x3: nCommand = EnhancedCustomShapeSegmentCommand::CLOSESUBPATH; nCnt = 0; break;
+                        case 0x4: nCommand = EnhancedCustomShapeSegmentCommand::ENDSUBPATH; nCnt = 0; break;
+                        case 0x5:
+                        case 0x6:
                         {
-                            switch ( ( nTmp >> 8 ) & 0xf )
+                            switch ( ( nTmp >> 8 ) & 0x1f )//5 bits next to command type is for path escape type
                             {
                                 case 0x0:
                                 {
+                                    //It is msopathEscapeExtension which is transformed into LINETO.
+                                    //If issue happens, I think this part can be comment so that it will be taken as unknow command.
+                                    //When export, origin data will be export without any change.
                                     nCommand = EnhancedCustomShapeSegmentCommand::LINETO;
                                     if ( !nCnt )
                                         nCnt = 1;
