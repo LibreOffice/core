@@ -31,6 +31,13 @@ pushd $(dirname $0) > /dev/null
 COREDIR=$(pwd)
 popd > /dev/null
 
+if test -f $COREDIR/bin/repo-list
+then
+	ALLREPOS="core `cat "$COREDIR/bin/repo-list"`"
+else
+	ALLREPOS=core
+fi
+
 refresh_hooks()
 {
     repo=$1
@@ -88,7 +95,7 @@ refresh_hooks()
 
 refresh_all_hooks()
 {
-    repos="core $(cat "$COREDIR/bin/repo-list")"
+    repos="$ALLREPOS"
     for repo in $repos ; do
         refresh_hooks $repo
     done
@@ -239,7 +246,7 @@ done
 # do it!
 DIRS="core $(cd $CLONEDIR ; ls)"
 if [ "$COMMAND" = "clone" ] ; then
-    DIRS=$(cat "$COREDIR/bin/repo-list")
+    DIRS="$ALLREPOS"
 fi
 for REPO in $DIRS ; do
     DIR="$CLONEDIR/$REPO"
