@@ -182,6 +182,9 @@ public:
     void destroy (pointer p)
     {
         p->~T();
+#ifdef _MSC_VER
+        (void) p; // spurious warning C4100: 'p': unreferenced formal parameter
+#endif
     }
 };
 
