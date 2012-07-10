@@ -29,7 +29,7 @@
 ASM=/usr/ccs/bin/as
 AFLAGS=-P
 
-SOLAR_JAVA=TRUE
+SOLAR_JAVA*=TRUE
 JAVAFLAGSDEBUG=-g
 
 # _PTHREADS is needed for the stl
