@@ -772,13 +772,13 @@ rtl::OUString SimpleParser::GetNextTokenString( ParserMessageList &rErrorList, s
     if (nStyle2StartPos == -1 && nStyle3StartPos == -1)
         return rtl::OUString();  // no more tokens
 
-    if ( nStyle4StartPos < nStyle2StartPos && nStyle4StartPos <= nStyle3StartPos )  // <= to make sure \\ is always handled first
+    if ( nStyle4StartPos != -1 && nStyle4StartPos < nStyle2StartPos && nStyle4StartPos <= nStyle3StartPos )  // <= to make sure \\ is always handled first
     {   // Skip quoted Backslash
         nPos = nStyle4StartPos +2;
         return GetNextTokenString( rErrorList, rTagStartPos );
     }
 
-    if ( nStyle2StartPos < nStyle3StartPos )
+    if ( nStyle2StartPos != -1 && ( nStyle3StartPos == -1 || nStyle2StartPos < nStyle3StartPos ) )
     {   // test for $[ ... ] style tokens
         sal_Int32 nEndPos = aSource.indexOf(']', nStyle2StartPos);
         if (nEndPos == -1)
