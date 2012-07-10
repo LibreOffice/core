@@ -71,7 +71,7 @@ $(call gb_JunitTest_get_target,%) :
 define gb_JunitTest_JunitTest
 $(call gb_JunitTest_get_target,$(1)) : T_CP := $(value XCLASSPATH)$(gb_CLASSPATHSEP)$(call gb_JavaClassSet_get_classdir,$(call gb_JunitTest_get_classsetname,$(1)))$(gb_CLASSPATHSEP)$(OOO_JUNIT_JAR)$(gb_CLASSPATHSEP)$(OUTDIR)/lib
 $(call gb_JunitTest_get_target,$(1)) : CLASSES :=
-$(call gb_JunitTest_JunitTest_platform,$(1))
+$(eval $(call gb_JunitTest_JunitTest_platform,$(1)))
 
 $(call gb_JavaClassSet_JavaClassSet,$(call gb_JunitTest_get_classsetname,$(1)))
 $(call gb_JunitTest_get_target,$(1)) : $(call gb_JavaClassSet_get_target,$(call gb_JunitTest_get_classsetname,$(1)))
