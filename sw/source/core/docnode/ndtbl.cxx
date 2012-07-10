@@ -1357,7 +1357,12 @@ SwTableNode* SwNodes::TextToTable( const SwNodes::TableRanges_t & rTableNodes,
                ++aCellEndIdx;
                SwStartNode* pSttNd = new SwStartNode( aTmpIdx, ND_STARTNODE,
                                             SwTableBoxStartNode );
+
+                // Quotation of http://nabble.documentfoundation.org/Some-strange-lines-by-taking-a-look-at-the-bt-of-fdo-51916-tp3994561p3994639.html
+                // SwNode's constructor adds itself to the same SwNodes array as the other node (pSttNd).
+                // So this statement is only executed for the side-effect.
                 new SwEndNode( aCellEndIdx, *pSttNd );
+
                 //set the start node on all node of the current cell
                 SwNodeIndex aCellNodeIdx = aCellIter->aStart;
                 for(;aCellNodeIdx <= aCellIter->aEnd; ++aCellNodeIdx )
