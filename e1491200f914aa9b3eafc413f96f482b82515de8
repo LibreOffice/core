@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAL3///4U\u003d",
+        "filename": "sc/source/core/tool/chgviset.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2012-07-10T23:32:19Z",
+      "side": 1,
+      "message": "I\u0027d prefer if we add a method to utl::TextSearch that takes an rtl::OUstring and sal_Int32. The underlying class that is called by SearchFrwrd already uses rtl::OUstring so it make much more sense to create a new method and use rtl::OUString everywhere.",
+      "revId": "e1491200f914aa9b3eafc413f96f482b82515de8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
