@@ -46,9 +46,9 @@ PATCH_FILES=JLanguageTool-1.4.0.patch
 .IF "$(JAVACISGCJ)"=="yes"
 JAVA_HOME=
 .EXPORT : JAVA_HOME
-BUILD_ACTION=$(ANT) -v -Dsolver.ooo.dir=$(SOLARVER)$/$(INPATH)$/bin -Dbuild.compiler=gcj dist
+BUILD_ACTION="$(ANT)" -v -Dsolver.ooo.dir=$(SOLARVER)$/$(INPATH)$/bin -Dbuild.compiler=gcj dist
 .ELSE
-BUILD_ACTION=$(ANT) -v -Dsolver.ooo.dir=$(SOLARVER)$/$(INPATH)$/bin -Dant.build.javac.target=$(JAVA_TARGET_VER) dist
+BUILD_ACTION="$(ANT)" -v -Dsolver.ooo.dir=$(SOLARVER)$/$(INPATH)$/bin -Dant.build.javac.target=$(JAVA_TARGET_VER) dist
 .ENDIF
 
 # --- Targets ------------------------------------------------------
