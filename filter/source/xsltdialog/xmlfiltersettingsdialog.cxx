@@ -1046,8 +1046,9 @@ long XMLFilterSettingsDialog::Notify( NotifyEvent& rNEvt )
             const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
             KeyCode         aKeyCode = pKEvt->GetKeyCode();
             sal_uInt16          nKeyCode = aKeyCode.GetCode();
+            sal_Bool        bMod1 =   pKEvt->GetKeyCode().IsMod1();
 
-            if( nKeyCode == KEY_ESCAPE )
+            if( nKeyCode == KEY_ESCAPE || (bMod1 && (nKeyCode == KEY_W)))
             {
                 Close();
                 return sal_True;
