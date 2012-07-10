@@ -139,7 +139,7 @@ void LinkManager::Remove( sal_uInt16 nPos, sal_uInt16 nCnt )
 {
     if( nCnt && nPos < aLinkTbl.size() )
     {
-        if( nPos + nCnt > aLinkTbl.size() )
+        if (sal::static_int_cast<size_t>(nPos + nCnt) > aLinkTbl.size())
             nCnt = aLinkTbl.size() - nPos;
 
         for( sal_uInt16 n = nPos; n < nPos + nCnt; ++n)
