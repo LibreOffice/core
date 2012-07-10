@@ -73,6 +73,12 @@ case "$1" in
 		git push $GERRITURL HEAD:refs/for/$BRANCH
 	;;
 	nextchange)
+		if test -n "`git status -s -uno`"
+		then
+			echo "You have uncommited changes. Please commit or stash these:"
+			git status
+			exit 1
+		fi
 		CHANGEID=`git log --format=format:%b -1 HEAD|grep Change-Id|cut -d: -f2|tr -d \ `
 		if test -z "$CHANGEID"
 		then
