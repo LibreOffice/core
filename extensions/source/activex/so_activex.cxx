@@ -173,14 +173,14 @@ BOOL createKey( HKEY hkey,
                                                            "",
                                                            0,
                                                            REG_SZ,
-                                                           (const BYTE*)aValue,
-                                                           strlen( aValue ) ) )
+                       reinterpret_cast<const BYTE*>(aValue),
+                       sal::static_int_cast<DWORD>(strlen(aValue))))
            && ( !aChildName || ERROR_SUCCESS == RegSetValueExA( hkey1,
                                                                aChildName,
                                                                0,
                                                                REG_SZ,
-                                                               (const BYTE*)aChildValue,
-                                                               strlen( aChildValue ) ) )
+                       reinterpret_cast<const BYTE*>(aChildValue),
+                       sal::static_int_cast<DWORD(strlen(aChildValue))))
            && ERROR_SUCCESS == RegCloseKey( hkey1 ) );
 
 }
@@ -286,8 +286,11 @@ STDAPI DllRegisterServerNative_Impl( int nMode, BOOL bForAllUsers, REGSAM nKeyAc
             wsprintfA( aSubKey, "%sMIME\\DataBase\\Content Type\\%s", aPrefix, aMimeType[ind] );
             if ( ERROR_SUCCESS != RegCreateKeyExA( bForAllUsers ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER, aSubKey, 0, NULL, REG_OPTION_NON_VOLATILE, nKeyAccess, NULL, &hkey, NULL )
               || ERROR_SUCCESS != RegSetValueExA(hkey, "CLSID", 0, REG_SZ,
-                 (const BYTE *)aClassID, strlen(aClassID)) )
+                    reinterpret_cast<const BYTE *>(aClassID),
+                    sal::static_int_cast<DWORD>(strlen(aClassID))) )
+            {
                     aResult = FALSE;
+            }
 
             if( hkey )
                 RegCloseKey(hkey),hkey= NULL;
@@ -487,10 +490,14 @@ STDAPI DllRegisterServerDoc_Impl( int nMode, BOOL bForAllUsers, REGSAM nKeyAcces
                wsprintfA( aSubKey, "%sMIME\\DataBase\\Content Type\\%s", aPrefix, aMSMimeType[ind] );
                if ( ERROR_SUCCESS != RegCreateKeyExA( bForAllUsers ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER, aSubKey, 0, NULL, REG_OPTION_NON_VOLATILE, nKeyAccess, NULL, &hkey, NULL )
                || ERROR_SUCCESS != RegSetValueExA(hkey, "Extension", 0, REG_SZ,
-                   (const BYTE *)aMSFileExt[ind], strlen( aMSFileExt[ind] ) )
+                        reinterpret_cast<const BYTE *>(aMSFileExt[ind]),
+                        sal::static_int_cast<DWORD>(strlen(aMSFileExt[ind])))
                || ERROR_SUCCESS != RegSetValueExA(hkey, "CLSID", 0, REG_SZ,
-                   (const BYTE *)aClassID, strlen(aClassID)) )
+                        reinterpret_cast<const BYTE *>(aClassID),
+                        sal::static_int_cast<DWORD>(strlen(aClassID))))
+               {
                        aResult = FALSE;
+               }
 
                if( hkey )
                    RegCloseKey(hkey),hkey= NULL;
@@ -498,8 +505,11 @@ STDAPI DllRegisterServerDoc_Impl( int nMode, BOOL bForAllUsers, REGSAM nKeyAcces
                wsprintfA( aSubKey, "%s%s", aPrefix, aMSFileExt[ind] );
                if ( ERROR_SUCCESS != RegCreateKeyExA( bForAllUsers ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER, aSubKey, 0, NULL, REG_OPTION_NON_VOLATILE, nKeyAccess, NULL, &hkey, NULL )
                || ERROR_SUCCESS != RegSetValueExA(hkey, "Content Type", 0, REG_SZ,
-                   (const BYTE *)aMSMimeType[ind], strlen( aMSMimeType[ind] ) ) )
+                        reinterpret_cast<const BYTE *>(aMSMimeType[ind]),
+                        sal::static_int_cast<DWORD>(strlen(aMSMimeType[ind]))))
+               {
                        aResult = FALSE;
+               }
 
                if( hkey )
                    RegCloseKey(hkey),hkey= NULL;
@@ -636,7 +646,8 @@ STDAPI DllRegisterServer( void )
     HRESULT aResult = E_FAIL;
 
     HMODULE aCurModule = GetModuleHandleA( bX64 ? X64_LIB_NAME : X32_LIB_NAME );
-    DWORD nLibNameLen = strlen( bX64 ? X64_LIB_NAME : X32_LIB_NAME );
+    DWORD nLibNameLen = sal::static_int_cast<DWORD>(
+            strlen((bX64) ? X64_LIB_NAME : X32_LIB_NAME));
 
     if( aCurModule )
     {
