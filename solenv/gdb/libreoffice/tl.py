@@ -338,6 +338,22 @@ class TablePrinter(ContainerHelper):
     def display_hint(self):
         return 'map'
 
+class PointPrinter(object):
+    '''Prints a Point.'''
+
+    def __init__(self, typename, value):
+        self.typename = typename
+        self.value = value
+
+    def to_string(self):
+        return "%s" % (self.typename)
+
+    def children(self):
+        x = self.value['nA']
+        y = self.value['nB']
+        children = [('x', x), ('y', y)]
+        return children.__iter__()
+
 printer = None
 
 def build_pretty_printers():
@@ -362,6 +378,7 @@ def build_pretty_printers():
     printer.add('DateTime', DateTimePrinter)
     printer.add('Date', DatePrinter)
     printer.add('Time', TimePrinter)
+    printer.add('Point', PointPrinter)
 
 def register_pretty_printers(obj):
     printing.register_pretty_printer(printer, obj)
