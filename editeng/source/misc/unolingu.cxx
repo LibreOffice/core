@@ -267,7 +267,9 @@ void SvxLinguConfigUpdate::UpdateAll( sal_Bool bForceCheck )
             }
 
             //
-            // add new available language/servcice entries
+            // add new available language/service entries
+            // and
+            // set last found services to currently available ones
             //
             uno::Reference< XAvailableLocales > xAvail( xLngSvcMgr, UNO_QUERY );
             Sequence< Locale > aAvailLocales( xAvail->getAvailableLocales(aService) );
@@ -275,34 +277,25 @@ void SvxLinguConfigUpdate::UpdateAll( sal_Bool bForceCheck )
             const Locale *pAvailLocale = aAvailLocales.getConstArray();
             for (i = 0;  i < nAvailLocales;  ++i)
             {
+                OUString aCfgLocaleStr( MsLangId::convertLanguageToIsoString(
+                                            SvxLocaleToLanguage( pAvailLocale[i] ) ) );
+
                 Sequence< OUString > aAvailSvcs(
                         xLngSvcMgr->getAvailableServices( aService, pAvailLocale[i] ));
+
+                aLastFoundSvcs[k][ aCfgLocaleStr ] = aAvailSvcs;
+
                 Sequence< OUString > aLastSvcs(
                         lcl_GetLastFoundSvcs( aCfg, aLastFoundList , pAvailLocale[i] ));
                 Sequence< OUString > aNewSvcs =
                         lcl_GetNewEntries( aLastSvcs, aAvailSvcs );
 
-                OUString aCfgLocaleStr( MsLangId::convertLanguageToIsoString(
-                                            SvxLocaleToLanguage( pAvailLocale[i] ) ) );
                 Sequence< OUString > aCfgSvcs( aCurSvcs[k][ aCfgLocaleStr ] );
 
                 // merge services list (previously configured to be listed first).
                 aCfgSvcs = lcl_MergeSeq( aCfgSvcs, aNewSvcs );
 
                 aCurSvcs[k][ aCfgLocaleStr ] = aCfgSvcs;
-            }
-
-            //
-            // set last found services to currently available ones
-            //
-            for (i = 0;  i < nAvailLocales;  ++i)
-            {
-                Sequence< OUString > aSvcImplNames(
-                        xLngSvcMgr->getAvailableServices( aService, pAvailLocale[i] ) );
-
-                OUString aCfgLocaleStr( MsLangId::convertLanguageToIsoString(
-                                            SvxLocaleToLanguage( pAvailLocale[i] ) ) );
-                aLastFoundSvcs[k][ aCfgLocaleStr ] = aSvcImplNames;
             }
         }
 
