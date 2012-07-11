@@ -1,0 +1,164 @@
+--- misc/libmspub-0.0.1/src/lib/MSPUBCollector.cpp	2012-07-10 08:13:15.000000000 +0200
++++ misc/build/libmspub-0.0.1/src/lib/MSPUBCollector.cpp	2012-07-12 01:02:25.804511128 +0200
+@@ -28,6 +28,7 @@
+  * instead of those above.
+  */
+ 
++#include <math.h>
+ #include "MSPUBCollector.h"
+ #include "ShapeGroupPainter.h"
+ #include "libmspub_utils.h"
+@@ -35,6 +36,10 @@
+ #include "MSPUBTypes.h"
+ #include "PolygonUtils.h"
+ 
++#ifndef M_PI
++#define M_PI 3.14159265358979323846
++#endif
++
+ libmspub::MSPUBCollector::MSPUBCollector(libwpg::WPGPaintInterface *painter) :
+   m_painter(painter), m_contentChunkReferences(), m_width(0), m_height(0),
+   m_widthSet(false), m_heightSet(false),
+@@ -364,11 +369,11 @@
+   case 7:
+     return sqrt(valOne * valTwo * valThree);
+   case 8:
+-    return atan2(valTwo, valOne) / (PI / 180);
++    return atan2(valTwo, valOne) / (M_PI / 180);
+   case 9:
+-    return valOne * sin(valTwo * (PI / 180) );
++    return valOne * sin(valTwo * (M_PI / 180) );
+   case 10:
+-    return valOne * cos(valTwo * (PI / 180) );
++    return valOne * cos(valTwo * (M_PI / 180) );
+   case 11:
+     return valOne * cos(atan2(valThree, valTwo));
+   case 12:
+@@ -382,9 +387,9 @@
+   case 0x80:
+     return sqrt(valThree * valThree - valOne * valOne);
+   case 0x81:
+-    return (cos(valThree * (PI / 180)) * (valOne - 10800) + sin(valThree * (PI / 180)) * (valTwo - 10800)) + 10800;
++    return (cos(valThree * (M_PI / 180)) * (valOne - 10800) + sin(valThree * (M_PI / 180)) * (valTwo - 10800)) + 10800;
+   case 0x82:
+-    return -(sin(valThree * (PI / 180)) * (valOne - 10800) - cos(valThree * (PI / 180)) * (valTwo - 10800)) + 10800;
++    return -(sin(valThree * (M_PI / 180)) * (valOne - 10800) - cos(valThree * (M_PI / 180)) * (valTwo - 10800)) + 10800;
+   default:
+     return 0;
+   }
+--- misc/libmspub-0.0.1/src/lib/MSPUBCollector.h	2012-07-10 08:13:15.000000000 +0200
++++ misc/build/libmspub-0.0.1/src/lib/MSPUBCollector.h	2012-07-12 01:02:25.804511128 +0200
+@@ -36,7 +36,6 @@
+ #include <set>
+ #include <string>
+ #include <algorithm>
+-#include <cmath>
+ 
+ #include <boost/ptr_container/ptr_map.hpp>
+ #include <boost/ptr_container/ptr_vector.hpp>
+@@ -55,8 +54,6 @@
+ #include "ShapeGroupPainter.h"
+ #include "ShapeGroup.h"
+ 
+-#define PI 3.14159265
+-
+ namespace libmspub
+ {
+ class MSPUBCollector
+--- misc/libmspub-0.0.1/src/lib/PolygonUtils.cpp	2012-07-10 08:13:15.000000000 +0200
++++ misc/build/libmspub-0.0.1/src/lib/PolygonUtils.cpp	2012-07-12 01:02:25.806511092 +0200
+@@ -26,8 +26,8 @@
+  * instead of those above.
+  */
+ 
+-#include <cstddef> // for NULL
+-#include <cmath>
++#include <stddef.h> // for NULL
++#include <math.h>
+ 
+ #include <libwpg/libwpg.h>
+ 
+@@ -38,7 +38,10 @@
+ 
+ #define CALCULATED_VALUE | 0x80000000
+ 
+-#define PI 3.14159265
++#ifndef M_PI
++#define M_PI 3.14159265358979323846
++#endif
++
+ 
+ using namespace libmspub;
+ 
+@@ -6034,15 +6037,15 @@
+           //
+           // assuming eccentric anomaly for now
+           WPXPropertyList moveVertex;
+-          Vector2D start(cx + rx * cos(startAngle * PI / 180),
+-                         cy + ry * sin(startAngle * PI / 180));
++          Vector2D start(cx + rx * cos(startAngle * M_PI / 180),
++                         cy + ry * sin(startAngle * M_PI / 180));
+           start = transform.transformWithOrigin(start, center);
+           moveVertex.insert("libwpg:path-action", "M");
+           moveVertex.insert("svg:x", start.m_x);
+           moveVertex.insert("svg:y", start.m_y);
+           vertices.append(moveVertex);
+-          Vector2D half(cx + rx * cos(endAngle * PI / 360),
+-                        cy + ry * sin(endAngle * PI / 360));
++          Vector2D half(cx + rx * cos(endAngle * M_PI / 360),
++                        cy + ry * sin(endAngle * M_PI / 360));
+           half = transform.transformWithOrigin(half, center);
+           WPXPropertyList halfVertex;
+           halfVertex.insert("libwpg:path-action", "A");
+@@ -6052,8 +6055,8 @@
+           halfVertex.insert("svg:ry", ry * transform.getVerticalScaling());
+           halfVertex.insert("libwpg:rotate", transform.getRotation() * 180 / M_PI);
+           vertices.append(halfVertex);
+-          Vector2D end(cx + rx * cos(endAngle * PI / 180),
+-                       cy + ry * sin(endAngle * PI / 180));
++          Vector2D end(cx + rx * cos(endAngle * M_PI / 180),
++                       cy + ry * sin(endAngle * M_PI / 180));
+           end = transform.transformWithOrigin(end, center);
+           vertex.insert("svg:x", end.m_x);
+           vertex.insert("svg:y", end.m_y);
+--- misc/libmspub-0.0.1/src/lib/libmspub_utils.cpp	2012-07-10 08:13:15.000000000 +0200
++++ misc/build/libmspub-0.0.1/src/lib/libmspub_utils.cpp	2012-07-12 01:02:25.807511068 +0200
+@@ -30,9 +30,14 @@
+  */
+ 
+ #include <string.h> // for memcpy
++#include <math.h>
+ #include <zlib.h>
+ #include "libmspub_utils.h"
+ 
++#ifndef M_PI
++#define M_PI 3.14159265358979323846
++#endif
++
+ #define ZLIB_CHUNK 16384
+ 
+ const char *libmspub::mimeByImgType(ImgType type)
+@@ -63,8 +68,8 @@
+ {
+   double vecX = x - centerX;
+   double vecY = centerY - y;
+-  double sinTheta = sin(rotation * PI / 180.);
+-  double cosTheta = cos(rotation * PI / 180.);
++  double sinTheta = sin(rotation * M_PI / 180.);
++  double cosTheta = cos(rotation * M_PI / 180.);
+   double newVecX = cosTheta * vecX - sinTheta * vecY;
+   double newVecY = sinTheta * vecX + cosTheta * vecY;
+   x = centerX + newVecX;
+--- misc/libmspub-0.0.1/src/lib/libmspub_utils.h	2012-07-10 08:13:15.000000000 +0200
++++ misc/build/libmspub-0.0.1/src/lib/libmspub_utils.h	2012-07-12 01:02:25.807511068 +0200
+@@ -30,10 +30,7 @@
+ #ifndef __LIBMSPUB_UTILS_H__
+ #define __LIBMSPUB_UTILS_H__
+ 
+-const double PI = 3.1415926;
+-
+ #include <stdio.h>
+-#include <cmath>
+ #include <vector>
+ #include <map>
+ #include <boost/ptr_container/ptr_map.hpp>
