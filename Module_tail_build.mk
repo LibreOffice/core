@@ -164,6 +164,12 @@ $(if $(strip $(1)),\
 $(call tailbuild_serialize,$(wordlist 2,$(words $(1)),$(1))))
 endef
 
-$(eval $(call tailbuild_serialize,scfilt sc sw sd $(if $(filter DBCONNECTIVITY,$(BUILD_TYPE)),dbu) oox svxcore vcl xo))
+$(eval $(call tailbuild_serialize,\
+	scfilt sc sw sd \
+	$(if $(filter TRUE,$(MERGELIBS)),merged,svxcore) \
+	$(if $(filter DBCONNECTIVITY,$(BUILD_TYPE)),dbu) \
+	oox vcl xo writerfilter cui chartcontroller swui \
+	vbaobj msword \
+))
 
 # vim: set noet sw=4 ts=4:
