@@ -1,4 +1,11 @@
-
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
 #include <stdlib.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -18,7 +25,6 @@ using rtl::OString;
 Server::Server()
 :  Thread( "ServerThread" ), mSocket(), mReceiver()
 {
-
 }
 
 Server::~Server()
@@ -60,7 +66,7 @@ void Server::listenThread()
         aTempStr = OString( aMessage ); //, (sal_Int32) aLen, CHARSET, 0u
         const sal_Char* aCommandChar = aTempStr.getStr();
 
-        mReceiver.parseCommand( aCommandChar, aTempStr.getLength(), NULL );
+        mReceiver.parseCommand( aCommandChar, aTempStr.getLength(), mStreamSocket );
         delete [] aMessage;
 
         // TODO: deal with transmision errors gracefully.
@@ -82,12 +88,15 @@ void Server::execute()
     }
     while ( true )
     {
+        fprintf( stderr, "Awaiting a connection.\n" );
         mSocket.acceptConnection( mStreamSocket );
         fprintf( stderr, "Accepted a connection!\n" );
         listenThread();
     }
 
 }
+
+
 
 Server *sd::Server::spServer = NULL;
 
@@ -106,3 +115,4 @@ void SdDLL::RegisterRemotes()
   sd::Server::setup();
 
 }
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -29,48 +29,70 @@ public abstract class Client {
 	private Receiver mReceiver;
 
 	public void setReceiver(Receiver aReceiver) {
-		aReceiver = mReceiver;
+		mReceiver = aReceiver;
+	}
+
+	protected void startListening() {
+
+		Thread t = new Thread() {
+			public void run() {
+				listen();
+			};
+
+		};
+		t.start();
 	}
 
 	private void listen() {
-		ByteArrayBuffer aBuffer = new ByteArrayBuffer(10);
-		byte aTemp;
-
-		try {
-			while ((aTemp = (byte) mInputStream.read()) != 0x0d) {
-				aBuffer.append(aTemp);
+		while (true) {
+			ByteArrayBuffer aBuffer = new ByteArrayBuffer(0);
+			int aTemp;
+			System.out.println("Now listening");
+			try {
+				while ((aTemp =  mInputStream.read()) != 0x0a) {
+					if (aTemp == -1) {
+						System.out.println("EOF Reached!!!");
+					}
+					System.out.println("Char: " + aTemp);
+					aBuffer.append((byte) aTemp);
+				}
+			} catch (IOException e1) {
+				// TODO stream couldn't be opened.
+				e1.printStackTrace();
 			}
-		} catch (IOException e1) {
-			// TODO stream couldn't be opened.
-			e1.printStackTrace();
-		}
+			System.out.println("Escaped the loop!");
+			String aLengthString;
+			try {
+				aLengthString = new String(aBuffer.toByteArray(), CHARSET);
+			} catch (Exception e1) {
+				e1.printStackTrace();
+				throw new Error("Specified network encoding [" + CHARSET
+						+ " not available.");
+			}
 
-		String aLengthString;
-		try {
-			aLengthString = new String(aBuffer.toByteArray(), CHARSET);
-		} catch (UnsupportedEncodingException e1) {
-			throw new Error("Specified network encoding [" + CHARSET
-					+ " not available.");
+			int aLength = Integer.parseInt(aLengthString);
+			System.out.println("Lenth = " + aLength);
+			byte[] aCommand = new byte[aLength];
+			try {
+				int readIn = 0;
+				while (readIn < aLength) {
+					readIn += mInputStream.read(aCommand, 0, aLength - readIn);
+//					System.out.println("Read in :" + readIn + " of : "
+//							+ aLength);
+				}
+			} catch (IOException e) {
+				// TODO close and notify that the connection has closed
+				e.printStackTrace();
+			}
+			String aCommandString;
+			try {
+				aCommandString = new String(aCommand, CHARSET);
+			} catch (UnsupportedEncodingException e) {
+				throw new Error("Specified network encoding [" + CHARSET
+						+ " not available.");
+			}
+			mReceiver.parseCommand(aCommandString);
 		}
-
-		int aLength = Integer.parseInt(aLengthString);
-
-		byte[] aCommand = new byte[aLength];
-		try {
-			mInputStream.read(aCommand, 0, aLength);
-		} catch (IOException e) {
-			// TODO close and notify that the connection has closed
-			e.printStackTrace();
-		}
-		String aCommandString;
-		try {
-			aCommandString = new String(aCommand, CHARSET);
-		} catch (UnsupportedEncodingException e) {
-			throw new Error("Specified network encoding [" + CHARSET
-					+ " not available.");
-		}
-		mReceiver.parseCommand(aCommandString);
-
 	}
 
 	private void parseCommand(String aCommand) {

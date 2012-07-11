@@ -60,6 +60,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sd_uimpress,\
     i18nisolang1 \
     msfilter \
     sal \
+    sax \
     salhelper \
     sb \
     sfx \

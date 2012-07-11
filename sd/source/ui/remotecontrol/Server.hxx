@@ -1,4 +1,11 @@
-
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
 #ifndef _SD_IMPRESSREMOTE_SERVER_HXX
 #define _SD_IMPRESSREMOTE_SERVER_HXX
 
@@ -8,10 +15,10 @@
 #include <string.h>
 #include <unistd.h>
 #include <sys/types.h>
-#include <sys/socket.h>
 #include <netinet/in.h>
 #include <osl/socket.hxx>
 //#include <com/sun/star/presentation/AnimationEffect.hpp>
+#include <com/sun/star/presentation/XSlideShowListener.hpp>
 
 #include <salhelper/thread.hxx>
 
@@ -34,7 +41,7 @@ namespace sd
         private:
             Server();
             ~Server();
-	    static Server *spServer;
+            static Server *spServer;
             osl::AcceptorSocket mSocket;
             osl::StreamSocket mStreamSocket;
             void listenThread();
@@ -44,3 +51,4 @@ namespace sd
 }
 
 #endif // _SD_IMPRESSREMOTE_SERVER_HXX
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

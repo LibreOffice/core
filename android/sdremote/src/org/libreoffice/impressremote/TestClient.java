@@ -77,6 +77,7 @@ public class TestClient extends Activity {
 	}
 
 	void doUnbindService() {
+		mCommunicationService.disconnect();
 		mCommunicationService.setActivityMessenger(null);
 		if (mIsBound) {
 			unbindService(mConnection);

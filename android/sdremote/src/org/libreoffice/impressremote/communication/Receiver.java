@@ -30,6 +30,16 @@ public class Receiver {
 			return;
 		}
 		try {
+//			int aPrinted = 0;
+//			while (aPrinted < aJSONCommandString.length()) {
+//				if (aPrinted + 100 < aJSONCommandString.length())
+//					System.out.println(aJSONCommandString.substring(aPrinted,
+//							aPrinted + 100));
+//				else
+//					System.out.println(aJSONCommandString.substring(aPrinted));
+//				aPrinted += 100;
+//			}
+
 			JSONObject aJSONCommand = new JSONObject(aJSONCommandString);
 			String aInstruction = aJSONCommand.getString("command");
 			if (aInstruction.equals("slide_updated")) {
@@ -47,7 +57,7 @@ public class Receiver {
 				}
 			} else if (aInstruction.equals("slide_preview")) {
 				int aSlideNumber = aJSONCommand.getInt("slide_number");
-				String aImageString = aJSONCommand.getString("image");
+				String aImageString = aJSONCommand.getString("image_preview");
 				byte[] aImage = Base64.decode(aImageString, Base64.DEFAULT);
 				Message aMessage = Message.obtain(null,
 						CommunicationService.MSG_SLIDE_PREVIEW);
