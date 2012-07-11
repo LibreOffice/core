@@ -40,6 +40,10 @@ public:
 
     const rtl::OUString& getSubTitle () const { return maSubTitle; }
 
+    virtual void calculateItemsPosition (sal_uInt32 nMaxTextLength);
+
+    virtual void Paint (drawinglayer::processor2d::BaseProcessor2D *pProcessor,
+                        const ThumbnailItemAttributes *pAttrs);
 private:
 
     rtl::OUString maPath;
@@ -47,6 +51,8 @@ private:
     rtl::OUString maKeywords;
     rtl::OUString maFileType;
     rtl::OUString maSubTitle;
+
+    Point maSubTitlePos;
 };
 
 #endif // TEMPLATEVIEWITEM_HXX
