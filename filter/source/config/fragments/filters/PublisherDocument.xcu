@@ -4,7 +4,7 @@
         <prop oor:name="FilterService"><value>com.sun.star.comp.Draw.MSPUBImportFilter</value></prop>
         <prop oor:name="UserData"><value></value></prop>
         <prop oor:name="UIName">
-            <value xml:lang="x-default">Microsoft Publisher 2003</value>
+            <value xml:lang="x-default">Microsoft Publisher 98-2010</value>
         </prop>
         <prop oor:name="FileFormatVersion"><value>0</value></prop>
         <prop oor:name="Type"><value>draw_Publisher_Document</value></prop>
