@@ -11,10 +11,11 @@ my $main_repo="core";
 my @pieces=("binfilter", "dictionaries", "help", "translations");
 
 my %bugzillas = (
-    fdo  => "https://bugs.freedesktop.org/",
-    bnc  => "https://bugzilla.novell.com/",
-    rhbz => "https://bugzilla.redhat.com/",
-    i    => "https://issues.apache.org/ooo/",
+    fdo  => "https://bugs.freedesktop.org/show_bug.cgi?id=",
+    bnc  => "https://bugzilla.novell.com/show_bug.cgi?id=",
+    rhbz => "https://bugzilla.redhat.com/show_bug.cgi?id=",
+    i    => "https://issues.apache.org/ooo/show_bug.cgi?id=",
+    fate => "https://features.opensuse.org/",
 );
 
 sub search_bugs($$$$)
@@ -305,7 +306,7 @@ sub get_bug_name($$)
     my $bug_number = $2;          # 12345
 
     if ( $bugzillas{$bugzilla} ) {
-        my $url = $bugzillas{$bugzilla} . "show_bug.cgi?id=" . $bug_number;
+        my $url = $bugzillas{$bugzilla} . $bug_number;
         my $ua = LWP::UserAgent->new;
         $ua->timeout(10);
         $ua->env_proxy;
