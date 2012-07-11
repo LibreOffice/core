@@ -55,6 +55,21 @@ class SwPaMPrinter(object):
         children = [ ( 'point', point), ( 'mark', mark ) ]
         return children.__iter__()
 
+class SwRectPrinter(object):
+    '''Prints SwRect.'''
+
+    def __init__(self, typename, value):
+        self.typename = typename
+        self.value = value
+
+    def to_string(self):
+        return "%s" % (self.typename)
+
+    def children(self):
+        point = self.value['m_Point']
+        size = self.value['m_Size']
+        children = [ ( 'point', point), ( 'size', size ) ]
+        return children.__iter__()
 
 class BigPtrArrayPrinter(object):
     '''Prints BigPtrArray.'''
@@ -174,6 +189,7 @@ def build_pretty_printers():
     printer.add('BigPtrArray', BigPtrArrayPrinter)
     printer.add('SwPosition', SwPositionPrinter)
     printer.add('SwPaM', SwPaMPrinter)
+    printer.add('SwRect', SwRectPrinter)
 
 def register_pretty_printers(obj):
     printing.register_pretty_printer(printer, obj)
