@@ -45,6 +45,7 @@ TARFILE_NAME=curl-7.26.0
 TARFILE_MD5=3fa4d5236f2a36ca5c3af6715e837691
 PATCH_FILES=\
     curl-7.26.0.patch \
+    curl-7.26.0_nspr.patch \
     curl-aix.patch
 
 .IF "$(GUI)"=="WNT"

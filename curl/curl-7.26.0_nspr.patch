@@ -1,0 +1,17 @@
+diff -ur curl-7.26.0/configure misc/build/curl-7.26.0/configure
+--- curl-7.26.0/configure	2012-07-11 10:06:15.249214153 +0200
++++ misc/build/curl-7.26.0/configure	2012-07-11 10:09:48.967225739 +0200
+@@ -22779,6 +22779,13 @@
+           addcflags=""
+           version="unknown"
+         fi
++
++        # NSPR includes and libs are needed with nss
++        check=`nspr-config --version 2>/dev/null`
++        if test -n "$check"; then
++          addlib="$addlib `nspr-config --libs`"
++          addcflags="$addcflags `nspr-config --cflags`"
++        fi
+       fi
+     else
+         # Without pkg-config, we'll kludge in some defaults
