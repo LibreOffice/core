@@ -165,11 +165,11 @@ $(call tailbuild_serialize,$(wordlist 2,$(words $(1)),$(1))))
 endef
 
 $(eval $(call tailbuild_serialize,\
-	scfilt sc sw sd \
-	$(if $(filter TRUE,$(MERGELIBS)),merged,svxcore) \
+	scfilt vbaobj sc msword swui sw sd \
 	$(if $(filter DBCONNECTIVITY,$(BUILD_TYPE)),dbu) \
-	oox vcl xo writerfilter cui chartcontroller swui \
-	vbaobj msword \
+	writerfilter cui chartcontroller \
+	$(if $(filter TRUE,$(MERGELIBS)),merged,svxcore) \
+	oox vcl xo \
 ))
 
 # vim: set noet sw=4 ts=4:
