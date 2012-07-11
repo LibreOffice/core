@@ -2544,6 +2544,7 @@ BmpWindow::BmpWindow( Window* pPar, sal_uInt16 nId,
     bLeftAlign(sal_False)
 {
     SetBackground();
+    SetPaintTransparent(sal_True);
 }
 
 void BmpWindow::Paint( const Rectangle& )
