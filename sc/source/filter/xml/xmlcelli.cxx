@@ -871,6 +871,7 @@ void ScXMLTableRowCellContext::AddCellsToTable( const ScAddress& rCellPos,
                             case util::NumberFormat::PERCENT:
                             case util::NumberFormat::CURRENCY:
                             case util::NumberFormat::TIME:
+                            case util::NumberFormat::DATE:
                             case util::NumberFormat::DATETIME:
                             case util::NumberFormat::LOGICAL:
                             {

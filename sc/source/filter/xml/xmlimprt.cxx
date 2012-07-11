@@ -1979,7 +1979,8 @@ ScXMLImport::ScXMLImport(
         { XML_FLOAT,        util::NumberFormat::NUMBER },
         { XML_STRING,       util::NumberFormat::TEXT },
         { XML_TIME,         util::NumberFormat::TIME },
-        { XML_DATE,         util::NumberFormat::DATETIME },
+        { XML_DATE,         util::NumberFormat::DATE },
+        { XML_DATE_TIME,    util::NumberFormat::DATETIME },
         { XML_PERCENTAGE,   util::NumberFormat::PERCENT },
         { XML_CURRENCY,     util::NumberFormat::CURRENCY },
         { XML_BOOLEAN,      util::NumberFormat::LOGICAL }
