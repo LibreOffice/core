@@ -1529,10 +1529,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
                 }
             }
             else if ( !m_pImpl->IsStyleSheetImport( ) )
-            {
-                rtl::OUString sNone;
-                rContext->Insert( PROP_NUMBERING_STYLE_NAME, true, uno::makeAny( sNone ) );
-            }
+                rContext->Insert( PROP_NUMBERING_STYLE_NAME, true, uno::makeAny( OUString() ) );
         }
         break;
     case NS_sprm::LN_PFNoLineNumb:   // sprmPFNoLineNumb
