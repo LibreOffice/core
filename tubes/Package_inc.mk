@@ -33,6 +33,7 @@ $(eval $(call gb_Package_add_file,tubes_inc,inc/tubes/file-transfer-helper.h,tub
 $(eval $(call gb_Package_add_file,tubes_inc,inc/tubes/manager.hxx,tubes/manager.hxx))
 $(eval $(call gb_Package_add_file,tubes_inc,inc/tubes/packet.hxx,tubes/packet.hxx))
 $(eval $(call gb_Package_add_file,tubes_inc,inc/tubes/tubesdllapi.h,tubes/tubesdllapi.h))
+$(eval $(call gb_Package_add_file,tubes_inc,inc/tubes/warnings_guard_boost_signals2.hpp,tubes/warnings_guard_boost_signals2.hpp))
 
 #$(eval $(call gb_Package_add_file,tubes_inc,inc/tubes/,tubes/))
 

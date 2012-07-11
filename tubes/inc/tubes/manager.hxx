@@ -40,7 +40,7 @@
 #include <tools/link.hxx>
 #include <telepathy-glib/telepathy-glib.h>
 #include <vector>
-#include <boost/signals2.hpp>
+#include <tubes/warnings_guard_boost_signals2.hpp>
 
 // For testing purposes, we might need more in future.
 #define LIBO_TUBES_DBUS_INTERFACE "org.libreoffice.calc"
