@@ -894,6 +894,17 @@ namespace cmis
             aUrl.setObjectPath( STD_TO_OUSTR( parentPath ) );
             sRet = aUrl.asString( );
         }
+        else
+        {
+            INetURLObject aUrl( m_sURL );
+            if ( aUrl.getSegmentCount( ) > 0 )
+            {
+                URL aCmisUrl( m_sURL );
+                aUrl.removeSegment( );
+                aCmisUrl.setObjectPath( aUrl.GetURLPath( INetURLObject::NO_DECODE ) );
+                sRet = aCmisUrl.asString( );
+            }
+        }
 
         return sRet;
     }
