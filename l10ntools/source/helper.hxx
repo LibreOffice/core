@@ -103,7 +103,7 @@ inline sal_Int32 indexOfAnyAsciiL(
 template< typename T > inline T abbreviate(
     T const & text, sal_Int32 start, sal_Int32 length)
 {
-    start = std::max(0, start);
+    start = std::max(sal_Int32(0), start);
     assert(start <= text.getLength());
     return text.copy(start, std::min(text.getLength() - start, length));
 }
