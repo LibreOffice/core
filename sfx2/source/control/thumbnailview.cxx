@@ -803,7 +803,7 @@ void ThumbnailView::InsertItem( sal_uInt16 nItemId, const BitmapEx& rImage,
     ThumbnailViewItem* pItem = new ThumbnailViewItem( *this, this );
     pItem->mnId     = nItemId;
     pItem->maPreview1 = rImage;
-    pItem->maText   = rText;
+    pItem->maTitle   = rText;
     pItem->setSelectClickHdl(LINK(this,ThumbnailView,OnItemSelected));
     ImplInsertItem( pItem, nPos );
 }
@@ -1047,7 +1047,7 @@ rtl::OUString ThumbnailView::GetItemText( sal_uInt16 nItemId ) const
     size_t nPos = GetItemPos( nItemId );
 
     if ( nPos != THUMBNAILVIEW_ITEM_NOTFOUND )
-        return mItemList[nPos]->maText;
+        return mItemList[nPos]->maTitle;
 
     return rtl::OUString();
 }

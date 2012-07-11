@@ -60,7 +60,7 @@ public:
 
     bool operator() (const ThumbnailViewItem *pItem1, const ThumbnailViewItem *pItem2)
     {
-        return (pItem1->maText.compareTo(pItem2->maText) < 0);
+        return (pItem1->maTitle.compareTo(pItem2->maTitle) < 0);
     }
 };
 

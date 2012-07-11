@@ -772,7 +772,7 @@ sal_Int16 SAL_CALL ThumbnailViewItemAcc::getAccessibleRole()
 
     if( mpParent )
     {
-        aRet = mpParent->maText;
+        aRet = mpParent->maTitle;
 
         if( aRet.isEmpty() )
         {

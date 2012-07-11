@@ -115,7 +115,7 @@ void TemplateView::InsertItems (const std::vector<TemplateItemProperties> &rTemp
         const TemplateItemProperties *pCur = &rTemplates[i];
 
         pItem->mnId = pCur->nId;
-        pItem->maText = pCur->aName;
+        pItem->maTitle = pCur->aName;
         pItem->setPath(pCur->aPath);
         pItem->setFileType(pCur->aType);
         pItem->maPreview1 = pCur->aThumbnail;

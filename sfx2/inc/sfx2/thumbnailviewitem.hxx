@@ -69,7 +69,7 @@ public:
     bool mbSelected;
     bool mbHover;
     BitmapEx maPreview1;
-    rtl::OUString maText;
+    rtl::OUString maTitle;
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >* mpxAcc;
 
     ThumbnailViewItem (ThumbnailView &rView, Window *pParent);

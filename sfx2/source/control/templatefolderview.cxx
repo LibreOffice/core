@@ -310,7 +310,7 @@ void TemplateFolderView::Populate ()
 
         TemplateFolderViewItem* pItem = new TemplateFolderViewItem( *this, this );
         pItem->mnId = i+1;
-        pItem->maText = aRegionName;
+        pItem->maTitle = aRegionName;
         pItem->setSelectClickHdl(LINK(this,ThumbnailView,OnItemSelected));
 
         sal_uInt16 nEntries = mpDocTemplates->GetCount(i);
@@ -355,7 +355,7 @@ std::vector<rtl::OUString> TemplateFolderView::getFolderNames()
     std::vector<rtl::OUString> ret(n);
 
     for (size_t i = 0; i < n; ++i)
-        ret[i] = mItemList[i]->maText;
+        ret[i] = mItemList[i]->maTitle;
 
     return ret;
 }
@@ -455,7 +455,7 @@ sal_uInt16 TemplateFolderView::createRegion(const rtl::OUString &rName)
 
     TemplateFolderViewItem* pItem = new TemplateFolderViewItem( *this, this );
     pItem->mnId = nRegionId+1;
-    pItem->maText = aRegionName;
+    pItem->maTitle = aRegionName;
     pItem->setSelectClickHdl(LINK(this,ThumbnailView,OnItemSelected));
 
     mItemList.push_back(pItem);
@@ -567,7 +567,7 @@ bool TemplateFolderView::moveTemplates(std::set<const ThumbnailViewItem *> &rIte
             TemplateItemProperties aTemplateItem;
             aTemplateItem.nId = nTargetIdx + 1;
             aTemplateItem.nRegionId = nTargetRegion;
-            aTemplateItem.aName = pViewItem->maText;
+            aTemplateItem.aName = pViewItem->maTitle;
             aTemplateItem.aPath = pViewItem->getPath();
             aTemplateItem.aType = pViewItem->getFileType();
             aTemplateItem.aThumbnail = pViewItem->maPreview1;
@@ -696,7 +696,7 @@ IMPL_LINK(TemplateFolderView, ChangeNameHdl, TemplateView*, pView)
     {
         if (mItemList[i]->mnId == nItemId)
         {
-            mItemList[i]->maText = pView->getRegionName();
+            mItemList[i]->maTitle = pView->getRegionName();
             mItemList[i]->calculateItemsPosition(mpItemAttrs->nMaxTextLenght);
             Invalidate();
             break;

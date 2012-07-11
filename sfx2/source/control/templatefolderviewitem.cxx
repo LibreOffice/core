@@ -98,7 +98,7 @@ void TemplateFolderViewItem::Paint (drawinglayer::processor2d::BaseProcessor2D *
 
     aSeq[nCount++] = Primitive2DReference(
                 new TextSimplePortionPrimitive2D(aTextMatrix,
-                                                 maText,0,maText.getLength(),
+                                                 maTitle,0,maTitle.getLength(),
                                                  std::vector< double >( ),
                                                  pAttrs->aFontAttr,
                                                  com::sun::star::lang::Locale(),

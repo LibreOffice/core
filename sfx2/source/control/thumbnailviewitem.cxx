@@ -132,7 +132,7 @@ void ThumbnailViewItem::calculateItemsPosition (sal_uInt32 nMaxTextLenght)
     // Calculate text position
     aPos.Y() += aImageSize.Height();
     aPos.Y() = aPos.Y() + aTextDev.getTextHeight() + (maDrawArea.Bottom() - aPos.Y() - aTextDev.getTextHeight())/2;
-    aPos.X() = maDrawArea.Left() + (aRectSize.Width() - aTextDev.getTextWidth(maText,0,nMaxTextLenght))/2;
+    aPos.X() = maDrawArea.Left() + (aRectSize.Width() - aTextDev.getTextWidth(maTitle,0,nMaxTextLenght))/2;
     maTextPos = aPos;
 
     // Calculate checkbox position
@@ -199,7 +199,7 @@ void ThumbnailViewItem::Paint (drawinglayer::processor2d::BaseProcessor2D *pProc
 
     aSeq[2] = Primitive2DReference(
                 new TextSimplePortionPrimitive2D(aTextMatrix,
-                                                 maText,0,pAttrs->nMaxTextLenght,
+                                                 maTitle,0,pAttrs->nMaxTextLenght,
                                                  std::vector< double >( ),
                                                  pAttrs->aFontAttr,
                                                  com::sun::star::lang::Locale(),
