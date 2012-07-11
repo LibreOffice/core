@@ -60,7 +60,8 @@ PlaceEditDialog::PlaceEditDialog(	Window* pParent ) :
     m_aFTCmisBinding( this, SvtResId( FT_ADDPLACE_CMIS_BINDING ) ),
     m_aEDCmisBinding( this, SvtResId( ED_ADDPLACE_CMIS_BINDING ) ),
     m_aFTCmisRepository( this, SvtResId( FT_ADDPLACE_CMIS_REPOSITORY ) ),
-    m_aEDCmisRepository( this, SvtResId( ED_ADDPLACE_CMIS_REPOSITORY ) ),
+    m_aLBCmisRepository( this, SvtResId( LB_ADDPLACE_CMIS_REPOSITORY ) ),
+    m_aBTCmisRepoRefresh( this, SvtResId( BT_ADDPLACE_CMIS_REPOREFRESH ) ),
     m_aFTUsername( this, SvtResId( FT_ADDPLACE_USERNAME ) ),
     m_aEDUsername( this, SvtResId( ED_ADDPLACE_USERNAME ) ),
     m_aBTOk( this, SvtResId( BT_ADDPLACE_OK ) ),
@@ -77,6 +78,7 @@ PlaceEditDialog::PlaceEditDialog(	Window* pParent ) :
 	m_aBTDelete.Hide();
 
     m_aLBServerType.SetSelectHdl( LINK( this, PlaceEditDialog, SelectTypeHdl ) );
+    m_aEDUsername.SetModifyHdl( LINK( this, PlaceEditDialog, EditUsernameHdl ) );
 
     InitDetails( );
 }
@@ -103,7 +105,8 @@ PlaceEditDialog::PlaceEditDialog( Window* pParent, const PlacePtr& pPlace ) :
     m_aFTCmisBinding( this, SvtResId( FT_ADDPLACE_CMIS_BINDING ) ),
     m_aEDCmisBinding( this, SvtResId( ED_ADDPLACE_CMIS_BINDING ) ),
     m_aFTCmisRepository( this, SvtResId( FT_ADDPLACE_CMIS_REPOSITORY ) ),
-    m_aEDCmisRepository( this, SvtResId( ED_ADDPLACE_CMIS_REPOSITORY ) ),
+    m_aLBCmisRepository( this, SvtResId( LB_ADDPLACE_CMIS_REPOSITORY ) ),
+    m_aBTCmisRepoRefresh( this, SvtResId( BT_ADDPLACE_CMIS_REPOREFRESH ) ),
     m_aFTUsername( this, SvtResId( FT_ADDPLACE_USERNAME ) ),
     m_aEDUsername( this, SvtResId( ED_ADDPLACE_USERNAME ) ),
     m_aBTOk( this, SvtResId( BT_ADDPLACE_OK ) ),
@@ -148,7 +151,9 @@ rtl::OUString PlaceEditDialog::GetServerUrl()
     if ( m_pCurrentDetails.get( ) )
     {
         INetURLObject aUrl = m_pCurrentDetails->getUrl();
-        aUrl.SetUser( rtl::OUString( m_aEDUsername.GetText( ) ).trim( ) );
+        rtl::OUString sUsername = rtl::OUString( m_aEDUsername.GetText( ) ).trim( );
+        if ( !sUsername.isEmpty( ) )
+            aUrl.SetUser( sUsername );
         if ( !aUrl.HasError( ) )
             sUrl = aUrl.GetMainURL( INetURLObject::NO_DECODE );
     }
@@ -212,7 +217,8 @@ void PlaceEditDialog::InitDetails( )
     pCmisDetails->addControl( FT_ADDPLACE_CMIS_BINDING, &m_aFTCmisBinding );
     pCmisDetails->addControl( ED_ADDPLACE_CMIS_BINDING, &m_aEDCmisBinding );
     pCmisDetails->addControl( FT_ADDPLACE_CMIS_REPOSITORY, &m_aFTCmisRepository );
-    pCmisDetails->addControl( ED_ADDPLACE_CMIS_REPOSITORY, &m_aEDCmisRepository );
+    pCmisDetails->addControl( LB_ADDPLACE_CMIS_REPOSITORY, &m_aLBCmisRepository );
+    pCmisDetails->addControl( BT_ADDPLACE_CMIS_REPOREFRESH, &m_aBTCmisRepoRefresh );
     pCmisDetails->setChangeHdl( LINK( this, PlaceEditDialog, EditHdl ) );
 
     if ( officecfg::Office::Common::Misc::ExperimentalMode::get() )
@@ -247,6 +253,16 @@ IMPL_LINK ( PlaceEditDialog, EditHdl, void *, EMPTYARG )
     rtl::OUString sName = rtl::OUString( m_aEDServerName.GetText() ).trim( );
     m_aBTOk.Enable( !sName.isEmpty( ) && !sUrl.isEmpty( ) );
 	return 1;
+}
+
+IMPL_LINK ( PlaceEditDialog, EditUsernameHdl, void *, EMPTYARG )
+{
+    for ( std::vector< boost::shared_ptr< DetailsContainer > >::iterator it = m_aDetailsContainers.begin( );
+            it != m_aDetailsContainers.end( ); ++it )
+    {
+        ( *it )->setUsername( rtl::OUString( m_aEDUsername.GetText() ) );
+    }
+    return 1;
 }
 
 IMPL_LINK( PlaceEditDialog, SelectTypeHdl, void*, EMPTYARG )

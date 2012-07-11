@@ -28,6 +28,8 @@
 #ifndef _SERVERDETAILSCONTROLS_HXX
 #define _SERVERDETAILSCONTROLS_HXX
 
+#include <com/sun/star/ucb/XCommandEnvironment.hpp>
+
 #include <tools/urlobj.hxx>
 #include <vcl/ctrl.hxx>
 #include <vcl/edit.hxx>
@@ -60,6 +62,8 @@ class DetailsContainer
             \return true if the split worked, false otherwise.
          */
         virtual bool setUrl( const INetURLObject& rUrl );
+
+        virtual void setUsername( const rtl::OUString& /*rUsername*/ ) { };
 
     protected:
         void notifyChange( );
@@ -119,12 +123,25 @@ class SmbDetailsContainer : public DetailsContainer
 
 class CmisDetailsContainer : public DetailsContainer
 {
+    private:
+        rtl::OUString m_sUsername;
+        com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment > m_xCmdEnv;
+        std::vector< rtl::OUString > m_aRepoIds;
+        rtl::OUString m_sRepoId;
+
     public:
-        CmisDetailsContainer( ) : DetailsContainer( ) { };
+        CmisDetailsContainer( );
         ~CmisDetailsContainer( ) { };
 
         virtual INetURLObject getUrl( );
         virtual bool setUrl( const INetURLObject& rUrl );
+        virtual void setUsername( const rtl::OUString& rUsername );
+        virtual void addControl( sal_uInt16 nId, Control* pControl );
+
+    private:
+        void selectRepository( );
+        DECL_LINK ( RefreshReposHdl, void * );
+        DECL_LINK ( SelectRepoHdl, void * );
 };
 
 #endif

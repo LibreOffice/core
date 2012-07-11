@@ -71,7 +71,8 @@ private :
     FixedText    m_aFTCmisBinding;
     Edit         m_aEDCmisBinding;
     FixedText    m_aFTCmisRepository;
-    Edit         m_aEDCmisRepository;
+    ListBox      m_aLBCmisRepository;
+    ImageButton  m_aBTCmisRepoRefresh;
 
     FixedText    m_aFTUsername;
     Edit         m_aEDUsername;
@@ -106,10 +107,11 @@ private:
 
     void InitDetails( );
 
-	DECL_LINK ( OKHdl, Button * );
-	DECL_LINK ( DelHdl, Button * );
-	DECL_LINK ( EditHdl, void * );
+    DECL_LINK ( OKHdl, Button * );
+    DECL_LINK ( DelHdl, Button * );
+    DECL_LINK ( EditHdl, void * );
     DECL_LINK ( SelectTypeHdl, void * );
+    DECL_LINK ( EditUsernameHdl, void * );
 
 };
 

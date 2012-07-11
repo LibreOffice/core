@@ -3349,7 +3349,8 @@ void SvtFileDialog::initDefaultPlaces( )
     Sequence< ::rtl::OUString > placesUrlsList(officecfg::Office::Common::Misc::FilePickerPlacesUrls::get(m_context));
     Sequence< ::rtl::OUString > placesNamesList(officecfg::Office::Common::Misc::FilePickerPlacesNames::get(m_context));
 
-    for(sal_Int32 nPlace = 0; nPlace < placesUrlsList.getLength() && nPlace < placesNamesList.getLength(); ++nPlace) {
+    for(sal_Int32 nPlace = 0; nPlace < placesUrlsList.getLength() && nPlace < placesNamesList.getLength(); ++nPlace)
+    {
         PlacePtr pPlace(new Place(placesNamesList[nPlace], placesUrlsList[nPlace], true));
         _pImp->_pPlaces->AppendPlace(pPlace);
     }

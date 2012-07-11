@@ -26,7 +26,16 @@
  * instead of those above.
  */
 
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/task/XInteractionHandler.hpp>
+#include <com/sun/star/ucb/XCommandEnvironment.hpp>
+#include <com/sun/star/ucb/XContentAccess.hpp>
+#include <com/sun/star/sdbc/XResultSet.hpp>
+#include <com/sun/star/sdbc/XRow.hpp>
+
 #include <rtl/uri.hxx>
+#include <ucbhelper/content.hxx>
+#include <ucbhelper/commandenvironment.hxx>
 
 #include "PlaceEditDialog.hrc"
 
@@ -35,6 +44,11 @@
 #include "ServerDetailsControls.hxx"
 
 using namespace std;
+using namespace com::sun::star::lang;
+using namespace com::sun::star::sdbc;
+using namespace com::sun::star::task;
+using namespace com::sun::star::ucb;
+using namespace com::sun::star::uno;
 
 DetailsContainer::DetailsContainer( ) :
     m_aControls( ),
@@ -273,21 +287,30 @@ bool SmbDetailsContainer::setUrl( const INetURLObject& rUrl )
     return bSuccess;
 }
 
+CmisDetailsContainer::CmisDetailsContainer( ) :
+    DetailsContainer( ),
+    m_sUsername( ),
+    m_xCmdEnv( )
+{
+    Reference< XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
+    Reference< XInteractionHandler >  xGlobalInteractionHandler = Reference< XInteractionHandler >(
+        xFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.task.InteractionHandler") ) ), UNO_QUERY );
+    m_xCmdEnv = new ucbhelper::CommandEnvironment( xGlobalInteractionHandler, Reference< XProgressHandler >() );
+}
+
 INetURLObject CmisDetailsContainer::getUrl( )
 {
     rtl::OUString sBindingUrl = rtl::OUString( static_cast< Edit* >( getControl( ED_ADDPLACE_CMIS_BINDING ) )->GetText() ).trim( );
-    rtl::OUString sRepo = rtl::OUString( static_cast< Edit* >( getControl( ED_ADDPLACE_CMIS_REPOSITORY ) )->GetText() ).trim( );
 
     rtl::OUString sUrl;
-    if ( !sBindingUrl.isEmpty( ) && !sRepo.isEmpty() )
+    if ( !sBindingUrl.isEmpty( ) && !m_sRepoId.isEmpty() )
     {
         rtl::OUString sEncodedBinding = rtl::Uri::encode(
-                sBindingUrl + "#" + sRepo,
+                sBindingUrl + "#" + m_sRepoId,
                 rtl_UriCharClassRelSegment,
                 rtl_UriEncodeKeepEscapes,
                 RTL_TEXTENCODING_UTF8 );
         sUrl = "vnd.libreoffice.cmis+atom://" + sEncodedBinding;
-        INetURLObject test( sUrl );
     }
 
     return INetURLObject( sUrl );
@@ -308,11 +331,98 @@ bool CmisDetailsContainer::setUrl( const INetURLObject& rUrl )
         sRepositoryId = aHostUrl.GetMark( );
 
         static_cast< Edit* >( getControl( ED_ADDPLACE_CMIS_BINDING ) )->SetText( sBindingUrl );
-        static_cast< Edit* >( getControl( ED_ADDPLACE_CMIS_REPOSITORY ) )->SetText( sRepositoryId );
     }
 
     return bSuccess;
 }
 
+void CmisDetailsContainer::setUsername( const rtl::OUString& rUsername )
+{
+    m_sUsername = rtl::OUString( rUsername );
+}
+
+void CmisDetailsContainer::addControl( sal_uInt16 nId, Control* pControl )
+{
+    DetailsContainer::addControl( nId, pControl );
+
+    // Add listener on BT_ADDPLACE_CMIS_REPOREFRESH
+    if ( nId == BT_ADDPLACE_CMIS_REPOREFRESH )
+        static_cast< ImageButton* >( pControl )->SetClickHdl( LINK( this, CmisDetailsContainer, RefreshReposHdl ) );
+    if ( nId == LB_ADDPLACE_CMIS_REPOSITORY )
+        static_cast< ListBox* >( pControl )->SetSelectHdl( LINK( this, CmisDetailsContainer, SelectRepoHdl ) );
+}
+
+void CmisDetailsContainer::selectRepository( )
+{
+    // Get the repo ID and call the Change listener
+    ListBox* pReposList = static_cast< ListBox* >( getControl( LB_ADDPLACE_CMIS_REPOSITORY ) );
+    sal_uInt16 nPos = pReposList->GetSelectEntryPos( );
+    m_sRepoId = m_aRepoIds[nPos];
+
+    notifyChange( );
+}
+
+IMPL_LINK( CmisDetailsContainer, RefreshReposHdl, void *, EMPTYARG  )
+{
+    rtl::OUString sBindingUrl = rtl::OUString( static_cast< Edit* >( getControl( ED_ADDPLACE_CMIS_BINDING ) )->GetText() ).trim( );
+
+    // Clean the listbox
+    ListBox* pReposList = static_cast< ListBox* >( getControl( LB_ADDPLACE_CMIS_REPOSITORY ) );
+    pReposList->Clear( );
+    m_aRepoIds.clear( );
+
+    // Compute the URL
+    rtl::OUString sUrl;
+    if ( !sBindingUrl.isEmpty( ) )
+    {
+        rtl::OUString sEncodedBinding = rtl::Uri::encode(
+                sBindingUrl,
+                rtl_UriCharClassRelSegment,
+                rtl_UriEncodeKeepEscapes,
+                RTL_TEXTENCODING_UTF8 );
+        sUrl = "vnd.libreoffice.cmis+atom://" + sEncodedBinding;
+    }
+
+    // Get the Content
+    ::ucbhelper::Content aCnt( sUrl, m_xCmdEnv );
+    Sequence< rtl::OUString > aProps( 1 );
+    aProps[0] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Title" ) );
+
+    try
+    {
+        Reference< XResultSet > xResultSet( aCnt.createCursor( aProps ), UNO_QUERY_THROW );
+        Reference< XContentAccess > xAccess( xResultSet, UNO_QUERY_THROW );
+        while ( xResultSet->next() )
+        {
+            rtl::OUString sURL = xAccess->queryContentIdentifierString( );
+            INetURLObject aURL( sURL );
+            rtl::OUString sId = aURL.GetURLPath( INetURLObject::DECODE_WITH_CHARSET );
+            sId = sId.copy( 1 );
+            m_aRepoIds.push_back( sId );
+
+            Reference< XRow > xRow( xResultSet, UNO_QUERY );
+            rtl::OUString sName = xRow->getString( 1 );
+            pReposList->InsertEntry( sName );
+        }
+    }
+    catch ( const Exception& )
+    {
+    }
+
+    // Auto-select the first one
+    if ( pReposList->GetEntryCount( ) > 0 )
+    {
+        pReposList->SelectEntryPos( 0 );
+        selectRepository( );
+    }
+
+    return 0;
+}
+
+IMPL_LINK( CmisDetailsContainer, SelectRepoHdl, void *, EMPTYARG  )
+{
+    selectRepository( );
+    return 0;
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

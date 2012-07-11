@@ -152,11 +152,27 @@ ModalDialog DLG_FPICKER_PLACE_EDIT
         Size = MAP_APPFONT ( 40 , 10 ) ;
         Text [ en-US ] = "Repository" ;
     };
-    Edit ED_ADDPLACE_CMIS_REPOSITORY
+    ListBox LB_ADDPLACE_CMIS_REPOSITORY
     {
         Pos = MAP_APPFONT ( 55, 60 ) ;
-        Size = MAP_APPFONT ( 137 , 12 ) ;
+        Size = MAP_APPFONT ( 122 , 75 ) ;
         Border = TRUE ;
+        DropDown = TRUE;
+    };
+    ImageButton BT_ADDPLACE_CMIS_REPOREFRESH
+    {
+        Pos = MAP_APPFONT ( 180, 60 ) ;
+        Size = MAP_APPFONT ( 12, 12 );
+        TabStop = FALSE ;
+        QuickHelpText [ en-US ] = "Refresh" ;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap
+            {
+                File = "reload.png" ;
+            };
+            MaskColor = Color { Red = 0xFF00; Green = 0x0000; Blue = 0xFF00; } ;
+        };
     };
     ListBox LB_ADDPLACE_SERVERTYPE
     {
