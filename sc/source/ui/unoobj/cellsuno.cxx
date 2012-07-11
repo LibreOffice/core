@@ -3464,8 +3464,8 @@ uno::Reference<sheet::XSheetCellRanges> SAL_CALL ScCellRangesBase::queryEmptyCel
 
         ScRangeList aNewRanges;
         //  IsMultiMarked reicht hier nicht (wird beim deselektieren nicht zurueckgesetzt)
-        if (aMarkData.HasAnyMultiMarks())
-            aMarkData.FillRangeListWithMarks( &aNewRanges, sal_False );
+        //if (aMarkData.HasAnyMultiMarks()) // #20044# should be set for all empty range
+        aMarkData.FillRangeListWithMarks( &aNewRanges, sal_False );
 
         return new ScCellRangesObj( pDocShell, aNewRanges );    // aNewRanges kann leer sein
     }
