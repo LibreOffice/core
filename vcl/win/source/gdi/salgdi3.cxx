@@ -56,6 +56,7 @@
 #include "tools/poly.hxx"
 #include "tools/debug.hxx"
 #include "tools/stream.hxx"
+#include "tools/helpers.hxx"
 
 #include <vcl/sysdata.hxx>
 
