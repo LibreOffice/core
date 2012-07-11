@@ -16,6 +16,24 @@
       "revId": "e1491200f914aa9b3eafc413f96f482b82515de8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMH////8\u003d",
+        "filename": "sc/source/core/tool/chgviset.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2012-07-11T14:35:51Z",
+      "side": 1,
+      "message": "Yes, indeed, that would make much sense.",
+      "parentUuid": "AAAAL3///4U\u003d",
+      "revId": "e1491200f914aa9b3eafc413f96f482b82515de8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
