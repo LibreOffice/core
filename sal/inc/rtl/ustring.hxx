@@ -1314,7 +1314,9 @@ public:
     */
     OUString copy( sal_Int32 beginIndex, sal_Int32 count ) const SAL_THROW(())
     {
-        assert(beginIndex >= 0 && beginIndex <= getLength() && count >= 0);
+        assert(beginIndex >= 0 && beginIndex <= getLength() && count >= 0
+               && sal::static_int_cast< sal_uInt32 >(count) <=
+                  sal::static_int_cast< sal_uInt32 >(getLength() - beginIndex));
         if ( (beginIndex == 0) && (count == getLength()) )
             return *this;
         else
