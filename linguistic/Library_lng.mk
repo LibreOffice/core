@@ -53,6 +53,7 @@ $(eval $(call gb_Library_use_libraries,lng,\
 	tl \
 	ucbhelper \
 	utl \
+	vcl \
 	xo \
     $(gb_STDLIBS) \
 ))

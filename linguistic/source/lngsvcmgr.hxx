@@ -30,7 +30,7 @@
 #define _LINGUISTIC_LNGSVCMGR_HXX_
 
 #include <uno/lbnames.h>            // CPPU_CURRENT_LANGUAGE_BINDING_NAME macro, which specify the environment type
-#include <cppuhelper/implbase4.hxx> // helper for implementations
+#include <cppuhelper/implbase5.hxx> // helper for implementations
 #include <cppuhelper/interfacecontainer.h>  //OMultiTypeInterfaceContainerHelper
 
 
@@ -39,8 +39,10 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/linguistic2/XLinguServiceManager.hpp>
 #include <com/sun/star/linguistic2/XAvailableLocales.hpp>
+#include <com/sun/star/util/XModifyBroadcaster.hpp>
+#include <com/sun/star/util/XModifyListener.hpp>
 #include <unotools/configitem.hxx>
-
+#include <vcl/timer.hxx>
 #include <boost/ptr_container/ptr_vector.hpp>
 
 #include "linguistic/misc.hxx"
@@ -64,12 +66,13 @@ namespace com { namespace sun { namespace star { namespace linguistic2 {
 
 
 class LngSvcMgr :
-    public cppu::WeakImplHelper4
+    public cppu::WeakImplHelper5
     <
         com::sun::star::linguistic2::XLinguServiceManager,
         com::sun::star::linguistic2::XAvailableLocales,
         com::sun::star::lang::XComponent,
-        com::sun::star::lang::XServiceInfo
+        com::sun::star::lang::XServiceInfo,
+        com::sun::star::util::XModifyListener
     >,
     private utl::ConfigItem
 {
@@ -88,6 +91,12 @@ class LngSvcMgr :
 
     com::sun::star::uno::Reference<
         ::com::sun::star::lang::XEventListener >        xListenerHelper;
+
+    com::sun::star::uno::Reference<
+        ::com::sun::star::util::XModifyBroadcaster>     xMB;
+
+    Timer                                               aUpdateTimer;
+
 
     com::sun::star::uno::Sequence<
         com::sun::star::lang::Locale >                  aAvailSpellLocales;
@@ -139,6 +148,10 @@ class LngSvcMgr :
     virtual void    Notify( const com::sun::star::uno::Sequence< rtl::OUString > &rPropertyNames );
     virtual void    Commit();
 
+    void UpdateAll();
+    void stopListening();
+    DECL_LINK( updateAndBroadcast, void* );
+
 public:
     LngSvcMgr();
     virtual ~LngSvcMgr();
@@ -166,6 +179,11 @@ public:
     virtual ::sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException);
 
+    // XEventListener
+    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& rSource ) throw(::com::sun::star::uno::RuntimeException);
+
+    // XModifyListener
+    virtual void SAL_CALL modified( const ::com::sun::star::lang::EventObject& rEvent ) throw(::com::sun::star::uno::RuntimeException);
 
     static inline ::rtl::OUString   getImplementationName_Static();
     static ::com::sun::star::uno::Sequence< ::rtl::OUString > getSupportedServiceNames_Static() throw();

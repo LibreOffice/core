@@ -46,26 +46,6 @@ class LinguMgrExitLstnr;
 class Window;
 
 ///////////////////////////////////////////////////////////////////////////
-// SvxLinguConfigUpdate
-// class to update configuration items when (before!) the linguistic is used.
-//
-// This class is called by all the dummy implementations to update all of the
-// configuration (list of used/available services) when the linguistic is
-// accessed for the first time.
-
-class SvxLinguConfigUpdate
-{
-    static sal_Int16    nNeedUpdating;  // n == -1 => needs to be checked
-                                    // n ==  0 => already updated, nothing to be done
-                                    // n ==  1 => needs to be updated
-
-public:
-
-    EDITENG_DLLPUBLIC static void UpdateAll( sal_Bool bForceCheck = sal_False );
-    static sal_Bool IsNeedUpdateAll( sal_Bool bForceCheck = sal_False );
-};
-
-///////////////////////////////////////////////////////////////////////////
 
 class EDITENG_DLLPUBLIC LinguMgr
 {

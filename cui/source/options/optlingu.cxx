@@ -1141,12 +1141,6 @@ SvxLinguTabPage::SvxLinguTabPage( Window* pParent,
     aLinguDicsEditPB.SetAccessibleName(sAccessibleNameDicsEdit);
     aLinguOptionsEditPB.SetAccessibleName(sAccessibleNameOptionEdit);
 
-    // force recalculation of hash value used for checking the need of updating
-    // because new dictionaries might be installed / downloaded.
-    //! Thus it needs to be called now since it may infuence the supported languages
-    //! to be reported AND the found user-dictionaries(!) as well.
-    SvxLinguConfigUpdate::UpdateAll( sal_True );
-
     xProp = uno::Reference< XPropertySet >( SvxGetLinguPropertySet(), UNO_QUERY );
     xDicList = uno::Reference< XDictionaryList >( SvxGetDictionaryList(), UNO_QUERY );
     if (xDicList.is())
