@@ -369,9 +369,10 @@ namespace {
     class DialogCreator : Resource
     {
     public:
-        DialogCreator (bool bImpress)
+        DialogCreator (bool bImpress, sal_Int32 nCurPage)
             : Resource(SdResId(_STR_IMPRESS_PRINT_UI_OPTIONS))
             , mbImpress(bImpress)
+            , mnCurPage(nCurPage)
         {
             ProcessResource();
         }
@@ -398,6 +399,7 @@ namespace {
         ::std::vector<beans::PropertyValue> maProperties;
         ::std::vector<sal_Int32> maSlidesPerPage;
         bool mbImpress;
+        sal_Int32 mnCurPage;
 
         void ProcessResource()
         {
@@ -634,7 +636,7 @@ namespace {
             AddDialogControl( vcl::PrinterOptionsHelper::getEditControlOpt( "",
                                 ".HelpID:vcl:PrintDialog:PageRange:Edit" ,
                                 "PageRange" ,
-                                "",
+                                OUString::valueOf(mnCurPage + 1),
                                 aPageRangeOpt )
                             );
 
@@ -1197,7 +1199,7 @@ public:
         , mpPrintView()
         , mbHasOrientationWarningBeenShown(false)
     {
-        DialogCreator aCreator( mrBase.GetDocShell()->GetDocumentType() == DOCUMENT_TYPE_IMPRESS );
+        DialogCreator aCreator( mrBase.GetDocShell()->GetDocumentType() == DOCUMENT_TYPE_IMPRESS, GetCurrentPageIndex() );
         m_aUIProperties = aCreator.GetDialogControls();
         maSlidesPerPage = aCreator.GetSlidesPerPage();
 
