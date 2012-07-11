@@ -183,7 +183,6 @@ void SdFiltersTest::test()
     ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/odp/text-test.odp"));
     testStuff(xDocShRef);
     }*/
-    CPPUNIT_ASSERT(false);
 }
 
 void SdFiltersTest::testStuff(::sd::DrawDocShellRef xDocShRef)
@@ -211,6 +210,7 @@ void SdFiltersTest::testStuff(::sd::DrawDocShellRef xDocShRef)
     }
     xDocShRef->DoClose();
 }
+
 bool SdFiltersTest::load(const rtl::OUString &rFilter, const rtl::OUString &rURL,
     const rtl::OUString &rUserData)
 {

@@ -53,7 +53,7 @@ namespace {
     // auxiliary functions
     void dumpGradientProperty(com::sun::star::awt::Gradient aGradient, xmlTextWriterPtr xmlWriter);
     void dumpPolyPolygonBezierCoords(com::sun::star::drawing::PolyPolygonBezierCoords aPolyPolygonBezierCoords, xmlTextWriterPtr xmlWriter);
-    void dumpPointSequenceSequence(com::sun::star::drawing::PointSequenceSequence aPointSequenceSequence, xmlTextWriterPtr xmlWriter);
+    void dumpPointSequenceSequence(com::sun::star::drawing::PointSequenceSequence aPointSequenceSequence, uno::Sequence<uno::Sequence<drawing::PolygonFlags> >*, xmlTextWriterPtr xmlWriter);
 
     // FillProperties.idl
     void dumpFillStyleAsAttribute(com::sun::star::drawing::FillStyle eFillStyle, xmlTextWriterPtr xmlWriter);
@@ -567,44 +567,7 @@ namespace {
 
     void dumpPolyPolygonBezierCoords(drawing::PolyPolygonBezierCoords aPolyPolygonBezierCoords, xmlTextWriterPtr xmlWriter)
     {
-        // dumps first field - Coordinates
-        dumpPointSequenceSequence(aPolyPolygonBezierCoords.Coordinates, xmlWriter);
-
-        // dumps second field - Flags
-        uno::Sequence<uno::Sequence< drawing::PolygonFlags > > polygonFlagsSequenceSequence = aPolyPolygonBezierCoords.Flags;
-        sal_Int32 nFlagsSequence = polygonFlagsSequenceSequence.getLength();
-        for (sal_Int32 i = 0; i < nFlagsSequence; ++i)
-        {
-            uno::Sequence< drawing::PolygonFlags > polygonFlagsSequence = polygonFlagsSequenceSequence[i];
-            sal_Int32 nFlags = polygonFlagsSequence.getLength();
-
-            xmlTextWriterStartElement(xmlWriter, BAD_CAST( "flagsSequence" ));
-
-            for (sal_Int32 j = 0; j < nFlags; ++j)
-            {
-                xmlTextWriterStartElement(xmlWriter, BAD_CAST( "polygonFlags" ));
-                switch(polygonFlagsSequence[j])
-                {
-                    case drawing::PolygonFlags_NORMAL:
-                        xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("polygonFlags"), "%s", "NORMAL");
-                        break;
-                    case drawing::PolygonFlags_SMOOTH:
-                        xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("polygonFlags"), "%s", "SMOOTH");
-                        break;
-                    case drawing::PolygonFlags_CONTROL:
-                        xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("polygonFlags"), "%s", "CONTROL");
-                        break;
-                    case drawing::PolygonFlags_SYMMETRIC:
-                        xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("polygonFlags"), "%s", "SYMMETRIC");
-                        break;
-                    default:
-                        break;
-                }
-                xmlTextWriterEndElement( xmlWriter );
-            }
-            xmlTextWriterEndElement( xmlWriter );
-        }
-
+        dumpPointSequenceSequence(aPolyPolygonBezierCoords.Coordinates, &aPolyPolygonBezierCoords.Flags, xmlWriter);
     }
 
     void dumpLineStartAsElement(drawing::PolyPolygonBezierCoords aLineStart, xmlTextWriterPtr xmlWriter)
@@ -687,15 +650,20 @@ namespace {
         }
     }
 
-    void dumpPointSequenceSequence(drawing::PointSequenceSequence aPointSequenceSequence, xmlTextWriterPtr xmlWriter)
+    void dumpPointSequenceSequence(drawing::PointSequenceSequence aPointSequenceSequence, uno::Sequence<uno::Sequence< drawing::PolygonFlags > >* pFlags, xmlTextWriterPtr xmlWriter)
     {
         // LibreOffice proudly presents - The Sequenception
         uno::Sequence<uno::Sequence< awt::Point > > pointSequenceSequence = aPointSequenceSequence;
         sal_Int32 nPointsSequence = pointSequenceSequence.getLength();
+
         for (sal_Int32 i = 0; i < nPointsSequence; ++i)
         {
             uno::Sequence< awt::Point > pointSequence = pointSequenceSequence[i];
             sal_Int32 nPoints = pointSequence.getLength();
+
+            uno::Sequence< drawing::PolygonFlags> flagsSequence;
+            if(pFlags)
+                flagsSequence = (*pFlags)[i];
 
             xmlTextWriterStartElement(xmlWriter, BAD_CAST( "pointSequence" ));
 
@@ -704,6 +672,28 @@ namespace {
                 xmlTextWriterStartElement(xmlWriter, BAD_CAST( "point" ));
                 xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("positionX"), "%" SAL_PRIdINT32, pointSequence[j].X);
                 xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("positionY"), "%" SAL_PRIdINT32, pointSequence[j].Y);
+
+                if(pFlags)
+                {
+                    switch(flagsSequence[j])
+                    {
+                        case drawing::PolygonFlags_NORMAL:
+                            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("polygonFlags"), "%s", "NORMAL");
+                            break;
+                        case drawing::PolygonFlags_SMOOTH:
+                            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("polygonFlags"), "%s", "SMOOTH");
+                            break;
+                        case drawing::PolygonFlags_CONTROL:
+                            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("polygonFlags"), "%s", "CONTROL");
+                            break;
+                        case drawing::PolygonFlags_SYMMETRIC:
+                            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("polygonFlags"), "%s", "SYMMETRIC");
+                            break;
+                        default:
+                            break;
+                    }
+                }
+
                 xmlTextWriterEndElement( xmlWriter );
             }
             xmlTextWriterEndElement( xmlWriter );
@@ -713,14 +703,14 @@ namespace {
     void dumpPolyPolygonAsElement(drawing::PointSequenceSequence aPolyPolygon, xmlTextWriterPtr xmlWriter)
     {
         xmlTextWriterStartElement(xmlWriter, BAD_CAST( "PolyPolygon" ));
-        dumpPointSequenceSequence(aPolyPolygon, xmlWriter);
+        dumpPointSequenceSequence(aPolyPolygon, NULL, xmlWriter);
         xmlTextWriterEndElement( xmlWriter );
     }
 
     void dumpGeometryAsElement(drawing::PointSequenceSequence aGeometry, xmlTextWriterPtr xmlWriter)
     {
         xmlTextWriterStartElement(xmlWriter, BAD_CAST( "Geometry" ));
-        dumpPointSequenceSequence(aGeometry, xmlWriter);
+        dumpPointSequenceSequence(aGeometry, NULL, xmlWriter);
         xmlTextWriterEndElement( xmlWriter );
     }
 
@@ -1767,12 +1757,17 @@ namespace {
         uno::Reference< lang::XServiceInfo > xServiceInfo( xShape, uno::UNO_QUERY_THROW );
         uno::Sequence< rtl::OUString > aServiceNames = xServiceInfo->getSupportedServiceNames();
 
-        uno::Any aAny = xPropSet->getPropertyValue("Name");
-        if (aAny >>= aName)
+        uno::Reference< beans::XPropertySetInfo> xInfo = xPropSet->getPropertySetInfo();
+        if(xInfo->hasPropertyByName("Name"))
         {
-            if (!aName.isEmpty())
-                xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("name"), "%s", rtl::OUStringToOString(aName, RTL_TEXTENCODING_UTF8).getStr());
+            uno::Any aAny = xPropSet->getPropertyValue("Name");
+            if (aAny >>= aName)
+            {
+                if (!aName.isEmpty())
+                    xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("name"), "%s", rtl::OUStringToOString(aName, RTL_TEXTENCODING_UTF8).getStr());
+            }
         }
+
         try
         {
         if (xServiceInfo->supportsService("com.sun.star.drawing.Text"))
