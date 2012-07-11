@@ -514,22 +514,22 @@
     </node>
     <node oor:name="km" oor:op="replace">
       <prop oor:name="UI_SANS" oor:op="replace" oor:type="xs:string">
-        <value>Khmer OS System;Khmer OS;XenoType Khmer</value>
+        <value>Khmer UI;Khmer OS System;Khmer OS;XenoType Khmer</value>
       </prop>
       <prop oor:name="CTL_DISPLAY" oor:op="replace" oor:type="xs:string">
-        <value>Khmer OS System;Khmer OS;XenoType Khmer</value>
+        <value>Khmer UI;Khmer OS System;Khmer OS;XenoType Khmer</value>
       </prop>
       <prop oor:name="CTL_HEADING" oor:op="replace" oor:type="xs:string">
-        <value>Khmer OS;Khmer OS System;XenoType Khmer</value>
+        <value>Khmer UI;Khmer OS System;Khmer OS;XenoType Khmer</value>
       </prop>
       <prop oor:name="CTL_PRESENTATION" oor:op="replace" oor:type="xs:string">
-        <value>Khmer OS;Khmer OS System;XenoType Khmer</value>
+        <value>Khmer UI;Khmer OS System;Khmer OS;XenoType Khmer</value>
       </prop>
       <prop oor:name="CTL_SPREADSHEET" oor:op="replace" oor:type="xs:string">
-        <value>Khmer OS System;Khmer OS;XenoType Khmer</value>
+        <value>Khmer UI;Khmer OS System;Khmer OS;XenoType Khmer</value>
       </prop>
       <prop oor:name="CTL_TEXT" oor:op="replace" oor:type="xs:string">
-        <value>Khmer OS;Khmer OS System;XenoType Khmer</value>
+        <value>Khmer UI;Khmer OS System;Khmer OS;XenoType Khmer</value>
       </prop>
     </node>
     <node oor:name="lo" oor:op="replace">
