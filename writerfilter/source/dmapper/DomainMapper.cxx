@@ -1533,6 +1533,8 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
                 {
                     uno::Any aRules = uno::makeAny( pList->GetNumberingRules( ) );
                     rContext->Insert( PROP_NUMBERING_RULES, true, aRules );
+                    // erase numbering from pStyle if already set
+                    rContext->erase( PropertyDefinition( PROP_NUMBERING_STYLE_NAME, true ));
                 }
             }
             else if ( !m_pImpl->IsStyleSheetImport( ) )
@@ -2990,17 +2992,21 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
         const ::rtl::OUString sConvertedStyleName = pStyleTable->ConvertStyleName( sStringValue, true );
         if (m_pImpl->GetTopContext() && m_pImpl->GetTopContextType() != CONTEXT_SECTION)
             m_pImpl->GetTopContext()->Insert( PROP_PARA_STYLE_NAME, true, uno::makeAny( sConvertedStyleName ));
-        const StyleSheetEntryPtr pEntry = pStyleTable->FindStyleSheetByISTD(sStringValue);
-        //apply numbering to paragraph if it was set at the style
-        OSL_ENSURE( pEntry.get(), "no style sheet found" );
-        const StyleSheetPropertyMap* pStyleSheetProperties = dynamic_cast<const StyleSheetPropertyMap*>(pEntry ? pEntry->pProperties.get() : 0);
+        //apply numbering to paragraph if it was set at the style, but only if the paragraph itself
+        //does not specify the numbering
+        if( rContext->find( PropertyDefinition( PROP_NUMBERING_RULES, true )) == rContext->end()) // !contains
+        {
+            const StyleSheetEntryPtr pEntry = pStyleTable->FindStyleSheetByISTD(sStringValue);
+            OSL_ENSURE( pEntry.get(), "no style sheet found" );
+            const StyleSheetPropertyMap* pStyleSheetProperties = dynamic_cast<const StyleSheetPropertyMap*>(pEntry ? pEntry->pProperties.get() : 0);
 
-        if( pStyleSheetProperties && pStyleSheetProperties->GetListId() >= 0 )
-            rContext->Insert( PROP_NUMBERING_STYLE_NAME, true, uno::makeAny(
-                        ListDef::GetStyleName( pStyleSheetProperties->GetListId( ) ) ), false);
+            if( pStyleSheetProperties && pStyleSheetProperties->GetListId() >= 0 )
+                rContext->Insert( PROP_NUMBERING_STYLE_NAME, true, uno::makeAny(
+                            ListDef::GetStyleName( pStyleSheetProperties->GetListId( ) ) ), false);
 
-        if( pStyleSheetProperties && pStyleSheetProperties->GetListLevel() >= 0 )
-            rContext->Insert( PROP_NUMBERING_LEVEL, true, uno::makeAny(pStyleSheetProperties->GetListLevel()), false);
+            if( pStyleSheetProperties && pStyleSheetProperties->GetListLevel() >= 0 )
+                rContext->Insert( PROP_NUMBERING_LEVEL, true, uno::makeAny(pStyleSheetProperties->GetListLevel()), false);
+        }
     }
     break;
     case NS_ooxml::LN_EG_RPrBase_rStyle:
