@@ -257,7 +257,7 @@ ToolBox RID_FULLSCREENTOOLBOX
 
 String STR_QUITAPP
 {
-    Text [ en-US ] = "E~xit" ;
+    Text [ en-US ] = "E~xit %PRODUCTNAME" ;
 };
 
 String RID_STR_HELP
