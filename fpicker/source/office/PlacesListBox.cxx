@@ -168,30 +168,30 @@ IMPL_LINK( PlacesListBox, Selection, void* , EMPTYARG )
 
 IMPL_LINK ( PlacesListBox, DoubleClick, void*, EMPTYARG )
 {
-	sal_uInt16 nSelected = mpImpl->GetCurrRow();
-	PlacePtr pPlace = maPlaces[nSelected];
-	if ( pPlace->IsEditable() == true )
-	{
-		PlaceEditDialog aDlg( mpDlg, pPlace );
-		short aRetCode = aDlg.Execute();
-		switch(aRetCode) {
-			case RET_OK :
-			{
-				pPlace->SetName ( aDlg.GetServerName() );
-				pPlace->SetUrl( aDlg.GetServerUrl() );
+    sal_uInt16 nSelected = mpImpl->GetCurrRow();
+    PlacePtr pPlace = maPlaces[nSelected];
+    if ( pPlace->IsEditable() == true && !pPlace->IsLocal( ) )
+    {
+        PlaceEditDialog aDlg( mpDlg, pPlace );
+        short aRetCode = aDlg.Execute();
+        switch(aRetCode) {
+            case RET_OK :
+            {
+                pPlace->SetName ( aDlg.GetServerName() );
+                pPlace->SetUrl( aDlg.GetServerUrl() );
                 mbUpdated = true;
-				break;
-			}
-			case RET_NO :
-			{
-				RemovePlace(nSelected);
-				break;
-			}
-			default:
-				break;
-		};
-	}
-	return 0;
+                break;
+            }
+            case RET_NO :
+            {
+                RemovePlace(nSelected);
+                break;
+            }
+            default:
+                break;
+        };
+    }
+    return 0;
 }
 
 void PlacesListBox::updateView( )
