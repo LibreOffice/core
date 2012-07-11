@@ -707,7 +707,7 @@ TokenInfo SimpleParser::GetNextToken( ParserMessageList &rErrorList )
                 // this is only to kick out quoted backslashes
             while (nQuotedQuotesPos != -1)
             {
-                if ( nQuotedBackPos <= nQuotedQuotesPos )
+                if ( nQuotedBackPos != -1 && nQuotedBackPos <= nQuotedQuotesPos )
                     nQuotePos = nQuotedBackPos+2;
                 else
                 {
@@ -808,7 +808,7 @@ rtl::OUString SimpleParser::GetNextTokenString( ParserMessageList &rErrorList, s
         if (nEndPos == -1)
         {   // Token is incomplete. Skip start and search for better ones
             nPos = nStyle3StartPos +2;
-            rErrorList.AddError( 24, "Tag Start '\\<' without Tag End '\\>'", TokenInfo( TAG_UNKNOWN_TAG, nStyle3StartPos, aSource.copy(nStyle3StartPos - 10, 20) ) );
+            rErrorList.AddError( 24, "Tag Start '\\<' without Tag End '\\>'", TokenInfo( TAG_UNKNOWN_TAG, nStyle3StartPos, helper::abbreviate(aSource, nStyle3StartPos - 10, 20) ) );
             return GetNextTokenString( rErrorList, rTagStartPos );
         }
         // check for paired quoted "    -->   \"sometext\"

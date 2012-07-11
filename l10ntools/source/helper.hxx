@@ -32,6 +32,7 @@
 
 #include "sal/config.h"
 
+#include <algorithm>
 #include <cassert>
 
 #include "rtl/string.hxx"
@@ -97,6 +98,14 @@ inline sal_Int32 indexOfAnyAsciiL(
         }
     }
     return -1;
+}
+
+template< typename T > inline T abbreviate(
+    T const & text, sal_Int32 start, sal_Int32 length)
+{
+    start = std::max(0, start);
+    assert(start <= text.getLength());
+    return text.copy(start, std::min(text.getLength() - start, length));
 }
 
 }
