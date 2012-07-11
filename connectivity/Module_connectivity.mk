@@ -44,6 +44,7 @@ $(eval $(call gb_Module_add_targets,connectivity,\
 	Library_dbtools \
 	Library_file \
 	Library_flat \
+	Library_mork \
 	Library_mysql \
 	Library_odbc \
 	Library_odbcbase \

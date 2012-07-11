@@ -310,6 +310,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     lwpft \
 	MacOSXSpell \
     merged \
+    mork \
     mozab2 \
     mozabdrv \
     msfilter \
