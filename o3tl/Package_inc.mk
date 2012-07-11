@@ -33,5 +33,6 @@ $(eval $(call gb_Package_add_file,o3tl_inc,inc/o3tl/heap_ptr.hxx,o3tl/heap_ptr.h
 $(eval $(call gb_Package_add_file,o3tl_inc,inc/o3tl/lazy_update.hxx,o3tl/lazy_update.hxx))
 $(eval $(call gb_Package_add_file,o3tl_inc,inc/o3tl/range.hxx,o3tl/range.hxx))
 $(eval $(call gb_Package_add_file,o3tl_inc,inc/o3tl/vector_pool.hxx,o3tl/vector_pool.hxx))
+$(eval $(call gb_Package_add_file,o3tl_inc,inc/o3tl/sorted_vector.hxx,o3tl/sorted_vector.hxx))
 
 # vim: set noet sw=4:

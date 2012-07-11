@@ -41,6 +41,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,o3tl_tests,\
 	o3tl/qa/test-heap_ptr \
 	o3tl/qa/test-range \
 	o3tl/qa/test-vector_pool \
+	o3tl/qa/test-sorted_vector \
 ))
 
 # vim: set noet sw=4:
