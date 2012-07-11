@@ -87,6 +87,7 @@
 #include <postithelper.hxx>
 #include <redline.hxx>
 #include <docary.hxx>
+#include <o3tl/sorted_vector.hxx>
 
 #include "swabstdlg.hxx"
 #include "globals.hrc"
@@ -105,9 +106,10 @@ using namespace ::com::sun::star::container;
 
 #define NAVI_BOOKMARK_DELIM     (sal_Unicode)1
 
-typedef SwContent* SwContentPtr;
-SV_DECL_PTRARR_SORT_DEL( SwContentArr, SwContentPtr, 0 )
-SV_IMPL_OP_PTRARR_SORT(SwContentArr, SwContentPtr)
+class SwContentArr : public o3tl::sorted_vector<SwContent*, o3tl::less_ptr_to<SwContent>> {
+public:
+    ~SwContentArr() { DeleteAndDestroyAll(); }
+};
 
 sal_Bool SwContentTree::bIsInDrag = sal_False;
 
@@ -286,10 +288,10 @@ void SwContentType::Init(sal_Bool* pbInvalidateWindow)
             sal_Bool bInvalidate = sal_False;
             if(!pMember)
                 pMember = new SwContentArr;
-            else if(pMember->Count())
+            else if(!pMember->empty())
             {
                 pOldMember = pMember;
-                nOldRegionCount = pOldMember->Count();
+                nOldRegionCount = pOldMember->size();
                 pMember = new SwContentArr;
             }
             const Point aNullPt;
@@ -320,22 +322,22 @@ void SwContentType::Init(sal_Bool* pbInvalidateWindow)
                     if( !pFmt->GetInfo( aAskItem ) &&
                         !aAskItem.pObject )     // not visible
                         pCnt->SetInvisible();
-                    pMember->Insert(pCnt);
+                    pMember->insert(pCnt);
 
-                    sal_uInt16 nPos = pMember->Count() - 1;
+                    sal_uInt16 nPos = pMember->size() - 1;
                     if(nOldRegionCount > nPos &&
-                        (pOldMember->GetObject(nPos))->IsInvisible()
+                        ((*pOldMember)[nPos])->IsInvisible()
                                 != pCnt->IsInvisible())
                             bInvalidate = sal_True;
                 }
             }
-            nMemberCount = pMember->Count();
+            nMemberCount = pMember->size();
             sTypeToken = rtl::OUString::createFromAscii(pMarkToRegion);
             bEdit = sal_True;
             bDelete = sal_False;
             if(pOldMember)
             {
-                pOldMember->DeleteAndDestroy(0, pOldMember->Count());
+                pOldMember->DeleteAndDestroyAll();
                 delete pOldMember;
                 if(pbInvalidateWindow && bInvalidate)
                     *pbInvalidateWindow = sal_True;
@@ -360,8 +362,8 @@ void SwContentType::Init(sal_Bool* pbInvalidateWindow)
             nMemberCount = 0;
             if(!pMember)
                 pMember = new SwContentArr;
-            else if(pMember->Count())
-                pMember->DeleteAndDestroy(0, pMember->Count());
+            else if(!pMember->empty())
+                pMember->DeleteAndDestroyAll();
 
             SwGetINetAttrs aArr;
             nMemberCount = pWrtShell->GetINetAttrs( aArr );
@@ -378,7 +380,7 @@ void SwContentType::Init(sal_Bool* pbInvalidateWindow)
                                         RTL_TEXTENCODING_UTF8 ),
                                     &p->rINetAttr,
                                     n );
-                pMember->Insert( pCnt );
+                pMember->insert( pCnt );
             }
             bEdit = sal_True;
             nOldMemberCount = nMemberCount;
@@ -390,8 +392,8 @@ void SwContentType::Init(sal_Bool* pbInvalidateWindow)
             nMemberCount = 0;
             if(!pMember)
                 pMember = new SwContentArr;
-            else if(pMember->Count())
-                pMember->DeleteAndDestroy(0, pMember->Count());
+            else if(!pMember->empty())
+                pMember->DeleteAndDestroyAll();
 
             SwPostItMgr* aMgr = pWrtShell->GetView().GetPostItMgr();
             if (aMgr)
@@ -411,7 +413,7 @@ void SwContentType::Init(sal_Bool* pbInvalidateWindow)
                                                 sEntry,
                                                 (const SwFmtFld*)aFmtFld,
                                                 nMemberCount);
-                            pMember->Insert(pCnt);
+                            pMember->insert(pCnt);
                             nMemberCount++;
                         }
                     }
@@ -464,8 +466,8 @@ const SwContent* SwContentType::GetMember(sal_uInt16 nIndex)
     {
         FillMemberList();
     }
-    if(nIndex < pMember->Count())
-        return pMember->GetObject(nIndex);
+    if(nIndex < pMember->size())
+        return (*pMember)[nIndex];
     else
         return 0;
 
@@ -488,14 +490,14 @@ void    SwContentType::FillMemberList(sal_Bool* pbLevelOrVisibilityChanged)
     if(pMember && pbLevelOrVisibilityChanged)
     {
         pOldMember = pMember;
-        nOldMemberCount = pOldMember->Count();
+        nOldMemberCount = pOldMember->size();
         pMember = new SwContentArr;
         *pbLevelOrVisibilityChanged = sal_False;
     }
     else if(!pMember)
         pMember = new SwContentArr;
-    else if(pMember->Count())
-        pMember->DeleteAndDestroy(0, pMember->Count());
+    else if(!pMember->empty())
+        pMember->DeleteAndDestroyAll();
     switch(nContentType)
     {
         case CONTENT_TYPE_OUTLINE   :
@@ -516,12 +518,12 @@ void    SwContentType::FillMemberList(sal_Bool* pbLevelOrVisibilityChanged)
                     SwNavigationPI::CleanEntry( aEntry );
                     SwOutlineContent* pCnt = new SwOutlineContent(this, aEntry, i, nLevel,
                                                         pWrtShell->IsOutlineMovable( i ), nPos );
-                    pMember->Insert(pCnt);//, nPos);
+                    pMember->insert(pCnt);//, nPos);
                     // bei gleicher Anzahl und vorhandenem pOldMember wird die
                     // alte mit der neuen OutlinePos verglichen
                     // cast fuer Win16
                     if(nOldMemberCount > (int)nPos &&
-                        ((SwOutlineContent*)pOldMember->GetObject(nPos))->GetOutlineLevel() != nLevel)
+                        ((SwOutlineContent*)(*pOldMember)[nPos])->GetOutlineLevel() != nLevel)
                         *pbLevelOrVisibilityChanged = sal_True;
 
                     nPos++;
@@ -548,10 +550,10 @@ void    SwContentType::FillMemberList(sal_Bool* pbLevelOrVisibilityChanged)
                     !aAskItem.pObject )     // not visible
                     pCnt->SetInvisible();
 
-                pMember->Insert(pCnt);
+                pMember->insert(pCnt);
 
                 if(nOldMemberCount > (int)i &&
-                    (pOldMember->GetObject(i))->IsInvisible() != pCnt->IsInvisible())
+                    (*pOldMember)[i]->IsInvisible() != pCnt->IsInvisible())
                         *pbLevelOrVisibilityChanged = sal_True;
             }
         }
@@ -593,9 +595,9 @@ void    SwContentType::FillMemberList(sal_Bool* pbLevelOrVisibilityChanged)
                 if( !pFrmFmt->GetInfo( aAskItem ) &&
                     !aAskItem.pObject )     // not visible
                     pCnt->SetInvisible();
-                pMember->Insert(pCnt);
+                pMember->insert(pCnt);
                 if(nOldMemberCount > (int)i &&
-                    (pOldMember->GetObject(i))->IsInvisible() != pCnt->IsInvisible())
+                    (*pOldMember)[i]->IsInvisible() != pCnt->IsInvisible())
                         *pbLevelOrVisibilityChanged = sal_True;
             }
         }
@@ -612,7 +614,7 @@ void    SwContentType::FillMemberList(sal_Bool* pbLevelOrVisibilityChanged)
                     const String& rBkmName = ppBookmark->get()->GetName();
                     //nYPos von 0 -> text::Bookmarks werden nach Alphabet sortiert
                     SwContent* pCnt = new SwContent(this, rBkmName, 0);
-                    pMember->Insert(pCnt);
+                    pMember->insert(pCnt);
                 }
             }
         }
@@ -645,16 +647,16 @@ void    SwContentType::FillMemberList(sal_Bool* pbLevelOrVisibilityChanged)
                     if( !pFmt->GetInfo( aAskItem ) &&
                         !aAskItem.pObject )     // not visible
                         pCnt->SetInvisible();
-                    pMember->Insert(pCnt);
+                    pMember->insert(pCnt);
 
-                    sal_uInt16 nPos = pMember->Count() - 1;
+                    sal_uInt16 nPos = pMember->size() - 1;
                     if(nOldMemberCount > nPos &&
-                        (pOldMember->GetObject(nPos))->IsInvisible()
+                        (*pOldMember)[nPos]->IsInvisible()
                                 != pCnt->IsInvisible())
                             *pbLevelOrVisibilityChanged = sal_True;
                 }
             }
-            nMemberCount = pMember->Count();
+            nMemberCount = pMember->size();
         }
         break;
         case CONTENT_TYPE_REFERENCE:
@@ -666,7 +668,7 @@ void    SwContentType::FillMemberList(sal_Bool* pbLevelOrVisibilityChanged)
             {
                 //Referenzen nach Alphabet sortiert
                 SwContent* pCnt = new SwContent(this, *i, 0);
-                pMember->Insert(pCnt);
+                pMember->insert(pCnt);
             }
         }
         break;
@@ -687,7 +689,7 @@ void    SwContentType::FillMemberList(sal_Bool* pbLevelOrVisibilityChanged)
                                         RTL_TEXTENCODING_UTF8 ),
                                     &p->rINetAttr,
                                     n );
-                pMember->Insert( pCnt );
+                pMember->insert( pCnt );
             }
         }
         break;
@@ -707,10 +709,10 @@ void    SwContentType::FillMemberList(sal_Bool* pbLevelOrVisibilityChanged)
                     !aAskItem.pObject )     // not visible
                     pCnt->SetInvisible();
 
-                pMember->Insert( pCnt );
-                sal_uInt16 nPos = pMember->Count() - 1;
+                pMember->insert( pCnt );
+                sal_uInt16 nPos = pMember->size() - 1;
                 if(nOldMemberCount > nPos &&
-                    (pOldMember->GetObject(nPos))->IsInvisible()
+                    (*pOldMember)[nPos]->IsInvisible()
                             != pCnt->IsInvisible())
                         *pbLevelOrVisibilityChanged = sal_True;
             }
@@ -721,8 +723,8 @@ void    SwContentType::FillMemberList(sal_Bool* pbLevelOrVisibilityChanged)
             nMemberCount = 0;
             if(!pMember)
                 pMember = new SwContentArr;
-            else if(pMember->Count())
-                pMember->DeleteAndDestroy(0, pMember->Count());
+            else if(!pMember->empty())
+                pMember->DeleteAndDestroyAll();
             SwPostItMgr* aMgr = pWrtShell->GetView().GetPostItMgr();
             if (aMgr)
             {
@@ -741,7 +743,7 @@ void    SwContentType::FillMemberList(sal_Bool* pbLevelOrVisibilityChanged)
                                                 sEntry,
                                                 (const SwFmtFld*)aFmtFld,
                                                 nMemberCount);
-                            pMember->Insert(pCnt);
+                            pMember->insert(pCnt);
                             nMemberCount++;
                         }
                     }
@@ -754,8 +756,8 @@ void    SwContentType::FillMemberList(sal_Bool* pbLevelOrVisibilityChanged)
             nMemberCount = 0;
             if(!pMember)
                 pMember = new SwContentArr;
-            else if(pMember->Count())
-                pMember->DeleteAndDestroy(0, pMember->Count());
+            else if(!pMember->empty())
+                pMember->DeleteAndDestroyAll();
 
             IDocumentDrawModelAccess* pIDDMA = pWrtShell->getIDocumentDrawModelAccess();
             SdrModel* pModel = pIDDMA->GetDrawModel();
@@ -780,10 +782,10 @@ void    SwContentType::FillMemberList(sal_Bool* pbLevelOrVisibilityChanged)
                                             nYPos);
                         if(!pIDDMA->IsVisibleLayerId(pTemp->GetLayer()))
                             pCnt->SetInvisible();
-                        pMember->Insert(pCnt);
+                        pMember->insert(pCnt);
                         nMemberCount++;
                         if(nOldMemberCount > (int)i &&
-                            (pOldMember->GetObject((sal_uInt16)i))->IsInvisible() != pCnt->IsInvisible())
+                            (*pOldMember)[i]->IsInvisible() != pCnt->IsInvisible() )
                                 *pbLevelOrVisibilityChanged = sal_True;
                     }
                 }
@@ -793,7 +795,7 @@ void    SwContentType::FillMemberList(sal_Bool* pbLevelOrVisibilityChanged)
     }
     bDataValid = sal_True;
     if(pOldMember)
-        pOldMember->DeleteAndDestroy(0, pOldMember->Count());
+        pOldMember->DeleteAndDestroyAll();
 
 }
 
