@@ -83,6 +83,24 @@ private:
     css::uno::Reference< css::uno::XComponentContext > context_;
 };
 
+class Connection:
+    public cppu::WeakImplHelper1< css::sdbc::XConnection >,
+    private boost::noncopyable
+{
+public:
+    Connection(
+        css::uno::Reference< css::uno::XComponentContext > const context):
+        context_(context)
+    { assert(context.is()); }
+
+private:
+    virtual ~Connection() {}
+
+    //... TODO
+
+    css::uno::Reference< css::uno::XComponentContext > context_;
+};
+
 css::uno::Reference< css::sdbc::XConnection > Service::connect(
     rtl::OUString const & url,
     css::uno::Sequence< css::beans::PropertyValue > const & info)
@@ -90,7 +108,7 @@ css::uno::Reference< css::sdbc::XConnection > Service::connect(
 {
     //... TODO
     (void) url; (void) info; // avoid warnings
-    return css::uno::Reference< css::sdbc::XConnection >();
+    return static_cast< cppu::OWeakObject * >(new Connection(context_));
 }
 
 sal_Bool Service::acceptsURL(rtl::OUString const & url)
