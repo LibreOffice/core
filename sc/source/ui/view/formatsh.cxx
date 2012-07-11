@@ -2159,6 +2159,8 @@ void ScFormatShell::StateFormatPaintbrush( SfxItemSet& rSet )
         rSet.DisableItem( SID_FORMATPAINTBRUSH );
     else
         rSet.Put( SfxBoolItem( SID_FORMATPAINTBRUSH, pViewData->GetView()->HasPaintBrush() ) );
+    ScViewFunc* pView = pViewData->GetView();
+    pView->Unmark();
 }
 
 short ScFormatShell::GetCurrentNumberFormatType()
