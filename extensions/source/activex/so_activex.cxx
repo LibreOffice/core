@@ -180,7 +180,7 @@ BOOL createKey( HKEY hkey,
                                                                0,
                                                                REG_SZ,
                        reinterpret_cast<const BYTE*>(aChildValue),
-                       sal::static_int_cast<DWORD(strlen(aChildValue))))
+                       sal::static_int_cast<DWORD>(strlen(aChildValue))))
            && ERROR_SUCCESS == RegCloseKey( hkey1 ) );
 
 }
