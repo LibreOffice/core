@@ -76,6 +76,7 @@ public:
     void testN766481();
     void testN766487();
     void testN693238();
+    void testNumbering1();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -100,6 +101,7 @@ public:
     CPPUNIT_TEST(testN766481);
     CPPUNIT_TEST(testN766487);
     CPPUNIT_TEST(testN693238);
+    CPPUNIT_TEST(testNumbering1);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -676,6 +678,62 @@ void Test::testN693238()
     sal_Int32 nValue = 0;
     xPropertySet->getPropertyValue("LeftMargin") >>= nValue;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(635), nValue);
+}
+
+void Test::testNumbering1()
+{
+    load( "numbering1.docx" );
+/* <w:numPr> in the paragraph itself was overriden by <w:numpr> introduced by the paragraph's <w:pStyle>
+enum = ThisComponent.Text.createEnumeration
+para = enum.NextElement
+xray para.NumberingStyleName
+numberingstyle = ThisComponent.NumberingRules.getByIndex(6)
+xray numberingstyle.name   - should match name above
+numbering = numberingstyle.getByIndex(0)
+xray numbering(11)  - should be 4, arabic
+note that the indexes may get off as the implementation evolves, C++ code seaches in loops
+*/
+    uno::Reference<text::XTextDocument> textDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> paraEnumAccess(textDocument->getText(), uno::UNO_QUERY);
+    // list of paragraphs
+    uno::Reference<container::XEnumeration> paraEnum = paraEnumAccess->createEnumeration();
+    uno::Reference<uno::XInterface> paragraph(paraEnum->nextElement(), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> text(paragraph, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL( OUString( "Text1." ), text->getString());
+    uno::Reference<beans::XPropertySet> xPropertySet( paragraph, uno::UNO_QUERY );
+    OUString numberingStyleName;
+    xPropertySet->getPropertyValue( "NumberingStyleName" ) >>= numberingStyleName;
+    uno::Reference<text::XNumberingRulesSupplier> xNumberingRulesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> numberingRules(xNumberingRulesSupplier->getNumberingRules(), uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> numberingRule;
+    for( int i = 0;
+         i < numberingRules->getCount();
+         ++i )
+    {
+        xPropertySet.set( numberingRules->getByIndex( i ), uno::UNO_QUERY );
+        OUString name;
+        xPropertySet->getPropertyValue( "Name" ) >>= name;
+        if( name == numberingStyleName )
+        {
+            numberingRule.set( numberingRules->getByIndex( i ), uno::UNO_QUERY );
+            break;
+        }
+    }
+    CPPUNIT_ASSERT( numberingRule.is());
+    uno::Sequence< beans::PropertyValue > numbering;
+    numberingRule->getByIndex( 0 ) >>= numbering;
+    sal_Int16 numberingType = style::NumberingType::NUMBER_NONE;
+    for( int i = 0;
+         i < numbering.getLength();
+         ++i )
+        {
+        if( numbering[ i ].Name == "NumberingType" )
+            {
+            numbering[ i ].Value >>= numberingType;
+            break;
+            }
+        }
+    CPPUNIT_ASSERT_EQUAL( style::NumberingType::ARABIC, numberingType );
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
