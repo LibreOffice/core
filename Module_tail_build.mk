@@ -167,9 +167,9 @@ endef
 $(eval $(call tailbuild_serialize,\
 	scfilt vbaobj sc msword swui sw sd \
 	$(if $(filter DBCONNECTIVITY,$(BUILD_TYPE)),dbu) \
-	writerfilter cui chartcontroller \
+	writerfilter cui chartcontroller oox \
 	$(if $(filter TRUE,$(MERGELIBS)),merged,svxcore) \
-	oox vcl xo \
+	vcl xo \
 ))
 
 # vim: set noet sw=4 ts=4:
