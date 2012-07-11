@@ -48,14 +48,17 @@ class Place
 
     public:
 
-        Place( rtl::OUString sName, rtl::OUString sUrl, bool bEditable = false) :
+        Place( rtl::OUString sName, rtl::OUString sUrl, bool bEditable = false ) :
 			msName( sName ),
 			maUrl( sUrl ),
 			mbEditable( bEditable ) {};
 
         ~Place( ) {};
 
-        Place( const Place& rCopy ) : msName( rCopy.msName ), maUrl( rCopy.maUrl ) { };
+        Place( const Place& rCopy ) :
+            msName( rCopy.msName ),
+            maUrl( rCopy.maUrl ),
+            mbEditable( rCopy.mbEditable ) { };
 
 		void SetName(const rtl::OUString& aName )    { msName = aName; }
 		void SetUrl(const  rtl::OUString& aUrl )	 { maUrl.SetURL( aUrl ); }
