@@ -601,6 +601,7 @@ IMPL_LINK_NOARG(SfxTemplateManagerDlg, SearchUpdateHdl)
             mpSearchView->AppendItem(++nCounter,pItem->nRegionId,
                                      pItem->nId-1,
                                      pItem->aName,
+                                     maView->GetItemText(pItem->nRegionId+1),
                                      pItem->aPath,
                                      pItem->aThumbnail);
         }

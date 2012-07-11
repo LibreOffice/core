@@ -34,7 +34,8 @@ TemplateSearchView::~TemplateSearchView ()
 }
 
 void TemplateSearchView::AppendItem(sal_uInt16 nItemId, sal_uInt16 nRegionId, sal_uInt16 nIdx,
-                                    const rtl::OUString &rStr, const rtl::OUString &rPath,
+                                    const rtl::OUString &rTitle, const rtl::OUString &rSubtitle,
+                                    const rtl::OUString &rPath,
                                     const BitmapEx &rImage)
 {
     TemplateSearchViewItem *pItem = new TemplateSearchViewItem(*this,this);
@@ -42,7 +43,8 @@ void TemplateSearchView::AppendItem(sal_uInt16 nItemId, sal_uInt16 nRegionId, sa
     pItem->mnIdx = nIdx;
     pItem->mnRegionId = nRegionId;
     pItem->maPreview1 = rImage;
-    pItem->maTitle = rStr;
+    pItem->maTitle = rTitle;
+    pItem->setSubTitle(rSubtitle);
     pItem->setPath(rPath);
     pItem->setSelectClickHdl(LINK(this,ThumbnailView,OnItemSelected));
 
