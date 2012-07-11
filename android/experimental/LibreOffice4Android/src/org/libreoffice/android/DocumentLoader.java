@@ -127,6 +127,8 @@ public class DocumentLoader
 
     ViewFlipper flipper;
     
+    DocumentViewer documentViewer;
+
     Bundle extras;
     
     LinearLayout ll ;
@@ -156,8 +158,8 @@ public class DocumentLoader
                 outToLeft.setDuration(500);
                 flipper.setOutAnimation(outToLeft);
 
-                flipper.showNext();
-                ((PageViewer)flipper.getChildAt((flipper.getDisplayedChild() + PAGECACHE_PLUSMINUS) % PAGECACHE_SIZE)).display(((PageViewer)flipper.getCurrentView()).currentPageNumber + PAGECACHE_PLUSMINUS);
+                documentViewer.nextPage();
+                //((PageViewer)flipper.getChildAt((flipper.getDisplayedChild() + PAGECACHE_PLUSMINUS) % PAGECACHE_SIZE)).display(((PageViewer)flipper.getCurrentView()).currentPageNumber + PAGECACHE_PLUSMINUS);
                 return true;
             } else if (event2.getX() - event1.getX() > 120) {
                 if (((PageViewer)flipper.getCurrentView()).currentPageNumber == 0)
@@ -173,9 +175,9 @@ public class DocumentLoader
                 outToRight.setDuration(500);
                 flipper.setOutAnimation(outToRight);
 
-                flipper.showPrevious();
+                documentViewer.prevPage();
 
-                ((PageViewer)flipper.getChildAt((flipper.getDisplayedChild() + PAGECACHE_SIZE - PAGECACHE_PLUSMINUS) % PAGECACHE_SIZE)).display(((PageViewer)flipper.getCurrentView()).currentPageNumber - PAGECACHE_PLUSMINUS);
+                //((PageViewer)flipper.getChildAt((flipper.getDisplayedChild() + PAGECACHE_SIZE - PAGECACHE_PLUSMINUS) % PAGECACHE_SIZE)).display(((PageViewer)flipper.getCurrentView()).currentPageNumber - PAGECACHE_PLUSMINUS);
 
                 return true;
             }
@@ -276,7 +278,7 @@ public class DocumentLoader
         try {
             // Use dummySmallDevice with no scale of offset just to find out
             // the paper size of this page.
-
+            Log.i( TAG , "Render( " + Integer.toString( number ) + " )");
             PropertyValue renderProps[] = new PropertyValue[3];
             renderProps[0] = new PropertyValue();
             renderProps[0].Name = "IsPrinter";
@@ -448,12 +450,16 @@ public class DocumentLoader
         TextView waitView;
         PageState state = PageState.NONEXISTENT;
         Bitmap bm;
+        static final String TAG = "PAGE_VIEWER";
+        int width ;
+        int height;
 
         class PageLoadTask
             extends AsyncTask<Integer, Void, Integer>
         {
             protected Integer doInBackground(Integer... params)
             {
+                Log.i( PageViewer.TAG, "doInBackground: page " + params[0].toString() );
                 int number = params[0];
 
                 if (number >= pageCount)
@@ -461,8 +467,8 @@ public class DocumentLoader
 
                 state = PageState.LOADING;
                 currentPageNumber = number;
-                ByteBuffer bb = renderPage(currentPageNumber);
-                bm = Bitmap.createBitmap(flipper.getWidth(), flipper.getHeight(), Bitmap.Config.ARGB_8888);
+                ByteBuffer bb = renderPage(currentPageNumber , params[1] , params[2]);//
+                bm = Bitmap.createBitmap( width, height, Bitmap.Config.ARGB_8888);
                 bm.copyPixelsFromBuffer(bb);
 
                 return currentPageNumber;
@@ -470,7 +476,7 @@ public class DocumentLoader
 
             protected void onPostExecute(Integer result)
             {
-                Log.i(TAG, "onPostExecute: " + result);
+                Log.i(PageViewer.TAG, "onPostExecute: " + result);
                 if (result == -1)
                     return;
 
@@ -489,22 +495,27 @@ public class DocumentLoader
 
         void display(int number)
         {
-            Log.i(TAG, "PageViewer display(" + number + ")");
+            Log.i(this.TAG, "PageViewer display(" + number + ")");
+            Log.i(this.TAG, "IF");
             if (number >= 0){
                 waitView = new TextView(DocumentLoader.this);
                 waitView.setText("Page " + (number+1) + ", wait...");
                 addView(waitView, 0, matchParent);
             }
+            Log.i(this.TAG, "ENDIF");
             currentPageNumber = number;
             state = PageState.NONEXISTENT;
-
+            Log.i(this.TAG, "IF");
             if (getDisplayedChild() == 1) {
                 showPrevious();
                 removeViewAt(1);
             }
-
+            Log.i(TAG, "ENDIF");
             if (number >= 0) {
-                new PageLoadTask().executeOnExecutor(AsyncTask.SERIAL_EXECUTOR, number);
+                Log.i( this.TAG , "Loading " + Integer.toString( number ) + " on Async ");
+                new PageLoadTask().executeOnExecutor(AsyncTask.SERIAL_EXECUTOR, number , width , height);
+            }else{
+                Log.i( this.TAG , "Bad computer, Bold!");
             }
         }
 
@@ -512,11 +523,13 @@ public class DocumentLoader
         	return this.currentPageNumber;
         }
         
-        PageViewer(int number)
+        PageViewer(int number , int width , int height)
         {
             super(DocumentLoader.this);
             if( number < 0)
             	return;
+            this.width = width ;
+            this.height = height;
             waitView = new TextView(DocumentLoader.this);
             waitView.setTextSize(24);
             waitView.setGravity(Gravity.CENTER);
@@ -585,7 +598,7 @@ public class DocumentLoader
 
         void display(int number)
         {
-            Log.i(TAG, "PageViewer display(" + number + ")");
+            Log.i(TAG, "Thumbnail display(" + number + ")");
             if (number >= 0)
                 waitView.setText("Page " + (number+1) + ", wait...");
             //state = PageState.NONEXISTENT;
@@ -645,9 +658,10 @@ public class DocumentLoader
             progressView = new ProgressBar( DocumentLoader.this, null, android.R.attr.progressBarStyleHorizontal);
             progressView.setProgress( 10 );
 
-            flipper = new ViewFlipper(DocumentLoader.this);
-            flipper = (ViewFlipper)findViewById( R.id.page_flipper );
-            flipper.addView( waitView , 0 , matchParent);
+            //flipper = new ViewFlipper(DocumentLoader.this);
+            //flipper = (ViewFlipper)findViewById( R.id.page_flipper );
+            //flipper.addView( waitView , 0 , matchParent);
+            //flipper.showNext();
             currentPage = 0;
     	}
         
@@ -714,17 +728,19 @@ public class DocumentLoader
         }
         
         protected void onPostExecute(Integer result){
-        	Log.i(TAG, "onPostExecute: " + result);
+            Log.i(TAG, "onPostExecute: " + result);
             if (result == -1)
                 return;
-          //flipper = new ViewFlipper(this);
-			flipper = (ViewFlipper)findViewById( R.id.page_flipper );
-            matchParent = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-            flipper.removeViewAt( 0 );	
+            //flipper = new ViewFlipper(this);
+            //flipper = (ViewFlipper)findViewById( R.id.page_flipper );
+            //matchParent = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+            //flipper.removeViewAt( 0 );
+            documentViewer = new DocumentViewer( (ViewFlipper)findViewById( R.id.page_flipper ) );
+            documentViewer.open(0);
 
+            //currentPage = 0;
+            //openPageWithPrefetching( currentPage );
 
-            currentPage = 0;
-            openPageWithPrefetching( currentPage );
             /*
             //open method? set current page = 0?
             flipper.addView(new PageViewer(0), 0, matchParent);
@@ -748,11 +764,153 @@ public class DocumentLoader
 					public void onClick(View v) {
 						// TODO Auto-generated method stub
 						Log.d("nav" , Integer.toString( pos ) );
-						openPageWithPrefetching( pos );
+                        //openPageWithPrefetching( pos );
+                        documentViewer.open( pos );
 					}
 				});
 				ll.addView ( thumb );
 			}
+        }
+    }
+
+    class DocumentViewer
+    {
+        private int currentPage;
+        private ViewFlipper viewFlipper;
+        //int pageCount;
+        private int lastPage;
+        private final int firstPage = 0;
+        private final int CACHE_PLUSMINUS = 2;
+        private final int CACHE_SIZE = 2*CACHE_PLUSMINUS + 1;
+        private ViewGroup.LayoutParams matchParent = new ViewGroup.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.MATCH_PARENT);
+
+        public DocumentViewer(ViewFlipper viewFlipper ){
+            this.currentPage = 0;
+            this.viewFlipper = viewFlipper;
+            this.lastPage = pageCount-1;
+            //viewFlipper.removeAllViews();
+            //Not doing this here doesn't sit right can have uninit viewFlipper
+            viewFlipper.removeAllViews();
+            //need to pre-fetch
+            for( int i = 0 ; i < this.CACHE_PLUSMINUS + 1 ; i++ ){//Load 0 + cache+- next pages
+                if( i > lastPage)
+                    break;
+                viewFlipper.addView( new PageViewer( i , viewFlipper.getWidth() , viewFlipper.getHeight()) , i );
+            }
+        }
+
+        public DocumentViewer(ViewFlipper viewFlipper, int n ){
+            this.currentPage = n;
+            this.viewFlipper = viewFlipper;
+            this.lastPage = pageCount-1;
+            //viewFlipper.removeAllViews();
+            //need to pre-fetch
+            int pos = 0;
+            for(int i = n - this.CACHE_PLUSMINUS ; i < n + this.CACHE_PLUSMINUS ; i++, pos++ ){
+                if( i < firstPage || i > lastPage)
+                    continue;//Perhaps should continue on < and break on > but this seems neater
+                viewFlipper.addView( new PageViewer( i , viewFlipper.getWidth() , viewFlipper.getHeight()) , pos );
+            }
+        }
+
+        public void nextPage(){
+            if( this.currentPage == lastPage ){
+                return;
+            }
+            this.currentPage++;
+            if( !( this.currentPage + this.CACHE_PLUSMINUS > lastPage) ){//don't remove view's if there are no more to add
+                viewFlipper.removeViewAt( 0 );
+                viewFlipper.addView(
+                new PageViewer( this.currentPage + this.CACHE_PLUSMINUS, viewFlipper.getWidth() , viewFlipper.getHeight())
+                    , this.CACHE_SIZE -1 );
+            }
+            viewFlipper.showNext();
+        }
+
+        public void prevPage(){
+            if( this.currentPage == firstPage ){
+                return;
+            }
+            this.currentPage--;
+            if( !( this.currentPage - this.CACHE_PLUSMINUS < 0) ){//don't remove view's if there are no more to add
+                viewFlipper.removeViewAt( CACHE_SIZE - 1 );
+                viewFlipper.addView(
+                    new PageViewer( this.currentPage - this.CACHE_PLUSMINUS , viewFlipper.getWidth() , viewFlipper.getHeight())
+                    , 0 );
+            }
+            viewFlipper.showPrevious();
+        }
+
+        public void open( int newPage ){
+            int diff = newPage - this.currentPage;
+            Log.i( TAG , "open( N )");
+            Log.i( TAG , "current page : " + Integer.toString( this.currentPage) );
+            Log.i( TAG , "opening : " + Integer.toString( newPage ) + " of " + Integer.toString( pageCount ) );
+            //diff = 0 -> do nothing
+            //abs(diff) >= cachesize -> fill as in constructor
+            //if curr > n : new_low foreach in cache ? # < new_low remove : from >n_upper add to end
+            //else : upbound foreach in cache ? # >= upbound remove ; add to start
+            if( diff == 0 )
+                return;
+            if( Math.abs(diff) >= CACHE_SIZE ){
+                int pos = 0;
+                viewFlipper.removeAllViews();
+                for(int i = newPage - this.CACHE_PLUSMINUS ; i < newPage + this.CACHE_PLUSMINUS ; i++, pos++ ){
+                    if( i < firstPage || i > lastPage)
+                        continue;//Perhaps should continue on < and break on > but this seems neater
+                    viewFlipper.addView( new PageViewer( i , viewFlipper.getWidth() , viewFlipper.getHeight()) , pos );
+                }
+            }
+
+            if( diff > 0 ){ // new > curr
+                int lowerBound = newPage - this.CACHE_PLUSMINUS;// of the new range
+                int pos = 0;
+                for(int i = 0 ; i < this.CACHE_SIZE ; i++ ){
+                    if( i >= viewFlipper.getChildCount() )
+                        break;
+                    PageViewer page = (PageViewer)viewFlipper.getChildAt( i );
+                    if( page.getPage() < lowerBound )
+                        viewFlipper.removeViewAt( i );
+                }
+                //for others add to end.
+                int numberRecycled = viewFlipper.getChildCount();
+                for(int i = lowerBound ; i < newPage + this.CACHE_PLUSMINUS ; i++, pos++ ){
+                    if( pos < numberRecycled)
+                        continue;
+                    if( i < firstPage || i > lastPage)
+                        continue;
+                    viewFlipper.addView( new PageViewer( i  , viewFlipper.getWidth() , viewFlipper.getHeight()), pos , matchParent );
+                }
+            }
+
+            if( diff < 0 ){ // new < curr
+                //FIXME The first 5 thumbnails are forwards only.
+                int upperBound = newPage + this.CACHE_PLUSMINUS;
+                int pos = 0;
+                for(int i = 0 ; i < this.CACHE_SIZE ; i++ ){
+                    if( i >= viewFlipper.getChildCount() )
+                        break;
+                    PageViewer page = (PageViewer)viewFlipper.getChildAt( i );
+                    if( page.getPage() > upperBound )
+                        viewFlipper.removeViewAt( i );
+                }
+                int numberRecycled = viewFlipper.getChildCount();
+                for(int i = newPage - this.CACHE_PLUSMINUS ; i < upperBound ; i++, pos++ ){
+                    if( this.CACHE_SIZE - pos < numberRecycled)
+                        continue;
+                    if( i < firstPage || i > lastPage)
+                        continue;
+                    viewFlipper.addView( new PageViewer( i , viewFlipper.getWidth() , viewFlipper.getHeight()), 0 , matchParent );
+                }
+            }
+            viewFlipper.setDisplayedChild( this.CACHE_PLUSMINUS );
+//            viewFlipper.showNext();
+        }
+
+        public ViewFlipper getFlipper(){
+            return viewFlipper;
         }
     }
 
@@ -973,32 +1131,6 @@ public class DocumentLoader
 	    }
 	}
     
-    /* if page is more than 2*+- away then no cache over lap
-     * load page && fill cache
-     * if page is */
-    public void openPageWithPrefetching( int number ){
-        //as a first draft clear an refill "cache" on load.
-        //should move views where "cache window" overlaps
-        Log.i( TAG , Integer.toString( pageCount ) );
-        //flipper.removeAllViews();
-        flipper.addView(new PageViewer(number), 0, matchParent);
-
-        for (int i = 0; i < PAGECACHE_PLUSMINUS; i++){
-            if( number + i+1 >= 0 && number + i+1 < pageCount){//pageCount will always be defined when this is called (famous last words)
-                flipper.addView(new PageViewer( number + i+1), i+1, matchParent);
-            }else{
-                flipper.addView( new PageViewer(  pageCount - 1), i+1, matchParent );
-            }
-        }
-        for (int i = 0; i < PAGECACHE_PLUSMINUS; i++){
-            if( number - i+1 >= 0 && number - i+1 < pageCount){
-                flipper.addView(new PageViewer( number - (i+1)), PAGECACHE_PLUSMINUS + i+1, matchParent);
-            }else{
-                flipper.addView( new PageViewer( 0 ), PAGECACHE_PLUSMINUS + i+1, matchParent );
-            }
-        }
-
-    }
 }
 
 // vim:set shiftwidth=4 softtabstop=4 expandtab:
