@@ -182,11 +182,18 @@ sal_Bool AquaSalVirtualDevice::SetSize( long nDX, long nDY )
     }
     else
     {
-        // default to a NSView target context, any will do
+        // default to a NSView target context
         AquaSalFrame* pSalFrame = mpGraphics->getGraphicsFrame();
         if( !pSalFrame || !AquaSalFrame::isAlive( pSalFrame ))
+        {
             if( !GetSalData()->maFrames.empty() )
+            {
+                // get the first matching frame
                 pSalFrame = *GetSalData()->maFrames.begin();
+                // update the frame reference
+                mpGraphics->setGraphicsFrame( pSalFrame );
+            }
+        }
         if( pSalFrame )
         {
             // #i91990#
