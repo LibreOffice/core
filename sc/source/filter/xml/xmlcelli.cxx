@@ -749,8 +749,7 @@ void ScXMLTableRowCellContext::SetFormulaCell(ScFormulaCell* pFCell) const
             pFCell->SetHybridString( *pOUTextValue );
         else
             pFCell->SetHybridDouble( fValue );
-        if( !pFCell->GetCode()->IsRecalcModeAlways() )
-            pFCell->ResetDirty();
+        pFCell->ResetDirty();
     }
 }
 
@@ -773,8 +772,7 @@ void ScXMLTableRowCellContext::AddTextCellToDoc( const ScAddress& rCurrentPos,
                 pFCell->SetHybridString( *pOUText );
             else
                 bDoIncrement = false;
-            if( !pFCell->GetCode()->IsRecalcModeAlways() )
-                pFCell->ResetDirty();
+            pFCell->ResetDirty();
         }
     }
     else

@@ -1099,6 +1099,10 @@ void ScFormulaCell::CompileXML( ScProgress& rProgress )
     //  (for macro warning, CompileXML is called at the end of loading XML file)
     if ( !pDocument->GetHasMacroFunc() && pCode->HasOpCodeRPN( ocMacro ) )
         pDocument->SetHasMacroFunc( true );
+
+    //volatile cells must be added here for import
+    if( pCode->IsRecalcModeAlways() )
+        pDocument->PutInFormulaTree(this);
 }
 
 
