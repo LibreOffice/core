@@ -82,26 +82,37 @@ void PageObjectPainter::PaintPageObject (
     OutputDevice& rDevice,
     const model::SharedPageDescriptor& rpDescriptor)
 {
+    if (UpdatePageObjectLayouter())
+    {
+        // Turn off antialiasing to avoid the bitmaps from being
+        // shifted by fractions of a pixel and thus show blurry edges.
+        const sal_uInt16 nSavedAntialiasingMode (rDevice.GetAntialiasing());
+        rDevice.SetAntialiasing(nSavedAntialiasingMode & ~ANTIALIASING_ENABLE_B2DDRAW);
+
+        PaintBackground(rDevice, rpDescriptor);
+        PaintPreview(rDevice, rpDescriptor);
+        PaintPageNumber(rDevice, rpDescriptor);
+        PaintTransitionEffect(rDevice, rpDescriptor);
+
+        rDevice.SetAntialiasing(nSavedAntialiasingMode);
+    }
+}
+
+
+
+
+bool PageObjectPainter::UpdatePageObjectLayouter (void)
+{
     // The page object layouter is quite volatile. It may have been replaced
     // since the last call.  Update it now.
     mpPageObjectLayouter = mrLayouter.GetPageObjectLayouter();
     if ( ! mpPageObjectLayouter)
     {
         OSL_ASSERT(mpPageObjectLayouter);
-        return;
+        return false;
     }
-
-    // Turn off antialiasing to avoid the bitmaps from being shifted by
-    // fractions of a pixel and thus show blurry edges.
-    const sal_uInt16 nSavedAntialiasingMode (rDevice.GetAntialiasing());
-    rDevice.SetAntialiasing(nSavedAntialiasingMode & ~ANTIALIASING_ENABLE_B2DDRAW);
-
-    PaintBackground(rDevice, rpDescriptor);
-    PaintPreview(rDevice, rpDescriptor);
-    PaintPageNumber(rDevice, rpDescriptor);
-    PaintTransitionEffect(rDevice, rpDescriptor);
-
-    rDevice.SetAntialiasing(nSavedAntialiasingMode);
+    else
+        return true;
 }
 
 
@@ -112,7 +123,7 @@ void PageObjectPainter::NotifyResize (const bool bForce)
     mpPageObjectLayouter = mrLayouter.GetPageObjectLayouter();
     if (bForce || ! mpPageObjectLayouter)
         InvalidateBitmaps();
-    else
+    else if (UpdatePageObjectLayouter())
     {
         const Size aSize (mpPageObjectLayouter->GetSize(
                 PageObjectLayouter::FocusIndicator,
