@@ -74,7 +74,7 @@ public:
 
     bool operator() (const TemplateItemProperties &rItem)
     {
-        return rItem.aName.indexOf(maKeyword) != -1;
+        return rItem.aName.matchIgnoreAsciiCase(maKeyword);
     }
 
 private:
