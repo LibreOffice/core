@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAL3///4M\u003d",
+        "filename": "cui/source/dialogs/cuigrfflt.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2012-07-11T05:33:27Z",
+      "side": 1,
+      "message": "you already added that one to the associated header\ncuigrfflt.hxx\nsurely cuigrfflt,cxx is expected to include cuigrfflt.hxx",
+      "revId": "46188dba739c83fd4a3cb1582da37f13a313870f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
