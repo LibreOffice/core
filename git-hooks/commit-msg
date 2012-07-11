@@ -125,7 +125,7 @@ add_ChangeId() {
                 for($line = @message - 1; $line >= 0; $line--) {
                         $_ = $message[$line];
 
-                        if (/^[a-zA-Z0-9-]+:/ && !m,^[a-z0-9-]+://,) {
+                        if (/^[a-zA-Z0-9-]+: /) {
                                 $haveFooter++;
                                 next;
                         }
