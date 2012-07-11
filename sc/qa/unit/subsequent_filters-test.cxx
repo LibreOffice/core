@@ -109,6 +109,7 @@ public:
     void testHardRecalcODS();
     void testFunctionsODS();
     void testCachedFormulaResultsODS();
+    void testVolatileFunctionsODS();
     void testCachedMatrixFormulaResultsODS();
     void testDatabaseRangesODS();
     void testDatabaseRangesXLS();
@@ -145,6 +146,7 @@ public:
     CPPUNIT_TEST(testHardRecalcODS);
     CPPUNIT_TEST(testFunctionsODS);
     CPPUNIT_TEST(testCachedFormulaResultsODS);
+    CPPUNIT_TEST(testVolatileFunctionsODS);
     CPPUNIT_TEST(testCachedMatrixFormulaResultsODS);
     CPPUNIT_TEST(testDatabaseRangesODS);
     CPPUNIT_TEST(testDatabaseRangesXLS);
@@ -384,6 +386,28 @@ void ScFiltersTest::testCachedFormulaResultsODS()
     //test cached formula results of informations functions
     createCSVPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("information-functions.")), aCSVFileName);
     testFile(aCSVFileName, pDoc, 3);
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testVolatileFunctionsODS()
+{
+    const rtl::OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("volatile."));
+    ScDocShellRef xDocSh = loadDoc( aFileNameBase, ODS );
+
+    CPPUNIT_ASSERT_MESSAGE("Failed to load volatile.ods", xDocSh.Is());
+    ScDocument* pDoc = xDocSh->GetDocument();
+
+    //we want to me sure that volatile functions are always recalculated
+    //regardless of cached results.  if you update the ods file, you must
+    //update the values here.
+    //if NOW() is recacluated, then it should never equal sTodayCache
+    OUString sTodayCache("07/11/12 12:28 AM");
+    OUString sTodayRecalc(pDoc->GetString(0,1,0));
+    CPPUNIT_ASSERT(sTodayCache != sTodayRecalc);
+
+    OUString sTodayRecalcRef(pDoc->GetString(2,1,0));
+    CPPUNIT_ASSERT(sTodayCache != sTodayRecalcRef);
 
     xDocSh->DoClose();
 }
