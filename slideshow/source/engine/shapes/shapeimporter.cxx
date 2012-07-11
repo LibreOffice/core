@@ -67,7 +67,6 @@
 #include <boost/scoped_ptr.hpp>
 
 using namespace com::sun::star;
-using namespace ::comphelper;
 
 namespace slideshow {
 namespace internal {

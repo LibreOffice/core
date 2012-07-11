@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 #
 #  Generate node tree from verbose logfile
 #

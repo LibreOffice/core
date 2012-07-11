@@ -1,30 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 #ifdef UNX
 #include <unistd.h>
@@ -42,12 +33,6 @@
 #include <tools/stream.hxx>
 
 #include "cppdep.hxx"
-
-#if defined WNT
-#define __STDC__ 1
-#define __GNU_LIBRARY__
-#include <external/glibc/getopt.h>
-#endif
 
 class RscHrcDep : public CppDep
 {
@@ -74,7 +59,6 @@ void RscHrcDep::Execute()
 
 int main( int argc, char** argv )
 {
-    int c;
     char aBuf[255];
     char pFileNamePrefix[255];
     char pOutputFileName[255];
@@ -87,36 +71,90 @@ int main( int argc, char** argv )
 
     RscHrcDep *pDep = new RscHrcDep;
 
+    // When the options are processed, the non-option arguments are
+    // collected at the head of the argv array.
+    // nLastNonOption points to the last of them.
+    int nLastNonOption (-1);
+
     pOutputFileName[0] = 0;
     pSrsFileName[0] = 0;
 
     for ( int i=1; i<argc; i++)
     {
         strcpy( aBuf, (const char *)argv[i] );
-        if ( aBuf[0] == '-' && aBuf[1] == 'p' && aBuf[2] == '=' )
+        const sal_Int32 nLength (strlen(aBuf));
+
+#ifdef DEBUG
+        printf("option %d is [%s] and has length %d\n", i, aBuf, (int)nLength);
+#endif
+
+        if (nLength == 0) // Is this even possible?
+            continue;
+
+        if (aBuf[0] == '-' && nLength > 0)
         {
-            strcpy(pFileNamePrefix, &aBuf[3]);
+            bool bIsKnownOption = true;
+            // Make a switch on the first character after the - for a
+            // preselection of the option.
+            // This is faster then multiple ifs and improves readability.
+            switch (aBuf[1])
+            {
+                case 'p':
+                    if (nLength > 1 && aBuf[2] == '=' )
+                        strcpy(pFileNamePrefix, &aBuf[3]);
+                    else
+                        bIsKnownOption = false;
+                    break;
+                case 'f':
+                    if (nLength > 2 && aBuf[2] == 'o' && aBuf[3] == '=' )
+                        strcpy(pOutputFileName, &aBuf[4]);
+                    else if (nLength>2 && aBuf[2] == 'p' && aBuf[3] == '=' )
+                    {
+                        strcpy(pSrsFileName, &aBuf[4]);
+                        String aName( pSrsFileName, osl_getThreadTextEncoding());
+                        DirEntry aDest( aName );
+                        aSrsBaseName = aDest.GetBase();
+                    }
+                    else
+                        bIsKnownOption = false;
+                    break;
+                case 'i':
+                case 'I':
+#ifdef DEBUG_VERBOSE
+                    printf("Include : %s\n", &aBuf[2] );
+#endif
+                    pDep->AddSearchPath( &aBuf[2] );
+                    break;
+                case 'h' :
+                case 'H' :
+                case '?' :
+                    printf("RscDep 1.0\n");
+                    break;
+                case 'a' :
+#ifdef DEBUG_VERBOSE
+                    printf("option a\n");
+#endif
+                    break;
+
+                case 'l' :
+#ifdef DEBUG_VERBOSE
+                    printf("option l with Value %s\n", &aBuf[2] );
+#endif
+                    pDep->AddSource(&aBuf[2]);
+                    break;
+
+                default:
+                    bIsKnownOption = false;
+                    break;
+            }
+#ifdef DEBUG_VERBOSE
+            if ( ! bIsKnownOption)
+				printf("Unknown option error [%s]\n", aBuf);
+#else
+            (void)bIsKnownOption;
+#endif
         }
-        if ( aBuf[0] == '-' && aBuf[1] == 'f' && aBuf[2] == 'o' && aBuf[3] == '=' )
-        {
-            strcpy(pOutputFileName, &aBuf[4]);
-        }
-        if ( aBuf[0] == '-' && aBuf[1] == 'f' && aBuf[2] == 'p' && aBuf[3] == '=' )
-        {
-            strcpy(pSrsFileName, &aBuf[4]);
-            String aName( pSrsFileName, osl_getThreadTextEncoding());
-            DirEntry aDest( aName );
-            aSrsBaseName = aDest.GetBase();
-        }
-        if (aBuf[0] == '-' &&  aBuf[1] == 'i' )
-        {
-            pDep->AddSearchPath( &aBuf[2] );
-        }
-        if (aBuf[0] == '-' &&  aBuf[1] == 'I' )
-        {
-            pDep->AddSearchPath( &aBuf[2] );
-        }
-        if (aBuf[0] == '@' )
+        else if (aBuf[0] == '@' )
         {
             rtl::OString aToken;
             String aRespName( &aBuf[1], osl_getThreadTextEncoding());
@@ -156,46 +194,13 @@ int main( int argc, char** argv )
                 }
             }
         }
-    }
-
-    while( 1 )
-    {
-        c = getopt( argc, argv,
-        "_abcdefghi:jklmnopqrstuvwxyzABCDEFGHI:JKLMNOPQRSTUVWXYZ1234567890/-+=.\\()\"");
-        if ( c == -1 )
-            break;
-
-        switch( c )
+        else
         {
-            case 0:
-                break;
-            case 'a' :
-#ifdef DEBUG_VERBOSE
-                printf("option a\n");
-#endif
-                break;
-
-            case 'l' :
-#ifdef DEBUG_VERBOSE
-                printf("option l with Value %s\n", optarg );
-#endif
-                pDep->AddSource( optarg );
-                break;
-
-            case 'h' :
-            case 'H' :
-            case '?' :
-                printf("RscDep 1.0\n");
-                break;
-
-            default:
-#ifdef DEBUG_VERBOSE
-                printf("Unknown getopt error\n");
-#endif
-                ;
+            // Collect all non-options at the head of argv.
+            if (++nLastNonOption < i)
+                argv[nLastNonOption] = argv[i];
         }
     }
-
 
     String aCwd(pFileNamePrefix, osl_getThreadTextEncoding());
     SvFileStream aOutStream;
@@ -211,8 +216,10 @@ int main( int argc, char** argv )
     aFileName += String(".dprr", osl_getThreadTextEncoding());
     aOutStream.Open( aFileName, STREAM_WRITE );
 
+    // Process the yet unhandled non-options.  These are supposed to
+    // be names of files on which the target depends.
     rtl::OStringBuffer aString;
-    if ( optind < argc )
+    if ( nLastNonOption >= 0 )
     {
 #ifdef DEBUG_VERBOSE
         printf("further arguments : ");
@@ -220,17 +227,16 @@ int main( int argc, char** argv )
         aString.append(rtl::OString(pSrsFileName).replace('\\', cDelim));
         aString.append(RTL_CONSTASCII_STRINGPARAM(" : " ));
 
-        while ( optind < argc )
+        for (sal_Int32 nIndex=0; nIndex<=nLastNonOption; ++nIndex)
         {
+#ifdef DEBUG
+            printf("option at %d is [%s]\n", (int)nIndex, argv[nIndex]);
+#endif
             if (!bSource )
             {
                 aString.append(' ');
-                aString.append(argv[optind]);
-                pDep->AddSource( argv[optind++]);
-            }
-            else
-            {
-                optind++;
+                aString.append(argv[nIndex]);
+                pDep->AddSource(argv[nIndex]);
             }
         }
     }
