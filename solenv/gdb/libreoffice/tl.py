@@ -354,6 +354,22 @@ class PointPrinter(object):
         children = [('x', x), ('y', y)]
         return children.__iter__()
 
+class SizePrinter(object):
+    '''Prints a Size.'''
+
+    def __init__(self, typename, value):
+        self.typename = typename
+        self.value = value
+
+    def to_string(self):
+        return "%s" % (self.typename)
+
+    def children(self):
+        width = self.value['nA']
+        height = self.value['nB']
+        children = [('width', width), ('height', height)]
+        return children.__iter__()
+
 printer = None
 
 def build_pretty_printers():
@@ -379,6 +395,7 @@ def build_pretty_printers():
     printer.add('Date', DatePrinter)
     printer.add('Time', TimePrinter)
     printer.add('Point', PointPrinter)
+    printer.add('Size', SizePrinter)
 
 def register_pretty_printers(obj):
     printing.register_pretty_printer(printer, obj)
