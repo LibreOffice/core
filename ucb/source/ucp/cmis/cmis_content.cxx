@@ -1179,7 +1179,11 @@ namespace cmis
                     // TODO Cache the objects
 
                     URL aUrl( m_sURL );
-                    aUrl.setObjectPath( m_sObjectPath + STD_TO_OUSTR( ( *it )->getName( ) ) );
+                    rtl::OUString sPath( m_sObjectPath );
+                    if ( sPath[sPath.getLength( ) - 1] != '/' )
+                        sPath += "/";
+                    sPath += STD_TO_OUSTR( ( *it )->getName( ) );
+                    aUrl.setObjectPath( sPath );
                     uno::Reference< ucb::XContentIdentifier > xId = new ucbhelper::ContentIdentifier( aUrl.asString( ) );
                     uno::Reference< ucb::XContent > xContent = new Content( m_xSMgr, m_pProvider, xId, *it );
 
