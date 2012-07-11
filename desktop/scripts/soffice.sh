@@ -108,7 +108,7 @@ for arg in $@ $VALGRINDOPT ; do
                     valgrind_skip='--trace-children-skip=*/java'
                 fi
                 # finally set the valgrind check
-                VALGRINDCHECK="valgrind --tool=$VALGRIND --trace-children=yes $valgrind_skip --num-callers=50 --error-limit=no --error-exitcode=101"
+                VALGRINDCHECK="valgrind --tool=$VALGRIND --trace-children=yes $valgrind_skip --num-callers=50 --error-limit=no"
                 echo "use kill -SIGUSR2 pid to dump traces of active allocations"
                 checks="c$checks"
                 if [ "$VALGRIND" = "memcheck" ] ; then
