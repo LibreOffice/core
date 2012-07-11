@@ -1,5 +1,5 @@
 --- misc/libmspub-0.0.1/src/lib/MSPUBCollector.cpp	2012-07-10 08:13:15.000000000 +0200
-+++ misc/build/libmspub-0.0.1/src/lib/MSPUBCollector.cpp	2012-07-12 01:02:25.804511128 +0200
++++ misc/build/libmspub-0.0.1/src/lib/MSPUBCollector.cpp	2012-07-12 01:29:28.154982030 +0200
 @@ -28,6 +28,7 @@
   * instead of those above.
   */
@@ -46,8 +46,33 @@
    default:
      return 0;
    }
+@@ -623,10 +628,10 @@
+     unsigned seqNum = i->first;
+     double *ptr_rotation = getIfExists(m_shapeRotationsBySeqNum, seqNum);
+     VectorTransformation2D rot = ptr_rotation ? VectorTransformation2D::fromCounterRadians((*ptr_rotation) * M_PI / 180.)
+-                                 : IDENTITY_TRANSFORMATION;
++                                 : VectorTransformation2D();
+     std::pair<bool, bool> *ptr_flips = getIfExists(m_shapeFlipsBySeqNum, seqNum);
+     VectorTransformation2D flips = ptr_flips ? VectorTransformation2D::fromFlips(ptr_flips->second, ptr_flips->first) :
+-                                   IDENTITY_TRANSFORMATION;
++                                   VectorTransformation2D();
+     group.m_transform = rot * flips;
+     Coordinate *ptr_coords = getIfExists(m_shapeCoordinatesBySeqNum, seqNum);
+     if (ptr_coords)
+@@ -655,9 +660,9 @@
+       shape->m_coordinatesRotated90 = true;
+     }
+     VectorTransformation2D rot = ptr_rotation ? VectorTransformation2D::fromCounterRadians(
+-                                   (*ptr_rotation) * M_PI / 180.) : IDENTITY_TRANSFORMATION;
++                                   (*ptr_rotation) * M_PI / 180.) : VectorTransformation2D();
+     std::pair<bool, bool> *ptr_flips = getIfExists(m_shapeFlipsBySeqNum, seqNum);
+-    VectorTransformation2D flips = ptr_flips ? VectorTransformation2D::fromFlips(ptr_flips->second, ptr_flips->first) : IDENTITY_TRANSFORMATION;
++    VectorTransformation2D flips = ptr_flips ? VectorTransformation2D::fromFlips(ptr_flips->second, ptr_flips->first) : VectorTransformation2D();
+     shape->m_transform = rot * flips;
+     ShapeType *type = getIfExists(m_shapeTypesBySeqNum, seqNum);
+     if (type)
 --- misc/libmspub-0.0.1/src/lib/MSPUBCollector.h	2012-07-10 08:13:15.000000000 +0200
-+++ misc/build/libmspub-0.0.1/src/lib/MSPUBCollector.h	2012-07-12 01:02:25.804511128 +0200
++++ misc/build/libmspub-0.0.1/src/lib/MSPUBCollector.h	2012-07-12 01:29:14.047323447 +0200
 @@ -36,7 +36,6 @@
  #include <set>
  #include <string>
@@ -66,7 +91,7 @@
  {
  class MSPUBCollector
 --- misc/libmspub-0.0.1/src/lib/PolygonUtils.cpp	2012-07-10 08:13:15.000000000 +0200
-+++ misc/build/libmspub-0.0.1/src/lib/PolygonUtils.cpp	2012-07-12 01:02:25.806511092 +0200
++++ misc/build/libmspub-0.0.1/src/lib/PolygonUtils.cpp	2012-07-12 01:29:14.049323401 +0200
 @@ -26,8 +26,8 @@
   * instead of those above.
   */
@@ -121,8 +146,78 @@
            end = transform.transformWithOrigin(end, center);
            vertex.insert("svg:x", end.m_x);
            vertex.insert("svg:y", end.m_y);
+--- misc/libmspub-0.0.1/src/lib/ShapeGroup.h	2012-07-10 08:13:15.000000000 +0200
++++ misc/build/libmspub-0.0.1/src/lib/ShapeGroup.h	2012-07-12 01:29:28.154982030 +0200
+@@ -14,7 +14,7 @@
+   ShapeGroup *m_parent;
+   VectorTransformation2D m_transform;
+   Coordinate m_coordinates;
+-  ShapeGroupElement(ShapeGroup *parent) : m_parent(parent), m_transform(IDENTITY_TRANSFORMATION), m_coordinates()
++  ShapeGroupElement(ShapeGroup *parent) : m_parent(parent), m_transform(VectorTransformation2D()), m_coordinates()
+   {
+   }
+   virtual unsigned getPageSeqNum() const = 0;
+--- misc/libmspub-0.0.1/src/lib/Shapes.h	2012-07-10 08:13:15.000000000 +0200
++++ misc/build/libmspub-0.0.1/src/lib/Shapes.h	2012-07-12 01:29:28.155982003 +0200
+@@ -105,21 +105,21 @@
+   unsigned m_left, m_top, m_right, m_bottom; //emu
+   GeometricShape(MSPUBCollector *o)
+     : FillableShape(o), m_str(), m_hasText(false), m_pageSeqNum(0), m_imgIndex(0), m_type(RECTANGLE),
+-      m_x(0), m_y(0), m_width(0), m_height(0), m_transform(IDENTITY_TRANSFORMATION),
++      m_x(0), m_y(0), m_width(0), m_height(0), m_transform(VectorTransformation2D()),
+       m_adjustValues(),
+       m_left(DEFAULT_MARGIN), m_top(DEFAULT_MARGIN), m_right(DEFAULT_MARGIN), m_bottom(DEFAULT_MARGIN),
+       m_valuesSeen(), m_filledDefaultAdjustValues(false), m_textCoord(), m_closeEverything(false),
+       m_lines(), m_drawStroke(false),
+       m_borderPosition(HALF_INSIDE_SHAPE),
+-      m_coordinatesRotated90(false), m_foldedTransform(IDENTITY_TRANSFORMATION) { }
++      m_coordinatesRotated90(false), m_foldedTransform(VectorTransformation2D()) { }
+   GeometricShape(unsigned pageSeqNum, MSPUBCollector *o)
+     : FillableShape(o), m_str(), m_hasText(false), m_pageSeqNum(pageSeqNum), m_imgIndex(0), m_type(RECTANGLE),
+-      m_x(0), m_y(0), m_width(0), m_height(0), m_transform(IDENTITY_TRANSFORMATION), m_adjustValues(),
++      m_x(0), m_y(0), m_width(0), m_height(0), m_transform(VectorTransformation2D()), m_adjustValues(),
+       m_left(DEFAULT_MARGIN), m_top(DEFAULT_MARGIN), m_right(DEFAULT_MARGIN), m_bottom(DEFAULT_MARGIN),
+       m_valuesSeen(), m_filledDefaultAdjustValues(false), m_textCoord(), m_closeEverything(false),
+       m_lines(), m_drawStroke(false),
+       m_borderPosition(HALF_INSIDE_SHAPE),
+-      m_coordinatesRotated90(false), m_foldedTransform(IDENTITY_TRANSFORMATION) { }
++      m_coordinatesRotated90(false), m_foldedTransform(VectorTransformation2D()) { }
+   std::vector<Color> getPaletteColors() const;
+   void output(libwpg::WPGPaintInterface *painter, Coordinate coord);
+ protected:
+--- misc/libmspub-0.0.1/src/lib/VectorTransformation2D.cpp
++++ misc/build/libmspub-0.0.1/src/lib/VectorTransformation2D.cpp
+@@ -29,7 +29,7 @@
+ #include "VectorTransformation2D.h"
+ #include <math.h>
+ 
+-libmspub::VectorTransformation2D::VectorTransformation2D() : m_m11(0), m_m12(0), m_m21(0), m_m22(0), m_x(0), m_y(0)
++libmspub::VectorTransformation2D::VectorTransformation2D() : m_m11(1), m_m12(0), m_m21(0), m_m22(1), m_x(0), m_y(0)
+ {
+ }
+ 
+--- misc/libmspub-0.0.1/src/lib/VectorTransformation2D.h	2012-07-10 08:13:15.000000000 +0200
++++ misc/build/libmspub-0.0.1/src/lib/VectorTransformation2D.h	2012-07-12 01:29:28.155982003 +0200
+@@ -45,8 +45,8 @@
+ {
+   double m_m11, m_m12, m_m21, m_m22;
+   double m_x, m_y;
+-  VectorTransformation2D();
+ public:
++  VectorTransformation2D();
+   Vector2D transform(Vector2D original) const;
+   Vector2D transformWithOrigin(Vector2D v, Vector2D origin) const;
+   double getRotation() const;
+@@ -58,7 +58,6 @@
+   static VectorTransformation2D fromCounterRadians(double theta);
+ };
+ VectorTransformation2D operator*(const VectorTransformation2D &l, const VectorTransformation2D &r);
+-const VectorTransformation2D IDENTITY_TRANSFORMATION = VectorTransformation2D::fromFlips(false, false);
+ } // namespace libmspub
+ 
+ #endif /* __VECTORTRANSFORMATION2D_H__ */
 --- misc/libmspub-0.0.1/src/lib/libmspub_utils.cpp	2012-07-10 08:13:15.000000000 +0200
-+++ misc/build/libmspub-0.0.1/src/lib/libmspub_utils.cpp	2012-07-12 01:02:25.807511068 +0200
++++ misc/build/libmspub-0.0.1/src/lib/libmspub_utils.cpp	2012-07-12 01:29:14.050323377 +0200
 @@ -30,9 +30,14 @@
   */
  
@@ -150,7 +245,7 @@
    double newVecY = sinTheta * vecX + cosTheta * vecY;
    x = centerX + newVecX;
 --- misc/libmspub-0.0.1/src/lib/libmspub_utils.h	2012-07-10 08:13:15.000000000 +0200
-+++ misc/build/libmspub-0.0.1/src/lib/libmspub_utils.h	2012-07-12 01:02:25.807511068 +0200
++++ misc/build/libmspub-0.0.1/src/lib/libmspub_utils.h	2012-07-12 01:29:14.050323377 +0200
 @@ -30,10 +30,7 @@
  #ifndef __LIBMSPUB_UTILS_H__
  #define __LIBMSPUB_UTILS_H__
