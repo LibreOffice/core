@@ -92,13 +92,13 @@ class ScXMLTableRowCellContext : public SvXMLImportContext
     bool CellsAreRepeated() const;
 
     void SetFormulaCell             ( ScFormulaCell* pFCell ) const;
-    void AddTextCellToDoc           ( const ScAddress& rScCurrentPos, const SCCOL nCurrentCol,
+    void PutTextCell                ( const ScAddress& rScCurrentPos, const SCCOL nCurrentCol,
                                       const ::boost::optional< rtl::OUString >& pOUText );
-    void AddNumberCellToDoc         ( const ScAddress& rScCurrentPos );
-    void AddCellsToTable            ( const ScAddress& rScCellPos,
+    void PutValueCell               ( const ScAddress& rScCurrentPos );
+    void AddTextAndValueCells       ( const ScAddress& rScCellPos,
                                       const ::boost::optional< rtl::OUString >& pOUText, ScAddress& rScCurrentPos );
     void AddNonFormulaCells         ( const ScAddress& rScCellPos );
-    void AddNonMatrixFormulaCell    ( const ScAddress& rScCurrentPos );
+    void PutFormulaCell             ( const ScAddress& rScCurrentPos );
     void AddFormulaCell             ( const ScAddress& rScCellPos );
 
 public:

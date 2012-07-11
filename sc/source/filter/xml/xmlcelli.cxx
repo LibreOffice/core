@@ -753,10 +753,12 @@ void ScXMLTableRowCellContext::SetFormulaCell(ScFormulaCell* pFCell) const
     }
 }
 
-void ScXMLTableRowCellContext::AddTextCellToDoc( const ScAddress& rCurrentPos,
+void ScXMLTableRowCellContext::PutTextCell( const ScAddress& rCurrentPos,
         const SCCOL nCurrentCol, const ::boost::optional< rtl::OUString >& pOUText )
 {
     bool bDoIncrement = true;
+    //matrix reference cells that contain text formula results;
+    //cell was already put in document, just need to set text here.
     if( rXMLImport.GetTables().IsPartOfMatrix(rCurrentPos) )
     {
         ScBaseCell* pCell = rXMLImport.GetDocument()->GetCell( rCurrentPos );
@@ -775,7 +777,7 @@ void ScXMLTableRowCellContext::AddTextCellToDoc( const ScAddress& rCurrentPos,
             pFCell->ResetDirty();
         }
     }
-    else
+    else //regular text cells
     {
         ScBaseCell* pNewCell = NULL;
         ScDocument* pDoc = rXMLImport.GetDocument();
@@ -798,8 +800,10 @@ void ScXMLTableRowCellContext::AddTextCellToDoc( const ScAddress& rCurrentPos,
         rXMLImport.ProgressBarIncrement(false);
 }
 
-void ScXMLTableRowCellContext::AddNumberCellToDoc( const ScAddress& rCurrentPos )
+void ScXMLTableRowCellContext::PutValueCell( const ScAddress& rCurrentPos )
 {
+    //matrix reference cells that contain value formula results;
+    //cell was already put in document, just need to set value here.
     if( rXMLImport.GetTables().IsPartOfMatrix(rCurrentPos) )
     {
         ScBaseCell* pCell = rXMLImport.GetDocument()->GetCell( rCurrentPos );
@@ -809,7 +813,7 @@ void ScXMLTableRowCellContext::AddNumberCellToDoc( const ScAddress& rCurrentPos 
             SetFormulaCell(pFCell);
         }
     }
-    else
+    else  //regular value cell
     {
         // #i62435# Initialize the value cell's script type
         // if the default style's number format is latin-only.
@@ -836,7 +840,7 @@ bool isEmptyOrNote( ScDocument* pDoc, const ScAddress& rCurrentPos )
 
 }
 
-void ScXMLTableRowCellContext::AddCellsToTable( const ScAddress& rCellPos,
+void ScXMLTableRowCellContext::AddTextAndValueCells( const ScAddress& rCellPos,
         const ::boost::optional< rtl::OUString >& pOUText, ScAddress& rCurrentPos )
 {
     ScMyTables& rTables = rXMLImport.GetTables();
@@ -864,7 +868,7 @@ void ScXMLTableRowCellContext::AddCellsToTable( const ScAddress& rCellPos,
                         {
                             case util::NumberFormat::TEXT:
                             {
-                                AddTextCellToDoc( rCurrentPos, i, pOUText );
+                                PutTextCell( rCurrentPos, i, pOUText );
                             }
                             break;
                             case util::NumberFormat::NUMBER:
@@ -875,7 +879,7 @@ void ScXMLTableRowCellContext::AddCellsToTable( const ScAddress& rCellPos,
                             case util::NumberFormat::DATETIME:
                             case util::NumberFormat::LOGICAL:
                             {
-                                AddNumberCellToDoc( rCurrentPos );
+                                PutValueCell( rCurrentPos );
                             }
                             break;
                             default:
@@ -988,7 +992,7 @@ void ScXMLTableRowCellContext::AddNonFormulaCells( const ScAddress& rCellPos )
     if( HasSpecialContent() )
         bIsEmpty = false;
 
-    AddCellsToTable( rCellPos, pOUText, aCurrentPos );
+    AddTextAndValueCells( rCellPos, pOUText, aCurrentPos );
 
     if( CellsAreRepeated() )
     {
@@ -1007,7 +1011,7 @@ void ScXMLTableRowCellContext::AddNonFormulaCells( const ScAddress& rCellPos )
     }
 }
 
-void ScXMLTableRowCellContext::AddNonMatrixFormulaCell( const ScAddress& rCellPos )
+void ScXMLTableRowCellContext::PutFormulaCell( const ScAddress& rCellPos )
 {
     ScDocument* pDoc = rXMLImport.GetDocument();
 
@@ -1071,20 +1075,23 @@ void ScXMLTableRowCellContext::AddFormulaCell( const ScAddress& rCellPos )
         {
             if (nMatrixCols > 0 && nMatrixRows > 0)
             {
+                //matrix cells are put in the document, but we must set the
+                //value/text of each matrix cell later
                 rXMLImport.GetTables().AddMatrixRange(
                         rCellPos.Col(), rCellPos.Row(),
                         rCellPos.Col() + nMatrixCols - 1,
                         rCellPos.Row() + nMatrixRows - 1,
                         pOUFormula->first, pOUFormula->second, eGrammar);
 
-                //add the cached formula result of the first matrix position
+                //set the value/text of the first matrix position (top-left).
+                //the value/text of the matrix reference cells will be set later.
                 ScFormulaCell* pFCell =
                     static_cast<ScFormulaCell*>( rXMLImport.GetDocument()->GetCell(rCellPos) );
                 SetFormulaCell(pFCell);
             }
         }
         else
-            AddNonMatrixFormulaCell( rCellPos );
+            PutFormulaCell( rCellPos );
 
         SetAnnotation( rCellPos );
         SetDetectiveObj( rCellPos );
