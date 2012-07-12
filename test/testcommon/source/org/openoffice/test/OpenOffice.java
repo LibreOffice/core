@@ -25,6 +25,7 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Properties;
+import java.util.UUID;
 import java.util.logging.Logger;
 
 import org.openoffice.test.common.FileUtil;
@@ -58,6 +59,8 @@ public class OpenOffice {
     private String unoUrl = "socket,host=localhost,port=2002;urp";
 
     private Properties versionProps = null;
+
+    private String id = "-"+UUID.randomUUID().toString().replace("-", "");
 
     public OpenOffice() {
         this(null);
@@ -117,6 +120,7 @@ public class OpenOffice {
                     "Use system property openoffice.home to specify the correct location of OpenOffice.");
 
         versionProps = FileUtil.loadProperties(versionFile);
+        addArgs(id);
         addArgs("-nofirststartwizard", "-norestore", "-quickstart=no");
         addRegistryModifications("<item oor:path=\"/org.openoffice.Office.Common/Misc\"><prop oor:name=\"UseSystemFileDialog\" oor:op=\"fuse\"><value>false</value></prop></item>",
                 "<item oor:path=\"/org.openoffice.Office.Common/Security/Scripting\"><prop oor:name=\"MacroSecurityLevel\" oor:op=\"fuse\"><value>0</value></prop></item>");
@@ -224,25 +228,15 @@ public class OpenOffice {
      * destroy OpenOffice
      */
     public void kill() {
-        if (process != null) {
-            process.destroy();
-            try {
-                process.waitFor();
-            } catch (InterruptedException e) {
-            }
-            process = null;
-        }
+        SystemUtil.killProcess(".*soffice.*" + id + ".*");
+        process = null;
     }
 
     /**
      * Kill all openoffice instances
      */
     public static void killAll() {
-        if (SystemUtil.isWindows()) {
-            SystemUtil.execScript("taskkill /F /IM soffice.bin /IM soffice.exe");
-        } else {
-            SystemUtil.execScript("killall -9 soffice soffice.bin");
-        }
+        SystemUtil.killProcess(".*soffice.*");
     }
 
 
@@ -263,13 +257,7 @@ public class OpenOffice {
             return;
         }
 
-        String bin = home.getAbsolutePath() + File.separatorChar + "soffice.bin";
-//      if (SystemUtil.isWindows()) {
-//          bin = "\"" + home + "\\soffice.exe\"";
-//      } else {
-//          bin = "cd \"" + home + "\" ; ./soffice.bin";
-//      }
-
+        String bin = home.getAbsolutePath() + File.separatorChar + (SystemUtil.isWindows() ? "soffice.exe" : "soffice.bin");
         ArrayList<String> cmds = new ArrayList<String>();
         cmds.add(bin);
         if (automationPort > 0) {

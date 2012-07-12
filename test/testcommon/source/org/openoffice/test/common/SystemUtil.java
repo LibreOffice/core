@@ -241,33 +241,68 @@ public class SystemUtil {
     /**
      * Get the commands of all running processes
      *
-     * @return
+     * @return List of <PID COMMAND>
      */
-    public static List<String> getProcesses() {
-        List<String> ret = new ArrayList<String>();
+    public static List<String[]> getProcesses() {
+        List<String[]> ret = new ArrayList<String[]>();
         try {
             StringBuffer output = new StringBuffer();
             if (isWindows()) {
-                File file = File.createTempFile("ssssss", ".js");
-                String contents = "var e=new Enumerator(GetObject(\"winmgmts:\").InstancesOf(\"Win32_process\"));\n\r";
-                contents += "for (;!e.atEnd();e.moveNext()) {\n\r";
-                contents += "WScript.Echo(e.item ().CommandLine);}";
+                File file = FileUtil.getUniqueFile(SCRIPT_TEMP_DIR, "listp", ".js");
+                String contents = "var e=new Enumerator(GetObject(\"winmgmts:\").InstancesOf(\"Win32_process\"));\n\r"
+                        + "WScript.Echo(\"PID\" + \" \"  + \"COMMAND\");\n\r"
+                        + "for (;!e.atEnd();e.moveNext()) {\n\r"
+                        + "WScript.Echo(e.item().ProcessId + \" \"  + e.item().CommandLine);}";
                 FileUtil.writeStringToFile(file.getAbsolutePath(), contents);
-                // exec("cscript //Nologo \"" + file.getAbsolutePath() + "\"",
-                // output, output);
+                exec(new String[] { "cscript", "//Nologo", file.getAbsolutePath()}, null, null, output, output);
             } else {
-                // exec("ps -x -eo command", output, output);
+                exec(new String[] {"ps", "-eo", "pid,command"}, null, null, output, output);
             }
             BufferedReader reader = new BufferedReader(new StringReader(output.toString()));
             String line = null;
+            reader.readLine();
             while ((line = reader.readLine()) != null) {
-                ret.add(line);
+                line = line.trim();
+                String[] row = new String[2];
+                int i = line.indexOf(" ");
+                if (i > 0) {
+                    row[0] = line.substring(0, i);
+                    row[1] = line.substring(++i);
+                } else {
+                    row[0] = line;
+                    row[1] = null;
+                }
+                ret.add(row);
             }
         } catch (IOException e) {
 
         }
 
         return ret;
+    }
+
+    public static void killProcess(String pattern) {
+        List<String[]> processes = SystemUtil.getProcesses();
+        for (String[] p : processes) {
+            if (p[1] != null && p[1].matches(pattern)) {
+                if (isWindows()) {
+                    exec(new String[] { "taskkill", "/F", "/PID", p[0] }, null, null, null, null);
+                } else {
+                    exec(new String[] { "kill", "-9", p[0] }, null, null, null, null);
+                }
+            }
+        }
+    }
+
+    public static boolean hasProcess(String pattern) {
+        List<String[]> processes = SystemUtil.getProcesses();
+        for (String[] p : processes) {
+            if (p[1] != null && p[1].matches(pattern)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
