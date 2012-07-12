@@ -77,7 +77,6 @@ $(eval $(call gb_Extension_add_files,report-builder,registry/data/org/openoffice
 ))
 
 $(eval $(call gb_Extension_add_files,report-builder,registry/data/org/openoffice/Office/UI,\
-	$(call gb_XcuDataTarget_get_target,reportbuilder/registry/data/org/openoffice/Office/UI/Controller.xcu) \
 	$(call gb_XcuDataTarget_get_target,reportbuilder/registry/data/org/openoffice/Office/UI/DbReportWindowState.xcu) \
 	$(call gb_XcuDataTarget_get_target,reportbuilder/registry/data/org/openoffice/Office/UI/ReportCommands.xcu) \
 ))
