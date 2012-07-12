@@ -2561,12 +2561,12 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
         Get the record for top level object, so we can get the word anchoring
         and wrapping information for it.
     */
-    for (MSDffImportRecords::iterator it = aData.begin();
-            it != aData.end(); ++it)
+    for (MSDffImportRecords::const_iterator it = aData.begin();
+            it != aData.end(); ++it) // MSVC2008 wants const_iterator here???
     {
         if (it->pObj == pObject)
         {
-            pRecord = &*it;
+            pRecord = &const_cast<SvxMSDffImportRec&>(*it);
             break;
         }
     }
@@ -2663,10 +2663,10 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
             */
             if (!aData.empty())
             {
-                for (MSDffImportRecords::iterator it = aData.begin();
+                for (MSDffImportRecords::const_iterator it = aData.begin();
                         it != aData.end(); ++it)
                 {
-                    pRecord = &*it;
+                    pRecord = &const_cast<SvxMSDffImportRec&>(*it);
                     if (pRecord->pObj && pRecord->aTextId.nTxBxS)
                     { // #i52825# pRetFrmFmt can be NULL
                         pRetFrmFmt = MungeTextIntoDrawBox(pRecord->pObj,
