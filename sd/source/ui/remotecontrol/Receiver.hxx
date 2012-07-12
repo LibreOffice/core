@@ -19,8 +19,8 @@
 #include <glib-object.h>
 #include <json-glib/json-glib.h>
 
-using namespace com::sun::star::presentation;
-using namespace com::sun::star::uno;
+namespace css = ::com::sun::star;
+
 namespace sd
 {
 
@@ -33,15 +33,15 @@ public:
 
 
 private:
-    void executeCommand( JsonObject *aObject, Reference<XSlideShowController> aController );
+    void executeCommand( JsonObject *aObject, css::uno::Reference<css::presentation::XSlideShowController> aController );
 
 };
 
 }
 
-Sequence<sal_Int8> preparePreview(sal_uInt32 aSlideNumber, Reference<XSlideShowController> xSlideShowController, sal_uInt32 aWidth, sal_uInt32 aHeight, sal_uInt64 &aSize );
+css::uno::Sequence<sal_Int8> preparePreview(sal_uInt32 aSlideNumber, css::uno::Reference<css::presentation::XSlideShowController> xSlideShowController, sal_uInt32 aWidth, sal_uInt32 aHeight, sal_uInt64 &aSize );
 
-void sendPreview(sal_uInt32 aSlideNumber, Reference<XSlideShowController> xSlideShowController, osl::StreamSocket &mStreamSocket );
+void sendPreview(sal_uInt32 aSlideNumber, css::uno::Reference<css::presentation::XSlideShowController> xSlideShowController, osl::StreamSocket &mStreamSocket );
 
 #endif // _SD_IMPRESSREMOTE_RECEIVER_HXX
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
