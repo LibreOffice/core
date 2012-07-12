@@ -1101,7 +1101,8 @@ void ScFormulaCell::CompileXML( ScProgress& rProgress )
         pDocument->SetHasMacroFunc( true );
 
     //volatile cells must be added here for import
-    if( pCode->IsRecalcModeAlways() )
+    if( pCode->IsRecalcModeAlways() || pCode->IsRecalcModeForced() ||
+        pCode->IsRecalcModeOnLoad() || pCode->IsRecalcModeOnLoadOnce() )
         pDocument->PutInFormulaTree(this);
 }
 
