@@ -2167,7 +2167,7 @@ NeonSession::isDomainMatch( rtl::OUString certHostName )
     if (hostName.equalsIgnoreAsciiCase( certHostName ) )
         return sal_True;
 
-    if ( 0 == certHostName.indexOf( rtl::OUString("*") ) &&
+    if ( 0 == certHostName.indexOf( '*' ) &&
          hostName.getLength() >= certHostName.getLength()  )
     {
         rtl::OUString cmpStr = certHostName.copy( 1 );

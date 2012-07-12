@@ -155,7 +155,7 @@ INetURLObject HostDetailsContainer::getUrl( )
         if ( nPort != m_nDefaultPort )
             sUrl += ":" + rtl::OUString::valueOf( nPort );
         if ( !sPath.isEmpty( ) )
-            if ( sPath.indexOf( "/" ) != 0 )
+            if ( sPath.indexOf( '/' ) != 0 )
                 sUrl += "/";
             sUrl += sPath;
     }
@@ -254,7 +254,7 @@ INetURLObject SmbDetailsContainer::getUrl( )
         if ( !sShare.isEmpty( ) )
             sUrl += sShare;
         if ( !sPath.isEmpty( ) )
-            if ( sPath.indexOf( "/" ) != 0 )
+            if ( sPath.indexOf( '/' ) != 0 )
                 sUrl += "/";
             sUrl += sPath;
     }

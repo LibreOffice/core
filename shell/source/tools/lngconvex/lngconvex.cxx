@@ -200,7 +200,7 @@ public:
 private:
     void init()
     {
-        sal_Int32 idx = lang_.indexOf("-");
+        sal_Int32 idx = lang_.indexOf('-');
 
         if (idx > -1)
         {

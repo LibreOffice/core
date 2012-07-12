@@ -434,8 +434,8 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
                         Reference< XStorable > xStorable( xDoc, UNO_QUERY );
                         if ( xStorable.is() ) {
                             rtl::OUString aParam = aDispatchRequest.aPrinterName;
-                            sal_Int32 nPathIndex =  aParam.lastIndexOfAsciiL( ";", 1 );
-                            sal_Int32 nFilterIndex = aParam.indexOfAsciiL( ":", 1 );
+                            sal_Int32 nPathIndex =  aParam.lastIndexOf( ';' );
+                            sal_Int32 nFilterIndex = aParam.indexOf( ':' );
                             if( nPathIndex < nFilterIndex )
                                 nFilterIndex = -1;
                             rtl::OUString aFilterOut=aParam.copy( nPathIndex+1 );
@@ -493,7 +493,7 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
                         }
                     } else if ( aDispatchRequest.aRequestType == REQUEST_BATCHPRINT ) {
                         rtl::OUString aParam = aDispatchRequest.aPrinterName;
-                        sal_Int32 nPathIndex =  aParam.lastIndexOfAsciiL( ";", 1 );
+                        sal_Int32 nPathIndex =  aParam.lastIndexOf( ';' );
 
                         rtl::OUString aFilterOut;
                         rtl::OUString aPrinterName;

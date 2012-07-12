@@ -316,7 +316,7 @@ void AxisConverter::convertFromModel( const Reference< XCoordinateSystem >& rxCo
 
         if( (aScaleData.AxisType == cssc2::AxisType::REALNUMBER) || (aScaleData.AxisType == cssc2::AxisType::PERCENT) )
         {
-            if( mrModel.maNumberFormat.maFormatCode.indexOfAsciiL("%",1) >= 0)
+            if( mrModel.maNumberFormat.maFormatCode.indexOf('%') >= 0)
                 mrModel.maNumberFormat.mbSourceLinked = false;
             getFormatter().convertNumberFormat( aAxisProp, mrModel.maNumberFormat );
         }

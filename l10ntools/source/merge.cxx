@@ -41,8 +41,8 @@ namespace
     {
         return rFilename.copy(
             std::max(
-                rFilename.lastIndexOf( "\\" ),
-                rFilename.lastIndexOf( "/" ))+1);
+                rFilename.lastIndexOf( '\\' ),
+                rFilename.lastIndexOf( '/' ))+1);
     };
 }
 

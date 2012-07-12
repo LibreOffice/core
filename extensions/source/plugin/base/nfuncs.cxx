@@ -142,7 +142,7 @@ NPNetscapeFuncs aNPNFuncs =
 static ::rtl::OString normalizeURL( XPlugin_Impl* plugin, const ::rtl::OString& url )
 {
     ::rtl::OString aLoadURL;
-    if( url.indexOf( ":" ) == -1 )
+    if( url.indexOf( ':' ) == -1 )
     {
         aLoadURL = ::rtl::OUStringToOString( plugin->getCreationURL(), plugin->getTextEncoding() );
         int nPos;

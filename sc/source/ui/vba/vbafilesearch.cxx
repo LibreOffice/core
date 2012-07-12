@@ -180,7 +180,7 @@ sal_Int32 SAL_CALL ScVbaFileSearch::Execute( )  throw (css::uno::RuntimeExceptio
     if ( IsWildCard( aTempFileName ) )
     {
         bool bEndWithAsterisk = aTempFileName.endsWithAsciiL("*", 1);
-        bool bStartWithAsterisk = (aTempFileName.indexOf(::rtl::OUString("*")) == 0);
+        bool bStartWithAsterisk = (aTempFileName.indexOf('*') == 0);
         if ( !bEndWithAsterisk && !bStartWithAsterisk )
         {
             aTempFileName = ::rtl::OUString("*") + aTempFileName + ::rtl::OUString("*");
