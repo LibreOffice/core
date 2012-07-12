@@ -130,7 +130,9 @@ struct SdNavigatorDropEvent : public ExecuteDropEvent
 
     // #112978# need to use GetAllMarkedBoundRect instead of GetAllMarkedRect to get
     // fat lines correctly
-    const Rectangle                 aMarkRect( GetAllMarkedBoundRect() );
+    // This seems to be broken on LibreOffice. So reverted this temporarily
+    // to fix fdo#45260
+    const Rectangle                 aMarkRect( GetAllMarkedRect() );
     TransferableObjectDescriptor    aObjDesc;
     String                          aDisplayName;
     SdrOle2Obj*                     pSdrOleObj = NULL;
