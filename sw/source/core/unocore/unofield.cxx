@@ -1019,6 +1019,11 @@ SwXTextField* SwXTextField::CreateSwXTextField(SwDoc & rDoc, SwFmtFld const& rFm
     return pField ? pField : new SwXTextField( rFmt, &rDoc );
 }
 
+sal_uInt16 SwXTextField::GetServiceId()
+{
+    return m_nServiceId;
+}
+
 struct SwFieldProperties_Impl
 {
     String      sPar1;
