@@ -1244,16 +1244,7 @@ sal_Int32 TestBridgeImpl::run( const Sequence< OUString > & rArgs )
         throw;
     }
 
-    if( bRet )
-    {
-        printf( "\n\n ### test succeeded!\n" );
-    }
-    else
-    {
-        printf( "\n> ### test failed!\n" );
-    }
-
-    return 0;
+    return bRet ? 0 : 1;
 }
 
 // XServiceInfo
