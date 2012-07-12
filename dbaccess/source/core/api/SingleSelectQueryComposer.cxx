@@ -614,6 +614,7 @@ void SAL_CALL OSingleSelectQueryComposer::setElementaryQuery( const ::rtl::OUStr
     {
         (void)e;
         OSL_FAIL( "OSingleSelectQueryComposer::setElementaryQuery: there should be no error anymore for the additive statement!" );
+        DBG_UNHANDLED_EXCEPTION();
         // every part of the additive statement should have passed other tests already, and should not
         // be able to cause any errors ... me thinks
     }
