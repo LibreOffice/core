@@ -110,23 +110,6 @@ bool is_windows_xp_or_above()
 }
 
 //---------------------------------
-/**
-*/
-
-void SaveDebugInfoToFile( const std::wstring& str )
-{
-   int handle;
-
-   if ((handle = open("c:\\temp\\SHELLRESULT.$$$", O_CREAT | O_RDWR | O_APPEND )) == -1)
-   {
-      perror("Error: open file error");
-      return;
-   }
-   write(handle, str.c_str(), str.length() );
-   close(handle);
-}
-
-//---------------------------------
 /** helper function to judge if the string is only has spaces.
     @returns
         <TRUE>if the provided string contains only but at least one space
