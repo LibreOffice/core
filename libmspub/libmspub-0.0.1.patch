@@ -1,5 +1,5 @@
---- misc/libmspub-0.0.1/src/lib/ColorReference.cpp	2012-07-11 15:03:45.000000000 -0600
-+++ misc/build/libmspub-0.0.1/src/lib/ColorReference.cpp	2012-07-11 17:43:45.293869000 -0600
+--- misc/libmspub-0.0.1/src/lib/ColorReference.cpp	2012-07-11 23:03:45.000000000 +0200
++++ misc/build/libmspub-0.0.1/src/lib/ColorReference.cpp	2012-07-12 15:13:47.840592701 +0200
 @@ -44,13 +44,13 @@
    return l.m_baseColor == r.m_baseColor && l.m_modifiedColor == r.m_modifiedColor;
  }
@@ -18,8 +18,8 @@
  
  }
  
---- misc/libmspub-0.0.1/src/lib/ColorReference.h	2012-07-11 15:03:07.000000000 -0600
-+++ misc/build/libmspub-0.0.1/src/lib/ColorReference.h	2012-07-11 17:43:38.741857500 -0600
+--- misc/libmspub-0.0.1/src/lib/ColorReference.h	2012-07-11 23:03:07.000000000 +0200
++++ misc/build/libmspub-0.0.1/src/lib/ColorReference.h	2012-07-12 15:13:47.840592701 +0200
 @@ -37,10 +37,10 @@
  {
    unsigned m_baseColor;
@@ -36,7 +36,7 @@
  public:
    explicit ColorReference(unsigned color) : m_baseColor(color), m_modifiedColor(color) { }
 --- misc/libmspub-0.0.1/src/lib/MSPUBCollector.cpp	2012-07-10 08:13:15.000000000 +0200
-+++ misc/build/libmspub-0.0.1/src/lib/MSPUBCollector.cpp	2012-07-12 01:29:28.154982030 +0200
++++ misc/build/libmspub-0.0.1/src/lib/MSPUBCollector.cpp	2012-07-12 15:13:47.841592676 +0200
 @@ -28,6 +28,7 @@
   * instead of those above.
   */
@@ -109,7 +109,7 @@
      ShapeType *type = getIfExists(m_shapeTypesBySeqNum, seqNum);
      if (type)
 --- misc/libmspub-0.0.1/src/lib/MSPUBCollector.h	2012-07-10 08:13:15.000000000 +0200
-+++ misc/build/libmspub-0.0.1/src/lib/MSPUBCollector.h	2012-07-12 01:29:14.047323447 +0200
++++ misc/build/libmspub-0.0.1/src/lib/MSPUBCollector.h	2012-07-12 15:13:47.841592676 +0200
 @@ -36,7 +36,6 @@
  #include <set>
  #include <string>
@@ -128,7 +128,7 @@
  {
  class MSPUBCollector
 --- misc/libmspub-0.0.1/src/lib/PolygonUtils.cpp	2012-07-10 08:13:15.000000000 +0200
-+++ misc/build/libmspub-0.0.1/src/lib/PolygonUtils.cpp	2012-07-12 01:29:14.049323401 +0200
++++ misc/build/libmspub-0.0.1/src/lib/PolygonUtils.cpp	2012-07-12 15:14:04.325188736 +0200
 @@ -26,8 +26,8 @@
   * instead of those above.
   */
@@ -152,6 +152,49 @@
  
  using namespace libmspub;
  
+@@ -5735,7 +5738,7 @@
+                       bool drawStroke, WPXPropertyList &graphicsProps, libwpg::WPGPaintInterface *painter)
+ {
+   std::vector<LineInfo> lineInfos;
+-  std::vector<Line>::const_iterator iter_line = lines.begin();
++  unsigned i_line = 0;
+   bool rectangle = isShapeTypeRectangle(shapeType) && !lines.empty(); // ugly HACK: special handling for rectangle outlines.
+   Vector2D vector(0, 0);
+   Vector2D old(0, 0);
+@@ -5746,7 +5749,7 @@
+     if (i > 0)
+     {
+       WPXPropertyList vertexStart;
+-      double lineWidth = (double)(iter_line->m_widthInEmu) / EMUS_IN_INCH;
++      double lineWidth = (double)(lines[i_line].m_widthInEmu) / EMUS_IN_INCH;
+       switch (i - 1) // fudge the lines inward by half their width so they are fully inside the shape and hence proper borders
+       {
+       case 0:
+@@ -5772,7 +5775,7 @@
+     old = vector;
+     if (rectangle)
+     {
+-      double lineWidth = (double)(iter_line->m_widthInEmu) / EMUS_IN_INCH;
++      double lineWidth = (double)(lines[i_line].m_widthInEmu) / EMUS_IN_INCH;
+       switch (i) // fudge the lines inward by half their width so they are fully inside the shape and hence proper borders
+       {
+       case 1:
+@@ -5795,12 +5798,12 @@
+     vertices.append(vertex);
+     if (i > 0)
+     {
+-      lineInfos.push_back(LineInfo(vertices, *iter_line, caller->getPaletteColors()));
++      lineInfos.push_back(LineInfo(vertices, lines[i_line], caller->getPaletteColors()));
+       if (drawStroke)
+       {
+-        if (iter_line + 1 < lines.end()) // continue using the last element if we run out of lines.
++        if (i_line + 1 < lines.size()) // continue using the last element if we run out of lines.
+         {
+-          ++iter_line;
++          ++i_line;
+         }
+       }
+     }
 @@ -6034,15 +6037,15 @@
            //
            // assuming eccentric anomaly for now
@@ -184,7 +227,7 @@
            vertex.insert("svg:x", end.m_x);
            vertex.insert("svg:y", end.m_y);
 --- misc/libmspub-0.0.1/src/lib/ShapeGroup.h	2012-07-10 08:13:15.000000000 +0200
-+++ misc/build/libmspub-0.0.1/src/lib/ShapeGroup.h	2012-07-12 01:29:28.154982030 +0200
++++ misc/build/libmspub-0.0.1/src/lib/ShapeGroup.h	2012-07-12 15:13:47.843592626 +0200
 @@ -14,7 +14,7 @@
    ShapeGroup *m_parent;
    VectorTransformation2D m_transform;
@@ -195,7 +238,7 @@
    }
    virtual unsigned getPageSeqNum() const = 0;
 --- misc/libmspub-0.0.1/src/lib/Shapes.h	2012-07-10 08:13:15.000000000 +0200
-+++ misc/build/libmspub-0.0.1/src/lib/Shapes.h	2012-07-12 01:29:28.155982003 +0200
++++ misc/build/libmspub-0.0.1/src/lib/Shapes.h	2012-07-12 15:13:47.844592602 +0200
 @@ -105,21 +105,21 @@
    unsigned m_left, m_top, m_right, m_bottom; //emu
    GeometricShape(MSPUBCollector *o)
@@ -222,8 +265,8 @@
    std::vector<Color> getPaletteColors() const;
    void output(libwpg::WPGPaintInterface *painter, Coordinate coord);
  protected:
---- misc/libmspub-0.0.1/src/lib/VectorTransformation2D.cpp
-+++ misc/build/libmspub-0.0.1/src/lib/VectorTransformation2D.cpp
+--- misc/libmspub-0.0.1/src/lib/VectorTransformation2D.cpp	2012-07-10 08:13:15.000000000 +0200
++++ misc/build/libmspub-0.0.1/src/lib/VectorTransformation2D.cpp	2012-07-12 15:13:47.844592602 +0200
 @@ -29,7 +29,7 @@
  #include "VectorTransformation2D.h"
  #include <math.h>
@@ -234,7 +277,7 @@
  }
  
 --- misc/libmspub-0.0.1/src/lib/VectorTransformation2D.h	2012-07-10 08:13:15.000000000 +0200
-+++ misc/build/libmspub-0.0.1/src/lib/VectorTransformation2D.h	2012-07-12 01:29:28.155982003 +0200
++++ misc/build/libmspub-0.0.1/src/lib/VectorTransformation2D.h	2012-07-12 15:13:47.844592602 +0200
 @@ -45,8 +45,8 @@
  {
    double m_m11, m_m12, m_m21, m_m22;
@@ -254,7 +297,7 @@
  
  #endif /* __VECTORTRANSFORMATION2D_H__ */
 --- misc/libmspub-0.0.1/src/lib/libmspub_utils.cpp	2012-07-10 08:13:15.000000000 +0200
-+++ misc/build/libmspub-0.0.1/src/lib/libmspub_utils.cpp	2012-07-12 01:29:14.050323377 +0200
++++ misc/build/libmspub-0.0.1/src/lib/libmspub_utils.cpp	2012-07-12 15:13:47.844592602 +0200
 @@ -30,9 +30,14 @@
   */
  
@@ -282,7 +325,7 @@
    double newVecY = sinTheta * vecX + cosTheta * vecY;
    x = centerX + newVecX;
 --- misc/libmspub-0.0.1/src/lib/libmspub_utils.h	2012-07-10 08:13:15.000000000 +0200
-+++ misc/build/libmspub-0.0.1/src/lib/libmspub_utils.h	2012-07-12 01:29:14.050323377 +0200
++++ misc/build/libmspub-0.0.1/src/lib/libmspub_utils.h	2012-07-12 15:13:47.845592578 +0200
 @@ -30,10 +30,7 @@
  #ifndef __LIBMSPUB_UTILS_H__
  #define __LIBMSPUB_UTILS_H__
