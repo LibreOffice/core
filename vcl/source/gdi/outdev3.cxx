@@ -6223,15 +6223,30 @@ SalLayout* OutputDevice::ImplLayout( const String& rOrigStr,
     return pSalLayout;
 }
 
-void OutputDevice::forceFallbackFontToFit(SalLayout &rFallback, ImplFontEntry &rFallbackFont,
+SalLayout* OutputDevice::getFallbackFontThatFits(ImplFontEntry &rFallbackFont,
     FontSelectPattern &rFontSelData, int nFallbackLevel,
     ImplLayoutArgs& rLayoutArgs, const ImplFontMetricData& rOrigMetric) const
 {
+    rFallbackFont.mnSetFontFlags = mpGraphics->SetFont( &rFontSelData, nFallbackLevel );
+
+    rLayoutArgs.ResetPos();
+    SalLayout* pFallback = mpGraphics->GetTextLayout( rLayoutArgs, nFallbackLevel );
+
+    if (!pFallback)
+        return NULL;
+
+    if (!pFallback->LayoutText(rLayoutArgs))
+    {
+        // there is no need for a font that couldn't resolve anything
+        pFallback->Release();
+        return NULL;
+    }
+
     Rectangle aBoundRect;
     bool bHaveBounding = false;
     Rectangle aRectangle;
 
-    rFallback.AdjustLayout( rLayoutArgs );
+    pFallback->AdjustLayout( rLayoutArgs );
 
     //All we care about here is getting the vertical bounds of this text and
     //make sure it will fit inside the available space
@@ -6239,7 +6254,7 @@ void OutputDevice::forceFallbackFontToFit(SalLayout &rFallback, ImplFontEntry &r
     for( int nStart = 0;;)
     {
         sal_GlyphId nLGlyph;
-        if( !rFallback.GetNextGlyphs( 1, &nLGlyph, aPos, nStart ) )
+        if( !pFallback->GetNextGlyphs( 1, &nLGlyph, aPos, nStart ) )
             break;
 
         sal_GlyphId nFontTag = nFallbackLevel << GF_FONTSHIFT;
@@ -6268,11 +6283,28 @@ void OutputDevice::forceFallbackFontToFit(SalLayout &rFallback, ImplFontEntry &r
         if (fScale < 1)
         {
             long nOrigHeight = rFontSelData.mnHeight;
-            rFontSelData.mnHeight = static_cast<int>(static_cast<float>(rFontSelData.mnHeight) * fScale);
+            long nNewHeight = static_cast<int>(static_cast<float>(rFontSelData.mnHeight) * fScale);
+
+            if (nNewHeight == nOrigHeight)
+                --nNewHeight;
+
+            pFallback->Release();
+
+            rFontSelData.mnHeight = nNewHeight;
             rFallbackFont.mnSetFontFlags = mpGraphics->SetFont( &rFontSelData, nFallbackLevel );
             rFontSelData.mnHeight = nOrigHeight;
+
+            rLayoutArgs.ResetPos();
+            pFallback = mpGraphics->GetTextLayout( rLayoutArgs, nFallbackLevel );
+            if (pFallback && !pFallback->LayoutText(rLayoutArgs))
+            {
+                pFallback->Release();
+                pFallback = NULL;
+            }
+            SAL_WARN_IF(pFallback, "vcl.gdi", "we couldn't layout text with a smaller point size that worked with a bigger one");
         }
     }
+    return pFallback;
 }
 
 // -----------------------------------------------------------------------
@@ -6333,30 +6365,17 @@ SalLayout* OutputDevice::ImplGlyphFallbackLayout( SalLayout* pSalLayout, ImplLay
             }
         }
 
-        pFallbackFont->mnSetFontFlags = mpGraphics->SetFont( &aFontSelData, nFallbackLevel );
-
         // create and add glyph fallback layout to multilayout
-        rLayoutArgs.ResetPos();
-        SalLayout* pFallback = mpGraphics->GetTextLayout( rLayoutArgs, nFallbackLevel );
-        if( pFallback )
+        SalLayout* pFallback = getFallbackFontThatFits(*pFallbackFont, aFontSelData,
+            nFallbackLevel, rLayoutArgs, aOrigMetric);
+        if (pFallback)
         {
-            if( pFallback->LayoutText( rLayoutArgs ) )
-            {
-                forceFallbackFontToFit(*pFallback, *pFallbackFont, aFontSelData,
-                    nFallbackLevel, rLayoutArgs, aOrigMetric);
-
-                if( !pMultiSalLayout )
-                    pMultiSalLayout = new MultiSalLayout( *pSalLayout );
-                pMultiSalLayout->AddFallback( *pFallback,
-                    rLayoutArgs.maRuns, aFontSelData.mpFontData );
-                if (nFallbackLevel == MAX_FALLBACK-1)
-                    pMultiSalLayout->SetInComplete();
-            }
-            else
-            {
-                // there is no need for a font that couldn't resolve anything
-                pFallback->Release();
-            }
+            if( !pMultiSalLayout )
+                pMultiSalLayout = new MultiSalLayout( *pSalLayout );
+            pMultiSalLayout->AddFallback( *pFallback,
+                rLayoutArgs.maRuns, aFontSelData.mpFontData );
+            if (nFallbackLevel == MAX_FALLBACK-1)
+                pMultiSalLayout->SetInComplete();
         }
 
         mpFontCache->Release( pFallbackFont );
