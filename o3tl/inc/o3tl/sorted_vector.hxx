@@ -34,7 +34,9 @@ public:
     @tpl Compare comparison method
 */
 template <class Value, class Compare = std::less<Value> >
-class sorted_vector : public std::vector<Value>, private sorted_vector_compare<Value, Compare>
+class sorted_vector
+    : private std::vector<Value>
+    , private sorted_vector_compare<Value, Compare>
 {
 public:
     typedef typename std::vector<Value>::iterator  iterator;
@@ -45,8 +47,10 @@ public:
     using std::vector<Value>::begin;
     using std::vector<Value>::end;
     using std::vector<Value>::clear;
-    using std::vector<Value>::insert;
     using std::vector<Value>::erase;
+    using std::vector<Value>::empty;
+    using std::vector<Value>::size;
+    using std::vector<Value>::operator[];
 
     // MODIFIERS
 
@@ -56,7 +60,7 @@ public:
         iterator it = std::lower_bound( begin(), end(), x, me );
         if( it == end() || less_than(x, *it) )
         {
-            it = insert( it, x );
+            it = std::vector<Value>::insert( it, x );
             return std::make_pair( it, true );
         }
         return std::make_pair( it, false );
