@@ -1,0 +1,392 @@
+<?xml version="1.0"?>
+<XShapes>
+ <XShape positionX="1400" positionY="1200" sizeX="2800" sizeY="2200" type="com.sun.star.drawing.CustomShape" textAutoGrowHeight="false" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="BLOCK" textVerticalAdjust="CENTER" textLeftDistance="250" textRightDistance="250" textUpperDistance="125" textLowerDistance="125" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="SOLID" fillColor="13625333" fillTransparence="0" fillTransparenceGradientName="">
+  <FillTransparenceGradient style="LINEAR" startColor="0" endColor="16777215" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+  <FillGradient style="LINEAR" startColor="8421504" endColor="16777215" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+  <FillHatch style="SINGLE" color="8421504" distance="20" angle="0"/>
+  <FillBitmap width="32" height="32"/>
+  <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
+  <LineStart/>
+  <LineEnd/>
+  <Transformation>
+   <Line1 column1="2801.000000" column2="0.000000" column3="1400.000000"/>
+   <Line2 column1="0.000000" column2="2201.000000" column3="1200.000000"/>
+   <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+  </Transformation>
+  <CustomShapeGeometry>
+   <PropertyValue name="ViewBox" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="Type" handle="0" value="smiley" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="AdjustmentValues" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="Path" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
+  </CustomShapeGeometry>
+ </XShape>
+ <XShape positionX="6000" positionY="1000" sizeX="3200" sizeY="2400" type="com.sun.star.drawing.CustomShape" textAutoGrowHeight="false" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="BLOCK" textVerticalAdjust="CENTER" textLeftDistance="250" textRightDistance="250" textUpperDistance="125" textLowerDistance="125" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="SOLID" fillColor="13625333" fillTransparence="0" fillTransparenceGradientName="">
+  <FillTransparenceGradient style="LINEAR" startColor="0" endColor="16777215" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+  <FillGradient style="LINEAR" startColor="8421504" endColor="16777215" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+  <FillHatch style="SINGLE" color="8421504" distance="20" angle="0"/>
+  <FillBitmap width="32" height="32"/>
+  <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
+  <LineStart/>
+  <LineEnd/>
+  <Transformation>
+   <Line1 column1="3201.000000" column2="0.000000" column3="6000.000000"/>
+   <Line2 column1="0.000000" column2="2401.000000" column3="1000.000000"/>
+   <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+  </Transformation>
+  <CustomShapeGeometry>
+   <PropertyValue name="ViewBox" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="Type" handle="0" value="sun" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="AdjustmentValues" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="Path" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
+  </CustomShapeGeometry>
+ </XShape>
+ <XShape positionX="11000" positionY="1400" sizeX="2000" sizeY="2200" type="com.sun.star.drawing.CustomShape" textAutoGrowHeight="false" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="BLOCK" textVerticalAdjust="CENTER" textLeftDistance="250" textRightDistance="250" textUpperDistance="125" textLowerDistance="125" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="749" textMinimumFrameWidth="499" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="SOLID" fillColor="13625333" fillTransparence="0" fillTransparenceGradientName="">
+  <FillTransparenceGradient style="LINEAR" startColor="0" endColor="16777215" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+  <FillGradient style="LINEAR" startColor="8421504" endColor="16777215" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+  <FillHatch style="SINGLE" color="8421504" distance="20" angle="0"/>
+  <FillBitmap width="32" height="32"/>
+  <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
+  <LineStart/>
+  <LineEnd/>
+  <Transformation>
+   <Line1 column1="2001.000000" column2="0.000000" column3="11000.000000"/>
+   <Line2 column1="0.000000" column2="2201.000000" column3="1400.000000"/>
+   <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+  </Transformation>
+  <CustomShapeGeometry>
+   <PropertyValue name="ViewBox" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="MirroredX" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="Type" handle="0" value="moon" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="AdjustmentValues" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="Path" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
+  </CustomShapeGeometry>
+ </XShape>
+ <XShape positionX="14800" positionY="1000" sizeX="2600" sizeY="3800" type="com.sun.star.drawing.CustomShape" textAutoGrowHeight="false" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="BLOCK" textVerticalAdjust="CENTER" textLeftDistance="250" textRightDistance="250" textUpperDistance="125" textLowerDistance="125" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="749" textMinimumFrameWidth="499" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="SOLID" fillColor="13625333" fillTransparence="0" fillTransparenceGradientName="">
+  <FillTransparenceGradient style="LINEAR" startColor="0" endColor="16777215" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+  <FillGradient style="LINEAR" startColor="8421504" endColor="16777215" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+  <FillHatch style="SINGLE" color="8421504" distance="20" angle="0"/>
+  <FillBitmap width="32" height="32"/>
+  <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
+  <LineStart/>
+  <LineEnd/>
+  <Transformation>
+   <Line1 column1="2601.000000" column2="0.000000" column3="14800.000000"/>
+   <Line2 column1="0.000000" column2="3801.000000" column3="1000.000000"/>
+   <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+  </Transformation>
+  <CustomShapeGeometry>
+   <PropertyValue name="ViewBox" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="Type" handle="0" value="non-primitive" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="Path" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="AdjustmentValues" handle="0" propertyState="DIRECT_VALUE"/>
+  </CustomShapeGeometry>
+ </XShape>
+ <XShape positionX="18600" positionY="1400" sizeX="2400" sizeY="2600" type="com.sun.star.drawing.CustomShape" textAutoGrowHeight="false" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="BLOCK" textVerticalAdjust="TOP" textLeftDistance="250" textRightDistance="250" textUpperDistance="125" textLowerDistance="125" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="SOLID" fillColor="13625333" fillTransparence="0" fillTransparenceGradientName="">
+  <FillTransparenceGradient style="LINEAR" startColor="0" endColor="16777215" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+  <FillGradient style="LINEAR" startColor="8421504" endColor="16777215" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+  <FillHatch style="SINGLE" color="8421504" distance="20" angle="0"/>
+  <FillBitmap width="32" height="32"/>
+  <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
+  <LineStart/>
+  <LineEnd/>
+  <Transformation>
+   <Line1 column1="2401.000000" column2="0.000000" column3="18600.000000"/>
+   <Line2 column1="0.000000" column2="2601.000000" column3="1400.000000"/>
+   <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+  </Transformation>
+  <CustomShapeGeometry>
+   <PropertyValue name="ViewBox" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="Type" handle="0" value="heart" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="AdjustmentValues" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="Path" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
+  </CustomShapeGeometry>
+ </XShape>
+ <XShape positionX="23400" positionY="1400" sizeX="2800" sizeY="2600" type="com.sun.star.drawing.CustomShape" textAutoGrowHeight="true" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="BLOCK" textVerticalAdjust="TOP" textLeftDistance="250" textRightDistance="250" textUpperDistance="125" textLowerDistance="125" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="666" textMinimumFrameWidth="486" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="SOLID" fillColor="13625333" fillTransparence="0" fillTransparenceGradientName="">
+  <FillTransparenceGradient style="LINEAR" startColor="0" endColor="16777215" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+  <FillGradient style="LINEAR" startColor="8421504" endColor="16777215" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+  <FillHatch style="SINGLE" color="8421504" distance="20" angle="0"/>
+  <FillBitmap width="32" height="32"/>
+  <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
+  <LineStart/>
+  <LineEnd/>
+  <Transformation>
+   <Line1 column1="2801.000000" column2="0.000000" column3="23400.000000"/>
+   <Line2 column1="0.000000" column2="2601.000000" column3="1400.000000"/>
+   <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+  </Transformation>
+  <CustomShapeGeometry>
+   <PropertyValue name="ViewBox" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="Type" handle="0" value="non-primitive" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="Path" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="AdjustmentValues" handle="0" propertyState="DIRECT_VALUE"/>
+  </CustomShapeGeometry>
+ </XShape>
+ <XShape positionX="1600" positionY="5600" sizeX="2400" sizeY="1600" type="com.sun.star.drawing.CustomShape" textAutoGrowHeight="false" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="BLOCK" textVerticalAdjust="CENTER" textLeftDistance="250" textRightDistance="250" textUpperDistance="125" textLowerDistance="125" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="SOLID" fillColor="13625333" fillTransparence="0" fillTransparenceGradientName="">
+  <FillTransparenceGradient style="LINEAR" startColor="0" endColor="16777215" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+  <FillGradient style="LINEAR" startColor="8421504" endColor="16777215" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+  <FillHatch style="SINGLE" color="8421504" distance="20" angle="0"/>
+  <FillBitmap width="32" height="32"/>
+  <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
+  <LineStart/>
+  <LineEnd/>
+  <Transformation>
+   <Line1 column1="2401.000000" column2="0.000000" column3="1600.000000"/>
+   <Line2 column1="0.000000" column2="1601.000000" column3="5600.000000"/>
+   <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+  </Transformation>
+  <CustomShapeGeometry>
+   <PropertyValue name="ViewBox" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="Type" handle="0" value="non-primitive" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="Path" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="AdjustmentValues" handle="0" propertyState="DIRECT_VALUE"/>
+  </CustomShapeGeometry>
+ </XShape>
+ <XShape positionX="6000" positionY="5000" sizeX="3400" sizeY="2600" type="com.sun.star.drawing.CustomShape" textAutoGrowHeight="false" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="BLOCK" textVerticalAdjust="CENTER" textLeftDistance="250" textRightDistance="250" textUpperDistance="125" textLowerDistance="125" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="SOLID" fillColor="13625333" fillTransparence="0" fillTransparenceGradientName="">
+  <FillTransparenceGradient style="LINEAR" startColor="0" endColor="16777215" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+  <FillGradient style="LINEAR" startColor="8421504" endColor="16777215" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+  <FillHatch style="SINGLE" color="8421504" distance="20" angle="0"/>
+  <FillBitmap width="32" height="32"/>
+  <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
+  <LineStart/>
+  <LineEnd/>
+  <Transformation>
+   <Line1 column1="3401.000000" column2="0.000000" column3="6000.000000"/>
+   <Line2 column1="0.000000" column2="2601.000000" column3="5000.000000"/>
+   <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+  </Transformation>
+  <CustomShapeGeometry>
+   <PropertyValue name="ViewBox" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="Type" handle="0" value="forbidden" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="AdjustmentValues" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="Path" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
+  </CustomShapeGeometry>
+ </XShape>
+ <XShape positionX="10800" positionY="5200" sizeX="2400" sizeY="2600" type="com.sun.star.drawing.CustomShape" textAutoGrowHeight="false" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="BLOCK" textVerticalAdjust="CENTER" textLeftDistance="250" textRightDistance="250" textUpperDistance="125" textLowerDistance="125" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="SOLID" fillColor="13625333" fillTransparence="0" fillTransparenceGradientName="">
+  <FillTransparenceGradient style="LINEAR" startColor="0" endColor="16777215" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+  <FillGradient style="LINEAR" startColor="8421504" endColor="16777215" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+  <FillHatch style="SINGLE" color="8421504" distance="20" angle="0"/>
+  <FillBitmap width="32" height="32"/>
+  <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
+  <LineStart/>
+  <LineEnd/>
+  <Transformation>
+   <Line1 column1="2401.000000" column2="0.000000" column3="10800.000000"/>
+   <Line2 column1="0.000000" column2="2601.000000" column3="5200.000000"/>
+   <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+  </Transformation>
+  <CustomShapeGeometry>
+   <PropertyValue name="ViewBox" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="Type" handle="0" value="NonPrimitive" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="Path" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="AdjustmentValues" handle="0" propertyState="DIRECT_VALUE"/>
+  </CustomShapeGeometry>
+ </XShape>
+ <XShape positionX="15200" positionY="6000" sizeX="2000" sizeY="1200" type="com.sun.star.drawing.CustomShape" textAutoGrowHeight="false" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="BLOCK" textVerticalAdjust="CENTER" textLeftDistance="250" textRightDistance="250" textUpperDistance="125" textLowerDistance="125" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="749" textMinimumFrameWidth="499" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="NONE" fillColor="13625333" fillTransparence="0" fillTransparenceGradientName="">
+  <FillTransparenceGradient style="LINEAR" startColor="0" endColor="16777215" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+  <FillGradient style="LINEAR" startColor="8421504" endColor="16777215" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+  <FillHatch style="SINGLE" color="8421504" distance="20" angle="0"/>
+  <FillBitmap width="32" height="32"/>
+  <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
+  <LineStart/>
+  <LineEnd/>
+  <Transformation>
+   <Line1 column1="2001.000000" column2="0.000000" column3="15200.000000"/>
+   <Line2 column1="0.000000" column2="1201.000000" column3="6000.000000"/>
+   <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+  </Transformation>
+  <CustomShapeGeometry>
+   <PropertyValue name="ViewBox" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="Type" handle="0" value="bracket-pair" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="AdjustmentValues" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="Path" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
+  </CustomShapeGeometry>
+ </XShape>
+ <XShape positionX="18200" positionY="5200" sizeX="1200" sizeY="2400" type="com.sun.star.drawing.CustomShape" textAutoGrowHeight="false" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="BLOCK" textVerticalAdjust="CENTER" textLeftDistance="250" textRightDistance="250" textUpperDistance="125" textLowerDistance="125" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="749" textMinimumFrameWidth="499" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="NONE" fillColor="13625333" fillTransparence="0" fillTransparenceGradientName="">
+  <FillTransparenceGradient style="LINEAR" startColor="0" endColor="16777215" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+  <FillGradient style="LINEAR" startColor="8421504" endColor="16777215" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+  <FillHatch style="SINGLE" color="8421504" distance="20" angle="0"/>
+  <FillBitmap width="32" height="32"/>
+  <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
+  <LineStart/>
+  <LineEnd/>
+  <Transformation>
+   <Line1 column1="1201.000000" column2="0.000000" column3="18200.000000"/>
+   <Line2 column1="0.000000" column2="2401.000000" column3="5200.000000"/>
+   <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+  </Transformation>
+  <CustomShapeGeometry>
+   <PropertyValue name="ViewBox" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="Type" handle="0" value="left-bracket" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="AdjustmentValues" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="Path" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
+  </CustomShapeGeometry>
+ </XShape>
+ <XShape positionX="21000" positionY="5400" sizeX="1400" sizeY="2400" type="com.sun.star.drawing.CustomShape" textAutoGrowHeight="false" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="BLOCK" textVerticalAdjust="CENTER" textLeftDistance="250" textRightDistance="250" textUpperDistance="125" textLowerDistance="125" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="749" textMinimumFrameWidth="499" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="NONE" fillColor="13625333" fillTransparence="0" fillTransparenceGradientName="">
+  <FillTransparenceGradient style="LINEAR" startColor="0" endColor="16777215" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+  <FillGradient style="LINEAR" startColor="8421504" endColor="16777215" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+  <FillHatch style="SINGLE" color="8421504" distance="20" angle="0"/>
+  <FillBitmap width="32" height="32"/>
+  <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
+  <LineStart/>
+  <LineEnd/>
+  <Transformation>
+   <Line1 column1="1401.000000" column2="0.000000" column3="21000.000000"/>
+   <Line2 column1="0.000000" column2="2401.000000" column3="5400.000000"/>
+   <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+  </Transformation>
+  <CustomShapeGeometry>
+   <PropertyValue name="ViewBox" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="Type" handle="0" value="right-bracket" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="AdjustmentValues" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="Path" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
+  </CustomShapeGeometry>
+ </XShape>
+ <XShape positionX="1600" positionY="9800" sizeX="2600" sizeY="2600" type="com.sun.star.drawing.CustomShape" textAutoGrowHeight="false" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="BLOCK" textVerticalAdjust="CENTER" textLeftDistance="250" textRightDistance="250" textUpperDistance="125" textLowerDistance="125" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="749" textMinimumFrameWidth="499" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="NONE" fillColor="13625333" fillTransparence="0" fillTransparenceGradientName="">
+  <FillTransparenceGradient style="LINEAR" startColor="0" endColor="16777215" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+  <FillGradient style="LINEAR" startColor="8421504" endColor="16777215" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+  <FillHatch style="SINGLE" color="8421504" distance="20" angle="0"/>
+  <FillBitmap width="32" height="32"/>
+  <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
+  <LineStart/>
+  <LineEnd/>
+  <Transformation>
+   <Line1 column1="2601.000000" column2="0.000000" column3="1600.000000"/>
+   <Line2 column1="0.000000" column2="2601.000000" column3="9800.000000"/>
+   <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+  </Transformation>
+  <CustomShapeGeometry>
+   <PropertyValue name="ViewBox" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="Type" handle="0" value="brace-pair" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="AdjustmentValues" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="Path" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
+  </CustomShapeGeometry>
+ </XShape>
+ <XShape positionX="6000" positionY="9800" sizeX="1000" sizeY="2800" type="com.sun.star.drawing.CustomShape" textAutoGrowHeight="false" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="BLOCK" textVerticalAdjust="CENTER" textLeftDistance="250" textRightDistance="250" textUpperDistance="125" textLowerDistance="125" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="749" textMinimumFrameWidth="499" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="NONE" fillColor="13625333" fillTransparence="0" fillTransparenceGradientName="">
+  <FillTransparenceGradient style="LINEAR" startColor="0" endColor="16777215" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+  <FillGradient style="LINEAR" startColor="8421504" endColor="16777215" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+  <FillHatch style="SINGLE" color="8421504" distance="20" angle="0"/>
+  <FillBitmap width="32" height="32"/>
+  <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
+  <LineStart/>
+  <LineEnd/>
+  <Transformation>
+   <Line1 column1="1001.000000" column2="0.000000" column3="6000.000000"/>
+   <Line2 column1="0.000000" column2="2801.000000" column3="9800.000000"/>
+   <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+  </Transformation>
+  <CustomShapeGeometry>
+   <PropertyValue name="ViewBox" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="Type" handle="0" value="left-brace" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="AdjustmentValues" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="Path" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
+  </CustomShapeGeometry>
+ </XShape>
+ <XShape positionX="9800" positionY="9200" sizeX="1600" sizeY="3200" type="com.sun.star.drawing.CustomShape" textAutoGrowHeight="false" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="BLOCK" textVerticalAdjust="CENTER" textLeftDistance="250" textRightDistance="250" textUpperDistance="125" textLowerDistance="125" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="749" textMinimumFrameWidth="499" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="NONE" fillColor="13625333" fillTransparence="0" fillTransparenceGradientName="">
+  <FillTransparenceGradient style="LINEAR" startColor="0" endColor="16777215" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+  <FillGradient style="LINEAR" startColor="8421504" endColor="16777215" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+  <FillHatch style="SINGLE" color="8421504" distance="20" angle="0"/>
+  <FillBitmap width="32" height="32"/>
+  <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
+  <LineStart/>
+  <LineEnd/>
+  <Transformation>
+   <Line1 column1="1601.000000" column2="0.000000" column3="9800.000000"/>
+   <Line2 column1="0.000000" column2="3201.000000" column3="9200.000000"/>
+   <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+  </Transformation>
+  <CustomShapeGeometry>
+   <PropertyValue name="ViewBox" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="Type" handle="0" value="right-brace" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="AdjustmentValues" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="Path" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
+  </CustomShapeGeometry>
+ </XShape>
+ <XShape positionX="13800" positionY="9600" sizeX="3200" sizeY="3400" type="com.sun.star.drawing.CustomShape" textAutoGrowHeight="false" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="BLOCK" textVerticalAdjust="CENTER" textLeftDistance="250" textRightDistance="250" textUpperDistance="125" textLowerDistance="125" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="SOLID" fillColor="13625333" fillTransparence="0" fillTransparenceGradientName="">
+  <FillTransparenceGradient style="LINEAR" startColor="0" endColor="16777215" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+  <FillGradient style="LINEAR" startColor="8421504" endColor="16777215" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+  <FillHatch style="SINGLE" color="8421504" distance="20" angle="0"/>
+  <FillBitmap width="32" height="32"/>
+  <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
+  <LineStart/>
+  <LineEnd/>
+  <Transformation>
+   <Line1 column1="3201.000000" column2="0.000000" column3="13800.000000"/>
+   <Line2 column1="0.000000" column2="3401.000000" column3="9600.000000"/>
+   <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+  </Transformation>
+  <CustomShapeGeometry>
+   <PropertyValue name="ViewBox" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="Type" handle="0" value="quad-bevel" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="AdjustmentValues" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="Path" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
+  </CustomShapeGeometry>
+ </XShape>
+ <XShape positionX="18800" positionY="9800" sizeX="3800" sizeY="2400" type="com.sun.star.drawing.CustomShape" textAutoGrowHeight="false" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="BLOCK" textVerticalAdjust="CENTER" textLeftDistance="250" textRightDistance="250" textUpperDistance="125" textLowerDistance="125" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="750" textMinimumFrameWidth="500" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="SOLID" fillColor="13625333" fillTransparence="0" fillTransparenceGradientName="">
+  <FillTransparenceGradient style="LINEAR" startColor="0" endColor="16777215" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+  <FillGradient style="LINEAR" startColor="8421504" endColor="16777215" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+  <FillHatch style="SINGLE" color="8421504" distance="20" angle="0"/>
+  <FillBitmap width="32" height="32"/>
+  <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
+  <LineStart/>
+  <LineEnd/>
+  <Transformation>
+   <Line1 column1="3801.000000" column2="0.000000" column3="18800.000000"/>
+   <Line2 column1="0.000000" column2="2401.000000" column3="9800.000000"/>
+   <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+  </Transformation>
+  <CustomShapeGeometry>
+   <PropertyValue name="ViewBox" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="Type" handle="0" value="col-60da8460" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="AdjustmentValues" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="Path" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
+  </CustomShapeGeometry>
+ </XShape>
+ <XShape positionX="24800" positionY="9600" sizeX="2200" sizeY="3000" type="com.sun.star.drawing.CustomShape" textAutoGrowHeight="false" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="BLOCK" textVerticalAdjust="CENTER" textLeftDistance="250" textRightDistance="250" textUpperDistance="125" textLowerDistance="125" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="66" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="SOLID" fillColor="13625333" fillTransparence="0" fillTransparenceGradientName="">
+  <FillTransparenceGradient style="LINEAR" startColor="0" endColor="16777215" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+  <FillGradient style="LINEAR" startColor="8421504" endColor="16777215" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
+  <FillHatch style="SINGLE" color="8421504" distance="20" angle="0"/>
+  <FillBitmap width="32" height="32"/>
+  <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
+  <LineStart/>
+  <LineEnd/>
+  <Transformation>
+   <Line1 column1="2201.000000" column2="0.000000" column3="24800.000000"/>
+   <Line2 column1="0.000000" column2="3001.000000" column3="9600.000000"/>
+   <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
+  </Transformation>
+  <CustomShapeGeometry>
+   <PropertyValue name="ViewBox" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="Type" handle="0" value="col-502ad400" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="AdjustmentValues" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="Path" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="Equations" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="Handles" handle="0" propertyState="DIRECT_VALUE"/>
+  </CustomShapeGeometry>
+ </XShape>
+</XShapes>

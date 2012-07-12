@@ -31,6 +31,7 @@
 #include <sal/config.h>
 #include <unotest/filters-test.hxx>
 #include <test/bootstrapfixture.hxx>
+#include <test/xmldiff.hxx>
 #include <rtl/strbuf.hxx>
 #include <osl/file.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
@@ -119,7 +120,7 @@ public:
 private:
     uno::Reference<document::XFilter> m_xFilter;
     uno::Reference<uno::XInterface> m_xDrawComponent;
-    void testStuff(::sd::DrawDocShellRef xDocShRef);
+    void testStuff(::sd::DrawDocShellRef xDocShRef, const rtl::OString& fileNameBase);
 };
 
 #define PPTX_FORMAT_TYPE 268959811
@@ -175,8 +176,8 @@ FileFormat aFileFormats[] = {
 void SdFiltersTest::test()
 {
     {
-    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/odp/shapes-test.odp"));
-    testStuff(xDocShRef);
+        ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/odp/shapes-test.odp"));
+        testStuff(xDocShRef, rtl::OUStringToOString(getPathFromSrc("/sd/qa/unit/data/xml/shapes-test_page"), RTL_TEXTENCODING_UTF8));
     }
     /*
     {
@@ -185,7 +186,7 @@ void SdFiltersTest::test()
     }*/
 }
 
-void SdFiltersTest::testStuff(::sd::DrawDocShellRef xDocShRef)
+void SdFiltersTest::testStuff(::sd::DrawDocShellRef xDocShRef, const rtl::OString& fileNameBase)
 {
     CPPUNIT_ASSERT_MESSAGE( "failed to load", xDocShRef.Is() );
     CPPUNIT_ASSERT_MESSAGE( "not in destruction", !xDocShRef->IsInDestruction() );
@@ -199,6 +200,7 @@ void SdFiltersTest::testStuff(::sd::DrawDocShellRef xDocShRef)
 
     XShapeDumper xShapeDumper;
     sal_Int32 nLength = xDrawPages->getCount();
+    rtl::OString aFileNameExt(".xml");
     for (sal_Int32 i = 0; i < nLength; ++i)
     {
         uno::Reference<drawing::XDrawPage> xDrawPage;
@@ -206,7 +208,16 @@ void SdFiltersTest::testStuff(::sd::DrawDocShellRef xDocShRef)
         aAny >>= xDrawPage;
         uno::Reference< drawing::XShapes > xShapes(xDrawPage, uno::UNO_QUERY_THROW);
         rtl::OUString aString = xShapeDumper.dump(xShapes);
+        rtl::OStringBuffer aFileNameBuf(fileNameBase);
+        aFileNameBuf.append(i);
+        aFileNameBuf.append(aFileNameExt);
+
+        rtl::OString aFileName = aFileNameBuf.makeStringAndClear();
+
+        XMLDiff aDiff(aFileName.getStr(), rtl::OUStringToOString(aString, RTL_TEXTENCODING_UTF8).getStr(), static_cast<int>(aString.getLength()),
+                rtl::OUStringToOString(getPathFromSrc("/sd/qa/unit/data/tolerance.xml"), RTL_TEXTENCODING_UTF8).getStr());
         std::cout << aString << std::endl;
+        aDiff.compare();
     }
     xDocShRef->DoClose();
 }
