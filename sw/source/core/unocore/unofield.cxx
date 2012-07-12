@@ -1761,7 +1761,8 @@ void SwXTextField::attachToRange(
                         OUString(),
                         ODF_COMMENTRANGE);
 
-                SwPaM aEnd(*aPam.GetMark(), *aPam.GetMark());
+                // Make sure we always insert the field at the end
+                SwPaM aEnd(*aPam.End(), *aPam.End());
                 pDoc->InsertPoolItem(aEnd, aFmt, nInsertFlags);
             }
             else
