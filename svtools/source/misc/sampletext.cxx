@@ -476,7 +476,6 @@ rtl::OUString makeRepresentativeTextForScript(UScriptCode eScript)
     if (sSampleText.isEmpty())
         sSampleText = makeShortRepresentativeTextForScript(eScript);
     return sSampleText;
-
 }
 
 rtl::OUString makeShortMinimalTextForScript(UScriptCode eScript)
@@ -1497,9 +1496,9 @@ rtl::OUString makeRepresentativeTextForFont(sal_Int16 nScriptType, const Font &r
 {
     rtl::OUString sRet(makeRepresentativeTextForLanguage(rFont.GetLanguage()));
 
-    if (sRet.isEmpty())
+    VirtualDevice aDevice;
+    if (sRet.isEmpty() || (STRING_LEN != aDevice.HasGlyphs(rFont, sRet)))
     {
-        VirtualDevice aDevice;
         aDevice.SetFont(rFont);
         vcl::FontCapabilities aFontCapabilities;
         if (aDevice.GetFontCapabilities(aFontCapabilities))
