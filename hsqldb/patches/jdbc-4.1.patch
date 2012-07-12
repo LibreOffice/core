@@ -1,19 +1,50 @@
---- misc/hsqldb/build/build.xml	2012-02-08 15:14:42.827123541 +0000
-+++ misc/build/hsqldb/build/build.xml	2012-02-08 15:21:43.827722388 +0000
-@@ -98,7 +98,11 @@
+--- misc/hsqldb/build/build.xml	2012-07-12 10:58:11.000000000 +0200
++++ misc/build/hsqldb/build/build.xml	2012-07-12 10:49:28.000000000 +0200
+@@ -98,16 +98,24 @@
        <echo message="ant.java.hasjsse=${ant.java.hasjsse}" />
     </target>
  
 -   <target name="javaversion6">
-+   <target name="javaversion7">
++   <target name="javaversion7" unless="ant.java.iscjavaset">
 +      <available classname="java.util.Objects" property="ant.java.iscjava17"/>
++      <available classname="java.util.Objects" property="ant.java.iscjavaset"/>
 +   </target>
 +
-+   <target name="javaversion6" depends="javaversion7" unless="ant.java.iscjava17">
++   <target name="javaversion6" depends="javaversion7" unless="ant.java.iscjavaset">
        <available classname="java.net.IDN" property="ant.java.iscjava16"/>
++      <available classname="java.net.IDN" property="ant.java.iscjavaset"/>
     </target>
  
-@@ -210,6 +214,7 @@
+-   <target name="javaversion4" depends="javaversion6" unless="ant.java.iscjava16">
++   <target name="javaversion4" depends="javaversion6" unless="ant.java.iscjavaset">
+       <available classname="java.nio.Buffer" property="ant.java.iscjava14"/>
++      <available classname="java.nio.Buffer" property="ant.java.iscjavaset"/>
+    </target>
+ 
+-   <target name="javaversion2" depends="javaversion4" unless="ant.java.iscjava14">
++   <target name="javaversion2" depends="javaversion4" unless="ant.java.iscjavaset">
+       <available classname="java.lang.ref.Reference" property="ant.java.iscjava12"/>
++      <available classname="java.lang.ref.Reference" property="ant.java.iscjavaset"/>
+    </target>
+ 
+    <target name="-prepare" depends="init,javaversion2">
+@@ -166,6 +177,7 @@
+       <java classname="org.hsqldb.util.CodeSwitcher" classpath="classes" >
+         <arg file="${src}/org/hsqldb/lib/java/JavaSystem.java"/>
+         <arg file="${src}/org/hsqldb/lib/HsqlTimer.java"/>
++        <arg file="${src}/org/hsqldb/jdbcDriver.java"/>
+         <arg file="${src}/org/hsqldb/jdbc/jdbcStatement.java"/>
+         <arg file="${src}/org/hsqldb/persist/LockFile.java"/>
+         <arg file="${src}/org/hsqldb/persist/Logger.java"/>
+@@ -183,6 +195,7 @@
+       <java classname="org.hsqldb.util.CodeSwitcher" classpath="classes" >
+         <arg file="${src}/org/hsqldb/lib/java/JavaSystem.java"/>
+         <arg file="${src}/org/hsqldb/lib/HsqlTimer.java"/>
++        <arg file="${src}/org/hsqldb/jdbcDriver.java"/>
+         <arg file="${src}/org/hsqldb/jdbc/jdbcBlob.java"/>
+         <arg file="${src}/org/hsqldb/jdbc/jdbcDatabaseMetaData.java"/>
+         <arg file="${src}/org/hsqldb/jdbc/jdbcDataSource.java"/>
+@@ -210,6 +223,7 @@
          <arg value="+JAVA2FULL"/>
          <arg value="-JAVA4"/>
          <arg value="-JAVA6"/>
@@ -21,7 +52,15 @@
         </java>
      </target>
  
-@@ -244,6 +249,7 @@
+@@ -218,6 +232,7 @@
+       <java classname="org.hsqldb.util.CodeSwitcher" classpath="classes" >
+         <arg file="${src}/org/hsqldb/lib/java/JavaSystem.java"/>
+         <arg file="${src}/org/hsqldb/lib/HsqlTimer.java"/>
++        <arg file="${src}/org/hsqldb/jdbcDriver.java"/>
+         <arg file="${src}/org/hsqldb/jdbc/jdbcBlob.java"/>
+         <arg file="${src}/org/hsqldb/jdbc/jdbcDatabaseMetaData.java"/>
+         <arg file="${src}/org/hsqldb/jdbc/jdbcDataSource.java"/>
+@@ -244,6 +259,7 @@
          <arg value="+JAVA2FULL"/>
          <arg value="+JAVA4"/>
          <arg value="-JAVA6"/>
@@ -29,19 +68,10 @@
         </java>
      </target>
  
-@@ -279,10 +285,47 @@
-         <arg value="+JAVA2FULL"/>
-         <arg value="+JAVA4"/>
-         <arg value="+JAVA6"/>
-+        <arg value="+JAVA7"/>
-+      </java>
-+    </target>
-+
-+    <target name="switchtojdk17" depends="switchtojdk16"
-+            description="self explanatory" if="ant.java.iscjava17">
-+      <java classname="org.hsqldb.util.CodeSwitcher" classpath="classes" >
-+        <arg file="${src}/org/hsqldb/lib/java/JavaSystem.java"/>
-+        <arg file="${src}/org/hsqldb/lib/HsqlTimer.java"/>
+@@ -253,6 +269,43 @@
+       <java classname="org.hsqldb.util.CodeSwitcher" classpath="classes" >
+         <arg file="${src}/org/hsqldb/lib/java/JavaSystem.java"/>
+         <arg file="${src}/org/hsqldb/lib/HsqlTimer.java"/>
 +        <arg file="${src}/org/hsqldb/jdbcDriver.java"/>
 +        <arg file="${src}/org/hsqldb/jdbc/jdbcBlob.java"/>
 +        <arg file="${src}/org/hsqldb/jdbc/jdbcDatabaseMetaData.java"/>
@@ -69,6 +99,23 @@
 +        <arg value="+JAVA2FULL"/>
 +        <arg value="+JAVA4"/>
 +        <arg value="+JAVA6"/>
++        <arg value="-JAVA7"/>
++      </java>
++    </target>
++
++    <target name="switchtojdk17" depends="switchtojdk16"
++            description="self explanatory" if="ant.java.iscjava17">
++      <java classname="org.hsqldb.util.CodeSwitcher" classpath="classes" >
++        <arg file="${src}/org/hsqldb/lib/java/JavaSystem.java"/>
++        <arg file="${src}/org/hsqldb/lib/HsqlTimer.java"/>
++        <arg file="${src}/org/hsqldb/jdbcDriver.java"/>
+         <arg file="${src}/org/hsqldb/jdbc/jdbcBlob.java"/>
+         <arg file="${src}/org/hsqldb/jdbc/jdbcDatabaseMetaData.java"/>
+         <arg file="${src}/org/hsqldb/jdbc/jdbcDataSource.java"/>
+@@ -279,10 +332,11 @@
+         <arg value="+JAVA2FULL"/>
+         <arg value="+JAVA4"/>
+         <arg value="+JAVA6"/>
 +        <arg value="+JAVA7"/>
        </java>
      </target>
