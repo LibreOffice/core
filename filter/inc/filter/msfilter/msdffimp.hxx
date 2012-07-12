@@ -329,7 +329,7 @@ private:
 };
 
 /** list of all SvxMSDffImportRec instances of/for a group */
-class MSFILTER_DLLPUBLIC MSDffImportRecords
+class MSDffImportRecords
     : public ::boost::ptr_set<SvxMSDffImportRec>
 {};
 
