@@ -884,8 +884,10 @@ ScValidationDataList::ScValidationDataList(const ScValidationDataList& rList) :
 {
     //  fuer Ref-Undo - echte Kopie mit neuen Tokens!
 
-    for( iterator it = rList.begin(); it != rList.end(); ++it )
+    for (const_iterator it = rList.begin(); it != rList.end(); ++it)
+    {
         InsertNew( (*it)->Clone() );
+    }
 
     //!     sortierte Eintraege aus rList schneller einfuegen ???
 }
@@ -895,8 +897,10 @@ ScValidationDataList::ScValidationDataList(ScDocument* pNewDoc,
 {
     //  fuer neues Dokument - echte Kopie mit neuen Tokens!
 
-    for( iterator it = rList.begin(); it != rList.end(); ++it )
+    for (const_iterator it = rList.begin(); it != rList.end(); ++it)
+    {
         InsertNew( (*it)->Clone(pNewDoc) );
+    }
 
     //!     sortierte Eintraege aus rList schneller einfuegen ???
 }
