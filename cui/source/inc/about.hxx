@@ -61,7 +61,6 @@ private:
     String m_aCopyrightTextStr;
     String m_aBasedTextStr;
     String m_aBasedDerivedTextStr;
-    String m_aWebsiteLinkStr;
     String m_aCreditsLinkStr;
     rtl::OUString m_sBuildStr;
     String m_aDescriptionTextStr;

@@ -82,7 +82,6 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId) :
     m_aCopyrightTextStr(ResId(ABOUT_STR_COPYRIGHT, *rId.GetResMgr())),
     m_aBasedTextStr(ResId(ABOUT_STR_BASED, *rId.GetResMgr())),
     m_aBasedDerivedTextStr(ResId(ABOUT_STR_BASED_DERIVED, *rId.GetResMgr())),
-    m_aWebsiteLinkStr(ResId( ABOUT_STR_LINK_WEBSITE, *rId.GetResMgr())),
     m_aCreditsLinkStr(ResId( ABOUT_STR_LINK_CREDITS, *rId.GetResMgr())),
     m_sBuildStr(ResId(ABOUT_STR_BUILD, *rId.GetResMgr())),
     m_aDescriptionTextStr(ResId(ABOUT_STR_DESCRIPTION, *rId.GetResMgr()))
