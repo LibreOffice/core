@@ -8,6 +8,8 @@
  */
 package org.libreoffice.impressremote.communication;
 
+import java.util.ArrayList;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -25,57 +27,40 @@ public class Receiver {
 		mActivityMessenger = aActivityMessenger;
 	}
 
-	public void parseCommand(String aJSONCommandString) {
+	public void parseCommand(ArrayList<String> aCommand) {
 		if (mActivityMessenger == null) {
 			return;
 		}
-		try {
-//			int aPrinted = 0;
-//			while (aPrinted < aJSONCommandString.length()) {
-//				if (aPrinted + 100 < aJSONCommandString.length())
-//					System.out.println(aJSONCommandString.substring(aPrinted,
-//							aPrinted + 100));
-//				else
-//					System.out.println(aJSONCommandString.substring(aPrinted));
-//				aPrinted += 100;
-//			}
-
-			JSONObject aJSONCommand = new JSONObject(aJSONCommandString);
-			String aInstruction = aJSONCommand.getString("command");
-			if (aInstruction.equals("slide_updated")) {
-				int aSlideNumber = aJSONCommand.getInt("slide_number");
-				Message aMessage = Message.obtain(null,
-						CommunicationService.MSG_SLIDE_CHANGED);
-				Bundle aData = new Bundle();
-				aData.putInt("slide_number", aSlideNumber);
-				aMessage.setData(aData);
-				try {
-					mActivityMessenger.send(aMessage);
-				} catch (RemoteException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			} else if (aInstruction.equals("slide_preview")) {
-				int aSlideNumber = aJSONCommand.getInt("slide_number");
-				String aImageString = aJSONCommand.getString("image_preview");
-				byte[] aImage = Base64.decode(aImageString, Base64.DEFAULT);
-				Message aMessage = Message.obtain(null,
-						CommunicationService.MSG_SLIDE_PREVIEW);
-				Bundle aData = new Bundle();
-				aData.putInt("slide_number", aSlideNumber);
-				aData.putByteArray("preview_image", aImage);
-				aMessage.setData(aData);
-				try {
-					mActivityMessenger.send(aMessage);
-				} catch (RemoteException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+		String aInstruction = aCommand.get(0);
+		if (aInstruction.equals("slide_updated")) {
+			int aSlideNumber = Integer.parseInt(aCommand.get(1));
+			Message aMessage = Message.obtain(null,
+					CommunicationService.MSG_SLIDE_CHANGED);
+			Bundle aData = new Bundle();
+			aData.putInt("slide_number", aSlideNumber);
+			aMessage.setData(aData);
+			try {
+				mActivityMessenger.send(aMessage);
+			} catch (RemoteException e) {
+				// Dead Handler -- i.e. Activity gone.
+			}
+		} else if (aInstruction.equals("slide_preview")) {
+			int aSlideNumber = Integer.parseInt(aCommand.get(1));
+			String aImageString = aCommand.get(2);
+			byte[] aImage = Base64.decode(aImageString, Base64.DEFAULT);
+			Message aMessage = Message.obtain(null,
+					CommunicationService.MSG_SLIDE_PREVIEW);
+			Bundle aData = new Bundle();
+			aData.putInt("slide_number", aSlideNumber);
+			aData.putByteArray("preview_image", aImage);
+			aMessage.setData(aData);
+			try {
+				mActivityMessenger.send(aMessage);
+			} catch (RemoteException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 
 	}

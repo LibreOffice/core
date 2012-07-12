@@ -20,11 +20,12 @@
 #include <rtl/ustrbuf.hxx>
 #include <sax/tools/converter.hxx>
 using namespace sd;
-using namespace ::com::sun::star::presentation;
-using namespace ::com::sun::star;
-using namespace ::com::sun::star::frame;
-using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::document;
+// using namespace ::com::sun::star::presentation;
+// using namespace ::com::sun::star;
+// using namespace ::com::sun::star::frame;
+// using namespace ::com::sun::star::beans;
+// using namespace ::com::sun::star::document;
+namespace css = ::com::sun::star;
 using rtl::OUString;
 using rtl::OString;
 using namespace ::osl;
@@ -38,7 +39,7 @@ Receiver::~Receiver()
 {
 }
 
-void Receiver::executeCommand( JsonObject *aObject, Reference<XSlideShowController> xSlideShowController )
+void Receiver::executeCommand( JsonObject *aObject, css::uno::Reference<css::presentation::XSlideShowController> xSlideShowController )
 {
     const char* aInstruction = json_node_get_string( json_object_get_member( aObject, "command" ) );
 
@@ -63,18 +64,20 @@ void Receiver::executeCommand( JsonObject *aObject, Reference<XSlideShowControll
 
 void Receiver::parseCommand( const char* aCommand, sal_Int32 size, osl::StreamSocket &aStreamSocket )
 {
-    Reference<XSlideShowController> xSlideShowController;
+    css::uno::Reference<css::presentation::XSlideShowController> xSlideShowController;
     try {
-        uno::Reference< lang::XMultiServiceFactory > xServiceManager(
-            ::comphelper::getProcessServiceFactory(), uno::UNO_QUERY_THROW );
-        uno::Reference< XFramesSupplier > xFramesSupplier( xServiceManager->createInstance(
+        css::uno::Reference< css::lang::XMultiServiceFactory > xServiceManager(
+            ::comphelper::getProcessServiceFactory(), css::uno::UNO_QUERY_THROW );
+        css::uno::Reference< css::frame::XFramesSupplier > xFramesSupplier( xServiceManager->createInstance(
         "com.sun.star.frame.Desktop" ) , UNO_QUERY_THROW );
-        uno::Reference< frame::XFrame > xFrame ( xFramesSupplier->getActiveFrame(), UNO_QUERY_THROW );
+        css::uno::Reference< css::frame::XFrame > xFrame ( xFramesSupplier->getActiveFrame(), UNO_QUERY_THROW );
         Reference<XPresentationSupplier> xPS ( xFrame->getController()->getModel(), UNO_QUERY_THROW);
         Reference<XPresentation2> xPresentation(xPS->getPresentation(), UNO_QUERY_THROW);
         // Throws an exception if now slideshow running
-       xSlideShowController =  Reference<XSlideShowController>( xPresentation->getController(), UNO_QUERY_THROW );
-       sendPreview( 1, xSlideShowController, aStreamSocket );
+        xSlideShowController =  Reference<css::presentation::XSlideShowController>(
+           xPresentation->getController(), UNO_QUERY_THROW );
+        // FIXME: remove later, this is just to test functionality
+        sendPreview( 0, xSlideShowController, aStreamSocket );
     }
     catch ( com::sun::star::uno::RuntimeException &e )
     {
@@ -108,59 +111,26 @@ void Receiver::parseCommand( const char* aCommand, sal_Int32 size, osl::StreamSo
 void sendPreview(sal_uInt32 aSlideNumber, Reference<XSlideShowController> xSlideShowController, osl::StreamSocket &mStreamSocket )
 {
 
-    sal_uInt64 aSize;
-
-    uno::Sequence<sal_Int8> aData = preparePreview( aSlideNumber, xSlideShowController, 320, 240, aSize );
+    sal_uInt64 aSize; // Unused
+    css::uno::Sequence<sal_Int8> aImageData = preparePreview( aSlideNumber, xSlideShowController, 320, 240, aSize );
 
     rtl::OUStringBuffer aStrBuffer;
-//     char* aDataEncoded = (char*) xmlSecBase64Encode( (xmlSecByte *) aData, aSize, 0 );
-    ::sax::Converter::encodeBase64( aStrBuffer, aData );
+    ::sax::Converter::encodeBase64( aStrBuffer, aImageData );
 
-    OUString aEncodedString = aStrBuffer.makeStringAndClear();
-    OString aEncodedShortString = rtl::OUStringToOString( aEncodedString, RTL_TEXTENCODING_UTF8 );
-//     aEncodedString.convertToString( &aEncodedShortString, RTL_TEXTENCODING_UTF8 , 0);
+    OString aEncodedShortString = rtl::OUStringToOString(
+        aStrBuffer.makeStringAndClear(), RTL_TEXTENCODING_UTF8 );
 
-    JsonBuilder *aBuilder = json_builder_new();
+    // Start the writing
+    mStreamSocket.write( "slide_preview\n", strlen( "slide_preview\n" ) );
 
-
-    json_builder_begin_object( aBuilder );
-
-    json_builder_set_member_name( aBuilder, "command" );
-    json_builder_add_string_value( aBuilder, "slide_preview" );
-
-    json_builder_set_member_name( aBuilder, "slide_number" );
-    json_builder_add_int_value( aBuilder, 2 );
-
-    json_builder_set_member_name( aBuilder, "image_preview" );
-    json_builder_add_string_value( aBuilder, aEncodedShortString.getStr() );
-
-    // FIXME: get the slide number
-    json_builder_end_object( aBuilder );
-
-    JsonGenerator *aGen = json_generator_new();
-    JsonNode *aRoot = json_builder_get_root( aBuilder );
-    json_generator_set_root( aGen, aRoot );
-    char *aCommand = json_generator_to_data( aGen, NULL);
-
-    json_node_free( aRoot );
-    g_object_unref ( aGen );
-    g_object_unref ( aBuilder );
-
-    sal_Int32 aLen = strlen( aCommand );
-
-    OString aLengthString = OString::valueOf( aLen );
-    const char *aLengthChar = aLengthString.getStr();
-
-    sal_Int32 aLengthLength = aLengthString.getLength();
-
-    fprintf( stderr, "%s\n", aCommand );
-
-    mStreamSocket.write( aLengthChar, aLengthLength );
+    rtl::OString aSlideNumberString(rtl::OUStringToOString(
+        rtl::OUString::valueOf( 2 ) , RTL_TEXTENCODING_UTF8 )); // FIXME get number
+    mStreamSocket.write( aSlideNumberString.getStr(), aSlideNumberString.getLength() );
     mStreamSocket.write( "\n", 1 );
-    mStreamSocket.write( aCommand, aLen );
-    // Transmit here.
 
-    g_free( aCommand );
+    mStreamSocket.write( aEncodedShortString.getStr(), aEncodedShortString.getLength() );
+    mStreamSocket.write( "\n\n", 2 );
+
 
 }
 
@@ -172,21 +142,21 @@ Sequence<sal_Int8> preparePreview(sal_uInt32 aSlideNumber, Reference<XSlideShowC
     FileBase::createTempFile( 0, 0, &aFileURL );
 
 
-    uno::Reference< lang::XMultiServiceFactory > xServiceManager(
-            ::comphelper::getProcessServiceFactory(), uno::UNO_QUERY_THROW );
+    css::uno::Reference< css::lang::XMultiServiceFactory > xServiceManager(
+            ::comphelper::getProcessServiceFactory(), css::uno::UNO_QUERY_THROW );
 
-    uno::Reference< XFilter > xFilter( xServiceManager->createInstance(
-        "com.sun.star.drawing.GraphicExportFilter"  ) , UNO_QUERY_THROW );
+    css::uno::Reference< css::document::XFilter > xFilter( xServiceManager->createInstance(
+        "com.sun.star.drawing.GraphicExportFilter"  ) , css::uno::UNO_QUERY_THROW );
 
-    uno::Reference< XExporter > xExporter( xFilter, uno::UNO_QUERY_THROW );
+    css::uno::Reference< css::document::XExporter > xExporter( xFilter, css::uno::UNO_QUERY_THROW );
 
 
-    uno::Reference< lang::XComponent > xSourceDoc(
-        xSlideShowController->getSlideByIndex( aSlideNumber ) , uno::UNO_QUERY_THROW );
+    css::uno::Reference< css::lang::XComponent > xSourceDoc(
+        xSlideShowController->getSlideByIndex( aSlideNumber ) , css::uno::UNO_QUERY_THROW );
 
     xExporter->setSourceDocument( xSourceDoc );
 
-    Sequence< beans::PropertyValue > aFilterData(3);
+    css::uno::Sequence< css::beans::PropertyValue > aFilterData(3);
     aFilterData[0].Name = "PixelWidth";
     aFilterData[0].Value <<= 2000;
     aFilterData[1].Name = "PixelHeight";
@@ -197,7 +167,7 @@ Sequence<sal_Int8> preparePreview(sal_uInt32 aSlideNumber, Reference<XSlideShowC
     aFilterData[2].Name = "ColorMode";
     aFilterData[2].Value <<= 0; // Color
 
-    uno::Sequence< beans::PropertyValue > aProps(3);
+    css::uno::Sequence< css::beans::PropertyValue > aProps(3);
     aProps[0].Name = "MediaType";
     aProps[0].Value <<= OUString( "image/png" );
 
@@ -218,7 +188,7 @@ Sequence<sal_Int8> preparePreview(sal_uInt32 aSlideNumber, Reference<XSlideShowC
     sal_uInt64 aRead;
     rSize = 0;
     aFile.getSize( rSize );
-    uno::Sequence<sal_Int8> aContents( rSize );
+    css::uno::Sequence<sal_Int8> aContents( rSize );
 
     aFile.read( aContents.getArray(), rSize, aRead );
     aFile.close();

@@ -18,8 +18,6 @@
 #include <osl/socket.hxx>
 
 namespace css = ::com::sun::star;
-//using namespace ::com::sun::star::presentation;
-
 namespace sd {
 class Listener
     : protected ::cppu::BaseMutex,

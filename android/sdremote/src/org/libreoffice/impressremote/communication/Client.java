@@ -1,9 +1,12 @@
 package org.libreoffice.impressremote.communication;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 
 import org.apache.http.util.ByteArrayBuffer;
 import org.json.JSONException;
@@ -44,69 +47,28 @@ public abstract class Client {
 	}
 
 	private void listen() {
-		while (true) {
-			ByteArrayBuffer aBuffer = new ByteArrayBuffer(0);
-			int aTemp;
-			System.out.println("Now listening");
-			try {
-				while ((aTemp =  mInputStream.read()) != 0x0a) {
-					if (aTemp == -1) {
-						System.out.println("EOF Reached!!!");
-					}
-					System.out.println("Char: " + aTemp);
-					aBuffer.append((byte) aTemp);
-				}
-			} catch (IOException e1) {
-				// TODO stream couldn't be opened.
-				e1.printStackTrace();
-			}
-			System.out.println("Escaped the loop!");
-			String aLengthString;
-			try {
-				aLengthString = new String(aBuffer.toByteArray(), CHARSET);
-			} catch (Exception e1) {
-				e1.printStackTrace();
-				throw new Error("Specified network encoding [" + CHARSET
-						+ " not available.");
-			}
-
-			int aLength = Integer.parseInt(aLengthString);
-			System.out.println("Lenth = " + aLength);
-			byte[] aCommand = new byte[aLength];
-			try {
-				int readIn = 0;
-				while (readIn < aLength) {
-					readIn += mInputStream.read(aCommand, 0, aLength - readIn);
-//					System.out.println("Read in :" + readIn + " of : "
-//							+ aLength);
-				}
-			} catch (IOException e) {
-				// TODO close and notify that the connection has closed
-				e.printStackTrace();
-			}
-			String aCommandString;
-			try {
-				aCommandString = new String(aCommand, CHARSET);
-			} catch (UnsupportedEncodingException e) {
-				throw new Error("Specified network encoding [" + CHARSET
-						+ " not available.");
-			}
-			mReceiver.parseCommand(aCommandString);
-		}
-	}
-
-	private void parseCommand(String aCommand) {
-		JSONObject aCommandObject;
-		String aInstruction;
+		BufferedReader aReader;
 		try {
-			aCommandObject = new JSONObject(aCommand);
-			aInstruction = aCommandObject.getString("command");
-			if (aInstruction.equals("slide_changed")) {
-				// TODO: process and notify
+			System.out.println("deb:Listening");
+			aReader = new BufferedReader(new InputStreamReader(mInputStream,
+					CHARSET));
+			while (true) {
+				ArrayList<String> aList = new ArrayList<String>();
+				String aTemp;
+				// read until empty line
+				while ((aTemp = aReader.readLine()).length() != 0) {
+					System.out.println("deb__:" + aTemp);
+					aList.add(aTemp);
+				}
+				System.out.println("deb:parsing");
+				mReceiver.parseCommand(aList);
 			}
-		} catch (JSONException e) {
+		} catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} catch (IOException e1) {
+			// TODO stream couldn't be opened.
+			e1.printStackTrace();
 		}
 
 	}
