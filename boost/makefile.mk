@@ -63,6 +63,8 @@ PATCH_FILES+=boost.gcc47679.patch
 PATCH_FILES+=boost.6369.warnings.patch
 #https://svn.boost.org/trac/boost/ticket/6397
 PATCH_FILES+=boost.6397.warnings.patch
+#backport from boost 1.48.0 fix for "opcode not supported on this processor"
+PATCH_FILES+=boost.mipsbackport.patch
 
 PATCH_FILES+=boost.windows.patch
 
