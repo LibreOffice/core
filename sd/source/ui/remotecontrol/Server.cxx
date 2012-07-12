@@ -11,6 +11,7 @@
 
 #include "sddll.hxx"
 #include "Server.hxx"
+#include "Receiver.hxx"
 
 using namespace std;
 using namespace sd;

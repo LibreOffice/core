@@ -19,13 +19,9 @@
 #include <xmlsec/base64.h>
 #include <rtl/ustrbuf.hxx>
 #include <sax/tools/converter.hxx>
+
 using namespace sd;
-// using namespace ::com::sun::star::presentation;
-// using namespace ::com::sun::star;
-// using namespace ::com::sun::star::frame;
-// using namespace ::com::sun::star::beans;
-// using namespace ::com::sun::star::document;
-namespace css = ::com::sun::star;
+using namespace ::com::sun::star;
 using rtl::OUString;
 using rtl::OString;
 using namespace ::osl;
@@ -39,7 +35,8 @@ Receiver::~Receiver()
 {
 }
 
-void Receiver::executeCommand( JsonObject *aObject, css::uno::Reference<css::presentation::XSlideShowController> xSlideShowController )
+void Receiver::executeCommand( JsonObject *aObject,
+                               uno::Reference<presentation::XSlideShowController> xSlideShowController )
 {
     const char* aInstruction = json_node_get_string( json_object_get_member( aObject, "command" ) );
 
@@ -108,7 +105,8 @@ void Receiver::parseCommand( const char* aCommand, sal_Int32 size, osl::StreamSo
 }
 
 
-void sendPreview(sal_uInt32 aSlideNumber, Reference<XSlideShowController> xSlideShowController, osl::StreamSocket &mStreamSocket )
+void sendPreview(sal_uInt32 aSlideNumber,
+                 uno::Reference<presentation::XSlideShowController> xSlideShowController, osl::StreamSocket &mStreamSocket )
 {
 
     sal_uInt64 aSize; // Unused
@@ -134,38 +132,39 @@ void sendPreview(sal_uInt32 aSlideNumber, Reference<XSlideShowController> xSlide
 
 }
 
-Sequence<sal_Int8> preparePreview(sal_uInt32 aSlideNumber, Reference<XSlideShowController> xSlideShowController, sal_uInt32 aWidth, sal_uInt32 aHeight, sal_uInt64 &rSize )
+uno::Sequence<sal_Int8>
+preparePreview(sal_uInt32 aSlideNumber,
+               uno::Reference<presentation::XSlideShowController> xSlideShowController,
+               sal_uInt32 aWidth, sal_uInt32 aHeight, sal_uInt64 &rSize )
 {
-
+    (void)aWidth; (void)aHeight; // FIXME: remove me when I'm used
     // Create temp file
     OUString aFileURL;
     FileBase::createTempFile( 0, 0, &aFileURL );
 
+    uno::Reference< lang::XMultiServiceFactory > xServiceManager(
+            ::comphelper::getProcessServiceFactory(), uno::UNO_QUERY_THROW );
 
-    css::uno::Reference< css::lang::XMultiServiceFactory > xServiceManager(
-            ::comphelper::getProcessServiceFactory(), css::uno::UNO_QUERY_THROW );
+    uno::Reference< document::XFilter > xFilter( xServiceManager->createInstance(
+        "com.sun.star.drawing.GraphicExportFilter"  ) , uno::UNO_QUERY_THROW );
 
-    css::uno::Reference< css::document::XFilter > xFilter( xServiceManager->createInstance(
-        "com.sun.star.drawing.GraphicExportFilter"  ) , css::uno::UNO_QUERY_THROW );
-
-    css::uno::Reference< css::document::XExporter > xExporter( xFilter, css::uno::UNO_QUERY_THROW );
-
+    uno::Reference< document::XExporter > xExporter( xFilter, uno::UNO_QUERY_THROW );
 
     css::uno::Reference< css::lang::XComponent > xSourceDoc(
         xSlideShowController->getSlideByIndex( aSlideNumber ) , css::uno::UNO_QUERY_THROW );
 
     xExporter->setSourceDocument( xSourceDoc );
 
-    css::uno::Sequence< css::beans::PropertyValue > aFilterData(3);
+    uno::Sequence< beans::PropertyValue > aFilterData(3);
     aFilterData[0].Name = "PixelWidth";
-    aFilterData[0].Value <<= 2000;
+    aFilterData[0].Value <<= sal_Int32(2000);
     aFilterData[1].Name = "PixelHeight";
-    aFilterData[1].Value <<= 2000;
+    aFilterData[1].Value <<= sal_Int32(2000);
 
     // Add quality if jpg "Quality" [1-100]
     // FIXME: is setting color mode needed.
     aFilterData[2].Name = "ColorMode";
-    aFilterData[2].Value <<= 0; // Color
+    aFilterData[2].Value <<= sal_Int32(0); // Color
 
     css::uno::Sequence< css::beans::PropertyValue > aProps(3);
     aProps[0].Name = "MediaType";
