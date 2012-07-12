@@ -2809,8 +2809,6 @@ throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::R
     uno::Reference<document::XActionLockable> xActionLockable(xDoc, uno::UNO_QUERY);
     if (xActionLockable.is())
         xActionLockable->addActionLock();
-
-    pDoc->EnableAdjustHeight(false);
 }
 
 // XServiceInfo

@@ -443,9 +443,10 @@ sal_Bool ScDocShell::LoadXML( SfxMedium* pLoadMedium, const ::com::sun::star::un
     else //still need to recalc volatile formula cells
         DoRecalc(false);
 
+    aDocument.EnableAdjustHeight(false);
+
     aDocument.SetXMLFromWrapper( false );
     AfterXMLLoading(bRet);
-    //! row heights...
 
     return bRet;
 }
