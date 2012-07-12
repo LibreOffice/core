@@ -7829,6 +7829,13 @@ SdrObject* SdrPowerPointImport::CreateTable( SdrObject* pGroup, sal_uInt32* pTab
                             if ( pPtr->pBObj == pPartObj )
                                 pPtr->pBObj = NULL;
                         }
+                        //In MS, the one_row_one_col table is made up of five shape,the connector is connected to some part of a table.
+                        //but in AOO, the connector is connected to the whole group table,so the connector obj is a group table when export by AOO.
+                        //should process this situation when import.
+                        if ( pPtr->pAObj == pGroup )
+                            pPtr->pAObj = pTable;
+                        if ( pPtr->pBObj == pGroup )
+                            pPtr->pBObj = pTable;
                     }
                 }
                 pTable->uno_unlock();
