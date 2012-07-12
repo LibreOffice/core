@@ -64,17 +64,6 @@ Reference< XInterface > SAL_CALL mspf_create( Reference< XComponentContext > con
 Sequence< ::rtl::OUString > SAL_CALL mspf_getSupportedServiceNames();
 
 
-bool endsWith( const ::rtl::OUString& target,
-    const ::rtl::OUString& item )
-{
-    sal_Int32 index = 0;
-    if (  ( index = target.indexOf( item ) ) != -1  &&
-       ( index == ( target.getLength() - item.getLength() ) ) )
-    {
-        return true;
-    }
-    return false;
-}
 //::rtl_StandardModuleCount s_moduleCount = MODULE_COUNT_INIT;
 
 /* should be available in some central location. */
@@ -335,7 +324,7 @@ throw ( provider::ScriptFrameworkErrorException,
     if  (   (   location.equals( OUSTR( "document" ) )
             &&  m_xModel.is()
             )
-            ||  ( endsWith( m_sCtxString, location ) )
+            ||  ( m_sCtxString.endsWith( location ) )
             ||  ( language.equals( OUSTR( "Basic" ) ) )
          )
     {
