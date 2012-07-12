@@ -67,7 +67,7 @@ public class SQLQueryComposer
         }
         catch (Exception exception)
         {
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
         }
     }
 
@@ -140,7 +140,7 @@ public class SQLQueryComposer
         }
         catch (Exception exception)
         {
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
         }
     }
 
@@ -171,7 +171,7 @@ public class SQLQueryComposer
             }
             catch (Exception e)
             {
-                e.printStackTrace(System.out);
+                e.printStackTrace(System.err);
             }
         }
     }
@@ -327,7 +327,7 @@ public class SQLQueryComposer
         }
         catch (Exception exception)
         {
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
             displaySQLErrorDialog(exception, _xParentWindow);
             return false;
         }
@@ -425,7 +425,7 @@ public class SQLQueryComposer
         }
         catch (Exception typeexception)
         {
-            typeexception.printStackTrace(System.out);
+            typeexception.printStackTrace(System.err);
         }
     }
 
