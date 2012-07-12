@@ -106,7 +106,7 @@ LDFLAGSADD+=$(LINKFLAGS) $(LINKFLAGSRUNPATH_OOO)
 .ENDIF                  # "$(OS)"=="AIX"
 
 .IF "$(HAVE_LD_HASH_STYLE)"  == "TRUE"
-LDFLAGSADD += -Wl,--hash-style=both
+LDFLAGSADD += -Wl,--hash-style=$(WITH_LINKER_HASH_STYLE)
 .ENDIF
 
 .IF "$(OS)"=="IOS"
