@@ -177,13 +177,15 @@ void xml_parser::init()
 
 void xml_parser::parse(const char* XmlData, size_t Length, bool IsFinal)
 {
-    if (0 == XML_Parse(xml_parser_, XmlData, Length, IsFinal))
+    if (XML_STATUS_ERROR == XML_Parse(xml_parser_, XmlData, Length, IsFinal))
+    {
         throw xml_parser_exception(
             (char*)XML_ErrorString(XML_GetErrorCode(xml_parser_)),
             (int)XML_GetErrorCode(xml_parser_),
             XML_GetCurrentLineNumber(xml_parser_),
             XML_GetCurrentColumnNumber(xml_parser_),
             XML_GetCurrentByteIndex(xml_parser_));
+    }
 }
 
 void xml_parser::set_document_handler(

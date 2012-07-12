@@ -1065,9 +1065,9 @@ HELPLINKER_DLLPUBLIC bool compileExtensionHelp
         aFile.close();
 
         XML_Parser parser = XML_ParserCreate( 0 );
-        int parsed = XML_Parse( parser, s, int( len ), true );
+        XML_Status parsed = XML_Parse( parser, s, int( len ), true );
 
-        if( parsed == 0 )
+        if (XML_STATUS_ERROR == parsed)
         {
             XML_Error nError = XML_GetErrorCode( parser );
             o_rHelpProcessingErrorInfo.m_eErrorClass = HELPPROCESSING_XMLPARSING_ERROR;

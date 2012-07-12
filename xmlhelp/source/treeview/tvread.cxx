@@ -528,9 +528,9 @@ TVChildTarget::TVChildTarget( const Reference< XMultiServiceFactory >& xMSF )
                                      data_handler);
         XML_SetUserData( parser,&pTVDom ); // does not return this
 
-        int parsed = XML_Parse( parser,s,int( len ),j==0 );
-        (void)parsed;
-        OSL_ENSURE( parsed, "TVChildTarget::TVChildTarget(): Tree file parsing failed" );
+        XML_Status const parsed = XML_Parse(parser, s, int(len), j==0);
+        SAL_WARN_IF(XML_STATUS_ERROR == parsed, "xmlhelp",
+                "TVChildTarget::TVChildTarget(): Tree file parsing failed");
 
         XML_ParserFree( parser );
         delete[] s;

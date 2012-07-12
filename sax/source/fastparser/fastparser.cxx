@@ -658,7 +658,8 @@ void FastSaxParser::parse()
             break;
         }
 
-        bool bContinue = XML_Parse( rEntity.mpParser, (const char*) seqOut.getConstArray(), nRead, 0 ) != 0;
+        bool const bContinue = XML_STATUS_ERROR != XML_Parse(rEntity.mpParser,
+            reinterpret_cast<const char*>(seqOut.getConstArray()), nRead, 0);
         // callbacks used inside XML_Parse may have caught an exception
         if( !bContinue || rEntity.maSavedException.hasValue() )
         {

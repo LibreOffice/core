@@ -740,7 +740,7 @@ void SaxExpatParser_Impl::parse( )
         sal_Bool bContinue = ( XML_Parse( getEntity().pParser ,
                                                 (const char *) seqOut.getArray(),
                                                 nRead,
-                                                0 ) != 0 );
+                                                0 ) != XML_STATUS_ERROR );
 
         if( ! bContinue || this->bExceptionWasThrown ) {
 
