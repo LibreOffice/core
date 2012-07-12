@@ -177,7 +177,8 @@ void xml_parser::init()
 
 void xml_parser::parse(const char* XmlData, size_t Length, bool IsFinal)
 {
-    if (XML_STATUS_ERROR == XML_Parse(xml_parser_, XmlData, Length, IsFinal))
+    if (XML_STATUS_ERROR ==
+            XML_Parse(xml_parser_, XmlData, static_cast<int>(Length), IsFinal))
     {
         throw xml_parser_exception(
             (char*)XML_ErrorString(XML_GetErrorCode(xml_parser_)),
