@@ -97,10 +97,6 @@ ModalDialog RID_DEFAULTABOUT
     {
         Text[ en-US ] = "(Build ID: $BUILDID)";
     };
-    String ABOUT_STR_LINK_WEBSITE
-    {
-        Text[ en-US ] = "http://www.libreoffice.org";
-    };
     String ABOUT_STR_LINK_CREDITS
     {
         Text[ en-US ] = "http://www.libreoffice.org/about-us/credits/";
