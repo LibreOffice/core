@@ -235,6 +235,13 @@ struct BookmarkInsertPosition
      {}
 };
 
+/// Stores the start/end positions of an annotation before its insertion.
+struct AnnotationPosition
+{
+    ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >  m_xStart;
+    ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >  m_xEnd;
+};
+
 struct RedlineParams
 {
     ::rtl::OUString m_sAuthor;
@@ -350,6 +357,7 @@ private:
 
     //annotation import
     uno::Reference< beans::XPropertySet >                                      m_xAnnotationField;
+    AnnotationPosition                                                         m_aAnnotationPosition;
 
     void                            GetCurrentLocale(::com::sun::star::lang::Locale& rLocale);
     void                            SetNumberFormat( const ::rtl::OUString& rCommand,
@@ -544,6 +552,8 @@ public:
     void PopFieldContext();
 
     void AddBookmark( const ::rtl::OUString& rBookmarkName, const ::rtl::OUString& rId );
+
+    void AddAnnotationPosition(const bool bStart);
 
     DomainMapperTableManager& getTableManager()
     {
