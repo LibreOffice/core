@@ -210,19 +210,6 @@ static bool checkAccessPath( OUString * pComp ) throw ()
 }
 
 //------------------------------------------------------------------------------
-static inline sal_Int32 endsWith(
-    const OUString & rText, const OUString & rEnd ) SAL_THROW(())
-{
-    if (rText.getLength() >= rEnd.getLength() &&
-        rEnd.equalsIgnoreAsciiCase(
-            rText.copy( rText.getLength() - rEnd.getLength() ) ))
-    {
-        return rText.getLength() - rEnd.getLength();
-    }
-    return -1;
-}
-
-//------------------------------------------------------------------------------
 static OUString makeComponentPath(
     const OUString & rLibName, const OUString & rPath )
 {
@@ -247,13 +234,13 @@ static OUString makeComponentPath(
         if (rPath[ rPath.getLength() -1 ] != '/')
             buf.append( (sal_Unicode) '/' );
     }
-    sal_Int32 nEnd = endsWith( rLibName, OUSTR(SAL_DLLEXTENSION) );
-    if (nEnd < 0) // !endsWith
+    if (! rLibName.endsWithIgnoreAsciiCase( OUSTR(SAL_DLLEXTENSION) ))
     {
 #if defined SAL_DLLPREFIX
-        nEnd = endsWith( rLibName, OUSTR(".uno") );
-        if (nEnd < 0) // !endsWith
+        if (! rLibName.endsWithIgnoreAsciiCase( OUSTR(".uno") ))
+        {
             buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(SAL_DLLPREFIX) );
+        }
 #endif
         buf.append( rLibName );
         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(SAL_DLLEXTENSION) );
