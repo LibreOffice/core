@@ -252,7 +252,7 @@ DBG_NAME(DirectSQLDialog)
                             }
                         }
                         // trap for when we fall off the end of the row
-                        catch (const SQLException& e)
+                        catch (const SQLException&)
                         {
                         }
                         // report the output
