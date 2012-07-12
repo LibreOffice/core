@@ -1649,6 +1649,10 @@ bool MSWordExportBase::GetBookmarks( const SwTxtNode& rNd, xub_StrLen nStt,
             bool bIsStartOk = ( nBStart >= nStt ) && ( nBStart <= nEnd );
             bool bIsEndOk = ( nBEnd >= nStt ) && ( nBEnd <= nEnd );
 
+            IFieldmark* pFieldmark = dynamic_cast<IFieldmark*>(pMark);
+            if (pFieldmark && pFieldmark->GetFieldname() == ODF_COMMENTRANGE)
+                continue;
+
             if ( bIsStartOk || bIsEndOk )
                 rArr.push_back( pMark );
         }
