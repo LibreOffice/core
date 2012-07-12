@@ -614,6 +614,14 @@ rtl::OUString makeRepresentativeTextForLanguage(LanguageType eLang)
         case LANGUAGE_YI & LANGUAGE_MASK_PRIMARY:
             sRet = makeRepresentativeTextForScript(USCRIPT_YI);
             break;
+        case LANGUAGE_GAELIC_IRELAND & LANGUAGE_MASK_PRIMARY:
+        {
+            const sal_Unicode aGa[] = {
+                'T', 0x00E9, 'a', 'c', 's', ' ', 'S', 'a', 'm', 'p', 'l', 'a', 'c', 'h'
+            };
+            sRet = rtl::OUString(aGa, SAL_N_ELEMENTS(aGa));
+            break;
+        }
         default:
             break;
     }
