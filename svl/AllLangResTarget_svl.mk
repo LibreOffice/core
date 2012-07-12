@@ -31,7 +31,6 @@ $(eval $(call gb_SrsTarget_use_packages,svl/res,\
 
 $(eval $(call gb_SrsTarget_add_files,svl/res,\
     svl/source/misc/mediatyp.src \
-    svl/source/items/cstitem.src \
 ))
 
 # vim: set noet sw=4 ts=4:
