@@ -64,7 +64,8 @@ bool SetRegistryKey(HKEY RootKey, const char* KeyName, const char* ValueName, co
     if (ERROR_SUCCESS == rc)
     {
         rc = RegSetValueExA(
-            hSubKey, ValueName, 0, REG_SZ, reinterpret_cast<const BYTE*>(Value), strlen(Value) + 1);
+            hSubKey, ValueName, 0, REG_SZ, reinterpret_cast<const BYTE*>(Value),
+            static_cast<DWORD>(strlen(Value) + 1));
 
         RegCloseKey(hSubKey);
     }
