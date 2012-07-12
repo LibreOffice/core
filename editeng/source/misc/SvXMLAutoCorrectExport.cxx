@@ -61,9 +61,9 @@ sal_uInt32 SvXMLAutoCorrectExport::exportDoc(enum XMLTokenEnum /*eClass*/)
                    _GetNamespaceMap().GetNameByKey ( XML_NAMESPACE_BLOCKLIST ) );
     {
         SvXMLElementExport aRoot (*this, XML_NAMESPACE_BLOCKLIST, XML_BLOCK_LIST, sal_True, sal_True);
-        for ( SvxAutocorrWordList::iterator it = pAutocorr_List->begin(); it != pAutocorr_List->end(); ++it )
+        for ( SvxAutocorrWordList::const_iterator it = pAutocorr_List->begin(); it != pAutocorr_List->end(); ++it )
         {
-            SvxAutocorrWord* p = *it;
+            const SvxAutocorrWord* p = *it;
 
             AddAttribute( XML_NAMESPACE_BLOCKLIST,
                           XML_ABBREVIATED_NAME,
