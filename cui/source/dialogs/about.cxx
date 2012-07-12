@@ -56,6 +56,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/rendergraphicrasterizer.hxx>
+#include <officecfg/Office/Common.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -124,31 +125,8 @@ IMPL_LINK( AboutDialog, HandleClick, PushButton*, pButton )
         sURL = m_aCreditsLinkStr;
     else if ( pDialogButton == (AboutDialogButton*)WEBSITE_BUTTON )
     {
-        try
-        {
-            Reference<lang::XMultiServiceFactory> xConfig( comphelper::getProcessServiceFactory()->createInstance(rtl::OUString( "com.sun.star.configuration.ConfigurationProvider" )),UNO_QUERY);
-            if( xConfig.is() )
-            {
-                Sequence<Any> args(1);
-                PropertyValue val(
-                    rtl::OUString( "nodepath" ),
-                    0,
-                    Any(rtl::OUString( "/org.openoffice.Office.Common/Help/StartCenter" )),
-                    PropertyState_DIRECT_VALUE);
-                args.getArray()[0] <<= val;
-                Reference<container::XNameAccess> xNameAccess(xConfig->createInstanceWithArguments(rtl::OUString( "com.sun.star.configuration.ConfigurationAccess" ),args), UNO_QUERY);
-                if( xNameAccess.is() )
-                {
-                    //throws css::container::NoSuchElementException, css::lang::WrappedTargetException
-                    Any value( xNameAccess->getByName(rtl::OUString( "InfoURL" )) );
-                    sURL = value.get<rtl::OUString> ();
-                    localizeWebserviceURI(sURL);
-                }
-            }
-        }
-        catch (const Exception&)
-        {
-        }
+        sURL = officecfg::Office::Common::Help::StartCenter::InfoURL::get();
+        localizeWebserviceURI(sURL);
     }
 
     // If the URL is empty, don't do anything
