@@ -68,8 +68,8 @@ void TemplateFolderViewItem::Paint (drawinglayer::processor2d::BaseProcessor2D *
 
     if (!maPreview2.IsEmpty())
     {
-        fScaleX = 0.8;
-        fScaleY = 0.8;
+        fScaleX = 0.8f;
+        fScaleY = 0.8f;
 
         aSeq[nCount++] = Primitive2DReference( new FillBitmapPrimitive2D(
                                             createScaleTranslateB2DHomMatrix(fScaleX,fScaleY,aPos.X(),aPos.Y()),
