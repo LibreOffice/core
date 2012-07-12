@@ -1301,14 +1301,14 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::dispose()
 }
 
 //-----------------------------------------------
-void SAL_CALL XCUBasedAcceleratorConfiguration::addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener )
+void SAL_CALL XCUBasedAcceleratorConfiguration::addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& /* xListener */ )
     throw(css::uno::RuntimeException)
 {
     // nop
 }
 
 //-----------------------------------------------
-void SAL_CALL XCUBasedAcceleratorConfiguration::removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener )
+void SAL_CALL XCUBasedAcceleratorConfiguration::removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& /* aListener */ )
     throw(css::uno::RuntimeException)
 {
     // nop
