@@ -879,7 +879,7 @@ void ScContentTree::GetNoteStrings()
         ScNotes::iterator itrEnd = pDoc->GetNotes(nTab)->end();
         for (; itr != itrEnd; ++itr)
         {
-//TODO: moggi
+            InsertContent(SC_CONTENT_NOTE, lcl_NoteString(*itr->second));
         }
     }
 }
