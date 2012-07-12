@@ -14,12 +14,11 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <sys/types.h>
-#include <netinet/in.h>
+
 #include <osl/socket.hxx>
+#include <salhelper/thread.hxx>
 
 #include <com/sun/star/presentation/XSlideShowListener.hpp>
-
-#include <salhelper/thread.hxx>
 
 #include "Receiver.hxx"
 

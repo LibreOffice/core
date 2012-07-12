@@ -57,6 +57,7 @@ void SAL_CALL Listener::resumed (void)
 void SAL_CALL Listener::slideEnded (sal_Bool bReverse)
     throw (css::uno::RuntimeException)
 {
+    (void) bReverse;
     JsonBuilder *aBuilder = json_builder_new();
 
 

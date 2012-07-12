@@ -7,20 +7,13 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 #include <stdlib.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
 #include <vector>
 
 #include "sddll.hxx"
 #include "Server.hxx"
-#include "Receiver.hxx"
-
-
 
 using namespace std;
 using namespace sd;
-using rtl::OUString;
-using rtl::OString;
 
 Server::Server()
 :  Thread( "ServerThread" ), mSocket(), mReceiver()
@@ -38,6 +31,10 @@ void Server::listenThread()
     while (true)
     {
         vector<char> aBuffer;
+        char aReadBuffer[100];
+        aRet = mStreamSocket.read
+
+
         int aRet;
         char aTemp;
         while ( (aRet = mStreamSocket.read( &aTemp, 1)) && aTemp != 0x0d ) // look for newline
@@ -49,7 +46,7 @@ void Server::listenThread()
             return;
         }
         aBuffer.push_back('\0');
-        OString aTempStr( &aBuffer.front() );
+        rtl::OString aTempStr( &aBuffer.front() );
 
         const sal_Char* aLengthChar = aTempStr.getStr();
         sal_Int32 aLen = strtol( aLengthChar, NULL, 10);
@@ -63,7 +60,7 @@ void Server::listenThread()
             return;
         }
 
-        aTempStr = OString( aMessage ); //, (sal_Int32) aLen, CHARSET, 0u
+        aTempStr = rtl::OString( aMessage ); //, (sal_Int32) aLen, CHARSET, 0u
         const sal_Char* aCommandChar = aTempStr.getStr();
 
         mReceiver.parseCommand( aCommandChar, aTempStr.getLength(), mStreamSocket );
@@ -95,8 +92,6 @@ void Server::execute()
     }
 
 }
-
-
 
 Server *sd::Server::spServer = NULL;
 
