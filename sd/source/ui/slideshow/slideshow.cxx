@@ -731,6 +731,13 @@ void SAL_CALL SlideShow::end() throw(RuntimeException)
         ViewShellBase* pFullScreenViewShellBase = mpFullScreenViewShellBase;
         mpFullScreenViewShellBase = 0;
 
+        // Dispose the controller before calling StartPresentation()
+        // on the work window to prevent a crash that is triggered
+        // only by the cairo canvas: the work window is shutting down
+        // presentation mode.  Find details in issue When later asked for information the
+        // gtk system functions report an error and we crash.
+        xController->dispose();
+
         if( pFullScreenViewShellBase )
         {
             PresentationViewShell* pShell = dynamic_cast<PresentationViewShell*>(pFullScreenViewShellBase->GetMainViewShell().get());
@@ -744,8 +751,6 @@ void SAL_CALL SlideShow::end() throw(RuntimeException)
                 }
             }
         }
-
-        xController->dispose();
 
         if( pFullScreenViewShellBase )
         {
