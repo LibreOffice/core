@@ -100,7 +100,7 @@ public class AbstractListener
             System.out.println("=======================================================");
             System.out.println("=== Note: An Exception was thrown which should have ===");
             System.out.println("=== caused a crash. I caught it. Please report this ===");
-            System.out.println("=== to  openoffice.org                              ===");
+            System.out.println("=== to https://www.libreoffice.org/get-help/bug/    ===");
             System.out.println("=======================================================");
 
             ite.printStackTrace();
@@ -114,8 +114,8 @@ public class AbstractListener
         {
             System.out.println("=======================================================");
             System.out.println("=== Note: An Exception was thrown which should have ===");
-            System.out.println("=== caused a crash. I Catched it. Please report this ==");
-            System.out.println("=== to  openoffice.org                               ==");
+            System.out.println("=== caused a crash. I caught it. Please report this ===");
+            System.out.println("=== to https://www.libreoffice.org/get-help/bug/    ===");
             System.out.println("=======================================================");
             ex.printStackTrace();
         }
