@@ -1078,10 +1078,10 @@ OSQLParseNode* OSQLParser::buildNode_STR_NUM(OSQLParseNode*& _pLiteral)
             if((aResult.TokenType & KParseType::IDENTNAME) && aResult.EndPos == _rValue.getLength())
             {
                 aValue = ::rtl::OUString::valueOf(aResult.Value);
-                sal_Int32 nPos = aValue.lastIndexOf(::rtl::OUString("."));
+                sal_Int32 nPos = aValue.lastIndexOf('.');
                 if((nPos+_nScale) < aValue.getLength())
                     aValue = aValue.replaceAt(nPos+_nScale,aValue.getLength()-nPos-_nScale,::rtl::OUString());
-                aValue = aValue.replaceAt(aValue.lastIndexOf(::rtl::OUString(".")),1,s_xLocaleData->getLocaleItem(m_pData->aLocale).decimalSeparator);
+                aValue = aValue.replaceAt(aValue.lastIndexOf('.'),1,s_xLocaleData->getLocaleItem(m_pData->aLocale).decimalSeparator);
                 return aValue;
             }
         }

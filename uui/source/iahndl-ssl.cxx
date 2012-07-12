@@ -97,7 +97,7 @@ isDomainMatch(
        if (hostName.equalsIgnoreAsciiCase( element ))
            return true;
 
-       if ( 0 == element.indexOf( rtl::OUString( "*" ) ) &&
+       if ( 0 == element.indexOf( '*' ) &&
                  hostName.getLength() >= element.getLength()  )
        {
            rtl::OUString cmpStr = element.copy( 1 );

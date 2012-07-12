@@ -104,7 +104,7 @@ ScVbaLineFormat::getBeginArrowheadStyle() throw (uno::RuntimeException)
     m_xPropertySet->getPropertyValue( rtl::OUString("LineStartName") ) >>= sLineName;
     if( ( sLineName.getLength() > 7 ) && ( sLineName.indexOf( rtl::OUString("msArray") ) ) != -1 )
     {
-        sal_Int32 nIndex = sLineName.indexOf( rtl::OUString(" ") );
+        sal_Int32 nIndex = sLineName.indexOf( ' ' );
         rtl::OUString sName = sLineName.copy( 0, nIndex );
         //sal_Int32 nSize = sLineName.copy( nIndex + 1 ).toInt32();
         nLineType = convertLineStartEndNameToArrowheadStyle( sName );

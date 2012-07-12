@@ -343,17 +343,17 @@ void GetConditionData(const rtl::OUString& rValue, ScConditionMode& eMode, rtl::
         rExpr1 = rValue.copy(2);
         eMode = SC_COND_NOTEQUAL;
     }
-    else if(rValue.indexOf("<") == 0)
+    else if(rValue.indexOf('<') == 0)
     {
         rExpr1 = rValue.copy(1);
         eMode = SC_COND_LESS;
     }
-    else if(rValue.indexOf("=") == 0)
+    else if(rValue.indexOf('=') == 0)
     {
         rExpr1 = rValue.copy(1);
         eMode = SC_COND_EQUAL;
     }
-    else if(rValue.indexOf(">") == 0)
+    else if(rValue.indexOf('>') == 0)
     {
         rExpr1 = rValue.copy(1);
         eMode = SC_COND_GREATER;

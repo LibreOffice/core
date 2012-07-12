@@ -433,7 +433,7 @@ sal_Bool SAL_CALL isDependencySatisfied( GConfClient* pClient, const Configurati
                 g_get_real_name(), osl_getThreadTextEncoding() ) );
             if( aCompleteName != "Unknown" )
             {
-                if( aCompleteName.trim().indexOf(rtl::OUString(" "), 0) != -1 )
+                if( aCompleteName.trim().indexOf( ' ' ) != -1 )
                     return sal_True;
             }
         }

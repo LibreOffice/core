@@ -370,7 +370,7 @@ namespace svt
 
     sal_Bool FileViewContentEnumerator::URLOnBlackList ( const ::rtl::OUString& sRealURL )
     {
-        ::rtl::OUString entryName = sRealURL.copy( sRealURL.lastIndexOf( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/" ))) +1 );
+        ::rtl::OUString entryName = sRealURL.copy( sRealURL.lastIndexOf( '/' ) + 1 );
 
         for (int i = 0; i < m_rBlackList.getLength() ; i++)
         {

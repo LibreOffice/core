@@ -126,7 +126,7 @@ void lclConvertLabelFormatting( PropertySet& rPropSet, ObjectFormatter& rFormatt
     bool bShowPercent = !rDataLabel.mbDeleted && rDataLabel.mobShowPercent.get( false ) && (rTypeInfo.meTypeCategory == TYPECATEGORY_PIE);
     if( bShowValue &&
         !bShowPercent && rTypeInfo.meTypeCategory == TYPECATEGORY_PIE &&
-        rDataLabel.maNumberFormat.maFormatCode.indexOfAsciiL("%", 1) >= 0 )
+        rDataLabel.maNumberFormat.maFormatCode.indexOf('%') >= 0 )
     {
         bShowValue = false;
         bShowPercent = true;

@@ -1285,7 +1285,7 @@ rtl::OString Export::GetText(const rtl::OString &rSource, int nToken)
         case TEXTLINE:
         case LONGTEXTLINE:
         {
-            rtl::OString sTmp(rSource.copy(rSource.indexOf("=")));
+            rtl::OString sTmp(rSource.copy(rSource.indexOf('=')));
             CleanValue( sTmp );
             sTmp = sTmp.replaceAll("\n", rtl::OString()).
                 replaceAll("\r", rtl::OString()).
@@ -1547,7 +1547,7 @@ sal_Bool Export::PrepareTextToMerge(rtl::OString &rText, sal_uInt16 nTyp,
         case STRING_TYP_QUICKHELPTEXT :
         case STRING_TYP_TITLE :
         {
-            nStart = rText.indexOf( "=" );
+            nStart = rText.indexOf( '=' );
             if ( nStart == -1 ) {
                 rText = sOrigText;
                 return sal_False;
