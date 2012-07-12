@@ -94,6 +94,7 @@
 #include <switerator.hxx>
 #include <rtl/strbuf.hxx>
 #include <vector>
+#include <xmloff/odffields.hxx>
 
 using ::rtl::OUString;
 using namespace ::com::sun::star;
@@ -1741,7 +1742,7 @@ void SwXTextField::attachToRange(
 
             UnoActionContext aCont(pDoc);
             SwTxtAttr* pTxtAttr = 0;
-            if(aPam.HasMark())
+            if(aPam.HasMark() && m_nServiceId != SW_SERVICE_FIELDTYPE_ANNOTATION)
                 pDoc->DeleteAndJoin(aPam);
 
             SwXTextCursor const*const pTextCursor(
@@ -1752,7 +1753,19 @@ void SwXTextField::attachToRange(
                 ? nsSetAttrMode::SETATTR_FORCEHINTEXPAND
                 : nsSetAttrMode::SETATTR_DEFAULT;
 
-            pDoc->InsertPoolItem(aPam, aFmt, nInsertFlags);
+            if (*aPam.GetPoint() != *aPam.GetMark() && m_nServiceId == SW_SERVICE_FIELDTYPE_ANNOTATION)
+            {
+                IDocumentMarkAccess* pMarksAccess = pDoc->getIDocumentMarkAccess();
+                pMarksAccess->makeFieldBookmark(
+                        aPam,
+                        OUString(),
+                        ODF_COMMENTRANGE);
+
+                SwPaM aEnd(*aPam.GetMark(), *aPam.GetMark());
+                pDoc->InsertPoolItem(aEnd, aFmt, nInsertFlags);
+            }
+            else
+                pDoc->InsertPoolItem(aPam, aFmt, nInsertFlags);
 
             pTxtAttr = aPam.GetNode()->GetTxtNode()->GetTxtAttrForCharAt(
                     aPam.GetPoint()->nContent.GetIndex()-1, RES_TXTATR_FIELD);
