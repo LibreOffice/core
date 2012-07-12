@@ -45,7 +45,7 @@
 #include <vector>
 
 class ThumbnailView;
-struct ThumbnailViewItem;
+class ThumbnailViewItem;
 
 typedef ::cppu::PartialWeakComponentImplHelper6<
     ::com::sun::star::accessibility::XAccessible,

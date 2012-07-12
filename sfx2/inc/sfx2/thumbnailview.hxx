@@ -28,7 +28,7 @@ class DataChangedEvent;
 class ScrollBar;
 typedef ::std::vector< ThumbnailViewItem* > ValueItemList;
 
-class ThumbnailItemAttributes;
+struct ThumbnailItemAttributes;
 class ThumbnailViewAcc;
 class ThumbnailViewItemAcc;
 
