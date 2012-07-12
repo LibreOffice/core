@@ -355,6 +355,7 @@ public class FileUtil {
         }
     }
 
+
     /**
      * Appeand a string to the tail of a file
      * @param file
@@ -432,11 +433,6 @@ public class FileUtil {
      * @return
      */
     public static boolean copyFile(File fromFile, File toFile) {
-         if (!fromFile.exists() || !fromFile.isFile() || !fromFile.canRead()) {
-            System.err.println(fromFile.getAbsolutePath() + "doesn't exist, or isn't file, or can't be read");
-            return false;
-         }
-
          if (toFile.isDirectory())
            toFile = new File(toFile, fromFile.getName());
 
@@ -470,6 +466,62 @@ public class FileUtil {
              } catch (IOException e) {
              }
          }
+    }
+
+
+    public static boolean writeToFile(InputStream from, File toFile) {
+        FileOutputStream to = null;
+        try {
+            File p = toFile.getParentFile();
+            if (p != null && !p.exists())
+                p.mkdirs();
+            to = new FileOutputStream(toFile);
+            byte[] buffer = new byte[4096];
+            int bytesRead;
+            while ((bytesRead = from.read(buffer)) != -1)
+                to.write(buffer, 0, bytesRead);
+
+            return true;
+        } catch (IOException e) {
+            // Can't copy
+            e.printStackTrace();
+            return false;
+        } finally {
+            if (from != null)
+                try {
+                    from.close();
+                } catch (IOException e) {
+                }
+            if (to != null)
+                try {
+                    to.close();
+                } catch (IOException e) {
+                }
+        }
+    }
+
+    public static boolean pump(InputStream from, OutputStream to) {
+        try {
+            byte[] buffer = new byte[4096];
+            int bytesRead;
+            while ((bytesRead = from.read(buffer)) != -1)
+                to.write(buffer, 0, bytesRead);
+
+            return true;
+        } catch (IOException e) {
+            return false;
+        } finally {
+            if (from != null)
+                try {
+                    from.close();
+                } catch (IOException e) {
+                }
+            if (to != null)
+                try {
+                    to.close();
+                } catch (IOException e) {
+                }
+        }
     }
 
     /**
@@ -702,4 +754,21 @@ public class FileUtil {
         }
     }
 
+
+    public static String getUrl(File file) {
+        try {
+            String url = file.toURL().toString();
+            url = url.replace("file:/", "file:///");
+        } catch(Exception e) {
+
+        }
+
+        return null;
+    }
+
+
+
+    public static String getUrl(String path) {
+        return getUrl(new File(path));
+    }
 }
