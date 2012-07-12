@@ -106,7 +106,9 @@ using namespace ::com::sun::star::container;
 
 #define NAVI_BOOKMARK_DELIM     (sal_Unicode)1
 
-class SwContentArr : public o3tl::sorted_vector<SwContent*, o3tl::less_ptr_to<SwContent>> {
+class SwContentArr
+    : public o3tl::sorted_vector<SwContent*, o3tl::less_ptr_to<SwContent> >
+{
 public:
     ~SwContentArr() { DeleteAndDestroyAll(); }
 };
