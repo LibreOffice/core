@@ -34,6 +34,8 @@
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
 #include <com/sun/star/util/XNumberFormats.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
+#include <officecfg/Setup.hxx>
+#include <officecfg/System.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/string.hxx>
 #include <osl/thread.h>
@@ -1963,31 +1965,11 @@ NumberFormatsBuffer::NumberFormatsBuffer( const WorkbookHelper& rHelper ) :
     mnNextBiffIndex( 0 )
 {
     // get the current locale
-    try
-    {
-        Reference< XMultiServiceFactory > xConfigProv( getBaseFilter().getServiceFactory()->createInstance(
-            CREATE_OUSTRING( "com.sun.star.configuration.ConfigurationProvider" ) ), UNO_QUERY_THROW );
-
-        // try user-defined locale setting
-        Sequence< Any > aArgs( 1 );
-        aArgs[ 0 ] <<= CREATE_OUSTRING( "org.openoffice.Setup/L10N/" );
-        Reference< XNameAccess > xConfigNA( xConfigProv->createInstanceWithArguments(
-            CREATE_OUSTRING( "com.sun.star.configuration.ConfigurationAccess" ), aArgs ), UNO_QUERY_THROW );
-        xConfigNA->getByName( CREATE_OUSTRING( "ooSetupSystemLocale" ) ) >>= maLocaleStr;
-
-        // if set to "use system", get locale from system
-        if( maLocaleStr.isEmpty() )
-        {
-            aArgs[ 0 ] <<= CREATE_OUSTRING( "org.openoffice.System/L10N/" );
-            xConfigNA.set( xConfigProv->createInstanceWithArguments(
-                CREATE_OUSTRING( "com.sun.star.configuration.ConfigurationAccess" ), aArgs ), UNO_QUERY_THROW );
-            xConfigNA->getByName( CREATE_OUSTRING( "Locale" ) ) >>= maLocaleStr;
-        }
-    }
-    catch( Exception& )
-    {
-        OSL_FAIL( "NumberFormatsBuffer::NumberFormatsBuffer - cannot get system locale" );
-    }
+    // try user-defined locale setting
+    maLocaleStr = officecfg::Setup::L10N::ooSetupSystemLocale::get();
+    // if set to "use system", get locale from system
+    if( maLocaleStr.isEmpty() )
+        maLocaleStr = officecfg::System::L10N::Locale::get();
 
     // create built-in formats for current locale
     insertBuiltinFormats();
