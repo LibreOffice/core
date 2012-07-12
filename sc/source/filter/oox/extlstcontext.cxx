@@ -180,8 +180,6 @@ ContextHandlerRef ExtGlobalContext::onCreateContext( sal_Int32 nElement, const A
         else
             return this;
     }
-
-    return 0;
 }
 
 void ExtGlobalContext::onStartElement( const AttributeList& rAttribs )
