@@ -59,7 +59,7 @@ public class SQLQueryComposer
     {
         try
         {
-            this.CurDBMetaData = _CurDBMetaData;
+            setDBMetaData(_CurDBMetaData);
             xMSF = UnoRuntime.queryInterface(XMultiServiceFactory.class, CurDBMetaData.DBConnection);
             final Object oQueryComposer = xMSF.createInstance("com.sun.star.sdb.SingleSelectQueryComposer");
             m_xQueryAnalyzer = UnoRuntime.queryInterface(XSingleSelectQueryAnalyzer.class, oQueryComposer);
@@ -227,6 +227,7 @@ public class SQLQueryComposer
     public void setDBMetaData(QueryMetaData _oDBMetaData)
     {
         this.CurDBMetaData = _oDBMetaData;
+        updateComposedCommandNames();
     }
 
     private PropertyValue[][] replaceConditionsByAlias(PropertyValue _filterconditions[][])
@@ -250,22 +251,30 @@ public class SQLQueryComposer
         return m_xQueryAnalyzer.getQuery();
     }
 
-    public StringBuilder getFromClause()
+    private void updateComposedCommandNames()
     {
-        StringBuilder sFromClause = new StringBuilder("FROM");
         composedCommandNames.clear();
         String[] sCommandNames = CurDBMetaData.getIncludedCommandNames();
         for (int i = 0; i < sCommandNames.length; i++)
         {
-            CommandName curCommandName = new CommandName(CurDBMetaData, sCommandNames[i]); //(setComposedCommandName)
+            CommandName curCommandName = new CommandName(CurDBMetaData, sCommandNames[i]);
             curCommandName.setAliasName(getuniqueAliasName(curCommandName.getTableName()));
+            composedCommandNames.add(curCommandName);
+        }
+    }
+
+    public StringBuilder getFromClause()
+    {
+        StringBuilder sFromClause = new StringBuilder("FROM");
+        String[] sCommandNames = CurDBMetaData.getIncludedCommandNames();
+        for (int i = 0; i < sCommandNames.length; i++)
+        {
+            CommandName curCommandName = getComposedCommandByDisplayName(sCommandNames[i]);
             sFromClause.append(" ").append(curCommandName.getComposedName()).append(" ").append(quoteName(curCommandName.getAliasName()));
             if (i < sCommandNames.length - 1)
             {
                 sFromClause.append(", ");
             }
-            // fill composedCommandNames
-            composedCommandNames.add(curCommandName);
         }
         return sFromClause;
     }
@@ -327,13 +336,19 @@ public class SQLQueryComposer
     private String getComposedAliasFieldName(String _fieldname)
     {
         FieldColumn CurFieldColumn = CurDBMetaData.getFieldColumnByDisplayName(_fieldname);
-        CommandName curComposedCommandName = getComposedCommandByDisplayName(CurFieldColumn.getCommandName());
+        final String curCommandName = CurFieldColumn.getCommandName();
+        final String curFieldName = CurFieldColumn.getFieldName();
+        CommandName curComposedCommandName = getComposedCommandByDisplayName(curCommandName);
         if (curComposedCommandName == null)
         {
-            return _fieldname;
+            //return _fieldname;
+            if ( curCommandName.length() > 0 )
+                return quoteName(curCommandName) + "." + quoteName(curFieldName);
+            else
+                return quoteName(CurFieldColumn.getFieldName());
         }
         String curAliasName = curComposedCommandName.getAliasName();
-        return quoteName(curAliasName) + "." + quoteName(CurFieldColumn.getFieldName());
+        return quoteName(curAliasName) + "." + quoteName(curFieldName);
     }
 
     private CommandName getComposedCommandByAliasName(String _AliasName)
