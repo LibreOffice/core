@@ -3222,8 +3222,16 @@ void SAL_CALL ScTableRowsObj::setPropertyValue(
     {
         sal_Int32 nNewHeight = 0;
         if ( aValue >>= nNewHeight )
-            rFunc.SetWidthOrHeight( false, 1, nRowArr, nTab, SC_SIZE_ORIGINAL,
-                                    (sal_uInt16)HMMToTwips(nNewHeight), sal_True, sal_True );
+        {
+            if (pDoc->IsImportingXML())
+                // TODO: This is a band-aid fix.  Eventually we need to
+                // re-work ods' style import to get it to set styles to
+                // ScDocument directly.
+                pDoc->SetRowHeightOnly( nStartRow, nEndRow, nTab, (sal_uInt16)HMMToTwips(nNewHeight) );
+            else
+                rFunc.SetWidthOrHeight( false, 1, nRowArr, nTab, SC_SIZE_ORIGINAL,
+                                        (sal_uInt16)HMMToTwips(nNewHeight), sal_True, sal_True );
+        }
     }
     else if ( aNameString.EqualsAscii( SC_UNONAME_CELLVIS ) )
     {
