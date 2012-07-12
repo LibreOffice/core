@@ -1658,7 +1658,7 @@ static const SvxAutocorrWord* lcl_SearchWordsInList(
 {
     const SvxAutocorrWordList* pAutoCorrWordList = pList->GetAutocorrWordList();
     TransliterationWrapper& rCmp = GetIgnoreTranslWrapper();
-    for( SvxAutocorrWordList::iterator it = pAutoCorrWordList->begin(); it != pAutoCorrWordList->end(); ++it )
+    for( SvxAutocorrWordList::const_iterator it = pAutoCorrWordList->begin(); it != pAutoCorrWordList->end(); ++it )
     {
         const SvxAutocorrWord* pFnd = *it;
         const String& rChk = pFnd->GetShort();
