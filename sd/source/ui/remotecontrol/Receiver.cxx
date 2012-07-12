@@ -25,54 +25,30 @@ using namespace ::com::sun::star;
 using rtl::OUString;
 using rtl::OString;
 using namespace ::osl;
+using namespace std;
 
 Receiver::Receiver()
 {
-    g_type_init ();
 }
 
 Receiver::~Receiver()
 {
 }
 
-void Receiver::executeCommand( JsonObject *aObject,
-                               uno::Reference<presentation::XSlideShowController> xSlideShowController )
+void Receiver::parseCommand( std::vector<OString> aCommand, osl::StreamSocket &aStreamSocket )
 {
-    const char* aInstruction = json_node_get_string( json_object_get_member( aObject, "command" ) );
-
-    fprintf( stderr, "instruction:%s\n", aInstruction );
-
-    if ( strcmp( aInstruction, "transition_next" ) == 0 )
-    {
-
-        xSlideShowController->gotoNextEffect();
-      // Next slide;
-    }
-    else if ( strcmp( aInstruction, "transition_previous" ) == 0 )
-    {
-        xSlideShowController->gotoPreviousEffect();
-    }
-    else if ( strcmp( aInstruction, "goto_slide" ) == 0 )
-    {
-        //
-    }
-
-}
-
-void Receiver::parseCommand( const char* aCommand, sal_Int32 size, osl::StreamSocket &aStreamSocket )
-{
-    css::uno::Reference<css::presentation::XSlideShowController> xSlideShowController;
+    uno::Reference<presentation::XSlideShowController> xSlideShowController;
     try {
-        css::uno::Reference< css::lang::XMultiServiceFactory > xServiceManager(
-            ::comphelper::getProcessServiceFactory(), css::uno::UNO_QUERY_THROW );
-        css::uno::Reference< css::frame::XFramesSupplier > xFramesSupplier( xServiceManager->createInstance(
-        "com.sun.star.frame.Desktop" ) , UNO_QUERY_THROW );
-        css::uno::Reference< css::frame::XFrame > xFrame ( xFramesSupplier->getActiveFrame(), UNO_QUERY_THROW );
-        Reference<XPresentationSupplier> xPS ( xFrame->getController()->getModel(), UNO_QUERY_THROW);
-        Reference<XPresentation2> xPresentation(xPS->getPresentation(), UNO_QUERY_THROW);
+        uno::Reference< lang::XMultiServiceFactory > xServiceManager(
+            ::comphelper::getProcessServiceFactory(), uno::UNO_QUERY_THROW );
+        uno::Reference< frame::XFramesSupplier > xFramesSupplier( xServiceManager->createInstance(
+        "com.sun.star.frame.Desktop" ) , uno::UNO_QUERY_THROW );
+        uno::Reference< frame::XFrame > xFrame ( xFramesSupplier->getActiveFrame(), uno::UNO_QUERY_THROW );
+        uno::Reference<presentation::XPresentationSupplier> xPS ( xFrame->getController()->getModel(), uno::UNO_QUERY_THROW);
+        uno::Reference<presentation::XPresentation2> xPresentation(xPS->getPresentation(), uno::UNO_QUERY_THROW);
         // Throws an exception if now slideshow running
-        xSlideShowController =  Reference<css::presentation::XSlideShowController>(
-           xPresentation->getController(), UNO_QUERY_THROW );
+        xSlideShowController =  uno::Reference<presentation::XSlideShowController>(
+           xPresentation->getController(), uno::UNO_QUERY_THROW );
         // FIXME: remove later, this is just to test functionality
         sendPreview( 0, xSlideShowController, aStreamSocket );
     }
@@ -81,26 +57,20 @@ void Receiver::parseCommand( const char* aCommand, sal_Int32 size, osl::StreamSo
         return;
     }
 
-    // Parsing
-    JsonParser *parser;
-    JsonNode *root;
-    GError *error;
-
-    parser = json_parser_new();
-    error = NULL;
-    json_parser_load_from_data( parser, aCommand, size, &error );
-
-    if (error) {
-        g_error_free( error );
-        g_object_unref( parser );
+    if ( aCommand[0].compareTo( "transition_next" ) == 0 )
+    {
+        xSlideShowController->gotoNextEffect();
     }
-
-    root = json_parser_get_root( parser );
-    JsonObject *aObject = json_node_get_object( root );
-
-    executeCommand( aObject, xSlideShowController );
-
-    g_object_unref( parser );
+    else if ( aCommand[0].compareTo( "transition_previous" ) == 0 )
+    {
+        xSlideShowController->gotoPreviousEffect();
+    }
+    else if ( aCommand[0].compareTo( "goto_slide" ) == 0 )
+    {
+        // FIXME: if 0 returned, then not a valid number
+        sal_Int32 aSlide = aCommand[1].toInt32();
+        xSlideShowController->gotoSlideIndex( aSlide );
+    }
 
 }
 
@@ -110,7 +80,7 @@ void sendPreview(sal_uInt32 aSlideNumber,
 {
 
     sal_uInt64 aSize; // Unused
-    css::uno::Sequence<sal_Int8> aImageData = preparePreview( aSlideNumber, xSlideShowController, 320, 240, aSize );
+    uno::Sequence<sal_Int8> aImageData = preparePreview( aSlideNumber, xSlideShowController, 320, 240, aSize );
 
     rtl::OUStringBuffer aStrBuffer;
     ::sax::Converter::encodeBase64( aStrBuffer, aImageData );
@@ -121,8 +91,7 @@ void sendPreview(sal_uInt32 aSlideNumber,
     // Start the writing
     mStreamSocket.write( "slide_preview\n", strlen( "slide_preview\n" ) );
 
-    rtl::OString aSlideNumberString(rtl::OUStringToOString(
-        rtl::OUString::valueOf( 2 ) , RTL_TEXTENCODING_UTF8 )); // FIXME get number
+    rtl::OString aSlideNumberString( rtl::OString::valueOf( 2 ) ); // FIXME get number
     mStreamSocket.write( aSlideNumberString.getStr(), aSlideNumberString.getLength() );
     mStreamSocket.write( "\n", 1 );
 
@@ -150,8 +119,8 @@ preparePreview(sal_uInt32 aSlideNumber,
 
     uno::Reference< document::XExporter > xExporter( xFilter, uno::UNO_QUERY_THROW );
 
-    css::uno::Reference< css::lang::XComponent > xSourceDoc(
-        xSlideShowController->getSlideByIndex( aSlideNumber ) , css::uno::UNO_QUERY_THROW );
+    uno::Reference< lang::XComponent > xSourceDoc(
+        xSlideShowController->getSlideByIndex( aSlideNumber ) , uno::UNO_QUERY_THROW );
 
     xExporter->setSourceDocument( xSourceDoc );
 
@@ -166,7 +135,7 @@ preparePreview(sal_uInt32 aSlideNumber,
     aFilterData[2].Name = "ColorMode";
     aFilterData[2].Value <<= sal_Int32(0); // Color
 
-    css::uno::Sequence< css::beans::PropertyValue > aProps(3);
+    uno::Sequence< beans::PropertyValue > aProps(3);
     aProps[0].Name = "MediaType";
     aProps[0].Value <<= OUString( "image/png" );
 
@@ -187,7 +156,7 @@ preparePreview(sal_uInt32 aSlideNumber,
     sal_uInt64 aRead;
     rSize = 0;
     aFile.getSize( rSize );
-    css::uno::Sequence<sal_Int8> aContents( rSize );
+    uno::Sequence<sal_Int8> aContents( rSize );
 
     aFile.read( aContents.getArray(), rSize, aRead );
     aFile.close();

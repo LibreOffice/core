@@ -10,9 +10,6 @@ package org.libreoffice.impressremote.communication;
 
 import java.util.ArrayList;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.os.Bundle;
 import android.os.Message;
 import android.os.Messenger;

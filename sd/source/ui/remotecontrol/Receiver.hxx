@@ -16,8 +16,8 @@
 #include <com/sun/star/presentation/XPresentation2.hpp>
 #include <osl/socket.hxx>
 #include <stdlib.h>
-#include <glib-object.h>
-#include <json-glib/json-glib.h>
+
+#include <vector>
 
 namespace css = ::com::sun::star;
 
@@ -29,12 +29,9 @@ class Receiver
 public:
     Receiver();
     ~Receiver();
-    void parseCommand( const char* aCommand, sal_Int32 size, osl::StreamSocket &aSocket );
-
+    void parseCommand( std::vector<rtl::OString> aCommand, osl::StreamSocket &aStreamSocket );
 
 private:
-    void executeCommand( JsonObject *aObject, css::uno::Reference<css::presentation::XSlideShowController> aController );
-
 };
 
 }

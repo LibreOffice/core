@@ -1,5 +1,8 @@
 package org.libreoffice.impressremote;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import org.libreoffice.impressremote.communication.CommunicationService;
 import android.app.Activity;
 import android.content.ComponentName;
@@ -20,6 +23,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 public class TestClient extends Activity {
+
+	HashMap<Integer, Bitmap> aPreviewImages = new HashMap<Integer, Bitmap>();
 
 	private boolean mIsBound = false;
 
@@ -139,12 +144,13 @@ public class TestClient extends Activity {
 				// TODO: set slide;
 				break;
 			case CommunicationService.MSG_SLIDE_PREVIEW:
-				int slideNumber = aData.getInt("slide_number");
+				int aSlideNumber = aData.getInt("slide_number");
 				byte[] aPreviewImage = aData.getByteArray("preview_image");
 				Bitmap aBitmap = BitmapFactory.decodeByteArray(aPreviewImage,
 						0, aPreviewImage.length);
+				aPreviewImages.put(aSlideNumber, aBitmap);
 				mImageView.setImageBitmap(aBitmap);
-				// TODO: update
+				// TODO: remove above line, use slide changed to show image.
 				break;
 
 			}

@@ -18,13 +18,12 @@ public class NetworkClient extends Client {
 	private Socket mSocket;
 
 	public NetworkClient(String ipAddress) {
+		// FIXME: eventually networking will be fully threaded.
 		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
 				.permitAll().build();
 		StrictMode.setThreadPolicy(policy);
-		System.out.println("Attempting to open port.");
 		try {
 			mSocket = new Socket(ipAddress, PORT);
-			System.out.println("We seem to have opened.");
 			mInputStream = mSocket.getInputStream();
 			mOutputStream = mSocket.getOutputStream();
 			startListening();

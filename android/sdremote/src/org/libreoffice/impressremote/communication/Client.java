@@ -49,7 +49,6 @@ public abstract class Client {
 	private void listen() {
 		BufferedReader aReader;
 		try {
-			System.out.println("deb:Listening");
 			aReader = new BufferedReader(new InputStreamReader(mInputStream,
 					CHARSET));
 			while (true) {
@@ -57,10 +56,8 @@ public abstract class Client {
 				String aTemp;
 				// read until empty line
 				while ((aTemp = aReader.readLine()).length() != 0) {
-					System.out.println("deb__:" + aTemp);
 					aList.add(aTemp);
 				}
-				System.out.println("deb:parsing");
 				mReceiver.parseCommand(aList);
 			}
 		} catch (UnsupportedEncodingException e) {
@@ -80,13 +77,7 @@ public abstract class Client {
 	 *            Must be a valid JSON string.
 	 */
 	public void sendCommand(String command) {
-		String aLengthString = Integer.toString(command.length());
-		byte[] aLengthBytes;
 		try {
-			aLengthBytes = aLengthString.getBytes(CHARSET);
-
-			mOutputStream.write(aLengthBytes);
-			mOutputStream.write(0x0d);
 			mOutputStream.write(command.getBytes(CHARSET));
 		} catch (UnsupportedEncodingException e) {
 			throw new Error("Specified network encoding [" + CHARSET

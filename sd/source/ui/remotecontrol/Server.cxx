@@ -7,6 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 #include <stdlib.h>
+#include <algorithm>
 #include <vector>
 
 #include "sddll.hxx"
@@ -15,6 +16,7 @@
 
 using namespace std;
 using namespace sd;
+using rtl::OString;
 
 Server::Server()
 :  Thread( "ServerThread" ), mSocket(), mReceiver()
@@ -31,41 +33,44 @@ void Server::listenThread()
     // TODO: decryption
     while (true)
     {
+        sal_uInt64 aRet, aRead;
         vector<char> aBuffer;
-        char aReadBuffer[100];
-        aRet = mStreamSocket.read
-
-
-        int aRet;
-        char aTemp;
-        while ( (aRet = mStreamSocket.read( &aTemp, 1)) && aTemp != 0x0d ) // look for newline
+        vector<OString> aCommand;
+        sal_Bool finished = false;
+        aRead = 0;
+        while ( !finished )
         {
-            aBuffer.push_back( aTemp );
+            aBuffer.resize( aRead + 100 );
+            aRet = mStreamSocket.recv( &aBuffer[aRead], 100 );
+            if ( aRet == 0 )
+            {
+                return; // closed
+            }
+            vector<char>::iterator aIt;
+            aIt = find( aBuffer.begin(), aBuffer.end(), '\n' ); // add aRead
+            aRead += aRet;
+            if ( aIt == aBuffer.end() )
+            {
+                fprintf( stderr, "Continuing\n" );
+                continue;
+            }
+            fprintf( stderr, "parsing\n" );
+            sal_uInt64 aLocation = aIt - aBuffer.begin();
+
+            vector<char> aTemp( aLocation );
+            memcpy( &(*aTemp.begin()),  &(*aBuffer.begin()), aLocation );
+            aTemp.push_back( 0 );
+
+            aBuffer.erase( aBuffer.begin(), aBuffer.begin() + aLocation + 1 ); // Also delete the newline
+            aRead -= aLocation;
+
+            aCommand.push_back( OString( &(*aTemp.begin()) ) );
+            if ( (*aTemp.begin()) == 0 )
+            {
+                mReceiver.parseCommand( aCommand, mStreamSocket );
+                aCommand.clear();
+            }
         }
-        if (aRet != 1) // Error reading or connection closed
-        {
-            return;
-        }
-        aBuffer.push_back('\0');
-        rtl::OString aTempStr( &aBuffer.front() );
-
-        const sal_Char* aLengthChar = aTempStr.getStr();
-        sal_Int32 aLen = strtol( aLengthChar, NULL, 10);
-
-        char *aMessage = new char[aLen+1];
-        aMessage[aLen] = '\0';
-
-        if( mStreamSocket.read( (void*) aMessage, aLen ) != aLen) // Error reading or connection closed
-        {
-            delete [] aMessage;
-            return;
-        }
-
-        aTempStr = rtl::OString( aMessage ); //, (sal_Int32) aLen, CHARSET, 0u
-        const sal_Char* aCommandChar = aTempStr.getStr();
-
-        mReceiver.parseCommand( aCommandChar, aTempStr.getLength(), mStreamSocket );
-        delete [] aMessage;
 
         // TODO: deal with transmision errors gracefully.
     }

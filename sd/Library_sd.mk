@@ -27,10 +27,6 @@
 
 $(eval $(call gb_Library_Library,sd))
 
-$(eval $(call gb_Library_use_externals,sd,\
-    gtk \
-))
-
 $(eval $(call gb_SdiTarget_SdiTarget,sd/sdi/sdslots,sd/sdi/sdslots))
 
 $(eval $(call gb_SdiTarget_set_include,sd/sdi/sdslots,\
@@ -63,7 +59,6 @@ $(eval $(call gb_Library_set_include,sd,\
     -I$(SRCDIR)/sd/source/ui/inc \
     -I$(SRCDIR)/sd/source/ui/slidesorter/inc \
     -I$(WORKDIR)/SdiTarget/sd/sdi \
-    $(shell pkg-config --cflags json-glib-1.0) \
 ))
 
 $(eval $(call gb_Library_add_defs,sd,\
@@ -108,10 +103,6 @@ $(eval $(call gb_Library_use_libraries,sd,\
     utl \
     vcl \
     $(gb_STDLIBS) \
-))
-
-$(eval $(call gb_Library_add_libs,sd,\
-    $(shell pkg-config --libs glib-2.0 json-glib-1.0) \
 ))
 
 $(eval $(call gb_Library_set_componentfile,sd,sd/util/sd))
