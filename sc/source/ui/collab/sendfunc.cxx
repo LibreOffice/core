@@ -28,7 +28,7 @@
 
 #include "sal/config.h"
 
-#include <boost/signals2.hpp>
+#include <tubes/warnings_guard_boost_signals2.hpp>
 #include <vector>
 
 #include "cell.hxx"
