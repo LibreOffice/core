@@ -608,9 +608,6 @@ rtl::OUString makeRepresentativeTextForLanguage(LanguageType eLang)
         case LANGUAGE_MONGOLIAN & LANGUAGE_MASK_PRIMARY:
             sRet = makeRepresentativeTextForScript(USCRIPT_MONGOLIAN);
             break;
-        case LANGUAGE_USER_TAGALOG & LANGUAGE_MASK_PRIMARY:
-            sRet = makeRepresentativeTextForScript(USCRIPT_TAGALOG);
-            break;
         case LANGUAGE_JAPANESE & LANGUAGE_MASK_PRIMARY:
             sRet = makeRepresentativeTextForScript(USCRIPT_JAPANESE);
             break;
