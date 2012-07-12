@@ -89,7 +89,7 @@
 
 # Slovenian dictionary.
 [ language=sl ]
-    33eb80b84d163e00298bc2c98ddd81cb http://sl.openoffice.org/test/pack-sl.oxt "pack-sl.oxt"
+    a2b35802526750e517df857fa66f8c48 http://193.2.66.133:85/download/OdprtiTezaver.oxt "OdprtiTezaver.oxt"
 
 # German (Austria) dictionary.
 [ language=de || language=de_AT || language=de_DE ]
