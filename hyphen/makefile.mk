@@ -44,7 +44,8 @@ ADDITIONAL_FILES += makefile.mk
 PATCH_FILES= \
     hyphen-build.patch \
     hyphen-android.patch \
-    hyphen-fdo43931.patch
+    hyphen-fdo43931.patch \
+    hyphen-lenwaswrong.patch
 
 .IF "$(GUI)"=="UNX"
 CONFIGURE_DIR=$(BUILD_DIR)
@@ -110,3 +111,9 @@ CONFIGURE_FLAGS+= --build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)
 .INCLUDE : target.mk
 .INCLUDE : tg_ext.mk
 
+# Since you never know what will be in a patch (for example, it may already
+# patch at configure level) or in the case of a binary patch, we remove the
+# entire package directory if a patch is newer.
+# Changes in this makefile could also make a complete build necessary if
+# configure is affected.
+$(PACKAGE_DIR)$/$(UNTAR_FLAG_FILE) : makefile.mk
