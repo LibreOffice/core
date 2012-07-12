@@ -1322,8 +1322,8 @@ private:
         SvxULSpaceItem &rUL);
     void MapWrapIntoFlyFmt(SvxMSDffImportRec* pRecord, SwFrmFmt* pFlyFmt);
 
-    void SetAttributesAtGrfNode( SvxMSDffImportRec* pRecord, SwFrmFmt *pFlyFmt,
-        WW8_FSPA *pF );
+    void SetAttributesAtGrfNode(SvxMSDffImportRec const* pRecord,
+            SwFrmFmt *pFlyFmt, WW8_FSPA *pF);
 
     bool IsDropCap();
     bool IsListOrDropcap() { return (!pAktItemSet  || bDropCap); };

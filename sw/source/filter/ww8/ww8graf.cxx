@@ -2016,7 +2016,8 @@ void SwWW8ImplReader::MapWrapIntoFlyFmt(SvxMSDffImportRec* pRecord,
     }
 }
 
-void SwWW8ImplReader::SetAttributesAtGrfNode( SvxMSDffImportRec* pRecord,
+void
+SwWW8ImplReader::SetAttributesAtGrfNode(SvxMSDffImportRec const*const pRecord,
     SwFrmFmt *pFlyFmt, WW8_FSPA *pF )
 {
     const SwNodeIndex* pIdx = pFlyFmt->GetCntnt(false).GetCntntIdx();
@@ -2560,13 +2561,14 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
         Get the record for top level object, so we can get the word anchoring
         and wrapping information for it.
     */
-    for (MSDffImportRecords::const_iterator it = aData.begin(); it != aData.end(); ++it )
+    for (MSDffImportRecords::iterator it = aData.begin();
+            it != aData.end(); ++it)
     {
-        pRecord = *it;
-        if (pRecord && pRecord->pObj == pObject)
+        if (it->pObj == pObject)
+        {
+            pRecord = &*it;
             break;
-        else
-            pRecord = 0;
+        }
     }
 
     OSL_ENSURE(pRecord, "how did that happen?");
@@ -2661,10 +2663,11 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
             */
             if (!aData.empty())
             {
-                for (MSDffImportRecords::const_iterator it = aData.begin(); it != aData.end(); ++it)
+                for (MSDffImportRecords::iterator it = aData.begin();
+                        it != aData.end(); ++it)
                 {
-                    pRecord = *it;
-                    if (pRecord && pRecord->pObj && pRecord->aTextId.nTxBxS)
+                    pRecord = &*it;
+                    if (pRecord->pObj && pRecord->aTextId.nTxBxS)
                     { // #i52825# pRetFrmFmt can be NULL
                         pRetFrmFmt = MungeTextIntoDrawBox(pRecord->pObj,
                             pRecord, nGrafAnchorCp, pRetFrmFmt);

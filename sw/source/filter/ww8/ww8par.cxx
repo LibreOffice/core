@@ -3680,10 +3680,8 @@ void wwSectionManager::SetSegmentToPageDesc(const wwSection &rSection,
         SdrObject* pObject = 0;
         if (mrReader.pMSDffManager->GetShape(0x401, pObject, aData))
         {
-            SvxMSDffImportRec * pRec = *aData.begin();
-
             // Only handle shape if it is a background shape
-            if ((pRec->nFlags & 0x400) != 0)
+            if ((aData.begin()->nFlags & 0x400) != 0)
             {
                 SfxItemSet aSet(rFmt.GetAttrSet());
                 mrReader.MatchSdrItemsIntoFlySet(pObject, aSet, mso_lineSimple,

@@ -45,6 +45,7 @@
 #include <vector>
 #include <set>
 #include <boost/ptr_container/ptr_vector.hpp>
+#include <boost/ptr_container/ptr_set.hpp>
 
 class Graphic;
 class SvStream;
@@ -329,11 +330,9 @@ private:
 };
 
 /** list of all SvxMSDffImportRec instances of/for a group */
-struct CompareMSDffImportRecords
-{
-  bool operator()( SvxMSDffImportRec* const& lhs, SvxMSDffImportRec* const& rhs ) const { return (*lhs)<(*rhs); }
-};
-class MSFILTER_DLLPUBLIC MSDffImportRecords : public std::set<SvxMSDffImportRec*,CompareMSDffImportRecords> {};
+class MSFILTER_DLLPUBLIC MSDffImportRecords
+    : public ::boost::ptr_set<SvxMSDffImportRec>
+{};
 
 /** block of parameters for import/export for a single call of
     ImportObjAtCurrentStreamPos() */
