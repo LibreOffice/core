@@ -186,7 +186,8 @@ HRESULT STDMETHODCALLTYPE CPropertyHdl::GetValue( REFPROPERTYKEY key, PROPVARIAN
 }
 
 //-----------------------------
-HRESULT STDMETHODCALLTYPE CPropertyHdl::SetValue( REFPROPERTYKEY key, REFPROPVARIANT propVar )
+HRESULT STDMETHODCALLTYPE
+CPropertyHdl::SetValue(REFPROPERTYKEY /*key*/, REFPROPVARIANT /*propVar*/)
 {
     HRESULT hr = E_UNEXPECTED;
     if ( m_pCache )
@@ -205,7 +206,8 @@ HRESULT STDMETHODCALLTYPE CPropertyHdl::Commit()
 //-----------------------------
 // IPropertyStore
 //-----------------------------
-HRESULT STDMETHODCALLTYPE CPropertyHdl::IsPropertyWritable( REFPROPERTYKEY key )
+HRESULT STDMETHODCALLTYPE
+CPropertyHdl::IsPropertyWritable(REFPROPERTYKEY /*key*/)
 {
     // We start with read only properties only
     return S_FALSE;
