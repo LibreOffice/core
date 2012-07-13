@@ -35,9 +35,9 @@
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/form/XForm.hpp>
 #include <vcl/field.hxx>
-#include <svl/svstdarr.hxx>
 #include <i18npool/lang.h>
 #include <tools/stream.hxx>
+#include <o3tl/sorted_vector.hxx>
 
 #include "shellio.hxx"
 #include "wrt_fn.hxx"
@@ -191,8 +191,35 @@ const sal_uInt32 HTML_FRMOPTS_GENIMG    =
 #define CSS1_OUTMODE_SCRIPT         ((sal_uInt16)(0x0007U << 11))
 
 // der HTML-Writer
-struct HTMLControl;
-SV_DECL_PTRARR_SORT_DEL( HTMLControls, HTMLControl*, 1 )
+struct HTMLControl
+{
+    // die Form, zu der das Control gehoert
+    ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer > xFormComps;
+    sal_uLong nNdIdx;                   // der Node, in dem es verankert ist
+    xub_StrLen nCount;              // wie viele Controls sind in dem Node
+
+    HTMLControl( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer > & rForm,
+                 sal_uInt32 nIdx );
+    ~HTMLControl();
+
+    // operatoren fuer das Sort-Array
+    bool operator==( const HTMLControl& rCtrl ) const
+    {
+        return nNdIdx == rCtrl.nNdIdx;
+    }
+    bool operator<( const HTMLControl& rCtrl ) const
+    {
+        return nNdIdx < rCtrl.nNdIdx;
+    }
+};
+
+class HTMLControls : public o3tl::sorted_vector<HTMLControl*, o3tl::less_ptr_to<HTMLControl> > {
+public:
+    // will free any items still in the vector
+    ~HTMLControls() { DeleteAndDestroyAll(); }
+};
+
+
 typedef std::vector<SwFmtINetFmt*> INetFmts;
 
 struct SwHTMLFmtInfo

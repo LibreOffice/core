@@ -381,8 +381,7 @@ sal_uLong SwHTMLWriter::WriteStream()
         pHTMLPosFlyFrms = 0;
     }
 
-    if( aHTMLControls.Count() )
-        aHTMLControls.DeleteAndDestroy( sal_uInt16(0), aHTMLControls.Count() );
+    aHTMLControls.DeleteAndDestroyAll();
 
     if( !aChrFmtInfos.empty() )
         aChrFmtInfos.clear();

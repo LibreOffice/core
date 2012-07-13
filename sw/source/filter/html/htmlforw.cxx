@@ -90,31 +90,6 @@ const sal_uInt32 HTML_FRMOPTS_IMG_CONTROL_CSS1 =
 
 
 
-struct HTMLControl
-{
-    // die Form, zu der das Control gehoert
-    uno::Reference< container::XIndexContainer > xFormComps;
-    sal_uLong nNdIdx;                   // der Node, in dem es verankert ist
-    xub_StrLen nCount;              // wie viele Controls sind in dem Node
-
-    HTMLControl( const uno::Reference< container::XIndexContainer > & rForm,
-                 sal_uInt32 nIdx );
-    ~HTMLControl();
-
-    // operatoren fuer das Sort-Array
-    sal_Bool operator==( const HTMLControl& rCtrl )
-    {
-        return nNdIdx == rCtrl.nNdIdx;
-    }
-    sal_Bool operator<( const HTMLControl& rCtrl )
-    {
-        return nNdIdx < rCtrl.nNdIdx;
-    }
-};
-
-SV_IMPL_OP_PTRARR_SORT( HTMLControls, HTMLControl* )
-
-
 void lcl_html_outEvents( SvStream& rStrm,
                          const uno::Reference< form::XFormComponent > rFormComp,
                          sal_Bool bCfgStarBasic,
@@ -261,11 +236,11 @@ sal_Bool SwHTMLWriter::HasControls() const
     sal_uInt16 i;
 
     // Skip all controls in front of the current paragraph
-    for( i = 0; i < aHTMLControls.Count() &&
+    for( i = 0; i < aHTMLControls.size() &&
         aHTMLControls[i]->nNdIdx < nStartIdx; i++ )
         ;
 
-    return i < aHTMLControls.Count() && aHTMLControls[i]->nNdIdx == nStartIdx;
+    return i < aHTMLControls.size() && aHTMLControls[i]->nNdIdx == nStartIdx;
 }
 
 void SwHTMLWriter::OutForm( sal_Bool bTag_On, const SwStartNode *pStartNd )
@@ -291,7 +266,7 @@ void SwHTMLWriter::OutForm( sal_Bool bTag_On, const SwStartNode *pStartNd )
 
     // Ueberspringen von Controls vor dem interesanten Bereich
     sal_uInt16 i;
-    for( i = 0; i < aHTMLControls.Count() &&
+    for( i = 0; i < aHTMLControls.size() &&
         aHTMLControls[i]->nNdIdx < nStartIdx; i++ )
         ;
 
@@ -299,7 +274,7 @@ void SwHTMLWriter::OutForm( sal_Bool bTag_On, const SwStartNode *pStartNd )
     {
         // Check fuer einen einzelnen Node: da ist nur interessant, ob
         // es zu dem Node ein Control gibt und zu welcher Form es gehoert
-        if( i < aHTMLControls.Count() &&
+        if( i < aHTMLControls.size() &&
             aHTMLControls[i]->nNdIdx == nStartIdx )
             xNewFormComps = aHTMLControls[i]->xFormComps;
     }
@@ -314,7 +289,7 @@ void SwHTMLWriter::OutForm( sal_Bool bTag_On, const SwStartNode *pStartNd )
         const SwStartNode *pCurrentStNd = 0; // und der Start-Node eines Ctrls
         xub_StrLen nCurrentCtrls = 0;   // und die in ihr gefundenen Controls
         sal_uInt32 nEndIdx =  pStartNd->EndOfSectionIndex();
-        for( ; i < aHTMLControls.Count() &&
+        for( ; i < aHTMLControls.size() &&
             aHTMLControls[i]->nNdIdx <= nEndIdx; i++ )
         {
             const SwStartNode *pCntrlStNd =
@@ -1393,12 +1368,13 @@ static void AddControl( HTMLControls& rControls,
     {
         uno::Reference< container::XIndexContainer >  xFormComps( xForm, uno::UNO_QUERY );
         HTMLControl *pHCntrl = new HTMLControl( xFormComps, nNodeIdx );
-        if( !rControls.C40_PTR_INSERT( HTMLControl, pHCntrl ) )
+        HTMLControls::const_iterator it = rControls.find( pHCntrl );
+        if( it == rControls.end() )
+            rControls.insert( pHCntrl );
+        else
         {
-            sal_uInt16 nPos = 0;
-            if( rControls.Seek_Entry(pHCntrl,&nPos) &&
-                rControls[nPos]->xFormComps==xFormComps )
-                rControls[nPos]->nCount++;
+            if( (*it)->xFormComps==xFormComps )
+                (*it)->nCount++;
             delete pHCntrl;
         }
     }
@@ -1464,6 +1440,5 @@ HTMLControl::HTMLControl(
 
 HTMLControl::~HTMLControl()
 {}
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
