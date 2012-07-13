@@ -56,8 +56,7 @@ class TeleManagerImpl;
     Accounts need to have been setup within Empathy already.
  */
 
-/* FIXME: selective dllprivate methods */
-class TUBES_DLLPUBLIC TeleManager
+class TeleManager
 {
 public:
 
@@ -79,14 +78,14 @@ public:
     TeleManager( bool bCreateOwnGMainLoop = false );
     ~TeleManager();
 
-    static TeleManager     *get();
-    void                    unref();
+    TUBES_DLLPUBLIC static TeleManager*     get();
+    TUBES_DLLPUBLIC void                    unref();
 
     /** Connect to DBus and create AccountManager. */
-    bool                    createAccountManager();
+    TUBES_DLLPUBLIC bool                    createAccountManager();
 
     /** Setup client handlers. */
-    bool                    registerClients();
+    TUBES_DLLPUBLIC bool                    registerClients();
 
     /** Prepare the Telepathy Account Manager.
         Requires createAccountManager() to have succeeded.
@@ -96,13 +95,13 @@ public:
 
         TODO: this needs some signalling mechanism
      */
-    void                    prepareAccountManager();
-    AccountManagerStatus    getAccountManagerStatus() const;
+    TUBES_DLLPUBLIC void                    prepareAccountManager();
+    TUBES_DLLPUBLIC AccountManagerStatus    getAccountManagerStatus() const;
 
     /** Fetches the contact list. Returns 0 before connect() is called successfully.
         Is non-functional until prepareAccountManager().
      */
-    ContactList*            getContactList() const;
+    TUBES_DLLPUBLIC ContactList*            getContactList() const;
 
     /** Start a group session in a MUC.
 
@@ -118,9 +117,9 @@ public:
             empty, only the conference's UUID is used and rConferenceRoom is
             ignored, hopefully resulting in a local DBus tube.
      */
-    TeleConference*         startGroupSession( TpAccount *pAccount,
-                                               const rtl::OUString& rConferenceRoom,
-                                               const rtl::OUString& rConferenceServer );
+    TUBES_DLLPUBLIC TeleConference*         startGroupSession( TpAccount *pAccount,
+                                                const rtl::OUString& rConferenceRoom,
+                                                const rtl::OUString& rConferenceServer );
 
     /** Start a session with a buddy.
 
@@ -130,7 +129,7 @@ public:
         @param pBuddy
             The buddy to be connected. Must be a contact of pAccount.
      */
-    TeleConference*         startBuddySession( TpAccount *pAccount, TpContact *pBuddy );
+    TUBES_DLLPUBLIC TeleConference*         startBuddySession( TpAccount *pAccount, TpContact *pBuddy );
 
     void                    disconnect();
 
@@ -219,11 +218,11 @@ private:
      */
     static TeleManager*     pSingleton;
     static sal_uInt32       nAnotherRefCount;
-    TUBES_DLLPRIVATE static ::osl::Mutex&   GetAnotherMutex();
+    static ::osl::Mutex&    GetAnotherMutex();
 
     friend class TeleManagerImpl;   // access to mutex
 
-    TUBES_DLLPRIVATE static ::osl::Mutex&   GetMutex();
+    static ::osl::Mutex&    GetMutex();
 };
 
 
