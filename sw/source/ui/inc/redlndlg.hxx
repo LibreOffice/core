@@ -40,6 +40,7 @@
 #include <svx/ctredlin.hxx>
 #include <svx/postattr.hxx>
 #include <boost/ptr_container/ptr_vector.hpp>
+#include <o3tl/sorted_vector.hxx>
 
 class SwChildWinWrapper;
 
@@ -63,10 +64,9 @@ struct SwRedlineDataParent
                         { return (pData && pData->GetSeqNo() <  rObj.pData->GetSeqNo()); }
 };
 
-typedef SwRedlineDataParent* SwRedlineDataParentPtr;
 typedef boost::ptr_vector<SwRedlineDataParent> SwRedlineDataParentArr;
 
-SV_DECL_PTRARR_SORT(SwRedlineDataParentSortArr, SwRedlineDataParentPtr, 10)
+class SwRedlineDataParentSortArr : public o3tl::sorted_vector<SwRedlineDataParent*, o3tl::less_ptr_to<SwRedlineDataParent> > {};
 
 
 typedef SwRedlineDataChild* SwRedlineDataChildPtr;

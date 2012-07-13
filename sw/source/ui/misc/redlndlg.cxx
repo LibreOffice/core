@@ -67,8 +67,6 @@
 
 SFX_IMPL_MODELESSDIALOG_WITHID( SwRedlineAcceptChild, FN_REDLINE_ACCEPT )
 
-SV_IMPL_OP_PTRARR_SORT(SwRedlineDataParentSortArr, SwRedlineDataParentPtr)
-
 static sal_uInt16 nSortMode = 0xffff;
 static sal_Bool   bSortDir = sal_True;
 
@@ -257,7 +255,7 @@ void SwRedlineAcceptDlg::Init(sal_uInt16 nStart)
 {
     SwWait aWait( *::GetActiveView()->GetDocShell(), sal_False );
     pTable->SetUpdateMode(sal_False);
-    aUsedSeqNo.Remove((sal_uInt16)0, aUsedSeqNo.Count());
+    aUsedSeqNo.clear();
 
     if (nStart)
         RemoveParents(nStart, aRedlineParents.size() - 1);
@@ -401,7 +399,7 @@ void SwRedlineAcceptDlg::Activate()
     SwView *pView = ::GetActiveView();
     SwWait aWait( *pView->GetDocShell(), sal_False );
 
-    aUsedSeqNo.Remove((sal_uInt16)0, aUsedSeqNo.Count());
+    aUsedSeqNo.clear();
 
     if (!pView) // can happen when switching to another app, when a Listbox in the dialog
         return; // had the focus previously (actually THs Bug)
@@ -582,13 +580,13 @@ void SwRedlineAcceptDlg::InsertChildren(SwRedlineDataParent *pParent, const SwRe
     bValidParent = bValidParent && pTable->IsValidEntry(&rRedln.GetAuthorString(), &rRedln.GetTimeStamp(), &rRedln.GetComment());
     if (nAutoFmt)
     {
-        sal_uInt16 nPos;
+        SwRedlineDataParentSortArr::const_iterator it;
 
-        if (pParent->pData->GetSeqNo() && !aUsedSeqNo.Insert(pParent, nPos))    // already there
+        if ( pParent->pData->GetSeqNo() && (it = aUsedSeqNo.insert(pParent).first) != aUsedSeqNo.end() )    // already there
         {
             if (pParent->pTLBParent)
             {
-                pTable->SetEntryText(sAutoFormat, aUsedSeqNo[nPos]->pTLBParent, 0);
+                pTable->SetEntryText(sAutoFormat, (*it)->pTLBParent, 0);
                 pTable->RemoveEntry(pParent->pTLBParent);
                 pParent->pTLBParent = 0;
             }
@@ -645,7 +643,7 @@ void SwRedlineAcceptDlg::InsertChildren(SwRedlineDataParent *pParent, const SwRe
         pTable->RemoveEntry(pParent->pTLBParent);
         pParent->pTLBParent = 0;
         if (nAutoFmt)
-            aUsedSeqNo.Remove(pParent);
+            aUsedSeqNo.erase(pParent);
     }
 }
 
@@ -738,7 +736,7 @@ void SwRedlineAcceptDlg::InsertParents(sal_uInt16 nStart, sal_uInt16 nEnd)
 
     RedlinData *pData;
     SvLBoxEntry *pParent;
-    SwRedlineDataParentPtr pRedlineParent;
+    SwRedlineDataParent* pRedlineParent;
     const SwRedline* pCurrRedline;
     if( !nStart && !pTable->FirstSelected() )
     {
@@ -1244,5 +1242,6 @@ void SwRedlineAcceptDlg::FillInfo(String &rExtraData) const
     }
     rExtraData += ')';
 }
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
