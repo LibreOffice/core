@@ -589,9 +589,9 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
 
     // Wert fuer FRAME bestimmen
     sal_uInt16 nFrameMask = 15;
-    if( !(aRows[0])->bTopBorder )
+    if( !(aRows.front())->bTopBorder )
         nFrameMask &= ~1;
-    if( !(aRows[aRows.Count()-1])->bBottomBorder )
+    if( !(aRows.back())->bBottomBorder )
         nFrameMask &= ~2;
     if( !(aCols.front())->bLeftBorder )
         nFrameMask &= ~4;
@@ -602,7 +602,7 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
     sal_Bool bRowsHaveBorder = sal_False;
     sal_Bool bRowsHaveBorderOnly = sal_True;
     SwWriteTableRow *pRow = aRows[0];
-    for( nRow=1; nRow < aRows.Count(); nRow++ )
+    for( nRow=1; nRow < aRows.size(); nRow++ )
     {
         SwWriteTableRow *pNextRow = aRows[nRow];
         sal_Bool bBorder = ( pRow->bBottomBorder || pNextRow->bTopBorder );
@@ -841,7 +841,7 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
     // Zeile nur ausgegeben werden, wenn unter der Zeile eine Linie ist
     if( bTHead &&
         (bTSections || bColGroups) &&
-        nHeadEndRow<aRows.Count()-1 && !aRows[nHeadEndRow]->bBottomBorder )
+        nHeadEndRow<aRows.size()-1 && !aRows[nHeadEndRow]->bBottomBorder )
         bTHead = sal_False;
 
     // <TBODY> aus ausgeben, wenn <THEAD> ausgegeben wird.
@@ -856,12 +856,12 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
         rWrt.IncIndentLevel(); // Inhalt von <THEAD>/<TDATA> einr.
     }
 
-    for( nRow = 0; nRow < aRows.Count(); nRow++ )
+    for( nRow = 0; nRow < aRows.size(); nRow++ )
     {
         const SwWriteTableRow *pRow2 = aRows[nRow];
 
         OutTableCells( rWrt, pRow2->GetCells(), pRow2->GetBackground() );
-        if( !nCellSpacing && nRow < aRows.Count()-1 && pRow2->bBottomBorder &&
+        if( !nCellSpacing && nRow < aRows.size()-1 && pRow2->bBottomBorder &&
             pRow2->nBottomBorder > DEF_LINE_WIDTH_1 )
         {
             sal_uInt16 nCnt = (pRow2->nBottomBorder / DEF_LINE_WIDTH_1) - 1;
@@ -876,7 +876,7 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
         }
         if( ( (bTHead && nRow==nHeadEndRow) ||
               (bTBody && pRow2->bBottomBorder) ) &&
-            nRow < aRows.Count()-1 )
+            nRow < aRows.size()-1 )
         {
             rWrt.DecIndentLevel(); // Inhalt von <THEAD>/<TDATA> einr.
             rWrt.OutNewLine(); // </THEAD>/</TDATA> in neue Zeile

@@ -41,8 +41,6 @@
 using ::editeng::SvxBorderLine;
 using namespace ::com::sun::star;
 
-SV_IMPL_OP_PTRARR_SORT( SwWriteTableRows, SwWriteTableRowPtr )
-
 //-----------------------------------------------------------------------
 
 sal_Int16 SwWriteTableCell::GetVertOri() const
@@ -269,7 +267,7 @@ sal_uInt16 SwWriteTable::MergeBoxBorders( const SwTableBox *pBox,
     if( rBoxItem.GetBottom() )
     {
         nBorderMask |= 2;
-        MergeBorders( rBoxItem.GetBottom(), nRow+nRowSpan==aRows.Count() );
+        MergeBorders( rBoxItem.GetBottom(), nRow+nRowSpan==aRows.size() );
         rBottomBorder = rBoxItem.GetBottom()->GetOutWidth();
     }
 
@@ -396,7 +394,7 @@ long SwWriteTable::GetAbsHeight( long nRawHeight, sal_uInt16 nRow,
     }
 
     // In der letzten Zeile noch die Liniendicke abziehen
-    if( nRow+nRowSpan==aRows.Count() )
+    if( nRow+nRowSpan==aRows.size() )
     {
         if( !pRow || nRowSpan > 1 )
             pRow = aRows[nRow+nRowSpan-1];
@@ -452,11 +450,8 @@ void SwWriteTable::CollectTableRowsCols( long nStartRPos,
                 nRPos += nLineHeight;
             }
             SwWriteTableRow *pRow = new SwWriteTableRow( nRPos, bUseLayoutHeights);
-            sal_uInt16 nRow;
-            if( aRows.Seek_Entry( pRow, &nRow ) )
+            if( !aRows.insert( pRow ).second )
                 delete pRow;
-            else
-                aRows.Insert( pRow );
         }
         else
         {
@@ -465,9 +460,8 @@ void SwWriteTable::CollectTableRowsCols( long nStartRPos,
 #endif
             nRPos = nStartRPos + nParentLineHeight;
 #if OSL_DEBUG_LEVEL > 0
-            SwWriteTableRow aRow( nStartRPos + nParentLineHeight, bUseLayoutHeights );
-            OSL_ENSURE( aRows.Seek_Entry(&aRow),
-                    "Parent-Zeile nicht gefunden" );
+            SwWriteTableRow aSrchRow( nRPos, bUseLayoutHeights );
+            OSL_ENSURE( aRows.find( &aSrchRow ) != aRows.end(), "Parent-Zeile nicht gefunden" );
             SwWriteTableRow aRowCheckPos(nCheckPos,bUseLayoutHeights);
             SwWriteTableRow aRowRPos(nRPos,bUseLayoutHeights);
             OSL_ENSURE( !bUseLayoutHeights ||
@@ -584,10 +578,10 @@ void SwWriteTable::FillTableRowsCols( long nStartRPos, sal_uInt16 nStartRow,
 
         // Und ihren Index
         sal_uInt16 nOldRow = nRow;
-        SwWriteTableRow aRow( nRPos,bUseLayoutHeights );
-        bool const bFound = aRows.Seek_Entry( &aRow, &nRow );
-        OSL_ENSURE( bFound, "missing row" );
-        (void) bFound; // unused in non-debug
+        SwWriteTableRow aSrchRow( nRPos,bUseLayoutHeights );
+        SwWriteTableRows::const_iterator it2 = aRows.find( &aSrchRow );
+        OSL_ENSURE( it2 != aRows.end(), "missing row" );
+        nRow = it2 - aRows.begin();
 
         OSL_ENSURE( nOldRow <= nRow, "Don't look back!" );
         if( nOldRow > nRow )
@@ -818,7 +812,7 @@ SwWriteTable::SwWriteTable( const SwHTMLTableLayout *pLayoutInfo )
             new SwWriteTableRow( (nRow+1)*ROW_DFLT_HEIGHT, bUseLayoutHeights );
         pRow->nTopBorder = 0;
         pRow->nBottomBorder = 0;
-        aRows.Insert( pRow );
+        aRows.insert( pRow );
     }
 
     // Und jetzt mit leben fuellen

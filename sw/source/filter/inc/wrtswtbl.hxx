@@ -30,7 +30,6 @@
 
 #include <tools/solar.h>
 #include <tools/color.hxx>
-#include <svl/svarray.hxx>
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <o3tl/sorted_vector.hxx>
 
@@ -173,8 +172,10 @@ inline int SwWriteTableRow::operator<( const SwWriteTableRow& rRow ) const
     return nPos < rRow.nPos - (mbUseLayoutHeights ? 0 : ROWFUZZY);
 }
 
-typedef SwWriteTableRow *SwWriteTableRowPtr;
-SV_DECL_PTRARR_SORT_DEL( SwWriteTableRows, SwWriteTableRowPtr, 5 )
+class SwWriteTableRows : public o3tl::sorted_vector<SwWriteTableRow*, o3tl::less_ptr_to<SwWriteTableRow> > {
+public:
+    ~SwWriteTableRows() { DeleteAndDestroyAll(); }
+};
 
 
 //-----------------------------------------------------------------------
