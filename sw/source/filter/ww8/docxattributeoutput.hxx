@@ -98,6 +98,10 @@ public:
 
     virtual void WritePostitFieldReference();
 
+    virtual void WritePostitFieldStart();
+
+    virtual void WritePostitFieldEnd();
+
     /// Output text (inside a run).
     virtual void RunText( const String& rText, rtl_TextEncoding eCharSet = RTL_TEXTENCODING_UTF8 );
 
@@ -522,6 +526,7 @@ private:
     void DoWriteBookmarks( );
     void WritePostponedGraphic();
     void WritePostponedMath();
+    void WriteCommentRanges();
 
     void StartField_Impl( FieldInfos& rInfos, bool bWriteRun = sal_False );
     void DoWriteCmd( String& rCmd );
@@ -558,6 +563,11 @@ private:
     /// Bookmarks to output
     std::vector<rtl::OString> m_rMarksStart;
     std::vector<rtl::OString> m_rMarksEnd;
+
+    /// Is there a postit start to output?
+    bool m_bPostitStart;
+    /// Is there a postit end to output?
+    bool m_bPostitEnd;
 
     /// Maps of the bookmarks ids
     std::map<rtl::OString, sal_uInt16> m_rOpenedMarksIds;
