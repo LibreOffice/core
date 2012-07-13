@@ -3538,6 +3538,12 @@ void DomainMapper_Impl::SetCurrentRedlineAuthor( rtl::OUString sAuthor )
         m_xAnnotationField->setPropertyValue("Author", uno::makeAny(sAuthor));
 }
 
+void DomainMapper_Impl::SetCurrentRedlineInitials( rtl::OUString sInitials )
+{
+    if (m_xAnnotationField.is())
+        m_xAnnotationField->setPropertyValue("Initials", uno::makeAny(sInitials));
+}
+
 void DomainMapper_Impl::SetCurrentRedlineDate( rtl::OUString sDate )
 {
     if (!m_xAnnotationField.is())

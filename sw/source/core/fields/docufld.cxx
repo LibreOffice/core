@@ -1799,6 +1799,11 @@ rtl::OUString SwPostItField::GetPar2() const
         return sTxt;
 }
 
+const rtl::OUString& SwPostItField::GetInitials() const
+{
+    return sInitials;
+}
+
 const OutlinerParaObject* SwPostItField::GetTextObject() const
 {
     return mpText;

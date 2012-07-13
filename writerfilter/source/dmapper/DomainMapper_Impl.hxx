@@ -621,6 +621,7 @@ public:
     void SetCurrentRedlineToken( sal_Int32 nToken );
     void RemoveCurrentRedline( );
     void ResetParaRedline( );
+    void SetCurrentRedlineInitials( rtl::OUString sInitials );
 
     void ApplySettingsTable();
     SectionPropertyMap * GetSectionContext();

@@ -3360,7 +3360,8 @@ void DocxAttributeOutput::WritePostitFields()
         const SwPostItField* f = m_postitFields[ i ];
         m_pSerializer->startElementNS( XML_w, XML_comment, FSNS( XML_w, XML_id ), idstr.getStr(),
             FSNS( XML_w, XML_author ), rtl::OUStringToOString( f->GetPar1(), RTL_TEXTENCODING_UTF8 ).getStr(),
-            FSNS( XML_w, XML_date ), msfilter::util::DateTimeToOString(f->GetDateTime()).getStr(), FSEND );
+            FSNS( XML_w, XML_date ), msfilter::util::DateTimeToOString(f->GetDateTime()).getStr(),
+            FSNS( XML_w, XML_initials ), rtl::OUStringToOString( f->GetInitials(), RTL_TEXTENCODING_UTF8 ).getStr(), FSEND );
         // Check for the text object existing, it seems that it can be NULL when saving a newly created
         // comment without giving focus back to the main document. As GetTxt() is empty in that case as well,
         // that is probably a bug in the Writer core.

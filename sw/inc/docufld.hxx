@@ -545,6 +545,7 @@ public:
     virtual rtl::OUString   GetPar2() const;
     virtual void            SetPar2(const rtl::OUString& rStr);
     const rtl::OUString&    GetTxt() const { return sTxt; }
+    const rtl::OUString&    GetInitials() const;
 
     const OutlinerParaObject*   GetTextObject() const;
     void SetTextObject( OutlinerParaObject* pText );

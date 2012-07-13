@@ -1361,6 +1361,9 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
         case NS_ooxml::LN_EG_RangeMarkupElements_commentRangeEnd:
             m_pImpl->AddAnnotationPosition(false);
         break;
+        case NS_ooxml::LN_CT_Comment_initials:
+            m_pImpl->SetCurrentRedlineInitials(sStringValue);
+        break;
         case NS_ooxml::LN_token:
             m_pImpl->SetCurrentRedlineToken( nIntValue );
         break;
