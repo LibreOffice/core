@@ -40,7 +40,7 @@ Receiver::~Receiver()
 void Receiver::parseCommand( std::vector<OString> aCommand )
 {
     fprintf( stderr, "Parsing:\n");
-    for (int i = 0; i < aCommand.size(); i++)
+    for (size_t i = 0; i < aCommand.size(); i++)
     {
     fprintf( stderr, "%s\n", aCommand[i].getStr() );}
     fprintf( stderr, "End parse\n" );
@@ -100,7 +100,7 @@ void sendPreview(sal_uInt32 aSlideNumber,
 
     aBuffer.append( "slide_preview\n" );
 
-    rtl::OString aSlideNumberString( rtl::OString::valueOf( 2 ) ); // FIXME get number
+    rtl::OString aSlideNumberString( rtl::OString::valueOf( sal_Int32(2) ) ); // FIXME get number
     aBuffer.append( aSlideNumberString.getStr() );
     aBuffer.append( "\n" );
 
