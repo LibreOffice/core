@@ -112,8 +112,4 @@ $(eval $(call gb_Library_add_exception_objects,chartview,\
     chart2/source/view/main/VTitle \
 ))
 
-$(eval $(call gb_Library_use_externals,chartview,\
-	libxml2 \
-))
-
 # vim: set noet sw=4 ts=4:
