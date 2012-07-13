@@ -1142,9 +1142,7 @@ sal_Bool ScViewFunc::MergeCells( sal_Bool bApi, sal_Bool& rDoContents, sal_Bool 
 
     if (bOk)
     {
-        HideCursor();
         bOk = pDocSh->GetDocFunc().MergeCells( aMergeOption, rDoContents, bRecord, bApi );
-        ShowCursor();
 
         if (bOk)
         {
@@ -1243,11 +1241,9 @@ sal_Bool ScViewFunc::RemoveMerge( sal_Bool bRecord )
         }
         while (bExtended);
 
-        HideCursor();
         sal_Bool bOk = pDocSh->GetDocFunc().UnmergeCells(aOption, bRecord, false );
         aExtended = aOption.getFirstSingleRange();
         MarkRange( aExtended );
-        ShowCursor();
 
         if (bOk)
             pDocSh->UpdateOle(GetViewData());

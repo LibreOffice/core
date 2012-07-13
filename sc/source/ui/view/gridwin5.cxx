@@ -61,32 +61,6 @@
 
 // -----------------------------------------------------------------------
 
-ScHideTextCursor::ScHideTextCursor( ScViewData* pData, ScSplitPos eW ) :
-    pViewData(pData),
-    eWhich(eW)
-{
-    Window* pWin = pViewData->GetView()->GetWindowByPos( eWhich );
-    if (pWin)
-    {
-        Cursor* pCur = pWin->GetCursor();
-        if ( pCur && pCur->IsVisible() )
-            pCur->Hide();
-    }
-}
-
-ScHideTextCursor::~ScHideTextCursor()
-{
-    Window* pWin = pViewData->GetView()->GetWindowByPos( eWhich );
-    if (pWin)
-    {
-        //  restore text cursor
-        if ( pViewData->HasEditView(eWhich) && pWin->HasFocus() )
-            pViewData->GetEditView(eWhich)->ShowCursor( false, sal_True );
-    }
-}
-
-// -----------------------------------------------------------------------
-
 bool ScGridWindow::ShowNoteMarker( SCsCOL nPosX, SCsROW nPosY, bool bKeyboard )
 {
     bool bDone = false;
@@ -367,8 +341,6 @@ void ScGridWindow::RequestHelp(const HelpEvent& rHEvt)
                 SCTAB       nTab = pViewData->GetTabNo();
                 pViewData->GetPosFromPixel( aPosPixel.X(), aPosPixel.Y(), eWhich, nPosX, nPosY );
                 const ScPatternAttr* pPattern = pDoc->GetPattern( nPosX, nPosY, nTab );
-
-                ScHideTextCursor aHideCursor( pViewData, eWhich );      // MapMode is changed in GetEditArea
 
                 // bForceToTop = sal_False, use the cell's real position
                 aPixRect = pViewData->GetEditArea( eWhich, nPosX, nPosY, this, pPattern, false );

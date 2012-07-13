@@ -81,17 +81,6 @@ struct SpellCallbackInfo;
 #define SC_PD_BREAK_V       32
 
 
-class ScHideTextCursor
-{
-private:
-    ScViewData* pViewData;
-    ScSplitPos  eWhich;
-
-public:
-            ScHideTextCursor( ScViewData* pData, ScSplitPos eW );
-            ~ScHideTextCursor();
-};
-
 // ---------------------------------------------------------------------------
 // predefines
 namespace sdr { namespace overlay { class OverlayObjectList; }}

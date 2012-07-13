@@ -182,8 +182,6 @@ void ScViewFunc::CutToClip( ScDocument* pClipDoc, sal_Bool bIncludeObjects )
         sal_uInt16 nExtFlags = 0;
         pDocSh->UpdatePaintExt( nExtFlags, aRange );
 
-        HideCursor();                           // Cursor aendert sich !
-
         rMark.MarkToMulti();
         pDoc->DeleteSelection( IDF_ALL, rMark );
         if ( bIncludeObjects )
@@ -198,7 +196,6 @@ void ScViewFunc::CutToClip( ScDocument* pClipDoc, sal_Bool bIncludeObjects )
                 new ScUndoCut( pDocSh, aRange, aOldEnd, rMark, pUndoDoc ) );
 
         aModificator.SetDocumentModified();
-        ShowCursor();                           // Cursor aendert sich !
         pDocSh->UpdateOle(GetViewData());
 
         CellContentChanged();
@@ -806,23 +803,6 @@ sal_Bool lcl_SelHasAttrib( ScDocument* pDoc, SCCOL nCol1, SCROW nRow1, SCCOL nCo
 
 namespace {
 
-class CursorSwitcher
-{
-public:
-    CursorSwitcher(ScViewFunc* pViewFunc) :
-        mpViewFunc(pViewFunc)
-    {
-        mpViewFunc->HideCursor();
-    }
-
-    ~CursorSwitcher()
-    {
-        mpViewFunc->ShowCursor();
-    }
-private:
-    ScViewFunc* mpViewFunc;
-};
-
 bool checkDestRangeForOverwrite(const ScRangeList& rDestRanges, const ScDocument* pDoc, const ScMarkData& rMark, Window* pParentWnd)
 {
     bool bIsEmpty = true;
@@ -1259,8 +1239,6 @@ bool ScViewFunc::PasteFromClip( sal_uInt16 nFlags, ScDocument* pClipDoc,
     rMark.SetMarkArea( aUserRange );
     MarkDataChanged();
 
-    HideCursor();                           // Cursor aendert sich !
-
         //
         //  Aus Clipboard kopieren,
         //  wenn gerechnet werden soll, Originaldaten merken
@@ -1359,8 +1337,6 @@ bool ScViewFunc::PasteFromClip( sal_uInt16 nFlags, ScDocument* pClipDoc,
                 ScRange(nClipStartX, nClipStartY, nStartTab, nClipStartX+nClipSizeX, nClipStartY, nStartTab),
                 PAINT_GRID );
         }
-
-    ShowCursor();                           // Cursor aendert sich !
 
     //!     Block-Bereich bei RefUndoDoc weglassen !!!
 
@@ -1563,7 +1539,6 @@ bool ScViewFunc::PasteMultiRangesFromClip(
     if (pDoc->IsUndoEnabled())
         pDoc->BeginDrawUndo();
 
-    CursorSwitcher aCursorSwitch(this);
     sal_uInt16 nNoObjFlags = nFlags & ~IDF_OBJECTS;
     pDoc->CopyMultiRangeFromClip(rCurPos, aMark, nNoObjFlags, pClipDoc,
                                  true, bAsLink, false, bSkipEmpty);
@@ -1715,8 +1690,6 @@ bool ScViewFunc::PasteFromClipToMultiRanges(
         pDocSh->MakeDrawLayer();
     if (pDoc->IsUndoEnabled())
         pDoc->BeginDrawUndo();
-
-    CursorSwitcher aCursorSwitch(this);
 
     // First, paste everything but the drawing objects.
     for (size_t i = 0, n = aRanges.size(); i < n; ++i)

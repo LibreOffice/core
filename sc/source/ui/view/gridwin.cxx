@@ -735,9 +735,7 @@ void ScGridWindow::RefreshAutoFilterButton(const ScAddress& rPos)
         bool bFilterActive = IsAutoFilterActive(rPos.Col(), rPos.Row(), rPos.Tab());
         mpFilterButton->setHasHiddenMember(bFilterActive);
         mpFilterButton->setPopupPressed(false);
-        HideCursor();
         mpFilterButton->draw();
-        ShowCursor();
     }
 }
 
@@ -4683,11 +4681,9 @@ void ScGridWindow::UpdateAutoFillMark(bool bMarked, const ScRange& rMarkRange)
 {
     if ( bMarked != bAutoMarkVisible || ( bMarked && rMarkRange.aEnd != aAutoMarkPos ) )
     {
-        HideCursor();
         bAutoMarkVisible = bMarked;
         if ( bMarked )
             aAutoMarkPos = rMarkRange.aEnd;
-        ShowCursor();
 
         UpdateAutoFillOverlay();
     }
@@ -5116,8 +5112,6 @@ bool ScGridWindow::GetEditUrlOrError( bool bSpellErr, const Point& rPos,
     if( !bFound )
         return false;
 
-    ScHideTextCursor aHideCursor( pViewData, eWhich );  // before GetEditArea (MapMode is changed)
-
     const ScPatternAttr* pPattern = pDoc->GetPattern( nPosX, nPosY, nTab );
     // bForceToTop = sal_False, use the cell's real position
     Rectangle aEditRect = pViewData->GetEditArea( eWhich, nPosX, nPosY, this, pPattern, false );
@@ -5268,8 +5262,6 @@ bool ScGridWindow::GetEditUrlOrError( bool bSpellErr, const Point& rPos,
         }
 
         SetMapMode(aOld);
-
-        //  text cursor is restored in ScHideTextCursor dtor
 
         return bRet;
     }

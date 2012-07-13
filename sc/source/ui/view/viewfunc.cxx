@@ -2309,8 +2309,6 @@ void ScViewFunc::SetWidthOrHeight( sal_Bool bWidth, SCCOLROW nRangeCnt, SCCOLROW
 
     if (bPaint)
     {
-        HideCursor();
-
         itr = pMarkData->begin();
         for (; itr != itrEnd; ++itr)
         {
@@ -2339,8 +2337,6 @@ void ScViewFunc::SetWidthOrHeight( sal_Bool bWidth, SCCOLROW nRangeCnt, SCCOLROW
         pDocSh->UpdateOle(GetViewData());
         if( !pDocSh->IsReadOnly() )
         aModificator.SetDocumentModified();
-
-        ShowCursor();
     }
 
     // #i97876# Spreadsheet data changes are not notified
