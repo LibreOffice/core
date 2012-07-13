@@ -1876,18 +1876,19 @@ static sal_Bool loadProfile(osl_TFile* pFile, osl_TProfileImpl* pProfile)
     sal_Char* pLine;
     sal_Char* bWasAdded = NULL;
 
+
+    if ( !pFile )
+    {
+        return sal_False;
+    }
+
+    if ( !pProfile )
+    {
+        return sal_False;
+    }
+
     pProfile->m_NoLines    = 0;
     pProfile->m_NoSections = 0;
-
-    if ( pFile == 0 )
-    {
-        return sal_False;
-    }
-
-    if ( pProfile == 0 )
-    {
-        return sal_False;
-    }
 
     OSL_VERIFY(OslProfile_rewindFile(pFile, sal_False));
 
