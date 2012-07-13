@@ -75,7 +75,7 @@ ScMyTables::ScMyTables(ScXMLImport& rTempImport)
     : rImport(rTempImport),
     aFixupOLEs(rTempImport),
     maCurrentCellPos(ScAddress::INITIALIZE_INVALID),
-    nCurrentColStylePos(0),
+    nCurrentColCount(0),
     nCurrentDrawPage( -1 ),
     nCurrentXShapes( -1 )
 {
@@ -113,7 +113,7 @@ void ScMyTables::NewSheet(const rtl::OUString& sTableName, const rtl::OUString& 
 {
     if (rImport.GetModel().is())
     {
-        nCurrentColStylePos = 0;
+        nCurrentColCount = 0;
         sCurrentSheetName = sTableName;
         //reset cols and rows for new sheet, but increment tab
         maCurrentCellPos.SetCol(-1);
@@ -227,8 +227,8 @@ void ScMyTables::DeleteTable()
 
 void ScMyTables::AddColStyle(const sal_Int32 nRepeat, const rtl::OUString& rCellStyleName)
 {
-    rImport.GetStylesImportHelper()->AddColumnStyle(rCellStyleName, nCurrentColStylePos, nRepeat);
-    nCurrentColStylePos += nRepeat;
+    rImport.GetStylesImportHelper()->AddColumnStyle(rCellStyleName, nCurrentColCount, nRepeat);
+    nCurrentColCount += nRepeat;
 }
 
 uno::Reference< drawing::XDrawPage > ScMyTables::GetCurrentXDrawPage()

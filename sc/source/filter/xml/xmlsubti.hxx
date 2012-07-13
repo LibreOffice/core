@@ -71,7 +71,7 @@ private:
     ScAddress                           maCurrentCellPos;
     ScRangeList                         maMatrixRangeList;
     ScXMLTabProtectionData              maProtectionData;
-    sal_Int32                           nCurrentColStylePos;
+    sal_Int32                           nCurrentColCount;
     sal_Int16                           nCurrentDrawPage;
     sal_Int16                           nCurrentXShapes;
 
@@ -96,7 +96,7 @@ public:
     ScXMLTabProtectionData&             GetCurrentProtectionData() { return maProtectionData; }
     rtl::OUString                       GetCurrentSheetName() const { return sCurrentSheetName; }
     SCTAB                               GetCurrentSheet() const { return (maCurrentCellPos.Tab() >= 0) ? maCurrentCellPos.Tab() : 0; }
-    SCCOL                               GetCurrentColumn() const { return (maCurrentCellPos.Col() >= 0) ? maCurrentCellPos.Col() : 0; }
+    SCCOL                               GetCurrentColCount() const { return nCurrentColCount; }
     SCROW                               GetCurrentRow() const { return (maCurrentCellPos.Row() >= 0) ? maCurrentCellPos.Row() : 0; }
     ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSpreadsheet >
                                         GetCurrentXSheet() const { return xCurrentSheet; }

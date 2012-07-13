@@ -118,7 +118,7 @@ void ScXMLTableColContext::EndElement()
 {
     ScXMLImport& rXMLImport = GetScImport();
     SCTAB nSheet = rXMLImport.GetTables().GetCurrentSheet();
-    sal_Int32 nCurrentColumn = rXMLImport.GetTables().GetCurrentColumn();
+    sal_Int32 nCurrentColumn = rXMLImport.GetTables().GetCurrentColCount();
     uno::Reference<sheet::XSpreadsheet> xSheet(rXMLImport.GetTables().GetCurrentXSheet());
     if(xSheet.is())
     {
@@ -187,10 +187,10 @@ ScXMLTableColsContext::ScXMLTableColsContext( ScXMLImport& rImport,
 {
     // don't have any attributes
     if (bHeader)
-        nHeaderStartCol = rImport.GetTables().GetCurrentColumn();
+        nHeaderStartCol = rImport.GetTables().GetCurrentColCount();
     else if (bGroup)
     {
-        nGroupStartCol = rImport.GetTables().GetCurrentColumn();
+        nGroupStartCol = rImport.GetTables().GetCurrentColCount();
         sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
         for( sal_Int16 i=0; i < nAttrCount; ++i )
         {
@@ -257,7 +257,7 @@ void ScXMLTableColsContext::EndElement()
     ScXMLImport& rXMLImport = GetScImport();
     if (bHeader)
     {
-        nHeaderEndCol = rXMLImport.GetTables().GetCurrentColumn();
+        nHeaderEndCol = rXMLImport.GetTables().GetCurrentColCount();
         nHeaderEndCol--;
         if (nHeaderStartCol <= nHeaderEndCol)
         {
@@ -284,7 +284,7 @@ void ScXMLTableColsContext::EndElement()
     else if (bGroup)
     {
         SCTAB nSheet = rXMLImport.GetTables().GetCurrentSheet();
-        nGroupEndCol = rXMLImport.GetTables().GetCurrentColumn();
+        nGroupEndCol = rXMLImport.GetTables().GetCurrentColCount();
         nGroupEndCol--;
         if (nGroupStartCol <= nGroupEndCol)
         {
