@@ -74,6 +74,11 @@ public:
         return 0;
     }
 
+    void erase( size_t index )
+    {
+        std::vector<Value>::erase( _begin() + index );
+    }
+
     // ACCESSORS
 
     // Only return a const iterator, so that the vector cannot be directly updated.

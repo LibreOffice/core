@@ -70,6 +70,36 @@ public:
         aVec.DeleteAndDestroyAll();
     }
 
+    void testErase()
+    {
+        o3tl::sorted_vector<SwContent*, o3tl::less_ptr_to<SwContent> > aVec;
+        SwContent *p1 = new SwContent(1);
+        SwContent *p2 = new SwContent(2);
+        SwContent *p3 = new SwContent(3);
+        SwContent *p4 = new SwContent(4);
+
+        aVec.insert(p1);
+        aVec.insert(p2);
+        aVec.insert(p3);
+
+        CPPUNIT_ASSERT( aVec.erase(p1) == 1 );
+        CPPUNIT_ASSERT( aVec.size() == 2 );
+
+        aVec.erase(1);
+        CPPUNIT_ASSERT( aVec.size() == 1 );
+
+        CPPUNIT_ASSERT( aVec.erase(p4) == 0 );
+
+        aVec.clear();
+        CPPUNIT_ASSERT( aVec.size() == 0 );
+
+        aVec.insert(p1);
+        aVec.insert(p2);
+        aVec.insert(p3);
+        aVec.DeleteAndDestroyAll();
+        CPPUNIT_ASSERT( aVec.size() == 0 );
+    }
+
     void testInsertRange()
     {
         o3tl::sorted_vector<SwContent*, o3tl::less_ptr_to<SwContent> > aVec1;
@@ -109,6 +139,7 @@ public:
 
     CPPUNIT_TEST_SUITE(sorted_vector_test);
     CPPUNIT_TEST(testBasics);
+    CPPUNIT_TEST(testErase);
     CPPUNIT_TEST(testInsertRange);
     CPPUNIT_TEST(testLowerBound);
     CPPUNIT_TEST_SUITE_END();
