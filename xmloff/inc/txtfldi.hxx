@@ -1341,11 +1341,13 @@ protected:
 class XMLAnnotationImportContext : public XMLTextFieldImportContext
 {
     const ::rtl::OUString sPropertyAuthor;
+    const ::rtl::OUString sPropertyInitials;
     const ::rtl::OUString sPropertyContent;
     const ::rtl::OUString sPropertyDate;
     const ::rtl::OUString sPropertyTextRange;
 
     ::rtl::OUStringBuffer aAuthorBuffer;
+    ::rtl::OUStringBuffer aInitialsBuffer;
     ::rtl::OUStringBuffer aTextBuffer;
     ::rtl::OUStringBuffer aDateBuffer;
 

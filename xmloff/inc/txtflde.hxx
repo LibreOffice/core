@@ -479,6 +479,7 @@ private:
     const ::rtl::OUString sPropertyFileFormat;
     const ::rtl::OUString sPropertyFullName;
     const ::rtl::OUString sPropertyHint;
+    const ::rtl::OUString sPropertyInitials;
     const ::rtl::OUString sPropertyInstanceName;
     const ::rtl::OUString sPropertyIsAutomaticUpdate;
     const ::rtl::OUString sPropertyIsConditionTrue;

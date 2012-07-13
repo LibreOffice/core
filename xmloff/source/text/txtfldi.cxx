@@ -158,6 +158,7 @@ const sal_Char sAPI_is_fixed[]          = "IsFixed";
 const sal_Char sAPI_content[]           = "Content";
 const sal_Char sAPI_value[]             = "Value";
 const sal_Char sAPI_author[]            = "Author";
+const sal_Char sAPI_initials[]          = "Initials";
 const sal_Char sAPI_full_name[]         = "FullName";
 const sal_Char sAPI_place_holder_type[] = "PlaceHolderType";
 const sal_Char sAPI_place_holder[]      = "PlaceHolder";
@@ -3633,6 +3634,7 @@ XMLAnnotationImportContext::XMLAnnotationImportContext(
         XMLTextFieldImportContext(rImport, rHlp, sAPI_annotation,
                                   nPrfx, sLocalName),
         sPropertyAuthor(sAPI_author),
+        sPropertyInitials(sAPI_initials),
         sPropertyContent(sAPI_content),
         // why is there no UNO_NAME_DATE_TIME, but only UNO_NAME_DATE_TIME_VALUE?
         sPropertyDate(sAPI_date_time_value),
@@ -3667,6 +3669,12 @@ SvXMLImportContext* XMLAnnotationImportContext::CreateChildContext(
         else if( IsXMLToken( rLocalName, XML_DATE ) )
             pContext = new XMLStringBufferImportContext(GetImport(), nPrefix,
                                             rLocalName, aDateBuffer);
+    }
+    else if( XML_NAMESPACE_TEXT == nPrefix )
+    {
+        if( IsXMLToken( rLocalName, XML_SENDER_INITIALS ) )
+            pContext = new XMLStringBufferImportContext(GetImport(), nPrefix,
+                                            rLocalName, aInitialsBuffer);
     }
 
     if( !pContext )
@@ -3757,6 +3765,10 @@ void XMLAnnotationImportContext::PrepareField(
     // import (possibly empty) author
     OUString sAuthor( aAuthorBuffer.makeStringAndClear() );
     xPropertySet->setPropertyValue(sPropertyAuthor, makeAny(sAuthor));
+
+    // import (possibly empty) initials
+    OUString sInitials( aInitialsBuffer.makeStringAndClear() );
+    xPropertySet->setPropertyValue(sPropertyInitials, makeAny(sInitials));
 
     DateTime aDateTime;
     if (::sax::Converter::convertDateTime(aDateTime,
