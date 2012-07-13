@@ -64,8 +64,6 @@
 #include <flyfrms.hxx>
 #include <sortedobjs.hxx>
 
-SV_IMPL_PTRARR_SORT( SwDestroyList, SwSectionFrmPtr )
-
 /*************************************************************************
 |*
 |*  SwSectionFrm::SwSectionFrm(), ~SwSectionFrm()
@@ -2689,18 +2687,16 @@ void SwRootFrm::InsertEmptySct( SwSectionFrm* pDel )
 {
     if( !pDestroy )
         pDestroy = new SwDestroyList;
-    sal_uInt16 nPos;
-    if( !pDestroy->Seek_Entry( pDel, &nPos ) )
-        pDestroy->Insert( pDel );
+    pDestroy->insert( pDel );
 }
 
 void SwRootFrm::_DeleteEmptySct()
 {
     OSL_ENSURE( pDestroy, "Keine Liste, keine Kekse" );
-    while( pDestroy->Count() )
+    while( !pDestroy->empty() )
     {
-        SwSectionFrm* pSect = (*pDestroy)[0];
-        pDestroy->Remove( sal_uInt16(0) );
+        SwSectionFrm* pSect = *pDestroy->begin();
+        pDestroy->erase( pDestroy->begin() );
         OSL_ENSURE( !pSect->IsColLocked() && !pSect->IsJoinLocked(),
                 "DeleteEmptySct: Locked SectionFrm" );
         if( !pSect->Frm().HasArea() && !pSect->ContainsCntnt() )
@@ -2729,16 +2725,13 @@ void SwRootFrm::_DeleteEmptySct()
 void SwRootFrm::_RemoveFromList( SwSectionFrm* pSct )
 {
     OSL_ENSURE( pDestroy, "Where's my list?" );
-    sal_uInt16 nPos;
-    if( pDestroy->Seek_Entry( pSct, &nPos ) )
-        pDestroy->Remove( nPos );
+    pDestroy->erase( pSct );
 }
 
 #ifdef DBG_UTIL
 bool SwRootFrm::IsInDelList( SwSectionFrm* pSct ) const
 {
-    sal_uInt16 nPos;
-    return ( pDestroy && pDestroy->Seek_Entry( pSct, &nPos ) );
+    return pDestroy && pDestroy->find( pSct ) != pDestroy->end();
 }
 #endif
 

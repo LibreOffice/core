@@ -31,6 +31,7 @@
 
 #include "layfrm.hxx"
 #include "flowfrm.hxx"
+#include <set>
 
 class SwSection;
 class SwSectionFmt;
@@ -153,8 +154,7 @@ public:
     DECL_FIXEDMEMPOOL_NEWDEL(SwSectionFrm)
 };
 
-typedef SwSectionFrm* SwSectionFrmPtr;
-SV_DECL_PTRARR_SORT( SwDestroyList, SwSectionFrmPtr, 1 )
+class SwDestroyList : public std::set<SwSectionFrm*> {};
 
 inline const SwSectionFrm *SwSectionFrm::GetFollow() const
 {
