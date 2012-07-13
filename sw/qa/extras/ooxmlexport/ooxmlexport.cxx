@@ -28,6 +28,7 @@
 #include "../swmodeltestbase.hxx"
 
 #include <com/sun/star/frame/XStorable.hpp>
+#include <com/sun/star/style/TabStop.hpp>
 #include <com/sun/star/view/XViewSettingsSupplier.hpp>
 
 #include <unotools/tempfile.hxx>
@@ -38,10 +39,12 @@ class Test : public SwModelTestBase
 {
 public:
     void testZoom();
+    void defaultTabStopNotInStyles();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
     CPPUNIT_TEST(testZoom);
+    CPPUNIT_TEST(defaultTabStopNotInStyles);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -74,6 +77,18 @@ void Test::testZoom()
     sal_Int16 nValue = 0;
     xPropertySet->getPropertyValue("ZoomValue") >>= nValue;
     CPPUNIT_ASSERT_EQUAL(sal_Int16(42), nValue);
+}
+
+void Test::defaultTabStopNotInStyles()
+{
+    roundtrip( "empty.odt" );
+// The default tab stop was mistakenly exported to a style.
+// xray ThisComponent.StyleFamilies(1)(0).ParaTabStop
+    uno::Reference< container::XNameAccess > paragraphStyles = getStyles( "ParagraphStyles" );
+    uno::Reference< beans::XPropertySet > properties( paragraphStyles->getByName( "Standard" ), uno::UNO_QUERY );
+    uno::Sequence< style::TabStop > stops;
+    properties->getPropertyValue( "ParaTabStops" ) >>= stops;
+    CPPUNIT_ASSERT_EQUAL( 0, stops.getLength());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
