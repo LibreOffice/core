@@ -31,9 +31,11 @@
 //  File:       ooofilt.cxx
 //  Contents:   Filter Implementation for OpenOffice.Org Document using
 //              Indexing Service
-//  Summary:    The LibreOffice filter reads LibreOffice files (with the
-//              extension .sxw .sxi, etc) and extract their content, author,
-//              keywords,subject,comments and title to be filtered.
+//  Summary:    The LibreOffice filter reads OpenOffice.org XML files (with
+//              the extension .sxw .sxi, etc) and ODF files and extract
+//              their content, author, keywords,subject,comments and title
+//              to be filtered.
+//
 //  Platform:   Windows 2000, Windows XP
 //--------------------------------------------------------------------------
 #include "internal/contentreader.hxx"
