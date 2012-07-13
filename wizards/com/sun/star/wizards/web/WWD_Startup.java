@@ -419,7 +419,7 @@ public abstract class WWD_Startup extends WWD_General
         }
         catch (java.lang.Exception jexception)
         {
-            jexception.printStackTrace(System.out);
+            jexception.printStackTrace(System.err);
         }
     }
 

@@ -58,7 +58,7 @@ public class RoadmapItemStateChangeListener implements XItemListener {
                 xDialogModelPropertySet.setPropertyValue("Step", new Integer(nNewID));
             }
         } catch (com.sun.star.uno.Exception exception) {
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
         }
     }
 

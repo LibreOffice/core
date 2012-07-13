@@ -202,7 +202,7 @@ public class UnoDialogSample implements XTextListener, XSpinListener, XActionLis
             XNameAccess xNameAccess = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, oNode);
             return xNameAccess;
         } catch (Exception exception) {
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
             return null;
         }
     }
@@ -235,7 +235,7 @@ public class UnoDialogSample implements XTextListener, XSpinListener, XActionLis
          * com.sun.star.lang.IllegalArgumentException,
          * com.sun.star.lang.WrappedTargetException,
          */
-            ex.printStackTrace(System.out);
+            ex.printStackTrace(System.err);
         }
         return sImageUrl;
     }
@@ -263,7 +263,7 @@ public class UnoDialogSample implements XTextListener, XSpinListener, XActionLis
             XControlModel xControlModel = (XControlModel) UnoRuntime.queryInterface(XControlModel.class, oDialogModel);
             m_xDialogControl.setModel(xControlModel);
         } catch (com.sun.star.uno.Exception exception) {
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
         }
     }
 
@@ -303,7 +303,7 @@ public class UnoDialogSample implements XTextListener, XSpinListener, XActionLis
             XMultiPropertySet xMultiPropertySet = (XMultiPropertySet) UnoRuntime.queryInterface(XMultiPropertySet.class, m_xDlgModelNameContainer);
             xMultiPropertySet.setPropertyValues(PropertyNames, PropertyValues);
         } catch (com.sun.star.uno.Exception ex) {
-            ex.printStackTrace(System.out);
+            ex.printStackTrace(System.err);
         }}
 
 
@@ -329,7 +329,7 @@ public class UnoDialogSample implements XTextListener, XSpinListener, XActionLis
                 return m_xWindowPeer;
             }
         } catch (com.sun.star.uno.Exception exception) {
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
         }
         return null;
     }
@@ -373,7 +373,7 @@ public class UnoDialogSample implements XTextListener, XSpinListener, XActionLis
             m_xDlgModelNameContainer.insertByName(sName, oControlModel);
             return oControlModel;
         } catch (com.sun.star.uno.Exception exception) {
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
             return null;
         }
     }
@@ -416,7 +416,7 @@ public class UnoDialogSample implements XTextListener, XSpinListener, XActionLis
              * com.sun.star.beans.UnknownPropertyException,
              * com.sun.star.uno.Exception
              */
-            ex.printStackTrace(System.out);
+            ex.printStackTrace(System.err);
         }
         return xFixedText;
     }
@@ -461,7 +461,7 @@ public class UnoDialogSample implements XTextListener, XSpinListener, XActionLis
              * com.sun.star.beans.UnknownPropertyException,
              * com.sun.star.uno.Exception
              */
-            ex.printStackTrace(System.out);
+            ex.printStackTrace(System.err);
         }
         return xTextComponent;
     }
@@ -501,7 +501,7 @@ public class UnoDialogSample implements XTextListener, XSpinListener, XActionLis
              * com.sun.star.beans.UnknownPropertyException,
              * com.sun.star.uno.Exception
              */
-            ex.printStackTrace(System.out);
+            ex.printStackTrace(System.err);
         }
         return xPBModelPSet;
     }
@@ -539,7 +539,7 @@ public class UnoDialogSample implements XTextListener, XSpinListener, XActionLis
              * com.sun.star.beans.UnknownPropertyException,
              * com.sun.star.uno.Exception
              */
-            ex.printStackTrace(System.out);
+            ex.printStackTrace(System.err);
         }
     }
 
@@ -576,7 +576,7 @@ public class UnoDialogSample implements XTextListener, XSpinListener, XActionLis
              * com.sun.star.beans.UnknownPropertyException,
              * com.sun.star.uno.Exception
              */
-            ex.printStackTrace(System.out);
+            ex.printStackTrace(System.err);
         }
     }
 
@@ -622,7 +622,7 @@ public class UnoDialogSample implements XTextListener, XSpinListener, XActionLis
              * com.sun.star.beans.UnknownPropertyException,
              * com.sun.star.uno.Exception
              */
-            ex.printStackTrace(System.out);
+            ex.printStackTrace(System.err);
         }
         return xTextComponent;
     }
@@ -662,7 +662,7 @@ public class UnoDialogSample implements XTextListener, XSpinListener, XActionLis
              * com.sun.star.beans.UnknownPropertyException,
              * com.sun.star.uno.Exception
              */
-            ex.printStackTrace(System.out);
+            ex.printStackTrace(System.err);
         }
         return xTFModelPSet;
     }
@@ -709,7 +709,7 @@ public class UnoDialogSample implements XTextListener, XSpinListener, XActionLis
              * com.sun.star.beans.UnknownPropertyException,
              * com.sun.star.uno.Exception
              */
-            ex.printStackTrace(System.out);
+            ex.printStackTrace(System.err);
         }
         return xDFModelPSet;
     }
@@ -751,7 +751,7 @@ public class UnoDialogSample implements XTextListener, XSpinListener, XActionLis
              * com.sun.star.beans.UnknownPropertyException,
              * com.sun.star.uno.Exception
              */
-            ex.printStackTrace(System.out);
+            ex.printStackTrace(System.err);
         }
         return xPFModelPSet;
     }
@@ -794,7 +794,7 @@ public class UnoDialogSample implements XTextListener, XSpinListener, XActionLis
              * com.sun.star.beans.UnknownPropertyException,
              * com.sun.star.uno.Exception
              */
-            ex.printStackTrace(System.out);
+            ex.printStackTrace(System.err);
         }
         return xNFModelPSet;
     }
@@ -843,7 +843,7 @@ public class UnoDialogSample implements XTextListener, XSpinListener, XActionLis
              * com.sun.star.beans.UnknownPropertyException,
              * com.sun.star.uno.Exception
              */
-            ex.printStackTrace(System.out);
+            ex.printStackTrace(System.err);
         }
         return xSBModelPSet;
     }
@@ -907,7 +907,7 @@ public class UnoDialogSample implements XTextListener, XSpinListener, XActionLis
              * com.sun.star.beans.UnknownPropertyException,
              * com.sun.star.uno.Exception
              */
-            ex.printStackTrace(System.out);
+            ex.printStackTrace(System.err);
         }
         return xCheckBox;
     }
@@ -951,7 +951,7 @@ public class UnoDialogSample implements XTextListener, XSpinListener, XActionLis
              * com.sun.star.beans.UnknownPropertyException,
              * com.sun.star.uno.Exception
              */
-            ex.printStackTrace(System.out);
+            ex.printStackTrace(System.err);
         }
     }
 
@@ -990,7 +990,7 @@ public class UnoDialogSample implements XTextListener, XSpinListener, XActionLis
              * com.sun.star.beans.UnknownPropertyException,
              * com.sun.star.uno.Exception
              */
-            ex.printStackTrace(System.out);
+            ex.printStackTrace(System.err);
         }
         return xListBox;
     }
@@ -1034,7 +1034,7 @@ public class UnoDialogSample implements XTextListener, XSpinListener, XActionLis
              * com.sun.star.beans.UnknownPropertyException,
              * com.sun.star.uno.Exception
              */
-            ex.printStackTrace(System.out);
+            ex.printStackTrace(System.err);
         }
         return xComboBox;
     }
@@ -1098,7 +1098,7 @@ public class UnoDialogSample implements XTextListener, XSpinListener, XActionLis
              * com.sun.star.beans.UnknownPropertyException,
              * com.sun.star.uno.Exception
              */
-            ex.printStackTrace(System.out);
+            ex.printStackTrace(System.err);
         }
         return xFFModelPSet;
     }
@@ -1152,7 +1152,7 @@ public class UnoDialogSample implements XTextListener, XSpinListener, XActionLis
              * com.sun.star.beans.UnknownPropertyException,
              * com.sun.star.uno.Exception
              */
-            ex.printStackTrace(System.out);
+            ex.printStackTrace(System.err);
         }
         return xTextComponent;
     }
@@ -1188,7 +1188,7 @@ public class UnoDialogSample implements XTextListener, XSpinListener, XActionLis
              * com.sun.star.beans.UnknownPropertyException,
              * com.sun.star.uno.Exception
              */
-            ex.printStackTrace(System.out);
+            ex.printStackTrace(System.err);
         }
         return xButton;
     }
@@ -1239,7 +1239,7 @@ public class UnoDialogSample implements XTextListener, XSpinListener, XActionLis
              * com.sun.star.beans.UnknownPropertyException,
              * com.sun.star.uno.Exception
              */
-            ex.printStackTrace(System.out);
+            ex.printStackTrace(System.err);
         }
     }
 
@@ -1266,7 +1266,7 @@ public class UnoDialogSample implements XTextListener, XSpinListener, XActionLis
              * com.sun.star.beans.UnknownPropertyException,
              * com.sun.star.uno.Exception
              */
-            ex.printStackTrace(System.out);
+            ex.printStackTrace(System.err);
         }
     }
 
@@ -1303,7 +1303,7 @@ public class UnoDialogSample implements XTextListener, XSpinListener, XActionLis
              * com.sun.star.beans.UnknownPropertyException,
              * com.sun.star.uno.Exception
              */
-            ex.printStackTrace(System.out);
+            ex.printStackTrace(System.err);
         }
     }
 
@@ -1384,7 +1384,7 @@ public class UnoDialogSample implements XTextListener, XSpinListener, XActionLis
              * com.sun.star.beans.PropertyVetoException
              * com.sun.star.uno.Exception
              */
-            ex.printStackTrace(System.out);
+            ex.printStackTrace(System.err);
         }
     }
 
@@ -1443,7 +1443,7 @@ public class UnoDialogSample implements XTextListener, XSpinListener, XActionLis
             XItemEventBroadcaster xRMBroadcaster = (XItemEventBroadcaster) UnoRuntime.queryInterface(XItemEventBroadcaster.class, xRMControl);
             xRMBroadcaster.addItemListener( getRoadmapItemStateChangeListener() );
         } catch (java.lang.Exception jexception) {
-            jexception.printStackTrace(System.out);
+            jexception.printStackTrace(System.err);
         }
     }
 
@@ -1465,7 +1465,7 @@ public class UnoDialogSample implements XTextListener, XSpinListener, XActionLis
             xRMItemPSet.setPropertyValue("ID", new Integer(_ID));
             m_xRMIndexCont.insertByIndex(Index, oRoadmapItem);
         } catch (com.sun.star.uno.Exception exception) {
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
         }
     }
 

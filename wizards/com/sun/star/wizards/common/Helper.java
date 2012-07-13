@@ -69,7 +69,7 @@ public class Helper
         }
         catch (Exception exception)
         {
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
         }
     }
 
@@ -89,7 +89,7 @@ public class Helper
         }
         catch (Exception exception)
         {
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
             return null;
         }
     }
@@ -131,7 +131,7 @@ public class Helper
         }
         catch (Exception exception)
         {
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
             return null;
         }
     }
@@ -181,7 +181,7 @@ public class Helper
         }
         catch (Exception exception)
         {
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
             return null;
         }
     }
@@ -199,7 +199,7 @@ public class Helper
         }
         catch (Exception exception)
         {
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
         }
         return null;
     }
@@ -220,7 +220,7 @@ public class Helper
         }
         catch (Exception exception)
         {
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
         }
         return null;
     }
@@ -241,7 +241,7 @@ public class Helper
         }
         catch (Exception exception)
         {
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
             return null;
         }
     }
@@ -266,7 +266,7 @@ public class Helper
         }
         catch (Exception exception)
         {
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
         }
     }
 
@@ -294,7 +294,7 @@ public class Helper
         }
         catch (Exception exception)
         {
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
             return null;
         }
     }

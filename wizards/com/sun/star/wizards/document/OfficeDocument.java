@@ -84,7 +84,7 @@ public class OfficeDocument
         }
         catch (Exception exception)
         {
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
         }
     }
 
@@ -106,7 +106,7 @@ public class OfficeDocument
         }
         catch (PropertyVetoException exception)
         {
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
         }
     }
 
@@ -153,7 +153,7 @@ public class OfficeDocument
         }
         catch (Exception exception)
         {
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
         }
         return oDocument;
     }
@@ -274,7 +274,7 @@ public class OfficeDocument
         }
         catch (Exception exception)
         {
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
         }
         return oDocument;
     }
@@ -312,7 +312,7 @@ public class OfficeDocument
         catch (Exception exception)
         {
 
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
             return false;
         }
     }

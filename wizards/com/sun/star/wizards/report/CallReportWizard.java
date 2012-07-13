@@ -53,7 +53,7 @@ public class CallReportWizard
         }
         catch (java.lang.Exception jexception)
         {
-            jexception.printStackTrace(System.out);
+            jexception.printStackTrace(System.err);
         }
     }*/
 

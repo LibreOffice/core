@@ -92,7 +92,7 @@ public class FieldFormatter implements XItemListener
         }
         catch (Exception e)
         {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
         }
 
         FontDescriptor oFontDesc = new FontDescriptor();

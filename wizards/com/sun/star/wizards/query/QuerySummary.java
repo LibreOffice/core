@@ -79,7 +79,7 @@ public class QuerySummary extends QueryMetaData
         }
         catch (com.sun.star.uno.Exception exception)
         {
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
         }
     }
 

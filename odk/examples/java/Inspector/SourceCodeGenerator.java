@@ -1054,7 +1054,7 @@ class UnoObjectDefinition{
                             sReturn +="\n}";
                         }
                         sReturn += "catch (" + sCurException + " " + sExceptionName + "){\n";
-                        sReturn += "\t" + sExceptionName + ".printStackTrace(System.out);\n";
+                        sReturn += "\t" + sExceptionName + ".printStackTrace(System.err);\n";
                         sReturn += "\t" + getCommentSign() + "Enter your Code here...\n}";
                         nIndex++;
                     }

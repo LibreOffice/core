@@ -71,7 +71,7 @@ public class Desktop
             }
             catch (Exception exception)
             {
-                exception.printStackTrace(System.out);
+                exception.printStackTrace(System.err);
             }
         }
         else
@@ -117,7 +117,7 @@ public class Desktop
         }
         catch (Exception e)
         {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
         }
         return null;
     }
@@ -136,7 +136,7 @@ public class Desktop
         }
         catch (Exception e)
         {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
         }
         return null;
     }
@@ -230,7 +230,7 @@ public class Desktop
         }
         catch (Exception e)
         {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
             return -1;
         }
     }
@@ -341,7 +341,7 @@ public class Desktop
         }
         catch (Exception exception)
         {
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
             return null;
         }
     }

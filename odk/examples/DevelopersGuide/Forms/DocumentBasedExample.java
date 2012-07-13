@@ -172,7 +172,7 @@ public abstract class DocumentBasedExample implements com.sun.star.lang.XEventLi
         }
         catch ( com.sun.star.uno.Exception e )
         {
-            e.printStackTrace( System.out );
+            e.printStackTrace( System.err );
         }
     }
 

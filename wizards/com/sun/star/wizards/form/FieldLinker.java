@@ -151,7 +151,7 @@ public class FieldLinker extends DBLimitedFieldSelection
         }
         catch (Exception e)
         {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
         }
     }
 

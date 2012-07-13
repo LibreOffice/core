@@ -133,7 +133,7 @@ public class DrawViewDemo
         catch( Exception ex )
         {
             System.out.println( ex.getMessage() );
-            ex.printStackTrace(System.out);
+            ex.printStackTrace(System.err);
         }
 
         System.exit( 0 );

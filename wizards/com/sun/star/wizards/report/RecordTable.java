@@ -78,7 +78,7 @@ public class RecordTable
         }
         catch (Exception exception)
         {
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
         }
     }
 

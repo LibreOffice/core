@@ -201,7 +201,7 @@ public class LoadSaveTest
     void report(Exception e) {
         System.out.println("Exception occurred:");
         System.out.println(e.toString());
-        e.printStackTrace(System.out);
+        e.printStackTrace(System.err);
         report2(e);
 //        failed();
     }

@@ -60,7 +60,7 @@ public class FaxDocument extends TextDocument
         }
         catch (Exception exception)
         {
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
         }
     }
 
@@ -115,7 +115,7 @@ public class FaxDocument extends TextDocument
             }
             catch (Exception exception)
             {
-                exception.printStackTrace(System.out);
+                exception.printStackTrace(System.err);
             }
         }
     }
@@ -161,7 +161,7 @@ public class FaxDocument extends TextDocument
         }
         catch (Exception exception)
         {
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
         }
     }
 

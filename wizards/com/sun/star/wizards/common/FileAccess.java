@@ -116,7 +116,7 @@ public class FileAccess
         }
         catch (Exception exception)
         {
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
             return PropertyNames.EMPTY_STRING;
         }
     }
@@ -194,7 +194,7 @@ public class FileAccess
         }
         catch (Exception exception)
         {
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
             ResultPath = PropertyNames.EMPTY_STRING;
         }
         if (!bexists)
@@ -275,7 +275,7 @@ public class FileAccess
         }
         catch (Exception exception)
         {
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
         // ResultPath = PropertyNames.EMPTY_STRING;
         }
 //        if (bexists == false)
@@ -394,7 +394,7 @@ public class FileAccess
     if (ResultPath.equals(PropertyNames.EMPTY_STRING) == false)
     bexists = xSimpleFileAccess.exists(ResultPath);
     } catch (Exception exception) {
-    exception.printStackTrace(System.out);
+    exception.printStackTrace(System.err);
     ResultPath = PropertyNames.EMPTY_STRING;
     }
     if (bexists == false)
@@ -432,7 +432,7 @@ public class FileAccess
         }
         catch (Exception exception)
         {
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
         }
         return bExists;
     }
@@ -450,7 +450,7 @@ public class FileAccess
         }
         catch (Exception exception)
         {
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
             return PropertyNames.EMPTY_STRING;
         }
         if (!bexists)
@@ -570,7 +570,7 @@ public class FileAccess
         }
         catch (com.sun.star.uno.Exception exception)
         {
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
             SystemDialog.showMessageBox(xMSF, "ErrorBox", VclWindowPeerAttribute.OK, sMsgFilePathInvalid);
             return false;
         }
@@ -632,7 +632,7 @@ public class FileAccess
         }
         catch (Exception exception)
         {
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
         }
         return LocLayoutFiles;
     }
@@ -774,7 +774,7 @@ public class FileAccess
             }
             catch (com.sun.star.ucb.CommandAbortedException exception)
             {
-                exception.printStackTrace(System.out);
+                exception.printStackTrace(System.err);
             }
             catch (com.sun.star.uno.Exception e)
             {
@@ -953,11 +953,11 @@ public class FileAccess
         }
         catch (CommandAbortedException e)
         {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
         }
         catch (Exception e)
         {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
         }
 
         return false;
@@ -1139,7 +1139,7 @@ public class FileAccess
         }
         catch (Exception e)
         {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
         }
         return sFileData;
     }

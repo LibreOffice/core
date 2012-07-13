@@ -56,7 +56,7 @@ public UnoMenu2(XComponentContext _xContext, XMultiComponentFactory _xMCF) {
         oUnoMenu2.addLabelForPopupMenu();
         oUnoMenu2.executeDialog();
         }catch( Exception ex ) {
-            ex.printStackTrace(System.out);
+            ex.printStackTrace(System.err);
         }
         finally{
         //make sure always to dispose the component and free the memory!

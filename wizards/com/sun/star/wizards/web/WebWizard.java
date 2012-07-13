@@ -52,7 +52,7 @@ public class WebWizard extends WWD_Events
         }
         catch (Exception exception)
         {
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
         }
     }
 }

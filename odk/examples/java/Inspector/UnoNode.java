@@ -163,7 +163,7 @@ public class UnoNode{
         pv.Value = sIDLUrl;
         getXDispatcher(openHyperlink).dispatch(openHyperlink, new PropertyValue[] {pv});
     } catch(Exception exception) {
-        exception.printStackTrace(System.out);
+        exception.printStackTrace(System.err);
     }}
 
 
@@ -177,7 +177,7 @@ public class UnoNode{
             xTransformer.parseStrict(oURL);
         return oURL[0];
         } catch (Exception e) {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
         }
         return null;
     }
@@ -189,7 +189,7 @@ public class UnoNode{
         XDesktop xDesktop = (XDesktop) UnoRuntime.queryInterface(XDesktop.class, oDesktop);
         return xDesktop.getCurrentFrame();
     } catch (Exception e) {
-        e.printStackTrace(System.out);
+        e.printStackTrace(System.err);
         return null;
     }}
 
@@ -202,7 +202,7 @@ public class UnoNode{
         XDispatch xDispatch = xDispatchProvider.queryDispatch(oURLArray[0], "_top", FrameSearchFlag.ALL); // "_self"
         return xDispatch;
     } catch (Exception e) {
-        e.printStackTrace(System.out);
+        e.printStackTrace(System.err);
         return null;
     }}
 
@@ -284,7 +284,7 @@ public class UnoNode{
         aVector.toArray(sRetArray);
         return sRetArray;
     } catch (java.lang.Exception exception) {
-        exception.printStackTrace(System.out);
+        exception.printStackTrace(System.err);
     }
         return new String[]{};
     }

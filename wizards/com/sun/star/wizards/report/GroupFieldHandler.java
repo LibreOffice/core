@@ -63,7 +63,7 @@ public class GroupFieldHandler extends FieldSelection
         }
         catch (Exception exception)
         {
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
         }
     }
 
@@ -99,7 +99,7 @@ public class GroupFieldHandler extends FieldSelection
         }
         catch (Exception exception)
         {
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
         }
     }
 

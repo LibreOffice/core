@@ -155,7 +155,7 @@ public class FormControlArranger
                 }
                 catch (Exception e)
                 {
-                    e.printStackTrace(System.out);
+                    e.printStackTrace(System.err);
                 }
                 break;
             case DataType.BIGINT:
@@ -375,7 +375,7 @@ public class FormControlArranger
         }
         catch (Exception e)
         {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
         }
     }
 
@@ -593,7 +593,7 @@ public class FormControlArranger
         }
         catch (Exception e)
         {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
         }
     }
 
@@ -648,7 +648,7 @@ public class FormControlArranger
         }
         catch (Exception e)
         {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
         }
     }
 

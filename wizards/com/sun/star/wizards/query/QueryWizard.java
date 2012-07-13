@@ -172,7 +172,7 @@ public class QueryWizard extends DatabaseObjectWizard
         }
         catch (java.lang.Exception jexception)
         {
-            jexception.printStackTrace(System.out);
+            jexception.printStackTrace(System.err);
         }
     }
 
@@ -218,7 +218,7 @@ public class QueryWizard extends DatabaseObjectWizard
         }
         catch (java.lang.Exception jexception)
         {
-            jexception.printStackTrace(System.out);
+            jexception.printStackTrace(System.err);
         }
         m_groupFilterComponent = null;
         m_titlesComponent = null;
@@ -280,7 +280,7 @@ public class QueryWizard extends DatabaseObjectWizard
         }
         catch (com.sun.star.uno.Exception exception)
         {
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
         }
     }
 
@@ -409,7 +409,7 @@ public class QueryWizard extends DatabaseObjectWizard
         }
         catch (SQLException e)
         {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
         }
     }
 

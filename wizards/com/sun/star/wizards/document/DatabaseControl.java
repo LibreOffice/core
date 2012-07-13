@@ -95,7 +95,7 @@ public class DatabaseControl extends Control
         }
         catch (Exception e)
         {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
         }
     }
 
@@ -115,7 +115,7 @@ public class DatabaseControl extends Control
         }
         catch (Exception e)
         {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
         }
     }
 
@@ -130,7 +130,7 @@ public class DatabaseControl extends Control
         }
         catch (Exception e)
         {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
         }
     }
 
@@ -250,7 +250,7 @@ public class DatabaseControl extends Control
         }
         catch (Exception e)
         {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
         }
     }
     /**

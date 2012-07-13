@@ -102,7 +102,7 @@ public class ColumnPropertySet
         }
         catch (Exception e)
         {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
         }
 
     }
@@ -121,7 +121,7 @@ public class ColumnPropertySet
         }
         catch (Exception e)
         {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
         }
     }
 
@@ -133,7 +133,7 @@ public class ColumnPropertySet
         }
         catch (Exception e)
         {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
             return 0;
         }
     }
@@ -194,7 +194,7 @@ public class ColumnPropertySet
         }
         catch (Exception e)
         {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
         }
     }
 

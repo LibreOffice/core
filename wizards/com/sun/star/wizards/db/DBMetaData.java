@@ -856,7 +856,7 @@ public class DBMetaData
                 callSQLErrorMessageDialog(sqlError, null);
                 return false;
             }
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
         }
         catch (SQLException e)
         {

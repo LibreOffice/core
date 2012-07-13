@@ -131,7 +131,7 @@ public class SingleControlValidation implements XFormComponentValidityListener
         }
         catch( java.lang.Exception e  )
         {
-            e.printStackTrace( System.out );
+            e.printStackTrace( System.err );
         }
     }
 
@@ -171,7 +171,7 @@ public class SingleControlValidation implements XFormComponentValidityListener
         }
         catch( com.sun.star.uno.Exception e )
         {
-            e.printStackTrace( System.out );
+            e.printStackTrace( System.err );
         }
     }
 

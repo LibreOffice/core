@@ -476,7 +476,7 @@ public class FormHandler
 //                  if (_xNamedForm.hasByName(sControlName))
 //                      _xNamedForm.removeByName(sControlName);
 //              } catch (Exception e) {
-//                  e.printStackTrace(System.out);
+//                  e.printStackTrace(System.err);
 //              }
                 }
             }

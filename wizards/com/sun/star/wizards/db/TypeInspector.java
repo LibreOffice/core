@@ -104,7 +104,7 @@ public class TypeInspector
         }
         catch (SQLException e)
         {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
         }
     }
 
@@ -133,7 +133,7 @@ public class TypeInspector
         }
         catch (Exception e)
         {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
             return 0;
         }
     }
@@ -170,7 +170,7 @@ public class TypeInspector
         }
         catch (Exception e)
         {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
         }
         return ColumnValue.NO_NULLS;
     }
@@ -239,7 +239,7 @@ public class TypeInspector
         }
         catch (Exception e)
         {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
         }
         return -1;
     }
@@ -393,7 +393,7 @@ public class TypeInspector
         }
         catch (Exception e)
         {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
         }
         return INVALID;
 

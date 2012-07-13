@@ -196,7 +196,7 @@ public abstract class Configuration
         }
         catch (Exception exception)
         {
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
             return null;
         }
     }
@@ -212,7 +212,7 @@ public abstract class Configuration
         }
         catch (Exception exception)
         {
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
         }
         return sLocale;
     }
@@ -349,7 +349,7 @@ public abstract class Configuration
         }
         catch (Exception e)
         {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
             return snames;
         }
     }
@@ -364,7 +364,7 @@ public abstract class Configuration
         }
         catch (Exception e)
         {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
             return null;
         }
     }
@@ -380,7 +380,7 @@ public abstract class Configuration
         }
         catch (Exception e)
         {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
         }
         return null;
     }
@@ -409,7 +409,7 @@ public abstract class Configuration
         }
         catch (Exception e)
         {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
         }
         return null;
     }
@@ -438,7 +438,7 @@ public abstract class Configuration
         }
         catch (Exception e)
         {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
         }
         return null;
     }

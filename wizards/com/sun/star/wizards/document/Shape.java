@@ -100,7 +100,7 @@ public class Shape
         }
         catch (Exception e)
         {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
         }
     }
 
@@ -117,7 +117,7 @@ public class Shape
         }
         catch (PropertyVetoException e)
         {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
         }
     }
 

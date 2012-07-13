@@ -93,7 +93,7 @@ public class FormDocument extends TextDocument
         }
         catch (Exception e)
         {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
         }
     }
 
@@ -140,7 +140,7 @@ public class FormDocument extends TextDocument
         }
         catch (Exception e)
         {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
         }
     }
 
@@ -338,7 +338,7 @@ public class FormDocument extends TextDocument
         }
         catch (Exception e)
         {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
             return false;
         }
         finally
@@ -519,7 +519,7 @@ public class FormDocument extends TextDocument
             }
             catch (Exception e)
             {
-                e.printStackTrace(System.out);
+                e.printStackTrace(System.err);
             }
         }
 
@@ -562,7 +562,7 @@ public class FormDocument extends TextDocument
             }
             catch (Exception e)
             {
-                e.printStackTrace(System.out);
+                e.printStackTrace(System.err);
             }
         }
 

@@ -112,7 +112,7 @@ public class Control extends Shape
         }
         catch (Exception e)
         {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
         }
     }
 
@@ -130,7 +130,7 @@ public class Control extends Shape
         }
         catch (Exception e)
         {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
         }
     }
 
@@ -251,7 +251,7 @@ public class Control extends Shape
         }
         catch (Exception e)
         {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
             return null;
         }
     }
@@ -335,7 +335,7 @@ public class Control extends Shape
         }
         catch (Exception e)
         {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
             return null;
         }
     }

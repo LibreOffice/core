@@ -263,7 +263,7 @@ public class DocumentInfo
                 }
             } catch (Exception e) {
                 // If anything goes wrong, give the user a stack trace
-                e.printStackTrace(System.out);
+                e.printStackTrace(System.err);
             }
         }
 

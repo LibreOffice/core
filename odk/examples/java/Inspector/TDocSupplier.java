@@ -82,7 +82,7 @@ public class TDocSupplier {
                 return xModel;
             }
         }catch(Exception exception){
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
         }
         JOptionPane.showMessageDialog(new javax.swing.JFrame(), "The selected Document could not be opened!", "Object Inspector", JOptionPane.ERROR_MESSAGE);
         return null;
@@ -96,7 +96,7 @@ public class TDocSupplier {
                 return xRow.getString(1);
             }
         }catch(Exception exception){
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
         }
         JOptionPane.showMessageDialog(new javax.swing.JFrame(), "The selected Document could not be opened!", "Object Inspector", JOptionPane.ERROR_MESSAGE);
         return "";
@@ -124,7 +124,7 @@ public class TDocSupplier {
             XRow xRow = (XRow) UnoRuntime.queryInterface(XRow.class, oAny);
             return xRow;
         }catch(Exception exception){
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
             return null;
         }}
 

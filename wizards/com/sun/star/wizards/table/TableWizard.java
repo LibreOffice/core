@@ -230,7 +230,7 @@ public class TableWizard extends DatabaseObjectWizard implements XTextListener
         }
         catch (Exception exception)
         {
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
         }
     }
 */
@@ -328,7 +328,7 @@ public class TableWizard extends DatabaseObjectWizard implements XTextListener
         }
         catch (Exception e)
         {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
         }
     }
 
@@ -376,7 +376,7 @@ public class TableWizard extends DatabaseObjectWizard implements XTextListener
         }
         catch (java.lang.Exception jexception)
         {
-            jexception.printStackTrace(System.out);
+            jexception.printStackTrace(System.err);
         }
         return PropertyNames.EMPTY_STRING;
     }
@@ -407,7 +407,7 @@ public class TableWizard extends DatabaseObjectWizard implements XTextListener
         }
         catch (SQLException e)
         {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
         }
         return true;
     }

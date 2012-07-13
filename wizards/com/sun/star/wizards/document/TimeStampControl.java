@@ -84,7 +84,7 @@ public class TimeStampControl extends DatabaseControl
         }
         catch (Exception e)
         {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
         }
         return null;
     }
@@ -121,7 +121,7 @@ public class TimeStampControl extends DatabaseControl
         }
         catch (PropertyVetoException e)
         {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
         }
     }
 

@@ -63,7 +63,7 @@ public class RowSet
         }
         catch( Exception e) {
             System.err.println("ERROR: can't get a component context from a running office ...");
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
             System.exit(1);
         }
 

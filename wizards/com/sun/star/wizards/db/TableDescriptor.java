@@ -123,7 +123,7 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
             }
             catch (Exception e)
             {
-                e.printStackTrace(System.out);
+                e.printStackTrace(System.err);
             }
             return true;
         }
@@ -192,19 +192,19 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
         }
         catch (UnknownPropertyException e)
         {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
         }
         catch (PropertyVetoException e)
         {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
         }
         catch (IllegalArgumentException e)
         {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
         }
         catch (WrappedTargetException e)
         {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
         }
 
         return false;
@@ -225,7 +225,7 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
         }
         catch (Exception ex)
         {
-            ex.printStackTrace(System.out);
+            ex.printStackTrace(System.err);
             return false;
         }
     }
@@ -296,7 +296,7 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
         }
         catch (Exception e)
         {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
             breturn = false;
         }
         if (!breturn)
@@ -348,7 +348,7 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
         }
         catch (Exception e1)
         {
-            e1.printStackTrace(System.out);
+            e1.printStackTrace(System.err);
         }
         return false;
     }
@@ -374,7 +374,7 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
                 }
                 catch (Exception e)
                 {
-                    e.printStackTrace(System.out);
+                    e.printStackTrace(System.err);
                 }
             }
         }
@@ -388,7 +388,7 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
         }
         catch (Exception e)
         {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
             showMessageBox("ErrorBox", VclWindowPeerAttribute.OK, e.getMessage());
             return false;
         }
@@ -419,19 +419,19 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
         }
         catch (UnknownPropertyException e)
         {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
         }
         catch (PropertyVetoException e)
         {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
         }
         catch (IllegalArgumentException e)
         {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
         }
         catch (WrappedTargetException e)
         {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
         }
         return false;
     }
@@ -458,7 +458,7 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
         }
         catch (Exception e)
         {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
         }
         return false;
     }
@@ -484,7 +484,7 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
         }
         catch (Exception e)
         {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
         }
     }
 
@@ -504,7 +504,7 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
             }
             catch (RuntimeException e)
             {
-                e.printStackTrace(System.out);
+                e.printStackTrace(System.err);
             }
         }
         return new String[]
@@ -530,7 +530,7 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
         }
         catch (RuntimeException e)
         {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
         }
         return false;
     }
@@ -553,7 +553,7 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
         }
         catch (RuntimeException e)
         {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
         }
         return null;
     }
@@ -583,7 +583,7 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
         }
         catch (RuntimeException e)
         {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
         }
         return null;
     }
@@ -608,7 +608,7 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
         }
         catch (Exception e)
         {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
         }
         return xRetPropertySet;
     }
@@ -629,7 +629,7 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
         }
         catch (Exception e)
         {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
         }
         return false;
     }
@@ -645,7 +645,7 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
         }
         catch (Exception e)
         {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
             return false;
         }
     }
@@ -672,7 +672,7 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
         }
         catch (Exception e)
         {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
         }
         return false;
     }
@@ -699,13 +699,13 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
                 }
                 catch (RuntimeException e1)
                 {
-                    e1.printStackTrace(System.out);
+                    e1.printStackTrace(System.err);
                 }
             }
         }
         catch (Exception e)
         {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
         }
         return null;
     }
@@ -731,13 +731,13 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
                 }
                 catch (Exception e)
                 {
-                    e.printStackTrace(System.out);
+                    e.printStackTrace(System.err);
                 }
             }
         }
         catch (RuntimeException e)
         {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
         }
         String[] sbinaryfieldnames = new String[NonBinaryFieldNameVector.size()];
         NonBinaryFieldNameVector.toArray(sbinaryfieldnames);
@@ -778,7 +778,7 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
         }
         catch (Exception e)
         {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
         }
     }
 
@@ -844,7 +844,7 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
             }
             catch (Exception e)
             {
-                e.printStackTrace(System.out);
+                e.printStackTrace(System.err);
                 bhastoinsert = false;
             }
         }

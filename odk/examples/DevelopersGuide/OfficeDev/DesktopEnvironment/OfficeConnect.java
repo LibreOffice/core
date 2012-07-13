@@ -107,7 +107,7 @@ public class OfficeConnect
         catch (java.lang.Exception ex)
         {
             System.err.println("connection failed" + ex);
-            ex.printStackTrace(System.out);
+            ex.printStackTrace(System.err);
             System.exit(1);
 
         }

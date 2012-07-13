@@ -98,11 +98,11 @@ public class Dataimport extends UnoDialog2 implements com.sun.star.awt.XActionLi
 //            }
 //            catch (Exception e) 
 //            {
-//                e.printStackTrace(System.out);
+//                e.printStackTrace(System.err);
 //            }
 //            catch (java.lang.Exception javaexception) 
 //            {
-//                javaexception.printStackTrace(System.out);
+//                javaexception.printStackTrace(System.err);
 //            }
 //        }
     public void showProgressDisplay(XMultiServiceFactory xMSF, boolean bgetConnection)

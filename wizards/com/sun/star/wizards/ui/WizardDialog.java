@@ -163,7 +163,7 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
         }
         catch (com.sun.star.lang.IllegalArgumentException exception)
         {
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
         }
     }
 
@@ -185,7 +185,7 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
         }
         catch (IllegalArgumentException exception)
         {
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
             return false;
         }
     }
@@ -210,7 +210,7 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
         }
         catch (com.sun.star.uno.Exception exception)
         {
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
             return -1;
         }
     }
@@ -269,7 +269,7 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
         }
         catch (java.lang.Exception jexception)
         {
-            jexception.printStackTrace(System.out);
+            jexception.printStackTrace(System.err);
         }
     }
 
@@ -308,7 +308,7 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
         }
         catch (com.sun.star.uno.Exception exception)
         {
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
             return -1;
         }
     }
@@ -337,7 +337,7 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
         }
         catch (com.sun.star.uno.Exception exception)
         {
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
             return null;
         }
     }
@@ -524,7 +524,7 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
         }
         catch (java.lang.Exception jexception)
         {
-            jexception.printStackTrace(System.out);
+            jexception.printStackTrace(System.err);
         }
     }
 
@@ -618,7 +618,7 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
         }
         catch (com.sun.star.uno.Exception exception)
         {
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
             return false;
         }
     }
@@ -708,7 +708,7 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
         }
         catch (com.sun.star.uno.Exception exception)
         {
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
             return -1;
         }
     }

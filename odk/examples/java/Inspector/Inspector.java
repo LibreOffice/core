@@ -120,7 +120,7 @@ public class Inspector{
             XPropertySet xPropertySet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, xNameAccess);
             sRetPath = (String) xPropertySet.getPropertyValue("SDKPath");
         }catch( Exception exception ) {
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
         }
         return sRetPath;
         }
@@ -182,7 +182,7 @@ public class Inspector{
             }
             xComponent.dispose();
         }catch( Exception exception ) {
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
         }}
 
 
@@ -198,7 +198,7 @@ public class Inspector{
                 xComponent.dispose();
             }
         } catch (com.sun.star.uno.Exception ex) {
-            ex.printStackTrace(System.out);
+            ex.printStackTrace(System.err);
         }}
 
 
@@ -211,7 +211,7 @@ public class Inspector{
             getInspectorPages().put(_sTitle, oInspectorPane);
             m_oSwingDialogProvider.show(nPageIndex);
         }catch( Exception exception ) {
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
         }}
 
 
@@ -284,7 +284,7 @@ public class Inspector{
                 m_oSwingDialogProvider.getInspectorPage(i).convertCompleteSourceCode(_nLanguage);
             }
         }catch( Exception exception ) {
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
         }}
 
 
@@ -389,7 +389,7 @@ public class Inspector{
             }
             m_oSwingDialogProvider.selectSourceCodeLanguage(nLanguage);
         }catch( Exception exception ) {
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
         }
             return nLanguage;
         }

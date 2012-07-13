@@ -145,7 +145,7 @@ public class FieldSelection
             }
             catch (Exception exception)
             {
-                exception.printStackTrace(System.out);
+                exception.printStackTrace(System.err);
             }
         }
     }
@@ -349,7 +349,7 @@ public class FieldSelection
         }
         catch (Exception exception)
         {
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
         }
     }
 
@@ -431,7 +431,7 @@ public class FieldSelection
         }
         catch (Exception exception)
         {
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
         }
     }
 
@@ -465,7 +465,7 @@ public class FieldSelection
         }
         catch (Exception exception)
         {
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
         }
     }
 
@@ -497,7 +497,7 @@ public class FieldSelection
         }
         catch (Exception exception)
         {
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
         }
     }
 

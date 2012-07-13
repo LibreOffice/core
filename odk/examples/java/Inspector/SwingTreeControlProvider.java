@@ -264,7 +264,7 @@ public class SwingTreeControlProvider implements XTreeControlProvider{
             addTreeExpandListener();
             }
             catch( Exception exception ) {
-                exception.printStackTrace(System.out);
+                exception.printStackTrace(System.err);
             }
             return jPnlContainer;
         }

@@ -55,7 +55,7 @@ public UnoMenu(XComponentContext _xContext, XMultiComponentFactory _xMCF) {
         oUnoMenu.mxTopWindow = oUnoMenu.showTopWindow( new Rectangle(100, 100, 500, 500));   //oUnoDialogSample.m_xWindowPeer,
         oUnoMenu.addMenuBar(oUnoMenu.mxTopWindow, oUnoMenu);
         }catch( Exception ex ) {
-            ex.printStackTrace(System.out);
+            ex.printStackTrace(System.err);
         }
     }
 

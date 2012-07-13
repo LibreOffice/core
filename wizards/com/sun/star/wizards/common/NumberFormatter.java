@@ -151,7 +151,7 @@ public class NumberFormatter
         }
         catch (Exception e)
         {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
             return -1;
         }
     }
@@ -176,7 +176,7 @@ public class NumberFormatter
         }
         catch (Exception e)
         {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
             return -1;
         }
     }
@@ -212,7 +212,7 @@ public class NumberFormatter
         }
         catch (Exception exception)
         {
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
         }
     }
 

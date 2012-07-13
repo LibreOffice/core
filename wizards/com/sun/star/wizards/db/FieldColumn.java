@@ -165,7 +165,7 @@ public class FieldColumn
         }
         catch (Exception e)
         {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
         }
     }
 
@@ -349,7 +349,7 @@ public class FieldColumn
         }
         catch (Exception exception)
         {
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
             m_nDBFormatKey = StandardFormatKey;
         }
     }
@@ -373,7 +373,7 @@ public class FieldColumn
         }
         catch (Exception exception)
         {
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
         }
     }
 

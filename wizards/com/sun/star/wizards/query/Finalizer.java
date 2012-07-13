@@ -148,7 +148,7 @@ public class Finalizer
         }
         catch (com.sun.star.uno.Exception exception)
         {
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
             return PropertyNames.EMPTY_STRING;
         }
     }

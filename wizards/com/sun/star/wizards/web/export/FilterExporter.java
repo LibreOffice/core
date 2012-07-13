@@ -55,7 +55,7 @@ public class FilterExporter extends AbstractExporter
         }
         catch (IOException iox)
         {
-            iox.printStackTrace(System.out);
+            iox.printStackTrace(System.err);
             result = false;
             throw iox;
         }

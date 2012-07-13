@@ -183,7 +183,7 @@ public class MessageBox  {
                 short nResult = xMessageBox.execute();
             }
         } catch (com.sun.star.uno.Exception ex) {
-            ex.printStackTrace(System.out);
+            ex.printStackTrace(System.err);
         } finally{
             //make sure always to dispose the component and free the memory!
             if (xComponent != null){
@@ -212,7 +212,7 @@ public class MessageBox  {
                 return false;
             }
         } catch (IllegalArgumentException e) {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
         }
         return bIsActivated;
     }

@@ -65,7 +65,7 @@ public class LetterDocument extends TextDocument
         }
         catch (Exception exception)
         {
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
         }
     }
 
@@ -120,7 +120,7 @@ public class LetterDocument extends TextDocument
             }
             catch (Exception exception)
             {
-                exception.printStackTrace(System.out);
+                exception.printStackTrace(System.err);
             }
         }
     }
@@ -165,7 +165,7 @@ public class LetterDocument extends TextDocument
         }
         catch (Exception exception)
         {
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
         }
     }
 
@@ -285,7 +285,7 @@ public class LetterDocument extends TextDocument
             }
             catch (Exception e)
             {
-                e.printStackTrace(System.out);
+                e.printStackTrace(System.err);
             }
         }
 
@@ -311,7 +311,7 @@ public class LetterDocument extends TextDocument
                 }
                 catch (Exception e)
                 {
-                    e.printStackTrace(System.out);
+                    e.printStackTrace(System.err);
                 }
             }
         }

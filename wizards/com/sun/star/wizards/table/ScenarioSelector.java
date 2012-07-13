@@ -153,7 +153,7 @@ public class ScenarioSelector extends FieldSelection implements XItemListener, X
         }
         catch (Exception e)
         {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
         }
         initializeCategory(BUSINESS);
     }
@@ -182,7 +182,7 @@ public class ScenarioSelector extends FieldSelection implements XItemListener, X
         }
         catch (Exception e)
         {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
         }
     }
 
@@ -212,7 +212,7 @@ public class ScenarioSelector extends FieldSelection implements XItemListener, X
             }
             catch (RuntimeException e)
             {
-                e.printStackTrace(System.out);
+                e.printStackTrace(System.err);
             }
         }
         String[] fieldnames = new String[afieldnameVector.size()];
@@ -238,7 +238,7 @@ public class ScenarioSelector extends FieldSelection implements XItemListener, X
             }
             catch (RuntimeException e)
             {
-                e.printStackTrace(System.out);
+                e.printStackTrace(System.err);
             }
         }
     }
@@ -263,7 +263,7 @@ public class ScenarioSelector extends FieldSelection implements XItemListener, X
                 }
                 catch (RuntimeException e)
                 {
-                    e.printStackTrace(System.out);
+                    e.printStackTrace(System.err);
                 }
                 if (!stablename.equals(PropertyNames.EMPTY_STRING))
                 {

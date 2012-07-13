@@ -233,7 +233,7 @@ public class CalcRTL /* extends ComplexTestCase */
         } catch (com.sun.star.uno.Exception e) {
             // Some exception occures.FAILED
             worked = false;
-            e.printStackTrace(/*(PrintWriter) log*/ System.out);
+            e.printStackTrace(/*(PrintWriter) log*/ System.err);
         }
 
         return worked;
@@ -287,9 +287,9 @@ public class CalcRTL /* extends ComplexTestCase */
             oSheet =  UnoRuntime.queryInterface(
                              XSpreadsheet.class, oIndexAccess.getByIndex(0));
         } catch (com.sun.star.lang.WrappedTargetException e) {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
         } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
         }
 
         return oSheet;

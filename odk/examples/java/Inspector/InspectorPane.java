@@ -94,7 +94,7 @@ import javax.swing.event.TreeWillExpandListener;
             m_xDialogProvider.addInspectorPage(getTitle(), oContainer);
         }
         catch( Exception exception ) {
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
         }}
 
 
@@ -291,7 +291,7 @@ import javax.swing.event.TreeWillExpandListener;
             }
         }
         catch( Exception exception ) {
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
         }}
 
 
@@ -311,7 +311,7 @@ import javax.swing.event.TreeWillExpandListener;
             }
         }
         catch(Exception exception) {
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
         }}
 
 
@@ -345,7 +345,7 @@ import javax.swing.event.TreeWillExpandListener;
         }
     }
     catch(Exception exception) {
-        exception.printStackTrace(System.out);
+        exception.printStackTrace(System.err);
     }}
 
 

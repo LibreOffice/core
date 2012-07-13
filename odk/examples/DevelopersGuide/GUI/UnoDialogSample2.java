@@ -136,7 +136,7 @@ public class UnoDialogSample2 extends UnoDialogSample {
             oUnoDialogSample2.xDialog = (XDialog) UnoRuntime.queryInterface(XDialog.class, oUnoDialogSample2.m_xDialogControl);
             oUnoDialogSample2.xDialog.execute();
         }catch( Exception ex ) {
-            ex.printStackTrace(System.out);
+            ex.printStackTrace(System.err);
         }
         finally{
             //make sure always to dispose the component and free the memory!
@@ -257,7 +257,7 @@ public class UnoDialogSample2 extends UnoDialogSample {
              * com.sun.star.beans.UnknownPropertyException,
              * com.sun.star.uno.Exception
              */
-            ex.printStackTrace(System.out);
+            ex.printStackTrace(System.err);
         }
     }
 

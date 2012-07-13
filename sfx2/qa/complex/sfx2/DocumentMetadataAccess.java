@@ -888,7 +888,7 @@ public class DocumentMetadataAccess
 
     public void report(Exception e) {
         System.out.println("Exception occurred:");
-        e.printStackTrace(System.out);
+        e.printStackTrace(System.err);
         report2(e);
         fail();
     }

@@ -88,7 +88,7 @@ public class UnoDialog implements EventNames
         }
         catch (com.sun.star.uno.Exception exception)
         {
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
         }
     }
 
@@ -106,7 +106,7 @@ public class UnoDialog implements EventNames
         }
         catch (com.sun.star.uno.Exception exception)
         {
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
             iKey = 2000;
         }
         return iKey;
@@ -160,7 +160,7 @@ public class UnoDialog implements EventNames
         }
         catch (com.sun.star.uno.Exception exception)
         {
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
         }
     }
 
@@ -186,7 +186,7 @@ public class UnoDialog implements EventNames
         }
         catch (com.sun.star.uno.Exception exception)
         {
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
         }
     }
 
@@ -200,7 +200,7 @@ public class UnoDialog implements EventNames
         }
         catch (com.sun.star.uno.Exception exception)
         { // com.sun.star.container.NoSuchElementException, com.sun.star.beans.UnknownPropertyException,
-            exception.printStackTrace(System.out); // com.sun.star.lang.WrappedTargetException, com.sun.star.beans.PropertyVetoException
+            exception.printStackTrace(System.err); // com.sun.star.lang.WrappedTargetException, com.sun.star.beans.PropertyVetoException
             return null; // com.sun.star.lang.IllegalArgumentException
         }
     }
@@ -220,7 +220,7 @@ public class UnoDialog implements EventNames
         }
         catch (com.sun.star.uno.Exception exception)
         { // com.sun.star.container.NoSuchElementException, com.sun.star.beans.UnknownPropertyException,
-            exception.printStackTrace(System.out); // com.sun.star.lang.WrappedTargetException, com.sun.star.beans.PropertyVetoException
+            exception.printStackTrace(System.err); // com.sun.star.lang.WrappedTargetException, com.sun.star.beans.PropertyVetoException
         }
     }
 
@@ -391,7 +391,7 @@ public class UnoDialog implements EventNames
         }
         catch (com.sun.star.uno.Exception exception)
         {
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
             return null;
         }
     }
@@ -425,7 +425,7 @@ public class UnoDialog implements EventNames
         }
         catch (com.sun.star.uno.Exception exception)
         {
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
             return null;
         }
     }
@@ -488,7 +488,7 @@ public class UnoDialog implements EventNames
         }
         catch (com.sun.star.uno.Exception exception)
         {
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
             return null;
         }
     }
@@ -507,7 +507,7 @@ public class UnoDialog implements EventNames
         }
         catch (com.sun.star.uno.Exception exception)
         {
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
             return null;
         }
     }
@@ -532,7 +532,7 @@ public class UnoDialog implements EventNames
         }
         catch (com.sun.star.uno.Exception exception)
         {
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
             return null;
         }
     }
@@ -554,7 +554,7 @@ public class UnoDialog implements EventNames
         }
         catch (com.sun.star.uno.Exception exception)
         {
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
         }
     }
 
@@ -586,7 +586,7 @@ public class UnoDialog implements EventNames
         }
         catch (com.sun.star.uno.Exception exception)
         {
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
         }
     }
 
@@ -604,7 +604,7 @@ public class UnoDialog implements EventNames
         }
         catch (com.sun.star.uno.Exception exception)
         {
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
         }
     }
 
@@ -619,7 +619,7 @@ public class UnoDialog implements EventNames
         }
         catch (com.sun.star.uno.Exception exception)
         {
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
             return null;
         }
     }
@@ -646,7 +646,7 @@ public class UnoDialog implements EventNames
         }
         catch (java.lang.Exception jexception)
         {
-            jexception.printStackTrace(System.out);
+            jexception.printStackTrace(System.err);
             return null;
         }
     }
@@ -1045,7 +1045,7 @@ public class UnoDialog implements EventNames
                 }
                 catch (IllegalArgumentException e)
                 {
-                    e.printStackTrace(System.out);
+                    e.printStackTrace(System.err);
                     return false;
                 }
                 //TODO: The following methods could be wrapped in an own class implementation

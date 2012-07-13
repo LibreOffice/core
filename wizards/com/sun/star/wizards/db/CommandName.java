@@ -74,7 +74,7 @@ public class CommandName
         }
         catch (SQLException e)
         {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
         }
     }
 
@@ -120,7 +120,7 @@ public class CommandName
         }
         catch (Exception exception)
         {
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
         }
     }
 
@@ -174,7 +174,7 @@ public class CommandName
         }
         catch (SQLException e)
         {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
             return false;
         }
     }

@@ -149,7 +149,7 @@ public class CommandMetaData extends DBMetaData
         }
         catch (Exception exception)
         {
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
             return null;
         }
     }
@@ -313,7 +313,7 @@ public class CommandMetaData extends DBMetaData
         }
         catch (Exception exception)
         {
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
         }
         Resource oResource = new Resource(xMSF, "Database", "dbw");
         String sMsgNoFieldsFromCommand = oResource.getResText(RID_DB_COMMON + 45);
@@ -388,7 +388,7 @@ public class CommandMetaData extends DBMetaData
         }
         catch (Exception exception)
         {
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
             return false;
         }
     }
@@ -411,7 +411,7 @@ public class CommandMetaData extends DBMetaData
         }
         catch (Exception exception)
         {
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
             return new String[]
                     {
                     };
@@ -471,7 +471,7 @@ public class CommandMetaData extends DBMetaData
         }
         catch (Exception exception)
         {
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
             return new String[]
                     {
                     };
@@ -624,7 +624,7 @@ public class CommandMetaData extends DBMetaData
         }
         catch (Exception e)
         {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
         }
         return sTotReferencedTables;
     }
@@ -687,7 +687,7 @@ public class CommandMetaData extends DBMetaData
         }
         catch (SQLException e)
         {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
         }
     }
 

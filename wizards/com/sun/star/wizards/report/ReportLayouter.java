@@ -210,7 +210,7 @@ public class ReportLayouter
         }
         catch (Exception exception)
         {
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
         }
     }
 
@@ -323,7 +323,7 @@ public class ReportLayouter
             }
             catch (Exception exception)
             {
-                exception.printStackTrace(System.out);
+                exception.printStackTrace(System.err);
             }
 //                CurReportDocument.getDoc().unlockallControllers();
             Helper.setUnoPropertyValue(CurUnoDialog.xDialogModel, PropertyNames.PROPERTY_ENABLED, Boolean.TRUE);

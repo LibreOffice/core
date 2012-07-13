@@ -231,7 +231,7 @@ public class FormTools {
         }
         catch (Exception ex) {
             System.out.println("Exception: "+ex);
-            ex.printStackTrace(System.out);
+            ex.printStackTrace(System.err);
         }
 
         return formLoader;
@@ -273,7 +273,7 @@ public class FormTools {
         }
         catch (Exception ex) {
             System.out.println("Exception: "+ex);
-            ex.printStackTrace(System.out);
+            ex.printStackTrace(System.err);
         }
 
         return formLoader;

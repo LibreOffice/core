@@ -58,7 +58,7 @@ public class CGCategory
         }
         catch (Exception e)
         {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
         }
     }
 
@@ -71,7 +71,7 @@ public class CGCategory
         }
         catch (Exception e)
         {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
             return null;
         }
     }

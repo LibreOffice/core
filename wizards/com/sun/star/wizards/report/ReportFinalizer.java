@@ -184,7 +184,7 @@ public class ReportFinalizer
 //      XSimpleFileAccess xSimpleFileAccess = (XSimpleFileAccess) com.sun.star.uno.UnoRuntime.queryInterface(XSimpleFileAccess.class, xUcbInterface);
 //      return xSimpleFileAccess.exists(_spath);
 //  } catch (Exception exception) {
-//      exception.printStackTrace(System.out);
+//      exception.printStackTrace(System.err);
 //      return false;
 //  }}
     public void initialize(RecordParser _CurDBMetaData)
@@ -224,7 +224,7 @@ public class ReportFinalizer
         }
         catch (Exception e)
         {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
             return PropertyNames.EMPTY_STRING;
         }
     }

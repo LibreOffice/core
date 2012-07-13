@@ -172,7 +172,7 @@ public class SystemDialog  {
             }
 
         }catch( Exception exception ) {
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
         } finally{
             //make sure always to dispose the component and free the memory!
             if (xComponent != null){

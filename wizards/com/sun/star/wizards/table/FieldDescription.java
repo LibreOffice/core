@@ -114,7 +114,7 @@ public class FieldDescription
         }
         catch (Exception e)
         {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
         }
         return bexists;
     }
@@ -151,7 +151,7 @@ public class FieldDescription
         }
         catch (Exception e)
         {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
         }
     }
 

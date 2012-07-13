@@ -138,7 +138,7 @@ public class PeerConfig implements XWindowListener
         }
         catch (RuntimeException re)
         {
-            re.printStackTrace(System.out);
+            re.printStackTrace(System.err);
             throw re;
         }
     }

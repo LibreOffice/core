@@ -278,7 +278,7 @@ public class CallWizard
         }
         catch (Exception exception)
         {
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
         }
     }
 }

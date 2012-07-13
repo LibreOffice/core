@@ -130,7 +130,7 @@ public class ImageControlSample extends UnoDialogSample{
              * com.sun.star.beans.UnknownPropertyException,
              * com.sun.star.uno.Exception
              */
-            ex.printStackTrace(System.out);
+            ex.printStackTrace(System.err);
         }
         return xICModelPropertySet;
     }

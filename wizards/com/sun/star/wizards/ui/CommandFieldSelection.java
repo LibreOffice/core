@@ -150,7 +150,7 @@ public class CommandFieldSelection extends FieldSelection implements Comparator<
         }
         catch (Exception exception)
         {
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
         }
     }
 
@@ -264,7 +264,7 @@ public class CommandFieldSelection extends FieldSelection implements Comparator<
         }
         catch (Exception exception)
         {
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
         }
     }
 

@@ -299,7 +299,7 @@ public class PrimaryKeyHandler implements XFieldSelectionListener
         }
         catch (Exception e)
         {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
         }
         return false;
     }
@@ -359,7 +359,7 @@ public class PrimaryKeyHandler implements XFieldSelectionListener
         }
         catch (Exception e)
         {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
         }
     }
 
@@ -373,7 +373,7 @@ public class PrimaryKeyHandler implements XFieldSelectionListener
         }
         catch (IllegalArgumentException e)
         {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
         }
     }
 

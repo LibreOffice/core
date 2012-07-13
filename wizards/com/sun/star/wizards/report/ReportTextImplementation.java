@@ -441,7 +441,7 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
         }
 //            catch (java.lang.Exception javaexception) 
 //            {
-//                javaexception.printStackTrace(System.out);
+//                javaexception.printStackTrace(System.err);
 //            }
         getDoc().unlockallControllers();
         getDoc().setLayoutSectionsVisible(false);
@@ -480,7 +480,7 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
 //            } 
 //            catch (java.lang.Exception jexception) 
 //            {
-//                jexception.printStackTrace(System.out);
+//                jexception.printStackTrace(System.err);
 //            }
 //        }
     private void replaceUserFields()

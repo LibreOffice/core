@@ -188,7 +188,7 @@ public class AggregateComponent extends ControlScroller
             }
             catch (Exception exception)
             {
-                exception.printStackTrace(System.out);
+                exception.printStackTrace(System.err);
             }
         }
     }
@@ -325,7 +325,7 @@ public class AggregateComponent extends ControlScroller
         }
         catch (SQLException e)
         {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
         }
         return false;
     }
@@ -414,7 +414,7 @@ public class AggregateComponent extends ControlScroller
         }
         catch (Exception exception)
         {
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
             return null;
         }
     }
@@ -543,7 +543,7 @@ public class AggregateComponent extends ControlScroller
             }
             catch (Exception exception)
             {
-                exception.printStackTrace(System.out);
+                exception.printStackTrace(System.err);
             }
         }
 
@@ -593,7 +593,7 @@ public class AggregateComponent extends ControlScroller
                 }
                 catch (Exception exception)
                 {
-                    exception.printStackTrace(System.out);
+                    exception.printStackTrace(System.err);
                 }
             }
 

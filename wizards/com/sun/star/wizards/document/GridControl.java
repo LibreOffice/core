@@ -78,7 +78,7 @@ public class GridControl extends Shape
         }
         catch (Exception e)
         {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
         }
     }
 }

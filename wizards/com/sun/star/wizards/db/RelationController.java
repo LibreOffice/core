@@ -78,7 +78,7 @@ public class RelationController extends CommandName
         }
         catch (SQLException e)
         {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
         }
         return sReferencedTableNames;
     }
@@ -146,7 +146,7 @@ public class RelationController extends CommandName
         }
         catch (Exception e)
         {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
         }
         return sKeyColumnNames;
     }

@@ -535,7 +535,7 @@ class ReportTextDocument extends com.sun.star.wizards.text.TextDocument implemen
         String SystemContentPath = JavaTools.convertfromURLNotation(ContentTemplatePath);
         String sMsgCurCommonReportError = JavaTools.replaceSubString(sMsgCommonReportError, SystemContentPath, "%PATH");
         CurDBMetaData.showMessageBox("ErrorBox", VclWindowPeerAttribute.OK, sMsgCurCommonReportError);
-        exception.printStackTrace(System.out);
+        exception.printStackTrace(System.err);
     }
 
     public void getallDBColumns()

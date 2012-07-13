@@ -220,7 +220,7 @@ public class SystemDialog
         }
         catch (Exception exception)
         {
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
         }
     }
 
@@ -285,7 +285,7 @@ public class SystemDialog
         }
         catch (com.sun.star.uno.Exception exception)
         {
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
             return null;
         }
     }
@@ -342,7 +342,7 @@ public class SystemDialog
         }
         catch (Exception exception)
         {
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
         }
         return iMessage;
     }
@@ -384,7 +384,7 @@ public class SystemDialog
         catch (Exception e)
         {
             // TODO Auto-generated catch block
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
         }
         return iMessage;
     }

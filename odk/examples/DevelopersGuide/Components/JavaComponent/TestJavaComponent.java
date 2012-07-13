@@ -134,7 +134,7 @@ public class TestJavaComponent
         {
             System.out.println( "UNO Exception caught: " + e );
             System.out.println( "Message: " + e.getMessage() );
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
         }
 
         // quit, even when a remote bridge is running

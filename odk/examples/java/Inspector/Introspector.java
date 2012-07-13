@@ -160,7 +160,7 @@ public class Introspector extends WeakBase{
             }
         }
     } catch (IllegalTypeException ex) {
-        ex.printStackTrace(System.out);
+        ex.printStackTrace(System.err);
     }
         return bIsContainer;
     }
@@ -422,7 +422,7 @@ public class Introspector extends WeakBase{
         }
         return null;
     } catch (Exception ex) {
-        ex.printStackTrace(System.out);
+        ex.printStackTrace(System.err);
         return null;
     }}
 
@@ -454,7 +454,7 @@ public class Introspector extends WeakBase{
             }
         }
     } catch (Exception ex) {
-        ex.printStackTrace(System.out);
+        ex.printStackTrace(System.err);
     }
         return xTypeDescription;
     }
@@ -637,7 +637,7 @@ public class Introspector extends WeakBase{
         }
         return xSimpleFileAccess;
     } catch (com.sun.star.uno.Exception ex) {
-        ex.printStackTrace(System.out);
+        ex.printStackTrace(System.err);
         return null;
     }}
 
@@ -651,7 +651,7 @@ public class Introspector extends WeakBase{
             bIsValid = (getXSimpleFileAccess().exists(sIDLFolder) && getXSimpleFileAccess().exists(sIndexFile));
         }
     } catch (com.sun.star.uno.Exception ex) {
-        ex.printStackTrace(System.out);
+        ex.printStackTrace(System.err);
     }
         return bIsValid;
     }

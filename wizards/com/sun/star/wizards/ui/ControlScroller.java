@@ -453,7 +453,7 @@ public abstract class ControlScroller
         }
         catch (java.lang.Exception ex)
         {
-            ex.printStackTrace(System.out);
+            ex.printStackTrace(System.err);
             return null;
         }
     }

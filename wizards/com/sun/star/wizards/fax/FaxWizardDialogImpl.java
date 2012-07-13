@@ -194,7 +194,7 @@ public class FaxWizardDialogImpl extends FaxWizardDialog
         catch (Exception exception)
         {
             removeTerminateListener();
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
             running = false;
             }
     }
@@ -771,7 +771,7 @@ public class FaxWizardDialogImpl extends FaxWizardDialog
         }
         catch (Exception exception)
         {
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
         }
     }
 

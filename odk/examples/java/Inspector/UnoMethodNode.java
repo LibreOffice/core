@@ -208,7 +208,7 @@ public class UnoMethodNode extends UnoNode{
         aParamInfo[0] = new Object[] {};
         return getXIdlMethod().invoke(getUnoObject(), aParamInfo);
     } catch (Exception ex) {
-        ex.printStackTrace(System.out);
+        ex.printStackTrace(System.err);
         return null;
     }}
 

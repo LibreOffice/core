@@ -259,7 +259,7 @@ public class TextDocument
             }
             catch (PropertyVetoException e1)
             {
-                e1.printStackTrace(System.out);
+                e1.printStackTrace(System.err);
             }
         }
         Object oDoc = OfficeDocument.load(xFrame, sDefaultTemplate, "_self", loadValues);
@@ -299,7 +299,7 @@ public class TextDocument
         }
         catch (Exception exception)
         {
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
             return null;
         }
     }
@@ -445,7 +445,7 @@ public class TextDocument
         }
         catch (NoSuchElementException e)
         {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
             return false;
         }
     }

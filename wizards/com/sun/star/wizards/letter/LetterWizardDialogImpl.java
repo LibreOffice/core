@@ -251,7 +251,7 @@ public class LetterWizardDialogImpl extends LetterWizardDialog
         catch (Exception exception)
         {
             removeTerminateListener();
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
             running = false;
             }
     }
@@ -844,7 +844,7 @@ public class LetterWizardDialogImpl extends LetterWizardDialog
         }
         catch (Exception exception)
         {
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
         }
     }
 

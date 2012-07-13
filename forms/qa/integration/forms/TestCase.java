@@ -73,7 +73,7 @@ public abstract class TestCase extends complexlib.ComplexTestCase implements com
         }
         catch ( java.lang.Exception e )
         {
-            e.printStackTrace( System.out );
+            e.printStackTrace( System.err );
         }
     }
 
@@ -93,7 +93,7 @@ public abstract class TestCase extends complexlib.ComplexTestCase implements com
         }
         catch ( com.sun.star.uno.Exception e )
         {
-            e.printStackTrace( System.out );
+            e.printStackTrace( System.err );
         }
     }
 

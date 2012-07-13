@@ -240,7 +240,7 @@ public class QueryMetaData extends CommandMetaData
         }
         catch (Exception exception)
         {
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
         }
     }
 

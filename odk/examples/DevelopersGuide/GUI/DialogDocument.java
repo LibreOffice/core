@@ -79,7 +79,7 @@ public class DialogDocument extends UnoDialogSample {
             oDialogDocument.insertButton(oDialogDocument, 126, 370, 50, "~Close dialog", (short) PushButtonType.OK_value);
             oDialogDocument.executeDialog();
         }catch( Exception ex ) {
-            ex.printStackTrace(System.out);
+            ex.printStackTrace(System.err);
         } finally{
             //make sure always to dispose the component and free the memory!
             if (oDialogDocument != null){

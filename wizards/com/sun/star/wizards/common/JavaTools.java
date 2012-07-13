@@ -61,7 +61,7 @@ public class JavaTools
         }
         catch (Exception exception)
         {
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
         }
     }
 */
@@ -142,7 +142,7 @@ public class JavaTools
         }
         catch (RuntimeException e)
         {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
             return null;
         }
     }
@@ -168,7 +168,7 @@ public class JavaTools
         }
         catch (RuntimeException e)
         {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
             return null;
         }
     }
@@ -416,7 +416,7 @@ public class JavaTools
         }
         catch (Exception exception)
         {
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
             return null;
         }
     }
@@ -450,7 +450,7 @@ public class JavaTools
         }
         catch (MalformedURLException e)
         {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
         }
         return sPath;
     }

@@ -101,7 +101,7 @@ public class Finalizer
                         }
                         catch (SQLException e1)
                         {
-                            e1.printStackTrace(System.out);
+                            e1.printStackTrace(System.err);
                         }
                         CurUnoDialog.insertLabel("lblCatalog",
                                 new String[]
@@ -136,7 +136,7 @@ public class Finalizer
                         }
                         catch (Exception e)
                         {
-                            e.printStackTrace(System.out);
+                            e.printStackTrace(System.err);
                         }
                         nListBoxPosX = 200;
                     }
@@ -156,7 +156,7 @@ public class Finalizer
                         }
                         catch (Exception e1)
                         {
-                            e1.printStackTrace(System.out);
+                            e1.printStackTrace(System.err);
                         }
                         CurUnoDialog.insertLabel("lblSchema",
                                 new String[]
@@ -191,7 +191,7 @@ public class Finalizer
                         }
                         catch (Exception e)
                         {
-                            e.printStackTrace(System.out);
+                            e.printStackTrace(System.err);
                         }
                     }
                 }
@@ -251,7 +251,7 @@ public class Finalizer
         }
         catch (SQLException e)
         {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
         }
     }
 

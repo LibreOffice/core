@@ -219,7 +219,7 @@ public class FilterComponent
         }
         catch (Exception e)
         {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
         }
         return PropertyNames.EMPTY_STRING;
     }
@@ -342,7 +342,7 @@ public class FilterComponent
         }
         catch (IllegalArgumentException e)
         {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
         }
         return PropertyNames.EMPTY_STRING;
     }
@@ -711,7 +711,7 @@ public class FilterComponent
             }
             catch (Exception exception)
             {
-                exception.printStackTrace(System.out);
+                exception.printStackTrace(System.err);
             }
         }
 
@@ -758,7 +758,7 @@ public class FilterComponent
             }
             catch (Exception exception)
             {
-                exception.printStackTrace(System.out);
+                exception.printStackTrace(System.err);
                 return false;
             }
         }
@@ -819,7 +819,7 @@ public class FilterComponent
             }
             catch (Exception e)
             {
-                e.printStackTrace(System.out);
+                e.printStackTrace(System.err);
             }
         }
 
@@ -860,7 +860,7 @@ public class FilterComponent
                 }
                 catch (Exception e)
                 {
-                    e.printStackTrace(System.out);
+                    e.printStackTrace(System.err);
                 }
                 if ((iselected.length) == 0)
                 {
@@ -885,7 +885,7 @@ public class FilterComponent
             }
             catch (Exception exception)
             {
-                exception.printStackTrace(System.out);
+                exception.printStackTrace(System.err);
             }
             return null;
         }
@@ -925,7 +925,7 @@ public class FilterComponent
             }
             catch (Exception exception)
             {
-                exception.printStackTrace(System.out);
+                exception.printStackTrace(System.err);
             }
             return -1;
         }

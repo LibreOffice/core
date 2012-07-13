@@ -133,7 +133,7 @@ public class DBColumn
         }
         catch (Exception e)
         {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
         }
         return false;
     }
@@ -291,7 +291,7 @@ public class DBColumn
         }
         catch (Exception exception)
         {
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
         }
     }
 
@@ -395,7 +395,7 @@ public class DBColumn
         }
         catch (com.sun.star.beans.UnknownPropertyException exception)
         {
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
         }
     }
 
@@ -423,7 +423,7 @@ public class DBColumn
         }
         catch (Exception exception)
         {
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
         }
     }
 
@@ -466,7 +466,7 @@ public class DBColumn
         {
 //      sMsgInvalidTextField = oResource.getResText(UIConsts.RID_REPORT + 73);
 //      SystemDialog.showMessageBox(oTextTableHandler.xMSFDoc, "ErrorBox", VclWindowPeerAttribute.OK, sMsgInvalidTextField);
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
             return true;    //most probably this is really the Namecell!!!!
         }
     }

@@ -78,7 +78,7 @@ public class RecordParser extends QueryMetaData
         }
         catch (Exception exception)
         {
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
         }
     }
 
@@ -95,7 +95,7 @@ public class RecordParser extends QueryMetaData
         }
         catch (Exception exception)
         {
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
             return null;
         }
     }
@@ -120,7 +120,7 @@ public class RecordParser extends QueryMetaData
         }
         catch (Exception exception)
         {
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
         }
         return Any.VOID;
     }
@@ -223,7 +223,7 @@ public class RecordParser extends QueryMetaData
         }
         catch (Exception exception)
         {
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
             throw new InvalidQueryException(xMSF, Command);
         }
     }
@@ -254,7 +254,7 @@ public class RecordParser extends QueryMetaData
         }
         catch (InvalidQueryException queryexception)
         {
-            queryexception.printStackTrace(System.out);
+            queryexception.printStackTrace(System.err);
             return false;
         }
     }

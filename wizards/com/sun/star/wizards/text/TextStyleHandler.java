@@ -61,7 +61,7 @@ public class TextStyleHandler
         }
         catch (Exception exception)
         {
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
         }
     }
 
@@ -80,7 +80,7 @@ public class TextStyleHandler
         }
         catch (Exception e)
         {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
         }
         return null;
     }
@@ -99,7 +99,7 @@ public class TextStyleHandler
         }
         catch (Exception e)
         {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
             return null;
         }
     }

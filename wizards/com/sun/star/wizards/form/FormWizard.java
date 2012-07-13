@@ -160,7 +160,7 @@ public class FormWizard extends DatabaseObjectWizard
         }
         catch (Exception e)
         {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
         }
     }
 
@@ -362,7 +362,7 @@ public class FormWizard extends DatabaseObjectWizard
         }
         catch (java.lang.Exception jexception)
         {
-            jexception.printStackTrace(System.out);
+            jexception.printStackTrace(System.err);
         }
         if ((!m_success) && (curFormDocument != null))
         {

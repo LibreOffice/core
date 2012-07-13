@@ -140,7 +140,7 @@ public class InspectorAddon {
                 }
             } catch( Exception e ) {
                 System.err.println( e + e.getMessage());
-                e.printStackTrace(System.out);
+                e.printStackTrace(System.err);
             }}
 
             public void addStatusListener( /*IN*/XStatusListener xControl, /*IN*/com.sun.star.util.URL aURL ) {

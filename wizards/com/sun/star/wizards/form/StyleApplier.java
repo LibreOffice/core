@@ -171,7 +171,7 @@ public class StyleApplier
 //        }
 //        catch (Exception e)
 //        {
-//            e.printStackTrace(System.out);
+//            e.printStackTrace(System.err);
 //        }
     }
 
@@ -200,7 +200,7 @@ public class StyleApplier
         }
         catch (Exception e)
         {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
         }
     }
 
@@ -216,7 +216,7 @@ public class StyleApplier
         }
         catch (IllegalArgumentException e)
         {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
         }
         return (short) -1;
     }
@@ -316,7 +316,7 @@ public class StyleApplier
         }
         catch (Exception e)
         {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
         }
         curFormDocument.unlockallControllers();
     }
@@ -428,7 +428,7 @@ public class StyleApplier
         }
         catch (Exception e)
         {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
         }
     }
 
@@ -489,7 +489,7 @@ public class StyleApplier
         }
         catch (Exception e)
         {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
         }
     }
 }

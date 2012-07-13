@@ -84,7 +84,7 @@ public class TextFieldHandler
         }
         catch (com.sun.star.uno.Exception exception)
         {
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
         }
         return PropertyNames.EMPTY_STRING;
     }
@@ -121,7 +121,7 @@ public class TextFieldHandler
         }
         catch (com.sun.star.uno.Exception exception)
         {
-            exception.printStackTrace(System.out);
+            exception.printStackTrace(System.err);
         }
     }
 
@@ -192,7 +192,7 @@ public class TextFieldHandler
         catch (Exception e)
         {
             // TODO Auto-generated catch block
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
         }
         return null;
     }
@@ -213,7 +213,7 @@ public class TextFieldHandler
         }
         catch (Exception e)
         {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
         }
     }
 
@@ -313,7 +313,7 @@ public class TextFieldHandler
         }
         catch (Exception e)
         {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
         }
     }
 
@@ -333,7 +333,7 @@ public class TextFieldHandler
         }
         catch (Exception e)
         {
-            e.printStackTrace(System.out);
+            e.printStackTrace(System.err);
         }
     }
 }

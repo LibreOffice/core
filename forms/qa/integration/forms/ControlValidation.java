@@ -98,7 +98,7 @@ public class ControlValidation extends complexlib.ComplexTestCase implements com
         }
         catch ( com.sun.star.uno.Exception e )
         {
-            e.printStackTrace( System.out );
+            e.printStackTrace( System.err );
         }
     }
 
