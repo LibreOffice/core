@@ -48,8 +48,6 @@ protected:
     RGBAColor maLineColor; //< pen color RGBA
     RGBAColor maFillColor; //< brush color RGBA
 
-    CoreTextPhysicalFontFace* m_font_face; //< Device Font settings
-
     bool mbNonAntialiasedText; //< allows text to be rendered without antialiasing
 
     // Graphics types
@@ -59,8 +57,6 @@ protected:
     bool mbWindow; //< is this a window graphics
 
     RGBColor m_TextColor;
-
-    CoreTextStyleInfo* m_style;
 
 public:
     AquaSalGraphics();
@@ -271,6 +267,8 @@ public:
     virtual SystemFontData GetSysFontData( int /* nFallbacklevel */ ) const;
 
 private:
+    CoreTextStyleInfo* m_style;
+
     // differences between VCL, Quartz and kHiThemeOrientation coordinate systems
     // make some graphics seem to be vertically-mirrored from a VCL perspective
     bool IsFlipped() const { return mbWindow; };
