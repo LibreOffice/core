@@ -79,7 +79,7 @@ class TeleManagerImpl
 {
 public:
     GMainLoop*                          mpLoop;
-    TpDBusDaemon*                       mpDBus;
+    TpAutomaticClientFactory*           mpFactory;
     TpBaseClient*                       mpClient;
     TpBaseClient*                       mpFileTransferClient;
     TpAccountManager*                   mpAccountManager;
@@ -380,34 +380,34 @@ TeleManager::unref()
 }
 
 
-bool TeleManager::connect()
+bool TeleManager::createAccountManager()
 {
-    INFO_LOGGER( "TeleManager::connect");
+    INFO_LOGGER( "TeleManager::createAccountManager");
 
     MutexGuard aGuard( GetMutex());
 
-    /* TODO: also check whether client could be registered and retry if not? */
-    SAL_INFO_IF( pImpl->mpDBus && pImpl->mpClient, "tubes", "TeleManager::connect: already connected");
-    if (pImpl->mpDBus && pImpl->mpClient)
+    SAL_INFO_IF( pImpl->mpAccountManager, "tubes", "TeleManager::createAccountManager: already connected");
+    if (pImpl->mpAccountManager)
         return true;
 
     GError* pError = NULL;
-    pImpl->mpDBus = tp_dbus_daemon_dup( &pError);
-    SAL_WARN_IF( !pImpl->mpDBus, "tubes", "TeleManager::connect: no dbus daemon");
-    if (!pImpl->mpDBus || pError)
+    TpDBusDaemon *pDBus = tp_dbus_daemon_dup( &pError);
+    SAL_WARN_IF( !pDBus, "tubes", "TeleManager::createAccountManager: no dbus daemon");
+    if (!pDBus || pError)
     {
-        SAL_WARN_IF( pError, "tubes", "TeleManager::connect: dbus daemon error: " << pError->message);
+        SAL_WARN_IF( pError, "tubes", "TeleManager::createAccountManager: dbus daemon error: " << pError->message);
         g_error_free( pError);
         return false;
     }
 
-    TpAutomaticClientFactory* pFactory = tp_automatic_client_factory_new( pImpl->mpDBus);
-    SAL_WARN_IF( !pFactory, "tubes", "TeleManager::connect: no client factory");
-    if (!pFactory)
+    pImpl->mpFactory = tp_automatic_client_factory_new( pDBus);
+    g_object_unref( pDBus);
+    SAL_WARN_IF( !pImpl->mpFactory, "tubes", "TeleManager::createAccountManager: no client factory");
+    if (!pImpl->mpFactory)
         return false;
 
     TpAccountManager* pAccountManager = tp_account_manager_new_with_factory (
-        TP_SIMPLE_CLIENT_FACTORY (pFactory));
+        TP_SIMPLE_CLIENT_FACTORY (pImpl->mpFactory));
     tp_account_manager_set_default( pAccountManager);
 
     /* Takes our ref. */
@@ -415,11 +415,22 @@ bool TeleManager::connect()
 
     pImpl->mpContactList = new ContactList(pAccountManager);
 
-    if (!mbAcceptIncoming)
+    return true;
+}
+
+bool TeleManager::registerClients()
+{
+    INFO_LOGGER( "TeleManager::registerClients");
+
+    MutexGuard aGuard( GetMutex());
+
+    /* TODO: also check whether client could be registered and retry if not? */
+    SAL_INFO_IF( pImpl->mpClient && pImpl->mpFileTransferClient, "tubes", "TeleManager::registerClients: already registered");
+    if (pImpl->mpClient && pImpl->mpFileTransferClient)
         return true;
 
     pImpl->mpClient = tp_simple_handler_new_with_factory(
-            TP_SIMPLE_CLIENT_FACTORY (pFactory), // factory
+            TP_SIMPLE_CLIENT_FACTORY (pImpl->mpFactory), // factory
             FALSE,                          // bypass_approval
             FALSE,                          // requests
             getFullClientName().getStr(),   // name
@@ -428,7 +439,7 @@ bool TeleManager::connect()
             this,                           // user_data
             NULL                            // destroy
             );
-    SAL_WARN_IF( !pImpl->mpClient, "tubes", "TeleManager::connect: no client");
+    SAL_WARN_IF( !pImpl->mpClient, "tubes", "TeleManager::registerClients: no client");
     if (!pImpl->mpClient)
         return false;
 
@@ -450,15 +461,16 @@ bool TeleManager::connect()
                 TP_PROP_CHANNEL_TYPE_DBUS_TUBE_SERVICE_NAME, G_TYPE_STRING, getFullServiceName().getStr(),
                 NULL));
 
+    GError* pError = NULL;
     if (!tp_base_client_register( pImpl->mpClient, &pError))
     {
-        SAL_WARN( "tubes", "TeleManager::connect: error registering client handler: " << pError->message);
+        SAL_WARN( "tubes", "TeleManager::registerClients: error registering client handler: " << pError->message);
         g_error_free( pError);
         return false;
     }
 
-    SAL_INFO( "tubes", "TeleManager::connect: bus name: " << tp_base_client_get_bus_name( pImpl->mpClient));
-    SAL_INFO( "tubes", "TeleManager::connect: object path: " << tp_base_client_get_object_path( pImpl->mpClient));
+    SAL_INFO( "tubes", "TeleManager::registerClients: bus name: " << tp_base_client_get_bus_name( pImpl->mpClient));
+    SAL_INFO( "tubes", "TeleManager::registerClients: object path: " << tp_base_client_get_object_path( pImpl->mpClient));
 
     /* Register a second "head" for incoming file transfers. This uses a more
      * specific filter than Empathy's handler by matching on the file
@@ -466,7 +478,7 @@ bool TeleManager::connect()
      * user isn't prompted before the channel gets passed to us.
      */
     pImpl->mpFileTransferClient = tp_simple_handler_new_with_factory (
-            TP_SIMPLE_CLIENT_FACTORY( pFactory),            // factory
+            TP_SIMPLE_CLIENT_FACTORY( pImpl->mpFactory),            // factory
             TRUE,                                           // bypass_approval
             FALSE,                                          // requests
             getFullClientName().getStr(),                   // name
@@ -485,7 +497,7 @@ bool TeleManager::connect()
     if (!tp_base_client_register( pImpl->mpFileTransferClient, &pError))
     {
         /* This shouldn't fail if registering the main handler succeeded */
-        SAL_WARN( "tubes", "TeleManager::connect: error registering file transfer handler: " << pError->message);
+        SAL_WARN( "tubes", "TeleManager::registerClients: error registering file transfer handler: " << pError->message);
         g_error_free( pError);
         return false;
     }
@@ -945,7 +957,7 @@ void TeleManager::addSuffixToNames( const char* pName )
 TeleManagerImpl::TeleManagerImpl()
     :
         mpLoop( NULL),
-        mpDBus( NULL),
+        mpFactory( NULL),
         mpClient( NULL),
         mpFileTransferClient( NULL),
         mpAccountManager( NULL),
@@ -957,12 +969,12 @@ TeleManagerImpl::TeleManagerImpl()
 
 TeleManagerImpl::~TeleManagerImpl()
 {
+    if (mpFactory)
+        g_object_unref( mpFactory);
     if (mpClient)
         g_object_unref( mpClient);
     if (mpFileTransferClient)
         g_object_unref( mpFileTransferClient);
-    if (mpDBus)
-        g_object_unref( mpDBus);
     if (mpAccountManager)
         g_object_unref( mpAccountManager);
     if (mpContactList)

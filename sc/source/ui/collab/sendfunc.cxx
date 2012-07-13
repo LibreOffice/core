@@ -307,7 +307,7 @@ bool ScDocFuncSend::InitTeleManager( bool bIsMaster )
     pManager->sigFileReceived.connect( boost::bind(
             &ScDocFuncRecv::fileReceived, mpDirect, _1 ));
 
-    if (pManager->connect())
+    if (pManager->createAccountManager())
     {
         pManager->prepareAccountManager();
         mpManager = pManager;

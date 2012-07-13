@@ -50,8 +50,10 @@ public:
     ~TestTeleTubes();
     void testSetupManager1();
     void testSetupManager2();
-    void testConnect1();
-    void testConnect2();
+    void testCreateAccountManager1();
+    void testCreateAccountManager2();
+    void testRegisterClients1();
+    void testRegisterClients2();
     void testContactList();
     void testPrepareAccountManager1();
     void testPrepareAccountManager2();
@@ -77,8 +79,10 @@ public:
     CPPUNIT_TEST_SUITE( TestTeleTubes );
     CPPUNIT_TEST( testSetupManager1 );
     CPPUNIT_TEST( testSetupManager2 );
-    CPPUNIT_TEST( testConnect1 );
-    CPPUNIT_TEST( testConnect2 );
+    CPPUNIT_TEST( testCreateAccountManager1 );
+    CPPUNIT_TEST( testCreateAccountManager2 );
+    CPPUNIT_TEST( testRegisterClients1 );
+    CPPUNIT_TEST( testRegisterClients2 );
     CPPUNIT_TEST( testPrepareAccountManager1 );
     CPPUNIT_TEST( testPrepareAccountManager2 );
     CPPUNIT_TEST( testContactList );
@@ -257,16 +261,28 @@ void TestTeleTubes::testStartBuddySession2()
     //CPPUNIT_ASSERT( bStarted == true);
 }
 
-void TestTeleTubes::testConnect1()
+void TestTeleTubes::testCreateAccountManager1()
 {
-    bool bConnected = mpManager1->connect();
+    bool bConnected = mpManager1->createAccountManager();
     CPPUNIT_ASSERT( bConnected == true);
 }
 
-void TestTeleTubes::testConnect2()
+void TestTeleTubes::testCreateAccountManager2()
 {
-    bool bConnected = mpManager2->connect();
+    bool bConnected = mpManager2->createAccountManager();
     CPPUNIT_ASSERT( bConnected == true);
+}
+
+void TestTeleTubes::testRegisterClients1()
+{
+    bool bRegistered = mpManager1->registerClients();
+    CPPUNIT_ASSERT( bRegistered == true);
+}
+
+void TestTeleTubes::testRegisterClients2()
+{
+    bool bRegistered = mpManager2->registerClients();
+    CPPUNIT_ASSERT( bRegistered == true);
 }
 
 void TestTeleTubes::testSendPacket()

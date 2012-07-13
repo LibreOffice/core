@@ -86,7 +86,14 @@ public:
     static TeleManager     *get( bool bAcceptIncoming );
     void                    unref();
 
-    /** Prepare the Telepathy Account Manager. Requires connect() to have succeeded.
+    /** Connect to DBus and create AccountManager. */
+    bool                    createAccountManager();
+
+    /** Setup client handlers. */
+    bool                    registerClients();
+
+    /** Prepare the Telepathy Account Manager.
+        Requires createAccountManager() to have succeeded.
 
         Invokes an async call that is not ready until meAccountManagerStatus is
         set! Until that is AMS_PREPARED nothing else will work.
@@ -130,9 +137,6 @@ public:
     bool                    startBuddySession( TpAccount *pAccount, TpContact *pBuddy );
 
     void                    unregisterConference( TeleConferencePtr pConference );
-
-    /** Connect to DBus and setup client handler. */
-    bool                    connect();
 
     void                    disconnect();
 
