@@ -1,5 +1,5 @@
 --- /dev/null
-+++ misc/build/nss-3.12.8/mozilla/security/nss/nss-config.in	2010-06-11 16:35:54.946870871 +0200
++++ misc/build/nss-3.13.5/mozilla/security/nss/nss-config.in	2010-06-11 16:35:54.946870871 +0200
 @@ -0,0 +1,147 @@
 +#!/bin/sh
 +
