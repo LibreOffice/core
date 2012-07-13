@@ -26,6 +26,10 @@
  *
  ************************************************************************/
 
+#include "sal/config.h"
+
+#include <iostream>
+
 #include "app.hxx"
 #include "desktop.hrc"
 #include "cmdlineargs.hxx"
@@ -711,9 +715,11 @@ void Desktop::ensureProcessServiceFactory()
         }
         catch (const css::uno::Exception& e)
         {
-            SAL_WARN("desktop", "UNO Exception: " << e.Message);
-            // let exceptions escape and tear down the process, it is
-            // completely broken anyway
+            // Application::ShowNativeErrorBox would only work after InitVCL, so
+            // all we can realistically do here is hope the user can see stderr:
+            std::cerr << "UNO Exception: " << e.Message << std::endl;
+            // Let exceptions escape and tear down the process, it is completely
+            // broken anyway:
             throw;
         }
     }
