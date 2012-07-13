@@ -227,6 +227,17 @@ sal_Bool ScTabPageSortFields::FillItemSet( SfxItemSet& rArgSet )
 {
     ScSortParam aNewSortData = aSortData;
 
+    if (pDlg)
+    {
+        const SfxItemSet* pExample = pDlg->GetExampleSet();
+        const SfxPoolItem* pItem;
+        if ( pExample && pExample->GetItemState( nWhichSort, sal_True, &pItem ) == SFX_ITEM_SET )
+        {
+            ScSortParam aTempData = static_cast<const ScSortItem*>(pItem)->GetSortData();
+            aTempData.maKeyState = aNewSortData.maKeyState;
+            aNewSortData = aTempData;
+        }
+    }
     std::vector<sal_uInt16>  nSortPos;
 
     for ( sal_uInt16 i=0; i<nSortKeyCount; i++ )
@@ -624,7 +635,8 @@ void ScTabPageSortOptions::Init()
 
 // -----------------------------------------------------------------------
 
-SfxTabPage* ScTabPageSortOptions::Create( Window*             pParent,
+SfxTabPage* ScTabPageSortOptions::Create(
+                                            Window*             pParent,
                                             const SfxItemSet&   rArgSet )
 {
     return ( new ScTabPageSortOptions( pParent, rArgSet ) );
@@ -707,6 +719,13 @@ sal_Bool ScTabPageSortOptions::FillItemSet( SfxItemSet& rArgSet )
     // Create local copy of ScParam
     ScSortParam aNewSortData = aSortData;
 
+    if (pDlg)
+    {
+        const SfxItemSet* pExample = pDlg->GetExampleSet();
+        const SfxPoolItem* pItem;
+        if ( pExample && pExample->GetItemState( nWhichSort, sal_True, &pItem ) == SFX_ITEM_SET )
+            aNewSortData = static_cast<const ScSortItem*>(pItem)->GetSortData();
+    }
     aNewSortData.bByRow          = aBtnTopDown.IsChecked();
     aNewSortData.bHasHeader      = aBtnHeader.IsChecked();
     aNewSortData.bCaseSens       = aBtnCase.IsChecked();
