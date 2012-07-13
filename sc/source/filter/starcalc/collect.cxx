@@ -148,6 +148,10 @@ sal_uInt16 ScCollection::IndexOf(ScDataObject* pScDataObject) const
 
 ScCollection& ScCollection::operator=( const ScCollection& r )
 {
+    // Check for self-assignment
+    if (this == &r)
+       return *this;
+
     lcl_DeleteScDataObjects( pItems, nCount );
 
     nCount = r.nCount;
