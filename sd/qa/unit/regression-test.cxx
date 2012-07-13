@@ -214,10 +214,13 @@ void SdFiltersTest::testStuff(::sd::DrawDocShellRef xDocShRef, const rtl::OStrin
 
         rtl::OString aFileName = aFileNameBuf.makeStringAndClear();
 
-        XMLDiff aDiff(aFileName.getStr(), rtl::OUStringToOString(aString, RTL_TEXTENCODING_UTF8).getStr(), static_cast<int>(aString.getLength()),
-                rtl::OUStringToOString(getPathFromSrc("/sd/qa/unit/data/tolerance.xml"), RTL_TEXTENCODING_UTF8).getStr());
         std::cout << aString << std::endl;
-        aDiff.compare();
+        doXMLDiff(aFileName.getStr(),
+            rtl::OUStringToOString(aString, RTL_TEXTENCODING_UTF8).getStr(),
+            static_cast<int>(aString.getLength()),
+            rtl::OUStringToOString(
+                getPathFromSrc("/sd/qa/unit/data/tolerance.xml"),
+                RTL_TEXTENCODING_UTF8).getStr());
     }
     xDocShRef->DoClose();
 }
