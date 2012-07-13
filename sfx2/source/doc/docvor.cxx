@@ -1378,9 +1378,8 @@ void SfxOrganizeListBox_Impl::Reset()
     else
     {
         const SfxObjectList& rList = pMgr->GetObjectList();
-        const sal_uInt16 nCount = rList.Count();
-        for ( sal_uInt16 i = 0; i < nCount; ++i )
-            InsertEntryByBmpType( rList.GetBaseName(i), BMPTYPE_DOC, 0, sal_True );
+        for ( SfxObjectList::const_iterator it = rList.begin(); it != rList.end(); ++it )
+            InsertEntryByBmpType( rList.GetBaseName(*it), BMPTYPE_DOC, 0, sal_True );
 
     }
     SetUpdateMode(sal_True);

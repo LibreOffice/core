@@ -19,7 +19,7 @@
 #ifndef _SFX_ORGMGR_HXX
 #define _SFX_ORGMGR_HXX
 
-#include <svl/svarray.hxx>
+#include <o3tl/sorted_vector.hxx>
 
 class SfxDocumentTemplates;
 class SfxOrganizeListBox_Impl;
@@ -27,15 +27,13 @@ struct _FileListEntry;
 
 //=========================================================================
 
-SV_DECL_PTRARR_SORT(_SfxObjectList, _FileListEntry*, 1)
-
-class SfxObjectList: public _SfxObjectList
+class SfxObjectList : public o3tl::sorted_vector<_FileListEntry*, o3tl::less_ptr_to<_FileListEntry> >
 {
 public:
     SfxObjectList();
     ~SfxObjectList();
 
-    const String&   GetBaseName( sal_uInt16 nId ) const;
+    const String& GetBaseName( const _FileListEntry* p ) const;
 };
 
 class IntlWrapper;

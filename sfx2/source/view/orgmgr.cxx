@@ -119,10 +119,6 @@ _FileListEntry::~_FileListEntry()
     DeleteObjectShell();
 }
 
-//-------------------------------------------------------------------------
-
-SV_IMPL_OP_PTRARR_SORT(_SfxObjectList, _FileListEntry*)
-
 //=========================================================================
 
 sal_Bool _FileListEntry::DeleteObjectShell()
@@ -191,14 +187,16 @@ SfxObjectList::SfxObjectList()
 
 SfxObjectList::~SfxObjectList()
 {
-    DeleteAndDestroy(0, Count());
+    for( const_iterator it = begin(); it != end(); ++it )
+        delete *it;
+    clear();
 }
 
 //-------------------------------------------------------------------------
 
-const String &SfxObjectList::GetBaseName(sal_uInt16 i) const
+const String &SfxObjectList::GetBaseName(const _FileListEntry* p) const
 {
-    return (*this)[i]->aBaseName;
+    return p->aBaseName;
 }
 
 //-------------------------------------------------------------------------
@@ -230,7 +228,7 @@ SfxOrganizeMgr::SfxOrganizeMgr( SfxOrganizeListBox_Impl *pLeft,
         String aTitle = pTmp->GetTitle( SFX_TITLE_TITLE );
         pNewEntry = new _FileListEntry( pTmp->GetMedium()->GetName(), pCollator, &aTitle );
         pNewEntry->aDocShell = pTmp;
-        pImpl->pDocList->C40_PTR_INSERT( _FileListEntry, pNewEntry );
+        pImpl->pDocList->insert( pNewEntry );
     }
 }
 
@@ -679,14 +677,16 @@ sal_Bool SfxOrganizeMgr::InsertFile( SfxOrganizeListBox_Impl* pCaller, const Str
 {
     const CollatorWrapper* pCollator = pImpl->pIntlWrapper->getCaseCollator();
     _FileListEntry* pEntry = new _FileListEntry( rFileName, pCollator );
-    if ( pImpl->pDocList->C40_PTR_INSERT( _FileListEntry, pEntry ) )
+    std::pair<SfxObjectList::const_iterator, bool> aRes = pImpl->pDocList->insert( pEntry );
+    if ( aRes.second )
     {
-        sal_uInt16 nPos = 0;
-        pImpl->pDocList->Seek_Entry( pEntry, &nPos );
+        sal_uInt16 nPos = aRes.first - pImpl->pDocList->begin();
         pCaller->InsertEntry( pEntry->aBaseName, pCaller->GetOpenedBmp(1),
                               pCaller->GetClosedBmp(1), 0, sal_True, nPos );
         return sal_True;
     }
+    else
+        delete pEntry;
     return sal_False;
 }
 
@@ -753,10 +753,9 @@ void SfxOrganizeMgr::SaveAll(Window *pParent)
             }
         }
     }
-    nRangeCount = pImpl->pDocList->Count();
-    for(i = 0; i < nRangeCount; ++i)
+    for( SfxObjectList::const_iterator it = pImpl->pDocList->begin(); it != pImpl->pDocList->end(); ++it )
     {
-        _FileListEntry *pEntry = (*pImpl->pDocList)[i];
+        _FileListEntry *pEntry = *it;
         if(!pEntry->DeleteObjectShell())
         {
             String aText(SfxResId(STR_ERROR_SAVE_TEMPLATE).toString());
