@@ -19,6 +19,7 @@
 #include <xmlsec/base64.h>
 #include <rtl/ustrbuf.hxx>
 #include <sax/tools/converter.hxx>
+#include <rtl/strbuf.hxx>
 
 using namespace sd;
 using namespace ::com::sun::star;
@@ -27,16 +28,22 @@ using rtl::OString;
 using namespace ::osl;
 using namespace std;
 
-Receiver::Receiver()
+Receiver::Receiver( Transmitter *aTransmitter )
 {
+    mTransmitter = aTransmitter;
 }
 
 Receiver::~Receiver()
 {
 }
 
-void Receiver::parseCommand( std::vector<OString> aCommand, osl::StreamSocket &aStreamSocket )
+void Receiver::parseCommand( std::vector<OString> aCommand )
 {
+    fprintf( stderr, "Parsing:\n");
+    for (int i = 0; i < aCommand.size(); i++)
+    {
+    fprintf( stderr, "%s\n", aCommand[i].getStr() );}
+    fprintf( stderr, "End parse\n" );
     uno::Reference<presentation::XSlideShowController> xSlideShowController;
     try {
         uno::Reference< lang::XMultiServiceFactory > xServiceManager(
@@ -49,8 +56,6 @@ void Receiver::parseCommand( std::vector<OString> aCommand, osl::StreamSocket &a
         // Throws an exception if now slideshow running
         xSlideShowController =  uno::Reference<presentation::XSlideShowController>(
            xPresentation->getController(), uno::UNO_QUERY_THROW );
-        // FIXME: remove later, this is just to test functionality
-        sendPreview( 0, xSlideShowController, aStreamSocket );
     }
     catch ( com::sun::star::uno::RuntimeException &e )
     {
@@ -72,16 +77,18 @@ void Receiver::parseCommand( std::vector<OString> aCommand, osl::StreamSocket &a
         xSlideShowController->gotoSlideIndex( aSlide );
     }
 
+            // FIXME: remove later, this is just to test functionality
+        //sendPreview( 0, xSlideShowController, mTransmitter );
+
 }
 
 
 void sendPreview(sal_uInt32 aSlideNumber,
-                 uno::Reference<presentation::XSlideShowController> xSlideShowController, osl::StreamSocket &mStreamSocket )
+                 uno::Reference<presentation::XSlideShowController> xSlideShowController, Transmitter *aTransmitter )
 {
 
     sal_uInt64 aSize; // Unused
     uno::Sequence<sal_Int8> aImageData = preparePreview( aSlideNumber, xSlideShowController, 320, 240, aSize );
-
     rtl::OUStringBuffer aStrBuffer;
     ::sax::Converter::encodeBase64( aStrBuffer, aImageData );
 
@@ -89,15 +96,17 @@ void sendPreview(sal_uInt32 aSlideNumber,
         aStrBuffer.makeStringAndClear(), RTL_TEXTENCODING_UTF8 );
 
     // Start the writing
-    mStreamSocket.write( "slide_preview\n", strlen( "slide_preview\n" ) );
+    rtl::OStringBuffer aBuffer;
+
+    aBuffer.append( "slide_preview\n" );
 
     rtl::OString aSlideNumberString( rtl::OString::valueOf( 2 ) ); // FIXME get number
-    mStreamSocket.write( aSlideNumberString.getStr(), aSlideNumberString.getLength() );
-    mStreamSocket.write( "\n", 1 );
+    aBuffer.append( aSlideNumberString.getStr() );
+    aBuffer.append( "\n" );
 
-    mStreamSocket.write( aEncodedShortString.getStr(), aEncodedShortString.getLength() );
-    mStreamSocket.write( "\n\n", 2 );
-
+    aBuffer.append( aEncodedShortString.getStr() );
+    aBuffer.append( "\n\n" );
+    aTransmitter->addMessage( aBuffer.makeStringAndClear(), Transmitter::Priority::LOW );
 
 }
 

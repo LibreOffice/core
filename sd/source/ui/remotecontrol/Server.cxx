@@ -19,7 +19,7 @@ using namespace sd;
 using rtl::OString;
 
 Server::Server()
-:  Thread( "ServerThread" ), mSocket(), mReceiver()
+:  Thread( "ServerThread" ), mSocket()
 {
 }
 
@@ -30,15 +30,16 @@ Server::~Server()
 // Run as a thread
 void Server::listenThread()
 {
+    Transmitter aTransmitter( mStreamSocket );
+    Receiver aReceiver( &aTransmitter );
     // TODO: decryption
     while (true)
     {
         sal_uInt64 aRet, aRead;
         vector<char> aBuffer;
         vector<OString> aCommand;
-        sal_Bool finished = false;
         aRead = 0;
-        while ( !finished )
+        while ( true )
         {
             aBuffer.resize( aRead + 100 );
             aRet = mStreamSocket.recv( &aBuffer[aRead], 100 );
@@ -46,29 +47,23 @@ void Server::listenThread()
             {
                 return; // closed
             }
-            vector<char>::iterator aIt;
-            aIt = find( aBuffer.begin(), aBuffer.end(), '\n' ); // add aRead
             aRead += aRet;
-            if ( aIt == aBuffer.end() )
+            vector<char>::iterator aIt;
+            while ( (aIt = find( aBuffer.begin() + aRead - aRet, aBuffer.end(), '\n' ))
+                != aBuffer.end() )
             {
-                fprintf( stderr, "Continuing\n" );
-                continue;
-            }
-            fprintf( stderr, "parsing\n" );
-            sal_uInt64 aLocation = aIt - aBuffer.begin();
+                fprintf( stderr, "we have string\n" );
+                sal_uInt64 aLocation = aIt - aBuffer.begin();
 
-            vector<char> aTemp( aLocation );
-            memcpy( &(*aTemp.begin()),  &(*aBuffer.begin()), aLocation );
-            aTemp.push_back( 0 );
+                aCommand.push_back( OString( &(*aBuffer.begin()), aLocation ) );
 
-            aBuffer.erase( aBuffer.begin(), aBuffer.begin() + aLocation + 1 ); // Also delete the newline
-            aRead -= aLocation;
-
-            aCommand.push_back( OString( &(*aTemp.begin()) ) );
-            if ( (*aTemp.begin()) == 0 )
-            {
-                mReceiver.parseCommand( aCommand, mStreamSocket );
-                aCommand.clear();
+                if ( aIt == aBuffer.begin() )
+                {
+                    aReceiver.parseCommand( aCommand );
+                    aCommand.clear();
+                }
+                aBuffer.erase( aBuffer.begin(), aIt + 1 ); // Also delete the newline
+                aRead -= (aLocation + 1);
             }
         }
 

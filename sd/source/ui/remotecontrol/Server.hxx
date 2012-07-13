@@ -20,7 +20,7 @@
 
 #include <com/sun/star/presentation/XSlideShowListener.hpp>
 
-#include "Receiver.hxx"
+
 
 /**
 * The port for use for the main communication between LibO and remote control app.
@@ -35,7 +35,7 @@ namespace sd
     class Server : public salhelper::Thread
     {
         public:
-	    static void setup();
+            static void setup();
         private:
             Server();
             ~Server();
@@ -43,7 +43,6 @@ namespace sd
             osl::AcceptorSocket mSocket;
             osl::StreamSocket mStreamSocket;
             void listenThread();
-            Receiver mReceiver;
             void execute();
     };
 }
