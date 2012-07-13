@@ -138,6 +138,5 @@ $(eval $(call gb_Package_add_file,drawinglayer_inc,inc/drawinglayer/processor3d/
 $(eval $(call gb_Package_add_file,drawinglayer_inc,inc/drawinglayer/texture/texture3d.hxx,drawinglayer/texture/texture3d.hxx))
 $(eval $(call gb_Package_add_file,drawinglayer_inc,inc/drawinglayer/texture/texture.hxx,drawinglayer/texture/texture.hxx))
 $(eval $(call gb_Package_add_file,drawinglayer_inc,inc/drawinglayer/XShapeDumper.hxx,drawinglayer/XShapeDumper.hxx))
-$(eval $(call gb_Package_add_file,drawinglayer_inc,inc/drawinglayer/XShapeDumper.hxx,drawinglayer/EnhancedShapeDumper.hxx))
 
 # vim: set noet sw=4 ts=4:
