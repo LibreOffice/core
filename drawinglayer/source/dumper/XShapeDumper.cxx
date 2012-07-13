@@ -35,6 +35,8 @@
 #include <com/sun/star/text/XText.hpp>
 #include <rtl/strbuf.hxx>
 #include <libxml/xmlwriter.h>
+#include <iostream>
+#include <rtl/oustringostreaminserter.hxx>
 
 #define DEBUG_DUMPER 0
 
@@ -1834,9 +1836,9 @@ void dumpXShape(uno::Reference< drawing::XShape > xShape, xmlTextWriterPtr xmlWr
         enhancedDumper.dumpEnhancedCustomShapeTextPathService(xPropSet);
     }
     }   // end of the 'try' block
-    catch (com::sun::star::beans::UnknownPropertyException &e)
+    catch (const beans::UnknownPropertyException& e)
     {
-        printf("Problem in the XShapeDumper");
+        std::cout << "Exception caught in XShapeDumper.cxx: " << e.Message << std::endl;
     }
 
     #if DEBUG_DUMPER
@@ -1877,7 +1879,14 @@ rtl::OUString XShapeDumper::dump(uno::Reference<drawing::XShapes> xPageShapes)
 
     xmlTextWriterStartDocument( xmlWriter, NULL, NULL, NULL );
 
-    dumpXShapes( xPageShapes, xmlWriter );
+    try
+    {
+        dumpXShapes( xPageShapes, xmlWriter );
+    }
+    catch (const beans::UnknownPropertyException& e)
+    {
+        std::cout << "Exception caught in XShapeDumper: " << e.Message << std::endl;
+    }
 
     xmlTextWriterEndDocument( xmlWriter );
     xmlFreeTextWriter( xmlWriter );
