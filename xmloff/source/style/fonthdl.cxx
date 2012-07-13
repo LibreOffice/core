@@ -85,12 +85,10 @@ sal_Bool XMLFontFamilyNamePropHdl::importXML( const OUString& rStrImpValue, uno:
     {
         sal_Int32 nFirst = nPos;
         nPos = ::sax::Converter::indexOfComma( rStrImpValue, nPos );
-        sal_Int32 nLast = (-1 == nPos ? rStrImpValue.getLength() : nPos);
-        if( nLast > 0 )
-            nLast--;
+        sal_Int32 nLast = (-1 == nPos ? rStrImpValue.getLength() - 1 : nPos - 1);
 
         // skip trailing blanks
-        while( sal_Unicode(' ') == rStrImpValue[nLast] && nLast > nFirst )
+        while( nLast > nFirst && sal_Unicode(' ') == rStrImpValue[nLast] )
             nLast--;
 
         // skip leading blanks
