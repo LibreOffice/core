@@ -124,7 +124,7 @@ void TeleManager::DBusChannelHandler(
             SAL_INFO( "tubes", "accepting");
             aAccepted = true;
 
-            TeleConferencePtr pConference( new TeleConference( pManager, pAccount, TP_DBUS_TUBE_CHANNEL( pChannel), ""));
+            TeleConferencePtr pConference( new TeleConference( pManager, pAccount, TP_DBUS_TUBE_CHANNEL( pChannel ) ) );
             pManager->maConferences.push_back( pConference);
             pConference->acceptTube();
         }
@@ -514,7 +514,7 @@ bool TeleManager::startGroupSession( TpAccount *pAccount,
 
     OString aSessionId( TeleManager::createUuid());
 
-    TeleConferencePtr pConference( new TeleConference( this, NULL, NULL, aSessionId));
+    TeleConferencePtr pConference( new TeleConference( this, NULL, NULL ) );
     maConferences.push_back( pConference);
 
     /* TODO: associate the document with this session and conference */
@@ -604,9 +604,7 @@ bool TeleManager::startBuddySession( TpAccount *pAccount, TpContact *pBuddy )
 
     ensureLegacyChannel( pAccount, pBuddy );
 
-    OString aSessionId( TeleManager::createUuid());
-
-    TeleConferencePtr pConference( new TeleConference( this, NULL, NULL, aSessionId));
+    TeleConferencePtr pConference( new TeleConference( this, NULL, NULL ) );
     maConferences.push_back( pConference);
 
     /* TODO: associate the document with this session and conference */

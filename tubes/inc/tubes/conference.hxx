@@ -48,7 +48,7 @@ class TeleConference : public boost::enable_shared_from_this<TeleConference>
 {
 public:
 
-    TeleConference( TeleManager* pManager, TpAccount *pAccount, TpDBusTubeChannel* pChannel, const rtl::OString& rSessionId );
+    TeleConference( TeleManager* pManager, TpAccount *pAccount, TpDBusTubeChannel* pChannel );
     ~TeleConference();
 
     /// Close channel and call finalize()
@@ -106,7 +106,6 @@ private:
     bool                    spinUntilTubeEstablished();
     bool                    setTube( GDBusConnection* pTube);
 
-    rtl::OString            maSessionId;
     TeleManager*            mpManager;
     TpAccount*              mpAccount;
     TpDBusTubeChannel*      mpChannel;

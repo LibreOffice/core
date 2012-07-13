@@ -201,9 +201,8 @@ void TeleConference::TubeAcceptedHandler(
 }
 
 
-TeleConference::TeleConference( TeleManager* pManager, TpAccount* pAccount, TpDBusTubeChannel* pChannel, const rtl::OString& rSessionId )
+TeleConference::TeleConference( TeleManager* pManager, TpAccount* pAccount, TpDBusTubeChannel* pChannel )
     :
-        maSessionId( rSessionId ),
         mpManager( pManager),
         mpAccount( NULL),
         mpChannel( NULL),
