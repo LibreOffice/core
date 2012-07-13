@@ -28,9 +28,8 @@
 
 #include "sal/config.h"
 
-class TeleManager;
 namespace tubes {
-    void createContacts( const TeleManager *pManager );
+    void createContacts();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

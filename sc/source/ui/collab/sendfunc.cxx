@@ -345,7 +345,7 @@ sal_Bool ScDocFuncSend::SetNormalString( const ScAddress& rPos, const String& rT
         SendFile( rText );
 
     if ( rtl::OUString( rText ) == "contacts" )
-        tubes::createContacts( mpManager );
+        tubes::createContacts();
 
     return true; // needs some code auditing action
 }

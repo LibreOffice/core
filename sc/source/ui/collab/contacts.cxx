@@ -50,6 +50,7 @@ class TubeContacts : public ModelessDialog
     PushButton              maBtnListen;
     SvxSimpleTableContainer maListContainer;
     SvxSimpleTable          maList;
+    TeleManager*            mpManager;
 
     DECL_LINK( BtnConnectHdl, void * );
     DECL_LINK( BtnListenHdl, void * );
@@ -99,8 +100,7 @@ class TubeContacts : public ModelessDialog
             TpAccount* pAccount = pAC->mpAccount;
             TpContact* pContact = pAC->mpContact;
             fprintf( stderr, "picked %s\n", tp_contact_get_identifier( pContact ) );
-            TeleManager *pManager = TeleManager::get();
-            if (!pManager->startBuddySession( pAccount, pContact ))
+            if (!mpManager->startBuddySession( pAccount, pContact ))
                 fprintf( stderr, "could not start session with %s\n",
                         tp_contact_get_identifier( pContact ) );
         }
@@ -115,8 +115,7 @@ class TubeContacts : public ModelessDialog
         {
             TpAccount* pAccount = pAC->mpAccount;
             fprintf( stderr, "picked %s\n", tp_account_get_display_name( pAccount ) );
-            TeleManager *pManager = TeleManager::get();
-            if (!pManager->startGroupSession( pAccount, rtl::OUString("liboroom"), rtl::OUString("conference.jabber.org") ))
+            if (!mpManager->startGroupSession( pAccount, rtl::OUString("liboroom"), rtl::OUString("conference.jabber.org") ))
                 fprintf( stderr, "could not start group session\n" );
         }
     }
@@ -130,6 +129,9 @@ public:
         maListContainer( this, ScResId( CTL_LIST ) ),
         maList( maListContainer )
     {
+        // FIXME: Who should really own TeleManager and where it can be destroyed ?
+        mpManager = TeleManager::get();
+
         maBtnConnect.SetClickHdl( LINK( this, TubeContacts, BtnConnectHdl ) );
         maBtnListen.SetClickHdl( LINK( this, TubeContacts, BtnListenHdl ) );
 
@@ -155,11 +157,11 @@ public:
                                        RTL_TEXTENCODING_UTF8 );
     }
 
-    void Populate( const TeleManager *pManager )
+    void Populate()
     {
-        if (!pManager)
+        if (!mpManager)
             return ;
-        ContactList *pContacts = pManager->getContactList();
+        ContactList *pContacts = mpManager->getContactList();
         if ( pContacts )
         {
             fprintf( stderr, "contacts !\n" );
@@ -222,11 +224,11 @@ IMPL_LINK_NOARG( TubeContacts, BtnListenHdl )
 #endif
 
 namespace tubes {
-void createContacts( const TeleManager *pManager )
+void createContacts()
 {
 #ifdef CONTACTS_DLG
     TubeContacts *pContacts = new TubeContacts();
-    pContacts->Populate( pManager );
+    pContacts->Populate();
 #endif
 }
 }

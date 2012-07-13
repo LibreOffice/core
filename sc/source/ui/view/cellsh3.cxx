@@ -53,9 +53,8 @@
 #include "scabstdlg.hxx"
 
 #ifdef ENABLE_TELEPATHY
-#include <tubes/manager.hxx>
 namespace tubes {
-    void createContacts( const TeleManager *pManager );
+    void createContacts();
 }
 #endif
 
@@ -120,7 +119,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
 
         case SID_COLLABORATION:
 #ifdef ENABLE_TELEPATHY
-            tubes::createContacts( TeleManager::get() );
+            tubes::createContacts();
 #endif
             break;
 
