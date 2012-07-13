@@ -687,6 +687,9 @@ void DocxExport::WriteSettings()
     rtl::OString aZoom(rtl::OString::valueOf(sal_Int32(pViewShell->GetViewOptions()->GetZoom())));
     pFS->singleElementNS(XML_w, XML_zoom, FSNS(XML_w, XML_percent), aZoom.getStr(), FSEND);
 
+    if( settings.defaultTabStop != 0 )
+        pFS->singleElementNS( XML_w, XML_defaultTabStop, FSNS( XML_w, XML_val ),
+            rtl::OString::valueOf( sal_Int32( settings.defaultTabStop )).getStr(), FSEND );
     if( settings.evenAndOddHeaders )
         pFS->singleElementNS( XML_w, XML_evenAndOddHeaders, FSEND );
 
@@ -833,12 +836,15 @@ DocxExport::~DocxExport()
 
 DocxSettingsData::DocxSettingsData()
 : evenAndOddHeaders( false )
+, defaultTabStop( 0 )
 {
 }
 
 bool DocxSettingsData::hasData() const
 {
     if( evenAndOddHeaders )
+        return true;
+    if( defaultTabStop != 0 )
         return true;
     return false;
 }
