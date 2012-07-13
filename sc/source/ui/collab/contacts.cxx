@@ -51,6 +51,7 @@ class TubeContacts : public ModelessDialog
     SvxSimpleTableContainer maListContainer;
     SvxSimpleTable          maList;
     TeleManager*            mpManager;
+    ScDocFuncSend*          mpSender;
 
     DECL_LINK( BtnConnectHdl, void * );
     DECL_LINK( BtnListenHdl, void * );
@@ -70,6 +71,19 @@ class TubeContacts : public ModelessDialog
         {
             fprintf( stderr, "Could not register client handlers.\n" );
         }
+        else
+        {
+            // FIXME: These signals should not be bind to a document specific code.
+
+            // Receiving file is not related to any document.
+            mpManager->sigFileReceived.connect( boost::bind(
+                        &ScDocFuncRecv::fileReceived, mpSender->GetReceiver(), _1 ) );
+
+            // TODO: It's still not clear to me who should take care of this signal
+            // and what exactly it is supposed to happen.
+            mpManager->sigConferenceCreated.connect( boost::bind(
+                        &ScDocFuncSend::SetCollaboration, mpSender, _1 ) );
+        }
     }
 
     void StartBuddySession()
@@ -82,9 +96,12 @@ class TubeContacts : public ModelessDialog
             TpAccount* pAccount = pAC->mpAccount;
             TpContact* pContact = pAC->mpContact;
             fprintf( stderr, "picked %s\n", tp_contact_get_identifier( pContact ) );
-            if (!mpManager->startBuddySession( pAccount, pContact ))
+            TeleConference* pConference = mpManager->startBuddySession( pAccount, pContact );
+            if (!pConference)
                 fprintf( stderr, "could not start session with %s\n",
                         tp_contact_get_identifier( pContact ) );
+            else
+                mpSender->SetCollaboration( pConference );
         }
     }
 
@@ -97,8 +114,12 @@ class TubeContacts : public ModelessDialog
         {
             TpAccount* pAccount = pAC->mpAccount;
             fprintf( stderr, "picked %s\n", tp_account_get_display_name( pAccount ) );
-            if (!mpManager->startGroupSession( pAccount, rtl::OUString("liboroom"), rtl::OUString("conference.jabber.org") ))
+            TeleConference* pConference = mpManager->startGroupSession( pAccount,
+                    rtl::OUString("liboroom"), rtl::OUString("conference.jabber.org") );
+            if (!pConference)
                 fprintf( stderr, "could not start group session\n" );
+            else
+                mpSender->SetCollaboration( pConference );
         }
     }
 
@@ -114,23 +135,18 @@ public:
     {
         ScDocShell *pScDocShell = dynamic_cast<ScDocShell*> (SfxObjectShell::Current());
         ScDocFunc *pDocFunc = pScDocShell ? &pScDocShell->GetDocFunc() : NULL;
-        ScDocFuncSend *pSender = dynamic_cast<ScDocFuncSend*> (pDocFunc);
-        if (!pSender)
+        mpSender = dynamic_cast<ScDocFuncSend*> (pDocFunc);
+        if (!mpSender)
         {
             // This means pDocFunc has to be ScDocFuncDirect* and we are not collaborating yet.
             ScDocFuncDirect *pDirect = dynamic_cast<ScDocFuncDirect*> (pDocFunc);
             ScDocFuncRecv *pReceiver = new ScDocFuncRecv( pDirect );
-            pSender = new ScDocFuncSend( *pScDocShell, pReceiver );
-            pScDocShell->SetDocFunc( pSender );
+            mpSender = new ScDocFuncSend( *pScDocShell, pReceiver );
+            pScDocShell->SetDocFunc( mpSender );
 
             // FIXME: Who should really own TeleManager and where it can be destroyed ?
             // Take reference, so TeleManager does not get destroyed after closing dialog:
             mpManager = TeleManager::get();
-
-            mpManager->sigPacketReceived.connect( boost::bind(
-                    &ScDocFuncRecv::packetReceived, pReceiver, _1, _2 ));
-            mpManager->sigFileReceived.connect( boost::bind(
-                    &ScDocFuncRecv::fileReceived, pReceiver, _1 ));
 
             if (mpManager->createAccountManager())
             {

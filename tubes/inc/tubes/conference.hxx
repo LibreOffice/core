@@ -38,6 +38,7 @@
 #include <rtl/ustring.hxx>
 #include <telepathy-glib/telepathy-glib.h>
 #include <queue>
+#include <tubes/warnings_guard_boost_signals2.hpp>
 
 typedef ::std::queue<TelePacket> TelePacketQueue;
 
@@ -52,7 +53,7 @@ public:
     ~TeleConference();
 
     /// Close channel and call finalize()
-    void                    close();
+    TUBES_DLLPUBLIC void    close();
 
     /// Unrefs, unregisters from manager and calls dtor if last reference!
     void                    finalize();
@@ -62,18 +63,20 @@ public:
     /** @param rPacket
             non-const on purpose, see TelePacket::getData()
      */
-    bool                    sendPacket( TelePacket& rPacket );
+    TUBES_DLLPUBLIC bool    sendPacket( TelePacket& rPacket );
 
     /** Pop a received packet. */
-    TUBES_DLLPUBLIC bool    popPacket( TelePacket& rPacket );
+    bool                    popPacket( TelePacket& rPacket );
 
     /** Queue incoming data as TelePacket */
     void                    queue( const char* pDBusSender, const char* pPacket, int nSize );
     void                    queue( TelePacket &rPacket );
 
+    /** Emitted when a packet is received. */
+    boost::signals2::signal<void (TelePacket&)> sigPacketReceived;
 
     typedef void          (*FileSentCallback)( bool aSuccess, void* pUserData);
-    void                    sendFile( rtl::OUString &localUri, FileSentCallback pCallback, void* pUserData);
+    TUBES_DLLPUBLIC void    sendFile( rtl::OUString &localUri, FileSentCallback pCallback, void* pUserData);
 
     // --- following only to be called only by manager's callbacks ---
     // TODO: make friends instead

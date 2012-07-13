@@ -121,7 +121,7 @@ public:
             empty, only the conference's UUID is used and rConferenceRoom is
             ignored, hopefully resulting in a local DBus tube.
      */
-    bool                    startGroupSession( TpAccount *pAccount,
+    TeleConference*         startGroupSession( TpAccount *pAccount,
                                                const rtl::OUString& rConferenceRoom,
                                                const rtl::OUString& rConferenceServer );
 
@@ -133,7 +133,7 @@ public:
         @param pBuddy
             The buddy to be connected. Must be a contact of pAccount.
      */
-    bool                    startBuddySession( TpAccount *pAccount, TpContact *pBuddy );
+    TeleConference*         startBuddySession( TpAccount *pAccount, TpContact *pBuddy );
 
     void                    unregisterConference( TeleConferencePtr pConference );
 
@@ -144,13 +144,6 @@ public:
         @returns to how many conferences the packet was send
      */
     sal_uInt32              sendPacket( const TelePacket& rPacket ) const;
-
-    /** Emitted when a packet is received, with a TeleConference*
-        pointing to the instance that received the packet.
-     */
-    boost::signals2::signal<void (TeleConference*, TelePacket&)> sigPacketReceived;
-    /* FIXME: listen to a signal on the conference rather than having it call us */
-    void                    callbackOnRecieved( TeleConference* pConference, TelePacket& rPacket ) const;
 
     /** Pop a received data packet.
 
@@ -165,6 +158,8 @@ public:
     void                    sendFile( rtl::OUString &localUri, TeleConference::FileSentCallback pCallback, void* pUserData);
 
     boost::signals2::signal<void ( const rtl::OUString &localUri )> sigFileReceived;
+
+    boost::signals2::signal<void (TeleConference*)> sigConferenceCreated;
 
     /// Only for use with MainLoopFlusher
     GMainLoop*              getMainLoop() const;

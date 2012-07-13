@@ -217,7 +217,7 @@ public:
     ScDocFuncRecv( ScDocFuncDirect *pChain );
     virtual ~ScDocFuncRecv();
 
-    void packetReceived( TeleConference*, TelePacket &rPacket );
+    void packetReceived( TelePacket &rPacket );
 
     virtual void fileReceived( const rtl::OUString &rStr );
     virtual void RecvMessage( const rtl::OString &rString );
@@ -226,7 +226,7 @@ public:
 class ScDocFuncSend : public ScDocFunc
 {
     ScDocFuncRecv       *mpDirect;
-    TeleManager         *mpManager;
+    TeleConference      *mpConference;
 
     void SendMessage( ScChangeOpWriter &rOp );
     void SendFile( const rtl::OUString &rURL );
@@ -236,6 +236,9 @@ public:
     // we don't need the rDocSh hack/pointer
     ScDocFuncSend( ScDocShell& rDocSh, ScDocFuncRecv *pDirect );
     virtual ~ScDocFuncSend();
+
+    void                SetCollaboration( TeleConference* pConference );
+    ScDocFuncRecv*      GetReceiver();
 
     virtual void        EnterListAction( sal_uInt16 nNameResId );
     virtual void        EndListAction();

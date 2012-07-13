@@ -124,9 +124,9 @@ void TeleManager::DBusChannelHandler(
             SAL_INFO( "tubes", "accepting");
             aAccepted = true;
 
-            TeleConferencePtr pConference( new TeleConference( pManager, pAccount, TP_DBUS_TUBE_CHANNEL( pChannel ) ) );
-            pManager->maConferences.push_back( pConference);
+            TeleConference* pConference = new TeleConference( pManager, pAccount, TP_DBUS_TUBE_CHANNEL( pChannel ) );
             pConference->acceptTube();
+            pManager->sigConferenceCreated( pConference );
         }
         else
         {
@@ -506,18 +506,13 @@ bool TeleManager::registerClients()
 
 
 /* TODO: factor out common code with startBuddySession() */
-bool TeleManager::startGroupSession( TpAccount *pAccount,
+TeleConference* TeleManager::startGroupSession( TpAccount *pAccount,
                                      const rtl::OUString& rUConferenceRoom,
                                      const rtl::OUString& rUConferenceServer )
 {
     INFO_LOGGER( "TeleManager::startGroupSession");
 
     OString aSessionId( TeleManager::createUuid());
-
-    TeleConferencePtr pConference( new TeleConference( this, NULL, NULL ) );
-    maConferences.push_back( pConference);
-
-    /* TODO: associate the document with this session and conference */
 
     /* FIXME: does this work at all _creating_ a MUC? */
     // Use conference and server if given, else create conference.
@@ -552,20 +547,25 @@ bool TeleManager::startGroupSession( TpAccount *pAccount,
     if (!pChannelRequest)
     {
         g_hash_table_unref( pRequest);
-        return false;
+        return NULL;
     }
 
     setChannelReadyHandlerInvoked( false);
 
+    TeleConference* pConference = new TeleConference( this, NULL, NULL );
+
     tp_account_channel_request_create_and_handle_channel_async(
-            pChannelRequest, NULL, TeleManager_ChannelReadyHandler, pConference.get());
+            pChannelRequest, NULL, TeleManager_ChannelReadyHandler, pConference);
 
     iterateLoop( &TeleManager::isChannelReadyHandlerInvoked);
 
     g_object_unref( pChannelRequest);
     g_hash_table_unref( pRequest);
 
-    return pConference->getChannel() != NULL && pConference->isTubeOpen();
+    if (!pConference->getChannel() || !pConference->isTubeOpen())
+        return NULL;
+
+    return pConference;
 }
 
 
@@ -598,16 +598,12 @@ void TeleManager::ensureLegacyChannel( TpAccount* pAccount, TpContact* pBuddy )
 
 
 /* TODO: factor out common code with startGroupSession() */
-bool TeleManager::startBuddySession( TpAccount *pAccount, TpContact *pBuddy )
+TeleConference* TeleManager::startBuddySession( TpAccount *pAccount, TpContact *pBuddy )
 {
     INFO_LOGGER( "TeleManager::startBuddySession");
 
     ensureLegacyChannel( pAccount, pBuddy );
 
-    TeleConferencePtr pConference( new TeleConference( this, NULL, NULL ) );
-    maConferences.push_back( pConference);
-
-    /* TODO: associate the document with this session and conference */
     const char *pIdentifier = tp_contact_get_identifier( pBuddy);
     SAL_INFO( "tubes", "TeleManager::startBuddySession: creating channel request from "
             << tp_account_get_path_suffix( pAccount)
@@ -626,20 +622,25 @@ bool TeleManager::startBuddySession( TpAccount *pAccount, TpContact *pBuddy )
     if (!pChannelRequest)
     {
         g_hash_table_unref( pRequest);
-        return false;
+        return NULL;
     }
 
     setChannelReadyHandlerInvoked( false);
 
+    TeleConference* pConference = new TeleConference( this, NULL, NULL );
+
     tp_account_channel_request_create_and_handle_channel_async(
-            pChannelRequest, NULL, TeleManager_ChannelReadyHandler, pConference.get());
+            pChannelRequest, NULL, TeleManager_ChannelReadyHandler, pConference );
 
     iterateLoop( &TeleManager::isChannelReadyHandlerInvoked);
 
     g_object_unref( pChannelRequest);
     g_hash_table_unref( pRequest);
 
-    return pConference->getChannel() != NULL && pConference->isTubeOpen();
+    if (!pConference->getChannel() || !pConference->isTubeOpen())
+        return NULL;
+
+    return pConference;
 }
 
 void TeleManager::prepareAccountManager()
@@ -749,15 +750,6 @@ sal_uInt32 TeleManager::sendPacket( const TelePacket& rPacket ) const
     }
     return nSent;
 }
-
-
-void TeleManager::callbackOnRecieved( TeleConference* pConference, TelePacket& rPacket) const
-{
-    INFO_LOGGER( "TeleManager::callbackOnRecieved");
-
-    sigPacketReceived( pConference, rPacket );
-}
-
 
 bool TeleManager::popPacket( TelePacket& rPacket )
 {

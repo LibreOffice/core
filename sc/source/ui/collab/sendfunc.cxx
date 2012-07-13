@@ -105,7 +105,7 @@ void ScDocFuncRecv::RecvMessage( const rtl::OString &rString )
     }
 }
 
-void ScDocFuncRecv::packetReceived( TeleConference*, TelePacket &rPacket )
+void ScDocFuncRecv::packetReceived( TelePacket &rPacket )
 {
     rtl::OString aString( rPacket.getData(), rPacket.getSize() );
     RecvMessage( aString );
@@ -220,10 +220,10 @@ extern "C"
 void ScDocFuncSend::SendMessage( ScChangeOpWriter &rOp )
 {
     fprintf( stderr, "Op: '%s'\n", rOp.toString().getStr() );
-    if (mpManager)
+    if (mpConference)
     {
         TelePacket aPacket( "sender", rOp.toString().getStr(), rOp.toString().getLength() );
-        mpManager->sendPacket( aPacket );
+        mpConference->sendPacket( aPacket );
     }
     else // local demo mode
         mpDirect->RecvMessage( rOp.toString() );
@@ -254,8 +254,8 @@ void ScDocFuncSend::SendFile( const rtl::OUString &rURL )
     fprintf( stderr, "Temp file is '%s'\n",
              rtl::OUStringToOString( aFileURL, RTL_TEXTENCODING_UTF8 ).getStr() );
 
-    if (mpManager)
-        mpManager->sendFile( aFileURL, file_sent_cb, NULL );
+    if (mpConference)
+        mpConference->sendFile( aFileURL, file_sent_cb, NULL );
     else
         mpDirect->fileReceived( aFileURL );
 
@@ -267,7 +267,7 @@ void ScDocFuncSend::SendFile( const rtl::OUString &rURL )
 ScDocFuncSend::ScDocFuncSend( ScDocShell& rDocSh, ScDocFuncRecv *pDirect )
         : ScDocFunc( rDocSh ),
         mpDirect( pDirect ),
-        mpManager( NULL )
+        mpConference( NULL )
 {
     fprintf( stderr, "Sender created !\n" );
 }
@@ -275,7 +275,20 @@ ScDocFuncSend::ScDocFuncSend( ScDocShell& rDocSh, ScDocFuncRecv *pDirect )
 ScDocFuncSend::~ScDocFuncSend()
 {
     fprintf( stderr, "Sender destroyed !\n" );
+    mpConference->close();
     delete mpDirect;
+}
+
+void ScDocFuncSend::SetCollaboration( TeleConference* pConference )
+{
+    mpConference = pConference;
+    mpConference->sigPacketReceived.connect( boost::bind(
+                &ScDocFuncRecv::packetReceived, mpDirect, _1 ) );
+}
+
+ScDocFuncRecv* ScDocFuncSend::GetReceiver()
+{
+    return mpDirect;
 }
 
 void ScDocFuncSend::EnterListAction( sal_uInt16 nNameResId )
