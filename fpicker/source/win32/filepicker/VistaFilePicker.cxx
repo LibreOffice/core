@@ -92,42 +92,6 @@ namespace
 }
 
 //-----------------------------------------------------------------------------------------
-#define ENABLE_LOGGING
-
-#define LOGFILE_VISTA "c:\\temp\\vistafiledialog.log"
-
-#ifdef ENABLE_LOGGING
-
-    #define LOG_FILE(PARAM_MESSAGE)                                 \
-        {                                                           \
-            FILE* pFile = fopen(LOGFILE_VISTA, "a");                \
-            fprintf(pFile, PARAM_MESSAGE);                          \
-            fclose(pFile);                                          \
-        }
-
-    #define LOG_FILE_1_PARAM(PARAM_MESSAGE, PARAM_1)                \
-        {                                                           \
-            FILE* pFile = fopen(LOGFILE_VISTA, "a");                \
-            fprintf(pFile, PARAM_MESSAGE, PARAM_1);                 \
-            fclose(pFile);                                          \
-        }
-
-    #define LOG_FILE_2_PARAM(PARAM_MESSAGE, PARAM_1, PARAM_2)       \
-        {                                                           \
-            FILE* pFile = fopen(LOGFILE_VISTA, "a");                \
-            fprintf(pFile, PARAM_MESSAGE, PARAM_1, PARAM_2);        \
-            fclose(pFile);                                          \
-        }
-
-#else
-
-    #define LOG_FILE(PARAM_MESSAGE)
-    #define LOG_FILE_1_PARAM(PARAM_MESSAGE, PARAM_1)
-    #define LOG_FILE_2_PARAM(PARAM_MESSAGE, PARAM_1, PARAM_2)
-
-#endif
-
-//-----------------------------------------------------------------------------------------
 VistaFilePicker::VistaFilePicker(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR)
     : TVistaFilePickerBase  (m_aMutex                 )
     , m_xSMGR               (xSMGR                    )
