@@ -1392,9 +1392,9 @@ void SwHTMLWriter::GetControls()
     if( pHTMLPosFlyFrms )
     {
         // die absatz-gebundenen Controls einsammeln
-        for( i=0; i<pHTMLPosFlyFrms->Count(); i++ )
+        for( i=0; i<pHTMLPosFlyFrms->size(); i++ )
         {
-            const SwHTMLPosFlyFrm* pPosFlyFrm = pHTMLPosFlyFrms->GetObject( i );
+            const SwHTMLPosFlyFrm* pPosFlyFrm = (*pHTMLPosFlyFrms)[ i ];
             if( HTML_OUT_CONTROL != pPosFlyFrm->GetOutFn() )
                 continue;
 

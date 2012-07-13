@@ -174,8 +174,6 @@ static HTMLOutEvent aIMapEventTable[] =
 
 
 
-SV_IMPL_OP_PTRARR_SORT( SwHTMLPosFlyFrms, SwHTMLPosFlyFrmPtr )
-
 sal_uInt16 SwHTMLWriter::GuessFrmType( const SwFrmFmt& rFrmFmt,
                                    const SdrObject*& rpSdrObj )
 {
@@ -266,7 +264,7 @@ sal_uInt16 SwHTMLWriter::GuessFrmType( const SwFrmFmt& rFrmFmt,
                     bEmpty = sal_True;
                     if( pHTMLPosFlyFrms )
                     {
-                        for( sal_uInt16 i=0; i<pHTMLPosFlyFrms->Count(); i++ )
+                        for( sal_uInt16 i=0; i<pHTMLPosFlyFrms->size(); i++ )
                         {
                             sal_uLong nIdx = (*pHTMLPosFlyFrms)[i]
                                                 ->GetNdIndex().GetIndex();
@@ -369,7 +367,7 @@ void SwHTMLWriter::CollectFlyFrms()
 
         SwHTMLPosFlyFrm *pNew =
             new SwHTMLPosFlyFrm( **it, pSdrObj, nMode );
-        pHTMLPosFlyFrms->Insert( pNew );
+        pHTMLPosFlyFrms->insert( pNew );
     }
 }
 
@@ -389,10 +387,10 @@ sal_Bool SwHTMLWriter::OutFlyFrm( sal_uLong nNdIdx, xub_StrLen nCntntIdx, sal_uI
         // suche nach dem Anfang der FlyFrames
         sal_uInt16 i;
 
-        for( i = 0; i < pHTMLPosFlyFrms->Count() &&
+        for( i = 0; i < pHTMLPosFlyFrms->size() &&
             (*pHTMLPosFlyFrms)[i]->GetNdIndex().GetIndex() < nNdIdx; i++ )
             ;
-        for( ; !bRestart && i < pHTMLPosFlyFrms->Count() &&
+        for( ; !bRestart && i < pHTMLPosFlyFrms->size() &&
             (*pHTMLPosFlyFrms)[i]->GetNdIndex().GetIndex() == nNdIdx; i++ )
         {
             SwHTMLPosFlyFrm *pPosFly = (*pHTMLPosFlyFrms)[i];
@@ -403,9 +401,9 @@ sal_Bool SwHTMLWriter::OutFlyFrm( sal_uLong nNdIdx, xub_StrLen nCntntIdx, sal_uI
                 // Erst entfernen ist wichtig, weil in tieferen
                 // Rekursionen evtl. weitere Eintraege oder das
                 // ganze Array geloscht werden koennte.
-                pHTMLPosFlyFrms->Remove( i, 1 );
+                pHTMLPosFlyFrms->erase( i );
                 i--;
-                if( !pHTMLPosFlyFrms->Count() )
+                if( pHTMLPosFlyFrms->empty() )
                 {
                     delete pHTMLPosFlyFrms;
                     pHTMLPosFlyFrms = 0;
@@ -1929,7 +1927,7 @@ SwHTMLPosFlyFrm::SwHTMLPosFlyFrm( const SwPosFlyFrm& rPosFly,
     }
 }
 
-sal_Bool SwHTMLPosFlyFrm::operator<( const SwHTMLPosFlyFrm& rFrm ) const
+bool SwHTMLPosFlyFrm::operator<( const SwHTMLPosFlyFrm& rFrm ) const
 {
     if( pNdIdx->GetIndex() == rFrm.pNdIdx->GetIndex() )
     {
@@ -1946,6 +1944,5 @@ sal_Bool SwHTMLPosFlyFrm::operator<( const SwHTMLPosFlyFrm& rFrm ) const
     else
         return pNdIdx->GetIndex() < rFrm.pNdIdx->GetIndex();
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

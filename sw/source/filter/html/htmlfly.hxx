@@ -30,8 +30,7 @@
 #define _HTMLFLY_HXX
 
 #include <tools/solar.h>
-
-#include <svl/svarray.hxx>
+#include <o3tl/sorted_vector.hxx>
 
 class SdrObject;
 class SwFrmFmt;
@@ -107,8 +106,8 @@ public:
     SwHTMLPosFlyFrm( const SwPosFlyFrm& rPosFly,
                      const SdrObject *pSdrObj, sal_uInt8 nOutMode );
 
-    sal_Bool operator==( const SwHTMLPosFlyFrm& ) const { return sal_False; }
-    sal_Bool operator<( const SwHTMLPosFlyFrm& ) const;
+    bool operator==( const SwHTMLPosFlyFrm& ) const { return false; }
+    bool operator<( const SwHTMLPosFlyFrm& ) const;
 
     const SwFrmFmt& GetFmt() const { return *pFrmFmt; }
     const SdrObject *GetSdrObject() const { return pSdrObject; }
@@ -128,9 +127,7 @@ public:
     sal_uInt8 GetOutCntnr() const { return nOutputMode & HTML_CNTNR_MASK; }
 };
 
-typedef SwHTMLPosFlyFrm *SwHTMLPosFlyFrmPtr;
-SV_DECL_PTRARR_SORT( SwHTMLPosFlyFrms, SwHTMLPosFlyFrmPtr, 10 )
-
+class SwHTMLPosFlyFrms : public o3tl::sorted_vector<SwHTMLPosFlyFrm*, o3tl::less_ptr_to<SwHTMLPosFlyFrm> > {};
 
 #endif
 

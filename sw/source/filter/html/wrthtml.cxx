@@ -376,7 +376,7 @@ sal_uLong SwHTMLWriter::WriteStream()
     OSL_ENSURE( !pHTMLPosFlyFrms, "Wurden nicht alle Rahmen ausgegeben" );
     if( pHTMLPosFlyFrms )
     {
-        pHTMLPosFlyFrms->DeleteAndDestroy( 0, pHTMLPosFlyFrms->Count() );
+        pHTMLPosFlyFrms->DeleteAndDestroyAll();
         delete pHTMLPosFlyFrms;
         pHTMLPosFlyFrms = 0;
     }
