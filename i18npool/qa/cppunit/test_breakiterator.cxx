@@ -38,6 +38,8 @@
 #include <com/sun/star/i18n/WordType.hpp>
 #include <unotest/bootstrapfixturebase.hxx>
 
+#include <unicode/uvernum.h>
+
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
 
@@ -59,7 +61,9 @@ public:
 #if TODO
     void testNorthernThai();
 #endif
+#if (U_ICU_VERSION_MAJOR_NUM > 4)
     void testKhmer();
+#endif
 
     CPPUNIT_TEST_SUITE(TestBreakIterator);
     CPPUNIT_TEST(testLineBreaking);
@@ -70,7 +74,9 @@ public:
 #if TODO
     CPPUNIT_TEST(testNorthernThai);
 #endif
+#if (U_ICU_VERSION_MAJOR_NUM > 4)
     CPPUNIT_TEST(testKhmer);
+#endif
     CPPUNIT_TEST_SUITE_END();
 private:
     uno::Reference<i18n::XBreakIterator> m_xBreak;
@@ -343,8 +349,12 @@ void TestBreakIterator::testNorthernThai()
 }
 #endif
 
+#if (U_ICU_VERSION_MAJOR_NUM > 4)
 //A test to ensure that our khmer word boundary detection is useful
 //https://bugs.freedesktop.org/show_bug.cgi?id=52020
+//
+//icu doesn't have the Khmer word boundary dictionaries in <= 4.0.0 but does in
+//the current 49.x.y . Not sure which version first had them introduced.
 void TestBreakIterator::testKhmer()
 {
     lang::Locale aLocale;
@@ -364,6 +374,7 @@ void TestBreakIterator::testKhmer()
 
     CPPUNIT_ASSERT(aBounds.startPos == 3 && aBounds.endPos == 5);
 }
+#endif
 
 void TestBreakIterator::setUp()
 {
