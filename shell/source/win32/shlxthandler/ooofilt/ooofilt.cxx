@@ -341,7 +341,7 @@ SCODE STDMETHODCALLTYPE COooFilter::GetChunk(STAT_CHUNK * pStat)
                 continue;
             }
             m_pwsBuffer = m_pContentReader -> getChunkBuffer()[m_ChunkPosition].second;
-            m_ulUnicodeBufferLen = m_pwsBuffer.length();
+            m_ulUnicodeBufferLen = static_cast<ULONG>(m_pwsBuffer.length());
             DWORD ChunkLCID = LocaleSetToLCID( m_pContentReader -> getChunkBuffer()[m_ChunkPosition].first );
             // Set chunk description
             pStat->idChunk   = m_ulChunkID;
@@ -1241,7 +1241,7 @@ namespace /* private */
                                     0,
                                     REG_MULTI_SZ,
                                     reinterpret_cast<const BYTE*>(DllsToRegisterList),
-                                    DllList.length() + 2);
+                                    static_cast<DWORD>(DllList.length() + 2));
 
                 RegCloseKey(hSubKey);
             }

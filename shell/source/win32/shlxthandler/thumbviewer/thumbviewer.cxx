@@ -247,7 +247,7 @@ HRESULT STDMETHODCALLTYPE StreamOnZipBuffer::Stat(STATSTG *pstatstg, DWORD grfSt
     pstatstg->type = STGTY_LOCKBYTES;
 
     ULARGE_INTEGER uli;
-    uli.LowPart = ref_zip_buffer_.size();
+    uli.LowPart = static_cast<DWORD>(ref_zip_buffer_.size());
     uli.HighPart = 0;
 
     pstatstg->cbSize = uli;
