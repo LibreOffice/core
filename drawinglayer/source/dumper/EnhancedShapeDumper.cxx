@@ -26,7 +26,7 @@
  * instead of those above.
  */
 
-#include <drawinglayer/EnhancedShapeDumper.hxx>
+#include <EnhancedShapeDumper.hxx>
 #include <rtl/strbuf.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 

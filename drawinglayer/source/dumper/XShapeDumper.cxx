@@ -27,7 +27,7 @@
  */
 
 #include <drawinglayer/XShapeDumper.hxx>
-#include <drawinglayer/EnhancedShapeDumper.hxx>
+#include "EnhancedShapeDumper.hxx"
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>

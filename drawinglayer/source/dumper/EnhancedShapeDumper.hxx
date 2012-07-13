@@ -28,7 +28,6 @@
 
 #include <libxml/xmlwriter.h>
 
-#include <drawinglayer/drawinglayerdllapi.h>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
 #include <com/sun/star/drawing/Direction3D.hpp>
@@ -51,7 +50,7 @@
 #ifndef EnhancedShapeDumper_hxx
 #define EnhancedShapeDumper_hxx
 
-class DRAWINGLAYER_DLLPUBLIC EnhancedShapeDumper
+class EnhancedShapeDumper
 {
 public:
     EnhancedShapeDumper(xmlTextWriterPtr writer)
