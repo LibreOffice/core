@@ -233,7 +233,7 @@ uno::Reference< container::XNameContainer >    DomainMapper_Impl::GetPageStyles(
     {
         uno::Reference< style::XStyleFamiliesSupplier > xSupplier( m_xTextDocument, uno::UNO_QUERY );
         if (xSupplier.is())
-            xSupplier->getStyleFamilies()->getByName(::rtl::OUString("PageStyles")) >>= m_xPageStyles;
+            xSupplier->getStyleFamilies()->getByName("PageStyles") >>= m_xPageStyles;
     }
     return m_xPageStyles;
 }
@@ -254,7 +254,7 @@ uno::Reference< beans::XPropertySet > DomainMapper_Impl::GetDocumentSettings()
     if( !m_xDocumentSettings.is() && m_xTextFactory.is())
     {
         m_xDocumentSettings = uno::Reference< beans::XPropertySet >(
-            m_xTextFactory->createInstance(::rtl::OUString("com.sun.star.document.Settings")), uno::UNO_QUERY );
+            m_xTextFactory->createInstance("com.sun.star.document.Settings"), uno::UNO_QUERY );
     }
     return m_xDocumentSettings;
 }
@@ -1584,7 +1584,7 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
             xProps->setPropertyValue(
                     rPropNameSupplier.GetName( PROP_OPAQUE ),
                     uno::makeAny( true ) );
-        if (xSInfo->supportsService(rtl::OUString("com.sun.star.text.TextFrame")))
+        if (xSInfo->supportsService("com.sun.star.text.TextFrame"))
         {
             uno::Reference<text::XTextContent> xTextContent(xShape, uno::UNO_QUERY_THROW);
             uno::Reference<text::XTextRange> xTextRange(xTextAppend->createTextCursorByRange(xTextAppend->getEnd()), uno::UNO_QUERY_THROW);
@@ -1790,7 +1790,7 @@ extract a parameter (with or without quotes) between the command and the followi
     }
     else
     {
-        nEndIndex = rCommand.indexOf( ::rtl::OUString(" \\"), nStartIndex);
+        nEndIndex = rCommand.indexOf(" \\", nStartIndex);
     }
     ::rtl::OUString sRet;
     if( nEndIndex > nStartIndex + 1 )
@@ -1885,10 +1885,10 @@ void DomainMapper_Impl::SetNumberFormat( const ::rtl::OUString& rCommand,
 {
     OUString sFormatString = lcl_ParseFormat( rCommand );
     // find \h - hijri/luna calendar todo: what about saka/era calendar?
-    bool bHijri = 0 < rCommand.indexOf( ::rtl::OUString("\\h "));
+    bool bHijri = 0 < rCommand.indexOf("\\h ");
     lang::Locale aUSLocale;
-    aUSLocale.Language = ::rtl::OUString("en");
-    aUSLocale.Country = ::rtl::OUString("US");
+    aUSLocale.Language = "en";
+    aUSLocale.Country = "US";
 
     //determine current locale - todo: is it necessary to initialize this locale?
     lang::Locale aCurrentLocale = aUSLocale;
@@ -2247,7 +2247,7 @@ void DomainMapper_Impl::handleAutoNum
     uno::Reference< beans::XPropertySet > xMaster =
     FindOrCreateFieldMaster
         ("com.sun.star.text.FieldMaster.SetExpression",
-        rtl::OUString("AutoNr" ));
+        "AutoNr");
 
     xMaster->setPropertyValue( rPropNameSupplier.GetName(PROP_SUB_TYPE),
         uno::makeAny(text::SetVariableType::SEQUENCE));
@@ -2358,8 +2358,7 @@ void DomainMapper_Impl::handleAuthor
         if(sFieldServiceName.isEmpty())
         {
             //create a custom property field
-            sServiceName +=
-                ::rtl::OUString("DocInfo.Custom");
+            sServiceName += "DocInfo.Custom";
             bIsCustomField = true;
         }
         else
@@ -2507,7 +2506,7 @@ void DomainMapper_Impl::handleToc
         xTOC.set(
                 m_xTextFactory->createInstance
                 ( bTableOfFigures ?
-                  ::rtl::OUString("com.sun.star.text.IllustrationsIndex")
+                  "com.sun.star.text.IllustrationsIndex"
                   : sTOCServiceName),
                 uno::UNO_QUERY_THROW);
     if (xTOC.is())
@@ -2784,7 +2783,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                     break;
                     case FIELD_FILENAME:
                     {
-                        sal_Int32 nNumberingTypeIndex = pContext->GetCommand().indexOf( ::rtl::OUString("\\p"));
+                        sal_Int32 nNumberingTypeIndex = pContext->GetCommand().indexOf("\\p");
                         if (xFieldProperties.is())
                             xFieldProperties->setPropertyValue(
                                     rPropNameSupplier.GetName(PROP_FILE_FORMAT),
@@ -2913,7 +2912,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                             FindOrCreateFieldMaster( "com.sun.star.text.FieldMaster.Database", sParam );
 
     //                    xFieldProperties->setPropertyValue(
-    //                             ::rtl::OUString("FieldCode"),
+    //                             "FieldCode",
     //                             uno::makeAny( pContext->GetCommand().copy( nIndex + 1 )));
                         uno::Reference< text::XDependentTextField > xDependentField( xFieldInterface, uno::UNO_QUERY_THROW );
                         xDependentField->attachTextFieldMaster( xMaster );
@@ -3536,8 +3535,7 @@ void DomainMapper_Impl::SetCurrentRedlineAuthor( rtl::OUString sAuthor )
             pCurrent->m_sAuthor = sAuthor;
     }
     else
-        m_xAnnotationField->setPropertyValue(rtl::OUString("Author"),
-                uno::makeAny(sAuthor));
+        m_xAnnotationField->setPropertyValue("Author", uno::makeAny(sAuthor));
 }
 
 void DomainMapper_Impl::SetCurrentRedlineDate( rtl::OUString sDate )
@@ -3549,8 +3547,7 @@ void DomainMapper_Impl::SetCurrentRedlineDate( rtl::OUString sDate )
             pCurrent->m_sDate = sDate;
     }
     else
-        m_xAnnotationField->setPropertyValue(rtl::OUString("DateTimeValue"),
-                uno::makeAny(lcl_DateStringToDateTime(sDate)));
+        m_xAnnotationField->setPropertyValue("DateTimeValue", uno::makeAny(lcl_DateStringToDateTime(sDate)));
 }
 
 void DomainMapper_Impl::SetCurrentRedlineId( sal_Int32 sId )
@@ -3594,8 +3591,7 @@ void DomainMapper_Impl::ApplySettingsTable()
     {
         try
         {
-            uno::Reference< beans::XPropertySet > xTextDefaults(
-                                                                m_xTextFactory->createInstance(::rtl::OUString("com.sun.star.text.Defaults")), uno::UNO_QUERY_THROW );
+            uno::Reference< beans::XPropertySet > xTextDefaults(m_xTextFactory->createInstance("com.sun.star.text.Defaults"), uno::UNO_QUERY_THROW );
             sal_Int32 nDefTab = m_pSettingsTable->GetDefaultTabStop();
             xTextDefaults->setPropertyValue( PropertyNameSupplier::GetPropertyNameSupplier().GetName( PROP_TAB_STOP_DISTANCE ), uno::makeAny(nDefTab) );
             if (m_pSettingsTable->GetLinkStyles())

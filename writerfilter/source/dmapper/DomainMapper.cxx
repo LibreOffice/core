@@ -113,7 +113,7 @@ LoggedStream(dmapper_logger, "DomainMapper"),
             (comphelper::OStorageHelper::GetStorageOfFormatFromInputStream(OFOPXML_STORAGE_FORMAT_STRING, xInputStream));
 
         uno::Reference< uno::XInterface > xTemp = xContext->getServiceManager()->createInstanceWithContext(
-                                ::rtl::OUString("com.sun.star.document.OOXMLDocumentPropertiesImporter"),
+                                "com.sun.star.document.OOXMLDocumentPropertiesImporter",
                                 xContext);
 
         uno::Reference< document::XOOXMLDocumentPropertiesImporter > xImporter( xTemp, uno::UNO_QUERY_THROW );

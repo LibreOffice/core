@@ -237,7 +237,7 @@ void SettingsTable::ApplyProperties( uno::Reference< text::XTextDocument > xDoc 
 
     // Record changes value
     if (xDocProps.is())
-        xDocProps->setPropertyValue( ::rtl::OUString("RecordChanges"), uno::makeAny( m_pImpl->m_bRecordChanges ) );
+        xDocProps->setPropertyValue("RecordChanges", uno::makeAny( m_pImpl->m_bRecordChanges ) );
 }
 
 

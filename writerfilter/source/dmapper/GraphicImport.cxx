@@ -887,10 +887,10 @@ void GraphicImport::lcl_attribute(Id nName, Value & val)
                             ( xShape, uno::UNO_QUERY_THROW );
 
                         rtl::OUString sUrl;
-                        xShapeProps->getPropertyValue( rtl::OUString("GraphicURL") ) >>= sUrl;
+                        xShapeProps->getPropertyValue("GraphicURL") >>= sUrl;
 
                         ::com::sun::star::beans::PropertyValues aMediaProperties( 1 );
-                        aMediaProperties[0].Name = rtl::OUString("URL");
+                        aMediaProperties[0].Name = "URL";
                         aMediaProperties[0].Value <<= sUrl;
 
                         m_xGraphicObject = createGraphicObject( aMediaProperties );
@@ -903,9 +903,9 @@ void GraphicImport::lcl_attribute(Id nName, Value & val)
                             uno::Reference< beans::XPropertySet > xGraphProps( m_xGraphicObject,
                                     uno::UNO_QUERY );
                             awt::Size aSize = xShape->getSize( );
-                            xGraphProps->setPropertyValue( rtl::OUString("Height"),
+                            xGraphProps->setPropertyValue("Height",
                                    uno::makeAny( aSize.Height ) );
-                            xGraphProps->setPropertyValue( rtl::OUString("Width"),
+                            xGraphProps->setPropertyValue("Width",
                                    uno::makeAny( aSize.Width ) );
                         }
                     }
@@ -1281,7 +1281,7 @@ uno::Reference< text::XTextContent > GraphicImport::createGraphicObject( const b
             PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
 
             uno::Reference< beans::XPropertySet > xGraphicObjectProperties(
-            m_xTextFactory->createInstance(::rtl::OUString("com.sun.star.text.TextGraphicObject")),
+            m_xTextFactory->createInstance("com.sun.star.text.TextGraphicObject"),
                 uno::UNO_QUERY_THROW);
             xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName(PROP_GRAPHIC), uno::makeAny( xGraphic ));
             xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName(PROP_ANCHOR_TYPE),

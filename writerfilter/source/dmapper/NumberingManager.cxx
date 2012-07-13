@@ -511,7 +511,7 @@ uno::Reference< container::XNameContainer > lcl_getUnoNumberingStyles(
     try
     {
         uno::Reference< style::XStyleFamiliesSupplier > xFamilies( xFactory, uno::UNO_QUERY_THROW );
-        uno::Any oFamily = xFamilies->getStyleFamilies( )->getByName( OUString("NumberingStyles") );
+        uno::Any oFamily = xFamilies->getStyleFamilies( )->getByName("NumberingStyles");
 
         oFamily >>= xStyles;
     }
@@ -535,8 +535,7 @@ void ListDef::CreateNumberingRules( DomainMapper& rDMapper,
         {
             // Create the numbering style
             uno::Reference< beans::XPropertySet > xStyle (
-                xFactory->createInstance(
-                    OUString("com.sun.star.style.NumberingStyle")),
+                xFactory->createInstance("com.sun.star.style.NumberingStyle"),
                 uno::UNO_QUERY_THROW );
 
             rtl::OUString sStyleName = GetStyleName( GetId( ) );
