@@ -39,15 +39,12 @@
 #include <rtl/ref.hxx>
 #include <tools/link.hxx>
 #include <telepathy-glib/telepathy-glib.h>
-#include <vector>
 #include <tubes/warnings_guard_boost_signals2.hpp>
 
 // For testing purposes, we might need more in future.
 #define LIBO_TUBES_DBUS_INTERFACE "org.libreoffice.calc"
 #define LIBO_TUBES_DBUS_MSG_METHOD "LibOMsg"
 #define LIBO_TUBES_DBUS_PATH "/org/libreoffice/calc"
-
-typedef ::std::vector<TeleConferencePtr> TeleConferenceVector;
 
 namespace osl { class Mutex; }
 class TeleManagerImpl;
@@ -135,27 +132,7 @@ public:
      */
     TeleConference*         startBuddySession( TpAccount *pAccount, TpContact *pBuddy );
 
-    void                    unregisterConference( TeleConferencePtr pConference );
-
     void                    disconnect();
-
-    /** Send data to all registered conferences.
-
-        @returns to how many conferences the packet was send
-     */
-    sal_uInt32              sendPacket( const TelePacket& rPacket ) const;
-
-    /** Pop a received data packet.
-
-        XXX This needs to be elaborated to pop from a specific conference, or
-        for a specific document. Currently the conferences are simply iterated
-        and the first non-empty queue is popped.
-
-        @returns whether there was any packet to pop
-     */
-    bool                    popPacket( TelePacket& rPacket );
-
-    void                    sendFile( rtl::OUString &localUri, TeleConference::FileSentCallback pCallback, void* pUserData);
 
     boost::signals2::signal<void ( const rtl::OUString &localUri )> sigFileReceived;
 
@@ -230,8 +207,6 @@ public:
 
 private:
     void                    ensureLegacyChannel( TpAccount* pAccount, TpContact* pBuddy );
-
-    TeleConferenceVector    maConferences;
 
     bool                    mbChannelReadyHandlerInvoked : 1;
 

@@ -363,9 +363,6 @@ void TeleConference::finalize()
         mpAddress = NULL;
     }
 
-    TeleConferencePtr pThis( shared_from_this());
-    mpManager->unregisterConference( pThis);
-
     //! *this gets destructed here!
 }
 

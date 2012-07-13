@@ -733,58 +733,6 @@ TpAccount* TeleManager::getAccount( const rtl::OString& rAccountID )
     return pAccount;
 }
 
-
-sal_uInt32 TeleManager::sendPacket( const TelePacket& rPacket ) const
-{
-    INFO_LOGGER( "TeleManager::sendPacket");
-
-    sal_uInt32 nSent = 0;
-    // Access to data ByteStream array forces reference count of one, provide
-    // non-const instance here before passing it down to each conference.
-    TelePacket aPacket( rPacket);
-    for (TeleConferenceVector::const_iterator it = maConferences.begin(); it != maConferences.end(); ++it)
-    {
-        if ((*it)->sendPacket( aPacket))
-            ++nSent;
-        /* TODO: what if failed? */
-    }
-    return nSent;
-}
-
-bool TeleManager::popPacket( TelePacket& rPacket )
-{
-    INFO_LOGGER( "TeleManager::popPacket");
-
-    for (TeleConferenceVector::const_iterator it = maConferences.begin(); it != maConferences.end(); ++it)
-    {
-        if ((*it)->popPacket( rPacket))
-            return true;
-    }
-    return false;
-}
-
-void TeleManager::sendFile( rtl::OUString &localUri, TeleConference::FileSentCallback pCallback, void* pUserData)
-{
-    INFO_LOGGER( "TeleManager::sendFile");
-
-    /* TODO: pluralize */
-    for (TeleConferenceVector::const_iterator it = maConferences.begin(); it != maConferences.end(); ++it)
-    {
-        (*it)->sendFile( localUri, pCallback, pUserData);
-        return;
-    }
-}
-
-void TeleManager::unregisterConference( TeleConferencePtr pConference )
-{
-    INFO_LOGGER( "TeleManager::unregisterConference");
-
-    TeleConferenceVector::iterator it = ::std::find( maConferences.begin(), maConferences.end(), pConference);
-    if (it != maConferences.end())
-        maConferences.erase( it);
-}
-
-
 void TeleManager::disconnect()
 {
     INFO_LOGGER( "TeleManager::disconnect");
@@ -797,20 +745,6 @@ void TeleManager::disconnect()
 
     tp_base_client_unregister( pImpl->mpFileTransferClient);
     pImpl->mpFileTransferClient = NULL;
-
-    size_t nSize = maConferences.size();
-    for (size_t i=0; i < nSize; /*nop*/)
-    {
-        maConferences[i]->close();
-        // close() may remove the conference from the vector and move following
-        // elements to this position (hence we don't use an iterator here),
-        // adjust accordingly.
-        size_t n = maConferences.size();
-        if (n < nSize)
-            nSize = n;
-        else
-            ++i;
-    }
 }
 
 

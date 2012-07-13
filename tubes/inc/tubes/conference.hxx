@@ -33,8 +33,6 @@
 #include "tubes/tubesdllapi.h"
 #include "tubes/packet.hxx"
 #include "tubes/file-transfer-helper.h"
-#include <boost/shared_ptr.hpp>
-#include <boost/enable_shared_from_this.hpp>
 #include <rtl/ustring.hxx>
 #include <telepathy-glib/telepathy-glib.h>
 #include <queue>
@@ -45,7 +43,7 @@ typedef ::std::queue<TelePacket> TelePacketQueue;
 class TeleManager;
 
 /** Conference setup by TeleManager */
-class TeleConference : public boost::enable_shared_from_this<TeleConference>
+class TeleConference
 {
 public:
 
@@ -118,14 +116,7 @@ private:
     TelePacketQueue         maPacketQueue;
 
     bool                    mbTubeOfferedHandlerInvoked : 1;
-
-    // hide from the public
-    using boost::enable_shared_from_this<TeleConference>::shared_from_this;
-
 };
-
-
-typedef boost::shared_ptr<TeleConference> TeleConferencePtr;
 
 #endif // INCLUDED_TUBES_CONFERENCE_HXX
 
