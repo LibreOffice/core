@@ -42,13 +42,13 @@ all:
 .ENDIF	
 
 VER_MAJOR=3
-VER_MINOR=12
-VER_PATCH=8
+VER_MINOR=13
+VER_PATCH=5
 
-TARFILE_NAME=nss-$(VER_MAJOR).$(VER_MINOR).$(VER_PATCH)-with-nspr-4.8.6
-TARFILE_MD5=71474203939fafbe271e1263e61d083e
+TARFILE_NAME=nss-$(VER_MAJOR).$(VER_MINOR).$(VER_PATCH)-with-nspr-4.9.1
+TARFILE_MD5=a0a861f539f0e7a91d05e6b9457e4db1
 TARFILE_ROOTDIR=nss-$(VER_MAJOR).$(VER_MINOR).$(VER_PATCH)
-PATCH_FILES=nss.patch nss.aix.patch nss-config.patch nss-linux3.patch nss-clang_os_Linux_x86_s_comments.patch nss-clang_os_Linux_x86_64_s_comments.patch nss-string-concat.patch nss-asm-fix.patch
+PATCH_FILES=nss.patch nss.aix.patch nss-config.patch
 
 .IF "$(OS)"=="MACOSX"
 PATCH_FILES+=nss_macosx.patch
@@ -98,10 +98,9 @@ OUT2BIN=config/nspr-config mozilla/security/nss/nss-config
 
 BUILD_DIR=mozilla/security/nss
 BUILD_ACTION= $(GNUMAKE) nss_build_all -j1
-#See #i105566# && moz#513024#
-.IF "$(OS)"=="LINUX"
-BUILD_ACTION+=FREEBL_NO_DEPEND=1
-.ENDIF
+#Note: with the new version the libfreebl3.so gets built in a way that does
+# not conflict with the system one on Linux automatically;
+# it is no longer necessary to add a workaround for #i105566# && moz#513024#
 .IF "$(OS)$(COM)"=="SOLARISGCC"
 BUILD_ACTION+=NS_USE_GCC=1
 .ENDIF
