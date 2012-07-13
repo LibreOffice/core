@@ -88,7 +88,7 @@ void Test::defaultTabStopNotInStyles()
     uno::Reference< beans::XPropertySet > properties( paragraphStyles->getByName( "Standard" ), uno::UNO_QUERY );
     uno::Sequence< style::TabStop > stops = getProperty< uno::Sequence< style::TabStop > >(
         paragraphStyles->getByName( "Standard" ), "ParaTabStops" );
-    CPPUNIT_ASSERT_EQUAL( 0, stops.getLength());
+    CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int32>(0), stops.getLength());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
