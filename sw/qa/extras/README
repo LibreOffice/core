@@ -120,11 +120,9 @@ prints the internal name of the object (e.g. 'SwXTextDocument' for 'xray ThisCom
 above the list of its properties. Inspect this class/interface in the code (that is,
 under offapi/, udkapi/, or wherever it is implemented) and search for a function named
 similarly to the property you want (getXYZ()). If there is none, it is most
-probably a property that can be read using XPropertySet:
+probably a property that can be read using XPropertySet or using the getProperty helper:
 
-uno::Reference<beans::XPropertySet> properties(textDocument, uno::UNO_QUERY);
-sal_Int32 val; // the right type for the property
-properties->getPropertyValue("CharacterCount") >>= val;
+sal_Int32 val = getProperty< sal_Int32 >( textDocument, "CharacterCount" );
 
 If there is a function to obtain the property, you need access it using the right interface.
 If the class itself is not the right interface, then it is one of the classes it inherits
@@ -215,9 +213,7 @@ uno::Reference<drawing::XDrawPageSupplier> drawPageSupplier(textDocument, uno::U
 uno::Reference<drawing::XDrawPage> drawPage = drawPageSupplier->getDrawPage();
 uno::Reference<drawing::XShape> image;
 drawPage->getByIndex(0) >>= image;
-uno::Reference<beans::XPropertySet> imageProperties(image, uno::UNO_QUERY);
-uno::Reference<graphic::XGraphic> graphic;
-imageProperties->getPropertyValue( "Graphic" ) >>= graphic;
+uno::Reference<graphic::XGraphic> graphic = getProperty< uno::Reference< graphic::XGraphic > >( image, "Graphic" );
 
 
 === Styles
@@ -238,6 +234,4 @@ uno::Reference<container::XNameAccess> pageStyles;
 styleFamilies->getByName("PageStyles") >>= pageStyles;
 uno::Reference<uno::XInterface> defaultStyle;
 pageStyles->getByName("Default") >>= defaultStyle;
-uno::Reference<beans::XPropertySet> styleProperties( defaultStyle, uno::UNO_QUERY );
-sal_Int32 width;
-styleProperties->getPropertyValue( "Width" ) >>= width;
+sal_Int32 width = getProperty< sal_Int32 >( defaultStyle, "Width" );

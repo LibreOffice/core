@@ -142,6 +142,24 @@ protected:
         return aRet;
     }
 
+    template< typename T >
+    T getProperty( uno::Any obj, const rtl::OUString& name ) const
+    {
+        uno::Reference< beans::XPropertySet > properties( obj, uno::UNO_QUERY );
+        T data;
+        properties->getPropertyValue( name ) >>= data;
+        return data;
+    }
+
+    template< typename T >
+    T getProperty( uno::Reference< uno::XInterface > obj, const rtl::OUString& name ) const
+    {
+        uno::Reference< beans::XPropertySet > properties( obj, uno::UNO_QUERY );
+        T data;
+        properties->getPropertyValue( name ) >>= data;
+        return data;
+    }
+
     uno::Reference<lang::XComponent> mxComponent;
     xmlBufferPtr mpXmlBuffer;
 };

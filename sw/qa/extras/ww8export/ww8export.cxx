@@ -76,8 +76,7 @@ void Test::testN325936()
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xPropertySet(xDraws->getByIndex(0), uno::UNO_QUERY);
-    sal_Int32 nValue = 0;
-    xPropertySet->getPropertyValue("BackColorTransparency") >>= nValue;
+    sal_Int32 nValue = getProperty< sal_Int32 >(xDraws->getByIndex(0), "BackColorTransparency");
     CPPUNIT_ASSERT_EQUAL(sal_Int32(100), nValue);
 }
 

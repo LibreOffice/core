@@ -86,8 +86,8 @@ void Test::defaultTabStopNotInStyles()
 // xray ThisComponent.StyleFamilies(1)(0).ParaTabStop
     uno::Reference< container::XNameAccess > paragraphStyles = getStyles( "ParagraphStyles" );
     uno::Reference< beans::XPropertySet > properties( paragraphStyles->getByName( "Standard" ), uno::UNO_QUERY );
-    uno::Sequence< style::TabStop > stops;
-    properties->getPropertyValue( "ParaTabStops" ) >>= stops;
+    uno::Sequence< style::TabStop > stops = getProperty< uno::Sequence< style::TabStop > >(
+        paragraphStyles->getByName( "Standard" ), "ParaTabStops" );
     CPPUNIT_ASSERT_EQUAL( 0, stops.getLength());
 }
 
