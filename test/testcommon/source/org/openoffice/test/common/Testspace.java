@@ -61,8 +61,12 @@ public class Testspace {
     }
 
     public static String prepareData(String dataFilePath) {
+        return prepareData(dataFilePath, "data/" + dataFilePath);
+    }
+
+    public static String prepareData(String dataFilePath, String to) {
         File dataFile = new File(dataFilePath);
-        File workingFile = getFile("data/" + dataFilePath);
+        File workingFile = getFile(to);
 
         if (!dataFile.isAbsolute())
             dataFile = new File(testdata, dataFilePath);
@@ -79,5 +83,4 @@ public class Testspace {
 
         return workingFile.getAbsolutePath();
     }
-
 }
