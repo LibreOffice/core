@@ -33,10 +33,12 @@ class Test : public SwModelTestBase
 {
 public:
     void testHello();
+    void testEmptySvgFamilyName();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
     CPPUNIT_TEST(testHello);
+    CPPUNIT_TEST(testEmptySvgFamilyName);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -54,6 +56,12 @@ void Test::testHello()
 {
     load("hello.odt");
     CPPUNIT_ASSERT_EQUAL(12, getLength());
+}
+
+void Test::testEmptySvgFamilyName()
+{
+    // .odt import did crash on the empty font list (which I think is valid according SVG spec)
+    load( "empty-svg-family-name.odt" );
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
