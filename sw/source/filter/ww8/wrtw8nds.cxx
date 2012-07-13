@@ -1862,12 +1862,19 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
                         sCode = sOUCode;
                     }
                 }
-                OutputField( NULL, eFieldId, sCode, WRITEFIELD_START | WRITEFIELD_CMD_START );
+
+                bool bCommentRange = pFieldmark && pFieldmark->GetFieldname() == ODF_COMMENTRANGE;
+                if (bCommentRange)
+                    AttrOutput().WritePostitFieldStart();
+                else
+                    OutputField( NULL, eFieldId, sCode, WRITEFIELD_START | WRITEFIELD_CMD_START );
+
                 if ( pFieldmark && pFieldmark->GetFieldname( ) == ODF_FORMTEXT )
                     WriteFormData( *pFieldmark );
                 else if ( pFieldmark && pFieldmark->GetFieldname( ) == ODF_HYPERLINK )
                     WriteHyperlinkData( *pFieldmark );
-                OutputField( NULL, lcl_getFieldId( pFieldmark ), String(), WRITEFIELD_CMD_END );
+                if (!bCommentRange)
+                    OutputField( NULL, lcl_getFieldId( pFieldmark ), String(), WRITEFIELD_CMD_END );
 
                 if ( pFieldmark && pFieldmark->GetFieldname() == ODF_UNHANDLED )
                 {
@@ -1902,7 +1909,11 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
                     }
                 }
 
-                OutputField( NULL, eFieldId, String(), WRITEFIELD_CLOSE );
+                if (pFieldmark && pFieldmark->GetFieldname() == ODF_COMMENTRANGE)
+                    AttrOutput().WritePostitFieldEnd();
+                else
+                    OutputField( NULL, eFieldId, String(), WRITEFIELD_CLOSE );
+
                 if ( pFieldmark && pFieldmark->GetFieldname() == ODF_FORMTEXT )
                     AppendBookmark( pFieldmark->GetName(), false );
             }
