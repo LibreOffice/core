@@ -59,6 +59,7 @@ public:
 #if TODO
     void testNorthernThai();
 #endif
+    void testKhmer();
 
     CPPUNIT_TEST_SUITE(TestBreakIterator);
     CPPUNIT_TEST(testLineBreaking);
@@ -69,6 +70,7 @@ public:
 #if TODO
     CPPUNIT_TEST(testNorthernThai);
 #endif
+    CPPUNIT_TEST(testKhmer);
     CPPUNIT_TEST_SUITE_END();
 private:
     uno::Reference<i18n::XBreakIterator> m_xBreak;
@@ -340,6 +342,28 @@ void TestBreakIterator::testNorthernThai()
         aBounds.startPos == 0 && aBounds.endPos == aTest.getLength());
 }
 #endif
+
+//A test to ensure that our khmer word boundary detection is useful
+//https://bugs.freedesktop.org/show_bug.cgi?id=52020
+void TestBreakIterator::testKhmer()
+{
+    lang::Locale aLocale;
+    aLocale.Language = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("km"));
+    aLocale.Country = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("KH"));
+
+    const sal_Unicode KHMER1[] = { 0x17B2, 0x17D2, 0x1799, 0x1782, 0x17C1 };
+
+    ::rtl::OUString aTest(KHMER1, SAL_N_ELEMENTS(KHMER1));
+    i18n::Boundary aBounds = m_xBreak->getWordBoundary(aTest, 0, aLocale,
+        i18n::WordType::DICTIONARY_WORD, true);
+
+    CPPUNIT_ASSERT(aBounds.startPos == 0 && aBounds.endPos == 3);
+
+    aBounds = m_xBreak->getWordBoundary(aTest, aBounds.endPos, aLocale,
+        i18n::WordType::DICTIONARY_WORD, true);
+
+    CPPUNIT_ASSERT(aBounds.startPos == 3 && aBounds.endPos == 5);
+}
 
 void TestBreakIterator::setUp()
 {
