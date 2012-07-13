@@ -113,10 +113,6 @@
 #include <rtl/strbuf.hxx>
 #include <rtl/oustringostreaminserter.hxx>
 
-//libxml2 for dumping
-#include <libxml/xmlwriter.h>
-
-
 //.............................................................................
 namespace chart
 {
