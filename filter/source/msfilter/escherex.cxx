@@ -754,6 +754,7 @@ sal_Bool EscherPropertyContainer::GetLineArrow( const sal_Bool bLineStart,
                 sal_Int16       nWhich = bLineStart ? XATTR_LINESTART : XATTR_LINEEND;
 
                 SvxUnogetApiNameForItem( nWhich, aArrowStartName, aApiName );
+                sal_Bool bIsMapped = sal_True;
                 if ( aApiName.getLength() )
                 {
 
@@ -788,8 +789,11 @@ sal_Bool EscherPropertyContainer::GetLineArrow( const sal_Bool bLineStart,
                         reLineEnd = ESCHER_LineArrowDiamondEnd;
                     else if ( aApiName.equalsAscii( "Arrow" ) )
                         reLineEnd = ESCHER_LineArrowEnd;
+                    else
+                        bIsMapped = sal_False;
+
                 }
-                else if ( aArrowStartName.GetTokenCount( ' ' ) == 2 )
+                if ( !bIsMapped && aArrowStartName.GetTokenCount( ' ' ) == 2 )
                 {
                     sal_Bool b = sal_True;
                     String aArrowName( aArrowStartName.GetToken( 0, ' ' ) );
