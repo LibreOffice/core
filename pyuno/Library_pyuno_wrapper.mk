@@ -49,10 +49,10 @@ $(eval $(call gb_Library_set_include,pyuno_wrapper,\
 endif
 
 ifneq ($(GUI)$(COM),WNTMSC)
-ifneq ($(OS),MACOSX)
+ifeq ($(filter DRAGONFLY FREEBSD NETBSD OPENBSD MACOSX,$(OS)),)
 
-$(eval $(call gb_Library_add_libs,pyuno_wrapper,\
-	-ldl \
+$(eval $(call gb_Library_use_libraries,pyuno_wrapper,\
+	dl \
 ))
 
 endif
