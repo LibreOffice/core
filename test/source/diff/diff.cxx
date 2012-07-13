@@ -26,10 +26,16 @@
  * instead of those above.
  */
 
+#define USE_CPPUNIT 1
 
 #include "test/xmldiff.hxx"
+
 #include <libxml/xpath.h>
-#include <rtl/math.hxx>
+#include <libxml/parser.h>
+#include <libxml/tree.h>
+#include <libxml/xmlmemory.h>
+
+#include <set>
 #include <cstring>
 #include <sstream>
 #include <cmath>
@@ -38,6 +44,73 @@
 #if USE_CPPUNIT
 #include <cppunit/extensions/HelperMacros.h>
 #endif
+
+#include <rtl/math.hxx>
+
+
+struct tolerance
+{
+    ~tolerance()
+    {
+        xmlFree(elementName);
+        xmlFree(attribName);
+    }
+
+    tolerance()
+    {
+        elementName = NULL;
+        attribName = NULL;
+    }
+
+    tolerance(const tolerance& tol)
+    {
+        elementName = xmlStrdup(tol.elementName);
+        attribName = xmlStrdup(tol.attribName);
+        relative = tol.relative;
+        value = tol.value;
+    }
+
+    xmlChar* elementName;
+    xmlChar* attribName;
+    bool relative;
+    double value;
+    bool operator==(const tolerance& rTol) const { return xmlStrEqual(elementName, rTol.elementName) && xmlStrEqual(attribName, rTol.attribName); }
+    bool operator<(const tolerance& rTol) const
+    {
+        int cmp = xmlStrcmp(elementName, rTol.elementName);
+        if(cmp == 0)
+        {
+            cmp = xmlStrcmp(attribName, rTol.attribName);
+        }
+
+        if(cmp>=0)
+            return false;
+        else
+            return true;
+    }
+};
+
+class XMLDiff
+{
+public:
+    XMLDiff(const char* pFileName, const char* pContent, int size, const char* pToleranceFileName);
+    ~XMLDiff();
+
+    bool compare();
+private:
+    typedef std::set<tolerance> ToleranceContainer;
+
+    void loadToleranceFile(xmlDocPtr xmlTolerance);
+    bool compareAttributes(xmlNodePtr node1, xmlNodePtr node2);
+    bool compareElements(xmlNodePtr node1, xmlNodePtr node2);
+
+    ToleranceContainer toleranceContainer;
+    xmlDocPtr xmlFile1;
+    xmlDocPtr xmlFile2;
+};
+
+
+
 
 XMLDiff::XMLDiff( const char* pFileName, const char* pContent, int size, const char* pToleranceFile)
 {
@@ -288,6 +361,15 @@ bool XMLDiff::compareAttributes(xmlNodePtr node1, xmlNodePtr node2)
 #endif
 
     return true;
+}
+
+
+bool
+doXMLDiff(char const*const pFileName, char const*const pContent, int const size,
+          char const*const pToleranceFileName)
+{
+    XMLDiff aDiff(pFileName, pContent, size, pToleranceFileName);
+    return aDiff.compare();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

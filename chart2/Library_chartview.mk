@@ -54,6 +54,7 @@ $(eval $(call gb_Library_use_libraries,chartview,\
     tl \
     utl \
     vcl \
+    drawinglayer \
     $(gb_STDLIBS) \
 ))
 

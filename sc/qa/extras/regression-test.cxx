@@ -73,9 +73,8 @@ bool checkDumpAgainstFile( const rtl::OUString& rDump, const rtl::OUString aFile
     CPPUNIT_ASSERT_MESSAGE("dump is empty", !rDump.isEmpty());
 
     rtl::OString aDump = rtl::OUStringToOString(rDump, RTL_TEXTENCODING_UTF8);
-    XMLDiff aDiff(aOFile.getStr(), aDump.getStr(),static_cast<int>(rDump.getLength()), aToleranceFile.getStr());
-
-    return aDiff.compare();
+    return doXMLDiff(aOFile.getStr(), aDump.getStr(),
+            static_cast<int>(rDump.getLength()), aToleranceFile.getStr());
 }
 
 }

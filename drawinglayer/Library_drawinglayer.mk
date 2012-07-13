@@ -31,6 +31,7 @@ $(eval $(call gb_Library_use_package,drawinglayer,drawinglayer_inc))
 
 $(eval $(call gb_Library_set_include,drawinglayer,\
     $$(INCLUDE) \
+    -I$(SRCDIR)/drawinglayer/inc \
 ))
 
 $(eval $(call gb_Library_add_defs,drawinglayer,\
@@ -38,6 +39,10 @@ $(eval $(call gb_Library_add_defs,drawinglayer,\
 ))
 
 $(eval $(call gb_Library_use_sdk_api,drawinglayer))
+
+$(eval $(call gb_Library_use_externals,drawinglayer,\
+	libxml2 \
+))
 
 $(eval $(call gb_Library_use_libraries,drawinglayer,\
     basegfx \
@@ -171,6 +176,8 @@ $(eval $(call gb_Library_add_exception_objects,drawinglayer,\
     drawinglayer/source/processor3d/zbufferprocessor3d \
     drawinglayer/source/texture/texture3d \
     drawinglayer/source/texture/texture \
+    drawinglayer/source/dumper/XShapeDumper \
+    drawinglayer/source/dumper/EnhancedShapeDumper \
 ))
 
 # vim: set noet sw=4 ts=4:

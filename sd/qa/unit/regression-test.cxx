@@ -31,6 +31,7 @@
 #include <sal/config.h>
 #include <unotest/filters-test.hxx>
 #include <test/bootstrapfixture.hxx>
+#include <test/xmldiff.hxx>
 #include <rtl/strbuf.hxx>
 #include <osl/file.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
@@ -55,6 +56,9 @@
 #include <string>
 #include <iostream>
 #include <rtl/oustringostreaminserter.hxx>
+
+#include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
+#include <drawinglayer/XShapeDumper.hxx>
 
 namespace {
 
@@ -116,9 +120,11 @@ public:
 private:
     uno::Reference<document::XFilter> m_xFilter;
     uno::Reference<uno::XInterface> m_xDrawComponent;
+    void testStuff(::sd::DrawDocShellRef xDocShRef, const rtl::OString& fileNameBase);
 };
 
 #define PPTX_FORMAT_TYPE 268959811
+#define ODP_FORMAT_TYPE 285212967
 
 struct FileFormat {
     const char* pName; const char* pFilterName; const char* pTypeName; sal_uLong nFormatType;
@@ -127,6 +133,7 @@ struct FileFormat {
 // cf. sc/qa/unit/filters-test.cxx and filters/...*.xcu to fill out.
 FileFormat aFileFormats[] = {
     { "pptx" , "Impress MS PowerPoint 2007 XML", "MS PowerPoint 2007 XML", PPTX_FORMAT_TYPE },
+    { "odp" , "impress8", "impress8", ODP_FORMAT_TYPE },
     { 0, 0, 0, 0 }
 };
 
@@ -150,11 +157,11 @@ FileFormat aFileFormats[] = {
         rtl::OUString(), pFmt->nFormatType, nFormat,
         rtl::OUString::createFromAscii( pFmt->pTypeName ),
         0, rtl::OUString(), rtl::OUString(), /* userdata */
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:factory/sdraw*")) );
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:factory/simpress*")) );
     aFilter->SetVersion(SOFFICE_FILEFORMAT_CURRENT);
 
     ::sd::DrawDocShellRef xDocShRef = new ::sd::DrawDocShell();
-    SfxMedium* pSrcMed = new SfxMedium(rURL, STREAM_STD_READ, true);
+    SfxMedium* pSrcMed = new SfxMedium(rURL, STREAM_STD_READ);
     pSrcMed->SetFilter(aFilter);
     if ( !xDocShRef->DoLoad(pSrcMed) )
     {
@@ -168,33 +175,53 @@ FileFormat aFileFormats[] = {
 
 void SdFiltersTest::test()
 {
-    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/a.pptx"));
+    {
+        ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/odp/shapes-test.odp"));
+        testStuff(xDocShRef, rtl::OUStringToOString(getPathFromSrc("/sd/qa/unit/data/xml/shapes-test_page"), RTL_TEXTENCODING_UTF8));
+    }
+    /*
+    {
+    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/odp/text-test.odp"));
+    testStuff(xDocShRef);
+    }*/
+}
+
+void SdFiltersTest::testStuff(::sd::DrawDocShellRef xDocShRef, const rtl::OString& fileNameBase)
+{
     CPPUNIT_ASSERT_MESSAGE( "failed to load", xDocShRef.Is() );
     CPPUNIT_ASSERT_MESSAGE( "not in destruction", !xDocShRef->IsInDestruction() );
 
-    uno::Reference< frame::XModel > xModel = xDocShRef->GetModel();
-    CPPUNIT_ASSERT(xModel.is());
-    uno::Reference< frame::XStorable > xStorable( xModel, uno::UNO_QUERY_THROW);
-    CPPUNIT_ASSERT( xStorable.is());
+    uno::Reference<frame::XModel> xTempModel(xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT(xTempModel.is());
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier (xTempModel, uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT(xDrawPagesSupplier.is());
+    uno::Reference< drawing::XDrawPages > xDrawPages = xDrawPagesSupplier->getDrawPages();
+    CPPUNIT_ASSERT(xDrawPages.is());
 
-    uno::Sequence< beans::PropertyValue > aArgs(1);
-    beans::PropertyValue aValue;
-    uno::Any aAny;
+    XShapeDumper xShapeDumper;
+    sal_Int32 nLength = xDrawPages->getCount();
+    rtl::OString aFileNameExt(".xml");
+    for (sal_Int32 i = 0; i < nLength; ++i)
+    {
+        uno::Reference<drawing::XDrawPage> xDrawPage;
+        uno::Any aAny = xDrawPages->getByIndex(i);
+        aAny >>= xDrawPage;
+        uno::Reference< drawing::XShapes > xShapes(xDrawPage, uno::UNO_QUERY_THROW);
+        rtl::OUString aString = xShapeDumper.dump(xShapes);
+        rtl::OStringBuffer aFileNameBuf(fileNameBase);
+        aFileNameBuf.append(i);
+        aFileNameBuf.append(aFileNameExt);
 
-    aAny <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("impress_svg_Export"));
+        rtl::OString aFileName = aFileNameBuf.makeStringAndClear();
 
-    aValue.Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FilterName"));
-    aValue.Value = aAny;
-    aValue.State = beans::PropertyState_DIRECT_VALUE;
-
-    aArgs[0] = aValue;
-
-    rtl::OUString aNewSvgURL = m_aSolverRootURL + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/unittest/sd/test2.svg"));
-
-    xStorable->storeToURL( aNewSvgURL, aArgs );
-
-    compareFiles( getPathFromSrc("/sd/qa/unit/data/svg/test.svg"), getPathFromSolver("/unittest/sd/test2.svg") );
-
+        std::cout << aString << std::endl;
+        doXMLDiff(aFileName.getStr(),
+            rtl::OUStringToOString(aString, RTL_TEXTENCODING_UTF8).getStr(),
+            static_cast<int>(aString.getLength()),
+            rtl::OUStringToOString(
+                getPathFromSrc("/sd/qa/unit/data/tolerance.xml"),
+                RTL_TEXTENCODING_UTF8).getStr());
+    }
     xDocShRef->DoClose();
 }
 
@@ -207,7 +234,7 @@ bool SdFiltersTest::load(const rtl::OUString &rFilter, const rtl::OUString &rURL
         rUserData, rtl::OUString() );
 
     ::sd::DrawDocShellRef xDocShRef = new ::sd::DrawDocShell();
-    SfxMedium* pSrcMed = new SfxMedium(rURL, STREAM_STD_READ, true);
+    SfxMedium* pSrcMed = new SfxMedium(rURL, STREAM_STD_READ);
     pSrcMed->SetFilter(&aFilter);
     bool bLoaded = xDocShRef->DoLoad(pSrcMed);
     xDocShRef->DoClose();
