@@ -128,7 +128,7 @@ namespace cmis
                     SAL_INFO( "cmisucp", "Looking for unsupported property " << rProp.Name );
                 }
             }
-            catch ( const libcmis::Exception& e )
+            catch (const libcmis::Exception&)
             {
                 xRow->appendVoid( rProp );
             }
@@ -156,7 +156,7 @@ namespace cmis
                 {
                     m_aRepositories = libcmis::SessionFactory::getRepositories( params );
                 }
-                catch ( const libcmis::Exception& e )
+                catch (const libcmis::Exception&)
                 {
                 }
             }
