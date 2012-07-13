@@ -28,7 +28,7 @@
 #ifndef _EDGLBLDC_HXX
 #define _EDGLBLDC_HXX
 
-#include <svl/svarray.hxx>
+#include <o3tl/sorted_vector.hxx>
 
 class SwSection;
 class SwTOXBase;
@@ -70,10 +70,10 @@ public:
 };
 
 
-typedef SwGlblDocContent* SwGlblDocContentPtr;
-SV_DECL_PTRARR_SORT_DEL( SwGlblDocContents, SwGlblDocContentPtr, 10 )
-
-
+class SwGlblDocContents : public o3tl::sorted_vector<SwGlblDocContent*, o3tl::less_ptr_to<SwGlblDocContent> > {
+public:
+    ~SwGlblDocContents() { DeleteAndDestroyAll(); }
+};
 
 #endif
 

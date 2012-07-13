@@ -40,8 +40,6 @@
 #include <edglbldc.hxx>
 
 
-SV_IMPL_OP_PTRARR_SORT( SwGlblDocContents, SwGlblDocContentPtr )
-
 sal_Bool SwEditShell::IsGlobalDoc() const
 {
     return getIDocumentSettingAccess()->get(IDocumentSettingAccess::GLOBAL_DOCUMENT);
@@ -64,8 +62,7 @@ sal_Bool SwEditShell::IsGlblDocSaveLinks() const
 
 sal_uInt16 SwEditShell::GetGlobalDocContent( SwGlblDocContents& rArr ) const
 {
-    if( rArr.Count() )
-        rArr.DeleteAndDestroy( 0, rArr.Count() );
+    rArr.DeleteAndDestroyAll();
 
     if( !getIDocumentSettingAccess()->get(IDocumentSettingAccess::GLOBAL_DOCUMENT) )
         return 0;
@@ -80,7 +77,7 @@ sal_uInt16 SwEditShell::GetGlobalDocContent( SwGlblDocContents& rArr ) const
         const SwSection* pSect = rSectFmts[ --n ]->GetGlobalDocSection();
         if( pSect )
         {
-            SwGlblDocContentPtr pNew;
+            SwGlblDocContent* pNew;
             switch( pSect->GetType() )
             {
             case TOX_HEADER_SECTION:    break;      // ignore
@@ -93,7 +90,7 @@ sal_uInt16 SwEditShell::GetGlobalDocContent( SwGlblDocContents& rArr ) const
                 pNew = new SwGlblDocContent( pSect );
                 break;
             }
-            if( !rArr.Insert( pNew ) )
+            if( !rArr.insert( pNew ).second )
                 delete pNew;
         }
     }
@@ -101,7 +98,7 @@ sal_uInt16 SwEditShell::GetGlobalDocContent( SwGlblDocContents& rArr ) const
     // und als letztes die Dummies (sonstiger Text) einfuegen
     SwNode* pNd;
     sal_uLong nSttIdx = pMyDoc->GetNodes().GetEndOfExtras().GetIndex() + 2;
-    for( n = 0; n < rArr.Count(); ++n )
+    for( n = 0; n < rArr.size(); ++n )
     {
         const SwGlblDocContent& rNew = *rArr[ n ];
         // suche von StartPos bis rNew.DocPos nach einem Content Node.
@@ -110,8 +107,8 @@ sal_uInt16 SwEditShell::GetGlobalDocContent( SwGlblDocContents& rArr ) const
             if( ( pNd = pMyDoc->GetNodes()[ nSttIdx ])->IsCntntNode()
                 || pNd->IsSectionNode() || pNd->IsTableNode() )
             {
-                SwGlblDocContentPtr pNew = new SwGlblDocContent( nSttIdx );
-                if( !rArr.Insert( pNew ) )
+                SwGlblDocContent* pNew = new SwGlblDocContent( nSttIdx );
+                if( !rArr.insert( pNew ).second )
                     delete pNew;
                 else
                     ++n;        // auf die naechste Position
@@ -124,26 +121,26 @@ sal_uInt16 SwEditShell::GetGlobalDocContent( SwGlblDocContents& rArr ) const
     }
 
     // sollte man das Ende auch noch setzen??
-    if( rArr.Count() )
+    if( !rArr.empty() )
     {
         sal_uLong nNdEnd = pMyDoc->GetNodes().GetEndOfContent().GetIndex();
         for( ; nSttIdx < nNdEnd; ++nSttIdx )
             if( ( pNd = pMyDoc->GetNodes()[ nSttIdx ])->IsCntntNode()
                 || pNd->IsSectionNode() || pNd->IsTableNode() )
             {
-                SwGlblDocContentPtr pNew = new SwGlblDocContent( nSttIdx );
-                if( !rArr.Insert( pNew ) )
+                SwGlblDocContent* pNew = new SwGlblDocContent( nSttIdx );
+                if( !rArr.insert( pNew ).second )
                     delete pNew;
                 break;
             }
     }
     else
     {
-        SwGlblDocContentPtr pNew = new SwGlblDocContent(
+        SwGlblDocContent* pNew = new SwGlblDocContent(
                     pMyDoc->GetNodes().GetEndOfExtras().GetIndex() + 2 );
-        rArr.Insert( pNew );
+        rArr.insert( pNew );
     }
-    return rArr.Count();
+    return rArr.size();
 }
 
 sal_Bool SwEditShell::InsertGlobalDocContent( const SwGlblDocContent& rInsPos,
@@ -269,7 +266,7 @@ sal_Bool SwEditShell::DeleteGlobalDocContent( const SwGlblDocContents& rArr ,
     SwDoc* pMyDoc = GetDoc();
     const SwGlblDocContent& rDelPos = *rArr[ nDelPos ];
     sal_uLong nDelIdx = rDelPos.GetDocPos();
-    if( 1 == rArr.Count() )
+    if( 1 == rArr.size() )
     {
         // ein Node muss aber da bleiben!
         rPos.nNode = nDelIdx - 1;
@@ -285,7 +282,7 @@ sal_Bool SwEditShell::DeleteGlobalDocContent( const SwGlblDocContents& rArr ,
         {
             rPos.nNode = nDelIdx;
             pCrsr->SetMark();
-            if( ++nDelPos < rArr.Count() )
+            if( ++nDelPos < rArr.size() )
                 rPos.nNode = rArr[ nDelPos ]->GetDocPos();
             else
                 rPos.nNode = pMyDoc->GetNodes().GetEndOfContent();
@@ -320,8 +317,8 @@ sal_Bool SwEditShell::MoveGlobalDocContent( const SwGlblDocContents& rArr ,
                                         sal_uInt16 nInsPos )
 {
     if( !getIDocumentSettingAccess()->get(IDocumentSettingAccess::GLOBAL_DOCUMENT) ||
-        nFromPos >= rArr.Count() || nToPos > rArr.Count() ||
-        nInsPos > rArr.Count() || nFromPos >= nToPos ||
+        nFromPos >= rArr.size() || nToPos > rArr.size() ||
+        nInsPos > rArr.size() || nFromPos >= nToPos ||
         ( nFromPos <= nInsPos && nInsPos <= nToPos ) )
         return sal_False;
 
@@ -334,13 +331,13 @@ sal_Bool SwEditShell::MoveGlobalDocContent( const SwGlblDocContents& rArr ,
 
     SwDoc* pMyDoc = GetDoc();
     SwNodeRange aRg( pMyDoc->GetNodes(), rArr[ nFromPos ]->GetDocPos() );
-    if( nToPos < rArr.Count() )
+    if( nToPos < rArr.size() )
         aRg.aEnd = rArr[ nToPos ]->GetDocPos();
     else
         aRg.aEnd = pMyDoc->GetNodes().GetEndOfContent();
 
     SwNodeIndex aInsPos( pMyDoc->GetNodes() );
-    if( nInsPos < rArr.Count() )
+    if( nInsPos < rArr.size() )
         aInsPos = rArr[ nInsPos ]->GetDocPos();
     else
         aInsPos  = pMyDoc->GetNodes().GetEndOfContent();
@@ -404,7 +401,5 @@ SwGlblDocContent::SwGlblDocContent( const SwSection* pSect )
     const SwSectionNode* pSectNd = pSect->GetFmt()->GetSectionNode();
     nDocPos = pSectNd ? pSectNd->GetIndex() : 0;
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

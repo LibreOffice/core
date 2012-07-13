@@ -245,11 +245,11 @@ sal_Int8 SwGlobalTree::ExecuteDrop( const ExecuteDropEvent& rEvt )
                     pActiveShell->GetGlobalDocContent(*pTempContents);
                     // wenn das file erfolgreich eingefuegt wurde,
                     // dann muss auch der naechste Content geholt werden
-                    if(nEntryCount < pTempContents->Count())
+                    if(nEntryCount < pTempContents->size())
                     {
                         nEntryCount++;
                         nAbsContPos++;
-                        pCnt = pTempContents->GetObject( static_cast< sal_uInt16 >(nAbsContPos) );
+                        pCnt = (*pTempContents)[ nAbsContPos ];
                     }
                 }
             }
@@ -553,7 +553,7 @@ sal_Bool     SwGlobalTree::NotifyMoving(   SvLBoxEntry*  pTarget,
 {
     SvTreeList* _pModel = GetModel();
     sal_uInt16 nSource = (sal_uInt16) _pModel->GetAbsPos(pSource);
-    sal_uInt16 nDest   = pTarget ? (sal_uInt16) _pModel->GetAbsPos(pTarget) : pSwGlblDocContents->Count();
+    sal_uInt16 nDest   = pTarget ? (sal_uInt16) _pModel->GetAbsPos(pTarget) : pSwGlblDocContents->size();
 
     if( pActiveShell->MoveGlobalDocContent(
             *pSwGlblDocContents, nSource, nSource + 1, nDest ) &&
@@ -639,13 +639,13 @@ void    SwGlobalTree::Display(sal_Bool bOnlyUpdateUserData)
         aEntryImages = ImageList(SW_RES(IMG_NAVI_ENTRYBMP));
         bIsImageListInitialized = sal_True;
     }
-    sal_uInt16 nCount = pSwGlblDocContents->Count();
-    if(bOnlyUpdateUserData && GetEntryCount() == pSwGlblDocContents->Count())
+    sal_uInt16 nCount = pSwGlblDocContents->size();
+    if(bOnlyUpdateUserData && GetEntryCount() == pSwGlblDocContents->size())
     {
         SvLBoxEntry* pEntry = First();
         for( sal_uInt16 i = 0; i < nCount; i++)
         {
-            SwGlblDocContentPtr pCont = pSwGlblDocContents->GetObject(i);
+            SwGlblDocContent* pCont = (*pSwGlblDocContents)[i];
             pEntry->SetUserData(pCont);
             pEntry = Next(pEntry);
         }
@@ -668,7 +668,7 @@ void    SwGlobalTree::Display(sal_Bool bOnlyUpdateUserData)
         SvLBoxEntry* pSelEntry = 0;
         for( sal_uInt16 i = 0; i < nCount; i++)
         {
-            SwGlblDocContentPtr pCont = pSwGlblDocContents->GetObject(i);
+            SwGlblDocContent* pCont = (*pSwGlblDocContents)[i];
             String sEntry;
             Image aImage;
             switch( pCont->GetType()  )
@@ -1117,18 +1117,18 @@ sal_Bool    SwGlobalTree::Update(sal_Bool bHard)
             sal_Bool bCopy = sal_False;
             SwGlblDocContents* pTempContents  = new SwGlblDocContents;
             pActiveShell->GetGlobalDocContent(*pTempContents);
-            if(pTempContents->Count() != pSwGlblDocContents->Count() ||
-                    pTempContents->Count() != GetEntryCount())
+            if(pTempContents->size() != pSwGlblDocContents->size() ||
+                    pTempContents->size() != GetEntryCount())
             {
                 bRet = sal_True;
                 bCopy = sal_True;
             }
             else
             {
-                for(sal_uInt16 i = 0; i < pTempContents->Count() && !bCopy; i++)
+                for(sal_uInt16 i = 0; i < pTempContents->size() && !bCopy; i++)
                 {
-                    SwGlblDocContent* pLeft = pTempContents->GetObject(i);
-                    SwGlblDocContent* pRight = pSwGlblDocContents->GetObject(i);
+                    SwGlblDocContent* pLeft = (*pTempContents)[i];
+                    SwGlblDocContent* pRight = (*pSwGlblDocContents)[i];
                     GlobalDocContentType eType = pLeft->GetType();
                     SvLBoxEntry* pEntry = GetEntry(i);
                     String sTemp = GetEntryText(pEntry);
@@ -1150,15 +1150,9 @@ sal_Bool    SwGlobalTree::Update(sal_Bool bHard)
             }
             if(bCopy || bHard)
             {
-                sal_uInt16 i;
-
-                pSwGlblDocContents->DeleteAndDestroy(0, pSwGlblDocContents->Count());
-                for( i = 0; i < pTempContents->Count(); i++)
-                {
-                    pSwGlblDocContents->Insert(pTempContents->GetObject(i));
-                }
-                for( i = pTempContents->Count(); i; i--)
-                    pTempContents->Remove(i - 1);
+                pSwGlblDocContents->DeleteAndDestroyAll();
+                pSwGlblDocContents->insert( *pTempContents );
+                pTempContents->clear();
 
             }
             delete pTempContents;
@@ -1169,7 +1163,7 @@ sal_Bool    SwGlobalTree::Update(sal_Bool bHard)
     {
         Clear();
         if(pSwGlblDocContents)
-            pSwGlblDocContents->DeleteAndDestroy(0, pSwGlblDocContents->Count());
+            pSwGlblDocContents->DeleteAndDestroyAll();
     }
     // hier muss noch eine Veraenderungspruefung rein!
     return bRet;
@@ -1290,12 +1284,12 @@ void SwGlobalTree::InsertRegion( const SwGlblDocContent* _pContent, const Sequen
         rSh.StartAction();
         // after insertion of the first new content the 'pCont' parameter becomes invalid
         // find the index of the 'anchor' content to always use a current anchor content
-        sal_uInt16 nAnchorContent = pSwGlblDocContents->Count() - 1;
+        sal_uInt16 nAnchorContent = pSwGlblDocContents->size() - 1;
         if ( !bMove )
         {
-            for( sal_uInt16 nContent = 0; nContent < pSwGlblDocContents->Count(); ++nContent )
+            for( sal_uInt16 nContent = 0; nContent < pSwGlblDocContents->size(); ++nContent )
             {
-                if( *_pContent == *pSwGlblDocContents->GetObject( nContent ) )
+                if( *_pContent == *(*pSwGlblDocContents)[ nContent ] )
                 {
                     nAnchorContent = nContent;
                     break;
@@ -1308,11 +1302,11 @@ void SwGlobalTree::InsertRegion( const SwGlblDocContent* _pContent, const Sequen
             //update the global document content after each inserted document
             rSh.GetGlobalDocContent(aTempContents);
             SwGlblDocContent* pAnchorContent = 0;
-            OSL_ENSURE(aTempContents.Count() > (nAnchorContent + nFile), "invalid anchor content -> last insertion failed");
-            if ( aTempContents.Count() > (nAnchorContent + nFile) )
-                pAnchorContent = aTempContents.GetObject(nAnchorContent + (sal_uInt16)nFile);
+            OSL_ENSURE(aTempContents.size() > (nAnchorContent + nFile), "invalid anchor content -> last insertion failed");
+            if ( aTempContents.size() > (nAnchorContent + nFile) )
+                pAnchorContent = aTempContents[nAnchorContent + (sal_uInt16)nFile];
             else
-                pAnchorContent = aTempContents.GetObject(aTempContents.Count() - 1);
+                pAnchorContent = aTempContents.back();
             String sFileName(pFileNames[nFile]);
             INetURLObject aFileUrl;
             aFileUrl.SetSmartURL( sFileName );
