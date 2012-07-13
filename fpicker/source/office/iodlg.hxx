@@ -129,8 +129,8 @@ private:
     DECL_STATIC_LINK( SvtFileDialog, URLBoxModifiedHdl_Impl, void* );
     DECL_STATIC_LINK( SvtFileDialog, ConnectToServerPressed_Hdl, void* );
 
-    DECL_STATIC_LINK( SvtFileDialog, AddPlacePressed_Hdl, void* );
-    DECL_STATIC_LINK( SvtFileDialog, RemovePlacePressed_Hdl, void* );
+    DECL_LINK       (                AddPlacePressed_Hdl, void* );
+    DECL_LINK       (                RemovePlacePressed_Hdl, void* );
     DECL_LINK       (                Split_Hdl, void* );
 
     void                        Init_Impl( WinBits nBits );

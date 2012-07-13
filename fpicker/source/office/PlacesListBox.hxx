@@ -94,6 +94,8 @@ class PlacesListBox : public Control
         std::vector< PlacePtr > maPlaces;
         SvtFileDialog*       mpDlg;
         PlacesListBox_Impl*  mpImpl;
+        PushButton*          mpAddBtn;
+        PushButton*          mpDelBtn;
         sal_Int32            mnNbEditables;
         bool                 mbUpdated;
         bool                 mbSelectionChanged;
@@ -109,6 +111,9 @@ class PlacesListBox : public Control
         bool IsUpdated();
         const std::vector<PlacePtr>& GetPlaces();
 
+        void SetAddHdl( const Link& rHdl );
+        void SetDelHdl( const Link& rHdl );
+        void SetDelEnabled( bool enabled );
         void SetSizePixel( const Size& rNewSize );
         void updateView( );
 

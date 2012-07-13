@@ -257,8 +257,6 @@ SvtExpFileDlg_Impl::SvtExpFileDlg_Impl( WinBits )   :
     _pCbOptions         ( NULL ),
     _pPlaces            ( NULL ),
     _pBtnConnectToServer( NULL ),
-    _pBtnAddPlace       ( NULL ),
-    _pBtnRemovePlace    ( NULL ),
     _nState             ( FILEDLG_STATE_REMOTE ),
     _nStyle             ( 0 ),
     _bDoubleClick       ( sal_False ),
@@ -297,8 +295,6 @@ SvtExpFileDlg_Impl::~SvtExpFileDlg_Impl()
     delete _pFilter;
     delete _pPlaces;
     delete _pBtnConnectToServer;
-    delete _pBtnAddPlace;
-    delete _pBtnRemovePlace;
 }
 
 //*****************************************************************************

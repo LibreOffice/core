@@ -90,7 +90,7 @@ ModalDialog DLG_FPICKER_EXPLORERFILE
     {
         HelpID = "fpicker:ListBox:DLG_SVT_EXPLORERFILE:LB_EXPLORERFILE_PLACES_LISTBOX";
         Pos = MAP_APPFONT ( 6 , 26 ) ;
-        Size = MAP_APPFONT ( 50 , 75 ) ;
+        Size = MAP_APPFONT ( 50 , 85 ) ;
         Border = TRUE ;
     };
     PushButton BTN_EXPLORERFILE_CONNECT_TO_SERVER
@@ -100,22 +100,6 @@ ModalDialog DLG_FPICKER_EXPLORERFILE
         Size = MAP_APPFONT ( 12 , 12 ) ;
         Text [ en-US ] = "..." ;
         QuickHelpText [ en-US ] = "Connect To Server" ;
-    };
-    PushButton BTN_EXPLORERFILE_ADD_PLACE
-    {
-      HelpID = "fpicker:PushButton:DLG_SVT_EXPLORERFILE:BTN_EXPLORERFILE_ADD_PLACE";
-      Pos = MAP_APPFONT ( 6 , 101 ) ;
-      Size = MAP_APPFONT ( 10 , 10 ) ;
-      Text [ en-US ] = "+" ;
-      QuickHelpText [ en-US ] = "Bookmark This Place" ;
-    };
-    PushButton BTN_EXPLORERFILE_REMOVE_PLACE
-    {
-      HelpID = "fpicker:PushButton:DLG_SVT_EXPLORERFILE:BTN_EXPLORERFILE_REMOVE_PLACE";
-      Pos = MAP_APPFONT ( 19 , 101 ) ;
-      Size = MAP_APPFONT ( 10 , 10 ) ;
-      Text [ en-US ] = "-" ;
-      QuickHelpText [ en-US ] = "Remove Selected Bookmark" ;
     };
     Control CTL_EXPLORERFILE_FILELIST
     {

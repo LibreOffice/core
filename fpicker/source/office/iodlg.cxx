@@ -568,14 +568,6 @@ void SvtFileDialog::Init_Impl
     _pImp->_pBtnConnectToServer = new PushButton ( this, SvtResId ( BTN_EXPLORERFILE_CONNECT_TO_SERVER ) );
     _pImp->_pBtnConnectToServer->SetAccessibleName( _pImp->_pBtnConnectToServer->GetQuickHelpText() );
 
-    _pImp->_pBtnAddPlace = new PushButton ( this, SvtResId ( BTN_EXPLORERFILE_ADD_PLACE ) );
-    _pImp->_pBtnAddPlace->SetAccessibleName( _pImp->_pBtnAddPlace->GetQuickHelpText() );
-    _pImp->_pBtnAddPlace->SetClickHdl( STATIC_LINK ( this, SvtFileDialog, AddPlacePressed_Hdl ) );
-
-    _pImp->_pBtnRemovePlace = new PushButton ( this, SvtResId ( BTN_EXPLORERFILE_REMOVE_PLACE ) );
-    _pImp->_pBtnRemovePlace->SetAccessibleName( _pImp->_pBtnRemovePlace->GetQuickHelpText() );
-    _pImp->_pBtnRemovePlace->SetClickHdl( STATIC_LINK ( this, SvtFileDialog, RemovePlacePressed_Hdl ) );
-
     _pImp->_pBtnUp = new SvtUpButton_Impl( this, SvtResId( BTN_EXPLORERFILE_UP ) );
     _pImp->_pBtnNewFolder = new ImageButton( this, SvtResId( BTN_EXPLORERFILE_NEWFOLDER ) );
     _pImp->_pBtnNewFolder->SetStyle( _pImp->_pBtnNewFolder->GetStyle() | WB_NOPOINTERFOCUS );
@@ -1439,23 +1431,23 @@ IMPL_STATIC_LINK ( SvtFileDialog, ConnectToServerPressed_Hdl, void*, EMPTYARG )
 
 //*****************************************************************************
 
-IMPL_STATIC_LINK ( SvtFileDialog, AddPlacePressed_Hdl, void*, EMPTYARG )
+IMPL_LINK_NOARG ( SvtFileDialog, AddPlacePressed_Hdl )
 {
     // Maybe open the PlacesDialog would have been a better idea
     // there is an ux choice to make we did not make...
-    INetURLObject aURLObj( pThis->_pFileView->GetViewURL() );
+    INetURLObject aURLObj( _pFileView->GetViewURL() );
     PlacePtr newPlace(
         new Place( aURLObj.GetLastName(INetURLObject::DECODE_WITH_CHARSET),
-                ::rtl::OUString(pThis->_pFileView->GetViewURL()), true));
-    pThis->_pImp->_pPlaces->AppendPlace(newPlace);
+                ::rtl::OUString(_pFileView->GetViewURL()), true));
+    _pImp->_pPlaces->AppendPlace(newPlace);
     return 0;
 }
 
 //*****************************************************************************
 
-IMPL_STATIC_LINK ( SvtFileDialog, RemovePlacePressed_Hdl, void*, EMPTYARG )
+IMPL_LINK_NOARG ( SvtFileDialog, RemovePlacePressed_Hdl )
 {
-    pThis->_pImp->_pPlaces->RemoveSelectedPlace();
+    _pImp->_pPlaces->RemoveSelectedPlace();
     return 0;
 }
 
@@ -1986,10 +1978,7 @@ void SvtFileDialog::onAsyncOperationFinished()
 //-----------------------------------------------------------------------------
 void SvtFileDialog::RemovablePlaceSelected(bool enable)
 {
-    if(enable)
-        _pImp->_pBtnRemovePlace->Enable();
-    else
-        _pImp->_pBtnRemovePlace->Disable();
+    _pImp->_pPlaces->SetDelEnabled( enable );
 }
 
 //-------------------------------------------------------------------------
@@ -2514,7 +2503,7 @@ void SvtFileDialog::implArrangeControls()
     {
         _pImp->_pEdCurrentPath, _pImp->_pBtnConnectToServer,
         _pImp->_pBtnUp, _pImp->_pBtnNewFolder,                              // image buttons
-        _pImp->_pPlaces, _pImp->_pBtnAddPlace, _pImp->_pBtnRemovePlace,     // list of places
+        _pImp->_pPlaces,                                                    // list of places
         _pFileView,                                                         // the file view
         _pImp->_pFtFileName, _pImp->_pEdFileName,
         _pImp->_pFtFileVersion, _pImp->_pLbFileVersion,
@@ -2684,7 +2673,8 @@ void SvtFileDialog::Resize()
     splitterNewSize.Height() += nDeltaY;
     _pSplitter->SetSizePixel( splitterNewSize );
     sal_Int32 nMinX = _pImp->_pPlaces->GetPosPixel( ).X( );
-    _pSplitter->SetDragRectPixel( Rectangle( Point( nMinX, 0 ), Size( aDlgSize ) ) );
+    sal_Int32 nMaxX = _pFileView->GetPosPixel( ).X( ) + _pFileView->GetSizePixel( ).Width() - nMinX;
+    _pSplitter->SetDragRectPixel( Rectangle( Point( nMinX, 0 ), Size( nMaxX, aDlgSize.Width() ) ) );
 
     // Resize the places list box to fit the height of the FileView
     Size placesNewSize(_pImp->_pPlaces->GetSizePixel());
@@ -2705,8 +2695,7 @@ void SvtFileDialog::Resize()
             _pImp->_pFtFileName, _pImp->_pEdFileName, _pImp->_pFtFileVersion, _pImp->_pLbFileVersion,
             _pImp->_pFtTemplates, _pImp->_pLbTemplates, _pImp->_pFtImageTemplates, _pImp->_pLbImageTemplates,
             _pImp->_pFtFileType, _pImp->GetFilterListControl(), _pCbReadOnly, _pCbLinkBox, _pCbPreviewBox,
-            _pPbPlay, _pImp->_pCbPassword, _pImp->_pCbAutoExtension, _pImp->_pCbOptions, _pCbSelection,
-            _pImp->_pBtnAddPlace, _pImp->_pBtnRemovePlace
+            _pPbPlay, _pImp->_pCbPassword, _pImp->_pCbAutoExtension, _pImp->_pCbOptions, _pCbSelection
         };
         Control** ppMoveControls = aMoveControlsVert;
         Control** ppMoveControlsEnd = ppMoveControls + sizeof( aMoveControlsVert ) / sizeof( aMoveControlsVert[0] );
@@ -3029,6 +3018,9 @@ void SvtFileDialog::AddControls_Impl( )
     }
 
     _pImp->_pPlaces = new PlacesListBox( this, SVT_RESSTR(STR_PLACES_TITLE), SvtResId(LB_EXPLORERFILE_PLACES_LISTBOX) );
+    _pImp->_pPlaces->SetAddHdl( LINK ( this, SvtFileDialog, AddPlacePressed_Hdl ) );
+    _pImp->_pPlaces->SetDelHdl( LINK ( this, SvtFileDialog, RemovePlacePressed_Hdl ) );
+
     initDefaultPlaces();
 }
 
@@ -3393,7 +3385,6 @@ IMPL_LINK_NOARG( SvtFileDialog, Split_Hdl )
     _pFileView->SetPosSizePixel( fileViewPos, fileViewSize );
 
     _pSplitter->SetPosPixel( Point( nSplitPos, _pSplitter->GetPosPixel().Y() ) );
-    Resize();
     return 0;
 }
 

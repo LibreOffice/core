@@ -160,8 +160,6 @@ public:
 
     PlacesListBox*                  _pPlaces;
     PushButton*                     _pBtnConnectToServer;
-    PushButton*                     _pBtnAddPlace;
-    PushButton*                     _pBtnRemovePlace;
 
     SvtFileDlgMode                  _eMode;
     SvtFileDlgType                  _eDlgType;

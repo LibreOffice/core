@@ -78,6 +78,8 @@ PlacesListBox::PlacesListBox( SvtFileDialog* pFileDlg, const rtl::OUString& rTit
     maPlaces( ),
     mpDlg( pFileDlg ),
     mpImpl( NULL ),
+    mpAddBtn( ),
+    mpDelBtn( ),
     mnNbEditables( 0 ),
     mbUpdated( false ),
     mbSelectionChanged( false )
@@ -86,11 +88,23 @@ PlacesListBox::PlacesListBox( SvtFileDialog* pFileDlg, const rtl::OUString& rTit
 
     mpImpl->SetSelectHdl( LINK( this, PlacesListBox, Selection ) );
     mpImpl->SetDoubleClickHdl( LINK( this, PlacesListBox, DoubleClick ) ) ;
+
+    mpAddBtn = new ImageButton( this, 0 );
+    mpAddBtn->SetText( rtl::OUString( "+" ) );
+    mpAddBtn->SetPosSizePixel( Point( 0, 0 ), Size( 24, 24 ) );
+    mpAddBtn->Show();
+
+    mpDelBtn = new ImageButton( this, 0 );
+    mpDelBtn->SetText( rtl::OUString( "-" ) );
+    mpDelBtn->SetPosSizePixel( Point( 0, 0 ), Size( 24, 24 ) );
+    mpDelBtn->Show();
 }
 
 PlacesListBox::~PlacesListBox( )
 {
     delete mpImpl;
+    delete mpAddBtn;
+    delete mpDelBtn;
 }
 
 void PlacesListBox::AppendPlace( PlacePtr pPlace )
@@ -139,10 +153,31 @@ void PlacesListBox::RemoveSelectedPlace() {
     RemovePlace(mpImpl->GetCurrRow());
 }
 
+void PlacesListBox::SetAddHdl( const Link& rHdl )
+{
+    mpAddBtn->SetClickHdl( rHdl );
+}
+
+void PlacesListBox::SetDelHdl( const Link& rHdl )
+{
+    mpDelBtn->SetClickHdl( rHdl );
+}
+
+void PlacesListBox::SetDelEnabled( bool enabled )
+{
+    mpDelBtn->Enable( enabled );
+}
+
 void PlacesListBox::SetSizePixel( const Size& rNewSize )
 {
     Control::SetSizePixel( rNewSize );
-    mpImpl->SetSizePixel( rNewSize );
+    Size aListSize( rNewSize );
+    aListSize.Height() -= 26 + 18;
+    mpImpl->SetSizePixel( aListSize );
+
+    sal_Int32 nBtnY = rNewSize.Height() - 26;
+    mpAddBtn->SetPosPixel( Point( 3, nBtnY ) );
+    mpDelBtn->SetPosPixel( Point( 6 + 24, nBtnY ) );
 }
 
 Image PlacesListBox::getEntryIcon( PlacePtr pPlace )
