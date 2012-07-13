@@ -187,6 +187,18 @@ ModalDialog DLG_TEMPLATE_MANAGER
 
             ToolBoxItem
             {
+                Identifier = TBI_TEMPLATE_LOCAL;
+                Text [ en-US ] = "Local Templates";
+            };
+
+            ToolBoxItem
+            {
+                Identifier = TBI_TEMPLATE_ONLINE;
+                Text [ en-US ] = "Online Templates";
+            };
+
+            ToolBoxItem
+            {
                 Identifier = TBI_TEMPLATE_IMPORT ;
                 Text [ en-US ] = "Import a template" ;
 

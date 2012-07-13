@@ -39,6 +39,8 @@
 #define BTN_TEMPLATE_CLOSE          24
 
 #define TBI_TEMPLATE_FOLDER_DEL     25
+#define TBI_TEMPLATE_LOCAL          26
+#define TBI_TEMPLATE_ONLINE         27
 
 #define STR_CREATE_TEXT             260
 #define STR_CREATE_SHEET            261
