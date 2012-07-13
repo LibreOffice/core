@@ -1246,7 +1246,7 @@ void SwXTextField::attachToRange(
                     aDateTime.SetSec(m_pProps->pDateTime->Seconds);
                 }
                 pFld = new SwPostItField((SwPostItFieldType*)pFldType,
-                        m_pProps->sPar1, m_pProps->sPar2,aDateTime);
+                        m_pProps->sPar1, m_pProps->sPar2, m_pProps->sPar3, aDateTime);
                 if ( m_pTextObject )
                 {
                     ((SwPostItField*)pFld)->SetTextObject( m_pTextObject->CreateText() );

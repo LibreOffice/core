@@ -820,7 +820,9 @@ enum SwPropNameIds
 /* 0751 */  UNO_NAME_HEADER_TEXT_FIRST,
 /* 0752 */  UNO_NAME_FOOTER_TEXT_FIRST,
 
-/* 0753 */  SW_PROPNAME_END
+/* 0753 */  UNO_NAME_INITIALS,
+
+/* 0754 */  SW_PROPNAME_END
 
 // new items in this array must match SwPropNameTab aPropNameTab
 };

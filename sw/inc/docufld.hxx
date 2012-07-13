@@ -520,13 +520,14 @@ class SW_DLLPUBLIC SwPostItField : public SwField
 {
     rtl::OUString sTxt;
     rtl::OUString sAuthor;
+    rtl::OUString sInitials;
     DateTime    aDateTime;
     OutlinerParaObject* mpText;
     SwTextAPIObject* m_pTextObject;
 
 public:
     SwPostItField( SwPostItFieldType*,
-                   const String& rAuthor, const String& rTxt, const DateTime& rDate);
+                   const String& rAuthor, const String& rTxt, const String& rInitials, const DateTime& rDate);
     ~SwPostItField();
 
     virtual String          Expand() const;

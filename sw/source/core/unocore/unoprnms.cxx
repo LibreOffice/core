@@ -792,6 +792,7 @@ const SwPropNameTab aPropNameTab = {
 /* 0751 FIRST_IS_SHARED */             {MAP_CHAR_LEN("FirstIsShared")},
 /* 0752 HEADER_TEXT_FIRST */            {MAP_CHAR_LEN("HeaderTextFirst")},
 /* 0753 FOOTER_TEXT_FIRST */            {MAP_CHAR_LEN("FooterTextFirst")},
+/* 0754 UNO_NAME_INITIALS */            {MAP_CHAR_LEN("Initials")},
 
 // new items in this array must match enum SwPropNameIds
 };
