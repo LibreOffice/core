@@ -28,13 +28,13 @@
 # instead of those above.
 #*************************************************************************
 
-$(eval $(call gb_CppunitTest_CppunitTest,sw_subsequent_ww8tok))
+$(eval $(call gb_CppunitTest_CppunitTest,sw_subsequent_ww8import))
 
-$(eval $(call gb_CppunitTest_add_exception_objects,sw_subsequent_ww8tok, \
-    sw/qa/extras/ww8tok/ww8tok \
+$(eval $(call gb_CppunitTest_add_exception_objects,sw_subsequent_ww8import, \
+    sw/qa/extras/ww8import/ww8import \
 ))
 
-$(eval $(call gb_CppunitTest_use_libraries,sw_subsequent_ww8tok, \
+$(eval $(call gb_CppunitTest_use_libraries,sw_subsequent_ww8import, \
     cppu \
     cppuhelper \
     sal \
@@ -44,24 +44,24 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_subsequent_ww8tok, \
     $(gb_STDLIBS) \
 ))
 
-$(eval $(call gb_CppunitTest_use_externals,sw_subsequent_ww8tok,\
+$(eval $(call gb_CppunitTest_use_externals,sw_subsequent_ww8import,\
     libxml2 \
 ))
 
-$(eval $(call gb_CppunitTest_set_include,sw_subsequent_ww8tok,\
+$(eval $(call gb_CppunitTest_set_include,sw_subsequent_ww8import,\
     -I$(SRCDIR)/sw/inc \
     -I$(SRCDIR)/sw/source/core/inc \
     $$(INCLUDE) \
 ))
 
-$(eval $(call gb_CppunitTest_use_api,sw_subsequent_ww8tok,\
+$(eval $(call gb_CppunitTest_use_api,sw_subsequent_ww8import,\
     offapi \
     udkapi \
 ))
 
-$(eval $(call gb_CppunitTest_use_ure,sw_subsequent_ww8tok))
+$(eval $(call gb_CppunitTest_use_ure,sw_subsequent_ww8import))
 
-$(eval $(call gb_CppunitTest_use_components,sw_subsequent_ww8tok,\
+$(eval $(call gb_CppunitTest_use_components,sw_subsequent_ww8import,\
     comphelper/util/comphelp \
     configmgr/source/configmgr \
     dbaccess/util/dba \
@@ -85,11 +85,11 @@ $(eval $(call gb_CppunitTest_use_components,sw_subsequent_ww8tok,\
         xmlhelp/util/ucpchelp1) \
 ))
 
-$(eval $(call gb_CppunitTest_use_configuration,sw_subsequent_ww8tok))
+$(eval $(call gb_CppunitTest_use_configuration,sw_subsequent_ww8import))
 
-$(eval $(call gb_CppunitTest_use_filter_configuration,sw_subsequent_ww8tok))
+$(eval $(call gb_CppunitTest_use_filter_configuration,sw_subsequent_ww8import))
 
-$(eval $(call gb_CppunitTest_use_extra_configuration,sw_subsequent_ww8tok,\
+$(eval $(call gb_CppunitTest_use_extra_configuration,sw_subsequent_ww8import,\
 	$(OUTDIR)/unittest/registry \
 ))
 

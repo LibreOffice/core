@@ -112,7 +112,7 @@ private:
 
 void Test::load(const OUString& rFilename)
 {
-    mxComponent = loadFromDesktop(getURLFromSrc("/sw/qa/extras/ooxmltok/data/") + rFilename);
+    mxComponent = loadFromDesktop(getURLFromSrc("/sw/qa/extras/ooxmlimport/data/") + rFilename);
 }
 
 void Test::testN751054()

@@ -28,13 +28,13 @@
 # instead of those above.
 #*************************************************************************
 
-$(eval $(call gb_CppunitTest_CppunitTest,sw_subsequent_rtftok))
+$(eval $(call gb_CppunitTest_CppunitTest,sw_subsequent_odfimport))
 
-$(eval $(call gb_CppunitTest_add_exception_objects,sw_subsequent_rtftok, \
-    sw/qa/extras/rtftok/rtftok \
+$(eval $(call gb_CppunitTest_add_exception_objects,sw_subsequent_odfimport, \
+    sw/qa/extras/odfimport/odfimport \
 ))
 
-$(eval $(call gb_CppunitTest_use_libraries,sw_subsequent_rtftok, \
+$(eval $(call gb_CppunitTest_use_libraries,sw_subsequent_odfimport, \
     cppu \
     cppuhelper \
     sal \
@@ -46,33 +46,35 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_subsequent_rtftok, \
     $(gb_STDLIBS) \
 ))
 
-$(eval $(call gb_CppunitTest_use_externals,sw_subsequent_rtftok,\
+$(eval $(call gb_CppunitTest_use_externals,sw_subsequent_odfimport,\
     libxml2 \
 ))
 
-$(eval $(call gb_CppunitTest_set_include,sw_subsequent_rtftok,\
+$(eval $(call gb_CppunitTest_set_include,sw_subsequent_odfimport,\
     -I$(SRCDIR)/sw/inc \
     -I$(SRCDIR)/sw/source/core/inc \
     $$(INCLUDE) \
 ))
 
-$(eval $(call gb_CppunitTest_use_api,sw_subsequent_rtftok,\
+$(eval $(call gb_CppunitTest_use_api,sw_subsequent_odfimport,\
     offapi \
     udkapi \
 ))
 
-$(eval $(call gb_CppunitTest_use_ure,sw_subsequent_rtftok))
+$(eval $(call gb_CppunitTest_use_ure,sw_subsequent_odfimport))
 
-$(eval $(call gb_CppunitTest_use_components,sw_subsequent_rtftok,\
-	comphelper/util/comphelp \
+$(eval $(call gb_CppunitTest_use_components,sw_subsequent_odfimport,\
+    comphelper/util/comphelp \
     configmgr/source/configmgr \
     fileaccess/source/fileacc \
     filter/source/config/cache/filterconfig1 \
     framework/util/fwk \
     i18npool/util/i18npool \
     package/util/package2 \
+    package/source/xstor/xstor \
     sw/util/sw \
     sw/util/swd \
+    sax/source/expatwrap/expwrap \
     sfx2/util/sfx \
     svl/source/fsstor/fsstorage \
     svtools/util/svt \
@@ -81,14 +83,14 @@ $(eval $(call gb_CppunitTest_use_components,sw_subsequent_rtftok,\
     ucb/source/ucp/file/ucpfile1 \
     unotools/util/utl \
     unoxml/source/service/unoxml \
-	writerfilter/util/writerfilter \
+    xmlhelp/util/ucpchelp1 \
 ))
 
-$(eval $(call gb_CppunitTest_use_configuration,sw_subsequent_rtftok))
+$(eval $(call gb_CppunitTest_use_configuration,sw_subsequent_odfimport))
 
-$(eval $(call gb_CppunitTest_use_filter_configuration,sw_subsequent_rtftok))
+$(eval $(call gb_CppunitTest_use_filter_configuration,sw_subsequent_odfimport))
 
-$(eval $(call gb_CppunitTest_use_extra_configuration,sw_subsequent_rtftok,\
+$(eval $(call gb_CppunitTest_use_extra_configuration,sw_subsequent_odfimport,\
 	$(OUTDIR)/unittest/registry \
 ))
 

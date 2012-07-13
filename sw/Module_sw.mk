@@ -55,12 +55,12 @@ $(eval $(call gb_Module_add_slowcheck_targets,sw,\
     CppunitTest_sw_filters_test \
     CppunitTest_sw_macros_test \
     CppunitTest_sw_subsequent_ooxmlexport \
-    CppunitTest_sw_subsequent_ooxmltok \
+    CppunitTest_sw_subsequent_ooxmlimport \
     CppunitTest_sw_subsequent_ww8export \
-    CppunitTest_sw_subsequent_ww8tok \
+    CppunitTest_sw_subsequent_ww8import \
     CppunitTest_sw_subsequent_rtfexport \
-    CppunitTest_sw_subsequent_rtftok \
-    CppunitTest_sw_subsequent_odftok \
+    CppunitTest_sw_subsequent_rtfimport \
+    CppunitTest_sw_subsequent_odfimport \
 ))
 
 $(eval $(call gb_Module_add_subsequentcheck_targets,sw,\

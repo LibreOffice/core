@@ -149,7 +149,7 @@ private:
 
 void Test::load(const OUString& rFilename)
 {
-    mxComponent = loadFromDesktop(getURLFromSrc("/sw/qa/extras/rtftok/data/") + rFilename);
+    mxComponent = loadFromDesktop(getURLFromSrc("/sw/qa/extras/rtfimport/data/") + rFilename);
 }
 
 int Test::getPages()

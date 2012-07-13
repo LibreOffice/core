@@ -28,53 +28,55 @@
 # instead of those above.
 #*************************************************************************
 
-$(eval $(call gb_CppunitTest_CppunitTest,sw_subsequent_odftok))
+$(eval $(call gb_CppunitTest_CppunitTest,sw_subsequent_ooxmlimport))
 
-$(eval $(call gb_CppunitTest_add_exception_objects,sw_subsequent_odftok, \
-    sw/qa/extras/odftok/odftok \
+$(eval $(call gb_CppunitTest_add_exception_objects,sw_subsequent_ooxmlimport, \
+    sw/qa/extras/ooxmlimport/ooxmlimport \
 ))
 
-$(eval $(call gb_CppunitTest_use_libraries,sw_subsequent_odftok, \
+$(eval $(call gb_CppunitTest_use_libraries,sw_subsequent_ooxmlimport, \
     cppu \
     cppuhelper \
     sal \
-	sw \
     test \
     unotest \
+    sw \
     vcl \
-    tl \
     $(gb_STDLIBS) \
 ))
 
-$(eval $(call gb_CppunitTest_use_externals,sw_subsequent_odftok,\
+$(eval $(call gb_CppunitTest_use_externals,sw_subsequent_ooxmlimport,\
     libxml2 \
 ))
 
-$(eval $(call gb_CppunitTest_set_include,sw_subsequent_odftok,\
+$(eval $(call gb_CppunitTest_set_include,sw_subsequent_ooxmlimport,\
     -I$(SRCDIR)/sw/inc \
     -I$(SRCDIR)/sw/source/core/inc \
     $$(INCLUDE) \
 ))
 
-$(eval $(call gb_CppunitTest_use_api,sw_subsequent_odftok,\
+$(eval $(call gb_CppunitTest_use_api,sw_subsequent_ooxmlimport,\
     offapi \
     udkapi \
 ))
 
-$(eval $(call gb_CppunitTest_use_ure,sw_subsequent_odftok))
+$(eval $(call gb_CppunitTest_use_ure,sw_subsequent_ooxmlimport))
 
-$(eval $(call gb_CppunitTest_use_components,sw_subsequent_odftok,\
+$(eval $(call gb_CppunitTest_use_components,sw_subsequent_ooxmlimport,\
     comphelper/util/comphelp \
     configmgr/source/configmgr \
     fileaccess/source/fileacc \
     filter/source/config/cache/filterconfig1 \
     framework/util/fwk \
     i18npool/util/i18npool \
-    package/util/package2 \
+    oox/util/oox \
     package/source/xstor/xstor \
+    package/util/package2 \
+    sax/source/expatwrap/expwrap \
+    sax/source/fastparser/fastsax \
     sw/util/sw \
     sw/util/swd \
-    sax/source/expatwrap/expwrap \
+    sw/util/msword \
     sfx2/util/sfx \
     svl/source/fsstor/fsstorage \
     svtools/util/svt \
@@ -83,14 +85,14 @@ $(eval $(call gb_CppunitTest_use_components,sw_subsequent_odftok,\
     ucb/source/ucp/file/ucpfile1 \
     unotools/util/utl \
     unoxml/source/service/unoxml \
-    xmlhelp/util/ucpchelp1 \
+    writerfilter/util/writerfilter \
 ))
 
-$(eval $(call gb_CppunitTest_use_configuration,sw_subsequent_odftok))
+$(eval $(call gb_CppunitTest_use_configuration,sw_subsequent_ooxmlimport))
 
-$(eval $(call gb_CppunitTest_use_filter_configuration,sw_subsequent_odftok))
+$(eval $(call gb_CppunitTest_use_filter_configuration,sw_subsequent_ooxmlimport))
 
-$(eval $(call gb_CppunitTest_use_extra_configuration,sw_subsequent_odftok,\
+$(eval $(call gb_CppunitTest_use_extra_configuration,sw_subsequent_ooxmlimport,\
 	$(OUTDIR)/unittest/registry \
 ))
 

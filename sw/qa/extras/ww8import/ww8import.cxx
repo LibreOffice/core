@@ -68,7 +68,7 @@ private:
 
 void Test::load(const OUString& rFilename)
 {
-    mxComponent = loadFromDesktop(getURLFromSrc("/sw/qa/extras/ww8tok/data/") + rFilename);
+    mxComponent = loadFromDesktop(getURLFromSrc("/sw/qa/extras/ww8import/data/") + rFilename);
 }
 
 void Test::testN757910()

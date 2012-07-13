@@ -49,7 +49,7 @@ private:
 
 void Test::load(const OUString& rFilename)
 {
-    mxComponent = loadFromDesktop(getURLFromSrc("/sw/qa/extras/odftok/data/") + rFilename);
+    mxComponent = loadFromDesktop(getURLFromSrc("/sw/qa/extras/odfimport/data/") + rFilename);
 }
 
 void Test::testHello()
