@@ -2500,12 +2500,10 @@ sal_Bool ScDocShell::HasAutomaticTableName( const String& rFilter )
         || rFilter.EqualsAscii( pFilterRtf );
 }
 
-#ifndef ENABLE_TELEPATHY
 ScDocFunc *ScDocShell::CreateDocFunc()
 {
     return new ScDocFuncDirect( *this );
 }
-#endif
 
 ScDocShell::ScDocShell( const ScDocShell& rShell ) :
     SvRefBase(),

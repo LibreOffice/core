@@ -237,8 +237,6 @@ public:
     ScDocFuncSend( ScDocShell& rDocSh, ScDocFuncRecv *pDirect );
     virtual ~ScDocFuncSend();
 
-    bool                InitTeleManager( bool bIsMaster );
-
     virtual void        EnterListAction( sal_uInt16 nNameResId );
     virtual void        EndListAction();
 

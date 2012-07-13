@@ -56,22 +56,6 @@
 
 namespace css = ::com::sun::star;
 
-namespace {
-
-bool isCollabMode( bool& rbMaster )
-{
-    const char* pEnv = getenv ("LIBO_TUBES");
-    if (pEnv)
-    {
-        rbMaster = !strcmp( pEnv, "master");
-        return true;
-    }
-    rbMaster = false;
-    return false;
-}
-
-}
-
 // FIXME: really ScDocFunc should be an abstract base
 ScDocFuncRecv::ScDocFuncRecv( ScDocFuncDirect *pChain )
     : mpChain( pChain )
@@ -294,30 +278,6 @@ ScDocFuncSend::~ScDocFuncSend()
     delete mpDirect;
 }
 
-bool ScDocFuncSend::InitTeleManager( bool bIsMaster )
-{
-    if (mpManager)
-    {
-        fprintf( stderr, "TeleManager is already connected.\n" );
-        return true;
-    }
-    TeleManager *pManager = TeleManager::get();
-    pManager->sigPacketReceived.connect( boost::bind(
-            &ScDocFuncRecv::packetReceived, mpDirect, _1, _2 ));
-    pManager->sigFileReceived.connect( boost::bind(
-            &ScDocFuncRecv::fileReceived, mpDirect, _1 ));
-
-    if (pManager->createAccountManager())
-    {
-        pManager->prepareAccountManager();
-        mpManager = pManager;
-        return true;
-    }
-    fprintf( stderr, "Could not connect.\n" );
-    pManager->unref();
-    return false;
-}
-
 void ScDocFuncSend::EnterListAction( sal_uInt16 nNameResId )
 {
     // Want to group these operations for the other side ...
@@ -431,13 +391,9 @@ sal_Bool ScDocFuncSend::MergeCells( const ScCellMergeOption& rOption, sal_Bool b
     return ScDocFunc::MergeCells( rOption, bContents, bRecord, bApi );
 }
 
+#ifdef INTERCEPT
 SC_DLLPRIVATE ScDocFunc *ScDocShell::CreateDocFunc()
 {
-    // With ScDocFuncDirect shared_ptr it should even be possible during
-    // runtime to replace a ScDocFuncDirect instance with a ScDocFuncSend
-    // chained instance (holding the same ScDocFuncDirect instance) and vice
-    // versa.
-    bool bIsMaster = false;
     if (getenv ("INTERCEPT"))
     {
         boost::shared_ptr<ScDocFuncDirect> pDirect( new ScDocFuncDirect( *this ) );
@@ -448,16 +404,9 @@ SC_DLLPRIVATE ScDocFunc *ScDocShell::CreateDocFunc()
 
         return new ScDocFuncSend( *this, boost::shared_ptr<ScDocFuncRecv>( aDemoBus.get() ) );
     }
-    else if (isCollabMode( bIsMaster ))
-    {
-        ScDocFuncDirect *pDirect = new ScDocFuncDirect( *this );
-        ScDocFuncRecv *pReceiver = new ScDocFuncRecv( pDirect );
-        ScDocFuncSend *pSender = new ScDocFuncSend( *this, pReceiver );
-        pSender->InitTeleManager( bIsMaster );
-        return pSender;
-    }
     else
         return new ScDocFuncDirect( *this );
 }
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

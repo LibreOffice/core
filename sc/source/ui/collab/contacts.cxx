@@ -66,27 +66,9 @@ class TubeContacts : public ModelessDialog
 
     void Listen()
     {
-        ScDocShell *pScDocShell = dynamic_cast<ScDocShell*> (SfxObjectShell::Current());
-        ScDocFunc *pDocFunc = pScDocShell ? &pScDocShell->GetDocFunc() : NULL;
-        ScDocFuncSend *pSender = dynamic_cast<ScDocFuncSend*> (pDocFunc);
-        if (!pSender)
+        if (!mpManager->registerClients())
         {
-            ScDocFuncDirect *pDirect = dynamic_cast<ScDocFuncDirect*> (pDocFunc);
-            ScDocFuncRecv *pReceiver = new ScDocFuncRecv( pDirect );
-            pSender = new ScDocFuncSend( *pScDocShell, pReceiver );
-            pScDocShell->SetDocFunc( pSender );
-        }
-        // This is a hack to work around:
-        //  `error registering client handler: Name
-        //  'org.freedesktop.Telepathy.Client.LibreOffice' already in use by another process`
-        // This happens when there is already slave instance running,
-        // so we try to init TeleManager as master.
-        bool bIsMaster = false;
-        if (!pSender->InitTeleManager( bIsMaster ))
-        {
-            fprintf( stderr, "Trying to initialize TeleManager as master..\n" );
-            bIsMaster = true;
-            pSender->InitTeleManager( bIsMaster );
+            fprintf( stderr, "Could not register client handlers.\n" );
         }
     }
 
@@ -127,11 +109,39 @@ public:
         maBtnConnect( this, ScResId( BTN_CONNECT ) ),
         maBtnListen( this, ScResId( BTN_LISTEN ) ),
         maListContainer( this, ScResId( CTL_LIST ) ),
-        maList( maListContainer )
+        maList( maListContainer ),
+        mpManager( TeleManager::get() )
     {
-        // FIXME: Who should really own TeleManager and where it can be destroyed ?
-        mpManager = TeleManager::get();
+        ScDocShell *pScDocShell = dynamic_cast<ScDocShell*> (SfxObjectShell::Current());
+        ScDocFunc *pDocFunc = pScDocShell ? &pScDocShell->GetDocFunc() : NULL;
+        ScDocFuncSend *pSender = dynamic_cast<ScDocFuncSend*> (pDocFunc);
+        if (!pSender)
+        {
+            // This means pDocFunc has to be ScDocFuncDirect* and we are not collaborating yet.
+            ScDocFuncDirect *pDirect = dynamic_cast<ScDocFuncDirect*> (pDocFunc);
+            ScDocFuncRecv *pReceiver = new ScDocFuncRecv( pDirect );
+            pSender = new ScDocFuncSend( *pScDocShell, pReceiver );
+            pScDocShell->SetDocFunc( pSender );
 
+            // FIXME: Who should really own TeleManager and where it can be destroyed ?
+            // Take reference, so TeleManager does not get destroyed after closing dialog:
+            mpManager = TeleManager::get();
+
+            mpManager->sigPacketReceived.connect( boost::bind(
+                    &ScDocFuncRecv::packetReceived, pReceiver, _1, _2 ));
+            mpManager->sigFileReceived.connect( boost::bind(
+                    &ScDocFuncRecv::fileReceived, pReceiver, _1 ));
+
+            if (mpManager->createAccountManager())
+            {
+                mpManager->prepareAccountManager();
+            }
+            else
+            {
+                fprintf( stderr, "Could not create AccountManager.\n" );
+                mpManager->unref();
+            }
+        }
         maBtnConnect.SetClickHdl( LINK( this, TubeContacts, BtnConnectHdl ) );
         maBtnListen.SetClickHdl( LINK( this, TubeContacts, BtnListenHdl ) );
 
@@ -149,7 +159,10 @@ public:
         maList.InsertHeaderEntry( sHeader, HEADERBAR_APPEND, HIB_LEFT );
         Show();
     }
-    virtual ~TubeContacts() {}
+    virtual ~TubeContacts()
+    {
+        mpManager->unref();
+    }
 
     static rtl::OUString fromUTF8( const char *pStr )
     {
