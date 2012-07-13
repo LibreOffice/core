@@ -872,15 +872,9 @@ void ServiceManager::loadImplementation(
         if (!prefix.isEmpty()) {
             prefix += "_";
         }
-        try {
-            f0 = cppu::loadSharedLibComponentFactory(
-                uri, rtl::OUString(), info->name, this,
-                css::uno::Reference< css::registry::XRegistryKey >(), prefix);
-        } catch (css::loader::CannotActivateFactoryException & e) {
-            throw css::uno::DeploymentException(
-                "Cannot activate implementation " + uri + ": " + e.Message,
-                static_cast< cppu::OWeakObject * >(this));
-        }
+        f0 = cppu::loadSharedLibComponentFactory(
+            uri, rtl::OUString(), info->name, this,
+            css::uno::Reference< css::registry::XRegistryKey >(), prefix);
     } else {
         SAL_INFO_IF(
             !info->prefix.isEmpty(), "cppuhelper",
@@ -900,15 +894,9 @@ void ServiceManager::loadImplementation(
         css::uno::Reference< css::loader::XImplementationLoader > loader(
             smgr->createInstanceWithContext(info->loader, ctxt),
             css::uno::UNO_QUERY_THROW);
-        try {
-            f0 = loader->activate(
-                info->name, rtl::OUString(), uri,
-                css::uno::Reference< css::registry::XRegistryKey >());
-        } catch (css::loader::CannotActivateFactoryException & e) {
-            throw css::uno::DeploymentException(
-                "Cannot activate implementation " + uri + ": " + e.Message,
-                static_cast< cppu::OWeakObject * >(this));
-        }
+        f0 = loader->activate(
+            info->name, rtl::OUString(), uri,
+            css::uno::Reference< css::registry::XRegistryKey >());
     }
     factory1->set(f0, css::uno::UNO_QUERY);
     if (!factory1->is()) {
