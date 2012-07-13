@@ -298,6 +298,8 @@ int main(int argc, char *argv[])
     DDFSRCFILE *srcListCurr = NULL;
     HFCI fci = NULL;
     ERF erf;
+    char * cmd = NULL;
+    unsigned int cmdSize = 0;
 
     while (argv[1] && (argv[1][0] == '-' || argv[1][0] == '/'))
     {
@@ -324,44 +326,45 @@ int main(int argc, char *argv[])
     }
     CabVerb = v;
 
+    if (ddfFile == NULL)
+    {
+        cabLog(CABLOG_ERR, "No DDF file specified.");
+        return 1;
+    }
+
+    cabLog(CABLOG_MSG, "=== Parsing directive file \"%s\"===", ddfFile);
+    switch(ParseDdf(ddfFile, &ddfVars, &srcListCurr, v))
+    {
+    case DDFERR_UNREAD: cabLog(CABLOG_ERR, "Could not open directive file."); break;
+    }
+    getcwd(ddfVars.szCabPath, MAX_PATH-1);
+    strcat(ddfVars.szCabPath, "/");
+
     srcList = srcListCurr;
-    if (ddfFile != NULL)
+    if (srcList == NULL)
     {
-        cabLog(CABLOG_MSG, "=== Parsing directive file \"%s\"===", ddfFile);
-        switch(ParseDdf(ddfFile, &ddfVars, &srcListCurr, v))
-        {
-        case DDFERR_UNREAD: cabLog(CABLOG_ERR, "Could not open directive file."); break;
-        }
-        getcwd(ddfVars.szCabPath, MAX_PATH-1);
-        strcat(ddfVars.szCabPath, "/");
+        cabLog(CABLOG_ERR, "No input files were specified.");
+        return 2;
     }
 
-    if (srcListCurr != NULL)
+    /* Construct system call to lcab */
+    for(srcListCurr = srcList; srcListCurr != NULL; srcListCurr = srcListCurr->next)
+        cmdSize += strlen(srcListCurr->fileName) + 1;
+    cmdSize += strlen(ddfVars.szCabPath) + strlen(ddfVars.szCab);
+    cmdSize += 6; /* room for "lcab " and \0 */
+    cmd = malloc(cmdSize);
+    strcpy(cmd, "lcab ");
+    for (srcListCurr = srcList; srcListCurr != NULL; srcListCurr = srcListCurr->next)
     {
-        cabLogCCAB(&ddfVars);
-        fci = FCICreate(&erf, fnFilePlaced, fnMemAlloc, fnMemFree, fnOpen, fnRead,
-                        fnWrite, fnClose, fnSeek, fnDelete, fnGetTempFile, &ddfVars, NULL);
-
-        if (fci != NULL)
-        {
-            cabLog(CABLOG_MSG, "=== Adding files to cabinet ===");
-            for (;srcListCurr != NULL; srcListCurr = srcListCurr->next)
-            {
-                cabLog(CABLOG_MSG, "Adding file: %s%s (%s)", ddfVars.szCabPath, srcListCurr->fileName, srcListCurr->cabName);
-                if (!FCIAddFile(fci, srcListCurr->fileName, srcListCurr->cabName, srcListCurr->extract, fnGetNextCab, fnStatus, fnGetOpenInfo, srcListCurr->cmpType))
-                    cabLogErr(&erf, "A problem occurred while adding a file");
-            }
-
-            cabLog(CABLOG_MSG, "=== Flushing the cabinet ===");
-            if (!FCIFlushCabinet(fci, FALSE, fnGetNextCab, fnStatus))
-                cabLogErr(&erf, "A problem occurred while flushing the cabinet");
-            FCIDestroy(fci);
-        }
-        else
-        {
-            cabLogErr(&erf, "Could not get FCI context");
-        }
+        strcat(cmd, srcListCurr->fileName);
+        strcat(cmd, " ");
     }
+    strcat(cmd, ddfVars.szCabPath);
+    strcat(cmd, ddfVars.szCab);
+
+    cabLog(CABLOG_MSG, "syscall: %s\n", cmd);
+    system(cmd);
+    free(cmd);
 
     cabLog(CABLOG_MSG, "=== Cleaning up resources ===");
     /* Free list of cab source files */
@@ -371,5 +374,6 @@ int main(int argc, char *argv[])
         free(srcListCurr);
         srcListCurr = next;
     }
+    cabLog(CABLOG_MSG, "Cabinet file %s/%s created.", ddfVars.szCabPath, ddfVars.szCab);
     return 0;
 }
