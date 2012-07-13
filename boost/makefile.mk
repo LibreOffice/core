@@ -80,6 +80,10 @@ PATCH_FILES += boost_1_44_0-gcc4.7.patch
 # Clang warnings:
 PATCH_FILES += boost_1_44_0-clang-warnings.patch
 
+# Backport http://svn.boost.org/svn/boost/trunk r76133 "Fix threading detection
+# in GCC-4.7 experimental":
+PATCH_FILES += boost_1_44_0-gthreads.patch
+
 ADDITIONAL_FILES= \
     libs/thread/src/win32/makefile.mk \
 	libs/date_time/src/gregorian/makefile.mk
