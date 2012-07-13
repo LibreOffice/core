@@ -35,7 +35,7 @@ class SwTxtFrm;
 
 #include <vcl/timer.hxx>
 #include <tools/gen.hxx>
-#include <svl/svarray.hxx>
+#include <boost/ptr_container/ptr_set.hpp>
 
 class SwBlinkPortion
 {
@@ -61,8 +61,7 @@ public:
     { return (long)pPor == (long)rBlinkPortion.pPor; }
 };
 
-typedef SwBlinkPortion* SwBlinkPortionPtr;
-SV_DECL_PTRARR_SORT_DEL(SwBlinkList, SwBlinkPortionPtr, 0)
+class SwBlinkList : public boost::ptr_set<SwBlinkPortion> {};
 
 class SwBlink
 {

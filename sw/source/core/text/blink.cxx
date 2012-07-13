@@ -48,9 +48,6 @@
 SwBlink *pBlink = NULL;
 
 
-// List of blinking portions
-SV_IMPL_OP_PTRARR_SORT( SwBlinkList, SwBlinkPortionPtr )
-
 SwBlink::SwBlink()
 {
     bVisible = sal_True;
@@ -77,16 +74,16 @@ IMPL_LINK_NOARG(SwBlink, Blinker)
         aTimer.SetTimeout( BLINK_ON_TIME );
     else
         aTimer.SetTimeout( BLINK_OFF_TIME );
-    if( aList.Count() )
+    if( !aList.empty() )
     {
 
-        for( MSHORT nPos = 0; nPos < aList.Count(); )
+        for( SwBlinkList::iterator it = aList.begin(); it != aList.end(); )
         {
-            const SwBlinkPortion* pTmp = aList[ nPos ];
+            const SwBlinkPortion* pTmp = &*it;
             if( pTmp->GetRootFrm() &&
                 ((SwRootFrm*)pTmp->GetRootFrm())->GetCurrShell() )
             {
-                ++nPos;
+                ++it;
 
                 Point aPos = pTmp->GetPos();
                 long nWidth, nHeight;
@@ -123,7 +120,7 @@ IMPL_LINK_NOARG(SwBlink, Blinker)
                     ->GetCurrShell()->InvalidateWindows( aRefresh );
             }
             else // Portions without a shell can be removed from the list
-                aList.Remove( nPos );
+                aList.erase( it );
         }
     }
     else // If the list is empty, the timer can be stopped
@@ -136,17 +133,16 @@ void SwBlink::Insert( const Point& rPoint, const SwLinePortion* pPor,
 {
     SwBlinkPortion *pBlinkPor = new SwBlinkPortion( pPor, nDir );
 
-    MSHORT nPos;
-    if( aList.Seek_Entry( pBlinkPor, &nPos ) )
+    SwBlinkList::iterator it = aList.find( *pBlinkPor );
+    if( it != aList.end()  )
     {
-        aList[ nPos ]->SetPos( rPoint );
-        delete pBlinkPor;
+        (*it).SetPos( rPoint );
     }
     else
     {
         pBlinkPor->SetPos( rPoint );
         pBlinkPor->SetRootFrm( pTxtFrm->getRootFrm() );
-        aList.Insert( pBlinkPor );
+        aList.insert( pBlinkPor );
         pTxtFrm->SetBlinkPor();
         if( pPor->IsLayPortion() || pPor->IsParaPortion() )
             ((SwLineLayout*)pPor)->SetBlinking( sal_True );
@@ -161,12 +157,12 @@ void SwBlink::Replace( const SwLinePortion* pOld, const SwLinePortion* pNew )
     // setting direction to 0 because direction does not matter
     // for this operation
     SwBlinkPortion aBlink( pOld, 0 );
-    MSHORT nPos;
-    if( aList.Seek_Entry( &aBlink, &nPos ) )
+    SwBlinkList::iterator it = aList.find( aBlink );
+    if( it != aList.end()  )
     {
-        SwBlinkPortion* pTmp = new SwBlinkPortion( aList[ nPos ], pNew );
-        aList.Remove( nPos );
-        aList.Insert( pTmp );
+        SwBlinkPortion* aTmp = new SwBlinkPortion( &*it, pNew );
+        aList.erase( it );
+        aList.insert( aTmp );
     }
 }
 
@@ -175,19 +171,17 @@ void SwBlink::Delete( const SwLinePortion* pPor )
     // setting direction to 0 because direction does not matter
     // for this operation
     SwBlinkPortion aBlink( pPor, 0 );
-    MSHORT nPos;
-    if( aList.Seek_Entry( &aBlink, &nPos ) )
-        aList.Remove( nPos );
+    aList.erase( aBlink );
 }
 
 void SwBlink::FrmDelete( const SwRootFrm* pRoot )
 {
-    for( MSHORT nPos = 0; nPos < aList.Count(); )
+    for( SwBlinkList::iterator it = aList.begin(); it != aList.end(); )
     {
-        if( pRoot == aList[ nPos ]->GetRootFrm() )
-            aList.Remove( nPos );
+        if( pRoot == (*it).GetRootFrm() )
+            aList.erase( it );
         else
-            ++nPos;
+            ++it;
     }
 }
 
