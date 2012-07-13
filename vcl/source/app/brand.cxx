@@ -122,8 +122,9 @@ vcl::RenderGraphicRasterizer Application::LoadBrandSVG (const char* pName)
     aRasterizer = loadSvg ("$BRAND_BASE_DIR/program/edition", aName);
     if (!aRasterizer.GetRenderGraphic().IsEmpty())
         return aRasterizer;
+
     aRasterizer = loadSvg ("$BRAND_BASE_DIR/program", aName);
-        return aRasterizer;
+    return aRasterizer;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

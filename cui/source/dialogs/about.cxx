@@ -73,7 +73,7 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId) :
     aDescriptionText     ( this,     ResId( ABOUT_DESCRIPTION_TEXT, *rId.GetResMgr() ) ),
     aCopyrightText       ( this,     ResId( ABOUT_COPYRIGHT_TEXT, *rId.GetResMgr() ) ),
     aCopyrightTextShadow ( this,     ResId( ABOUT_COPYRIGHT_TEXT, *rId.GetResMgr() ) ),
-    aLogoImage           ( this,     ResId( ABOUT_IMAGE_LOGO, *rId.GetResMgr() ) ),
+    aLogoImage           ( this ),
     aCreditsButton       ( this,     ResId( ABOUT_BTN_CREDITS, *rId.GetResMgr() ) ),
     aWebsiteButton       ( this,     ResId( ABOUT_BTN_WEBSITE, *rId.GetResMgr() ) ),
     aCancelButton        ( this,     ResId( ABOUT_BTN_CANCEL, *rId.GetResMgr() ) ),
@@ -213,15 +213,20 @@ void AboutDialog::LayoutControls()
     Size aDialogSize ( aIdealTextWidth + aDialogBorder * 2, 0);
 
     // Render and Position Logo
-    vcl::RenderGraphicRasterizer aRasterizerLogo = Application::LoadBrandSVG("flat_logo");
-    float aLogoWidthHeightRatio = (float)aRasterizerLogo.GetDefaultSizePixel().Width() /
-                               (float)aRasterizerLogo.GetDefaultSizePixel().Height();
-
-    Size aLogoSize( aIdealTextWidth, aIdealTextWidth / aLogoWidthHeightRatio );
+    Size aLogoSize( aIdealTextWidth, aIdealTextWidth / 20 );
     Point aLogoPos( aDialogBorder, aDialogBorder );
-    aLogoBitmap = aRasterizerLogo.Rasterize( aLogoSize );
-    aLogoImage.SetImage( Image( aLogoBitmap ) );
-    aLogoImage.SetPosSizePixel( aLogoPos, aLogoSize );
+
+    vcl::RenderGraphicRasterizer aRasterizerLogo = Application::LoadBrandSVG("flat_logo");
+    if ( !aRasterizerLogo.GetRenderGraphic().IsEmpty() &&
+         aRasterizerLogo.GetDefaultSizePixel().Width() > 0 && aRasterizerLogo.GetDefaultSizePixel().Height() > 0 )
+    {
+        const float aLogoWidthHeightRatio = (float)aRasterizerLogo.GetDefaultSizePixel().Width() / (float)aRasterizerLogo.GetDefaultSizePixel().Height();
+        aLogoSize = Size( aIdealTextWidth, aIdealTextWidth / aLogoWidthHeightRatio );
+
+        aLogoBitmap = aRasterizerLogo.Rasterize( aLogoSize );
+        aLogoImage.SetImage( Image( aLogoBitmap ) );
+        aLogoImage.SetPosSizePixel( aLogoPos, aLogoSize );
+    }
 
     // Position version text
     sal_Int32 aLogoVersionSpacing = aLogoSize.Height() * 0.15;
