@@ -523,7 +523,7 @@ private:
     void WritePostponedGraphic();
     void WritePostponedMath();
 
-    void StartField_Impl( FieldInfos& rInfos, sal_Bool bWriteRun = sal_False );
+    void StartField_Impl( FieldInfos& rInfos, bool bWriteRun = sal_False );
     void DoWriteCmd( String& rCmd );
     void CmdField_Impl( FieldInfos& rInfos );
     void EndField_Impl( FieldInfos& rInfos );
@@ -548,7 +548,7 @@ private:
     sal_Int32 m_nRedlineId;
 
     /// Flag indicating that the section properties are being written
-    sal_Bool m_bOpenedSectPr;
+    bool m_bOpenedSectPr;
 
     /// Field data to remember in the text run
     std::vector< FieldInfos > m_Fields;

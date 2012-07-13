@@ -675,7 +675,7 @@ void DocxAttributeOutput::WriteFFData(  const FieldInfos& rInfos )
     }
 }
 
-void DocxAttributeOutput::StartField_Impl( FieldInfos& rInfos, sal_Bool bWriteRun )
+void DocxAttributeOutput::StartField_Impl( FieldInfos& rInfos, bool bWriteRun )
 {
     if ( rInfos.pField && rInfos.eType == ww::eUNKNOWN )
     {
