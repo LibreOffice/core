@@ -1523,7 +1523,7 @@ public:
     /// Get id of the style (rFmt).
     sal_uInt16 GetSlot( const SwFmt& rFmt ) const;
 
-    SwFmt* GetSwFmt() { return (*pFmtA); }
+    const SwFmt* GetSwFmt() const { return (*pFmtA); }
 };
 
 sal_Int16 GetWordFirstLineOffset(const SwNumFmt &rFmt);
