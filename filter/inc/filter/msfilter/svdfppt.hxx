@@ -580,7 +580,8 @@ protected:
     sal_uInt32     GetNotesPageId(sal_uInt16 nPageNum ) const;
     SdrOutliner* GetDrawOutliner( SdrTextObj* pSdrText ) const;
     void        SeekOle( SfxObjectShell* pShell, sal_uInt32 nFilterOptions );
-
+    void        ApplyTextAnchorAttributes( PPTTextObj& rTextObj, SfxItemSet& rSet ) const;
+    sal_Bool    IsVerticalText() const;
 public:
                 SdrPowerPointImport( PowerPointImportParam&, const String& rBaseURL );
     virtual     ~SdrPowerPointImport();
