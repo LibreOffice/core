@@ -68,27 +68,12 @@
 #include    "xffooterstyle.hxx"
 #include    "xfbgimage.hxx"
 
-XFPageMaster::XFPageMaster()
+XFPageMaster::XFPageMaster() : m_fPageWidth(0), m_fPageHeight(0), m_eUsage(enumXFPageUsageNone),
+m_eTextDir(enumXFTextDirNone), m_bPrintOrient(sal_True), m_pBorders(NULL), m_pShadow(NULL),
+m_pColumns(NULL), m_pBGImage(NULL), m_pHeaderStyle(NULL), m_pFooterStyle(NULL),
+m_eSepAlign(enumXFAlignNone), m_fSepWidth(0), m_aSepColor(0), m_fSepSpaceAbove(0),
+m_fSepSpaceBelow(0), m_nSepLengthPercent(0)
 {
-    m_fPageWidth = 0;
-    m_fPageHeight = 0;
-    m_eUsage = enumXFPageUsageNone;
-    m_eTextDir = enumXFTextDirNone;
-    m_bPrintOrient = sal_True;
-    m_pBorders = NULL;
-    m_pShadow = NULL;
-    m_pColumns = NULL;
-    m_pBGImage = NULL;
-
-    m_pHeaderStyle = NULL;
-    m_pFooterStyle = NULL;
-
-    m_eSepAlign = enumXFAlignNone;
-    m_fSepWidth = 0;
-    m_aSepColor = 0;
-    m_fSepSpaceAbove = 0;
-    m_fSepSpaceBelow = 0;
-    m_nSepLengthPercent = 0;
 }
 
 XFPageMaster::~XFPageMaster()
