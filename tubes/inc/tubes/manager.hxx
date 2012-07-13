@@ -79,11 +79,10 @@ public:
             Whether to create and iterate an own GMainLoop. For testing
             purposes when no GMainLoop is available.
      */
-    TeleManager( bool bAcceptIncoming = true, bool bCreateOwnGMainLoop = false );
+    TeleManager( bool bCreateOwnGMainLoop = false );
     ~TeleManager();
 
-    static TeleManager     *get() { return pSingleton; }
-    static TeleManager     *get( bool bAcceptIncoming );
+    static TeleManager     *get();
     void                    unref();
 
     /** Connect to DBus and create AccountManager. */
@@ -239,7 +238,6 @@ private:
 
     TeleConferenceVector    maConferences;
 
-    bool                    mbAcceptIncoming;
     bool                    mbChannelReadyHandlerInvoked : 1;
 
     static TeleManagerImpl* pImpl;

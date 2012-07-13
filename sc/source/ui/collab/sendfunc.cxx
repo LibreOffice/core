@@ -301,7 +301,7 @@ bool ScDocFuncSend::InitTeleManager( bool bIsMaster )
         fprintf( stderr, "TeleManager is already connected.\n" );
         return true;
     }
-    TeleManager *pManager = TeleManager::get( !bIsMaster );
+    TeleManager *pManager = TeleManager::get();
     pManager->sigPacketReceived.connect( boost::bind(
             &ScDocFuncRecv::packetReceived, mpDirect, _1, _2 ));
     pManager->sigFileReceived.connect( boost::bind(

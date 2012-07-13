@@ -325,9 +325,8 @@ static void TeleManager_AccountManagerReadyHandler(
 }
 
 
-TeleManager::TeleManager( bool bAcceptIncoming, bool bCreateOwnGMainLoop )
+TeleManager::TeleManager( bool bCreateOwnGMainLoop )
     :
-        mbAcceptIncoming( bAcceptIncoming ),
         mbChannelReadyHandlerInvoked( false)
 {
     // The glib object types need to be initialized, else we aren't going
@@ -359,11 +358,11 @@ TeleManager::~TeleManager()
 }
 
 TeleManager *
-TeleManager::get( bool bAcceptIncoming )
+TeleManager::get()
 {
     MutexGuard aGuard( GetAnotherMutex());
     if (!pSingleton)
-        pSingleton = new TeleManager(bAcceptIncoming);
+        pSingleton = new TeleManager();
 
     nAnotherRefCount++;
     return pSingleton;
