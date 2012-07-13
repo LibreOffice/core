@@ -269,22 +269,10 @@ para = enum.NextElement
 xray para.String
 xray para.PageStyleName
 */
-    uno::Reference<text::XTextDocument> textDocument(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XEnumerationAccess> paraEnumAccess(textDocument->getText(), uno::UNO_QUERY);
-    // list of paragraphs
-    uno::Reference<container::XEnumeration> paraEnum = paraEnumAccess->createEnumeration();
-    // go to 1st paragraph
-    (void) paraEnum->nextElement();
-    // get the 2nd paragraph
-    uno::Reference<uno::XInterface> paragraph(paraEnum->nextElement(), uno::UNO_QUERY);
-    // text of the paragraph
-    uno::Reference<text::XTextRange> text(paragraph, uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL( OUString( "TEXT1" ), text->getString());
+    uno::Reference<uno::XInterface> paragraph = getParagraph( 2, "TEXT1" );
     // we want to test the paragraph is on the first page (it was put onto another page without the fix),
     // use a small trick and instead of checking the page layout, check the page style
-    uno::Reference<beans::XPropertySet> paragraphProperties(paragraph, uno::UNO_QUERY);
-    OUString pageStyle;
-    paragraphProperties->getPropertyValue( "PageStyleName" ) >>= pageStyle;
+    OUString pageStyle = getProperty< OUString >( paragraph, "PageStyleName" );
     CPPUNIT_ASSERT_EQUAL( OUString( "First Page" ), pageStyle );
 }
 
@@ -385,24 +373,11 @@ para2 = enum.nextElement
 xray para2.String
 xray para2.PageStyleName
 */
-    uno::Reference<text::XTextDocument> textDocument(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XEnumerationAccess> paraEnumAccess(textDocument->getText(), uno::UNO_QUERY);
-    // list of paragraphs
-    uno::Reference<container::XEnumeration> paraEnum = paraEnumAccess->createEnumeration();
-    // go to 1st paragraph
-    (void) paraEnum->nextElement();
     // get the 2nd and 3rd paragraph
-    uno::Reference<uno::XInterface> paragraph1(paraEnum->nextElement(), uno::UNO_QUERY);
-    uno::Reference<uno::XInterface> paragraph2(paraEnum->nextElement(), uno::UNO_QUERY);
-    uno::Reference<text::XTextRange> text1(paragraph1, uno::UNO_QUERY);
-    uno::Reference<text::XTextRange> text2(paragraph2, uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL( OUString( "one" ), text1->getString());
-    CPPUNIT_ASSERT_EQUAL( OUString( "two" ), text2->getString());
-    uno::Reference<beans::XPropertySet> paragraphProperties1(paragraph1, uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> paragraphProperties2(paragraph2, uno::UNO_QUERY);
-    OUString pageStyle1, pageStyle2;
-    paragraphProperties1->getPropertyValue( "PageStyleName" ) >>= pageStyle1;
-    paragraphProperties2->getPropertyValue( "PageStyleName" ) >>= pageStyle2;
+    uno::Reference<uno::XInterface> paragraph1 = getParagraph( 2, "one" );
+    uno::Reference<uno::XInterface> paragraph2 = getParagraph( 3, "two" );
+    OUString pageStyle1 = getProperty< OUString >( paragraph1, "PageStyleName" );
+    OUString pageStyle2 = getProperty< OUString >( paragraph2, "PageStyleName" );
     CPPUNIT_ASSERT_EQUAL( OUString( "Converted1" ), pageStyle1 );
     CPPUNIT_ASSERT_EQUAL( OUString( "Converted2" ), pageStyle2 );
 
@@ -424,24 +399,11 @@ para2 = enum.nextElement
 xray para2.String
 xray para2.PageStyleName
 */
-    uno::Reference<text::XTextDocument> textDocument(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XEnumerationAccess> paraEnumAccess(textDocument->getText(), uno::UNO_QUERY);
-    // list of paragraphs
-    uno::Reference<container::XEnumeration> paraEnum = paraEnumAccess->createEnumeration();
     // get the 2nd and 4th paragraph
-    (void) paraEnum->nextElement();
-    uno::Reference<uno::XInterface> paragraph1(paraEnum->nextElement(), uno::UNO_QUERY);
-    (void) paraEnum->nextElement();
-    uno::Reference<uno::XInterface> paragraph2(paraEnum->nextElement(), uno::UNO_QUERY);
-    uno::Reference<text::XTextRange> text1(paragraph1, uno::UNO_QUERY);
-    uno::Reference<text::XTextRange> text2(paragraph2, uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL( OUString( "text1" ), text1->getString());
-    CPPUNIT_ASSERT_EQUAL( OUString( "text2" ), text2->getString());
-    uno::Reference<beans::XPropertySet> paragraphProperties1(paragraph1, uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> paragraphProperties2(paragraph2, uno::UNO_QUERY);
-    OUString pageStyle1, pageStyle2;
-    paragraphProperties1->getPropertyValue( "PageStyleName" ) >>= pageStyle1;
-    paragraphProperties2->getPropertyValue( "PageStyleName" ) >>= pageStyle2;
+    uno::Reference<uno::XInterface> paragraph1 = getParagraph( 2, "text1" );
+    uno::Reference<uno::XInterface> paragraph2 = getParagraph( 4, "text2" );
+    OUString pageStyle1 = getProperty< OUString >( paragraph1, "PageStyleName" );
+    OUString pageStyle2 = getProperty< OUString >( paragraph2, "PageStyleName" );
     // "Standard" is the style for the first page (2nd is "Converted1").
     CPPUNIT_ASSERT_EQUAL( OUString( "Standard" ), pageStyle1 );
     CPPUNIT_ASSERT_EQUAL( OUString( "Standard" ), pageStyle2 );
@@ -693,16 +655,9 @@ numbering = numberingstyle.getByIndex(0)
 xray numbering(11)  - should be 4, arabic
 note that the indexes may get off as the implementation evolves, C++ code seaches in loops
 */
-    uno::Reference<text::XTextDocument> textDocument(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XEnumerationAccess> paraEnumAccess(textDocument->getText(), uno::UNO_QUERY);
-    // list of paragraphs
-    uno::Reference<container::XEnumeration> paraEnum = paraEnumAccess->createEnumeration();
-    uno::Reference<uno::XInterface> paragraph(paraEnum->nextElement(), uno::UNO_QUERY);
-    uno::Reference<text::XTextRange> text(paragraph, uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL( OUString( "Text1." ), text->getString());
-    uno::Reference<beans::XPropertySet> xPropertySet( paragraph, uno::UNO_QUERY );
-    OUString numberingStyleName;
-    xPropertySet->getPropertyValue( "NumberingStyleName" ) >>= numberingStyleName;
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference< text::XTextRange > paragraph = getParagraph( 1, "Text1." );
+    OUString numberingStyleName = getProperty< OUString >( paragraph, "NumberingStyleName" );
     uno::Reference<text::XNumberingRulesSupplier> xNumberingRulesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> numberingRules(xNumberingRulesSupplier->getNumberingRules(), uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> numberingRule;
@@ -710,9 +665,7 @@ note that the indexes may get off as the implementation evolves, C++ code seache
          i < numberingRules->getCount();
          ++i )
     {
-        xPropertySet.set( numberingRules->getByIndex( i ), uno::UNO_QUERY );
-        OUString name;
-        xPropertySet->getPropertyValue( "Name" ) >>= name;
+        OUString name = getProperty< OUString >( numberingRules->getByIndex( i ), "Name" );
         if( name == numberingStyleName )
         {
             numberingRule.set( numberingRules->getByIndex( i ), uno::UNO_QUERY );

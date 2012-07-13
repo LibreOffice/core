@@ -159,6 +159,11 @@ uno::Reference<container::XEnumeration> paraEnum = paraEnumAccess->createEnumera
 // get the 2nd paragraph
 uno::Reference<uno::XInterface> paragraph(paraEnum->nextElement(), uno::UNO_QUERY);
 
+Note that for paragraphs it's easier to use getParagraph(), which gets the given
+paragraph (counted from 1) and optionally checks the paragraph text.
+
+uno::Reference< text::XTextRange > paragraph = getParagraph( 2, "TEXT" )
+
 === XNamedAccess (e.g. get a bookmark named 'position1'):
 
 Basic:

@@ -27,6 +27,7 @@
 
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
+#include <com/sun/star/text/XTextRange.hpp>
 
 #include <test/bootstrapfixture.hxx>
 #include <unotest/macros_test.hxx>
@@ -158,6 +159,22 @@ protected:
         T data;
         properties->getPropertyValue( name ) >>= data;
         return data;
+    }
+
+    // Get paragraph (counted from 1), optionally check it contains the given text.
+    uno::Reference< text::XTextRange > getParagraph( int number, rtl::OUString content ) const
+    {
+        uno::Reference<text::XTextDocument> textDocument(mxComponent, uno::UNO_QUERY);
+        uno::Reference<container::XEnumerationAccess> paraEnumAccess(textDocument->getText(), uno::UNO_QUERY);
+        uno::Reference<container::XEnumeration> paraEnum = paraEnumAccess->createEnumeration();
+        for( int i = 1;
+             i < number;
+             ++i )
+            paraEnum->nextElement();
+        uno::Reference< text::XTextRange > paragraph( paraEnum->nextElement(), uno::UNO_QUERY );
+        if( !content.isEmpty())
+            CPPUNIT_ASSERT_EQUAL( content, paragraph->getString());
+        return paragraph;
     }
 
     uno::Reference<lang::XComponent> mxComponent;
