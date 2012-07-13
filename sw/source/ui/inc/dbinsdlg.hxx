@@ -44,6 +44,8 @@
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Sequence.h>
 #include <boost/ptr_container/ptr_vector.hpp>
+#include <o3tl/sorted_vector.hxx>
+
 namespace com{namespace sun{namespace star{
     namespace sdbcx{
     class XColumnsSupplier;
@@ -87,8 +89,11 @@ struct SwInsDBColumn
     int operator<( const SwInsDBColumn& rCmp ) const;
 };
 
-typedef SwInsDBColumn* SwInsDBColumnPtr;
-SV_DECL_PTRARR_SORT_DEL( SwInsDBColumns, SwInsDBColumnPtr, 32 )
+class SwInsDBColumns : public o3tl::sorted_vector<SwInsDBColumn*, o3tl::less_ptr_to<SwInsDBColumn> >
+{
+public:
+    ~SwInsDBColumns() { DeleteAndDestroyAll(); }
+};
 
 
 class SwInsertDBColAutoPilot : public SfxModalDialog, public utl::ConfigItem

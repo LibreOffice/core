@@ -172,8 +172,6 @@ struct _DB_Column
     }
 };
 
-SV_IMPL_OP_PTRARR_SORT( SwInsDBColumns, SwInsDBColumnPtr )
-
 
 struct _DB_ColumnConfigData
 {
@@ -353,7 +351,7 @@ SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView,
                 }
                 break;
             }
-            if( !aDBColumns.Insert( pNew ))
+            if( !aDBColumns.insert( pNew ).second )
             {
                 OSL_ENSURE( !this, "Spaltenname mehrfach vergeben?" );
                 delete pNew;
@@ -420,7 +418,7 @@ SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView,
     aLbTblDbColumn.SetDoubleClickHdl( LINK( this, SwInsertDBColAutoPilot, DblClickHdl ));
     aLbTableCol.SetDoubleClickHdl( LINK( this, SwInsertDBColAutoPilot, DblClickHdl ));
 
-    for( sal_uInt16 n = 0; n < aDBColumns.Count(); ++n )
+    for( sal_uInt16 n = 0; n < aDBColumns.size(); ++n )
     {
         const String& rS = aDBColumns[ n ]->sColumn;
         aLbTblDbColumn.InsertEntry( rS, n );
@@ -480,7 +478,6 @@ IMPL_LINK( SwInsertDBColAutoPilot, PageHdl, Button*, pButton )
 
 IMPL_LINK( SwInsertDBColAutoPilot, DBFormatHdl, Button*, pButton )
 {
-    sal_uInt16 nFndPos;
     ListBox& rBox = aRbAsTable.IsChecked()
                         ? ( 0 == aLbTableCol.GetEntryData( 0 )
                             ? aLbTblDbColumn
@@ -488,10 +485,10 @@ IMPL_LINK( SwInsertDBColAutoPilot, DBFormatHdl, Button*, pButton )
                         : aLbTxtDbColumn;
 
     SwInsDBColumn aSrch( rBox.GetSelectEntry(), 0 );
-    aDBColumns.Seek_Entry( &aSrch, &nFndPos );
+    SwInsDBColumns::const_iterator it = aDBColumns.find( &aSrch );
 
     sal_Bool bFromDB = &aRbDbFmtFromDb == pButton;
-    aDBColumns[ nFndPos ]->bIsDBFmt = bFromDB;
+    (*it)->bIsDBFmt = bFromDB;
     aLbDbFmtFromUsr.Enable( !bFromDB );
 
     return 0;
@@ -541,21 +538,21 @@ IMPL_LINK( SwInsertDBColAutoPilot, TblToFromHdl, Button*, pButton )
     {
         if( LISTBOX_ENTRY_NOTFOUND != aLbTableCol.GetSelectEntryPos() )
         {
-            sal_uInt16 nFndPos, nInsPos,
+            sal_uInt16 nInsPos,
                     nDelPos = aLbTableCol.GetSelectEntryPos(),
                     nTopPos = aLbTableCol.GetTopEntry();
 
             // look for the right InsertPos!!
             SwInsDBColumn aSrch( aLbTableCol.GetEntry( nDelPos ), 0 );
-            aDBColumns.Seek_Entry( &aSrch, &nFndPos );
-            if( !nFndPos || nFndPos == aDBColumns.Count()-1 )
-                nInsPos = nFndPos;
+            SwInsDBColumns::const_iterator it = aDBColumns.find( &aSrch );
+            if( it == aDBColumns.begin() || (it+1) == aDBColumns.end() )
+                nInsPos = it - aDBColumns.begin();
             else
             {
                 nInsPos = LISTBOX_ENTRY_NOTFOUND;
-                while( ++nFndPos < aDBColumns.Count() &&
+                while( ++it != aDBColumns.end() &&
                         LISTBOX_ENTRY_NOTFOUND == (nInsPos = aLbTblDbColumn.
-                        GetEntryPos( String(aDBColumns[ nFndPos ]->sColumn ))) )
+                        GetEntryPos( String( (*it)->sColumn ))) )
                     ;
             }
 
@@ -582,7 +579,7 @@ IMPL_LINK( SwInsertDBColAutoPilot, TblToFromHdl, Button*, pButton )
 
         aLbTblDbColumn.Clear();
         aLbTableCol.Clear();
-        for( sal_uInt16 n = 0; n < aDBColumns.Count(); ++n )
+        for( sal_uInt16 n = 0; n < aDBColumns.size(); ++n )
             aLbTblDbColumn.InsertEntry( aDBColumns[ n ]->sColumn, n );
         aLbTblDbColumn.SelectEntryPos( 0 );
     }
@@ -801,16 +798,15 @@ IMPL_LINK( SwInsertDBColAutoPilot, SelectHdl, ListBox*, pBox )
                                     : &aLbTxtDbColumn )
                             : pBox;
 
-    sal_uInt16 nFndPos;
     SwInsDBColumn aSrch( pGetBox->GetSelectEntry(), 0 );
-    aDBColumns.Seek_Entry( &aSrch, &nFndPos );
+    SwInsDBColumns::const_iterator it = aDBColumns.find( &aSrch );
 
     if( pBox == &aLbDbFmtFromUsr )
     {
         if( !aSrch.sColumn.isEmpty() )
         {
             aOldNumFmtLnk.Call( pBox );
-            aDBColumns[ nFndPos ]->nUsrNumFmt = aLbDbFmtFromUsr.GetFormat();
+            (*it)->nUsrNumFmt = aLbDbFmtFromUsr.GetFormat();
         }
     }
     else
@@ -826,7 +822,7 @@ IMPL_LINK( SwInsertDBColAutoPilot, SelectHdl, ListBox*, pBox )
         }
         else
         {
-            sal_Bool bEnableFmt = aDBColumns[ nFndPos ]->bHasFmt;
+            sal_Bool bEnableFmt = (*it)->bHasFmt;
             aRbDbFmtFromDb.Enable( bEnableFmt );
             aRbDbFmtFromUsr.Enable( bEnableFmt );
 
@@ -835,12 +831,12 @@ IMPL_LINK( SwInsertDBColAutoPilot, SelectHdl, ListBox*, pBox )
                 (( sTxt += rtl::OUString(" (" )) += String(aSrch.sColumn) ) += (sal_Unicode)')';
             }
 
-            sal_Bool bIsDBFmt = aDBColumns[ nFndPos ]->bIsDBFmt;
+            sal_Bool bIsDBFmt = (*it)->bIsDBFmt;
             aRbDbFmtFromDb.Check( bIsDBFmt );
             aRbDbFmtFromUsr.Check( !bIsDBFmt );
             aLbDbFmtFromUsr.Enable( !bIsDBFmt );
             if( !bIsDBFmt )
-                aLbDbFmtFromUsr.SetDefFormat( aDBColumns[ nFndPos ]->nUsrNumFmt );
+                aLbDbFmtFromUsr.SetDefFormat( (*it)->nUsrNumFmt );
         }
 
         aFlFormat.SetText( sTxt );
@@ -904,11 +900,12 @@ sal_Bool SwInsertDBColAutoPilot::SplitTextToColArr( const String& rTxt,
         {
             // Text in <> brackets found: what is it:
             SwInsDBColumn aSrch( sTxt.Copy( nSttPos, nEndPos - nSttPos ), 0);
-            if( aDBColumns.Seek_Entry( &aSrch, &nFndPos ) )
+            SwInsDBColumns::const_iterator it = aDBColumns.find( &aSrch );
+            if( it != aDBColumns.end() )
             {
                 // that is a valid field
                 // so surely the text "before":
-                const SwInsDBColumn& rFndCol = *aDBColumns[ nFndPos ];
+                const SwInsDBColumn& rFndCol = **it;
 
                 _DB_Column* pNew;
 
@@ -1014,22 +1011,22 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
             ++nRows;
 
         // prepare the array for the selected columns
-        SwInsDBColumns_SAR aColFlds( 255 >= nCols ? (sal_uInt8)nCols : 255 );
+        std::vector<SwInsDBColumn*> aColFlds;
         for( n = 0; n < nCols; ++n )
         {
-            sal_uInt16 nFndPos;
             SwInsDBColumn aSrch( aLbTableCol.GetEntry( n ), 0 );
-            if( aDBColumns.Seek_Entry( &aSrch, &nFndPos ) )
-                aColFlds.Insert( aDBColumns[ nFndPos ], n );
+            SwInsDBColumns::const_iterator it = aDBColumns.find( &aSrch );
+            if( it != aDBColumns.end() )
+                aColFlds[ n ] = *it;
             else {
                 OSL_ENSURE( !this, "database column not found" );
             }
         }
 
-        if( nCols != aColFlds.Count() )
+        if( nCols != aColFlds.size() )
         {
             OSL_ENSURE( !this, "not all database columns found" );
-            nCols = aColFlds.Count();
+            nCols = aColFlds.size();
         }
 
         if(!nRows || !nCols)
@@ -1645,7 +1642,7 @@ void SwInsertDBColAutoPilot::Commit()
     rtl::OUString sPrevLang;
 
     SvNumberFormatter& rNFmtr = *pView->GetWrtShell().GetNumberFormatter();
-    for(sal_uInt16 nCol = 0; nCol < aDBColumns.Count(); nCol++)
+    for(sal_uInt16 nCol = 0; nCol < aDBColumns.size(); nCol++)
     {
         rtl::OUString sColumnNode = sNewNode;
          SwInsDBColumn* pColumn = aDBColumns[nCol];
@@ -1752,9 +1749,9 @@ void SwInsertDBColAutoPilot::Load()
                 pSubProps[0] >>= sColumn;
                 //check for existance of the loaded column name
                 sal_Bool bFound = sal_False;
-                for(sal_Int32 nRealColumn = 0; nRealColumn < aDBColumns.Count(); nRealColumn++)
+                for(sal_uInt16 nRealColumn = 0; nRealColumn < aDBColumns.size(); nRealColumn++)
                 {
-                    if(aDBColumns[(sal_uInt16)nRealColumn]->sColumn == sColumn)
+                    if(aDBColumns[nRealColumn]->sColumn == sColumn)
                     {
                         bFound = sal_True;
                         break;
@@ -1764,7 +1761,7 @@ void SwInsertDBColAutoPilot::Load()
                     continue;
                 sal_Int16 nIndex = 0;
                 pSubProps[1] >>= nIndex;
-                SwInsDBColumnPtr pInsDBColumn = new SwInsDBColumn(sColumn, nIndex);
+                SwInsDBColumn* pInsDBColumn = new SwInsDBColumn(sColumn, nIndex);
                 if(pSubProps[2].hasValue())
                     pInsDBColumn->bHasFmt = *(sal_Bool*)pSubProps[2].getValue();
                 if(pSubProps[3].hasValue())
@@ -1783,7 +1780,7 @@ void SwInsertDBColAutoPilot::Load()
                                                         pInsDBColumn->eUsrNumFmtLng );
 
 
-                pNewData->aDBColumns.Insert(pInsDBColumn);
+                pNewData->aDBColumns.insert(pInsDBColumn);
             }
             sal_uInt16 n = 0;
             String sTmp( pNewData->sTblList );
@@ -1841,10 +1838,10 @@ void SwInsertDBColAutoPilot::Load()
 
             // now copy the user defined Numberformat strings to the
             // Shell. Then only these are available as ID
-            for( n = 0; n < aDBColumns.Count() ; ++n )
+            for( n = 0; n < aDBColumns.size() ; ++n )
             {
                 SwInsDBColumn& rSet = *aDBColumns[ n ];
-                for( sal_uInt16 m = 0; m < pNewData->aDBColumns.Count() ; ++m )
+                for( sal_uInt16 m = 0; m < pNewData->aDBColumns.size() ; ++m )
                 {
                     SwInsDBColumn& rGet = *pNewData->aDBColumns[ m ];
                     if(rGet.sColumn == rSet.sColumn)
