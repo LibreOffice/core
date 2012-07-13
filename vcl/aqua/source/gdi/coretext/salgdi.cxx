@@ -23,7 +23,6 @@ AquaSalGraphics::AquaSalGraphics()
     , mxClipPath( NULL )
     , maLineColor( COL_WHITE )
     , maFillColor( COL_BLACK )
-    , m_font_face( NULL )
     , mbNonAntialiasedText( false )
     , mbPrinter( false )
     , mbVirDev( false )
@@ -152,20 +151,30 @@ sal_uLong AquaSalGraphics::GetKernPairs( sal_uLong, ImplKernPairData* )
 
 bool AquaSalGraphics::GetImplFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const
 {
-    if( !m_font_face )
+    if( !m_style )
     {
         return false;
     }
-    return m_font_face->GetImplFontCapabilities(rFontCapabilities);
+    CoreTextPhysicalFontFace* font_face = m_style->GetFontFace();
+    if( !font_face)
+    {
+        return false;
+    }
+    return font_face->GetImplFontCapabilities(rFontCapabilities);
 }
 
 const ImplFontCharMap* AquaSalGraphics::GetImplFontCharMap() const
 {
-    if( !m_font_face )
+    if( !m_style )
+    {
+        return false;
+    }
+    CoreTextPhysicalFontFace* font_face = m_style->GetFontFace();
+    if( !font_face)
     {
         return ImplFontCharMap::GetDefaultMap();
     }
-    return m_font_face->GetImplFontCharMap();
+    return font_face->GetImplFontCharMap();
 }
 
 bool AquaSalGraphics::GetRawFontData( const PhysicalFontFace* pFontFace,

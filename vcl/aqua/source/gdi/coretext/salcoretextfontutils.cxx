@@ -196,24 +196,31 @@ SystemFontList::SystemFontList()
     {
         CFArrayRef font_descriptors = CTFontCollectionCreateMatchingFontDescriptors(font_collection);
 
-        for(int i = 0; i < CFArrayGetCount(font_descriptors); i++)
+        if(font_descriptors)
         {
-            CTFontDescriptorRef font_descriptor = (CTFontDescriptorRef)CFArrayGetValueAtIndex(font_descriptors, i);
-            CTFontRef font = CTFontCreateWithFontDescriptor(font_descriptor, 0, NULL);
-            ImplDevFontAttributes devfont_attr;
-            if(GetDevFontAttributes( font_descriptor, devfont_attr ) )
+            for(int i = 0; i < CFArrayGetCount(font_descriptors); i++)
             {
-                CoreTextPhysicalFontFace* font_data = new CoreTextPhysicalFontFace(devfont_attr, font);
-                if(font_data && font_data->GetCTFont())
+                CTFontDescriptorRef font_descriptor = (CTFontDescriptorRef)CFArrayGetValueAtIndex(font_descriptors, i);
+                CTFontRef font = CTFontCreateWithFontDescriptor(font_descriptor, 0, NULL);
+                if(font)
                 {
-                    m_aFontContainer [ font_data->GetCTFont() ] = font_data;
+                    ImplDevFontAttributes devfont_attr;
+                    if(GetDevFontAttributes( font_descriptor, devfont_attr ) )
+                    {
+                        CoreTextPhysicalFontFace* font_face = new CoreTextPhysicalFontFace(devfont_attr, font);
+                        if(font_face && font_face->GetCTFont())
+                        {
+                            m_aFontContainer [ font_face->GetCTFont() ] = font_face;
+                        }
+                    }
+                    CFRelease(font);
                 }
             }
-            CFRelease(font);
+            CFRelease(font_descriptors);
         }
-        CFRelease(font_descriptors);
+        CFRelease(font_collection);
     }
-    CFRelease(font_collection);
+
 }
 
 SystemFontList::~SystemFontList()
@@ -250,6 +257,7 @@ CoreTextPhysicalFontFace::CoreTextPhysicalFontFace( const ImplDevFontAttributes&
 ,   m_bHasCJKSupport( false )
 ,   m_bFontCapabilitiesRead( false )
 {
+    msgs_debug(font,"retain %p as %p",font, m_CTFontRef);
 }
 
 CoreTextPhysicalFontFace::~CoreTextPhysicalFontFace()
@@ -258,10 +266,8 @@ CoreTextPhysicalFontFace::~CoreTextPhysicalFontFace()
     {
         m_pCharMap->DeReference();
     }
-    if( m_CTFontRef )
-    {
-        CFRelease(m_CTFontRef);
-    }
+    msgs_debug(font,"release font %p", m_CTFontRef);
+    SafeCFRelease(m_CTFontRef);
 }
 
 PhysicalFontFace* CoreTextPhysicalFontFace::Clone() const
@@ -274,6 +280,7 @@ PhysicalFontFace* CoreTextPhysicalFontFace::Clone() const
     if( m_CTFontRef )
     {
         pClone->m_CTFontRef = (CTFontRef)CFRetain(m_CTFontRef);
+        msgs_debug(font,"clone ref %p into %p", m_CTFontRef, pClone->m_CTFontRef);
     }
     return pClone;
 }
@@ -391,9 +398,6 @@ bool CoreTextPhysicalFontFace::GetRawFontData( std::vector<unsigned char>& rBuff
         if(CFF_table)
         {
             *pJustCFF = CFDataGetLength(CFF_table) ? true : false;
-        }
-        if(CFF_table)
-        {
             CFRelease(CFF_table);
             return true;
         }

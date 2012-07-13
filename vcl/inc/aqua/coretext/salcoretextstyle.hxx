@@ -14,6 +14,7 @@ public:
     CoreTextStyleInfo();
     ~CoreTextStyleInfo();
     CTFontRef GetFont() const { return m_CTFont; };
+    CoreTextPhysicalFontFace* GetFontFace() const { return m_font_face; };
     long GetFontStretchedSize() const;
     float GetFontStretchFactor() const { return m_stretch_factor; };
     CTParagraphStyleRef GetParagraphStyle() const { return m_CTParagraphStyle; } ;
@@ -33,7 +34,7 @@ private:
     CTParagraphStyleRef m_CTParagraphStyle;
     CTFontRef m_CTFont;
     CGColorRef m_color;
-    const CoreTextPhysicalFontFace* m_font_face;
+    CoreTextPhysicalFontFace* m_font_face;
 
 };
 

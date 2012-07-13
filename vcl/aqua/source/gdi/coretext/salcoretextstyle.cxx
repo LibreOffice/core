@@ -35,13 +35,14 @@ long CoreTextStyleInfo::GetFontStretchedSize() const
 void CoreTextStyleInfo::SetFont(FontSelectPattern* requested_font)
 {
     msgs_debug(style,"req(%p) release font %p -->", requested_font, m_CTFont);
-    SafeCFRelease(m_CTFont);
+
     if(!requested_font)
     {
+        SafeCFRelease(m_CTFont);
         m_font_face = NULL;
         return;
     }
-    m_font_face = static_cast<const CoreTextPhysicalFontFace*>(requested_font->mpFontData);
+    m_font_face = (CoreTextPhysicalFontFace*)(requested_font->mpFontData);
 
     m_matrix = CGAffineTransformIdentity;
     CGFloat font_size = (CGFloat)requested_font->mfExactHeight;
@@ -68,6 +69,8 @@ void CoreTextStyleInfo::SetFont(FontSelectPattern* requested_font)
         m_stretch_factor = (float)requested_font->mnWidth / requested_font->mnHeight;
         m_matrix = CGAffineTransformScale(m_matrix, m_stretch_factor, 1.0F );
     }
+
+    SafeCFRelease(m_CTFont);
 
     /* FIXME: pass attribute to take into accout 'VerticalStyle' */
     /* FIXME: how to deal with 'rendering options' i.e anti-aliasing, does it even matter in CoreText ? */
