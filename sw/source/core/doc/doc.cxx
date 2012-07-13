@@ -2662,7 +2662,7 @@ SwUnoCrsr* SwDoc::CreateUnoCrsr( const SwPosition& rPos, sal_Bool bTblCrsr )
     else
         pNew = new SwUnoCrsr( rPos );
 
-    pUnoCrsrTbl->Insert( pNew, pUnoCrsrTbl->Count() );
+    pUnoCrsrTbl->insert( pNew );
     return pNew;
 }
 

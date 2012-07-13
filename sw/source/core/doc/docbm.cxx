@@ -1418,15 +1418,15 @@ void _SaveCntntIdx(SwDoc* pDoc,
     {
         aSave.SetTypeAndCount( 0x400, 0 );
         const SwUnoCrsrTbl& rTbl = pDoc->GetUnoCrsrTbl();
-        for( sal_uInt16 n = 0; n < rTbl.Count(); ++n )
+        for( SwUnoCrsrTbl::iterator it = rTbl.begin(); it != rTbl.end(); ++it )
         {
-            FOREACHPAM_START( rTbl[ n ] )
+            FOREACHPAM_START( *it )
                 lcl_ChkPaM( rSaveArr, nNode, nCntnt, *PCURCRSR, aSave, sal_False );
                 aSave.IncCount();
             FOREACHPAM_END()
 
             SwUnoTableCrsr* pUnoTblCrsr =
-                dynamic_cast<SwUnoTableCrsr*>(rTbl[ n ]);
+                dynamic_cast<SwUnoTableCrsr*>(*it);
             if( pUnoTblCrsr )
             {
                 FOREACHPAM_START( &pUnoTblCrsr->GetSelRing() )
@@ -1558,9 +1558,9 @@ void _RestoreCntntIdx(SwDoc* pDoc,
             {
                 sal_uInt16 nCnt = 0;
                 const SwUnoCrsrTbl& rTbl = pDoc->GetUnoCrsrTbl();
-                for( sal_uInt16 i = 0; i < rTbl.Count(); ++i )
+                for( SwUnoCrsrTbl::iterator it = rTbl.begin(); it != rTbl.end(); ++it )
                 {
-                    FOREACHPAM_START( rTbl[ i ] )
+                    FOREACHPAM_START( *it )
                         if( aSave.GetCount() == nCnt )
                         {
                             pPos = &PCURCRSR->GetBound( 0x0400 ==
@@ -1573,7 +1573,7 @@ void _RestoreCntntIdx(SwDoc* pDoc,
                         break;
 
                     SwUnoTableCrsr* pUnoTblCrsr =
-                        dynamic_cast<SwUnoTableCrsr*>(rTbl[ i ]);
+                        dynamic_cast<SwUnoTableCrsr*>(*it);
                     if ( pUnoTblCrsr )
                     {
                         FOREACHPAM_START( &pUnoTblCrsr->GetSelRing() )
@@ -1718,9 +1718,9 @@ void _RestoreCntntIdx(std::vector<sal_uLong> &rSaveArr,
                 {
                     sal_uInt16 nCnt = 0;
                     const SwUnoCrsrTbl& rTbl = pDoc->GetUnoCrsrTbl();
-                    for( sal_uInt16 i = 0; i < rTbl.Count(); ++i )
+                    for( SwUnoCrsrTbl::iterator it = rTbl.begin(); it != rTbl.end(); ++it )
                     {
-                        FOREACHPAM_START( rTbl[ i ] )
+                        FOREACHPAM_START( *it )
                             if( aSave.GetCount() == nCnt )
                             {
                                 pPos = &PCURCRSR->GetBound( 0x0400 ==
@@ -1733,7 +1733,7 @@ void _RestoreCntntIdx(std::vector<sal_uLong> &rSaveArr,
                             break;
 
                         SwUnoTableCrsr* pUnoTblCrsr =
-                            dynamic_cast<SwUnoTableCrsr*>(rTbl[ i ]);
+                            dynamic_cast<SwUnoTableCrsr*>(*it);
                         if ( pUnoTblCrsr )
                         {
                             FOREACHPAM_START( &pUnoTblCrsr->GetSelRing() )

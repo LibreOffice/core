@@ -153,9 +153,9 @@ void PaMCorrAbs( const SwPaM& rRange,
     {
         SwUnoCrsrTbl& rTbl = const_cast<SwUnoCrsrTbl&>(pDoc->GetUnoCrsrTbl());
 
-        for( sal_uInt16 n = 0; n < rTbl.Count(); ++n )
+        for( SwUnoCrsrTbl::iterator it = rTbl.begin(); it != rTbl.end(); ++it )
         {
-            SwUnoCrsr *const pUnoCursor = rTbl[ n ];
+            SwUnoCrsr *const pUnoCursor = *it;
 
             bool bChange = false; // has the UNO cursor been corrected?
 
@@ -172,7 +172,7 @@ void PaMCorrAbs( const SwPaM& rRange,
             FOREACHPAM_END()
 
             SwUnoTableCrsr *const pUnoTblCrsr =
-                dynamic_cast<SwUnoTableCrsr *>(rTbl[ n ]);
+                dynamic_cast<SwUnoTableCrsr *>(*it);
             if( pUnoTblCrsr )
             {
                 FOREACHPAM_START( &pUnoTblCrsr->GetSelRing() )
@@ -298,14 +298,14 @@ void PaMCorrRel( const SwNodeIndex &rOldNode,
     }
     {
         SwUnoCrsrTbl& rTbl = (SwUnoCrsrTbl&)pDoc->GetUnoCrsrTbl();
-        for( sal_uInt16 n = 0; n < rTbl.Count(); ++n )
+        for( SwUnoCrsrTbl::iterator it = rTbl.begin(); it != rTbl.end(); ++it )
         {
-            FOREACHPAM_START( rTbl[ n ] )
+            FOREACHPAM_START( *it )
                 lcl_PaMCorrRel1( PCURCRSR, pOldNode, aNewPos, nCntIdx );
             FOREACHPAM_END()
 
             SwUnoTableCrsr* pUnoTblCrsr =
-                dynamic_cast<SwUnoTableCrsr*>(rTbl[ n ]);
+                dynamic_cast<SwUnoTableCrsr*>(*it);
             if( pUnoTblCrsr )
             {
                 FOREACHPAM_START( &pUnoTblCrsr->GetSelRing() )

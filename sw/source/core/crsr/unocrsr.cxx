@@ -32,8 +32,6 @@
 #include <docary.hxx>
 #include <rootfrm.hxx>
 
-SV_IMPL_PTRARR( SwUnoCrsrTbl, SwUnoCrsrPtr )
-
 IMPL_FIXEDMEMPOOL_NEWDEL( SwUnoCrsr )
 
 SwUnoCrsr::SwUnoCrsr( const SwPosition &rPos, SwPaM* pRing )
@@ -51,12 +49,9 @@ SwUnoCrsr::~SwUnoCrsr()
     {
         // then remove cursor from array
         SwUnoCrsrTbl& rTbl = (SwUnoCrsrTbl&)pDoc->GetUnoCrsrTbl();
-        sal_uInt16 nDelPos = rTbl.GetPos( this );
-
-        if( USHRT_MAX != nDelPos )
-            rTbl.Remove( nDelPos );
-        else {
-            OSL_ENSURE( !this, "UNO cursor not anymore in array" );
+        if( !rTbl.erase( this ) )
+        {
+            OSL_ENSURE( !this, "UNO Cursor nicht mehr im Array" );
         }
     }
 
@@ -255,6 +250,15 @@ void SwUnoTableCrsr::MakeBoxSels()
             if( pTblNd && 0 != ( pBox = pTblNd->GetTable().GetTblBox( pBoxNd->GetIndex() )) )
                 InsertBox( *pBox );
         }
+    }
+}
+
+SwUnoCrsrTbl::~SwUnoCrsrTbl()
+{
+    while (!empty())
+    {
+        delete *begin();
+        erase( begin() );
     }
 }
 

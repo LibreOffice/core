@@ -30,7 +30,9 @@
 
 #include <com/sun/star/i18n/ForbiddenCharacters.hpp>
 #include <vector>
+#include <set>
 #include <algorithm>
+#include <svl/svarray.hxx>
 
 class SwFieldType;
 class SwFmt;
@@ -51,7 +53,6 @@ namespace com { namespace sun { namespace star { namespace i18n {
 }}}}
 
 #include <swtypes.hxx>
-#include <svl/svarray.hxx>
 
 // provides some methods for generic operations on lists that contain
 // SwFmt* subclasses.
@@ -174,8 +175,11 @@ public:
     using _SwRedlineTbl::GetPos;
 };
 
-typedef SwUnoCrsr* SwUnoCrsrPtr;
-SV_DECL_PTRARR_DEL( SwUnoCrsrTbl, SwUnoCrsrPtr, 0 )
+class SwUnoCrsrTbl : public std::set<SwUnoCrsr*> {
+public:
+    // the destructor will free all objects still in the set
+    ~SwUnoCrsrTbl();
+};
 
 class SwOLENodes : public std::vector<SwOLENode*> {};
 
