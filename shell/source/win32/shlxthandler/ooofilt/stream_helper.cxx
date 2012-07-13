@@ -127,7 +127,7 @@ FileStream::~FileStream()
 unsigned long FileStream::sread (unsigned char *buf, unsigned long size)
 {
     if (file)
-        return fread(buf, 1, size, file);
+        return static_cast<unsigned long>(fread(buf, 1, size, file));
     return 0;
 }
 
