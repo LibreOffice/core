@@ -472,6 +472,7 @@ SvtFileDialog::~SvtFileDialog()
 
     delete _pImp;
     delete _pFileView;
+    delete _pSplitter;
 
     delete _pCbReadOnly;
     delete _pCbLinkBox;
@@ -594,6 +595,10 @@ void SvtFileDialog::Init_Impl
     _pFileView->SetHelpId( HID_FILEDLG_STANDARD );
     _pFileView->SetStyle( _pFileView->GetStyle() | WB_TABSTOP );
 
+    _pSplitter = new Splitter( this, SvtResId( EXPLORERFILE_SPLITTER ) );
+    _pSplitter->SetBackground( Wallpaper( Application::GetSettings().GetStyleSettings().GetFaceColor() ));
+    _pSplitter->SetSplitHdl( LINK( this, SvtFileDialog, Split_Hdl ) );
+
     // determine the size of the buttons
     Size aSize = _pImp->_pBtnNewFolder->GetSizePixel();
     Image aNewFolderImg( GetButtonImage( IMG_FILEDLG_CREATEFOLDER ) );
@@ -675,6 +680,9 @@ void SvtFileDialog::Init_Impl
 
     // Adjust the position of the other elements.
     _pFileView->SetPosPixel( aPos );
+
+    aPos.X() = _pSplitter->GetPosPixel().X();
+    _pSplitter->SetPosPixel( aPos );
 
     aPos.X() = _pImp->_pPlaces->GetPosPixel().X();
     _pImp->_pPlaces->SetPosPixel( aPos );
@@ -2245,6 +2253,7 @@ short SvtFileDialog::PrepareExecute()
     OpenURL_Impl( aObj.GetMainURL( INetURLObject::NO_DECODE ) );
 
     _pFileView->Show();
+    _pSplitter->Show();
     SvtDefModalDialogParent_Impl aDefParent( this );
 
     // if applicable read and set size from ini
@@ -2669,6 +2678,13 @@ void SvtFileDialog::Resize()
     nDeltaX -= nWinDeltaW;
 
     _pFileView->SetSizePixel( aNewSize );
+
+    // Resize the Splitter to fit the height
+    Size splitterNewSize = _pSplitter->GetSizePixel( );
+    splitterNewSize.Height() += nDeltaY;
+    _pSplitter->SetSizePixel( splitterNewSize );
+    sal_Int32 nMinX = _pImp->_pPlaces->GetPosPixel( ).X( );
+    _pSplitter->SetDragRectPixel( Rectangle( Point( nMinX, 0 ), Size( aDlgSize ) ) );
 
     // Resize the places list box to fit the height of the FileView
     Size placesNewSize(_pImp->_pPlaces->GetSizePixel());
@@ -3355,6 +3371,30 @@ void SvtFileDialog::initDefaultPlaces( )
 
     // Reset the placesList "updated" state
     _pImp->_pPlaces->IsUpdated();
+}
+
+IMPL_LINK_NOARG( SvtFileDialog, Split_Hdl )
+{
+    sal_Int32 nSplitPos = _pSplitter->GetSplitPosPixel();
+
+    // Resize the places list
+    sal_Int32 nPlaceX = _pImp->_pPlaces->GetPosPixel( ).X();
+    Size placeSize = _pImp->_pPlaces->GetSizePixel( );
+    placeSize.Width() = nSplitPos - nPlaceX;
+    _pImp->_pPlaces->SetSizePixel( placeSize );
+
+    // Change Pos and size of the fileview
+    Point fileViewPos = _pFileView->GetPosPixel();
+    sal_Int32 nOldX = fileViewPos.X();
+    sal_Int32 nNewX = nSplitPos + _pSplitter->GetSizePixel().Width();
+    fileViewPos.X() = nNewX;
+    Size fileViewSize = _pFileView->GetSizePixel();
+    fileViewSize.Width() -= ( nNewX - nOldX );
+    _pFileView->SetPosSizePixel( fileViewPos, fileViewSize );
+
+    _pSplitter->SetPosPixel( Point( nSplitPos, _pSplitter->GetPosPixel().Y() ) );
+    Resize();
+    return 0;
 }
 
 // QueryFolderNameDialog -------------------------------------------------------

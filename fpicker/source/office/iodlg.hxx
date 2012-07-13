@@ -25,6 +25,7 @@
 #include <vcl/edit.hxx>
 #include <vcl/combobox.hxx>
 #include <vcl/lstbox.hxx>
+#include <vcl/split.hxx>
 #include <com/sun/star/beans/StringPair.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -95,6 +96,7 @@ private:
     Window*                     _pPrevWin;
     FixedBitmap*                _pPrevBmp;
     SvtFileView*                _pFileView;
+    Splitter*                   _pSplitter;
     ::svt::IFilePickerListener* _pFileNotifier;
     SvtExpFileDlg_Impl*         _pImp;
     WinBits                     _nExtraBits;
@@ -129,6 +131,7 @@ private:
 
     DECL_STATIC_LINK( SvtFileDialog, AddPlacePressed_Hdl, void* );
     DECL_STATIC_LINK( SvtFileDialog, RemovePlacePressed_Hdl, void* );
+    DECL_LINK       (                Split_Hdl, void* );
 
     void                        Init_Impl( WinBits nBits );
     /** find a filter with the given wildcard

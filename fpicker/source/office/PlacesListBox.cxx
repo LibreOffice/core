@@ -45,11 +45,11 @@ PlacesListBox_Impl::PlacesListBox_Impl( PlacesListBox* pParent, const rtl::OUStr
 {
     Size aBoxSize = pParent->GetSizePixel( );
     mpHeaderBar = new HeaderBar( pParent, WB_BUTTONSTYLE | WB_BOTTOMBORDER );
-    mpHeaderBar->SetPosSizePixel( Point( 0, 0 ), Size( aBoxSize.getWidth(), 16 ) );
+    mpHeaderBar->SetPosSizePixel( Point( 0, 0 ), Size( 600, 16 ) );
 
-    long pTabs[] = { 2, 20, aBoxSize.getWidth() };
+    long pTabs[] = { 2, 20, 600 };
     SetTabs( &pTabs[0], MAP_PIXEL );
-    mpHeaderBar->InsertItem( COLUMN_NAME, rTitle, aBoxSize.getWidth(), HIB_LEFT | HIB_VCENTER );
+    mpHeaderBar->InsertItem( COLUMN_NAME, rTitle, 600, HIB_LEFT | HIB_VCENTER );
 
     Size aHeadSize = mpHeaderBar->GetSizePixel();
     SetPosSizePixel( Point( 0, aHeadSize.getHeight() ),

@@ -54,6 +54,7 @@
 #define BTN_EXPLORERFILE_CONNECT_TO_SERVER  51
 #define BTN_EXPLORERFILE_ADD_PLACE          52
 #define BTN_EXPLORERFILE_REMOVE_PLACE       53
+#define EXPLORERFILE_SPLITTER               54
 
 // -----------------------------------------------
 
