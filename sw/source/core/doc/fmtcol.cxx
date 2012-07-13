@@ -48,8 +48,6 @@ TYPEINIT1( SwGrfFmtColl, SwFmtColl );
 TYPEINIT1( SwConditionTxtFmtColl, SwTxtFmtColl );
 TYPEINIT1( SwCollCondition, SwClient );
 
-SV_IMPL_PTRARR( SwFmtCollConditions, SwCollConditionPtr );
-
 namespace TxtFmtCollFunc
 {
 
@@ -576,36 +574,36 @@ const SwCollCondition* SwConditionTxtFmtColl::HasCondition(
     const SwCollCondition* pFnd = 0;
     sal_uInt16 n;
 
-    for( n = 0; n < aCondColls.Count(); ++n )
-        if( *( pFnd = aCondColls[ n ]) == rCond )
+    for( n = 0; n < aCondColls.size(); ++n )
+        if( *( pFnd = &aCondColls[ n ]) == rCond )
             break;
 
-    return n < aCondColls.Count() ? pFnd : 0;
+    return n < aCondColls.size() ? pFnd : 0;
 }
 
 
 void SwConditionTxtFmtColl::InsertCondition( const SwCollCondition& rCond )
 {
-    for( sal_uInt16 n = 0; n < aCondColls.Count(); ++n )
-        if( *aCondColls[ n ] == rCond )
+    for( sal_uInt16 n = 0; n < aCondColls.size(); ++n )
+        if( aCondColls[ n ] == rCond )
         {
-            aCondColls.DeleteAndDestroy( n );
+            aCondColls.erase( aCondColls.begin() + n );
             break;
         }
 
     // Not found -> so insert it
     SwCollCondition* pNew = new SwCollCondition( rCond );
-    aCondColls.Insert( pNew, aCondColls.Count() );
+    aCondColls.push_back( pNew );
 }
 
 
 sal_Bool SwConditionTxtFmtColl::RemoveCondition( const SwCollCondition& rCond )
 {
     sal_Bool bRet = sal_False;
-    for( sal_uInt16 n = 0; n < aCondColls.Count(); ++n )
-        if( *aCondColls[ n ] == rCond )
+    for( sal_uInt16 n = 0; n < aCondColls.size(); ++n )
+        if( aCondColls[ n ] == rCond )
         {
-            aCondColls.DeleteAndDestroy( n );
+            aCondColls.erase( aCondColls.begin() + n );
             bRet = sal_True;
         }
 
@@ -615,12 +613,11 @@ sal_Bool SwConditionTxtFmtColl::RemoveCondition( const SwCollCondition& rCond )
 void SwConditionTxtFmtColl::SetConditions( const SwFmtCollConditions& rCndClls )
 {
     // Copy the Conditions, but first delete the old ones
-    if( aCondColls.Count() )
-        aCondColls.DeleteAndDestroy( 0, aCondColls.Count() );
+    aCondColls.clear();
     SwDoc& rDoc = *GetDoc();
-    for( sal_uInt16 n = 0; n < rCndClls.Count(); ++n )
+    for( sal_uInt16 n = 0; n < rCndClls.size(); ++n )
     {
-        SwCollCondition* pFnd = rCndClls[ n ];
+        const SwCollCondition* pFnd = &rCndClls[ n ];
         SwTxtFmtColl* pTmpColl = pFnd->GetTxtFmtColl()
                                     ? rDoc.CopyTxtColl( *pFnd->GetTxtFmtColl() )
                                     : 0;
@@ -631,7 +628,7 @@ void SwConditionTxtFmtColl::SetConditions( const SwFmtCollConditions& rCndClls )
         else
             pNew = new SwCollCondition( pTmpColl, pFnd->GetCondition(),
                                         pFnd->GetSubCondition() );
-        aCondColls.Insert( pNew, n );
+        aCondColls.push_back( pNew );
     }
 }
 //#outline level, zhaojianwei

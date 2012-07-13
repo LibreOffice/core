@@ -1055,9 +1055,9 @@ void SwXMLImport::UpdateTxtCollConditions( SwDoc *pDoc )
             const SwFmtCollConditions& rConditions =
                 ((const SwConditionTxtFmtColl *)pColl)->GetCondColls();
             sal_Bool bSendModify = sal_False;
-            for( sal_uInt16 j=0; j < rConditions.Count() && !bSendModify; j++ )
+            for( sal_uInt16 j=0; j < rConditions.size() && !bSendModify; j++ )
             {
-                const SwCollCondition& rCond = *rConditions[j];
+                const SwCollCondition& rCond = rConditions[j];
                 switch( rCond.GetCondition() )
                 {
                 case PARA_IN_TABLEHEAD:

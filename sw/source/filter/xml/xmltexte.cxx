@@ -115,9 +115,9 @@ void SwXMLTextParagraphExport::exportStyleContent(
         {
             const SwFmtCollConditions& rConditions =
                 ((const SwConditionTxtFmtColl *)pColl)->GetCondColls();
-            for( sal_uInt16 i=0; i < rConditions.Count(); i++ )
+            for( sal_uInt16 i=0; i < rConditions.size(); i++ )
             {
-                const SwCollCondition& rCond = *rConditions[i];
+                const SwCollCondition& rCond = rConditions[i];
 
                 enum XMLTokenEnum eFunc = XML_TOKEN_INVALID;
                 OUStringBuffer sBuffer( 20 );

@@ -28,10 +28,10 @@
 #ifndef _FMTCOL_HXX
 #define _FMTCOL_HXX
 
-#include <svl/svarray.hxx>
 #include "swdllapi.h"
 #include <format.hxx>
 #include <swtypes.hxx> // For MAXLEVEL.
+#include <boost/ptr_container/ptr_vector.hpp>
 
 class SwDoc; // For friend.
 
@@ -231,8 +231,7 @@ public:
     void RegisterToFormat( SwFmt& );
 };
 
-typedef SwCollCondition* SwCollConditionPtr;
-SV_DECL_PTRARR_DEL( SwFmtCollConditions, SwCollConditionPtr, 0 )
+class SwFmtCollConditions : public boost::ptr_vector<SwCollCondition> {};
 
 class SW_DLLPUBLIC SwConditionTxtFmtColl : public SwTxtFmtColl
 {
