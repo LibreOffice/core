@@ -55,7 +55,6 @@ namespace com {
 }
 
 // List of all sorted elements
-typedef const _FndBox*      _FndBoxPtr;
 typedef SwSortElement*      SwSortElementPtr;
 
 SV_DECL_PTRARR_SORT(SwSortElements, SwSortElementPtr, 0)
@@ -148,7 +147,7 @@ private:
 
     SwDoc*              pDoc;
     const _FndBox&      rBoxRef;
-    _FndBoxPtr*         pArr;
+    const _FndBox**     pArr;
     SfxItemSet**        ppItemSets;
 
     sal_uInt16          nRows;
