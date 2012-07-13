@@ -479,7 +479,7 @@ sal_Bool GSIBlock::HasSuspiciousChars( GSILine* pTestee, GSILine* pSource )
                 rtl::OStringToOUString(
                     pTestee->GetText().copy(0, nPos), RTL_TEXTENCODING_UTF8));
             sal_Int32 nErrorPos = aUTF8Tester.getLength();
-            rtl::OString aContext( pTestee->GetText().copy( nPos, 20 ) );
+            rtl::OString aContext( helper::abbreviate( pTestee->GetText(), nPos, 20 ) );
             PrintError(rtl::OStringBuffer(RTL_CONSTASCII_STRINGPARAM("Found double questionmark in translation only. Looks like an encoding problem at Position "))
                  .append(nErrorPos).getStr(),
                 "Text format", aContext, pTestee->GetLineNumber(), pTestee->GetUniqId());
