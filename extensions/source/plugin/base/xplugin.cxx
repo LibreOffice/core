@@ -41,7 +41,6 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/loader/XImplementationLoader.hpp>
-#include <com/sun/star/loader/CannotActivateFactoryException.hpp>
 #include <com/sun/star/plugin/PluginManager.hpp>
 
 #include <comphelper/componentcontext.hxx>

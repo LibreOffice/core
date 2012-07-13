@@ -66,7 +66,6 @@
 #include <com/sun/star/frame/XLoadEventListener.hpp>
 #include <com/sun/star/frame/XFilterDetect.hpp>
 #include <com/sun/star/loader/XImplementationLoader.hpp>
-#include <com/sun/star/loader/CannotActivateFactoryException.hpp>
 #include <comphelper/processfactory.hxx>
 
 #include <sal/types.h>

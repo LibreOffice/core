@@ -55,7 +55,6 @@
 #include "com/sun/star/container/XElementAccess.hpp"
 #include "com/sun/star/container/XIndexAccess.hpp"
 #include "com/sun/star/loader/XImplementationLoader.hpp"
-#include "com/sun/star/loader/CannotActivateFactoryException.hpp"
 
 PluginManager* PluginManager::pManager = NULL;
 
