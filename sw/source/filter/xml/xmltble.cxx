@@ -60,6 +60,7 @@
 #include "xmltexte.hxx"
 #include "xmlexp.hxx"
 #include <boost/foreach.hpp>
+#include <o3tl/sorted_vector.hxx>
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
@@ -105,9 +106,10 @@ sal_Int32 SwXMLTableColumnCmpWidth_Impl( const SwXMLTableColumn_Impl& r1,
 
 // ---------------------------------------------------------------------
 
-typedef SwXMLTableColumn_Impl *SwXMLTableColumnPtr;
-SV_DECL_PTRARR_SORT_DEL( SwXMLTableColumns_Impl, SwXMLTableColumnPtr, 5 )
-SV_IMPL_OP_PTRARR_SORT( SwXMLTableColumns_Impl, SwXMLTableColumnPtr )
+class SwXMLTableColumns_Impl : public o3tl::sorted_vector<SwXMLTableColumn_Impl*, o3tl::less_ptr_to<SwXMLTableColumn_Impl> > {
+public:
+    ~SwXMLTableColumns_Impl() { DeleteAndDestroyAll(); }
+};
 
 DECLARE_CONTAINER_SORT( SwXMLTableColumnsSortByWidth_Impl,
                         SwXMLTableColumn_Impl )
@@ -158,7 +160,7 @@ SwXMLTableLines_Impl::SwXMLTableLines_Impl( const SwTableLines& rLines ) :
                 SwXMLTableColumn_Impl *pCol =
                     new SwXMLTableColumn_Impl( nCPos );
 
-                if( !aCols.Insert( pCol ) )
+                if( !aCols.insert( pCol ).second )
                     delete pCol;
 
                 if( nBox==nBoxes-1U )
@@ -181,7 +183,7 @@ SwXMLTableLines_Impl::SwXMLTableLines_Impl( const SwTableLines& rLines ) :
                 nCPos = nWidth;
 #if OSL_DEBUG_LEVEL > 0
                 SwXMLTableColumn_Impl aCol( nWidth );
-                OSL_ENSURE( aCols.Seek_Entry(&aCol), "couldn't find last column" );
+                OSL_ENSURE( aCols.find(&aCol) != aCols.end(), "couldn't find last column" );
                 OSL_ENSURE( SwXMLTableColumn_Impl(nCheckPos) ==
                                             SwXMLTableColumn_Impl(nCPos),
                         "rows have different total widths" );
@@ -594,7 +596,7 @@ void SwXMLExport::ExportTableLinesAutoStyles( const SwTableLines& rLines,
     {
         const SwXMLTableColumns_Impl& rCols = pLines->GetColumns();
         sal_uInt32 nCPos = 0U;
-        sal_uInt16 nColumns = rCols.Count();
+        sal_uInt16 nColumns = rCols.size();
         for( sal_uInt16 nColumn=0U; nColumn<nColumns; nColumn++ )
         {
             SwXMLTableColumn_Impl *pColumn = rCols[nColumn];
@@ -684,9 +686,9 @@ void SwXMLExport::ExportTableLinesAutoStyles( const SwTableLines& rLines,
             // Und ihren Index
             sal_uInt16 nOldCol = nCol;
             SwXMLTableColumn_Impl aCol( nCPos );
-            bool const bFound = pLines->GetColumns().Seek_Entry( &aCol, &nCol );
-            OSL_ENSURE( bFound, "couldn't find column" );
-            (void) bFound; // unused in non-debug
+            SwXMLTableColumns_Impl::const_iterator it = pLines->GetColumns().find( &aCol );
+            OSL_ENSURE( it != pLines->GetColumns().end(), "couldn't find column" );
+            nCol = it - pLines->GetColumns().begin();
 
             const SwStartNode *pBoxSttNd = pBox->GetSttNd();
             if( pBoxSttNd )
@@ -969,13 +971,10 @@ void SwXMLExport::ExportTableLine( const SwTableLine& rLine,
 
             // Und ihren Index
             const sal_uInt16 nOldCol = nCol;
-            {
-                SwXMLTableColumn_Impl aCol( nCPos );
-                const bool bFound =
-                    rLines.GetColumns().Seek_Entry( &aCol, &nCol );
-                OSL_ENSURE( bFound, "couldn't find column" );
-                (void) bFound; // unused in non-debug
-            }
+            SwXMLTableColumn_Impl aCol( nCPos );
+            SwXMLTableColumns_Impl::const_iterator it = rLines.GetColumns().find( &aCol );
+            OSL_ENSURE( it != rLines.GetColumns().end(), "couldn't find column" );
+            nCol = it - rLines.GetColumns().begin();
 
             // #i95726# - Some fault tolerance, if table is somehow corrupted.
             if ( nCol < nOldCol )
@@ -983,7 +982,7 @@ void SwXMLExport::ExportTableLine( const SwTableLine& rLine,
                 OSL_FAIL( "table and/or table information seems to be corrupted." );
                 if ( nBox == nBoxes - 1 )
                 {
-                    nCol = rLines.GetColumns().Count() - 1;
+                    nCol = rLines.GetColumns().size() - 1;
                 }
                 else
                 {
@@ -1047,7 +1046,7 @@ void SwXMLExport::ExportTableLines( const SwTableLines& rLines,
     // pass 2: export columns
     const SwXMLTableColumns_Impl& rCols = pLines->GetColumns();
     sal_uInt16 nColumn = 0U;
-    sal_uInt16 nColumns = rCols.Count();
+    sal_uInt16 nColumns = rCols.size();
     sal_uInt16 nColRep = 1U;
     SwXMLTableColumn_Impl *pColumn = (nColumns > 0) ? rCols[0U] : 0;
     while( pColumn )
