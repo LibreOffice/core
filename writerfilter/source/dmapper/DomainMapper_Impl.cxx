@@ -1517,6 +1517,8 @@ void DomainMapper_Impl::PopFootOrEndnote()
 
 void DomainMapper_Impl::PopAnnotation()
 {
+    RemoveLastParagraph();
+
     m_aTextAppendStack.pop();
 
     // See if the annotation will be a single position or a range.
