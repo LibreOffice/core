@@ -5,10 +5,19 @@
     	<item name="android:windowActionModeOverlay">true</item>
     	<item name="android:actionBarStyle">@style/TransparentDarkActionBar</item>
     </style>
+
+    <style name="FileExplorer" parent="@android:style/Theme.Holo.Light">
+        <item name="android:actionBarStyle">@style/DarkActionBar</item>
+    </style>
+
     <style name="TransparentDarkActionBar" parent="@android:style/Widget.Holo.ActionBar">
         <item name="android:background">#bb000000</item>
     </style>
-    
+    <style name="DarkActionBar" parent="@android:style/Widget.Holo.ActionBar">
+        <item name="android:background">#ff333333</item>
+        <item name="android:textColor">#dddddd</item>
+    </style>
+
     <style name="grayBackground">
         <item name="android:background">#dd000000</item>
     </style>

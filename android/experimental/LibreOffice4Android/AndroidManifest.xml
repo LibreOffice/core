@@ -28,7 +28,8 @@
         <!-- File Explorer Activities taken from eclipse workspace -->        
         <activity
             android:name=".ui.LibreOfficeUIActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name"
+            android:theme="@style/FileExplorer">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

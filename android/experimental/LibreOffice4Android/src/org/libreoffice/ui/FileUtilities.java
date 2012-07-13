@@ -124,6 +124,8 @@ public class FileUtilities {
         public boolean accept(File pathname) {
         if (pathname.isDirectory())
             return true;
+        if( lookupExtension( pathname.getName() ) == UNKNOWN)
+            return false;// Thubnails will be unknown, for example.
         return doAccept(pathname.getName(), mode, "");
         }
     };

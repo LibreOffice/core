@@ -1110,21 +1110,28 @@ public class DocumentLoader
         // Could easily make a new (larger) thumb but recycling
         // should be faster & more efficient, better for the environment ;-)
         //ll = (LinearLayout)findViewById( R.id.navigator);
-        Bitmap bmp = ( (ThumbnailView)ll.getChildAt( 0 ) ).getBitmap();
+//        Bitmap bmp = ( (ThumbnailView)ll.getChildAt( 0 ) ).getBitmap();
+
+        ByteBuffer bb = renderPage( 0 , 100 , (int)( 100*Math.sqrt(2) )  );
+//        bb.flip();
+        Bitmap bmp = Bitmap.createBitmap( 100, (int)( 100*Math.sqrt(2) ), Bitmap.Config.ARGB_8888);
+        bmp.copyPixelsFromBuffer(bb);
+
         File file = new File(extras.getString("input"));
         Log.i(TAG ,"onDestroy " + extras.getString("input"));
         File dir = file.getParentFile();
-        String[] nameComponents = file.getName().split("[.]");
-        for(String str : nameComponents){
-            Log.i(TAG,"onDestroy " + str);
-        }
         File thumbnailFile = new File( dir , "." + file.getName().split("[.]")[0] + ".png");
         try {
-            ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+            /*(ByteArrayOutputStream bytes = new ByteArrayOutputStream();
             bmp.compress(Bitmap.CompressFormat.JPEG, 40, bytes);
-            thumbnailFile.createNewFile();
+            if( !thumbnailFile.isFile() )
+                thumbnailFile.createNewFile();
             FileOutputStream fo = new FileOutputStream( thumbnailFile );
-            fo.write(bytes.toByteArray());
+            fo.write(bytes.toByteArray());*/
+            if( !thumbnailFile.isFile() )
+                thumbnailFile.createNewFile();
+            FileOutputStream fo = new FileOutputStream( thumbnailFile );
+            bmp.compress(Bitmap.CompressFormat.PNG, 40, fo);
         } catch (IOException e) {
             // TODO: handle exception
         }
