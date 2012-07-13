@@ -2168,7 +2168,7 @@ void SwRefPageGetFieldType::Modify( const SfxPoolItem* pOld, const SfxPoolItem* 
     if( !pNew && !pOld && GetDepends() )
     {
         // sammel erstmal alle SetPageRefFelder ein.
-        _SetGetExpFlds aTmpLst( 10 );
+        _SetGetExpFlds aTmpLst;
         if( MakeSetList( aTmpLst ) )
         {
             SwIterator<SwFmtFld,SwFieldType> aIter( *this );
@@ -2221,12 +2221,12 @@ sal_uInt16 SwRefPageGetFieldType::MakeSetList( _SetGetExpFlds& rTmpLst )
                                                 &aPos.nContent );
                 }
 
-                if( !rTmpLst.Insert( pNew ))
+                if( !rTmpLst.insert( pNew ).second)
                     delete pNew;
             }
     }
 
-    return rTmpLst.Count();
+    return rTmpLst.size();
 }
 
 void SwRefPageGetFieldType::UpdateField( SwTxtFld* pTxtFld,
@@ -2243,12 +2243,12 @@ void SwRefPageGetFieldType::UpdateField( SwTxtFld* pTxtFld,
         SwNodeIndex aIdx( *pTxtNode );
         _SetGetExpFld aEndFld( aIdx, pTxtFld );
 
-        sal_uInt16 nLast;
-        rSetList.Seek_Entry( &aEndFld, &nLast );
+        _SetGetExpFlds::const_iterator itLast = rSetList.lower_bound( &aEndFld );
 
-        if( nLast-- )
+        if( itLast != rSetList.begin() )
         {
-            const SwTxtFld* pRefTxtFld = rSetList[ nLast ]->GetFld();
+            itLast--;
+            const SwTxtFld* pRefTxtFld = (*itLast)->GetFld();
             const SwRefPageSetField* pSetFld =
                         (SwRefPageSetField*)pRefTxtFld->GetFld().GetFld();
             if( pSetFld->IsOn() )
@@ -2316,7 +2316,7 @@ void SwRefPageGetField::ChangeExpansion( const SwFrm* pFrm,
     OSL_ENSURE( !pFrm->IsInDocBody(), "Flag ist nicht richtig, Frame steht im DocBody" );
 
     // sammel erstmal alle SetPageRefFelder ein.
-    _SetGetExpFlds aTmpLst( 10 );
+    _SetGetExpFlds aTmpLst;
     if( !pGetType->MakeSetList( aTmpLst ) )
         return ;
 
@@ -2333,13 +2333,13 @@ void SwRefPageGetField::ChangeExpansion( const SwFrm* pFrm,
 
     _SetGetExpFld aEndFld( aPos.nNode, pFld, &aPos.nContent );
 
-    sal_uInt16 nLast;
-    aTmpLst.Seek_Entry( &aEndFld, &nLast );
+    _SetGetExpFlds::const_iterator itLast = aTmpLst.lower_bound( &aEndFld );
 
-    if( !nLast-- )
-        return ;        // es gibt kein entsprechendes Set - Feld vor mir
+    if( itLast == aTmpLst.begin() )
+        return;        // es gibt kein entsprechendes Set - Feld vor mir
+    itLast--;
 
-    const SwTxtFld* pRefTxtFld = aTmpLst[ nLast ]->GetFld();
+    const SwTxtFld* pRefTxtFld = (*itLast)->GetFld();
     const SwRefPageSetField* pSetFld =
                         (SwRefPageSetField*)pRefTxtFld->GetFld().GetFld();
     Point aPt;

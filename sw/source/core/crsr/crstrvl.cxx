@@ -623,7 +623,7 @@ void lcl_MakeFldLst( _SetGetExpFlds& rLst, const SwFieldType& rFldType,
                 _SetGetExpFld* pNew = new _SetGetExpFld(
                                 SwNodeIndex( rTxtNode ), pTxtFld );
                 pNew->SetBodyPos( *pCFrm );
-                rLst.Insert( pNew );
+                rLst.insert( pNew );
             }
         }
 }
@@ -633,7 +633,7 @@ sal_Bool SwCrsrShell::MoveFldType( const SwFieldType* pFldType, sal_Bool bNext,
                                             sal_uInt16 nSubType, sal_uInt16 nResType )
 {
     // sorted list of all fields
-    _SetGetExpFlds aSrtLst( 64 );
+    _SetGetExpFlds aSrtLst;
 
     if (pFldType)
     {
@@ -669,10 +669,10 @@ sal_Bool SwCrsrShell::MoveFldType( const SwFieldType* pFldType, sal_Bool bNext,
     }
 
     // found no fields?
-    if( !aSrtLst.Count() )
+    if( aSrtLst.empty() )
         return sal_False;
 
-    sal_uInt16 nPos;
+    _SetGetExpFlds::const_iterator it;
     SwCursor* pCrsr = getShellCrsr( true );
     {
         // (1998): Always use field for search so that the right one is found as
@@ -705,27 +705,43 @@ sal_Bool SwCrsrShell::MoveFldType( const SwFieldType* pFldType, sal_Bool bNext,
             aSrch.SetBodyPos( *pTNd->getLayoutFrm( GetLayout(), &aPt, &rPos, sal_False ) );
         }
 
-        sal_Bool bFound = aSrtLst.Seek_Entry( &aSrch, &nPos );
+        it = aSrtLst.lower_bound( &aSrch );
         if( bDelFld )
         {
             delete (SwFmtFld*)&pTxtFld->GetAttr();
             delete pTxtFld;
         }
 
-        if( bFound )
+        if( it != aSrtLst.end() && **it == aSrch ) // found
         {
             if( bNext )
             {
-                if( ++nPos >= aSrtLst.Count() )
+                if( ++it == aSrtLst.end() )
                     return sal_False; // already at the end
             }
-            else if( !nPos-- )
-                return sal_False; // no more steps forward possible
+            else
+            {
+                if( it == aSrtLst.begin() )
+                    return sal_False; // no more steps backward possible
+                it--;
+            }
         }
-        else if( bNext ? nPos >= aSrtLst.Count() : !nPos--)
-            return sal_False;
+        else // not found
+        {
+            if( bNext )
+            {
+                if( it == aSrtLst.end() )
+                    return sal_False;
+            }
+            else
+            {
+                if( it == aSrtLst.begin() )
+                    return sal_False; // no more steps backward possible
+                it--;
+            }
+        }
     }
-    const _SetGetExpFld& rFnd = **( aSrtLst.GetData() + nPos );
+    const _SetGetExpFld& rFnd = **it;
 
 
     SET_CURR_SHELL( this );

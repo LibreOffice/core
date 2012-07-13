@@ -84,7 +84,7 @@ SwInputFieldList::SwInputFieldList( SwEditShell* pShell, sal_Bool bBuildTmpLst )
                     {
                         SwNodeIndex aIdx( rTxtNode );
                         _SetGetExpFld* pNew = new _SetGetExpFld(aIdx, pTxtFld );
-                        pSrtLst->Insert( pNew );
+                        pSrtLst->insert( pNew );
                     }
                 }
             }
@@ -103,7 +103,7 @@ SwInputFieldList::~SwInputFieldList()
 
 sal_uInt16 SwInputFieldList::Count() const
 {
-    return pSrtLst->Count();
+    return pSrtLst->size();
 }
 
 
@@ -177,7 +177,7 @@ sal_uInt16 SwInputFieldList::BuildSortLst()
                     {
                         SwNodeIndex aIdx( rTxtNode );
                         _SetGetExpFld* pNew = new _SetGetExpFld(aIdx, pTxtFld );
-                        pSrtLst->Insert( pNew );
+                        pSrtLst->insert( pNew );
                     }
                     else
                         aTmpLst.erase( it );
@@ -188,7 +188,7 @@ sal_uInt16 SwInputFieldList::BuildSortLst()
 
     // die Pointer werden nicht mehr gebraucht
     aTmpLst.clear();
-    return pSrtLst->Count();
+    return pSrtLst->size();
 }
 
 /*--------------------------------------------------------------------
@@ -211,8 +211,8 @@ void SwInputFieldList::RemoveUnselectedFlds()
             if (aPos >= *PCURCRSR->Start() && aPos < *PCURCRSR->End())
             {
                 // Feld innerhalb der Selektion
-                pNewLst->Insert( (*pSrtLst)[i] );
-                pSrtLst->Remove(i, 1);
+                pNewLst->insert( (*pSrtLst)[i] );
+                pSrtLst->erase( i );
             }
             else
                 i++;

@@ -30,6 +30,7 @@
 #define _DOCFLD_HXX
 
 #include <calc.hxx>
+#include <o3tl/sorted_vector.hxx>
 
 class SwTxtFld;
 class SwIndex;
@@ -86,11 +87,11 @@ public:
 
     _SetGetExpFld( const SwFlyFrmFmt& rFlyFmt, const SwPosition* pPos = 0 );
 
-    sal_Bool operator==( const _SetGetExpFld& rFld ) const
-    {   return nNode == rFld.nNode && nCntnt == rFld.nCntnt &&
+    bool operator==( const _SetGetExpFld& rFld ) const
+        {   return nNode == rFld.nNode && nCntnt == rFld.nCntnt &&
                 ( !CNTNT.pTxtFld || !rFld.CNTNT.pTxtFld ||
                     CNTNT.pTxtFld == rFld.CNTNT.pTxtFld ); }
-    sal_Bool operator<( const _SetGetExpFld& rFld ) const;
+    bool operator<( const _SetGetExpFld& rFld ) const;
 
     const SwTxtFld* GetFld() const
         { return TEXTFIELD == eSetGetExpFldType ? CNTNT.pTxtFld : 0; }
@@ -118,8 +119,11 @@ public:
     void SetBodyPos( const SwCntntFrm& rFrm );
 };
 
-typedef _SetGetExpFld* _SetGetExpFldPtr;
-SV_DECL_PTRARR_SORT_DEL( _SetGetExpFlds, _SetGetExpFldPtr, 0 )
+class _SetGetExpFlds : public o3tl::sorted_vector<_SetGetExpFld*, o3tl::less_ptr_to<_SetGetExpFld> >
+{
+public:
+    ~_SetGetExpFlds() { DeleteAndDestroyAll(); }
+};
 
 // struct for saving strings from the SetExp's string fields
 struct _HashStr : public SwHash

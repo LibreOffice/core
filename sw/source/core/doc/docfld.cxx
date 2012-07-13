@@ -32,7 +32,6 @@
 #include <float.h>
 #include <comphelper/string.hxx>
 #include <tools/datetime.hxx>
-#include <svl/svarray.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/charclass.hxx>
 #include <unotools/transliterationwrapper.hxx>
@@ -73,8 +72,6 @@ using namespace ::com::sun::star::uno;
 
 extern sal_Bool IsFrameBehind( const SwTxtNode& rMyNd, sal_uInt16 nMySttPos,
                         const SwTxtNode& rBehindNd, sal_uInt16 nSttPos );
-
-SV_IMPL_OP_PTRARR_SORT( _SetGetExpFlds, _SetGetExpFldPtr )
 
 /*--------------------------------------------------------------------
     Description: Insert field types
@@ -890,19 +887,19 @@ void _SetGetExpFld::SetBodyPos( const SwCntntFrm& rFrm )
     }
 }
 
-sal_Bool _SetGetExpFld::operator<( const _SetGetExpFld& rFld ) const
+bool _SetGetExpFld::operator<( const _SetGetExpFld& rFld ) const
 {
     if( nNode < rFld.nNode || ( nNode == rFld.nNode && nCntnt < rFld.nCntnt ))
-        return sal_True;
+        return true;
     else if( nNode != rFld.nNode || nCntnt != rFld.nCntnt )
-        return sal_False;
+        return false;
 
     const SwNode *pFirst = GetNodeFromCntnt(),
                  *pNext = rFld.GetNodeFromCntnt();
 
     // Position is the same: continue only if both field pointers are set!
     if( !pFirst || !pNext )
-        return sal_False;
+        return false;
 
     // same Section?
     if( pFirst->StartOfSectionNode() != pNext->StartOfSectionNode() )
@@ -1107,16 +1104,14 @@ void SwDoc::FldsToCalc( SwCalc& rCalc, const _SetGetExpFld& rToThisFld )
     SwNewDBMgr* pMgr = GetNewDBMgr();
     pMgr->CloseAll(sal_False);
 
-    if( pUpdtFlds->GetSortLst()->Count() )
+    if( !pUpdtFlds->GetSortLst()->empty() )
     {
-        sal_uInt16 nLast;
-        _SetGetExpFld* pFld = (_SetGetExpFld*)&rToThisFld;
-        if( pUpdtFlds->GetSortLst()->Seek_Entry( pFld, &nLast ) )
-            ++nLast;
+        _SetGetExpFlds::const_iterator itLast = pUpdtFlds->GetSortLst()->lower_bound( (_SetGetExpFld*)&rToThisFld );
+        if( **itLast == rToThisFld )
+            ++itLast;
 
-        const _SetGetExpFldPtr* ppSortLst = pUpdtFlds->GetSortLst()->GetData();
-        for( sal_uInt16 n = 0; n < nLast; ++n, ++ppSortLst )
-            lcl_CalcFld( *this, rCalc, **ppSortLst, pMgr );
+        for( _SetGetExpFlds::const_iterator it = pUpdtFlds->GetSortLst()->begin(); it != itLast; ++it )
+            lcl_CalcFld( *this, rCalc, **it, pMgr );
     }
 
     pMgr->CloseAll(sal_False);
@@ -1131,15 +1126,13 @@ void SwDoc::FldsToCalc( SwCalc& rCalc, sal_uLong nLastNd, sal_uInt16 nLastCnt )
     SwNewDBMgr* pMgr = GetNewDBMgr();
     pMgr->CloseAll(sal_False);
 
-    const _SetGetExpFldPtr* ppSortLst = pUpdtFlds->GetSortLst()->GetData();
-
-    for( sal_uInt16 n = pUpdtFlds->GetSortLst()->Count();
-        n &&
-        ( (*ppSortLst)->GetNode() < nLastNd ||
-          ( (*ppSortLst)->GetNode() == nLastNd && (*ppSortLst)->GetCntnt() <= nLastCnt )
+    for( _SetGetExpFlds::const_iterator it = pUpdtFlds->GetSortLst()->begin();
+        it != pUpdtFlds->GetSortLst()->end() &&
+        ( (*it)->GetNode() < nLastNd ||
+          ( (*it)->GetNode() == nLastNd && (*it)->GetCntnt() <= nLastCnt )
         );
-        --n, ++ppSortLst )
-        lcl_CalcFld( *this, rCalc, **ppSortLst, pMgr );
+        ++it )
+        lcl_CalcFld( *this, rCalc, **it, pMgr );
 
     pMgr->CloseAll(sal_False);
 }
@@ -1153,24 +1146,20 @@ void SwDoc::FldsToExpand( SwHash**& ppHashTbl, sal_uInt16& rTblSize,
 
     // Hash table for all string replacements is filled on-the-fly.
     // Try to fabricate an uneven number.
-    rTblSize = (( pUpdtFlds->GetSortLst()->Count() / 7 ) + 1 ) * 7;
+    rTblSize = (( pUpdtFlds->GetSortLst()->size() / 7 ) + 1 ) * 7;
     ppHashTbl = new SwHash*[ rTblSize ];
     memset( ppHashTbl, 0, sizeof( _HashStr* ) * rTblSize );
 
-    sal_uInt16 nLast;
+    _SetGetExpFlds::const_iterator itLast;
     {
-        _SetGetExpFld* pTmp = (_SetGetExpFld*)&rToThisFld;
-        if( pUpdtFlds->GetSortLst()->Seek_Entry( pTmp, &nLast ) )
-            ++nLast;
+        itLast = pUpdtFlds->GetSortLst()->lower_bound( (_SetGetExpFld*)&rToThisFld );
+        if( **itLast == rToThisFld )
+            ++itLast;
     }
 
-    sal_uInt16 nPos;
-    SwHash* pFnd;
-    String aNew;
-    const _SetGetExpFldPtr* ppSortLst = pUpdtFlds->GetSortLst()->GetData();
-    for( ; nLast; --nLast, ++ppSortLst )
+    for( _SetGetExpFlds::const_iterator it = pUpdtFlds->GetSortLst()->begin(); it != itLast; ++it )
     {
-        const SwTxtFld* pTxtFld = (*ppSortLst)->GetFld();
+        const SwTxtFld* pTxtFld = (*it)->GetFld();
         if( !pTxtFld )
             continue;
 
@@ -1183,6 +1172,7 @@ void SwDoc::FldsToExpand( SwHash**& ppHashTbl, sal_uInt16& rTblSize,
                 // set the new value in the hash table
                 // is the formula a field?
                 SwSetExpField* pSFld = (SwSetExpField*)pFld;
+                String aNew;
                 LookString( ppHashTbl, rTblSize, pSFld->GetFormula(), aNew );
 
                 if( !aNew.Len() )               // nothing found, then the formula is
@@ -1195,7 +1185,8 @@ void SwDoc::FldsToExpand( SwHash**& ppHashTbl, sal_uInt16& rTblSize,
                 // look up the field's name
                 aNew = ((SwSetExpFieldType*)pSFld->GetTyp())->GetSetRefName();
                 // Entry present?
-                pFnd = Find( aNew, ppHashTbl, rTblSize, &nPos );
+                sal_uInt16 nPos;
+                SwHash* pFnd = Find( aNew, ppHashTbl, rTblSize, &nPos );
                 if( pFnd )
                     // modify entry in the hash table
                     ((_HashStr*)pFnd)->aSetStr = pSFld->GetExpStr();
@@ -1211,7 +1202,8 @@ void SwDoc::FldsToExpand( SwHash**& ppHashTbl, sal_uInt16& rTblSize,
 
                 // Insert entry in the hash table
                 // Entry present?
-                pFnd = Find( rName, ppHashTbl, rTblSize, &nPos );
+                sal_uInt16 nPos;
+                SwHash* pFnd = Find( rName, ppHashTbl, rTblSize, &nPos );
                 String const value(pFld->ExpandField(IsClipBoard()));
                 if( pFnd )
                 {
@@ -1241,7 +1233,7 @@ void SwDoc::UpdateExpFlds( SwTxtFld* pUpdtFld, bool bUpdRefFlds )
     pUpdtFlds->MakeFldList( *this, sal_True, GETFLD_ALL );
     mbNewFldLst = sal_False;
 
-    if( !pUpdtFlds->GetSortLst()->Count() )
+    if( pUpdtFlds->GetSortLst()->empty() )
     {
         if( bUpdRefFlds )
             UpdateRefFlds(NULL);
@@ -1297,10 +1289,9 @@ void SwDoc::UpdateExpFlds( SwTxtFld* pUpdtFld, bool bUpdRefFlds )
     pMgr->CloseAll(sal_False);
 
     String aNew;
-    const _SetGetExpFldPtr* ppSortLst = pUpdtFlds->GetSortLst()->GetData();
-    for( n = pUpdtFlds->GetSortLst()->Count(); n; --n, ++ppSortLst )
+    for( _SetGetExpFlds::const_iterator it = pUpdtFlds->GetSortLst()->begin(); it != pUpdtFlds->GetSortLst()->end(); ++it )
     {
-        SwSection* pSect = (SwSection*)(*ppSortLst)->GetSection();
+        SwSection* pSect = (SwSection*)(*it)->GetSection();
         if( pSect )
         {
 
@@ -1311,7 +1302,7 @@ void SwDoc::UpdateExpFlds( SwTxtFld* pUpdtFld, bool bUpdRefFlds )
             continue;
         }
 
-        SwTxtFld* pTxtFld = (SwTxtFld*)(*ppSortLst)->GetFld();
+        SwTxtFld* pTxtFld = (SwTxtFld*)(*it)->GetFld();
         if( !pTxtFld )
         {
             OSL_ENSURE( !this, "what's wrong now'" );
@@ -1471,7 +1462,7 @@ void SwDoc::UpdateExpFlds( SwTxtFld* pUpdtFld, bool bUpdRefFlds )
                         if( MAXLEVEL > nLvl )
                         {
                             // test if the Number needs to be updated
-                            pSeqNd = GetNodes()[ (*ppSortLst)->GetNode() ];
+                            pSeqNd = GetNodes()[ (*it)->GetNode() ];
 
                             const SwTxtNode* pOutlNd = pSeqNd->
                                     FindOutlineNodeOfLevel( nLvl );
@@ -2181,7 +2172,7 @@ void SwDocUpdtFld::InsDelFldInFldLst( sal_Bool bIns, const SwTxtFld& rFld )
     {
         if( !bIns )             // if list is present and deleted
             return;             // don't do a thing
-        pFldSortLst = new _SetGetExpFlds( 64 );
+        pFldSortLst = new _SetGetExpFlds;
     }
 
     if( bIns )      // insert anew:
@@ -2190,10 +2181,13 @@ void SwDocUpdtFld::InsDelFldInFldLst( sal_Bool bIns, const SwTxtFld& rFld )
     {
         // look up via the pTxtFld pointer. It is a sorted list, but it's sorted by node
         // position. Until this is found, the search for the pointer is already done.
-        for( sal_uInt16 n = 0; n < pFldSortLst->Count(); ++n )
+        for( sal_uInt16 n = 0; n < pFldSortLst->size(); ++n )
             if( &rFld == (*pFldSortLst)[ n ]->GetPointer() )
-                pFldSortLst->DeleteAndDestroy( n--, 1 );
-                // one field can occur multiple times
+            {
+                delete (*pFldSortLst)[n];
+                pFldSortLst->erase( n );
+                n--; // one field can occur multiple times
+            }
     }
 }
 
@@ -2208,7 +2202,7 @@ void SwDocUpdtFld::_MakeFldList( SwDoc& rDoc, int eGetMode )
 {
     // new version: walk all fields of the attribute pool
     delete pFldSortLst;
-    pFldSortLst = new _SetGetExpFlds( 64 );
+    pFldSortLst = new _SetGetExpFlds;
 
     /// consider and unhide sections
     ///     with hide condition, only in mode GETFLD_ALL (<eGetMode == GETFLD_ALL>)
@@ -2432,7 +2426,7 @@ void SwDocUpdtFld::GetBodyNode( const SwTxtFld& rTFld, sal_uInt16 nFldWhich )
     }
 
     if( pNew != NULL )
-        if( !pFldSortLst->Insert( pNew ))
+        if( !pFldSortLst->insert( pNew ).second )
             delete pNew;
 }
 
@@ -2470,7 +2464,7 @@ void SwDocUpdtFld::GetBodyNode( const SwSectionNode& rSectNd )
     if( !pNew )
         pNew = new _SetGetExpFld( rSectNd );
 
-    if( !pFldSortLst->Insert( pNew ))
+    if( !pFldSortLst->insert( pNew ).second )
         delete pNew;
 }
 

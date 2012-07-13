@@ -1221,7 +1221,7 @@ bool lcl_GetPostIts(
                 {
                     SwNodeIndex aIdx( pTxtFld->GetTxtNode() );
                     _PostItFld* pNew = new _PostItFld( aIdx, pTxtFld );
-                    pSrtLst->Insert( pNew );
+                    pSrtLst->insert( pNew );
                 }
                 else
                     break;  // we just wanted to check for the existence of postits ...
@@ -1396,7 +1396,7 @@ void SwDoc::UpdatePagesForPrintingWithPostItData(
     sal_Int16 nPostItMode = (sal_Int16) rOptions.getIntValue( "PrintAnnotationMode", 0 );
     OSL_ENSURE(nPostItMode == POSTITS_NONE || rData.HasPostItData(),
             "print post-its without post-it data?" );
-    const sal_uInt16 nPostItCount = rData.HasPostItData() ? rData.m_pPostItFields->Count() : 0;
+    const sal_uInt16 nPostItCount = rData.HasPostItData() ? rData.m_pPostItFields->size() : 0;
     if (nPostItMode != POSTITS_NONE && nPostItCount > 0)
     {
         SET_CURR_SHELL( rData.m_pPostItShell.get() );
