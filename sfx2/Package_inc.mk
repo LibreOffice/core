@@ -121,6 +121,7 @@ $(eval $(call gb_Package_add_file,sfx2_inc,inc/sfx2/templatelocnames.hrc,sfx2/te
 $(eval $(call gb_Package_add_file,sfx2_inc,inc/sfx2/templateview.hxx,sfx2/templateview.hxx))
 $(eval $(call gb_Package_add_file,sfx2_inc,inc/sfx2/templatefolderview.hxx,sfx2/templatefolderview.hxx))
 $(eval $(call gb_Package_add_file,sfx2_inc,inc/sfx2/templatefolderviewitem.hxx,sfx2/templatefolderviewitem.hxx))
+$(eval $(call gb_Package_add_file,sfx2_inc,inc/sfx2/templateonlineview.hxx,sfx2/templateonlineview.hxx))
 $(eval $(call gb_Package_add_file,sfx2_inc,inc/sfx2/thumbnailview.hxx,sfx2/thumbnailview.hxx))
 $(eval $(call gb_Package_add_file,sfx2_inc,inc/sfx2/thumbnailviewitem.hxx,sfx2/thumbnailviewitem.hxx))
 $(eval $(call gb_Package_add_file,sfx2_inc,inc/sfx2/titledockwin.hxx,sfx2/titledockwin.hxx))
