@@ -758,7 +758,7 @@ public class FileUtil {
     public static String getUrl(File file) {
         try {
             String url = file.toURL().toString();
-            url = url.replace("file:/", "file:///");
+            return url.replace("file:/", "file:///");
         } catch(Exception e) {
 
         }
