@@ -54,6 +54,7 @@ public:
     virtual void tearDown();
 
     void testLineBreaking();
+    void testWordBoundaries();
     void testGraphemeIteration();
     void testWeak();
     void testAsian();
@@ -67,6 +68,7 @@ public:
 
     CPPUNIT_TEST_SUITE(TestBreakIterator);
     CPPUNIT_TEST(testLineBreaking);
+    CPPUNIT_TEST(testWordBoundaries);
     CPPUNIT_TEST(testGraphemeIteration);
     CPPUNIT_TEST(testWeak);
     CPPUNIT_TEST(testAsian);
@@ -122,6 +124,47 @@ void TestBreakIterator::testLineBreaking()
             i18n::LineBreakResults aResult = m_xBreak->getLineBreak(aTest, aTest.getLength()-1, aLocale, 0, aHyphOptions, aUserOptions);
             CPPUNIT_ASSERT_MESSAGE("Expected a break at the the start of the word", aResult.breakIndex == aWord.getLength()+1);
         }
+    }
+}
+
+//See https://bugs.freedesktop.org/show_bug.cgi?id=49629
+void TestBreakIterator::testWordBoundaries()
+{
+    lang::Locale aLocale;
+    aLocale.Language = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("en"));
+    aLocale.Country = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("US"));
+
+    i18n::Boundary aBounds;
+
+    //See https://issues.apache.org/ooo/show_bug.cgi?id=11993
+    {
+        ::rtl::OUString aTest("abcd ef  ghi??? KLM");
+
+        CPPUNIT_ASSERT(!m_xBreak->isBeginWord(aTest, 4, aLocale, i18n::WordType::DICTIONARY_WORD));
+        CPPUNIT_ASSERT(m_xBreak->isEndWord(aTest, 4, aLocale, i18n::WordType::DICTIONARY_WORD));
+        aBounds = m_xBreak->getWordBoundary(aTest, 4, aLocale, i18n::WordType::DICTIONARY_WORD, true);
+        CPPUNIT_ASSERT(aBounds.startPos == 0 && aBounds.endPos == 4);
+
+        CPPUNIT_ASSERT(!m_xBreak->isBeginWord(aTest, 8, aLocale, i18n::WordType::DICTIONARY_WORD));
+        CPPUNIT_ASSERT(!m_xBreak->isEndWord(aTest, 8, aLocale, i18n::WordType::DICTIONARY_WORD));
+
+        //next word
+        aBounds = m_xBreak->getWordBoundary(aTest, 8, aLocale, i18n::WordType::DICTIONARY_WORD, true);
+        CPPUNIT_ASSERT(aBounds.startPos == 9 && aBounds.endPos == 12);
+
+        //previous word
+        aBounds = m_xBreak->getWordBoundary(aTest, 8, aLocale, i18n::WordType::DICTIONARY_WORD, false);
+        CPPUNIT_ASSERT(aBounds.startPos == 5 && aBounds.endPos == 7);
+
+        CPPUNIT_ASSERT(!m_xBreak->isBeginWord(aTest, 12, aLocale, i18n::WordType::DICTIONARY_WORD));
+        CPPUNIT_ASSERT(m_xBreak->isEndWord(aTest, 12, aLocale, i18n::WordType::DICTIONARY_WORD));
+        aBounds = m_xBreak->getWordBoundary(aTest, 12, aLocale, i18n::WordType::DICTIONARY_WORD, true);
+        CPPUNIT_ASSERT(aBounds.startPos == 9 && aBounds.endPos == 12);
+
+        CPPUNIT_ASSERT(m_xBreak->isBeginWord(aTest, 16, aLocale, i18n::WordType::DICTIONARY_WORD));
+        CPPUNIT_ASSERT(!m_xBreak->isEndWord(aTest, 16, aLocale, i18n::WordType::DICTIONARY_WORD));
+        aBounds = m_xBreak->getWordBoundary(aTest, 16, aLocale, i18n::WordType::DICTIONARY_WORD, true);
+        CPPUNIT_ASSERT(aBounds.startPos == 16 && aBounds.endPos == 19);
     }
 }
 
