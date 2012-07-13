@@ -55,8 +55,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
 
-SV_DECL_PTRARR_SORT( SwpFmts, SwFmt*, 0 )
-SV_IMPL_PTRARR_SORT( SwpFmts, SwFmt* )
+typedef std::set<SwFmt*> SwpFmts;
 
     // Sonderbehandlung fuer SvxFontItem, nur den Namen vergleichen:
 int CmpAttr( const SfxPoolItem& rItem1, const SfxPoolItem& rItem2 )
@@ -920,10 +919,10 @@ sal_Bool SwPaM::Find( const SfxPoolItem& rAttr, sal_Bool bValue, SwMoveFn fnMove
         // no hard attribution, so check if node was asked for this attr before
         if( !pNode->HasSwAttrSet() )
         {
-            const SwFmt* pTmpFmt = pNode->GetFmtColl();
-            if( aFmtArr.Count() && aFmtArr.Seek_Entry( pTmpFmt ))
+            SwFmt* pTmpFmt = pNode->GetFmtColl();
+            if( aFmtArr.find( pTmpFmt ) != aFmtArr.end() )
                 continue; // collection was requested earlier
-            aFmtArr.Insert( pTmpFmt );
+            aFmtArr.insert( pTmpFmt );
         }
 
         if( SFX_ITEM_SET == pNode->GetSwAttrSet().GetItemState( nWhich,
@@ -1016,10 +1015,10 @@ sal_Bool SwPaM::Find( const SfxItemSet& rSet, sal_Bool bNoColls, SwMoveFn fnMove
         // no hard attribution, so check if node was asked for this attr before
         if( !pNode->HasSwAttrSet() )
         {
-            const SwFmt* pTmpFmt = pNode->GetFmtColl();
-            if( aFmtArr.Count() && aFmtArr.Seek_Entry( pTmpFmt ))
+            SwFmt* pTmpFmt = pNode->GetFmtColl();
+            if( aFmtArr.find( pTmpFmt ) != aFmtArr.end() )
                 continue; // collection was requested earlier
-            aFmtArr.Insert( pTmpFmt );
+            aFmtArr.insert( pTmpFmt );
         }
 
         if( lcl_Search( *pNode, aOtherSet, bNoColls ))
