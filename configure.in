@@ -4605,7 +4605,7 @@ if test "$_os" = "Linux"; then
         BUILD_STLPORT="no"
         ;;
     esac
-elif test "$_os" = "SunOS"; then
+elif test "$_os" = "SunOS" -a "$COM" = "C52"; then
     BUILD_STLPORT="yes"
 elif test "$_os" = "WINNT" -a "$WITH_MINGW" != "yes"; then
     BUILD_STLPORT="yes"
