@@ -32,6 +32,7 @@
 #include <tools/color.hxx>
 #include <svl/svarray.hxx>
 #include <boost/ptr_container/ptr_vector.hpp>
+#include <o3tl/sorted_vector.hxx>
 
 #include <swdllapi.h>
 
@@ -230,8 +231,10 @@ inline int SwWriteTableCol::operator<( const SwWriteTableCol& rCol ) const
 }
 
 
-typedef SwWriteTableCol *SwWriteTableColPtr;
-SV_DECL_PTRARR_SORT_DEL( SwWriteTableCols, SwWriteTableColPtr, 5 )
+class SwWriteTableCols : public o3tl::sorted_vector<SwWriteTableCol*, o3tl::less_ptr_to<SwWriteTableCol> > {
+public:
+    ~SwWriteTableCols() { DeleteAndDestroyAll(); }
+};
 
 //-----------------------------------------------------------------------
 

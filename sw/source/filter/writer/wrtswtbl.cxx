@@ -42,7 +42,6 @@ using ::editeng::SvxBorderLine;
 using namespace ::com::sun::star;
 
 SV_IMPL_OP_PTRARR_SORT( SwWriteTableRows, SwWriteTableRowPtr )
-SV_IMPL_OP_PTRARR_SORT( SwWriteTableCols, SwWriteTableColPtr )
 
 //-----------------------------------------------------------------------
 
@@ -277,7 +276,7 @@ sal_uInt16 SwWriteTable::MergeBoxBorders( const SwTableBox *pBox,
     if( rBoxItem.GetRight() )
     {
         nBorderMask |= 8;
-        MergeBorders( rBoxItem.GetRight(), nCol+nColSpan==aCols.Count() );
+        MergeBorders( rBoxItem.GetRight(), nCol+nColSpan==aCols.size() );
     }
 
     // If any distance is set, the smallest one is used. This holds for
@@ -335,7 +334,7 @@ sal_uInt16 SwWriteTable::GetRightSpace( sal_uInt16 nCol, sal_uInt16 nColSpan ) c
 
     // In der letzten Spalte noch einmal zusaetzlich CELLSPACING und
     // und die Liniendicke abziehen
-    if( nCol+nColSpan==aCols.Count() )
+    if( nCol+nColSpan==aCols.size() )
     {
         nSpace += (nCellSpacing + nRightSub);
 
@@ -493,11 +492,8 @@ void SwWriteTable::CollectTableRowsCols( long nStartRPos,
                 nCPos = nCPos + GetBoxWidth( pBox );
                 SwWriteTableCol *pCol = new SwWriteTableCol( nCPos );
 
-                sal_uInt16 nCol;
-                if( aCols.Seek_Entry( pCol, &nCol ) )
+                if( !aCols.insert( pCol ).second )
                     delete pCol;
-                else
-                    aCols.Insert( pCol );
 
                 if( nBox==nBoxes-1 )
                 {
@@ -522,9 +518,10 @@ void SwWriteTable::CollectTableRowsCols( long nStartRPos,
                 }
 #endif
                 nCPos = nStartCPos + nParentLineWidth;
+
 #if OSL_DEBUG_LEVEL > 0
-                SwWriteTableCol aCol( nStartCPos + nParentLineWidth );
-                OSL_ENSURE( aCols.Seek_Entry(&aCol),
+                SwWriteTableCol aSrchCol( nCPos );
+                OSL_ENSURE( aCols.find( &aSrchCol ) != aCols.end(),
                         "Parent-Zelle nicht gefunden" );
                 OSL_ENSURE( SwWriteTableCol(nCheckPos) ==
                                             SwWriteTableCol(nCPos),
@@ -629,10 +626,8 @@ void SwWriteTable::FillTableRowsCols( long nStartRPos, sal_uInt16 nStartRow,
             sal_Bool bOutAtRow = !nParentLineWidth;
             if( !bOutAtRow && nStartCPos==0 )
             {
-                sal_uInt16 nEndCol;
                 SwWriteTableCol aCol( nParentLineWidth );
-                bOutAtRow = aCols.Seek_Entry(&aCol,&nEndCol) &&
-                            nEndCol == aCols.Count()-1;
+                bOutAtRow = aCols.find( &aCol ) == (aCols.end() - 1);
             }
             if( bOutAtRow )
             {
@@ -669,10 +664,10 @@ void SwWriteTable::FillTableRowsCols( long nStartRPos, sal_uInt16 nStartRow,
 
             // Und ihren Index
             sal_uInt16 nOldCol = nCol;
-            SwWriteTableCol aCol( nCPos );
-            bool const bFound2 = aCols.Seek_Entry( &aCol, &nCol );
-            OSL_ENSURE( bFound2, "missing column" );
-            (void) bFound2; // unused in non-debug
+            SwWriteTableCol aSrchCol( nCPos );
+            SwWriteTableCols::const_iterator it = aCols.find( &aSrchCol );
+            OSL_ENSURE( it != aCols.end(), "missing column" );
+            nCol = it - aCols.begin();
 
             if( !ShouldExpandSub( pBox, bSubExpanded, nDepth ) )
             {
@@ -700,7 +695,7 @@ void SwWriteTable::FillTableRowsCols( long nStartRPos, sal_uInt16 nStartRow,
                     // #i30094# add a sanity check here to ensure that
                     // we don't access an invalid aCols[] as &nCol
                     // above can be changed.
-                    if (!(nBorderMask & 4) && nOldCol < aCols.Count())
+                    if (!(nBorderMask & 4) && nOldCol < aCols.size())
                     {
                         SwWriteTableCol *pCol = aCols[nOldCol];
                         OSL_ENSURE(pCol, "No TableCol found, panic!");
@@ -766,7 +761,7 @@ SwWriteTable::SwWriteTable(const SwTableLines& rLines, long nWidth,
     // Erstmal die Tabellen-Struktur festlegen. Hinter der Tabelle ist in
     // jedem Fall eine Spalte zu Ende
     SwWriteTableCol *pCol = new SwWriteTableCol( nParentWidth );
-    aCols.Insert( pCol );
+    aCols.insert( pCol );
     CollectTableRowsCols( 0, 0, 0, nParentWidth, rLines, nMaxDepth - 1 );
 
     // Und jetzt mit leben fuellen
@@ -814,7 +809,7 @@ SwWriteTable::SwWriteTable( const SwHTMLTableLayout *pLayoutInfo )
                                pLayoutCol->IsRelWidthOption() );
         }
 
-        aCols.Insert( pCol );
+        aCols.insert( pCol );
     }
 
     for( nRow=0; nRow<nRows; nRow++ )

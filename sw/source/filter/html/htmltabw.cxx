@@ -593,9 +593,9 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
         nFrameMask &= ~1;
     if( !(aRows[aRows.Count()-1])->bBottomBorder )
         nFrameMask &= ~2;
-    if( !(aCols[0])->bLeftBorder )
+    if( !(aCols.front())->bLeftBorder )
         nFrameMask &= ~4;
-    if( !(aCols[aCols.Count()-1])->bRightBorder )
+    if( !(aCols.back())->bRightBorder )
         nFrameMask &= ~8;
 
     // Wert fur RULES bestimmen
@@ -626,7 +626,7 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
     sal_Bool bColsHaveBorderOnly = sal_True;
     SwWriteTableCol *pCol = aCols[0];
     sal_uInt16 nCol;
-    for( nCol=1; nCol<aCols.Count(); nCol++ )
+    for( nCol=1; nCol<aCols.size(); nCol++ )
     {
         SwWriteTableCol *pNextCol = aCols[nCol];
         sal_Bool bBorder = ( pCol->bRightBorder || pNextCol->bLeftBorder );
@@ -660,7 +660,7 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
     if( bColsOption )
     {
         sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_cols).
-            append('=').append(static_cast<sal_Int32>(aCols.Count()));
+            append('=').append(static_cast<sal_Int32>(aCols.size()));
     }
 
     // ALIGN= ausgeben
@@ -763,7 +763,7 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
         HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_caption, sal_False );
     }
 
-    sal_uInt16 nCols = aCols.Count();
+    sal_uInt16 nCols = aCols.size();
 
     // <COLGRP>/<COL> ausgeben: Bei Export ueber Layout nur wenn beim
     // Import welche da waren, sonst immer.
