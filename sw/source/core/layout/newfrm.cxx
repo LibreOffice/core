@@ -54,6 +54,7 @@
 #include "IDocumentDrawModelAccess.hxx"
 #include <hints.hxx>
 #include <viewopt.hxx>
+#include <set>
 
 SwLayVout     *SwRootFrm::pVout = 0;
 sal_Bool           SwRootFrm::bInPaint = sal_False;
@@ -394,9 +395,7 @@ void _FrmFinit()
 |*
 |*************************************************************************/
 
-typedef CurrShell* CurrShellPtr;
-SV_DECL_PTRARR_SORT(SwCurrShells,CurrShellPtr,4)
-SV_IMPL_PTRARR_SORT(SwCurrShells,CurrShellPtr)
+class SwCurrShells : public std::set<CurrShell*> {};
 
 CurrShell::CurrShell( ViewShell *pNew )
 {
@@ -406,7 +405,7 @@ CurrShell::CurrShell( ViewShell *pNew )
     {
         pPrev = pRoot->pCurrShell;
         pRoot->pCurrShell = pNew;
-        pRoot->pCurrShells->Insert( this );
+        pRoot->pCurrShells->insert( this );
     }
     else
         pPrev = 0;
@@ -416,10 +415,10 @@ CurrShell::~CurrShell()
 {
     if ( pRoot )
     {
-        pRoot->pCurrShells->Remove( this );
+        pRoot->pCurrShells->erase( this );
         if ( pPrev )
             pRoot->pCurrShell = pPrev;
-        if ( !pRoot->pCurrShells->Count() && pRoot->pWaitingCurrShell )
+        if ( pRoot->pCurrShells->empty() && pRoot->pWaitingCurrShell )
         {
             pRoot->pCurrShell = pRoot->pWaitingCurrShell;
             pRoot->pWaitingCurrShell = 0;
@@ -430,7 +429,7 @@ CurrShell::~CurrShell()
 void SetShell( ViewShell *pSh )
 {
     SwRootFrm *pRoot = pSh->GetLayout();
-    if ( !pRoot->pCurrShells->Count() )
+    if ( pRoot->pCurrShells->empty() )
         pRoot->pCurrShell = pSh;
     else
         pRoot->pWaitingCurrShell = pSh;
@@ -447,9 +446,9 @@ void SwRootFrm::DeRegisterShell( ViewShell *pSh )
         pWaitingCurrShell = 0;
 
     // Remove references
-    for ( sal_uInt16 i = 0; i < pCurrShells->Count(); ++i )
+    for ( SwCurrShells::iterator it = pCurrShells->begin(); it != pCurrShells->end(); ++it )
     {
-        CurrShell *pC = (*pCurrShells)[i];
+        CurrShell *pC = *it;
         if (pC->pPrev == pSh)
             pC->pPrev = 0;
     }
@@ -623,8 +622,8 @@ SwRootFrm::~SwRootFrm()
     pDestroy = 0;
 
     // Remove references
-    for ( sal_uInt16 i = 0; i < pCurrShells->Count(); ++i )
-        (*pCurrShells)[i]->pRoot = 0;
+    for ( SwCurrShells::iterator it = pCurrShells->begin(); it != pCurrShells->end(); ++it )
+        (*it)->pRoot = 0;
 
     delete pCurrShells;
     pCurrShells = 0;
