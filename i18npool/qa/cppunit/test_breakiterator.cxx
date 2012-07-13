@@ -183,6 +183,43 @@ void TestBreakIterator::testWordBoundaries()
 
         CPPUNIT_ASSERT(m_xBreak->isEndWord(aTest, 3, aLocale, i18n::WordType::ANYWORD_IGNOREWHITESPACES));
     }
+
+    //See https://issues.apache.org/ooo/show_bug.cgi?id=14904
+    {
+        const sal_Unicode TEST1[] =
+        {
+            'W', 'o', 'r', 'k', 'i', 'n', 'g', ' ', 0x201C, 'W', 'o', 'r', 'd', 's',
+            ' ', 's', 't', 'a', 'r', 't', 'i', 'n', 'g', ' ', 'w', 'i', 't',
+            'h', ' ', 'q', 'u', 'o', 't', 'e', 's', 0x201D, ' ', 'W', 'o', 'r', 'k',
+            'i', 'n', 'g', ' ', 0x2018, 'B', 'r', 'o', 'k', 'e', 'n', 0x2019, ' ',
+            '?', 'S', 'p', 'a', 'n', 'i', 's', 'h', '?', ' ', 'd', 'o', 'e',
+            's', 'n', 0x2019, 't', ' ', 'w', 'o', 'r', 'k', '.', ' ', 'N', 'o',
+            't', ' ', 'e', 'v', 'e', 'n', ' ' , 0x00BF, 'r', 'e', 'a', 'l', '?', ' ',
+            'S', 'p', 'a', 'n', 'i', 's', 'h'
+        };
+        ::rtl::OUString aTest(TEST1, SAL_N_ELEMENTS(TEST1));
+
+        aBounds = m_xBreak->getWordBoundary(aTest, 4, aLocale, i18n::WordType::DICTIONARY_WORD, false);
+        CPPUNIT_ASSERT(aBounds.startPos == 0 && aBounds.endPos == 7);
+
+        aBounds = m_xBreak->getWordBoundary(aTest, 12, aLocale, i18n::WordType::DICTIONARY_WORD, false);
+        CPPUNIT_ASSERT(aBounds.startPos == 9 && aBounds.endPos == 14);
+
+        aBounds = m_xBreak->getWordBoundary(aTest, 40, aLocale, i18n::WordType::DICTIONARY_WORD, false);
+        CPPUNIT_ASSERT(aBounds.startPos == 37 && aBounds.endPos == 44);
+
+        aBounds = m_xBreak->getWordBoundary(aTest, 49, aLocale, i18n::WordType::DICTIONARY_WORD, false);
+        CPPUNIT_ASSERT(aBounds.startPos == 46 && aBounds.endPos == 52);
+
+        aBounds = m_xBreak->getWordBoundary(aTest, 58, aLocale, i18n::WordType::DICTIONARY_WORD, false);
+        CPPUNIT_ASSERT(aBounds.startPos == 55 && aBounds.endPos == 62);
+
+        aBounds = m_xBreak->getWordBoundary(aTest, 67, aLocale, i18n::WordType::DICTIONARY_WORD, false);
+        CPPUNIT_ASSERT(aBounds.startPos == 64 && aBounds.endPos == 71);
+
+        aBounds = m_xBreak->getWordBoundary(aTest, 90, aLocale, i18n::WordType::DICTIONARY_WORD, false);
+        CPPUNIT_ASSERT(aBounds.startPos == 88 && aBounds.endPos == 92);
+    }
 }
 
 //See http://qa.openoffice.org/issues/show_bug.cgi?id=111152
