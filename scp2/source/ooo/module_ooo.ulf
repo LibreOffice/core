@@ -131,7 +131,7 @@ en-US = "Greek spelling dictionary, and hyphenation rules"
 en-US = "Spanish"
 
 [STR_DESC_MODULE_EXTENSION_DICTIONARY_ES]
-en-US = "Spanish spelling dictionary"
+en-US = "Spanish spelling dictionary, hyphenation rules, and thesaurus"
 
 [STR_NAME_MODULE_EXTENSION_DICTIONARY_ET]
 en-US = "Estonian"
