@@ -483,6 +483,21 @@ void ScAttrArray::SetPatternArea(SCROW nStartRow, SCROW nEndRow, const ScPattern
 #endif
 }
 
+void ScAttrArray::SwapPattern( ScAttrArray& rArray2, SCROW nRow1, SCROW nRow2, const ScPatternAttr* pPattern1, const ScPatternAttr* pPattern2)
+{
+    if(!VALIDROW(nRow1) || !VALIDROW(nRow2))
+        return;
+
+    SCSIZE nIndex1 = 0;
+    SCSIZE nIndex2 = 0;
+    Search(nRow1, nIndex1);
+    rArray2.Search(nRow2, nIndex2);
+    pData[nIndex1].pPattern = pPattern1;
+    rArray2.pData[nIndex2].pPattern = pPattern2;
+
+    if (pDocument->IsStreamValid(nTab))
+        pDocument->SetStreamValid(nTab, false);
+}
 
 void ScAttrArray::ApplyStyleArea( SCROW nStartRow, SCROW nEndRow, ScStyleSheet* pStyle )
 {

@@ -307,6 +307,7 @@ public:
                                   ScEditDataArray* pDataArray = NULL );
     bool        SetAttrEntries(ScAttrEntry* pData, SCSIZE nSize);
     void        SetPattern( SCROW nRow, const ScPatternAttr& rPatAttr, bool bPutToPool = false );
+    void        SwapPattern( ScColumn& rCol, SCROW nRow1, SCROW nRow2, const ScPatternAttr& rPatAttr1, const ScPatternAttr& rPatAttr2 );
     void        SetPatternArea( SCROW nStartRow, SCROW nEndRow,
                                 const ScPatternAttr& rPatAttr, bool bPutToPool = false );
     void        ApplyPatternIfNumberformatIncompatible( const ScRange& rRange,

@@ -652,6 +652,11 @@ void ScColumn::SetPattern( SCROW nRow, const ScPatternAttr& rPatAttr, bool bPutT
     pAttrArray->SetPattern( nRow, &rPatAttr, bPutToPool );
 }
 
+void ScColumn::SwapPattern( ScColumn& rCol2, SCROW nRow1, SCROW nRow2, const ScPatternAttr& rPatAttr1, const ScPatternAttr& rPatAttr2 )
+{
+    pAttrArray->SwapPattern( *rCol2.pAttrArray, nRow1, nRow2, &rPatAttr1, &rPatAttr2 );
+}
+
 
 void ScColumn::SetPatternArea( SCROW nStartRow, SCROW nEndRow,
                                 const ScPatternAttr& rPatAttr, bool bPutToPool )
