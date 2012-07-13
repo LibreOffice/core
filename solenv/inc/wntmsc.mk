@@ -195,7 +195,7 @@ CFLAGSWERRCC=-WX -DLIBO_WERROR
 # Once all modules on this platform compile without warnings, set
 # COMPILER_WARN_ERRORS=TRUE here instead of setting MODULES_WITH_WARNINGS (see
 # settings.mk):
-MODULES_WITH_WARNINGS :=
+MODULES_WITH_WARNINGS := binfilter
 
 CDEFS+=-DWIN32 -D_MT -DWINVER=0x0500 -D_WIN32_WINNT=0x0500 -D_WIN32_IE=0x0500
 .IF "$(COMEX)" == "11"
