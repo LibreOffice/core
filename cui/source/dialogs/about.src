@@ -114,7 +114,4 @@ ModalDialog RID_DEFAULTABOUT
         DefButton = TRUE ;
         Text [ en-US ] = "~Close";
     };
-    FixedImage ABOUT_IMAGE_LOGO
-    {
-    };
 };
