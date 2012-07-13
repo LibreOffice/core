@@ -53,6 +53,7 @@ struct DocxSettingsData
     DocxSettingsData();
     bool hasData() const; /// returns true if there are any non-default settings (i.e. something to write)
     bool evenAndOddHeaders;
+    int defaultTabStop;
 };
 
 /// The class that does all the actual DOCX export-related work.
@@ -217,8 +218,8 @@ public:
     /// Reference to the VMLExport instance for the main document.
     oox::vml::VMLExport& VMLExporter();
 
-    /// Data to be exported in the settings part of the document
-    DocxSettingsData& settingsData();
+    /// Set the document default tab stop.
+    void setDefaultTabStop( int stop ) { settings.defaultTabStop = stop; }
 
 private:
     /// No copying.

@@ -3757,7 +3757,12 @@ void DocxAttributeOutput::ParaTabStop( const SvxTabStopItem& rTabStop )
 
     sal_uInt16 nCount = rTabStop.Count();
     for (sal_uInt16 i = 0; i < nCount; i++ )
-        impl_WriteTabElement( m_pSerializer, rTabStop[i], nCurrentLeft );
+    {
+        if( rTabStop[i].GetAdjustment() != SVX_TAB_ADJUST_DEFAULT )
+            impl_WriteTabElement( m_pSerializer, rTabStop[i], nCurrentLeft );
+        else
+            GetExport().setDefaultTabStop( rTabStop[i].GetTabPos());
+    }
 
     m_pSerializer->endElementNS( XML_w, XML_tabs );
 }
