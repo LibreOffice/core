@@ -1,0 +1,2 @@
+RegistrationClassName: com.sun.star.report.pentaho.SOReportJobFactory
+UNO-Type-Path: 
