@@ -149,7 +149,7 @@ void list_view_builder::insert_item(const std::wstring& title, const std::wstrin
     lvi.iSubItem   = 0;
     lvi.mask       = LVIF_TEXT;
     lvi.state      = 0;
-    lvi.cchTextMax = title.size() + 1;
+    lvi.cchTextMax = static_cast<int>(title.size() + 1);
     lvi.stateMask  = 0;
     lvi.pszText    = const_cast<wchar_t*>(title.c_str());
 
@@ -211,7 +211,7 @@ void winxp_list_view_builder::insert_group(const std::wstring& name)
     lvg.cbSize    = sizeof(lvg);
     lvg.mask      = LVGF_HEADER | LVGF_STATE | LVGF_GROUPID;
     lvg.pszHeader = const_cast<wchar_t*>(name.c_str());
-    lvg.cchHeader = name.size() + 1;
+    lvg.cchHeader = static_cast<int>(name.size() + 1);
     lvg.iGroupId  = ++group_count_;
     lvg.state     = LVGS_NORMAL;
     lvg.uAlign    = LVGA_HEADER_CENTER;
