@@ -4615,7 +4615,7 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
                 SwFlyFrmFmt* pPrevFlyFmt = 0;
                 // ggfs. Nachfolger ermitteln
                 SvxMSDffShapeTxBxSort::iterator tmpIter1 = it;
-                tmpIter1++;
+                ++tmpIter1;
                 if( tmpIter1 != aTxBxSort.end() )
                 {
                     SvxMSDffShapeOrder *pNextOrder = *tmpIter1;
@@ -4627,7 +4627,7 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
                 if( it != aTxBxSort.begin() )
                 {
                     SvxMSDffShapeTxBxSort::iterator tmpIter2 = it;
-                    tmpIter2--;
+                    --tmpIter2;
                     SvxMSDffShapeOrder *pPrevOrder = *tmpIter2;
                     if ((0xFFFF0000 & pOrder->nTxBxComp)
                            == (0xFFFF0000 & pPrevOrder->nTxBxComp))
