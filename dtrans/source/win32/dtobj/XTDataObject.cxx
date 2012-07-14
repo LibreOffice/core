@@ -832,7 +832,7 @@ STDMETHODIMP CEnumFormatEtc::Clone( IEnumFORMATETC** ppenum )
         return E_INVALIDARG;
 
     *ppenum = new CEnumFormatEtc( m_lpUnkOuter, m_FormatEtcContainer );
-    if ( NULL != ppenum )
+    if ( NULL != *ppenum )
         static_cast< LPUNKNOWN >( *ppenum )->AddRef( );
 
     return ( NULL != *ppenum ) ? S_OK : E_OUTOFMEMORY;
