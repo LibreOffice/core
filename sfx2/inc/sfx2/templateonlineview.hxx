@@ -12,6 +12,8 @@
 
 #include <sfx2/thumbnailview.hxx>
 
+#include <com/sun/star/ucb/XCommandEnvironment.hpp>
+
 class TemplateOnlineView : public ThumbnailView
 {
 public:
@@ -19,6 +21,15 @@ public:
     TemplateOnlineView (Window *pParent, WinBits nWinStyle, bool bDisableTransientChildren);
 
     virtual ~TemplateOnlineView ();
+
+    // Load repositories from user settings.
+    void Populate ();
+
+private:
+
+    com::sun::star::uno::Sequence< rtl::OUString > maUrls;
+    com::sun::star::uno::Sequence< rtl::OUString > maNames;
+    com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment > m_xCmdEnv;
 };
 
 #endif // __SFX2_TEMPLATEONLINEVIEW_HXX__
