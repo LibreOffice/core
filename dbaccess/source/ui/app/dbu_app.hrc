@@ -60,5 +60,4 @@
 #error Resource-Id Ueberlauf in #file, #line
 #endif
 
-#endif // _DBU_BRW_HRC_
-
+#endif // _DBU_APP_HRC_
