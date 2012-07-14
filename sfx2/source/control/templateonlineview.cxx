@@ -13,15 +13,21 @@
 #include <officecfg/Office/Common.hxx>
 #include <sfx2/templateonlineviewitem.hxx>
 #include <sfx2/templateview.hxx>
+#include <sfx2/templateviewitem.hxx>
 #include <ucbhelper/content.hxx>
 #include <ucbhelper/commandenvironment.hxx>
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
+#include <com/sun/star/sdbc/XResultSet.hpp>
+#include <com/sun/star/sdbc/XRow.hpp>
+#include <com/sun/star/ucb/XContentAccess.hpp>
+#include <com/sun/star/ucb/XDynamicResultSet.hpp>
 
 using namespace com::sun::star;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::task;
+using namespace com::sun::star::sdbc;
 using namespace com::sun::star::ucb;
 using namespace com::sun::star::uno;
 
@@ -29,7 +35,7 @@ TemplateOnlineView::TemplateOnlineView (Window *pParent, WinBits nWinStyle, bool
     : ThumbnailView(pParent,nWinStyle,bDisableTransientChildren),
       mpItemView(new TemplateView(this,NULL))
 {
-    mpItemView->SetPosPixel(Point(0,0));
+    mpItemView->SetColor(Color(COL_WHITE));
 
     Reference< XMultiServiceFactory > xFactory = comphelper::getProcessServiceFactory();
     Reference< XInteractionHandler >  xGlobalInteractionHandler = Reference< XInteractionHandler >(
