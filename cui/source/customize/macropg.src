@@ -40,7 +40,7 @@ TabPage RID_SVXPAGE_MACROASSIGN
     Hide = TRUE ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( WIDTH_TP , HEIGHT_TP ) ;
+    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
     Text [ en-US ] = "Assign action" ;
     String STR_EVENT
     {

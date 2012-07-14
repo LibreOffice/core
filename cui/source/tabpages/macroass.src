@@ -36,7 +36,7 @@ TabPage RID_SVXPAGE_EVENTASSIGN
     Hide = TRUE ;
     SVLook = TRUE ;
     DialogControl = TRUE ;
-    Size = MAP_APPFONT ( WIDTH_TP , HEIGHT_TP ) ;
+    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
     Text [ en-US ] = "Assign Macro" ;
     String STR_EVENT
     {
