@@ -422,9 +422,13 @@ bool IcuLayoutEngine::operator()( ServerFontLayout& rLayout, ImplLayoutArgs& rAr
         le_int32 eScriptCode = -1;
         for( int i = nMinRunPos; i < nEndRunPos; ++i )
         {
-            eScriptCode = uscript_getScript( pIcuChars[i], &rcI18n );
-            if( (eScriptCode > 0) && (eScriptCode != latnScriptCode) )
-                break;
+            le_int32 eNextScriptCode = uscript_getScript( pIcuChars[i], &rcI18n );
+            if( (eNextScriptCode > USCRIPT_INHERITED) )
+            {
+                eScriptCode = eNextScriptCode;
+                if (eNextScriptCode != latnScriptCode)
+                    break;
+            }
         }
         if( eScriptCode < 0 )   // TODO: handle errors better
             eScriptCode = latnScriptCode;
