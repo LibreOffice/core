@@ -187,6 +187,7 @@ public:
 
     using LEFontInstance::mapCharToGlyph;
     virtual LEGlyphID       mapCharToGlyph( LEUnicode32 ch ) const;
+    virtual LEGlyphID       mapCharToGlyph( LEUnicode32 ch, const LECharMapper *mapper, le_bool filterZeroWidth ) const;
 
     virtual le_int32        getAscent() const;
     virtual le_int32        getDescent() const;
@@ -261,6 +262,18 @@ LEGlyphID IcuFontFromServerFont::mapCharToGlyph( LEUnicode32 ch ) const
 {
     LEGlyphID nGlyphIndex = mrServerFont.GetRawGlyphIndex( ch );
     return nGlyphIndex;
+}
+
+LEGlyphID IcuFontFromServerFont::mapCharToGlyph( LEUnicode32 ch, const LECharMapper *mapper, le_bool /*filterZeroWidth*/ ) const
+{
+    /*
+     fdo#31821, icu has...
+      >│93          if (filterZeroWidth && (mappedChar == 0x200C || mappedChar == 0x200D)) {                                            │
+       │94              return canDisplay(mappedChar) ? 0x0001 : 0xFFFF;                                                                 │
+       │95          }
+     so only the Indic layouts allow the joiners to get mapped to glyphs
+    */
+    return LEFontInstance::mapCharToGlyph( ch, mapper, false );
 }
 
 // -----------------------------------------------------------------------
