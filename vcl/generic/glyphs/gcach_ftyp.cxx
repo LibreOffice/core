@@ -449,7 +449,9 @@ static unsigned GetUInt( const unsigned char* p ) { return((p[0]<<24)+(p[1]<<16)
 static unsigned GetUShort( const unsigned char* p ){ return((p[0]<<8)+p[1]);}
 //static signed GetSShort( const unsigned char* p ){ return((short)((p[0]<<8)+p[1]));}
 
-// -----------------------------------------------------------------------
+static const sal_uInt32 T_true = 0x74727565;        /* 'true' */
+static const sal_uInt32 T_ttcf = 0x74746366;        /* 'ttcf' */
+static const sal_uInt32 T_otto = 0x4f54544f;        /* 'OTTO' */
 
 const unsigned char* FtFontInfo::GetTable( const char* pTag, sal_uLong* pLength ) const
 {
@@ -458,12 +460,13 @@ const unsigned char* FtFontInfo::GetTable( const char* pTag, sal_uLong* pLength 
     if( !pBuffer || nFileSize<1024 )
         return NULL;
 
-    // we currently only handle TTF and TTC headers
+    // we currently handle TTF, TTC and OTF headers
     unsigned nFormat = GetUInt( pBuffer );
+
     const unsigned char* p = pBuffer + 12;
-    if( nFormat == 0x74746366 )         // TTC_MAGIC
+    if( nFormat == T_ttcf )         // TTC_MAGIC
         p += GetUInt( p + 4 * mnFaceNum );
-    else if( (nFormat!=0x00010000) && (nFormat!=0x74727565) )    // TTF_MAGIC and Apple TTF Magic
+    else if( nFormat != 0x00010000 && nFormat != T_true && nFormat != T_otto) // TTF_MAGIC and Apple TTF Magic and PS-OpenType font
         return NULL;
 
     // walk table directory until match
