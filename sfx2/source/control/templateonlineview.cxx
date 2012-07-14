@@ -12,6 +12,7 @@
 #include <comphelper/processfactory.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <sfx2/templateonlineviewitem.hxx>
+#include <sfx2/templateview.hxx>
 #include <ucbhelper/content.hxx>
 #include <ucbhelper/commandenvironment.hxx>
 
@@ -25,8 +26,11 @@ using namespace com::sun::star::ucb;
 using namespace com::sun::star::uno;
 
 TemplateOnlineView::TemplateOnlineView (Window *pParent, WinBits nWinStyle, bool bDisableTransientChildren)
-    : ThumbnailView(pParent,nWinStyle,bDisableTransientChildren)
+    : ThumbnailView(pParent,nWinStyle,bDisableTransientChildren),
+      mpItemView(new TemplateView(this,NULL))
 {
+    mpItemView->SetPosPixel(Point(0,0));
+
     Reference< XMultiServiceFactory > xFactory = comphelper::getProcessServiceFactory();
     Reference< XInteractionHandler >  xGlobalInteractionHandler = Reference< XInteractionHandler >(
         xFactory->createInstance("com.sun.star.task.InteractionHandler" ), UNO_QUERY );
@@ -36,6 +40,7 @@ TemplateOnlineView::TemplateOnlineView (Window *pParent, WinBits nWinStyle, bool
 
 TemplateOnlineView::~TemplateOnlineView ()
 {
+    delete mpItemView;
 }
 
 void TemplateOnlineView::Populate()
@@ -61,6 +66,18 @@ void TemplateOnlineView::Populate()
 
     if (IsReallyVisible() && IsUpdateMode())
         Invalidate();
+}
+
+void TemplateOnlineView::setItemDimensions(long ItemWidth, long ThumbnailHeight, long DisplayHeight, int itemPadding)
+{
+    ThumbnailView::setItemDimensions(ItemWidth,ThumbnailHeight,DisplayHeight,itemPadding);
+
+    mpItemView->setItemDimensions(ItemWidth,ThumbnailHeight,DisplayHeight,itemPadding);
+}
+
+void TemplateOnlineView::Resize()
+{
+    mpItemView->SetSizePixel(GetSizePixel());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

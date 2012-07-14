@@ -14,6 +14,8 @@
 
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 
+class TemplateView;
+
 class TemplateOnlineView : public ThumbnailView
 {
 public:
@@ -25,7 +27,15 @@ public:
     // Load repositories from user settings.
     void Populate ();
 
+    void setItemDimensions (long ItemWidth, long ThumbnailHeight, long DisplayHeight, int itemPadding);
+
 private:
+
+    virtual void Resize ();
+
+private:
+
+    TemplateView *mpItemView;
 
     com::sun::star::uno::Sequence< rtl::OUString > maUrls;
     com::sun::star::uno::Sequence< rtl::OUString > maNames;
