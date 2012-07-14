@@ -17,6 +17,7 @@
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/templatefolderview.hxx>
 #include <sfx2/templatefolderviewitem.hxx>
+#include <sfx2/templateonlineview.hxx>
 #include <sfx2/templateviewitem.hxx>
 #include <sfx2/thumbnailviewitem.hxx>
 #include <tools/urlobj.hxx>
@@ -97,6 +98,7 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
       mpTemplateBar( new ToolBox(this, SfxResId(TBX_ACTION_TEMPLATES))),
       mpSearchView(new TemplateSearchView(this)),
       maView(new TemplateFolderView(this,SfxResId(TEMPLATE_VIEW))),
+      mpOnlineView(new TemplateOnlineView(this, WB_VSCROLL,false)),
       mnSelectionCount(0),
       mxDesktop(comphelper::getProcessServiceFactory()->createInstance( "com.sun.star.frame.Desktop" ),uno::UNO_QUERY )
 {
@@ -221,6 +223,8 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
     mpViewBar->Show();
     mpActionBar->Show();
 
+    switchMainView(true);
+
     maView->Populate();
     maView->Show();
 
@@ -235,6 +239,7 @@ SfxTemplateManagerDlg::~SfxTemplateManagerDlg ()
     delete mpTemplateBar;
     delete mpSearchView;
     delete maView;
+    delete mpOnlineView;
     delete mpCreateMenu;
     delete mpActionMenu;
 }
@@ -312,6 +317,12 @@ IMPL_LINK_NOARG(SfxTemplateManagerDlg,TBXViewHdl)
         break;
     case TBI_TEMPLATE_FOLDER_DEL:
         OnFolderDelete();
+        break;
+    case TBI_TEMPLATE_LOCAL:
+        switchMainView(true);
+        break;
+    case TBI_TEMPLATE_ONLINE:
+        switchMainView(false);
         break;
     default:
         break;
@@ -812,6 +823,26 @@ void SfxTemplateManagerDlg::centerTopButtons()
 
     aBtnPos.setX(aBtnPos.getX() + aBtnSize.getWidth());
     maButtonSelMode.SetPosPixel(aBtnPos);
+}
+
+void SfxTemplateManagerDlg::switchMainView(bool bDisplayLocal)
+{
+    if (bDisplayLocal)
+    {
+        mpViewBar->ShowItem(TBI_TEMPLATE_ONLINE);
+        mpViewBar->HideItem(TBI_TEMPLATE_LOCAL);
+
+        mpOnlineView->Hide();
+        maView->Show();
+    }
+    else
+    {
+        mpViewBar->ShowItem(TBI_TEMPLATE_LOCAL);
+        mpViewBar->HideItem(TBI_TEMPLATE_ONLINE);
+
+        maView->Hide();
+        mpOnlineView->Show();
+    }
 }
 
 void lcl_createTemplate(uno::Reference< com::sun::star::frame::XComponentLoader > xDesktop,

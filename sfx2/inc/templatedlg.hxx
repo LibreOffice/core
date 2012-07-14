@@ -18,6 +18,7 @@
 class Edit;
 class PopupMenu;
 class TemplateFolderView;
+class TemplateOnlineView;
 class TemplateSearchView;
 class ThumbnailView;
 class ThumbnailViewItem;
@@ -76,6 +77,9 @@ private:
 
     void centerTopButtons ();
 
+    // Exchange view between local/online view.
+    void switchMainView (bool bDisplayLocal);
+
 private:
 
     PushButton aButtonAll;
@@ -92,6 +96,7 @@ private:
     ToolBox *mpTemplateBar;
     TemplateSearchView *mpSearchView;
     TemplateFolderView *maView;
+    TemplateOnlineView *mpOnlineView;
     PopupMenu *mpCreateMenu;
     PopupMenu *mpActionMenu;
 
