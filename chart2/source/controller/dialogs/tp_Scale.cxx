@@ -569,13 +569,6 @@ int ScaleTabPage::DeactivatePage(SfxItemSet* pItemSet)
     bool bDateAxis = chart2::AxisType::DATE == m_nAxisType;
 
     sal_uInt32 nIndex = pNumFormatter->GetStandardIndex(LANGUAGE_SYSTEM);
-    const SfxPoolItem *pPoolItem = NULL;
-    if( GetItemSet().GetItemState( SID_ATTR_NUMBERFORMAT_VALUE, sal_True, &pPoolItem ) == SFX_ITEM_SET )
-        nIndex = static_cast< sal_uInt32 >( static_cast< const SfxInt32Item* >(pPoolItem)->GetValue());
-    else
-    {
-        OSL_FAIL( "Using Standard Language" );
-    }
 
     Control* pControl = NULL;
     sal_uInt16 nErrStrId = 0;
