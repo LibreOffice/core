@@ -43,27 +43,4 @@
 #define SID_INSERT                      (SID_CHAOS_START + 90)
 #define SID_VIEW_FLD_PIC                (SID_CHAOS_START + 185)
 
-// -----    Help IDs    -----
-
-#define HID_CHAOS_NEW_IMAP_BOX          HID_CHAOS_START
-#define HID_CHAOS_NEW_IMAP_MSG          (HID_CHAOS_START + 1)
-#define HID_CHAOS_NEW_IMAP_FLD          (HID_CHAOS_START + 2)
-#define HID_CHAOS_NEW_NEWS_BOX          (HID_CHAOS_START + 3)
-#define HID_CHAOS_NEW_NEWS_MSG          (HID_CHAOS_START + 4)
-#define HID_CHAOS_NEW_FSYS_FLD          (HID_CHAOS_START + 5)
-#define HID_CHAOS_NEW_FSYS_LNK          (HID_CHAOS_START + 6)
-#define HID_CHAOS_NEW_FTP_BOX           (HID_CHAOS_START + 7)
-#define HID_CHAOS_NEW_FTP_FLD           (HID_CHAOS_START + 8)
-#define HID_CHAOS_NEW_OUT_BOX           (HID_CHAOS_START + 9)
-#define HID_CHAOS_NEW_OUT_MSG           (HID_CHAOS_START + 10)
-#define HID_CHAOS_NEW_POP3_BOX          (HID_CHAOS_START + 11)
-#define HID_CHAOS_NEW_POP3_MSG          (HID_CHAOS_START + 12)
-#define HID_CHAOS_NEW_SEARCH            (HID_CHAOS_START + 13)
-#define HID_CHAOS_NEW_VIM_BOX           (HID_CHAOS_START + 14)
-#define HID_CHAOS_NEW_VIM_MSG           (HID_CHAOS_START + 15)
-#define HID_CHAOS_NEW_SUBSCR_BOX        (HID_CHAOS_START + 16)
-#define HID_CHAOS_NEW_BOOKMARK          (HID_CHAOS_START + 17)
-#define HID_CHAOS_NEW_PUB_BOX           (HID_CHAOS_START + 18)
-
 #endif
-

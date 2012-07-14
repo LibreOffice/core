@@ -273,11 +273,6 @@
 
 #include <sfx2/sfxsids.hrc>
 
-#define HID_INTERFACE_SFXMAILVIEW               13
-#define HID_INTERFACE_SFXEXPLVIEWSH             17
-#define HID_INTERFACE_SFXFRAMESETVIEW           21
-#define HID_INTERFACE_SFXFRAMESETSOURCEVIEW     22
-#define HID_INTERFACE_SFXPLUGINVIEW              9
 #define HID_INTERFACE_SFXHELP_VIEWSH            24
 
 #define RET_NEWTASK 200

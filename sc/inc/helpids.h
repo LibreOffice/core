@@ -151,7 +151,6 @@
 #define HID_SC_SCENARIO_DELETE                                  "SC_HID_SC_SCENARIO_DELETE"
 #define HID_SC_SCENARIO_EDIT                                    "SC_HID_SC_SCENARIO_EDIT"
 
-#define HID_SCDLG_CONDFORMAT                                    "SC_HID_SCDLG_CONDFORMAT"
 #define HID_COLROWNAMERANGES                                    "SC_HID_COLROWNAMERANGES"
 
 #define HID_FUNCTION_BOX                                        "SC_HID_FUNCTION_BOX"
@@ -175,8 +174,6 @@
 //  wrong group - HID_SC_DLG_START is full
 #define HID_SC_RENAME_AUTOFMT                                   "SC_HID_SC_RENAME_AUTOFMT"
 #define HID_SC_REN_AFMT_NAME                                    "SC_HID_SC_REN_AFMT_NAME"
-
-#define HID_SC_TOOLBOX_GRAPHIC                                  "SC_HID_SC_TOOLBOX_GRAPHIC"
 
 #define HID_CHG_PROTECT                                         "SC_HID_CHG_PROTECT"
 

@@ -65,30 +65,9 @@
 
 // Toolboxen
 #define HID_SD_DRAW_TOOLBOX                                     "SD_HID_SD_DRAW_TOOLBOX"
-#define HID_SD_SLIDE_TOOLBOX                                    "SD_HID_SD_SLIDE_TOOLBOX"
-#define HID_SD_OUTLINE_TOOLBOX                                  "SD_HID_SD_OUTLINE_TOOLBOX"
 #define HID_SD_DRAW_OBJ_TOOLBOX                                 "SD_HID_SD_DRAW_OBJ_TOOLBOX"
 #define HID_SD_DRAW_OPTIONS_TOOLBOX                             "SD_HID_SD_DRAW_OPTIONS_TOOLBOX"
-#define HID_SD_DRAW_COMMONTASK_TOOLBOX                          "SD_HID_SD_DRAW_COMMONTASK_TOOLBOX"
-#define HID_SD_BEZIER_TOOLBOX                                   "SD_HID_SD_BEZIER_TOOLBOX"
 #define HID_SD_TEXT_TOOLBOX                                     "SD_HID_SD_TEXT_TOOLBOX"
-#define HID_SD_GLUEPOINTS_TOOLBOX                               "SD_HID_SD_GLUEPOINTS_TOOLBOX"
-#define HID_SD_SLIDE_OBJ_TOOLBOX                                "SD_HID_SD_SLIDE_OBJ_TOOLBOX"
-
-// FloatingWindows
-#define HID_SD_FW_ALIGNMENT                                     "SD_HID_SD_FW_ALIGNMENT"
-#define HID_SD_FW_ZOOM                                          "SD_HID_SD_FW_ZOOM"
-#define HID_SD_FW_CHOOSE_MODE                                   "SD_HID_SD_FW_CHOOSE_MODE"
-#define HID_SD_FW_TEXT                                          "SD_HID_SD_FW_TEXT"
-#define HID_SD_FW_RECTANGLES                                    "SD_HID_SD_FW_RECTANGLES"
-#define HID_SD_FW_ELLIPSES                                      "SD_HID_SD_FW_ELLIPSES"
-#define HID_SD_FW_LINES                                         "SD_HID_SD_FW_LINES"
-#define HID_SD_FW_ARROWS                                        "SD_HID_SD_FW_ARROWS"
-#define HID_SD_FW_3D_OBJECTS                                    "SD_HID_SD_FW_3D_OBJECTS"
-#define HID_SD_FW_CONNECTORS                                    "SD_HID_SD_FW_CONNECTORS"
-#define HID_SD_FW_INSERT                                        "SD_HID_SD_FW_INSERT"
-#define HID_SD_FW_POSITION                                      "SD_HID_SD_FW_POSITION"
-
 
 #define HID_SD_NAVIGATOR_MENU1                                  "SD_HID_SD_NAVIGATOR_MENU1"
 #define HID_SD_NAVIGATOR_MENU2                                  "SD_HID_SD_NAVIGATOR_MENU2"
@@ -125,9 +104,6 @@
 #define HID_SD_AUTOPILOT_OPEN                                   "SD_HID_SD_AUTOPILOT_OPEN"
 #define HID_SD_AUTOPILOT_PAGETEMPLATES                          "SD_HID_SD_AUTOPILOT_PAGETEMPLATES"
 
-#define HID_SD_DRAW_GRAF_TOOLBOX                                "SD_HID_SD_DRAW_GRAF_TOOLBOX"
-
-
 #define HID_SD_TABBAR_PAGES                                     "SD_HID_SD_TABBAR_PAGES"
 #define HID_SD_TABBAR_LAYERS                                    "SD_HID_SD_TABBAR_LAYERS"
 
@@ -140,11 +116,8 @@
 #define HID_SD_NAMEDIALOG_PAGE                                  "SD_HID_SD_NAMEDIALOG_PAGE"
 #define HID_SD_NAMEDIALOG_LINEEND                               "SD_HID_SD_NAMEDIALOG_LINEEND"
 
-
 #define HID_SD_TABPAGE_HEADERFOOTER_SLIDE                       "SD_HID_SD_TABPAGE_HEADERFOOTER_SLIDE"
 #define HID_SD_TABPAGE_HEADERFOOTER_NOTESHANDOUT                "SD_HID_SD_TABPAGE_HEADERFOOTER_NOTESHANDOUT"
-
-#define HID_SD_DRAW_MEDIA_TOOLBOX                               "SD_HID_SD_DRAW_MEDIA_TOOLBOX"
 
 #define HID_SD_TASK_PANE                                        "SD_HID_SD_TASK_PANE"
 #define HID_SD_SLIDE_DESIGNS                                    "SD_HID_SD_SLIDE_DESIGNS"

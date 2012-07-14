@@ -39,11 +39,9 @@
 #define HID_EDIT_WIN                                            "SW_HID_EDIT_WIN"
 
 #define HID_INSERT_CTRL                                         "SW_HID_INSERT_CTRL" // TbxControl Einfuegen
-#define HID_INSERT_OBJ_CTRL                                     "SW_HID_INSERT_OBJ_CTRL"
 #define HID_INSERT_FIELD_CTRL                                   "SW_HID_INSERT_FIELD_CTRL"
 
 #define HID_SOURCEVIEW                                          "SW_HID_SOURCEVIEW"
-#define HID_TBL_OPT_CTRL                                        "SW_HID_TBL_OPT_CTRL"
 #define HID_AUTOFORMAT_CLB                                      "SW_HID_AUTOFORMAT_CLB"
 
 #define HID_SCRL_NAVI                                           "SW_HID_SCRL_NAVI"
@@ -141,7 +139,6 @@
 #define HID_DLG_FLDEDT_NEXT                                     "SW_HID_DLG_FLDEDT_NEXT"
 #define HID_DLG_FLDEDT_PREV                                     "SW_HID_DLG_FLDEDT_PREV"
 #define HID_DLG_FLDEDT_ADDRESS                                  "SW_HID_DLG_FLDEDT_ADDRESS"
-#define HID_DLG_PRV_PRT_OPTIONS                                 "SW_HID_DLG_PRV_PRT_OPTIONS"
 
 #define HID_FILEDLG_CHARDLG                                     "SW_HID_FILEDLG_CHARDLG"
 #define HID_FILEDLG_LOADTEMPLATE                                "SW_HID_FILEDLG_LOADTEMPLATE"
@@ -150,7 +147,6 @@
 #define HID_FILEDLG_FRMPAGE                                     "SW_HID_FILEDLG_FRMPAGE"
 #define HID_FILEDLG_SRCVIEW                                     "SW_HID_FILEDLG_SRCVIEW"
 #define HID_FILEDLG_WIZDOKU                                     "SW_HID_FILEDLG_WIZDOKU"
-#define HID_PREVIEW_ZOOM                                        "SW_HID_PREVIEW_ZOOM"
 
 #define HID_REDLINE_AUTOFMT_ACCEPT                              "SW_HID_REDLINE_AUTOFMT_ACCEPT"
 #define HID_MULTI_TOX_DLG                                       "SW_HID_MULTI_TOX_DLG"
@@ -356,9 +352,6 @@
 #define HID_NAVIGATION_IMGBTN                                   "SW_HID_NAVIGATION_IMGBTN"
 #define HID_ENVELOP_INSERT                                      "SW_HID_ENVELOP_INSERT"
 
-#define HID_WEBTOOLS_TOOLBOX                                    "SW_HID_WEBTOOLS_TOOLBOX"
-#define HID_WEBTEXT_TOOLBOX                                     "SW_HID_WEBTEXT_TOOLBOX"
-#define HID_WEBFRAME_TOOLBOX                                    "SW_HID_WEBFRAME_TOOLBOX"
 #define HID_TEXT_TOOLBOX                                        "SW_HID_TEXT_TOOLBOX"
 #define HID_TABLE_TOOLBOX                                       "SW_HID_TABLE_TOOLBOX"
 #define HID_FRAME_TOOLBOX                                       "SW_HID_FRAME_TOOLBOX"
@@ -368,7 +361,6 @@
 #define HID_BEZIER_TOOLBOX                                      "SW_HID_BEZIER_TOOLBOX"
 #define HID_DRAW_TEXT_TOOLBOX                                   "SW_HID_DRAW_TEXT_TOOLBOX"
 #define HID_NUM_TOOLBOX                                         "SW_HID_NUM_TOOLBOX"
-#define HID_TOOLS_TOOLBOX                                       "SW_HID_TOOLS_TOOLBOX"
 
 #define HID_LABEL_INSERT                                        "SW_HID_LABEL_INSERT"
 #define HID_CALC_TOOLBOX                                        "SW_HID_CALC_TOOLBOX"
@@ -385,7 +377,6 @@
 #define HID_SELECT_TEMPLATE                                     "SW_HID_SELECT_TEMPLATE"
 
 #define HID_AP_INSERT_DB_SEL                                    "SW_HID_AP_INSERT_DB_SEL"
-#define HID_WEBGRAPHIC_TOOLBOX                                  "SW_HID_WEBGRAPHIC_TOOLBOX"
 #define HID_OUTLINE_FORM                                        "SW_HID_OUTLINE_FORM"
 #define HID_NUM_RESET                                           "SW_HID_NUM_RESET"
 

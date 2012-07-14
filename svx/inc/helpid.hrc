@@ -23,7 +23,6 @@
 #include <sfx2/sfxcommands.h>
 
 // Help-Ids --------------------------------------------------------------
-#define HID_ALIGN_TBX                                         "SVX_HID_ALIGN_TBX"
 #define HID_BMPMASK_CTL_PIPETTE                               "SVX_HID_BMPMASK_CTL_PIPETTE"
 #define HID_BMPMASK_CTL_QCOL_1                                "SVX_HID_BMPMASK_CTL_QCOL_1"
 #define HID_BMPMASK_TBI_PIPETTE                               "SVX_HID_BMPMASK_TBI_PIPETTE"
@@ -49,7 +48,6 @@
 #define HID_CTRL3D_SWITCHER                                   "SVX_HID_CTRL3D_SWITCHER"
 #define HID_CTRL3D_VSCROLL                                    "SVX_HID_CTRL3D_VSCROLL"
 #define HID_CTRL_COLOR                                        "SVX_HID_CTRL_COLOR"
-#define HID_DRAWTOOL_TBX                                      "SVX_HID_DRAWTOOL_TBX"
 #define HID_EDITENG_SPELLER_ADDWORD                           "SVX_HID_EDITENG_SPELLER_ADDWORD"
 #define HID_EDITENG_SPELLER_AUTOCORRECT                       "SVX_HID_EDITENG_SPELLER_AUTOCORRECT"
 #define HID_EDITENG_SPELLER_IGNORE                            "SVX_HID_EDITENG_SPELLER_IGNORE"
@@ -185,7 +183,6 @@
 #define HID_REDLINING_VIEW_PB_UNDO                            "SVX_HID_REDLINING_VIEW_PB_UNDO"
 #define HID_RUBY_DIALOG                                       "SVX_HID_RUBY_DIALOG"
 #define HID_STYLE_LISTBOX                                     "SVX_HID_STYLE_LISTBOX"
-#define HID_SVXTBX_DRAW                                       "SVX_HID_SVXTBX_DRAW"
 #define HID_SVXTBX_UNDO_REDO_CTRL                             "SVX_HID_SVXTBX_UNDO_REDO_CTRL"
 #define HID_SVX_CHINESE_DICTIONARY_CB_REVERSE                 "SVX_HID_SVX_CHINESE_DICTIONARY_CB_REVERSE"
 #define HID_SVX_CHINESE_DICTIONARY_LB_HEADER                  "SVX_HID_SVX_CHINESE_DICTIONARY_LB_HEADER"
@@ -209,12 +206,9 @@
 #define HID_VALUESET_EXTRUSION_DIRECTION                      "SVX_HID_VALUESET_EXTRUSION_DIRECTION"
 #define HID_VALUESET_EXTRUSION_LIGHTING                       "SVX_HID_VALUESET_EXTRUSION_LIGHTING"
 #define HID_XMLSEC_CALL                                       "SVX_HID_XMLSEC_CALL"
-#define HID_OFA_HYPERLINK_DLG                                 "SVX_HID_OFA_HYPERLINK_DLG"
 #define HID_OFA_HYPERLINK_NAME                                "SVX_HID_OFA_HYPERLINK_NAME"
-#define HID_OFA_HYPERLINK_SEARCH                              "SVX_HID_OFA_HYPERLINK_SEARCH"
 #define HID_OFA_HYPERLINK_TARGET                              "SVX_HID_OFA_HYPERLINK_TARGET"
 #define HID_OFA_HYPERLINK_URL                                 "SVX_HID_OFA_HYPERLINK_URL"
-#define HID_OFA_HYPERLINK_URL_TXT                             "SVX_HID_OFA_HYPERLINK_URL_TXT"
 #define HID_CT_THES_ALTERNATIVES                              "SVX_HID_CT_THES_ALTERNATIVES"
 
 #endif

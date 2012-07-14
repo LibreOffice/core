@@ -48,13 +48,6 @@
 #define HID_FILEDLG_EDIT_FAVORITES_LISTBOX                    "SVT_HID_FILEDLG_EDIT_FAVORITES_LISTBOX"
 #define HID_FILEDLG_EDIT_FAVORITES_HEADERBAR                  "SVT_HID_FILEDLG_EDIT_FAVORITES_HEADERBAR"
 
-// HelpID's fuer die Textkomponente
-#define HID_TEXTCPNT_OPEN_LINK                                 "SVT_HID_TEXTCPNT_OPEN_LINK"
-#define HID_TEXTCPNT_OPEN_LINK_NEW                             "SVT_HID_TEXTCPNT_OPEN_LINK_NEW"
-#define HID_TEXTCPNT_DOWNLOAD                                  "SVT_HID_TEXTCPNT_DOWNLOAD"
-#define HID_TEXTCPNT_ADD_BOOKMARK                              "SVT_HID_TEXTCPNT_ADD_BOOKMARK"
-#define HID_TEXTCPNT_COPY_LINK                                 "SVT_HID_TEXTCPNT_COPY_LINK"
-
 // Help ids of template dialog
 #define HID_TEMPLATEDLG_DIALOG                                 "SVT_HID_TEMPLATEDLG_DIALOG"
 #define HID_TEMPLATEDLG_ICONCTRL                               "SVT_HID_TEMPLATEDLG_ICONCTRL"

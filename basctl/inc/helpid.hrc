@@ -20,7 +20,6 @@
 
 #define HID_BASICIDE_TOOLBOX                              "BASCTL_HID_BASICIDE_TOOLBOX"
 #define HID_BASICIDE_OBJECTS                              "BASCTL_HID_BASICIDE_OBJECTS"
-#define HID_BASICIDE_CONTROLS                             "BASCTL_HID_BASICIDE_CONTROLS"
 #define HID_BASICIDE_MACROS                               "BASCTL_HID_BASICIDE_MACROS"
 #define HID_BASICIDE_LIBS                                 "BASCTL_HID_BASICIDE_LIBS"
 #define HID_BASICIDE_ORG_TC                               "BASCTL_HID_BASICIDE_ORG_TC"
@@ -30,19 +29,12 @@
 #define HID_BASICIDE_LIBSDLG_TREE                         "BASCTL_HID_BASICIDE_LIBSDLG_TREE"
 #define HID_BASICIDE_OBJECTCAT                            "BASCTL_HID_BASICIDE_OBJECTCAT"
 
-#define HID_BASICIDE_PROP_BROWSER                         "BASCTL_HID_BASICIDE_PROP_BROWSER"
-
-#define HID_BASICIDE_PROP_BROWSER_LBOX                    "BASCTL_HID_BASICIDE_PROP_BROWSER_LBOX"
-
 #define HID_BASICIDE_OBJCAT_SHOW                          "BASCTL_HID_BASICIDE_OBJCAT_SHOW"
-#define HID_BASICIDE_OBJCAT_PROPS                         "BASCTL_HID_BASICIDE_OBJCAT_PROPS"
-#define HID_BASICIDE_OBJCAT_HELP                          "BASCTL_HID_BASICIDE_OBJCAT_HELP"
 
 #define HID_BASICIDE_BRKDLG                               "BASCTL_HID_BASICIDE_BRKDLG"
 #define HID_BASICIDE_ACTIV                                "BASCTL_HID_BASICIDE_ACTIV"
 #define HID_BASICIDE_BRKPROPS                             "BASCTL_HID_BASICIDE_BRKPROPS"
 #define HID_BASICIDE_REMOVEWATCH                          "BASCTL_HID_BASICIDE_REMOVEWATCH"
-#define HID_BASICIDE_GOTOALL                              "BASCTL_HID_BASICIDE_GOTOALL"
 
 #define HID_BASICIDE_MODULWINDOW                          "BASCTL_HID_BASICIDE_MODULWINDOW"
 #define HID_BASICIDE_DIALOGWINDOW                         "BASCTL_HID_BASICIDE_DIALOGWINDOW"
