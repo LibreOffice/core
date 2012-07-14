@@ -207,7 +207,7 @@ rtl::OUString VbaCommandBarHelper::findToolbarByName( const css::uno::Reference<
     for( sal_Int32 i = 0; i < allNames.getLength(); i++ )
     {
         sResourceUrl = allNames[i];
-        if(sResourceUrl.indexOf( rtl::OUString( ITEM_TOOLBAR_URL ) ) == 0 )
+        if(sResourceUrl.indexOf( ITEM_TOOLBAR_URL ) == 0 )
         {
             if( hasToolbar( sResourceUrl, sName ) )
                 return sResourceUrl;

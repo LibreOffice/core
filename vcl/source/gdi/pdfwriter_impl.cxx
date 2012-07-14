@@ -4866,13 +4866,13 @@ sal_Int32 PDFWriterImpl::getBestBuiltinFont( const Font& rFont )
     OUString aFontName( rFont.GetName() );
     aFontName = aFontName.toAsciiLowerCase();
 
-    if( aFontName.indexOf( OUString( "times"  ) ) != -1 )
+    if( aFontName.indexOf( "times" ) != -1 )
         nBest = 8;
-    else if( aFontName.indexOf( OUString( "courier"  ) ) != -1 )
+    else if( aFontName.indexOf( "courier" ) != -1 )
         nBest = 0;
-    else if( aFontName.indexOf( OUString( "dingbats"  ) ) != -1 )
+    else if( aFontName.indexOf( "dingbats" ) != -1 )
         nBest = 13;
-    else if( aFontName.indexOf( OUString( "symbol"  ) ) != -1 )
+    else if( aFontName.indexOf( "symbol" ) != -1 )
         nBest = 12;
     if( nBest < 12 )
     {

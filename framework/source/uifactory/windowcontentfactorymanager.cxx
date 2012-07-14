@@ -104,7 +104,7 @@ void WindowContentFactoryManager::RetrieveTypeNameFromResourceURL( const rtl::OU
     const sal_Int32 RESOURCEURL_PREFIX_SIZE = 17;
     const char      RESOURCEURL_PREFIX[] = "private:resource/";
 
-    if (( aResourceURL.indexOf( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( RESOURCEURL_PREFIX ))) == 0 ) &&
+    if (( aResourceURL.indexOf( RESOURCEURL_PREFIX ) == 0 ) &&
         ( aResourceURL.getLength() > RESOURCEURL_PREFIX_SIZE ))
     {
         rtl::OUString aTmpStr( aResourceURL.copy( RESOURCEURL_PREFIX_SIZE ));

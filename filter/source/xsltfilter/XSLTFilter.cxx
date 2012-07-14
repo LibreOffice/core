@@ -202,8 +202,7 @@ m_rServiceFactory(r), m_bTerminated(sal_False), m_bError(sal_False)
                                                  "/singletons/com.sun.star.util.theMacroExpander" )),
                                 UNO_QUERY_THROW);
                 sExpandedUrl = xMacroExpander->expandMacros(sUrl);
-                sal_Int32 nPos = sExpandedUrl.indexOf(::rtl::OUString(
-                         "vnd.sun.star.expand:" ));
+                sal_Int32 nPos = sExpandedUrl.indexOf( "vnd.sun.star.expand:" );
                 if (nPos != -1)
                     sExpandedUrl = sExpandedUrl.copy(nPos + 20);
             }

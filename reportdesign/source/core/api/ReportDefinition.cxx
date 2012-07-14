@@ -2234,7 +2234,7 @@ uno::Reference< uno::XInterface > SAL_CALL OReportDefinition::createInstanceWith
     ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
 
     uno::Reference< uno::XInterface > xRet;
-    if ( aServiceSpecifier.indexOf( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.ImportEmbeddedObjectResolver"))) == 0 )
+    if ( aServiceSpecifier.indexOf( "com.sun.star.document.ImportEmbeddedObjectResolver") == 0 )
     {
         uno::Reference< embed::XStorage > xStorage;
         const uno::Any* pIter = _aArgs.getConstArray();
@@ -2257,7 +2257,7 @@ uno::Reference< uno::XInterface > SAL_CALL OReportDefinition::createInstance( co
     ::osl::MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
     uno::Reference< drawing::XShape > xShape;
-    if ( aServiceSpecifier.indexOf( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.report.")) ) == 0 )
+    if ( aServiceSpecifier.indexOf( "com.sun.star.report." ) == 0 )
     {
         if ( aServiceSpecifier == SERVICE_SHAPE )
             xShape.set(SvxUnoDrawMSFactory::createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.CustomShape")) ),uno::UNO_QUERY_THROW);
@@ -2269,7 +2269,7 @@ uno::Reference< uno::XInterface > SAL_CALL OReportDefinition::createInstance( co
         else
             xShape.set(SvxUnoDrawMSFactory::createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.OLE2Shape")) ),uno::UNO_QUERY_THROW);
     }
-    else if ( aServiceSpecifier.indexOf( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.component.")) ) == 0 )
+    else if ( aServiceSpecifier.indexOf( "com.sun.star.form.component." ) == 0 )
     {
         xShape.set(m_aProps->m_xContext->getServiceManager()->createInstanceWithContext(aServiceSpecifier,m_aProps->m_xContext),uno::UNO_QUERY);
     }

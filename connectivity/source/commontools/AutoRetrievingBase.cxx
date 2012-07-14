@@ -41,7 +41,7 @@ namespace connectivity
             nIndex = sStatement.indexOf(sTable,nIndex);
             if ( -1 != nIndex )
             { // we need a table name
-                sal_Int32 nIntoIndex = sStmt.indexOf(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("INTO ")));
+                sal_Int32 nIntoIndex = sStmt.indexOf("INTO ");
                 sStmt = sStmt.copy(nIntoIndex+5);
                 do
                 {

@@ -59,7 +59,7 @@ public:
         if( hasMoreElements() )
         {
             rtl::OUString sResourceUrl( m_sNames[ m_nCurrentPosition++ ] );
-            if( sResourceUrl.indexOf( rtl::OUString("private:resource/toolbar/") ) != -1 )
+            if( sResourceUrl.indexOf( "private:resource/toolbar/" ) != -1 )
             {
                 uno::Reference< container::XIndexAccess > xCBarSetting = m_pCBarHelper->getSettings( sResourceUrl );
                 uno::Reference< XCommandBar > xCommandBar( new ScVbaCommandBar( m_xParent, m_xContext, m_pCBarHelper, xCBarSetting, sResourceUrl, sal_False, sal_False ) );
@@ -194,7 +194,7 @@ ScVbaCommandBars::getCount() throw(css::uno::RuntimeException)
     uno::Sequence< ::rtl::OUString > allNames = m_xNameAccess->getElementNames();
     for( sal_Int32 i = 0; i < allNames.getLength(); i++ )
     {
-        if(allNames[i].indexOf( rtl::OUString("private:resource/toolbar/") ) != -1 )
+        if(allNames[i].indexOf( "private:resource/toolbar/" ) != -1 )
         {
             nCount++;
         }

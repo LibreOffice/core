@@ -670,7 +670,7 @@ bool lcl_isFilterNativelySupported(const SfxFilter& rFilter)
         return true;
 
     ::rtl::OUString aName = rFilter.GetFilterName();
-    if (aName.indexOf(::rtl::OUString("MS Excel")) == 0)
+    if (aName.indexOf("MS Excel") == 0)
         // We can handle all Excel variants natively.
         return true;
 

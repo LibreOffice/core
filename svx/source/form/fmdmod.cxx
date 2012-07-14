@@ -40,7 +40,7 @@ using namespace ::svxform;
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  SAL_CALL SvxFmMSFactory::createInstance(const ::rtl::OUString& ServiceSpecifier) throw( ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException )
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  xRet;
-    if ( ServiceSpecifier.indexOf( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.component.")) ) == 0 )
+    if ( ServiceSpecifier.indexOf( "com.sun.star.form.component." ) == 0 )
     {
         xRet = ::comphelper::getProcessServiceFactory()->createInstance(ServiceSpecifier);
     }

@@ -125,7 +125,7 @@ static const sal_Int32  RESOURCEURL_PREFIX_SIZE = 17;
 static sal_Int16 RetrieveTypeFromResourceURL( const rtl::OUString& aResourceURL )
 {
 
-    if (( aResourceURL.indexOf( rtl::OUString( RESOURCEURL_PREFIX )) == 0 ) &&
+    if (( aResourceURL.indexOf( RESOURCEURL_PREFIX ) == 0 ) &&
         ( aResourceURL.getLength() > RESOURCEURL_PREFIX_SIZE ))
     {
         rtl::OUString aTmpStr     = aResourceURL.copy( RESOURCEURL_PREFIX_SIZE );
@@ -146,7 +146,7 @@ static sal_Int16 RetrieveTypeFromResourceURL( const rtl::OUString& aResourceURL 
 
 static rtl::OUString RetrieveNameFromResourceURL( const rtl::OUString& aResourceURL )
 {
-    if (( aResourceURL.indexOf( rtl::OUString( RESOURCEURL_PREFIX )) == 0 ) &&
+    if (( aResourceURL.indexOf( RESOURCEURL_PREFIX ) == 0 ) &&
         ( aResourceURL.getLength() > RESOURCEURL_PREFIX_SIZE ))
     {
         sal_Int32 nIndex = aResourceURL.lastIndexOf( '/' );

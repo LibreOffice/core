@@ -195,9 +195,9 @@ void PackageUri::init() const
                 // - encoded slashes
                 // - parent folder segments ".."
                 // - current folder segments "."
-                if ( m_aPath.indexOf( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "//" ) ) ) != -1
-                  || m_aPath.indexOf( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "%2F" ) ) ) != -1
-                  || m_aPath.indexOf( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "%2f" ) ) ) != -1
+                if ( m_aPath.indexOf( "//" ) != -1
+                  || m_aPath.indexOf( "%2F" ) != -1
+                  || m_aPath.indexOf( "%2f" ) != -1
                   || ::comphelper::OStorageHelper::PathHasSegment( m_aPath, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".." ) ) )
                   || ::comphelper::OStorageHelper::PathHasSegment( m_aPath, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "." ) ) ) )
                 {

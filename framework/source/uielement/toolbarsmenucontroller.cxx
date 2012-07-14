@@ -182,7 +182,7 @@ void ToolbarsMenuController::addCommand(
     Reference< awt::XMenuExtended > xMenuExtended( m_xPopupMenu, UNO_QUERY );
     xMenuExtended->setCommand( nItemId, rCommandURL );
 
-    bool bInternal = ( rCommandURL.indexOf( rtl::OUString( STATIC_INTERNAL_CMD_PART )) == 0);
+    bool bInternal = ( rCommandURL.indexOf( STATIC_INTERNAL_CMD_PART ) == 0);
     if ( !bInternal )
     {
         if ( !getDispatchFromCommandURL( rCommandURL ).is() )
@@ -638,7 +638,7 @@ void SAL_CALL ToolbarsMenuController::select( const css::awt::MenuEvent& rEvent 
             PopupMenu* pVCLPopupMenu = (PopupMenu *)pPopupMenu->GetMenu();
 
             rtl::OUString aCmd( pVCLPopupMenu->GetItemCommand( rEvent.MenuId ));
-            if ( aCmd.indexOf( rtl::OUString( STATIC_INTERNAL_CMD_PART )) == 0 )
+            if ( aCmd.indexOf( STATIC_INTERNAL_CMD_PART ) == 0 )
             {
                 // Command to restore the visibility of all context sensitive toolbars
                 Reference< XNameReplace > xNameReplace( xPersistentWindowState, UNO_QUERY );
@@ -719,7 +719,7 @@ void SAL_CALL ToolbarsMenuController::select( const css::awt::MenuEvent& rEvent 
                     }
                 }
             }
-            else if ( aCmd.indexOf( rtl::OUString( STATIC_CMD_PART )) < 0 )
+            else if ( aCmd.indexOf( STATIC_CMD_PART ) < 0 )
             {
                 URL                     aTargetURL;
                 Sequence<PropertyValue> aArgs;
@@ -787,7 +787,7 @@ void SAL_CALL ToolbarsMenuController::activate( const css::awt::MenuEvent& ) thr
     const sal_uInt32 nCount = aCmdVector.size();
     for ( sal_uInt32 i = 0; i < nCount; i++ )
     {
-        bool bInternal = ( aCmdVector[i].indexOf( rtl::OUString( STATIC_INTERNAL_CMD_PART )) == 0);
+        bool bInternal = ( aCmdVector[i].indexOf( STATIC_INTERNAL_CMD_PART ) == 0);
 
         if ( !bInternal )
         {

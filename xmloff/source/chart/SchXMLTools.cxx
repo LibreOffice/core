@@ -779,17 +779,17 @@ bool isDocumentGeneratedWithOpenOfficeOlderThan3_3( const uno::Reference< frame:
     if( !bResult )
     {
         ::rtl::OUString aGenerator( lcl_getGeneratorFromModel(xChartModel) );
-        if( aGenerator.indexOf( ::rtl::OUString( "OpenOffice.org_project/3" ) ) != -1 )
+        if( aGenerator.indexOf( "OpenOffice.org_project/3" ) != -1 )
         {
-            if( aGenerator.indexOf( ::rtl::OUString( "OpenOffice.org_project/300m" ) ) != -1 )
+            if( aGenerator.indexOf( "OpenOffice.org_project/300m" ) != -1 )
             {
                 sal_Int32 nBuilId = lcl_getBuildIDFromGenerator( lcl_getGeneratorFromModel(xChartModel) );
                 if( nBuilId>0 && nBuilId<9491 ) //9491 is build id of dev300m76
                     bResult= true;
             }
-            else if( aGenerator.indexOf( ::rtl::OUString( "OpenOffice.org_project/310m" ) ) != -1 )
+            else if( aGenerator.indexOf( "OpenOffice.org_project/310m" ) != -1 )
                 bResult= true;
-            else if( aGenerator.indexOf( ::rtl::OUString( "OpenOffice.org_project/320m" ) ) != -1 )
+            else if( aGenerator.indexOf( "OpenOffice.org_project/320m" ) != -1 )
                 bResult= true;
         }
     }
@@ -802,7 +802,7 @@ bool isDocumentGeneratedWithOpenOfficeOlderThan3_0( const uno::Reference< frame:
     if( !bResult )
     {
         ::rtl::OUString aGenerator( lcl_getGeneratorFromModel(xChartModel) );
-        if( aGenerator.indexOf( ::rtl::OUString( "OpenOffice.org_project/680m" ) ) != -1 )
+        if( aGenerator.indexOf( "OpenOffice.org_project/680m" ) != -1 )
             bResult= true;
     }
     return bResult;
@@ -834,11 +834,11 @@ bool isDocumentGeneratedWithOpenOfficeOlderThan2_3( const uno::Reference< frame:
         if( xChild.is() )
         {
             aGenerator = lcl_getGeneratorFromModel( uno::Reference< frame::XModel >( xChild->getParent(), uno::UNO_QUERY) );
-            if( aGenerator.indexOf( ::rtl::OUString( "OpenOffice.org_project" ) ) != -1 )
+            if( aGenerator.indexOf( "OpenOffice.org_project" ) != -1 )
             {
                 //the chart application has not created files without a meta stream since OOo 2.3 (OOo 2.3 has written a metastream already)
                 //only the report builder extension has created some files with OOo 3.1 that do not have a meta stream
-                if( aGenerator.indexOf( ::rtl::OUString( "OpenOffice.org_project/31" ) ) != -1 )
+                if( aGenerator.indexOf( "OpenOffice.org_project/31" ) != -1 )
                     bResult = false;//#i100102# probably generated with OOo 3.1 by the report designer
                 else
                     bResult= true; //in this case the OLE chart was created by an older version, as OLE objects are sometimes stream copied the version can differ from the parents version, so the parents version is not a reliable indicator
@@ -854,11 +854,11 @@ bool isDocumentGeneratedWithOpenOfficeOlderThan2_0( const ::com::sun::star::uno:
 {
     bool bResult = false;
     ::rtl::OUString aGenerator( lcl_getGeneratorFromModelOrItsParent(xChartModel) );
-    if(    ( aGenerator.indexOf( ::rtl::OUString( "OpenOffice.org 1" ) ) == 0 )
-        || ( aGenerator.indexOf( ::rtl::OUString( "StarOffice 6" ) ) == 0 )
-        || ( aGenerator.indexOf( ::rtl::OUString( "StarOffice 7" ) ) == 0 )
-        || ( aGenerator.indexOf( ::rtl::OUString( "StarSuite 6" ) ) == 0 )
-        || ( aGenerator.indexOf( ::rtl::OUString( "StarSuite 7" ) ) == 0 )
+    if(    ( aGenerator.indexOf( "OpenOffice.org 1" ) == 0 )
+        || ( aGenerator.indexOf( "StarOffice 6" ) == 0 )
+        || ( aGenerator.indexOf( "StarOffice 7" ) == 0 )
+        || ( aGenerator.indexOf( "StarSuite 6" ) == 0 )
+        || ( aGenerator.indexOf( "StarSuite 7" ) == 0 )
         )
         bResult= true;
     return bResult;
