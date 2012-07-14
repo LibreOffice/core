@@ -16,9 +16,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _FRM_RESOURCE_HRC_
 #include "frm_resource.hrc"
-#endif
 
 
 String RID_STR_XFORMS_NO_BINDING_EXPRESSION

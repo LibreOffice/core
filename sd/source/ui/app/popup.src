@@ -32,9 +32,7 @@
 #undef SD_POPUP
 #define SD_POPUP RID_GRAPHIC_TEXTOBJ_POPUP
 #include "popup2.src"
-#ifndef _GLOBLMN_HRC
 #include <svx/globlmn.hrc>
-#endif
 #include "helpids.h"
 
 #define DEFINE_SLOTID_FOR_NUMBER_BULLETS    SID_OUTLINE_BULLET

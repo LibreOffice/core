@@ -25,9 +25,7 @@
  *
  ************************************************************************/
 
-#ifndef _TOOLKIT_AWT_XTHROBBER_HRC_
 #include <xthrobber.hrc>
-#endif
 
 #define STD_MASK_COLOR MaskColor = Color { Red = 0xFFFF; Green = 0x0000; Blue = 0xFFFF; };
 

@@ -16,12 +16,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DBU_DLG_HRC_
 #include "dbu_dlg.hrc"
-#endif
-#ifndef DBACCESS_UI_BROWSER_ID_HXX
 #include "browserids.hxx"
-#endif
 
 #define MASKCOLOR MaskColor = Color { Red = 0xFFFF; Green = 0x0000; Blue = 0xFFFF; }
 

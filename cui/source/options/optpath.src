@@ -24,12 +24,9 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
- // include --------------------------------------------------------------
 #include "optpath.hrc"
 #include <cuires.hrc>
-#ifndef _SFX_HRC
 #include <sfx2/sfx.hrc>
-#endif
 #include "helpid.hrc"
 
  // RID_SFXPAGE_PATH -----------------------------------------------------

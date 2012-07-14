@@ -19,10 +19,7 @@
 #include "tp_3D_SceneGeometry.hrc"
 #include "dlg_View3D.hrc"
 #include "HelpIds.hrc"
-
-#ifndef _SVT_CONTROLDIMS_HRC_
 #include <svtools/controldims.hrc>
-#endif
 
 #define WIDTH_FL 108
 #define WIDTH_MF 57

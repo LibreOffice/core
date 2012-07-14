@@ -17,9 +17,7 @@
  */
 
 #include <cuires.hrc>
-#ifndef _SVX_DOCLINKDIALOG_HRC_
 #include "doclinkdialog.hrc"
-#endif
 
 #define DIALOG_SIZE_X       200
 #define DIALOG_SIZE_Y       94

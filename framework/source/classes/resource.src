@@ -26,10 +26,7 @@
  ************************************************************************/
 
 #include "helpid.hrc"
-
-#ifndef __FRAMEWORK_CLASSES_RESOURCE_HRC_
 #include <classes/resource.hrc>
-#endif
 
 String STR_MENU_ADDONS
 {

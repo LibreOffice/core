@@ -25,12 +25,8 @@
  *
  ************************************************************************/
 
-#ifndef _SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
-#ifndef _GLOBLMN_HRC
 #include <svx/globlmn.hrc>
-#endif
 #include "workctrl.hrc"
 #include "helpid.h"
 #include "cmdid.h"

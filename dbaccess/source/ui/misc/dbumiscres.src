@@ -16,9 +16,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DBU_MISC_HRC_
 #include "dbu_misc.hrc"
-#endif
 
 
 Resource RSC_CHARSETS

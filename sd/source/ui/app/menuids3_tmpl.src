@@ -25,9 +25,8 @@
  *
  ************************************************************************/
 
-#ifndef _GLOBLMN_HRC
 #include <svx/globlmn.hrc>
-#endif
+
 #define MN_CHANGEBEZIER \
     MenuItem\
     {\

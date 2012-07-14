@@ -16,12 +16,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef EXTENSIONS_PROPRESID_HRC
 #include "formresid.hrc"
-#endif
-#ifndef EXTENSIONS_SOURCE_PROPCTRLR_NEWDATATYPE_HRC
 #include "newdatatype.hrc"
-#endif
 
 #define DIALOG_WIDTH    150
 #define DIALOG_HEIGHT   55

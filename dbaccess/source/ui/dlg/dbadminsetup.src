@@ -16,14 +16,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DBAUI_DBADMINSETUP_HRC_
 #include "dbadminsetup.hrc"
-#endif
-
-#ifndef _DBAUI_AUTOCONTROLS_HRC_
 #include "AutoControls.hrc"
-#endif
-
 
 #define CHECKBOX_HEIGHT     8
 #define FIXEDTEXT_HEIGHT    8

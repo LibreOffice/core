@@ -25,9 +25,7 @@
  *
  ************************************************************************/
 
-#ifndef _EXTENSIONS_DBP_DBPRESID_HRC_
 #include "dbpresid.hrc"
-#endif
 
 TabPage RID_PAGE_TABLESELECTION
 {

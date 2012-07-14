@@ -18,9 +18,7 @@
 #include <cuires.hrc>
 #include "helpid.hrc"
 
-#ifndef SVX_HANGUL_HANJA_DLG_HRC
 #include "hangulhanjadlg.hrc"
-#endif
 
 ModalDialog RID_SVX_MDLG_HANGULHANJA
 {

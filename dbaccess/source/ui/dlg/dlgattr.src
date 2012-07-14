@@ -15,18 +15,10 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SVX_DIALOGS_HRC
 #include <svx/dialogs.hrc>
-#endif
-#ifndef _DBA_DBACCESS_HELPID_HRC_
 #include "dbaccess_helpid.hrc"
-#endif
-#ifndef _DBU_DLG_HRC_
 #include "dbu_dlg.hrc"
-#endif
-#ifndef DBAUI_SBATTRDLG_HRC
 #include "dlgattr.hrc"
-#endif
 
  //================================================
  // Der Attributdialog:

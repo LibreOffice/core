@@ -27,9 +27,7 @@
 #include "CondFormat.hrc"
 #include "RptResId.hrc"
 #include "helpids.hrc"
-#ifndef _GLOBLMN_HRC
 #include <svx/globlmn.hrc>
-#endif
 #include "rptui_slotid.hrc"
 
 Control WIN_CONDITION

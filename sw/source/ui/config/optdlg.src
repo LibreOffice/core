@@ -25,12 +25,8 @@
  *
  ************************************************************************/
 /* StarView ressource file */
-#ifndef _SFX_HRC
 #include <sfx2/sfx.hrc>
-#endif
-#ifndef _SVX_DIALOGS_HRC
 #include <svx/dialogs.hrc>
-#endif
 #include "globals.hrc"
 #include "config.hrc"
 #include "optdlg.hrc"

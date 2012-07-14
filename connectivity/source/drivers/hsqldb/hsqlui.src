@@ -16,9 +16,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef CONNECTIVITY_HSQLUI_HRC
 #include "hsqlui.hrc"
-#endif
 
 /*  Note:
     The resource file built here (hsqldb.res, finally) is *not* included

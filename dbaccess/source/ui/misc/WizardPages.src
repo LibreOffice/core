@@ -16,16 +16,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef DBAUI_WIZARD_PAGES_HRC
 #include "WizardPages.hrc"
-#endif
-#ifndef _DBU_MISC_HRC_
 #include "dbu_misc.hrc"
-#endif
-#ifndef _DBA_DBACCESS_HELPID_HRC_
 #include "dbaccess_helpid.hrc"
-#endif
-
 #include "dbaccess_slotid.hrc"
 
 #define WINDOW_SIZE_X   276

@@ -16,12 +16,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SVX_DIALOGS_HRC
 #include <svx/dialogs.hrc>
-#endif
-#ifndef SVX_FRMSEL_HRC
 #include "frmsel.hrc"
-#endif
 
 Resource RID_SVXSTR_BORDER_CONTROL
 {

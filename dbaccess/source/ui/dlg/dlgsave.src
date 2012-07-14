@@ -16,15 +16,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef DBAUI_DLGSAVE_HRC
 #include "dlgsave.hrc"
-#endif
-#ifndef _DBU_DLG_HRC_
 #include "dbu_dlg.hrc"
-#endif
-#ifndef _DBA_DBACCESS_HELPID_HRC_
 #include "dbaccess_helpid.hrc"
-#endif
 
 ModalDialog DLG_SAVE_AS
 {

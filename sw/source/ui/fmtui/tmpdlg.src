@@ -25,9 +25,7 @@
  *
  ************************************************************************/
 
-#ifndef _SFX_HRC
 #include <sfx2/sfx.hrc>
-#endif
 #include "fmtui.hrc"
 #include "globals.hrc"
 #include "svx/dialogs.hrc"

@@ -16,15 +16,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _SFX_SRCHDLG_HRC_
 #include "srchdlg.hrc"
-#endif
-#ifndef _SFX_DIALOG_HRC
 #include "dialog.hrc"
-#endif
-#ifndef _SFX_HELPID_HRC
 #include "helpid.hrc"
-#endif
 
 ModelessDialog RID_DLG_SEARCH
 {

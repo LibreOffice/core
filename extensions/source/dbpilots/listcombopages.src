@@ -16,9 +16,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _EXTENSIONS_DBP_DBPRESID_HRC_
 #include "dbpresid.hrc"
-#endif
 
 TabPage RID_PAGE_LCW_CONTENTSELECTION_TABLE
 {

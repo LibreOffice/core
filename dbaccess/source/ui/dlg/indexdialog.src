@@ -16,18 +16,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DBU_DLG_HRC_
 #include "dbu_dlg.hrc"
-#endif
-#ifndef _DBAUI_INDEXDIALOG_HRC_
 #include "indexdialog.hrc"
-#endif
-#ifndef DBACCESS_UI_BROWSER_ID_HXX
 #include "browserids.hxx"
-#endif
-#ifndef _DBA_DBACCESS_HELPID_HRC_
 #include "dbaccess_helpid.hrc"
-#endif
 
 #define DIALOG_SIZE_X       220
 #define DIALOG_SIZE_Y       140

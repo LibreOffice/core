@@ -16,12 +16,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DBAUI_PARAMDIALOG_HRC_
 #include "paramdialog.hrc"
-#endif
-#ifndef _DBU_DLG_HRC_
 #include "dbu_dlg.hrc"
-#endif
 
 #define LIST_WIDTH      100
 #define LIST_HEIGHT     50

@@ -16,13 +16,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _EXTENSIONS_FORMCTRLR_PROPRESID_HRC_
 #include "formresid.hrc"
-#endif
 #include "propctrlr.hrc"
-#ifndef EXTENSIONS_SOURCE_PROPCTRLR_FORMLINKDIALOG_HRC
 #include "formlinkdialog.hrc"
-#endif
 
 ModalDialog RID_DLG_FORMLINKS
 {

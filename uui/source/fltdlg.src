@@ -18,13 +18,8 @@
 
 #define __RSC
 
-#ifndef UUI_IDS_HRC
 #include "ids.hrc"
-#endif
-
-#ifndef UUI_FLTDLG_HRC
 #include "fltdlg.hrc"
-#endif
 
 ModalDialog DLG_FILTER_SELECT
 {

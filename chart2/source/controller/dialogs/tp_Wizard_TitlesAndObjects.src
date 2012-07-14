@@ -21,10 +21,7 @@
 #include "res_SecondaryAxisCheckBoxes.hrc"
 #include "dlg_CreationWizard.hrc"
 #include "res_LegendPosition.hrc"
-
-#ifndef _SVT_CONTROLDIMS_HRC_
 #include <svtools/controldims.hrc>
-#endif
 
 #define MASKCOLOR MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; }
 #define WIZ_TITLES_WIDTH 130

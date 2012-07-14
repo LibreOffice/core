@@ -18,12 +18,8 @@
 
 #define __RSC
 
-#ifndef UUI_IDS_HRC
 #include <ids.hrc>
-#endif
-#ifndef UUI_MASTERPASSCRTDLG_HRC
 #include <masterpasscrtdlg.hrc>
-#endif
 
 ModalDialog DLG_UUI_MASTERPASSWORD_CRT
 {

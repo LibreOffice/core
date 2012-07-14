@@ -18,9 +18,7 @@
 
 #define __RSC
 
-#ifndef UUI_IDS_HRC
 #include "ids.hrc"
-#endif
 
 String RID_KEEP_PASSWORD
 {

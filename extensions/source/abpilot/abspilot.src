@@ -25,9 +25,7 @@
  *
  ************************************************************************/
 
-#ifndef EXTENSIONS_ABPRESID_HRC
 #include "abpresid.hrc"
-#endif
 
 //........................................................................
 ModalDialog RID_DLG_ADDRESSBOOKSOURCEPILOT

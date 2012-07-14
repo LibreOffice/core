@@ -16,9 +16,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef ACCESSIBILITY_HELPER_ACCESSIBLESTRINGS_HRC_
 #include <accessibility/helper/accessiblestrings.hrc>
-#endif
 
 
 String RID_STR_ACC_ACTION_CLICK

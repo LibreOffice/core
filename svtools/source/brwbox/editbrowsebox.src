@@ -25,13 +25,8 @@
  *
  ************************************************************************/
 
-#ifndef _SVTOOLS_EDITBROWSEBOX_HRC_
 #include "editbrowsebox.hrc"
-#endif
-
-#ifndef _SVTOOLS_HRC
 #include <svtools/svtools.hrc>
-#endif
 
 ImageList RID_SVTOOLS_IMAGELIST_EDITBROWSEBOX
 {

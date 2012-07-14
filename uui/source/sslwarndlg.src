@@ -17,13 +17,8 @@
  */
 #define __RSC
 
-
-#ifndef UUI_IDS_HRC
 #include <ids.hrc>
-#endif
-#ifndef UUI_SSLWARN_HRC
 #include <sslwarndlg.hrc>
-#endif
 
 ModalDialog DLG_UUI_SSLWARN
 {

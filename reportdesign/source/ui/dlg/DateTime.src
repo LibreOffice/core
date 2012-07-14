@@ -18,12 +18,8 @@
 #include "DateTime.hrc"
 #include "RptResId.hrc"
 #include "helpids.hrc"
-#ifndef _GLOBLMN_HRC
 #include <svx/globlmn.hrc>
-#endif
-#ifndef _SBASLTID_HRC
 #include <svx/svxids.hrc>
-#endif
 
 
 ModalDialog RID_DATETIME_DLG

@@ -16,15 +16,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef DBAUI_USERADMIN_HRC
 #include "UserAdmin.hrc"
-#endif
-#ifndef _DBU_DLG_HRC_
 #include "dbu_dlg.hrc"
-#endif
-#ifndef _DBA_DBACCESS_HELPID_HRC_
 #include "dbaccess_helpid.hrc"
-#endif
 
 #define WINDOW_SIZE_X 260
 #define WINDOW_SIZE_Y 185

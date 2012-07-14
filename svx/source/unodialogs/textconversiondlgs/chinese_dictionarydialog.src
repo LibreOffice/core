@@ -19,9 +19,7 @@
 #include "chinese_dictionarydialog.hrc"
 #include "chinese_direction.hrc"
 
-#ifndef _SVT_CONTROLDIMS_HRC_
 #include <svtools/controldims.hrc>
-#endif
 
 //-----------------------------------------------------------------------------
 //defines for positions and sizes:

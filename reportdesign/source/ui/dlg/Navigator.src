@@ -27,12 +27,8 @@
 #include "RptResId.hrc"
 #include "helpids.hrc"
 #include "rptui_slotid.hrc"
-#ifndef _GLOBLMN_HRC
 #include <svx/globlmn.hrc>
-#endif
-#ifndef _SBASLTID_HRC
 #include <svx/svxids.hrc>
-#endif
 #include <svl/solar.hrc>
 
 #define RID_SVXIMG_COLLAPSEDNODE                    (RID_FORMS_START + 2)

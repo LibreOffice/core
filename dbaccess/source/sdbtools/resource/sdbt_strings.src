@@ -16,9 +16,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef DBACCESS_SDBT_RESOURCE_HRC
 #include "sdbt_resource.hrc"
-#endif
 
 String STR_QUERY_AND_TABLE_DISTINCT_NAMES
 {

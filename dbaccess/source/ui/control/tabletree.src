@@ -16,12 +16,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DBU_CONTROL_HRC_
 #include "dbu_control.hrc"
-#endif
-#ifndef _DBAUI_TABLETREE_HRC_
 #include "tabletree.hrc"
-#endif
 #include "browserids.hxx"
 
 Menu MENU_TABLETREE_POPUP

@@ -25,9 +25,7 @@
  *
  ************************************************************************/
 #define __RSC
-#ifndef _ERRCODE_HXX //autogen
 #include <tools/errcode.hxx>
-#endif
 #include "sb.hrc"
 #include <basic/sberrors.hxx>
 

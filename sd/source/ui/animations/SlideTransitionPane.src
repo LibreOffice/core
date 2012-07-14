@@ -19,10 +19,7 @@
 #include "CustomAnimation.hrc"
 #include "SlideTransitionPane.hrc"
 #include "helpids.h"
-
-#ifndef _SVT_CONTROLDIMS_HRC_
 #include <svtools/controldims.hrc>
-#endif
 
 // Note: Sizes of 1 usually mean they are auto-calculated
 

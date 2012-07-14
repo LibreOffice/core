@@ -16,12 +16,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DBACCESS_UI_DIRECTSQL_HRC_
 #include "directsql.hrc"
-#endif
-#ifndef _DBU_DLG_HRC_
 #include "dbu_dlg.hrc"
-#endif
 
 #define BUTTON_SIZE_X       50
 #define BUTTON_SIZE_Y       14

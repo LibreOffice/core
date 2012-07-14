@@ -19,10 +19,7 @@
 #include "dlg_InsertLegend.hrc"
 #include "CommonResources.hrc"
 #include "res_LegendPosition.hrc"
-
-#ifndef _SVT_CONTROLDIMS_HRC_
 #include <svtools/controldims.hrc>
-#endif
 
 ModalDialog DLG_LEGEND
 {

@@ -18,13 +18,8 @@
 
 #define __RSC
 
-#ifndef UUI_IDS_HRC
 #include "ids.hrc"
-#endif
-
-#ifndef UUI_NAMECLASHDLG_HRC
 #include "nameclashdlg.hrc"
-#endif
 
 #define DLG_WIDTH       250
 #define DLG_HEIGTH       75

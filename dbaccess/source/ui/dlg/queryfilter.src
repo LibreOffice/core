@@ -16,9 +16,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef DBAUI_QUERYFILTER_HRC
 #include "queryfilter.hrc"
-#endif
 #include "dbaccess_helpid.hrc"
 
 ModalDialog DLG_FILTERCRIT
