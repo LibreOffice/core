@@ -19,6 +19,14 @@ public:
     TemplateOnlineViewItem (ThumbnailView &rView, Window *pParent);
 
     virtual ~TemplateOnlineViewItem ();
+
+    void setURL (const rtl::OUString &rURL) { maUrl = rURL; }
+
+    const rtl::OUString& getURL () const { return maUrl; }
+
+private:
+
+    rtl::OUString maUrl;
 };
 
 #endif // __SFX2_TEMPLATEONLINEVIEWITEM_HXX__

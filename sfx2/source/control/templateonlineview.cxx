@@ -52,6 +52,7 @@ void TemplateOnlineView::Populate()
 
         pItem->mnId = i+1;
         pItem->maTitle = maNames[i];
+        pItem->setURL(maUrls[i]);
 
         mItemList.push_back(pItem);
     }
