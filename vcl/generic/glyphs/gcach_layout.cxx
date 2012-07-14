@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-#define ENABLE_ICU_LAYOUT
 #include <gcach_ftyp.hxx>
 #include <sallayout.hxx>
 #include <salgdi.hxx>
@@ -36,6 +34,13 @@
 
 #include <sal/alloca.h>
 #include <rtl/instance.hxx>
+
+#include <layout/LayoutEngine.h>
+#include <layout/LEFontInstance.h>
+#include <layout/LEScripts.h>
+
+#include <unicode/uscript.h>
+#include <unicode/ubidi.h>
 
 namespace { struct SimpleLayoutEngine : public rtl::Static< ServerFontLayoutEngine, SimpleLayoutEngine > {}; }
 
@@ -156,25 +161,6 @@ bool ServerFontLayoutEngine::operator()( ServerFontLayout& rLayout, ImplLayoutAr
 // =======================================================================
 // bridge to ICU LayoutEngine
 // =======================================================================
-
-#ifdef ENABLE_ICU_LAYOUT
-
-// disable warnings in icu layout headers
-#if defined __SUNPRO_CC
-#pragma disable_warn
-#endif
-
-#include <layout/LayoutEngine.h>
-#include <layout/LEFontInstance.h>
-#include <layout/LEScripts.h>
-
-// enable warnings again
-#if defined __SUNPRO_CC
-#pragma enable_warn
-#endif
-
-#include <unicode/uscript.h>
-#include <unicode/ubidi.h>
 
 using namespace U_ICU_NAMESPACE;
 
@@ -641,18 +627,13 @@ bool IcuLayoutEngine::operator()( ServerFontLayout& rLayout, ImplLayoutArgs& rAr
     return true;
 }
 
-#endif // ENABLE_ICU_LAYOUT
-
 // =======================================================================
 
 ServerFontLayoutEngine* ServerFont::GetLayoutEngine()
 {
     // find best layout engine for font, platform, script and language
-#ifdef ENABLE_ICU_LAYOUT
     if( !mpLayoutEngine && FT_IS_SFNT( maFaceFT ) )
         mpLayoutEngine = new IcuLayoutEngine( *this );
-#endif // ENABLE_ICU_LAYOUT
-
     return mpLayoutEngine;
 }
 
