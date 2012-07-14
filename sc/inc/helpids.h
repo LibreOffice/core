@@ -56,10 +56,6 @@
 #define HID_SC_HF_FRL                                           "SC_HID_SC_HF_FRL"
 #define HID_SC_HF_FRC                                           "SC_HID_SC_HF_FRC"
 #define HID_SC_HF_FRR                                           "SC_HID_SC_HF_FRR"
-//  "Spalten" in Teilergebnissen: Gruppe 1/2/3 - nicht mehr!
-#define HID_SC_SUBT_COLS_1                                      "SC_HID_SC_SUBT_COLS_1"
-#define HID_SC_SUBT_COLS_2                                      "SC_HID_SC_SUBT_COLS_2"
-#define HID_SC_SUBT_COLS_3                                      "SC_HID_SC_SUBT_COLS_3"
 //  Eintraege im Navigator
 #define HID_SC_NAVIPI_ENTRIES                                   "SC_HID_SC_NAVIPI_ENTRIES"
 #define HID_SC_NAVIPI_ROW                                       "SC_HID_SC_NAVIPI_ROW"
@@ -81,18 +77,14 @@
 //  Bereich ist voll!
 
 // Hilfe IDs fuer Dialoge / Pages (max.70) -----------------------------------
-#define HID_SC_AUTOFORMAT                                       "SC_HID_SC_AUTOFORMAT"
 #define HID_SC_PIVOTFILTER                                      "SC_HID_SC_PIVOTFILTER"
 #define HID_SC_INPORTOPT                                        "SC_HID_SC_INPORTOPT"
 #define HID_SC_PIVOTSUBT                                        "SC_HID_SC_PIVOTSUBT"
-#define HID_SC_FORM_ARGS                                        "SC_HID_SC_FORM_ARGS"
 #define HID_SCPAGE_SORT_FIELDS                                  "SC_HID_SCPAGE_SORT_FIELDS"
 #define HID_SCPAGE_SORT_OPTIONS                                 "SC_HID_SCPAGE_SORT_OPTIONS"
-#define HID_SCPAGE_SORTKEY_FIELDS                               "SC_HID_SCPAGE_SORTKEY_FIELDS"
 #define HID_SCPAGE_SUBT_OPTIONS                                 "SC_HID_SCPAGE_SUBT_OPTIONS"
 #define HID_SCPAGE_SUBT_GROUP                                   "SC_HID_SCPAGE_SUBT_GROUP"
 #define HID_SCPAGE_PROTECTION                                   "SC_HID_SCPAGE_PROTECTION"
-#define HID_SCPAGE_VIEW                                         "SC_HID_SCPAGE_VIEW"
 #define HID_SCPAGE_CALC                                         "SC_HID_SCPAGE_CALC"
 #define HID_SCPAGE_FORMULA                                      "SC_HID_SCPAGE_FORMULA"
 #define HID_SCPAGE_USERLISTS                                    "SC_HID_SCPAGE_USERLISTS"
@@ -113,12 +105,9 @@
 
 #define HID_SCPAGE_CONTENT                                      "SC_HID_SCPAGE_CONTENT"
 #define HID_SCPAGE_LAYOUT                                       "SC_HID_SCPAGE_LAYOUT"
-#define HID_SCPAGE_INPUT                                        "SC_HID_SCPAGE_INPUT"
 
 #define HID_SC_NAVIGATOR                                        "SC_HID_SC_NAVIGATOR"
 
-#define HID_SC_MTRIN_VAL                                        "SC_HID_SC_MTRIN_VAL"
-#define HID_SC_MTRIN_DEF                                        "SC_HID_SC_MTRIN_DEF"
 #define HID_SC_SELENTRY_LIST                                    "SC_HID_SC_SELENTRY_LIST"
 #define HID_SC_GROUP_COLS                                       "SC_HID_SC_GROUP_COLS"
 #define HID_SC_GROUP_ROWS                                       "SC_HID_SC_GROUP_ROWS"
@@ -162,7 +151,6 @@
 #define HID_SC_SCENARIO_DELETE                                  "SC_HID_SC_SCENARIO_DELETE"
 #define HID_SC_SCENARIO_EDIT                                    "SC_HID_SC_SCENARIO_EDIT"
 
-#define HID_SCDLG_FORMULA                                       "SC_HID_SCDLG_FORMULA"
 #define HID_SCDLG_CONDFORMAT                                    "SC_HID_SCDLG_CONDFORMAT"
 #define HID_COLROWNAMERANGES                                    "SC_HID_COLROWNAMERANGES"
 
@@ -197,34 +185,9 @@
 #define HID_SC_REN_AFMT_DLG                                     "SC_HID_SC_REN_AFMT_DLG"
 
 // Hilfe IDs fuer Submenus (max.50) ------------------------------------------
-#define HID_SCMENU_EDIT                                         "SC_HID_SCMENU_EDIT"
-#define HID_SCMENU_FILL                                         "SC_HID_SCMENU_FILL"
-#define HID_SCMENU_DELBREAK                                     "SC_HID_SCMENU_DELBREAK"
-#define HID_SCMENU_VIEW                                         "SC_HID_SCMENU_VIEW"
-#define HID_SCMENU_TOOLBARS                                     "SC_HID_SCMENU_TOOLBARS"
-#define HID_SCMENU_INSERT                                       "SC_HID_SCMENU_INSERT"
-#define HID_SCMENU_INSBREAK                                     "SC_HID_SCMENU_INSBREAK"
-#define HID_SCMENU_NAME                                         "SC_HID_SCMENU_NAME"
-#define HID_SCMENU_GRAPHIC                                      "SC_HID_SCMENU_GRAPHIC"
-#define HID_SCMENU_DATA                                         "SC_HID_SCMENU_DATA"
-#define HID_SCMENU_FILTER                                       "SC_HID_SCMENU_FILTER"
-#define HID_SCMENU_OUTLINE                                      "SC_HID_SCMENU_OUTLINE"
-#define HID_SCMENU_PIVOT                                        "SC_HID_SCMENU_PIVOT"
-#define HID_SCMENU_EXTRA                                        "SC_HID_SCMENU_EXTRA"
-#define HID_SCMENU_SPELLING                                     "SC_HID_SCMENU_SPELLING"
-#define HID_SCMENU_AUDIT                                        "SC_HID_SCMENU_AUDIT"
-#define HID_SCMENU_PROTECT                                      "SC_HID_SCMENU_PROTECT"
-#define HID_SCMENU_CELLCONT                                     "SC_HID_SCMENU_CELLCONT"
-#define HID_SCMENU_ROW                                          "SC_HID_SCMENU_ROW"
-#define HID_SCMENU_COL                                          "SC_HID_SCMENU_COL"
-#define HID_SCMENU_TAB                                          "SC_HID_SCMENU_TAB"
-#define HID_SCMENU_MERGE                                        "SC_HID_SCMENU_MERGE"
-#define HID_SCMENU_AREA                                         "SC_HID_SCMENU_AREA"
 #define HID_SCMENU_OBJMIRROR                                    "SC_HID_SCMENU_OBJMIRROR"
 #define HID_SCMENU_OBJARRANGE                                   "SC_HID_SCMENU_OBJARRANGE"
 #define HID_SCMENU_ANCHOR                                       "SC_HID_SCMENU_ANCHOR"
-#define HID_SCMENU_SENDTO                                       "SC_HID_SCMENU_SENDTO"
-#define HID_SCMENU_CHANGES                                      "SC_HID_SCMENU_CHANGES"
 
 #define HID_SC_FAP_BTN_FX1                                      "SC_HID_SC_FAP_BTN_FX1"
 #define HID_SC_FAP_BTN_FX2                                      "SC_HID_SC_FAP_BTN_FX2"
@@ -243,7 +206,6 @@
 #define HID_SORT_POSITION                                       "SC_HID_SORT_POSITION"
 #define HID_SC_CHANGES_COMMENT                                  "SC_HID_SC_CHANGES_COMMENT"
 #define HID_SC_FUNCTIONLIST                                     "SC_HID_SC_FUNCTIONLIST"
-#define HID_SCPAGE_OPTLOAD                                      "SC_HID_SCPAGE_OPTLOAD"
 #define HID_PASSWD_TABLE                                        "SC_HID_PASSWD_TABLE"
 #define HID_PASSWD_DOC                                          "SC_HID_PASSWD_DOC"
 
@@ -253,7 +215,6 @@
 
 // Other help IDs (max.70) ---------------------------------------------------
 #define HID_SCDLG_LINKAREAURL                                   "SC_HID_SCDLG_LINKAREAURL"
-#define HID_SCMENU_EDIT_TABLE                                   "SC_HID_SCMENU_EDIT_TABLE"
 
 #define HID_SELECTTABLES                                        "SC_HID_SELECTTABLES"
 #define HID_SC_REPLCELLSWARN                                    "SC_HID_SC_REPLCELLSWARN"
@@ -274,9 +235,6 @@
 #define HID_SC_DPDATEGROUP                                      "SC_HID_SC_DPDATEGROUP"
 #define HID_SC_DPDATEGROUP_LB                                   "SC_HID_SC_DPDATEGROUP_LB"
 #define HID_SC_DPSHOWDETAIL                                     "SC_HID_SC_DPSHOWDETAIL"
-
-// #i68101#
-#define HID_SC_TITLE_DESCRIPTION_OBJECT                         "SC_HID_SC_TITLE_DESCRIPTION_OBJECT"
 
 #define HID_SC_SOLVEROPTIONS                                    "SC_HID_SC_SOLVEROPTIONS"
 #define HID_SC_SOLVEROPTIONS_LB                                 "SC_HID_SC_SOLVEROPTIONS_LB"
@@ -410,10 +368,7 @@
 #define HID_MN_FORMAT_ALGN                                      "SC_HID_MN_FORMAT_ALGN"
 #define HID_MN_FORMAT_LINESPACE                                 "SC_HID_MN_FORMAT_LINESPACE"
 
-
 // Ende Hilfe IDs ------------------------------------------------------------
-
-#define HID_SC_FUNC_DUMMY                                       "SC_HID_SC_FUNC_DUMMY"
 
 #define HID_FUNC_DBANZAHL                                       "SC_HID_FUNC_DBANZAHL"
 #define HID_FUNC_DBANZAHL2                                      "SC_HID_FUNC_DBANZAHL2"
@@ -487,7 +442,6 @@
 #define HID_FUNC_FORMEL                                         "SC_HID_FUNC_FORMEL"
 #define HID_FUNC_ZELLE                                          "SC_HID_FUNC_ZELLE"
 #define HID_FUNC_INFO                                           "SC_HID_FUNC_INFO"
-
 
 #define HID_FUNC_FALSCH                                         "SC_HID_FUNC_FALSCH"
 #define HID_FUNC_NICHT                                          "SC_HID_FUNC_NICHT"

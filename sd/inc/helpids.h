@@ -64,8 +64,6 @@
 #define HID_SD_NAVIGATOR_TBI_SHAPE_FILTER                       "SD_HID_SD_NAVIGATOR_TBI_SHAPE_FILTER"
 
 // Toolboxen
-#define HID_SD_DRAW_DEFAULTTOOLBOX                              "SD_HID_SD_DRAW_DEFAULTTOOLBOX"
-#define HID_SD_PLUGINTOOLBOX                                    "SD_HID_SD_PLUGINTOOLBOX"
 #define HID_SD_DRAW_TOOLBOX                                     "SD_HID_SD_DRAW_TOOLBOX"
 #define HID_SD_SLIDE_TOOLBOX                                    "SD_HID_SD_SLIDE_TOOLBOX"
 #define HID_SD_OUTLINE_TOOLBOX                                  "SD_HID_SD_OUTLINE_TOOLBOX"
@@ -91,7 +89,6 @@
 #define HID_SD_FW_INSERT                                        "SD_HID_SD_FW_INSERT"
 #define HID_SD_FW_POSITION                                      "SD_HID_SD_FW_POSITION"
 
-#define HID_SD_BTN_PREVIEW                                      "SD_HID_SD_BTN_PREVIEW"
 
 #define HID_SD_NAVIGATOR_MENU1                                  "SD_HID_SD_NAVIGATOR_MENU1"
 #define HID_SD_NAVIGATOR_MENU2                                  "SD_HID_SD_NAVIGATOR_MENU2"
@@ -130,7 +127,6 @@
 
 #define HID_SD_DRAW_GRAF_TOOLBOX                                "SD_HID_SD_DRAW_GRAF_TOOLBOX"
 
-#define HID_SD_FW_GRAFFILTERS                                   "SD_HID_SD_FW_GRAFFILTERS"
 
 #define HID_SD_TABBAR_PAGES                                     "SD_HID_SD_TABBAR_PAGES"
 #define HID_SD_TABBAR_LAYERS                                    "SD_HID_SD_TABBAR_LAYERS"
@@ -144,8 +140,6 @@
 #define HID_SD_NAMEDIALOG_PAGE                                  "SD_HID_SD_NAMEDIALOG_PAGE"
 #define HID_SD_NAMEDIALOG_LINEEND                               "SD_HID_SD_NAMEDIALOG_LINEEND"
 
-#define HID_SD_DRAW_3D_TOOLBOX                                  "SD_HID_SD_DRAW_3D_TOOLBOX"
-#define HID_SD_DRAW_FONTWORK_TOOLBOX                            "SD_HID_SD_DRAW_FONTWORK_TOOLBOX"
 
 #define HID_SD_TABPAGE_HEADERFOOTER_SLIDE                       "SD_HID_SD_TABPAGE_HEADERFOOTER_SLIDE"
 #define HID_SD_TABPAGE_HEADERFOOTER_NOTESHANDOUT                "SD_HID_SD_TABPAGE_HEADERFOOTER_NOTESHANDOUT"
@@ -227,18 +221,10 @@
 #define HID_VECTORIZE_DLG                                       "SD_HID_VECTORIZE_DLG"
 #define HID_UNDO_DELETE_WARNING                                 "SD_HID_UNDO_DELETE_WARNING"
 
-#define HID_MN_SUB_GROUP                                        "SD_HID_MN_SUB_GROUP"
 #define HID_MN_SUB_GRAPHIC                                      "SD_HID_MN_SUB_GRAPHIC"
-#define HID_MN_SUB_SEND                                         "SD_HID_MN_SUB_SEND"
-#define HID_MN_SUB_MASTER_LAYOUTS                               "SD_HID_MN_SUB_MASTER_LAYOUTS"
-#define HID_MN_SUB_VIEW                                         "SD_HID_MN_SUB_VIEW"
-#define HID_MN_SUB_MASTERPAGE                                   "SD_HID_MN_SUB_MASTERPAGE"
 #define HID_MN_SUB_FIELD                                        "SD_HID_MN_SUB_FIELD"
 #define HID_MN_SUB_TEMPLATES                                    "SD_HID_MN_SUB_TEMPLATES"
 #define HID_MN_SUB_SPELLING                                     "SD_HID_MN_SUB_SPELLING"
-#define HID_MN_SUB_POSITION                                     "SD_HID_MN_SUB_POSITION"
-#define HID_MN_SUB_OUTPUT_QUALITY                               "SD_HID_MN_SUB_OUTPUT_QUALITY"
-#define HID_MN_SUB_PREVIEW_OUTPUT_QUALITY                       "SD_HID_MN_SUB_PREVIEW_OUTPUT_QUALITY"
 #define HID_MN_SUB_CONVERT                                      "SD_HID_MN_SUB_CONVERT"
 #define HID_MN_SUB_MIRROR                                       "SD_HID_MN_SUB_MIRROR"
 

@@ -161,9 +161,7 @@
 #define HID_OBJ_START               (HID_START+30000)
 //      HID_OBJ_END                 (HID_START+32767)
 
-
-#define HID_EXTENSIONS_START        (HID_OBJ_START+2281)
-#define HID_EXTENSIONS_END          (HID_OBJ_START+2800)
+// free: HID_OBJ_START+2281 to HID_OBJ_START+2800
 
 // Slot Ids
 
