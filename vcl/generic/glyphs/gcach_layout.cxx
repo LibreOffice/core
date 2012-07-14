@@ -61,9 +61,7 @@ void ServerFontLayout::DrawText( SalGraphics& rSalGraphics ) const
 
 bool ServerFontLayout::LayoutText( ImplLayoutArgs& rArgs )
 {
-    ServerFontLayoutEngine* pLE = NULL;
-    if( !(rArgs.mnFlags & SAL_LAYOUT_COMPLEX_DISABLED) )
-        pLE = mrServerFont.GetLayoutEngine();
+    ServerFontLayoutEngine* pLE = mrServerFont.GetLayoutEngine();
     if( !pLE )
         pLE = &SimpleLayoutEngine::get();
 
