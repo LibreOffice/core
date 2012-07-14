@@ -82,7 +82,23 @@ ModelPosition ConvertToModelPosition( const ConversionMap* pMap, sal_uInt32 nVie
             const sal_uInt32 nLengthModel  = nPosModel - nPrevPosModel;
             const sal_uInt32 nLengthExpand = nPosExpand - nPrevPosExpand;
 
-            const sal_uInt32 nFieldLengthExpand = nLengthExpand - nLengthModel + 1;
+            // For zero-expansion fields (e.g. post-it note fields), the expanded
+            // string is smaller than the original string. nLengthExpand (the distance
+            // between 2 fields in view-space) can be smaller than nLengthModel (the
+            // distance in model-space). It can only be smaller by 1 (field marker character
+            // exists in model-space but not in view-space).
+            //
+            // For a concrete example, consider: "Hello^[Comment Field] ^[Page Number Field]"
+            // ^ are field markers. This expands to: "Hello 1". Note that the comment marker
+            // was removed. The model-space distance between the two fields is 7 - 5 = 2. The view-space
+            // distance between the two fields is 6 - 5 = 1.
+            // (Technically, the comment field doesn't exist in the view. It still retains the index
+            // of where it used to be, though)
+            //
+            // So the field length must be computed as "nLengthExpand + 1 - nLengthModel" instead
+            // of the intuitive "nLengthExpand - nLengthModel + 1" to avoid underflow with
+            // the unsigned ints.
+            const sal_uInt32 nFieldLengthExpand = nLengthExpand + 1 - nLengthModel;
             const sal_uInt32 nFieldEndExpand = nPrevPosExpand + nFieldLengthExpand;
 
             // Check if nPos is outside of field:

@@ -3101,7 +3101,10 @@ const ModelToViewHelper::ConversionMap*
     ModelToViewHelper::ConversionMap* pConversionMap = 0;
 
     const SwpHints* pSwpHints2 = GetpSwpHints();
-    xub_StrLen nPos = 0;
+    // nPos cannot be xub_StrLen. In the loop below, it is possible for nPos to go negative
+    // if there's a hint with zero-expansion inserted at the beginning of the node.
+    // (see the computation "nPos += aExpand.Len() - 1" at the end of the loop).
+    sal_Int32 nPos = 0;
 
     for ( sal_uInt16 i = 0; pSwpHints2 && i < pSwpHints2->Count(); ++i )
     {
@@ -3111,15 +3114,25 @@ const ModelToViewHelper::ConversionMap*
             const XubString aExpand(
                 static_cast<SwTxtFld const*>(pAttr)->GetFld().GetFld()
                     ->ExpandField(true));
-            if ( aExpand.Len() > 0 )
+            const xub_StrLen nFieldPos = *pAttr->GetStart();
+
+            OSL_ASSERT(nPos + static_cast<sal_Int32>(nFieldPos) >= 0);
+            const xub_StrLen adjustedPos = static_cast<xub_StrLen>(nPos + static_cast<sal_Int32>(nFieldPos));
+
+            // CH_TXTATR_INWORD is inserted as a hint for post-it fields (document comments).
+            // For example, consider: "Hel^lo world", where the ^ denotes the position at which the
+            // comment is inserted. Even though the hint at ^ is empty (aExpand is empty), we still want
+            // to expand the field (i.e. delete CH_TXTATR_INWORD) to prevent CH_TXTATR_INWORD from
+            // splitting "Hello" into 2 words (for word-counting and other word-based logic).
+            if ( aExpand.Len() > 0 ||
+                 (aExpand.Len() == 0 && rNodeText[nFieldPos] == CH_TXTATR_INWORD))
             {
-                const xub_StrLen nFieldPos = *pAttr->GetStart();
-                rRetText = rRetText.replaceAt( nPos + nFieldPos, 1, aExpand );
+                rRetText = rRetText.replaceAt( adjustedPos, 1, aExpand );
                 if ( !pConversionMap )
                     pConversionMap = new ModelToViewHelper::ConversionMap;
                 pConversionMap->push_back(
                         ModelToViewHelper::ConversionMapEntry(
-                            nFieldPos, nPos + nFieldPos ) );
+                            nFieldPos, adjustedPos ) );
                 nPos += ( aExpand.Len() - 1 );
             }
         }
