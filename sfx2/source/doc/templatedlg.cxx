@@ -190,6 +190,14 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
     maView->setOverlayDblClickHdl(LINK(this,SfxTemplateManagerDlg,OpenTemplateHdl));
     maView->setOverlayCloseHdl(LINK(this,SfxTemplateManagerDlg,CloseOverlayHdl));
 
+    // Set online view position and dimensions
+    mpOnlineView->SetPosSizePixel(aViewPos,aThumbSize);
+    mpOnlineView->setItemMaxTextLength(ITEM_MAX_TEXT_LENGTH);
+
+    mpOnlineView->setItemDimensions(ITEM_MAX_WIDTH,THUMBNAIL_MAX_HEIGHT,
+                                    ITEM_MAX_HEIGHT-THUMBNAIL_MAX_HEIGHT,
+                                    ITEM_PADDING);
+
     mpSearchView->SetSizePixel(aThumbSize);
     mpSearchView->setItemMaxTextLength(ITEM_MAX_TEXT_LENGTH);
 
