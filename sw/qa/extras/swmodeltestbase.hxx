@@ -147,7 +147,7 @@ protected:
     T getProperty( uno::Any obj, const rtl::OUString& name ) const
     {
         uno::Reference< beans::XPropertySet > properties( obj, uno::UNO_QUERY );
-        T data;
+        T data = T();
         properties->getPropertyValue( name ) >>= data;
         return data;
     }
@@ -156,7 +156,7 @@ protected:
     T getProperty( uno::Reference< uno::XInterface > obj, const rtl::OUString& name ) const
     {
         uno::Reference< beans::XPropertySet > properties( obj, uno::UNO_QUERY );
-        T data;
+        T data = T();
         properties->getPropertyValue( name ) >>= data;
         return data;
     }
