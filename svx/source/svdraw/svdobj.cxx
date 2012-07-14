@@ -1090,7 +1090,7 @@ void SdrObject::TakeObjNamePlural(XubString& rName) const
 void SdrObject::ImpTakeDescriptionStr(sal_uInt16 nStrCacheID, rtl::OUString& rStr, sal_uInt16 nVal) const
 {
     rStr = ImpGetResStr(nStrCacheID);
-    sal_Int32 nPos = rStr.indexOf(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("%1")));
+    sal_Int32 nPos = rStr.indexOf("%1");
     if (nPos >= 0)
     {
         // Replace '%1' with the object name.
@@ -1099,7 +1099,7 @@ void SdrObject::ImpTakeDescriptionStr(sal_uInt16 nStrCacheID, rtl::OUString& rSt
         rStr = rStr.replaceAt(nPos, 2, aObjName);
     }
 
-    nPos = rStr.indexOf(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("%2")));
+    nPos = rStr.indexOf("%2");
     if (nPos >= 0)
         // Replace '%2' with the passed value.
         rStr = rStr.replaceAt(

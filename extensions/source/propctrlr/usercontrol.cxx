@@ -293,7 +293,7 @@ namespace pcr
         ::rtl::OUString sURL;
         if ( ( _rValue >>= sURL ) )
         {
-            if ( sURL.indexOf( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.GraphicObject:"  ) ) ) == 0  )
+            if ( sURL.indexOf( "vnd.sun.star.GraphicObject:" ) == 0 )
                 getTypedControlWindow()->DisplayURL( getTypedControlWindow()->GetPlaceHolder() );
             else
                 getTypedControlWindow()->DisplayURL( sURL );

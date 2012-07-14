@@ -505,11 +505,11 @@ OUString lcl_getDiagramType( const OUString & rTemplateServiceName )
 
         // "Area" "StackedArea" "PercentStackedArea" "ThreeDArea"
         // "StackedThreeDArea" "PercentStackedThreeDArea"
-        if( aName.indexOf( rtl::OUString("Area") ) != -1 )
+        if( aName.indexOf( "Area" ) != -1 )
             return rtl::OUString("com.sun.star.chart.AreaDiagram");
 
         // "Pie" "PieAllExploded" "ThreeDPie" "ThreeDPieAllExploded"
-        if( aName.indexOf( rtl::OUString("Pie") ) != -1 )
+        if( aName.indexOf( "Pie" ) != -1 )
             return rtl::OUString("com.sun.star.chart.PieDiagram");
 
         // "Column" "StackedColumn" "PercentStackedColumn" "ThreeDColumnDeep"
@@ -518,33 +518,33 @@ OUString lcl_getDiagramType( const OUString & rTemplateServiceName )
         // "PercentStackedBar" "ThreeDBarDeep" "ThreeDBarFlat"
         // "StackedThreeDBarFlat" "PercentStackedThreeDBarFlat" "ColumnWithLine"
         // "StackedColumnWithLine"
-        if( aName.indexOf( rtl::OUString("Column") ) != -1 || aName.indexOf( rtl::OUString("Bar") ) != -1 )
+        if( aName.indexOf( "Column" ) != -1 || aName.indexOf( "Bar" ) != -1 )
             return rtl::OUString( "com.sun.star.chart.BarDiagram" );
 
         // "Donut" "DonutAllExploded" "ThreeDDonut" "ThreeDDonutAllExploded"
-        if( aName.indexOf( rtl::OUString("Donut") ) != -1 )
+        if( aName.indexOf( "Donut" ) != -1 )
             return rtl::OUString( "com.sun.star.chart.DonutDiagram" );
 
         // "ScatterLineSymbol" "ScatterLine" "ScatterSymbol" "ThreeDScatter"
-        if( aName.indexOf( rtl::OUString("Scatter") ) != -1 )
+        if( aName.indexOf( "Scatter" ) != -1 )
             return rtl::OUString( "com.sun.star.chart.XYDiagram" );
 
         // "FilledNet" "StackedFilledNet" "PercentStackedFilledNet"
-        if( aName.indexOf( rtl::OUString("FilledNet") ) != -1 )
+        if( aName.indexOf( "FilledNet" ) != -1 )
             return rtl::OUString( "com.sun.star.chart.FilledNetDiagram" );
 
         // "Net" "NetSymbol" "NetLine" "StackedNet" "StackedNetSymbol"
         // "StackedNetLine" "PercentStackedNet" "PercentStackedNetSymbol"
         // "PercentStackedNetLine"
-        if( aName.indexOf( rtl::OUString("Net") ) != -1 )
+        if( aName.indexOf( "Net" ) != -1 )
             return rtl::OUString( "com.sun.star.chart.NetDiagram" );
 
         // "StockLowHighClose" "StockOpenLowHighClose" "StockVolumeLowHighClose"
         // "StockVolumeOpenLowHighClose"
-        if( aName.indexOf( rtl::OUString("Stock") ) != -1 )
+        if( aName.indexOf( "Stock" ) != -1 )
             return rtl::OUString( "com.sun.star.chart.StockDiagram" );
 
-        if( aName.indexOf( rtl::OUString("Bubble") ) != -1 )
+        if( aName.indexOf( "Bubble" ) != -1 )
             return rtl::OUString( "com.sun.star.chart.BubbleDiagram" );
 
         // Note: this must be checked after Bar, Net and Scatter
@@ -553,7 +553,7 @@ OUString lcl_getDiagramType( const OUString & rTemplateServiceName )
         // "PercentStackedLine" "LineSymbol" "StackedLineSymbol"
         // "PercentStackedLineSymbol" "ThreeDLine" "StackedThreeDLine"
         // "PercentStackedThreeDLine" "ThreeDLineDeep"
-        if( aName.indexOf( rtl::OUString("Line") ) != -1 || aName.indexOf( rtl::OUString("Symbol") ) != -1 )
+        if( aName.indexOf( "Line" ) != -1 || aName.indexOf( "Symbol" ) != -1 )
             return rtl::OUString( "com.sun.star.chart.LineDiagram" );
 
         OSL_FAIL( "unknown template" );

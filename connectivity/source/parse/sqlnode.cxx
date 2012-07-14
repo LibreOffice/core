@@ -976,7 +976,7 @@ sal_Int16 OSQLParser::buildLikeRule(OSQLParseNode*& pAppend, OSQLParseNode*& pLi
                         break;
                     default:
                         m_sErrorMessage = m_pContext->getErrorMessage(IParseContext::ERROR_VALUE_NO_LIKE);
-                        m_sErrorMessage = m_sErrorMessage.replaceAt(m_sErrorMessage.indexOf(::rtl::OUString("#1")),2,pLiteral->getTokenValue());
+                        m_sErrorMessage = m_sErrorMessage.replaceAt(m_sErrorMessage.indexOf("#1"),2,pLiteral->getTokenValue());
                         break;
                 }
             }

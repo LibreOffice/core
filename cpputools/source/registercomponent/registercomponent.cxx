@@ -74,7 +74,7 @@ OUString replacePrefix(OUString const & url, OUString const & prefix) {
 
 sal_Bool isFileUrl(const OUString& fileName)
 {
-    if (fileName.indexOf(OUString(RTL_CONSTASCII_USTRINGPARAM("file://"))) == 0 )
+    if (fileName.indexOf("file://") == 0 )
         return sal_True;
     return sal_False;
 }

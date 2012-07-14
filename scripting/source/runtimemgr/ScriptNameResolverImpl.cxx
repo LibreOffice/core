@@ -246,7 +246,7 @@ throw ( lang::IllegalArgumentException, script::CannotConvertException, RuntimeE
         // b) an illegal location
 
         // detect illegal location
-        if (  scriptURI.indexOf( OUString("location=") ) != -1 )
+        if (  scriptURI.indexOf( "location=" ) != -1 )
         {
             OSL_TRACE(
                 "ScriptNameResolver::resolve, throwing IllegalArgException" );

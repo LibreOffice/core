@@ -2126,7 +2126,7 @@ void OSQLParseTreeIterator::impl_appendError( IParseContext::ErrorCode _eError, 
 
         sErrorMessage = sErrorMessage.replaceAt( sErrorMessage.indexOf( sPlaceHolder1 ), sPlaceHolder1.getLength(), *_pReplaceToken1 );
         if ( _pReplaceToken2 )
-            sErrorMessage = sErrorMessage.replaceAt( sErrorMessage.indexOf( ::rtl::OUString("#2") ), 2, *_pReplaceToken2 );
+            sErrorMessage = sErrorMessage.replaceAt( sErrorMessage.indexOf( "#2" ), 2, *_pReplaceToken2 );
     }
 
     impl_appendError( SQLException(

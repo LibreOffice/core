@@ -291,7 +291,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(/*argc*/, argv)
     s_test__bootstrap_InitialComponentContext__purpose();
 
     int ret;
-    if (s_comment.indexOf(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FAILURE"))) == -1)
+    if (s_comment.indexOf("FAILURE") == -1)
     {
         s_comment += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TESTS PASSED\n"));
         ret = 0;

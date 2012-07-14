@@ -256,8 +256,7 @@ generateCustomName(
     OUString name;
     OUString placeholder("%n" );
 
-    sal_Int32 pos = prefix.indexOf(
-        OUString("%n" ) );
+    sal_Int32 pos = prefix.indexOf( placeholder );
 
     if ( pos != -1 )
     {
@@ -822,7 +821,7 @@ SvxConfigDialog::SvxConfigDialog(
     {
         OUString text = ((const SfxStringItem*)pItem)->GetValue();
 
-        if (text.indexOf(OUString(ITEM_TOOLBAR_URL)) == 0)
+        if (text.indexOf( ITEM_TOOLBAR_URL ) == 0)
         {
             SetCurPageId( RID_SVXPAGE_TOOLBARS );
         }
@@ -3153,7 +3152,7 @@ SvxToolbarConfigPage::SvxToolbarConfigPage(
     if ( pItem )
     {
         OUString text = ((const SfxStringItem*)pItem)->GetValue();
-        if (text.indexOf(OUString(ITEM_TOOLBAR_URL)) == 0)
+        if (text.indexOf( ITEM_TOOLBAR_URL ) == 0)
         {
             m_aURLToSelect = text.copy( 0 );
         }
@@ -3800,7 +3799,7 @@ void ToolbarSaveInData::SetSystemStyle(
     const OUString& rResourceURL,
     sal_Int32 nStyle )
 {
-    if ( rResourceURL.indexOf( OUString("private" ) ) == 0 &&
+    if ( rResourceURL.indexOf( "private" ) == 0 &&
          m_xPersistentWindowState.is() &&
          m_xPersistentWindowState->hasByName( rResourceURL ) )
     {
@@ -3839,7 +3838,7 @@ sal_Int32 ToolbarSaveInData::GetSystemStyle( const OUString& rResourceURL )
 {
     sal_Int32 result = 0;
 
-    if ( rResourceURL.indexOf( OUString("private" ) ) == 0 &&
+    if ( rResourceURL.indexOf( "private" ) == 0 &&
          m_xPersistentWindowState.is() &&
          m_xPersistentWindowState->hasByName( rResourceURL ) )
     {
@@ -3873,7 +3872,7 @@ OUString ToolbarSaveInData::GetSystemUIName( const OUString& rResourceURL )
 {
     OUString result;
 
-    if ( rResourceURL.indexOf( OUString("private" ) ) == 0 &&
+    if ( rResourceURL.indexOf( "private" ) == 0 &&
          m_xPersistentWindowState.is() &&
          m_xPersistentWindowState->hasByName( rResourceURL ) )
     {
@@ -3899,7 +3898,7 @@ OUString ToolbarSaveInData::GetSystemUIName( const OUString& rResourceURL )
         }
     }
 
-    if ( rResourceURL.indexOf( OUString(".uno" ) ) == 0 &&
+    if ( rResourceURL.indexOf( ".uno" ) == 0 &&
          m_xCommandToLabelMap.is() &&
          m_xCommandToLabelMap->hasByName( rResourceURL ) )
     {

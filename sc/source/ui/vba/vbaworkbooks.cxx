@@ -202,9 +202,9 @@ bool
 ScVbaWorkbooks::isSpreadSheetFile( const rtl::OUString& sType )
 {
     // include calc_QPro etc. ? ( not for the moment anyway )
-    if ( sType.indexOf( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("calc_MS"))) == 0
-    || sType.indexOf( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("calc8"))) == 0
-    || sType.indexOf( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("calc_StarOffice"))) == 0 )
+    if ( sType.indexOf( "calc_MS" ) == 0
+    || sType.indexOf( "calc8" ) == 0
+    || sType.indexOf( "calc_StarOffice" ) == 0 )
         return true;
     return false;
 }

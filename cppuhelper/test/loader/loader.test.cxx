@@ -182,7 +182,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(/*argc*/, argv)
     message += s_test__cppu_writeSharedLibComponentInfo(":affine");
     message += s_test__cppu_writeSharedLibComponentInfo("");
 
-    if (message.indexOf(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FAILED"))) == -1)
+    if (message.indexOf("FAILED") == -1)
         message += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TESTS PASSED\n"));
 
     else

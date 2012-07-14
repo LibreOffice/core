@@ -108,7 +108,7 @@ sal_Bool ZipPackageFolder::LookForUnexpectedODF12Streams( const ::rtl::OUString&
             if ( aPath == "META-INF/" )
             {
                 if ( rShortName != "manifest.xml"
-                  && rShortName.indexOf( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "signatures" ) ) ) == -1 )
+                  && rShortName.indexOf( "signatures" ) == -1 )
                 {
                     // a stream from META-INF with unexpected name
                     bHasUnexpected = sal_True;
