@@ -150,10 +150,9 @@ struct MigrationItemInfo
 
     MigrationItemInfo(){}
 
-    MigrationItemInfo(const ::rtl::OUString& sResourceURL, const MigrationItem& aMigratiionItem)
+    MigrationItemInfo(const ::rtl::OUString& sResourceURL, const MigrationItem& aMigrationItem)
+    : m_sResourceURL(sResourceURL), m_aMigrationItem(aMigrationItem)
     {
-        m_sResourceURL = sResourceURL;
-        m_aMigrationItem = aMigratiionItem;
     }
 };
 
