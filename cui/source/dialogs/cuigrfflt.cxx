@@ -27,7 +27,6 @@
  ************************************************************************/
 
 #include <tools/shl.hxx>
-#include <tools/helpers.hxx>
 #include <vcl/msgbox.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/viewsh.hxx>
