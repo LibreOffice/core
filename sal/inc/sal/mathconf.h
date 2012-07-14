@@ -26,7 +26,7 @@
  *
  ************************************************************************/
 
-#if !defined INCLUDED_SAL_MATHCONF_H
+#ifndef INCLUDED_SAL_MATHCONF_H
 #define INCLUDED_SAL_MATHCONF_H
 
 #include "osl/endian.h"

@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#if !defined INCLUDED_OSL_DOUBLECHECKEDLOCKING_H
+#ifndef INCLUDED_OSL_DOUBLECHECKEDLOCKING_H
 #define INCLUDED_OSL_DOUBLECHECKEDLOCKING_H
 
 #if defined __cplusplus

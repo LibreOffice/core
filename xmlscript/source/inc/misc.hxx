@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#if ! defined INCLUDED_XMLSCRIPT_MISC_HXX
+#ifndef INCLUDED_XMLSCRIPT_MISC_HXX
 #define INCLUDED_XMLSCRIPT_MISC_HXX
 
 #include "com/sun/star/uno/Any.hxx"

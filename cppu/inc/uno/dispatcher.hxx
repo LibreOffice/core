@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#if ! defined INCLUDED_UNO_DISPATCHER_HXX
+#ifndef INCLUDED_UNO_DISPATCHER_HXX
 #define INCLUDED_UNO_DISPATCHER_HXX
 
 #include "uno/dispatcher.h"

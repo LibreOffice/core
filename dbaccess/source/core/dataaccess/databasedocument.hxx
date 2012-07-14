@@ -50,7 +50,7 @@
 #include <com/sun/star/document/XDocumentEventBroadcaster.hpp>
 #include <com/sun/star/document/XDocumentRecovery.hpp>
 
-#if ! defined(INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_17)
+#ifndef INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_17
 #define INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_17
 #define COMPHELPER_IMPLBASE_INTERFACE_NUMBER 17
 #include <comphelper/implbase_var.hxx>

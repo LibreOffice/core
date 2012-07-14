@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#if !defined INCLUDED_SFX2_APPL_IMESTATUSWINDOW_HXX
+#ifndef INCLUDED_SFX2_APPL_IMESTATUSWINDOW_HXX
 #define INCLUDED_SFX2_APPL_IMESTATUSWINDOW_HXX
 
 #include "com/sun/star/beans/XPropertyChangeListener.hpp"

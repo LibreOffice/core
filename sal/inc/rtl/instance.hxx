@@ -26,7 +26,7 @@
  *
  ************************************************************************/
 
-#if !defined INCLUDED_RTL_INSTANCE_HXX
+#ifndef INCLUDED_RTL_INSTANCE_HXX
 #define INCLUDED_RTL_INSTANCE_HXX
 
 #include "osl/doublecheckedlocking.h"

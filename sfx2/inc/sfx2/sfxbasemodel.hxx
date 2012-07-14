@@ -87,7 +87,7 @@
 #include <com/sun/star/task/XInteractionHandler.hpp>
 
 //________________________________________________________________________________________________________
-#if ! defined(INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_32)
+#ifndef INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_32
 #define INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_32
 #define COMPHELPER_IMPLBASE_INTERFACE_NUMBER 32
 #include <comphelper/implbase_var.hxx>

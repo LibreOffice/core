@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#if ! defined(WAITSYMBOL_HXX_INCLUDED)
+#ifndef WAITSYMBOL_HXX_INCLUDED
 #define WAITSYMBOL_HXX_INCLUDED
 
 #include <com/sun/star/rendering/XBitmap.hpp>

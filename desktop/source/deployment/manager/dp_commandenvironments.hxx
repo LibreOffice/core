@@ -26,7 +26,7 @@
  *
  ************************************************************************/
 
-#if ! defined INCLUDED_DP_COMMANDENVIRONMENTS_HXX
+#ifndef INCLUDED_DP_COMMANDENVIRONMENTS_HXX
 #define INCLUDED_DP_COMMANDENVIRONMENTS_HXX
 
 #include "cppuhelper/compbase3.hxx"

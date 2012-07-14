@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#if ! defined INCLUDED_com_sun_star_sax_input_XUidMapping_idl
+#ifndef INCLUDED_com_sun_star_sax_input_XUidMapping_idl
 #define INCLUDED_com_sun_star_sax_input_XUidMapping_idl
 
 #include <com/sun/star/container/NoSuchElementException.idl>

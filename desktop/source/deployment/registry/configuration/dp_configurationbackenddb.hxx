@@ -26,7 +26,7 @@
  *
  ************************************************************************/
 
-#if ! defined INCLUDED_DP_CONFIGURATIONBACKENDDB_HXX
+#ifndef INCLUDED_DP_CONFIGURATIONBACKENDDB_HXX
 #define INCLUDED_DP_CONFIGURATIONBACKENDDB_HXX
 
 #include "rtl/ustring.hxx"

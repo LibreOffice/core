@@ -26,7 +26,7 @@
  *
  ************************************************************************/
 
-#if ! defined INCLUDED_com_sun_star_deployment_ui_PackageManagerDialog_idl
+#ifndef INCLUDED_com_sun_star_deployment_ui_PackageManagerDialog_idl
 #define INCLUDED_com_sun_star_deployment_ui_PackageManagerDialog_idl
 
 #include <com/sun/star/ui/dialogs/XAsynchronousExecutableDialog.idl>

@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#if ! defined INCLUDED_DP_EXECUTABLEBACKENDDB_HXX
+#ifndef INCLUDED_DP_EXECUTABLEBACKENDDB_HXX
 #define INCLUDED_DP_EXECUTABLEBACKENDDB_HXX
 
 #include "rtl/ustring.hxx"

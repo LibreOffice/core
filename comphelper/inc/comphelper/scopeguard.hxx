@@ -17,12 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#if ! defined(INCLUDED_COMPHELPER_SCOPEGUARD_HXX)
+#ifndef INCLUDED_COMPHELPER_SCOPEGUARD_HXX
 #define INCLUDED_COMPHELPER_SCOPEGUARD_HXX
 
-#if ! defined(INCLUDED_COMPHELPERDLLAPI_H)
 #include "comphelper/comphelperdllapi.h"
-#endif
 #include "boost/function.hpp"
 #include "boost/noncopyable.hpp"
 #include "boost/bind.hpp"

@@ -18,7 +18,7 @@
  */
 
 /** @HTML */
-#if !defined INCLUDED_JVMFWK_VENDORPLUGIN_H
+#ifndef INCLUDED_JVMFWK_VENDORPLUGIN_H
 #define INCLUDED_JVMFWK_VENDORPLUGIN_H
 
 #include "jvmfwkplugindllapi.h"

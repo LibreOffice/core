@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#if ! defined INCLUDED_SLIDESHOW_VEEWIPE_HXX
+#ifndef INCLUDED_SLIDESHOW_VEEWIPE_HXX
 #define INCLUDED_SLIDESHOW_VEEWIPE_HXX
 
 #include <basegfx/polygon/b2dpolypolygon.hxx>

@@ -16,12 +16,10 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#if ! defined(INCLUDED_COMPHELPER_OPTIONAL_HXX)
+#ifndef INCLUDED_COMPHELPER_OPTIONAL_HXX
 #define INCLUDED_COMPHELPER_OPTIONAL_HXX
 
-#if ! defined(_COM_SUN_STAR_BEANS_OPTIONAL_HPP_)
 #include "com/sun/star/beans/Optional.hpp"
-#endif
 #include "boost/optional.hpp"
 
 namespace comphelper {

@@ -3,7 +3,7 @@
 //
 //////////////////////////////////////////////////////////////////////
 
-#if !defined __SODOCUMENTEVENTLISTENER_H_
+#ifndef __SODOCUMENTEVENTLISTENER_H_
 #define __SODOCUMENTEVENTLISTENER_H_
 
 #if _MSC_VER > 1000

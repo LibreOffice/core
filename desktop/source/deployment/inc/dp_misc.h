@@ -26,7 +26,7 @@
  *
  ************************************************************************/
 
-#if ! defined INCLUDED_DP_MISC_H
+#ifndef INCLUDED_DP_MISC_H
 #define INCLUDED_DP_MISC_H
 
 #include "rtl/ustrbuf.hxx"

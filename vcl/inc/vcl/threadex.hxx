@@ -31,9 +31,7 @@
 #include <tools/link.hxx>
 #include <vcl/dllapi.h>
 
-#if ! defined(_CPPUHELPER_EXC_HLP_HXX_)
 #include "cppuhelper/exc_hlp.hxx"
-#endif
 #include "boost/optional.hpp"
 #include <memory>
 

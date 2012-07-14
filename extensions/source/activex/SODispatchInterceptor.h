@@ -3,7 +3,7 @@
 //
 //////////////////////////////////////////////////////////////////////
 
-#if !defined __SODISPATCHINTERCEPTOR_H_
+#ifndef __SODISPATCHINTERCEPTOR_H_
 #define __SODISPATCHINTERCEPTOR_H_
 
 #if _MSC_VER > 1000

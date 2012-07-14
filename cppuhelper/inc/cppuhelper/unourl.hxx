@@ -26,7 +26,7 @@
  *
  ************************************************************************/
 
-#if !defined INCLUDED_CPPUHELPER_UNOURL_HXX
+#ifndef INCLUDED_CPPUHELPER_UNOURL_HXX
 #define INCLUDED_CPPUHELPER_UNOURL_HXX
 
 #include <memory>

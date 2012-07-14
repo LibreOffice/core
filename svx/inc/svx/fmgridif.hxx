@@ -56,7 +56,7 @@
 #include <comphelper/uno3.hxx>
 #include <cppuhelper/implbase10.hxx>
 
-#if ! defined(INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_19)
+#ifndef INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_19
 #define INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_19
 #define COMPHELPER_IMPLBASE_INTERFACE_NUMBER 19
 #include <comphelper/implbase_var.hxx>

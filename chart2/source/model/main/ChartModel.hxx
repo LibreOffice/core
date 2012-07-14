@@ -65,7 +65,7 @@
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 
-#if ! defined(INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_22)
+#ifndef INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_22
 #define INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_22
 #define COMPHELPER_IMPLBASE_INTERFACE_NUMBER 22
 #include "comphelper/implbase_var.hxx"

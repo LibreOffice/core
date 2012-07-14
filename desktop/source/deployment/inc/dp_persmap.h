@@ -26,7 +26,7 @@
  *
  ************************************************************************/
 
-#if ! defined INCLUDED_DP_PERSMAP_H
+#ifndef INCLUDED_DP_PERSMAP_H
 #define INCLUDED_DP_PERSMAP_H
 
 #include "rtl/ustring.hxx"

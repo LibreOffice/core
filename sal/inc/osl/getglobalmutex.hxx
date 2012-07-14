@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#if !defined INCLUDED_OSL_GETGLOBALMUTEX_HXX
+#ifndef INCLUDED_OSL_GETGLOBALMUTEX_HXX
 #define INCLUDED_OSL_GETGLOBALMUTEX_HXX
 
 #include "osl/mutex.hxx"

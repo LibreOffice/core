@@ -16,7 +16,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#if ! defined INCLUDED_DIGITALSIGNATURESDIALOG_HRC
+#ifndef INCLUDED_DIGITALSIGNATURESDIALOG_HRC
 #define INCLUDED_DIGITALSIGNATURESDIALOG_HRC
 
 //global.hrc in xmlsecurity/inc starts at 1000

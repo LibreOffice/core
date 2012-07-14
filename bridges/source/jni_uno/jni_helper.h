@@ -26,7 +26,7 @@
  *
  ************************************************************************/
 
-#if ! defined INCLUDED_JNI_HELPER_H
+#ifndef INCLUDED_JNI_HELPER_H
 #define INCLUDED_JNI_HELPER_H
 
 #include "jni_base.h"

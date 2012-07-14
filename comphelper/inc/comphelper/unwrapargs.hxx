@@ -17,16 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#if ! defined(COMPHELPER_UNWRAPARGS_HXX_INCLUDED)
+#ifndef COMPHELPER_UNWRAPARGS_HXX_INCLUDED
 #define COMPHELPER_UNWRAPARGS_HXX_INCLUDED
 
-#if ! defined(_RTL_USTRBUF_HXX_)
 #include "rtl/ustrbuf.hxx"
-#endif
 #include "com/sun/star/uno/Sequence.hxx"
-#if ! defined(_COM_SUN_STAR_LANG_ILLEGALARGUMENTEXCEPTION_HPP_)
 #include "com/sun/star/lang/IllegalArgumentException.hpp"
-#endif
 #include "boost/optional.hpp"
 #include "boost/preprocessor/cat.hpp"
 #include "boost/preprocessor/repetition.hpp"
@@ -125,7 +121,7 @@ inline void unwrapArgs( \
     BOOST_PP_REPEAT(BOOST_PP_ADD(n_, 1), COMPHELPER_UNWRAPARGS_extract, ~) \
 }
 
-#if ! defined(COMPHELPER_UNWRAPARGS_MAX_ARGS)
+#ifndef COMPHELPER_UNWRAPARGS_MAX_ARGS
 #define COMPHELPER_UNWRAPARGS_MAX_ARGS 12
 #endif
 

@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#if ! defined INCLUDED_COMMON_HXX
+#ifndef INCLUDED_COMMON_HXX
 #define INCLUDED_COMMON_HXX
 
 #include "sal/types.h"

@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#if !defined INCLUDED_JVMACCESS_SUNVERSION_HXX
+#ifndef INCLUDED_JVMACCESS_SUNVERSION_HXX
 #define INCLUDED_JVMACCESS_SUNVERSION_HXX
 
 #include "rtl/ustring.hxx"

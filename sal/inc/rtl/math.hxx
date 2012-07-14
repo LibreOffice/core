@@ -26,7 +26,7 @@
  *
  ************************************************************************/
 
-#if !defined INCLUDED_RTL_MATH_HXX
+#ifndef INCLUDED_RTL_MATH_HXX
 #define INCLUDED_RTL_MATH_HXX
 
 #include "rtl/math.h"

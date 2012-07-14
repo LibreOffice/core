@@ -26,7 +26,7 @@
  *
  ************************************************************************/
 
-#if !defined INCLUDED_ACCESSIBILITY_TEXTWINDOWACCESSIBILITY_HXX
+#ifndef INCLUDED_ACCESSIBILITY_TEXTWINDOWACCESSIBILITY_HXX
 #define INCLUDED_ACCESSIBILITY_TEXTWINDOWACCESSIBILITY_HXX
 
 #include <toolkit/awt/vclxaccessiblecomponent.hxx>

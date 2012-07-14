@@ -26,7 +26,7 @@
  *
  ************************************************************************/
 
-#if !defined INCLUDED_DP_GUI_SHARED_HXX
+#ifndef INCLUDED_DP_GUI_SHARED_HXX
 #define INCLUDED_DP_GUI_SHARED_HXX
 
 #include "rtl/instance.hxx"

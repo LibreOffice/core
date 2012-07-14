@@ -26,7 +26,7 @@
  *
  ************************************************************************/
 
-#if ! defined INCLUDED_DP_EXTENSIONMANAGER_H
+#ifndef INCLUDED_DP_EXTENSIONMANAGER_H
 #define INCLUDED_DP_EXTENSIONMANAGER_H
 
 #include "dp_manager.hrc"

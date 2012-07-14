@@ -26,7 +26,7 @@
  *
  ************************************************************************/
 
-#if ! defined INCLUDED_DP_RESOURCE_H
+#ifndef INCLUDED_DP_RESOURCE_H
 #define INCLUDED_DP_RESOURCE_H
 
 #include "tools/string.hxx"

@@ -26,7 +26,7 @@
  *
  ************************************************************************/
 
-#if ! defined INCLUDED_JNI_BASE_H
+#ifndef INCLUDED_JNI_BASE_H
 #define INCLUDED_JNI_BASE_H
 
 #if defined (__SUNPRO_CC) || defined (__SUNPRO_C)

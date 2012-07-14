@@ -26,7 +26,7 @@
  *
  ************************************************************************/
 
-#if ! defined INCLUDED_DP_REGISTRY_H
+#ifndef INCLUDED_DP_REGISTRY_H
 #define INCLUDED_DP_REGISTRY_H
 
 #include "dp_misc.h"

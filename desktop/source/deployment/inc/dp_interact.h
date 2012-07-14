@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#if ! defined INCLUDED_DP_INTERACT_H
+#ifndef INCLUDED_DP_INTERACT_H
 #define INCLUDED_DP_INTERACT_H
 
 #include "rtl/ref.hxx"

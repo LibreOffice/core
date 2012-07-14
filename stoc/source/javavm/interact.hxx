@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#if !defined INCLUDED_STOC_JAVAVM_INTERACT_HXX
+#ifndef INCLUDED_STOC_JAVAVM_INTERACT_HXX
 #define INCLUDED_STOC_JAVAVM_INTERACT_HXX
 
 #include "com/sun/star/task/XInteractionRequest.hpp"

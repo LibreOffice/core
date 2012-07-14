@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#if !defined INCLUDED_JVMACCESS_VIRTUALMACHINE_HXX
+#ifndef INCLUDED_JVMACCESS_VIRTUALMACHINE_HXX
 #define INCLUDED_JVMACCESS_VIRTUALMACHINE_HXX
 
 #include "jvmaccessdllapi.h"

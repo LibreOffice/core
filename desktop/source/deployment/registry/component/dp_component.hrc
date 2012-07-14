@@ -16,7 +16,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#if ! defined INCLUDED_DP_COMPONENT_HRC
+#ifndef INCLUDED_DP_COMPONENT_HRC
 #define INCLUDED_DP_COMPONENT_HRC
 
 #include "deployment.hrc"

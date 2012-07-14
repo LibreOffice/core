@@ -26,7 +26,7 @@
  *
  ************************************************************************/
 
-#if ! defined INCLUDED_JNI_INFO_H
+#ifndef INCLUDED_JNI_INFO_H
 #define INCLUDED_JNI_INFO_H
 
 #include <boost/unordered_map.hpp>

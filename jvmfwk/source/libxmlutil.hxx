@@ -16,13 +16,13 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#if !defined INCLUDED_JVMFWK_LIBXMLUTIL_HXX
+#ifndef INCLUDED_JVMFWK_LIBXMLUTIL_HXX
 #define INCLUDED_JVMFWK_LIBXMLUTIL_HXX
-
 
 #include "libxml/parser.h"
 #include "libxml/xpath.h"
 #include "rtl/ustring.hxx"
+
 namespace jfw
 {
 class CXPathObjectPtr

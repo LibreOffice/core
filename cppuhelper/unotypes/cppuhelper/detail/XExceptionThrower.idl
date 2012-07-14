@@ -16,7 +16,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#if ! defined INCLUDED_cppuhelper_detail_XExceptionThrower_idl
+#ifndef INCLUDED_cppuhelper_detail_XExceptionThrower_idl
 #define INCLUDED_cppuhelper_detail_XExceptionThrower_idl
 
 #include <com/sun/star/uno/Exception.idl>

@@ -37,7 +37,7 @@
 //
 //////////////////////////////////////////////////////////////////////
 
-#if !defined __SOCOMWINDOWPEER_H_
+#ifndef __SOCOMWINDOWPEER_H_
 #define __SOCOMWINDOWPEER_H_
 
 #if _MSC_VER > 1000

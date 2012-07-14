@@ -26,7 +26,7 @@
  *
  ************************************************************************/
 
-#if !defined INCLUDED_RTL_MATH_H
+#ifndef INCLUDED_RTL_MATH_H
 #define INCLUDED_RTL_MATH_H
 
 #include "rtl/ustring.h"

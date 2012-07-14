@@ -23,7 +23,7 @@
 #include "ServiceMacros.hxx"
 #include "DiagramHelper.hxx"
 
-#if ! defined(INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_13)
+#ifndef INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_13
 #define INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_13
 #define COMPHELPER_IMPLBASE_INTERFACE_NUMBER 13
 #include "comphelper/implbase_var.hxx"

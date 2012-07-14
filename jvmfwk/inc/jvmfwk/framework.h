@@ -19,7 +19,7 @@
 
 /** @HTML */
 
-#if !defined INCLUDED_JVMFWK_FRAMEWORK_H
+#ifndef INCLUDED_JVMFWK_FRAMEWORK_H
 #define INCLUDED_JVMFWK_FRAMEWORK_H
 
 #include "jvmfwkdllapi.h"

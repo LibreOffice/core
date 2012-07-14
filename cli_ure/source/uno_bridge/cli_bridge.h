@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#if ! defined INCLUDED_CLI_BRIDGE_H
+#ifndef INCLUDED_CLI_BRIDGE_H
 #define INCLUDED_CLI_BRIDGE_H
 #include <vcclr.h>
 #include "osl/interlck.h"

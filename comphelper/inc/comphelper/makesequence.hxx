@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#if ! defined(COMPHELPER_MAKESEQUENCE_HXX_INCLUDED)
+#ifndef COMPHELPER_MAKESEQUENCE_HXX_INCLUDED
 #define COMPHELPER_MAKESEQUENCE_HXX_INCLUDED
 
 #include "com/sun/star/uno/Sequence.hxx"
@@ -62,7 +62,7 @@ inline ::com::sun::star::uno::Sequence<T> makeSequence( \
     return seq; \
 }
 
-#if ! defined(COMPHELPER_MAKESEQUENCE_MAX_ARGS)
+#ifndef COMPHELPER_MAKESEQUENCE_MAX_ARGS
 #define COMPHELPER_MAKESEQUENCE_MAX_ARGS 12
 #endif
 

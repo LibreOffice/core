@@ -16,7 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#if ! defined(COMPHELPER_SERVICEDECL_HXX_INCLUDED)
+#ifndef COMPHELPER_SERVICEDECL_HXX_INCLUDED
 #define COMPHELPER_SERVICEDECL_HXX_INCLUDED
 
 #include <comphelper/comphelperdllapi.h>
@@ -335,7 +335,7 @@ inline void * component_getFactoryHelper( \
     return pRet; \
 }
 
-#if ! defined(COMPHELPER_SERVICEDECL_COMPONENT_HELPER_MAX_ARGS)
+#ifndef COMPHELPER_SERVICEDECL_COMPONENT_HELPER_MAX_ARGS
 #define COMPHELPER_SERVICEDECL_COMPONENT_HELPER_MAX_ARGS 8
 #endif
 

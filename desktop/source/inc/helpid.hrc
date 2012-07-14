@@ -16,7 +16,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#if ! defined INCLUDED_DESKTOP_HELPID_HRC
+#ifndef INCLUDED_DESKTOP_HELPID_HRC
 #define INCLUDED_DESKTOP_HELPID_HRC
 
 #define HID_PACKAGE_MANAGER                                "DESKTOP_HID_PACKAGE_MANAGER"

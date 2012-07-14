@@ -38,7 +38,7 @@
     include guards.  Please use the following external include guard rule
     where <N> is the number of interface types:
 
-    #if ! defined(INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_<N>)
+    #ifndef INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_<N>
     #define INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_<N>
     #define COMPHELPER_IMPLBASE_INTERFACE_NUMBER <N>
     #include "comphelper/implbase_var.hxx"
@@ -53,7 +53,7 @@
     The default is a maximum of 6 arguments.
 */
 
-#if ! defined(COMPHELPER_IMPLBASE_INTERFACE_NUMBER)
+#ifndef COMPHELPER_IMPLBASE_INTERFACE_NUMBER
 #error "you have to define COMPHELPER_IMPLBASE_INTERFACE_NUMBER prior to including comphelper/implbase_var.hxx!"
 #endif // ! defined(COMPHELPER_IMPLBASE_INTERFACE_NUMBER)
 
@@ -61,19 +61,13 @@
 #error "include proper header file: cppuhelper/implbase<N>.hxx or cppuhelper/compbase<N>.hxx!"
 #endif
 
-#if ! defined(COMPHELPER_IMPLBASE_MAX_CTOR_ARGS)
+#ifndef COMPHELPER_IMPLBASE_MAX_CTOR_ARGS
 #define COMPHELPER_IMPLBASE_MAX_CTOR_ARGS 6 // default
 #endif
 
-#if ! defined(_CPPUHELPER_IMPLBASE_EX_HXX_)
 #include "cppuhelper/implbase_ex.hxx"
-#endif
-#if ! defined(INCLUDED_RTL_INSTANCE_HXX)
 #include "rtl/instance.hxx"
-#endif
-#if ! defined(_CPPUHELPER_COMPBASE_EX_HXX_)
 #include "cppuhelper/compbase_ex.hxx"
-#endif
 
 #include "boost/preprocessor/cat.hpp"
 #include "boost/preprocessor/repetition.hpp"

@@ -26,7 +26,7 @@
  *
  ************************************************************************/
 
-#if ! defined INCLUDED_DP_UCB_H
+#ifndef INCLUDED_DP_UCB_H
 #define INCLUDED_DP_UCB_H
 
 #include <list>

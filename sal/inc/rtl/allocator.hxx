@@ -25,16 +25,11 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#if !defined INCLUDED_RTL_ALLOCATOR_HXX
+#ifndef INCLUDED_RTL_ALLOCATOR_HXX
 #define INCLUDED_RTL_ALLOCATOR_HXX
 
-#if ! defined(_SAL_TYPES_H_)
 #include "sal/types.h"
-#endif
-#if ! defined(_RTL_ALLOC_H_)
 #include "rtl/alloc.h"
-#endif
-
 #include <cstddef>
 
 /// @cond INTERNAL
