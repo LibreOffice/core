@@ -24,7 +24,6 @@
 
 #include <salframe.hxx>
 #include <svdata.hxx>
-#include <salinst.hxx>
 
 void Sound::Beep( SoundType eType, Window* pWindow )
 {
@@ -32,13 +31,10 @@ void Sound::Beep( SoundType eType, Window* pWindow )
     if ( Application::IsHeadlessModeEnabled() )
         return;
 
-    if( !pWindow )
-    {
-        Window* pDefWindow = ImplGetDefaultWindow();
-        pDefWindow->ImplGetFrame()->Beep( eType );
-    }
-    else
-        pWindow->ImplGetFrame()->Beep( eType );
+    if ( !pWindow )
+        pWindow = ImplGetDefaultWindow();
+
+    pWindow->ImplGetFrame()->Beep( eType );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
