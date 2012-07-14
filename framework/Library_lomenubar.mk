@@ -42,6 +42,7 @@ $(eval $(call gb_Library_use_libraries,lomenubar,\
 	sal \
 	cppu \
 	cppuhelper \
+    comphelper \
 	X11 \
 	$(gb_STDLIBS) \
 ))

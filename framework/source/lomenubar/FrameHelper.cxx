@@ -64,6 +64,7 @@
 #include <com/sun/star/ui/XAcceleratorConfiguration.hpp>
 #include <com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
 #include <rtl/process.h>
+#include <comphelper/componentcontext.hxx>
 
 #include <gio/gio.h>
 //#pragma GCC diagnostic push
@@ -261,7 +262,7 @@ FrameHelper::FrameHelper(const Reference< XMultiServiceFactory >&  rServiceManag
     : m_xStatusListener(new MenuItemStatusListener(this))
     , m_pDispatchRegistry(new framework::lomenubar::DispatchRegistry(m_xStatusListener))
     , m_xMSF(rServiceManager)
-    , m_xTrans(util::URLTransformer::create(m_xMSF))
+    , m_xTrans(util::URLTransformer::create(comphelper::ComponentContext(m_xMSF).getUNOContext()))
     , m_xMM(m_xMSF->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.ModuleManager"))),UNO_QUERY)
     , m_xPCF(m_xMSF->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.PopupMenuControllerFactory"))), UNO_QUERY)
     , m_xFrame(xFrame)
