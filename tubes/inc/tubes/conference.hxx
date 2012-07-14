@@ -70,6 +70,8 @@ public:
     void                    queue( const char* pDBusSender, const char* pPacket, int nSize );
     void                    queue( TelePacket &rPacket );
 
+    TUBES_DLLPUBLIC void    invite( TpContact *pContact );
+
     /** Emitted when a packet is received. */
     boost::signals2::signal<void (TelePacket&)> sigPacketReceived;
 

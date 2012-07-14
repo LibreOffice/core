@@ -238,6 +238,7 @@ public:
     virtual ~ScDocFuncSend();
 
     void                SetCollaboration( TeleConference* pConference );
+    TeleConference*     GetConference();
     ScDocFuncRecv*      GetReceiver();
 
     virtual void        EnterListAction( sal_uInt16 nNameResId );

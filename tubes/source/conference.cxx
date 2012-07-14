@@ -418,6 +418,15 @@ void TeleConference::queue( const char* pDBusSender, const char* pPacketData, in
     queue( aPacket );
 }
 
+void TeleConference::invite( TpContact *pContact )
+{
+    INFO_LOGGER( "TeleConference::invite" );
+    TpHandle aHandle = tp_contact_get_handle( pContact );
+    GArray handles = { reinterpret_cast<gchar *> (&aHandle), 1 };
+    tp_cli_channel_interface_group_call_add_members( TP_CHANNEL( mpChannel ),
+            -1, &handles, NULL, NULL, NULL, NULL, NULL );
+}
+
 
 class SendFileRequest {
 public:

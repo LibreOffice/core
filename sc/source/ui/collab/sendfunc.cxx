@@ -286,6 +286,11 @@ void ScDocFuncSend::SetCollaboration( TeleConference* pConference )
                 &ScDocFuncRecv::packetReceived, mpDirect, _1 ) );
 }
 
+TeleConference* ScDocFuncSend::GetConference()
+{
+    return mpConference;
+}
+
 ScDocFuncRecv* ScDocFuncSend::GetReceiver()
 {
     return mpDirect;

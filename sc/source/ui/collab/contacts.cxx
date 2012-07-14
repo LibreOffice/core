@@ -47,6 +47,7 @@ class TubeContacts : public ModelessDialog
 {
     FixedLine               maLabel;
     PushButton              maBtnConnect;
+    PushButton              maBtnInvite;
     PushButton              maBtnListen;
     SvxSimpleTableContainer maListContainer;
     SvxSimpleTable          maList;
@@ -54,6 +55,7 @@ class TubeContacts : public ModelessDialog
     ScDocFuncSend*          mpSender;
 
     DECL_LINK( BtnConnectHdl, void * );
+    DECL_LINK( BtnInviteHdl, void * );
     DECL_LINK( BtnListenHdl, void * );
 
     struct AccountContact
@@ -64,6 +66,19 @@ class TubeContacts : public ModelessDialog
             mpAccount(pAccount), mpContact(pContact) {}
     };
     boost::ptr_vector<AccountContact> maACs;
+
+    void Invite()
+    {
+        AccountContact *pAC = NULL;
+        if (maList.FirstSelected())
+            pAC = static_cast<AccountContact*> (maList.FirstSelected()->GetUserData());
+        if (pAC && mpSender->GetConference())
+        {
+            TpContact* pContact = pAC->mpContact;
+            fprintf( stderr, "inviting %s\n", tp_contact_get_identifier( pContact ) );
+            mpSender->GetConference()->invite( pContact );
+        }
+    }
 
     void Listen()
     {
@@ -128,6 +143,7 @@ public:
         ModelessDialog( NULL, ScResId( RID_SCDLG_CONTACTS ) ),
         maLabel( this, ScResId( FL_LABEL ) ),
         maBtnConnect( this, ScResId( BTN_CONNECT ) ),
+        maBtnInvite( this, ScResId( BTN_INVITE ) ),
         maBtnListen( this, ScResId( BTN_LISTEN ) ),
         maListContainer( this, ScResId( CTL_LIST ) ),
         maList( maListContainer ),
@@ -159,6 +175,7 @@ public:
             }
         }
         maBtnConnect.SetClickHdl( LINK( this, TubeContacts, BtnConnectHdl ) );
+        maBtnInvite.SetClickHdl( LINK( this, TubeContacts, BtnInviteHdl ) );
         maBtnListen.SetClickHdl( LINK( this, TubeContacts, BtnListenHdl ) );
 
         static long aStaticTabs[]=
@@ -238,6 +255,13 @@ IMPL_LINK_NOARG( TubeContacts, BtnConnectHdl )
 #else
     StartGroupSession();
 #endif
+    Close();
+    return 0;
+}
+
+IMPL_LINK_NOARG( TubeContacts, BtnInviteHdl )
+{
+    Invite();
     Close();
     return 0;
 }
