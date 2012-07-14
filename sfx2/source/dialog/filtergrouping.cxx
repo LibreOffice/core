@@ -1048,7 +1048,7 @@ namespace sfx2
         if ( xFilterGroupManager.is() )
         {
             // Add both html/pdf filter as a filter group to get a separator between both groups
-            if ( !aImportantFilterGroup.empty() )
+            if ( aImportantFilterGroup.size() > 0 )
             {
                 Sequence< StringPair > aFilters( aImportantFilterGroup.size() );
                 for ( sal_Int32 i = 0; i < (sal_Int32)aImportantFilterGroup.size(); i++ )
@@ -1068,7 +1068,7 @@ namespace sfx2
                 }
             }
 
-            if ( !aFilterGroup.empty() )
+            if ( aFilterGroup.size() > 0 )
             {
                 Sequence< StringPair > aFilters( aFilterGroup.size() );
                 for ( sal_Int32 i = 0; i < (sal_Int32)aFilterGroup.size(); i++ )
