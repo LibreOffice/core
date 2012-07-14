@@ -14,6 +14,8 @@
 #include <sfx2/templateonlineviewitem.hxx>
 #include <sfx2/templateview.hxx>
 #include <sfx2/templateviewitem.hxx>
+#include <svtools/imagemgr.hxx>
+#include <tools/urlobj.hxx>
 #include <ucbhelper/content.hxx>
 #include <ucbhelper/commandenvironment.hxx>
 
@@ -30,6 +32,19 @@ using namespace com::sun::star::task;
 using namespace com::sun::star::sdbc;
 using namespace com::sun::star::ucb;
 using namespace com::sun::star::uno;
+
+enum
+{
+    ROW_TITLE = 1,
+    ROW_SIZE,
+    ROW_DATE_MOD,
+    ROW_DATE_CREATE,
+    ROW_IS_DOCUMENT,
+    ROW_TARGET_URL,
+    ROW_IS_HIDDEN,
+    ROW_IS_REMOTE,
+    ROW_IS_REMOVEABLE
+};
 
 TemplateOnlineView::TemplateOnlineView (Window *pParent, WinBits nWinStyle, bool bDisableTransientChildren)
     : ThumbnailView(pParent,nWinStyle,bDisableTransientChildren),
@@ -84,6 +99,113 @@ void TemplateOnlineView::setItemDimensions(long ItemWidth, long ThumbnailHeight,
 void TemplateOnlineView::Resize()
 {
     mpItemView->SetSizePixel(GetSizePixel());
+}
+
+void TemplateOnlineView::OnItemDblClicked(ThumbnailViewItem *pItem)
+{
+    rtl::OUString aURL = static_cast<TemplateOnlineViewItem*>(pItem)->getURL();
+
+    try
+    {
+
+        uno::Sequence< rtl::OUString > aProps(9);
+
+        aProps[0] = "Title";
+        aProps[1] = "Size";
+        aProps[2] = "DateModified";
+        aProps[3] = "DateCreated";
+        aProps[4] = "IsDocument";
+        aProps[5] = "TargetURL";
+        aProps[6] = "IsHidden";
+        aProps[7] = "IsRemote";
+        aProps[8] = "IsRemoveable";
+
+        ucbhelper::Content aContent(aURL,m_xCmdEnv);
+
+        uno::Reference< XResultSet > xResultSet;
+        uno::Reference< XDynamicResultSet > xDynResultSet;
+
+        ucbhelper::ResultSetInclude eInclude = ucbhelper::INCLUDE_FOLDERS_AND_DOCUMENTS;
+        xDynResultSet = aContent.createDynamicCursor( aProps, eInclude );
+
+        if ( xDynResultSet.is() )
+            xResultSet = xDynResultSet->getStaticResultSet();
+
+        if ( xResultSet.is() )
+        {
+            uno::Reference< XRow > xRow( xResultSet, UNO_QUERY );
+            uno::Reference< XContentAccess > xContentAccess( xResultSet, UNO_QUERY );
+
+            util::DateTime aDT;
+            std::vector<TemplateItemProperties> aItems;
+
+            sal_uInt16 nIdx = 0;
+            while ( xResultSet->next() )
+            {
+                bool bIsDocument = xRow->getBoolean( ROW_IS_DOCUMENT ) && !xRow->wasNull();
+                bool bIsHidden = xRow->getBoolean( ROW_IS_HIDDEN );
+
+                // don't show hidden files or anything besides documents
+                if ( bIsDocument && (!bIsHidden || xRow->wasNull()) )
+                {
+                    aDT = xRow->getTimestamp( ROW_DATE_MOD );
+                    bool bContainsDate = !xRow->wasNull();
+
+                    if ( !bContainsDate )
+                    {
+                        aDT = xRow->getTimestamp( ROW_DATE_CREATE );
+                        bContainsDate = !xRow->wasNull();
+                    }
+
+                    rtl::OUString aContentURL = xContentAccess->queryContentIdentifierString();
+                    rtl::OUString aTargetURL = xRow->getString( ROW_TARGET_URL );
+                    bool bHasTargetURL = !xRow->wasNull() && !aTargetURL.isEmpty();
+
+                    rtl::OUString sRealURL = bHasTargetURL ? aTargetURL : aContentURL;
+
+                    TemplateItemProperties aTemplateItem;
+                    aTemplateItem.nId = nIdx+1;
+                    aTemplateItem.nRegionId = pItem->mnId-1;
+                    aTemplateItem.aPath = sRealURL;
+//                    pData->mbIsRemote = xRow->getBoolean( ROW_IS_REMOTE ) && !xRow->wasNull();
+//                    pData->mbIsRemoveable = xRow->getBoolean( ROW_IS_REMOVEABLE ) && !xRow->wasNull();
+                    aTemplateItem.aName = xRow->getString( ROW_TITLE );
+//                    pData->maSize = xRow->getLong( ROW_SIZE );
+
+                    if ( bHasTargetURL &&
+                        INetURLObject( aContentURL ).GetProtocol() == INET_PROT_VND_SUN_STAR_HIER )
+                    {
+                        ucbhelper::Content aCnt( aTargetURL, m_xCmdEnv );
+
+                        try
+                        {
+//                            aCnt.getPropertyValue("Size") >>= pData->maSize;
+                            aCnt.getPropertyValue("DateModified") >>= aDT;
+                        }
+                        catch (...)
+                        {}
+                    }
+
+                    aTemplateItem.aType = SvFileInformationManager::GetFileDescription(INetURLObject(sRealURL));
+
+                    aItems.push_back(aTemplateItem);
+                    ++nIdx;
+                }
+            }
+
+            mpItemView->InsertItems(aItems);
+            mpItemView->Show();
+        }
+    }
+    catch( ucb::CommandAbortedException& )
+    {
+    }
+    catch( uno::RuntimeException& )
+    {
+    }
+    catch( uno::Exception& )
+    {
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

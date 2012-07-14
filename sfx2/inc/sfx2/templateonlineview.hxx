@@ -33,6 +33,8 @@ private:
 
     virtual void Resize ();
 
+    virtual void OnItemDblClicked (ThumbnailViewItem *pItem);
+
 private:
 
     TemplateView *mpItemView;
