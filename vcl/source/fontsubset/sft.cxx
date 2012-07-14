@@ -92,15 +92,15 @@ struct PSPathElement
     }
 };
 
-/*- In horisontal writing mode right sidebearing is calculated using this formula
+/*- In horizontal writing mode right sidebearing is calculated using this formula
  *- rsb = aw - (lsb + xMax - xMin) -*/
 typedef struct {
     sal_Int16  xMin;
     sal_Int16  yMin;
     sal_Int16  xMax;
     sal_Int16  yMax;
-    sal_uInt16 aw;                /*- Advance Width (horisontal writing mode)    */
-    sal_Int16  lsb;               /*- Left sidebearing (horisontal writing mode) */
+    sal_uInt16 aw;                /*- Advance Width (horizontal writing mode)    */
+    sal_Int16  lsb;               /*- Left sidebearing (horizontal writing mode) */
     sal_uInt16 ah;                /*- advance height (vertical writing mode)     */
     sal_Int16  tsb;               /*- top sidebearing (vertical writing mode)    */
 } TTGlyphMetrics;
