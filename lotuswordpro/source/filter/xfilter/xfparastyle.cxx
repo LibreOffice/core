@@ -134,6 +134,9 @@ XFParaStyle::XFParaStyle(const XFParaStyle& other) : XFStyle(other)
 
 XFParaStyle& XFParaStyle::operator=(const XFParaStyle& other)
 {
+    // Check for self-assignment
+    if (this == &other)
+        return *this;
     m_strParentStyleName = other.m_strParentStyleName;
     m_nFlag = other.m_nFlag;
     m_eAlignType = other.m_eAlignType;
