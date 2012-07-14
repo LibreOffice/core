@@ -233,6 +233,8 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
 
     switchMainView(true);
 
+    mpOnlineView->Populate();
+
     maView->Populate();
     maView->Show();
 
