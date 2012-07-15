@@ -31,7 +31,7 @@ namespace com {
     }   }   }
 }
 
-class SfxTemplateManagerDlg : public ModalDialog
+class SfxTemplateManagerDlg : public ModelessDialog
 {
 public:
 
