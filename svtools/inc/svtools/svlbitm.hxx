@@ -128,12 +128,12 @@ public:
                     SvLBoxString();
     virtual         ~SvLBoxString();
     virtual sal_uInt16  IsA();
-    void            InitViewData( SvLBox*,SvLBoxEntry*,SvViewDataItem* );
+    virtual void    InitViewData( SvLBox*,SvLBoxEntry*,SvViewDataItem* );
     XubString       GetText() const { return aStr; }
     void            SetText( SvLBoxEntry*, const XubString& rStr );
-    void            Paint( const Point&, SvLBox& rDev, sal_uInt16 nFlags,SvLBoxEntry* );
-    SvLBoxItem*     Create() const;
-    void            Clone( SvLBoxItem* pSource );
+    virtual void    Paint( const Point&, SvLBox& rDev, sal_uInt16 nFlags,SvLBoxEntry* );
+    virtual SvLBoxItem* Create() const;
+    virtual void    Clone( SvLBoxItem* pSource );
 };
 
 class SvLBoxBmp : public SvLBoxItem
@@ -143,10 +143,10 @@ public:
                     SvLBoxBmp();
     virtual         ~SvLBoxBmp();
     virtual sal_uInt16  IsA();
-    void            InitViewData( SvLBox*,SvLBoxEntry*,SvViewDataItem* );
-    void            Paint( const Point&, SvLBox& rView, sal_uInt16 nFlags,SvLBoxEntry* );
-    SvLBoxItem*     Create() const;
-    void            Clone( SvLBoxItem* pSource );
+    virtual void    InitViewData( SvLBox*,SvLBoxEntry*,SvViewDataItem* );
+    virtual void    Paint( const Point&, SvLBox& rView, sal_uInt16 nFlags,SvLBoxEntry* );
+    virtual SvLBoxItem* Create() const;
+    virtual void    Clone( SvLBoxItem* pSource );
 };
 
 
@@ -183,13 +183,13 @@ public:
                                   SvLBoxButtonData* pBData );
                     SvLBoxButton();
     virtual         ~SvLBoxButton();
-    void            InitViewData( SvLBox*,SvLBoxEntry*,SvViewDataItem* );
+    virtual void    InitViewData( SvLBox*,SvLBoxEntry*,SvViewDataItem* );
     virtual sal_uInt16  IsA();
     void            Check( SvLBox* pView, SvLBoxEntry*, sal_Bool bCheck );
     virtual sal_Bool    ClickHdl(SvLBox* pView, SvLBoxEntry* );
-    void            Paint( const Point&, SvLBox& rView, sal_uInt16 nFlags,SvLBoxEntry* );
-    SvLBoxItem*     Create() const;
-    void            Clone( SvLBoxItem* pSource );
+    virtual void    Paint( const Point&, SvLBox& rView, sal_uInt16 nFlags,SvLBoxEntry* );
+    virtual SvLBoxItem* Create() const;
+    virtual void    Clone( SvLBoxItem* pSource );
     sal_uInt16          GetButtonFlags() const { return nItemFlags; }
     sal_Bool            IsStateChecked() const { return (sal_Bool)(nItemFlags & SV_ITEMSTATE_CHECKED)!=0; }
     sal_Bool            IsStateUnchecked() const { return (sal_Bool)(nItemFlags & SV_ITEMSTATE_UNCHECKED)!=0; }
@@ -244,10 +244,10 @@ public:
                     SvLBoxContextBmp();
     virtual         ~SvLBoxContextBmp();
     virtual sal_uInt16  IsA();
-    void            InitViewData( SvLBox*,SvLBoxEntry*,SvViewDataItem* );
-    void            Paint( const Point&, SvLBox& rView, sal_uInt16 nFlags,SvLBoxEntry* );
-    SvLBoxItem*     Create() const;
-    void            Clone( SvLBoxItem* pSource );
+    virtual void    InitViewData( SvLBox*,SvLBoxEntry*,SvViewDataItem* );
+    virtual void    Paint( const Point&, SvLBox& rView, sal_uInt16 nFlags,SvLBoxEntry* );
+    virtual SvLBoxItem* Create() const;
+    virtual void    Clone( SvLBoxItem* pSource );
 
 
     sal_Bool            SetModeImages( const Image& _rBitmap1, const Image& _rBitmap2 );
