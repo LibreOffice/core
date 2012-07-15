@@ -115,13 +115,6 @@ String STR_TITLE_USERDATALOCKED
     Text [ en-US ] = "%PRODUCTNAME %PRODUCTVERSION";
 };
 
-InfoBox INFOBOX_CMDLINEHELP
-{
-    Buttons = WB_OK ;
-    DefButton = WB_DEF_OK ;
-    Message = "";
-};
-
 ModalDialog DLG_CMDLINEHELP
 {
     HelpID = "desktop:ModalDialog:DLG_CMDLINEHELP";
@@ -169,13 +162,6 @@ ErrorBox EBX_ERR_PRINTDISABLED
     Buttons = WB_OK ;
     DefButton = WB_DEF_OK ;
     Message [ en-US ] = "Printing is disabled. No documents can be printed.";
-};
-
-InfoBox INFOBOX_EXPIRED
-{
-    Buttons = WB_OK ;
-    DefButton = WB_DEF_OK ;
-    Message [ en-US ] = "This Evaluation Version has expired. To find out more about %PRODUCTNAME,\nvisit http://www.oracle.com/us/products/applications/open-office.";
 };
 
 String STR_BOOTSTRAP_ERR_NO_PATHSET_SERVICE

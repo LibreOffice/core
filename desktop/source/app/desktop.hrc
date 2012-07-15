@@ -25,10 +25,6 @@
 //      RID_FIRSTSTSTART_START              3000
 #define RID_DESKTOP_STRING_START            10000
 
-
-#define INFOBOX_CMDLINEHELP                 (RID_DESKTOP_DIALOG_START+51)
-#define INFOBOX_EXPIRED                     (RID_DESKTOP_DIALOG_START+52)
-
 #define QBX_USERDATALOCKED                  (RID_DESKTOP_DIALOG_START+100)
 
 #define DLG_CMDLINEHELP                     (RID_DESKTOP_DIALOG_START+101)
