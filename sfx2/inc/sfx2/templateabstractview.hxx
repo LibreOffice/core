@@ -12,6 +12,8 @@
 
 #include <sfx2/thumbnailview.hxx>
 
+class TemplateView;
+
 class SFX2_DLLPUBLIC TemplateAbstractView : public ThumbnailView
 {
 public:
@@ -21,6 +23,10 @@ public:
     TemplateAbstractView ( Window* pParent, const ResId& rResId, bool bDisableTransientChildren = false );
 
     virtual ~TemplateAbstractView ();
+
+protected:
+
+    TemplateView *mpItemView;
 };
 
 #endif // __SFX2_TEMPLATEABSTRACTVIEW_HXX__

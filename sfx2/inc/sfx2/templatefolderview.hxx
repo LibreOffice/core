@@ -17,7 +17,6 @@
 
 class SfxDocumentTemplates;
 class TemplateFolderViewItem;
-class TemplateView;
 
 enum FILTER_APPLICATION
 {
@@ -87,7 +86,6 @@ private:
     bool mbFilteredResults;     // Flag keep track if overlay has been filtered so folders can get filtered too afterwards
     FILTER_APPLICATION meFilterOption;
     SfxDocumentTemplates *mpDocTemplates;
-    TemplateView *mpItemView;
     Link maTemplateStateHdl;
 };
 

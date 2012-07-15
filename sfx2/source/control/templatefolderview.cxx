@@ -273,8 +273,7 @@ TemplateFolderView::TemplateFolderView ( Window* pParent, const ResId& rResId, b
     : TemplateAbstractView(pParent,rResId,bDisableTransientChildren),
       mbFilteredResults(false),
       meFilterOption(FILTER_APP_NONE),
-      mpDocTemplates(new SfxDocumentTemplates),
-      mpItemView(new TemplateView(this))
+      mpDocTemplates(new SfxDocumentTemplates)
 {
     Size aViewSize = mpItemView->CalcWindowSizePixel(INIT_VIEW_COLS,INIT_VIEW_LINES,
                                                      ITEM_MAX_WIDTH,ITEM_MAX_HEIGHT,ITEM_SPACE);
@@ -291,7 +290,6 @@ TemplateFolderView::TemplateFolderView ( Window* pParent, const ResId& rResId, b
 
 TemplateFolderView::~TemplateFolderView()
 {
-    delete mpItemView;
     delete mpDocTemplates;
 }
 

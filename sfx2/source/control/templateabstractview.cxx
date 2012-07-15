@@ -9,18 +9,23 @@
 
 #include <sfx2/templateabstractview.hxx>
 
+#include <sfx2/templateview.hxx>
+
 TemplateAbstractView::TemplateAbstractView (Window *pParent, WinBits nWinStyle, bool bDisableTransientChildren)
-    : ThumbnailView(pParent,nWinStyle,bDisableTransientChildren)
+    : ThumbnailView(pParent,nWinStyle,bDisableTransientChildren),
+      mpItemView(new TemplateView(this))
 {
 }
 
 TemplateAbstractView::TemplateAbstractView(Window *pParent, const ResId &rResId, bool bDisableTransientChildren)
-    : ThumbnailView(pParent,rResId,bDisableTransientChildren)
+    : ThumbnailView(pParent,rResId,bDisableTransientChildren),
+      mpItemView(new TemplateView(this))
 {
 }
 
 TemplateAbstractView::~TemplateAbstractView ()
 {
+    delete mpItemView;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

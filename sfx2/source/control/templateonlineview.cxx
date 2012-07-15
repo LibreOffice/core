@@ -47,8 +47,7 @@ enum
 };
 
 TemplateOnlineView::TemplateOnlineView (Window *pParent, WinBits nWinStyle, bool bDisableTransientChildren)
-    : TemplateAbstractView(pParent,nWinStyle,bDisableTransientChildren),
-      mpItemView(new TemplateView(this))
+    : TemplateAbstractView(pParent,nWinStyle,bDisableTransientChildren)
 {
     mpItemView->SetColor(Color(COL_WHITE));
 
@@ -61,7 +60,6 @@ TemplateOnlineView::TemplateOnlineView (Window *pParent, WinBits nWinStyle, bool
 
 TemplateOnlineView::~TemplateOnlineView ()
 {
-    delete mpItemView;
 }
 
 void TemplateOnlineView::Populate()
