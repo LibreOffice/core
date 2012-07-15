@@ -131,9 +131,6 @@ public:
     void    SetPattern( SCROW nRow, const ScPatternAttr* pPattern, bool bPutToPool = false );
     void    SetPatternArea( SCROW nStartRow, SCROW nEndRow, const ScPatternAttr* pPattern,
                             bool bPutToPool = false, ScEditDataArray* pDataArray = NULL );
-
-    //swap two column patterns without adding and removing them from the pool
-    void    SwapPattern( ScAttrArray& pArray2, SCROW nRow1, SCROW nRow2, const ScPatternAttr* pPattern1, const ScPatternAttr* pPattern2 );
     void    ApplyStyleArea( SCROW nStartRow, SCROW nEndRow, ScStyleSheet* pStyle );
     void    ApplyCacheArea( SCROW nStartRow, SCROW nEndRow, SfxItemPoolCache* pCache,
                             ScEditDataArray* pDataArray = NULL );

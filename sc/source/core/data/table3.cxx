@@ -571,7 +571,8 @@ void ScTable::SwapCol(SCCOL nCol1, SCCOL nCol2)
             const ScPatternAttr* pPat2 = GetPattern(nCol2, nRow);
             if (pPat1 != pPat2)
             {
-                aCol[nCol1].SwapPattern(aCol[nCol2], nRow, nRow, *pPat1, *pPat2);
+                SetPattern(nCol1, nRow, *pPat2, true);
+                SetPattern(nCol2, nRow, *pPat1, true);
             }
         }
     }
@@ -622,7 +623,8 @@ void ScTable::SwapRow(SCROW nRow1, SCROW nRow2)
             const ScPatternAttr* pPat2 = GetPattern(nCol, nRow2);
             if (pPat1 != pPat2)
             {
-                aCol[nCol].SwapPattern(aCol[nCol], nRow1, nRow2, *pPat1, *pPat2);
+                SetPattern(nCol, nRow1, *pPat2, true);
+                SetPattern(nCol, nRow2, *pPat1, true);
             }
         }
     }
