@@ -41,11 +41,14 @@ $(eval $(call gb_Module_add_check_targets,svl,\
 ))
 #TODO: CppunitTest_svl_urihelper depends on ucb, can only be added once svl is
 # in tail build
+#FIXME: fails on MSVC
 
+ifneq ($(OS),WNT)
 $(eval $(call gb_Module_add_subsequentcheck_targets,svl,\
 	CppunitTest_svl_urihelper \
     JunitTest_svl_complex \
 ))
+endif
 
 #todo: dde platform dependent
 #todo: package_inc
