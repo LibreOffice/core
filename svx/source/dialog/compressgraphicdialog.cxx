@@ -56,10 +56,10 @@ CompressGraphicsDialog::CompressGraphicsDialog( Window* pParent, const Graphic& 
     m_aFixedTextDPI         ( this,    SVX_RES( FT_DPI ) ),
     m_aLosslessRB           ( this,    SVX_RES( RB_LOSSLESS_COMPRESSION ) ),
     m_aJpegCompRB           ( this,    SVX_RES( RB_JPEG_COMPRESSION ) ),
-    m_aCompressionMF        ( this,    SVX_RES( MF_COMPRESSION_FACTOR ) ),
     m_aCompressionFT        ( this,    SVX_RES( FT_COMPRESSION ) ),
-    m_aQualityMF            ( this,    SVX_RES( MF_QUALITY_FACTOR ) ),
+    m_aCompressionMF        ( this,    SVX_RES( MF_COMPRESSION_FACTOR ) ),
     m_aQualityFT            ( this,    SVX_RES( FT_QUALITY ) ),
+    m_aQualityMF            ( this,    SVX_RES( MF_QUALITY_FACTOR ) ),
     m_aCropCB               ( this,    SVX_RES( CB_CROP ) ),
     m_aBtnOK                ( this,    SVX_RES( BUTTON_CG_OK ) ),
     m_aBtnCancel            ( this,    SVX_RES( BUTTON_CG_CANCEL ) ),
@@ -139,9 +139,6 @@ void CompressGraphicsDialog::Update()
     aViewSizeString += UniString::CreateFromInt32(aValX);
     aViewSizeString += ( " DPI" ) ;
     m_aFixedText3.SetText(aViewSizeString);
-
-    int nPixelX = (sal_Int32)((double)MetricField::ConvertValue(m_aViewSize100mm.Width(),   2, MAP_100TH_MM, FUNIT_INCH) / 100 * m_dResolution );
-    int nPixelY = (sal_Int32)((double)MetricField::ConvertValue(m_aViewSize100mm.Height(),  2, MAP_100TH_MM, FUNIT_INCH) / 100 * m_dResolution );
 
     SvMemoryStream aMemStream;
     aMemStream.SetVersion( SOFFICE_FILEFORMAT_CURRENT );
