@@ -32,6 +32,7 @@ import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
 import org.openoffice.test.OpenOffice;
 import org.openoffice.test.common.GraphicsUtil;
+import org.openoffice.test.common.Testspace;
 import org.openoffice.test.vcl.client.CommunicationException;
 
 /**

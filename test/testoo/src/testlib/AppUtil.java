@@ -24,11 +24,10 @@
 package testlib;
 import static testlib.UIMap.*;
 
-import java.io.File;
-
 import org.openoffice.test.common.Condition;
 import org.openoffice.test.common.FileUtil;
 import org.openoffice.test.common.SystemUtil;
+import org.openoffice.test.common.Testspace;
 import org.openoffice.test.vcl.Tester;
 import org.openoffice.test.vcl.widgets.VclWindow;
 
@@ -83,16 +82,10 @@ public class AppUtil extends Tester {
      * @return a absolute path on the local
      */
     public static String testFile(String path) {
-        File source = new File("data", path);
-        File target = Testspace.getFile("data/" + path);
-        FileUtil.copyFile(source, target);
-        return target.getAbsolutePath();
+        return Testspace.prepareData(path);
     }
 
     public static String fullPath(String relativePath) {
-        File file = new File(relativePath);
-        if (file.isAbsolute())
-            return relativePath;
         return Testspace.getPath(relativePath);
     }
 
