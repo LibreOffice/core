@@ -400,8 +400,7 @@ public:
         SwpHstry::iterator itSourceBegin = pIns->m_SwpHstry.begin() + nStart;
         SwpHstry::iterator itSourceEnd = pIns->m_SwpHstry.end();
         if (itSourceBegin == itSourceEnd) return;
-        m_SwpHstry.reserve(nPos + static_cast<size_t>(itSourceEnd - itSourceBegin));
-        std::copy( itSourceBegin, itSourceEnd, m_SwpHstry.begin() + nPos );
+        m_SwpHstry.insert(m_SwpHstry.begin() + nPos, itSourceBegin, itSourceEnd);
         pIns->m_SwpHstry.erase( itSourceBegin, itSourceEnd );
     }
 
