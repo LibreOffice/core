@@ -121,7 +121,7 @@ uno::Reference< uno::XInterface > ScDataPilotTableObj::init()
 uno::Reference< uno::XInterface > ScDataPilotTableObj::getSheets()
 {
     uno::Reference< sheet::XSpreadsheetDocument > xDoc(mxComponent, UNO_QUERY_THROW);
-    uno::Reference< uno::XInterface > xSheets = xDoc->getSheets();
+    uno::Reference< uno::XInterface > xSheets(xDoc->getSheets());
     return xSheets;
 }
 
