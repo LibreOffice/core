@@ -87,6 +87,20 @@ void TemplateOnlineView::Populate()
         Invalidate();
 }
 
+void TemplateOnlineView::showOverlay (bool bVisible)
+{
+    mbActive = !bVisible;
+    mpItemView->Show(bVisible);
+
+    // Clear items is the overlay is closed.
+    if (!bVisible)
+    {
+        mpItemView->Clear();
+
+        setSelectionMode(mbSelectionMode);
+    }
+}
+
 void TemplateOnlineView::setItemDimensions(long ItemWidth, long ThumbnailHeight, long DisplayHeight, int itemPadding)
 {
     ThumbnailView::setItemDimensions(ItemWidth,ThumbnailHeight,DisplayHeight,itemPadding);

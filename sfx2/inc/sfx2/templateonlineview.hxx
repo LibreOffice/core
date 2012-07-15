@@ -23,7 +23,9 @@ public:
     virtual ~TemplateOnlineView ();
 
     // Load repositories from user settings.
-    void Populate ();
+    virtual void Populate ();
+
+    virtual void showOverlay (bool bVisible);
 
     void setItemDimensions (long ItemWidth, long ThumbnailHeight, long DisplayHeight, int itemPadding);
 

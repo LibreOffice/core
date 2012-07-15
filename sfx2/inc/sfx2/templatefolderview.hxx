@@ -36,11 +36,11 @@ public:
     virtual ~TemplateFolderView ();
 
     // Fill view with template folders thumbnails
-    void Populate ();
+    virtual void Populate ();
 
     std::vector<rtl::OUString> getFolderNames ();
 
-    void showOverlay (bool bVisible);
+    virtual void showOverlay (bool bVisible);
 
     void filterTemplatesByApp (const FILTER_APPLICATION &eApp);
 

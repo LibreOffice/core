@@ -24,6 +24,11 @@ public:
 
     virtual ~TemplateAbstractView ();
 
+    // Fill view with template folders thumbnails
+    virtual void Populate () = 0;
+
+    virtual void showOverlay (bool bVisible) = 0;
+
     // Check if the overlay is visible or not.
     bool isOverlayVisible () const;
 
