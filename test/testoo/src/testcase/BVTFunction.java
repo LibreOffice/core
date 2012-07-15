@@ -36,7 +36,6 @@ import java.io.File;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.openoffice.test.common.FileUtil;
@@ -563,7 +562,7 @@ public class BVTFunction {
      * 3. Check if the chart is inserted successfully
      * @throws Exception
      */
-    @Ignore("There is bug in presentation")
+    @Test
     public void testInsertChartInPresentation() throws Exception{
 
         // Create a new presentation document

@@ -90,10 +90,8 @@ public class Tester {
      */
     public static void rightClick(int x, int y) {
         robot.mouseMove(x, y);
-        robot.mousePress(InputEvent.BUTTON2_MASK);
-        robot.mouseRelease(InputEvent.BUTTON2_MASK);
-        robot.mousePress(InputEvent.BUTTON2_MASK);
-        robot.mouseRelease(InputEvent.BUTTON2_MASK);
+        robot.mousePress(InputEvent.BUTTON3_MASK);
+        robot.mouseRelease(InputEvent.BUTTON3_MASK);
         robot.delay(100);
     }
 

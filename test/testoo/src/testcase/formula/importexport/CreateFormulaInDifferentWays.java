@@ -28,21 +28,12 @@ package testcase.formula.importexport;
 
 import static testlib.AppUtil.*;
 import static testlib.UIMap.*;
-
-import java.awt.Rectangle;
-import java.io.File;
-
 import static org.junit.Assert.*;
-import static org.openoffice.test.vcl.Tester.*;
-
+import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.openoffice.test.common.FileUtil;
-import org.openoffice.test.common.GraphicsUtil;
-
-import testlib.CalcUtil;
 import testlib.Log;
 
 /**
@@ -50,25 +41,43 @@ import testlib.Log;
  */
 public class CreateFormulaInDifferentWays {
 
-    /**
-     * TestCapture helps us to do
-     * 1. Take a screenshot when failure occurs.
-     * 2. Collect extra data when OpenOffice crashes.
-     */
     @Rule
     public Log LOG = new Log();
 
-    /**
-     * initApp helps us to do
-     * 1. Patch the OpenOffice to enable automation if necessary.
-     * 2. Start OpenOffice with automation enabled if necessary.
-     * 3. Reset OpenOffice to startcenter.
-     *
-     * @throws java.lang.Exception
-     */
     @Before
     public void setUp() throws Exception {
-        initApp();
+        app.start();
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        app.close();
+    }
+
+    /**
+     * Test elements window active and inactive
+     * @throws Exception
+     */
+    @Test
+    public void testElementsWindowActive() throws Exception{
+
+        // New a formula document
+        startcenter.menuItem("File->New->Formula").select();
+        sleep(3);
+
+        // Check if the "View->Elements" menu is selected
+        math_EditWindow.menuItem("View").select();
+        boolean viewElements = math_EditWindow.menuItem("View->Elements").isSelected();
+
+        // If the menu is selected, the Elements window should display
+        assertEquals("Elements window displays correctly", viewElements, math_ElementsWindow.exists());
+
+        // Active or inactive the Elements window, it should display correctly
+        math_EditWindow.menuItem("View->Elements").select();
+        sleep(1);
+        math_EditWindow.menuItem("View").select();
+        viewElements = math_EditWindow.menuItem("View->Elements").isSelected();
+        assertEquals("Elements window display correctly", viewElements, math_ElementsWindow.exists());
     }
 
     /**
@@ -83,11 +92,12 @@ public class CreateFormulaInDifferentWays {
         startcenter.menuItem("File->New->Formula").select();
         sleep(3);
 
-        // Make Elements window pop up (For AOO3.4: View->Elements)
+        // Make Elements window pop up
         math_EditWindow.menuItem("View").select();
-        if (!math_EditWindow.menuItem("View->Selection").isSelected()) {
-            math_EditWindow.menuItem("View->Selection").select();
+        if (!math_EditWindow.menuItem("View->Elements").isSelected()) {
+            math_EditWindow.menuItem("View->Elements").select();
         }
+        math_EditWindow.click(1, 1);
 
         // Click a formula in Elements window and edit the formula in the commands window
         math_ElementsRelations.click();
@@ -100,8 +110,8 @@ public class CreateFormulaInDifferentWays {
         String insertedFormula = "a <> b";
 
         // Verify if the formula is correct
-        math_EditWindow.menuItem("Edit->Select All").select();
-        typeKeys("<$copy>");
+        app.dispatch(".uno:Select");
+        app.dispatch(".uno:Copy");
         sleep(1);
         assertEquals("The inserted formula into math", insertedFormula.concat(" "), app.getClipboard());    // add " "
 
@@ -119,9 +129,12 @@ public class CreateFormulaInDifferentWays {
 
         // Verify if the formula still exists in the file, and correct
         math_EditWindow.menuItem("Edit->Select All").select();
-        typeKeys("<$copy>");
+        app.dispatch(".uno:Copy");
         sleep(1);
         assertEquals("The inserted formula into math", insertedFormula.concat(" "), app.getClipboard());    // add " "
+
+        // Close all dialogs
+        app.dispatch(".uno:CloseDoc");
     }
 
     /**
@@ -154,7 +167,7 @@ public class CreateFormulaInDifferentWays {
 
         // Verify if the formula is correct
         math_EditWindow.menuItem("Edit->Select All").select();
-        typeKeys("<$copy>");
+        app.dispatch(".uno:Copy");
         sleep(1);
         assertEquals("The inserted formula into math", insertedFormula.concat(" "), app.getClipboard());    // add " "
 
@@ -172,9 +185,12 @@ public class CreateFormulaInDifferentWays {
 
         // Verify if the formula still exists in the file, and correct
         math_EditWindow.menuItem("Edit->Select All").select();
-        typeKeys("<$copy>");
+        app.dispatch(".uno:Copy");
         sleep(1);
         assertEquals("The inserted formula into math", insertedFormula.concat(" "), app.getClipboard());    // add " "
+
+        // Close all dialogs
+        app.dispatch(".uno:CloseDoc");
     }
 
     /**
@@ -190,26 +206,27 @@ public class CreateFormulaInDifferentWays {
 
         // Make Elements window pop up (For AOO3.4: View->Elements)
         math_EditWindow.menuItem("View").select();
-        if (!math_EditWindow.menuItem("View->Selection").isSelected()) {
-            math_EditWindow.menuItem("View->Selection").select();
+        if (!math_EditWindow.menuItem("View->Elements").isSelected()) {
+            math_EditWindow.menuItem("View->Elements").select();
         }
+        math_EditWindow.click(1, 1);
 
         // Click a formula in Elements window and edit the formula in the commands window
         math_ElementsUnaryBinary.click();
         math_ElementsUnaryBinaryPlus.click();
-        sleep(0.5);
+        sleep(1);
         typeKeys("a");  // "+a";
 
         // Undo and verify if it works fine
         math_EditWindow.menuItem("Edit->Undo: Insert").select();
         math_EditWindow.menuItem("Edit->Select All").select();
-        typeKeys("<$copy>");
+        app.dispatch(".uno:Copy");
         assertEquals("The inserted formula into math", "+<?> ", app.getClipboard());    // add " "
 
         // Redo and verify if it works fine
         math_EditWindow.menuItem("Edit->Redo: Insert").select();
         math_EditWindow.menuItem("Edit->Select All").select();
-        typeKeys("<$copy>");
+        app.dispatch(".uno:Copy");
         assertEquals("The inserted formula into math", "+a ", app.getClipboard());  // add " "
     }
 }
