@@ -554,6 +554,7 @@ void ScHTMLLayoutParser::Adjust()
                 nCurRow = pS->nCurRow;
             }
             delete pS;
+            pS = NULL;
             nTab = pE->nTab;
             if (pTables)
             {
