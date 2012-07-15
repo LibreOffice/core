@@ -1098,20 +1098,14 @@ public:
 
     void drawOutputAreaBorder()
     {
-        Size aOutputSize = mrParent.GetOutputSizePixel();
-        Rectangle aOutRect = mrParent.GetPageArea();
-
-        Rectangle borderRect(Point(aOutRect.Left(),-10),Size(aOutputSize.Width(),12));
-        if( mrParent.IsNativeControlSupported(CTRL_FRAME,PART_ENTIRE_CONTROL) &&
-                mrParent.DrawNativeControl(CTRL_FRAME,PART_ENTIRE_CONTROL,borderRect,
-                    CTRL_STATE_ENABLED,ImplControlValue(FRAME_DRAW_IN),rtl::OUString()) )
-            return;
-
         WinBits nWinStyle = mrParent.GetStyle();
 
         // Bei Border oben und unten einen Strich extra malen
         if ( (nWinStyle & WB_BORDER) || (nWinStyle & WB_TOPBORDER) )
         {
+            Size aOutputSize = mrParent.GetOutputSizePixel();
+            Rectangle aOutRect = mrParent.GetPageArea();
+
             // Bei 3D-Tabs wird auch der Border in 3D gemalt
             if ( nWinStyle & WB_3DTAB )
             {
@@ -1204,27 +1198,6 @@ public:
 
     void drawTab()
     {
-        ControlState nState(CTRL_STATE_ENABLED);
-        if( mbSelected )
-            nState|=CTRL_STATE_SELECTED;
-        TabitemValue tiValue;
-        tiValue.mnPosition|=TABITEM_IS_AT_BOTTOM;
-        Rectangle tabRect(maRect);
-        tabRect.Left()+=5;
-        tabRect.Right()-=4;
-        tabRect.Bottom()+=1;
-        if( !mbSelected )
-        {
-            tabRect.Bottom()-=2;
-            tabRect.Top()+=2;
-        }
-        if( mrParent.IsNativeControlSupported(CTRL_TAB_ITEM,PART_ENTIRE_CONTROL) &&
-               mrParent.DrawNativeControl(CTRL_TAB_ITEM,PART_ENTIRE_CONTROL,tabRect,
-                   nState,tiValue,rtl::OUString()) )
-        {
-            return;
-        }
-
         mrParent.SetLineColor(mpStyleSettings->GetDarkShadowColor());
 
         // Je nach Status die richtige FillInBrush setzen
@@ -1449,12 +1422,9 @@ void TabBar::Paint( const Rectangle& )
 
             if ( bCurrent )
             {
-                if(!IsNativeControlSupported(CTRL_TAB_ITEM,PART_ENTIRE_CONTROL))
-                {
-                    SetLineColor();
-                    SetFillColor(aSelectColor);
-                    aDrawer.drawOverTopBorder(mnWinStyle & WB_3DTAB);
-                }
+                SetLineColor();
+                SetFillColor(aSelectColor);
+                aDrawer.drawOverTopBorder(mnWinStyle & WB_3DTAB);
                 return;
             }
 
