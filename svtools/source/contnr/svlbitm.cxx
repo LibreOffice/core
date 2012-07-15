@@ -345,18 +345,6 @@ sal_uInt16 SvLBoxButton::IsA()
     return SV_ITEM_ID_LBOXBUTTON;
 }
 
-void SvLBoxButton::Check(SvLBox*, SvLBoxEntry*, sal_Bool bOn)
-{
-    DBG_CHKTHIS(SvLBoxButton,0);
-    if ( bOn != IsStateChecked() )
-    {
-        if ( bOn )
-            SetStateChecked();
-        else
-            SetStateUnchecked();
-    }
-}
-
 sal_Bool SvLBoxButton::ClickHdl( SvLBox*, SvLBoxEntry* pEntry )
 {
     DBG_CHKTHIS(SvLBoxButton,0);

@@ -115,9 +115,6 @@ namespace dbtools
         static ::com::sun::star::util::DateTime toDateTime(const ::rtl::OUString& _sSQLDate);
 
 
-        /** return the given DateTime as JDBC compliant 64 bit value
-        */
-        static sal_Int64 toINT64(const ::com::sun::star::util::DateTime& rVal);
         static sal_Int32 getMsFromTime(const ::com::sun::star::util::Time& rVal);
 
         static sal_Int32 toDays(const ::com::sun::star::util::Date& _rVal, const ::com::sun::star::util::Date& _rNullDate = getStandardDate());

@@ -137,29 +137,6 @@ namespace dbtools
     }
 
     //------------------------------------------------------------------------------
-    sal_Int64 DBTypeConversion::toINT64(const DateTime& rVal)
-    {
-        // normalize time
-        sal_Int32 nSeconds          = rVal.Seconds + rVal.HundredthSeconds / 100;
-        sal_Int32 nHundredthSeconds = rVal.HundredthSeconds % 100;
-        sal_Int32 nMinutes          = rVal.Minutes + nSeconds / 60;
-        nSeconds                    = nSeconds % 60;
-        sal_Int32 nHours            = rVal.Hours + nMinutes / 60;
-        nMinutes                    = nMinutes % 60;
-
-        // assemble time
-        sal_Int32 nTime = (sal_Int32)(nHundredthSeconds + (nSeconds*100) + (nMinutes*10000) + (nHours*1000000));
-        sal_Int32 nDate = ((sal_Int32)(rVal.Day%100)) + (((sal_Int32)(rVal.Month%100))*100) + (((sal_Int32) rVal.Year%10000)*10000);
-        sal_Int64 nRet;
-
-        nRet = (sal_Int64) nTime;
-        nRet <<= 32;
-        nRet += nDate;
-
-        return nRet;
-    }
-
-    //------------------------------------------------------------------------------
     sal_Int32 DBTypeConversion::getMsFromTime(const Time& rVal)
     {
         sal_Int32   nHour     = rVal.Hours;

@@ -186,7 +186,6 @@ public:
     virtual         ~SvLBoxButton();
     virtual void    InitViewData( SvLBox*,SvLBoxEntry*,SvViewDataItem* );
     virtual sal_uInt16  IsA();
-    void            Check( SvLBox* pView, SvLBoxEntry*, sal_Bool bCheck );
     virtual sal_Bool    ClickHdl(SvLBox* pView, SvLBoxEntry* );
     virtual void    Paint( const Point&, SvLBox& rView, sal_uInt16 nFlags,SvLBoxEntry* );
     virtual SvLBoxItem* Create() const;
