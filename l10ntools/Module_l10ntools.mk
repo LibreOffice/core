@@ -29,6 +29,7 @@ $(eval $(call gb_Module_Module,l10ntools))
 $(eval $(call gb_Module_add_targets,l10ntools,\
     Executable_helpex \
     Executable_idxdict \
+    Executable_ulfconv \
     Executable_ulfex \
     Executable_gsicheck \
     Executable_cfgex \
@@ -41,6 +42,7 @@ $(eval $(call gb_Module_add_targets,l10ntools,\
     Library_helplinker \
     Package_inc \
     Package_scripts \
+    Package_ulfconv \
 ))
 
 ifneq ($(SOLAR_JAVA),)
