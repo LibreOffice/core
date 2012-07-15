@@ -270,7 +270,7 @@ private:
 };
 
 TemplateFolderView::TemplateFolderView ( Window* pParent, const ResId& rResId, bool bDisableTransientChildren)
-    : ThumbnailView(pParent,rResId,bDisableTransientChildren),
+    : TemplateAbstractView(pParent,rResId,bDisableTransientChildren),
       mbFilteredResults(false),
       meFilterOption(FILTER_APP_NONE),
       mpDocTemplates(new SfxDocumentTemplates),

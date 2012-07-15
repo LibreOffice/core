@@ -47,7 +47,7 @@ enum
 };
 
 TemplateOnlineView::TemplateOnlineView (Window *pParent, WinBits nWinStyle, bool bDisableTransientChildren)
-    : ThumbnailView(pParent,nWinStyle,bDisableTransientChildren),
+    : TemplateAbstractView(pParent,nWinStyle,bDisableTransientChildren),
       mpItemView(new TemplateView(this,NULL))
 {
     mpItemView->SetColor(Color(COL_WHITE));

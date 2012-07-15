@@ -10,13 +10,13 @@
 #ifndef __SFX2_TEMPLATEONLINEVIEW_HXX__
 #define __SFX2_TEMPLATEONLINEVIEW_HXX__
 
-#include <sfx2/thumbnailview.hxx>
+#include <sfx2/templateabstractview.hxx>
 
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 
 class TemplateView;
 
-class TemplateOnlineView : public ThumbnailView
+class TemplateOnlineView : public TemplateAbstractView
 {
 public:
 

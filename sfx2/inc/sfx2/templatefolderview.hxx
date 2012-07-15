@@ -12,8 +12,8 @@
 
 #include <set>
 
+#include <sfx2/templateabstractview.hxx>
 #include <sfx2/templateproperties.hxx>
-#include <sfx2/thumbnailview.hxx>
 
 class SfxDocumentTemplates;
 class TemplateFolderViewItem;
@@ -28,7 +28,7 @@ enum FILTER_APPLICATION
     FILTER_APP_DRAW
 };
 
-class SFX2_DLLPUBLIC TemplateFolderView : public ThumbnailView
+class SFX2_DLLPUBLIC TemplateFolderView : public TemplateAbstractView
 {
 public:
 
