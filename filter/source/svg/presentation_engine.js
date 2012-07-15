@@ -3006,7 +3006,7 @@ function skipEffects(dir)
 {
     if( dir == 1 )
     {
-        var bRet = aSlideShow.skipEffect();
+        var bRet = aSlideShow.skipPlayingOrNextEffect();
 
         if( !bRet )
         {
@@ -5145,6 +5145,7 @@ function BaseNode( aAnimElem, aParentNode, aNodeContext )
     this.aDuration = null;
     this.aEnd = null;
     this.bMainSequenceRootNode = false;
+    this.bInteractiveSequenceRootNode = false;
     this.eFillMode = FILL_MODE_FREEZE;
     this.eRestartMode = RESTART_MODE_NEVER;
     this.nReapeatCount = undefined;
@@ -5462,6 +5463,11 @@ BaseNode.prototype.isMainSequenceRootNode = function()
     return this.bMainSequenceRootNode;
 };
 
+BaseNode.prototype.isInteractiveSequenceRootNode = function()
+{
+    return this.bInteractiveSequenceRootNode;
+};
+
 BaseNode.prototype.makeDeactivationEvent = function( nDelay )
 {
     if( this.aDeactivationEvent )
@@ -5528,6 +5534,8 @@ BaseNode.prototype.notifyEndListeners = function()
     }
 
     this.aContext.aEventMultiplexer.notifyEvent( EVENT_TRIGGER_END_EVENT, this.getId() );
+    if( this.getParentNode() && this.getParentNode().isMainSequenceRootNode() )
+        this.aContext.aEventMultiplexer.notifyNextEffectEndEvent();
 };
 
 BaseNode.prototype.getContext = function()
@@ -6123,6 +6131,7 @@ BaseContainerNode.prototype.parseElement= function()
     if( sNodeTypeAttr && aImpressNodeTypeInMap[ sNodeTypeAttr ] )
         this.eImpressNodeType = aImpressNodeTypeInMap[ sNodeTypeAttr ];
     this.bMainSequenceRootNode = ( this.eImpressNodeType == IMPRESS_MAIN_SEQUENCE_NODE );
+    this.bInteractiveSequenceRootNode = ( this.eImpressNodeType == IMPRESS_INTERACTIVE_SEQUENCE_NODE );
 
     // preset-class attribute
     this.ePresetClass =  undefined;
@@ -6554,6 +6563,7 @@ SequentialTimeContainer.prototype.rewindCurrentEffect = function( aChildNode )
         // resolve it again.
         aChildNode.init();
         this.resolveChild( aChildNode );
+        this.notifyRewindedEvent( aChildNode );
         this.bIsRewinding = false;
     }
     else
@@ -6582,12 +6592,17 @@ SequentialTimeContainer.prototype.rewindLastEffect = function( aChildNode )
         // immediately without increment the finished children counter and
         // resolve the next child.
         this.bIsRewinding = true;
-        // We end the current effect and remove any change it applies on the
-        // animated shape.
+        // We end the current effect.
         this.getContext().aTimerEventQueue.forceEmpty();
         this.getContext().aActivityQueue.clear();
         aChildNode.end();
-        aChildNode.removeEffect();
+        // Invoking the end method on the current child node that has not yet
+        // been activated should not lead to any change on the animated shape.
+        // However for safety we used to call the removeEffect method but
+        // lately we noticed that when interactive animation sequences are
+        // involved into the shape effect invoking such a method causes
+        // some issue.
+        //aChildNode.removeEffect();
 
         // As we rewind the previous effect we need to decrease the finished
         // children counter.
@@ -6603,6 +6618,7 @@ SequentialTimeContainer.prototype.rewindLastEffect = function( aChildNode )
         // in ENDED state now, On the contrary it cannot be resolved again later.
         aChildNode.init();
         this.resolveChild( aPreviousChildNode );
+        this.notifyRewindedEvent( aChildNode );
         this.bIsRewinding = false;
     }
     else
@@ -6629,27 +6645,48 @@ SequentialTimeContainer.prototype.resolveChild = function( aChildNode )
 {
     var bResolved = aChildNode.resolve();
 
-    if( bResolved && this.isMainSequenceRootNode() )
+    if( bResolved && ( this.isMainSequenceRootNode() || this.isInteractiveSequenceRootNode() ) )
     {
         if( this.aCurrentSkipEvent )
             this.aCurrentSkipEvent.dispose();
-
         this.aCurrentSkipEvent = makeEvent( bind2( SequentialTimeContainer.prototype.skipEffect, this, aChildNode ) );
-        this.aContext.aEventMultiplexer.registerSkipEffectEvent( this.aCurrentSkipEvent );
 
         if( this.aRewindCurrentEffectEvent )
             this.aRewindCurrentEffectEvent.dispose();
-
         this.aRewindCurrentEffectEvent = makeEvent( bind2( SequentialTimeContainer.prototype.rewindCurrentEffect, this, aChildNode ) );
-        this.aContext.aEventMultiplexer.registerRewindCurrentEffectEvent( this.aRewindCurrentEffectEvent );
 
         if( this.aRewindLastEffectEvent )
             this.aRewindLastEffectEvent.dispose();
-
         this.aRewindLastEffectEvent = makeEvent( bind2( SequentialTimeContainer.prototype.rewindLastEffect, this, aChildNode ) );
-        this.aContext.aEventMultiplexer.registerRewindLastEffectEvent( this.aRewindLastEffectEvent );
+
+        if( this.isMainSequenceRootNode() )
+        {
+            this.aContext.aEventMultiplexer.registerSkipEffectEvent( this.aCurrentSkipEvent );
+            this.aContext.aEventMultiplexer.registerRewindCurrentEffectEvent( this.aRewindCurrentEffectEvent );
+            this.aContext.aEventMultiplexer.registerRewindLastEffectEvent( this.aRewindLastEffectEvent );
+        }
+        else if( this.isInteractiveSequenceRootNode() )
+        {
+            this.aContext.aEventMultiplexer.registerSkipInteractiveEffectEvent( aChildNode.getId(), this.aCurrentSkipEvent );
+            this.aContext.aEventMultiplexer.registerRewindRunningInteractiveEffectEvent( aChildNode.getId(), this.aRewindCurrentEffectEvent );
+            this.aContext.aEventMultiplexer.registerRewindEndedInteractiveEffectEvent( aChildNode.getId(), this.aRewindLastEffectEvent );
+        }
     }
     return bResolved;
+};
+
+SequentialTimeContainer.prototype.notifyRewindedEvent = function( aChildNode )
+{
+    if( this.isInteractiveSequenceRootNode() )
+    {
+        this.aContext.aEventMultiplexer.notifyRewindedEffectEvent( aChildNode.getId() );
+
+        var sId = aChildNode.getBegin().getEventBaseElementId();
+        if( sId )
+        {
+            this.aContext.aEventMultiplexer.notifyRewindedEffectEvent( sId );
+        }
+    }
 };
 
 SequentialTimeContainer.prototype.dispose = function()
@@ -8714,7 +8751,6 @@ AnimatedElement.prototype.restoreState = function( nAnimationNodeId )
     }
 
     ANIMDBG.print( 'AnimatedElement(' + this.getId() + ').restoreState(' + nAnimationNodeId +')' );
-
     var aState = this.aStateSet[ nAnimationNodeId ];
     var bRet = this.setToElement( aState.aElement );
     if( bRet )
@@ -9670,6 +9706,8 @@ function registerEvent( nNodeId, aTiming, aEvent, aNodeContext )
                     {
                         case EVENT_TRIGGER_ON_CLICK:
                             aEventMultiplexer.registerEvent( eEventType, aSourceEventElement.getId(), aEvent );
+                            aEventMultiplexer.registerRewindedEffectHandler( aSourceEventElement.getId(),
+                                                                             bind2( aSourceEventElement.charge, aSourceEventElement ) );
                             bEventRegistered = true;
                             break;
                         default:
@@ -9681,6 +9719,11 @@ function registerEvent( nNodeId, aTiming, aEvent, aNodeContext )
                         var aEndEvent = aInteractiveAnimationSequenceMap[ nNodeId ].getEndEvent();
                         aEventMultiplexer.registerEvent( eEventType, aSourceEventElement.getId(), aStartEvent );
                         aEventMultiplexer.registerEvent( EVENT_TRIGGER_END_EVENT, nNodeId, aEndEvent );
+                        aEventMultiplexer.registerRewindedEffectHandler(
+                            nNodeId,
+                            bind2( InteractiveAnimationSequence.prototype.chargeEvents,
+                                   aInteractiveAnimationSequenceMap[ nNodeId ] )
+                        );
                     }
                 }
                 else  // no base event element present
@@ -9754,16 +9797,19 @@ SourceEventElement.prototype.getId = function()
 SourceEventElement.prototype.onMouseEnter = function()
 {
     this.bIsPointerOver = true;
+    this.setPointerCursor();
 };
 
 SourceEventElement.prototype.onMouseLeave = function()
 {
     this.bIsPointerOver = false;
+    this.setDefaultCursor();
 };
 
 SourceEventElement.prototype.charge = function()
 {
     this.bClickHandled = false;
+    this.setPointerCursor();
 };
 
 SourceEventElement.prototype.handleClick = function( aMouseEvent )
@@ -9771,14 +9817,27 @@ SourceEventElement.prototype.handleClick = function( aMouseEvent )
     if( !this.bIsPointerOver ) return false;
 
     if( this.bClickHandled )
-        return true;
+        return false;
 
     this.aEventMultiplexer.notifyEvent( EVENT_TRIGGER_ON_CLICK, this.getId() );
     aSlideShow.update();
     this.bClickHandled = true;
+    this.setDefaultCursor();
     return true;
 };
 
+SourceEventElement.prototype.setPointerCursor = function()
+{
+    if( this.bClickHandled )
+        return;
+
+    this.aElement.setAttribute( 'style', 'cursor: pointer' );
+};
+
+SourceEventElement.prototype.setDefaultCursor = function()
+{
+    this.aElement.setAttribute( 'style', 'cursor: default' );
+};
 
 
 // ------------------------------------------------------------------------------------------ //
@@ -9876,10 +9935,15 @@ function EventMultiplexer( aTimerEventQueue )
 {
     this.aTimerEventQueue = aTimerEventQueue;
     this.aEventMap = new Object();
+    this.aSkipEffectEndHandlerSet = new Array();
     this.aMouseClickHandlerSet = new PriorityQueue( PriorityEntry.compare );
     this.aSkipEffectEvent = null;
     this.aRewindCurrentEffectEvent = null;
     this.aRewindLastEffectEvent = null;
+    this.aSkipInteractiveEffectEventSet = new Object();
+    this.aRewindRunningInteractiveEffectEventSet = new Object();
+    this.aRewindEndedInteractiveEffectEventSet = new Object();
+    this.aRewindedEffectHandlerSet = new Object();
 }
 
 EventMultiplexer.prototype.registerMouseClickHandler = function( aHandler, nPriority )
@@ -9932,6 +9996,21 @@ EventMultiplexer.prototype.notifyEvent = function( eEventType, aNotifierId )
     }
 };
 
+EventMultiplexer.prototype.registerNextEffectEndHandler = function( aHandler )
+{
+    this.aSkipEffectEndHandlerSet.push( aHandler );
+};
+
+EventMultiplexer.prototype.notifyNextEffectEndEvent = function()
+{
+    var nSize = this.aSkipEffectEndHandlerSet.length;
+    for( var i = 0; i < nSize; ++i )
+    {
+        (this.aSkipEffectEndHandlerSet[i])();
+    }
+    this.aSkipEffectEndHandlerSet = new Array();
+};
+
 EventMultiplexer.prototype.registerSkipEffectEvent = function( aEvent )
 {
     this.aSkipEffectEvent = aEvent;
@@ -9973,6 +10052,59 @@ EventMultiplexer.prototype.notifyRewindLastEffectEvent = function()
         this.aRewindLastEffectEvent = null;
     }
 };
+
+EventMultiplexer.prototype.registerSkipInteractiveEffectEvent = function( nNotifierId, aEvent )
+{
+    this.aSkipInteractiveEffectEventSet[ nNotifierId ] = aEvent;
+};
+
+EventMultiplexer.prototype.notifySkipInteractiveEffectEvent = function( nNotifierId )
+{
+    if( this.aSkipInteractiveEffectEventSet[ nNotifierId ] )
+    {
+        this.aTimerEventQueue.addEvent( this.aSkipInteractiveEffectEventSet[ nNotifierId ] );
+    }
+};
+
+EventMultiplexer.prototype.registerRewindRunningInteractiveEffectEvent = function( nNotifierId, aEvent )
+{
+    this.aRewindRunningInteractiveEffectEventSet[ nNotifierId ] = aEvent;
+};
+
+EventMultiplexer.prototype.notifyRewindRunningInteractiveEffectEvent = function( nNotifierId )
+{
+    if( this.aRewindRunningInteractiveEffectEventSet[ nNotifierId ] )
+    {
+        this.aTimerEventQueue.addEvent( this.aRewindRunningInteractiveEffectEventSet[ nNotifierId ] );
+    }
+};
+
+EventMultiplexer.prototype.registerRewindEndedInteractiveEffectEvent = function( nNotifierId, aEvent )
+{
+    this.aRewindEndedInteractiveEffectEventSet[ nNotifierId ] = aEvent;
+};
+
+EventMultiplexer.prototype.notifyRewindEndedInteractiveEffectEvent = function( nNotifierId )
+{
+    if( this.aRewindEndedInteractiveEffectEventSet[ nNotifierId ] )
+    {
+        this.aTimerEventQueue.addEvent( this.aRewindEndedInteractiveEffectEventSet[ nNotifierId ] );
+    }
+};
+
+EventMultiplexer.prototype.registerRewindedEffectHandler = function( aNotifierId, aHandler )
+{
+    this.aRewindedEffectHandlerSet[ aNotifierId ] = aHandler;
+};
+
+EventMultiplexer.prototype.notifyRewindedEffectEvent = function( aNotifierId )
+{
+    if( this.aRewindedEffectHandlerSet[ aNotifierId ] )
+    {
+        (this.aRewindedEffectHandlerSet[ aNotifierId ])();
+    }
+};
+
 
 EventMultiplexer.DEBUG = aEventMultiplexerDebugPrinter.isEnabled();
 
@@ -11419,6 +11551,49 @@ var PREFERRED_FRAMES_PER_SECONDS        = 50;
 var PREFERRED_FRAME_RATE                = 1.0 / PREFERRED_FRAMES_PER_SECONDS;
 
 
+function Effect( nId )
+{
+    this.nId = ( typeof( nId ) === typeof( 1 ) ) ? nId : -1;
+    this.eState = Effect.NOT_STARTED;
+};
+
+Effect.NOT_STARTED = 0;
+Effect.PLAYING = 1;
+Effect.ENDED = 2;
+
+Effect.prototype.getId = function()
+{
+    return this.nId;
+};
+
+Effect.prototype.isMainEffect = function()
+{
+    return ( this.nId === -1 );
+};
+
+Effect.prototype.isPlaying = function()
+{
+    return ( this.eState === Effect.PLAYING );
+};
+
+Effect.prototype.isEnded = function()
+{
+    return ( this.eState === Effect.ENDED );
+};
+
+Effect.prototype.start = function()
+{
+    assert( this.eState === Effect.NOT_STARTED, 'Effect.start: wrong state.' );
+    this.eState = Effect.PLAYING;
+};
+
+Effect.prototype.end = function()
+{
+    assert( this.eState === Effect.PLAYING, 'Effect.end: wrong state.' );
+    this.eState = Effect.ENDED;
+};
+
+// ------------------------------------------------------------------------------------------ //
 
 function SlideShow()
 {
@@ -11435,17 +11610,20 @@ function SlideShow()
                                           this.aNextEffectEventArray,
                                           this.aInteractiveAnimationSequenceMap,
                                           this.aActivityQueue );
-    this.nCurrentEffect = 0;
-    this.eDirection = FORWARD;
-    this.nTotalInteracAnimSeqRunning = 0;
     this.bIsIdle = true;
     this.bIsEnabled = true;
+    this.bNoSlideTransition = false;
+
+    this.nCurrentEffect = 0;
+    this.bIsNextEffectRunning = false;
     this.bIsRewinding = false;
     this.bIsSkipping = false;
     this.bIsSkippingAll = false;
-    this.bNoSlideTransition = false;
+    this.nTotalInteractivePlayingEffects = 0;
+    this.aStartedEffectList = new Array();
+    this.aStartedEffectIndexMap = new Object();
+    this.aStartedEffectIndexMap[ -1 ] = undefined;
 }
-
 
 SlideShow.prototype.setSlideEvents = function( aNextEffectEventArray,
                                                aInteractiveAnimationSequenceMap,
@@ -11467,7 +11645,6 @@ SlideShow.prototype.setSlideEvents = function( aNextEffectEventArray,
     this.aContext.aEventMultiplexer = aEventMultiplexer;
     this.aEventMultiplexer = aEventMultiplexer;
     this.nCurrentEffect = 0;
-    this.nTotalInteracAnimSeqRunning = 0;
 };
 
 SlideShow.prototype.createSlideTransition = function( aSlideTransitionHandler, aLeavingSlide, aEnteringSlide, aTransitionEndEvent )
@@ -11512,30 +11689,74 @@ SlideShow.prototype.createSlideTransition = function( aSlideTransitionHandler, a
 
 };
 
-SlideShow.prototype.isRunning = function()
-{
-    return !this.bIsIdle;
-};
-
-SlideShow.prototype.isInterAnimSeqRunning = function()
-{
-    return ( this.nTotalInteracAnimSeqRunning > 0 );
-};
-
 SlideShow.prototype.isEnabled = function()
 {
     return this.bIsEnabled;
 };
 
+SlideShow.prototype.isRunning = function()
+{
+    return !this.bIsIdle;
+};
+
+SlideShow.prototype.isMainEffectPlaying = function()
+{
+    return this.bIsNextEffectRunning;
+};
+
+SlideShow.prototype.isInteractiveEffectPlaying = function()
+{
+    return ( this.nTotalInteractivePlayingEffects > 0 );
+};
+
+SlideShow.prototype.isAnyEffectPlaying = function()
+{
+    return ( this.isMainEffectPlaying() || this.isInteractiveEffectPlaying() );
+};
+
+SlideShow.prototype.hasAnyEffectStarted = function()
+{
+    return ( this.aStartedEffectList.length > 0 );
+};
+
 SlideShow.prototype.notifyNextEffectStart = function()
 {
+    assert( !this.bIsNextEffectRunning,
+            'SlideShow.notifyNextEffectStart: an effect is already started.' );
+    this.bIsNextEffectRunning = true;
+    this.aEventMultiplexer.registerNextEffectEndHandler( bind2( SlideShow.prototype.notifyNextEffectEnd, this ) );
+    var aEffect = new Effect();
+    aEffect.start();
+    this.aStartedEffectIndexMap[ -1 ] = this.aStartedEffectList.length;
+    this.aStartedEffectList.push( aEffect );
+
+
     var aAnimatedElementMap = theMetaDoc.aMetaSlideSet[nCurSlide].aSlideAnimationsHandler.aAnimatedElementMap;
     for( var sId in aAnimatedElementMap )
         aAnimatedElementMap[ sId ].notifyNextEffectStart( this.nCurrentEffect );
 };
 
+SlideShow.prototype.notifyNextEffectEnd = function()
+{
+     assert( this.bIsNextEffectRunning,
+            'SlideShow.notifyNextEffectEnd: effect already ended.' );
+    this.bIsNextEffectRunning = false;
+
+    this.aStartedEffectList[ this.aStartedEffectIndexMap[ -1 ] ].end();
+};
+
 SlideShow.prototype.notifySlideStart = function( nSlideIndex )
 {
+    this.nCurrentEffect = 0;
+    this.bIsRewinding = false;
+    this.bIsSkipping = false;
+    this.bIsSkippingAll = false;
+    this.nTotalInteractivePlayingEffects = 0;
+    this.aStartedEffectList = new Array();
+    this.aStartedEffectIndexMap = new Object();
+    this.aStartedEffectIndexMap[ -1 ] = undefined;
+
+
     var aAnimatedElementMap = theMetaDoc.aMetaSlideSet[nSlideIndex].aSlideAnimationsHandler.aAnimatedElementMap;
     for( var sId in aAnimatedElementMap )
         aAnimatedElementMap[ sId ].notifySlideStart();
@@ -11556,88 +11777,108 @@ SlideShow.prototype.notifyTransitionEnd = function( nSlideIndex )
 
 SlideShow.prototype.notifyInteractiveAnimationSequenceStart = function( nNodeId )
 {
-    ++this.nTotalInteracAnimSeqRunning;
+    ++this.nTotalInteractivePlayingEffects;
+    var aEffect = new Effect( nNodeId );
+    aEffect.start();
+    this.aStartedEffectIndexMap[ nNodeId ] = this.aStartedEffectList.length;
+    this.aStartedEffectList.push( aEffect );
 };
 
 SlideShow.prototype.notifyInteractiveAnimationSequenceEnd = function( nNodeId )
 {
-    assert( this.nTotalInteracAnimSeqRunning > 0,
-            'SlideShow.notifyInteractiveAnimationSequenceStart: ' +
-            'the total number of running interactive application is zero' );
-    --this.nTotalInteracAnimSeqRunning;
+    assert( this.isInteractiveEffectPlaying(),
+            'SlideShow.notifyInteractiveAnimationSequenceEnd: no interactive effect playing.' )
+
+    this.aStartedEffectList[ this.aStartedEffectIndexMap[ nNodeId ] ].end();
+    --this.nTotalInteractivePlayingEffects;
 };
 
+/** nextEffect
+ *  Start the next effect belonging to the main animation sequence if any.
+ *  If there is an already playing effect belonging to any animation sequence
+ *  it is skipped.
+ *
+ *  @return {Boolean}
+ *      False if there is no more effect to start, true otherwise.
+ */
 SlideShow.prototype.nextEffect = function()
 {
     if( !this.isEnabled() )
         return false;
 
-    if( this.isInterAnimSeqRunning() )
-        return true;
-
-    if( this.isRunning() )
+    if( this.isAnyEffectPlaying() )
     {
-        this.skipCurrentEffect();
+        this.skipAllPlayingEffects();
         return true;
     }
 
     if( !this.aNextEffectEventArray )
         return false;
 
-    this.notifyNextEffectStart();
-
     if( this.nCurrentEffect >= this.aNextEffectEventArray.size() )
         return false;
 
-    this.eDirection = FORWARD;
+    this.notifyNextEffectStart();
+
     this.aNextEffectEventArray.at( this.nCurrentEffect ).fire();
     ++this.nCurrentEffect;
     this.update();
     return true;
 };
 
-/** skipCurrentEffect
- *  Skip the current playing effect.
+/** skipAllPlayingEffects
+ *  Skip all playing effect, independently to which animation sequence they
+ *  belong.
  *
  */
-SlideShow.prototype.skipCurrentEffect = function()
+SlideShow.prototype.skipAllPlayingEffects  = function()
 {
     if( this.bIsSkipping || this.bIsRewinding )
-        return;
+        return true;
 
     this.bIsSkipping = true;
-    this.aEventMultiplexer.notifySkipEffectEvent();
+    // TODO: The correct order should be based on the left playing time.
+    for( var i = 0; i < this.aStartedEffectList.length; ++i )
+    {
+        var aEffect = this.aStartedEffectList[i];
+        if( aEffect.isPlaying() )
+        {
+            if( aEffect.isMainEffect() )
+                this.aEventMultiplexer.notifySkipEffectEvent();
+            else
+                this.aEventMultiplexer.notifySkipInteractiveEffectEvent( aEffect.getId() );
+        }
+    }
     this.update();
     this.bIsSkipping = false;
+    return true;
 };
 
-/** skipEffect
- *  Skip the next effect to be played.
+/** skipNextEffect
+ *  Skip the next effect to be played (if any) that belongs to the main
+ *  animation sequence.
+ *  Require: no effect is playing.
  *
+ *  @return {Boolean}
+ *      False if there is no more effect to skip, true otherwise.
  */
-SlideShow.prototype.skipEffect = function()
+SlideShow.prototype.skipNextEffect = function()
 {
     if( this.bIsSkipping || this.bIsRewinding )
         return true;
 
-    if( this.isInterAnimSeqRunning() )
-        return true;
-
-    if( this.isRunning() )
-    {
-        this.skipCurrentEffect();
-        return true;
-    }
+    assert( !this.isAnyEffectPlaying(),
+            'SlideShow.skipNextEffect' );
 
     if( !this.aNextEffectEventArray )
         return false;
 
-    this.notifyNextEffectStart();
     if( this.nCurrentEffect >= this.aNextEffectEventArray.size() )
         return false;
 
+    this.notifyNextEffectStart();
+
     this.bIsSkipping = true;
-    this.eDirection = FORWARD;
     this.aNextEffectEventArray.at( this.nCurrentEffect ).fire();
     this.aEventMultiplexer.notifySkipEffectEvent();
     ++this.nCurrentEffect;
@@ -11645,9 +11886,26 @@ SlideShow.prototype.skipEffect = function()
     this.bIsSkipping = false;
     return true;
 };
+
+/** skipPlayingOrNextEffect
+ *  Skip the next effect to be played that belongs to the main animation
+ *  sequence  or all playing effects.
+ *
+ *  @return {Boolean}
+ *      False if there is no more effect to skip, true otherwise.
+ */
+SlideShow.prototype.skipPlayingOrNextEffect = function()
+{
+    if( this.isAnyEffectPlaying() )
+        return this.skipAllPlayingEffects();
+    else
+        return this.skipNextEffect();
+};
+
 
 /** skipAllEffects
- *  Skip all left effects on the current slide.
+ *  Skip all left effects that belongs to the main animation sequence and all
+ *  playing effects on the current slide.
  *
  *  @return {Boolean}
  *      True if it already skipping or when it has ended skipping,
@@ -11658,13 +11916,11 @@ SlideShow.prototype.skipAllEffects = function()
     if( this.bIsSkippingAll )
         return true;
 
-    if( this.isInterAnimSeqRunning() )
-        return true;
-
     this.bIsSkippingAll = true;
-    if( this.isRunning() )
+
+    if( this.isAnyEffectPlaying() )
     {
-        this.skipCurrentEffect();
+        this.skipAllPlayingEffects();
     }
     else if( !this.aNextEffectEventArray
                || ( this.nCurrentEffect >= this.aNextEffectEventArray.size() ) )
@@ -11681,14 +11937,16 @@ SlideShow.prototype.skipAllEffects = function()
     // aNextEffectEventArray will going on increasing after every skip action.
     while( this.nCurrentEffect < this.aNextEffectEventArray.size() )
     {
-        this.skipEffect();
+        this.skipNextEffect();
     }
     this.bIsSkippingAll = false;
     return true;
 };
 
 /** rewindEffect
- *  Rewind the current playing effect or the last played one.
+ *  Rewind all the effects started after at least one of the current playing
+ *  effects. If there is no playing effect, it rewinds the last played one,
+ *  both in case it belongs to the main or to an interactive animation sequence.
  *
  */
 SlideShow.prototype.rewindEffect = function()
@@ -11696,37 +11954,105 @@ SlideShow.prototype.rewindEffect = function()
     if( this.bIsSkipping || this.bIsRewinding )
         return;
 
-    if( this.isInterAnimSeqRunning() )
-        return true;
-
-    if( this.nCurrentEffect == 0 )
+    if( !this.hasAnyEffectStarted() )
     {
         this.rewindToPreviousSlide();
         return;
     }
 
     this.bIsRewinding = true;
-    if( this.isRunning() )
+
+    var nFirstPlayingEffectIndex = undefined;
+
+    var i = 0;
+    for( ; i < this.aStartedEffectList.length; ++i )
     {
-        this.aEventMultiplexer.notifyRewindCurrentEffectEvent();
+        var aEffect = this.aStartedEffectList[i];
+        if( aEffect.isPlaying() )
+        {
+            nFirstPlayingEffectIndex = i;
+            break;
+        }
     }
-    else
+
+    // There is at least one playing effect.
+    if( nFirstPlayingEffectIndex !== undefined )
     {
-        this.aEventMultiplexer.notifyRewindLastEffectEvent();
+        i = this.aStartedEffectList.length - 1;
+        for( ; i >= nFirstPlayingEffectIndex; --i )
+        {
+            aEffect = this.aStartedEffectList[i];
+            if( aEffect.isPlaying() )
+            {
+                if( aEffect.isMainEffect() )
+                {
+                    this.aEventMultiplexer.notifyRewindCurrentEffectEvent();
+                    if( this.nCurrentEffect > 0 )
+                        --this.nCurrentEffect;
+                }
+                else
+                {
+                    this.aEventMultiplexer.notifyRewindRunningInteractiveEffectEvent( aEffect.getId() );
+                }
+            }
+            else if( aEffect.isEnded() )
+            {
+                if( aEffect.isMainEffect() )
+                {
+                    this.aEventMultiplexer.notifyRewindLastEffectEvent();
+                    if( this.nCurrentEffect > 0 )
+                        --this.nCurrentEffect;
+                }
+                else
+                {
+                    this.aEventMultiplexer.notifyRewindEndedInteractiveEffectEvent( aEffect.getId() );
+                }
+            }
+        }
+        this.update();
+
+        // Pay attention here: we need to remove all rewinded effects from
+        // the started effect list only after updating.
+        i = this.aStartedEffectList.length - 1;
+        for( ; i >= nFirstPlayingEffectIndex; --i )
+        {
+            aEffect = this.aStartedEffectList.pop();
+            if( !aEffect.isMainEffect() )
+                delete this.aStartedEffectIndexMap[ aEffect.getId() ];
+        }
     }
-    if( this.nCurrentEffect > 0 )
-        --this.nCurrentEffect;
-    this.update();
+    else  // there is no playing effect
+    {
+        aEffect = this.aStartedEffectList.pop();
+        if( !aEffect.isMainEffect() )
+            delete this.aStartedEffectIndexMap[ aEffect.getId() ];
+        if( aEffect.isEnded() )  // Well that is almost an assertion.
+        {
+            if( aEffect.isMainEffect() )
+            {
+                this.aEventMultiplexer.notifyRewindLastEffectEvent();
+                if( this.nCurrentEffect > 0 )
+                    --this.nCurrentEffect;
+            }
+            else
+            {
+                this.aEventMultiplexer.notifyRewindEndedInteractiveEffectEvent( aEffect.getId() );
+            }
+        }
+        this.update();
+    }
+
     this.bIsRewinding = false;
 };
 
 /** rewindToPreviousSlide
- *  Displays the previous slide with all effects played.
+ *  Displays the previous slide with all effects, that belong to the main
+ *  animation sequence, played.
  *
  */
 SlideShow.prototype.rewindToPreviousSlide = function()
 {
-    if( this.isRunning() )
+    if( this.isAnyEffectPlaying() )
         return;
     var nNewSlide = nCurSlide - 1;
     this.displaySlide( nNewSlide, true );
@@ -11739,16 +12065,16 @@ SlideShow.prototype.rewindToPreviousSlide = function()
  */
 SlideShow.prototype.rewindAllEffects = function()
 {
-    if( this.nCurrentEffect == 0 )
+    if( !this.hasAnyEffectStarted() )
     {
         this.rewindToPreviousSlide();
         return;
     }
 
-     while( this.nCurrentEffect > 0 )
-     {
-         this.rewindEffect();
-     }
+    while( this.hasAnyEffectStarted() )
+    {
+        this.rewindEffect();
+    }
 };
 
 SlideShow.prototype.displaySlide = function( nNewSlide, bSkipSlideTransition )
