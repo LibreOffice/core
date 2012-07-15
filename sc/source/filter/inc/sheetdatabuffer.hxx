@@ -90,48 +90,6 @@ struct DataTableModel
 
 // ============================================================================
 
-/** Stores position and contents of a range of cells for optimized import. */
-class CellBlock : public WorksheetHelper
-{
-public:
-    explicit            CellBlock( const WorksheetHelper& rHelper, const ValueRange& rColSpan, sal_Int32 nRow );
-
-    /** Writes all buffered cells into the Calc sheet. */
-    void                finalizeImport();
-
-private:
-    /** Fills unused cells before passed index with empty strings. */
-    void                fillUnusedCells( sal_Int32 nIndex );
-
-private:
-    /** Stores position and string data of a rich-string cell. */
-    struct RichStringCell
-    {
-        ::com::sun::star::table::CellAddress
-                            maCellAddr;         /// The address of the rich-string cell.
-        RichStringRef       mxString;           /// The string with rich formatting.
-        const Font*         mpFirstPortionFont; /// Font information from cell for first text portion.
-
-        explicit            RichStringCell(
-                                const ::com::sun::star::table::CellAddress& rCellAddr,
-                                const RichStringRef& rxString,
-                                const Font* pFirstPortionFont );
-    };
-    typedef ::std::list< RichStringCell > RichStringCellList;
-
-    ::com::sun::star::table::CellRangeAddress
-                        maRange;            /// Cell range covered by this cell block.
-    RichStringCellList  maRichStrings;      /// Cached rich-string cells.
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > >
-                        maCellArray;        /// The array of cells of this cell block.
-    ::com::sun::star::uno::Any*
-                        mpCurrCellRow;      /// Pointer to first cell of current row (last row in maCellArray).
-    const sal_Int32     mnRowLength;        /// Number of cells covered by row of this cell block.
-    sal_Int32           mnFirstFreeIndex;   /// Relative index of first unused cell in current row.
-};
-
-// ============================================================================
-
 /** Manages all cell blocks currently in use. */
 class CellBlockBuffer : public WorksheetHelper
 {
@@ -146,11 +104,8 @@ public:
 
 private:
     typedef ::std::map< sal_Int32, ValueRangeVector >   ColSpanVectorMap;
-    typedef RefMap< sal_Int32, CellBlock >              CellBlockMap;
 
     ColSpanVectorMap    maColSpans;             /// Buffereed column spans, mapped by row index.
-    CellBlockMap        maCellBlocks;           /// All open cell blocks, mapped by last (!) column of the block span.
-    CellBlockMap::iterator maCellBlockIt;       /// Pointer to cell block currently in use.
     sal_Int32           mnCurrRow;              /// Current row index used for buffered cell import.
 };
 

@@ -299,7 +299,6 @@ cairocanvas::SpriteDeviceHelper::getSurface()
 cairocanvas::TextLayout::draw(_cairo*)
 canvas::createSurfaceProxyManager(boost::shared_ptr<canvas::IRenderModule> const&)
 cmis::Content::exchangeIdentity(com::sun::star::uno::Reference<com::sun::star::ucb::XContentIdentifier> const&)
-comphelper::OSelectionChangeListener::disposeAdapter()
 comphelper::detail::ConfigurationWrapper::getGroupReadWrite(boost::shared_ptr<comphelper::ConfigurationChanges> const&, rtl::OUString const&) const
 comphelper::detail::ConfigurationWrapper::getLocalizedPropertyValue(rtl::OUString const&) const
 comphelper::detail::ConfigurationWrapper::setLocalizedPropertyValue(boost::shared_ptr<comphelper::ConfigurationChanges> const&, rtl::OUString const&, com::sun::star::uno::Any const&) const
@@ -321,8 +320,6 @@ nullcanvas::SpriteCanvasHelper::opaqueUpdate(basegfx::B2DConnectedRanges<canvas:
 nullcanvas::SpriteCanvasHelper::scrollUpdate(basegfx::B2DRange const&, basegfx::B2DRange const&, basegfx::B2DConnectedRanges<canvas::SpriteRedrawManager::SpriteInfo>::ConnectedComponents const&)
 oox::drawingml::TextParagraphProperties::dump() const
 oox::xls::BiffDrawingObjectBase::BiffDrawingObjectBase(oox::xls::WorksheetHelper const&)
-oox::xls::CellBlock::CellBlock(oox::xls::WorksheetHelper const&, oox::ValueRange const&, int)
-oox::xls::CellBlock::RichStringCell::RichStringCell(com::sun::star::table::CellAddress const&, boost::shared_ptr<oox::xls::RichString> const&, oox::xls::Font const*)
 sd::LeftDrawPaneShell::RegisterInterface(SfxModule*)
 sd::LeftImpressPaneShell::RegisterInterface(SfxModule*)
 sd::ToolPanelPaneShell::RegisterInterface(SfxModule*)

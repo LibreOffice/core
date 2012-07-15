@@ -120,67 +120,10 @@ DataTableModel::DataTableModel() :
 
 // ============================================================================
 
-namespace {
-
-const sal_Int32 CELLBLOCK_MAXROWS  = 16;    /// Number of rows in a cell block.
-
-} // namespace
-
-CellBlock::CellBlock( const WorksheetHelper& rHelper, const ValueRange& rColSpan, sal_Int32 nRow ) :
-    WorksheetHelper( rHelper ),
-    maRange( rHelper.getSheetIndex(), rColSpan.mnFirst, nRow, rColSpan.mnLast, nRow ),
-    mnRowLength( rColSpan.mnLast - rColSpan.mnFirst + 1 ),
-    mnFirstFreeIndex( 0 )
-{
-    maCellArray.realloc( 1 );
-    maCellArray[ 0 ].realloc( mnRowLength );
-    mpCurrCellRow = maCellArray[ 0 ].getArray();
-}
-
-void CellBlock::finalizeImport()
-{
-    // fill last cells in last row with empty strings (placeholder for empty cells)
-    fillUnusedCells( mnRowLength );
-    // insert all buffered cells into the Calc sheet
-    try
-    {
-        Reference< XCellRangeData > xRangeData( getCellRange( maRange ), UNO_QUERY_THROW );
-        xRangeData->setDataArray( maCellArray );
-    }
-    catch( Exception& )
-    {
-    }
-    // insert uncacheable cells separately
-    for( RichStringCellList::const_iterator aIt = maRichStrings.begin(), aEnd = maRichStrings.end(); aIt != aEnd; ++aIt )
-        putRichString( aIt->maCellAddr, *aIt->mxString, aIt->mpFirstPortionFont );
-}
-
-// private --------------------------------------------------------------------
-
-CellBlock::RichStringCell::RichStringCell( const CellAddress& rCellAddr, const RichStringRef& rxString, const Font* pFirstPortionFont ) :
-    maCellAddr( rCellAddr ),
-    mxString( rxString ),
-    mpFirstPortionFont( pFirstPortionFont )
-{
-}
-
-void CellBlock::fillUnusedCells( sal_Int32 nIndex )
-{
-    if( mnFirstFreeIndex < nIndex )
-    {
-        Any* pCellEnd = mpCurrCellRow + nIndex;
-        for( Any* pCell = mpCurrCellRow + mnFirstFreeIndex; pCell < pCellEnd; ++pCell )
-            *pCell <<= OUString();
-    }
-}
-
-// ============================================================================
-
 CellBlockBuffer::CellBlockBuffer( const WorksheetHelper& rHelper ) :
     WorksheetHelper( rHelper ),
     mnCurrRow( -1 )
 {
-    maCellBlockIt = maCellBlocks.end();
 }
 
 void CellBlockBuffer::setColSpans( sal_Int32 nRow, const ValueRangeSet& rColSpans )
@@ -193,7 +136,6 @@ void CellBlockBuffer::setColSpans( sal_Int32 nRow, const ValueRangeSet& rColSpan
 
 void CellBlockBuffer::finalizeImport()
 {
-    maCellBlocks.forEachMem( &CellBlock::finalizeImport );
 }
 
 // ============================================================================

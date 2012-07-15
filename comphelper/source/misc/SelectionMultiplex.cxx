@@ -47,16 +47,6 @@ void OSelectionChangeListener::_disposing(const EventObject&) throw( RuntimeExce
 }
 
 //------------------------------------------------------------------
-void OSelectionChangeListener::disposeAdapter()
-{
-    if ( m_pAdapter )
-        m_pAdapter->dispose();
-
-    // will automatically set a new adapter
-    OSL_ENSURE( !m_pAdapter, "OSelectionChangeListener::disposeAdapter: what did dispose do?" );
-}
-
-//------------------------------------------------------------------
 void OSelectionChangeListener::setAdapter(OSelectionChangeMultiplexer* pAdapter)
 {
     if (m_pAdapter)

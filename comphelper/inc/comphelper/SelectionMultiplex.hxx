@@ -56,11 +56,6 @@ namespace comphelper
         virtual void _disposing(const ::com::sun::star::lang::EventObject& _rSource) throw( ::com::sun::star::uno::RuntimeException);
 
     protected:
-        /** If the derivee also owns the mutex which we know as reference, then call this within your
-            derivee's dtor.
-        */
-        void    disposeAdapter();
-
         // pseudo-private. Making it private now could break compatibility
         void    setAdapter( OSelectionChangeMultiplexer* _pAdapter );
     };
