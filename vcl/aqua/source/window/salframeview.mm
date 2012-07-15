@@ -30,6 +30,7 @@
 #include <sal/alloca.h>
 #include <sal/macros.h>
 
+#include "tools/helpers.hxx"
 #include "vcl/window.hxx"
 #include "vcl/svapp.hxx"
 
