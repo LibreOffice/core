@@ -29,6 +29,8 @@ GUI := WNT
 
 gb_Helper_get_rcfile = $(1).ini
 
+gb_Helper_LIBRARY_PATH_VAR := PATH
+
 gb_MKTEMP := mktemp --tmpdir=$(gb_TMPDIR) gbuild.XXXXXX
 
 gb_OSDEFS := \
