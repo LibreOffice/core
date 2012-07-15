@@ -29,13 +29,20 @@ $(eval $(call gb_CppunitTest_CppunitTest,smoketest))
 
 $(eval $(call gb_CppunitTest_abort_on_assertion,smoketest))
 
+$(eval $(call gb_CppunitTest_add_exception_objects,smoketest,\
+	smoketest/smoketest_too \
+))
+
 $(eval $(call gb_CppunitTest_use_api,smoketest,\
 	offapi \
 	udkapi \
 ))
 
 $(eval $(call gb_CppunitTest_use_libraries,smoketest,\
-	smoketest \
+	cppu \
+	cppuhelper \
+	sal \
+	unotest \
 ))
 
 ifeq ($(OS),MACOSX)

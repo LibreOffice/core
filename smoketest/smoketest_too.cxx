@@ -1,0 +1,1 @@
+#include <smoketest.cxx>
