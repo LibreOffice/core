@@ -392,7 +392,8 @@ endif
 
 build: build-packimages
 ifeq ($(OS_FOR_BUILD),WNT)
-	cd instsetoo_native && unset MAKEFLAGS && $(SOLARENV)/bin/build.pl
+	cd instsetoo_native && unset MAKEFLAGS && \
+		$(SOLARENV)/bin/build.pl FORCE2ARCHIVE=TRUE
 else
 	cd instsetoo_native && unset MAKEFLAGS && \
         $(SOLARENV)/bin/build.pl -P$(BUILD_NCPUS) -- -P$(GMAKE_PARALLELISM)
@@ -423,11 +424,16 @@ install-strip:
 dev-install: build
 	@rm -rf $(DEVINSTALLDIR)
 	@mkdir $(DEVINSTALLDIR)
+ifeq ($(OS_FOR_BUILD),WNT)
+	unzip -d "$(DEVINSTALLDIR)" "$(SRCDIR)/instsetoo_native/$(INPATH)/LibreOffice_Dev/archive/install/en-US/LibO*_install-arc_en-US.zip"
+	mv "$(DEVINSTALLDIR)"/LibO*_install-arc_en-US/* "$(DEVINSTALLDIR)"/opt
+else
 ifeq ($(DISABLE_LINKOO),TRUE)
 	@ooinstall $(DEVINSTALLDIR)/opt
 	@install-gdb-printers -L
 else
 	@ooinstall -l $(DEVINSTALLDIR)/opt
+endif
 endif
 	@rm -f $(SRCDIR)/install && ln -s $(DEVINSTALLDIR)/opt/ $(SRCDIR)/install
 
