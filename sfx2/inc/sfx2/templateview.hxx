@@ -26,11 +26,13 @@ public:
 
     virtual ~TemplateView ();
 
-    void setRegionId (const sal_uInt16 nRegionId);
+    void setId (const sal_uInt16 nId) { mnId = nId; }
 
-    sal_uInt16 getRegionId () const { return mnRegionId; }
+    sal_uInt16 getId () const { return mnId; }
 
-    const rtl::OUString& getRegionName () const { return maFolderName; }
+    void setName (const rtl::OUString &rName);
+
+    const rtl::OUString& getName () const { return maName; }
 
     virtual void Paint (const Rectangle &rRect);
 
@@ -56,8 +58,8 @@ private:
 
     Image maCloseImg;
     bool mbRenderTitle;
-    sal_uInt16 mnRegionId;
-    rtl::OUString maFolderName;
+    sal_uInt16 mnId;
+    rtl::OUString maName;
     SfxDocumentTemplates *mpDocTemplates;
     Link maDblClickHdl;
     Link maChangeNameHdl;

@@ -36,7 +36,7 @@ TemplateView::TemplateView (Window *pParent, SfxDocumentTemplates *pTemplates)
     : ThumbnailView(pParent,WB_VSCROLL),
       maCloseImg(SfxResId(IMG_TEMPLATE_VIEW_CLOSE)),
       mbRenderTitle(true),
-      mnRegionId(0),
+      mnId(0),
       mpDocTemplates(pTemplates),
       mpEditName(new Edit(this, WB_BORDER | WB_HIDE))
 {
@@ -48,10 +48,9 @@ TemplateView::~TemplateView ()
     delete mpEditName;
 }
 
-void TemplateView::setRegionId (const sal_uInt16 nRegionId)
+void TemplateView::setName (const rtl::OUString &rName)
 {
-    mnRegionId = nRegionId;
-    maFolderName = mpDocTemplates->GetRegionName(nRegionId);
+    maName = rName;
     mpEditName->SetText(rtl::OUString());
 }
 
@@ -74,7 +73,7 @@ void TemplateView::Paint (const Rectangle &rRect)
 
     if (mbRenderTitle)
     {
-        aPos.X() = (aWinSize.getWidth() - aTextDev.getTextWidth(maFolderName,0,maFolderName.getLength()))/2;
+        aPos.X() = (aWinSize.getWidth() - aTextDev.getTextWidth(maName,0,maName.getLength()))/2;
         aPos.Y() = aTextDev.getTextHeight() + (mnHeaderHeight - aTextDev.getTextHeight())/2;
 
         basegfx::B2DHomMatrix aTextMatrix( createScaleTranslateB2DHomMatrix(
@@ -83,7 +82,7 @@ void TemplateView::Paint (const Rectangle &rRect)
 
         aSeq[nCount++] = Primitive2DReference(
                     new TextSimplePortionPrimitive2D(aTextMatrix,
-                                                     maFolderName,0,maFolderName.getLength(),
+                                                     maName,0,maName.getLength(),
                                                      std::vector< double >( ),
                                                      mpItemAttrs->aFontAttr,
                                                      com::sun::star::lang::Locale(),
@@ -188,7 +187,7 @@ void TemplateView::MouseButtonDown (const MouseEvent &rMEvt)
         {
             drawinglayer::primitive2d::TextLayouterDevice aTextDev;
 
-            float fTextWidth = aTextDev.getTextWidth(maFolderName,0,maFolderName.getLength());
+            float fTextWidth = aTextDev.getTextWidth(maName,0,maName.getLength());
 
             aPos.X() = (aWinSize.getWidth() - fTextWidth)/2;
             aPos.Y() = (mnHeaderHeight - aTextDev.getTextHeight())/2;
@@ -215,11 +214,11 @@ void TemplateView::OnItemDblClicked(ThumbnailViewItem *pItem)
 
 IMPL_LINK_NOARG(TemplateView, ChangeNameHdl)
 {
-    rtl::OUString aTmp = maFolderName;
-    maFolderName = mpEditName->GetText();
+    rtl::OUString aTmp = maName;
+    maName = mpEditName->GetText();
 
     if (!maChangeNameHdl.Call(this))
-        maFolderName = aTmp;
+        maName = aTmp;
 
     mpEditName->SetText(rtl::OUString());
 

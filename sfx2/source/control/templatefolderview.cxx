@@ -482,7 +482,7 @@ bool TemplateFolderView::removeRegion(const sal_uInt16 nItemId)
 
 bool TemplateFolderView::removeTemplate (const sal_uInt16 nItemId)
 {
-    sal_uInt16 nRegionId = mpItemView->getRegionId();
+    sal_uInt16 nRegionId = mpItemView->getId();
     sal_uInt16 nItemRegionId = nRegionId + 1;
     sal_uInt16 nTemplateId = nItemId - 1;
 
@@ -525,7 +525,7 @@ bool TemplateFolderView::moveTemplates(std::set<const ThumbnailViewItem *> &rIte
     bool ret = true;
     bool refresh = false;
 
-    sal_uInt16 nSrcRegionId = mpItemView->getRegionId();
+    sal_uInt16 nSrcRegionId = mpItemView->getId();
     sal_uInt16 nSrcRegionItemId = nSrcRegionId + 1;
 
     TemplateFolderViewItem *pTarget = NULL;
@@ -665,7 +665,8 @@ void TemplateFolderView::OnItemDblClicked (ThumbnailViewItem *pRegionItem)
     // Fill templates
     sal_uInt16 nRegionId = pRegionItem->mnId-1;
 
-    mpItemView->setRegionId(nRegionId);
+    mpItemView->setId(nRegionId);
+    mpItemView->setName(mpDocTemplates->GetRegionName(nRegionId));
     mpItemView->InsertItems(static_cast<TemplateFolderViewItem*>(pRegionItem)->maTemplates);
 
     if (mbSelectionMode)
@@ -686,17 +687,17 @@ IMPL_LINK(TemplateFolderView, TVTemplateStateHdl, const ThumbnailViewItem*, pIte
 
 IMPL_LINK(TemplateFolderView, ChangeNameHdl, TemplateView*, pView)
 {
-    sal_uInt16 nRegionId = pView->getRegionId();
+    sal_uInt16 nRegionId = pView->getId();
     sal_uInt16 nItemId = nRegionId + 1;
 
-    if (!mpDocTemplates->SetName(pView->getRegionName(),nRegionId,USHRT_MAX))
+    if (!mpDocTemplates->SetName(pView->getName(),nRegionId,USHRT_MAX))
         return false;
 
     for (size_t i = 0; i < mItemList.size(); ++i)
     {
         if (mItemList[i]->mnId == nItemId)
         {
-            mItemList[i]->maTitle = pView->getRegionName();
+            mItemList[i]->maTitle = pView->getName();
             mItemList[i]->calculateItemsPosition(mpItemAttrs->nMaxTextLenght);
             Invalidate();
             break;
