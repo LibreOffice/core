@@ -45,6 +45,7 @@ void Receiver::parseCommand( std::vector<OString> aCommand )
     fprintf( stderr, "%s\n", aCommand[i].getStr() );}
     fprintf( stderr, "End parse\n" );
     uno::Reference<presentation::XSlideShowController> xSlideShowController;
+    uno::Reference<presentation::XPresentation2> xPresentation;
     try {
         uno::Reference< lang::XMultiServiceFactory > xServiceManager(
             ::comphelper::getProcessServiceFactory(), uno::UNO_QUERY_THROW );
@@ -52,31 +53,64 @@ void Receiver::parseCommand( std::vector<OString> aCommand )
         "com.sun.star.frame.Desktop" ) , uno::UNO_QUERY_THROW );
         uno::Reference< frame::XFrame > xFrame ( xFramesSupplier->getActiveFrame(), uno::UNO_QUERY_THROW );
         uno::Reference<presentation::XPresentationSupplier> xPS ( xFrame->getController()->getModel(), uno::UNO_QUERY_THROW);
-        uno::Reference<presentation::XPresentation2> xPresentation(xPS->getPresentation(), uno::UNO_QUERY_THROW);
+        xPresentation = uno::Reference<presentation::XPresentation2>(
+            xPS->getPresentation(), uno::UNO_QUERY_THROW);
         // Throws an exception if now slideshow running
         xSlideShowController =  uno::Reference<presentation::XSlideShowController>(
            xPresentation->getController(), uno::UNO_QUERY_THROW );
     }
     catch ( com::sun::star::uno::RuntimeException &e )
     {
-        return;
+        //return;
     }
 
-    if ( aCommand[0].compareTo( "transition_next" ) == 0 )
+    if ( aCommand[0].equals( "transition_next" ) )
     {
-        xSlideShowController->gotoNextEffect();
+        if ( xSlideShowController.is() )
+            xSlideShowController->gotoNextEffect();
     }
-    else if ( aCommand[0].compareTo( "transition_previous" ) == 0 )
+    else if ( aCommand[0].equals( "transition_previous" ) )
     {
-        xSlideShowController->gotoPreviousEffect();
+        if ( xSlideShowController.is() )
+            xSlideShowController->gotoPreviousEffect();
     }
-    else if ( aCommand[0].compareTo( "goto_slide" ) == 0 )
+    else if ( aCommand[0].equals( "goto_slide" ) )
     {
         // FIXME: if 0 returned, then not a valid number
         sal_Int32 aSlide = aCommand[1].toInt32();
-        xSlideShowController->gotoSlideIndex( aSlide );
+        if ( xSlideShowController.is() )
+            xSlideShowController->gotoSlideIndex( aSlide );
     }
-
+    else if ( aCommand[0].equals( "presentation_start" ) )
+    {
+        if ( xPresentation.is() )
+            xPresentation->start();
+    }
+    else if ( aCommand[0].equals( "presentation_stop" ) )
+    {
+        if ( xPresentation.is() )
+            xPresentation->end();
+    }
+    else if ( aCommand[0].equals( "presentation_blank_screen" ) )
+    {
+        sal_Int32 aColour = 0; // Default is black
+        if ( aCommand.size() > 1 )
+        {
+//             aColour = FIXME: get the colour in some format from this string
+//              Determine the formatting first.
+        }
+        if ( xSlideShowController.is() )
+        {
+            xSlideShowController->blankScreen( aColour );
+        }
+    }
+    else if ( aCommand[0].equals( "presentation_resume" ) )
+    {
+        if ( xSlideShowController.is() )
+        {
+            xSlideShowController->resume();
+        }
+    }
             // FIXME: remove later, this is just to test functionality
         //sendPreview( 0, xSlideShowController, mTransmitter );
 

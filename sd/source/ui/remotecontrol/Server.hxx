@@ -20,8 +20,6 @@
 
 #include <com/sun/star/presentation/XSlideShowListener.hpp>
 
-
-
 /**
 * The port for use for the main communication between LibO and remote control app.
 */

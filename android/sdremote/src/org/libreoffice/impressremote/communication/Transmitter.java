@@ -1,5 +1,7 @@
 package org.libreoffice.impressremote.communication;
 
+import android.graphics.Color;
+
 /**
  * Interface to send commands to the server.
  *
@@ -26,4 +28,30 @@ public class Transmitter {
 		mClient.sendCommand("goto_slide\n" + slide + "\n\n");
 	}
 
+	/**
+	 * Blank the screen to the default colour (set server-side), which is
+	 * generally black. This is slightly faster than using
+	 * <code> blankScreen( colour ) </code>.
+	 */
+	public void blankScreen() {
+		mClient.sendCommand("presentation_blank_screen\n\n");
+	}
+
+	/**
+	 * Set the screen to a specific colour. Only use if a non default colour is
+	 * needed.
+	 * @param aColor
+	 */
+	public void blankScreen(Color aColor) {
+		// Fixme: check how to get colour in integer form.
+		mClient.sendCommand("presentation_blank_screen\n" + aColor + "\n\n");
+	}
+
+	public void startPresentation() {
+		mClient.sendCommand("presentation_start\n\n");
+	}
+
+	public void stopPresentation() {
+		mClient.sendCommand("presentation_stop\n\n");
+	}
 }
