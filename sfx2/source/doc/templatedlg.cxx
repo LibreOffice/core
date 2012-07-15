@@ -198,6 +198,8 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
                                     ITEM_MAX_HEIGHT-THUMBNAIL_MAX_HEIGHT,
                                     ITEM_PADDING);
 
+    mpOnlineView->setOverlayCloseHdl(LINK(this,SfxTemplateManagerDlg,CloseOverlayHdl));
+
     mpSearchView->SetSizePixel(aThumbSize);
     mpSearchView->setItemMaxTextLength(ITEM_MAX_TEXT_LENGTH);
 
@@ -308,7 +310,7 @@ IMPL_LINK_NOARG(SfxTemplateManagerDlg, CloseOverlayHdl)
     mpTemplateBar->Hide();
     mpViewBar->Show();
 
-    maView->showOverlay(false);
+    mpCurView->showOverlay(false);
     return 0;
 }
 
@@ -839,6 +841,8 @@ void SfxTemplateManagerDlg::switchMainView(bool bDisplayLocal)
 {
     if (bDisplayLocal)
     {
+        mpCurView = maView;
+
         mpViewBar->ShowItem(TBI_TEMPLATE_ONLINE);
         mpViewBar->HideItem(TBI_TEMPLATE_LOCAL);
 
@@ -847,6 +851,8 @@ void SfxTemplateManagerDlg::switchMainView(bool bDisplayLocal)
     }
     else
     {
+        mpCurView = mpOnlineView;
+
         mpViewBar->ShowItem(TBI_TEMPLATE_LOCAL);
         mpViewBar->HideItem(TBI_TEMPLATE_ONLINE);
 
