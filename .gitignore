@@ -130,6 +130,3 @@ test/user-template/user/psprint/pspfontcache
 # Somepeople love debugging
 gdbtrace.log
 valgrind.log
-
-#patches
-*.patch
