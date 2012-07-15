@@ -116,6 +116,9 @@ bool passesNegativeList(rtl::OUString const & url) {
             "/dictionaries/da_DK/help/da/"
             "org.openoffice.da.hunspell.dictionaries/page1.xhp") },
         { RTL_CONSTASCII_STRINGPARAM(
+            "/dictionaries/da_DK/help/da/"
+            "org.openoffice.da.hunspell.dictionaries/page2.xhp") },
+        { RTL_CONSTASCII_STRINGPARAM(
             "/dictionaries/hu_HU/help/hu/"
             "org.openoffice.hu.hunspell.dictionaries/page1.xhp") },
         { RTL_CONSTASCII_STRINGPARAM("/hidother.src") },
