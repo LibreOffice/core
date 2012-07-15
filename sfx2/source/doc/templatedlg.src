@@ -45,7 +45,7 @@ String STR_INPUT_NEW
     Text [ en-US ] = "Enter folder name:";
 };
 
-ModalDialog DLG_TEMPLATE_MANAGER
+ModelessDialog DLG_TEMPLATE_MANAGER
 {
     HelpId = CMD_SID_TEMPLATE_MANAGER;
     OutputSize = TRUE;

@@ -84,7 +84,7 @@ private:
 };
 
 SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
-    : ModalDialog(parent, SfxResId(DLG_TEMPLATE_MANAGER)),
+    : ModelessDialog(parent, SfxResId(DLG_TEMPLATE_MANAGER)),
       aButtonAll(this,SfxResId(BTN_SELECT_ALL)),
       aButtonDocs(this,SfxResId(BTN_SELECT_DOCS)),
       aButtonPresents(this,SfxResId(BTN_SELECT_PRESENTATIONS)),
