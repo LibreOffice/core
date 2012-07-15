@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _COMPRESS_GRAPHICS_DIALOG_HXX
-#define _COMPRESS_GRAPHICS_DIALOG_HXX
+#ifndef _COMPRESS_GRAPHIC_DIALOG_HXX
+#define _COMPRESS_GRAPHIC_DIALOG_HXX
 
 #include <vcl/dialog.hxx>
 #include <vcl/button.hxx>
@@ -30,19 +30,32 @@
 class SVX_DLLPUBLIC CompressGraphicsDialog : public ModalDialog
 {
 private:
+    FixedLine       m_aImageDetailsFL;
     FixedText       m_aFixedText2X;
     FixedText       m_aFixedText2;
     FixedText       m_aFixedText3X;
     FixedText       m_aFixedText3;
-    FixedText       m_aFixedText4X;
-    FixedText       m_aFixedText4;
     FixedText       m_aFixedText5X;
     FixedText       m_aFixedText5;
     FixedText       m_aFixedText6X;
     FixedText       m_aFixedText6;
+
+    FixedLine       m_aSettingsFL;
+    CheckBox        m_aReduceResolutionCB;
+    FixedText       m_aNewWidthFT;
+    MetricField     m_aMFNewWidth;
+    FixedText       m_aNewHeightFT;
+    MetricField     m_aMFNewHeight;
+    FixedText       m_aResolutionFT;
     ComboBox        m_aResolutionLB;
-    MetricField     m_aMFQuality;
-    CheckBox        m_aLossless;
+    FixedText       m_aFixedTextDPI;
+    RadioButton     m_aLosslessRB;
+    RadioButton     m_aJpegCompRB;
+    FixedText       m_aCompressionFT;
+    MetricField     m_aCompressionMF;
+    FixedText       m_aQualityFT;
+    MetricField     m_aQualityMF;
+    CheckBox        m_aCropCB;
     OKButton        m_aBtnOK;
     CancelButton    m_aBtnCancel;
     HelpButton      m_aBtnHelp;
@@ -52,10 +65,20 @@ private:
     Size            m_aViewSize100mm;
     SfxBindings&    m_rBindings;
 
+    double          m_dResolution;
+
+    DECL_LINK( NewWidthModifiedHdl, void* );
+    DECL_LINK( NewHeightModifiedHdl, void* );
     DECL_LINK( ResolutionModifiedHdl, void* );
-    DECL_LINK( ClickHdl, void* );
+    DECL_LINK( ToggleCompressionRB, void* );
+    DECL_LINK( ToggleReduceResolutionRB, void* );
+
+    DECL_LINK( CalculateClickHdl, void* );
 
     void Update();
+    void UpdateNewWidthMF();
+    void UpdateNewHeightMF();
+    void UpdateResolutionLB();
 
 public:
     CompressGraphicsDialog( Window* pParent, const Graphic& rGraphic, const Size& rViewSize100mm, SfxBindings& rBindings );
