@@ -28,4 +28,36 @@ TemplateAbstractView::~TemplateAbstractView ()
     delete mpItemView;
 }
 
+bool TemplateAbstractView::isOverlayVisible () const
+{
+    return mpItemView->IsVisible();
+}
+
+void TemplateAbstractView::sortOverlayItems(const boost::function<bool (const ThumbnailViewItem*,
+                                                                        const ThumbnailViewItem*) > &func)
+{
+    mpItemView->sortItems(func);
+}
+
+void TemplateAbstractView::setOverlayDblClickHdl(const Link &rLink)
+{
+    mpItemView->setDblClickHdl(rLink);
+}
+
+void TemplateAbstractView::setOverlayCloseHdl(const Link &rLink)
+{
+    mpItemView->setCloseHdl(rLink);
+}
+
+void TemplateAbstractView::OnSelectionMode (bool bMode)
+{
+    if (mpItemView->IsVisible())
+    {
+        mbSelectionMode = bMode;
+        mpItemView->setSelectionMode(bMode);
+    }
+    else
+        ThumbnailView::OnSelectionMode(bMode);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

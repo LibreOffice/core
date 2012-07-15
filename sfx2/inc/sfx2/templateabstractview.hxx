@@ -24,6 +24,20 @@ public:
 
     virtual ~TemplateAbstractView ();
 
+    // Check if the overlay is visible or not.
+    bool isOverlayVisible () const;
+
+    void sortOverlayItems (const boost::function<bool (const ThumbnailViewItem*,
+                                                       const ThumbnailViewItem*) > &func);
+
+    void setOverlayDblClickHdl (const Link &rLink);
+
+    void setOverlayCloseHdl (const Link &rLink);
+
+protected:
+
+    virtual void OnSelectionMode (bool bMode);
+
 protected:
 
     TemplateView *mpItemView;

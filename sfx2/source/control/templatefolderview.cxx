@@ -358,11 +358,6 @@ std::vector<rtl::OUString> TemplateFolderView::getFolderNames()
     return ret;
 }
 
-bool TemplateFolderView::isOverlayVisible () const
-{
-    return mpItemView->IsVisible();
-}
-
 void TemplateFolderView::showOverlay (bool bVisible)
 {
     mbActive = !bVisible;
@@ -384,16 +379,6 @@ void TemplateFolderView::showOverlay (bool bVisible)
 
         setSelectionMode(mbSelectionMode);
     }
-}
-
-void TemplateFolderView::setOverlayDblClickHdl(const Link &rLink)
-{
-    mpItemView->setDblClickHdl(rLink);
-}
-
-void TemplateFolderView::setOverlayCloseHdl(const Link &rLink)
-{
-    mpItemView->setCloseHdl(rLink);
 }
 
 void TemplateFolderView::filterTemplatesByApp (const FILTER_APPLICATION &eApp)
@@ -428,12 +413,6 @@ TemplateFolderView::getFilteredItems(const boost::function<bool (const TemplateI
     }
 
     return aItems;
-}
-
-void TemplateFolderView::sortOverlayItems(const boost::function<bool (const ThumbnailViewItem*,
-                                                                      const ThumbnailViewItem*) > &func)
-{
-    mpItemView->sortItems(func);
 }
 
 sal_uInt16 TemplateFolderView::createRegion(const rtl::OUString &rName)
@@ -645,17 +624,6 @@ void TemplateFolderView::Resize()
     aPos.setX((aWinSize.getWidth() - aViewSize.getWidth())/2);
 
     mpItemView->SetPosPixel(aPos);
-}
-
-void TemplateFolderView::OnSelectionMode (bool bMode)
-{
-    if (mpItemView->IsVisible())
-    {
-        mbSelectionMode = bMode;
-        mpItemView->setSelectionMode(bMode);
-    }
-    else
-        ThumbnailView::OnSelectionMode(bMode);
 }
 
 void TemplateFolderView::OnItemDblClicked (ThumbnailViewItem *pRegionItem)

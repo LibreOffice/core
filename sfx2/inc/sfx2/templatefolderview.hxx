@@ -40,22 +40,12 @@ public:
 
     std::vector<rtl::OUString> getFolderNames ();
 
-    // Check if the overlay is visible or not.
-    bool isOverlayVisible () const;
-
     void showOverlay (bool bVisible);
-
-    void setOverlayDblClickHdl (const Link &rLink);
-
-    void setOverlayCloseHdl (const Link &rLink);
 
     void filterTemplatesByApp (const FILTER_APPLICATION &eApp);
 
     std::vector<TemplateItemProperties>
         getFilteredItems (const boost::function<bool (const TemplateItemProperties&) > &rFunc) const;
-
-    void sortOverlayItems (const boost::function<bool (const ThumbnailViewItem*,
-                                                       const ThumbnailViewItem*) > &func);
 
     void setTemplateStateHdl (const Link &aLink) { maTemplateStateHdl = aLink; }
 
@@ -72,8 +62,6 @@ public:
 private:
 
     virtual void Resize ();
-
-    virtual void OnSelectionMode (bool bMode);
 
     virtual void OnItemDblClicked (ThumbnailViewItem *pRegionItem);
 
