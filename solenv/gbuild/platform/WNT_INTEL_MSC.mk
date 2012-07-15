@@ -633,10 +633,8 @@ gb_JunitTest_JunitTest_platform_longpathname_hack =
 endif # OOO_TEST_SOFFICE
 
 define gb_JunitTest_JunitTest_platform
-$(call gb_JunitTest_JunitTest_platform_longpathname_hack,$(1))
-
 $(call gb_JunitTest_get_target,$(1)) : DEFS := \
-	-Dorg.openoffice.test.arg.soffice="$$$${OOO_TEST_SOFFICE:-path:`cat $(call gb_JunitTest_get_target,$(1)).instpath`/opt/OpenOffice.org 3/program/soffice.exe}" \
+	-Dorg.openoffice.test.arg.soffice="$$$${OOO_TEST_SOFFICE:-path:$(OUTDIR)/installation/opt/program/soffice.exe}" \
 	-Dorg.openoffice.test.arg.env=PATH \
 	-Dorg.openoffice.test.arg.user=file:///$(call gb_JunitTest_get_userdir,$(1))
 
