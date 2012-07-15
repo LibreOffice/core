@@ -65,10 +65,8 @@ void dumpFillTransparenceGradientNameAsAttribute(rtl::OUString sTranspGradName, 
 void dumpFillTransparenceGradientAsElement(com::sun::star::awt::Gradient aTranspGrad, xmlTextWriterPtr xmlWriter);
 void dumpFillGradientNameAsAttribute(rtl::OUString sGradName, xmlTextWriterPtr xmlWriter);
 void dumpFillGradientAsElement(com::sun::star::awt::Gradient aGradient, xmlTextWriterPtr xmlWriter);
-void dumpFillHatchNameAsAttribute(rtl::OUString sHatchName, xmlTextWriterPtr xmlWriter);
 void dumpFillHatchAsElement(com::sun::star::drawing::Hatch aHatch, xmlTextWriterPtr xmlWriter);
 void dumpFillBackgroundAsAttribute(sal_Bool bBackground, xmlTextWriterPtr xmlWriter);
-void dumpFillBitmapNameAsAttribute(rtl::OUString sBitmapName, xmlTextWriterPtr xmlWriter);
 void dumpFillBitmapAsElement(com::sun::star::uno::Reference<com::sun::star::awt::XBitmap> xBitmap, xmlTextWriterPtr xmlWriter);
 void dumpFillBitmapURLAsAttribute(rtl::OUString sBitmapURL, xmlTextWriterPtr xmlWriter);
 void dumpFillBitmapPositionOffsetXAsAttribute(sal_Int32 aBitmapPositionOffsetX, xmlTextWriterPtr xmlWriter);
@@ -150,10 +148,6 @@ void dumpHomogenMatrixLine3(com::sun::star::drawing::HomogenMatrixLine3 aLine, x
 void dumpTransformationAsElement(com::sun::star::drawing::HomogenMatrix3 aTransformation, xmlTextWriterPtr xmlWriter);
 void dumpNavigationOrderAsAttribute(sal_Int32 aNavigationOrder, xmlTextWriterPtr xmlWriter);
 void dumpHyperlinkAsAttribute(rtl::OUString sHyperlink, xmlTextWriterPtr xmlWriter);
-
-// PolyPolygonBezierDescriptor.idl
-void dumpPolyPolygonBezierAsElement(com::sun::star::drawing::PolyPolygonBezierCoords aPolyPolygonBezier, xmlTextWriterPtr xmlWriter);
-void dumpGeometryAsElement(com::sun::star::drawing::PolyPolygonBezierCoords aGeometry, xmlTextWriterPtr xmlWriter);
 
 // CustomShape.idl
 void dumpCustomShapeEngineAsAttribute(rtl::OUString sCustomShapeEngine, xmlTextWriterPtr xmlWriter);
@@ -291,12 +285,6 @@ void dumpFillGradientAsElement(awt::Gradient aGradient, xmlTextWriterPtr xmlWrit
     xmlTextWriterEndElement( xmlWriter );
 }
 
-void dumpFillHatchNameAsAttribute(rtl::OUString sHatchName, xmlTextWriterPtr xmlWriter)
-{
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("fillHatchName"), "%s",
-        rtl::OUStringToOString(sHatchName, RTL_TEXTENCODING_UTF8).getStr());
-}
-
 void dumpFillHatchAsElement(drawing::Hatch aHatch, xmlTextWriterPtr xmlWriter)
 {
     xmlTextWriterStartElement(xmlWriter, BAD_CAST( "FillHatch" ));
@@ -326,12 +314,6 @@ void dumpFillBackgroundAsAttribute(sal_Bool bBackground, xmlTextWriterPtr xmlWri
         xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("fillBackground"), "%s", "true");
     else
         xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("fillBackground"), "%s", "false");
-}
-
-void dumpFillBitmapNameAsAttribute(rtl::OUString sBitmapName, xmlTextWriterPtr xmlWriter)
-{
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("fillGradientName"), "%s",
-        rtl::OUStringToOString(sBitmapName, RTL_TEXTENCODING_UTF8).getStr());
 }
 
 void dumpFillBitmapAsElement(uno::Reference<awt::XBitmap> xBitmap, xmlTextWriterPtr xmlWriter)
@@ -1094,24 +1076,6 @@ void dumpShapeDescriptorAsAttribute( uno::Reference< drawing::XShapeDescriptor >
 {
     xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("type"), "%s",
         rtl::OUStringToOString(xDescr->getShapeType(), RTL_TEXTENCODING_UTF8).getStr());
-}
-
-// -----------------------------------------------------
-// ---------- PolyPolygonBezierDescriptor.idl ----------
-// -----------------------------------------------------
-
-void dumpPolyPolygonBezierAsElement(drawing::PolyPolygonBezierCoords aPolyPolygonBezier, xmlTextWriterPtr xmlWriter)
-{
-    xmlTextWriterStartElement(xmlWriter, BAD_CAST( "PolyPolygonBezier" ));
-    dumpPolyPolygonBezierCoords(aPolyPolygonBezier, xmlWriter);
-    xmlTextWriterEndElement( xmlWriter );
-}
-
-void dumpGeometryAsElement(drawing::PolyPolygonBezierCoords aGeometry, xmlTextWriterPtr xmlWriter)
-{
-    xmlTextWriterStartElement(xmlWriter, BAD_CAST( "Geometry" ));
-    dumpPolyPolygonBezierCoords(aGeometry, xmlWriter);
-    xmlTextWriterEndElement( xmlWriter );
 }
 
 // -------------------------------------
