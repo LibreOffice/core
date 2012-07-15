@@ -341,7 +341,7 @@ void SvTabListBox::SetEntryText( const XubString& rStr, SvLBoxEntry* pEntry, sal
                     aTemp = rtl::OUString(pCurToken, nCurTokenLen);
                 else
                     aTemp.Erase(); // delete all columns without a token
-                ((SvLBoxString*)pStr)->SetText( pEntry, aTemp );
+                ((SvLBoxString*)pStr)->SetText( aTemp );
                 pCurToken = pNextToken;
                 pNextToken = GetToken( pCurToken, nCurTokenLen );
             }
@@ -350,7 +350,7 @@ void SvTabListBox::SetEntryText( const XubString& rStr, SvLBoxEntry* pEntry, sal
                 if( !nCol )
                 {
                     aTemp = rtl::OUString(pCurToken, nCurTokenLen);
-                    ((SvLBoxString*)pStr)->SetText( pEntry, aTemp );
+                    ((SvLBoxString*)pStr)->SetText( aTemp );
                     if( !pNextToken )
                         break;
                     pCurToken = pNextToken;

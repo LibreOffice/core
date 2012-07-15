@@ -197,11 +197,11 @@ sal_Bool SvLBoxButtonData::IsRadio() {
 
 DBG_NAME(SvLBoxString);
 
-SvLBoxString::SvLBoxString( SvLBoxEntry* pEntry,sal_uInt16 nFlags,const XubString& rStr) :
-        SvLBoxItem( pEntry, nFlags )
+SvLBoxString::SvLBoxString(SvLBoxEntry* pEntry, sal_uInt16 nFlags, const rtl::OUString& rStr)
+    : SvLBoxItem(pEntry, nFlags)
 {
     DBG_CTOR(SvLBoxString,0);
-    SetText( pEntry, rStr );
+    SetText(rStr);
 }
 
 SvLBoxString::SvLBoxString() : SvLBoxItem()
@@ -229,10 +229,10 @@ void SvLBoxString::Paint( const Point& rPos, SvLBox& rDev, sal_uInt16 /* nFlags 
         sal_uInt16 nStyle = rDev.IsEnabled() ? 0 : TEXT_DRAW_DISABLE;
         if ( rDev.IsEntryMnemonicsEnabled() )
             nStyle |= TEXT_DRAW_MNEMONIC;
-        rDev.DrawText( Rectangle(rPos,GetSize(&rDev,_pEntry)),aStr,nStyle);
+        rDev.DrawText(Rectangle(rPos, GetSize(&rDev,_pEntry)), maText, nStyle);
     }
     else
-        rDev.DrawText( rPos, aStr);
+        rDev.DrawText(rPos, maText);
 
 }
 
@@ -245,13 +245,7 @@ SvLBoxItem* SvLBoxString::Create() const
 void SvLBoxString::Clone( SvLBoxItem* pSource )
 {
     DBG_CHKTHIS(SvLBoxString,0);
-    aStr = ((SvLBoxString*)pSource)->aStr;
-}
-
-void SvLBoxString::SetText( SvLBoxEntry*, const XubString& rStr )
-{
-    DBG_CHKTHIS(SvLBoxString,0);
-    aStr = rStr;
+    maText = ((SvLBoxString*)pSource)->maText;
 }
 
 void SvLBoxString::InitViewData( SvLBox* pView,SvLBoxEntry* pEntry,
@@ -260,7 +254,7 @@ void SvLBoxString::InitViewData( SvLBox* pView,SvLBoxEntry* pEntry,
     DBG_CHKTHIS(SvLBoxString,0);
     if( !pViewData )
         pViewData = pView->GetViewDataItem( pEntry, this );
-    pViewData->aSize = Size(pView->GetTextWidth( aStr ), pView->GetTextHeight());
+    pViewData->aSize = Size(pView->GetTextWidth(maText), pView->GetTextHeight());
 }
 
 // ***************************************************************

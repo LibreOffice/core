@@ -47,7 +47,7 @@ SvLBoxFontString::SvLBoxFontString(
     mbUseColor( pColor != NULL )
 {
     DBG_CTOR( SvLBoxFontString, 0 );
-    SetText( pEntry, rString );
+    SetText( rString );
     if( pColor )
         maFont.SetColor( *pColor );
 }

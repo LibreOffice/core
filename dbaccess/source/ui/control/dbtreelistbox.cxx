@@ -120,7 +120,7 @@ SvLBoxEntry* DBTreeListBox::GetEntryPosByName( const String& aName, SvLBoxEntry*
         {
             pEntry = static_cast<SvLBoxEntry*>((*pChildren)[ i ]);
             SvLBoxString* pItem = (SvLBoxString*)(pEntry->GetFirstItem(SV_ITEM_ID_LBOXSTRING));
-            if ( pItem->GetText().Equals(aName) )
+            if ( pItem->GetText().equals(aName) )
             {
                 if ( !_pFilter || _pFilter->includeEntry( pEntry ) )
                     // found

@@ -112,16 +112,13 @@ private:
 
 // --------------------------------------------------------------------
 
-class UnoTreeListItem : public SvLBoxItem
+class UnoTreeListItem : public SvLBoxString
 {
 public:
                     UnoTreeListItem( SvLBoxEntry* );
                     UnoTreeListItem();
     virtual         ~UnoTreeListItem();
-    virtual sal_uInt16  IsA();
     void            InitViewData( SvLBox*,SvLBoxEntry*,SvViewDataItem* );
-    OUString        GetText() const;
-    void            SetText( const OUString& rText );
     Image           GetImage() const;
     void            SetImage( const Image& rImage );
     OUString        GetGraphicURL() const;
@@ -131,7 +128,6 @@ public:
     void            Clone( SvLBoxItem* pSource );
 
 private:
-    OUString        maText;
     OUString        maGraphicURL;
     Image           maImage;
 };
@@ -1601,14 +1597,14 @@ sal_Bool UnoTreeListBoxImpl::EditedEntry( SvLBoxEntry* pEntry, const rtl::OUStri
 // ====================================================================
 
 UnoTreeListItem::UnoTreeListItem( SvLBoxEntry* pEntry )
-: SvLBoxItem( pEntry, 0 )
+: SvLBoxString(pEntry, 0, rtl::OUString())
 {
 }
 
 // --------------------------------------------------------------------
 
 UnoTreeListItem::UnoTreeListItem()
-: SvLBoxItem()
+: SvLBoxString()
 {
 }
 
@@ -1616,13 +1612,6 @@ UnoTreeListItem::UnoTreeListItem()
 
 UnoTreeListItem::~UnoTreeListItem()
 {
-}
-
-// --------------------------------------------------------------------
-
-sal_uInt16 UnoTreeListItem::IsA()
-{
-    return 0;
 }
 
 // --------------------------------------------------------------------
@@ -1670,20 +1659,6 @@ void UnoTreeListItem::Clone( SvLBoxItem* pSource )
         maText = pSourceItem->maText;
         maImage = pSourceItem->maImage;
     }
-}
-
-// --------------------------------------------------------------------
-
-OUString UnoTreeListItem::GetText() const
-{
-    return maText;
-}
-
-// --------------------------------------------------------------------
-
-void UnoTreeListItem::SetText( const OUString& rText )
-{
-    maText = rText;
 }
 
 // --------------------------------------------------------------------

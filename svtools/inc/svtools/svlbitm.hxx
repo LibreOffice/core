@@ -122,15 +122,16 @@ inline SvButtonState SvLBoxButtonData::GetActButtonState() const
 
 class SVT_DLLPUBLIC SvLBoxString : public SvLBoxItem
 {
-    XubString aStr;
+protected:
+    rtl::OUString maText;
 public:
-                    SvLBoxString( SvLBoxEntry*,sal_uInt16 nFlags,const XubString& rStr);
+                    SvLBoxString(SvLBoxEntry*, sal_uInt16 nFlags, const rtl::OUString& rStr);
                     SvLBoxString();
     virtual         ~SvLBoxString();
     virtual sal_uInt16  IsA();
-    virtual void    InitViewData( SvLBox*,SvLBoxEntry*,SvViewDataItem* );
-    XubString       GetText() const { return aStr; }
-    void            SetText( SvLBoxEntry*, const XubString& rStr );
+    virtual void    InitViewData(SvLBox*, SvLBoxEntry*, SvViewDataItem*);
+    rtl::OUString   GetText() const { return maText; }
+    void            SetText( const rtl::OUString& rText ) { maText = rText; }
     virtual void    Paint( const Point&, SvLBox& rDev, sal_uInt16 nFlags,SvLBoxEntry* );
     virtual SvLBoxItem* Create() const;
     virtual void    Clone( SvLBoxItem* pSource );

@@ -339,8 +339,7 @@ String SvTreeListBox::SearchEntryText( SvLBoxEntry* pEntry ) const
     while( nCur < nCount )
     {
         pItem = pEntry->GetItem( nCur );
-        if ( pItem->IsA() == SV_ITEM_ID_LBOXSTRING &&
-             static_cast<SvLBoxString*>( pItem )->GetText().Len() > 0 )
+        if ( pItem->IsA() == SV_ITEM_ID_LBOXSTRING && !static_cast<SvLBoxString*>( pItem )->GetText().isEmpty() )
         {
             sRet = static_cast<SvLBoxString*>( pItem )->GetText();
             break;
@@ -447,7 +446,7 @@ void SvTreeListBox::SetEntryText( SvLBoxEntry* pEntry, const XubString& aStr)
     DBG_CHKTHIS(SvTreeListBox,0);
     SvLBoxString* pItem = (SvLBoxString*)(pEntry->GetFirstItem(SV_ITEM_ID_LBOXSTRING));
     DBG_ASSERT(pItem,"SetText:Item not found");
-    pItem->SetText( pEntry, aStr );
+    pItem->SetText( aStr );
     pItem->InitViewData( this, pEntry, 0 );
     GetModel()->InvalidateEntry( pEntry );
 }
@@ -1345,7 +1344,7 @@ void SvTreeListBox::EditedText( const XubString& rStr )
     {
         if( EditedEntry( pEdEntry, rStr ) )
         {
-            ((SvLBoxString*)pEdItem)->SetText( pEdEntry, rStr );
+            ((SvLBoxString*)pEdItem)->SetText( rStr );
             pModel->InvalidateEntry( pEdEntry );
         }
         if( GetSelectionCount() == 0 )

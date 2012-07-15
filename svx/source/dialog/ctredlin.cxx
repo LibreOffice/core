@@ -100,7 +100,7 @@ SvLBoxColorString::SvLBoxColorString( SvLBoxEntry*pEntry,sal_uInt16 nFlags,const
 {
     DBG_CTOR(SvLBoxColorString,0);
     aPrivColor=rCol;
-    SetText( pEntry, rStr );
+    SetText( rStr );
 }
 
 SvLBoxColorString::SvLBoxColorString()
