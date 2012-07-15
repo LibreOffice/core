@@ -940,6 +940,7 @@ sub write_summary_into_msi_database
     my $author = get_author_for_sis();
     my $subject = get_subject_for_sis($allvariableshashref);
     my $comment = get_comment_for_sis($sislanguage,$languagefile, "OOO_SIS_COMMENT");
+    $comment =~ s/\[ProductName\]/$allvariableshashref->{'PRODUCTNAME'}/;
     my $keywords = get_keywords_for_sis($sislanguage,$languagefile, "OOO_SIS_KEYWORDS");
     my $appname = get_appname_for_sis($sislanguage,$languagefile, "OOO_SIS_APPNAME");
     my $security = get_security_for_sis();
