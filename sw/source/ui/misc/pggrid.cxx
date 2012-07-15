@@ -453,6 +453,16 @@ IMPL_LINK(SwTextGridPage, TextSizeChangedHdl, SpinField*, pField)
         if (&aTextSizeMF == pField)
         {
             m_bRubyUserValue = sal_False;
+
+            // fdo#50941: set maximum characters per line
+            sal_Int32 nTextSize = static_cast< sal_Int32 >(aTextSizeMF.Denormalize(aTextSizeMF.GetValue(FUNIT_TWIP)));
+            if (nTextSize > 0)
+            {
+                sal_Int32 nMaxChars = m_aPageSize.Width() / nTextSize;
+                aCharsPerLineNF.SetValue(nMaxChars);
+                aCharsPerLineNF.SetMax(nMaxChars);
+                SetLinesOrCharsRanges( aCharsRangeFT , aCharsPerLineNF.GetMax() );
+            }
         }
         //set maximum line per page
         {
