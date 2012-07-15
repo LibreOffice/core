@@ -43,12 +43,13 @@
 
 #define MAX_DATAFORM_COLS   256
 #define MAX_DATAFORM_ROWS   32000
-#define CTRL_HEIGHT         22
-#define FIXED_WIDTH         60
-#define EDIT_WIDTH          140
-#define FIXED_LEFT          12
-#define EDIT_LEFT           78
-#define LINE_HEIGHT         30
+#define FIXED_WIDTH         54
+#define EDIT_WIDTH          86
+#define FIXED_HEIGHT        10
+#define EDIT_HEIGHT         12
+#define FIXED_LEFT          6
+#define EDIT_LEFT           62
+#define LINE_HEIGHT         16
 
 //zhangyun
 class ScDataFormDlg : public ModalDialog

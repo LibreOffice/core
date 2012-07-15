@@ -163,10 +163,15 @@ ScDataFormDlg::ScDataFormDlg( Window* pParent, ScTabViewShell*  pTabViewShellOri
 
         String  aFieldName;
 
-        int nTop = 12;
+        //align with LAB_DATAFORM_RECORDNO
+        int nTop = LogicToPixel( Size(1,6), MapMode(MAP_APPFONT) ).getHeight();
+        const int nOne = LogicToPixel( Size(1,1), MapMode(MAP_APPFONT) ).getHeight();
+        const int nLineHeight = LogicToPixel( Size(1, LINE_HEIGHT), MapMode(MAP_APPFONT) ).getHeight();
+        const int nFixedLeft = LogicToPixel( Size(FIXED_LEFT, 1), MapMode(MAP_APPFONT) ).getWidth();
+        const int nEditLeft = LogicToPixel( Size(EDIT_LEFT, 1), MapMode(MAP_APPFONT) ).getWidth();
 
-        Size    nFixedSize(FIXED_WIDTH, CTRL_HEIGHT );
-        Size    nEditSize(EDIT_WIDTH, CTRL_HEIGHT );
+        Size    nFixedSize(LogicToPixel( Size(FIXED_WIDTH, FIXED_HEIGHT), MapMode(MAP_APPFONT) ));
+        Size    nEditSize(LogicToPixel( Size(EDIT_WIDTH, EDIT_HEIGHT), MapMode(MAP_APPFONT) ));
 
         aColLength = nEndCol - nStartCol + 1;
 
@@ -185,13 +190,13 @@ ScDataFormDlg::ScDataFormDlg( Window* pParent, ScTabViewShell*  pTabViewShellOri
 
                 maFixedTexts[nIndex].SetSizePixel(nFixedSize);
                 maEdits[nIndex].SetSizePixel(nEditSize);
-                maFixedTexts[nIndex].SetPosPixel(Point(FIXED_LEFT, nTop));
-                maEdits[nIndex].SetPosPixel(Point(EDIT_LEFT, nTop));
+                maFixedTexts[nIndex].SetPosPixel(Point(nFixedLeft, nTop + nOne));
+                maEdits[nIndex].SetPosPixel(Point(nEditLeft, nTop));
                 maFixedTexts[nIndex].SetText(aFieldName);
                 maFixedTexts[nIndex].Show();
                 maEdits[nIndex].Show();
 
-                nTop += LINE_HEIGHT;
+                nTop += nLineHeight;
             }
             else
             {
