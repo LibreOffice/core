@@ -9,7 +9,6 @@ mkdir: %_DEST%\bin\userscripts
 ..\%__SRC%\bin\noarch\fake-db-1.0-0.noarch.rpm %_DEST%\bin\openoffice.org-userland-1.0-0.noarch.rpm
 
 mkdir: %_DEST%\bin\osolsmf
-..\%__SRC%\bin\ulfconv %_DEST%\bin\ulfconv
 ..\%__SRC%\bin\langpackscript.sh %_DEST%\bin\langpackscript.sh
 ..\%__SRC%\bin\linuxpatchscript.sh %_DEST%\bin\linuxpatchscript.sh
 ..\%__SRC%\bin\downloadscript.sh %_DEST%\bin\downloadscript.sh
@@ -19,7 +18,6 @@ mkdir: %_DEST%\bin\osolsmf
 ..\%__SRC%\bin\update.sh %_DEST%\bin\update
 ..\%__SRC%\bin\javaloader.sh %_DEST%\bin\javaloader.sh
 ..\%__SRC%\misc\mac_ulffiles_dest\*.ulf %_DEST%\bin\*.ulf
-..\source\win32\msi-encodinglist.txt %_DEST%\bin\msi-encodinglist.txt
 ..\source\win32\patchlist.txt %_DEST%\bin\patchlist.txt
 ..\source\win32\desktophelper.txt %_DEST%\bin\desktophelper.txt
 ..\source\win32\get_retval.bat %_DEST%\bin\get_retval.bat
