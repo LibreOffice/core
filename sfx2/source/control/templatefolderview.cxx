@@ -274,7 +274,7 @@ TemplateFolderView::TemplateFolderView ( Window* pParent, const ResId& rResId, b
       mbFilteredResults(false),
       meFilterOption(FILTER_APP_NONE),
       mpDocTemplates(new SfxDocumentTemplates),
-      mpItemView(new TemplateView(this,mpDocTemplates))
+      mpItemView(new TemplateView(this))
 {
     Size aViewSize = mpItemView->CalcWindowSizePixel(INIT_VIEW_COLS,INIT_VIEW_LINES,
                                                      ITEM_MAX_WIDTH,ITEM_MAX_HEIGHT,ITEM_SPACE);

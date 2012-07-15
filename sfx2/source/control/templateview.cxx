@@ -18,7 +18,6 @@
 #include <drawinglayer/primitive2d/textlayoutdevice.hxx>
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
-#include <sfx2/doctempl.hxx>
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/templateviewitem.hxx>
 #include <vcl/edit.hxx>
@@ -32,12 +31,11 @@ using namespace basegfx::tools;
 using namespace drawinglayer::attribute;
 using namespace drawinglayer::primitive2d;
 
-TemplateView::TemplateView (Window *pParent, SfxDocumentTemplates *pTemplates)
+TemplateView::TemplateView (Window *pParent)
     : ThumbnailView(pParent,WB_VSCROLL),
       maCloseImg(SfxResId(IMG_TEMPLATE_VIEW_CLOSE)),
       mbRenderTitle(true),
       mnId(0),
-      mpDocTemplates(pTemplates),
       mpEditName(new Edit(this, WB_BORDER | WB_HIDE))
 {
     mnHeaderHeight = 30;

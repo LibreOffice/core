@@ -15,14 +15,13 @@
 #include <vcl/image.hxx>
 
 class Edit;
-class SfxDocumentTemplates;
 class TemplateViewItem;
 
 class TemplateView : public ThumbnailView
 {
 public:
 
-    TemplateView (Window *pParent, SfxDocumentTemplates *pTemplates);
+    TemplateView (Window *pParent);
 
     virtual ~TemplateView ();
 
@@ -60,7 +59,6 @@ private:
     bool mbRenderTitle;
     sal_uInt16 mnId;
     rtl::OUString maName;
-    SfxDocumentTemplates *mpDocTemplates;
     Link maDblClickHdl;
     Link maChangeNameHdl;
     Link maCloseHdl;
