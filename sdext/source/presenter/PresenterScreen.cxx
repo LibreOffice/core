@@ -440,10 +440,10 @@ void PresenterScreen::SwitchMonitors()
             return;
 
         // Adapt that display number to be the 'default' setting of 0 if it matches
-        sal_Int32 nDefaultDisplay = 0;
+        sal_Int32 nExternalDisplay = 0;
         Reference<beans::XPropertySet> xDisplayProperties = GetDisplayAccess();
-        xDisplayProperties->getPropertyValue(A2S("DefaultDisplay")) >>= nDefaultDisplay;
-        if (nNewScreen == nDefaultDisplay)
+        xDisplayProperties->getPropertyValue(A2S("ExternalDisplay")) >>= nExternalDisplay;
+        if (nNewScreen == nExternalDisplay)
             nNewScreen = 0; // screen zero is best == the primary display
         else
             nNewScreen++; // otherwise we store screens offset by one.
