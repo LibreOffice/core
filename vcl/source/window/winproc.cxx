@@ -300,17 +300,17 @@ static sal_Bool ImplCallCommand( Window* pChild, sal_uInt16 nEvt, void* pData = 
     NotifyEvent     aNCmdEvt( EVENT_COMMAND, pChild, &aCEvt );
     ImplDelData     aDelData( pChild );
     sal_Bool            bPreNotify = (ImplCallPreNotify( aNCmdEvt ) != 0);
-    if ( aDelData.IsDelete() )
+    if ( aDelData.IsDead() )
         return sal_False;
     if ( !bPreNotify )
     {
         pChild->ImplGetWindowImpl()->mbCommand = sal_False;
         pChild->Command( aCEvt );
 
-        if( aDelData.IsDelete() )
+        if( aDelData.IsDead() )
             return sal_False;
         pChild->ImplNotifyKeyMouseCommandEventListeners( aNCmdEvt );
-        if ( aDelData.IsDelete() )
+        if ( aDelData.IsDead() )
             return sal_False;
         if ( pChild->ImplGetWindowImpl()->mbCommand )
             return sal_True;
@@ -336,7 +336,7 @@ static long ContextMenuEventLink( void* pCEvent, void* )
 {
     ContextMenuEvent* pEv = (ContextMenuEvent*)pCEvent;
 
-    if( ! pEv->aDelData.IsDelete() )
+    if( ! pEv->aDelData.IsDead() )
     {
         pEv->pWindow->ImplRemoveDel( &pEv->aDelData );
         ImplCallCommand( pEv->pWindow, COMMAND_CONTEXTMENU, NULL, sal_True, &pEv->aChildPos );
@@ -399,7 +399,7 @@ long ImplHandleMouseEvent( Window* pWindow, sal_uInt16 nSVEvent, sal_Bool bMouse
 
             ImplDestroyHelpWindow( true );
 
-            if ( aDelData.IsDelete() )
+            if ( aDelData.IsDead() )
                 return 1; // pWindow is dead now - avoid crash! (#122045#)
         }
     }
@@ -631,7 +631,7 @@ long ImplHandleMouseEvent( Window* pWindow, sal_uInt16 nSVEvent, sal_Bool bMouse
                 {
                     pMouseMoveWin->MouseMove( aMLeaveEvt );
                     // #82968#
-                    if( !aDelData.IsDelete() )
+                    if( !aDelData.IsDead() )
                         aNLeaveEvt.GetWindow()->ImplNotifyKeyMouseCommandEventListeners( aNLeaveEvt );
                 }
 
@@ -640,12 +640,12 @@ long ImplHandleMouseEvent( Window* pWindow, sal_uInt16 nSVEvent, sal_Bool bMouse
 
                 if ( pChild )
                 {
-                    if ( aDelData2.IsDelete() )
+                    if ( aDelData2.IsDead() )
                         pChild = NULL;
                     else
                         pChild->ImplRemoveDel( &aDelData2 );
                 }
-                if ( aDelData.IsDelete() )
+                if ( aDelData.IsDead() )
                     return 1;
                 pMouseMoveWin->ImplRemoveDel( &aDelData );
             }
@@ -719,7 +719,7 @@ long ImplHandleMouseEvent( Window* pWindow, sal_uInt16 nSVEvent, sal_Bool bMouse
         pChild->ImplAddDel( &aDelData );
         if ( ImplHandleMouseFloatMode( pChild, aMousePos, nCode, nSVEvent, bMouseLeave ) )
         {
-            if ( !aDelData.IsDelete() )
+            if ( !aDelData.IsDead() )
             {
                 pChild->ImplRemoveDel( &aDelData );
                 pChild->ImplGetFrameData()->mbStartDragCalled = sal_True;
@@ -747,11 +747,11 @@ long ImplHandleMouseEvent( Window* pWindow, sal_uInt16 nSVEvent, sal_Bool bMouse
         if( !pSVData->maWinData.mpFirstFloat && // totop for floating windows in popup would change the focus and would close them immediately
             !(pChild->ImplGetFrameWindow()->GetStyle() & WB_OWNERDRAWDECORATION) )    // ownerdrawdecorated windows must never grab focus
             pChild->ToTop();
-        if ( aDelData.IsDelete() )
+        if ( aDelData.IsDead() )
             return 1;
     }
 
-    if ( ImplCallPreNotify( aNEvt ) || aDelData.IsDelete() )
+    if ( ImplCallPreNotify( aNEvt ) || aDelData.IsDead() )
         nRet = 1;
     else
     {
@@ -762,7 +762,7 @@ long ImplHandleMouseEvent( Window* pWindow, sal_uInt16 nSVEvent, sal_Bool bMouse
             {
                 TrackingEvent aTEvt( aMEvt );
                 pChild->Tracking( aTEvt );
-                if ( !aDelData.IsDelete() )
+                if ( !aDelData.IsDead() )
                 {
                     // When ScrollRepeat, we restart the timer
                     if ( pSVData->maWinData.mpTrackTimer &&
@@ -779,7 +779,7 @@ long ImplHandleMouseEvent( Window* pWindow, sal_uInt16 nSVEvent, sal_Bool bMouse
                      (pChild->GetSettings().GetMouseSettings().GetOptions() & MOUSE_OPTION_AUTOFOCUS) )
                     pChild->ToTop( TOTOP_NOGRABFOCUS );
 
-                if( aDelData.IsDelete() )
+                if( aDelData.IsDead() )
                     bCallHelpRequest = sal_False;
                 else
                 {
@@ -819,11 +819,11 @@ long ImplHandleMouseEvent( Window* pWindow, sal_uInt16 nSVEvent, sal_Bool bMouse
         }
 
         // #82968#
-        if ( !aDelData.IsDelete() )
+        if ( !aDelData.IsDead() )
             aNEvt.GetWindow()->ImplNotifyKeyMouseCommandEventListeners( aNEvt );
     }
 
-    if ( aDelData.IsDelete() )
+    if ( aDelData.IsDead() )
         return 1;
 
 
@@ -1105,7 +1105,7 @@ static long ImplHandleKey( Window* pWindow, sal_uInt16 nSVEvent,
     sal_Bool        bKeyPreNotify = (ImplCallPreNotify( aNotifyEvt ) != 0);
     long        nRet = 1;
 
-    if ( !bKeyPreNotify && !aDelData.IsDelete() )
+    if ( !bKeyPreNotify && !aDelData.IsDead() )
     {
         if ( nSVEvent == EVENT_KEYINPUT )
         {
@@ -1118,11 +1118,11 @@ static long ImplHandleKey( Window* pWindow, sal_uInt16 nSVEvent,
             pChild->KeyUp( aKeyEvt );
         }
         // #82968#
-        if( !aDelData.IsDelete() )
+        if( !aDelData.IsDead() )
             aNotifyEvt.GetWindow()->ImplNotifyKeyMouseCommandEventListeners( aNotifyEvt );
     }
 
-    if ( aDelData.IsDelete() )
+    if ( aDelData.IsDead() )
         return 1;
 
     pChild->ImplRemoveDel( &aDelData );
@@ -1216,7 +1216,7 @@ static long ImplHandleKey( Window* pWindow, sal_uInt16 nSVEvent,
         KeyEvent    aKEvt( (xub_Unicode)nCharCode, aKeyCode, nRepeat );
         NotifyEvent aNEvt( nSVEvent, pChild, &aKEvt );
         sal_Bool        bPreNotify = (ImplCallPreNotify( aNEvt ) != 0);
-        if ( aChildDelData.IsDelete() )
+        if ( aChildDelData.IsDead() )
             return 1;
 
         if ( !bPreNotify )
@@ -1232,9 +1232,9 @@ static long ImplHandleKey( Window* pWindow, sal_uInt16 nSVEvent,
                 pChild->KeyUp( aKEvt );
             }
             // #82968#
-            if( !aChildDelData.IsDelete() )
+            if( !aChildDelData.IsDead() )
                 aNEvt.GetWindow()->ImplNotifyKeyMouseCommandEventListeners( aNEvt );
-            if ( aChildDelData.IsDelete() )
+            if ( aChildDelData.IsDead() )
                 return 1;
         }
 
@@ -1439,13 +1439,13 @@ static sal_Bool ImplCallWheelCommand( Window* pWindow, const Point& rPos,
     NotifyEvent         aNCmdEvt( EVENT_COMMAND, pWindow, &aCEvt );
     ImplDelData         aDelData( pWindow );
     sal_Bool                bPreNotify = (ImplCallPreNotify( aNCmdEvt ) != 0);
-    if ( aDelData.IsDelete() )
+    if ( aDelData.IsDead() )
         return sal_False;
     if ( !bPreNotify )
     {
         pWindow->ImplGetWindowImpl()->mbCommand = sal_False;
         pWindow->Command( aCEvt );
-        if ( aDelData.IsDelete() )
+        if ( aDelData.IsDead() )
             return sal_False;
         if ( pWindow->ImplGetWindowImpl()->mbCommand )
             return sal_True;
@@ -1464,7 +1464,7 @@ static long ImplHandleWheelEvent( Window* pWindow, const SalWheelMouseEvent& rEv
         pSVData->maWinData.mpAutoScrollWin->EndAutoScroll();
     if ( pSVData->maHelpData.mpHelpWin )
         ImplDestroyHelpWindow( true );
-    if( aDogTag.IsDelete() )
+    if( aDogTag.IsDead() )
         return 0;
 
     sal_uInt16 nMode;
@@ -1910,7 +1910,7 @@ static long DelayedCloseEventLink( void* pCEvent, void* )
 {
     DelayedCloseEvent* pEv = (DelayedCloseEvent*)pCEvent;
 
-    if( ! pEv->aDelData.IsDelete() )
+    if( ! pEv->aDelData.IsDead() )
     {
         pEv->pWindow->ImplRemoveDel( &pEv->aDelData );
         // dispatch to correct window type
@@ -1987,7 +1987,7 @@ static void ImplHandleUserEvent( ImplSVEvent* pSVEvent )
 {
     if ( pSVEvent )
     {
-        if ( pSVEvent->mbCall && !pSVEvent->maDelData.IsDelete() )
+        if ( pSVEvent->mbCall && !pSVEvent->maDelData.IsDead() )
         {
             if ( pSVEvent->mpWindow )
             {

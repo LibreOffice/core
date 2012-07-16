@@ -2346,7 +2346,7 @@ void RadioButton::ImplUncheckAllOther()
                     ImplDelData aDelData;
                     pWindow->ImplAddDel( &aDelData );
                     ((RadioButton*)pWindow)->SetState( sal_False );
-                    if ( aDelData.IsDelete() )
+                    if ( aDelData.IsDead() )
                         return;
                     pWindow->ImplRemoveDel( &aDelData );
                 }
@@ -2376,7 +2376,7 @@ void RadioButton::ImplUncheckAllOther()
                 ImplDelData aDelData;
                 pWindow->ImplAddDel( &aDelData );
                 ((RadioButton*)pWindow)->SetState( sal_False );
-                if ( aDelData.IsDelete() )
+                if ( aDelData.IsDead() )
                     return;
                 pWindow->ImplRemoveDel( &aDelData );
             }
@@ -2401,18 +2401,18 @@ void RadioButton::ImplCallClick( sal_Bool bGrabFocus, sal_uInt16 nFocusFlags )
     ImplAddDel( &aDelData );
     if ( mbRadioCheck )
         ImplUncheckAllOther();
-    if ( aDelData.IsDelete() )
+    if ( aDelData.IsDead() )
         return;
     if ( bGrabFocus )
         ImplGrabFocus( nFocusFlags );
-    if ( aDelData.IsDelete() )
+    if ( aDelData.IsDead() )
         return;
     if ( mbStateChanged )
         Toggle();
-    if ( aDelData.IsDelete() )
+    if ( aDelData.IsDead() )
         return;
     Click();
-    if ( aDelData.IsDelete() )
+    if ( aDelData.IsDead() )
         return;
     ImplRemoveDel( &aDelData );
     mbStateChanged = sal_False;
@@ -2831,11 +2831,11 @@ void RadioButton::Check( sal_Bool bCheck )
         ImplDelData aDelData;
         ImplAddDel( &aDelData );
         StateChanged( STATE_CHANGE_STATE );
-        if ( aDelData.IsDelete() )
+        if ( aDelData.IsDead() )
             return;
         if ( bCheck && mbRadioCheck )
             ImplUncheckAllOther();
-        if ( aDelData.IsDelete() )
+        if ( aDelData.IsDead() )
             return;
         Toggle();
         ImplRemoveDel( &aDelData );
@@ -3351,7 +3351,7 @@ void CheckBox::ImplCheck()
     ImplInvalidateOrDrawCheckBoxState();
     if( ! (GetStyle() & WB_EARLYTOGGLE) )
         Toggle();
-    if ( aDelData.IsDelete() )
+    if ( aDelData.IsDead() )
         return;
     ImplRemoveDel( &aDelData );
     Click();

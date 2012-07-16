@@ -3579,7 +3579,7 @@ sal_Bool ToolBox::ImplHandleMouseButtonUp( const MouseEvent& rMEvt, sal_Bool bCa
                         ImplDelData aDelData;
                         ImplAddDel( &aDelData );
                         Select();
-                        if ( aDelData.IsDelete() )
+                        if ( aDelData.IsDead() )
                             return sal_True;
                         ImplRemoveDel( &aDelData );
                     }
@@ -4107,7 +4107,7 @@ void ToolBox::Tracking( const TrackingEvent& rTEvt )
     else
         ImplHandleMouseMove( rTEvt.GetMouseEvent(), rTEvt.IsTrackingRepeat() );
 
-    if ( aDelData.IsDelete() )
+    if ( aDelData.IsDead() )
         // toolbox was deleted
         return;
     ImplRemoveDel( &aDelData );
@@ -4992,7 +4992,7 @@ sal_Bool ToolBox::ImplActivateItem( KeyCode aKeyCode )
             ImplDelData aDelData;
             ImplAddDel( &aDelData );
             Select();
-            if ( aDelData.IsDelete() )
+            if ( aDelData.IsDead() )
                 return bRet;
             ImplRemoveDel( &aDelData );
 
@@ -5234,7 +5234,7 @@ void ToolBox::KeyInput( const KeyEvent& rKEvt )
         }
     }
 
-    if ( aDelData.IsDelete() )
+    if ( aDelData.IsDead() )
         return;
     ImplRemoveDel( &aDelData );
 

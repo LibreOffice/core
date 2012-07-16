@@ -713,7 +713,7 @@ sal_Bool DockingWindow::Close()
     ImplDelData aDelData;
     ImplAddDel( &aDelData );
     ImplCallEventListeners( VCLEVENT_WINDOW_CLOSE );
-    if ( aDelData.IsDelete() )
+    if ( aDelData.IsDead() )
         return sal_False;
     ImplRemoveDel( &aDelData );
 

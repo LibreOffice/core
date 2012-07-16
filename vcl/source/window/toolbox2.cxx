@@ -524,7 +524,7 @@ void ToolBox::Select()
     ImplCallEventListeners( VCLEVENT_TOOLBOX_SELECT );
     maSelectHdl.Call( this );
 
-    if ( aDelData.IsDelete() )
+    if ( aDelData.IsDead() )
         return;
     ImplRemoveDel( &aDelData );
 
@@ -2047,7 +2047,7 @@ void ToolBox::ImplExecuteCustomMenu()
         sal_uInt16 uId = GetMenu()->Execute( pWin, Rectangle( ImplGetPopupPosition( aMenuRect, Size() ), Size() ),
                                 POPUPMENU_EXECUTE_DOWN | POPUPMENU_NOMOUSEUPCLOSE );
 
-        if ( aDelData.IsDelete() )
+        if ( aDelData.IsDead() )
             return;
         ImplRemoveDel( &aDelData );
 
@@ -2055,7 +2055,7 @@ void ToolBox::ImplExecuteCustomMenu()
             GetMenu()->RemoveEventListener( LINK( this, ToolBox, ImplCustomMenuListener ) );
         if( bBorderDel )
         {
-            if( aBorderDel.IsDelete() )
+            if( aBorderDel.IsDead() )
                 return;
             pWin->ImplRemoveDel( &aBorderDel );
         }

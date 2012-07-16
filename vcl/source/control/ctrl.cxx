@@ -371,11 +371,11 @@ sal_Bool Control::ImplCallEventListenersAndHandler(  sal_uLong nEvent, const Lin
     ImplAddDel( &aCheckDelete );
 
     ImplCallEventListeners( nEvent );
-    if ( !aCheckDelete.IsDelete() )
+    if ( !aCheckDelete.IsDead() )
     {
         rHandler.Call( pCaller );
 
-        if ( !aCheckDelete.IsDelete() )
+        if ( !aCheckDelete.IsDead() )
         {
             ImplRemoveDel( &aCheckDelete );
             return sal_False;
