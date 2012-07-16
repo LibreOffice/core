@@ -173,6 +173,10 @@ ScCondFrmtEntry::ScCondFrmtEntry(Window* pParent, ScDocument* pDoc):
     SwitchToType(COLLAPSED);
     SetHeight();
     SetCondType();
+
+    EntryTypeHdl(&maLbEntryTypeMin);
+    EntryTypeHdl(&maLbEntryTypeMiddle);
+    EntryTypeHdl(&maLbEntryTypeMax);
 }
 
 ScCondFrmtEntry::ScCondFrmtEntry(Window* pParent, ScDocument* pDoc, const ScFormatEntry* pFormatEntry):
@@ -297,6 +301,10 @@ ScCondFrmtEntry::ScCondFrmtEntry(Window* pParent, ScDocument* pDoc, const ScForm
     maClickHdl = LINK( pParent, ScCondFormatList, EntrySelectHdl );
     SwitchToType(COLLAPSED);
     SetHeight();
+
+    EntryTypeHdl(&maLbEntryTypeMin);
+    EntryTypeHdl(&maLbEntryTypeMiddle);
+    EntryTypeHdl(&maLbEntryTypeMax);
 }
 
 ScCondFrmtEntry::~ScCondFrmtEntry()
@@ -307,6 +315,12 @@ void ScCondFrmtEntry::Init()
 {
     maLbType.SetSelectHdl( LINK( this, ScCondFrmtEntry, TypeListHdl ) );
     maLbColorFormat.SetSelectHdl( LINK( this, ScCondFrmtEntry, ColFormatTypeHdl ) );
+    maLbEntryTypeMin.SetSelectHdl( LINK( this, ScCondFrmtEntry, EntryTypeHdl ) );
+    maLbEntryTypeMax.SetSelectHdl( LINK( this, ScCondFrmtEntry, EntryTypeHdl ) );
+    maLbEntryTypeMiddle.SetSelectHdl( LINK( this, ScCondFrmtEntry, EntryTypeHdl ) );
+
+
+
     SfxStyleSheetIterator aStyleIter( mpDoc->GetStyleSheetPool(), SFX_STYLE_FAMILY_PARA );
     for ( SfxStyleSheetBase* pStyle = aStyleIter.First(); pStyle; pStyle = aStyleIter.Next() )
     {
@@ -813,6 +827,31 @@ IMPL_LINK_NOARG(ScCondFrmtEntry, ColFormatTypeHdl)
     return 0;
 }
 
+IMPL_LINK( ScCondFrmtEntry, EntryTypeHdl, ListBox*, pBox )
+{
+    bool bEnableEdit = true;
+    sal_Int32 nPos = pBox->GetSelectEntryPos();
+    if(nPos == 0 || nPos == 1)
+    {
+        bEnableEdit = false;
+    }
+
+    Edit* pEd = NULL;
+    if(pBox == &maLbEntryTypeMin)
+        pEd = &maEdMin;
+    else if(pBox == &maLbEntryTypeMiddle)
+        pEd = &maEdMiddle;
+    else if(pBox == &maLbEntryTypeMax)
+        pEd = &maEdMax;
+
+    if(bEnableEdit)
+        pEd->Enable();
+    else
+        pEd->Disable();
+
+    return 0;
+}
+
 IMPL_LINK_NOARG(ScCondFrmtEntry, StyleSelectHdl)
 {
     if(maLbStyle.GetSelectEntryPos() == 0)
@@ -906,6 +945,7 @@ IMPL_LINK_NOARG( ScCondFrmtEntry, ConditionTypeSelectHdl )
     {
         maEdVal2.Hide();
     }
+
     return 0;
 }
 

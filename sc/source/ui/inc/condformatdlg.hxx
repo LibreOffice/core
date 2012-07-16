@@ -124,6 +124,7 @@ private:
     DECL_LINK( OptionBtnHdl, void* );
     DECL_LINK( DataBarTypeSelectHdl, void* );
     DECL_LINK( ConditionTypeSelectHdl, void* );
+    DECL_LINK( EntryTypeHdl, ListBox* );
 
 public:
     ScCondFrmtEntry( Window* pParent, ScDocument* pDoc );
