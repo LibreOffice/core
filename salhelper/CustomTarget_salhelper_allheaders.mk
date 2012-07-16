@@ -33,17 +33,18 @@ $(call gb_CustomTarget_get_target,salhelper/allheaders) : \
 	$(salhelper_allheaders_DIR)/salhelper_allheaders.hxx
 
 # dependency on Package_inc.mk should ensure this is updated whenever a new public header is added
-$(salhelper_allheaders_DIR)/salhelper_allheaders.hxx :| $(salhelper_allheaders_DIR)/.dir $(SRCDIR)/salhelper/Package_inc.mk
+$(salhelper_allheaders_DIR)/salhelper_allheaders.hxx : \
+            CustomTarget_salhelper_allheaders.mk \
+            | $(salhelper_allheaders_DIR)/.dir $(SRCDIR)/salhelper/Package_inc.mk
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,1)
-	echo '// Generated list of all salhelper/ includes' >  $@
-	echo -e  \
-	    $(foreach file, $(wildcard $(SRCDIR)/salhelper/inc/*.h) $(wildcard $(SRCDIR)/salhelper/inc/*.hxx) \
-	                    $(wildcard $(SRCDIR)/salhelper/inc/*/*.h) $(wildcard $(SRCDIR)/salhelper/inc/*/*.hxx) \
-	                    $(wildcard $(SRCDIR)/salhelper/inc/*/*/*.h) $(wildcard $(SRCDIR)/salhelper/inc/*/*/*.hxx) \
-	                    $(wildcard $(SRCDIR)/salhelper/inc/*/*/*/*.h) $(wildcard $(SRCDIR)/salhelper/inc/*/*/*/*.hxx), \
-	        $(if $(findstring /win32/, $(file)), '#ifdef _WIN32\n') \
-	        '#include <$(subst $(SRCDIR)/salhelper/inc/,,$(file))>\n' \
-	        $(if $(findstring /win32/, $(file)), '#endif // _WIN32\n') \
-	    ) >> $@
+	printf '// Generated list of all salhelper/ includes\n' >  $@
+	$(foreach file, $(wildcard $(SRCDIR)/salhelper/inc/*.h) $(wildcard $(SRCDIR)/salhelper/inc/*.hxx) \
+	                $(wildcard $(SRCDIR)/salhelper/inc/*/*.h) $(wildcard $(SRCDIR)/salhelper/inc/*/*.hxx) \
+	                $(wildcard $(SRCDIR)/salhelper/inc/*/*/*.h) $(wildcard $(SRCDIR)/salhelper/inc/*/*/*.hxx) \
+	                $(wildcard $(SRCDIR)/salhelper/inc/*/*/*/*.h) $(wildcard $(SRCDIR)/salhelper/inc/*/*/*/*.hxx), \
+	    $(if $(findstring /win32/, $(file)), printf '#ifdef _WIN32\n' >> $@ &&) \
+	    printf '#include <%s>\n' $(subst $(SRCDIR)/salhelper/inc/,,$(file)) >> $@ && \
+	    $(if $(findstring /win32/, $(file)), printf '#endif // _WIN32\n' >> $@ &&) \
+	    ) :
 
 # vim: set noet sw=4 ts=4:

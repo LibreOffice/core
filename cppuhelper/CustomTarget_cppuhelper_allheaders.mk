@@ -33,17 +33,18 @@ $(call gb_CustomTarget_get_target,cppuhelper/allheaders) : \
 	$(cppuhelper_allheaders_DIR)/cppuhelper_allheaders.hxx
 
 # dependency on Package_inc.mk should ensure this is updated whenever a new public header is added
-$(cppuhelper_allheaders_DIR)/cppuhelper_allheaders.hxx :| $(cppuhelper_allheaders_DIR)/.dir $(SRCDIR)/cppuhelper/Package_inc.mk
+$(cppuhelper_allheaders_DIR)/cppuhelper_allheaders.hxx : \
+            CustomTarget_cppuhelper_allheaders.mk \
+            | $(cppuhelper_allheaders_DIR)/.dir $(SRCDIR)/cppuhelper/Package_inc.mk
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,1)
-	echo '// Generated list of all cppuhelper/ includes' >  $@
-	echo -e  \
-	    $(foreach file, $(wildcard $(SRCDIR)/cppuhelper/inc/*.h) $(wildcard $(SRCDIR)/cppuhelper/inc/*.hxx) \
-	                    $(wildcard $(SRCDIR)/cppuhelper/inc/*/*.h) $(wildcard $(SRCDIR)/cppuhelper/inc/*/*.hxx) \
-	                    $(wildcard $(SRCDIR)/cppuhelper/inc/*/*/*.h) $(wildcard $(SRCDIR)/cppuhelper/inc/*/*/*.hxx) \
-	                    $(wildcard $(SRCDIR)/cppuhelper/inc/*/*/*/*.h) $(wildcard $(SRCDIR)/cppuhelper/inc/*/*/*/*.hxx), \
-	        $(if $(findstring /win32/, $(file)), '#ifdef _WIN32\n') \
-	        '#include <$(subst $(SRCDIR)/cppuhelper/inc/,,$(file))>\n' \
-	        $(if $(findstring /win32/, $(file)), '#endif // _WIN32\n') \
-	    ) >> $@
+	printf '// Generated list of all cppuhelper/ includes\n' >  $@
+	$(foreach file, $(wildcard $(SRCDIR)/cppuhelper/inc/*.h) $(wildcard $(SRCDIR)/cppuhelper/inc/*.hxx) \
+	                $(wildcard $(SRCDIR)/cppuhelper/inc/*/*.h) $(wildcard $(SRCDIR)/cppuhelper/inc/*/*.hxx) \
+	                $(wildcard $(SRCDIR)/cppuhelper/inc/*/*/*.h) $(wildcard $(SRCDIR)/cppuhelper/inc/*/*/*.hxx) \
+	                $(wildcard $(SRCDIR)/cppuhelper/inc/*/*/*/*.h) $(wildcard $(SRCDIR)/cppuhelper/inc/*/*/*/*.hxx), \
+	    $(if $(findstring /win32/, $(file)), printf '#ifdef WNT\n' >> $@ &&) \
+	    printf '#include <%s>\n' $(subst $(SRCDIR)/cppuhelper/inc/,,$(file)) >> $@ && \
+	    $(if $(findstring /win32/, $(file)), printf '#endif // WNT\n' >> $@ &&) \
+	    ) :
 
 # vim: set noet sw=4 ts=4:
