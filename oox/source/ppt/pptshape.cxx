@@ -1,30 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 #include "oox/ppt/pptshape.hxx"
 #include "oox/core/xmlfilterbase.hxx"
@@ -139,8 +130,8 @@ void PPTShape::addShape(
             Reference< lang::XMultiServiceFactory > xServiceFact( rFilterBase.getModel(), UNO_QUERY_THROW );
             sal_Bool bClearText = sal_False;
 
-            if ( sServiceName !=  "com.sun.star.drawing.GraphicObjectShape"  &&
-                 sServiceName !=  "com.sun.star.drawing.OLE2Shape" )
+            if ( sServiceName != "com.sun.star.drawing.GraphicObjectShape" &&
+                 sServiceName != "com.sun.star.drawing.OLE2Shape" )
             {
                 const rtl::OUString sOutlinerShapeService( "com.sun.star.presentation.OutlinerShape"  );
                 OSL_TRACE("has master: %p", rSlidePersist.getMasterPersist().get());
@@ -149,8 +140,7 @@ void PPTShape::addShape(
                     case XML_ctrTitle :
                     case XML_title :
                     {
-                        const rtl::OUString sTitleShapeService( "com.sun.star.presentation.TitleTextShape"  );
-                        sServiceName = sTitleShapeService;
+                        sServiceName = "com.sun.star.presentation.TitleTextShape";
                         aMasterTextListStyle = rSlidePersist.getMasterPersist().get() ? rSlidePersist.getMasterPersist()->getTitleTextStyle() : rSlidePersist.getTitleTextStyle();
                     }
                     break;
@@ -159,8 +149,7 @@ void PPTShape::addShape(
                         if ( ( meShapeLocation == Master ) || ( meShapeLocation == Layout ) )
                             sServiceName = rtl::OUString();
                         else {
-                            const rtl::OUString sTitleShapeService( "com.sun.star.presentation.SubtitleShape"  );
-                            sServiceName = sTitleShapeService;
+                            sServiceName = "com.sun.star.presentation.SubtitleShape";
                             aMasterTextListStyle = rSlidePersist.getMasterPersist().get() ? rSlidePersist.getMasterPersist()->getTitleTextStyle() : rSlidePersist.getTitleTextStyle();
                         }
                     }
@@ -173,10 +162,9 @@ void PPTShape::addShape(
                     break;
                     case XML_body :
                     {
-                        const rtl::OUString sNotesShapeService( "com.sun.star.presentation.NotesShape"  );
                         if ( rSlidePersist.isNotesPage() )
                         {
-                            sServiceName = sNotesShapeService;
+                            sServiceName = "com.sun.star.presentation.NotesShape";
                             aMasterTextListStyle = rSlidePersist.getMasterPersist().get() ? rSlidePersist.getMasterPersist()->getNotesTextStyle() : rSlidePersist.getNotesTextStyle();
                         }
                         else
@@ -187,70 +175,47 @@ void PPTShape::addShape(
                     }
                     break;
                     case XML_dt :
-                    {
-                        const rtl::OUString sDateTimeShapeService( "com.sun.star.presentation.DateTimeShape"  );
-                        sServiceName = sDateTimeShapeService;
+                        sServiceName = "com.sun.star.presentation.DateTimeShape";
                         bClearText = sal_True;
-                    }
                     break;
                     case XML_hdr :
-                    {
-                        const rtl::OUString sHeaderShapeService( "com.sun.star.presentation.HeaderShape"  );
-                        sServiceName = sHeaderShapeService;
+                        sServiceName = "com.sun.star.presentation.HeaderShape";
                         bClearText = sal_True;
-                    }
                     break;
                     case XML_ftr :
-                    {
-                        const rtl::OUString sFooterShapeService( "com.sun.star.presentation.FooterShape"  );
-                        sServiceName = sFooterShapeService;
+                        sServiceName = "com.sun.star.presentation.FooterShape";
                         bClearText = sal_True;
-                    }
                     break;
                     case XML_sldNum :
-                    {
-                        const rtl::OUString sSlideNumberShapeService( "com.sun.star.presentation.SlideNumberShape"  );
-                        sServiceName = sSlideNumberShapeService;
+                        sServiceName = "com.sun.star.presentation.SlideNumberShape";
                         bClearText = sal_True;
-                    }
                     break;
                     case XML_sldImg :
-                    {
-                        const rtl::OUString sPageShapeService( "com.sun.star.presentation.PageShape"  );
-                        sServiceName = sPageShapeService;
-                    }
+                        sServiceName = "com.sun.star.presentation.PageShape";
                     break;
                     case XML_chart :
                         if ( meShapeLocation == Layout )
                             sServiceName = sOutlinerShapeService;
-                        else {
-                            const rtl::OUString sChartService( "com.sun.star.presentation.ChartShape"  );
-                            sServiceName = sChartService;
-                        }
+                        else
+                            sServiceName = "com.sun.star.presentation.ChartShape";
                     break;
                     case XML_tbl :
                         if ( meShapeLocation == Layout )
                             sServiceName = sOutlinerShapeService;
-                        else {
-                            const rtl::OUString sTableService( "com.sun.star.presentation.TableShape"  );
-                            sServiceName = sTableService;
-                        }
+                        else
+                            sServiceName = "com.sun.star.presentation.TableShape";
                     break;
                     case XML_pic :
                         if ( meShapeLocation == Layout )
                             sServiceName = sOutlinerShapeService;
-                        else {
-                            const rtl::OUString sGraphicObjectService( "com.sun.star.presentation.GraphicObjectShape"  );
-                            sServiceName = sGraphicObjectService;
-                        }
+                        else
+                            sServiceName = "com.sun.star.presentation.GraphicObjectShape";
                     break;
                     case XML_media :
                         if ( meShapeLocation == Layout )
                             sServiceName = sOutlinerShapeService;
-                        else {
-                            const rtl::OUString sMediaService( "com.sun.star.presentation.MediaShape"  );
-                            sServiceName = sMediaService;
-                        }
+                        else
+                            sServiceName = "com.sun.star.presentation.MediaShape";
                     break;
                     default:
                         if ( mnSubType && meShapeLocation == Layout )

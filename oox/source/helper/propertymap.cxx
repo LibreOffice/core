@@ -1,30 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 #include "oox/helper/propertymap.hxx"
 #include "oox/helper/helper.hxx"
@@ -351,9 +342,9 @@ static void lclDumpAnyValue( Any value)
         } else if( value >>= aMatrix ) {
             fprintf (stderr,"Matrix\n%f %f %f\n%f %f %f\n%f %f %f\n", aMatrix.Line1.Column1, aMatrix.Line1.Column2, aMatrix.Line1.Column3, aMatrix.Line2.Column1, aMatrix.Line2.Column2, aMatrix.Line2.Column3, aMatrix.Line3.Column1, aMatrix.Line3.Column2, aMatrix.Line3.Column3);
         } else if( value >>= intValue )
-            fprintf (stderr,"%" SAL_PRIdINT32 "            (hex: %" SAL_PRIxUINT32 ")\n", intValue, intValue);
+            fprintf (stderr,"%d            (hex: %x)\n", intValue, intValue);
         else if( value >>= uintValue )
-            fprintf (stderr,"%" SAL_PRIdINT32 "            (hex: %" SAL_PRIxUINT32 ")\n", uintValue, uintValue);
+            fprintf (stderr,"%d            (hex: %x)\n", uintValue, uintValue);
         else if( value >>= int16Value )
             fprintf (stderr,"%d            (hex: %x)\n", int16Value, int16Value);
         else if( value >>= uint16Value )
@@ -553,13 +544,13 @@ static const char* lclDumpAnyValueCode( Any value, int level = 0)
     EnhancedCustomShapeParameter par;
     awt::Rectangle rect;
     awt::Size size;
-    sal_Int32 intValue = 0;
-    sal_uInt32 uintValue = 0;
-    sal_Int16 int16Value = 0;
-    sal_uInt16 uint16Value = 0;
+    sal_Int32 intValue;
+    sal_uInt32 uintValue;
+    sal_Int16 int16Value;
+    sal_uInt16 uint16Value;
     long longValue;
     float floatValue = 0;
-    bool boolValue = false;
+    bool boolValue;
     LineSpacing spacing;
 //         RectanglePoint pointValue;
     WritingMode aWritingMode;

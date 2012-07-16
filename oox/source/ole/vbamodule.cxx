@@ -1,30 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 #include "oox/ole/vbamodule.hxx"
 #include <boost/unordered_map.hpp>
@@ -47,18 +38,16 @@ namespace ole {
 
 // ============================================================================
 
-using namespace ::com::sun::star::container;
-using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::script;
 using namespace ::com::sun::star::script::vba;
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star;
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
 using ::com::sun::star::awt::KeyEvent;
 // ============================================================================
-typedef ::cppu::WeakImplHelper1< XIndexContainer > OleIdToNameContainer_BASE;
+typedef ::cppu::WeakImplHelper1< container::XIndexContainer > OleIdToNameContainer_BASE;
 typedef boost::unordered_map< sal_Int32, rtl::OUString >  ObjIdToName;
 
 class OleIdToNameContainer : public OleIdToNameContainer_BASE
@@ -126,13 +115,14 @@ public:
 
  // ============================================================================
 
-VbaModule::VbaModule( const Reference< XComponentContext >& rxContext, const Reference< XModel >& rxDocModel,
-        const OUString& rName, rtl_TextEncoding eTextEnc, bool bExecutable ) :
+VbaModule::VbaModule( const Reference< XComponentContext >& rxContext,
+                      const Reference< frame::XModel >& rxDocModel,
+                      const OUString& rName, rtl_TextEncoding eTextEnc, bool bExecutable ) :
     mxContext( rxContext ),
     mxDocModel( rxDocModel ),
     maName( rName ),
     meTextEnc( eTextEnc ),
-    mnType( ModuleType::UNKNOWN ),
+    mnType( script::ModuleType::UNKNOWN ),
     mnOffset( SAL_MAX_UINT32 ),
     mbReadOnly( false ),
     mbPrivate( false ),
@@ -182,13 +172,13 @@ void VbaModule::importDirRecords( BinaryInputStream& rDirStrm )
             break;
             case VBA_ID_MODULETYPEPROCEDURAL:
                 OOX_ENSURE_RECORDSIZE( nRecSize == 0 );
-                OSL_ENSURE( mnType == ModuleType::UNKNOWN, "VbaModule::importDirRecords - multiple module type records" );
-                mnType = ModuleType::NORMAL;
+                OSL_ENSURE( mnType == script::ModuleType::UNKNOWN, "VbaModule::importDirRecords - multiple module type records" );
+                mnType = script::ModuleType::NORMAL;
             break;
             case VBA_ID_MODULETYPEDOCUMENT:
                 OOX_ENSURE_RECORDSIZE( nRecSize == 0 );
-                OSL_ENSURE( mnType == ModuleType::UNKNOWN, "VbaModule::importDirRecords - multiple module type records" );
-                mnType = ModuleType::DOCUMENT;
+                OSL_ENSURE( mnType == script::ModuleType::UNKNOWN, "VbaModule::importDirRecords - multiple module type records" );
+                mnType = script::ModuleType::DOCUMENT;
             break;
             case VBA_ID_MODULEREADONLY:
                 OOX_ENSURE_RECORDSIZE( nRecSize == 0 );
@@ -205,23 +195,26 @@ void VbaModule::importDirRecords( BinaryInputStream& rDirStrm )
     }
     OSL_ENSURE( !maName.isEmpty(), "VbaModule::importDirRecords - missing module name" );
     OSL_ENSURE( !maStreamName.isEmpty(), "VbaModule::importDirRecords - missing module stream name" );
-    OSL_ENSURE( mnType != ModuleType::UNKNOWN, "VbaModule::importDirRecords - missing module type" );
+    OSL_ENSURE( mnType != script::ModuleType::UNKNOWN, "VbaModule::importDirRecords - missing module type" );
     OSL_ENSURE( mnOffset < SAL_MAX_UINT32, "VbaModule::importDirRecords - missing module stream offset" );
 }
 
-void VbaModule::createAndImportModule( StorageBase& rVbaStrg, const Reference< XNameContainer >& rxBasicLib,
-        const Reference< XNameAccess >& rxDocObjectNA, const Reference< XNameContainer >& rxOleNameOverrides ) const
+void VbaModule::createAndImportModule( StorageBase& rVbaStrg,
+                                       const Reference< container::XNameContainer >& rxBasicLib,
+                                       const Reference< container::XNameAccess >& rxDocObjectNA,
+                                       const Reference< container::XNameContainer >& rxOleNameOverrides ) const
 {
     OUString aVBASourceCode = readSourceCode( rVbaStrg, rxOleNameOverrides );
     createModule( aVBASourceCode, rxBasicLib, rxDocObjectNA );
 }
 
-void VbaModule::createEmptyModule( const Reference< XNameContainer >& rxBasicLib, const Reference< XNameAccess >& rxDocObjectNA ) const
+void VbaModule::createEmptyModule( const Reference< container::XNameContainer >& rxBasicLib,
+                                   const Reference< container::XNameAccess >& rxDocObjectNA ) const
 {
     createModule( OUString(), rxBasicLib, rxDocObjectNA );
 }
 
-OUString VbaModule::readSourceCode( StorageBase& rVbaStrg, const Reference< XNameContainer >& rxOleNameOverrides ) const
+OUString VbaModule::readSourceCode( StorageBase& rVbaStrg, const Reference< container::XNameContainer >& rxOleNameOverrides ) const
 {
     OUStringBuffer aSourceCode;
     const static rtl::OUString sUnmatchedRemovedTag( RTL_CONSTASCII_USTRINGPARAM( "Rem removed unmatched Sub/End: " ) );
@@ -337,7 +330,8 @@ OUString VbaModule::readSourceCode( StorageBase& rVbaStrg, const Reference< XNam
     return aSourceCode.makeStringAndClear();
 }
 
-void VbaModule::extractOleOverrideFromAttr( const OUString& rAttribute, const Reference< XNameContainer >& rxOleNameOverrides ) const
+void VbaModule::extractOleOverrideFromAttr( const OUString& rAttribute,
+                                            const Reference< container::XNameContainer >& rxOleNameOverrides ) const
 {
     // format of the attribute we are interested in is
     // Attribute VB_Control = "ControlName", intString, MSForms, ControlTypeAsString
@@ -355,38 +349,39 @@ void VbaModule::extractOleOverrideFromAttr( const OUString& rAttribute, const Re
             rtl::OUStringToOString( maName, RTL_TEXTENCODING_UTF8 ).getStr(), nCntrlId,
             rtl::OUStringToOString( sCntrlName, RTL_TEXTENCODING_UTF8 ).getStr() );
         if ( !rxOleNameOverrides->hasByName( maName ) )
-            rxOleNameOverrides->insertByName( maName, Any( Reference< XIndexContainer> ( new OleIdToNameContainer ) ) );
-        Reference< XIndexContainer > xIdToOleName;
+            rxOleNameOverrides->insertByName( maName, Any( Reference< container::XIndexContainer> ( new OleIdToNameContainer ) ) );
+        Reference< container::XIndexContainer > xIdToOleName;
         if ( rxOleNameOverrides->getByName( maName ) >>= xIdToOleName )
             xIdToOleName->insertByIndex( nCntrlId, makeAny( sCntrlName ) );
     }
 }
 
 void VbaModule::createModule( const OUString& rVBASourceCode,
-        const Reference< XNameContainer >& rxBasicLib, const Reference< XNameAccess >& rxDocObjectNA ) const
+                              const Reference< container::XNameContainer >& rxBasicLib,
+                              const Reference< container::XNameAccess >& rxDocObjectNA ) const
 {
     if( maName.isEmpty() )
         return;
 
     // prepare the Basic module
-    ModuleInfo aModuleInfo;
+    script::ModuleInfo aModuleInfo;
     aModuleInfo.ModuleType = mnType;
     OUStringBuffer aSourceCode;
     aSourceCode.appendAscii( RTL_CONSTASCII_STRINGPARAM( "Rem Attribute VBA_ModuleType=" ) );
     switch( mnType )
     {
-        case ModuleType::NORMAL:
+        case script::ModuleType::NORMAL:
             aSourceCode.appendAscii( RTL_CONSTASCII_STRINGPARAM( "VBAModule" ) );
         break;
-        case ModuleType::CLASS:
+        case script::ModuleType::CLASS:
             aSourceCode.appendAscii( RTL_CONSTASCII_STRINGPARAM( "VBAClassModule" ) );
         break;
-        case ModuleType::FORM:
+        case script::ModuleType::FORM:
             aSourceCode.appendAscii( RTL_CONSTASCII_STRINGPARAM( "VBAFormModule" ) );
             // hack from old filter, document Basic should know the XModel, but it doesn't
             aModuleInfo.ModuleObject.set( mxDocModel, UNO_QUERY );
         break;
-        case ModuleType::DOCUMENT:
+        case script::ModuleType::DOCUMENT:
             aSourceCode.appendAscii( RTL_CONSTASCII_STRINGPARAM( "VBADocumentModule" ) );
             // get the VBA implementation object associated to the document module
             if( rxDocObjectNA.is() ) try
@@ -404,7 +399,7 @@ void VbaModule::createModule( const OUString& rVBASourceCode,
     if( mbExecutable )
     {
         aSourceCode.appendAscii( RTL_CONSTASCII_STRINGPARAM( "Option VBASupport 1\n" ) );
-        if( mnType == ModuleType::CLASS )
+        if( mnType == script::ModuleType::CLASS )
             aSourceCode.appendAscii( RTL_CONSTASCII_STRINGPARAM( "Option ClassModule\n" ) );
     }
     else
