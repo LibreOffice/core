@@ -82,6 +82,9 @@ class TubeContacts : public ModelessDialog
 
     void Listen()
     {
+        if (!mpManager)
+            return ;
+
         if (!mpManager->registerClients())
         {
             fprintf( stderr, "Could not register client handlers.\n" );
@@ -103,6 +106,9 @@ class TubeContacts : public ModelessDialog
 
     void StartBuddySession()
     {
+        if (!mpManager)
+            return ;
+
         AccountContact *pAC = NULL;
         if (maList.FirstSelected())
             pAC = static_cast<AccountContact*> (maList.FirstSelected()->GetUserData());
@@ -122,6 +128,9 @@ class TubeContacts : public ModelessDialog
 
     void StartGroupSession()
     {
+        if (!mpManager)
+            return ;
+
         AccountContact *pAC = NULL;
         if (maList.FirstSelected())
             pAC = static_cast<AccountContact*> (maList.FirstSelected()->GetUserData());
@@ -172,6 +181,7 @@ public:
             {
                 fprintf( stderr, "Could not create AccountManager.\n" );
                 mpManager->unref();
+                mpManager = NULL;
             }
         }
         maBtnConnect.SetClickHdl( LINK( this, TubeContacts, BtnConnectHdl ) );
@@ -194,7 +204,8 @@ public:
     }
     virtual ~TubeContacts()
     {
-        mpManager->unref();
+        if (mpManager)
+            mpManager->unref();
     }
 
     static rtl::OUString fromUTF8( const char *pStr )
