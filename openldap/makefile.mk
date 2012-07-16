@@ -59,6 +59,7 @@ OUT2INC+=include$/lber_types.h
 OUT2INC+=include$/lber.h
 
 OUT2LIB+=libraries$/libldap$/.libs$/libldap.a
+OUT2LIB+=libraries$/libldap_r$/.libs$/libldap_r.a
 OUT2LIB+=libraries$/liblber$/.libs$/liblber.a
 
 # --- Targets ------------------------------------------------------
