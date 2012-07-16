@@ -34,7 +34,6 @@
 #include "additions.hxx"
 #include "data.hxx"
 #include "modifications.hxx"
-#include "nodemap.hxx"
 #include "path.hxx"
 
 namespace com { namespace sun { namespace star {
