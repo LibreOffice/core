@@ -269,7 +269,7 @@ para = enum.NextElement
 xray para.String
 xray para.PageStyleName
 */
-    uno::Reference<uno::XInterface> paragraph = getParagraph( 2, "TEXT1" );
+    uno::Reference<uno::XInterface> paragraph(getParagraph( 2, "TEXT1" ));
     // we want to test the paragraph is on the first page (it was put onto another page without the fix),
     // use a small trick and instead of checking the page layout, check the page style
     OUString pageStyle = getProperty< OUString >( paragraph, "PageStyleName" );
@@ -374,8 +374,8 @@ xray para2.String
 xray para2.PageStyleName
 */
     // get the 2nd and 3rd paragraph
-    uno::Reference<uno::XInterface> paragraph1 = getParagraph( 2, "one" );
-    uno::Reference<uno::XInterface> paragraph2 = getParagraph( 3, "two" );
+    uno::Reference<uno::XInterface> paragraph1(getParagraph( 2, "one" ));
+    uno::Reference<uno::XInterface> paragraph2(getParagraph( 3, "two" ));
     OUString pageStyle1 = getProperty< OUString >( paragraph1, "PageStyleName" );
     OUString pageStyle2 = getProperty< OUString >( paragraph2, "PageStyleName" );
     CPPUNIT_ASSERT_EQUAL( OUString( "Converted1" ), pageStyle1 );
@@ -400,8 +400,8 @@ xray para2.String
 xray para2.PageStyleName
 */
     // get the 2nd and 4th paragraph
-    uno::Reference<uno::XInterface> paragraph1 = getParagraph( 2, "text1" );
-    uno::Reference<uno::XInterface> paragraph2 = getParagraph( 4, "text2" );
+    uno::Reference<uno::XInterface> paragraph1(getParagraph( 2, "text1" ));
+    uno::Reference<uno::XInterface> paragraph2(getParagraph( 4, "text2" ));
     OUString pageStyle1 = getProperty< OUString >( paragraph1, "PageStyleName" );
     OUString pageStyle2 = getProperty< OUString >( paragraph2, "PageStyleName" );
     // "Standard" is the style for the first page (2nd is "Converted1").
@@ -656,7 +656,7 @@ xray numbering(11)  - should be 4, arabic
 note that the indexes may get off as the implementation evolves, C++ code seaches in loops
 */
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
-    uno::Reference< text::XTextRange > paragraph = getParagraph( 1, "Text1." );
+    uno::Reference< text::XTextRange > paragraph(getParagraph( 1, "Text1." ));
     OUString numberingStyleName = getProperty< OUString >( paragraph, "NumberingStyleName" );
     uno::Reference<text::XNumberingRulesSupplier> xNumberingRulesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> numberingRules(xNumberingRulesSupplier->getNumberingRules(), uno::UNO_QUERY);
