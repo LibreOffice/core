@@ -275,15 +275,17 @@ ScDocFuncSend::ScDocFuncSend( ScDocShell& rDocSh, ScDocFuncRecv *pDirect )
 ScDocFuncSend::~ScDocFuncSend()
 {
     fprintf( stderr, "Sender destroyed !\n" );
-    mpConference->close();
+    if (mpConference)
+        mpConference->close();
     delete mpDirect;
 }
 
 void ScDocFuncSend::SetCollaboration( TeleConference* pConference )
 {
     mpConference = pConference;
-    mpConference->sigPacketReceived.connect( boost::bind(
-                &ScDocFuncRecv::packetReceived, mpDirect, _1 ) );
+    if (mpConference)
+        mpConference->sigPacketReceived.connect( boost::bind(
+                    &ScDocFuncRecv::packetReceived, mpDirect, _1 ) );
 }
 
 TeleConference* ScDocFuncSend::GetConference()
