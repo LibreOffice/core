@@ -61,6 +61,7 @@ ContactList::ContactList(TpAccountManager *pAccountManager)
         TP_CONTACT_FEATURE_ALIAS,
         TP_CONTACT_FEATURE_AVATAR_DATA,
         TP_CONTACT_FEATURE_CAPABILITIES,
+        TP_CONTACT_FEATURE_PRESENCE,
         TP_CONTACT_FEATURE_INVALID);
 }
 
@@ -70,16 +71,25 @@ ContactList::~ContactList()
     mpAccountManager = NULL;
 }
 
-static gboolean
-contact_supports_libo_dtube (TpContact *contact)
+static bool
+tb_contact_is_online (TpContact *contact)
 {
-    TpCapabilities *caps = tp_contact_get_capabilities (contact);
-
-    if (caps == NULL)
-        return FALSE;
-
-    return tp_capabilities_supports_dbus_tubes (caps,
-        TP_HANDLE_TYPE_CONTACT, TeleManager::getFullServiceName().getStr());
+    switch (tp_contact_get_presence_type (contact))
+    {
+        case TP_CONNECTION_PRESENCE_TYPE_UNSET:
+        case TP_CONNECTION_PRESENCE_TYPE_OFFLINE:
+            return false;
+        case TP_CONNECTION_PRESENCE_TYPE_AVAILABLE:
+        case TP_CONNECTION_PRESENCE_TYPE_AWAY:
+        case TP_CONNECTION_PRESENCE_TYPE_EXTENDED_AWAY:
+        case TP_CONNECTION_PRESENCE_TYPE_HIDDEN:
+        case TP_CONNECTION_PRESENCE_TYPE_BUSY:
+            return true;
+        case TP_CONNECTION_PRESENCE_TYPE_UNKNOWN:
+        case TP_CONNECTION_PRESENCE_TYPE_ERROR:
+        default:
+            return false;
+    }
 }
 
 AccountContactPairV ContactList::getContacts()
@@ -113,7 +123,7 @@ AccountContactPairV ContactList::getContacts()
               reinterpret_cast<TpContact *>(g_ptr_array_index (contacts, i));
 
           if (contact != self &&
-              contact_supports_libo_dtube (contact))
+              tb_contact_is_online (contact))
             {
               g_object_ref (account);
               g_object_ref (contact);

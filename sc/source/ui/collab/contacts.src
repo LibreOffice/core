@@ -9,7 +9,7 @@ ModelessDialog RID_SCDLG_CONTACTS
     Hide = FALSE ;
     Moveable = TRUE ;
     Closeable = TRUE ;
-    Size = MAP_APPFONT ( 220 , 215 ) ;
+    Size = MAP_APPFONT ( 220 , 225 ) ;
     OutputSize = TRUE ;
     Text [ en-US ] = "Contacts" ;
 
@@ -23,7 +23,13 @@ ModelessDialog RID_SCDLG_CONTACTS
     {
         Pos = MAP_APPFONT( 70 , 200 );
         Size = MAP_APPFONT( 50 , 10 );
-        Text [ en-US ] = "Collaborate";
+        Text [ en-US ] = "startBuddySession";
+    };
+    PushButton BTN_GROUP
+    {
+        Pos = MAP_APPFONT( 70 , 212 );
+        Size = MAP_APPFONT( 50 , 10 );
+        Text [ en-US ] = "startGroupSession";
     };
     PushButton BTN_INVITE
     {

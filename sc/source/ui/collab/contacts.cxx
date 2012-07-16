@@ -47,6 +47,7 @@ class TubeContacts : public ModelessDialog
 {
     FixedLine               maLabel;
     PushButton              maBtnConnect;
+    PushButton              maBtnGroup;
     PushButton              maBtnInvite;
     PushButton              maBtnListen;
     SvxSimpleTableContainer maListContainer;
@@ -55,6 +56,7 @@ class TubeContacts : public ModelessDialog
     ScDocFuncSend*          mpSender;
 
     DECL_LINK( BtnConnectHdl, void * );
+    DECL_LINK( BtnGroupHdl, void * );
     DECL_LINK( BtnInviteHdl, void * );
     DECL_LINK( BtnListenHdl, void * );
 
@@ -152,12 +154,14 @@ public:
         ModelessDialog( NULL, ScResId( RID_SCDLG_CONTACTS ) ),
         maLabel( this, ScResId( FL_LABEL ) ),
         maBtnConnect( this, ScResId( BTN_CONNECT ) ),
+        maBtnGroup( this, ScResId( BTN_GROUP ) ),
         maBtnInvite( this, ScResId( BTN_INVITE ) ),
         maBtnListen( this, ScResId( BTN_LISTEN ) ),
         maListContainer( this, ScResId( CTL_LIST ) ),
         maList( maListContainer ),
         mpManager( TeleManager::get() )
     {
+        Hide();
         ScDocShell *pScDocShell = dynamic_cast<ScDocShell*> (SfxObjectShell::Current());
         ScDocFunc *pDocFunc = pScDocShell ? &pScDocShell->GetDocFunc() : NULL;
         mpSender = dynamic_cast<ScDocFuncSend*> (pDocFunc);
@@ -185,6 +189,7 @@ public:
             }
         }
         maBtnConnect.SetClickHdl( LINK( this, TubeContacts, BtnConnectHdl ) );
+        maBtnGroup.SetClickHdl( LINK( this, TubeContacts, BtnGroupHdl ) );
         maBtnInvite.SetClickHdl( LINK( this, TubeContacts, BtnInviteHdl ) );
         maBtnListen.SetClickHdl( LINK( this, TubeContacts, BtnListenHdl ) );
 
@@ -200,7 +205,6 @@ public:
         sHeader += String( ScResId( STR_HEADER_NAME ) );
         sHeader += '\t';
         maList.InsertHeaderEntry( sHeader, HEADERBAR_APPEND, HIB_LEFT );
-        Show();
     }
     virtual ~TubeContacts()
     {
@@ -221,7 +225,6 @@ public:
         ContactList *pContacts = mpManager->getContactList();
         if ( pContacts )
         {
-            fprintf( stderr, "contacts !\n" );
             AccountContactPairV aPairs = pContacts->getContacts();
             AccountContactPairV::iterator it;
             for( it = aPairs.begin(); it != aPairs.end(); it++ )
@@ -240,10 +243,6 @@ public:
                         aImage = Image( aBitmap );
                     }
                 }
-                fprintf( stderr, "'%s' => '%s' '%s'\n",
-                         tp_account_get_display_name( it->first ),
-                         tp_contact_get_alias( it->second ),
-                         tp_contact_get_identifier( it->second ) );
                 rtl::OUStringBuffer aEntry( 128 );
                 aEntry.append( sal_Unicode( '\t' ) );
                 aEntry.append( fromUTF8 ( tp_contact_get_alias( it->second ) ) );
@@ -256,31 +255,31 @@ public:
                 pEntry->SetUserData( &maACs.back() );
             }
         }
+        Show();
     }
 };
 
 IMPL_LINK_NOARG( TubeContacts, BtnConnectHdl )
 {
-#if 0
     StartBuddySession();
-#else
+    return 0;
+}
+
+IMPL_LINK_NOARG( TubeContacts, BtnGroupHdl )
+{
     StartGroupSession();
-#endif
-    Close();
     return 0;
 }
 
 IMPL_LINK_NOARG( TubeContacts, BtnInviteHdl )
 {
     Invite();
-    Close();
     return 0;
 }
 
 IMPL_LINK_NOARG( TubeContacts, BtnListenHdl )
 {
     Listen();
-    Close();
     return 0;
 }
 
