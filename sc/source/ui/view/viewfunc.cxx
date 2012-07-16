@@ -557,7 +557,6 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
         {
             ScRangeList aChangeRanges;
             ScMarkData::iterator itr = rMark.begin(), itrEnd = rMark.end();
-            itr = rMark.begin();
             for (; itr != itrEnd; ++itr)
                 aChangeRanges.Append( ScRange( nCol, nRow, *itr ) );
 
