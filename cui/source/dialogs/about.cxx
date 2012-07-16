@@ -204,6 +204,7 @@ void AboutDialog::LayoutControls()
         aLogoBitmap = aRasterizerLogo.Rasterize( aLogoSize );
         aLogoImage.SetImage( Image( aLogoBitmap ) );
         aLogoImage.SetPosSizePixel( aLogoPos, aLogoSize );
+        aLogoImage.Show();
     }
 
     // Position version text
