@@ -76,7 +76,7 @@ void test::oustring::Compare::compareToAscii()
     rtl::OUString abc("abc");
     CPPUNIT_ASSERT(abc.compareToAscii("a") > 0);
     CPPUNIT_ASSERT_EQUAL(
-        0, abc.compareToAscii(RTL_CONSTASCII_STRINGPARAM("a")));
+        sal_Int32(0), abc.compareToAscii(RTL_CONSTASCII_STRINGPARAM("a")));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
