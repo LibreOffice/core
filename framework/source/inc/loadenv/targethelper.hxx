@@ -76,7 +76,7 @@ class TargetHelper
             @note   An empty target is similar to "_self"!
 
             @param  sCheckTarget
-                    must be the unknwon target name, which should be checked.
+                    must be the unknown target name, which should be checked.
 
             @param  eSpecialTarget
                     represent the expected target.
@@ -100,7 +100,7 @@ class TargetHelper
                     by definition inside the same frame tree (e.g. _beamer and
                     OFFICE_HELP_TASK) its not a good idea to allow anything here :-)
 
-                    Of course we can't check unknwon names, which are not special ones.
+                    Of course we can't check unknown names, which are not special ones.
                     But we decide, that it's not allowed to use "_" as first sign
                     (because we reserve this letter for our own purposes!)
                     and the value must not a well known special target.

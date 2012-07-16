@@ -612,7 +612,7 @@ void SAL_CALL SvXMLImport::startElement( const OUString& rName,
                                  : rAttrName.copy( 6 ) );
             // Add namespace, but only if it is known.
             sal_uInt16 nKey = mpNamespaceMap->AddIfKnown( aPrefix, rAttrValue );
-            // If namespace is unknwon, try to match a name with similar
+            // If namespace is unknown, try to match a name with similar
             // TC Id an version
             if( XML_NAMESPACE_UNKNOWN == nKey  )
             {
@@ -664,7 +664,7 @@ void SAL_CALL SvXMLImport::startElement( const OUString& rName,
             Sequence < OUString > aParams(1);
             aParams.getArray()[0] = rName;
 
-            SetError( XMLERROR_FLAG_SEVERE|XMLERROR_UNKNWON_ROOT,
+            SetError( XMLERROR_FLAG_SEVERE|XMLERROR_UNKNOWN_ROOT,
                       aParams, aMsg, xDummyLocator );
         }
     }

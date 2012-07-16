@@ -470,7 +470,7 @@ css::beans::Optional< css::uno::Any > Components::getExternalValue(
             throw css::uno::RuntimeException(
                 (rtl::OUString(
                     RTL_CONSTASCII_USTRINGPARAM(
-                        "unknwon external value descriptor ID: ")) +
+                        "unknown external value descriptor ID: ")) +
                  e.Message),
                 css::uno::Reference< css::uno::XInterface >());
         } catch (css::lang::WrappedTargetException & e) {

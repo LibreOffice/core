@@ -3112,7 +3112,7 @@ sal_Int32 AnimationImporter::importTargetElementContainer( const Atom* pAtom, An
             }
             break;
             default:
-                OSL_FAIL("unknwon atom inside ppt::AnimationImporter::importTargetElementContainer()!");
+                OSL_FAIL("unknown atom inside ppt::AnimationImporter::importTargetElementContainer()!");
                 break;
             }
 
@@ -3143,7 +3143,7 @@ void AnimationImporter::importPropertySetContainer( const Atom* pAtom, PropertyS
             }
             else
             {
-                OSL_FAIL("unknwon atom inside ppt::AnimationImporter::importPropertySetContainer()!");
+                OSL_FAIL("unknown atom inside ppt::AnimationImporter::importPropertySetContainer()!");
             }
 
             pChildAtom = pAtom->findNextChildAtom( pChildAtom );

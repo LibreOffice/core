@@ -520,7 +520,7 @@ void CUPSManager::initialize()
             m_aGlobalDefaults.m_nPDFDevice = 1;
     }
     // do not send include JobPatch; CUPS will insert that itself
-    // TODO: currently unknwon which versions of CUPS insert JobPatches
+    // TODO: currently unknown which versions of CUPS insert JobPatches
     // so currently it is assumed CUPS = don't insert JobPatch files
     m_bUseJobPatch = false;
 
