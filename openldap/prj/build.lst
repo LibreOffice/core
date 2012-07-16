@@ -1,0 +1,3 @@
+ol	openldap	: soltools NSS:nss NULL
+ol	openldap			    usr1	-	u	ol_mkout NULL
+ol	openldap			    nmake	-	u	ol_openldap NULL
