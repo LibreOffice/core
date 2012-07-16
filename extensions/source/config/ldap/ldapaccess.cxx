@@ -35,21 +35,6 @@
 
 namespace extensions { namespace config { namespace ldap {
 
-oslModule       LdapConnection::s_Ldap_Module = NULL;
-t_ldap_unbind_s          LdapConnection::s_p_unbind_s = NULL;
-t_ldap_simple_bind_s     LdapConnection::s_p_simple_bind_s = NULL;
-t_ldap_set_option        LdapConnection::s_p_set_option = NULL;
-t_ldap_err2string        LdapConnection::s_p_err2string = NULL;
-t_ldap_init              LdapConnection::s_p_init = NULL;
-t_ldap_msgfree           LdapConnection::s_p_msgfree = NULL;
-t_ldap_get_dn            LdapConnection::s_p_get_dn = NULL;
-t_ldap_first_entry       LdapConnection::s_p_first_entry = NULL;
-t_ldap_first_attribute   LdapConnection::s_p_first_attribute = NULL;
-t_ldap_next_attribute    LdapConnection::s_p_next_attribute = NULL;
-t_ldap_search_s          LdapConnection::s_p_search_s = NULL;
-t_ldap_value_free        LdapConnection::s_p_value_free = NULL;
-t_ldap_get_values        LdapConnection::s_p_get_values = NULL;
-t_ldap_memfree           LdapConnection::s_p_memfree = NULL;
 //------------------------------------------------------------------------------
 typedef int LdapErrCode;
 //------------------------------------------------------------------------------
@@ -59,7 +44,7 @@ struct LdapMessageHolder
     ~LdapMessageHolder()
     {
         if (msg)
-            (*LdapConnection::s_p_msgfree)(msg);
+            ldap_msgfree(msg);
     }
 
     LDAPMessage * msg;
@@ -79,7 +64,7 @@ void LdapConnection::disconnect()
 {
     if (mConnection != NULL)
     {
-        (*s_p_unbind_s)(mConnection) ;
+        ldap_unbind_s(mConnection) ;
         mConnection = NULL;
     }
 }
@@ -98,11 +83,11 @@ static void checkLdapReturnCode(const sal_Char *aOperation,
     {
         message.appendAscii(aOperation).appendAscii(": ") ;
     }
-    message.appendAscii((*LdapConnection::s_p_err2string)(aRetCode)).appendAscii(" (") ;
+    message.appendAscii(ldap_err2string(aRetCode)).appendAscii(" (") ;
     sal_Char *stub = NULL ;
 
 #ifndef LDAP_OPT_SIZELIMIT // for use with OpenLDAP
-    (*s_p_get_lderrno)(aConnection, NULL, &stub) ;
+    ldap_get_lderrno(aConnection, NULL, &stub) ;
 #endif
     if (stub != NULL)
     {
@@ -112,7 +97,7 @@ static void checkLdapReturnCode(const sal_Char *aOperation,
         // string itself. At any rate freeing it seems to
         // cause some undue problems at least on Windows.
         // This call is thus disabled for the moment.
-        //(*s_p_memfree)(stub) ;
+        //ldap_memfree(stub) ;
     }
     else { message.appendAscii(kNoSpecificMessage) ; }
     message.appendAscii(")") ;
@@ -139,20 +124,20 @@ void  LdapConnection::connectSimple()
         initConnection() ;
         // Set Protocol V3
         int version = LDAP_VERSION3;
-        (*s_p_set_option)(mConnection,
+        ldap_set_option(mConnection,
                         LDAP_OPT_PROTOCOL_VERSION,
                         &version);
 
 #ifdef LDAP_X_OPT_CONNECT_TIMEOUT // OpenLDAP doesn't support this and the func
         /* timeout is specified in milliseconds -> 4 seconds*/
         int timeout = 4000;
-        (*s_p_set_option)( mConnection,
+        ldap_set_option( mConnection,
                         LDAP_X_OPT_CONNECT_TIMEOUT,
                         &timeout );
 #endif
 
         // Do the bind
-        LdapErrCode retCode = (*s_p_simple_bind_s)(mConnection,
+        LdapErrCode retCode = ldap_simple_bind_s(mConnection,
                                                mLdapDefinition.mAnonUser.getStr(),
                                                mLdapDefinition.mAnonCredentials.getStr()) ;
 
@@ -173,7 +158,7 @@ void LdapConnection::initConnection()
 
     if (mLdapDefinition.mPort == 0) mLdapDefinition.mPort = LDAP_PORT;
 
-    mConnection = (*s_p_init)(mLdapDefinition.mServer.getStr(),
+    mConnection = ldap_init(mLdapDefinition.mServer.getStr(),
                             mLdapDefinition.mPort) ;
     if (mConnection == NULL)
     {
@@ -199,7 +184,7 @@ void LdapConnection::initConnection()
     rtl::OString aUserDn =findUserDn( rtl::OUStringToOString(aUser, RTL_TEXTENCODING_ASCII_US));
 
     LdapMessageHolder result;
-    LdapErrCode retCode = (*s_p_search_s)(mConnection,
+    LdapErrCode retCode = ldap_search_s(mConnection,
                                       aUserDn.getStr(),
                                       LDAP_SCOPE_BASE,
                                       "(objectclass=*)",
@@ -209,18 +194,18 @@ void LdapConnection::initConnection()
 
     checkLdapReturnCode("getUserProfile", retCode,mConnection) ;
 
-    void * ptr;
-    char * attr = (*s_p_first_attribute)(mConnection, result.msg, &ptr);
+    BerElement * ptr;
+    char * attr = ldap_first_attribute(mConnection, result.msg, &ptr);
     while (attr != 0) {
-        char ** values = (*s_p_get_values)(mConnection, result.msg, attr);
+        char ** values = ldap_get_values(mConnection, result.msg, attr);
         if (values != 0) {
             data->insert(
                 LdapData::value_type(
                     rtl::OStringToOUString(attr, RTL_TEXTENCODING_ASCII_US),
                     rtl::OStringToOUString(*values, RTL_TEXTENCODING_UTF8)));
-            (*s_p_value_free)(values);
+            ldap_value_free(values);
         }
-        attr = (*s_p_next_attribute)(mConnection, result.msg, ptr);
+        attr = ldap_next_attribute(mConnection, result.msg, ptr);
     }
 }
 //------------------------------------------------------------------------------
@@ -249,21 +234,21 @@ void LdapConnection::initConnection()
     sal_Char * attributes [2];
     attributes[0]= const_cast<sal_Char *>(LDAP_NO_ATTRS);
     attributes[1]= NULL;
-    LdapErrCode retCode = (*s_p_search_s)(mConnection,
+    LdapErrCode retCode = ldap_search_s(mConnection,
                                       mLdapDefinition.mBaseDN.getStr(),
                                       LDAP_SCOPE_SUBTREE,
                                       filter.makeStringAndClear().getStr(), attributes, 0, &result.msg) ;
 
     checkLdapReturnCode("FindUserDn", retCode,mConnection) ;
     rtl::OString userDn ;
-    LDAPMessage *entry = (*s_p_first_entry)(mConnection, result.msg) ;
+    LDAPMessage *entry = ldap_first_entry(mConnection, result.msg) ;
 
     if (entry != NULL)
     {
-        sal_Char *charsDn = (*s_p_get_dn)(mConnection, entry) ;
+        sal_Char *charsDn = ldap_get_dn(mConnection, entry) ;
 
         userDn = charsDn ;
-        (*s_p_memfree)(charsDn) ;
+        ldap_memfree(charsDn) ;
     }
     else
     {
@@ -273,48 +258,8 @@ void LdapConnection::initConnection()
     return userDn ;
 }
 
-#if defined WNT || !defined WITH_OPENLDAP
-extern "C" { static void SAL_CALL thisModule() {} }
-#endif
-
-void LdapConnection::loadModule()
-{
-    if ( !s_Ldap_Module )
-    {
-#if defined WNT
-        s_Ldap_Module = osl_loadModuleAscii("wldap32.dll", 0);
-#elif defined WITH_OPENLDAP
-        s_Ldap_Module = osl_loadModuleAscii(
-            ("libldap-" SAL_STRINGIFY(LDAP_VENDOR_VERSION_MAJOR) "."
-             SAL_STRINGIFY(LDAP_VENDOR_VERSION_MINOR) ".so."
-             SAL_STRINGIFY(LDAP_VENDOR_VERSION_MAJOR)),
-            0);
-#else
-        s_Ldap_Module = osl_loadModuleRelativeAscii(
-            &thisModule, "libldap50.so", 0);
-#endif
-
-        if ( s_Ldap_Module )
-        {
-            s_p_unbind_s = (t_ldap_unbind_s)(osl_getFunctionSymbol(s_Ldap_Module, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ldap_unbind_s")).pData));
-            s_p_simple_bind_s = (t_ldap_simple_bind_s)(osl_getFunctionSymbol(s_Ldap_Module, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ldap_simple_bind_s")).pData));
-            s_p_set_option = (t_ldap_set_option)(osl_getFunctionSymbol(s_Ldap_Module, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ldap_set_option")).pData));
-            s_p_err2string = (t_ldap_err2string)(osl_getFunctionSymbol(s_Ldap_Module, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ldap_err2string")).pData));
-            s_p_init = (t_ldap_init)(osl_getFunctionSymbol(s_Ldap_Module, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ldap_init")).pData));
-            s_p_msgfree = (t_ldap_msgfree)(osl_getFunctionSymbol(s_Ldap_Module, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ldap_msgfree")).pData));
-            s_p_get_dn = (t_ldap_get_dn)(osl_getFunctionSymbol(s_Ldap_Module, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ldap_get_dn")).pData));
-            s_p_first_entry = (t_ldap_first_entry)(osl_getFunctionSymbol(s_Ldap_Module, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ldap_first_entry")).pData));
-            s_p_first_attribute = (t_ldap_first_attribute)(osl_getFunctionSymbol(s_Ldap_Module, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ldap_first_attribute")).pData));
-            s_p_next_attribute = (t_ldap_next_attribute)(osl_getFunctionSymbol(s_Ldap_Module, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ldap_next_attribute")).pData));
-            s_p_search_s = (t_ldap_search_s)(osl_getFunctionSymbol(s_Ldap_Module, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ldap_search_s")).pData));
-            s_p_value_free = (t_ldap_value_free)(osl_getFunctionSymbol(s_Ldap_Module, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ldap_value_free")).pData));
-            s_p_get_values = (t_ldap_get_values)(osl_getFunctionSymbol(s_Ldap_Module, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ldap_get_values")).pData));
-            s_p_memfree = (t_ldap_memfree)(osl_getFunctionSymbol(s_Ldap_Module, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ldap_memfree")).pData));
-        }
-    }
-}
-
 //------------------------------------------------------------------------------
+
 } } } // extensions.config.ldap
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

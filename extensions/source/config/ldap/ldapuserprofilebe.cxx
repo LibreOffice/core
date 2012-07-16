@@ -85,7 +85,6 @@ LdapUserProfileBe::LdapUserProfileBe( const uno::Reference<uno::XComponentContex
     }
 
     LdapConnection connection;
-    connection.loadModule();
     connection.connectSimple(aDefinition);
     connection.getUserProfile(loggedOnUser, &data_);
 }

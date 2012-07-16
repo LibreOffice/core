@@ -68,6 +68,24 @@ $(eval $(call gb_Library_use_libraries,ldapbe2,\
 	sal \
 ))
 
+ifeq ($(OS),WNT)
+$(eval $(call gb_Library_use_libraries,ldapbe2,\
+	wldap32 \
+))
+else # 0S!=WNT
+ifneq ($(WITH_OPENLDAP),YES)
+$(eval $(call gb_Library_add_libs,ldapbe2,\
+	-lldap50 \
+))
+else # WITH_OPENLDAP=YES
+$(eval $(call gb_Library_add_libs,ldapbe2,\
+	-lldap \
+))
+endif
+endif
+
+
+
 ifeq ($(OS),FREEBSD)
 $(eval $(call gb_Library_add_libs,ldapbe2,\
 	-lcompat \
