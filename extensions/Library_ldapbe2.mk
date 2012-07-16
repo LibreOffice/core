@@ -58,9 +58,9 @@ $(eval $(call gb_Library_use_libraries,ldapbe2,\
 	wldap32 \
 ))
 else # 0S!=WNT
+$(eval $(call gb_Library_use_externals,ldapbe2,openldap))
+
 $(eval $(call gb_Library_add_libs,ldapbe2,\
-	-lldap \
-	-llber \
 	-lssl3 \
 	-lsmime3 \
 	-lnss3 \

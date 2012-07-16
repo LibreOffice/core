@@ -1328,6 +1328,41 @@ endef
 endif # SYSTEM_HSQLDB
 
 
+ifdef ($(SYSTEM_OPENLDAP),YES)
+
+define gb_LinkTarget__use_openldap
+
+$(call gb_LinkTarget_add_libs,$(1),\
+	-lldap \
+	-llber \
+)
+
+endef
+
+else # !SYSTEM_OPENLDAP
+
+$(eval $(call gb_Helper_register_static_libraries,PLAINLIBS,\
+	ldap \
+	lber \
+))
+
+define gb_LinkTarget__use_openldap
+
+$(call gb_LinkTarget_set_include,$(1),\
+	-I$(OUTDIR)/inc/openldap \
+	$$(INCLUDE) \
+)
+
+$(call gb_LinkTarget_use_static_libraries,$(1),\
+	ldap \
+	lber \
+)
+
+endef
+
+endif # SYSTEM_OPENLDAP
+
+
 ifeq ($(SYSTEM_POSTGRESQL),YES)
 
 define gb_LinkTarget__use_postgresql
