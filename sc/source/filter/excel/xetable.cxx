@@ -2029,41 +2029,22 @@ void XclExpRowBuffer::Finalize( XclExpDefaultRowData& rDefRowData, const ScfUInt
     XclExpDefaultRowData aMaxDefData;
     size_t nMaxDefCount = 0;
     // only look for default format in existing rows, if there are more than unused
-    bool bSearchExisting = ( maRowMap.size() >= (  GetMaxPos().Row() - maRowMap.size() ) );
-    if ( bSearchExisting )
+    for (itr = itrBeg; itr != itrEnd; ++itr)
     {
-        for (itr = itrBeg; itr != itrEnd; ++itr)
+        const RowRef& rRow = itr->second;
+        if (rRow->IsDefaultable())
         {
-            const RowRef& rRow = itr->second;
-            if (rRow->IsDefaultable())
+            XclExpDefaultRowData aDefData( *rRow );
+            size_t& rnDefCount = aDefRowMap[ aDefData ];
+            ++rnDefCount;
+            if( rnDefCount > nMaxDefCount )
             {
-                XclExpDefaultRowData aDefData( *rRow );
-                size_t& rnDefCount = aDefRowMap[ aDefData ];
-                ++rnDefCount;
-                if( rnDefCount > nMaxDefCount )
-                {
-                    nMaxDefCount = rnDefCount;
-                    aMaxDefData = aDefData;
-                }
+                nMaxDefCount = rnDefCount;
+                aMaxDefData = aDefData;
             }
         }
     }
-    else
-    {
-        // find a suitable unused row to get the default height from,
-        // searching backwards from max row
-        for ( SCROW nRow = GetMaxPos().Row(); nRow >= 0; --nRow )
-        {
-            if ( maRowMap.find( nRow ) == maRowMap.end() )
-            {
-                // use first encountered unused row height as default
-                // I wonder should we do this always ( and abandon the search
-                // of exising rows )
-                aMaxDefData.mnHeight = GetDoc().GetRowHeight(nRow, GetCurrScTab(), false);
-                break;
-            }
-        }
-    }
+
     // return the default row format to caller
     rDefRowData = aMaxDefData;
 
@@ -2165,17 +2146,13 @@ XclExpDimensions* XclExpRowBuffer::GetDimensions()
 
 XclExpRow& XclExpRowBuffer::GetOrCreateRow( sal_uInt32 nXclRow, bool bRowAlwaysEmpty )
 {
-    RowMap::iterator itr = maRowMap.begin();
-    for ( size_t nFrom = maRowMap.size(); nFrom <= nXclRow; ++nFrom )
+    RowMap::iterator itr = maRowMap.find(nXclRow);
+    if (itr == maRowMap.end())
     {
-        itr = maRowMap.find(nFrom);
-        if ( itr == maRowMap.end() )
-        {
-            RowRef p(new XclExpRow(GetRoot(), nFrom, maOutlineBfr, bRowAlwaysEmpty));
-            maRowMap.insert(RowMap::value_type(nFrom, p));
-        }
+        RowRef p(new XclExpRow(GetRoot(), nXclRow, maOutlineBfr, bRowAlwaysEmpty));
+        ::std::pair<RowMap::iterator, bool> r = maRowMap.insert(RowMap::value_type(nXclRow, p));
+        itr = r.first;
     }
-    itr = maRowMap.find(nXclRow);
     return *itr->second;
 }
 
