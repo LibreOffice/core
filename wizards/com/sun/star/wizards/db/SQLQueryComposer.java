@@ -345,7 +345,7 @@ public class SQLQueryComposer
             if ( curCommandName.length() > 0 )
                 return quoteName(curCommandName) + "." + quoteName(curFieldName);
             else
-                return quoteName(CurFieldColumn.getFieldName());
+                return quoteName(curFieldName);
         }
         String curAliasName = curComposedCommandName.getAliasName();
         return quoteName(curAliasName) + "." + quoteName(curFieldName);
