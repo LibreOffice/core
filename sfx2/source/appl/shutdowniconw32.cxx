@@ -275,13 +275,12 @@ static void addTaskbarIcon( HWND hWnd )
         strTip = ShutdownIcon::getInstance()->GetResString( STR_QUICKSTART_TIP );
 
     // add taskbar icon
-    NOTIFYICONDATAA nid;
+    NOTIFYICONDATAW nid;
     nid.hIcon = (HICON)LoadImageA( GetModuleHandle( NULL ), MAKEINTRESOURCE( ICON_LO_DEFAULT ),
         IMAGE_ICON, GetSystemMetrics( SM_CXSMICON ), GetSystemMetrics( SM_CYSMICON ),
         LR_DEFAULTCOLOR | LR_SHARED );
 
-    // better use unicode wrapper here ?
-    strncpy( nid.szTip, ( OUStringToOString(strTip, osl_getThreadTextEncoding()).getStr() ), 64 );
+    wcsncpy( nid.szTip, strTip.getStr(), 64 );
 
     nid.cbSize              = sizeof(nid);
     nid.hWnd                = hWnd;
@@ -289,7 +288,7 @@ static void addTaskbarIcon( HWND hWnd )
     nid.uCallbackMessage    = SFX_TASKBAR_NOTIFICATION;
     nid.uFlags              = NIF_MESSAGE|NIF_TIP|NIF_ICON;
 
-    Shell_NotifyIconA(NIM_ADD, &nid);
+    Shell_NotifyIconW(NIM_ADD, &nid);
 }
 
 // -------------------------------
