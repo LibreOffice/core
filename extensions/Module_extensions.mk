@@ -32,11 +32,16 @@ $(eval $(call gb_Module_add_targets,extensions,\
 	AllLangResTarget_scn \
 	AllLangResTarget_upd \
 	Library_abp \
-	Library_ldapbe2 \
 	Library_log \
 	Library_res \
 	Library_scn \
 ))
+
+ifneq ($(filter-out IOS ANDROID,$(OS)),)
+$(eval $(call gb_Module_add_targets,shell,\
+	Library_ldapbe2 \
+))
+endif
 
 ifneq (,$(filter DBCONNECTIVITY,$(BUILD_TYPE)))
 $(eval $(call gb_Module_add_targets,extensions,\

@@ -29,7 +29,11 @@
 
 CDEFAULTOPT=-Os
 .INCLUDE : unxgcc.mk
+.IF "$(CPU)" == "I"
+CDEFS+=-DX86
+.ELSE
 CDEFS+=-DARM32
+.ENDIF
 CFLAGS+=-fno-omit-frame-pointer
 
 # Override some macros set by unxgcc.mk

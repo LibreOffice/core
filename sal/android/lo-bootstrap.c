@@ -1235,6 +1235,8 @@ lo_dlcall_argc_argv(void *function,
     return result;
 }
 
+#ifndef X86
+
 /* There is a bug in std::type_info::operator== and
  * std::type_info::before() in libgnustl_shared.so in NDK r7 at
  * least. They compare the type name pointers instead of comparing the
@@ -1407,6 +1409,21 @@ patch_libgnustl_shared(void)
           &replacement_method_before_arm);
 }
 
+// static native void patch_libgnustl_shared();
+
+__attribute__ ((visibility("default")))
+void
+Java_org_libreoffice_android_Bootstrap_patch_1libgnustl_1shared(JNIEnv* env,
+                                                                jobject clazz)
+{
+    (void) env;
+    (void) clazz;
+
+    patch_libgnustl_shared();
+}
+
+#endif // not X86
+
 #define UNPACK_TREE "/assets/unpack"
 
 static int
@@ -1518,19 +1535,6 @@ extract_files(const char *prefix)
         }
     }
     lo_apk_closedir(tree);
-}
-
-// static native void patch_libgnustl_shared();
-
-__attribute__ ((visibility("default")))
-void
-Java_org_libreoffice_android_Bootstrap_patch_1libgnustl_1shared(JNIEnv* env,
-                                                                jobject clazz)
-{
-    (void) env;
-    (void) clazz;
-
-    patch_libgnustl_shared();
 }
 
 // static native void extract_files();
