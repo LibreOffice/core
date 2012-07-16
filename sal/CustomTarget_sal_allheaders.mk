@@ -1,0 +1,52 @@
+# -*- Mode: makefile; tab-width: 4; indent-tabs-mode: t -*-
+#
+# Version: MPL 1.1 / GPLv3+ / LGPLv3+
+#
+# The contents of this file are subject to the Mozilla Public License Version
+# 1.1 (the "License"); you may not use this file except in compliance with
+# the License or as specified alternatively below. You may obtain a copy of
+# the License at http://www.mozilla.org/MPL/
+#
+# Software distributed under the License is distributed on an "AS IS" basis,
+# WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+# for the specific language governing rights and limitations under the
+# License.
+#
+# Major Contributor(s):
+# Copyright (C) 2011 Matúš Kukan <matus.kukan@gmail.com> (initial developer)
+#
+# All Rights Reserved.
+#
+# For minor contributions see the git repository.
+#
+# Alternatively, the contents of this file may be used under the terms of
+# either the GNU General Public License Version 3 or later (the "GPLv3+"), or
+# the GNU Lesser General Public License Version 3 or later (the "LGPLv3+"),
+# in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
+# instead of those above.
+
+$(eval $(call gb_CustomTarget_CustomTarget,sal/allheaders))
+
+sal_allheaders_DIR := $(call gb_CustomTarget_get_workdir,sal/allheaders)
+
+$(call gb_CustomTarget_get_target,sal/allheaders) : \
+	$(sal_allheaders_DIR)/sal_allheaders.hxx
+
+# dependency on Package_inc.mk should ensure this is updated whenever a new public header is added
+$(sal_allheaders_DIR)/sal_allheaders.hxx :| $(sal_allheaders_DIR)/.dir $(SRCDIR)/sal/Package_inc.mk
+	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,1)
+	echo '// Generated list of all sal/ includes' >  $@
+	echo '#ifdef WNT' >>  $@
+	echo '#include <windows.h>' >>  $@
+	echo '#endif' >>  $@
+	echo -e  \
+	    $(foreach file, $(wildcard $(SRCDIR)/sal/inc/*.h) $(wildcard $(SRCDIR)/sal/inc/*.hxx) \
+	                    $(wildcard $(SRCDIR)/sal/inc/*/*.h) $(wildcard $(SRCDIR)/sal/inc/*/*.hxx) \
+	                    $(wildcard $(SRCDIR)/sal/inc/*/*/*.h) $(wildcard $(SRCDIR)/sal/inc/*/*/*.hxx) \
+	                    $(wildcard $(SRCDIR)/sal/inc/*/*/*/*.h) $(wildcard $(SRCDIR)/sal/inc/*/*/*/*.hxx), \
+	        $(if $(findstring /win32/, $(file)), '#ifdef WNT\n') \
+	        '#include <$(subst $(SRCDIR)/sal/inc/,,$(file))>\n' \
+	        $(if $(findstring /win32/, $(file)), '#endif // WNT\n') \
+	    ) >> $@
+
+# vim: set noet sw=4 ts=4:

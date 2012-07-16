@@ -28,6 +28,7 @@
 $(eval $(call gb_Module_Module,cppu))
 
 $(eval $(call gb_Module_add_targets,cppu,\
+	CustomTarget_cppu_allheaders \
 	InternalUnoApi_cppu \
 	Library_affine_uno \
 	Library_cppu \
@@ -38,6 +39,7 @@ $(eval $(call gb_Module_add_targets,cppu,\
 ))
 
 $(eval $(call gb_Module_add_check_targets,cppu,\
+	CppunitTest_cppu_checkapi \
 	CppunitTest_cppu_qa_any \
 	CppunitTest_cppu_qa_recursion \
 	CppunitTest_cppu_qa_reference \

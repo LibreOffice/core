@@ -849,6 +849,10 @@ typedef rtlunittest::OStringBuffer OStringBuffer;
 #undef RTL_STRING_CONST_FUNCTION
 #endif
 
+#ifdef RTL_USING
+using ::rtl::OStringBuffer;
+#endif
+
 #endif  /* __cplusplus */
 #endif  /* _RTL_STRBUF_HXX_ */
 

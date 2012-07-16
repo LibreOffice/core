@@ -25,26 +25,26 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Module_Module,cppuhelper))
+$(eval $(call gb_CppunitTest_CppunitTest,sal_checkapi))
 
-$(eval $(call gb_Module_add_targets,cppuhelper,\
-	CustomTarget_cppuhelper_allheaders \
-	InternalUnoApi_cppuhelper \
-	Library_cppuhelper \
-	Package_findsofficepath \
-	Package_inc \
-	Package_unorc \
+$(eval $(call gb_CppunitTest_add_exception_objects,sal_checkapi,\
+    sal/qa/checkapi/strings \
 ))
 
-$(eval $(call gb_Module_add_check_targets,cppuhelper,\
-	CppunitTest_cppuhelper_checkapi \
-	CppunitTest_cppuhelper_cppu_ifcontainer \
-	CppunitTest_cppuhelper_cppu_unourl \
+$(eval $(call gb_CppunitTest_set_include,sal_checkapi,\
+	$$(INCLUDE) \
+	-I$(SRCDIR)/sal/inc \
 ))
-# CppunitTest_cppuhelper_qa_weak depends on module bridges
 
-# TODO ? (I don't think OOO_SUBSEQUENT_TESTS != "" can be true..
-# someone would have to do it on command line)
-#	qa/propertysetmixin/makefile.mk
+# strings.cxx includes generated strings.hxx
+$(call gb_CxxObject_get_target,sal/qa/checkapi/strings) : \
+	INCLUDE += -I$(call gb_CustomTarget_get_workdir,sal/allheaders)
+$(call gb_CxxObject_get_target,sal/qa/checkapi/strings) :| \
+	$(call gb_CustomTarget_get_workdir,sal/allheaders)/sal_allheaders.hxx
+
+$(eval $(call gb_CppunitTest_use_libraries,sal_checkapi,\
+    sal \
+    $(gb_STDLIBS) \
+))
 
 # vim: set noet sw=4 ts=4:

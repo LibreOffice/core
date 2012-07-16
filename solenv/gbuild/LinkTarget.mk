@@ -299,6 +299,10 @@ endif
 
 gb_LinkTarget_DEFAULTDEFS := $(gb_GLOBALDEFS)
 
+define gb_LinkTarget_rtl_defs
+$(if $(filter-out sal salhelper cppu cppuhelper, $(gb_Module_CURRENTMODULE_NAME)), -DRTL_USING)
+endef
+
 # defined by platform
 #  gb_LinkTarget_CXXFLAGS
 #  gb_LinkTarget_LDFLAGS
@@ -471,7 +475,7 @@ $(call gb_LinkTarget_get_target,$(1)) : T_CXXFLAGS := $$(gb_LinkTarget_CXXFLAGS)
 $(call gb_LinkTarget_get_target,$(1)) : T_OBJCXXFLAGS := $$(gb_LinkTarget_OBJCXXFLAGS)
 $(call gb_LinkTarget_get_target,$(1)) : T_OBJCFLAGS := $$(gb_LinkTarget_OBJCFLAGS)
 $(call gb_LinkTarget_get_headers_target,$(1)) \
-$(call gb_LinkTarget_get_target,$(1)) : DEFS := $$(gb_LinkTarget_DEFAULTDEFS) $(CPPFLAGS)
+$(call gb_LinkTarget_get_target,$(1)) : DEFS := $$(gb_LinkTarget_DEFAULTDEFS) $$(call gb_LinkTarget_rtl_defs,$(1)) $(CPPFLAGS)
 $(call gb_LinkTarget_get_headers_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : INCLUDE := $$(gb_LinkTarget_INCLUDE)
 $(call gb_LinkTarget_get_headers_target,$(1)) \
@@ -503,7 +507,7 @@ $(call gb_LinkTarget_get_dep_target,$(1)) : T_CXXFLAGS := $$(gb_LinkTarget_CXXFL
 $(call gb_LinkTarget_get_dep_target,$(1)) : T_OBJCXXFLAGS := $$(gb_LinkTarget_OBJCXXFLAGS)
 $(call gb_LinkTarget_get_dep_target,$(1)) : T_OBJCFLAGS := $$(gb_LinkTarget_OBJCFLAGS)
 $(call gb_LinkTarget_get_dep_target,$(1)) : T_YACCFLAGS := $$(gb_LinkTarget_YYACFLAGS) $(YACCFLAGS)
-$(call gb_LinkTarget_get_dep_target,$(1)) : DEFS := $$(gb_LinkTarget_DEFAULTDEFS) $(CPPFLAGS)
+$(call gb_LinkTarget_get_dep_target,$(1)) : DEFS := $$(gb_LinkTarget_DEFAULTDEFS) $$(call gb_LinkTarget_rtl_defs,$(1)) $(CPPFLAGS)
 $(call gb_LinkTarget_get_dep_target,$(1)) : INCLUDE := $$(gb_LinkTarget_INCLUDE)
 $(call gb_LinkTarget_get_dep_target,$(1)) : INCLUDE_STL := $$(gb_LinkTarget_INCLUDE_STL)
 $(call gb_LinkTarget_get_dep_target,$(1)) : TARGETTYPE :=

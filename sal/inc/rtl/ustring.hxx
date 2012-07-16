@@ -2085,6 +2085,17 @@ inline OString OUStringToOString( const OUString & rUnicode,
 
 } /* Namespace */
 
+// RTL_USING is defined by gbuild for all modules except those with stable public API
+// (as listed in ure/source/README). It allows to use classes like OUString without
+// having to explicitly refer to the rtl namespace, which is kind of superfluous
+// given that OUString itself is namespaced by its OU prefix.
+#ifdef RTL_USING
+using ::rtl::OUString;
+using ::rtl::OUStringHash;
+using ::rtl::OStringToOUString;
+using ::rtl::OUStringToOString;
+#endif
+
 #endif /* _RTL_USTRING_HXX */
 
 // Include the ostream << operator directly here, so that it's always available

@@ -1470,6 +1470,11 @@ struct OStringHash
 
 } /* Namespace */
 
+#ifdef RTL_USING
+using ::rtl::OString;
+using ::rtl::OStringHash;
+#endif
+
 #endif /* _RTL_STRING_HXX_ */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

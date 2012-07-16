@@ -28,8 +28,13 @@
 $(eval $(call gb_Module_Module,salhelper))
 
 $(eval $(call gb_Module_add_targets,salhelper,\
+	CustomTarget_salhelper_allheaders \
 	Library_salhelper \
 	Package_inc \
+))
+
+$(eval $(call gb_Module_add_check_targets,salhelper,\
+	CppunitTest_salhelper_checkapi \
 ))
 
 # vim: set noet sw=4 ts=4:

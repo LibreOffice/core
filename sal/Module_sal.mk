@@ -30,6 +30,7 @@ $(eval $(call gb_Module_Module,sal))
 
 $(eval $(call gb_Module_add_targets,sal,\
 	CustomTarget_generated \
+	CustomTarget_sal_allheaders \
 	$(if $(filter $(OS),IOS),, \
 		Executable_osl_process_child) \
 	Executable_cppunittester \
@@ -48,6 +49,7 @@ $(eval $(call gb_Module_add_targets,sal,\
 $(eval $(call gb_Module_add_check_targets,sal,\
 	CppunitTest_Module_DLL \
 	CppunitTest_sal_bytesequence \
+	CppunitTest_sal_checkapi \
 	CppunitTest_sal_osl_condition \
 	$(if $(filter $(OS),WNT),, \
 		CppunitTest_sal_osl_file) \

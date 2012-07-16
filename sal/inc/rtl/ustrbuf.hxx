@@ -962,6 +962,10 @@ typedef rtlunittest::OUStringBuffer OUStringBuffer;
 }
 #endif
 
+#ifdef RTL_USING
+using ::rtl::OUStringBuffer;
+#endif
+
 #endif  /* _RTL_USTRBUF_HXX_ */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
