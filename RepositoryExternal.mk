@@ -1328,7 +1328,7 @@ endef
 endif # SYSTEM_HSQLDB
 
 
-ifdef ($(SYSTEM_OPENLDAP),YES)
+ifeq ($(SYSTEM_OPENLDAP),YES)
 
 define gb_LinkTarget__use_openldap
 
