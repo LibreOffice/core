@@ -9,7 +9,7 @@ mkdir: %_DEST%\lib\sqlite
 ..\%__SRC%\inc\include\private\*.h %_DEST%\inc\mozilla\nspr\private
 ..\%__SRC%\inc\nss\*.h %_DEST%\inc\mozilla\nss
 
-..\%__SRC%\lib\libfreebl3.* %_DEST%\lib\libfreebl.*
+..\%__SRC%\lib\libfreebl3.* %_DEST%\lib\libfreebl3.*
 ..\%__SRC%\lib\libfreebl_32fpu_3.* %_DEST%\lib\libfreebl_32fpu_3.*
 ..\%__SRC%\lib\libfreebl_32int64_3.* %_DEST%\lib\libfreebl_32int64_3.*
 ..\%__SRC%\lib\libfreebl_32int_3.* %_DEST%\lib\libfreebl_32int_3.*
