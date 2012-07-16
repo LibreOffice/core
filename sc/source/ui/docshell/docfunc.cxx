@@ -848,7 +848,11 @@ sal_Bool ScDocFunc::PutCell( const ScAddress& rPos, ScBaseCell* pNewCell, sal_Bo
 
     pDoc->PutCell( rPos, pNewCell );
 
-    if ( !bXMLLoading && pNewCell->GetCellType() == CELLTYPE_FORMULA && !pDoc->GetAutoCalc() )
+    // This "interpret once" block was moved from ScViewFunc::EnterData() where
+    // it was never executed from API, so don't do it here. For performance
+    // reasons API calls may disable calculation while operating and
+    // recalculate once when done.
+    if ( !bXMLLoading && !bApi && pNewCell->GetCellType() == CELLTYPE_FORMULA && !pDoc->GetAutoCalc() )
     {
         ScFormulaCell *pFormCell = static_cast<ScFormulaCell *>( pNewCell );
         // calculate just the cell once and set Dirty again
