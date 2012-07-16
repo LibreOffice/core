@@ -356,14 +356,19 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                     if( !(sAuthor = aUserOpt.GetFullName()).Len())
                         if( !(sAuthor = aUserOpt.GetID()).Len() )
                             sAuthor = String( SW_RES( STR_REDLINE_UNKNOWN_AUTHOR ));
+
+                    // Save the current selection, it will be required later for fieldmark insertion.
+                    SwPaM& rCurrPam = rSh.GetCurrentShellCursor();
+                    SwPaM aSaved(*rCurrPam.GetPoint(), *rCurrPam.GetMark());
                     if( rSh.HasSelection() )
                     {
-                        rSh.NormalizePam(true);
+                        rSh.NormalizePam(false);
                         rSh.KillPams();
                         rSh.ClearMark();
                     }
                     SwInsertFld_Data aData(TYP_POSTITFLD, 0, sAuthor, aEmptyStr, 0);
-                    aFldMgr.InsertFld(aData);
+                    aFldMgr.InsertFld(aData, &aSaved);
+
                     rSh.Push();
                     rSh.SwCrsrShell::Left(1, CRSR_SKIP_CHARS, sal_False);
                     pPostIt = (SwPostItField*)aFldMgr.GetCurFld();

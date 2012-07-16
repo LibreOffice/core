@@ -59,6 +59,7 @@
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
 #include <vcl/mnemonic.hxx>
+#include <xmloff/odffields.hxx>
 #include <view.hxx>
 #include <wrtsh.hxx>        // active window
 #include <doc.hxx>      // active window
@@ -849,7 +850,7 @@ sal_uInt16 SwFldMgr::GetCurTypeId() const
  --------------------------------------------------------------------*/
 
 
-sal_Bool SwFldMgr::InsertFld(  const SwInsertFld_Data& rData )
+sal_Bool SwFldMgr::InsertFld(  const SwInsertFld_Data& rData, SwPaM *pPam )
 {
     SwField* pFld   = 0;
     sal_Bool bExp = sal_False;
@@ -1377,6 +1378,13 @@ sal_Bool SwFldMgr::InsertFld(  const SwInsertFld_Data& rData )
 
     // insert
     pCurShell->StartAllAction();
+
+    if (pPam && *pPam->GetPoint() != *pPam->GetMark() && rData.nTypeId == TYP_POSTITFLD)
+    {
+        // If an annotation field is inserted, take care of the relevant fieldmark.
+        IDocumentMarkAccess* pMarksAccess = pCurShell->GetDoc()->getIDocumentMarkAccess();
+        pMarksAccess->makeFieldBookmark(*pPam, OUString(), ODF_COMMENTRANGE);
+    }
 
     pCurShell->Insert(*pFld);
 
