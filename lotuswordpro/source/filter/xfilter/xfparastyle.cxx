@@ -116,7 +116,7 @@ XFParaStyle::XFParaStyle(const XFParaStyle& other) : XFStyle(other)
     m_aLineHeight = other.m_aLineHeight;
     m_aPadding = other.m_aPadding;
     m_aBreaks = other.m_aBreaks;
-//  m_aTabs = other.m_aTabs;
+
     for (size_t i=0; i<other.m_aTabs.GetCount(); ++i)
     {
         const IXFStyle *pStyle = other.m_aTabs.Item(i);
@@ -135,52 +135,56 @@ XFParaStyle::XFParaStyle(const XFParaStyle& other) : XFStyle(other)
 XFParaStyle& XFParaStyle::operator=(const XFParaStyle& other)
 {
     // Check for self-assignment
-    if (this == &other)
-        return *this;
-    m_strParentStyleName = other.m_strParentStyleName;
-    m_nFlag = other.m_nFlag;
-    m_eAlignType = other.m_eAlignType;
-    m_fTextIndent = other.m_fTextIndent;
-    m_bNumberLines = other.m_bNumberLines;
-    m_nLineNumberRestart = other.m_nLineNumberRestart;
-    m_bNumberRight = other.m_bNumberRight;
-
-    if( other.m_pFont )
-        m_pFont = other.m_pFont;
-    else
-        m_pFont = NULL;
-
-    if( other.m_pBorders )
-        m_pBorders = new XFBorders(*other.m_pBorders);
-    else
-        m_pBorders = NULL;
-    m_aBackColor = other.m_aBackColor;
-    if( other.m_pBGImage )
-        m_pBGImage = new XFBGImage(*other.m_pBGImage);
-    else
-        m_pBGImage = NULL;
-
-    m_aShadow = other.m_aShadow;
-    m_aMargin = other.m_aMargin;
-    m_aDropcap = other.m_aDropcap;
-    m_aLineHeight = other.m_aLineHeight;
-    m_aPadding = other.m_aPadding;
-    m_aBreaks = other.m_aBreaks;
-    //  m_aTabs = other.m_aTabs;
-    for (size_t i=0; i<other.m_aTabs.GetCount(); ++i)
+    if (this != &other)
     {
-        const IXFStyle *pStyle = other.m_aTabs.Item(i);
-        if( pStyle )
+        // first , clean member
+        delete(m_pBGImage);
+        m_aTabs.Reset();
+
+        m_strParentStyleName = other.m_strParentStyleName;
+        m_nFlag = other.m_nFlag;
+        m_eAlignType = other.m_eAlignType;
+        m_fTextIndent = other.m_fTextIndent;
+        m_bNumberLines = other.m_bNumberLines;
+        m_nLineNumberRestart = other.m_nLineNumberRestart;
+        m_bNumberRight = other.m_bNumberRight;
+
+        if( other.m_pFont )
+            m_pFont = other.m_pFont;
+        else
+            m_pFont = NULL;
+
+        if( other.m_pBorders )
+            m_pBorders = new XFBorders(*other.m_pBorders);
+        else
+            m_pBorders = NULL;
+        m_aBackColor = other.m_aBackColor;
+        if( other.m_pBGImage )
+            m_pBGImage = new XFBGImage(*other.m_pBGImage);
+        else
+            m_pBGImage = NULL;
+
+        m_aShadow = other.m_aShadow;
+        m_aMargin = other.m_aMargin;
+        m_aDropcap = other.m_aDropcap;
+        m_aLineHeight = other.m_aLineHeight;
+        m_aPadding = other.m_aPadding;
+        m_aBreaks = other.m_aBreaks;
+
+        for (size_t i=0; i<other.m_aTabs.GetCount(); ++i)
         {
-            const XFTabStyle *pTabStyle = dynamic_cast<const XFTabStyle*>(pStyle);
-            if( pTabStyle )
+            const IXFStyle *pStyle = other.m_aTabs.Item(i);
+            if( pStyle )
             {
-                XFTabStyle *pCopyStyle = new XFTabStyle(*pTabStyle);
-                m_aTabs.AddStyle(pCopyStyle);
+                const XFTabStyle *pTabStyle = dynamic_cast<const XFTabStyle*>(pStyle);
+                if( pTabStyle )
+                {
+                    XFTabStyle *pCopyStyle = new XFTabStyle(*pTabStyle);
+                    m_aTabs.AddStyle(pCopyStyle);
+                }
             }
         }
     }
-
     return *this;
 }
 
