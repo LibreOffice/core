@@ -372,7 +372,7 @@ void
 TeleManager::unref()
 {
     MutexGuard aGuard( GetAnotherMutex());
-    if (--nAnotherRefCount == 0) {
+    if (nAnotherRefCount && --nAnotherRefCount == 0) {
         delete pSingleton;
         pSingleton = NULL;
     }
