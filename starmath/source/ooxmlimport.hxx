@@ -41,30 +41,30 @@ class SmOoxmlImport
 {
 public:
     SmOoxmlImport( oox::formulaimport::XmlStream& stream );
-    rtl::OUString ConvertToStarMath();
+    OUString ConvertToStarMath();
 private:
-    rtl::OUString handleStream();
-    rtl::OUString handleAcc();
-    rtl::OUString handleBar();
-    rtl::OUString handleBox();
-    rtl::OUString handleBorderBox();
-    rtl::OUString handleD();
-    rtl::OUString handleEqArr();
-    rtl::OUString handleF();
-    rtl::OUString handleFunc();
+    OUString handleStream();
+    OUString handleAcc();
+    OUString handleBar();
+    OUString handleBox();
+    OUString handleBorderBox();
+    OUString handleD();
+    OUString handleEqArr();
+    OUString handleF();
+    OUString handleFunc();
     enum LimLowUpp_t { LimLow, LimUpp };
-    rtl::OUString handleLimLowUpp( LimLowUpp_t limlowupp );
-    rtl::OUString handleGroupChr();
-    rtl::OUString handleM();
-    rtl::OUString handleNary();
-    rtl::OUString handleR();
-    rtl::OUString handleRad();
-    rtl::OUString handleSpre();
-    rtl::OUString handleSsub();
-    rtl::OUString handleSsubsup();
-    rtl::OUString handleSsup();
-    rtl::OUString readOMathArg();
-    rtl::OUString readOMathArgInElement( int token );
+    OUString handleLimLowUpp( LimLowUpp_t limlowupp );
+    OUString handleGroupChr();
+    OUString handleM();
+    OUString handleNary();
+    OUString handleR();
+    OUString handleRad();
+    OUString handleSpre();
+    OUString handleSsub();
+    OUString handleSsubsup();
+    OUString handleSsup();
+    OUString readOMathArg();
+    OUString readOMathArgInElement( int token );
     oox::formulaimport::XmlStream& stream;
 };
 

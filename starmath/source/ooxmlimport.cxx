@@ -35,8 +35,6 @@
 
 using namespace oox;
 using namespace oox::formulaimport;
-using rtl::OUString;
-using rtl::OUStringBuffer;
 
 /*
 The primary internal data structure for the formula is the text representation

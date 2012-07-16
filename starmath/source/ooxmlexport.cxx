@@ -203,7 +203,7 @@ void SmOoxmlExport::HandleText( const SmNode* pNode, int /*nLevel*/)
     }
     m_pSerializer->startElementNS( XML_m, XML_t, FSNS( XML_xml, XML_space ), "preserve", FSEND );
     SmTextNode* pTemp=(SmTextNode* )pNode;
-    SAL_INFO( "starmath.ooxml", "Text:" << rtl::OUStringToOString( pTemp->GetText(), RTL_TEXTENCODING_UTF8 ).getStr());
+    SAL_INFO( "starmath.ooxml", "Text:" << OUStringToOString( pTemp->GetText(), RTL_TEXTENCODING_UTF8 ).getStr());
     for(xub_StrLen i=0;i<pTemp->GetText().Len();i++)
     {
 #if 0
@@ -224,7 +224,7 @@ void SmOoxmlExport::HandleText( const SmNode* pNode, int /*nLevel*/)
         *pS << sal_uInt8(nFace+128); //typeface
 #endif
         sal_uInt16 nChar = pTemp->GetText().GetChar(i);
-        m_pSerializer->writeEscaped( rtl::OUString( SmTextNode::ConvertSymbolToUnicode(nChar)));
+        m_pSerializer->writeEscaped( OUString( SmTextNode::ConvertSymbolToUnicode(nChar)));
 
 #if 0
         //Mathtype can only have these sort of character
@@ -329,8 +329,8 @@ void SmOoxmlExport::HandleAttribute( const SmAttributNode* pNode, int nLevel )
         {
             m_pSerializer->startElementNS( XML_m, XML_acc, FSEND );
             m_pSerializer->startElementNS( XML_m, XML_accPr, FSEND );
-            rtl::OString value = rtl::OUStringToOString(
-                rtl::OUString( pNode->Attribute()->GetToken().cMathChar ), RTL_TEXTENCODING_UTF8 );
+            OString value = OUStringToOString(
+                OUString( pNode->Attribute()->GetToken().cMathChar ), RTL_TEXTENCODING_UTF8 );
             m_pSerializer->singleElementNS( XML_m, XML_chr, FSNS( XML_m, XML_val ), value.getStr(), FSEND );
             m_pSerializer->endElementNS( XML_m, XML_accPr );
             m_pSerializer->startElementNS( XML_m, XML_e, FSEND );
@@ -408,13 +408,13 @@ void SmOoxmlExport::HandleRoot( const SmRootNode* pNode, int nLevel )
     m_pSerializer->endElementNS( XML_m, XML_rad );
 }
 
-static rtl::OString mathSymbolToString( const SmNode* node )
+static OString mathSymbolToString( const SmNode* node )
 {
     assert( node->GetType() == NMATH );
     const SmTextNode* txtnode = static_cast< const SmTextNode* >( node );
     assert( txtnode->GetText().Len() == 1 );
     sal_Unicode chr = SmTextNode::ConvertSymbolToUnicode( txtnode->GetText().GetChar( 0 ));
-    return rtl::OUStringToOString( rtl::OUString( chr ), RTL_TEXTENCODING_UTF8 );
+    return OUStringToOString( OUString( chr ), RTL_TEXTENCODING_UTF8 );
 }
 
 void SmOoxmlExport::HandleOperator( const SmOperNode* pNode, int nLevel )
