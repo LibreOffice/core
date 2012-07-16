@@ -441,7 +441,7 @@ struct OBroadcastHelperVar
 {
     /** The shared mutex. */
     ::osl::Mutex &                      rMutex;
-    /** ListenerContainer class is thread save. */
+    /** ListenerContainer class is thread safe. */
     container   aLC;
     /** Dispose call ready. */
     sal_Bool                            bDisposed;

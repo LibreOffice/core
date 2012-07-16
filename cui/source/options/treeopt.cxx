@@ -325,7 +325,6 @@ SfxTabPage* CreateGeneralTabPage( sal_uInt16 nId, Window* pParent, const SfxItem
         case SID_SB_CONNECTIONPOOLING:              fnCreate = &::offapp::ConnectionPoolOptionsPage::Create; break;
         case SID_SB_DBREGISTEROPTIONS:              fnCreate = &::svx::DbRegistrationOptionsPage::Create; break;
         case RID_SVXPAGE_ACCESSIBILITYCONFIG:       fnCreate = &SvxAccessibilityOptionsTabPage::Create; break;
-        case RID_SVXPAGE_SSO:                       fnCreate = GetSSOCreator(); break;
         case RID_SVXPAGE_OPTIONS_CTL:               fnCreate = &SvxCTLOptionsPage::Create ; break;
         case RID_SVXPAGE_INET_MOZPLUGIN:            fnCreate = &MozPluginTabPage::Create; break;
         case RID_SVXPAGE_OPTIONS_JAVA:              fnCreate = &SvxJavaOptionsPage::Create ; break;
@@ -360,7 +359,6 @@ static OptionsMapping_Impl const OptionsMap_Impl[] =
     { "ProductName",        "Appearance",           RID_SVXPAGE_COLORCONFIG },
     { "ProductName",        "Accessibility",        RID_SVXPAGE_ACCESSIBILITYCONFIG },
     { "ProductName",        "Java",                 RID_SVXPAGE_OPTIONS_JAVA },
-    { "ProductName",        "NetworkIdentity",      RID_SVXPAGE_SSO },
     { "ProductName",        "OnlineUpdate",         RID_SVXPAGE_ONLINEUPDATE },
     { "LanguageSettings",   NULL,                   SID_LANGUAGE_OPTIONS },
     { "LanguageSettings",   "Languages",            OFA_TP_LANGUAGES  },
@@ -1179,68 +1177,6 @@ OfaPageResource::OfaPageResource() :
     FreeResource();
 }
 
-sal_Bool EnableSSO( void )
-{
-    // SSO must be enabled if the configuration manager bootstrap settings
-    // are configured as follows ...
-    //  CFG_Offline=false
-    //  CFG_ServerType=uno ( or unspecified )
-    //  CFG_BackendService=
-    //   com.sun.star.comp.configuration.backend.LdapSingleBackend
-
-    rtl::OUString theIniFile;
-    osl_getExecutableFile( &theIniFile.pData );
-    theIniFile = theIniFile.copy( 0, theIniFile.lastIndexOf( '/' ) + 1 ) +
-                 rtl::OUString(SAL_CONFIGFILE( "configmgr" ) );
-    ::rtl::Bootstrap theBootstrap( theIniFile );
-
-    rtl::OUString theOfflineValue;
-    rtl::OUString theDefaultOfflineValue ("false" );
-    theBootstrap.getFrom( rtl::OUString("CFG_Offline" ),
-                          theOfflineValue,
-                          theDefaultOfflineValue );
-
-    rtl::OUString theServerTypeValue;
-    theBootstrap.getFrom( rtl::OUString("CFG_ServerType" ),
-                          theServerTypeValue );
-
-    rtl::OUString theBackendServiceTypeValue;
-    theBootstrap.getFrom( rtl::OUString("CFG_BackendService" ),
-                          theBackendServiceTypeValue );
-
-    sal_Bool bSSOEnabled =
-        ( theOfflineValue == theDefaultOfflineValue                     &&
-          ( theServerTypeValue.isEmpty() ||
-          theServerTypeValue == rtl::OUString("uno" ) ) &&
-          theBackendServiceTypeValue ==
-            rtl::OUString( "com.sun.star.comp.configuration.backend.LdapSingleBackend" ) );
-    if ( bSSOEnabled && GetSSOCreator() == 0 )
-    {
-        bSSOEnabled = sal_False;
-    }
-    return bSSOEnabled;
-}
-
-extern "C" { static void SAL_CALL thisModule() {} }
-
-CreateTabPage GetSSOCreator( void )
-{
-    static CreateTabPage theSymbol = 0;
-    if ( theSymbol == 0 )
-    {
-        osl::Module aModule;
-        rtl::OUString theModuleName( SVLIBRARY( "ssoopt"  ) );
-        if( aModule.loadRelative(
-                &thisModule, theModuleName, SAL_LOADMODULE_DEFAULT ) )
-        {
-            rtl::OUString theSymbolName( "CreateSSOTabPage"  );
-            theSymbol = reinterpret_cast<CreateTabPage>(aModule.getFunctionSymbol( theSymbolName ));
-        }
-    }
-
-    return theSymbol;
-}
-
 SfxItemSet* OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId )
 {
     Reference< XPropertySet >  xProp( SvxGetLinguPropertySet() );
@@ -1594,7 +1530,6 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
     sal_uInt16 i, nPageId;
 
     // %PRODUCTNAME options
-    sal_Bool isSSOEnabled = EnableSSO();
     if ( !lcl_isOptionHidden( SID_GENERAL_OPTIONS, aOptionsDlgOpt ) )
     {
         ResStringArray& rGeneralArray = aDlgResource.GetGeneralArray();
@@ -1628,10 +1563,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
                     continue;
                 }
             }
-            if ( nPageId != RID_SVXPAGE_SSO || isSSOEnabled )
-            {
-                AddTabPage( nPageId, sNewTitle, nGroup );
-            }
+            AddTabPage( nPageId, sNewTitle, nGroup );
         }
     }
 

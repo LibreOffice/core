@@ -107,7 +107,6 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
             < "Appearance" ;        RID_SVXPAGE_COLORCONFIG        ; > ;
             < "Accessibility" ; RID_SVXPAGE_ACCESSIBILITYCONFIG ; > ;
             < "Java" ; RID_SVXPAGE_OPTIONS_JAVA ; > ;
-            < "Network Identity" ; RID_SVXPAGE_SSO ; > ;
             < "Online Update" ; RID_SVXPAGE_ONLINEUPDATE ; > ;
         };
     };
