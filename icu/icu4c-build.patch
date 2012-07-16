@@ -15,7 +15,7 @@
  
          ".long ","",HEX_0X
      },
-+    {"gcc-android",
++    {"gcc-android-arm",
 +	"\t.arch armv5te\n"
 +	"\t.fpu softvfp\n"
 +	"\t.eabi_attribute 20, 1\n"

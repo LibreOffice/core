@@ -21,9 +21,9 @@ all:
 	@echo "Therefore the version provided here does not need to be built in addition."
 .ENDIF
 
-.IF "$(OS)"=="WNT"
+.IF "$(OS)"=="WNT" || "$(OS)"=="ANDROID" || "$(OS)"=="IOS"
 all:
-	@echo "Openldap is not needed on Windows."
+	@echo "Openldap is not needed on Windows, Android or iOS."
 .ENDIF
 
 # --- Files --------------------------------------------------------

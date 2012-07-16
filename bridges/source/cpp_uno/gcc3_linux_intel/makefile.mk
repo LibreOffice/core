@@ -42,7 +42,8 @@ ENABLE_EXCEPTIONS=TRUE
     "$(COM)$(OS)$(CPU)$(COMNAME)" == "GCCOPENBSDIgcc3" || \
     "$(COM)$(OS)$(CPU)$(COMNAME)" == "GCCFREEBSDIgcc3" || \
     "$(COM)$(OS)$(CPU)$(COMNAME)" == "GCCNETBSDIgcc3" || \
-    "$(COM)$(OS)$(CPU)$(COMNAME)" == "GCCDRAGONFLYIgcc3"
+    "$(COM)$(OS)$(CPU)$(COMNAME)" == "GCCDRAGONFLYIgcc3" || \
+    "$(COM)$(OS)$(CPU)$(COMNAME)" == "GCCANDROIDIgcc3" || \
 
 # In case someone enabled the non-standard -fomit-frame-pointer which does not
 # work with the .cxx sources in this directory:

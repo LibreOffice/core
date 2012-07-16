@@ -95,6 +95,10 @@
 .INCLUDE : unxandr.mk
 .ENDIF
 
+.IF "$(COM)$(OS)$(CPU)" == "GCCANDROIDI"
+.INCLUDE : unxandr.mk
+.ENDIF
+
 .IF "$(COM)$(OS)$(CPU)" == "GCCLINUXA"
 .INCLUDE : unxlnga.mk
 .ENDIF

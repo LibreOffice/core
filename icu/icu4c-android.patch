@@ -24,8 +24,8 @@
  # Check to see if genccode can generate simple assembly.
  GENCCODE_ASSEMBLY=
  case "${host}" in
-+*-*-linux-androideabi)
-+    GENCCODE_ASSEMBLY="-a gcc-android"
++arm-*-linux-androideabi)
++    GENCCODE_ASSEMBLY="-a gcc-android-arm"
 +    ;;
  *-linux*|*-kfreebsd*-gnu*|i*86-*-*bsd*|i*86-pc-gnu)
      if test "$GCC" = yes; then
