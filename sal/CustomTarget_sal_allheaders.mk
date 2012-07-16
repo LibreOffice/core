@@ -33,20 +33,20 @@ $(call gb_CustomTarget_get_target,sal/allheaders) : \
 	$(sal_allheaders_DIR)/sal_allheaders.hxx
 
 # dependency on Package_inc.mk should ensure this is updated whenever a new public header is added
-$(sal_allheaders_DIR)/sal_allheaders.hxx :| $(sal_allheaders_DIR)/.dir $(SRCDIR)/sal/Package_inc.mk
+$(sal_allheaders_DIR)/sal_allheaders.hxx : CustomTarget_sal_allheaders.mk \
+            | $(sal_allheaders_DIR)/.dir $(SRCDIR)/sal/Package_inc.mk
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,1)
-	echo '// Generated list of all sal/ includes' >  $@
-	echo '#ifdef WNT' >>  $@
-	echo '#include <windows.h>' >>  $@
-	echo '#endif' >>  $@
-	echo -e  \
-	    $(foreach file, $(wildcard $(SRCDIR)/sal/inc/*.h) $(wildcard $(SRCDIR)/sal/inc/*.hxx) \
-	                    $(wildcard $(SRCDIR)/sal/inc/*/*.h) $(wildcard $(SRCDIR)/sal/inc/*/*.hxx) \
-	                    $(wildcard $(SRCDIR)/sal/inc/*/*/*.h) $(wildcard $(SRCDIR)/sal/inc/*/*/*.hxx) \
-	                    $(wildcard $(SRCDIR)/sal/inc/*/*/*/*.h) $(wildcard $(SRCDIR)/sal/inc/*/*/*/*.hxx), \
-	        $(if $(findstring /win32/, $(file)), '#ifdef WNT\n') \
-	        '#include <$(subst $(SRCDIR)/sal/inc/,,$(file))>\n' \
-	        $(if $(findstring /win32/, $(file)), '#endif // WNT\n') \
-	    ) >> $@
+	printf '// Generated list of all sal/ includes\n' >  $@
+	printf '#ifdef WNT\n' >>  $@
+	printf '#include <windows.h>\n' >>  $@
+	printf '#endif\n' >>  $@
+	$(foreach file, $(wildcard $(SRCDIR)/sal/inc/*.h) $(wildcard $(SRCDIR)/sal/inc/*.hxx) \
+	                $(wildcard $(SRCDIR)/sal/inc/*/*.h) $(wildcard $(SRCDIR)/sal/inc/*/*.hxx) \
+	                $(wildcard $(SRCDIR)/sal/inc/*/*/*.h) $(wildcard $(SRCDIR)/sal/inc/*/*/*.hxx) \
+	                $(wildcard $(SRCDIR)/sal/inc/*/*/*/*.h) $(wildcard $(SRCDIR)/sal/inc/*/*/*/*.hxx), \
+	    $(if $(findstring /win32/, $(file)), printf '#ifdef WNT\n' >> $@ &&) \
+	    printf '#include <%s>\n' $(subst $(SRCDIR)/sal/inc/,,$(file)) >> $@ && \
+	    $(if $(findstring /win32/, $(file)), printf '#endif // WNT\n' >> $@ &&) \
+	    ) :
 
 # vim: set noet sw=4 ts=4:
