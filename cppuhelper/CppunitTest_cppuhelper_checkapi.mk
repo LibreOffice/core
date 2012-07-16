@@ -25,30 +25,30 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_CppunitTest_CppunitTest,cppu_checkapi))
+$(eval $(call gb_CppunitTest_CppunitTest,cppuhelper_checkapi))
 
-$(eval $(call gb_CppunitTest_add_exception_objects,cppu_checkapi,\
-    cppu/qa/checkapi/strings \
+$(eval $(call gb_CppunitTest_add_exception_objects,cppuhelper_checkapi,\
+    cppuhelper/qa/checkapi/strings \
 ))
 
-$(eval $(call gb_CppunitTest_set_include,cppu_checkapi,\
+$(eval $(call gb_CppunitTest_set_include,cppuhelper_checkapi,\
 	$$(INCLUDE) \
-	-I$(SRCDIR)/cppu/inc \
+	-I$(SRCDIR)/cppuhelper/inc \
 ))
 
-$(eval $(call gb_CppunitTest_use_internal_comprehensive_api,cppu_checkapi, \
+$(eval $(call gb_CppunitTest_use_internal_comprehensive_api,cppuhelper_checkapi, \
 	cppu \
 	udkapi \
 ))
 
 # strings.cxx includes generated strings.hxx
-$(call gb_CxxObject_get_target,cppu/qa/checkapi/strings) : \
-	INCLUDE += -I$(call gb_CustomTarget_get_workdir,cppu/allheaders)
-$(call gb_CxxObject_get_target,cppu/qa/checkapi/strings) :| \
-	$(call gb_CustomTarget_get_workdir,cppu/allheaders)/cppu_allheaders.hxx
+$(call gb_CxxObject_get_target,cppuhelper/qa/checkapi/strings) : \
+	INCLUDE += -I$(call gb_CustomTarget_get_workdir,cppuhelper/allheaders)
+$(call gb_CxxObject_get_target,cppuhelper/qa/checkapi/strings) :| \
+	$(call gb_CustomTarget_get_workdir,cppuhelper/allheaders)/cppuhelper_allheaders.hxx
 
-$(eval $(call gb_CppunitTest_use_libraries,cppu_checkapi,\
-    cppu \
+$(eval $(call gb_CppunitTest_use_libraries,cppuhelper_checkapi,\
+    cppuhelper \
     $(gb_STDLIBS) \
 ))
 

@@ -25,24 +25,24 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_CustomTarget_CustomTarget,cppu/allheaders))
+$(eval $(call gb_CustomTarget_CustomTarget,cppuhelper/allheaders))
 
-cppu_allheaders_DIR := $(call gb_CustomTarget_get_workdir,cppu/allheaders)
+cppuhelper_allheaders_DIR := $(call gb_CustomTarget_get_workdir,cppuhelper/allheaders)
 
-$(call gb_CustomTarget_get_target,cppu/allheaders) : \
-	$(cppu_allheaders_DIR)/cppu_allheaders.hxx
+$(call gb_CustomTarget_get_target,cppuhelper/allheaders) : \
+	$(cppuhelper_allheaders_DIR)/cppuhelper_allheaders.hxx
 
 # dependency on Package_inc.mk should ensure this is updated whenever a new public header is added
-$(cppu_allheaders_DIR)/cppu_allheaders.hxx :| $(cppu_allheaders_DIR)/.dir $(SRCDIR)/cppu/Package_inc.mk
+$(cppuhelper_allheaders_DIR)/cppuhelper_allheaders.hxx :| $(cppuhelper_allheaders_DIR)/.dir $(SRCDIR)/cppuhelper/Package_inc.mk
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,1)
-	echo '// Generated list of all cppu/ includes' >  $@
+	echo '// Generated list of all cppuhelper/ includes' >  $@
 	echo -e  \
-	    $(foreach file, $(wildcard $(SRCDIR)/cppu/inc/*.h) $(wildcard $(SRCDIR)/cppu/inc/*.hxx) \
-	                    $(wildcard $(SRCDIR)/cppu/inc/*/*.h) $(wildcard $(SRCDIR)/cppu/inc/*/*.hxx) \
-	                    $(wildcard $(SRCDIR)/cppu/inc/*/*/*.h) $(wildcard $(SRCDIR)/cppu/inc/*/*/*.hxx) \
-	                    $(wildcard $(SRCDIR)/cppu/inc/*/*/*/*.h) $(wildcard $(SRCDIR)/cppu/inc/*/*/*/*.hxx), \
+	    $(foreach file, $(wildcard $(SRCDIR)/cppuhelper/inc/*.h) $(wildcard $(SRCDIR)/cppuhelper/inc/*.hxx) \
+	                    $(wildcard $(SRCDIR)/cppuhelper/inc/*/*.h) $(wildcard $(SRCDIR)/cppuhelper/inc/*/*.hxx) \
+	                    $(wildcard $(SRCDIR)/cppuhelper/inc/*/*/*.h) $(wildcard $(SRCDIR)/cppuhelper/inc/*/*/*.hxx) \
+	                    $(wildcard $(SRCDIR)/cppuhelper/inc/*/*/*/*.h) $(wildcard $(SRCDIR)/cppuhelper/inc/*/*/*/*.hxx), \
 	        $(if $(findstring /win32/, $(file)), '#ifdef _WIN32\n') \
-	        '#include <$(subst $(SRCDIR)/cppu/inc/,,$(file))>\n' \
+	        '#include <$(subst $(SRCDIR)/cppuhelper/inc/,,$(file))>\n' \
 	        $(if $(findstring /win32/, $(file)), '#endif // _WIN32\n') \
 	    ) >> $@
 
