@@ -348,7 +348,7 @@ IMPL_LINK_NOARG(ListBox, ImplPopupModeEndHdl)
             ImplDelData aCheckDelete;
             ImplAddDel( &aCheckDelete );
             Select();
-            if ( aCheckDelete.IsDelete() )
+            if ( aCheckDelete.IsDead() )
                 return 0;
             ImplRemoveDel( &aCheckDelete );
 

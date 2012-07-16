@@ -832,7 +832,7 @@ sal_Bool Window::EndSaveFocus( sal_uIntPtr nSaveId, sal_Bool bRestore )
     {
         sal_Bool                bOK = sal_True;
         ImplFocusDelData*   pDelData = (ImplFocusDelData*)(void*)nSaveId;
-        if ( !pDelData->IsDelete() )
+        if ( !pDelData->IsDead() )
         {
             pDelData->mpFocusWin->ImplRemoveDel( pDelData );
             if ( bRestore )

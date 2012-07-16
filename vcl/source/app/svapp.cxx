@@ -1024,7 +1024,7 @@ void Application::RemoveUserEvent( sal_uLong nUserEvent )
 
         if ( pSVEvent->mpWindow )
         {
-            if( ! pSVEvent->maDelData.IsDelete() )
+            if( ! pSVEvent->maDelData.IsDead() )
                 pSVEvent->mpWindow->ImplRemoveDel( &(pSVEvent->maDelData) );
             pSVEvent->mpWindow = NULL;
         }

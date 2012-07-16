@@ -431,7 +431,6 @@ struct ImplDelData
         DBG_ASSERT( mbDel == sal_False, "object deleted while in use !" );
         return (mbDel!=sal_False);
     }
-    sal_Bool /*deprecated */IsDelete() const { return (sal_Bool)IsDead(); }
 
 private:
     void            AttachToWindow( const Window* );

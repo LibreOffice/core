@@ -451,7 +451,7 @@ sal_Int32 DNDEventDispatcher::fireDropEvent( Window *pWindow,
                 xContext, nDropAction, relLoc.X(), relLoc.Y(), nSourceActions, xTransferable );
         }
 
-        if ( !aDelData.IsDelete() )
+        if ( !aDelData.IsDead() )
         {
             pWindow->ImplRemoveDel( &aDelData );
             // release UI lock

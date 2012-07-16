@@ -4010,7 +4010,7 @@ void Window::ImplGrabFocus( sal_uInt16 nFlags )
         }
 
         // call Get- and LoseFocus
-        if ( pOldFocusWindow && ! aOldFocusDel.IsDelete() )
+        if ( pOldFocusWindow && ! aOldFocusDel.IsDead() )
         {
             if ( pOldFocusWindow->IsTracking() &&
                  (pSVData->maWinData.mnTrackFlags & STARTTRACK_FOCUSCANCEL) )
@@ -4040,15 +4040,15 @@ void Window::ImplGrabFocus( sal_uInt16 nFlags )
                 // notify the new focus window so it can restore the inner focus
                 // eg, toolboxes can select their recent active item
                 if( pOldFocusWindow &&
-                    ! aOldFocusDel.IsDelete() &&
+                    ! aOldFocusDel.IsDead() &&
                     ( pOldFocusWindow->GetDialogControlFlags() & WINDOW_DLGCTRL_FLOATWIN_POPUPMODEEND_CANCEL ) )
                     mpWindowImpl->mnGetFocusFlags |= GETFOCUS_FLOATWIN_POPUPMODEEND_CANCEL;
                 NotifyEvent aNEvt( EVENT_GETFOCUS, this );
-                if ( !ImplCallPreNotify( aNEvt ) && !aDogTag.IsDelete() )
+                if ( !ImplCallPreNotify( aNEvt ) && !aDogTag.IsDead() )
                     GetFocus();
-                if( !aDogTag.IsDelete() )
-                    ImplCallActivateListeners( (pOldFocusWindow && ! aOldFocusDel.IsDelete()) ? pOldFocusWindow : NULL );
-                if( !aDogTag.IsDelete() )
+                if( !aDogTag.IsDead() )
+                    ImplCallActivateListeners( (pOldFocusWindow && ! aOldFocusDel.IsDead()) ? pOldFocusWindow : NULL );
+                if( !aDogTag.IsDead() )
                 {
                     mpWindowImpl->mnGetFocusFlags = 0;
                     mpWindowImpl->mbInFocusHdl = sal_False;
@@ -4760,7 +4760,7 @@ void Window::GetFocus()
     {
         ImplDelData aDogtag( this );
         mpWindowImpl->mpLastFocusWindow->GrabFocus();
-        if( aDogtag.IsDelete() )
+        if( aDogtag.IsDead() )
             return;
     }
 
@@ -4967,7 +4967,7 @@ void Window::ImplNotifyKeyMouseCommandEventListeners( NotifyEvent& rNEvt )
             ImplCallEventListeners( VCLEVENT_WINDOW_KEYUP, (void*)rNEvt.GetKeyEvent() );
     }
 
-    if ( aDelData.IsDelete() )
+    if ( aDelData.IsDead() )
         return;
     ImplRemoveDel( &aDelData );
 
@@ -5168,12 +5168,12 @@ void Window::CallEventListeners( sal_uLong nEvent, void* pData )
 
     ImplGetSVData()->mpApp->ImplCallEventListeners( &aEvent );
 
-    if ( aDelData.IsDelete() )
+    if ( aDelData.IsDead() )
         return;
 
     mpWindowImpl->maEventListeners.Call( &aEvent );
 
-    if ( aDelData.IsDelete() )
+    if ( aDelData.IsDead() )
         return;
 
     ImplRemoveDel( &aDelData );
@@ -5185,7 +5185,7 @@ void Window::CallEventListeners( sal_uLong nEvent, void* pData )
 
         pWindow->mpWindowImpl->maChildEventListeners.Call( &aEvent );
 
-        if ( aDelData.IsDelete() )
+        if ( aDelData.IsDead() )
             return;
 
         pWindow->ImplRemoveDel( &aDelData );
@@ -6174,7 +6174,7 @@ void Window::Show( sal_Bool bVisible, sal_uInt16 nFlags )
     if ( !bVisible )
     {
         ImplHideAllOverlaps();
-        if( aDogTag.IsDelete() )
+        if( aDogTag.IsDead() )
             return;
 
         if ( mpWindowImpl->mpBorderWindow )
@@ -6211,7 +6211,7 @@ void Window::Show( sal_Bool bVisible, sal_uInt16 nFlags )
                 aInvRegion = mpWindowImpl->maWinClipRegion;
             }
 
-            if( aDogTag.IsDelete() )
+            if( aDogTag.IsDead() )
                 return;
 
             bRealVisibilityChanged = mpWindowImpl->mbReallyVisible;
@@ -6342,7 +6342,7 @@ void Window::Show( sal_Bool bVisible, sal_uInt16 nFlags )
             mpWindowImpl->mbPaintFrame = sal_True;
             sal_Bool bNoActivate = (nFlags & (SHOW_NOACTIVATE|SHOW_NOFOCUSCHANGE)) ? sal_True : sal_False;
             mpWindowImpl->mpFrame->Show( sal_True, bNoActivate );
-            if( aDogTag.IsDelete() )
+            if( aDogTag.IsDead() )
                 return;
 
             // Query the correct size of the window, if we are waiting for
@@ -6356,7 +6356,7 @@ void Window::Show( sal_Bool bVisible, sal_uInt16 nFlags )
             }
         }
 
-        if( aDogTag.IsDelete() )
+        if( aDogTag.IsDead() )
             return;
 
 #if OSL_DEBUG_LEVEL > 0
@@ -6369,7 +6369,7 @@ void Window::Show( sal_Bool bVisible, sal_uInt16 nFlags )
         ImplShowAllOverlaps();
     }
 
-    if( aDogTag.IsDelete() )
+    if( aDogTag.IsDead() )
         return;
     // invalidate all saved backgrounds
     if ( mpWindowImpl->mpFrameData->mpFirstBackWin )
@@ -6382,7 +6382,7 @@ void Window::Show( sal_Bool bVisible, sal_uInt16 nFlags )
     // now only notify with a NULL data pointer, for all other clients except the access bridge.
     if ( !bRealVisibilityChanged )
         ImplCallEventListeners( mpWindowImpl->mbVisible ? VCLEVENT_WINDOW_SHOW : VCLEVENT_WINDOW_HIDE, NULL );
-    if( aDogTag.IsDelete() )
+    if( aDogTag.IsDead() )
         return;
 
     // #107575#, if a floating windows is shown that grabs the focus, we have to notify the toolkit about it
@@ -6420,7 +6420,7 @@ Size Window::GetSizePixel() const
         ImplDelData aDogtag( this );
         mpWindowImpl->mpFrameData->maResizeTimer.Stop();
         mpWindowImpl->mpFrameData->maResizeTimer.GetTimeoutHdl().Call( NULL );
-        if( aDogtag.IsDelete() )
+        if( aDogtag.IsDead() )
             return Size(0,0);
     }
 
@@ -8109,7 +8109,7 @@ void Window::ImplCallDeactivateListeners( Window *pNew )
     {
         ImplDelData aDogtag( this );
         ImplCallEventListeners( VCLEVENT_WINDOW_DEACTIVATE );
-        if( aDogtag.IsDelete() )
+        if( aDogtag.IsDead() )
             return;
 
         // #100759#, avoid walking the wrong frame's hierarchy
@@ -8128,7 +8128,7 @@ void Window::ImplCallActivateListeners( Window *pOld )
     {
         ImplDelData aDogtag( this );
         ImplCallEventListeners( VCLEVENT_WINDOW_ACTIVATE, pOld );
-        if( aDogtag.IsDelete() )
+        if( aDogtag.IsDead() )
             return;
 
         // #106298# revoke the change for 105369, because this change

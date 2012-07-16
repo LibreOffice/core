@@ -519,7 +519,7 @@ sal_Bool Dialog::Close()
         return sal_False;
     }
     //liuchen 2009-7-22
-    if ( aDelData.IsDelete() )
+    if ( aDelData.IsDead() )
         return sal_False;
     ImplRemoveDel( &aDelData );
 
@@ -543,7 +543,7 @@ sal_Bool Dialog::Close()
             else
                 bRet = sal_False;
         }
-        if ( aDelData.IsDelete() )
+        if ( aDelData.IsDead() )
             return sal_True;
         ImplRemoveDel( &aDelData );
         return bRet;
@@ -677,7 +677,7 @@ short Dialog::Execute()
 
     // Yield util EndDialog is called or dialog gets destroyed
     // (the latter should not happen, but better safe than sorry
-    while ( !aDelData.IsDelete() && mbInExecute )
+    while ( !aDelData.IsDead() && mbInExecute )
         Application::Yield();
 
     ImplEndExecuteModal();
@@ -685,13 +685,13 @@ short Dialog::Execute()
 #ifdef DBG_UTIL
     if( pDialogParent  )
     {
-        if( ! aParentDelData.IsDelete() )
+        if( ! aParentDelData.IsDead() )
             pDialogParent->ImplRemoveDel( &aParentDelData );
         else
             OSL_FAIL( "Dialog::Execute() - Parent of dialog destroyed in Execute()" );
     }
 #endif
-    if ( !aDelData.IsDelete() )
+    if ( !aDelData.IsDead() )
         ImplRemoveDel( &aDelData );
 #ifdef DBG_UTIL
     else

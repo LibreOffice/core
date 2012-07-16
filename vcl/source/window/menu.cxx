@@ -3624,7 +3624,7 @@ sal_uInt16 PopupMenu::ImplExecute( Window* pW, const Rectangle& rRect, sal_uLong
     Activate();
     bInCallback = sal_False;
 
-    if ( aDelData.IsDelete() )
+    if ( aDelData.IsDead() )
         return 0;   // Error
 
     pW->ImplRemoveDel( &aDelData );
@@ -3766,7 +3766,7 @@ sal_uInt16 PopupMenu::ImplExecute( Window* pW, const Rectangle& rRect, sal_uLong
         if( ! aModalWinDel.IsDead() )
             pW->ImplDecModalCount();
 
-        if ( !aDelData.IsDelete() )
+        if ( !aDelData.IsDead() )
             pWin->ImplRemoveDel( &aDelData );
         else
             return 0;
@@ -4980,7 +4980,7 @@ void MenuFloatingWindow::KeyInput( const KeyEvent& rKEvent )
         }
     }
     // #105474# check if menu window was not destroyed
-    if ( !aDelData.IsDelete() )
+    if ( !aDelData.IsDead() )
     {
         ImplRemoveDel( &aDelData );
         bKeyInput = sal_False;
