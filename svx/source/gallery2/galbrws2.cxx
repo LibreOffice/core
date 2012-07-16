@@ -460,7 +460,7 @@ sal_Int8 GalleryBrowser2::AcceptDrop( DropTargetHelper& rTarget, const AcceptDro
 {
     sal_Int8 nRet = DND_ACTION_NONE;
 
-    if( mpCurTheme && !mpCurTheme->IsReadOnly() && !mpCurTheme ->IsImported() )
+    if( mpCurTheme && !mpCurTheme->IsReadOnly() )
     {
         if( !mpCurTheme->IsDragging() )
         {
@@ -1092,18 +1092,9 @@ void GalleryBrowser2::ImplExecute( sal_uInt16 nId )
 
 String GalleryBrowser2::GetItemText( const GalleryTheme& rTheme, const SgaObject& rObj, sal_uIntPtr nItemTextFlags )
 {
-    INetURLObject   aURL;
     String          aRet;
 
-    if( rTheme.IsImported() )
-    {
-        aURL = rTheme.GetParent()->GetImportURL( rTheme.GetName() );
-
-        aURL.removeSegment();
-        aURL.Append( rObj.GetURL().GetName() );
-    }
-    else
-        aURL = rObj.GetURL();
+    INetURLObject aURL(rObj.GetURL());
 
     if( nItemTextFlags & GALLERY_ITEM_THEMENAME )
     {

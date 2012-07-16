@@ -54,7 +54,6 @@ private:
     sal_uInt32              nFileNumber;
     sal_uInt32              nId;
     sal_Bool                bReadOnly;
-    sal_Bool                bImported;
     sal_Bool                bModified;
     sal_Bool                bThemeNameFromResource;
 
@@ -64,7 +63,7 @@ private:
 public:
 
                             GalleryThemeEntry( const INetURLObject& rBaseURL, const String& rName,
-                                               sal_uInt32 nFileNumber, sal_Bool bReadOnly, sal_Bool bImported,
+                                               sal_uInt32 nFileNumber, sal_Bool bReadOnly,
                                                sal_Bool bNewFile, sal_uInt32 nId, sal_Bool bThemeNameFromResource );
                             ~GalleryThemeEntry() {};
 
@@ -75,14 +74,13 @@ public:
     const INetURLObject&    GetSdgURL() const { return aSdgURL; }
     const INetURLObject&    GetSdvURL() const { return aSdvURL; }
 
-    sal_Bool                IsImported() const { return bImported; }
     sal_Bool                IsReadOnly() const { return bReadOnly; }
     sal_Bool                IsDefault() const;
 
     sal_Bool                IsHidden() const { return aName.matchAsciiL(RTL_CONSTASCII_STRINGPARAM("private://gallery/hidden/")); }
 
     sal_Bool                IsModified() const { return bModified; }
-    void                    SetModified( sal_Bool bSet ) { bModified = ( bSet && !IsImported() && !IsReadOnly() ); }
+    void                    SetModified( sal_Bool bSet ) { bModified = ( bSet && !IsReadOnly() ); }
 
     void                    SetName( const rtl::OUString& rNewName );
     sal_Bool                IsNameFromResource() const { return bThemeNameFromResource; }
@@ -102,7 +100,6 @@ struct GalleryImportThemeEntry
     rtl::OUString aThemeName;
     rtl::OUString aUIName;
     INetURLObject aURL;
-    rtl::OUString aImportName;
 };
 
 typedef ::std::vector< GalleryImportThemeEntry* > GalleryImportThemeList;
@@ -141,8 +138,6 @@ private:
 
     void                        ImplLoad( const rtl::OUString& rMultiPath );
     void                        ImplLoadSubDirs( const INetURLObject& rBaseURL, sal_Bool& rbIsReadOnly );
-    void                        ImplLoadImports();
-    void                        ImplWriteImportList();
 
     SVX_DLLPUBLIC GalleryThemeEntry*            ImplGetThemeEntry( const rtl::OUString& rThemeName );
     GalleryThemeEntry*          ImplGetThemeEntry( sal_uIntPtr nThemeId );

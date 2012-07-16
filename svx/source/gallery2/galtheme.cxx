@@ -79,9 +79,6 @@ GalleryTheme::GalleryTheme( Gallery* pGallery, GalleryThemeEntry* pThemeEntry ) 
         bDragging             ( sal_False )
 {
     ImplCreateSvDrawStorage();
-
-    if( pThm->IsImported() )
-        aImportName = pThm->GetThemeName();
 }
 
 // ------------------------------------------------------------------------
@@ -104,15 +101,10 @@ GalleryTheme::~GalleryTheme()
 
 void GalleryTheme::ImplCreateSvDrawStorage()
 {
-    if( !pThm->IsImported() )
-    {
-        aSvDrawStorageRef = new SvStorage( sal_False, GetSdvURL().GetMainURL( INetURLObject::NO_DECODE ), pThm->IsReadOnly() ? STREAM_READ : STREAM_STD_READWRITE );
-        // #i50423# ReadOnly may not been set though the file can't be written (because of security reasons)
-        if ( ( aSvDrawStorageRef->GetError() != ERRCODE_NONE ) && !pThm->IsReadOnly() )
-            aSvDrawStorageRef = new SvStorage( sal_False, GetSdvURL().GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ );
-    }
-    else
-        aSvDrawStorageRef.Clear();
+    aSvDrawStorageRef = new SvStorage( sal_False, GetSdvURL().GetMainURL( INetURLObject::NO_DECODE ), pThm->IsReadOnly() ? STREAM_READ : STREAM_STD_READWRITE );
+    // #i50423# ReadOnly may not been set though the file can't be written (because of security reasons)
+    if ( ( aSvDrawStorageRef->GetError() != ERRCODE_NONE ) && !pThm->IsReadOnly() )
+        aSvDrawStorageRef = new SvStorage( sal_False, GetSdvURL().GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ );
 }
 
 // ------------------------------------------------------------------------
@@ -256,19 +248,7 @@ INetURLObject GalleryTheme::ImplGetURL( const GalleryObject* pObject ) const
     INetURLObject aURL;
 
     if( pObject )
-    {
-        if( IsImported() )
-        {
-            INetURLObject aPathURL( GetParent()->GetImportURL( GetName() ) );
-
-            aPathURL.removeSegment();
-            aPathURL.removeFinalSlash();
-            aPathURL.Append( pObject->aURL.GetName() );
-            aURL = aPathURL;
-        }
-        else
-            aURL = pObject->aURL;
-    }
+        aURL = pObject->aURL;
 
     return aURL;
 }
@@ -536,7 +516,7 @@ bool GalleryTheme::ChangeObjectPos( size_t nOldPos, size_t nNewPos )
 
 void GalleryTheme::Actualize( const Link& rActualizeLink, GalleryProgress* pProgress )
 {
-    if( !IsReadOnly() && !IsImported() )
+    if( !IsReadOnly() )
     {
         Graphic         aGraphic;
         String          aFormat;
@@ -778,7 +758,7 @@ GalleryThemeEntry* GalleryTheme::CreateThemeEntry( const INetURLObject& rURL, sa
                 aPathURL.removeFinalSlash();
                 pRet = new GalleryThemeEntry( aPathURL, aThemeName,
                                               String(rURL.GetBase()).Copy( 2, 6 ).ToInt32(),
-                                              bReadOnly, sal_False, sal_False, nThemeId,
+                                              bReadOnly, sal_False, nThemeId,
                                               bThemeNameFromResource );
             }
 
@@ -1432,7 +1412,6 @@ SvStream& GalleryTheme::ReadData( SvStream& rIStm )
     String              aThemeName;
     rtl_TextEncoding    nTextEncoding;
 
-    aImportName = rtl::OUString();
     rIStm >> nVersion;
     rtl::OString aTmpStr = read_lenPrefixed_uInt8s_ToOString<sal_uInt16>(rIStm);
     rIStm >> nCount;
@@ -1587,11 +1566,10 @@ const INetURLObject& GalleryTheme::GetSdvURL() const { return pThm->GetSdvURL();
 sal_uInt32 GalleryTheme::GetId() const { return pThm->GetId(); }
 void GalleryTheme::SetId( sal_uInt32 nNewId, sal_Bool bResetThemeName ) { pThm->SetId( nNewId, bResetThemeName ); }
 sal_Bool GalleryTheme::IsThemeNameFromResource() const { return pThm->IsNameFromResource(); }
-sal_Bool GalleryTheme::IsImported() const { return pThm->IsImported(); }
 sal_Bool GalleryTheme::IsReadOnly() const { return pThm->IsReadOnly(); }
 sal_Bool GalleryTheme::IsDefault() const { return pThm->IsDefault(); }
 sal_Bool GalleryTheme::IsModified() const { return pThm->IsModified(); }
-const rtl::OUString& GalleryTheme::GetName() const { return IsImported() ? aImportName : pThm->GetThemeName(); }
+const rtl::OUString& GalleryTheme::GetName() const { return pThm->GetThemeName(); }
 
 void GalleryTheme::InsertAllThemes( ListBox& rListBox )
 {

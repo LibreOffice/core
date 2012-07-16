@@ -468,11 +468,6 @@ Bitmap RID_SVXBMP_THEME_NORMAL_BIG
     File = "galnorl.bmp" ;
 };
 
-Bitmap RID_SVXBMP_THEME_IMPORTED_BIG
-{
-    File = "galimpl.bmp" ;
-};
-
 Bitmap RID_SVXBMP_THEME_READONLY_BIG
 {
     File = "galrdol.bmp" ;

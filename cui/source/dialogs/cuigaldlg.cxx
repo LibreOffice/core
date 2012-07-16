@@ -681,7 +681,7 @@ void TPGalleryThemeGeneral::SetXChgData( ExchangeData* _pData )
     String              aObjStr( CUI_RES( RID_SVXSTR_GALLERYPROPS_OBJECT ) );
     String              aAccess;
     String              aType( SVX_RES( RID_SVXSTR_GALLERYPROPS_GALTHEME ) );
-    sal_Bool            bReadOnly = pThm->IsReadOnly() && !pThm->IsImported();
+    sal_Bool            bReadOnly = pThm->IsReadOnly();
 
     aEdtMSName.SetHelpId( HID_GALLERY_EDIT_MSNAME );
     aEdtMSName.SetText( pThm->GetName() );
@@ -722,9 +722,7 @@ void TPGalleryThemeGeneral::SetXChgData( ExchangeData* _pData )
     // set image
     sal_uInt16 nId;
 
-    if( pThm->IsImported() )
-        nId = RID_SVXBMP_THEME_IMPORTED_BIG;
-    else if( pThm->IsReadOnly() )
+    if( pThm->IsReadOnly() )
         nId = RID_SVXBMP_THEME_READONLY_BIG;
     else if( pThm->IsDefault() )
         nId = RID_SVXBMP_THEME_DEFAULT_BIG;

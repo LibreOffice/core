@@ -190,11 +190,6 @@ Bitmap RID_SVXBMP_THEME_NORMAL
     File = "galnors.bmp" ;
 };
 
-Bitmap RID_SVXBMP_THEME_IMPORTED
-{
-    File = "galimps.bmp" ;
-};
-
 Bitmap RID_SVXBMP_THEME_READONLY
 {
     File = "galrdos.bmp" ;

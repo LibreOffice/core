@@ -147,8 +147,7 @@ GalleryBrowser1::GalleryBrowser1( GalleryBrowser* pParent, const ResId& rResId, 
     mpThemePropsDlgItemSet( NULL ),
     aImgNormal            ( GalleryResGetBitmapEx( RID_SVXBMP_THEME_NORMAL ) ),
     aImgDefault           ( GalleryResGetBitmapEx( RID_SVXBMP_THEME_DEFAULT ) ),
-    aImgReadOnly          ( GalleryResGetBitmapEx( RID_SVXBMP_THEME_READONLY ) ),
-    aImgImported          ( GalleryResGetBitmapEx( RID_SVXBMP_THEME_IMPORTED ) )
+    aImgReadOnly          ( GalleryResGetBitmapEx( RID_SVXBMP_THEME_READONLY ) )
 {
     StartListening( *mpGallery );
 
@@ -195,9 +194,7 @@ sal_uIntPtr GalleryBrowser1::ImplInsertThemeEntry( const GalleryThemeEntry* pEnt
     {
         const Image* pImage;
 
-        if( pEntry->IsImported() )
-            pImage = &aImgImported;
-        else if( pEntry->IsReadOnly() )
+        if( pEntry->IsReadOnly() )
             pImage = &aImgReadOnly;
         else if( pEntry->IsDefault() )
             pImage = &aImgDefault;
@@ -267,11 +264,6 @@ void GalleryBrowser1::ImplGetExecuteVector(::std::vector< sal_uInt16 >& o_aExec)
 
         if( pTheme->IsReadOnly() )
             bUpdateAllowed = bRenameAllowed = bRemoveAllowed = sal_False;
-        else if( pTheme->IsImported() )
-        {
-            bUpdateAllowed = sal_False;
-            bRenameAllowed = bRemoveAllowed = sal_True;
-        }
         else if( pTheme->IsDefault() )
         {
             bUpdateAllowed = bRenameAllowed = sal_True;
@@ -289,7 +281,7 @@ void GalleryBrowser1::ImplGetExecuteVector(::std::vector< sal_uInt16 >& o_aExec)
         if( bRemoveAllowed )
             o_aExec.push_back( MN_DELETE );
 
-        if( bIdDialog && !pTheme->IsReadOnly() && !pTheme->IsImported() )
+        if( bIdDialog && !pTheme->IsReadOnly() )
             o_aExec.push_back( MN_ASSIGN_ID );
 
         o_aExec.push_back( MN_PROPERTIES );
@@ -465,7 +457,7 @@ void GalleryBrowser1::ImplExecute( sal_uInt16 nId )
         {
             GalleryTheme* pTheme = mpGallery->AcquireTheme( GetSelectedTheme(), *this );
 
-            if( pTheme && !pTheme->IsReadOnly() && !pTheme->IsImported() )
+            if (pTheme && !pTheme->IsReadOnly())
             {
 
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();

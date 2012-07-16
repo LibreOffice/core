@@ -99,7 +99,6 @@ class GalleryTheme : public SfxBroadcaster
 private:
 
     GalleryObjectList           aObjectList;
-    rtl::OUString               aImportName;
     String                      m_aDestDir;
     SotStorageRef               aSvDrawStorageRef;
     Gallery*                    pParent;
@@ -149,8 +148,6 @@ public:
 
     SVX_DLLPUBLIC const rtl::OUString& GetName() const;
     const rtl::OUString&        GetRealName() const;
-    const rtl::OUString&        GetImportName() const { return aImportName; }
-    void                        SetImportName(const rtl::OUString& rImportName) { aImportName = rImportName; }
 
     const String&               GetDestDir() const { return m_aDestDir; }
     void                        SetDestDir(const String& rDestDir) { m_aDestDir = rDestDir; }
@@ -177,7 +174,6 @@ public:
 
     sal_Bool                        IsThemeNameFromResource() const;
 
-    SVX_DLLPUBLIC sal_Bool          IsImported() const;
     SVX_DLLPUBLIC sal_Bool          IsReadOnly() const;
     SVX_DLLPUBLIC sal_Bool          IsDefault() const;
     sal_Bool                        IsModified() const;

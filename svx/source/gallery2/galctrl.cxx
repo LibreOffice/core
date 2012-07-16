@@ -692,7 +692,7 @@ sal_Int8 GalleryListView::AcceptDrop( const BrowserAcceptDropEvent& )
 {
     sal_Int8 nRet = DND_ACTION_NONE;
 
-    if( mpTheme && !mpTheme->IsReadOnly() && !mpTheme ->IsImported() )
+    if( mpTheme && !mpTheme->IsReadOnly() )
         nRet = DND_ACTION_COPY;
 
     return nRet;
