@@ -177,7 +177,7 @@ ModelessDialog DLG_TEMPLATE_MANAGER
             ToolBoxItem
             {
                 Identifier = TBI_TEMPLATE_CREATE;
-                Text [ en-US ] = "Create a template" ;
+                Text [ en-US ] = "Create" ;
 
                 ItemImage = Image
                 {
@@ -188,19 +188,19 @@ ModelessDialog DLG_TEMPLATE_MANAGER
             ToolBoxItem
             {
                 Identifier = TBI_TEMPLATE_LOCAL;
-                Text [ en-US ] = "Local Templates";
+                Text [ en-US ] = "Local";
             };
 
             ToolBoxItem
             {
                 Identifier = TBI_TEMPLATE_ONLINE;
-                Text [ en-US ] = "Online Templates";
+                Text [ en-US ] = "Online";
             };
 
             ToolBoxItem
             {
                 Identifier = TBI_TEMPLATE_IMPORT ;
-                Text [ en-US ] = "Import a template" ;
+                Text [ en-US ] = "Import" ;
 
                 ItemImage = Image
                 {
