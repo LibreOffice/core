@@ -288,7 +288,7 @@ IMPL_LINK_NOARG( ScDataBarSettingsDlg, OkBtnHdl )
             mpNumberFormatter->IsNumberFormat(aMinString, nIndex, nMinValue);
             nIndex = 0;
             double nMaxValue = 0;
-            mpNumberFormatter->IsNumberFormat(aMaxString, nIndex, nMinValue);
+            mpNumberFormatter->IsNumberFormat(aMaxString, nIndex, nMaxValue);
             if(rtl::math::approxEqual(nMinValue, nMaxValue) || nMinValue > nMaxValue)
                 bWarn = true;
         }
