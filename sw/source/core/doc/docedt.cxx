@@ -74,6 +74,8 @@
 #include <vcl/msgbox.hxx>
 #include "comcore.hrc"
 #include "editsh.hxx"
+#include <fldbas.hxx>
+#include <fmtfld.hxx>
 #include <unoflatpara.hxx>
 #include <SwGrammarMarkUp.hxx>
 
@@ -1635,6 +1637,30 @@ bool SwDoc::DeleteRangeImplImpl(SwPaM & rPam)
                     0 != (pEndIdx = pAttr->GetEnd()) &&
                     *pEndIdx == *pAttr->GetStart() )
                     pTxtNd->DestroyAttr( pHts->Cut( n ) );
+            }
+        }
+    }
+
+    // Delete fieldmarks before postits.
+    if (pStt->nNode == pEnd->nNode && (pEnd->nContent.GetIndex() - pStt->nContent.GetIndex()) == 1)
+    {
+        SwTxtNode* pTxtNd = rPam.Start()->nNode.GetNode().GetTxtNode();
+        xub_StrLen nIndex = rPam.Start()->nContent.GetIndex();
+        // If there are at least two chars before the postit, we may have a fieldmark there.
+        if (pTxtNd->GetTxt().GetChar(nIndex) == CH_TXTATR_INWORD && nIndex > 1)
+        {
+            SwTxtAttr* pTxtAttr = pTxtNd->GetTxtAttrForCharAt(nIndex, RES_TXTATR_FIELD);
+            if (pTxtAttr && pTxtAttr->GetFld().GetFld()->Which() == RES_POSTITFLD && pTxtNd->GetTxt().GetChar(nIndex - 1) == CH_TXT_ATR_FIELDEND)
+            {
+                xub_StrLen nStart = pTxtNd->GetTxt().SearchBackward(CH_TXT_ATR_FIELDSTART, nIndex - 2);
+                if (nStart != STRING_NOTFOUND)
+                {
+                    SwIndex aStart(pStt->nContent);
+                    aStart = nStart;
+                    SwIndex aEnd(pEnd->nContent);
+                    aEnd = nIndex - 1;
+                    _DelBookmarks(pStt->nNode, pEnd->nNode, NULL, &aStart, &aEnd);
+                }
             }
         }
     }
