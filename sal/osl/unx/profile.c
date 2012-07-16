@@ -1303,7 +1303,7 @@ static osl_TStamp closeFileImpl(osl_TFile* pFile, oslProfileOption Flags)
     {
         stamp = OslProfile_getFileStamp(pFile);
 
-        if ( Flags & (osl_Profile_WRITELOCK | osl_Profile_WRITELOCK ) )
+        if ( Flags & (osl_Profile_WRITELOCK | osl_Profile_READLOCK ) )
         {
             OslProfile_lockFile(pFile, un_lock);
         }
