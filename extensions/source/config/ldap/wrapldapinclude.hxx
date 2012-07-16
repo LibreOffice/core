@@ -34,6 +34,7 @@
 #ifdef WNT
 #include <windows.h>
 #include <winldap.h>
+#define CONST_PCHAR_CAST (const PCHAR)
 #ifndef LDAP_API
 #    define LDAP_API(rt) rt
 #endif
@@ -44,6 +45,7 @@
 #    define LDAP_NO_ATTRS "1.1"
 #endif
 #else // !defined WNT
+#define CONST_PCHAR_CAST
 #ifndef LDAP_INCLUDED
 #define LDAP_INCLUDED
 #include <ldap/ldap.h>

@@ -138,8 +138,8 @@ void  LdapConnection::connectSimple()
 
         // Do the bind
         LdapErrCode retCode = ldap_simple_bind_s(mConnection,
-                                               mLdapDefinition.mAnonUser.getStr(),
-                                               mLdapDefinition.mAnonCredentials.getStr()) ;
+                                               CONST_PCHAR_CAST mLdapDefinition.mAnonUser.getStr(),
+                                               CONST_PCHAR_CAST mLdapDefinition.mAnonCredentials.getStr()) ;
 
         checkLdapReturnCode("SimpleBind", retCode, mConnection) ;
     }
@@ -158,7 +158,7 @@ void LdapConnection::initConnection()
 
     if (mLdapDefinition.mPort == 0) mLdapDefinition.mPort = LDAP_PORT;
 
-    mConnection = ldap_init(mLdapDefinition.mServer.getStr(),
+    mConnection = ldap_init(CONST_PCHAR_CAST mLdapDefinition.mServer.getStr(),
                             mLdapDefinition.mPort) ;
     if (mConnection == NULL)
     {
@@ -185,7 +185,7 @@ void LdapConnection::initConnection()
 
     LdapMessageHolder result;
     LdapErrCode retCode = ldap_search_s(mConnection,
-                                      aUserDn.getStr(),
+                                      CONST_PCHAR_CAST aUserDn.getStr(),
                                       LDAP_SCOPE_BASE,
                                       "(objectclass=*)",
                                       0,
@@ -235,9 +235,9 @@ void LdapConnection::initConnection()
     attributes[0]= const_cast<sal_Char *>(LDAP_NO_ATTRS);
     attributes[1]= NULL;
     LdapErrCode retCode = ldap_search_s(mConnection,
-                                      mLdapDefinition.mBaseDN.getStr(),
+                                      CONST_PCHAR_CAST mLdapDefinition.mBaseDN.getStr(),
                                       LDAP_SCOPE_SUBTREE,
-                                      filter.makeStringAndClear().getStr(), attributes, 0, &result.msg) ;
+                                      CONST_PCHAR_CAST filter.makeStringAndClear().getStr(), attributes, 0, &result.msg) ;
 
     checkLdapReturnCode("FindUserDn", retCode,mConnection) ;
     rtl::OString userDn ;
