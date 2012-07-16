@@ -30,6 +30,7 @@
 #ifndef LDAP_CALL
 #    define LDAP_CALL
 #endif
+#define CONST_PCHAR_CAST
 #else
 #ifdef WNT
 #include <windows.h>
