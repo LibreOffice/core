@@ -61,7 +61,13 @@ BUILD_ACTION = nmake -f win32.mak USE_SSL=1 USE_LDAP=1 USE_MICROSOFT_LDAP=1
 CONFIGURE_DIR=.
 BUILD_DIR=src/interfaces/libpq
 
-CONFIGURE_ACTION = CPPFLAGS="$(SOLARINC)" LDFLAGS="$(SOLARLIB)" ./configure --without-readline --disable-shared --with-openssl --with-ldap
+CONFIGURE_ACTION = ./configure --without-readline --disable-shared --with-openssl --with-ldap
+
+.IF "$(OS)" != "WNT" && "$(SYSTEM_OPENLDAP) != "YES"
+CONFIGURE_ACTION += CPPFLAGS="-I $(SOLARVER)$/$(INPATH)$/inc$/openldap"
+CONFIGURE_ACTION += LDFLAGS="$(SOLARLIB)"
+CONFIGURE_ACTION += EXTRA_LDAP_LIBS="-llber -lssl3 -lsmime3 -lnss3 -lnssutil3 -lplds4 -lplc4 -lnspr4"
+.ENDIF 
 
 .IF "$(CROSS_COMPILING)" == "YES"
 CONFIGURE_ACTION += --build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)

@@ -61,6 +61,13 @@ else # 0S!=WNT
 $(eval $(call gb_Library_add_libs,ldapbe2,\
 	-lldap \
 	-llber \
+	-lssl3 \
+	-lsmime3 \
+	-lnss3 \
+	-lnssutil3 \
+	-lplds4 \
+	-lplc4 \
+	-lnspr4 \
 ))
 endif
 

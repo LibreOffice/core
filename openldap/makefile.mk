@@ -36,7 +36,7 @@ PATCH_FILES=\
 
 CONFIGURE_DIR=
 CONFIGURE_ACTION=.$/configure
-CONFIGURE_FLAGS=--disable-slapd --with-pic --with-tls=moznss --disable-shared --enable-static
+CONFIGURE_FLAGS=--disable-slapd --with-pic --with-tls=moznss --without-cyrus-sasl --disable-shared --enable-static
 .IF "$(SYSTEM_NSS)" == "YES"
 CONFIGURE_FLAGS+=CPPFLAGS="$(NSS_CFLAGS)" CFLAGS="$(NSS_CFLAGS)" LDFLAGS="$(NSS_LIBS)"
 .ELSE
