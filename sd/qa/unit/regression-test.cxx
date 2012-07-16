@@ -139,7 +139,7 @@ FileFormat aFileFormats[] = {
 
 ::sd::DrawDocShellRef SdFiltersTest::loadURL( const rtl::OUString &rURL )
 {
-    FileFormat *pFmt;
+    FileFormat *pFmt(0);
 
     for (size_t i = 0; i < SAL_N_ELEMENTS (aFileFormats); i++)
     {
