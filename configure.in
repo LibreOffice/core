@@ -1260,7 +1260,7 @@ AC_ARG_WITH(system-icu,
         [Use icu already on system.]),,
     [with_system_icu="$with_system_libs"])
 
-AC_ARG_WITH(system_openldap,
+AC_ARG_WITH(system-openldap,
     AS_HELP_STRING([--with-system-openldap],
         [Use the OpenLDAP LDAP SDK already on system.]),,
 	[with_system_openldap="$with_system_libs"])
@@ -7777,7 +7777,6 @@ AC_SUBST(MOZ_FLAVOUR)
 AC_SUBST(MOZ_INC)
 AC_SUBST(MOZ_LIB)
 AC_SUBST(MOZ_LIB_XPCOM)
-AC_SUBST(MOZ_LDAP_CFLAGS)
 
 dnl ===================================================================
 dnl Check for system NSS only with xmlsec or mozilla build enabled
