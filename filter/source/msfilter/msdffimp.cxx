@@ -1723,8 +1723,17 @@ void DffPropertyReader::ApplyFillAttributes( SvStream& rIn, SfxItemSet& rSet, co
                             aXOBitmap.Bitmap2Array();
                             aXOBitmap.SetBitmapType( XBITMAP_8X8 );
                             aXOBitmap.SetPixelSize( aBmp.GetSizePixel() );
-                           aXOBitmap.SetPixelColor( aCol1 );
-                           aXOBitmap.SetBackgroundColor( aCol2 );
+
+                            if( aXOBitmap.GetBackgroundColor() == COL_BLACK )
+                            {
+                                aXOBitmap.SetPixelColor( aCol1 );
+                                aXOBitmap.SetBackgroundColor( aCol2 );
+                            }
+                            else
+                            {
+                                aXOBitmap.SetPixelColor( aCol2 );
+                                aXOBitmap.SetBackgroundColor( aCol1 );
+                            }
                            aXOBitmap.Array2Bitmap();
                         }
                         rSet.Put( XFillBitmapItem( rtl::OUString(), aXOBitmap ) );
