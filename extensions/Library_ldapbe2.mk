@@ -34,26 +34,11 @@ $(eval $(call gb_Library_set_componentfile,ldapbe2,extensions/source/config/ldap
 
 $(eval $(call gb_Library_use_sdk_api,ldapbe2))
 
-ifeq ($(LDAPSDKINCLUDES),)
-ifneq ($(WITH_OPENLDAP),YES)
-ifeq ($(SYSTEM_MOZILLA),YES)
-$(eval $(call gb_Library_set_include,ldapbe2,\
-	$$(INCLUDE) \
-	$(MOZ_LDAP_CFLAGS) \
-))
-else # SYSTEM_MOZILLA=NO
-$(eval $(call gb_Library_set_include,ldapbe2,\
-	$$(INCLUDE) \
-	-I$(OUTDIR)/inc/mozilla \
-))
-endif # SYSTEM_MOZILLA=YES
-else # WITH_OPENLDAP=YES
+ifneq ($(OS),WNT)
 $(eval $(call gb_Library_add_defs,ldapbe2,\
-	-DWITH_OPENLDAP \
 	-DLDAP_DEPRECATED \
 ))
-endif # WITH_OPENLDAP=NO
-endif # LDAPSDKINCLUDES=
+endif
 
 $(eval $(call gb_Library_add_exception_objects,ldapbe2,\
 	extensions/source/config/ldap/componentdef \
@@ -73,15 +58,10 @@ $(eval $(call gb_Library_use_libraries,ldapbe2,\
 	wldap32 \
 ))
 else # 0S!=WNT
-ifneq ($(WITH_OPENLDAP),YES)
-$(eval $(call gb_Library_add_libs,ldapbe2,\
-	-lldap50 \
-))
-else # WITH_OPENLDAP=YES
 $(eval $(call gb_Library_add_libs,ldapbe2,\
 	-lldap \
+	-llber \
 ))
-endif
 endif
 
 
@@ -90,12 +70,6 @@ ifeq ($(OS),FREEBSD)
 $(eval $(call gb_Library_add_libs,ldapbe2,\
 	-lcompat \
 ))
-ifneq ($(WITH_OPENLDAP),YES)
-$(eval $(call gb_Library_add_libs,ldapbe2,\
-	-Wl,-Bstatic
-	-llber50 \
-))
-endif # WITH_OPENLDAP=NO
 endif # OS=FREEBSD
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:

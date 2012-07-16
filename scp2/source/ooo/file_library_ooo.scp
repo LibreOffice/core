@@ -95,7 +95,6 @@ End
 
 SPECIAL_COMPONENT_LIB_FILE(gid_File_Lib_Configmgr, configmgr.uno)
 
-#ifdef WITH_LDAP
 File gid_File_Lib_Ldapbe2
     LIB_FILE_BODY;
     Styles = (PACKED);
@@ -106,7 +105,6 @@ File gid_File_Lib_Ldapbe2
     Name = "ldapbe2.uno.dll";
   #endif
 End
-#endif
 
 STD_LIB_FILE(gid_File_Lib_Chartcontroller, chartcontroller)
 STD_LIB_FILE(gid_File_Lib_Chartmodel, chartmodel)

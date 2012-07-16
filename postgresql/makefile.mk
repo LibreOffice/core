@@ -56,29 +56,16 @@ CONFIGURE_DIR=.
 BUILD_DIR=src
 
 CONFIGURE_ACTION =
-BUILD_ACTION = nmake -f win32.mak USE_SSL=1
-.IF "$(WITH_LDAP)" == "YES"
-BUILD_ACTION += USE_LDAP=1
-.IF "$(WITH_OPENLDAP)" != "YES"
-BUILD_ACTION += USE_MICROSOFT_LDAP=1
-.ENDIF
-.ENDIF # "$(WITH_LDAP)" == "YES"
+BUILD_ACTION = nmake -f win32.mak USE_SSL=1 USE_LDAP=1 USE_MICROSOFT_LDAP=1
 .ELSE #"$(GUI)$(COM)"!="WNTMSC"
 CONFIGURE_DIR=.
 BUILD_DIR=src/interfaces/libpq
 
-CONFIGURE_ACTION = CPPFLAGS="$(SOLARINC)" LDFLAGS="$(SOLARLIB)" ./configure --without-readline --disable-shared --with-openssl
+CONFIGURE_ACTION = CPPFLAGS="$(SOLARINC)" LDFLAGS="$(SOLARLIB)" ./configure --without-readline --disable-shared --with-openssl --with-ldap
 
 .IF "$(CROSS_COMPILING)" == "YES"
 CONFIGURE_ACTION += --build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)
 .ENDIF
-
-.IF "$(WITH_LDAP)" == "YES"
-CONFIGURE_ACTION += --with-ldap
-.IF "$(WITH_OPENLDAP)" != "YES"
-CONFIGURE_ACTION += --with-includes='$(SOLARVER)$/$(INPATH)$/inc$/mozilla$/ldap' --with-mozldap
-.ENDIF
-.ENDIF # "$(WITH_LDAP)" == "YES"
 
 .IF "$(WITH_KRB5)" == "YES"
 CONFIGURE_ACTION += --with-krb5

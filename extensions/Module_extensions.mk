@@ -32,6 +32,7 @@ $(eval $(call gb_Module_add_targets,extensions,\
 	AllLangResTarget_scn \
 	AllLangResTarget_upd \
 	Library_abp \
+	Library_ldapbe2 \
 	Library_log \
 	Library_res \
 	Library_scn \
@@ -129,11 +130,5 @@ $(eval $(call gb_Module_add_targets,extensions,\
 	Zip_mdibundle \
 ))
 endif # OS=MACOSX
-
-ifeq ($(WITH_LDAP),YES)
-$(eval $(call gb_Module_add_targets,extensions,\
-	Library_ldapbe2 \
-))
-endif # WITH_LDAP=YES
 
 # vim:set shiftwidth=4 softtabstop=4 noexpandtab:

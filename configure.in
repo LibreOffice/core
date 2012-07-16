@@ -593,11 +593,6 @@ AC_ARG_ENABLE(graphite,
         [Enables the compilation of Graphite smart font rendering.])
 )
 
-AC_ARG_ENABLE(ldap,
-    AS_HELP_STRING([--disable-ldap],
-        [Disables the use of LDAP backend via Netscape/Mozilla or OpenLDAP LDAP SDK])
-)
-
 AC_ARG_ENABLE(fetch-external,
     AS_HELP_STRING([--disable-fetch-external],
         [Disables fetching external tarballs from web sources.])
@@ -1040,11 +1035,6 @@ AC_ARG_WITH(linked-git,
     GIT_LINK_SRC=$withval ,
 )
 
-AC_ARG_WITH(openldap,
-    AS_HELP_STRING([--with-openldap],
-        [Enables the use of the OpenLDAP LDAP SDK instead of the Netscape/Mozilla one.]),
-,)
-
 AC_ARG_WITH(vba-package-format,
     AS_HELP_STRING([--with-vba-package-format],
         [Specify package format for vba compatibility api. Specifying  "builtin"
@@ -1269,6 +1259,11 @@ AC_ARG_WITH(system-icu,
     AS_HELP_STRING([--with-system-icu],
         [Use icu already on system.]),,
     [with_system_icu="$with_system_libs"])
+
+AC_ARG_WITH(system_openldap,
+    AS_HELP_STRING([--with-system-openldap],
+        [Use the OpenLDAP LDAP SDK already on system.]),,
+	[with_system_openldap="$with_system_libs"])
 
 AC_ARG_WITH(system-poppler,
     AS_HELP_STRING([--with-system-poppler],
@@ -7528,33 +7523,27 @@ else
 fi
 AC_SUBST(ENABLE_XMLSEC)
 
-AC_MSG_CHECKING([whether to build LDAP configuration backend])
-if test "$enable_ldap" != "no"; then
-    WITH_OPENLDAP=NO
-    WITH_LDAP=NO
-    if test "$with_openldap" = "yes"; then
-        WITH_LDAP=YES
-        AC_MSG_RESULT([OpenLDAP])
-        WITH_OPENLDAP=YES
-        AC_CHECK_HEADERS(ldap.h, [],
-            [AC_MSG_ERROR(ldap.h not found. install openldap libs)], [])
-	AC_CHECK_LIB([ldap], [ldap_simple_bind_s], [:],
-	    [AC_MSG_ERROR(openldap lib not found or functional)], [])
-	AC_CHECK_LIB([ldap], [ldap_set_option], [:],
-	    [AC_MSG_ERROR(openldap lib not found or functional)], [])
-    elif test "$enable_mozilla" != "no"; then
-        AC_MSG_RESULT([Mozilla])
-        WITH_LDAP=YES
-        WITH_OPENLDAP=NO
-    else
-        AC_MSG_RESULT([no. Either Mozilla or OpenLDAP required])
-    fi
+dnl ===================================================================
+dnl Check for system openldap
+dnl ===================================================================
+
+if test "$_os" != "WINNT"; then
+AC_MSG_CHECKING([which openldap library to use])
+if test "$with_system_openldap" = "yes"; then
+	AC_MSG_RESULT([external])
+    SYSTEM_OPENLDAP=YES
+    AC_CHECK_HEADERS(ldap.h, [], [AC_MSG_ERROR(ldap.h not found. install openldap libs)], [])
+	AC_CHECK_LIB([ldap], [ldap_simple_bind_s], [:], [AC_MSG_ERROR(openldap lib not found or functional)], [])
+	AC_CHECK_LIB([ldap], [ldap_set_option], [:], [AC_MSG_ERROR(openldap lib not found or functional)], [])
 else
-    AC_MSG_RESULT([no])
-    WITH_LDAP=NO
+    AC_MSG_RESULT([internal])
+    SYSTEM_OPENLDAP=NO
+	BUILD_TYPE="$BUILD_TYPE OPENLDAP"
 fi
-AC_SUBST(WITH_LDAP)
-AC_SUBST(WITH_OPENLDAP)
+else
+    SYSTEM_OPENLDAP=NO
+fi
+AC_SUBST(SYSTEM_OPENLDAP)
 
 dnl ===================================================================
 dnl Check for system mozilla
@@ -7602,17 +7591,6 @@ if test -n "$with_system_mozilla" -a "$with_system_mozilla" != "no"; then
     fi
 
     MOZ_LIB_XPCOM=$MOZILLAXPCOM_LIBS
-    if test "$WITH_LDAP" != "NO" -a "$WITH_OPENLDAP" != "YES"; then
-        AC_MSG_CHECKING([whether $tmp was compiled with --enable-ldap])
-        if test -d "$MOZ_INC/ldap"; then
-            AC_MSG_RESULT([yes])
-            MOZ_LDAP_CFLAGS="-I$MOZ_INC"
-        else
-            AC_MSG_ERROR([no.
-Could not find LDAP header include files in $MOZ_INC/ldap.
-Please recompile $tmp with --enable-ldap or use --with-openldap.])
-        fi
-    fi
 
     #e.g. http://fedoraproject.org/wiki/Releases/FeatureXULRunnerAPIChanges
     #the plugin pkg-config etc. reverts to "mozilla-plugin" with libxul

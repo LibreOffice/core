@@ -22,16 +22,6 @@
 #pragma warning (disable:4668)
 #endif
 
-#ifdef WITH_OPENLDAP
-#include <ldap.h>
-#ifndef LDAP_API
-#    define LDAP_API(rt) rt
-#endif
-#ifndef LDAP_CALL
-#    define LDAP_CALL
-#endif
-#define CONST_PCHAR_CAST
-#else
 #ifdef WNT
 #include <windows.h>
 #include <winldap.h>
@@ -46,13 +36,15 @@
 #    define LDAP_NO_ATTRS "1.1"
 #endif
 #else // !defined WNT
-#define CONST_PCHAR_CAST
-#ifndef LDAP_INCLUDED
-#define LDAP_INCLUDED
-#include <ldap/ldap.h>
-#endif // LDAP_INCLUDED
-#endif // WNT
+#include <ldap.h>
+#ifndef LDAP_API
+#    define LDAP_API(rt) rt
 #endif
+#ifndef LDAP_CALL
+#    define LDAP_CALL
+#endif
+#define CONST_PCHAR_CAST
+#endif // WNT
 
 #ifdef WNT
 #pragma warning (pop)

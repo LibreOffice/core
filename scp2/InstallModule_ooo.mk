@@ -83,7 +83,6 @@ $(eval $(call gb_InstallModule_define_if_set,scp2/ooo,\
 	SYSTEM_REDLAND \
 	SYSTEM_SNDFILE \
 	SYSTEM_STDLIBS \
-	WITH_LDAP \
 ))
 
 $(eval $(call gb_InstallModule_define_value_if_set,scp2/ooo,\

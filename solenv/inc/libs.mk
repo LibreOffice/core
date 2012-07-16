@@ -114,11 +114,7 @@ MOZBASELIB=-lnspr4 -lxpcom
 .IF "$(GUI)$(COM)"=="WNTGCC"
 LDAPSDKLIB=-lwldap32
 .ELSE			# "$(GUI)$(COM)"=="WNTGCC"
-.IF "$(WITH_OPENLDAP)" == "YES"
 LDAPSDKLIB=-lldap
-.ELSE
-LDAPSDKLIB=-lldap50
-.ENDIF
 .ENDIF			# "$(GUI)$(COM)"=="WNTGCC"
 
 ICOLIB=-lico$(DLLPOSTFIX)

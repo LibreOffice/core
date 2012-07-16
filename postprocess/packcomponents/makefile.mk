@@ -165,6 +165,7 @@ my_components += \
     component/desktop/source/splash/spl \
     component/extensions/source/abpilot/abp \
     component/extensions/source/bibliography/bib \
+	component/extensions/source/config/ldap/ldapbe2 \
     component/extensions/source/dbpilots/dbp \
     component/extensions/source/logging/log \
     component/extensions/source/propctrlr/pcr \
@@ -308,10 +309,6 @@ my_components += \
 my_components += \
     bf_migratefilter \
     bindet
-.END
-
-.IF "$(WITH_LDAP)" == "YES"
-my_components += component/extensions/source/config/ldap/ldapbe2
 .END
 
 .IF "$(WITH_MOZILLA)" != "NO"

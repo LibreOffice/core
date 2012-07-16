@@ -547,6 +547,7 @@ $(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
     i18nsearch \
     kdebe1 \
     kde4be1 \
+    ldapbe2 \
     localebe1 \
     lomenubar \
     macbe1 \
@@ -591,12 +592,6 @@ $(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
     oleautobridge2 \
     smplmail \
     wininetbe1 \
-))
-endif
-
-ifeq ($(WITH_LDAP),YES)
-$(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
-    ldapbe2 \
 ))
 endif
 
