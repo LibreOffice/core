@@ -38,7 +38,9 @@
 #if GTK_CHECK_VERSION(2,14,0)
 #include <gtk/gtkunixprint.h>
 #else
+#include <gtk/gtkprintjob.h>
 #include <gtk/gtkpagesetupunixdialog.h>
+#include <gtk/gtkprintunixdialog.h>
 #endif
 
 #if !GTK_CHECK_VERSION(3,0,0)
