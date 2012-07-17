@@ -137,6 +137,7 @@ void SwBlink::Insert( const Point& rPoint, const SwLinePortion* pPor,
     if( it != aList.end()  )
     {
         (*it).SetPos( rPoint );
+        delete pBlinkPor;
     }
     else
     {
