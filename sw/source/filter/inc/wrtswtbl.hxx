@@ -292,7 +292,7 @@ protected:
 
     void MergeBorders( const editeng::SvxBorderLine* pBorderLine, sal_Bool bTable );
 
-    sal_uInt16 MergeBoxBorders( const SwTableBox *pBox, sal_uInt16 nRow, sal_uInt16 nCol,
+    sal_uInt16 MergeBoxBorders(const SwTableBox *pBox, size_t nRow, size_t nCol,
                             sal_uInt16 nRowSpan, sal_uInt16 nColSpan,
                             sal_uInt16 &rTopBorder, sal_uInt16 &rBottomBorder );
 
@@ -308,16 +308,16 @@ public:
     sal_uInt16 GetRelWidth( sal_uInt16 nCol, sal_uInt16 nColSpan ) const;
     sal_uInt16 GetPrcWidth( sal_uInt16 nCol, sal_uInt16 nColSpan ) const;
 
-    long GetAbsHeight( long nRawWidth, sal_uInt16 nRow, sal_uInt16 nRowSpan ) const;
-protected:
+    long GetAbsHeight(long nRawWidth, size_t nRow, sal_uInt16 nRowSpan) const;
 
+protected:
     long GetLineHeight( const SwTableLine *pLine );
     long GetLineHeight( const SwTableBox *pBox ) const;
     const SvxBrushItem *GetLineBrush( const SwTableBox *pBox,
                                       SwWriteTableRow *pRow );
 
     sal_uInt16 GetLeftSpace( sal_uInt16 nCol ) const;
-    sal_uInt16 GetRightSpace( sal_uInt16 nCol, sal_uInt16 nColSpan ) const;
+    sal_uInt16 GetRightSpace(size_t nCol, sal_uInt16 nColSpan) const;
 
 
 public:

@@ -241,7 +241,7 @@ void SwWriteTable::MergeBorders( const SvxBorderLine* pBorderLine,
 
 
 sal_uInt16 SwWriteTable::MergeBoxBorders( const SwTableBox *pBox,
-                                        sal_uInt16 nRow, sal_uInt16 nCol,
+                                        size_t const nRow, size_t const nCol,
                                         sal_uInt16 nRowSpan, sal_uInt16 nColSpan,
                                         sal_uInt16& rTopBorder,
                                         sal_uInt16 &rBottomBorder )
@@ -326,7 +326,8 @@ sal_uInt16 SwWriteTable::GetLeftSpace( sal_uInt16 nCol ) const
     return nSpace;
 }
 
-sal_uInt16 SwWriteTable::GetRightSpace( sal_uInt16 nCol, sal_uInt16 nColSpan ) const
+sal_uInt16
+SwWriteTable::GetRightSpace(size_t const nCol, sal_uInt16 nColSpan) const
 {
     sal_uInt16 nSpace = nCellPadding;
 
@@ -377,7 +378,7 @@ sal_uInt16 SwWriteTable::GetPrcWidth( sal_uInt16 nCol, sal_uInt16 nColSpan ) con
                                    GetBaseWidth() );
 }
 
-long SwWriteTable::GetAbsHeight( long nRawHeight, sal_uInt16 nRow,
+long SwWriteTable::GetAbsHeight(long nRawHeight, size_t const nRow,
                                    sal_uInt16 nRowSpan ) const
 {
     nRawHeight -= (2*nCellPadding + nCellSpacing);
