@@ -1919,6 +1919,8 @@ bool SdrEdgeObj::applySpecialDrag(SdrDragStat& rDragStat)
     ImpSetEdgeInfoToAttr();
     bEdgeTrackUserDefined = false;
 
+    SetRectsDirty();
+
     if(bOriginalEdgeModified && rDragStat.GetView())
     {
         // hide connect marker helper again when original gets changed.
