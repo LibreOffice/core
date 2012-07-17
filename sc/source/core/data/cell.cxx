@@ -1926,11 +1926,11 @@ void ScFormulaCell::GetURLResult( rtl::OUString& rURL, rtl::OUString& rCellText 
     if (xMat)
     {
         // determine if the matrix result is a string or value.
-        ScMatrixValue nMatVal = xMat->Get(0, 1);
-        if (!ScMatrix::IsValueType( nMatVal.nType))
-            rURL = nMatVal.GetString();
+        if (!xMat->IsValue(0, 1))
+            rURL = xMat->GetString(0, 1);
         else
-            pFormatter->GetOutputString( nMatVal.fVal, nURLFormat, rURL, &pColor );
+            pFormatter->GetOutputString(
+                xMat->GetDouble(0, 1), nURLFormat, rURL, &pColor);
     }
 
     if(rURL.isEmpty())

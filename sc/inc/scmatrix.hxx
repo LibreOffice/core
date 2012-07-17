@@ -49,16 +49,18 @@ const ScMatValType SC_MATVAL_EMPTY     = SC_MATVAL_STRING | 0x04; // STRING plus
 const ScMatValType SC_MATVAL_EMPTYPATH = SC_MATVAL_EMPTY | 0x08;  // EMPTY plus flag
 const ScMatValType SC_MATVAL_NONVALUE  = SC_MATVAL_EMPTYPATH;     // mask of all non-value bits
 
+/**
+ * Try NOT to use this struct.  This struct should go away in a hopefully
+ * not so distant futture.
+ */
 struct ScMatrixValue
 {
-    union {
-        double fVal;
-        const ::rtl::OUString* pS;
-    };
+    double fVal;
+    rtl::OUString aStr;
     ScMatValType nType;
 
     /// Only valid if ScMatrix methods indicate so!
-    const ::rtl::OUString& GetString() const { return pS ? *pS : EMPTY_OUSTRING; }
+    const ::rtl::OUString& GetString() const { return aStr; }
 
     /// Only valid if ScMatrix methods indicate that this is no string!
     sal_uInt16 GetError() const         { return GetDoubleErrorValue( fVal); }
@@ -68,12 +70,8 @@ struct ScMatrixValue
 
     ScMatrixValue() : fVal(0.0), nType(SC_MATVAL_EMPTY) {}
 
-    ScMatrixValue(const ScMatrixValue& r) : fVal(r.fVal), nType(r.nType)
-    {
-        if (nType == SC_MATVAL_STRING)
-            // This is probably not necessary but just in case...
-            pS = r.pS;
-    }
+    ScMatrixValue(const ScMatrixValue& r) :
+        fVal(r.fVal), aStr(r.aStr), nType(r.nType) {}
 
     bool operator== (const ScMatrixValue& r) const
     {
@@ -89,10 +87,8 @@ struct ScMatrixValue
             default:
                 ;
         }
-        if (!pS)
-            return r.pS == NULL;
 
-        return GetString().equals(r.GetString());
+        return aStr == r.aStr;
     }
 
     bool operator!= (const ScMatrixValue& r) const
@@ -102,13 +98,12 @@ struct ScMatrixValue
 
     ScMatrixValue& operator= (const ScMatrixValue& r)
     {
+        if (this == &r)
+            return *this;
+
         nType = r.nType;
         fVal = r.fVal;
-
-        if (nType == SC_MATVAL_STRING)
-            // This is probably not necessary but just in case...
-            pS = r.pS;
-
+        aStr = r.aStr;
         return *this;
     }
 };

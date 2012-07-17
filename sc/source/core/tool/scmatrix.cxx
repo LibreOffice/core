@@ -740,7 +740,7 @@ ScMatrixValue ScMatrixImpl::Get(SCSIZE nC, SCSIZE nR) const
             break;
             case mdds::mtm::element_string:
                 aVal.nType = SC_MATVAL_STRING;
-                aVal.pS = &EMPTY_OUSTRING;
+                aVal.aStr = maMat.get_string(nR, nC);
             break;
             case mdds::mtm::element_empty:
                 // Empty path equals empty plus flag.

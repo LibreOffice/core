@@ -1224,7 +1224,7 @@ struct PartiallyFilledEmptyMatrix
         else if (nCol == 8 && nRow == 2)
         {
             CPPUNIT_ASSERT_MESSAGE("element is not of value type", rVal.nType == SC_MATVAL_STRING);
-            CPPUNIT_ASSERT_MESSAGE("element value is not what is expected", rVal.pS->equalsAscii("Test"));
+            CPPUNIT_ASSERT_MESSAGE("element value is not what is expected", rVal.aStr == "Test");
         }
         else if (nCol == 8 && nRow == 11)
         {
