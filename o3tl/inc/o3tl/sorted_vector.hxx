@@ -55,7 +55,7 @@ public:
 
     std::pair<const_iterator,bool> insert( const Value& x )
     {
-        iterator it = _lower_bound( x );
+        iterator it = lower_bound_nonconst( x );
         if (it == base_t::end() || less_than(x, *it))
         {
             it = base_t::insert( it, x );
@@ -66,7 +66,7 @@ public:
 
     size_type erase( const Value& x )
     {
-        iterator it = _lower_bound( x );
+        iterator it = lower_bound_nonconst( x );
         if (it != base_t::end() && !less_than(x, *it))
         {
             erase( it );
@@ -77,7 +77,7 @@ public:
 
     void erase( size_t index )
     {
-        base_t::erase( _begin() + index );
+        base_t::erase( begin_nonconst() + index );
     }
 
     // ACCESSORS
@@ -160,7 +160,8 @@ public:
        // of another sorted vector
        if ( empty() )
        {
-           base_t::insert( _begin(), rOther._begin(), rOther._end() );
+           base_t::insert( begin_nonconst(),
+                   rOther.begin_nonconst(), rOther.end_nonconst() );
        }
        else
            for( const_iterator it = rOther.begin(); it != rOther.end(); ++it )
@@ -183,14 +184,14 @@ private:
         return me.operator()(lhs, rhs);
     }
 
-    iterator _lower_bound( const Value& x )
+    iterator lower_bound_nonconst( const Value& x )
     {
         const MyCompare& me = *this;
         return std::lower_bound( base_t::begin(), base_t::end(), x, me );
     }
 
-    typename base_t::iterator _begin() { return base_t::begin(); }
-    typename base_t::iterator _end() { return base_t::end(); }
+    typename base_t::iterator begin_nonconst() { return base_t::begin(); }
+    typename base_t::iterator end_nonconst()   { return base_t::end(); }
 
 };
 
