@@ -1308,7 +1308,7 @@ $(call gb_LinkTarget_set_include,$(1),\
 endef
 
 
-ifdef ($(SYSTEM_HSQLDB),YES)
+ifeq ($(SYSTEM_HSQLDB),YES)
 
 define gb_LinkTarget__use_hsqldb
 
