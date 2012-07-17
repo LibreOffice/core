@@ -222,16 +222,14 @@ void TestBreakIterator::testWordBoundaries()
     }
 
     //See https://bugs.freedesktop.org/show_bug.cgi?id=49629
+    sal_Unicode aBreakTests[] = { ' ', 1, 2, 3, 4, 5, 6, 7, 0x91, 0x92, 0x200B, 0xE8FF, 0xF8FF };
     for (int mode = i18n::WordType::ANY_WORD; mode <= i18n::WordType::WORD_COUNT; ++mode)
     {
         //make sure that in all cases isBeginWord and isEndWord matches getWordBoundary
-        //
-        //test "Word", then "Word\x01" then "Word\x02"
-        for (sal_Unicode i = 0; i < 3; ++i)
+        for (size_t i = 0; i < SAL_N_ELEMENTS(aBreakTests); ++i)
         {
             ::rtl::OUString aTest("Word");
-            if (i > 0)
-                aTest += rtl::OUString(i) + rtl::OUString("Word");
+            aTest += rtl::OUString(aBreakTests[i]) + rtl::OUString("Word");
             aBounds = m_xBreak->getWordBoundary(aTest, 0, aLocale, mode, true);
             switch (mode)
             {
@@ -254,6 +252,35 @@ void TestBreakIterator::testWordBoundaries()
         }
     }
 
+    sal_Unicode aJoinTests[] = { 'X', 0x200C, 0x200D, 0x2060, 0xFEFF, 0xFFF9 };
+    for (int mode = i18n::WordType::ANY_WORD; mode <= i18n::WordType::WORD_COUNT; ++mode)
+    {
+        //make sure that in all cases isBeginWord and isEndWord matches getWordBoundary
+        for (size_t i = 0; i < SAL_N_ELEMENTS(aJoinTests); ++i)
+        {
+            ::rtl::OUString aTest("Word");
+            aTest += rtl::OUString(aJoinTests[i]) + rtl::OUString("Word");
+            aBounds = m_xBreak->getWordBoundary(aTest, 0, aLocale, mode, true);
+            switch (mode)
+            {
+                case i18n::WordType::ANY_WORD:
+                    CPPUNIT_ASSERT(aBounds.startPos == 0 && aBounds.endPos == 9);
+                    break;
+                case i18n::WordType::ANYWORD_IGNOREWHITESPACES:
+                    CPPUNIT_ASSERT(aBounds.startPos == 0 && aBounds.endPos == 9);
+                    break;
+                case i18n::WordType::DICTIONARY_WORD:
+                    CPPUNIT_ASSERT(aBounds.startPos == 0 && aBounds.endPos == 9);
+                    break;
+                case i18n::WordType::WORD_COUNT:
+                    CPPUNIT_ASSERT(aBounds.startPos == 0 && aBounds.endPos == 9);
+                    break;
+            }
+
+            CPPUNIT_ASSERT(m_xBreak->isBeginWord(aTest, aBounds.startPos, aLocale, mode));
+            CPPUNIT_ASSERT(m_xBreak->isEndWord(aTest, aBounds.endPos, aLocale, mode));
+        }
+    }
 }
 
 //See http://qa.openoffice.org/issues/show_bug.cgi?id=111152
