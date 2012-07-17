@@ -150,7 +150,7 @@ void TeleManager::TransferDone( EmpathyFTHandler *handler, TpFileTransferChannel
 {
     TeleManager* pManager = reinterpret_cast<TeleManager*>(pUserData);
 
-    SAL_INFO( "tubes", "TeleConference_TransferDone: hooray!");
+    SAL_INFO( "tubes", "TeleManager::TransferDone: hooray!");
     GFile *gfile = empathy_ft_handler_get_gfile( handler);
     char *uri = g_file_get_uri( gfile);
     rtl::OUString aUri( uri, strlen( uri), RTL_TEXTENCODING_UTF8);
@@ -163,7 +163,7 @@ void TeleManager::TransferDone( EmpathyFTHandler *handler, TpFileTransferChannel
 
 static void TeleManager_TransferError( EmpathyFTHandler *handler, const GError *error, void*)
 {
-    SAL_INFO( "tubes", "TeleConference_TransferError: " << error->message);
+    SAL_INFO( "tubes", "TeleManager_TransferError: " << error->message);
 
     g_object_unref( handler);
 }
