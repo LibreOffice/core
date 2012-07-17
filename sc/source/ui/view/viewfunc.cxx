@@ -212,18 +212,16 @@ void ScViewFunc::DoAutoAttributes( SCCOL nCol, SCROW nRow, SCTAB nTab,
                             aFormatSource.Col(), aFormatSource.Row(), nTab );
     if ( !((const ScMergeAttr&)pSource->GetItem(ATTR_MERGE)).IsMerged() )
     {
-        const ScPatternAttr* pDocOld = pDoc->GetPattern( nCol, nRow, nTab );
-        //  pDocOld is only valid till call ApplyPattern!
-
-        const ScStyleSheet* pSrcStyle = pSource->GetStyleSheet();
-
-        // Ho hum ... - totally untested but looks fun ! :-)
         ScRange aRange( nCol, nRow, nTab, nCol, nRow, nTab );
         ScMarkData aMark;
         aMark.SetMarkArea( aRange );
 
         ScDocFunc &rFunc = GetViewData()->GetDocFunc();
-        if ( pSrcStyle && pSrcStyle != pDocOld->GetStyleSheet() )
+
+        // pOldPattern is only valid until call to ApplyAttributes!
+        const ScPatternAttr* pOldPattern = pDoc->GetPattern( nCol, nRow, nTab );
+        const ScStyleSheet* pSrcStyle = pSource->GetStyleSheet();
+        if ( pSrcStyle && pSrcStyle != pOldPattern->GetStyleSheet() )
             rFunc.ApplyStyle( aMark, pSrcStyle->GetName(), sal_True, sal_False );
 
         rFunc.ApplyAttributes( aMark, *pSource, sal_True, sal_False );
