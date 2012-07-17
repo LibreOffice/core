@@ -975,24 +975,150 @@ double ScMatrixImpl::Or() const
     return EvalMatrix<OrEvaluator>(maMat);
 }
 
+namespace {
+
+struct SumOp
+{
+    void operator() (double& rAccum, double fVal)
+    {
+        rAccum += fVal;
+    }
+};
+
+struct SumSquareOp
+{
+    void operator() (double& rAccum, double fVal)
+    {
+        rAccum += fVal*fVal;
+    }
+};
+
+struct ProductOp
+{
+    void operator() (double& rAccum, double fVal)
+    {
+        rAccum *= fVal;
+    }
+};
+
+template<typename _Op>
+class WalkElementBlocks : std::unary_function<MatrixImplType::element_block_node_type, void>
+{
+    _Op maOp;
+
+    ScMatrix::IterateResult maRes;
+    bool mbFirst:1;
+    bool mbTextAsZero:1;
+public:
+    WalkElementBlocks(bool bTextAsZero) : maRes(0.0, 0.0, 0), mbFirst(true), mbTextAsZero(bTextAsZero) {}
+
+    const ScMatrix::IterateResult& getResult() const { return maRes; }
+
+    void operator() (const MatrixImplType::element_block_node_type& node)
+    {
+        switch (node.type)
+        {
+            case mdds::mtm::element_numeric:
+            {
+                mdds::mtv::numeric_element_block::const_iterator it = mdds::mtv::numeric_element_block::begin(*node.data);
+                mdds::mtv::numeric_element_block::const_iterator itEnd = mdds::mtv::numeric_element_block::end(*node.data);
+                for (; it != itEnd; ++it)
+                {
+                    if (mbFirst)
+                    {
+                        maOp(maRes.mfFirst, *it);
+                        mbFirst = false;
+                    }
+                    else
+                        maOp(maRes.mfRest, *it);
+                }
+                maRes.mnCount += node.size;
+            }
+            break;
+            case mdds::mtm::element_boolean:
+            {
+                mdds::mtv::boolean_element_block::const_iterator it = mdds::mtv::boolean_element_block::begin(*node.data);
+                mdds::mtv::boolean_element_block::const_iterator itEnd = mdds::mtv::boolean_element_block::end(*node.data);
+                for (; it != itEnd; ++it)
+                {
+                    if (mbFirst)
+                    {
+                        maOp(maRes.mfFirst, *it);
+                        mbFirst = false;
+                    }
+                    else
+                        maOp(maRes.mfRest, *it);
+                }
+                maRes.mnCount += node.size;
+            }
+            break;
+            case mdds::mtm::element_string:
+                if (mbTextAsZero)
+                    maRes.mnCount += node.size;
+            break;
+            case mdds::mtm::element_empty:
+            default:
+                ;
+        }
+    }
+};
+
+class CountElements : std::unary_function<MatrixImplType::element_block_node_type, void>
+{
+    size_t mnCount;
+    bool mbCountString;
+public:
+    CountElements(bool bCountString) : mnCount(0), mbCountString(bCountString) {}
+
+    size_t getCount() const { return mnCount; }
+
+    void operator() (const MatrixImplType::element_block_node_type& node)
+    {
+        switch (node.type)
+        {
+            case mdds::mtm::element_numeric:
+            case mdds::mtm::element_boolean:
+                mnCount += node.size;
+            break;
+            case mdds::mtm::element_string:
+                if (mbCountString)
+                    mnCount += node.size;
+            break;
+            case mdds::mtm::element_empty:
+            default:
+                ;
+        }
+    }
+};
+
+}
+
 ScMatrix::IterateResult ScMatrixImpl::Sum(bool bTextAsZero) const
 {
-    return ScMatrix::IterateResult(0, 0, 0);
+    WalkElementBlocks<SumOp> aFunc(bTextAsZero);
+    maMat.walk(aFunc);
+    return aFunc.getResult();
 }
 
 ScMatrix::IterateResult ScMatrixImpl::SumSquare(bool bTextAsZero) const
 {
-    return ScMatrix::IterateResult(0, 0, 0);
+    WalkElementBlocks<SumSquareOp> aFunc(bTextAsZero);
+    maMat.walk(aFunc);
+    return aFunc.getResult();
 }
 
 ScMatrix::IterateResult ScMatrixImpl::Product(bool bTextAsZero) const
 {
-    return ScMatrix::IterateResult(0, 0, 0);
+    WalkElementBlocks<ProductOp> aFunc(bTextAsZero);
+    maMat.walk(aFunc);
+    return aFunc.getResult();
 }
 
 size_t ScMatrixImpl::Count(bool bCountStrings) const
 {
-    return 0;
+    CountElements aFunc(bCountStrings);
+    maMat.walk(aFunc);
+    return aFunc.getCount();
 }
 
 void ScMatrixImpl::CalcPosition(SCSIZE nIndex, SCSIZE& rC, SCSIZE& rR) const
