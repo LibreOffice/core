@@ -3107,7 +3107,7 @@ const ModelToViewHelper::ConversionMap*
     {
         const SwTxtAttr* pAttr = (*pSwpHints2)[i];
         bool bReplace = false;
-        xub_StrLen nFieldPos;
+        xub_StrLen nFieldPos(STRING_NOTFOUND);
         rtl::OUString aExpand;
         switch (pAttr->Which())
         {
