@@ -294,7 +294,6 @@ struct custom_string_trait
 namespace {
 
 typedef mdds::multi_type_matrix<custom_string_trait> MatrixImplType;
-//typedef ::mdds::mixed_type_matrix< ::rtl::OUString, sal_uInt8> MatrixImplType;
 
 struct ElemEqual : public unary_function<double, bool>
 {
@@ -367,25 +366,6 @@ void compareMatrix(MatrixImplType& rMat)
         }
     }
 }
-
-#if 0
-/**
- * Return a numeric value from a matrix element no matter what its type is.
- */
-double getNumericValue(const MatrixImplType::element& elem)
-{
-    switch (elem.m_type)
-    {
-        case mdds::element_boolean:
-            return static_cast<double>(elem.m_boolean);
-        case mdds::element_numeric:
-            return elem.m_numeric;
-        default:
-            ;
-    }
-    return 0.0;
-}
-#endif
 
 }
 
