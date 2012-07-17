@@ -22,7 +22,7 @@ $Katakana  = [[:Script = KATAKANA:] [:name = KATAKANA-HIRAGANA PROLONGED SOUND M
                                    [:name = HALFWIDTH KATAKANA SEMI-VOICED SOUND MARK:]];
 
 
-$ALetter   = [\u0002 [:Alphabetic:] [:name= COMMERCIAL AT:] [:name= HEBREW PUNCTUATION GERESH:]
+$ALetter   = [[:Alphabetic:] [:name= COMMERCIAL AT:] [:name= HEBREW PUNCTUATION GERESH:]
                            - $Katakana
                            - [:Script = Thai:]
                            - [:Script = Lao:]

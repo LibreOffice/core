@@ -3106,22 +3106,45 @@ const ModelToViewHelper::ConversionMap*
     for ( sal_uInt16 i = 0; pSwpHints2 && i < pSwpHints2->Count(); ++i )
     {
         const SwTxtAttr* pAttr = (*pSwpHints2)[i];
-        if ( RES_TXTATR_FIELD == pAttr->Which() )
+        bool bReplace = false;
+        xub_StrLen nFieldPos;
+        rtl::OUString aExpand;
+        switch (pAttr->Which())
         {
-            const XubString aExpand(
-                static_cast<SwTxtFld const*>(pAttr)->GetFld().GetFld()
-                    ->ExpandField(true));
-            if ( aExpand.Len() > 0 )
-            {
-                const xub_StrLen nFieldPos = *pAttr->GetStart();
-                rRetText = rRetText.replaceAt( nPos + nFieldPos, 1, aExpand );
-                if ( !pConversionMap )
-                    pConversionMap = new ModelToViewHelper::ConversionMap;
-                pConversionMap->push_back(
-                        ModelToViewHelper::ConversionMapEntry(
-                            nFieldPos, nPos + nFieldPos ) );
-                nPos += ( aExpand.Len() - 1 );
-            }
+            case RES_TXTATR_FIELD:
+                bReplace = true;
+                aExpand =
+                    static_cast<SwTxtFld const*>(pAttr)->GetFld().GetFld()
+                        ->ExpandField(true);
+                nFieldPos = *pAttr->GetStart();
+                break;
+            case RES_TXTATR_FTN:
+                {
+                    bReplace = true;
+                    const SwFmtFtn& rFtn = static_cast<SwTxtFtn const*>(pAttr)->GetFtn();
+                    const SwDoc *pDoc = GetDoc();
+                    aExpand = rFtn.GetViewNumStr(*pDoc);
+                    nFieldPos = *pAttr->GetStart();
+                }
+                break;
+            default:
+                if (pAttr->HasDummyChar())
+                {
+                    bReplace = true;
+                    nFieldPos = *pAttr->GetStart();
+                }
+                break;
+        }
+
+        if (bReplace)
+        {
+            rRetText = rRetText.replaceAt( nPos + nFieldPos, 1, aExpand );
+            if ( !pConversionMap )
+                pConversionMap = new ModelToViewHelper::ConversionMap;
+            pConversionMap->push_back(
+                    ModelToViewHelper::ConversionMapEntry(
+                        nFieldPos, nPos + nFieldPos ) );
+            nPos += ( aExpand.getLength() - 1 );
         }
     }
 

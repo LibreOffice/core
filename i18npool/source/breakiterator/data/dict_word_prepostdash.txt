@@ -30,7 +30,7 @@ $Hangul = [:Script = HANGUL:];
 $PrePostDashHyphen = [ [:name = HYPHEN-MINUS:] ];
 
 
-$ALetter   = [\u0002 [:Alphabetic:] [:name= COMMERCIAL AT:] [:name= HEBREW PUNCTUATION GERESH:]
+$ALetter   = [[:Alphabetic:] [:name= COMMERCIAL AT:] [:name= HEBREW PUNCTUATION GERESH:]
                            - $Ideographic
                            - $Katakana
                            - $Hangul

@@ -24,7 +24,7 @@ $Katakana  = [[:Script = KATAKANA:] [:name = KATAKANA-HIRAGANA PROLONGED SOUND M
 $Ideographic = [:Ideographic:];
 $Hangul = [:Script = HANGUL:];
 
-$ALetter   = [\u0002 [:Alphabetic:] [:name= NO-BREAK SPACE:] [:name= HEBREW PUNCTUATION GERESH:] 
+$ALetter   = [[:Alphabetic:] [:name= NO-BREAK SPACE:] [:name= HEBREW PUNCTUATION GERESH:] 
                            - $Ideographic
                            - $Katakana
                            - $Hangul

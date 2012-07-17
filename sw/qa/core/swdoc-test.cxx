@@ -58,6 +58,8 @@
 #include "swscanner.hxx"
 #include "swmodule.hxx"
 #include "swtypes.hxx"
+#include "fmtftn.hxx"
+#include "fmtrfmrk.hxx"
 
 SO2_DECL_REF(SwDocShell)
 SO2_IMPL_REF(SwDocShell)
@@ -222,7 +224,7 @@ void SwDocTest::testSwScanner()
     SwNodeIndex aIdx(m_pDoc->GetNodes().GetEndOfContent(), -1);
     SwPaM aPaM(aIdx);
 
-    const SwTxtNode* pTxtNode = aPaM.GetNode()->GetTxtNode();
+    SwTxtNode* pTxtNode = aPaM.GetNode()->GetTxtNode();
 
     CPPUNIT_ASSERT_MESSAGE("Has Text Node", pTxtNode);
 
@@ -334,6 +336,36 @@ void SwDocTest::testSwScanner()
         pTxtNode = aPaM.GetNode()->GetTxtNode();
         pTxtNode->CountWords(aDocStat, 0, SAL_N_ELEMENTS(aShouldBeFive));
         CPPUNIT_ASSERT_MESSAGE("Should be 5", aDocStat.nWord == 5);
+    }
+
+    //See https://bugs.freedesktop.org/show_bug.cgi?id=49629
+    {
+        SwDocStat aDocStat;
+
+        m_pDoc->AppendTxtNode(*aPaM.GetPoint());
+        m_pDoc->InsertString(aPaM, rtl::OUString("Apple"));
+        pTxtNode = aPaM.GetNode()->GetTxtNode();
+        xub_StrLen nPos = aPaM.GetPoint()->nContent.GetIndex();
+        SwFmtFtn aFtn;
+        aFtn.SetNumStr(rtl::OUString("banana"));
+        SwTxtAttr* pTA = pTxtNode->InsertItem(aFtn, nPos, nPos);
+        CPPUNIT_ASSERT(pTA);
+        CPPUNIT_ASSERT(pTxtNode->Len() == 6); //Apple + 0x02
+        pTxtNode->CountWords(aDocStat, 0, pTxtNode->Len());
+        CPPUNIT_ASSERT(aDocStat.nWord == 1);
+        CPPUNIT_ASSERT_MESSAGE("footnote should be expanded", aDocStat.nChar == 11);
+
+        xub_StrLen nNextPos = aPaM.GetPoint()->nContent.GetIndex();
+        CPPUNIT_ASSERT(nNextPos == nPos+1);
+        SwFmtRefMark aRef(rtl::OUString("refmark"));
+        pTA = pTxtNode->InsertItem(aRef, nNextPos, nNextPos);
+        CPPUNIT_ASSERT(pTA);
+
+        aDocStat.Reset();
+        pTxtNode->SetWordCountDirty(true);
+        pTxtNode->CountWords(aDocStat, 0, pTxtNode->Len());
+        CPPUNIT_ASSERT(aDocStat.nWord == 1);
+        CPPUNIT_ASSERT_MESSAGE("refmark anchor should not be counted", aDocStat.nChar == 11);
     }
 
     //See https://bugs.freedesktop.org/show_bug.cgi?id=46757
