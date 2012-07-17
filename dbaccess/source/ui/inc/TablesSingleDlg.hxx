@@ -31,9 +31,6 @@ namespace com { namespace sun { namespace star {
     namespace beans {
         class XPropertySet;
     }
-    namespace sdbc {
-        class XConnection;
-    }
     namespace lang {
         class XMultiServiceFactory;
     }

@@ -39,8 +39,6 @@
 #include <sfx2/ctrlitem.hxx>
 #include <sfx2/viewfrm.hxx>
 
-class SfxInPlaceEnv_Impl;
-class SfxPlugInEnv_Impl;
 class SfxSplitWindow;
 class SfxWorkWindow;
 

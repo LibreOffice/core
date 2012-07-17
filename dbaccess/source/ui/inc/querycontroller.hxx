@@ -50,7 +50,6 @@ namespace comphelper
 namespace dbaui
 {
     class OQueryContainerWindow;
-    class OQueryTableWindow;
 
     class OQueryController;
     typedef ::comphelper::OPropertyContainer                            OQueryController_PBase;
