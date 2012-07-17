@@ -43,7 +43,7 @@ if (-d "$StartDir") {
     # check binaries
     print "check binaries: ";
     if (-d "$StartDir/bin") {
-    my @binarylist = ( "idlc","idlcpp","cppumaker","javamaker",
+	my @binarylist = ( "idlc","ucpp","cppumaker","javamaker",
                "regcompare","autodoc",
                "unoapploader", "uno-skeletonmaker" );
 

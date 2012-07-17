@@ -50,7 +50,7 @@ IDL_CHAPTER_REFS=idl_chapter_refs.txt
 EXELIST = \
     $(DESTDIRBIN)/cppumaker$(EXEPOSTFIX) 	\
     $(DESTDIRBIN)/regcompare$(EXEPOSTFIX) 	\
-    $(DESTDIRBIN)/idlcpp$(EXEPOSTFIX) 	\
+	$(DESTDIRBIN)/ucpp$(EXEPOSTFIX) 	\
     $(DESTDIRBIN)/idlc$(EXEPOSTFIX) 	\
     $(DESTDIRBIN)/javamaker$(EXEPOSTFIX) 	\
     $(DESTDIRBIN)/autodoc$(EXEPOSTFIX) \

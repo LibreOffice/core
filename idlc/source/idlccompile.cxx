@@ -1,30 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 #include <idlc/idlc.hxx>
 #include <rtl/ustring.hxx>
@@ -184,12 +175,10 @@ sal_Bool copyFile(const OString* source, const OString& target)
     sal_Bool bRet = sal_True;
 
     FILE* pSource = source == 0 ? stdin : fopen(source->getStr(), "rb");
-
     if ( !pSource )
         return sal_False;
 
     FILE* pTarget = fopen(target.getStr(), "wb");
-
     if ( !pTarget )
     {
         fclose(pSource);
@@ -251,8 +240,13 @@ sal_Int32 compileFile(const OString * pathname)
     idlc()->setMainFileName(fileName);
     idlc()->setRealFileName(tmpFile);
 
-    OStringBuffer cppArgs(512);
-    cppArgs.append("-DIDL -Xi -Xc -+");
+    ::std::vector< ::rtl::OUString> lCppArgs;
+    lCppArgs.push_back("-DIDL");
+    lCppArgs.push_back("-C");
+    lCppArgs.push_back("-zI");
+    lCppArgs.push_back("-I.");
+
+    OStringBuffer cppArgs(256);
     Options* pOptions = idlc()->getOptions();
 
     OString filePath;
@@ -264,43 +258,45 @@ sal_Int32 compileFile(const OString * pathname)
 
         if ( !filePath.isEmpty() )
         {
-            cppArgs.append(" -I\"");
+            cppArgs.append("-I");
             cppArgs.append(filePath);
-            cppArgs.append("\"");
+            lCppArgs.push_back(rtl::OStringToOUString(
+                cppArgs.makeStringAndClear().replace('\\', '/'),
+                RTL_TEXTENCODING_UTF8));
         }
     }
 
     if ( pOptions->isValid("-D") )
     {
-        cppArgs.append(" ");
-        cppArgs.append(pOptions->getOption("-D"));
-    }
-    if ( pOptions->isValid("-I") )
-    {
-        cppArgs.append(" ");
-        cppArgs.append(pOptions->getOption("-I"));
+        OString token, dOpt = pOptions->getOption("-D");
+        sal_Int32 nIndex = 0;
+        do
+        {
+            token = dOpt.getToken( 0, ' ', nIndex );
+            if (token.getLength())
+                lCppArgs.push_back(rtl::OStringToOUString("-D" + token, RTL_TEXTENCODING_UTF8));
+        } while( nIndex != -1 );
     }
 
-    cppArgs.append(" \"");
+	if ( pOptions->isValid("-I") )
+    {
+        OString token, incOpt = pOptions->getOption("-I");
+        sal_Int32 nIndex = 0;
+        do
+        {
+            token = incOpt.getToken( 0, ' ', nIndex );
+            if (token.getLength())
+                lCppArgs.push_back(rtl::OStringToOUString("-I" + token, RTL_TEXTENCODING_UTF8));
+        } while( nIndex != -1 );
+    }
+
+    lCppArgs.push_back(OUString(RTL_CONSTASCII_USTRINGPARAM("-o")));
+
+	cppArgs.append(preprocFile);
+    lCppArgs.push_back(OStringToOUString(cppArgs.makeStringAndClear(), RTL_TEXTENCODING_UTF8));
+
     cppArgs.append(tmpFile);
-    cppArgs.append("\" \"");
-    cppArgs.append(preprocFile);
-    cppArgs.append("\"");
-
-    OString cmdFileName = makeTempName(OString("idlc_"));
-    FILE* pCmdFile = fopen(cmdFileName.getStr(), "w");
-
-    if ( !pCmdFile )
-    {
-          fprintf(stderr, "%s: couldn't open temporary file for preprocessor commands: %s\n",
-            idlc()->getOptions()->getProgramName().getStr(), cmdFileName.getStr());
-          exit(99);
-    }
-    fprintf(pCmdFile, "%s", cppArgs.getStr());
-    fclose(pCmdFile);
-
-    OUString cmdArg(RTL_CONSTASCII_USTRINGPARAM("@"));
-    cmdArg += OStringToOUString(cmdFileName, RTL_TEXTENCODING_UTF8);
+    lCppArgs.push_back(OStringToOUString(cppArgs.makeStringAndClear(), RTL_TEXTENCODING_UTF8));
 
     OUString cpp;
     OUString startDir;
@@ -309,19 +305,31 @@ sal_Int32 compileFile(const OString * pathname)
     }
 
     sal_Int32 idx= cpp.lastIndexOf(OUString( RTL_CONSTASCII_USTRINGPARAM("idlc")) );
-     cpp = cpp.copy(0, idx);
+    cpp = cpp.copy(0, idx);
 
 #if defined(SAL_W32)
-     cpp += OUString( RTL_CONSTASCII_USTRINGPARAM("idlcpp.exe"));
+    cpp += OUString( RTL_CONSTASCII_USTRINGPARAM("ucpp.exe"));
 #else
-    cpp += OUString( RTL_CONSTASCII_USTRINGPARAM("idlcpp"));
+    cpp += OUString( RTL_CONSTASCII_USTRINGPARAM("ucpp"));
 #endif
 
     oslProcess      hProcess = NULL;
     oslProcessError procError = osl_Process_E_None;
 
-    procError = osl_executeProcess(cpp.pData, &cmdArg.pData, 1, osl_Process_WAIT,
-                                   0, startDir.pData, 0, 0, &hProcess);
+    const int nCmdArgs = lCppArgs.size();
+    rtl_uString** pCmdArgs = 0;
+    pCmdArgs = (rtl_uString**)rtl_allocateZeroMemory(nCmdArgs * sizeof(rtl_uString*));
+
+    ::std::vector< ::rtl::OUString >::iterator iter = lCppArgs.begin();
+    ::std::vector< ::rtl::OUString >::iterator end = lCppArgs.end();
+    int i = 0;
+	while ( iter != end ) {
+        pCmdArgs[i++] = (*iter).pData;
+        ++iter;
+    }
+
+	procError = osl_executeProcess( cpp.pData, pCmdArgs, nCmdArgs, osl_Process_WAIT,
+                                    0, startDir.pData, 0, 0, &hProcess );
 
     oslProcessInfo hInfo;
     hInfo.Size = (sal_uInt32)(sizeof(oslProcessInfo));
@@ -340,26 +348,17 @@ sal_Int32 compileFile(const OString * pathname)
                     pOptions->getProgramName().getStr(),
                     pathname == 0 ? "" : "file ", fileName.getStr());
 
-        unlink(tmpFile.getStr());
-        unlink(preprocFile.getStr());
-        unlink(cmdFileName.getStr());
         osl_freeProcessHandle(hProcess);
+        rtl_freeMemory(pCmdArgs);
         exit(hInfo.Code ? hInfo.Code : 99);
     }
     osl_freeProcessHandle(hProcess);
+    rtl_freeMemory(pCmdArgs);
 
     if (unlink(tmpFile.getStr()) != 0)
     {
         fprintf(stderr, "%s: Could not remove cpp input file %s\n",
                  pOptions->getProgramName().getStr(), tmpFile.getStr());
-        exit(99);
-    }
-
-    if (unlink(cmdFileName.getStr()) != 0)
-    {
-        fprintf(stderr, "%s: Could not remove unocpp command file %s\n",
-                   pOptions->getProgramName().getStr(), cmdFileName.getStr());
-
         exit(99);
     }
 
