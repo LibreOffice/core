@@ -43,6 +43,7 @@
 #include "resource/sharedresources.hxx"
 #include "java/LocalRef.hxx"
 #include <string.h>
+#include <iostream>
 
 using namespace connectivity;
 using namespace ::com::sun::star::uno;
