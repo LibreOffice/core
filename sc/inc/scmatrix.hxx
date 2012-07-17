@@ -131,14 +131,6 @@ class SC_DLLPUBLIC ScMatrix
     ScMatrix& operator=( const ScMatrix&);
 
 public:
-    enum DensityType
-    {
-        FILLED_ZERO,
-        FILLED_EMPTY,
-        SPARSE_ZERO,
-        SPARSE_EMPTY
-    };
-
     /**
      * When adding all numerical matrix elements for a scalar result such as
      * summation, the interpreter wants to separate the first non-zero value
