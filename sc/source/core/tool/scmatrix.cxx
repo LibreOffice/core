@@ -444,10 +444,10 @@ private:
 };
 
 ScMatrixImpl::ScMatrixImpl(SCSIZE nC, SCSIZE nR) :
-    maMat(nR, nC), pErrorInterpreter(NULL), mbCloneIfConst(true) {}
+    maMat(nR, nC), maMatFlag(nR, nC), pErrorInterpreter(NULL), mbCloneIfConst(true) {}
 
 ScMatrixImpl::ScMatrixImpl(SCSIZE nC, SCSIZE nR, double fInitVal) :
-    maMat(nR, nC, fInitVal), pErrorInterpreter(NULL), mbCloneIfConst(true) {}
+    maMat(nR, nC, fInitVal), maMatFlag(nR, nC), pErrorInterpreter(NULL), mbCloneIfConst(true) {}
 
 ScMatrixImpl::~ScMatrixImpl()
 {
@@ -457,6 +457,7 @@ ScMatrixImpl::~ScMatrixImpl()
 void ScMatrixImpl::Clear()
 {
     maMat.clear();
+    maMatFlag.clear();
 }
 
 void ScMatrixImpl::SetImmutable(bool bVal)
