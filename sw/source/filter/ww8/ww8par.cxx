@@ -3157,10 +3157,10 @@ bool SwWW8ImplReader::ReadChar(long nPosCp, long nCpOfs)
         case 0x5:               // Annotation reference
         case 0x13:
             break;
-        case 0x2:
+        case 0x2: // Auto-Footnote-Number, should be replaced by SwWW8ImplReader::End_Ftn later
             if (!maFtnStack.empty())
-                cInsert = 0x2;
-            break;                  // Auto-Fussnoten-Nummer
+                cInsert = CH_TXTATR_INWORD;
+            break;
 #if OSL_DEBUG_LEVEL > 1
         default:
             ::std::clog << "<unknownValue val=\"" << nWCharVal << "\">" << ::std::endl;
