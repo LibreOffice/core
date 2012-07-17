@@ -2222,15 +2222,21 @@ void SmNodeToTextVisitor::Visit( SmOperNode* pNode )
             LineToText( pChild );
             Append( "} " );
         }
-        if( ( pChild = pSubSup->GetSubSup( CSUP ) ) ) {
+        if( ( pChild = pSubSup->GetSubSup( CSUB ) ) ) {
             Separate( );
-            Append( "csup { " );
+            if (pSubSup->IsUseLimits())
+                Append( "from { " );
+            else
+                Append( "csub { " );
             LineToText( pChild );
             Append( "} " );
         }
-        if( ( pChild = pSubSup->GetSubSup( CSUB ) ) ) {
+        if( ( pChild = pSubSup->GetSubSup( CSUP ) ) ) {
             Separate( );
-            Append( "csub { " );
+            if (pSubSup->IsUseLimits())
+                Append( "to { " );
+            else
+                Append( "csup { " );
             LineToText( pChild );
             Append( "} " );
         }
@@ -2406,14 +2412,20 @@ void SmNodeToTextVisitor::Visit( SmSubSupNode* pNode )
         Append( "_ " );
         LineToText( pChild );
     }
-    if( ( pChild = pNode->GetSubSup( CSUP ) ) ) {
-        Separate( );
-        Append( "csup " );
-        LineToText( pChild );
-    }
     if( ( pChild = pNode->GetSubSup( CSUB ) ) ) {
         Separate( );
-        Append( "csub " );
+        if (pNode->IsUseLimits())
+            Append( "from " );
+        else
+            Append( "csub " );
+        LineToText( pChild );
+    }
+    if( ( pChild = pNode->GetSubSup( CSUP ) ) ) {
+        Separate( );
+        if (pNode->IsUseLimits())
+            Append( "to " );
+        else
+            Append( "csup " );
         LineToText( pChild );
     }
 }
