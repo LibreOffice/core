@@ -580,17 +580,22 @@ void SwRedlineAcceptDlg::InsertChildren(SwRedlineDataParent *pParent, const SwRe
     bValidParent = bValidParent && pTable->IsValidEntry(&rRedln.GetAuthorString(), &rRedln.GetTimeStamp(), &rRedln.GetComment());
     if (nAutoFmt)
     {
-        SwRedlineDataParentSortArr::const_iterator it;
 
-        if ( pParent->pData->GetSeqNo() && (it = aUsedSeqNo.insert(pParent).first) != aUsedSeqNo.end() )    // already there
+        if (pParent->pData->GetSeqNo())
         {
-            if (pParent->pTLBParent)
+            std::pair<SwRedlineDataParentSortArr::const_iterator,bool> const ret
+                = aUsedSeqNo.insert(pParent);
+            if (ret.second) // already there
             {
-                pTable->SetEntryText(sAutoFormat, (*it)->pTLBParent, 0);
-                pTable->RemoveEntry(pParent->pTLBParent);
-                pParent->pTLBParent = 0;
+                if (pParent->pTLBParent)
+                {
+                    pTable->SetEntryText(
+                            sAutoFormat, (*ret.first)->pTLBParent, 0);
+                    pTable->RemoveEntry(pParent->pTLBParent);
+                    pParent->pTLBParent = 0;
+                }
+                return;
             }
-            return;
         }
         bValidParent = bValidParent && bAutoFmt;
     }
