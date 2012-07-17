@@ -568,15 +568,6 @@ int ScaleTabPage::DeactivatePage(SfxItemSet* pItemSet)
 
     bool bDateAxis = chart2::AxisType::DATE == m_nAxisType;
 
-    sal_uInt32 nIndex = pNumFormatter->GetStandardIndex(LANGUAGE_SYSTEM);
-    const SfxPoolItem *pPoolItem = NULL;
-    if( GetItemSet().GetItemState( SID_ATTR_NUMBERFORMAT_VALUE, sal_True, &pPoolItem ) == SFX_ITEM_SET )
-        nIndex = static_cast< sal_uInt32 >( static_cast< const SfxInt32Item* >(pPoolItem)->GetValue());
-    else
-    {
-        OSL_FAIL( "Using Standard Language" );
-    }
-
     Control* pControl = NULL;
     sal_uInt16 nErrStrId = 0;
     double fDummy;
@@ -616,28 +607,28 @@ int ScaleTabPage::DeactivatePage(SfxItemSet* pItemSet)
     // check for entries that cannot be parsed for the current number format
     else if ( aFmtFldMin.IsModified()
         && !aCbxAutoMin.IsChecked()
-        && !pNumFormatter->IsNumberFormat(aFmtFldMin.GetText(), nIndex, fDummy))
+              && !pNumFormatter->IsNumberFormat(aFmtFldMin.GetText(), aFmtFldMin.GetFormatKey(), fDummy))
     {
         pControl = &aFmtFldMin;
         nErrStrId = STR_INVALID_NUMBER;
     }
     else if (aFmtFldMax.IsModified() && !aCbxAutoMax.IsChecked() &&
              !pNumFormatter->IsNumberFormat(aFmtFldMax.GetText(),
-                                            nIndex, fDummy))
+                                            aFmtFldMax.GetFormatKey(), fDummy))
     {
         pControl = &aFmtFldMax;
         nErrStrId = STR_INVALID_NUMBER;
     }
     else if ( !bDateAxis && aFmtFldStepMain.IsModified() && !aCbxAutoStepMain.IsChecked() &&
              !pNumFormatter->IsNumberFormat(aFmtFldStepMain.GetText(),
-                                            nIndex, fDummy))
+                                            aFmtFldStepMain.GetFormatKey(), fDummy))
     {
         pControl = &aFmtFldStepMain;
         nErrStrId = STR_STEP_GT_ZERO;
     }
     else if (aFmtFldOrigin.IsModified() && !aCbxAutoOrigin.IsChecked() &&
              !pNumFormatter->IsNumberFormat(aFmtFldOrigin.GetText(),
-                                            nIndex, fDummy))
+                                            aFmtFldOrigin.GetFormatKey(), fDummy))
     {
         pControl = &aFmtFldOrigin;
         nErrStrId = STR_INVALID_NUMBER;
