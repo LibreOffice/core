@@ -1284,10 +1284,11 @@ void SwGlobalTree::InsertRegion( const SwGlblDocContent* _pContent, const Sequen
         rSh.StartAction();
         // after insertion of the first new content the 'pCont' parameter becomes invalid
         // find the index of the 'anchor' content to always use a current anchor content
-        sal_uInt16 nAnchorContent = pSwGlblDocContents->size() - 1;
+        size_t nAnchorContent = pSwGlblDocContents->size() - 1;
         if ( !bMove )
         {
-            for( sal_uInt16 nContent = 0; nContent < pSwGlblDocContents->size(); ++nContent )
+            for (size_t nContent = 0; nContent < pSwGlblDocContents->size();
+                    ++nContent)
             {
                 if( *_pContent == *(*pSwGlblDocContents)[ nContent ] )
                 {
@@ -1304,7 +1305,7 @@ void SwGlobalTree::InsertRegion( const SwGlblDocContent* _pContent, const Sequen
             SwGlblDocContent* pAnchorContent = 0;
             OSL_ENSURE(aTempContents.size() > (nAnchorContent + nFile), "invalid anchor content -> last insertion failed");
             if ( aTempContents.size() > (nAnchorContent + nFile) )
-                pAnchorContent = aTempContents[nAnchorContent + (sal_uInt16)nFile];
+                pAnchorContent = aTempContents[nAnchorContent + nFile];
             else
                 pAnchorContent = aTempContents.back();
             String sFileName(pFileNames[nFile]);
