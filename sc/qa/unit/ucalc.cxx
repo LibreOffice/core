@@ -1248,7 +1248,7 @@ void Test::testMatrix()
     SCSIZE nC, nR;
     pMat->GetDimensions(nC, nR);
     CPPUNIT_ASSERT_MESSAGE("matrix is not empty", nC == 0 && nR == 0);
-    pMat->Resize(4, 10);
+    pMat->Resize(4, 10, 0.0);
     pMat->GetDimensions(nC, nR);
     CPPUNIT_ASSERT_MESSAGE("matrix size is not as expected", nC == 4 && nR == 10);
     CPPUNIT_ASSERT_MESSAGE("both 'and' and 'or' should evaluate to false",

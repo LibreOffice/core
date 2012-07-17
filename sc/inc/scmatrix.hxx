@@ -238,6 +238,8 @@ public:
      */
     void Resize( SCSIZE nC, SCSIZE nR);
 
+    void Resize(SCSIZE nC, SCSIZE nR, double fVal);
+
     /** Clone the matrix and extend it to the new size. nNewCols and nNewRows
         MUST be at least of the size of the original matrix. */
     ScMatrix* CloneAndExtend(SCSIZE nNewCols, SCSIZE nNewRows) const;

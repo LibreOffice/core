@@ -388,6 +388,7 @@ public:
     void SetImmutable(bool bVal);
     bool IsImmutable() const;
     void Resize(SCSIZE nC, SCSIZE nR);
+    void Resize(SCSIZE nC, SCSIZE nR, double fVal);
     void SetErrorInterpreter( ScInterpreter* p);
     ScInterpreter* GetErrorInterpreter() const { return pErrorInterpreter; }
 
@@ -473,6 +474,11 @@ bool ScMatrixImpl::IsImmutable() const
 void ScMatrixImpl::Resize(SCSIZE nC, SCSIZE nR)
 {
     maMat.resize(nR, nC);
+}
+
+void ScMatrixImpl::Resize(SCSIZE nC, SCSIZE nR, double fVal)
+{
+    maMat.resize(nR, nC, fVal);
 }
 
 void ScMatrixImpl::SetErrorInterpreter( ScInterpreter* p)
@@ -1152,6 +1158,11 @@ void ScMatrix::SetImmutable( bool bVal )
 void ScMatrix::Resize( SCSIZE nC, SCSIZE nR)
 {
     pImpl->Resize(nC, nR);
+}
+
+void ScMatrix::Resize(SCSIZE nC, SCSIZE nR, double fVal)
+{
+    pImpl->Resize(nC, nR, fVal);
 }
 
 ScMatrix* ScMatrix::CloneAndExtend(SCSIZE nNewCols, SCSIZE nNewRows) const
