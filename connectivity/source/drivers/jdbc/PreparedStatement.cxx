@@ -141,7 +141,6 @@ void SAL_CALL java_sql_PreparedStatement::setString( sal_Int32 parameterIndex, c
 
 ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet > SAL_CALL java_sql_PreparedStatement::executeQuery(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
-    std::cerr << ::rtl::OUStringToOString( this->m_sSqlStatement, RTL_TEXTENCODING_UTF8 ).getStr() << std::endl;
     m_aLogger.log( LogLevel::FINE, STR_LOG_EXECUTING_PREPARED_QUERY );
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);
