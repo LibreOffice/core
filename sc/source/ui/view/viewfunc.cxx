@@ -539,9 +539,16 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
         {
             ScMarkData::iterator itr = rMark.begin(), itrEnd = rMark.end();
             for ( ; itr != itrEnd; ++itr )
-                if ( rFunc.SetNormalString( ScAddress( nCol, nRow, *itr ),
-                                            rString, sal_False ) )
+            {
+                bool bNumFmtSet = false;
+                rFunc.SetNormalString( bNumFmtSet, ScAddress( nCol, nRow, *itr ), rString, sal_False );
+                if (bNumFmtSet)
+                {
+                    /* FIXME: if set on any sheet results in changed only on
+                     * sheet nTab for TestFormatArea() and DoAutoAttributes() */
                     bNumFmtChanged = true;
+                }
+            }
         }
 
         sal_Bool bAutoFormat = TestFormatArea(nCol, nRow, nTab, bNumFmtChanged);

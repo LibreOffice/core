@@ -77,8 +77,11 @@ void ScDocFuncRecv::RecvMessage( const rtl::OString &rString )
                                                  RTL_TEXTENCODING_UTF8 ) );
         // FIXME: have some hash to enumeration mapping here
         if ( aReader.getMethod() == "setNormalString" )
-            mpChain->SetNormalString( aReader.getAddress( 1 ), aReader.getString( 2 ),
+        {
+            bool bNumFmtSet = false;
+            mpChain->SetNormalString( bNumFmtSet, aReader.getAddress( 1 ), aReader.getString( 2 ),
                                       aReader.getBool( 3 ) );
+        }
         else if ( aReader.getMethod() == "putCell" )
         {
             ScBaseCell *pNewCell = aReader.getCell( 2 );
@@ -313,13 +316,15 @@ void ScDocFuncSend::EndListAction()
     SendMessage( aOp );
 }
 
-sal_Bool ScDocFuncSend::SetNormalString( const ScAddress& rPos, const String& rText, sal_Bool bApi )
+sal_Bool ScDocFuncSend::SetNormalString( bool& o_rbNumFmtSet, const ScAddress& rPos, const String& rText, sal_Bool bApi )
 {
     ScChangeOpWriter aOp( "setNormalString" );
     aOp.appendAddress( rPos );
     aOp.appendString( rText );
     aOp.appendBool( bApi );
     SendMessage( aOp );
+
+    o_rbNumFmtSet = false;
 
     if ( rtl::OUString( rText ) == "saveme" )
         SendFile( rText );

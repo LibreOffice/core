@@ -754,7 +754,7 @@ sal_Bool ScDocFunc::TransliterateText( const ScMarkData& rMark, sal_Int32 nType,
 
 //------------------------------------------------------------------------
 
-sal_Bool ScDocFunc::SetNormalString( const ScAddress& rPos, const String& rText, sal_Bool bApi )
+sal_Bool ScDocFunc::SetNormalString( bool& o_rbNumFmtSet, const ScAddress& rPos, const String& rText, sal_Bool bApi )
 {
     ScDocShellModificator aModificator( rDocShell );
     ScDocument* pDoc = rDocShell.GetDocument();
@@ -795,7 +795,7 @@ sal_Bool ScDocFunc::SetNormalString( const ScAddress& rPos, const String& rText,
             pHasFormat[0] = false;
     }
 
-    pDoc->SetString( rPos.Col(), rPos.Row(), rPos.Tab(), rText );
+    o_rbNumFmtSet = pDoc->SetString( rPos.Col(), rPos.Row(), rPos.Tab(), rText );
 
     if (bUndo)
     {
@@ -981,7 +981,10 @@ sal_Bool ScDocFunc::PutData( const ScAddress& rPos, ScEditEngineDefaulter& rEngi
     {
         String aText = rEngine.GetText();
         if ( bInterpret || !aText.Len() )
-            bRet = SetNormalString( rPos, aText, bApi );
+        {
+            bool bNumFmtSet = false;
+            bRet = SetNormalString( bNumFmtSet, rPos, aText, bApi );
+        }
         else
             bRet = PutCell( rPos, new ScStringCell( aText ), bApi );
     }
@@ -1100,7 +1103,10 @@ sal_Bool ScDocFunc::SetCellText( const ScAddress& rPos, const String& rText,
     if (pNewCell)
         return PutCell( rPos, pNewCell, bApi );
     else
-        return SetNormalString( rPos, rText, bApi );
+    {
+        bool bNumFmtSet = false;
+        return SetNormalString( bNumFmtSet, rPos, rText, bApi );
+    }
 }
 
 //------------------------------------------------------------------------

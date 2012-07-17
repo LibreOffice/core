@@ -244,7 +244,7 @@ public:
     virtual void        EnterListAction( sal_uInt16 nNameResId );
     virtual void        EndListAction();
 
-    virtual sal_Bool    SetNormalString( const ScAddress& rPos, const String& rText, sal_Bool bApi );
+    virtual sal_Bool    SetNormalString( bool& o_rbNumFmtSet, const ScAddress& rPos, const String& rText, sal_Bool bApi );
     virtual sal_Bool    PutCell( const ScAddress& rPos, ScBaseCell* pNewCell, sal_Bool bApi );
     virtual sal_Bool    PutData( const ScAddress& rPos, ScEditEngineDefaulter& rEngine,
                                 sal_Bool bInterpret, sal_Bool bApi );

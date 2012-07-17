@@ -95,7 +95,7 @@ public:
     virtual sal_Bool        TransliterateText( const ScMarkData& rMark, sal_Int32 nType,
                                                sal_Bool bRecord, sal_Bool bApi );
 
-    virtual sal_Bool        SetNormalString( const ScAddress& rPos, const String& rText, sal_Bool bApi );
+    virtual sal_Bool        SetNormalString( bool& o_rbNumFmtSet, const ScAddress& rPos, const String& rText, sal_Bool bApi );
     virtual sal_Bool        PutCell( const ScAddress& rPos, ScBaseCell* pNewCell, sal_Bool bApi );
     virtual sal_Bool        PutData( const ScAddress& rPos, ScEditEngineDefaulter& rEngine,
                                       sal_Bool bInterpret, sal_Bool bApi );
