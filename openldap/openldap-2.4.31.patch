@@ -48,3 +48,26 @@
  
  #undef NSS_VERSION_INT
  #define	NSS_VERSION_INT	((NSS_VMAJOR << 24) | (NSS_VMINOR << 16) | \
+--- misc/openldap-2.4.31/configure.in	2012-04-22 21:25:08.000000000 +0100
++++ misc/build/openldap-2.4.31/configure.in	2012-07-16 13:56:24.000000000 +0100
+@@ -1232,7 +1232,8 @@
+ 		AC_CHECK_HEADERS([nssutil.h])
+ 		if test "$ac_cv_header_nssutil_h" = yes ; then
+ 			AC_CHECK_LIB([nss3], [NSS_Initialize],
+-						 [ have_moznss=yes ], [ have_moznss=no ])
++						 [ have_moznss=yes ], [ have_moznss=no ],
++						 [ -lssl3 -lsmime3 -lnss3 -lnssutil3 -lplds4 -lplc4 -lnspr4 ])
+ 		fi
+ 
+ 		if test "$have_moznss" = yes ; then
+--- misc/openldap-2.4.31/configure	2012-07-16 14:11:55.000000000 +0100
++++ misc/build/openldap-2.4.31/configure	2012-07-16 13:56:24.000000000 +0100
+@@ -15718,7 +15718,7 @@
+   $as_echo_n "(cached) " >&6
+ else
+   ac_check_lib_save_LIBS=$LIBS
+-LIBS="-lnss3  $LIBS"
++LIBS="-lnss3  -lssl3 -lsmime3 -lnss3 -lnssutil3 -lplds4 -lplc4 -lnspr4  $LIBS"
+ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+ /* end confdefs.h.  */
+ 
