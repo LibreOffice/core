@@ -2212,13 +2212,13 @@ void SmNodeToTextVisitor::Visit( SmOperNode* pNode )
         }
         if( ( pChild = pSubSup->GetSubSup( RSUP ) ) ) {
             Separate( );
-            Append( "rsup { " );
+            Append( "^ { " );
             LineToText( pChild );
             Append( "} " );
         }
         if( ( pChild = pSubSup->GetSubSup( RSUB ) ) ) {
             Separate( );
-            Append( "rsub { " );
+            Append( "_ { " );
             LineToText( pChild );
             Append( "} " );
         }
@@ -2398,12 +2398,12 @@ void SmNodeToTextVisitor::Visit( SmSubSupNode* pNode )
     }
     if( ( pChild = pNode->GetSubSup( RSUP ) ) ) {
         Separate( );
-        Append( "rsup " );
+        Append( "^ " );
         LineToText( pChild );
     }
     if( ( pChild = pNode->GetSubSup( RSUB ) ) ) {
         Separate( );
-        Append( "rsub " );
+        Append( "_ " );
         LineToText( pChild );
     }
     if( ( pChild = pNode->GetSubSup( CSUP ) ) ) {
