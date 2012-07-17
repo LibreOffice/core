@@ -53,6 +53,10 @@ typedef mdds::mtv::default_element_block<element_type_custom_string, rtl::OUStri
 
 namespace rtl {
 
+// Callback functions required for supporting rtl::OUString in
+// mdds::multi_type_vector.  They must be in the rtl namespace to satisfy
+// argument dependent lookup that mdds::multi_type_vector requires.
+
 mdds::mtv::element_t mdds_mtv_get_element_type(const OUString&)
 {
     return element_type_custom_string;
@@ -122,6 +126,10 @@ mdds::mtv::base_element_block* mdds_mtv_create_new_block(size_t init_size, const
 
 }
 
+/**
+ * Custom string trait struct to tell mdds::multi_type_matrix about the
+ * custom string type and how to handle blocks storing them.
+ */
 struct custom_string_trait
 {
     typedef OUString string_type;
@@ -279,7 +287,8 @@ struct custom_string_trait
             switch (mdds::mtv::get_block_type(block))
             {
                 case element_type_custom_string:
-                    // Do nothing.  The client code manages the life cycle of these cells.
+                    // Do nothing.  One needs to handle this only when the
+                    // block stores pointers and manages their life cycles.
                 break;
                 default:
                     mdds::mtv::element_block_func::overwrite_values(block, pos, len);
@@ -287,7 +296,6 @@ struct custom_string_trait
         }
     };
 };
-
 
 // ============================================================================
 
