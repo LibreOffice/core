@@ -56,7 +56,6 @@ import com.sun.star.wizards.common.PropertyNames;
 import com.sun.star.wizards.common.SystemDialog;
 import com.sun.star.wizards.db.DBMetaData;
 import com.sun.star.wizards.document.OfficeDocument;
-import com.sun.star.wizards.document.FormHandler.UnknownHiddenControlException;
 import com.sun.star.wizards.ui.UIConsts;
 import java.util.ArrayList;
 import java.util.Vector;
@@ -224,32 +223,27 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
             XNameContainer xNamedForms = getDoc().oFormHandler.getDocumentForms();
             Object oDBForm = Helper.getUnoObjectbyName(xNamedForms, ReportWizard.SOREPORTFORMNAME);
             boolean bgetConnection;
-            String sQueryName = PropertyNames.EMPTY_STRING;
             if (oDBForm != null)
             {
                 String sMsg = sMsgHiddenControlMissing + (char) 13 + sMsgEndAutopilot;
                 XNameAccess xNamedForm = UnoRuntime.queryInterface( XNameAccess.class, oDBForm );
-                getRecordParser().Command = getDoc().oFormHandler.getValueofHiddenControl(xNamedForm, PropertyNames.COMMAND, sMsg);
-                String sCommandType = getDoc().oFormHandler.getValueofHiddenControl(xNamedForm, PropertyNames.COMMAND_TYPE, sMsg);
-                String sGroupFieldNames = getDoc().oFormHandler.getValueofHiddenControl(xNamedForm, "GroupFieldNames", sMsg);
-                String sFieldNames = getDoc().oFormHandler.getValueofHiddenControl(xNamedForm, "FieldNames", sMsg);
-                String sorting;
-                try
-                {
-                    sorting = getDoc().oFormHandler.getValueofHiddenControl(xNamedForm, "Sorting", sMsg);
-                }
-                catch (UnknownHiddenControlException exception)
-                {
-                    sorting = "";
-                }
-                String sRecordFieldNames = getDoc().oFormHandler.getValueofHiddenControl(xNamedForm, "RecordFieldNames", sMsg);
-                if (xNamedForm.hasByName("QueryName"))
-                {
-                    sQueryName = getDoc().oFormHandler.getValueofHiddenControl(xNamedForm, "QueryName", sMsg);
-                }
+                getRecordParser().Command = getDoc().oFormHandler.getValueofHiddenControl(xNamedForm, PropertyNames.COMMAND);
+                String sCommandType = getDoc().oFormHandler.getValueofHiddenControl(xNamedForm, PropertyNames.COMMAND_TYPE);
+                String sGroupFieldNames = getDoc().oFormHandler.getValueofHiddenControl(xNamedForm, "GroupFieldNames");
+                String sFieldNames = getDoc().oFormHandler.getValueofHiddenControl(xNamedForm, "FieldNames");
+                String sRecordFieldNames = getDoc().oFormHandler.getValueofHiddenControl(xNamedForm, "RecordFieldNames");
+
+                String sorting = PropertyNames.EMPTY_STRING;
+                if ( xNamedForm.hasByName( "Sorting" ) )
+                    sorting = getDoc().oFormHandler.getValueofHiddenControl(xNamedForm, "Sorting");
+
+                String sQueryName = PropertyNames.EMPTY_STRING;
+                if ( xNamedForm.hasByName( "QueryName" ) )
+                    sQueryName = getDoc().oFormHandler.getValueofHiddenControl(xNamedForm, "QueryName");
+
                 String[] sFieldNameList = JavaTools.ArrayoutofString(sFieldNames, PropertyNames.SEMI_COLON);
                 String[] sNewList = JavaTools.ArrayoutofString(sRecordFieldNames, PropertyNames.SEMI_COLON);
-                if ( !PropertyNames.EMPTY_STRING.equals(sorting))
+                if ( sorting.length() > 0)
                 {
                     String[] sortList = JavaTools.ArrayoutofString(sorting, PropertyNames.SEMI_COLON);
                     ArrayList<String[]> aSortFields = new ArrayList<String[]>();
@@ -327,11 +321,6 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
             return false;
         }
         catch (java.lang.Exception ex)
-        {
-            Logger.getLogger( ReportTextImplementation.class.getName() ).log( Level.SEVERE, null, ex );
-            return false;
-        }
-        catch (com.sun.star.wizards.document.FormHandler.UnknownHiddenControlException ex)
         {
             Logger.getLogger( ReportTextImplementation.class.getName() ).log( Level.SEVERE, null, ex );
             return false;

@@ -219,23 +219,21 @@ public class FormHandler
         return xFormsSupplier.getForms();
     }
 
-    public String getValueofHiddenControl(XNameAccess xNamedForm, String ControlName, String sMsg) throws com.sun.star.wizards.document.FormHandler.UnknownHiddenControlException
+    public String getValueofHiddenControl(XNameAccess xNamedForm, String ControlName)
     {
+        String value = "";
         try
         {
             if (xNamedForm.hasByName(ControlName))
             {
-                return AnyConverter.toString(com.sun.star.wizards.common.Helper.getUnoPropertyValue(xNamedForm.getByName(ControlName), "HiddenValue"));
-            }
-            else
-            {
-                throw new UnknownHiddenControlException(xNamedForm, ControlName, sMsg);
+                value = AnyConverter.toString(com.sun.star.wizards.common.Helper.getUnoPropertyValue(xNamedForm.getByName(ControlName), "HiddenValue"));
             }
         }
-        catch (Exception exception)
+        catch (Exception ex)
         {
-            throw new UnknownHiddenControlException(xNamedForm, ControlName, sMsg);
+            Logger.getLogger( FormHandler.class.getName() ).log( Level.SEVERE, null, ex );
         }
+        return value;
     }
 
     public void insertHiddenControl(XNameAccess xNameAccess, XNameContainer xNamedForm, String ControlName, String ControlValue)
@@ -257,19 +255,6 @@ public class FormHandler
         catch (Exception ex)
         {
             Logger.getLogger(FormHandler.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
-    public class UnknownHiddenControlException extends java.lang.Throwable
-    {
-
-        public UnknownHiddenControlException(XNameAccess xNamedForm, String ControlName, String sMsgHiddenControlisMissing)
-        {
-            XNamed xNamed = UnoRuntime.queryInterface(XNamed.class, xNamedForm);
-            String FormName = xNamed.getName();
-            sMsgHiddenControlisMissing = JavaTools.replaceSubString(sMsgHiddenControlisMissing, FormName, "<REPORTFORM>");
-            sMsgHiddenControlisMissing = JavaTools.replaceSubString(sMsgHiddenControlisMissing, ControlName, "<CONTROLNAME>");
-            SystemDialog.showMessageBox(xMSFDoc, "ErrorBox", VclWindowPeerAttribute.OK, sMsgHiddenControlisMissing);
         }
     }
 
