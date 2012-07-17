@@ -1465,9 +1465,6 @@ static ScTokenArray* lcl_fillEmptyMatrix(const ScRange& rRange)
     SCSIZE nC = static_cast<SCSIZE>(rRange.aEnd.Col()-rRange.aStart.Col()+1);
     SCSIZE nR = static_cast<SCSIZE>(rRange.aEnd.Row()-rRange.aStart.Row()+1);
     ScMatrixRef xMat = new ScMatrix(nC, nR);
-    for (SCSIZE i = 0; i < nC; ++i)
-        for (SCSIZE j = 0; j < nR; ++j)
-            xMat->PutEmpty(i, j);
 
     ScMatrixToken aToken(xMat);
     SAL_WNODEPRECATED_DECLARATIONS_PUSH

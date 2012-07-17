@@ -5333,7 +5333,7 @@ void ScInterpreter::ScSumIf()
             break;
             case svExternalSingleRef:
             {
-                pSumExtraMatrix = new ScMatrix(1, 1);
+                pSumExtraMatrix = new ScMatrix(1, 1, 0.0);
                 ScExternalRefCache::TokenRef pToken;
                 PopExternalSingleRef(pToken);
                 if (!pToken)
@@ -5957,7 +5957,7 @@ void ScInterpreter::ScLookup()
         ScMatrixRef pDataMat2;
         if (bVertical)
         {
-            ScMatrixRef pTempMat(new ScMatrix(1, nR));
+            ScMatrixRef pTempMat(new ScMatrix(1, nR, 0.0));
             for (SCSIZE i = 0; i < nR; ++i)
                 if (pDataMat->IsValue(0, i))
                     pTempMat->PutDouble(pDataMat->GetDouble(0, i), 0, i);
@@ -5967,7 +5967,7 @@ void ScInterpreter::ScLookup()
         }
         else
         {
-            ScMatrixRef pTempMat(new ScMatrix(nC, 1));
+            ScMatrixRef pTempMat(new ScMatrix(nC, 1, 0.0));
             for (SCSIZE i = 0; i < nC; ++i)
                 if (pDataMat->IsValue(i, 0))
                     pTempMat->PutDouble(pDataMat->GetDouble(i, 0), i, 0);

@@ -326,7 +326,7 @@ void ScInterpreter:: ScLCM()
 ScMatrixRef ScInterpreter::GetNewMat(SCSIZE nC, SCSIZE nR)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::GetNewMat" );
-    ScMatrixRef pMat = new ScMatrix( nC, nR);
+    ScMatrixRef pMat = new ScMatrix(nC, nR, 0.0);
     pMat->SetErrorInterpreter( this);
     // A temporary matrix is mutable and ScMatrix::CloneIfConst() returns the
     // very matrix.
@@ -556,18 +556,17 @@ ScMatrixRef ScInterpreter::GetMatrix()
             }
             if (pToken->GetType() == svDouble)
             {
-                pMat = new ScMatrix(1, 1);
+                pMat = new ScMatrix(1, 1, 0.0);
                 pMat->PutDouble(pToken->GetDouble(), 0, 0);
             }
             else if (pToken->GetType() == svString)
             {
-                pMat = new ScMatrix(1, 1);
+                pMat = new ScMatrix(1, 1, 0.0);
                 pMat->PutString(pToken->GetString(), 0, 0);
             }
             else
             {
                 pMat = new ScMatrix(1, 1);
-                pMat->PutEmpty(0, 0);
             }
         }
         break;

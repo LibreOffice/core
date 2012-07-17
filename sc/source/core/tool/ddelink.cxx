@@ -166,7 +166,7 @@ sfx2::SvBaseLink::UpdateResult ScDdeLink::DataChanged(
     else                                // Daten aufteilen
     {
         //  Matrix immer neu anlegen, damit bIsString nicht durcheinanderkommt
-        pResult = new ScMatrix( nCols, nRows );
+        pResult = new ScMatrix(nCols, nRows, 0.0);
 
         SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
 

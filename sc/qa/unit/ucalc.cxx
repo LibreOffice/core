@@ -1242,72 +1242,57 @@ struct PartiallyFilledEmptyMatrix
 void Test::testMatrix()
 {
     ScMatrixRef pMat;
-    ScMatrix::DensityType eDT[2];
 
-    // First, test the zero matrix types.
-    eDT[0] = ScMatrix::FILLED_ZERO;
-    eDT[1] = ScMatrix::SPARSE_ZERO;
-    for (int i = 0; i < 2; ++i)
-    {
-        pMat = new ScMatrix(0, 0, eDT[i]);
-        SCSIZE nC, nR;
-        pMat->GetDimensions(nC, nR);
-        CPPUNIT_ASSERT_MESSAGE("matrix is not empty", nC == 0 && nR == 0);
-        pMat->Resize(4, 10);
-        pMat->GetDimensions(nC, nR);
-        CPPUNIT_ASSERT_MESSAGE("matrix size is not as expected", nC == 4 && nR == 10);
-        CPPUNIT_ASSERT_MESSAGE("both 'and' and 'or' should evaluate to false",
-                               !pMat->And() && !pMat->Or());
+    // First, test the zero matrix type.
+    pMat = new ScMatrix(0, 0, 0.0);
+    SCSIZE nC, nR;
+    pMat->GetDimensions(nC, nR);
+    CPPUNIT_ASSERT_MESSAGE("matrix is not empty", nC == 0 && nR == 0);
+    pMat->Resize(4, 10);
+    pMat->GetDimensions(nC, nR);
+    CPPUNIT_ASSERT_MESSAGE("matrix size is not as expected", nC == 4 && nR == 10);
+    CPPUNIT_ASSERT_MESSAGE("both 'and' and 'or' should evaluate to false",
+                           !pMat->And() && !pMat->Or());
 
-        // Resizing into a larger matrix should fill the void space with zeros.
-        checkMatrixElements<AllZeroMatrix>(*pMat);
+    // Resizing into a larger matrix should fill the void space with zeros.
+    checkMatrixElements<AllZeroMatrix>(*pMat);
 
-        pMat->FillDouble(3.0, 1, 2, 2, 8);
-        checkMatrixElements<PartiallyFilledZeroMatrix>(*pMat);
-        CPPUNIT_ASSERT_MESSAGE("matrix is expected to be numeric", pMat->IsNumeric());
-        CPPUNIT_ASSERT_MESSAGE("partially non-zero matrix should evaluate false on 'and' and true on 'or",
-                               !pMat->And() && pMat->Or());
-        pMat->FillDouble(5.0, 0, 0, nC-1, nR-1);
-        CPPUNIT_ASSERT_MESSAGE("fully non-zero matrix should evaluate true both on 'and' and 'or",
-                               pMat->And() && pMat->Or());
-    }
+    pMat->FillDouble(3.0, 1, 2, 2, 8);
+    checkMatrixElements<PartiallyFilledZeroMatrix>(*pMat);
+    CPPUNIT_ASSERT_MESSAGE("matrix is expected to be numeric", pMat->IsNumeric());
+    CPPUNIT_ASSERT_MESSAGE("partially non-zero matrix should evaluate false on 'and' and true on 'or",
+                           !pMat->And() && pMat->Or());
+    pMat->FillDouble(5.0, 0, 0, nC-1, nR-1);
+    CPPUNIT_ASSERT_MESSAGE("fully non-zero matrix should evaluate true both on 'and' and 'or",
+                           pMat->And() && pMat->Or());
 
     // Test the AND and OR evaluations.
-    for (int i = 0; i < 2; ++i)
-    {
-        pMat = new ScMatrix(2, 2, eDT[i]);
+    pMat = new ScMatrix(2, 2, 0.0);
 
-        // Only some of the elements are non-zero.
-        pMat->PutBoolean(true, 0, 0);
-        pMat->PutDouble(1.0, 1, 1);
-        CPPUNIT_ASSERT_MESSAGE("incorrect OR result", pMat->Or());
-        CPPUNIT_ASSERT_MESSAGE("incorrect AND result", !pMat->And());
+    // Only some of the elements are non-zero.
+    pMat->PutBoolean(true, 0, 0);
+    pMat->PutDouble(1.0, 1, 1);
+    CPPUNIT_ASSERT_MESSAGE("incorrect OR result", pMat->Or());
+    CPPUNIT_ASSERT_MESSAGE("incorrect AND result", !pMat->And());
 
-        // All of the elements are non-zero.
-        pMat->PutBoolean(true, 0, 1);
-        pMat->PutDouble(2.3, 1, 0);
-        CPPUNIT_ASSERT_MESSAGE("incorrect OR result", pMat->Or());
-        CPPUNIT_ASSERT_MESSAGE("incorrect AND result", pMat->And());
-    }
+    // All of the elements are non-zero.
+    pMat->PutBoolean(true, 0, 1);
+    pMat->PutDouble(2.3, 1, 0);
+    CPPUNIT_ASSERT_MESSAGE("incorrect OR result", pMat->Or());
+    CPPUNIT_ASSERT_MESSAGE("incorrect AND result", pMat->And());
 
-    // Now test the emtpy matrix types.
-    eDT[0] = ScMatrix::FILLED_EMPTY;
-    eDT[1] = ScMatrix::SPARSE_EMPTY;
-    for (int i = 0; i < 2; ++i)
-    {
-        pMat = new ScMatrix(10, 20, eDT[i]);
-        SCSIZE nC, nR;
-        pMat->GetDimensions(nC, nR);
-        CPPUNIT_ASSERT_MESSAGE("matrix size is not as expected", nC == 10 && nR == 20);
-        checkMatrixElements<AllEmptyMatrix>(*pMat);
+    // Now test the emtpy matrix type.
+    pMat = new ScMatrix(10, 20);
+    pMat->GetDimensions(nC, nR);
+    CPPUNIT_ASSERT_MESSAGE("matrix size is not as expected", nC == 10 && nR == 20);
+    checkMatrixElements<AllEmptyMatrix>(*pMat);
 
-        pMat->PutBoolean(true, 1, 1);
-        pMat->PutDouble(-12.5, 4, 5);
-        rtl::OUString aStr("Test");
-        pMat->PutString(aStr, 8, 2);
-        pMat->PutEmptyPath(8, 11);
-        checkMatrixElements<PartiallyFilledEmptyMatrix>(*pMat);
-    }
+    pMat->PutBoolean(true, 1, 1);
+    pMat->PutDouble(-12.5, 4, 5);
+    rtl::OUString aStr("Test");
+    pMat->PutString(aStr, 8, 2);
+    pMat->PutEmptyPath(8, 11);
+    checkMatrixElements<PartiallyFilledEmptyMatrix>(*pMat);
 }
 
 namespace {

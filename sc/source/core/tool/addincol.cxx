@@ -1650,7 +1650,7 @@ void ScUnoAddInCall::SetResult( const uno::Any& rNewRes )
                     {
                         xMatrix = new ScMatrix(
                                 static_cast<SCSIZE>(nMaxColCount),
-                                static_cast<SCSIZE>(nRowCount) );
+                                static_cast<SCSIZE>(nRowCount), 0.0);
                         for (nRow=0; nRow<nRowCount; nRow++)
                         {
                             long nColCount = pRowArr[nRow].getLength();
@@ -1692,7 +1692,7 @@ void ScUnoAddInCall::SetResult( const uno::Any& rNewRes )
                     {
                         xMatrix = new ScMatrix(
                                 static_cast<SCSIZE>(nMaxColCount),
-                                static_cast<SCSIZE>(nRowCount) );
+                                static_cast<SCSIZE>(nRowCount), 0.0);
                         for (nRow=0; nRow<nRowCount; nRow++)
                         {
                             long nColCount = pRowArr[nRow].getLength();
@@ -1734,7 +1734,7 @@ void ScUnoAddInCall::SetResult( const uno::Any& rNewRes )
                     {
                         xMatrix = new ScMatrix(
                                 static_cast<SCSIZE>(nMaxColCount),
-                                static_cast<SCSIZE>(nRowCount) );
+                                static_cast<SCSIZE>(nRowCount), 0.0);
                         for (nRow=0; nRow<nRowCount; nRow++)
                         {
                             long nColCount = pRowArr[nRow].getLength();

@@ -1492,7 +1492,7 @@ FormulaToken* ScTokenArray::MergeArray( )
         return NULL;
 
     int nSign = 1;
-    ScMatrix* pArray = new ScMatrix( nCol, nRow );
+    ScMatrix* pArray = new ScMatrix(nCol, nRow, 0.0);
     for ( i = nStart, nCol = 0, nRow = 0 ; i < nLen ; i++ )
     {
         t = pCode[i];

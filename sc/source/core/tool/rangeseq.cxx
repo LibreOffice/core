@@ -410,7 +410,7 @@ ScMatrixRef ScSequenceToMatrix::CreateMixedMatrix( const com::sun::star::uno::An
             rtl::OUString aUStr;
             xMatrix = new ScMatrix(
                     static_cast<SCSIZE>(nMaxColCount),
-                    static_cast<SCSIZE>(nRowCount) );
+                    static_cast<SCSIZE>(nRowCount), 0.0);
             SCSIZE nCols, nRows;
             xMatrix->GetDimensions( nCols, nRows);
             if (nCols != static_cast<SCSIZE>(nMaxColCount) || nRows != static_cast<SCSIZE>(nRowCount))
