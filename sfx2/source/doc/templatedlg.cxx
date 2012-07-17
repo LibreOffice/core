@@ -604,7 +604,7 @@ IMPL_LINK_NOARG(SfxTemplateManagerDlg, SearchUpdateHdl)
     {
         mpSearchView->Clear();
         mpSearchView->Show();
-        maView->Hide();
+        mpCurView->Hide();
     }
 
     rtl::OUString aKeyword = mpSearchEdit->GetText();
@@ -634,7 +634,7 @@ IMPL_LINK_NOARG(SfxTemplateManagerDlg, SearchUpdateHdl)
     else
     {
         mpSearchView->Hide();
-        maView->Show();
+        mpCurView->Show();
     }
 
     return 0;
@@ -741,6 +741,7 @@ void SfxTemplateManagerDlg::OnTemplateSearch ()
 
     SetSizePixel(aWinSize);
     maView->SetPosPixel(aPos);
+    mpOnlineView->SetPosPixel(aPos);
     mpSearchView->SetPosPixel(aPos);
     maButtonClose.SetPosPixel(aClosePos);
 
@@ -748,7 +749,7 @@ void SfxTemplateManagerDlg::OnTemplateSearch ()
     if (bVisible)
     {
         mpSearchView->Hide();
-        maView->Show();
+        mpCurView->Show();
     }
 
     mpSearchEdit->Show(!bVisible);
