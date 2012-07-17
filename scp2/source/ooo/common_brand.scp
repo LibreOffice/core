@@ -48,6 +48,7 @@ Module gid_Module_Root_Brand
              gid_Brand_File_Bin_Crashreport_Script,
              gid_Brand_File_Bin_Crashreport_Com,
              gid_Brand_File_Bin_Python,
+             gid_Brand_File_Bin_Quickstart_Os2,
              gid_Brand_File_Bin_Soffice,
              gid_Brand_File_Bin_Soffice_Bin,
              gid_Brand_File_Bin_Soffice_Bin_Manifest,
@@ -1322,5 +1323,14 @@ File gid_Brand_File_Bin_Python
     Name = EXENAME(pyuno/python);
     Dir = gid_Brand_Dir_Program;
     Styles = (PACKED);
+End
+#endif
+
+#ifdef OS2
+File gid_Brand_File_Bin_Quickstart_Os2
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Brand_Dir_Program;
+    Name = "quickstart.exe";
 End
 #endif
