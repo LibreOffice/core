@@ -48,7 +48,10 @@ VER_PATCH=5
 TARFILE_NAME=nss-$(VER_MAJOR).$(VER_MINOR).$(VER_PATCH)-with-nspr-4.9.1
 TARFILE_MD5=a0a861f539f0e7a91d05e6b9457e4db1
 TARFILE_ROOTDIR=nss-$(VER_MAJOR).$(VER_MINOR).$(VER_PATCH)
-PATCH_FILES=nss.patch nss.aix.patch nss-config.patch
+PATCH_FILES=nss.patch nss.aix.patch nss-config.patch \
+    nss-3.13.5-zlib-werror.patch
+# nss-3.13.5-zlib-werror.patch: avoid -Werror=implicit-function-declaration for
+# lseek, read, write
 
 .IF "$(OS)"=="MACOSX"
 PATCH_FILES+=nss_macosx.patch
