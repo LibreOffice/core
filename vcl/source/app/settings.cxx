@@ -474,8 +474,10 @@ void StyleSettings::Set3DColors( const Color& rColor )
     {
         mpData->maLightColor    = rColor;
         mpData->maShadowColor   = rColor;
+        mpData->maDarkShadowColor=rColor;
         mpData->maLightColor.IncreaseLuminance( 64 );
         mpData->maShadowColor.DecreaseLuminance( 64 );
+        mpData->maDarkShadowColor.DecreaseLuminance( 100 );
         sal_uLong   nRed    = mpData->maLightColor.GetRed();
         sal_uLong   nGreen  = mpData->maLightColor.GetGreen();
         sal_uLong   nBlue   = mpData->maLightColor.GetBlue();
