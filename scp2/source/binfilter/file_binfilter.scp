@@ -52,10 +52,19 @@ STD_LIB_FILE( gid_File_Lib_Bf_Sc, bf_sc)
 STD_LIB_FILE( gid_File_Lib_Bf_Sd, bf_sd)
 STD_LIB_FILE( gid_File_Lib_Bf_Sm, bf_sm)
 STD_LIB_FILE( gid_File_Lib_Bf_Sw, bf_sw)
+#ifdef OS2
+STD_LIB_FILE( gid_File_Lib_Bf_Wrapper, bf_wrapp)
+STD_LIB_FILE( gid_File_Lib_Legacy_Binfilters, legacy_b)
+#else
 STD_LIB_FILE( gid_File_Lib_Bf_Wrapper, bf_wrapper)
 STD_LIB_FILE( gid_File_Lib_Legacy_Binfilters, legacy_binfilters)
+#endif
 
+#ifdef OS2
+STD_LIB_FILE( gid_File_Lib_Bf_Migratefilter, bf_migra)
+#else
 STD_LIB_FILE( gid_File_Lib_Bf_Migratefilter, bf_migratefilter)
+#endif
 STD_LIB_FILE( gid_File_Lib_Bindet, bindet)
 
 STD_RES_FILE( gid_File_Res_Bf_Sch, bf_sch )
