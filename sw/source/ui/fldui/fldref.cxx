@@ -50,9 +50,6 @@
 #include <IDocumentMarkAccess.hxx>
 #include <ndtxt.hxx>
 
-// sw/inc/expfld.hxx
-SV_IMPL_PTRARR( _SwSeqFldList, _SeqFldLstElem* )
-
 #define REFFLDFLAG          0x4000
 #define REFFLDFLAG_BOOKMARK 0x4800
 #define REFFLDFLAG_FOOTNOTE 0x5000

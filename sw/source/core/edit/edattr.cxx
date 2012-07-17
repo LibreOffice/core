@@ -338,8 +338,7 @@ bool SwEditShell::HasFtns( bool bEndNotes ) const
     // gebe Liste aller Fussnoten und deren Anfangstexte
 sal_uInt16 SwEditShell::GetSeqFtnList( SwSeqFldList& rList, bool bEndNotes )
 {
-    if( rList.Count() )
-        rList.Remove( 0, rList.Count() );
+    rList.Clear();
 
     sal_uInt16 n, nFtnCnt = pDoc->GetFtnIdxs().Count();
     SwTxtFtn* pTxtFtn;
