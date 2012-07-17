@@ -78,9 +78,7 @@ using namespace ::com::sun::star;
 #define CHECK_TABLE(t)
 #endif
 
-typedef SwTableLine* SwTableLinePtr;
-SV_DECL_PTRARR_SORT( SwSortTableLines, SwTableLinePtr, 16 )
-SV_IMPL_PTRARR_SORT( SwSortTableLines, SwTableLinePtr );
+typedef o3tl::sorted_vector<SwTableLine*> SwSortTableLines;
 
 // In order to set the Frame Formats for the Boxes, it's enough to look
 // up the current one in the array. If it's already there return the new one.
@@ -129,7 +127,8 @@ struct CR_SetBoxWidth
         nMode = pTblNd->GetTable().GetTblChgMode();
     }
     CR_SetBoxWidth( const CR_SetBoxWidth& rCpy )
-        : pTblNd( rCpy.pTblNd ),
+        : aLines( rCpy.aLines ),
+        pTblNd( rCpy.pTblNd ),
         pUndo( rCpy.pUndo ),
         nDiff( rCpy.nDiff ), nSide( rCpy.nSide ),
         nMaxSize( rCpy.nMaxSize ), nLowerDiff( 0 ),
@@ -138,7 +137,6 @@ struct CR_SetBoxWidth
         bBigger( rCpy.bBigger ), bLeft( rCpy.bLeft ),
         bSplittBox( rCpy.bSplittBox ), bAnyBoxFnd( rCpy.bAnyBoxFnd )
     {
-        aLines.Insert( &rCpy.aLines );
         aLinesWidth = rCpy.aLinesWidth;
     }
 
@@ -154,20 +152,22 @@ struct CR_SetBoxWidth
 
     void AddBoxWidth( const SwTableBox& rBox, sal_uInt16 nWidth )
     {
-        SwTableLinePtr p = (SwTableLine*)rBox.GetUpper();
-        sal_uInt16 nFndPos;
-        if( aLines.Insert( p, nFndPos ))
-            aLinesWidth.insert( aLinesWidth.begin()+nFndPos, nWidth );
+        SwTableLine* p = (SwTableLine*)rBox.GetUpper();
+        std::pair<SwSortTableLines::const_iterator, bool> aPair = aLines.insert( p );
+        sal_uInt16 nFndPos = aPair.first - aLines.begin();
+        if( aPair.second )
+            aLinesWidth.insert( aLinesWidth.begin() + nFndPos, nWidth );
         else
             aLinesWidth[ nFndPos ] = aLinesWidth[ nFndPos ] + nWidth;
     }
 
     sal_uInt16 GetBoxWidth( const SwTableLine& rLn ) const
     {
-        SwTableLinePtr p = (SwTableLine*)&rLn;
+        SwTableLine* p = (SwTableLine*)&rLn;
+        SwSortTableLines::const_iterator it = aLines.find( p );
         sal_uInt16 nFndPos;
-        if( aLines.Seek_Entry( p, &nFndPos ) )
-            nFndPos = aLinesWidth[ nFndPos ];
+        if( it != aLines.end() )
+            nFndPos = aLinesWidth[ it - aLines.begin() ];
         else
             nFndPos = 0;
         return nFndPos;
