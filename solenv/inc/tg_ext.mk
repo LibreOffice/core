@@ -174,7 +174,7 @@ $(MISC)/%.unpack : $(TARFILE_LOCATION2)/%.jar
     @$(RENAME) $@.$(INPATH) $@
 
 #do unpack
-$(PACKAGE_DIR)/$(UNTAR_FLAG_FILE) : $(PRJ)/$(ROUT)/misc/$(TARFILE_MD5)-$(TARFILE_NAME).unpack $(PATCH_FILE_DEP)
+$(PACKAGE_DIR)/$(UNTAR_FLAG_FILE) : $(PRJ)/$(ROUT)/misc/$(TARFILE_MD5)-$(TARFILE_NAME).unpack $(PATCH_FILE_DEP) makefile.mk
     $(IFEXIST) $(PACKAGE_DIR)/$(TARFILE_ROOTDIR).exists $(THEN) $(RENAME:s/+//) $(PACKAGE_DIR)/$(TARFILE_ROOTDIR) $(PACKAGE_DIR)/$(TARFILE_ROOTDIR)_removeme $(FI)
     $(COMMAND_ECHO)-rm -rf $(PACKAGE_DIR)/$(TARFILE_ROOTDIR)_removeme
     @-$(MKDIRHIER) $(PACKAGE_DIR)$(fake_root_dir)

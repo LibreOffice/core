@@ -110,10 +110,3 @@ CONFIGURE_FLAGS+= --build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)
 .INCLUDE : set_ext.mk
 .INCLUDE : target.mk
 .INCLUDE : tg_ext.mk
-
-# Since you never know what will be in a patch (for example, it may already
-# patch at configure level) or in the case of a binary patch, we remove the
-# entire package directory if a patch is newer.
-# Changes in this makefile could also make a complete build necessary if
-# configure is affected.
-$(PACKAGE_DIR)$/$(UNTAR_FLAG_FILE) : makefile.mk

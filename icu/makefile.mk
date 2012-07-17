@@ -322,10 +322,3 @@ $(LB)$/icule$(ICU_BUILD_LIBPOST).lib : $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE)
 $(LB)$/icutu$(ICU_BUILD_LIBPOST).lib : $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE)
     $(TOUCH) $@
 .ENDIF
-
-# Since you never know what will be in a patch (for example, it may already
-# patch at configure level) or in the case of a binary patch, we remove the
-# entire package directory if a patch is newer.
-# Changes in this makefile could also make a complete build necessary if
-# configure is affected.
-$(PACKAGE_DIR)$/$(UNTAR_FLAG_FILE) : makefile.mk
