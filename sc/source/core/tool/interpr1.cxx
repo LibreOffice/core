@@ -4621,7 +4621,7 @@ public:
         return mbColVec ? mrMat.GetDouble(0, i) : mrMat.GetDouble(i, 0);
     }
 
-    const rtl::OUString& GetString(SCSIZE i) const
+    rtl::OUString GetString(SCSIZE i) const
     {
         return mbColVec ? mrMat.GetString(0, i) : mrMat.GetString(i, 0);
     }

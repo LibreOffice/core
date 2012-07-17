@@ -169,12 +169,16 @@ public:
     /// The maximum number of elements a matrix may have at runtime.
     inline static size_t GetElementsMax()
     {
+        // TODO: Fix me.
+        return 0x08000000;
+#if 0
         // Roughly 125MB in total, divided by 8+1 per element => 14M elements.
         const size_t nMemMax = 0x08000000 / (sizeof(ScMatrixValue) + sizeof(ScMatValType));
         // With MAXROWCOUNT==65536 and 128 columns => 8M elements ~72MB.
         const size_t nArbitraryLimit = (size_t)MAXROWCOUNT * 128;
         // Stuffed with a million rows would limit this to 14 columns.
         return nMemMax < nArbitraryLimit ? nMemMax : nArbitraryLimit;
+#endif
     }
 
     /// Value or boolean.
@@ -215,11 +219,11 @@ public:
         return (nType & SC_MATVAL_NONVALUE) == SC_MATVAL_EMPTYPATH;
     }
 
-    ScMatrix( SCSIZE nC, SCSIZE nR, DensityType eType = FILLED_ZERO);
+    ScMatrix(SCSIZE nC, SCSIZE nR);
+    ScMatrix(SCSIZE nC, SCSIZE nR, double fInitVal);
 
     /** Clone the matrix. */
     ScMatrix* Clone() const;
-    ScMatrix* Clone( DensityType eType) const;
 
     /** Clone the matrix if mbCloneIfConst (immutable) is set, otherwise
         return _this_ matrix, to be assigned to a ScMatrixRef. */
@@ -236,7 +240,7 @@ public:
 
     /** Clone the matrix and extend it to the new size. nNewCols and nNewRows
         MUST be at least of the size of the original matrix. */
-    ScMatrix* CloneAndExtend( SCSIZE nNewCols, SCSIZE nNewRows, DensityType eType) const;
+    ScMatrix* CloneAndExtend(SCSIZE nNewCols, SCSIZE nNewRows) const;
 
     inline void IncRef() const
     {
@@ -249,7 +253,6 @@ public:
             delete this;
     }
 
-    DensityType GetDensityType() const;
     void SetErrorInterpreter( ScInterpreter* p);
     void GetDimensions( SCSIZE& rC, SCSIZE& rR) const;
     SCSIZE GetElementCount() const;
@@ -303,9 +306,9 @@ public:
     double GetDouble( SCSIZE nIndex) const;
 
     /// @return empty string if empty or empty path, else string content.
-    const ::rtl::OUString& GetString( SCSIZE nC, SCSIZE nR) const;
+    rtl::OUString GetString( SCSIZE nC, SCSIZE nR) const;
     /// @return empty string if empty or empty path, else string content.
-    const ::rtl::OUString& GetString( SCSIZE nIndex) const;
+    rtl::OUString GetString( SCSIZE nIndex) const;
 
     /** @returns the matrix element's string if one is present, otherwise the
         numerical value formatted as string, or in case of an error the error

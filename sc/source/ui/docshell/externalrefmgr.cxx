@@ -626,8 +626,7 @@ ScExternalRefCache::TokenArrayRef ScExternalRefCache::getCellRangeData(
         }
 
         ScMatrixRef xMat = new ScMatrix(
-            static_cast<SCSIZE>(nDataCol2-nDataCol1+1),
-            static_cast<SCSIZE>(nDataRow2-nDataRow1+1), ScMatrix::SPARSE_EMPTY);
+            static_cast<SCSIZE>(nDataCol2-nDataCol1+1), static_cast<SCSIZE>(nDataRow2-nDataRow1+1));
 
         // Only fill non-empty cells, for better performance.
         vector<SCROW> aRows;
@@ -1383,8 +1382,7 @@ static ScTokenArray* lcl_convertToTokenArray(const ScDocument* pSrcDoc, ScRange&
             pUsedRange.reset(new ScRange(nDataCol1, nDataRow1, 0, nDataCol2, nDataRow2, 0));
 
         ScMatrixRef xMat = new ScMatrix(
-            static_cast<SCSIZE>(nCol2-nCol1+1),
-            static_cast<SCSIZE>(nRow2-nRow1+1), ScMatrix::SPARSE_EMPTY);
+            static_cast<SCSIZE>(nCol2-nCol1+1), static_cast<SCSIZE>(nRow2-nRow1+1));
 
         for (SCCOL nCol = nDataCol1; nCol <= nDataCol2; ++nCol)
         {
