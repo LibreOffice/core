@@ -3730,6 +3730,7 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     std::fprintf( stderr, "MenuBarTextColor = %x (%d)\n", (int)aStyleSet.GetMenuBarTextColor().GetColor(), aStyleSet.GetMenuBarTextColor().GetLuminance() );
     std::fprintf( stderr, "LightColor = %x (%d)\n", (int)aStyleSet.GetLightColor().GetColor(), aStyleSet.GetLightColor().GetLuminance() );
     std::fprintf( stderr, "ShadowColor = %x (%d)\n", (int)aStyleSet.GetShadowColor().GetColor(), aStyleSet.GetShadowColor().GetLuminance() );
+    std::fprintf( stderr, "DarkShadowColor = %x (%d)\n", (int)aStyleSet.GetDarkShadowColor().GetColor(), aStyleSet.GetDarkShadowColor().GetLuminance() );
 #endif
 
     // Awful hack for menu separators in the Sonar and similar themes.
