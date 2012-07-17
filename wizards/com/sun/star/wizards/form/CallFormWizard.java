@@ -82,7 +82,7 @@ public class CallFormWizard
                 if (sEvent.compareTo(PropertyNames.START) == 0)
                 {
                     FormWizard CurFormWizard = new FormWizard( m_serviceFactory, m_wizardContext );
-                    CurFormWizard.startFormWizard();
+                    CurFormWizard.start();
                 }
             }
             catch (Exception exception)
