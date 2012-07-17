@@ -32,6 +32,7 @@
 #include <fldbas.hxx>
 #include <cellfml.hxx>
 #include <set>
+#include <vector>
 
 class SfxPoolItem;
 class SwTxtNode;
@@ -58,15 +59,24 @@ struct _SeqFldLstElem
         : sDlgEntry( rStr ), nSeqNo( nNo )
     {}
 };
-SV_DECL_PTRARR_DEL( _SwSeqFldList, _SeqFldLstElem*, 10 )
 
-class SW_DLLPUBLIC SwSeqFldList : public _SwSeqFldList
+class SW_DLLPUBLIC SwSeqFldList
 {
+    std::vector<_SeqFldLstElem*> maData;
 public:
-    SwSeqFldList()  : _SwSeqFldList( 10 ) {}
+    ~SwSeqFldList()
+    {
+        for( std::vector<_SeqFldLstElem*>::const_iterator it = maData.begin(); it != maData.end(); ++it )
+            delete *it;
+    }
 
-    sal_Bool InsertSort( _SeqFldLstElem* );
-    sal_Bool SeekEntry( const _SeqFldLstElem& , sal_uInt16* pPos = 0 );
+    bool InsertSort(_SeqFldLstElem* pNew);
+    bool SeekEntry(const _SeqFldLstElem& rNew, sal_uInt16* pPos) const;
+
+    sal_uInt16 Count() { return maData.size(); }
+    _SeqFldLstElem* operator[](sal_uInt16 nIndex) { return maData[nIndex]; }
+    const _SeqFldLstElem* operator[](sal_uInt16 nIndex) const { return maData[nIndex]; }
+    void Clear() { maData.clear(); }
 };
 
 class SwGetExpFieldType : public SwValueFieldType

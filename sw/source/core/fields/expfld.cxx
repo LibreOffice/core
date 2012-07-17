@@ -68,8 +68,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::text;
 using ::rtl::OUString;
 
-SV_IMPL_PTRARR( _SwSeqFldList, _SeqFldLstElem* )
-
 //-----------------------------------------------------------------------------
 sal_Int16 lcl_SubTypeToAPI(sal_uInt16 nSubType)
 {
@@ -596,8 +594,7 @@ extern void InsertSort( std::vector<sal_uInt16>& rArr, sal_uInt16 nIdx, sal_uInt
 
 sal_uInt16 SwSetExpFieldType::GetSeqFldList( SwSeqFldList& rList )
 {
-    if( rList.Count() )
-        rList.Remove( 0, rList.Count() );
+    rList.Clear();
 
     SwIterator<SwFmtFld,SwFieldType> aIter( *this );
     const SwTxtNode* pNd;
@@ -705,7 +702,7 @@ bool SwSetExpFieldType::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     return true;
 }
 
-sal_Bool SwSeqFldList::InsertSort( _SeqFldLstElem* pNew )
+bool SwSeqFldList::InsertSort( _SeqFldLstElem* pNew )
 {
     sal_Unicode* p = pNew->sDlgEntry.GetBufferAccess();
     while( *p )
@@ -716,15 +713,15 @@ sal_Bool SwSeqFldList::InsertSort( _SeqFldLstElem* pNew )
     }
 
     sal_uInt16 nPos;
-    sal_Bool bRet = SeekEntry( *pNew, &nPos );
+    bool bRet = SeekEntry( *pNew, &nPos );
     if( !bRet )
-        C40_INSERT( _SeqFldLstElem, pNew, nPos );
+        maData.insert( maData.begin() + nPos, pNew );
     return bRet;
 }
 
-sal_Bool SwSeqFldList::SeekEntry( const _SeqFldLstElem& rNew, sal_uInt16* pP )
+bool SwSeqFldList::SeekEntry( const _SeqFldLstElem& rNew, sal_uInt16* pP ) const
 {
-    sal_uInt16 nO = Count(), nM, nU = 0;
+    sal_uInt16 nO = maData.size(), nM, nU = 0;
     if( nO > 0 )
     {
         CollatorWrapper & rCaseColl = ::GetAppCaseCollator(),
@@ -746,7 +743,7 @@ sal_Bool SwSeqFldList::SeekEntry( const _SeqFldLstElem& rNew, sal_uInt16* pP )
 
             //#59900# Die Sortierung soll die Nummer korrekt einordnen
             //also "10" nach "9" und nicht "10" nach "1"
-            const String& rTmp1 = (*((_SeqFldLstElem**)pData + nM))->sDlgEntry;
+            const String& rTmp1 = maData[nM]->sDlgEntry;
             xub_StrLen nFndPos1 = 0;
             String sNum1( rTmp1.GetToken( 0, ' ', nFndPos1 ));
             sal_Int32 nCmp;
@@ -765,7 +762,7 @@ sal_Bool SwSeqFldList::SeekEntry( const _SeqFldLstElem& rNew, sal_uInt16* pP )
             if( 0 == nCmp )
             {
                 if( pP ) *pP = nM;
-                return sal_True;
+                return true;
             }
             else if( 0 < nCmp )
                 nU = nM + 1;
@@ -776,7 +773,7 @@ sal_Bool SwSeqFldList::SeekEntry( const _SeqFldLstElem& rNew, sal_uInt16* pP )
         }
     }
     if( pP ) *pP = nU;
-    return sal_False;
+    return false;
 }
 
 /*--------------------------------------------------------------------
