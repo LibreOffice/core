@@ -115,12 +115,12 @@ protected:
     // but the width will not be re-evaluated based on the attributes.
     sal_Bool bFormatHeightOnly :1;
 
-    sal_Bool bInCnt :1;        //< FLY_AS_CHAR, anchored as character
-    sal_Bool bAtCnt :1;        //< FLY_AT_PARA, anchored at paragraph
-    sal_Bool bLayout :1;       //< FLY_AT_PAGE, FLY_AT_FLY, at page or at frame
-    sal_Bool bAutoPosition :1; //< FLY_AT_CHAR, anchored at character
+    sal_Bool bInCnt :1;        ///< FLY_AS_CHAR, anchored as character
+    sal_Bool bAtCnt :1;        ///< FLY_AT_PARA, anchored at paragraph
+    sal_Bool bLayout :1;       ///< FLY_AT_PAGE, FLY_AT_FLY, at page or at frame
+    sal_Bool bAutoPosition :1; ///< FLY_AT_CHAR, anchored at character
 
-    sal_Bool bNoShrink :1;     //< temporary forbid shrinking to avoid loops
+    sal_Bool bNoShrink :1;     ///< temporary forbid shrinking to avoid loops
     // If sal_True, the content of the fly frame will not be deleted when it
     // is moved to an invisible layer.
     sal_Bool bLockDeleteContent :1;

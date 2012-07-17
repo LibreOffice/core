@@ -163,9 +163,9 @@ class SW_DLLPUBLIC ViewShell : public Ring
                                     // of scrollbars.
     sal_Bool  bEndActionByVirDev:1; // Paints from EndAction always via virtual device
                                     // (e.g. when browsing).
-    bool      bShowHeaderSeparator:1; //< Flag to say that we are showing the header control
-    bool      bShowFooterSeparator:1; //< Flag to say that we are showing the footer control
-    bool      bHeaderFooterEdit:1;  //< Flag to say that we are editing header or footer (according to the bShow(Header|Footer)Separator above)
+    bool      bShowHeaderSeparator:1; ///< Flag to say that we are showing the header control
+    bool      bShowFooterSeparator:1; ///< Flag to say that we are showing the footer control
+    bool      bHeaderFooterEdit:1;  ///< Flag to say that we are editing header or footer (according to the bShow(Header|Footer)Separator above)
 
     // boolean, indicating that class in in constructor.
     bool mbInConstructor:1;
