@@ -168,7 +168,7 @@ protected:
     sal_uInt16 mnMaxZoom;
 
     /** This flag tells whether to re-calculate the minimal zoom factor
-        depening on the current zoom factor.  Its default value is now sal_False.
+        depening on the current zoom factor.  Its default value is now false.
     */
     bool mbMinZoomAutoCalc;
     bool mbCalcMinZoomByMinSide;
