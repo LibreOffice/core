@@ -117,11 +117,6 @@ struct ScMatrixValue
  * Matrix data type that can store values of mixed types.  Each element can
  * be one of the following types: numeric, string, boolean, empty, and empty
  * path.
- *
- * This class also supports four different density types: filled zero,
- * filled empty, sparse zero, and sparse empty.  The filled density type
- * allocates memory for every single element at all times, whereas the
- * sparse density types allocates memory only for non-default elements.
  */
 class SC_DLLPUBLIC ScMatrix
 {
