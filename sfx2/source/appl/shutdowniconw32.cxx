@@ -289,7 +289,7 @@ static void addTaskbarIcon( HWND hWnd )
         IMAGE_ICON, GetSystemMetrics( SM_CXSMICON ), GetSystemMetrics( SM_CYSMICON ),
         LR_DEFAULTCOLOR | LR_SHARED );
 
-    wcsncpy( nid.szTip, strTip.getStr(), 64 );
+    wcsncpy( nid.szTip, reinterpret_cast<LPCWSTR>(strTip.getStr()), 64 );
 
     nid.cbSize              = sizeof(nid);
     nid.hWnd                = hWnd;
