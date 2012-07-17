@@ -17,6 +17,7 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 
+use strict;
 use warnings;
 
 sub usage() {
@@ -45,36 +46,36 @@ sub show_call_stack
     print STDERR "--- End stack trace ---\n";
 }
 
-$src_shapes = shift;
-$src_text = shift;
+my $src_shapes = shift;
+my $src_text = shift;
 
 usage() if ( !defined( $src_shapes ) || !defined( $src_text ) ||
              $src_shapes eq "-h" || $src_shapes eq "--help" ||
              !-f $src_shapes || !-f $src_text );
 
 # Global variables
-@levels = ();
-$shape_name = "";
-$state = "";
-$path = "";
-$adjust = "";
-$max_adj_no = 0;
-@formulas = ();
-%variables = ();
-$ignore_this_shape = 0;
-$handles = "";
-$textboxrect = "";
-$last_pos_x = "";
-$last_pos_y = "";
-$no_stroke = 0;
-$no_fill = 0;
-$path_w = 1;
-$path_h = 1;
-@quadratic_bezier = ();
+my @levels = ();
+my $shape_name = "";
+my $state = "";
+my $path = "";
+my $adjust = "";
+my $max_adj_no = 0;
+my @formulas = ();
+my %variables = ();
+my $ignore_this_shape = 0;
+my $handles = "";
+my $textboxrect = "";
+my $last_pos_x = "";
+my $last_pos_y = "";
+my $no_stroke = 0;
+my $no_fill = 0;
+my $path_w = 1;
+my $path_h = 1;
+my @quadratic_bezier = ();
 
-%result_shapes = ();
+my %result_shapes = ();
 
-%shapes_ids = (
+my %shapes_ids = (
     0 => 'notPrimitive',
     1 => 'rectangle',
     2 => 'roundRectangle',
@@ -288,17 +289,6 @@ sub error( $ )
     print STDERR "ERROR (in $shape_name ): $msg\n";
 }
 
-# Check that we are in the correct level
-sub is_level( $$ )
-{
-    my ( $level, $value ) = @_;
-
-    if ( $level > 0 ) {
-        error( "Error in is_level(), \$level should be <= 0." );
-    }
-    return ( $#levels + $level > 0 ) && ( $levels[$#levels + $level] eq $value );
-}
-
 # Setup the %variables map with predefined values
 sub setup_variables()
 {
@@ -391,7 +381,7 @@ sub value( $ )
 }
 
 # Convert the DrawingML formula to a VML one
-%command_variables = (
+my %command_variables = (
     'w' => 'width',
     'h' => 'height',
     'r' => 'width',
@@ -422,7 +412,7 @@ sub insert_formula( $$ )
     my ( $name, $fmla ) = @_;
 
     my $i = 0;
-    foreach $f ( @formulas ) {
+    foreach my $f ( @formulas ) {
         if ( $f eq $fmla ) {
             if ( $name ne "" ) {
                 $variables{$name} = "@" . $i;
@@ -475,7 +465,9 @@ sub convert_formula( $$ )
 
         # parse the parameters
         ( my $values = $fmla ) =~ s/^([^ ]+) *//;
-        my $p1 = "", $p2 = "", $p3 = "";
+        my $p1 = "";
+	my $p2 = "";
+	my $p3 = "";
         if ( $values =~ /^([^ ]+)/ ) {
             $p1 = $1;
             $values =~ s/^([^ ]+) *//;
@@ -629,7 +621,7 @@ sub convert_formula( $$ )
 }
 
 # There's no exact equivalent of 'arcTo' in VML, we have to do some special casing...
-%convert_arcTo = (
+my %convert_arcTo = (
     '0' => {
         '90' => {
             'path' => 'qy',
@@ -765,7 +757,8 @@ sub start_element( $% )
 
     #print "element: $element\n";
 
-    if ( is_level( -1, "presetShapeDefinitons" ) || is_level( -1, "presetTextWarpDefinitions" ) ) {
+    if ( @levels > 1 && ( $levels[-2] eq "presetShapeDefinitons" ||
+			  $levels[-2] eq "presetTextWarpDefinitions" ) ) {
         $shape_name = $element;
 
         $state = "";
@@ -996,7 +989,7 @@ sub end_element( $ )
             if ( $#formulas >= 0 )
             {
                 $out .= "<v:formulas>\n";
-                foreach $fmla ( @formulas ) {
+                foreach my $fmla ( @formulas ) {
                     $out .= "<v:f eqn=\"$fmla\"/>\n"
                 }
                 $out .= "</v:formulas>\n";
@@ -1143,10 +1136,10 @@ sub parse( $ )
         # the actual parsing
         my @starts = split( /</, $line );
         $line = "";
-        foreach $start ( @starts ) {
+        foreach my $start ( @starts ) {
             next if ( $start eq "" );
 
-            @ends = split( />/, $start );
+            my @ends = split( />/, $start );
             my $element = $ends[0];
             my $data = $ends[1];
 
@@ -1170,13 +1163,14 @@ sub parse( $ )
 }
 
 # Do the real work
-open( IN, "<$src_shapes" ) || die "Cannot open $src_shapes.";
-parse( IN );
-close( IN );
+my $file;
+open( $file, "<$src_shapes" ) || die "Cannot open $src_shapes: $!";
+parse( $file );
+close( $file );
 
-open( IN, "<$src_text" ) || die "Cannot open $src_text.";
-parse( IN );
-close( IN );
+open( $file, "<$src_text" ) || die "Cannot open $src_text: $!";
+parse( $file );
+close( $file );
 
 if ( !defined( $result_shapes{'textBox'} ) ) {
     $result_shapes{'textBox'} =
@@ -1201,7 +1195,7 @@ const char* pShapeTypes[ ESCHER_ShpInst_COUNT ] =
 {
 EOF
 
-for ( $i = 0; $i < 203; ++$i ) {
+for ( my $i = 0; $i < 203; ++$i ) {
     if ( $i < 4 ) {
         print "    /* $i - $shapes_ids{$i} - handled separately */\n    NULL,\n";
     }
