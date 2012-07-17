@@ -63,6 +63,7 @@
 #define EmfPlusRecordTypeDrawLines 16397
 #define EmfPlusRecordTypeFillPath 16404
 #define EmfPlusRecordTypeDrawPath 16405
+#define EmfPlusRecordTypeDrawImage 16410
 #define EmfPlusRecordTypeDrawImagePoints 16411
 #define EmfPlusRecordTypeDrawString 16412
 #define EmfPlusRecordTypeSetRenderingOrigin 16413
@@ -800,9 +801,9 @@ namespace cppcanvas
             }
         };
 
-        void ImplRenderer::ReadRectangle (SvStream& s, float& x, float& y, float &width, float& height, sal_uInt32 flags)
+        void ImplRenderer::ReadRectangle (SvStream& s, float& x, float& y, float &width, float& height, bool bCompressed)
         {
-            if (flags & 0x4000) {
+            if (bCompressed) {
                 sal_Int16 ix, iy, iw, ih;
 
                 s >> ix >> iy >> iw >> ih;
@@ -1405,6 +1406,7 @@ namespace cppcanvas
                         }
                         break;
                     }
+                case EmfPlusRecordTypeDrawImage:
                 case EmfPlusRecordTypeDrawImagePoints:
                     {
                         sal_uInt32 attrIndex;
@@ -1412,27 +1414,49 @@ namespace cppcanvas
 
                         rMF >> attrIndex >> sourceUnit;
 
-                        EMFP_DEBUG (printf ("EMF+ DrawImagePoints attributes index: %d source unit: %d\n", (int)attrIndex, (int)sourceUnit));
+                        EMFP_DEBUG (printf ("EMF+ %s attributes index: %d source unit: %d\n", type == EmfPlusRecordTypeDrawImagePoints ? "DrawImagePoints" : "DrawImage", (int)attrIndex, (int)sourceUnit));
                         EMFP_DEBUG (printf ("EMF+\tTODO: use image attributes\n"));
 
                         if (sourceUnit == 2 && aObjects [flags & 0xff]) { // we handle only GraphicsUnit.Pixel now
                             EMFPImage& image = *(EMFPImage *) aObjects [flags & 0xff];
                             float sx, sy, sw, sh;
-                            sal_Int32 unknown;
+                            sal_Int32 aCount;
 
                             ReadRectangle (rMF, sx, sy, sw, sh);
 
-                            rMF >> unknown;
+                            EMFP_DEBUG (printf ("EMF+ %s source rectangle: %f,%f %fx%f\n", type == EmfPlusRecordTypeDrawImagePoints ? "DrawImagePoints" : "DrawImage", sx, sy, sw, sh));
 
-                            EMFP_DEBUG (printf ("EMF+ DrawImagePoints source rectangle: %f,%f %fx%f unknown: 0x%08x\n", sx, sy, sw, sh, (unsigned int)unknown));
+                            ::basegfx::B2DPoint aDstPoint;
+                            ::basegfx::B2DSize aDstSize;
+                            bool bValid = false;
 
-                            if (unknown == 3) { // it probably means number of points defining destination rectangle
-                                float x1, y1, x2, y2, x3, y3;
+                            if (type == EmfPlusRecordTypeDrawImagePoints) {
+                                rMF >> aCount;
 
-                                ReadPoint (rMF, x1, y1, flags);
-                                ReadPoint (rMF, x2, y2, flags);
-                                ReadPoint (rMF, x3, y3, flags);
+                                if( aCount == 3) { // TODO: now that we now that this value is count we should support it better
+                                    float x1, y1, x2, y2, x3, y3;
 
+                                    ReadPoint (rMF, x1, y1, flags);
+                                    ReadPoint (rMF, x2, y2, flags);
+                                    ReadPoint (rMF, x3, y3, flags);
+
+                                    aDstPoint = Map (x1, y1);
+                                    aDstSize = MapSize(x2 - x1, y3 - y1);
+
+                                    bValid = true;
+                                }
+                            } else if (type == EmfPlusRecordTypeDrawImage) {
+                                float dx, dy, dw, dh;
+
+                                ReadRectangle (rMF, dx, dy, dw, dh, flags & 0x4000);
+
+                                aDstPoint = Map (dx, dy);
+                                aDstSize = MapSize(dw, dh);
+
+                                bValid = true;
+                            }
+
+                            if (bValid) {
                                 BitmapEx aBmp( image.graphic.GetBitmapEx () );
                                 const Rectangle aCropRect (::vcl::unotools::pointFromB2DPoint (basegfx::B2DPoint (sx, sy)),
                                                            ::vcl::unotools::sizeFromB2DSize (basegfx::B2DSize(sw, sh)));
@@ -1444,8 +1468,8 @@ namespace cppcanvas
                                     ActionSharedPtr pBmpAction (
                                         internal::BitmapActionFactory::createBitmapAction (
                                             aBmp,
-                                            rState.mapModeTransform * Map (x1, y1),
-                                            rState.mapModeTransform * MapSize(x2 - x1, y3 - y1),
+                                            rState.mapModeTransform * aDstPoint,
+                                            rState.mapModeTransform * aDstSize,
                                             rCanvas,
                                             rState));
 
@@ -1459,10 +1483,10 @@ namespace cppcanvas
                                     EMFP_DEBUG (printf ("EMF+ warning: empty bitmap\n"));
                                 }
                             } else {
-                                EMFP_DEBUG (printf ("EMF+ DrawImagePoints TODO (fixme)\n"));
+                                EMFP_DEBUG (printf ("EMF+ DrawImage(Points) TODO (fixme)\n"));
                             }
                         } else {
-                            EMFP_DEBUG (printf ("EMF+ DrawImagePoints TODO (fixme) - possibly unsupported source units for crop rectangle\n"));
+                            EMFP_DEBUG (printf ("EMF+ DrawImage(Points) TODO (fixme) - possibly unsupported source units for crop rectangle\n"));
                         }
                         break;
                     }
