@@ -287,14 +287,6 @@ static void TeleManager_ChannelReadyHandler(
     pConference->offerTube();
 }
 
-static gboolean caps_hack_timeout_cb (void *pUserData)
-{
-    TeleManager* pManager = reinterpret_cast<TeleManager*>(pUserData);
-
-    pManager->setAccountManagerReadyHandlerInvoked( true);
-    return FALSE;
-}
-
 static void TeleManager_AccountManagerReadyHandler(
         GObject*        pSourceObject,
         GAsyncResult*   pResult,
@@ -308,10 +300,6 @@ static void TeleManager_AccountManagerReadyHandler(
     if (!pManager)
         return;
 
-    // Hack
-    // pManager->setAccountManagerReadyHandlerInvoked( true);
-    g_timeout_add_seconds( 2, caps_hack_timeout_cb, pManager);
-
     GError* pError = NULL;
     gboolean bPrepared = tp_proxy_prepare_finish( pSourceObject, pResult, &pError);
     SAL_WARN_IF( !bPrepared, "tubes", "TeleManager_AccountManagerReadyHandler: not prepared");
@@ -322,6 +310,7 @@ static void TeleManager_AccountManagerReadyHandler(
     }
 
     pManager->setAccountManagerReady( bPrepared);
+    pManager->setAccountManagerReadyHandlerInvoked( true);
 }
 
 
