@@ -10,6 +10,8 @@
 #include <algorithm>
 #include <vector>
 
+#include <comphelper/processfactory.hxx>
+
 #include "sddll.hxx"
 #include "Server.hxx"
 #include "Receiver.hxx"
@@ -32,13 +34,13 @@ Server::~Server()
 // Run as a thread
 void Server::listenThread()
 {
-    Transmitter aTransmitter( mStreamSocket );
-    mTransmitter = &aTransmitter;
-    Receiver aReceiver( &aTransmitter );
+//     Transmitter aTransmitter( mStreamSocket );
+    mTransmitter = new Transmitter( mStreamSocket);
+    Receiver aReceiver( mTransmitter );
+    mTransmitter->addMessage( "Hello world\n\n", Transmitter::Priority::HIGH );
 
-    uno::Reference<presentation::XSlideShowController> xSlideShowController;
-    uno::Reference<presentation::XPresentation2> xPresentation;
     try {
+        fprintf( stderr, "Trying to add a Listener in listenThread\n" );
         uno::Reference< lang::XMultiServiceFactory > xServiceManager(
             ::comphelper::getProcessServiceFactory(), uno::UNO_QUERY_THROW );
         uno::Reference< frame::XFramesSupplier > xFramesSupplier( xServiceManager->createInstance(
@@ -50,11 +52,13 @@ void Server::listenThread()
         if ( xPresentation->isRunning() )
         {
             presentationStarted( xPresentation->getController() );
+            fprintf( stderr, "Added the listener\n");
         }
+        fprintf( stderr, "We aren't running\n" );
     }
     catch ( com::sun::star::uno::RuntimeException &e )
     {
-        //return;
+        fprintf( stderr, "Exeption on add\n" );
     }
 
 
@@ -95,6 +99,7 @@ void Server::listenThread()
 
         // TODO: deal with transmision errors gracefully.
     }
+    delete mTransmitter;
     mTransmitter = NULL;
 }
 
@@ -127,8 +132,10 @@ void Server::presentationStarted( css::uno::Reference<
 {
     if ( mTransmitter )
     {
-        Listener* aListener = new Listener( *mTransmitter );
+        fprintf( stderr, "Adding Listener on start of presentation.\n" );
+        Listener* aListener = new Listener( mTransmitter );
         aListener->init( rController );
+        fprintf( stderr, "Added the listener as desired.\n" );
     }
 }
 

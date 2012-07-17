@@ -26,6 +26,7 @@ Transmitter::Transmitter( StreamSocket &aSocket )
 void
 Transmitter::execute()
 {
+    fprintf( stderr, "Waiting\n" );
     while( mQueuesNotEmpty.wait() )
     {
         while ( true )
@@ -35,6 +36,7 @@ Transmitter::execute()
             {
                 OString aMessage = mHighPriority.front();
                 mHighPriority.pop();
+                fprintf(stderr , " Writing HIGHP:\n%s<<END>>", aMessage.getStr() );
                 mStreamSocket.write( aMessage.getStr(), aMessage.getLength() );
             }
 
@@ -42,10 +44,10 @@ Transmitter::execute()
             {
                 OString aMessage = mLowPriority.front();
                 mLowPriority.pop();
+                fprintf(stderr , " Writing LOWP:\n%s<<END>>", aMessage.getStr() );
                 mStreamSocket.write( aMessage.getStr(), aMessage.getLength() );
             }
 
-            //fprintf( stderr, "Lowsize:%i, Highsize:%i\n", mLowPriority.size(), mHighPriority.size() );
             if ( (mLowPriority.size() == 0) && (mHighPriority.size() == 0) )
             {
                 mQueuesNotEmpty.reset();

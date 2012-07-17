@@ -25,6 +25,7 @@ public class Receiver {
 	}
 
 	public void parseCommand(ArrayList<String> aCommand) {
+		System.out.println("parsing " +aCommand.get(0));
 		if (mActivityMessenger == null) {
 			return;
 		}

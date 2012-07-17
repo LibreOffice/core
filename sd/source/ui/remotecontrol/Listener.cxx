@@ -10,26 +10,39 @@
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/presentation/XPresentationSupplier.hpp>
 #include <com/sun/star/presentation/XPresentation2.hpp>
+
+#include <rtl/strbuf.hxx>
+
 #include "Listener.hxx"
 
 using namespace sd;
 using namespace ::com::sun::star::presentation;
 using namespace ::com::sun::star::frame;
 using rtl::OString;
+using rtl::OStringBuffer;
 
 
-Listener::Listener( sd::Transmitter& rTransmitter  )
+Listener::Listener( sd::Transmitter *aTransmitter  )
     : ::cppu::WeakComponentImplHelper1< XSlideShowListener>( m_aMutex )
 {
+    fprintf( stderr, "Creating Transmitter\n" );
+    mTransmitter = aTransmitter;
 }
 
-void Listener::init(css::uno::Reference< css::presentation::XSlideShowController > aController)
+Listener::~Listener()
 {
-        aController->addSlideShowListener(static_cast<XSlideShowListener*>(this));
 }
 
-
-
+void Listener::init(css::uno::Reference< css::presentation::XSlideShowController >& aController)
+{
+    fprintf( stderr, "Initing Transmitter\n" );
+    if (aController.is() )
+    {
+//     mController = aController;
+    aController->addSlideShowListener(static_cast<XSlideShowListener*>(this));-
+    }
+    fprintf( stderr, "Initiated Transmitter\n" );
+}
 
 //----- XAnimationListener ----------------------------------------------------
 void SAL_CALL Listener::beginEvent(const css::uno::Reference<
@@ -46,10 +59,11 @@ void SAL_CALL Listener::endEvent( const css::uno::Reference<
 }
 
 void SAL_CALL Listener::repeat( const css::uno::Reference<
-    css::animations::XAnimationNode >& rNode, ::sal_Int32 Repeat )
+    css::animations::XAnimationNode >& rNode, ::sal_Int32 aRepeat )
      throw (css::uno::RuntimeException)
 {
     (void) rNode;
+    (void) aRepeat;
 }
 
 
@@ -68,40 +82,16 @@ void SAL_CALL Listener::resumed (void)
 void SAL_CALL Listener::slideEnded (sal_Bool bReverse)
     throw (css::uno::RuntimeException)
 {
+    fprintf( stderr, "slideEnded\n" );
     (void) bReverse;
-    fprintf( stderr, "slidenede\n" );
-//     (void) bReverse;
-//     JsonBuilder *aBuilder = json_builder_new();
-//
-//
-//     json_builder_begin_object( aBuilder );
-//     json_builder_set_member_name( aBuilder, "slide_number");
-//     json_builder_add_int_value( aBuilder, 2 );
-//     // FIXME: get the slide number
-//     json_builder_end_object( aBuilder );
-//
-//     JsonGenerator *aGen = json_generator_new();
-//     JsonNode *aRoot = json_builder_get_root( aBuilder );
-//     json_generator_set_root( aGen, aRoot );
-//     char *aCommand = json_generator_to_data( aGen, NULL);
-//
-//     json_node_free( aRoot );
-//     g_object_unref ( aGen );
-//     g_object_unref ( aBuilder );
-//
-//     sal_Int32 aLen = strlen( aCommand );
-//
-//     OString aLengthString = OString::valueOf( aLen );
-//     const char *aLengthChar = aLengthString.getStr();
-//
-//     sal_Int32 aLengthLength = aLengthString.getLength();
-//
-//     mStreamSocket.write( aLengthChar, aLengthLength );
-//     mStreamSocket.write( "\n", 1 );
-//     mStreamSocket.write( aCommand, aLen );
-//     // Transmit here.
-//
-//     g_free( aCommand );
+    sal_Int32 aSlide = mController->getCurrentSlideIndex();
+
+    OStringBuffer aBuilder( "slide_updated\n" );
+    aBuilder.append( OString::valueOf( aSlide ) );
+    aBuilder.append( "\n\n" );
+
+    mTransmitter->addMessage( aBuilder.makeStringAndClear() ,
+                              Transmitter::Priority::HIGH );
 }
 
 void SAL_CALL Listener::hyperLinkClicked (const rtl::OUString &)
@@ -112,17 +102,19 @@ void SAL_CALL Listener::hyperLinkClicked (const rtl::OUString &)
 void SAL_CALL Listener::slideTransitionStarted (void)
     throw (css::uno::RuntimeException)
 {
+        fprintf( stderr, "slideTransitionStarted\n" );
 }
 
 void SAL_CALL Listener::slideTransitionEnded (void)
     throw (css::uno::RuntimeException)
 {
-        fprintf( stderr, "slidetreatasdfanede\n" );
+    fprintf( stderr, "slideTransitionEnded\n" );
 }
 
 void SAL_CALL Listener::slideAnimationsEnded (void)
     throw (css::uno::RuntimeException)
 {
+    fprintf( stderr, "slideAnimationsEnded\n" );
 }
 
 void SAL_CALL Listener::disposing (void)
@@ -134,6 +126,7 @@ void SAL_CALL Listener::disposing (
     const css::lang::EventObject& rEvent)
     throw (::com::sun::star::uno::RuntimeException)
 {
+    (void) rEvent;
 // FIXME: disconnect as appropriate
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

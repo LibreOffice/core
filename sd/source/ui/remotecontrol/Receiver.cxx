@@ -42,9 +42,6 @@ Receiver::~Receiver()
 
 void Receiver::parseCommand( std::vector<OString> aCommand )
 {
-    fprintf( stderr, "Parsing:\n");
-    for (size_t i = 0; i < aCommand.size(); i++)
-    {
     uno::Reference<presentation::XSlideShowController> xSlideShowController;
     uno::Reference<presentation::XPresentation2> xPresentation;
     try {
@@ -113,7 +110,7 @@ void Receiver::parseCommand( std::vector<OString> aCommand )
         }
     }
             // FIXME: remove later, this is just to test functionality
-        //sendPreview( 0, xSlideShowController, mTransmitter );
+    sendPreview( 0, xSlideShowController, mTransmitter );
 
 }
 
@@ -189,8 +186,6 @@ preparePreview(sal_uInt32 aSlideNumber,
     aProps[2].Value <<= aFilterData;
 
     xFilter->filter( aProps );
-
-    fprintf( stderr, "%s\n", rtl::OUStringToOString( aFileURL , RTL_TEXTENCODING_UTF8 ).getStr() );
 
     // FIXME: error handling.
 

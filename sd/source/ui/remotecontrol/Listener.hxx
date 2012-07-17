@@ -28,8 +28,9 @@ class Listener
       public ::cppu::WeakComponentImplHelper1< css::presentation::XSlideShowListener >
 {
 public:
-    Listener( sd::Transmitter& rTransmitter );
-    void init( css::uno::Reference< css::presentation::XSlideShowController > aController);
+    Listener( sd::Transmitter *aTransmitter );
+    ~Listener();
+    void init( css::uno::Reference< css::presentation::XSlideShowController >& aController);
 
     // XAnimationListener
     virtual void SAL_CALL beginEvent(const css::uno::Reference<
@@ -57,8 +58,9 @@ public:
     throw (com::sun::star::uno::RuntimeException);
 
 private:
-    css::uno::Reference<css::presentation::XSlideShowController> mxSlideShowController;
     osl::StreamSocket mStreamSocket;
+    sd::Transmitter *mTransmitter;
+    css::uno::Reference< css::presentation::XSlideShowController > mController;
 };
 }
 #endif // _SD_IMPRESSREMOTE_LISTENER_HXX
