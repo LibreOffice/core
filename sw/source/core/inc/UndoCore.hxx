@@ -45,8 +45,12 @@ namespace sw {
     class IShellCursorSupplier;
 }
 
-typedef SwRedlineSaveData* SwRedlineSaveDataPtr;
-SV_DECL_PTRARR_DEL( SwRedlineSaveDatas, SwRedlineSaveDataPtr, 8 )
+class SwRedlineSaveDatas : public std::vector<SwRedlineSaveData*> {
+public:
+    ~SwRedlineSaveDatas() { DeleteAndDestroyAll(); }
+
+    void DeleteAndDestroyAll();
+};
 
 namespace sw {
 class SW_DLLPRIVATE UndoRedoContext
