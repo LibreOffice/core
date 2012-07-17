@@ -69,6 +69,7 @@
 
 #include <set>
 #include <map>
+#include <algorithm> // min, max
 
 #include <sfx2/childwin.hxx>
 
@@ -293,16 +294,28 @@ void SwGetRefField::UpdateField( const SwTxtFld* pFldTxtAttr )
     sTxt.Erase();
 
     SwDoc* pDoc = ((SwGetRefFieldType*)GetTyp())->GetDoc();
-    sal_uInt16 nStt = USHRT_MAX;
-    sal_uInt16 nEnd = USHRT_MAX;
-    SwTxtNode* pTxtNd = SwGetRefFieldType::FindAnchor( pDoc, sSetRefName,
-                                        nSubType, nSeqNo, &nStt, &nEnd );
+    // finding the reference target (the number)
+    sal_uInt16 nNumStart, nNumEnd;
+    SwTxtNode* pTxtNd = SwGetRefFieldType::FindAnchor(
+        pDoc, sSetRefName, nSubType, nSeqNo, &nNumStart, &nNumEnd
+    );
+    // not found?
     if ( !pTxtNd )
     {
         sTxt = ViewShell::GetShellRes()->aGetRefFld_RefItemNotFound;
         return ;
     }
+    // where is the category name (e.g. "Illustration")?
+    rtl::OUString const Text = pTxtNd->GetTxt();
+    unsigned const nCatStart = Text.indexOf(sSetRefName);
+    unsigned const nCatEnd = nCatStart == unsigned(-1) ?
+        unsigned(-1) : nCatStart + sSetRefName.getLength();
+    bool const bHasCat = nCatStart != unsigned(-1);
 
+    // length of the referenced text
+    unsigned const nLen = Text.getLength();
+
+    // which format?
     switch( GetFormat() )
     {
     case REF_CONTENT:
@@ -310,73 +323,95 @@ void SwGetRefField::UpdateField( const SwTxtFld* pFldTxtAttr )
     case REF_ONLYCAPTION:
     case REF_ONLYSEQNO:
         {
+            // needed part of Text
+            unsigned nStart, nEnd;
+
             switch( nSubType )
             {
             case REF_SEQUENCEFLD:
-                nEnd = pTxtNd->GetTxt().Len();
+
                 switch( GetFormat() )
                 {
+                // "Category and Number"
                 case REF_ONLYNUMBER:
-                    if( nStt + 1 < nEnd )
-                        nEnd = nStt + 1;
-                    nStt = 0;
-                    break;
-
-                case REF_ONLYCAPTION:
-                    {
-                        const SwTxtAttr* const pTxtAttr =
-                            pTxtNd->GetTxtAttrForCharAt(nStt, RES_TXTATR_FIELD);
-                        if( pTxtAttr )
-                            nStt = SwGetExpField::GetReferenceTextPos(
-                                                pTxtAttr->GetFld(), *pDoc );
-                        else if( nStt + 1 < nEnd )
-                            ++nStt;
+                    if (bHasCat) {
+                        nStart = std::min<unsigned>(nNumStart, nCatStart);
+                        nEnd = std::max<unsigned>(nNumEnd, nCatEnd);
+                    } else {
+                        nStart = nNumStart;
+                        nEnd = nNumEnd;
                     }
                     break;
 
+                // "Caption Text"
+                case REF_ONLYCAPTION: {
+                    // next alphanumeric character after category+number
+                    if (const SwTxtAttr* const pTxtAttr =
+                        pTxtNd->GetTxtAttrForCharAt(nNumStart, RES_TXTATR_FIELD)
+                    ) {
+                        // start searching from nFrom
+                        unsigned const nFrom = bHasCat ?
+                            std::max<unsigned>(nNumStart + 1, nCatEnd) : nNumStart + 1;
+                        nStart = SwGetExpField::GetReferenceTextPos(
+                            pTxtAttr->GetFld(), *pDoc, nFrom
+                        );
+                    } else {
+                        nStart = bHasCat ?
+                            std::max<unsigned>(nNumEnd, nCatEnd) : nNumEnd;
+                    }
+                    nEnd = nLen;
+                    break;
+                }
+
+                // "Numbering"
                 case REF_ONLYSEQNO:
-                    if( nStt + 1 < nEnd )
-                        nEnd = nStt + 1;
+                    nStart = nNumStart;
+                    nEnd = std::min<unsigned>(nStart + 1, nLen);
                     break;
 
+                // "Reference" (whole Text)
                 default:
-                    nStt = 0;
+                    nStart = 0;
+                    nEnd = nLen;
                     break;
                 }
                 break;
 
             case REF_BOOKMARK:
-                if( USHRT_MAX == nEnd )
-                {
-                    // Text steht ueber verschiedene Nodes verteilt.
-                    // Gesamten Text oder nur bis zum Ende vom Node?
-                    nEnd = pTxtNd->GetTxt().Len();
-                }
+                nStart = nNumStart;
+                // Text steht ueber verschiedene Nodes verteilt.
+                // Gesamten Text oder nur bis zum Ende vom Node?
+                nEnd = nNumEnd == USHRT_MAX ? nLen : nNumEnd;
                 break;
 
             case REF_OUTLINE:
+                nStart = nNumStart;
+                nEnd = nNumEnd;
                 break;
 
             case REF_FOOTNOTE:
             case REF_ENDNOTE:
+                // die Nummer oder den NumString besorgen
+                for( unsigned i = 0; i < pDoc->GetFtnIdxs().Count(); ++i )
                 {
-                    // die Nummer oder den NumString besorgen
-                    sal_uInt16 n, nFtnCnt = pDoc->GetFtnIdxs().Count();
-                    SwTxtFtn* pFtnIdx;
-                    for( n = 0; n < nFtnCnt; ++n )
-                        if( nSeqNo == (pFtnIdx = pDoc->GetFtnIdxs()[ n ])->GetSeqRefNo() )
-                        {
-                            sTxt = pFtnIdx->GetFtn().GetViewNumStr( *pDoc );
-                            break;
-                        }
-                    nStt = nEnd;        // kein Bereich, der String ist fertig
+                    SwTxtFtn* const pFtnIdx = pDoc->GetFtnIdxs()[i];
+                    if( nSeqNo == pFtnIdx->GetSeqRefNo() )
+                    {
+                        sTxt = pFtnIdx->GetFtn().GetViewNumStr( *pDoc );
+                        break;
+                    }
                 }
+                return;
+
+            default:
+                nStart = nNumStart;
+                nEnd = nNumEnd;
                 break;
             }
 
-            if( nStt != nEnd )      // ein Bereich?
+            if( nStart != nEnd ) // ein Bereich?
             {
-                sTxt = pTxtNd->GetExpandTxt( nStt, nEnd - nStt );
+                sTxt = pTxtNd->GetExpandTxt( nStart, nEnd - nStart );
 
                 // alle Sonderzeichen entfernen (durch Blanks ersetzen):
                 if( sTxt.Len() )
@@ -399,7 +434,7 @@ void SwGetRefField::UpdateField( const SwTxtFld* pFldTxtAttr )
         {
             const SwTxtFrm* pFrm = (SwTxtFrm*)pTxtNd->getLayoutFrm( pDoc->GetCurrentLayout(), 0,0,sal_False),
                         *pSave = pFrm;
-            while( pFrm && !pFrm->IsInside( nStt ) )
+            while( pFrm && !pFrm->IsInside( nNumStart ) )
                 pFrm = (SwTxtFrm*)pFrm->GetFollow();
 
             if( pFrm || 0 != ( pFrm = pSave ))
@@ -446,14 +481,14 @@ void SwGetRefField::UpdateField( const SwTxtFld* pFldTxtAttr )
             // Node stehen!
             if( pFldTxtAttr->GetpTxtNode() == pTxtNd )
             {
-                sTxt = nStt < *pFldTxtAttr->GetStart()
+                sTxt = nNumStart < *pFldTxtAttr->GetStart()
                             ? aLocaleData.getAboveWord()
                             : aLocaleData.getBelowWord();
                 break;
             }
 
             sTxt = ::IsFrameBehind( *pFldTxtAttr->GetpTxtNode(), *pFldTxtAttr->GetStart(),
-                                    *pTxtNd, nStt )
+                                    *pTxtNd, nNumStart )
                         ? aLocaleData.getAboveWord()
                         : aLocaleData.getBelowWord();
         }
