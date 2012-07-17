@@ -280,6 +280,11 @@ void RTFDocumentImpl::setAuthor(rtl::OUString& rAuthor)
     m_aAuthor = rAuthor;
 }
 
+void RTFDocumentImpl::setAuthorInitials(rtl::OUString& rAuthorInitials)
+{
+    m_aAuthorInitials = rAuthorInitials;
+}
+
 bool RTFDocumentImpl::isSubstream() const
 {
     return m_pSuperstream != 0;
@@ -319,6 +324,11 @@ void RTFDocumentImpl::resolveSubstream(sal_uInt32 nPos, Id nId, OUString& rIgnor
     {
         pImpl->setAuthor(m_aAuthor);
         m_aAuthor = OUString();
+    }
+    if (!m_aAuthorInitials.isEmpty())
+    {
+        pImpl->setAuthorInitials(m_aAuthorInitials);
+        m_aAuthorInitials = OUString();
     }
     pImpl->seek(nPos);
     SAL_INFO("writerfilter", "substream start");
@@ -932,6 +942,7 @@ void RTFDocumentImpl::text(OUString& rString)
         case DESTINATION_TITLE:
         case DESTINATION_SUBJECT:
         case DESTINATION_DOCCOMM:
+        case DESTINATION_ATNID:
             m_aStates.top().aDestinationText.append(rString);
             break;
         case DESTINATION_EQINSTRUCTION:
@@ -1240,11 +1251,19 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
             else
             {
                 // If there is an author set, emit it now.
-                if (!m_aAuthor.isEmpty())
+                if (!m_aAuthor.isEmpty() || !m_aAuthorInitials.isEmpty())
                 {
-                    RTFValue::Pointer_t pValue(new RTFValue(m_aAuthor));
                     RTFSprms aAttributes;
-                    aAttributes.set(NS_ooxml::LN_CT_TrackChange_author, pValue);
+                    if (!m_aAuthor.isEmpty())
+                    {
+                        RTFValue::Pointer_t pValue(new RTFValue(m_aAuthor));
+                        aAttributes.set(NS_ooxml::LN_CT_TrackChange_author, pValue);
+                    }
+                    if (!m_aAuthorInitials.isEmpty())
+                    {
+                        RTFValue::Pointer_t pValue(new RTFValue(m_aAuthorInitials));
+                        aAttributes.set(NS_ooxml::LN_CT_Comment_initials, pValue);
+                    }
                     writerfilter::Reference<Properties>::Pointer_t const pProperties(new RTFReferenceProperties(aAttributes));
                     Mapper().props(pProperties);
                 }
@@ -1349,6 +1368,27 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
             break;
         case RTF_DOCCOMM:
             m_aStates.top().nDestinationState = DESTINATION_DOCCOMM;
+            break;
+        case RTF_ATRFSTART:
+        case RTF_ATRFEND:
+            {
+                // We could send the real value here, but that would make the
+                // tokenizer more complicated, and dmapper doesn't read the
+                // result anyway.
+                RTFValue::Pointer_t pValue(new RTFValue(0));
+                m_aStates.top().nDestinationState = DESTINATION_SKIP;
+
+                RTFSprms aAttributes;
+                if (nKeyword == RTF_ATRFSTART)
+                    aAttributes.set(NS_ooxml::LN_EG_RangeMarkupElements_commentRangeStart, pValue);
+                else
+                    aAttributes.set(NS_ooxml::LN_EG_RangeMarkupElements_commentRangeEnd, pValue);
+                writerfilter::Reference<Properties>::Pointer_t const pProperties(new RTFReferenceProperties(aAttributes));
+                Mapper().props(pProperties);
+            }
+            break;
+        case RTF_ATNID:
+            m_aStates.top().nDestinationState = DESTINATION_ATNID;
             break;
         default:
             SAL_INFO("writerfilter", OSL_THIS_FUNC << ": TODO handle destination '" << lcl_RtfToString(nKeyword) << "'");
@@ -3365,6 +3405,8 @@ int RTFDocumentImpl::popState()
     }
     else if (m_aStates.top().nDestinationState == DESTINATION_ANNOTATIONAUTHOR)
         m_aAuthor = m_aStates.top().aDestinationText.makeStringAndClear();
+    else if (m_aStates.top().nDestinationState == DESTINATION_ATNID)
+        m_aAuthorInitials = m_aStates.top().aDestinationText.makeStringAndClear();
     else if (m_aStates.top().nDestinationState == DESTINATION_FALT)
     {
         OUString aStr(m_aStates.top().aDestinationText.makeStringAndClear());

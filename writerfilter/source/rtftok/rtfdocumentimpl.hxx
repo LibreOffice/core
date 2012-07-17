@@ -117,7 +117,8 @@ namespace writerfilter {
             DESTINATION_PARAGRAPHNUMBERING_TEXTAFTER,
             DESTINATION_TITLE,
             DESTINATION_SUBJECT,
-            DESTINATION_DOCCOMM
+            DESTINATION_DOCCOMM,
+            DESTINATION_ATNID
         };
 
         enum RTFBorderState
@@ -355,6 +356,7 @@ namespace writerfilter {
                 void setSubstream(bool bIsSubtream);
                 void setSuperstream(RTFDocumentImpl *pSuperstream);
                 void setAuthor(rtl::OUString& rAuthor);
+                void setAuthorInitials(rtl::OUString& rAuthorInitials);
                 bool isSubstream() const;
                 void finishSubstream();
                 void setIgnoreFirst(rtl::OUString& rIgnoreFirst);
@@ -481,6 +483,8 @@ namespace writerfilter {
                 std::map<int, rtl::OUString> m_aAuthors;
                 /// Annotation author of the next annotation.
                 rtl::OUString m_aAuthor;
+                /// Initials of author of the next annotation.
+                rtl::OUString m_aAuthorInitials;
 
                 RTFSprms m_aFormfieldSprms;
                 RTFSprms m_aFormfieldAttributes;
