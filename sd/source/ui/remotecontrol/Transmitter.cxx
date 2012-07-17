@@ -34,7 +34,7 @@ Transmitter::execute()
             osl::MutexGuard aQueueGuard( mQueueMutex );
             while ( mHighPriority.size() )
             {
-                OString aMessage = mHighPriority.front();
+                OString aMessage( mHighPriority.front() );
                 mHighPriority.pop();
                 fprintf(stderr , " Writing HIGHP:\n%s<<END>>", aMessage.getStr() );
                 mStreamSocket.write( aMessage.getStr(), aMessage.getLength() );
@@ -42,7 +42,7 @@ Transmitter::execute()
 
             if( mLowPriority.size() )
             {
-                OString aMessage = mLowPriority.front();
+                OString aMessage( mLowPriority.front() );
                 mLowPriority.pop();
                 fprintf(stderr , " Writing LOWP:\n%s<<END>>", aMessage.getStr() );
                 mStreamSocket.write( aMessage.getStr(), aMessage.getLength() );
