@@ -1347,12 +1347,12 @@ SPECIAL_LIB_FILE(gid_File_Lib_Sqlite3,sqlite3)
  of the build to avoid #i106132#. Now we need to put it into the program dir of
  the install.
 */
-#if !defined(MACOS) || (MAC_OS_X_VERSION_MIN_REQUIRED < 1060)
+#if !defined(MACOSX) || (MAC_OS_X_VERSION_MIN_REQUIRED < 1060)
 File gid_File_Lib_Sqlite3
     Name = "sqlite/" SPECIAL_NAME(sqlite3);
     PACKED_LIB_FILE_BODY;
 End
-#endif //!defined(MACOS) || (MAC_OS_X_VERSION_MIN_REQUIRED < 1060)
+#endif //!defined(MACOSX) || (MAC_OS_X_VERSION_MIN_REQUIRED < 1060)
 #endif //WNT
 SPECIAL_LIB_FILE(gid_File_Lib_Ssl3,ssl3)
 #endif //SYSTEM_NSS
