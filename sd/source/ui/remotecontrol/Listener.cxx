@@ -7,34 +7,87 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <cstring>
-
+#include <comphelper/processfactory.hxx>
+#include <com/sun/star/presentation/XPresentationSupplier.hpp>
+#include <com/sun/star/presentation/XPresentation2.hpp>
 #include "Listener.hxx"
 
 using namespace sd;
 using namespace ::com::sun::star::presentation;
+using namespace ::com::sun::star::frame;
 using rtl::OString;
 
 
-Listener::Listener( const css::uno::Reference<XSlideShowController>& rxSlideShowController,
-    osl::StreamSocket aSocket )
-    : ::cppu::WeakComponentImplHelper1< XSlideShowListener >( m_aMutex ),
-      mxSlideShowController(rxSlideShowController),
-      mStreamSocket( aSocket )
+Listener::Listener( css::uno::Reference< css::presentation::XSlideShowController > aController, sd::Transmitter& rTransmitter  )
+    : ::cppu::WeakComponentImplHelper2< XSlideShowListener,
+            XFrameActionListener >( m_aMutex )
 {
-    if( mxSlideShowController.is() )
+    fprintf( stderr, "Hello from a listener...\n" );
+    try
     {
-        // Listen for events from the slide show controller.
-        mxSlideShowController->addSlideShowListener(static_cast<XSlideShowListener*>(this));
+        css::uno::Reference< css::lang::XMultiServiceFactory > xServiceManager(
+            ::comphelper::getProcessServiceFactory(), css::uno::UNO_QUERY_THROW );
+        css::uno::Reference< css::frame::XFrame > xDesktop( xServiceManager->createInstance(
+        "com.sun.star.frame.Desktop" ) , css::uno::UNO_QUERY_THROW );
+        xDesktop->addFrameActionListener( static_cast<XFrameActionListener*>(this));
     }
+    catch ( css::uno::RuntimeException &e )
+    {
+        //return;
+    }
+    if( aController.is() )
+    {
+//         css::uno::Reference< css::lang::XMultiServiceFactory > xServiceManager(
+//             ::comphelper::getProcessServiceFactory(), css::uno::UNO_QUERY_THROW );
+//         css::uno::Reference< css::frame::XFramesSupplier > xFramesSupplier(
+//             xServiceManager->createInstance( "com.sun.star.frame.Desktop" ) ,
+//             css::uno::UNO_QUERY_THROW );
+//         css::uno::Reference< css::frame::XFrame > xFrame (
+//             xFramesSupplier->getActiveFrame(), css::uno::UNO_QUERY_THROW );
+//         css::uno::Reference<css::presentation::XPresentationSupplier> xPS (
+//             xFrame->getController()->getModel(), css::uno::UNO_QUERY_THROW);
+//         css::uno::Reference<css::presentation::XPresentation2> xPresentation(
+//             xPS->getPresentation(), css::uno::UNO_QUERY_THROW);
+//         // Throws an exception if now slideshow running
+//         css::uno::Reference<css::presentation::XSlideShowController> xSlideShowController(
+//             xPresentation->getController(), css::uno::UNO_QUERY_THROW );
+//         xSlideShowController->addSlideShowListener(static_cast<XSlideShowListener*>(this));
+//         fprintf(stderr, "Registered the slideshowlistener\n" );
+        fprintf(stderr, "Trying to add the slideshowlistener\n" );
+        aController->addSlideShowListener(static_cast<XSlideShowListener*>(this));
+        fprintf(stderr, "Registered the slideshowlistener\n" );
+    }
+     else
+     {
+        fprintf(stderr, "rController isn't\n" );
+     }
 
 }
 
-Listener::~Listener()
+
+
+
+//----- XAnimationListener ----------------------------------------------------
+void SAL_CALL Listener::beginEvent(const css::uno::Reference<
+    css::animations::XAnimationNode >&  rNode ) throw (css::uno::RuntimeException)
 {
-
-
+    (void) rNode;
 }
+
+
+void SAL_CALL Listener::endEvent( const css::uno::Reference<
+    css::animations::XAnimationNode >& rNode ) throw (css::uno::RuntimeException)
+{
+    (void) rNode;
+}
+
+void SAL_CALL Listener::repeat( const css::uno::Reference<
+    css::animations::XAnimationNode >& rNode, ::sal_Int32 Repeat )
+     throw (css::uno::RuntimeException)
+{
+    (void) rNode;
+}
+
 
 //----- XSlideShowListener ----------------------------------------------------
 
@@ -51,6 +104,8 @@ void SAL_CALL Listener::resumed (void)
 void SAL_CALL Listener::slideEnded (sal_Bool bReverse)
     throw (css::uno::RuntimeException)
 {
+    (void) bReverse;
+    fprintf( stderr, "slidenede\n" );
 //     (void) bReverse;
 //     JsonBuilder *aBuilder = json_builder_new();
 //
@@ -98,10 +153,29 @@ void SAL_CALL Listener::slideTransitionStarted (void)
 void SAL_CALL Listener::slideTransitionEnded (void)
     throw (css::uno::RuntimeException)
 {
+        fprintf( stderr, "slidetreatasdfanede\n" );
 }
 
 void SAL_CALL Listener::slideAnimationsEnded (void)
     throw (css::uno::RuntimeException)
 {
+}
+
+void SAL_CALL Listener::frameAction (const css::frame::FrameActionEvent& rEvent)
+        throw (::com::sun::star::uno::RuntimeException)
+{
+    fprintf( stderr, "FrameAction\n" );
+}
+
+void SAL_CALL Listener::disposing (void)
+{
+// FIXME: disconnect as appropriate
+}
+
+void SAL_CALL Listener::disposing (
+    const css::lang::EventObject& rEvent)
+    throw (::com::sun::star::uno::RuntimeException)
+{
+// FIXME: disconnect as appropriate
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

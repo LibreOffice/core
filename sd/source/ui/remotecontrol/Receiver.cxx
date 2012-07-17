@@ -116,7 +116,6 @@ void Receiver::parseCommand( std::vector<OString> aCommand )
 
 }
 
-
 void sendPreview(sal_uInt32 aSlideNumber,
                  uno::Reference<presentation::XSlideShowController> xSlideShowController, Transmitter *aTransmitter )
 {

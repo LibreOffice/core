@@ -10,33 +10,55 @@
 #define _SD_IMPRESSREMOTE_LISTENER_HXX
 
 #include <sal/config.h>
+#include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/presentation/XSlideShowListener.hpp>
 #include <com/sun/star/presentation/XSlideShowController.hpp>
 
-#include <cppuhelper/compbase1.hxx>
+#include <cppuhelper/compbase2.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <osl/socket.hxx>
+
+#include "Transmitter.hxx"
 
 namespace css = ::com::sun::star;
 
 namespace sd {
 class Listener
     : protected ::cppu::BaseMutex,
-      public ::cppu::WeakComponentImplHelper1< css::presentation::XSlideShowListener >
+      public ::cppu::WeakComponentImplHelper2< css::presentation::XSlideShowListener,  css::frame::XFrameActionListener >
 {
 public:
-    Listener( const css::uno::Reference<css::presentation::XSlideShowController>& rxSlideShowController,
-        osl::StreamSocket aSocket );
-    ~Listener();
+    Listener( css::uno::Reference< css::presentation::XSlideShowController > aController, sd::Transmitter& rTransmitter );
+
+
+    // XAnimationListener
+    virtual void SAL_CALL beginEvent(const css::uno::Reference<
+        css::animations::XAnimationNode >&  rNode ) throw (css::uno::RuntimeException);
+    virtual void SAL_CALL endEvent( const css::uno::Reference<
+        css::animations::XAnimationNode >& rNode ) throw (css::uno::RuntimeException);
+    virtual void SAL_CALL repeat( const css::uno::Reference<
+        css::animations::XAnimationNode >& rNode, ::sal_Int32 Repeat )
+        throw (css::uno::RuntimeException);
 
     // XSlideShowListener
-    virtual void SAL_CALL paused(  ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL resumed(  ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL slideTransitionStarted(  ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL slideTransitionEnded(  ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL slideAnimationsEnded(  ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL slideEnded(sal_Bool bReverse) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL hyperLinkClicked( const ::rtl::OUString& hyperLink ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL paused(  ) throw (css::uno::RuntimeException);
+    virtual void SAL_CALL resumed(  ) throw (css::uno::RuntimeException);
+    virtual void SAL_CALL slideTransitionStarted(  ) throw (css::uno::RuntimeException);
+    virtual void SAL_CALL slideTransitionEnded(  ) throw (css::uno::RuntimeException);
+    virtual void SAL_CALL slideAnimationsEnded(  ) throw (css::uno::RuntimeException);
+    virtual void SAL_CALL slideEnded(sal_Bool bReverse) throw (css::uno::RuntimeException);
+    virtual void SAL_CALL hyperLinkClicked( const ::rtl::OUString& hyperLink )
+        throw (css::uno::RuntimeException);
+
+    // XFrameActionListener
+    virtual void SAL_CALL frameAction (const css::frame::FrameActionEvent& rEvent)
+        throw (css::uno::RuntimeException);
+
+    // XEventListener
+    virtual void SAL_CALL disposing (void);
+    virtual void SAL_CALL disposing (
+        const com::sun::star::lang::EventObject& rEvent)
+    throw (com::sun::star::uno::RuntimeException);
 
 private:
     css::uno::Reference<css::presentation::XSlideShowController> mxSlideShowController;

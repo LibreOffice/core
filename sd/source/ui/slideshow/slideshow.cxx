@@ -58,6 +58,7 @@
 #include "sdattr.hrc"
 #include "FactoryIds.hxx"
 #include "ViewShell.hxx"
+#include "Server.hxx"
 #include "SlideShowRestarter.hxx"
 #include "DrawController.hxx"
 #include <boost/bind.hpp>
@@ -267,6 +268,7 @@ void SlideShow::CreateController(  ViewShell* pViewSh, ::sd::View* pView, ::Wind
     // multiple slide show instances for one document.
     mxController = xController;
     mbIsInStartup = false;
+    Server::presentationStarted( getController() );
 }
 
 // --------------------------------------------------------------------
@@ -910,6 +912,7 @@ void SAL_CALL SlideShow::startWithArguments( const Sequence< PropertyValue >& rA
         StartFullscreenPresentation();
     else
         StartInPlacePresentation();
+
 }
 
 // --------------------------------------------------------------------

@@ -18,7 +18,9 @@
 #include <osl/socket.hxx>
 #include <salhelper/thread.hxx>
 
-#include <com/sun/star/presentation/XSlideShowListener.hpp>
+#include <com/sun/star/presentation/XSlideShowController.hpp>
+
+namespace css = ::com::sun::star;
 
 /**
 * The port for use for the main communication between LibO and remote control app.
@@ -30,10 +32,14 @@
 namespace sd
 {
 
+    class Transmitter;
+
     class Server : public salhelper::Thread
     {
         public:
             static void setup();
+            static void presentationStarted( css::uno::Reference<
+                css::presentation::XSlideShowController > rController );
         private:
             Server();
             ~Server();
@@ -42,6 +48,7 @@ namespace sd
             osl::StreamSocket mStreamSocket;
             void listenThread();
             void execute();
+            static Transmitter *mTransmitter;
     };
 }
 

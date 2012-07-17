@@ -13,6 +13,7 @@
 #include "sddll.hxx"
 #include "Server.hxx"
 #include "Receiver.hxx"
+#include "Listener.hxx"
 
 using namespace std;
 using namespace sd;
@@ -31,7 +32,9 @@ Server::~Server()
 void Server::listenThread()
 {
     Transmitter aTransmitter( mStreamSocket );
+    mTransmitter = &aTransmitter;
     Receiver aReceiver( &aTransmitter );
+
     // TODO: decryption
     while (true)
     {
@@ -94,7 +97,20 @@ void Server::execute()
 
 }
 
+
+void Server::presentationStarted( css::uno::Reference<
+     css::presentation::XSlideShowController > rController )
+{
+
+    fprintf( stderr, "Registering\n" );
+    new Listener( rController, *mTransmitter );
+
+}
+
+
+
 Server *sd::Server::spServer = NULL;
+Transmitter *sd::Server::mTransmitter = NULL;
 
 void Server::setup()
 {
