@@ -39,25 +39,26 @@ class sorted_vector
     , private sorted_vector_compare<Value, Compare>
 {
 private:
+    typedef typename std::vector<Value> base_t;
     typedef typename std::vector<Value>::iterator  iterator;
 public:
     typedef typename std::vector<Value>::const_iterator const_iterator;
     typedef typename std::vector<Value>::size_type size_type;
     typedef sorted_vector_compare<Value, Compare> MyCompare;
 
-    using std::vector<Value>::clear;
-    using std::vector<Value>::erase;
-    using std::vector<Value>::empty;
-    using std::vector<Value>::size;
+    using base_t::clear;
+    using base_t::erase;
+    using base_t::empty;
+    using base_t::size;
 
     // MODIFIERS
 
     std::pair<const_iterator,bool> insert( const Value& x )
     {
         iterator it = _lower_bound( x );
-        if( it == std::vector<Value>::end() || less_than(x, *it) )
+        if (it == base_t::end() || less_than(x, *it))
         {
-            it = std::vector<Value>::insert( it, x );
+            it = base_t::insert( it, x );
             return std::make_pair( it, true );
         }
         return std::make_pair( it, false );
@@ -66,7 +67,7 @@ public:
     size_type erase( const Value& x )
     {
         iterator it = _lower_bound( x );
-        if( it != std::vector<Value>::end() && !less_than(x, *it) )
+        if (it != base_t::end() && !less_than(x, *it))
         {
             erase( it );
             return 1;
@@ -76,7 +77,7 @@ public:
 
     void erase( size_t index )
     {
-        std::vector<Value>::erase( _begin() + index );
+        base_t::erase( _begin() + index );
     }
 
     // ACCESSORS
@@ -84,49 +85,49 @@ public:
     // Only return a const iterator, so that the vector cannot be directly updated.
     const_iterator begin() const
     {
-        return std::vector<Value>::begin();
+        return base_t::begin();
     }
 
     // Only return a const iterator, so that the vector cannot be directly updated.
     const_iterator end() const
     {
-        return std::vector<Value>::end();
+        return base_t::end();
     }
 
     // Return a value rather than a reference, so that the vector cannot be directly updated,
     // and the sorted invariant violated.
     Value front()
     {
-        return std::vector<Value>::front();
+        return base_t::front();
     }
 
     const Value& front() const
     {
-        return std::vector<Value>::front();
+        return base_t::front();
     }
 
     // Return a value rather than a reference, so that the vector cannot be directly updated,
     // and the sorted invariant violated.
     Value back()
     {
-        return std::vector<Value>::back();
+        return base_t::back();
     }
 
     const Value& back() const
     {
-        return std::vector<Value>::back();
+        return base_t::back();
     }
 
     // Return a value rather than a reference, so that the vector cannot be directly updated,
     // and the sorted invariant violated.
     Value operator[]( size_t index )
     {
-        return std::vector<Value>::operator[]( index );
+        return base_t::operator[]( index );
     }
 
     const Value& operator[]( size_t index ) const
     {
-        return std::vector<Value>::operator[]( index );
+        return base_t::operator[]( index );
     }
 
     // OPERATIONS
@@ -134,7 +135,7 @@ public:
     const_iterator lower_bound( const Value& x ) const
     {
         const MyCompare& me = *this;
-        return std::lower_bound( std::vector<Value>::begin(), std::vector<Value>::end(), x, me );
+        return std::lower_bound( base_t::begin(), base_t::end(), x, me );
     }
 
     /* Searches the container for an element with a value of x
@@ -146,9 +147,9 @@ public:
     const_iterator find( const Value& x ) const
     {
         const_iterator it = lower_bound( x );
-        if( it == std::vector<Value>::end() || less_than(x, *it) )
+        if (it == base_t::end() || less_than(x, *it))
         {
-            return std::vector<Value>::end();
+            return base_t::end();
         }
         return it;
     }
@@ -159,7 +160,7 @@ public:
        // of another sorted vector
        if ( empty() )
        {
-           std::vector<Value>::insert( _begin(), rOther._begin(), rOther._end() );
+           base_t::insert( _begin(), rOther._begin(), rOther._end() );
        }
        else
            for( const_iterator it = rOther.begin(); it != rOther.end(); ++it )
@@ -185,11 +186,11 @@ private:
     iterator _lower_bound( const Value& x )
     {
         const MyCompare& me = *this;
-        return std::lower_bound( std::vector<Value>::begin(), std::vector<Value>::end(), x, me );
+        return std::lower_bound( base_t::begin(), base_t::end(), x, me );
     }
 
-    typename std::vector<Value>::iterator _begin() { return std::vector<Value>::begin(); }
-    typename std::vector<Value>::iterator _end() { return std::vector<Value>::end(); }
+    typename base_t::iterator _begin() { return base_t::begin(); }
+    typename base_t::iterator _end() { return base_t::end(); }
 
 };
 
