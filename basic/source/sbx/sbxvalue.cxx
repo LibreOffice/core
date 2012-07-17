@@ -1564,8 +1564,11 @@ sal_Bool SbxValue::LoadData( SvStream& r, sal_uInt16 )
             // Match the UInt on this system?
             if( n > SAL_TYPES_SIZEOFINT )
                 r >> aData.nULong, aData.eType = SbxULONG;
-            else
-                r >> (sal_uInt32&)aData.nUInt;
+            else {
+                sal_uInt32 nUInt;
+                r >> nUInt;
+                aData.nUInt = nUInt;
+            }
             break;
         }
         case SbxEMPTY:
