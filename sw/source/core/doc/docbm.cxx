@@ -1418,7 +1418,8 @@ void _SaveCntntIdx(SwDoc* pDoc,
     {
         aSave.SetTypeAndCount( 0x400, 0 );
         const SwUnoCrsrTbl& rTbl = pDoc->GetUnoCrsrTbl();
-        for( SwUnoCrsrTbl::iterator it = rTbl.begin(); it != rTbl.end(); ++it )
+        for (SwUnoCrsrTbl::const_iterator it = rTbl.begin();
+                it != rTbl.end(); ++it)
         {
             FOREACHPAM_START( *it )
                 lcl_ChkPaM( rSaveArr, nNode, nCntnt, *PCURCRSR, aSave, sal_False );
@@ -1558,7 +1559,8 @@ void _RestoreCntntIdx(SwDoc* pDoc,
             {
                 sal_uInt16 nCnt = 0;
                 const SwUnoCrsrTbl& rTbl = pDoc->GetUnoCrsrTbl();
-                for( SwUnoCrsrTbl::iterator it = rTbl.begin(); it != rTbl.end(); ++it )
+                for (SwUnoCrsrTbl::const_iterator it = rTbl.begin();
+                        it != rTbl.end(); ++it)
                 {
                     FOREACHPAM_START( *it )
                         if( aSave.GetCount() == nCnt )
@@ -1718,7 +1720,8 @@ void _RestoreCntntIdx(std::vector<sal_uLong> &rSaveArr,
                 {
                     sal_uInt16 nCnt = 0;
                     const SwUnoCrsrTbl& rTbl = pDoc->GetUnoCrsrTbl();
-                    for( SwUnoCrsrTbl::iterator it = rTbl.begin(); it != rTbl.end(); ++it )
+                    for (SwUnoCrsrTbl::const_iterator it = rTbl.begin();
+                            it != rTbl.end(); ++it)
                     {
                         FOREACHPAM_START( *it )
                             if( aSave.GetCount() == nCnt )
