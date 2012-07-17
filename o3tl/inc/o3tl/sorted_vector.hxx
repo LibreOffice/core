@@ -94,35 +94,14 @@ public:
         return base_t::end();
     }
 
-    // Return a value rather than a reference, so that the vector cannot be directly updated,
-    // and the sorted invariant violated.
-    Value front()
-    {
-        return base_t::front();
-    }
-
     const Value& front() const
     {
         return base_t::front();
     }
 
-    // Return a value rather than a reference, so that the vector cannot be directly updated,
-    // and the sorted invariant violated.
-    Value back()
-    {
-        return base_t::back();
-    }
-
     const Value& back() const
     {
         return base_t::back();
-    }
-
-    // Return a value rather than a reference, so that the vector cannot be directly updated,
-    // and the sorted invariant violated.
-    Value operator[]( size_t index )
-    {
-        return base_t::operator[]( index );
     }
 
     const Value& operator[]( size_t index ) const
