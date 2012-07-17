@@ -40,11 +40,13 @@ class Test : public SwModelTestBase
 public:
     void testZoom();
     void defaultTabStopNotInStyles();
+    void testFdo38244();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
     CPPUNIT_TEST(testZoom);
     CPPUNIT_TEST(defaultTabStopNotInStyles);
+    CPPUNIT_TEST(testFdo38244);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -89,6 +91,72 @@ void Test::defaultTabStopNotInStyles()
     uno::Sequence< style::TabStop > stops = getProperty< uno::Sequence< style::TabStop > >(
         paragraphStyles->getByName( "Standard" ), "ParaTabStops" );
     CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int32>(0), stops.getLength());
+}
+
+void Test::testFdo38244()
+{
+    roundtrip("fdo38244.docx");
+
+    /*
+     * Comments attached to a range was imported without the range, check for the fieldmark start/end positions.
+     *
+     * oParas = ThisComponent.Text.createEnumeration
+     * oPara = oParas.nextElement
+     * oRuns = oPara.createEnumeration
+     * oRun = oRuns.nextElement
+     * oRun = oRuns.nextElement 'TextFieldStart
+     * oRun = oRuns.nextElement
+     * oRun = oRuns.nextElement 'TextFieldEnd
+     * xray oRun.TextPortionType
+     */
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
+    uno::Reference<container::XEnumerationAccess> xRunEnumAccess(xParaEnum->nextElement(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xRunEnum = xRunEnumAccess->createEnumeration();
+    xRunEnum->nextElement();
+    uno::Reference<beans::XPropertySet> xPropertySet(xRunEnum->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("TextFieldStart"), getProperty<OUString>(xPropertySet, "TextPortionType"));
+    xRunEnum->nextElement();
+    xPropertySet.set(xRunEnum->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("TextFieldEnd"), getProperty<OUString>(xPropertySet, "TextPortionType"));
+
+    /*
+     * Initials were not imported.
+     *
+     * oFields = ThisComponent.TextFields.createEnumeration
+     * oField = oFields.nextElement
+     * xray oField.Initials
+     */
+    uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
+    uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
+    xPropertySet.set(xFields->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("M"), getProperty<OUString>(xPropertySet, "Initials"));
+
+    /*
+     * There was a fake empty paragraph at the end of the comment text.
+     *
+     * oFields = ThisComponent.TextFields.createEnumeration
+     * oField = oFields.nextElement
+     * oParas = oField.TextRange.createEnumeration
+     * oPara = oParas.nextElement
+     * oPara = oParas.nextElement
+     */
+
+    xParaEnumAccess.set(getProperty< uno::Reference<container::XEnumerationAccess> >(xPropertySet, "TextRange"), uno::UNO_QUERY);
+    xParaEnum = xParaEnumAccess->createEnumeration();
+    xParaEnum->nextElement();
+    bool bCaught = false;
+    try
+    {
+        xParaEnum->nextElement();
+    }
+    catch (container::NoSuchElementException&)
+    {
+        bCaught = true;
+    }
+    CPPUNIT_ASSERT_EQUAL(true, bCaught);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
