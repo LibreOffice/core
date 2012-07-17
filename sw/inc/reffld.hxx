@@ -48,19 +48,19 @@ enum REFERENCESUBTYPE
 enum REFERENCEMARK
 {
     REF_BEGIN,
-    REF_PAGE = REF_BEGIN,
-    REF_CHAPTER,
-    REF_CONTENT,
-    REF_UPDOWN,
-    REF_PAGE_PGDESC,
-    REF_ONLYNUMBER,
-    REF_ONLYCAPTION,
-    REF_ONLYSEQNO,
+    REF_PAGE = REF_BEGIN, // "Page"
+    REF_CHAPTER,          // "Chapter"
+    REF_CONTENT,          // "Reference"
+    REF_UPDOWN,           // "Above/Below"
+    REF_PAGE_PGDESC,      // "As Page Style"
+    REF_ONLYNUMBER,       // "Category and Number"
+    REF_ONLYCAPTION,      // "Caption Text"
+    REF_ONLYSEQNO,        // "Numbering"
     // --> #i81002#
     // new reference format types for referencing bookmarks and set references
-    REF_NUMBER,
-    REF_NUMBER_NO_CONTEXT,
-    REF_NUMBER_FULL_CONTEXT,
+    REF_NUMBER,              // "Number"
+    REF_NUMBER_NO_CONTEXT,   // "Number (no context)"
+    REF_NUMBER_FULL_CONTEXT, // "Number (full context)"
     REF_END
 };
 
@@ -72,7 +72,7 @@ class SwGetRefFieldType : public SwFieldType
     SwDoc* pDoc;
 protected:
     // Overlay in order to update all ref-fields.
-   virtual void Modify( const SfxPoolItem*, const SfxPoolItem * );
+    virtual void Modify( const SfxPoolItem*, const SfxPoolItem* );
 public:
     SwGetRefFieldType(SwDoc* pDoc );
     virtual SwFieldType*    Copy() const;

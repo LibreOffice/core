@@ -895,19 +895,21 @@ void SwGetExpField::SetValue( const double& rAny )
 /* --------------------------------------------------
     Description: Find the index of the reference text
     following the current field
+    nHint: search starting position after the current
+    field (or 0 if default)
  --------------------------------------------------*/
-xub_StrLen SwGetExpField::GetReferenceTextPos( const SwFmtFld& rFmt, SwDoc& rDoc)
+xub_StrLen SwGetExpField::GetReferenceTextPos( const SwFmtFld& rFmt, SwDoc& rDoc, unsigned nHint)
 {
     //
     const SwTxtFld* pTxtFld = rFmt.GetTxtFld();
     const SwTxtNode& rTxtNode = pTxtFld->GetTxtNode();
     //
-    xub_StrLen nRet = *pTxtFld->GetStart() + 1;
+    xub_StrLen nRet = nHint ? nHint : *pTxtFld->GetStart() + 1;
     String sNodeText = rTxtNode.GetTxt();
     sNodeText.Erase(0, nRet);
     if(sNodeText.Len())
     {
-        //now check if sNodeText starts with a non-alphanumeric character plus a blank
+        // now check if sNodeText starts with a non-alphanumeric character plus blanks
         sal_uInt16 nSrcpt = pBreakIt->GetRealScriptOfText( sNodeText, 0 );
 
         static sal_uInt16 nIds[] =
@@ -934,11 +936,14 @@ xub_StrLen SwGetExpField::GetReferenceTextPos( const SwFmtFld& rFmt, SwDoc& rDoc
             if( !bIsAlphaNum ||
                 (c0 == ' ' || c0 == '\t'))
             {
+                // ignoring blanks
                 nRet++;
-                if( sNodeText.Len() > 1 &&
-                    (sNodeText.GetChar(1) == ' ' ||
-                     sNodeText.GetChar(1) == '\t'))
-                    nRet++;
+                unsigned i = 1;
+                while (i < sNodeText.Len() &&
+                    (sNodeText.GetChar(i) == ' ' ||
+                     sNodeText.GetChar(i) == '\t')
+                )
+                    nRet++, i++;
             }
         }
     }
