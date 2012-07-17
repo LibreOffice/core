@@ -85,7 +85,7 @@ static const char* pStringIds[] = {
     "grave",            "acute",            "circumflex",       "tilde",
 /*128*/ "macron",       "breve",            "dotaccent",        "dieresis",
     "ring",             "cedilla",          "hungarumlaut",     "ogonek",
-    "caron",            "endash",           "AE",               "ordfeminine",
+    "caron",            "emdash",           "AE",               "ordfeminine",
     "Lslash",           "Oslash",           "OE",               "ordmasculine",
 /*144*/ "ae",           "dotlessi",         "lslash",           "oslash",
     "oe",               "germandbls",       "onesuperior",      "logicalnot",
