@@ -8,6 +8,9 @@
  */
 #include "Receiver.hxx"
 #include <string.h>
+#include <com/sun/star/presentation/XSlideShowController.hpp>
+#include <com/sun/star/presentation/XPresentationSupplier.hpp>
+#include <com/sun/star/presentation/XPresentation2.hpp>
 #include <com/sun/star/frame/XFramesSupplier.hpp>
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/document/XExporter.hpp>
@@ -42,8 +45,6 @@ void Receiver::parseCommand( std::vector<OString> aCommand )
     fprintf( stderr, "Parsing:\n");
     for (size_t i = 0; i < aCommand.size(); i++)
     {
-    fprintf( stderr, "%s\n", aCommand[i].getStr() );}
-    fprintf( stderr, "End parse\n" );
     uno::Reference<presentation::XSlideShowController> xSlideShowController;
     uno::Reference<presentation::XPresentation2> xPresentation;
     try {

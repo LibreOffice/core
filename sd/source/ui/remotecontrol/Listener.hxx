@@ -14,7 +14,7 @@
 #include <com/sun/star/presentation/XSlideShowListener.hpp>
 #include <com/sun/star/presentation/XSlideShowController.hpp>
 
-#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/compbase1.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <osl/socket.hxx>
 
@@ -25,11 +25,11 @@ namespace css = ::com::sun::star;
 namespace sd {
 class Listener
     : protected ::cppu::BaseMutex,
-      public ::cppu::WeakComponentImplHelper2< css::presentation::XSlideShowListener,  css::frame::XFrameActionListener >
+      public ::cppu::WeakComponentImplHelper1< css::presentation::XSlideShowListener >
 {
 public:
-    Listener( css::uno::Reference< css::presentation::XSlideShowController > aController, sd::Transmitter& rTransmitter );
-
+    Listener( sd::Transmitter& rTransmitter );
+    void init( css::uno::Reference< css::presentation::XSlideShowController > aController);
 
     // XAnimationListener
     virtual void SAL_CALL beginEvent(const css::uno::Reference<
@@ -48,10 +48,6 @@ public:
     virtual void SAL_CALL slideAnimationsEnded(  ) throw (css::uno::RuntimeException);
     virtual void SAL_CALL slideEnded(sal_Bool bReverse) throw (css::uno::RuntimeException);
     virtual void SAL_CALL hyperLinkClicked( const ::rtl::OUString& hyperLink )
-        throw (css::uno::RuntimeException);
-
-    // XFrameActionListener
-    virtual void SAL_CALL frameAction (const css::frame::FrameActionEvent& rEvent)
         throw (css::uno::RuntimeException);
 
     // XEventListener

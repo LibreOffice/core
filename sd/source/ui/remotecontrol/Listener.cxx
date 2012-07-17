@@ -18,50 +18,14 @@ using namespace ::com::sun::star::frame;
 using rtl::OString;
 
 
-Listener::Listener( css::uno::Reference< css::presentation::XSlideShowController > aController, sd::Transmitter& rTransmitter  )
-    : ::cppu::WeakComponentImplHelper2< XSlideShowListener,
-            XFrameActionListener >( m_aMutex )
+Listener::Listener( sd::Transmitter& rTransmitter  )
+    : ::cppu::WeakComponentImplHelper1< XSlideShowListener>( m_aMutex )
 {
-    fprintf( stderr, "Hello from a listener...\n" );
-    try
-    {
-        css::uno::Reference< css::lang::XMultiServiceFactory > xServiceManager(
-            ::comphelper::getProcessServiceFactory(), css::uno::UNO_QUERY_THROW );
-        css::uno::Reference< css::frame::XFrame > xDesktop( xServiceManager->createInstance(
-        "com.sun.star.frame.Desktop" ) , css::uno::UNO_QUERY_THROW );
-        xDesktop->addFrameActionListener( static_cast<XFrameActionListener*>(this));
-    }
-    catch ( css::uno::RuntimeException &e )
-    {
-        //return;
-    }
-    if( aController.is() )
-    {
-//         css::uno::Reference< css::lang::XMultiServiceFactory > xServiceManager(
-//             ::comphelper::getProcessServiceFactory(), css::uno::UNO_QUERY_THROW );
-//         css::uno::Reference< css::frame::XFramesSupplier > xFramesSupplier(
-//             xServiceManager->createInstance( "com.sun.star.frame.Desktop" ) ,
-//             css::uno::UNO_QUERY_THROW );
-//         css::uno::Reference< css::frame::XFrame > xFrame (
-//             xFramesSupplier->getActiveFrame(), css::uno::UNO_QUERY_THROW );
-//         css::uno::Reference<css::presentation::XPresentationSupplier> xPS (
-//             xFrame->getController()->getModel(), css::uno::UNO_QUERY_THROW);
-//         css::uno::Reference<css::presentation::XPresentation2> xPresentation(
-//             xPS->getPresentation(), css::uno::UNO_QUERY_THROW);
-//         // Throws an exception if now slideshow running
-//         css::uno::Reference<css::presentation::XSlideShowController> xSlideShowController(
-//             xPresentation->getController(), css::uno::UNO_QUERY_THROW );
-//         xSlideShowController->addSlideShowListener(static_cast<XSlideShowListener*>(this));
-//         fprintf(stderr, "Registered the slideshowlistener\n" );
-        fprintf(stderr, "Trying to add the slideshowlistener\n" );
-        aController->addSlideShowListener(static_cast<XSlideShowListener*>(this));
-        fprintf(stderr, "Registered the slideshowlistener\n" );
-    }
-     else
-     {
-        fprintf(stderr, "rController isn't\n" );
-     }
+}
 
+void Listener::init(css::uno::Reference< css::presentation::XSlideShowController > aController)
+{
+        aController->addSlideShowListener(static_cast<XSlideShowListener*>(this));
 }
 
 
@@ -159,12 +123,6 @@ void SAL_CALL Listener::slideTransitionEnded (void)
 void SAL_CALL Listener::slideAnimationsEnded (void)
     throw (css::uno::RuntimeException)
 {
-}
-
-void SAL_CALL Listener::frameAction (const css::frame::FrameActionEvent& rEvent)
-        throw (::com::sun::star::uno::RuntimeException)
-{
-    fprintf( stderr, "FrameAction\n" );
 }
 
 void SAL_CALL Listener::disposing (void)

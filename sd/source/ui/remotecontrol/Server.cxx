@@ -17,6 +17,7 @@
 
 using namespace std;
 using namespace sd;
+using namespace ::com::sun::star;
 using rtl::OString;
 
 Server::Server()
@@ -34,6 +35,28 @@ void Server::listenThread()
     Transmitter aTransmitter( mStreamSocket );
     mTransmitter = &aTransmitter;
     Receiver aReceiver( &aTransmitter );
+
+    uno::Reference<presentation::XSlideShowController> xSlideShowController;
+    uno::Reference<presentation::XPresentation2> xPresentation;
+    try {
+        uno::Reference< lang::XMultiServiceFactory > xServiceManager(
+            ::comphelper::getProcessServiceFactory(), uno::UNO_QUERY_THROW );
+        uno::Reference< frame::XFramesSupplier > xFramesSupplier( xServiceManager->createInstance(
+        "com.sun.star.frame.Desktop" ) , uno::UNO_QUERY_THROW );
+        uno::Reference< frame::XFrame > xFrame ( xFramesSupplier->getActiveFrame(), uno::UNO_QUERY_THROW );
+        uno::Reference<presentation::XPresentationSupplier> xPS ( xFrame->getController()->getModel(), uno::UNO_QUERY_THROW);
+        uno::Reference<presentation::XPresentation2> xPresentation(
+            xPS->getPresentation(), uno::UNO_QUERY_THROW);
+        if ( xPresentation->isRunning() )
+        {
+            presentationStarted( xPresentation->getController() );
+        }
+    }
+    catch ( com::sun::star::uno::RuntimeException &e )
+    {
+        //return;
+    }
+
 
     // TODO: decryption
     while (true)
@@ -72,6 +95,7 @@ void Server::listenThread()
 
         // TODO: deal with transmision errors gracefully.
     }
+    mTransmitter = NULL;
 }
 
 
@@ -101,10 +125,11 @@ void Server::execute()
 void Server::presentationStarted( css::uno::Reference<
      css::presentation::XSlideShowController > rController )
 {
-
-    fprintf( stderr, "Registering\n" );
-    new Listener( rController, *mTransmitter );
-
+    if ( mTransmitter )
+    {
+        Listener* aListener = new Listener( *mTransmitter );
+        aListener->init( rController );
+    }
 }
 
 
