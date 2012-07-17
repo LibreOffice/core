@@ -2573,7 +2573,6 @@ namespace cppcanvas
                         const OutDevState&       rState( rStates.getState() );
                         const ::Size             aBaselineOffset( tools::getBaselineOffset( rState,
                                                                                             rVDev ) );
-                        const ::Point            aStartPoint( pAct->GetStartPoint() );
                         const ::basegfx::B2DSize aSize( rState.mapModeTransform *
                                                         ::basegfx::B2DSize(pAct->GetWidth(),
                                                                            0 ));
@@ -2980,8 +2979,6 @@ namespace cppcanvas
             const Size aMtfSize( rMtf.GetPrefSize() );
             const Size aMtfSizePixPre( aVDev.LogicToPixel( aMtfSize,
                                                            rMtf.GetPrefMapMode() ) );
-            const Point aEmptyPt;
-            const Point aMtfOriginPix( aVDev.LogicToPixel( aEmptyPt ) );
 
             // #i44110# correct null-sized output - there are shapes
             // which have zero size in at least one dimension

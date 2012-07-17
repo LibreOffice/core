@@ -1328,7 +1328,6 @@ bool ImpPathForDragAndCreate::MovCreate(SdrDragStat& rStat)
     bool bFreeHand=IsFreeHand(pU->eAktKind);
     rStat.SetNoSnap(bFreeHand);
     rStat.SetOrtho8Possible(pU->eAktKind!=OBJ_CARC && pU->eAktKind!=OBJ_RECT && (!pU->bMixedCreate || pU->eAktKind!=OBJ_LINE));
-    Point aActMerk(rXPoly[nActPoint]);
     rXPoly[nActPoint]=rStat.Now();
     if (!pU->bMixedCreate && pU->eStartKind==OBJ_LINE && rXPoly.GetPointCount()>=1) {
         Point aPt(rStat.Start());
@@ -1403,7 +1402,6 @@ bool ImpPathForDragAndCreate::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
     bool bIncomp=pView!=NULL && pView->IsUseIncompatiblePathCreateInterface();
     XPolygon& rXPoly=aPathPolygon[aPathPolygon.Count()-1];
     sal_uInt16 nActPoint=rXPoly.GetPointCount()-1;
-    Point aAktMerk(rXPoly[nActPoint]);
     rXPoly[nActPoint]=rStat.Now();
     if (!pU->bMixedCreate && pU->eStartKind==OBJ_LINE) {
         if (rStat.GetPointAnz()>=2) eCmd=SDRCREATE_FORCEEND;

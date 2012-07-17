@@ -757,8 +757,6 @@ bool ChartController::executeDlg_ObjectProperties_withoutUndoGuard( const ::rtl:
         //-------------------------------------------------------------
         //convert properties to ItemSet
 
-        awt::Size aPageSize( ChartModelHelper::getPageSize(getModel()) );
-
         SAL_WNODEPRECATED_DECLARATIONS_PUSH
         ::std::auto_ptr< ReferenceSizeProvider > pRefSizeProv(
             impl_createReferenceSizeProvider());

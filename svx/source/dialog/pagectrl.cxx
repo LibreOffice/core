@@ -202,10 +202,6 @@ void SvxPageWindow::DrawPage( const Point& rOrg, const sal_Bool bSecond, const s
     SetFillColor( rFieldColor );
     DrawRect( Rectangle( rOrg, aTempSize ) );
 
-    // Border Top Bottom Left Right
-    Point aBegin( rOrg );
-    Point aEnd( rOrg );
-
     long nL = nLeft;
     long nR = nRight;
 

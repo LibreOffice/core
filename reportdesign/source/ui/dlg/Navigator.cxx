@@ -935,7 +935,6 @@ void ONavigator::Resize()
 {
     FloatingWindow::Resize();
 
-    Point aPos(GetPosPixel());
     Size aSize( GetOutputSizePixel() );
 
     //////////////////////////////////////////////////////////////////////

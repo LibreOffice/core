@@ -1425,7 +1425,7 @@ Reference< XSpellChecker1 > ImpEditEngine::GetSpeller()
 }
 
 
-SpellInfo * ImpEditEngine::CreateSpellInfo( const EditSelection &rSel, bool bMultipleDocs )
+SpellInfo * ImpEditEngine::CreateSpellInfo( bool bMultipleDocs )
 {
     if (!pSpellInfo)
         pSpellInfo = new SpellInfo;
@@ -1433,7 +1433,6 @@ SpellInfo * ImpEditEngine::CreateSpellInfo( const EditSelection &rSel, bool bMul
         *pSpellInfo = SpellInfo();  // reset to default values
 
     pSpellInfo->bMultipleDoc = bMultipleDocs;
-    EditSelection aSentenceSel( SelectSentence( rSel ) );
     // always spell draw objects completely, startting at the top.
     // (spelling in only a selection or not starting with the top requires
     // further changes elsewehe to work properly)
@@ -1459,7 +1458,7 @@ EESpellState ImpEditEngine::Spell( EditView* pEditView, sal_Bool bMultipleDoc )
     }
 
     EditSelection aCurSel( pEditView->pImpEditView->GetEditSelection() );
-    pSpellInfo = CreateSpellInfo( aCurSel, bMultipleDoc );
+    pSpellInfo = CreateSpellInfo( bMultipleDoc );
 
     sal_Bool bIsStart = sal_False;
     if ( bMultipleDoc )
@@ -1885,8 +1884,7 @@ void ImpEditEngine::StartSpelling(EditView& rEditView, sal_Bool bMultipleDoc)
 {
     DBG_ASSERT(!pSpellInfo, "pSpellInfo already set?");
     rEditView.pImpEditView->SetEditSelection( aEditDoc.GetStartPaM() );
-    EditSelection aCurSel( rEditView.pImpEditView->GetEditSelection() );
-    pSpellInfo = CreateSpellInfo( aCurSel, bMultipleDoc );
+    pSpellInfo = CreateSpellInfo( bMultipleDoc );
 }
 
 Reference< XSpellAlternatives > ImpEditEngine::ImpFindNextError(EditSelection& rSelection)
@@ -1942,7 +1940,7 @@ bool ImpEditEngine::SpellSentence(EditView& rEditView,
     bool bRet = false;
     EditSelection aCurSel( rEditView.pImpEditView->GetEditSelection() );
     if(!pSpellInfo)
-        pSpellInfo = CreateSpellInfo( aCurSel, true );
+        pSpellInfo = CreateSpellInfo( true );
     pSpellInfo->aCurSentenceStart = aCurSel.Min();
     DBG_ASSERT( xSpeller.is(), "No spell checker set!" );
     pSpellInfo->aLastSpellPortions.clear();

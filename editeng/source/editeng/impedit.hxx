@@ -592,7 +592,7 @@ private:
     EditPaM             StartOfWord( const EditPaM& rPaM, sal_Int16 nWordType = ::com::sun::star::i18n::WordType::ANYWORD_IGNOREWHITESPACES );
     EditPaM             EndOfWord( const EditPaM& rPaM, sal_Int16 nWordType = ::com::sun::star::i18n::WordType::ANYWORD_IGNOREWHITESPACES );
     EditSelection       SelectWord( const EditSelection& rCurSelection, sal_Int16 nWordType = ::com::sun::star::i18n::WordType::ANYWORD_IGNOREWHITESPACES, sal_Bool bAcceptStartOfWord = sal_True );
-    EditSelection       SelectSentence( const EditSelection& rCurSel );
+    EditSelection       SelectSentence( const EditSelection& rCurSel ) const;
     EditPaM             CursorVisualLeftRight( EditView* pEditView, const EditPaM& rPaM, sal_uInt16 nCharacterIteratorMode, sal_Bool bToLeft );
     EditPaM             CursorVisualStartEnd( EditView* pEditView, const EditPaM& rPaM, sal_Bool bStart );
 
@@ -670,7 +670,7 @@ private:
     ::com::sun::star::uno::Reference < ::com::sun::star::i18n::XBreakIterator > ImplGetBreakIterator() const;
     ::com::sun::star::uno::Reference < ::com::sun::star::i18n::XExtendedInputSequenceChecker > ImplGetInputSequenceChecker() const;
 
-    SpellInfo *     CreateSpellInfo( const EditSelection &rSel, bool bMultipleDocs );
+    SpellInfo *     CreateSpellInfo( bool bMultipleDocs );
 
     ImpEditEngine(); // disabled
     ImpEditEngine(EditEngine* pEditEngine, SfxItemPool* pPool);

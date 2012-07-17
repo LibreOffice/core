@@ -256,7 +256,6 @@ void ODesignView::resizeDocumentView(Rectangle& _rPlayground)
             }
         }
 
-        Size aReportWindowSize(aPlaygroundSize);
         if ( m_aSplitWin.IsItemValid(TASKPANE_ID) )
         {
             // normalize the split pos

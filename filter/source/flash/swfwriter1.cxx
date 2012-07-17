@@ -1202,11 +1202,7 @@ bool Writer::Impl_writeStroke( SvtGraphicStroke& rStroke )
     rStroke.getPath( aPolygon );
     PolyPolygon aPolyPolygon( aPolygon );
 
-    Rectangle aOldRect( aPolyPolygon.GetBoundRect() );
-
     map( aPolyPolygon );
-
-    Rectangle aNewRect( aPolyPolygon.GetBoundRect() );
 
     // as log as not LINESTYLE2 and DefineShape4 is used (which
     // added support for LineJoin), only round LineJoins are

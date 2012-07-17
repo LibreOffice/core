@@ -373,7 +373,6 @@ void OTableEditorCtrl::PaintCell(OutputDevice& rDev, const Rectangle& rRect,
 {
     DBG_CHKTHIS(OTableEditorCtrl,NULL);
     const String aText( GetCellText( m_nCurrentPos, nColumnId ));
-    const Point aPos(rRect.TopLeft());
     const Size TxtSize(GetDataWindow().GetTextWidth(aText), GetDataWindow().GetTextHeight());
 
     rDev.Push( PUSH_CLIPREGION );

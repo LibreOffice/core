@@ -59,7 +59,7 @@ void SAL_CALL ManifestWriter::writeManifestSequence( const Reference< XOutputStr
         Reference < XDocumentHandler > xHandler ( xSource, UNO_QUERY );
         if (xHandler.is())
             try {
-                ManifestExport aExporter ( xHandler, rSequence);
+                ManifestExport( xHandler, rSequence);
             }
             catch( SAXException& )
             {

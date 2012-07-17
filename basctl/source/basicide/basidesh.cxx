@@ -507,7 +507,6 @@ sal_Bool BasicIDEShell::NextPage( sal_Bool bPrev )
 
 void BasicIDEShell::ArrangeTabBar()
 {
-    Size aSz( GetViewFrame()->GetWindow().GetOutputSizePixel() );
     long nBoxPos = aScrollBarBox.GetPosPixel().X() - 1;
     long nPos = pTabBar->GetSplitSize();
     if ( nPos <= nBoxPos )

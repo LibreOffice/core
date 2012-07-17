@@ -1456,7 +1456,6 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( SeriesPlotterContainer& 
 
         bool bLessSpaceConsumedThanExpected = false;
         {
-            ::basegfx::B2IRectangle aOldRect( aConsumedOuterRect );
             aConsumedOuterRect = ShapeFactory::getRectangleOfShape(xBoundingShape);
             if( aConsumedOuterRect.getMinX() > aAvailableOuterRect.getMinX()
                 || aConsumedOuterRect.getMaxX() < aAvailableOuterRect.getMaxX()

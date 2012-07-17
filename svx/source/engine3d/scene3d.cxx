@@ -547,8 +547,6 @@ void E3dScene::RotateScene (const Point& rRef, long /*nWink*/, double sn, double
     long dyOutRectHalf = labs(UpperLeft.Y() - LowerRight.Y());
     dyOutRectHalf /= 2;
 
-    Rectangle RectQuelle(aOutRect), RectZiel(aOutRect);
-
         // Only the center is moved. The corners are moved by NbcMove. For the
         // rotation a cartesian coordinate system is used in which the pivot
         // point is the origin, and the y-axis increases upward, the X-axis to
@@ -571,7 +569,7 @@ void E3dScene::RotateScene (const Point& rRef, long /*nWink*/, double sn, double
                   // positive direction!
     {             // xnew = x * cos(alpha) - y * sin(alpha)
                   // ynew = x * sin(alpha) + y * cos(alpha)
-                  // Bottom Right is not rotated: the pages of RectQuelle must
+                  // Bottom Right is not rotated: the pages of aOutRect must
                   // remain parallel to the coordinate axes.
         NewCenter.X() = (long) (Center.X() * cs - Center.Y() * sn);
         NewCenter.Y() = (long) (Center.X() * sn + Center.Y() * cs);

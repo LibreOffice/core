@@ -405,8 +405,6 @@ APPHELPER_XSERVICEINFO_IMPL(ChartController,CHART_CONTROLLER_SERVICE_IMPLEMENTAT
         m_apDropTargetHelper.reset();
     }
     {
-        awt::Size aPageSize( ChartModelHelper::getPageSize(getModel()) );
-
         // calls to VCL
         SolarMutexGuard aSolarGuard;
         m_pChartWindow = new ChartWindow(this,pParent,pParent?pParent->GetStyle():0);

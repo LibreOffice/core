@@ -378,8 +378,6 @@ void FrameSelectorImpl::InitBorderGeometry()
     maArray.SetYOffset( mnLine1 );
     maArray.SetAllRowHeights( (mbHor ? mnLine2 : mnLine3) - mnLine1 );
 
-    Rectangle aTLRect( maArray.GetCellRect( 0, 0 ) );
-
     // Focus polygons ---------------------------------------------------------
 
     /*  Width for focus rectangles from center of frame borders. */

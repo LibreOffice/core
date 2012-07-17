@@ -249,15 +249,15 @@ TYPEINIT1( FmFilterHint, SfxHint );
 //========================================================================
 class FmFilterInsertedHint : public FmFilterHint
 {
-    sal_Int32 m_nPos;   // Position relative to the parent of the data
+    sal_uLong m_nPos;   // Position relative to the parent of the data
 
 public:
     TYPEINFO();
-    FmFilterInsertedHint(FmFilterData* pData, sal_Int32 nRelPos)
+    FmFilterInsertedHint(FmFilterData* pData, sal_uLong nRelPos)
         :FmFilterHint(pData)
         ,m_nPos(nRelPos){}
 
-    sal_Int32 GetPos() const { return m_nPos; }
+    sal_uLong GetPos() const { return m_nPos; }
 };
 TYPEINIT1( FmFilterInsertedHint, FmFilterHint );
 
@@ -793,7 +793,7 @@ void FmFilterModel::AppendFilterItems( FmFormItem& _rFormItem )
 void FmFilterModel::Insert(const ::std::vector<FmFilterData*>::iterator& rPos, FmFilterData* pData)
 {
     ::std::vector<FmFilterData*>& rItems = pData->GetParent()->GetChildren();
-    sal_Int32 nPos = rPos == rItems.end() ? LIST_APPEND : rPos - rItems.begin();
+    sal_uLong nPos = rPos == rItems.end() ? LIST_APPEND : rPos - rItems.begin();
     rItems.insert(rPos, pData);
 
     // UI benachrichtigen
@@ -1548,7 +1548,7 @@ SvLBoxEntry* FmFilterNavigator::FindEntry(const FmFilterData* pItem) const
 }
 
 //------------------------------------------------------------------------
-void FmFilterNavigator::Insert(FmFilterData* pItem, sal_Int32 nPos)
+void FmFilterNavigator::Insert(FmFilterData* pItem, sal_uLong nPos)
 {
     const FmParentData* pParent = pItem->GetParent() ? pItem->GetParent() : GetFilterModel();
 

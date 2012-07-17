@@ -1306,20 +1306,16 @@ sal_Bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pSt
                 break;
 
                 case W_META_ROUNDRECT:
-                {
-                    Size aSize( ReadYXExt() );
+                    ReadYXExt(); // size
                     GetWinExtMax( ReadRectangle(), rPlaceableBound, nMapMode );
-                }
                 break;
 
                 case W_META_ARC:
                 case W_META_PIE:
                 case W_META_CHORD:
-                {
-                    Point aEnd( ReadYX() );
-                    Point aStart( ReadYX() );
+                    ReadYX(); // end
+                    ReadYX(); // start
                     GetWinExtMax( ReadRectangle(), rPlaceableBound, nMapMode );
-                }
                 break;
 
                 case W_META_POLYGON:

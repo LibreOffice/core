@@ -956,8 +956,6 @@ void SdrGrafObj::SaveGeoData(SdrObjGeoData& rGeo) const
 
 void SdrGrafObj::RestGeoData(const SdrObjGeoData& rGeo)
 {
-    Size        aSizMerk( aRect.GetSize() );
-
     SdrRectObj::RestGeoData(rGeo);
     SdrGrafObjGeoData& rGGeo=(SdrGrafObjGeoData&)rGeo;
     bMirrored=rGGeo.bMirrored;
@@ -1038,8 +1036,6 @@ SdrObject* SdrGrafObj::DoConvertToPolyObj(sal_Bool bBezier) const
             // Sort into group and return ONLY those objects that can be created from the MetaFile.
             SdrObjGroup*            pGrp = new SdrObjGroup();
             ImpSdrGDIMetaFileImport aFilter(*GetModel());
-            Point                   aOutPos( aRect.TopLeft() );
-            const Size              aOutSiz( aRect.GetSize() );
 
             aFilter.SetScaleRect(GetSnapRect());
             aFilter.SetLayer(GetLayer());

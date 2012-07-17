@@ -1515,8 +1515,6 @@ void SvxPositionSizeTabPage::PointChanged( Window* pWindow, RECT_POINT eRP )
     else
     {
         meRP = eRP;
-
-        Rectangle aTmpRect( GetRect() );
         SetMinMaxPosition();
     }
 }

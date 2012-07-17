@@ -571,10 +571,7 @@ void FlashExporter::exportShape( Reference< XShape >& xShape, bool bMaster )
 
     try
     {
-            com::sun::star::awt::Point aPosition( xShape->getPosition() );
-            com::sun::star::awt::Size aSize( xShape->getSize() );
-
-            com::sun::star::awt::Rectangle aBoundRect;//(aPosition.X, aPosition.Y, aSize.Width, aSize.Height);
+            com::sun::star::awt::Rectangle aBoundRect;
             xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("BoundRect") ) ) >>= aBoundRect;
 
             ShapeInfo* pShapeInfo = new ShapeInfo();

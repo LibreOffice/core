@@ -176,9 +176,10 @@ namespace cppcanvas
 
                 aPolygon.clear ();
 
-                // debug code
-                const ::basegfx::B2DRectangle aBounds (::basegfx::tools::getRange (GetPolygon (rR)));
-                EMFP_DEBUG (printf ("EMF+\tpolygon bounding box: %f,%f %fx%f (mapped)\n", aBounds.getMinX (), aBounds.getMinY (), aBounds.getWidth (), aBounds.getHeight ()));
+                (void) rR; // avoid warnings
+                EMFP_DEBUG (
+                    const ::basegfx::B2DRectangle aBounds (::basegfx::tools::getRange (GetPolygon (rR)));
+                    printf ("EMF+\tpolygon bounding box: %f,%f %fx%f (mapped)\n", aBounds.getMinX (), aBounds.getMinY (), aBounds.getWidth (), aBounds.getHeight ()));
             }
 
             ::basegfx::B2DPolyPolygon& GetPolygon (ImplRenderer& rR, bool bMapIt = true)

@@ -853,7 +853,6 @@ SdrObject* EnhancedCustomShapeFontWork::CreateFontWork( const SdrObject* pShape2
 {
     SdrObject* pRet = NULL;
 
-    Rectangle aLogicRect( pCustomShape->GetLogicRect() );
     PolyPolygon aOutlines2d( GetOutlinesFromShape2d( pShape2d ) );
     sal_uInt16 nOutlinesCount2d = aOutlines2d.Count();
     if ( nOutlinesCount2d )

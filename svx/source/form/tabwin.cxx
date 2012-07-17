@@ -424,7 +424,6 @@ void FmFieldWin::Resize()
 {
     SfxFloatingWindow::Resize();
 
-    Point aPos(GetPosPixel());
     Size aOutputSize( GetOutputSizePixel() );
 
     //////////////////////////////////////////////////////////////////////

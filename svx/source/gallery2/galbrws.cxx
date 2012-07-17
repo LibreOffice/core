@@ -162,7 +162,6 @@ void GalleryBrowser::Resize()
 
     const long  nFrameWidth = LogicToPixel( Size( 3, 0 ), MAP_APPFONT ).Width();
     const long  nFrameWidth2 = nFrameWidth << 1;
-    Size        aMinSize( GetMinOutputSizePixel() );
     Size        aNewSize( GetOutputSizePixel() );
     Point       aSplitPos( mpSplitter->GetPosPixel() );
     const Size  aSplitSize( mpSplitter->GetOutputSizePixel() );

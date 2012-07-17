@@ -7395,7 +7395,6 @@ SdrObject* SdrPowerPointImport::CreateTable( SdrObject* pGroup, sal_uInt32* pTab
                     SdrObject* pObj( aGroupIter.Next() );
                     if ( !IsLine( pObj ) )
                     {
-                        Rectangle aSnapRect( pObj->GetSnapRect() );
                         sal_Int32 nTableIndex = 0;
                         sal_Int32 nRow = 0;
                         sal_Int32 nRowCount = 0;

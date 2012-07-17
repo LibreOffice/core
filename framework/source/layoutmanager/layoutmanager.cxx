@@ -2740,7 +2740,6 @@ throw( uno::RuntimeException )
         return;
 
     // Request to set docking area space again.
-    awt::Rectangle                    aDockingArea( m_aDockingArea );
     Reference< XDockingAreaAcceptor > xDockingAreaAcceptor( m_xDockingAreaAcceptor );
     Reference< awt::XWindow >         xContainerWindow( m_xContainerWindow );
 

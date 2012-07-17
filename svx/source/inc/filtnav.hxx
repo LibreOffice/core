@@ -296,7 +296,7 @@ protected:
 
     void DeleteSelection();
     SvLBoxEntry* FindEntry(const FmFilterData* pItem) const;
-    void Insert(FmFilterData* pItem, sal_Int32 nPos);
+    void Insert(FmFilterData* pItem, sal_uLong nPos);
     void Remove(FmFilterData* pItem);
 
     DECL_LINK(OnRemove, SvLBoxEntry*);

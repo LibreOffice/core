@@ -1632,6 +1632,7 @@ EditSelection ImpEditEngine::SelectWord( const EditSelection& rCurSel, sal_Int16
 }
 
 EditSelection ImpEditEngine::SelectSentence( const EditSelection& rCurSel )
+    const
 {
     uno::Reference < i18n::XBreakIterator > _xBI( ImplGetBreakIterator() );
     const EditPaM& rPaM = rCurSel.Min();

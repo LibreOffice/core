@@ -1329,8 +1329,6 @@ TextSelection TextView::ImpMoveCursor( const KeyEvent& rKeyEvent )
     {
         mpImpl->mpTextEngine->CursorMoved( aOldEnd.GetPara() );
 
-
-        TextSelection aOldSelection( mpImpl->maSelection );
         TextSelection aNewSelection( mpImpl->maSelection );
         aNewSelection.GetEnd() = aPaM;
         if ( bSelect )
