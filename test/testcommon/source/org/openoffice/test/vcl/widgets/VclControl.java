@@ -288,6 +288,11 @@ public class VclControl extends VclWidget {
         inputKeys("");
     }
 
+    public void typeKeys(String keys) {
+        focus();
+        Tester.typeKeys(keys);
+    }
+
     public Rectangle getScreenRectangle() {
         String ret = (String) invoke(Constant.M_GetScreenRectangle, new Object[] { Boolean.FALSE });
         if (ret == null)
