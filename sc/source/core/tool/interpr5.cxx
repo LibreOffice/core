@@ -429,6 +429,8 @@ ScMatrixRef ScInterpreter::CreateMatrixFromDoubleRef( const FormulaToken* pToken
 
         SCROW nPrevRow = -2, nThisRow = -2;
 
+        // Neighboring cell values of identical type are stored and passed as
+        // an array to the matrix object, for performance reasons.
         for (ScBaseCell* pCell = aCellIter.GetFirst(); pCell; pCell = aCellIter.GetNext(), nPrevRow = nThisRow)
         {
             nThisRow = aCellIter.GetRow();
