@@ -237,7 +237,7 @@ namespace {
 
 typedef mdds::multi_type_matrix<custom_string_trait> MatrixImplType;
 
-struct ElemEqual : public unary_function<double, bool>
+struct ElemEqualZero : public unary_function<double, bool>
 {
     bool operator() (double val) const
     {
@@ -245,7 +245,7 @@ struct ElemEqual : public unary_function<double, bool>
     }
 };
 
-struct ElemNotEqual : public unary_function<double, bool>
+struct ElemNotEqualZero : public unary_function<double, bool>
 {
     bool operator() (double val) const
     {
@@ -253,7 +253,7 @@ struct ElemNotEqual : public unary_function<double, bool>
     }
 };
 
-struct ElemGreater : public unary_function<double, bool>
+struct ElemGreaterZero : public unary_function<double, bool>
 {
     bool operator() (double val) const
     {
@@ -261,7 +261,7 @@ struct ElemGreater : public unary_function<double, bool>
     }
 };
 
-struct ElemLess : public unary_function<double, bool>
+struct ElemLessZero : public unary_function<double, bool>
 {
     bool operator() (double val) const
     {
@@ -269,7 +269,7 @@ struct ElemLess : public unary_function<double, bool>
     }
 };
 
-struct ElemGreaterEqual : public unary_function<double, bool>
+struct ElemGreaterEqualZero : public unary_function<double, bool>
 {
     bool operator() (double val) const
     {
@@ -277,7 +277,7 @@ struct ElemGreaterEqual : public unary_function<double, bool>
     }
 };
 
-struct ElemLessEqual : public unary_function<double, bool>
+struct ElemLessEqualZero : public unary_function<double, bool>
 {
     bool operator() (double val) const
     {
@@ -289,6 +289,8 @@ template<typename _Comp>
 void compareMatrix(MatrixImplType& rMat)
 {
     MatrixImplType::size_pair_type aDim = rMat.size();
+    MatrixImplType aNewMat(aDim.row, aDim.column, false); // initialize with boolean block.  faster this way.
+
     _Comp aComp;
     for (size_t i = 0; i < aDim.row; ++i)
     {
@@ -304,9 +306,10 @@ void compareMatrix(MatrixImplType& rMat)
                 continue;
 
             bool b = aComp(fVal);
-            rMat.set(i, j, b);
+            aNewMat.set(i, j, b);
         }
     }
+    aNewMat.swap(rMat);
 }
 
 }
@@ -841,32 +844,32 @@ void ScMatrixImpl::FillDouble( double fVal, SCSIZE nC1, SCSIZE nR1, SCSIZE nC2, 
 
 void ScMatrixImpl::CompareEqual()
 {
-    compareMatrix<ElemEqual>(maMat);
+    compareMatrix<ElemEqualZero>(maMat);
 }
 
 void ScMatrixImpl::CompareNotEqual()
 {
-    compareMatrix<ElemNotEqual>(maMat);
+    compareMatrix<ElemNotEqualZero>(maMat);
 }
 
 void ScMatrixImpl::CompareLess()
 {
-    compareMatrix<ElemLess>(maMat);
+    compareMatrix<ElemLessZero>(maMat);
 }
 
 void ScMatrixImpl::CompareGreater()
 {
-    compareMatrix<ElemGreater>(maMat);
+    compareMatrix<ElemGreaterZero>(maMat);
 }
 
 void ScMatrixImpl::CompareLessEqual()
 {
-    compareMatrix<ElemLessEqual>(maMat);
+    compareMatrix<ElemLessEqualZero>(maMat);
 }
 
 void ScMatrixImpl::CompareGreaterEqual()
 {
-    compareMatrix<ElemGreaterEqual>(maMat);
+    compareMatrix<ElemGreaterEqualZero>(maMat);
 }
 
 namespace {
