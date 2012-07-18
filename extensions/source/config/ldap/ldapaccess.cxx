@@ -270,7 +270,7 @@ void LdapConnection::initConnection()
 
     LdapMessageHolder result;
 #ifdef WNT
-    PWCHAR attributes [2] = { LDAP_NO_ATTRS, NULL };
+    PWCHAR attributes [2] = { L"1.1", NULL };
     LdapErrCode retCode = ldap_search_sW(mConnection,
                                       (PWCHAR) mLdapDefinition.mBaseDN.getStr(),
                                       LDAP_SCOPE_SUBTREE,
