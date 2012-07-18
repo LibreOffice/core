@@ -668,16 +668,25 @@ rtl::OUString ScMatrixImpl::GetString(SCSIZE nC, SCSIZE nR) const
 {
     if (ValidColRowOrReplicated( nC, nR ))
     {
+        double fErr = 0.0;
         switch (maMat.get_type(nR, nC))
         {
             case mdds::mtm::element_string:
                 return maMat.get<rtl::OUString>(nR, nC);
             case mdds::mtm::element_empty:
                 return EMPTY_OUSTRING;
+            case mdds::mtm::element_numeric:
+                OSL_FAIL("ScMatrixImpl::GetString: access error, no string");
+                fErr = maMat.get<double>(nR, nC);
+            break;
+            case mdds::mtm::element_boolean:
+                OSL_FAIL("ScMatrixImpl::GetString: access error, no string");
+                fErr = maMat.get<bool>(nR, nC);
+            break;
             default:
-                SetErrorAtInterpreter( GetError(nC, nR));
                 OSL_FAIL("ScMatrixImpl::GetString: access error, no string");
         }
+        SetErrorAtInterpreter(GetDoubleErrorValue(fErr));
     }
     else
     {
@@ -701,10 +710,18 @@ rtl::OUString ScMatrixImpl::GetString( SvNumberFormatter& rFormatter, SCSIZE nC,
         return ::rtl::OUString();
     }
 
-    if (IsString( nC, nR))
+    double fVal = 0.0;
+    switch (maMat.get_type(nR, nC))
     {
-        if (IsEmptyPath( nC, nR))
-        {   // result of empty FALSE jump path
+        case mdds::mtm::element_string:
+            return maMat.get<rtl::OUString>(nR, nC);
+        case mdds::mtm::element_empty:
+        {
+            if (!maMatFlag.get<double>(nR, nC))
+                // not an empty path.
+                break;
+
+            // result of empty FALSE jump path
             sal_uLong nKey = rFormatter.GetStandardFormat( NUMBERFORMAT_LOGICAL,
                     ScGlobal::eLnge);
             ::rtl::OUString aStr;
@@ -712,17 +729,23 @@ rtl::OUString ScMatrixImpl::GetString( SvNumberFormatter& rFormatter, SCSIZE nC,
             rFormatter.GetOutputString( 0.0, nKey, aStr, &pColor);
             return aStr;
         }
-        return GetString( nC, nR);
+        case mdds::mtm::element_numeric:
+            fVal = maMat.get<double>(nR, nC);
+        break;
+        case mdds::mtm::element_boolean:
+            fVal = maMat.get<bool>(nR, nC);
+        break;
+        default:
+            ;
     }
 
-    sal_uInt16 nError = GetError( nC, nR);
+    sal_uInt16 nError = GetDoubleErrorValue(fVal);
     if (nError)
     {
         SetErrorAtInterpreter( nError);
         return ScGlobal::GetErrorString( nError);
     }
 
-    double fVal= GetDouble( nC, nR);
     sal_uLong nKey = rFormatter.GetStandardFormat( NUMBERFORMAT_NUMBER,
             ScGlobal::eLnge);
     ::rtl::OUString aStr;
