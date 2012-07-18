@@ -138,8 +138,8 @@ void  LdapConnection::connectSimple()
 
         // Do the bind
         LdapErrCode retCode = ldap_simple_bind_s(mConnection,
-                                               CONST_PCHAR_CAST mLdapDefinition.mAnonUser.getStr(),
-                                               CONST_PCHAR_CAST mLdapDefinition.mAnonCredentials.getStr()) ;
+                                               CONST_PCHAR_CAST rtl::OUStringToOString( mLdapDefinition.mAnonUser, RTL_TEXTENCODING_UTF8 ).getStr(),
+                                               CONST_PCHAR_CAST rtl::OUStringToOString( mLdapDefinition.mAnonCredentials, RTL_TEXTENCODING_UTF8 ).getStr()) ;
 
         checkLdapReturnCode("SimpleBind", retCode, mConnection) ;
     }
@@ -158,14 +158,14 @@ void LdapConnection::initConnection()
 
     if (mLdapDefinition.mPort == 0) mLdapDefinition.mPort = LDAP_PORT;
 
-    mConnection = ldap_init(CONST_PCHAR_CAST mLdapDefinition.mServer.getStr(),
+    mConnection = ldap_init(CONST_PCHAR_CAST  rtl::OUStringToOString( mLdapDefinition.mServer, RTL_TEXTENCODING_UTF8 ).getStr(),
                             mLdapDefinition.mPort) ;
     if (mConnection == NULL)
     {
         rtl::OUStringBuffer message ;
 
         message.appendAscii("Cannot initialise connection to LDAP server ") ;
-        message.appendAscii(mLdapDefinition.mServer.getStr()) ;
+        message.append(mLdapDefinition.mServer) ;
         message.appendAscii(":") ;
         message.append(mLdapDefinition.mPort) ;
         throw ldap::LdapConnectionException(message.makeStringAndClear(),
@@ -181,11 +181,11 @@ void LdapConnection::initConnection()
     OSL_ASSERT(data != 0);
     if (!isValid()) { connectSimple(); }
 
-    rtl::OString aUserDn =findUserDn( rtl::OUStringToOString(aUser, RTL_TEXTENCODING_ASCII_US));
+    rtl::OUString aUserDn =findUserDn( aUser );
 
     LdapMessageHolder result;
     LdapErrCode retCode = ldap_search_s(mConnection,
-                                      CONST_PCHAR_CAST aUserDn.getStr(),
+                                      CONST_PCHAR_CAST rtl::OUStringToOString( aUserDn, RTL_TEXTENCODING_UTF8 ).getStr(),
                                       LDAP_SCOPE_BASE,
                                       "(objectclass=*)",
                                       0,
@@ -209,7 +209,7 @@ void LdapConnection::initConnection()
     }
 }
 //------------------------------------------------------------------------------
- rtl::OString LdapConnection::findUserDn(const rtl::OString& aUser)
+ rtl::OUString LdapConnection::findUserDn(const rtl::OUString& aUser)
     throw (lang::IllegalArgumentException,
             ldap::LdapConnectionException, ldap::LdapGenericException)
 {
@@ -225,7 +225,7 @@ void LdapConnection::initConnection()
 
 
 
-    rtl::OStringBuffer filter( "(&(objectclass=" );
+    rtl::OUStringBuffer filter( "(&(objectclass=" );
 
     filter.append( mLdapDefinition.mUserObjectClass ).append(")(") ;
     filter.append( mLdapDefinition.mUserUniqueAttr ).append("=").append(aUser).append("))") ;
@@ -235,19 +235,19 @@ void LdapConnection::initConnection()
     attributes[0]= const_cast<sal_Char *>(LDAP_NO_ATTRS);
     attributes[1]= NULL;
     LdapErrCode retCode = ldap_search_s(mConnection,
-                                      CONST_PCHAR_CAST mLdapDefinition.mBaseDN.getStr(),
+                                      CONST_PCHAR_CAST rtl::OUStringToOString( mLdapDefinition.mBaseDN, RTL_TEXTENCODING_UTF8 ).getStr(),
                                       LDAP_SCOPE_SUBTREE,
-                                      CONST_PCHAR_CAST filter.makeStringAndClear().getStr(), attributes, 0, &result.msg) ;
+                                      CONST_PCHAR_CAST rtl::OUStringToOString( filter.makeStringAndClear(), RTL_TEXTENCODING_UTF8 ).getStr(), attributes, 0, &result.msg) ;
 
     checkLdapReturnCode("FindUserDn", retCode,mConnection) ;
-    rtl::OString userDn ;
+    rtl::OUString userDn ;
     LDAPMessage *entry = ldap_first_entry(mConnection, result.msg) ;
 
     if (entry != NULL)
     {
         sal_Char *charsDn = ldap_get_dn(mConnection, entry) ;
 
-        userDn = charsDn ;
+        userDn = rtl::OStringToOUString( charsDn, RTL_TEXTENCODING_UTF8 );
         ldap_memfree(charsDn) ;
     }
     else

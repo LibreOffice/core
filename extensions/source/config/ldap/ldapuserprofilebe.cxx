@@ -171,11 +171,9 @@ bool LdapUserProfileBe::readLdapConfiguration(
 bool LdapUserProfileBe::getLdapStringParam(
     uno::Reference<container::XNameAccess>& xAccess,
     const rtl::OUString& aLdapSetting,
-    rtl::OString& aServerParameter)
+    rtl::OUString& aServerParameter)
 {
-    rtl::OUString sParam;
-    xAccess->getByName(aLdapSetting) >>= sParam;
-    aServerParameter = rtl::OUStringToOString(sParam, RTL_TEXTENCODING_ASCII_US);
+    xAccess->getByName(aLdapSetting) >>= aServerParameter;
 
     return !aServerParameter.isEmpty();
 }

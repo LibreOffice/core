@@ -45,19 +45,19 @@ struct LdapUserProfile;
 struct LdapDefinition
 {
     /** LDAP server name */
-    rtl::OString mServer ;
+    rtl::OUString mServer ;
     /** LDAP server port number */
     sal_Int32 mPort ;
     /** Repository base DN */
-    rtl::OString mBaseDN ;
+    rtl::OUString mBaseDN ;
     /** DN to use for "anonymous" connection */
-    rtl::OString mAnonUser ;
+    rtl::OUString mAnonUser ;
     /** Credentials to use for "anonymous" connection */
-    rtl::OString mAnonCredentials ;
+    rtl::OUString mAnonCredentials ;
     /** User Entity Object Class */
-    rtl::OString mUserObjectClass;
+    rtl::OUString mUserObjectClass;
     /** User Entity Unique Attribute */
-    rtl::OString mUserUniqueAttr;
+    rtl::OUString mUserUniqueAttr;
  } ;
 
 typedef std::map< rtl::OUString, rtl::OUString > LdapData; // key/value pairs
@@ -94,7 +94,7 @@ public:
     /** finds DN of user
         @return  DN of User
     */
-    rtl::OString findUserDn(const rtl::OString& aUser)
+    rtl::OUString findUserDn(const rtl::OUString& aUser)
         throw (lang::IllegalArgumentException,
                 ldap::LdapConnectionException,
                 ldap::LdapGenericException);

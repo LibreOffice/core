@@ -151,7 +151,7 @@ class LdapUserProfileBe : private LdapProfileMutexHolder, public BackendBase
 
         bool getLdapStringParam(uno::Reference<container::XNameAccess>& xAccess,
                                 const rtl::OUString& aLdapSetting,
-                                rtl::OString& aServerParameter);
+                                rtl::OUString& aServerParameter);
 
     LdapData data_;
 } ;
