@@ -15,9 +15,12 @@ using namespace sd;
 
 Transmitter::Transmitter( StreamSocket &aSocket )
   : Thread( "TransmitterThread" ),
-    mStreamSocket( aSocket )
+    mStreamSocket( aSocket ),
+    mQueuesNotEmpty(),
+    mQueueMutex(),
+    mLowPriority(),
+    mHighPriority()
 {
-    launch();
 }
 
 void
@@ -29,7 +32,7 @@ Transmitter::execute()
         fprintf( stderr, "Continuing after condition\n" );
         while ( true )
         {
-            osl::MutexGuard aQueueGuard( mQueueMutex );
+            ::osl::MutexGuard aQueueGuard( mQueueMutex );
             while ( mHighPriority.size() )
             {
                 OString aMessage( mHighPriority.front() );
@@ -46,7 +49,7 @@ Transmitter::execute()
                 mStreamSocket.write( aMessage.getStr(), aMessage.getLength() );
             }
 
-            if ( (mLowPriority.size() == 0) && (mHighPriority.size() == 0) )
+            if ( mLowPriority.empty() && mHighPriority.empty() )
             {
                 mQueuesNotEmpty.reset();
                 break;
@@ -62,19 +65,25 @@ Transmitter::~Transmitter()
 
 }
 
-void Transmitter::addMessage( const OString aMessage, const Priority aPriority )
+void Transmitter::addMessage( const OString& aMessage, const Priority aPriority )
 {
-    osl::MutexGuard aQueueGuard( mQueueMutex );
+    fprintf(stderr, "Acquiring\n");
+    ::osl::MutexGuard aQueueGuard( mQueueMutex );
+    fprintf(stderr, "Acquired\n" );
     switch ( aPriority )
     {
         case Priority::LOW:
+            fprintf(stderr, "PushingLow\n");
             mLowPriority.push( aMessage );
             break;
         case Priority::HIGH:
+            fprintf(stderr, "PushingHigh\n%s\n", aMessage.getStr() );
             mHighPriority.push( aMessage );
             break;
     }
-    mQueuesNotEmpty.set();
+    fprintf( stderr, "Setting\n" );
+    if ( !mQueuesNotEmpty.check() )
+        mQueuesNotEmpty.set();
     fprintf( stderr, "Added\n" );
 
 }

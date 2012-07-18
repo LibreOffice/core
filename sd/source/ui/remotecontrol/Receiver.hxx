@@ -34,14 +34,15 @@ public:
     void parseCommand( std::vector<rtl::OString> aCommand );
 
 private:
-    Transmitter *mTransmitter;
+    Transmitter *pTransmitter;
 };
 
 }
 
 css::uno::Sequence<sal_Int8> preparePreview(sal_uInt32 aSlideNumber, const css::uno::Reference<css::presentation::XSlideShowController>& xSlideShowController, sal_uInt32 aWidth, sal_uInt32 aHeight, sal_uInt64 &aSize );
 
-void sendPreview(sal_uInt32 aSlideNumber, css::uno::Reference<css::presentation::XSlideShowController> xSlideShowController, sd::Transmitter *aTransmitter );
+void sendPreview(sal_uInt32 aSlideNumber, const css::uno::Reference<
+        css::presentation::XSlideShowController>& xSlideShowController, sd::Transmitter *aTransmitter );
 
 #endif // _SD_IMPRESSREMOTE_RECEIVER_HXX
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

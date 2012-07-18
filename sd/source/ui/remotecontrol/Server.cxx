@@ -35,10 +35,11 @@ Server::~Server()
 void Server::listenThread()
 {
 //     Transmitter aTransmitter( mStreamSocket );
-    mTransmitter = new Transmitter( mStreamSocket);
-    Receiver aReceiver( mTransmitter );
-    mTransmitter->addMessage( "Hello world\n\n", Transmitter::Priority::HIGH );
-
+//     Transmitter aTransmitter( mStreamSocket);
+    pTransmitter = new Transmitter( mStreamSocket );
+    pTransmitter->launch();
+    Receiver aReceiver( pTransmitter );
+//     aTransmitter.addMessage( "Hello world\n\n", Transmitter::Priority::HIGH );
     try {
         fprintf( stderr, "Trying to add a Listener in listenThread\n" );
         uno::Reference< lang::XMultiServiceFactory > xServiceManager(
@@ -99,8 +100,10 @@ void Server::listenThread()
 
         // TODO: deal with transmision errors gracefully.
     }
-    delete mTransmitter;
-    mTransmitter = NULL;
+    mListener->disposing();
+    mListener = NULL;
+    delete pTransmitter;
+    pTransmitter = NULL;
 }
 
 
@@ -130,17 +133,19 @@ void Server::execute()
 void Server::presentationStarted( const css::uno::Reference<
      css::presentation::XSlideShowController > &rController )
 {
-//     if ( mTransmitter )
-//     {
-//         Listener* aListener = new Listener( mTransmitter );
-//         aListener->init( rController );
-//     }
+    if ( pTransmitter )
+    {
+        Listener *aListener = new Listener( pTransmitter );
+        aListener->init( rController );
+        mListener = css::uno::Reference<Listener>( aListener );
+    }
 }
 
 
 
 Server *sd::Server::spServer = NULL;
-Transmitter *sd::Server::mTransmitter = NULL;
+Transmitter *sd::Server::pTransmitter = NULL;
+css::uno::Reference<Listener> sd::Server::mListener = NULL;
 
 void Server::setup()
 {

@@ -33,6 +33,7 @@ namespace sd
 {
 
     class Transmitter;
+    class Listener;
 
     class Server : public salhelper::Thread
     {
@@ -48,7 +49,8 @@ namespace sd
             osl::StreamSocket mStreamSocket;
             void listenThread();
             void execute();
-            static Transmitter *mTransmitter;
+            static Transmitter *pTransmitter;
+            static css::uno::Reference<Listener> mListener;
     };
 }
 

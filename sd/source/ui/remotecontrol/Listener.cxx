@@ -25,7 +25,7 @@ using rtl::OStringBuffer;
 Listener::Listener( sd::Transmitter *aTransmitter  )
     : ::cppu::WeakComponentImplHelper1< XSlideShowListener>( m_aMutex )
 {
-    mTransmitter = aTransmitter;
+    pTransmitter = aTransmitter;
 }
 
 Listener::~Listener()
@@ -37,7 +37,8 @@ void Listener::init( const css::uno::Reference< css::presentation::XSlideShowCon
     if (aController.is() )
     {
         mController = css::uno::Reference< css::presentation::XSlideShowController >( aController );
-        aController->addSlideShowListener(static_cast<XSlideShowListener*>(this));
+        aController->addSlideShowListener(this);
+        fprintf( stderr, "Registered listener.\n" );
     }
 }
 
@@ -87,8 +88,13 @@ void SAL_CALL Listener::slideEnded (sal_Bool bReverse)
     aBuilder.append( OString::valueOf( aSlide ) );
     aBuilder.append( "\n\n" );
 
-    mTransmitter->addMessage( aBuilder.makeStringAndClear() ,
-                              Transmitter::Priority::HIGH );
+    if ( pTransmitter )
+    {
+        fprintf( stderr, "Transmitter is, transmitting.\n" );
+         pTransmitter->addMessage( aBuilder.makeStringAndClear() ,
+                               Transmitter::Priority::HIGH );
+    }
+    fprintf( stderr, "Transmitted\n" );
 }
 
 void SAL_CALL Listener::hyperLinkClicked (const rtl::OUString &)
@@ -116,6 +122,7 @@ void SAL_CALL Listener::slideAnimationsEnded (void)
 
 void SAL_CALL Listener::disposing (void)
 {
+    pTransmitter = NULL;
     if ( mController.is() )
     {
         mController->removeSlideShowListener( static_cast<XSlideShowListener*>(this) );

@@ -27,16 +27,16 @@ public:
     enum Priority { LOW = 1, HIGH };
     Transmitter( osl::StreamSocket &aSocket );
     ~Transmitter();
-    void addMessage( const rtl::OString aMessage, const Priority aPriority );
+    void addMessage( const rtl::OString& aMessage, const Priority aPriority );
 
 private:
     void execute();
 
-    osl::StreamSocket mStreamSocket;
+    ::osl::StreamSocket mStreamSocket;
 
-    osl::Condition mQueuesNotEmpty;
+    ::osl::Condition mQueuesNotEmpty;
 
-    osl::Mutex mQueueMutex;
+    ::osl::Mutex mQueueMutex;
 
     std::queue<rtl::OString> mLowPriority;
     std::queue<rtl::OString> mHighPriority;

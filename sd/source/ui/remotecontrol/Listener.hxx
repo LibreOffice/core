@@ -58,8 +58,7 @@ public:
     throw (com::sun::star::uno::RuntimeException);
 
 private:
-    osl::StreamSocket mStreamSocket;
-    sd::Transmitter *mTransmitter;
+    sd::Transmitter *pTransmitter;
     css::uno::Reference< css::presentation::XSlideShowController > mController;
 };
 }

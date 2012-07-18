@@ -33,7 +33,7 @@ using namespace std;
 
 Receiver::Receiver( Transmitter *aTransmitter )
 {
-    mTransmitter = aTransmitter;
+    pTransmitter = aTransmitter;
 }
 
 Receiver::~Receiver()
@@ -110,12 +110,12 @@ void Receiver::parseCommand( std::vector<OString> aCommand )
         }
     }
             // FIXME: remove later, this is just to test functionality
-    sendPreview( 0, xSlideShowController, mTransmitter );
+//     sendPreview( 0, xSlideShowController, mTransmitter );
 
 }
 
-void sendPreview(sal_uInt32 aSlideNumber,
-                 uno::Reference<presentation::XSlideShowController> xSlideShowController, Transmitter *aTransmitter )
+void sendPreview( sal_uInt32 aSlideNumber,
+                 const uno::Reference<presentation::XSlideShowController>& xSlideShowController, Transmitter *aTransmitter )
 {
 
     sal_uInt64 aSize; // Unused
@@ -143,7 +143,7 @@ void sendPreview(sal_uInt32 aSlideNumber,
 
 uno::Sequence<sal_Int8>
 preparePreview(sal_uInt32 aSlideNumber,
-               const uno::Reference<presentation::XSlideShowController> &xSlideShowController,
+               const uno::Reference<presentation::XSlideShowController>& xSlideShowController,
                sal_uInt32 aWidth, sal_uInt32 aHeight, sal_uInt64 &rSize )
 {
     (void)aWidth; (void)aHeight; // FIXME: remove me when I'm used
