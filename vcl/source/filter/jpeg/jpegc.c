@@ -194,7 +194,14 @@ void ReadJPEG( void* pJPEGReader, void* pIStm, long* pLines )
         }
     }
 
-    jpeg_finish_decompress( &cinfo );
+    if ( pDIB )
+    {
+        jpeg_finish_decompress( &cinfo );
+    }
+    else
+    {
+        jpeg_abort_decompress( &cinfo );
+    }
     if (pScanLineBuffer!=NULL) {
         rtl_freeMemory( pScanLineBuffer );
         pScanLineBuffer=NULL;
