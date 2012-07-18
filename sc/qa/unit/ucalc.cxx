@@ -1042,6 +1042,21 @@ void Test::testFuncParam()
     m_pDoc->GetValue(0, 0, 0, val);
     CPPUNIT_ASSERT_MESSAGE("incorrect result", val == 0.25);
 
+    // Conversion of string to numeric argument.
+    m_pDoc->SetString(0, 0, 0, OUString("=\"\"+3"));    // empty string
+    m_pDoc->SetString(0, 1, 0, OUString("=\" \"+3"));   // only blank
+    m_pDoc->SetString(0, 2, 0, OUString("=\" 4 \"+3")); // number in blanks
+    m_pDoc->SetString(0, 3, 0, OUString("=\" x \"+3")); // non-numeric => #VALUE! error
+    m_pDoc->CalcFormulaTree(false, true);
+    m_pDoc->GetValue(0, 0, 0, val);
+    CPPUNIT_ASSERT_MESSAGE("incorrect result", val == 3);
+    m_pDoc->GetValue(0, 1, 0, val);
+    CPPUNIT_ASSERT_MESSAGE("incorrect result", val == 3);
+    m_pDoc->GetValue(0, 2, 0, val);
+    CPPUNIT_ASSERT_MESSAGE("incorrect result", val == 7);
+    rtl::OUString aVal = m_pDoc->GetString( 0, 3, 0);
+    CPPUNIT_ASSERT_MESSAGE("incorrect result", aVal == "#VALUE!");
+
     m_pDoc->DeleteTab(0);
 }
 
