@@ -3019,7 +3019,7 @@ bool SwWW8ImplReader::ReadChar(long nPosCp, long nCpOfs)
         nWCharVal = nBCode;
     }
 
-    sal_Char cInsert = '\x0';
+    sal_Unicode cInsert = '\x0';
     bool bRet = false;
     //xushanchuan add for issue106569
     if ( 0xc != nWCharVal )
@@ -3170,7 +3170,7 @@ bool SwWW8ImplReader::ReadChar(long nPosCp, long nCpOfs)
 
     if( '\x0' != cInsert )
     {
-        rtl::OUString sInsert(&cInsert, 1, RTL_TEXTENCODING_MS_1252);
+        rtl::OUString sInsert(cInsert);
         emulateMSWordAddTextToParagraph(sInsert);
     }
     if (!maApos.back()) //a para end in apo doesn't count
