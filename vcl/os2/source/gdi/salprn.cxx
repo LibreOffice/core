@@ -215,6 +215,10 @@ void Os2SalInstance::GetPrinterQueueInfo( ImplPrnQueueList* pList )
 
         ByteString aOrgDriverName( pPrqInfo->pszDriverName);
         ByteString aName( pPrqInfo->pszName);
+#if OSL_DEBUG_LEVEL>0
+        printf("GetPrinterQueueInfo pszDriverName %s\n", pPrqInfo->pszDriverName);
+        printf("GetPrinterQueueInfo pszName %s\n", pPrqInfo->pszDriverName);
+#endif
         pInfo->maDriver      = ::rtl::OStringToOUString (aOrgDriverName, gsl_getSystemTextEncoding());
         pInfo->maPrinterName = ::rtl::OStringToOUString (pPrqInfo->pszComment, gsl_getSystemTextEncoding());
         pInfo->maLocation    = ::rtl::OStringToOUString (aName, gsl_getSystemTextEncoding());
@@ -647,6 +651,10 @@ static void ImplGetFormAndTrayList( Os2SalInfoPrinter* pOs2SalInfoPrinter, const
                         ImplFormInfo* pInfo     = new ImplFormInfo;
                         pInfo->mnPaperWidth     = pElm->hcInfo.cx;
                         pInfo->mnPaperHeight    = pElm->hcInfo.cy;
+#if OSL_DEBUG_LEVEL>0
+        printf("ImplGetFormAndTrayList mnPaperWidth %d\n", pInfo->mnPaperWidth);
+        printf("ImplGetFormAndTrayList mnPaperHeight %d\n", pInfo->mnPaperHeight);
+#endif
                         pInfo->mnId             = pElm->djppsFormID;
                         pOs2SalInfoPrinter->mpFormArray[i] = pInfo;
                     }

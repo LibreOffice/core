@@ -354,7 +354,7 @@ void InitSalMain()
     HMQ hMQ;
     SalData* pData = GetAppSalData();
 #if OSL_DEBUG_LEVEL>0
-printf("InitSalMain\n");
+    debug_printf("InitSalMain\n");
 #endif
 
     // morph application to PM
