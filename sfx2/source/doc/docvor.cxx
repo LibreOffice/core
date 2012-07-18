@@ -746,7 +746,7 @@ sal_Bool SfxOrganizeListBox_Impl::MoveOrCopyContents(SvLBox *pSourceBox,
                     pChildIter = NextSibling(pChildIter);
                 // gfs Fuellen bei Items onDemand
                 ++i;
-                if(p[i+1] != INDEX_IGNORE &&
+                if((i < 2) && p[i+1] != INDEX_IGNORE &&
                    pChildIter->HasChildsOnDemand() &&
                    !GetModel()->HasChilds(pChildIter))
                     RequestingChilds(pChildIter);

@@ -103,7 +103,7 @@ sal_Bool XMLFontWeightPropHdl::importXML( const OUString& rStrImpValue, Any& rVa
     {
         bRet = sal_False;
         static int nCount = sizeof(aFontWeightMap)/sizeof(FontWeightMapper);
-        for( int i=0; i<nCount; i++ )
+        for (int i = 0; i < (nCount-1); ++i)
         {
             if( (nWeight >= aFontWeightMap[i].nValue) && (nWeight <= aFontWeightMap[i+1].nValue) )
             {
