@@ -3250,6 +3250,7 @@ void SwRTFParser::ReadPageDescTbl()
 
     sal_uInt16 nCols = USHRT_MAX, nColSpace = USHRT_MAX, nAktCol = 0;
     SvUShorts aColumns;
+    ::std::map< const SwPageDesc*, sal_uInt16 > aFollowMap; //store index of following page descriptors
 
     while( nNumOpenBrakets && IsParserWorking() )
     {
@@ -3323,10 +3324,9 @@ void SwRTFParser::ReadPageDescTbl()
             break;
 
         case RTF_PGDSCNXT:
-            // setze erstmal nur die Nummer als Follow. Am Ende der
-            // Tabelle wird diese entsprechend korrigiert !!
+            // store index of follow in map; will be fixed up later
             if( nTokenValue )
-                pPg->SetFollow( (const SwPageDesc*)nTokenValue );
+                aFollowMap.insert( ::std::pair<const SwPageDesc*, sal_uInt16>( pPg, nTokenValue ));
             else
                 pPg->SetFollow( & const_cast<const SwDoc *>(pDoc)
                                 ->GetPageDesc( 0 ) );
@@ -3507,10 +3507,13 @@ void SwRTFParser::ReadPageDescTbl()
     for( nPos = 0; nPos < pDoc->GetPageDescCnt(); ++nPos )
     {
         SwPageDesc* pPgDsc = &pDoc->_GetPageDesc( nPos );
-        if( (sal_uInt16)(long)pPgDsc->GetFollow() < pDoc->GetPageDescCnt() )
-            pPgDsc->SetFollow(& const_cast<const SwDoc *>(pDoc)
-                              ->GetPageDesc((sal_uInt16)(long)
-                                            pPgDsc->GetFollow()));
+        std::map< const SwPageDesc*, sal_uInt16 >::const_iterator aIter =
+            aFollowMap.find( pPgDsc );
+        if (aIter != aFollowMap.end())
+        {
+            if ((*aIter).second < pDoc->GetPageDescCnt())
+                pPgDsc->SetFollow(& const_cast<const SwDoc *>(pDoc)->GetPageDesc((*aIter).second));
+        }
     }
 
     SetChkStyleAttr( bSaveChkStyleAttr );
