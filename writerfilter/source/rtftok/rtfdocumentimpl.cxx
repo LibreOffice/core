@@ -3624,9 +3624,11 @@ void RTFDocumentImpl::setDestinationText(OUString& rString)
     m_aStates.top().aDestinationText.append(rString);
 }
 
-void RTFDocumentImpl::replayShapetext()
+bool RTFDocumentImpl::replayShapetext()
 {
+    bool bRet = !m_aShapetextBuffer.empty();
     replayBuffer(m_aShapetextBuffer);
+    return bRet;
 }
 
 bool RTFDocumentImpl::getSkipUnknown()
