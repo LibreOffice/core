@@ -198,7 +198,9 @@ void OfaHtmlTabPage::Reset( const SfxItemSet& )
     aIgnoreFontNamesCB.Check(pHtmlOpt->IsIgnoreFontFamily());
     sal_uInt16 nExport = pHtmlOpt->GetExportMode();
     if( nExport >= ( sizeof( aExportToPosArr ) / sizeof( sal_uInt16 ) ) )
-        nExport = 4;    // default for bad config entry is NS 4.0
+    {
+        nExport = 3;    // default for bad config entry is NS 4.0
+    }
     sal_uInt16 nPosArr = aExportToPosArr[ nExport ];
 //  if( nPosArr == DEPRECATED_ENTRY )
 //      nPosArr = aExportToPosArr[ 4 ];     // again: NS 4.0 is default

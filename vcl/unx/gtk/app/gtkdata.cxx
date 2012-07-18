@@ -364,7 +364,7 @@ GdkCursor* GtkSalDisplay::getFromXPM( const char *pBitmap,
 
 GdkCursor *GtkSalDisplay::getCursor( PointerStyle ePointerStyle )
 {
-    if( ePointerStyle > POINTER_COUNT )
+    if (ePointerStyle >= POINTER_COUNT)
         return NULL;
 
     if ( !m_aCursors[ ePointerStyle ] )

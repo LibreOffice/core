@@ -67,8 +67,8 @@ void CGMChart::DeleteTextEntry( TextEntry* pTextEntry )
             pTAttr = pTAttr->pNextAttribute;
             delete pTempTAttr;
         }
-        delete pTextEntry;
         maTextEntryList.Remove( pTextEntry );
+        delete pTextEntry;
     }
 };
 

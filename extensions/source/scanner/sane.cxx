@@ -984,7 +984,7 @@ String Sane::GetOptionUnitName( int n )
     String aText;
     SANE_Unit nUnit = mppOptions[n]->unit;
     size_t nUnitAsSize = (size_t)nUnit;
-    if( nUnitAsSize > sizeof( ppUnits )/sizeof( ppUnits[0] ) )
+    if (nUnitAsSize >= sizeof(ppUnits)/sizeof(ppUnits[0]))
         aText = String::CreateFromAscii( "[unknown units]" );
     else
         aText = String( ppUnits[ nUnit ], gsl_getSystemTextEncoding() );

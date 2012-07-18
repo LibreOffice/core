@@ -748,7 +748,7 @@ bool ParseCMAP( const unsigned char* pCmap, int nLength, CmapResult& rResult )
             while( cMin < cEnd )
             {
                 int j = 0;
-                for(; (cMin < cEnd) && (j < NINSIZE); ++cMin )
+                for (; (cMin < cEnd) && (j < (NINSIZE-1)); ++cMin)
                 {
                     if( cMin >= 0x0100 )
                         cCharsInp[ j++ ] = static_cast<sal_Char>(cMin >> 8);
