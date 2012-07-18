@@ -56,73 +56,7 @@ namespace rtl {
 // Callback functions required for supporting rtl::OUString in
 // mdds::multi_type_vector.  They must be in the rtl namespace to satisfy
 // argument dependent lookup that mdds::multi_type_vector requires.
-
-mdds::mtv::element_t mdds_mtv_get_element_type(const OUString&)
-{
-    return element_type_custom_string;
-}
-
-void mdds_mtv_set_value(mdds::mtv::base_element_block& block, size_t pos, const OUString& val)
-{
-    custom_string_block::set_value(block, pos, val);
-}
-
-void mdds_mtv_get_value(const mdds::mtv::base_element_block& block, size_t pos, OUString& val)
-{
-    custom_string_block::get_value(block, pos, val);
-}
-
-template<typename _Iter>
-void mdds_mtv_set_values(
-    mdds::mtv::base_element_block& block, size_t pos, const OUString&, const _Iter& it_begin, const _Iter& it_end)
-{
-    custom_string_block::set_values(block, pos, it_begin, it_end);
-}
-
-void mdds_mtv_append_value(mdds::mtv::base_element_block& block, const OUString& val)
-{
-    custom_string_block::append_value(block, val);
-}
-
-void mdds_mtv_prepend_value(mdds::mtv::base_element_block& block, const OUString& val)
-{
-    custom_string_block::prepend_value(block, val);
-}
-
-template<typename _Iter>
-void mdds_mtv_prepend_values(mdds::mtv::base_element_block& block, const OUString&, const _Iter& it_begin, const _Iter& it_end)
-{
-    custom_string_block::prepend_values(block, it_begin, it_end);
-}
-
-template<typename _Iter>
-void mdds_mtv_append_values(mdds::mtv::base_element_block& block, const OUString&, const _Iter& it_begin, const _Iter& it_end)
-{
-    custom_string_block::append_values(block, it_begin, it_end);
-}
-
-template<typename _Iter>
-void mdds_mtv_assign_values(mdds::mtv::base_element_block& dest, const OUString&, const _Iter& it_begin, const _Iter& it_end)
-{
-    custom_string_block::assign_values(dest, it_begin, it_end);
-}
-
-void mdds_mtv_get_empty_value(OUString& val)
-{
-    val = OUString();
-}
-
-template<typename _Iter>
-void mdds_mtv_insert_values(
-    mdds::mtv::base_element_block& block, size_t pos, const OUString&, const _Iter& it_begin, const _Iter& it_end)
-{
-    custom_string_block::insert_values(block, pos, it_begin, it_end);
-}
-
-mdds::mtv::base_element_block* mdds_mtv_create_new_block(size_t init_size, const OUString& val)
-{
-    return custom_string_block::create_block_with_value(init_size, val);
-}
+MDDS_MTV_DEFINE_ELEMENT_CALLBACKS(OUString, element_type_custom_string, OUString(), custom_string_block)
 
 }
 
