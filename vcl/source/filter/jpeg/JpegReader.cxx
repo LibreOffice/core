@@ -35,6 +35,13 @@ extern "C"
 
 #define JPEG_MIN_READ 512
 #define BUFFER_SIZE  4096
+namespace {
+    // Arbitrary maximal size (256M) of bitmaps after they have been decoded.
+    // It is used to prevent excessive swapping due to large buffers in
+    // virtual memory.
+    // May have to be tuned if it turns out to be too large or too small.
+    static const sal_uInt64 MAX_BITMAP_BYTE_SIZE = sal_uInt64(256 * 1024 * 1024);
+}
 
 extern "C" void* CreateBitmapFromJPEGReader( void* pJPEGReader, void* pJPEGCreateBitmapParam )
 {
@@ -211,6 +218,9 @@ void* JPEGReader::CreateBitmap( void* _pParam )
     if (pParam->nWidth > SAL_MAX_INT32 / 8 || pParam->nHeight > SAL_MAX_INT32 / 8)
         return NULL; // avoid overflows later
 
+    if (pParam->nWidth <= 0 || pParam->nHeight <=0)
+        return NULL;
+
     Size        aSize( pParam->nWidth, pParam->nHeight );
     sal_Bool    bGray = pParam->bGray != 0;
 
@@ -219,12 +229,22 @@ void* JPEGReader::CreateBitmap( void* _pParam )
     if( mpAcc )
     {
         maBmp.ReleaseAccess( mpAcc );
+        maBmp = Bitmap();
+        mpAcc = NULL;
     }
 
     sal_uInt64 nSize = aSize.Width();
     nSize *= aSize.Height();
     if (nSize > SAL_MAX_INT32 / 24)
         return NULL;
+
+    // Check if the bitmap is untypically large.
+    if (nSize*(bGray?1:3) > MAX_BITMAP_BYTE_SIZE)
+    {
+        // Do not try to acquire resources for the large bitmap or to
+        // read the bitmap into memory.
+        return NULL;
+    }
 
     if( bGray )
     {
@@ -287,6 +307,7 @@ void* JPEGReader::CreateBitmap( void* _pParam )
     if ( !pBmpBuf )
     {
         maBmp.ReleaseAccess( mpAcc );
+        maBmp = Bitmap();
         mpAcc = NULL;
     }
 
