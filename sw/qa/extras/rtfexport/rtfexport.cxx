@@ -50,6 +50,7 @@ public:
     void testFdo50087();
     void testFdo50831();
     void testFdo48335();
+    void testFdo38244();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -60,6 +61,7 @@ public:
     CPPUNIT_TEST(testFdo50087);
     CPPUNIT_TEST(testFdo50831);
     CPPUNIT_TEST(testFdo48335);
+    CPPUNIT_TEST(testFdo38244);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -172,6 +174,32 @@ void Test::testFdo48335()
     OUString aValue;
     xPropertySet->getPropertyValue("TextPortionType") >>= aValue;
     CPPUNIT_ASSERT_EQUAL(OUString("SoftPageBreak"), aValue);
+}
+
+void Test::testFdo38244()
+{
+    // See ooxmlexport's testFdo38244().
+    roundtrip("fdo38244.rtf");
+
+    // Test comment range feature.
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
+    uno::Reference<container::XEnumerationAccess> xRunEnumAccess(xParaEnum->nextElement(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xRunEnum = xRunEnumAccess->createEnumeration();
+    xRunEnum->nextElement();
+    uno::Reference<beans::XPropertySet> xPropertySet(xRunEnum->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("TextFieldStart"), getProperty<OUString>(xPropertySet, "TextPortionType"));
+    xRunEnum->nextElement();
+    xPropertySet.set(xRunEnum->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("TextFieldEnd"), getProperty<OUString>(xPropertySet, "TextPortionType"));
+
+    // Test initials.
+    uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
+    uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
+    xPropertySet.set(xFields->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("M"), getProperty<OUString>(xPropertySet, "Initials"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

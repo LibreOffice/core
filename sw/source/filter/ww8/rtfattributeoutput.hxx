@@ -75,6 +75,10 @@ public:
     /// Called after we end outputting the attributes.
     virtual void EndRunProperties( const SwRedlineData* pRedlineData );
 
+    virtual void WritePostitFieldStart();
+
+    virtual void WritePostitFieldEnd();
+
     /// Output text (inside a run).
     virtual void RunText( const String& rText, rtl_TextEncoding eCharSet = RTL_TEXTENCODING_UTF8 );
 
@@ -545,6 +549,9 @@ private:
     bool m_bSingleEmptyRun;
 
     bool m_bInRun;
+
+    unsigned int m_nPostitFieldsMaxId;
+
 public:
     RtfAttributeOutput( RtfExport &rExport );
 

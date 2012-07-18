@@ -3002,7 +3002,7 @@ void RtfAttributeOutput::PostitField( const SwField* pFld )
     const SwPostItField& rPFld = *(SwPostItField*)pFld;
 
     m_aRunText->append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_ATNID " ");
-    m_aRunText->append(OUStringToOString(OUString(rPFld.GetPar1()), m_rExport.eCurrentEncoding));
+    m_aRunText->append(OUStringToOString(OUString(rPFld.GetInitials()), m_rExport.eCurrentEncoding));
     m_aRunText->append("}");
     m_aRunText->append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_ATNAUTHOR " ");
     m_aRunText->append(OUStringToOString(OUString(rPFld.GetPar1()), m_rExport.eCurrentEncoding));
@@ -3010,11 +3010,28 @@ void RtfAttributeOutput::PostitField( const SwField* pFld )
     m_aRunText->append(OOO_STRING_SVTOOLS_RTF_CHATN);
 
     m_aRunText->append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_ANNOTATION);
+    m_aRunText->append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_ATNREF " ");
+    m_aRunText->append(sal_Int32(m_nPostitFieldsMaxId++));
+    m_aRunText->append('}');
     m_aRunText->append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_ATNDATE " ");
     m_aRunText->append((sal_Int32)sw::ms::DateTime2DTTM(rPFld.GetDateTime()));
     m_aRunText->append('}');
     m_aRunText->append(OUStringToOString(OUString(rPFld.GetTxt()), m_rExport.eCurrentEncoding));
     m_aRunText->append('}');
+}
+
+void RtfAttributeOutput::WritePostitFieldStart()
+{
+    m_aRunText->append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_ATRFSTART " ");
+    m_aRunText->append(sal_Int32(m_nPostitFieldsMaxId));
+    m_aRunText->append("}");
+}
+
+void RtfAttributeOutput::WritePostitFieldEnd()
+{
+    m_aRunText->append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_ATRFEND " ");
+    m_aRunText->append(sal_Int32(m_nPostitFieldsMaxId));
+    m_aRunText->append("}");
 }
 
 bool RtfAttributeOutput::DropdownField( const SwField* /*pFld*/ )
@@ -3040,6 +3057,7 @@ RtfAttributeOutput::RtfAttributeOutput( RtfExport &rExport )
     m_aCells(),
     m_bSingleEmptyRun(false),
     m_bInRun(false),
+    m_nPostitFieldsMaxId(0),
     m_pPrevPageDesc(0)
 {
     SAL_INFO("sw.rtf", OSL_THIS_FUNC);
