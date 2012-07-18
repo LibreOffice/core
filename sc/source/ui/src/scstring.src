@@ -116,6 +116,46 @@ String SCSTR_AUDITSHELL
 
  // -----------------------------------------------------------------------
 
+String STR_ROWHEIGHT
+{
+    Text [ en-US ] = "Height" ;
+};
+
+String STR_OPT_ROWHEIGHT
+{
+    Text [ en-US ] = "Add" ;
+};
+
+String STR_ROWHEIGHT_TITLE
+{
+    Text [ en-US ] = "Row Height" ;
+};
+
+String STR_OPT_ROWHEIGHT_TITLE
+{
+    Text [ en-US ] = "Optimal Row Height" ;
+};
+
+String STR_COLWIDTH
+{
+    Text [ en-US ] = "Width" ;
+};
+
+String STR_OPT_COLWIDTH
+{
+    Text [ en-US ] = "Add" ;
+};
+
+String STR_COLWIDTH_TITLE
+{
+    Text [ en-US ] = "Column Width" ;
+};
+
+String STR_OPT_COLWIDTH_TITLE
+{
+    Text [ en-US ] = "Optimal Column Width" ;
+};
+
 String SCSTR_UNDEFINED
 {
     Text [ en-US ] = "- undefined -" ;
@@ -171,14 +211,39 @@ String SCSTR_ROW
     Text [ en-US ] = "Row" ;
 };
 
+String SCSTR_NEW
+{
+    Text [ en-US ] = "~New" ;
+};
+
 String SCSTR_ADD
 {
     Text [ en-US ] = "~Add" ;
 };
 
+String SCSTR_REMOVE
+{
+    Text [ en-US ] = "~Delete" ;
+};
+
+String SCSTR_CANCEL
+{
+    Text [ en-US ] = "Cance~l" ;
+};
+
 String SCSTR_MODIFY
 {
     Text [ en-US ] = "Modif~y" ;
+};
+
+String SCSTR_SHOWTABLE
+{
+    Text [ en-US ] = "Show Sheet" ;
+};
+
+String SCSTR_HIDDENTABLES
+{
+    Text [ en-US ] = "Hidden Sheets" ;
 };
 
 String SCSTR_SELECTDB
@@ -199,6 +264,11 @@ String SCSTR_TABLE
 String SCSTR_NAME
 {
     Text [ en-US ] = "Name" ;
+};
+
+String SCSTR_INSTABLE
+{
+    Text [ en-US ] = "Insert Sheet" ;
 };
 
 String SCSTR_APDTABLE
@@ -233,6 +303,71 @@ String STR_INSERTGRAPHIC
 
  //      Attribute
 
+String SCSTR_HOR_JUSTIFY_LEFT
+{
+    Text [ en-US ] = "Align left" ;
+};
+
+String SCSTR_HOR_JUSTIFY_CENTER
+{
+    Text [ en-US ] = "Centered horizontally" ;
+};
+
+String SCSTR_HOR_JUSTIFY_RIGHT
+{
+    Text [ en-US ] = "Align right" ;
+};
+
+String SCSTR_HOR_JUSTIFY_BLOCK
+{
+    Text [ en-US ] = "Justify" ;
+};
+
+String SCSTR_HOR_JUSTIFY_REPEAT
+{
+    Text [ en-US ] = "Repeat alignment" ;
+};
+
+String SCSTR_HOR_JUSTIFY_STANDARD
+{
+    Text [ en-US ] = "Horizontal alignment default" ;
+};
+
+String SCSTR_VER_JUSTIFY_TOP
+{
+    Text [ en-US ] = "Align to top" ;
+};
+
+String SCSTR_VER_JUSTIFY_CENTER
+{
+    Text [ en-US ] = "Centered vertically" ;
+};
+
+String SCSTR_VER_JUSTIFY_BOTTOM
+{
+    Text [ en-US ] = "Align to bottom" ;
+};
+
+String SCSTR_VER_JUSTIFY_STANDARD
+{
+    Text [ en-US ] = "Vertical alignment default" ;
+};
+
+String SCSTR_ORIENTATION_TOPBOTTOM
+{
+    Text [ en-US ] = "Top to bottom" ;
+};
+
+String SCSTR_ORIENTATION_BOTTOMTOP
+{
+    Text [ en-US ] = "Bottom to Top" ;
+};
+
+String SCSTR_ORIENTATION_STANDARD
+{
+    Text [ en-US ] = "Default orientation" ;
+};
+
 String SCSTR_PROTECTDOC
 {
     Text [ en-US ] = "Protect Document" ;
@@ -241,6 +376,11 @@ String SCSTR_PROTECTDOC
 String SCSTR_UNPROTECTDOC
 {
     Text [ en-US ] = "Unprotect document" ;
+};
+
+String SCSTR_PROTECTTAB
+{
+    Text [ en-US ] = "Protect Sheet" ;
 };
 
 String SCSTR_UNPROTECTTAB
@@ -273,9 +413,65 @@ String SCSTR_WRONGPASSWORD
     Text [ en-US ] = "Incorrect Password" ;
 };
 
+String SCSTR_END
+{
+    Text [ en-US ] = "~End" ;
+};
+
+String SCSTR_STAT_PRINT
+{
+    Text [ en-US ] = "Printing..." ;
+};
+
 String SCSTR_UNKNOWN
 {
     Text [ en-US ] = "Unknown" ;
+};
+
+String SCSTR_CHAR_ATTRS
+{
+    Text [ en-US ] = "Font Attributes" ;
+};
+
+
+String SCSTR_CLPBRD_CLEAR
+{
+    Text [ en-US ] = "You have a large amount of data saved in the clipboard.\nDo you want the clipboard contents to be available in other applications?" ;
+};
+
+String SCSTR_CFG_APP
+{
+    Text [ en-US ] = "System Options" ;
+};
+
+String SCSTR_CFG_DOC
+{
+    Text [ en-US ] = "Document Options" ;
+};
+
+String SCSTR_CFG_VIEW
+{
+    Text [ en-US ] = "View Options" ;
+};
+
+String SCSTR_CFG_INPUT
+{
+    Text [ en-US ] = "Input Options" ;
+};
+
+String SCSTR_CFG_SPELLCHECK
+{
+    Text [ en-US ] = "Spelling Options" ;
+};
+
+String SCSTR_CFG_PRINT
+{
+    Text [ en-US ] = "Print Options" ;
+};
+
+String SCSTR_CFG_NAVIPI
+{
+    Text [ en-US ] = "Navigator Settings" ;
 };
 
 String SCSTR_VALID_MINIMUM
@@ -332,6 +528,36 @@ String SCSTR_FORMULA_AUTOCORRECTION
 
 //! the graphics filter error strings should be moved to svx or offapp!
 
+String SCSTR_GRFILTER_OPENERROR
+{
+    Text [ en-US ] = "Graphics file can not be opened" ;
+};
+
+String SCSTR_GRFILTER_IOERROR
+{
+    Text [ en-US ] = "Graphics file can not be read" ;
+};
+
+String SCSTR_GRFILTER_FORMATERROR
+{
+    Text [ en-US ] = "Unknown graphic format" ;
+};
+
+String SCSTR_GRFILTER_VERSIONERROR
+{
+    Text [ en-US ] = "This graphic file version is not supported" ;
+};
+
+String SCSTR_GRFILTER_FILTERERROR
+{
+    Text [ en-US ] = "Graphics filter not found" ;
+};
+
+String SCSTR_GRFILTER_TOOBIG
+{
+    Text [ en-US ] = "Not enough memory available to insert graphics." ;
+};
+
 String SCSTR_UNDO_GRAFFILTER
 {
     Text [ en-US ] = "Graphics Filter" ;
@@ -358,6 +584,11 @@ String STR_DLG_SELECTTABLES_LBNAME
 String STR_REPLCELLSWARN
 {
     Text [ en-US ] = "You are pasting data into cells that already contain data.\nDo you really want to overwrite the existing data?";
+};
+
+String SCSTR_ALLFILTER
+{
+    Text [ en-US ] = "~All";
 };
 
 String STR_ACC_CSVRULER_NAME
@@ -490,6 +721,16 @@ String STR_ACC_EDITLINE_DESCR
     Text [ en-US ] = "This is where you enter or edit text, numbers and formulas.";
 };
 
+String STR_ACC_EDITCELL_NAME
+{
+    Text [ en-US ] = "Cell %1";
+};
+
+String STR_ACC_EDITCELL_DESCR
+{
+    Text = "";
+};
+
 String STR_ACC_DATAPILOT_ROW_DESCR
 {
     Text [ en-US ] = "Fields that you drop here will be displayed as rows in the final pivot table.";
@@ -529,6 +770,19 @@ String STR_ACC_TOOLBAR_FORMULA
 {
     Text [ en-US ] = "Formula Tool Bar";
 };
+String STR_ACC_DOC_SPREADSHEET
+{
+    Text [ en-US ] = "%PRODUCTNAME Spreadsheets";
+};
+String STR_ACC_DOC_SPREADSHEET_READONLY
+{
+    Text [ en-US ] = "(read-only)";
+};
+String STR_ACC_DOC_PREVIEW_SUFFIX
+{
+    Text [ en-US ] = "(Preview mode)";
+};
+
 String SCSTR_MOREBTN_MOREOPTIONS
 {
     Text [ en-US ] = "More ~Options";
