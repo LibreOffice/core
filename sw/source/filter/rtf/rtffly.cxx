@@ -280,7 +280,8 @@ void SwRTFParser::SetFlysInDoc()
 
         // liegt Ende und Start vom Naechsten im gleichen Node, dann muss
         // gesplittet werden
-        if( n + 1 < aFlyArr.Count() && pFlySave->nEndCnt &&
+        if (((static_cast<size_t>(n) + 1) < aFlyArr.Count()) &&
+            pFlySave->nEndCnt &&
             pFlySave->nEndNd == aFlyArr[ n + 1 ]->nSttNd )
         {
             SwCntntNode *const pCNd = pFlySave->nEndNd.GetNode().GetCntntNode();
@@ -1249,6 +1250,10 @@ void SwRTFParser::InsPicture( const String& rGrfNm, const Graphic* pGrf,
     if ( bReadSwFly && !mbReadCellWhileReadSwFly )
     // <--
     {
+        OSL_ENSURE(aFlyArr.Count(),
+            "SwRTFParser::InsPicture: fly array empty.");
+        if (aFlyArr.Count())
+        {
         // erzeuge nur einen normalen GrafikNode und ersetze diesen gegen
         // den vorhandenen Textnode
         SwNodeIndex& rIdx = pPam->GetPoint()->nNode;
@@ -1385,6 +1390,7 @@ void SwRTFParser::_SetPictureSize( const SwNoTxtNode& rNd,
             long nBoxWidth = pBox->GetFrmFmt()->GetFrmSize().GetWidth();
             if( aSize.Width() > nBoxWidth )
                 aSize.Width() = nBoxWidth;
+        }
         }
     }
 

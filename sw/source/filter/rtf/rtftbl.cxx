@@ -216,6 +216,11 @@ void SwRTFParser::ReadTable( int nToken )
 
     sal_Int16 eVerOrient = text::VertOrientation::NONE;
     long nLineHeight = 0;
+    if (aMergeBoxes.empty()) // can this actually happen?
+    {
+        OSL_ASSERT(false);
+        aMergeBoxes.push_back(sal_False);
+    }
     size_t nBoxCnt = aMergeBoxes.size()-1;
     SwBoxFrmFmts aBoxFmts;
     SwTableBoxFmt* pBoxFmt = pDoc->MakeTableBoxFmt();
@@ -306,8 +311,11 @@ void SwRTFParser::ReadTable( int nToken )
                         {
                             --m_nCurrentBox;
                         }
-                        pFmt = static_cast<SwTableBoxFmt*>(
-                            pLine->GetTabBoxes()[ m_nCurrentBox ]->GetFrmFmt());
+                        if (m_nCurrentBox < pLine->GetTabBoxes().Count())
+                        {
+                            pFmt = static_cast<SwTableBoxFmt*>(
+                              pLine->GetTabBoxes()[m_nCurrentBox]->GetFrmFmt());
+                        }
                     }
                     else
                         pFmt = aBoxFmts[ aBoxFmts.Count()-1 ];
@@ -646,12 +654,6 @@ void SwRTFParser::ReadTable( int nToken )
 
         pOldTblNd = pTableNode;
         bNewTbl = sal_False;
-
-        {
-            // JP 13.08.98: TabellenUmrandungen optimieren - Bug 53525
-            void* p = pFmt;
-            aTblFmts.Insert( p, aTblFmts.Count() );
-        }
     }
     else
     {
@@ -746,12 +748,6 @@ void SwRTFParser::ReadTable( int nToken )
 
             m_nCurrentBox = 0;
             pOldTblNd = pTableNode;
-
-            {
-                // JP 13.08.98: TabellenUmrandungen optimieren - Bug 53525
-                void* p = pFmt;
-                aTblFmts.Insert( p, aTblFmts.Count() );
-            }
         }
     }
 
@@ -911,7 +907,7 @@ void SwRTFParser::GotoNextBox()
         }
 
         if (bMove &&
-                (static_cast<size_t>(m_nCurrentBox + 1) == aMergeBoxes.size()))
+               ((static_cast<size_t>(m_nCurrentBox) + 1) == aMergeBoxes.size()))
             // dann hinter die Tabelle
             pPam->Move( fnMoveForward, fnGoNode );
     }

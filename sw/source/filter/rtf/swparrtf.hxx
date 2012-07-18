@@ -295,7 +295,6 @@ class SwRTFParser : public SvxRTFParser
     SwFlySaveArr aFlyArr;               // Flys als Letzes im Doc setzen
     SvBools aMergeBoxes;                // Flags fuer gemergte Zellen
     SwListArr aListArr;
-    SvPtrarr aTblFmts;
     SvPtrarr aRubyCharFmts;
     BookmarkPosition* mpBookmarkStart;
     sw::util::RedlineStack *mpRedlineStack;
