@@ -143,7 +143,7 @@ void sendPreview(sal_uInt32 aSlideNumber,
 
 uno::Sequence<sal_Int8>
 preparePreview(sal_uInt32 aSlideNumber,
-               uno::Reference<presentation::XSlideShowController> xSlideShowController,
+               const uno::Reference<presentation::XSlideShowController> &xSlideShowController,
                sal_uInt32 aWidth, sal_uInt32 aHeight, sal_uInt64 &rSize )
 {
     (void)aWidth; (void)aHeight; // FIXME: remove me when I'm used

@@ -30,7 +30,7 @@ class Listener
 public:
     Listener( sd::Transmitter *aTransmitter );
     ~Listener();
-    void init( css::uno::Reference< css::presentation::XSlideShowController >& aController);
+    void init( const css::uno::Reference< css::presentation::XSlideShowController >& aController);
 
     // XAnimationListener
     virtual void SAL_CALL beginEvent(const css::uno::Reference<

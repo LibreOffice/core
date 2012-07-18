@@ -15,12 +15,9 @@ using namespace sd;
 
 Transmitter::Transmitter( StreamSocket &aSocket )
   : Thread( "TransmitterThread" ),
-    mStreamSocket( aSocket ),
-    mQueuesNotEmpty(),
-    mQueueMutex()
+    mStreamSocket( aSocket )
 {
     launch();
-    // Start a thread
 }
 
 void
@@ -29,6 +26,7 @@ Transmitter::execute()
     fprintf( stderr, "Waiting\n" );
     while( mQueuesNotEmpty.wait() )
     {
+        fprintf( stderr, "Continuing after condition\n" );
         while ( true )
         {
             osl::MutexGuard aQueueGuard( mQueueMutex );
@@ -64,7 +62,7 @@ Transmitter::~Transmitter()
 
 }
 
-void Transmitter::addMessage( OString aMessage, Priority aPriority )
+void Transmitter::addMessage( const OString aMessage, const Priority aPriority )
 {
     osl::MutexGuard aQueueGuard( mQueueMutex );
     switch ( aPriority )
@@ -77,6 +75,7 @@ void Transmitter::addMessage( OString aMessage, Priority aPriority )
             break;
     }
     mQueuesNotEmpty.set();
+    fprintf( stderr, "Added\n" );
 
 }
 

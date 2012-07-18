@@ -38,8 +38,8 @@ namespace sd
     {
         public:
             static void setup();
-            static void presentationStarted( css::uno::Reference<
-                css::presentation::XSlideShowController > rController );
+            static void presentationStarted( const css::uno::Reference<
+                css::presentation::XSlideShowController > &rController );
         private:
             Server();
             ~Server();

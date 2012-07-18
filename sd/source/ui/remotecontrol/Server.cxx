@@ -58,7 +58,7 @@ void Server::listenThread()
     }
     catch ( com::sun::star::uno::RuntimeException &e )
     {
-        fprintf( stderr, "Exeption on add\n" );
+        fprintf( stderr, "Exception on add\n" );
     }
 
 
@@ -127,16 +127,14 @@ void Server::execute()
 }
 
 
-void Server::presentationStarted( css::uno::Reference<
-     css::presentation::XSlideShowController > rController )
+void Server::presentationStarted( const css::uno::Reference<
+     css::presentation::XSlideShowController > &rController )
 {
-    if ( mTransmitter )
-    {
-        fprintf( stderr, "Adding Listener on start of presentation.\n" );
-        Listener* aListener = new Listener( mTransmitter );
-        aListener->init( rController );
-        fprintf( stderr, "Added the listener as desired.\n" );
-    }
+//     if ( mTransmitter )
+//     {
+//         Listener* aListener = new Listener( mTransmitter );
+//         aListener->init( rController );
+//     }
 }
 
 

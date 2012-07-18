@@ -25,7 +25,6 @@ using rtl::OStringBuffer;
 Listener::Listener( sd::Transmitter *aTransmitter  )
     : ::cppu::WeakComponentImplHelper1< XSlideShowListener>( m_aMutex )
 {
-    fprintf( stderr, "Creating Transmitter\n" );
     mTransmitter = aTransmitter;
 }
 
@@ -33,15 +32,13 @@ Listener::~Listener()
 {
 }
 
-void Listener::init(css::uno::Reference< css::presentation::XSlideShowController >& aController)
+void Listener::init( const css::uno::Reference< css::presentation::XSlideShowController >& aController)
 {
-    fprintf( stderr, "Initing Transmitter\n" );
     if (aController.is() )
     {
-//     mController = aController;
-    aController->addSlideShowListener(static_cast<XSlideShowListener*>(this));-
+        mController = css::uno::Reference< css::presentation::XSlideShowController >( aController );
+        aController->addSlideShowListener(static_cast<XSlideShowListener*>(this));
     }
-    fprintf( stderr, "Initiated Transmitter\n" );
 }
 
 //----- XAnimationListener ----------------------------------------------------
@@ -119,7 +116,10 @@ void SAL_CALL Listener::slideAnimationsEnded (void)
 
 void SAL_CALL Listener::disposing (void)
 {
-// FIXME: disconnect as appropriate
+    if ( mController.is() )
+    {
+        mController->removeSlideShowListener( static_cast<XSlideShowListener*>(this) );
+    }
 }
 
 void SAL_CALL Listener::disposing (
@@ -127,6 +127,6 @@ void SAL_CALL Listener::disposing (
     throw (::com::sun::star::uno::RuntimeException)
 {
     (void) rEvent;
-// FIXME: disconnect as appropriate
+    dispose();
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

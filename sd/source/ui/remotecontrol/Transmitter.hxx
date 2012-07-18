@@ -27,7 +27,7 @@ public:
     enum Priority { LOW = 1, HIGH };
     Transmitter( osl::StreamSocket &aSocket );
     ~Transmitter();
-    void addMessage( rtl::OString aMessage, Priority aPriority );
+    void addMessage( const rtl::OString aMessage, const Priority aPriority );
 
 private:
     void execute();
