@@ -69,6 +69,9 @@ ODatabaseMetaDataResultSet::ODatabaseMetaDataResultSet(OConnection* _pConnection
     ,m_bFreeHandle(sal_False)
 {
     OSL_ENSURE(m_pConnection,"ODatabaseMetaDataResultSet::ODatabaseMetaDataResultSet: No parent set!");
+    if( SQL_NULL_HANDLE == m_aStatementHandle )
+        throw RuntimeException();
+
     osl_incrementInterlockedCount( &m_refCount );
     m_pConnection->acquire();
     m_pRowStatusArray = new SQLUSMALLINT[1]; // the default value
