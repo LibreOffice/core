@@ -56,10 +56,11 @@ sal_uLong ReadClipboardFormat( SvStream & rStm )
     if( nLen > 0 )
     {
         // get a string name
-        sal_Char * p = new sal_Char[ nLen ];
-        if( rStm.Read( p, nLen ) == (sal_uLong) nLen )
+        sal_Char * p = new( ::std::nothrow ) sal_Char[ nLen ];
+        if( p && rStm.Read( p, nLen ) == (sal_uLong) nLen )
         {
-            nFormat = SotExchange::RegisterFormatName( String::CreateFromAscii( p, short(nLen-1) ) );
+            // take so much from the buffer, as the string supports
+            nFormat = SotExchange::RegisterFormatName( String::CreateFromAscii( p, xub_StrLen( ( nLen - 1 ) & STRING_MAXLEN ) ) );
         }
         else
             rStm.SetError( SVSTREAM_GENERALERROR );

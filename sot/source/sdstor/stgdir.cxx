@@ -50,9 +50,9 @@
 // Problem der Implementation: Keine Hierarchischen commits. Daher nur
 // insgesamt transaktionsorientert oder direkt.
 
-StgDirEntry::StgDirEntry( const void* pFrom, sal_Bool * pbOk ) : StgAvlNode()
+StgDirEntry::StgDirEntry( const void* pBuffer, sal_uInt32 nBufferLen, sal_Bool * pbOk ) : StgAvlNode()
 {
-    *pbOk = aEntry.Load( pFrom );
+    *pbOk = aEntry.Load( pBuffer, nBufferLen );
 
     InitMembers();
 }
@@ -99,8 +99,13 @@ StgDirEntry::~StgDirEntry()
 
 short StgDirEntry::Compare( const StgAvlNode* p ) const
 {
-    const StgDirEntry* pEntry = (const StgDirEntry*) p;
-    return aEntry.Compare( pEntry->aEntry );
+    short nResult = -1;
+    if ( p )
+    {
+        const StgDirEntry* pEntry = (const StgDirEntry*) p;
+        nResult = aEntry.Compare( pEntry->aEntry );
+    }
+    return nResult;
 }
 
 // Enumerate the entry numbers.
@@ -260,9 +265,9 @@ void StgDirEntry::OpenStream( StgIo& rIo, sal_Bool bForceBig )
     sal_Int32 nThreshold = (sal_uInt16) rIo.aHdr.GetThreshold();
     delete pStgStrm;
     if( !bForceBig && aEntry.GetSize() < nThreshold )
-        pStgStrm = new StgSmallStrm( rIo, this );
+        pStgStrm = new StgSmallStrm( rIo, *this );
     else
-        pStgStrm = new StgDataStrm( rIo, this );
+        pStgStrm = new StgDataStrm( rIo, *this );
     if( bInvalid && aEntry.GetSize() )
     {
         // This entry has invalid data, so delete that data
@@ -320,6 +325,10 @@ sal_Bool StgDirEntry::SetSize( sal_Int32 nNewSize )
     }
     else
     {
+        OSL_ENSURE( pStgStrm, "The pointer may not be NULL!" );
+        if ( !pStgStrm )
+            return sal_False;
+
         sal_Bool bRes = sal_False;
         StgIo& rIo = pStgStrm->GetIo();
         sal_Int32 nThreshold = rIo.aHdr.GetThreshold();
@@ -399,6 +408,10 @@ sal_Int32 StgDirEntry::Seek( sal_Int32 nNew )
     }
     else
     {
+        OSL_ENSURE( pStgStrm, "The pointer may not be NULL!" );
+        if ( !pStgStrm )
+            return nPos;
+
         sal_Int32 nSize = aEntry.GetSize();
 
         if( nNew < 0 )
@@ -418,6 +431,7 @@ sal_Int32 StgDirEntry::Seek( sal_Int32 nNew )
         pStgStrm->Pos2Page( nNew );
         nNew = pStgStrm->GetPos();
     }
+
     return nPos = nNew;
 }
 
@@ -432,7 +446,14 @@ sal_Int32 StgDirEntry::Read( void* p, sal_Int32 nLen )
     else if( pCurStrm )
         nLen = pCurStrm->Read( p, nLen );
     else
+    {
+        OSL_ENSURE( pStgStrm, "The pointer may not be NULL!" );
+        if ( !pStgStrm )
+            return 0;
+
         nLen = pStgStrm->Read( p, nLen );
+    }
+
     nPos += nLen;
     return nLen;
 }
@@ -450,6 +471,11 @@ sal_Int32 StgDirEntry::Write( const void* p, sal_Int32 nLen )
     // Is this stream opened in transacted mode? Do we have to make a copy?
     if( !bDirect && !pTmpStrm && !Strm2Tmp() )
         return 0;
+
+    OSL_ENSURE( pStgStrm, "The pointer may not be NULL!" );
+    if ( !pStgStrm )
+        return 0;
+
     if( pTmpStrm )
     {
         nLen = pTmpStrm->Write( p, nLen );
@@ -631,6 +657,10 @@ sal_Bool StgDirEntry::Strm2Tmp()
             {
                 if( n )
                 {
+                    OSL_ENSURE( pStgStrm, "The pointer may not be NULL!" );
+                    if ( !pStgStrm )
+                        return sal_False;
+
                     sal_uInt8 aTempBytes[ 4096 ];
                     void* p = static_cast<void*>( aTempBytes );
                     pStgStrm->Pos2Page( 0L );
@@ -652,9 +682,13 @@ sal_Bool StgDirEntry::Strm2Tmp()
             else
                 n = 1;
         }
+
         if( n )
         {
-            pStgStrm->GetIo().SetError( pTmpStrm->GetError() );
+            OSL_ENSURE( pStgStrm, "The pointer may not be NULL!" );
+            if ( pStgStrm )
+                pStgStrm->GetIo().SetError( pTmpStrm->GetError() );
+
             delete pTmpStrm;
             pTmpStrm = NULL;
             return sal_False;
@@ -672,6 +706,9 @@ sal_Bool StgDirEntry::Tmp2Strm()
         pTmpStrm = pCurStrm, pCurStrm = NULL;
     if( pTmpStrm )
     {
+        OSL_ENSURE( pStgStrm, "The pointer may not be NULL!" );
+        if ( !pStgStrm )
+            return sal_False;
         sal_uLong n = pTmpStrm->GetSize();
         StgStrm* pNewStrm;
         StgIo& rIo = pStgStrm->GetIo();
@@ -809,7 +846,7 @@ void StgDirStrm::SetupEntry( sal_Int32 n, StgDirEntry* pUpper )
     if( p )
     {
         sal_Bool bOk(sal_False);
-        StgDirEntry* pCur = new StgDirEntry( p, &bOk );
+        StgDirEntry* pCur = new StgDirEntry( p, STGENTRY_SIZE, &bOk );
 
         if( !bOk )
         {
@@ -864,6 +901,9 @@ void StgDirStrm::SetupEntry( sal_Int32 n, StgDirEntry* pUpper )
 sal_Bool StgDirStrm::SetSize( sal_Int32 nBytes )
 {
     // Always allocate full pages
+    if ( nBytes < 0 )
+        nBytes = 0;
+
     nBytes = ( ( nBytes + nPageSize - 1 ) / nPageSize ) * nPageSize;
     return StgStrm::SetSize( nBytes );
 }
@@ -872,7 +912,7 @@ sal_Bool StgDirStrm::SetSize( sal_Int32 nBytes )
 
 sal_Bool StgDirStrm::Store()
 {
-    if( !pRoot->IsDirty() )
+    if( !pRoot || !pRoot->IsDirty() )
         return sal_True;
     if( !pRoot->StoreStreams( rIo ) )
         return sal_False;

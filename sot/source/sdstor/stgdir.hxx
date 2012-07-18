@@ -66,7 +66,7 @@ public:
     sal_Bool         bDirect;                   // sal_True: direct mode
     sal_Bool         bZombie;                   // sal_True: Removed From StgIo
     sal_Bool         bInvalid;                  // sal_True: invalid entry
-    StgDirEntry( const void*, sal_Bool * pbOk );
+    StgDirEntry( const void* pBuffer, sal_uInt32 nBufferLen, sal_Bool * pbOk );
     StgDirEntry( const StgEntry& );
     ~StgDirEntry();
 

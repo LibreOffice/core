@@ -122,37 +122,22 @@ sal_Bool StgCompObjStream::Load()
         *this >> aClsId;
         sal_Int32 nLen1 = 0;
         *this >> nLen1;
-        // higher bits are ignored
-        nLen1 &= 0xFFFF;
-        sal_Char* p = new sal_Char[ (sal_uInt16) nLen1 ];
-        if( Read( p, nLen1 ) == (sal_uLong) nLen1 )
+        if ( nLen1 > 0 )
         {
-            aUserName = nLen1 ? String( p, gsl_getSystemTextEncoding() ) : String();
-/*          // Now we can read the CB format
-            sal_Int32 nLen2 = 0;
-            *this >> nLen2;
-            if( nLen2 > 0 )
+            // higher bits are ignored
+            sal_uLong nStrLen = ::std::min( nLen1, (sal_Int32)0xFFFE );
+
+            sal_Char* p = new sal_Char[ nStrLen+1 ];
+            p[nStrLen] = 0;
+            if( Read( p, nStrLen ) == nStrLen )
             {
-                // get a string name
-                if( nLen2 > nLen1 )
-                    delete p, p = new char[ nLen2 ];
-                if( Read( p, nLen2 ) == (sal_uLong) nLen2 && nLen2 )
-                    nCbFormat = Exchange::RegisterFormatName( String( p ) );
-                else
-                    SetError( SVSTREAM_GENERALERROR );
+                aUserName = nStrLen ? String( p, gsl_getSystemTextEncoding() ) : String();
+                nCbFormat = ReadClipboardFormat( *this );
             }
-            else if( nLen2 == -1L )
-                // Windows clipboard format
-                *this >> nCbFormat;
             else
-                // unknown identifier
                 SetError( SVSTREAM_GENERALERROR );
-*/
-            nCbFormat = ReadClipboardFormat( *this );
+            delete [] p;
         }
-        else
-            SetError( SVSTREAM_GENERALERROR );
-        delete [] p;
     }
     return sal_Bool( GetError() == SVSTREAM_OK );
 }

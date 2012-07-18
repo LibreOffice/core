@@ -74,21 +74,44 @@ SvStream& operator <<( SvStream& r, const ClsId& rId )
 ///////////////////////////// class StgHeader ////////////////////////////
 
 StgHeader::StgHeader()
+: nVersion( 0 )
+, nByteOrder( 0 )
+, nPageSize( 0 )
+, nDataPageSize( 0 )
+, bDirty( 0 )
+, nFATSize( 0 )
+, nTOCstrm( 0 )
+, nReserved( 0 )
+, nThreshold( 0 )
+, nDataFAT( 0 )
+, nDataFATSize( 0 )
+, nMasterChain( 0 )
+, nMaster( 0 )
 {
-    memset( this, 0, sizeof( StgHeader ) );
+    memset( cSignature, 0, sizeof( cSignature ) );
+    memset( &aClsId, 0, sizeof( ClsId ) );
+    memset( cReserved, 0, sizeof( cReserved ) );
+    memset( nMasterFAT, 0, sizeof( nMasterFAT ) );
 }
 
 void StgHeader::Init()
 {
-    memset( this, 0, sizeof( StgHeader ) );
     memcpy( cSignature, cStgSignature, 8 );
+    memset( &aClsId, 0, sizeof( ClsId ) );
     nVersion      = 0x0003003B;
     nByteOrder    = 0xFFFE;
     nPageSize     = 9;          // 512 bytes
     nDataPageSize = 6;          // 64 bytes
+    bDirty = 0;
+    memset( cReserved, 0, sizeof( cReserved ) );
+    nFATSize = 0;
+    nTOCstrm = 0;
+    nReserved = 0;
     nThreshold    = 4096;
+    nDataFAT = 0;
     nDataFATSize  = 0;
     nMasterChain  = STG_EOF;
+
     SetTOCStart( STG_EOF );
     SetDataFATStart( STG_EOF );
     for( short i = 0; i < 109; i++ )
@@ -97,9 +120,15 @@ void StgHeader::Init()
 
 sal_Bool StgHeader::Load( StgIo& rIo )
 {
-    SvStream& r = *rIo.GetStrm();
-    Load( r );
-    return rIo.Good();
+    sal_Bool bResult = sal_False;
+    if ( rIo.GetStrm() )
+    {
+        SvStream& r = *rIo.GetStrm();
+        bResult = Load( r );
+        bResult = ( bResult && rIo.Good() );
+    }
+
+    return bResult;
 }
 
 sal_Bool StgHeader::Load( SvStream& r )
@@ -122,7 +151,8 @@ sal_Bool StgHeader::Load( SvStream& r )
       >> nMaster;                   // 48 # of additional master blocks
     for( short i = 0; i < 109; i++ )
         r >> nMasterFAT[ i ];
-    return r.GetErrorCode() == ERRCODE_NONE;
+
+    return ( r.GetErrorCode() == ERRCODE_NONE && Check() );
 }
 
 sal_Bool StgHeader::Store( StgIo& rIo )
@@ -161,8 +191,15 @@ sal_Bool StgHeader::Check()
 {
     return sal_Bool( memcmp( cSignature, cStgSignature, 8 ) == 0
             && (short) ( nVersion >> 16 ) == 3 )
+            && nPageSize == 9
             && lcl_wontoverflow(nPageSize)
-            && lcl_wontoverflow(nDataPageSize);
+            && lcl_wontoverflow(nDataPageSize)
+            && nFATSize > 0
+            && nTOCstrm >= 0
+            && nThreshold > 0
+            && ( nDataFAT == -2 || ( nDataFAT >= 0 && nDataFATSize > 0 ) )
+            && ( nMasterChain == -2 || ( nMasterChain >=0 && nMaster > 109 ) )
+            && nMaster >= 0;
 }
 
 sal_Int32 StgHeader::GetFATPage( short n ) const
@@ -251,7 +288,21 @@ static void FromUnicode( String& rName )
 */
 sal_Bool StgEntry::Init()
 {
-    memset( this, 0, sizeof (StgEntry) - sizeof( String ) );
+    memset( nName, 0, sizeof( nName ) );
+    nNameLen = 0;
+    cType = 0;
+    cFlags = 0;
+    nLeft = 0;
+    nRight = 0;
+    nChild = 0;
+    memset( &aClsId, 0, sizeof( aClsId ) );
+    nFlags = 0;
+    nMtime[0] = 0; nMtime[1] = 0;
+    nAtime[0] = 0; nAtime[1] = 0;
+    nPage1 = 0;
+    nSize = 0;
+    nUnknown = 0;
+
     SetLeaf( STG_LEFT,  STG_FREE );
     SetLeaf( STG_RIGHT, STG_FREE );
     SetLeaf( STG_CHILD, STG_FREE );
@@ -358,9 +409,12 @@ short StgEntry::Compare( const StgEntry& r ) const
 // These load/store operations are a bit more complicated,
 // since they have to copy their contents into a packed structure.
 
-sal_Bool StgEntry::Load( const void* pFrom )
+sal_Bool StgEntry::Load( const void* pFrom, sal_uInt32 nBufSize )
 {
-    SvMemoryStream r( (sal_Char*) pFrom, 128, STREAM_READ );
+    if ( nBufSize < 128 )
+        return sal_False;
+
+    SvMemoryStream r( (sal_Char*) pFrom, nBufSize, STREAM_READ );
     for( short i = 0; i < 32; i++ )
         r >> nName[ i ];            // 00 name as WCHAR
     r >> nNameLen                   // 40 size of name in bytes including 00H
@@ -382,7 +436,7 @@ sal_Bool StgEntry::Load( const void* pFrom )
     sal_uInt16 n = nNameLen;
     if( n )
         n = ( n >> 1 ) - 1;
-    if( n > 31 || (nSize < 0 && cType != STG_STORAGE) )
+    if( n > 31 || (nSize < 0 && cType != STG_STORAGE) || ( nPage1 < 0 && nPage1 != -2 ) )
     {
         // the size makes no sence for the substorage
         // TODO/LATER: actually the size should be an unsigned value, but in this case it would mean a stream of more than 2Gb
