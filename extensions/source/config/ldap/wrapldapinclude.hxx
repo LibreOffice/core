@@ -28,10 +28,8 @@
 #ifndef LDAP_NO_ATTRS
 #    define LDAP_NO_ATTRS L"1.1"
 #endif
-#define CONST_PCHAR_CAST (const PCHAR)
 #else // !defined WNT
 #include <ldap.h>
-#define CONST_PCHAR_CAST
 #endif // WNT
 
 #ifndef LDAP_API
