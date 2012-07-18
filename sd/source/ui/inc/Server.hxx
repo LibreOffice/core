@@ -16,6 +16,7 @@
 #include <sys/types.h>
 
 #include <osl/socket.hxx>
+#include <rtl/ref.hxx>
 #include <salhelper/thread.hxx>
 
 #include <com/sun/star/presentation/XSlideShowController.hpp>
@@ -50,7 +51,7 @@ namespace sd
             void listenThread();
             void execute();
             static Transmitter *pTransmitter;
-            static css::uno::Reference<Listener> mListener;
+            static rtl::Reference<Listener> mListener;
     };
 }
 

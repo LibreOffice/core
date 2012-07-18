@@ -59,6 +59,7 @@ void Receiver::parseCommand( std::vector<OString> aCommand )
     }
     catch ( com::sun::star::uno::RuntimeException &e )
     {
+        fprintf( stderr, "Error in retrieving Controller\n" );
         //return;
     }
 

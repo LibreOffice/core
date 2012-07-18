@@ -91,7 +91,7 @@ void SAL_CALL Listener::slideEnded (sal_Bool bReverse)
     if ( pTransmitter )
     {
         fprintf( stderr, "Transmitter is, transmitting.\n" );
-         pTransmitter->addMessage( aBuilder.makeStringAndClear() ,
+        pTransmitter->addMessage( aBuilder.makeStringAndClear(),
                                Transmitter::Priority::HIGH );
     }
     fprintf( stderr, "Transmitted\n" );

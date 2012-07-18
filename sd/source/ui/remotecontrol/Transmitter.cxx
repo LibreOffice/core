@@ -23,8 +23,7 @@ Transmitter::Transmitter( StreamSocket &aSocket )
 {
 }
 
-void
-Transmitter::execute()
+void Transmitter::execute()
 {
     fprintf( stderr, "Waiting\n" );
     while( mQueuesNotEmpty.wait() )
@@ -32,7 +31,9 @@ Transmitter::execute()
         fprintf( stderr, "Continuing after condition\n" );
         while ( true )
         {
+            fprintf( stderr, "Trying to acquire mutex in Transmitter Thread\n" );
             ::osl::MutexGuard aQueueGuard( mQueueMutex );
+            fprintf( stderr, "Acquired mutex in Transmitter Thread\n" );
             while ( mHighPriority.size() )
             {
                 OString aMessage( mHighPriority.front() );
@@ -77,15 +78,22 @@ void Transmitter::addMessage( const OString& aMessage, const Priority aPriority 
             mLowPriority.push( aMessage );
             break;
         case Priority::HIGH:
-            fprintf(stderr, "PushingHigh\n%s\n", aMessage.getStr() );
+            fprintf(stderr, "PushingHigh\n<<<%s>>>\n", aMessage.getStr() );
             mHighPriority.push( aMessage );
             break;
     }
     fprintf( stderr, "Setting\n" );
     if ( !mQueuesNotEmpty.check() )
+    {
         mQueuesNotEmpty.set();
+        fprintf( stderr, "Condition has now been set\n" );
+    }
+    else
+    {
+        fprintf( stderr, "Condition was already set\n" );
+    }
     fprintf( stderr, "Added\n" );
-
+    fprintf( stderr, "Front:\n<<<%s>>>\n", mHighPriority.front().getStr() );
 }
 
 

@@ -17,6 +17,7 @@
 #include "Receiver.hxx"
 #include "Listener.hxx"
 
+
 using namespace std;
 using namespace sd;
 using namespace ::com::sun::star;
@@ -34,8 +35,6 @@ Server::~Server()
 // Run as a thread
 void Server::listenThread()
 {
-//     Transmitter aTransmitter( mStreamSocket );
-//     Transmitter aTransmitter( mStreamSocket);
     pTransmitter = new Transmitter( mStreamSocket );
     pTransmitter->launch();
     Receiver aReceiver( pTransmitter );
@@ -100,7 +99,7 @@ void Server::listenThread()
 
         // TODO: deal with transmision errors gracefully.
     }
-    mListener->disposing();
+    mListener->dispose();
     mListener = NULL;
     delete pTransmitter;
     pTransmitter = NULL;
@@ -137,7 +136,9 @@ void Server::presentationStarted( const css::uno::Reference<
     {
         Listener *aListener = new Listener( pTransmitter );
         aListener->init( rController );
-        mListener = css::uno::Reference<Listener>( aListener );
+        fprintf( stderr, "presentationStarted:init--done\n");
+        mListener = rtl::Reference<Listener>( aListener );
+        fprintf( stderr, "presentationStarted:mListener--done\n");
     }
 }
 
@@ -145,7 +146,7 @@ void Server::presentationStarted( const css::uno::Reference<
 
 Server *sd::Server::spServer = NULL;
 Transmitter *sd::Server::pTransmitter = NULL;
-css::uno::Reference<Listener> sd::Server::mListener = NULL;
+rtl::Reference<Listener> sd::Server::mListener = NULL;
 
 void Server::setup()
 {
