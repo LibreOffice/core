@@ -355,75 +355,79 @@ ScMatrixRef ScInterpreter::CreateMatrixFromDoubleRef( const FormulaToken* pToken
         SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
         SCCOL nCol2, SCROW nRow2, SCTAB nTab2 )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::CreateMatrixFromDoubleRef" );
-    ScMatrixRef pMat = NULL;
-    if (nTab1 == nTab2 && !nGlobalError)
+    if (nTab1 != nTab2 || nGlobalError)
     {
-        ScTokenMatrixMap::const_iterator aIter;
-        if ( static_cast<SCSIZE>(nRow2 - nRow1 + 1) *
-                static_cast<SCSIZE>(nCol2 - nCol1 + 1) >
-                ScMatrix::GetElementsMax() )
-            SetError(errStackOverflow);
-        else if (pTokenMatrixMap && ((aIter = pTokenMatrixMap->find( pToken))
-                    != pTokenMatrixMap->end()))
-            pMat = static_cast<ScToken*>((*aIter).second.get())->GetMatrix();
-        else
-        {
-            SCSIZE nMatCols = static_cast<SCSIZE>(nCol2 - nCol1 + 1);
-            SCSIZE nMatRows = static_cast<SCSIZE>(nRow2 - nRow1 + 1);
-            pMat = GetNewMat( nMatCols, nMatRows, true);
-            if (pMat && !nGlobalError)
-            {
-                ScCellIterator aCellIter(
-                    pDok, nCol1, nRow1, nTab1, nCol2, nRow2, nTab2);
-
-                for (ScBaseCell* pCell = aCellIter.GetFirst(); pCell; pCell =
-                        aCellIter.GetNext())
-                {
-                    SCCOL nThisCol = aCellIter.GetCol();
-                    SCROW nThisRow = aCellIter.GetRow();
-                    if (HasCellEmptyData(pCell))
-                        continue;
-
-                    if (HasCellValueData(pCell))
-                    {
-                        ScAddress aAdr( nThisCol, nThisRow, nTab1);
-                        double fVal = GetCellValue( aAdr, pCell);
-                        if ( nGlobalError )
-                        {
-                            fVal = CreateDoubleError( nGlobalError);
-                            nGlobalError = 0;
-                        }
-                        pMat->PutDouble( fVal,
-                                static_cast<SCSIZE>(nThisCol-nCol1),
-                                static_cast<SCSIZE>(nThisRow-nRow1));
-                        continue;
-                    }
-
-                    String aStr;
-                    GetCellString( aStr, pCell);
-                    if ( nGlobalError )
-                    {
-                        double fVal = CreateDoubleError( nGlobalError);
-                        nGlobalError = 0;
-                        pMat->PutDouble( fVal,
-                                static_cast<SCSIZE>(nThisCol-nCol1),
-                                static_cast<SCSIZE>(nThisRow-nRow1));
-                    }
-                    else
-                        pMat->PutString( aStr,
-                                static_cast<SCSIZE>(nThisCol-nCol1),
-                                static_cast<SCSIZE>(nThisRow-nRow1));
-                }
-
-                if (pTokenMatrixMap)
-                    pTokenMatrixMap->insert( ScTokenMatrixMap::value_type(
-                                pToken, new ScMatrixToken( pMat)));
-            }
-        }
-    }
-    else                                // not a 2D matrix
+        // Not a 2D matrix.
         SetError(errIllegalParameter);
+        return NULL;
+    }
+
+    SCSIZE nMatCols = static_cast<SCSIZE>(nCol2 - nCol1 + 1);
+    SCSIZE nMatRows = static_cast<SCSIZE>(nRow2 - nRow1 + 1);
+
+    if (nMatRows * nMatCols > ScMatrix::GetElementsMax())
+    {
+        SetError(errStackOverflow);
+        return NULL;
+    }
+
+    ScTokenMatrixMap::const_iterator aIter;
+    if (pTokenMatrixMap && ((aIter = pTokenMatrixMap->find( pToken))
+                != pTokenMatrixMap->end()))
+    {
+        return static_cast<ScToken*>((*aIter).second.get())->GetMatrix();
+    }
+
+    ScMatrixRef pMat = GetNewMat( nMatCols, nMatRows, true);
+    if (!pMat || nGlobalError)
+        return NULL;
+
+    ScCellIterator aCellIter(
+        pDok, nCol1, nRow1, nTab1, nCol2, nRow2, nTab2);
+
+    for (ScBaseCell* pCell = aCellIter.GetFirst(); pCell; pCell =
+            aCellIter.GetNext())
+    {
+        SCCOL nThisCol = aCellIter.GetCol();
+        SCROW nThisRow = aCellIter.GetRow();
+        if (HasCellEmptyData(pCell))
+            continue;
+
+        if (HasCellValueData(pCell))
+        {
+            ScAddress aAdr( nThisCol, nThisRow, nTab1);
+            double fVal = GetCellValue( aAdr, pCell);
+            if ( nGlobalError )
+            {
+                fVal = CreateDoubleError( nGlobalError);
+                nGlobalError = 0;
+            }
+            pMat->PutDouble( fVal,
+                    static_cast<SCSIZE>(nThisCol-nCol1),
+                    static_cast<SCSIZE>(nThisRow-nRow1));
+            continue;
+        }
+
+        String aStr;
+        GetCellString( aStr, pCell);
+        if ( nGlobalError )
+        {
+            double fVal = CreateDoubleError( nGlobalError);
+            nGlobalError = 0;
+            pMat->PutDouble( fVal,
+                    static_cast<SCSIZE>(nThisCol-nCol1),
+                    static_cast<SCSIZE>(nThisRow-nRow1));
+        }
+        else
+            pMat->PutString( aStr,
+                    static_cast<SCSIZE>(nThisCol-nCol1),
+                    static_cast<SCSIZE>(nThisRow-nRow1));
+    }
+
+    if (pTokenMatrixMap)
+        pTokenMatrixMap->insert( ScTokenMatrixMap::value_type(
+                    pToken, new ScMatrixToken( pMat)));
+
     return pMat;
 }
 
