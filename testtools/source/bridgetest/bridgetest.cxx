@@ -544,6 +544,7 @@ static sal_Bool performTest(
             } catch (...) {
                 bRet &= check(false, "getRaiseAttr2 threw wrong type");
             }
+#ifndef OS2 // see i120310 for details
             // Test instantiated polymorphic struct types:
             {
                 bRet &= check(
@@ -605,6 +606,8 @@ static sal_Bool performTest(
                     !xLBT->getNullPolyInterface().member.is(),
                     "getNullPolyInterface");
             }
+#endif // OS2
+
             // Any test:
             bRet &= check(performAnyTest(xLBT , aData), "any test");
             // Sequence of call test:
