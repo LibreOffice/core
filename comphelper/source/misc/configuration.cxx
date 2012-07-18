@@ -199,7 +199,7 @@ rtl::OUString comphelper::detail::ConfigurationWrapper::extendLocalizedPath(
             css::uno::UNO_QUERY_THROW)->
         getLocale());
     SAL_WARN_IF(
-        locale.Language.indexOf('-') == -1, "comphelper",
+        locale.Language.indexOf('-') != -1, "comphelper",
         "Locale language \"" << locale.Language << "\" contains \"-\"");
     assert(locale.Language.indexOf('&') == -1);
     assert(locale.Language.indexOf('"') == -1);
@@ -212,7 +212,7 @@ rtl::OUString comphelper::detail::ConfigurationWrapper::extendLocalizedPath(
     if (!locale.Country.isEmpty()) {
         buf.append('-');
         SAL_WARN_IF(
-            locale.Country.indexOf('-') == -1, "comphelper",
+            locale.Country.indexOf('-') != -1, "comphelper",
             "Locale language \"" << locale.Country << "\" contains \"-\"");
         assert(locale.Country.indexOf('&') == -1);
         assert(locale.Country.indexOf('"') == -1);
