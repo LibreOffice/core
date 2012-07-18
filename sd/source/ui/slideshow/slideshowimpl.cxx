@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-#include <boost/scoped_ptr.hpp>
-
 #include "com/sun/star/frame/XComponentLoader.hpp"
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/document/XEventsSupplier.hpp>
@@ -82,7 +80,6 @@
 #include "avmedia/mediawindow.hxx"
 #include  "svtools/colrdlg.hxx"
 
-#include <boost/noncopyable.hpp>
 #include <boost/bind.hpp>
 
 using ::rtl::OUString;
