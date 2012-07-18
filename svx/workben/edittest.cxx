@@ -90,6 +90,7 @@
 #include <osl/file.hxx>
 #include <osl/process.h>
 #include <rtl/bootstrap.hxx>
+#include <vector>
 
 #define TB_LEFT          1
 #define TB_RIGHT         2
@@ -177,8 +178,16 @@ Reference< XMultiServiceFactory > createApplicationServiceManager()
 
 // --- class EditApp -------------------------------------------------
 
-SV_DECL_PTRARR_DEL( StringList, String*, 0 );
-SV_IMPL_PTRARR( StringList, String* );
+class StringList : public std::vector<String*>
+{
+public:
+    ~StringList()
+    {
+        for( const_iterator it = begin(); it != end(); ++it )
+            delete *it;
+    }
+};
+
 StringList aSimpleHistory;
 
 class EditApp : public Application
