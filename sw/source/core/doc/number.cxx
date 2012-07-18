@@ -1292,9 +1292,9 @@ namespace numfunc
             }
             inline sal_Unicode GetChar( sal_uInt8 p_nListLevel ) const
             {
-                if ( p_nListLevel > MAXLEVEL )
+                if (p_nListLevel >= MAXLEVEL)
                 {
-                    p_nListLevel = MAXLEVEL;
+                    p_nListLevel = MAXLEVEL - 1;
                 }
 
                 return mnLevelChars[p_nListLevel];

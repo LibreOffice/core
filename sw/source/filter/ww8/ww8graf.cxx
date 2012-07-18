@@ -263,7 +263,7 @@ static void SetFill( SfxItemSet& rSet, WW8_DP_FILL& rFill )
     else
     {
         rSet.Put(XFillStyleItem(XFILL_SOLID));  // necessary for textbox
-        if (nPat <= 1 || nPat > sizeof(nPatA))
+        if (nPat <= 1 || ((sizeof(nPatA)/sizeof(nPatA[0])) <= nPat))
         {
             // Solid Background or unknown
             rSet.Put(XFillColorItem(aEmptyStr, WW8TransCol(rFill.dlpcBg)));

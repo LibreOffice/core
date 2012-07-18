@@ -943,9 +943,15 @@ long SwWW8ImplReader::Read_Field(WW8PLCFManResult* pRes)
     if (bNested)
         return 0;
 
-    sal_uInt16 n = ( aF.nId <= eMax ) ? aF.nId : static_cast< sal_uInt16 >(eMax); // alle > 91 werden 92
+    sal_uInt16 n = (aF.nId <= eMax) ? aF.nId : static_cast<sal_uInt16>(eMax);
     sal_uInt16 nI = n / 32;                     // # des sal_uInt32
     sal_uLong nMask = 1 << ( n % 32 );          // Maske fuer Bits
+
+    if ((sizeof(nFieldTagAlways)/sizeof(nFieldTagAlways[0])) <= nI)
+    {   // if indexes larger than 95 are needed, then a new configuration
+        // item has to be added, and nFieldTagAlways/nFieldTagBad expanded!
+        return aF.nLen;
+    }
 
     if( nFieldTagAlways[nI] & nMask )       // Flag: Tag it
         return Read_F_Tag( &aF );           // Resultat nicht als Text

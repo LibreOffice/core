@@ -432,7 +432,8 @@ void SwOneExampleFrame::CreatePopup(const Point& rPt)
         sal_Int16 nZoom = 0;
         aZoom >>= nZoom;
 
-        for(sal_uInt16 i = 0; i < 5; i++ )
+        for (sal_uInt16 i = 0;
+                i < (sizeof(nZoomValues)/sizeof(nZoomValues[0])); ++i)
         {
             String sTemp;
             sTemp = String::CreateFromInt32(nZoomValues[i]);
@@ -453,7 +454,8 @@ void SwOneExampleFrame::CreatePopup(const Point& rPt)
 IMPL_LINK(SwOneExampleFrame, PopupHdl, Menu*, pMenu )
 {
     sal_uInt16 nId = pMenu->GetCurItemId();
-    if( nId > ITEM_ZOOM && nId < ITEM_ZOOM + 100 )
+    if ((nId > ITEM_ZOOM) &&
+        (nId <= (ITEM_ZOOM + (sizeof(nZoomValues)/sizeof(nZoomValues[0])))))
     {
         sal_Int16 nZoom = nZoomValues[nId - ITEM_ZOOM - 1];
         uno::Reference< view::XViewSettingsSupplier >  xSettings(_xController, uno::UNO_QUERY);

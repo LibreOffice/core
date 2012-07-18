@@ -3539,7 +3539,7 @@ bool SwWW8ImplReader::GetFontParams( sal_uInt16 nFCode, FontFamily& reFamily,
             break;
         }
     }
-    if( b < sizeof( eFamilyA ) )
+    if (b < (sizeof(eFamilyA)/sizeof(eFamilyA[0])))
         reFamily = eFamilyA[b];
     else
         reFamily = FAMILY_DONTKNOW;
