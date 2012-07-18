@@ -541,6 +541,9 @@ SQLHANDLE OConnection::createStatementHandle()
 // -----------------------------------------------------------------------------
 void OConnection::freeStatementHandle(SQLHANDLE& _pHandle)
 {
+    if( SQL_NULL_HANDLE == _pHandle )
+        return;
+
     ::std::map< SQLHANDLE,OConnection*>::iterator aFind = m_aConnections.find(_pHandle);
 
     N3SQLFreeStmt(_pHandle,SQL_RESET_PARAMS);
