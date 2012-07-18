@@ -24,7 +24,32 @@
 
 #include <map>
 
-#include "wrapldapinclude.hxx"
+#ifdef WNT
+#pragma warning (push,1)
+#pragma warning (disable:4668)
+#endif
+
+#ifdef WNT
+#include <windows.h>
+#include <winldap.h>
+#ifndef LDAP_NO_ATTRS
+#    define LDAP_NO_ATTRS L"1.1"
+#endif
+#else // !defined WNT
+#include <ldap.h>
+#endif // WNT
+
+#ifndef LDAP_API
+#    define LDAP_API(rt) rt
+#endif
+#ifndef LDAP_CALL
+#    define LDAP_CALL
+#endif
+
+#ifdef WNT
+#pragma warning (pop)
+#endif // WNT
+
 #include <com/sun/star/ldap/LdapGenericException.hpp>
 
 #include <com/sun/star/ldap/LdapConnectionException.hpp>
