@@ -223,9 +223,9 @@ void LdapConnection::initConnection()
     BerElement * ptr;
 #ifdef WNT
     PWCHAR attr = ldap_first_attributeW(mConnection, result.msg, &ptr);
-    while (attr != 0) {
+    while (attr) {
         PWCHAR * values = ldap_get_valuesW(mConnection, result.msg, attr);
-        if (values != 0) {
+        if (values) {
             data->insert(
                 LdapData::value_type( attr, *values ));
             ldap_value_freeW(values);
@@ -233,9 +233,9 @@ void LdapConnection::initConnection()
         attr = ldap_next_attributeW(mConnection, result.msg, ptr);
 #else
     char * attr = ldap_first_attribute(mConnection, result.msg, &ptr);
-    while (attr != 0) {
+    while (attr) {
         char ** values = ldap_get_values(mConnection, result.msg, attr);
-        if (values != 0) {
+        if (values) {
             data->insert(
                 LdapData::value_type(
                     rtl::OStringToOUString(attr, RTL_TEXTENCODING_ASCII_US),
