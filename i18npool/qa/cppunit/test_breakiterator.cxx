@@ -252,7 +252,7 @@ void TestBreakIterator::testWordBoundaries()
         }
     }
 
-    sal_Unicode aJoinTests[] = { 'X', 0x200C, 0x200D, 0x2060, 0xFEFF, 0xFFF9 };
+    sal_Unicode aJoinTests[] = { 'X', 0x200C, 0x200D, 0x2060, 0xFEFF, 0xFFF9, 0xFFFA, 0xFFFB };
     for (int mode = i18n::WordType::ANY_WORD; mode <= i18n::WordType::WORD_COUNT; ++mode)
     {
         //make sure that in all cases isBeginWord and isEndWord matches getWordBoundary

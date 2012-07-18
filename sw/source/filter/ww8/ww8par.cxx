@@ -3159,7 +3159,7 @@ bool SwWW8ImplReader::ReadChar(long nPosCp, long nCpOfs)
             break;
         case 0x2: // Auto-Footnote-Number, should be replaced by SwWW8ImplReader::End_Ftn later
             if (!maFtnStack.empty())
-                cInsert = CH_TXTATR_INWORD;
+                cInsert = 0x2;
             break;
 #if OSL_DEBUG_LEVEL > 1
         default:

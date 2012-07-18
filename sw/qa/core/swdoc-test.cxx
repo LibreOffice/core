@@ -60,6 +60,7 @@
 #include "swtypes.hxx"
 #include "fmtftn.hxx"
 #include "fmtrfmrk.hxx"
+#include "fmtfld.hxx"
 
 SO2_DECL_REF(SwDocShell)
 SO2_IMPL_REF(SwDocShell)
@@ -366,6 +367,25 @@ void SwDocTest::testSwScanner()
         pTxtNode->CountWords(aDocStat, 0, pTxtNode->Len());
         CPPUNIT_ASSERT(aDocStat.nWord == 1);
         CPPUNIT_ASSERT_MESSAGE("refmark anchor should not be counted", aDocStat.nChar == 11);
+
+        m_pDoc->AppendTxtNode(*aPaM.GetPoint());
+        m_pDoc->InsertString(aPaM, rtl::OUString("Apple"));
+
+        DateTime aDate(DateTime::SYSTEM);
+        SwPostItField aPostIt(
+            (SwPostItFieldType*)m_pDoc->GetSysFldType(RES_POSTITFLD), rtl::OUString("An Author"),
+            rtl::OUString("Some Text"), rtl::OUString("WhatEver"), aDate );
+        m_pDoc->InsertPoolItem(aPaM, SwFmtFld(aPostIt), 0);
+
+        m_pDoc->InsertString(aPaM, rtl::OUString("Apple"));
+        pTxtNode = aPaM.GetNode()->GetTxtNode();
+        aDocStat.Reset();
+        pTxtNode->CountWords(aDocStat, 0, pTxtNode->Len());
+        CPPUNIT_ASSERT(aDocStat.nWord == 1);
+        CPPUNIT_ASSERT_MESSAGE("postit anchor should effectively not exist", aDocStat.nChar == 10);
+        CPPUNIT_ASSERT(pTxtNode->Len() == 11);
+
+        aDocStat.Reset();
     }
 
     //See https://bugs.freedesktop.org/show_bug.cgi?id=46757

@@ -3013,16 +3013,16 @@ sal_Unicode GetCharOfTxtAttr( const SwTxtAttr& rAttr )
     sal_Unicode cRet = CH_TXTATR_BREAKWORD;
     switch ( rAttr.Which() )
     {
-        case RES_TXTATR_FTN:
         case RES_TXTATR_REFMARK:
         case RES_TXTATR_TOXMARK:
-        case RES_TXTATR_META:
-        case RES_TXTATR_METAFIELD:
             cRet = CH_TXTATR_INWORD;
         break;
 
         case RES_TXTATR_FIELD:
         case RES_TXTATR_FLYCNT:
+        case RES_TXTATR_FTN:
+        case RES_TXTATR_META:
+        case RES_TXTATR_METAFIELD:
         {
             cRet = CH_TXTATR_BREAKWORD;
 

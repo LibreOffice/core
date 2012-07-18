@@ -1377,7 +1377,7 @@ void lcl_CopyHint( const sal_uInt16 nWhich, const SwTxtAttr * const pHt,
         case RES_TXTATR_META:
         case RES_TXTATR_METAFIELD:
             OSL_ENSURE(pNewHt, "copying Meta should not fail!");
-            OSL_ENSURE(pDest && (CH_TXTATR_INWORD ==
+            OSL_ENSURE(pDest && (CH_TXTATR_BREAKWORD ==
                                 pDest->GetTxt().GetChar(*pNewHt->GetStart())),
                    "missing CH_TXTATR?");
             break;

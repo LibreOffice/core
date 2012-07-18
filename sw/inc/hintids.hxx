@@ -35,7 +35,7 @@
 // For SwTxtHints without end index the following char is added:
 
 #define CH_TXTATR_BREAKWORD     ((sal_Unicode)0x01)
-#define CH_TXTATR_INWORD        ((sal_Unicode)0x02)
+#define CH_TXTATR_INWORD        ((sal_Unicode)0xFFF9)
 #define CH_TXTATR_TAB           ((sal_Unicode)'\t')
 #define CH_TXTATR_NEWLINE       ((sal_Unicode)'\n')
 #define CH_TXT_ATR_FIELDSTART ((sal_Unicode)0x04)

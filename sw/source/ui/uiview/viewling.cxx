@@ -533,11 +533,10 @@ void SwView::InsertThesaurusSynonym( const String &rSynonmText, const String &rL
 
         pWrtShell->SelWrd();
 
-        // make sure the selection build later from the
-        // data below does not include footnotes and other
-        // "in word" character to the left and right in order
-        // to preserve those. Therefore count those "in words"
-        // in order to modify the selection accordingly.
+        // make sure the selection build later from the data below does not
+        // include "in word" character to the left and right in order to
+        // preserve those. Therefore count those "in words" in order to modify
+        // the selection accordingly.
         const sal_Unicode* pChar = rLookUpText.GetBuffer();
         xub_StrLen nLeft = 0;
         while (pChar && *pChar++ == CH_TXTATR_INWORD)
