@@ -23,6 +23,9 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_editeng.hxx"
+
+#include <memory>
+
 #include <com/sun/star/xml/AttributeData.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <xmloff/xmlcnimp.hxx>
@@ -114,7 +117,8 @@ sal_Bool SvXMLAttrContainerItem::PutValue( const com::sun::star::uno::Any& rVal,
     }
     else
     {
-        SvXMLAttrContainerData* pNewImpl = new SvXMLAttrContainerData;
+        ::std::auto_ptr<SvXMLAttrContainerData> pNewImpl(
+            new SvXMLAttrContainerData);
 
         try
         {
@@ -165,17 +169,15 @@ sal_Bool SvXMLAttrContainerItem::PutValue( const com::sun::star::uno::Any& rVal,
             if( nAttr == nCount )
             {
                 delete pImpl;
-                pImpl = pNewImpl;
+                pImpl = pNewImpl.release();
             }
             else
             {
-                delete pNewImpl;
                 return sal_False;
             }
         }
         catch(...)
         {
-            delete pNewImpl;
             return sal_False;
         }
     }
