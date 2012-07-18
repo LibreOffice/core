@@ -29,6 +29,11 @@
 #include "cuires.hrc"
 #include "hyphen.hrc"
 
+String RID_SVXSTR_HMERR_CHECKINSTALL
+{
+    Text [ en-US ] = "is not available for spellchecking\nPlease check your installation and install the desired language\n" ;
+};
+
  // RID_SVXDLG_HYPHENATE --------------------------------------------------
 ModalDialog RID_SVXDLG_HYPHENATE
 {

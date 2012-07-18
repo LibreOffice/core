@@ -679,6 +679,11 @@ ModalDialog MD_ICONCHANGE
 };
 
 // Strings ---------------------------------------------------------------
+String RID_SVXSTR_IMPORT_ICON_ERROR
+{
+    Text [ en-US ] = "The files listed below could not be imported. The file format could not be interpreted." ;
+};
+
 String RID_SVXSTR_DELETE_ICON_CONFIRM  //added for issue73355
 {
     Text [ en-US ] = "Are you sure to delete the image?" ;
@@ -717,6 +722,16 @@ String RID_SVXSTR_TOOLBAR_CONTENT
 String RID_SVXSTR_COMMANDS
 {
     Text [ en-US ] = "Commands" ;
+};
+
+String RID_SVXSTR_COMMAND
+{
+    Text [ en-US ] = "Command" ;
+};
+
+String RID_SVXSTR_TOOLBAR_NAME
+{
+    TEXT_TOOLBAR_NAME
 };
 
 /* %MENUNAME will be replaced at runtime by the name of the selected menu. */

@@ -282,5 +282,9 @@
 
 #define RID_IMG_PRNDLG_NOCOLLATE            (STR_SVT_PRNDLG_START + 30)
 
+// IAccessible2 implementation in 2009
+#define STR_PARAGRAPH_START                 (STR_SVT_PRNDLG_START + 50)
+#define STR_PARAGRAPH                       (STR_PARAGRAPH_START + 0)
+
 #endif  // #ifndef _SVTOOLS_HRC
 

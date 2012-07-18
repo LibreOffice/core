@@ -325,6 +325,16 @@ String STR_HELP_BUTTON_SOURCEVIEW
     Text [ en-US ] = "HTML Source";
 };
 
+String STR_HELP_FIRST_MESSAGE
+{
+    Text [ en-US ] = "The Help is being started...";
+};
+
+String STR_HELP_FIRST_HTML
+{
+    Text = "<html></head><body><center><br></br><br></br><p><tt>%1</tt></center></body></html>";
+};
+
 String STR_HELP_MENU_TEXT_SELECTION_MODE
 {
     Text [ en-US ] = "Select Text";

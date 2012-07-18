@@ -89,7 +89,29 @@ Menu MN_SPELL_POPUP
             };
             Text [ en-US ] = "Set Language for Paragraph" ;
         };
+/*
+       MenuItem
+        {
+            Identifier = MN_SET_LANGUAGE_ALL_TEXT ;
+            SubMenu = Menu
+            {
+            };
+            Text [ en-US ] = "Set Language for all Text" ;
+        };
+*/
     };
+};
+String STR_WORD
+{
+    Text [ en-US ] = "Word is " ;
+};
+String STR_PARAGRAPH
+{
+    Text [ en-US ] = "Paragraph is " ;
+};
+String STR_SPELL_OK
+{
+    Text [ en-US ] = "The spellcheck is complete." ;
 };
 String STR_HYP_OK
 {

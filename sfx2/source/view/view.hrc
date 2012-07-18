@@ -23,11 +23,14 @@
 // #defines *****************************************************************
 
 #define STR_NODEFPRINTER                    (RID_SFX_VIEW_START+ 0)
+#define STR_PRINTER_NOTAVAIL                (RID_SFX_VIEW_START+ 1)
+
 
 #define STR_PRINT_OPTIONS                   (RID_SFX_VIEW_START+ 6)
 #define STR_PRINT_OPTIONS_TITLE             (RID_SFX_VIEW_START+ 7)
 #define STR_ERROR_PRINTER_BUSY              (RID_SFX_VIEW_START+ 8)
 #define STR_NOSTARTPRINTER                  (RID_SFX_VIEW_START+ 9)
+#define STR_PRINTING                        (RID_SFX_VIEW_START+10)
 
 #define DLG_PRINTMONITOR                    (RID_SFX_VIEW_START)
 #define FT_DOCNAME                      1
@@ -37,9 +40,13 @@
 #define PB_CANCELPRNMON                 5
 #define STR_FT_PREPARATION              6
 #define STR_PAGE                            (RID_SFX_VIEW_START+20)
+#define STR_ERROR_PRINT                     (RID_SFX_VIEW_START+21)
 #define STR_PRINT_NEWORI                    (RID_SFX_VIEW_START+22)
 #define STR_PRINT_NEWSIZE                   (RID_SFX_VIEW_START+23)
 #define STR_PRINT_NEWORISIZE                (RID_SFX_VIEW_START+24)
+
+#define STR_PREVIEW_DOCINFO                 (RID_SFX_VIEW_START+25)
+#define STR_PREVIEW_NODOCINFO               (RID_SFX_VIEW_START+26)
 
 #define MSG_ERROR_SEND_MAIL                 (RID_SFX_VIEW_START+31)
 
@@ -76,6 +83,7 @@
 
 #define FL_SEP_LEFT                     46
 #define FL_SEP_RIGHT                    47
+
 
 #endif
 

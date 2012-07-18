@@ -584,6 +584,7 @@
 ../../svtools/source/contnr/fileview.src
 ../../svtools/source/contnr/svcontnr.src
 ../../svtools/source/contnr/templwin.src
+../../svtools/source/items1/cstitem.src
 ../../svtools/source/filter.vcl/filter/dlgepng.src
 ../../svtools/source/filter.vcl/filter/dlgexpor.src
 ../../svtools/source/filter.vcl/filter/dlgejpg.src

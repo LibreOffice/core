@@ -33,3 +33,8 @@ String RID_STR_CANNOT_DETERMINE_LIBNAME
     Text [ en-US ] = "The library name could not be determined.";
 };
 
+String RID_STR_LIBNAME_ALREADY_EXISTS
+{
+    Text [ en-US ] = "This library name already exists. Please choose a different name.";
+};
+

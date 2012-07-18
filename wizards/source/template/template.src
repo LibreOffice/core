@@ -17,7 +17,13 @@
  */
 #define SAMPLES                 1000
 #define STYLES                  1100
+#define AgendaDlgName		1200
+#define AgendaDlgNoCancel	1201
+#define AgendaDlgFrame		1202
+#define AgendaDlgButton1	1203
+#define AgendaDlgButton2	1204
 #define CorrespondenceNoTextmark 1300
+#define CorrespondenceMsgError	1302
 #define CorrespondenceDialog	1303
 #define CorrespondenceFields    1350
 #define TextField    1400
@@ -56,6 +62,32 @@ String STYLES + 3
 };
 
 // --------------------------------------------------------------------
+String AgendaDlgName
+{
+    Text [ en-US ] = "Minutes Template";
+};
+
+String AgendaDlgNoCancel
+{
+    Text [ en-US ] = "An option must be confirmed.";
+};
+
+String AgendaDlgFrame
+{
+    Text [ en-US ] = "Minutes Type";
+};
+
+String AgendaDlgButton1
+{
+    Text [ en-US ] = "Results Minutes";
+};
+
+String AgendaDlgButton2
+{
+    Text [ en-US ] = "Evaluation Minutes";
+};
+
+// --------------------------------------------------------------------
 String CorrespondenceNoTextmark
 {
     Text [ en-US ] = "The bookmark 'Recipient' is missing.";
@@ -64,6 +96,11 @@ String CorrespondenceNoTextmark
 String CorrespondenceNoTextmark+1
 {
     Text [ en-US ] = "Form letter fields can not be included.";
+};
+
+String CorrespondenceMsgError
+{
+    Text [ en-US ] = "An error has occurred.";
 };
 
 String CorrespondenceDialog
