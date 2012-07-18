@@ -138,6 +138,7 @@ struct LastPageSaver
 // class OfaTreeOptionsDialog --------------------------------------------
 
 namespace com { namespace sun { namespace star { namespace frame { class XFrame; } } } }
+namespace com { namespace sun { namespace star { namespace container { class XNameAccess; } } } }
 namespace com { namespace sun { namespace star { namespace lang { class XMultiServiceFactory; } } } }
 namespace com { namespace sun { namespace star { namespace awt { class XContainerWindowProvider; } } } }
 
@@ -191,8 +192,12 @@ private:
                                             com::sun::star::lang::XMultiServiceFactory >& xMFac,
                                          const com::sun::star::uno::Reference<
                                             com::sun::star::frame::XFrame >& xFrame );
-    Module*         LoadModule( const rtl::OUString& rModuleIdentifier );
-    void            LoadNodes( Module* pModule,
+    Module*         LoadModule( const rtl::OUString& rModuleIdentifier,
+                                const com::sun::star::uno::Reference<
+                                    com::sun::star::container::XNameAccess >& xRoot );
+    void            LoadNodes( const com::sun::star::uno::Reference<
+                                    com::sun::star::container::XNameAccess >& xRoot,
+                               Module* pModule,
                                const rtl::OUString& rExtensionId,
                                VectorOfNodes& rOutNodeList );
     void            InsertNodes( const VectorOfNodes& rNodeList );

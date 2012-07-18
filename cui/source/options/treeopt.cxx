@@ -67,11 +67,11 @@
 #include <com/sun/star/frame/XModuleManager.hpp>
 #include <com/sun/star/loader/CannotActivateFactoryException.hpp>
 #include <com/sun/star/util/XMacroExpander.hpp>
+#include <comphelper/configurationhelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <editeng/optitems.hxx>
 #include <editeng/unolingu.hxx>
 #include <linguistic/misc.hxx>
-#include <officecfg/Office/OptionsDialog.hxx>
 #include <osl/module.hxx>
 #include <osl/process.h>
 #include <rtl/bootstrap.hxx>
@@ -1995,12 +1995,18 @@ void OfaTreeOptionsDialog::LoadExtensionOptions( const rtl::OUString& rExtension
 {
     Module* pModule = NULL;
     Reference< XMultiServiceFactory > xMSFac = comphelper::getProcessServiceFactory();
+    // open optionsdialog.xcu
+    Reference< XNameAccess > xRoot(
+        ::comphelper::ConfigurationHelper::openConfig(
+            xMSFac, C2U("org.openoffice.Office.OptionsDialog"),
+            ::comphelper::ConfigurationHelper::E_READONLY ), UNO_QUERY );
+    DBG_ASSERT( xRoot.is(), "OfaTreeOptionsDialog::LoadExtensionOptions(): no config" );
     // when called by Tools - Options then load nodes of active module
     if ( rExtensionId.isEmpty() )
-        pModule = LoadModule( GetModuleIdentifier( xMSFac, Reference< XFrame >() ) );
+        pModule = LoadModule( GetModuleIdentifier( xMSFac, Reference< XFrame >() ), xRoot );
 
     VectorOfNodes aNodeList;
-    LoadNodes( pModule, rExtensionId, aNodeList );
+    LoadNodes( xRoot, pModule, rExtensionId, aNodeList );
     InsertNodes( aNodeList );
 }
 
@@ -2039,58 +2045,64 @@ rtl::OUString OfaTreeOptionsDialog::GetModuleIdentifier(
 }
 
 Module* OfaTreeOptionsDialog::LoadModule(
-    const rtl::OUString& rModuleIdentifier )
+    const rtl::OUString& rModuleIdentifier, const Reference< XNameAccess >& xRoot )
 {
     Module* pModule = NULL;
-    Reference< XNameAccess > xSet(
-        officecfg::Office::OptionsDialog::Modules::get());
+    Reference< XNameAccess > xSet;
 
-    Sequence< rtl::OUString > seqNames = xSet->getElementNames();
-    for ( int i = 0; i < seqNames.getLength(); ++i )
+    if ( xRoot->hasByName( C2U("Modules") ) )
     {
-        rtl::OUString sModule( seqNames[i] );
-        if ( rModuleIdentifier == sModule )
+        xRoot->getByName( C2U("Modules") ) >>= xSet;
+        if ( xSet.is() )
         {
-            // current active module found
-            pModule = new Module( sModule );
-            pModule->m_bActive = true;
-
-            Reference< XNameAccess > xModAccess;
-            xSet->getByName( seqNames[i] ) >>= xModAccess;
-            if ( xModAccess.is() )
+            Sequence< rtl::OUString > seqNames = xSet->getElementNames();
+            for ( int i = 0; i < seqNames.getLength(); ++i )
             {
-                // load the nodes of this module
-                Reference< XNameAccess > xNodeAccess;
-                xModAccess->getByName( C2U("Nodes") ) >>= xNodeAccess;
-                if ( xNodeAccess.is() )
+                rtl::OUString sModule( seqNames[i] );
+                if ( rModuleIdentifier == sModule )
                 {
-                    Sequence< rtl::OUString > xTemp = xNodeAccess->getElementNames();
-                    Reference< XNameAccess > xAccess;
-                    sal_Int32 nIndex = -1;
-                    for ( int x = 0; x < xTemp.getLength(); ++x )
+                    // current active module found
+                    pModule = new Module( sModule );
+                    pModule->m_bActive = true;
+
+                    Reference< XNameAccess > xModAccess;
+                    xSet->getByName( seqNames[i] ) >>= xModAccess;
+                    if ( xModAccess.is() )
                     {
-                        xNodeAccess->getByName( xTemp[x] ) >>= xAccess;
-                        if ( xAccess.is() )
+                        // load the nodes of this module
+                        Reference< XNameAccess > xNodeAccess;
+                        xModAccess->getByName( C2U("Nodes") ) >>= xNodeAccess;
+                        if ( xNodeAccess.is() )
                         {
-                            xAccess->getByName( C2U("Index") ) >>= nIndex;
-                            if ( nIndex < 0 )
-                                // append nodes with index < 0
-                                pModule->m_aNodeList.push_back(
-                                    new OrderedEntry( nIndex, xTemp[x] ) );
-                            else
+                            Sequence< rtl::OUString > xTemp = xNodeAccess->getElementNames();
+                            Reference< XNameAccess > xAccess;
+                            sal_Int32 nIndex = -1;
+                            for ( int x = 0; x < xTemp.getLength(); ++x )
                             {
-                                // search position of the node
-                                sal_uInt32 y = 0;
-                                for ( ; y < pModule->m_aNodeList.size(); ++y )
+                                xNodeAccess->getByName( xTemp[x] ) >>= xAccess;
+                                if ( xAccess.is() )
                                 {
-                                    sal_Int32 nNodeIdx = pModule->m_aNodeList[y]->m_nIndex;
-                                    if ( nNodeIdx < 0 || nNodeIdx > nIndex )
-                                        break;
+                                    xAccess->getByName( C2U("Index") ) >>= nIndex;
+                                    if ( nIndex < 0 )
+                                        // append nodes with index < 0
+                                        pModule->m_aNodeList.push_back(
+                                            new OrderedEntry( nIndex, xTemp[x] ) );
+                                    else
+                                    {
+                                        // search position of the node
+                                        sal_uInt32 y = 0;
+                                        for ( ; y < pModule->m_aNodeList.size(); ++y )
+                                        {
+                                            sal_Int32 nNodeIdx = pModule->m_aNodeList[y]->m_nIndex;
+                                            if ( nNodeIdx < 0 || nNodeIdx > nIndex )
+                                                break;
+                                        }
+                                        // and insert the node on this position
+                                        pModule->m_aNodeList.insert(
+                                            pModule->m_aNodeList.begin() + y,
+                                            new OrderedEntry( nIndex, xTemp[x] ) );
+                                    }
                                 }
-                                // and insert the node on this position
-                                pModule->m_aNodeList.insert(
-                                    pModule->m_aNodeList.begin() + y,
-                                    new OrderedEntry( nIndex, xTemp[x] ) );
                             }
                         }
                     }
@@ -2102,145 +2114,151 @@ Module* OfaTreeOptionsDialog::LoadModule(
 }
 
 void OfaTreeOptionsDialog::LoadNodes(
-    Module* pModule, const rtl::OUString& rExtensionId,
-    VectorOfNodes& rOutNodeList )
+    const Reference< XNameAccess >& xRoot, Module* pModule,
+    const rtl::OUString& rExtensionId, VectorOfNodes& rOutNodeList )
 {
-    Reference< XNameAccess > xSet(
-        officecfg::Office::OptionsDialog::Nodes::get());
-    VectorOfNodes aNodeList;
-    Sequence< rtl::OUString > seqNames = xSet->getElementNames();
-
-    for ( int i = 0; i < seqNames.getLength(); ++i )
+    Reference< XNameAccess > xSet;
+    if ( xRoot->hasByName( C2U("Nodes") ) )
     {
-        String sGroupName( seqNames[i] );
-        Reference< XNameAccess > xNodeAccess;
-        xSet->getByName( seqNames[i] ) >>= xNodeAccess;
-
-        if ( xNodeAccess.is() )
+        xRoot->getByName( C2U("Nodes") ) >>= xSet;
+        if ( xSet.is() )
         {
-            rtl::OUString sNodeId, sLabel, sPageURL, sGroupId;
-            bool bAllModules = false;
-            sal_Int32 nGroupIndex = 0;
+            VectorOfNodes aNodeList;
+            Sequence< rtl::OUString > seqNames = xSet->getElementNames();
 
-            sNodeId = seqNames[i];
-            xNodeAccess->getByName( C2U("Label") ) >>= sLabel;
-            xNodeAccess->getByName( C2U("OptionsPage") ) >>= sPageURL;
-            xNodeAccess->getByName( C2U("AllModules") ) >>= bAllModules;
-            xNodeAccess->getByName( C2U("GroupId") ) >>= sGroupId;
-            xNodeAccess->getByName( C2U("GroupIndex") ) >>= nGroupIndex;
-
-            if ( sLabel.isEmpty() )
-                sLabel = sGroupName;
-            String sTemp = getGroupName( sLabel, !rExtensionId.isEmpty() );
-            if ( sTemp.Len() > 0 )
-                sLabel = sTemp;
-            OptionsNode* pNode =
-                new OptionsNode( sNodeId, sLabel, sPageURL, bAllModules, sGroupId, nGroupIndex );
-
-            if ( rExtensionId.isEmpty() && !isNodeActive( pNode, pModule ) )
+            for ( int i = 0; i < seqNames.getLength(); ++i )
             {
-                delete pNode;
-                continue;
-            }
+                String sGroupName( seqNames[i] );
+                Reference< XNameAccess > xNodeAccess;
+                xSet->getByName( seqNames[i] ) >>= xNodeAccess;
 
-            Reference< XNameAccess > xLeavesSet;
-            xNodeAccess->getByName( C2U( "Leaves" ) ) >>= xLeavesSet;
-            if ( xLeavesSet.is() )
-            {
-                Sequence< rtl::OUString > seqLeaves = xLeavesSet->getElementNames();
-                for ( int j = 0; j < seqLeaves.getLength(); ++j )
+                if ( xNodeAccess.is() )
                 {
-                    Reference< XNameAccess > xLeaveAccess;
-                    xLeavesSet->getByName( seqLeaves[j] ) >>= xLeaveAccess;
+                    rtl::OUString sNodeId, sLabel, sPageURL, sGroupId;
+                    bool bAllModules = false;
+                    sal_Int32 nGroupIndex = 0;
 
-                    if ( xLeaveAccess.is() )
+                    sNodeId = seqNames[i];
+                    xNodeAccess->getByName( C2U("Label") ) >>= sLabel;
+                    xNodeAccess->getByName( C2U("OptionsPage") ) >>= sPageURL;
+                    xNodeAccess->getByName( C2U("AllModules") ) >>= bAllModules;
+                    xNodeAccess->getByName( C2U("GroupId") ) >>= sGroupId;
+                    xNodeAccess->getByName( C2U("GroupIndex") ) >>= nGroupIndex;
+
+                    if ( sLabel.isEmpty() )
+                        sLabel = sGroupName;
+                    String sTemp = getGroupName( sLabel, !rExtensionId.isEmpty() );
+                    if ( sTemp.Len() > 0 )
+                        sLabel = sTemp;
+                    OptionsNode* pNode =
+                        new OptionsNode( sNodeId, sLabel, sPageURL, bAllModules, sGroupId, nGroupIndex );
+
+                    if ( rExtensionId.isEmpty() && !isNodeActive( pNode, pModule ) )
                     {
-                        rtl::OUString sId, sLeafLabel, sEventHdl, sLeafURL, sLeafGrpId;
-                        sal_Int32 nLeafGrpIdx = 0;
+                        delete pNode;
+                        continue;
+                    }
 
-                        xLeaveAccess->getByName( C2U("Id") ) >>= sId;
-                        xLeaveAccess->getByName( C2U("Label") ) >>= sLeafLabel;
-                        xLeaveAccess->getByName( C2U("OptionsPage") ) >>= sLeafURL;
-                        xLeaveAccess->getByName( C2U("EventHandlerService") ) >>= sEventHdl;
-                        xLeaveAccess->getByName( C2U("GroupId") ) >>= sLeafGrpId;
-                        xLeaveAccess->getByName( C2U("GroupIndex") ) >>= nLeafGrpIdx;
-
-                        if ( rExtensionId.isEmpty() || sId == rExtensionId )
+                    Reference< XNameAccess > xLeavesSet;
+                    xNodeAccess->getByName( C2U( "Leaves" ) ) >>= xLeavesSet;
+                    if ( xLeavesSet.is() )
+                    {
+                        Sequence< rtl::OUString > seqLeaves = xLeavesSet->getElementNames();
+                        for ( int j = 0; j < seqLeaves.getLength(); ++j )
                         {
-                            OptionsLeaf* pLeaf = new OptionsLeaf(
-                                sId, sLeafLabel, sLeafURL, sEventHdl, sLeafGrpId, nLeafGrpIdx );
+                            Reference< XNameAccess > xLeaveAccess;
+                            xLeavesSet->getByName( seqLeaves[j] ) >>= xLeaveAccess;
 
-                            if ( !sLeafGrpId.isEmpty() )
+                            if ( xLeaveAccess.is() )
                             {
-                                bool bAlreadyOpened = false;
-                                if ( pNode->m_aGroupedLeaves.size() > 0 )
+                                rtl::OUString sId, sLeafLabel, sEventHdl, sLeafURL, sLeafGrpId;
+                                sal_Int32 nLeafGrpIdx = 0;
+
+                                xLeaveAccess->getByName( C2U("Id") ) >>= sId;
+                                xLeaveAccess->getByName( C2U("Label") ) >>= sLeafLabel;
+                                xLeaveAccess->getByName( C2U("OptionsPage") ) >>= sLeafURL;
+                                xLeaveAccess->getByName( C2U("EventHandlerService") ) >>= sEventHdl;
+                                xLeaveAccess->getByName( C2U("GroupId") ) >>= sLeafGrpId;
+                                xLeaveAccess->getByName( C2U("GroupIndex") ) >>= nLeafGrpIdx;
+
+                                if ( rExtensionId.isEmpty() || sId == rExtensionId )
                                 {
-                                    for ( sal_uInt32 k = 0;
-                                          k < pNode->m_aGroupedLeaves.size(); ++k )
+                                    OptionsLeaf* pLeaf = new OptionsLeaf(
+                                        sId, sLeafLabel, sLeafURL, sEventHdl, sLeafGrpId, nLeafGrpIdx );
+
+                                    if ( !sLeafGrpId.isEmpty() )
                                     {
-                                        if ( pNode->m_aGroupedLeaves[k].size() > 0 &&
-                                             pNode->m_aGroupedLeaves[k][0]->m_sGroupId
-                                             == sLeafGrpId )
+                                        bool bAlreadyOpened = false;
+                                        if ( pNode->m_aGroupedLeaves.size() > 0 )
                                         {
-                                            sal_uInt32 l = 0;
-                                            for ( ; l < pNode->m_aGroupedLeaves[k].size(); ++l )
+                                            for ( sal_uInt32 k = 0;
+                                                    k < pNode->m_aGroupedLeaves.size(); ++k )
                                             {
-                                                if ( pNode->m_aGroupedLeaves[k][l]->
-                                                     m_nGroupIndex >= nLeafGrpIdx )
+                                                if ( pNode->m_aGroupedLeaves[k].size() > 0 &&
+                                                     pNode->m_aGroupedLeaves[k][0]->m_sGroupId
+                                                        == sLeafGrpId )
+                                                {
+                                                    sal_uInt32 l = 0;
+                                                    for ( ; l < pNode->m_aGroupedLeaves[k].size(); ++l )
+                                                    {
+                                                        if ( pNode->m_aGroupedLeaves[k][l]->
+                                                                m_nGroupIndex >= nLeafGrpIdx )
+                                                            break;
+                                                    }
+                                                    pNode->m_aGroupedLeaves[k].insert(
+                                                        pNode->m_aGroupedLeaves[k].begin() + l, pLeaf );
+                                                    bAlreadyOpened = true;
                                                     break;
+                                                }
                                             }
-                                            pNode->m_aGroupedLeaves[k].insert(
-                                                pNode->m_aGroupedLeaves[k].begin() + l, pLeaf );
-                                            bAlreadyOpened = true;
-                                            break;
+                                        }
+                                        if ( !bAlreadyOpened )
+                                        {
+                                            VectorOfLeaves aGroupedLeaves;
+                                            aGroupedLeaves.push_back( pLeaf );
+                                            pNode->m_aGroupedLeaves.push_back( aGroupedLeaves );
                                         }
                                     }
-                                }
-                                if ( !bAlreadyOpened )
-                                {
-                                    VectorOfLeaves aGroupedLeaves;
-                                    aGroupedLeaves.push_back( pLeaf );
-                                    pNode->m_aGroupedLeaves.push_back( aGroupedLeaves );
+                                    else
+                                        pNode->m_aLeaves.push_back(
+                                            new OptionsLeaf(
+                                                sId, sLeafLabel, sLeafURL,
+                                                sEventHdl, sLeafGrpId, nLeafGrpIdx ) );
                                 }
                             }
-                            else
-                                pNode->m_aLeaves.push_back(
-                                    new OptionsLeaf(
-                                        sId, sLeafLabel, sLeafURL,
-                                        sEventHdl, sLeafGrpId, nLeafGrpIdx ) );
                         }
+                    }
+
+                    // do not insert nodes without leaves
+                    if ( pNode->m_aLeaves.size() > 0 || pNode->m_aGroupedLeaves.size() > 0 )
+                    {
+                        pModule ? aNodeList.push_back( pNode ) : rOutNodeList.push_back( pNode );
                     }
                 }
             }
 
-            // do not insert nodes without leaves
-            if ( pNode->m_aLeaves.size() > 0 || pNode->m_aGroupedLeaves.size() > 0 )
+            if ( pModule && aNodeList.size() > 0 )
             {
-                pModule ? aNodeList.push_back( pNode ) : rOutNodeList.push_back( pNode );
-            }
-        }
-    }
-
-    if ( pModule && aNodeList.size() > 0 )
-    {
-        sal_uInt32 i = 0, j = 0;
-        for ( ; i < pModule->m_aNodeList.size(); ++i )
-        {
-            rtl::OUString sNodeId = pModule->m_aNodeList[i]->m_sId;
-            for ( j = 0; j < aNodeList.size(); ++j )
-            {
-                OptionsNode* pNode = aNodeList[j];
-                if ( pNode->m_sId == sNodeId )
+                sal_uInt32 i = 0, j = 0;
+                for ( ; i < pModule->m_aNodeList.size(); ++i )
                 {
-                    rOutNodeList.push_back( pNode );
-                    aNodeList.erase( aNodeList.begin() + j );
-                    break;
+                    rtl::OUString sNodeId = pModule->m_aNodeList[i]->m_sId;
+                    for ( j = 0; j < aNodeList.size(); ++j )
+                    {
+                        OptionsNode* pNode = aNodeList[j];
+                        if ( pNode->m_sId == sNodeId )
+                        {
+                            rOutNodeList.push_back( pNode );
+                            aNodeList.erase( aNodeList.begin() + j );
+                            break;
+                        }
+                    }
                 }
+
+                for ( i = 0; i < aNodeList.size(); ++i )
+                    rOutNodeList.push_back( aNodeList[i] );
             }
         }
-
-        for ( i = 0; i < aNodeList.size(); ++i )
-            rOutNodeList.push_back( aNodeList[i] );
     }
 }
 
