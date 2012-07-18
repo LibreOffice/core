@@ -28,55 +28,24 @@ package testcase.formula.catalog;
 
 import static testlib.AppUtil.*;
 import static testlib.UIMap.*;
-
-import java.awt.Rectangle;
-import java.io.File;
-
 import static org.junit.Assert.*;
-import static org.openoffice.test.vcl.Tester.*;
-
+import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
-import org.openoffice.test.common.FileUtil;
-import org.openoffice.test.common.GraphicsUtil;
-
-import testlib.CalcUtil;
 import testlib.Log;
 
 /**
  *
  */
-public class AddCustomSymbolsFromCatalog {
+public class AddDeleteSymbolsFromCatalog {
 
-    /**
-     * TestCapture helps us to do
-     * 1. Take a screenshot when failure occurs.
-     * 2. Collect extra data when OpenOffice crashes.
-     */
     @Rule
     public Log LOG = new Log();
 
-    /**
-     * initApp helps us to do
-     * 1. Patch the OpenOffice to enable automation if necessary.
-     * 2. Start OpenOffice with automation enabled if necessary.
-     * 3. Reset OpenOffice to startcenter.
-     *
-     * @throws java.lang.Exception
-     */
     @Before
     public void setUp() throws Exception {
-        initApp();
-    }
-
-    /**
-     * Test add custom symbols from Catalog->Symbols
-     * @throws Exception
-     */
-    @Ignore("Add button in Edit Symbols dialog is disabled")
-    public void testAddSymbolFromCatalog() throws Exception{
+        app.start();
 
         // New a formula document
         startcenter.menuItem("File->New->Formula").select();
@@ -96,6 +65,19 @@ public class AddCustomSymbolsFromCatalog {
 
         // Verify if the "Edit Symbols" dialog pop up
         assertTrue("Edit Symbols dialog does not pop up", math_EditSymbolsDlg.exists(3));
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        app.close();
+    }
+
+    /**
+     * Test add custom symbols from Catalog->Symbols
+     * @throws Exception
+     */
+    @Test
+    public void testAddSymbolFromCatalog() throws Exception{
 
         // Choose a symbol which is not in the list, click "Add" and "OK"
         String selectedSymbol;
@@ -132,6 +114,11 @@ public class AddCustomSymbolsFromCatalog {
             }
         }
         assertTrue("Symbol is not added to Symbol set", bSelectSymbolNotInList);
+
+        // Close all dialogs
+        math_EditSymbolsDlg.cancel();
+        math_SymbolsDlg.close();
+        app.dispatch(".uno:CloseDoc");
     }
 
     /**
@@ -140,25 +127,6 @@ public class AddCustomSymbolsFromCatalog {
      */
     @Test
     public void testModifySymbolFontFromCatalog() throws Exception{
-
-        // New a formula document
-        startcenter.menuItem("File->New->Formula").select();
-        sleep(3);
-
-        // Click catalog button
-        math_CatalogButton.click();
-        sleep(1);
-
-        // Verify if the "Symbols" dialog pop up
-        assertTrue("Symbols dialog does not pop up", math_SymbolsDlg.exists(3));
-
-        // Select "Special", click "Edit" button
-        math_SymbolsDlgListbox.select("Special");
-        math_SymbolsDlgEditButton.click();
-        sleep(1);
-
-        // Verify if the "Edit Symbols" dialog pop up
-        assertTrue("Edit Symbols dialog does not pop up", math_EditSymbolsDlg.exists(3));
 
         // Modify the font of selected symbol
         //String selectedSymbol = math_EditSymbolsDlgSymbol.getText();
@@ -175,6 +143,11 @@ public class AddCustomSymbolsFromCatalog {
         math_SymbolsDlgEditButton.click();
         math_EditSymbolsDlgSymbol.select(selectedSymbol);
         assertEquals("Font of symbol is not modified successfully", modifiedSymbolFont, math_EditSymbolsDlgFont.getSelText());
+
+        // Close all dialogs
+        math_EditSymbolsDlg.cancel();
+        math_SymbolsDlg.close();
+        app.dispatch(".uno:CloseDoc");
     }
 
     /**
@@ -184,31 +157,13 @@ public class AddCustomSymbolsFromCatalog {
     @Test
     public void testModifySymbolTypefaceFromCatalog() throws Exception{
 
-        // New a formula document
-        startcenter.menuItem("File->New->Formula").select();
-        sleep(3);
-
-        // Click catalog button
-        math_CatalogButton.click();
-        sleep(1);
-
-        // Verify if the "Symbols" dialog pop up
-        assertTrue("Symbols dialog does not pop up", math_SymbolsDlg.exists(3));
-
-        // Select "Special", click "Edit" button
-        math_SymbolsDlgListbox.select("Special");
-        math_SymbolsDlgEditButton.click();
-        sleep(1);
-
-        // Verify if the "Edit Symbols" dialog pop up
-        assertTrue("Edit Symbols dialog does not pop up", math_EditSymbolsDlg.exists(3));
-
         // Modify the typeface of selected symbol
-        String selectedSymbol = math_EditSymbolsDlgSymbol.getText();
+//      String selectedSymbol = math_EditSymbolsDlgSymbol.getText();
         int oldSymbolTypefaceIndex = math_EditSymbolsDlgTypeface.getSelIndex();
         int modifiedSymbolTypefaceIndex = (oldSymbolTypefaceIndex+1==math_EditSymbolsDlgTypeface.getItemCount()) ? 0 : (oldSymbolTypefaceIndex+1);
         math_EditSymbolsDlgTypeface.select(modifiedSymbolTypefaceIndex);    // select the next typeface of old typeface
         String modifiedSymbolTypeface= math_EditSymbolsDlgTypeface.getSelText();
+        String selectedSymbol = math_EditSymbolsDlgSymbol.getText();
         math_EditSymbolsDlgModify.click();
         math_EditSymbolsDlg.ok();
         sleep(1);
@@ -217,5 +172,40 @@ public class AddCustomSymbolsFromCatalog {
         math_SymbolsDlgEditButton.click();
         math_EditSymbolsDlgSymbol.select(selectedSymbol);
         assertEquals("Typeface of symbol is not modified successfully", modifiedSymbolTypeface, math_EditSymbolsDlgTypeface.getSelText());
+
+        // Close all dialogs
+        math_EditSymbolsDlg.cancel();
+        math_SymbolsDlg.close();
+        app.dispatch(".uno:CloseDoc");
+    }
+
+    /**
+     * Test delete custom symbols from Catalog->Symbols
+     * @throws Exception
+     */
+    @Test
+    public void testDeleteSymbolFromCatalog() throws Exception{
+
+        // Delete the selected symbol
+        String selectedSymbol = math_EditSymbolsDlgSymbol.getText();
+        math_EditSymbolsDlgDelete.click();
+        math_EditSymbolsDlg.ok();
+        sleep(1);
+
+        // Verify if the selected symbol is deleted successfully
+        math_SymbolsDlgEditButton.click();
+        boolean isDeleted = true;
+        for (int i=0; i<math_EditSymbolsDlgSymbol.getItemCount(); i++) {
+            if (selectedSymbol.equals(math_EditSymbolsDlgSymbol.getItemText(i))){
+                isDeleted = false;
+                break;
+            }
+        }
+        assertTrue("Symbol is not deleted successfully", isDeleted);
+
+        // Close all dialogs
+        math_EditSymbolsDlg.cancel();
+        math_SymbolsDlg.close();
+        app.dispatch(".uno:CloseDoc");
     }
 }

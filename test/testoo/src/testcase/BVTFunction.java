@@ -145,7 +145,6 @@ public class BVTFunction {
     @Test
     public void testAboutDialog()
     {
-
         app.dispatch(".uno:About");
         assertTrue(AboutDialog.exists(5));
         AboutDialog.ok();

@@ -57,6 +57,9 @@ public class AppUtil extends Tester {
         }
     }
 
+    public static void typeKeys(String keys) {
+        Tester.typeKeys(keys);
+    }
 
     public static void openStartcenter() {
         if (startcenter.exists())

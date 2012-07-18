@@ -21,51 +21,82 @@
 
 
 
-package testcase.sd.headerandfooter;
+/**
+ *
+ */
+package testcase.presentation.headerandfooter;
 
 import static testlib.AppUtil.fullPath;
-import static testlib.AppUtil.initApp;
 import static testlib.AppUtil.openStartcenter;
 import static testlib.AppUtil.submitSaveDlg;
 import static testlib.AppUtil.submitOpenDlg;
 import static testlib.AppUtil.testFile;
-import static testlib.UIMap.startcenter;
 import static testlib.UIMap.*;
-
-import java.io.File;
-
 import static org.junit.Assert.*;
 import static org.openoffice.test.vcl.Tester.*;
-import static org.openoffice.test.vcl.Tester.typeKeys;
-
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.openoffice.test.common.FileUtil;
-
 import testlib.Log;
-import testlib.UIMap;
 
-public class OpenPPTWithHeaderFooter {
-    /**
-     * TestCapture helps us to do
-     * 1. Take a screenshot when failure occurs.
-     * 2. Collect extra data when OpenOffice crashes.
-     */
+public class OpenDocumentWithHeaderFooter {
+
     @Rule
     public Log LOG = new Log();
 
-    /**
-     * initApp helps us to do
-     * 1. Patch the OpenOffice to enable automation if necessary.
-     * 2. Start OpenOffice with automation enabled if necessary.
-     * 3. Reset OpenOffice to startcenter.
-     *
-     * @throws java.lang.Exception
-     */
     @Before
     public void setUp() throws Exception {
-        initApp();
+        app.start();
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        app.close();
+    }
+
+    /**
+     * Test open AOO3.4 presentation with header and footer.
+     * edit and save to ODP
+     * @throws Exception
+     */
+    @Test
+    public void testOpenAOO34WithHeaderFooter() throws Exception{
+        //open sample file
+        String file = testFile("sd/AOO3.4HeaderFooter.odp");
+        app.dispatch(".uno:Open");
+        submitOpenDlg(file);
+
+        //check after reopen
+        impress.menuItem("View->Header and Footer...").select();
+        sleep(1);
+        assertEquals(true,SD_DateAndTimeFooterOnSlide.isChecked());
+        assertEquals("fixed date",SD_FixedDateAndTimeOnSlideInput.getText());
+        assertEquals(true,SD_FooterTextOnSlide.isChecked());
+        assertEquals("footer test",SD_FooterTextOnSlideInput.getText());
+        assertEquals(true,SD_SlideNumAsFooterOnSlide.isChecked());
+
+        SD_SlideNumAsFooterOnSlide.uncheck();
+        SD_ApplyToAllButtonOnSlideFooter.click();
+
+        //save to odp and reopen
+        impress.menuItem("File->Save As...").select();
+        String saveTo2 = fullPath("temp/" + "AOO3.4HeaderFooter.odp");
+        FileUtil.deleteFile(saveTo2);
+        submitSaveDlg(saveTo2);
+        impress.menuItem("File->Close").select();
+        sleep(1);
+
+        openStartcenter();
+        app.dispatch(".uno:Open");
+        String openFrom2=fullPath("temp/" + "AOO3.4HeaderFooter.odp");
+        submitOpenDlg(openFrom2);
+
+        impress.menuItem("View->Header and Footer...").select();
+        sleep(1);
+        assertEquals(false,SD_SlideNumAsFooterOnSlide.isChecked());
+        //end-save to odp and reopen
     }
 
     /**
@@ -77,7 +108,7 @@ public class OpenPPTWithHeaderFooter {
     public void testOpenPPTWithHeaderFooter() throws Exception{
         //open sample file
         String file = testFile("sd/gfdd.ppt");
-        startcenter.menuItem("File->Open").select();
+        app.dispatch(".uno:Open");
         submitOpenDlg(file);
 
         //check after reopen
@@ -92,20 +123,19 @@ public class OpenPPTWithHeaderFooter {
         SD_SlideNumAsFooterOnSlide.uncheck();
         SD_ApplyToAllButtonOnSlideFooter.click();
 
-
         //save to ppt and reopen
         impress.menuItem("File->Save As...").select();
         String saveTo = fullPath("temp/" + "gfdd.ppt");
         FileUtil.deleteFile(saveTo);
         submitSaveDlg(saveTo);
-        SaveInODFOrNot.focus();
-        typeKeys("<enter>");
+        if (AlienFormatDlg.exists(3))
+            AlienFormatDlg.ok();
         sleep(1);
         impress.menuItem("File->Close").select();
         sleep(1);
 
         openStartcenter();
-        startcenter.menuItem("File->Open").select();
+        app.dispatch(".uno:Open");
         String openFrom=fullPath("temp/" + "gfdd.ppt");
         submitOpenDlg(openFrom);
 
@@ -118,7 +148,6 @@ public class OpenPPTWithHeaderFooter {
         SD_ApplyButtonOnSlideFooter.focus();
         typeKeys("<tab>");
         typeKeys("<enter>");
-
         //end
 
         //save to odp and reopen
@@ -130,7 +159,7 @@ public class OpenPPTWithHeaderFooter {
         sleep(1);
 
         openStartcenter();
-        startcenter.menuItem("File->Open").select();
+        app.dispatch(".uno:Open");
         String openFrom2=fullPath("temp/" + "gfdd.odp");
         submitOpenDlg(openFrom2);
 
@@ -139,7 +168,4 @@ public class OpenPPTWithHeaderFooter {
         assertEquals(false,SD_SlideNumAsFooterOnSlide.isChecked());
         //end-save to odp and reopen
     }
-
-
-
 }
