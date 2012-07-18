@@ -274,12 +274,16 @@ ByteString ScfTools::ReadCString( SvStream& rStrm )
     ByteString aRet;
     sal_Char cChar;
 
+    sal_uInt32 nLen = 0;
     rStrm >> cChar;
-    while( cChar )
+    while( cChar && nLen++ < STRING_MAXLEN )
     {
         aRet += cChar;
         rStrm >> cChar;
     }
+    // Callers assume that a 0-byte was read and may advance their book keeping
+    // counters by String.Len()+1, don't put back cChar!=0 if STRING_MAXLEN was
+    // reached.
     return aRet;
 }
 
@@ -288,9 +292,10 @@ ByteString ScfTools::ReadCString( SvStream& rStrm, sal_Int32& rnBytesLeft )
     ByteString aRet;
     sal_Char cChar;
 
+    sal_uInt32 nLen = 0;
     rStrm >> cChar;
     rnBytesLeft--;
-    while( cChar )
+    while( cChar && nLen++ < STRING_MAXLEN )
     {
         aRet += cChar;
         rStrm >> cChar;
@@ -300,12 +305,12 @@ ByteString ScfTools::ReadCString( SvStream& rStrm, sal_Int32& rnBytesLeft )
     return aRet;
 }
 
-void ScfTools::AppendCString( SvStream& rStrm, ByteString& rString )
+void ScfTools::AppendCStringWithLen( SvStream& rStrm, ByteString& rString, sal_uInt32 nLen )
 {
     sal_Char cChar;
 
     rStrm >> cChar;
-    while( cChar )
+    while( cChar && nLen++ < STRING_MAXLEN )
     {
         rString += cChar;
         rStrm >> cChar;
@@ -315,7 +320,7 @@ void ScfTools::AppendCString( SvStream& rStrm, ByteString& rString )
 void ScfTools::AppendCString( SvStream& rStrm, String& rString, rtl_TextEncoding eTextEnc )
 {
     ByteString aByteString;
-    AppendCString( rStrm, aByteString );
+    AppendCStringWithLen( rStrm, aByteString, rString.Len() );
     rString += String( aByteString, eTextEnc );
 }
 

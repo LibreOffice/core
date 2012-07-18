@@ -61,10 +61,16 @@ FltError ScQProReader::readSheet( SCTAB nTab, ScDocument* pDoc, ScQProStyle *pSt
             case 0x000f:{ // Label cell
                 String aLabel;
                 *mpStream >> nCol >> nDummy >> nRow >> nStyle >> nDummy;
-                readString( aLabel, getLength() - 7 );
-                nStyle = nStyle >> 3;
-                pStyle->SetFormat( pDoc, nCol, nRow, nTab, nStyle );
-                pDoc->PutCell( nCol, nRow, nTab, ScBaseCell::CreateTextCell( aLabel, pDoc ), (sal_Bool) sal_True );
+                sal_uInt16 nLen = getLength();
+                if (nLen >= 7)
+                {
+                    readString( aLabel, nLen - 7 );
+                    nStyle = nStyle >> 3;
+                    pStyle->SetFormat( pDoc, nCol, nRow, nTab, nStyle );
+                    pDoc->PutCell( nCol, nRow, nTab, ScBaseCell::CreateTextCell( aLabel, pDoc ), (sal_Bool) sal_True );
+                }
+                else
+                    eRet = eERR_FORMAT;
                 }
                 break;
 
@@ -192,7 +198,11 @@ FltError ScQProReader::import( ScDocument *pDoc )
                 String aLabel;
                 *mpStream >> nPtSize >> nFontAttr;
                 pStyleElement->setFontRecord( j, nFontAttr, nPtSize );
-                readString( aLabel, getLength() - 4 );
+                sal_uInt16 nLen = getLength();
+                if (nLen >= 4)
+                    readString( aLabel, nLen - 4 );
+                else
+                    eRet = eERR_FORMAT;
                 pStyleElement->setFontType( j, aLabel );
                 j++;
                 }

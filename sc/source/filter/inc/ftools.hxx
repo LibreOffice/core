@@ -359,8 +359,13 @@ public:
     inline static String ReadCString( SvStream& rStrm, sal_Int32& rnBytesLeft, rtl_TextEncoding eTextEnc )
                             { return String( ReadCString( rStrm, rnBytesLeft ), eTextEnc ); }
 
-    /** Appends a zero terminted byte string. */
-    static void         AppendCString( SvStream& rStrm, ByteString& rString );
+    /** Appends a zero terminted byte string.
+        @param nLen
+               The previous length of the string, usually rString.Len(), but
+               necessary as this may be called from within AppendCString()
+               where rString is a temporary ByteString to be appended to
+               UniString. */
+    static void         AppendCStringWithLen( SvStream& rStrm, ByteString& rString, sal_uInt32 nLen );
     /** Appends a zero terminted byte string. */
     static void         AppendCString( SvStream& rStrm, String& rString, rtl_TextEncoding eTextEnc );
 
