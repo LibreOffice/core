@@ -370,7 +370,7 @@ namespace writerfilter {
                 /// Resolve a picture: If not inline, then anchored.
                 int resolvePict(bool bInline);
                 void runBreak();
-                void replayShapetext();
+                bool replayShapetext();
                 bool getSkipUnknown();
                 void setSkipUnknown(bool bSkipUnknown);
 

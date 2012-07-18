@@ -97,6 +97,7 @@ public:
     void testFdo50665();
     void testFdo49659();
     void testFdo46966();
+    void testFdo52066();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -137,6 +138,7 @@ public:
     CPPUNIT_TEST(testFdo50665);
     CPPUNIT_TEST(testFdo49659);
     CPPUNIT_TEST(testFdo46966);
+    CPPUNIT_TEST(testFdo52066);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -809,6 +811,21 @@ void Test::testFdo46966()
     sal_Int32 nValue = 0;
     xPropertySet->getPropertyValue("TopMargin") >>= nValue;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(TWIP_TO_MM100(720)), nValue);
+}
+
+void Test::testFdo52066()
+{
+    /*
+     * The problem was that the height of the shape was too big.
+     *
+     * xray ThisComponent.DrawPage(0).Size.Height
+     */
+    load("fdo52066.rtf");
+
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(xDraws->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(TWIP_TO_MM100(19)), xShape->getSize().Height);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
