@@ -677,14 +677,21 @@ sal_Int64 NumericFormatter::Normalize( sal_Int64 nValue ) const
 sal_Int64 NumericFormatter::Denormalize( sal_Int64 nValue ) const
 {
     sal_Int64 nFactor = ImplPower10( GetDecimalDigits() );
+
+    if ((nValue < ( SAL_MIN_INT64 + nFactor )) ||
+        (nValue > ( SAL_MAX_INT64 - nFactor )))
+    {
+        return ( nValue / nFactor );
+    }
+
     if( nValue < 0 )
     {
-        sal_Int64 nHalf = nValue < ( SAL_MIN_INT64 + nFactor )? 0 : nFactor/2;
+        sal_Int64 nHalf = nFactor/2;
         return ((nValue-nHalf) / nFactor );
     }
     else
     {
-        sal_Int64 nHalf = nValue > ( SAL_MAX_INT64 - nFactor )? 0 : nFactor/2;
+        sal_Int64 nHalf = nFactor/2;
         return ((nValue+nHalf) / nFactor );
     }
 }
@@ -1238,14 +1245,15 @@ sal_Int64 MetricField::ConvertValue( sal_Int64 nValue, sal_Int64 mnBaseValue, sa
 {
     double nDouble = nonValueDoubleToValueDouble( ConvertDoubleValue(
                 (double)nValue, mnBaseValue, nDecDigits, eInUnit, eOutUnit ) );
+    sal_Int64 nLong ;
 
     // caution: precision loss in double cast
-    sal_Int64 nLong = static_cast<sal_Int64>( nDouble );
-
-    if ( nDouble >= (double)SAL_MAX_INT64 )
-        nLong = SAL_MAX_INT64;
-    else if ( nDouble <= (double)SAL_MIN_INT64 )
+    if ( nDouble <= (double)SAL_MIN_INT64 )
         nLong = SAL_MIN_INT64;
+    else if ( nDouble >= (double)SAL_MAX_INT64 )
+        nLong = SAL_MAX_INT64;
+    else
+        nLong = static_cast<sal_Int64>( nDouble );
 
     return nLong;
 }
