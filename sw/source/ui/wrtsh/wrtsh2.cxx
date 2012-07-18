@@ -72,7 +72,9 @@
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 
-void SwWrtShell::Insert(SwField &rFld)
+#include <xmloff/odffields.hxx>
+
+void SwWrtShell::Insert(SwField &rFld, SwPaM *pCommentRange)
 {
     ResetCursorStack();
     if(!CanInsert())
@@ -83,6 +85,13 @@ void SwWrtShell::Insert(SwField &rFld)
     aRewriter.AddRule(UndoArg1, rFld.GetDescription());
 
     StartUndo(UNDO_INSERT, &aRewriter);
+
+    if (pCommentRange && GetDoc())
+    {
+        // If an annotation field is inserted, take care of the relevant fieldmark.
+        IDocumentMarkAccess* pMarksAccess = GetDoc()->getIDocumentMarkAccess();
+        pMarksAccess->makeFieldBookmark(*pCommentRange, OUString(), ODF_COMMENTRANGE);
+    }
 
     bool bDeleted = false;
     if( HasSelection() )
