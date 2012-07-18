@@ -678,7 +678,7 @@ rtl::OUString ScMatrixImpl::GetString( SvNumberFormatter& rFormatter, SCSIZE nC,
             return maMat.get<rtl::OUString>(nR, nC);
         case mdds::mtm::element_empty:
         {
-            if (!maMatFlag.get<double>(nR, nC))
+            if (!maMatFlag.get<bool>(nR, nC))
                 // not an empty path.
                 break;
 
