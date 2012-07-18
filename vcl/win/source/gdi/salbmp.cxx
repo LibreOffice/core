@@ -329,41 +329,51 @@ HGLOBAL WinSalBitmap::ImplCreateDIB( const Size& rSize, sal_uInt16 nBits, const 
 
     HGLOBAL hDIB = 0;
 
-    if ( rSize.Width() && rSize.Height() )
+    if( rSize.Width() <= 0 || rSize.Height() <= 0 )
+        return hDIB;
+
+    // calculate bitmap size in Bytes
+    const sal_uLong nAlignedWidth4Bytes = AlignedWidth4Bytes( nBits * rSize.Width() );
+    const sal_uLong nImageSize = nAlignedWidth4Bytes * rSize.Height();
+    bool bOverflow = (nImageSize / nAlignedWidth4Bytes) != rSize.Height();
+    if( bOverflow )
+        return hDIB;
+
+    // allocate bitmap memory including header and palette
+    const sal_uInt16 nColors = (nBits <= 8) ? (1 << nBits) : 0;
+    const sal_uLong nHeaderSize = sizeof( BITMAPINFOHEADER ) + nColors * sizeof( RGBQUAD );
+    bOverflow = (nHeaderSize + nImageSize) < nImageSize;
+    if( bOverflow )
+        return hDIB;
+
+    hDIB = GlobalAlloc( GHND, nHeaderSize + nImageSize );
+    if( !hDIB )
+        return hDIB;
+
+    PBITMAPINFO pBI = static_cast<PBITMAPINFO>( GlobalLock( hDIB ) );
+    PBITMAPINFOHEADER pBIH = reinterpret_cast<PBITMAPINFOHEADER>( pBI );
+
+    pBIH->biSize = sizeof( BITMAPINFOHEADER );
+    pBIH->biWidth = rSize.Width();
+    pBIH->biHeight = rSize.Height();
+    pBIH->biPlanes = 1;
+    pBIH->biBitCount = nBits;
+    pBIH->biCompression = BI_RGB;
+    pBIH->biSizeImage = nImageSize;
+    pBIH->biXPelsPerMeter = 0;
+    pBIH->biYPelsPerMeter = 0;
+    pBIH->biClrUsed = 0;
+    pBIH->biClrImportant = 0;
+
+    if( nColors )
     {
-        const sal_uLong     nImageSize = AlignedWidth4Bytes( nBits * rSize.Width() ) * rSize.Height();
-        const sal_uInt16    nColors = ( nBits <= 8 ) ? ( 1 << nBits ) : 0;
-
-        hDIB = GlobalAlloc( GHND, sizeof( BITMAPINFOHEADER ) + nColors * sizeof( RGBQUAD ) + nImageSize );
-
-        if( hDIB )
-        {
-            PBITMAPINFO         pBI = (PBITMAPINFO) GlobalLock( hDIB );
-            PBITMAPINFOHEADER   pBIH = (PBITMAPINFOHEADER) pBI;
-
-            pBIH->biSize = sizeof( BITMAPINFOHEADER );
-            pBIH->biWidth = rSize.Width();
-            pBIH->biHeight = rSize.Height();
-            pBIH->biPlanes = 1;
-            pBIH->biBitCount = nBits;
-            pBIH->biCompression = BI_RGB;
-            pBIH->biSizeImage = nImageSize;
-            pBIH->biXPelsPerMeter = 0;
-            pBIH->biYPelsPerMeter = 0;
-            pBIH->biClrUsed = 0;
-            pBIH->biClrImportant = 0;
-
-            if ( nColors )
-            {
-                const sal_uInt16 nMinCount = std::min( nColors, rPal.GetEntryCount() );
-
-                if( nMinCount )
-                    memcpy( pBI->bmiColors, rPal.ImplGetColorBuffer(), nMinCount * sizeof( RGBQUAD ) );
-            }
-
-            GlobalUnlock( hDIB );
-        }
+        // copy the palette entries if any
+        const sal_uInt16 nMinCount = std::min( nColors, rPal.GetEntryCount() );
+        if( nMinCount )
+            memcpy( pBI->bmiColors, rPal.ImplGetColorBuffer(), nMinCount * sizeof(RGBQUAD) );
     }
+
+    GlobalUnlock( hDIB );
 
     return hDIB;
 }
