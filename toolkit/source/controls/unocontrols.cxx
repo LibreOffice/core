@@ -484,6 +484,18 @@ void UnoEditControl::getColumnsAndLines( sal_Int16& nCols, sal_Int16& nLines ) t
     Impl_getColumnsAndLines( nCols, nLines );
 }
 
+::rtl::OUString UnoEditControl::getImplementationName(  ) throw(uno::RuntimeException)
+{
+    return ::rtl::OUString( "stardiv.Toolkit.UnoEditControl" );
+}
+
+uno::Sequence< ::rtl::OUString > UnoEditControl::getSupportedServiceNames() throw(uno::RuntimeException)
+{
+    uno::Sequence< ::rtl::OUString > aNames = UnoControlBase::getSupportedServiceNames( );
+    aNames.realloc( aNames.getLength() + 1 );
+    aNames[ aNames.getLength() - 1 ] = ::rtl::OUString::createFromAscii( szServiceName2_UnoControlEdit );
+    return aNames;
+}
 
 //  ----------------------------------------------------
 //  class UnoControlFileControlModel
