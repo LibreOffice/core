@@ -57,10 +57,7 @@ extern "C" {
 #if defined( WNT)
 #define SAL_MATH_FINITE(d) _finite(d)
 #elif defined OS2
-#define SAL_MATH_FINITE(x)              \
-    ((sizeof (x) == sizeof (float)) ? __isfinitef(x)    \
-    : (sizeof (x) == sizeof (double)) ? __isfinite(x)   \
-    : __isfinitel(x))
+#define SAL_MATH_FINITE(d) finite(d)
 #elif defined LINUX || defined UNX
 #define SAL_MATH_FINITE(d) finite(d)
 #else /* WNT, LINUX, UNX */
