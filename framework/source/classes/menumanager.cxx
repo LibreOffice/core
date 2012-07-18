@@ -120,7 +120,7 @@ const char UNO_COMMAND[] = ".uno:";
 
 MenuManager::MenuManager(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
-    REFERENCE< XFRAME >& rFrame, Menu* pMenu, sal_Bool bDelete, sal_Bool bDeleteChildren )
+    REFERENCE< XFRAME >& rFrame, AbstractMenu* pMenu, sal_Bool bDelete, sal_Bool bDeleteChildren )
 :
     ThreadHelpBase( &Application::GetSolarMutex() ),
     mxServiceFactory(xServiceFactory)
@@ -465,7 +465,7 @@ void SAL_CALL MenuManager::disposing( const EVENTOBJECT& Source ) throw ( RUNTIM
 }
 
 
-void MenuManager::UpdateSpecialFileMenu( Menu* pMenu )
+void MenuManager::UpdateSpecialFileMenu( AbstractMenu* pMenu )
 {
     // update picklist
     Sequence< Sequence< PropertyValue > > aHistoryList = SvtHistoryOptions().GetList( ePICKLIST );
@@ -631,7 +631,7 @@ void MenuManager::UpdateSpecialFileMenu( Menu* pMenu )
     }
 }
 
-void MenuManager::UpdateSpecialWindowMenu( Menu* pMenu,const Reference< XMultiServiceFactory >& xServiceFactory,framework::IMutex& _rMutex )
+void MenuManager::UpdateSpecialWindowMenu( AbstractMenu* pMenu,const Reference< XMultiServiceFactory >& xServiceFactory,framework::IMutex& _rMutex )
 {
     // update window list
     ::std::vector< ::rtl::OUString > aNewWindowListVector;
@@ -745,7 +745,7 @@ void MenuManager::CreatePicklistArguments( Sequence< PropertyValue >& aArgsList,
 // vcl handler
 //_________________________________________________________________________________________________________________
 
-IMPL_LINK( MenuManager, Activate, Menu *, pMenu )
+IMPL_LINK( MenuManager, Activate, AbstractMenu *, pMenu )
 {
     if ( pMenu == m_pVCLMenu )
     {
@@ -848,7 +848,7 @@ IMPL_LINK( MenuManager, Activate, Menu *, pMenu )
 }
 
 
-IMPL_LINK( MenuManager, Deactivate, Menu *, pMenu )
+IMPL_LINK( MenuManager, Deactivate, AbstractMenu *, pMenu )
 {
     if ( pMenu == m_pVCLMenu )
         m_bActive = sal_False;
@@ -857,7 +857,7 @@ IMPL_LINK( MenuManager, Deactivate, Menu *, pMenu )
 }
 
 
-IMPL_LINK( MenuManager, Select, Menu *, pMenu )
+IMPL_LINK( MenuManager, Select, AbstractMenu *, pMenu )
 {
     URL                     aTargetURL;
     Sequence<PropertyValue> aArgs;
@@ -959,7 +959,7 @@ void MenuManager::AddMenu(PopupMenu* _pPopupMenu,const ::rtl::OUString& _sItemCo
     m_aMenuItemHandlerVector.push_back( pMenuItemHandler );
 }
 
-sal_uInt16 MenuManager::FillItemCommand(::rtl::OUString& _rItemCommand,Menu* _pMenu,sal_uInt16 _nIndex) const
+sal_uInt16 MenuManager::FillItemCommand(::rtl::OUString& _rItemCommand, AbstractMenu* _pMenu,sal_uInt16 _nIndex) const
 {
     sal_uInt16 nItemId = _pMenu->GetItemId( _nIndex );
 
@@ -973,7 +973,7 @@ sal_uInt16 MenuManager::FillItemCommand(::rtl::OUString& _rItemCommand,Menu* _pM
     }
     return nItemId;
 }
-void MenuManager::FillMenuImages(Reference< XFrame >& _xFrame,Menu* _pMenu,sal_Bool bShowMenuImages)
+void MenuManager::FillMenuImages(Reference< XFrame >& _xFrame, AbstractMenu* _pMenu,sal_Bool bShowMenuImages)
 {
     AddonsOptions       aAddonOptions;
 

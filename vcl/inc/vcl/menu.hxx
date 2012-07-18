@@ -102,6 +102,94 @@ struct ImplMenuDelData
     bool isDeleted() const { return mpMenu == 0; }
 };
 
+// ----------------
+// - AbstractMenu -
+// ----------------
+
+class VCL_DLLPUBLIC AbstractMenu : public Resource
+{
+public:
+    virtual ~AbstractMenu() {}
+
+    virtual SAL_DLLPRIVATE Window*  ImplGetWindow() const = 0;
+
+    virtual void                    InsertItem( sal_uInt16 nItemId, const XubString& rStr,
+                                                MenuItemBits nItemBits = 0,
+                                                sal_uInt16 nPos = MENU_APPEND ) = 0;
+    virtual void                    InsertItem( sal_uInt16 nItemId,
+                                                const XubString& rString, const Image& rImage,
+                                                MenuItemBits nItemBits = 0,
+                                                sal_uInt16 nPos = MENU_APPEND ) = 0;
+    virtual void                    InsertSeparator( sal_uInt16 nPos = MENU_APPEND ) = 0;
+    virtual void                    RemoveItem( sal_uInt16 nPos ) = 0;
+    virtual void                    CopyItem( const Menu& rMenu, sal_uInt16 nPos,
+                                              sal_uInt16 nNewPos = MENU_APPEND ) = 0;
+    virtual void                    Clear() = 0;
+
+    virtual void                    SetMenuFlags( sal_uInt16 nFlags ) = 0;
+    virtual sal_uInt16              GetMenuFlags() const = 0;
+
+    virtual sal_uInt16              GetItemCount() const = 0;
+    virtual sal_uInt16              GetItemId( sal_uInt16 nPos ) const = 0;
+    virtual sal_uInt16              GetItemPos( sal_uInt16 nItemId ) const = 0;
+    virtual MenuItemType            GetItemType( sal_uInt16 nPos ) const = 0;
+    virtual sal_uInt16              GetCurItemId() const = 0;
+
+    virtual void                    SetItemBits( sal_uInt16 nItemId, MenuItemBits nBits ) = 0;
+    virtual MenuItemBits            GetItemBits( sal_uInt16 nItemId ) const = 0;
+
+    virtual void                    SetUserValue( sal_uInt16 nItemId, sal_uLong nValue ) = 0;
+    virtual sal_uLong               GetUserValue( sal_uInt16 nItemId ) const = 0;
+
+    virtual void                    SetPopupMenu( sal_uInt16 nItemId, PopupMenu* pMenu ) = 0;
+    virtual PopupMenu*              GetPopupMenu( sal_uInt16 nItemId ) const = 0;
+
+    virtual void                    SetAccelKey( sal_uInt16 nItemId, const KeyCode& rKeyCode ) = 0;
+
+    virtual void                    CheckItem( sal_uInt16 nItemId, sal_Bool bCheck = sal_True ) = 0;
+    virtual sal_Bool                IsItemChecked( sal_uInt16 nItemId ) const = 0;
+
+    virtual void                    EnableItem( sal_uInt16 nItemId, sal_Bool bEnable = sal_True ) = 0;
+    virtual sal_Bool                IsItemEnabled( sal_uInt16 nItemId ) const = 0;
+
+    virtual void                    ShowItem( sal_uInt16 nItemId, sal_Bool bVisible = sal_True ) = 0;
+    virtual void                    HideItem( sal_uInt16 nItemId ) = 0;
+
+    virtual sal_Bool                IsMenuBar() const = 0;
+
+    virtual void                    RemoveDisabledEntries( sal_Bool bCheckPopups = sal_True,
+                                                           sal_Bool bRemoveEmptyPopups = sal_False ) = 0;
+
+    virtual void                    SetItemText( sal_uInt16 nItemId, const XubString& rStr ) = 0;
+    virtual XubString               GetItemText( sal_uInt16 nItemId ) const = 0;
+
+    virtual void                    SetItemImage( sal_uInt16 nItemId, const Image& rImage ) = 0;
+    virtual Image                   GetItemImage( sal_uInt16 nItemId ) const = 0;
+
+    virtual void                    SetItemCommand( sal_uInt16 nItemId, const XubString& rCommand ) = 0;
+    virtual const XubString&        GetItemCommand( sal_uInt16 nItemId ) const = 0;
+
+    virtual void                    SetTipHelpText( sal_uInt16 nItemId, const XubString& rString ) = 0;
+
+    virtual void                    SetHelpCommand( sal_uInt16 nItemId, const XubString& rString ) = 0;
+    virtual const XubString&        GetHelpCommand( sal_uInt16 nItemId ) const = 0;
+
+    virtual void                    SetHelpId( sal_uInt16 nItemId, const rtl::OString& rHelpId ) = 0;
+    virtual rtl::OString            GetHelpId( sal_uInt16 nItemId ) const = 0;
+
+    virtual void                    SetActivateHdl( const Link& rLink ) = 0;
+
+    virtual void                    SetDeactivateHdl( const Link& rLink ) = 0;
+
+    virtual void                    SetHighlightHdl( const Link& rLink ) = 0;
+
+    virtual void                    SetSelectHdl( const Link& rLink ) = 0;
+
+    // Returns the system's menu handle if native menus are supported
+    // pData must point to a SystemMenuData structure
+    virtual sal_Bool                GetSystemMenuData( SystemMenuData* pData ) const = 0;
+};
+
 // --------
 // - Menu -
 // --------
@@ -113,7 +201,7 @@ struct MenuLogo
     Color       aEndColor;
 };
 
-class VCL_DLLPUBLIC Menu : public Resource
+class VCL_DLLPUBLIC Menu : public AbstractMenu
 {
     friend class MenuBar;
     friend class MenuBarWindow;
@@ -267,12 +355,12 @@ public:
     void                ShowItem( sal_uInt16 nItemId, sal_Bool bVisible = sal_True );
     void                HideItem( sal_uInt16 nItemId ) { ShowItem( nItemId, sal_False ); }
 
-    sal_Bool                IsItemPosVisible( sal_uInt16 nItemPos ) const;
-    sal_Bool                IsMenuVisible() const;
-    sal_Bool                IsMenuBar() const { return bIsMenuBar; }
+    sal_Bool            IsItemPosVisible( sal_uInt16 nItemPos ) const;
+    sal_Bool            IsMenuVisible() const;
+    sal_Bool            IsMenuBar() const { return bIsMenuBar; }
 
     void                RemoveDisabledEntries( sal_Bool bCheckPopups = sal_True, sal_Bool bRemoveEmptyPopups = sal_False );
-    sal_Bool                HasValidEntries( sal_Bool bCheckPopups = sal_True );
+    sal_Bool            HasValidEntries( sal_Bool bCheckPopups = sal_True );
 
     void                SetItemText( sal_uInt16 nItemId, const XubString& rStr );
     XubString           GetItemText( sal_uInt16 nItemId ) const;
@@ -282,7 +370,7 @@ public:
     void                SetItemImageAngle( sal_uInt16 nItemId, long nAngle10 );
     long                GetItemImageAngle( sal_uInt16 nItemId ) const;
     void                SetItemImageMirrorMode( sal_uInt16 nItemId, sal_Bool bMirror );
-    sal_Bool                GetItemImageMirrorMode( sal_uInt16 ) const;
+    sal_Bool            GetItemImageMirrorMode( sal_uInt16 ) const;
 
     void                SetItemCommand( sal_uInt16 nItemId, const XubString& rCommand );
     const XubString&    GetItemCommand( sal_uInt16 nItemId ) const;
@@ -318,8 +406,8 @@ public:
 
     void                AddEventListener( const Link& rEventListener );
     void                RemoveEventListener( const Link& rEventListener );
-    //void                AddChildEventListener( const Link& rEventListener );
-    //void                RemoveChildEventListener( const Link& rEventListener );
+    void                AddChildEventListener( const Link& rEventListener );
+    void                RemoveChildEventListener( const Link& rEventListener );
 
     Menu&               operator =( const Menu& rMenu );
 
@@ -369,10 +457,10 @@ class VCL_DLLPUBLIC MenuBar : public Menu
     Link                maCloserHdl;
     Link                maFloatHdl;
     Link                maHideHdl;
-    sal_Bool                mbCloserVisible;
-    sal_Bool                mbFloatBtnVisible;
-    sal_Bool                mbHideBtnVisible;
-    sal_Bool                mbDisplayable;
+    sal_Bool            mbCloserVisible;
+    sal_Bool            mbFloatBtnVisible;
+    sal_Bool            mbHideBtnVisible;
+    sal_Bool            mbDisplayable;
 
     friend class Application;
     friend class Menu;
@@ -382,7 +470,7 @@ class VCL_DLLPUBLIC MenuBar : public Menu
 
     SAL_DLLPRIVATE static Window*   ImplCreate( Window* pParent, Window* pWindow, MenuBar* pMenu );
     SAL_DLLPRIVATE static void      ImplDestroy( MenuBar* pMenu, sal_Bool bDelete );
-    SAL_DLLPRIVATE sal_Bool             ImplHandleKeyEvent( const KeyEvent& rKEvent, sal_Bool bFromMenu = sal_True );
+    SAL_DLLPRIVATE sal_Bool         ImplHandleKeyEvent( const KeyEvent& rKEvent, sal_Bool bFromMenu = sal_True );
 
 public:
                         MenuBar();
@@ -392,17 +480,17 @@ public:
     MenuBar&            operator =( const MenuBar& rMenu );
 
     void                ShowCloser( sal_Bool bShow = sal_True );
-    sal_Bool                HasCloser() const { return mbCloserVisible; }
-    sal_Bool                HasFloatButton() const { return mbFloatBtnVisible; }
-    sal_Bool                HasHideButton() const { return mbHideBtnVisible; }
+    sal_Bool            HasCloser() const { return mbCloserVisible; }
+    sal_Bool            HasFloatButton() const { return mbFloatBtnVisible; }
+    sal_Bool            HasHideButton() const { return mbHideBtnVisible; }
     void                ShowButtons( sal_Bool bClose, sal_Bool bFloat, sal_Bool bHide );
 
     void                SelectEntry( sal_uInt16 nId );
-    sal_Bool                HandleMenuActivateEvent( Menu *pMenu ) const;
-    sal_Bool                HandleMenuDeActivateEvent( Menu *pMenu ) const;
-    sal_Bool                HandleMenuHighlightEvent( Menu *pMenu, sal_uInt16 nEventId ) const;
-    sal_Bool                HandleMenuCommandEvent( Menu *pMenu, sal_uInt16 nEventId ) const;
-    sal_Bool                HandleMenuButtonEvent( Menu *pMenu, sal_uInt16 nEventId ) const;
+    sal_Bool            HandleMenuActivateEvent( Menu *pMenu ) const;
+    sal_Bool            HandleMenuDeActivateEvent( Menu *pMenu ) const;
+    sal_Bool            HandleMenuHighlightEvent( Menu *pMenu, sal_uInt16 nEventId ) const;
+    sal_Bool            HandleMenuCommandEvent( Menu *pMenu, sal_uInt16 nEventId ) const;
+    sal_Bool            HandleMenuButtonEvent( Menu *pMenu, sal_uInt16 nEventId ) const;
 
     void                SetCloserHdl( const Link& rLink )           { maCloserHdl = rLink; }
     const Link&         GetCloserHdl() const                        { return maCloserHdl; }
@@ -416,18 +504,18 @@ public:
     //    and it will be hidden if it was visible before
     //  - note: if a menubar is diplayable, this does not necessarily mean that it is currently visible
     void                SetDisplayable( sal_Bool bDisplayable );
-    sal_Bool                IsDisplayable() const                       { return mbDisplayable; }
+    sal_Bool            IsDisplayable() const                       { return mbDisplayable; }
 
     struct MenuBarButtonCallbackArg
     {
         sal_uInt16      nId;             // Id of the button
-        bool        bHighlight;      // highlight on/off
-        MenuBar*    pMenuBar;        // menubar the button belongs to
+        bool            bHighlight;      // highlight on/off
+        MenuBar*        pMenuBar;        // menubar the button belongs to
     };
     // add an arbitrary button to the menubar (will appear next to closer)
     // passed link will be call with a MenuBarButtonCallbackArg on press
     // passed string will be set as tooltip
-    sal_uInt16              AddMenuBarButton( const Image&, const Link&, const String&, sal_uInt16 nPos = 0 );
+    sal_uInt16          AddMenuBarButton( const Image&, const Link&, const String&, sal_uInt16 nPos = 0 );
     // set the highlight link for additional button with ID nId
     // highlight link will be called with a MenuBarButtonHighlightArg
     // the bHighlight member of that struct shall contain the new state

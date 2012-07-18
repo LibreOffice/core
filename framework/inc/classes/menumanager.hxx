@@ -72,7 +72,7 @@ class MenuManager : public ThreadHelpBase           ,
         MenuManager(
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
             REFERENCE< XFRAME >& rFrame,
-            Menu* pMenu,
+            AbstractMenu* pMenu,
             sal_Bool bDelete,
             sal_Bool bDeleteChildren );
 
@@ -84,33 +84,33 @@ class MenuManager : public ThreadHelpBase           ,
         // XEventListener
         virtual void SAL_CALL disposing( const EVENTOBJECT& Source ) throw ( RUNTIMEEXCEPTION );
 
-        DECL_LINK( Select, Menu * );
+        DECL_LINK( Select, AbstractMenu * );
 
-        Menu*   GetMenu() const { return m_pVCLMenu; }
+        AbstractMenu*   GetMenu() const { return m_pVCLMenu; }
 
         void    RemoveListener();
 
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& getServiceFactory();
 
-        static void UpdateSpecialWindowMenu( Menu* pMenu ,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,IMutex& _rMutex);
+        static void UpdateSpecialWindowMenu( AbstractMenu* pMenu ,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,IMutex& _rMutex);
         static void FillMenuImages(
             ::com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& xFrame,
-            Menu* _pMenu,
+            AbstractMenu* _pMenu,
             sal_Bool bShowMenuImages
         );
 
     protected:
         DECL_LINK(Highlight, void *);
-        DECL_LINK( Activate, Menu * );
-        DECL_LINK( Deactivate, Menu * );
+        DECL_LINK( Activate, AbstractMenu * );
+        DECL_LINK( Deactivate, AbstractMenu * );
 
     private:
-        void UpdateSpecialFileMenu( Menu* pMenu );
-        void UpdateSpecialWindowMenu( Menu* pMenu );
+        void UpdateSpecialFileMenu( AbstractMenu* pMenu );
+        void UpdateSpecialWindowMenu( AbstractMenu* pMenu );
         void ClearMenuDispatch(const EVENTOBJECT& Source = EVENTOBJECT(),bool _bRemoveOnly = true);
         void SetHdl();
         void AddMenu(PopupMenu* _pPopupMenu,const ::rtl::OUString& _sItemCommand,sal_uInt16 _nItemId,sal_Bool _bDelete,sal_Bool _bDeleteChildren);
-        sal_uInt16 FillItemCommand(::rtl::OUString& _rItemCommand,Menu* _pMenu,sal_uInt16 _nIndex) const;
+        sal_uInt16 FillItemCommand(::rtl::OUString& _rItemCommand, AbstractMenu* _pMenu,sal_uInt16 _nIndex) const;
 
 
         struct MenuItemHandler
@@ -141,7 +141,7 @@ class MenuManager : public ThreadHelpBase           ,
         sal_Bool                            m_bIsBookmarkMenu;
         sal_Bool                            m_bShowMenuImages;
         ::rtl::OUString                     m_aMenuItemCommand;
-        Menu*                               m_pVCLMenu;
+        AbstractMenu*                       m_pVCLMenu;
         REFERENCE< XFRAME >                 m_xFrame;
         ::std::vector< MenuItemHandler* >   m_aMenuItemHandlerVector;
 

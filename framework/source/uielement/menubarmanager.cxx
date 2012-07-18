@@ -184,7 +184,7 @@ MenuBarManager::MenuBarManager(
     const Reference< XURLTransformer >& _xURLTransformer,
     const Reference< XDispatchProvider >& rDispatchProvider,
     const rtl::OUString& rModuleIdentifier,
-    Menu* pMenu, sal_Bool bDelete, sal_Bool bDeleteChildren )
+    AbstractMenu* pMenu, sal_Bool bDelete, sal_Bool bDeleteChildren )
 : ThreadHelpBase( &Application::GetSolarMutex() ), OWeakObject()
     , m_bDisposed( sal_False )
     , m_bRetrieveImages( sal_False )
@@ -760,7 +760,7 @@ void SAL_CALL MenuBarManager::disposing( const EventObject& Source ) throw ( Run
 }
 
 
-void MenuBarManager::CheckAndAddMenuExtension( Menu* pMenu )
+void MenuBarManager::CheckAndAddMenuExtension( AbstractMenu* pMenu )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "MenuBarManager::CheckAndAddMenuExtension" );
 
@@ -791,7 +791,7 @@ void MenuBarManager::CheckAndAddMenuExtension( Menu* pMenu )
     }
 }
 
-static void lcl_CheckForChildren(Menu* pMenu, sal_uInt16 nItemId)
+static void lcl_CheckForChildren(AbstractMenu* pMenu, sal_uInt16 nItemId)
 {
     if (PopupMenu* pThisPopup = pMenu->GetPopupMenu( nItemId ))
         pMenu->EnableItem( nItemId, pThisPopup->GetItemCount() ? true : false );
@@ -831,7 +831,7 @@ private:
 
 }
 
-IMPL_LINK( MenuBarManager, Activate, Menu *, pMenu )
+IMPL_LINK( MenuBarManager, Activate, AbstractMenu *, pMenu )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "MenuBarManager::Activate" );
     if ( pMenu == m_pVCLMenu )
@@ -1030,7 +1030,7 @@ IMPL_LINK( MenuBarManager, Activate, Menu *, pMenu )
 }
 
 
-IMPL_LINK( MenuBarManager, Deactivate, Menu *, pMenu )
+IMPL_LINK( MenuBarManager, Deactivate, AbstractMenu *, pMenu )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "MenuBarManager::Deactivate" );
     if ( pMenu == m_pVCLMenu )
@@ -1066,7 +1066,7 @@ IMPL_LINK( MenuBarManager, AsyncSettingsHdl, Timer*,)
     return 0;
 }
 
-IMPL_LINK( MenuBarManager, Select, Menu *, pMenu )
+IMPL_LINK( MenuBarManager, Select, AbstractMenu *, pMenu )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "MenuBarManager::Select" );
     URL                     aTargetURL;
@@ -1238,7 +1238,7 @@ sal_Bool MenuBarManager::CreatePopupMenuController( MenuItemHandler* pMenuItemHa
     return sal_False;
 }
 
-void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rFrame, const Reference< XDispatchProvider >& rDispatchProvider, const rtl::OUString& rModuleIdentifier, sal_Bool bDelete, sal_Bool bDeleteChildren )
+void MenuBarManager::FillMenuManager( AbstractMenu* pMenu, const Reference< XFrame >& rFrame, const Reference< XDispatchProvider >& rDispatchProvider, const rtl::OUString& rModuleIdentifier, sal_Bool bDelete, sal_Bool bDeleteChildren )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "MenuBarManager::FillMenuManager" );
     m_xFrame            = rFrame;
@@ -1682,8 +1682,8 @@ void MenuBarManager::RetrieveImageManagers()
 }
 
 void MenuBarManager::FillMenuWithConfiguration(
-    sal_uInt16&                             nId,
-    Menu*                               pMenu,
+    sal_uInt16&                         nId,
+    AbstractMenu*                       pMenu,
     const ::rtl::OUString&              rModuleIdentifier,
     const Reference< XIndexAccess >&    rItemContainer,
     const Reference< XURLTransformer >& rTransformer )
@@ -1693,7 +1693,7 @@ void MenuBarManager::FillMenuWithConfiguration(
     MenuBarManager::FillMenu( nId, pMenu, rModuleIdentifier, rItemContainer, xEmptyDispatchProvider );
 
     // Merge add-on menu entries into the menu bar
-    MenuBarManager::MergeAddonMenus( static_cast< Menu* >( pMenu ),
+    MenuBarManager::MergeAddonMenus( static_cast< AbstractMenu* >( pMenu ),
                                      AddonsOptions().GetMergeMenuInstructions(),
                                      rModuleIdentifier );
 
@@ -1718,8 +1718,8 @@ void MenuBarManager::FillMenuWithConfiguration(
 }
 
 void MenuBarManager::FillMenu(
-    sal_uInt16&                               nId,
-    Menu*                                 pMenu,
+    sal_uInt16&                           nId,
+    AbstractMenu*                         pMenu,
     const rtl::OUString&                  rModuleIdentifier,
     const Reference< XIndexAccess >&      rItemContainer,
     const Reference< XDispatchProvider >& rDispatchProvider )
@@ -1829,7 +1829,7 @@ void MenuBarManager::FillMenu(
 }
 
 void MenuBarManager::MergeAddonMenus(
-    Menu* pMenuBar,
+    AbstractMenu* pMenuBar,
     const MergeMenuInstructionContainer& aMergeInstructionContainer,
     const ::rtl::OUString& rModuleIdentifier )
 {
@@ -1854,7 +1854,7 @@ void MenuBarManager::MergeAddonMenus(
             MenuBarMerger::GetSubMenu( rMergeInstruction.aMergeMenu, aMergeMenuItems );
 
             // try to find the reference point for our merge operation
-            Menu* pMenu = pMenuBar;
+            AbstractMenu* pMenu = pMenuBar;
             ReferencePathInfo aResult = MenuBarMerger::FindReferencePath( aMergePath, pMenu );
 
             if ( aResult.eResult == RP_OK )
@@ -1933,7 +1933,7 @@ void MenuBarManager::SetItemContainer( const Reference< XIndexAccess >& rItemCon
         sal_uInt16          nId = 1;
 
         // Fill menu bar with container contents
-        FillMenuWithConfiguration( nId, (Menu *)m_pVCLMenu, m_aModuleIdentifier, rItemContainer, m_xURLTransformer );
+        FillMenuWithConfiguration( nId, (AbstractMenu *)m_pVCLMenu, m_aModuleIdentifier, rItemContainer, m_xURLTransformer );
 
         // Refill menu manager again
         Reference< XDispatchProvider > xDispatchProvider;
@@ -2012,7 +2012,7 @@ void MenuBarManager::AddMenu(MenuBarManager* pSubMenuManager,const ::rtl::OUStri
     m_aMenuItemHandlerVector.push_back( pMenuItemHandler );
 }
 
-sal_uInt16 MenuBarManager::FillItemCommand(::rtl::OUString& _rItemCommand,Menu* _pMenu,sal_uInt16 _nIndex) const
+sal_uInt16 MenuBarManager::FillItemCommand(::rtl::OUString& _rItemCommand, AbstractMenu* _pMenu,sal_uInt16 _nIndex) const
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "MenuBarManager::FillItemCommand" );
     sal_uInt16 nItemId = _pMenu->GetItemId( _nIndex );
