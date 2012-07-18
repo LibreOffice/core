@@ -477,6 +477,9 @@ void NumericFormatter::ImplInit()
     mnLastValue         = 0;
     mnMin               = 0;
     mnMax               = 0x7FFFFFFFFFFFFFFFLL;
+#ifdef OS2 // see i120312 for details.
+    mnMax               = 0x00000000FFFFFFFFLL;
+#endif
     mnCorrectedValue    = 0;
     mnDecimalDigits     = 2;
     mnType              = FORMAT_NUMERIC;
