@@ -29,6 +29,5 @@ $(eval $(call gb_Package_Package,reportbuilder_license,$(SRCDIR)/reportbuilder/l
 
 $(eval $(call gb_Package_add_file,reportbuilder,bin/reportbuilder/readme_en-US.html,readme_en-US.html))
 $(eval $(call gb_Package_add_file,reportbuilder,bin/reportbuilder/readme_en-US.txt,readme_en-US.txt))
-$(eval $(call gb_Package_add_file,reportbuilder,bin/reportbuilder/THIRDPARTYREADMELICENSE.html,THIRDPARTYREADMELICENSE.html))
 
 # vim: set shiftwidth=4 tabstop=4 noexpandtab:

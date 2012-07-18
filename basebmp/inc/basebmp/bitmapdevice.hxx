@@ -1,30 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 #ifndef INCLUDED_BASEBMP_BITMAPDEVICE_HXX
 #define INCLUDED_BASEBMP_BITMAPDEVICE_HXX
@@ -554,104 +545,103 @@ public:
                            const BitmapDeviceSharedPtr& rClip );
 
 protected:
-    BitmapDevice( const basegfx::B2IBox&           rBounds,
-                  sal_Int32                        nScanlineFormat,
-                  sal_Int32                        nScanlineStride,
-                  sal_uInt8*                       pFirstScanline,
-                  const RawMemorySharedArray&      rMem,
-                  const PaletteMemorySharedVector& rPalette );
-
-    virtual ~BitmapDevice();
+    BASEBMP_DLLPRIVATE BitmapDevice( const basegfx::B2IBox&           rBounds,
+                                     sal_Int32                        nScanlineFormat,
+                                     sal_Int32                        nScanlineStride,
+                                     sal_uInt8*                       pFirstScanline,
+                                     const RawMemorySharedArray&      rMem,
+                                     const PaletteMemorySharedVector& rPalette );
+    BASEBMP_DLLPRIVATE virtual ~BitmapDevice();
 
 private:
-    virtual bool isCompatibleBitmap( const BitmapDeviceSharedPtr& bmp ) const = 0;
-    virtual bool isCompatibleClipMask( const BitmapDeviceSharedPtr& bmp ) const = 0;
-    virtual bool isCompatibleAlphaMask( const BitmapDeviceSharedPtr& bmp ) const = 0;
+    BASEBMP_DLLPRIVATE virtual bool isCompatibleBitmap( const BitmapDeviceSharedPtr& bmp ) const = 0;
+    BASEBMP_DLLPRIVATE virtual bool isCompatibleClipMask( const BitmapDeviceSharedPtr& bmp ) const = 0;
+    BASEBMP_DLLPRIVATE virtual bool isCompatibleAlphaMask( const BitmapDeviceSharedPtr& bmp ) const = 0;
 
-    virtual void clear_i( Color                  fillColor,
-                          const basegfx::B2IBox& rBounds ) = 0;
+    BASEBMP_DLLPRIVATE virtual void clear_i( Color                  fillColor,
+                                             const basegfx::B2IBox& rBounds ) = 0;
 
-    virtual void setPixel_i( const basegfx::B2IPoint& rPt,
-                             Color                    lineColor,
-                             DrawMode                 drawMode ) = 0;
-    virtual void setPixel_i( const basegfx::B2IPoint&     rPt,
-                             Color                        lineColor,
-                             DrawMode                     drawMode,
-                             const BitmapDeviceSharedPtr& rClip ) = 0;
+    BASEBMP_DLLPRIVATE virtual void setPixel_i( const basegfx::B2IPoint& rPt,
+                                               Color                    lineColor,
+                                               DrawMode                 drawMode ) = 0;
+    BASEBMP_DLLPRIVATE virtual void setPixel_i( const basegfx::B2IPoint&     rPt,
+                                                Color                        lineColor,
+                                                DrawMode                     drawMode,
+                                                const BitmapDeviceSharedPtr& rClip ) = 0;
 
-    virtual Color getPixel_i( const basegfx::B2IPoint& rPt ) = 0;
+    BASEBMP_DLLPRIVATE virtual Color getPixel_i( const basegfx::B2IPoint& rPt ) = 0;
 
-    virtual sal_uInt32 getPixelData_i( const basegfx::B2IPoint& rPt ) = 0;
+    BASEBMP_DLLPRIVATE virtual sal_uInt32 getPixelData_i( const basegfx::B2IPoint& rPt ) = 0;
 
-    virtual void drawLine_i( const basegfx::B2IPoint& rPt1,
-                             const basegfx::B2IPoint& rPt2,
-                             const basegfx::B2IBox&   rBounds,
-                             Color                    lineColor,
-                             DrawMode                 drawMode ) = 0;
-    virtual void drawLine_i( const basegfx::B2IPoint&     rPt1,
-                             const basegfx::B2IPoint&     rPt2,
-                             const basegfx::B2IBox&       rBounds,
-                             Color                        lineColor,
-                             DrawMode                     drawMode,
-                             const BitmapDeviceSharedPtr& rClip ) = 0;
+    BASEBMP_DLLPRIVATE virtual void drawLine_i( const basegfx::B2IPoint& rPt1,
+                                                const basegfx::B2IPoint& rPt2,
+                                                const basegfx::B2IBox&   rBounds,
+                                                Color                    lineColor,
+                                                DrawMode                 drawMode ) = 0;
+    BASEBMP_DLLPRIVATE virtual void drawLine_i( const basegfx::B2IPoint&     rPt1,
+                                                const basegfx::B2IPoint&     rPt2,
+                                                const basegfx::B2IBox&       rBounds,
+                                                Color                        lineColor,
+                                                DrawMode                     drawMode,
+                                                const BitmapDeviceSharedPtr& rClip ) = 0;
 
-    virtual void drawPolygon_i( const basegfx::B2DPolygon& rPoly,
-                                const basegfx::B2IBox&     rBounds,
-                                Color                      lineColor,
-                                DrawMode                   drawMode ) = 0;
-    virtual void drawPolygon_i( const basegfx::B2DPolygon&   rPoly,
-                                const basegfx::B2IBox&       rBounds,
-                                Color                        lineColor,
-                                DrawMode                     drawMode,
-                                const BitmapDeviceSharedPtr& rClip ) = 0;
+    BASEBMP_DLLPRIVATE virtual void drawPolygon_i( const basegfx::B2DPolygon& rPoly,
+                                                   const basegfx::B2IBox&     rBounds,
+                                                   Color                      lineColor,
+                                                   DrawMode                   drawMode ) = 0;
+    BASEBMP_DLLPRIVATE virtual void drawPolygon_i( const basegfx::B2DPolygon&   rPoly,
+                                                   const basegfx::B2IBox&       rBounds,
+                                                   Color                        lineColor,
+                                                   DrawMode                     drawMode,
+                                                   const BitmapDeviceSharedPtr& rClip ) = 0;
 
-    virtual void fillPolyPolygon_i( const basegfx::B2DPolyPolygon& rPoly,
-                                    Color                          fillColor,
-                                    DrawMode                       drawMode,
-                                    const basegfx::B2IBox&         rBounds ) = 0;
-    virtual void fillPolyPolygon_i( const basegfx::B2DPolyPolygon& rPoly,
-                                    Color                          fillColor,
-                                    DrawMode                       drawMode,
-                                    const basegfx::B2IBox&         rBounds,
-                                    const BitmapDeviceSharedPtr&   rClip ) = 0;
-
-    // must work with *this == rSrcBitmap!
-    virtual void drawBitmap_i( const BitmapDeviceSharedPtr& rSrcBitmap,
-                               const basegfx::B2IBox&       rSrcRect,
-                               const basegfx::B2IBox&       rDstRect,
-                               DrawMode                     drawMode ) = 0;
-    virtual void drawBitmap_i( const BitmapDeviceSharedPtr& rSrcBitmap,
-                               const basegfx::B2IBox&       rSrcRect,
-                               const basegfx::B2IBox&       rDstRect,
-                               DrawMode                     drawMode,
-                               const BitmapDeviceSharedPtr& rClip ) = 0;
+    BASEBMP_DLLPRIVATE virtual void fillPolyPolygon_i( const basegfx::B2DPolyPolygon& rPoly,
+                                                       Color                          fillColor,
+                                                       DrawMode                       drawMode,
+                                                       const basegfx::B2IBox&         rBounds ) = 0;
+    BASEBMP_DLLPRIVATE virtual void fillPolyPolygon_i( const basegfx::B2DPolyPolygon& rPoly,
+                                                       Color                          fillColor,
+                                                       DrawMode                       drawMode,
+                                                       const basegfx::B2IBox&         rBounds,
+                                                       const BitmapDeviceSharedPtr&   rClip ) = 0;
 
     // must work with *this == rSrcBitmap!
-    virtual void drawMaskedColor_i( Color                        rSrcColor,
-                                    const BitmapDeviceSharedPtr& rAlphaMask,
-                                    const basegfx::B2IBox&       rSrcRect,
-                                    const basegfx::B2IPoint&     rDstPoint ) = 0;
-    virtual void drawMaskedColor_i( Color                        rSrcColor,
-                                    const BitmapDeviceSharedPtr& rAlphaMask,
-                                    const basegfx::B2IBox&       rSrcRect,
-                                    const basegfx::B2IPoint&     rDstPoint,
-                                    const BitmapDeviceSharedPtr& rClip ) = 0;
+    BASEBMP_DLLPRIVATE virtual void drawBitmap_i( const BitmapDeviceSharedPtr& rSrcBitmap,
+                                                  const basegfx::B2IBox&       rSrcRect,
+                                                  const basegfx::B2IBox&       rDstRect,
+                                                  DrawMode                     drawMode ) = 0;
+    BASEBMP_DLLPRIVATE virtual void drawBitmap_i( const BitmapDeviceSharedPtr& rSrcBitmap,
+                                                  const basegfx::B2IBox&       rSrcRect,
+                                                  const basegfx::B2IBox&       rDstRect,
+                                                  DrawMode                     drawMode,
+                                                  const BitmapDeviceSharedPtr& rClip ) = 0;
 
     // must work with *this == rSrcBitmap!
-    virtual void drawMaskedBitmap_i( const BitmapDeviceSharedPtr& rSrcBitmap,
-                                     const BitmapDeviceSharedPtr& rMask,
-                                     const basegfx::B2IBox&       rSrcRect,
-                                     const basegfx::B2IBox&       rDstRect,
-                                     DrawMode                     drawMode ) = 0;
-    virtual void drawMaskedBitmap_i( const BitmapDeviceSharedPtr& rSrcBitmap,
-                                     const BitmapDeviceSharedPtr& rMask,
-                                     const basegfx::B2IBox&       rSrcRect,
-                                     const basegfx::B2IBox&       rDstRect,
-                                     DrawMode                     drawMode,
-                                     const BitmapDeviceSharedPtr& rClip ) = 0;
+    BASEBMP_DLLPRIVATE virtual void drawMaskedColor_i( Color                        rSrcColor,
+                                                       const BitmapDeviceSharedPtr& rAlphaMask,
+                                                       const basegfx::B2IBox&       rSrcRect,
+                                                       const basegfx::B2IPoint&     rDstPoint ) = 0;
+    BASEBMP_DLLPRIVATE virtual void drawMaskedColor_i( Color                        rSrcColor,
+                                                       const BitmapDeviceSharedPtr& rAlphaMask,
+                                                       const basegfx::B2IBox&       rSrcRect,
+                                                       const basegfx::B2IPoint&     rDstPoint,
+                                                       const BitmapDeviceSharedPtr& rClip ) = 0;
 
-    virtual IBitmapDeviceDamageTrackerSharedPtr getDamageTracker_i() const = 0;
-    virtual void setDamageTracker_i( const IBitmapDeviceDamageTrackerSharedPtr& rDamage ) = 0;
+    // must work with *this == rSrcBitmap!
+    BASEBMP_DLLPRIVATE virtual void drawMaskedBitmap_i( const BitmapDeviceSharedPtr& rSrcBitmap,
+                                                        const BitmapDeviceSharedPtr& rMask,
+                                                        const basegfx::B2IBox&       rSrcRect,
+                                                        const basegfx::B2IBox&       rDstRect,
+                                                        DrawMode                     drawMode ) = 0;
+    BASEBMP_DLLPRIVATE virtual void drawMaskedBitmap_i( const BitmapDeviceSharedPtr& rSrcBitmap,
+                                                        const BitmapDeviceSharedPtr& rMask,
+                                                        const basegfx::B2IBox&       rSrcRect,
+                                                        const basegfx::B2IBox&       rDstRect,
+                                                        DrawMode                     drawMode,
+                                                        const BitmapDeviceSharedPtr& rClip ) = 0;
+
+    BASEBMP_DLLPRIVATE virtual IBitmapDeviceDamageTrackerSharedPtr getDamageTracker_i() const = 0;
+    BASEBMP_DLLPRIVATE virtual void setDamageTracker_i( const IBitmapDeviceDamageTrackerSharedPtr& rDamage ) = 0;
 
     BitmapDeviceSharedPtr getGenericRenderer() const;
 
@@ -660,7 +650,7 @@ private:
 
 /** Function to create a BitmapDevice for given scanline format
  */
-BASEBMP_DLLPUBLIC BitmapDeviceSharedPtr createBitmapDevice( const basegfx::B2IVector& rSize,
+BitmapDeviceSharedPtr BASEBMP_DLLPUBLIC createBitmapDevice( const basegfx::B2IVector& rSize,
                                                             bool                      bTopDown,
                                                             sal_Int32                 nScanlineFormat );
 
@@ -671,7 +661,7 @@ BASEBMP_DLLPUBLIC BitmapDeviceSharedPtr createBitmapDevice( const basegfx::B2IVe
     lookups for the whole range of pixel values from the specified
     format.
  */
-BASEBMP_DLLPUBLIC BitmapDeviceSharedPtr createBitmapDevice( const basegfx::B2IVector&        rSize,
+BitmapDeviceSharedPtr BASEBMP_DLLPUBLIC createBitmapDevice( const basegfx::B2IVector&        rSize,
                                                             bool                             bTopDown,
                                                             sal_Int32                        nScanlineFormat,
                                                             const PaletteMemorySharedVector& rPalette );
@@ -682,7 +672,7 @@ BASEBMP_DLLPUBLIC BitmapDeviceSharedPtr createBitmapDevice( const basegfx::B2IVe
     Note: the provided memory must have sufficient size, to store the
     image of the specified area and format.
  */
-BASEBMP_DLLPUBLIC BitmapDeviceSharedPtr createBitmapDevice( const basegfx::B2IVector&        rSize,
+BitmapDeviceSharedPtr BASEBMP_DLLPUBLIC createBitmapDevice( const basegfx::B2IVector&        rSize,
                                                             bool                             bTopDown,
                                                             sal_Int32                        nScanlineFormat,
                                                             const RawMemorySharedArray&      rMem,
@@ -697,7 +687,7 @@ BASEBMP_DLLPUBLIC BitmapDeviceSharedPtr createBitmapDevice( const basegfx::B2IVe
     area. Useful to implement rectangular clips (usually faster than
     setting up a 1bpp clip mask).
  */
-BASEBMP_DLLPUBLIC BitmapDeviceSharedPtr subsetBitmapDevice( const BitmapDeviceSharedPtr& rProto,
+BitmapDeviceSharedPtr BASEBMP_DLLPUBLIC subsetBitmapDevice( const BitmapDeviceSharedPtr& rProto,
                                                             const basegfx::B2IBox&       rSubset );
 
 /** Function to clone a BitmapDevice from a given prototype.
@@ -706,7 +696,7 @@ BASEBMP_DLLPUBLIC BitmapDeviceSharedPtr subsetBitmapDevice( const BitmapDeviceSh
     copied, only the size can be varied. Note that the prototype's
     bitmap content is <em>not</em> copied, only a palette (if any).
  */
-BASEBMP_DLLPUBLIC BitmapDeviceSharedPtr cloneBitmapDevice( const basegfx::B2IVector&    rSize,
+BitmapDeviceSharedPtr BASEBMP_DLLPUBLIC cloneBitmapDevice( const basegfx::B2IVector&    rSize,
                                                            const BitmapDeviceSharedPtr& rProto );
 
 }

@@ -32,7 +32,6 @@ $(eval $(call gb_Extension_add_files,report-builder,,\
 	$(call gb_Jar_get_outdir_target,sun-report-builder) \
 	$(SRCDIR)/reportbuilder/license/readme_en-US.html \
 	$(SRCDIR)/reportbuilder/license/readme_en-US.txt \
-	$(SRCDIR)/reportbuilder/license/THIRDPARTYREADMELICENSE.html \
 	$(SRCDIR)/reportbuilder/util/components.rdb \
 ))
 
