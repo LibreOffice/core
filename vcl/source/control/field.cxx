@@ -694,10 +694,14 @@ sal_Int64 NumericFormatter::Normalize( sal_Int64 nValue ) const
 sal_Int64 NumericFormatter::Denormalize( sal_Int64 nValue ) const
 {
     sal_Int64 nFactor = ImplPower10( GetDecimalDigits() );
+
+    if((nValue < ( SAL_MIN_INT64 + nFactor )) ||
+       (nValue > ( SAL_MAX_INT64 - nFactor )))
+    return ( nValue / nFactor );
     if( nValue < 0 )
-        return ((nValue-(nFactor/2)) / nFactor );
+    return ((nValue-(nFactor/2)) / nFactor );
     else
-        return ((nValue+(nFactor/2)) / nFactor );
+    return ((nValue+(nFactor/2)) / nFactor );
 }
 
 // -----------------------------------------------------------------------
@@ -1247,13 +1251,18 @@ static double nonValueDoubleToValueDouble( double nValue )
 sal_Int64 MetricField::ConvertValue( sal_Int64 nValue, sal_Int64 mnBaseValue, sal_uInt16 nDecDigits,
                                      FieldUnit eInUnit, FieldUnit eOutUnit )
 {
+    double nDouble = nonValueDoubleToValueDouble( ConvertDoubleValue(
+                (double)nValue, mnBaseValue, nDecDigits, eInUnit, eOutUnit ) );
+    sal_Int64 nLong ;
+
     // caution: precision loss in double cast
-    return static_cast<sal_Int64>(
-        // #150733# cast double to sal_Int64 can throw a
-        // EXCEPTION_FLT_INVALID_OPERATION on Windows
-        nonValueDoubleToValueDouble(
-            ConvertDoubleValue( (double)nValue, mnBaseValue, nDecDigits,
-                                eInUnit, eOutUnit ) ) );
+    if ( nDouble <= (double)SAL_MIN_INT64 )
+    nLong = SAL_MIN_INT64;
+    else if ( nDouble >= (double)SAL_MAX_INT64 )
+    nLong = SAL_MAX_INT64;
+    else
+    nLong = static_cast<sal_Int64>( nDouble );
+    return ( nLong );
 }
 
 // -----------------------------------------------------------------------
@@ -1262,8 +1271,6 @@ sal_Int64 MetricField::ConvertValue( sal_Int64 nValue, sal_uInt16 nDigits,
                                      MapUnit eInUnit, FieldUnit eOutUnit )
 {
     return static_cast<sal_Int64>(
-        // #150733# cast double to sal_Int64 can throw a
-        // EXCEPTION_FLT_INVALID_OPERATION on Windows
         nonValueDoubleToValueDouble(
             ConvertDoubleValue( nValue, nDigits, eInUnit, eOutUnit ) ) );
 }
