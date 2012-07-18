@@ -66,7 +66,6 @@ ODatabaseMetaDataResultSet::ODatabaseMetaDataResultSet(OConnection* _pConnection
     ,m_nCurrentFetchState(0)
     ,m_bWasNull(sal_True)
     ,m_bEOF(sal_False)
-    ,m_bFreeHandle(sal_False)
 {
     OSL_ENSURE(m_pConnection,"ODatabaseMetaDataResultSet::ODatabaseMetaDataResultSet: No parent set!");
     if( SQL_NULL_HANDLE == m_aStatementHandle )
@@ -96,8 +95,8 @@ void ODatabaseMetaDataResultSet::disposing(void)
     OPropertySetHelper::disposing();
 
     ::osl::MutexGuard aGuard(m_aMutex);
-    if(m_bFreeHandle)
-        m_pConnection->freeStatementHandle(m_aStatementHandle);
+
+    m_pConnection->freeStatementHandle(m_aStatementHandle);
 
     m_aStatement    = NULL;
 m_xMetaData.clear();
@@ -846,7 +845,6 @@ void ODatabaseMetaDataResultSet::openTables(const Any& catalog, const ::rtl::OUS
                             const ::rtl::OUString& tableNamePattern,
                             const Sequence< ::rtl::OUString >& types )  throw(SQLException, RuntimeException)
 {
-    m_bFreeHandle = sal_True;
     ::rtl::OString aPKQ,aPKO,aPKN,aCOL;
     const ::rtl::OUString *pSchemaPat = NULL;
 
@@ -894,7 +892,6 @@ void ODatabaseMetaDataResultSet::openTables(const Any& catalog, const ::rtl::OUS
 //-----------------------------------------------------------------------------
 void ODatabaseMetaDataResultSet::openTablesTypes( ) throw(SQLException, RuntimeException)
 {
-    m_bFreeHandle = sal_True;
     SQLRETURN nRetcode = N3SQLTables(m_aStatementHandle,
                             0,0,
                             0,0,
@@ -911,7 +908,6 @@ void ODatabaseMetaDataResultSet::openTablesTypes( ) throw(SQLException, RuntimeE
 // -------------------------------------------------------------------------
 void ODatabaseMetaDataResultSet::openCatalogs() throw(SQLException, RuntimeException)
 {
-    m_bFreeHandle = sal_True;
     SQLRETURN nRetcode = N3SQLTables(m_aStatementHandle,
                             (SDB_ODBC_CHAR *) SQL_ALL_CATALOGS,SQL_NTS,
                             (SDB_ODBC_CHAR *) "",SQL_NTS,
@@ -929,7 +925,6 @@ void ODatabaseMetaDataResultSet::openCatalogs() throw(SQLException, RuntimeExcep
 // -------------------------------------------------------------------------
 void ODatabaseMetaDataResultSet::openSchemas() throw(SQLException, RuntimeException)
 {
-    m_bFreeHandle = sal_True;
     SQLRETURN nRetcode = N3SQLTables(m_aStatementHandle,
                             (SDB_ODBC_CHAR *) "",SQL_NTS,
                             (SDB_ODBC_CHAR *) SQL_ALL_SCHEMAS,SQL_NTS,
@@ -955,7 +950,6 @@ void ODatabaseMetaDataResultSet::openColumnPrivileges(  const Any& catalog, cons
     else
         pSchemaPat = NULL;
 
-    m_bFreeHandle = sal_True;
     ::rtl::OString aPKQ,aPKO,aPKN,aCOL;
 
     if ( catalog.hasValue() )
@@ -991,7 +985,6 @@ void ODatabaseMetaDataResultSet::openColumns(   const Any& catalog,             
     else
         pSchemaPat = NULL;
 
-    m_bFreeHandle = sal_True;
     ::rtl::OString aPKQ,aPKO,aPKN,aCOL;
     if ( catalog.hasValue() )
         aPKQ = ::rtl::OUStringToOString(comphelper::getString(catalog),m_nTextEncoding);
@@ -1060,7 +1053,6 @@ void ODatabaseMetaDataResultSet::openProcedureColumns(  const Any& catalog,     
     else
         pSchemaPat = NULL;
 
-    m_bFreeHandle = sal_True;
     ::rtl::OString aPKQ,aPKO,aPKN,aCOL;
     if ( catalog.hasValue() )
         aPKQ = ::rtl::OUStringToOString(comphelper::getString(catalog),m_nTextEncoding);
@@ -1095,7 +1087,6 @@ void ODatabaseMetaDataResultSet::openProcedures(const Any& catalog, const ::rtl:
     else
         pSchemaPat = NULL;
 
-    m_bFreeHandle = sal_True;
     ::rtl::OString aPKQ,aPKO,aPKN,aCOL;
 
     if ( catalog.hasValue() )
@@ -1140,7 +1131,6 @@ void ODatabaseMetaDataResultSet::openSpecialColumns(sal_Bool _bRowVer,const Any&
     else
         pSchemaPat = NULL;
 
-    m_bFreeHandle = sal_True;
     ::rtl::OString aPKQ,aPKO,aPKN,aCOL;
     if ( catalog.hasValue() )
     aPKQ = ::rtl::OUStringToOString(comphelper::getString(catalog),m_nTextEncoding);
@@ -1179,8 +1169,6 @@ void ODatabaseMetaDataResultSet::openForeignKeys( const Any& catalog, const ::rt
                                   const Any& catalog2, const ::rtl::OUString* schema2,
                                   const ::rtl::OUString* table2) throw(SQLException, RuntimeException)
 {
-    m_bFreeHandle = sal_True;
-
     ::rtl::OString aPKQ,aPKO,aPKN, aFKQ, aFKO, aFKN;
     if ( catalog.hasValue() )
         aPKQ = ::rtl::OUStringToOString(comphelper::getString(catalog),m_nTextEncoding);
@@ -1230,7 +1218,6 @@ void ODatabaseMetaDataResultSet::openPrimaryKeys(const Any& catalog, const ::rtl
     else
         pSchemaPat = NULL;
 
-    m_bFreeHandle = sal_True;
     ::rtl::OString aPKQ,aPKO,aPKN,aCOL;
 
     if ( catalog.hasValue() )
@@ -1260,7 +1247,6 @@ void ODatabaseMetaDataResultSet::openTablePrivileges(const Any& catalog, const :
     else
         pSchemaPat = NULL;
 
-    m_bFreeHandle = sal_True;
     ::rtl::OString aPKQ,aPKO,aPKN;
 
     if ( catalog.hasValue() )
@@ -1291,7 +1277,6 @@ void ODatabaseMetaDataResultSet::openIndexInfo( const Any& catalog, const ::rtl:
     else
         pSchemaPat = NULL;
 
-    m_bFreeHandle = sal_True;
     ::rtl::OString aPKQ,aPKO,aPKN;
 
     if ( catalog.hasValue() )

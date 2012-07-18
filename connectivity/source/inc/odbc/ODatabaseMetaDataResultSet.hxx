@@ -66,7 +66,7 @@ namespace connectivity
             ::std::map<sal_Int32, ::connectivity::TInt2StringMap >              m_aIntValueRange;
             ::std::map<sal_Int32,SWORD>                                         m_aODBCColumnTypes;
 
-            SQLHANDLE                                                                   m_aStatementHandle;
+            SQLHANDLE                                                                   m_aStatementHandle;   // ... until freed
             SQLHANDLE                                                                   m_aConnectionHandle;
             ::com::sun::star::uno::WeakReferenceHelper                                  m_aStatement;
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData>        m_xMetaData;
@@ -79,7 +79,6 @@ namespace connectivity
             SQLRETURN                                   m_nCurrentFetchState;
             sal_Bool                                    m_bWasNull;
             sal_Bool                                    m_bEOF;                 // after last record
-            sal_Bool                                    m_bFreeHandle;
 
             // set the columncount of the driver
             void checkColumnCount();
