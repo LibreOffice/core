@@ -48,6 +48,14 @@ using namespace ::com::sun::star;
 
 #define JPEGMINREAD 512
 
+namespace {
+    // Arbitrary maximal size (256M) of bitmaps after they have been decoded.
+    // It is used to prevent excessive swapping due to large buffers in
+    // virtual memory.
+    // May have to be tuned if it turns out to be too large or too small.
+    static const sal_uInt64 MAX_BITMAP_BYTE_SIZE = sal_uInt64(256 * 1024 * 1024);
+}
+
 // -------------
 // - (C-Calls) -
 // -------------
@@ -338,7 +346,21 @@ void* JPEGReader::CreateBitmap( void* pParam )
     void* pBmpBuf = NULL;
 
     if( pAcc )
+    {
         aBmp.ReleaseAccess( pAcc );
+        aBmp = Bitmap();
+        pAcc = NULL;
+    }
+
+    // Check if the bitmap is untypically large.
+    if (aSize.Width()<=0
+        || aSize.Height()<=0
+        || sal_uInt64(aSize.Width())*sal_uInt64(aSize.Height())*(bGray?1:3) > MAX_BITMAP_BYTE_SIZE)
+    {
+        // Do not try to acquire resources for the large bitmap or to
+        // read the bitmap into memory.
+        return NULL;
+    }
 
     if( bGray )
     {
@@ -402,6 +424,7 @@ void* JPEGReader::CreateBitmap( void* pParam )
         if ( pBmpBuf == 0 )
         {
             aBmp.ReleaseAccess( pAcc );
+            aBmp = Bitmap();
             pAcc = NULL;
         }
 
