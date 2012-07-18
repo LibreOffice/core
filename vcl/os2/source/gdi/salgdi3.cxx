@@ -601,6 +601,7 @@ void ImplOs2FontData::ReadCmapTable( HPS hPS ) const
 
     if( !mpUnicodeMap )
         mpUnicodeMap = ImplFontCharMap::GetDefaultMap( bIsSymbolFont );
+    mpUnicodeMap->AddReference();
 }
 
 // =======================================================================
