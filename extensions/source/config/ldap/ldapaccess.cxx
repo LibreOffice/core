@@ -131,15 +131,27 @@ void  LdapConnection::connectSimple()
 #ifdef LDAP_X_OPT_CONNECT_TIMEOUT // OpenLDAP doesn't support this and the func
         /* timeout is specified in milliseconds -> 4 seconds*/
         int timeout = 4000;
+#ifdef WNT
+        ldap_set_optionW( mConnection,
+                        LDAP_X_OPT_CONNECT_TIMEOUT,
+                        &timeout );
+#else
         ldap_set_option( mConnection,
                         LDAP_X_OPT_CONNECT_TIMEOUT,
                         &timeout );
 #endif
+#endif
 
         // Do the bind
+#ifdef WNT
+        LdapErrCode retCode = ldap_simple_bind_sW(mConnection,
+                                               (PWCHAR) mLdapDefinition.mAnonUser.getStr(),
+                                               (PWCHAR) mLdapDefinition.mAnonCredentials.getStr() );
+#else
         LdapErrCode retCode = ldap_simple_bind_s(mConnection,
-                                               CONST_PCHAR_CAST rtl::OUStringToOString( mLdapDefinition.mAnonUser, RTL_TEXTENCODING_UTF8 ).getStr(),
-                                               CONST_PCHAR_CAST rtl::OUStringToOString( mLdapDefinition.mAnonCredentials, RTL_TEXTENCODING_UTF8 ).getStr()) ;
+                                               rtl::OUStringToOString( mLdapDefinition.mAnonUser, RTL_TEXTENCODING_UTF8 ).getStr(),
+                                               rtl::OUStringToOString( mLdapDefinition.mAnonCredentials, RTL_TEXTENCODING_UTF8 ).getStr()) ;
+#endif
 
         checkLdapReturnCode("SimpleBind", retCode, mConnection) ;
     }
@@ -158,8 +170,13 @@ void LdapConnection::initConnection()
 
     if (mLdapDefinition.mPort == 0) mLdapDefinition.mPort = LDAP_PORT;
 
-    mConnection = ldap_init(CONST_PCHAR_CAST  rtl::OUStringToOString( mLdapDefinition.mServer, RTL_TEXTENCODING_UTF8 ).getStr(),
+#ifdef WNT
+    mConnection = ldap_initW((PWCHAR) mLdapDefinition.mServer.getStr(),
                             mLdapDefinition.mPort) ;
+#else
+    mConnection = ldap_init(rtl::OUStringToOString( mLdapDefinition.mServer, RTL_TEXTENCODING_UTF8 ).getStr(),
+                            mLdapDefinition.mPort) ;
+#endif
     if (mConnection == NULL)
     {
         rtl::OUStringBuffer message ;
@@ -184,17 +201,37 @@ void LdapConnection::initConnection()
     rtl::OUString aUserDn =findUserDn( aUser );
 
     LdapMessageHolder result;
+#ifdef WNT
+    LdapErrCode retCode = ldap_search_sW(mConnection,
+                                      (PWCHAR) aUserDn.getStr(),
+                                      LDAP_SCOPE_BASE,
+                                      L"(objectclass=*)",
+                                      0,
+                                      0, // Attributes + values
+                                      &result.msg) ;
+#else
     LdapErrCode retCode = ldap_search_s(mConnection,
-                                      CONST_PCHAR_CAST rtl::OUStringToOString( aUserDn, RTL_TEXTENCODING_UTF8 ).getStr(),
+                                      rtl::OUStringToOString( aUserDn, RTL_TEXTENCODING_UTF8 ).getStr(),
                                       LDAP_SCOPE_BASE,
                                       "(objectclass=*)",
                                       0,
                                       0, // Attributes + values
                                       &result.msg) ;
-
+#endif
     checkLdapReturnCode("getUserProfile", retCode,mConnection) ;
 
     BerElement * ptr;
+#ifdef WNT
+    PWCHAR attr = ldap_first_attributeW(mConnection, result.msg, &ptr);
+    while (attr != 0) {
+        PWCHAR * values = ldap_get_valuesW(mConnection, result.msg, attr);
+        if (values != 0) {
+            data->insert(
+                LdapData::value_type( attr, *values ));
+            ldap_value_freeW(values);
+        }
+        attr = ldap_next_attributeW(mConnection, result.msg, ptr);
+#else
     char * attr = ldap_first_attribute(mConnection, result.msg, &ptr);
     while (attr != 0) {
         char ** values = ldap_get_values(mConnection, result.msg, attr);
@@ -206,6 +243,7 @@ void LdapConnection::initConnection()
             ldap_value_free(values);
         }
         attr = ldap_next_attribute(mConnection, result.msg, ptr);
+#endif
     }
 }
 //------------------------------------------------------------------------------
@@ -231,24 +269,36 @@ void LdapConnection::initConnection()
     filter.append( mLdapDefinition.mUserUniqueAttr ).append("=").append(aUser).append("))") ;
 
     LdapMessageHolder result;
-    sal_Char * attributes [2];
-    attributes[0]= const_cast<sal_Char *>(LDAP_NO_ATTRS);
-    attributes[1]= NULL;
-    LdapErrCode retCode = ldap_search_s(mConnection,
-                                      CONST_PCHAR_CAST rtl::OUStringToOString( mLdapDefinition.mBaseDN, RTL_TEXTENCODING_UTF8 ).getStr(),
+#ifdef WNT
+    PWCHAR attributes [2] = { LDAP_NO_ATTRS, NULL };
+    LdapErrCode retCode = ldap_search_sW(mConnection,
+                                      (PWCHAR) mLdapDefinition.mBaseDN.getStr(),
                                       LDAP_SCOPE_SUBTREE,
-                                      CONST_PCHAR_CAST rtl::OUStringToOString( filter.makeStringAndClear(), RTL_TEXTENCODING_UTF8 ).getStr(), attributes, 0, &result.msg) ;
-
+                                      (PWCHAR) filter.makeStringAndClear().getStr(), attributes, 0, &result.msg) ;
+#else
+    sal_Char * attributes [2] = { const_cast<sal_Char *>(LDAP_NO_ATTRS), NULL };
+    LdapErrCode retCode = ldap_search_s(mConnection,
+                                      rtl::OUStringToOString( mLdapDefinition.mBaseDN, RTL_TEXTENCODING_UTF8 ).getStr(),
+                                      LDAP_SCOPE_SUBTREE,
+                                      rtl::OUStringToOString( filter.makeStringAndClear(), RTL_TEXTENCODING_UTF8 ).getStr(), attributes, 0, &result.msg) ;
+#endif
     checkLdapReturnCode("FindUserDn", retCode,mConnection) ;
     rtl::OUString userDn ;
     LDAPMessage *entry = ldap_first_entry(mConnection, result.msg) ;
 
     if (entry != NULL)
     {
+#ifdef WNT
+        PWCHAR charsDn = ldap_get_dnW(mConnection, entry) ;
+
+        userDn = charsDn;
+        ldap_memfreeW(charsDn) ;
+#else
         sal_Char *charsDn = ldap_get_dn(mConnection, entry) ;
 
         userDn = rtl::OStringToOUString( charsDn, RTL_TEXTENCODING_UTF8 );
         ldap_memfree(charsDn) ;
+#endif
     }
     else
     {
