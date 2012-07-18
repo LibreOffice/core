@@ -170,17 +170,20 @@ class TokenPool
 #endif
         ScTokenArray*               pScToken;   // Tokenbastler
 
-        void                        GrowString( void );
-        void                        GrowDouble( void );
-//UNUSED2009-05 void                        GrowError( void );
-        void                        GrowTripel( void );
-        void                        GrowId( void );
-        void                        GrowElement( void );
-        void                        GrowExt( void );
-        void                        GrowNlf( void );
-        void                        GrowMatrix( void );
-        void                        GetElement( const sal_uInt16 nId );
-        void                        GetElementRek( const sal_uInt16 nId );
+        bool                        GrowString( void );
+        bool                        GrowDouble( void );
+/* TODO: in case we had FormulaTokenArray::AddError() */
+#if 0
+        bool                        GrowError( void );
+#endif
+        bool                        GrowTripel( sal_uInt16 nByMin = 1 );
+        bool                        GrowId( void );
+        bool                        GrowElement( void );
+        bool                        GrowExt( void );
+        bool                        GrowNlf( void );
+        bool                        GrowMatrix( void );
+        bool                        GetElement( const sal_uInt16 nId );
+        bool                        GetElementRek( const sal_uInt16 nId );
     public:
                                     TokenPool( void );
                                     ~TokenPool();
@@ -214,7 +217,6 @@ class TokenPool
         inline E_TYPE               GetType( const TokenId& nId ) const;
         sal_Bool                        IsSingleOp( const TokenId& nId, const DefTokenId eId ) const;
         const String*               GetExternal( const TokenId& nId ) const;
-//UNUSED2008-05  const String*               GetString( const TokenId& nId ) const;
         ScMatrix*                   GetMatrix( unsigned int n ) const;
 };
 
@@ -305,7 +307,8 @@ inline TokenPool& TokenPool::operator <<( const TokenId nId )
         "-TokenPool::operator <<: TokenId im DefToken-Bereich!" );
 
     if( nP_IdAkt >= nP_Id )
-        GrowId();
+        if (!GrowId())
+            return *this;
 
     pP_Id[ nP_IdAkt ] = ( ( sal_uInt16 ) nId ) - 1;
     nP_IdAkt++;
@@ -320,7 +323,8 @@ inline TokenPool& TokenPool::operator <<( const DefTokenId eId )
         "-TokenPool::operator<<: enmum zu gross!" );
 
     if( nP_IdAkt >= nP_Id )
-        GrowId();
+        if (!GrowId())
+            return *this;
 
     pP_Id[ nP_IdAkt ] = ( ( sal_uInt16 ) eId ) + nScTokenOff;
     nP_IdAkt++;
@@ -332,7 +336,8 @@ inline TokenPool& TokenPool::operator <<( const DefTokenId eId )
 inline TokenPool& TokenPool::operator <<( TokenStack& rStack )
 {
     if( nP_IdAkt >= nP_Id )
-        GrowId();
+        if (!GrowId())
+            return *this;
 
     pP_Id[ nP_IdAkt ] = ( ( sal_uInt16 ) rStack.Get() ) - 1;
     nP_IdAkt++;

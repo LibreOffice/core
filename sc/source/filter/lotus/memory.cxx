@@ -37,37 +37,9 @@
 #include "decl.h"
 #include "tool.h"
 
-extern const long       nStackSize;
-extern const int        nAnzNRange;
-
 extern ScDocument*      pDoc;
 
-const long              nStackSize = 8L * 1024;     // -> form_xxx.cpp
-const int               nAnzNRange = 2048;          // -> tool_xxx.cpp, max. 2048 Named Ranges
-
-sal_Char*               pPuffer;                    // -> flt_xxx.cxx
-sal_Char*               pDummy1;                    // -> flt_xxx.cxx, ScanVersion()
-sal_Char*               pDummy2;                    // -> tool.cxx, CreateTable()
-
-extern sal_uInt8*           pFormelBuffer;              // -> tool.cxx, fuer OP_Formula()
-sal_uInt8*                  pFormelBuffer;
-
 extern FormCache*       pValueFormCache;            // -> tool.cxx
-
-sal_Char*               pStack;                     // -> formel.cxx
-sal_Char*               pPuffer0;                   // -> formel.cxx
-sal_Char*               pPuffer1;                   // -> formel.cxx
-extern const int        nMaxPar;
-const int               nMaxPar = 128;              // max. 128 Parameter werden unterstuetzt
-sal_Char**              pPar;                       // -> formel.cxx, Pn()
-
-#ifndef _DOS                                        // -> op.cxx
-sal_Char*               pAnsi;
-#endif
-sal_Char*               pErgebnis;                  // -> op.cxx
-
-extern sal_Bool             bFormInit;                  // -> tool.cxx, fuer GetFormHandle()
-sal_Bool                    bFormInit;
 
 extern SvxHorJustifyItem    *pAttrRight, *pAttrLeft, *pAttrCenter,
                             *pAttrRepeat, *pAttrStandard;   // -> tool.cxx, fuer GetFormAttr()
@@ -77,25 +49,6 @@ extern ScProtectionAttr*    pAttrUnprot;   // -> tool.cxx, fuer PutFormString()
 
 sal_Bool MemNew( void )
 {
-    pPuffer = new sal_Char [ 32L*1024L ];
-
-    pDummy1 = new sal_Char [ 32 ];
-
-    pDummy2 = new sal_Char [ 32 ];
-
-    pStack = new sal_Char [ nStackSize * 3 ];   // alle drei auf einmal
-
-    pPuffer0 = pStack + nStackSize;
-    pPuffer1 = pPuffer0 + nStackSize;
-
-    pAnsi = new sal_Char [ 2048 ];
-
-    pErgebnis = new sal_Char [ 32L*1024L ];
-
-    pPar = new sal_Char *[ nMaxPar ];
-
-    pFormelBuffer = new sal_uInt8[ 4096 ];
-
     pValueFormCache = new FormCache( pDoc );
 
     // fuer tool.cxx::PutFormString()
@@ -105,7 +58,6 @@ sal_Bool MemNew( void )
     pAttrCenter = new SvxHorJustifyItem( SVX_HOR_JUSTIFY_CENTER, ATTR_HOR_JUSTIFY );
     pAttrRepeat = new SvxHorJustifyItem( SVX_HOR_JUSTIFY_REPEAT, ATTR_HOR_JUSTIFY );
     pAttrStandard = new SvxHorJustifyItem( SVX_HOR_JUSTIFY_STANDARD, ATTR_HOR_JUSTIFY );
-    bFormInit = sal_True;
 
     return sal_True;
 }
@@ -113,15 +65,6 @@ sal_Bool MemNew( void )
 
 void MemDelete( void )
 {
-    delete[] pPuffer;
-    delete[] pDummy1;
-    delete[] pDummy2;
-    delete[] pStack;
-    delete[] pAnsi;
-    delete[] pErgebnis;
-    delete[] pPar;
-    delete[] pFormelBuffer;
-
     delete pValueFormCache;
     delete pAttrRight;
     delete pAttrLeft;

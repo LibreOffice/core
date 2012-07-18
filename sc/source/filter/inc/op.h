@@ -35,7 +35,6 @@ void OP_EOF( SvStream &aStream, sal_uInt16 nLaenge );
 void OP_Integer( SvStream &aStream, sal_uInt16 nLaenge );
 void OP_Number( SvStream &aStream, sal_uInt16 nLaenge );
 void OP_Label( SvStream &aStream, sal_uInt16 nLaenge );
-//UNUSED2009-05 void OP_Text( SvStream &aStream, sal_uInt16 nLaenge );      // WK3
 void OP_Integer3( SvStream &aStream, sal_uInt16 nLaenge );  // WK3
 void OP_Number3( SvStream &aStream, sal_uInt16 nLaenge );   // WK3
 void OP_Formula( SvStream &aStream, sal_uInt16 nLaenge );

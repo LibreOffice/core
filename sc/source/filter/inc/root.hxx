@@ -105,6 +105,9 @@ struct LOTUS_ROOT
     RangeNameBufferWK3* pRngNmBffWK3;
     LotusFontBuffer*    pFontBuff;
     LotAttrTable*       pAttrTable;
+
+                        LOTUS_ROOT( ScDocument* pDocP, CharSet eQ );
+                        ~LOTUS_ROOT();
 };
 
 extern LOTUS_ROOT*      pLotusRoot; // -> Inkarn. in filter.cxx

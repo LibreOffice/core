@@ -68,7 +68,7 @@ void LotAttrCache::LotusToScBorderLine( sal_uInt8 nLine, SvxBorderLine& aBL )
 const SvxColorItem& LotAttrCache::GetColorItem( const sal_uInt8 nLotIndex ) const
 {
     DBG_ASSERT( nLotIndex > 0 && nLotIndex < 7,
-        "-LotAttrCache::GetColorItem(): so nicht!" );
+        "-LotAttrCache::GetColorItem(): caller hast to check index!" );
 
     return *ppColorItems[ nLotIndex - 1 ];
 }
@@ -77,7 +77,7 @@ const SvxColorItem& LotAttrCache::GetColorItem( const sal_uInt8 nLotIndex ) cons
 const Color& LotAttrCache::GetColor( const sal_uInt8 nLotIndex ) const
 {
     // Farbe <-> Index passt fuer Background, nicht aber fuer Fonts (0 <-> 7)!
-    DBG_ASSERT( nLotIndex < 8, "*LotAttrCache::GetColor(): Index > 7!" );
+    DBG_ASSERT( nLotIndex < 8, "*LotAttrCache::GetColor(): Index > 7, caller hast to check index!" );
     return pColTab[ nLotIndex ];
 }
 
@@ -208,6 +208,8 @@ LotAttrCol::~LotAttrCol()
 
 void LotAttrCol::SetAttr( const SCROW nRow, const ScPatternAttr& rAttr )
 {
+    // Actually with the current implementation of MAXROWCOUNT>=64k and nRow
+    // being read as sal_uInt16 there's no chance that nRow would be invalid..
     DBG_ASSERT( ValidRow(nRow), "*LotAttrCol::SetAttr(): ... und rums?!" );
 
     ENTRY*      pAkt = ( ENTRY* ) List::Last();
@@ -275,6 +277,9 @@ LotAttrTable::~LotAttrTable()
 void LotAttrTable::SetAttr( const SCCOL nColFirst, const SCCOL nColLast, const SCROW nRow,
                             const LotAttrWK3& rAttr )
 {
+    // With the current implementation of MAXCOLCOUNT>=1024 and nColFirst and
+    // nColLast being calculated as sal_uInt8+sal_uInt8 there's no chance that
+    // they would be invalid.
     const ScPatternAttr&    rPattAttr = aAttrCache.GetPattAttr( rAttr );
     SCCOL                   nColCnt;
 
