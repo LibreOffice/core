@@ -1254,28 +1254,29 @@ void SwRTFParser::InsPicture( const String& rGrfNm, const Graphic* pGrf,
             "SwRTFParser::InsPicture: fly array empty.");
         if (aFlyArr.Count())
         {
-        // erzeuge nur einen normalen GrafikNode und ersetze diesen gegen
-        // den vorhandenen Textnode
-        SwNodeIndex& rIdx = pPam->GetPoint()->nNode;
-        pGrfNd = pDoc->GetNodes().MakeGrfNode( rIdx,
-                    rGrfNm, aEmptyStr,    // Name der Graphic !!
-                    pGrf,
-                    (SwGrfFmtColl*)pDoc->GetDfltGrfFmtColl() );
+            // erzeuge nur einen normalen GrafikNode und ersetze diesen gegen
+            // den vorhandenen Textnode
+            SwNodeIndex& rIdx = pPam->GetPoint()->nNode;
+            pGrfNd = pDoc->GetNodes().MakeGrfNode( rIdx,
+                        rGrfNm, aEmptyStr,    // Name der Graphic !!
+                        pGrf,
+                        (SwGrfFmtColl*)pDoc->GetDfltGrfFmtColl() );
 
-        if( pGrfAttrSet )
-            pGrfNd->SetAttr( *pGrfAttrSet );
+            if( pGrfAttrSet )
+                pGrfNd->SetAttr( *pGrfAttrSet );
 
-        SwFlySave* pFlySave = aFlyArr[ aFlyArr.Count()-1 ];
-        pFlySave->nSttNd = rIdx.GetIndex() - 1;
+            SwFlySave* pFlySave = aFlyArr[ aFlyArr.Count()-1 ];
+            pFlySave->nSttNd = rIdx.GetIndex() - 1;
 
-        if( 1 < aFlyArr.Count() )
-        {
-            pFlySave = aFlyArr[ aFlyArr.Count() - 2 ];
-            if( pFlySave->nEndNd == rIdx )
-                pFlySave->nEndNd = rIdx.GetIndex() - 1;
+            if( 1 < aFlyArr.Count() )
+            {
+                pFlySave = aFlyArr[ aFlyArr.Count() - 2 ];
+                if( pFlySave->nEndNd == rIdx )
+                    pFlySave->nEndNd = rIdx.GetIndex() - 1;
+            }
+
+            pGrfNd->onGraphicChanged();
         }
-
-        pGrfNd->onGraphicChanged();
     }
     else
     {
@@ -1390,7 +1391,6 @@ void SwRTFParser::_SetPictureSize( const SwNoTxtNode& rNd,
             long nBoxWidth = pBox->GetFrmFmt()->GetFrmSize().GetWidth();
             if( aSize.Width() > nBoxWidth )
                 aSize.Width() = nBoxWidth;
-        }
         }
     }
 
