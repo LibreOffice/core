@@ -114,7 +114,7 @@ public:
     /// if denominator is 0.0
     static inline double div( const double& fNumerator, const double& fDenominator );
 
-    ScMatrixRef GetNewMat(SCSIZE nC, SCSIZE nR);
+    ScMatrixRef GetNewMat(SCSIZE nC, SCSIZE nR, bool bEmpty = false);
 
     enum VolatileType {
         VOLATILE,

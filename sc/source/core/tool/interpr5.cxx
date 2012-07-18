@@ -323,10 +323,15 @@ void ScInterpreter:: ScLCM()
     }
 }
 
-ScMatrixRef ScInterpreter::GetNewMat(SCSIZE nC, SCSIZE nR)
+ScMatrixRef ScInterpreter::GetNewMat(SCSIZE nC, SCSIZE nR, bool bEmpty)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::GetNewMat" );
-    ScMatrixRef pMat = new ScMatrix(nC, nR, 0.0);
+    ScMatrixRef pMat;
+    if (bEmpty)
+        pMat = new ScMatrix(nC, nR);
+    else
+        pMat = new ScMatrix(nC, nR, 0.0);
+
     pMat->SetErrorInterpreter( this);
     // A temporary matrix is mutable and ScMatrix::CloneIfConst() returns the
     // very matrix.
@@ -366,54 +371,21 @@ ScMatrixRef ScInterpreter::CreateMatrixFromDoubleRef( const FormulaToken* pToken
         {
             SCSIZE nMatCols = static_cast<SCSIZE>(nCol2 - nCol1 + 1);
             SCSIZE nMatRows = static_cast<SCSIZE>(nRow2 - nRow1 + 1);
-            pMat = GetNewMat( nMatCols, nMatRows);
+            pMat = GetNewMat( nMatCols, nMatRows, true);
             if (pMat && !nGlobalError)
             {
-                // Set position where the next entry is expected.
-                SCROW nNextRow = nRow1;
-                SCCOL nNextCol = nCol1;
-                // Set last position as if there was a previous entry.
-                SCROW nThisRow = nRow2;
-                SCCOL nThisCol = nCol1 - 1;
-                ScCellIterator aCellIter( pDok, nCol1, nRow1, nTab1, nCol2,
-                        nRow2, nTab2);
+                ScCellIterator aCellIter(
+                    pDok, nCol1, nRow1, nTab1, nCol2, nRow2, nTab2);
+
                 for (ScBaseCell* pCell = aCellIter.GetFirst(); pCell; pCell =
                         aCellIter.GetNext())
                 {
-                    nThisCol = aCellIter.GetCol();
-                    nThisRow = aCellIter.GetRow();
-                    if (nThisCol != nNextCol || nThisRow != nNextRow)
-                    {
-                        // Fill empty between iterator's positions.
-                        for ( ; nNextCol <= nThisCol; ++nNextCol)
-                        {
-                            SCSIZE nC = nNextCol - nCol1;
-                            SCSIZE nMatStopRow = ((nNextCol < nThisCol) ?
-                                    nMatRows : nThisRow - nRow1);
-                            for (SCSIZE nR = nNextRow - nRow1; nR <
-                                    nMatStopRow; ++nR)
-                            {
-                                pMat->PutEmpty( nC, nR);
-                            }
-                            nNextRow = nRow1;
-                        }
-                    }
-                    if (nThisRow == nRow2)
-                    {
-                        nNextCol = nThisCol + 1;
-                        nNextRow = nRow1;
-                    }
-                    else
-                    {
-                        nNextCol = nThisCol;
-                        nNextRow = nThisRow + 1;
-                    }
+                    SCCOL nThisCol = aCellIter.GetCol();
+                    SCROW nThisRow = aCellIter.GetRow();
                     if (HasCellEmptyData(pCell))
-                    {
-                        pMat->PutEmpty( static_cast<SCSIZE>(nThisCol-nCol1),
-                                static_cast<SCSIZE>(nThisRow-nRow1));
-                    }
-                    else if (HasCellValueData(pCell))
+                        continue;
+
+                    if (HasCellValueData(pCell))
                     {
                         ScAddress aAdr( nThisCol, nThisRow, nTab1);
                         double fVal = GetCellValue( aAdr, pCell);
@@ -425,38 +397,25 @@ ScMatrixRef ScInterpreter::CreateMatrixFromDoubleRef( const FormulaToken* pToken
                         pMat->PutDouble( fVal,
                                 static_cast<SCSIZE>(nThisCol-nCol1),
                                 static_cast<SCSIZE>(nThisRow-nRow1));
+                        continue;
+                    }
+
+                    String aStr;
+                    GetCellString( aStr, pCell);
+                    if ( nGlobalError )
+                    {
+                        double fVal = CreateDoubleError( nGlobalError);
+                        nGlobalError = 0;
+                        pMat->PutDouble( fVal,
+                                static_cast<SCSIZE>(nThisCol-nCol1),
+                                static_cast<SCSIZE>(nThisRow-nRow1));
                     }
                     else
-                    {
-                        String aStr;
-                        GetCellString( aStr, pCell);
-                        if ( nGlobalError )
-                        {
-                            double fVal = CreateDoubleError( nGlobalError);
-                            nGlobalError = 0;
-                            pMat->PutDouble( fVal,
-                                    static_cast<SCSIZE>(nThisCol-nCol1),
-                                    static_cast<SCSIZE>(nThisRow-nRow1));
-                        }
-                        else
-                            pMat->PutString( aStr,
-                                    static_cast<SCSIZE>(nThisCol-nCol1),
-                                    static_cast<SCSIZE>(nThisRow-nRow1));
-                    }
+                        pMat->PutString( aStr,
+                                static_cast<SCSIZE>(nThisCol-nCol1),
+                                static_cast<SCSIZE>(nThisRow-nRow1));
                 }
-                // Fill empty if iterator's last position wasn't the end.
-                if (nThisCol != nCol2 || nThisRow != nRow2)
-                {
-                    for ( ; nNextCol <= nCol2; ++nNextCol)
-                    {
-                        SCSIZE nC = nNextCol - nCol1;
-                        for (SCSIZE nR = nNextRow - nRow1; nR < nMatRows; ++nR)
-                        {
-                            pMat->PutEmpty( nC, nR);
-                        }
-                        nNextRow = nRow1;
-                    }
-                }
+
                 if (pTokenMatrixMap)
                     pTokenMatrixMap->insert( ScTokenMatrixMap::value_type(
                                 pToken, new ScMatrixToken( pMat)));
