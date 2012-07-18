@@ -1736,7 +1736,7 @@ SwTableBox::SwTableBox( SwTableBoxFmt* pFmt, const SwStartNode& rSttNd, SwTableL
 
     // an der Table eintragen
     const SwTableNode* pTblNd = pSttNd->FindTableNode();
-    OSL_ENSURE( pTblNd, "in welcher Tabelle steht denn die Box?" );
+    OSL_ENSURE( pTblNd, "In which table is the box?" );
     SwTableSortBoxes& rSrtArr = (SwTableSortBoxes&)pTblNd->GetTable().
                                 GetTabSortBoxes();
     SwTableBox* p = this;   // error: &this

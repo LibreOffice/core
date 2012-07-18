@@ -2159,7 +2159,7 @@ void SwTable::CheckConsistency() const
         if( !nCurrLine )
             nLineWidth = nWidth;
         SAL_WARN_IF( nWidth != nLineWidth, "sw", "Different Line Widths" );
-        SAL_WARN_IF( nWidth != nTabSize, "sw", "Boxen der Line zu klein/gross" );
+        SAL_WARN_IF( nWidth != nTabSize, "sw", "Line's Boxes are too small or too large" );
         SAL_WARN_IF( nWidth < 0 || nWidth > USHRT_MAX, "sw", "Width out of range" );
         SAL_WARN_IF( aIter != aRowSpanCells.end(), "sw", "Missing overlapped box" );
         aIter = aRowSpanCells.begin();
