@@ -50,47 +50,49 @@
 using ::std::vector;
 using namespace formula;
 
+namespace {
+
 const double fInvEpsilon = 1.0E-7;
 
-// -----------------------------------------------------------------------
-    struct MatrixAdd : public ::std::binary_function<double,double,double>
-    {
-        inline double operator() (const double& lhs, const double& rhs) const
-        {
-            return ::rtl::math::approxAdd( lhs,rhs);
-        }
-    };
-    struct MatrixSub : public ::std::binary_function<double,double,double>
-    {
-        inline double operator() (const double& lhs, const double& rhs) const
-        {
-            return ::rtl::math::approxSub( lhs,rhs);
-        }
-    };
-    struct MatrixMul : public ::std::binary_function<double,double,double>
-    {
-        inline double operator() (const double& lhs, const double& rhs) const
-        {
-            return lhs * rhs;
-        }
-    };
-    struct MatrixDiv : public ::std::binary_function<double,double,double>
-    {
-        inline double operator() (const double& lhs, const double& rhs) const
-        {
-            return ScInterpreter::div( lhs,rhs);
-        }
-    };
-    struct MatrixPow : public ::std::binary_function<double,double,double>
-    {
-        inline double operator() (const double& lhs, const double& rhs) const
-        {
-            return ::pow( lhs,rhs);
-        }
-    };
-
-namespace
+struct MatrixAdd : public ::std::binary_function<double,double,double>
 {
+    inline double operator() (const double& lhs, const double& rhs) const
+    {
+        return ::rtl::math::approxAdd( lhs,rhs);
+    }
+};
+
+struct MatrixSub : public ::std::binary_function<double,double,double>
+{
+    inline double operator() (const double& lhs, const double& rhs) const
+    {
+        return ::rtl::math::approxSub( lhs,rhs);
+    }
+};
+
+struct MatrixMul : public ::std::binary_function<double,double,double>
+{
+    inline double operator() (const double& lhs, const double& rhs) const
+    {
+        return lhs * rhs;
+    }
+};
+
+struct MatrixDiv : public ::std::binary_function<double,double,double>
+{
+    inline double operator() (const double& lhs, const double& rhs) const
+    {
+        return ScInterpreter::div( lhs,rhs);
+    }
+};
+
+struct MatrixPow : public ::std::binary_function<double,double,double>
+{
+    inline double operator() (const double& lhs, const double& rhs) const
+    {
+        return ::pow( lhs,rhs);
+    }
+};
 
 // Multiply n x m Mat A with m x l Mat B to n x l Mat R
 void lcl_MFastMult(ScMatrixRef pA, ScMatrixRef pB, ScMatrixRef pR,
@@ -1146,25 +1148,28 @@ inline SCSIZE lcl_GetMinExtent( SCSIZE n1, SCSIZE n2 )
 }
 
 template<class _Function>
-ScMatrixRef lcl_MatrixCalculation(const _Function& _pOperation,ScMatrix* pMat1, ScMatrix* pMat2,ScInterpreter* _pIterpreter)
+ScMatrixRef lcl_MatrixCalculation(
+   const ScMatrix& rMat1, const ScMatrix& rMat2, ScInterpreter* pInterpreter)
 {
+    static _Function Op;
+
     SCSIZE nC1, nC2, nMinC;
     SCSIZE nR1, nR2, nMinR;
     SCSIZE i, j;
-    pMat1->GetDimensions(nC1, nR1);
-    pMat2->GetDimensions(nC2, nR2);
+    rMat1.GetDimensions(nC1, nR1);
+    rMat2.GetDimensions(nC2, nR2);
     nMinC = lcl_GetMinExtent( nC1, nC2);
     nMinR = lcl_GetMinExtent( nR1, nR2);
-    ScMatrixRef xResMat = _pIterpreter->GetNewMat(nMinC, nMinR);
+    ScMatrixRef xResMat = pInterpreter->GetNewMat(nMinC, nMinR);
     if (xResMat)
     {
         for (i = 0; i < nMinC; i++)
         {
             for (j = 0; j < nMinR; j++)
             {
-                if (pMat1->IsValueOrEmpty(i,j) && pMat2->IsValueOrEmpty(i,j))
+                if (rMat1.IsValueOrEmpty(i,j) && rMat2.IsValueOrEmpty(i,j))
                 {
-                    double d = _pOperation(pMat1->GetDouble(i,j),pMat2->GetDouble(i,j));
+                    double d = Op(rMat1.GetDouble(i,j), rMat2.GetDouble(i,j));
                     xResMat->PutDouble( d, i, j);
                 }
                 else
@@ -1301,13 +1306,11 @@ void ScInterpreter::CalculateAddSub(bool _bSub)
         ScMatrixRef pResMat;
         if ( _bSub )
         {
-            MatrixSub aSub;
-            pResMat = lcl_MatrixCalculation(aSub ,pMat1.get(), pMat2.get(),this);
+            pResMat = lcl_MatrixCalculation<MatrixSub>(*pMat1, *pMat2, this);
         }
         else
         {
-            MatrixAdd aAdd;
-            pResMat = lcl_MatrixCalculation(aAdd ,pMat1.get(), pMat2.get(),this);
+            pResMat = lcl_MatrixCalculation<MatrixAdd>(*pMat1, *pMat2, this);
         }
 
         if (!pResMat)
@@ -1514,8 +1517,7 @@ void ScInterpreter::ScMul()
     }
     if (pMat1 && pMat2)
     {
-        MatrixMul aMul;
-        ScMatrixRef pResMat = lcl_MatrixCalculation(aMul,pMat1.get(), pMat2.get(),this);
+        ScMatrixRef pResMat = lcl_MatrixCalculation<MatrixMul>(*pMat1, *pMat2, this);
         if (!pResMat)
             PushNoValue();
         else
@@ -1589,8 +1591,7 @@ void ScInterpreter::ScDiv()
     }
     if (pMat1 && pMat2)
     {
-        MatrixDiv aDiv;
-        ScMatrixRef pResMat = lcl_MatrixCalculation(aDiv,pMat1.get(), pMat2.get(),this);
+        ScMatrixRef pResMat = lcl_MatrixCalculation<MatrixDiv>(*pMat1, *pMat2, this);
         if (!pResMat)
             PushNoValue();
         else
@@ -1671,8 +1672,7 @@ void ScInterpreter::ScPow()
         fVal1 = GetDouble();
     if (pMat1 && pMat2)
     {
-        MatrixPow aPow;
-        ScMatrixRef pResMat = lcl_MatrixCalculation(aPow,pMat1.get(), pMat2.get(),this);
+        ScMatrixRef pResMat = lcl_MatrixCalculation<MatrixPow>(*pMat1, *pMat2, this);
         if (!pResMat)
             PushNoValue();
         else
@@ -1743,7 +1743,6 @@ void ScInterpreter::ScSumProduct()
     SCSIZE nR, nR1;
     pMat2->GetDimensions(nC, nR);
     pMat = pMat2;
-    MatrixMul aMul;
     for (sal_uInt16 i = 1; i < nParamCount; i++)
     {
         pMat1 = GetMatrix();
@@ -1758,7 +1757,7 @@ void ScInterpreter::ScSumProduct()
             PushNoValue();
             return;
         }
-        ScMatrixRef pResMat = lcl_MatrixCalculation(aMul,pMat1.get(), pMat.get(),this);
+        ScMatrixRef pResMat = lcl_MatrixCalculation<MatrixMul>(*pMat1, *pMat, this);
         if (!pResMat)
         {
             PushNoValue();
@@ -1853,8 +1852,7 @@ void ScInterpreter::ScSumXMY2()
         PushNoValue();
         return;
     } // if (nC1 != nC2 || nR1 != nR2)
-    MatrixSub aSub;
-    ScMatrixRef pResMat = lcl_MatrixCalculation(aSub,pMat1.get(), pMat2.get(),this);
+    ScMatrixRef pResMat = lcl_MatrixCalculation<MatrixSub>(*pMat1, *pMat2, this);
     if (!pResMat)
     {
         PushNoValue();
