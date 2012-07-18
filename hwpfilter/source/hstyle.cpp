@@ -23,7 +23,10 @@
 
 /* $Id: hstyle.cpp,v 1.3 2008-04-10 12:07:14 rt Exp $ */
 
+#define NOMINMAX
 #include "precompile.h"
+
+#include <comphelper/newarray.hxx>
 
 #include    "hwplib.h"
 #include    "hwpfile.h"
@@ -129,7 +132,7 @@ bool HWPStyle::Read(HWPFile & hwpf)
     ParaShape pshape;
 
     hwpf.Read2b(&nstyles, 1);
-    style = new StyleData[nstyles];
+    style = ::comphelper::newArray_null<StyleData>(nstyles);
     if (!style)
         return false;
 

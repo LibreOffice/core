@@ -35,7 +35,6 @@ extern LinkedList<Node> nodelist;
 
 #include "hcode.h"
 
-static hchar entity[32];
 #define ascii(x)  OUString::createFromAscii(x)
 #define rstartEl(x,y)   rDocumentHandler->startElement(x,y)
 #define rendEl(x)    rDocumentHandler->endElement(x)
@@ -44,7 +43,6 @@ static hchar entity[32];
 #define reucstr(x,y) rDocumentHandler->characters(OUString(x,y, RTL_TEXTENCODING_EUC_KR))
 #define padd(x,y,z)  pList->addAttribute(x,y,z)
 #else
-static char entity[32];
 static int indent = 0;
 #define inds indent++; for(int i = 0 ; i < indent ; i++) fprintf(stderr," ")
 #define inde for(int i = 0 ; i < indent ; i++) fprintf(stderr," "); indent--
@@ -225,11 +223,12 @@ void Formula::makeIdentifier(Node *res)
      case ID_IDENTIFIER :
 #ifdef DEBUG
           inds;
-          fprintf(stderr,"<math:mi>%s</math:mi>\n",getMathMLEntity(tmp->value, entity));
+          fprintf(stderr,"<math:mi>%s</math:mi>\n",
+                  getMathMLEntity(tmp->value).c_str());
           indo;
 #else
           rstartEl(ascii("math:mi"), rList);
-          runistr(getMathMLEntity(tmp->value, entity));
+          runistr(getMathMLEntity(tmp->value).c_str());
           rendEl(ascii("math:mi"));
 #endif
           break;
@@ -251,7 +250,7 @@ void Formula::makeIdentifier(Node *res)
           inds; fprintf(stderr,"<math:mo>%s</math:mo>\n",tmp->value); indo;
 #else
           rstartEl(ascii("math:mo"), rList);
-          runistr(getMathMLEntity(tmp->value,entity));
+          runistr(getMathMLEntity(tmp->value).c_str());
           rendEl(ascii("math:mo"));
 #endif
           break;
@@ -407,11 +406,12 @@ void Formula::makeDecoration(Node *res)
 
 #ifdef DEBUG
      inds;
-     fprintf(stderr,"<math:mo>%s</math:mo>\n", getMathMLEntity(tmp->value,entity));
+     fprintf(stderr,"<math:mo>%s</math:mo>\n",
+             getMathMLEntity(tmp->value).c_str());
      indo;
 #else
      rstartEl(ascii("math:mo"), rList);
-     runistr(getMathMLEntity(tmp->value,entity));
+     runistr(getMathMLEntity(tmp->value).c_str());
      rendEl(ascii("math:mo"));
 #endif
 
@@ -532,11 +532,14 @@ void Formula::makeFence(Node *res)
      Node *tmp = res->child;
 #ifdef DEBUG
      inds;
-     fprintf(stderr,"<math:mfenced open=\"%s\" close=\"%s\">\n",getMathMLEntity(tmp->value, entity),
-                getMathMLEntity(tmp->next->next->value,entity));
+     fprintf(stderr,"<math:mfenced open=\"%s\" close=\"%s\">\n",
+                getMathMLEntity(tmp->value).c_str(),
+                getMathMLEntity(tmp->next->next->value).c_str());
 #else
-     padd(ascii("open"), ascii("CDATA"), OUString(getMathMLEntity(tmp->value,entity)) );
-     padd(ascii("close"), ascii("CDATA"), OUString(getMathMLEntity(tmp->next->next->value,entity)) );
+     padd(ascii("open"), ascii("CDATA"),
+             OUString(getMathMLEntity(tmp->value).c_str()) );
+     padd(ascii("close"), ascii("CDATA"),
+             OUString(getMathMLEntity(tmp->next->next->value).c_str()) );
      rstartEl(ascii("math:mfenced"), rList);
      pList->clear();
 #endif

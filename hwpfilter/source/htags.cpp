@@ -41,7 +41,6 @@
 #include "hwplib.h"
 #include "hwpfile.h"
 #include "htags.h"
-#include "himgutil.h"
 
 bool HyperText::Read(HWPFile & hwpf)
 {
@@ -75,11 +74,6 @@ EmPicture::EmPicture(int tsize):size(tsize - 32)
 #endif
 EmPicture::~EmPicture(void)
 {
-// clear temporary image file
-    char *fname = (char *) GetEmbImgname(this);
-
-    if (fname && access(fname, 0) == 0)
-        unlink(fname);
     if (data)
         delete[]data;
 };

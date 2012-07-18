@@ -26,6 +26,9 @@
 #ifndef _HWPLIB_H_
 #define _HWPLIB_H_
 #include "precompile.h"
+
+#include <string>
+
 /* hwp96부터 hunit가 4byte가 되었다. */
 /**
  * size of hunit is 4 since hwp96 version
@@ -55,6 +58,8 @@ typedef unsigned short  ushort;
 typedef unsigned int    uint;
 typedef unsigned long   ulong;
 #endif                                            /* _UTYPE_ */
+
+typedef ::std::basic_string<hchar> hchar_string;
 
 #ifndef _ZZRECT_
 #define _ZZRECT_

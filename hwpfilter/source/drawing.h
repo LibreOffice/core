@@ -36,6 +36,8 @@
 
 #include <math.h>
 
+#include <comphelper/newarray.hxx>
+
 #include "hwplib.h"
 #include "hwpfile.h"
 #include "hiodev.h"
@@ -361,6 +363,7 @@ static HWPDrawingObject *LoadDrawingObject(void)
             hdo->child = LoadDrawingObject();
             if (hdo->child == NULL)
             {
+                goto error;
             }
         }
         if (prev == NULL)
@@ -659,6 +662,7 @@ static int getBlend(int alpha)
 }
 */
 
+
 static int
 HWPDOFreeFormFunc(int type, HWPDrawingObject * hdo,
 int cmd, void *argp, int argv)
@@ -682,7 +686,8 @@ int cmd, void *argp, int argv)
                 return OBJRET_FILE_ERROR;
             if (hdo->u.freeform.npt)
             {
-                hdo->u.freeform.pt = new ZZPoint[hdo->u.freeform.npt];
+                hdo->u.freeform.pt =
+                    ::comphelper::newArray_null<ZZPoint>(hdo->u.freeform.npt);
                 if (hdo->u.freeform.pt == NULL)
                 {
                     hdo->u.freeform.npt = 0;

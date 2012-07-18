@@ -175,7 +175,7 @@ struct HWPDOProperty
 
     ZZPoint offset1;
     ZZPoint offset2;
-    char szPatternFile[MAX_PATH + 1];
+    char szPatternFile[260 + 1];
     char pictype;
 };
 

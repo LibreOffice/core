@@ -27,7 +27,8 @@
 #include <string.h>
 #include <stdio.h>
 
-typedef unsigned short hchar;
+#include <hwplib.h>
+
 
 struct FormulaEntry{
      const char *tex;
@@ -363,30 +364,31 @@ const struct FormulaEntry FormulaMapTab[] = {
 };
 
 #ifndef DEBUG
-hchar *getMathMLEntity(const char *tex, hchar *buf)
+hchar_string getMathMLEntity(const char *tex)
 {
-     static int tabSize = sizeof( FormulaMapTab ) / sizeof( FormulaMapTab[0] );
-     int i, len;
+     static size_t tabSize = sizeof(FormulaMapTab) / sizeof(FormulaMapTab[0]);
 
-     for( i = 0 ; i < tabSize ; i++ ){
+     hchar_string buf;
+     for (size_t i = 0 ; i < tabSize ; i++) {
           if( !strcmp(tex, FormulaMapTab[i].tex ) ) {
-                buf[0] = FormulaMapTab[i].ucs;
-                buf[1] = '\0';
+                buf.push_back(FormulaMapTab[i].ucs);
                 return buf;
           }
      }
-     len = strlen(tex);
 
-     for( i = 0 ; i < len ; i++ )
-          buf[i] = tex[i];
-     buf[len] = 0;
+     size_t const len = strlen(tex);
+     for (size_t i = 0 ; i < len ; i++)
+     {
+         buf.push_back(tex[i]);
+     }
      return buf;
 }
 
 #else
-char *getMathMLEntity(const char *tex, char *buf)
+::std::string getMathMLEntity(const char *tex)
 {
-     strcpy(buf,tex);
+     ::std::string buf;
+     buf.append(tex);
      return buf;
 }
 #endif

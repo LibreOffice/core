@@ -22,8 +22,10 @@
 
 
 /* $Id: hpara.cpp,v 1.6 2008-06-04 09:59:35 vg Exp $ */
-
+#define NOMINMAX
 #include "precompile.h"
+
+#include <comphelper/newarray.hxx>
 
 #include "hwplib.h"
 #include "hwpfile.h"
@@ -116,7 +118,8 @@ int HWPPara::Read(HWPFile & hwpf, unsigned char flag)
           pshape.pagebreak = etcflag;
     }
 
-    linfo = new LineInfo[nline];
+    linfo = ::comphelper::newArray_null<LineInfo>(nline);
+    if (!linfo) { return false; }
     for (ii = 0; ii < nline; ii++)
     {
         linfo[ii].Read(hwpf, this);
@@ -143,7 +146,7 @@ int HWPPara::Read(HWPFile & hwpf, unsigned char flag)
 
     if (contain_cshape)
     {
-        cshapep = new CharShape[nch];
+        cshapep = ::comphelper::newArray_null<CharShape>(nch);
         if (!cshapep)
         {
             perror("Memory Allocation: cshape\n");
@@ -167,7 +170,8 @@ int HWPPara::Read(HWPFile & hwpf, unsigned char flag)
         }
     }
 // read string
-    hhstr = new HBox *[nch];
+    hhstr = ::comphelper::newArray_null<HBox *>(nch);
+    if (!hhstr) { return false; }
     for (ii = 0; ii < nch; ii++)
         hhstr[ii] = 0;
     ii = 0;

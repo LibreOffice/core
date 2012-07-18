@@ -49,7 +49,6 @@ SLOFILES =	\
         $(SLO)$/hcode.obj \
         $(SLO)$/hfont.obj \
         $(SLO)$/hgzip.obj \
-        $(SLO)$/himgutil.obj \
         $(SLO)$/hinfo.obj \
         $(SLO)$/hiodev.obj \
         $(SLO)$/hpara.obj \
