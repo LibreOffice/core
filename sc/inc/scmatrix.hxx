@@ -261,9 +261,14 @@ public:
 
     void PutDouble( double fVal, SCSIZE nC, SCSIZE nR);
     void PutDouble( double fVal, SCSIZE nIndex);
+    void PutDouble(const double* pArray, size_t nLen, SCSIZE nC, SCSIZE nR);
+
     void PutString( const ::rtl::OUString& rStr, SCSIZE nC, SCSIZE nR);
     void PutString( const ::rtl::OUString& rStr, SCSIZE nIndex);
+    void PutString(const rtl::OUString* pArray, size_t nLen, SCSIZE nC, SCSIZE nR);
+
     void PutEmpty( SCSIZE nC, SCSIZE nR);
+
     /// Jump FALSE without path
     void PutEmptyPath( SCSIZE nC, SCSIZE nR);
     void PutError( sal_uInt16 nErrorCode, SCSIZE nC, SCSIZE nR );

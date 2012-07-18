@@ -343,10 +343,14 @@ public:
     bool ValidColRowReplicated( SCSIZE & rC, SCSIZE & rR ) const;
     bool ValidColRowOrReplicated( SCSIZE & rC, SCSIZE & rR ) const;
     void SetErrorAtInterpreter( sal_uInt16 nError ) const;
+
     void PutDouble(double fVal, SCSIZE nC, SCSIZE nR);
     void PutDouble( double fVal, SCSIZE nIndex);
+    void PutDouble(const double* pArray, size_t nLen, SCSIZE nC, SCSIZE nR);
+
     void PutString(const ::rtl::OUString& rStr, SCSIZE nC, SCSIZE nR);
     void PutString(const ::rtl::OUString& rStr, SCSIZE nIndex);
+    void PutString(const rtl::OUString* pArray, size_t nLen, SCSIZE nC, SCSIZE nR);
 
     void PutEmpty(SCSIZE nC, SCSIZE nR);
     void PutEmptyPath(SCSIZE nC, SCSIZE nR);
@@ -495,6 +499,16 @@ void ScMatrixImpl::PutDouble(double fVal, SCSIZE nC, SCSIZE nR)
     }
 }
 
+void ScMatrixImpl::PutDouble(const double* pArray, size_t nLen, SCSIZE nC, SCSIZE nR)
+{
+    if (ValidColRow( nC, nR))
+        maMat.set(nR, nC, pArray, pArray + nLen);
+    else
+    {
+        OSL_FAIL("ScMatrixImpl::PutDouble: dimension error");
+    }
+}
+
 void ScMatrixImpl::PutDouble( double fVal, SCSIZE nIndex)
 {
     SCSIZE nC, nR;
@@ -505,7 +519,17 @@ void ScMatrixImpl::PutDouble( double fVal, SCSIZE nIndex)
 void ScMatrixImpl::PutString(const ::rtl::OUString& rStr, SCSIZE nC, SCSIZE nR)
 {
     if (ValidColRow( nC, nR))
-        maMat.set(nR, nC, rtl::OUString(rStr));
+        maMat.set(nR, nC, rStr);
+    else
+    {
+        OSL_FAIL("ScMatrixImpl::PutString: dimension error");
+    }
+}
+
+void ScMatrixImpl::PutString(const rtl::OUString* pArray, size_t nLen, SCSIZE nC, SCSIZE nR)
+{
+    if (ValidColRow( nC, nR))
+        maMat.set(nR, nC, pArray, pArray + nLen);
     else
     {
         OSL_FAIL("ScMatrixImpl::PutString: dimension error");
@@ -1181,6 +1205,11 @@ void ScMatrix::PutDouble( double fVal, SCSIZE nIndex)
     pImpl->PutDouble(fVal, nIndex);
 }
 
+void ScMatrix::PutDouble(const double* pArray, size_t nLen, SCSIZE nC, SCSIZE nR)
+{
+    pImpl->PutDouble(pArray, nLen, nC, nR);
+}
+
 void ScMatrix::PutString(const ::rtl::OUString& rStr, SCSIZE nC, SCSIZE nR)
 {
     pImpl->PutString(rStr, nC, nR);
@@ -1189,6 +1218,11 @@ void ScMatrix::PutString(const ::rtl::OUString& rStr, SCSIZE nC, SCSIZE nR)
 void ScMatrix::PutString(const ::rtl::OUString& rStr, SCSIZE nIndex)
 {
     pImpl->PutString(rStr, nIndex);
+}
+
+void ScMatrix::PutString(const rtl::OUString* pArray, size_t nLen, SCSIZE nC, SCSIZE nR)
+{
+    pImpl->PutString(pArray, nLen, nC, nR);
 }
 
 void ScMatrix::PutEmpty(SCSIZE nC, SCSIZE nR)
