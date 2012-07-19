@@ -323,13 +323,14 @@ void ImpExportHandles( SvXMLExport& rExport, const uno::Sequence< beans::Propert
 }
 
 void ImpExportEnhancedPath( SvXMLExport& rExport,
-    const uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeParameterPair >& rCoordinates,
-        const uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeSegment >& rSegments )
+                            const uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeParameterPair >& rCoordinates,
+                            const uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeSegment >& rSegments,
+                            bool bExtended = false )
 {
 
     rtl::OUString       aStr;
     rtl::OUStringBuffer aStrBuffer;
-    sal_uInt16 aNamespace = XML_NAMESPACE_DRAW;
+    bool bNeedExtended = false;
 
     sal_Int32 i, j, k, l;
 
@@ -415,8 +416,15 @@ void ImpExportEnhancedPath( SvXMLExport& rExport,
             case com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::QUADRATICCURVETO :
                 aStrBuffer.append( (sal_Unicode)'Q' ); nParameter = 2; break;
             case com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::ARCANGLETO :
-                aStrBuffer.append( (sal_Unicode)'G' ); nParameter = 2; aNamespace = XML_NAMESPACE_DRAW_EXT; break;
-
+                if ( bExtended ) {
+                    aStrBuffer.append( (sal_Unicode)'G' );
+                    nParameter = 2;
+                } else {
+                    aStrBuffer.setLength( aStrBuffer.getLength() - 1);
+                    bNeedExtended = true;
+                    i += 2;
+                }
+                break;
             default : // ups, seems to be something wrong
             {
                 aSegment.Count = 1;
@@ -445,7 +453,9 @@ void ImpExportEnhancedPath( SvXMLExport& rExport,
         }
     }
     aStr = aStrBuffer.makeStringAndClear();
-    rExport.AddAttribute( aNamespace, XML_ENHANCED_PATH, aStr );
+    rExport.AddAttribute( bExtended ? XML_NAMESPACE_DRAW_EXT : XML_NAMESPACE_DRAW, XML_ENHANCED_PATH, aStr );
+    if ( !bExtended && bNeedExtended )
+        ImpExportEnhancedPath( rExport, rCoordinates, rSegments, true );
 }
 
 void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< beans::XPropertySet >& xPropSet )
