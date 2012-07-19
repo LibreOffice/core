@@ -417,6 +417,8 @@ sub read_encodinglist
 
         if ( $line =~ /^\s*\#/ ) { next; }  # this is a comment line
 
+        if ( $line =~ /^$/ ) { next; }  # this is an empty line
+
         if ( $line =~ /^(.*?)(\#.*)$/ ) { $line = $1; } # removing comments after "#"
 
         if ( $line =~ /^\s*([\w-]+)\s*(\d+)\s*(\d+)\s*$/ )
@@ -430,7 +432,7 @@ sub read_encodinglist
         }
         else
         {
-            installer::exiter::exit_program("ERROR: Wrong syntax in Windows encoding list $installer::globals::encodinglistname : en-US 1252 1033 !", "read_encodinglist");
+            installer::exiter::exit_program("ERROR: Wrong syntax in Windows encoding list $installer::globals::encodinglistname in line $i.", "read_encodinglist");
         }
     }
 
