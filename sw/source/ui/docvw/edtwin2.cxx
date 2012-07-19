@@ -108,7 +108,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
 {
     SwWrtShell &rSh = rView.GetWrtShell();
     sal_Bool bQuickBalloon = 0 != (rEvt.GetMode() & ( HELPMODE_QUICK | HELPMODE_BALLOON ));
-    if(bQuickBalloon && rSh.GetViewOptions()->IsPreventTips())
+    if(bQuickBalloon && !rSh.GetViewOptions()->IsShowContentTips())
         return;
     sal_Bool bWeiter = sal_True;
     SET_CURR_SHELL(&rSh);

@@ -3173,7 +3173,7 @@ void SfxHelpWindow_Impl::openDone(const ::rtl::OUString& sURL    ,
                 Reference < XPropertySet > xViewProps = xSettings->getViewSettings();
                 Reference< XPropertySetInfo > xInfo = xViewProps->getPropertySetInfo();
                 Any aBoolAny = makeAny( sal_Bool( sal_True ) );
-                xViewProps->setPropertyValue( DEFINE_CONST_OUSTRING("PreventHelpTips"), aBoolAny );
+                xViewProps->setPropertyValue( DEFINE_CONST_OUSTRING("ShowContentTips"), makeAny( sal_Bool( sal_False ) ) );
                 xViewProps->setPropertyValue( DEFINE_CONST_OUSTRING("ShowGraphics"), aBoolAny );
                 xViewProps->setPropertyValue( DEFINE_CONST_OUSTRING("ShowTables"), aBoolAny );
                 xViewProps->setPropertyValue( DEFINE_CONST_OUSTRING("HelpURL"), makeAny( DEFINE_CONST_OUSTRING("HID:SFX2_HID_HELP_ONHELP") ) );

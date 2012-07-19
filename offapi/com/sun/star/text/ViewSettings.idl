@@ -325,7 +325,7 @@ published service ViewSettings
      */
     [optional, property] boolean ShowHiddenCharacters;
     //-------------------------------------------------------------------------
-    /** If this proeperty is <TRUE/>, the settings of nonprinting characters are applied.
+    /** If this property is <TRUE/>, the settings of nonprinting characters are applied.
 
         <p>This option controls the use of the settings ShowHiddenCharacters,
         ShowTabstops, ShowSpaces, ShowBreaks and ShowParaBreaks </p>
@@ -349,6 +349,13 @@ published service ViewSettings
         @since OOo 3.1
      */
     [optional, property] long VerticalRulerMetric;
+    //-------------------------------------------------------------------------
+    /** If this property is <TRUE/>, tips for document content are shown,
+        typically in a help balloon when the mouse is over the content.
+
+        @since Apache OpenOffice 3.5
+     */
+    [optional, property] boolean ShowContentTips;
 };
 
 //=============================================================================
