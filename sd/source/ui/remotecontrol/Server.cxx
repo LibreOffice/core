@@ -13,10 +13,11 @@
 #include <comphelper/processfactory.hxx>
 
 #include "sddll.hxx"
-#include "Server.hxx"
-#include "Receiver.hxx"
-#include "Listener.hxx"
 
+#include "ImagePreparer.hxx"
+#include "Listener.hxx"
+#include "Receiver.hxx"
+#include "Server.hxx"
 
 using namespace std;
 using namespace sd;
@@ -94,6 +95,11 @@ void Server::listenThread()
     // TODO: deal with transmision errors gracefully.
     mListener->disposing();
     mListener = NULL;
+
+    if ( mPreparer.is() )
+        delete mPreparer.get();
+    mPreparer = NULL;
+
     delete pTransmitter;
     pTransmitter = NULL;
     fprintf( stderr, "Finished listening\n" );
@@ -134,6 +140,9 @@ void Server::presentationStarted( const css::uno::Reference<
     {
         mListener = rtl::Reference<Listener>( new Listener( spServer, pTransmitter ) );
         mListener->init( rController );
+
+        mPreparer = rtl::Reference<ImagePreparer>( new ImagePreparer( rController, pTransmitter ) );
+        mPreparer->launch();
     }
 }
 
@@ -142,6 +151,7 @@ void Server::presentationStarted( const css::uno::Reference<
 Server *sd::Server::spServer = NULL;
 Transmitter *sd::Server::pTransmitter = NULL;
 rtl::Reference<Listener> sd::Server::mListener = NULL;
+rtl::Reference<ImagePreparer> sd::Server::mPreparer = NULL;
 
 void Server::setup()
 {

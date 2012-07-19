@@ -158,8 +158,6 @@ public class TestClient extends Activity {
 					mImageView.setImageBitmap(aBitmap);
 					mCurrentPreviewImageMissing = false;
 				}
-				mImageView.setImageBitmap(aBitmap);
-				// TODO: remove above line, use slide changed to show image.
 				break;
 
 			}

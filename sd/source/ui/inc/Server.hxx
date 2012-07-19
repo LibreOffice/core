@@ -35,6 +35,7 @@ namespace sd
 
     class Transmitter;
     class Listener;
+    class ImagePreparer;
 
     class Server : public salhelper::Thread
     {
@@ -53,6 +54,7 @@ namespace sd
             void execute();
             static Transmitter *pTransmitter;
             static rtl::Reference<Listener> mListener;
+            static rtl::Reference<ImagePreparer> mPreparer;
     };
 }
 

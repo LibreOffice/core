@@ -101,7 +101,7 @@ void SAL_CALL Listener::slideTransitionStarted (void)
     sal_Int32 aSlide = mController->getCurrentSlideIndex();
 
     OStringBuffer aBuilder( "slide_updated\n" );
-    aBuilder.append( OString::valueOf( aSlide + 1 ) ); // Slides are numbered from 0
+    aBuilder.append( OString::valueOf( aSlide ) );
     aBuilder.append( "\n\n" );
 
     if ( pTransmitter )

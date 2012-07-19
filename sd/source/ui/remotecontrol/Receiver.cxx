@@ -12,10 +12,8 @@
 #include <com/sun/star/presentation/XPresentationSupplier.hpp>
 #include <com/sun/star/presentation/XPresentation2.hpp>
 #include <com/sun/star/frame/XFramesSupplier.hpp>
-#include <com/sun/star/document/XFilter.hpp>
-#include <com/sun/star/document/XExporter.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
+
 
 #include <comphelper/processfactory.hxx>
 #include <osl/file.hxx>
@@ -110,99 +108,6 @@ void Receiver::parseCommand( std::vector<OString> aCommand )
             xSlideShowController->resume();
         }
     }
-            // FIXME: remove later, this is just to test functionality
-//     sendPreview( 0, xSlideShowController, mTransmitter );
-
 }
-
-void sendPreview( sal_uInt32 aSlideNumber,
-                 const uno::Reference<presentation::XSlideShowController>& xSlideShowController, Transmitter *aTransmitter )
-{
-
-    sal_uInt64 aSize; // Unused
-    uno::Sequence<sal_Int8> aImageData = preparePreview( aSlideNumber, xSlideShowController, 320, 240, aSize );
-    rtl::OUStringBuffer aStrBuffer;
-    ::sax::Converter::encodeBase64( aStrBuffer, aImageData );
-
-    OString aEncodedShortString = rtl::OUStringToOString(
-        aStrBuffer.makeStringAndClear(), RTL_TEXTENCODING_UTF8 );
-
-    // Start the writing
-    rtl::OStringBuffer aBuffer;
-
-    aBuffer.append( "slide_preview\n" );
-
-    rtl::OString aSlideNumberString( rtl::OString::valueOf( sal_Int32(2) ) ); // FIXME get number
-    aBuffer.append( aSlideNumberString.getStr() );
-    aBuffer.append( "\n" );
-
-    aBuffer.append( aEncodedShortString.getStr() );
-    aBuffer.append( "\n\n" );
-    aTransmitter->addMessage( aBuffer.makeStringAndClear(), Transmitter::Priority::LOW );
-
-}
-
-uno::Sequence<sal_Int8>
-preparePreview(sal_uInt32 aSlideNumber,
-               const uno::Reference<presentation::XSlideShowController>& xSlideShowController,
-               sal_uInt32 aWidth, sal_uInt32 aHeight, sal_uInt64 &rSize )
-{
-    (void)aWidth; (void)aHeight; // FIXME: remove me when I'm used
-    // Create temp file
-    OUString aFileURL;
-    FileBase::createTempFile( 0, 0, &aFileURL );
-
-    uno::Reference< lang::XMultiServiceFactory > xServiceManager(
-            ::comphelper::getProcessServiceFactory(), uno::UNO_QUERY_THROW );
-
-    uno::Reference< document::XFilter > xFilter( xServiceManager->createInstance(
-        "com.sun.star.drawing.GraphicExportFilter"  ) , uno::UNO_QUERY_THROW );
-
-    uno::Reference< document::XExporter > xExporter( xFilter, uno::UNO_QUERY_THROW );
-
-    uno::Reference< lang::XComponent > xSourceDoc(
-        xSlideShowController->getSlideByIndex( aSlideNumber ) , uno::UNO_QUERY_THROW );
-
-    xExporter->setSourceDocument( xSourceDoc );
-
-    uno::Sequence< beans::PropertyValue > aFilterData(3);
-    aFilterData[0].Name = "PixelWidth";
-    aFilterData[0].Value <<= sal_Int32(2000);
-    aFilterData[1].Name = "PixelHeight";
-    aFilterData[1].Value <<= sal_Int32(2000);
-
-    // Add quality if jpg "Quality" [1-100]
-    // FIXME: is setting color mode needed.
-    aFilterData[2].Name = "ColorMode";
-    aFilterData[2].Value <<= sal_Int32(0); // Color
-
-    uno::Sequence< beans::PropertyValue > aProps(3);
-    aProps[0].Name = "MediaType";
-    aProps[0].Value <<= OUString( "image/png" );
-
-    aProps[1].Name = "URL";
-    aProps[1].Value <<= aFileURL;
-
-    aProps[2].Name = "FilterData";
-    aProps[2].Value <<= aFilterData;
-
-    xFilter->filter( aProps );
-
-    // FIXME: error handling.
-
-    File aFile( aFileURL );
-    aFile.open(0);
-    sal_uInt64 aRead;
-    rSize = 0;
-    aFile.getSize( rSize );
-    uno::Sequence<sal_Int8> aContents( rSize );
-
-    aFile.read( aContents.getArray(), rSize, aRead );
-    aFile.close();
-    File::remove( aFileURL );
-    return aContents;
-
-}
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
