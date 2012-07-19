@@ -667,6 +667,13 @@ void GetEnhancedPath( std::vector< com::sun::star::beans::PropertyValue >& rDest
                 nIndex++;
             }
             break;
+            case 'G' :
+            {
+                nLatestSegmentCommand = com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::ARCANGLETO;
+                nParametersNeeded = 2;
+                nIndex++;
+            }
+            break;
             case 'W' :
             {
                 nLatestSegmentCommand = com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::CLOCKWISEARCTO;

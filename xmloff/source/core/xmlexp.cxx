@@ -380,6 +380,8 @@ void SvXMLExport::_InitCtor()
         }
     }
     if( (getExportFlags() & (EXPORT_MASTERSTYLES|EXPORT_CONTENT) ) != 0 )
+            mpNamespaceMap->Add(
+                GetXMLToken(XML_NP_DRAW_EXT), GetXMLToken(XML_N_DRAW_EXT), XML_NAMESPACE_DRAW_EXT);
     {
         mpNamespaceMap->Add( GetXMLToken(XML_NP_MATH), GetXMLToken(XML_N_MATH), XML_NAMESPACE_MATH );
         mpNamespaceMap->Add( GetXMLToken(XML_NP_FORM), GetXMLToken(XML_N_FORM), XML_NAMESPACE_FORM );
