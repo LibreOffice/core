@@ -408,6 +408,57 @@ void PageMasterImportPropertyMapper::finished(::std::vector< XMLPropertyState >&
         rProperties.push_back(*pFooterDynamic);
         delete pFooterDynamic;
     }
+
+    // fdo#38056: nerf the various AllFoo properties so they do not override
+    // the individual Foo properties later on
+    if (pAllPaddingProperty)
+    {
+        pAllPaddingProperty->mnIndex = -1;
+    }
+    if (pAllBorderProperty)
+    {
+        pAllBorderProperty->mnIndex = -1;
+    }
+    if (pAllBorderWidthProperty)
+    {
+        pAllBorderWidthProperty->mnIndex = -1;
+    }
+    if (pAllHeaderPaddingProperty)
+    {
+        pAllHeaderPaddingProperty->mnIndex = -1;
+    }
+    if (pAllHeaderBorderProperty)
+    {
+        pAllHeaderBorderProperty->mnIndex = -1;
+    }
+    if (pAllHeaderBorderWidthProperty)
+    {
+        pAllHeaderBorderWidthProperty->mnIndex = -1;
+    }
+    if (pAllFooterPaddingProperty)
+    {
+        pAllFooterPaddingProperty->mnIndex = -1;
+    }
+    if (pAllFooterBorderProperty)
+    {
+        pAllFooterBorderProperty->mnIndex = -1;
+    }
+    if (pAllFooterBorderWidthProperty)
+    {
+        pAllFooterBorderWidthProperty->mnIndex = -1;
+    }
+    if (pAllMarginProperty)
+    {
+        pAllMarginProperty->mnIndex = -1;
+    }
+    if (pAllHeaderMarginProperty)
+    {
+        pAllHeaderMarginProperty->mnIndex = -1;
+    }
+    if (pAllFooterMarginProperty)
+    {
+        pAllFooterMarginProperty->mnIndex = -1;
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
