@@ -18,7 +18,7 @@
  */
 
 #include <svl/svstdarr.hxx>
-#include <tools/debug.hxx>
+#include <svl/svarray.hxx>
 
 SV_IMPL_VARARR(SvPtrarr,VoidPtr)
 
@@ -28,51 +28,10 @@ sal_uInt16 SvPtrarr::GetPos( const VoidPtr& aElement ) const
     return ( n >= nA ? USHRT_MAX : n );
 }
 
-// ---------------- strings -------------------------------------
 
-// Array with different Seek method
-_SV_IMPL_SORTAR_ALG( SvStringsISortDtor, StringPtr )
-void SvStringsISortDtor::DeleteAndDestroy( sal_uInt16 nP, sal_uInt16 nL )
+bool CompareSvStringsISortDtor::operator()( String* const& lhs, String* const& rhs ) const
 {
-    if( nL )
-    {
-        DBG_ASSERT( nP < nA && nP + nL <= nA, "ERR_VAR_DEL" );
-        for( sal_uInt16 n=nP; n < nP + nL; n++ )
-            delete *((StringPtr*)pData+n);
-        SvPtrarr::Remove( nP, nL );
-    }
-}
-sal_Bool SvStringsISortDtor::Seek_Entry( const StringPtr aE, sal_uInt16* pP ) const
-{
-    register sal_uInt16 nO  = SvStringsISortDtor_SAR::Count(),
-            nM,
-            nU = 0;
-    if( nO > 0 )
-    {
-        nO--;
-        while( nU <= nO )
-        {
-            nM = nU + ( nO - nU ) / 2;
-            StringCompare eCmp = (*((StringPtr*)pData + nM))->
-                                    CompareIgnoreCaseToAscii( *(aE) );
-            if( COMPARE_EQUAL == eCmp )
-            {
-                if( pP ) *pP = nM;
-                return sal_True;
-            }
-            else if( COMPARE_LESS == eCmp )
-                nU = nM + 1;
-            else if( nM == 0 )
-            {
-                if( pP ) *pP = nU;
-                return sal_False;
-            }
-            else
-                nO = nM - 1;
-        }
-    }
-    if( pP ) *pP = nU;
-    return sal_False;
+    return lhs->CompareIgnoreCaseToAscii( *rhs ) == COMPARE_LESS;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

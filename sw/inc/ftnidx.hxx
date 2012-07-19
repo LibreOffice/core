@@ -29,6 +29,7 @@
 #define _FTNIDX_HXX
 
 #include <svl/svstdarr.hxx>
+#include <svl/svarray.hxx>
 #include <vector>
 
 class SwTxtFtn;

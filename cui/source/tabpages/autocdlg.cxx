@@ -1532,20 +1532,23 @@ sal_Bool OfaAutocorrExceptPage::FillItemSet( SfxItemSet&  )
 
             if(pWrdList)
             {
-                sal_uInt16 nCount = pWrdList->Count();
+                sal_uInt16 nCount = pWrdList->size();
                 sal_uInt16 i;
                 for( i = nCount; i; )
                 {
-                    String* pString = pWrdList->GetObject( --i );
+                    String* pString = (*pWrdList)[ --i ];
 
                     if( !lcl_FindInArray(rArrays.aDoubleCapsStrings, *pString))
-                      pWrdList->DeleteAndDestroy( i );
+                    {
+                      delete (*pWrdList)[ i ];
+                      pWrdList->erase( pWrdList->begin() + i );
+                    }
                 }
 
                 for(std::vector<rtl::OUString>::iterator it = rArrays.aDoubleCapsStrings.begin(); it != rArrays.aDoubleCapsStrings.end(); ++i)
                 {
                     String* s = new String(*it);
-                    if(!pWrdList->Insert(s))
+                    if(!pWrdList->insert(s).second)
                         delete s;
                 }
                 pAutoCorrect->SaveWrdSttExceptList(eCurLang);
@@ -1555,19 +1558,22 @@ sal_Bool OfaAutocorrExceptPage::FillItemSet( SfxItemSet&  )
 
             if(pCplList)
             {
-                sal_uInt16 nCount = pCplList->Count();
+                sal_uInt16 nCount = pCplList->size();
                 sal_uInt16 i;
                 for( i = nCount; i; )
                 {
-                    String* pString = pCplList->GetObject( --i );
+                    String* pString = (*pCplList)[ --i ];
                     if( !lcl_FindInArray(rArrays.aAbbrevStrings, *pString))
-                        pCplList->DeleteAndDestroy( i );
+                    {
+                        delete (*pCplList)[ i ];
+                        pCplList->erase( pCplList->begin() + i );
+                    }
                 }
 
                 for(std::vector<rtl::OUString>::iterator it = rArrays.aAbbrevStrings.begin(); it != rArrays.aAbbrevStrings.end(); ++it)
                 {
                     String* s = new String(*it);
-                    if(!pCplList->Insert(s))
+                    if(!pCplList->insert(s).second)
                         delete s;
                 }
 
@@ -1581,19 +1587,22 @@ sal_Bool OfaAutocorrExceptPage::FillItemSet( SfxItemSet&  )
 
     if(pWrdList)
     {
-        sal_uInt16 nCount = pWrdList->Count();
+        sal_uInt16 nCount = pWrdList->size();
         sal_uInt16 i;
         for( i = nCount; i; )
         {
-            String* pString = pWrdList->GetObject( --i );
+            String* pString = (*pWrdList)[ --i ];
             if( USHRT_MAX == aDoubleCapsLB.GetEntryPos(*pString) )
-                pWrdList->DeleteAndDestroy( i );
+            {
+                delete (*pWrdList)[ i ];
+                pWrdList->erase( pWrdList->begin() + i );
+            }
         }
         nCount = aDoubleCapsLB.GetEntryCount();
         for( i = 0; i < nCount; ++i )
         {
             String* pEntry = new String( aDoubleCapsLB.GetEntry( i ) );
-            if( !pWrdList->Insert( pEntry ))
+            if( !pWrdList->insert( pEntry ).second)
                 delete pEntry;
         }
         pAutoCorrect->SaveWrdSttExceptList(eLang);
@@ -1603,19 +1612,22 @@ sal_Bool OfaAutocorrExceptPage::FillItemSet( SfxItemSet&  )
 
     if(pCplList)
     {
-        sal_uInt16 nCount = pCplList->Count();
+        sal_uInt16 nCount = pCplList->size();
         sal_uInt16 i;
         for( i = nCount; i; )
         {
-            String* pString = pCplList->GetObject( --i );
+            String* pString = (*pCplList)[ --i ];
             if( USHRT_MAX == aAbbrevLB.GetEntryPos(*pString) )
-                pCplList->DeleteAndDestroy( i );
+            {
+                delete (*pCplList)[ i ];
+                pCplList->erase( pCplList->begin() + i );
+            }
         }
         nCount = aAbbrevLB.GetEntryCount();
         for( i = 0; i < nCount; ++i )
         {
             String* pEntry = new String( aAbbrevLB.GetEntry( i ) );
-            if( !pCplList->Insert( pEntry ))
+            if( !pCplList->insert( pEntry ).second)
                 delete pEntry;
         }
         pAutoCorrect->SaveCplSttExceptList(eLang);
@@ -1693,13 +1705,13 @@ void OfaAutocorrExceptPage::RefillReplaceBoxes(sal_Bool bFromReset,
         const SvStringsISortDtor* pCplList = pAutoCorrect->GetCplSttExceptList(eLang);
         const SvStringsISortDtor* pWrdList = pAutoCorrect->GetWrdSttExceptList(eLang);
         sal_uInt16 i;
-        for( i = 0; i < pCplList->Count(); i++ )
+        for( i = 0; i < pCplList->size(); i++ )
         {
-            aAbbrevLB.InsertEntry(*pCplList->GetObject(i));
+            aAbbrevLB.InsertEntry(*(*pCplList)[i]);
         }
-        for( i = 0; i < pWrdList->Count(); i++ )
+        for( i = 0; i < pWrdList->size(); i++ )
         {
-            aDoubleCapsLB.InsertEntry(*pWrdList->GetObject(i));
+            aDoubleCapsLB.InsertEntry(*(*pWrdList)[i]);
         }
     }
 }
@@ -2330,14 +2342,14 @@ void OfaAutoCompleteTabPage::Reset( const SfxItemSet&  )
             }
     }
 
-    if( pOpt->pAutoCmpltList && pOpt->pAutoCmpltList->Count() )
+    if( pOpt->pAutoCmpltList && pOpt->pAutoCmpltList->size() )
     {
         pAutoCmpltList = (SvStringsISortDtor*)pOpt->pAutoCmpltList;
         pOpt->pAutoCmpltList = 0;
-        nAutoCmpltListCnt = pAutoCmpltList->Count();
+        nAutoCmpltListCnt = pAutoCmpltList->size();
         for( sal_uInt16 n = 0; n < nAutoCmpltListCnt; ++n )
         {
-            const StringPtr pStr = pAutoCmpltList->GetObject( n );
+            const StringPtr pStr = (*pAutoCmpltList)[ n ];
             sal_uInt16 nPos = aLBEntries.InsertEntry( *pStr );
             aLBEntries.SetEntryData( nPos, (void*)pStr );
         }
@@ -2363,11 +2375,9 @@ IMPL_LINK_NOARG(OfaAutoCompleteTabPage, DeleteHdl)
     while( nSelCnt )
     {
         sal_uInt16 nPos = aLBEntries.GetSelectEntryPos( --nSelCnt );
-        const StringPtr pStr = (StringPtr)aLBEntries.GetEntryData( nPos );
+        StringPtr pStr = (StringPtr)aLBEntries.GetEntryData( nPos );
         aLBEntries.RemoveEntry( nPos );
-        nPos = pAutoCmpltList->GetPos( pStr );
-        if( USHRT_MAX != nPos )
-            pAutoCmpltList->Remove( nPos );
+        pAutoCmpltList->erase( pStr );
     }
     return 0;
 }

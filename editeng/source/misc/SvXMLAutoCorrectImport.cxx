@@ -246,7 +246,7 @@ SvXMLExceptionContext::SvXMLExceptionContext(
 
     String * pNew = new String( sWord );
 
-    if( !rLocalRef.rList.Insert( pNew ) )
+    if( !rLocalRef.rList.insert( pNew ).second )
         delete pNew;
 }
 

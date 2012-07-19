@@ -642,8 +642,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
 
             rACW.SetLockWordLstLocked( true );
 
-            SvStringsISortDtor aTmpLst;
-            aTmpLst.Insert( &rACW.GetWordList() );
+            SvStringsISortDtor aTmpLst( rACW.GetWordList() );
             pAFlags->pAutoCmpltList = &aTmpLst;
 
             SfxApplication* pApp = SFX_APP();
@@ -678,7 +677,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 pAFlags->pAutoCmpltList = 0;
             }
             // remove all pointer we never delete the strings
-            aTmpLst.Remove( (sal_uInt16)0, aTmpLst.Count() );
+            aTmpLst.clear();
 
             if( !bOldAutoCmpltCollectWords && bOldAutoCmpltCollectWords !=
                 pAFlags->bAutoCmpltCollectWords )
