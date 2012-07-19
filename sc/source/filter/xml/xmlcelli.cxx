@@ -189,7 +189,8 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
                     bIsEmpty = false;
 
                     //if office:value="0", treat like text in case the formula
-                    //result is "Err:###" or "#N/A" until we confirm otherwise
+                    //result is "Err:###", "#N/A", or matrix reference cell with
+                    //blank text result until we confirm otherwise.
                     if(fValue == 0.0)
                         bFormulaTextResult = true;
                 }
@@ -1109,9 +1110,21 @@ void ScXMLTableRowCellContext::AddFormulaCell( const ScAddress& rCellPos )
 
 namespace{
 
-bool isErrOrNA(const rtl::OUString& rStr)
+bool isSpecialValue(const rtl::OUString& rStr, sal_Int16& rnCellType)
 {
-    return (rStr.indexOf("Err:")  > -1) || (rStr.indexOf("#N/A") > -1);
+    if( (rStr.indexOf("Err:")  > -1) || (rStr.indexOf("#N/A") > -1) )
+        return true;
+    //If a matrix formula has a matrix reference cell that is intended to have
+    //a blank text result, the matrix reference cell is actually saved(export)
+    //as a float cell with 0 as the value and empty <text:p/>.
+    //Import works around this by setting these cells as text cells so that
+    //the blank text is used for display instead of the number 0.
+    if( rStr.isEmpty() )
+    {
+        rnCellType = util::NumberFormat::TEXT;
+        return true;
+    }
+    return false;
 }
 
 }
@@ -1132,8 +1145,9 @@ void ScXMLTableRowCellContext::EndElement()
         }
     }
 
-    //if this is an "Err:###" or "#N/A" then use text:p value
-    if( bFormulaTextResult && pOUTextContent && isErrOrNA(*pOUTextContent) )
+    //if this is a blank matrix formula result, "Err:###", or "#N/A" then
+    //use text:p string because of the way export saves these types of cells.
+    if( bFormulaTextResult && pOUTextContent && isSpecialValue(*pOUTextContent, nCellType) )
         pOUTextValue.reset(*pOUTextContent);
 
     ScAddress aCellPos = rXMLImport.GetTables().GetCurrentCellPos();
