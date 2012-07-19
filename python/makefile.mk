@@ -51,7 +51,8 @@ PATCH_FILES=\
     Python-2.6.1-nohardlink.patch \
     Python-2.6.1-security-flags.patch \
     Python-disable-dbm.patch \
-    Python-linux3.patch
+    Python-linux3.patch \
+    Python-subversion-1-7.patch
 
 CONFIGURE_DIR=
 
