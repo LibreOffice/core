@@ -311,41 +311,7 @@ sub set_mspfilename
 {
     my ($allvariables, $mspdir, $languagesarrayref) = @_;
 
-    my $databasename = $allvariables->{'PRODUCTNAME'};
-    $databasename = lc($databasename);
-    $databasename =~ s/\.//g;
-    $databasename =~ s/\-//g;
-    $databasename =~ s/\s//g;
-
-    if ( $allvariables->{'MSPPRODUCTVERSION'} ) { $databasename = $databasename . $allvariables->{'MSPPRODUCTVERSION'}; }
-
-    # possibility to overwrite the name with variable DATABASENAME
-    # if ( $allvariables->{'DATABASENAME'} ) { $databasename = $allvariables->{'DATABASENAME'}; }
-
-    # Adding patch info to database name
-    # if ( $installer::globals::buildid ) { $databasename = $databasename . "_" . $installer::globals::buildid; }
-
-    # if ( $allvariables->{'VENDORPATCHVERSION'} ) { $databasename = $databasename . "_" . $allvariables->{'VENDORPATCHVERSION'}; }
-
-
-    if (( $allvariables->{'SERVICEPACK'} ) && ( $allvariables->{'SERVICEPACK'} == 1 ))
-    {
-        my $windowspatchlevel = 0;
-        if ( $allvariables->{'MSPPATCHLEVEL'} ) { $windowspatchlevel = $allvariables->{'MSPPATCHLEVEL'}; }
-        $databasename = $databasename . "_servicepack_" . $windowspatchlevel;
-        my $languagestring = create_langstring($languagesarrayref);
-        $databasename = $databasename . $languagestring;
-    }
-    else
-    {
-        my $hotfixaddon = "hotfix_";
-        $hotfixaddon = $hotfixaddon . $installer::globals::buildid;
-        my $cwsname = "";
-        if ( $allvariables->{'OVERWRITE_CWSNAME'} ) { $hotfixaddon = $allvariables->{'OVERWRITE_CWSNAME'}; }
-        $databasename = $databasename . "_" . $hotfixaddon;
-    }
-
-    $databasename = $databasename . ".msp";
+    my $databasename = $allvariables->{'PRODUCTNAME'} . "-PTF-" . $allvariables->{'PRODUCTVERSION'} . "-" . $allvariables->{'WINDOWSPATCHLEVEL'} . ".msp";
 
     my $fullmspname = $mspdir . $installer::globals::separator . $databasename;
 
