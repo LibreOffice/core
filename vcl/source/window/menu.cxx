@@ -6039,4 +6039,37 @@ ImplMenuDelData::~ImplMenuDelData()
         const_cast< Menu* >( mpMenu )->ImplRemoveDel( *this );
 }
 
+#include <iostream>
+using namespace std;
+
+void printMenu( AbstractMenu* pMenu ) {
+    if ( pMenu ) {
+        sal_uInt16 itemCount = pMenu->GetItemCount();
+        MenuItemList *items = ((Menu*)pMenu)->GetItemList();
+
+        for (int i=0; i < itemCount; i++) {
+            MenuItemData *itemData = items->GetDataFromPos(i);
+            sal_uInt16 itemId = pMenu->GetItemId(i);
+
+            if (itemData->eType == MENUITEM_SEPARATOR) {
+                cout << "---------------" << endl;
+            } else {
+                rtl::OUString itemText = itemData->aText;
+                rtl::OUString cmdString = itemData->aCommandStr;
+                cout << "Item ID: " << itemId << "  Text: " << itemText << "  CMD: " << cmdString << endl;
+
+                if (itemData->pSubMenu) {
+                    cout << ">> SUBMENU <<" << endl;
+                    printMenu( itemData->pSubMenu );
+                }
+            }
+        }
+    }
+}
+
+void Menu::Freeze() {
+    printMenu( this );
+    cout << "============================================================" << endl;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

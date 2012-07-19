@@ -167,6 +167,7 @@ void SAL_CALL MenuBarWrapper::initialize( const Sequence< Any >& aArguments ) th
                     // Fill menubar with container contents
                     sal_uInt16 nId = 1;
                     MenuBarManager::FillMenuWithConfiguration( nId, pVCLMenuBar, aModuleIdentifier, m_xConfigData, xTrans );
+//                    pVCLMenuBar->Freeze();
                 }
             }
             catch ( const NoSuchElementException& )
@@ -208,6 +209,9 @@ void SAL_CALL MenuBarWrapper::initialize( const Sequence< Any >& aArguments ) th
             // Don't use this toolkit menu bar or one of its functions. It is only used as a data container!
             pAwtMenuBar = new VCLXMenuBar( pVCLMenuBar );
             m_xMenuBar = Reference< XMenuBar >( static_cast< OWeakObject *>( pAwtMenuBar ), UNO_QUERY );
+
+            // Freeze the menubar
+            pVCLMenuBar->Freeze();
         }
     }
 }

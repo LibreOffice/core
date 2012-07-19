@@ -1047,6 +1047,9 @@ IMPL_LINK( MenuBarManager, Deactivate, AbstractMenu *, pMenu )
         }
     }
 
+//    pMenu->Freeze();
+    m_pVCLMenu->Freeze();
+
     return 1;
 }
 
@@ -1726,7 +1729,7 @@ void MenuBarManager::FillMenu(
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "MenuBarManager::FillMenu" );
     // Fill menu bar with container contents
-    for ( sal_Int32 n = 0; n < rItemContainer->getCount(); n++ )
+     for ( sal_Int32 n = 0; n < rItemContainer->getCount(); n++ )
     {
         Sequence< PropertyValue >       aProp;
         rtl::OUString                   aCommandURL;

@@ -188,6 +188,8 @@ public:
     // Returns the system's menu handle if native menus are supported
     // pData must point to a SystemMenuData structure
     virtual sal_Bool                GetSystemMenuData( SystemMenuData* pData ) const = 0;
+
+    virtual void                    Freeze(void) = 0;
 };
 
 // --------
@@ -446,6 +448,8 @@ public:
 
     void                HighlightItem( sal_uInt16 nItemPos );
     void                DeHighlight() { HighlightItem( 0xFFFF ); } // MENUITEMPOS_INVALID
+
+    void                Freeze();
 };
 
 // -----------
