@@ -1590,7 +1590,7 @@ static sal_Char const sDoubleSpace[] = "  ";
                             const SvxTabStopItem& rTab =
                                 (const SvxTabStopItem &)pSet->
                                 GetPool()->GetDefaultItem( RES_PARATR_TABSTOP );
-                            MSHORT nDefTabDist = (MSHORT)rTab.GetStart()->GetTabPos();
+                            MSHORT nDefTabDist = (MSHORT)rTab[0].GetTabPos();
                             nRightTab = nLeftTab - nTxtLeft;
                             nRightTab /= nDefTabDist;
                             nRightTab = nRightTab * nDefTabDist + nTxtLeft;

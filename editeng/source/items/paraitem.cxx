@@ -93,8 +93,6 @@ TYPEINIT1_FACTORY(SvxForbiddenRuleItem, SfxBoolItem, new SvxForbiddenRuleItem(sa
 TYPEINIT1_FACTORY(SvxParaVertAlignItem, SfxUInt16Item, new SvxParaVertAlignItem(0, 0));
 TYPEINIT1_FACTORY(SvxParaGridItem, SfxBoolItem, new SvxParaGridItem(sal_True, 0));
 
-SV_IMPL_VARARR_SORT( SvxTabStopArr, SvxTabStop )
-
 // -----------------------------------------------------------------------
 
 SvxLineSpacingItem::SvxLineSpacingItem( sal_uInt16 nHeight, const sal_uInt16 nId )
@@ -913,7 +911,7 @@ XubString SvxTabStop::GetValueString() const
 
 SvxTabStopItem::SvxTabStopItem( sal_uInt16 _nWhich ) :
     SfxPoolItem( _nWhich ),
-    SvxTabStopArr( sal_Int8(SVX_TAB_DEFCOUNT) )
+    maTabStops()
 {
     const sal_uInt16 nTabs = SVX_TAB_DEFCOUNT, nDist = SVX_TAB_DEFDIST;
     const SvxTabAdjust eAdjst= SVX_TAB_ADJUST_DEFAULT;
@@ -921,7 +919,7 @@ SvxTabStopItem::SvxTabStopItem( sal_uInt16 _nWhich ) :
     for (sal_uInt16 i = 0; i < nTabs; ++i)
     {
         SvxTabStop aTab( (i + 1) * nDist, eAdjst );
-        SvxTabStopArr::Insert( aTab );
+        maTabStops.insert( aTab );
     }
 }
 
@@ -932,12 +930,12 @@ SvxTabStopItem::SvxTabStopItem( const sal_uInt16 nTabs,
                                 const SvxTabAdjust eAdjst,
                                 sal_uInt16 _nWhich ) :
     SfxPoolItem( _nWhich ),
-    SvxTabStopArr( sal_Int8(nTabs) )
+    maTabStops()
 {
     for ( sal_uInt16 i = 0; i < nTabs; ++i )
     {
         SvxTabStop aTab( (i + 1) * nDist, eAdjst );
-        SvxTabStopArr::Insert( aTab );
+        maTabStops.insert( aTab );
     }
 }
 
@@ -945,33 +943,32 @@ SvxTabStopItem::SvxTabStopItem( const sal_uInt16 nTabs,
 
 SvxTabStopItem::SvxTabStopItem( const SvxTabStopItem& rTSI ) :
     SfxPoolItem( rTSI.Which() ),
-    SvxTabStopArr( (sal_Int8)rTSI.Count() )
+    maTabStops( rTSI.maTabStops )
 {
-    SvxTabStopArr::Insert( &rTSI );
 }
 
 // -----------------------------------------------------------------------
 
 sal_uInt16 SvxTabStopItem::GetPos( const SvxTabStop& rTab ) const
 {
-    sal_uInt16 nFound;
-    return Seek_Entry( rTab, &nFound ) ? nFound : SVX_TAB_NOTFOUND;
+    SvxTabStopArr::const_iterator it = maTabStops.find( rTab );
+    return it != maTabStops.end() ? it - maTabStops.begin() : SVX_TAB_NOTFOUND;
 }
 
 // -----------------------------------------------------------------------
 
 sal_uInt16 SvxTabStopItem::GetPos( const sal_Int32 nPos ) const
 {
-    sal_uInt16 nFound;
-    return Seek_Entry( SvxTabStop( nPos ), &nFound ) ? nFound : SVX_TAB_NOTFOUND;
+    SvxTabStopArr::const_iterator it = maTabStops.find( SvxTabStop( nPos ) );
+    return it != maTabStops.end() ? it - maTabStops.begin() : SVX_TAB_NOTFOUND;
 }
 
 // -----------------------------------------------------------------------
 
 SvxTabStopItem& SvxTabStopItem::operator=( const SvxTabStopItem& rTSI )
 {
-    Remove( 0, Count() );
-    SvxTabStopArr::Insert( &rTSI );
+    maTabStops.clear();
+    maTabStops.insert( rTSI.maTabStops );
     return *this;
 }
 
@@ -988,7 +985,7 @@ bool SvxTabStopItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
             style::TabStop* pArr = aSeq.getArray();
             for(sal_uInt16 i = 0; i < nCount; i++)
             {
-                const SvxTabStop& rTab = *(GetStart() + i);
+                const SvxTabStop& rTab = (*this)[i];
                 pArr[i].Position        = bConvert ? TWIP_TO_MM100(rTab.GetTabPos()) : rTab.GetTabPos();
                 switch(rTab.GetAdjustment())
                 {
@@ -1008,7 +1005,7 @@ bool SvxTabStopItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         }
         case MID_STD_TAB:
         {
-            const SvxTabStop &rTab = *(GetStart());
+            const SvxTabStop &rTab = maTabStops.front();
             rVal <<= (static_cast<sal_Int32>(bConvert ? TWIP_TO_MM100(rTab.GetTabPos()) : rTab.GetTabPos()));
             break;
         }
@@ -1068,7 +1065,7 @@ bool SvxTabStopItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                 }
             }
 
-            SvxTabStopArr::Remove( 0, Count() );
+            maTabStops.clear();
             const style::TabStop* pArr = aSeq.getConstArray();
             const sal_uInt16 nCount = (sal_uInt16)aSeq.getLength();
             for(sal_uInt16 i = 0; i < nCount ; i++)
@@ -1101,9 +1098,9 @@ bool SvxTabStopItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                 nNewPos = MM100_TO_TWIP ( nNewPos );
             if (nNewPos <= 0)
                 return sal_False;
-            const SvxTabStop& rTab = *(GetStart());
+            const SvxTabStop& rTab = maTabStops.front();
             SvxTabStop aNewTab ( nNewPos, rTab.GetAdjustment(), rTab.GetDecimal(), rTab.GetFill() );
-            Remove ( 0 );
+            Remove( 0 );
             Insert( aNewTab );
             break;
         }
@@ -1210,7 +1207,7 @@ SvStream& SvxTabStopItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) 
     {
         const SvxTabStopItem& rDefTab = (const SvxTabStopItem &)
             pPool->GetDefaultItem( pPool->GetWhich( SID_ATTR_TABSTOP, sal_False ) );
-        nDefDist = sal_uInt16( rDefTab.GetStart()->GetTabPos() );
+        nDefDist = sal_uInt16( rDefTab.maTabStops.front().GetTabPos() );
         const sal_Int32 nPos = nTabs > 0 ? (*this)[nTabs-1].GetTabPos() : 0;
         nCount  = (sal_uInt16)(nPos / nDefDist);
         nNew    = (nCount + 1) * nDefDist;
@@ -1247,12 +1244,12 @@ SvStream& SvxTabStopItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) 
 }
 
 // -----------------------------------------------------------------------
-sal_Bool SvxTabStopItem::Insert( const SvxTabStop& rTab )
+bool SvxTabStopItem::Insert( const SvxTabStop& rTab )
 {
     sal_uInt16 nTabPos = GetPos(rTab);
     if(SVX_TAB_NOTFOUND != nTabPos )
         Remove(nTabPos);
-    return SvxTabStopArr::Insert( rTab );
+    return maTabStops.insert( rTab ).second;
 }
 // -----------------------------------------------------------------------
 void SvxTabStopItem::Insert( const SvxTabStopItem* pTabs, sal_uInt16 nStart,
@@ -1265,7 +1262,10 @@ void SvxTabStopItem::Insert( const SvxTabStopItem* pTabs, sal_uInt16 nStart,
         if(SVX_TAB_NOTFOUND != nTabPos)
             Remove(nTabPos);
     }
-    SvxTabStopArr::Insert( pTabs, nStart, nEnd );
+    for( sal_uInt16 i = nStart; i < nEnd && i < pTabs->Count(); i++ )
+    {
+        maTabStops.insert( (*pTabs)[i] );
+    }
 }
 
 
