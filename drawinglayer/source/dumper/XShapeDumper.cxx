@@ -1454,19 +1454,19 @@ void dumpLinePropertiesService(uno::Reference< beans::XPropertySet > xPropSet, x
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("LineColor");
-        sal_Int32 aLineColor;
+        sal_Int32 aLineColor = sal_Int32();
         if(anotherAny >>= aLineColor)
             dumpLineColorAsAttribute(aLineColor, xmlWriter);
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("LineTransparence");
-        sal_Int32 aLineTransparence;
+        sal_Int32 aLineTransparence = sal_Int32();
         if(anotherAny >>= aLineTransparence)
             dumpLineTransparenceAsAttribute(aLineTransparence, xmlWriter);
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("LineWidth");
-        sal_Int32 aLineWidth;
+        sal_Int32 aLineWidth = sal_Int32();
         if(anotherAny >>= aLineWidth)
             dumpLineWidthAsAttribute(aLineWidth, xmlWriter);
     }
@@ -1502,25 +1502,25 @@ void dumpLinePropertiesService(uno::Reference< beans::XPropertySet > xPropSet, x
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("LineStartCenter");
-        sal_Bool bLineStartCenter;
+        sal_Bool bLineStartCenter = sal_Bool();
         if(anotherAny >>= bLineStartCenter)
             dumpLineStartCenterAsAttribute(bLineStartCenter, xmlWriter);
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("LineStartWidth");
-        sal_Int32 aLineStartWidth;
+        sal_Int32 aLineStartWidth = sal_Int32();
         if(anotherAny >>= aLineStartWidth)
             dumpLineStartWidthAsAttribute(aLineStartWidth, xmlWriter);
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("LineEndCenter");
-        sal_Bool bLineEndCenter;
+        sal_Bool bLineEndCenter = sal_Bool();
         if(anotherAny >>= bLineEndCenter)
             dumpLineEndCenterAsAttribute(bLineEndCenter, xmlWriter);
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("LineEndWidth");
-        sal_Int32 aLineEndWidth;
+        sal_Int32 aLineEndWidth = sal_Int32();
         if(anotherAny >>= aLineEndWidth)
             dumpLineEndWidthAsAttribute(aLineEndWidth, xmlWriter);
     }

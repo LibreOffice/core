@@ -624,19 +624,19 @@ void EnhancedShapeDumper::dumpEnhancedCustomShapeHandleService(uno::Reference< b
 {
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("MirroredX");
-        sal_Bool bMirroredX;
+        sal_Bool bMirroredX = sal_Bool();
         if(anotherAny >>= bMirroredX)
             dumpMirroredXAsAttribute(bMirroredX);
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("MirroredY");
-        sal_Bool bMirroredY;
+        sal_Bool bMirroredY = sal_Bool();
         if(anotherAny >>= bMirroredY)
             dumpMirroredYAsAttribute(bMirroredY);
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("Switched");
-        sal_Bool bSwitched;
+        sal_Bool bSwitched = sal_Bool();
         if(anotherAny >>= bSwitched)
             dumpSwitchedAsAttribute(bSwitched);
     }
@@ -654,25 +654,25 @@ void EnhancedShapeDumper::dumpEnhancedCustomShapeHandleService(uno::Reference< b
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("RefX");
-        sal_Int32 aRefX;
+        sal_Int32 aRefX = sal_Int32();
         if(anotherAny >>= aRefX)
             dumpRefXAsAttribute(aRefX);
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("RefY");
-        sal_Int32 aRefY;
+        sal_Int32 aRefY = sal_Int32();
         if(anotherAny >>= aRefY)
             dumpRefYAsAttribute(aRefY);
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("RefAngle");
-        sal_Int32 aRefAngle;
+        sal_Int32 aRefAngle = sal_Int32();
         if(anotherAny >>= aRefAngle)
             dumpRefAngleAsAttribute(aRefAngle);
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("RefR");
-        sal_Int32 aRefR;
+        sal_Int32 aRefR = sal_Int32();
         if(anotherAny >>= aRefR)
             dumpRefRAsAttribute(aRefR);
     }
