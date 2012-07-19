@@ -34,6 +34,7 @@
 #include <vector>
 #include <list>
 #include <map>
+#include <o3tl/sorted_vector.hxx>
 #include <boost/ptr_container/ptr_map.hpp>
 #include <boost/unordered_map.hpp>
 
@@ -108,7 +109,7 @@ public:
 
 // ============================================================================
 
-SV_DECL_VARARR_SORT( ScHTMLColOffset, sal_uLong, 16 )
+typedef o3tl::sorted_vector<sal_uLong> ScHTMLColOffset;
 
 struct ScHTMLTableStackEntry
 {

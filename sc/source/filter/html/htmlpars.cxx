@@ -190,9 +190,6 @@ void ScHTMLStyles::insertProp(
     pProps->insert(PropsType::value_type(aProp, aValue));
 }
 
-SV_IMPL_VARARR_SORT( ScHTMLColOffset, sal_uLong );
-
-
 // ============================================================================
 // BASE class for HTML parser classes
 // ============================================================================
@@ -323,16 +320,15 @@ sal_uLong ScHTMLLayoutParser::Read( SvStream& rStream, const String& rBaseURL )
     // Spaltenbreiten erzeugen
     Adjust();
     OutputDevice* pDefaultDev = Application::GetDefaultDevice();
-    sal_uInt16 nCount = pColOffset->Count();
-    const sal_uLong* pOff = (const sal_uLong*) pColOffset->GetData();
-    sal_uLong nOff = *pOff++;
+    sal_uInt16 nCount = pColOffset->size();
+    sal_uLong nOff = (*pColOffset)[0];
     Size aSize;
-    for ( sal_uInt16 j = 1; j < nCount; j++, pOff++ )
+    for ( sal_uInt16 j = 1; j < nCount; j++ )
     {
-        aSize.Width() = *pOff - nOff;
+        aSize.Width() = (*pColOffset)[j] - nOff;
         aSize = pDefaultDev->PixelToLogic( aSize, MapMode( MAP_TWIP ) );
         maColWidths[ j-1 ] = aSize.Width();
-        nOff = *pOff;
+        nOff = (*pColOffset)[j];
     }
     return nErr;
 }
@@ -393,12 +389,13 @@ bool ScHTMLLayoutParser::SeekOffset( ScHTMLColOffset* pOffset, sal_uInt16 nOffse
         SCCOL* pCol, sal_uInt16 nOffsetTol )
 {
     OSL_ENSURE( pOffset, "ScHTMLLayoutParser::SeekOffset - illegal call" );
-    sal_uInt16 nPos;
-    bool bFound = pOffset->Seek_Entry( nOffset, &nPos );
+    ScHTMLColOffset::const_iterator it = pOffset->find( nOffset );
+    bool bFound = it != pOffset->end();
+    sal_uInt16 nPos = it - pOffset->end();
     *pCol = static_cast<SCCOL>(nPos);
     if ( bFound )
         return true;
-    sal_uInt16 nCount = pOffset->Count();
+    sal_uInt16 nCount = pOffset->size();
     if ( !nCount )
         return false;
     // nPos ist Einfuegeposition, da liegt der Naechsthoehere (oder auch nicht)
@@ -422,13 +419,13 @@ void ScHTMLLayoutParser::MakeCol( ScHTMLColOffset* pOffset, sal_uInt16& nOffset,
     if ( SeekOffset( pOffset, nOffset, &nPos, nOffsetTol ) )
         nOffset = (sal_uInt16)(*pOffset)[nPos];
     else
-        pOffset->Insert( nOffset );
+        pOffset->insert( nOffset );
     if ( nWidth )
     {
         if ( SeekOffset( pOffset, nOffset + nWidth, &nPos, nWidthTol ) )
             nWidth = (sal_uInt16)(*pOffset)[nPos] - nOffset;
         else
-            pOffset->Insert( nOffset + nWidth );
+            pOffset->insert( nOffset + nWidth );
     }
 }
 
@@ -441,11 +438,11 @@ void ScHTMLLayoutParser::MakeColNoRef( ScHTMLColOffset* pOffset, sal_uInt16 nOff
     if ( SeekOffset( pOffset, nOffset, &nPos, nOffsetTol ) )
         nOffset = (sal_uInt16)(*pOffset)[nPos];
     else
-        pOffset->Insert( nOffset );
+        pOffset->insert( nOffset );
     if ( nWidth )
     {
         if ( !SeekOffset( pOffset, nOffset + nWidth, &nPos, nWidthTol ) )
-            pOffset->Insert( nOffset + nWidth );
+            pOffset->insert( nOffset + nWidth );
     }
 }
 
@@ -460,7 +457,7 @@ void ScHTMLLayoutParser::ModifyOffset( ScHTMLColOffset* pOffset, sal_uInt16& nOl
         if ( SeekOffset( pOffset, nNewOffset, &nPos, nOffsetTol ) )
             nNewOffset = (sal_uInt16)(*pOffset)[nPos];
         else
-            pOffset->Insert( nNewOffset );
+            pOffset->insert( nNewOffset );
         return ;
     }
     nOldOffset = (sal_uInt16)(*pOffset)[nPos];
@@ -470,23 +467,20 @@ void ScHTMLLayoutParser::ModifyOffset( ScHTMLColOffset* pOffset, sal_uInt16& nOl
         nNewOffset = (sal_uInt16)(*pOffset)[nPos2];
         return ;
     }
-    sal_uLong* pData = ((sal_uLong*) pOffset->GetData()) + nPos;        //! QAD
     long nDiff = nNewOffset - nOldOffset;
     if ( nDiff < 0 )
     {
-        const sal_uLong* pStop = pOffset->GetData();
         do
         {
-            *pData += nDiff;
-        } while ( pStop < pData-- );
+            (*pOffset)[nPos] += nDiff;
+        } while ( nPos-- );
     }
     else
     {
-        const sal_uLong* pStop = pOffset->GetData() + pOffset->Count();
         do
         {
-            *pData += nDiff;
-        } while ( ++pData < pStop );
+            (*pOffset)[nPos] += nDiff;
+        } while ( ++nPos < (sal_uInt16)pOffset->size() );
     }
 }
 
@@ -642,7 +636,7 @@ void ScHTMLLayoutParser::Adjust()
         SkipLocked( pE, false );
         if ( pE->nCol != nColBeforeSkip )
         {
-            SCCOL nCount = (SCCOL)pColOffset->Count();
+            SCCOL nCount = (SCCOL)pColOffset->size();
             if ( nCount <= pE->nCol )
             {
                 pE->nOffset = (sal_uInt16) (*pColOffset)[nCount-1];
@@ -685,7 +679,7 @@ sal_uInt16 ScHTMLLayoutParser::GetWidth( ScEEParseEntry* pE )
         return pE->nWidth;
     sal_Int32 nTmp = ::std::min( static_cast<sal_Int32>( pE->nCol -
                 nColCntStart + pE->nColOverlap),
-            static_cast<sal_Int32>( pLocalColOffset->Count() - 1));
+            static_cast<sal_Int32>( pLocalColOffset->size() - 1));
     SCCOL nPos = (nTmp < 0 ? 0 : static_cast<SCCOL>(nTmp));
     sal_uInt16 nOff2 = (sal_uInt16) (*pLocalColOffset)[nPos];
     if ( pE->nOffset < nOff2 )
@@ -703,16 +697,16 @@ void ScHTMLLayoutParser::SetWidths()
     SCCOL nColsPerRow = nMaxCol - nColCntStart;
     if ( nColsPerRow <= 0 )
         nColsPerRow = 1;
-    if ( pLocalColOffset->Count() <= 2 )
+    if ( pLocalColOffset->size() <= 2 )
     {   // nur PageSize, es gab keine Width-Angabe
         sal_uInt16 nWidth = nTableWidth / static_cast<sal_uInt16>(nColsPerRow);
         sal_uInt16 nOff = nColOffsetStart;
-        pLocalColOffset->Remove( (sal_uInt16)0, pLocalColOffset->Count() );
+        pLocalColOffset->clear();
         for ( nCol = 0; nCol <= nColsPerRow; ++nCol, nOff = nOff + nWidth )
         {
             MakeColNoRef( pLocalColOffset, nOff, 0, 0, 0 );
         }
-        nTableWidth = (sal_uInt16)((*pLocalColOffset)[pLocalColOffset->Count() -1 ] - (*pLocalColOffset)[0]);
+        nTableWidth = (sal_uInt16)(pLocalColOffset->back() - pLocalColOffset->front());
         for ( size_t i = nFirstTableCell, nListSize = maList.size(); i < nListSize; ++i )
         {
             pE = maList[ i ];
@@ -797,7 +791,7 @@ void ScHTMLLayoutParser::SetWidths()
             {
                 pOffsets[nCol] = pOffsets[nCol-1] + pWidths[nCol-1];
             }
-            pLocalColOffset->Remove( (sal_uInt16)0, pLocalColOffset->Count() );
+            pLocalColOffset->clear();
             for ( nCol = 0; nCol <= nColsPerRow; nCol++ )
             {
                 MakeColNoRef( pLocalColOffset, pOffsets[nCol], 0, 0, 0 );
@@ -826,9 +820,9 @@ void ScHTMLLayoutParser::SetWidths()
             delete [] pOffsets;
         }
     }
-    if ( pLocalColOffset->Count() )
+    if ( !pLocalColOffset->empty() )
     {
-        sal_uInt16 nMax = (sal_uInt16) (*pLocalColOffset)[pLocalColOffset->Count() - 1];
+        sal_uInt16 nMax = (sal_uInt16) pLocalColOffset->back();
         if ( aPageSize.Width() < nMax )
             aPageSize.Width() = nMax;
     }
@@ -860,7 +854,7 @@ void ScHTMLLayoutParser::Colonize( ScEEParseEntry* pE )
     if ( nCol < pE->nCol )
     {   // verdraengt
         nCol = pE->nCol - nColCntStart;
-        SCCOL nCount = static_cast<SCCOL>(pLocalColOffset->Count());
+        SCCOL nCount = static_cast<SCCOL>(pLocalColOffset->size());
         if ( nCol < nCount )
             nColOffset = (sal_uInt16) (*pLocalColOffset)[nCol];
         else
