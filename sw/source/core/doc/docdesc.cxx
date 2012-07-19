@@ -323,7 +323,7 @@ void SwDoc::ChgPageDesc( sal_uInt16 i, const SwPageDesc &rChged )
         // If the numbering scheme has changed we could have QuoVadis/ErgoSum texts
         // that refer to a changed page, so we invalidate foot notes.
         SwFtnIdxs& rFtnIdxs = GetFtnIdxs();
-        for( sal_uInt16 nPos = 0; nPos < rFtnIdxs.Count(); ++nPos )
+        for( sal_uInt16 nPos = 0; nPos < rFtnIdxs.size(); ++nPos )
         {
             SwTxtFtn *pTxtFtn = rFtnIdxs[ nPos ];
             const SwFmtFtn &rFtn = pTxtFtn->GetFtn();

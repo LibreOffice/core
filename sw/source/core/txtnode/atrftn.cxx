@@ -52,16 +52,14 @@ namespace {
                                                          SwTxtFtn *pExclude,
                                                          std::vector<SwTxtFtn*> &rInvalid)
     {
-        int n;
         std::set<sal_uInt16> aArr;
         SwFtnIdxs& ftnIdxs = rDoc.GetFtnIdxs();
-        SwTxtFtn* pTxtFtn;
 
         rInvalid.clear();
 
-        for( n = 0; n < ftnIdxs.Count(); ++n )
+        for( sal_uInt16 n = 0; n < ftnIdxs.size(); ++n )
         {
-            pTxtFtn = ftnIdxs[ n ];
+            SwTxtFtn* pTxtFtn = ftnIdxs[ n ];
             if ( pTxtFtn != pExclude )
             {
                 if ( USHRT_MAX == pTxtFtn->GetSeqRefNo() )
@@ -314,12 +312,12 @@ void SwTxtFtn::SetStartNode( const SwNodeIndex *pNewNode, sal_Bool bDelNode )
         DELETEZ( m_pStartNode );
 
         // loesche die Fussnote noch aus dem Array am Dokument
-        for( sal_uInt16 n = 0; n < pDoc->GetFtnIdxs().Count(); ++n )
+        for( sal_uInt16 n = 0; n < pDoc->GetFtnIdxs().size(); ++n )
             if( this == pDoc->GetFtnIdxs()[n] )
             {
-                pDoc->GetFtnIdxs().Remove( n );
+                pDoc->GetFtnIdxs().erase( pDoc->GetFtnIdxs().begin() + n );
                 // gibt noch weitere Fussnoten
-                if( !pDoc->IsInDtor() && n < pDoc->GetFtnIdxs().Count() )
+                if( !pDoc->IsInDtor() && n < pDoc->GetFtnIdxs().size() )
                 {
                     SwNodeIndex aTmp( pDoc->GetFtnIdxs()[n]->GetTxtNode() );
                     pDoc->GetFtnIdxs().UpdateFtn( aTmp );

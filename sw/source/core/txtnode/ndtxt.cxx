@@ -1088,7 +1088,7 @@ void SwTxtNode::_ChgTxtCollUpdateNum( const SwTxtFmtColl *pOldColl,
 
     SwNodes& rNds = GetNodes();
     // Update beim Level 0 noch die Fussnoten !!
-    if( ( !nNewLevel || !nOldLevel) && pDoc->GetFtnIdxs().Count() &&
+    if( ( !nNewLevel || !nOldLevel) && !pDoc->GetFtnIdxs().empty() &&
         FTNNUM_CHAPTER == pDoc->GetFtnInfo().eNum &&
         rNds.IsDocNodes() )
     {

@@ -206,7 +206,7 @@ void SwEndNoteInfo::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
         else
             pDoc = ((SwCharFmt*)aAnchorCharFmtDep.GetRegisteredIn())->GetDoc();
         SwFtnIdxs& rFtnIdxs = pDoc->GetFtnIdxs();
-        for( sal_uInt16 nPos = 0; nPos < rFtnIdxs.Count(); ++nPos )
+        for( sal_uInt16 nPos = 0; nPos < rFtnIdxs.size(); ++nPos )
         {
             SwTxtFtn *pTxtFtn = rFtnIdxs[ nPos ];
             const SwFmtFtn &rFtn = pTxtFtn->GetFtn();
@@ -307,7 +307,7 @@ void SwDoc::SetFtnInfo(const SwFtnInfo& rInfo)
                     // For messages regarding ErgoSum etc. we save the extra code and use the
                     // available methods.
                     SwFtnIdxs& rFtnIdxs = GetFtnIdxs();
-                    for( sal_uInt16 nPos = 0; nPos < rFtnIdxs.Count(); ++nPos )
+                    for( sal_uInt16 nPos = 0; nPos < rFtnIdxs.size(); ++nPos )
                     {
                         SwTxtFtn *pTxtFtn = rFtnIdxs[ nPos ];
                         const SwFmtFtn &rFtn = pTxtFtn->GetFtn();
@@ -377,7 +377,7 @@ void SwDoc::SetEndNoteInfo(const SwEndNoteInfo& rInfo)
                 // For messages regarding ErgoSum etc. we save the extra code and use the
                 // available methods.
                 SwFtnIdxs& rFtnIdxs = GetFtnIdxs();
-                for( sal_uInt16 nPos = 0; nPos < rFtnIdxs.Count(); ++nPos )
+                for( sal_uInt16 nPos = 0; nPos < rFtnIdxs.size(); ++nPos )
                 {
                     SwTxtFtn *pTxtFtn = rFtnIdxs[ nPos ];
                     const SwFmtFtn &rFtn = pTxtFtn->GetFtn();
@@ -432,7 +432,7 @@ bool SwDoc::SetCurFtn( const SwPaM& rPam, const String& rNumStr,
     sal_Bool bChg = sal_False;
     sal_Bool bTypeChgd = sal_False;
     sal_uInt16 n = nPos;        // save
-    while( nPos < rFtnArr.Count() &&
+    while( nPos < rFtnArr.size() &&
             (( nIdx = _SwTxtFtn_GetIndex((pTxtFtn = rFtnArr[ nPos++ ] )))
                 < nEndNd || ( nIdx == nEndNd &&
                 nEndCnt >= *pTxtFtn->GetStart() )) )

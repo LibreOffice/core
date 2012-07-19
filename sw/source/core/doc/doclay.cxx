@@ -2125,7 +2125,7 @@ void SwDoc::SetAllUniqueFlyNames()
         }
     aArr.clear();
 
-    if( GetFtnIdxs().Count() )
+    if( !GetFtnIdxs().empty() )
     {
         SwTxtFtn::SetUniqueSeqRefNo( *this );
         // #i52775# Chapter footnotes did not get updated correctly.

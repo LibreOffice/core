@@ -354,7 +354,7 @@ SwDoc::InsertSwSection(SwPaM const& rRange, SwSectionData & rNewData,
     }
 
     sal_Bool bUpdateFtn = sal_False;
-    if( GetFtnIdxs().Count() && pAttr )
+    if( GetFtnIdxs().size() && pAttr )
     {
         sal_uInt16 nVal = ((SwFmtFtnAtTxtEnd&)pAttr->Get(
                                             RES_FTN_AT_TXTEND )).GetValue();
@@ -769,14 +769,14 @@ void SwDoc::UpdateSection(sal_uInt16 const nPos, SwSectionData & rNewData,
 void lcl_DeleteFtn( SwSectionNode *pNd, sal_uLong nStt, sal_uLong nEnd )
 {
     SwFtnIdxs& rFtnArr = pNd->GetDoc()->GetFtnIdxs();
-    if( rFtnArr.Count() )
+    if( rFtnArr.size() )
     {
         sal_uInt16 nPos;
         rFtnArr.SeekEntry( SwNodeIndex( *pNd ), &nPos );
         SwTxtFtn* pSrch;
 
         // loesche erstmal alle, die dahinter stehen
-        while( nPos < rFtnArr.Count() &&
+        while( nPos < rFtnArr.size() &&
             _SwTxtFtn_GetIndex( (pSrch = rFtnArr[ nPos ]) ) <= nEnd )
         {
             // Werden die Nodes nicht geloescht mussen sie bei den Seiten

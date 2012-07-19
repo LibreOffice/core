@@ -562,7 +562,7 @@ SwDoc::~SwDoc()
     SwNodes & rUndoNodes( GetUndoManager().GetUndoNodes() );
     rUndoNodes.pOutlineNds->clear();
 
-    pFtnIdxs->Remove( sal_uInt16(0), pFtnIdxs->Count() );
+    pFtnIdxs->clear();
 
     // indices could be registered in attributes
     m_pUndoManager->DelAllUndoObj();

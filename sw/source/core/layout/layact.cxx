@@ -496,7 +496,7 @@ SwPageFrm* SwLayAction::CheckFirstVisPage( SwPageFrm *pPage )
         pPage = pCnt->FindPageFrm();
     }
 
-    if ( pPage->GetFmt()->GetDoc()->GetFtnIdxs().Count() )
+    if ( !pPage->GetFmt()->GetDoc()->GetFtnIdxs().empty() )
     {
         SwFtnContFrm *pCont = pPage->FindFtnCont();
         if ( pCont )

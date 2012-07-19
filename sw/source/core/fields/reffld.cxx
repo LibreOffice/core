@@ -389,7 +389,7 @@ void SwGetRefField::UpdateField( const SwTxtFld* pFldTxtAttr )
             case REF_FOOTNOTE:
             case REF_ENDNOTE:
                 // die Nummer oder den NumString besorgen
-                for( unsigned i = 0; i < pDoc->GetFtnIdxs().Count(); ++i )
+                for( unsigned i = 0; i < pDoc->GetFtnIdxs().size(); ++i )
                 {
                     SwTxtFtn* const pFtnIdx = pDoc->GetFtnIdxs()[i];
                     if( nSeqNo == pFtnIdx->GetSeqRefNo() )
@@ -912,7 +912,7 @@ SwTxtNode* SwGetRefFieldType::FindAnchor( SwDoc* pDoc, const String& rRefMark,
     case REF_FOOTNOTE:
     case REF_ENDNOTE:
         {
-            sal_uInt16 n, nFtnCnt = pDoc->GetFtnIdxs().Count();
+            sal_uInt16 n, nFtnCnt = pDoc->GetFtnIdxs().size();
             SwTxtFtn* pFtnIdx;
             for( n = 0; n < nFtnCnt; ++n )
                 if( nSeqNo == (pFtnIdx = pDoc->GetFtnIdxs()[ n ])->GetSeqRefNo() )
@@ -986,7 +986,7 @@ void _RefIdsMap::GetFieldIdsFromDoc( SwDoc& rDoc, std::set<sal_uInt16> &rIds)
 /// @param[in,out] rIds The list of IDs found in the document.
 void _RefIdsMap::GetNoteIdsFromDoc( SwDoc& rDoc, std::set<sal_uInt16> &rIds)
 {
-    for( sal_uInt16 n = rDoc.GetFtnIdxs().Count(); n; )
+    for( sal_uInt16 n = rDoc.GetFtnIdxs().size(); n; )
         rIds.insert( rDoc.GetFtnIdxs()[ --n ]->GetSeqRefNo() );
 }
 
@@ -1087,7 +1087,7 @@ void _RefIdsMap::Check( SwDoc& rDoc, SwDoc& rDestDoc, SwGetRefField& rFld,
             if( !bField )
             {
                 SwTxtFtn* pFtnIdx;
-                for( sal_uInt16 i = 0, nCnt = rDoc.GetFtnIdxs().Count(); i < nCnt; ++i )
+                for( sal_uInt16 i = 0, nCnt = rDoc.GetFtnIdxs().size(); i < nCnt; ++i )
                     if( nSeqNo == (pFtnIdx = rDoc.GetFtnIdxs()[ i ])->GetSeqRefNo() )
                     {
                         pFtnIdx->SetSeqNo( n );

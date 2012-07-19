@@ -482,14 +482,14 @@ SwCntntFrm::~SwCntntFrm()
             sal_uLong nIndex = pCNd->GetIndex();
             rFtnIdxs.SeekEntry( *pTxtNd, &nPos );
             SwTxtFtn* pTxtFtn;
-            if( nPos < rFtnIdxs.Count() )
+            if( nPos < rFtnIdxs.size() )
             {
                 while( nPos && pTxtNd == &(rFtnIdxs[ nPos ]->GetTxtNode()) )
                     --nPos;
                 if( nPos || pTxtNd != &(rFtnIdxs[ nPos ]->GetTxtNode()) )
                     ++nPos;
             }
-            while( nPos < rFtnIdxs.Count() )
+            while( nPos < rFtnIdxs.size() )
             {
                 pTxtFtn = rFtnIdxs[ nPos ];
                 if( pTxtFtn->GetTxtNode().GetIndex() > nIndex )

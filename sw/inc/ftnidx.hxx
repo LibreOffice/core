@@ -28,8 +28,9 @@
 #ifndef _FTNIDX_HXX
 #define _FTNIDX_HXX
 
-#include <svl/svarray.hxx>
 #include <vector>
+#include <sal/types.h>
+#include <o3tl/sorted_vector.hxx>
 
 class SwTxtFtn;
 class SwNodeIndex;
@@ -41,10 +42,12 @@ class SwSectionNode;
 #define _SwTxtFtn_GetIndex( pFIdx ) (pFIdx->GetTxtNode().GetIndex())
 
 
-typedef SwTxtFtn* SwTxtFtnPtr;
-SV_DECL_PTRARR_SORT( _SwFtnIdxs, SwTxtFtnPtr, 0 )
+struct CompareSwFtnIdxs
+{
+    bool operator()(SwTxtFtn* const& lhs, SwTxtFtn* const& rhs) const;
+};
 
-class SwFtnIdxs : public _SwFtnIdxs
+class SwFtnIdxs : public o3tl::sorted_vector<SwTxtFtn*>
 {
 public:
     SwFtnIdxs() {}
