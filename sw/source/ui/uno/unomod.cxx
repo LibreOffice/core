@@ -77,7 +77,7 @@ enum SwViewSettingsPropertyHandles
     HANDLE_VIEWSET_SMOOTH_SCROLLING,
     HANDLE_VIEWSET_ZOOM_TYPE,
     HANDLE_VIEWSET_ZOOM,
-    HANDLE_VIEWSET_PREVENT_TIPS,
+    HANDLE_VIEWSET_SHOW_CONTENT_TIPS,
     HANDLE_VIEWSET_HELP_URL,
     HANDLE_VIEWSET_VRULER_RIGHT,
     HANDLE_VIEWSET_SHOW_RULER,
@@ -122,7 +122,7 @@ static ChainablePropertySetInfo * lcl_createViewSettingsInfo()
         { RTL_CONSTASCII_STRINGPARAM ( "IsRasterVisible"),      HANDLE_VIEWSET_IS_RASTER_VISIBLE,       CPPUTYPE_BOOLEAN,   PROPERTY_NONE, 0},
         { RTL_CONSTASCII_STRINGPARAM ( "IsSnapToRaster"),       HANDLE_VIEWSET_IS_SNAP_TO_RASTER,       CPPUTYPE_BOOLEAN,   PROPERTY_NONE, 0},
         { RTL_CONSTASCII_STRINGPARAM ( "IsVertRulerRightAligned"),HANDLE_VIEWSET_VRULER_RIGHT         , CPPUTYPE_BOOLEAN, PROPERTY_NONE, 0},
-        { RTL_CONSTASCII_STRINGPARAM ( "PreventHelpTips" ),     HANDLE_VIEWSET_PREVENT_TIPS         , CPPUTYPE_BOOLEAN, PROPERTY_NONE, 0},
+        { RTL_CONSTASCII_STRINGPARAM ( "ShowContentTips" ),     HANDLE_VIEWSET_SHOW_CONTENT_TIPS      , CPPUTYPE_BOOLEAN, PROPERTY_NONE, 0},
         { RTL_CONSTASCII_STRINGPARAM ( "RasterResolutionX"),    HANDLE_VIEWSET_RASTER_RESOLUTION_X,     CPPUTYPE_INT32,     PROPERTY_NONE, 0},
         { RTL_CONSTASCII_STRINGPARAM ( "RasterResolutionY"),    HANDLE_VIEWSET_RASTER_RESOLUTION_Y,     CPPUTYPE_INT32,     PROPERTY_NONE, 0},
         { RTL_CONSTASCII_STRINGPARAM ( "RasterSubdivisionX"),   HANDLE_VIEWSET_RASTER_SUBDIVISION_X,    CPPUTYPE_INT32,     PROPERTY_NONE, 0},
@@ -638,7 +638,7 @@ void SwXViewSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, c
         case  HANDLE_VIEWSET_TABLE_BOUNDARIES      :   mpViewOption->SetAppearanceFlag(VIEWOPT_TABLE_BOUNDARIES, bVal, sal_True);    break;
         case  HANDLE_VIEWSET_TEXT_BOUNDARIES       :   mpViewOption->SetDocBoundaries(bVal);    break;
         case  HANDLE_VIEWSET_SMOOTH_SCROLLING      :   mpViewOption->SetSmoothScroll(bVal); break;
-        case  HANDLE_VIEWSET_PREVENT_TIPS :            mpViewOption->SetPreventTips(bVal); break;
+        case  HANDLE_VIEWSET_SHOW_CONTENT_TIPS     :   mpViewOption->SetShowContentTips(bVal); break;
         case  HANDLE_VIEWSET_IS_RASTER_VISIBLE     : mpViewOption->SetGridVisible(bVal); break;
         case  HANDLE_VIEWSET_IS_SNAP_TO_RASTER     : mpViewOption->SetSnap(bVal); break;
         case  HANDLE_VIEWSET_RASTER_RESOLUTION_X   :
@@ -865,7 +865,7 @@ void SwXViewSettings::_getSingleValue( const comphelper::PropertyInfo & rInfo, u
         case  HANDLE_VIEWSET_TABLE_BOUNDARIES      :   bBoolVal = SwViewOption::IsTableBoundaries(); break;
         case  HANDLE_VIEWSET_TEXT_BOUNDARIES       :   bBoolVal = SwViewOption::IsDocBoundaries(); break;
         case  HANDLE_VIEWSET_SMOOTH_SCROLLING      :   bBoolVal = mpConstViewOption->IsSmoothScroll();  break;
-        case  HANDLE_VIEWSET_PREVENT_TIPS :            bBoolVal = mpConstViewOption->IsPreventTips(); break;
+        case  HANDLE_VIEWSET_SHOW_CONTENT_TIPS     :   bBoolVal = mpConstViewOption->IsShowContentTips(); break;
         case  HANDLE_VIEWSET_IS_RASTER_VISIBLE     : bBoolVal = mpConstViewOption->IsGridVisible(); break;
         case  HANDLE_VIEWSET_IS_SNAP_TO_RASTER     : bBoolVal = mpConstViewOption->IsSnap(); break;
         case  HANDLE_VIEWSET_RASTER_RESOLUTION_X   :

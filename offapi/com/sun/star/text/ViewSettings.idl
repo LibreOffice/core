@@ -247,6 +247,13 @@ published service ViewSettings
         @since OOo 3.1
      */
     [optional, property] long VerticalRulerMetric;
+    //-------------------------------------------------------------------------
+    /** If this property is <TRUE/>, tips for document content are shown,
+        typically in a help balloon when the mouse is over the content.
+
+        @since LibreOffice 4.1
+     */
+    [optional, property] boolean ShowContentTips;
 };
 
 

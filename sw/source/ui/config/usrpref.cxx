@@ -83,7 +83,7 @@ Sequence<OUString> SwContentViewConfig::GetPropertyNames()
         "Display/DrawingControl",                   //  2
         "Display/FieldCode",                        //  3
         "Display/Note",                             //  4
-        "Display/PreventTips",                      //  5
+        "Display/ShowContentTips",                      //  5
         "NonprintingCharacter/MetaCharacters",     //   6
         "NonprintingCharacter/ParagraphEnd",        //  7
         "NonprintingCharacter/OptionalHyphen",      //  8
@@ -145,7 +145,7 @@ void SwContentViewConfig::Commit()
             case  2: bVal = rParent.IsDraw();       break;// "Display/DrawingControl",
             case  3: bVal = rParent.IsFldName();    break;// "Display/FieldCode",
             case  4: bVal = rParent.IsPostIts();    break;// "Display/Note",
-            case  5: bVal = rParent.IsPreventTips(); break; // "Display/PreventTips"
+            case  5: bVal = rParent.IsShowContentTips(); break; // "Display/ShowContentTips"
             case  6: bVal = rParent.IsViewMetaChars(); break; //"NonprintingCharacter/MetaCharacters"
             case  7: bVal = rParent.IsParagraph(sal_True); break;// "NonprintingCharacter/ParagraphEnd",
             case  8: bVal = rParent.IsSoftHyph(); break;// "NonprintingCharacter/OptionalHyphen",
@@ -186,7 +186,7 @@ void SwContentViewConfig::Load()
                     case  2: rParent.SetDraw(bSet);     break;// "Display/DrawingControl",
                     case  3: rParent.SetFldName(bSet);  break;// "Display/FieldCode",
                     case  4: rParent.SetPostIts(bSet);  break;// "Display/Note",
-                    case  5: rParent.SetPreventTips(bSet);  break;// "Display/PreventTips",
+                    case  5: rParent.SetShowContentTips(bSet);  break;// "Display/ShowContentTips",
                     case  6: rParent.SetViewMetaChars(bSet); break; //"NonprintingCharacter/MetaCharacters"
                     case  7: rParent.SetParagraph(bSet); break;// "NonprintingCharacter/ParagraphEnd",
                     case  8: rParent.SetSoftHyph(bSet); break;// "NonprintingCharacter/OptionalHyphen",

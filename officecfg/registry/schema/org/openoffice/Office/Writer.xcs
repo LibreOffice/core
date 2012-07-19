@@ -1046,13 +1046,14 @@
           </info>
           <value>true</value>
         </prop>
-        <prop oor:name="PreventTips" oor:type="xs:boolean" oor:nillable="false">
+        <prop oor:name="ShowContentTips" oor:type="xs:boolean">
+          <!-- OldPath: Writer/Content/Display/PreventTips -->
           <!-- UIHints: Not accessible via user interface -->
           <info>
-            <desc>Enables the writer to prevent the display of help tips programmatically.</desc>
-            <label>Prevent help tips</label>
+            <desc>Enables the writer to prevent the display of tips for document content programmatically.</desc>
+            <label>Show document content tips</label>
           </info>
-          <value>false</value>
+          <value>true</value>
         </prop>
       </group>
       <group oor:name="NonprintingCharacter">

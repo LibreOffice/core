@@ -83,7 +83,7 @@ namespace svtools{ class ColorConfig;}
 #define VIEWOPT_2_MODIFIED          0x00010000L
 #define VIEWOPT_2_KEEPASPECTRATIO   0x00020000L
 #define VIEWOPT_2_GRFKEEPZOOM       0x00040000L
-#define VIEWOPT_2_PREVENT_TIPS      0x00100000L
+#define VIEWOPT_2_CONTENT_TIPS      0x00100000L
 #define VIEWOPT_2_RESERVED3         0x00200000L
 #define VIEWOPT_2_RESERVED4         0x00400000L
 #define VIEWOPT_2_PRTFORMAT         0x00800000L
@@ -464,8 +464,8 @@ public:
         { return nUIOptions & VIEWOPT_2_KEEPASPECTRATIO ? sal_True : sal_False;   }
     sal_Bool    IsGrfKeepZoom()    const
         { return nUIOptions & VIEWOPT_2_GRFKEEPZOOM ? sal_True : sal_False;   }
-    sal_Bool    IsPreventTips() const
-        { return nUIOptions & VIEWOPT_2_PREVENT_TIPS ? sal_True : sal_False; }
+    sal_Bool    IsShowContentTips() const
+        { return nUIOptions & VIEWOPT_2_CONTENT_TIPS ? sal_True : sal_False; }
     sal_Bool    IsPrtFormat() const
         { return nUIOptions & VIEWOPT_2_PRTFORMAT ? sal_True : sal_False; }
 
@@ -481,8 +481,8 @@ public:
         { b ? (nUIOptions |= VIEWOPT_2_KEEPASPECTRATIO ) : ( nUIOptions &= ~VIEWOPT_2_KEEPASPECTRATIO); }
     void   SetGrfKeepZoom   (sal_Bool b)
         { b ? (nUIOptions |= VIEWOPT_2_GRFKEEPZOOM ) : ( nUIOptions &= ~VIEWOPT_2_GRFKEEPZOOM); }
-    void SetPreventTips( sal_Bool b)
-        { b ? (nUIOptions |= VIEWOPT_2_PREVENT_TIPS) : (nUIOptions &= ~VIEWOPT_2_PREVENT_TIPS); }
+    void SetShowContentTips( sal_Bool b)
+        { b ? (nUIOptions |= VIEWOPT_2_CONTENT_TIPS) : (nUIOptions &= ~VIEWOPT_2_CONTENT_TIPS); }
     void SetPrtFormat( sal_Bool b)
         { b ? (nUIOptions |= VIEWOPT_2_PRTFORMAT) : (nUIOptions &= ~VIEWOPT_2_PRTFORMAT); }
 
