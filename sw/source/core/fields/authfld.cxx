@@ -322,9 +322,8 @@ sal_uInt16  SwAuthorityFieldType::GetSequencePos(long nHandle)
                             DELETEZ(pNew);
                         else // remove the old content
                         {
-                            for (SwTOXSortTabBases::const_iterator it = aSortArr.begin(); it != aSortArr.end(); ++it)
-                                delete *it;
-                            aSortArr.clear();
+                            aSortArr.erase(aSortArr.begin() + i);
+                            delete pOld;
                         }
                         break;
                     }
