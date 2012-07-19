@@ -611,7 +611,7 @@ const SwFrmFmt *SwFEShell::NewFlyFrm( const SfxItemSet& rSet, sal_Bool bAnchVali
     if( IsTableMode() )
     {
         GetTblSel( *this, aBoxes );
-        if( aBoxes.Count() )
+        if( !aBoxes.empty() )
         {
             // Crsr should be removed from the removal area.
             // Always put it after/on the table; via the

@@ -28,13 +28,13 @@
 #ifndef _TBLSEL_HXX
 #define _TBLSEL_HXX
 
-#include <svl/svarray.hxx>
 #include <swtable.hxx>
 #include <swrect.hxx>
 #include "swdllapi.h"
 
 #include <deque>
 #include <boost/ptr_container/ptr_vector.hpp>
+#include <o3tl/sorted_vector.hxx>
 
 class SwCrsrShell;
 class SwCursor;
@@ -51,8 +51,15 @@ class SwUndoTblMerge;
 class SwCellFrm;
 
 typedef ::std::deque< SwCellFrm* > SwCellFrms;
-typedef SwTableBox* SwTableBoxPtr;
-SV_DECL_PTRARR_SORT( SwSelBoxes, SwTableBoxPtr, 10 )
+
+struct CompareSwSelBoxes
+{
+    bool operator()(SwTableBox* const& lhs, SwTableBox* const& rhs) const
+    {
+        return lhs->GetSttIdx() < rhs->GetSttIdx();
+    }
+};
+class SwSelBoxes : public o3tl::sorted_vector<SwTableBox*, CompareSwSelBoxes> {};
 
 // Collects all boxes in table that are selected.
 // Selection gets extended in given direction according to enum-parameter.

@@ -1962,7 +1962,7 @@ bool SwRootFrm::MakeTblCrsrs( SwTableCursor& rTblCrsr )
                         {
                             SwTableBox* pInsBox = (SwTableBox*)
                                 ((SwCellFrm*)pCell)->GetTabBox();
-                            aNew.Insert( pInsBox );
+                            aNew.insert( pInsBox );
                         }
                         if ( pCell->GetNext() )
                         {

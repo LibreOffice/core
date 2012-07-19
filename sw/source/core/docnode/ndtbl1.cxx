@@ -147,12 +147,12 @@ sal_Bool lcl_GetBoxSel( const SwCursor& rCursor, SwSelBoxes& rBoxes,
             {
                 SwTableBox* pBox = (SwTableBox*)pNd->FindTableNode()->GetTable().
                                             GetTblBox( pNd->GetIndex() );
-                rBoxes.Insert( pBox );
+                rBoxes.insert( pBox );
             }
         } while( bAllCrsr &&
                 pSttPam != ( pCurPam = (SwPaM*)pCurPam->GetNext()) );
     }
-    return 0 != rBoxes.Count();
+    return !rBoxes.empty();
 }
 
 /***********************************************************************
@@ -1137,8 +1137,8 @@ void SwDoc::SetBoxAttr( const SwCursor& rCursor, const SfxPoolItem &rNew )
         }
 
         std::vector<SwTblFmtCmp*> aFmtCmp;
-        aFmtCmp.reserve( Max( 255, (int)aBoxes.Count() ) );
-        for ( sal_uInt16 i = 0; i < aBoxes.Count(); ++i )
+        aFmtCmp.reserve( Max( 255, (int)aBoxes.size() ) );
+        for ( sal_uInt16 i = 0; i < aBoxes.size(); ++i )
         {
             SwTableBox *pBox = aBoxes[i];
 
@@ -1183,7 +1183,7 @@ sal_Bool SwDoc::GetBoxAttr( const SwCursor& rCursor, SfxPoolItem& rToFill ) cons
         bRet = sal_True;
         sal_Bool bOneFound = sal_False;
         const sal_uInt16 nWhich = rToFill.Which();
-        for( sal_uInt16 i = 0; i < aBoxes.Count(); ++i )
+        for( sal_uInt16 i = 0; i < aBoxes.size(); ++i )
         {
             switch ( nWhich )
             {
@@ -1253,7 +1253,7 @@ sal_uInt16 SwDoc::GetBoxAlign( const SwCursor& rCursor ) const
     SwTableNode* pTblNd = rCursor.GetPoint()->nNode.GetNode().FindTableNode();
     SwSelBoxes aBoxes;
     if( pTblNd && ::lcl_GetBoxSel( rCursor, aBoxes ))
-        for( sal_uInt16 i = 0; i < aBoxes.Count(); ++i )
+        for( sal_uInt16 i = 0; i < aBoxes.size(); ++i )
         {
             const SwFmtVertOrient &rOri =
                             aBoxes[i]->GetFrmFmt()->GetVertOrient();

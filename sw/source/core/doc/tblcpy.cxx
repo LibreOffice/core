@@ -192,7 +192,7 @@ namespace
     {
         if( !rFndBox.GetLines().empty() )
         {
-            bool bNoSelection = rSelBoxes.Count() < 2;
+            bool bNoSelection = rSelBoxes.size() < 2;
             _FndLines &rFndLines = rFndBox.GetLines();
             maCols.push_front(0);
             const SwTableLine* pLine = rFndLines.front().GetLine();
@@ -317,13 +317,13 @@ namespace
     {
         BoxSpanInfo aInfo;
         if( pSelBoxes &&
-            USHRT_MAX != pSelBoxes->GetPos( pBox ) )
+            pSelBoxes->end() != pSelBoxes->find( pBox ) )
         {
             aInfo.mbSelected = true;
             if( mnStartCol == USHRT_MAX )
             {
                 mnStartCol = (sal_uInt16)maLines[nLine].size();
-                if( pSelBoxes->Count() < 2 )
+                if( pSelBoxes->size() < 2 )
                 {
                     pSelBoxes = 0;
                     aInfo.mbSelected = false;
@@ -690,7 +690,7 @@ sal_Bool SwTable::InsNewTable( const SwTable& rCpyTbl, const SwSelBoxes& rSelBox
     if( aTarget.mnAddLine && IsNewModel() )
     {
         SwSelBoxes aBoxes;
-        aBoxes.Insert( GetTabLines().back()->GetTabBoxes().front() );
+        aBoxes.insert( GetTabLines().back()->GetTabBoxes().front() );
         if( pUndo )
             pUndo->InsertRow( *this, aBoxes, aTarget.mnAddLine );
         else
@@ -817,7 +817,7 @@ sal_Bool SwTable::InsTable( const SwTable& rCpyTbl, const SwNodeIndex& rSttBox,
 sal_Bool SwTable::InsTable( const SwTable& rCpyTbl, const SwSelBoxes& rSelBoxes,
                         SwUndoTblCpyTbl* pUndo )
 {
-    OSL_ENSURE( rSelBoxes.Count(), "Missing selection" );
+    OSL_ENSURE( !rSelBoxes.empty(), "Missing selection" );
 
     SetHTMLTableLayout( 0 );    // Delete HTML Layout
 
@@ -869,7 +869,7 @@ sal_Bool SwTable::InsTable( const SwTable& rCpyTbl, const SwSelBoxes& rSelBoxes,
                 // If we don't have enough Lines, then see if we can insert
                 // new ones to reach our goal. But only if the SSelection
                 // contains a Box!
-                if( 1 < rSelBoxes.Count() )
+                if( 1 < rSelBoxes.size() )
                     return sal_False;
 
                 sal_uInt16 nNewLns = rCpyTbl.GetTabLines().size() -
@@ -1011,7 +1011,7 @@ sal_Bool SwTable::InsTable( const SwTable& rCpyTbl, const SwSelBoxes& rSelBoxes,
     if( 1 == rCpyTbl.GetTabSortBoxes().size() )
     {
         SwTableBox *pTmpBx = rCpyTbl.GetTabSortBoxes()[0];
-        for( sal_uInt16 n = 0; n < rSelBoxes.Count(); ++n )
+        for( sal_uInt16 n = 0; n < rSelBoxes.size(); ++n )
             lcl_CpyBox( rCpyTbl, pTmpBx, *this,
                         (SwTableBox*)rSelBoxes[n], sal_True, pUndo );
     }
@@ -1042,7 +1042,7 @@ static void _FndCntntBox( const SwTableBox* pBox, SwSelBoxes* pPara )
         BOOST_FOREACH( const SwTableLine* pLine, pBox->GetTabLines() )
             _FndCntntLine( pLine, pPara );
     else
-        pPara->Insert( (SwTableBox*)pBox );
+        pPara->insert( (SwTableBox*)pBox );
 }
 
 static void _FndCntntLine( const SwTableLine* pLine, SwSelBoxes* pPara )
@@ -1061,7 +1061,7 @@ SwSelBoxes& SwTable::SelLineFromBox( const SwTableBox* pBox,
             pLine = pLine->GetUpper()->GetUpper();
 
     // Delete all old ones
-    rBoxes.Remove( sal_uInt16(0), rBoxes.Count() );
+    rBoxes.clear();
     for( SwTableBoxes::iterator it = pLine->GetTabBoxes().begin();
              it != pLine->GetTabBoxes().end(); ++it)
         _FndCntntBox(*it, &rBoxes );

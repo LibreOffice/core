@@ -346,7 +346,7 @@ void SwTableFormula::_MakeFormula( const SwTable& rTbl, String& rNewStr,
 
         rNewStr += '(';
         bool bDelim = false;
-        for( sal_uInt16 n = 0; n < aBoxes.Count() &&
+        for( sal_uInt16 n = 0; n < aBoxes.size() &&
                            !pCalcPara->rCalc.IsCalcError(); ++n )
         {
             const SwTableBox* pTblBox = aBoxes[n];
@@ -872,12 +872,11 @@ String lcl_BoxNmToRel( const SwTable& rTbl, const SwTableNode& rTblNd,
 sal_uInt16 SwTableFormula::GetBoxesOfFormula( const SwTable& rTbl,
                                         SwSelBoxes& rBoxes )
 {
-    if( rBoxes.Count() )
-        rBoxes.Remove( sal_uInt16(0), rBoxes.Count() );
+    rBoxes.clear();
 
     BoxNmToPtr( &rTbl );
     ScanString( &SwTableFormula::_GetFmlBoxes, rTbl, &rBoxes );
-    return rBoxes.Count();
+    return rBoxes.size();
 }
 
 void SwTableFormula::_GetFmlBoxes( const SwTable& rTbl, String& ,
@@ -909,10 +908,10 @@ void SwTableFormula::_GetFmlBoxes( const SwTable& rTbl, String& ,
         // deren Werte
         SwSelBoxes aBoxes;
         GetBoxes( *pSttBox, *pEndBox, aBoxes );
-        pBoxes->Insert( &aBoxes );
+        pBoxes->insert( aBoxes );
     }
     else if( pSttBox )          // nur die StartBox ?
-        pBoxes->Insert( pSttBox );
+        pBoxes->insert( pSttBox );
 }
 
 void SwTableFormula::GetBoxes( const SwTableBox& rSttBox,
@@ -957,14 +956,14 @@ void SwTableFormula::GetBoxes( const SwTableBox& rSttBox,
                 break;
 
             // dann mal die Tabellenkoepfe raus:
-            for( sal_uInt16 n = 0; n < rBoxes.Count(); ++n )
+            for( sal_uInt16 n = 0; n < rBoxes.size(); ++n )
             {
                 pLine = rBoxes[n]->GetUpper();
                 while( pLine->GetUpper() )
                     pLine = pLine->GetUpper()->GetUpper();
 
                 if( pTbl->IsHeadline( *pLine ) )
-                    rBoxes.Remove( n--, 1 );
+                    rBoxes.erase( rBoxes.begin() + n-- );
             }
         } while( sal_False );
     }
