@@ -1294,13 +1294,13 @@ void dumpFillPropertiesService(uno::Reference< beans::XPropertySet > xPropSet, x
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("FillColor");
-        sal_Int32 aColor;
+        sal_Int32 aColor = sal_Int32();
         if(anotherAny >>= aColor)
             dumpFillColorAsAttribute(aColor, xmlWriter);
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("FillTransparence");
-        sal_Int32 aTransparence;
+        sal_Int32 aTransparence = sal_Int32();
         if(anotherAny >>= aTransparence)
             dumpFillTransparenceAsAttribute(aTransparence, xmlWriter);
     }
@@ -1342,7 +1342,7 @@ void dumpFillPropertiesService(uno::Reference< beans::XPropertySet > xPropSet, x
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("FillBackground");
-        sal_Bool bFillBackground;
+        sal_Bool bFillBackground = sal_Bool();
         if(anotherAny >>= bFillBackground)
             dumpFillBackgroundAsAttribute(bFillBackground, xmlWriter);
     }
@@ -1366,25 +1366,25 @@ void dumpFillPropertiesService(uno::Reference< beans::XPropertySet > xPropSet, x
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("FillBitmapPositionOffsetX");
-        sal_Int32 aBitmapPositionOffsetX;
+        sal_Int32 aBitmapPositionOffsetX = sal_Int32();
         if(anotherAny >>= aBitmapPositionOffsetX)
             dumpFillBitmapPositionOffsetXAsAttribute(aBitmapPositionOffsetX, xmlWriter);
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("FillBitmapPositionOffsetY");
-        sal_Int32 aBitmapPositionOffsetY;
+        sal_Int32 aBitmapPositionOffsetY = sal_Int32();
         if(anotherAny >>= aBitmapPositionOffsetY)
             dumpFillBitmapPositionOffsetYAsAttribute(aBitmapPositionOffsetY, xmlWriter);
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("FillBitmapOffsetX");
-        sal_Int32 aBitmapOffsetX;
+        sal_Int32 aBitmapOffsetX = sal_Int32();
         if(anotherAny >>= aBitmapOffsetX)
             dumpFillBitmapOffsetXAsAttribute(aBitmapOffsetX, xmlWriter);
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("FillBitmapOffsetY");
-        sal_Int32 aBitmapOffsetY;
+        sal_Int32 aBitmapOffsetY = sal_Int32();
         if(anotherAny >>= aBitmapOffsetY)
             dumpFillBitmapOffsetYAsAttribute(aBitmapOffsetY, xmlWriter);
     }
@@ -1396,19 +1396,19 @@ void dumpFillPropertiesService(uno::Reference< beans::XPropertySet > xPropSet, x
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("FillBitmapLogicalSize");
-        sal_Bool bBitmapLogicalSize;
+        sal_Bool bBitmapLogicalSize = sal_Bool();
         if(anotherAny >>= bBitmapLogicalSize)
             dumpFillBitmapLogicalSizeAsAttribute(bBitmapLogicalSize, xmlWriter);
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("FillBitmapSizeX");
-        sal_Int32 aBitmapSizeX;
+        sal_Int32 aBitmapSizeX = sal_Int32();
         if(anotherAny >>= aBitmapSizeX)
             dumpFillBitmapSizeXAsAttribute(aBitmapSizeX, xmlWriter);
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("FillBitmapSizeY");
-        sal_Int32 aBitmapSizeY;
+        sal_Int32 aBitmapSizeY = sal_Int32();
         if(anotherAny >>= aBitmapSizeY)
             dumpFillBitmapSizeYAsAttribute(aBitmapSizeY, xmlWriter);
     }
@@ -1420,13 +1420,13 @@ void dumpFillPropertiesService(uno::Reference< beans::XPropertySet > xPropSet, x
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("FillBitmapStretch");
-        sal_Bool bBitmapStretch;
+        sal_Bool bBitmapStretch = sal_Bool();
         if(anotherAny >>= bBitmapStretch)
             dumpFillBitmapStretchAsAttribute(bBitmapStretch, xmlWriter);
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("FillBitmapTile");
-        sal_Bool bBitmapTile;
+        sal_Bool bBitmapTile = sal_Bool();
         if(anotherAny >>= bBitmapTile)
             dumpFillBitmapTileAsAttribute(bBitmapTile, xmlWriter);
     }

@@ -40,13 +40,13 @@ void EnhancedShapeDumper::dumpEnhancedCustomShapeExtrusionService(uno::Reference
 {
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("Extrusion");
-        sal_Bool bExtrusion;
+        sal_Bool bExtrusion = sal_Bool();
         if(anotherAny >>= bExtrusion)
             dumpExtrusionAsAttribute(bExtrusion);
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("Brightness");
-        double aBrightness;
+        double aBrightness = double();
         if(anotherAny >>= aBrightness)
             dumpBrightnessAsAttribute(aBrightness);
     }
@@ -58,43 +58,43 @@ void EnhancedShapeDumper::dumpEnhancedCustomShapeExtrusionService(uno::Reference
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("Diffusion");
-        double aDiffusion;
+        double aDiffusion = double();
         if(anotherAny >>= aDiffusion)
             dumpDiffusionAsAttribute(aDiffusion);
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("NumberOfLineSegments");
-        sal_Int32 aNumberOfLineSegments;
+        sal_Int32 aNumberOfLineSegments = sal_Int32();
         if(anotherAny >>= aNumberOfLineSegments)
             dumpNumberOfLineSegmentsAsAttribute(aNumberOfLineSegments);
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("LightFace");
-        sal_Bool bLightFace;
+        sal_Bool bLightFace = sal_Bool();
         if(anotherAny >>= bLightFace)
             dumpLightFaceAsAttribute(bLightFace);
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("FirstLightHarsh");
-        sal_Bool bFirstLightHarsh;
+        sal_Bool bFirstLightHarsh = sal_Bool();
         if(anotherAny >>= bFirstLightHarsh)
             dumpFirstLightHarshAsAttribute(bFirstLightHarsh);
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("SecondLightHarsh");
-        sal_Bool bSecondLightHarsh;
+        sal_Bool bSecondLightHarsh = sal_Bool();
         if(anotherAny >>= bSecondLightHarsh)
             dumpSecondLightHarshAsAttribute(bSecondLightHarsh);
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("FirstLightLevel");
-        double aFirstLightLevel;
+        double aFirstLightLevel = double();
         if(anotherAny >>= aFirstLightLevel)
             dumpFirstLightLevelAsAttribute(aFirstLightLevel);
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("SecondLightLevel");
-        double aSecondLightLevel;
+        double aSecondLightLevel = double();
         if(anotherAny >>= aSecondLightLevel)
             dumpSecondLightLevelAsAttribute(aSecondLightLevel);
     }
@@ -112,7 +112,7 @@ void EnhancedShapeDumper::dumpEnhancedCustomShapeExtrusionService(uno::Reference
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("Metal");
-        sal_Bool bMetal;
+        sal_Bool bMetal = sal_Bool();
         if(anotherAny >>= bMetal)
             dumpMetalAsAttribute(bMetal);
     }
@@ -136,7 +136,7 @@ void EnhancedShapeDumper::dumpEnhancedCustomShapeExtrusionService(uno::Reference
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("Shininess");
-        double aShininess;
+        double aShininess = double();
         if(anotherAny >>= aShininess)
             dumpShininessAsAttribute(aShininess);
     }
@@ -148,7 +148,7 @@ void EnhancedShapeDumper::dumpEnhancedCustomShapeExtrusionService(uno::Reference
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("Specularity");
-        double aSpecularity;
+        double aSpecularity = double();
         if(anotherAny >>= aSpecularity)
             dumpSpecularityAsAttribute(aSpecularity);
     }
@@ -172,7 +172,7 @@ void EnhancedShapeDumper::dumpEnhancedCustomShapeExtrusionService(uno::Reference
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("ExtrusionColor");
-        sal_Bool bExtrusionColor;
+        sal_Bool bExtrusionColor = sal_Bool();
         if(anotherAny >>= bExtrusionColor)
             dumpExtrusionColorAsAttribute(bExtrusionColor);
     }
