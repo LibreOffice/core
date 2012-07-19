@@ -107,7 +107,7 @@ sal_Bool lcl_IsUsingEnhancedFields( const uno::Reference< lang::XMultiServiceFac
         ::comphelper::ConfigurationHelper::readRelativeKey( xCfgAccess, rtl::OUString( "Filter/Microsoft/Import"  ), rtl::OUString( "ImportWWFieldsAsEnhancedFields"  ) ) >>= bResult;
 
     }
-    catch( uno::Exception& )
+    catch( const uno::Exception& )
     {
     }
     return bResult;
@@ -289,9 +289,8 @@ void DomainMapper_Impl::RemoveLastParagraph( )
         xCursor->goLeft( 1, true );
         xCursor->setString(::rtl::OUString());
     }
-    catch( const uno::Exception& rEx)
+    catch( const uno::Exception& )
     {
-        (void)rEx;
     }
 }
 
@@ -661,9 +660,8 @@ void lcl_MoveBorderPropertiesToFrame(uno::Sequence<beans::PropertyValue>& rFrame
         rFrameProperties.realloc(nStart);
     }
     catch( const uno::Exception& rEx )
-   {
-        (void)rEx;
-   }
+    {
+    }
 }
 
 
@@ -925,9 +923,8 @@ void DomainMapper_Impl::CheckUnregisteredFrameConversion( )
                 rAppendContext.pLastParagraphProperties->GetEndingRange(),
                 aFrameProperties );
         }
-        catch( const uno::Exception& rEx )
+        catch( const uno::Exception& )
         {
-            (void)rEx;
         }
     }
 }
@@ -1068,15 +1065,12 @@ void DomainMapper_Impl::finishParagraph( PropertyMapPtr pPropertyMap )
             if( !bKeepLastParagraphProperties )
                 rAppendContext.pLastParagraphProperties = pToBeSavedProperties;
         }
-        catch(const lang::IllegalArgumentException& rIllegal)
+        catch(const lang::IllegalArgumentException&)
         {
-            (void)rIllegal;
             OSL_FAIL( "IllegalArgumentException in DomainMapper_Impl::finishParagraph" );
         }
-        catch(const uno::Exception& rEx)
+        catch(const uno::Exception&)
         {
-            (void)rEx;
-            //OSL_ENSURE( false, "ArgumentException in DomainMapper_Impl::finishParagraph" );
         }
     }
 
@@ -1125,14 +1119,12 @@ void DomainMapper_Impl::appendTextPortion( const ::rtl::OUString& rString, Prope
 
             //getTableManager( ).handle(xTextRange);
         }
-        catch(const lang::IllegalArgumentException& rEx)
+        catch(const lang::IllegalArgumentException&)
         {
-            (void)rEx;
             OSL_FAIL( "IllegalArgumentException in DomainMapper_Impl::appendTextPortion" );
         }
-        catch(const uno::Exception& rEx)
+        catch(const uno::Exception&)
         {
-            (void)rEx;
             OSL_FAIL( "Exception in DomainMapper_Impl::appendTextPortion" );
         }
     }
@@ -1152,10 +1144,10 @@ void DomainMapper_Impl::appendTextContent(
         {
             xTextAppendAndConvert->appendTextContent( xContent, xPropertyValues );
         }
-        catch(const lang::IllegalArgumentException& )
+        catch(const lang::IllegalArgumentException&)
         {
         }
-        catch(const uno::Exception& )
+        catch(const uno::Exception&)
         {
         }
     }
@@ -1198,9 +1190,8 @@ void DomainMapper_Impl::appendOLE( const ::rtl::OUString& rStreamName, OLEHandle
         appendTextContent( xOLE, uno::Sequence< beans::PropertyValue >() );
 
     }
-    catch( const uno::Exception& rEx )
+    catch( const uno::Exception& )
     {
-        (void)rEx;
         OSL_FAIL( "Exception in creation of OLE object" );
     }
 
@@ -1235,9 +1226,8 @@ void DomainMapper_Impl::appendStarMath( const Value& val )
                 uno::makeAny( text::TextContentAnchorType_AS_CHARACTER ) );
             appendTextContent( xStarMath, uno::Sequence< beans::PropertyValue >() );
         }
-        catch( const uno::Exception& rEx )
+        catch( const uno::Exception& )
         {
-            (void)rEx;
             OSL_FAIL( "Exception in creation of StarMath object" );
         }
     }
@@ -1266,7 +1256,7 @@ uno::Reference< beans::XPropertySet > DomainMapper_Impl::appendTextSectionAfter(
             xSection->attach( uno::Reference< text::XTextRange >( xCursor, uno::UNO_QUERY_THROW) );
             xRet = uno::Reference< beans::XPropertySet > (xSection, uno::UNO_QUERY );
         }
-        catch(const uno::Exception& )
+        catch(const uno::Exception&)
         {
         }
 
@@ -1308,7 +1298,7 @@ void DomainMapper_Impl::PushPageHeader(SectionPropertyMap::PageType eType)
             xPageStyle->getPropertyValue(rPropNameSupplier.GetName( bLeft ? PROP_HEADER_TEXT_LEFT : PROP_HEADER_TEXT) ) >>= xHeaderText;
             m_aTextAppendStack.push( uno::Reference< text::XTextAppend >( xHeaderText, uno::UNO_QUERY_THROW));
         }
-        catch( uno::Exception& )
+        catch( const uno::Exception& )
         {
         }
     }
@@ -1346,7 +1336,7 @@ void DomainMapper_Impl::PushPageFooter(SectionPropertyMap::PageType eType)
             xPageStyle->getPropertyValue(rPropNameSupplier.GetName( bLeft ? PROP_FOOTER_TEXT_LEFT : PROP_FOOTER_TEXT) ) >>= xFooterText;
             m_aTextAppendStack.push(uno::Reference< text::XTextAppend >( xFooterText, uno::UNO_QUERY_THROW ));
         }
-        catch( uno::Exception& )
+        catch( const uno::Exception& )
         {
         }
     }
@@ -1403,7 +1393,7 @@ void DomainMapper_Impl::PushFootOrEndnote( bool bIsFootnote )
         // Redlines for the footnote anchor
         CheckRedline( xFootnote->getAnchor( ) );
     }
-    catch( uno::Exception& )
+    catch( const uno::Exception& )
     {
         OSL_FAIL( "exception in PushFootOrEndnote" );
     }
@@ -1439,9 +1429,8 @@ void DomainMapper_Impl::CreateRedline( uno::Reference< text::XTextRange > xRange
 
             xRedline->makeRedline( sType, aRedlineProperties );
         }
-        catch( const uno::Exception & rEx )
+        catch( const uno::Exception & )
         {
-            ( void ) rEx;
             OSL_FAIL( "Exception in makeRedline" );
         }
     }
@@ -1500,7 +1489,7 @@ void DomainMapper_Impl::PushAnnotation()
         m_xAnnotationField->getPropertyValue(::rtl::OUString( "TextRange")) >>= xAnnotationText;
         m_aTextAppendStack.push(uno::Reference< text::XTextAppend >( xAnnotationText, uno::UNO_QUERY_THROW ));
     }
-    catch( uno::Exception& )
+    catch( const uno::Exception& )
     {
         OSL_FAIL( "exception in PushAnnotation" );
     }
@@ -1626,7 +1615,7 @@ void DomainMapper_Impl::PopShapeContext()
         {
             appendTextContent( xObj, uno::Sequence< beans::PropertyValue >() );
         }
-        catch ( uno::RuntimeException& )
+        catch ( const uno::RuntimeException& )
         {
             // this is normal: the shape is already attached
         }
@@ -1644,7 +1633,7 @@ void DomainMapper_Impl::PopShapeContext()
                     xDrawPage->remove( xShape );
                 }
             }
-            catch( uno::Exception& )
+            catch( const uno::Exception& )
             {
             }
         }
@@ -3149,7 +3138,7 @@ void DomainMapper_Impl::SetFieldResult( ::rtl::OUString& rResult )
                 }
             }
         }
-        catch( uno::Exception& )
+        catch( const uno::Exception& )
         {
 
         }
@@ -3260,11 +3249,11 @@ void DomainMapper_Impl::PopFieldContext()
                     }
                 }
             }
-            catch(const lang::IllegalArgumentException& )
+            catch(const lang::IllegalArgumentException&)
             {
                 OSL_FAIL( "IllegalArgumentException in PopFieldContext()" );
             }
-            catch(const uno::Exception& )
+            catch(const uno::Exception&)
             {
                 OSL_FAIL( "exception in PopFieldContext()" );
             }
@@ -3629,7 +3618,7 @@ void DomainMapper_Impl::ApplySettingsTable()
                 xViewDataSupplier->setViewData(xIndexAccess);
             }
         }
-        catch(const uno::Exception& )
+        catch(const uno::Exception&)
         {
         }
     }
