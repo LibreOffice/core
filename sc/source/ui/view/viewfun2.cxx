@@ -2832,8 +2832,6 @@ void ScViewFunc::ShowTable( const String& rName )
         pDocSh->PostPaint(0,0,0,MAXCOL,MAXROW,MAXTAB, PAINT_EXTRAS);
         pDocSh->SetDocumentModified();
     }
-    else
-        Sound::Beep();
 }
 
 
@@ -2868,8 +2866,6 @@ void ScViewFunc::HideTable( SCTAB nTab )
         pDocSh->PostPaint(0,0,0,MAXCOL,MAXROW,MAXTAB, PAINT_EXTRAS);
         pDocSh->SetDocumentModified();
     }
-    else
-        Sound::Beep();
 }
 
 

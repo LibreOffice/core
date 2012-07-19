@@ -1496,8 +1496,6 @@ IMPL_LINK( WatchWindow, EditAccHdl, Accelerator *, pAcc )
                 aXEdit.SetSelection( Selection( 0, 0xFFFF ) );
                 UpdateWatches();
             }
-            else
-                Sound::Beep();
         }
         break;
         case KEY_ESCAPE:
@@ -1942,9 +1940,6 @@ sal_Bool WatchTreeListBox::EditingEntry( SvLBoxEntry* pEntry, Selection& )
         }
     }
 
-    if ( !bEdit )
-        Sound::Beep();
-
     return bEdit;
 }
 
@@ -1962,22 +1957,10 @@ sal_Bool WatchTreeListBox::EditedEntry( SvLBoxEntry* pEntry, const rtl::OUString
         aResult = aResult.Copy( 1, nResultLen - 2 );
 
     sal_Bool bResModified = ( aResult != aEditingRes ) ? sal_True : sal_False;
-    sal_Bool bError = sal_False;
-    if ( !aVName.Len() )
-    {
-        bError = sal_True;
-    }
-
     sal_Bool bRet = sal_False;
 
-    if ( bError )
-    {
-        Sound::Beep();
-    }
-    else if ( bResModified )
-    {
+    if ( bResModified )
         bRet = ImplBasicEntryEdited( pEntry, aResult );
-    }
 
     return bRet;
 }
@@ -2023,9 +2006,6 @@ sal_Bool WatchTreeListBox::ImplBasicEntryEdited( SvLBoxEntry* pEntry, const Stri
         bError = sal_True;
         SbxBase::ResetError();
     }
-
-    if ( bError )
-        Sound::Beep();
 
     UpdateWatches();
 

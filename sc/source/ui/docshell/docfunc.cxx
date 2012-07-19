@@ -4520,17 +4520,13 @@ bool ScDocFunc::UnmergeCells( const ScCellMergeOption& rOption, sal_Bool bRecord
         bRecord = false;
 
     ScDocument* pUndoDoc = NULL;
-    bool bBeep = false;
     for (set<SCTAB>::const_iterator itr = rOption.maTabs.begin(), itrEnd = rOption.maTabs.end();
           itr != itrEnd; ++itr)
     {
         SCTAB nTab = *itr;
         ScRange aRange = rOption.getSingleRange(nTab);
         if ( !pDoc->HasAttrib(aRange, HASATTR_MERGED) )
-        {
-            bBeep = true;
             continue;
-        }
 
         ScRange aExtended = aRange;
         pDoc->ExtendMerge(aExtended);
@@ -4563,8 +4559,6 @@ bool ScDocFunc::UnmergeCells( const ScCellMergeOption& rOption, sal_Bool bRecord
         if ( !AdjustRowHeight( aExtended ) )
             rDocShell.PostPaint( aExtended, PAINT_GRID );
     }
-    if (bBeep && !bApi)
-        Sound::Beep();
 
     if (bRecord)
     {

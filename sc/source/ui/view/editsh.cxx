@@ -292,10 +292,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
 
                 // while the dialog was open, edit mode may have been stopped
                 if (!SC_MOD()->IsInputMode())
-                {
-                    Sound::Beep();
                     return;
-                }
 
                 if (nFormat > 0)
                 {
@@ -366,10 +363,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
 
                     // while the dialog was open, edit mode may have been stopped
                     if (!SC_MOD()->IsInputMode())
-                    {
-                        Sound::Beep();
                         return;
-                    }
                 }
 
                 if ( aString.Len() )
@@ -420,7 +414,6 @@ void ScEditShell::Execute( SfxRequest& rReq )
                 // while the dialog was open, edit mode may have been stopped
                 if (!SC_MOD()->IsInputMode())
                 {
-                    Sound::Beep();
                     delete pDlg;
                     return;
                 }
@@ -466,7 +459,6 @@ void ScEditShell::Execute( SfxRequest& rReq )
                 // while the dialog was open, edit mode may have been stopped
                 if (!SC_MOD()->IsInputMode())
                 {
-                    Sound::Beep();
                     delete pDlg;
                     return;
                 }
@@ -482,7 +474,6 @@ void ScEditShell::Execute( SfxRequest& rReq )
 
         case SID_TOGGLE_REL:
             {
-                bool bOk = false;
                 if (pEngine->GetParagraphCount() == 1)
                 {
                     String aText = pEngine->GetText();
@@ -502,14 +493,11 @@ void ScEditShell::Execute( SfxRequest& rReq )
                             pTopView->GetEditEngine()->SetText( aNew );
                             pTopView->SetSelection( aNewSel );
                         }
-                        bOk = true;
 
                         //  Referenz wird selektiert -> beim Tippen nicht ueberschreiben
                         bSetSelIsRef = sal_True;
                     }
                 }
-                if (!bOk)
-                    Sound::Beep();              // keine Referenzen oder mehrere Absaetze
             }
             break;
 

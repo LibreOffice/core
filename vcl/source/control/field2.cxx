@@ -624,7 +624,6 @@ static sal_Bool ImplPatternProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
             // mask is equal at all input positions
             if ( !bSameMask )
             {
-                Sound::Beep();
                 return sal_True;
             }
         }
@@ -730,9 +729,7 @@ static sal_Bool ImplPatternProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
                 aStr += cChar;
         }
 
-        if ( bError )
-            Sound::Beep();
-        else
+        if ( !bError )
         {
             rbInKeyInput = sal_True;
             Selection aNewSel( ImplPatternRightPos( aStr, rEditMask, nFormatFlags, bSameMask, nNewPos ) );
@@ -742,8 +739,6 @@ static sal_Bool ImplPatternProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
             rbInKeyInput = sal_False;
         }
     }
-    else
-        Sound::Beep();
 
     return sal_True;
 }

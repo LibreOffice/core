@@ -179,11 +179,7 @@ void ArgEdit::KeyInput( const KeyEvent& rKEvt )
             {
                 pEd->GrabFocus();
             }
-            else
-                Sound::Beep();
         }
-        else
-            Sound::Beep();
     }
     else
         RefEdit::KeyInput( rKEvt );

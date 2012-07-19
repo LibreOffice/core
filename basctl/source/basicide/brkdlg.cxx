@@ -208,7 +208,6 @@ IMPL_LINK( BreakPointDialog, ButtonHdl, Button *, pButton )
         {
             aComboBox.SetText( aText );
             aComboBox.GrabFocus();
-            Sound::Beep();
         }
         CheckButtons();
     }

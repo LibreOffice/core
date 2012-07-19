@@ -146,7 +146,6 @@ void ScDocument::InsertMatrixFormula(SCCOL nCol1, SCROW nRow1,
     nTab1 = i;
     if (!bStop)
     {
-        Sound::Beep();
         OSL_FAIL("ScDocument::InsertMatrixFormula Keine Tabelle markiert");
         return;
     }
@@ -239,7 +238,6 @@ void ScDocument::InsertTableOp(const ScTabOpParam& rParam,      // Mehrfachopera
     nTab1 = i;
     if (!bStop)
     {
-        Sound::Beep();
         OSL_FAIL("ScDocument::InsertTableOp: Keine Tabelle markiert");
         return;
     }

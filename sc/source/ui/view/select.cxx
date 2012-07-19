@@ -229,7 +229,6 @@ void ScViewFunctionSet::BeginDrag()
         }
     }
 
-    Sound::Beep();          // can't drag
 }
 
 //      Selection

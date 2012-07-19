@@ -1659,12 +1659,6 @@ void ScInputHandler::NextAutoEntry( bool bBack )
 
                         bInOwnChange = false;
                     }
-                    else
-                    {
-                        // mehr gibts nicht
-
-                        Sound::Beep();
-                    }
                 }
             }
         }

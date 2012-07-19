@@ -234,8 +234,6 @@ void ScGridWindow::DoPushButton( SCCOL nCol, SCROW nRow, const MouseEvent& rMEvt
             }
             delete pDlg;
         }
-        else
-            Sound::Beep();
     }
     else
     {

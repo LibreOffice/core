@@ -461,8 +461,6 @@ void SvLBoxButton::InitViewData( SvLBox* pView,SvLBoxEntry* pEntry,
 
 bool SvLBoxButton::CheckModification() const
 {
-    if( eKind == SvLBoxButtonKind_disabledCheckbox )
-        Sound::Beep();
     return eKind == SvLBoxButtonKind_enabledCheckbox;
 }
 

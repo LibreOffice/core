@@ -238,8 +238,6 @@ void __EXPORT MyEditEngine::FieldClicked( const SvxFieldItem& rField, USHORT nPa
         bURLClicked = TRUE;
         UpdateFields();
     }
-    else
-        Sound::Beep();
 }
 
 void __EXPORT MyEditEngine::FieldSelected( const SvxFieldItem& rField, USHORT nPara, USHORT nPos )

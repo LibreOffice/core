@@ -1143,9 +1143,6 @@ void ViewTabListBox_Impl::DoQuickSearch( const xub_Unicode& rChar )
             bFound = sal_False;
     }
 
-    if ( !bFound )
-        Sound::Beep();
-
     maResetQuickSearch.Start();
 }
 

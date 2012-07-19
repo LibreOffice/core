@@ -1401,7 +1401,6 @@ void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow, bool bDataSelec
     {
         DELETEZ(pFilterBox);                // war nix
         DELETEZ(pFilterFloat);
-        Sound::Beep();                      // bemerkbar machen
     }
     else
     {
@@ -1775,10 +1774,7 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt )
 
     ScModule* pScMod = SC_MOD();
     if (pScMod->IsModalMode(pViewData->GetSfxDocShell()))
-    {
-        Sound::Beep();
         return;
-    }
 
     pScActiveViewShell = pViewData->GetViewShell();         // falls auf Link geklickt wird
     nScClickMouseModifier = rMEvt.GetModifier();            // um Control-Klick immer zu erkennen
@@ -2143,8 +2139,6 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
         ::svl::IUndoManager* pMgr = pViewData->GetDocShell()->GetUndoManager();
         if ( pMgr->GetUndoActionCount() && pMgr->GetUndoActionId() == STR_UNDO_APPLYCELLSTYLE )
             pMgr->Undo();
-        else
-            Sound::Beep();
         return;
     }
 
@@ -2330,8 +2324,6 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
                 Sequence<sheet::DataPilotFieldFilter> aFilters;
                 if ( pDPObj->GetDataFieldPositionData(aCellPos, aFilters) )
                     pViewData->GetView()->ShowDataPilotSourceData( *pDPObj, aFilters );
-                else
-                    Sound::Beep();  // nothing to expand/collapse/show
             }
 
             return;
@@ -4199,8 +4191,6 @@ sal_Int8 ScGridWindow::DropTransferObj( ScTransferObj* pTransObj, SCCOL nDestPos
 
                 pDocSh->GetUndoManager()->LeaveListAction();
 
-                if (!bDone)
-                    Sound::Beep();  // instead of error message in drop handler
             }
             else
                 bDone = sal_True;       // nothing to do
