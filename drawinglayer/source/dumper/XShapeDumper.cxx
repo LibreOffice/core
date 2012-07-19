@@ -1587,13 +1587,13 @@ void dumpShapeService(uno::Reference< beans::XPropertySet > xPropSet, xmlTextWri
     uno::Reference< beans::XPropertySetInfo> xInfo = xPropSet->getPropertySetInfo();
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("ZOrder");
-        sal_Int32 aZOrder;
+        sal_Int32 aZOrder = sal_Int32();
         if(anotherAny >>= aZOrder)
             dumpZOrderAsAttribute(aZOrder, xmlWriter);
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("LayerID");
-        sal_Int32 aLayerID;
+        sal_Int32 aLayerID = sal_Int32();
         if(anotherAny >>= aLayerID)
             dumpLayerIDAsAttribute(aLayerID, xmlWriter);
     }
@@ -1605,19 +1605,19 @@ void dumpShapeService(uno::Reference< beans::XPropertySet > xPropSet, xmlTextWri
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("Visible");
-        sal_Bool bVisible;
+        sal_Bool bVisible = sal_Bool();
         if(anotherAny >>= bVisible)
             dumpVisibleAsAttribute(bVisible, xmlWriter);
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("Printable");
-        sal_Bool bPrintable;
+        sal_Bool bPrintable = sal_Bool();
         if(anotherAny >>= bPrintable)
             dumpPrintableAsAttribute(bPrintable, xmlWriter);
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("MoveProtect");
-        sal_Bool bMoveProtect;
+        sal_Bool bMoveProtect = sal_Bool();
         if(anotherAny >>= bMoveProtect)
             dumpMoveProtectAsAttribute(bMoveProtect, xmlWriter);
     }
@@ -1629,7 +1629,7 @@ void dumpShapeService(uno::Reference< beans::XPropertySet > xPropSet, xmlTextWri
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("SizeProtect");
-        sal_Bool bSizeProtect;
+        sal_Bool bSizeProtect = sal_Bool();
         if(anotherAny >>= bSizeProtect)
             dumpSizeProtectAsAttribute(bSizeProtect, xmlWriter);
     }
@@ -1641,7 +1641,7 @@ void dumpShapeService(uno::Reference< beans::XPropertySet > xPropSet, xmlTextWri
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("NavigationOrder");
-        sal_Int32 aNavigationOrder;
+        sal_Int32 aNavigationOrder = sal_Int32();
         if(anotherAny >>= aNavigationOrder)
             dumpNavigationOrderAsAttribute(aNavigationOrder, xmlWriter);
     }

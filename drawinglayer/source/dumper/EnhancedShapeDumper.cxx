@@ -395,19 +395,19 @@ void EnhancedShapeDumper::dumpEnhancedCustomShapeGeometryService(uno::Reference<
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("MirroredX");
-        sal_Bool bMirroredX;
+        sal_Bool bMirroredX = sal_Bool();
         if(anotherAny >>= bMirroredX)
             dumpMirroredXAsAttribute(bMirroredX);
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("MirroredY");
-        sal_Bool bMirroredY;
+        sal_Bool bMirroredY = sal_Bool();
         if(anotherAny >>= bMirroredY)
             dumpMirroredYAsAttribute(bMirroredY);
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("TextRotateAngle");
-        double aTextRotateAngle;
+        double aTextRotateAngle = double();
         if(anotherAny >>= aTextRotateAngle)
             dumpTextRotateAngleAsAttribute(aTextRotateAngle);
     }
