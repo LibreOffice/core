@@ -46,9 +46,6 @@
 
 
 
-SV_IMPL_VARARR_SORT( ScRTFColTwips, sal_uLong );
-
-
 
 ScRTFParser::ScRTFParser( EditEngine* pEditP ) :
         ScEEParser( pEditP ),
@@ -126,12 +123,13 @@ inline void ScRTFParser::NextRow()
 
 sal_Bool ScRTFParser::SeekTwips( sal_uInt16 nTwips, SCCOL* pCol )
 {
-    sal_uInt16 nPos;
-    sal_Bool bFound = pColTwips->Seek_Entry( nTwips, &nPos );
+    ScRTFColTwips::const_iterator it = pColTwips->find( nTwips );
+    sal_Bool bFound = it != pColTwips->end();
+    sal_uInt16 nPos = it - pColTwips->end();
     *pCol = static_cast<SCCOL>(nPos);
     if ( bFound )
         return sal_True;
-    sal_uInt16 nCount = pColTwips->Count();
+    sal_uInt16 nCount = pColTwips->size();
     if ( !nCount )
         return false;
     SCCOL nCol = *pCol;
@@ -173,7 +171,7 @@ void ScRTFParser::ColAdjust()
                 nColMax = nCol;
         }
         nStartAdjust = (sal_uLong)~0;
-        pColTwips->Remove( (sal_uInt16)0, pColTwips->Count() );
+        pColTwips->clear();
     }
 }
 
@@ -252,7 +250,7 @@ void ScRTFParser::NewCellRow( ImportInfo* /*pInfo*/ )
             const ScRTFCellDefault& rD = maDefaultList[i];
             SCCOL nCol;
             if ( !SeekTwips(rD.nTwips, &nCol) )
-                pColTwips->Insert( rD.nTwips );
+                pColTwips->insert( rD.nTwips );
         }
     }
     pDefMerge = NULL;

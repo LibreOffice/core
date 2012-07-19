@@ -33,6 +33,7 @@
 
 #ifdef SC_RTFPARSE_CXX
 #include <boost/ptr_container/ptr_vector.hpp>
+#include <o3tl/sorted_vector.hxx>
 
 struct ScRTFCellDefault
 {
@@ -46,7 +47,7 @@ struct ScRTFCellDefault
 };
 
 // deswegen ULONG, typedef bringt's auch nicht :-(
-SV_DECL_VARARR_SORT( ScRTFColTwips, sal_uLong, 16 )
+class ScRTFColTwips : public o3tl::sorted_vector<sal_uLong> {};
 
 #else       // SC_RTFPARSE_CXX
 
