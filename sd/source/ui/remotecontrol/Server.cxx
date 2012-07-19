@@ -35,9 +35,11 @@ Server::~Server()
 // Run as a thread
 void Server::listenThread()
 {
+    fprintf( stderr, "Server:: address of Transmitter before:%p\n", pTransmitter );
     pTransmitter = new Transmitter( mStreamSocket );
     pTransmitter->launch();
     Receiver aReceiver( pTransmitter );
+    fprintf( stderr, "Server:: address of Transmitter:%p\n", pTransmitter );
 //     aTransmitter.addMessage( "Hello world\n\n", Transmitter::Priority::HIGH );
     try {
         fprintf( stderr, "Trying to add a Listener in listenThread\n" );
@@ -75,14 +77,13 @@ void Server::listenThread()
             aRet = mStreamSocket.recv( &aBuffer[aRead], 100 );
             if ( aRet == 0 )
             {
-                return; // closed
+                break; // I.e. transmission finished.
             }
             aRead += aRet;
             vector<char>::iterator aIt;
-            while ( (aIt = find( aBuffer.begin() + aRead - aRet, aBuffer.end(), '\n' ))
+            while ( (aIt = find( aBuffer.begin(), aBuffer.end(), '\n' ))
                 != aBuffer.end() )
             {
-                fprintf( stderr, "we have string\n" );
                 sal_uInt64 aLocation = aIt - aBuffer.begin();
 
                 aCommand.push_back( OString( &(*aBuffer.begin()), aLocation ) );

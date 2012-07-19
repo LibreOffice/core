@@ -23,9 +23,12 @@ using rtl::OStringBuffer;
 
 
 Listener::Listener( sd::Transmitter *aTransmitter  )
-    : ::cppu::WeakComponentImplHelper1< XSlideShowListener>( m_aMutex )
+    : ::cppu::WeakComponentImplHelper1< XSlideShowListener >( m_aMutex ),
+      pTransmitter( NULL )
 {
+    fprintf( stderr, "listener:: address of Transmitter1:%p\n", aTransmitter );
     pTransmitter = aTransmitter;
+    fprintf( stderr, "listener:: address of Transmitter2:%p\n", pTransmitter );
 }
 
 Listener::~Listener()
@@ -37,7 +40,7 @@ void Listener::init( const css::uno::Reference< css::presentation::XSlideShowCon
     if (aController.is() )
     {
         mController = css::uno::Reference< css::presentation::XSlideShowController >( aController );
-        aController->addSlideShowListener(this);
+        aController->addSlideShowListener( this );
         fprintf( stderr, "Registered listener.\n" );
     }
 }
@@ -80,6 +83,7 @@ void SAL_CALL Listener::resumed (void)
 void SAL_CALL Listener::slideEnded (sal_Bool bReverse)
     throw (css::uno::RuntimeException)
 {
+    fprintf( stderr, "listener:: address of Transmitter__:%p\n", pTransmitter );
     fprintf( stderr, "slideEnded\n" );
     (void) bReverse;
     sal_Int32 aSlide = mController->getCurrentSlideIndex();
@@ -125,7 +129,7 @@ void SAL_CALL Listener::disposing (void)
     pTransmitter = NULL;
     if ( mController.is() )
     {
-        mController->removeSlideShowListener( static_cast<XSlideShowListener*>(this) );
+        mController->removeSlideShowListener( this );
     }
 }
 

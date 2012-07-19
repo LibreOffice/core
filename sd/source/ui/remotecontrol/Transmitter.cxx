@@ -21,13 +21,15 @@ Transmitter::Transmitter( StreamSocket &aSocket )
     mLowPriority(),
     mHighPriority()
 {
+    fprintf( stderr, "Address of low queue in constructor:%p\n", &mLowPriority );
 }
 
 void Transmitter::execute()
 {
     fprintf( stderr, "Waiting\n" );
-    while( mQueuesNotEmpty.wait() )
+    while ( true )
     {
+        mQueuesNotEmpty.wait();
         fprintf( stderr, "Continuing after condition\n" );
         while ( true )
         {
@@ -71,6 +73,7 @@ void Transmitter::addMessage( const OString& aMessage, const Priority aPriority 
     fprintf(stderr, "Acquiring\n");
     ::osl::MutexGuard aQueueGuard( mQueueMutex );
     fprintf(stderr, "Acquired\n" );
+    fprintf( stderr, "Address of low queue in addMessge:%p\n", &mLowPriority );
     switch ( aPriority )
     {
         case Priority::LOW:
