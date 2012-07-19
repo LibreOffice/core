@@ -108,7 +108,8 @@ class OfficeIPCThread : public salhelper::Thread
         IPC_STATUS_OK,
         IPC_STATUS_2ND_OFFICE,
         IPC_STATUS_PIPE_ERROR,
-        IPC_STATUS_BOOTSTRAP_ERROR
+        IPC_STATUS_BOOTSTRAP_ERROR,
+        IPC_STATUS_MULTI_TS_ERROR
     };
 
     // controlling pipe communication during shutdown
