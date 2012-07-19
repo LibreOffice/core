@@ -325,7 +325,7 @@ bool SwEditShell::SetCurFtn( const SwFmtFtn& rFillFtn )
 bool SwEditShell::HasFtns( bool bEndNotes ) const
 {
     const SwFtnIdxs &rIdxs = pDoc->GetFtnIdxs();
-    for ( sal_uInt16 i = 0; i < rIdxs.Count(); ++i )
+    for ( sal_uInt16 i = 0; i < rIdxs.size(); ++i )
     {
         const SwFmtFtn &rFtn = rIdxs[i]->GetFtn();
         if ( bEndNotes == rFtn.IsEndNote() )
@@ -340,7 +340,7 @@ sal_uInt16 SwEditShell::GetSeqFtnList( SwSeqFldList& rList, bool bEndNotes )
 {
     rList.Clear();
 
-    sal_uInt16 n, nFtnCnt = pDoc->GetFtnIdxs().Count();
+    sal_uInt16 n, nFtnCnt = pDoc->GetFtnIdxs().size();
     SwTxtFtn* pTxtFtn;
     for( n = 0; n < nFtnCnt; ++n )
     {

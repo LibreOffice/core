@@ -131,7 +131,7 @@ sal_Bool SwCursor::GotoFtnAnchor()
         // search in all footnotes in document for this StartIndex
         const SwTxtFtn* pTxtFtn;
         const SwFtnIdxs& rFtnArr = pSttNd->GetDoc()->GetFtnIdxs();
-        for( sal_uInt16 n = 0; n < rFtnArr.Count(); ++n )
+        for( sal_uInt16 n = 0; n < rFtnArr.size(); ++n )
             if( 0 != ( pTxtFtn = rFtnArr[ n ])->GetStartNode() &&
                 pSttNd == &pTxtFtn->GetStartNode()->GetNode() )
             {
@@ -184,7 +184,7 @@ sal_Bool SwCursor::GotoNextFtnAnchor()
     if( rFtnArr.SeekEntry( GetPoint()->nNode, &nPos ))
     {
         // there is a footnote with this index, so search also for the next one
-        if( nPos < rFtnArr.Count() )
+        if( nPos < rFtnArr.size() )
         {
             sal_uLong nNdPos = GetPoint()->nNode.GetIndex();
             xub_StrLen nCntPos = GetPoint()->nContent.GetIndex();
@@ -194,7 +194,7 @@ sal_Bool SwCursor::GotoNextFtnAnchor()
             if( CmpLE( *pTxtFtn, nNdPos, nCntPos ) )
             {
                 pTxtFtn = 0;
-                for( ++nPos; nPos < rFtnArr.Count(); ++nPos )
+                for( ++nPos; nPos < rFtnArr.size(); ++nPos )
                 {
                     pTxtFtn = rFtnArr[ nPos ];
                     if( !CmpLE( *pTxtFtn, nNdPos, nCntPos ) )
@@ -218,7 +218,7 @@ sal_Bool SwCursor::GotoNextFtnAnchor()
             }
         }
     }
-    else if( nPos < rFtnArr.Count() )
+    else if( nPos < rFtnArr.size() )
         pTxtFtn = rFtnArr[ nPos ];
 
     sal_Bool bRet = 0 != pTxtFtn;
@@ -250,7 +250,7 @@ sal_Bool SwCursor::GotoPrevFtnAnchor()
         // search forwards
         if( CmpL( *pTxtFtn, nNdPos, nCntPos ))
         {
-            for( ++nPos; nPos < rFtnArr.Count(); ++nPos )
+            for( ++nPos; nPos < rFtnArr.size(); ++nPos )
             {
                 pTxtFtn = rFtnArr[ nPos ];
                 if( !CmpL( *pTxtFtn, nNdPos, nCntPos ) )

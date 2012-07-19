@@ -684,7 +684,7 @@ const SwPageDesc* SwNode::FindPageDesc( sal_Bool bCalcLay,
                     // der Anker kann nur im Bodytext sein
                     const SwTxtFtn* pTxtFtn;
                     const SwFtnIdxs& rFtnArr = pDoc->GetFtnIdxs();
-                    for( sal_uInt16 n = 0; n < rFtnArr.Count(); ++n )
+                    for( sal_uInt16 n = 0; n < rFtnArr.size(); ++n )
                         if( 0 != ( pTxtFtn = rFtnArr[ n ])->GetStartNode() &&
                             (SwNode*)pSttNd ==
                             &pTxtFtn->GetStartNode()->GetNode() )
@@ -1806,7 +1806,7 @@ sal_Bool SwCntntNode::IsAnyCondition( SwCollCondition& rTmp ) const
                         const SwTxtFtn* pTxtFtn;
                         const SwNode* pSrchNd = pSttNd;
 
-                        for( sal_uInt16 n = 0; n < rFtnArr.Count(); ++n )
+                        for( sal_uInt16 n = 0; n < rFtnArr.size(); ++n )
                             if( 0 != ( pTxtFtn = rFtnArr[ n ])->GetStartNode() &&
                                 pSrchNd == &pTxtFtn->GetStartNode()->GetNode() )
                             {

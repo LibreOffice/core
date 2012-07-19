@@ -139,7 +139,7 @@ MSWordStyles::MSWordStyles( MSWordExportBase& rExport )
 {
     // if exist any Foot-/End-Notes then get from the EndNoteInfo struct
     // the CharFormats. They will create it!
-    if ( m_rExport.pDoc->GetFtnIdxs().Count() )
+    if ( !m_rExport.pDoc->GetFtnIdxs().empty() )
     {
         m_rExport.pDoc->GetEndNoteInfo().GetAnchorCharFmt( *m_rExport.pDoc );
         m_rExport.pDoc->GetEndNoteInfo().GetCharFmt( *m_rExport.pDoc );

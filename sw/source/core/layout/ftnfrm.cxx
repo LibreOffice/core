@@ -65,10 +65,11 @@ sal_uLong lcl_FindFtnPos( const SwDoc *pDoc, const SwTxtFtn *pAttr )
 {
     const SwFtnIdxs &rFtnIdxs = pDoc->GetFtnIdxs();
 
-    sal_uInt16 nRet;
-    SwTxtFtnPtr pBla = (SwTxtFtn*)pAttr;
-    if ( rFtnIdxs.Seek_Entry( pBla, &nRet ) )
+    SwTxtFtn* pBla = (SwTxtFtn*)pAttr;
+    SwFtnIdxs::const_iterator it = rFtnIdxs.find( pBla );
+    if ( it != rFtnIdxs.end() )
     {
+        sal_uInt16 nRet = it - rFtnIdxs.begin();
         if( pAttr->GetFtn().IsEndNote() )
             return sal_uLong(nRet) + ENDNOTE;
         return nRet;
@@ -1132,7 +1133,7 @@ SwFtnContFrm *SwFtnBossFrm::FindFtnCont()
 SwFtnContFrm *SwFtnBossFrm::FindNearestFtnCont( sal_Bool bDontLeave )
 {
     SwFtnContFrm *pCont = 0;
-    if ( GetFmt()->GetDoc()->GetFtnIdxs().Count() )
+    if ( !GetFmt()->GetDoc()->GetFtnIdxs().empty() )
     {
         pCont = FindFtnCont();
         if ( !pCont )
@@ -2873,7 +2874,7 @@ sal_Bool SwLayoutFrm::MoveLowerFtns( SwCntntFrm *pStart, SwFtnBossFrm *pOldBoss,
                                  SwFtnBossFrm *pNewBoss, const sal_Bool bFtnNums )
 {
     SwDoc *pDoc = GetFmt()->GetDoc();
-    if ( !pDoc->GetFtnIdxs().Count() )
+    if ( pDoc->GetFtnIdxs().empty() )
         return sal_False;
     if( pDoc->GetFtnInfo().ePos == FTNPOS_CHAPTER &&
         ( !IsInSct() || !FindSctFrm()->IsFtnAtEnd() ) )

@@ -382,7 +382,7 @@ sal_uInt16 SwWW8ImplReader::End_Ftn()
         const SwNodeIndex* pSttIdx = ((SwTxtFtn*)pFN)->GetStartNode();
         OSL_ENSURE(pSttIdx, "Probleme beim Anlegen des Fussnoten-Textes");
 
-        ((SwTxtFtn*)pFN)->SetSeqNo( rDoc.GetFtnIdxs().Count() );
+        ((SwTxtFtn*)pFN)->SetSeqNo( rDoc.GetFtnIdxs().size() );
 
         bool bOld = bFtnEdn;
         bFtnEdn = true;

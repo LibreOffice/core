@@ -1389,13 +1389,13 @@ bool SwTxtNode::InsertHint( SwTxtAttr * const pAttr, const SetAttrMode nMode )
                 if( !bNewFtn )
                 {
                     // eine alte Ftn wird umgehaengt (z.B. SplitNode)
-                    for( sal_uInt16 n = 0; n < pDoc->GetFtnIdxs().Count(); ++n )
+                    for( sal_uInt16 n = 0; n < pDoc->GetFtnIdxs().size(); ++n )
                         if( pAttr == pDoc->GetFtnIdxs()[n] )
                         {
                             // neuen Index zuweisen, dafuer aus dem SortArray
                             // loeschen und neu eintragen
                             pTxtFtn = pDoc->GetFtnIdxs()[n];
-                            pDoc->GetFtnIdxs().Remove( n );
+                            pDoc->GetFtnIdxs().erase( pDoc->GetFtnIdxs().begin() + n );
                             break;
                         }
                     // wenn ueber Undo der StartNode gesetzt wurde, kann
@@ -1411,7 +1411,7 @@ bool SwTxtNode::InsertHint( SwTxtAttr * const pAttr, const SetAttrMode nMode )
                 // FussNote im Redline-Bereich NICHT ins FtnArray einfuegen!
                 if( StartOfSectionIndex() > rNodes.GetEndOfRedlines().GetIndex() )
                 {
-                    const bool bSuccess = pDoc->GetFtnIdxs().Insert(pTxtFtn);
+                    const bool bSuccess = pDoc->GetFtnIdxs().insert(pTxtFtn).second;
                     OSL_ENSURE( bSuccess, "FtnIdx not inserted." );
                     (void) bSuccess; // unused in non-debug
                 }

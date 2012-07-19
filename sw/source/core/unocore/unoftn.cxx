@@ -361,7 +361,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
         // force creation of sequence id - is used for references
         if (pNewDoc->IsInReading())
         {
-            pTxtAttr->SetSeqNo(pNewDoc->GetFtnIdxs().Count());
+            pTxtAttr->SetSeqNo(pNewDoc->GetFtnIdxs().size());
         }
         else
         {

@@ -664,7 +664,7 @@ void SwHTMLWriter::OutStyleSheet( const SwPageDesc& rPageDesc, sal_Bool bUsed )
     }
 
     const SwFtnIdxs& rIdxs = pDoc->GetFtnIdxs();
-    nArrLen = rIdxs.Count();
+    nArrLen = rIdxs.size();
     sal_uInt16 nEnd = 0, nFtn = 0;
     for( i=0; i < nArrLen; i++ )
     {

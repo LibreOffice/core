@@ -540,7 +540,7 @@ void SwUndoSaveCntnt::DelCntntIndex( const SwPosition& rMark,
     if( nsDelCntntType::DELCNT_FTN & nDelCntntType )
     {
         SwFtnIdxs& rFtnArr = pDoc->GetFtnIdxs();
-        if( rFtnArr.Count() )
+        if( !rFtnArr.empty() )
         {
             const SwNode* pFtnNd;
             sal_uInt16 nPos;
@@ -548,7 +548,7 @@ void SwUndoSaveCntnt::DelCntntIndex( const SwPosition& rMark,
             SwTxtFtn* pSrch;
 
             // for now delete all that come afterwards
-            while( nPos < rFtnArr.Count() && ( pFtnNd =
+            while( nPos < rFtnArr.size() && ( pFtnNd =
                 &( pSrch = rFtnArr[ nPos ] )->GetTxtNode())->GetIndex()
                         <= pEnd->nNode.GetIndex() )
             {

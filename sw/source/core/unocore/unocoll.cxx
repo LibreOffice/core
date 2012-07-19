@@ -1811,7 +1811,7 @@ sal_Int32 SwXFootnotes::getCount(void) throw( uno::RuntimeException )
     if(!IsValid())
         throw uno::RuntimeException();
     sal_Int32 nCount = 0;
-    sal_uInt16 n, nFtnCnt = GetDoc()->GetFtnIdxs().Count();
+    sal_uInt16 n, nFtnCnt = GetDoc()->GetFtnIdxs().size();
     SwTxtFtn* pTxtFtn;
     for( n = 0; n < nFtnCnt; ++n )
     {
@@ -1832,7 +1832,7 @@ uno::Any SwXFootnotes::getByIndex(sal_Int32 nIndex)
     sal_Int32 nCount = 0;
     if(IsValid())
     {
-        sal_uInt16 n, nFtnCnt = GetDoc()->GetFtnIdxs().Count();
+        sal_uInt16 n, nFtnCnt = GetDoc()->GetFtnIdxs().size();
         SwTxtFtn* pTxtFtn;
         uno::Reference< XFootnote >  xRef;
         for( n = 0; n < nFtnCnt; ++n )
@@ -1868,7 +1868,7 @@ sal_Bool SwXFootnotes::hasElements(void) throw( uno::RuntimeException )
     SolarMutexGuard aGuard;
     if(!IsValid())
         throw uno::RuntimeException();
-    return GetDoc()->GetFtnIdxs().Count() > 0;
+    return !GetDoc()->GetFtnIdxs().empty();
 }
 
 Reference<XFootnote>    SwXFootnotes::GetObject( SwDoc& rDoc, const SwFmtFtn& rFmt )

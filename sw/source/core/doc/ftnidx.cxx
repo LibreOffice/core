@@ -38,48 +38,17 @@
 #include <rootfrm.hxx>
 
 
-_SV_IMPL_SORTAR_ALG( _SwFtnIdxs, SwTxtFtnPtr )
-sal_Bool _SwFtnIdxs::Seek_Entry( const SwTxtFtnPtr rSrch, sal_uInt16* pFndPos ) const
+
+bool CompareSwFtnIdxs::operator()(SwTxtFtn* const& lhs, SwTxtFtn* const& rhs) const
 {
-    sal_uLong nIdx = _SwTxtFtn_GetIndex( rSrch );
-    xub_StrLen nCntIdx = *rSrch->GetStart();
-
-    sal_uInt16 nO = Count(), nM, nU = 0;
-    if( nO > 0 )
-    {
-        nO--;
-        while( nU <= nO )
-        {
-            nM = nU + ( nO - nU ) / 2;
-            sal_uLong nFndIdx = _SwTxtFtn_GetIndex( (*this)[ nM ] );
-            if( nFndIdx == nIdx && *(*this)[ nM ]->GetStart() == nCntIdx )
-            {
-                if( pFndPos )
-                    *pFndPos = nM;
-                return sal_True;
-            }
-            else if( nFndIdx < nIdx ||
-                (nFndIdx == nIdx && *(*this)[ nM ]->GetStart() < nCntIdx ))
-                nU = nM + 1;
-            else if( nM == 0 )
-            {
-                if( pFndPos )
-                    *pFndPos = nU;
-                return sal_False;
-            }
-            else
-                nO = nM - 1;
-        }
-    }
-    if( pFndPos )
-        *pFndPos = nU;
-    return sal_False;
+    sal_uLong nIdxLHS = _SwTxtFtn_GetIndex( lhs );
+    sal_uLong nIdxRHS = _SwTxtFtn_GetIndex( rhs );
+    return ( nIdxLHS == nIdxRHS && lhs->GetStart() < rhs->GetStart() ) || nIdxLHS < nIdxRHS;
 }
-
 
 void SwFtnIdxs::UpdateFtn( const SwNodeIndex& rStt )
 {
-    if( !Count() )
+    if( empty() )
         return;
 
     // Get the NodesArray using the first foot note's StartIndex
@@ -129,13 +98,13 @@ void SwFtnIdxs::UpdateFtn( const SwNodeIndex& rStt )
             ++nPos;
         }
 
-        if( nPos == Count() )       // nothing found
+        if( nPos == size() )       // nothing found
             return;
 
         if( rOutlNds.empty() )
             nFtnNo = nPos+1;
 
-        for( ; nPos < Count(); ++nPos )
+        for( ; nPos < size(); ++nPos )
         {
             pTxtFtn = (*this)[ nPos ];
             if( pTxtFtn->GetTxtNode().GetIndex() >= nCapEnd )
@@ -156,7 +125,7 @@ void SwFtnIdxs::UpdateFtn( const SwNodeIndex& rStt )
 
     sal_uInt16 nPos, nFtnNo = 1, nEndNo = 1;
     sal_uLong nUpdNdIdx = rStt.GetIndex();
-    for( nPos = 0; nPos < Count(); ++nPos )
+    for( nPos = 0; nPos < size(); ++nPos )
     {
         pTxtFtn = (*this)[ nPos ];
         if( nUpdNdIdx <= pTxtFtn->GetTxtNode().GetIndex() )
@@ -176,7 +145,7 @@ void SwFtnIdxs::UpdateFtn( const SwNodeIndex& rStt )
     }
 
     // Set the array number for all footnotes starting from nPos
-    for( ; nPos < Count(); ++nPos )
+    for( ; nPos < size(); ++nPos )
     {
         pTxtFtn = (*this)[ nPos ];
         const SwFmtFtn &rFtn = pTxtFtn->GetFtn();
@@ -199,7 +168,7 @@ void SwFtnIdxs::UpdateFtn( const SwNodeIndex& rStt )
 
 void SwFtnIdxs::UpdateAllFtn()
 {
-    if( !Count() )
+    if( empty() )
         return;
 
     // Get the NodesArray via the StartIndex of the first Footnote
@@ -224,7 +193,7 @@ void SwFtnIdxs::UpdateAllFtn()
             if ( rOutlNds[ n ]->GetTxtNode()->GetAttrOutlineLevel() == 1 )//<-end,zhaojianwei
             {
                 sal_uLong nCapStt = rOutlNds[ n ]->GetIndex();  // Start of a new chapter
-                for( ; nFtnIdx < Count(); ++nFtnIdx )
+                for( ; nFtnIdx < size(); ++nFtnIdx )
                 {
                     pTxtFtn = (*this)[ nFtnIdx ];
                     if( pTxtFtn->GetTxtNode().GetIndex() >= nCapStt )
@@ -237,13 +206,13 @@ void SwFtnIdxs::UpdateAllFtn()
                         pTxtFtn->SetNumber( rFtnInfo.nFtnOffset + nNo++,
                                             &rFtn.GetNumStr() );
                 }
-                if( nFtnIdx >= Count() )
+                if( nFtnIdx >= size() )
                     break;          // ok, everything is updated
                 nNo = 1;
             }
         }
 
-        for( nNo = 1; nFtnIdx < Count(); ++nFtnIdx )
+        for( nNo = 1; nFtnIdx < size(); ++nFtnIdx )
         {
             // Endnotes are per-document
             pTxtFtn = (*this)[ nFtnIdx ];
@@ -259,7 +228,7 @@ void SwFtnIdxs::UpdateAllFtn()
     // We use sal_Bool here, so that we also iterate through the Endnotes with a chapter setting.
     const sal_Bool bEndNoteOnly = FTNNUM_DOC != rFtnInfo.eNum;
     sal_uInt16 nFtnNo = 0, nEndNo = 0;
-    for( sal_uInt16 nPos = 0; nPos < Count(); ++nPos )
+    for( sal_uInt16 nPos = 0; nPos < size(); ++nPos )
     {
         pTxtFtn = (*this)[ nPos ];
         const SwFmtFtn &rFtn = pTxtFtn->GetFtn();
@@ -286,7 +255,7 @@ SwTxtFtn* SwFtnIdxs::SeekEntry( const SwNodeIndex& rPos, sal_uInt16* pFndPos ) c
 {
     sal_uLong nIdx = rPos.GetIndex();
 
-    sal_uInt16 nO = Count(), nM, nU = 0;
+    sal_uInt16 nO = size(), nM, nU = 0;
     if( nO > 0 )
     {
         nO--;

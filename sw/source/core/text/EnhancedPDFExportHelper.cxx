@@ -1930,7 +1930,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
         //
         // FOOTNOTES
         //
-        const sal_uInt16 nFtnCount = pDoc->GetFtnIdxs().Count();
+        const sal_uInt16 nFtnCount = pDoc->GetFtnIdxs().size();
         for ( sal_uInt16 nIdx = 0; nIdx < nFtnCount; ++nIdx )
         {
             // Set cursor to text node that contains the footnote:

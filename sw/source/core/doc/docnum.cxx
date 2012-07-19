@@ -146,7 +146,7 @@ void SwDoc::SetOutlineNumRule( const SwNumRule& rRule )
     UpdateNumRule();
 
     // update if we have foot notes && chapter-wise numbering
-    if( GetFtnIdxs().Count() && FTNNUM_CHAPTER == GetFtnInfo().eNum )
+    if( !GetFtnIdxs().empty() && FTNNUM_CHAPTER == GetFtnInfo().eNum )
         GetFtnIdxs().UpdateAllFtn();
 
     UpdateExpFlds(NULL, true);

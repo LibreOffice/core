@@ -1263,7 +1263,7 @@ CreateParentXText(SwDoc & rDoc, const SwPosition& rPos)
         break;
         case SwFootnoteStartNode:
         {
-            const sal_uInt16 nFtnCnt = rDoc.GetFtnIdxs().Count();
+            const sal_uInt16 nFtnCnt = rDoc.GetFtnIdxs().size();
             uno::Reference< text::XFootnote >  xRef;
             for (sal_uInt16 n = 0; n < nFtnCnt; ++n )
             {

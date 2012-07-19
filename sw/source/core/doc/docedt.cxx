@@ -368,7 +368,7 @@ bool lcl_SaveFtn( const SwNodeIndex& rSttNd, const SwNodeIndex& rEndNd,
                 rSttNd.GetIndex() >= rNds.GetEndOfAutotext().GetIndex();
     const bool bSaveFtn = !bDelFtn &&
                     rInsPos.GetIndex() >= rNds.GetEndOfExtras().GetIndex();
-    if( rFtnArr.Count() )
+    if( !rFtnArr.empty() )
     {
 
         sal_uInt16 nPos;
@@ -377,7 +377,7 @@ bool lcl_SaveFtn( const SwNodeIndex& rSttNd, const SwNodeIndex& rEndNd,
         const SwNode* pFtnNd;
 
         // Delete/save all that come after it
-        while( nPos < rFtnArr.Count() && ( pFtnNd =
+        while( nPos < rFtnArr.size() && ( pFtnNd =
             &( pSrch = rFtnArr[ nPos ] )->GetTxtNode())->GetIndex()
                     <= rEndNd.GetIndex() )
         {
@@ -403,9 +403,9 @@ bool lcl_SaveFtn( const SwNodeIndex& rSttNd, const SwNodeIndex& rEndNd,
                 else
                 {
                     pSrch->DelFrms(0);
-                    rFtnArr.Remove( nPos );
+                    rFtnArr.erase( rFtnArr.begin() + nPos );
                     if( bSaveFtn )
-                        rSaveArr.Insert( pSrch );
+                        rSaveArr.insert( pSrch );
                 }
                 bUpdateFtn = sal_True;
             }
@@ -431,9 +431,9 @@ bool lcl_SaveFtn( const SwNodeIndex& rSttNd, const SwNodeIndex& rEndNd,
                 else
                 {
                     pSrch->DelFrms(0);
-                    rFtnArr.Remove( nPos );
+                    rFtnArr.erase( rFtnArr.begin() + nPos );
                     if( bSaveFtn )
-                        rSaveArr.Insert( pSrch );
+                        rSaveArr.insert( pSrch );
                 }
                 bUpdateFtn = sal_True;
             }
@@ -461,7 +461,7 @@ bool lcl_SaveFtn( const SwNodeIndex& rSttNd, const SwNodeIndex& rEndNd,
                         SwTxtAttr *pAttr = pHints->GetTextHint( i );
                         if ( pAttr->Which() == RES_TXTATR_FTN )
                         {
-                            rSaveArr.Insert( static_cast<SwTxtFtn*>(pAttr) );
+                            rSaveArr.insert( static_cast<SwTxtFtn*>(pAttr) );
                         }
                     }
                 }
@@ -1089,10 +1089,10 @@ bool SwDoc::MoveRange( SwPaM& rPaM, SwPosition& rPos, SwMoveFlags eMvFlags )
 
     if( bUpdateFtn )
     {
-        if( aTmpFntIdx.Count() )
+        if( !aTmpFntIdx.empty() )
         {
-            GetFtnIdxs().Insert( &aTmpFntIdx );
-            aTmpFntIdx.Remove( sal_uInt16( 0 ), aTmpFntIdx.Count() );
+            GetFtnIdxs().insert( aTmpFntIdx );
+            aTmpFntIdx.clear();
         }
 
         GetFtnIdxs().UpdateAllFtn();
@@ -1222,10 +1222,10 @@ bool SwDoc::MoveNodeRange( SwNodeRange& rRange, SwNodeIndex& rPos,
 
     if( bUpdateFtn )
     {
-        if( aTmpFntIdx.Count() )
+        if( !aTmpFntIdx.empty() )
         {
-            GetFtnIdxs().Insert( &aTmpFntIdx );
-            aTmpFntIdx.Remove( sal_uInt16( 0 ), aTmpFntIdx.Count() );
+            GetFtnIdxs().insert( aTmpFntIdx );
+            aTmpFntIdx.clear();
         }
 
         GetFtnIdxs().UpdateAllFtn();

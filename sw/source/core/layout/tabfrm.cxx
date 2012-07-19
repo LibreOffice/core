@@ -475,7 +475,7 @@ void lcl_MoveRowContent( SwRowFrm& rSourceLine, SwRowFrm& rDestLine )
 //
 void lcl_MoveFootnotes( SwTabFrm& rSource, SwTabFrm& rDest, SwLayoutFrm& rRowFrm )
 {
-    if ( 0 != rSource.GetFmt()->GetDoc()->GetFtnIdxs().Count() )
+    if ( !rSource.GetFmt()->GetDoc()->GetFtnIdxs().empty() )
     {
         SwFtnBossFrm* pOldBoss = rSource.FindFtnBossFrm( sal_True );
         SwFtnBossFrm* pNewBoss = rDest.FindFtnBossFrm( sal_True );
@@ -1866,7 +1866,7 @@ void SwTabFrm::MakeAll()
     bool bMovedFwd  = false;
     // gets set to true when the Frm is split
     bool bSplit = false;
-    const sal_Bool bFtnsInDoc = 0 != GetFmt()->GetDoc()->GetFtnIdxs().Count();
+    const bool bFtnsInDoc = !GetFmt()->GetDoc()->GetFtnIdxs().empty();
     sal_Bool bMoveable;
     const sal_Bool bFly     = IsInFly();
 

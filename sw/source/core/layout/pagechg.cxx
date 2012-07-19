@@ -169,8 +169,8 @@ void SwBodyFrm::Format( const SwBorderAttrs * )
             nBorder /= 2;
 
             // #i21774# Footnotes and centering the grid does not work together:
-            const bool bAdjust = 0 == ((SwPageFrm*)GetUpper())->GetFmt()->GetDoc()->
-                                        GetFtnIdxs().Count();
+            const bool bAdjust = ((SwPageFrm*)GetUpper())->GetFmt()->GetDoc()->
+                                        GetFtnIdxs().empty();
 
             (Prt().*fnRect->fnSetPosY)( bAdjust ? nBorder : 0 );
             (Prt().*fnRect->fnSetHeight)( nSize );
@@ -1093,7 +1093,7 @@ void SwFrm::CheckPageDescs( SwPageFrm *pStart, sal_Bool bNotifyFields )
 
     SwRootFrm *pRoot = (SwRootFrm*)pStart->GetUpper();
     SwDoc* pDoc      = pStart->GetFmt()->GetDoc();
-    const sal_Bool bFtns = 0 != pDoc->GetFtnIdxs().Count();
+    const bool bFtns = !pDoc->GetFtnIdxs().empty();
 
     SwPageFrm *pPage = pStart;
     if( pPage->GetPrev() && ((SwPageFrm*)pPage->GetPrev())->IsEmptyPage() )
@@ -1341,7 +1341,7 @@ SwPageFrm *SwFrm::InsertPage( SwPageFrm *pPrevPage, sal_Bool bFtn )
         {
             SwPageFrm *pDel = pSibling;
             pSibling = (SwPageFrm*)pSibling->GetNext();
-            if ( pDoc->GetFtnIdxs().Count() )
+            if ( !pDoc->GetFtnIdxs().empty() )
                 pRoot->RemoveFtns( pDel, sal_True );
             pDel->Cut();
             delete pDel;
@@ -1364,7 +1364,7 @@ SwPageFrm *SwFrm::InsertPage( SwPageFrm *pPrevPage, sal_Bool bFtn )
     {
         SwPageFrm *pDel = pSibling;
         pSibling = (SwPageFrm*)pSibling->GetNext();
-        if ( pDoc->GetFtnIdxs().Count() )
+        if ( !pDoc->GetFtnIdxs().empty() )
             pRoot->RemoveFtns( pDel, sal_True );
         pDel->Cut();
         delete pDel;
@@ -1535,7 +1535,7 @@ void SwRootFrm::RemoveSuperfluous()
         {
             SwPageFrm *pEmpty = pPage;
             pPage = (SwPageFrm*)pPage->GetPrev();
-            if ( GetFmt()->GetDoc()->GetFtnIdxs().Count() )
+            if ( !GetFmt()->GetDoc()->GetFtnIdxs().empty() )
                 RemoveFtns( pEmpty, sal_True );
             pEmpty->Cut();
             delete pEmpty;
@@ -1617,7 +1617,7 @@ void SwRootFrm::AssertFlyPages()
         }
         //Jetzt koennen die Endnotenseiten natuerlich wieder krumm sein;
         //in diesem Fall werden sie vernichtet.
-        if ( pDoc->GetFtnIdxs().Count() )
+        if ( !pDoc->GetFtnIdxs().empty() )
         {
             pPage = (SwPageFrm*)Lower();
             while ( pPage && !pPage->IsFtnPage() )
