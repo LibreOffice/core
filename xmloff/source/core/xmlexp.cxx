@@ -376,7 +376,8 @@ void SvXMLExport::_InitCtor()
                 GetXMLToken(XML_NP_TABLE_EXT), GetXMLToken(XML_N_TABLE_EXT), XML_NAMESPACE_TABLE_EXT);
             mpNamespaceMap->Add(
                 GetXMLToken(XML_NP_CALC_EXT), GetXMLToken(XML_N_CALC_EXT), XML_NAMESPACE_CALC_EXT);
-
+            mpNamespaceMap->Add(
+                GetXMLToken(XML_NP_DRAW_EXT), GetXMLToken(XML_N_DRAW_EXT), XML_NAMESPACE_DRAW_EXT);
         }
     }
     if( (getExportFlags() & (EXPORT_MASTERSTYLES|EXPORT_CONTENT) ) != 0 )

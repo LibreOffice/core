@@ -329,6 +329,7 @@ void ImpExportEnhancedPath( SvXMLExport& rExport,
 
     rtl::OUString       aStr;
     rtl::OUStringBuffer aStrBuffer;
+    sal_uInt16 aNamespace = XML_NAMESPACE_DRAW;
 
     sal_Int32 i, j, k, l;
 
@@ -413,6 +414,8 @@ void ImpExportEnhancedPath( SvXMLExport& rExport,
                 aStrBuffer.append( (sal_Unicode)'Y' ); nParameter = 1; break;
             case com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::QUADRATICCURVETO :
                 aStrBuffer.append( (sal_Unicode)'Q' ); nParameter = 2; break;
+            case com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::ARCANGLETO :
+                aStrBuffer.append( (sal_Unicode)'G' ); nParameter = 2; aNamespace = XML_NAMESPACE_DRAW_EXT; break;
 
             default : // ups, seems to be something wrong
             {
@@ -442,7 +445,7 @@ void ImpExportEnhancedPath( SvXMLExport& rExport,
         }
     }
     aStr = aStrBuffer.makeStringAndClear();
-    rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_ENHANCED_PATH, aStr );
+    rExport.AddAttribute( aNamespace, XML_ENHANCED_PATH, aStr );
 }
 
 void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< beans::XPropertySet >& xPropSet )
