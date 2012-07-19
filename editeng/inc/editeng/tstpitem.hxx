@@ -33,6 +33,7 @@
 #include <svl/poolitem.hxx>
 #include <editeng/svxenum.hxx>
 #include <editeng/editengdllapi.h>
+#include <o3tl/sorted_vector.hxx>
 
 // class SvxTabStop ------------------------------------------------------
 
@@ -103,16 +104,16 @@ public:
 
 // class SvxTabStopItem --------------------------------------------------
 
-SV_DECL_VARARR_SORT_VISIBILITY( SvxTabStopArr, SvxTabStop, SVX_TAB_DEFCOUNT, EDITENG_DLLPUBLIC )
+typedef o3tl::sorted_vector<SvxTabStop> SvxTabStopArr;
 
 /*  [Description]
 
     This item describes a list of TabStops.
 */
 
-class EDITENG_DLLPUBLIC SvxTabStopItem : public SfxPoolItem, private SvxTabStopArr
+class EDITENG_DLLPUBLIC SvxTabStopItem : public SfxPoolItem
 {
-//friend class SvxTabStopObject_Impl;
+    SvxTabStopArr maTabStops;
 
 public:
     TYPEINFO();
@@ -131,14 +132,14 @@ public:
     sal_uInt16          GetPos( const sal_Int32 nPos ) const;
 
     // unprivatized:
-    sal_uInt16          Count() const { return SvxTabStopArr::Count(); }
-    sal_Bool            Insert( const SvxTabStop& rTab );
-    void            Insert( const SvxTabStopItem* pTabs, sal_uInt16 nStart = 0,
+    sal_uInt16          Count() const { return maTabStops.size(); }
+    bool                Insert( const SvxTabStop& rTab );
+    void                Insert( const SvxTabStopItem* pTabs, sal_uInt16 nStart = 0,
                             sal_uInt16 nEnd = USHRT_MAX );
-    void            Remove( SvxTabStop& rTab )
-                        { SvxTabStopArr::Remove( rTab ); }
-    void            Remove( const sal_uInt16 nPos, const sal_uInt16 nLen = 1 )
-                        { SvxTabStopArr::Remove( nPos, nLen ); }
+    void                Remove( SvxTabStop& rTab )
+                        { maTabStops.erase( rTab ); }
+    void                Remove( const sal_uInt16 nPos, const sal_uInt16 nLen = 1 )
+                        { maTabStops.erase( maTabStops.begin() + nPos, maTabStops.begin() + nPos + nLen ); }
 
     // Assignment operator, equality operator (caution: expensive!)
     SvxTabStopItem& operator=( const SvxTabStopItem& rTSI );
@@ -147,15 +148,10 @@ public:
     //int             operator!=( const SvxTabStopItem& rTSI ) const
     //                  { return !( operator==( rTSI ) ); }
 
-    // SortedArrays returns only Stackobjects!
     const SvxTabStop& operator[]( const sal_uInt16 nPos ) const
-                        {
-                            DBG_ASSERT( GetStart() &&
-                                        nPos < Count(), "op[]" );
-                            return *( GetStart() + nPos );
-                        }
-    const SvxTabStop*  GetStart() const
-                        {   return SvxTabStopArr::GetData(); }
+                        { return maTabStops[nPos]; }
+    SvxTabStop& operator[]( const sal_uInt16 nPos )
+                        { return maTabStops[nPos]; }
 
     // "pure virtual Methods" from SfxPoolItem
     virtual int              operator==( const SfxPoolItem& ) const;
@@ -171,8 +167,6 @@ public:
     virtual SfxPoolItem*     Create( SvStream&, sal_uInt16 ) const;
     virtual SvStream&        Store( SvStream& , sal_uInt16 nItemVersion ) const;
 
-    using SvxTabStopArr::Insert;
-    using SvxTabStopArr::Remove;
 };
 
 #endif

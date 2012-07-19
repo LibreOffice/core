@@ -1136,12 +1136,9 @@ int lcl_SetNewDefTabStops( SwTwips nOldWidth, SwTwips nNewWidth,
         return sal_False;
 
     // Find the default's beginning
-    SvxTabStop* pTabs = ((SvxTabStop*)rChgTabStop.GetStart())
-                        + (nOldCnt-1);
     sal_uInt16 n;
-
-    for( n = nOldCnt; n ; --n, --pTabs )
-        if( SVX_TAB_ADJUST_DEFAULT != pTabs->GetAdjustment() )
+    for( n = nOldCnt; n ; --n )
+        if( SVX_TAB_ADJUST_DEFAULT != rChgTabStop[n - 1].GetAdjustment() )
             break;
     ++n;
     if( n < nOldCnt )   // delete the DefTabStops
