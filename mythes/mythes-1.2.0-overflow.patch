@@ -1,0 +1,24 @@
+--- misc/mythes-1.2.0/mythes.cxx	2010-02-27 16:52:52.000000000 +0100
++++ misc/build/mythes-1.2.0/mythes.cxx	2011-05-18 16:22:49.125014204 +0200
+@@ -4,6 +4,8 @@
+ #include <stdlib.h>
+ #include <errno.h>
+ 
++#include <limits>
++
+ #include "mythes.hxx"
+ 
+ // some basic utility routines
+@@ -204,6 +206,12 @@
+          return 0;
+     }          
+     int nmeanings = atoi(buf+np+1);
++    if ((nmeanings < 0) ||
++        ((::std::numeric_limits<size_t>::max() / sizeof(mentry)) < nmeanings))
++    {
++        free(buf);
++        return 0;
++    }
+     *pme = (mentry*) malloc( nmeanings * sizeof(mentry) );
+     if (!(*pme)) {
+         free(buf);
