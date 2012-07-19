@@ -1830,6 +1830,11 @@ void SwTxtNode::ReplaceTextOnly( xub_StrLen nPos, xub_StrLen nLen,
 void SwTxtNode::CountWords( SwDocStat& rStat,
                             xub_StrLen nStt, xub_StrLen nEnd ) const
 {
+    if (IsInRedlines())
+    {   //not counting txtnodes used to hold deleted redline content
+        return;
+    }
+
     sal_Bool isCountAll = ( (0 == nStt) && (GetTxt().Len() == nEnd) );
 
     ++rStat.nAllPara; // #i93174#: count _all_ paragraphs

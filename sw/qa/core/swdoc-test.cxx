@@ -61,6 +61,8 @@
 #include "fmtftn.hxx"
 #include "fmtrfmrk.hxx"
 #include "fmtfld.hxx"
+#include "redline.hxx"
+#include "docary.hxx"
 
 SO2_DECL_REF(SwDocShell)
 SO2_IMPL_REF(SwDocShell)
@@ -399,7 +401,7 @@ void SwDocTest::testSwScanner()
         pTxtNode->CountWords(aDocStat, 0, pTxtNode->Len());
         CPPUNIT_ASSERT_EQUAL(aDocStat.nWord, static_cast<sal_uLong>(2));
 
-        //turn on red-lining
+        //turn on red-lining and show changes
         m_pDoc->SetRedlineMode(nsRedlineMode_t::REDLINE_ON | nsRedlineMode_t::REDLINE_SHOW_DELETE|nsRedlineMode_t::REDLINE_SHOW_INSERT);
         CPPUNIT_ASSERT_MESSAGE("redlining should be on", m_pDoc->IsRedlineOn());
         CPPUNIT_ASSERT_MESSAGE("redlines should be visible", IDocumentRedlineAccess::IsShowChanges(m_pDoc->GetRedlineMode()));
@@ -414,6 +416,39 @@ void SwDocTest::testSwScanner()
         pTxtNode->SetWordCountDirty(true);
         pTxtNode->CountWords(aDocStat, 0, pTxtNode->Len()); //but word-counting the text should only count the non-deleted text
         CPPUNIT_ASSERT_EQUAL(aDocStat.nWord, static_cast<sal_uLong>(1));
+
+        pTxtNode->SetWordCountDirty(true);
+
+        //keep red-lining on but hide changes
+        m_pDoc->SetRedlineMode(nsRedlineMode_t::REDLINE_ON);
+        CPPUNIT_ASSERT_MESSAGE("redlining should be still on", m_pDoc->IsRedlineOn());
+        CPPUNIT_ASSERT_MESSAGE("redlines should be invisible", !IDocumentRedlineAccess::IsShowChanges(m_pDoc->GetRedlineMode()));
+
+        aDocStat.Reset();
+        pTxtNode->CountWords(aDocStat, 0, pTxtNode->Len()); //but word-counting the text should only count the non-deleted text
+        CPPUNIT_ASSERT_EQUAL(aDocStat.nWord, static_cast<sal_uLong>(1));
+
+        rtl::OUString sLorem = pTxtNode->GetTxt();
+        CPPUNIT_ASSERT(sLorem == "Lorem");
+
+        const SwRedlineTbl& rTbl = m_pDoc->GetRedlineTbl();
+
+        SwNodes& rNds = m_pDoc->GetNodes();
+        CPPUNIT_ASSERT(rTbl.Count() == 1);
+
+        SwNodeIndex* pNodeIdx = rTbl[0]->GetContentIdx();
+        CPPUNIT_ASSERT(pNodeIdx);
+
+        pTxtNode = rNds[ pNodeIdx->GetIndex() + 1 ]->GetTxtNode();        //first deleted txtnode
+        CPPUNIT_ASSERT(pTxtNode);
+
+        rtl::OUString sIpsum = pTxtNode->GetTxt();
+        CPPUNIT_ASSERT(sIpsum == " ipsum");
+
+        aDocStat.Reset();
+        pTxtNode->CountWords(aDocStat, 0, pTxtNode->Len()); //word-counting the text should only count the non-deleted text, and this whole chunk should be ignored
+        CPPUNIT_ASSERT_EQUAL(aDocStat.nWord, static_cast<sal_uLong>(0));
+        CPPUNIT_ASSERT_EQUAL(aDocStat.nChar, static_cast<sal_uLong>(0));
     }
 }
 
