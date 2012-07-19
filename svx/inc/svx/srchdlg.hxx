@@ -38,10 +38,10 @@
 #include <vcl/dialog.hxx>
 #include <sfx2/childwin.hxx>
 #include <sfx2/basedlgs.hxx>
-#include <svl/svarray.hxx>
 #include <svtools/svmedit.hxx>
 #include <svl/srchdefs.hxx>
 #include "svx/svxdllapi.h"
+#include <vector>
 
 class SvxSearchItem;
 class MoreButton;
@@ -63,7 +63,7 @@ struct SearchAttrItem
 
 // class SearchAttrItemList ----------------------------------------------
 
-SV_DECL_VARARR_VISIBILITY(SrchAttrItemList, SearchAttrItem, 8, SVX_DLLPUBLIC)
+typedef std::vector<SearchAttrItem> SrchAttrItemList;
 
 class SVX_DLLPUBLIC SearchAttrItemList : private SrchAttrItemList
 {
@@ -75,15 +75,15 @@ public:
     void            Put( const SfxItemSet& rSet );
     SfxItemSet&     Get( SfxItemSet& rSet );
     void            Clear();
-    sal_uInt16          Count() const { return SrchAttrItemList::Count(); }
-    SearchAttrItem& operator[](sal_uInt16 nPos) const
+    sal_uInt16      Count() const { return SrchAttrItemList::size(); }
+    SearchAttrItem& operator[](sal_uInt16 nPos)
                         { return SrchAttrItemList::operator[]( nPos ); }
-    SearchAttrItem& GetObject( sal_uInt16 nPos ) const
-                        { return SrchAttrItemList::GetObject( nPos ); }
+    SearchAttrItem& GetObject( sal_uInt16 nPos )
+                        { return SrchAttrItemList::operator[]( nPos ); }
 
-    // the pointer to the item is not being copierd, so don't delete
+    // the pointer to the item is not being copied, so don't delete
     void Insert( const SearchAttrItem& rItem )
-        { SrchAttrItemList::Insert( rItem, SrchAttrItemList::Count() ); }
+        { SrchAttrItemList::push_back( rItem ); }
     // deletes the pointer to the items
     void Remove( sal_uInt16 nPos, sal_uInt16 nLen = 1 );
 };
