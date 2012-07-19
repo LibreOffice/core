@@ -268,7 +268,7 @@ void SlideShow::CreateController(  ViewShell* pViewSh, ::sd::View* pView, ::Wind
     // multiple slide show instances for one document.
     mxController = xController;
     mbIsInStartup = false;
-    Server::presentationStarted( getController() );
+
 }
 
 // --------------------------------------------------------------------
@@ -1073,6 +1073,8 @@ void SlideShow::activate( ViewShellBase& rBase )
 
     if( mxController.is() )
         mxController->activate();
+
+    Server::presentationStarted( mxController.get() );
 }
 
 // ---------------------------------------------------------

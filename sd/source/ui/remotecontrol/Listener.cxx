@@ -36,11 +36,15 @@ Listener::~Listener()
 
 void Listener::init( const css::uno::Reference< css::presentation::XSlideShowController >& aController)
 {
-    if (aController.is() )
+    if ( aController.is() )
     {
         mController = css::uno::Reference< css::presentation::XSlideShowController >( aController );
         aController->addSlideShowListener( this );
         fprintf( stderr, "Registered listener.\n" );
+    }
+    else
+    {
+        fprintf( stderr, "Couldn't register listener -- aController isn't\n" );
     }
 }
 
@@ -93,6 +97,7 @@ void SAL_CALL Listener::hyperLinkClicked (const rtl::OUString &)
 void SAL_CALL Listener::slideTransitionStarted (void)
     throw (css::uno::RuntimeException)
 {
+    fprintf( stderr, "slideTransitionStarted\n" );
     sal_Int32 aSlide = mController->getCurrentSlideIndex();
 
     OStringBuffer aBuilder( "slide_updated\n" );
@@ -118,25 +123,20 @@ void SAL_CALL Listener::slideAnimationsEnded (void)
 
 void SAL_CALL Listener::disposing (void)
 {
-    fprintf( stderr, "In disposing\n" );
     pTransmitter = NULL;
-    fprintf( stderr, "Nulled transmitter\n" );
     if ( mController.is() )
     {
-        fprintf( stderr, "mController was\n" );
         mController->removeSlideShowListener( this );
         mController = NULL;
     }
     mServer->informListenerDestroyed();
-    fprintf( stderr, "finished disposing\n" );
 }
 
 void SAL_CALL Listener::disposing (
     const css::lang::EventObject& rEvent)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    fprintf( stderr, "disposing\n");
     (void) rEvent;
-     dispose();
+    dispose();
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

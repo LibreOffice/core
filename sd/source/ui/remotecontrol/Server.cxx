@@ -35,12 +35,9 @@ Server::~Server()
 // Run as a thread
 void Server::listenThread()
 {
-    fprintf( stderr, "Server:: address of Transmitter before:%p\n", pTransmitter );
     pTransmitter = new Transmitter( mStreamSocket );
     pTransmitter->launch();
     Receiver aReceiver( pTransmitter );
-    fprintf( stderr, "Server:: address of Transmitter:%p\n", pTransmitter );
-//     aTransmitter.addMessage( "Hello world\n\n", Transmitter::Priority::HIGH );
     try {
         fprintf( stderr, "Trying to add a Listener in listenThread\n" );
         uno::Reference< lang::XMultiServiceFactory > xServiceManager(
@@ -60,50 +57,46 @@ void Server::listenThread()
     }
     catch ( com::sun::star::uno::RuntimeException &e )
     {
-        fprintf( stderr, "Exception on add\n" );
     }
 
 
     // TODO: decryption
-    while (true)
+
+    sal_uInt64 aRet, aRead;
+    vector<char> aBuffer;
+    vector<OString> aCommand;
+    aRead = 0;
+    while ( true )
     {
-        sal_uInt64 aRet, aRead;
-        vector<char> aBuffer;
-        vector<OString> aCommand;
-        aRead = 0;
-        while ( true )
+        aBuffer.resize( aRead + 100 );
+        aRet = mStreamSocket.recv( &aBuffer[aRead], 100 );
+        if ( aRet == 0 )
         {
-            aBuffer.resize( aRead + 100 );
-            aRet = mStreamSocket.recv( &aBuffer[aRead], 100 );
-            if ( aRet == 0 )
-            {
-                break; // I.e. transmission finished.
-            }
-            aRead += aRet;
-            vector<char>::iterator aIt;
-            while ( (aIt = find( aBuffer.begin(), aBuffer.end(), '\n' ))
-                != aBuffer.end() )
-            {
-                sal_uInt64 aLocation = aIt - aBuffer.begin();
-
-                aCommand.push_back( OString( &(*aBuffer.begin()), aLocation ) );
-
-                if ( aIt == aBuffer.begin() )
-                {
-                    aReceiver.parseCommand( aCommand );
-                    aCommand.clear();
-                }
-                aBuffer.erase( aBuffer.begin(), aIt + 1 ); // Also delete the newline
-                aRead -= (aLocation + 1);
-            }
+            break; // I.e. transmission finished.
         }
+        aRead += aRet;
+        vector<char>::iterator aIt;
+        while ( (aIt = find( aBuffer.begin(), aBuffer.end(), '\n' ))
+            != aBuffer.end() )
+        {
+            sal_uInt64 aLocation = aIt - aBuffer.begin();
 
-        // TODO: deal with transmision errors gracefully.
+            aCommand.push_back( OString( &(*aBuffer.begin()), aLocation ) );
+            if ( aIt == aBuffer.begin() )
+            {
+                aReceiver.parseCommand( aCommand );
+                aCommand.clear();
+            }
+            aBuffer.erase( aBuffer.begin(), aIt + 1 ); // Also delete the newline
+            aRead -= (aLocation + 1);
+        }
     }
-    mListener->dispose();
+    // TODO: deal with transmision errors gracefully.
+    mListener->disposing();
     mListener = NULL;
     delete pTransmitter;
     pTransmitter = NULL;
+    fprintf( stderr, "Finished listening\n" );
 }
 
 
@@ -141,7 +134,6 @@ void Server::presentationStarted( const css::uno::Reference<
     {
         mListener = rtl::Reference<Listener>( new Listener( spServer, pTransmitter ) );
         mListener->init( rController );
-
     }
 }
 
