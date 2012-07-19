@@ -502,10 +502,7 @@ void ScMatrixImpl::PutDouble(double fVal, SCSIZE nC, SCSIZE nR)
 void ScMatrixImpl::PutDouble(const double* pArray, size_t nLen, SCSIZE nC, SCSIZE nR)
 {
     if (ValidColRow( nC, nR))
-    {
-        double* p = const_cast<double*>(pArray);
-        maMat.set(nR, nC, p, p + nLen);
-    }
+        maMat.set(nR, nC, pArray, pArray + nLen);
     else
     {
         OSL_FAIL("ScMatrixImpl::PutDouble: dimension error");
