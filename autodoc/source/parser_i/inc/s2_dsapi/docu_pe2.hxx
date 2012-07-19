@@ -143,6 +143,9 @@ class SapiDocu_PE : public TokenInterpreter
     void                SetCurSinceAtTagVersion_OOo(
                             DYN ary::inf::DocuToken &
                                                 let_drNewToken );
+    void                SetCurSinceAtTagVersion_AOO(
+                            DYN ary::inf::DocuToken &
+                                                let_drNewToken );
     void                SetCurSinceAtTagVersion_Number(
                             DYN ary::inf::DocuToken &
                                                 let_drNewToken );
