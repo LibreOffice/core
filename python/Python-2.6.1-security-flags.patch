@@ -539,12 +539,10 @@
  				Name="VCALinkTool"
 --- misc/Python-2.6.1/PCbuild/_ssl.vcproj	2012-07-17 13:58:39.048409000 +0200
 +++ misc/build/Python-2.6.1/PCbuild/_ssl.vcproj	2012-07-17 13:57:52.319736300 +0200
-@@ -57,8 +57,7 @@
+@@ -57,6 +57,7 @@
  			/>
  			<Tool
  				Name="VCLinkerTool"
-- 				RandomizedBaseAddress="1"
-- 				DataExecutionPrevention="1"
 +				AdditionalOptions="/SAFESEH /NXCOMPAT /DYNAMICBASE"
  				AdditionalDependencies="ws2_32.lib $(SOLARVER)\$(INPATH)\lib$(UPDMINOREXT)\libeay32.lib $(SOLARVER)\$(INPATH)\lib$(UPDMINOREXT)\ssleay32.lib"
  			/>
