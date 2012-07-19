@@ -1521,10 +1521,10 @@ SwUndoTblNdsChg::SwUndoTblNdsChg( SwUndoId nAction,
 
 void SwUndoTblNdsChg::ReNewBoxes( const SwSelBoxes& rBoxes )
 {
-    if( rBoxes.Count() != aBoxes.size() )
+    if( rBoxes.size() != aBoxes.size() )
     {
         aBoxes.clear();
-        for( sal_uInt16 n = 0; n < rBoxes.Count(); ++n )
+        for( sal_uInt16 n = 0; n < rBoxes.size(); ++n )
             aBoxes.insert( rBoxes[n]->GetSttIdx() );
     }
 }
@@ -1596,7 +1596,7 @@ void SwUndoTblNdsChg::SaveNewBoxes( const SwTableNode& rTblNd,
     OSL_ENSURE( ! IsDelBox(), "wrong Action" );
     pNewSttNds.reset( new std::set<_BoxMove> );
 
-    OSL_ENSURE( rTbl.IsNewModel() || rOld.size() + nCount * rBoxes.Count() == rTblBoxes.size(),
+    OSL_ENSURE( rTbl.IsNewModel() || rOld.size() + nCount * rBoxes.size() == rTblBoxes.size(),
         "unexpected boxes" );
     OSL_ENSURE( rOld.size() <= rTblBoxes.size(), "more unexpected boxes" );
     for( sal_uInt16 n = 0, i = 0; i < rTblBoxes.size(); ++i )
@@ -1621,7 +1621,7 @@ void SwUndoTblNdsChg::SaveNewBoxes( const SwTableNode& rTblNd,
             const SwTableLine* pBoxLine = pBox->GetUpper();
             sal_uInt16 nLineDiff = lcl_FindParentLines(rTbl,*pBox).C40_GETPOS(SwTableLine,pBoxLine);
             sal_uInt16 nLineNo = 0;
-            for( sal_uInt16 j = 0; j < rBoxes.Count(); ++j )
+            for( sal_uInt16 j = 0; j < rBoxes.size(); ++j )
             {
                 pCheckBox = rBoxes[j];
                 if( pCheckBox->GetUpper()->GetUpper() == pBox->GetUpper()->GetUpper() )
@@ -1810,7 +1810,7 @@ void SwUndoTblNdsChg::RedoImpl(::sw::UndoRedoContext & rContext)
     for( std::set<sal_uLong>::iterator it = aBoxes.begin(); it != aBoxes.end(); ++it )
     {
         SwTableBox* pBox = pTblNd->GetTable().GetTblBox( *it );
-        aSelBoxes.Insert( pBox );
+        aSelBoxes.insert( pBox );
     }
 
     // create SelBoxes and call InsertCell/-Row/SplitTbl
@@ -1963,7 +1963,7 @@ CHECKTABLE(pTblNd->GetTable())
                                 pCpyBox->GetUpper() );
         rLnBoxes.push_back( pBox );
 
-        aSelBoxes.Insert( pBox );
+        aSelBoxes.insert( pBox );
     }
 
 CHECKTABLE(pTblNd->GetTable())
@@ -2097,7 +2097,7 @@ void SwUndoTblMerge::MoveBoxCntnt( SwDoc* pDoc, SwNodeRange& rRg, SwNodeIndex& r
 void SwUndoTblMerge::SetSelBoxes( const SwSelBoxes& rBoxes )
 {
     // memorize selection
-    for( sal_uInt16 n = 0; n < rBoxes.Count(); ++n )
+    for( sal_uInt16 n = 0; n < rBoxes.size(); ++n )
         aBoxes.insert( rBoxes[n]->GetSttIdx() );
 
     // as separator for inserts of new boxes after shifting
@@ -2105,7 +2105,7 @@ void SwUndoTblMerge::SetSelBoxes( const SwSelBoxes& rBoxes )
 
     // The new table model does not delete overlapped cells (by row span),
     // so the rBoxes array might be empty even some cells have been merged.
-    if( rBoxes.Count() )
+    if( !rBoxes.empty() )
         nTblNode = rBoxes[ 0 ]->GetSttNd()->FindTableNode()->GetIndex();
 }
 

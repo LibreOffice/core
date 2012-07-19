@@ -72,7 +72,7 @@ sal_Bool SwAccessibleCell::IsSelected()
                 static_cast< const SwCellFrm * >( GetFrm() );
             SwTableBox *pBox =
                 const_cast< SwTableBox *>( pCFrm->GetTabBox() ); //SVPtrArr!
-            bRet = pCSh->GetTableCrsr()->GetBoxes().Seek_Entry( pBox );
+            bRet = pCSh->GetTableCrsr()->GetBoxes().find( pBox ) != pCSh->GetTableCrsr()->GetBoxes().end();
         }
     }
 

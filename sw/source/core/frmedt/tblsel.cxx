@@ -75,41 +75,6 @@
 #undef      DEL_EMPTY_BOXES_AT_START_AND_END
 #define     DEL_ALL_EMPTY_BOXES
 
-_SV_IMPL_SORTAR_ALG( SwSelBoxes, SwTableBoxPtr )
-sal_Bool SwSelBoxes::Seek_Entry( const SwTableBoxPtr rSrch, sal_uInt16* pFndPos ) const
-{
-    sal_uLong nIdx = rSrch->GetSttIdx();
-
-    sal_uInt16 nO = Count(), nM, nU = 0;
-    if( nO > 0 )
-    {
-        nO--;
-        while( nU <= nO )
-        {
-            nM = nU + ( nO - nU ) / 2;
-            if( (*this)[ nM ]->GetSttNd() == rSrch->GetSttNd() )
-            {
-                if( pFndPos )
-                    *pFndPos = nM;
-                return sal_True;
-            }
-            else if( (*this)[ nM ]->GetSttIdx() < nIdx )
-                nU = nM + 1;
-            else if( nM == 0 )
-            {
-                if( pFndPos )
-                    *pFndPos = nU;
-                return sal_False;
-            }
-            else
-                nO = nM - 1;
-        }
-    }
-    if( pFndPos )
-        *pFndPos = nU;
-    return sal_False;
-}
-
 struct _CmpLPt
 {
     Point aPos;
@@ -172,16 +137,14 @@ const SwLayoutFrm *lcl_FindNextCellFrm( const SwLayoutFrm *pLay )
 
 void GetTblSelCrs( const SwCrsrShell &rShell, SwSelBoxes& rBoxes )
 {
-    if( rBoxes.Count() )
-        rBoxes.Remove( sal_uInt16(0), rBoxes.Count() );
+    rBoxes.clear();
     if( rShell.IsTableMode() && ((SwCrsrShell&)rShell).UpdateTblSelBoxes())
-        rBoxes.Insert( &rShell.GetTableCrsr()->GetBoxes() );
+        rBoxes.insert( (SwSelBoxes&)rShell.GetTableCrsr()->GetBoxes() );
 }
 
 void GetTblSelCrs( const SwTableCursor& rTblCrsr, SwSelBoxes& rBoxes )
 {
-    if( rBoxes.Count() )
-        rBoxes.Remove( sal_uInt16(0), rBoxes.Count() );
+    rBoxes.clear();
 
     if( rTblCrsr.IsChgd() || !rTblCrsr.GetBoxesCount() )
     {
@@ -190,7 +153,7 @@ void GetTblSelCrs( const SwTableCursor& rTblCrsr, SwSelBoxes& rBoxes )
     }
 
     if( rTblCrsr.GetBoxesCount() )
-        rBoxes.Insert( &rTblCrsr.GetBoxes() );
+        rBoxes.insert( (SwSelBoxes&)rTblCrsr.GetBoxes() );
 }
 
 void GetTblSel( const SwCrsrShell& rShell, SwSelBoxes& rBoxes,
@@ -264,7 +227,7 @@ void GetTblSel( const SwCursor& rCrsr, SwSelBoxes& rBoxes,
                     // check for cell protection??
                     if( !bChkProtected ||
                         !pBox->GetFrmFmt()->GetProtect().IsCntntProtected() )
-                        rBoxes.Insert( pBox );
+                        rBoxes.insert( pBox );
                 }
             }
         }
@@ -367,7 +330,7 @@ void GetTblSel( const SwLayoutFrm* pStart, const SwLayoutFrm* pEnd,
                             // check for cell protection??
                             if( !bChkProtected ||
                                 !pBox->GetFrmFmt()->GetProtect().IsCntntProtected() )
-                                rBoxes.Insert( pBox );
+                                rBoxes.insert( pBox );
 
                             if ( pCells )
                             {
@@ -460,7 +423,7 @@ void GetTblSel( const SwLayoutFrm* pStart, const SwLayoutFrm* pEnd,
         }
 
         i = 0;
-        rBoxes.Remove( i, rBoxes.Count() );
+        rBoxes.erase( rBoxes.begin() + i, rBoxes.end() );
         --nLoopMax;
 
     } while( sal_True );
@@ -886,7 +849,7 @@ sal_Bool GetAutoSumSel( const SwCrsrShell& rShell, SwCellFrms& rBoxes )
 sal_Bool HasProtectedCells( const SwSelBoxes& rBoxes )
 {
     sal_Bool bRet = sal_False;
-    for( sal_uInt16 n = 0, nCnt = rBoxes.Count(); n < nCnt; ++n )
+    for( sal_uInt16 n = 0, nCnt = rBoxes.size(); n < nCnt; ++n )
         if( rBoxes[ n ]->GetFrmFmt()->GetProtect().IsCntntProtected() )
         {
             bRet = sal_True;
@@ -958,8 +921,7 @@ sal_Bool IsEmptyBox( const SwTableBox& rBox, SwPaM& rPam )
 void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
                 SwTableBox** ppMergeBox, SwUndoTblMerge* pUndo )
 {
-    if( rBoxes.Count() )
-        rBoxes.Remove( sal_uInt16(0), rBoxes.Count() );
+    rBoxes.clear();
 
     OSL_ENSURE( rPam.GetCntntNode() && rPam.GetCntntNode( sal_False ),
             "Tabselection not on Cnt." );
@@ -1039,7 +1001,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
                                 pBox->GetFrmFmt()->SetFmtAttr( aNew );
                                 // this box is selected
                                 pLastBox = pBox;
-                                rBoxes.Insert( pBox );
+                                rBoxes.insert( pBox );
                                 aPosArr.Insert(
                                     _CmpLPt( (pCell->Frm().*fnRect->fnGetPos)(),
                                     pBox, bVert ) );
@@ -1056,7 +1018,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
                             {
                                 // this box is selected
                                 pLastBox = pBox;
-                                rBoxes.Insert( pBox );
+                                rBoxes.insert( pBox );
 #if OSL_DEBUG_LEVEL > 1
                                 Point aInsPoint( (pCell->Frm().*fnRect->fnGetPos)() );
 #endif
@@ -1107,7 +1069,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
 
                             // this box is selected
                             pLastBox = pBox;
-                            rBoxes.Insert( pBox );
+                            rBoxes.insert( pBox );
                             aPosArr.Insert(
                                 _CmpLPt( (pCell->Frm().*fnRect->fnGetPos)(),
                                 pBox, bVert ) );
@@ -1149,7 +1111,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
                             pBox->GetFrmFmt()->SetFmtAttr( aNew );
 
                             pLastBox = pBox;
-                            rBoxes.Insert( pBox );
+                            rBoxes.insert( pBox );
                             aPosArr.Insert( _CmpLPt( Point( rUnion.Left(),
                                                 pCell->Frm().Top()), pBox, bVert ));
 
@@ -1173,7 +1135,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
     }
 
     // no SSelection / no boxes found
-    if( 1 >= rBoxes.Count() )
+    if( 1 >= rBoxes.size() )
         return;
 
     // now search all horizontally adjacent boxes and connect
@@ -1505,7 +1467,7 @@ sal_uInt16 CheckMergeSel( const SwPaM& rPam )
 sal_uInt16 CheckMergeSel( const SwSelBoxes& rBoxes )
 {
     sal_uInt16 eRet = TBLMERGE_NOSELECTION;
-    if( rBoxes.Count() )
+    if( !rBoxes.empty() )
     {
         eRet = TBLMERGE_OK;
 
@@ -2110,8 +2072,7 @@ static void _FndBoxCopyCol( SwTableBox* pBox, _FndPara* pFndPara )
     }
     else
     {
-        sal_uInt16 nFndPos;
-        if( !pFndPara->rBoxes.Seek_Entry( pBox, &nFndPos ))
+        if( pFndPara->rBoxes.find( pBox ) == pFndPara->rBoxes.end())
         {
             delete pFndBox;
             return;
@@ -2152,7 +2113,7 @@ void _FndBox::SetTableLines( const SwSelBoxes &rBoxes, const SwTable &rTable )
     sal_uInt16 nStPos = USHRT_MAX;
     sal_uInt16 nEndPos= 0;
 
-    for ( sal_uInt16 i = 0; i < rBoxes.Count(); ++i )
+    for ( sal_uInt16 i = 0; i < rBoxes.size(); ++i )
     {
         SwTableLine *pLine = rBoxes[i]->GetUpper();
         while ( pLine->GetUpper() )

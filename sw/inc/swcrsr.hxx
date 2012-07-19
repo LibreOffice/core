@@ -286,8 +286,8 @@ public:
     virtual sal_Bool GotoTable( const String& rName );
 
     void InsertBox( const SwTableBox& rTblBox );
-    void DeleteBox( sal_uInt16 nPos ) { aSelBoxes.Remove( nPos ); bChg = sal_True; }
-    sal_uInt16 GetBoxesCount() const { return aSelBoxes.Count(); }
+    void DeleteBox( sal_uInt16 nPos ) { aSelBoxes.erase( aSelBoxes.begin() + nPos ); bChg = sal_True; }
+    sal_uInt16 GetBoxesCount() const { return aSelBoxes.size(); }
     const SwSelBoxes& GetBoxes() const { return aSelBoxes; }
 
     // Creates cursor for all boxes.

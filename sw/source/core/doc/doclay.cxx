@@ -784,7 +784,7 @@ SwFlyFrmFmt* SwDoc::MakeFlyAndMove( const SwPaM& rPam, const SfxItemSet& rSet,
             SwPosition aPos( aIndex );
             aPos.nContent.Assign( pNode, 0 );
 
-            if( pSelBoxes && pSelBoxes->Count() )
+            if( pSelBoxes && !pSelBoxes->empty() )
             {
                 // Table selection
                 // Copy parts of a table: create a table with the same width as the
@@ -799,7 +799,7 @@ SwFlyFrmFmt* SwDoc::MakeFlyAndMove( const SwPaM& rPam, const SfxItemSet& rSet,
                 SwTable& rTbl = pTblNd->GetTable();
 
                 // Did we select the whole table?
-                if( pSelBoxes->Count() == rTbl.GetTabSortBoxes().size() )
+                if( pSelBoxes->size() == rTbl.GetTabSortBoxes().size() )
                 {
                     // move the whole table
                     SwNodeRange aRg( *pTblNd, 0, *pTblNd->EndOfSectionNode(), 1 );

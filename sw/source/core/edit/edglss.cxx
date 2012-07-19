@@ -208,11 +208,11 @@ sal_Bool SwEditShell::_CopySelToDoc( SwDoc* pInsDoc, SwNodeIndex* pSttNd )
         SwTableNode* pTblNd;
         SwSelBoxes aBoxes;
         GetTblSel( *this, aBoxes );
-        if( aBoxes.Count() && 0 != (pTblNd = (SwTableNode*)aBoxes[0]
+        if( !aBoxes.empty() && 0 != (pTblNd = (SwTableNode*)aBoxes[0]
             ->GetSttNd()->FindTableNode() ))
         {
             // teste ob der TabellenName kopiert werden kann
-            sal_Bool bCpyTblNm = aBoxes.Count() == pTblNd->GetTable().GetTabSortBoxes().size();
+            sal_Bool bCpyTblNm = aBoxes.size() == pTblNd->GetTable().GetTabSortBoxes().size();
             if( bCpyTblNm )
             {
                 const String& rTblName = pTblNd->GetTable().GetFrmFmt()->GetName();

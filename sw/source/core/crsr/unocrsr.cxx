@@ -235,7 +235,7 @@ void SwUnoTableCrsr::MakeBoxSels()
     {
         SwSelBoxes& rTmpBoxes = (SwSelBoxes&)GetBoxes();
         sal_uInt16 nCount = 0;
-        while( nCount < rTmpBoxes.Count() )
+        while( nCount < rTmpBoxes.size() )
             DeleteBox( nCount );
     }
 

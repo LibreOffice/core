@@ -492,7 +492,7 @@ sal_Bool SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
 sal_Bool SwDoc::SortTbl(const SwSelBoxes& rBoxes, const SwSortOptions& rOpt)
 {
     // Via SwDoc for Undo!
-    OSL_ENSURE( rBoxes.Count(), "no valid Box list" );
+    OSL_ENSURE( !rBoxes.empty(), "no valid Box list" );
     SwTableNode* pTblNd = (SwTableNode*)rBoxes[0]->GetSttNd()->FindTableNode();
     if( !pTblNd )
         return sal_False;
@@ -561,7 +561,7 @@ sal_Bool SwDoc::SortTbl(const SwSelBoxes& rBoxes, const SwSortOptions& rOpt)
     if (GetIDocumentUndoRedo().DoesUndo())
     {
         pUndoSort = new SwUndoSort( rBoxes[0]->GetSttIdx(),
-                                    rBoxes[rBoxes.Count()-1]->GetSttIdx(),
+                                    rBoxes.back()->GetSttIdx(),
                                    *pTblNd, rOpt, aFlatBox.HasItemSets() );
         GetIDocumentUndoRedo().AppendUndo(pUndoSort);
     }

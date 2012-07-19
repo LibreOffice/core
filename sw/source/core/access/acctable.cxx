@@ -295,7 +295,7 @@ void SwAccessibleTableData_Impl::GetSelection(
                         static_cast < const SwCellFrm * >( pLower );
                 SwTableBox *pBox =
                     const_cast< SwTableBox *>( pCFrm->GetTabBox() ); //SVPtrArr!
-                if( !rSelBoxes.Seek_Entry( pBox ) )
+                if( rSelBoxes.find( pBox ) == rSelBoxes.end() )
                 {
                     const Int32Set_Impl rRowsOrCols =
                         bColumns ? maColumns : maRows;
@@ -659,7 +659,7 @@ sal_Bool SwAccessibleTable::IsChildSelected( sal_Int32 nChildIndex ) const
     {
         const SwTableBox* pBox = GetTableBox( nChildIndex );
         OSL_ENSURE( pBox != NULL, "We need the table box." );
-        bRet = pSelBoxes->Seek_Entry( const_cast<SwTableBox*>( pBox ) );
+        bRet = pSelBoxes->find( const_cast<SwTableBox*>( pBox ) ) != pSelBoxes->end();
     }
 
     return bRet;
@@ -1199,7 +1199,7 @@ sal_Bool SAL_CALL SwAccessibleTable::isAccessibleSelected(
             const SwCellFrm *pCFrm = static_cast < const SwCellFrm * >( pFrm );
             SwTableBox *pBox =
                 const_cast< SwTableBox *>( pCFrm->GetTabBox() ); //SVPtrArr!
-            bRet = pSelBoxes->Seek_Entry( pBox );
+            bRet = pSelBoxes->find( pBox ) != pSelBoxes->end();
         }
     }
 

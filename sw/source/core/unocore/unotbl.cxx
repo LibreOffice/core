@@ -1534,8 +1534,8 @@ SwXTextTableCursor::SwXTextTableCursor(SwFrmFmt& rTableFmt, const SwTableCursor*
     }
     const SwSelBoxes& rBoxes = pTableSelection->GetBoxes();
     SwTableCursor* pTableCrsr = dynamic_cast<SwTableCursor*>(pUnoCrsr);
-    for(sal_uInt16 i = 0; i < rBoxes.Count(); i++)
-        pTableCrsr->InsertBox( *rBoxes.GetObject(i) );
+    for(sal_uInt16 i = 0; i < rBoxes.size(); i++)
+        pTableCrsr->InsertBox( *rBoxes[i] );
 
     pUnoCrsr->Add(&aCrsrDepend);
     SwUnoTableCrsr* pTblCrsr = dynamic_cast<SwUnoTableCrsr*>(pUnoCrsr);
@@ -2382,7 +2382,7 @@ void SwXTextTable::dispose(void) throw( uno::RuntimeException )
         SwTableSortBoxes& rBoxes = pTable->GetTabSortBoxes();
         SwSelBoxes aSelBoxes;
         for(SwTableSortBoxes::const_iterator it = rBoxes.begin(); it != rBoxes.end(); ++it )
-            aSelBoxes.Insert( *it );
+            aSelBoxes.insert( *it );
         pFmt->GetDoc()->DeleteRowCol(aSelBoxes);
     }
     else
@@ -2951,7 +2951,7 @@ void SwXTextTable::sort(const uno::Sequence< beans::PropertyValue >& rDescriptor
         for( sal_uInt16 n = 0; n < rTBoxes.size(); ++n )
         {
             SwTableBox* pBox = rTBoxes[ n ];
-            aBoxes.Insert( pBox );
+            aBoxes.insert( pBox );
         }
         UnoActionContext aContext( pFmt->GetDoc() );
         pFmt->GetDoc()->SortTbl(aBoxes, aSortOpt);
@@ -2979,7 +2979,7 @@ void SwXTextTable::autoFormat(const OUString& aName) throw( lang::IllegalArgumen
                     for( sal_uInt16 n = 0; n < rTBoxes.size(); ++n )
                     {
                         SwTableBox* pBox = rTBoxes[ n ];
-                        aBoxes.Insert( pBox );
+                        aBoxes.insert( pBox );
                     }
                     UnoActionContext aContext( pFmt->GetDoc() );
                     pFmt->GetDoc()->SetTableAutoFmt( aBoxes, aAutoFmtTbl[i] );
