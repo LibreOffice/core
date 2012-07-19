@@ -22,13 +22,12 @@ using rtl::OString;
 using rtl::OStringBuffer;
 
 
-Listener::Listener( sd::Transmitter *aTransmitter  )
+Listener::Listener( const ::rtl::Reference<Server>& rServer, sd::Transmitter *aTransmitter  )
     : ::cppu::WeakComponentImplHelper1< XSlideShowListener >( m_aMutex ),
+      mServer( rServer ),
       pTransmitter( NULL )
 {
-    fprintf( stderr, "listener:: address of Transmitter1:%p\n", aTransmitter );
     pTransmitter = aTransmitter;
-    fprintf( stderr, "listener:: address of Transmitter2:%p\n", pTransmitter );
 }
 
 Listener::~Listener()
@@ -83,22 +82,7 @@ void SAL_CALL Listener::resumed (void)
 void SAL_CALL Listener::slideEnded (sal_Bool bReverse)
     throw (css::uno::RuntimeException)
 {
-    fprintf( stderr, "listener:: address of Transmitter__:%p\n", pTransmitter );
-    fprintf( stderr, "slideEnded\n" );
     (void) bReverse;
-    sal_Int32 aSlide = mController->getCurrentSlideIndex();
-
-    OStringBuffer aBuilder( "slide_updated\n" );
-    aBuilder.append( OString::valueOf( aSlide ) );
-    aBuilder.append( "\n\n" );
-
-    if ( pTransmitter )
-    {
-        fprintf( stderr, "Transmitter is, transmitting.\n" );
-        pTransmitter->addMessage( aBuilder.makeStringAndClear(),
-                               Transmitter::Priority::HIGH );
-    }
-    fprintf( stderr, "Transmitted\n" );
 }
 
 void SAL_CALL Listener::hyperLinkClicked (const rtl::OUString &)
@@ -109,35 +93,50 @@ void SAL_CALL Listener::hyperLinkClicked (const rtl::OUString &)
 void SAL_CALL Listener::slideTransitionStarted (void)
     throw (css::uno::RuntimeException)
 {
-        fprintf( stderr, "slideTransitionStarted\n" );
+    sal_Int32 aSlide = mController->getCurrentSlideIndex();
+
+    OStringBuffer aBuilder( "slide_updated\n" );
+    aBuilder.append( OString::valueOf( aSlide + 1 ) ); // Slides are numbered from 0
+    aBuilder.append( "\n\n" );
+
+    if ( pTransmitter )
+    {
+        pTransmitter->addMessage( aBuilder.makeStringAndClear(),
+                               Transmitter::Priority::HIGH );
+    }
 }
 
 void SAL_CALL Listener::slideTransitionEnded (void)
     throw (css::uno::RuntimeException)
 {
-    fprintf( stderr, "slideTransitionEnded\n" );
 }
 
 void SAL_CALL Listener::slideAnimationsEnded (void)
     throw (css::uno::RuntimeException)
 {
-    fprintf( stderr, "slideAnimationsEnded\n" );
 }
 
 void SAL_CALL Listener::disposing (void)
 {
+    fprintf( stderr, "In disposing\n" );
     pTransmitter = NULL;
+    fprintf( stderr, "Nulled transmitter\n" );
     if ( mController.is() )
     {
+        fprintf( stderr, "mController was\n" );
         mController->removeSlideShowListener( this );
+        mController = NULL;
     }
+    mServer->informListenerDestroyed();
+    fprintf( stderr, "finished disposing\n" );
 }
 
 void SAL_CALL Listener::disposing (
     const css::lang::EventObject& rEvent)
     throw (::com::sun::star::uno::RuntimeException)
 {
+    fprintf( stderr, "disposing\n");
     (void) rEvent;
-    dispose();
+     dispose();
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

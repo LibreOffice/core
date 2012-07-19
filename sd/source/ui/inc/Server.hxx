@@ -42,6 +42,7 @@ namespace sd
             static void setup();
             static void presentationStarted( const css::uno::Reference<
                 css::presentation::XSlideShowController > &rController );
+            void informListenerDestroyed();
         private:
             Server();
             ~Server();

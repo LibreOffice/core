@@ -17,7 +17,9 @@
 #include <cppuhelper/compbase1.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <osl/socket.hxx>
+#include <rtl/ref.hxx>
 
+#include "Server.hxx"
 #include "Transmitter.hxx"
 
 namespace css = ::com::sun::star;
@@ -28,9 +30,9 @@ class Listener
       public ::cppu::WeakComponentImplHelper1< css::presentation::XSlideShowListener >
 {
 public:
-    Listener( sd::Transmitter *aTransmitter );
+    Listener( const ::rtl::Reference<Server>& rServer, sd::Transmitter *aTransmitter );
     ~Listener();
-    void init( const css::uno::Reference< css::presentation::XSlideShowController >& aController);
+    void init( const css::uno::Reference< css::presentation::XSlideShowController >& aController );
 
     // XAnimationListener
     virtual void SAL_CALL beginEvent(const css::uno::Reference<
@@ -58,6 +60,7 @@ public:
     throw (com::sun::star::uno::RuntimeException);
 
 private:
+    rtl::Reference<Server> mServer;
     sd::Transmitter *pTransmitter;
     css::uno::Reference< css::presentation::XSlideShowController > mController;
 };

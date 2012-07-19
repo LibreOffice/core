@@ -21,44 +21,32 @@ Transmitter::Transmitter( StreamSocket &aSocket )
     mLowPriority(),
     mHighPriority()
 {
-    fprintf( stderr, "Address of low queue in constructor:%p\n", &mLowPriority );
 }
 
 void Transmitter::execute()
 {
-    fprintf( stderr, "Waiting\n" );
     while ( true )
     {
         mQueuesNotEmpty.wait();
-        fprintf( stderr, "Continuing after condition\n" );
-        while ( true )
+
+        ::osl::MutexGuard aQueueGuard( mQueueMutex );
+        if ( !mHighPriority.empty() )
         {
-            fprintf( stderr, "Trying to acquire mutex in Transmitter Thread\n" );
-            ::osl::MutexGuard aQueueGuard( mQueueMutex );
-            fprintf( stderr, "Acquired mutex in Transmitter Thread\n" );
-            while ( mHighPriority.size() )
-            {
-                OString aMessage( mHighPriority.front() );
-                mHighPriority.pop();
-                fprintf(stderr , " Writing HIGHP:\n%s<<END>>", aMessage.getStr() );
-                mStreamSocket.write( aMessage.getStr(), aMessage.getLength() );
-            }
-
-            if( mLowPriority.size() )
-            {
-                OString aMessage( mLowPriority.front() );
-                mLowPriority.pop();
-                fprintf(stderr , " Writing LOWP:\n%s<<END>>", aMessage.getStr() );
-                mStreamSocket.write( aMessage.getStr(), aMessage.getLength() );
-            }
-
-            if ( mLowPriority.empty() && mHighPriority.empty() )
-            {
-                mQueuesNotEmpty.reset();
-                break;
-            }
+            OString aMessage( mHighPriority.front() );
+            mHighPriority.pop();
+            mStreamSocket.write( aMessage.getStr(), aMessage.getLength() );
+        }
+        else if ( !mLowPriority.empty() )
+        {
+            OString aMessage( mLowPriority.front() );
+            mLowPriority.pop();
+            mStreamSocket.write( aMessage.getStr(), aMessage.getLength() );
         }
 
+        if ( mLowPriority.empty() && mHighPriority.empty() )
+        {
+            mQueuesNotEmpty.reset();
+        }
     }
 
 }
@@ -70,33 +58,20 @@ Transmitter::~Transmitter()
 
 void Transmitter::addMessage( const OString& aMessage, const Priority aPriority )
 {
-    fprintf(stderr, "Acquiring\n");
     ::osl::MutexGuard aQueueGuard( mQueueMutex );
-    fprintf(stderr, "Acquired\n" );
-    fprintf( stderr, "Address of low queue in addMessge:%p\n", &mLowPriority );
     switch ( aPriority )
     {
         case Priority::LOW:
-            fprintf(stderr, "PushingLow\n");
             mLowPriority.push( aMessage );
             break;
         case Priority::HIGH:
-            fprintf(stderr, "PushingHigh\n<<<%s>>>\n", aMessage.getStr() );
             mHighPriority.push( aMessage );
             break;
     }
-    fprintf( stderr, "Setting\n" );
     if ( !mQueuesNotEmpty.check() )
     {
         mQueuesNotEmpty.set();
-        fprintf( stderr, "Condition has now been set\n" );
     }
-    else
-    {
-        fprintf( stderr, "Condition was already set\n" );
-    }
-    fprintf( stderr, "Added\n" );
-    fprintf( stderr, "Front:\n<<<%s>>>\n", mHighPriority.front().getStr() );
 }
 
 

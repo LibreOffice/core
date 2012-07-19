@@ -129,17 +129,19 @@ void Server::execute()
 
 }
 
+void Server::informListenerDestroyed()
+{
+    mListener.clear();
+}
 
 void Server::presentationStarted( const css::uno::Reference<
      css::presentation::XSlideShowController > &rController )
 {
     if ( pTransmitter )
     {
-        Listener *aListener = new Listener( pTransmitter );
-        aListener->init( rController );
-        fprintf( stderr, "presentationStarted:init--done\n");
-        mListener = rtl::Reference<Listener>( aListener );
-        fprintf( stderr, "presentationStarted:mListener--done\n");
+        mListener = rtl::Reference<Listener>( new Listener( spServer, pTransmitter ) );
+        mListener->init( rController );
+
     }
 }
 
