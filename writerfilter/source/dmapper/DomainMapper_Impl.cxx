@@ -3620,41 +3620,47 @@ void DomainMapper_Impl::ApplySettingsTable()
 uno::Reference<beans::XPropertySet> DomainMapper_Impl::GetCurrentNumberingCharStyle()
 {
     uno::Reference<beans::XPropertySet> xRet;
-    OUString aStyle = GetCurrentParaStyleId();
-    if (aStyle.isEmpty() || GetTopContextType() != CONTEXT_PARAGRAPH)
-        return xRet;
-    const StyleSheetEntryPtr pEntry = GetStyleSheetTable()->FindStyleSheetByISTD(aStyle);
-    if (!pEntry)
-        return xRet;
-    const StyleSheetPropertyMap* pStyleSheetProperties = dynamic_cast<const StyleSheetPropertyMap*>(pEntry ? pEntry->pProperties.get() : 0);
-    sal_Int32 nListId = pStyleSheetProperties->GetListId();
-    sal_Int32 nListLevel = pStyleSheetProperties->GetListLevel();
-    if (nListId < 0 || nListLevel < 0)
-        return xRet;
-
-    // So we are in a paragraph style and it has numbering. Look up the relevant character style.
-    OUString aListName = ListDef::GetStyleName(nListId);
-    uno::Reference< style::XStyleFamiliesSupplier > xStylesSupplier(GetTextDocument(), uno::UNO_QUERY);
-    uno::Reference< container::XNameAccess > xStyleFamilies = xStylesSupplier->getStyleFamilies();
-    uno::Reference<container::XNameAccess> xNumberingStyles;
-    xStyleFamilies->getByName("NumberingStyles") >>= xNumberingStyles;
-    uno::Reference<beans::XPropertySet> xStyle(xNumberingStyles->getByName(aListName), uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xLevels(xStyle->getPropertyValue("NumberingRules"), uno::UNO_QUERY);
-    uno::Sequence<beans::PropertyValue> aProps;
-    xLevels->getByIndex(nListLevel) >>= aProps;
-    for (int i = 0; i < aProps.getLength(); ++i)
+    try
     {
-        const beans::PropertyValue& rProp = aProps[i];
+        OUString aStyle = GetCurrentParaStyleId();
+        if (aStyle.isEmpty() || GetTopContextType() != CONTEXT_PARAGRAPH)
+            return xRet;
+        const StyleSheetEntryPtr pEntry = GetStyleSheetTable()->FindStyleSheetByISTD(aStyle);
+        if (!pEntry)
+            return xRet;
+        const StyleSheetPropertyMap* pStyleSheetProperties = dynamic_cast<const StyleSheetPropertyMap*>(pEntry ? pEntry->pProperties.get() : 0);
+        sal_Int32 nListId = pStyleSheetProperties->GetListId();
+        sal_Int32 nListLevel = pStyleSheetProperties->GetListLevel();
+        if (nListId < 0 || nListLevel < 0)
+            return xRet;
 
-        if (rProp.Name == "CharStyleName")
+        // So we are in a paragraph style and it has numbering. Look up the relevant character style.
+        OUString aListName = ListDef::GetStyleName(nListId);
+        uno::Reference< style::XStyleFamiliesSupplier > xStylesSupplier(GetTextDocument(), uno::UNO_QUERY);
+        uno::Reference< container::XNameAccess > xStyleFamilies = xStylesSupplier->getStyleFamilies();
+        uno::Reference<container::XNameAccess> xNumberingStyles;
+        xStyleFamilies->getByName("NumberingStyles") >>= xNumberingStyles;
+        uno::Reference<beans::XPropertySet> xStyle(xNumberingStyles->getByName(aListName), uno::UNO_QUERY);
+        uno::Reference<container::XIndexAccess> xLevels(xStyle->getPropertyValue("NumberingRules"), uno::UNO_QUERY);
+        uno::Sequence<beans::PropertyValue> aProps;
+        xLevels->getByIndex(nListLevel) >>= aProps;
+        for (int i = 0; i < aProps.getLength(); ++i)
         {
-            OUString aCharStyle;
-            rProp.Value >>= aCharStyle;
-            uno::Reference<container::XNameAccess> xCharacterStyles;
-            xStyleFamilies->getByName("CharacterStyles") >>= xCharacterStyles;
-            xRet.set(xCharacterStyles->getByName(aCharStyle), uno::UNO_QUERY);
-            break;
+            const beans::PropertyValue& rProp = aProps[i];
+
+            if (rProp.Name == "CharStyleName")
+            {
+                OUString aCharStyle;
+                rProp.Value >>= aCharStyle;
+                uno::Reference<container::XNameAccess> xCharacterStyles;
+                xStyleFamilies->getByName("CharacterStyles") >>= xCharacterStyles;
+                xRet.set(xCharacterStyles->getByName(aCharStyle), uno::UNO_QUERY_THROW);
+                break;
+            }
         }
+    }
+    catch( const uno::Exception& )
+    {
     }
     return xRet;
 }
