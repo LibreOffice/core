@@ -2753,8 +2753,6 @@ void ScViewFunc::ChangeNumFmtDecimals( sal_Bool bIncrement )
         //  ATTR_LANGUAGE_FORMAT not
         ApplySelectionPattern( aNewAttrs, sal_True );
     }
-    else
-        Sound::Beep();              // was nothing
 }
 
 void ScViewFunc::ChangeIndent( sal_Bool bIncrement )

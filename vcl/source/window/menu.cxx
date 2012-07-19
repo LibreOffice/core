@@ -4971,12 +4971,7 @@ void MenuFloatingWindow::KeyInput( const KeyEvent& rKEvent )
                 }
             }
             else
-            {
-                // Beep for invalid keys, except for HELP and F-keys
-                if ( !rKEvent.GetKeyCode().IsMod2() && ( nCode != KEY_HELP ) && ( rKEvent.GetKeyCode().GetGroup() != KEYGROUP_FKEYS ) )
-                    Sound::Beep();
                 FloatingWindow::KeyInput( rKEvent );
-            }
         }
     }
     // #105474# check if menu window was not destroyed
@@ -5745,14 +5740,6 @@ sal_Bool MenuBarWindow::ImplHandleKeyEvent( const KeyEvent& rKEvent, sal_Bool bF
                 mbAutoPopup = sal_True;
                 ChangeHighlightItem( nEntry, sal_True );
                 bDone = sal_True;
-            }
-            else
-            {
-                // only validate own character combinations due
-                // to systemmenu's and other system-hotkeyes
-                sal_uInt16 nKeyCode = rKEvent.GetKeyCode().GetCode();
-                if ( ((nKeyCode >= KEY_A) && (nKeyCode <= KEY_Z)) )
-                    Sound::Beep();
             }
         }
     }

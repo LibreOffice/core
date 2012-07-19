@@ -1296,8 +1296,6 @@ sal_Bool ScContentTree::LoadFile( const String& rUrl )
 
         pParentWindow->GetDocNames( &aHiddenTitle );            // Liste fuellen
     }
-    else
-        Sound::Beep();          // Fehler beim Laden
 
     //  Dokument wird im dtor von ScDocumentLoader wieder geschlossen
 

@@ -2579,7 +2579,6 @@ void DbGridControl::MoveToPosition(sal_uInt32 nPos)
             if (!m_pSeekCursor->absolute(nPos + 1))
             {
                 AdjustRows();
-                Sound::Beep();
                 return;
             }
             else

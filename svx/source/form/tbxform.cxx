@@ -88,7 +88,6 @@ void SvxFmAbsRecWin::FirePosition( sal_Bool _bForce )
         sal_Int64 nRecord = GetValue();
         if (nRecord < GetMin() || nRecord > GetMax())
         {
-            Sound::Beep();
             return;
         }
 

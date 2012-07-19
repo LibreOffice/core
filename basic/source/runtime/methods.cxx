@@ -3919,7 +3919,6 @@ RTLFUNC(Beep)
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
         return;
     }
-    Sound::Beep();
 }
 
 RTLFUNC(Load)

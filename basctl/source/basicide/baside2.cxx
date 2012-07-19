@@ -546,7 +546,6 @@ sal_Bool ModulWindow::ToggleBreakPoint( sal_uLong nLine )
         CheckCompileBasic();
         if ( aStatus.bError )
         {
-            Sound::Beep();
             return sal_False;
         }
 
@@ -572,9 +571,6 @@ sal_Bool ModulWindow::ToggleBreakPoint( sal_uLong nLine )
                     }
                 }
             }
-
-            if ( !bNewBreakPoint )
-                Sound::Beep();
         }
     }
 
@@ -753,7 +749,6 @@ void ModulWindow::BasicAddWatch()
 {
     DBG_CHKTHIS( ModulWindow, 0 );
     String aWatchStr;
-    sal_Bool bInserted = sal_False;
     AssertValidEditEngine();
     sal_Bool bAdd = sal_True;
     if ( !GetEditView()->HasSelection() )
@@ -780,9 +775,6 @@ void ModulWindow::BasicAddWatch()
             bInserted = sal_True;
         }
     }
-
-    if ( !bInserted )
-        Sound::Beep();
 }
 
 
@@ -790,10 +782,7 @@ void ModulWindow::BasicAddWatch()
 void ModulWindow::BasicRemoveWatch()
 {
     DBG_CHKTHIS( ModulWindow, 0 );
-    bool bRemoved = pLayout->GetWatchWindow().RemoveSelectedWatch();
-
-    if ( !bRemoved )
-        Sound::Beep();
+    pLayout->GetWatchWindow().RemoveSelectedWatch();
 }
 
 
@@ -1022,10 +1011,6 @@ void ModulWindow::ExecuteCommand( SfxRequest& rReq )
         }
         break;
         case SID_BASICIDE_MATCHGROUP:
-        {
-            if ( !GetEditView()->MatchGroup() )
-                Sound::Beep();
-        }
         break;
         case SID_BASICIDE_TOGGLEBRKPNT:
         {

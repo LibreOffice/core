@@ -1034,8 +1034,6 @@ void ScNavigatorDlg::SetCurrentTableStr( const rtl::OUString& rName )
             return;
         }
     }
-
-    Sound::Beep();                  // Tabelle nicht gefunden
 }
 
 //------------------------------------------------------------------------

@@ -2009,12 +2009,7 @@ sal_Bool TextView::ImplCheckTextLen( const String& rNewText )
             // nur dann noch ermitteln, wie viel Text geloescht wird
             n -= mpImpl->mpTextEngine->GetTextLen( mpImpl->maSelection );
             if ( n > mpImpl->mpTextEngine->GetMaxTextLen() )
-            {
-                // Beep hat hier eigentlich nichts verloren, sondern lieber ein Hdl,
-                // aber so funktioniert es wenigstens in ME, BasicIDE, SourceView
-                Sound::Beep();
                 bOK = sal_False;
-            }
         }
     }
     return bOK;

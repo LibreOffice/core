@@ -198,7 +198,6 @@ void ScTabViewShell::InsertURLField( const String& rName, const String& rURL, co
         if ( !SelectionEditable() )
         {
             // no error message (may be called from drag&drop)
-            Sound::Beep();
             return;
         }
 

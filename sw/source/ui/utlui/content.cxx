@@ -2181,9 +2181,7 @@ void SwContentTree::ExecCommand(sal_uInt16 nCmd, sal_Bool bModifier)
                 }
                 else
                 {
-                    if( pShell->IsProtectedOutlinePara() )
-                        Sound::Beep(); //konnte nicht umgestuft werden
-                    else
+                    if( !pShell->IsProtectedOutlinePara() )
                         pShell->OutlineUpDown( nCmd == FN_ITEM_LEFT ? -1 : 1 );
                 }
 
@@ -2208,8 +2206,6 @@ void SwContentTree::ExecCommand(sal_uInt16 nCmd, sal_Bool bModifier)
                     }
                 }
             }
-            else
-                Sound::Beep(); //konnte nicht verschoben werden
         }
     }
 }

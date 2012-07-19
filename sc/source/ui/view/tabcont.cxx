@@ -230,7 +230,6 @@ void ScTabControl::Select()
             SelectPage( static_cast<sal_uInt16>(i)+1, rMark.GetTableSelect(i) );
         SetCurPageId( static_cast<sal_uInt16>(pViewData->GetTabNo()) + 1 );
 
-        Sound::Beep();
         return;
     }
 
@@ -517,8 +516,6 @@ sal_Int8 ScTabControl::ExecuteDrop( const ExecuteDropEvent& rEvt )
                 rData.pCellTransfer->SetDragWasInternal();          // don't delete
                 return sal_True;
             }
-            else
-                Sound::Beep();
         }
     }
 

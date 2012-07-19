@@ -742,7 +742,6 @@ void SvTreeListBox::KeyInput( const KeyEvent& rKEvt )
             SvLBoxEntry* pEntry = First();
             pEntry = NextVisible( pEntry );
             SetEntryText( pEntry, "SetEntryText" );
-            Sound::Beep();
         }
         break;
     }

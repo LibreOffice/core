@@ -271,8 +271,6 @@ sal_Bool ScOutlineDocFunc::RemoveAllOutlines( SCTAB nTab, sal_Bool bRecord, sal_
         lcl_InvalidateOutliner( rDocShell.GetViewBindings() );
         bSuccess = sal_True;
     }
-    else if (!bApi)
-        Sound::Beep();
 
     return bSuccess;
 }
@@ -548,9 +546,6 @@ sal_Bool ScOutlineDocFunc::ShowMarkedOutlines( const ScRange& rRange, sal_Bool b
         lcl_InvalidateOutliner( rDocShell.GetViewBindings() );
     }
 
-    if (!bDone && !bApi)
-        Sound::Beep();
-
     return bDone;
 }
 
@@ -645,9 +640,6 @@ sal_Bool ScOutlineDocFunc::HideMarkedOutlines( const ScRange& rRange, sal_Bool b
 
         lcl_InvalidateOutliner( rDocShell.GetViewBindings() );
     }
-
-    if (!bDone && !bApi)
-        Sound::Beep();
 
     return bDone;
 }
