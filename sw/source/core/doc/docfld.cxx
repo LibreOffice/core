@@ -2191,7 +2191,7 @@ void SwDocUpdtFld::InsDelFldInFldLst( sal_Bool bIns, const SwTxtFld& rFld )
             if( &rFld == (*pFldSortLst)[ n ]->GetPointer() )
             {
                 delete (*pFldSortLst)[n];
-                pFldSortLst->erase( n );
+                pFldSortLst->erase( pFldSortLst->begin() + n );
                 n--; // one field can occur multiple times
             }
     }

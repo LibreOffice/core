@@ -28,15 +28,25 @@
 ***********************************************************************/
 
 #include "svl/svldllapi.h"
-#include <svl/svarray.hxx>
 #include <deque>
 
 #include <tools/string.hxx>
+#include <o3tl/sorted_vector.hxx>
 
 typedef String* StringPtr;
 
 #ifndef _SVSTDARR_STRINGSISORTDTOR_DECL
-SV_DECL_PTRARR_SORT_DEL_VISIBILITY( SvStringsISortDtor, StringPtr, 1, SVL_DLLPUBLIC )
+
+struct SVL_DLLPUBLIC CompareSvStringsISortDtor
+{
+    bool operator()( String* const& lhs, String* const& rhs ) const;
+};
+class SVL_DLLPUBLIC SvStringsISortDtor : public o3tl::sorted_vector<String*, CompareSvStringsISortDtor >
+{
+public:
+    ~SvStringsISortDtor() { DeleteAndDestroyAll(); }
+};
+
 #define _SVSTDARR_STRINGSISORTDTOR_DECL
 #endif
 

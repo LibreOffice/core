@@ -103,7 +103,7 @@ sal_uInt32 SvXMLExceptionListExport::exportDoc(enum XMLTokenEnum /*eClass*/)
                    _GetNamespaceMap().GetNameByKey ( XML_NAMESPACE_BLOCKLIST ) );
     {
         SvXMLElementExport aRoot (*this, XML_NAMESPACE_BLOCKLIST, XML_BLOCK_LIST, sal_True, sal_True);
-        sal_uInt16 nBlocks= rList.Count();
+        sal_uInt16 nBlocks= rList.size();
         for ( sal_uInt16 i = 0; i < nBlocks; i++)
         {
             AddAttribute( XML_NAMESPACE_BLOCKLIST,

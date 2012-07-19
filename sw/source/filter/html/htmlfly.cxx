@@ -401,7 +401,7 @@ sal_Bool SwHTMLWriter::OutFlyFrm( sal_uLong nNdIdx, xub_StrLen nCntntIdx, sal_uI
                 // Erst entfernen ist wichtig, weil in tieferen
                 // Rekursionen evtl. weitere Eintraege oder das
                 // ganze Array geloscht werden koennte.
-                pHTMLPosFlyFrms->erase( i );
+                pHTMLPosFlyFrms->erase( pHTMLPosFlyFrms->begin() + i );
                 i--;
                 if( pHTMLPosFlyFrms->empty() )
                 {

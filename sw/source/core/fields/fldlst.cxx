@@ -212,7 +212,7 @@ void SwInputFieldList::RemoveUnselectedFlds()
             {
                 // Feld innerhalb der Selektion
                 pNewLst->insert( (*pSrtLst)[i] );
-                pSrtLst->erase( i );
+                pSrtLst->erase( pSrtLst->begin() + i );
             }
             else
                 i++;
