@@ -1214,7 +1214,7 @@ void SwTOXBaseSection::UpdateOutline( const SwTxtNode* pOwnChapterNode )
     SwNodes& rNds = pDoc->GetNodes();
 
     const SwOutlineNodes& rOutlNds = rNds.GetOutLineNds();
-    for( sal_uInt16 n = 0; n < rOutlNds.Count(); ++n )
+    for( sal_uInt16 n = 0; n < rOutlNds.size(); ++n )
     {
         ::SetProgressState( 0, pDoc->GetDocShell() );
         SwTxtNode* pTxtNd = rOutlNds[ n ]->GetTxtNode();

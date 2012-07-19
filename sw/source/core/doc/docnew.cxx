@@ -558,9 +558,9 @@ SwDoc::~SwDoc()
 
     // The ChapterNumbers/Numbers need to be deleted before the Templates
     // or we update all the time!
-    m_pNodes->pOutlineNds->Remove(sal_uInt16(0), m_pNodes->pOutlineNds->Count());
+    m_pNodes->pOutlineNds->clear();
     SwNodes & rUndoNodes( GetUndoManager().GetUndoNodes() );
-    rUndoNodes.pOutlineNds->Remove(sal_uInt16(0), rUndoNodes.pOutlineNds->Count());
+    rUndoNodes.pOutlineNds->clear();
 
     pFtnIdxs->Remove( sal_uInt16(0), pFtnIdxs->Count() );
 

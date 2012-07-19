@@ -370,14 +370,14 @@ sal_Bool SwDoc::SelectServerObj( const String& rStr, SwPaM*& rpPam,
 
                 // look for the section's end, now
                 for( ++nTmpPos;
-                        nTmpPos < rOutlNds.Count() &&
+                        nTmpPos < rOutlNds.size() &&
                         nLvl < rOutlNds[ nTmpPos ]->GetTxtNode()->
                                 //GetTxtColl()->GetOutlineLevel();//#outline level,zhaojianwei
                                 GetAttrOutlineLevel()-1;//<-end,zhaojianwei
                     ++nTmpPos )
                     ;       // there is no block
 
-                if( nTmpPos < rOutlNds.Count() )
+                if( nTmpPos < rOutlNds.size() )
                     rpRange->aEnd = *rOutlNds[ nTmpPos ];
                 else
                     rpRange->aEnd = GetNodes().GetEndOfContent();

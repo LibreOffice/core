@@ -828,7 +828,7 @@ String lcl_dbg_out(SwOutlineNodes & rNodes)
 {
     String aStr("[\n", RTL_TEXTENCODING_ASCII_US);
 
-    for (sal_uInt16 i = 0; i < rNodes.Count(); i++)
+    for (sal_uInt16 i = 0; i < rNodes.size(); i++)
     {
         aStr += lcl_dbg_out(*rNodes[i]);
         aStr += String("\n", RTL_TEXTENCODING_ASCII_US);

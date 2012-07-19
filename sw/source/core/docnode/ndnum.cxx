@@ -33,53 +33,16 @@
 #include <fldbas.hxx>           // UpdateFlds der KapitelNummerierung
 #include <docary.hxx>
 
-_SV_IMPL_SORTAR_ALG( SwOutlineNodes, SwNodePtr )
-sal_Bool SwOutlineNodes::Seek_Entry( const SwNodePtr rSrch, sal_uInt16* pFndPos ) const
+bool CompareSwOutlineNodes::operator()( SwNode* const& lhs, SwNode* const& rhs) const
 {
-    sal_uLong nIdx = rSrch->GetIndex();
+    return lhs->GetIndex() < rhs->GetIndex();
+}
 
-    sal_uInt16 nO = Count(), nM, nU = 0;
-    if( nO > 0 )
-    {
-//JP 17.03.98: aufgrund des Bug 48592 - wo unter anderem nach Undo/Redo
-//              Nodes aus dem falschen NodesArray im OutlineArray standen,
-//              jetzt mal einen Check eingebaut.
-#if OSL_DEBUG_LEVEL > 0
-        {
-            for( sal_uInt16 n = 1; n < nO; ++n )
-                if( &(*this)[ n-1 ]->GetNodes() !=
-                    &(*this)[ n ]->GetNodes() )
-                {
-                    OSL_ENSURE( !this, "Node im falschen Outline-Array" );
-                }
-        }
-#endif
-
-        nO--;
-        while( nU <= nO )
-        {
-            nM = nU + ( nO - nU ) / 2;
-            if( (*this)[ nM ] == rSrch )
-            {
-                if( pFndPos )
-                    *pFndPos = nM;
-                return sal_True;
-            }
-            else if( (*this)[ nM ]->GetIndex() < nIdx )
-                nU = nM + 1;
-            else if( nM == 0 )
-            {
-                if( pFndPos )
-                    *pFndPos = nU;
-                return sal_False;
-            }
-            else
-                nO = nM - 1;
-        }
-    }
-    if( pFndPos )
-        *pFndPos = nU;
-    return sal_False;
+bool SwOutlineNodes::Seek_Entry(SwNode* const &rP, sal_uInt16* pnPos) const
+{
+    const_iterator it = lower_bound(rP);
+    *pnPos = it - begin();
+    return it != end() && rP->GetIndex() == (*it)->GetIndex();
 }
 
 void SwNodes::UpdateOutlineNode(SwNode & rNd)
@@ -88,7 +51,7 @@ void SwNodes::UpdateOutlineNode(SwNode & rNd)
 
     if (pTxtNd && pTxtNd->IsOutlineStateChanged())
     {
-        sal_Bool bFound = pOutlineNds->Seek_Entry(pTxtNd);
+        sal_Bool bFound = pOutlineNds->find(pTxtNd) != pOutlineNds->end();
 
         if (pTxtNd->IsOutline())
         {
@@ -97,7 +60,7 @@ void SwNodes::UpdateOutlineNode(SwNode & rNd)
                 // assure that text is in the correct nodes array
                 if ( &(pTxtNd->GetNodes()) == this )
                 {
-                    pOutlineNds->Insert(pTxtNd);
+                    pOutlineNds->insert(pTxtNd);
                 }
                 else
                 {
@@ -108,7 +71,7 @@ void SwNodes::UpdateOutlineNode(SwNode & rNd)
         else
         {
             if (bFound)
-                pOutlineNds->Remove(pTxtNd);
+                pOutlineNds->erase(pTxtNd);
         }
 
         pTxtNd->UpdateOutlineState();
@@ -120,13 +83,13 @@ void SwNodes::UpdateOutlineNode(SwNode & rNd)
 
 void SwNodes::UpdtOutlineIdx( const SwNode& rNd )
 {
-    if( !pOutlineNds->Count() )     // keine OutlineNodes vorhanden ?
+    if( pOutlineNds->empty() )     // keine OutlineNodes vorhanden ?
         return;
 
     const SwNodePtr pSrch = (SwNodePtr)&rNd;
     sal_uInt16 nPos;
     pOutlineNds->Seek_Entry( pSrch, &nPos );
-    if( nPos == pOutlineNds->Count() )      // keine zum Updaten vorhanden ?
+    if( nPos == pOutlineNds->size() )      // keine zum Updaten vorhanden ?
         return;
 
     if( nPos )

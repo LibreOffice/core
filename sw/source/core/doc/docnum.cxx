@@ -184,7 +184,7 @@ void SwDoc::PropagateOutlineRule()
 // Increase/Decrease
 sal_Bool SwDoc::OutlineUpDown( const SwPaM& rPam, short nOffset )
 {
-    if( !GetNodes().GetOutLineNds().Count() || !nOffset )
+    if( GetNodes().GetOutLineNds().empty() || !nOffset )
         return sal_False;
 
     // calculate the area
@@ -431,7 +431,7 @@ sal_Bool SwDoc::MoveOutlinePara( const SwPaM& rPam, short nOffset )
     const SwPosition& rStt = *rPam.Start(),
                     & rEnd = &rStt == rPam.GetPoint() ? *rPam.GetMark()
                                                       : *rPam.GetPoint();
-    if( !GetNodes().GetOutLineNds().Count() || !nOffset ||
+    if( GetNodes().GetOutLineNds().empty() || !nOffset ||
         (rStt.nNode.GetIndex() < GetNodes().GetEndOfExtras().GetIndex()) ||
         (rEnd.nNode.GetIndex() < GetNodes().GetEndOfExtras().GetIndex()))
     {
@@ -471,7 +471,7 @@ sal_Bool SwDoc::MoveOutlinePara( const SwPaM& rPam, short nOffset )
             ++nTmpPos; // For sub outlines only!
     }
 
-    aEndRg = nTmpPos < GetNodes().GetOutLineNds().Count()
+    aEndRg = nTmpPos < GetNodes().GetOutLineNds().size()
                     ? *GetNodes().GetOutLineNds()[ nTmpPos ]
                     : GetNodes().GetEndOfContent();
     if( nOffset >= 0 )
@@ -513,7 +513,7 @@ sal_Bool SwDoc::MoveOutlinePara( const SwPaM& rPam, short nOffset )
     // calculation of the new position
     if( nOffset < 0 && nAktPos < sal_uInt16(-nOffset) )
         pNd = GetNodes().GetEndOfContent().StartOfSectionNode();
-    else if( nAktPos + nOffset >= GetNodes().GetOutLineNds().Count() )
+    else if( nAktPos + nOffset >= (sal_uInt16)GetNodes().GetOutLineNds().size() )
         pNd = &GetNodes().GetEndOfContent();
     else
         pNd = GetNodes().GetOutLineNds()[ nAktPos + nOffset ];
@@ -579,7 +579,7 @@ sal_uInt16 lcl_FindOutlineName( const SwNodes& rNds, const String& rName,
 {
     sal_uInt16 nSavePos = USHRT_MAX;
     const SwOutlineNodes& rOutlNds = rNds.GetOutLineNds();
-    for( sal_uInt16 n = 0; n < rOutlNds.Count(); ++n )
+    for( sal_uInt16 n = 0; n < rOutlNds.size(); ++n )
     {
         SwTxtNode* pTxtNd = rOutlNds[ n ]->GetTxtNode();
         String sTxt( pTxtNd->GetExpandTxt() );
@@ -646,12 +646,12 @@ sal_uInt16 lcl_FindOutlineNum( const SwNodes& rNds, String& rName )
     const SwOutlineNodes& rOutlNds = rNds.GetOutLineNds();
     // Without OutlineNodes searching doesn't pay off
     // and we save a crash
-    if(!rOutlNds.Count())
+    if( rOutlNds.empty() )
         return USHRT_MAX;
     SwTxtNode* pNd;
     nPos = 0;
     // search in the existing outline nodes for the required outline num array
-    for( ; nPos < rOutlNds.Count(); ++nPos )
+    for( ; nPos < rOutlNds.size(); ++nPos )
     {
         pNd = rOutlNds[ nPos ]->GetTxtNode();
         const int nLvl = pNd->GetAttrOutlineLevel()-1;   //<-end,zhaojianwei
@@ -687,7 +687,7 @@ sal_uInt16 lcl_FindOutlineNum( const SwNodes& rNds, String& rName )
             }
         }
     }
-    if( nPos >= rOutlNds.Count() )
+    if( nPos >= rOutlNds.size() )
         nPos = USHRT_MAX;
     return nPos;
 }
@@ -2417,7 +2417,7 @@ void SwDoc::getNumItems( tSortedNodeNumList& orNodeNumList ) const
 // implementation for interface <IDocumentOutlineNodes>
 sal_Int32 SwDoc::getOutlineNodesCount() const
 {
-    return GetNodes().GetOutLineNds().Count();
+    return GetNodes().GetOutLineNds().size();
 }
 
 int SwDoc::getOutlineLevel( const sal_Int32 nIdx ) const

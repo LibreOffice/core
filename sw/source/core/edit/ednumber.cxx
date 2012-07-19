@@ -536,7 +536,7 @@ sal_Bool SwEditShell::IsProtectedOutlinePara() const
         if( !rOutlNd.Seek_Entry( pNd, &nPos ) && nPos )
             --nPos;
 
-        for( ; nPos < rOutlNd.Count(); ++nPos )
+        for( ; nPos < rOutlNd.size(); ++nPos )
         {
             SwNodePtr pTmpNd = rOutlNd[ nPos ];
 

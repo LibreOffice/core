@@ -1010,7 +1010,7 @@ void SwDocShell::GetState(SfxItemSet& rSet)
         case FN_ABSTRACT_NEWDOC:
         case FN_OUTLINE_TO_CLIPBOARD:
             {
-                if ( !GetDoc()->GetNodes().GetOutLineNds().Count() )
+                if ( GetDoc()->GetNodes().GetOutLineNds().empty() )
                     rSet.DisableItem( nWhich );
             }
             break;

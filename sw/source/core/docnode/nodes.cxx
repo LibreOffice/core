@@ -176,7 +176,7 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, sal_uLong nSz,
                 if (pTxtNode->IsOutline())
                 {
                     const SwNodePtr pSrch = (SwNodePtr)&rNd;
-                    pOutlineNds->Remove( pSrch );
+                    pOutlineNds->erase( pSrch );
                 }
             }
 
@@ -191,7 +191,7 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, sal_uLong nSz,
                 if (bInsOutlineIdx && rTxtNd.IsOutline())
                 {
                     const SwNodePtr pSrch = (SwNodePtr)&rNd;
-                    pOutlineNds->Insert( pSrch );
+                    pOutlineNds->insert( pSrch );
                 }
                 rTxtNd.InvalidateNumRule();
 
@@ -234,7 +234,7 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, sal_uLong nSz,
                 // remove outline index from old nodes array
                 if (pTxtNd->IsOutline())
                 {
-                    pOutlineNds->Remove( pNd );
+                    pOutlineNds->erase( pNd );
                 }
 
                 // muss die Rule kopiere werden?
@@ -272,7 +272,7 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, sal_uLong nSz,
                     // OultineNodes set the new nodes in the array
                     if (bInsOutlineIdx && pTxtNd->IsOutline())
                     {
-                        rNds.pOutlineNds->Insert( pTxtNd );
+                        rNds.pOutlineNds->insert( pTxtNd );
                     }
 
                     pTxtNd->AddToList();
@@ -541,7 +541,7 @@ sal_Bool SwNodes::_MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
                                 if (pCNd->IsTxtNode() &&
                                     static_cast<SwTxtNode*>(pCNd)->IsOutline())
                                 {
-                                    pOutlineNds->Remove( pCNd );
+                                    pOutlineNds->erase( pCNd );
                                 }
                                 else
                                     pCNd = 0;
@@ -550,7 +550,7 @@ sal_Bool SwNodes::_MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
                             BigPtrArray::Move( aMvIdx.GetIndex(), aIdx.GetIndex() );
 
                             if( bInsOutlineIdx && pCNd )
-                                pOutlineNds->Insert( pCNd );
+                                pOutlineNds->insert( pCNd );
                             if( pTmpNd->IsTxtNode() )
                                 ((SwTxtNode*)pTmpNd)->AddToList();
                         }
@@ -576,7 +576,7 @@ sal_Bool SwNodes::_MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
                             // loesche die Gliederungs-Indizies aus
                             // dem alten Nodes-Array
                             if( bOutlNd )
-                                pOutlineNds->Remove( pNd );
+                                pOutlineNds->erase( pNd );
 
                             RemoveNode( aMvIdx.GetIndex(), 1, sal_False );
                             pNd->pStartOfSection = pSttNode;
@@ -585,7 +585,7 @@ sal_Bool SwNodes::_MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
                             // setze bei Start/EndNodes die richtigen Indizies
                             if( bInsOutlineIdx && bOutlNd )
                                 // und setze sie im neuen Nodes-Array
-                                rNodes.pOutlineNds->Insert( pNd );
+                                rNodes.pOutlineNds->insert( pNd );
                             else if( pNd->IsStartNode() )
                                 pSttNode = (SwStartNode*)pNd;
                             else if( pNd->IsEndNode() )
@@ -1226,7 +1226,7 @@ void SwNodes::Delete(const SwNodeIndex &rIndex, sal_uLong nNodes)
                                 pOutlineNds->Seek_Entry( pNd, &nIdxPos ))
                         {
                             // loesche die Gliederungs-Indizies.
-                            pOutlineNds->Remove( nIdxPos );
+                            pOutlineNds->erase( pOutlineNds->begin() + nIdxPos );
                             bUpdateOutline = sal_True;
                         }
                         pTxtNode->InvalidateNumRule();
@@ -1288,7 +1288,7 @@ void SwNodes::Delete(const SwNodeIndex &rIndex, sal_uLong nNodes)
             {
                 if( pTxtNd->IsOutline())
                 {                   // loesche die Gliederungs-Indizies.
-                    pOutlineNds->Remove( pTxtNd );
+                    pOutlineNds->erase( pTxtNd );
                     bUpdateOutline = sal_True;
                 }
                 pTxtNd->InvalidateNumRule();
@@ -1528,7 +1528,7 @@ void SwNodes::DelNodes( const SwNodeIndex & rStart, sal_uLong nCnt )
                 sal_uInt16 nIdxPos;
                 if( pOutlineNds->Seek_Entry( pNd, &nIdxPos ))
                 {
-                    pOutlineNds->Remove( nIdxPos );
+                    pOutlineNds->erase( pOutlineNds->begin() + nIdxPos );
                     bUpdateNum = 1;
                 }
             }

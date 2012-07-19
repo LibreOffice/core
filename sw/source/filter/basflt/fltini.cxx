@@ -403,11 +403,11 @@ void SwRelNumRuleSpaces::SetOultineRelSpaces( const SwNodeIndex& rStt,
 {
         SwDoc* pDoc = rStt.GetNode().GetDoc();
         const SwOutlineNodes& rOutlNds = pDoc->GetNodes().GetOutLineNds();
-        if( rOutlNds.Count() )
+        if( !rOutlNds.empty() )
         {
                 sal_uInt16 nPos;
                 rOutlNds.Seek_Entry( &rStt.GetNode(), &nPos );
-                for( ; nPos < rOutlNds.Count() &&
+                for( ; nPos < rOutlNds.size() &&
                                 rOutlNds[ nPos ]->GetIndex() < rEnd.GetIndex(); ++nPos )
                 {
                         SwTxtNode* pNd = rOutlNds[ nPos ]->GetTxtNode();
