@@ -36,8 +36,6 @@
 #include <swundo.hxx>
 #include <numrule.hxx>
 
-SV_IMPL_VARARR_SORT( _SwPamRanges, SwPamRange )
-
 
 SwPamRanges::SwPamRanges( const SwPaM& rRing )
 {
@@ -54,15 +52,16 @@ void SwPamRanges::Insert( const SwNodeIndex& rIdx1, const SwNodeIndex& rIdx2 )
     if( aRg.nEnd < aRg.nStart )
     {   aRg.nStart = aRg.nEnd; aRg.nEnd = rIdx1.GetIndex(); }
 
-    sal_uInt16 nPos = 0;
-    const SwPamRange* pTmp;
-    if( Count() && Seek_Entry( aRg, &nPos ))        // suche Insert Position
+    _SwPamRanges::iterator it = lower_bound( aRg );
+    sal_uInt16 nPos = it - begin();
+    if( !empty() && (*it) == aRg)        // suche Insert Position
     {
         // ist der im Array stehende kleiner ??
-        if( ( pTmp = GetData()+ nPos )->nEnd < aRg.nEnd )
+        SwPamRange& rTmp = _SwPamRanges::operator[](nPos);
+        if( rTmp.nEnd < aRg.nEnd )
         {
-            aRg.nEnd = pTmp->nEnd;
-            Remove( nPos, 1 );      // zusammenfassen
+            aRg.nEnd = rTmp.nEnd;
+            erase( begin() + nPos );      // zusammenfassen
         }
         else
             return;     // ende, weil schon alle zusammengefasst waren
@@ -75,35 +74,37 @@ void SwPamRanges::Insert( const SwNodeIndex& rIdx1, const SwNodeIndex& rIdx2 )
         // mit dem Vorgaenger zusammenfassen ??
         if( nPos > 0 )
         {
-            if( ( pTmp = GetData()+( nPos-1 ))->nEnd == aRg.nStart
-                || pTmp->nEnd+1 == aRg.nStart )
+            SwPamRange& rTmp = _SwPamRanges::operator[](nPos-1);
+            if( rTmp.nEnd == aRg.nStart
+                || rTmp.nEnd+1 == aRg.nStart )
             {
-                aRg.nStart = pTmp->nStart;
+                aRg.nStart = rTmp.nStart;
                 bEnde = sal_False;
-                Remove( --nPos, 1 );        // zusammenfassen
+                erase( begin() + --nPos );        // zusammenfassen
             }
             // SSelection im Bereich ??
-            else if( pTmp->nStart <= aRg.nStart && aRg.nEnd <= pTmp->nEnd )
+            else if( rTmp.nStart <= aRg.nStart && aRg.nEnd <= rTmp.nEnd )
                 return;
         }
             // mit dem Nachfolger zusammenfassen ??
-        if( nPos < Count() )
+        if( nPos < size() )
         {
-            if( ( pTmp = GetData() + nPos )->nStart == aRg.nEnd ||
-                pTmp->nStart == aRg.nEnd+1 )
+            SwPamRange& rTmp = _SwPamRanges::operator[](nPos);
+            if( rTmp.nStart == aRg.nEnd ||
+                rTmp.nStart == aRg.nEnd+1 )
             {
-                aRg.nEnd = pTmp->nEnd;
+                aRg.nEnd = rTmp.nEnd;
                 bEnde = sal_False;
-                Remove( nPos, 1 );      // zusammenfassen
+                erase( begin() + nPos );      // zusammenfassen
             }
 
             // SSelection im Bereich ??
-            else if( pTmp->nStart <= aRg.nStart && aRg.nEnd <= pTmp->nEnd )
+            else if( rTmp.nStart <= aRg.nStart && aRg.nEnd <= rTmp.nEnd )
                 return;
         }
     } while( !bEnde );
 
-    _SwPamRanges::Insert( aRg );
+    _SwPamRanges::insert( aRg );
 }
 
 
@@ -111,7 +112,7 @@ void SwPamRanges::Insert( const SwNodeIndex& rIdx1, const SwNodeIndex& rIdx2 )
 SwPaM& SwPamRanges::SetPam( sal_uInt16 nArrPos, SwPaM& rPam )
 {
     OSL_ASSERT( nArrPos < Count() );
-    const SwPamRange& rTmp = *(GetData() + nArrPos );
+    const SwPamRange& rTmp = (*this)[ nArrPos ];
     rPam.GetPoint()->nNode = rTmp.nStart;
     rPam.GetPoint()->nContent.Assign( rPam.GetCntntNode(), 0 );
     rPam.SetMark();
