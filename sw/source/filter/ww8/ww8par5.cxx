@@ -1542,7 +1542,7 @@ eF_ResT SwWW8ImplReader::Read_F_Seq( WW8FieldDesc*, String& rStr )
 
         case '*':
             nRet = aReadParam.SkipToNextToken();
-            if( -2 == nRet )
+            if( -2 == nRet && !( aReadParam.GetResult().EqualsAscii("MERGEFORMAT") || aReadParam.GetResult().EqualsAscii("CHARFORMAT") ))
                 eNumFormat = GetNumTypeFromName( aReadParam.GetResult() );
             break;
 
