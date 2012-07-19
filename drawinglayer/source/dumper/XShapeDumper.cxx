@@ -1530,31 +1530,31 @@ void dumpShadowPropertiesService(uno::Reference< beans::XPropertySet > xPropSet,
 {
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("Shadow");
-        sal_Bool bShadow;
+        sal_Bool bShadow = sal_Bool();
         if(anotherAny >>= bShadow)
             dumpShadowAsAttribute(bShadow, xmlWriter);
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("ShadowColor");
-        sal_Int32 aShadowColor;
+        sal_Int32 aShadowColor = sal_Int32();
         if(anotherAny >>= aShadowColor)
             dumpShadowColorAsAttribute(aShadowColor, xmlWriter);
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("ShadowTransparence");
-        sal_Int32 aShadowTransparence;
+        sal_Int32 aShadowTransparence = sal_Int32();
         if(anotherAny >>= aShadowTransparence)
             dumpShadowTransparenceAsAttribute(aShadowTransparence, xmlWriter);
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("ShadowXDistance");
-        sal_Int32 aShadowXDistance;
+        sal_Int32 aShadowXDistance = sal_Int32();
         if(anotherAny >>= aShadowXDistance)
             dumpShadowXDistanceAsAttribute(aShadowXDistance, xmlWriter);
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("ShadowYDistance");
-        sal_Int32 aShadowYDistance;
+        sal_Int32 aShadowYDistance = sal_Int32();
         if(anotherAny >>= aShadowYDistance)
             dumpShadowYDistanceAsAttribute(aShadowYDistance, xmlWriter);
     }

@@ -1026,7 +1026,7 @@ void EnhancedShapeDumper::dumpEnhancedCustomShapeTextPathService(uno::Reference<
 {
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("TextPath");
-        sal_Bool bTextPath;
+        sal_Bool bTextPath = sal_Bool();
         if(anotherAny >>= bTextPath)
             dumpTextPathAsAttribute(bTextPath);
     }
@@ -1038,7 +1038,7 @@ void EnhancedShapeDumper::dumpEnhancedCustomShapeTextPathService(uno::Reference<
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("ScaleX");
-        sal_Bool bScaleX;
+        sal_Bool bScaleX = sal_Bool();
         if(anotherAny >>= bScaleX)
             dumpScaleXAsAttribute(bScaleX);
     }
