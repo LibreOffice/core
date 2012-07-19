@@ -44,6 +44,7 @@
 #include <editeng/borderline.hxx>
 #include <dbdata.hxx>
 #include "validat.hxx"
+#include "cell.hxx"
 
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
@@ -423,9 +424,17 @@ void ScFiltersTest::testCachedMatrixFormulaResultsODS()
     rtl::OUString aCSVFileName;
     createCSVPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("matrix.")), aCSVFileName);
     testFile(aCSVFileName, pDoc, 0);
-    //test matrix with errors
+    //test matrices with special cases
     createCSVPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("matrix2.")), aCSVFileName);
     testFile(aCSVFileName, pDoc, 1);
+    //The above testFile() does not catch the below case.
+    //If a matrix formula has a matrix reference cell that is intended to have
+    //a blank text result, the matrix reference cell is actually saved(export)
+    //as a float cell with 0 as the value and an empty <text:p/>.
+    //Import works around this by setting these cells as text cells so that
+    //the blank text is used for display instead of the number 0.
+    //If this is working properly, the following cell should NOT have value data.
+    CPPUNIT_ASSERT(!pDoc->GetCell(ScAddress(3,5,1))->HasValueData());
 
     xDocSh->DoClose();
 }

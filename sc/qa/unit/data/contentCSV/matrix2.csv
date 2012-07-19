@@ -3,3 +3,4 @@ Err:502,Err:502,Err:502,,error result
 #N/A,#N/A,#N/A,,n/a
 TRUE,TRUE,TRUE,,Display TRUE instead of 1
 FALSE,FALSE,FALSE,,Display FALSE instead of 0
+42,,42,,Display blank cell instead of 0
