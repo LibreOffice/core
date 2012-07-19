@@ -128,7 +128,7 @@ SvxIconChoiceCtrlEntry* IcnCursor_Impl::SearchCol(sal_uInt16 nCol, sal_uInt16 nT
     IconChoiceMap::iterator mapIt = pColumns->find( nCol );
     if ( mapIt == pColumns->end() )
         return 0;
-    SvxIconChoiceCtrlEntryPtrVec& rList = mapIt->second;
+    SvxIconChoiceCtrlEntryPtrVec const & rList = mapIt->second;
     const sal_uInt16 nCount = rList.size();
     if( !nCount )
         return 0;
@@ -203,7 +203,7 @@ SvxIconChoiceCtrlEntry* IcnCursor_Impl::SearchRow(sal_uInt16 nRow, sal_uInt16 nL
     IconChoiceMap::iterator mapIt = pRows->find( nRow );
     if ( mapIt == pRows->end() )
         return 0;
-    SvxIconChoiceCtrlEntryPtrVec& rList = mapIt->second;
+    SvxIconChoiceCtrlEntryPtrVec const & rList = mapIt->second;
     const sal_uInt16 nCount = rList.size();
     if( !nCount )
         return 0;
