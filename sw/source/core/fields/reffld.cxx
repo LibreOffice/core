@@ -309,7 +309,7 @@ void SwGetRefField::UpdateField( const SwTxtFld* pFldTxtAttr )
     rtl::OUString const Text = pTxtNd->GetTxt();
     unsigned const nCatStart = Text.indexOf(sSetRefName);
     unsigned const nCatEnd = nCatStart == unsigned(-1) ?
-        unsigned(-1) : nCatStart + sSetRefName.getLength();
+        unsigned(-1) : nCatStart + sSetRefName.Len();
     bool const bHasCat = nCatStart != unsigned(-1);
 
     // length of the referenced text
