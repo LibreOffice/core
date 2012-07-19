@@ -3523,7 +3523,7 @@ _FndBox* lcl_SaveInsDelData( CR_SetBoxWidth& rParam, SwUndo** ppUndo,
     }
 
     // Prevent deleting the whole Table
-    if( rParam.bBigger && rParam.aBoxes.Count() == rTbl.GetTabSortBoxes().Count() )
+    if( rParam.bBigger && rParam.aBoxes.Count() == rTbl.GetTabSortBoxes().size() )
         return 0;
 
     _FndBox* pFndBox = new _FndBox( 0, 0 );
@@ -3537,7 +3537,7 @@ _FndBox* lcl_SaveInsDelData( CR_SetBoxWidth& rParam, SwUndo** ppUndo,
         pFndBox->SetTableLines( rTbl );
 
         if( ppUndo )
-            rTmpLst.Insert( &rTbl.GetTabSortBoxes(), 0, rTbl.GetTabSortBoxes().Count() );
+            rTmpLst.insert( rTbl.GetTabSortBoxes() );
     }
 
     // Find Lines for the Layout update
@@ -3559,7 +3559,7 @@ sal_Bool SwTable::SetColWidth( SwTableBox& rAktBox, sal_uInt16 eType,
     const SvxLRSpaceItem& rLR = GetFrmFmt()->GetLRSpace();
 
     _FndBox* pFndBox = 0;                // for insertion/deletion
-    SwTableSortBoxes aTmpLst( 0 );       // for Undo
+    SwTableSortBoxes aTmpLst;       // for Undo
     sal_Bool bBigger,
         bRet = sal_False,
         bLeft = nsTblChgWidthHeightType::WH_COL_LEFT == ( eType & 0xff ) ||
@@ -3666,7 +3666,7 @@ sal_Bool SwTable::SetColWidth( SwTableBox& rAktBox, sal_uInt16 eType,
                     pFndBox = ::lcl_SaveInsDelData( aParam, ppUndo,
                                                     aTmpLst, nDistStt );
                     if( aParam.bBigger && aParam.aBoxes.Count() ==
-                                    aSortCntBoxes.Count() )
+                                    aSortCntBoxes.size() )
                     {
                         // This whole Table is to be deleted!
                         GetFrmFmt()->GetDoc()->DeleteRowCol( aParam.aBoxes );
@@ -4049,7 +4049,7 @@ _FndBox* lcl_SaveInsDelData( CR_SetLineHeight& rParam, SwUndo** ppUndo,
     OSL_ENSURE( rParam.aBoxes.Count(), "We can't go on without Boxes!" );
 
     // Prevent deleting the whole Table
-    if( !rParam.bBigger && rParam.aBoxes.Count() == rTbl.GetTabSortBoxes().Count() )
+    if( !rParam.bBigger && rParam.aBoxes.Count() == rTbl.GetTabSortBoxes().size() )
         return 0;
 
     _FndBox* pFndBox = new _FndBox( 0, 0 );
@@ -4063,7 +4063,7 @@ _FndBox* lcl_SaveInsDelData( CR_SetLineHeight& rParam, SwUndo** ppUndo,
         pFndBox->SetTableLines( rTbl );
 
         if( ppUndo )
-            rTmpLst.Insert( &rTbl.GetTabSortBoxes(), 0, rTbl.GetTabSortBoxes().Count() );
+            rTmpLst.insert( rTbl.GetTabSortBoxes() );
     }
 
     // Find Lines for the Layout update
@@ -4289,7 +4289,7 @@ sal_Bool SwTable::SetRowHeight( SwTableBox& rAktBox, sal_uInt16 eType,
         pBaseLine = pBaseLine->GetUpper()->GetUpper();
 
     _FndBox* pFndBox = 0;                // for insertion/deletion
-    SwTableSortBoxes aTmpLst( 0 );       // for Undo
+    SwTableSortBoxes aTmpLst;       // for Undo
     sal_Bool bBigger,
         bRet = sal_False,
         bTop = nsTblChgWidthHeightType::WH_ROW_TOP == ( eType & 0xff ) ||
@@ -4368,7 +4368,7 @@ sal_Bool SwTable::SetRowHeight( SwTableBox& rAktBox, sal_uInt16 eType,
 
                         // delete complete table when last row is deleted
                         if( !bBigger &&
-                            aParam.aBoxes.Count() == aSortCntBoxes.Count() )
+                            aParam.aBoxes.Count() == aSortCntBoxes.size() )
                         {
                             GetFrmFmt()->GetDoc()->DeleteRowCol( aParam.aBoxes );
                             return sal_False;

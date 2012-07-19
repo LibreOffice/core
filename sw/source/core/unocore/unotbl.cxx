@@ -1226,13 +1226,12 @@ SwXCell* SwXCell::CreateXCell(SwFrmFmt* pTblFmt, SwTableBox* pBox, SwTable *pTab
     {
         if( !pTable )
             pTable = SwTable::FindTable( pTblFmt );
-        sal_uInt16 nPos = USHRT_MAX;
-        SwTableBox* pFoundBox =
-            pTable->GetTabSortBoxes().Seek_Entry( pBox, &nPos ) ? pBox : NULL;
+        SwTableSortBoxes::const_iterator it = pTable->GetTabSortBoxes().find( pBox );
 
         //wenn es die Box gibt, dann wird auch eine Zelle zurueckgegeben
-        if(pFoundBox)
+        if( it != pTable->GetTabSortBoxes().end() )
         {
+            sal_uInt16 nPos = it - pTable->GetTabSortBoxes().begin();
             SwIterator<SwXCell,SwFmt> aIter( *pTblFmt );
             SwXCell* pXCell = aIter.First();
             while( pXCell )
@@ -1255,13 +1254,17 @@ SwXCell* SwXCell::CreateXCell(SwFrmFmt* pTblFmt, SwTableBox* pBox, SwTable *pTab
 SwTableBox* SwXCell::FindBox(SwTable* pTable, SwTableBox* pBox2)
 {
     // check if nFndPos happens to point to the right table box
-    if( nFndPos < pTable->GetTabSortBoxes().Count() &&
+    if( nFndPos < pTable->GetTabSortBoxes().size() &&
         pBox2 == pTable->GetTabSortBoxes()[ nFndPos ] )
         return pBox2;
 
     // if not, seek the entry (and return, if successful)
-    if( pTable->GetTabSortBoxes().Seek_Entry( pBox2, &nFndPos ))
+    SwTableSortBoxes::const_iterator it = pTable->GetTabSortBoxes().find( pBox2 );
+    if( it != pTable->GetTabSortBoxes().end() )
+    {
+        nFndPos = it - pTable->GetTabSortBoxes().begin();
         return pBox2;
+    }
 
     // box not found: reset nFndPos pointer
     nFndPos = USHRT_MAX;
@@ -2378,7 +2381,8 @@ void SwXTextTable::dispose(void) throw( uno::RuntimeException )
         SwTable* pTable = SwTable::FindTable( pFmt );
         SwTableSortBoxes& rBoxes = pTable->GetTabSortBoxes();
         SwSelBoxes aSelBoxes;
-        aSelBoxes.Insert(rBoxes.GetData(), rBoxes.Count());
+        for(SwTableSortBoxes::const_iterator it = rBoxes.begin(); it != rBoxes.end(); ++it )
+            aSelBoxes.Insert( *it );
         pFmt->GetDoc()->DeleteRowCol(aSelBoxes);
     }
     else
@@ -2944,7 +2948,7 @@ void SwXTextTable::sort(const uno::Sequence< beans::PropertyValue >& rDescriptor
         SwTable* pTable = SwTable::FindTable( pFmt );
         SwSelBoxes aBoxes;
         const SwTableSortBoxes& rTBoxes = pTable->GetTabSortBoxes();
-        for( sal_uInt16 n = 0; n < rTBoxes.Count(); ++n )
+        for( sal_uInt16 n = 0; n < rTBoxes.size(); ++n )
         {
             SwTableBox* pBox = rTBoxes[ n ];
             aBoxes.Insert( pBox );
@@ -2972,7 +2976,7 @@ void SwXTextTable::autoFormat(const OUString& aName) throw( lang::IllegalArgumen
                 {
                     SwSelBoxes aBoxes;
                     const SwTableSortBoxes& rTBoxes = pTable->GetTabSortBoxes();
-                    for( sal_uInt16 n = 0; n < rTBoxes.Count(); ++n )
+                    for( sal_uInt16 n = 0; n < rTBoxes.size(); ++n )
                     {
                         SwTableBox* pBox = rTBoxes[ n ];
                         aBoxes.Insert( pBox );

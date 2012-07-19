@@ -82,8 +82,6 @@ TYPEINIT1( SwTableFmt, SwFrmFmt );
 TYPEINIT1( SwTableBoxFmt, SwFrmFmt );
 TYPEINIT1( SwTableLineFmt, SwFrmFmt );
 
-SV_IMPL_PTRARR_SORT(SwTableSortBoxes,SwTableBoxPtr);
-
 SV_IMPL_REF( SwServerObject )
 
 #define COLFUZZY 20
@@ -283,7 +281,7 @@ SwTable::SwTable( const SwTable& rTable )
 
 void DelBoxNode( SwTableSortBoxes& rSortCntBoxes )
 {
-    for( sal_uInt16 n = 0; n < rSortCntBoxes.Count(); ++n )
+    for( sal_uInt16 n = 0; n < rSortCntBoxes.size(); ++n )
         rSortCntBoxes[ n ]->pSttNd = 0;
 }
 
@@ -312,7 +310,7 @@ SwTable::~SwTable()
     //JP: reicht leider nicht, es muessen die Pointer auf den StartNode
     //  der Section geloescht werden
     DelBoxNode( aSortCntBoxes );
-    aSortCntBoxes.Remove( (sal_uInt16)0, aSortCntBoxes.Count() );
+    aSortCntBoxes.clear();
     delete pHTMLLayout;
 }
 
@@ -1520,7 +1518,7 @@ SwTableBox* SwTable::GetTblBox( sal_uLong nSttIdx )
     //Falls es das Layout noch nicht gibt oder sonstwie etwas schieft geht.
     if ( !pRet )
     {
-        for( sal_uInt16 n = aSortCntBoxes.Count(); n; )
+        for( sal_uInt16 n = aSortCntBoxes.size(); n; )
             if( aSortCntBoxes[ --n ]->GetSttIdx() == nSttIdx )
                 return aSortCntBoxes[ n ];
     }
@@ -1532,7 +1530,7 @@ sal_Bool SwTable::IsTblComplex() const
     // returnt sal_True wenn sich in der Tabelle Verschachtelungen befinden
     // steht eine Box nicht in der obersten Line, da wurde gesplittet/
     // gemergt und die Struktur ist komplexer.
-    for( sal_uInt16 n = 0; n < aSortCntBoxes.Count(); ++n )
+    for( sal_uInt16 n = 0; n < aSortCntBoxes.size(); ++n )
         if( aSortCntBoxes[ n ]->GetUpper()->GetUpper() )
             return sal_True;
     return sal_False;
@@ -1722,7 +1720,7 @@ SwTableBox::SwTableBox( SwTableBoxFmt* pFmt, const SwNodeIndex &rIdx,
     SwTableSortBoxes& rSrtArr = (SwTableSortBoxes&)pTblNd->GetTable().
                                 GetTabSortBoxes();
     SwTableBox* p = this;   // error: &this
-    rSrtArr.Insert( p );        // eintragen
+    rSrtArr.insert( p );        // eintragen
 }
 
 SwTableBox::SwTableBox( SwTableBoxFmt* pFmt, const SwStartNode& rSttNd, SwTableLine *pUp ) :
@@ -1740,7 +1738,7 @@ SwTableBox::SwTableBox( SwTableBoxFmt* pFmt, const SwStartNode& rSttNd, SwTableL
     SwTableSortBoxes& rSrtArr = (SwTableSortBoxes&)pTblNd->GetTable().
                                 GetTabSortBoxes();
     SwTableBox* p = this;   // error: &this
-    rSrtArr.Insert( p );        // eintragen
+    rSrtArr.insert( p );        // eintragen
 }
 
 SwTableBox::~SwTableBox()
@@ -1754,7 +1752,7 @@ SwTableBox::~SwTableBox()
         SwTableSortBoxes& rSrtArr = (SwTableSortBoxes&)pTblNd->GetTable().
                                     GetTabSortBoxes();
         SwTableBox *p = this;   // error: &this
-        rSrtArr.Remove( p );        // austragen
+        rSrtArr.erase( p );        // austragen
     }
 
     // ist die TabelleBox der letzte Client im FrameFormat, kann dieses
@@ -1962,7 +1960,7 @@ sal_Bool SwTable::GetInfo( SfxPoolItem& rInfo ) const
         const SwTableNode* pTblNode = GetTableNode();
         if( pTblNode && &pTblNode->GetNodes() == ((SwAutoFmtGetDocNode&)rInfo).pNodes )
         {
-            if ( aSortCntBoxes.Count() )
+            if ( !aSortCntBoxes.empty() )
             {
                   SwNodeIndex aIdx( *aSortCntBoxes[ 0 ]->GetSttNd() );
                 ((SwAutoFmtGetDocNode&)rInfo).pCntntNode =
@@ -1975,7 +1973,7 @@ sal_Bool SwTable::GetInfo( SfxPoolItem& rInfo ) const
     case RES_FINDNEARESTNODE:
         if( GetFrmFmt() && ((SwFmtPageDesc&)GetFrmFmt()->GetFmtAttr(
             RES_PAGEDESC )).GetPageDesc() &&
-            aSortCntBoxes.Count() &&
+            !aSortCntBoxes.empty() &&
             aSortCntBoxes[ 0 ]->GetSttNd()->GetNodes().IsDocNodes() )
             ((SwFindNearestNode&)rInfo).CheckNode( *
                 aSortCntBoxes[ 0 ]->GetSttNd()->FindTableNode() );
@@ -1999,7 +1997,7 @@ SwTable * SwTable::FindTable( SwFrmFmt const*const pFmt )
 
 SwTableNode* SwTable::GetTableNode() const
 {
-    return GetTabSortBoxes().Count() ?
+    return !GetTabSortBoxes().empty() ?
            (SwTableNode*)GetTabSortBoxes()[ 0 ]->GetSttNd()->FindTableNode() :
            pTableNode;
 }

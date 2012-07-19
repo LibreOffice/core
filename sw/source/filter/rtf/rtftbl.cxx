@@ -495,7 +495,7 @@ void SwRTFParser::ReadTable( int nToken )
                   text::HoriOrientation::LEFT_AND_WIDTH == eAdjust &&
                   nLSpace != pFmt->GetLRSpace().GetLeft()
                 ) ||
-                pTableNode->GetTable().GetTabSortBoxes().Count() >= eMAXCELLS
+                pTableNode->GetTable().GetTabSortBoxes().size() >= eMAXCELLS
               )
             )
         {
@@ -571,7 +571,7 @@ void SwRTFParser::ReadTable( int nToken )
                 if (
                     rTblSz.GetWidth() != nTblSz ||
                     rHoriz.GetHoriOrient() != eAdjust ||
-                    rTable.GetTabSortBoxes().Count() >= eMAXCELLS
+                    rTable.GetTabSortBoxes().size() >= eMAXCELLS
                     )
                 {
                     pTableNode = 0;
@@ -843,7 +843,7 @@ void SwRTFParser::NewTblLine()
         pTableNode->GetTable().SetRowsToRepeat( nRowsToRepeat );
 
     if( !bMakeCopy &&
-        64000 < pTableNode->GetTable().GetTabSortBoxes().Count() )
+        64000 < pTableNode->GetTable().GetTabSortBoxes().size() )
     {
         bMakeCopy = sal_True;       // spaetestens jetzt eine neue anfangen!
     }

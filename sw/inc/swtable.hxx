@@ -29,7 +29,6 @@
 #define _SWTABLE_HXX
 #include <tools/mempool.hxx>
 #include <tools/ref.hxx>
-#include <svl/svarray.hxx>
 #include <tblenum.hxx>
 #include <swtypes.hxx>
 #include <calbck.hxx>
@@ -39,6 +38,7 @@
 #include <boost/noncopyable.hpp>
 #include <vector>
 #include <algorithm>
+#include <o3tl/sorted_vector.hxx>
 
 class SwStartNode;
 class SwFmt;
@@ -98,8 +98,7 @@ public:
 
 // Save content-bearing box-pointers additionally in a sorted array
 // (for calculation in table).
-typedef SwTableBox* SwTableBoxPtr;
-SV_DECL_PTRARR_SORT( SwTableSortBoxes, SwTableBoxPtr, 25 )
+class SwTableSortBoxes : public o3tl::sorted_vector<SwTableBox*> {};
 
 class SW_DLLPUBLIC SwTable: public SwClient          //Client of FrmFmt.
 {

@@ -862,7 +862,7 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTblOpts,
     // JP 03.04.97: Inhalt der Boxen auf Zahlen abpruefen
     if( IsInsTblFormatNum() )
     {
-        for( sal_uInt16 nBoxes = pNdTbl->GetTabSortBoxes().Count(); nBoxes; )
+        for( sal_uInt16 nBoxes = pNdTbl->GetTabSortBoxes().size(); nBoxes; )
             ChkBoxNumFmt( *pNdTbl->GetTabSortBoxes()[ --nBoxes ], sal_False );
     }
 
@@ -1699,13 +1699,13 @@ sal_Bool SwDoc::InsertCol( const SwSelBoxes& rBoxes, sal_uInt16 nCnt, sal_Bool b
     if( rTbl.ISA( SwDDETable ))
         return sal_False;
 
-    SwTableSortBoxes aTmpLst( 0 );
+    SwTableSortBoxes aTmpLst;
     SwUndoTblNdsChg* pUndo = 0;
     if (GetIDocumentUndoRedo().DoesUndo())
     {
         pUndo = new SwUndoTblNdsChg( UNDO_TABLE_INSCOL, rBoxes, *pTblNd,
                                      0, 0, nCnt, bBehind, sal_False );
-        aTmpLst.Insert( &rTbl.GetTabSortBoxes(), 0, rTbl.GetTabSortBoxes().Count() );
+        aTmpLst.insert( rTbl.GetTabSortBoxes() );
     }
 
     bool bRet(false);
@@ -1762,13 +1762,13 @@ sal_Bool SwDoc::InsertRow( const SwSelBoxes& rBoxes, sal_uInt16 nCnt, sal_Bool b
     if( rTbl.ISA( SwDDETable ))
         return sal_False;
 
-    SwTableSortBoxes aTmpLst( 0 );
+    SwTableSortBoxes aTmpLst;
     SwUndoTblNdsChg* pUndo = 0;
     if (GetIDocumentUndoRedo().DoesUndo())
     {
         pUndo = new SwUndoTblNdsChg( UNDO_TABLE_INSROW,rBoxes, *pTblNd,
                                      0, 0, nCnt, bBehind, sal_False );
-        aTmpLst.Insert( &rTbl.GetTabSortBoxes(), 0, rTbl.GetTabSortBoxes().Count() );
+        aTmpLst.insert( rTbl.GetTabSortBoxes() );
     }
 
     bool bRet(false);
@@ -1966,7 +1966,7 @@ sal_Bool SwDoc::DeleteRowCol( const SwSelBoxes& rBoxes, bool bColumn )
     const sal_uLong nTmpIdx1 = pTblNd->GetIndex();
     const sal_uLong nTmpIdx2 = aSelBoxes[ aSelBoxes.Count()-1 ]->GetSttNd()->
                                 EndOfSectionIndex()+1;
-    if( pTblNd->GetTable().GetTabSortBoxes().Count() == aSelBoxes.Count() &&
+    if( pTblNd->GetTable().GetTabSortBoxes().size() == aSelBoxes.Count() &&
         aSelBoxes[0]->GetSttIdx()-1 == nTmpIdx1 &&
         nTmpIdx2 == pTblNd->EndOfSectionIndex() )
     {
@@ -2160,14 +2160,14 @@ sal_Bool SwDoc::SplitTbl( const SwSelBoxes& rBoxes, sal_Bool bVert, sal_uInt16 n
         return sal_False;
 
     std::vector<sal_uLong> aNdsCnts;
-    SwTableSortBoxes aTmpLst( 0 );
+    SwTableSortBoxes aTmpLst;
     SwUndoTblNdsChg* pUndo = 0;
     if (GetIDocumentUndoRedo().DoesUndo())
     {
         pUndo = new SwUndoTblNdsChg( UNDO_TABLE_SPLIT, rBoxes, *pTblNd, 0, 0,
                                      nCnt, bVert, bSameHeight );
 
-        aTmpLst.Insert( &rTbl.GetTabSortBoxes(), 0, rTbl.GetTabSortBoxes().Count() );
+        aTmpLst.insert( rTbl.GetTabSortBoxes() );
         if( !bVert )
         {
             for( sal_uInt16 n = 0; n < rBoxes.Count(); ++n )
@@ -3310,8 +3310,8 @@ public:
 
     void ChgBox( SwTableBox* pBox )
     {
-        rOldTbl.GetTabSortBoxes().Remove( pBox );
-        pNewTblNd->GetTable().GetTabSortBoxes().Insert( pBox );
+        rOldTbl.GetTabSortBoxes().erase( pBox );
+        pNewTblNd->GetTable().GetTabSortBoxes().insert( pBox );
     }
 };
 
@@ -3593,8 +3593,8 @@ sal_Bool SwNodes::MergeTable( const SwNodeIndex& rPos, sal_Bool bWithPrev,
                                rDelTbl.GetTabLines().begin(), rDelTbl.GetTabLines().end() );
     rDelTbl.GetTabLines().clear();
 
-    rTbl.GetTabSortBoxes().Insert( &rDelTbl.GetTabSortBoxes() );
-    rDelTbl.GetTabSortBoxes().Remove( (sal_uInt16)0, rDelTbl.GetTabSortBoxes().Count() );
+    rTbl.GetTabSortBoxes().insert( rDelTbl.GetTabSortBoxes() );
+    rDelTbl.GetTabSortBoxes().clear();
 
     // die vordere Tabelle bleibt immer stehen, die hintere wird geloescht
     SwEndNode* pTblEndNd = pDelTblNd->EndOfSectionNode();
@@ -4422,7 +4422,7 @@ sal_Bool SwDoc::_UnProtectTblCells( SwTable& rTbl )
         :   0;
 
     SwTableSortBoxes& rSrtBox = rTbl.GetTabSortBoxes();
-    for( sal_uInt16 i = rSrtBox.Count(); i; )
+    for( sal_uInt16 i = rSrtBox.size(); i; )
     {
         SwFrmFmt *pBoxFmt = rSrtBox[ --i ]->GetFrmFmt();
         if( pBoxFmt->GetProtect().IsCntntProtected() )
@@ -4563,7 +4563,7 @@ sal_Bool SwDoc::HasTblAnyProtection( const SwPosition* pPos,
     if( pTbl )
     {
         SwTableSortBoxes& rSrtBox = pTbl->GetTabSortBoxes();
-        for( sal_uInt16 i = rSrtBox.Count(); i; )
+        for( sal_uInt16 i = rSrtBox.size(); i; )
         {
             SwFrmFmt *pBoxFmt = rSrtBox[ --i ]->GetFrmFmt();
             if( pBoxFmt->GetProtect().IsCntntProtected() )

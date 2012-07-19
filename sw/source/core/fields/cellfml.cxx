@@ -91,13 +91,13 @@ double SwTableBox::GetValue( SwTblCalcPara& rCalcPara ) const
 
     // wird eine Rekursion erzeugt ?
     SwTableBox* pBox = (SwTableBox*)this;
-    if( rCalcPara.pBoxStk->Seek_Entry( pBox ))
+    if( rCalcPara.pBoxStk->find( pBox ) != rCalcPara.pBoxStk->end() )
         return nRet;            // steht schon auf dem Stack: FEHLER
 
     // bei dieser Box nochmal aufsetzen
     rCalcPara.SetLastTblBox( this );
 
-    rCalcPara.pBoxStk->Insert( pBox );      // eintragen
+    rCalcPara.pBoxStk->insert( pBox );      // eintragen
     do {        // Middle-Check-Loop, damit aus dieser gesprungen werden kann
                 // hier aufgespannt, damit am Ende der Box-Pointer aus dem
                 // Stack ausgetragen wird
@@ -234,7 +234,7 @@ double SwTableBox::GetValue( SwTblCalcPara& rCalcPara ) const
 
     if( !rCalcPara.IsStackOverFlow() )
     {
-        rCalcPara.pBoxStk->Remove( pBox );      // raus aus dem Stack
+        rCalcPara.pBoxStk->erase( pBox );      // raus aus dem Stack
         rCalcPara.DecStackCnt();
     }
 
@@ -276,7 +276,7 @@ sal_Bool SwTblCalcPara::CalcWithStackOverflow()
         rCalc.SetCalcError( CALC_NOERR );
         aStackOverFlows.insert( aStackOverFlows.begin() + nCnt++, pBox );
 
-        pBoxStk->Remove( pBox );
+        pBoxStk->erase( pBox );
         pBox->GetValue( *this );
     } while( IsStackOverFlow() );
 
@@ -285,7 +285,7 @@ sal_Bool SwTblCalcPara::CalcWithStackOverflow()
     // falls Rekursionen erkannt wurden
     nStackCnt = 0;
     rCalc.SetCalcError( CALC_NOERR );
-    pBoxStk->Remove( sal_uInt16(0), pBoxStk->Count() );
+    pBoxStk->clear();
 
     while( !rCalc.IsCalcError() && nCnt )
     {
@@ -327,13 +327,13 @@ void SwTableFormula::_MakeFormula( const SwTable& rTbl, String& rNewStr,
         pEndBox = reinterpret_cast<SwTableBox*>(sal::static_int_cast<sal_IntPtr>(pLastBox->ToInt64()));
 
         // ist das ueberhaupt ein gueltiger Pointer ??
-        if( !rTbl.GetTabSortBoxes().Seek_Entry( pEndBox ))
+        if( rTbl.GetTabSortBoxes().find( pEndBox ) == rTbl.GetTabSortBoxes().end() )
             pEndBox = 0;
         rFirstBox.Erase( 0, pLastBox->Len()+1 );
     }
     pSttBox = reinterpret_cast<SwTableBox*>(sal::static_int_cast<sal_IntPtr>(rFirstBox.ToInt64()));
     // ist das ueberhaupt ein gueltiger Pointer ??
-    if( !rTbl.GetTabSortBoxes().Seek_Entry( pSttBox ))
+    if( rTbl.GetTabSortBoxes().find( pSttBox ) == rTbl.GetTabSortBoxes().end() )
         pSttBox = 0;
 
     rNewStr += ' ';
@@ -485,7 +485,7 @@ void SwTableFormula::PtrToBoxNms( const SwTable& rTbl, String& rNewStr,
         pBox = reinterpret_cast<SwTableBox*>(sal::static_int_cast<sal_IntPtr>(pLastBox->ToInt64()));
 
         // ist das ueberhaupt ein gueltiger Pointer ??
-        if( rTbl.GetTabSortBoxes().Seek_Entry( pBox ))
+        if( rTbl.GetTabSortBoxes().find( pBox ) != rTbl.GetTabSortBoxes().end() )
             rNewStr += pBox->GetName();
         else
             rNewStr += '?';
@@ -495,7 +495,7 @@ void SwTableFormula::PtrToBoxNms( const SwTable& rTbl, String& rNewStr,
 
     pBox = reinterpret_cast<SwTableBox*>(sal::static_int_cast<sal_IntPtr>(rFirstBox.ToInt64()));
     // ist das ueberhaupt ein gueltiger Pointer ??
-    if( rTbl.GetTabSortBoxes().Seek_Entry( pBox ))
+    if( rTbl.GetTabSortBoxes().find( pBox ) != rTbl.GetTabSortBoxes().end() )
         rNewStr += pBox->GetName();
     else
         rNewStr += '?';
@@ -835,7 +835,7 @@ String lcl_BoxNmToRel( const SwTable& rTbl, const SwTableNode& rTblNd,
     {
         // in die Externe Darstellung umwandeln.
         SwTableBox* pBox = reinterpret_cast<SwTableBox*>(sal::static_int_cast<sal_IntPtr>(sTmp.ToInt64()));
-        if( !rTbl.GetTabSortBoxes().Seek_Entry( pBox ))
+        if( rTbl.GetTabSortBoxes().find( pBox ) == rTbl.GetTabSortBoxes().end() )
             return rtl::OUString('?');
         sTmp = pBox->GetName();
     }
@@ -893,14 +893,14 @@ void SwTableFormula::_GetFmlBoxes( const SwTable& rTbl, String& ,
         pEndBox = reinterpret_cast<SwTableBox*>(sal::static_int_cast<sal_IntPtr>(pLastBox->ToInt64()));
 
         // ist das ueberhaupt ein gueltiger Pointer ??
-        if( !rTbl.GetTabSortBoxes().Seek_Entry( pEndBox ))
+        if( rTbl.GetTabSortBoxes().find( pEndBox ) == rTbl.GetTabSortBoxes().end() )
             pEndBox = 0;
         rFirstBox.Erase( 0, pLastBox->Len()+1 );
     }
 
     pSttBox = reinterpret_cast<SwTableBox*>(sal::static_int_cast<sal_IntPtr>(rFirstBox.ToInt64()));
     // ist das ueberhaupt ein gueltiger Pointer ??
-    if( !rTbl.GetTabSortBoxes().Seek_Entry( pSttBox ))
+    if( rTbl.GetTabSortBoxes().find( pSttBox ) == rTbl.GetTabSortBoxes().end() )
         pSttBox = 0;
 
     if( pEndBox && pSttBox )    // Bereich ?
@@ -1013,8 +1013,8 @@ void SwTableFormula::_HasValidBoxes( const SwTable& rTbl, String& ,
 
         // sind das gueltige Pointer ?
         if( ( pLastBox &&
-              ( !pEndBox || !rTbl.GetTabSortBoxes().Seek_Entry( pEndBox ) ) ) ||
-            ( !pSttBox || !rTbl.GetTabSortBoxes().Seek_Entry( pSttBox ) ) )
+              ( !pEndBox || rTbl.GetTabSortBoxes().find( pEndBox ) == rTbl.GetTabSortBoxes().end() ) ) ||
+            ( !pSttBox || rTbl.GetTabSortBoxes().find( pSttBox ) == rTbl.GetTabSortBoxes().end() ) )
                 *pBValid = false;
     }
 }
@@ -1121,9 +1121,9 @@ void SwTableFormula::_SplitMergeBoxNm( const SwTable& rTbl, String& rNewStr,
         break;
     }
 
-    if( pLastBox && !pTbl->GetTabSortBoxes().Seek_Entry( pEndBox ))
+    if( pLastBox && pTbl->GetTabSortBoxes().find( pEndBox ) == pTbl->GetTabSortBoxes().end() )
         pEndBox = 0;
-    if( !pTbl->GetTabSortBoxes().Seek_Entry( pSttBox ))
+    if( pTbl->GetTabSortBoxes().find( pSttBox ) == pTbl->GetTabSortBoxes().end() )
         pSttBox = 0;
 
     if( TBL_SPLITTBL == rTblUpd.eFlags )
