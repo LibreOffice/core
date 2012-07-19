@@ -1256,10 +1256,10 @@ void SwDocShell::Execute(SfxRequest& rReq)
 
                         bool    bOutline[MAXLEVEL] = {false};
                         const SwOutlineNodes& rOutlNds = pDoc->GetNodes().GetOutLineNds();
-                        if( rOutlNds.Count() )
+                        if( !rOutlNds.empty() )
                         {
                             int nLevel;
-                            for(sal_uInt16 n = 0; n < rOutlNds.Count(); ++n )
+                            for(sal_uInt16 n = 0; n < rOutlNds.size(); ++n )
                                 if( ( nLevel = rOutlNds[n]->GetTxtNode()->GetAttrOutlineLevel()) > 0 &&
                                     ! bOutline[nLevel-1] )
                                 {

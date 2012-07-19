@@ -91,8 +91,8 @@ SwNodePtr GetStartNode( SwOutlineNodes* pOutlNds, int nOutlineLevel, sal_uInt16*
 {
     SwNodePtr pNd;
 
-    for( ; *nOutl < pOutlNds->Count(); ++(*nOutl) )
-        if( ( pNd = pOutlNds->GetObject( *nOutl ))->GetTxtNode()->GetAttrOutlineLevel() == nOutlineLevel && !pNd->FindTableNode() )
+    for( ; *nOutl < pOutlNds->size(); ++(*nOutl) )
+        if( ( pNd = (*pOutlNds)[ *nOutl ])->GetTxtNode()->GetAttrOutlineLevel() == nOutlineLevel && !pNd->FindTableNode() )
         {
             return pNd;
         }
@@ -104,9 +104,9 @@ SwNodePtr GetEndNode( SwOutlineNodes* pOutlNds, int nOutlineLevel, sal_uInt16* n
 {
     SwNodePtr pNd;
 
-    for( ++(*nOutl); (*nOutl) < pOutlNds->Count(); ++(*nOutl) )
+    for( ++(*nOutl); (*nOutl) < pOutlNds->size(); ++(*nOutl) )
     {
-        pNd = pOutlNds->GetObject( *nOutl );
+        pNd = (*pOutlNds)[ *nOutl ];
 
         const int nLevel = pNd->GetTxtNode()->GetAttrOutlineLevel();
 
@@ -123,8 +123,8 @@ SwNodePtr GetEndNode( SwOutlineNodes* pOutlNds, int nOutlineLevel, sal_uInt16* n
 SwNodePtr GetStartNode( const SwOutlineNodes* pOutlNds, const SwTxtFmtColl* pSplitColl, sal_uInt16* nOutl )
 {
     SwNodePtr pNd;
-    for( ; *nOutl < pOutlNds->Count(); ++(*nOutl) )
-        if( ( pNd = pOutlNds->GetObject( *nOutl ))->GetTxtNode()->
+    for( ; *nOutl < pOutlNds->size(); ++(*nOutl) )
+        if( ( pNd = (*pOutlNds)[ *nOutl ])->GetTxtNode()->
                     GetTxtColl() == pSplitColl &&
             !pNd->FindTableNode() )
         {
@@ -137,9 +137,9 @@ SwNodePtr GetEndNode( const SwOutlineNodes* pOutlNds, const SwTxtFmtColl* pSplit
 {
     SwNodePtr pNd;
 
-    for( ++(*nOutl); *nOutl < pOutlNds->Count(); ++(*nOutl) )
+    for( ++(*nOutl); *nOutl < pOutlNds->size(); ++(*nOutl) )
     {
-        pNd = pOutlNds->GetObject( *nOutl );
+        pNd = (*pOutlNds)[ *nOutl ];
         SwTxtFmtColl* pTColl = pNd->GetTxtNode()->GetTxtColl();
 
         if( ( pTColl == pSplitColl ||
@@ -174,13 +174,13 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const String& rPath, bool bOutline, c
         // If it isn't a OutlineNumbering, then use an own array and collect the Nodes.
         if( pSplitColl->GetAttrOutlineLevel() == 0 )//<-end,zhaojianwei, 0814
         {
-            pOutlNds = new SwOutlineNodes( 8 );
+            pOutlNds = new SwOutlineNodes;
             SwIterator<SwTxtNode,SwFmtColl> aIter( *pSplitColl );
             for( SwTxtNode* pTNd = aIter.First(); pTNd; pTNd = aIter.Next() )
                 if( pTNd->GetNodes().IsDocNodes() )
-                    pOutlNds->Insert( pTNd );
+                    pOutlNds->insert( pTNd );
 
-            if( !pOutlNds->Count() )
+            if( pOutlNds->empty() )
             {
                 delete pOutlNds;
                 return false;
@@ -244,8 +244,8 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const String& rPath, bool bOutline, c
 
 
     // Skip all invalid ones
-    while( nOutl < pOutlNds->Count() &&
-        pOutlNds->GetObject( nOutl )->GetIndex() < GetNodes().GetEndOfExtras().GetIndex() )
+    while( nOutl < pOutlNds->size() &&
+        (*pOutlNds)[ nOutl ]->GetIndex() < GetNodes().GetEndOfExtras().GetIndex() )
         ++nOutl;
 
     do {

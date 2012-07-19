@@ -2066,12 +2066,12 @@ const SwFmtINetFmt* SwDoc::FindINetAttr( const String& rName ) const
 void SwDoc::Summary( SwDoc* pExtDoc, sal_uInt8 nLevel, sal_uInt8 nPara, sal_Bool bImpress )
 {
     const SwOutlineNodes& rOutNds = GetNodes().GetOutLineNds();
-    if( pExtDoc && rOutNds.Count() )
+    if( pExtDoc && !rOutNds.empty() )
     {
         sal_uInt16 i;
-        ::StartProgress( STR_STATSTR_SUMMARY, 0, rOutNds.Count(), GetDocShell() );
+        ::StartProgress( STR_STATSTR_SUMMARY, 0, rOutNds.size(), GetDocShell() );
         SwNodeIndex aEndOfDoc( pExtDoc->GetNodes().GetEndOfContent(), -1 );
-        for( i = 0; i < rOutNds.Count(); ++i )
+        for( i = 0; i < rOutNds.size(); ++i )
         {
             ::SetProgressState( i, GetDocShell() );
             const sal_uLong nIndex = rOutNds[ i ]->GetIndex();
@@ -2081,7 +2081,7 @@ void SwDoc::Summary( SwDoc* pExtDoc, sal_uInt8 nLevel, sal_uInt8 nPara, sal_Bool
                 continue;
             sal_uInt16 nEndOfs = 1;
             sal_uInt8 nWish = nPara;
-            sal_uLong nNextOutNd = i + 1 < rOutNds.Count() ?
+            sal_uLong nNextOutNd = i + 1 < (sal_uInt16)rOutNds.size() ?
                 rOutNds[ i + 1 ]->GetIndex() : GetNodes().Count();
             sal_Bool bKeep = sal_False;
             while( ( nWish || bKeep ) && nIndex + nEndOfs < nNextOutNd &&

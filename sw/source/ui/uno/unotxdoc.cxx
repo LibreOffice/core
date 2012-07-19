@@ -3452,7 +3452,7 @@ Any SwXLinkNameAccessWrapper::getByName(const OUString& rName)
                 if(!pxDoc->GetDocShell())
                     throw RuntimeException();
                 SwDoc* pDoc = pxDoc->GetDocShell()->GetDoc();
-                sal_uInt16 nOutlineCount = pDoc->GetNodes().GetOutLineNds().Count();
+                sal_uInt16 nOutlineCount = pDoc->GetNodes().GetOutLineNds().size();
 
                 for (sal_uInt16 i = 0; i < nOutlineCount && !bFound; ++i)
                 {
@@ -3495,7 +3495,7 @@ Sequence< OUString > SwXLinkNameAccessWrapper::getElementNames(void)
 
         SwDoc* pDoc = pxDoc->GetDocShell()->GetDoc();
         const SwOutlineNodes& rOutlineNodes = pDoc->GetNodes().GetOutLineNds();
-        sal_uInt16 nOutlineCount = rOutlineNodes.Count();
+        sal_uInt16 nOutlineCount = rOutlineNodes.size();
         aRet.realloc(nOutlineCount);
         OUString* pResArr = aRet.getArray();
         String sSuffix = rtl::OUString('|');
@@ -3539,7 +3539,7 @@ sal_Bool SwXLinkNameAccessWrapper::hasByName(const OUString& rName)
                 if(!pxDoc->GetDocShell())
                     throw RuntimeException();
                 SwDoc* pDoc = pxDoc->GetDocShell()->GetDoc();
-                sal_uInt16 nOutlineCount = pDoc->GetNodes().GetOutLineNds().Count();
+                sal_uInt16 nOutlineCount = pDoc->GetNodes().GetOutLineNds().size();
 
                 for (sal_uInt16 i = 0; i < nOutlineCount && !bRet; ++i)
                 {

@@ -805,7 +805,7 @@ const SwTxtNode* SwNode::FindOutlineNodeOfLevel( sal_uInt8 nLvl ) const
 {
     const SwTxtNode* pRet = 0;
     const SwOutlineNodes& rONds = GetNodes().GetOutLineNds();
-    if( MAXLEVEL > nLvl && rONds.Count() )
+    if( MAXLEVEL > nLvl && !rONds.empty() )
     {
         sal_uInt16 nPos;
         SwNode* pNd = (SwNode*)this;
@@ -1836,11 +1836,11 @@ sal_Bool SwCntntNode::IsAnyCondition( SwCollCondition& rTmp ) const
     {
         sal_uInt16 nPos;
         const SwOutlineNodes& rOutlNds = rNds.GetOutLineNds();
-        if( rOutlNds.Count() )
+        if( !rOutlNds.empty() )
         {
             if( !rOutlNds.Seek_Entry( (SwCntntNode*)this, &nPos ) && nPos )
                 --nPos;
-            if( nPos < rOutlNds.Count() &&
+            if( nPos < rOutlNds.size() &&
                 rOutlNds[ nPos ]->GetIndex() < GetIndex() )
             {
                 SwTxtNode* pOutlNd = rOutlNds[ nPos ]->GetTxtNode();

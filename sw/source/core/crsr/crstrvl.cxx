@@ -826,7 +826,7 @@ sal_Bool SwCrsrShell::GotoNextOutline()
     if( rNds.GetOutLineNds().Seek_Entry( pNd, &nPos ))
         ++nPos;
 
-    if( nPos == rNds.GetOutLineNds().Count() )
+    if( nPos == rNds.GetOutLineNds().size() )
         return sal_False;
 
     pNd = rNds.GetOutLineNds()[ nPos ];
@@ -903,7 +903,7 @@ sal_Bool SwCrsrShell::MakeOutlineSel( sal_uInt16 nSttPos, sal_uInt16 nEndPos,
 {
     const SwNodes& rNds = GetDoc()->GetNodes();
     const SwOutlineNodes& rOutlNds = rNds.GetOutLineNds();
-    if( !rOutlNds.Count() )
+    if( rOutlNds.empty() )
         return sal_False;
 
     SET_CURR_SHELL( this );
@@ -923,7 +923,7 @@ sal_Bool SwCrsrShell::MakeOutlineSel( sal_uInt16 nSttPos, sal_uInt16 nEndPos,
     if( bWithChildren )
     {
         const int nLevel = pEndNd->GetTxtNode()->GetAttrOutlineLevel()-1;
-        for( ++nEndPos; nEndPos < rOutlNds.Count(); ++nEndPos )
+        for( ++nEndPos; nEndPos < rOutlNds.size(); ++nEndPos )
         {
             pEndNd = rOutlNds[ nEndPos ];
             const int nNxtLevel = pEndNd->GetTxtNode()->GetAttrOutlineLevel()-1;
@@ -932,10 +932,10 @@ sal_Bool SwCrsrShell::MakeOutlineSel( sal_uInt16 nSttPos, sal_uInt16 nEndPos,
         }
     }
     // if without children then set onto next one
-    else if( ++nEndPos < rOutlNds.Count() )
+    else if( ++nEndPos < rOutlNds.size() )
         pEndNd = rOutlNds[ nEndPos ];
 
-    if( nEndPos == rOutlNds.Count() ) // no end found
+    if( nEndPos == rOutlNds.size() ) // no end found
         pEndNd = &rNds.GetEndOfContent();
 
     KillPams();
@@ -1020,7 +1020,7 @@ sal_Bool SwCrsrShell::GetContentAtPos( const Point& rPt,
 
         const SwNodes& rNds = GetDoc()->GetNodes();
         if( pTxtNd && SwContentAtPos::SW_OUTLINE & rCntntAtPos.eCntntAtPos
-            && rNds.GetOutLineNds().Count() )
+            && !rNds.GetOutLineNds().empty() )
         {
             const SwTxtNode* pONd = pTxtNd->FindOutlineNodeOfLevel( MAXLEVEL-1);
             if( pONd )

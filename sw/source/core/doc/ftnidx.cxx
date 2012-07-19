@@ -98,19 +98,19 @@ void SwFtnIdxs::UpdateFtn( const SwNodeIndex& rStt )
         const SwOutlineNodes& rOutlNds = pDoc->GetNodes().GetOutLineNds();
         const SwNode* pCapStt = &pDoc->GetNodes().GetEndOfExtras();
         sal_uLong nCapEnd = pDoc->GetNodes().GetEndOfContent().GetIndex();
-        if( rOutlNds.Count() )
+        if( !rOutlNds.empty() )
         {
             // Find the Chapter's start, which contains rStt
             sal_uInt16 n;
 
-            for( n = 0; n < rOutlNds.Count(); ++n )
+            for( n = 0; n < rOutlNds.size(); ++n )
                 if( rOutlNds[ n ]->GetIndex() > rStt.GetIndex() )
                     break;      // found it!
                 //else if( !rOutlNds[ n ]->GetTxtNode()->GetTxtColl()->GetOutlineLevel() )  //#outline level,zhaojianwei
                 else if ( rOutlNds[ n ]->GetTxtNode()->GetAttrOutlineLevel() == 1 )   //<-end,zhaojianwei
                     pCapStt = rOutlNds[ n ];    // Beginning of a new Chapter
             // now find the end of the range
-            for( ; n < rOutlNds.Count(); ++n )
+            for( ; n < rOutlNds.size(); ++n )
                 //if( !rOutlNds[ n ]->GetTxtNode()->GetTxtColl()->GetOutlineLevel() )//#outline level,zhaojianwei
                 if ( rOutlNds[ n ]->GetTxtNode()->GetAttrOutlineLevel() == 1 )//<-end,zhaojianwei
                 {
@@ -132,7 +132,7 @@ void SwFtnIdxs::UpdateFtn( const SwNodeIndex& rStt )
         if( nPos == Count() )       // nothing found
             return;
 
-        if( !rOutlNds.Count() )
+        if( rOutlNds.empty() )
             nFtnNo = nPos+1;
 
         for( ; nPos < Count(); ++nPos )
@@ -219,7 +219,7 @@ void SwFtnIdxs::UpdateAllFtn()
         const SwOutlineNodes& rOutlNds = pDoc->GetNodes().GetOutLineNds();
         sal_uInt16 nNo = 1,     // Number for the Footnotes
                nFtnIdx = 0;     // Index into theFtnIdx array
-        for( sal_uInt16 n = 0; n < rOutlNds.Count(); ++n )
+        for( sal_uInt16 n = 0; n < rOutlNds.size(); ++n )
         {
             if ( rOutlNds[ n ]->GetTxtNode()->GetAttrOutlineLevel() == 1 )//<-end,zhaojianwei
             {

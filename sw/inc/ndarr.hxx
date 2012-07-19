@@ -35,11 +35,11 @@
 
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 
-#include <svl/svarray.hxx>
 #include <svtools/embedhlp.hxx>
 
 #include <bparr.hxx>
 #include <ndtyp.hxx>
+#include <o3tl/sorted_vector.hxx>
 
 class Graphic;
 class GraphicObject;
@@ -82,7 +82,16 @@ typedef SwNode * SwNodePtr;
 typedef sal_Bool (*FnForEach_SwNodes)( const SwNodePtr&, void* pArgs );
 typedef struct _xmlTextWriter *xmlTextWriterPtr;
 
-SV_DECL_PTRARR_SORT( SwOutlineNodes, SwNodePtr, 0 )
+struct CompareSwOutlineNodes
+{
+    bool operator()( SwNode* const& lhs, SwNode* const& rhs) const;
+};
+
+class SwOutlineNodes : public o3tl::sorted_vector<SwNode*, CompareSwOutlineNodes>
+{
+public:
+    bool Seek_Entry(SwNode* const &rP, sal_uInt16* pnPos) const;
+};
 
 class SW_DLLPUBLIC SwNodes
     : private BigPtrArray
