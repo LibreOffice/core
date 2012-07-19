@@ -1202,7 +1202,7 @@ static bool lcl_PutString(
         ScSetStringParam aParam;
         aParam.mpNumFormatter = pFormatter;
         aParam.mbDetectNumberFormat = bDetectNumFormat;
-        aParam.mbSetTextCellFormat = true;
+        aParam.mbSetTextCellFormat = false;
         aParam.mbHandleApostrophe = false;
         pDoc->SetString( nCol, nRow, nTab, rStr, &aParam );
     }
