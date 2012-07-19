@@ -98,8 +98,6 @@ using namespace comphelper;
 #define MODIFY_ALLTABLES    0x00004000
 #define MODIFY_NOTES        0x00008000
 
-SV_IMPL_VARARR(SrchAttrItemList, SearchAttrItem);
-
 #define GetCheckBoxValue( rBox )                                \
     rBox.IsEnabled() ? rBox.IsChecked() : sal_False
 
@@ -170,16 +168,11 @@ void StrArrToList_Impl( sal_uInt16 nId, const std::vector<rtl::OUString>& rStrLs
 // class SearchAttrItemList ----------------------------------------------
 
 SearchAttrItemList::SearchAttrItemList( const SearchAttrItemList& rList ) :
-
-    SrchAttrItemList( (sal_uInt8)rList.Count() )
-
+    SrchAttrItemList(rList)
 {
-    SrchAttrItemList::Insert( &rList, 0 );
-    SearchAttrItem* _pData = (SearchAttrItem*)GetData();
-
-    for ( sal_uInt16 i = Count(); i; --i, ++_pData )
-        if ( !IsInvalidItem( _pData->pItem ) )
-            _pData->pItem = _pData->pItem->Clone();
+    for ( sal_uInt16 i = 0; i < size(); ++i )
+        if ( !IsInvalidItem( (*this)[i].pItem ) )
+            (*this)[i].pItem = (*this)[i].pItem->Clone();
 }
 
 // -----------------------------------------------------------------------
@@ -230,13 +223,12 @@ void SearchAttrItemList::Put( const SfxItemSet& rSet )
 SfxItemSet& SearchAttrItemList::Get( SfxItemSet& rSet )
 {
     SfxItemPool* pPool = rSet.GetPool();
-    SearchAttrItem* _pData = (SearchAttrItem*)GetData();
 
-    for ( sal_uInt16 i = Count(); i; --i, ++_pData )
-        if ( IsInvalidItem( _pData->pItem ) )
-            rSet.InvalidateItem( pPool->GetWhich( _pData->nSlot ) );
+    for ( sal_uInt16 i = 0; i < size(); ++i )
+        if ( IsInvalidItem( (*this)[i].pItem ) )
+            rSet.InvalidateItem( pPool->GetWhich( (*this)[i].nSlot ) );
         else
-            rSet.Put( *_pData->pItem );
+            rSet.Put( *(*this)[i].pItem );
     return rSet;
 }
 
@@ -244,12 +236,10 @@ SfxItemSet& SearchAttrItemList::Get( SfxItemSet& rSet )
 
 void SearchAttrItemList::Clear()
 {
-    SearchAttrItem* _pData = (SearchAttrItem*)GetData();
-
-    for ( sal_uInt16 i = Count(); i; --i, ++_pData )
-        if ( !IsInvalidItem( _pData->pItem ) )
-            delete _pData->pItem;
-    SrchAttrItemList::Remove( 0, Count() );
+    for ( sal_uInt16 i = 0; i < size(); ++i )
+        if ( !IsInvalidItem( (*this)[i].pItem ) )
+            delete (*this)[i].pItem;
+    SrchAttrItemList::clear();
 }
 
 // -----------------------------------------------------------------------
@@ -257,15 +247,14 @@ void SearchAttrItemList::Clear()
 // Deletes the pointer to the items
 void SearchAttrItemList::Remove( sal_uInt16 nPos, sal_uInt16 nLen )
 {
-    if ( nPos + nLen > Count() )
-        nLen = Count() - nPos;
-    SearchAttrItem* _pData = (SearchAttrItem*)GetData() + nPos;
+    if ( nPos + nLen > size() )
+        nLen = size() - nPos;
 
-    for ( sal_uInt16 n = nLen; n; --n, ++_pData )
-        if ( !IsInvalidItem( _pData->pItem ) )
-            delete _pData->pItem;
+    for ( sal_uInt16 i = nPos; i < nPos + nLen; ++i )
+        if ( !IsInvalidItem( (*this)[i].pItem ) )
+            delete (*this)[i].pItem;
 
-    SrchAttrItemList::Remove( nPos, nLen );
+    SrchAttrItemList::erase( begin() + nPos, begin() + nPos + nLen );
 }
 
 #undef INI_LIST
