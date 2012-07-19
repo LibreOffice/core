@@ -117,6 +117,7 @@
 #include <osl/time.h>
 #include <rtl/random.h>
 #include "WW8Sttbf.hxx"
+#include <editeng/charrotateitem.hxx>
 #include "WW8FibData.hxx"
 
 using namespace sw::util;
@@ -1930,7 +1931,7 @@ void WW8AttributeOutput::TableInfoRow( ww8::WW8TableNodeInfoInner::Pointer_t pTa
     }
 }
 
-static sal_uInt16 lcl_TCFlags(const SwTableBox * pBox, long nRowSpan)
+static sal_uInt16 lcl_TCFlags(SwDoc &rDoc, const SwTableBox * pBox, long nRowSpan)
 {
     sal_uInt16 nFlags = 0;
 
@@ -1952,6 +1953,31 @@ static sal_uInt16 lcl_TCFlags(const SwTableBox * pBox, long nRowSpan)
                 break;
             default:
                 break;
+        }
+        const SwStartNode * pSttNd = pBox->GetSttNd();
+        if(pSttNd)
+        {
+            SwNodeIndex aIdx( *pSttNd );
+            const SwCntntNode * pCNd = pSttNd->GetNodes().GoNext( &aIdx );
+            if( pCNd && pCNd->IsTxtNode())
+            {
+                SfxItemSet aCoreSet(rDoc.GetAttrPool(), RES_CHRATR_ROTATE, RES_CHRATR_ROTATE);
+                ((SwTxtNode*)pCNd)->GetAttr( aCoreSet, 0, ((SwTxtNode*)pCNd)->GetTxt().Len());
+                const SvxCharRotateItem * pRotate = NULL;
+                const SfxPoolItem * pRotItem;
+                if ( SFX_ITEM_SET == aCoreSet.GetItemState(RES_CHRATR_ROTATE, sal_True, &pRotItem))
+                {
+                    pRotate = (SvxCharRotateItem*)pRotItem;
+                    if(pRotate && pRotate->GetValue() == 900)
+                    {
+                        nFlags = nFlags | 0x0004 | 0x0008;
+                    }
+                    else if(pRotate && pRotate->GetValue() == 2700 )
+                    {
+                        nFlags = nFlags | 0x0004 | 0x0010;
+                    }
+                }
+            }
         }
     }
 
@@ -2248,7 +2274,7 @@ void WW8AttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t 
         if ( m_rWW8Export.bWrtWW8 )
         {
             sal_uInt16 nFlags =
-                lcl_TCFlags(pTabBox1, *aItRowSpans);
+                lcl_TCFlags(*m_rWW8Export.pDoc, pTabBox1, *aItRowSpans);
              m_rWW8Export.InsUInt16( nFlags );
         }
 
