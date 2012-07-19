@@ -4839,6 +4839,9 @@ if test "$GCC" = "yes"; then
     AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
 #include <stddef.h>
 
+#include <vector>
+    // some Clang fail when compiling against GCC 4.7 headers with --std=gnu++0x
+
 template <typename T, size_t S> char (&sal_n_array_size( T(&)[S] ))[S];
 
 namespace
