@@ -162,14 +162,14 @@ void IDEBaseWindow::StoreData()
 {
 }
 
-sal_Bool IDEBaseWindow::CanClose()
+bool IDEBaseWindow::CanClose()
 {
-    return sal_True;
+    return true;
 }
 
-sal_Bool IDEBaseWindow::AllowUndo()
+bool IDEBaseWindow::AllowUndo()
 {
-    return sal_True;
+    return true;
 }
 
 

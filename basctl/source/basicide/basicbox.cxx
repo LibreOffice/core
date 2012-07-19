@@ -152,12 +152,12 @@ BasicLibBox::BasicLibBox( Window* pParent, const uno::Reference< frame::XFrame >
     m_xFrame( rFrame )
 {
     FillBox();
-    bIgnoreSelect = sal_True;   // do not yet transfer select of 0
-    bFillBox = sal_True;
+    bIgnoreSelect = true;   // do not yet transfer select of 0
+    bFillBox = true;
     SelectEntryPos( 0 );
     aCurText = GetEntry( 0 );
     SetSizePixel( Size( 250, 200 ) );
-    bIgnoreSelect = sal_False;
+    bIgnoreSelect = false;
 }
 
 
@@ -202,7 +202,7 @@ void BasicLibBox::ReleaseFocus()
 void BasicLibBox::FillBox()
 {
     SetUpdateMode( sal_False );
-    bIgnoreSelect = sal_True;
+    bIgnoreSelect = true;
 
     aCurText = GetSelectEntry();
 
@@ -232,7 +232,7 @@ void BasicLibBox::FillBox()
         SelectEntryPos( GetEntryCount() );
         aCurText = GetSelectEntry();
     }
-    bIgnoreSelect = sal_False;
+    bIgnoreSelect = false;
 }
 
 void BasicLibBox::InsertEntries( const ScriptDocument& rDocument, LibraryLocation eLocation )
@@ -285,15 +285,15 @@ long BasicLibBox::PreNotify( NotifyEvent& rNEvt )
         if ( bFillBox )
         {
             FillBox();
-            bFillBox = sal_False;
+            bFillBox = false;
         }
     }
     else if( rNEvt.GetType() == EVENT_LOSEFOCUS )
     {
         if ( !HasChildPathFocus( sal_True ) )
         {
-            bIgnoreSelect = sal_True;
-            bFillBox = sal_True;
+            bIgnoreSelect = true;
+            bFillBox = true;
         }
     }
 

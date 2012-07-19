@@ -75,8 +75,8 @@ class BasicLibBox : public DocListenerBox
 {
 private:
     String          aCurText;
-    sal_Bool            bIgnoreSelect;
-    sal_Bool            bFillBox;
+    bool            bIgnoreSelect;
+    bool            bFillBox;
     com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > m_xFrame;
 
     void            ReleaseFocus();

@@ -149,7 +149,7 @@ public:
 
     virtual void    StoreData();
     virtual void    UpdateData();
-    virtual sal_Bool    CanClose();
+    virtual bool    CanClose();
 
     // return number of pages to be printed
     virtual sal_Int32 countPages( Printer* pPrinter ) = 0;
@@ -163,7 +163,7 @@ public:
     virtual sal_Bool    IsModified();
     virtual sal_Bool    IsPasteAllowed();
 
-    virtual sal_Bool    AllowUndo();
+    virtual bool    AllowUndo();
 
     virtual void    SetReadOnly( sal_Bool bReadOnly );
     virtual sal_Bool    IsReadOnly();

@@ -162,12 +162,12 @@ private:
 EditorWindow::EditorWindow( Window* pParent ) :
     Window( pParent, WB_BORDER )
 {
-    bDoSyntaxHighlight = sal_True;
-    bDelayHighlight = sal_True;
+    bDoSyntaxHighlight = true;
+    bDelayHighlight = true;
     pModulWindow = 0;
     pEditView = 0;
     pEditEngine = 0;
-    bHighlightning = sal_False;
+    bHighlightning = false;
     pProgress = 0;
     nCurTextWidth = 0;
     SetBackground(
@@ -403,9 +403,9 @@ void EditorWindow::Command( const CommandEvent& rCEvt )
     }
 }
 
-sal_Bool EditorWindow::ImpCanModify()
+bool EditorWindow::ImpCanModify()
 {
-    sal_Bool bCanModify = sal_True;
+    bool bCanModify = true;
     if ( StarBASIC::IsRunning() )
     {
         // If in Trace-mode, abort the trace or refuse input
@@ -416,7 +416,7 @@ sal_Bool EditorWindow::ImpCanModify()
             BasicIDE::StopBasic();
         }
         else
-            bCanModify = sal_False;
+            bCanModify = false;
     }
     return bCanModify;
 }
@@ -449,12 +449,12 @@ void EditorWindow::KeyInput( const KeyEvent& rKEvt )
                 TextSelection aSel( pEditView->GetSelection() );
                 if ( aSel.GetStart().GetPara() != aSel.GetEnd().GetPara() )
                 {
-                    bDelayHighlight = sal_False;
+                    bDelayHighlight = false;
                     if ( !rKEvt.GetKeyCode().IsShift() )
                         pEditView->IndentBlock();
                     else
                         pEditView->UnindentBlock();
-                    bDelayHighlight = sal_True;
+                    bDelayHighlight = true;
                     bDone = sal_True;
                 }
             }
@@ -500,11 +500,11 @@ void EditorWindow::LoseFocus()
     Window::LoseFocus();
 }
 
-sal_Bool EditorWindow::SetSourceInBasic( sal_Bool bQuiet )
+bool EditorWindow::SetSourceInBasic( bool bQuiet )
 {
     (void)bQuiet;
 
-    sal_Bool bChanged = sal_False;
+    bool bChanged = false;
     if ( pEditEngine && pEditEngine->IsModified()
         && !GetEditView()->IsReadOnly() )   // Added for #i60626, otherwise
             // any read only bug in the text engine could lead to a crash later
@@ -530,7 +530,7 @@ sal_Bool EditorWindow::SetSourceInBasic( sal_Bool bQuiet )
 
             pEditEngine->SetModified( sal_False );
             BasicIDE::MarkDocumentModified( aDocument );
-            bChanged = sal_True;
+            bChanged = true;
         }
     }
     return bChanged;
@@ -574,8 +574,8 @@ void EditorWindow::CreateEditEngine()
 
     aHighlighter.initialize( HIGHLIGHT_BASIC );
 
-    sal_Bool bWasDoSyntaxHighlight = bDoSyntaxHighlight;
-    bDoSyntaxHighlight = sal_False; // too slow for large texts...
+    bool bWasDoSyntaxHighlight = bDoSyntaxHighlight;
+    bDoSyntaxHighlight = false; // too slow for large texts...
     ::rtl::OUString aOUSource( pModulWindow->GetModule() );
     sal_Int32 nLines = 0;
     sal_Int32 nIndex = -1;
@@ -720,12 +720,12 @@ void EditorWindow::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
         }
         else if( rTextHint.GetId() == TEXT_HINT_PARAINSERTED )
         {
-            ParagraphInsertedDeleted( rTextHint.GetValue(), sal_True );
+            ParagraphInsertedDeleted( rTextHint.GetValue(), true );
             DoDelayedSyntaxHighlight( rTextHint.GetValue() );
         }
         else if( rTextHint.GetId() == TEXT_HINT_PARAREMOVED )
         {
-            ParagraphInsertedDeleted( rTextHint.GetValue(), sal_False );
+            ParagraphInsertedDeleted( rTextHint.GetValue(), false );
         }
         else if( rTextHint.GetId() == TEXT_HINT_PARACONTENTCHANGED )
         {
@@ -868,7 +868,7 @@ IMPL_LINK_NOARG(EditorWindow, SyntaxTimerHdl)
     sal_Bool bWasModified = pEditEngine->IsModified();
     // pEditEngine->SetUpdateMode( sal_False );
 
-    bHighlightning = sal_True;
+    bHighlightning = true;
     for ( SyntaxLineSet::const_iterator it = aSyntaxLineTable.begin();
           it != aSyntaxLineTable.end(); ++it )
     {
@@ -883,12 +883,12 @@ IMPL_LINK_NOARG(EditorWindow, SyntaxTimerHdl)
     pEditEngine->SetModified( bWasModified );
 
     aSyntaxLineTable.clear();
-    bHighlightning = sal_False;
+    bHighlightning = false;
 
     return 0;
 }
 
-void EditorWindow::ParagraphInsertedDeleted( sal_uLong nPara, sal_Bool bInserted )
+void EditorWindow::ParagraphInsertedDeleted( sal_uLong nPara, bool bInserted )
 {
     if ( pProgress )
         pProgress->StepProgress();
@@ -996,7 +996,7 @@ void BreakPointWindow::Paint( const Rectangle& )
         size_t nY = nLine*nLineHeight - nCurYOffset;
         DrawImage( Point( 0, nY ) + aBmpOff, pBrk->bEnabled ? aBrk1 : aBrk0 );
     }
-    ShowMarker( sal_True );
+    ShowMarker( true );
 }
 
 
@@ -1009,18 +1009,18 @@ void BreakPointWindow::DoScroll( long nHorzScroll, long nVertScroll )
 
 
 
-void BreakPointWindow::SetMarkerPos( sal_uInt16 nLine, sal_Bool bError )
+void BreakPointWindow::SetMarkerPos( sal_uInt16 nLine, bool bError )
 {
     if ( SyncYOffset() )
         Update();
 
-    ShowMarker( sal_False );
+    ShowMarker( false );
     nMarkerPos = nLine;
     bErrorMarker = bError;
-    ShowMarker( sal_True );
+    ShowMarker( true );
 }
 
-void BreakPointWindow::ShowMarker( sal_Bool bShow )
+void BreakPointWindow::ShowMarker( bool bShow )
 {
     if ( nMarkerPos == MARKER_NOMARKER )
         return;
@@ -1128,7 +1128,7 @@ void BreakPointWindow::Command( const CommandEvent& rCEvt )
     }
 }
 
-sal_Bool BreakPointWindow::SyncYOffset()
+bool BreakPointWindow::SyncYOffset()
 {
     TextView* pView = pModulWindow->GetEditView();
     if ( pView )
@@ -1138,10 +1138,10 @@ sal_Bool BreakPointWindow::SyncYOffset()
         {
             nCurYOffset = nViewYOffset;
             Invalidate();
-            return sal_True;
+            return true;
         }
     }
-    return sal_False;
+    return false;
 }
 
 // virtual
@@ -1399,7 +1399,7 @@ void WatchWindow::AddWatch( const String& rVName )
     aRemoveWatchButton.Enable();
 }
 
-sal_Bool WatchWindow::RemoveSelectedWatch()
+bool WatchWindow::RemoveSelectedWatch()
 {
     SvLBoxEntry* pEntry = aTreeListBox.GetCurEntry();
     if ( pEntry )
@@ -1412,10 +1412,10 @@ sal_Bool WatchWindow::RemoveSelectedWatch()
             aXEdit.SetText( String() );
         if ( !aTreeListBox.GetEntryCount() )
             aRemoveWatchButton.Disable();
-        return sal_True;
+        return true;
     }
     else
-        return sal_False;
+        return false;
 }
 
 

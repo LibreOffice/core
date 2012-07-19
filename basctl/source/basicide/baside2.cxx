@@ -268,7 +268,7 @@ void ModulWindow::CheckCompileBasic()
             if( bModified )
             {
                 AssertValidEditEngine();
-                GetEditorWindow().SetSourceInBasic( sal_False );
+                GetEditorWindow().SetSourceInBasic( false );
             }
 
             sal_Bool bWasModified = GetBasic()->IsModified();
@@ -285,12 +285,12 @@ void ModulWindow::CheckCompileBasic()
             pIDEShell->GetViewFrame()->GetWindow().LeaveWait();
 
             aStatus.bError = !bDone;
-            aStatus.bIsRunning = sal_False;
+            aStatus.bIsRunning = false;
         }
     }
 }
 
-sal_Bool ModulWindow::BasicExecute()
+bool ModulWindow::BasicExecute()
 {
     DBG_CHKTHIS( ModulWindow, 0 );
 
@@ -301,7 +301,7 @@ sal_Bool ModulWindow::BasicExecute()
         if ( !aDocument.allowMacros() )
         {
             WarningBox( this, WB_OK, IDE_RESSTR(RID_STR_CANNOTRUNMACRO)).Execute();
-            return sal_False;
+            return false;
         }
     }
 
@@ -351,10 +351,10 @@ sal_Bool ModulWindow::BasicExecute()
             ClearStatus( BASWIN_RUNNINGBASIC );
         }
         else
-            aStatus.bIsRunning = sal_False; // cancel of Reschedule()
+            aStatus.bIsRunning = false; // cancel of Reschedule()
     }
 
-    sal_Bool bDone = !aStatus.bError;
+    bool bDone = !aStatus.bError;
 
     return bDone;
 }
@@ -371,39 +371,39 @@ sal_Bool ModulWindow::CompileBasic()
     return bIsCompiled;
 }
 
-sal_Bool ModulWindow::BasicRun()
+bool ModulWindow::BasicRun()
 {
     DBG_CHKTHIS( ModulWindow, 0 );
 
     aStatus.nBasicFlags = 0;
-    sal_Bool bDone = BasicExecute();
+    bool bDone = BasicExecute();
     return bDone;
 }
 
-sal_Bool ModulWindow::BasicStepOver()
+bool ModulWindow::BasicStepOver()
 {
     DBG_CHKTHIS( ModulWindow, 0 );
     aStatus.nBasicFlags = SbDEBUG_STEPINTO | SbDEBUG_STEPOVER;
-    sal_Bool bDone = BasicExecute();
+    bool bDone = BasicExecute();
     return bDone;
 }
 
 
-sal_Bool ModulWindow::BasicStepInto()
+bool ModulWindow::BasicStepInto()
 {
     DBG_CHKTHIS( ModulWindow, 0 );
 
     aStatus.nBasicFlags = SbDEBUG_STEPINTO;
-    sal_Bool bDone = BasicExecute();
+    bool bDone = BasicExecute();
     return bDone;
 }
 
-sal_Bool ModulWindow::BasicStepOut()
+bool ModulWindow::BasicStepOut()
 {
     DBG_CHKTHIS( ModulWindow, 0 );
 
     aStatus.nBasicFlags = SbDEBUG_STEPOUT;
-    sal_Bool bDone = BasicExecute();
+    bool bDone = BasicExecute();
     return bDone;
 }
 
@@ -414,7 +414,7 @@ void ModulWindow::BasicStop()
     DBG_CHKTHIS( ModulWindow, 0 );
 
     GetBasic()->Stop();
-    aStatus.bIsRunning = sal_False;
+    aStatus.bIsRunning = false;
 }
 
 sal_Bool ModulWindow::LoadBasic()
@@ -731,8 +731,8 @@ long ModulWindow::BasicBreakHdl( StarBASIC* pBasic )
     pLayout->GetWatchWindow().UpdateWatches();
     pLayout->GetStackWindow().UpdateCalls();
 
-    aStatus.bIsInReschedule = sal_True;
-    aStatus.bIsRunning = sal_True;
+    aStatus.bIsInReschedule = true;
+    aStatus.bIsRunning = true;
 
     AddStatus( BASWIN_INRESCHEDULE );
 
@@ -741,7 +741,7 @@ long ModulWindow::BasicBreakHdl( StarBASIC* pBasic )
     while( aStatus.bIsRunning )
         Application::Yield();
 
-    aStatus.bIsInReschedule = sal_False;
+    aStatus.bIsInReschedule = false;
     aXEditorWindow.GetBrkWindow().SetMarkerPos( MARKER_NOMARKER );
 
     ClearStatus( BASWIN_INRESCHEDULE );
@@ -790,7 +790,7 @@ void ModulWindow::BasicAddWatch()
 void ModulWindow::BasicRemoveWatch()
 {
     DBG_CHKTHIS( ModulWindow, 0 );
-    sal_Bool bRemoved = pLayout->GetWatchWindow().RemoveSelectedWatch();
+    bool bRemoved = pLayout->GetWatchWindow().RemoveSelectedWatch();
 
     if ( !bRemoved )
         Sound::Beep();
@@ -848,17 +848,17 @@ void ModulWindow::StoreData()
     // StoreData is called when the BasicManager is destroyed or
     // this window is closed.
     // => interrupts undesired!
-    GetEditorWindow().SetSourceInBasic( sal_True );
+    GetEditorWindow().SetSourceInBasic( true );
 }
 
-sal_Bool ModulWindow::CanClose()
+bool ModulWindow::CanClose()
 {
     DBG_CHKTHIS( ModulWindow, 0 );
-    return sal_True;
+    return true;
 }
 
 
-sal_Bool ModulWindow::AllowUndo()
+bool ModulWindow::AllowUndo()
 {
     return GetEditorWindow().CanModify();
 }
@@ -1301,7 +1301,7 @@ void ModulWindow::BasicStarted()
 {
     if ( XModule().Is() )
     {
-        aStatus.bIsRunning = sal_True;
+        aStatus.bIsRunning = true;
         BreakPointList& rList = GetBreakPoints();
         if ( rList.size() )
         {
@@ -1319,7 +1319,7 @@ void ModulWindow::BasicStarted()
 
 void ModulWindow::BasicStopped()
 {
-    aStatus.bIsRunning = sal_False;
+    aStatus.bIsRunning = false;
     GetBreakPointWindow().SetMarkerPos( MARKER_NOMARKER );
 }
 

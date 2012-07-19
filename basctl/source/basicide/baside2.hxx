@@ -117,9 +117,9 @@ private:
     void            ImpDoHighlight( sal_uLong nLineOff );
     void            ImplSetFont();
 
-    sal_Bool            bHighlightning;
-    sal_Bool            bDoSyntaxHighlight;
-    sal_Bool            bDelayHighlight;
+    bool            bHighlightning;
+    bool            bDoSyntaxHighlight;
+    bool            bDelayHighlight;
 
     virtual
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >
@@ -138,7 +138,7 @@ protected:
 
     void            DoSyntaxHighlight( sal_uLong nPara );
     String          GetWordAtCursor();
-    sal_Bool            ImpCanModify();
+    bool            ImpCanModify();
 
 public:
                     EditorWindow( Window* pParent );
@@ -151,7 +151,7 @@ public:
     void            CreateProgress( const String& rText, sal_uLong nRange );
     void            DestroyProgress();
 
-    void            ParagraphInsertedDeleted( sal_uLong nNewPara, sal_Bool bInserted );
+    void            ParagraphInsertedDeleted( sal_uLong nNewPara, bool bInserted );
     void            DoDelayedSyntaxHighlight( sal_uLong nPara );
 
     void            CreateEditEngine();
@@ -161,9 +161,9 @@ public:
                         { pModulWindow = pWin; }
 
     void            ForceSyntaxTimeout();
-    sal_Bool            SetSourceInBasic( sal_Bool bQuiet = sal_True );
+    bool            SetSourceInBasic( bool bQuiet = true );
 
-    sal_Bool            CanModify() { return ImpCanModify(); }
+    bool            CanModify() { return ImpCanModify(); }
 };
 
 
@@ -174,7 +174,7 @@ private:
     sal_uInt16          nMarkerPos;
     BreakPointList  aBreakPointList;
     ModulWindow*    pModulWindow;
-    sal_Bool            bErrorMarker;
+    bool            bErrorMarker;
 
     virtual void DataChanged(DataChangedEvent const & rDCEvt);
 
@@ -184,11 +184,11 @@ protected:
     virtual void    Paint( const Rectangle& );
     virtual void    Resize();
     BreakPoint*     FindBreakPoint( const Point& rMousePos );
-    void            ShowMarker( sal_Bool bShow );
+    void            ShowMarker( bool bShow );
     virtual void    MouseButtonDown( const MouseEvent& rMEvt );
     virtual void    Command( const CommandEvent& rCEvt );
 
-    sal_Bool            SyncYOffset();
+    bool            SyncYOffset();
 
 public:
                     BreakPointWindow( Window* pParent );
@@ -197,7 +197,7 @@ public:
     void            SetModulWindow( ModulWindow* pWin )
                         { pModulWindow = pWin; }
 
-    void            SetMarkerPos( sal_uInt16 nLine, sal_Bool bErrorMarker = sal_False );
+    void            SetMarkerPos( sal_uInt16 nLine, bool bErrorMarker = false );
 
     void            DoScroll( long nHorzScroll, long nVertScroll );
     long&           GetCurYOffset()         { return nCurYOffset; }
@@ -253,7 +253,7 @@ public:
                     ~WatchWindow();
 
     void            AddWatch( const String& rVName );
-    sal_Bool            RemoveSelectedWatch();
+    bool            RemoveSelectedWatch();
     void            UpdateWatches( bool bBasicStopped = false );
 
     WatchTreeListBox&   GetWatchTreeListBox() { return aTreeListBox; }
@@ -325,7 +325,7 @@ private:
     long                BasicBreakHdl( StarBASIC* pBasic );
 
     void                CheckCompileBasic();
-    sal_Bool                BasicExecute();
+    bool                BasicExecute();
 
     void                GoOnTop();
     void                AssertValidEditEngine();
@@ -351,14 +351,14 @@ public:
     virtual void    GetState( SfxItemSet& );
     virtual void    StoreData();
     virtual void    UpdateData();
-    virtual sal_Bool    CanClose();
+    virtual bool    CanClose();
     // return number of pages to be printed
     virtual sal_Int32 countPages( Printer* pPrinter );
     // print page
     virtual void printPage( sal_Int32 nPage, Printer* pPrinter );
     virtual ::rtl::OUString  GetTitle();
     virtual BasicEntryDescriptor CreateEntryDescriptor();
-    virtual sal_Bool    AllowUndo();
+    virtual bool    AllowUndo();
     virtual void    SetReadOnly( sal_Bool bReadOnly );
     virtual sal_Bool    IsReadOnly();
 
@@ -372,10 +372,10 @@ public:
     ::rtl::OUString GetSbModuleName();
 
     sal_Bool            CompileBasic();
-    sal_Bool            BasicRun();
-    sal_Bool            BasicStepOver();
-    sal_Bool            BasicStepInto();
-    sal_Bool            BasicStepOut();
+    bool            BasicRun();
+    bool            BasicStepOver();
+    bool            BasicStepInto();
+    bool            BasicStepOut();
     void            BasicStop();
     sal_Bool            BasicToggleBreakPoint();
     void            BasicToggleBreakPointEnabled();
