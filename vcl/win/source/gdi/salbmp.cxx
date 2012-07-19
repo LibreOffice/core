@@ -335,7 +335,7 @@ HGLOBAL WinSalBitmap::ImplCreateDIB( const Size& rSize, sal_uInt16 nBits, const 
         return hDIB;
 
     PBITMAPINFO pBI = static_cast<PBITMAPINFO>( GlobalLock( hDIB ) );
-    PBITMAPINFOHEADER pBIH = static_cast<PBITMAPINFOHEADER>( pBI );
+    PBITMAPINFOHEADER pBIH = reinterpret_cast<PBITMAPINFOHEADER>( pBI );
 
     pBIH->biSize = sizeof( BITMAPINFOHEADER );
     pBIH->biWidth = rSize.Width();
