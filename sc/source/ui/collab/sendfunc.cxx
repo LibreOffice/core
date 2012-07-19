@@ -39,6 +39,7 @@
 #include <tubes/manager.hxx>
 #include <tubes/conference.hxx>
 #include <tubes/contact-list.hxx>
+#include <tubes/constants.h>
 
 // new file send/recv fun ...
 #include <com/sun/star/uno/Sequence.hxx>
@@ -232,12 +233,13 @@ void ScDocFuncSend::SendMessage( ScChangeOpWriter &rOp )
         mpDirect->RecvMessage( rOp.toString() );
 }
 
-void ScDocFuncSend::SendFile( const rtl::OUString &rURL )
+void ScDocFuncSend::SendFile( const rtl::OUString &sUuid )
 {
-    (void)rURL;
-
     String aTmpPath = utl::TempFile::CreateTempName();
-    aTmpPath.Append( rtl::OUString( ".ods" ) );
+    aTmpPath.Append( OUString("_") );
+    aTmpPath.Append( sUuid );
+    aTmpPath.Append( OUString("_") );
+    aTmpPath.Append( OUString(".ods") );
 
     rtl::OUString aFileURL;
     ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aTmpPath, aFileURL );
@@ -416,22 +418,30 @@ sal_Bool ScDocFuncSend::MergeCells( const ScCellMergeOption& rOption, sal_Bool b
     return ScDocFunc::MergeCells( rOption, bContents, bRecord, bApi );
 }
 
-#ifdef INTERCEPT
-SC_DLLPRIVATE ScDocFunc *ScDocShell::CreateDocFunc()
+ScDocFunc *ScDocShell::CreateDocFunc()
 {
     if (getenv ("INTERCEPT"))
     {
-        boost::shared_ptr<ScDocFuncDirect> pDirect( new ScDocFuncDirect( *this ) );
+        ScDocFuncDirect* pDirect = new ScDocFuncDirect( *this );
         boost::shared_ptr<ScDocFuncRecv> pReceiver( new ScDocFuncRecv( pDirect ) );
 
         static boost::shared_ptr<ScDocFuncDemo> aDemoBus( new ScDocFuncDemo() );
         aDemoBus->add_client( pReceiver ); // a lifecycle horror no doubt.
 
-        return new ScDocFuncSend( *this, boost::shared_ptr<ScDocFuncRecv>( aDemoBus.get() ) );
+        return new ScDocFuncSend( *this, aDemoBus.get() );
+    }
+    else if (TeleManager::hasWaitingConference())
+    {
+        ScDocFuncDirect *pDirect = new ScDocFuncDirect( *this );
+        ScDocFuncRecv *pReceiver = new ScDocFuncRecv( pDirect );
+        ScDocFuncSend *pSender = new ScDocFuncSend( *this, pReceiver );
+        TeleManager *pManager = TeleManager::get();
+        pSender->SetCollaboration( pManager->getConference() );
+        pManager->unref();
+        return pSender;
     }
     else
         return new ScDocFuncDirect( *this );
 }
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

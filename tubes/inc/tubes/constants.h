@@ -45,6 +45,10 @@
  * tp_simple_handler_new_with_am(). */
 #define LIBO_CLIENT_SUFFIX "LibreOffice"
 
+/* Key value storing UUID for TeleConference
+ */
+#define LIBO_TUBES_UUID "LIBO_TUBES_UUID"
+
 #endif // INCLUDED_TUBES_CONSTANTS_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -229,7 +229,6 @@ class ScDocFuncSend : public ScDocFunc
     TeleConference      *mpConference;
 
     void SendMessage( ScChangeOpWriter &rOp );
-    void SendFile( const rtl::OUString &rURL );
 
 public:
     // FIXME: really ScDocFunc should be an abstract base, so
@@ -240,6 +239,8 @@ public:
     void                SetCollaboration( TeleConference* pConference );
     TeleConference*     GetConference();
     ScDocFuncRecv*      GetReceiver();
+    // TODO: I think this could be moved to TeleManager later.
+    void                SendFile( const rtl::OUString &rURL );
 
     virtual void        EnterListAction( sal_uInt16 nNameResId );
     virtual void        EndListAction();

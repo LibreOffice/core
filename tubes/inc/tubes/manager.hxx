@@ -40,6 +40,7 @@
 #include <tools/link.hxx>
 #include <telepathy-glib/telepathy-glib.h>
 #include <tubes/warnings_guard_boost_signals2.hpp>
+#include <map>
 
 // For testing purposes, we might need more in future.
 #define LIBO_TUBES_DBUS_INTERFACE "org.libreoffice.calc"
@@ -131,11 +132,15 @@ public:
      */
     TUBES_DLLPUBLIC TeleConference*         startBuddySession( TpAccount *pAccount, TpContact *pBuddy );
 
+    /** Get a conference with current UUID to set a session. */
+    TUBES_DLLPUBLIC TeleConference*         getConference();
+
+    /** True if there has been tube channel received and is still not used. */
+    TUBES_DLLPUBLIC static bool             hasWaitingConference();
+
     void                    disconnect();
 
     boost::signals2::signal<void ( const rtl::OUString &localUri )> sigFileReceived;
-
-    boost::signals2::signal<void (TeleConference*)> sigConferenceCreated;
 
     /// Only for use with MainLoopFlusher
     GMainLoop*              getMainLoop() const;
@@ -184,7 +189,7 @@ public:
         is something like org.libreoffice.calc, this modifies the names to
         "LibreOffice"+pName and "org.libreoffice.calc"+pName to make tests not
         interfere with the real world. This is not to be used otherwise. If
-        used it must be called before the first TeleManager is instanciated and 
+        used it must be called before the first TeleManager is instanciated and
         connects.
      */
     static void             addSuffixToNames( const char* pName );
@@ -205,6 +210,7 @@ public:
         gpointer                    pUserData);
 
 private:
+    void                    addConference( TeleConference* );
     void                    ensureLegacyChannel( TpAccount* pAccount, TpContact* pBuddy );
 
     bool                    mbChannelReadyHandlerInvoked : 1;

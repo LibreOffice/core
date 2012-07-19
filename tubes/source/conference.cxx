@@ -28,6 +28,7 @@
 
 #include <tubes/conference.hxx>
 #include <tubes/manager.hxx>
+#include <tubes/constants.h>
 
 
 #if defined SAL_LOG_INFO
@@ -196,16 +197,20 @@ void TeleConference::TubeAcceptedHandler(
         g_error_free( pError);
         return;
     }
+    GHashTable* pParameters = tp_dbus_tube_channel_get_parameters( pChannel);
+    const char* sUuid = tp_asv_get_string( pParameters, LIBO_TUBES_UUID);
+    pConference->msUuid = OString( sUuid);
 
     pConference->setTube( pTube);
 }
 
 
-TeleConference::TeleConference( TeleManager* pManager, TpAccount* pAccount, TpDBusTubeChannel* pChannel )
+TeleConference::TeleConference( TeleManager* pManager, TpAccount* pAccount, TpDBusTubeChannel* pChannel, const OString sUuid )
     :
         mpManager( pManager),
         mpAccount( NULL),
         mpChannel( NULL),
+        msUuid( sUuid),
         mpAddress( NULL),
         mpTube( NULL),
         mbTubeOfferedHandlerInvoked( false)
@@ -272,9 +277,13 @@ bool TeleConference::offerTube()
     if (!mpChannel)
         return false;
 
+    GHashTable* pParameters = tp_asv_new (
+            LIBO_TUBES_UUID, G_TYPE_STRING, msUuid.getStr(),
+            NULL);
+
     tp_dbus_tube_channel_offer_async(
             mpChannel,
-            NULL, // no parameters for now
+            pParameters,
             &TeleConference::TubeOfferedHandler,
             this);
 

@@ -86,6 +86,9 @@ public:
     TeleManager::AccountManagerStatus   meAccountManagerStatus;
     bool                                mbAccountManagerReadyHandlerInvoked;
     ContactList*                        mpContactList;
+    OString                             msCurrentUUID;
+    typedef std::map< OString, TeleConference* > MapStringConference;
+    MapStringConference                 maAcceptedConferences;
 
                             TeleManagerImpl();
                             ~TeleManagerImpl();
@@ -124,9 +127,9 @@ void TeleManager::DBusChannelHandler(
             SAL_INFO( "tubes", "accepting");
             aAccepted = true;
 
-            TeleConference* pConference = new TeleConference( pManager, pAccount, TP_DBUS_TUBE_CHANNEL( pChannel ) );
+            TeleConference* pConference = new TeleConference( pManager, pAccount, TP_DBUS_TUBE_CHANNEL( pChannel ), createUuid() );
             pConference->acceptTube();
-            pManager->sigConferenceCreated( pConference );
+            pManager->addConference( pConference );
         }
         else
         {
@@ -146,6 +149,29 @@ void TeleManager::DBusChannelHandler(
     }
 }
 
+void TeleManager::addConference( TeleConference* pConference )
+{
+    pImpl->maAcceptedConferences[ pConference->getUuid() ] = pConference;
+}
+
+TeleConference* TeleManager::getConference()
+{
+    TeleManagerImpl::MapStringConference::iterator it =
+            pImpl->maAcceptedConferences.find( pImpl->msCurrentUUID );
+    TeleConference* pConference = NULL;
+    if (it != pImpl->maAcceptedConferences.end())
+        pConference = it->second;
+    SAL_WARN_IF( !pConference, "tubes", "TeleManager::getConference: "
+            << pImpl->msCurrentUUID.getStr() << " not found!" );
+    pImpl->msCurrentUUID = OString();
+    return pConference;
+}
+
+bool TeleManager::hasWaitingConference()
+{
+    return !pImpl->msCurrentUUID.isEmpty();
+}
+
 void TeleManager::TransferDone( EmpathyFTHandler *handler, TpFileTransferChannel *, gpointer pUserData)
 {
     TeleManager* pManager = reinterpret_cast<TeleManager*>(pUserData);
@@ -156,6 +182,11 @@ void TeleManager::TransferDone( EmpathyFTHandler *handler, TpFileTransferChannel
     rtl::OUString aUri( uri, strlen( uri), RTL_TEXTENCODING_UTF8);
     g_free( uri);
 
+    sal_Int32 first = aUri.indexOf('_');
+    sal_Int32 last = aUri.lastIndexOf('_');
+    OString sUuid( OUStringToOString( aUri.copy( first + 1, last - first - 1),
+                RTL_TEXTENCODING_UTF8));
+    pImpl->msCurrentUUID = sUuid;
     pManager->sigFileReceived( aUri );
 
     g_object_unref( handler);
@@ -616,7 +647,7 @@ TeleConference* TeleManager::startBuddySession( TpAccount *pAccount, TpContact *
 
     setChannelReadyHandlerInvoked( false);
 
-    TeleConference* pConference = new TeleConference( this, NULL, NULL );
+    TeleConference* pConference = new TeleConference( this, NULL, NULL, createUuid() );
 
     tp_account_channel_request_create_and_handle_channel_async(
             pChannelRequest, NULL, TeleManager_ChannelReadyHandler, pConference );
@@ -881,6 +912,11 @@ TeleManagerImpl::TeleManagerImpl()
 
 TeleManagerImpl::~TeleManagerImpl()
 {
+    // There may be unused conferences left opened, so close them.
+    // It should not make a problem to close already closed conference.
+    for (MapStringConference::iterator it = maAcceptedConferences.begin();
+            it != maAcceptedConferences.end(); ++it)
+        it->second->close();
     if (mpFactory)
         g_object_unref( mpFactory);
     if (mpClient)

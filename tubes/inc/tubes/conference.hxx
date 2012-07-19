@@ -47,7 +47,7 @@ class TeleConference
 {
 public:
 
-    TeleConference( TeleManager* pManager, TpAccount *pAccount, TpDBusTubeChannel* pChannel );
+    TeleConference( TeleManager* pManager, TpAccount *pAccount, TpDBusTubeChannel* pChannel, const OString sUuid = OString() );
     ~TeleConference();
 
     /// Close channel and call finalize()
@@ -77,6 +77,7 @@ public:
 
     typedef void          (*FileSentCallback)( bool aSuccess, void* pUserData);
     TUBES_DLLPUBLIC void    sendFile( rtl::OUString &localUri, FileSentCallback pCallback, void* pUserData);
+    TUBES_DLLPUBLIC const OString& getUuid() const { return msUuid; }
 
     // --- following only to be called only by manager's callbacks ---
     // TODO: make friends instead
@@ -112,6 +113,7 @@ private:
     TeleManager*            mpManager;
     TpAccount*              mpAccount;
     TpDBusTubeChannel*      mpChannel;
+    OString                 msUuid;
     gchar*                  mpAddress;
     GDBusConnection*        mpTube;
     guint                   maObjectRegistrationId;

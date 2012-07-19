@@ -98,11 +98,6 @@ class TubeContacts : public ModelessDialog
             // Receiving file is not related to any document.
             mpManager->sigFileReceived.connect( boost::bind(
                         &ScDocFuncRecv::fileReceived, mpSender->GetReceiver(), _1 ) );
-
-            // TODO: It's still not clear to me who should take care of this signal
-            // and what exactly it is supposed to happen.
-            mpManager->sigConferenceCreated.connect( boost::bind(
-                        &ScDocFuncSend::SetCollaboration, mpSender, _1 ) );
         }
     }
 
@@ -124,7 +119,11 @@ class TubeContacts : public ModelessDialog
                 fprintf( stderr, "could not start session with %s\n",
                         tp_contact_get_identifier( pContact ) );
             else
+            {
                 mpSender->SetCollaboration( pConference );
+                mpSender->SendFile( OStringToOUString(
+                            pConference->getUuid(), RTL_TEXTENCODING_UTF8 ) );
+            }
         }
     }
 
