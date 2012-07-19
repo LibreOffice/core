@@ -33,6 +33,7 @@ import java.io.StringReader;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.StringTokenizer;
 import java.util.logging.Logger;
@@ -49,7 +50,7 @@ public class SystemUtil {
 
     private static final String OSNAME = System.getProperty("os.name");
 
-    public static final File SCRIPT_TEMP_DIR = new File(System.getProperty("user.home"), ".ootest");
+    public static final File SCRIPT_TEMP_DIR = Testspace.getFile("bin");
 
     /**
      * Play beep sound! The method doesn't work, if the code is executed on
@@ -239,40 +240,55 @@ public class SystemUtil {
     }
 
     /**
-     * Get the commands of all running processes
+     * Get Information of running processes
      *
-     * @return List of <PID COMMAND>
      */
-    public static List<String[]> getProcesses() {
-        List<String[]> ret = new ArrayList<String[]>();
+    public static List<HashMap<String, Object>> getProcesses() {
+        List<HashMap<String, Object>> ret = new ArrayList<HashMap<String, Object>>();
         try {
             StringBuffer output = new StringBuffer();
             if (isWindows()) {
-                File file = FileUtil.getUniqueFile(SCRIPT_TEMP_DIR, "listp", ".js");
-                String contents = "var e=new Enumerator(GetObject(\"winmgmts:\").InstancesOf(\"Win32_process\"));\n\r"
-                        + "WScript.Echo(\"PID\" + \" \"  + \"COMMAND\");\n\r"
-                        + "for (;!e.atEnd();e.moveNext()) {\n\r"
-                        + "WScript.Echo(e.item().ProcessId + \" \"  + e.item().CommandLine);}";
-                FileUtil.writeStringToFile(file.getAbsolutePath(), contents);
+                File file = new File(SCRIPT_TEMP_DIR, "ps.vbs");
+//              if (!file.exists()) {
+                    String contents = "Set wmi=GetObject(\"Winmgmts:\")\n\r"
+                            + "Set ps = wmi.ExecQuery(\"Select * from Win32_Process\")\n\r"
+                            + "WScript.Echo \"PID COMMAND\" \n\r"
+                            + "For Each p in ps\n\r"
+                            + "WScript.Echo p.ProcessId & \" \" & p.CommandLine\n\r"
+                            + "Next";
+                    FileUtil.writeStringToFile(file.getAbsolutePath(), contents);
+//              }
                 exec(new String[] { "cscript", "//Nologo", file.getAbsolutePath()}, null, null, output, output);
             } else {
                 exec(new String[] {"ps", "-eo", "pid,command"}, null, null, output, output);
             }
+
             BufferedReader reader = new BufferedReader(new StringReader(output.toString()));
             String line = null;
             reader.readLine();
             while ((line = reader.readLine()) != null) {
-                line = line.trim();
-                String[] row = new String[2];
-                int i = line.indexOf(" ");
-                if (i > 0) {
-                    row[0] = line.substring(0, i);
-                    row[1] = line.substring(++i);
-                } else {
-                    row[0] = line;
-                    row[1] = null;
+                HashMap<String, Object> p = new HashMap<String, Object>();
+                StringTokenizer tokenizer = new StringTokenizer(line, " ", true);
+                StringBuffer last = new StringBuffer();
+                int col = 0;
+                while (tokenizer.hasMoreTokens()) {
+                    String token = tokenizer.nextToken();
+                    switch (col) {
+                    case 0:
+                        if (!" ".equals(token)) {
+                            //
+                            p.put("pid", token);
+                            col++;
+                        }
+                        break;
+                    default:
+                        last.append(token);
+                        break;
+                    }
                 }
-                ret.add(row);
+
+                p.put("command", last.toString().trim());
+                ret.add(p);
             }
         } catch (IOException e) {
 
@@ -282,27 +298,96 @@ public class SystemUtil {
     }
 
     public static void killProcess(String pattern) {
-        List<String[]> processes = SystemUtil.getProcesses();
-        for (String[] p : processes) {
-            if (p[1] != null && p[1].matches(pattern)) {
+        List<HashMap<String, Object>> processes = SystemUtil.getProcesses();
+        for (HashMap<String, Object> p : processes) {
+            String command = (String) p.get("command");
+            String pid = (String) p.get("pid");
+            if (command != null && command.matches(pattern)) {
                 if (isWindows()) {
-                    exec(new String[] { "taskkill", "/F", "/PID", p[0] }, null, null, null, null);
+                    exec(new String[] { "taskkill", "/F", "/PID", pid }, null, null, null, null);
                 } else {
-                    exec(new String[] { "kill", "-9", p[0] }, null, null, null, null);
+                    exec(new String[] { "kill", "-9", pid }, null, null, null, null);
                 }
             }
         }
     }
 
     public static boolean hasProcess(String pattern) {
-        List<String[]> processes = SystemUtil.getProcesses();
-        for (String[] p : processes) {
-            if (p[1] != null && p[1].matches(pattern)) {
-                return true;
+        return findProcess(pattern) != null;
+    }
+
+    public static HashMap<String, Object> findProcess(String pattern) {
+        List<HashMap<String, Object>> processes = SystemUtil.getProcesses();
+        for (HashMap<String, Object> p : processes) {
+            String command = (String) p.get("command");
+            if (command != null && command.matches(pattern)) {
+                return p;
             }
         }
 
-        return false;
+        return null;
+    }
+
+    /**
+     * Get Information of running processes
+     *
+     */
+    public static HashMap<String, Object> getProcessPerfData(String processId) {
+        try {
+            StringBuffer output = new StringBuffer();
+            if (isWindows()) {
+                File file = new File(SCRIPT_TEMP_DIR, "pps.vbs");
+                String contents = "Set wmi=GetObject(\"Winmgmts:\")\n\r"
+                        + "Set pps = wmi.ExecQuery(\"Select * from Win32_PerfFormattedData_PerfProc_Process Where IDProcess='" + processId+"'\")\n\r"
+                        + "WScript.Echo \"pcpu rss\" \n\r"
+                        + "For Each pp in pps \n\r"
+                        + "WScript.Echo pp.PercentProcessorTime & \" \" & Round(pp.WorkingSet/1024) \n\r"
+                        + "Next";
+//              String contents = "var wmi = GetObject(\"Winmgmts:\");\n"
+//                      + "var pps = new Enumerator(wmi.ExecQuery(\"Select * from Win32_PerfFormattedData_PerfProc_Process Where IDProcess='" + processId+"'\"));\n"
+//                      + "WScript.Echo(\"pcpu rss\");\n"
+//                      + "for ( ; !pps.atEnd(); pps.moveNext()) {\n"
+//                      + "var pp = pps.item();\n"
+//                      + "WScript.Echo(pp.PercentProcessorTime + \" \" + (pp.WorkingSet/1024));\n"
+//                      + "}";
+                FileUtil.writeStringToFile(file.getAbsolutePath(), contents);
+                exec(new String[] { "cscript", "//Nologo", file.getAbsolutePath()}, null, null, output, output);
+            } else {
+                exec(new String[] {"ps", "-p", processId ,"-o", "pcpu,rss"}, null, null, output, output);
+            }
+            BufferedReader reader = new BufferedReader(new StringReader(output.toString()));
+            String line = null;
+            reader.readLine();
+            if ((line = reader.readLine()) != null) {
+                HashMap<String, Object> p = new HashMap<String, Object>();
+                StringTokenizer tokenizer = new StringTokenizer(line, " ", true);
+                int col = 0;
+                while (tokenizer.hasMoreTokens()) {
+                    String token = tokenizer.nextToken();
+                    switch (col) {
+                    case 0:
+                        if (!" ".equals(token)) {
+                            //
+                            p.put("pcpu", Double.parseDouble(token));
+                            col++;
+                        }
+                        break;
+                    case 1:
+                        if (!" ".equals(token)) {
+                            //
+                            p.put("rss", Long.parseLong(token));
+                            col++;
+                        }
+                        break;
+                    }
+                }
+                return p;
+            }
+        } catch (IOException e) {
+
+        }
+
+        return null;
     }
 
     /**
