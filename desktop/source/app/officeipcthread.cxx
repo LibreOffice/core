@@ -496,16 +496,29 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
     do
     {
         OSecurity &rSecurity = Security::get();
-        // Try to create pipe
-        if ( pThread->maPipe.create( pThread->maPipeIdent.getStr(), OPipe::TOption_Create, rSecurity ))
+        // #119950# Try to connect pipe first. If connected, means another instance already launched.
+        if( pThread->maPipe.create( pThread->maPipeIdent.getStr(), OPipe::TOption_Open, rSecurity ))
+        {
+            // #119950# Test if launched in a new terminal session for same user. On Windows platform, normally a user is resticted
+            // to have only one terminal session. But if mutiple terminal session for one user is allowed, crash will happen if launched
+            // OpenOffice from more than one terminal session. So need to detect and prevent this happen.
+
+            // Will try to create a same name pipe. If creation is successfully, means current instance is launched in a new session.
+            vos::OPipe  maSessionPipe;
+            if ( maSessionPipe.create( pThread->maPipeIdent.getStr(), OPipe::TOption_Create, rSecurity )) {
+                // Can create a pipe with same name. This can only happen in multiple terminal session environment on Windows platform.
+                // Will display a warning dialog and exit.
+                return IPC_STATUS_MULTI_TS_ERROR;
+            } else {
+                // Pipe connected to first office
+                nPipeMode = PIPEMODE_CONNECTED;
+            }
+
+        }
+        else if ( pThread->maPipe.create( pThread->maPipeIdent.getStr(), OPipe::TOption_Create, rSecurity )) // Connection not successfull, now we try to create
         {
             // Pipe created
             nPipeMode = PIPEMODE_CREATED;
-        }
-        else if( pThread->maPipe.create( pThread->maPipeIdent.getStr(), OPipe::TOption_Open, rSecurity )) // Creation not successfull, now we try to connect
-        {
-            // Pipe connected to first office
-            nPipeMode = PIPEMODE_CONNECTED;
         }
         else
         {

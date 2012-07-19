@@ -107,7 +107,8 @@ class OfficeIPCThread : public vos::OThread
     {
         IPC_STATUS_OK,
         IPC_STATUS_2ND_OFFICE,
-        IPC_STATUS_BOOTSTRAP_ERROR
+        IPC_STATUS_BOOTSTRAP_ERROR,
+        IPC_STATUS_MULTI_TS_ERROR
     };
 
     virtual ~OfficeIPCThread();

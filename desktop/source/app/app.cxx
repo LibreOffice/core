@@ -243,6 +243,8 @@ static sal_Bool _bCrashReporterEnabled = sal_True;
 static const ::rtl::OUString CFG_PACKAGE_COMMON_HELP   ( RTL_CONSTASCII_USTRINGPARAM( "org.openoffice.Office.Common/Help"));
 
 static ::rtl::OUString getBrandSharePreregBundledPathURL();
+// #i119950# Add a option that not to display the "Fatal Error" on dialog title
+void FatalError(const ::rtl::OUString& sMessage, const sal_Bool isDisplayErrorString = sal_True);
 // ----------------------------------------------------------------------------
 
 ResMgr* Desktop::GetDesktopResManager()
@@ -354,7 +356,7 @@ OUString MakeStartupConfigAccessErrorMessage( OUString const & aInternalErrMsg )
 //
 // Thats why we have to use a special native message box here which does not use yield :-)
 //=============================================================================
-void FatalError(const ::rtl::OUString& sMessage)
+void FatalError(const ::rtl::OUString& sMessage, const sal_Bool isDisplayErrorString)
 {
     ::rtl::OUString sProductKey = ::utl::Bootstrap::getProductKey();
     if ( ! sProductKey.getLength())
@@ -369,8 +371,9 @@ void FatalError(const ::rtl::OUString& sMessage)
 
     ::rtl::OUStringBuffer sTitle (128);
     sTitle.append      (sProductKey     );
-    sTitle.appendAscii (" - Fatal Error");
-
+    if (isDisplayErrorString) {
+        sTitle.appendAscii (" - Fatal Error");
+    }
     Application::ShowNativeErrorBox (sTitle.makeStringAndClear (), sMessage);
     _exit(ExitHelper::E_FATAL_ERROR);
 }
@@ -995,6 +998,11 @@ void Desktop::Init()
         if ( aStatus == OfficeIPCThread::IPC_STATUS_BOOTSTRAP_ERROR )
         {
             SetBootstrapError( BE_PATHINFO_MISSING );
+
+        }
+        else if ( aStatus == OfficeIPCThread::IPC_STATUS_MULTI_TS_ERROR )
+        {
+            SetBootstrapError( BE_MUTLISESSION_NOT_SUPPROTED );
         }
         else if ( aStatus == OfficeIPCThread::IPC_STATUS_2ND_OFFICE )
         {
@@ -1241,7 +1249,13 @@ void Desktop::HandleBootstrapPathErrors( ::utl::Bootstrap::Status aBootstrapStat
 
 void Desktop::HandleBootstrapErrors( BootstrapError aBootstrapError )
 {
-    if ( aBootstrapError == BE_PATHINFO_MISSING )
+    if ( aBootstrapError == BE_MUTLISESSION_NOT_SUPPROTED ) {
+        OUString        aMessage;
+        aMessage = GetMsgString( STR_BOOTSTRAP_ERR_MULTISESSION,
+                        OUString( RTL_CONSTASCII_USTRINGPARAM( "You have another instance running in a different terminal session. Close that instance and then try again." )) );
+        FatalError(aMessage,sal_False);
+
+    } else if ( aBootstrapError == BE_PATHINFO_MISSING )
     {
         OUString                    aErrorMsg;
         OUString                    aBuffer;
