@@ -615,7 +615,7 @@ sal_Bool SwFEShell::Copy( SwFEShell* pDestShell, const Point& rSttPt,
                 bRet = pDestShell->GetDoc()->InsCopyOfTbl( *pDstPos, aBoxes,0,
                                         bIsMove && this == pDestShell &&
                                         aBoxes.Count() == pTblNd->GetTable().
-                                        GetTabSortBoxes().Count(),
+                                        GetTabSortBoxes().size(),
                                         this != pDestShell );
 
                 if( this != pDestShell )

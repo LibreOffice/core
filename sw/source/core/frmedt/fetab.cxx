@@ -1277,7 +1277,7 @@ sal_Bool SwFEShell::SetTableAutoFmt( const SwTableAutoFmt& rNew )
     else
     {
         const SwTableSortBoxes& rTBoxes = pTblNd->GetTable().GetTabSortBoxes();
-        for( sal_uInt16 n = 0; n < rTBoxes.Count(); ++n )
+        for( sal_uInt16 n = 0; n < rTBoxes.size(); ++n )
         {
             SwTableBox* pBox = rTBoxes[ n ];
             aBoxes.Insert( pBox );
@@ -1316,7 +1316,7 @@ sal_Bool SwFEShell::GetTableAutoFmt( SwTableAutoFmt& rGet )
     else
     {
         const SwTableSortBoxes& rTBoxes = pTblNd->GetTable().GetTabSortBoxes();
-        for( sal_uInt16 n = 0; n < rTBoxes.Count(); ++n )
+        for( sal_uInt16 n = 0; n < rTBoxes.size(); ++n )
         {
             SwTableBox* pBox = rTBoxes[ n ];
             aBoxes.Insert( pBox );

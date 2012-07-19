@@ -844,7 +844,7 @@ sal_Bool SwTable::InsTable( const SwTable& rCpyTbl, const SwSelBoxes& rSelBoxes,
 
     // Special case: If a Box is located in a Table, copy it to all selected
     // Boxes!
-    if( 1 != rCpyTbl.GetTabSortBoxes().Count() )
+    if( 1 != rCpyTbl.GetTabSortBoxes().size() )
     {
         SwTableLine* pSttLine = pSttBox->GetUpper();
         sal_uInt16 nSttLine = GetTabLines().C40_GETPOS( SwTableLine, pSttLine );
@@ -1008,7 +1008,7 @@ sal_Bool SwTable::InsTable( const SwTable& rCpyTbl, const SwSelBoxes& rSelBoxes,
     aFndBox.SetTableLines( *this );
     aFndBox.DelFrms( *this );
 
-    if( 1 == rCpyTbl.GetTabSortBoxes().Count() )
+    if( 1 == rCpyTbl.GetTabSortBoxes().size() )
     {
         SwTableBox *pTmpBx = rCpyTbl.GetTabSortBoxes()[0];
         for( sal_uInt16 n = 0; n < rSelBoxes.Count(); ++n )

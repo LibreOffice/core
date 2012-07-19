@@ -799,7 +799,7 @@ SwFlyFrmFmt* SwDoc::MakeFlyAndMove( const SwPaM& rPam, const SfxItemSet& rSet,
                 SwTable& rTbl = pTblNd->GetTable();
 
                 // Did we select the whole table?
-                if( pSelBoxes->Count() == rTbl.GetTabSortBoxes().Count() )
+                if( pSelBoxes->Count() == rTbl.GetTabSortBoxes().size() )
                 {
                     // move the whole table
                     SwNodeRange aRg( *pTblNd, 0, *pTblNd->EndOfSectionNode(), 1 );

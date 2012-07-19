@@ -415,7 +415,7 @@ SwUndoTblToTxt::SwUndoTblToTxt( const SwTable& rTbl, sal_Unicode cCh )
     cTrenner( cCh ), nHdlnRpt( rTbl.GetRowsToRepeat() )
 {
     pTblSave = new _SaveTable( rTbl );
-    pBoxSaves = new SwTblToTxtSaves( (SwTblToTxtSaves::size_type)rTbl.GetTabSortBoxes().Count() );
+    pBoxSaves = new SwTblToTxtSaves( (SwTblToTxtSaves::size_type)rTbl.GetTabSortBoxes().size() );
 
     if( rTbl.IsA( TYPE( SwDDETable ) ) )
         pDDEFldType = (SwDDEFieldType*)((SwDDETable&)rTbl).GetDDEFldType()->Copy();
@@ -493,7 +493,7 @@ void SwUndoTblToTxt::UndoImpl(::sw::UndoRedoContext & rContext)
     if( bCheckNumFmt )
     {
         SwTableSortBoxes& rBxs = pTblNd->GetTable().GetTabSortBoxes();
-        for( sal_uInt16 nBoxes = rBxs.Count(); nBoxes; )
+        for( sal_uInt16 nBoxes = rBxs.size(); nBoxes; )
             rDoc.ChkBoxNumFmt( *rBxs[ --nBoxes ], sal_False );
     }
 
@@ -838,7 +838,7 @@ SwUndoTblHeadline::SwUndoTblHeadline( const SwTable& rTbl, sal_uInt16 nOldHdl,
     nOldHeadline( nOldHdl ),
     nNewHeadline( nNewHdl )
 {
-    OSL_ENSURE( rTbl.GetTabSortBoxes().Count(), "Table without content" );
+    OSL_ENSURE( !rTbl.GetTabSortBoxes().empty(), "Table without content" );
     const SwStartNode *pSttNd = rTbl.GetTabSortBoxes()[ 0 ]->GetSttNd();
     OSL_ENSURE( pSttNd, "Box without content" );
 
@@ -1545,7 +1545,7 @@ void SwUndoTblNdsChg::SaveNewBoxes( const SwTableNode& rTblNd,
     OSL_ENSURE( ! IsDelBox(), "wrong Action" );
     pNewSttNds.reset( new std::set<_BoxMove> );
 
-    for( n = 0, i = 0; n < rOld.Count(); ++i )
+    for( n = 0, i = 0; n < rOld.size(); ++i )
     {
         if( rOld[ n ] == rTblBoxes[ i ] )
             ++n;
@@ -1554,7 +1554,7 @@ void SwUndoTblNdsChg::SaveNewBoxes( const SwTableNode& rTblNd,
             pNewSttNds->insert( _BoxMove(rTblBoxes[ i ]->GetSttIdx()) );
     }
 
-    for( ; i < rTblBoxes.Count(); ++i )
+    for( ; i < rTblBoxes.size(); ++i )
         // new box: insert sorted
         pNewSttNds->insert( _BoxMove(rTblBoxes[ i ]->GetSttIdx()) );
 }
@@ -1596,12 +1596,12 @@ void SwUndoTblNdsChg::SaveNewBoxes( const SwTableNode& rTblNd,
     OSL_ENSURE( ! IsDelBox(), "wrong Action" );
     pNewSttNds.reset( new std::set<_BoxMove> );
 
-    OSL_ENSURE( rTbl.IsNewModel() || rOld.Count() + nCount * rBoxes.Count() == rTblBoxes.Count(),
+    OSL_ENSURE( rTbl.IsNewModel() || rOld.size() + nCount * rBoxes.Count() == rTblBoxes.size(),
         "unexpected boxes" );
-    OSL_ENSURE( rOld.Count() <= rTblBoxes.Count(), "more unexpected boxes" );
-    for( sal_uInt16 n = 0, i = 0; i < rTblBoxes.Count(); ++i )
+    OSL_ENSURE( rOld.size() <= rTblBoxes.size(), "more unexpected boxes" );
+    for( sal_uInt16 n = 0, i = 0; i < rTblBoxes.size(); ++i )
     {
-        if( ( n < rOld.Count() ) &&
+        if( ( n < rOld.size() ) &&
             ( rOld[ n ] == rTblBoxes[ i ] ) )
         {
             // box already known? Then nothing to be done.
@@ -2771,10 +2771,9 @@ sal_Bool SwUndoTblCpyTbl::InsertRow( SwTable& rTbl, const SwSelBoxes& rBoxes,
     SwTableNode* pTblNd = (SwTableNode*)rTbl.GetTabSortBoxes()[0]->
                                 GetSttNd()->FindTableNode();
 
-    SwTableSortBoxes aTmpLst( 0 );
     pInsRowUndo = new SwUndoTblNdsChg( UNDO_TABLE_INSROW, rBoxes, *pTblNd,
                                        0, 0, nCnt, sal_True, sal_False );
-    aTmpLst.Insert( &rTbl.GetTabSortBoxes(), 0, rTbl.GetTabSortBoxes().Count() );
+    SwTableSortBoxes aTmpLst( rTbl.GetTabSortBoxes() );
 
     sal_Bool bRet = rTbl.InsertRow( rTbl.GetFrmFmt()->GetDoc(), rBoxes, nCnt, sal_True );
     if( bRet )
@@ -3104,7 +3103,7 @@ void CheckTable( const SwTable& rTbl )
 {
     const SwNodes& rNds = rTbl.GetFrmFmt()->GetDoc()->GetNodes();
     const SwTableSortBoxes& rSrtArr = rTbl.GetTabSortBoxes();
-    for( sal_uInt16 n = 0; n < rSrtArr.Count(); ++n )
+    for( sal_uInt16 n = 0; n < rSrtArr.size(); ++n )
     {
         const SwTableBox* pBox = rSrtArr[ n ];
         const SwNode* pNd = pBox->GetSttNd();

@@ -51,6 +51,7 @@ class SwUndoTblMerge;
 class SwCellFrm;
 
 typedef ::std::deque< SwCellFrm* > SwCellFrms;
+typedef SwTableBox* SwTableBoxPtr;
 SV_DECL_PTRARR_SORT( SwSelBoxes, SwTableBoxPtr, 10 )
 
 // Collects all boxes in table that are selected.

@@ -5459,7 +5459,7 @@ HTMLTable *SwHTMLParser::BuildTable( SvxAdjust eParentAdjust,
             bUpperSpace = sal_True;
             SetTxtCollAttrs();
 
-            nParaCnt = nParaCnt - Min(nParaCnt, pTCntxt->GetTableNode()->GetTable().GetTabSortBoxes().Count());
+            nParaCnt = nParaCnt - Min(nParaCnt, (sal_uInt16)pTCntxt->GetTableNode()->GetTable().GetTabSortBoxes().size());
 
             // ggfs. eine Tabelle anspringen
             if( JUMPTO_TABLE == eJumpTo && pTable->GetSwTable() &&

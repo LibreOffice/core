@@ -49,9 +49,8 @@ SwDDETable::SwDDETable( SwTable& rTable, SwDDEFieldType* pDDEType,
     : SwTable( rTable ), aDepend( this, pDDEType )
 {
     // Kopiere/move die Daten der Tabelle
-    aSortCntBoxes.Insert( &rTable.GetTabSortBoxes(), 0,
-                          rTable.GetTabSortBoxes().Count()  ); // move die Inh. Boxen
-    rTable.GetTabSortBoxes().Remove( (sal_uInt16)0, rTable.GetTabSortBoxes().Count() );
+    aSortCntBoxes.insert( rTable.GetTabSortBoxes()  ); // move die Inh. Boxen
+    rTable.GetTabSortBoxes().clear();
 
     aLines.insert( aLines.begin(),
                    rTable.GetTabLines().begin(), rTable.GetTabLines().end() ); // move die Lines
@@ -116,7 +115,7 @@ void SwDDETable::ChangeContent()
     // Stehen wir im richtigen NodesArray (Wegen UNDO)
     if( aLines.empty() )
         return;
-    OSL_ENSURE( GetTabSortBoxes().Count(), "Tabelle ohne Inhalt?" );
+    OSL_ENSURE( !GetTabSortBoxes().empty(), "Tabelle ohne Inhalt?" );
     if( !GetTabSortBoxes()[0]->GetSttNd()->GetNodes().IsDocNodes() )
         return;
 
@@ -167,7 +166,7 @@ sal_Bool SwDDETable::NoDDETable()
     // Stehen wir im richtigen NodesArray (Wegen UNDO)
     if( aLines.empty() )
         return sal_False;
-    OSL_ENSURE( GetTabSortBoxes().Count(), "Tabelle ohne Inhalt?" );
+    OSL_ENSURE( !GetTabSortBoxes().empty(), "Tabelle ohne Inhalt?" );
     SwNode* pNd = (SwNode*)GetTabSortBoxes()[0]->GetSttNd();
     if( !pNd->GetNodes().IsDocNodes() )
         return sal_False;
@@ -178,9 +177,8 @@ sal_Bool SwDDETable::NoDDETable()
     SwTable* pNewTbl = new SwTable( *this );
 
     // Kopiere/move die Daten der Tabelle
-    pNewTbl->GetTabSortBoxes().Insert( &GetTabSortBoxes(), 0,
-                          GetTabSortBoxes().Count()  ); // move die Inh. Boxen
-    GetTabSortBoxes().Remove( (sal_uInt16)0, GetTabSortBoxes().Count() );
+    pNewTbl->GetTabSortBoxes().insert( GetTabSortBoxes() ); // move die Inh. Boxen
+    GetTabSortBoxes().clear();
 
     pNewTbl->GetTabLines().insert( pNewTbl->GetTabLines().begin(),
                                    GetTabLines().begin(), GetTabLines().end() ); // move die Lines

@@ -483,7 +483,7 @@ SwTableNode* SwTableNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
     pTblNd->GetTable().SetTableNode( 0 );
 
     // Sonderbehandlung fuer eine einzelne Box
-    if( 1 == GetTable().GetTabSortBoxes().Count() )
+    if( 1 == GetTable().GetTabSortBoxes().size() )
     {
         aRg.aStart.Assign( *pTblNd, 1 );
         aRg.aEnd.Assign( *pTblNd->EndOfSectionNode() );
