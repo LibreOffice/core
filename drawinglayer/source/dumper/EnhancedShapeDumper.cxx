@@ -831,13 +831,13 @@ void EnhancedShapeDumper::dumpEnhancedCustomShapePathService(uno::Reference< bea
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("StretchX");
-        sal_Int32 aStretchX;
+        sal_Int32 aStretchX = sal_Int32();
         if(anotherAny >>= aStretchX)
             dumpStretchXAsAttribute(aStretchX);
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("StretchY");
-        sal_Int32 aStretchY;
+        sal_Int32 aStretchY = sal_Int32();
         if(anotherAny >>= aStretchY)
             dumpStretchYAsAttribute(aStretchY);
     }
@@ -861,25 +861,25 @@ void EnhancedShapeDumper::dumpEnhancedCustomShapePathService(uno::Reference< bea
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("GluePointType");
-        sal_Int32 aGluePointType;
+        sal_Int32 aGluePointType = sal_Int32();
         if(anotherAny >>= aGluePointType)
             dumpGluePointTypeAsAttribute(aGluePointType);
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("ExtrusionAllowed");
-        sal_Bool bExtrusionAllowed;
+        sal_Bool bExtrusionAllowed = sal_Bool();
         if(anotherAny >>= bExtrusionAllowed)
             dumpExtrusionAllowedAsAttribute(bExtrusionAllowed);
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("ConcentricGradientFillAllowed");
-        sal_Bool bConcentricGradientFillAllowed;
+        sal_Bool bConcentricGradientFillAllowed = sal_Bool();
         if(anotherAny >>= bConcentricGradientFillAllowed)
             dumpConcentricGradientFillAllowedAsAttribute(bConcentricGradientFillAllowed);
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("TextPathAllowed");
-        sal_Bool bTextPathAllowed;
+        sal_Bool bTextPathAllowed = sal_Bool();
         if(anotherAny >>= bTextPathAllowed)
             dumpTextPathAllowedAsAttribute(bTextPathAllowed);
     }

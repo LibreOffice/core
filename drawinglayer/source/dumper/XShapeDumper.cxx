@@ -1146,25 +1146,25 @@ void dumpTextPropertiesService(uno::Reference< beans::XPropertySet > xPropSet, x
     if(xInfo->hasPropertyByName("IsNumbering"))
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("IsNumbering");
-        sal_Bool bIsNumbering;
+        sal_Bool bIsNumbering = sal_Bool();
         if(anotherAny >>= bIsNumbering)
             dumpIsNumberingAsAttribute(bIsNumbering, xmlWriter);
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("TextAutoGrowHeight");
-        sal_Bool bTextAutoGrowHeight;
+        sal_Bool bTextAutoGrowHeight = sal_Bool();
         if(anotherAny >>= bTextAutoGrowHeight)
             dumpTextAutoGrowHeightAsAttribute(bTextAutoGrowHeight, xmlWriter);
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("TextAutoGrowWidth");
-        sal_Bool bTextAutoGrowWidth;
+        sal_Bool bTextAutoGrowWidth = sal_Bool();
         if(anotherAny >>= bTextAutoGrowWidth)
             dumpTextAutoGrowWidthAsAttribute(bTextAutoGrowWidth, xmlWriter);
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("TextContourFrame");
-        sal_Bool bTextContourFrame;
+        sal_Bool bTextContourFrame = sal_Bool();
         if(anotherAny >>= bTextContourFrame)
             dumpTextContourFrameAsAttribute(bTextContourFrame, xmlWriter);
     }
@@ -1188,67 +1188,67 @@ void dumpTextPropertiesService(uno::Reference< beans::XPropertySet > xPropSet, x
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("TextLeftDistance");
-        sal_Int32 aTextLeftDistance;
+        sal_Int32 aTextLeftDistance = sal_Int32();
         if(anotherAny >>= aTextLeftDistance)
             dumpTextLeftDistanceAsAttribute(aTextLeftDistance, xmlWriter);
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("TextRightDistance");
-        sal_Int32 aTextRightDistance;
+        sal_Int32 aTextRightDistance = sal_Int32();
         if(anotherAny >>= aTextRightDistance)
             dumpTextRightDistanceAsAttribute(aTextRightDistance, xmlWriter);
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("TextUpperDistance");
-        sal_Int32 aTextUpperDistance;
+        sal_Int32 aTextUpperDistance = sal_Int32();
         if(anotherAny >>= aTextUpperDistance)
             dumpTextUpperDistanceAsAttribute(aTextUpperDistance, xmlWriter);
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("TextLowerDistance");
-        sal_Int32 aTextLowerDistance;
+        sal_Int32 aTextLowerDistance = sal_Int32();
         if(anotherAny >>= aTextLowerDistance)
             dumpTextLowerDistanceAsAttribute(aTextLowerDistance, xmlWriter);
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("TextMaximumFrameHeight");
-        sal_Int32 aTextMaximumFrameHeight;
+        sal_Int32 aTextMaximumFrameHeight = sal_Int32();
         if(anotherAny >>= aTextMaximumFrameHeight)
             dumpTextMaximumFrameHeightAsAttribute(aTextMaximumFrameHeight, xmlWriter);
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("TextMaximumFrameWidth");
-        sal_Int32 aTextMaximumFrameWidth;
+        sal_Int32 aTextMaximumFrameWidth = sal_Int32();
         if(anotherAny >>= aTextMaximumFrameWidth)
             dumpTextMaximumFrameWidthAsAttribute(aTextMaximumFrameWidth, xmlWriter);
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("TextMinimumFrameHeight");
-        sal_Int32 aTextMinimumFrameHeight;
+        sal_Int32 aTextMinimumFrameHeight = sal_Int32();
         if(anotherAny >>= aTextMinimumFrameHeight)
             dumpTextMinimumFrameHeightAsAttribute(aTextMinimumFrameHeight, xmlWriter);
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("TextMinimumFrameWidth");
-        sal_Int32 aTextMinimumFrameWidth;
+        sal_Int32 aTextMinimumFrameWidth = sal_Int32();
         if(anotherAny >>= aTextMinimumFrameWidth)
             dumpTextMinimumFrameWidthAsAttribute(aTextMinimumFrameWidth, xmlWriter);
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("TextAnimationAmount");
-        sal_Int32 aTextAnimationAmount;
+        sal_Int32 aTextAnimationAmount = sal_Int32();
         if(anotherAny >>= aTextAnimationAmount)
             dumpTextAnimationAmountAsAttribute(aTextAnimationAmount, xmlWriter);
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("TextAnimationCount");
-        sal_Int32 aTextAnimationCount;
+        sal_Int32 aTextAnimationCount = sal_Int32();
         if(anotherAny >>= aTextAnimationCount)
             dumpTextAnimationCountAsAttribute(aTextAnimationCount, xmlWriter);
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("TextAnimationDelay");
-        sal_Int32 aTextAnimationDelay;
+        sal_Int32 aTextAnimationDelay = sal_Int32();
         if(anotherAny >>= aTextAnimationDelay)
             dumpTextAnimationDelayAsAttribute(aTextAnimationDelay, xmlWriter);
     }
@@ -1266,13 +1266,13 @@ void dumpTextPropertiesService(uno::Reference< beans::XPropertySet > xPropSet, x
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("TextAnimationStartInside");
-        sal_Bool bTextAnimationStartInside;
+        sal_Bool bTextAnimationStartInside = sal_Bool();
         if(anotherAny >>= bTextAnimationStartInside)
             dumpTextAnimationStartInsideAsAttribute(bTextAnimationStartInside, xmlWriter);
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("TextAnimationStopInside");
-        sal_Bool bTextAnimationStopInside;
+        sal_Bool bTextAnimationStopInside = sal_Bool();
         if(anotherAny >>= bTextAnimationStopInside)
             dumpTextAnimationStopInsideAsAttribute(bTextAnimationStopInside, xmlWriter);
     }
