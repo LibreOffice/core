@@ -1792,7 +1792,7 @@ long SwWW8ImplReader::Read_And(WW8PLCFManResult* pRes)
     this->pFmtOfJustInsertedApo = 0;
     SwPostItField aPostIt(
         (SwPostItFieldType*)rDoc.GetSysFldType(RES_POSTITFLD), sAuthor,
-        sTxt, aEmptyStr, aDate );
+        sTxt, aEmptyStr, aEmptyStr, aDate );
     aPostIt.SetTextObject(pOutliner);
 
     pCtrlStck->NewAttr(*pPaM->GetPoint(), SvxCharHiddenItem(false, RES_CHRATR_HIDDEN));

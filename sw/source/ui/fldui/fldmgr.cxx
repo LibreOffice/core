@@ -870,7 +870,7 @@ sal_Bool SwFldMgr::InsertFld(  const SwInsertFld_Data& rData, SwPaM *pPam )
         case TYP_POSTITFLD:
         {
             SwPostItFieldType* pType = (SwPostItFieldType*)pCurShell->GetFldType(0, RES_POSTITFLD);
-            pFld = new SwPostItField(pType, rData.sPar1, rData.sPar2, aEmptyStr, DateTime( DateTime::SYSTEM ));
+            pFld = new SwPostItField(pType, rData.sPar1, rData.sPar2, aEmptyStr, aEmptyStr, DateTime( DateTime::SYSTEM ));
             break;
         }
         case TYP_SCRIPTFLD:

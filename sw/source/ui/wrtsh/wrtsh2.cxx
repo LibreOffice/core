@@ -90,7 +90,8 @@ void SwWrtShell::Insert(SwField &rFld, SwPaM *pCommentRange)
     {
         // If an annotation field is inserted, take care of the relevant fieldmark.
         IDocumentMarkAccess* pMarksAccess = GetDoc()->getIDocumentMarkAccess();
-        pMarksAccess->makeFieldBookmark(*pCommentRange, OUString(), ODF_COMMENTRANGE);
+        sw::mark::IFieldmark* pFieldmark = pMarksAccess->makeFieldBookmark(*pCommentRange, OUString(), ODF_COMMENTRANGE);
+        ((SwPostItField&)rFld).SetName(pFieldmark->GetName());
     }
 
     bool bDeleted = false;

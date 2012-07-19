@@ -520,14 +520,15 @@ class SW_DLLPUBLIC SwPostItField : public SwField
 {
     rtl::OUString sTxt;
     rtl::OUString sAuthor;
-    rtl::OUString sInitials;
+    rtl::OUString sInitials; ///< Initials of the author.
+    rtl::OUString sName; ///< Name of the comment.
     DateTime    aDateTime;
     OutlinerParaObject* mpText;
     SwTextAPIObject* m_pTextObject;
 
 public:
     SwPostItField( SwPostItFieldType*,
-                   const String& rAuthor, const String& rTxt, const String& rInitials, const DateTime& rDate);
+                   const String& rAuthor, const String& rTxt, const String& rInitials, const String& rName, const DateTime& rDate);
     ~SwPostItField();
 
     virtual String          Expand() const;
@@ -546,6 +547,8 @@ public:
     virtual void            SetPar2(const rtl::OUString& rStr);
     const rtl::OUString&    GetTxt() const { return sTxt; }
     const rtl::OUString&    GetInitials() const;
+    void                    SetName(const rtl::OUString& rStr);
+    const OUString&         GetName() const;
 
     const OutlinerParaObject*   GetTextObject() const;
     void SetTextObject( OutlinerParaObject* pText );
