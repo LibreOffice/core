@@ -1246,7 +1246,7 @@ void SwXTextField::attachToRange(
                     aDateTime.SetSec(m_pProps->pDateTime->Seconds);
                 }
                 pFld = new SwPostItField((SwPostItFieldType*)pFldType,
-                        m_pProps->sPar1, m_pProps->sPar2, m_pProps->sPar3, aDateTime);
+                        m_pProps->sPar1, m_pProps->sPar2, m_pProps->sPar3, m_pProps->sPar4, aDateTime);
                 if ( m_pTextObject )
                 {
                     ((SwPostItField*)pFld)->SetTextObject( m_pTextObject->CreateText() );
@@ -1756,10 +1756,11 @@ void SwXTextField::attachToRange(
             if (*aPam.GetPoint() != *aPam.GetMark() && m_nServiceId == SW_SERVICE_FIELDTYPE_ANNOTATION)
             {
                 IDocumentMarkAccess* pMarksAccess = pDoc->getIDocumentMarkAccess();
-                pMarksAccess->makeFieldBookmark(
+                sw::mark::IFieldmark* pFieldmark = pMarksAccess->makeFieldBookmark(
                         aPam,
                         OUString(),
                         ODF_COMMENTRANGE);
+                ((SwPostItField*)aFmt.GetFld())->SetName(pFieldmark->GetName());
 
                 // Make sure we always insert the field at the end
                 SwPaM aEnd(*aPam.End(), *aPam.End());

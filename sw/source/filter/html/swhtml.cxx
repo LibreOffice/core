@@ -5388,7 +5388,7 @@ void SwHTMLParser::ParseMoreMetaOptions()
 
     SwPostItField aPostItFld(
         (SwPostItFieldType*)pDoc->GetSysFldType( RES_POSTITFLD ),
-        aEmptyStr, sText.makeStringAndClear(), aEmptyStr, DateTime( DateTime::SYSTEM ) );
+        aEmptyStr, sText.makeStringAndClear(), aEmptyStr, aEmptyStr, DateTime( DateTime::SYSTEM ) );
     SwFmtFld aFmtFld( aPostItFld );
     InsertAttr( aFmtFld );
 }

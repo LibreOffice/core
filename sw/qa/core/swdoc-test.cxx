@@ -376,7 +376,7 @@ void SwDocTest::testSwScanner()
         DateTime aDate(DateTime::SYSTEM);
         SwPostItField aPostIt(
             (SwPostItFieldType*)m_pDoc->GetSysFldType(RES_POSTITFLD), rtl::OUString("An Author"),
-            rtl::OUString("Some Text"), rtl::OUString("WhatEver"), aDate );
+            rtl::OUString("Some Text"), rtl::OUString("Initials"), OUString("Name"), aDate );
         m_pDoc->InsertPoolItem(aPaM, SwFmtFld(aPostIt), 0);
 
         m_pDoc->InsertString(aPaM, rtl::OUString("Apple"));

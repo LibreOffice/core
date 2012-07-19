@@ -1735,8 +1735,8 @@ SwFieldType* SwPostItFieldType::Copy() const
  --------------------------------------------------------------------*/
 
 SwPostItField::SwPostItField( SwPostItFieldType* pT,
-        const String& rAuthor, const String& rTxt, const String& rInitials, const DateTime& rDateTime )
-    : SwField( pT ), sTxt( rTxt ), sAuthor( rAuthor ), sInitials( rInitials ), aDateTime( rDateTime ), mpText(0), m_pTextObject(0)
+        const String& rAuthor, const String& rTxt, const String& rInitials, const String& rName, const DateTime& rDateTime )
+    : SwField( pT ), sTxt( rTxt ), sAuthor( rAuthor ), sInitials( rInitials ), sName( rName ), aDateTime( rDateTime ), mpText(0), m_pTextObject(0)
 {
 }
 
@@ -1765,8 +1765,8 @@ String SwPostItField::GetDescription() const
 
 SwField* SwPostItField::Copy() const
 {
-    SwPostItField* pRet = new SwPostItField( (SwPostItFieldType*)GetTyp(), sAuthor, sInitials,
-                                sTxt, aDateTime);
+    SwPostItField* pRet = new SwPostItField( (SwPostItFieldType*)GetTyp(), sAuthor, sTxt, sInitials, sName,
+                                aDateTime);
     if (mpText)
         pRet->SetTextObject( new OutlinerParaObject(*mpText) );
     return pRet;
@@ -1804,6 +1804,16 @@ const rtl::OUString& SwPostItField::GetInitials() const
     return sInitials;
 }
 
+void SwPostItField::SetName(const rtl::OUString& rName)
+{
+    sName = rName;
+}
+
+const rtl::OUString& SwPostItField::GetName() const
+{
+    return sName;
+}
+
 const OutlinerParaObject* SwPostItField::GetTextObject() const
 {
     return mpText;
@@ -1834,6 +1844,9 @@ bool SwPostItField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
         }
     case FIELD_PROP_PAR3:
         rAny <<= OUString(sInitials);
+        break;
+    case FIELD_PROP_PAR4:
+        rAny <<= OUString(sName);
         break;
     case FIELD_PROP_TEXT:
         {
@@ -1901,6 +1914,9 @@ bool SwPostItField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
         break;
     case FIELD_PROP_PAR3:
         rAny >>= sInitials;
+        break;
+    case FIELD_PROP_PAR4:
+        rAny >>= sName;
         break;
     case FIELD_PROP_TEXT:
         OSL_FAIL("Not implemented!");
