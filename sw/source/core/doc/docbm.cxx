@@ -593,7 +593,7 @@ namespace sw { namespace mark
                 isPosInRange = true, isOtherPosInRange = true;
             }
 
-            if(isPosInRange && (isOtherPosInRange || !pMark->IsExpanded()))
+            if(isPosInRange && (isOtherPosInRange || !pMark->IsExpanded() || IDocumentMarkAccess::GetType(*pMark) == TEXT_FIELDMARK))
             {
                 // completely in range
 
@@ -697,6 +697,9 @@ namespace sw { namespace mark
                     "<MarkManager::deleteMark(..)>"
                     " - Bookmark not found.");
                 m_vFieldmarks.erase(ppFieldmark);
+                sw::mark::TextFieldmark* pTextFieldmark = dynamic_cast<sw::mark::TextFieldmark*>(ppMark->get());
+                if (pTextFieldmark)
+                    pTextFieldmark->ReleaseDoc(m_pDoc);
                 break;
             }
             case IDocumentMarkAccess::NAVIGATOR_REMINDER:

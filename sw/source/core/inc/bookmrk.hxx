@@ -237,6 +237,7 @@ namespace sw {
         public:
             TextFieldmark(const SwPaM& rPaM);
             virtual void InitDoc(SwDoc* const io_pDoc);
+            void ReleaseDoc(SwDoc* const pDoc);
         };
 
         class CheckboxFieldmark
