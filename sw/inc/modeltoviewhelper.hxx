@@ -20,9 +20,11 @@
 #ifndef _MODELTOVIEWHELPER_HXX
 #define _MODELTOVIEWHELPER_HXX
 
+#include <rtl/ustring.hxx>
 #include <sal/types.h>
-
 #include <vector>
+
+class SwTxtNode;
 
 /** Some helpers for converting model strings to view strings.
 
@@ -33,7 +35,7 @@
     helper functions are provided to convert model positions to view positions
     and vice versa.
 */
-namespace ModelToViewHelper
+class ModelToViewHelper
 {
     /** For each field in the model string, there is an entry in the conversion
         map. The first value of the ConversionMapEntry points to the field
@@ -43,6 +45,12 @@ namespace ModelToViewHelper
     */
     typedef std::pair< sal_uInt32 , sal_uInt32 > ConversionMapEntry;
     typedef std::vector< ConversionMapEntry > ConversionMap;
+
+    ConversionMap m_aMap;
+
+    rtl::OUString m_aRetText;
+
+public:
 
     /** This struct defines a position in the model string.
 
@@ -59,12 +67,10 @@ namespace ModelToViewHelper
         ModelPosition() : mnPos(0), mnSubPos(0), mbIsField(false) {}
     };
 
-    /** Converts a model position into a view position
+    ModelToViewHelper(const SwTxtNode &rNode);
+    ModelToViewHelper() {}   //pass through filter, view == model
 
-        @param pMap
-            pMap is the conversion map required for the calculation. If pMap is
-            0, no conversion takes place, i.e., it is assumed that the model
-            string is identical to the view string.
+    /** Converts a model position into a view position
 
         @param nPos
             nPos denotes a position in the model string which should be
@@ -77,14 +83,9 @@ namespace ModelToViewHelper
             nPos is behind the last entry in the conversion map) nPos will
             be returned.
     */
-    sal_uInt32 ConvertToViewPosition( const ConversionMap* pMap, sal_uInt32 nModelPos );
+    sal_uInt32 ConvertToViewPosition( sal_uInt32 nModelPos ) const;
 
     /** Converts a view position into a model position
-
-        @param pMap
-            pMap is the conversion map required for the calculation. If pMap is
-            0, no conversion takes place, i.e., it is assumed that the model
-            string is identical to the view string.
 
         @param nPos
             nPos denotes a position in the view string which should be
@@ -97,8 +98,10 @@ namespace ModelToViewHelper
             model position with mnPos = nPos and mnIsField = false will be
             returned.
     */
-    ModelPosition ConvertToModelPosition( const ConversionMap* pMap, sal_uInt32 nViewPos );
-}
+    ModelPosition ConvertToModelPosition( sal_uInt32 nViewPos ) const;
+
+    rtl::OUString getViewText() const { return m_aRetText; }
+};
 
 #endif
 

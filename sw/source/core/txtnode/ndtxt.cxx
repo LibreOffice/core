@@ -3092,14 +3092,12 @@ sal_Bool SwTxtNode::GetExpandTxt( SwTxtNode& rDestNd, const SwIndex* pDestIdx,
     return sal_True;
 }
 
-const ModelToViewHelper::ConversionMap*
-        SwTxtNode::BuildConversionMap( rtl::OUString& rRetText ) const
+ModelToViewHelper::ModelToViewHelper(const SwTxtNode &rNode)
 {
-    const rtl::OUString& rNodeText = GetTxt();
-    rRetText = rNodeText;
-    ModelToViewHelper::ConversionMap* pConversionMap = 0;
+    const rtl::OUString& rNodeText = rNode.GetTxt();
+    m_aRetText = rNodeText;
 
-    const SwpHints* pSwpHints2 = GetpSwpHints();
+    const SwpHints* pSwpHints2 = rNode.GetpSwpHints();
     xub_StrLen nPos = 0;
 
     for ( sal_uInt16 i = 0; pSwpHints2 && i < pSwpHints2->Count(); ++i )
@@ -3121,7 +3119,7 @@ const ModelToViewHelper::ConversionMap*
                 {
                     bReplace = true;
                     const SwFmtFtn& rFtn = static_cast<SwTxtFtn const*>(pAttr)->GetFtn();
-                    const SwDoc *pDoc = GetDoc();
+                    const SwDoc *pDoc = rNode.GetDoc();
                     aExpand = rFtn.GetViewNumStr(*pDoc);
                     nFieldPos = *pAttr->GetStart();
                 }
@@ -3137,22 +3135,14 @@ const ModelToViewHelper::ConversionMap*
 
         if (bReplace)
         {
-            rRetText = rRetText.replaceAt( nPos + nFieldPos, 1, aExpand );
-            if ( !pConversionMap )
-                pConversionMap = new ModelToViewHelper::ConversionMap;
-            pConversionMap->push_back(
-                    ModelToViewHelper::ConversionMapEntry(
-                        nFieldPos, nPos + nFieldPos ) );
+            m_aRetText = m_aRetText.replaceAt( nPos + nFieldPos, 1, aExpand );
+            m_aMap.push_back( ConversionMapEntry( nFieldPos, nPos + nFieldPos ) );
             nPos += ( aExpand.getLength() - 1 );
         }
     }
 
-    if ( pConversionMap && pConversionMap->size() )
-        pConversionMap->push_back(
-            ModelToViewHelper::ConversionMapEntry(
-                rNodeText.getLength()+1, rRetText.getLength()+1 ) );
-
-    return pConversionMap;
+    if ( !m_aMap.empty() )
+        m_aMap.push_back( ConversionMapEntry( rNodeText.getLength()+1, m_aRetText.getLength()+1 ) );
 }
 
 XubString SwTxtNode::GetRedlineTxt( xub_StrLen nIdx, xub_StrLen nLen,

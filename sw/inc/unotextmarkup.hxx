@@ -47,7 +47,7 @@ class SwXTextMarkup:
     public SwClient
 {
 public:
-    SwXTextMarkup( SwTxtNode& rTxtNode, const ModelToViewHelper::ConversionMap* pConversionMap );
+    SwXTextMarkup( SwTxtNode& rTxtNode, const ModelToViewHelper& rConversionMap );
     virtual ~SwXTextMarkup();
 
     // ::com::sun::star::text::XTextMarkup:
@@ -63,11 +63,10 @@ private:
 
 protected:
     //SwClient
-   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
+    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
 
     SwTxtNode* mpTxtNode;
-    const ModelToViewHelper::ConversionMap* mpConversionMap;
-
+    const ModelToViewHelper maConversionMap;
 };
 
 
