@@ -15,7 +15,7 @@
 * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY 
 * KIND, either express or implied.  See the License for the 
 * specific language governing permissions and limitations 
-* under the License. *  
+* under the License.  *  
 *************************************************************/-->
  <!--MARKER(update_precomp.py): autogen include statement, do not remove-->
  <!--//This file is about the conversion of the UOF v2.0 and ODF document format from CS2C 20120610.-->
