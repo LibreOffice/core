@@ -10,7 +10,8 @@
 $(eval $(call gb_Library_Library,mork))
 
 $(eval $(call gb_Library_add_exception_objects,mork, \
-    connectivity/source/drivers/mork/driver \
+    connectivity/source/drivers/mork/MorkDriver \
+    connectivity/source/drivers/mork/MorkParser \
     connectivity/source/drivers/mork/services \
 ))
 

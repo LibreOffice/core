@@ -13,7 +13,7 @@
 #include "cppuhelper/implementationentry.hxx"
 #include "sal/types.h"
 
-#include "driver.hxx"
+#include "MorkDriver.hxx"
 
 namespace
 {

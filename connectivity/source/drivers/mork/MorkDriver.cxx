@@ -28,7 +28,7 @@
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
 
-#include "driver.hxx"
+#include "MorkDriver.hxx"
 
 namespace css = com::sun::star;
 
