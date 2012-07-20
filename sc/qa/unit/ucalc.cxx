@@ -216,6 +216,7 @@ public:
     void testCopyPasteFormulasExternalDoc();
 
     void testFindAreaPosRowDown();
+    void testFindAreaPosColRight();
 
     CPPUNIT_TEST_SUITE(Test);
 #if 0
@@ -262,6 +263,7 @@ public:
     CPPUNIT_TEST(testCopyPasteFormulasExternalDoc);
 #endif
     CPPUNIT_TEST(testFindAreaPosRowDown);
+    CPPUNIT_TEST(testFindAreaPosColRight);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -4593,7 +4595,7 @@ void Test::testCopyPasteFormulasExternalDoc()
 void Test::testFindAreaPosRowDown()
 {
     const char* aData[][2] = {
-        { "", "" },
+        { "", "1" },
         { "1", "" },
         { "1", "1" },
         { "", "1" },
@@ -4656,6 +4658,71 @@ void Test::testFindAreaPosRowDown()
 
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(6), nRow);
     CPPUNIT_ASSERT_EQUAL(static_cast<SCCOL>(1), nCol);
+
+    pDoc->DeleteTab(0);
+}
+
+void Test::testFindAreaPosColRight()
+{
+    const char* aData[][7] = {
+        { "", "1", "1", "", "1", "1", "1" },
+        { "", "", "1", "1", "1", "", "1" }, };
+
+    ScDocument* pDoc = m_xDocShRef->GetDocument();
+    rtl::OUString aTabName1("test1");
+    pDoc->InsertTab(0, aTabName1);
+    clearRange( pDoc, ScRange(0, 0, 0, 7, SAL_N_ELEMENTS(aData), 0));
+    ScAddress aPos(0,0,0);
+    ScRange aDataRange = insertRangeData( pDoc, aPos, aData, SAL_N_ELEMENTS(aData));
+    CPPUNIT_ASSERT_MESSAGE("failed to insert range data at correct position", aDataRange.aStart == aPos);
+
+    pDoc->SetColHidden(4,4,0,true);
+    bool bHidden = pDoc->ColHidden(4,0);
+    CPPUNIT_ASSERT(bHidden);
+
+    SCCOL nCol = 0;
+    SCROW nRow = 0;
+    pDoc->FindAreaPos(nCol, nRow, 0, 1, 0);
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(0), nRow);
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCCOL>(1), nCol);
+
+    pDoc->FindAreaPos(nCol, nRow, 0, 1, 0);
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(0), nRow);
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCCOL>(2), nCol);
+
+    pDoc->FindAreaPos(nCol, nRow, 0, 1, 0);
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(0), nRow);
+    // BUG! This returns right now 4 because FindAreaPos does
+    // not yet work correctly with hidden rows
+    //CPPUNIT_ASSERT_EQUAL(static_cast<SCCOL>(5), nCol);
+
+    pDoc->FindAreaPos(nCol, nRow, 0, 1, 0);
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(0), nRow);
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCCOL>(6), nCol);
+
+    pDoc->FindAreaPos(nCol, nRow, 0, 1, 0);
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(0), nRow);
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCCOL>(MAXCOL), nCol);
+
+    nCol = 2;
+    nRow = 1;
+
+    pDoc->FindAreaPos(nCol, nRow, 0, 1, 0);
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(1), nRow);
+    // BUG! This returns right now 4 because FindAreaPos does
+    // not yet work correctly with hidden rows
+    //CPPUNIT_ASSERT_EQUAL(static_cast<SCCOL>(3), nCol);
+
+    pDoc->FindAreaPos(nCol, nRow, 0, 1, 0);
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(1), nRow);
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCCOL>(6), nCol);
 
     pDoc->DeleteTab(0);
 }
