@@ -1623,8 +1623,8 @@ AC_ARG_WITH(java,
 AC_ARG_WITH(java_target_version,
     AS_HELP_STRING([--with-java-target-version],
         [Generate class files that will work on JVMs with the specified version.
-         For example, use --with-java-target-version=1.4 to make sure that the
-         application will work with JVM 1.4 even when compiled with JDK 1.5.])
+         For example, use --with-java-target-version=1.5 to make sure that the
+         application will work with JVM 1.5 even when compiled with JDK 1.6.])
     [
                           This option is ignored when you compile with gcj/gij.
 
@@ -5336,8 +5336,6 @@ if test "$SOLAR_JAVA" != ""; then
         AC_MSG_CHECKING([re-checking JDK])
         JDK=gcj
         AC_MSG_RESULT([checked (ecj)])
-        #TODO: what's to do here? some switch to do 1.5 compiling?
-        JAVAFLAGS="-source 1.5 -target 1.5"
         _gij_longver="40200"
     fi
 fi
@@ -5823,7 +5821,6 @@ AC_SUBST(CLASSPATH)
 AC_SUBST(JAVALIB)
 AC_SUBST(JAVACOMPILER)
 AC_SUBST(JAVADOC)
-AC_SUBST(JAVAFLAGS)
 AC_SUBST(JAVAINTERPRETER)
 AC_SUBST(JAVAIFLAGS)
 AC_SUBST(JAVA_HOME)
