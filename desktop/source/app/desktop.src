@@ -90,6 +90,11 @@ String STR_BOOTSTRAP_ERR_NO_CFG_SERVICE
     Text [ en-US ] = "The configuration service is not available.";
 };
 
+String STR_BOOTSTRAP_ERR_MULTISESSION
+{
+    Text [ en-US ] = "You have another instance running in a different terminal session. Close that instance and then try again.";
+};
+
 String STR_ASK_START_SETUP_MANUALLY
 {
     Text [ en-US ] = "Start the setup application to repair the installation from the CD or the folder containing the installation packages.";
