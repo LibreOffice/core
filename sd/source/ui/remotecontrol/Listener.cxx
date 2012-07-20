@@ -25,22 +25,31 @@ using rtl::OStringBuffer;
 Listener::Listener( const ::rtl::Reference<Server>& rServer, sd::Transmitter *aTransmitter  )
     : ::cppu::WeakComponentImplHelper1< XSlideShowListener >( m_aMutex ),
       mServer( rServer ),
-      pTransmitter( NULL )
+      pTransmitter( NULL ),
+      mPreparer()
 {
     pTransmitter = aTransmitter;
+    fprintf( stderr, "Listener created %p\n", this );
 }
 
 Listener::~Listener()
 {
+    fprintf( stderr, "Listener destroyed %p\n", this );
 }
 
 void Listener::init( const css::uno::Reference< css::presentation::XSlideShowController >& aController)
 {
+    fprintf( stderr, "Initing\n" );
     if ( aController.is() )
     {
+        fprintf( stderr, "Is -- now copying refrerence.\n" );
         mController = css::uno::Reference< css::presentation::XSlideShowController >( aController );
+        fprintf( stderr, "Registering listener\n" );
         aController->addSlideShowListener( this );
         fprintf( stderr, "Registered listener.\n" );
+
+        mPreparer.set( new ImagePreparer( aController, pTransmitter, mPreparer ) );
+        mPreparer->launch();
     }
     else
     {
@@ -123,6 +132,13 @@ void SAL_CALL Listener::slideAnimationsEnded (void)
 
 void SAL_CALL Listener::disposing (void)
 {
+    fprintf( stderr, "disposing void\n" );
+    if ( mPreparer.is() )
+    {
+        delete mPreparer.get();
+        mPreparer = NULL;
+    }
+
     pTransmitter = NULL;
     if ( mController.is() )
     {
@@ -136,6 +152,7 @@ void SAL_CALL Listener::disposing (
     const css::lang::EventObject& rEvent)
     throw (::com::sun::star::uno::RuntimeException)
 {
+    fprintf( stderr, "disposing with Events\n" );
     (void) rEvent;
     dispose();
 }

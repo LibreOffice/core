@@ -21,6 +21,7 @@
 
 #include "Server.hxx"
 #include "Transmitter.hxx"
+#include "ImagePreparer.hxx"
 
 namespace css = ::com::sun::star;
 
@@ -63,6 +64,7 @@ private:
     rtl::Reference<Server> mServer;
     sd::Transmitter *pTransmitter;
     css::uno::Reference< css::presentation::XSlideShowController > mController;
+    rtl::Reference<sd::ImagePreparer> mPreparer;
 };
 }
 #endif // _SD_IMPRESSREMOTE_LISTENER_HXX

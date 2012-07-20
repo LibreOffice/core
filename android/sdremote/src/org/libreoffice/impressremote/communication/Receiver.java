@@ -10,22 +10,32 @@ package org.libreoffice.impressremote.communication;
 
 import java.util.ArrayList;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
 import android.util.Base64;
+import android.util.SparseArray;
 
 public class Receiver {
 
 	private Messenger mActivityMessenger;
 
+	private SparseArray<byte[]> mPreviewImages = new SparseArray<byte[]>();
+
 	public void setActivityMessenger(Messenger aActivityMessenger) {
 		mActivityMessenger = aActivityMessenger;
 	}
 
+	public Bitmap getPreviewImage(int aSlide) {
+		byte[] aImage = mPreviewImages.get(aSlide);
+		return BitmapFactory.decodeByteArray(aImage, 0, aImage.length);
+	}
+
 	public void parseCommand(ArrayList<String> aCommand) {
-		System.out.println("parsing " +aCommand.get(0));
+		System.out.println("parsing " + aCommand.get(0));
 		if (mActivityMessenger == null) {
 			return;
 		}
@@ -46,11 +56,15 @@ public class Receiver {
 			int aSlideNumber = Integer.parseInt(aCommand.get(1));
 			String aImageString = aCommand.get(2);
 			byte[] aImage = Base64.decode(aImageString, Base64.DEFAULT);
+
+			// Store image internally
+			mPreviewImages.put(aSlideNumber, aImage);
+
+			// Notify the frontend
 			Message aMessage = Message.obtain(null,
 					CommunicationService.MSG_SLIDE_PREVIEW);
 			Bundle aData = new Bundle();
 			aData.putInt("slide_number", aSlideNumber);
-			aData.putByteArray("preview_image", aImage);
 			aMessage.setData(aData);
 			try {
 				mActivityMessenger.send(aMessage);

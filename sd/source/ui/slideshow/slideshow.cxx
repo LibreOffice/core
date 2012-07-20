@@ -58,7 +58,6 @@
 #include "sdattr.hrc"
 #include "FactoryIds.hxx"
 #include "ViewShell.hxx"
-#include "Server.hxx"
 #include "SlideShowRestarter.hxx"
 #include "DrawController.hxx"
 #include <boost/bind.hpp>
@@ -1074,7 +1073,6 @@ void SlideShow::activate( ViewShellBase& rBase )
     if( mxController.is() )
         mxController->activate();
 
-    Server::presentationStarted( mxController.get() );
 }
 
 // ---------------------------------------------------------

@@ -93,12 +93,9 @@ void Server::listenThread()
         }
     }
     // TODO: deal with transmision errors gracefully.
+    fprintf( stderr, "done with transmitting\n" );
     mListener->disposing();
     mListener = NULL;
-
-    if ( mPreparer.is() )
-        delete mPreparer.get();
-    mPreparer = NULL;
 
     delete pTransmitter;
     pTransmitter = NULL;
@@ -140,18 +137,21 @@ void Server::presentationStarted( const css::uno::Reference<
     {
         mListener = rtl::Reference<Listener>( new Listener( spServer, pTransmitter ) );
         mListener->init( rController );
-
-        mPreparer = rtl::Reference<ImagePreparer>( new ImagePreparer( rController, pTransmitter ) );
-        mPreparer->launch();
     }
 }
 
-
+void Server::presentationStopped()
+{
+    if ( mListener.is() )
+    {
+        mListener->disposing();
+        mListener = NULL;
+    }
+}
 
 Server *sd::Server::spServer = NULL;
 Transmitter *sd::Server::pTransmitter = NULL;
 rtl::Reference<Listener> sd::Server::mListener = NULL;
-rtl::Reference<ImagePreparer> sd::Server::mPreparer = NULL;
 
 void Server::setup()
 {

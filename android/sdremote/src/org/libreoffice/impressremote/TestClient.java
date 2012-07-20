@@ -1,7 +1,5 @@
 package org.libreoffice.impressremote;
 
-import java.util.HashMap;
-
 import org.libreoffice.impressremote.communication.CommunicationService;
 import android.app.Activity;
 import android.content.ComponentName;
@@ -23,10 +21,11 @@ import android.widget.TextView;
 
 public class TestClient extends Activity {
 
-	private HashMap<Integer, Bitmap> mPreviewImages = new HashMap<Integer, Bitmap>();
 	private boolean mCurrentPreviewImageMissing = false;
 
 	private boolean mIsBound = false;
+
+	private int mCurrentSlide = 0;
 
 	private CommunicationService mCommunicationService;
 
@@ -141,22 +140,17 @@ public class TestClient extends Activity {
 			case CommunicationService.MSG_SLIDE_CHANGED:
 				int newSlide = aData.getInt("slide_number");
 				mSlideLabel.setText("Slide " + newSlide);
-				if (mPreviewImages.containsKey(newSlide)) {
-					mImageView.setImageBitmap(mPreviewImages.get(newSlide));
-					mCurrentPreviewImageMissing = false;
-				} else {
-					mCurrentPreviewImageMissing = true;
-				}
-				break;
+				mCurrentPreviewImageMissing = true;
+				// We continue on to try and update the image.
 			case CommunicationService.MSG_SLIDE_PREVIEW:
 				int aSlideNumber = aData.getInt("slide_number");
-				byte[] aPreviewImage = aData.getByteArray("preview_image");
-				Bitmap aBitmap = BitmapFactory.decodeByteArray(aPreviewImage,
-						0, aPreviewImage.length);
-				mPreviewImages.put(aSlideNumber, aBitmap);
-				if (mCurrentPreviewImageMissing) {
-					mImageView.setImageBitmap(aBitmap);
-					mCurrentPreviewImageMissing = false;
+				if ( mCurrentPreviewImageMissing ) {
+					Bitmap aImage = mCommunicationService
+							.getPreviewImage(aSlideNumber);
+					if (aImage != null) {
+						mImageView.setImageBitmap(aImage);
+						mCurrentPreviewImageMissing = false;
+					}
 				}
 				break;
 

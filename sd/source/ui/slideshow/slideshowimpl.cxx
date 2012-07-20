@@ -79,7 +79,7 @@
 #include "canvas/elapsedtime.hxx"
 #include "avmedia/mediawindow.hxx"
 #include  "svtools/colrdlg.hxx"
-
+#include "Server.hxx"
 #include <boost/bind.hpp>
 
 using ::rtl::OUString;
@@ -609,6 +609,7 @@ SlideshowImpl::~SlideshowImpl()
 
 void SAL_CALL SlideshowImpl::disposing()
 {
+    Server::presentationStopped();
     if( mxShow.is() && mpDoc )
         NotifyDocumentEvent( mpDoc, "OnEndPresentation" );
 
@@ -1508,6 +1509,7 @@ void SAL_CALL SlideshowImpl::resume() throw (RuntimeException)
                 comphelper::anyToString( cppu::getCaughtException() ),
                 RTL_TEXTENCODING_UTF8 )).getStr() );
     }
+    Server::presentationStarted( this );
 }
 
 // ---------------------------------------------------------

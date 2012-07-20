@@ -43,6 +43,7 @@ namespace sd
             static void setup();
             static void presentationStarted( const css::uno::Reference<
                 css::presentation::XSlideShowController > &rController );
+            static void presentationStopped();
             void informListenerDestroyed();
         private:
             Server();
@@ -54,7 +55,6 @@ namespace sd
             void execute();
             static Transmitter *pTransmitter;
             static rtl::Reference<Listener> mListener;
-            static rtl::Reference<ImagePreparer> mPreparer;
     };
 }
 

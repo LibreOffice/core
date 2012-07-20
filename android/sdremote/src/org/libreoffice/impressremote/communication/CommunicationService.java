@@ -2,6 +2,8 @@ package org.libreoffice.impressremote.communication;
 
 import android.app.Service;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Binder;
 import android.os.IBinder;
 import android.os.Messenger;
@@ -71,5 +73,10 @@ public class CommunicationService extends Service {
 	public void disconnect() {
 		mClient.closeConnection();
 	}
+
+	public Bitmap getPreviewImage(int aSlide) {
+		return mReceiver.getPreviewImage(aSlide);
+	}
+
 
 }
