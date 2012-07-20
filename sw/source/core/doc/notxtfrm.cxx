@@ -210,18 +210,18 @@ void lcl_ClearArea( const SwFrm &rFrm,
     SwRegionRects aRegion( rPtArea, 4 );
     aRegion -= rGrfArea;
 
-    if ( aRegion.Count() )
+    if ( !aRegion.empty() )
     {
         const SvxBrushItem *pItem; const Color *pCol; SwRect aOrigRect;
         if ( rFrm.GetBackgroundBrush( pItem, pCol, aOrigRect, sal_False ) )
-            for( sal_uInt16 i = 0; i < aRegion.Count(); ++i )
+            for( sal_uInt16 i = 0; i < aRegion.size(); ++i )
                 ::DrawGraphic( pItem, &rOut, aOrigRect, aRegion[i] );
         else
         {
             rOut.Push( PUSH_FILLCOLOR|PUSH_LINECOLOR );
             rOut.SetFillColor( rFrm.getRootFrm()->GetCurrShell()->Imp()->GetRetoucheColor());
             rOut.SetLineColor();
-            for( sal_uInt16 i = 0; i < aRegion.Count(); ++i )
+            for( sal_uInt16 i = 0; i < aRegion.size(); ++i )
                 rOut.DrawRect( aRegion[i].SVRect() );
             rOut.Pop();
         }

@@ -210,7 +210,7 @@ sal_Bool SwLayAction::PaintWithoutFlys( const SwRect &rRect, const SwCntntFrm *p
     const SwFlyFrm *pSelfFly = pCnt->FindFlyFrm();
     sal_uInt16 i;
 
-    for ( i = 0; i < rObjs.Count() && aTmp.Count(); ++i )
+    for ( i = 0; i < rObjs.Count() && !aTmp.empty(); ++i )
     {
         SdrObject *pO = rObjs[i]->DrawObj();
         if ( !pO->ISA(SwVirtFlyDrawObj) )
@@ -279,9 +279,8 @@ sal_Bool SwLayAction::PaintWithoutFlys( const SwRect &rRect, const SwCntntFrm *p
     }
 
     sal_Bool bRetPaint = sal_False;
-    const SwRect *pData = aTmp.GetData();
-    for ( i = 0; i < aTmp.Count(); ++pData, ++i )
-        bRetPaint |= pImp->GetShell()->AddPaintRect( *pData );
+    for ( SwRects::const_iterator it = aTmp.begin(); it != aTmp.end(); ++it )
+        bRetPaint |= pImp->GetShell()->AddPaintRect( *it );
     return bRetPaint;
 }
 
@@ -1421,13 +1420,13 @@ sal_Bool SwLayAction::FormatLayout( SwLayoutFrm *pLay, sal_Bool bAddRect )
 
                     SwRegionRects aRegion( aOldRect );
                     aRegion -= aPaint;
-                    for ( i = 0; i < aRegion.Count(); ++i )
+                    for ( i = 0; i < aRegion.size(); ++i )
                         pImp->GetShell()->AddPaintRect( aRegion[i] );
                     aRegion.ChangeOrigin( aPaint );
-                    aRegion.Remove( 0, aRegion.Count() );
-                    aRegion.Insert( aPaint, 0 );
+                    aRegion.clear();
+                    aRegion.push_back( aPaint );
                     aRegion -= aOldRect;
-                    for ( i = 0; i < aRegion.Count(); ++i )
+                    for ( i = 0; i < aRegion.size(); ++i )
                         pImp->GetShell()->AddPaintRect( aRegion[i] );
                 }
 

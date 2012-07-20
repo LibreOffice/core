@@ -265,7 +265,7 @@ void SwVisCrsr::_SetPosAndShow()
 
 
 SwSelPaintRects::SwSelPaintRects( const SwCrsrShell& rCSh )
-:   SwRects( 0 ),
+:   SwRects(),
     pCShell( &rCSh ),
     mpCursorOverlay(0)
 {
@@ -278,14 +278,7 @@ SwSelPaintRects::~SwSelPaintRects()
 
 void SwSelPaintRects::swapContent(SwSelPaintRects& rSwap)
 {
-    SwRects aTempRects;
-    aTempRects.Insert(this, 0);
-
-    Remove(0, Count());
-    Insert(&rSwap, 0);
-
-    rSwap.Remove(0, rSwap.Count());
-    rSwap.Insert(&aTempRects, 0);
+    SwRects::swap(rSwap);
 
     // #i75172# also swap mpCursorOverlay
     sdr::overlay::OverlayObject* pTempOverlay = getCursorOverlay();
@@ -301,7 +294,7 @@ void SwSelPaintRects::Hide()
         mpCursorOverlay = 0;
     }
 
-    SwRects::Remove( 0, Count() );
+    SwRects::clear();
 }
 
 void SwSelPaintRects::Show()
@@ -311,13 +304,13 @@ void SwSelPaintRects::Show()
     if(pView && pView->PaintWindowCount())
     {
         // reset rects
-        SwRects::Remove( 0, SwRects::Count() );
+        SwRects::clear();
         FillRects();
 
         // get new rects
         std::vector< basegfx::B2DRange > aNewRanges;
 
-        for(sal_uInt16 a(0); a < Count(); a++)
+        for(sal_uInt16 a(0); a < size(); a++)
         {
             const SwRect aNextRect((*this)[a]);
             const Rectangle aPntRect(aNextRect.SVRect());
@@ -339,7 +332,7 @@ void SwSelPaintRects::Show()
                 mpCursorOverlay = 0;
             }
         }
-        else if(Count())
+        else if(!empty())
         {
             SdrPaintWindow* pCandidate = pView->GetPaintWindow(0);
             rtl::Reference< ::sdr::overlay::OverlayManager > xTargetOverlay = pCandidate->GetOverlayManager();
@@ -382,31 +375,31 @@ void SwSelPaintRects::Show()
 
 void SwSelPaintRects::Invalidate( const SwRect& rRect )
 {
-    sal_uInt16 nSz = Count();
+    sal_uInt16 nSz = size();
     if( !nSz )
         return;
 
     SwRegionRects aReg( GetShell()->VisArea() );
-    aReg.Remove( 0, aReg.Count() );
-    aReg.Insert( this, 0 );
+    aReg.assign( begin(), end() );
     aReg -= rRect;
-    SwRects::Remove( 0, nSz );
-    SwRects::Insert( &aReg, 0 );
+    SwRects::erase( begin(), begin() + nSz );
+    SwRects::insert( begin(), aReg.begin(), aReg.end() );
 
     // If the selection is to the right or at the bottom, outside the
     // visible area, it is never aligned on one pixel at the right/bottom.
     // This has to be determined here and if that is the case the
     // rectangle has to be expanded.
-    if( GetShell()->bVisPortChgd && 0 != ( nSz = Count()) )
+    if( GetShell()->bVisPortChgd && 0 != ( nSz = size()) )
     {
         SwSelPaintRects::Get1PixelInLogic( *GetShell() );
-        SwRect* pRect = (SwRect*)GetData();
-        for( ; nSz--; ++pRect )
+        iterator it = begin();
+        for( ; nSz--; ++it )
         {
-            if( pRect->Right() == GetShell()->aOldRBPos.X() )
-                pRect->Right( pRect->Right() + nPixPtX );
-            if( pRect->Bottom() == GetShell()->aOldRBPos.Y() )
-                pRect->Bottom( pRect->Bottom() + nPixPtY );
+            SwRect& rRectIt = *it;
+            if( rRectIt.Right() == GetShell()->aOldRBPos.X() )
+                rRectIt.Right( rRectIt.Right() + nPixPtX );
+            if( rRectIt.Bottom() == GetShell()->aOldRBPos.Y() )
+                rRectIt.Bottom( rRectIt.Bottom() + nPixPtY );
         }
     }
 }
@@ -680,7 +673,7 @@ void SwShellTableCrsr::FillRects()
         }
     }
     aReg.Invert();
-    Insert( &aReg, 0 );
+    insert( begin(), aReg.begin(), aReg.end() );
 }
 
 

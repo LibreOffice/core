@@ -1851,8 +1851,8 @@ void SwCrsrShell::RefreshBlockCursor()
                 --pPam;
 
                 SwShellCrsr* pNew = new SwShellCrsr( *pCurCrsr );
-                pNew->Insert( pCurCrsr, 0 );
-                pCurCrsr->Remove( 0, pCurCrsr->Count() );
+                pNew->insert( pNew->begin(), pCurCrsr->begin(),  pCurCrsr->end());
+                pCurCrsr->clear();
                 pCurCrsr->DeleteMark();
 
                 *pCurCrsr->GetPoint() = *(*pPam)->GetPoint(); // n-2, n-3, .., 2, 1
@@ -1868,8 +1868,8 @@ void SwCrsrShell::RefreshBlockCursor()
             }
             {
                 SwShellCrsr* pNew = new SwShellCrsr( *pCurCrsr );
-                pNew->Insert( pCurCrsr, 0 );
-                pCurCrsr->Remove( 0, pCurCrsr->Count() );
+                pNew->insert( pNew->begin(), pCurCrsr->begin(), pCurCrsr->end() );
+                pCurCrsr->clear();
                 pCurCrsr->DeleteMark();
             }
             pPam = aSelList.getEnd();
@@ -1937,8 +1937,8 @@ sal_Bool SwCrsrShell::Pop( sal_Bool bOldCrsr )
             pOldStk->GetPtPos() == pCurCrsr->GetMkPos() )
         {
             // move "Selections Rectangles"
-            pCurCrsr->Insert( pOldStk, 0 );
-            pOldStk->Remove( 0, pOldStk->Count() );
+            pCurCrsr->insert( pCurCrsr->begin(), pOldStk->begin(), pOldStk->end() );
+            pOldStk->clear();
         }
 
         if( pOldStk->HasMark() )

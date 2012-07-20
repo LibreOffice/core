@@ -28,17 +28,17 @@
 #ifndef _SWREGION_HXX
 #define _SWREGION_HXX
 
-#include <svl/svarray.hxx>
+#include <vector>
 
 #include "swrect.hxx"
 
-SV_DECL_VARARR( SwRects, SwRect, 20 )
+typedef std::vector<SwRect> SwRects;
 
 class SwRegionRects : public SwRects
 {
     SwRect aOrigin; // Copy of StartRect.
 
-    inline void InsertRect( const SwRect &rRect, const sal_uInt16 nPos, sal_Bool &rDel);
+    inline void InsertRect( const SwRect &rRect, const sal_uInt16 nPos, bool &rDel);
 
 public:
     SwRegionRects( const SwRect& rStartRect, sal_uInt16 nInit = 20 );
@@ -50,7 +50,7 @@ public:
     void Invert();
 
     // Combine adjacent rectangles.
-    void Compress( sal_Bool bFuzzy = sal_True );
+    void Compress( bool bFuzzy = true );
 
     inline const SwRect &GetOrigin() const { return aOrigin; }
     inline void ChangeOrigin( const SwRect &rRect ) { aOrigin = rRect; }

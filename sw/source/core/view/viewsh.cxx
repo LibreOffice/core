@@ -294,10 +294,10 @@ void ViewShell::ImplEndAction( const sal_Bool bIdleEnd )
                 pRegion->Compress();
 
                 VirtualDevice *pVout = 0;
-                while ( pRegion->Count() )
+                while ( !pRegion->empty() )
                 {
-                    SwRect aRect( (*pRegion)[ pRegion->Count() - 1 ] );
-                    pRegion->Remove( pRegion->Count() - 1 );
+                    SwRect aRect( pRegion->back() );
+                    pRegion->pop_back();
 
                     sal_Bool bPaint = sal_True;
                     if ( IsEndActionByVirDev() )
@@ -1501,18 +1501,18 @@ void ViewShell::PaintDesktop( const SwRect &rRect )
             }
             pPage = pPage->GetNext();
         }
-        aRegion.Remove( 0, aRegion.Count() );
+        aRegion.clear();
         if ( aLeft.HasArea() )
-            aRegion.Insert( aLeft, 0 );
+            aRegion.push_back( aLeft );
         if ( aRight.HasArea() )
-            aRegion.Insert( aRight, 1 );
+            aRegion.push_back( aRight );
     }
     else
     {
         const SwFrm *pPage = Imp()->GetFirstVisPage();
         const SwTwips nBottom = rRect.Bottom();
         //const SwTwips nRight  = rRect.Right();
-        while ( pPage && aRegion.Count() &&
+        while ( pPage && !aRegion.empty() &&
                 (pPage->Frm().Top() <= nBottom) ) // PAGES01 && (pPage->Frm().Left() <= nRight))
         {
             SwRect aPageRect( pPage->Frm() );
@@ -1533,7 +1533,7 @@ void ViewShell::PaintDesktop( const SwRect &rRect )
             pPage = pPage->GetNext();
         }
     }
-    if ( aRegion.Count() )
+    if ( !aRegion.empty() )
         _PaintDesktop( aRegion );
 }
 
@@ -1545,7 +1545,7 @@ void ViewShell::_PaintDesktop( const SwRegionRects &rRegion )
     GetOut()->Push( PUSH_FILLCOLOR|PUSH_LINECOLOR );
     GetOut()->SetLineColor();
 
-    for ( sal_uInt16 i = 0; i < rRegion.Count(); ++i )
+    for ( sal_uInt16 i = 0; i < rRegion.size(); ++i )
     {
         const Rectangle aRectangle(rRegion[i].SVRect());
 
@@ -1634,7 +1634,7 @@ sal_Bool ViewShell::CheckInvalidForPaint( const SwRect &rRect )
             //Nur dann interessant, wenn sich im sichtbaren Bereich etwas
             //veraendert hat.
             sal_Bool bStop = sal_True;
-            for ( sal_uInt16 i = 0; i < pRegion->Count(); ++i )
+            for ( sal_uInt16 i = 0; i < pRegion->size(); ++i )
             {
                 const SwRect &rTmp = (*pRegion)[i];
                 if ( sal_False == (bStop = rTmp.IsOver( VisArea() )) )
@@ -1653,10 +1653,10 @@ sal_Bool ViewShell::CheckInvalidForPaint( const SwRect &rRect )
             pRegion->Invert();
             pRegion->Compress();
             bRet = sal_False;
-            if ( pRegion->Count() )
+            if ( !pRegion->empty() )
             {
                 SwRegionRects aRegion( rRect );
-                for ( sal_uInt16 i = 0; i < pRegion->Count(); ++i )
+                for ( sal_uInt16 i = 0; i < pRegion->size(); ++i )
                 {   const SwRect &rTmp = (*pRegion)[i];
                     if ( !rRect.IsInside( rTmp ) )
                     {
@@ -1669,7 +1669,7 @@ sal_Bool ViewShell::CheckInvalidForPaint( const SwRect &rRect )
                 }
                 if ( bRet )
                 {
-                    for ( sal_uInt16 i = 0; i < aRegion.Count(); ++i )
+                    for ( sal_uInt16 i = 0; i < aRegion.size(); ++i )
                         GetWin()->Invalidate( aRegion[i].SVRect() );
 
                     if ( rRect != VisArea() )

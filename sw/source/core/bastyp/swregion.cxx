@@ -30,29 +30,27 @@
 #include "swregion.hxx"
 #include "swtypes.hxx"
 
-SV_IMPL_VARARR( SwRects, SwRect );
-
 SwRegionRects::SwRegionRects( const SwRect &rStartRect, sal_uInt16 nInit ) :
-    SwRects( (sal_uInt8)nInit ),
+    SwRects(),
     aOrigin( rStartRect )
 {
-    Insert( aOrigin, 0 );
+    reserve(nInit);
+    push_back( aOrigin );
 }
 
 // If <rDel> is sal_True then this Rect will be overwritten by <rRect> at
 // position <nPos>. Otherwise <rRect> is attached at the end.
 inline void SwRegionRects::InsertRect( const SwRect &rRect,
-                                       const sal_uInt16 nPos, sal_Bool &rDel )
+                                       const sal_uInt16 nPos, bool &rDel )
 {
     if( rDel )
     {
-        pData = (SwRect*)pData; // looks weird but seems to help gcc ->i78417
-        *(pData+nPos) = rRect;
-        rDel = sal_False;
+        (*this)[nPos] = rRect;
+        rDel = false;
     }
     else
     {
-        Insert( rRect, Count() );
+        push_back( rRect );
     }
 }
 
@@ -64,18 +62,18 @@ inline void SwRegionRects::InsertRect( const SwRect &rRect,
 */
 void SwRegionRects::operator-=( const SwRect &rRect )
 {
-    sal_uInt16 nMax = Count();
+    sal_uInt16 nMax = size();
     for ( sal_uInt16 i = 0; i < nMax; ++i )
     {
-        if ( rRect.IsOver( *(pData+i) ) )
+        if ( rRect.IsOver( (*this)[i] ) )
         {
-            SwRect aTmp( *(pData+i) );
+            SwRect aTmp( (*this)[i] );
             SwRect aInter( aTmp );
             aInter._Intersection( rRect );
 
             // The first Rect that should be inserted takes position of i.
             // This avoids one Delete() call.
-            sal_Bool bDel = sal_True;
+            bool bDel = true;
 
             // now split; only those rectangles should be left over that are in
             // the "old" but not in the "new" area; hence, not in intersection.
@@ -108,7 +106,7 @@ void SwRegionRects::operator-=( const SwRect &rRect )
 
             if( bDel )
             {
-                Remove( i );
+                erase( begin() + i );
                 --i;     // so that we don't forget any
                 --nMax;  // so that we don't check too much
             }
@@ -132,24 +130,12 @@ void SwRegionRects::Invert()
     // To avoid unnecessary memory requirements, create a "useful" initial size:
     // Number of rectangles in this area * 2 + 2 for the special case of a
     // single hole (so four Rects in the inverse case).
-    SwRegionRects aInvRegion( aOrigin, Count()*2+2 );
-    const SwRect *pDat = GetData();
-    for( sal_uInt16 i = 0; i < Count(); ++pDat, ++i )
-        aInvRegion -= *pDat;
+    SwRegionRects aInvRegion( aOrigin, size()*2+2 );
+    for( const_iterator it = begin(); it != end(); ++it )
+        aInvRegion -= *it;
 
-    sal_uInt16 nCpy = Count(), nDel = 0;
-    if( aInvRegion.Count() < Count() )
-    {
-        nDel = Count() - aInvRegion.Count();
-        nCpy = aInvRegion.Count();
-    }
     // overwrite all existing
-    memcpy( pData, aInvRegion.GetData(), nCpy * sizeof( SwRect ));
-
-    if( nCpy < aInvRegion.Count() )
-        Insert( &aInvRegion, nCpy, nCpy );
-    else if( nDel )
-        Remove( nCpy, nDel );
+    swap( aInvRegion );
 }
 
 inline SwTwips CalcArea( const SwRect &rRect )
@@ -158,23 +144,23 @@ inline SwTwips CalcArea( const SwRect &rRect )
 }
 
 // combine all adjacent rectangles
-void SwRegionRects::Compress( sal_Bool bFuzzy )
+void SwRegionRects::Compress( bool bFuzzy )
 {
-    for ( int i = 0; i < Count(); ++i )
+    for ( size_type i = 0; i < size(); ++i )
     {
-        for ( int j = i+1; j < Count(); ++j )
+        for ( size_type j = i+1; j < size(); ++j )
         {
             // If one rectangle contains a second completely than the latter
             // does not need to be stored and can be deleted
-            if ( (*(pData + i)).IsInside( *(pData + j) ) )
+            if ( (*this)[i].IsInside( (*this)[j] ) )
             {
-                Remove( static_cast<sal_uInt16>(j), 1 );
+                erase( begin() + j );
                 --j;
             }
-            else if ( (*(pData + j)).IsInside( *(pData + i) ) )
+            else if ( (*this)[j].IsInside( (*this)[i] ) )
             {
-                *(pData + i) = *(pData + j);
-                Remove( static_cast<sal_uInt16>(j), 1 );
+                (*this)[i] = (*this)[j];
+                erase( begin() + j );
                 i = -1;
                 break;
             }
@@ -187,16 +173,16 @@ void SwRegionRects::Compress( sal_Bool bFuzzy )
                 // ( 9622 * 141.5 = 1361513 ~= a quarter (1/4) centimeter wider
                 // than the width of a A4 page
                 const long nFuzzy = bFuzzy ? 1361513 : 0;
-                SwRect aUnion( *(pData + i) );
-                aUnion.Union( *(pData + j) );
-                SwRect aInter( *(pData + i) );
-                aInter.Intersection( *(pData + j));
-                if ( (::CalcArea( *(pData + i) ) +
-                      ::CalcArea( *(pData + j) ) + nFuzzy) >=
+                SwRect aUnion( (*this)[i] );
+                aUnion.Union( (*this)[j] );
+                SwRect aInter( (*this)[i] );
+                aInter.Intersection( (*this)[j] );
+                if ( (::CalcArea( (*this)[i] ) +
+                      ::CalcArea( (*this)[j] ) + nFuzzy) >=
                      (::CalcArea( aUnion ) - CalcArea( aInter )) )
                 {
-                    *(pData + i) = aUnion;
-                    Remove( static_cast<sal_uInt16>(j), 1 );
+                    (*this)[i] = aUnion;
+                    erase( begin() + j );
                     i = -1;
                     break;
                 }
