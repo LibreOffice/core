@@ -85,13 +85,6 @@ void ScMyStyleRanges::AddRange(const ScRange& rRange,
             mpTimeList->addRange(rRange);
         }
         break;
-        case util::NumberFormat::DATE:
-        {
-            if (!mpDateList)
-                mpDateList.reset(new ScSimpleRangeList);
-            mpDateList->addRange(rRange);
-        }
-        break;
         case util::NumberFormat::DATETIME:
         {
             if (!mpDateTimeList)
@@ -159,8 +152,6 @@ void ScMyStyleRanges::InsertCol(const sal_Int32 nCol, const sal_Int32 nTab, ScDo
         mpNumberList->insertCol(static_cast<SCCOL>(nCol), static_cast<SCTAB>(nTab));
     if (mpTimeList)
         mpTimeList->insertCol(static_cast<SCCOL>(nCol), static_cast<SCTAB>(nTab));
-    if (mpDateList)
-        mpDateList->insertCol(static_cast<SCCOL>(nCol), static_cast<SCTAB>(nTab));
     if (mpDateTimeList)
         mpDateTimeList->insertCol(static_cast<SCCOL>(nCol), static_cast<SCTAB>(nTab));
     if (mpPercentList)
@@ -213,13 +204,6 @@ void ScMyStyleRanges::SetStylesToRanges(const rtl::OUString* pStyleName, ScXMLIm
         mpTimeList->getRangeList(aList);
         SetStylesToRanges(aList, pStyleName, util::NumberFormat::TIME, NULL, rImport);
         mpTimeList->clear();
-    }
-    if (mpDateList)
-    {
-        list<ScRange> aList;
-        mpDateList->getRangeList(aList);
-        SetStylesToRanges(aList, pStyleName, util::NumberFormat::DATE, NULL, rImport);
-        mpDateList->clear();
     }
     if (mpDateTimeList)
     {

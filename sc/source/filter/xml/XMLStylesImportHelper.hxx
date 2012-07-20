@@ -97,7 +97,6 @@ class ScMyStyleRanges : public SvRefBase
     ::boost::shared_ptr<ScSimpleRangeList> mpTextList;
     ::boost::shared_ptr<ScSimpleRangeList> mpNumberList;
     ::boost::shared_ptr<ScSimpleRangeList> mpTimeList;
-    ::boost::shared_ptr<ScSimpleRangeList> mpDateList;
     ::boost::shared_ptr<ScSimpleRangeList> mpDateTimeList;
     ::boost::shared_ptr<ScSimpleRangeList> mpPercentList;
     ::boost::shared_ptr<ScSimpleRangeList> mpLogicalList;
