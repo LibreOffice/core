@@ -46,11 +46,12 @@ private:
     BitmapEx           aBackgroundBitmap;
     BitmapEx           aLogoBitmap;
 
+
     MultiLineEdit       aVersionText;
     MultiLineEdit       aDescriptionText;
     MultiLineEdit       aCopyrightText;
-    MultiLineEdit       aCopyrightTextShadow;
     FixedImage          aLogoImage;
+    MultiLineEdit       aLogoReplacement;
     PushButton          aCreditsButton;
     PushButton          aWebsiteButton;
     CancelButton        aCancelButton;
@@ -68,10 +69,7 @@ private:
     void StyleControls();
     void LayoutControls();
     void LayoutButtons(sal_Int32 aContentWidth, sal_Int32 aDialogBorder,
-                       Point aDescriptionPos,
-                       sal_Int32 aDescriptionTextHeight,
-                       sal_Int32 aVersionDescriptionSpacing, Point& aButtonPos,
-                       Size& aButtonSize, sal_Int32& aButtonsWidth );
+                       Point& aButtonPos, Size& aButtonSize, sal_Int32& aButtonsWidth );
     void MoveControl(Control& rControl, sal_Int32 X, sal_Int32 Y);
     rtl::OUString GetBuildId();
     rtl::OUString GetVersionString();

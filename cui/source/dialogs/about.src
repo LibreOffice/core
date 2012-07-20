@@ -32,6 +32,16 @@ ModalDialog RID_DEFAULTABOUT
     OutputSize = TRUE ;
     Moveable = TRUE ;
     SVLook = TRUE ;
+    MultiLineEdit ABOUT_LOGO_REPLACEMENT
+    {
+        Border = FALSE ;
+        IgnoreTab = TRUE ;
+        ReadOnly = TRUE ;
+        AutoVScroll = TRUE ;
+        LEFT = FALSE ;
+        CENTER = TRUE ;
+        RIGHT = FALSE ;
+    };
     MultiLineEdit ABOUT_DESCRIPTION_TEXT
     {
         Border = FALSE ;
@@ -43,15 +53,6 @@ ModalDialog RID_DEFAULTABOUT
         RIGHT = FALSE ;
     };
     MultiLineEdit ABOUT_COPYRIGHT_TEXT
-    {
-        Border = FALSE ;
-        IgnoreTab = TRUE ;
-        ReadOnly = TRUE ;
-        LEFT = FALSE ;
-        CENTER = TRUE ;
-        RIGHT = FALSE ;
-    };
-    MultiLineEdit ABOUT_COPYRIGHT_TEXT_SHADOW
     {
         Border = FALSE ;
         IgnoreTab = TRUE ;
