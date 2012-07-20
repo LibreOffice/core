@@ -155,14 +155,17 @@ void SwXMLTextBlocks::AddName( const String& rShort, const String& rLong, sal_Bo
     sal_uInt16 nIdx = GetIndex( rShort );
     SwBlockName* pNew = NULL;
     if( nIdx != (sal_uInt16) -1 )
-        aNames.DeleteAndDestroy( nIdx );
+    {
+        delete aNames[nIdx];
+        aNames.erase( aNames.begin() + nIdx );
+    }
 
     aPackageName = GeneratePackageName( rShort );
     pNew = new SwBlockName( rShort, rLong, aPackageName );
 
     pNew->bIsOnlyTxtFlagInit = sal_True;
     pNew->bIsOnlyTxt = bOnlyTxt;
-    aNames.C40_PTR_INSERT( SwBlockName, pNew );
+    aNames.insert( pNew );
     bInfoChanged = sal_True;
 }
 void SwXMLTextBlocks::AddName( const String& rShort, const String& rLong,
@@ -170,17 +173,20 @@ void SwXMLTextBlocks::AddName( const String& rShort, const String& rLong,
 {
     sal_uInt16 nIdx = GetIndex( rShort );
     if( nIdx != (sal_uInt16) -1 )
-        aNames.DeleteAndDestroy( nIdx );
+    {
+        delete aNames[nIdx];
+        aNames.erase( aNames.begin() + nIdx );
+    }
     SwBlockName* pNew = new SwBlockName( rShort, rLong, rPackageName );
     pNew->bIsOnlyTxtFlagInit = sal_True;
     pNew->bIsOnlyTxt = bOnlyTxt;
-    aNames.C40_PTR_INSERT( SwBlockName, pNew );
+    aNames.insert( pNew );
     bInfoChanged = sal_True;
 }
 
 sal_uLong SwXMLTextBlocks::Delete( sal_uInt16 n )
 {
-    String aPckName (aNames[ n ]->aPackageName);
+    String aPckName (aNames[n]->aPackageName);
     uno::Reference < container::XNameAccess > xAccess( xBlkRoot, uno::UNO_QUERY );
     if ( xAccess.is() &&
             xAccess->hasByName( aPckName ) && xBlkRoot->isStreamElement( aPckName ) )
@@ -206,7 +212,7 @@ sal_uLong SwXMLTextBlocks::Rename( sal_uInt16 nIdx, const String& rNewShort, con
     OSL_ENSURE( xBlkRoot.is(), "No storage set" );
     if(!xBlkRoot.is())
         return 0;
-    rtl::OUString aOldName (aNames[ nIdx ]->aPackageName);
+    rtl::OUString aOldName (aNames[nIdx]->aPackageName);
     aShort = rNewShort;
     aPackageName = GeneratePackageName( aShort );
 

@@ -114,7 +114,7 @@ sal_uLong SwXMLTextBlocks::GetDoc( sal_uInt16 nIdx )
             }
 
             xml::sax::InputSource aParserInput;
-            aParserInput.sSystemId = aNames [ nIdx ] ->aPackageName;
+            aParserInput.sSystemId = aNames[nIdx]->aPackageName;
 
             aParserInput.aInputStream = xStream->getInputStream();
 
@@ -182,9 +182,9 @@ sal_uLong SwXMLTextBlocks::GetMacroTable( sal_uInt16 nIdx,
 {
     // set current auto text
 
-    aShort = aNames[ nIdx ]->aShort;
-    aLong = aNames[ nIdx ]->aLong;
-    aPackageName = aNames[ nIdx ]->aPackageName;
+    aShort = aNames[nIdx]->aShort;
+    aLong = aNames[nIdx]->aLong;
+    aPackageName = aNames[nIdx]->aPackageName;
 
     sal_uLong nRet = 0;
 
@@ -603,9 +603,9 @@ sal_uLong SwXMLTextBlocks::SetMacroTable(
     sal_Bool bFileAlreadyOpen )
 {
     // set current autotext
-    aShort = aNames[ nIdx ]->aShort;
-    aLong = aNames[ nIdx ]->aLong;
-    aPackageName = aNames[ nIdx ]->aPackageName;
+    aShort = aNames[nIdx]->aShort;
+    aLong = aNames[nIdx]->aLong;
+    aPackageName = aNames[nIdx]->aPackageName;
 
     // start XML autotext event export
     sal_uLong nRes = 0;

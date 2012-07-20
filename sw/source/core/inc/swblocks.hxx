@@ -31,7 +31,7 @@
 #include <tools/string.hxx>
 
 #include <tools/datetime.hxx>
-#include <svl/svarray.hxx>
+#include <o3tl/sorted_vector.hxx>
 
 
 class SwPaM;
@@ -58,11 +58,11 @@ public:
     SwBlockName( const String& rShort, const String& rLong, const String& rPackageName );
 
     // fuer das Einsortieren in das Array
-    int operator==( const SwBlockName& r ) { return aShort == r.aShort; }
-    int operator< ( const SwBlockName& r ) { return aShort <  r.aShort; }
+    bool operator==( const SwBlockName& r ) const { return aShort == r.aShort; }
+    bool operator< ( const SwBlockName& r ) const { return aShort <  r.aShort; }
 };
 
-SV_DECL_PTRARR_SORT( SwBlockNames, SwBlockName*, 10 )
+class SwBlockNames : public o3tl::sorted_vector<SwBlockName*, o3tl::less_ptr_to<SwBlockName> > {};
 
 
 class SwImpBlocks
