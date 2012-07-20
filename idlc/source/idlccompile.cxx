@@ -244,7 +244,6 @@ sal_Int32 compileFile(const OString * pathname)
     lCppArgs.push_back("-DIDL");
     lCppArgs.push_back("-C");
     lCppArgs.push_back("-zI");
-    lCppArgs.push_back("-I.");
 
     OStringBuffer cppArgs(256);
     Options* pOptions = idlc()->getOptions();
