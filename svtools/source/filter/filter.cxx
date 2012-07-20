@@ -1157,7 +1157,7 @@ void GraphicFilter::ImplInit()
 
     if( bUseConfig )
     {
-#if defined WNT
+#if defined WNT || defined OS2
         rtl::OUString url(RTL_CONSTASCII_USTRINGPARAM("$BRAND_BASE_DIR/program"));
 #else
         rtl::OUString url(RTL_CONSTASCII_USTRINGPARAM("$OOO_BASE_DIR/program"));
