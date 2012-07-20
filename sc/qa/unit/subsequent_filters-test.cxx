@@ -165,9 +165,7 @@ public:
     CPPUNIT_TEST(testMergedCellsODS);
     CPPUNIT_TEST(testRepeatedColumnsODS);
     CPPUNIT_TEST(testDataValidityODS);
-#if 0
     CPPUNIT_TEST(testBrokenQuotesCSV);
-#endif
     CPPUNIT_TEST(testSharedFormulaXLSX);
     CPPUNIT_TEST(testCellValueXLSX);
     CPPUNIT_TEST(testControlImport);
