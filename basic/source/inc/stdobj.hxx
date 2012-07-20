@@ -36,7 +36,7 @@ class SbiStdObject : public SbxObject
                              const SfxHint& rHint, const TypeId& rHintType );
 public:
     SbiStdObject( const String&, StarBASIC* );
-    virtual SbxVariable* Find( const String&, SbxClassType );
+    virtual SbxVariable* Find( const rtl::OUString&, SbxClassType );
     virtual void SetModified( sal_Bool );
 };
 

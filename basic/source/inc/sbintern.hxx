@@ -40,7 +40,7 @@ class SbiFactory : public SbxFactory
 {
 public:
     virtual SbxBase* Create( sal_uInt16 nSbxId, sal_uInt32 = SBXCR_SBX );
-    virtual SbxObject* CreateObject( const String& );
+    virtual SbxObject* CreateObject( const rtl::OUString& );
 };
 
 typedef ::std::vector< String > StringVector;
@@ -73,7 +73,7 @@ public:
     void RemoveClassModule( SbModule* pClassModule );
 
     virtual SbxBase* Create( sal_uInt16 nSbxId, sal_uInt32 = SBXCR_SBX );
-    virtual SbxObject* CreateObject( const String& );
+    virtual SbxObject* CreateObject( const rtl::OUString& );
 
     SbModule* FindClass( const String& rClassName );
 };

@@ -2657,7 +2657,7 @@ SbUnoProperty::~SbUnoProperty()
 {}
 
 
-SbxVariable* SbUnoObject::Find( const String& rName, SbxClassType t )
+SbxVariable* SbUnoObject::Find( const rtl::OUString& rName, SbxClassType t )
 {
     static Reference< XIdlMethod > xDummyMethod;
     static Property aDummyProp;
@@ -2802,9 +2802,9 @@ SbxVariable* SbUnoObject::Find( const String& rName, SbxClassType t )
 
     if( !pRes )
     {
-        if( rName.EqualsIgnoreCaseAscii( ID_DBG_SUPPORTEDINTERFACES ) ||
-            rName.EqualsIgnoreCaseAscii( ID_DBG_PROPERTIES ) ||
-            rName.EqualsIgnoreCaseAscii( ID_DBG_METHODS ) )
+        if( rName.equalsIgnoreAsciiCase(ID_DBG_SUPPORTEDINTERFACES) ||
+            rName.equalsIgnoreAsciiCase(ID_DBG_PROPERTIES) ||
+            rName.equalsIgnoreAsciiCase(ID_DBG_METHODS) )
         {
             // Create
             implCreateDbgProperties();
@@ -2949,7 +2949,7 @@ SbxBase* SbUnoFactory::Create( sal_uInt16, sal_uInt32 )
     return NULL;
 }
 
-SbxObject* SbUnoFactory::CreateObject( const String& rClassName )
+SbxObject* SbUnoFactory::CreateObject( const rtl::OUString& rClassName )
 {
     return Impl_CreateUnoStruct( rClassName );
 }
@@ -3413,10 +3413,8 @@ SbUnoClass* findUnoClass( const ::rtl::OUString& rName )
     return pUnoClass;
 }
 
-SbxVariable* SbUnoClass::Find( const XubString& rName, SbxClassType t )
+SbxVariable* SbUnoClass::Find( const rtl::OUString& rName, SbxClassType )
 {
-    (void)t;
-
     SbxVariable* pRes = SbxObject::Find( rName, SbxCLASS_VARIABLE );
 
     // If nothing were located the submodule isn't known yet
@@ -3570,7 +3568,7 @@ SbUnoService* findUnoService( const ::rtl::OUString& rName )
     return pSbUnoService;
 }
 
-SbxVariable* SbUnoService::Find( const String& rName, SbxClassType )
+SbxVariable* SbUnoService::Find( const rtl::OUString& rName, SbxClassType )
 {
     SbxVariable* pRes = SbxObject::Find( rName, SbxCLASS_METHOD );
 
@@ -4878,7 +4876,7 @@ void SbUnoStructRefObject::initMemberCache()
     mbMemberCacheInit = true;
 }
 
-SbxVariable* SbUnoStructRefObject::Find( const String& rName, SbxClassType t )
+SbxVariable* SbUnoStructRefObject::Find( const rtl::OUString& rName, SbxClassType t )
 {
     SbxVariable* pRes = SbxObject::Find( rName, t );
     if ( !pRes )
@@ -4903,9 +4901,9 @@ SbxVariable* SbUnoStructRefObject::Find( const String& rName, SbxClassType t )
 
     if( !pRes )
     {
-        if( rName.EqualsIgnoreCaseAscii( ID_DBG_SUPPORTEDINTERFACES ) ||
-            rName.EqualsIgnoreCaseAscii( ID_DBG_PROPERTIES ) ||
-            rName.EqualsIgnoreCaseAscii( ID_DBG_METHODS ) )
+        if( rName.equalsIgnoreAsciiCase(ID_DBG_SUPPORTEDINTERFACES) ||
+            rName.equalsIgnoreAsciiCase(ID_DBG_PROPERTIES) ||
+            rName.equalsIgnoreAsciiCase(ID_DBG_METHODS) )
         {
             // Create
             implCreateDbgProperties();

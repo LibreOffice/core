@@ -753,7 +753,7 @@ SbiStdObject::~SbiStdObject()
 // return NULL without error code, so that a whole chain of
 // objects can be asked for the method/property.
 
-SbxVariable* SbiStdObject::Find( const String& rName, SbxClassType t )
+SbxVariable* SbiStdObject::Find( const rtl::OUString& rName, SbxClassType t )
 {
     // entered already?
     SbxVariable* pVar = SbxObject::Find( rName, t );
@@ -776,7 +776,7 @@ SbxVariable* SbiStdObject::Find( const String& rName, SbxClassType t )
         {
             if( ( p->nArgs & nSrchMask )
              && ( p->nHash == nHash_ )
-             && ( rName.EqualsIgnoreCaseAscii( p->pName ) ) )
+             && ( rName.equalsIgnoreAsciiCaseAscii( p->pName ) ) )
             {
                 SbiInstance* pInst = GetSbData()->pInst;
                 bFound = sal_True;

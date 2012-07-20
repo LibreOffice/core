@@ -99,7 +99,7 @@ SbxVariable* SbxCollection::FindUserData( sal_uInt32 nData )
         return SbxObject::FindUserData( nData );
 }
 
-SbxVariable* SbxCollection::Find( const XubString& rName, SbxClassType t )
+SbxVariable* SbxCollection::Find( const rtl::OUString& rName, SbxClassType t )
 {
     if( GetParameters() )
     {

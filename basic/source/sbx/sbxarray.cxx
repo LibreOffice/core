@@ -441,7 +441,7 @@ SbxVariable* SbxArray::FindUserData( sal_uInt32 nData )
 // Search of an element by his name and type. If an element is an object,
 // it will also be scanned..
 
-SbxVariable* SbxArray::Find( const XubString& rName, SbxClassType t )
+SbxVariable* SbxArray::Find( const rtl::OUString& rName, SbxClassType t )
 {
     SbxVariable* p = NULL;
     sal_uInt32 nCount = pData->size();

@@ -171,7 +171,7 @@ SbxBase* SbxBase::Create( sal_uInt16 nSbxId, sal_uInt32 nCreator )
     if( nSbxId == 0x65 )    // Dialog Id
         return new SbxVariable;
 
-    XubString aEmptyStr;
+    rtl::OUString aEmptyStr;
     if( nCreator == SBXCR_SBX )
       switch( nSbxId )
     {
@@ -342,7 +342,7 @@ SbxBase* SbxFactory::Create( sal_uInt16, sal_uInt32 )
     return NULL;
 }
 
-SbxObject* SbxFactory::CreateObject( const XubString& )
+SbxObject* SbxFactory::CreateObject( const rtl::OUString& )
 {
     return NULL;
 }
@@ -352,8 +352,7 @@ SbxObject* SbxFactory::CreateObject( const XubString& )
 SbxInfo::~SbxInfo()
 {}
 
-void SbxInfo::AddParam
-        ( const XubString& rName, SbxDataType eType, sal_uInt16 nFlags )
+void SbxInfo::AddParam(const rtl::OUString& rName, SbxDataType eType, sal_uInt16 nFlags)
 {
     aParams.push_back(new SbxParamInfo(rName, eType, nFlags));
 }
@@ -377,10 +376,9 @@ sal_Bool SbxInfo::LoadData( SvStream& rStrm, sal_uInt16 nVer )
     rStrm >> nHelpId >> nParam;
     while( nParam-- )
     {
-        XubString aName;
         sal_uInt16 nType, nFlags;
         sal_uInt32 nUserData = 0;
-        aName = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(rStrm,
+        rtl::OUString aName = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(rStrm,
             RTL_TEXTENCODING_ASCII_US);
         rStrm >> nType >> nFlags;
         if( nVer > 1 )

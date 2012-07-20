@@ -163,7 +163,7 @@ void SbxObject::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
     }
 }
 
-sal_Bool SbxObject::IsClass( const XubString& rName ) const
+sal_Bool SbxObject::IsClass( const rtl::OUString& rName ) const
 {
     return sal_Bool( aClassName.EqualsIgnoreCaseAscii( rName ) );
 }
@@ -199,7 +199,7 @@ SbxVariable* SbxObject::FindUserData( sal_uInt32 nData )
     return pRes;
 }
 
-SbxVariable* SbxObject::Find( const XubString& rName, SbxClassType t )
+SbxVariable* SbxObject::Find( const rtl::OUString& rName, SbxClassType t )
 {
 #ifdef DBG_UTIL
     static sal_uInt16 nLvl = 0;
