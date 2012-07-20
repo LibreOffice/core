@@ -270,8 +270,7 @@ _CpyTabFrm& _CpyTabFrm::operator=( const _CpyTabFrm& rCpyTabFrm )
     return *this;
 }
 
-SV_DECL_VARARR_SORT( _CpyTabFrms, _CpyTabFrm, 0 )
-SV_IMPL_VARARR_SORT( _CpyTabFrms, _CpyTabFrm )
+typedef o3tl::sorted_vector<_CpyTabFrm> _CpyTabFrms;
 
 struct _CpyPara
 {
@@ -327,7 +326,9 @@ static void lcl_CopyCol( _FndBox & rFndBox, _CpyPara *const pCpyPara)
     sal_uInt16 nFndPos;
     if( pCpyPara->nCpyCnt )
     {
-        if( !pCpyPara->rTabFrmArr.Seek_Entry( aFindFrm, &nFndPos ))
+        _CpyTabFrms::const_iterator itFind = pCpyPara->rTabFrmArr.lower_bound( aFindFrm );
+        nFndPos = itFind - pCpyPara->rTabFrmArr.begin();
+        if( itFind == pCpyPara->rTabFrmArr.end() || !(*itFind == aFindFrm) )
         {
             // For nested copying, also save the new Format as an old one.
             SwTableBoxFmt* pNewFmt = (SwTableBoxFmt*)pBox->ClaimFrmFmt();
@@ -371,9 +372,9 @@ static void lcl_CopyCol( _FndBox & rFndBox, _CpyPara *const pCpyPara)
                 pNewFmt->SetFmtAttr( aFrmSz );
 
                 aFindFrm.pNewFrmFmt = pNewFmt;
-                pCpyPara->rTabFrmArr.Insert( aFindFrm );
+                pCpyPara->rTabFrmArr.insert( aFindFrm );
                 aFindFrm.Value.pFrmFmt = pNewFmt;
-                pCpyPara->rTabFrmArr.Insert( aFindFrm );
+                pCpyPara->rTabFrmArr.insert( aFindFrm );
             }
         }
         else
@@ -384,9 +385,10 @@ static void lcl_CopyCol( _FndBox & rFndBox, _CpyPara *const pCpyPara)
     }
     else
     {
+        _CpyTabFrms::const_iterator itFind = pCpyPara->rTabFrmArr.find( aFindFrm );
         if( pCpyPara->nDelBorderFlag &&
-            pCpyPara->rTabFrmArr.Seek_Entry( aFindFrm, &nFndPos ))
-            aFindFrm = pCpyPara->rTabFrmArr[ nFndPos ];
+            itFind != pCpyPara->rTabFrmArr.end() )
+            aFindFrm = *itFind;
         else
             aFindFrm.pNewFrmFmt = (SwTableBoxFmt*)pBox->GetFrmFmt();
     }
@@ -440,7 +442,7 @@ static void lcl_CopyCol( _FndBox & rFndBox, _CpyPara *const pCpyPara)
                 pBox->ClaimFrmFmt()->SetFmtAttr( aNew );
 
                 if( !pCpyPara->nCpyCnt )
-                    pCpyPara->rTabFrmArr.Insert( aFindFrm );
+                    pCpyPara->rTabFrmArr.insert( aFindFrm );
             }
         }
     }
@@ -1322,7 +1324,9 @@ sal_Bool SwTable::SplitCol( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nC
         // Find the Frame Format in the Frame Format Array
         SwTableBoxFmt* pLastBoxFmt;
         _CpyTabFrm aFindFrm( (SwTableBoxFmt*)pSelBox->GetFrmFmt() );
-        if( !aFrmArr.Seek_Entry( aFindFrm, &nFndPos ))
+        _CpyTabFrms::const_iterator itFind = aFrmArr.lower_bound( aFindFrm );
+        nFndPos = itFind - aFrmArr.begin();
+        if( itFind == aFrmArr.end() || !(*itFind == aFindFrm) )
         {
             // Change the FrmFmt
             aFindFrm.pNewFrmFmt = (SwTableBoxFmt*)pSelBox->ClaimFrmFmt();
@@ -1330,7 +1334,7 @@ sal_Bool SwTable::SplitCol( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nC
             SwTwips nNewBoxSz = nBoxSz / ( nCnt + 1 );
             aFindFrm.pNewFrmFmt->SetFmtAttr( SwFmtFrmSize( ATT_VAR_SIZE,
                                                         nNewBoxSz, 0 ) );
-            aFrmArr.Insert( aFindFrm );
+            aFrmArr.insert( aFindFrm );
 
             pLastBoxFmt = aFindFrm.pNewFrmFmt;
             if( nBoxSz != ( nNewBoxSz * (nCnt + 1)))
@@ -1369,13 +1373,13 @@ sal_Bool SwTable::SplitCol( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nC
             aFindFrm.pNewFrmFmt->SetFmtAttr( aTmp );
 
             // Remove the Format from the "cache"
-            for( sal_uInt16 i = aFrmArr.Count(); i; )
+            for( sal_uInt16 i = aFrmArr.size(); i; )
             {
                 const _CpyTabFrm& rCTF = aFrmArr[ --i ];
                 if( rCTF.pNewFrmFmt == aFindFrm.pNewFrmFmt ||
                     rCTF.Value.pFrmFmt == aFindFrm.pNewFrmFmt )
                 {
-                    aFrmArr.Remove( i );
+                    aFrmArr.erase( aFrmArr.begin() + i );
                     aLastBoxArr.erase( aLastBoxArr.begin() + i );
                 }
             }
@@ -2020,8 +2024,9 @@ static void lcl_CopyBoxToDoc(_FndBox const& rFndBox, _CpyPara *const pCpyPara)
         _CpyTabFrm aFindFrm(static_cast<SwTableBoxFmt*>(rFndBox.GetBox()->GetFrmFmt()));
 
         SwFmtFrmSize aFrmSz;
-        sal_uInt16 nFndPos;
-        if( !pCpyPara->rTabFrmArr.Seek_Entry( aFindFrm, &nFndPos ) ||
+        _CpyTabFrms::const_iterator itFind = pCpyPara->rTabFrmArr.lower_bound( aFindFrm );
+        sal_uInt16 nFndPos = itFind - pCpyPara->rTabFrmArr.begin();
+        if( itFind == pCpyPara->rTabFrmArr.end() || !(*itFind == aFindFrm) ||
             ( aFrmSz = ( aFindFrm = pCpyPara->rTabFrmArr[ nFndPos ]).pNewFrmFmt->
                 GetFrmSize()).GetWidth() != (SwTwips)nSize )
         {
@@ -2032,7 +2037,7 @@ static void lcl_CopyBoxToDoc(_FndBox const& rFndBox, _CpyPara *const pCpyPara)
                 aFindFrm.pNewFrmFmt->ResetFmtAttr(  RES_BOXATR_FORMULA, RES_BOXATR_VALUE );
             aFrmSz.SetWidth( nSize );
             aFindFrm.pNewFrmFmt->SetFmtAttr( aFrmSz );
-            pCpyPara->rTabFrmArr.Insert( aFindFrm );
+            pCpyPara->rTabFrmArr.insert( aFindFrm );
         }
 
         SwTableBox* pBox;
@@ -2113,16 +2118,16 @@ lcl_CopyLineToDoc(const _FndLine& rFndLine, _CpyPara *const pCpyPara)
 {
     // Find the Frame Format in the list of all Frame Formats
     _CpyTabFrm aFindFrm( (SwTableBoxFmt*)rFndLine.GetLine()->GetFrmFmt() );
-    sal_uInt16 nFndPos;
-    if( !pCpyPara->rTabFrmArr.Seek_Entry( aFindFrm, &nFndPos ))
+    _CpyTabFrms::const_iterator itFind = pCpyPara->rTabFrmArr.find( aFindFrm );
+    if( itFind == pCpyPara->rTabFrmArr.end() )
     {
         // It doesn't exist yet, so copy it
         aFindFrm.pNewFrmFmt = (SwTableBoxFmt*)pCpyPara->pDoc->MakeTableLineFmt();
         aFindFrm.pNewFrmFmt->CopyAttrs( *rFndLine.GetLine()->GetFrmFmt() );
-        pCpyPara->rTabFrmArr.Insert( aFindFrm );
+        pCpyPara->rTabFrmArr.insert( aFindFrm );
     }
     else
-        aFindFrm = pCpyPara->rTabFrmArr[ nFndPos ];
+        aFindFrm = *itFind;
 
     SwTableLine* pNewLine = new SwTableLine( (SwTableLineFmt*)aFindFrm.pNewFrmFmt,
                         rFndLine.GetBoxes().size(), pCpyPara->pInsBox );
