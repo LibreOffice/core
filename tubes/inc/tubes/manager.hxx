@@ -39,7 +39,6 @@
 #include <rtl/ref.hxx>
 #include <tools/link.hxx>
 #include <telepathy-glib/telepathy-glib.h>
-#include <map>
 
 // For testing purposes, we might need more in future.
 #define LIBO_TUBES_DBUS_INTERFACE "org.libreoffice.calc"
