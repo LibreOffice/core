@@ -60,6 +60,7 @@ $(eval $(call gb_Module_add_slowcheck_targets,sw,\
     CppunitTest_sw_subsequent_ww8import \
     CppunitTest_sw_subsequent_rtfexport \
     CppunitTest_sw_subsequent_rtfimport \
+    CppunitTest_sw_subsequent_odfexport \
     CppunitTest_sw_subsequent_odfimport \
 ))
 
