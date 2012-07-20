@@ -235,8 +235,7 @@ struct _MapTblFrmFmt
     {}
 };
 
-SV_DECL_VARARR( _MapTblFrmFmts, _MapTblFrmFmt, 0 )
-SV_IMPL_VARARR( _MapTblFrmFmts, _MapTblFrmFmt );
+typedef std::vector<_MapTblFrmFmt> _MapTblFrmFmts;
 
 SwCntntNode* SwTxtNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
 {
@@ -299,12 +298,12 @@ SwCntntNode* SwTxtNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
 }
 
 
-sal_Bool lcl_SrchNew( const _MapTblFrmFmt& rMap, void * pPara )
+static bool lcl_SrchNew( const _MapTblFrmFmt& rMap, const SwFrmFmt** pPara )
 {
-    if( rMap.pOld != *(const SwFrmFmt**)pPara )
-        return sal_True;
-    *((const SwFrmFmt**)pPara) = rMap.pNew;
-    return sal_False;       // abbrechen, Pointer gefunden
+    if( rMap.pOld != *pPara )
+        return true;
+    *pPara = rMap.pNew;
+    return false;       // abbrechen, Pointer gefunden
 }
 
 
@@ -330,7 +329,9 @@ static void lcl_CopyTblLine( const SwTableLine* pLine, _CopyTable* pCT );
 static void lcl_CopyTblBox( SwTableBox* pBox, _CopyTable* pCT )
 {
     SwTableBoxFmt* pBoxFmt = (SwTableBoxFmt*)pBox->GetFrmFmt();
-    pCT->rMapArr.ForEach( lcl_SrchNew, &pBoxFmt );
+    for( _MapTblFrmFmts::const_iterator it = pCT->rMapArr.begin(); it != pCT->rMapArr.end(); ++it )
+        if ( !lcl_SrchNew( *it, (const SwFrmFmt**)&pBoxFmt ) )
+            break;
     if( pBoxFmt == pBox->GetFrmFmt() ) // ein neues anlegen ??
     {
         const SfxPoolItem* pItem;
@@ -357,8 +358,7 @@ static void lcl_CopyTblBox( SwTableBox* pBox, _CopyTable* pCT )
             }
         }
 
-        pCT->rMapArr.Insert( _MapTblFrmFmt( pBox->GetFrmFmt(), pBoxFmt ),
-                                pCT->rMapArr.Count() );
+        pCT->rMapArr.push_back( _MapTblFrmFmt( pBox->GetFrmFmt(), pBoxFmt ) );
     }
 
     sal_uInt16 nLines = pBox->GetTabLines().size();
@@ -391,13 +391,14 @@ static void lcl_CopyTblBox( SwTableBox* pBox, _CopyTable* pCT )
 static void lcl_CopyTblLine( const SwTableLine* pLine, _CopyTable* pCT )
 {
     SwTableLineFmt* pLineFmt = (SwTableLineFmt*)pLine->GetFrmFmt();
-    pCT->rMapArr.ForEach( lcl_SrchNew, &pLineFmt );
+    for( _MapTblFrmFmts::const_iterator it = pCT->rMapArr.begin(); it != pCT->rMapArr.end(); ++it )
+        if ( !lcl_SrchNew( *it, (const SwFrmFmt**)&pLineFmt ) )
+            break;
     if( pLineFmt == pLine->GetFrmFmt() )   // ein neues anlegen ??
     {
         pLineFmt = pCT->pDoc->MakeTableLineFmt();
         pLineFmt->CopyAttrs( *pLine->GetFrmFmt() );
-        pCT->rMapArr.Insert( _MapTblFrmFmt( pLine->GetFrmFmt(), pLineFmt ),
-                                pCT->rMapArr.Count());
+        pCT->rMapArr.push_back( _MapTblFrmFmt( pLine->GetFrmFmt(), pLineFmt ) );
     }
     SwTableLine* pNewLine = new SwTableLine( pLineFmt,
                             pLine->GetTabBoxes().size(), pCT->pInsBox );
