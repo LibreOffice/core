@@ -765,6 +765,7 @@ struct PPTParaSheet
 
     void        Read( SdrPowerPointImport& rMan, SvStream& rIn, sal_Bool bMasterStyle,
                         sal_uInt32 nLevel, sal_Bool bFirst );
+    void        UpdateBulletRelSize(  sal_uInt32 nLevel, sal_uInt16 nFontHeight );
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

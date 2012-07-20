@@ -4274,6 +4274,18 @@ void PPTParaSheet::Read( SdrPowerPointImport&
     }
 }
 
+void PPTParaSheet::UpdateBulletRelSize(  sal_uInt32 nLevel, sal_uInt16 nFontHeight )
+{
+    if ( maParaLevel[ nLevel ].mnBulletHeight > 0x7fff ) // a negative value is the absolute bullet height
+    {
+        sal_Int16  nBulletRelSize = ( sal_Int16 )maParaLevel[ nLevel ].mnBulletHeight;
+        nBulletRelSize = nFontHeight ? ((-nBulletRelSize) * 100 ) / nFontHeight : 100;
+        if ( nBulletRelSize < 0 ) //bullet size over flow
+            nBulletRelSize = 100;
+        maParaLevel[ nLevel ].mnBulletHeight = nBulletRelSize;
+    }
+}
+
 PPTStyleSheet::PPTStyleSheet( const DffRecordHeader& rSlideHd, SvStream& rIn, SdrPowerPointImport& rManager,
                                 const PPTTextCharacterStyleAtomInterpreter& /*rTxCFStyle*/, const PPTTextParagraphStyleAtomInterpreter& rTxPFStyle,
                                     const PPTTextSpecInfo& rTextSpecInfo ) :
@@ -4344,6 +4356,7 @@ PPTStyleSheet::PPTStyleSheet( const DffRecordHeader& rSlideHd, SvStream& rIn, Sd
                         }
                     }
                     mpCharSheet[ TSS_TYPE_TEXT_IN_SHAPE ]->Read( rIn, sal_True, nLev, bFirst );
+                    mpParaSheet[ TSS_TYPE_TEXT_IN_SHAPE ]->UpdateBulletRelSize(  nLev, mpCharSheet[ TSS_TYPE_TEXT_IN_SHAPE ]->maCharLevel[ nLev ].mnFontHeight );
                     bFirst = sal_False;
                     nLev++;
                 }
@@ -4432,6 +4445,7 @@ PPTStyleSheet::PPTStyleSheet( const DffRecordHeader& rSlideHd, SvStream& rIn, Sd
                 }
                 mpParaSheet[ nInstance ]->Read( rManager, rIn, sal_True, nLev, bFirst );
                 mpCharSheet[ nInstance ]->Read( rIn, sal_True, nLev, bFirst );
+                mpParaSheet[ nInstance ]->UpdateBulletRelSize(  nLev, mpCharSheet[ nInstance ]->maCharLevel[ nLev ].mnFontHeight );
                 bFirst = sal_False;
                 nLev++;
             }
@@ -4529,6 +4543,7 @@ PPTStyleSheet::PPTStyleSheet( const DffRecordHeader& rSlideHd, SvStream& rIn, Sd
                             }
                         }
                         mpCharSheet[ TSS_TYPE_TEXT_IN_SHAPE ]->Read( rIn, sal_True, nLev, bFirst );
+                        mpParaSheet[ TSS_TYPE_TEXT_IN_SHAPE ]->UpdateBulletRelSize(  nLev, mpCharSheet[ TSS_TYPE_TEXT_IN_SHAPE ]->maCharLevel[ nLev ].mnFontHeight );
                         bFirst = sal_False;
                         nLev++;
                     }
