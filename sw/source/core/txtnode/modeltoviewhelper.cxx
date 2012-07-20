@@ -31,7 +31,7 @@ sal_uInt32 ConvertToViewPosition( const ConversionMap* pMap, sal_uInt32 nModelPo
     if ( !pMap )
         return nRet;
 
-    // Search for entry behind nPos:
+    // Search for entry after nPos:
     ConversionMap::const_iterator aIter;
     for ( aIter = pMap->begin(); aIter != pMap->end(); ++aIter )
     {
@@ -60,7 +60,7 @@ ModelPosition ConvertToModelPosition( const ConversionMap* pMap, sal_uInt32 nVie
     if ( !pMap )
         return aRet;
 
-    // Search for entry behind nPos:
+    // Search for entry after nPos:
     ConversionMap::const_iterator aIter;
     for ( aIter = pMap->begin(); aIter != pMap->end(); ++aIter )
     {
