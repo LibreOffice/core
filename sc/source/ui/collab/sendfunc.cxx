@@ -198,7 +198,7 @@ class ScDocFuncDemo : public ScDocFuncRecv
         // FIXME: Lifecycle nightmare
         std::vector< boost::shared_ptr<ScDocFuncRecv> > aCopy( maClients );
         for (std::vector< boost::shared_ptr<ScDocFuncRecv> >::iterator i
-                 = aCopy.begin(); i != aCopy.end(); i++)
+                 = aCopy.begin(); i != aCopy.end(); ++i)
             (*i)->RecvMessage(rString);
     }
 
@@ -207,7 +207,7 @@ class ScDocFuncDemo : public ScDocFuncRecv
         // FIXME: Lifecycle nightmare
         std::vector< boost::shared_ptr<ScDocFuncRecv> > aCopy( maClients );
         for (std::vector< boost::shared_ptr<ScDocFuncRecv> >::iterator i
-                 = aCopy.begin(); i != aCopy.end(); i++)
+                 = aCopy.begin(); i != aCopy.end(); ++i)
             (*i)->fileReceived( rStr );
     }
 };

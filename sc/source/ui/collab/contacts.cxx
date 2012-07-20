@@ -227,7 +227,7 @@ public:
         {
             AccountContactPairV aPairs = pContacts->getContacts();
             AccountContactPairV::iterator it;
-            for( it = aPairs.begin(); it != aPairs.end(); it++ )
+            for( it = aPairs.begin(); it != aPairs.end(); ++it )
             {
                 Image aImage;
                 GFile *pAvatarFile = tp_contact_get_avatar_file( it->second );
