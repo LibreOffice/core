@@ -4217,6 +4217,7 @@ PINWHEELWIPE_TRANSITION     = 6;  // 23
 PUSHWIPE_TRANSITION         = 7; // 35
 SLIDEWIPE_TRANSITION        = 8; // 36
 FADE_TRANSITION             = 9; // 37
+CHECKERBOARDWIPE_TRANSITION = 10; // 39
 
 aTransitionTypeInMap = {
     'barWipe'           : BARWIPE_TRANSITION,
@@ -4227,12 +4228,13 @@ aTransitionTypeInMap = {
     'pinWheelWipe'      : PINWHEELWIPE_TRANSITION,
     'pushWipe'          : PUSHWIPE_TRANSITION,
     'slideWipe'         : SLIDEWIPE_TRANSITION,
-    'fade'              : FADE_TRANSITION
+    'fade'              : FADE_TRANSITION,
+    'checkerBoardWipe'  : CHECKERBOARDWIPE_TRANSITION
 };
 
 aTransitionTypeOutMap = [ '', 'barWipe', 'boxWipe', 'fourBoxWipe', 'ellipseWipe',
                           'clockWipe', 'pinWheelWipe', 'pushWipe', 'slideWipe',
-                          'fade' ];
+                          'fade', 'checkerBoardWipe' ];
 
 
 // Transition Subtypes
@@ -4243,25 +4245,27 @@ CORNERSIN_TRANS_SUBTYPE             = 3; // 11
 CORNERSOUT_TRANS_SUBTYPE            = 4;
 VERTICAL_TRANS_SUBTYPE              = 5;
 HORIZONTAL_TRANS_SUBTYPE            = 6; // 14
-CIRCLE_TRANS_SUBTYPE                = 7; // 27
-CLOCKWISETWELVE_TRANS_SUBTYPE       = 8; // 33
-CLOCKWISETHREE_TRANS_SUBTYPE        = 9;
-CLOCKWISESIX_TRANS_SUBTYPE          = 10;
-CLOCKWISENINE_TRANS_SUBTYPE         = 11;
-TWOBLADEVERTICAL_TRANS_SUBTYPE      = 12;
-TWOBLADEHORIZONTAL_TRANS_SUBTYPE    = 13;
-FOURBLADE_TRANS_SUBTYPE             = 14; // 39
-FROMLEFT_TRANS_SUBTYPE              = 15; // 97
-FROMTOP_TRANS_SUBTYPE               = 16;
-FROMRIGHT_TRANS_SUBTYPE             = 17;
-FROMBOTTOM_TRANS_SUBTYPE            = 18;
-CROSSFADE_TRANS_SUBTYPE             = 19;
-FADETOCOLOR_TRANS_SUBTYPE           = 20;
-FADEFROMCOLOR_TRANS_SUBTYPE         = 21;
-FADEOVERCOLOR_TRANS_SUBTYPE         = 22;
-THREEBLADE_TRANS_SUBTYPE            = 23;
-EIGHTBLADE_TRANS_SUBTYPE            = 24;
-ONEBLADE_TRANS_SUBTYPE              = 25; // 107
+DOWN_TRANS_SUBTYPE                  = 7  // 19
+CIRCLE_TRANS_SUBTYPE                = 8; // 27
+CLOCKWISETWELVE_TRANS_SUBTYPE       = 9; // 33
+CLOCKWISETHREE_TRANS_SUBTYPE        = 10;
+CLOCKWISESIX_TRANS_SUBTYPE          = 11;
+CLOCKWISENINE_TRANS_SUBTYPE         = 12;
+TWOBLADEVERTICAL_TRANS_SUBTYPE      = 13;
+TWOBLADEHORIZONTAL_TRANS_SUBTYPE    = 14;
+FOURBLADE_TRANS_SUBTYPE             = 15; // 39
+FROMLEFT_TRANS_SUBTYPE              = 16; // 97
+FROMTOP_TRANS_SUBTYPE               = 17;
+FROMRIGHT_TRANS_SUBTYPE             = 18;
+FROMBOTTOM_TRANS_SUBTYPE            = 19;
+CROSSFADE_TRANS_SUBTYPE             = 20;
+FADETOCOLOR_TRANS_SUBTYPE           = 21;
+FADEFROMCOLOR_TRANS_SUBTYPE         = 22;
+FADEOVERCOLOR_TRANS_SUBTYPE         = 23;
+THREEBLADE_TRANS_SUBTYPE            = 24;
+EIGHTBLADE_TRANS_SUBTYPE            = 25;
+ONEBLADE_TRANS_SUBTYPE              = 26; // 107
+ACROSS_TRANS_SUBTYPE                = 27;
 
 aTransitionSubtypeInMap = {
     'leftToRight'       : LEFTTORIGHT_TRANS_SUBTYPE,
@@ -4270,6 +4274,7 @@ aTransitionSubtypeInMap = {
     'cornersOut'        : CORNERSOUT_TRANS_SUBTYPE,
     'vertical'          : VERTICAL_TRANS_SUBTYPE,
     'horizontal'        : HORIZONTAL_TRANS_SUBTYPE,
+    'down'              : DOWN_TRANS_SUBTYPE,
     'circle'            : CIRCLE_TRANS_SUBTYPE,
     'clockwiseTwelve'   : CLOCKWISETWELVE_TRANS_SUBTYPE,
     'clockwiseThree'    : CLOCKWISETHREE_TRANS_SUBTYPE,
@@ -4288,16 +4293,18 @@ aTransitionSubtypeInMap = {
     'fadeOverColor'     : FADEOVERCOLOR_TRANS_SUBTYPE,
     'threeBlade'        : THREEBLADE_TRANS_SUBTYPE,
     'eightBlade'        : EIGHTBLADE_TRANS_SUBTYPE,
-    'oneBlade'          : ONEBLADE_TRANS_SUBTYPE
+    'oneBlade'          : ONEBLADE_TRANS_SUBTYPE,
+    'across'            : ACROSS_TRANS_SUBTYPE
 };
 
 aTransitionSubtypeOutMap = [ 'default', 'leftToRight', 'topToBottom', 'cornersIn',
-                             'cornersOut', 'vertical', 'horizontal', 'circle',
+                             'cornersOut', 'vertical', 'horizontal', 'down', 'circle',
                              'clockwiseTwelve', 'clockwiseThree', 'clockwiseSix',
                              'clockwiseNine', 'twoBladeVertical', 'twoBladeHorizontal',
                              'fourBlade', 'fromLeft', 'fromTop', 'fromRight',
                              'fromBottom', 'crossfade', 'fadeToColor', 'fadeFromColor',
-                             'fadeOverColor', 'threeBlade', 'eightBlade', 'oneBlade' ];
+                             'fadeOverColor', 'threeBlade', 'eightBlade', 'oneBlade',
+                             'across' ];
 
 
 // Transition Modes
@@ -4530,6 +4537,27 @@ aTransitionInfoTable[FADE_TRANSITION][FADEOVERCOLOR_TRANS_SUBTYPE] =
     'scaleIsotropically' : false
 };
 
+aTransitionInfoTable[CHECKERBOARDWIPE_TRANSITION] = {};
+aTransitionInfoTable[CHECKERBOARDWIPE_TRANSITION][DOWN_TRANS_SUBTYPE] =
+{
+    'class' : TRANSITION_CLIP_POLYPOLYGON,
+    'rotationAngle' : 90.0,
+    'scaleX' : 1.0,
+    'scaleY' : 1.0,
+    'reverseMethod' : REVERSEMETHOD_FLIP_Y,
+    'outInvertsSweep' : true,
+    'scaleIsotropically' : false
+};
+aTransitionInfoTable[CHECKERBOARDWIPE_TRANSITION][ACROSS_TRANS_SUBTYPE] =
+{
+    'class' : TRANSITION_CLIP_POLYPOLYGON,
+    'rotationAngle' : 0.0,
+    'scaleX' : 1.0,
+    'scaleY' : 1.0,
+    'reverseMethod' : REVERSEMETHOD_FLIP_X,
+    'outInvertsSweep' : true,
+    'scaleIsotropically' : false
+};
 
 // ------------------------------------------------------------------------------------------ //
 // Transition tables
@@ -8064,6 +8092,8 @@ function createClipPolyPolygon( nType, nSubtype )
                     return null;
             }
             return new PinWheelWipePath( nBlades );
+        case CHECKERBOARDWIPE_TRANSITION:
+            return new CheckerBoardWipePath( 10 );
     }
 }
 
@@ -8313,6 +8343,62 @@ PinWheelWipePath.prototype.perform = function( nT )
 
     var aTransform = SVGIdentityMatrix.translate( 0.5, 0.5 ).scale( 0.5 );
     aPolyPath.matrixTransform( aTransform );
+
+    return aPolyPath;
+};
+
+
+// ------------------------------------------------------------------------------------------ //
+/** Class CheckerBoardWipePath
+ *
+ *  @param unitsPerEdge
+ *     The number of cells (per line and column) in the checker board.
+ */
+function CheckerBoardWipePath( unitsPerEdge )
+{
+    this.unitsPerEdge = unitsPerEdge;
+    if( this.unitsPerEdge === undefined || this.unitsPerEdge < 1 )
+        this.unitsPerEdge = 10;
+    this.aBasePath = createUnitSquarePath();
+}
+
+/** perform
+ *
+ *  @param nT
+ *      A parameter in [0,1] representing the width of the generated bars.
+ *  @return {SVGPathElement}
+ *      A svg <path> element representing a multi-bars.
+ */
+CheckerBoardWipePath.prototype.perform = function( nT )
+{
+    var d = pruneScaleValue(1.0 / this.unitsPerEdge);
+    var aMatrix = SVGIdentityMatrix.scaleNonUniform(pruneScaleValue( d*2.0*nT ),
+                                                    pruneScaleValue( d ) );
+
+    var aPolyPath = null;
+    var i, j;
+    var aTransform;
+    var aPath;
+    for ( i = this.unitsPerEdge; i--; )
+    {
+        aTransform = SVGIdentityMatrix;
+
+        if ((i % 2) == 1) // odd line
+            aTransform = aTransform.translate( -d, 0.0 );
+
+        aTransform = aTransform.multiply( aMatrix );
+
+        for ( j = (this.unitsPerEdge / 2) + 1; j--;)
+        {
+            aPath = this.aBasePath.cloneNode( true );
+            aPath.matrixTransform( aTransform );
+            if (aPolyPath == null) aPolyPath = aPath;
+            else aPolyPath.appendPath( aPath );
+            aTransform = SVGIdentityMatrix.translate( d*2.0, 0.0 ).multiply( aTransform );
+        }
+
+        aMatrix = SVGIdentityMatrix.translate( 0.0, d ).multiply( aMatrix ); // next line
+    }
 
     return aPolyPath;
 };
