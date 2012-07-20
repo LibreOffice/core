@@ -989,7 +989,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
         // we search for connecting opportunities (kashida)
         else if ( bAdjustBlock && i18n::ScriptType::COMPLEX == nScript )
         {
-            SwScanner aScanner( rNode, rNode.GetTxt(), 0, 0,
+            SwScanner aScanner( rNode, rNode.GetTxt(), 0, ModelToViewHelper(),
                                 i18n::WordType::DICTIONARY_WORD,
                                 nLastKashida, nChg );
 

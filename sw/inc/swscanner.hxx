@@ -45,7 +45,7 @@ class SwScanner
     const SwTxtNode& rNode;
     const rtl::OUString aText;
     const LanguageType* pLanguage;
-    const ModelToViewHelper::ConversionMap* pConversionMap;
+    const ModelToViewHelper& rConversionMap;
     sal_Int32 nStartPos;
     sal_Int32 nEndPos;
     sal_Int32 nBegin;
@@ -57,7 +57,7 @@ class SwScanner
 public:
     SwScanner( const SwTxtNode& rNd, const rtl::OUString& rTxt,
                const LanguageType* pLang,
-               const ModelToViewHelper::ConversionMap* pConvMap,
+               const ModelToViewHelper& rConvMap,
                sal_uInt16 nWordType,
                sal_Int32 nStart, sal_Int32 nEnde, sal_Bool bClip = sal_False );
 
