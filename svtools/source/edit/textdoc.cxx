@@ -34,9 +34,6 @@ SV_IMPL_PTRARR( TextCharAttribs, TextCharAttribPtr );
 // Vergleichmethode wird von QuickSort gerufen...
 
 EXTERN_C
-#if defined( PM2 ) && (!defined( CSET ) && !defined ( MTW ) && !defined( WTC ))
-int _stdcall
-#else
 #ifdef WNT
 #if _MSC_VER >= 1200
 int __cdecl
@@ -45,7 +42,6 @@ int _cdecl
 #endif
 #else
 int
-#endif
 #endif
 
 CompareStart( const void* pFirst, const void* pSecond )
