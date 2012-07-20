@@ -1737,6 +1737,10 @@ void XMLTextFieldExport::ExportFieldHelper(
                    "Unexpected presentation for annotation field");
 
         // annotation element + content
+        OUString aName;
+        rPropSet->getPropertyValue(sPropertyName) >>= aName;
+        if (!aName.isEmpty())
+            GetExport().AddAttribute(XML_NAMESPACE_OFFICE, XML_NAME, aName);
         SvXMLElementExport aElem(GetExport(), XML_NAMESPACE_OFFICE,
                                  XML_ANNOTATION, sal_False, sal_True);
 

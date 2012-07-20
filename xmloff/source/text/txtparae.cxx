@@ -2181,6 +2181,7 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
 {
     static OUString sMeta("InContentMetadata");
     bool bPrevCharIsSpace = bPrvChrIsSpc;
+    bool bAnnotationStarted = false;
 
     /* This is  used for exporting to strict OpenDocument 1.2, in which case traditional
      * bookmarks are used instead of fieldmarks. */
@@ -2204,8 +2205,15 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
             }
             else if( sType.equals(sTextField))
             {
-                exportTextField( xTxtRange, bAutoStyles, bIsProgress );
-                bPrevCharIsSpace = false;
+                if (bAnnotationStarted)
+                {
+                    bAnnotationStarted = false;
+                }
+                else
+                {
+                    exportTextField( xTxtRange, bAutoStyles, bIsProgress );
+                    bPrevCharIsSpace = false;
+                }
             }
             else if( sType.equals( sFrame ) )
             {
@@ -2265,6 +2273,14 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
             }
             else if (sType.equals(sTextFieldStart))
             {
+                Reference< ::com::sun::star::text::XFormField > xFormField(xPropSet->getPropertyValue(sBookmark), UNO_QUERY);
+                if (xFormField->getFieldType() == ODF_COMMENTRANGE)
+                {
+                    exportTextField( xTxtRange, bAutoStyles, bIsProgress );
+                    bAnnotationStarted = true;
+                    continue;
+                }
+
                 /* As of now, textmarks are a proposed extension to the OpenDocument standard. */
                 if ( GetExport().getDefaultVersion() > SvtSaveOptions::ODFVER_012 )
                 {
@@ -2273,7 +2289,6 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
                     {
                         GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_NAME, xBookmark->getName());
                     }
-                    Reference< ::com::sun::star::text::XFormField > xFormField(xPropSet->getPropertyValue(sBookmark), UNO_QUERY);
                     if (xFormField.is())
                     {
                         GetExport().AddAttribute(XML_NAMESPACE_FIELD, XML_TYPE, xFormField->getFieldType());
@@ -2288,7 +2303,6 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
                 /* The OpenDocument standard does not include support for TextMarks for now, so use bookmarks instead. */
                 else
                 {
-                    Reference< ::com::sun::star::text::XFormField > xFormField(xPropSet->getPropertyValue(sBookmark), UNO_QUERY);
                     if (xFormField.is())
                     {
                         Reference< ::com::sun::star::container::XNameAccess > xParameters(xFormField->getParameters(), UNO_QUERY);
@@ -2322,6 +2336,18 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
             }
             else if (sType.equals(sTextFieldEnd))
             {
+                if (bAnnotationStarted)
+                {
+                    Reference<XNamed> xBookmark(xPropSet->getPropertyValue(sBookmark), UNO_QUERY);
+                    const OUString& rName = xBookmark->getName();
+                    if (!rName.isEmpty())
+                        GetExport().AddAttribute(XML_NAMESPACE_OFFICE, XML_NAME, rName);
+                    SvXMLElementExport aElem( GetExport(), !bAutoStyles,
+                        XML_NAMESPACE_OFFICE, XML_ANNOTATION_END,
+                        sal_False, sal_False );
+                    continue;
+                }
+
                 if ( GetExport().getDefaultVersion() > SvtSaveOptions::ODFVER_012 )
                 {
                     SvXMLElementExport aElem( GetExport(), !bAutoStyles,
