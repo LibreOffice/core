@@ -73,7 +73,7 @@ void PackageRegistryBackend::disposing( lang::EventObject const & event )
     ::osl::MutexGuard guard( getMutex() );
     if ( m_bound.erase( url ) != 1 )
     {
-        SAL_WARN("basic", "erase(" << url << ") != 1");
+        SAL_WARN("desktop.deployment", "erase(" << url << ") != 1");
     }
 }
 
@@ -209,7 +209,7 @@ Reference<deployment::XPackage> PackageRegistryBackend::bindPackage(
     { // first insertion
         SAL_WARN_IF(
             Reference<XInterface>(insertion.first->second) != xNewPackage,
-            "desktop", "mismatch");
+            "desktop.deployment", "mismatch");
     }
     else
     { // found existing entry
@@ -339,7 +339,8 @@ Package::Package( ::rtl::Reference<PackageRegistryBackend> const & myBackend,
     if (m_bRemoved)
     {
         //We use the last segment of the URL
-        SAL_WARN_IF(!m_name.isEmpty(), "basic", "non-empty m_name");
+        SAL_WARN_IF(
+            !m_name.isEmpty(), "desktop.deployment", "non-empty m_name");
         OUString name = m_url;
         rtl::Bootstrap::expandMacros(name);
         sal_Int32 index = name.lastIndexOf('/');
@@ -679,7 +680,8 @@ void Package::processPackage_impl(
         }
         catch (const RuntimeException &e) {
             SAL_WARN(
-                "basic", "unexpected RuntimeException \"" << e.Message << '"');
+                "desktop.deployment",
+                "unexpected RuntimeException \"" << e.Message << '"');
             throw;
         }
         catch (const CommandFailedException &) {
