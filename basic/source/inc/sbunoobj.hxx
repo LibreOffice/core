@@ -87,7 +87,7 @@ public:
     ~SbUnoStructRefObject();
 
     // Find overloaded to support e. g. NameAccess
-    virtual SbxVariable* Find( const String&, SbxClassType );
+    virtual SbxVariable* Find( const rtl::OUString&, SbxClassType );
 
     // Force creation of all properties for debugging
     void createAllProperties( void  )
@@ -127,7 +127,7 @@ public:
     void doIntrospection( void );
 
     // Find overloaded to support e. g. NameAccess
-    virtual SbxVariable* Find( const String&, SbxClassType );
+    virtual SbxVariable* Find( const rtl::OUString&, SbxClassType );
 
     // Force creation of all properties for debugging
     void createAllProperties( void  )
@@ -215,7 +215,7 @@ class SbUnoFactory : public SbxFactory
 {
 public:
     virtual SbxBase* Create( sal_uInt16 nSbxId, sal_uInt32 = SBXCR_SBX );
-    virtual SbxObject* CreateObject( const String& );
+    virtual SbxObject* CreateObject( const rtl::OUString& );
 };
 
 // wrapper for an uno-class
@@ -234,7 +234,7 @@ public:
     {}
 
 
-    virtual SbxVariable* Find( const String&, SbxClassType );
+    virtual SbxVariable* Find( const rtl::OUString&, SbxClassType );
 
 
     const ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XIdlClass >& getUnoClass( void ) { return m_xClass; }
@@ -263,7 +263,7 @@ public:
             , m_bNeedsInit( true )
     {}
 
-    virtual SbxVariable* Find( const String&, SbxClassType );
+    virtual SbxVariable* Find( const rtl::OUString&, SbxClassType );
 
     void SFX_NOTIFY( SfxBroadcaster&, const TypeId&, const SfxHint& rHint, const TypeId& );
 };
@@ -387,8 +387,8 @@ class BasicCollection : public SbxObject
 
 public:
     TYPEINFO();
-    BasicCollection( const String& rClassname );
-    virtual SbxVariable* Find( const String&, SbxClassType );
+    BasicCollection( const rtl::OUString& rClassname );
+    virtual SbxVariable* Find( const rtl::OUString&, SbxClassType );
     virtual void Clear();
 };
 

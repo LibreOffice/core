@@ -126,7 +126,7 @@ public:
     static String   GetErrorMsg();
     static xub_StrLen GetErl();
 
-    virtual SbxVariable* Find( const String&, SbxClassType );
+    virtual SbxVariable* Find( const rtl::OUString&, SbxClassType );
     virtual sal_Bool Call( const String&, SbxArray* = NULL );
 
     SbxArray*       GetModules() { return pModules; }

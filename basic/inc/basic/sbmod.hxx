@@ -99,7 +99,7 @@ public:
     virtual void    SetParent( SbxObject* );
     virtual void    Clear();
 
-    virtual SbxVariable* Find( const String&, SbxClassType );
+    virtual SbxVariable* Find( const rtl::OUString&, SbxClassType );
 
     virtual const String&   GetSource() const;
     const ::rtl::OUString&  GetSource32() const;
@@ -164,7 +164,7 @@ public:
     ~SbClassModuleObject();
 
     // Overridden to support NameAccess etc.
-    virtual SbxVariable* Find( const String&, SbxClassType );
+    virtual SbxVariable* Find( const rtl::OUString&, SbxClassType );
 
     virtual void SFX_NOTIFY( SfxBroadcaster&, const TypeId&, const SfxHint& rHint, const TypeId& );
 

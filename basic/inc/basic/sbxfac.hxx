@@ -21,11 +21,11 @@
 #define __SBX_SBX_FACTORY_HXX
 
 #include <basic/sbxdef.hxx>
+#include <rtl/ustring.hxx>
 #include "basicdllapi.h"
 
 class SbxBase;
 class SbxObject;
-class String;
 
 class BASIC_DLLPUBLIC SbxFactory
 {
@@ -35,7 +35,7 @@ public:
     SbxFactory( sal_Bool bLast=sal_False )  { bHandleLast = bLast; }
     sal_Bool IsHandleLast( void )       { return bHandleLast; }
     virtual SbxBase* Create( sal_uInt16 nSbxId, sal_uInt32 = SBXCR_SBX );
-    virtual SbxObject* CreateObject( const String& );
+    virtual SbxObject* CreateObject( const rtl::OUString& );
 };
 
 #endif

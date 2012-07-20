@@ -56,7 +56,7 @@ public:
     virtual SbxClassType GetClass() const;
     virtual void Clear();
 
-    virtual sal_Bool  IsClass( const String& ) const;
+    virtual sal_Bool  IsClass( const rtl::OUString& ) const;
     const String& GetClassName() const { return aClassName; }
     void          SetClassName( const String &rNew ) { aClassName = rNew; }
     // Default-Property
@@ -64,7 +64,7 @@ public:
     void SetDfltProperty( const String& r );
     // Search for an element
     virtual SbxVariable* FindUserData( sal_uInt32 nUserData );
-    virtual SbxVariable* Find( const String&, SbxClassType );
+    virtual SbxVariable* Find( const rtl::OUString&, SbxClassType );
     SbxVariable* FindQualified( const String&, SbxClassType );
     // Quick-Call-Interface for Methods
     virtual sal_Bool Call( const String&, SbxArray* = NULL );

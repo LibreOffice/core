@@ -404,24 +404,15 @@ SbxBase* SbiFactory::Create( sal_uInt16 nSbxId, sal_uInt32 nCreator )
     return NULL;
 }
 
-SbxObject* SbiFactory::CreateObject( const String& rClass )
+SbxObject* SbiFactory::CreateObject( const rtl::OUString& rClass )
 {
-    if( rClass.EqualsIgnoreCaseAscii( "StarBASIC" ) )
+    if( rClass.equalsIgnoreAsciiCase( "StarBASIC" ) )
         return new StarBASIC( NULL );
-    else
-    if( rClass.EqualsIgnoreCaseAscii( "StarBASICModule" ) )
-    {
-        String aEmpty;
-        return new SbModule( aEmpty );
-    }
-    else
-    if( rClass.EqualsIgnoreCaseAscii( "Collection" ) )
-    {
-        String aCollectionName( RTL_CONSTASCII_USTRINGPARAM("Collection") );
-        return new BasicCollection( aCollectionName );
-    }
-    else
-    if( rClass.EqualsIgnoreCaseAscii( "FileSystemObject" ) )
+    else if( rClass.equalsIgnoreAsciiCase( "StarBASICModule" ) )
+        return new SbModule( rtl::OUString() );
+    else if( rClass.equalsIgnoreAsciiCase( "Collection" ) )
+        return new BasicCollection( rtl::OUString("Collection"));
+    else if( rClass.equalsIgnoreAsciiCase( "FileSystemObject" ) )
     {
         try
         {
@@ -431,7 +422,8 @@ SbxObject* SbiFactory::CreateObject( const String& rClass )
             return new SbUnoObject( aServiceName, uno::makeAny( xInterface ) );
         }
         catch(const Exception& )
-        {}
+        {
+        }
     }
 
     return NULL;
@@ -443,7 +435,7 @@ class SbOLEFactory : public SbxFactory
 {
 public:
     virtual SbxBase* Create( sal_uInt16 nSbxId, sal_uInt32 = SBXCR_SBX );
-    virtual SbxObject* CreateObject( const String& );
+    virtual SbxObject* CreateObject( const rtl::OUString& );
 };
 
 SbxBase* SbOLEFactory::Create( sal_uInt16, sal_uInt32 )
@@ -454,7 +446,7 @@ SbxBase* SbOLEFactory::Create( sal_uInt16, sal_uInt32 )
 
 SbUnoObject* createOLEObject_Impl( const ::rtl::OUString& aType );  // sbunoobj.cxx
 
-SbxObject* SbOLEFactory::CreateObject( const String& rClassName )
+SbxObject* SbOLEFactory::CreateObject( const rtl::OUString& rClassName )
 {
     SbxObject* pRet = createOLEObject_Impl( rClassName );
     return pRet;
@@ -468,7 +460,7 @@ class SbFormFactory : public SbxFactory
 {
 public:
     virtual SbxBase* Create( sal_uInt16 nSbxId, sal_uInt32 = SBXCR_SBX );
-    virtual SbxObject* CreateObject( const String& );
+    virtual SbxObject* CreateObject( const rtl::OUString& );
 };
 
 SbxBase* SbFormFactory::Create( sal_uInt16, sal_uInt32 )
@@ -477,7 +469,7 @@ SbxBase* SbFormFactory::Create( sal_uInt16, sal_uInt32 )
     return NULL;
 }
 
-SbxObject* SbFormFactory::CreateObject( const String& rClassName )
+SbxObject* SbFormFactory::CreateObject( const rtl::OUString& rClassName )
 {
     if( SbModule* pMod = GetSbData()->pMod )
     {
@@ -571,7 +563,7 @@ class SbTypeFactory : public SbxFactory
 {
 public:
     virtual SbxBase* Create( sal_uInt16 nSbxId, sal_uInt32 = SBXCR_SBX );
-    virtual SbxObject* CreateObject( const String& );
+    virtual SbxObject* CreateObject( const rtl::OUString& );
 };
 
 SbxBase* SbTypeFactory::Create( sal_uInt16, sal_uInt32 )
@@ -580,7 +572,7 @@ SbxBase* SbTypeFactory::Create( sal_uInt16, sal_uInt32 )
     return NULL;
 }
 
-SbxObject* SbTypeFactory::CreateObject( const String& rClassName )
+SbxObject* SbTypeFactory::CreateObject( const rtl::OUString& rClassName )
 {
     SbxObject* pRet = NULL;
     SbModule* pMod = GetSbData()->pMod;
@@ -767,7 +759,7 @@ void SbClassModuleObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType
     handleProcedureProperties( rBC, rHint );
 }
 
-SbxVariable* SbClassModuleObject::Find( const XubString& rName, SbxClassType t )
+SbxVariable* SbClassModuleObject::Find( const rtl::OUString& rName, SbxClassType t )
 {
     SbxVariable* pRes = SbxObject::Find( rName, t );
     if( pRes )
@@ -863,7 +855,7 @@ SbxBase* SbClassFactory::Create( sal_uInt16, sal_uInt32 )
     return NULL;
 }
 
-SbxObject* SbClassFactory::CreateObject( const String& rClassName )
+SbxObject* SbClassFactory::CreateObject( const rtl::OUString& rClassName )
 {
     SbxObjectRef xToUseClassModules = xClassModules;
 
@@ -1270,7 +1262,7 @@ void StarBASIC::DeInitAllModules( void )
 // method and a module with the given name is found the search continues
 // for entrypoint "Main".
 // If this fails again a conventional search over objects is performend.
-SbxVariable* StarBASIC::Find( const String& rName, SbxClassType t )
+SbxVariable* StarBASIC::Find( const rtl::OUString& rName, SbxClassType t )
 {
     static String aMainStr( RTL_CONSTASCII_USTRINGPARAM("Main") );
 
@@ -1282,7 +1274,7 @@ SbxVariable* StarBASIC::Find( const String& rName, SbxClassType t )
     {
         if( t == SbxCLASS_DONTCARE || t == SbxCLASS_OBJECT )
         {
-            if( rName.EqualsIgnoreCaseAscii( RTLNAME ) )
+            if( rName.equalsIgnoreAsciiCase( RTLNAME ) )
                 pRes = pRtl;
         }
         if( !pRes )
@@ -1901,7 +1893,7 @@ static sal_uInt16 nCountHash = 0, nAddHash, nItemHash, nRemoveHash;
 SbxInfoRef BasicCollection::xAddInfo = NULL;
 SbxInfoRef BasicCollection::xItemInfo = NULL;
 
-BasicCollection::BasicCollection( const XubString& rClass )
+BasicCollection::BasicCollection( const rtl::OUString& rClass )
              : SbxObject( rClass )
 {
     if( !nCountHash )
@@ -1955,7 +1947,7 @@ void BasicCollection::Initialize()
     }
 }
 
-SbxVariable* BasicCollection::Find( const XubString& rName, SbxClassType t )
+SbxVariable* BasicCollection::Find( const rtl::OUString& rName, SbxClassType t )
 {
     SbxVariable* pFind = SbxObject::Find( rName, t );
     return pFind;
@@ -1973,20 +1965,20 @@ void BasicCollection::SFX_NOTIFY( SfxBroadcaster& rCst, const TypeId& rId1,
         sal_Bool bRequestInfo = sal_Bool( nId == SBX_HINT_INFOWANTED );
         SbxVariable* pVar = p->GetVar();
         SbxArray* pArg = pVar->GetParameters();
-        XubString aVarName( pVar->GetName() );
+        rtl::OUString aVarName( pVar->GetName() );
         if( bRead || bWrite )
         {
             if( pVar->GetHashCode() == nCountHash
-                  && aVarName.EqualsIgnoreCaseAscii( pCountStr ) )
+                  && aVarName.equalsIgnoreAsciiCaseAscii( pCountStr ) )
                 pVar->PutLong( xItemArray->Count32() );
             else if( pVar->GetHashCode() == nAddHash
-                  && aVarName.EqualsIgnoreCaseAscii( pAddStr ) )
+                  && aVarName.equalsIgnoreAsciiCaseAscii( pAddStr ) )
                 CollAdd( pArg );
             else if( pVar->GetHashCode() == nItemHash
-                  && aVarName.EqualsIgnoreCaseAscii( pItemStr ) )
+                  && aVarName.equalsIgnoreAsciiCaseAscii( pItemStr ) )
                 CollItem( pArg );
             else if( pVar->GetHashCode() == nRemoveHash
-                  && aVarName.EqualsIgnoreCaseAscii( pRemoveStr ) )
+                  && aVarName.equalsIgnoreAsciiCaseAscii( pRemoveStr ) )
                 CollRemove( pArg );
             else
                 SbxObject::SFX_NOTIFY( rCst, rId1, rHint, rId2 );
@@ -1995,10 +1987,10 @@ void BasicCollection::SFX_NOTIFY( SfxBroadcaster& rCst, const TypeId& rId1,
         else if ( bRequestInfo )
         {
             if( pVar->GetHashCode() == nAddHash
-                  && aVarName.EqualsIgnoreCaseAscii( pAddStr ) )
+                  && aVarName.equalsIgnoreAsciiCaseAscii( pAddStr ) )
                 pVar->SetInfo( xAddInfo );
             else if( pVar->GetHashCode() == nItemHash
-                  && aVarName.EqualsIgnoreCaseAscii( pItemStr ) )
+                  && aVarName.equalsIgnoreAsciiCaseAscii( pItemStr ) )
                 pVar->SetInfo( xItemInfo );
         }
     }

@@ -46,12 +46,11 @@ SbStdFactory::SbStdFactory()
 {
 }
 
-SbxObject* SbStdFactory::CreateObject( const String& rClassName )
+SbxObject* SbStdFactory::CreateObject( const rtl::OUString& rClassName )
 {
-    if( rClassName.EqualsIgnoreCaseAscii( String( RTL_CONSTASCII_USTRINGPARAM("Picture") ) ) )
+    if( rClassName.equalsIgnoreAsciiCase("Picture") )
         return new SbStdPicture;
-    else
-        if( rClassName.EqualsIgnoreCaseAscii( String( RTL_CONSTASCII_USTRINGPARAM("Font") ) ) )
+    else if( rClassName.equalsIgnoreAsciiCase("Font") )
         return new SbStdFont;
     else
         return NULL;
@@ -135,7 +134,7 @@ SbStdPicture::~SbStdPicture()
 }
 
 
-SbxVariable* SbStdPicture::Find( const String& rName, SbxClassType t )
+SbxVariable* SbStdPicture::Find( const rtl::OUString& rName, SbxClassType t )
 {
     // entered already?
     return SbxObject::Find( rName, t );
@@ -258,7 +257,7 @@ SbStdFont::~SbStdFont()
 }
 
 
-SbxVariable* SbStdFont::Find( const String& rName, SbxClassType t )
+SbxVariable* SbStdFont::Find( const rtl::OUString& rName, SbxClassType t )
 {
     return SbxObject::Find( rName, t );
 }
@@ -427,7 +426,7 @@ SbStdClipboard::~SbStdClipboard()
 }
 
 
-SbxVariable* SbStdClipboard::Find( const String& rName, SbxClassType t )
+SbxVariable* SbStdClipboard::Find( const rtl::OUString& rName, SbxClassType t )
 {
     return SbxObject::Find( rName, t );
 }

@@ -36,7 +36,7 @@ class BASIC_DLLPUBLIC SbStdFactory : public SbxFactory
 public:
     SbStdFactory();
 
-    virtual SbxObject*  CreateObject( const String& rClassName );
+    virtual SbxObject*  CreateObject( const rtl::OUString& rClassName );
 };
 
 //--------------------
@@ -59,7 +59,7 @@ public:
     TYPEINFO();
 
     SbStdPicture();
-    virtual SbxVariable* Find( const String&, SbxClassType );
+    virtual SbxVariable* Find( const rtl::OUString&, SbxClassType );
 
     Graphic GetGraphic() const { return aGraphic; }
     void    SetGraphic( const Graphic& rGrf ) { aGraphic = rGrf; }
@@ -93,7 +93,7 @@ public:
     TYPEINFO();
 
     SbStdFont();
-    virtual SbxVariable* Find( const String&, SbxClassType );
+    virtual SbxVariable* Find( const rtl::OUString&, SbxClassType );
 
     void    SetBold( sal_Bool bB ) { bBold = bB; }
     sal_Bool    IsBold() const { return bBold; }
@@ -131,7 +131,7 @@ public:
     TYPEINFO();
 
     SbStdClipboard();
-    virtual SbxVariable* Find( const String&, SbxClassType );
+    virtual SbxVariable* Find( const rtl::OUString&, SbxClassType );
 };
 
 #endif

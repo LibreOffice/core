@@ -689,7 +689,7 @@ void SbModule::Clear()
 }
 
 
-SbxVariable* SbModule::Find( const XubString& rName, SbxClassType t )
+SbxVariable* SbModule::Find( const rtl::OUString& rName, SbxClassType t )
 {
     // make sure a search in an uninstatiated class module will fail
     SbxVariable* pRes = SbxObject::Find( rName, t );
@@ -2214,7 +2214,7 @@ SbObjModule::GetObject()
     return pDocObject;
 }
 SbxVariable*
-SbObjModule::Find( const XubString& rName, SbxClassType t )
+SbObjModule::Find( const rtl::OUString& rName, SbxClassType t )
 {
     SbxVariable* pVar = NULL;
     if ( pDocObject)
@@ -2568,20 +2568,20 @@ SbUserFormModuleInstance* SbUserFormModule::CreateInstance()
 }
 
 SbUserFormModuleInstance::SbUserFormModuleInstance( SbUserFormModule* pParentModule,
-    const String& rName, const com::sun::star::script::ModuleInfo& mInfo, bool bIsVBACompat )
+    const rtl::OUString& rName, const com::sun::star::script::ModuleInfo& mInfo, bool bIsVBACompat )
         : SbUserFormModule( rName, mInfo, bIsVBACompat )
         , m_pParentModule( pParentModule )
 {
 }
 
-sal_Bool SbUserFormModuleInstance::IsClass( const XubString& rName ) const
+sal_Bool SbUserFormModuleInstance::IsClass( const rtl::OUString& rName ) const
 {
     sal_Bool bParentNameMatches = m_pParentModule->GetName().EqualsIgnoreCaseAscii( rName );
     sal_Bool bRet = bParentNameMatches || SbxObject::IsClass( rName );
     return bRet;
 }
 
-SbxVariable* SbUserFormModuleInstance::Find( const XubString& rName, SbxClassType t )
+SbxVariable* SbUserFormModuleInstance::Find( const rtl::OUString& rName, SbxClassType t )
 {
     SbxVariable* pVar = m_pParentModule->Find( rName, t );
     return pVar;
@@ -2625,7 +2625,7 @@ void SbUserFormModule::Unload()
         triggerTerminateEvent();
     }
     // Search method
-    SbxVariable* pMeth = SbObjModule::Find( String( RTL_CONSTASCII_USTRINGPARAM( "UnloadObject" ) ), SbxCLASS_METHOD );
+    SbxVariable* pMeth = SbObjModule::Find( rtl::OUString("UnloadObject"), SbxCLASS_METHOD );
     if( pMeth )
     {
         OSL_TRACE("Attempting too run the UnloadObjectMethod");
@@ -2721,7 +2721,7 @@ void SbUserFormModule::InitObject()
 }
 
 SbxVariable*
-SbUserFormModule::Find( const XubString& rName, SbxClassType t )
+SbUserFormModule::Find( const rtl::OUString& rName, SbxClassType t )
 {
     if ( !pDocObject && !GetSbData()->bRunInit && GetSbData()->pInst )
         InitObject();
