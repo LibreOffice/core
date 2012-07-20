@@ -134,8 +134,9 @@
     if( ( p->eType & (~SbxBYREF) ) == SbxDOUBLE )
     {
         SbxValues aTmp;
-        XubString aRes;
+        rtl::OUString aRes;
         aTmp.eType = SbxSTRING;
+        aTmp.pOUString = &aRes;
         if( p->eType == SbxDOUBLE )
             ImpPutDouble( &aTmp, p->nDouble, sal_True );    // true = bCoreString
         else
