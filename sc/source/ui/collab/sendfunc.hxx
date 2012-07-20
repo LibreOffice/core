@@ -219,7 +219,6 @@ public:
 
     void packetReceived( TelePacket &rPacket );
 
-    virtual void fileReceived( const rtl::OUString &rStr );
     virtual void RecvMessage( const rtl::OString &rString );
 };
 

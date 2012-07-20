@@ -39,7 +39,6 @@
 #include <rtl/ref.hxx>
 #include <tools/link.hxx>
 #include <telepathy-glib/telepathy-glib.h>
-#include <tubes/warnings_guard_boost_signals2.hpp>
 #include <map>
 
 // For testing purposes, we might need more in future.
@@ -139,8 +138,6 @@ public:
     TUBES_DLLPUBLIC static bool             hasWaitingConference();
 
     void                    disconnect();
-
-    boost::signals2::signal<void ( const rtl::OUString &localUri )> sigFileReceived;
 
     /// Only for use with MainLoopFlusher
     GMainLoop*              getMainLoop() const;

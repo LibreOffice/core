@@ -91,14 +91,6 @@ class TubeContacts : public ModelessDialog
         {
             fprintf( stderr, "Could not register client handlers.\n" );
         }
-        else
-        {
-            // FIXME: These signals should not be bind to a document specific code.
-
-            // Receiving file is not related to any document.
-            mpManager->sigFileReceived.connect( boost::bind(
-                        &ScDocFuncRecv::fileReceived, mpSender->GetReceiver(), _1 ) );
-        }
     }
 
     void StartBuddySession()
