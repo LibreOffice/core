@@ -48,6 +48,14 @@ void Listener::init( const css::uno::Reference< css::presentation::XSlideShowCon
         aController->addSlideShowListener( this );
         fprintf( stderr, "Registered listener.\n" );
 
+        sal_Int32 aSlides = aController->getSlideCount();
+        OStringBuffer aBuffer;
+        aBuffer.append( "slideshow_started\n" )
+               .append( OString::valueOf( aSlides ) ).append( "\n\n" );
+
+        pTransmitter->addMessage( aBuffer.makeStringAndClear(),
+                                  Transmitter::Priority::HIGH );
+
         mPreparer.set( new ImagePreparer( aController, pTransmitter, mPreparer ) );
         mPreparer->launch();
     }

@@ -22,6 +22,7 @@
 
         <service android:name=".communication.CommunicationService" >
         </service>
+        <activity android:name=".ThumbnailActivity"></activity>
     </application>
 
 </manifest>

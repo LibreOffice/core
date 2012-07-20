@@ -26,6 +26,10 @@
 namespace css = ::com::sun::star;
 
 namespace sd {
+/**
+ * Slide show listener. This class can also be used for anything else that is
+ * specific to the lifetime of one slideshow while a client is connected.
+ */
 class Listener
     : protected ::cppu::BaseMutex,
       public ::cppu::WeakComponentImplHelper1< css::presentation::XSlideShowListener >

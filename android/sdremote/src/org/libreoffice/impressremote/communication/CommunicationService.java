@@ -25,8 +25,9 @@ public class CommunicationService extends Service {
 		NETWORK, BLUETOOTH
 	};
 
-	public static final int MSG_SLIDE_CHANGED = 1;
-	public static final int MSG_SLIDE_PREVIEW = 2;
+	public static final int MSG_SLIDESHOW_STARTED = 1;
+	public static final int MSG_SLIDE_CHANGED = 2;
+	public static final int MSG_SLIDE_PREVIEW = 3;
 
 	private Transmitter mTransmitter;
 
@@ -74,8 +75,8 @@ public class CommunicationService extends Service {
 		mClient.closeConnection();
 	}
 
-	public Bitmap getPreviewImage(int aSlide) {
-		return mReceiver.getPreviewImage(aSlide);
+	public SlideShow getSlideShow() {
+		return mReceiver.getSlideShow();
 	}
 
 

@@ -52,6 +52,13 @@ public class TestClient extends Activity {
 	protected void onPause() {
 		super.onPause();
 		doUnbindService();
+	}
+
+	@Override
+	protected void onStop() {
+		// TODO Auto-generated method stub
+		super.onStop();
+//		mCommunicationService.disconnect();
 		stopService(new Intent(this, CommunicationService.class));
 	}
 
@@ -75,13 +82,14 @@ public class TestClient extends Activity {
 	};
 
 	void doBindService() {
-		bindService(new Intent(this, CommunicationService.class), mConnection,
-				Context.BIND_AUTO_CREATE);
+		Intent aIntent = new Intent(this, CommunicationService.class);
+		startService(aIntent);
+		bindService(aIntent, mConnection,
+				Context.BIND_IMPORTANT);
 		mIsBound = true;
 	}
 
 	void doUnbindService() {
-		mCommunicationService.disconnect();
 		mCommunicationService.setActivityMessenger(null);
 		if (mIsBound) {
 			unbindService(mConnection);
@@ -125,6 +133,16 @@ public class TestClient extends Activity {
 
 		});
 
+		Button mThumbnailButton = (Button) findViewById(R.id.button_thumbnail);
+
+		mThumbnailButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent aIntent = new Intent(TestClient.this, ThumbnailActivity.class);
+				startActivity( aIntent);
+			}
+		});
+
 	}
 
 	private void enableButtons(boolean aEnabled) {
@@ -146,7 +164,7 @@ public class TestClient extends Activity {
 				int aSlideNumber = aData.getInt("slide_number");
 				if ( mCurrentPreviewImageMissing ) {
 					Bitmap aImage = mCommunicationService
-							.getPreviewImage(aSlideNumber);
+							.getSlideShow().getImage(aSlideNumber);
 					if (aImage != null) {
 						mImageView.setImageBitmap(aImage);
 						mCurrentPreviewImageMissing = false;

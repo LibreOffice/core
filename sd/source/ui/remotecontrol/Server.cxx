@@ -94,8 +94,7 @@ void Server::listenThread()
     }
     // TODO: deal with transmision errors gracefully.
     fprintf( stderr, "done with transmitting\n" );
-    mListener->disposing();
-    mListener = NULL;
+    presentationStopped();
 
     delete pTransmitter;
     pTransmitter = NULL;

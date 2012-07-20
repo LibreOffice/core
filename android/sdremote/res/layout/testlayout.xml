@@ -25,6 +25,13 @@
         android:layout_gravity="center_horizontal"
         android:text="Previous" />
 
+    <Button
+        android:id="@+id/button_thumbnail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="Thumbnail View" />
+
     <ImageView
         android:id="@+id/image_preview"
         android:layout_width="wrap_content"

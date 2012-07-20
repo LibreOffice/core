@@ -23,15 +23,14 @@ public class Receiver {
 
 	private Messenger mActivityMessenger;
 
-	private SparseArray<byte[]> mPreviewImages = new SparseArray<byte[]>();
+	private SlideShow mSlideShow = null;
+
+	public SlideShow getSlideShow() {
+		return mSlideShow;
+	}
 
 	public void setActivityMessenger(Messenger aActivityMessenger) {
 		mActivityMessenger = aActivityMessenger;
-	}
-
-	public Bitmap getPreviewImage(int aSlide) {
-		byte[] aImage = mPreviewImages.get(aSlide);
-		return BitmapFactory.decodeByteArray(aImage, 0, aImage.length);
 	}
 
 	public void parseCommand(ArrayList<String> aCommand) {
@@ -40,37 +39,56 @@ public class Receiver {
 			return;
 		}
 		String aInstruction = aCommand.get(0);
-		if (aInstruction.equals("slide_updated")) {
-			int aSlideNumber = Integer.parseInt(aCommand.get(1));
+		if (aInstruction.equals("slideshow_started")) {
+			int aSlideShowlength = Integer.parseInt(aCommand.get(1));
+			mSlideShow = new SlideShow(aSlideShowlength);
+
 			Message aMessage = Message.obtain(null,
-					CommunicationService.MSG_SLIDE_CHANGED);
+					CommunicationService.MSG_SLIDESHOW_STARTED);
 			Bundle aData = new Bundle();
-			aData.putInt("slide_number", aSlideNumber);
 			aMessage.setData(aData);
 			try {
 				mActivityMessenger.send(aMessage);
 			} catch (RemoteException e) {
 				// Dead Handler -- i.e. Activity gone.
 			}
-		} else if (aInstruction.equals("slide_preview")) {
-			int aSlideNumber = Integer.parseInt(aCommand.get(1));
-			String aImageString = aCommand.get(2);
-			byte[] aImage = Base64.decode(aImageString, Base64.DEFAULT);
+		} else {
+			if (mSlideShow == null)
+				return;
 
-			// Store image internally
-			mPreviewImages.put(aSlideNumber, aImage);
+			if (aInstruction.equals("slide_updated")) {
 
-			// Notify the frontend
-			Message aMessage = Message.obtain(null,
-					CommunicationService.MSG_SLIDE_PREVIEW);
-			Bundle aData = new Bundle();
-			aData.putInt("slide_number", aSlideNumber);
-			aMessage.setData(aData);
-			try {
-				mActivityMessenger.send(aMessage);
-			} catch (RemoteException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				int aSlideNumber = Integer.parseInt(aCommand.get(1));
+				Message aMessage = Message.obtain(null,
+						CommunicationService.MSG_SLIDE_CHANGED);
+				Bundle aData = new Bundle();
+				aData.putInt("slide_number", aSlideNumber);
+				aMessage.setData(aData);
+				try {
+					mActivityMessenger.send(aMessage);
+				} catch (RemoteException e) {
+					// Dead Handler -- i.e. Activity gone.
+				}
+			} else if (aInstruction.equals("slide_preview")) {
+				int aSlideNumber = Integer.parseInt(aCommand.get(1));
+				String aImageString = aCommand.get(2);
+				byte[] aImage = Base64.decode(aImageString, Base64.DEFAULT);
+
+				// Store image internally
+				mSlideShow.putImage(aSlideNumber, aImage);
+
+				// Notify the frontend
+				Message aMessage = Message.obtain(null,
+						CommunicationService.MSG_SLIDE_PREVIEW);
+				Bundle aData = new Bundle();
+				aData.putInt("slide_number", aSlideNumber);
+				aMessage.setData(aData);
+				try {
+					mActivityMessenger.send(aMessage);
+				} catch (RemoteException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 
 		}
