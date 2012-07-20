@@ -8,8 +8,11 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 # Usage: gawk -f list-dateacceptancepattern.awk *.xml [--html]
-# Outputs two lists of locales, one with DateAcceptancePattern elements
-# defined, and one where none are defined.
+#
+# Outputs three lists of locales, one with DateAcceptancePattern elements
+# defined, one with inherited LC_FORMAT elements and thus date patterns, and
+# one where no DateAcceptancePattern are defined.
+#
 # If --html is given as the last parameter, format output suitable for
 # inclusion in HTML.
 
@@ -21,6 +24,7 @@ BEGIN {
     }
     file = ""
     nopatterns = 0
+    inheritedcount = 0
     if (html)
         print "<p>"
     else
@@ -36,7 +40,7 @@ file != FILENAME {
         endFile()
     file = FILENAME
     patterns = 0
-    noFormatCode = 1
+    inherited = ""
 }
 
 /<DateAcceptancePattern>/ {
@@ -44,10 +48,10 @@ file != FILENAME {
     pattern[patterns++] = a[3]
 }
 
-# No FormatCode element means inherited LC_FORMAT ref=...
-# hence pattern inherited as well.
-/<FormatCode>/ {
-    noFormatCode = 0
+# pattern inherited as well
+/<LC_FORMAT[^>]* ref="[^>"]+"[^>]*>/ {
+    split( $0, a, /.* ref="|"/ )
+    inherited = a[2]
 }
 
 
@@ -61,6 +65,28 @@ END {
     }
     else
         print "\n"
+
+    print "Locales inheriting patterns:"
+    if (html)
+    {
+        print "<br>"
+        for (i=0; i<inheritedcount; ++i)
+        {
+            if (LocaleHasPatterns[InheritedList[i][1]])
+                print InheritedList[i][0] " = " InheritedList[i][1] "&nbsp;&nbsp;&nbsp; "
+        }
+        print "\n<p>"
+    }
+    else
+    {
+        for (i=0; i<inheritedcount; ++i)
+        {
+            if (LocaleHasPatterns[InheritedList[i][1]])
+                print InheritedList[i][0] " = " InheritedList[i][1]
+        }
+        print "\n"
+    }
+
     print "Locales without explicit DateAcceptancePattern elements:"
     if (html)
         print "<br>"
@@ -85,11 +111,13 @@ END {
 
 
 function endFile() {
+    locale =  getLocale( file)
+    LocaleHasPatterns[locale] = patterns
     if (patterns)
     {
         if (html)
         {
-            print "  <li> " getLocale( file) ":"
+            print "  <li> " locale ":"
             print "  <ul>"
             for ( i=0; i<patterns; ++i )
             {
@@ -99,15 +127,21 @@ function endFile() {
         }
         else
         {
-            print getLocale( file) ":"
+            print locale ":"
             for ( i=0; i<patterns; ++i )
             {
                 print "    " pattern[i]
             }
         }
     }
-    else if (!noFormatCode)
-        NoPatternList[nopatterns++] = getLocale( file)
+    else if (inherited)
+    {
+        InheritedList[inheritedcount][0] = locale
+        InheritedList[inheritedcount][1] = inherited
+        ++inheritedcount
+    }
+    else
+        NoPatternList[nopatterns++] = locale
 }
 
 
