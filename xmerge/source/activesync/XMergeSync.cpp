@@ -56,12 +56,6 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID *ppv)
 {
     // Create the factory object
     CXMergeFactory *pFactory = new CXMergeFactory();
-    if (pFactory == NULL)
-    {
-        *ppv = NULL;
-        return E_OUTOFMEMORY;
-    }
-
     HRESULT hr = pFactory->QueryInterface(riid, ppv);
     pFactory->Release();
 

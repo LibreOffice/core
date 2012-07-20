@@ -496,10 +496,9 @@ STDMETHODIMP CXTDataObject::EnumFormatEtc(
     if ( DATADIR_GET == dwDirection )
     {
         *ppenumFormatetc = new CEnumFormatEtc( this, m_FormatEtcContainer );
-        if ( NULL != *ppenumFormatetc )
-            static_cast< LPUNKNOWN >( *ppenumFormatetc )->AddRef( );
+        static_cast< LPUNKNOWN >( *ppenumFormatetc )->AddRef( );
 
-        hr = ( NULL != *ppenumFormatetc ) ? S_OK : E_OUTOFMEMORY;
+        hr = S_OK;
     }
     else
         hr = E_INVALIDARG;
@@ -832,10 +831,9 @@ STDMETHODIMP CEnumFormatEtc::Clone( IEnumFORMATETC** ppenum )
         return E_INVALIDARG;
 
     *ppenum = new CEnumFormatEtc( m_lpUnkOuter, m_FormatEtcContainer );
-    if ( NULL != *ppenum )
-        static_cast< LPUNKNOWN >( *ppenum )->AddRef( );
+    static_cast< LPUNKNOWN >( *ppenum )->AddRef( );
 
-    return ( NULL != *ppenum ) ? S_OK : E_OUTOFMEMORY;
+    return S_OK;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

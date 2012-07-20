@@ -402,9 +402,6 @@ extern "C" STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, void** ppv)
         OutputDebugStringFormat( "DllGetClassObject: Create CLSID_THUMBVIEWER_HANDLER\n" );
 
     IUnknown* pUnk = new CClassFactory(rclsid);
-    if (0 == pUnk)
-        return E_OUTOFMEMORY;
-
     *ppv = pUnk;
     return S_OK;
 }

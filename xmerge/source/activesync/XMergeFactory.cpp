@@ -84,12 +84,6 @@ STDMETHODIMP CXMergeFactory::CreateInstance(IUnknown *pUnkOuter, REFIID iid, voi
     if (iid == IID_ICeFileFilter)
     {
         CXMergeFilter *pFilter = new CXMergeFilter();
-        if(pFilter == NULL)
-        {
-             *ppvObject = NULL;
-            return E_OUTOFMEMORY;
-        }
-
         HRESULT hr = pFilter->QueryInterface(iid, ppvObject);
         pFilter->Release();
 

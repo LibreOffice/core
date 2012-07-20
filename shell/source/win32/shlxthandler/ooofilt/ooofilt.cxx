@@ -817,21 +817,16 @@ SCODE STDMETHODCALLTYPE COooFilterCF::CreateInstance(
     if ( 0 != pUnkOuter )
         return CLASS_E_NOAGGREGATION;
     pIUnk = new COooFilter();
-    if ( 0 != pIUnk )
+    if ( SUCCEEDED( pIUnk->QueryInterface( riid , ppvObject ) ) )
     {
-        if ( SUCCEEDED( pIUnk->QueryInterface( riid , ppvObject ) ) )
-        {
-            // Release extra refcount from QueryInterface
-            pIUnk->Release();
-        }
-        else
-        {
-            delete pIUnk;
-            return E_UNEXPECTED;
-        }
+        // Release extra refcount from QueryInterface
+        pIUnk->Release();
     }
     else
-        return E_OUTOFMEMORY;
+    {
+        delete pIUnk;
+        return E_UNEXPECTED;
+    }
     return S_OK;
 }
 
@@ -919,19 +914,14 @@ extern "C" SCODE STDMETHODCALLTYPE DllGetClassObject(
     }
     else
         return CLASS_E_CLASSNOTAVAILABLE;
-    if ( 0 != pResult )
-    {
-        if( SUCCEEDED( pResult->QueryInterface( iid, ppvObj ) ) )
-            // Release extra refcount from QueryInterface
-            pResult->Release();
-        else
-        {
-            delete pImpl;
-            return E_UNEXPECTED;
-        }
-    }
+    if( SUCCEEDED( pResult->QueryInterface( iid, ppvObj ) ) )
+        // Release extra refcount from QueryInterface
+        pResult->Release();
     else
-        return E_OUTOFMEMORY;
+    {
+        delete pImpl;
+        return E_UNEXPECTED;
+    }
     return S_OK;
 }
 //F-------------------------------------------------------------------------
