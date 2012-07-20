@@ -23,7 +23,9 @@ BEGIN {
         --ARGC
     }
     file = ""
-    nopatterns = 0
+    offlocale = 0
+    offpatterns = 1
+    offinherit = 2
     inheritedcount = 0
     if (html)
         print "<p>"
@@ -58,6 +60,11 @@ file != FILENAME {
 END {
     if (file)
         endFile()
+
+    PROCINFO["sorted_in"] = "@ind_str_asc"
+
+    fillAllInherited()
+
     if (html)
     {
         print "</ul>"
@@ -70,19 +77,19 @@ END {
     if (html)
     {
         print "<br>"
-        for (i=0; i<inheritedcount; ++i)
+        for (i in LocaleList)
         {
-            if (LocaleHasPatterns[InheritedList[i][1]])
-                print InheritedList[i][0] " = " InheritedList[i][1] "&nbsp;&nbsp;&nbsp; "
+            if (LocaleList[i][offinherit] && LocaleList[i][offpatterns])
+                print LocaleList[i][offlocale] " = " LocaleList[i][offinherit] "&nbsp;&nbsp;&nbsp; "
         }
         print "\n<p>"
     }
     else
     {
-        for (i=0; i<inheritedcount; ++i)
+        for (i in LocaleList)
         {
-            if (LocaleHasPatterns[InheritedList[i][1]])
-                print InheritedList[i][0] " = " InheritedList[i][1]
+            if (LocaleList[i][offinherit] && LocaleList[i][offpatterns])
+                print LocaleList[i][offlocale] " = " LocaleList[i][offinherit]
         }
         print "\n"
     }
@@ -95,16 +102,18 @@ END {
         print "<p>"
     if (html)
     {
-        for (i=0; i<nopatterns; ++i)
+        for (i in LocaleList)
         {
-            print NoPatternList[i] "&nbsp;&nbsp;&nbsp; "
+            if (!LocaleList[i][offpatterns])
+                print LocaleList[i][offlocale] "&nbsp;&nbsp;&nbsp; "
         }
     }
     else
     {
-        for (i=0; i<nopatterns; ++i)
+        for (i in LocaleList)
         {
-            print NoPatternList[i]
+            if (!LocaleList[i][offpatterns])
+                print LocaleList[i][offlocale]
         }
     }
 }
@@ -112,7 +121,8 @@ END {
 
 function endFile() {
     locale =  getLocale( file)
-    LocaleHasPatterns[locale] = patterns
+    LocaleList[locale][offlocale] = locale
+    LocaleList[locale][offpatterns] = patterns
     if (patterns)
     {
         if (html)
@@ -135,21 +145,31 @@ function endFile() {
         }
     }
     else if (inherited)
-    {
-        InheritedList[inheritedcount][0] = locale
-        InheritedList[inheritedcount][1] = inherited
-        ++inheritedcount
-    }
-    else
-        NoPatternList[nopatterns++] = locale
+        LocaleList[locale][offinherit] = inherited
 }
 
 
-function getLocale( file, tmp ) {
+function getLocale( file,       tmp ) {
     tmp = file
     gsub( /.*\//, "", tmp )
     gsub( /\.xml/, "", tmp )
     return tmp
+}
+
+
+function fillInherited( locale ) {
+    if (!LocaleList[locale][offpatterns] && LocaleList[locale][offinherit])
+        LocaleList[locale][offpatterns] = fillInherited( LocaleList[locale][offinherit])
+    return LocaleList[locale][offpatterns]
+}
+
+
+function fillAllInherited(      i ) {
+    for (i in LocaleList)
+    {
+        if (!LocaleList[i][offpatterns] && LocaleList[i][offinherit])
+            LocaleList[i][offpatterns] = fillInherited( LocaleList[i][offinherit])
+    }
 }
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:
