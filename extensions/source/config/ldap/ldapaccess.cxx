@@ -205,7 +205,7 @@ void LdapConnection::initConnection()
     LdapErrCode retCode = ldap_search_sW(mConnection,
                                       (PWCHAR) aUserDn.getStr(),
                                       LDAP_SCOPE_BASE,
-                                      L"(objectclass=*)",
+                                      const_cast<PWCHAR>( L"(objectclass=*)" ),
                                       0,
                                       0, // Attributes + values
                                       &result.msg) ;
@@ -270,7 +270,7 @@ void LdapConnection::initConnection()
 
     LdapMessageHolder result;
 #ifdef WNT
-    PWCHAR attributes [2] = { L"1.1", NULL };
+    PWCHAR attributes [2] = { const_cast<PWCHAR>( L"1.1" ), NULL };
     LdapErrCode retCode = ldap_search_sW(mConnection,
                                       (PWCHAR) mLdapDefinition.mBaseDN.getStr(),
                                       LDAP_SCOPE_SUBTREE,
