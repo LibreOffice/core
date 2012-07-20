@@ -786,6 +786,7 @@ public:
                         sal_uInt32 nLevel,
                         sal_Bool bFirst
                     );
+    void        UpdateBulletRelSize(  sal_uInt32 nLevel, sal_uInt16 nFontHeight );
 };
 
 class PPTParagraphObj;
