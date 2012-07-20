@@ -593,7 +593,7 @@ namespace sw { namespace mark
                 isPosInRange = true, isOtherPosInRange = true;
             }
 
-            if(isPosInRange && (isOtherPosInRange || !pMark->IsExpanded() || IDocumentMarkAccess::GetType(*pMark) == TEXT_FIELDMARK))
+            if(isPosInRange && (isOtherPosInRange || !pMark->IsExpanded()))
             {
                 // completely in range
 
