@@ -226,8 +226,10 @@ void LdapConnection::initConnection()
     while (attr) {
         PWCHAR * values = ldap_get_valuesW(mConnection, result.msg, attr);
         if (values) {
+            const rtl::OUString aAttr( reinterpret_cast<sal_Unicode*>( attr ) );
+            const rtl::OUString aValues( reinterpret_cast<sal_Unicode*>( *values ) );
             data->insert(
-                LdapData::value_type( attr, *values ));
+                LdapData::value_type( aAttr, aValues ));
             ldap_value_freeW(values);
         }
         attr = ldap_next_attributeW(mConnection, result.msg, ptr);
@@ -291,7 +293,7 @@ void LdapConnection::initConnection()
 #ifdef WNT
         PWCHAR charsDn = ldap_get_dnW(mConnection, entry) ;
 
-        userDn = charsDn;
+        userDn = rtl::OUString( reinterpret_cast<const sal_Unicode*>( charsDn ) );
         ldap_memfreeW(charsDn) ;
 #else
         sal_Char *charsDn = ldap_get_dn(mConnection, entry) ;
