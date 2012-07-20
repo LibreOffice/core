@@ -225,7 +225,7 @@ SwWW8AttrIter::SwWW8AttrIter(MSWordExportBase& rWr, const SwTxtNode& rTxtNd) :
 
     maFlyIter = maFlyFrms.begin();
 
-    if ( m_rExport.pDoc->GetRedlineTbl().Count() )
+    if ( !m_rExport.pDoc->GetRedlineTbl().empty() )
     {
         SwPosition aPosition( rNd, SwIndex( (SwTxtNode*)&rNd ) );
         pCurRedline = m_rExport.pDoc->GetRedline( aPosition, &nCurRedlinePos );
@@ -277,14 +277,14 @@ xub_StrLen SwWW8AttrIter::SearchNext( xub_StrLen nStartPos )
                 nMinPos = i;
     }
 
-    if ( nCurRedlinePos < m_rExport.pDoc->GetRedlineTbl().Count() )
+    if ( nCurRedlinePos < m_rExport.pDoc->GetRedlineTbl().size() )
     {
         // nCurRedlinePos point to the next redline
         nPos = nCurRedlinePos;
         if( pCurRedline )
             ++nPos;
 
-        for ( ; nPos < m_rExport.pDoc->GetRedlineTbl().Count(); ++nPos )
+        for ( ; nPos < m_rExport.pDoc->GetRedlineTbl().size(); ++nPos )
         {
             const SwRedline* pRedl = m_rExport.pDoc->GetRedlineTbl()[ nPos ];
 
@@ -1196,7 +1196,7 @@ bool SwWW8AttrIter::IsRedlineAtEnd( xub_StrLen nEnd ) const
     bool bRet = false;
     // search next Redline
     for( sal_uInt16 nPos = nCurRedlinePos;
-        nPos < m_rExport.pDoc->GetRedlineTbl().Count(); ++nPos )
+        nPos < m_rExport.pDoc->GetRedlineTbl().size(); ++nPos )
     {
         const SwPosition* pEnd = m_rExport.pDoc->GetRedlineTbl()[ nPos ]->End();
         if( pEnd->nNode == rNd )
@@ -1234,7 +1234,7 @@ const SwRedlineData* SwWW8AttrIter::GetRedline( xub_StrLen nPos )
     if( !pCurRedline )
     {
         // search next Redline
-        for( ; nCurRedlinePos < m_rExport.pDoc->GetRedlineTbl().Count();
+        for( ; nCurRedlinePos < m_rExport.pDoc->GetRedlineTbl().size();
                 ++nCurRedlinePos )
         {
             const SwRedline* pRedl = m_rExport.pDoc->GetRedlineTbl()[ nCurRedlinePos ];
@@ -1474,7 +1474,7 @@ String SwWW8AttrIter::GetSnippet(const String &rStr, xub_StrLen nAktPos,
 static SwTxtFmtColl& lcl_getFormatCollection( MSWordExportBase& rExport, const SwTxtNode* pTxtNode )
 {
     sal_uInt16 nPos = 0;
-    sal_uInt16 nMax = rExport.pDoc->GetRedlineTbl().Count();
+    sal_uInt16 nMax = rExport.pDoc->GetRedlineTbl().size();
     while( nPos < nMax )
     {
         const SwRedline* pRedl = rExport.pDoc->GetRedlineTbl()[ nPos++ ];

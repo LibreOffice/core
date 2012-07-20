@@ -1165,7 +1165,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
                 }
                 const SwRedlineTbl& rRedTbl =
                     pFmt->GetDoc()->GetRedlineTbl();
-                for (sal_uInt16 nRed = 0; nRed < rRedTbl.Count(); nRed++)
+                for (sal_uInt16 nRed = 0; nRed < rRedTbl.size(); nRed++)
                 {
                     const SwRedline* pRedline = rRedTbl[nRed];
                     SwNode const*const pRedPointNode = pRedline->GetNode(sal_True);

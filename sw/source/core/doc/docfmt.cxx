@@ -629,7 +629,7 @@ lcl_InsAttr(SwDoc *const pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
                     aTxtSet, rSt.GetIndex(), rSt.GetIndex(), nFlags ) || bRet;
 
                 if (bRet && (pDoc->IsRedlineOn() || (!pDoc->IsIgnoreRedline()
-                                && pDoc->GetRedlineTbl().Count())))
+                                && !pDoc->GetRedlineTbl().empty())))
                 {
                     SwPaM aPam( pStt->nNode, pStt->nContent.GetIndex()-1,
                                 pStt->nNode, pStt->nContent.GetIndex() );
@@ -668,7 +668,7 @@ lcl_InsAttr(SwDoc *const pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
                     || bRet;
 
                 if (bRet && (pDoc->IsRedlineOn() || (!pDoc->IsIgnoreRedline()
-                                && pDoc->GetRedlineTbl().Count())))
+                                && !pDoc->GetRedlineTbl().empty())))
                 {
                     // Was text content inserted? (RefMark/TOXMarks without an end)
                     sal_Bool bTxtIns = nInsCnt != rSt.GetIndex();

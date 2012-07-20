@@ -2239,7 +2239,7 @@ void SwScriptInfo::CalcHiddenRanges( const SwTxtNode& rNode, MultiSelection& rHi
     {
         sal_uInt16 nAct = rIDRA.GetRedlinePos( rNode, USHRT_MAX );
 
-        for ( ; nAct < rIDRA.GetRedlineTbl().Count(); nAct++ )
+        for ( ; nAct < rIDRA.GetRedlineTbl().size(); nAct++ )
         {
             const SwRedline* pRed = rIDRA.GetRedlineTbl()[ nAct ];
 

@@ -988,7 +988,7 @@ void SwTxtNode::Update( SwIndex const & rPos, const xub_StrLen nChangeLen,
     if ( !bNegative && !bDelete )
     {
         const SwRedlineTbl& rTbl = GetDoc()->GetRedlineTbl();
-        for ( sal_uInt16 i = 0; i < rTbl.Count(); ++i )
+        for ( sal_uInt16 i = 0; i < rTbl.size(); ++i )
         {
             SwRedline *const pRedl = rTbl[ i ];
             if ( pRedl->HasMark() )
@@ -3155,7 +3155,7 @@ XubString SwTxtNode::GetRedlineTxt( xub_StrLen nIdx, xub_StrLen nLen,
     {
         // es existiert fuer den Node irgendein Redline-Delete-Object
         const sal_uLong nNdIdx = GetIndex();
-        for( ; nRedlPos < pDoc->GetRedlineTbl().Count() ; ++nRedlPos )
+        for( ; nRedlPos < pDoc->GetRedlineTbl().size() ; ++nRedlPos )
         {
             const SwRedline* pTmp = pDoc->GetRedlineTbl()[ nRedlPos ];
             if( nsRedlineType_t::REDLINE_DELETE == pTmp->GetType() )

@@ -1931,7 +1931,7 @@ sal_uInt16 _SaveMergeRedlines::InsertRedline()
             --n;
 
         const SwRedlineTbl& rRedlineTbl = pDoc->GetRedlineTbl();
-        for( ; n < rRedlineTbl.Count(); ++n )
+        for( ; n < rRedlineTbl.size(); ++n )
         {
             SwRedline* pRedl = rRedlineTbl[ n ];
             SwPosition* pRStt = pRedl->Start(),
@@ -1954,7 +1954,7 @@ sal_uInt16 _SaveMergeRedlines::InsertRedline()
 
                 case POS_COLLIDE_END:
                 case POS_BEFORE:
-                    n = rRedlineTbl.Count();
+                    n = rRedlineTbl.size();
                     break;
 
                 case POS_OUTSIDE:
@@ -2050,7 +2050,7 @@ long SwDoc::MergeDoc( const SwDoc& rDoc )
         const SwRedlineTbl& rSrcRedlTbl = rSrcDoc.GetRedlineTbl();
         sal_uLong nEndOfExtra = rSrcDoc.GetNodes().GetEndOfExtras().GetIndex();
         sal_uLong nMyEndOfExtra = GetNodes().GetEndOfExtras().GetIndex();
-        for( sal_uInt16 n = 0; n < rSrcRedlTbl.Count(); ++n )
+        for( sal_uInt16 n = 0; n < rSrcRedlTbl.size(); ++n )
         {
             const SwRedline* pRedl = rSrcRedlTbl[ n ];
             sal_uLong nNd = pRedl->GetPoint()->nNode.GetIndex();

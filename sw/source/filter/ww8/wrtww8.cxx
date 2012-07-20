@@ -2846,7 +2846,7 @@ void MSWordExportBase::ExportDocument( bool bWriteAll )
     maFrames = GetFrames( *pDoc, bWriteAll? NULL : pOrigPam );
 
     mnRedlineMode = pDoc->GetRedlineMode();
-    if ( pDoc->GetRedlineTbl().Count() )
+    if ( !pDoc->GetRedlineTbl().empty() )
     {
         pDoc->SetRedlineMode( (RedlineMode_t)(mnRedlineMode | nsRedlineMode_t::REDLINE_SHOW_DELETE |
                                      nsRedlineMode_t::REDLINE_SHOW_INSERT) );

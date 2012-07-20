@@ -60,7 +60,7 @@ sal_Int32 SwXRedlines::getCount(  ) throw(uno::RuntimeException)
     if(!IsValid())
         throw uno::RuntimeException();
     const SwRedlineTbl& rRedTbl = GetDoc()->GetRedlineTbl();
-    return rRedTbl.Count();
+    return rRedTbl.size();
 }
 
 uno::Any SwXRedlines::getByIndex(sal_Int32 nIndex)
@@ -71,9 +71,9 @@ uno::Any SwXRedlines::getByIndex(sal_Int32 nIndex)
         throw uno::RuntimeException();
     const SwRedlineTbl& rRedTbl = GetDoc()->GetRedlineTbl();
     uno::Any aRet;
-    if(rRedTbl.Count() > nIndex && nIndex >= 0)
+    if(!rRedTbl.empty() > nIndex && nIndex >= 0)
     {
-        uno::Reference <beans::XPropertySet> xRet = SwXRedlines::GetObject( *rRedTbl.GetObject((sal_uInt16)nIndex), *GetDoc() );
+        uno::Reference <beans::XPropertySet> xRet = SwXRedlines::GetObject( *rRedTbl[nIndex], *GetDoc() );
         aRet <<= xRet;
     }
     else
@@ -101,7 +101,7 @@ sal_Bool SwXRedlines::hasElements(  ) throw(uno::RuntimeException)
     if(!IsValid())
         throw uno::RuntimeException();
     const SwRedlineTbl& rRedTbl = GetDoc()->GetRedlineTbl();
-    return rRedTbl.Count() > 0;
+    return rRedTbl.size() > 0;
 }
 
 OUString SwXRedlines::getImplementationName(void) throw( uno::RuntimeException )
@@ -154,7 +154,7 @@ sal_Bool SwXRedlineEnumeration::hasMoreElements(void) throw( uno::RuntimeExcepti
 {
     if(!pDoc)
         throw uno::RuntimeException();
-    return pDoc->GetRedlineTbl().Count() > nCurrentIndex;
+    return pDoc->GetRedlineTbl().size() > nCurrentIndex;
 }
 
 uno::Any SwXRedlineEnumeration::nextElement(void)
@@ -163,9 +163,9 @@ uno::Any SwXRedlineEnumeration::nextElement(void)
     if(!pDoc)
         throw uno::RuntimeException();
     const SwRedlineTbl& rRedTbl = pDoc->GetRedlineTbl();
-    if(!(rRedTbl.Count() > nCurrentIndex))
+    if( rRedTbl.size() <= nCurrentIndex )
         throw container::NoSuchElementException();
-    uno::Reference <beans::XPropertySet> xRet = SwXRedlines::GetObject( *rRedTbl.GetObject(nCurrentIndex++), *pDoc );
+    uno::Reference <beans::XPropertySet> xRet = SwXRedlines::GetObject( *rRedTbl[nCurrentIndex++], *pDoc );
     uno::Any aRet;
     aRet <<= xRet;
     return aRet;

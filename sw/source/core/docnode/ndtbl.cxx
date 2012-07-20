@@ -551,7 +551,7 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTblOpts,
     GetNodes().GoNext( &aNdIdx );      // zum naechsten ContentNode
     pTblNd->MakeFrms( &aNdIdx );
 
-    if( IsRedlineOn() || (!IsIgnoreRedline() && pRedlineTbl->Count() ))
+    if( IsRedlineOn() || (!IsIgnoreRedline() && !pRedlineTbl->empty() ))
     {
         SwPaM aPam( *pTblNd->EndOfSectionNode(), *pTblNd, 1 );
         if( IsRedlineOn() )

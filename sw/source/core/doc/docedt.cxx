@@ -492,7 +492,7 @@ void lcl_SaveRedlines( const SwPaM& aPam, _SaveRedlines& rArr )
     // iterate over relevant redlines and decide for each whether it should
     // be saved, or split + saved
     SwRedlineTbl& rRedlineTable = const_cast<SwRedlineTbl&>( pDoc->GetRedlineTbl() );
-    for( ; nCurrentRedline < rRedlineTable.Count(); nCurrentRedline++ )
+    for( ; nCurrentRedline < rRedlineTable.size(); nCurrentRedline++ )
     {
         SwRedline* pCurrent = rRedlineTable[ nCurrentRedline ];
         SwComparePosition eCompare =
@@ -562,7 +562,7 @@ void lcl_SaveRedlines( const SwNodeRange& rRg, _SaveRedlines& rArr )
     aSrchPos.nContent.Assign( aSrchPos.nNode.GetNode().GetCntntNode(), 0 );
     if( pDoc->GetRedline( aSrchPos, &nRedlPos ) && nRedlPos )
         --nRedlPos;
-    else if( nRedlPos >= pDoc->GetRedlineTbl().Count() )
+    else if( nRedlPos >= pDoc->GetRedlineTbl().size() )
         return ;
 
     RedlineMode_t eOld = pDoc->GetRedlineMode();
@@ -636,7 +636,7 @@ void lcl_SaveRedlines( const SwNodeRange& rRg, _SaveRedlines& rArr )
         else
             break;
 
-    } while( ++nRedlPos < pDoc->GetRedlineTbl().Count() );
+    } while( ++nRedlPos < pDoc->GetRedlineTbl().size() );
     pDoc->SetRedlineMode_intern( eOld );
 }
 
@@ -663,7 +663,7 @@ _SaveRedlEndPosForRestore::_SaveRedlEndPosForRestore( const SwNodeIndex& rInsIdx
 {
     SwNode& rNd = rInsIdx.GetNode();
     SwDoc* pDest = rNd.GetDoc();
-    if( pDest->GetRedlineTbl().Count() )
+    if( !pDest->GetRedlineTbl().empty() )
     {
         sal_uInt16 nFndPos;
         const SwPosition* pEnd;
@@ -820,7 +820,7 @@ bool SwDoc::Overwrite( const SwPaM &rRg, const String &rStr )
     }
 
     if (!GetIDocumentUndoRedo().DoesUndo() &&
-        !IsIgnoreRedline() && GetRedlineTbl().Count())
+        !IsIgnoreRedline() && !GetRedlineTbl().empty())
     {
         SwPaM aPam( rPt.nNode, nStart, rPt.nNode, rPt.nContent.GetIndex() );
         DeleteRedline( aPam, true, USHRT_MAX );
@@ -879,7 +879,7 @@ bool SwDoc::MoveRange( SwPaM& rPaM, SwPosition& rPos, SwMoveFlags eMvFlags )
 
     // save redlines (if DOC_MOVEREDLINES is used)
     _SaveRedlines aSaveRedl;
-    if( DOC_MOVEREDLINES & eMvFlags && GetRedlineTbl().Count() )
+    if( DOC_MOVEREDLINES & eMvFlags && !GetRedlineTbl().empty() )
     {
         lcl_SaveRedlines( rPaM, aSaveRedl );
 
@@ -1129,7 +1129,7 @@ bool SwDoc::MoveNodeRange( SwNodeRange& rRange, SwNodeIndex& rPos,
 
     _SaveRedlines aSaveRedl;
     std::vector<SwRedline*> aSavRedlInsPosArr;
-    if( DOC_MOVEREDLINES & eMvFlags && GetRedlineTbl().Count() )
+    if( DOC_MOVEREDLINES & eMvFlags && !GetRedlineTbl().empty() )
     {
         lcl_SaveRedlines( rRange, aSaveRedl );
 
@@ -1147,7 +1147,7 @@ bool SwDoc::MoveNodeRange( SwNodeRange& rRange, SwNodeIndex& rPos,
                 {
                     aSavRedlInsPosArr.push_back( pTmp );
                 }
-            } while( pRStt->nNode < rPos && ++nRedlPos < GetRedlineTbl().Count());
+            } while( pRStt->nNode < rPos && ++nRedlPos < GetRedlineTbl().size());
         }
     }
 
@@ -1200,7 +1200,7 @@ bool SwDoc::MoveNodeRange( SwNodeRange& rRange, SwNodeIndex& rPos,
         for( sal_uInt16 n = 0; n < aSavRedlInsPosArr.size(); ++n )
         {
             SwRedline* pTmp = aSavRedlInsPosArr[ n ];
-            if( USHRT_MAX != GetRedlineTbl().GetPos( pTmp ) )
+            if( GetRedlineTbl().Contains( pTmp ) )
             {
                 SwPosition* pEnd = pTmp->End();
                 pEnd->nNode = aIdx;
@@ -1694,7 +1694,7 @@ bool SwDoc::DeleteRangeImplImpl(SwPaM & rPam)
         return true;
     }
 
-    if( !IsIgnoreRedline() && GetRedlineTbl().Count() )
+    if( !IsIgnoreRedline() && !GetRedlineTbl().empty() )
         DeleteRedline( rPam, true, USHRT_MAX );
 
     // Delete and move all "Flys at the paragraph", which are within the Selection
@@ -1797,7 +1797,7 @@ bool SwDoc::DeleteRangeImplImpl(SwPaM & rPam)
 
     } while( sal_False );
 
-    if( !IsIgnoreRedline() && GetRedlineTbl().Count() )
+    if( !IsIgnoreRedline() && !GetRedlineTbl().empty() )
         CompressRedlines();
     SetModified();
 
@@ -2421,7 +2421,7 @@ SetRedlineMode( eOld );
         }
         else
         {
-            if( !IsIgnoreRedline() && GetRedlineTbl().Count() )
+            if( !IsIgnoreRedline() && GetRedlineTbl().size() )
                 DeleteRedline( aDelPam, true, USHRT_MAX );
 
             SwUndoReplace* pUndoRpl = 0;
@@ -2722,7 +2722,7 @@ void SwDoc::checkRedlining(RedlineMode_t& _rReadlineMode)
     const SwRedlineTbl& rRedlineTbl = GetRedlineTbl();
     SwEditShell* pEditShell = GetEditShell();
     Window* pParent = pEditShell ? pEditShell->GetWin() : NULL;
-    if ( pParent && !mbReadlineChecked && rRedlineTbl.Count() > MAX_REDLINE_COUNT
+    if ( pParent && !mbReadlineChecked && rRedlineTbl.size() > MAX_REDLINE_COUNT
         && !((_rReadlineMode & nsRedlineMode_t::REDLINE_SHOW_DELETE) == nsRedlineMode_t::REDLINE_SHOW_DELETE) )
     {
         WarningBox aWarning( pParent,SW_RES(MSG_DISABLE_READLINE_QUESTION));

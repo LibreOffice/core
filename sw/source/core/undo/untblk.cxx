@@ -323,7 +323,7 @@ void SwUndoInserts::RedoImpl(::sw::UndoRedoContext & rContext)
         pDoc->SetRedlineMode_intern( eOld );
     }
     else if( !( nsRedlineMode_t::REDLINE_IGNORE & GetRedlineMode() ) &&
-            pDoc->GetRedlineTbl().Count() )
+            !pDoc->GetRedlineTbl().empty() )
         pDoc->SplitRedline( *pPam );
 }
 

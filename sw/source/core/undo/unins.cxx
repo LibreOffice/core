@@ -166,12 +166,12 @@ sal_Bool SwUndoInsert::CanGrouping( const SwPosition& rPos )
             // Check if there is another Redline at the InsPosition. If the
             // same exists only once, it can be combined.
             const SwRedlineTbl& rTbl = rDoc.GetRedlineTbl();
-            if( rTbl.Count() )
+            if( !rTbl.empty() )
             {
                 SwRedlineData aRData( nsRedlineType_t::REDLINE_INSERT, rDoc.GetRedlineAuthor() );
                 const SwIndexReg* pIReg = rPos.nContent.GetIdxReg();
                 SwIndex* pIdx;
-                for( sal_uInt16 i = 0; i < rTbl.Count(); ++i )
+                for( sal_uInt16 i = 0; i < rTbl.size(); ++i )
                 {
                     SwRedline* pRedl = rTbl[ i ];
                     if( pIReg == (pIdx = &pRedl->End()->nContent)->GetIdxReg() &&
@@ -315,7 +315,7 @@ void SwUndoInsert::RedoImpl(::sw::UndoRedoContext & rContext)
             pTmpDoc->SetRedlineMode_intern( eOld );
         }
         else if( !( nsRedlineMode_t::REDLINE_IGNORE & GetRedlineMode() ) &&
-                pTmpDoc->GetRedlineTbl().Count() )
+                !pTmpDoc->GetRedlineTbl().empty() )
             pTmpDoc->SplitRedline( *pPam );
 
         pPam->DeleteMark();
@@ -361,7 +361,7 @@ void SwUndoInsert::RedoImpl(::sw::UndoRedoContext & rContext)
                 pTmpDoc->SetRedlineMode_intern( eOld );
             }
             else if( !( nsRedlineMode_t::REDLINE_IGNORE & GetRedlineMode() ) &&
-                    pTmpDoc->GetRedlineTbl().Count() )
+                    !pTmpDoc->GetRedlineTbl().empty() )
                 pTmpDoc->SplitRedline(*pPam);
         }
     }

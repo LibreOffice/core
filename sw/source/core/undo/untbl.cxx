@@ -330,7 +330,7 @@ void SwUndoInsTbl::RedoImpl(::sw::UndoRedoContext & rContext)
 
     if( (pRedlData && IDocumentRedlineAccess::IsRedlineOn( GetRedlineMode() )) ||
         ( !( nsRedlineMode_t::REDLINE_IGNORE & GetRedlineMode() ) &&
-            rDoc.GetRedlineTbl().Count() ))
+            !rDoc.GetRedlineTbl().empty() ))
     {
         SwPaM aPam( *pTblNode->EndOfSectionNode(), *pTblNode, 1 );
         SwCntntNode* pCNd = aPam.GetCntntNode( sal_False );

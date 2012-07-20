@@ -32,7 +32,7 @@
 #include <vector>
 #include <set>
 #include <algorithm>
-#include <svl/svarray.hxx>
+#include <o3tl/sorted_vector.hxx>
 
 class SwFieldType;
 class SwFmt;
@@ -139,24 +139,29 @@ public:
     sal_uInt16 GetPos(const SwNumRule* pRule) const;
 };
 
-typedef SwRedline* SwRedlinePtr;
-SV_DECL_PTRARR_SORT_DEL( _SwRedlineTbl, SwRedlinePtr, 0 )
+struct CompareSwRedlineTbl
+{
+    bool operator()(SwRedline* const &lhs, SwRedline* const &rhs) const;
+};
+class _SwRedlineTbl : public o3tl::sorted_vector<SwRedline*, CompareSwRedlineTbl> {
+public:
+    ~_SwRedlineTbl();
+};
 
 class SwRedlineTbl : private _SwRedlineTbl
 {
 public:
-    SwRedlineTbl( sal_uInt8 nSize = 0 )
-        : _SwRedlineTbl( nSize ) {}
-    ~SwRedlineTbl() {}
+    bool Contains(const SwRedline* p) const { return find(const_cast<SwRedline* const>(p)) != end(); }
+    sal_uInt16 GetPos(const SwRedline* p) const;
 
-    sal_Bool SavePtrInArr( SwRedlinePtr p ) { return _SwRedlineTbl::Insert( p ); }
+    bool Insert( SwRedline* p, bool bIns = true );
+    bool Insert( SwRedline* p, sal_uInt16& rInsPos, bool bIns = true );
+    bool InsertWithValidRanges( SwRedline* p, sal_uInt16* pInsPos = 0 );
 
-    sal_Bool Insert( SwRedlinePtr& p, sal_Bool bIns = sal_True );
-    sal_Bool Insert( SwRedlinePtr& p, sal_uInt16& rInsPos, sal_Bool bIns = sal_True );
-    sal_Bool InsertWithValidRanges( SwRedlinePtr& p, sal_uInt16* pInsPos = 0 );
-
-    void Remove( sal_uInt16 nP, sal_uInt16 nL = 1 );
-    void DeleteAndDestroy( sal_uInt16 nP, sal_uInt16 nL=1 );
+    void Remove( sal_uInt16 nPos );
+    bool Remove( const SwRedline* p );
+    void DeleteAndDestroy( sal_uInt16 nPos, sal_uInt16 nLen = 1 );
+    void DeleteAndDestroyAll();
 
     // Search next or previous Redline with the same Seq. No.
     // Search can be restricted via Lookahaed.
@@ -168,11 +173,9 @@ public:
     sal_uInt16 FindPrevSeqNo( sal_uInt16 nSeqNo, sal_uInt16 nSttPos,
                             sal_uInt16 nLookahead = 20 ) const;
 
-    using _SwRedlineTbl::Count;
+    using _SwRedlineTbl::size;
     using _SwRedlineTbl::operator[];
-    using _SwRedlineTbl::GetObject;
-    using _SwRedlineTbl::Seek_Entry;
-    using _SwRedlineTbl::GetPos;
+    using _SwRedlineTbl::empty;
 };
 
 class SwUnoCrsrTbl : public std::set<SwUnoCrsr*> {

@@ -846,7 +846,7 @@ bool SwDoc::SplitNode( const SwPosition &rPos, bool bChkTableStart )
         if( !aBkmkArr.empty() )
             _RestoreCntntIdx( this, aBkmkArr, rPos.nNode.GetIndex()-1, 0, sal_True );
 
-        if( IsRedlineOn() || (!IsIgnoreRedline() && pRedlineTbl->Count() ))
+        if( IsRedlineOn() || (!IsIgnoreRedline() && !pRedlineTbl->empty() ))
         {
             SwPaM aPam( rPos );
             aPam.SetMark();
@@ -884,7 +884,7 @@ bool SwDoc::AppendTxtNode( SwPosition& rPos )
         GetIDocumentUndoRedo().AppendUndo( new SwUndoInsert( rPos.nNode ) );
     }
 
-    if( IsRedlineOn() || (!IsIgnoreRedline() && pRedlineTbl->Count() ))
+    if( IsRedlineOn() || (!IsIgnoreRedline() && !pRedlineTbl->empty() ))
     {
         SwPaM aPam( rPos );
         aPam.SetMark();
@@ -976,7 +976,7 @@ bool SwDoc::InsertString( const SwPaM &rRg, const String &rStr,
         }
     }
 
-    if( IsRedlineOn() || (!IsIgnoreRedline() && pRedlineTbl->Count() ))
+    if( IsRedlineOn() || (!IsIgnoreRedline() && !pRedlineTbl->empty() ))
     {
         SwPaM aPam( rPos.nNode, aTmp.GetCntnt(),
                     rPos.nNode, rPos.nContent.GetIndex());

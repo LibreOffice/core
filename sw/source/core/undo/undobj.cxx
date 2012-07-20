@@ -988,7 +988,7 @@ SwRedlineSaveData::SwRedlineSaveData( SwComparePosition eCmpPos,
     }
 
 #if OSL_DEBUG_LEVEL > 0
-    nRedlineCount = rSttPos.nNode.GetNode().GetDoc()->GetRedlineTbl().Count();
+    nRedlineCount = rSttPos.nNode.GetNode().GetDoc()->GetRedlineTbl().size();
 #endif
 }
 
@@ -1037,7 +1037,7 @@ sal_Bool SwUndo::FillSaveData( const SwPaM& rRange, SwRedlineSaveDatas& rSData,
     const SwRedlineTbl& rTbl = rRange.GetDoc()->GetRedlineTbl();
     sal_uInt16 n = 0;
     rRange.GetDoc()->GetRedline( *pStt, &n );
-    for( ; n < rTbl.Count(); ++n )
+    for( ; n < rTbl.size(); ++n )
     {
         SwRedline* pRedl = rTbl[ n ];
         const SwPosition *pRStt = pRedl->Start(), *pREnd = pRedl->End();
@@ -1065,7 +1065,7 @@ sal_Bool SwUndo::FillSaveDataForFmt( const SwPaM& rRange, SwRedlineSaveDatas& rS
     const SwRedlineTbl& rTbl = rRange.GetDoc()->GetRedlineTbl();
     sal_uInt16 n = 0;
     rRange.GetDoc()->GetRedline( *pStt, &n );
-    for( ; n < rTbl.Count(); ++n )
+    for( ; n < rTbl.size(); ++n )
     {
         SwRedline* pRedl = rTbl[ n ];
         if( nsRedlineType_t::REDLINE_FORMAT == pRedl->GetType() )
@@ -1099,7 +1099,7 @@ void SwUndo::SetSaveData( SwDoc& rDoc, const SwRedlineSaveDatas& rSData )
 #if OSL_DEBUG_LEVEL > 0
     // check redline count against count saved in RedlineSaveData object
     assert(rSData.empty() ||
-           (rSData[0]->nRedlineCount == rDoc.GetRedlineTbl().Count()));
+           (rSData[0]->nRedlineCount == rDoc.GetRedlineTbl().size()));
             // "redline count not restored properly"
 #endif
 

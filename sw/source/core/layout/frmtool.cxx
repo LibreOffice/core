@@ -3452,7 +3452,7 @@ sal_Bool IsExtraData( const SwDoc *pDoc )
     return rInf.IsPaintLineNumbers() ||
            rInf.IsCountInFlys() ||
            ((sal_Int16)SW_MOD()->GetRedlineMarkPos() != text::HoriOrientation::NONE &&
-            pDoc->GetRedlineTbl().Count());
+            !pDoc->GetRedlineTbl().empty());
 }
 
 // OD 22.09.2003 #110978#

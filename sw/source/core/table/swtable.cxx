@@ -2108,7 +2108,7 @@ void ChgTextToNum( SwTableBox& rBox, const String& rTxt, const Color* pCol,
                 pTNd->DontExpandFmt( aResetIdx, sal_False, sal_False );
             }
 
-            if( !pDoc->IsIgnoreRedline() && pDoc->GetRedlineTbl().Count() )
+            if( !pDoc->IsIgnoreRedline() && !pDoc->GetRedlineTbl().empty() )
             {
                 SwPaM aTemp(*pTNd, 0, *pTNd, rOrig.Len());
                 pDoc->DeleteRedline(aTemp, true, USHRT_MAX);

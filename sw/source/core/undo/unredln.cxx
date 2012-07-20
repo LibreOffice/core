@@ -251,7 +251,7 @@ void SwUndoRedlineSort::UndoRedlineImpl(SwDoc & rDoc, SwPaM & rPam)
         sal_uInt16 nFnd = rDoc.GetRedlinePos(
                             *rDoc.GetNodes()[ nSttNode + 1 ],
                             nsRedlineType_t::REDLINE_INSERT );
-        OSL_ENSURE( USHRT_MAX != nFnd && nFnd+1 < rDoc.GetRedlineTbl().Count(),
+        OSL_ENSURE( USHRT_MAX != nFnd && nFnd+1 < (sal_uInt16)rDoc.GetRedlineTbl().size(),
                     "could not find an Insert object" );
         ++nFnd;
         rDoc.GetRedlineTbl()[nFnd]->Show( 1 );
@@ -483,7 +483,7 @@ void SwUndoCompDoc::RedoImpl(::sw::UndoRedoContext & rContext)
             pTmp->InvalidateRange();
         }
         else if( !( nsRedlineMode_t::REDLINE_IGNORE & GetRedlineMode() ) &&
-                pDoc->GetRedlineTbl().Count() )
+                !pDoc->GetRedlineTbl().empty() )
             pDoc->SplitRedline( *pPam );
     }
     else
