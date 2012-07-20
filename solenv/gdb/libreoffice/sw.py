@@ -39,6 +39,17 @@ class SwPositionPrinter(object):
         offset = self.value['nContent']['m_nIndex']
         return "%s (node %d, offset %d)" % (self.typename, node['nOffset'], offset)
 
+class SwNodeIndexPrinter(object):
+    '''Prints SwNodeIndex.'''
+
+    def __init__(self, typename, value):
+        self.typename = typename
+        self.value = value
+
+    def to_string(self):
+        node = self.value['pNd'].dereference();
+        return "%s (node %d)" % (self.typename, node['nOffset'])
+
 class SwPaMPrinter(object):
     '''Prints SwPaM.'''
 
@@ -188,6 +199,7 @@ def build_pretty_printers():
     printer = printing.Printer("libreoffice/sw")
     printer.add('BigPtrArray', BigPtrArrayPrinter)
     printer.add('SwPosition', SwPositionPrinter)
+    printer.add('SwNodeIndex', SwNodeIndexPrinter)
     printer.add('SwPaM', SwPaMPrinter)
     printer.add('SwRect', SwRectPrinter)
 
