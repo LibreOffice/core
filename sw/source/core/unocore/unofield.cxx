@@ -1766,12 +1766,8 @@ void SwXTextField::attachToRange(
                     // The fieldmark always has a (generated) name.
                     pPostItField->SetName(pFieldmark->GetName());
                 else
-                {
                     // The field has a name already, use it.
-                    sw::mark::MarkBase* pMarkBase = dynamic_cast<sw::mark::MarkBase*>(pFieldmark);
-                    if (pMarkBase)
-                        pMarkBase->SetName(pPostItField->GetName());
-                }
+                    pMarksAccess->renameMark(pFieldmark, pPostItField->GetName());
 
                 // Make sure we always insert the field at the end
                 SwPaM aEnd(*aPam.End(), *aPam.End());
