@@ -92,6 +92,7 @@
 #include <docsh.hxx>
 #include <fmtmeta.hxx> // MetaFieldManager
 #include <switerator.hxx>
+#include <bookmrk.hxx>
 #include <rtl/strbuf.hxx>
 #include <vector>
 #include <xmloff/odffields.hxx>
@@ -1760,7 +1761,17 @@ void SwXTextField::attachToRange(
                         aPam,
                         OUString(),
                         ODF_COMMENTRANGE);
-                ((SwPostItField*)aFmt.GetFld())->SetName(pFieldmark->GetName());
+                SwPostItField* pPostItField = (SwPostItField*)aFmt.GetFld();
+                if (pPostItField->GetName().isEmpty())
+                    // The fieldmark always has a (generated) name.
+                    pPostItField->SetName(pFieldmark->GetName());
+                else
+                {
+                    // The field has a name already, use it.
+                    sw::mark::MarkBase* pMarkBase = dynamic_cast<sw::mark::MarkBase*>(pFieldmark);
+                    if (pMarkBase)
+                        pMarkBase->SetName(pPostItField->GetName());
+                }
 
                 // Make sure we always insert the field at the end
                 SwPaM aEnd(*aPam.End(), *aPam.End());
