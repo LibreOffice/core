@@ -45,6 +45,7 @@ T4_WRITER = \
     pdf_Portable_Document_Format\
     writer8_template\
     writer8 \
+    writer_NSO_UOF2 \
     writer_MS_Word_2003_XML \
     writer_MS_Word_2007_XML \
     writer_MS_Word_2007_XML_Template
@@ -77,6 +78,7 @@ F4_WRITER = \
     writer_StarOffice_XML_Writer_Template \
     writer_pdf_Export\
     writer8\
+    NSO_Writer_UOF2 \
     writer8_template \
     MS_Word_2003_XML \
     MS_Word_2007_XML \
@@ -98,6 +100,7 @@ F4_UI_WRITER = \
     Text__encoded__ui \
     writer_StarOffice_XML_Writer_Template_ui \
     writer8_ui \
+    NSO_Writer_UOF2_ui \
     writer8_template_ui \
     MS_Word_2003_XML_ui \
     MS_Word_2007_XML_ui \

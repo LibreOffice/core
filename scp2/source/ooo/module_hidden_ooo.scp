@@ -186,6 +186,7 @@ Module gid_Module_Root_Files_4
 	gid_File_Lib_Lng,
 	gid_File_Lib_Offacc,
 	gid_File_Lib_Oox,
+	gid_File_Lib_Uof,/** This is added by wangyumin from on 2012-05-20. */
 	gid_File_Lib_Pcr,
 	gid_File_Lib_Pdffilter,
 	gid_File_Lib_Pk,

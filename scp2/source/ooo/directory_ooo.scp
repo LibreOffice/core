@@ -420,6 +420,16 @@ Directory gid_Dir_Share_Xslt_Import_uof
     ParentID = gid_Dir_Share_Xslt_Import;
     DosName = "uof";
 End
+///Begin Added by wangyumin for uof2-filter from cs2c yumin.wang@cs2c.com.cn on 2012-2-22 14:32:18
+Directory gid_Dir_Share_Xslt_Export_uof2
+    ParentID = gid_Dir_Share_Xslt_Export;
+    DosName = "uof2";
+End
+Directory gid_Dir_Share_Xslt_Import_uof2
+    ParentID = gid_Dir_Share_Xslt_Import;
+    DosName = "uof2";
+End
+/// End Added by wangyumin on 2012-2-22 14:32:18
 Directory gid_Dir_Share_Xslt_Export_Wordml
     ParentID = gid_Dir_Share_Xslt_Export;
     DosName = "wordml";

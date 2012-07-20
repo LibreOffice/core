@@ -17,11 +17,10 @@
  * specific language governing permissions and limitations
  * under the License.
  *
- *************************************************************/
+ **************************************************************/
 
-
-
-// MARKER(update_precomp.py): autogen include statement, do not remove
+ // MARKER(update_precomp.py): autogen include statement, do not remove
+//This file is about the conversion of the UOF v2.0 and ODF document format from CS2C 20120610.
 #include "precompiled_filter.hxx"
 
 #include <stdio.h>
@@ -69,8 +68,23 @@
 #include <com/sun/star/util/XStringSubstitution.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 
+// for test added by wangyao
+#include <unotools/streamwrap.hxx>
+#include <comphelper/processfactory.hxx>
+#include <tools/stream.hxx>
+// end for test added
+// added by wangyao
+#include "uof2splitter.hxx"
+// end added
+
 #include <xmloff/attrlist.hxx>
 #include <fla.hxx>
+//Begin added by wangyumin for uof2 doc import on 2012-02-13
+#include "uof2storage.hxx"
+#include "uof2merge.hxx"
+#include <tools/stream.hxx>
+#include <string>
+//End added
 
 using namespace ::rtl;
 using namespace ::cppu;
@@ -228,6 +242,9 @@ private:
 
     Reference< XActiveDataControl > m_tcontrol;
     oslCondition  m_cTransformed;
+
+    Reference< XActiveDataControl > m_splitControl;// added by wangyao for uof2 doc export
+
     sal_Bool m_bTerminated;
     sal_Bool m_bError;
 
@@ -280,6 +297,11 @@ public:
         throw (com::sun::star::xml::sax::SAXException,RuntimeException);
     virtual void SAL_CALL setDocumentLocator(const Reference<XLocator>& doclocator)
         throw (SAXException,RuntimeException);
+    // begin added by wangyao for uof2 doc export
+private:
+    Reference< XStream > m_rStream;
+    UOF2Splitter * pSplitter;
+    // end added
 };
 
 XSLTFilter::XSLTFilter( const Reference< XMultiServiceFactory > &r )
@@ -416,11 +438,37 @@ sal_Bool XSLTFilter::importer(
     {
         try
         {
-            // we want to be notfied when the processing is done...
+            // we want to be notified when the processing is done...
             m_tcontrol->addListener(Reference< XStreamListener >(this));
 
             // connect input to transformer
             Reference< XActiveDataSink > tsink(m_tcontrol, UNO_QUERY);
+            //Begin Added by wangyumin for uof2 doc import on 2012-02-13
+            UOF2Storage aUOF2Storage(m_rServiceFactory, xInputStream);
+            if(aUOF2Storage.isValidUOF2Doc())
+            {
+                UOF2Merge aUOF2Merge(aUOF2Storage, m_rServiceFactory);
+                aUOF2Merge.merge();
+                /*Reference< XInputStream > aTestInStrm = aUOF2Merge.getMergedInStream();
+                SvFileStream aFileStream( String::CreateFromAscii("file:///f:/test.xml"), STREAM_STD_READWRITE | STREAM_TRUNC);
+                while(true)
+                {
+                    Sequence< sal_Int8 > aSeq;
+                    if( aTestInStrm->readBytes(aSeq, 512) )
+                    {
+                        sal_Int32 nLen = aSeq.getLength();
+                        for(sal_Int32 i = 0; i < nLen; ++i)
+                        {
+                            aFileStream << static_cast< signed char >(aSeq[i]);
+                        }
+                    }
+                    else
+                        break;
+                }*/
+                tsink->setInputStream(aUOF2Merge.getMergedInStream());
+            }
+            else
+            //End Added
             tsink->setInputStream(xInputStream);
 
             // create pipe
@@ -483,7 +531,7 @@ sal_Bool XSLTFilter::exporter(
     OUString udStyleSheet = rel2abs(msUserData[5]);
 
     // read source data
-    // we are especialy interested in the output stream
+    // we are especially interested in the output stream
     // since that is where our xml-writer will push the data
     // from it's data-source interface
     OUString aName, sURL;
@@ -505,6 +553,10 @@ sal_Bool XSLTFilter::exporter(
             aSourceData[i].Value >>= m_rOutputStream;
         else if ( aName.equalsAscii("URL" ))
             aSourceData[i].Value >>= sURL;
+        // add by wangyao for uof2 doc export, get Stream for constructing UOF2Storage
+        if ( aName.equalsAscii("StreamForOutput"))
+            aSourceData[i].Value >>= m_rStream;
+        // end adding.
     }
 
     if (!m_rDocumentHandler.is()) {
@@ -541,7 +593,7 @@ sal_Bool XSLTFilter::exporter(
     OSL_ASSERT(m_tcontrol.is());
     if (m_tcontrol.is() && m_rOutputStream.is() && m_rDocumentHandler.is())
     {
-        // we want to be notfied when the processing is done...
+        // we want to be notified when the processing is done...
         m_tcontrol->addListener(Reference< XStreamListener >(this));
 
         // create pipe
@@ -557,9 +609,32 @@ sal_Bool XSLTFilter::exporter(
         Reference< XActiveDataSink > tsink(m_tcontrol, UNO_QUERY);
         tsink->setInputStream(pipein);
 
-        // connect transformer to output
+        // Begin comment by wangyao for changing transformer to connect to a new pipe
+        //// connect transformer to output
+        //Reference< XActiveDataSource > tsource(m_tcontrol, UNO_QUERY);
+        //tsource->setOutputStream(m_rOutputStream);
+        // End comment
+
+        // Added by wangyao for creating pipe2
+        Reference< XOutputStream > x_Pipeout( m_rServiceFactory->createInstance(
+            OUString::createFromAscii("com.sun.star.io.Pipe")), UNO_QUERY );
+        Reference< XInputStream > x_Pipein( x_Pipeout, UNO_QUERY );
+
+        // connect transformer to pipe2
         Reference< XActiveDataSource > tsource(m_tcontrol, UNO_QUERY);
-        tsource->setOutputStream(m_rOutputStream);
+        tsource->setOutputStream( x_Pipeout );
+
+        pSplitter = new UOF2Splitter( m_rServiceFactory, sURL );
+        m_splitControl = Reference< XActiveDataControl >( static_cast< cppu::OWeakObject* >( pSplitter), UNO_QUERY );
+        //m_splitControl->addListener( Reference< XStreamListener >(this));
+        // connect pipe2 to splitter
+        Reference< XActiveDataSink > splitsink( m_splitControl, UNO_QUERY );
+        splitsink->setInputStream( x_Pipein );
+        // connect splitter to output
+        Reference< XActiveDataStreamer > splitout( m_splitControl, UNO_QUERY );
+        splitout->setStream( m_rStream );
+        m_rOutputStream = m_rStream->getOutputStream();
+        // End added
 
         // we will start receiving events after returning 'true'.
         // we will start the transformation as soon as we receive the startDocument
@@ -584,6 +659,11 @@ void XSLTFilter::startDocument() throw (SAXException,RuntimeException){
 void XSLTFilter::endDocument() throw (SAXException, RuntimeException){
     OSL_ASSERT(m_rDocumentHandler.is());
     m_rDocumentHandler->endDocument();
+
+    // add by wangyao, when the inputStream(outputStream of filter) was closed, start to parse it.
+    m_splitControl->start();
+    // end adding.
+
     // wait for the transformer to finish
     osl_waitCondition(m_cTransformed, 0);
     if (!m_bError && !m_bTerminated)
@@ -676,6 +756,31 @@ void SAL_CALL component_getImplementationEnvironment(
     const sal_Char ** ppEnvTypeName, uno_Environment ** /* ppEnv */ )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
+}
+
+sal_Bool SAL_CALL component_writeInfo(void * /* pServiceManager */, void * pRegistryKey )
+{
+    if (pRegistryKey)
+    {
+        try
+        {
+            Reference< XRegistryKey > xNewKey(
+                reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey(
+                    OUString::createFromAscii( "/" IMPLEMENTATION_NAME "/UNO/SERVICES" ) ) );
+
+            const Sequence< OUString > & rSNL = getSupportedServiceNames();
+            const OUString * pArray = rSNL.getConstArray();
+            for ( sal_Int32 nPos = rSNL.getLength(); nPos--; )
+                xNewKey->createKey( pArray[nPos] );
+
+            return sal_True;
+        }
+        catch (InvalidRegistryException &)
+        {
+            OSL_ENSURE( sal_False, "### InvalidRegistryException!" );
+        }
+    }
+    return sal_False;
 }
 
 void * SAL_CALL component_getFactory(

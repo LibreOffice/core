@@ -31,6 +31,7 @@ T4_IMPRESS = \
     pdf_Portable_Document_Format \
     pwp_PlaceWare\
     impress8\
+    impress_NSO_UOF2 \
     impress8_template\
     draw8\
     MS_PowerPoint_2007_XML\
@@ -47,6 +48,7 @@ F4_IMPRESS = \
     impress_pdf_Export \
     placeware_Export\
     impress8\
+    NSO_Impress_UOF2 \
     impress8_template\
     impress8_draw\
     impress_MS_PowerPoint_2007_XML\
@@ -60,6 +62,7 @@ F4_UI_IMPRESS = \
     StarOffice_XML__Impress__ui \
     impress_StarOffice_XML_Impress_Template_ui \
     impress8_ui \
+    NSO_Impress_UOF2_ui \
     impress8_template_ui \
     impress8_draw_ui \
     impress_MS_PowerPoint_2007_XML_ui \

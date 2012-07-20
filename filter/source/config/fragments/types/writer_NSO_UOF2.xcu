@@ -1,0 +1,13 @@
+    <node oor:name="writer_NSO_UOF2" oor:op="replace">
+        <prop oor:name="DetectService"><value>com.sun.star.comp.filters.XMLFilterDetect</value></prop>
+        <prop oor:name="URLPattern"/>
+        <prop oor:name="Extensions"><value>uot</value></prop>
+        <prop oor:name="MediaType"><value>application/xml</value></prop>
+        <prop oor:name="Preferred"><value>false</value></prop>
+        <prop oor:name="PreferredFilter"><value>NSO Writer UOF2</value></prop>
+        <prop oor:name="UIName">
+            <value xml:lang="en-US">Uniform Office Format 2 text</value>
+            <value xml:lang="zh-CN">中文办公软件文档格式2 字处理文档</value>
+        </prop>
+        <prop oor:name="ClipboardFormat"><value>doctype:uot:UOF2</value></prop>
+    </node>

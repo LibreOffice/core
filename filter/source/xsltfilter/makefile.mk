@@ -33,7 +33,15 @@ CLASSDIR!:=$(CLASSDIR)$/$(TARGET)
 
 .IF "$(DISABLE_SAXON)" == ""
 
-SLOFILES=$(SLO)$/XSLTFilter.obj $(SLO)$/fla.obj
+SLOFILES= \
+            $(SLO)$/XSLTFilter.obj \
+            $(SLO)$/fla.obj \
+            $(SLO)$/uof2storage.obj \
+            $(SLO)$/uof2merge.obj \
+            $(SLO)$/XMLBase64Codec.obj \
+            $(SLO)$/uof2splithandler.obj \
+            $(SLO)$/uof2splitter.obj
+            
 LIBNAME=xsltfilter
 SHL1TARGETDEPN=makefile.mk
 SHL1OBJS=$(SLOFILES)
@@ -48,7 +56,8 @@ SHL1STDLIBS= \
     $(CPPUHELPERLIB)    \
     $(CPPULIB)          \
     $(XMLOFFLIB) \
-    $(SALLIB)
+    $(SALLIB) \
+    $(COMPHELPERLIB)
 
 .IF "$(SOLAR_JAVA)"!=""
 

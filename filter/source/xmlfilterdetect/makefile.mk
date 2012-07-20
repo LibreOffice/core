@@ -51,7 +51,8 @@ SHL1OBJS=		$(SLO)$/fdcomp.obj		\
 SHL1STDLIBS=	$(UCBHELPERLIB)	 \
                 $(CPPUHELPERLIB) \
                 $(CPPULIB) \
-                $(SALLIB)
+                $(SALLIB) \
+                $(COMPHELPERLIB)
 
 .INCLUDE :			target.mk
 
