@@ -18,6 +18,8 @@
 
 UDK_3_0_0 {
     global:
+        _ZTI*; _ZTS*; # weak RTTI symbols for C++ exceptions
+
         store_acquireHandle;
         store_attrib;
         store_closeDirectory;
@@ -47,3 +49,9 @@ UDK_3_0_0 {
         *;
 };
 
+# Unique libstdc++ symbols:
+GLIBCXX_3.4 {
+    global:
+        _ZGVNSt7num_put*; _ZNSt7num_put*;
+        _ZNSs4_Rep20_S_empty_rep_storageE;
+};

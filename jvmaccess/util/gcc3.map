@@ -18,6 +18,8 @@
 
 UDK_3.1 {
     global:
+        _ZTI*; _ZTS*; # weak RTTI symbols for C++ exceptions
+
         # jvmaccess/virtualmachine.hxx:
         _ZN9jvmaccess14VirtualMachine11AttachGuard17CreationExceptionC1Ev; # jvmaccess::VirtualMachine::AttachGuard::CreationException::CreationException()
         _ZN9jvmaccess14VirtualMachine11AttachGuard17CreationExceptionC1ERKS2_; # jvmaccess::VirtualMachine::AttachGuard::CreationException::CreationException(CreationException const &)
@@ -89,3 +91,10 @@ UDK_3.5 { # LibO 3.6
         _ZTSN9jvmaccess14VirtualMachine11AttachGuard17CreationExceptionE; # typeinfo name for jvmaccess::VirtualMachine::AttachGuard::CreationException
         _ZTVN9jvmaccess14VirtualMachine11AttachGuard17CreationExceptionE; # vtable for jvmaccess::VirtualMachine::AttachGuard::CreationException
 } UDK_3.4;
+
+# Unique libstdc++ symbols:
+GLIBCXX_3.4 {
+    global:
+        _ZGVNSt7num_put*; _ZNSt7num_put*;
+        _ZNSs4_Rep20_S_empty_rep_storageE;
+};

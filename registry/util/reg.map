@@ -17,6 +17,8 @@
 #
 UDK_3_0_0 {
     global:
+        _ZTI*; _ZTS*; # weak RTTI symbols for C++ exceptions
+
         initRegistry_Api;
         initRegistryTypeWriter_Api;
         initRegistryTypeReader_Api;
@@ -100,3 +102,10 @@ UDK_3.1 {
         typereg_writer_setReferenceData;
         typereg_writer_getBlob;
 } UDK_3_0_0;
+
+# Unique libstdc++ symbols:
+GLIBCXX_3.4 {
+    global:
+        _ZGVNSt7num_put*; _ZNSt7num_put*;
+        _ZNSs4_Rep20_S_empty_rep_storageE;
+};

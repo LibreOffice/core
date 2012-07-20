@@ -18,6 +18,8 @@
 
 UDK_3_0_0 {
     global:
+        _ZTI*; _ZTS*; # weak RTTI symbols for C++ exceptions
+
         # jvmfwk/framework.h:
     jfw_freeJavaInfo;
     jfw_areEqualJavaInfo;
@@ -47,3 +49,10 @@ UDK_3.1 { # OOo 3.1.0
     global:
     jfw_existJRE;
 } UDK_3_0_0;
+
+# Unique libstdc++ symbols:
+GLIBCXX_3.4 {
+    global:
+        _ZGVNSt7num_put*; _ZNSt7num_put*;
+        _ZNSs4_Rep20_S_empty_rep_storageE;
+};
