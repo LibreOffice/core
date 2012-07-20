@@ -50,6 +50,17 @@ class SwNodeIndexPrinter(object):
         node = self.value['pNd'].dereference();
         return "%s (node %d)" % (self.typename, node['nOffset'])
 
+class SwIndexPrinter(object):
+    '''Prints SwIndex.'''
+
+    def __init__(self, typename, value):
+        self.typename = typename
+        self.value = value
+
+    def to_string(self):
+        offset = self.value['m_nIndex']
+        return "%s (offset %d)" % (self.typename, offset)
+
 class SwPaMPrinter(object):
     '''Prints SwPaM.'''
 
@@ -200,6 +211,7 @@ def build_pretty_printers():
     printer.add('BigPtrArray', BigPtrArrayPrinter)
     printer.add('SwPosition', SwPositionPrinter)
     printer.add('SwNodeIndex', SwNodeIndexPrinter)
+    printer.add('SwIndex', SwIndexPrinter)
     printer.add('SwPaM', SwPaMPrinter)
     printer.add('SwRect', SwRectPrinter)
 
