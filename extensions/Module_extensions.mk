@@ -38,7 +38,7 @@ $(eval $(call gb_Module_add_targets,extensions,\
 ))
 
 ifneq ($(filter-out IOS ANDROID,$(OS)),)
-$(eval $(call gb_Module_add_targets,shell,\
+$(eval $(call gb_Module_add_targets,extensions,\
 	Library_ldapbe2 \
 ))
 endif
