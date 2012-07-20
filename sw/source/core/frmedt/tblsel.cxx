@@ -83,10 +83,10 @@ struct _CmpLPt
 
     _CmpLPt( const Point& rPt, const SwTableBox* pBox, sal_Bool bVertical );
 
-    sal_Bool operator==( const _CmpLPt& rCmp ) const
+    bool operator==( const _CmpLPt& rCmp ) const
     {   return X() == rCmp.X() && Y() == rCmp.Y() ? sal_True : sal_False; }
 
-    sal_Bool operator<( const _CmpLPt& rCmp ) const
+    bool operator<( const _CmpLPt& rCmp ) const
     {
         if ( bVert )
             return X() > rCmp.X() || ( X() == rCmp.X() && Y() < rCmp.Y() )
@@ -101,8 +101,7 @@ struct _CmpLPt
 };
 
 
-SV_DECL_VARARR_SORT( _MergePos, _CmpLPt, 0 )
-SV_IMPL_VARARR_SORT( _MergePos, _CmpLPt )
+typedef o3tl::sorted_vector<_CmpLPt> _MergePos;
 
 
 struct _Sort_CellFrm
@@ -1002,7 +1001,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
                                 // this box is selected
                                 pLastBox = pBox;
                                 rBoxes.insert( pBox );
-                                aPosArr.Insert(
+                                aPosArr.insert(
                                     _CmpLPt( (pCell->Frm().*fnRect->fnGetPos)(),
                                     pBox, bVert ) );
 
@@ -1022,7 +1021,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
 #if OSL_DEBUG_LEVEL > 1
                                 Point aInsPoint( (pCell->Frm().*fnRect->fnGetPos)() );
 #endif
-                                aPosArr.Insert(
+                                aPosArr.insert(
                                     _CmpLPt( (pCell->Frm().*fnRect->fnGetPos)(),
                                     pBox, bVert ) );
                             }
@@ -1070,7 +1069,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
                             // this box is selected
                             pLastBox = pBox;
                             rBoxes.insert( pBox );
-                            aPosArr.Insert(
+                            aPosArr.insert(
                                 _CmpLPt( (pCell->Frm().*fnRect->fnGetPos)(),
                                 pBox, bVert ) );
 
@@ -1112,7 +1111,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
 
                             pLastBox = pBox;
                             rBoxes.insert( pBox );
-                            aPosArr.Insert( _CmpLPt( Point( rUnion.Left(),
+                            aPosArr.insert( _CmpLPt( Point( rUnion.Left(),
                                                 pCell->Frm().Top()), pBox, bVert ));
 
                             if( pUndo )
@@ -1290,13 +1289,13 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
 // DEL_ALL_EMPTY_BOXES
 
         nWidth = 0;
-        long nY = aPosArr.Count() ?
+        long nY = !aPosArr.empty() ?
                     ( bVert ?
                       aPosArr[ 0 ].X() :
                       aPosArr[ 0 ].Y() ) :
                   0;
 
-        for( sal_uInt16 n = 0; n < aPosArr.Count(); ++n )
+        for( sal_uInt16 n = 0; n < aPosArr.size(); ++n )
         {
             const _CmpLPt& rPt = aPosArr[ n ];
             if( bCalcWidth )
@@ -1312,7 +1311,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
                 if( pUndo )
                     pUndo->SaveCollection( *rPt.pSelBox );
 
-                aPosArr.Remove( n, 1 );
+                aPosArr.erase( aPosArr.begin() + n );
                 --n;
             }
         }
@@ -1346,7 +1345,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
     }
 
     //Block to delete  SwPaM, SwPosition from stack
-    if( aPosArr.Count() )
+    if( !aPosArr.empty() )
     {
         SwTxtNode* pTxtNd = 0;
         SwPosition aInsPos( *(*ppMergeBox)->GetSttNd() );
@@ -1354,7 +1353,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
 
         SwPaM aPam( aInsPos );
 
-        for( sal_uInt16 n = 0; n < aPosArr.Count(); ++n )
+        for( sal_uInt16 n = 0; n < aPosArr.size(); ++n )
         {
             const _CmpLPt& rPt = aPosArr[ n ];
             aPam.GetPoint()->nNode.Assign( *rPt.pSelBox->GetSttNd()->
