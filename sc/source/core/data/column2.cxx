@@ -1317,22 +1317,23 @@ void ScColumn::FindDataAreaPos(SCROW& rRow, long nMovY) const
     if (bThere && maItems[nIndex].pCell->IsBlank())
         bThere = false;
 
+    size_t nLastIndex = maItems.size() - 1;
     if (bThere)
     {
         SCROW nLast = rRow;
         SCSIZE nOldIndex = nIndex;
         if (bForward)
         {
-            if (nIndex<maItems.size()-1)
+            if (nIndex<nLastIndex)
             {
                 ++nIndex;
-                while (nIndex<maItems.size()-1 && maItems[nIndex].nRow==nLast+1
+                while (nIndex<nLastIndex && maItems[nIndex].nRow==nLast+1
                                         && !maItems[nIndex].pCell->IsBlank())
                 {
                     ++nIndex;
                     ++nLast;
                 }
-                if (nIndex==maItems.size()-1)
+                if (nIndex==nLastIndex)
                     if (maItems[nIndex].nRow==nLast+1 && !maItems[nIndex].pCell->IsBlank())
                         ++nLast;
             }
@@ -1366,9 +1367,9 @@ void ScColumn::FindDataAreaPos(SCROW& rRow, long nMovY) const
     {
         if (bForward)
         {
-            while (nIndex<maItems.size() && maItems[nIndex].pCell->IsBlank())
+            while (nIndex<nLastIndex+1 && maItems[nIndex].pCell->IsBlank())
                 ++nIndex;
-            if (nIndex<maItems.size())
+            if (nIndex<nLastIndex+1)
                 rRow = maItems[nIndex].nRow;
             else
                 rRow = MAXROW;
