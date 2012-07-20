@@ -78,6 +78,7 @@ void testFile(rtl::OUString& aFileName, ScDocument* pDoc, SCTAB nTab, StringType
     aConfig.delimiters.push_back(',');
     aConfig.delimiters.push_back(';');
     aConfig.text_qualifier = '"';
+    aConfig.trim_cell_value = false;
 
 
     std::string aContent;
