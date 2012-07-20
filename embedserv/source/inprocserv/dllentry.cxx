@@ -186,9 +186,6 @@ extern "C" STDAPI INPROC_DLLPUBLIC DllGetClassObject( REFCLSID rclsid, REFIID ri
                 return E_NOINTERFACE;
 
             *ppv = new inprocserv::InprocEmbedProvider_Impl( rclsid );
-            if ( *ppv == NULL )
-                return E_OUTOFMEMORY;
-
             ((LPUNKNOWN)*ppv)->AddRef();
             return S_OK;
          }
@@ -316,9 +313,6 @@ STDMETHODIMP InprocEmbedProvider_Impl::CreateInstance(IUnknown FAR* punkOuter,
         return CLASS_E_NOAGGREGATION;
 
     InprocEmbedDocument_Impl* pEmbedDocument = new InprocEmbedDocument_Impl( m_guid );
-    if ( !pEmbedDocument )
-        return E_OUTOFMEMORY;
-
     pEmbedDocument->AddRef();
     HRESULT hr = pEmbedDocument->Init();
     if ( SUCCEEDED( hr ) )

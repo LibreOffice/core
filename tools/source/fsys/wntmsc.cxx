@@ -510,10 +510,7 @@ HRESULT SHResolvePath( HWND hwndOwner, LPCTSTR pszPath, LPITEMIDLIST *ppidl )
     // First make a copy of the path
 
     pszPathCopy = new TCHAR[lstrlen(pszPath) + 1];
-    if ( pszPathCopy )
-        lstrcpy( pszPathCopy, pszPath );
-    else
-        return E_OUTOFMEMORY;
+    lstrcpy( pszPathCopy, pszPath );
 
     // Determine the first token
 

@@ -432,9 +432,6 @@ extern "C" STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, void** ppv)
         return E_NOINTERFACE;
 
     IUnknown* pUnk = new CClassFactory( rclsid );
-    if ( 0 == pUnk )
-        return E_OUTOFMEMORY;
-
     *ppv = pUnk;
     return S_OK;
 }
