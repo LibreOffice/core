@@ -28,7 +28,6 @@
 
 #include "sal/config.h"
 
-#include <tubes/warnings_guard_boost_signals2.hpp>
 #include <vector>
 
 #include "cell.hxx"
@@ -39,23 +38,17 @@
 #include <tubes/manager.hxx>
 #include <tubes/conference.hxx>
 #include <tubes/contact-list.hxx>
-#include <tubes/constants.h>
 
-// new file send/recv fun ...
 #include <com/sun/star/uno/Sequence.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <comphelper/mediadescriptor.hxx>
-#include <comphelper/processfactory.hxx>
-#include <comphelper/componentcontext.hxx>
-#include <com/sun/star/frame/XLoadable.hpp>
-#include <com/sun/star/frame/XComponentLoader.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/document/XDocumentRecovery.hpp>
-#include <com/sun/star/util/XCloseable.hpp>
 
 namespace css = ::com::sun::star;
+
+// FIXME: this is only meant for demo I think
+extern void TeleManager_fileReceived( const OUString& );
 
 // FIXME: really ScDocFunc should be an abstract base
 ScDocFuncRecv::ScDocFuncRecv( ScDocFuncDirect *pChain )
@@ -115,64 +108,6 @@ void ScDocFuncRecv::packetReceived( TelePacket &rPacket )
     RecvMessage( aString );
 }
 
-void ScDocFuncRecv::fileReceived( const rtl::OUString &rStr )
-{
-    fprintf( stderr, "incoming file '%s'\n",
-             rtl::OUStringToOString( rStr, RTL_TEXTENCODING_UTF8 ).getStr() );
-
-    // using the frame::XLoadable interface fails with a DoubleInitializationException
-/*    css::uno::Sequence < css::beans::PropertyValue > aLoadArgs(5);
-    aLoadArgs[0].Name = rtl::OUString( "URL" );
-    aLoadArgs[0].Value <<= rpStr;
-    aLoadArgs[1].Name = rtl::OUString( "FilterName" );
-    aLoadArgs[1].Value <<= rtl::OUString( "calc8" );
-    aLoadArgs[2].Name = rtl::OUString( "Referer" );
-    aLoadArgs[2].Value <<= rtl::OUString( "" );
-    // no interaction handler ?
-    aLoadArgs[3].Name = rtl::OUString( "MacroExecutionMode" );
-    aLoadArgs[3].Value <<= sal_Int32( 3 );
-    aLoadArgs[4].Name = rtl::OUString( "UpdateDocMode" );
-    aLoadArgs[4].Value <<= sal_Int32( 2 );
-    try
-    {
-        css::uno::Reference < css::frame::XLoadable > xLoad(
-                rDocShell.GetBaseModel(), css::uno::UNO_QUERY_THROW );
-        xLoad->load( aLoadArgs );
-    }
-    catch ( css::uno::Exception& e )
-    {
-        fprintf( stderr, "exception when loading '%s' !\n",
-                 rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
-                 } */
-// #2 - tried out the SfxAutoReloadTimer_Impl - shove stuff at the SID_RELOAD slot ...
-
-// #3 - can we use the framework/inc/services/frame.hxx 's "sTargetFrameName"
-// magic to load into our current frame ? ... :-)
-
-    css::uno::Reference< css::lang::XMultiServiceFactory > rFactory =
-        ::comphelper::getProcessServiceFactory();
-
-    css::uno::Sequence < css::beans::PropertyValue > args(0);
-// FIXME: should this be hidden before it is synched & ready ? ...
-//    args[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Hidden"));
-//    args[0].Value <<= sal_True;
-    try
-    {
-        css::uno::Reference < css::frame::XComponentLoader > xLoader(
-                ::comphelper::getProcessServiceFactory()->createInstance(
-                        "com.sun.star.frame.Desktop" ),
-                        css::uno::UNO_QUERY_THROW );
-        css::uno::Reference < css::util::XCloseable > xDoc(
-                xLoader->loadComponentFromURL( rStr, "_blank", 0, args ),
-                css::uno::UNO_QUERY_THROW );
-    }
-    catch ( css::uno::Exception& e )
-    {
-        fprintf( stderr, "exception when loading '%s' !\n",
-                 rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
-    }
-}
-
 /*
  * Provides a local bus that doesn't require an IM channel for
  * quick demoing, export INTERCEPT=demo # to enable.
@@ -201,15 +136,6 @@ class ScDocFuncDemo : public ScDocFuncRecv
         for (std::vector< boost::shared_ptr<ScDocFuncRecv> >::iterator i
                  = aCopy.begin(); i != aCopy.end(); ++i)
             (*i)->RecvMessage(rString);
-    }
-
-    virtual void fileReceived( const rtl::OUString &rStr )
-    {
-        // FIXME: Lifecycle nightmare
-        std::vector< boost::shared_ptr<ScDocFuncRecv> > aCopy( maClients );
-        for (std::vector< boost::shared_ptr<ScDocFuncRecv> >::iterator i
-                 = aCopy.begin(); i != aCopy.end(); ++i)
-            (*i)->fileReceived( rStr );
     }
 };
 
@@ -262,7 +188,7 @@ void ScDocFuncSend::SendFile( const rtl::OUString &sUuid )
     if (mpConference)
         mpConference->sendFile( aFileURL, file_sent_cb, NULL );
     else
-        mpDirect->fileReceived( aFileURL );
+        TeleManager_fileReceived( aFileURL );
 
     // FIXME: unlink the file after send ...
 }

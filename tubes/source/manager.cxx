@@ -33,6 +33,21 @@
 #include <osl/mutex.hxx>
 #include <cstring>
 
+// new file send/recv fun ...
+#include <com/sun/star/uno/Sequence.hxx>
+#include <unotools/tempfile.hxx>
+#include <unotools/localfilehelper.hxx>
+#include <comphelper/mediadescriptor.hxx>
+#include <comphelper/processfactory.hxx>
+#include <comphelper/componentcontext.hxx>
+#include <com/sun/star/frame/XLoadable.hpp>
+#include <com/sun/star/frame/XComponentLoader.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/document/XDocumentRecovery.hpp>
+#include <com/sun/star/util/XCloseable.hpp>
+
+namespace css = ::com::sun::star;
 
 #if defined SAL_LOG_INFO
 namespace
@@ -172,6 +187,65 @@ bool TeleManager::hasWaitingConference()
     return !pImpl->msCurrentUUID.isEmpty();
 }
 
+// FIXME this is exported only because of ScDocFuncDemo
+SAL_DLLPUBLIC_EXPORT void TeleManager_fileReceived( const rtl::OUString &rStr )
+{
+    fprintf( stderr, "incoming file '%s'\n",
+             rtl::OUStringToOString( rStr, RTL_TEXTENCODING_UTF8 ).getStr() );
+
+    // using the frame::XLoadable interface fails with a DoubleInitializationException
+/*    css::uno::Sequence < css::beans::PropertyValue > aLoadArgs(5);
+    aLoadArgs[0].Name = rtl::OUString( "URL" );
+    aLoadArgs[0].Value <<= rpStr;
+    aLoadArgs[1].Name = rtl::OUString( "FilterName" );
+    aLoadArgs[1].Value <<= rtl::OUString( "calc8" );
+    aLoadArgs[2].Name = rtl::OUString( "Referer" );
+    aLoadArgs[2].Value <<= rtl::OUString( "" );
+    // no interaction handler ?
+    aLoadArgs[3].Name = rtl::OUString( "MacroExecutionMode" );
+    aLoadArgs[3].Value <<= sal_Int32( 3 );
+    aLoadArgs[4].Name = rtl::OUString( "UpdateDocMode" );
+    aLoadArgs[4].Value <<= sal_Int32( 2 );
+    try
+    {
+        css::uno::Reference < css::frame::XLoadable > xLoad(
+                rDocShell.GetBaseModel(), css::uno::UNO_QUERY_THROW );
+        xLoad->load( aLoadArgs );
+    }
+    catch ( css::uno::Exception& e )
+    {
+        fprintf( stderr, "exception when loading '%s' !\n",
+                 rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
+                 } */
+// #2 - tried out the SfxAutoReloadTimer_Impl - shove stuff at the SID_RELOAD slot ...
+
+// #3 - can we use the framework/inc/services/frame.hxx 's "sTargetFrameName"
+// magic to load into our current frame ? ... :-)
+
+    css::uno::Reference< css::lang::XMultiServiceFactory > rFactory =
+        ::comphelper::getProcessServiceFactory();
+
+    css::uno::Sequence < css::beans::PropertyValue > args(0);
+// FIXME: should this be hidden before it is synched & ready ? ...
+//    args[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Hidden"));
+//    args[0].Value <<= sal_True;
+    try
+    {
+        css::uno::Reference < css::frame::XComponentLoader > xLoader(
+                ::comphelper::getProcessServiceFactory()->createInstance(
+                        "com.sun.star.frame.Desktop" ),
+                        css::uno::UNO_QUERY_THROW );
+        css::uno::Reference < css::util::XCloseable > xDoc(
+                xLoader->loadComponentFromURL( rStr, "_blank", 0, args ),
+                css::uno::UNO_QUERY_THROW );
+    }
+    catch ( css::uno::Exception& e )
+    {
+        fprintf( stderr, "exception when loading '%s' !\n",
+                 rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
+    }
+}
+
 void TeleManager::TransferDone( EmpathyFTHandler *handler, TpFileTransferChannel *, gpointer pUserData)
 {
     TeleManager* pManager = reinterpret_cast<TeleManager*>(pUserData);
@@ -187,7 +261,7 @@ void TeleManager::TransferDone( EmpathyFTHandler *handler, TpFileTransferChannel
     OString sUuid( OUStringToOString( aUri.copy( first + 1, last - first - 1),
                 RTL_TEXTENCODING_UTF8));
     pImpl->msCurrentUUID = sUuid;
-    pManager->sigFileReceived( aUri );
+    TeleManager_fileReceived( aUri );
 
     g_object_unref( handler);
 }

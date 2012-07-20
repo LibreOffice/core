@@ -32,12 +32,16 @@ $(eval $(call gb_Library_set_include,tubes,\
 	$$(INCLUDE) \
 ))
 
+$(eval $(call gb_Library_use_sdk_api,tubes))
+
 $(eval $(call gb_Library_add_defs,tubes,\
 	-DTUBES_DLLIMPLEMENTATION \
 ))
 
 $(eval $(call gb_Library_use_libraries,tubes,\
 	$(gb_STDLIBS) \
+	comphelper \
+	cppu \
 	sal \
 	salhelper \
 ))
