@@ -183,8 +183,7 @@ bool TeleManager::hasWaitingConference()
 // FIXME this is exported only because of ScDocFuncDemo
 SAL_DLLPUBLIC_EXPORT void TeleManager_fileReceived( const rtl::OUString &rStr )
 {
-    fprintf( stderr, "incoming file '%s'\n",
-             rtl::OUStringToOString( rStr, RTL_TEXTENCODING_UTF8 ).getStr() );
+    SAL_INFO( "tubes", "TeleManager_fileReceived: incoming file: " << rStr );
 
     css::uno::Reference< css::lang::XMultiServiceFactory > rFactory =
         ::comphelper::getProcessServiceFactory();
@@ -202,8 +201,7 @@ SAL_DLLPUBLIC_EXPORT void TeleManager_fileReceived( const rtl::OUString &rStr )
     }
     catch ( const css::uno::Exception& e )
     {
-        fprintf( stderr, "exception when loading '%s' !\n",
-                 rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
+        SAL_WARN( "tubes", "TeleManager_fileReceived: exception when loading: " << e.Message );
     }
 }
 
