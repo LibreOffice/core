@@ -938,6 +938,12 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                         break;
 
                         default :
+                        {
+                            if ( nTextFlags == PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_LEFT )
+                                eTHA = SDRTEXTHORZADJUST_LEFT;
+                            else if ( nTextFlags == PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_RIGHT )
+                                eTHA = SDRTEXTHORZADJUST_RIGHT;
+                        }
                         break;
                     }
                     nMinFrameHeight = rTextRect.GetHeight() - ( nTextTop + nTextBottom );
