@@ -2236,6 +2236,32 @@ eF_ResT SwWW8ImplReader::Read_F_PgRef( WW8FieldDesc*, String& rStr )
     rDoc.InsertPoolItem( *pPaM, SwFmtFld( aFld ), 0 );
     return FLD_OK;
 }
+//helper function
+//For MS MacroButton field, the symbol in plain text is always "(" (0x28),
+//which should be mapped according to the macro type
+bool ConvertMacroSymbol( const String& rName, String& rReference )
+{
+    bool bConverted = false;
+    if( rReference.EqualsAscii( "(" ) )
+    {
+        bConverted = true;
+        sal_Unicode cSymbol;
+        if( rName.EqualsAscii( "CheckIt" ) )
+            cSymbol = 0xF06F;
+        else if( rName.EqualsAscii( "UncheckIt" ) )
+            cSymbol = 0xF0FE;
+        else if( rName.EqualsAscii( "ShowExample" ) )
+            cSymbol = 0xF02A;
+        //else if... : todo
+        else
+            bConverted = false;
+
+        if( bConverted )
+            rReference = cSymbol;
+    }
+    return bConverted;
+}
+//end
 
 // "MACROSCHALTFL"ACHE"
 eF_ResT SwWW8ImplReader::Read_F_Macro( WW8FieldDesc*, String& rStr)
@@ -2278,22 +2304,53 @@ eF_ResT SwWW8ImplReader::Read_F_Macro( WW8FieldDesc*, String& rStr)
     if( !aName.Len() )
         return FLD_TAGIGN;  // makes no sense without Makro-Name
 
+    //try converting macro symbol according to macro name
+    bool bApplyWingdings = ConvertMacroSymbol( aName, aVText );
     aName.InsertAscii( "StarOffice.Standard.Modul1.", 0 );
 
     SwMacroField aFld( (SwMacroFieldType*)
                     rDoc.GetSysFldType( RES_MACROFLD ), aName, aVText );
-    rDoc.InsertPoolItem( *pPaM, SwFmtFld( aFld ), 0 );
 
+    if( !bApplyWingdings )
+    {
 
-    WW8_CP nOldCp = pPlcxMan->Where();
-    WW8_CP nCp = nOldCp + nOffset;
+        rDoc.InsertPoolItem( *pPaM, SwFmtFld( aFld ), 0 );
+        WW8_CP nOldCp = pPlcxMan->Where();
+        WW8_CP nCp = nOldCp + nOffset;
 
-    SwPaM aPaM(*pPaM);
-    aPaM.SetMark();
-    aPaM.Move(fnMoveBackward);
-    aPaM.Exchange();
+        SwPaM aPaM(*pPaM);
+        aPaM.SetMark();
+        aPaM.Move(fnMoveBackward);
+        aPaM.Exchange();
 
-    mpPostProcessAttrsInfo = new WW8PostProcessAttrsInfo(nCp, nCp, aPaM);
+        mpPostProcessAttrsInfo = new WW8PostProcessAttrsInfo(nCp, nCp, aPaM);
+    }
+    else
+    {
+        //set Wingdings font
+        sal_uInt16 i = 0;
+        for ( ; i < pFonts->GetMax(); i++ )
+        {
+            FontFamily eFamily;
+            String aFontName;
+            FontPitch ePitch;
+            CharSet eSrcCharSet;
+            if( GetFontParams( i, eFamily, aFontName, ePitch, eSrcCharSet )
+                && aFontName.EqualsAscii("Wingdings") )
+            {
+                break;
+            }
+        }
+
+        if ( i < pFonts->GetMax() )
+        {
+
+            SetNewFontAttr( i, true, RES_CHRATR_FONT );
+            rDoc.InsertPoolItem( *pPaM, SwFmtFld( aFld ), 0 );
+            pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_CHRATR_FONT );
+            ResetCharSetVars();
+        }
+    }
 
     return FLD_OK;
 }
