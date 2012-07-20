@@ -26,7 +26,8 @@
 #
 #*************************************************************************
 
-gb_JavaClassSet_JAVACCOMMAND := $(JAVACOMPILER) $(JAVAFLAGS)
+gb_JavaClassSet_JAVACCOMMAND := $(JAVACOMPILER) $(JAVAFLAGS) \
+    -source $(JAVA_SOURCE_VER) -target $(JAVA_TARGET_VER)
 gb_JavaClassSet_JAVACDEBUG :=
 
 # Enforces correct dependency order for possibly generated stuff:
