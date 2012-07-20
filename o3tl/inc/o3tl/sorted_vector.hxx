@@ -17,17 +17,6 @@
 namespace o3tl
 {
 
-/** Helper template */
-template <class Value, class Compare>
-class sorted_vector_compare : public Compare
-{
-public:
-    bool operator()(const Value& lhs, const Value& rhs) const
-    {
-        return Compare::operator()(lhs, rhs);
-    }
-};
-
 /** Represents a sorted vector of values.
 
     @tpl Value class of item to be stored in container
@@ -36,7 +25,6 @@ public:
 template <class Value, class Compare = std::less<Value> >
 class sorted_vector
     : private std::vector<Value>
-    , private sorted_vector_compare<Value, Compare>
 {
 private:
     typedef typename std::vector<Value> base_t;
@@ -44,7 +32,6 @@ private:
 public:
     typedef typename std::vector<Value>::const_iterator const_iterator;
     typedef typename std::vector<Value>::size_type size_type;
-    typedef sorted_vector_compare<Value, Compare> MyCompare;
 
     using base_t::clear;
     using base_t::erase;
@@ -113,8 +100,7 @@ public:
 
     const_iterator lower_bound( const Value& x ) const
     {
-        const MyCompare& me = *this;
-        return std::lower_bound( base_t::begin(), base_t::end(), x, me );
+        return std::lower_bound( base_t::begin(), base_t::end(), x, Compare() );
     }
 
     /* Searches the container for an element with a value of x
@@ -159,14 +145,12 @@ private:
     /** just makes the code easier to read */
     bool less_than(const Value& lhs, const Value& rhs) const
     {
-        const MyCompare& me = *this;
-        return me.operator()(lhs, rhs);
+        return Compare().operator()(lhs, rhs);
     }
 
     iterator lower_bound_nonconst( const Value& x )
     {
-        const MyCompare& me = *this;
-        return std::lower_bound( base_t::begin(), base_t::end(), x, me );
+        return std::lower_bound( base_t::begin(), base_t::end(), x, Compare() );
     }
 
     typename base_t::iterator begin_nonconst() { return base_t::begin(); }
