@@ -175,23 +175,27 @@ sub include_tables_into_pcpfile
         $localworkdir =~ s/\//\\\\/g;
     }
 
-    $systemcall = $msidb . " -d " . $localfullpcpfilepath . " -f " . $localworkdir . " -i " . $tables;
-
-    $returnvalue = system($systemcall);
-
-    $infoline = "Systemcall: $systemcall\n";
-    push( @installer::globals::logfileinfo, $infoline);
-
-    if ($returnvalue)
+    my @tables = split(' ', $tables); # I found that msidb from Windows SDK 7.1 did not accept more than one table.
+    foreach my $table (@tables)
     {
-        $infoline = "ERROR: Could not execute $systemcall !\n";
+        $systemcall = $msidb . " -d " . $localfullpcpfilepath . " -f " . $localworkdir . " -i " . $table;
+
+        $returnvalue = system($systemcall);
+
+        $infoline = "Systemcall: $systemcall\n";
         push( @installer::globals::logfileinfo, $infoline);
-        installer::exiter::exit_program("ERROR: Could not include tables into pcp file: $fullpcpfilepath !", "include_tables_into_pcpfile");
-    }
-    else
-    {
-        $infoline = "Success: Executed $systemcall successfully!\n";
-        push( @installer::globals::logfileinfo, $infoline);
+
+        if ($returnvalue)
+        {
+            $infoline = "ERROR: Could not execute $systemcall !\n";
+            push( @installer::globals::logfileinfo, $infoline);
+            installer::exiter::exit_program("ERROR: Could not include tables into pcp file: $fullpcpfilepath !", "include_tables_into_pcpfile");
+        }
+        else
+        {
+            $infoline = "Success: Executed $systemcall successfully!\n";
+            push( @installer::globals::logfileinfo, $infoline);
+        }
     }
 }
 
