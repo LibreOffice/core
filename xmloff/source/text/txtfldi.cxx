@@ -567,7 +567,9 @@ XMLTextFieldImportContext::CreateTextFieldImportContext(
             break;
 
         case XML_TOK_TEXT_ANNOTATION:
+        case XML_TOK_TEXT_ANNOTATION_END:
             pContext = new XMLAnnotationImportContext( rImport, rHlp,
+                                                       nToken,
                                                        nPrefix, rName);
             break;
 
@@ -3629,6 +3631,7 @@ TYPEINIT1(XMLAnnotationImportContext, XMLTextFieldImportContext);
 XMLAnnotationImportContext::XMLAnnotationImportContext(
     SvXMLImport& rImport,
     XMLTextImportHelper& rHlp,
+    sal_uInt16 nToken,
     sal_uInt16 nPrfx,
     const OUString& sLocalName) :
         XMLTextFieldImportContext(rImport, rHlp, sAPI_annotation,
@@ -3638,7 +3641,9 @@ XMLAnnotationImportContext::XMLAnnotationImportContext(
         sPropertyContent(sAPI_content),
         // why is there no UNO_NAME_DATE_TIME, but only UNO_NAME_DATE_TIME_VALUE?
         sPropertyDate(sAPI_date_time_value),
-        sPropertyTextRange(sAPI_TextRange)
+        sPropertyTextRange(sAPI_TextRange),
+        sPropertyName(sAPI_name),
+        m_nToken(nToken)
 {
     bValid = sal_True;
 
@@ -3649,10 +3654,11 @@ XMLAnnotationImportContext::XMLAnnotationImportContext(
 }
 
 void XMLAnnotationImportContext::ProcessAttribute(
-    sal_uInt16,
-    const OUString& )
+    sal_uInt16 nToken,
+    const OUString& rValue )
 {
-    // ignore
+    if (nToken == XML_TOK_TEXT_NAME)
+        aName = rValue;
 }
 
 SvXMLImportContext* XMLAnnotationImportContext::CreateChildContext(
@@ -3747,7 +3753,21 @@ void XMLAnnotationImportContext::EndElement()
             // workaround for #80606#
             try
             {
-                GetImportHelper().InsertTextContent( xTextContent );
+                if (m_nToken == XML_TOK_TEXT_ANNOTATION_END && m_xStart.is())
+                {
+                    // So we are ending a previous annotation, let's create a
+                    // text range covering the old and the current position.
+                    uno::Reference<text::XText> xText = GetImportHelper().GetText();
+                    uno::Reference<text::XTextCursor> xCursor = xText->createTextCursorByRange(m_xStart->getAnchor());
+                    xCursor->gotoRange(GetImportHelper().GetCursorAsRange(), true);
+                    uno::Reference<text::XTextRange> xTextRange(xCursor, uno::UNO_QUERY);
+                    xText->insertTextContent(xTextRange, xTextContent, !xCursor->isCollapsed());
+
+                    // Now we can delete the old annotation with the incorrect position.
+                    uno::Reference<lang::XComponent>(m_xStart, uno::UNO_QUERY)->dispose();
+                }
+                else
+                    GetImportHelper().InsertTextContent( xTextContent );
             }
             catch (const lang::IllegalArgumentException&)
             {
@@ -3762,6 +3782,39 @@ void XMLAnnotationImportContext::EndElement()
 void XMLAnnotationImportContext::PrepareField(
     const Reference<XPropertySet> & xPropertySet)
 {
+    if (m_nToken == XML_TOK_TEXT_ANNOTATION_END && !aName.isEmpty())
+    {
+        // Search for a previous annotation with the same name.
+        Reference<XTextFieldsSupplier> xTextFieldsSupplier(GetImport().GetModel(), UNO_QUERY);
+        uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
+        uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
+        uno::Reference<beans::XPropertySet> xPrevField;
+        while (xFields->hasMoreElements())
+        {
+            uno::Reference<beans::XPropertySet> xCurrField(xFields->nextElement(), uno::UNO_QUERY);
+            OUString aFieldName;
+            xCurrField->getPropertyValue(sPropertyName) >>= aFieldName;
+            if (aFieldName == aName)
+            {
+                xPrevField = xCurrField;
+                break;
+            }
+        }
+        if (xPrevField.is())
+        {
+            // Found? Then copy over the properties.
+            xPropertySet->setPropertyValue(sPropertyAuthor, xPrevField->getPropertyValue(sPropertyAuthor));
+            xPropertySet->setPropertyValue(sPropertyInitials, xPrevField->getPropertyValue(sPropertyInitials));
+            xPropertySet->setPropertyValue(sPropertyDate, xPrevField->getPropertyValue(sPropertyDate));
+            xPropertySet->setPropertyValue(sPropertyName, xPrevField->getPropertyValue(sPropertyName));
+            xPropertySet->setPropertyValue(sPropertyContent, xPrevField->getPropertyValue(sPropertyContent));
+
+            // And save a reference to it, so we can delete it later.
+            m_xStart.set(xPrevField, uno::UNO_QUERY);
+            return;
+        }
+    }
+
     // import (possibly empty) author
     OUString sAuthor( aAuthorBuffer.makeStringAndClear() );
     xPropertySet->setPropertyValue(sPropertyAuthor, makeAny(sAuthor));
@@ -3792,6 +3845,9 @@ void XMLAnnotationImportContext::PrepareField(
             sBuffer = sBuffer.copy(0, sBuffer.getLength()-1);
         xPropertySet->setPropertyValue(sPropertyContent, makeAny(sBuffer));
     }
+
+    if (!aName.isEmpty())
+        xPropertySet->setPropertyValue(sPropertyName, makeAny(aName));
 }
 
 
