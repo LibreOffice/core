@@ -135,7 +135,7 @@ void TeleManager::DBusChannelHandler(
             SAL_INFO( "tubes", "accepting");
             aAccepted = true;
 
-            TeleConference* pConference = new TeleConference( pManager, pAccount, TP_DBUS_TUBE_CHANNEL( pChannel ), createUuid() );
+            TeleConference* pConference = new TeleConference( pManager, pAccount, TP_DBUS_TUBE_CHANNEL( pChannel ) );
             pConference->acceptTube();
             pManager->addConference( pConference );
         }
@@ -207,10 +207,8 @@ SAL_DLLPUBLIC_EXPORT void TeleManager_fileReceived( const rtl::OUString &rStr )
     }
 }
 
-void TeleManager::TransferDone( EmpathyFTHandler *handler, TpFileTransferChannel *, gpointer pUserData)
+void TeleManager::TransferDone( EmpathyFTHandler *handler, TpFileTransferChannel *, gpointer )
 {
-    TeleManager* pManager = reinterpret_cast<TeleManager*>(pUserData);
-
     SAL_INFO( "tubes", "TeleManager::TransferDone: hooray!");
     GFile *gfile = empathy_ft_handler_get_gfile( handler);
     char *uri = g_file_get_uri( gfile);
@@ -538,7 +536,7 @@ bool TeleManager::registerClients()
             getFullClientName().getStr(),                   // name
             TRUE,                                           // uniquify to get a different bus name to the main client, above
             TeleManager_FileTransferHandler,                // callback
-            this,                                           // user_data
+            this,                                           // user_data, unused
             NULL                                            // destroy
             );
     tp_base_client_take_handler_filter( pImpl->mpFileTransferClient,
