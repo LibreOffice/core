@@ -30,11 +30,12 @@
 
 #include "driver.hxx"
 
-namespace connectivity { namespace mork {
-
-namespace {
-
 namespace css = com::sun::star;
+
+namespace connectivity
+{
+namespace mork
+{
 
 class Service:
     public cppu::WeakImplHelper2< css::lang::XServiceInfo, css::sdbc::XDriver >,
@@ -43,43 +44,51 @@ class Service:
 public:
     Service(css::uno::Reference< css::uno::XComponentContext > const context):
         context_(context)
-    { assert(context.is()); }
+    {
+        assert(context.is());
+    }
 
 private:
     virtual ~Service() {}
 
-    virtual rtl::OUString SAL_CALL getImplementationName()
-        throw (css::uno::RuntimeException)
-    { return connectivity::mork::getImplementationName(); }
+    rtl::OUString SAL_CALL getImplementationName()
+    throw (css::uno::RuntimeException)
+    {
+        return connectivity::mork::getImplementationName();
+    }
 
-    virtual sal_Bool SAL_CALL supportsService(rtl::OUString const & ServiceName)
-        throw (css::uno::RuntimeException)
-    { return ServiceName == getSupportedServiceNames()[0]; } //TODO
+    sal_Bool SAL_CALL supportsService(rtl::OUString const &ServiceName)
+    throw (css::uno::RuntimeException)
+    {
+        return ServiceName == getSupportedServiceNames()[0];    //TODO
+    }
 
-    virtual css::uno::Sequence< rtl::OUString > SAL_CALL
+    css::uno::Sequence< rtl::OUString > SAL_CALL
     getSupportedServiceNames() throw (css::uno::RuntimeException)
-    { return connectivity::mork::getSupportedServiceNames(); }
+    {
+        return connectivity::mork::getSupportedServiceNames();
+    }
 
-    virtual css::uno::Reference< css::sdbc::XConnection > SAL_CALL connect(
-        rtl::OUString const & url,
-        css::uno::Sequence< css::beans::PropertyValue > const & info)
-        throw (css::sdbc::SQLException, css::uno::RuntimeException);
+    css::uno::Reference< css::sdbc::XConnection > SAL_CALL connect(
+        rtl::OUString const &url,
+        css::uno::Sequence< css::beans::PropertyValue > const &info)
+    throw (css::sdbc::SQLException, css::uno::RuntimeException);
 
-    virtual sal_Bool SAL_CALL acceptsURL(
-        rtl::OUString const & url)
-        throw (css::sdbc::SQLException, css::uno::RuntimeException);
+    sal_Bool SAL_CALL acceptsURL(
+        rtl::OUString const &url)
+    throw (css::sdbc::SQLException, css::uno::RuntimeException);
 
-    virtual css::uno::Sequence< css::sdbc::DriverPropertyInfo > SAL_CALL
+    css::uno::Sequence< css::sdbc::DriverPropertyInfo > SAL_CALL
     getPropertyInfo(
-        rtl::OUString const & url,
-        css::uno::Sequence< css::beans::PropertyValue > const & info)
-        throw (css::sdbc::SQLException, css::uno::RuntimeException);
+        rtl::OUString const &url,
+        css::uno::Sequence< css::beans::PropertyValue > const &info)
+    throw (css::sdbc::SQLException, css::uno::RuntimeException);
 
-    virtual sal_Int32 SAL_CALL getMajorVersion()
-        throw (css::uno::RuntimeException);
+    sal_Int32 SAL_CALL getMajorVersion()
+    throw (css::uno::RuntimeException);
 
-    virtual sal_Int32 SAL_CALL getMinorVersion()
-        throw (css::uno::RuntimeException);
+    sal_Int32 SAL_CALL getMinorVersion()
+    throw (css::uno::RuntimeException);
 
     css::uno::Reference< css::uno::XComponentContext > context_;
 };
@@ -90,73 +99,145 @@ class Connection:
 {
 public:
     Connection(
-        css::uno::Reference< css::uno::XComponentContext > const context):
-        context_(context)
-    { assert(context.is()); }
+        css::uno::Reference< css::uno::XComponentContext > const context);
 
 private:
-    virtual ~Connection() {}
+    ~Connection();
 
-    //... TODO
+    // XConnection
+    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XStatement > SAL_CALL createStatement(  )
+    throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XPreparedStatement > SAL_CALL prepareStatement( const ::rtl::OUString &sql )
+    throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XPreparedStatement > SAL_CALL prepareCall( const ::rtl::OUString &sql )
+    throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+
+    ::rtl::OUString SAL_CALL nativeSQL( const ::rtl::OUString &sql )
+    throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+
+    void SAL_CALL setAutoCommit( sal_Bool autoCommit )
+    throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+
+    sal_Bool SAL_CALL getAutoCommit(  )
+    throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+
+    void SAL_CALL commit(  )
+    throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+
+    void SAL_CALL rollback(  )
+    throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+
+    sal_Bool SAL_CALL isClosed(  )
+    throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData > SAL_CALL getMetaData(  )
+    throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+
+    void SAL_CALL setReadOnly( sal_Bool readOnly )
+    throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+
+    sal_Bool SAL_CALL isReadOnly(  )
+    throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+
+    void SAL_CALL setCatalog( const ::rtl::OUString &catalog )
+    throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+
+    ::rtl::OUString SAL_CALL getCatalog(  )
+    throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+
+    void SAL_CALL setTransactionIsolation( sal_Int32 level )
+    throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+
+    sal_Int32 SAL_CALL getTransactionIsolation(  )
+    throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > SAL_CALL getTypeMap(  )
+    throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+
+    void SAL_CALL setTypeMap( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& typeMap )
+    throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+
+    // XCloseable
+    void SAL_CALL close(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+
 
     css::uno::Reference< css::uno::XComponentContext > context_;
 };
 
-css::uno::Reference< css::sdbc::XConnection > Service::connect(
-    rtl::OUString const & url,
-    css::uno::Sequence< css::beans::PropertyValue > const & info)
-    throw (css::sdbc::SQLException, css::uno::RuntimeException)
-{
-    //... TODO
-    (void) url; (void) info; // avoid warnings
-    return static_cast< cppu::OWeakObject * >(new Connection(context_));
+}
 }
 
-sal_Bool Service::acceptsURL(rtl::OUString const & url)
-    throw (css::sdbc::SQLException, css::uno::RuntimeException)
+connectivity::mork::Connection::Connection(
+    css::uno::Reference< css::uno::XComponentContext > const context):
+    context_(context)
+{
+    assert(context.is());
+}
+
+connectivity::mork::Connection::~Connection()
+{
+}
+
+css::uno::Reference< css::sdbc::XConnection > connectivity::mork::Service::connect(
+    rtl::OUString const &url,
+    css::uno::Sequence< css::beans::PropertyValue > const &info)
+throw (css::sdbc::SQLException, css::uno::RuntimeException)
+{
+    //... TODO
+    (void) url;
+    (void) info; // avoid warnings
+
+    return new connectivity::mork::Connection(context_);
+}
+
+sal_Bool connectivity::mork::Service::acceptsURL(rtl::OUString const &url)
+throw (css::sdbc::SQLException, css::uno::RuntimeException)
 {
     //... TODO
     (void) url; // avoid warnings
     return false;
 }
 
-css::uno::Sequence< css::sdbc::DriverPropertyInfo > Service::getPropertyInfo(
-    rtl::OUString const & url,
-    css::uno::Sequence< css::beans::PropertyValue > const & info)
-    throw (css::sdbc::SQLException, css::uno::RuntimeException)
+css::uno::Sequence< css::sdbc::DriverPropertyInfo > connectivity::mork::Service::getPropertyInfo(
+    rtl::OUString const &url,
+    css::uno::Sequence< css::beans::PropertyValue > const &info)
+throw (css::sdbc::SQLException, css::uno::RuntimeException)
 {
     //... TODO
-    (void) url; (void) info; // avoid warnings
+    (void) url;
+    (void) info; // avoid warnings
     return css::uno::Sequence< css::sdbc::DriverPropertyInfo >();
 }
 
-sal_Int32 Service::getMajorVersion() throw (css::uno::RuntimeException) {
+sal_Int32 connectivity::mork::Service::getMajorVersion() throw (css::uno::RuntimeException)
+{
     //... TODO
     return 0;
 }
 
-sal_Int32 Service::getMinorVersion() throw (css::uno::RuntimeException) {
+sal_Int32 connectivity::mork::Service::getMinorVersion() throw (css::uno::RuntimeException)
+{
     //... TODO
     return 0;
-}
-
 }
 
 css::uno::Reference< css::uno::XInterface > create(
-    css::uno::Reference< css::uno::XComponentContext > const & context)
+    css::uno::Reference< css::uno::XComponentContext > const &context)
 {
-    return static_cast< cppu::OWeakObject * >(new Service(context));
+    return static_cast< cppu::OWeakObject * >(new connectivity::mork::Service(context));
 }
 
-rtl::OUString getImplementationName() {
+rtl::OUString connectivity::mork::getImplementationName()
+{
     return rtl::OUString("com.sun.star.comp.sdbc.MorkDriver");
 }
 
-css::uno::Sequence< rtl::OUString > getSupportedServiceNames() {
+css::uno::Sequence< rtl::OUString > connectivity::mork::getSupportedServiceNames()
+{
     rtl::OUString name("com.sun.star.sdbc.Driver");
     return css::uno::Sequence< rtl::OUString >(&name, 1);
 }
-
-} }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

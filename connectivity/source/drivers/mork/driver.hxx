@@ -16,27 +16,42 @@
 #include "com/sun/star/uno/Sequence.hxx"
 #include "sal/types.h"
 
-namespace com { namespace sun { namespace star {
-    namespace uno {
-        class XComponentContext;
-        class XInterface;
-    }
-} } }
-namespace rtl { class OUString; }
+namespace com
+{
+namespace sun
+{
+namespace star
+{
+namespace uno
+{
+class XComponentContext;
+class XInterface;
+}
+}
+}
+}
+namespace rtl
+{
+class OUString;
+}
 
-namespace connectivity { namespace mork {
+namespace connectivity
+{
+namespace mork
+{
 
 com::sun::star::uno::Reference< com::sun::star::uno::XInterface > SAL_CALL
 create(
     com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
-        const &);
+    const &);
 
 rtl::OUString SAL_CALL getImplementationName();
 
 com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL
 getSupportedServiceNames();
 
-} }
+}
+}
 
 #endif
 
