@@ -79,6 +79,7 @@ public:
 
     TUBES_DLLPUBLIC static TeleManager*     get();
     TUBES_DLLPUBLIC void                    unref();
+    TUBES_DLLPUBLIC bool                    init( bool& bIsListening );
 
     /** Connect to DBus and create AccountManager. */
     TUBES_DLLPUBLIC bool                    createAccountManager();

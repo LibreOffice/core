@@ -614,12 +614,19 @@ throw()
 Desktop::Desktop()
 : m_bServicesRegistered( false )
 , m_aBootstrapError( BE_OK )
+#ifdef ENABLE_TELEPATHY
+, m_pTeleManager( NULL )
+#endif
 {
     RTL_LOGFILE_TRACE( "desktop (cd100003) ::Desktop::Desktop" );
 }
 
 Desktop::~Desktop()
 {
+#ifdef ENABLE_TELEPATHY
+    if (m_pTeleManager)
+        m_pTeleManager->unref();
+#endif
 }
 
 void Desktop::Init()
@@ -1699,6 +1706,13 @@ int Desktop::Main()
     SvtAccessibilityOptions aOptions;
     aOptions.SetVCLSettings();
     SetSplashScreenProgress(60);
+
+#ifdef ENABLE_TELEPATHY
+    m_pTeleManager = TeleManager::get();
+    bool bIsListening = rCmdLineArgs.IsInvisible();
+    m_pTeleManager->init( bIsListening );
+    // TODO: What to do if init fails ?
+#endif
 
     if ( !pExecGlobals->bRestartRequested )
     {

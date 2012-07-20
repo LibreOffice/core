@@ -53,7 +53,6 @@ class TubeContacts : public ModelessDialog
     SvxSimpleTableContainer maListContainer;
     SvxSimpleTable          maList;
     TeleManager*            mpManager;
-    ScDocFuncSend*          mpSender;
 
     DECL_LINK( BtnConnectHdl, void * );
     DECL_LINK( BtnGroupHdl, void * );
@@ -69,35 +68,52 @@ class TubeContacts : public ModelessDialog
     };
     boost::ptr_vector<AccountContact> maACs;
 
+    ScDocFuncSend* GetScDocFuncSendInCurrentSfxObjectShell()
+    {
+        ScDocShell *pScDocShell = dynamic_cast<ScDocShell*> (SfxObjectShell::Current());
+        ScDocFunc *pDocFunc = pScDocShell ? &pScDocShell->GetDocFunc() : NULL;
+        return dynamic_cast<ScDocFuncSend*> (pDocFunc);
+    }
+
+    ScDocFuncSend* EnsureScDocFuncSendInCurrentSfxObjectShell()
+    {
+        ScDocShell *pScDocShell = dynamic_cast<ScDocShell*> (SfxObjectShell::Current());
+        ScDocFunc *pDocFunc = pScDocShell ? &pScDocShell->GetDocFunc() : NULL;
+        ScDocFuncSend *pSender = dynamic_cast<ScDocFuncSend*> (pDocFunc);
+        if (!pSender)
+        {
+            // This means pDocFunc has to be ScDocFuncDirect* and we are not collaborating yet.
+            ScDocFuncDirect *pDirect = dynamic_cast<ScDocFuncDirect*> (pDocFunc);
+            ScDocFuncRecv *pReceiver = new ScDocFuncRecv( pDirect );
+            pSender = new ScDocFuncSend( *pScDocShell, pReceiver );
+            pScDocShell->SetDocFunc( pSender );
+        }
+        return pSender;
+    }
+
     void Invite()
     {
         AccountContact *pAC = NULL;
         if (maList.FirstSelected())
             pAC = static_cast<AccountContact*> (maList.FirstSelected()->GetUserData());
-        if (pAC && mpSender->GetConference())
+        if (pAC)
         {
-            TpContact* pContact = pAC->mpContact;
-            fprintf( stderr, "inviting %s\n", tp_contact_get_identifier( pContact ) );
-            mpSender->GetConference()->invite( pContact );
+            ScDocFuncSend *pSender = GetScDocFuncSendInCurrentSfxObjectShell();
+            if (pSender && pSender->GetConference())
+            {
+                TpContact* pContact = pAC->mpContact;
+                fprintf( stderr, "inviting %s\n", tp_contact_get_identifier( pContact ) );
+                pSender->GetConference()->invite( pContact );
+            }
         }
     }
 
     void Listen()
     {
-        if (!mpManager)
-            return ;
-
-        if (!mpManager->registerClients())
-        {
-            fprintf( stderr, "Could not register client handlers.\n" );
-        }
     }
 
     void StartBuddySession()
     {
-        if (!mpManager)
-            return ;
-
         AccountContact *pAC = NULL;
         if (maList.FirstSelected())
             pAC = static_cast<AccountContact*> (maList.FirstSelected()->GetUserData());
@@ -112,8 +128,9 @@ class TubeContacts : public ModelessDialog
                         tp_contact_get_identifier( pContact ) );
             else
             {
-                mpSender->SetCollaboration( pConference );
-                mpSender->SendFile( OStringToOUString(
+                ScDocFuncSend* pSender = EnsureScDocFuncSendInCurrentSfxObjectShell();
+                pSender->SetCollaboration( pConference );
+                pSender->SendFile( OStringToOUString(
                             pConference->getUuid(), RTL_TEXTENCODING_UTF8 ) );
             }
         }
@@ -121,9 +138,6 @@ class TubeContacts : public ModelessDialog
 
     void StartGroupSession()
     {
-        if (!mpManager)
-            return ;
-
         AccountContact *pAC = NULL;
         if (maList.FirstSelected())
             pAC = static_cast<AccountContact*> (maList.FirstSelected()->GetUserData());
@@ -136,7 +150,10 @@ class TubeContacts : public ModelessDialog
             if (!pConference)
                 fprintf( stderr, "could not start group session\n" );
             else
-                mpSender->SetCollaboration( pConference );
+            {
+                ScDocFuncSend* pSender = EnsureScDocFuncSendInCurrentSfxObjectShell();
+                pSender->SetCollaboration( pConference );
+            }
         }
     }
 
@@ -153,32 +170,6 @@ public:
         mpManager( TeleManager::get() )
     {
         Hide();
-        ScDocShell *pScDocShell = dynamic_cast<ScDocShell*> (SfxObjectShell::Current());
-        ScDocFunc *pDocFunc = pScDocShell ? &pScDocShell->GetDocFunc() : NULL;
-        mpSender = dynamic_cast<ScDocFuncSend*> (pDocFunc);
-        if (!mpSender)
-        {
-            // This means pDocFunc has to be ScDocFuncDirect* and we are not collaborating yet.
-            ScDocFuncDirect *pDirect = dynamic_cast<ScDocFuncDirect*> (pDocFunc);
-            ScDocFuncRecv *pReceiver = new ScDocFuncRecv( pDirect );
-            mpSender = new ScDocFuncSend( *pScDocShell, pReceiver );
-            pScDocShell->SetDocFunc( mpSender );
-
-            // FIXME: Who should really own TeleManager and where it can be destroyed ?
-            // Take reference, so TeleManager does not get destroyed after closing dialog:
-            mpManager = TeleManager::get();
-
-            if (mpManager->createAccountManager())
-            {
-                mpManager->prepareAccountManager();
-            }
-            else
-            {
-                fprintf( stderr, "Could not create AccountManager.\n" );
-                mpManager->unref();
-                mpManager = NULL;
-            }
-        }
         maBtnConnect.SetClickHdl( LINK( this, TubeContacts, BtnConnectHdl ) );
         maBtnGroup.SetClickHdl( LINK( this, TubeContacts, BtnGroupHdl ) );
         maBtnInvite.SetClickHdl( LINK( this, TubeContacts, BtnInviteHdl ) );
@@ -199,8 +190,7 @@ public:
     }
     virtual ~TubeContacts()
     {
-        if (mpManager)
-            mpManager->unref();
+        mpManager->unref();
     }
 
     static rtl::OUString fromUTF8( const char *pStr )
@@ -211,8 +201,6 @@ public:
 
     void Populate()
     {
-        if (!mpManager)
-            return ;
         ContactList *pContacts = mpManager->getContactList();
         if ( pContacts )
         {

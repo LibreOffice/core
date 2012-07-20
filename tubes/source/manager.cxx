@@ -414,6 +414,7 @@ TeleManager *
 TeleManager::get()
 {
     MutexGuard aGuard( GetAnotherMutex());
+    SAL_INFO( "tubes", "TeleManager::get: count: " << nAnotherRefCount );
     if (!pSingleton)
         pSingleton = new TeleManager();
 
@@ -429,8 +430,27 @@ TeleManager::unref()
         delete pSingleton;
         pSingleton = NULL;
     }
+    SAL_INFO( "tubes", "TeleManager::unref: count: " << nAnotherRefCount );
 }
 
+bool TeleManager::init( bool& bIsListening )
+{
+    if (createAccountManager())
+    {
+        prepareAccountManager();
+        if (bIsListening && !registerClients())
+        {
+            bIsListening = false;
+            SAL_WARN( "tubes", "TeleManager::init: Could not register client handlers." );
+        }
+        return true;
+    }
+    else
+    {
+        SAL_WARN( "tubes", "TeleManager::init: Could not create AccountManager." );
+        return false;
+    }
+}
 
 bool TeleManager::createAccountManager()
 {

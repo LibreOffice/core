@@ -63,6 +63,16 @@ $(eval $(call gb_Library_use_libraries,sofficeapp,\
     $(gb_STDLIBS) \
 ))
 
+ifeq ($(ENABLE_TELEPATHY),TRUE)
+$(eval $(call gb_Library_use_libraries,sofficeapp,tubes))
+
+$(eval $(call gb_Library_use_external,sofficeapp,telepathy))
+
+$(eval $(call gb_Library_add_defs,sofficeapp,\
+    -DENABLE_TELEPATHY \
+))
+endif
+
 ifeq ($(GUIBASE),cocoatouch)
 $(eval $(call gb_Library_add_cflags,sofficeapp,\
     $(gb_OBJCFLAGS) \

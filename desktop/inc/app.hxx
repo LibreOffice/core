@@ -41,6 +41,9 @@
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/uno/Reference.h>
 #include <osl/mutex.hxx>
+#ifdef ENABLE_TELEPATHY
+#include <tubes/manager.hxx>
+#endif
 
 using namespace com::sun::star::task;
 using namespace com::sun::star::uno;
@@ -205,6 +208,9 @@ class Desktop : public Application
         sal_uInt16                          m_nAppEvents;
         BootstrapError                  m_aBootstrapError;
         BootstrapStatus                 m_aBootstrapStatus;
+#ifdef ENABLE_TELEPATHY
+        TeleManager*                    m_pTeleManager;
+#endif
 
         std::auto_ptr< Lockfile > m_pLockfile;
         Timer    m_firstRunTimer;
