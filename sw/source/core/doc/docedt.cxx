@@ -1642,8 +1642,8 @@ bool SwDoc::DeleteRangeImplImpl(SwPaM & rPam)
         }
     }
 
-    // Delete fieldmarks before postits.
-    if (pStt->nNode == pEnd->nNode && (pEnd->nContent.GetIndex() - pStt->nContent.GetIndex()) == 1)
+    // Delete fieldmarks before postits, but let's leave them alone during import.
+    if (GetIDocumentUndoRedo().DoesUndo() && pStt->nNode == pEnd->nNode && (pEnd->nContent.GetIndex() - pStt->nContent.GetIndex()) == 1)
     {
         SwTxtNode* pTxtNd = rPam.Start()->nNode.GetNode().GetTxtNode();
         xub_StrLen nIndex = rPam.Start()->nContent.GetIndex();
