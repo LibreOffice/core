@@ -27,9 +27,6 @@
 
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/servicefactory.hxx>
-#include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/implbase2.hxx>
-#include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/implbase4.hxx>
 #include <cppuhelper/implbase.hxx>
 
@@ -78,7 +75,6 @@
 // end added
 
 #include <xmloff/attrlist.hxx>
-#include <fla.hxx>
 //Begin added by wangyumin for uof2 doc import on 2012-02-13
 #include "uof2storage.hxx"
 #include "uof2merge.hxx"
@@ -99,132 +95,6 @@ using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::util;
 
 namespace XSLT {
-
-
-class FLABridge : public WeakImplHelper1< XDocumentHandler>
-{
-private:
-    const Reference<XDocumentHandler>& m_rDocumentHandler;
-    const sal_Unicode *eval(const sal_Unicode *expr, sal_Int32 exprLen);
-    FLA::Evaluator ev;
-    bool active;
-
-public:
-    FLABridge(const Reference<XDocumentHandler>& m_rDocumentHandler);
-
-    // XDocumentHandler
-    virtual void SAL_CALL startDocument()
-        throw (SAXException,RuntimeException);
-    virtual void SAL_CALL endDocument()
-        throw (SAXException, RuntimeException);
-    virtual void SAL_CALL startElement(const OUString& str, const Reference<XAttributeList>& attriblist)
-        throw (SAXException,RuntimeException);
-    virtual void SAL_CALL endElement(const OUString& str)
-        throw (SAXException, RuntimeException);
-    virtual void SAL_CALL characters(const OUString& str)
-        throw (SAXException, RuntimeException);
-    virtual void SAL_CALL ignorableWhitespace(const OUString& str)
-        throw (SAXException, RuntimeException);
-    virtual void SAL_CALL processingInstruction(const OUString& str, const OUString& str2)
-        throw (com::sun::star::xml::sax::SAXException,RuntimeException);
-    virtual void SAL_CALL setDocumentLocator(const Reference<XLocator>& doclocator)
-        throw (SAXException,RuntimeException);
-
-};
-
-FLABridge::FLABridge(const Reference<XDocumentHandler>& _rDocumentHandler) : m_rDocumentHandler(_rDocumentHandler), active(false)
-{
-}
-
-void FLABridge::startDocument() throw (SAXException,RuntimeException){
-    OSL_ASSERT(m_rDocumentHandler.is());
-    m_rDocumentHandler->startDocument();
-}
-
-void FLABridge::endDocument() throw (SAXException,RuntimeException){
-    OSL_ASSERT(m_rDocumentHandler.is());
-    m_rDocumentHandler->endDocument();
-
-}
-
-
-void FLABridge::startElement(const OUString& str, const Reference<XAttributeList>& attriblist)
-    throw (SAXException, RuntimeException)
-{
-    OSL_ASSERT(m_rDocumentHandler.is());
-    if (active)
-    {
-//      SvXMLAttributeList* _attriblist=SvXMLAttributeList::getImplementation(attriblist);
-        const int len=attriblist->getLength();
-        SvXMLAttributeList *_newattriblist= new SvXMLAttributeList();
-        for(int i=0;i<len;i++)
-        {
-            const OUString& name=attriblist->getNameByIndex( sal::static_int_cast<sal_Int16>( i ) );
-            sal_Int32 pos;
-            static const OUString _value_(".value", 6, RTL_TEXTENCODING_ASCII_US);
-            if ((pos=name.lastIndexOf(L'.'))!=-1 && name.match(_value_, pos))
-            {
-                const OUString newName(name, pos);
-                const OUString& value=attriblist->getValueByIndex( sal::static_int_cast<sal_Int16>( i ) );
-                const OUString newValue(ev.eval(value.getStr(), value.getLength()));
-                if (newValue.getLength()>0)
-                {
-                    _newattriblist->AddAttribute(newName, newValue);
-                }
-            }
-            else
-            {
-                _newattriblist->AddAttribute(name, attriblist->getValueByIndex( sal::static_int_cast<sal_Int16>( i )));
-            }
-        };
-        const Reference<XAttributeList> newattriblist(_newattriblist);
-        m_rDocumentHandler->startElement(str, newattriblist);
-    }
-    else
-    {
-        if (str.compareToAscii("fla:fla.activate")==0)
-        {
-            active=1;
-        }
-        m_rDocumentHandler->startElement(str, attriblist);
-    }
-}
-
-void FLABridge::endElement(const OUString& str)
-    throw (SAXException, RuntimeException)
-{
-    OSL_ASSERT(m_rDocumentHandler.is());
-    m_rDocumentHandler->endElement(str);
-}
-
-void FLABridge::characters(const OUString& str)
-    throw (SAXException, RuntimeException)
-{
-    OSL_ASSERT(m_rDocumentHandler.is());
-    m_rDocumentHandler->characters(str);
-}
-
-void FLABridge::ignorableWhitespace(const OUString& str)
-    throw (SAXException, RuntimeException)
-{
-    OSL_ASSERT(m_rDocumentHandler.is());
-    m_rDocumentHandler->ignorableWhitespace(str);
-}
-
-void  FLABridge::processingInstruction(const OUString& str, const OUString& str2)
-    throw (SAXException, RuntimeException)
-{
-    OSL_ASSERT(m_rDocumentHandler.is());
-    m_rDocumentHandler->processingInstruction(str, str2);
-}
-
-void FLABridge::setDocumentLocator(const Reference<XLocator>& doclocator)
-    throw (SAXException, RuntimeException)
-{
-    OSL_ASSERT(m_rDocumentHandler.is());
-    m_rDocumentHandler->setDocumentLocator(doclocator);
-}
-
 
 
 class XSLTFilter : public WeakImplHelper4< XImportFilter, XExportFilter, XDocumentHandler, XStreamListener>
@@ -487,7 +357,7 @@ sal_Bool XSLTFilter::importer(
             aInput.aInputStream = pipein;
 
             // set doc handler
-            xSaxParser->setDocumentHandler(new FLABridge(xHandler));
+            xSaxParser->setDocumentHandler(xHandler);
 
             // transform
             m_tcontrol->start();

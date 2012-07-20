@@ -35,7 +35,6 @@ CLASSDIR!:=$(CLASSDIR)$/$(TARGET)
 
 SLOFILES= \
             $(SLO)$/XSLTFilter.obj \
-            $(SLO)$/fla.obj \
             $(SLO)$/uof2storage.obj \
             $(SLO)$/uof2merge.obj \
             $(SLO)$/XMLBase64Codec.obj \
