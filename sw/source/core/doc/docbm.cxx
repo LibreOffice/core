@@ -1163,7 +1163,7 @@ void _DelBookmarks(
     // which holds all position information as offset.
     // Assignement happens after moving.
     SwRedlineTbl& rTbl = (SwRedlineTbl&)pDoc->GetRedlineTbl();
-    for(sal_uInt16 nCnt = 0; nCnt < rTbl.Count(); ++nCnt )
+    for(sal_uInt16 nCnt = 0; nCnt < rTbl.size(); ++nCnt )
     {
         // Is at position?
         SwRedline* pRedl = rTbl[ nCnt ];
@@ -1276,7 +1276,7 @@ void _SaveCntntIdx(SwDoc* pDoc,
     // 2. Redlines
     aSave.SetTypeAndCount( 0x1000, 0 );
     const SwRedlineTbl& rRedlTbl = pDoc->GetRedlineTbl();
-    for( ; aSave.GetCount() < rRedlTbl.Count(); aSave.IncCount() )
+    for( ; aSave.GetCount() < rRedlTbl.size(); aSave.IncCount() )
     {
         const SwRedline* pRdl = rRedlTbl[ aSave.GetCount() ];
         int nPointPos = lcl_RelativePosition( *pRdl->GetPoint(), nNode, nCntnt );

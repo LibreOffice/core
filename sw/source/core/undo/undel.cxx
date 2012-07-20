@@ -117,7 +117,7 @@ SwUndoDelete::SwUndoDelete( SwPaM& rPam, sal_Bool bFullPara, sal_Bool bCalledByT
 
     SwDoc * pDoc = rPam.GetDoc();
 
-    if( !pDoc->IsIgnoreRedline() && pDoc->GetRedlineTbl().Count() )
+    if( !pDoc->IsIgnoreRedline() && !pDoc->GetRedlineTbl().empty() )
     {
         pRedlSaveData = new SwRedlineSaveDatas;
         if( !FillSaveData( rPam, *pRedlSaveData ))

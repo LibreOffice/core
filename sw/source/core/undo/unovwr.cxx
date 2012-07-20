@@ -53,7 +53,7 @@ SwUndoOverwrite::SwUndoOverwrite( SwDoc* pDoc, SwPosition& rPos,
     : SwUndo(UNDO_OVERWRITE),
       pRedlSaveData( 0 ), bGroup( sal_False )
 {
-    if( !pDoc->IsIgnoreRedline() && pDoc->GetRedlineTbl().Count() )
+    if( !pDoc->IsIgnoreRedline() && !pDoc->GetRedlineTbl().empty() )
     {
         SwPaM aPam( rPos.nNode, rPos.nContent.GetIndex(),
                     rPos.nNode, rPos.nContent.GetIndex()+1 );

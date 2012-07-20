@@ -1834,7 +1834,7 @@ sal_Bool SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, sal_Bool bIsOutl
             sal_Bool bCheckDel = sal_True;
 
             // There is a some Redline Delete Object for the Area
-            for( ; nRedlPos < GetRedlineTbl().Count(); ++nRedlPos )
+            for( ; nRedlPos < GetRedlineTbl().size(); ++nRedlPos )
             {
                 const SwRedline* pTmp = GetRedlineTbl()[ nRedlPos ];
                 if( !bCheckDel || nsRedlineType_t::REDLINE_DELETE == pTmp->GetType() )
@@ -1844,7 +1844,7 @@ sal_Bool SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, sal_Bool bIsOutl
                     {
                     case POS_COLLIDE_START:
                     case POS_BEHIND:            // Pos1 comes after Pos2
-                        nRedlPos = GetRedlineTbl().Count();
+                        nRedlPos = GetRedlineTbl().size();
                         break;
 
                     case POS_COLLIDE_END:
@@ -1898,7 +1898,7 @@ sal_Bool SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, sal_Bool bIsOutl
                          : !pREnd->nContent.GetIndex() )) )
             {
                 pOwnRedl = pTmp;
-                if( nRedlPos + 1 < GetRedlineTbl().Count() )
+                if( nRedlPos + 1 < (sal_uInt16)GetRedlineTbl().size() )
                 {
                     pTmp = GetRedlineTbl()[ nRedlPos+1 ];
                     if( *pTmp->Start() == *pREnd )
@@ -1968,7 +1968,7 @@ sal_Bool SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, sal_Bool bIsOutl
                 // All, that are in the to-be-deleted Node, need to be
                 // moved to the next Node
                 SwPosition* pPos;
-                for( sal_uInt16 n = 0; n < GetRedlineTbl().Count(); ++n )
+                for( sal_uInt16 n = 0; n < GetRedlineTbl().size(); ++n )
                 {
                     SwRedline* pTmp = GetRedlineTbl()[ n ];
                     if( ( pPos = &pTmp->GetBound(sal_True))->nNode == aIdx )
@@ -2020,7 +2020,7 @@ sal_Bool SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, sal_Bool bIsOutl
         }
     }
 
-    if( !pOwnRedl && !IsIgnoreRedline() && GetRedlineTbl().Count() )
+    if( !pOwnRedl && !IsIgnoreRedline() && !GetRedlineTbl().empty() )
     {
         SwPaM aTemp(aIdx);
         SplitRedline(aTemp);

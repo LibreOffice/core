@@ -239,7 +239,7 @@ short SwRedlineItr::_Seek( SwFont& rFnt, xub_StrLen nNew, xub_StrLen nOld )
         nStart = STRING_LEN;
         nEnd = STRING_LEN;
 
-        for( ; nAct < rDoc.GetRedlineTbl().Count() ; ++nAct )
+        for( ; nAct < rDoc.GetRedlineTbl().size() ; ++nAct )
         {
             rDoc.GetRedlineTbl()[ nAct ]->CalcStartEnd( nNdIdx, nStart, nEnd );
 
@@ -398,7 +398,7 @@ sal_Bool SwRedlineItr::CheckLine( xub_StrLen nChkStart, xub_StrLen nChkEnd )
     xub_StrLen nOldAct = nAct;
     sal_Bool bRet = sal_False;
 
-    for( nAct = nFirst; nAct < rDoc.GetRedlineTbl().Count() ; ++nAct )
+    for( nAct = nFirst; nAct < rDoc.GetRedlineTbl().size() ; ++nAct )
     {
         rDoc.GetRedlineTbl()[ nAct ]->CalcStartEnd( nNdIdx, nStart, nEnd );
         if( nChkEnd < nStart )

@@ -327,7 +327,7 @@ SwDoc::InsertSwSection(SwPaM const& rRange, SwSectionData & rNewData,
 
     SetRedlineMode_intern( eOld );
 
-    if( IsRedlineOn() || (!IsIgnoreRedline() && pRedlineTbl->Count() ))
+    if( IsRedlineOn() || (!IsIgnoreRedline() && !pRedlineTbl->empty() ))
     {
         SwPaM aPam( *pNewSectNode->EndOfSectionNode(), *pNewSectNode, 1 );
         if( IsRedlineOn() )

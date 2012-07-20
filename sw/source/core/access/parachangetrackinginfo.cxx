@@ -65,7 +65,7 @@ namespace {
         }
 
         if ( !IDocumentRedlineAccess::IsShowChanges( pIDocChangeTrack->GetRedlineMode() ) ||
-             pIDocChangeTrack->GetRedlineTbl().Count() == 0 )
+             pIDocChangeTrack->GetRedlineTbl().empty() )
         {
             // nothing to do --> empty change track text markup lists.
             return;
@@ -88,7 +88,7 @@ namespace {
 
         // iteration over the redlines which overlap with the text node.
         const SwRedlineTbl& rRedlineTbl = pIDocChangeTrack->GetRedlineTbl();
-        const sal_uInt16 nRedlineCount( rRedlineTbl.Count() );
+        const sal_uInt16 nRedlineCount( rRedlineTbl.size() );
         for ( sal_uInt16 nActRedline = nIdxOfFirstRedlineForTxtNode;
               nActRedline < nRedlineCount;
               ++nActRedline)

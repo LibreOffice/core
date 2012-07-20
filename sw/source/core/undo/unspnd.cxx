@@ -173,7 +173,7 @@ void SwUndoSplitNode::RedoImpl(::sw::UndoRedoContext & rContext)
 
         if( ( pRedlData && IDocumentRedlineAccess::IsRedlineOn( GetRedlineMode() )) ||
             ( !( nsRedlineMode_t::REDLINE_IGNORE & GetRedlineMode() ) &&
-                pDoc->GetRedlineTbl().Count() ))
+                !pDoc->GetRedlineTbl().empty() ))
         {
             rPam.SetMark();
             if( rPam.Move( fnMoveBackward ))

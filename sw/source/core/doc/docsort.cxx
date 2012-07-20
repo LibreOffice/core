@@ -343,7 +343,7 @@ sal_Bool SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
     SwUndoRedlineSort* pRedlUndo = 0;
     SwUndoSort* pUndoSort = 0;
 
-    if( IsRedlineOn() || (!IsIgnoreRedline() && pRedlineTbl->Count() ))
+    if( IsRedlineOn() || (!IsIgnoreRedline() && !pRedlineTbl->empty() ))
     {
         pRedlPam = new SwPaM( pStart->nNode, pEnd->nNode, -1, 1 );
         SwCntntNode* pCNd = pRedlPam->GetCntntNode( sal_False );
@@ -508,7 +508,7 @@ sal_Bool SwDoc::SortTbl(const SwSelBoxes& rBoxes, const SwSortOptions& rOpt)
     if(aFndBox.GetLines().empty())
         return sal_False;
 
-    if( !IsIgnoreRedline() && GetRedlineTbl().Count() )
+    if( !IsIgnoreRedline() && !GetRedlineTbl().empty() )
         DeleteRedline( *pTblNd, true, USHRT_MAX );
 
     sal_uInt16 nStart = 0;

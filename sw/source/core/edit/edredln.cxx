@@ -50,7 +50,7 @@ sal_Bool SwEditShell::IsRedlineOn() const
 
 sal_uInt16 SwEditShell::GetRedlineCount() const
 {
-    return GetDoc()->GetRedlineTbl().Count();
+    return GetDoc()->GetRedlineTbl().size();
 }
 
 const SwRedline& SwEditShell::GetRedline( sal_uInt16 nPos ) const
@@ -128,7 +128,7 @@ sal_uInt16 SwEditShell::FindRedlineOfData( const SwRedlineData& rData ) const
 {
     const SwRedlineTbl& rTbl = GetDoc()->GetRedlineTbl();
 
-    for( sal_uInt16 i = 0, nCnt = rTbl.Count(); i < nCnt; ++i )
+    for( sal_uInt16 i = 0, nCnt = rTbl.size(); i < nCnt; ++i )
         if( &rTbl[ i ]->GetRedlineData() == &rData )
             return i;
     return USHRT_MAX;

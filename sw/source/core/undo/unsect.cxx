@@ -202,7 +202,7 @@ void SwUndoInsSection::RedoImpl(::sw::UndoRedoContext & rContext)
         rDoc.SetRedlineMode_intern( eOld );
     }
     else if( !( nsRedlineMode_t::REDLINE_IGNORE & GetRedlineMode() ) &&
-            rDoc.GetRedlineTbl().Count() )
+            !rDoc.GetRedlineTbl().empty() )
     {
         SwPaM aPam( *pSectNd->EndOfSectionNode(), *pSectNd, 1 );
         rDoc.SplitRedline( aPam );

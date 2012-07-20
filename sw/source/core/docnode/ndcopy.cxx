@@ -581,7 +581,7 @@ void lcl_DeleteRedlines( const SwPaM& rPam, SwPaM& rCpyPam )
 {
     const SwDoc* pSrcDoc = rPam.GetDoc();
     const SwRedlineTbl& rTbl = pSrcDoc->GetRedlineTbl();
-    if( rTbl.Count() )
+    if( !rTbl.empty() )
     {
         SwDoc* pDestDoc = rCpyPam.GetDoc();
         SwPosition* pCpyStt = rCpyPam.Start(), *pCpyEnd = rCpyPam.End();
@@ -593,7 +593,7 @@ void lcl_DeleteRedlines( const SwPaM& rPam, SwPaM& rCpyPam )
 
         sal_uInt16 n = 0;
         pSrcDoc->GetRedline( *pStt, &n );
-        for( ; n < rTbl.Count(); ++n )
+        for( ; n < rTbl.size(); ++n )
         {
             const SwRedline* pRedl = rTbl[ n ];
             if( nsRedlineType_t::REDLINE_DELETE == pRedl->GetType() && pRedl->IsVisible() )
@@ -609,7 +609,7 @@ void lcl_DeleteRedlines( const SwPaM& rPam, SwPaM& rCpyPam )
 
                 case POS_COLLIDE_START:
                 case POS_BEHIND:                // Pos1 liegt hinter Pos2
-                    n = rTbl.Count();
+                    n = rTbl.size();
                     break;
 
                 default:
@@ -659,7 +659,7 @@ void lcl_DeleteRedlines( const SwPaM& rPam, SwPaM& rCpyPam )
 void lcl_DeleteRedlines( const SwNodeRange& rRg, SwNodeRange& rCpyRg )
 {
     SwDoc* pSrcDoc = rRg.aStart.GetNode().GetDoc();
-    if( pSrcDoc->GetRedlineTbl().Count() )
+    if( !pSrcDoc->GetRedlineTbl().empty() )
     {
         SwPaM aRgTmp( rRg.aStart, rRg.aEnd );
         SwPaM aCpyTmp( rCpyRg.aStart, rCpyRg.aEnd );
@@ -703,7 +703,7 @@ SwDoc::CopyRange( SwPaM& rPam, SwPosition& rPos, const bool bCopyAll ) const
 
     SwPaM* pRedlineRange = 0;
     if( pDoc->IsRedlineOn() ||
-        (!pDoc->IsIgnoreRedline() && pDoc->GetRedlineTbl().Count() ) )
+        (!pDoc->IsIgnoreRedline() && !pDoc->GetRedlineTbl().empty() ) )
         pRedlineRange = new SwPaM( rPos );
 
     RedlineMode_t eOld = pDoc->GetRedlineMode();

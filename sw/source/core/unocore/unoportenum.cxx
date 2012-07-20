@@ -935,7 +935,7 @@ lcl_FillRedlineArray(SwDoc const & rDoc, SwUnoCrsr const & rUnoCrsr,
         SwXRedlinePortion_ImplList& rRedArr )
 {
     const SwRedlineTbl& rRedTbl = rDoc.GetRedlineTbl();
-    sal_uInt16 nRedTblCount = rRedTbl.Count();
+    sal_uInt16 nRedTblCount = rRedTbl.size();
 
     if ( nRedTblCount > 0 )
     {

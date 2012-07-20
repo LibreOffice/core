@@ -434,7 +434,7 @@ void SwDocTest::testSwScanner()
         const SwRedlineTbl& rTbl = m_pDoc->GetRedlineTbl();
 
         SwNodes& rNds = m_pDoc->GetNodes();
-        CPPUNIT_ASSERT(rTbl.Count() == 1);
+        CPPUNIT_ASSERT(rTbl.size() == 1);
 
         SwNodeIndex* pNodeIdx = rTbl[0]->GetContentIdx();
         CPPUNIT_ASSERT(pNodeIdx);

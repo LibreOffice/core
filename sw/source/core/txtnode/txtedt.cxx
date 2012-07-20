@@ -118,7 +118,7 @@ sal_uInt16 lcl_MaskRedlines( const SwTxtNode& rNode, XubString& rText,
     const SwDoc& rDoc = *rNode.GetDoc();
     sal_uInt16 nAct = rDoc.GetRedlinePos( rNode, USHRT_MAX );
 
-    for ( ; nAct < rDoc.GetRedlineTbl().Count(); nAct++ )
+    for ( ; nAct < rDoc.GetRedlineTbl().size(); nAct++ )
     {
         const SwRedline* pRed = rDoc.GetRedlineTbl()[ nAct ];
 

@@ -249,7 +249,7 @@ void RtfExport::WriteRevTab()
 {
     SAL_INFO("sw.rtf", OSL_THIS_FUNC);
 
-    int nRevAuthors = pDoc->GetRedlineTbl().Count();
+    int nRevAuthors = pDoc->GetRedlineTbl().size();
 
     if (nRevAuthors < 1)
         return;
@@ -258,7 +258,7 @@ void RtfExport::WriteRevTab()
     String sUnknown(RTL_CONSTASCII_USTRINGPARAM("Unknown"));
     GetRedline(sUnknown);
 
-    for( sal_uInt16 i = 0; i < pDoc->GetRedlineTbl().Count(); ++i )
+    for( sal_uInt16 i = 0; i < pDoc->GetRedlineTbl().size(); ++i )
     {
         const SwRedline* pRedl = pDoc->GetRedlineTbl()[ i ];
 

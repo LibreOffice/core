@@ -815,7 +815,7 @@ void SwDoc::ClearDoc()
     OSL_ENSURE( !pDrawModel || !pDrawModel->GetPage(0)->GetObjCount(),
                 "not all DrawObjects removed from the page" );
 
-    pRedlineTbl->DeleteAndDestroy( 0, pRedlineTbl->Count() );
+    pRedlineTbl->DeleteAndDestroyAll();
 
     delete pACEWord;
 

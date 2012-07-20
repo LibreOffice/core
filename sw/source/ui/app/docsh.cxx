@@ -921,7 +921,7 @@ sal_uInt16 SwDocShell::GetHiddenInformationState( sal_uInt16 nStates )
 
     if ( nStates & HIDDENINFORMATION_RECORDEDCHANGES )
     {
-        if ( GetDoc()->GetRedlineTbl().Count() )
+        if ( !GetDoc()->GetRedlineTbl().empty() )
             nState |= HIDDENINFORMATION_RECORDEDCHANGES;
     }
     if ( nStates & HIDDENINFORMATION_NOTES )
