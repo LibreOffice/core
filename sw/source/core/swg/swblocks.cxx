@@ -47,8 +47,6 @@
 #include <statstr.hrc>
 #include <swerror.h>
 
-SV_IMPL_OP_PTRARR_SORT( SwBlockNames, SwBlockName* );
-
 //////////////////////////////////////////////////////////////////////////
 
 // Hash-Code errechnen (muss nicht eindeutig sein)
@@ -115,7 +113,7 @@ SwImpBlocks::SwImpBlocks( const String& rFile, sal_Bool )
 
 SwImpBlocks::~SwImpBlocks()
 {
-    aNames.DeleteAndDestroy( 0, aNames.Count() );
+    aNames.DeleteAndDestroyAll();
 }
 
 // Loeschen des Inhaltes des Dokuments
@@ -143,7 +141,7 @@ SwPaM* SwImpBlocks::MakePaM()
 
 sal_uInt16 SwImpBlocks::GetCount() const
 {
-    return aNames.Count();
+    return aNames.size();
 }
 
 // Case Insensitive
@@ -151,9 +149,9 @@ sal_uInt16 SwImpBlocks::GetIndex( const String& rShort ) const
 {
     String s( GetAppCharClass().uppercase( rShort ) );
     sal_uInt16 nHash = Hash( s );
-    for( sal_uInt16 i = 0; i < aNames.Count(); i++ )
+    for( sal_uInt16 i = 0; i < aNames.size(); i++ )
     {
-        SwBlockName* pName = aNames[ i ];
+        const SwBlockName* pName = aNames[ i ];
         if( pName->nHashS == nHash
          && pName->aShort == s )
             return i;
@@ -165,9 +163,9 @@ sal_uInt16 SwImpBlocks::GetIndex( const String& rShort ) const
 sal_uInt16 SwImpBlocks::GetLongIndex( const String& rLong ) const
 {
     sal_uInt16 nHash = Hash( rLong );
-    for( sal_uInt16 i = 0; i < aNames.Count(); i++ )
+    for( sal_uInt16 i = 0; i < aNames.size(); i++ )
     {
-        SwBlockName* pName = aNames[ i ];
+        const SwBlockName* pName = aNames[ i ];
         if( pName->nHashL == nHash
          && pName->aLong == rLong )
             return i;
@@ -178,23 +176,23 @@ sal_uInt16 SwImpBlocks::GetLongIndex( const String& rLong ) const
 
 const String& SwImpBlocks::GetShortName( sal_uInt16 n ) const
 {
-    if( n < aNames.Count() )
-        return aNames[ n ]->aShort;
+    if( n < aNames.size() )
+        return aNames[n]->aShort;
     return aEmptyStr;
 }
 
 
 const String& SwImpBlocks::GetLongName( sal_uInt16 n ) const
 {
-    if( n < aNames.Count() )
-        return aNames[ n ]->aLong;
+    if( n < aNames.size() )
+        return aNames[n]->aLong;
     return aEmptyStr;
 }
 
 rtl::OUString SwImpBlocks::GetPackageName( sal_uInt16 n ) const
 {
-    if( n < aNames.Count() )
-        return aNames[ n ]->aPackageName;
+    if( n < aNames.size() )
+        return aNames[n]->aPackageName;
     return rtl::OUString();
 }
 
@@ -203,11 +201,14 @@ void SwImpBlocks::AddName( const String& rShort, const String& rLong,
 {
     sal_uInt16 nIdx = GetIndex( rShort );
     if( nIdx != (sal_uInt16) -1 )
-        aNames.DeleteAndDestroy( nIdx );
+    {
+        delete aNames[nIdx];
+        aNames.erase( aNames.begin() + nIdx );
+    }
     SwBlockName* pNew = new SwBlockName( rShort, rLong, 0L );
     pNew->bIsOnlyTxtFlagInit = sal_True;
     pNew->bIsOnlyTxt = bOnlyTxt;
-    aNames.C40_PTR_INSERT( SwBlockName, pNew );
+    aNames.insert( pNew );
 }
 
 
@@ -341,7 +342,10 @@ sal_Bool SwTextBlocks::Delete( sal_uInt16 n )
         {
             nErr = pImp->Delete( n );
             if( !nErr )
-                pImp->aNames.DeleteAndDestroy( n );
+            {
+                delete pImp->aNames[n];
+                pImp->aNames.erase( pImp->aNames.begin() + n );
+            }
             if( n == pImp->nCur )
                 pImp->nCur = (sal_uInt16) -1;
             if( !nErr )
@@ -383,7 +387,8 @@ sal_uInt16 SwTextBlocks::Rename( sal_uInt16 n, const String* s, const String* l 
             if( !nErr )
             {
                 sal_Bool bOnlyTxt = pImp->aNames[ n ]->bIsOnlyTxt;
-                pImp->aNames.DeleteAndDestroy( n );
+                delete pImp->aNames[n];
+                pImp->aNames.erase( pImp->aNames.begin() + n );
                 pImp->AddName( aNew, aLong, bOnlyTxt );
                 nErr = pImp->MakeBlockList();
             }
@@ -578,7 +583,7 @@ sal_Bool SwTextBlocks::IsOnlyTextBlock( sal_uInt16 nIdx ) const
     sal_Bool bRet = sal_False;
     if( pImp && !pImp->bInPutMuchBlocks )
     {
-        SwBlockName* pBlkNm = pImp->aNames[ nIdx ];
+        SwBlockName* pBlkNm = const_cast<SwBlockName*>( pImp->aNames[ nIdx ] );
         if( !pBlkNm->bIsOnlyTxtFlagInit &&
             !pImp->IsFileChanged() && !pImp->OpenFile( sal_True ) )
         {
@@ -649,6 +654,5 @@ void SwTextBlocks::SetBaseURL( const String& rURL )
     if(pImp)
         pImp->SetBaseURL(rURL);
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
