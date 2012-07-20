@@ -2097,8 +2097,8 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, sal_Bool bIsTblMode )
         SwRect aTmp( pCell->Prt() );
         aTmp.Pos() += pCell->Frm().Pos();
         aRegion.ChangeOrigin( aTmp );
-        aRegion.Remove( 0, aRegion.Count() );
-        aRegion.Insert( aTmp, 0 );
+        aRegion.clear();
+        aRegion.push_back( aTmp);
     }
     else
     {
@@ -2675,8 +2675,7 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, sal_Bool bIsTblMode )
             Sub( aRegion, aDropRect );
     }
 
-    rCrsr.Remove( 0, rCrsr.Count() );
-    rCrsr.Insert( &aRegion, 0 );
+    rCrsr.assign( aRegion.begin(), aRegion.end() );
 }
 
 

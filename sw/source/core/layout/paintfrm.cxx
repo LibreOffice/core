@@ -1494,7 +1494,7 @@ void lcl_SubtractFlys( const SwFrm *pFrm, const SwPageFrm *pPage,
     if ( !pRetoucheFly )
         pRetoucheFly = pRetoucheFly2;
 
-    for ( sal_uInt16 j = 0; (j < rObjs.Count()) && rRegion.Count(); ++j )
+    for ( sal_uInt16 j = 0; (j < rObjs.Count()) && !rRegion.empty(); ++j )
     {
         const SwAnchoredObject* pAnchoredObj = rObjs[j];
         const SdrObject* pSdrObj = pAnchoredObj->GetDrawObj();
@@ -2104,7 +2104,7 @@ void DrawGraphic( const SvxBrushItem *pBrush,
             else
                 bGrfBackgrdAlreadyDrawn = true;
             /// loop rectangles of background region, which has to be drawn
-            for( sal_uInt16 i = 0; i < aRegion.Count(); ++i )
+            for( sal_uInt16 i = 0; i < aRegion.size(); ++i )
             {
                 pOutDev->DrawRect( aRegion[i].SVRect() );
             }
@@ -4035,12 +4035,12 @@ void SwFlyFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
                     {
                         pOut->SetClipRegion( aPoly );
                     }
-                    for ( sal_uInt16 i = 0; i < aRegion.Count(); ++i )
+                    for ( sal_uInt16 i = 0; i < aRegion.size(); ++i )
                         PaintBackground( aRegion[i], pPage, rAttrs, sal_False, sal_True );
                     pOut->Pop();
                 }
                 else
-                    for ( sal_uInt16 i = 0; i < aRegion.Count(); ++i )
+                    for ( sal_uInt16 i = 0; i < aRegion.size(); ++i )
                         PaintBackground( aRegion[i], pPage, rAttrs, sal_False, sal_True );
             }
 
@@ -4232,21 +4232,21 @@ void SwFrm::PaintShadow( const SwRect& rRect, SwRect& rOutRect,
                     /// OD 06.08.2002 #99657# - draw full shadow rectangle
                     aOut.Top( aOut.Top() + nHeight );
                     aOut.Left( aOut.Left() + nWidth );
-                    aRegion.Insert( aOut, aRegion.Count() );
+                    aRegion.push_back( aOut );
                 }
                 else
                 {
                     aOut.Top ( aOut.Bottom() - nHeight );
                     aOut.Left( aOut.Left()   + nWidth );
                     if ( bBottom )
-                        aRegion.Insert( aOut, aRegion.Count() );
+                        aRegion.push_back( aOut );
                     aOut.Left( aOut.Right()   - nWidth );
                     aOut.Top ( rOutRect.Top() + nHeight );
                     if ( bBottom )
                         aOut.Bottom( aOut.Bottom() - nHeight );
                     if ( bCnt && (!bTop || !bBottom) )
                         ::lcl_ExtendLeftAndRight( aOut, *(this), rAttrs, fnRect );
-                    aRegion.Insert( aOut, aRegion.Count() );
+                    aRegion.push_back( aOut );
                 }
 
                 rOutRect.Right ( rOutRect.Right() - nWidth );
@@ -4260,21 +4260,21 @@ void SwFrm::PaintShadow( const SwRect& rRect, SwRect& rOutRect,
                     /// OD 06.08.2002 #99657# - draw full shadow rectangle
                     aOut.Bottom( aOut.Bottom() - nHeight );
                     aOut.Right( aOut.Right() - nWidth );
-                    aRegion.Insert( aOut, aRegion.Count() );
+                    aRegion.push_back( aOut );
                 }
                 else
                 {
                     aOut.Bottom( aOut.Top()   + nHeight );
                     aOut.Right ( aOut.Right() - nWidth );
                     if ( bTop )
-                        aRegion.Insert( aOut, aRegion.Count() );
+                        aRegion.push_back( aOut );
                     aOut.Right ( aOut.Left() + nWidth );
                     aOut.Bottom( rOutRect.Bottom() - nHeight );
                     if ( bTop )
                         aOut.Top( aOut.Top() + nHeight );
                     if ( bCnt && (!bBottom || !bTop) )
                         ::lcl_ExtendLeftAndRight( aOut, *(this), rAttrs, fnRect );
-                    aRegion.Insert( aOut, aRegion.Count() );
+                    aRegion.push_back( aOut );
                 }
 
                 rOutRect.Left( rOutRect.Left() + nWidth );
@@ -4288,21 +4288,21 @@ void SwFrm::PaintShadow( const SwRect& rRect, SwRect& rOutRect,
                     /// OD 06.08.2002 #99657# - draw full shadow rectangle
                     aOut.Bottom( aOut.Bottom() - nHeight);
                     aOut.Left( aOut.Left() + nWidth );
-                    aRegion.Insert( aOut, aRegion.Count() );
+                    aRegion.push_back( aOut );
                 }
                 else
                 {
                     aOut.Bottom( aOut.Top() + nHeight );
                     aOut.Left (  aOut.Left()+ nWidth );
                     if ( bTop )
-                        aRegion.Insert( aOut, aRegion.Count() );
+                        aRegion.push_back( aOut );
                     aOut.Left  ( aOut.Right() - nWidth );
                     aOut.Bottom( rOutRect.Bottom() - nHeight );
                     if ( bTop )
                         aOut.Top( aOut.Top() + nHeight );
                     if ( bCnt && (!bBottom || bTop) )
                         ::lcl_ExtendLeftAndRight( aOut, *(this), rAttrs, fnRect );
-                    aRegion.Insert( aOut, aRegion.Count() );
+                    aRegion.push_back( aOut );
                 }
 
                 rOutRect.Right( rOutRect.Right() - nWidth );
@@ -4316,21 +4316,21 @@ void SwFrm::PaintShadow( const SwRect& rRect, SwRect& rOutRect,
                     /// OD 06.08.2002 #99657# - draw full shadow rectangle
                     aOut.Top( aOut.Top() + nHeight );
                     aOut.Right( aOut.Right() - nWidth );
-                    aRegion.Insert( aOut, aRegion.Count() );
+                    aRegion.push_back( aOut );
                 }
                 else
                 {
                     aOut.Top  ( aOut.Bottom()- nHeight );
                     aOut.Right( aOut.Right() - nWidth );
                     if ( bBottom )
-                        aRegion.Insert( aOut, aRegion.Count() );
+                        aRegion.push_back( aOut );
                     aOut.Right( aOut.Left() + nWidth );
                     aOut.Top( rOutRect.Top() + nHeight );
                     if ( bBottom )
                         aOut.Bottom( aOut.Bottom() - nHeight );
                     if ( bCnt && (!bTop || !bBottom) )
                         ::lcl_ExtendLeftAndRight( aOut, *(this), rAttrs, fnRect );
-                    aRegion.Insert( aOut, aRegion.Count() );
+                    aRegion.push_back( aOut );
                 }
 
                 rOutRect.Left( rOutRect.Left() + nWidth );
@@ -4346,7 +4346,7 @@ void SwFrm::PaintShadow( const SwRect& rRect, SwRect& rOutRect,
 
     sal_uLong nOldDrawMode = pOut->GetDrawMode();
     Color aShadowColor( rShadow.GetColor() );
-    if( aRegion.Count() && pGlobalShell->GetWin() &&
+    if( !aRegion.empty() && pGlobalShell->GetWin() &&
         Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
     {
         // Is heigh contrast mode, the output device has already set the
@@ -4362,7 +4362,7 @@ void SwFrm::PaintShadow( const SwRect& rRect, SwRect& rOutRect,
 
     pOut->SetDrawMode( nOldDrawMode );
 
-    for ( sal_uInt16 i = 0; i < aRegion.Count(); ++i )
+    for ( sal_uInt16 i = 0; i < aRegion.size(); ++i )
     {
         SwRect &rOut = aRegion[i];
         aOut = rOut;
@@ -4415,7 +4415,7 @@ void SwFrm::PaintBorderLine( const SwRect& rRect,
     {
         SwRegionRects aRegion( aOut, 4 );
         ::lcl_SubtractFlys( this, pPage, aOut, aRegion );
-        for ( sal_uInt16 i = 0; i < aRegion.Count(); ++i )
+        for ( sal_uInt16 i = 0; i < aRegion.size(); ++i )
             pLines->AddLineRect( aRegion[i], pColor, nStyle, pTab, nSubCol );
     }
     else
@@ -5583,14 +5583,14 @@ void SwPageFrm::PaintMarginArea( const SwRect& _rOutputRect,
             const SwPageFrm* pPage = static_cast<const SwPageFrm*>(this);
             if ( pPage->GetSortedObjs() )
                 ::lcl_SubtractFlys( this, pPage, aPgRect, aPgRegion );
-            if ( aPgRegion.Count() )
+            if ( !aPgRegion.empty() )
             {
                 OutputDevice *pOut = _pViewShell->GetOut();
                 if ( pOut->GetFillColor() != aGlobalRetoucheColor )
                     pOut->SetFillColor( aGlobalRetoucheColor );
-                for ( sal_uInt16 i = 0; i < aPgRegion.Count(); ++i )
+                for ( sal_uInt16 i = 0; i < aPgRegion.size(); ++i )
                 {
-                    if ( 1 < aPgRegion.Count() )
+                    if ( 1 < aPgRegion.size() )
                     {
                         ::SwAlignRect( aPgRegion[i], pGlobalShell );
                         if( !aPgRegion[i].HasArea() )
@@ -6142,9 +6142,9 @@ void SwFrm::PaintBackground( const SwRect &rRect, const SwPageFrm *pPage,
                     ///     --> Status Quo: background transparency have to be
                     ///        considered for fly frames
                     const sal_Bool bConsiderBackgroundTransparency = IsFlyFrm();
-                    for ( sal_uInt16 i = 0; i < aRegion.Count(); ++i )
+                    for ( sal_uInt16 i = 0; i < aRegion.size(); ++i )
                     {
-                        if ( 1 < aRegion.Count() )
+                        if ( 1 < aRegion.size() )
                         {
                             ::SwAlignRect( aRegion[i], pGlobalShell );
                             if( !aRegion[i].HasArea() )
@@ -6898,7 +6898,7 @@ void SwFrm::Retouche( const SwPageFrm * pPage, const SwRect &rRect ) const
         // #i16816# tagged pdf support
         SwTaggedPDFHelper aTaggedPDFHelper( 0, 0, 0, *pSh->GetOut() );
 
-        for ( sal_uInt16 i = 0; i < aRegion.Count(); ++i )
+        for ( sal_uInt16 i = 0; i < aRegion.size(); ++i )
         {
             SwRect &rRetouche = aRegion[i];
 

@@ -1703,8 +1703,8 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                     // Note: We make a copy of the rectangles, because they may
                     // be deleted again in JumpToSwMark.
                     SwRects aTmp;
-                    aTmp.Insert( mrSh.SwCrsrShell::_GetCrsr(), 0 );
-                    OSL_ENSURE( aTmp.Count() > 0, "Enhanced pdf export - rectangles are missing" );
+                    aTmp.insert( aTmp.begin(), mrSh.SwCrsrShell::_GetCrsr()->begin(), mrSh.SwCrsrShell::_GetCrsr()->end() );
+                    OSL_ENSURE( !aTmp.empty(), "Enhanced pdf export - rectangles are missing" );
 
                     // Create the destination for internal links:
                     sal_Int32 nDestId = -1;
@@ -1732,7 +1732,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                         const bool bHeaderFooter = pDoc->IsInHeaderFooter( aPos.nNode );
 
                         // Create links for all selected rectangles:
-                        const sal_uInt16 nNumOfRects = aTmp.Count();
+                        const sal_uInt16 nNumOfRects = aTmp.size();
                         for ( sal_uInt16 i = 0; i < nNumOfRects; ++i )
                         {
                             // Link Rectangle
@@ -1865,8 +1865,8 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
 
                     // Link Rectangles
                     SwRects aTmp;
-                    aTmp.Insert( mrSh.SwCrsrShell::_GetCrsr(), 0 );
-                    OSL_ENSURE( aTmp.Count() > 0, "Enhanced pdf export - rectangles are missing" );
+                    aTmp.insert( aTmp.begin(), mrSh.SwCrsrShell::_GetCrsr()->begin(), mrSh.SwCrsrShell::_GetCrsr()->end() );
+                    OSL_ENSURE( !aTmp.empty(), "Enhanced pdf export - rectangles are missing" );
 
                     mrSh.SwCrsrShell::ClearMark();
 
@@ -1890,7 +1890,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                         const bool bHeaderFooter = pDoc->IsInHeaderFooter( aPos.nNode );
 
                         // Create links for all selected rectangles:
-                        const sal_uInt16 nNumOfRects = aTmp.Count();
+                        const sal_uInt16 nNumOfRects = aTmp.size();
                         for ( sal_uInt16 i = 0; i < nNumOfRects; ++i )
                         {
                             // Link rectangle
@@ -1954,8 +1954,8 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
 
             // Link Rectangle
             SwRects aTmp;
-            aTmp.Insert( mrSh.SwCrsrShell::_GetCrsr(), 0 );
-            OSL_ENSURE( aTmp.Count() > 0, "Enhanced pdf export - rectangles are missing" );
+            aTmp.insert( aTmp.begin(), mrSh.SwCrsrShell::_GetCrsr()->begin(), mrSh.SwCrsrShell::_GetCrsr()->end() );
+            OSL_ENSURE( !aTmp.empty(), "Enhanced pdf export - rectangles are missing" );
             const SwRect aLinkRect( aTmp[ 0 ] );
 
             mrSh._GetCrsr()->RestoreSavePos();

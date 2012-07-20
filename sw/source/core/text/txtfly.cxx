@@ -589,11 +589,11 @@ sal_Bool SwTxtFly::DrawTextOpaque( SwDrawTextInfo &rInf )
         rInf.SetPos( rOld );
         return sal_False;
     }
-    else if( aRegion.Count() )
+    else if( !aRegion.empty() )
     {
         // What a huge effort ...
         SwSaveClip aClipVout( rInf.GetpOut() );
-        for( MSHORT i = 0; i < aRegion.Count(); ++i )
+        for( MSHORT i = 0; i < aRegion.size(); ++i )
         {
             SwRect &rRect = aRegion[i];
             if( rRect != aRegion.GetOrigin() )
@@ -659,7 +659,7 @@ void SwTxtFly::DrawFlyRect( OutputDevice* pOut, const SwRect &rRect,
         }
     }
 
-    for( MSHORT i = 0; i < aRegion.Count(); ++i )
+    for( MSHORT i = 0; i < aRegion.size(); ++i )
     {
         if ( bNoGraphic )
             pOut->DrawRect( aRegion[i].SVRect() );
