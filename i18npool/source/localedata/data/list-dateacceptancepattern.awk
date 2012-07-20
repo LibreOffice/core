@@ -80,7 +80,7 @@ END {
         for (i in LocaleList)
         {
             if (LocaleList[i][offinherit] && LocaleList[i][offpatterns])
-                print LocaleList[i][offlocale] " = " LocaleList[i][offinherit] "&nbsp;&nbsp;&nbsp; "
+                print getInheritance( LocaleList[i][offlocale], LocaleList[i][offlocale]) "&nbsp;&nbsp;&nbsp; "
         }
         print "\n<p>"
     }
@@ -89,7 +89,7 @@ END {
         for (i in LocaleList)
         {
             if (LocaleList[i][offinherit] && LocaleList[i][offpatterns])
-                print LocaleList[i][offlocale] " = " LocaleList[i][offinherit]
+                print getInheritance( LocaleList[i][offlocale], LocaleList[i][offlocale])
         }
         print "\n"
     }
@@ -105,7 +105,7 @@ END {
         for (i in LocaleList)
         {
             if (!LocaleList[i][offpatterns])
-                print LocaleList[i][offlocale] "&nbsp;&nbsp;&nbsp; "
+                print getInheritance( LocaleList[i][offlocale], LocaleList[i][offlocale]) "&nbsp;&nbsp;&nbsp; "
         }
     }
     else
@@ -113,13 +113,13 @@ END {
         for (i in LocaleList)
         {
             if (!LocaleList[i][offpatterns])
-                print LocaleList[i][offlocale]
+                print getInheritance( LocaleList[i][offlocale], LocaleList[i][offlocale])
         }
     }
 }
 
 
-function endFile() {
+function endFile(       locale ) {
     locale =  getLocale( file)
     LocaleList[locale][offlocale] = locale
     LocaleList[locale][offpatterns] = patterns
@@ -170,6 +170,13 @@ function fillAllInherited(      i ) {
         if (!LocaleList[i][offpatterns] && LocaleList[i][offinherit])
             LocaleList[i][offpatterns] = fillInherited( LocaleList[i][offinherit])
     }
+}
+
+
+function getInheritance( str, locale ) {
+    if (LocaleList[locale][offinherit])
+        str = getInheritance( str " = " LocaleList[locale][offinherit], LocaleList[locale][offinherit])
+    return str
 }
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:
