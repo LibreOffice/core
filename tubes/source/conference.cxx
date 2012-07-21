@@ -29,7 +29,7 @@
 #include <tubes/conference.hxx>
 #include <tubes/manager.hxx>
 #include <tubes/constants.h>
-
+#include <tubes/file-transfer-helper.h>
 
 #if defined SAL_LOG_INFO
 namespace
@@ -439,14 +439,10 @@ void TeleConference::invite( TpContact *pContact )
 
 class SendFileRequest {
 public:
-    SendFileRequest( TeleConference *pSelf,
-        TeleConference::FileSentCallback pCallback, void* pUserData)
-        : mpSelf(pSelf)
-        , mpCallback(pCallback)
+    SendFileRequest( TeleConference::FileSentCallback pCallback, void* pUserData)
+        : mpCallback(pCallback)
         , mpUserData(pUserData) {};
 
-    /* FIXME: make a shared pointer? */
-    TeleConference*                     mpSelf;
     TeleConference::FileSentCallback    mpCallback;
     void*                               mpUserData;
 };
@@ -471,7 +467,7 @@ static void TeleConference_TransferError( EmpathyFTHandler *handler, const GErro
     g_object_unref (handler);
 }
 
-void TeleConference::FTReady( EmpathyFTHandler *handler, GError *error, gpointer user_data)
+static void TeleConference_FTReady( EmpathyFTHandler *handler, GError *error, gpointer user_data)
 {
     SendFileRequest *request = reinterpret_cast<SendFileRequest *>(user_data);
 
@@ -487,7 +483,7 @@ void TeleConference::FTReady( EmpathyFTHandler *handler, GError *error, gpointer
             G_CALLBACK (TeleConference_TransferDone), request);
         g_signal_connect(handler, "transfer-error",
             G_CALLBACK (TeleConference_TransferError), request);
-        empathy_ft_handler_set_service_name(handler, request->mpSelf->mpManager->getFullServiceName().getStr());
+        empathy_ft_handler_set_service_name(handler, TeleManager::getFullServiceName().getStr());
         empathy_ft_handler_start_transfer(handler);
     }
 }
@@ -504,13 +500,13 @@ void TeleConference::sendFile( rtl::OUString &localUri, FileSentCallback pCallba
 
     GFile *pSource = g_file_new_for_uri(
         OUStringToOString( localUri, RTL_TEXTENCODING_UTF8).getStr() );
-    SendFileRequest *pReq = new SendFileRequest( this, pCallback, pUserData);
+    SendFileRequest *pReq = new SendFileRequest( pCallback, pUserData);
 
     empathy_ft_handler_new_outgoing( mpAccount,
         tp_channel_get_target_contact( TP_CHANNEL( mpChannel)),
         pSource,
         0,
-        &TeleConference::FTReady, pReq);
+        TeleConference_FTReady, pReq);
 }
 
 

@@ -31,7 +31,6 @@
 
 #include <sal/config.h>
 #include "tubes/tubesdllapi.h"
-#include "tubes/file-transfer-helper.h"
 #include <rtl/ustring.hxx>
 #include <telepathy-glib/telepathy-glib.h>
 #include <queue>
@@ -89,7 +88,6 @@ public:
 
     static void             TubeOfferedHandler(GObject* pSource, GAsyncResult* pResult, gpointer pUserData);
     static void             TubeAcceptedHandler(GObject* pSource, GAsyncResult* pResult, gpointer pUserData);
-    static void             FTReady( EmpathyFTHandler *handler, GError *error, gpointer user_data);
 
     static void             methodCallHandler(GDBusConnection*       pConnection,
                                               const gchar*           pSender,
