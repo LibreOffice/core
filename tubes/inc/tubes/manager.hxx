@@ -32,7 +32,6 @@
 #include <sal/config.h>
 #include "tubes/tubesdllapi.h"
 #include "tubes/conference.hxx"
-#include "tubes/packet.hxx"
 #include "tubes/contact-list.hxx"
 #include <rtl/ustring.hxx>
 #include <salhelper/thread.hxx>

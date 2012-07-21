@@ -110,7 +110,7 @@ void TeleConference::methodCallHandler(
 
     SAL_INFO( "tubes", "TeleConference::methodCallHandler: received packet from sender "
             << (pSender ? pSender : "(null)") << " with size " << nPacketSize);
-    pConference->queue( pSender, pPacketData, nPacketSize);
+    pConference->queue( pPacketData, nPacketSize );
     g_dbus_method_invocation_return_value( pInvocation, 0 );
 
     g_variant_unref( ay);
@@ -376,7 +376,7 @@ void TeleConference::finalize()
 }
 
 
-bool TeleConference::sendPacket( TelePacket& rPacket )
+bool TeleConference::sendPacket( const OString& rPacket )
 {
     INFO_LOGGER( "TeleConference::sendPacket");
 
@@ -388,9 +388,9 @@ bool TeleConference::sendPacket( TelePacket& rPacket )
     /* FIXME: in GLib 2.32 we can use g_variant_new_fixed_array(). It does
      * essentially this.
      */
-    void* pData = g_memdup( rPacket.getData(), rPacket.getSize() );
+    void* pData = g_memdup( rPacket.getStr(), rPacket.getLength() );
     GVariant *pParameters = g_variant_new_from_data( G_VARIANT_TYPE("(ay)"),
-            pData, rPacket.getSize(),
+            pData, rPacket.getLength(),
             FALSE,
             g_free, pData);
 
@@ -411,7 +411,7 @@ bool TeleConference::sendPacket( TelePacket& rPacket )
 }
 
 
-void TeleConference::queue( TelePacket &rPacket )
+void TeleConference::queue( const OString &rPacket )
 {
     INFO_LOGGER( "TeleConference::queue");
 
@@ -421,9 +421,9 @@ void TeleConference::queue( TelePacket &rPacket )
 }
 
 
-void TeleConference::queue( const char* pDBusSender, const char* pPacketData, int nPacketSize )
+void TeleConference::queue( const char* pPacketData, int nPacketSize )
 {
-    TelePacket aPacket( pDBusSender, pPacketData, nPacketSize );
+    OString aPacket( pPacketData, nPacketSize );
     queue( aPacket );
 }
 
@@ -514,7 +514,7 @@ void TeleConference::sendFile( rtl::OUString &localUri, FileSentCallback pCallba
 }
 
 
-bool TeleConference::popPacket( TelePacket& rPacket )
+bool TeleConference::popPacket( OString& rPacket )
 {
     INFO_LOGGER( "TeleConference::popPacket");
 

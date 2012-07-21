@@ -31,14 +31,11 @@
 
 #include <sal/config.h>
 #include "tubes/tubesdllapi.h"
-#include "tubes/packet.hxx"
 #include "tubes/file-transfer-helper.h"
 #include <rtl/ustring.hxx>
 #include <telepathy-glib/telepathy-glib.h>
 #include <queue>
 #include <tubes/warnings_guard_boost_signals2.hpp>
-
-typedef ::std::queue<TelePacket> TelePacketQueue;
 
 class TeleManager;
 
@@ -58,22 +55,19 @@ public:
 
     TeleManager*            getManager() const  { return mpManager; }
 
-    /** @param rPacket
-            non-const on purpose, see TelePacket::getData()
-     */
-    TUBES_DLLPUBLIC bool    sendPacket( TelePacket& rPacket );
+    TUBES_DLLPUBLIC bool    sendPacket( const OString& rPacket );
 
     /** Pop a received packet. */
-    bool                    popPacket( TelePacket& rPacket );
+    bool                    popPacket( OString& rPacket );
 
-    /** Queue incoming data as TelePacket */
-    void                    queue( const char* pDBusSender, const char* pPacket, int nSize );
-    void                    queue( TelePacket &rPacket );
+    /** Queue incoming data as OString */
+    void                    queue( const char* pPacket, int nSize );
+    void                    queue( const OString& rPacket );
 
     TUBES_DLLPUBLIC void    invite( TpContact *pContact );
 
     /** Emitted when a packet is received. */
-    boost::signals2::signal<void (TelePacket&)> sigPacketReceived;
+    boost::signals2::signal<void (const OString&)> sigPacketReceived;
 
     typedef void          (*FileSentCallback)( bool aSuccess, void* pUserData);
     TUBES_DLLPUBLIC void    sendFile( rtl::OUString &localUri, FileSentCallback pCallback, void* pUserData);
@@ -107,6 +101,7 @@ public:
                                               void*                  pUserData);
 
 private:
+    typedef ::std::queue<OString> TelePacketQueue;
     bool                    spinUntilTubeEstablished();
     bool                    setTube( GDBusConnection* pTube);
 
