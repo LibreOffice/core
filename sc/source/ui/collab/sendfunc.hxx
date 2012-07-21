@@ -14,8 +14,7 @@
 
 #include "cell.hxx"
 #include "docfunc.hxx"
-#include <tubes/conference.hxx>
-#include <tubes/manager.hxx>
+class TeleConference;
 
 namespace {
 

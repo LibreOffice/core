@@ -37,7 +37,6 @@
 #include "sendfunc.hxx"
 #include <tubes/manager.hxx>
 #include <tubes/conference.hxx>
-#include <tubes/contact-list.hxx>
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include <unotools/tempfile.hxx>
