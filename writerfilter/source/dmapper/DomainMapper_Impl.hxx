@@ -119,13 +119,13 @@ class FieldContext
     bool                                                                            m_bFieldCommandCompleted;
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >          m_xStartRange;
 
-    ::rtl::OUString                                                                 m_sCommand;
+    OUString                                                                 m_sCommand;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextField >          m_xTextField;
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XFormField >          m_xFormField;
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >       m_xTOC;//TOX
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >       m_xTC;//TOX entry
-    ::rtl::OUString                                                                 m_sHyperlinkURL;
+    OUString                                                                 m_sHyperlinkURL;
     FFDataHandler::Pointer_t                                                        m_pFFDataHandler;
     FormControlHelper::Pointer_t                                                    m_pFormControlHelper;
 
@@ -135,8 +135,8 @@ public:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > GetStartRange() const { return m_xStartRange; }
 
-    void                    AppendCommand(const ::rtl::OUString& rPart);
-    const ::rtl::OUString&  GetCommand() const {return m_sCommand; }
+    void                    AppendCommand(const OUString& rPart);
+    const OUString&  GetCommand() const {return m_sCommand; }
 
     void                    SetCommandCompleted() { m_bFieldCommandCompleted = true; }
     bool                    IsCommandCompleted() const { return m_bFieldCommandCompleted;    }
@@ -152,8 +152,8 @@ public:
     void    SetTC( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > xTC ) { m_xTC = xTC; }
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   GetTC( ) { return m_xTC; }
 
-    void    SetHyperlinkURL( const ::rtl::OUString& rURL ) { m_sHyperlinkURL = rURL; }
-    const ::rtl::OUString&                                                      GetHyperlinkURL() { return m_sHyperlinkURL; }
+    void    SetHyperlinkURL( const OUString& rURL ) { m_sHyperlinkURL = rURL; }
+    const OUString&                                                      GetHyperlinkURL() { return m_sHyperlinkURL; }
 
     void setFFDataHandler(FFDataHandler::Pointer_t pFFDataHandler) { m_pFFDataHandler = pFFDataHandler; }
     FFDataHandler::Pointer_t getFFDataHandler() const { return m_pFFDataHandler; }
@@ -161,7 +161,7 @@ public:
     void setFormControlHelper(FormControlHelper::Pointer_t pFormControlHelper) { m_pFormControlHelper = pFormControlHelper; }
     FormControlHelper::Pointer_t getFormControlHelper() const { return m_pFormControlHelper; }
 
-    ::std::vector<rtl::OUString> GetCommandParts() const;
+    ::std::vector<OUString> GetCommandParts() const;
 };
 
 struct TextAppendContext
@@ -226,9 +226,9 @@ struct DeletableTabStop : public ::com::sun::star::style::TabStop
 struct BookmarkInsertPosition
 {
     bool                                                                    m_bIsStartOfText;
-    ::rtl::OUString                                                         m_sBookmarkName;
+    OUString                                                         m_sBookmarkName;
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >  m_xTextRange;
-    BookmarkInsertPosition(bool bIsStartOfText, const ::rtl::OUString& rName, ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >  xTextRange):
+    BookmarkInsertPosition(bool bIsStartOfText, const OUString& rName, ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >  xTextRange):
         m_bIsStartOfText( bIsStartOfText ),
         m_sBookmarkName( rName ),
         m_xTextRange( xTextRange )
@@ -244,8 +244,8 @@ struct AnnotationPosition
 
 struct RedlineParams
 {
-    ::rtl::OUString m_sAuthor;
-    ::rtl::OUString m_sDate;
+    OUString m_sAuthor;
+    OUString m_sDate;
     sal_Int32       m_nId;
     sal_Int32       m_nToken;
 };
@@ -277,7 +277,7 @@ class WRITERFILTER_DLLPRIVATE DomainMapper_Impl
 public:
     typedef TableManager< ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >, PropertyMapPtr > TableManager_t;
     typedef TableDataHandler< ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >, TablePropertyMapPtr > TableDataHandler_t;
-    typedef std::map < ::rtl::OUString, BookmarkInsertPosition > BookmarkMap_t;
+    typedef std::map < OUString, BookmarkInsertPosition > BookmarkMap_t;
 
 private:
     SourceDocumentType                                                              m_eDocumentType;
@@ -329,7 +329,7 @@ private:
 
     ::std::vector<DeletableTabStop> m_aCurrentTabStops;
     sal_uInt32                      m_nCurrentTabStopIndex;
-    ::rtl::OUString                 m_sCurrentParaStyleId;
+    OUString                 m_sCurrentParaStyleId;
     bool                            m_bInStyleSheetImport; //in import of fonts, styles, lists or lfos
     bool                            m_bInAnyTableImport; //in import of fonts, styles, lists or lfos
 
@@ -360,11 +360,11 @@ private:
     AnnotationPosition                                                         m_aAnnotationPosition;
 
     void                            GetCurrentLocale(::com::sun::star::lang::Locale& rLocale);
-    void                            SetNumberFormat( const ::rtl::OUString& rCommand,
+    void                            SetNumberFormat( const OUString& rCommand,
                                         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xPropertySet );
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
                                     FindOrCreateFieldMaster( const sal_Char* pFieldMasterService,
-                                                            const ::rtl::OUString& rFieldMasterName )
+                                                            const OUString& rFieldMasterName )
                                                                 throw(::com::sun::star::uno::Exception);
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >       GetDocumentSettings();
 
@@ -396,7 +396,7 @@ public:
     {
         return m_xTextDocument;
     }
-    void SetDocumentSettingsProperty( const ::rtl::OUString& rPropName, const uno::Any& rValue );
+    void SetDocumentSettingsProperty( const OUString& rPropName, const uno::Any& rValue );
 
     void CreateRedline( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > xRange, RedlineParamsPtr& pRedline  );
 
@@ -420,10 +420,10 @@ public:
     bool isBreakDeferred( BreakType deferredBreakType );
     void clearDeferredBreaks();
     void finishParagraph( PropertyMapPtr pPropertyMap );
-    void appendTextPortion( const ::rtl::OUString& rString, PropertyMapPtr pPropertyMap );
+    void appendTextPortion( const OUString& rString, PropertyMapPtr pPropertyMap );
     void appendTextContent( const ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextContent >,
                                 const uno::Sequence< beans::PropertyValue >  );
-    void appendOLE( const ::rtl::OUString& rStreamName, OLEHandlerPtr pOleHandler );
+    void appendOLE( const OUString& rStreamName, OLEHandlerPtr pOleHandler );
     void appendStarMath( const Value& v );
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > appendTextSectionAfter(
                     ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >& xBefore );
@@ -482,8 +482,8 @@ public:
     ::com::sun::star::uno::Sequence< ::com::sun::star::style::TabStop >     GetCurrentTabStopAndClear();
     void                                NextTabStop() {++m_nCurrentTabStopIndex;}
 
-    void        SetCurrentParaStyleId(::rtl::OUString sStringValue) {m_sCurrentParaStyleId = sStringValue;}
-    ::rtl::OUString   GetCurrentParaStyleId() const {return m_sCurrentParaStyleId;}
+    void        SetCurrentParaStyleId(OUString sStringValue) {m_sCurrentParaStyleId = sStringValue;}
+    OUString   GetCurrentParaStyleId() const {return m_sCurrentParaStyleId;}
 
     ::com::sun::star::uno::Any    GetPropertyFromStyleSheet(PropertyIds eId);
     void        SetStyleSheetImport( bool bSet ) { m_bInStyleSheetImport = bSet;}
@@ -512,7 +512,7 @@ public:
     bool IsOpenFieldCommand() const;
     bool IsOpenField() const;
     //collect the pieces of the command
-    void AppendFieldCommand(::rtl::OUString& rPartOfCommand);
+    void AppendFieldCommand(OUString& rPartOfCommand);
     void handleFieldAsk
         (FieldContextPtr pContext,
         PropertyNameSupplier& rPropNameSupplier,
@@ -539,19 +539,19 @@ public:
         PropertyNameSupplier& rPropNameSupplier,
         uno::Reference< uno::XInterface > & xFieldInterface,
         uno::Reference< beans::XPropertySet > xFieldProperties,
-        const ::rtl::OUString & sTOCServiceName);
+        const OUString & sTOCServiceName);
     //the field command has to be closed (0x14 appeared)
     void CloseFieldCommand();
     //the _current_ fields require a string type result while TOCs accept richt results
     bool IsFieldResultAsString();
     //apply the result text to the related field
-    void SetFieldResult( ::rtl::OUString& rResult );
+    void SetFieldResult( OUString& rResult );
     // set FFData of top field context
     void SetFieldFFData( FFDataHandler::Pointer_t pFFDataHandler );
     //the end of field is reached (0x15 appeared) - the command might still be open
     void PopFieldContext();
 
-    void AddBookmark( const ::rtl::OUString& rBookmarkName, const ::rtl::OUString& rId );
+    void AddBookmark( const OUString& rBookmarkName, const OUString& rId );
 
     void AddAnnotationPosition(const bool bStart);
 
@@ -615,13 +615,13 @@ public:
     RedlineParamsPtr GetTopRedline( );
 
     sal_Int32 GetCurrentRedlineToken( );
-    void SetCurrentRedlineAuthor( rtl::OUString sAuthor );
-    void SetCurrentRedlineDate( rtl::OUString sDate );
+    void SetCurrentRedlineAuthor( OUString sAuthor );
+    void SetCurrentRedlineDate( OUString sDate );
     void SetCurrentRedlineId( sal_Int32 nId );
     void SetCurrentRedlineToken( sal_Int32 nToken );
     void RemoveCurrentRedline( );
     void ResetParaRedline( );
-    void SetCurrentRedlineInitials( rtl::OUString sInitials );
+    void SetCurrentRedlineInitials( OUString sInitials );
 
     void ApplySettingsTable();
     SectionPropertyMap * GetSectionContext();

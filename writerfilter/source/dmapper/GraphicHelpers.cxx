@@ -134,7 +134,7 @@ void PositionHandler::lcl_sprm( Sprm& )
 {
 }
 
-void PositionHandler::setPositionOffset(const ::rtl::OUString & sText, bool vertical)
+void PositionHandler::setPositionOffset(const OUString & sText, bool vertical)
 {
     if( vertical )
         savedPositionOffsetV = ConversionHelper::convertEMUToMM100( sText.toInt32());
@@ -142,7 +142,7 @@ void PositionHandler::setPositionOffset(const ::rtl::OUString & sText, bool vert
         savedPositionOffsetH = ConversionHelper::convertEMUToMM100( sText.toInt32());
 }
 
-void PositionHandler::setAlignH(const ::rtl::OUString & sText)
+void PositionHandler::setAlignH(const OUString & sText)
 {
     if( sText == "left")
         savedAlignH = text::HoriOrientation::LEFT;
@@ -156,7 +156,7 @@ void PositionHandler::setAlignH(const ::rtl::OUString & sText)
         savedAlignH = text::HoriOrientation::OUTSIDE;
 }
 
-void PositionHandler::setAlignV(const ::rtl::OUString & sText)
+void PositionHandler::setAlignV(const OUString & sText)
 {
     if( sText == "top" )
         savedAlignV = text::VertOrientation::TOP;

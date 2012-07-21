@@ -47,7 +47,7 @@ namespace writerfilter {
 namespace dmapper
 {
 
-typedef ::std::map< ::rtl::OUString, ::rtl::OUString> StringPairMap_t;
+typedef ::std::map< OUString, OUString> StringPairMap_t;
 
 
 
@@ -258,10 +258,10 @@ PropertyMapPtr TableStyleSheetEntry::GetLocalPropertiesFromMask( sal_Int32 nMask
 
 struct ListCharStylePropertyMap_t
 {
-    ::rtl::OUString         sCharStyleName;
+    OUString         sCharStyleName;
     PropertyValueVector_t   aPropertyValues;
 
-    ListCharStylePropertyMap_t(const ::rtl::OUString& rCharStyleName, const PropertyValueVector_t& rPropertyValues):
+    ListCharStylePropertyMap_t(const OUString& rCharStyleName, const PropertyValueVector_t& rPropertyValues):
         sCharStyleName( rCharStyleName ),
         aPropertyValues( rPropertyValues )
         {}
@@ -283,7 +283,7 @@ struct StyleSheetTable_Impl
 
     StyleSheetTable_Impl(DomainMapper& rDMapper, uno::Reference< text::XTextDocument> xTextDocument);
 
-    ::rtl::OUString HasListCharStyle( const PropertyValueVector_t& rCharProperties );
+    OUString HasListCharStyle( const PropertyValueVector_t& rCharProperties );
 };
 
 
@@ -302,9 +302,9 @@ StyleSheetTable_Impl::StyleSheetTable_Impl(DomainMapper& rDMapper, uno::Referenc
 }
 
 
-::rtl::OUString StyleSheetTable_Impl::HasListCharStyle( const PropertyValueVector_t& rPropValues )
+OUString StyleSheetTable_Impl::HasListCharStyle( const PropertyValueVector_t& rPropValues )
 {
-    ::rtl::OUString sRet;
+    OUString sRet;
     ListCharStylePropertyVector_t::const_iterator aListVectorIter = m_aListCharStylePropertyVector.begin();
     while( aListVectorIter != m_aListCharStylePropertyVector.end() )
     {
@@ -368,16 +368,16 @@ void StyleSheetTable::lcl_attribute(Id Name, Value & val)
         return ;
     int nIntValue = val.getInt();
     (void)nIntValue;
-    ::rtl::OUString sValue = val.getString();
+    OUString sValue = val.getString();
 
     switch(Name)
     {
         case NS_rtf::LN_ISTD:
-            m_pImpl->m_pCurrentEntry->sStyleIdentifierD = ::rtl::OUString::valueOf(static_cast<sal_Int32>(nIntValue), 16);
+            m_pImpl->m_pCurrentEntry->sStyleIdentifierD = OUString::valueOf(static_cast<sal_Int32>(nIntValue), 16);
         break;
         case NS_rtf::LN_STI:
         {
-            ::rtl::OUString tempStyleIdentifier = GetStyleIdFromIndex(static_cast<sal_uInt32>(nIntValue));
+            OUString tempStyleIdentifier = GetStyleIdFromIndex(static_cast<sal_uInt32>(nIntValue));
             if (!tempStyleIdentifier.isEmpty())
                 m_pImpl->m_pCurrentEntry->sStyleIdentifierI = tempStyleIdentifier;
             if (nIntValue == 0 || nIntValue == 65)
@@ -389,11 +389,11 @@ void StyleSheetTable::lcl_attribute(Id Name, Value & val)
         break;
         case NS_rtf::LN_ISTDBASE:
             if (static_cast<sal_uInt32>(nIntValue) != 0xfff)
-                m_pImpl->m_pCurrentEntry->sBaseStyleIdentifier = ::rtl::OUString::valueOf(static_cast<sal_Int32>(nIntValue), 16);
+                m_pImpl->m_pCurrentEntry->sBaseStyleIdentifier = OUString::valueOf(static_cast<sal_Int32>(nIntValue), 16);
         break;
         case NS_rtf::LN_ISTDNEXT:
             if (static_cast<sal_uInt32>(nIntValue) != 0xfff)
-                m_pImpl->m_pCurrentEntry->sNextStyleIdentifier = ::rtl::OUString::valueOf(static_cast<sal_Int32>(nIntValue), 16);
+                m_pImpl->m_pCurrentEntry->sNextStyleIdentifier = OUString::valueOf(static_cast<sal_Int32>(nIntValue), 16);
         break;
         case NS_rtf::LN_FSCRATCH:
         case NS_rtf::LN_FINVALHEIGHT:
@@ -464,7 +464,7 @@ void StyleSheetTable::lcl_sprm(Sprm & rSprm)
     Value::Pointer_t pValue = rSprm.getValue();
     sal_Int32 nIntValue = pValue.get() ? pValue->getInt() : 0;
     (void)nIntValue;
-    rtl::OUString sStringValue = pValue.get() ? pValue->getString() : rtl::OUString();
+    OUString sStringValue = pValue.get() ? pValue->getString() : OUString();
 
     switch(nSprmId)
     {
@@ -635,7 +635,7 @@ public:
 
     void    Insert( beans::PropertyValue aVal );
     uno::Sequence< uno::Any > getValues();
-    uno::Sequence< ::rtl::OUString > getNames();
+    uno::Sequence< OUString > getNames();
 };
 void    PropValVector::Insert( beans::PropertyValue aVal )
 {
@@ -664,10 +664,10 @@ uno::Sequence< uno::Any > PropValVector::getValues()
     }
     return aRet;
 }
-uno::Sequence< ::rtl::OUString > PropValVector::getNames()
+uno::Sequence< OUString > PropValVector::getNames()
 {
-    uno::Sequence< ::rtl::OUString > aRet( size() );
-    ::rtl::OUString* pNames = aRet.getArray();
+    uno::Sequence< OUString > aRet( size() );
+    OUString* pNames = aRet.getArray();
     sal_Int32 nVal = 0;
     _PropValVector::iterator aIt = begin();
     while(aIt != end())
@@ -704,7 +704,7 @@ void StyleSheetTable::ApplyStyleSheets( FontTablePtr rFontTable )
                     bool bInsert = false;
                     uno::Reference< container::XNameContainer > xStyles = bParaStyle ? xParaStyles : xCharStyles;
                     uno::Reference< style::XStyle > xStyle;
-                    ::rtl::OUString sConvertedStyleName = ConvertStyleName( pEntry->sStyleName );
+                    OUString sConvertedStyleName = ConvertStyleName( pEntry->sStyleName );
                     if(xStyles->hasByName( sConvertedStyleName ))
                         xStyles->getByName( sConvertedStyleName ) >>= xStyle;
                     else
@@ -745,7 +745,7 @@ void StyleSheetTable::ApplyStyleSheets( FontTablePtr rFontTable )
                             pEntry->pProperties->Insert(PROP_CHAR_HEIGHT, true, aTwoHundredFortyTwip, false);
     //                      western font not already set -> apply first font
                             const FontEntry::Pointer_t pWesternFontEntry(rFontTable->getFontEntry( 0 ));
-                            rtl::OUString sWesternFontName = pWesternFontEntry->sFontName;
+                            OUString sWesternFontName = pWesternFontEntry->sFontName;
                             pEntry->pProperties->Insert(PROP_CHAR_FONT_NAME, true, uno::makeAny( sWesternFontName ), false);
 
     //                      CJK  ... apply second font
@@ -794,7 +794,7 @@ void StyleSheetTable::ApplyStyleSheets( FontTablePtr rFontTable )
                             {
                                 aPropValues.realloc( aPropValues.getLength( ) + 1 );
                                 beans::PropertyValue aStyleVal( rPropNameSupplier.GetName( PROP_NUMBERING_STYLE_NAME ), 0,
-                                        uno::makeAny( rtl::OUString() ),
+                                        uno::makeAny( OUString() ),
                                         beans::PropertyState_DIRECT_VALUE );
                                 aPropValues[ aPropValues.getLength( ) - 1 ] = aStyleVal;
                             }
@@ -909,7 +909,7 @@ void StyleSheetTable::ApplyStyleSheets( FontTablePtr rFontTable )
 }
 
 
-const StyleSheetEntryPtr StyleSheetTable::FindStyleSheetByISTD(const ::rtl::OUString& sIndex)
+const StyleSheetEntryPtr StyleSheetTable::FindStyleSheetByISTD(const OUString& sIndex)
 {
     StyleSheetEntryPtr pRet;
     for( sal_uInt32 nPos = 0; nPos < m_pImpl->m_aStyleSheetEntries.size(); ++nPos )
@@ -924,7 +924,7 @@ const StyleSheetEntryPtr StyleSheetTable::FindStyleSheetByISTD(const ::rtl::OUSt
 }
 
 
-const StyleSheetEntryPtr StyleSheetTable::FindStyleSheetByStyleName(const ::rtl::OUString& sIndex)
+const StyleSheetEntryPtr StyleSheetTable::FindStyleSheetByStyleName(const OUString& sIndex)
 {
     StyleSheetEntryPtr pRet;
     for( sal_uInt32 nPos = 0; nPos < m_pImpl->m_aStyleSheetEntries.size(); ++nPos )
@@ -939,7 +939,7 @@ const StyleSheetEntryPtr StyleSheetTable::FindStyleSheetByStyleName(const ::rtl:
 }
 
 
-const StyleSheetEntryPtr StyleSheetTable::FindStyleSheetByConvertedStyleName(const ::rtl::OUString& sIndex)
+const StyleSheetEntryPtr StyleSheetTable::FindStyleSheetByConvertedStyleName(const OUString& sIndex)
 {
     StyleSheetEntryPtr pRet;
     for( sal_uInt32 nPos = 0; nPos < m_pImpl->m_aStyleSheetEntries.size(); ++nPos )
@@ -955,7 +955,7 @@ const StyleSheetEntryPtr StyleSheetTable::FindStyleSheetByConvertedStyleName(con
 
 
 
-const StyleSheetEntryPtr StyleSheetTable::FindParentStyleSheet(::rtl::OUString sBaseStyle)
+const StyleSheetEntryPtr StyleSheetTable::FindParentStyleSheet(OUString sBaseStyle)
 {
     if( sBaseStyle.isEmpty() )
     {
@@ -1116,9 +1116,9 @@ static const sal_Char* const aStyleNamePairs[] =
 };
 
 
-::rtl::OUString StyleSheetTable::ConvertStyleName( const ::rtl::OUString& rWWName, bool bExtendedSearch)
+OUString StyleSheetTable::ConvertStyleName( const OUString& rWWName, bool bExtendedSearch)
 {
-    ::rtl::OUString sRet( rWWName );
+    OUString sRet( rWWName );
     if( bExtendedSearch )
     {
         //search for the rWWName in the IdentifierD of the existing styles and convert the sStyleName member
@@ -1136,8 +1136,8 @@ static const sal_Char* const aStyleNamePairs[] =
         for( sal_uInt32 nPair = 0; nPair < sizeof(aStyleNamePairs) / sizeof( sal_Char*) / 2; ++nPair)
         {
                 m_pImpl->m_aStyleNameMap.insert( StringPairMap_t::value_type(
-                    ::rtl::OUString::createFromAscii(aStyleNamePairs[2 * nPair]),
-                    ::rtl::OUString::createFromAscii(aStyleNamePairs[2 * nPair + 1]) ));
+                    OUString::createFromAscii(aStyleNamePairs[2 * nPair]),
+                    OUString::createFromAscii(aStyleNamePairs[2 * nPair + 1]) ));
         }
     }
     StringPairMap_t::iterator aIt = m_pImpl->m_aStyleNameMap.find( sRet );
@@ -1146,13 +1146,13 @@ static const sal_Char* const aStyleNamePairs[] =
     return sRet;
 }
 
-::rtl::OUString StyleSheetTable::GetStyleIdFromIndex(const sal_uInt32 sti)
+OUString StyleSheetTable::GetStyleIdFromIndex(const sal_uInt32 sti)
 {
-    ::rtl::OUString sRet;
+    OUString sRet;
     if (sti >= (sizeof(aStyleNamePairs) / sizeof( sal_Char*) / 2))
-        sRet = ::rtl::OUString();
+        sRet = OUString();
     else
-        sRet = ::rtl::OUString::createFromAscii(aStyleNamePairs[2 * sti]);
+        sRet = OUString::createFromAscii(aStyleNamePairs[2 * sti]);
     return sRet;
 }
 
@@ -1211,10 +1211,10 @@ void StyleSheetTable::applyDefaults(bool bParaProperties)
 }
 
 
-::rtl::OUString StyleSheetTable::getOrCreateCharStyle( PropertyValueVector_t& rCharProperties )
+OUString StyleSheetTable::getOrCreateCharStyle( PropertyValueVector_t& rCharProperties )
 {
     //find out if any of the styles already has the required properties then return it's name
-    ::rtl::OUString sListLabel = m_pImpl->HasListCharStyle(rCharProperties);
+    OUString sListLabel = m_pImpl->HasListCharStyle(rCharProperties);
     if( !sListLabel.isEmpty() )
         return sListLabel;
     const char cListLabel[] = "ListLabel ";
@@ -1224,13 +1224,13 @@ void StyleSheetTable::applyDefaults(bool bParaProperties)
     xStyleFamilies->getByName("CharacterStyles") >>= xCharStyles;
     //search for all character styles with the name sListLabel + <index>
     sal_Int32 nStyleFound = 0;
-    uno::Sequence< ::rtl::OUString > aStyleNames = xCharStyles->getElementNames();
-    const ::rtl::OUString* pStyleNames = aStyleNames.getConstArray();
+    uno::Sequence< OUString > aStyleNames = xCharStyles->getElementNames();
+    const OUString* pStyleNames = aStyleNames.getConstArray();
     for( sal_Int32 nStyle = 0; nStyle < aStyleNames.getLength(); ++nStyle )
     {
         if( pStyleNames[nStyle].matchAsciiL( cListLabel, sizeof( cListLabel ) - 1  ))
         {
-            ::rtl::OUString sSuffix = pStyleNames[nStyle].copy( sizeof( cListLabel ) - 1 );
+            OUString sSuffix = pStyleNames[nStyle].copy( sizeof( cListLabel ) - 1 );
             sal_Int32 nSuffix = sSuffix.toInt32();
             if( nSuffix > 0 )
             {
@@ -1239,8 +1239,8 @@ void StyleSheetTable::applyDefaults(bool bParaProperties)
             }
         }
     }
-    sListLabel = ::rtl::OUString::createFromAscii( cListLabel );
-    sListLabel += ::rtl::OUString::valueOf( ++nStyleFound );
+    sListLabel = OUString::createFromAscii( cListLabel );
+    sListLabel += OUString::valueOf( ++nStyleFound );
     //create a new one otherwise
     uno::Reference< lang::XMultiServiceFactory > xDocFactory( m_pImpl->m_xTextDocument, uno::UNO_QUERY_THROW );
     PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();

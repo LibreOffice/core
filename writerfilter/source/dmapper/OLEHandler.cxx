@@ -61,7 +61,7 @@ OLEHandler::~OLEHandler()
 
 void OLEHandler::lcl_attribute(Id rName, Value & rVal)
 {
-    rtl::OUString sStringValue = rVal.getString();
+    OUString sStringValue = rVal.getString();
     (void)rName;
     switch( rName )
     {
@@ -181,9 +181,9 @@ void OLEHandler::lcl_sprm(Sprm & rSprm)
 }
 
 
-::rtl::OUString OLEHandler::copyOLEOStream( uno::Reference< text::XTextDocument > xTextDocument )
+OUString OLEHandler::copyOLEOStream( uno::Reference< text::XTextDocument > xTextDocument )
 {
-    ::rtl::OUString sRet;
+    OUString sRet;
     if( !m_xInputStream.is( ) )
         return sRet;
     try
@@ -194,8 +194,8 @@ void OLEHandler::lcl_sprm(Sprm & rSprm)
         //hack to work with the ImportEmbeddedObjectResolver
         static sal_Int32 nObjectCount = 100;
         uno::Reference< container::XNameAccess > xNA( xEmbeddedResolver, uno::UNO_QUERY_THROW );
-        ::rtl::OUString aURL("Obj");
-        aURL += ::rtl::OUString::valueOf( nObjectCount++ );
+        OUString aURL("Obj");
+        aURL += OUString::valueOf( nObjectCount++ );
         uno::Reference < io::XOutputStream > xOLEStream;
         if( (xNA->getByName( aURL ) >>= xOLEStream) && xOLEStream.is() )
         {
@@ -213,8 +213,8 @@ void OLEHandler::lcl_sprm(Sprm & rSprm)
                 }
             }
 
-            static const ::rtl::OUString sProtocol("vnd.sun.star.EmbeddedObject:");
-            ::rtl::OUString aPersistName( xEmbeddedResolver->resolveEmbeddedObjectURL( aURL ) );
+            static const OUString sProtocol("vnd.sun.star.EmbeddedObject:");
+            OUString aPersistName( xEmbeddedResolver->resolveEmbeddedObjectURL( aURL ) );
             sRet = aPersistName.copy( sProtocol.getLength() );
 
         }

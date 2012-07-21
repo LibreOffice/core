@@ -174,7 +174,7 @@
     <xsl:param name="name"/>
     <xsl:choose>
       <xsl:when test="$name='OUString'">
-	<xsl:text>::rtl::OUString</xsl:text>
+	<xsl:text>OUString</xsl:text>
       </xsl:when>
       <xsl:otherwise>
 	<xsl:value-of select="$name"/>

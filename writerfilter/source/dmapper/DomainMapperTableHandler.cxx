@@ -321,7 +321,7 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
         if(aTableStyleIter != m_aTableProperties->end())
         {
             // Apply table style properties recursively
-            ::rtl::OUString sTableStyleName;
+            OUString sTableStyleName;
             aTableStyleIter->second >>= sTableStyleName;
             StyleSheetTablePtr pStyleSheetTable = m_rDMapper_Impl.GetStyleSheetTable();
             const StyleSheetEntryPtr pStyleSheet = pStyleSheetTable->FindStyleSheetByISTD( sTableStyleName );
@@ -500,7 +500,7 @@ CellPropertyValuesSeq_t DomainMapperTableHandler::endTableGetCellProperties(Tabl
             {
                 if ( rInfo.pTableStyle )
                 {
-                    rtl::OUString sMask;
+                    OUString sMask;
                     pTcCnfStyleIt->second >>= sMask;
                     nRowStyleMask = sMask.toInt32( 2 );
                 }
@@ -532,7 +532,7 @@ CellPropertyValuesSeq_t DomainMapperTableHandler::endTableGetCellProperties(Tabl
                     if ( aCnfStyleIter != aCellIterator->get( )->end( ) )
                     {
                         if ( rInfo.pTableStyle ) {
-                            rtl::OUString sMask;
+                            OUString sMask;
                             aCnfStyleIter->second >>= sMask;
                             nCellStyleMask = sMask.toInt32( 2 );
                         }
@@ -599,7 +599,7 @@ CellPropertyValuesSeq_t DomainMapperTableHandler::endTableGetCellProperties(Tabl
 #ifdef DEBUG_DMAPPER_TABLE_HANDLER
         //-->debug cell properties
         {
-            ::rtl::OUString sNames;
+            OUString sNames;
             const uno::Sequence< beans::PropertyValues > aDebugCurrentRow = aCellProperties[nRow];
             sal_Int32 nDebugCells = aDebugCurrentRow.getLength();
             (void) nDebugCells;
@@ -609,11 +609,11 @@ CellPropertyValuesSeq_t DomainMapperTableHandler::endTableGetCellProperties(Tabl
                 sal_Int32 nDebugCellProperties = aDebugCellProperties.getLength();
                 for( sal_Int32  nDebugProperty = 0; nDebugProperty < nDebugCellProperties; ++nDebugProperty)
                 {
-                    const ::rtl::OUString sName = aDebugCellProperties[nDebugProperty].Name;
+                    const OUString sName = aDebugCellProperties[nDebugProperty].Name;
                     sNames += sName;
-                    sNames += ::rtl::OUString('-');
+                    sNames += OUString('-');
                 }
-                sNames += ::rtl::OUString('\n');
+                sNames += OUString('\n');
             }
             (void)sNames;
         }
@@ -708,7 +708,7 @@ void DomainMapperTableHandler::endTable()
         {
 #ifdef DEBUG_DMAPPER_TABLE_HANDLER
             fprintf( stderr, "Conversion to table error: %s\n",
-                    rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
+                    OUStringToOString( e.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
             dmapper_logger->chars(std::string("failed to import table!"));
 #else
             (void)e;
@@ -718,7 +718,7 @@ void DomainMapperTableHandler::endTable()
         {
 #ifdef DEBUG_DMAPPER_TABLE_HANDLER
             fprintf( stderr, "Exception during table creation: %s\n",
-                    rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_UTF8 ).getStr( ) );
+                    OUStringToOString( e.Message, RTL_TEXTENCODING_UTF8 ).getStr( ) );
 #else
             (void) e;
 #endif

@@ -46,12 +46,12 @@ namespace dmapper
  */
 class WRITERFILTER_DLLPRIVATE OLEHandler : public LoggedProperties
 {
-    ::rtl::OUString     m_sObjectType;
-    ::rtl::OUString     m_sProgId;
-    ::rtl::OUString     m_sShapeId;
-    ::rtl::OUString     m_sDrawAspect;
-    ::rtl::OUString     m_sObjectId;
-    ::rtl::OUString     m_sr_id;
+    OUString     m_sObjectType;
+    OUString     m_sProgId;
+    OUString     m_sShapeId;
+    OUString     m_sDrawAspect;
+    OUString     m_sObjectId;
+    OUString     m_sr_id;
 
     sal_Int32                   m_nDxaOrig;
     sal_Int32                   m_nDyaOrig;
@@ -78,7 +78,7 @@ public:
 
     inline bool isOLEObject( ) { return m_xInputStream.is( ); };
 
-    ::rtl::OUString copyOLEOStream( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextDocument > xTextDocument );
+    OUString copyOLEOStream( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextDocument > xTextDocument );
 
     ::com::sun::star::awt::Size     getSize() const { return m_aShapeSize;}
     ::com::sun::star::awt::Point    getPosition() const { return m_aShapePosition;}

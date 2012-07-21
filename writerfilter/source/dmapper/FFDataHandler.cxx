@@ -42,17 +42,17 @@ FFDataHandler::~FFDataHandler()
 {
 }
 
-const rtl::OUString & FFDataHandler::getName() const
+const OUString & FFDataHandler::getName() const
 {
     return m_sName;
 }
 
-const rtl::OUString & FFDataHandler::getHelpText() const
+const OUString & FFDataHandler::getHelpText() const
 {
     return m_sHelpText;
 }
 
-const rtl::OUString & FFDataHandler::getStatusText() const
+const OUString & FFDataHandler::getStatusText() const
 {
     return m_sStatusText;
 }
@@ -77,7 +77,7 @@ bool FFDataHandler::getCheckboxChecked() const
         return false;
 }
 
-const rtl::OUString & FFDataHandler::getDropDownResult() const
+const OUString & FFDataHandler::getDropDownResult() const
 {
     return m_sDropDownResult;
 }
@@ -87,7 +87,7 @@ const FFDataHandler::DropDownEntries_t & FFDataHandler::getDropDownEntries() con
     return m_DropDownEntries;
 }
 
-const rtl::OUString & FFDataHandler::getTextDefault() const
+const OUString & FFDataHandler::getTextDefault() const
 {
     return m_sTextDefault;
 }

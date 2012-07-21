@@ -90,16 +90,16 @@ uno::Reference<form::XForm> FormControlHelper::FormControlHelper_Impl::getForm()
         if (xFormsSupplier.is())
         {
             uno::Reference<container::XNameContainer> xFormsNamedContainer(xFormsSupplier->getForms());
-            static ::rtl::OUString sDOCXForm("DOCX-Standard");
+            static OUString sDOCXForm("DOCX-Standard");
 
-            ::rtl::OUString sFormName(sDOCXForm);
+            OUString sFormName(sDOCXForm);
             sal_uInt16 nUnique = 0;
 
             while (xFormsNamedContainer->hasByName(sFormName))
             {
                 ++nUnique;
                 sFormName = sDOCXForm;
-                sFormName += ::rtl::OUString::valueOf(nUnique);
+                sFormName += OUString::valueOf(nUnique);
             }
 
             uno::Reference<uno::XInterface> xForm(getServiceFactory()->createInstance("com.sun.star.form.component.Form"));
@@ -143,7 +143,7 @@ FormControlHelper::~FormControlHelper()
 }
 
 bool FormControlHelper::createCheckbox(uno::Reference<text::XTextRange> xTextRange,
-                                       const ::rtl::OUString & rControlName)
+                                       const OUString & rControlName)
 {
     if ( !m_pFFData )
         return false;
@@ -231,12 +231,12 @@ bool FormControlHelper::processField(uno::Reference<text::XFormField> xFormField
             aAny <<= m_pFFData->getCheckboxChecked();
             if ( xPropSet.is() )
                 xPropSet->setPropertyValue("Checked", aAny);
-            rtl::OUString sName;
+            OUString sName;
         }
         else if (m_pImpl->m_eFieldId == FIELD_FORMDROPDOWN )
         {
             xFormField->setFieldType(ODF_FORMDROPDOWN);
-            uno::Sequence< rtl::OUString > sItems;
+            uno::Sequence< OUString > sItems;
             sItems.realloc( m_pFFData->getDropDownEntries().size() );
             ::std::copy( m_pFFData->getDropDownEntries().begin(), m_pFFData->getDropDownEntries().end(), ::comphelper::stl_begin(sItems));
             if ( sItems.getLength() )
@@ -272,16 +272,16 @@ bool FormControlHelper::insertControl(uno::Reference<text::XTextRange> xTextRang
     if (! xFormComps.is())
         return false;
 
-    static ::rtl::OUString sControl("Control");
+    static OUString sControl("Control");
 
     sal_Int32 nControl = 0;
     bool bDone = false;
-    ::rtl::OUString sControlName;
+    OUString sControlName;
 
     do
     {
-        ::rtl::OUString sTmp(sControl);
-        sTmp += ::rtl::OUString::valueOf(nControl);
+        OUString sTmp(sControl);
+        sTmp += OUString::valueOf(nControl);
 
         nControl++;
         if (! xFormCompsByName->hasByName(sTmp))

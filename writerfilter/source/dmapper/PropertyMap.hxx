@@ -86,7 +86,7 @@ class PropertyMap : public _PropertyMap
     //depending on sprmCSymbol
     sal_Unicode                                                                 m_cFootnoteSymbol; // 0 == invalid
     sal_Int32                                                                   m_nFootnoteFontId; // negative values are invalid ids
-    ::rtl::OUString                                                             m_sFootnoteFontName;
+    OUString                                                             m_sFootnoteFontName;
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XFootnote >       m_xFootnote;
 
 protected:
@@ -117,8 +117,8 @@ public:
     sal_Int32   GetFootnoteFontId() const { return m_nFootnoteFontId;}
     void        SetFootnoteFontId(sal_Int32 nSet) { m_nFootnoteFontId = nSet;}
 
-    const ::rtl::OUString&      GetFootnoteFontName() const { return m_sFootnoteFontName;}
-    void                        SetFootnoteFontName( const ::rtl::OUString& rSet ) { m_sFootnoteFontName = rSet;}
+    const OUString&      GetFootnoteFontName() const { return m_sFootnoteFontName;}
+    void                        SetFootnoteFontName( const OUString& rSet ) { m_sFootnoteFontName = rSet;}
 
     virtual void insertTableProperties( const PropertyMap* );
 
@@ -142,8 +142,8 @@ class SectionPropertyMap : public PropertyMap
     bool                                                                        m_bIsFirstSection;
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >      m_xStartingRange;
 
-    ::rtl::OUString                                                             m_sFirstPageStyleName;
-    ::rtl::OUString                                                             m_sFollowPageStyleName;
+    OUString                                                             m_sFirstPageStyleName;
+    OUString                                                             m_sFollowPageStyleName;
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   m_aFirstPageStyle;
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   m_aFollowPageStyle;
 
@@ -293,7 +293,7 @@ class ParagraphProperties
 
     sal_Int8                m_nDropCapLength; //number of characters
 
-    ::rtl::OUString         m_sParaStyleName;
+    OUString         m_sParaStyleName;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >      m_xStartingRange; //start of a frame
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >      m_xEndingRange; //end of the frame
@@ -363,8 +363,8 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > GetEndingRange() const { return m_xEndingRange; }
     void SetEndingRange( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > xSet ) { m_xEndingRange = xSet; }
 
-    void                    SetParaStyleName( const ::rtl::OUString& rSet ) { m_sParaStyleName = rSet;}
-    const ::rtl::OUString&  GetParaStyleName() const { return m_sParaStyleName;}
+    void                    SetParaStyleName( const OUString& rSet ) { m_sParaStyleName = rSet;}
+    const OUString&  GetParaStyleName() const { return m_sParaStyleName;}
 
     void ResetFrameProperties();
 };
@@ -382,7 +382,7 @@ class StyleSheetPropertyMap : public PropertyMap, public ParagraphProperties
     sal_Int32               mnCT_Spacing_line;
     sal_Int32               mnCT_Spacing_lineRule;
 
-    ::rtl::OUString         msCT_Fonts_ascii;
+    OUString         msCT_Fonts_ascii;
     bool                    mbCT_TrPrBase_tblHeader;
     sal_Int32               mnCT_TrPrBase_jc;
     sal_Int32               mnCT_TcPrBase_vAlign;
@@ -413,7 +413,7 @@ public:
     void SetCT_Spacing_lineRule(   sal_Int32  nSet )
         {mnCT_Spacing_lineRule = nSet; mbCT_Spacing_lineRuleSet = true;     }
 
-    void SetCT_Fonts_ascii(  const ::rtl::OUString& rSet )
+    void SetCT_Fonts_ascii(  const OUString& rSet )
         {msCT_Fonts_ascii = rSet;          }
     void SetCT_TrPrBase_tblHeader( bool bSet )
         {mbCT_TrPrBase_tblHeader = bSet; mbCT_TrPrBase_tblHeaderSet = true; }
@@ -440,7 +440,7 @@ public:
         return mbCT_Spacing_lineRuleSet;
     }
 
-    bool GetCT_Fonts_ascii(::rtl::OUString& rToFill) const
+    bool GetCT_Fonts_ascii(OUString& rToFill) const
     {
         if( msCT_Fonts_ascii.getLength() > 0 )
             rToFill = msCT_Fonts_ascii;

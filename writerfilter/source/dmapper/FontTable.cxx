@@ -56,7 +56,7 @@ void FontTable::lcl_attribute(Id Name, Value & val)
     if(!m_pImpl->pCurrentEntry)
         return ;
     int nIntValue = val.getInt();
-    ::rtl::OUString sValue = val.getString();
+    OUString sValue = val.getString();
     switch(Name)
     {
         case NS_rtf::LN_CBFFNM1:
@@ -127,7 +127,7 @@ void FontTable::lcl_sprm(Sprm& rSprm)
     Value::Pointer_t pValue = rSprm.getValue();
     sal_Int32 nIntValue = pValue->getInt();
     (void)nIntValue;
-    rtl::OUString sStringValue = pValue->getString();
+    OUString sStringValue = pValue->getString();
     switch(nSprmId)
     {
         case NS_ooxml::LN_CT_Font_charset:

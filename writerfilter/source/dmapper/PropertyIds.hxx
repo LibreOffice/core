@@ -297,7 +297,7 @@ class PropertyNameSupplier
 public:
     PropertyNameSupplier();
     ~PropertyNameSupplier();
-    const rtl::OUString& GetName( PropertyIds eId ) const;
+    const OUString& GetName( PropertyIds eId ) const;
 
     static PropertyNameSupplier& GetPropertyNameSupplier();
 };

@@ -36,9 +36,9 @@ class WRITERFILTER_DLLPRIVATE PositionHandler: public LoggedProperties
 public:
     PositionHandler( bool vertical );
     ~PositionHandler( );
-    static void setPositionOffset(const ::rtl::OUString & sText, bool vertical);
-    static void setAlignH(const ::rtl::OUString & sText);
-    static void setAlignV(const ::rtl::OUString & sText);
+    static void setPositionOffset(const OUString & sText, bool vertical);
+    static void setAlignH(const OUString & sText);
+    static void setAlignV(const OUString & sText);
 
     sal_Int16 m_nOrient;
     sal_Int16 m_nRelation;

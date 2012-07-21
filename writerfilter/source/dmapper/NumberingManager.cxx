@@ -39,10 +39,6 @@
 
 using namespace com::sun::star;
 
-using ::rtl::OUString;
-using ::rtl::OString;
-using ::rtl::OUStringToOString;
-
 #define MAKE_PROPVAL(NameId, Value) \
     beans::PropertyValue(aPropNameSupplier.GetName(NameId), 0, uno::makeAny(Value), beans::PropertyState_DIRECT_VALUE )
 
@@ -538,7 +534,7 @@ void ListDef::CreateNumberingRules( DomainMapper& rDMapper,
                 xFactory->createInstance("com.sun.star.style.NumberingStyle"),
                 uno::UNO_QUERY_THROW );
 
-            rtl::OUString sStyleName = GetStyleName( GetId( ) );
+            OUString sStyleName = GetStyleName( GetId( ) );
 
             xStyles->insertByName( sStyleName, makeAny( xStyle ) );
 

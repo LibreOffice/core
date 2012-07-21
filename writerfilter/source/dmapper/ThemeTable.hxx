@@ -39,7 +39,7 @@ public:
     ThemeTable();
     virtual ~ThemeTable();
 
-    const ::rtl::OUString getFontNameForTheme(const Id id) const;
+    const OUString getFontNameForTheme(const Id id) const;
 
  private:
     // Properties

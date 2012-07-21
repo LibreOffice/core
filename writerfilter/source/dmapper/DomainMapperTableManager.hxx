@@ -42,7 +42,7 @@ class DomainMapperTableManager : public DomainMapperTableManager_Base_t
     sal_Int32       m_nTableWidth; //might be set directly or has to be calculated from the column positions
     bool            m_bOOXML;
     bool            m_bImplicitMerges;
-    ::rtl::OUString m_sTableStyleName;
+    OUString m_sTableStyleName;
     PropertyMapPtr  m_pTableStyleTextProperies;
 
     ::std::vector< IntVectorPtr >  m_aTableGrid;
@@ -73,7 +73,7 @@ public:
     IntVectorPtr getCurrentGrid( );
     IntVectorPtr getCurrentSpans( );
 
-    const ::rtl::OUString& getTableStyleName() const { return m_sTableStyleName; }
+    const OUString& getTableStyleName() const { return m_sTableStyleName; }
     /// copy the text properties of the table style and its parent into pContext
     void    CopyTextProperties(PropertyMapPtr pContext, StyleSheetTablePtr pStyleSheetTable);
 
