@@ -38,6 +38,8 @@
 
 #include <math.h>
 
+#include <vector>
+
 #include <mdds/multi_type_matrix.hpp>
 #include <mdds/multi_type_vector_types.hpp>
 #include <mdds/multi_type_vector_trait.hpp>
@@ -856,9 +858,12 @@ void ScMatrixImpl::FillDouble( double fVal, SCSIZE nC1, SCSIZE nR1, SCSIZE nC2, 
 {
     if (ValidColRow( nC1, nR1) && ValidColRow( nC2, nR2))
     {
-        for (SCSIZE i = nR1; i <= nR2; ++i)
-            for (SCSIZE j = nC1; j <= nC2; ++j)
-                maMat.set(i, j, fVal);
+        for (SCSIZE j = nC1; j <= nC2; ++j)
+        {
+            // Passing value array is much faster.
+            std::vector<double> aVals(nR2-nR1+1, fVal);
+            maMat.set(nR1, j, aVals.begin(), aVals.end());
+        }
     }
     else
     {
