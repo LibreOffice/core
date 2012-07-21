@@ -53,7 +53,6 @@ $(eval $(call gb_Library_use_externals,tubes,\
 $(eval $(call gb_Library_add_exception_objects,tubes,\
 	tubes/source/conference \
 	tubes/source/manager \
-	tubes/source/packet \
 	tubes/source/contact-list \
 ))
 

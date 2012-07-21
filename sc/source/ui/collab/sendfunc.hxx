@@ -16,7 +16,6 @@
 #include "docfunc.hxx"
 #include <tubes/conference.hxx>
 #include <tubes/manager.hxx>
-#include <tubes/packet.hxx>
 
 namespace {
 
@@ -217,7 +216,7 @@ public:
     ScDocFuncRecv( ScDocFuncDirect *pChain );
     virtual ~ScDocFuncRecv();
 
-    void packetReceived( TelePacket &rPacket );
+    void packetReceived( const OString &rPacket );
 
     virtual void RecvMessage( const rtl::OString &rString );
 };

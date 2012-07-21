@@ -102,10 +102,9 @@ void ScDocFuncRecv::RecvMessage( const rtl::OString &rString )
     }
 }
 
-void ScDocFuncRecv::packetReceived( TelePacket &rPacket )
+void ScDocFuncRecv::packetReceived( const OString &rPacket )
 {
-    rtl::OString aString( rPacket.getData(), rPacket.getSize() );
-    RecvMessage( aString );
+    RecvMessage( rPacket );
 }
 
 /*
@@ -152,8 +151,7 @@ void ScDocFuncSend::SendMessage( ScChangeOpWriter &rOp )
     fprintf( stderr, "Op: '%s'\n", rOp.toString().getStr() );
     if (mpConference)
     {
-        TelePacket aPacket( "sender", rOp.toString().getStr(), rOp.toString().getLength() );
-        mpConference->sendPacket( aPacket );
+        mpConference->sendPacket( rOp.toString() );
     }
     else // local demo mode
         mpDirect->RecvMessage( rOp.toString() );
