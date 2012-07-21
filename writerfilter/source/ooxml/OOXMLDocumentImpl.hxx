@@ -52,7 +52,7 @@ protected:
                       sal_uInt32 nId);
 
     writerfilter::Reference<Stream>::Pointer_t
-    getSubStream(const rtl::OUString & rId);
+    getSubStream(const OUString & rId);
 
     writerfilter::Reference<Stream>::Pointer_t
     getXNoteStream(OOXMLStream::StreamType_t nType,
@@ -77,18 +77,18 @@ public:
                                 const sal_Int32 nNoteId);
     virtual void resolveHeader(Stream & rStream,
                                const sal_Int32 type,
-                               const rtl::OUString & rId);
+                               const OUString & rId);
     virtual void resolveFooter(Stream & rStream,
                                const sal_Int32 type,
-                               const rtl::OUString & rId);
+                               const OUString & rId);
 
     virtual void resolveComment(Stream & rStream, const sal_Int32 nId);
 
     virtual OOXMLPropertySet * getPicturePropSet
-    (const ::rtl::OUString & rId);
-    virtual void resolvePicture(Stream & rStream, const rtl::OUString & rId);
+    (const OUString & rId);
+    virtual void resolvePicture(Stream & rStream, const OUString & rId);
 
-    virtual ::rtl::OUString getTargetForId(const ::rtl::OUString & rId);
+    virtual OUString getTargetForId(const OUString & rId);
 
     virtual void setModel(uno::Reference<frame::XModel> xModel);
     virtual uno::Reference<frame::XModel> getModel();
@@ -96,12 +96,12 @@ public:
     virtual uno::Reference<drawing::XDrawPage> getDrawPage();
     virtual uno::Reference<io::XInputStream> getInputStream();
     virtual uno::Reference<io::XInputStream> getStorageStream();
-    virtual uno::Reference<io::XInputStream> getInputStreamForId(const rtl::OUString & rId);
+    virtual uno::Reference<io::XInputStream> getInputStreamForId(const OUString & rId);
     virtual void setXNoteId(const sal_Int32 nId);
     virtual sal_Int32 getXNoteId() const;
     virtual void setXNoteType(const Id & rId);
     virtual const Id & getXNoteType() const;
-    virtual const ::rtl::OUString & getTarget() const;
+    virtual const OUString & getTarget() const;
     virtual uno::Reference<xml::sax::XFastShapeContextHandler> getShapeContext( );
     virtual void setShapeContext( uno::Reference<xml::sax::XFastShapeContextHandler> xContext );
 };

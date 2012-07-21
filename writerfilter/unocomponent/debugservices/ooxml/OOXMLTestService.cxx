@@ -72,11 +72,11 @@ xContext( xContext_ )
 {
 }
 
-sal_Int32 SAL_CALL ScannerTestService::run( const uno::Sequence< rtl::OUString >& aArguments ) throw (uno::RuntimeException)
+sal_Int32 SAL_CALL ScannerTestService::run( const uno::Sequence< OUString >& aArguments ) throw (uno::RuntimeException)
 {
     uno::Sequence<uno::Any> aUcbInitSequence(2);
-    aUcbInitSequence[0] <<= rtl::OUString("Local");
-    aUcbInitSequence[1] <<= rtl::OUString("Office");
+    aUcbInitSequence[0] <<= OUString("Local");
+    aUcbInitSequence[1] <<= OUString("Office");
     uno::Reference<lang::XMultiServiceFactory> xServiceFactory(xContext->getServiceManager(), uno::UNO_QUERY_THROW);
     uno::Reference<lang::XMultiComponentFactory> xFactory(xContext->getServiceManager(), uno::UNO_QUERY_THROW );
     if (::ucbhelper::ContentBroker::initialize(xServiceFactory, aUcbInitSequence))
@@ -87,7 +87,7 @@ sal_Int32 SAL_CALL ScannerTestService::run( const uno::Sequence< rtl::OUString >
         debugLogger->startDocument();
 #endif
 
-        rtl::OUString arg=aArguments[0];
+        OUString arg=aArguments[0];
 
         ::comphelper::setProcessServiceFactory(xServiceFactory);
 
@@ -95,7 +95,7 @@ sal_Int32 SAL_CALL ScannerTestService::run( const uno::Sequence< rtl::OUString >
 
         rtl_uString *dir=NULL;
         osl_getProcessWorkingDir(&dir);
-        rtl::OUString absFileUrl;
+        OUString absFileUrl;
         osl_getAbsoluteFileURL(dir, arg.pData, &absFileUrl.pData);
         rtl_uString_release(dir);
 
@@ -123,16 +123,16 @@ sal_Int32 SAL_CALL ScannerTestService::run( const uno::Sequence< rtl::OUString >
     return 0;
 }
 
-::rtl::OUString ScannerTestService_getImplementationName ()
+OUString ScannerTestService_getImplementationName ()
 {
-    return rtl::OUString(ScannerTestService::IMPLEMENTATION_NAME );
+    return OUString(ScannerTestService::IMPLEMENTATION_NAME );
 }
 
-uno::Sequence< rtl::OUString > SAL_CALL ScannerTestService_getSupportedServiceNames(  ) throw (uno::RuntimeException)
+uno::Sequence< OUString > SAL_CALL ScannerTestService_getSupportedServiceNames(  ) throw (uno::RuntimeException)
 {
-    uno::Sequence < rtl::OUString > aRet(1);
-    rtl::OUString* pArray = aRet.getArray();
-    pArray[0] =  rtl::OUString(ScannerTestService::SERVICE_NAME );
+    uno::Sequence < OUString > aRet(1);
+    OUString* pArray = aRet.getArray();
+    pArray[0] =  OUString(ScannerTestService::SERVICE_NAME );
     return aRet;
 }
 

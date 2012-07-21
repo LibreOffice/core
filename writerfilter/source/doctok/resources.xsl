@@ -81,7 +81,7 @@ typedef const WW8DocumentImpl * WW8DocumentImplPointer;
 using namespace ::std;&#xa;</xsl:text>
       <xsl:apply-templates select="//UML:Class" mode="class"/>
       <xsl:text>
-rtl::OUString getDffOptName(sal_uInt32 nPid);
+OUString getDffOptName(sal_uInt32 nPid);
 bool isBooleanDffOpt(sal_uInt32 nId);
 }}
 #endif // INCLUDED_RESOURCES_HXX&#xa;</xsl:text></out>
@@ -619,7 +619,7 @@ class </xsl:text>
     <xsl:text>; }&#xa;</xsl:text>
   </xsl:when>
   <xsl:when test='$stereotype = "string"'>
-    rtl::OUString get_<xsl:value-of select='@name'/>() const { return getString(<xsl:value-of select='$offset'/>); }
+    OUString get_<xsl:value-of select='@name'/>() const { return getString(<xsl:value-of select='$offset'/>); }
   </xsl:when>
 </xsl:choose>
 </xsl:template>
@@ -730,7 +730,7 @@ class </xsl:text>
     <xsl:when test="$type='S16'">sal_Int16</xsl:when>
     <xsl:when test="$type='U32'">sal_uInt32</xsl:when>
     <xsl:when test="$type='S32'">sal_Int32</xsl:when>
-    <xsl:when test="$type='String'">rtl::OUString</xsl:when>
+    <xsl:when test="$type='String'">OUString</xsl:when>
     <xsl:when test="$type='Value'">WW8Value::Pointer_t</xsl:when>
     <xsl:when test="$type='Binary'">WW8BinaryObjReference::Pointer_t</xsl:when>
     <xsl:when test="$parenttype=''">

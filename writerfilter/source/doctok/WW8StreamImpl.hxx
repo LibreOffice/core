@@ -40,13 +40,13 @@ public:
                   uno::Reference<io::XInputStream> rStream);
     virtual ~WW8StreamImpl();
 
-    virtual WW8Stream::Pointer_t getSubStream(const ::rtl::OUString & rId);
+    virtual WW8Stream::Pointer_t getSubStream(const OUString & rId);
 
     virtual Sequence get(sal_uInt32 nOffset, sal_uInt32 nCount)
         const;
 
     virtual string getSubStreamNames() const;
-    virtual uno::Sequence<rtl::OUString> getSubStreamUNames() const;
+    virtual uno::Sequence<OUString> getSubStreamUNames() const;
 
     virtual void dump(OutputWithDepth<string> & o) const;
 };

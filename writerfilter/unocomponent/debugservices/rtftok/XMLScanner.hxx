@@ -34,7 +34,7 @@ private:
 public:
     XMLScanner(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > &xContext);
 
-    virtual ::sal_Int32 SAL_CALL run( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aArguments ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::sal_Int32 SAL_CALL run( const ::com::sun::star::uno::Sequence< OUString >& aArguments ) throw (::com::sun::star::uno::RuntimeException);
 
 public:
     const static sal_Char SERVICE_NAME[40];
@@ -42,9 +42,9 @@ public:
 
 };
 
-::rtl::OUString XMLScanner_getImplementationName ();
-sal_Bool SAL_CALL XMLScanner_supportsService( const ::rtl::OUString& ServiceName );
-::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL XMLScanner_getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException);
+OUString XMLScanner_getImplementationName ();
+sal_Bool SAL_CALL XMLScanner_supportsService( const OUString& ServiceName );
+::com::sun::star::uno::Sequence< OUString > SAL_CALL XMLScanner_getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException);
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL XMLScanner_createInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > &xContext) throw( ::com::sun::star::uno::Exception );
 
 } } /* end namespace writerfilter::rtftok */

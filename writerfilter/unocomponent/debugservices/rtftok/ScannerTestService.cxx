@@ -125,24 +125,24 @@ class MyRtfScannerHandler : public writerfilter::rtftok::RTFScannerHandler
             aArgs0[0] <<= myStream;
             uno::Reference< container::XNameContainer > xNameContainer(
             xServiceFactory->createInstanceWithArguments(
-                    ::rtl::OUString("com.sun.star.embed.OLESimpleStorage"),
+                    OUString("com.sun.star.embed.OLESimpleStorage"),
                     aArgs0 ),
             uno::UNO_QUERY_THROW );
             try {
                 printf("TRY\n");
-        ::com::sun::star::uno::Sequence< ::rtl::OUString > names=xNameContainer->getElementNames();
+        ::com::sun::star::uno::Sequence< OUString > names=xNameContainer->getElementNames();
                 printf("OK\n");
 
             for(int i=0;i<names.getLength();i++)
             {
-                rtl::OUString &name=names[i];
+                OUString &name=names[i];
                 wprintf(L"name=%s\n", name.getStr());
             }
             {
                 uno::Reference< io::XStream > xContentStream = xStorage->openStreamElement(
-                    rtl::OUString::createFromAscii(buf), embed::ElementModes::READWRITE | embed::ElementModes::TRUNCATE );
+                    OUString::createFromAscii(buf), embed::ElementModes::READWRITE | embed::ElementModes::TRUNCATE );
                 uno::Reference<beans::XPropertySet> xContentStreamPropSet(xContentStream, uno::UNO_QUERY_THROW);
-                xContentStreamPropSet->setPropertyValue(rtl::OUString("MediaType"), uno::makeAny(rtl::OUString("application/vnd.sun.star.oleobject")));
+                xContentStreamPropSet->setPropertyValue(OUString("MediaType"), uno::makeAny(OUString("application/vnd.sun.star.oleobject")));
                 uno::Reference<io::XOutputStream> myOutStream=xContentStream->getOutputStream();
                 uno::Sequence< ::sal_Int8 > seq1(binLen);
                 unsigned char *data1=binBufferStr;
@@ -165,23 +165,23 @@ class MyRtfScannerHandler : public writerfilter::rtftok::RTFScannerHandler
                 printf("SEQ OK\n");
 
                 uno::Reference< io::XStream > xContentStream = xStorage->openStreamElement(
-                    rtl::OUString::createFromAscii(buf), embed::ElementModes::READWRITE | embed::ElementModes::TRUNCATE );
+                    OUString::createFromAscii(buf), embed::ElementModes::READWRITE | embed::ElementModes::TRUNCATE );
                 uno::Reference<beans::XPropertySet> xContentStreamPropSet(xContentStream, uno::UNO_QUERY_THROW);
-                xContentStreamPropSet->setPropertyValue(rtl::OUString("MediaType"), uno::makeAny(rtl::OUString("application/vnd.sun.star.oleobject")));
+                xContentStreamPropSet->setPropertyValue(OUString("MediaType"), uno::makeAny(OUString("application/vnd.sun.star.oleobject")));
                 printf("CONTENT STREAM OK\n");
 
                 uno::Sequence< uno::Any > aArgs1( 1 );
                 aArgs1[0] <<= xContentStream;
                 uno::Reference< container::XNameContainer > xNameContainer2(
                     xServiceFactory->createInstanceWithArguments(
-                    ::rtl::OUString("com.sun.star.embed.OLESimpleStorage"),
+                    OUString("com.sun.star.embed.OLESimpleStorage"),
                     aArgs1 ),
                     uno::UNO_QUERY_THROW );
                 printf("OLE STORAGE OK\n");
 
                 uno::Any anyStream;
                 anyStream <<= myInStream;
-                xNameContainer2->insertByName(rtl::OUString("\1Ole10Native"), anyStream);
+                xNameContainer2->insertByName(OUString("\1Ole10Native"), anyStream);
                 printf("INSERT OK\n");
 
                 uno::Reference<embed::XTransactedObject> xTransact(xNameContainer2, uno::UNO_QUERY);
@@ -273,7 +273,7 @@ public:
             bytesTotal=xSeekable->getLength();
         if (xStatusIndicator.is() && xSeekable.is())
         {
-            xStatusIndicator->start(::rtl::OUString("Converting"), 100);
+            xStatusIndicator->start(OUString("Converting"), 100);
         }
     }
 
@@ -298,7 +298,7 @@ public:
                 {
                     char buf1[100];
                     sprintf(buf1, "Converted %" SAL_PRIdINT64 " KB", bytesRead/1024);
-                    xStatusIndicator->start(::rtl::OUString::createFromAscii(buf1), 0);
+                    xStatusIndicator->start(OUString::createFromAscii(buf1), 0);
                 }
             }
             return len;
@@ -319,14 +319,14 @@ xContext( xContext_ )
 {
 }
 
-sal_Int32 SAL_CALL ScannerTestService::run( const uno::Sequence< rtl::OUString >& aArguments ) throw (uno::RuntimeException)
+sal_Int32 SAL_CALL ScannerTestService::run( const uno::Sequence< OUString >& aArguments ) throw (uno::RuntimeException)
 {
 
   printf("TEST\n");
 
     uno::Sequence<uno::Any> aUcbInitSequence(2);
-    aUcbInitSequence[0] <<= rtl::OUString("Local");
-    aUcbInitSequence[1] <<= rtl::OUString("Office");
+    aUcbInitSequence[0] <<= OUString("Local");
+    aUcbInitSequence[1] <<= OUString("Office");
     uno::Reference<lang::XMultiServiceFactory> xServiceFactory(xContext->getServiceManager(), uno::UNO_QUERY_THROW);
   printf("A\n");
     uno::Reference<lang::XMultiComponentFactory> xFactory(xContext->getServiceManager(), uno::UNO_QUERY_THROW );
@@ -334,20 +334,20 @@ sal_Int32 SAL_CALL ScannerTestService::run( const uno::Sequence< rtl::OUString >
     if (::ucbhelper::ContentBroker::initialize(xServiceFactory, aUcbInitSequence))
     {
   printf("C\n");
-            rtl::OUString arg=aArguments[0];
+            OUString arg=aArguments[0];
 
             uno::Reference<ucb::XSimpleFileAccess2> xFileAccess(ucb::SimpleFileAccess::create(xContext));
 
             rtl_uString *dir=NULL;
             osl_getProcessWorkingDir(&dir);
-            rtl::OUString absFileUrl;
+            OUString absFileUrl;
             osl_getAbsoluteFileURL(dir, arg.pData, &absFileUrl.pData);
             rtl_uString_release(dir);
 
             uno::Reference <lang::XSingleServiceFactory> xStorageFactory(
-                xServiceFactory->createInstance (rtl::OUString("com.sun.star.embed.StorageFactory")), uno::UNO_QUERY_THROW);
+                xServiceFactory->createInstance (OUString("com.sun.star.embed.StorageFactory")), uno::UNO_QUERY_THROW);
 
-            rtl::OUString outFileUrl;
+            OUString outFileUrl;
             {
             rtl_uString *dir1=NULL;
             osl_getProcessWorkingDir(&dir1);
@@ -360,7 +360,7 @@ sal_Int32 SAL_CALL ScannerTestService::run( const uno::Sequence< rtl::OUString >
             aArgs2[1] <<= embed::ElementModes::READWRITE | embed::ElementModes::TRUNCATE;
             uno::Reference<embed::XStorage> xStorage(xStorageFactory->createInstanceWithArguments(aArgs2), uno::UNO_QUERY_THROW);
             uno::Reference<beans::XPropertySet> xPropSet(xStorage, uno::UNO_QUERY_THROW);
-            xPropSet->setPropertyValue(rtl::OUString("MediaType"), uno::makeAny(rtl::OUString("application/vnd.oasis.opendocument.text")));
+            xPropSet->setPropertyValue(OUString("MediaType"), uno::makeAny(OUString("application/vnd.oasis.opendocument.text")));
             uno::Reference<io::XInputStream> xInputStream = xFileAccess->openFileRead(absFileUrl);
             uno::Reference< task::XStatusIndicator > xStatusIndicator;
 
@@ -389,20 +389,20 @@ sal_Int32 SAL_CALL ScannerTestService::run( const uno::Sequence< rtl::OUString >
     return 0;
 }
 
-::rtl::OUString ScannerTestService_getImplementationName ()
+OUString ScannerTestService_getImplementationName ()
 {
-    return rtl::OUString(ScannerTestService::IMPLEMENTATION_NAME );
+    return OUString(ScannerTestService::IMPLEMENTATION_NAME );
 }
 
-sal_Bool SAL_CALL ScannerTestService_supportsService( const ::rtl::OUString& ServiceName )
+sal_Bool SAL_CALL ScannerTestService_supportsService( const OUString& ServiceName )
 {
     return ServiceName == ScannerTestService::SERVICE_NAME;
 }
-uno::Sequence< rtl::OUString > SAL_CALL ScannerTestService_getSupportedServiceNames(  ) throw (uno::RuntimeException)
+uno::Sequence< OUString > SAL_CALL ScannerTestService_getSupportedServiceNames(  ) throw (uno::RuntimeException)
 {
-    uno::Sequence < rtl::OUString > aRet(1);
-    rtl::OUString* pArray = aRet.getArray();
-    pArray[0] =  rtl::OUString(ScannerTestService::SERVICE_NAME );
+    uno::Sequence < OUString > aRet(1);
+    OUString* pArray = aRet.getArray();
+    pArray[0] =  OUString(ScannerTestService::SERVICE_NAME );
     return aRet;
 }
 

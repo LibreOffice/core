@@ -562,9 +562,9 @@ writerfilter::Reference &lt; BinaryObj &gt; ::Pointer_t createSprmBinary
 
 <xsl:template name="getdffoptname">
   <xsl:text>
-rtl::OUString getDffOptName(sal_uInt32 nPid)
+OUString getDffOptName(sal_uInt32 nPid)
 {
-    rtl::OUString result;
+    OUString result;
 
     switch (nPid)
     {&#xa;</xsl:text>
@@ -656,7 +656,7 @@ WW8Value::Pointer_t WW8FOPTE::get_value()
 
 <xsl:template match='UML:Model/UML:Namespace.ownedElement' mode='ww8foptename'>
   <xsl:text>
-rtl::OUString WW8FOPTE::get_name()
+OUString WW8FOPTE::get_name()
 {
     return getDffOptName(get_pid());
 }</xsl:text>

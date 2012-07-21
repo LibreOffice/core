@@ -56,7 +56,7 @@
   -->
   <xsl:template name="valueconstantdecls">
     <xsl:text>
-extern rtl::OUString 
+extern OUString 
     </xsl:text>
     <xsl:call-template name="valuestringname">
       <xsl:with-param name="string"></xsl:with-param>
@@ -64,7 +64,7 @@ extern rtl::OUString
     <xsl:text>;</xsl:text>    
     <xsl:for-each select="//rng:value[generate-id(key('value-with-content', text())[1]) = generate-id(.)]">
       <xsl:text>
-extern rtl::OUString </xsl:text>
+extern OUString </xsl:text>
       <xsl:call-template name="valuestringname">
         <xsl:with-param name="string" select="."/>
       </xsl:call-template>

@@ -46,7 +46,7 @@ public:
 
     virtual int getInt() const;
     virtual bool getBool() const;
-    virtual ::rtl::OUString getString() const;
+    virtual OUString getString() const;
     virtual uno::Any getAny() const;
     virtual writerfilter::Reference<Properties>::Pointer_t getProperties();
     virtual writerfilter::Reference<Stream>::Pointer_t getStream();
@@ -102,7 +102,7 @@ protected:
     bool mbValue;
 public:
     explicit OOXMLBooleanValue(bool bValue);
-    explicit OOXMLBooleanValue(const rtl::OUString & rValue);
+    explicit OOXMLBooleanValue(const OUString & rValue);
     virtual ~OOXMLBooleanValue();
 
     virtual int getInt() const;
@@ -115,13 +115,13 @@ public:
 class OOXMLStringValue : public OOXMLValue
 {
 protected:
-    rtl::OUString mStr;
+    OUString mStr;
 public:
-    explicit OOXMLStringValue(const rtl::OUString & rStr);
+    explicit OOXMLStringValue(const OUString & rStr);
     virtual ~OOXMLStringValue();
 
     virtual uno::Any getAny() const;
-    virtual rtl::OUString getString() const;
+    virtual OUString getString() const;
     virtual string toString() const;
     virtual OOXMLValue * clone() const;
 };
@@ -191,7 +191,7 @@ protected:
     sal_Int32 mnValue;
 public:
     explicit OOXMLIntegerValue(sal_Int32 nValue);
-    explicit OOXMLIntegerValue(const rtl::OUString & rValue);
+    explicit OOXMLIntegerValue(const OUString & rValue);
     virtual ~OOXMLIntegerValue();
 
     virtual int getInt() const;
@@ -206,7 +206,7 @@ protected:
     sal_uInt32 mnValue;
 public:
     explicit OOXMLHexValue(sal_uInt32 nValue);
-    explicit OOXMLHexValue(const rtl::OUString & rValue);
+    explicit OOXMLHexValue(const OUString & rValue);
     virtual ~OOXMLHexValue();
 
     virtual int getInt() const;
@@ -261,7 +261,7 @@ public:
 class OOXMLPropertySetEntryToString : public Properties
 {
     Id mnId;
-    ::rtl::OUString mStr;
+    OUString mStr;
 
 public:
     OOXMLPropertySetEntryToString(Id nId);
@@ -270,7 +270,7 @@ public:
     virtual void sprm(Sprm & rSprm);
     virtual void attribute(Id nId, Value & rValue);
 
-    const ::rtl::OUString & getString() const;
+    const OUString & getString() const;
 };
 
 class OOXMLPropertySetEntryToInteger : public Properties

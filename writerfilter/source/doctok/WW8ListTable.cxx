@@ -96,7 +96,7 @@ WW8List::get_listlevel(sal_uInt32 nIndex)
         (new WW8ListLevel(mpParent, nPayloadOffset, nPayloadSize));
 }
 
-::rtl::OUString WW8ListLevel::get_xst()
+OUString WW8ListLevel::get_xst()
 {
     sal_uInt32 nOffset = WW8ListLevel::getSize();
 

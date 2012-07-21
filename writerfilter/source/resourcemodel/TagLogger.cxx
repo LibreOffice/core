@@ -123,7 +123,7 @@ namespace writerfilter
         for (int i = 0; i < aProps.getLength(); ++i)
         {
             startElement( "property" );
-            ::rtl::OUString sName(aProps[i].Name);
+            OUString sName(aProps[i].Name);
 
             attribute( "name", sName );
             try
@@ -167,7 +167,7 @@ namespace writerfilter
     }
 
 #if OSL_DEBUG_LEVEL > 1
-    void TagLogger::attribute(const string & name, const ::rtl::OUString & value)
+    void TagLogger::attribute(const string & name, const OUString & value)
     {
         attribute( name, OUStringToOString( value, RTL_TEXTENCODING_ASCII_US ).getStr() );
     }
@@ -188,7 +188,7 @@ namespace writerfilter
 
         sal_Int32 nInt = 0;
         float nFloat = 0.0;
-        ::rtl::OUString aStr;
+        OUString aStr;
 
         xmlChar* xmlName = xmlCharStrdup( name.c_str() );
         if ( aAny >>= nInt )
@@ -215,7 +215,7 @@ namespace writerfilter
         xmlFree( xmlChars );
     }
 
-    void TagLogger::chars(const ::rtl::OUString & rChars)
+    void TagLogger::chars(const OUString & rChars)
     {
         chars(OUStringToOString(rChars, RTL_TEXTENCODING_ASCII_US).getStr());
     }

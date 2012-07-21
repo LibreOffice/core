@@ -151,7 +151,7 @@ public:
 
     virtual string toString() const;
     virtual int getInt() const;
-    virtual ::rtl::OUString getString() const;
+    virtual OUString getString() const;
     virtual uno::Any getAny() const;
     virtual writerfilter::Reference<Properties>::Pointer_t getProperties();
     virtual writerfilter::Reference<Stream>::Pointer_t getStream();
@@ -167,7 +167,7 @@ public:
     virtual ~WW8IntValue() {}
 
     virtual int getInt() const;
-    virtual ::rtl::OUString getString() const;
+    virtual OUString getString() const;
     virtual uno::Any getAny() const;
 
     virtual string toString() const;
@@ -186,14 +186,14 @@ ostream & operator << (ostream & o, const WW8Value & rValue);
 
 class WW8StringValue : public WW8Value
 {
-    ::rtl::OUString mString;
+    OUString mString;
 
 public:
-    WW8StringValue(::rtl::OUString string_) : mString(string_) {}
+    WW8StringValue(OUString string_) : mString(string_) {}
     virtual ~WW8StringValue() {}
 
     virtual int getInt() const;
-    virtual ::rtl::OUString getString() const;
+    virtual OUString getString() const;
     virtual uno::Any getAny() const;
 
     virtual string toString() const;
@@ -206,7 +206,7 @@ public:
 
    @param rStr   string to create value from.
 */
-WW8Value::Pointer_t createValue(const rtl::OUString & rStr);
+WW8Value::Pointer_t createValue(const OUString & rStr);
 
 class WW8PropertiesValue : public WW8Value
 {

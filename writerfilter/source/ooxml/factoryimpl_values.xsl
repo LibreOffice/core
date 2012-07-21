@@ -56,14 +56,14 @@
   -->
   <xsl:template name="valueconstants">
     <xsl:text>
-rtl::OUString </xsl:text>
+OUString </xsl:text>
 <xsl:call-template name="valuestringname">
   <xsl:with-param name="string"></xsl:with-param>
 </xsl:call-template>
 <xsl:text>("");</xsl:text>
 <xsl:for-each select="//rng:value[generate-id(key('value-with-content', text())[1]) = generate-id(.)]">
   <xsl:text>
-rtl::OUString </xsl:text>
+OUString </xsl:text>
 <xsl:call-template name="valuestringname">
   <xsl:with-param name="string" select="."/>
 </xsl:call-template>

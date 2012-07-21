@@ -64,7 +64,7 @@
         </xsl:if>
     </xsl:for-each>
     <xsl:text>
-    virtual void charactersAction(OOXMLFastContextHandler * pHandler, const ::rtl::OUString &amp; sText);</xsl:text>
+    virtual void charactersAction(OOXMLFastContextHandler * pHandler, const OUString &amp; sText);</xsl:text>
 </xsl:template>
 
 <!-- factorydecl -->

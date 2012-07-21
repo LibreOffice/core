@@ -57,11 +57,11 @@ Element
 }
 
 void SAL_CALL OOXMLFastDocumentHandler::startUnknownElement
-(const ::rtl::OUString &
+(const OUString &
 #ifdef DEBUG_CONTEXT_STACK
 Namespace
 #endif
-, const ::rtl::OUString &
+, const OUString &
 #ifdef DEBUG_CONTEXT_STACK
 Name
 #endif
@@ -93,11 +93,11 @@ throw (uno::RuntimeException, xml::sax::SAXException)
 }
 
 void SAL_CALL OOXMLFastDocumentHandler::endUnknownElement
-(const ::rtl::OUString &
+(const OUString &
 #ifdef DEBUG_CONTEXT_STACK
 Namespace
 #endif
-, const ::rtl::OUString &
+, const OUString &
 #ifdef DEBUG_CONTEXT_STACK
 Name
 #endif
@@ -146,12 +146,12 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
 
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
 OOXMLFastDocumentHandler::createUnknownChildContext
-(const ::rtl::OUString &
+(const OUString &
 #ifdef DEBUG_CONTEXT_STACK
 Namespace
 #endif
 ,
- const ::rtl::OUString &
+ const OUString &
 #ifdef DEBUG_CONTEXT_STACK
 Name
 #endif
@@ -170,7 +170,7 @@ Name
         (new OOXMLFastDocumentHandler(m_xContext));
 }
 
-void SAL_CALL OOXMLFastDocumentHandler::characters(const ::rtl::OUString & /*aChars*/)
+void SAL_CALL OOXMLFastDocumentHandler::characters(const OUString & /*aChars*/)
     throw (uno::RuntimeException, xml::sax::SAXException)
 {
     // TODO: Insert your implementation for "characters" here.

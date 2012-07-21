@@ -343,7 +343,7 @@
 	<xsl:value-of select="$try1"/>
       </xsl:when>
       <xsl:when test="@type='OUString'">
-	<xsl:text>rtl::OUString</xsl:text>
+	<xsl:text>OUString</xsl:text>
       </xsl:when>
       <xsl:otherwise>
 	<xsl:if test="$impl='true'">

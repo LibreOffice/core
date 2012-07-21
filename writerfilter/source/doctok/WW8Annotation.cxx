@@ -22,7 +22,7 @@
 namespace writerfilter {
 namespace doctok
 {
-rtl::OUString WW8ATRD::get_xstUsrInitl()
+OUString WW8ATRD::get_xstUsrInitl()
 {
     return getString(0x0);
 }

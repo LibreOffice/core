@@ -74,7 +74,7 @@ sal_uInt32 WW8Font::get_f()
     return mnIndex;
 }
 
-rtl::OUString WW8Font::get_xszFfn()
+OUString WW8Font::get_xszFfn()
 {
     sal_uInt32 nOffset = 0x28;
     sal_uInt32 nCount = get_cbFfnM1() - nOffset;
@@ -85,10 +85,10 @@ rtl::OUString WW8Font::get_xszFfn()
     rtl_uString_newFromStr
         (&pNew, reinterpret_cast<const sal_Unicode *>(&aSeq[0]));
 
-    return rtl::OUString(pNew);
+    return OUString(pNew);
 }
 
-rtl::OUString WW8Font::get_altName()
+OUString WW8Font::get_altName()
 {
     sal_uInt32 nOffset = 0x28 + get_ixchSzAlt();
     sal_uInt32 nCount = get_cbFfnM1() - nOffset;
@@ -99,7 +99,7 @@ rtl::OUString WW8Font::get_altName()
     rtl_uString_newFromStr
         (&pNew, reinterpret_cast<const sal_Unicode *>(&aSeq[0]));
 
-    return rtl::OUString(pNew);
+    return OUString(pNew);
 }
 
 }}

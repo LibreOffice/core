@@ -35,7 +35,7 @@ OOXMLFastTokenHandler::OOXMLFastTokenHandler
 {}
 
 // ::com::sun::star::xml::sax::XFastTokenHandler:
-::sal_Int32 SAL_CALL OOXMLFastTokenHandler::getToken(const ::rtl::OUString & Identifier)
+::sal_Int32 SAL_CALL OOXMLFastTokenHandler::getToken(const OUString & Identifier)
     throw (css::uno::RuntimeException)
 {
     ::sal_Int32 nResult = OOXML_FAST_TOKENS_END;
@@ -58,17 +58,17 @@ OOXMLFastTokenHandler::OOXMLFastTokenHandler
     return nResult;
 }
 
-::rtl::OUString SAL_CALL OOXMLFastTokenHandler::getIdentifier(::sal_Int32 Token)
+OUString SAL_CALL OOXMLFastTokenHandler::getIdentifier(::sal_Int32 Token)
     throw (css::uno::RuntimeException)
 {
-    ::rtl::OUString sResult;
+    OUString sResult;
 
     if ( Token >= 0 || Token < OOXML_FAST_TOKENS_END )
     {
-        static ::rtl::OUString aTokens[OOXML_FAST_TOKENS_END];
+        static OUString aTokens[OOXML_FAST_TOKENS_END];
 
         if (aTokens[Token].getLength() == 0)
-            aTokens[Token] = ::rtl::OUString::createFromAscii
+            aTokens[Token] = OUString::createFromAscii
                 (tokenmap::wordlist[Token].name);
     }
 

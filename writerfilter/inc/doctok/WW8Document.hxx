@@ -66,7 +66,7 @@ public:
 
        @return    the substream
      */
-    virtual Pointer_t getSubStream(const ::rtl::OUString & rSid) = 0;
+    virtual Pointer_t getSubStream(const OUString & rSid) = 0;
 
     /**
        Return a continious part of the stream.
@@ -82,7 +82,7 @@ public:
     // Returns the names of substreams contained in the stream
     virtual string getSubStreamNames() const = 0;
 
-    virtual uno::Sequence<rtl::OUString> getSubStreamUNames() const = 0;
+    virtual uno::Sequence<OUString> getSubStreamUNames() const = 0;
 
     /**
        Dumps content of stream to output.

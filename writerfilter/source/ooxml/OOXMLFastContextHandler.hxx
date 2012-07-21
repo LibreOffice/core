@@ -74,8 +74,8 @@ public:
         throw (uno::RuntimeException, xml::sax::SAXException);
 
     virtual void SAL_CALL startUnknownElement
-    (const ::rtl::OUString & Namespace,
-     const ::rtl::OUString & Name,
+    (const OUString & Namespace,
+     const OUString & Name,
      const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
         throw (uno::RuntimeException, xml::sax::SAXException);
 
@@ -83,7 +83,7 @@ public:
         throw (uno::RuntimeException, xml::sax::SAXException);
 
     virtual void SAL_CALL endUnknownElement
-    (const ::rtl::OUString & Namespace, const ::rtl::OUString & Name)
+    (const OUString & Namespace, const OUString & Name)
         throw (uno::RuntimeException, xml::sax::SAXException);
 
     virtual uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
@@ -94,12 +94,12 @@ public:
 
     virtual uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
     createUnknownChildContext
-    (const ::rtl::OUString & Namespace,
-     const ::rtl::OUString & Name,
+    (const OUString & Namespace,
+     const OUString & Name,
      const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
         throw (uno::RuntimeException, xml::sax::SAXException);
 
-    virtual void SAL_CALL characters(const ::rtl::OUString & aChars)
+    virtual void SAL_CALL characters(const OUString & aChars)
         throw (uno::RuntimeException, xml::sax::SAXException);
 
     static const uno::Sequence< sal_Int8 > & getUnoTunnelId();
@@ -144,14 +144,14 @@ public:
     void resolveFootnote(const sal_Int32 nId);
     void resolveEndnote(const sal_Int32 nId);
     void resolveComment(const sal_Int32 nId);
-    void resolvePicture(const rtl::OUString & rId);
+    void resolvePicture(const OUString & rId);
     void resolveHeader(const sal_Int32 type,
-                                const rtl::OUString & rId);
+                                const OUString & rId);
     void resolveFooter(const sal_Int32 type,
-                                const rtl::OUString & rId);
-    void resolveOLE(const rtl::OUString & rId);
+                                const OUString & rId);
+    void resolveOLE(const OUString & rId);
 
-    ::rtl::OUString getTargetForId(const ::rtl::OUString & rId);
+    OUString getTargetForId(const OUString & rId);
 
     uno::Reference < xml::sax::XFastContextHandler >
     createFromStart
@@ -198,10 +198,10 @@ public:
     void softHyphen();
     void handleLastParagraphInSection();
     void endOfParagraph();
-    void text(const ::rtl::OUString & sText);
-    void positionOffset(const ::rtl::OUString & sText);
-    void alignH(const ::rtl::OUString & sText);
-    void alignV(const ::rtl::OUString & sText);
+    void text(const OUString & sText);
+    void positionOffset(const OUString & sText);
+    void alignH(const OUString & sText);
+    void alignV(const OUString & sText);
     void startTxbxContent();
     void endTxbxContent();
     virtual void propagateCharacterProperties();
@@ -263,7 +263,7 @@ protected:
      const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
         throw (uno::RuntimeException, xml::sax::SAXException);
 
-    virtual void lcl_characters(const ::rtl::OUString & aChars)
+    virtual void lcl_characters(const OUString & aChars)
         throw (uno::RuntimeException, xml::sax::SAXException);
 
     void startAction(Token_t Element);
@@ -273,7 +273,7 @@ protected:
 
 
     virtual OOXMLPropertySet * getPicturePropSet
-    (const ::rtl::OUString & rId);
+    (const OUString & rId);
     virtual void resolvePropertySetAttrs();
 
     uno::Reference< uno::XComponentContext > getComponentContext();
@@ -506,20 +506,20 @@ public:
 
     // ::com::sun::star::xml::sax::XFastContextHandler:
     virtual void SAL_CALL startUnknownElement
-    (const ::rtl::OUString & Namespace,
-     const ::rtl::OUString & Name,
+    (const OUString & Namespace,
+     const OUString & Name,
      const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
         throw (uno::RuntimeException, xml::sax::SAXException);
 
     virtual void SAL_CALL endUnknownElement
-    (const ::rtl::OUString & Namespace,
-     const ::rtl::OUString & Name)
+    (const OUString & Namespace,
+     const OUString & Name)
         throw (uno::RuntimeException, xml::sax::SAXException);
 
     virtual uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
     createUnknownChildContext
-    (const ::rtl::OUString & Namespace,
-     const ::rtl::OUString & Name,
+    (const OUString & Namespace,
+     const OUString & Name,
      const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
         throw (uno::RuntimeException, xml::sax::SAXException);
 
@@ -547,7 +547,7 @@ protected:
      const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
         throw (uno::RuntimeException, xml::sax::SAXException);
 
-    virtual void lcl_characters(const ::rtl::OUString & aChars)
+    virtual void lcl_characters(const OUString & aChars)
                 throw (uno::RuntimeException, xml::sax::SAXException);
 
 };
@@ -569,20 +569,20 @@ public:
 
     // ::com::sun::star::xml::sax::XFastContextHandler:
     virtual void SAL_CALL startUnknownElement
-    (const ::rtl::OUString & Namespace,
-     const ::rtl::OUString & Name,
+    (const OUString & Namespace,
+     const OUString & Name,
      const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
         throw (uno::RuntimeException, xml::sax::SAXException);
 
     virtual void SAL_CALL endUnknownElement
-    (const ::rtl::OUString & Namespace,
-     const ::rtl::OUString & Name)
+    (const OUString & Namespace,
+     const OUString & Name)
         throw (uno::RuntimeException, xml::sax::SAXException);
 
     virtual uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
     createUnknownChildContext
-    (const ::rtl::OUString & Namespace,
-     const ::rtl::OUString & Name,
+    (const OUString & Namespace,
+     const OUString & Name,
      const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
         throw (uno::RuntimeException, xml::sax::SAXException);
 
@@ -616,7 +616,7 @@ protected:
      const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
         throw (uno::RuntimeException, xml::sax::SAXException);
 
-    virtual void lcl_characters(const ::rtl::OUString & aChars)
+    virtual void lcl_characters(const OUString & aChars)
                 throw (uno::RuntimeException, xml::sax::SAXException);
 
     virtual void setId(Id nId);
@@ -675,7 +675,7 @@ protected:
         const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
         throw (uno::RuntimeException, xml::sax::SAXException);
 
-    virtual void lcl_characters(const ::rtl::OUString & aChars) throw (uno::RuntimeException, xml::sax::SAXException);
+    virtual void lcl_characters(const OUString & aChars) throw (uno::RuntimeException, xml::sax::SAXException);
 
     // should be private, but not much point in making deep copies of it
     oox::formulaimport::XmlStreamBuilder buffer;

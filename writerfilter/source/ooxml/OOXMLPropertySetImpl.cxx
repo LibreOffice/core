@@ -196,9 +196,9 @@ int OOXMLValue::getInt() const
     return 0;
 }
 
-::rtl::OUString OOXMLValue::getString() const
+OUString OOXMLValue::getString() const
 {
-    return ::rtl::OUString();
+    return OUString();
 }
 
 uno::Any OOXMLValue::getAny() const
@@ -269,7 +269,7 @@ OOXMLBooleanValue::OOXMLBooleanValue(bool bValue)
 {
 }
 
-OOXMLBooleanValue::OOXMLBooleanValue(const rtl::OUString & rValue)
+OOXMLBooleanValue::OOXMLBooleanValue(const OUString & rValue)
 : mbValue(false)
 {
     mbValue = (rValue == "true"
@@ -314,7 +314,7 @@ OOXMLValue * OOXMLBooleanValue::clone() const
   class OOXMLStringValue
 */
 
-OOXMLStringValue::OOXMLStringValue(const rtl::OUString & rStr)
+OOXMLStringValue::OOXMLStringValue(const OUString & rStr)
 : mStr(rStr)
 {
 }
@@ -330,7 +330,7 @@ uno::Any OOXMLStringValue::getAny() const
     return aAny;
 }
 
-rtl::OUString OOXMLStringValue::getString() const
+OUString OOXMLStringValue::getString() const
 {
     return mStr;
 }
@@ -576,7 +576,7 @@ OOXMLIntegerValue::OOXMLIntegerValue(sal_Int32 nValue)
 {
 }
 
-OOXMLIntegerValue::OOXMLIntegerValue(const rtl::OUString & rValue)
+OOXMLIntegerValue::OOXMLIntegerValue(const OUString & rValue)
 : mnValue(0)
 {
     mnValue = rValue.toInt32();
@@ -620,7 +620,7 @@ OOXMLHexValue::OOXMLHexValue(sal_uInt32 nValue)
 {
 }
 
-OOXMLHexValue::OOXMLHexValue(const rtl::OUString & rValue)
+OOXMLHexValue::OOXMLHexValue(const OUString & rValue)
 {
     mnValue = static_cast<sal_uInt32>(rValue.toInt32(16));
 }
@@ -782,7 +782,7 @@ void OOXMLPropertySetEntryToString::attribute(Id nId, Value & rValue)
         mStr = rValue.getString();
 }
 
-const ::rtl::OUString & OOXMLPropertySetEntryToString::getString() const
+const OUString & OOXMLPropertySetEntryToString::getString() const
 {
     return mStr;
 }

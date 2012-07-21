@@ -62,7 +62,7 @@ WW8StyleSheet::getEntry(sal_uInt32 nIndex)
     return pResult;
 }
 
-rtl::OUString WW8Style::get_xstzName()
+OUString WW8Style::get_xstzName()
 {
     sal_uInt32 nCount = getU8(0xc);
 
@@ -74,14 +74,14 @@ rtl::OUString WW8Style::get_xstzName()
         rtl_uString_newFromStr
             (&pNew, reinterpret_cast<const sal_Unicode *>(&aSeq[0]));
 
-        return rtl::OUString(pNew);
+        return OUString(pNew);
 
     }
 
     return get_xstzName1();
 }
 
-rtl::OUString WW8Style::get_xstzName1()
+OUString WW8Style::get_xstzName1()
 {
     WW8StyleSheet * pParentStyleSheet = dynamic_cast<WW8StyleSheet *>(mpParent);
 
@@ -101,13 +101,13 @@ rtl::OUString WW8Style::get_xstzName1()
                 rtl_uString_newFromStr
                     (&pNew, reinterpret_cast<const sal_Unicode *>(&aSeq[0]));
 
-                return rtl::OUString(pNew);
+                return OUString(pNew);
 
             }
         }
     }
 
-    return rtl::OUString();
+    return OUString();
 }
 
 sal_uInt32 WW8Style::get_upxstart()

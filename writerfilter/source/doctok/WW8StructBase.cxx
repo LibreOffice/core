@@ -90,10 +90,10 @@ sal_uInt32 getU32(const WW8StructBase::Sequence & rSeq,
     return nResult;
 }
 
-rtl::OUString WW8StructBase::getString(sal_uInt32 nOffset, sal_uInt32 nCount)
+OUString WW8StructBase::getString(sal_uInt32 nOffset, sal_uInt32 nCount)
     const
 {
-    rtl::OUString aResult;
+    OUString aResult;
 
     if (nOffset < getCount())
     {
@@ -112,7 +112,7 @@ rtl::OUString WW8StructBase::getString(sal_uInt32 nOffset, sal_uInt32 nCount)
             (&pNew, reinterpret_cast<const sal_Unicode *>(&aSeq[0]),
              nCount1);
 
-            aResult = rtl::OUString(pNew);
+            aResult = OUString(pNew);
         }
     }
 
@@ -134,7 +134,7 @@ WW8StructBase::getRemainder(sal_uInt32 nOffset) const
 }
 
 
-rtl::OUString WW8StructBase::getString(sal_uInt32 nOffset) const
+OUString WW8StructBase::getString(sal_uInt32 nOffset) const
 {
     sal_uInt32 nCount = getU16(nOffset);
 

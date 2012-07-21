@@ -47,14 +47,14 @@ public:
 
     static void newProperty(OOXMLFastContextHandler * pHandler,
                             Id nId,
-                            const ::rtl::OUString & rValue);
+                            const OUString & rValue);
 
     static void newProperty(OOXMLFastContextHandler * pHandler,
                             Id nId, sal_Int32 nValue);
 
     static void mark(OOXMLFastContextHandler * pHandler,
                      Id nId,
-                     const ::rtl::OUString & rValue);
+                     const OUString & rValue);
 
     static void attributes
     (OOXMLFastContextHandler * pContext,
@@ -168,7 +168,7 @@ OOXMLFastHelper<T>::createAndSetParentRef
 template <class T>
 void OOXMLFastHelper<T>::newProperty(OOXMLFastContextHandler * pHandler,
                                      Id nId,
-                                     const ::rtl::OUString & rValue)
+                                     const OUString & rValue)
 {
     OOXMLValue::Pointer_t pVal(new T(rValue));
 
@@ -179,7 +179,7 @@ void OOXMLFastHelper<T>::newProperty(OOXMLFastContextHandler * pHandler,
     debug_logger->attribute("name", aStr);
     debug_logger->attribute
         ("value",
-         ::rtl::OUStringToOString
+         OUStringToOString
          (rValue, RTL_TEXTENCODING_ASCII_US).getStr());
 
     if (aStr.empty())
@@ -220,7 +220,7 @@ void OOXMLFastHelper<T>::newProperty(OOXMLFastContextHandler * pHandler,
 template <class T>
 void OOXMLFastHelper<T>::mark(OOXMLFastContextHandler * pHandler,
                               Id nId,
-                              const ::rtl::OUString & rValue)
+                              const OUString & rValue)
 {
     OOXMLValue::Pointer_t pVal(new T(rValue));
 
@@ -231,7 +231,7 @@ void OOXMLFastHelper<T>::mark(OOXMLFastContextHandler * pHandler,
     debug_logger->attribute("name", aStr);
     debug_logger->attribute
     ("value",
-     ::rtl::OUStringToOString
+     OUStringToOString
      (rValue, RTL_TEXTENCODING_ASCII_US).getStr());
 
     if (aStr.empty())

@@ -222,7 +222,7 @@ public:
 
        @return  the string
      */
-    rtl::OUString getString(sal_uInt32 nOffset) const;
+    OUString getString(sal_uInt32 nOffset) const;
 
     /**
        Returns binary object for remainder of this WW8StructBase
@@ -238,7 +238,7 @@ public:
        @param nOffset     offset the string starts at
        @param nLength     number of characters in the string
      */
-    rtl::OUString getString(sal_uInt32 nOffset, sal_uInt32) const;
+    OUString getString(sal_uInt32 nOffset, sal_uInt32) const;
 
     /**
        Dump the part.

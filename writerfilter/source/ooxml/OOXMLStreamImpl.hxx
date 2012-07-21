@@ -44,15 +44,15 @@ class OOXMLStreamImpl : public OOXMLStream
 
     StreamType_t mnStreamType;
 
-    rtl::OUString msId;
-    rtl::OUString msPath;
-    rtl::OUString msTarget;
+    OUString msId;
+    OUString msPath;
+    OUString msTarget;
 
     bool lcl_getTarget(uno::Reference<embed::XRelationshipAccess>
                        xRelationshipAccess,
                        StreamType_t nStreamType,
-                       const ::rtl::OUString & rId,
-                       ::rtl::OUString & rDocumentTarget);
+                       const OUString & rId,
+                       OUString & rDocumentTarget);
 public:
     typedef boost::shared_ptr<OOXMLStreamImpl> Pointer_t;
 
@@ -62,7 +62,7 @@ public:
     (uno::Reference<uno::XComponentContext> xContext,
      uno::Reference<io::XInputStream> xStorageStream,
      StreamType_t nType);
-    OOXMLStreamImpl(OOXMLStreamImpl & rStream, const rtl::OUString & rId);
+    OOXMLStreamImpl(OOXMLStreamImpl & rStream, const OUString & rId);
 
     virtual ~OOXMLStreamImpl();
 
@@ -71,8 +71,8 @@ public:
     virtual uno::Reference<io::XInputStream> getDocumentStream();
     virtual uno::Reference<io::XInputStream> getStorageStream();
     virtual uno::Reference<uno::XComponentContext> getContext();
-    virtual ::rtl::OUString getTargetForId(const ::rtl::OUString & rId);
-    virtual const ::rtl::OUString & getTarget() const;
+    virtual OUString getTargetForId(const OUString & rId);
+    virtual const OUString & getTarget() const;
 
     virtual uno::Reference<xml::sax::XFastTokenHandler>
     getFastTokenHandler(uno::Reference<uno::XComponentContext> rContext);

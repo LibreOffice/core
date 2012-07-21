@@ -609,7 +609,7 @@ CreateElementMapPointer </xsl:text>
     <xsl:text> pHandler</xsl:text>
   </xsl:if>
   <xsl:if test="$action='characters'">
-    <xsl:text>, const ::rtl::OUString &amp;</xsl:text>
+    <xsl:text>, const OUString &amp;</xsl:text>
     <xsl:if test="contains($switchblock1, 'sText') or contains($switchblock2, 'sText')">
       <xsl:text> sText</xsl:text>
     </xsl:if>

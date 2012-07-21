@@ -195,7 +195,7 @@ void SAL_CALL OOXMLFastContextHandler::startFastElement
 }
 
 void SAL_CALL OOXMLFastContextHandler::startUnknownElement
-(const ::rtl::OUString & Namespace, const ::rtl::OUString & Name,
+(const OUString & Namespace, const OUString & Name,
  const uno::Reference< xml::sax::XFastAttributeList > & /*Attribs*/)
 throw (uno::RuntimeException, xml::sax::SAXException)
 {
@@ -250,7 +250,7 @@ void OOXMLFastContextHandler::lcl_endFastElement
 }
 
 void SAL_CALL OOXMLFastContextHandler::endUnknownElement
-(const ::rtl::OUString & , const ::rtl::OUString & )
+(const OUString & , const OUString & )
 throw (uno::RuntimeException, xml::sax::SAXException)
 {
 #ifdef DEBUG_CONTEXT_HANDLER
@@ -292,8 +292,8 @@ uno::Reference< xml::sax::XFastContextHandler >
 
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
 OOXMLFastContextHandler::createUnknownChildContext
-(const ::rtl::OUString & Namespace,
- const ::rtl::OUString & Name,
+(const OUString & Namespace,
+ const OUString & Name,
  const uno::Reference< xml::sax::XFastAttributeList > & /*Attribs*/)
     throw (uno::RuntimeException, xml::sax::SAXException)
 {
@@ -312,14 +312,14 @@ OOXMLFastContextHandler::createUnknownChildContext
 }
 
 void SAL_CALL OOXMLFastContextHandler::characters
-(const ::rtl::OUString & aChars)
+(const OUString & aChars)
     throw (uno::RuntimeException, xml::sax::SAXException)
 {
     lcl_characters(aChars);
 }
 
 void OOXMLFastContextHandler::lcl_characters
-(const ::rtl::OUString & rString)
+(const OUString & rString)
 throw (uno::RuntimeException, xml::sax::SAXException)
 {
     OOXMLFactory::getInstance()->characters(this, rString);
@@ -496,7 +496,7 @@ void OOXMLFastContextHandler::setParent
 }
 
 OOXMLPropertySet * OOXMLFastContextHandler::getPicturePropSet
-(const ::rtl::OUString & rId)
+(const OUString & rId)
 {
     return dynamic_cast<OOXMLDocumentImpl *>(mpParserState->getDocument())->
         getPicturePropSet(rId);
@@ -831,7 +831,7 @@ void OOXMLFastContextHandler::endTxbxContent()
     mpParserState->endTxbxContent();
 }
 
-void OOXMLFastContextHandler::text(const ::rtl::OUString & sText)
+void OOXMLFastContextHandler::text(const OUString & sText)
 {
 #ifdef DEBUG_CONTEXT_HANDLER
     debug_logger->startElement("contexthandler.text");
@@ -854,7 +854,7 @@ void OOXMLFastContextHandler::text(const ::rtl::OUString & sText)
  is done sooner than lcl_sprms() actually results in processing the tags it is enclosed
  in, so the values are stored in PositionHandler for later use.
 */
-void OOXMLFastContextHandler::positionOffset(const ::rtl::OUString & sText)
+void OOXMLFastContextHandler::positionOffset(const OUString & sText)
 {
 #ifdef DEBUG_ELEMENT
     debug_logger->startElement("positionOffset");
@@ -865,7 +865,7 @@ void OOXMLFastContextHandler::positionOffset(const ::rtl::OUString & sText)
         ::writerfilter::dmapper::PositionHandler::setPositionOffset( sText, inPositionV );
 }
 
-void OOXMLFastContextHandler::alignH(const ::rtl::OUString & sText)
+void OOXMLFastContextHandler::alignH(const OUString & sText)
 {
 #ifdef DEBUG_ELEMENT
     debug_logger->startElement("alignH");
@@ -876,7 +876,7 @@ void OOXMLFastContextHandler::alignH(const ::rtl::OUString & sText)
         ::writerfilter::dmapper::PositionHandler::setAlignH( sText );
 }
 
-void OOXMLFastContextHandler::alignV(const ::rtl::OUString & sText)
+void OOXMLFastContextHandler::alignV(const OUString & sText)
 {
 #ifdef DEBUG_ELEMENT
     debug_logger->startElement("alignV");
@@ -1115,24 +1115,24 @@ void OOXMLFastContextHandler::resolveComment(const sal_Int32 nId)
     mpParserState->getDocument()->resolveComment(*mpStream, nId);
 }
 
-void OOXMLFastContextHandler::resolvePicture(const rtl::OUString & rId)
+void OOXMLFastContextHandler::resolvePicture(const OUString & rId)
 {
     mpParserState->getDocument()->resolvePicture(*mpStream, rId);
 }
 
 void OOXMLFastContextHandler::resolveHeader
-(const sal_Int32 type, const rtl::OUString & rId)
+(const sal_Int32 type, const OUString & rId)
 {
     mpParserState->getDocument()->resolveHeader(*mpStream, type, rId);
 }
 
 void OOXMLFastContextHandler::resolveFooter
-(const sal_Int32 type, const rtl::OUString & rId)
+(const sal_Int32 type, const OUString & rId)
 {
     mpParserState->getDocument()->resolveFooter(*mpStream, type, rId);
 }
 
-void OOXMLFastContextHandler::resolveOLE(const rtl::OUString & rId)
+void OOXMLFastContextHandler::resolveOLE(const OUString & rId)
 {
     uno::Reference<io::XInputStream> xInputStream
         (mpParserState->getDocument()->getInputStreamForId(rId));
@@ -1142,8 +1142,8 @@ void OOXMLFastContextHandler::resolveOLE(const rtl::OUString & rId)
     newProperty(NS_ooxml::LN_inputstream, aValue);
 }
 
-::rtl::OUString OOXMLFastContextHandler::getTargetForId
-(const ::rtl::OUString & rId)
+OUString OOXMLFastContextHandler::getTargetForId
+(const OUString & rId)
 {
     return mpParserState->getDocument()->getTargetForId(rId);
 }
@@ -1248,7 +1248,7 @@ void OOXMLFastContextHandlerStream::sendProperty(Id nId)
 
     OOXMLPropertySetEntryToString aHandler(nId);
     getPropertySetAttrs()->resolve(aHandler);
-    const ::rtl::OUString & sText = aHandler.getString();
+    const OUString & sText = aHandler.getString();
     mpStream->utext(reinterpret_cast < const sal_uInt8 * >
                     (sText.getStr()),
                     sText.getLength());
@@ -1602,7 +1602,7 @@ void OOXMLFastContextHandlerValue::setDefaultStringValue()
 
     if (mpValue.get() == NULL)
     {
-        OOXMLValue::Pointer_t pValue(new OOXMLStringValue(::rtl::OUString()));
+        OOXMLValue::Pointer_t pValue(new OOXMLStringValue(OUString()));
         setValue(pValue);
     }
 }
@@ -1964,8 +1964,8 @@ void OOXMLFastContextHandlerShape::lcl_startFastElement
 }
 
 void SAL_CALL OOXMLFastContextHandlerShape::startUnknownElement
-(const ::rtl::OUString & Namespace,
- const ::rtl::OUString & Name,
+(const OUString & Namespace,
+ const OUString & Name,
  const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
     throw (uno::RuntimeException, xml::sax::SAXException)
 {
@@ -2024,8 +2024,8 @@ void OOXMLFastContextHandlerShape::lcl_endFastElement
 }
 
 void SAL_CALL OOXMLFastContextHandlerShape::endUnknownElement
-(const ::rtl::OUString & Namespace,
- const ::rtl::OUString & Name)
+(const OUString & Namespace,
+ const OUString & Name)
     throw (uno::RuntimeException, xml::sax::SAXException)
 {
     if (mrShapeContext.is())
@@ -2076,8 +2076,8 @@ OOXMLFastContextHandlerShape::lcl_createFastChildContext
 
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
 OOXMLFastContextHandlerShape::createUnknownChildContext
-(const ::rtl::OUString & Namespace,
- const ::rtl::OUString & Name,
+(const OUString & Namespace,
+ const OUString & Name,
  const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
     throw (uno::RuntimeException, xml::sax::SAXException)
 {
@@ -2091,7 +2091,7 @@ OOXMLFastContextHandlerShape::createUnknownChildContext
 }
 
 void OOXMLFastContextHandlerShape::lcl_characters
-(const ::rtl::OUString & aChars)
+(const OUString & aChars)
     throw (uno::RuntimeException, xml::sax::SAXException)
 {
     if (mrShapeContext.is())
@@ -2120,8 +2120,8 @@ OOXMLFastContextHandlerWrapper::~OOXMLFastContextHandlerWrapper()
 }
 
 void SAL_CALL OOXMLFastContextHandlerWrapper::startUnknownElement
-(const ::rtl::OUString & Namespace,
- const ::rtl::OUString & Name,
+(const OUString & Namespace,
+ const OUString & Name,
  const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
     throw (uno::RuntimeException, xml::sax::SAXException)
 {
@@ -2130,8 +2130,8 @@ void SAL_CALL OOXMLFastContextHandlerWrapper::startUnknownElement
 }
 
 void SAL_CALL OOXMLFastContextHandlerWrapper::endUnknownElement
-(const ::rtl::OUString & Namespace,
- const ::rtl::OUString & Name)
+(const OUString & Namespace,
+ const OUString & Name)
     throw (uno::RuntimeException, xml::sax::SAXException)
 {
     if (mxContext.is())
@@ -2140,8 +2140,8 @@ void SAL_CALL OOXMLFastContextHandlerWrapper::endUnknownElement
 
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
 OOXMLFastContextHandlerWrapper::createUnknownChildContext
-(const ::rtl::OUString & Namespace,
- const ::rtl::OUString & Name,
+(const OUString & Namespace,
+ const OUString & Name,
  const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
     throw (uno::RuntimeException, xml::sax::SAXException)
 {
@@ -2259,7 +2259,7 @@ OOXMLFastContextHandlerWrapper::lcl_createFastChildContext
 }
 
 void OOXMLFastContextHandlerWrapper::lcl_characters
-(const ::rtl::OUString & aChars)
+(const OUString & aChars)
     throw (uno::RuntimeException, xml::sax::SAXException)
 {
     if (mxContext.is())
@@ -2419,7 +2419,7 @@ OOXMLFastContextHandlerLinear::lcl_createFastChildContext(Token_t,
     return xContextHandler;
 }
 
-void OOXMLFastContextHandlerLinear::lcl_characters(const ::rtl::OUString& aChars)
+void OOXMLFastContextHandlerLinear::lcl_characters(const OUString& aChars)
     throw (uno::RuntimeException, xml::sax::SAXException)
 {
     buffer.appendCharacters( aChars );
@@ -2438,7 +2438,7 @@ void OOXMLFastContextHandlerMath::process()
 {
     SvGlobalName name( SO3_SM_CLASSID );
     comphelper::EmbeddedObjectContainer container;
-    rtl::OUString aName;
+    OUString aName;
     uno::Reference< embed::XEmbeddedObject > ref = container.CreateEmbeddedObject( name.GetByteSequence(), aName );
     uno::Reference< uno::XInterface > component( ref->getComponent(), uno::UNO_QUERY );
     if( oox::FormulaImportBase* import = dynamic_cast< oox::FormulaImportBase* >( component.get()))
