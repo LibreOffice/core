@@ -178,7 +178,7 @@ TeleConference* TeleManager::getConference()
 
 bool TeleManager::hasWaitingConference()
 {
-    return !pImpl->msCurrentUUID.isEmpty();
+    return pImpl && !pImpl->msCurrentUUID.isEmpty();
 }
 
 void TeleManager::setCurrentUuid( const OString& rUuid )
