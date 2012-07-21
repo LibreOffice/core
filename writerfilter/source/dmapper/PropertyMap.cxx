@@ -121,7 +121,7 @@ static void lcl_AnyToTag(const uno::Any & rAny)
         rAny >>= aFloat;
         dmapper_logger->attribute("floatValue", aFloat);
 
-        ::rtl::OUString aStr;
+        OUString aStr;
         rAny >>= aStr;
         dmapper_logger->attribute("stringValue", aStr);
     }
@@ -133,7 +133,7 @@ static void lcl_AnyToTag(const uno::Any & rAny)
 void PropertyMap::Insert( PropertyIds eId, bool bIsTextProperty, const uno::Any& rAny, bool bOverwrite )
 {
 #ifdef DEBUG_DMAPPER_PROPERTY_MAP
-    const ::rtl::OUString& rInsert = PropertyNameSupplier::
+    const OUString& rInsert = PropertyNameSupplier::
         GetPropertyNameSupplier().GetName(eId);
 
     dmapper_logger->startElement("propertyMap.insert");
@@ -188,7 +188,7 @@ void PropertyMap::dumpXml( const TagLogger::Pointer_t pLogger ) const
                     aMapIter->second >>= aFloat;
                     pLogger->attribute("floatValue", aFloat);
 
-                    ::rtl::OUString aStr;
+                    OUString aStr;
                     aMapIter->second >>= auInt;
                     pLogger->attribute("stringValue", aStr);
                 }
@@ -325,16 +325,16 @@ SectionPropertyMap::~SectionPropertyMap()
 }
 
 
-::rtl::OUString lcl_FindUnusedPageStyleName(const uno::Sequence< ::rtl::OUString >& rPageStyleNames)
+OUString lcl_FindUnusedPageStyleName(const uno::Sequence< OUString >& rPageStyleNames)
 {
     static const sal_Char cDefaultStyle[] = "Converted";
     //find the hightest number x in each style with the name "cDefaultStyle+x" and
     //return an incremented name
     sal_Int32 nMaxIndex = 0;
     const sal_Int32 nDefaultLength = sizeof(cDefaultStyle)/sizeof(sal_Char) - 1;
-    const ::rtl::OUString sDefaultStyle( cDefaultStyle, nDefaultLength, RTL_TEXTENCODING_ASCII_US );
+    const OUString sDefaultStyle( cDefaultStyle, nDefaultLength, RTL_TEXTENCODING_ASCII_US );
 
-    const ::rtl::OUString* pStyleNames = rPageStyleNames.getConstArray();
+    const OUString* pStyleNames = rPageStyleNames.getConstArray();
     for( sal_Int32 nStyle = 0; nStyle < rPageStyleNames.getLength(); ++nStyle)
     {
         if( pStyleNames[nStyle].getLength() > nDefaultLength &&
@@ -345,8 +345,8 @@ SectionPropertyMap::~SectionPropertyMap()
                 nMaxIndex = nIndex;
         }
     }
-    ::rtl::OUString sRet( sDefaultStyle );
-    sRet += rtl::OUString::valueOf( nMaxIndex + 1);
+    OUString sRet( sDefaultStyle );
+    sRet += OUString::valueOf( nMaxIndex + 1);
     return sRet;
 }
 
@@ -364,7 +364,7 @@ uno::Reference< beans::XPropertySet > SectionPropertyMap::GetPageStyle(
         {
             if( m_sFirstPageStyleName.isEmpty() && xPageStyles.is() )
             {
-                uno::Sequence< ::rtl::OUString > aPageStyleNames = xPageStyles->getElementNames();
+                uno::Sequence< OUString > aPageStyleNames = xPageStyles->getElementNames();
                 m_sFirstPageStyleName = lcl_FindUnusedPageStyleName(aPageStyleNames);
                 m_aFirstPageStyle = uno::Reference< beans::XPropertySet > (
                         xTextFactory->createInstance("com.sun.star.style.PageStyle"),
@@ -382,7 +382,7 @@ uno::Reference< beans::XPropertySet > SectionPropertyMap::GetPageStyle(
         {
             if( m_sFollowPageStyleName.isEmpty() && xPageStyles.is() )
             {
-                uno::Sequence< ::rtl::OUString > aPageStyleNames = xPageStyles->getElementNames();
+                uno::Sequence< OUString > aPageStyleNames = xPageStyles->getElementNames();
                 m_sFollowPageStyleName = lcl_FindUnusedPageStyleName(aPageStyleNames);
                 m_aFollowPageStyle = uno::Reference< beans::XPropertySet > (
                         xTextFactory->createInstance("com.sun.star.style.PageStyle"),
@@ -484,7 +484,7 @@ void SectionPropertyMap::ApplyBorderToPageStyles(
     {
         if( m_pBorderLines[nBorder] )
         {
-            const ::rtl::OUString sBorderName = rPropNameSupplier.GetName( aBorderIds[nBorder] );
+            const OUString sBorderName = rPropNameSupplier.GetName( aBorderIds[nBorder] );
             if (xFirst.is())
                 xFirst->setPropertyValue( sBorderName, uno::makeAny( *m_pBorderLines[nBorder] ));
             if(xSecond.is())
@@ -512,7 +512,7 @@ void SectionPropertyMap::SetBorderDistance( uno::Reference< beans::XPropertySet 
     sal_Int32 nDist = nDistance;
     if( nOffsetFrom == 1 )
     {
-        const ::rtl::OUString sMarginName = rPropNameSupplier.GetName( eMarginId );
+        const OUString sMarginName = rPropNameSupplier.GetName( eMarginId );
         uno::Any aMargin = xStyle->getPropertyValue( sMarginName );
         sal_Int32 nMargin = 0;
         aMargin >>= nMargin;
@@ -523,7 +523,7 @@ void SectionPropertyMap::SetBorderDistance( uno::Reference< beans::XPropertySet 
         // Set the distance to ( Margin - distance )
         nDist = nMargin - nDistance;
     }
-    const ::rtl::OUString sBorderDistanceName = rPropNameSupplier.GetName( eDistId );
+    const OUString sBorderDistanceName = rPropNameSupplier.GetName( eDistId );
     if (xStyle.is())
         xStyle->setPropertyValue( sBorderDistanceName, uno::makeAny( nDist ));
 }
@@ -537,7 +537,7 @@ uno::Reference< text::XTextColumns > SectionPropertyMap::ApplyColumnProperties(
     try
     {
         PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
-        const ::rtl::OUString sTextColumns = rPropNameSupplier.GetName( PROP_TEXT_COLUMNS );
+        const OUString sTextColumns = rPropNameSupplier.GetName( PROP_TEXT_COLUMNS );
         if (xColumnContainer.is())
             xColumnContainer->getPropertyValue(sTextColumns) >>= xColumns;
         uno::Reference< beans::XPropertySet > xColumnPropSet( xColumns, uno::UNO_QUERY_THROW );
@@ -655,7 +655,7 @@ void SectionPropertyMap::CopyLastHeaderFooter( bool bFirstPage, DomainMapper_Imp
             bool bHasPrevHeader = false;
             bool bHasHeader = false;
 
-            rtl::OUString sHeaderIsOn = rPropNameSupplier.GetName( PROP_HEADER_IS_ON );
+            OUString sHeaderIsOn = rPropNameSupplier.GetName( PROP_HEADER_IS_ON );
             if (xPrevStyle.is())
                 xPrevStyle->getPropertyValue( sHeaderIsOn ) >>= bHasPrevHeader;
             if (xStyle.is())
@@ -668,7 +668,7 @@ void SectionPropertyMap::CopyLastHeaderFooter( bool bFirstPage, DomainMapper_Imp
             bool bHasPrevFooter = false;
             bool bHasFooter = false;
 
-            rtl::OUString sFooterIsOn = rPropNameSupplier.GetName( PROP_FOOTER_IS_ON );
+            OUString sFooterIsOn = rPropNameSupplier.GetName( PROP_FOOTER_IS_ON );
             if (xPrevStyle.is())
                 xPrevStyle->getPropertyValue( sFooterIsOn ) >>= bHasPrevFooter;
             if (xStyle.is())
@@ -683,7 +683,7 @@ void SectionPropertyMap::CopyLastHeaderFooter( bool bFirstPage, DomainMapper_Imp
             {
                 bool bIsHeader = ( i < nNbProps / 2 );
                 PropertyIds aPropId = aProperties[i];
-                rtl::OUString sName = rPropNameSupplier.GetName( aPropId );
+                OUString sName = rPropNameSupplier.GetName( aPropId );
 
                 if ( ( bIsHeader && bCopyHeader ) || ( !bIsHeader && bCopyFooter ) )
                 {
@@ -877,7 +877,7 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
         CopyLastHeaderFooter( false, rDM_Impl );
         PrepareHeaderFooterProperties( false );
 
-        const ::rtl::OUString sTrayIndex = rPropNameSupplier.GetName( PROP_PRINTER_PAPER_TRAY_INDEX );
+        const OUString sTrayIndex = rPropNameSupplier.GetName( PROP_PRINTER_PAPER_TRAY_INDEX );
         if( m_nPaperBin >= 0 )
             xFollowPageStyle->setPropertyValue( sTrayIndex, uno::makeAny( m_nPaperBin ) );
         uno::Reference< text::XTextColumns > xColumns;
@@ -911,7 +911,7 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
 
         sal_Int32 nCharWidth = 423; //240 twip/ 12 pt
         //todo: is '0' the right index here?
-        const StyleSheetEntryPtr pEntry = rDM_Impl.GetStyleSheetTable()->FindStyleSheetByISTD(::rtl::OUString::valueOf(static_cast<sal_Int32>(0), 16));
+        const StyleSheetEntryPtr pEntry = rDM_Impl.GetStyleSheetTable()->FindStyleSheetByISTD(OUString::valueOf(static_cast<sal_Int32>(0), 16));
         if( pEntry.get( ) )
         {
             PropertyMap::iterator aElement_ = pEntry->pProperties->find(PropertyDefinition( PROP_CHAR_HEIGHT_ASIAN, false ));
@@ -1020,7 +1020,7 @@ void SectionPropertyMap::_ApplyProperties( uno::Reference< beans::XPropertySet >
             uno::UNO_QUERY);
     if (xMultiSet.is())
     {   // FIXME why is "this" a STL container???
-        uno::Sequence<rtl::OUString> names(this->size());
+        uno::Sequence<OUString> names(this->size());
         uno::Sequence<uno::Any> values(this->size());
         PropertyMap::iterator it = this->begin();
         for (size_t i = 0; it != this->end(); ++it, ++i)

@@ -16,14 +16,14 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#include "PropertyIds.hxx"
 #include <rtl/ustring.hxx>
+#include "PropertyIds.hxx"
 #include <map>
 
 namespace writerfilter {
 namespace dmapper{
 
-typedef ::std::map< PropertyIds, ::rtl::OUString> PropertyNameMap_t;
+typedef ::std::map< PropertyIds, OUString> PropertyNameMap_t;
 
 struct PropertyNameSupplier_Impl
 {
@@ -44,12 +44,12 @@ PropertyNameSupplier::~PropertyNameSupplier()
 }
 
 
-const rtl::OUString& PropertyNameSupplier::GetName( PropertyIds eId ) const
+const OUString& PropertyNameSupplier::GetName( PropertyIds eId ) const
 {
     PropertyNameMap_t::iterator aIt = m_pImpl->aNameMap.find(eId);
     if(aIt == m_pImpl->aNameMap.end())
     {
-        ::rtl::OUString sName;
+        OUString sName;
         switch(eId)
         {
             case PROP_CHAR_WEIGHT:     sName = "CharWeight"; break;

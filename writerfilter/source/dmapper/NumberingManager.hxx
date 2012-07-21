@@ -49,9 +49,9 @@ class ListLevel : public PropertyMap
     sal_Int32                                     m_nFPrev;          //LN_FPREV
     sal_Int32                                     m_nFPrevSpace;     //LN_FPREVSPACE
     sal_Int32                                     m_nFWord6;         //LN_FWORD6
-    ::rtl::OUString                               m_sRGBXchNums;     //LN_RGBXCHNUMS
+    OUString                               m_sRGBXchNums;     //LN_RGBXCHNUMS
     sal_Int16                                     m_nXChFollow;      //LN_IXCHFOLLOW
-    ::rtl::OUString                               m_sBulletChar;
+    OUString                               m_sBulletChar;
     sal_Int32                                     m_nTabstop;
     boost::shared_ptr< StyleSheetEntry >          m_pParaStyle;
     bool                                          m_outline;
@@ -78,20 +78,20 @@ public:
 
     // Setters for the import
     void SetValue( Id nId, sal_Int32 nValue );
-    void SetBulletChar( rtl::OUString sValue ) { m_sBulletChar = sValue; };
+    void SetBulletChar( OUString sValue ) { m_sBulletChar = sValue; };
     void SetParaStyle( boost::shared_ptr< StyleSheetEntry > pStyle );
-    void AddRGBXchNums( rtl::OUString sValue ) { m_sRGBXchNums += sValue; };
+    void AddRGBXchNums( OUString sValue ) { m_sRGBXchNums += sValue; };
 
     // Getters
-    rtl::OUString GetBulletChar( ) { return m_sBulletChar; };
+    OUString GetBulletChar( ) { return m_sBulletChar; };
     boost::shared_ptr< StyleSheetEntry > GetParaStyle( ) { return m_pParaStyle; };
     bool isOutlineNumbering() const { return m_outline; }
 
     // UNO mapping functions
 
     // rPrefix and rSuffix are out parameters
-    static sal_Int16 GetParentNumbering( rtl::OUString sText, sal_Int16 nLevel,
-        rtl::OUString& rPrefix, rtl::OUString& rSuffix );
+    static sal_Int16 GetParentNumbering( OUString sText, sal_Int16 nLevel,
+        OUString& rPrefix, OUString& rSuffix );
 
     com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >
         GetProperties(  );
@@ -110,7 +110,7 @@ class AbstractListDef
 {
 private:
     sal_Int32                            m_nTPLC;          //LN_TPLC
-    ::rtl::OUString                      m_sRGISTD;        //LN_RGISTD
+    OUString                      m_sRGISTD;        //LN_RGISTD
     sal_Int32                            m_nSimpleList;    //LN_FSIMPLELIST
     sal_Int32                            m_nRestart;       //LN_FRESTARTHDN
     sal_Int32                            m_nUnsigned;      //LN_UNSIGNED26_2
@@ -135,7 +135,7 @@ public:
     // Setters using during the import
     void SetId( sal_Int32 nId ) { m_nId = nId; };
     void SetValue( sal_uInt32 nSprmId, sal_Int32 nValue );
-    void AddRGISTD( rtl::OUString sValue ) { m_sRGISTD += sValue; };
+    void AddRGISTD( OUString sValue ) { m_sRGISTD += sValue; };
 
     // Accessors
     sal_Int32             GetId( ) { return m_nId; };
@@ -171,7 +171,7 @@ public:
     AbstractListDef::Pointer GetAbstractDefinition( ) { return m_pAbstractDef; };
 
     // Mapping functions
-    static rtl::OUString GetStyleName( sal_Int32 nId );
+    static OUString GetStyleName( sal_Int32 nId );
 
     com::sun::star::uno::Sequence<
         com::sun::star::uno::Sequence<

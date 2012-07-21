@@ -59,7 +59,7 @@ void MeasureHandler::lcl_attribute(Id rName, Value & rVal)
         break;
         case NS_ooxml::LN_CT_Height_hRule: // 90666;
         {
-            ::rtl::OUString sHeightType = rVal.getString();
+            OUString sHeightType = rVal.getString();
             if ( sHeightType == "exact" )
                 m_nRowHeightSizeType = text::SizeType::FIX;
         }
@@ -72,7 +72,7 @@ void MeasureHandler::lcl_attribute(Id rName, Value & rVal)
         case NS_ooxml::LN_CT_Height_val: // 90665 -- a string value
         {
             m_nUnit = NS_ooxml::LN_Value_ST_TblWidth_dxa;
-            ::rtl::OUString sHeight = rVal.getString();
+            OUString sHeight = rVal.getString();
             m_nMeasureValue = sHeight.toInt32();
         }
         break;

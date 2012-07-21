@@ -35,9 +35,9 @@ struct ThemeTable_Impl
     ThemeTable_Impl() :
         m_currentThemeFontId(0),
         m_currentFontThemeEntry() {}
-    std::map<sal_uInt32, std::map<sal_uInt32, ::rtl::OUString> > m_themeFontMap;
+    std::map<sal_uInt32, std::map<sal_uInt32, OUString> > m_themeFontMap;
     sal_uInt32 m_currentThemeFontId;
-    std::map<sal_uInt32, ::rtl::OUString> m_currentFontThemeEntry;
+    std::map<sal_uInt32, OUString> m_currentFontThemeEntry;
 };
 
 ThemeTable::ThemeTable()
@@ -60,7 +60,7 @@ void ThemeTable::lcl_attribute(Id Name, Value & val)
     dmapper_logger->attribute("name", (*QNameToString::Instance())(Name));
     dmapper_logger->attribute("value", val.toString());
 #endif
-    ::rtl::OUString sValue = val.getString();
+    OUString sValue = val.getString();
     switch(Name)
     {
         case NS_ooxml::LN_CT_TextFont_typeface:
@@ -92,7 +92,7 @@ void ThemeTable::lcl_sprm(Sprm& rSprm)
     Value::Pointer_t pValue = rSprm.getValue();
     sal_Int32 nIntValue = pValue->getInt();
     (void)nIntValue;
-    rtl::OUString sStringValue = pValue->getString();
+    OUString sStringValue = pValue->getString();
 
     switch(nSprmId)
     {
@@ -107,7 +107,7 @@ void ThemeTable::lcl_sprm(Sprm& rSprm)
     case NS_ooxml::LN_CT_FontScheme_minorFont:
         {
             writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
-        m_pImpl->m_currentFontThemeEntry = std::map<sal_uInt32, rtl::OUString>();
+        m_pImpl->m_currentFontThemeEntry = std::map<sal_uInt32, OUString>();
             if( pProperties.get())
                 pProperties->resolve(*this);
             m_pImpl->m_themeFontMap[nSprmId] = m_pImpl->m_currentFontThemeEntry;
@@ -148,9 +148,9 @@ void ThemeTable::lcl_entry(int /*pos*/, writerfilter::Reference<Properties>::Poi
 #endif
 }
 
-const ::rtl::OUString ThemeTable::getFontNameForTheme(const Id id) const
+const OUString ThemeTable::getFontNameForTheme(const Id id) const
 {
-    std::map<sal_uInt32, ::rtl::OUString> tmpThemeFontMap;
+    std::map<sal_uInt32, OUString> tmpThemeFontMap;
     switch (id)
     {
     case NS_ooxml::LN_Value_ST_Theme_majorEastAsia:
@@ -166,7 +166,7 @@ const ::rtl::OUString ThemeTable::getFontNameForTheme(const Id id) const
         tmpThemeFontMap = m_pImpl->m_themeFontMap[NS_ooxml::LN_CT_FontScheme_minorFont];
     break;
     default:
-        return ::rtl::OUString();
+        return OUString();
     }
 
     switch (id)
@@ -176,29 +176,29 @@ const ::rtl::OUString ThemeTable::getFontNameForTheme(const Id id) const
     case NS_ooxml::LN_Value_ST_Theme_minorAscii:
     case NS_ooxml::LN_Value_ST_Theme_minorHAnsi:
     {
-         std::map<sal_uInt32, ::rtl::OUString>::const_iterator Iter = tmpThemeFontMap.find(NS_ooxml::LN_CT_FontCollection_latin);
+         std::map<sal_uInt32, OUString>::const_iterator Iter = tmpThemeFontMap.find(NS_ooxml::LN_CT_FontCollection_latin);
              if (Iter != tmpThemeFontMap.end())
                   return (Iter)->second;
-             return ::rtl::OUString();
+             return OUString();
         }
     case NS_ooxml::LN_Value_ST_Theme_majorBidi:
     case NS_ooxml::LN_Value_ST_Theme_minorBidi:
         {
-             std::map<sal_uInt32, ::rtl::OUString>::const_iterator Iter = tmpThemeFontMap.find(NS_ooxml::LN_CT_FontCollection_cs);
+             std::map<sal_uInt32, OUString>::const_iterator Iter = tmpThemeFontMap.find(NS_ooxml::LN_CT_FontCollection_cs);
              if (Iter != tmpThemeFontMap.end())
                  return (Iter)->second;
-             return ::rtl::OUString();
+             return OUString();
         }
     case NS_ooxml::LN_Value_ST_Theme_majorEastAsia:
     case NS_ooxml::LN_Value_ST_Theme_minorEastAsia:
         {
-             std::map<sal_uInt32, ::rtl::OUString>::const_iterator Iter = tmpThemeFontMap.find(NS_ooxml::LN_CT_FontCollection_ea);
+             std::map<sal_uInt32, OUString>::const_iterator Iter = tmpThemeFontMap.find(NS_ooxml::LN_CT_FontCollection_ea);
              if (Iter != tmpThemeFontMap.end())
                  return (Iter)->second;
-             return ::rtl::OUString();
+             return OUString();
         }
     default:
-    return ::rtl::OUString();
+    return OUString();
     }
 }
 

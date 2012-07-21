@@ -169,9 +169,9 @@ DomainMapper::~DomainMapper()
 
 void DomainMapper::lcl_attribute(Id nName, Value & val)
 {
-    static ::rtl::OUString sLocalBookmarkName;
+    static OUString sLocalBookmarkName;
     sal_Int32 nIntValue = val.getInt();
-    rtl::OUString sStringValue = val.getString();
+    OUString sStringValue = val.getString();
 
     SectionPropertyMap * pSectionContext = m_pImpl->GetSectionContext();
 
@@ -300,13 +300,13 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             //as CharStyleName or ParaStyleName
             //if the style is a user defined style then it must have an ISTD - built-in styles might not have it
             StyleSheetTablePtr pStyleSheets = m_pImpl->GetStyleSheetTable();
-            ::rtl::OUString sValue = ::rtl::OUString::valueOf(nIntValue, 16);
+            OUString sValue = OUString::valueOf(nIntValue, 16);
             const StyleSheetEntryPtr pEntry = pStyleSheets->FindStyleSheetByISTD(sValue);
             if( pEntry.get( ) )
             {
                 bool bParaStyle = (pEntry->nStyleTypeCode == STYLE_TYPE_PARA);
                 if(bParaStyle)
-                    m_pImpl->SetCurrentParaStyleId(::rtl::OUString::valueOf(static_cast<sal_Int32>(nIntValue), 16));
+                    m_pImpl->SetCurrentParaStyleId(OUString::valueOf(static_cast<sal_Int32>(nIntValue), 16));
                 if (m_pImpl->GetTopContext() && m_pImpl->GetTopContextType() != CONTEXT_SECTION)
                     m_pImpl->GetTopContext()->Insert(
                                                  bParaStyle ?
@@ -758,7 +758,7 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             //contains the bookmark identifier - has to be added to the bookmark name imported before
             //if it is already available then the bookmark should be inserted
             m_pImpl->AddBookmark( sLocalBookmarkName, sStringValue );
-            sLocalBookmarkName = ::rtl::OUString();
+            sLocalBookmarkName = OUString();
         break;
         case NS_rtf::LN_LISTLEVEL:
             break;
@@ -884,7 +884,7 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
         case NS_ooxml::LN_CT_Sym_char:
         if( m_pImpl->GetTopContext() && m_pImpl->GetTopContext()->GetFootnote().is())
         {
-            m_pImpl->GetTopContext()->GetFootnote()->setLabel(::rtl::OUString( sal_Unicode(nIntValue)));
+            m_pImpl->GetTopContext()->GetFootnote()->setLabel(OUString( sal_Unicode(nIntValue)));
             break;
         }
         else //it's a _real_ symbol
@@ -1102,8 +1102,8 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
         case NS_ooxml::LN_CT_EastAsianLayout_combineBrackets:
             if (m_pImpl->GetTopContext())
             {
-                rtl::OUString sCombinePrefix = getBracketStringFromEnum(nIntValue);
-                rtl::OUString sCombineSuffix = getBracketStringFromEnum(nIntValue, false);
+                OUString sCombinePrefix = getBracketStringFromEnum(nIntValue);
+                OUString sCombineSuffix = getBracketStringFromEnum(nIntValue, false);
                 m_pImpl->GetTopContext()->Insert(PROP_CHAR_COMBINE_PREFIX, true, uno::makeAny ( sCombinePrefix ));
                 m_pImpl->GetTopContext()->Insert(PROP_CHAR_COMBINE_SUFFIX, true, uno::makeAny ( sCombineSuffix ));
             }
@@ -1472,7 +1472,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
     bool bExchangeLeftRight = false;
     Value::Pointer_t pValue = rSprm.getValue();
     sal_Int32 nIntValue = pValue->getInt();
-    rtl::OUString sStringValue = pValue->getString();
+    OUString sStringValue = pValue->getString();
     PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
 
     switch(nSprmId)
@@ -2986,7 +2986,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
     {
         m_pImpl->SetCurrentParaStyleId( sStringValue );
         StyleSheetTablePtr pStyleTable = m_pImpl->GetStyleSheetTable();
-        const ::rtl::OUString sConvertedStyleName = pStyleTable->ConvertStyleName( sStringValue, true );
+        const OUString sConvertedStyleName = pStyleTable->ConvertStyleName( sStringValue, true );
         if (m_pImpl->GetTopContext() && m_pImpl->GetTopContextType() != CONTEXT_SECTION)
             m_pImpl->GetTopContext()->Insert( PROP_PARA_STYLE_NAME, true, uno::makeAny( sConvertedStyleName ));
         //apply numbering to paragraph if it was set at the style, but only if the paragraph itself
@@ -3008,7 +3008,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
     break;
     case NS_ooxml::LN_EG_RPrBase_rStyle:
         {
-            rtl::OUString sConvertedName( m_pImpl->GetStyleSheetTable()->ConvertStyleName( sStringValue, true ) );
+            OUString sConvertedName( m_pImpl->GetStyleSheetTable()->ConvertStyleName( sStringValue, true ) );
             // First check if the style exists in the document.
             StyleSheetEntryPtr pEntry = m_pImpl->GetStyleSheetTable( )->FindStyleSheetByStyleName( sConvertedName );
             bool bExists = pEntry.get( ) && ( pEntry->nStyleTypeCode == STYLE_TYPE_CHAR );
@@ -3191,7 +3191,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
             pProperties->resolve(*pOLEHandler);
             if ( pOLEHandler->isOLEObject( ) )
             {
-                ::rtl::OUString sStreamName = pOLEHandler->copyOLEOStream( m_pImpl->GetTextDocument() );
+                OUString sStreamName = pOLEHandler->copyOLEOStream( m_pImpl->GetTextDocument() );
                 if( !sStreamName.isEmpty() )
                 {
                     m_pImpl->appendOLE( sStreamName, pOLEHandler );
@@ -3269,7 +3269,7 @@ void DomainMapper::lcl_startParagraphGroup()
 {
     m_pImpl->getTableManager().startParagraphGroup();
     m_pImpl->PushProperties(CONTEXT_PARAGRAPH);
-    static ::rtl::OUString sDefault("Standard" );
+    static OUString sDefault("Standard");
     if (m_pImpl->GetTopContext())
     {
         if (!m_pImpl->IsInShape())
@@ -3356,7 +3356,7 @@ void DomainMapper::lcl_endCharacterGroup()
 void DomainMapper::lcl_text(const sal_uInt8 * data_, size_t len)
 {
     //TODO: Determine the right text encoding (FIB?)
-    ::rtl::OUString sText( (const sal_Char*) data_, len, RTL_TEXTENCODING_MS_1252 );
+    OUString sText( (const sal_Char*) data_, len, RTL_TEXTENCODING_MS_1252 );
 #ifdef DEBUG_DOMAINMAPPER
     dmapper_logger->startElement("text");
     dmapper_logger->chars(sText);
@@ -3734,33 +3734,33 @@ sal_Int16 DomainMapper::getEmphasisValue(const sal_Int32 nIntValue)
     }
 }
 
-rtl::OUString DomainMapper::getBracketStringFromEnum(const sal_Int32 nIntValue, const bool bIsPrefix)
+OUString DomainMapper::getBracketStringFromEnum(const sal_Int32 nIntValue, const bool bIsPrefix)
 {
     switch(nIntValue)
     {
     case 1:
         if (bIsPrefix)
-            return rtl::OUString( "(" );
-        return rtl::OUString( ")" );
+            return OUString( "(" );
+        return OUString( ")" );
 
     case 2:
         if (bIsPrefix)
-            return rtl::OUString( "[" );
-        return rtl::OUString( "]" );
+            return OUString( "[" );
+        return OUString( "]" );
 
     case 3:
         if (bIsPrefix)
-            return rtl::OUString( "<" );
-        return rtl::OUString( ">" );
+            return OUString( "<" );
+        return OUString( ">" );
 
     case 4:
         if (bIsPrefix)
-            return rtl::OUString( "{" );
-        return rtl::OUString( "}" );
+            return OUString( "{" );
+        return OUString( "}" );
 
     case 0:
     default:
-        return rtl::OUString();
+        return OUString();
     }
 }
 
@@ -3821,7 +3821,7 @@ uno::Reference< text::XTextRange > DomainMapper::GetCurrentTextRange()
     return m_pImpl->GetTopTextAppend()->getEnd();
 }
 
-::rtl::OUString DomainMapper::getOrCreateCharStyle( PropertyValueVector_t& rCharProperties )
+OUString DomainMapper::getOrCreateCharStyle( PropertyValueVector_t& rCharProperties )
 {
     StyleSheetTablePtr pStyleSheets = m_pImpl->GetStyleSheetTable();
     return pStyleSheets->getOrCreateCharStyle( rCharProperties );

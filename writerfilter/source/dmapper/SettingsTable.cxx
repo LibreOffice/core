@@ -40,9 +40,9 @@ struct SettingsTable_Impl
     DomainMapper&       m_rDMapper;
     const uno::Reference< lang::XMultiServiceFactory > m_xTextFactory;
 
-    ::rtl::OUString     m_sCharacterSpacing;
-    ::rtl::OUString     m_sDecimalSymbol;
-    ::rtl::OUString     m_sListSeparatorForFields; //2.15.1.56 listSeparator (List Separator for Field Code Evaluation)
+    OUString     m_sCharacterSpacing;
+    OUString     m_sDecimalSymbol;
+    OUString     m_sListSeparatorForFields; //2.15.1.56 listSeparator (List Separator for Field Code Evaluation)
 
     int                 m_nDefaultTabStop;
     int                 m_nHyphenationZone;
@@ -56,15 +56,15 @@ struct SettingsTable_Impl
     int                 m_nCryptProviderType;
     int                 m_nCryptAlgorithmClass;
     int                 m_nCryptAlgorithmType;
-    ::rtl::OUString     m_sCryptAlgorithmSid;
+    OUString     m_sCryptAlgorithmSid;
     int                 m_nCryptSpinCount;
-    ::rtl::OUString     m_sCryptProvider;
-    ::rtl::OUString     m_sAlgIdExt;
-    ::rtl::OUString     m_sAlgIdExtSource;
-    ::rtl::OUString     m_sCryptProviderTypeExt;
-    ::rtl::OUString     m_sCryptProviderTypeExtSource;
-    ::rtl::OUString     m_sHash;
-    ::rtl::OUString     m_sSalt;
+    OUString     m_sCryptProvider;
+    OUString     m_sAlgIdExt;
+    OUString     m_sAlgIdExtSource;
+    OUString     m_sCryptProviderTypeExt;
+    OUString     m_sCryptProviderTypeExtSource;
+    OUString     m_sHash;
+    OUString     m_sSalt;
     bool                m_bLinkStyles;
     sal_Int16           m_nZoomFactor;
     bool                m_bEvenAndOddHeaders;
@@ -129,7 +129,7 @@ void SettingsTable::lcl_sprm(Sprm& rSprm)
     Value::Pointer_t pValue = rSprm.getValue();
     sal_Int32 nIntValue = pValue->getInt();
     (void)nIntValue;
-    rtl::OUString sStringValue = pValue->getString();
+    OUString sStringValue = pValue->getString();
 
     switch(nSprmId)
     {

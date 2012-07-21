@@ -34,17 +34,17 @@ struct FontEntry
 {
     typedef boost::shared_ptr<FontEntry> Pointer_t;
 
-    ::rtl::OUString sFontName;
-    ::rtl::OUString sFontName1;
+    OUString sFontName;
+    OUString sFontName1;
     bool            bTrueType;
     sal_Int16       nPitchRequest;
     sal_Int32       nTextEncoding;
     sal_Int32       nFontFamilyId;
     sal_Int32       nBaseWeight;
     sal_Int32       nAltFontIndex;
-    ::rtl::OUString sPanose;
-    ::rtl::OUString sFontSignature;
-    ::rtl::OUString sAlternativeFont;
+    OUString sPanose;
+    OUString sFontSignature;
+    OUString sAlternativeFont;
     FontEntry() :
         bTrueType(false),
         nPitchRequest( 0 ),

@@ -27,7 +27,7 @@ class FFDataHandler : public LoggedProperties
 public:
     // typedefs
     typedef ::boost::shared_ptr<FFDataHandler> Pointer_t;
-    typedef ::std::vector<rtl::OUString> DropDownEntries_t;
+    typedef ::std::vector<OUString> DropDownEntries_t;
 
     // constructor
     FFDataHandler();
@@ -35,13 +35,13 @@ public:
     virtual ~FFDataHandler();
 
     // member: name
-    const rtl::OUString & getName() const;
+    const OUString & getName() const;
 
     // member: helpText
-    const rtl::OUString & getHelpText() const;
+    const OUString & getHelpText() const;
 
     // member: statusText
-    const rtl::OUString & getStatusText() const;
+    const OUString & getStatusText() const;
 
     // member: checkboxHeight
     sal_uInt32 getCheckboxHeight() const;
@@ -53,28 +53,28 @@ public:
     bool getCheckboxChecked() const;
 
     // member: dropDownResult
-    const rtl::OUString & getDropDownResult() const;
+    const OUString & getDropDownResult() const;
 
     // member: dropDownEntries
     const DropDownEntries_t & getDropDownEntries() const;
 
     // member: textDefault
-    const rtl::OUString & getTextDefault() const;
+    const OUString & getTextDefault() const;
 
     // sprm
     void resolveSprm(Sprm & r_sprm);
 
 private:
-    rtl::OUString m_sName;
-    rtl::OUString m_sHelpText;
-    rtl::OUString m_sStatusText;
+    OUString m_sName;
+    OUString m_sHelpText;
+    OUString m_sStatusText;
     sal_uInt32 m_nCheckboxHeight;
     bool m_bCheckboxAutoHeight;
     int m_nCheckboxChecked;
     int m_nCheckboxDefault;
-    rtl::OUString m_sDropDownResult;
+    OUString m_sDropDownResult;
     DropDownEntries_t m_DropDownEntries;
-    rtl::OUString m_sTextDefault;
+    OUString m_sTextDefault;
 
     // sprm
     void lcl_sprm(Sprm & r_sprm);

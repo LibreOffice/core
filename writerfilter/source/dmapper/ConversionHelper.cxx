@@ -208,11 +208,11 @@ void MakeBorderLine( sal_Int32 nLineThickness,   sal_Int32 nLineType,
     rToFill.Color = nLineColor;
 }
 
-void lcl_SwapQuotesInField(::rtl::OUString &rFmt)
+void lcl_SwapQuotesInField(OUString &rFmt)
 {
     //Swap unescaped " and ' with ' and "
     sal_Int32 nLen = rFmt.getLength();
-    ::rtl::OUStringBuffer aBuffer( rFmt.getStr() );
+    OUStringBuffer aBuffer( rFmt.getStr() );
     const sal_Unicode* pFmt = rFmt.getStr();
     for (sal_Int32 nI = 0; nI < nLen; ++nI)
     {
@@ -223,7 +223,7 @@ void lcl_SwapQuotesInField(::rtl::OUString &rFmt)
     }
     rFmt = aBuffer.makeStringAndClear();
 }
-bool lcl_IsNotAM(::rtl::OUString& rFmt, sal_Int32 nPos)
+bool lcl_IsNotAM(OUString& rFmt, sal_Int32 nPos)
 {
     return (
             (nPos == rFmt.getLength() - 1) ||
@@ -234,10 +234,10 @@ bool lcl_IsNotAM(::rtl::OUString& rFmt, sal_Int32 nPos)
         );
 }
 
-::rtl::OUString ConvertMSFormatStringToSO(
-        const ::rtl::OUString& rFormat, lang::Locale& rLocale, bool bHijri)
+OUString ConvertMSFormatStringToSO(
+        const OUString& rFormat, lang::Locale& rLocale, bool bHijri)
 {
-    ::rtl::OUString sFormat(rFormat);
+    OUString sFormat(rFormat);
     lcl_SwapQuotesInField(sFormat);
 
     //#102782#, #102815#, #108341# & #111944# have to work at the same time :-)
@@ -246,7 +246,7 @@ bool lcl_IsNotAM(::rtl::OUString& rFmt, sal_Int32 nPos)
     sal_Int32 nLen = sFormat.getLength();
     sal_Int32 nI = 0;
 //    const sal_Unicode* pFormat = sFormat.getStr();
-    ::rtl::OUStringBuffer aNewFormat( sFormat );
+    OUStringBuffer aNewFormat( sFormat );
     while (nI < nLen)
     {
         if (aNewFormat[nI] == '\\')

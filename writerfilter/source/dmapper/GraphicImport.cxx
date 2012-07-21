@@ -247,9 +247,9 @@ public:
     bool            bInShapeOptionMode;
     sal_Int32       nShapeOptionType;
 
-    ::rtl::OUString sName;
-    ::rtl::OUString sAlternativeText;
-    ::rtl::OUString title;
+    OUString sName;
+    OUString sAlternativeText;
+    OUString title;
 
     GraphicImport_Impl(GraphicImportType eImportType, DomainMapper&   rDMapper) :
         nXSize(0)
@@ -886,7 +886,7 @@ void GraphicImport::lcl_attribute(Id nName, Value & val)
                         uno::Reference< beans::XPropertySet > xShapeProps
                             ( xShape, uno::UNO_QUERY_THROW );
 
-                        rtl::OUString sUrl;
+                        OUString sUrl;
                         xShapeProps->getPropertyValue("GraphicURL") >>= sUrl;
 
                         ::com::sun::star::beans::PropertyValues aMediaProperties( 1 );

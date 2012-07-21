@@ -41,8 +41,8 @@ namespace ConversionHelper{
                               sal_Int32 nLineColor,
                               ::com::sun::star::table::BorderLine2& rToFill, bool bIsOOXML );
     //convert the number format string form MS format to SO format
-    ::rtl::OUString ConvertMSFormatStringToSO(
-            const ::rtl::OUString& rFormat, ::com::sun::star::lang::Locale& rLocale, bool bHijri);
+    OUString ConvertMSFormatStringToSO(
+            const OUString& rFormat, ::com::sun::star::lang::Locale& rLocale, bool bHijri);
     sal_Int32 convertTwipToMM100(sal_Int32 _t);
     // probably the most useless unit in the world - English Metric Units (EMU) 360 000 EMU == 1cm
     sal_Int32 convertEMUToMM100(sal_Int32 _t);

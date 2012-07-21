@@ -49,9 +49,9 @@ private:
     ImplPointer_t m_pImpl;
 
     bool createCheckbox(uno::Reference<text::XTextRange> xTextRange,
-                        const ::rtl::OUString & rControlName);
+                        const OUString & rControlName);
     bool createDropdown(uno::Reference<text::XTextRange> xTextRange,
-                        const ::rtl::OUString & rControlName);
+                        const OUString & rControlName);
 };
 
 }

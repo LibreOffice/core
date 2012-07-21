@@ -51,18 +51,18 @@ struct StyleSheetTable_Impl;
 class StyleSheetEntry
 {
 public:
-    ::rtl::OUString sStyleIdentifierI;
-    ::rtl::OUString sStyleIdentifierD;
+    OUString sStyleIdentifierI;
+    OUString sStyleIdentifierD;
     bool            bIsDefaultStyle;
     bool            bInvalidHeight;
     bool            bHasUPE; //universal property expansion
     StyleType       nStyleTypeCode; //sgc
-    ::rtl::OUString sBaseStyleIdentifier;
-    ::rtl::OUString sNextStyleIdentifier;
-    ::rtl::OUString sStyleName;
-    ::rtl::OUString sStyleName1;
+    OUString sBaseStyleIdentifier;
+    OUString sNextStyleIdentifier;
+    OUString sStyleName;
+    OUString sStyleName1;
     PropertyMapPtr  pProperties;
-    ::rtl::OUString sConvertedStyleName;
+    OUString sConvertedStyleName;
 
     StyleSheetEntry();
     virtual ~StyleSheetEntry();
@@ -85,16 +85,16 @@ public:
     virtual ~StyleSheetTable();
 
     void ApplyStyleSheets( FontTablePtr rFontTable );
-    const StyleSheetEntryPtr FindStyleSheetByISTD(const ::rtl::OUString& sIndex);
-    const StyleSheetEntryPtr FindStyleSheetByStyleName(const ::rtl::OUString& rIndex);
-    const StyleSheetEntryPtr FindStyleSheetByConvertedStyleName(const ::rtl::OUString& rIndex);
+    const StyleSheetEntryPtr FindStyleSheetByISTD(const OUString& sIndex);
+    const StyleSheetEntryPtr FindStyleSheetByStyleName(const OUString& rIndex);
+    const StyleSheetEntryPtr FindStyleSheetByConvertedStyleName(const OUString& rIndex);
     // returns the parent of the one with the given name - if empty the parent of the current style sheet is returned
-    const StyleSheetEntryPtr FindParentStyleSheet(::rtl::OUString sBaseStyle);
+    const StyleSheetEntryPtr FindParentStyleSheet(OUString sBaseStyle);
 
-    ::rtl::OUString ConvertStyleName( const ::rtl::OUString& rWWName, bool bExtendedSearch = false );
-    ::rtl::OUString GetStyleIdFromIndex(const sal_uInt32 sti);
+    OUString ConvertStyleName( const OUString& rWWName, bool bExtendedSearch = false );
+    OUString GetStyleIdFromIndex(const sal_uInt32 sti);
 
-    ::rtl::OUString getOrCreateCharStyle( PropertyValueVector_t& rCharProperties );
+    OUString getOrCreateCharStyle( PropertyValueVector_t& rCharProperties );
 
 private:
     // Properties
