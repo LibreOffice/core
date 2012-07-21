@@ -260,6 +260,8 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
     {
         if (nCellType == util::NumberFormat::TEXT)
             bFormulaTextResult = true;
+        if(nCellType == util::NumberFormat::DATETIME)
+            nCellType = util::NumberFormat::UNDEFINED;
     }
     rXMLImport.GetStylesImportHelper()->SetAttributes(pStyleName, pCurrencySymbol, nCellType);
 }
