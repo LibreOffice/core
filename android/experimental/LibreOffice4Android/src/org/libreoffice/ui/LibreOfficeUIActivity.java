@@ -19,7 +19,20 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.prefs.Preferences;
 
-import android.app.ActionBar;
+//import android.app.ActionBar;
+//import android.view.Menu;
+//import android.view.MenuInflater;
+//import android.view.MenuItem;
+
+import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
+import com.actionbarsherlock.view.MenuInflater;
+import com.actionbarsherlock.app.SherlockActivity;
+import android.graphics.drawable.BitmapDrawable;
+import android.os.Build;
+import android.graphics.Shader.TileMode;
+
 import android.app.ActionBar.OnNavigationListener;
 import android.app.Activity;
 import android.content.Context;
@@ -31,9 +44,6 @@ import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
@@ -47,7 +57,7 @@ import android.widget.ListView;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
-public class LibreOfficeUIActivity extends Activity implements OnNavigationListener {
+public class LibreOfficeUIActivity extends SherlockActivity implements ActionBar.OnNavigationListener {
     private String tag = "file_manager";
 	private SharedPreferences prefs;
     private File homeDirectory;
@@ -89,16 +99,34 @@ public class LibreOfficeUIActivity extends Activity implements OnNavigationListe
     }
     
     public void createUI(){
-    	ActionBar actionBar = getActionBar();
+        ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayShowTitleEnabled(false);//This should show current directory if anything
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
+        /*actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
         SpinnerAdapter mSpinnerAdapter = ArrayAdapter.createFromResource(this, R.array.file_view_modes,
                 android.R.layout.simple_spinner_dropdown_item);
         actionBar.setListNavigationCallbacks(mSpinnerAdapter, this);
+        */
+        //make the navigation spinner
+        Context context = getSupportActionBar().getThemedContext();
+        ArrayAdapter<CharSequence> list = ArrayAdapter.createFromResource(context, R.array.file_view_modes, R.layout.sherlock_spinner_item);
+        list.setDropDownViewResource(R.layout.sherlock_spinner_dropdown_item);
+
+        getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
+        getSupportActionBar().setListNavigationCallbacks(list, this);
+
+        //make striped actionbar
+        BitmapDrawable bg = (BitmapDrawable)getResources().getDrawable(R.drawable.bg_striped);
+        bg.setTileModeXY(TileMode.REPEAT, TileMode.REPEAT);
+        getSupportActionBar().setBackgroundDrawable(bg);
+
+        BitmapDrawable bgSplit = (BitmapDrawable)getResources().getDrawable(R.drawable.bg_striped_split_img);
+        bgSplit.setTileModeXY(TileMode.REPEAT, TileMode.REPEAT);
+        getSupportActionBar().setSplitBackgroundDrawable(bgSplit);
+
         if( !currentDirectory.equals( homeDirectory )){
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
-        
+
     	if( viewMode == GRID_VIEW){
 	        // code to make a grid view
         	setContentView(R.layout.file_grid);
@@ -126,19 +154,6 @@ public class LibreOfficeUIActivity extends Activity implements OnNavigationListe
         	lv.setClickable(true);
         	fileNames = currentDirectory.list( FileUtilities.getFilenameFilter( filterMode ) );
         	filePaths = currentDirectory.listFiles( FileUtilities.getFileFilter( filterMode ) );
-        	/*lv.setOnItemClickListener(new OnItemClickListener() {
-	            public void onItemClick(AdapterView<?> parent, View view,
-	                int position, long id) {
-	            	Log.d(tag, "click!");
-	            	File file = filePaths[position];
-	            	if(!file.isDirectory()){
-	            		open(fileNames[position]);
-	            	}else{
-	            		file = new File( currentDirectory, file.getName() );
-	            		openDirectory( file );
-	            	}	
-	            }
-	          });*/
         	lv.setAdapter( new ListItemAdapter(getApplicationContext(), filePaths) );
         	actionBar.setSelectedNavigationItem( filterMode + 1 );
         }
@@ -148,10 +163,10 @@ public class LibreOfficeUIActivity extends Activity implements OnNavigationListe
     public void openDirectory(File dir ){
     	currentDirectory = dir; 
         if( !currentDirectory.equals( homeDirectory )){
-            ActionBar actionBar = getActionBar();
+            ActionBar actionBar = getSupportActionBar();
             actionBar.setDisplayHomeAsUpEnabled(true);
         }else{
-            ActionBar actionBar = getActionBar();
+            ActionBar actionBar = getSupportActionBar();
             actionBar.setDisplayHomeAsUpEnabled( false );
         }
     	filePaths = currentDirectory.listFiles( FileUtilities.getFileFilter( filterMode ) );
@@ -185,7 +200,7 @@ public class LibreOfficeUIActivity extends Activity implements OnNavigationListe
     
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
+        MenuInflater inflater = getSupportMenuInflater();
         inflater.inflate(R.menu.view_menu, menu);
         
         MenuItem item = (MenuItem)menu.findItem(R.id.menu_view_toggle);
@@ -219,9 +234,17 @@ public class LibreOfficeUIActivity extends Activity implements OnNavigationListe
 	        	}
 	        	createUI();
 	        	break;
-	        default:
-	            return super.onOptionsItemSelected(item);
-	    }
+            case R.id.menu_sort_size:
+            case R.id.menu_sort_az:
+            case R.id.menu_sort_modified:
+                sortFiles(item);
+                break;
+            case R.id.menu_preferences:
+                editPreferences(item);
+                break;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
 	    return true;
 	}
     
