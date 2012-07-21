@@ -2504,6 +2504,12 @@ void SmNodeToTextVisitor::Visit( SmLineNode* pNode )
 void SmNodeToTextVisitor::Visit( SmExpressionNode* pNode )
 {
     bool bracketsNeeded = pNode->GetNumSubNodes() != 1 || pNode->GetSubNode(0)->GetType() == NBINHOR;
+    // nested subsups
+    bracketsNeeded |=
+        pNode->GetParent()->GetType() == NSUBSUP &&
+        pNode->GetNumSubNodes() == 1 &&
+        pNode->GetSubNode(0)->GetType() == NSUBSUP;
+
     if (bracketsNeeded) {
         Append( "{ " );
     }
