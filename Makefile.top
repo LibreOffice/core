@@ -1,6 +1,6 @@
 # -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t -*-
 
-.PHONY : all bootstrap build check clean clean-build clean-host dev-install distclean distro-pack-install docs fetch findunusedcode id install install-strip subsequentcheck tags
+.PHONY : all bootstrap build check clean clean-build clean-host dev-install distclean distro-pack-install docs fetch findunusedcode id install install-strip install-tb subsequentcheck tags
 
 ifeq ($(MAKECMDGOALS),)
 MAKECMDGOALS:=all
@@ -439,6 +439,18 @@ ifeq ($(DISABLE_LINKOO),TRUE)
 else
 	@ooinstall -l $(DEVINSTALLDIR)/opt
 endif
+endif
+	@rm -f $(SRCDIR)/install && ln -s $(DEVINSTALLDIR)/opt/ $(SRCDIR)/install
+
+install-tb:
+	@rm -rf $(DEVINSTALLDIR)
+	@mkdir $(DEVINSTALLDIR)
+ifeq ($(OS_FOR_BUILD),WNT)
+	unzip -d "$(DEVINSTALLDIR)" "$(SRCDIR)/instsetoo_native/$(INPATH)/LibreOffice_Dev/archive/install/en-US/LibO*_install-arc_en-US.zip"
+	mv "$(DEVINSTALLDIR)"/LibO*_install-arc_en-US/* "$(DEVINSTALLDIR)"/opt
+else
+	@ooinstall $(DEVINSTALLDIR)/opt
+	@install-gdb-printers -L
 endif
 	@rm -f $(SRCDIR)/install && ln -s $(DEVINSTALLDIR)/opt/ $(SRCDIR)/install
 
