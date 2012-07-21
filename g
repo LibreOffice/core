@@ -233,7 +233,7 @@ while shift ; do
             FILESNUM=$(($FILESNUM+1))
         else
             # make the paths absolute
-            FILES[$FILESNUM]=$(perl -e 'use Cwd "abs_path"; print abs_path(shift);' "$PARAM")
+            FILES[$FILESNUM]=$(perl -e 'use Cwd "abs_path"; print abs_path(shift);' "$PARAM" 2>/dev/null)
             if [ -z "${FILES[$FILESNUM]}" -o ! -e "${FILES[$FILESNUM]}" ] ; then
                 # it is probably not a file, but a tag name, or something
                 FILES[$FILESNUM]="$PARAM"
