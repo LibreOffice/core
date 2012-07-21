@@ -59,15 +59,15 @@ public:
      const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
         throw (uno::RuntimeException, xml::sax::SAXException);
     virtual void SAL_CALL startUnknownElement
-    (const ::rtl::OUString & Namespace,
-     const ::rtl::OUString & Name,
+    (const OUString & Namespace,
+     const OUString & Name,
      const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
         throw (uno::RuntimeException, xml::sax::SAXException);
     virtual void SAL_CALL endFastElement(::sal_Int32 Element)
         throw (uno::RuntimeException, xml::sax::SAXException);
     virtual void SAL_CALL endUnknownElement
-    (const ::rtl::OUString & Namespace,
-     const ::rtl::OUString & Name)
+    (const OUString & Namespace,
+     const OUString & Name)
         throw (uno::RuntimeException, xml::sax::SAXException);
     virtual uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
     createFastChildContext
@@ -76,11 +76,11 @@ public:
         throw (uno::RuntimeException, xml::sax::SAXException);
     virtual uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
     createUnknownChildContext
-    (const ::rtl::OUString & Namespace,
-     const ::rtl::OUString & Name,
+    (const OUString & Namespace,
+     const OUString & Name,
      const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
         throw (uno::RuntimeException, xml::sax::SAXException);
-    virtual void SAL_CALL characters(const ::rtl::OUString & aChars)
+    virtual void SAL_CALL characters(const OUString & aChars)
         throw (uno::RuntimeException, xml::sax::SAXException);
 
     void setStream(Stream * pStream);

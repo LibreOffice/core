@@ -44,7 +44,7 @@
     <xsl:when test="$type='S16'">sal_Int16</xsl:when>
     <xsl:when test="$type='U32'">sal_uInt32</xsl:when>
     <xsl:when test="$type='S32'">sal_Int32</xsl:when>
-    <xsl:when test="$type='String'">rtl::OUString</xsl:when>
+    <xsl:when test="$type='String'">OUString</xsl:when>
     <xsl:otherwise>
       <xsl:text>writerfilter::Reference &lt; </xsl:text>
       <xsl:value-of select='$parenttype'/>

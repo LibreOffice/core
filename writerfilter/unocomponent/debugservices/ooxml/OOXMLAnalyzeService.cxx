@@ -61,9 +61,9 @@ const sal_Char AnalyzeService::IMPLEMENTATION_NAME[40] = "debugservices.ooxml.An
 class URLLister
 {
     uno::Reference<io::XInputStream> xInputStream;
-    rtl::OUString mString;
-    rtl::OUString mCRLF;
-    rtl::OUString mLF;
+    OUString mString;
+    OUString mCRLF;
+    OUString mLF;
 
     sal_uInt32 getEOLIndex()
     {
@@ -79,18 +79,18 @@ class URLLister
 
 public:
     URLLister(uno::Reference<com::sun::star::uno::XComponentContext> xContext,
-              rtl::OUString absFileUrl)
+              OUString absFileUrl)
     {
         uno::Reference<ucb::XSimpleFileAccess2> xFileAccess(ucb::SimpleFileAccess::create(xContext));
         xInputStream = xFileAccess->openFileRead(absFileUrl) ;
 
-        mLF = rtl::OUString("\n");
-        mCRLF = rtl::OUString("\r\n");
+        mLF = OUString("\n");
+        mCRLF = OUString("\r\n");
     }
 
-    rtl::OUString getURL()
+    OUString getURL()
     {
-        rtl::OUString aResult;
+        OUString aResult;
 
         sal_Int32 nIndex = getEOLIndex();
 
@@ -107,7 +107,7 @@ public:
                      nCount);
 
                 rtl::OString aTmp(pNew);
-                rtl::OUString aTail(rtl::OStringToOUString
+                OUString aTail(rtl::OStringToOUString
                                     (aTmp, RTL_TEXTENCODING_ASCII_US));
                 mString = mString.concat(aTail);
             }
@@ -138,12 +138,12 @@ xContext( xContext_ )
 }
 
 sal_Int32 SAL_CALL AnalyzeService::run
-( const uno::Sequence< rtl::OUString >& aArguments )
+( const uno::Sequence< OUString >& aArguments )
     throw (uno::RuntimeException)
 {
     uno::Sequence<uno::Any> aUcbInitSequence(2);
-    aUcbInitSequence[0] <<= rtl::OUString("Local");
-    aUcbInitSequence[1] <<= rtl::OUString("Office");
+    aUcbInitSequence[0] <<= OUString("Local");
+    aUcbInitSequence[1] <<= OUString("Office");
     uno::Reference<lang::XMultiServiceFactory>
         xServiceFactory(xContext->getServiceManager(), uno::UNO_QUERY_THROW);
     uno::Reference<lang::XMultiComponentFactory>
@@ -153,12 +153,12 @@ sal_Int32 SAL_CALL AnalyzeService::run
     {
         ::comphelper::setProcessServiceFactory(xServiceFactory);
 
-        rtl::OUString arg=aArguments[0];
+        OUString arg=aArguments[0];
 
         rtl_uString *dir=NULL;
         osl_getProcessWorkingDir(&dir);
 
-        rtl::OUString absFileUrlUrls;
+        OUString absFileUrlUrls;
         osl_getAbsoluteFileURL(dir, arg.pData, &absFileUrlUrls.pData);
 
         URLLister aLister(xContext, absFileUrlUrls);
@@ -167,7 +167,7 @@ sal_Int32 SAL_CALL AnalyzeService::run
 
         writerfilter::analyzerIds();
 
-        rtl::OUString aURL = aLister.getURL();
+        OUString aURL = aLister.getURL();
 
         while (!aURL.isEmpty())
         {
@@ -245,20 +245,20 @@ sal_Int32 SAL_CALL AnalyzeService::run
     return 0;
 }
 
-::rtl::OUString AnalyzeService_getImplementationName ()
+OUString AnalyzeService_getImplementationName ()
 {
-    return rtl::OUString(AnalyzeService::IMPLEMENTATION_NAME );
+    return OUString(AnalyzeService::IMPLEMENTATION_NAME );
 }
 
-sal_Bool SAL_CALL AnalyzeService_supportsService( const ::rtl::OUString& ServiceName )
+sal_Bool SAL_CALL AnalyzeService_supportsService( const OUString& ServiceName )
 {
     return ServiceName == AnalyzeService::SERVICE_NAME;
 }
-uno::Sequence< rtl::OUString > SAL_CALL AnalyzeService_getSupportedServiceNames(  ) throw (uno::RuntimeException)
+uno::Sequence< OUString > SAL_CALL AnalyzeService_getSupportedServiceNames(  ) throw (uno::RuntimeException)
 {
-    uno::Sequence < rtl::OUString > aRet(1);
-    rtl::OUString* pArray = aRet.getArray();
-    pArray[0] =  rtl::OUString(AnalyzeService::SERVICE_NAME );
+    uno::Sequence < OUString > aRet(1);
+    OUString* pArray = aRet.getArray();
+    pArray[0] =  OUString(AnalyzeService::SERVICE_NAME );
     return aRet;
 }
 

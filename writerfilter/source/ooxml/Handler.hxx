@@ -51,7 +51,7 @@ public:
 class OOXMLFooterHandler : public Properties
 {
     OOXMLFastContextHandler * mpFastContext;
-    ::rtl::OUString msStreamId;
+    OUString msStreamId;
     sal_Int32 mnType;
 public:
     OOXMLFooterHandler(OOXMLFastContextHandler * pContext);
@@ -63,7 +63,7 @@ public:
 class OOXMLHeaderHandler : public Properties
 {
     OOXMLFastContextHandler * mpFastContext;
-    ::rtl::OUString msStreamId;
+    OUString msStreamId;
     sal_Int32 mnType;
 public:
     OOXMLHeaderHandler(OOXMLFastContextHandler * pContext);
@@ -75,7 +75,7 @@ public:
 class OOXMLCommentHandler : public Properties
 {
     OOXMLFastContextHandler * mpFastContext;
-    ::rtl::OUString msStreamId;
+    OUString msStreamId;
 public:
     OOXMLCommentHandler(OOXMLFastContextHandler * pContext);
     virtual ~OOXMLCommentHandler();
@@ -121,8 +121,8 @@ public:
 class OOXMLHyperlinkHandler : public Properties
 {
     OOXMLFastContextHandler * mpFastContext;
-    ::rtl::OUString mFieldCode;
-    ::rtl::OUString mURL;
+    OUString mFieldCode;
+    OUString mURL;
 
 public:
     OOXMLHyperlinkHandler(OOXMLFastContextHandler * pContext);

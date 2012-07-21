@@ -63,7 +63,7 @@ void dump(OutputWithDepth<string> & o, const char * name, sal_uInt32 n)
 }
 
 void dump(OutputWithDepth<string> & /*o*/, const char * /*name*/,
-          const rtl::OUString & /*str*/)
+          const OUString & /*str*/)
 {
 }
 
@@ -408,7 +408,7 @@ void WW8StreamHandler::info(const string & info_)
 void WW8PropertiesHandler::attribute(Id name, Value & val)
 {
     boost::shared_ptr<rtl::OString> pStr(new ::rtl::OString());
-    ::rtl::OUString aStr = val.getString();
+    OUString aStr = val.getString();
     aStr.convertToString(pStr.get(), RTL_TEXTENCODING_ASCII_US,
                          OUSTRING_TO_OSTRING_CVTFLAGS);
     string sXMLValue = xmlify(pStr->getStr());

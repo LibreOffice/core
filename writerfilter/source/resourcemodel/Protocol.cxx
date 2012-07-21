@@ -78,7 +78,7 @@ void StreamProtocol::endCharacterGroup()
 
 void StreamProtocol::text(const sal_uInt8 * data, size_t len)
 {
-    ::rtl::OUString sText((const sal_Char*) data, len,
+    OUString sText((const sal_Char*) data, len,
                           RTL_TEXTENCODING_MS_1252);
     m_pTagLogger->startElement("protocol-text");
     m_pTagLogger->chars(sText);
@@ -89,8 +89,8 @@ void StreamProtocol::text(const sal_uInt8 * data, size_t len)
 
 void StreamProtocol::utext(const sal_uInt8 * data, size_t len)
 {
-    ::rtl::OUString sText;
-    ::rtl::OUStringBuffer aBuffer = ::rtl::OUStringBuffer(len);
+    OUString sText;
+    OUStringBuffer aBuffer = OUStringBuffer(len);
     aBuffer.append( (const sal_Unicode *) data, len);
     sText = aBuffer.makeStringAndClear();
 

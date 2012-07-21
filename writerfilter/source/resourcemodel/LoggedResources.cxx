@@ -46,7 +46,7 @@ void LoggedResourcesHelper::endElement(const string & /*sElement*/)
     mpLogger->endElement();
 }
 
-void LoggedResourcesHelper::chars(const ::rtl::OUString & rChars)
+void LoggedResourcesHelper::chars(const OUString & rChars)
 {
     mpLogger->chars(rChars);
 }
@@ -165,7 +165,7 @@ void LoggedStream::text(const sal_uInt8 * data, size_t len)
 #ifdef DEBUG_LOGGING
     mHelper.startElement("text");
 
-    ::rtl::OUString sText( (const sal_Char*) data, len, RTL_TEXTENCODING_MS_1252 );
+    OUString sText( (const sal_Char*) data, len, RTL_TEXTENCODING_MS_1252 );
 
     mHelper.startElement("data");
     mHelper.chars(sText);
@@ -185,8 +185,8 @@ void LoggedStream::utext(const sal_uInt8 * data, size_t len)
     mHelper.startElement("utext");
     mHelper.startElement("data");
 
-    ::rtl::OUString sText;
-    ::rtl::OUStringBuffer aBuffer = ::rtl::OUStringBuffer(len);
+    OUString sText;
+    OUStringBuffer aBuffer = OUStringBuffer(len);
     aBuffer.append( (const sal_Unicode *) data, len);
     sText = aBuffer.makeStringAndClear();
 

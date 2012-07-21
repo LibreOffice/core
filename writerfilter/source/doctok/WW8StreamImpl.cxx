@@ -84,7 +84,7 @@ WW8Stream::Sequence WW8StreamImpl::get(sal_uInt32 nOffset,
     return WW8Stream::Sequence();
 }
 
-WW8Stream::Pointer_t WW8StreamImpl::getSubStream(const ::rtl::OUString & sId)
+WW8Stream::Pointer_t WW8StreamImpl::getSubStream(const OUString & sId)
 {
     WW8Stream::Pointer_t pResult;
 
@@ -127,12 +127,12 @@ string WW8StreamImpl::getSubStreamNames() const
 
     if (xOLESimpleStorage.is())
     {
-        uno::Sequence<rtl::OUString> aSeq = xOLESimpleStorage->getElementNames();
+        uno::Sequence<OUString> aSeq = xOLESimpleStorage->getElementNames();
 
         for (sal_uInt32 n = 0;
              n < sal::static_int_cast<sal_uInt32>(aSeq.getLength()); ++n)
         {
-            rtl::OUString aOUStr = aSeq[n];
+            OUString aOUStr = aSeq[n];
 
             if (n > 0)
                 sResult += ", ";
@@ -162,7 +162,7 @@ string WW8StreamImpl::getSubStreamNames() const
     return sResult;
 }
 
-uno::Sequence<rtl::OUString> WW8StreamImpl::getSubStreamUNames() const
+uno::Sequence<OUString> WW8StreamImpl::getSubStreamUNames() const
 {
     return xOLESimpleStorage->getElementNames();
 }

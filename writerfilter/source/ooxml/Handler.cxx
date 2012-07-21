@@ -294,7 +294,7 @@ OOXMLHyperlinkHandler::OOXMLHyperlinkHandler(OOXMLFastContextHandler * pContext)
 
 OOXMLHyperlinkHandler::~OOXMLHyperlinkHandler()
 {
-    ::rtl::OUString sReturn(" HYPERLINK \"");
+    OUString sReturn(" HYPERLINK \"");
 
     sReturn += mURL;
     sReturn += "\"";

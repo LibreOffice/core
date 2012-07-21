@@ -106,9 +106,9 @@ public:
 
        @return the URL found or an empty string
      */
-    virtual ::rtl::OUString getTargetForId(const ::rtl::OUString & rId) = 0;
+    virtual OUString getTargetForId(const OUString & rId) = 0;
 
-    virtual const ::rtl::OUString & getTarget() const = 0;
+    virtual const OUString & getTarget() const = 0;
 
     virtual uno::Reference<xml::sax::XFastTokenHandler>
     getFastTokenHandler(uno::Reference<uno::XComponentContext> rContext) = 0;
@@ -182,7 +182,7 @@ public:
        @param rPictureId    id of the picture to resolve
      */
     virtual void resolvePicture(Stream & rStream,
-                                const rtl::OUString & rPictureId) = 0;
+                                const OUString & rPictureId) = 0;
 
     /**
        Resolves a header to a stream handler.
@@ -197,7 +197,7 @@ public:
      */
     virtual void resolveHeader(Stream & rStream,
                                const sal_Int32 type,
-                               const rtl::OUString & rId) = 0;
+                               const OUString & rId) = 0;
 
     /**
        Resolves a footer to a stream handler.
@@ -212,7 +212,7 @@ public:
     */
     virtual void resolveFooter(Stream & rStream,
                                const sal_Int32 type,
-                               const rtl::OUString & rId) = 0;
+                               const OUString & rId) = 0;
 
 
     /**
@@ -222,7 +222,7 @@ public:
 
        @return the URL found or an empty string
      */
-    virtual ::rtl::OUString getTargetForId(const ::rtl::OUString & rId) = 0;
+    virtual OUString getTargetForId(const OUString & rId) = 0;
 
     virtual void setModel(uno::Reference<frame::XModel> xModel) = 0;
     virtual uno::Reference<frame::XModel> getModel() = 0;
@@ -231,12 +231,12 @@ public:
     virtual uno::Reference<io::XInputStream> getInputStream() = 0;
     virtual uno::Reference<io::XInputStream> getStorageStream() = 0;
     virtual uno::Reference<io::XInputStream> getInputStreamForId
-    (const ::rtl::OUString & rId) = 0;
+    (const OUString & rId) = 0;
     virtual void setXNoteId(const sal_Int32 nId) = 0;
     virtual sal_Int32 getXNoteId() const = 0;
     virtual void setXNoteType(const Id & nId) = 0;
     virtual const Id & getXNoteType() const = 0;
-    virtual const ::rtl::OUString & getTarget() const = 0;
+    virtual const OUString & getTarget() const = 0;
     virtual uno::Reference<xml::sax::XFastShapeContextHandler> getShapeContext( ) = 0;
     virtual void setShapeContext( uno::Reference<xml::sax::XFastShapeContextHandler> xContext ) = 0;
 };
@@ -255,7 +255,7 @@ public:
                  OOXMLStream::StreamType_t nStreamType = OOXMLStream::DOCUMENT);
 
     static OOXMLStream::Pointer_t
-    createStream(OOXMLStream::Pointer_t pStream, const rtl::OUString & rId);
+    createStream(OOXMLStream::Pointer_t pStream, const OUString & rId);
 
     static OOXMLDocument *
     createDocument(OOXMLStream::Pointer_t pStream);

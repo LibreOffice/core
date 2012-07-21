@@ -145,9 +145,9 @@ static sal_uInt32 lcl_FFDATA_tooltip_offset(WW8FFDATA & rRef)
     return nResult;
 }
 
-rtl::OUString WW8FFDATA::get_default()
+OUString WW8FFDATA::get_default()
 {
-    rtl::OUString sResult;
+    OUString sResult;
 
     sal_uInt32 nOffset = lcl_FFDATA_default_offset(*this);
     switch (get_FLT())
@@ -163,19 +163,19 @@ rtl::OUString WW8FFDATA::get_default()
     return sResult;
 }
 
-rtl::OUString WW8FFDATA::get_formatting()
+OUString WW8FFDATA::get_formatting()
 {
     return getString(lcl_FFDATA_formatting_offset(*this));
 }
 
-rtl::OUString WW8FFDATA::get_help()
+OUString WW8FFDATA::get_help()
 {
     return getString(lcl_FFDATA_help_offset(*this));
 }
 
-rtl::OUString WW8FFDATA::get_tooltip()
+OUString WW8FFDATA::get_tooltip()
 {
-    rtl::OUString sResult;
+    OUString sResult;
 
     sResult = getString(lcl_FFDATA_tooltip_offset(*this));
 

@@ -70,7 +70,7 @@ typedef boost::unordered_map<Token_t, AttributeInfo> AttributeToResourceMap;
 typedef boost::shared_ptr<AttributeToResourceMap> AttributeToResourceMapPointer;
 typedef boost::unordered_map<Id, AttributeToResourceMapPointer> AttributesMap;
 
-typedef boost::unordered_map<rtl::OUString, sal_Int32, ::rtl::OUStringHash> ListValueMap;
+typedef boost::unordered_map<OUString, sal_Int32, OUStringHash> ListValueMap;
 typedef boost::shared_ptr<ListValueMap> ListValueMapPointer;
 typedef boost::unordered_map<Id, ListValueMapPointer> ListValuesMap;
 
@@ -98,7 +98,7 @@ public:
     typedef boost::shared_ptr<OOXMLFactory_ns> Pointer_t;
 
     virtual void startAction(OOXMLFastContextHandler * pHandler);
-    virtual void charactersAction(OOXMLFastContextHandler * pHandler, const ::rtl::OUString & rString);
+    virtual void charactersAction(OOXMLFastContextHandler * pHandler, const OUString & rString);
     virtual void endAction(OOXMLFastContextHandler * pHandler);
     virtual void attributeAction(OOXMLFastContextHandler * pHandler, Token_t nToken, OOXMLValue::Pointer_t pValue);
     virtual string getDefineName(Id nId) const;
@@ -142,7 +142,7 @@ public:
                     const uno::Reference< xml::sax::XFastAttributeList > & Attribs);
 
     void characters(OOXMLFastContextHandler * pHandler,
-                    const ::rtl::OUString & rString);
+                    const OUString & rString);
 
     void startAction(OOXMLFastContextHandler * pHandler, Token_t nToken);
     void endAction(OOXMLFastContextHandler * pHandler, Token_t nToken);

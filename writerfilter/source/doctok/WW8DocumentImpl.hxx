@@ -44,11 +44,11 @@ class Bookmark : public writerfilter::Reference<Properties>
     writerfilter::Reference<Properties>::Pointer_t mpBKF;
 
     /// name of bookmark
-    rtl::OUString mName;
+    OUString mName;
 
 public:
     Bookmark(writerfilter::Reference<Properties>::Pointer_t pBKF,
-             rtl::OUString & rName);
+             OUString & rName);
 
     virtual ~Bookmark() {}
 
@@ -101,7 +101,7 @@ class BookmarkHelper
 
        @param nPos       index of the bookmark
     */
-    rtl::OUString getName(sal_uInt32 nPos);
+    OUString getName(sal_uInt32 nPos);
 
     /**
        Return index of a bookmark.
@@ -144,7 +144,7 @@ public:
 
        @param rCpAndFc       CpAndFc of the bookmark
      */
-    rtl::OUString getName(const CpAndFc & rCp);
+    OUString getName(const CpAndFc & rCp);
 
     /**
        Return bookmark.
@@ -355,7 +355,7 @@ class WW8DocumentImpl : public WW8Document
 
     bool isSpecial(sal_uInt32 nChar);
 
-    WW8Stream::Pointer_t getSubStream(const ::rtl::OUString & sId) const;
+    WW8Stream::Pointer_t getSubStream(const OUString & sId) const;
 
     /**
        Parse bin table and create CpAndFcs for all points in the

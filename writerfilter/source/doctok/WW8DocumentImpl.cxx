@@ -634,7 +634,7 @@ void WW8DocumentImpl::parseBinTableCpAndFcs(WW8BinTable & rTable,
 }
 
 WW8Stream::Pointer_t WW8DocumentImpl::getSubStream
-(const ::rtl::OUString & sId) const
+(const OUString & sId) const
 {
     return mpStream->getSubStream(sId);
 }
@@ -1352,7 +1352,7 @@ void WW8DocumentImpl::resolveSpecialChar(sal_uInt32 nChar, Stream & rStream)
 void WW8DocumentImpl::text(Stream & rStream, const sal_uInt8 * data, size_t len)
 {
 #ifdef DEBUG_ELEMENT
-    ::rtl::OUString sText( (const sal_Char*) data, len, RTL_TEXTENCODING_MS_1252 );
+    OUString sText( (const sal_Char*) data, len, RTL_TEXTENCODING_MS_1252 );
     debug_logger->startElement("text");
     debug_logger->chars(OUStringToOString(sText, RTL_TEXTENCODING_ASCII_US).getStr());
     debug_logger->endElement();
@@ -1365,8 +1365,8 @@ void WW8DocumentImpl::utext(Stream & rStream, const sal_uInt8 * data, size_t len
 #ifdef DEBUG_ELEMENT
     debug_logger->startElement("utext");
 
-    ::rtl::OUString sText;
-    ::rtl::OUStringBuffer aBuffer = ::rtl:: OUStringBuffer(len);
+    OUString sText;
+    OUStringBuffer aBuffer = ::rtl:: OUStringBuffer(len);
     aBuffer.append( (const sal_Unicode *) data, len);
     sText = aBuffer.makeStringAndClear();
 
@@ -1892,7 +1892,7 @@ string CpAndFc::toString() const
 // Bookmark
 
 Bookmark::Bookmark(writerfilter::Reference<Properties>::Pointer_t pBKF,
-                   rtl::OUString & rName)
+                   OUString & rName)
 : mpBKF(pBKF), mName(rName)
 {
 }
@@ -1930,7 +1930,7 @@ CpAndFc BookmarkHelper::getEndCpAndFc(sal_uInt32 nPos)
     return aCpAndFc;
 }
 
-rtl::OUString BookmarkHelper::getName(sal_uInt32 nPos)
+OUString BookmarkHelper::getName(sal_uInt32 nPos)
 {
     return mpNames->getEntry(nPos);
 }
@@ -2045,7 +2045,7 @@ BookmarkHelper::getBookmark(const CpAndFc & rCpAndFc)
 
     try
     {
-        rtl::OUString aName = getName(rCpAndFc);
+        OUString aName = getName(rCpAndFc);
 
         pResult = writerfilter::Reference<Properties>::Pointer_t
             (new Bookmark(getBKF(rCpAndFc), aName));
@@ -2058,9 +2058,9 @@ BookmarkHelper::getBookmark(const CpAndFc & rCpAndFc)
     return pResult;
 }
 
-rtl::OUString BookmarkHelper::getName(const CpAndFc & rCpAndFc)
+OUString BookmarkHelper::getName(const CpAndFc & rCpAndFc)
 {
-    rtl::OUString sResult;
+    OUString sResult;
 
     sal_uInt32 nIndex = getIndex(rCpAndFc);
 

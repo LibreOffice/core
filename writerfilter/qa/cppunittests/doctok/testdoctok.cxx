@@ -73,9 +73,9 @@ public:
 
         uno::Sequence<uno::Any> aUcbInitSequence(2);
         aUcbInitSequence[0] <<=
-            rtl::OUString("Local");
+            OUString("Local");
         aUcbInitSequence[1] <<=
-            rtl::OUString("Office");
+            OUString("Office");
 
         uno::Reference<lang::XMultiServiceFactory>
             xServiceFactory(xFactory, uno::UNO_QUERY);
@@ -118,7 +118,7 @@ public:
         rtl_uString *absfile=NULL;
         rtl_uString_newConcat(&absfile, dir, fname);
 
-        rtl::OUString sInputFileURL( absfile );
+        OUString sInputFileURL( absfile );
 
         for (sal_Int32 n = 0; n < sInputFileURL.getLength(); ++n)
         {

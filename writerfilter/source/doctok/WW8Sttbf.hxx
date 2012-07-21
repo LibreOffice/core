@@ -76,7 +76,7 @@ public:
 
        @param nPos     the index of the entry
      */
-    rtl::OUString getEntry(sal_uInt32 nPos) const;
+    OUString getEntry(sal_uInt32 nPos) const;
 };
 
 class WW8SttbTableResource : public ::writerfilter::Reference<Table>

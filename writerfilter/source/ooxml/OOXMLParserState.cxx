@@ -134,7 +134,7 @@ sal_Int32 OOXMLParserState::getXNoteId() const
     return mpDocument->getXNoteId();
 }
 
-const ::rtl::OUString & OOXMLParserState::getTarget() const
+const OUString & OOXMLParserState::getTarget() const
 {
     return mpDocument->getTarget();
 }

@@ -37,7 +37,7 @@ public:
 
     void startElement(const string & sElement);
     void endElement(const string & sElement);
-    void chars(const ::rtl::OUString & rChars);
+    void chars(const OUString & rChars);
     void chars(const string & rChars);
     void attribute(const string & rName, const string & rValue);
     void attribute(const string & rName, sal_uInt32 nValue);

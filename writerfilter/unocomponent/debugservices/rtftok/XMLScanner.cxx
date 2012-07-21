@@ -191,7 +191,7 @@ public:
             bytesTotal=xSeekable->getLength();
         if (xStatusIndicator.is() && xSeekable.is())
         {
-            xStatusIndicator->start(::rtl::OUString("Converting"), 100);
+            xStatusIndicator->start(OUString("Converting"), 100);
         }
     }
 
@@ -216,7 +216,7 @@ public:
                 {
                     char buf1[100];
                     sprintf(buf1, "Converted %" SAL_PRIdINT64 " KB", bytesRead/1024);
-                    xStatusIndicator->start(::rtl::OUString::createFromAscii(buf1), 0);
+                    xStatusIndicator->start(OUString::createFromAscii(buf1), 0);
                 }
             }
             return len;
@@ -237,26 +237,26 @@ xContext( xContext_ )
 {
 }
 
-sal_Int32 SAL_CALL XMLScanner::run( const uno::Sequence< rtl::OUString >& aArguments ) throw (uno::RuntimeException)
+sal_Int32 SAL_CALL XMLScanner::run( const uno::Sequence< OUString >& aArguments ) throw (uno::RuntimeException)
 {
     uno::Sequence<uno::Any> aUcbInitSequence(2);
-    aUcbInitSequence[0] <<= rtl::OUString("Local");
-    aUcbInitSequence[1] <<= rtl::OUString("Office");
+    aUcbInitSequence[0] <<= OUString("Local");
+    aUcbInitSequence[1] <<= OUString("Office");
     uno::Reference<lang::XMultiServiceFactory> xServiceFactory(xContext->getServiceManager(), uno::UNO_QUERY_THROW);
     if (::ucbhelper::ContentBroker::initialize(xServiceFactory, aUcbInitSequence))
     {
-            rtl::OUString arg=aArguments[0];
+            OUString arg=aArguments[0];
 
             uno::Reference<ucb::XSimpleFileAccess2> xFileAccess(ucb::SimpleFileAccess::create(xContext));
 
             rtl_uString *dir=NULL;
             osl_getProcessWorkingDir(&dir);
-            rtl::OUString absFileUrl;
+            OUString absFileUrl;
             osl_getAbsoluteFileURL(dir, arg.pData, &absFileUrl.pData);
             rtl_uString_release(dir);
 
             uno::Reference <lang::XSingleServiceFactory> xStorageFactory(
-                xServiceFactory->createInstance (rtl::OUString("com.sun.star.embed.StorageFactory")), uno::UNO_QUERY_THROW);
+                xServiceFactory->createInstance (OUString("com.sun.star.embed.StorageFactory")), uno::UNO_QUERY_THROW);
 
             uno::Reference<io::XInputStream> xInputStream = xFileAccess->openFileRead(absFileUrl);
             uno::Reference< task::XStatusIndicator > xStatusIndicator;
@@ -279,20 +279,20 @@ sal_Int32 SAL_CALL XMLScanner::run( const uno::Sequence< rtl::OUString >& aArgum
     return 0;
 }
 
-::rtl::OUString XMLScanner_getImplementationName ()
+OUString XMLScanner_getImplementationName ()
 {
-    return rtl::OUString(XMLScanner::IMPLEMENTATION_NAME );
+    return OUString(XMLScanner::IMPLEMENTATION_NAME );
 }
 
-sal_Bool SAL_CALL XMLScanner_supportsService( const ::rtl::OUString& ServiceName )
+sal_Bool SAL_CALL XMLScanner_supportsService( const OUString& ServiceName )
 {
     return ServiceName == XMLScanner::SERVICE_NAME;
 }
-uno::Sequence< rtl::OUString > SAL_CALL XMLScanner_getSupportedServiceNames(  ) throw (uno::RuntimeException)
+uno::Sequence< OUString > SAL_CALL XMLScanner_getSupportedServiceNames(  ) throw (uno::RuntimeException)
 {
-    uno::Sequence < rtl::OUString > aRet(1);
-    rtl::OUString* pArray = aRet.getArray();
-    pArray[0] =  rtl::OUString(XMLScanner::SERVICE_NAME );
+    uno::Sequence < OUString > aRet(1);
+    OUString* pArray = aRet.getArray();
+    pArray[0] =  OUString(XMLScanner::SERVICE_NAME );
     return aRet;
 }
 

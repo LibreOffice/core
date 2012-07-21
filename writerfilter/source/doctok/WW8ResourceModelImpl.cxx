@@ -268,9 +268,9 @@ uno::Any WW8Value::getAny() const
     return uno::Any();
 }
 
-::rtl::OUString WW8Value::getString() const
+OUString WW8Value::getString() const
 {
-    return ::rtl::OUString();
+    return OUString();
 }
 
 string WW8Value::toString() const
@@ -298,9 +298,9 @@ int WW8IntValue::getInt() const
     return mValue;
 }
 
-::rtl::OUString WW8IntValue::getString() const
+OUString WW8IntValue::getString() const
 {
-    return ::rtl::OUString::valueOf(static_cast<sal_Int32>(mValue));
+    return OUString::valueOf(static_cast<sal_Int32>(mValue));
 }
 
 uno::Any WW8IntValue::getAny() const
@@ -338,7 +338,7 @@ int WW8StringValue::getInt() const
     return 0;
 }
 
-::rtl::OUString WW8StringValue::getString() const
+OUString WW8StringValue::getString() const
 {
     return mString;
 }
@@ -380,7 +380,7 @@ string WW8StringValue::toString() const
     return result;
 }
 
-WW8Value::Pointer_t createValue(const rtl::OUString & rStr)
+WW8Value::Pointer_t createValue(const OUString & rStr)
 {
     return WW8Value::Pointer_t(new WW8StringValue(rStr));
 }

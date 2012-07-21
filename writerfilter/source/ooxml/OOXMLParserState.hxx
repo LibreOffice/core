@@ -45,7 +45,7 @@ class OOXMLParserState
     unsigned int mnHandle;
     OOXMLDocument * mpDocument;
     sal_Int32 mnXNoteId;
-    rtl::OUString msTarget;
+    OUString msTarget;
     OOXMLPropertySet::Pointer_t mpCharacterProps;
     stack<OOXMLPropertySet::Pointer_t> mCellProps;
     stack<OOXMLPropertySet::Pointer_t> mRowProps;
@@ -90,7 +90,7 @@ public:
     void setXNoteId(const sal_Int32 rId);
     sal_Int32 getXNoteId() const;
 
-    const rtl::OUString & getTarget() const;
+    const OUString & getTarget() const;
 
     void resolveCharacterProperties(Stream & rStream);
     void setCharacterProperties(OOXMLPropertySet::Pointer_t pProps);

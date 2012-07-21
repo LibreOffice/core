@@ -1001,7 +1001,7 @@ void TableManager<T, PropertiesPointer>::resolveCurrentTable()
             (void) e;
 #if OSL_DEBUG_LEVEL > 0
             rtl::OStringBuffer aBuf("resolving of current table failed with: ");
-            aBuf.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8));
+            aBuf.append(OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8));
             OSL_FAIL(aBuf.getStr());
 #endif
         }

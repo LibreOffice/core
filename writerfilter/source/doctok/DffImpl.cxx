@@ -319,9 +319,9 @@ DffDGG::get_fidcl(sal_uInt32 pos)
 
 // DffBSE
 
-rtl::OUString DffBSE::get_blipname()
+OUString DffBSE::get_blipname()
 {
-    rtl::OUString sResult;
+    OUString sResult;
     WW8FBSE aFBSE(this, 0x8);
 
     if (aFBSE.get_cbName() > 0)
@@ -395,11 +395,11 @@ void WW8FOPTE::resolveNoAuto(Properties & rHandler)
 
 // DffFSP
 
-rtl::OUString DffFSP::get_shptypename()
+OUString DffFSP::get_shptypename()
 {
     string aName = (*ShapeTypeToString::Instance())(get_shptype());
 
-    return rtl::OUString::createFromAscii(aName.c_str());
+    return OUString::createFromAscii(aName.c_str());
 }
 
 // DffSpContainer

@@ -63,7 +63,7 @@ sal_uInt32 WW8Sttbf::getEntryCount() const
     return mnCount;
 }
 
-rtl::OUString WW8Sttbf::getEntry(sal_uInt32 nPos) const
+OUString WW8Sttbf::getEntry(sal_uInt32 nPos) const
 {
     return getString(getEntryOffset(nPos));
 }

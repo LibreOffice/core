@@ -156,7 +156,7 @@ void OOXMLFactory::attributes(OOXMLFastContextHandler * pHandler,
 #ifdef DEBUG_FACTORY
                         debug_logger->element("boolean");
 #endif
-                        ::rtl::OUString aValue(Attribs->getValue(aIt->first));
+                        OUString aValue(Attribs->getValue(aIt->first));
                         OOXMLFastHelper<OOXMLBooleanValue>::newProperty(pHandler, nId, aValue);
 
                         OOXMLValue::Pointer_t pValue(new OOXMLBooleanValue(aValue));
@@ -168,7 +168,7 @@ void OOXMLFactory::attributes(OOXMLFastContextHandler * pHandler,
 #ifdef DEBUG_FACTORY
                         debug_logger->element("string");
 #endif
-                        ::rtl::OUString aValue(Attribs->getValue(aIt->first));
+                        OUString aValue(Attribs->getValue(aIt->first));
                         OOXMLFastHelper<OOXMLStringValue>::newProperty
                             (pHandler, nId, aValue);
 
@@ -181,7 +181,7 @@ void OOXMLFactory::attributes(OOXMLFastContextHandler * pHandler,
 #ifdef DEBUG_FACTORY
                         debug_logger->element("integer");
 #endif
-                        ::rtl::OUString aValue(Attribs->getValue(aIt->first));
+                        OUString aValue(Attribs->getValue(aIt->first));
                         OOXMLFastHelper<OOXMLIntegerValue>::newProperty
                             (pHandler, nId, aValue);
 
@@ -194,7 +194,7 @@ void OOXMLFactory::attributes(OOXMLFastContextHandler * pHandler,
 #ifdef DEBUG_FACTORY
                         debug_logger->element("hex");
 #endif
-                        ::rtl::OUString aValue(Attribs->getValue(aIt->first));
+                        OUString aValue(Attribs->getValue(aIt->first));
                         OOXMLFastHelper<OOXMLHexValue>::newProperty
                             (pHandler, nId, aValue);
 
@@ -212,7 +212,7 @@ void OOXMLFactory::attributes(OOXMLFastContextHandler * pHandler,
 
                         if (pListValueMap.get() != NULL)
                         {
-                            ::rtl::OUString aValue(Attribs->getValue(aIt->first));
+                            OUString aValue(Attribs->getValue(aIt->first));
                             sal_uInt32 nValue = (*pListValueMap)[aValue];
 
 #ifdef DEBUG_FACTORY
@@ -276,7 +276,7 @@ OOXMLFactory::createFastChildContext(OOXMLFastContextHandler * pHandler,
 }
 
 void OOXMLFactory::characters(OOXMLFastContextHandler * pHandler,
-                              const ::rtl::OUString & rString)
+                              const OUString & rString)
 {
 #ifdef DEBUG_FACTORY
     debug_logger->startElement("factory.characters");
@@ -338,7 +338,7 @@ void OOXMLFactory_ns::endAction(OOXMLFastContextHandler *)
 {
 }
 
-void OOXMLFactory_ns::charactersAction(OOXMLFastContextHandler *, const ::rtl::OUString &)
+void OOXMLFactory_ns::charactersAction(OOXMLFastContextHandler *, const OUString &)
 {
 }
 

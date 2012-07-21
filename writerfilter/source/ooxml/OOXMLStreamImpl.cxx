@@ -60,7 +60,7 @@ OOXMLStreamImpl::OOXMLStreamImpl
 }
 
 OOXMLStreamImpl::OOXMLStreamImpl
-(OOXMLStreamImpl & rOOXMLStream, const rtl::OUString & rId)
+(OOXMLStreamImpl & rOOXMLStream, const OUString & rId)
 : mxContext(rOOXMLStream.mxContext),
   mxStorageStream(rOOXMLStream.mxStorageStream),
   mxStorage(rOOXMLStream.mxStorage),
@@ -80,7 +80,7 @@ OOXMLStreamImpl::~OOXMLStreamImpl()
 #endif
 }
 
-const ::rtl::OUString & OOXMLStreamImpl::getTarget() const
+const OUString & OOXMLStreamImpl::getTarget() const
 {
     return msTarget;
 }
@@ -88,33 +88,33 @@ const ::rtl::OUString & OOXMLStreamImpl::getTarget() const
 bool OOXMLStreamImpl::lcl_getTarget(uno::Reference<embed::XRelationshipAccess>
                                     xRelationshipAccess,
                                     StreamType_t nStreamType,
-                                    const ::rtl::OUString & rId,
-                                    ::rtl::OUString & rDocumentTarget)
+                                    const OUString & rId,
+                                    OUString & rDocumentTarget)
 {
     bool bFound = false;
     static uno::Reference< com::sun::star::uri::XUriReferenceFactory > xFac =  ::com::sun::star::uri::UriReferenceFactory::create( mxContext );
     // use '/' to representent the root of the zip package ( and provide a 'file' scheme to
     // keep the XUriReference implementation happy )
     // add mspath to represent the 'source' of this stream
-    uno::Reference< com::sun::star::uri::XUriReference > xBase = xFac->parse( rtl::OUString( "file:///"  ) + msPath );
+    uno::Reference< com::sun::star::uri::XUriReference > xBase = xFac->parse( OUString( "file:///"  ) + msPath );
 
-    static rtl::OUString sType("Type");
-    static rtl::OUString sId("Id");
-    static rtl::OUString sDocumentType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument");
-    static rtl::OUString sStylesType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles");
-    static rtl::OUString sNumberingType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/numbering");
-    static rtl::OUString sFonttableType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/fontTable");
-    static rtl::OUString sFootnotesType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/footnotes");
-    static rtl::OUString sEndnotesType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/endnotes");
-    static rtl::OUString sCommentsType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/comments");
-    static rtl::OUString sThemeType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/theme");
-    static rtl::OUString sSettingsType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/settings");
-    static rtl::OUString sTarget("Target");
-    static rtl::OUString sTargetMode("TargetMode");
-    static rtl::OUString sExternal("External");
-    static rtl::OUString sVBAProjectType("http://schemas.microsoft.com/office/2006/relationships/vbaProject");
+    static OUString sType("Type");
+    static OUString sId("Id");
+    static OUString sDocumentType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument");
+    static OUString sStylesType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles");
+    static OUString sNumberingType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/numbering");
+    static OUString sFonttableType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/fontTable");
+    static OUString sFootnotesType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/footnotes");
+    static OUString sEndnotesType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/endnotes");
+    static OUString sCommentsType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/comments");
+    static OUString sThemeType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/theme");
+    static OUString sSettingsType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/settings");
+    static OUString sTarget("Target");
+    static OUString sTargetMode("TargetMode");
+    static OUString sExternal("External");
+    static OUString sVBAProjectType("http://schemas.microsoft.com/office/2006/relationships/vbaProject");
 
-    rtl::OUString sStreamType;
+    OUString sStreamType;
 
     switch (nStreamType)
     {
@@ -162,7 +162,7 @@ bool OOXMLStreamImpl::lcl_getTarget(uno::Reference<embed::XRelationshipAccess>
             uno::Sequence< beans::StringPair > aSeq = aSeqs[j];
 
             bool bExternalTarget = false;
-            ::rtl::OUString sMyTarget;
+            OUString sMyTarget;
             for (sal_Int32 i = 0; i < aSeq.getLength(); i++)
             {
                 beans::StringPair aPair = aSeq[i];
@@ -207,9 +207,9 @@ bool OOXMLStreamImpl::lcl_getTarget(uno::Reference<embed::XRelationshipAccess>
     return bFound;
 }
 
-::rtl::OUString OOXMLStreamImpl::getTargetForId(const ::rtl::OUString & rId)
+OUString OOXMLStreamImpl::getTargetForId(const OUString & rId)
 {
-    ::rtl::OUString sTarget;
+    OUString sTarget;
 
     uno::Reference<embed::XRelationshipAccess> xRelationshipAccess
         (mxDocumentStream, uno::UNO_QUERY_THROW);
@@ -217,7 +217,7 @@ bool OOXMLStreamImpl::lcl_getTarget(uno::Reference<embed::XRelationshipAccess>
     if (lcl_getTarget(xRelationshipAccess, UNKNOWN, rId, sTarget))
         return sTarget;
 
-    return ::rtl::OUString();
+    return OUString();
 }
 
 void OOXMLStreamImpl::init()
@@ -271,7 +271,7 @@ uno::Reference<xml::sax::XParser> OOXMLStreamImpl::getParser()
 
     uno::Reference<xml::sax::XParser> xParser
         (xFactory->createInstanceWithContext
-        ( rtl::OUString("com.sun.star.xml.sax.Parser"),
+        ( OUString("com.sun.star.xml.sax.Parser"),
           mxContext ),
         uno::UNO_QUERY );
 
@@ -315,7 +315,7 @@ OOXMLDocumentFactory::createStream
 
 OOXMLStream::Pointer_t
 OOXMLDocumentFactory::createStream
-(OOXMLStream::Pointer_t pStream, const rtl::OUString & rId)
+(OOXMLStream::Pointer_t pStream, const OUString & rId)
 {
     return OOXMLStream::Pointer_t
         (new OOXMLStreamImpl(*dynamic_cast<OOXMLStreamImpl *>(pStream.get()),

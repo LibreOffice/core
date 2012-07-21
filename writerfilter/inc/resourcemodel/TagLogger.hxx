@@ -72,11 +72,11 @@ namespace writerfilter
 #endif
         void attribute(const std::string & name, const std::string & value);
 #if OSL_DEBUG_LEVEL > 1
-        void attribute(const std::string & name, const ::rtl::OUString & value);
+        void attribute(const std::string & name, const OUString & value);
         void attribute(const std::string & name, sal_uInt32 value);
         void attribute(const std::string & name, const uno::Any aAny);
         void chars(const std::string & chars);
-        void chars(const ::rtl::OUString & chars);
+        void chars(const OUString & chars);
         void endElement();
 #endif
 

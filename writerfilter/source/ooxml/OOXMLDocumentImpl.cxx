@@ -118,13 +118,13 @@ const Id & OOXMLDocumentImpl::getXNoteType() const
     return mXNoteType;
 }
 
-const ::rtl::OUString & OOXMLDocumentImpl::getTarget() const
+const OUString & OOXMLDocumentImpl::getTarget() const
 {
     return mpStream->getTarget();
 }
 
 writerfilter::Reference<Stream>::Pointer_t
-OOXMLDocumentImpl::getSubStream(const rtl::OUString & rId)
+OOXMLDocumentImpl::getSubStream(const OUString & rId)
 {
     OOXMLStream::Pointer_t pStream
         (OOXMLDocumentFactory::createStream(mpStream, rId));
@@ -210,7 +210,7 @@ void OOXMLDocumentImpl::resolveComment(Stream & rStream,
 }
 
 OOXMLPropertySet * OOXMLDocumentImpl::getPicturePropSet
-(const ::rtl::OUString & rId)
+(const OUString & rId)
 {
     OOXMLStream::Pointer_t pStream
         (OOXMLDocumentFactory::createStream(mpStream, rId));
@@ -242,21 +242,21 @@ OOXMLPropertySet * OOXMLDocumentImpl::getPicturePropSet
 }
 
 void OOXMLDocumentImpl::resolvePicture(Stream & rStream,
-                                       const rtl::OUString & rId)
+                                       const OUString & rId)
 {
     OOXMLPropertySet * pProps = getPicturePropSet(rId);
 
     rStream.props(writerfilter::Reference<Properties>::Pointer_t(pProps));
 }
 
-::rtl::OUString OOXMLDocumentImpl::getTargetForId(const ::rtl::OUString & rId)
+OUString OOXMLDocumentImpl::getTargetForId(const OUString & rId)
 {
     return mpStream->getTargetForId(rId);
 }
 
 void OOXMLDocumentImpl::resolveHeader(Stream & rStream,
                                       const sal_Int32 type,
-                                      const rtl::OUString & rId)
+                                      const OUString & rId)
 {
      writerfilter::Reference<Stream>::Pointer_t pStream =
          getSubStream(rId);
@@ -278,7 +278,7 @@ void OOXMLDocumentImpl::resolveHeader(Stream & rStream,
 
 void OOXMLDocumentImpl::resolveFooter(Stream & rStream,
                                       const sal_Int32 type,
-                                      const rtl::OUString & rId)
+                                      const OUString & rId)
 {
      writerfilter::Reference<Stream>::Pointer_t pStream =
          getSubStream(rId);
@@ -350,7 +350,7 @@ void OOXMLDocumentImpl::resolve(Stream & rStream)
 #endif
 }
 
-uno::Reference<io::XInputStream> OOXMLDocumentImpl::getInputStreamForId(const ::rtl::OUString & rId)
+uno::Reference<io::XInputStream> OOXMLDocumentImpl::getInputStreamForId(const OUString & rId)
 {
     OOXMLStream::Pointer_t pStream(OOXMLDocumentFactory::createStream(mpStream, rId));
 

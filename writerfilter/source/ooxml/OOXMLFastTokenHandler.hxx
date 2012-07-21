@@ -39,8 +39,8 @@ public:
     explicit OOXMLFastTokenHandler(css::uno::Reference< css::uno::XComponentContext > const & context);
 
     // ::com::sun::star::xml::sax::XFastTokenHandler:
-    virtual ::sal_Int32 SAL_CALL getToken(const ::rtl::OUString & Identifier) throw (css::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getIdentifier(::sal_Int32 Token) throw (css::uno::RuntimeException);
+    virtual ::sal_Int32 SAL_CALL getToken(const OUString & Identifier) throw (css::uno::RuntimeException);
+    virtual OUString SAL_CALL getIdentifier(::sal_Int32 Token) throw (css::uno::RuntimeException);
     virtual css::uno::Sequence< ::sal_Int8 > SAL_CALL getUTF8Identifier(::sal_Int32 Token) throw (css::uno::RuntimeException);
     virtual ::sal_Int32 SAL_CALL getTokenFromUTF8(const css::uno::Sequence< ::sal_Int8 > & Identifier) throw (css::uno::RuntimeException);
 

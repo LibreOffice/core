@@ -32,10 +32,6 @@ using namespace std;
 using namespace util;
 using namespace osl;
 
-using ::rtl::OUString;
-using ::rtl::OUStringToOString;
-using ::rtl::OString;
-
 /** Helper function, get a temporary file name
  */
 OString getTempFileName(const OUString& fileName)

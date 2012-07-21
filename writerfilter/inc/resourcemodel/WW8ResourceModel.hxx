@@ -310,7 +310,7 @@ public:
     /**
        Returns string representation of the value.
      */
-    virtual ::rtl::OUString getString() const = 0;
+    virtual OUString getString() const = 0;
 
     /**
        Returns representation of the value as uno::Any.
@@ -408,7 +408,7 @@ Stream::Pointer_t WRITERFILTER_RESOURCEMODEL_DLLPUBLIC createStreamHandler();
     void WRITERFILTER_RESOURCEMODEL_DLLPUBLIC dump(OutputWithDepth<string> & o, const char * name, writerfilter::Reference<Properties>::Pointer_t props);
     void WRITERFILTER_RESOURCEMODEL_DLLPUBLIC dump(OutputWithDepth<string> & o, const char * name, sal_uInt32 n);
     void WRITERFILTER_RESOURCEMODEL_DLLPUBLIC dump(OutputWithDepth<string> & /*o*/, const char * /*name*/,
-                                     const rtl::OUString & /*str*/);
+                                     const OUString & /*str*/);
     void WRITERFILTER_RESOURCEMODEL_DLLPUBLIC dump(OutputWithDepth<string> & o, const char * name, writerfilter::Reference<BinaryObj>::Pointer_t binary);
 
 }
