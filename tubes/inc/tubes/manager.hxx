@@ -134,6 +134,7 @@ public:
 
     /** True if there has been tube channel received and is still not used. */
     TUBES_DLLPUBLIC static bool             hasWaitingConference();
+    static void                             setCurrentUuid( const OString& rUuid );
 
     void                    disconnect();
 
@@ -192,8 +193,6 @@ public:
     TpAccount*              getAccount( const rtl::OString& rAccountID );
 
 /* Callbacks; not for use outside this class. */
-    static void             TransferDone( EmpathyFTHandler *handler, TpFileTransferChannel *, gpointer user_data);
-
     static void             DBusChannelHandler(
         TpSimpleHandler*            /*handler*/,
         TpAccount*                  pAccount,

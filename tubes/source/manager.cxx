@@ -28,6 +28,7 @@
 
 #include "tubes/manager.hxx"
 #include "tubes/constants.h"
+#include "tubes/file-transfer-helper.h"
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/frame/XComponentLoader.hpp>
@@ -180,6 +181,11 @@ bool TeleManager::hasWaitingConference()
     return !pImpl->msCurrentUUID.isEmpty();
 }
 
+void TeleManager::setCurrentUuid( const OString& rUuid )
+{
+    pImpl->msCurrentUUID = rUuid;
+}
+
 // FIXME this is exported only because of ScDocFuncDemo
 SAL_DLLPUBLIC_EXPORT void TeleManager_fileReceived( const rtl::OUString &rStr )
 {
@@ -205,9 +211,9 @@ SAL_DLLPUBLIC_EXPORT void TeleManager_fileReceived( const rtl::OUString &rStr )
     }
 }
 
-void TeleManager::TransferDone( EmpathyFTHandler *handler, TpFileTransferChannel *, gpointer )
+void TeleManager_TransferDone( EmpathyFTHandler *handler, TpFileTransferChannel *, gpointer )
 {
-    SAL_INFO( "tubes", "TeleManager::TransferDone: hooray!");
+    SAL_INFO( "tubes", "TeleManager_TransferDone: hooray!");
     GFile *gfile = empathy_ft_handler_get_gfile( handler);
     char *uri = g_file_get_uri( gfile);
     rtl::OUString aUri( uri, strlen( uri), RTL_TEXTENCODING_UTF8);
@@ -217,7 +223,7 @@ void TeleManager::TransferDone( EmpathyFTHandler *handler, TpFileTransferChannel
     sal_Int32 last = aUri.lastIndexOf('_');
     OString sUuid( OUStringToOString( aUri.copy( first + 1, last - first - 1),
                 RTL_TEXTENCODING_UTF8));
-    pImpl->msCurrentUUID = sUuid;
+    TeleManager::setCurrentUuid( sUuid );
     TeleManager_fileReceived( aUri );
 
     g_object_unref( handler);
@@ -256,7 +262,7 @@ TeleManager_IncomingHandlerReady (
     empathy_ft_handler_incoming_set_destination( pHandler, pDestination);
     g_object_unref( pDestination);
 
-    g_signal_connect( pHandler, "transfer-done", G_CALLBACK (&TeleManager::TransferDone), pManager);
+    g_signal_connect( pHandler, "transfer-done", G_CALLBACK (TeleManager_TransferDone), pManager);
     g_signal_connect( pHandler, "transfer-error", G_CALLBACK (TeleManager_TransferError), pManager);
     empathy_ft_handler_start_transfer( pHandler);
 }
