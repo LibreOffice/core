@@ -39,8 +39,6 @@
 
 using namespace ::comphelper;
 using namespace ::com::sun::star;
-using ::rtl::OUString;
-using rtl::OUStringToOString;
 
 RtfImportFilter::RtfImportFilter( const uno::Reference< uno::XComponentContext > &xCtx ) :
     m_xCtx( xCtx )

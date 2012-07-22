@@ -31,7 +31,6 @@
 
 using namespace ::comphelper;
 using namespace ::com::sun::star;
-using ::rtl::OUString;
 
 DocxExportFilter::DocxExportFilter( const uno::Reference< uno::XComponentContext >& xContext )
     : oox::core::XmlFilterBase( xContext )

@@ -74,11 +74,6 @@ using ::editeng::SvxBorderLine;
 using namespace ::comphelper;
 using namespace ::com::sun::star;
 
-using rtl::OString;
-using rtl::OUString;
-using rtl::OStringBuffer;
-using rtl::OUStringBuffer;
-
 using sw::mark::IMark;
 
 #if defined(UNX)

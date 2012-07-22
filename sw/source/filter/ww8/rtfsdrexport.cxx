@@ -37,10 +37,6 @@
 #include <svx/unoapi.hxx>
 #include <vcl/cvtgrf.hxx>
 
-using rtl::OString;
-using rtl::OStringBuffer;
-using rtl::OUString;
-using rtl::OUStringBuffer;
 using namespace sw::util;
 
 RtfSdrExport::RtfSdrExport( RtfExport &rExport )
