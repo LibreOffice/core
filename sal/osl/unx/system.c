@@ -30,10 +30,25 @@
 
 #ifdef NO_PTHREAD_RTL
 
+/* struct passwd differs on some platforms */
+
+#if defined(MACOSX) || defined(IOS) || defined(OPENBSD) || defined(NETBSD)
+
+//No mutex needed on Mac OS X, gethostbyname is thread safe
+
+#if defined(MACOSX)
+
+#define RTL_MUTEX_LOCK
+#define RTL_MUTEX_UNLOCK
+
+#else //defined(MACOSX)
+
 static pthread_mutex_t getrtl_mutex = PTHREAD_MUTEX_INITIALIZER;
 
-/* struct passwd differs on some platforms */
-#if defined(MACOSX) || defined(IOS) || defined(OPENBSD) || defined(NETBSD)
+#define RTL_MUTEX_LOCK pthread_mutex_lock(&getrtl_mutex);
+#define RTL_MUTEX_UNLOCK pthread_mutex_unlock(&getrtl_mutex);
+
+#endif //defined(MACOSX)
 
 extern int h_errno;
 
@@ -50,7 +65,7 @@ struct hostent *gethostbyname_r(const char *name, struct hostent *result,
      */
       struct hostent* res;
 
-      pthread_mutex_lock(&getrtl_mutex);
+      RTL_MUTEX_LOCK
 
       if ( (res = gethostbyname(name)) )
       {
@@ -120,9 +135,9 @@ struct hostent *gethostbyname_r(const char *name, struct hostent *result,
         *h_errnop = h_errno;
     }
 
-    pthread_mutex_unlock(&getrtl_mutex);
+    RTL_MUTEX_UNLOCK
 
-      return res;
+    return res;
 }
 #endif // OSX || IOS || OPENBSD || NETBSD
 
