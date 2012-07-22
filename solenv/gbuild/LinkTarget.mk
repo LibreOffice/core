@@ -106,8 +106,7 @@ endef
 ifeq ($(gb_FULLDEPS),$(true))
 define gb_Object__command_dep
 mkdir -p $(dir $(1)) && \
-	echo '$(2) : $$(gb_Helper_PHONY)' > $(1)
-
+   echo '$(2) : $$(gb_Helper_PHONY)' > $(1)
 endef
 else
 gb_Object__command_dep = \
@@ -125,9 +124,8 @@ $(call gb_CObject_get_target,%) : $(call gb_CObject_get_source,$(SRCDIR),%)
 	$(call gb_CObject__command,$@,$*,$<,$(call gb_CObject_get_dep_target,$*))
 
 ifeq ($(gb_FULLDEPS),$(true))
-$(call gb_CObject_get_dep_target,%) :
-	$(if $(wildcard $@),touch $@,\
-	  $(call gb_Object__command_dep,$@,$(call gb_CObject_get_target,$*)))
+$(call gb_CObject_get_dep_target,%) : $(call gb_CObject_get_target,%)
+	test -f $@ || ( $(call gb_Object__command_dep,$@,$<) )
 
 endif
 
@@ -142,9 +140,8 @@ $(call gb_CxxObject_get_target,%) : $(call gb_CxxObject_get_source,$(SRCDIR),%)
 	$(call gb_CxxObject__command,$@,$*,$<,$(call gb_CxxObject_get_dep_target,$*))
 
 ifeq ($(gb_FULLDEPS),$(true))
-$(call gb_CxxObject_get_dep_target,%) :
-	$(if $(wildcard $@),touch $@,\
-	  $(call gb_Object__command_dep,$@,$(call gb_CxxObject_get_target,$*)))
+$(call gb_CxxObject_get_dep_target,%) : $(call gb_CxxObject_get_target,%)
+	test -f $@ || ( $(call gb_Object__command_dep,$@,$<) )
 
 endif
 
@@ -160,9 +157,8 @@ $(call gb_GenCObject_get_target,%) : $(call gb_GenCObject_get_source,%)
 	$(call gb_CObject__command,$@,$*,$<,$(call gb_GenCObject_get_dep_target,$*))
 
 ifeq ($(gb_FULLDEPS),$(true))
-$(call gb_GenCObject_get_dep_target,%) :
-	$(if $(wildcard $@),touch $@,\
-	  $(call gb_Object__command_dep,$@,$(call gb_GenCObject_get_target,$*)))
+$(call gb_GenCObject_get_dep_target,%) : $(call gb_GenCObject_get_target,%)
+	test -f $@ || ( $(call gb_Object__command_dep,$@,$<) )
 
 endif
 
@@ -178,9 +174,8 @@ $(call gb_GenCxxObject_get_target,%) : $(call gb_GenCxxObject_get_source,%)
 	$(call gb_CxxObject__command,$@,$*,$<,$(call gb_GenCxxObject_get_dep_target,$*))
 
 ifeq ($(gb_FULLDEPS),$(true))
-$(call gb_GenCxxObject_get_dep_target,%) :
-	$(if $(wildcard $@),touch $@,\
-	  $(call gb_Object__command_dep,$@,$(call gb_GenCxxObject_get_target,$*)))
+$(call gb_GenCxxObject_get_dep_target,%) : $(call gb_GenCxxObject_get_target,%)
+	test -f $@ || ( $(call gb_Object__command_dep,$@,$<) )
 
 endif
 
@@ -253,9 +248,8 @@ $(call gb_ObjCxxObject_get_target,%) : $(call gb_ObjCxxObject_get_source,$(SRCDI
 	$(call gb_ObjCxxObject__command,$@,$*,$<,$(call gb_ObjCxxObject_get_dep_target,$*))
 
 ifeq ($(gb_FULLDEPS),$(true))
-$(call gb_ObjCxxObject_get_dep_target,%) :
-	$(if $(wildcard $@),touch $@,\
-	  $(call gb_Object__command_dep,$@,$(call gb_ObjCxxObject_get_target,$*)))
+$(call gb_ObjCxxObject_get_dep_target,%) : $(call gb_ObjCxxObject_get_target,%)
+	test -f $@ || ( $(call gb_Object__command_dep,$@,$<) )
 
 endif
 
@@ -271,9 +265,8 @@ $(call gb_ObjCObject_get_target,%) : $(call gb_ObjCObject_get_source,$(SRCDIR),%
 	$(call gb_ObjCObject__command,$@,$*,$<,$(call gb_ObjCObject_get_dep_target,$*))
 
 ifeq ($(gb_FULLDEPS),$(true))
-$(call gb_ObjCObject_get_dep_target,%) :
-	$(if $(wildcard $@),touch $@,\
-	  $(call gb_Object__command_dep,$@,$(call gb_ObjCObject_get_target,$*)))
+$(call gb_ObjCObject_get_dep_target,%) : $(call gb_ObjCObject_get_target,%)
+	test -f $@ || ( $(call gb_Object__command_dep,$@,$<) )
 
 endif
 
@@ -288,9 +281,8 @@ $(call gb_AsmObject_get_target,%) : $(call gb_AsmObject_get_source,$(SRCDIR),%)
 	$(call gb_AsmObject__command,$@,$*,$<,$(call gb_AsmObject_get_dep_target,$*))
 
 ifeq ($(gb_FULLDEPS),$(true))
-$(call gb_AsmObject_get_dep_target,%) :
-	$(if $(wildcard $@),touch $@,\
-	  $(call gb_Object__command_dep,$@,$(call gb_AsmObject_get_target,$*)))
+$(call gb_AsmObject_get_dep_target,%) : $(call gb_AsmObject_get_target,%)
+	test -f $@ || ( $(call gb_Object__command_dep,$@,$<) )
 
 endif
 
