@@ -51,8 +51,8 @@ class SW_DLLPUBLIC SwBreakIt : private ::boost::noncopyable
     com::sun::star::lang::Locale * m_pLocale;
     com::sun::star::i18n::ForbiddenCharacters * m_pForbidden;
 
-    LanguageType aLast;          // language of the current locale
-    LanguageType aForbiddenLang; // language of the current forbiddenChar struct
+    LanguageType aLast;          ///< language of the current locale
+    LanguageType aForbiddenLang; ///< language of the current forbiddenChar struct
 
     void _GetLocale( const LanguageType aLang );
     void _GetForbidden( const LanguageType  aLang );
