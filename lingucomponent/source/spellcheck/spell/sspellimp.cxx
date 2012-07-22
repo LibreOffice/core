@@ -73,16 +73,16 @@ using ::rtl::OString;
 
 ///////////////////////////////////////////////////////////////////////////
 
-SpellChecker::SpellChecker()
-    : aEvtListeners(GetLinguMutex())
+SpellChecker::SpellChecker() :
+    aDicts(NULL),
+    aDEncs(NULL),
+    aDLocs(NULL),
+    aDNames(NULL),
+    numdict(0),
+    aEvtListeners(GetLinguMutex()),
+    pPropHelper(NULL),
+    bDisposing(sal_False)
 {
-    aDicts = NULL;
-    aDEncs = NULL;
-    aDLocs = NULL;
-    aDNames = NULL;
-    bDisposing = sal_False;
-    pPropHelper = NULL;
-    numdict = 0;
 }
 
 SpellChecker::~SpellChecker()
@@ -92,18 +92,12 @@ SpellChecker::~SpellChecker()
        for (int i = 0; i < numdict; ++i)
        {
             delete aDicts[i];
-            aDicts[i] = NULL;
        }
        delete[] aDicts;
     }
-    aDicts = NULL;
-    numdict = 0;
     delete[] aDEncs;
-    aDEncs = NULL;
     delete[] aDLocs;
-    aDLocs = NULL;
     delete[] aDNames;
-    aDNames = NULL;
     if (pPropHelper)
     {
         pPropHelper->RemoveAsPropListener();
@@ -162,8 +156,7 @@ Sequence< Locale > SAL_CALL SpellChecker::getLocales()
         // is not yet supported by the list od new style dictionaries
         MergeNewStyleDicsAndOldStyleDics( aDics, aOldStyleDics );
 
-        numdict = aDics.size();
-        if (numdict)
+        if (!aDics.empty())
         {
             // get supported locales from the dictionaries-to-use...
             sal_Int32 k = 0;
@@ -239,9 +232,13 @@ Sequence< Locale > SAL_CALL SpellChecker::getLocales()
         {
             /* no dictionary found so register no dictionaries */
             numdict = 0;
+            delete[] aDicts;
             aDicts  = NULL;
-            aDEncs  = NULL;
+            delete[] aDEncs;
+            aDEncs = NULL;
+            delete[] aDLocs;
             aDLocs  = NULL;
+            delete[] aDNames;
             aDNames = NULL;
             aSuppLocales.realloc(0);
         }
