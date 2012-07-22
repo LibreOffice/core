@@ -392,8 +392,7 @@ endif
 
 build: build-packimages
 ifeq ($(OS_FOR_BUILD),WNT)
-	cd instsetoo_native && unset MAKEFLAGS && \
-		$(SOLARENV)/bin/build.pl FORCE2ARCHIVE=TRUE
+	cd instsetoo_native && unset MAKEFLAGS && $(SOLARENV)/bin/build.pl
 else
 	cd instsetoo_native && unset MAKEFLAGS && \
         $(SOLARENV)/bin/build.pl -P$(BUILD_NCPUS) -- -P$(GMAKE_PARALLELISM)
@@ -425,6 +424,7 @@ dev-install: build
 	@rm -rf $(DEVINSTALLDIR)
 	@mkdir $(DEVINSTALLDIR)
 ifeq ($(OS_FOR_BUILD),WNT)
+	cd instsetoo_native && unset MAKEFLAGS && $(SOLARENV)/bin/build.pl FORCE2ARCHIVE=TRUE
 	unzip -d "$(DEVINSTALLDIR)" "$(SRCDIR)/instsetoo_native/$(INPATH)/LibreOffice_Dev/archive/install/en-US/LibO*_install-arc_en-US.zip"
 	mv "$(DEVINSTALLDIR)"/LibO*_install-arc_en-US/* "$(DEVINSTALLDIR)"/opt
 else
