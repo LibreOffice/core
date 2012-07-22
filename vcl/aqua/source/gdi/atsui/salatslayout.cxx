@@ -852,11 +852,38 @@ void ATSLayout::GetCaretPositions( int nMaxIndex, long* pCaretXArray ) const
  *
  * @return : measurement valid
 **/
-bool ATSLayout::GetBoundRect( SalGraphics&, Rectangle& rVCLRect ) const
+bool ATSLayout::GetBoundRect( SalGraphics& rGraphics, Rectangle& rVCLRect ) const
 {
+    AquaSalGraphics& rAquaGraphics = static_cast<AquaSalGraphics&>(rGraphics);
+
     const Point aPos = GetDrawPosition( Point(mnBaseAdv, 0) );
     const Fixed nFixedX = Vcl2Fixed( +aPos.X() );
     const Fixed nFixedY = Vcl2Fixed( +aPos.Y() );
+
+    // prepare ATSUI drawing attributes
+    static const ItemCount nMaxControls = 8;
+    ATSUAttributeTag theTags[ nMaxControls ];
+    ByteCount theSizes[ nMaxControls];
+    ATSUAttributeValuePtr theValues[ nMaxControls ];
+    ItemCount numcontrols = 0;
+
+    // Tell ATSUI to use CoreGraphics
+    theTags[numcontrols] = kATSUCGContextTag;
+    theSizes[numcontrols] = sizeof( CGContextRef );
+    theValues[numcontrols++] = &rAquaGraphics.mrContext;
+
+    // Rotate if necessary
+    if( rAquaGraphics.mnATSUIRotation != 0 )
+    {
+        Fixed theAngle = rAquaGraphics.mnATSUIRotation;
+        theTags[numcontrols] = kATSULineRotationTag;
+        theSizes[numcontrols] = sizeof( Fixed );
+        theValues[numcontrols++] = &theAngle;
+    }
+
+    DBG_ASSERT( (numcontrols <= nMaxControls), "ATSLayout::GetBoundRect() numcontrols overflow" );
+    OSStatus theErr = ATSUSetLayoutControls (maATSULayout, numcontrols, theTags, theSizes, theValues);
+    DBG_ASSERT( (theErr==noErr), "ATSLayout::GetBoundRect ATSUSetLayoutControls failed!\n" );
 
     Rect aMacRect;
     OSStatus eStatus = ATSUMeasureTextImage( maATSULayout,
