@@ -456,7 +456,7 @@ namespace sw
     }
 }
 
-class FieldEntry
+class WW8FieldEntry
 {
     private:
         ::rtl::OUString msBookmarkName;
@@ -468,10 +468,10 @@ class FieldEntry
         sw::hack::Position maStartPos;
         sal_uInt16 mnFieldId;
         sal_uLong mnObjLocFc;
-        FieldEntry(SwPosition &rPos, sal_uInt16 nFieldId) throw();
-        FieldEntry(const FieldEntry &rOther) throw();
-        FieldEntry &operator=(const FieldEntry &rOther) throw();
-        void Swap(FieldEntry &rOther) throw();
+        WW8FieldEntry(SwPosition &rPos, sal_uInt16 nFieldId) throw();
+        WW8FieldEntry(const WW8FieldEntry &rOther) throw();
+        WW8FieldEntry &operator=(const WW8FieldEntry &rOther) throw();
+        void Swap(WW8FieldEntry &rOther) throw();
 
         SwNodeIndex GetPtNode() { return maStartPos.GetPtNode(); };
         xub_StrLen GetPtCntnt() { return maStartPos.GetPtCntnt(); };
@@ -494,7 +494,7 @@ private:
     WW8PLCFxSaveAll maPLCFxSave;
     SwPosition maTmpPos;
     std::deque<bool> maOldApos;
-    std::deque<FieldEntry> maOldFieldStack;
+    std::deque<WW8FieldEntry> maOldFieldStack;
     SwWW8FltControlStack* mpOldStck;
     SwWW8FltAnchorStack* mpOldAnchorStck;
     sw::util::RedlineStack *mpOldRedlines;
@@ -985,8 +985,8 @@ private:
     where the end point will fall, to do so fully correctly duplicates the
     main logic of the filter itself.
     */
-    std::deque<FieldEntry> maFieldStack;
-    typedef std::deque<FieldEntry>::const_iterator mycFieldIter;
+    std::deque<WW8FieldEntry> maFieldStack;
+    typedef std::deque<WW8FieldEntry>::const_iterator mycFieldIter;
 
     /*
     A stack of open footnotes. Should only be one in it at any time.
