@@ -75,8 +75,8 @@ class SW_DLLPUBLIC SwClient : ::boost::noncopyable
     friend class SwModify;
     friend class SwClientIter;
 
-    SwClient *pLeft, *pRight;       // double-linked list of other clients
-    SwModify *pRegisteredIn;        // event source
+    SwClient *pLeft, *pRight;       ///< double-linked list of other clients
+    SwModify *pRegisteredIn;        ///< event source
 
     // in general clients should not be removed when their SwModify sends out Modify()
     // notifications; in some rare cases this is necessary, but only the concrete SwClient
@@ -198,9 +198,8 @@ public:
 
     SwClient* GetToTell() { return pToTell; }
 
-    // get Client information
+    /** get Client information */
     virtual sal_Bool GetInfo( SfxPoolItem & ) const;
-
 protected:
     virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNewValue );
     virtual void SwClientNotify( const SwModify& rModify, const SfxHint& rHint );
@@ -209,8 +208,8 @@ protected:
 
 class SwClientIter
 {
-    friend SwClient* SwModify::Remove(SwClient *); // for pointer adjustments
-    friend void SwModify::Add(SwClient *pDepend);   // for pointer adjustments
+    friend SwClient* SwModify::Remove(SwClient *); ///< for pointer adjustments
+    friend void SwModify::Add(SwClient *pDepend);   ///< for pointer adjustments
 
     const SwModify& rRoot;
 

@@ -67,24 +67,24 @@ typedef sal_Bool (*FnForEach)( const ElementPtr&, void* pArgs );
 #define COMPRESSLVL 80
 
 struct BlockInfo {                  // block info:
-    BigPtrArray* pBigArr;           // in this array the block is located
-    ElementPtr* pData;              // data block
-    sal_uLong nStart, nEnd;         // start- and end index
-    sal_uInt16 nElem;               // number of elements
+    BigPtrArray* pBigArr;           ///< in this array the block is located
+    ElementPtr* pData;              ///< data block
+    sal_uLong nStart, nEnd;         ///< start- and end index
+    sal_uInt16 nElem;               ///< number of elements
 };
 
 class SW_DLLPUBLIC BigPtrArray
 {
     BlockInfo** ppInf;              // block info
-    sal_uLong       nSize;              // number of elements
-    sal_uInt16      nMaxBlock;          // current max. number of blocks
-    sal_uInt16      nBlock;             // number of blocks
-    sal_uInt16      nCur;               // last block
+    sal_uLong       nSize;              ///< number of elements
+    sal_uInt16      nMaxBlock;          ///< current max. number of blocks
+    sal_uInt16      nBlock;             ///< number of blocks
+    sal_uInt16      nCur;               ///< last block
 
-    sal_uInt16      Index2Block( sal_uLong ) const; // block search
-    BlockInfo*  InsBlock( sal_uInt16 );         // insert block
-    void        BlockDel( sal_uInt16 );         // some blocks were deleted
-    void        UpdIndex( sal_uInt16 );         // recalculate indices
+    sal_uInt16      Index2Block( sal_uLong ) const; ///< block search
+    BlockInfo*  InsBlock( sal_uInt16 );         ///< insert block
+    void        BlockDel( sal_uInt16 );         ///< some blocks were deleted
+    void        UpdIndex( sal_uInt16 );         ///< recalculate indices
 
 protected:
     // fill all blocks

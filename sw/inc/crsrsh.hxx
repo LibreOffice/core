@@ -111,8 +111,8 @@ struct SwContentAtPos
         SW_SMARTTAG         = 0x0800,
         SW_FORMCTRL         = 0x1000
 #ifdef DBG_UTIL
-        ,SW_CURR_ATTRS      = 0x4000        // only for debugging
-        ,SW_TABLEBOXVALUE   = 0x8000        // only for debugging
+        ,SW_CURR_ATTRS      = 0x4000        ///< only for debugging
+        ,SW_TABLEBOXVALUE   = 0x8000        ///< only for debugging
 #endif
     } eCntntAtPos;
 
@@ -166,40 +166,40 @@ public:
 
     /* for calling UpdateCrsr */
     enum CrsrFlag {
-        UPDOWN      = (1 << 0),     // keep Up/Down on columns
-        SCROLLWIN   = (1 << 1),     // scroll window
-        CHKRANGE    = (1 << 2),     // check overlapping PaMs
-        NOCALRECT   = (1 << 3),     // don't recalculate CharRect
-        READONLY    = (1 << 4)      // make visible in spite of Readonly
+        UPDOWN      = (1 << 0),     ///< keep Up/Down on columns
+        SCROLLWIN   = (1 << 1),     ///< scroll window
+        CHKRANGE    = (1 << 2),     ///< check overlapping PaMs
+        NOCALRECT   = (1 << 3),     ///< don't recalculate CharRect
+        READONLY    = (1 << 4)      ///< make visible in spite of Readonly
     };
 
 private:
 
-    SwRect  aCharRect;          // Char-SRectangle on which the cursor is located
-    Point   aCrsrHeight;        // height & offset from visible Cursor
-    Point   aOldRBPos;          // Right/Bottom of last VisArea
+    SwRect  aCharRect;          ///< Char-SRectangle on which the cursor is located
+    Point   aCrsrHeight;        ///< height & offset from visible Cursor
+    Point   aOldRBPos;          ///< Right/Bottom of last VisArea
                                 // (used in Invalidate by Cursor)
 
-    Link aFlyMacroLnk;          // Link will be called, if the Crsr is set
-                                // into a fly. A macro can be then becalled
-    Link aChgLnk;               // link will be called by every attribut/
-                                // format changes at cursor position.
-    Link aGrfArrivedLnk;        // Link calls to UI if a graphic is arrived
+    Link aFlyMacroLnk;          /*!< Link will be called, if the Crsr is set
+                                   into a fly. A macro can be then becalled */
+    Link aChgLnk;               /*!< link will be called by every attribut/
+                                   format changes at cursor position.*/
+    Link aGrfArrivedLnk;        ///< Link calls to UI if a graphic is arrived
 
-    SwShellCrsr* pCurCrsr;      // current cursor
-    SwShellCrsr* pCrsrStk;      // stack for the cursor
-    SwVisCrsr *pVisCrsr;        // the visible cursor
+    SwShellCrsr* pCurCrsr;      ///< current cursor
+    SwShellCrsr* pCrsrStk;      ///< stack for the cursor
+    SwVisCrsr *pVisCrsr;        ///< the visible cursor
 
-    IBlockCursor *pBlockCrsr;   // interface of cursor for block (=rectangular) selection
+    IBlockCursor *pBlockCrsr;   ///< interface of cursor for block (=rectangular) selection
 
-    SwShellTableCrsr* pTblCrsr; // table Crsr; only in tables when the
-                                // selection lays over 2 columns
+    SwShellTableCrsr* pTblCrsr; /*!< table Crsr; only in tables when the
+                                   selection lays over 2 columns */
 
-    SwNodeIndex* pBoxIdx;       // for recognizing of the changed
-    SwTableBox* pBoxPtr;        // table row
+    SwNodeIndex* pBoxIdx;       ///< for recognizing of the changed
+    SwTableBox* pBoxPtr;        ///< table row
 
-    long nUpDownX;              // try to move the cursor on up/down always
-                                // in the same column
+    long nUpDownX;              /*!< try to move the cursor on up/down always
+                                   in the same column */
     long nLeftFrmPos;
     sal_uLong nAktNode;             // save CursorPos at Start-Action
     xub_StrLen nAktCntnt;
@@ -213,24 +213,24 @@ private:
      * (via Find()) can be realised.
      */
     sal_uInt16 nCrsrMove;
-    sal_uInt16 nBasicActionCnt;     // Actions which are parenthesized by Basic
-    CrsrMoveState eMvState;     // Status for Crsr-Travelling - GetCrsrOfst
+    sal_uInt16 nBasicActionCnt;     ///< Actions which are parenthesized by Basic
+    CrsrMoveState eMvState;     ///< Status for Crsr-Travelling - GetCrsrOfst
 
     String sMarkedListId;
     int nMarkedListLevel;
 
-    sal_Bool bHasFocus : 1;         // Shell is "active" in a window
-    sal_Bool bSVCrsrVis : 1;        // SV-Cursor visible/invisible
-    sal_Bool bChgCallFlag : 1;      // attribute change inside Start- and EndAction
-    sal_Bool bVisPortChgd : 1;      // in VisPortChg-Call
+    sal_Bool bHasFocus : 1;         ///< Shell is "active" in a window
+    sal_Bool bSVCrsrVis : 1;        ///< SV-Cursor visible/invisible
+    sal_Bool bChgCallFlag : 1;      ///< attribute change inside Start- and EndAction
+    sal_Bool bVisPortChgd : 1;      ///< in VisPortChg-Call
                                 // (used in Invalidate by the Cursor)
 
-    sal_Bool bCallChgLnk : 1;       // flag for derived classes
+    sal_Bool bCallChgLnk : 1;       ///< flag for derived classes
                                 // TRUE -> call ChgLnk
                                 // access only via SwChgLinkFlag
-    sal_Bool bAllProtect : 1;       // Flag for areas
+    sal_Bool bAllProtect : 1;       ///< Flag for areas
                                 // TRUE -> everything protected / hidden
-    sal_Bool bInCMvVisportChgd : 1; // Flag for CrsrMoves
+    sal_Bool bInCMvVisportChgd : 1; ///< Flag for CrsrMoves
                                 // TRUE -> view was moved
     sal_Bool bGCAttr : 1;           // TRUE -> non expanded attributes exist.
     sal_Bool bIgnoreReadonly : 1;   // TRUE -> make the cursor visible on next
@@ -322,13 +322,13 @@ public:
     virtual SwPaM & GetCurrentShellCursor();
 
     SwPaM * CreateCrsr();
-    // delete the current cursor and make the following into the current
+    ///< delete the current cursor and make the following into the current
     sal_Bool DestroyCrsr();
-    // transform TableCursor to normal cursor, nullify Tablemode
+    ///< transform TableCursor to normal cursor, nullify Tablemode
     void TblCrsrToCursor();
-    // enter block mode, change normal cursor into block cursor
+    ///< enter block mode, change normal cursor into block cursor
     void CrsrToBlockCrsr();
-    // leave block mode, change block cursor into normal cursor
+    ///< leave block mode, change block cursor into normal cursor
     void BlockCrsrToCrsr();
 
     // SelAll() selects the document body content
@@ -659,14 +659,14 @@ public:
     SwShellTableCrsr* GetTableCrsr() { return pTblCrsr; }
     sal_uInt16 UpdateTblSelBoxes();
 
-    sal_Bool GotoFtnTxt();      // jump from content to footnote
-    sal_Bool GotoFtnAnchor();   // jump from footnote to anchor
+    sal_Bool GotoFtnTxt();      ///< jump from content to footnote
+    sal_Bool GotoFtnAnchor();   ///< jump from footnote to anchor
     sal_Bool GotoPrevFtnAnchor();
     sal_Bool GotoNextFtnAnchor();
 
-    sal_Bool GotoFlyAnchor();       // jump from the frame to the anchor
-    sal_Bool GotoHeaderTxt();       // jump from the content to the header
-    sal_Bool GotoFooterTxt();       // jump from the content to the footer
+    sal_Bool GotoFlyAnchor();       ///< jump from the frame to the anchor
+    sal_Bool GotoHeaderTxt();       ///< jump from the content to the header
+    sal_Bool GotoFooterTxt();       ///< jump from the content to the footer
     // jump to the header/footer of the given or current PageDesc
     sal_Bool SetCrsrInHdFt( sal_uInt16 nDescNo = USHRT_MAX,
                             sal_Bool bInHeader = sal_True );

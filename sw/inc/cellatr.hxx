@@ -37,7 +37,7 @@
 
 class SW_DLLPUBLIC SwTblBoxNumFormat : public SfxUInt32Item
 {
-    sal_Bool bAuto;     // automatically given flag
+    sal_Bool bAuto;     ///< automatically given flag
 public:
     SwTblBoxNumFormat( sal_uInt32 nFormat = NUMBERFORMAT_TEXT,
                         sal_Bool bAuto = sal_False );

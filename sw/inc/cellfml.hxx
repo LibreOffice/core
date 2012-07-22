@@ -47,9 +47,9 @@ class SwTblCalcPara
     sal_uInt16 nStackCnt, nMaxSize;
 
 public:
-    SwTableSortBoxes *pBoxStk;  // stack for recognizing recursion
-    SwCalc& rCalc;              // current Calculator
-    const SwTable* pTbl;        // current table
+    SwTableSortBoxes *pBoxStk;  ///< stack for recognizing recursion
+    SwCalc& rCalc;              ///< current Calculator
+    const SwTable* pTbl;        ///< current table
 
     SwTblCalcPara( SwCalc& rCalculator, const SwTable& rTable );
     ~SwTblCalcPara();
@@ -97,9 +97,9 @@ typedef void (SwTableFormula:: *FnScanFormel)( const SwTable&, String&,
 protected:
     enum NameType { EXTRNL_NAME, INTRNL_NAME, REL_NAME };
 
-    String      sFormel;            // current formula
-    NameType    eNmType;            // current display method
-    sal_Bool        bValidValue;        // sal_True: recalculate formula
+    String      sFormel;            ///< current formula
+    NameType    eNmType;            ///< current display method
+    sal_Bool        bValidValue;        ///< sal_True: recalculate formula
 
     // find the node in which the formula is located
     //  TextFeld    -> TextNode,
@@ -129,13 +129,13 @@ public:
                                     return *this;
         }
 
-    // create from the internal formula (for CORE) the external formula (for UI)
+    /// create from the internal formula (for CORE) the external formula (for UI)
     void PtrToBoxNm( const SwTable* pTbl );
-    // create from the external formula the internal
+    /// create from the external formula the internal
     void BoxNmToPtr( const SwTable* pTbl );
-    // create from the external/internal formula the relative formula
+    /// create from the external/internal formula the relative formula
     void ToRelBoxNm( const SwTable* pTbl );
-    // gets called before/after merging/splitting of tables
+    /// gets called before/after merging/splitting of tables
     void ToSplitMergeBoxNm( SwTableFmlUpdate& rTblUpd );
 
     bool IsIntrnlName() const                  { return eNmType == INTRNL_NAME; }
