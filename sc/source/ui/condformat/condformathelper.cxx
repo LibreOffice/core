@@ -76,6 +76,8 @@ rtl::OUString ScCondFormatHelper::GetExpression(const ScConditionalFormat& rForm
                     if(eMode == SC_COND_DIRECT)
                     {
                         aBuffer.append(getTextForType(FORMULA));
+                        aBuffer.append(" ");
+                        aBuffer.append(pEntry->GetExpression(rPos, 0));
                     }
                     else
                     {
