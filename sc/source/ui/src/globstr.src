@@ -1891,5 +1891,9 @@ Resource RID_GLOBSTR
     {
         Text [ en-US ] = "duplicate";
     };
+    String STR_COND_FORMULA
+    {
+        Text [ en-US ] = "Formula is";
+    };
 };
 
