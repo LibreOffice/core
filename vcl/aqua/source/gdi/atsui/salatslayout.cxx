@@ -884,6 +884,7 @@ bool ATSLayout::GetBoundRect( SalGraphics& rGraphics, Rectangle& rVCLRect ) cons
 
     DBG_ASSERT( (numcontrols <= nMaxControls), "ATSLayout::GetBoundRect() numcontrols overflow" );
     OSStatus theErr = ATSUSetLayoutControls (maATSULayout, numcontrols, theTags, theSizes, theValues);
+    (void) theErr;
     DBG_ASSERT( (theErr==noErr), "ATSLayout::GetBoundRect ATSUSetLayoutControls failed!\n" );
 
     Rect aMacRect;
