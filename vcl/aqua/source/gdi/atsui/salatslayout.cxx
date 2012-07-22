@@ -420,6 +420,7 @@ void ATSLayout::DrawText( SalGraphics& rGraphics ) const
 
     DBG_ASSERT( (numcontrols <= nMaxControls), "ATSLayout::DrawText() numcontrols overflow" );
     OSStatus theErr = ATSUSetLayoutControls (maATSULayout, numcontrols, theTags, theSizes, theValues);
+    (void) theErr;
     DBG_ASSERT( (theErr==noErr), "ATSLayout::DrawText ATSUSetLayoutControls failed!\n" );
 
     // Draw the text
