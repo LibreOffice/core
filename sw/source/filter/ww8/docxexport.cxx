@@ -68,9 +68,6 @@ using namespace ::oox;
 
 using oox::vml::VMLExport;
 
-using rtl::OUString;
-using rtl::OUStringBuffer;
-
 using sw::mark::IMark;
 
 AttributeOutputBase& DocxExport::AttrOutput() const

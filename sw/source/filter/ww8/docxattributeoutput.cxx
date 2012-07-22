@@ -136,11 +136,6 @@
 #endif
 
 using ::editeng::SvxBorderLine;
-using rtl::OString;
-using rtl::OStringBuffer;
-using rtl::OUString;
-using rtl::OUStringBuffer;
-using rtl::OUStringToOString;
 
 using namespace oox;
 using namespace docx;
