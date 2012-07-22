@@ -655,7 +655,7 @@ void ScTable::CopyConditionalFormat( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCRO
     ScConditionalFormatList* pOldCondFormatList = pTable->mpCondFormatList.get();
     for(SCCOL i = nCol1; i <= nCol2; ++i)
     {
-        ScAttrIterator* pIter = aCol[i-nDx].CreateAttrIterator( nRow1-nDy, nRow2-nDy );
+        ScAttrIterator* pIter = pTable->aCol[i-nDx].CreateAttrIterator( nRow1-nDy, nRow2-nDy );
         SCROW nStartRow = 0, nEndRow = 0;
         const ScPatternAttr* pPattern = pIter->Next( nStartRow, nEndRow );
         sal_uInt32 nId = ((SfxUInt32Item&)pPattern->GetItem(ATTR_CONDITIONAL)).GetValue();
