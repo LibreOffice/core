@@ -112,7 +112,7 @@ case `basename "$MAILER" | sed 's/-.*$//'` in
             COMMAND=${COMMAND:-}${COMMAND:+,}body=${BODY}
         fi
         if [ "$ATTACH" != "" ]; then
-            COMMAND=${COMMAND:-}${COMMAND:+,}attachment=${ATTACH}
+            COMMAND=${COMMAND:-}${COMMAND:+,}attachment=\'${ATTACH}\'
         fi
 
         run_mozilla "$MAILER" "$COMMAND"
