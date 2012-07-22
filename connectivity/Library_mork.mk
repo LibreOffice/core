@@ -9,13 +9,12 @@
 
 $(eval $(call gb_Library_Library,mork))
 
-$(eval $(call gb_Library_add_exception_objects,mork, \
-    connectivity/source/drivers/mork/MorkDriver \
-    connectivity/source/drivers/mork/MorkParser \
-    connectivity/source/drivers/mork/services \
-))
-
 $(eval $(call gb_Library_set_componentfile,mork,connectivity/source/drivers/mork/mork))
+
+$(eval $(call gb_Library_set_include,mork,\
+	-I$(SRCDIR)/connectivity/source/inc \
+	$$(INCLUDE) \
+))
 
 $(eval $(call gb_Library_use_libraries,mork, \
     cppu \
@@ -25,5 +24,12 @@ $(eval $(call gb_Library_use_libraries,mork, \
 ))
 
 $(eval $(call gb_Library_use_sdk_api,mork))
+
+$(eval $(call gb_Library_add_exception_objects,mork, \
+    connectivity/source/drivers/mork/MorkParser \
+    connectivity/source/drivers/mork/MDriver \
+    connectivity/source/drivers/mork/MConnection \
+    connectivity/source/drivers/mork/MServices \
+))
 
 # vim: set noet sw=4 ts=4:

@@ -1,0 +1,234 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#include "diagnose_ex.h"
+#include "MConnection.hxx"
+#include "MDriver.hxx"
+
+#include <connectivity/dbcharset.hxx>
+#include <connectivity/dbexception.hxx>
+#include <connectivity/sqlerror.hxx>
+
+#include <com/sun/star/sdbc/ColumnValue.hpp>
+#include <com/sun/star/sdbc/XRow.hpp>
+#include <com/sun/star/sdbc/TransactionIsolation.hpp>
+
+#include <comphelper/officeresourcebundle.hxx>
+
+#if OSL_DEBUG_LEVEL > 0
+# define OUtoCStr( x ) ( ::rtl::OUStringToOString ( (x), RTL_TEXTENCODING_ASCII_US).getStr())
+#else /* OSL_DEBUG_LEVEL */
+# define OUtoCStr( x ) ("dummy")
+#endif /* OSL_DEBUG_LEVEL */
+
+using namespace dbtools;
+
+//------------------------------------------------------------------------------
+using namespace com::sun::star::uno;
+using namespace com::sun::star::lang;
+using namespace com::sun::star::beans;
+using namespace com::sun::star::sdbc;
+using namespace com::sun::star::sdbcx;
+// --------------------------------------------------------------------------------
+
+namespace connectivity { namespace mork {
+
+// -----------------------------------------------------------------------------
+
+OConnection::OConnection(MorkDriver* _pDriver)
+    :OSubComponent<OConnection, OConnection_BASE>((::cppu::OWeakObject*)_pDriver, this)
+    ,m_pDriver(_pDriver)
+{
+    m_pDriver->acquire();
+
+}
+//-----------------------------------------------------------------------------
+OConnection::~OConnection()
+{
+    acquire();
+    if(!isClosed())
+        close();
+    m_pDriver->release();
+    m_pDriver = NULL;
+}
+//-----------------------------------------------------------------------------
+void SAL_CALL OConnection::release() throw()
+{
+    relase_ChildImpl();
+}
+// -----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyValue >& info)  throw(SQLException)
+{
+    (void) info; // avoid warnings
+    OSL_TRACE("IN OConnection::construct()" );
+    //  open file
+    setURL(url);
+}
+// XServiceInfo
+// --------------------------------------------------------------------------------
+IMPLEMENT_SERVICE_INFO(OConnection, "com.sun.star.sdbc.drivers.mork.OConnection", "com.sun.star.sdbc.Connection")
+
+// --------------------------------------------------------------------------------
+Reference< XStatement > SAL_CALL OConnection::createStatement(  ) throw(SQLException, RuntimeException)
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+    checkDisposed(OConnection_BASE::rBHelper.bDisposed);
+
+    // create a statement
+    // the statement can only be executed once
+    // Reference< XStatement > xReturn = new OStatement(this);
+    // m_aStatements.push_back(WeakReferenceHelper(xReturn));
+    return NULL;
+}
+// --------------------------------------------------------------------------------
+Reference< XPreparedStatement > SAL_CALL OConnection::prepareStatement( const ::rtl::OUString& _sSql ) throw(SQLException, RuntimeException)
+{
+    OSL_UNUSED( _sSql );
+    ::osl::MutexGuard aGuard( m_aMutex );
+    checkDisposed(OConnection_BASE::rBHelper.bDisposed);
+
+    OSL_TRACE("OConnection::prepareStatement( %s )", OUtoCStr( _sSql ) );
+    return NULL;
+}
+// --------------------------------------------------------------------------------
+Reference< XPreparedStatement > SAL_CALL OConnection::prepareCall( const ::rtl::OUString& _sSql ) throw(SQLException, RuntimeException)
+{
+    OSL_UNUSED( _sSql );
+    ::dbtools::throwFeatureNotImplementedException( "XConnection::prepareCall", *this );
+    OSL_TRACE("OConnection::prepareCall( %s )", OUtoCStr( _sSql ) );
+    return NULL;
+}
+// --------------------------------------------------------------------------------
+::rtl::OUString SAL_CALL OConnection::nativeSQL( const ::rtl::OUString& _sSql ) throw(SQLException, RuntimeException)
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+    // when you need to transform SQL92 to you driver specific you can do it here
+    OSL_TRACE("OConnection::nativeSQL( %s )", OUtoCStr( _sSql ) );
+
+    return _sSql;
+}
+// --------------------------------------------------------------------------------
+void SAL_CALL OConnection::setAutoCommit( sal_Bool /*autoCommit*/ ) throw(SQLException, RuntimeException)
+{
+    ::dbtools::throwFeatureNotImplementedException( "XConnection::setAutoCommit", *this );
+}
+// --------------------------------------------------------------------------------
+sal_Bool SAL_CALL OConnection::getAutoCommit(  ) throw(SQLException, RuntimeException)
+{
+    // you have to distinguish which if you are in autocommit mode or not
+    // at normal case true should be fine here
+
+    return sal_True;
+}
+// --------------------------------------------------------------------------------
+void SAL_CALL OConnection::commit(  ) throw(SQLException, RuntimeException)
+{
+    // when you database does support transactions you should commit here
+}
+// --------------------------------------------------------------------------------
+void SAL_CALL OConnection::rollback(  ) throw(SQLException, RuntimeException)
+{
+    // same as commit but for the other case
+}
+// --------------------------------------------------------------------------------
+sal_Bool SAL_CALL OConnection::isClosed(  ) throw(SQLException, RuntimeException)
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+
+    // just simple -> we are close when we are disposed taht means someone called dispose(); (XComponent)
+    return OConnection_BASE::rBHelper.bDisposed;
+}
+// --------------------------------------------------------------------------------
+Reference< XDatabaseMetaData > SAL_CALL OConnection::getMetaData(  ) throw(SQLException, RuntimeException)
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+    checkDisposed(OConnection_BASE::rBHelper.bDisposed);
+    return NULL;
+}
+// --------------------------------------------------------------------------------
+void SAL_CALL OConnection::setReadOnly( sal_Bool /*readOnly*/ ) throw(SQLException, RuntimeException)
+{
+    ::dbtools::throwFeatureNotImplementedException( "XConnection::setReadOnly", *this );
+}
+// --------------------------------------------------------------------------------
+sal_Bool SAL_CALL OConnection::isReadOnly(  ) throw(SQLException, RuntimeException)
+{
+    // return if your connection to readonly
+    return sal_False;
+}
+// --------------------------------------------------------------------------------
+void SAL_CALL OConnection::setCatalog( const ::rtl::OUString& /*catalog*/ ) throw(SQLException, RuntimeException)
+{
+    ::dbtools::throwFeatureNotImplementedException( "XConnection::setCatalog", *this );
+}
+// --------------------------------------------------------------------------------
+::rtl::OUString SAL_CALL OConnection::getCatalog(  ) throw(SQLException, RuntimeException)
+{
+    return ::rtl::OUString();
+}
+// --------------------------------------------------------------------------------
+void SAL_CALL OConnection::setTransactionIsolation( sal_Int32 /*level*/ ) throw(SQLException, RuntimeException)
+{
+    ::dbtools::throwFeatureNotImplementedException( "XConnection::setTransactionIsolation", *this );
+}
+// --------------------------------------------------------------------------------
+sal_Int32 SAL_CALL OConnection::getTransactionIsolation(  ) throw(SQLException, RuntimeException)
+{
+    // please have a look at @see com.sun.star.sdbc.TransactionIsolation
+    return TransactionIsolation::NONE;
+}
+// --------------------------------------------------------------------------------
+Reference< ::com::sun::star::container::XNameAccess > SAL_CALL OConnection::getTypeMap(  ) throw(SQLException, RuntimeException)
+{
+    // if your driver has special database types you can return it here
+    return NULL;
+}
+// --------------------------------------------------------------------------------
+void SAL_CALL OConnection::setTypeMap( const Reference< ::com::sun::star::container::XNameAccess >& /*typeMap*/ ) throw(SQLException, RuntimeException)
+{
+    ::dbtools::throwFeatureNotImplementedException( "XConnection::setTypeMap", *this );
+}
+// --------------------------------------------------------------------------------
+// XCloseable
+void SAL_CALL OConnection::close(  ) throw(SQLException, RuntimeException)
+{
+    // we just dispose us
+    {
+        ::osl::MutexGuard aGuard( m_aMutex );
+        checkDisposed(OConnection_BASE::rBHelper.bDisposed);
+
+    }
+    dispose();
+}
+// --------------------------------------------------------------------------------
+// XWarningsSupplier
+Any SAL_CALL OConnection::getWarnings(  ) throw(SQLException, RuntimeException)
+{
+    // when you collected some warnings -> return it
+    return Any();
+}
+// --------------------------------------------------------------------------------
+void SAL_CALL OConnection::clearWarnings(  ) throw(SQLException, RuntimeException)
+{
+    // you should clear your collected warnings here
+}
+//------------------------------------------------------------------------------
+void OConnection::disposing()
+{
+    // we noticed that we should be destroied in near future so we have to dispose our statements
+    ::osl::MutexGuard aGuard(m_aMutex);
+    dispose_ChildImpl();
+}
+// -----------------------------------------------------------------------------
+
+
+} } // namespace connectivity::mork
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
