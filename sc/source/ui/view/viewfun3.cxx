@@ -1756,11 +1756,6 @@ void ScViewFunc::PostPasteFromClip(const ScRangeList& rPasteRanges, const ScMark
 
     SelectionChanged();
 
-    // #i97876# Spreadsheet data changes are not notified
-    ScModelObj* pModelObj = ScModelObj::getImplementation( pDocSh->GetModel() );
-    if (!pModelObj || !pModelObj->HasChangesListeners())
-        return;
-
     ScRangeList aChangeRanges;
     for (size_t i = 0, n = rPasteRanges.size(); i < n; ++i)
     {
@@ -1774,7 +1769,7 @@ void ScViewFunc::PostPasteFromClip(const ScRangeList& rPasteRanges, const ScMark
             aChangeRanges.Append(aChangeRange);
         }
     }
-    pModelObj->NotifyChanges( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "cell-change" ) ), aChangeRanges );
+    pDocSh->NotifyCellChanges( aChangeRanges );
 }
 
 

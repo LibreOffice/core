@@ -282,6 +282,31 @@ public:
     void            NotifyStyle( const SfxStyleSheetHint& rHint );
     void            DoAutoStyle( const ScRange& rRange, const String& rStyle );
 
+    /**
+     * Helper function to notify Spreadsheet data changes.
+     *
+     * The notification logic is always the same:
+     *  * Get a pointer to the document model
+     *  * Check for listeners
+     *  * Get/Build changes list
+     *  * Send it via the document model
+     *
+     * The only part being application dependant is the 3rd step
+     *
+     * This function is an attempt to fix LO bug #47958.
+     *
+     * @param rOperations Type of change
+     * @param rRanges List of changes to advertise
+     * @param rProperties
+     */
+    void            NotifyDocumentChanges( const ::rtl::OUString& rOperations, const ScRangeList& rRange,
+                                           const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rProperties =
+                                                 ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >() );
+    /**
+     * Helper function for the most common use case of 'NotifyDocumentChanges'
+     */
+    void            NotifyCellChanges( const ScRangeList& rRange );
+
     Window*         GetActiveDialogParent();
     void            ErrorMessage( sal_uInt16 nGlobStrId );
     sal_Bool            IsEditable() const;

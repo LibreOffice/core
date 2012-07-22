@@ -301,17 +301,12 @@ void ScUndoEnterData::Undo()
     DoChange();
     EndUndo();
 
-    // #i97876# Spreadsheet data changes are not notified
-    ScModelObj* pModelObj = ScModelObj::getImplementation( pDocShell->GetModel() );
-    if ( pModelObj && pModelObj->HasChangesListeners() )
+    ScRangeList aChangeRanges;
+    for ( sal_uInt16 i = 0; i < nCount; ++i )
     {
-        ScRangeList aChangeRanges;
-        for ( sal_uInt16 i = 0; i < nCount; ++i )
-        {
-            aChangeRanges.Append( ScRange( nCol, nRow, pTabs[i] ) );
-        }
-        pModelObj->NotifyChanges( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "cell-change" ) ), aChangeRanges );
+        aChangeRanges.Append( ScRange( nCol, nRow, pTabs[i] ) );
     }
+    pDocShell->NotifyCellChanges( aChangeRanges );
 }
 
 void ScUndoEnterData::Redo()
@@ -334,17 +329,12 @@ void ScUndoEnterData::Redo()
     DoChange();
     EndRedo();
 
-    // #i97876# Spreadsheet data changes are not notified
-    ScModelObj* pModelObj = ScModelObj::getImplementation( pDocShell->GetModel() );
-    if ( pModelObj && pModelObj->HasChangesListeners() )
+    ScRangeList aChangeRanges;
+    for ( sal_uInt16 i = 0; i < nCount; ++i )
     {
-        ScRangeList aChangeRanges;
-        for ( sal_uInt16 i = 0; i < nCount; ++i )
-        {
-            aChangeRanges.Append( ScRange( nCol, nRow, pTabs[i] ) );
-        }
-        pModelObj->NotifyChanges( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "cell-change" ) ), aChangeRanges );
+        aChangeRanges.Append( ScRange( nCol, nRow, pTabs[i] ) );
     }
+    pDocShell->NotifyCellChanges( aChangeRanges );
 }
 
 void ScUndoEnterData::Repeat(SfxRepeatTarget& rTarget)

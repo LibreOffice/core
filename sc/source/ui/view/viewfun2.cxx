@@ -1289,14 +1289,9 @@ void ScViewFunc::FillSeries( FillDir eDir, FillCmd eCmd, FillDateCmd eDateCmd,
             pDocSh->UpdateOle(GetViewData());
             UpdateScrollBars();
 
-            // #i97876# Spreadsheet data changes are not notified
-            ScModelObj* pModelObj = ScModelObj::getImplementation( pDocSh->GetModel() );
-            if ( pModelObj && pModelObj->HasChangesListeners() )
-            {
-                ScRangeList aChangeRanges;
-                aChangeRanges.Append( aRange );
-                pModelObj->NotifyChanges( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "cell-change" ) ), aChangeRanges );
-            }
+            ScRangeList aChangeRanges;
+            aChangeRanges.Append( aRange );
+            pDocSh->NotifyCellChanges( aChangeRanges );
         }
     }
     else
@@ -1321,43 +1316,38 @@ void ScViewFunc::FillAuto( FillDir eDir, SCCOL nStartCol, SCROW nStartRow,
         pDocSh->UpdateOle(GetViewData());
         UpdateScrollBars();
 
-        // #i97876# Spreadsheet data changes are not notified
-        ScModelObj* pModelObj = ScModelObj::getImplementation( pDocSh->GetModel() );
-        if ( pModelObj && pModelObj->HasChangesListeners() )
+        ScRangeList aChangeRanges;
+        ScRange aChangeRange( aRange );
+        switch ( eDir )
         {
-            ScRangeList aChangeRanges;
-            ScRange aChangeRange( aRange );
-            switch ( eDir )
-            {
-                case FILL_TO_BOTTOM:
-                    {
-                        aChangeRange.aStart.SetRow( aSourceRange.aEnd.Row() + 1 );
-                    }
-                    break;
-                case FILL_TO_TOP:
-                    {
-                        aChangeRange.aEnd.SetRow( aSourceRange.aStart.Row() - 1 );
-                    }
-                    break;
-                case FILL_TO_RIGHT:
-                    {
-                        aChangeRange.aStart.SetCol( aSourceRange.aEnd.Col() + 1 );
-                    }
-                    break;
-                case FILL_TO_LEFT:
-                    {
-                        aChangeRange.aEnd.SetCol( aSourceRange.aStart.Col() - 1 );
-                    }
-                    break;
-                default:
-                    {
+            case FILL_TO_BOTTOM:
+                {
+                    aChangeRange.aStart.SetRow( aSourceRange.aEnd.Row() + 1 );
+                }
+                break;
+            case FILL_TO_TOP:
+                {
+                    aChangeRange.aEnd.SetRow( aSourceRange.aStart.Row() - 1 );
+                }
+                break;
+            case FILL_TO_RIGHT:
+                {
+                    aChangeRange.aStart.SetCol( aSourceRange.aEnd.Col() + 1 );
+                }
+                break;
+            case FILL_TO_LEFT:
+                {
+                    aChangeRange.aEnd.SetCol( aSourceRange.aStart.Col() - 1 );
+                }
+                break;
+            default:
+                {
 
-                    }
-                    break;
-            }
-            aChangeRanges.Append( aChangeRange );
-            pModelObj->NotifyChanges( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "cell-change" ) ), aChangeRanges );
+                }
+                break;
         }
+        aChangeRanges.Append( aChangeRange );
+        pDocSh->NotifyCellChanges( aChangeRanges );
     }
 }
 

@@ -515,6 +515,20 @@ sal_Bool ScDocShell::Load( SfxMedium& rMedium )
     return bRet;
 }
 
+void ScDocShell::NotifyDocumentChanges( const ::rtl::OUString& rOperations, const ScRangeList& rRanges, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rProperties )
+{
+    ScModelObj* pModelObj = ScModelObj::getImplementation( GetModel() );
+    if ( pModelObj && pModelObj->HasChangesListeners() )
+    {
+        pModelObj->NotifyChanges( rOperations, rRanges, rProperties );
+    }
+}
+
+void ScDocShell::NotifyCellChanges( const ScRangeList& rRange )
+{
+    NotifyDocumentChanges( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "cell-change" ) ), rRange );
+}
+
 void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     uno::Reference< script::vba::XVBAEventProcessor > xVbaEvents = aDocument.GetVbaEventProcessor();

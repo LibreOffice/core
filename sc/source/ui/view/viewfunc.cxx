@@ -651,18 +651,13 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab, const String& rS
 
         pDocSh->UpdateOle(GetViewData());
 
-        // #i97876# Spreadsheet data changes are not notified
-        ScModelObj* pModelObj = ScModelObj::getImplementation( pDocSh->GetModel() );
-        if ( pModelObj && pModelObj->HasChangesListeners() )
+        ScRangeList aChangeRanges;
+        itr = rMark.begin();
+        for (; itr != itrEnd; ++itr)
         {
-            ScRangeList aChangeRanges;
-            itr = rMark.begin();
-            for (; itr != itrEnd; ++itr)
-            {
-                aChangeRanges.Append( ScRange( nCol, nRow, *itr ) );
-            }
-            pModelObj->NotifyChanges( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "cell-change" ) ), aChangeRanges );
+            aChangeRanges.Append( ScRange( nCol, nRow, *itr ) );
         }
+        pDocSh->NotifyCellChanges( aChangeRanges );
 
         aModificator.SetDocumentModified();
         lcl_PostRepaintCondFormat( pDoc->GetCondFormat( nCol, nRow, nTab ), pDocSh );
@@ -840,18 +835,13 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab, const EditTextOb
 
             pDocSh->UpdateOle(GetViewData());
 
-            // #i97876# Spreadsheet data changes are not notified
-            ScModelObj* pModelObj = ScModelObj::getImplementation( pDocSh->GetModel() );
-            if ( pModelObj && pModelObj->HasChangesListeners() )
+            ScRangeList aChangeRanges;
+            itr = rMark.begin();
+            for (; itr != itrEnd; ++itr)
             {
-                ScRangeList aChangeRanges;
-                itr = rMark.begin();
-                for (; itr != itrEnd; ++itr)
-                {
-                    aChangeRanges.Append( ScRange( nCol, nRow, *itr ) );
-                }
-                pModelObj->NotifyChanges( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "cell-change" ) ), aChangeRanges );
+                aChangeRanges.Append( ScRange( nCol, nRow, *itr ) );
             }
+            pDocSh->NotifyCellChanges( aChangeRanges );
 
             aModificator.SetDocumentModified();
         }
@@ -1372,37 +1362,32 @@ void ScViewFunc::ApplySelectionPattern( const ScPatternAttr& rAttr,
         CellContentChanged();
     }
 
-    // #i97876# Spreadsheet data changes are not notified
-    ScModelObj* pModelObj = ScModelObj::getImplementation( pDocSh->GetModel() );
-    if ( pModelObj && pModelObj->HasChangesListeners() )
+    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aProperties;
+    sal_Int32 nCount = 0;
+    const SfxItemPropertyMap& rMap = ScCellObj::GetCellPropertyMap();
+    PropertyEntryVector_t aPropVector = rMap.getPropertyEntries();
+    for ( sal_uInt16 nWhich = ATTR_PATTERN_START; nWhich <= ATTR_PATTERN_END; ++nWhich )
     {
-        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aProperties;
-        sal_Int32 nCount = 0;
-        const SfxItemPropertyMap& rMap = ScCellObj::GetCellPropertyMap();
-        PropertyEntryVector_t aPropVector = rMap.getPropertyEntries();
-        for ( sal_uInt16 nWhich = ATTR_PATTERN_START; nWhich <= ATTR_PATTERN_END; ++nWhich )
+        const SfxPoolItem* pItem = 0;
+        if ( rNewSet.GetItemState( nWhich, sal_True, &pItem ) == SFX_ITEM_SET && pItem )
         {
-            const SfxPoolItem* pItem = 0;
-            if ( rNewSet.GetItemState( nWhich, sal_True, &pItem ) == SFX_ITEM_SET && pItem )
+            PropertyEntryVector_t::const_iterator aIt = aPropVector.begin();
+            while ( aIt != aPropVector.end())
             {
-                PropertyEntryVector_t::const_iterator aIt = aPropVector.begin();
-                while ( aIt != aPropVector.end())
+                if ( aIt->nWID == nWhich )
                 {
-                    if ( aIt->nWID == nWhich )
-                    {
-                        ::com::sun::star::uno::Any aVal;
-                        pItem->QueryValue( aVal, aIt->nMemberId );
-                        aProperties.realloc( nCount + 1 );
-                        aProperties[ nCount ].Name = aIt->sName;
-                        aProperties[ nCount ].Value <<= aVal;
-                        ++nCount;
-                    }
-                    ++aIt;
+                    ::com::sun::star::uno::Any aVal;
+                    pItem->QueryValue( aVal, aIt->nMemberId );
+                    aProperties.realloc( nCount + 1 );
+                    aProperties[ nCount ].Name = aIt->sName;
+                    aProperties[ nCount ].Value <<= aVal;
+                    ++nCount;
                 }
+                ++aIt;
             }
         }
-        pModelObj->NotifyChanges( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "attribute" ) ), aChangeRanges, aProperties );
     }
+    pDocSh->NotifyDocumentChanges( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "attribute" ) ), aChangeRanges, aProperties );
 
     StartFormatArea();
 }
@@ -1615,19 +1600,14 @@ sal_Bool ScViewFunc::InsertCells( InsCellCmd eCmd, sal_Bool bRecord, sal_Bool bP
             pDocSh->UpdateOle(GetViewData());
             CellContentChanged();
 
-            // #i97876# Spreadsheet data changes are not notified
-            ScModelObj* pModelObj = ScModelObj::getImplementation( pDocSh->GetModel() );
-            if ( pModelObj && pModelObj->HasChangesListeners() )
+            if ( eCmd == INS_INSROWS || eCmd == INS_INSCOLS )
             {
-                if ( eCmd == INS_INSROWS || eCmd == INS_INSCOLS )
-                {
-                    ScRangeList aChangeRanges;
-                    aChangeRanges.Append( aRange );
-                    ::rtl::OUString aOperation = ( eCmd == INS_INSROWS ?
-                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "insert-rows" ) ) :
-                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "insert-columns" ) ) );
-                    pModelObj->NotifyChanges( aOperation, aChangeRanges );
-                }
+                ScRangeList aChangeRanges;
+                aChangeRanges.Append( aRange );
+                ::rtl::OUString aOperation = ( eCmd == INS_INSROWS ?
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "insert-rows" ) ) :
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "insert-columns" ) ) );
+                pDocSh->NotifyDocumentChanges( aOperation, aChangeRanges );
             }
         }
         return bSuccess;
@@ -1676,19 +1656,14 @@ void ScViewFunc::DeleteCells( DelCellCmd eCmd, sal_Bool bRecord )
         pDocSh->UpdateOle(GetViewData());
         CellContentChanged();
 
-        // #i97876# Spreadsheet data changes are not notified
-        ScModelObj* pModelObj = ScModelObj::getImplementation( pDocSh->GetModel() );
-        if ( pModelObj && pModelObj->HasChangesListeners() )
+        if ( eCmd == DEL_DELROWS || eCmd == DEL_DELCOLS )
         {
-            if ( eCmd == DEL_DELROWS || eCmd == DEL_DELCOLS )
-            {
-                ScRangeList aChangeRanges;
-                aChangeRanges.Append( aRange );
-                ::rtl::OUString aOperation = ( eCmd == DEL_DELROWS ?
-                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "delete-rows" ) ) :
-                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "delete-columns" ) ) );
-                pModelObj->NotifyChanges( aOperation, aChangeRanges );
-            }
+            ScRangeList aChangeRanges;
+            aChangeRanges.Append( aRange );
+            ::rtl::OUString aOperation = ( eCmd == DEL_DELROWS ?
+                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "delete-rows" ) ) :
+                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "delete-columns" ) ) );
+                pDocSh->NotifyDocumentChanges( aOperation, aChangeRanges);
         }
 
         //  put cursor directly behind deleted range
@@ -2044,21 +2019,16 @@ void ScViewFunc::DeleteContents( sal_uInt16 nFlags, sal_Bool bRecord )
 
     pDocSh->UpdateOle(GetViewData());
 
-    // #i97876# Spreadsheet data changes are not notified
-    ScModelObj* pModelObj = ScModelObj::getImplementation( pDocSh->GetModel() );
-    if ( pModelObj && pModelObj->HasChangesListeners() )
+    ScRangeList aChangeRanges;
+    if ( bSimple )
     {
-        ScRangeList aChangeRanges;
-        if ( bSimple )
-        {
-            aChangeRanges.Append( aMarkRange );
-        }
-        else
-        {
-            aFuncMark.FillRangeListWithMarks( &aChangeRanges, false );
-        }
-        pModelObj->NotifyChanges( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "cell-change" ) ), aChangeRanges );
+        aChangeRanges.Append( aMarkRange );
     }
+    else
+    {
+        aFuncMark.FillRangeListWithMarks( &aChangeRanges, false );
+    }
+    pDocSh->NotifyCellChanges( aChangeRanges );
 
     aModificator.SetDocumentModified();
     CellContentChanged();
@@ -2339,30 +2309,25 @@ void ScViewFunc::SetWidthOrHeight( sal_Bool bWidth, SCCOLROW nRangeCnt, SCCOLROW
         aModificator.SetDocumentModified();
     }
 
-    // #i97876# Spreadsheet data changes are not notified
     if ( bWidth )
     {
-        ScModelObj* pModelObj = ScModelObj::getImplementation( pDocSh->GetModel() );
-        if ( pModelObj && pModelObj->HasChangesListeners() )
+        ScRangeList aChangeRanges;
+        itr = pMarkData->begin();
+        for (; itr != itrEnd; ++itr)
         {
-            ScRangeList aChangeRanges;
-            itr = pMarkData->begin();
-            for (; itr != itrEnd; ++itr)
+            nTab = *itr;
+            const SCCOLROW* pTabRanges = pRanges;
+            for ( SCCOLROW nRange = 0; nRange < nRangeCnt; ++nRange )
             {
-                nTab = *itr;
-                const SCCOLROW* pTabRanges = pRanges;
-                for ( SCCOLROW nRange = 0; nRange < nRangeCnt; ++nRange )
+                SCCOL nStartCol = static_cast< SCCOL >( *(pTabRanges++) );
+                SCCOL nEndCol = static_cast< SCCOL >( *(pTabRanges++) );
+                for ( SCCOL nCol = nStartCol; nCol <= nEndCol; ++nCol )
                 {
-                    SCCOL nStartCol = static_cast< SCCOL >( *(pTabRanges++) );
-                    SCCOL nEndCol = static_cast< SCCOL >( *(pTabRanges++) );
-                    for ( SCCOL nCol = nStartCol; nCol <= nEndCol; ++nCol )
-                    {
-                        aChangeRanges.Append( ScRange( nCol, 0, nTab ) );
-                    }
+                    aChangeRanges.Append( ScRange( nCol, 0, nTab ) );
                 }
             }
-            pModelObj->NotifyChanges( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "column-resize" ) ), aChangeRanges );
         }
+        pDocSh->NotifyDocumentChanges( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "column-resize" ) ), aChangeRanges );
     }
 }
 
