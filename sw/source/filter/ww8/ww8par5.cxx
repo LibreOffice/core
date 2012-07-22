@@ -413,7 +413,7 @@ long SwWW8ImplReader::Read_Book(WW8PLCFManResult*)
     SwPosition aStart(*pPaM->GetPoint());
     if (!maFieldStack.empty())
     {
-        const FieldEntry &rTest = maFieldStack.back();
+        const WW8FieldEntry &rTest = maFieldStack.back();
         aStart = rTest.maStartPos;
     }
 
@@ -826,56 +826,56 @@ bool AcceptableNestedField(sal_uInt16 nFieldCode)
     }
 }
 
-FieldEntry::FieldEntry(SwPosition &rPos, sal_uInt16 nFieldId) throw()
+WW8FieldEntry::WW8FieldEntry(SwPosition &rPos, sal_uInt16 nFieldId) throw()
     : maStartPos(rPos), mnFieldId(nFieldId), mnObjLocFc(0)
 {
 }
 
-FieldEntry::FieldEntry(const FieldEntry &rOther) throw()
+WW8FieldEntry::WW8FieldEntry(const WW8FieldEntry &rOther) throw()
     : maStartPos(rOther.maStartPos), mnFieldId(rOther.mnFieldId), mnObjLocFc(rOther.mnObjLocFc)
 {
 }
 
-void FieldEntry::Swap(FieldEntry &rOther) throw()
+void WW8FieldEntry::Swap(WW8FieldEntry &rOther) throw()
 {
     std::swap(maStartPos, rOther.maStartPos);
     std::swap(mnFieldId, rOther.mnFieldId);
 }
 
-FieldEntry &FieldEntry::operator=(const FieldEntry &rOther) throw()
+WW8FieldEntry &WW8FieldEntry::operator=(const WW8FieldEntry &rOther) throw()
 {
-    FieldEntry aTemp(rOther);
+    WW8FieldEntry aTemp(rOther);
     Swap(aTemp);
     return *this;
 }
 
-::rtl::OUString FieldEntry::GetBookmarkName()
+::rtl::OUString WW8FieldEntry::GetBookmarkName()
 {
     return msBookmarkName;
 }
 
-::rtl::OUString FieldEntry::GetBookmarkCode()
+::rtl::OUString WW8FieldEntry::GetBookmarkCode()
 {
     return msMarkCode;
 }
 
-void FieldEntry::SetBookmarkName(::rtl::OUString bookmarkName)
+void WW8FieldEntry::SetBookmarkName(::rtl::OUString bookmarkName)
 {
     msBookmarkName=bookmarkName;
 }
 
-void FieldEntry::SetBookmarkType(::rtl::OUString bookmarkType)
+void WW8FieldEntry::SetBookmarkType(::rtl::OUString bookmarkType)
 {
     msMarkType=bookmarkType;
 }
 
-void FieldEntry::SetBookmarkCode(::rtl::OUString bookmarkCode)
+void WW8FieldEntry::SetBookmarkCode(::rtl::OUString bookmarkCode)
 {
     msMarkCode = bookmarkCode;
 }
 
 
-::sw::mark::IFieldmark::parameter_map_t& FieldEntry::getParameters() {
+::sw::mark::IFieldmark::parameter_map_t& WW8FieldEntry::getParameters() {
     return maParams;
 }
 
@@ -1020,7 +1020,7 @@ long SwWW8ImplReader::Read_Field(WW8PLCFManResult* pRes)
     bool bCodeNest = aF.bCodeNest;
     if ( aF.nId == 6 ) bCodeNest = false; // We can handle them and loose the inner data
 
-    maFieldStack.push_back(FieldEntry(*pPaM->GetPoint(), aF.nId));
+    maFieldStack.push_back(WW8FieldEntry(*pPaM->GetPoint(), aF.nId));
 
     if (bNested)
         return 0;
