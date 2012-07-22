@@ -450,7 +450,7 @@ ifeq ($(OS_FOR_BUILD),WNT)
 	mv "$(DEVINSTALLDIR)"/LibO*_install-arc_en-US/* "$(DEVINSTALLDIR)"/opt
 else
 	@ooinstall $(DEVINSTALLDIR)/opt
-	@install-gdb-printers -L
+	@install-gdb-printers
 endif
 	@rm -f $(SRCDIR)/install && ln -s $(DEVINSTALLDIR)/opt/ $(SRCDIR)/install
 
