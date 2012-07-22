@@ -88,11 +88,11 @@ extern SwPosRegion fnRegionStart, fnRegionEnd;
  */
 enum FindRanges
 {
-    FND_IN_BODY     = 0x00,     // Find "one" only in body text.
-    FND_IN_OTHER    = 0x02,     // Find "all" in Footer/Header/Fly...
-    FND_IN_SEL      = 0x04,     // Find in selections.
-    FND_IN_BODYONLY = 0x08,     // Find only in body - only in combination with FND_IN_SELALL !!!
-    FND_IN_SELALL   = 0x01      // All (only in non-body and selections).
+    FND_IN_BODY     = 0x00,     ///< Find "one" only in body text.
+    FND_IN_OTHER    = 0x02,     ///< Find "all" in Footer/Header/Fly...
+    FND_IN_SEL      = 0x04,     ///< Find in selections.
+    FND_IN_BODYONLY = 0x08,     ///< Find only in body - only in combination with FND_IN_SELALL !!!
+    FND_IN_SELALL   = 0x01      ///< All (only in non-body and selections).
 };
 
 

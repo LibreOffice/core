@@ -234,7 +234,8 @@ class IDocumentMarkAccess
         virtual ::sw::mark::IFieldmark* getFieldmarkBefore(const SwPosition& pos) const =0;
         virtual ::sw::mark::IFieldmark* getFieldmarkAfter(const SwPosition& pos) const =0;
 
-        // Returns the MarkType used to create the mark
+        /** Returns the MarkType used to create the mark
+        */
         static MarkType SAL_DLLPUBLIC_EXPORT GetType(const ::sw::mark::IMark& rMark);
     protected:
         virtual ~IDocumentMarkAccess() {};
