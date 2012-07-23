@@ -1312,7 +1312,9 @@ void SvXMLImport::AddStyleDisplayName( sal_uInt16 nFamily,
     StyleMap::key_type aKey( nFamily, rName );
     StyleMap::value_type aValue( aKey, rDisplayName );
     ::std::pair<StyleMap::iterator,bool> aRes( mpStyleMap->insert( aValue ) );
-    OSL_ENSURE( aRes.second, "duplicate style name" );
+    SAL_WARN_IF( !aRes.second,
+                 "xmloff",
+                 "duplicate style name" );
 
 }
 
