@@ -7460,6 +7460,14 @@ SdrObject* SdrPowerPointImport::CreateTable( SdrObject* pGroup, sal_uInt32* pTab
                     for ( size_t i = 0; i < pSolverContainer->aCList.size(); ++i )
                     {
                         SvxMSDffConnectorRule* pPtr = pSolverContainer->aCList[ i ];
+
+                        // check connections to the group object
+                        if ( pPtr->pAObj == pGroup )
+                            pPtr->pAObj = NULL;
+                        if ( pPtr->pBObj == pGroup )
+                            pPtr->pBObj = NULL;
+
+                        // check connections to all its subobjects
                         SdrObjListIter aIter( *pGroup, IM_DEEPWITHGROUPS );
                         while( aIter.IsMore() )
                         {
