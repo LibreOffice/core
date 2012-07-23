@@ -1033,7 +1033,7 @@ unsigned ColorConfigWindow_Impl::GetPosBehindLastChapter () const
 long ColorConfigWindow_Impl::GetDeltaAbove (Group eGroup) const
 {
     long nDelta = 0;
-    for (unsigned i = 0; i != eGroup; ++i)
+    for (int i = 0; i != eGroup; ++i)
         if (!IsGroupVisible(static_cast<Group>(i)))
             nDelta += vChapters[i]->GetHeight();
     return nDelta;
