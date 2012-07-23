@@ -1483,7 +1483,9 @@ void ImpEditView::ShowDDCursor( const Rectangle& rRect )
         aSaveRec.Right() += 1;
         aSaveRec.Bottom() += 1;
 
+#ifdef DBG_UTIL
         Size aNewSzPx( aSaveRec.GetSize() );
+#endif
         if ( !pDragAndDropInfo->pBackground )
         {
             pDragAndDropInfo->pBackground = new VirtualDevice( *GetWindow() );
