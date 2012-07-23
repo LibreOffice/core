@@ -35,6 +35,7 @@ namespace drawinglayer
             double                                  mfDistance;
             double                                  mfAngle;
             basegfx::BColor                         maColor;
+            sal_uInt32                              mnMinimalDiscreteDistance;
 
             // bitfield
             unsigned                                mbFillBackground : 1;
@@ -44,11 +45,13 @@ namespace drawinglayer
                 double fDistance,
                 double fAngle,
                 const basegfx::BColor& rColor,
+                sal_uInt32 nMinimalDiscreteDistance,
                 bool bFillBackground)
             :   meStyle(eStyle),
                 mfDistance(fDistance),
                 mfAngle(fAngle),
                 maColor(rColor),
+                mnMinimalDiscreteDistance(nMinimalDiscreteDistance),
                 mbFillBackground(bFillBackground)
             {
             }
@@ -58,6 +61,7 @@ namespace drawinglayer
                 mfDistance(0.0),
                 mfAngle(0.0),
                 maColor(basegfx::BColor()),
+                mnMinimalDiscreteDistance(3), // same as VCL
                 mbFillBackground(false)
             {
             }
@@ -67,6 +71,7 @@ namespace drawinglayer
             double getDistance() const { return mfDistance; }
             double getAngle() const { return mfAngle; }
             const basegfx::BColor& getColor() const { return maColor; }
+            sal_uInt32 getMinimalDiscreteDistance() const { return mnMinimalDiscreteDistance; }
             bool isFillBackground() const { return mbFillBackground; }
 
             bool operator==(const ImpFillHatchAttribute& rCandidate) const
@@ -75,7 +80,8 @@ namespace drawinglayer
                     && getDistance() == rCandidate.getDistance()
                     && getAngle() == rCandidate.getAngle()
                     && getColor() == rCandidate.getColor()
-                    && isFillBackground()  == rCandidate.isFillBackground());
+                    && getMinimalDiscreteDistance() == rCandidate.getMinimalDiscreteDistance()
+                    && isFillBackground() == rCandidate.isFillBackground());
             }
         };
 
@@ -90,9 +96,11 @@ namespace drawinglayer
             double fDistance,
             double fAngle,
             const basegfx::BColor& rColor,
+            sal_uInt32 nMinimalDiscreteDistance,
             bool bFillBackground)
         :   mpFillHatchAttribute(ImpFillHatchAttribute(
-                eStyle, fDistance, fAngle, rColor, bFillBackground))
+                eStyle, fDistance, fAngle, rColor,
+                nMinimalDiscreteDistance, bFillBackground))
         {
         }
 
@@ -145,6 +153,11 @@ namespace drawinglayer
         const basegfx::BColor& FillHatchAttribute::getColor() const
         {
             return mpFillHatchAttribute->getColor();
+        }
+
+        sal_uInt32 FillHatchAttribute::getMinimalDiscreteDistance() const
+        {
+            return mpFillHatchAttribute->getMinimalDiscreteDistance();
         }
 
         bool FillHatchAttribute::isFillBackground() const

@@ -25,6 +25,7 @@
 #include <basegfx/tools/canvastools.hxx>
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
+#include <drawinglayer/geometry/viewinformation2d.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -39,12 +40,26 @@ namespace drawinglayer
         Primitive2DSequence FillHatchPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             Primitive2DSequence aRetval;
+
             if(!getFillHatch().isDefault())
             {
                 // create hatch
                 const basegfx::BColor aHatchColor(getFillHatch().getColor());
                 const double fAngle(getFillHatch().getAngle());
                 ::std::vector< basegfx::B2DHomMatrix > aMatrices;
+                double fDistance(getFillHatch().getDistance());
+                const bool bAdaptDistance(0 != getFillHatch().getMinimalDiscreteDistance());
+
+                // #i120230# evtl. adapt distance
+                if(bAdaptDistance)
+                {
+                    const double fDiscreteDistance(getFillHatch().getDistance() / getDiscreteUnit());
+
+                    if(fDiscreteDistance < (double)getFillHatch().getMinimalDiscreteDistance())
+                    {
+                        fDistance = (double)getFillHatch().getMinimalDiscreteDistance() * getDiscreteUnit();
+                    }
+                }
 
                 // get hatch transformations
                 switch(getFillHatch().getStyle())
@@ -52,7 +67,7 @@ namespace drawinglayer
                     case attribute::HATCHSTYLE_TRIPLE:
                     {
                         // rotated 45 degrees
-                        texture::GeoTexSvxHatch aHatch(getObjectRange(), getFillHatch().getDistance(), fAngle - F_PI4);
+                        texture::GeoTexSvxHatch aHatch(getObjectRange(), fDistance, fAngle - F_PI4);
                         aHatch.appendTransformations(aMatrices);
 
                         // fall-through by purpose
@@ -60,7 +75,7 @@ namespace drawinglayer
                     case attribute::HATCHSTYLE_DOUBLE:
                     {
                         // rotated 90 degrees
-                        texture::GeoTexSvxHatch aHatch(getObjectRange(), getFillHatch().getDistance(), fAngle - F_PI2);
+                        texture::GeoTexSvxHatch aHatch(getObjectRange(), fDistance, fAngle - F_PI2);
                         aHatch.appendTransformations(aMatrices);
 
                         // fall-through by purpose
@@ -68,7 +83,7 @@ namespace drawinglayer
                     case attribute::HATCHSTYLE_SINGLE:
                     {
                         // angle as given
-                        texture::GeoTexSvxHatch aHatch(getObjectRange(), getFillHatch().getDistance(), fAngle);
+                        texture::GeoTexSvxHatch aHatch(getObjectRange(), fDistance, fAngle);
                         aHatch.appendTransformations(aMatrices);
                     }
                 }
@@ -113,7 +128,7 @@ namespace drawinglayer
             const basegfx::B2DRange& rObjectRange,
             const basegfx::BColor& rBColor,
             const attribute::FillHatchAttribute& rFillHatch)
-        :   BufferedDecompositionPrimitive2D(),
+        :   DiscreteMetricDependentPrimitive2D(),
             maObjectRange(rObjectRange),
             maFillHatch(rFillHatch),
             maBColor(rBColor)
@@ -122,7 +137,7 @@ namespace drawinglayer
 
         bool FillHatchPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
         {
-            if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
+            if(DiscreteMetricDependentPrimitive2D::operator==(rPrimitive))
             {
                 const FillHatchPrimitive2D& rCompare = (FillHatchPrimitive2D&)rPrimitive;
 
@@ -138,6 +153,23 @@ namespace drawinglayer
         {
             // return ObjectRange
             return getObjectRange();
+        }
+
+        Primitive2DSequence FillHatchPrimitive2D::get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
+        {
+            ::osl::MutexGuard aGuard( m_aMutex );
+            bool bAdaptDistance(0 != getFillHatch().getMinimalDiscreteDistance());
+
+            if(bAdaptDistance)
+            {
+                // behave view-dependent
+                return DiscreteMetricDependentPrimitive2D::get2DDecomposition(rViewInformation);
+            }
+            else
+            {
+                // behave view-independent
+                return BufferedDecompositionPrimitive2D::get2DDecomposition(rViewInformation);
+            }
         }
 
         // provide unique ID

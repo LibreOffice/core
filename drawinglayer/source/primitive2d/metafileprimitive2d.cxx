@@ -958,6 +958,7 @@ namespace
             (double)rHatch.GetDistance(),
             (double)rHatch.GetAngle() * F_PI1800,
             rHatch.GetColor().getBColor(),
+            3, // same default as VCL, a minimum of three discrete units (pixels) offset
             false);
     }
 

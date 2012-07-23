@@ -453,6 +453,7 @@ namespace drawinglayer
                                 (double)rHatch.GetDistance(),
                                 (double)rHatch.GetAngle() * F_PI1800,
                                 aColorB.getBColor(),
+                                3, // same default as VCL, a minimum of three discrete units (pixels) offset
                                 ((const XFillBackgroundItem&)(rSet.Get(XATTR_FILLBACKGROUND))).GetValue());
 
                             break;

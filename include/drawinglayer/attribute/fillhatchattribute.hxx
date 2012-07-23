@@ -69,6 +69,7 @@ namespace drawinglayer
                 double fDistance,
                 double fAngle,
                 const basegfx::BColor& rColor,
+                sal_uInt32 nMinimalDiscreteDistance,
                 bool bFillBackground);
             FillHatchAttribute();
             FillHatchAttribute(const FillHatchAttribute& rCandidate);
@@ -86,6 +87,19 @@ namespace drawinglayer
             double getDistance() const;
             double getAngle() const;
             const basegfx::BColor& getColor() const;
+
+            // #i120230# If a minimal discrete distance is wanted (VCL used 3,
+            // this is the default for the global instance, too), set this
+            // unequal to zero. Zero means not to use it. If set bigger zero
+            // (should be at least two, one leads to a full plane filled with
+            // lines when Distance in discrete views is smaller than one) this
+            // will be used when the discrete value is less than the given one.
+            // This is used to 'emulate' old VCL behaviour which makes hatches
+            // look better by not making distances as small as needed, but
+            // keeping them on a minimal discrete value for more appealing
+            // visualisation.
+            sal_uInt32 getMinimalDiscreteDistance() const;
+
             bool isFillBackground() const;
         };
     } // end of namespace attribute

@@ -230,6 +230,7 @@ namespace drawinglayer
                     getDiscreteHatchDistance() * getDiscreteUnit(),
                     getHatchRotation() - getRotation(),
                     getHatchColor(),
+                    3, // same default as VCL, a minimum of three discrete units (pixels) offset
                     false);
                 const Primitive2DReference aPrimitive(
                     new PolyPolygonHatchPrimitive2D(

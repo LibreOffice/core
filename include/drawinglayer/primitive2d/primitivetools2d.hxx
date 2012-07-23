@@ -47,6 +47,13 @@ namespace drawinglayer
              */
             double                                  mfDiscreteUnit;
 
+        protected:
+            /// helper to update discrete unit
+            void updateDiscreteUnit(double fNew)
+            {
+                mfDiscreteUnit = fNew;
+            }
+
         public:
             /// constructor
             DiscreteMetricDependentPrimitive2D()

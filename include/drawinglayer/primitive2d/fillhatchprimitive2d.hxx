@@ -23,6 +23,7 @@
 #include <drawinglayer/drawinglayerdllapi.h>
 
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
+#include <drawinglayer/primitive2d/primitivetools2d.hxx>
 #include <drawinglayer/attribute/fillhatchattribute.hxx>
 #include <basegfx/color/bcolor.hxx>
 
@@ -40,9 +41,14 @@ namespace drawinglayer
             If the background is to be filled, a flag in FillHatchAttribute is set and
             the BColor defines the background color.
 
+            #i120230# This primitive is now evtl. metric dependent due to the value
+            MinimalDiscreteDistance in the FillHatchAttribute if the value is not zero.
+            This is used for a more appealing, VCL-like visualisation by not letting the
+            distances get too small between lines.
+
             The decomposition will deliver the hatch lines.
          */
-        class DRAWINGLAYER_DLLPUBLIC FillHatchPrimitive2D : public BufferedDecompositionPrimitive2D
+        class DRAWINGLAYER_DLLPUBLIC FillHatchPrimitive2D : public DiscreteMetricDependentPrimitive2D
         {
         private:
             /// the geometric definition
@@ -75,6 +81,9 @@ namespace drawinglayer
 
             /// get range
             virtual basegfx::B2DRange getB2DRange(const geometry::ViewInformation2D& rViewInformation) const;
+
+            /// get local decomposition. Overloaded since this decomposition is view-dependent
+            virtual Primitive2DSequence get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
 
             /// provide unique ID
             DeclPrimitrive2DIDBlock()
