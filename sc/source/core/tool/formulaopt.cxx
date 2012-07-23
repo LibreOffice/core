@@ -55,7 +55,7 @@ ScFormulaOptions::ScFormulaOptions()
 ScFormulaOptions::ScFormulaOptions( const ScFormulaOptions& rCpy ) :
     bUseEnglishFuncName ( rCpy.bUseEnglishFuncName ),
     eFormulaGrammar     ( rCpy.eFormulaGrammar ),
-    eStringRefSyntax(rCpy.eStringRefSyntax),
+    aCalcConfig(rCpy.aCalcConfig),
     aFormulaSepArg      ( rCpy.aFormulaSepArg ),
     aFormulaSepArrayRow ( rCpy.aFormulaSepArrayRow ),
     aFormulaSepArrayCol ( rCpy.aFormulaSepArrayCol )
@@ -72,7 +72,7 @@ void ScFormulaOptions::SetDefaults()
     eFormulaGrammar     = ::formula::FormulaGrammar::GRAM_NATIVE;
 
     // unspecified means use the current formula syntax.
-    eStringRefSyntax = formula::FormulaGrammar::CONV_UNSPECIFIED;
+    aCalcConfig.reset();
 
     ResetFormulaSeparators();
 }
@@ -144,7 +144,7 @@ ScFormulaOptions& ScFormulaOptions::operator=( const ScFormulaOptions& rCpy )
 {
     bUseEnglishFuncName = rCpy.bUseEnglishFuncName;
     eFormulaGrammar     = rCpy.eFormulaGrammar;
-    eStringRefSyntax = rCpy.eStringRefSyntax;
+    aCalcConfig = rCpy.aCalcConfig;
     aFormulaSepArg      = rCpy.aFormulaSepArg;
     aFormulaSepArrayRow = rCpy.aFormulaSepArrayRow;
     aFormulaSepArrayCol = rCpy.aFormulaSepArrayCol;
@@ -155,7 +155,7 @@ bool ScFormulaOptions::operator==( const ScFormulaOptions& rOpt ) const
 {
     return bUseEnglishFuncName == rOpt.bUseEnglishFuncName
         && eFormulaGrammar     == rOpt.eFormulaGrammar
-        && eStringRefSyntax == rOpt.eStringRefSyntax
+        && aCalcConfig == rOpt.aCalcConfig
         && aFormulaSepArg      == rOpt.aFormulaSepArg
         && aFormulaSepArrayRow == rOpt.aFormulaSepArrayRow
         && aFormulaSepArrayCol == rOpt.aFormulaSepArrayCol;
@@ -311,7 +311,7 @@ ScFormulaCfg::ScFormulaCfg() :
                 case SCFORMULAOPT_STRING_REF_SYNTAX:
                 {
                     // Get default value in case this option is not set.
-                    ::formula::FormulaGrammar::AddressConvention eConv = GetStringRefAddressSyntax();
+                    ::formula::FormulaGrammar::AddressConvention eConv = GetCalcConfig().meStringRefAddressSyntax;
 
                     do
                     {
@@ -338,7 +338,7 @@ ScFormulaCfg::ScFormulaCfg() :
                         }
                     }
                     while (false);
-                    SetStringRefAddressSyntax(eConv);
+                    GetCalcConfig().meStringRefAddressSyntax = eConv;
                 }
                 break;
                 }
@@ -387,7 +387,7 @@ void ScFormulaCfg::Commit()
             case SCFORMULAOPT_STRING_REF_SYNTAX:
             {
                 sal_Int32 nVal = -1;
-                switch (GetStringRefAddressSyntax())
+                switch (GetCalcConfig().meStringRefAddressSyntax)
                 {
                     case ::formula::FormulaGrammar::CONV_OOO:     nVal = 0; break;
                     case ::formula::FormulaGrammar::CONV_XL_A1:   nVal = 1; break;
