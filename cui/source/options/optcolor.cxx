@@ -36,7 +36,6 @@
 #include <unotools/pathoptions.hxx>
 #include <vcl/msgbox.hxx>
 #include <boost/shared_ptr.hpp>
-#include <boost/make_shared.hpp>
 #include <svx/svxdlg.hxx>
 #include <helpid.hrc>
 #include <dialmgr.hxx>
@@ -464,15 +463,15 @@ ColorConfigWindow_Impl::Entry::Entry (
     // has checkbox?
     if (vEntryInfo[iEntry].bCheckBox)
     {
-        pText = boost::make_shared<CheckBox>(
+        pText = boost::shared_ptr<CheckBox>( new CheckBox (
             &rParent, ResId(vEntryInfo[iEntry].nTextResId, rResMgr)
-        );
+        ) );
     }
     else
     {
-        pText = boost::make_shared<FixedText>(
+        pText = boost::shared_ptr<FixedText>( new FixedText (
             &rParent, ResId(vEntryInfo[iEntry].nTextResId, rResMgr)
-        );
+        ) );
     }
 }
 
@@ -481,7 +480,7 @@ ColorConfigWindow_Impl::Entry::Entry (
     Window& rParent, ResMgr& rResMgr,
     unsigned nYPos, ExtendedColorConfigValue const& aColorEntry
 ) :
-    pText(boost::make_shared<FixedText>(&rParent, ResId(FT_BASICERROR, rResMgr))),
+    pText(boost::shared_ptr<FixedText>(new FixedText (&rParent, ResId(FT_BASICERROR, rResMgr)))),
     aColorList(&rParent, ResId(LB_BASICERROR, rResMgr)),
     aPreview(&rParent, ResId(WN_BASICERROR, rResMgr)),
     aDefaultColor(aColorEntry.getDefaultColor())
@@ -692,15 +691,14 @@ void ColorConfigWindow_Impl::CreateEntries (ResMgr& rResMgr)
     vChapters.reserve(nGroupCount);
     for (unsigned i = 0; i != nGroupCount; ++i)
     {
-        vChapters.push_back(boost::make_shared<Chapter>(
-            *this, static_cast<Group>(i), rResMgr
-        ));
+        vChapters.push_back(boost::shared_ptr<Chapter> (
+            new Chapter( *this, static_cast<Group>(i), rResMgr ) ) );
     }
 
     // creating entries
     vEntries.reserve(ColorConfigEntryCount);
     for (unsigned i = 0; i != ColorConfigEntryCount; ++i)
-        vEntries.push_back(boost::make_shared<Entry>(*this, i, rResMgr));
+        vEntries.push_back( boost::shared_ptr<Entry>(new Entry (*this, i, rResMgr) ) );
 
     // calculate heights of groups which can be hidden
     {
@@ -722,19 +720,19 @@ void ColorConfigWindow_Impl::CreateEntries (ResMgr& rResMgr)
         for (unsigned j = 0; j != nExtGroupCount; ++j)
         {
             rtl::OUString const sComponentName = aExtConfig.GetComponentName(j);
-            vChapters.push_back(boost::make_shared<Chapter>(
+            vChapters.push_back(boost::shared_ptr<Chapter>(new Chapter (
                 *this, rResMgr, nLineNum * LINE_HEIGHT,
                 aExtConfig.GetComponentDisplayName(sComponentName)
-            ));
+            )));
             ++nLineNum;
             unsigned nColorCount = aExtConfig.GetComponentColorCount(sComponentName);
             for (unsigned i = 0; i != nColorCount; ++i)
             {
                 ExtendedColorConfigValue const aColorEntry =
                     aExtConfig.GetComponentColorConfigValue(sComponentName, i);
-                vEntries.push_back(boost::make_shared<Entry>(
+                vEntries.push_back(boost::shared_ptr<Entry>( new Entry (
                     *this, rResMgr, nLineNum * LINE_HEIGHT, aColorEntry
-                ));
+                )));
                 ++nLineNum;
             }
         }
