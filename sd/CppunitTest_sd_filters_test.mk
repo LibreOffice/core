@@ -67,10 +67,6 @@ $(eval $(call gb_CppunitTest_use_libraries,sd_filters_test, \
 	$(gb_STDLIBS) \
 ))
 
-$(eval $(call gb_CppunitTest_add_libs,sd_filters_test,\
-    $(shell pkg-config --libs glib-2.0 json-glib-1.0) \
-))
-
 $(eval $(call gb_CppunitTest_set_include,sd_filters_test,\
     -I$(SRCDIR)/sd/source/ui/inc \
     -I$(SRCDIR)/sd/inc \

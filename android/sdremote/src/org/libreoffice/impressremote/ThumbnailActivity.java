@@ -11,18 +11,12 @@ package org.libreoffice.impressremote;
 import org.libreoffice.impressremote.communication.CommunicationService;
 import org.libreoffice.impressremote.communication.SlideShow;
 
-import android.app.Activity;
-import android.content.ComponentName;
+import android.app.Fragment;
 import android.content.Context;
-import android.content.Intent;
-import android.content.ServiceConnection;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.IBinder;
 import android.os.Message;
-import android.os.Messenger;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,47 +26,42 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class ThumbnailActivity extends Activity {
+public class ThumbnailActivity extends Fragment {
 
 	private CommunicationService mCommunicationService;
-	private boolean mIsBound = false;
 
 	private GridView mGrid;
 	private ImageView mCurrentImage;
 	private TextView mCurrentText;
 
 	private SlideShow mSlideShow;
+	private Context mContext;
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+	                Bundle savedInstanceState) {
+		// Inflate the layout for this fragment
+		View v = inflater
+		                .inflate(R.layout.fragment_thumbnail, container, false);
+
+		mGrid = (GridView) v.findViewById(R.id.thumbnail_grid);
+
+		mGrid.setOnItemClickListener(new ClickListener());
+		mContext = container.getContext();
+
+		return v;
+	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_thumbnail);
 
-		bindService(new Intent(this, CommunicationService.class), mConnection,
-		                Context.BIND_ADJUST_WITH_ACTIVITY);
-		mIsBound = true;
-
-		mGrid = (GridView) findViewById(R.id.thumbnail_grid);
-
-		mGrid.setOnItemClickListener(new ClickListener());
 	}
 
 	@Override
-	protected void onPause() {
+	public void onPause() {
 		super.onPause();
-		mCommunicationService.setActivityMessenger(null);
-		if (mIsBound) {
-			unbindService(mConnection);
-			mIsBound = false;
-		}
 	}
-
-	// @Override
-	// public boolean onCreateOptionsMenu(Menu menu) {
-	// MenuInflater inflater = getMenuInflater();
-	// inflater.inflate(R.menu.main_activity, menu);
-	// return true;
-	// }
 
 	private void setSelected(int position) {
 		formatUnselected(mCurrentImage, mCurrentText);
@@ -92,7 +81,7 @@ public class ThumbnailActivity extends Activity {
 			                R.color.thumbnail_border));
 		}
 		if (aText != null) {
-			aText.setTypeface(Typeface.create(mCurrentText.getTypeface(),
+			aText.setTypeface(Typeface.create(aText.getTypeface(),
 			                Typeface.NORMAL));
 		}
 	}
@@ -103,56 +92,42 @@ public class ThumbnailActivity extends Activity {
 			                R.color.thumbnail_border_selected));
 		}
 		if (aText != null) {
-			aText.setTypeface(Typeface.create(mCurrentText.getTypeface(),
+			aText.setTypeface(Typeface.create(aText.getTypeface(),
 			                Typeface.BOLD));
 		}
 	}
 
 	// ------------------------------------------------- SERVICE CONNECTION ----
-	final Messenger mMessenger = new Messenger(new MessageHandler());
-
-	private ServiceConnection mConnection = new ServiceConnection() {
-		@Override
-		public void onServiceConnected(ComponentName aClassName,
-		                IBinder aService) {
-			mCommunicationService = ((CommunicationService.CBinder) aService)
-			                .getService();
-			mCommunicationService.setActivityMessenger(mMessenger);
-			mSlideShow = mCommunicationService.getSlideShow();
-			mGrid.setAdapter(new ThumbnailAdapter(ThumbnailActivity.this,
-			                mSlideShow));
-		}
-
-		@Override
-		public void onServiceDisconnected(ComponentName aClassName) {
-			mCommunicationService = null;
-		}
-	};
 
 	// ----------------------------------------------------- CLICK LISTENER ----
 	protected class ClickListener implements AdapterView.OnItemClickListener {
 		public void onItemClick(AdapterView<?> parent, View v, int position,
 		                long id) {
-			mCommunicationService.getTransmitter().gotoSlide(position);
+			if (mCommunicationService != null)
+				mCommunicationService.getTransmitter().gotoSlide(position);
 		}
 	}
 
 	// ---------------------------------------------------- MESSAGE HANDLER ----
-	protected class MessageHandler extends Handler {
-		@Override
-		public void handleMessage(Message aMessage) {
-			Bundle aData = aMessage.getData();
-			switch (aMessage.what) {
-			case CommunicationService.MSG_SLIDE_CHANGED:
-				int aSlide = aData.getInt("slide_number");
-				setSelected(aSlide);
-				break;
-			case CommunicationService.MSG_SLIDE_PREVIEW:
-				// int aNSlide = aData.getInt("slide_number");
-				mGrid.invalidateViews();
-				break;
 
-			}
+	public void setCommunicationService(
+	                CommunicationService aCommunicationService) {
+		mCommunicationService = aCommunicationService;
+		mSlideShow = mCommunicationService.getSlideShow();
+		mGrid.setAdapter(new ThumbnailAdapter(mContext, mSlideShow));
+	}
+
+	public void handleMessage(Message aMessage) {
+		Bundle aData = aMessage.getData();
+		switch (aMessage.what) {
+		case CommunicationService.MSG_SLIDE_CHANGED:
+			int aSlide = aData.getInt("slide_number");
+			setSelected(aSlide);
+			break;
+		case CommunicationService.MSG_SLIDE_PREVIEW:
+			mGrid.invalidateViews();
+			break;
+
 		}
 	}
 
@@ -201,6 +176,8 @@ public class ThumbnailActivity extends Activity {
 			if ((mSlideShow != null)
 			                && (position == mSlideShow.getCurrentSlide())) {
 				formatSelected(aImage, aText);
+				mCurrentImage = aImage;
+				mCurrentText = aText;
 			} else {
 				formatUnselected(aImage, aText);
 			}

@@ -151,7 +151,7 @@ public class TestClient extends Activity {
 			@Override
 			public void onClick(View v) {
 				Intent aIntent = new Intent(TestClient.this,
-				                ThumbnailActivity.class);
+				                PresentationActivity.class);
 				startActivity(aIntent);
 			}
 		});

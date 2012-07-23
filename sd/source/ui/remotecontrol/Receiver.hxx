@@ -39,4 +39,3 @@ private:
 
 }
 #endif // _SD_IMPRESSREMOTE_RECEIVER_HXX
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
