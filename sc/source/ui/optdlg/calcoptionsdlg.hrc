@@ -34,6 +34,8 @@
 
 #define FT_OPTION_EDIT_CAPTION 4
 #define LB_OPTION_EDIT 5
+#define BTN_OPTION_TRUE 6
+#define BTN_OPTION_FALSE 7
 
 #define FL_ANNOTATION 20
 #define FT_ANNOTATION 21
@@ -42,5 +44,12 @@
 #define STR_STRING_REF_SYNTAX_DESC 23
 
 #define STR_USE_FORMULA_SYNTAX 24
+
+#define STR_TRUE 25
+#define STR_FALSE 26
+
+#define STR_EMPTY_STRING_AS_ZERO_CAPTION 27
+#define STR_EMPTY_STRING_AS_ZERO_DESC 28
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

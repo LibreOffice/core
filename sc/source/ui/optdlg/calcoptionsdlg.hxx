@@ -43,6 +43,7 @@ public:
     virtual ~ScCalcOptionsDialog();
 
     DECL_LINK( SettingsSelHdl, Control* );
+    DECL_LINK( BtnToggleHdl, RadioButton* );
 
     const ScCalcConfig& GetConfig() const;
 
@@ -50,20 +51,27 @@ private:
     void FillOptionsList();
     void SelectionChanged();
     void ListOptionValueChanged();
+    void RadioValueChanged();
 
     rtl::OUString toString(formula::FormulaGrammar::AddressConvention eConv) const;
+    rtl::OUString toString(bool bVal) const;
 
 private:
     SvxCheckListBox maLbSettings;
 
     FixedText maFtOptionEditCaption;
     ListBox maLbOptionEdit;
+    RadioButton maBtnTrue;
+    RadioButton maBtnFalse;
 
     FixedLine maFlAnnotation;
     FixedText maFtAnnotation;
 
     OKButton maBtnOK;
     CancelButton maBtnCancel;
+
+    rtl::OUString maTrue;
+    rtl::OUString maFalse;
 
     rtl::OUString maCalcA1;
     rtl::OUString maExcelA1;
@@ -72,6 +80,9 @@ private:
     rtl::OUString maCaptionStringRefSyntax;
     rtl::OUString maDescStringRefSyntax;
     rtl::OUString maUseFormulaSyntax;
+
+    rtl::OUString maCaptionEmptyStringAsZero;
+    rtl::OUString maDescEmptyStringAsZero;
 
     ScCalcConfig maConfig;
 };

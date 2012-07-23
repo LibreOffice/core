@@ -87,16 +87,22 @@ ScCalcOptionsDialog::ScCalcOptionsDialog(Window* pParent, const ScCalcConfig& rC
     maLbSettings(this, ScResId(LB_SETTINGS)),
     maFtOptionEditCaption(this, ScResId(FT_OPTION_EDIT_CAPTION)),
     maLbOptionEdit(this, ScResId(LB_OPTION_EDIT)),
+    maBtnTrue(this, ScResId(BTN_OPTION_TRUE)),
+    maBtnFalse(this, ScResId(BTN_OPTION_FALSE)),
     maFlAnnotation(this, ScResId(FL_ANNOTATION)),
     maFtAnnotation(this, ScResId(FT_ANNOTATION)),
     maBtnOK(this, ScResId(BTN_OK)),
     maBtnCancel(this, ScResId(BTN_CANCEL)),
+    maTrue(ScResId(STR_TRUE).toString()),
+    maFalse(ScResId(STR_FALSE).toString()),
     maCalcA1(ScResId(SCSTR_FORMULA_SYNTAX_CALC_A1).toString()),
     maExcelA1(ScResId(SCSTR_FORMULA_SYNTAX_XL_A1).toString()),
     maExcelR1C1(ScResId(SCSTR_FORMULA_SYNTAX_XL_R1C1).toString()),
     maCaptionStringRefSyntax(ScResId(STR_STRING_REF_SYNTAX_CAPTION).toString()),
     maDescStringRefSyntax(ScResId(STR_STRING_REF_SYNTAX_DESC).toString()),
     maUseFormulaSyntax(ScResId(STR_USE_FORMULA_SYNTAX).toString()),
+    maCaptionEmptyStringAsZero(ScResId(STR_EMPTY_STRING_AS_ZERO_CAPTION).toString()),
+    maDescEmptyStringAsZero(ScResId(STR_EMPTY_STRING_AS_ZERO_DESC).toString()),
     maConfig(rConfig)
 {
     maLbSettings.SetStyle(maLbSettings.GetStyle() | WB_CLIPCHILDREN | WB_FORCE_MAKEVISIBLE);
@@ -105,6 +111,12 @@ ScCalcOptionsDialog::ScCalcOptionsDialog(Window* pParent, const ScCalcConfig& rC
     Link aLink = LINK(this, ScCalcOptionsDialog, SettingsSelHdl);
     maLbSettings.SetSelectHdl(aLink);
     maLbOptionEdit.SetSelectHdl(aLink);
+
+    aLink = LINK(this, ScCalcOptionsDialog, BtnToggleHdl);
+    maBtnTrue.SetToggleHdl(aLink); // Set handler only to the 'True' button.
+
+    maBtnTrue.SetText(maTrue);
+    maBtnFalse.SetText(maFalse);
 
     FillOptionsList();
     FreeResource();
@@ -136,58 +148,134 @@ void ScCalcOptionsDialog::FillOptionsList()
         pModel->Insert(pEntry);
     }
 
+    {
+        // Treat empty string as zero.
+        SvLBoxEntry* pEntry = new SvLBoxEntry;
+        pEntry->AddItem(new SvLBoxString(pEntry, 0, rtl::OUString()));
+        pEntry->AddItem(new SvLBoxContextBmp(pEntry, 0, Image(), Image(), 0));
+        OptionString* pItem = new OptionString(
+            maCaptionEmptyStringAsZero, toString(maConfig.mbEmptyStringAsZero));
+        pEntry->AddItem(pItem);
+        pModel->Insert(pEntry);
+    }
+
     maLbSettings.SetUpdateMode(true);
 }
 
 void ScCalcOptionsDialog::SelectionChanged()
 {
-    if (true)
+    sal_uInt16 nSelectedPos = maLbSettings.GetSelectEntryPos();
+    switch (nSelectedPos)
     {
-        // Formula syntax for INDIRECT function.
-        maLbOptionEdit.Clear();
-        maLbOptionEdit.InsertEntry(maUseFormulaSyntax);
-        maLbOptionEdit.InsertEntry(maCalcA1);
-        maLbOptionEdit.InsertEntry(maExcelA1);
-        maLbOptionEdit.InsertEntry(maExcelR1C1);
-        switch (maConfig.meStringRefAddressSyntax)
+        case 0:
         {
-            case formula::FormulaGrammar::CONV_OOO:
-                maLbOptionEdit.SelectEntryPos(1);
-            break;
-            case formula::FormulaGrammar::CONV_XL_A1:
-                maLbOptionEdit.SelectEntryPos(2);
-            break;
-            case formula::FormulaGrammar::CONV_XL_R1C1:
-                maLbOptionEdit.SelectEntryPos(3);
-            break;
-            case formula::FormulaGrammar::CONV_UNSPECIFIED:
-            default:
-                maLbOptionEdit.SelectEntryPos(0);
+            // Formula syntax for INDIRECT function.
+            maBtnTrue.Hide();
+            maBtnFalse.Hide();
+            maLbOptionEdit.Show();
+
+            maLbOptionEdit.Clear();
+            maLbOptionEdit.InsertEntry(maUseFormulaSyntax);
+            maLbOptionEdit.InsertEntry(maCalcA1);
+            maLbOptionEdit.InsertEntry(maExcelA1);
+            maLbOptionEdit.InsertEntry(maExcelR1C1);
+            switch (maConfig.meStringRefAddressSyntax)
+            {
+                case formula::FormulaGrammar::CONV_OOO:
+                    maLbOptionEdit.SelectEntryPos(1);
+                break;
+                case formula::FormulaGrammar::CONV_XL_A1:
+                    maLbOptionEdit.SelectEntryPos(2);
+                break;
+                case formula::FormulaGrammar::CONV_XL_R1C1:
+                    maLbOptionEdit.SelectEntryPos(3);
+                break;
+                case formula::FormulaGrammar::CONV_UNSPECIFIED:
+                default:
+                    maLbOptionEdit.SelectEntryPos(0);
+            }
+            maFtAnnotation.SetText(maDescStringRefSyntax);
         }
-        maFtAnnotation.SetText(maDescStringRefSyntax);
+        break;
+        case 1:
+        {
+            // Treat empty string as zero.
+            maLbOptionEdit.Hide();
+            maBtnTrue.Show();
+            maBtnFalse.Show();
+
+            if (maConfig.mbEmptyStringAsZero)
+            {
+                maBtnTrue.Check(true);
+                maBtnFalse.Check(false);
+            }
+            else
+            {
+                maBtnTrue.Check(false);
+                maBtnFalse.Check(true);
+            }
+        }
+        break;
+        default:
+            ;
     }
 }
 
 void ScCalcOptionsDialog::ListOptionValueChanged()
 {
-    if (true)
+    sal_uInt16 nSelected = maLbSettings.GetSelectEntryPos();
+    switch (nSelected)
     {
-        // Formula syntax for INDIRECT function.
-        sal_uInt16 nPos = maLbOptionEdit.GetSelectEntryPos();
-        maConfig.meStringRefAddressSyntax = toAddressConvention(nPos);
+        case 0:
+        {
+            // Formula syntax for INDIRECT function.
+            sal_uInt16 nPos = maLbOptionEdit.GetSelectEntryPos();
+            maConfig.meStringRefAddressSyntax = toAddressConvention(nPos);
 
-        maLbSettings.SetUpdateMode(false);
+            maLbSettings.SetUpdateMode(false);
 
-        SvLBoxTreeList* pModel = maLbSettings.GetModel();
-        SvLBoxEntry* pEntry = pModel->GetEntry(NULL, 0);
-        if (!pEntry)
-            return;
+            SvLBoxTreeList* pModel = maLbSettings.GetModel();
+            SvLBoxEntry* pEntry = pModel->GetEntry(NULL, 0);
+            if (!pEntry)
+                return;
 
-        OptionString* pItem = new OptionString(
-            maCaptionStringRefSyntax, toString(maConfig.meStringRefAddressSyntax));
-        pEntry->ReplaceItem(pItem, 2);
+            OptionString* pItem = new OptionString(
+                maCaptionStringRefSyntax, toString(maConfig.meStringRefAddressSyntax));
+            pEntry->ReplaceItem(pItem, 2);
 
-        maLbSettings.SetUpdateMode(true);
+            maLbSettings.SetUpdateMode(true);
+        }
+        break;
+        default:
+            ;
+    }
+}
+
+void ScCalcOptionsDialog::RadioValueChanged()
+{
+    sal_uInt16 nSelected = maLbSettings.GetSelectEntryPos();
+    switch (nSelected)
+    {
+        case 1:
+        {
+            // Treat empty string as zero.
+            maConfig.mbEmptyStringAsZero = maBtnTrue.IsChecked();
+            maLbSettings.SetUpdateMode(false);
+
+            SvLBoxTreeList* pModel = maLbSettings.GetModel();
+            SvLBoxEntry* pEntry = pModel->GetEntry(NULL, 1);
+            if (!pEntry)
+                return;
+
+            OptionString* pItem = new OptionString(
+                maCaptionEmptyStringAsZero, toString(maConfig.mbEmptyStringAsZero));
+            pEntry->ReplaceItem(pItem, 2);
+
+            maLbSettings.SetUpdateMode(true);
+        }
+        break;
+        default:
+            ;
     }
 }
 
@@ -208,6 +296,11 @@ rtl::OUString ScCalcOptionsDialog::toString(formula::FormulaGrammar::AddressConv
     return maUseFormulaSyntax;
 }
 
+rtl::OUString ScCalcOptionsDialog::toString(bool bVal) const
+{
+    return bVal ? maTrue : maFalse;
+}
+
 IMPL_LINK(ScCalcOptionsDialog, SettingsSelHdl, Control*, pCtrl)
 {
     if (pCtrl == &maLbSettings)
@@ -217,5 +310,12 @@ IMPL_LINK(ScCalcOptionsDialog, SettingsSelHdl, Control*, pCtrl)
 
     return 0;
 }
+
+IMPL_LINK(ScCalcOptionsDialog, BtnToggleHdl, RadioButton*, pBtn)
+{
+    RadioValueChanged();
+    return 0;
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
