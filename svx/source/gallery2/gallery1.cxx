@@ -467,16 +467,6 @@ GalleryThemeEntry* Gallery::ImplGetThemeEntry( const rtl::OUString& rThemeName )
 
 // ------------------------------------------------------------------------
 
-GalleryImportThemeEntry* Gallery::ImplGetImportThemeEntry( const rtl::OUString& rImportName )
-{
-    for ( size_t i = 0, n = aImportList.size(); i < n; ++i )
-        if ( rImportName == aImportList[ i ]->aUIName )
-            return aImportList[ i ];
-    return NULL;
-}
-
-// ------------------------------------------------------------------------
-
 rtl::OUString Gallery::GetThemeName( sal_uIntPtr nThemeId ) const
 {
     GalleryThemeEntry* pFound = NULL;
@@ -632,22 +622,6 @@ sal_Bool Gallery::RemoveTheme( const String& rThemeName )
     }
 
     return bRet;
-}
-
-// ------------------------------------------------------------------------
-
-INetURLObject Gallery::GetImportURL( const String& rThemeName )
-{
-    INetURLObject               aURL;
-    GalleryImportThemeEntry*    pImportEntry = ImplGetImportThemeEntry( rThemeName );
-
-    if( pImportEntry )
-    {
-        aURL = pImportEntry->aURL;
-        DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
-    }
-
-    return aURL;
 }
 
 // ------------------------------------------------------------------------
