@@ -113,21 +113,21 @@ TabPage RID_SVXPAGE_COLORCONFIG
 
 // misc defines to shorten defining of standard elements
 // standard sizes
-#define FT_SEP_SIZE                     Size = MAP_APPFONT ( _FT_WIDTH , 8 )
-#define FT_SIZE                         Size = MAP_APPFONT ( _FT_WIDTH , _FT_HEIGHT )
-#define LB_SIZE                         Size = MAP_APPFONT ( _LB_WIDTH , _LB_HEIGHT )
-#define WN_SIZE                         Size = MAP_APPFONT ( _WN_WIDTH , _WN_HEIGHT )
-#define CB_SIZE                         Size = MAP_APPFONT ( _CB_WIDTH , _FT_HEIGHT )
+#define FT_SEP_SIZE                     Size = MAP_APPFONT ( FT_WIDTH , SEP_HEIGHT )
+#define FT_SIZE                         Size = MAP_APPFONT ( FT_WIDTH , FT_HEIGHT )
+#define LB_SIZE                         Size = MAP_APPFONT ( LB_WIDTH , LB_HEIGHT )
+#define WN_SIZE                         Size = MAP_APPFONT ( WN_WIDTH , WN_HEIGHT )
+#define CB_SIZE                         Size = MAP_APPFONT ( CB_WIDTH , FT_HEIGHT )
 
 // combination of position and size
-#define POS_SIZE( POSX, LINENUM, CONTRL_SIZE )  Pos = MAP_APPFONT ( POSX , LINENUM * _LINE_HEIGHT ) ; CONTRL_SIZE
+#define POS_SIZE( POSX, LINENUM, CONTRL_SIZE )  Pos = MAP_APPFONT ( POSX , LINENUM * LINE_HEIGHT ) ; CONTRL_SIZE
 
 // ... for special types
-#define FT_SEP_POS_SIZE( LINENUM )      POS_SIZE( 0, LINENUM, FT_SEP_SIZE )
-#define FT_POS_SIZE( LINENUM )          POS_SIZE( _FT_XPOS, LINENUM, FT_SIZE )
-#define LB_POS_SIZE( LINENUM )          POS_SIZE( _LB_XPOS, LINENUM, LB_SIZE )
-#define WN_POS_SIZE( LINENUM )          POS_SIZE( _WN_XPOS, LINENUM, WN_SIZE )
-#define CB_POS_SIZE( LINENUM )          POS_SIZE( _CB_XPOS, LINENUM, CB_SIZE )
+#define FT_SEP_POS_SIZE( LINENUM )      POS_SIZE( FT_XPOS, LINENUM, FT_SEP_SIZE )
+#define FT_POS_SIZE( LINENUM )          POS_SIZE( FT_XPOS, LINENUM, FT_SIZE )
+#define LB_POS_SIZE( LINENUM )          POS_SIZE( LB_XPOS, LINENUM, LB_SIZE )
+#define WN_POS_SIZE( LINENUM )          POS_SIZE( WN_XPOS, LINENUM, WN_SIZE )
+#define CB_POS_SIZE( LINENUM )          POS_SIZE( CB_XPOS, LINENUM, CB_SIZE )
 
 // combination of a listbox (color chooser) and window (color preview)
 #define LB_WN( ID_POST, LINENUM )       ListBox LB_#ID_POST{LB_POS_SIZE(LINENUM);DropDown=TRUE;};Window WN_#ID_POST{WN_POS_SIZE(LINENUM);Border=TRUE;};

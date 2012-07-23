@@ -25,8 +25,8 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _SVX_OPTCOLOR_HXX
-#define _SVX_OPTCOLOR_HXX
+#ifndef SVX_OPTCOLOR_HXX
+#define SVX_OPTCOLOR_HXX
 
 // include ---------------------------------------------------------------
 
