@@ -496,9 +496,7 @@ void ScDocShell::SetFormulaOptions(const ScFormulaOptions& rOpt )
         rOpt.GetFormulaSepArg(), rOpt.GetFormulaSepArrayCol(), rOpt.GetFormulaSepArrayRow());
 
     // Global interpreter settings.
-    ScCalcConfig aConfig;
-    aConfig.meStringRefAddressSyntax = rOpt.GetStringRefAddressSyntax();
-    ScInterpreter::SetGlobalConfig(aConfig);
+    ScInterpreter::SetGlobalConfig(rOpt.GetCalcConfig());
 }
 
 void ScDocShell::CheckConfigOptions()

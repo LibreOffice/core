@@ -35,13 +35,14 @@
 #include "formula/grammar.hxx"
 #include "scdllapi.h"
 #include "global.hxx"
+#include "calcconfig.hxx"
 
 class SC_DLLPUBLIC ScFormulaOptions
 {
 private:
     bool bUseEnglishFuncName;     // use English function name even if the locale is not English.
     formula::FormulaGrammar::Grammar eFormulaGrammar;  // formula grammar used to switch different formula syntax
-    formula::FormulaGrammar::AddressConvention eStringRefSyntax;
+    ScCalcConfig aCalcConfig;
 
     ::rtl::OUString aFormulaSepArg;
     ::rtl::OUString aFormulaSepArrayRow;
@@ -57,8 +58,9 @@ public:
     void SetFormulaSyntax( ::formula::FormulaGrammar::Grammar eGram ) { eFormulaGrammar = eGram; }
     ::formula::FormulaGrammar::Grammar GetFormulaSyntax() const { return eFormulaGrammar; }
 
-    void SetStringRefAddressSyntax(formula::FormulaGrammar::AddressConvention eConv) { eStringRefSyntax = eConv; }
-    formula::FormulaGrammar::AddressConvention GetStringRefAddressSyntax() const { return eStringRefSyntax; }
+    ScCalcConfig& GetCalcConfig() { return aCalcConfig; }
+    const ScCalcConfig& GetCalcConfig() const { return aCalcConfig; }
+    void SetCalcConfig(const ScCalcConfig& rConfig) { aCalcConfig = rConfig; }
 
     void SetUseEnglishFuncName( bool bVal ) { bUseEnglishFuncName = bVal; }
     bool GetUseEnglishFuncName() const { return bUseEnglishFuncName; }

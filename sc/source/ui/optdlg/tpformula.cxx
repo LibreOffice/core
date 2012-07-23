@@ -291,7 +291,7 @@ sal_Bool ScTpFormulaOptions::FillItemSet(SfxItemSet& rCoreSet)
         aOpt.SetFormulaSepArg(aSep);
         aOpt.SetFormulaSepArrayCol(aSepArrayCol);
         aOpt.SetFormulaSepArrayRow(aSepArrayRow);
-        aOpt.SetStringRefAddressSyntax(maCurrentConfig.meStringRefAddressSyntax);
+        aOpt.SetCalcConfig(maCurrentConfig);
 
         rCoreSet.Put( ScTpFormulaItem( SID_SCFORMULAOPTIONS, aOpt ) );
         bRet = true;
@@ -353,8 +353,8 @@ void ScTpFormulaOptions::Reset(const SfxItemSet& rCoreSet)
     // detailed calc settings.
     ScFormulaOptions aDefaults;
 
-    maSavedConfig.meStringRefAddressSyntax = aOpt.GetStringRefAddressSyntax();
-    bool bDefault = aDefaults.GetStringRefAddressSyntax() == maSavedConfig.meStringRefAddressSyntax;
+    maSavedConfig = aOpt.GetCalcConfig();
+    bool bDefault = aDefaults.GetCalcConfig() == maSavedConfig;
     UpdateCustomCalcRadioButtons(bDefault);
 
     maCurrentConfig = maSavedConfig;
