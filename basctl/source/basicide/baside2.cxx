@@ -772,7 +772,6 @@ void ModulWindow::BasicAddWatch()
             aWatchStr = GetEditView()->GetSelected();
             pLayout->GetWatchWindow().AddWatch( aWatchStr );
             pLayout->GetWatchWindow().UpdateWatches();
-            bInserted = sal_True;
         }
     }
 }
