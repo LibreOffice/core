@@ -1400,6 +1400,7 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
             m_aStates.top().nDestinationState = DESTINATION_ATNID;
             break;
         case RTF_MMATH:
+        case RTF_MOMATHPARA:
             // Nothing to do here (just enter the destination) till RTF_MMATHPR is implemented.
             break;
         case RTF_MOMATH:
@@ -1436,6 +1437,14 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
         case RTF_MACCPR:
             m_aMathBuffer.appendOpeningTag(M_TOKEN(accPr));
             m_aStates.top().nDestinationState = DESTINATION_MACCPR;
+            break;
+        case RTF_MBAR:
+            m_aMathBuffer.appendOpeningTag(M_TOKEN(bar));
+            m_aStates.top().nDestinationState = DESTINATION_MBAR;
+            break;
+        case RTF_MBARPR:
+            m_aMathBuffer.appendOpeningTag(M_TOKEN(barPr));
+            m_aStates.top().nDestinationState = DESTINATION_MBARPR;
             break;
         case RTF_MCHR:
             m_aStates.top().nDestinationState = DESTINATION_MCHR;
@@ -3099,7 +3108,8 @@ int RTFDocumentImpl::pushState()
             (m_aStates.top().nDestinationState == DESTINATION_FIELDINSTRUCTION && !m_bEq) ||
             m_aStates.top().nDestinationState == DESTINATION_MOMATH ||
             m_aStates.top().nDestinationState == DESTINATION_MNUM ||
-            m_aStates.top().nDestinationState == DESTINATION_MDEN)
+            m_aStates.top().nDestinationState == DESTINATION_MDEN ||
+            m_aStates.top().nDestinationState == DESTINATION_ME)
         m_aStates.top().nDestinationState = DESTINATION_NORMAL;
     else if (m_aStates.top().nDestinationState == DESTINATION_FIELDINSTRUCTION && m_bEq)
         m_aStates.top().nDestinationState = DESTINATION_EQINSTRUCTION;
@@ -3549,6 +3559,10 @@ int RTFDocumentImpl::popState()
     }
     else if (m_aStates.top().nDestinationState == DESTINATION_ME)
         m_aMathBuffer.appendClosingTag(M_TOKEN(e));
+    else if (m_aStates.top().nDestinationState == DESTINATION_MBAR)
+        m_aMathBuffer.appendClosingTag(M_TOKEN(bar));
+    else if (m_aStates.top().nDestinationState == DESTINATION_MBARPR)
+        m_aMathBuffer.appendClosingTag(M_TOKEN(barPr));
 
     // See if we need to end a track change
     RTFValue::Pointer_t pTrackchange = m_aStates.top().aCharacterSprms.find(NS_ooxml::LN_trackchange);
