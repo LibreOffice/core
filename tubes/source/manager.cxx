@@ -104,7 +104,7 @@ public:
 };
 
 
-void TeleManager::DBusChannelHandler(
+void TeleManager_DBusChannelHandler(
         TpSimpleHandler*            /*handler*/,
         TpAccount*                  pAccount,
         TpConnection*               /*connection*/,
@@ -115,10 +115,10 @@ void TeleManager::DBusChannelHandler(
         gpointer                    pUserData)
 {
     bool aAccepted = false;
-    INFO_LOGGER_F( "TeleManager::DBusChannelHandler");
+    INFO_LOGGER_F( "TeleManager_DBusChannelHandler");
 
     TeleManager* pManager = reinterpret_cast<TeleManager*>(pUserData);
-    SAL_WARN_IF( !pManager, "tubes", "TeleManager::DBusChannelHandler: no manager");
+    SAL_WARN_IF( !pManager, "tubes", "TeleManager_DBusChannelHandler: no manager");
     if (!pManager)
         return;
 
@@ -128,7 +128,7 @@ void TeleManager::DBusChannelHandler(
         if (!pChannel)
             continue;
 
-        SAL_INFO( "tubes", "TeleManager::DBusChannelHandler: incoming dbus channel: "
+        SAL_INFO( "tubes", "TeleManager_DBusChannelHandler: incoming dbus channel: "
                 << tp_channel_get_identifier( pChannel));
 
         if (TP_IS_DBUS_TUBE_CHANNEL( pChannel))
@@ -491,7 +491,7 @@ bool TeleManager::registerClients()
             FALSE,                          // requests
             getFullClientName().getStr(),   // name
             FALSE,                          // uniquify
-            &TeleManager::DBusChannelHandler, // callback
+            TeleManager_DBusChannelHandler, // callback
             this,                           // user_data
             NULL                            // destroy
             );
