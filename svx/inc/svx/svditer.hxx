@@ -55,7 +55,7 @@ class SVX_DLLPUBLIC SdrObjListIter
     void ImpProcessObj(SdrObject* pObj, SdrIterMode eMode, bool bUseZOrder);
 
 public:
-    SdrObjListIter(const SdrObjList& rObjList, SdrIterMode eMode = IM_DEEPNOGROUPS, bool bReverse = false);
+    explicit SdrObjListIter(const SdrObjList& rObjList, SdrIterMode eMode = IM_DEEPNOGROUPS, bool bReverse = false);
     /** This variant lets the user choose the order in which to travel over
         the objects.
         @param bUseZOrder
@@ -67,10 +67,10 @@ public:
 
     /* SJ: the following function can now be used with every
        SdrObject and is no longer limited to group objects */
-    SdrObjListIter(const SdrObject& rObj, SdrIterMode eMode = IM_DEEPNOGROUPS, bool bReverse = false);
+    explicit SdrObjListIter(const SdrObject& rObj, SdrIterMode eMode = IM_DEEPNOGROUPS, bool bReverse = false);
 
     /** Iterates over a list of marked objects received from the SdrMarkView. */
-    SdrObjListIter(const SdrMarkList& rMarkList, SdrIterMode eMode = IM_DEEPNOGROUPS, bool bReverse = false);
+    explicit SdrObjListIter(const SdrMarkList& rMarkList, SdrIterMode eMode = IM_DEEPNOGROUPS, bool bReverse = false);
 
     void Reset() { mnIndex = (mbReverse ? maObjList.size() : 0L); }
     bool IsMore() const { return (mbReverse ? mnIndex != 0 : ( mnIndex < maObjList.size())); }

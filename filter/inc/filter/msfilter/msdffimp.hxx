@@ -121,7 +121,7 @@ protected:
     DffPropFlags    mpFlags[ 1024 ];
 
 public:
-    DffPropSet( sal_Bool bInitialize = sal_False )
+    explicit DffPropSet( sal_Bool bInitialize = sal_False )
     {
         if ( bInitialize )
             memset( mpFlags, 0, 0x400 * sizeof( DffPropFlags ) );
@@ -160,7 +160,7 @@ class MSFILTER_DLLPUBLIC DffPropertyReader : public DffPropSet
 
 public:
     sal_Int32 mnFix16Angle;
-    DffPropertyReader( const SvxMSDffManager& rManager );
+    explicit DffPropertyReader( const SvxMSDffManager& rManager );
     ~DffPropertyReader();
     sal_Int32 Fix16ToAngle( sal_Int32 nAngle ) const;
 
@@ -344,7 +344,7 @@ struct SvxMSDffImportData
 
     SvxMSDffImportData()
         {}
-    SvxMSDffImportData( const Rectangle& rParentRect ) : aParentRect( rParentRect ) {}
+    explicit SvxMSDffImportData( const Rectangle& rParentRect ) : aParentRect( rParentRect ) {}
     void SetNewRect(sal_Int32 left, sal_Int32 top, sal_Int32 right, sal_Int32 bottom )
         { aNewRect = Rectangle(left, top, right, bottom); }
     sal_Bool HasParRect() const { return aParentRect.IsEmpty(); }
@@ -403,7 +403,7 @@ struct DffRecordList
 
     DffRecordHeader     mHd[ DFF_RECORD_MANAGER_BUF_SIZE ];
 
-    DffRecordList( DffRecordList* pList );
+    explicit DffRecordList( DffRecordList* pList );
     ~DffRecordList();
 };
 
@@ -431,7 +431,7 @@ public :
                                           DffSeekToContentMode eMode = SEEK_FROM_BEGINNING );
 
         DffRecordManager();
-        DffRecordManager( SvStream& rIn );
+        explicit DffRecordManager( SvStream& rIn );
         ~DffRecordManager();
 
         DffRecordHeader* Current();
@@ -815,7 +815,7 @@ struct SvxMSDffShapeInfo
     sal_Bool bSortByShapeId :1;
     sal_Bool bLastBoxInChain:1;
 
-    SvxMSDffShapeInfo(sal_uLong nFPos, sal_uInt32 nId=0, // sal_uLong nBIdx=0,
+    explicit SvxMSDffShapeInfo(sal_uLong nFPos, sal_uInt32 nId=0, // sal_uLong nBIdx=0,
                       sal_uInt16 nSeqId=0, sal_uInt16 nBoxId=0):
         nShapeId( nId ),
         nFilePos( nFPos ),
@@ -860,7 +860,7 @@ struct SvxMSDffShapeOrder
     // Approach: In the Ctor of SvxMSDffManager only the shape ids are stored in
     //           the shape order array. The Text-Box number and the object
     //           pointer are only stored if the shape is really imported.
-    SvxMSDffShapeOrder( sal_uLong nId ):
+    explicit SvxMSDffShapeOrder( sal_uLong nId ):
         nShapeId( nId ), nTxBxComp( 0 ), pFly( 0 ), nHdFtSection( 0 ), pObj( 0 ){}
 
     bool operator==( const SvxMSDffShapeOrder& rEntry ) const

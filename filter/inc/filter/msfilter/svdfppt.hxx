@@ -500,7 +500,7 @@ struct MSFILTER_DLLPUBLIC HeaderFooterEntry
                             const PptSlidePersistEntry& rSlidePersist
                         );
 
-                        HeaderFooterEntry( const PptSlidePersistEntry* pMaster = NULL );
+                        explicit HeaderFooterEntry( const PptSlidePersistEntry* pMaster = NULL );
                         ~HeaderFooterEntry();
 };
 
@@ -672,7 +672,7 @@ struct PPTTextSpecInfo
     sal_uInt16      nLanguage[ 3 ];
     sal_uInt16      nDontKnow;
 
-    PPTTextSpecInfo( sal_uInt32 nCharIdx );
+    explicit PPTTextSpecInfo( sal_uInt32 nCharIdx );
     ~PPTTextSpecInfo();
 };
 
@@ -762,7 +762,7 @@ struct PPTCharSheet
 {
     PPTCharLevel    maCharLevel[ 5 ];
 
-                    PPTCharSheet( sal_uInt32 nInstance );
+                    explicit PPTCharSheet( sal_uInt32 nInstance );
                     PPTCharSheet( const PPTCharSheet& rCharSheet );
 
     void            Read( SvStream& rIn, sal_Bool bMasterStyle, sal_uInt32 nLevel, sal_Bool bFirst );
@@ -795,7 +795,7 @@ public:
 
     PPTParaLevel    maParaLevel[ 5 ];
 
-                    PPTParaSheet( sal_uInt32 nInstance );
+                    explicit PPTParaSheet( sal_uInt32 nInstance );
                     PPTParaSheet( const PPTParaSheet& rParaSheet );
 
     void            Read(
@@ -945,7 +945,7 @@ struct PPTCharPropSet
     void                SetFont( sal_uInt16 nFont );
     void                SetColor( sal_uInt32 nColor );
 
-                        PPTCharPropSet( sal_uInt32 nParagraph );
+                        explicit PPTCharPropSet( sal_uInt32 nParagraph );
                         PPTCharPropSet( PPTCharPropSet& rCharPropSet );
                         PPTCharPropSet( PPTCharPropSet& rCharPropSet, sal_uInt32 nParagraph );
                         ~PPTCharPropSet();
@@ -1204,7 +1204,7 @@ struct ImplPPTTextObj
 
     sal_uInt32                  mnTextFlags;
 
-    ImplPPTTextObj( PptSlidePersistEntry& rPersistEntry ) : mrPersistEntry ( rPersistEntry ) {};
+    explicit ImplPPTTextObj( PptSlidePersistEntry& rPersistEntry ) : mrPersistEntry ( rPersistEntry ) {};
 };
 
 class PPTTextObj
