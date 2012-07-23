@@ -486,6 +486,8 @@ public:
 
     inline Color const & getSyntaxColor(TokenTypes eType) const
     { return m_aSyntaxColors[eType]; }
+
+    void ToggleObjectCatalog ();
 };
 
 #endif  // _BASIDE2_HXX

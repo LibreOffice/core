@@ -1511,14 +1511,14 @@ void ModulWindowLayout::ArrangeWindows()
     if ( ( nVSplitPos < nMinPos ) || ( nVSplitPos > nMaxPos ) )
         nVSplitPos = ( nVSplitPos < nMinPos ) ? 0 : ( aSz.Height() - SPLIT_HEIGHT );
 
-    Size aXEWSz;
-    aXEWSz.Width() = aSz.Width() - OBJCAT_PANE_WIDTH;
-
-    aXEWSz.Height() = nVSplitPos + 1;
     if ( m_pModulWindow )
     {
         DBG_CHKOBJ( m_pModulWindow, ModulWindow, 0 );
-        m_pModulWindow->SetPosSizePixel( Point( OBJCAT_PANE_WIDTH, 0 ), aXEWSz );
+        bool const bObjCat = aObjectCatalog.IsVisible();
+        m_pModulWindow->SetPosSizePixel(
+            Point(bObjCat ? OBJCAT_PANE_WIDTH : 0, 0),
+            Size(bObjCat ? aSz.Width() - OBJCAT_PANE_WIDTH : aSz.Width(), nVSplitPos + 1)
+        );
     }
 
     aVSplitter.SetDragRectPixel( Rectangle( Point( 0, 0 ), Size( aSz.Width(), aSz.Height() ) ) );
@@ -1543,10 +1543,12 @@ void ModulWindowLayout::ArrangeWindows()
     if ( !aStackWindow.IsFloatingMode() )
         aStackWindow.SetPosSizePixel( aSWPos, aSWSz );
 
-    Size aOCSz( OBJCAT_PANE_WIDTH, aSz.Height() - aSWSz.Height() - 3 );
-    Point aOCPos( 0, 0 );
     if ( !aObjectCatalog.IsFloatingMode() )
+    {
+        Size aOCSz( OBJCAT_PANE_WIDTH, aSz.Height() - aSWSz.Height() - 3 );
+        Point aOCPos( 0, 0 );
         aObjectCatalog.SetPosSizePixel( aOCPos, aOCSz );
+    }
 
     if ( aStackWindow.IsFloatingMode() && aWatchWindow.IsFloatingMode() )
         aHSplitter.Hide();
@@ -1734,6 +1736,18 @@ void ModulWindowLayout::updateSyntaxHighlighting()
 Image ModulWindowLayout::getImage(sal_uInt16 nId) const
 {
     return m_aImagesNormal.GetImage(nId);
+}
+
+// shows or hides the Object Catalog window (depending on its state)
+void ModulWindowLayout::ToggleObjectCatalog ()
+{
+    // show or hide?
+    bool const bShow = !aObjectCatalog.IsVisible();
+    bShow ? aObjectCatalog.Show() : aObjectCatalog.Hide();
+    if (m_pModulWindow)
+        m_pModulWindow->SetObjectCatalogDisplay(bShow);
+    // refreshing
+    ArrangeWindows();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

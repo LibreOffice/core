@@ -443,26 +443,11 @@ void BasicIDEShell::ExecuteGlobal( SfxRequest& rReq )
             pWin->EditMacro( rInfo.GetMethod() );
         }
         break;
+
         case SID_BASICIDE_OBJCAT:
-        {
-            if ( bObjectCatalogDisplay )
-            {
-                pModulLayout->GetObjectCatalog().Hide();
-                dynamic_cast<ModulWindow*>(pCurWin)->SetPosPixel( Point( 0, 0 ) );
-                dynamic_cast<ModulWindow*>(pCurWin)->SetSizePixel( Size( pCurWin->GetSizePixel().Width() + OBJCAT_PANE_WIDTH, pCurWin->GetSizePixel().Height() ) );
-                dynamic_cast<ModulWindow*>(pCurWin)->SetObjectCatalogDisplay( false );
-                bObjectCatalogDisplay = sal_False;
-            }
-            else
-            {
-                pModulLayout->GetObjectCatalog().Show();
-                dynamic_cast<ModulWindow*>(pCurWin)->SetPosPixel( Point( OBJCAT_PANE_WIDTH, 0 ) );
-                dynamic_cast<ModulWindow*>(pCurWin)->SetSizePixel( Size( pCurWin->GetSizePixel().Width() - OBJCAT_PANE_WIDTH, pCurWin->GetSizePixel().Height() ) );
-                dynamic_cast<ModulWindow*>(pCurWin)->SetObjectCatalogDisplay( true );
-                bObjectCatalogDisplay = sal_True;
-            }
-        }
-        break;
+            pModulLayout->ToggleObjectCatalog();
+            break;
+
         case SID_BASICIDE_NAMECHANGEDONTAB:
         {
             DBG_ASSERT( rReq.GetArgs(), "arguments expected" );
