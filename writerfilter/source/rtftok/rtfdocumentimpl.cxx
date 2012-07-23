@@ -68,6 +68,7 @@
 #include <rtffly.hxx>
 
 #define TWIP_TO_MM100(TWIP)     ((TWIP) >= 0 ? (((TWIP)*127L+36L)/72L) : (((TWIP)*127L-36L)/72L))
+#define M_TOKEN(token) OOX_TOKEN(officeMath, token)
 
 using std::make_pair;
 using rtl::OString;
@@ -1402,73 +1403,46 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
             // Nothing to do here (just enter the destination) till RTF_MMATHPR is implemented.
             break;
         case RTF_MOMATH:
-            {
-                uno::Reference<xml::sax::XFastAttributeList> aAttribs;
-                m_aMathBuffer.appendOpeningTag(oox::NMSP_officeMath | oox::XML_oMath, aAttribs);
-                m_aStates.top().nDestinationState = DESTINATION_MOMATH;
-            }
+            m_aMathBuffer.appendOpeningTag(M_TOKEN(oMath));
+            m_aStates.top().nDestinationState = DESTINATION_MOMATH;
             break;
         case RTF_MR:
             m_aStates.top().nDestinationState = DESTINATION_MR;
             break;
         case RTF_MF:
-            {
-                uno::Reference<xml::sax::XFastAttributeList> aAttribs;
-                m_aMathBuffer.appendOpeningTag(oox::NMSP_officeMath | oox::XML_f, aAttribs);
-                m_aStates.top().nDestinationState = DESTINATION_MF;
-            }
+            m_aMathBuffer.appendOpeningTag(M_TOKEN(f));
+            m_aStates.top().nDestinationState = DESTINATION_MF;
             break;
         case RTF_MFPR:
-            {
-                uno::Reference<xml::sax::XFastAttributeList> aAttribs;
-                m_aMathBuffer.appendOpeningTag(oox::NMSP_officeMath | oox::XML_fPr, aAttribs);
-                m_aStates.top().nDestinationState = DESTINATION_MFPR;
-            }
+            m_aMathBuffer.appendOpeningTag(M_TOKEN(fPr));
+            m_aStates.top().nDestinationState = DESTINATION_MFPR;
             break;
         case RTF_MCTRLPR:
-            {
-                uno::Reference<xml::sax::XFastAttributeList> aAttribs;
-                m_aMathBuffer.appendOpeningTag(oox::NMSP_officeMath | oox::XML_ctrlPr, aAttribs);
-                m_aStates.top().nDestinationState = DESTINATION_MCTRLPR;
-            }
+            m_aMathBuffer.appendOpeningTag(M_TOKEN(ctrlPr));
+            m_aStates.top().nDestinationState = DESTINATION_MCTRLPR;
             break;
         case RTF_MNUM:
-            {
-                uno::Reference<xml::sax::XFastAttributeList> aAttribs;
-                m_aMathBuffer.appendOpeningTag(oox::NMSP_officeMath | oox::XML_num, aAttribs);
-                m_aStates.top().nDestinationState = DESTINATION_MNUM;
-            }
+            m_aMathBuffer.appendOpeningTag(M_TOKEN(num));
+            m_aStates.top().nDestinationState = DESTINATION_MNUM;
             break;
         case RTF_MDEN:
-            {
-                uno::Reference<xml::sax::XFastAttributeList> aAttribs;
-                m_aMathBuffer.appendOpeningTag(oox::NMSP_officeMath | oox::XML_den, aAttribs);
-                m_aStates.top().nDestinationState = DESTINATION_MDEN;
-            }
+            m_aMathBuffer.appendOpeningTag(M_TOKEN(den));
+            m_aStates.top().nDestinationState = DESTINATION_MDEN;
             break;
         case RTF_MACC:
-            {
-                uno::Reference<xml::sax::XFastAttributeList> aAttribs;
-                m_aMathBuffer.appendOpeningTag(oox::NMSP_officeMath | oox::XML_acc, aAttribs);
-                m_aStates.top().nDestinationState = DESTINATION_MACC;
-            }
+            m_aMathBuffer.appendOpeningTag(M_TOKEN(acc));
+            m_aStates.top().nDestinationState = DESTINATION_MACC;
             break;
         case RTF_MACCPR:
-            {
-                uno::Reference<xml::sax::XFastAttributeList> aAttribs;
-                m_aMathBuffer.appendOpeningTag(oox::NMSP_officeMath | oox::XML_accPr, aAttribs);
-                m_aStates.top().nDestinationState = DESTINATION_MACCPR;
-            }
+            m_aMathBuffer.appendOpeningTag(M_TOKEN(accPr));
+            m_aStates.top().nDestinationState = DESTINATION_MACCPR;
             break;
         case RTF_MCHR:
             m_aStates.top().nDestinationState = DESTINATION_MCHR;
             break;
         case RTF_ME:
-            {
-                uno::Reference<xml::sax::XFastAttributeList> aAttribs;
-                m_aMathBuffer.appendOpeningTag(oox::NMSP_officeMath | oox::XML_e, aAttribs);
-                m_aStates.top().nDestinationState = DESTINATION_ME;
-            }
+            m_aMathBuffer.appendOpeningTag(M_TOKEN(e));
+            m_aStates.top().nDestinationState = DESTINATION_ME;
             break;
         default:
             SAL_INFO("writerfilter", OSL_THIS_FUNC << ": TODO handle destination '" << lcl_RtfToString(nKeyword) << "'");
@@ -3528,8 +3502,7 @@ int RTFDocumentImpl::popState()
     }
     else if (m_aStates.top().nDestinationState == DESTINATION_MOMATH)
     {
-        uno::Reference<xml::sax::XFastAttributeList> aAttribs;
-        m_aMathBuffer.appendClosingTag(oox::NMSP_officeMath | oox::XML_oMath);
+        m_aMathBuffer.appendClosingTag(M_TOKEN(oMath));
 
         SvGlobalName aGlobalName(SO3_SM_CLASSID);
         comphelper::EmbeddedObjectContainer aContainer;
@@ -3547,36 +3520,35 @@ int RTFDocumentImpl::popState()
     }
     else if (m_aStates.top().nDestinationState == DESTINATION_MR)
     {
-        uno::Reference<xml::sax::XFastAttributeList> aAttribs;
-        m_aMathBuffer.appendOpeningTag(oox::NMSP_officeMath | oox::XML_r, aAttribs);
-        m_aMathBuffer.appendOpeningTag(oox::NMSP_officeMath | oox::XML_t, aAttribs);
+        m_aMathBuffer.appendOpeningTag(M_TOKEN(r));
+        m_aMathBuffer.appendOpeningTag(M_TOKEN(t));
         m_aMathBuffer.appendCharacters(m_aStates.top().aDestinationText.makeStringAndClear());
-        m_aMathBuffer.appendClosingTag(oox::NMSP_officeMath | oox::XML_t);
-        m_aMathBuffer.appendClosingTag(oox::NMSP_officeMath | oox::XML_r);
+        m_aMathBuffer.appendClosingTag(M_TOKEN(t));
+        m_aMathBuffer.appendClosingTag(M_TOKEN(r));
     }
     else if (m_aStates.top().nDestinationState == DESTINATION_MF)
-        m_aMathBuffer.appendClosingTag(oox::NMSP_officeMath | oox::XML_f);
+        m_aMathBuffer.appendClosingTag(M_TOKEN(f));
     else if (m_aStates.top().nDestinationState == DESTINATION_MFPR)
-        m_aMathBuffer.appendClosingTag(oox::NMSP_officeMath | oox::XML_fPr);
+        m_aMathBuffer.appendClosingTag(M_TOKEN(fPr));
     else if (m_aStates.top().nDestinationState == DESTINATION_MCTRLPR)
-        m_aMathBuffer.appendClosingTag(oox::NMSP_officeMath | oox::XML_ctrlPr);
+        m_aMathBuffer.appendClosingTag(M_TOKEN(ctrlPr));
     else if (m_aStates.top().nDestinationState == DESTINATION_MNUM)
-        m_aMathBuffer.appendClosingTag(oox::NMSP_officeMath | oox::XML_num);
+        m_aMathBuffer.appendClosingTag(M_TOKEN(num));
     else if (m_aStates.top().nDestinationState == DESTINATION_MDEN)
-        m_aMathBuffer.appendClosingTag(oox::NMSP_officeMath | oox::XML_den);
+        m_aMathBuffer.appendClosingTag(M_TOKEN(den));
     else if (m_aStates.top().nDestinationState == DESTINATION_MACC)
-        m_aMathBuffer.appendClosingTag(oox::NMSP_officeMath | oox::XML_acc);
+        m_aMathBuffer.appendClosingTag(M_TOKEN(acc));
     else if (m_aStates.top().nDestinationState == DESTINATION_MACCPR)
-        m_aMathBuffer.appendClosingTag(oox::NMSP_officeMath | oox::XML_accPr);
+        m_aMathBuffer.appendClosingTag(M_TOKEN(accPr));
     else if (m_aStates.top().nDestinationState == DESTINATION_MCHR)
     {
         oox::formulaimport::XmlStream::AttributeList aAttribs;
-        aAttribs[oox::NMSP_officeMath | oox::XML_val] = m_aStates.top().aDestinationText.makeStringAndClear();
-        m_aMathBuffer.appendOpeningTag(oox::NMSP_officeMath | oox::XML_chr, aAttribs);
-        m_aMathBuffer.appendClosingTag(oox::NMSP_officeMath | oox::XML_chr);
+        aAttribs[M_TOKEN(val)] = m_aStates.top().aDestinationText.makeStringAndClear();
+        m_aMathBuffer.appendOpeningTag(M_TOKEN(chr), aAttribs);
+        m_aMathBuffer.appendClosingTag(M_TOKEN(chr));
     }
     else if (m_aStates.top().nDestinationState == DESTINATION_ME)
-        m_aMathBuffer.appendClosingTag(oox::NMSP_officeMath | oox::XML_e);
+        m_aMathBuffer.appendClosingTag(M_TOKEN(e));
 
     // See if we need to end a track change
     RTFValue::Pointer_t pTrackchange = m_aStates.top().aCharacterSprms.find(NS_ooxml::LN_trackchange);
