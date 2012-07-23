@@ -45,7 +45,7 @@ public:
     sal_Bool        SelectLevel( SCTAB nTab, sal_Bool bColumns, sal_uInt16 nLevel,
                                     sal_Bool bRecord, sal_Bool bPaint, sal_Bool bApi );
 
-    sal_Bool        ShowMarkedOutlines( const ScRange& rRange, sal_Bool bRecord, sal_Bool bApi );
+    sal_Bool        ShowMarkedOutlines( const ScRange& rRange, sal_Bool bRecord );
     sal_Bool        HideMarkedOutlines( const ScRange& rRange, sal_Bool bRecord, sal_Bool bApi );
 
     sal_Bool        ShowOutline( SCTAB nTab, sal_Bool bColumns, sal_uInt16 nLevel, sal_uInt16 nEntry,
