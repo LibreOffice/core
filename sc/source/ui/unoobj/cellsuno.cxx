@@ -5424,7 +5424,7 @@ void SAL_CALL ScCellRangeObj::merge( sal_Bool bMerge ) throw(uno::RuntimeExcepti
         if ( bMerge )
             pDocSh->GetDocFunc().MergeCells( aMergeOption, false, true, true );
         else
-            pDocSh->GetDocFunc().UnmergeCells( aMergeOption, true, true );
+            pDocSh->GetDocFunc().UnmergeCells( aMergeOption, true );
 
         //! Fehler abfangen?
     }

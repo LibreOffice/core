@@ -1346,7 +1346,7 @@ void ScUndoDragDrop::Redo()
 
     // skipped rows and merged cells don't mix
     if ( !bIncludeFiltered && pClipDoc->HasClipFilteredRows() )
-        pDocShell->GetDocFunc().UnmergeCells( aDestRange, false, sal_True );
+        pDocShell->GetDocFunc().UnmergeCells( aDestRange, false );
 
     for (nTab=aDestRange.aStart.Tab(); nTab<=aDestRange.aEnd.Tab(); nTab++)
     {
