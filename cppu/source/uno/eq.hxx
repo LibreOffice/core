@@ -127,7 +127,7 @@ inline sal_Bool _equalSequence(
     switch (pElementType->eTypeClass)
     {
     case typelib_TypeClass_CHAR:
-        return (0 == ::rtl_compareMemory( pDestElements, pSourceElements, sizeof(sal_Unicode) * nElements ));
+        return (0 == memcmp( pDestElements, pSourceElements, sizeof(sal_Unicode) * nElements ));
     case typelib_TypeClass_BOOLEAN:
     {
         for ( sal_Int32 nPos = nElements; nPos--; )
@@ -141,16 +141,16 @@ inline sal_Bool _equalSequence(
         return sal_True;
     }
     case typelib_TypeClass_BYTE:
-        return (0 == ::rtl_compareMemory( pDestElements, pSourceElements, sizeof(sal_Int8) * nElements ));
+        return (0 == memcmp( pDestElements, pSourceElements, sizeof(sal_Int8) * nElements ));
     case typelib_TypeClass_SHORT:
     case typelib_TypeClass_UNSIGNED_SHORT:
-        return (0 == ::rtl_compareMemory( pDestElements, pSourceElements, sizeof(sal_Int16) * nElements ));
+        return (0 == memcmp( pDestElements, pSourceElements, sizeof(sal_Int16) * nElements ));
     case typelib_TypeClass_LONG:
     case typelib_TypeClass_UNSIGNED_LONG:
-        return (0 == ::rtl_compareMemory( pDestElements, pSourceElements, sizeof(sal_Int32) * nElements ));
+        return (0 == memcmp( pDestElements, pSourceElements, sizeof(sal_Int32) * nElements ));
     case typelib_TypeClass_HYPER:
     case typelib_TypeClass_UNSIGNED_HYPER:
-        return (0 == ::rtl_compareMemory( pDestElements, pSourceElements, sizeof(sal_Int64) * nElements ));
+        return (0 == memcmp( pDestElements, pSourceElements, sizeof(sal_Int64) * nElements ));
     case typelib_TypeClass_FLOAT:
     {
         for ( sal_Int32 nPos = nElements; nPos--; )
@@ -206,7 +206,7 @@ inline sal_Bool _equalSequence(
         return sal_True;
     }
     case typelib_TypeClass_ENUM:
-        return (0 == ::rtl_compareMemory( pDestElements, pSourceElements, sizeof(sal_Int32) * nElements ));
+        return (0 == memcmp( pDestElements, pSourceElements, sizeof(sal_Int32) * nElements ));
     case typelib_TypeClass_STRUCT:
     case typelib_TypeClass_EXCEPTION:
     {
