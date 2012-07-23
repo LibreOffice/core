@@ -1,3 +1,11 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
 package org.libreoffice.impressremote.communication;
 
 import java.io.BufferedReader;
@@ -7,10 +15,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-
-import org.apache.http.util.ByteArrayBuffer;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 /**
  * Generic Client for the remote control. To implement a Client for a specific
@@ -50,7 +54,7 @@ public abstract class Client {
 		BufferedReader aReader;
 		try {
 			aReader = new BufferedReader(new InputStreamReader(mInputStream,
-					CHARSET));
+			                CHARSET));
 			while (true) {
 				ArrayList<String> aList = new ArrayList<String>();
 				String aTemp;
@@ -82,10 +86,11 @@ public abstract class Client {
 			mOutputStream.write(command.getBytes(CHARSET));
 		} catch (UnsupportedEncodingException e) {
 			throw new Error("Specified network encoding [" + CHARSET
-					+ " not available.");
+			                + " not available.");
 		} catch (IOException e) {
 			// TODO Notify that stream has closed.
 		}
 	}
 
 }
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,9 +1,15 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
 package org.libreoffice.impressremote.communication;
 
 import android.app.Service;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Binder;
 import android.os.IBinder;
 import android.os.Messenger;
@@ -59,6 +65,24 @@ public class CommunicationService extends Service {
 		return mTransmitter;
 	}
 
+	/**
+	 * Connect to a specific server. This method cannot be called on the main
+	 * activity thread.
+	 *
+	 * @param aServer
+	 *            The Server to connect to.
+	 */
+	public void connectTo(Server aServer) {
+		connectTo(aServer.getProtocol(), aServer.getAddress());
+	}
+
+	/**
+	 * Connect to a specific server. This method cannot be called on the main
+	 * activity thread.
+	 *
+	 * @param aProtocol
+	 * @param address
+	 */
 	public void connectTo(Protocol aProtocol, String address) {
 		switch (aProtocol) {
 		case NETWORK:
@@ -66,9 +90,17 @@ public class CommunicationService extends Service {
 			mTransmitter = new Transmitter(mClient);
 			mClient.setReceiver(mReceiver);
 			break;
+		case BLUETOOTH:
+			break;
+		default:
+			break;
 
 		}
 
+	}
+
+	public Server[] getServers() {
+		return null;
 	}
 
 	public void disconnect() {
@@ -79,5 +111,39 @@ public class CommunicationService extends Service {
 		return mReceiver.getSlideShow();
 	}
 
+	// ---------------------------------------------------- SERVER -------------
+	/**
+	 * Class describing a remote server.
+	 */
+	public class Server {
+		private Protocol mProtocol;
+		private String mAddress;
+		private String mName;
+
+		protected Server(Protocol aProtocol, String aAddress, String aName) {
+			mProtocol = aProtocol;
+			mAddress = aAddress;
+			mName = aName;
+		}
+
+		public Protocol getProtocol() {
+			return mProtocol;
+		}
+
+		public String getAddress() {
+			return mAddress;
+		}
+
+		/**
+		 * Get a human friendly name for the server.
+		 *
+		 * @return The name.
+		 */
+		public String getName() {
+			return mName;
+		}
+
+	}
 
 }
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

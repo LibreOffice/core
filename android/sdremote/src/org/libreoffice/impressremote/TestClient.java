@@ -1,13 +1,21 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
 package org.libreoffice.impressremote;
 
 import org.libreoffice.impressremote.communication.CommunicationService;
+
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -24,8 +32,6 @@ public class TestClient extends Activity {
 	private boolean mCurrentPreviewImageMissing = false;
 
 	private boolean mIsBound = false;
-
-	private int mCurrentSlide = 0;
 
 	private CommunicationService mCommunicationService;
 
@@ -51,25 +57,32 @@ public class TestClient extends Activity {
 	@Override
 	protected void onPause() {
 		super.onPause();
-		doUnbindService();
+		// doUnbindService();
+	}
+
+	@Override
+	public void onBackPressed() {
+		// TODO Auto-generated method stub
+		stopService(new Intent(this, CommunicationService.class));
+		super.onBackPressed();
 	}
 
 	@Override
 	protected void onStop() {
 		// TODO Auto-generated method stub
 		super.onStop();
-//		mCommunicationService.disconnect();
-		stopService(new Intent(this, CommunicationService.class));
+		// mCommunicationService.disconnect();
+		// stopService(new Intent(this, CommunicationService.class));
 	}
 
 	private ServiceConnection mConnection = new ServiceConnection() {
 		@Override
 		public void onServiceConnected(ComponentName aClassName,
-				IBinder aService) {
+		                IBinder aService) {
 			mCommunicationService = ((CommunicationService.CBinder) aService)
-					.getService();
+			                .getService();
 			mCommunicationService.connectTo(
-					CommunicationService.Protocol.NETWORK, "10.0.2.2");
+			                CommunicationService.Protocol.NETWORK, "10.0.2.2");
 			mCommunicationService.setActivityMessenger(mMessenger);
 			enableButtons(true);
 		}
@@ -84,8 +97,7 @@ public class TestClient extends Activity {
 	void doBindService() {
 		Intent aIntent = new Intent(this, CommunicationService.class);
 		startService(aIntent);
-		bindService(aIntent, mConnection,
-				Context.BIND_IMPORTANT);
+		bindService(aIntent, mConnection, Context.BIND_IMPORTANT);
 		mIsBound = true;
 	}
 
@@ -138,8 +150,9 @@ public class TestClient extends Activity {
 		mThumbnailButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Intent aIntent = new Intent(TestClient.this, ThumbnailActivity.class);
-				startActivity( aIntent);
+				Intent aIntent = new Intent(TestClient.this,
+				                ThumbnailActivity.class);
+				startActivity(aIntent);
 			}
 		});
 
@@ -162,9 +175,9 @@ public class TestClient extends Activity {
 				// We continue on to try and update the image.
 			case CommunicationService.MSG_SLIDE_PREVIEW:
 				int aSlideNumber = aData.getInt("slide_number");
-				if ( mCurrentPreviewImageMissing ) {
-					Bitmap aImage = mCommunicationService
-							.getSlideShow().getImage(aSlideNumber);
+				if (mCurrentPreviewImageMissing) {
+					Bitmap aImage = mCommunicationService.getSlideShow()
+					                .getImage(aSlideNumber);
 					if (aImage != null) {
 						mImageView.setImageBitmap(aImage);
 						mCurrentPreviewImageMissing = false;
@@ -176,3 +189,4 @@ public class TestClient extends Activity {
 		}
 	}
 }
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

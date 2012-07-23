@@ -8,16 +8,11 @@
  */
 package org.libreoffice.impressremote;
 
-import android.app.Activity;
-import android.os.Bundle;
-
-public class Launcher extends Activity {
-	/** Called when the activity is first created. */
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.main);
-	}
+/**
+ * Used to manage the action bar whenever a presentation is running.
+ *
+ */
+public class ActionBarManager {
 
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

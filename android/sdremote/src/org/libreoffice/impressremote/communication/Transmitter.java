@@ -1,3 +1,11 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
 package org.libreoffice.impressremote.communication;
 
 import android.graphics.Color;
@@ -40,6 +48,7 @@ public class Transmitter {
 	/**
 	 * Set the screen to a specific colour. Only use if a non default colour is
 	 * needed.
+	 *
 	 * @param aColor
 	 */
 	public void blankScreen(Color aColor) {
@@ -55,3 +64,4 @@ public class Transmitter {
 		mClient.sendCommand("presentation_stop\n\n");
 	}
 }
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

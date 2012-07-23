@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="orange">#EE4400</color>
+    <color name="light_grey">#E8E9E8</color>
+
+    <integer name="thumbnail_border_width">3</integer>
+
+    <color name="thumbnail_border">#B4B4B4</color>
+    <color name="thumbnail_border_selected">#EE4400</color>
+
+    <style name="Theme.ImpressRemote.ActionBar" parent="android:style/Widget.Holo.Light.ActionBar">
+        <item name="android:background">@color/orange</item>
+    </style>
+
+    <style name="Theme.ImpressRemote" parent="android:style/Theme.Holo.Light">
+        <item name="android:actionBarStyle">@style/Theme.ImpressRemote.ActionBar</item>
+        <item name="android:windowBackground">@color/light_grey</item>
+    </style>
+</resources>

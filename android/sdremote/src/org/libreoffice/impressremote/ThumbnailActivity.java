@@ -1,6 +1,13 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
 package org.libreoffice.impressremote;
 
-import org.libreoffice.impressremote.TestClient.MessageHandler;
 import org.libreoffice.impressremote.communication.CommunicationService;
 import org.libreoffice.impressremote.communication.SlideShow;
 
@@ -10,7 +17,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
@@ -43,7 +49,7 @@ public class ThumbnailActivity extends Activity {
 		setContentView(R.layout.activity_thumbnail);
 
 		bindService(new Intent(this, CommunicationService.class), mConnection,
-				Context.BIND_ADJUST_WITH_ACTIVITY);
+		                Context.BIND_ADJUST_WITH_ACTIVITY);
 		mIsBound = true;
 
 		mGrid = (GridView) findViewById(R.id.thumbnail_grid);
@@ -61,24 +67,44 @@ public class ThumbnailActivity extends Activity {
 		}
 	}
 
+	// @Override
+	// public boolean onCreateOptionsMenu(Menu menu) {
+	// MenuInflater inflater = getMenuInflater();
+	// inflater.inflate(R.menu.main_activity, menu);
+	// return true;
+	// }
+
 	private void setSelected(int position) {
-		if (mCurrentImage != null) {
-			mCurrentImage.setPadding(0, 0, 0, 0);
-		}
-		if (mCurrentText != null) {
-			mCurrentText.setTypeface(Typeface.create(
-					mCurrentText.getTypeface(), Typeface.NORMAL));
-		}
+		formatUnselected(mCurrentImage, mCurrentText);
 
 		View aV = mGrid.getChildAt(position);
 		if (aV != null) {
 			mCurrentImage = (ImageView) aV.findViewById(R.id.sub_thumbnail);
 			mCurrentText = (TextView) aV.findViewById(R.id.sub_number);
 
-			mCurrentImage.setBackgroundColor(Color.RED);
-			mCurrentImage.setPadding(2, 2, 2, 2);
-			mCurrentText.setTypeface(Typeface.create(mCurrentText.getTypeface(),
-					Typeface.BOLD));
+			formatSelected(mCurrentImage, mCurrentText);
+		}
+	}
+
+	private void formatUnselected(ImageView aImage, TextView aText) {
+		if (aImage != null) {
+			aImage.setBackgroundColor(getResources().getColor(
+			                R.color.thumbnail_border));
+		}
+		if (aText != null) {
+			aText.setTypeface(Typeface.create(mCurrentText.getTypeface(),
+			                Typeface.NORMAL));
+		}
+	}
+
+	private void formatSelected(ImageView aImage, TextView aText) {
+		if (aImage != null) {
+			aImage.setBackgroundColor(getResources().getColor(
+			                R.color.thumbnail_border_selected));
+		}
+		if (aText != null) {
+			aText.setTypeface(Typeface.create(mCurrentText.getTypeface(),
+			                Typeface.BOLD));
 		}
 	}
 
@@ -88,13 +114,13 @@ public class ThumbnailActivity extends Activity {
 	private ServiceConnection mConnection = new ServiceConnection() {
 		@Override
 		public void onServiceConnected(ComponentName aClassName,
-				IBinder aService) {
+		                IBinder aService) {
 			mCommunicationService = ((CommunicationService.CBinder) aService)
-					.getService();
+			                .getService();
 			mCommunicationService.setActivityMessenger(mMessenger);
 			mSlideShow = mCommunicationService.getSlideShow();
 			mGrid.setAdapter(new ThumbnailAdapter(ThumbnailActivity.this,
-					mSlideShow));
+			                mSlideShow));
 		}
 
 		@Override
@@ -106,7 +132,7 @@ public class ThumbnailActivity extends Activity {
 	// ----------------------------------------------------- CLICK LISTENER ----
 	protected class ClickListener implements AdapterView.OnItemClickListener {
 		public void onItemClick(AdapterView<?> parent, View v, int position,
-				long id) {
+		                long id) {
 			mCommunicationService.getTransmitter().gotoSlide(position);
 		}
 	}
@@ -160,11 +186,24 @@ public class ThumbnailActivity extends Activity {
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			LayoutInflater aInflater = (LayoutInflater) mContext
-					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			View v = aInflater.inflate(R.layout.slide_thumbnail, null);
 
 			ImageView aImage = (ImageView) v.findViewById(R.id.sub_thumbnail);
 			TextView aText = (TextView) v.findViewById(R.id.sub_number);
+
+			// Do the image & number styling
+			int aBorderWidth = getResources().getInteger(
+			                R.integer.thumbnail_border_width);
+			aImage.setPadding(aBorderWidth, aBorderWidth, aBorderWidth,
+			                aBorderWidth);
+
+			if ((mSlideShow != null)
+			                && (position == mSlideShow.getCurrentSlide())) {
+				formatSelected(aImage, aText);
+			} else {
+				formatUnselected(aImage, aText);
+			}
 
 			Bitmap aBitmap = mSlideShow.getImage(position);
 			if (aBitmap != null) {
@@ -173,13 +212,8 @@ public class ThumbnailActivity extends Activity {
 
 			aText.setText(String.valueOf(position + 1));
 
-//			if ((mSlideShow != null)
-//					&& (position == mSlideShow.getCurrentSlide())) {
-//				setSelected(position);
-//			}
-
 			return v;
 		}
-
 	}
 }
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
