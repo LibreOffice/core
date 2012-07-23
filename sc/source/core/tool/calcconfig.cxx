@@ -29,7 +29,8 @@
 #include "calcconfig.hxx"
 
 ScCalcConfig::ScCalcConfig() :
-    meStringRefAddressSyntax(formula::FormulaGrammar::CONV_UNSPECIFIED) {}
+    meStringRefAddressSyntax(formula::FormulaGrammar::CONV_UNSPECIFIED),
+    mbEmptyStringAsZero(false) {}
 
 void ScCalcConfig::reset()
 {
@@ -38,7 +39,8 @@ void ScCalcConfig::reset()
 
 bool ScCalcConfig::operator== (const ScCalcConfig& r) const
 {
-    return meStringRefAddressSyntax == r.meStringRefAddressSyntax;
+    return meStringRefAddressSyntax == r.meStringRefAddressSyntax &&
+        mbEmptyStringAsZero == r.mbEmptyStringAsZero;
 }
 
 bool ScCalcConfig::operator!= (const ScCalcConfig& r) const

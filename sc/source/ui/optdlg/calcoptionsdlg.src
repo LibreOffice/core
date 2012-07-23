@@ -60,6 +60,20 @@ ModalDialog RID_SCDLG_FORMULA_CALCOPTIONS
         DropDown = TRUE ;
     };
 
+    RadioButton BTN_OPTION_TRUE
+    {
+        Pos = MAP_APPFONT ( 50, 83 ) ;
+        Size = MAP_APPFONT ( 50, 14 ) ;
+        TabStop = TRUE ;
+    };
+
+    RadioButton BTN_OPTION_FALSE
+    {
+        Pos = MAP_APPFONT ( 110, 83 ) ;
+        Size = MAP_APPFONT ( 50, 14 ) ;
+        TabStop = TRUE ;
+    };
+
     FixedLine FL_ANNOTATION
     {
         Pos = MAP_APPFONT ( 6 , 98 ) ;
@@ -102,5 +116,25 @@ ModalDialog RID_SCDLG_FORMULA_CALCOPTIONS
     String STR_USE_FORMULA_SYNTAX
     {
         Text [ en-US ] = "Use formula syntax";
+    };
+
+    String STR_EMPTY_STRING_AS_ZERO_CAPTION
+    {
+        Text [ en-US ] = "Treat empty string as zero";
+    };
+
+    String STR_EMPTY_STRING_AS_ZERO_DESC
+    {
+        Text [ en-US ] = "Blah.";
+    };
+
+    String STR_TRUE
+    {
+        Text [ en-US ] = "True";
+    };
+
+    String STR_FALSE
+    {
+        Text [ en-US ] = "False";
     };
 };
