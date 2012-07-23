@@ -33,10 +33,10 @@
 #include "tubes/tubesdllapi.h"
 #include <rtl/ustring.hxx>
 #include <telepathy-glib/telepathy-glib.h>
-#include <queue>
 #include <tubes/warnings_guard_boost_signals2.hpp>
 
 class TeleManager;
+class TeleConferenceImpl;
 
 /** Conference setup by TeleManager */
 class TeleConference
@@ -52,16 +52,10 @@ public:
     /// Unrefs, unregisters from manager and calls dtor if last reference!
     void                    finalize();
 
-    TeleManager*            getManager() const  { return mpManager; }
-
     TUBES_DLLPUBLIC bool    sendPacket( const OString& rPacket );
 
     /** Pop a received packet. */
     bool                    popPacket( OString& rPacket );
-
-    /** Queue incoming data as OString */
-    void                    queue( const char* pPacket, int nSize );
-    void                    queue( const OString& rPacket );
 
     TUBES_DLLPUBLIC void    invite( TpContact *pContact );
 
@@ -71,37 +65,36 @@ public:
     typedef void          (*FileSentCallback)( bool aSuccess, void* pUserData);
     TUBES_DLLPUBLIC void    sendFile( rtl::OUString &localUri, FileSentCallback pCallback, void* pUserData);
     TUBES_DLLPUBLIC const OString& getUuid() const { return msUuid; }
-    void                    setUuid( const OString& rUuid ) { msUuid = rUuid; }
 
     // --- following only to be called only by manager's callbacks ---
     // TODO: make friends instead
-
     void                    setChannel( TpAccount* pAccount, TpDBusTubeChannel* pChannel );
-    TpDBusTubeChannel*      getChannel() const  { return mpChannel; }
     bool                    offerTube();
     bool                    acceptTube();
-    bool                    setTube( GDBusConnection* pTube );
-    /// got tube accepted on other end as well?
-    bool                    isTubeOpen() const { return mpTube != NULL; }
+    TeleManager*            getManager() const  { return mpManager; }
 
     // Only for callbacks.
-    void                    setTubeOfferedHandlerInvoked( bool b ) { mbTubeOfferedHandlerInvoked = b; }
-    bool                    isTubeOfferedHandlerInvoked() const { return mbTubeOfferedHandlerInvoked; }
+    bool                    setTube( GDBusConnection* pTube );
+    void                    setTubeOfferedHandlerInvoked( bool b );
+    bool                    isTubeOfferedHandlerInvoked() const;
+    /** Queue incoming data as OString */
+    void                    queue( const OString& rPacket );
+    void                    setUuid( const OString& rUuid ) { msUuid = rUuid; }
 
 private:
-    typedef ::std::queue<OString> TelePacketQueue;
+    friend class TeleManager;
+    // Used only by TeleManager:
+    /// got tube accepted on other end as well?
+    bool                    isReady() const;
+
+    // Private:
     bool                    spinUntilTubeEstablished();
 
     TeleManager*            mpManager;
     TpAccount*              mpAccount;
     TpDBusTubeChannel*      mpChannel;
     OString                 msUuid;
-    gchar*                  mpAddress;
-    GDBusConnection*        mpTube;
-    guint                   maObjectRegistrationId;
-    TelePacketQueue         maPacketQueue;
-
-    bool                    mbTubeOfferedHandlerInvoked : 1;
+    TeleConferenceImpl*     pImpl;
 };
 
 #endif // INCLUDED_TUBES_CONFERENCE_HXX

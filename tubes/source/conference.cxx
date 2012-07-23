@@ -31,6 +31,8 @@
 #include <tubes/constants.h>
 #include <tubes/file-transfer-helper.h>
 
+#include <queue>
+
 #if defined SAL_LOG_INFO
 namespace
 {
@@ -57,6 +59,24 @@ struct InfoLogger
 #define INFO_LOGGER_F(s)
 #define INFO_LOGGER(s)
 #endif // SAL_LOG_INFO
+
+class TeleConferenceImpl
+{
+    typedef ::std::queue<OString> TelePacketQueue;
+
+public:
+    guint                   maObjectRegistrationId;
+    TelePacketQueue         maPacketQueue;
+    GDBusConnection*        mpTube;
+    bool                    mbTubeOfferedHandlerInvoked : 1;
+
+    TeleConferenceImpl() :
+        mpTube( NULL ),
+        mbTubeOfferedHandlerInvoked( false )
+    {}
+
+    ~TeleConferenceImpl() {}
+};
 
 static void TeleConference_MethodCallHandler(
     GDBusConnection*       /*pConnection*/,
@@ -110,7 +130,7 @@ static void TeleConference_MethodCallHandler(
 
     SAL_INFO( "tubes", "TeleConference_MethodCallHandler: received packet from sender "
             << (pSender ? pSender : "(null)") << " with size " << nPacketSize);
-    pConference->queue( pPacketData, nPacketSize );
+    pConference->queue( OString( pPacketData, nPacketSize ) );
     g_dbus_method_invocation_return_value( pInvocation, 0 );
 
     g_variant_unref( ay);
@@ -211,9 +231,7 @@ TeleConference::TeleConference( TeleManager* pManager, TpAccount* pAccount, TpDB
         mpAccount( NULL),
         mpChannel( NULL),
         msUuid( sUuid),
-        mpAddress( NULL),
-        mpTube( NULL),
-        mbTubeOfferedHandlerInvoked( false)
+        pImpl( new TeleConferenceImpl() )
 {
     setChannel( pAccount, pChannel );
 }
@@ -221,7 +239,8 @@ TeleConference::TeleConference( TeleManager* pManager, TpAccount* pAccount, TpDB
 
 TeleConference::~TeleConference()
 {
-    // Do nothing here, we're destructed from finalize()
+    // We're destructed from finalize()
+    delete pImpl;
 }
 
 
@@ -247,7 +266,7 @@ bool TeleConference::spinUntilTubeEstablished()
 {
     mpManager->iterateLoop( this, &TeleConference::isTubeOfferedHandlerInvoked);
 
-    bool bOpen = isTubeOpen();
+    bool bOpen = pImpl->mpTube != NULL;
     SAL_INFO( "tubes", "TeleConference::spinUntilTubeEstablished: tube open: " << bOpen);
     return bOpen;
 }
@@ -258,8 +277,8 @@ bool TeleConference::acceptTube()
     INFO_LOGGER( "TeleConference::acceptTube");
 
     SAL_WARN_IF( !mpChannel, "tubes", "TeleConference::acceptTube: no channel setup");
-    SAL_WARN_IF( mpTube, "tubes", "TeleConference::acceptTube: already tubed");
-    if (!mpChannel || mpTube)
+    SAL_WARN_IF( pImpl->mpTube, "tubes", "TeleConference::acceptTube: already tubed");
+    if (!mpChannel || pImpl->mpTube)
         return false;
 
     tp_dbus_tube_channel_accept_async( mpChannel,
@@ -295,12 +314,11 @@ bool TeleConference::setTube( GDBusConnection* pTube)
 {
     INFO_LOGGER( "TeleConference::setTube");
 
-    OSL_ENSURE( !mpTube, "TeleConference::setTube: already tubed");
+    OSL_ENSURE( !pImpl->mpTube, "TeleConference::setTube: already tubed");
 
-    mpTube = pTube;
+    pImpl->mpTube = pTube;
 
     GDBusNodeInfo *introspection_data;
-    guint registration_id;
     static const GDBusInterfaceVTable interface_vtable =
     {
         TeleConference_MethodCallHandler,
@@ -320,16 +338,30 @@ bool TeleConference::setTube( GDBusConnection* pTube)
     introspection_data = g_dbus_node_info_new_for_xml (introspection_xml, NULL);
     g_assert (introspection_data != NULL);
 
-    registration_id = g_dbus_connection_register_object( mpTube,
+    pImpl->maObjectRegistrationId = g_dbus_connection_register_object( pImpl->mpTube,
             LIBO_TUBES_DBUS_PATH, introspection_data->interfaces[0],
             &interface_vtable, this, NULL, NULL);
-    g_assert (registration_id > 0);
+    g_assert (pImpl->maObjectRegistrationId > 0);
 
     g_dbus_node_info_unref (introspection_data);
 
     return true;
 }
 
+void TeleConference::setTubeOfferedHandlerInvoked( bool b )
+{
+    pImpl->mbTubeOfferedHandlerInvoked = b;
+}
+
+bool TeleConference::isTubeOfferedHandlerInvoked() const
+{
+    return pImpl->mbTubeOfferedHandlerInvoked;
+}
+
+bool TeleConference::isReady() const
+{
+    return mpChannel && pImpl->mpTube;
+}
 
 void TeleConference::close()
 {
@@ -358,18 +390,12 @@ void TeleConference::finalize()
         mpAccount = NULL;
     }
 
-    if (mpTube)
+    if (pImpl->mpTube)
     {
-        g_dbus_connection_unregister_object( mpTube, maObjectRegistrationId);
-        g_dbus_connection_close_sync( mpTube, NULL, NULL );
-        g_object_unref( mpTube );
-        mpTube = NULL;
-    }
-
-    if (mpAddress)
-    {
-        g_free( mpAddress);
-        mpAddress = NULL;
+        g_dbus_connection_unregister_object( pImpl->mpTube, pImpl->maObjectRegistrationId);
+        g_dbus_connection_close_sync( pImpl->mpTube, NULL, NULL );
+        g_object_unref( pImpl->mpTube );
+        pImpl->mpTube = NULL;
     }
 
     //! *this gets destructed here!
@@ -381,8 +407,8 @@ bool TeleConference::sendPacket( const OString& rPacket )
     INFO_LOGGER( "TeleConference::sendPacket");
 
     OSL_ENSURE( mpManager, "tubes: TeleConference::sendPacket: no TeleManager");
-    SAL_WARN_IF( !mpTube, "tubes", "TeleConference::sendPacket: no tube");
-    if (!(mpManager && mpTube))
+    SAL_WARN_IF( !pImpl->mpTube, "tubes", "TeleConference::sendPacket: no tube");
+    if (!(mpManager && pImpl->mpTube))
         return false;
 
     /* FIXME: in GLib 2.32 we can use g_variant_new_fixed_array(). It does
@@ -394,7 +420,7 @@ bool TeleConference::sendPacket( const OString& rPacket )
             FALSE,
             g_free, pData);
 
-    g_dbus_connection_call( mpTube,
+    g_dbus_connection_call( pImpl->mpTube,
             NULL, /* bus name; in multi-user case we'd address this to the master. */
             LIBO_TUBES_DBUS_PATH,
             LIBO_TUBES_DBUS_INTERFACE,
@@ -415,17 +441,11 @@ void TeleConference::queue( const OString &rPacket )
 {
     INFO_LOGGER( "TeleConference::queue");
 
-    maPacketQueue.push( rPacket);
+    pImpl->maPacketQueue.push( rPacket);
 
     sigPacketReceived( rPacket );
 }
 
-
-void TeleConference::queue( const char* pPacketData, int nPacketSize )
-{
-    OString aPacket( pPacketData, nPacketSize );
-    queue( aPacket );
-}
 
 void TeleConference::invite( TpContact *pContact )
 {
@@ -514,10 +534,10 @@ bool TeleConference::popPacket( OString& rPacket )
 {
     INFO_LOGGER( "TeleConference::popPacket");
 
-    if (maPacketQueue.empty())
+    if (pImpl->maPacketQueue.empty())
         return false;
-    rPacket = maPacketQueue.front();
-    maPacketQueue.pop();
+    rPacket = pImpl->maPacketQueue.front();
+    pImpl->maPacketQueue.pop();
     return true;
 }
 

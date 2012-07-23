@@ -619,7 +619,7 @@ TeleConference* TeleManager::startGroupSession( TpAccount *pAccount,
     g_object_unref( pChannelRequest);
     g_hash_table_unref( pRequest);
 
-    if (!pConference->getChannel() || !pConference->isTubeOpen())
+    if (!pConference->isReady())
         return NULL;
 
     return pConference;
@@ -694,7 +694,7 @@ TeleConference* TeleManager::startBuddySession( TpAccount *pAccount, TpContact *
     g_object_unref( pChannelRequest);
     g_hash_table_unref( pRequest);
 
-    if (!pConference->getChannel() || !pConference->isTubeOpen())
+    if (!pConference->isReady())
         return NULL;
 
     return pConference;
