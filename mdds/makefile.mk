@@ -32,7 +32,8 @@ TARFILE_MD5=3e89a35f253a4f1c7de68c57d851ef38
 PATCH_FILES=\
 	    mdds_0.6.0.patch \
 	    0001-help-compiler-select-the-right-overload-of-vector-in.patch \
-            mdds_0.6.0-unused-parameter.patch
+            mdds_0.6.0-unused-parameter.patch \
+            mdds_0.6.0-unreachable-code.patch
 
 CONFIGURE_DIR=
 CONFIGURE_ACTION=

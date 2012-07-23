@@ -1,0 +1,10 @@
+--- misc/mdds_0.6.0/include/mdds/mixed_type_matrix_def.inl	2012-07-23 16:20:34.101608964 +0200
++++ misc/build/mdds_0.6.0/include/mdds/mixed_type_matrix_def.inl	2012-07-23 16:19:13.022858991 +0200
+@@ -44,7 +44,6 @@
+         default:
+             throw matrix_error("unknown density type");
+     }
+-    return NULL;
+ }
+ 
+ template<typename _String, typename _Flag>
