@@ -1967,46 +1967,26 @@ sal_Bool WatchTreeListBox::EditedEntry( SvLBoxEntry* pEntry, const rtl::OUString
 
 sal_Bool WatchTreeListBox::ImplBasicEntryEdited( SvLBoxEntry* pEntry, const String& rResult )
 {
-    WatchItem* pItem = (WatchItem*)pEntry->GetUserData();
-    String aVName( pItem->maName );
-
-    sal_Bool bError = sal_False;
-    String aResult( rResult );
-    String aIndex;
     bool bArrayElement;
     SbxBase* pSBX = ImplGetSBXForEntry( pEntry, bArrayElement );
 
-    SbxBase* pToBeChanged = NULL;
     if ( pSBX && pSBX->ISA( SbxVariable ) && !pSBX->ISA( SbxMethod ) )
     {
         SbxVariable* pVar = (SbxVariable*)pSBX;
         SbxDataType eType = pVar->GetType();
-        if ( (sal_uInt8)eType == (sal_uInt8)SbxOBJECT )
-            bError = sal_True;
-        else if ( eType & SbxARRAY )
-            bError = sal_True;
-        else
-            pToBeChanged = pSBX;
-    }
-
-    if ( pToBeChanged )
-    {
-        if ( pToBeChanged->ISA( SbxVariable ) )
+        if ( (sal_uInt8)eType != (sal_uInt8)SbxOBJECT
+             && ( eType & SbxARRAY ) == 0 )
         {
             // If the type is variable, the conversion of the SBX does not matter,
             // else the string is converted.
-            ((SbxVariable*)pToBeChanged)->PutStringExt( aResult );
+            pVar->PutStringExt( rResult );
         }
-        else
-            bError = sal_True;
     }
 
     if ( SbxBase::IsError() )
     {
-        bError = sal_True;
         SbxBase::ResetError();
     }
-    (void)bError; // used to Beep.
 
     UpdateWatches();
 
