@@ -950,6 +950,7 @@ void RTFDocumentImpl::text(OUString& rString)
         case DESTINATION_DOCCOMM:
         case DESTINATION_ATNID:
         case DESTINATION_MR:
+        case DESTINATION_MCHR:
             m_aStates.top().aDestinationText.append(rString);
             break;
         case DESTINATION_EQINSTRUCTION:
@@ -1443,6 +1444,30 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
                 uno::Reference<xml::sax::XFastAttributeList> aAttribs;
                 m_aMathBuffer.appendOpeningTag(oox::NMSP_officeMath | oox::XML_den, aAttribs);
                 m_aStates.top().nDestinationState = DESTINATION_MDEN;
+            }
+            break;
+        case RTF_MACC:
+            {
+                uno::Reference<xml::sax::XFastAttributeList> aAttribs;
+                m_aMathBuffer.appendOpeningTag(oox::NMSP_officeMath | oox::XML_acc, aAttribs);
+                m_aStates.top().nDestinationState = DESTINATION_MACC;
+            }
+            break;
+        case RTF_MACCPR:
+            {
+                uno::Reference<xml::sax::XFastAttributeList> aAttribs;
+                m_aMathBuffer.appendOpeningTag(oox::NMSP_officeMath | oox::XML_accPr, aAttribs);
+                m_aStates.top().nDestinationState = DESTINATION_MACCPR;
+            }
+            break;
+        case RTF_MCHR:
+            m_aStates.top().nDestinationState = DESTINATION_MCHR;
+            break;
+        case RTF_ME:
+            {
+                uno::Reference<xml::sax::XFastAttributeList> aAttribs;
+                m_aMathBuffer.appendOpeningTag(oox::NMSP_officeMath | oox::XML_e, aAttribs);
+                m_aStates.top().nDestinationState = DESTINATION_ME;
             }
             break;
         default:
@@ -3097,7 +3122,10 @@ int RTFDocumentImpl::pushState()
     else if (m_aStates.top().nDestinationState == DESTINATION_FIELDRESULT ||
             m_aStates.top().nDestinationState == DESTINATION_SHAPETEXT ||
             m_aStates.top().nDestinationState == DESTINATION_FORMFIELD ||
-            (m_aStates.top().nDestinationState == DESTINATION_FIELDINSTRUCTION && !m_bEq))
+            (m_aStates.top().nDestinationState == DESTINATION_FIELDINSTRUCTION && !m_bEq) ||
+            m_aStates.top().nDestinationState == DESTINATION_MOMATH ||
+            m_aStates.top().nDestinationState == DESTINATION_MNUM ||
+            m_aStates.top().nDestinationState == DESTINATION_MDEN)
         m_aStates.top().nDestinationState = DESTINATION_NORMAL;
     else if (m_aStates.top().nDestinationState == DESTINATION_FIELDINSTRUCTION && m_bEq)
         m_aStates.top().nDestinationState = DESTINATION_EQINSTRUCTION;
@@ -3536,6 +3564,19 @@ int RTFDocumentImpl::popState()
         m_aMathBuffer.appendClosingTag(oox::NMSP_officeMath | oox::XML_num);
     else if (m_aStates.top().nDestinationState == DESTINATION_MDEN)
         m_aMathBuffer.appendClosingTag(oox::NMSP_officeMath | oox::XML_den);
+    else if (m_aStates.top().nDestinationState == DESTINATION_MACC)
+        m_aMathBuffer.appendClosingTag(oox::NMSP_officeMath | oox::XML_acc);
+    else if (m_aStates.top().nDestinationState == DESTINATION_MACCPR)
+        m_aMathBuffer.appendClosingTag(oox::NMSP_officeMath | oox::XML_accPr);
+    else if (m_aStates.top().nDestinationState == DESTINATION_MCHR)
+    {
+        oox::formulaimport::XmlStream::AttributeList aAttribs;
+        aAttribs[oox::NMSP_officeMath | oox::XML_val] = m_aStates.top().aDestinationText.makeStringAndClear();
+        m_aMathBuffer.appendOpeningTag(oox::NMSP_officeMath | oox::XML_chr, aAttribs);
+        m_aMathBuffer.appendClosingTag(oox::NMSP_officeMath | oox::XML_chr);
+    }
+    else if (m_aStates.top().nDestinationState == DESTINATION_ME)
+        m_aMathBuffer.appendClosingTag(oox::NMSP_officeMath | oox::XML_e);
 
     // See if we need to end a track change
     RTFValue::Pointer_t pTrackchange = m_aStates.top().aCharacterSprms.find(NS_ooxml::LN_trackchange);
