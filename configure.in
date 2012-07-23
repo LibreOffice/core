@@ -74,6 +74,8 @@ else
 fi
 AC_SUBST(CROSS_COMPILING)
 
+AC_PATH_PROG(WINEGCC, winegcc)
+
 AC_PROG_EGREP
 # AC_PROG_EGREP doesn't set GREP on all systems as well
 AC_PATH_PROG(GREP, grep)
@@ -8570,6 +8572,11 @@ if test "$_os" = "WINNT"; then
         # presence is already tested above in the WINDOWS_SDK_HOME check
         UUIDGEN=uuidgen.exe
         AC_SUBST(UUIDGEN)
+    fi
+else
+    AC_PATH_PROG([UUIDGEN], [uuidgen])
+    if test -z "$UUIDGEN"; then
+        AC_MSG_WARN([uuid is needed for dev-install])
     fi
 fi
 
