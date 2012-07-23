@@ -20,10 +20,14 @@ TARGET=sn_makecab
 .IF "$(WINEGCC)"==""
 @all:
     @echo "No winegcc present, not building makecab..."
-.ELSE
-@all:
-    @echo "Not building makecab yet, stay tuned..."
 .ENDIF
+
+@all: $(BIN)/makecab.exe $(BIN)/makecab.exe.so
+
+$(BIN)/makecab.exe.so: $(BIN)/makecab.exe
+
+$(BIN)/makecab.exe:
+	$(WINEGCC) -o $(BIN)/makecab.exe makecab.c parseddf.c -mconsole -lmsi 
 
 # --- Targets --------------------------------------------------------------
 

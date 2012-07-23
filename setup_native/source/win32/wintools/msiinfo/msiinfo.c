@@ -33,7 +33,7 @@
 #define MAX_STORAGE_NAME 31
 #define COMMANDS 17
 
-static const uint commandMap[COMMANDS][4] =
+static const unsigned commandMap[COMMANDS][4] =
 {{'c', PID_CODEPAGE, VT_I2},
  {'t', PID_TITLE, VT_LPSTR},
  {'j', PID_SUBJECT, VT_LPSTR},
@@ -61,7 +61,7 @@ static const char * commandNames[COMMANDS] =
 static void parseDate(LPCWSTR value, SYSTEMTIME *time)
 {
     LPWSTR field;
-    uint len = 4*sizeof(WCHAR);
+    unsigned len = 4*sizeof(WCHAR);
 
     if (lstrlenW(value) != 19) return;
     field = malloc(len + sizeof(WCHAR));
@@ -93,7 +93,7 @@ static void parseDate(LPCWSTR value, SYSTEMTIME *time)
 static BOOL msiinfoDisplayProperties(LPWSTR dbfile)
 {
     MSIHANDLE dbhandle, infohandle;
-    uint i, r, dataType;
+    unsigned i, r, dataType;
     INT iVal;
     FILETIME ftVal;
     SYSTEMTIME sysTime;
@@ -137,9 +137,9 @@ static BOOL msiinfoDisplayProperties(LPWSTR dbfile)
     return TRUE;
 }
 
-static BOOL msiinfoUpdateProperty(MSIHANDLE infoHandle, uint property, uint dataType, LPCWSTR value)
+static BOOL msiinfoUpdateProperty(MSIHANDLE infoHandle, unsigned property, unsigned dataType, LPCWSTR value)
 {
-    uint r;
+    unsigned r;
     int iVal = 0;
     FILETIME ftVal;
     SYSTEMTIME sysTime = {0};
@@ -191,9 +191,9 @@ static void usage(void)
 int wmain(int argc, WCHAR *argv[])
 {
     WCHAR *dbfile = NULL;
-    uint i = 0;
+    unsigned i = 0;
     MSIHANDLE dbhandle, infohandle;
-    uint r;
+    unsigned r;
     LPWSTR value = 0;
     static const WCHAR h1[] = {'/', '?', 0};
     static const WCHAR h2[] = {'-', '?', 0};
