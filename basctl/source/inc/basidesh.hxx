@@ -91,8 +91,6 @@ friend class LocalizationMgr;
 friend class ContainerListenerImpl;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener > m_xLibListener;
 
-    sal_Bool            bObjectCatalogDisplay;
-
 #if _SOLAR__PRIVATE
     void                Init();
     void                InitTabBar();
