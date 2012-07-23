@@ -161,7 +161,7 @@ public:
                         { pModulWindow = pWin; }
 
     void            ForceSyntaxTimeout();
-    bool            SetSourceInBasic( bool bQuiet = true );
+    bool            SetSourceInBasic();
 
     bool            CanModify() { return ImpCanModify(); }
 };

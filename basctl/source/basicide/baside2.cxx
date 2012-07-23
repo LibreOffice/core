@@ -268,7 +268,7 @@ void ModulWindow::CheckCompileBasic()
             if( bModified )
             {
                 AssertValidEditEngine();
-                GetEditorWindow().SetSourceInBasic( false );
+                GetEditorWindow().SetSourceInBasic();
             }
 
             sal_Bool bWasModified = GetBasic()->IsModified();
@@ -836,7 +836,7 @@ void ModulWindow::StoreData()
     // StoreData is called when the BasicManager is destroyed or
     // this window is closed.
     // => interrupts undesired!
-    GetEditorWindow().SetSourceInBasic( true );
+    GetEditorWindow().SetSourceInBasic();
 }
 
 bool ModulWindow::CanClose()

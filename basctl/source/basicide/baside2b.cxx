@@ -500,10 +500,8 @@ void EditorWindow::LoseFocus()
     Window::LoseFocus();
 }
 
-bool EditorWindow::SetSourceInBasic( bool bQuiet )
+bool EditorWindow::SetSourceInBasic()
 {
-    (void)bQuiet;
-
     bool bChanged = false;
     if ( pEditEngine && pEditEngine->IsModified()
         && !GetEditView()->IsReadOnly() )   // Added for #i60626, otherwise
