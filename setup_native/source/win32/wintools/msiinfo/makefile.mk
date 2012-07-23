@@ -27,7 +27,7 @@ TARGET=sn_msiinfo
 $(BIN)/msiinfo.exe.so: $(BIN)/msiinfo.exe
 
 $(BIN)/msiinfo.exe:
-	$(WINEGCC) -o $(BIN)/msiinfo.exe msiinfo.c -mconsole -municode -lmsi 
+	$(WINEGCC) -o $(BIN)/msiinfo.exe msiinfo.c -m32 -mconsole -municode -lmsi
 
 # --- Targets --------------------------------------------------------------
 

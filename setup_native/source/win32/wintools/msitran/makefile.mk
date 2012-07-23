@@ -27,7 +27,7 @@ TARGET=sn_msitran
 $(BIN)/msitran.exe.so: $(BIN)/msitran.exe
 
 $(BIN)/msitran.exe:
-	$(WINEGCC) -o $(BIN)/msitran.exe msitran.c -mconsole -lmsi 
+	$(WINEGCC) -o $(BIN)/msitran.exe msitran.c -m32 -mconsole -lmsi
 
 # --- Targets --------------------------------------------------------------
 

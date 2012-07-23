@@ -27,7 +27,7 @@ TARGET=sn_msimsp
 $(BIN)/msimsp.exe.so: $(BIN)/msimsp.exe
 
 $(BIN)/msimsp.exe:
-	$(WINEGCC) -o $(BIN)/msimsp.exe msimsp.c -mconsole -lmsi 
+	$(WINEGCC) -o $(BIN)/msimsp.exe msimsp.c -m32 -mconsole -lmsi
 
 # --- Targets --------------------------------------------------------------
 

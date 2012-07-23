@@ -27,7 +27,7 @@ TARGET=sn_makecab
 $(BIN)/makecab.exe.so: $(BIN)/makecab.exe
 
 $(BIN)/makecab.exe:
-	$(WINEGCC) -o $(BIN)/makecab.exe makecab.c parseddf.c -mconsole -lmsi 
+	$(WINEGCC) -o $(BIN)/makecab.exe makecab.c parseddf.c -m32 -mconsole -lmsi
 
 # --- Targets --------------------------------------------------------------
 

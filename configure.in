@@ -74,8 +74,6 @@ else
 fi
 AC_SUBST(CROSS_COMPILING)
 
-AC_PATH_PROG(WINEGCC, winegcc)
-
 AC_PROG_EGREP
 # AC_PROG_EGREP doesn't set GREP on all systems as well
 AC_PATH_PROG(GREP, grep)
@@ -2364,6 +2362,24 @@ fi
 dnl The following checks for gcc, cc and then cl (if it weren't guarded for win32)
 if test "$_os" != "WINNT" -o "$WITH_MINGW" = "yes"; then
     AC_PROG_CC
+fi
+
+dnl We need winegcc when building MinGW build to be able to cross-build msi tools
+AC_PATH_PROG(WINEGCC, winegcc)
+if test "$WITH_MINGW" = "yes" ; then
+    if test "$WINEGCC" = ""; then
+        AC_MSG_ERROR([winegcc was not found, please install wine-devel, or wine-devel-32bit])
+    fi
+    CC_save="$CC"
+    CC="$WINEGCC -m32"
+    AC_LINK_IFELSE([AC_LANG_PROGRAM([
+#include <stdio.h>
+        ],[
+printf ("hello world\n");
+        ])],,
+        [AC_MSG_ERROR([winegcc cannot build 32bit binaries, please install glibc-devel-32bit and gcc-32bit])]
+    )
+    CC="$CC_save"
 fi
 
 COMPATH=`dirname "$CC"`
