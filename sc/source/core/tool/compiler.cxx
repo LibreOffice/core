@@ -4002,7 +4002,7 @@ ScRangeData* ScCompiler::GetRangeData( const FormulaToken& rToken ) const
 
 bool ScCompiler::HandleRange()
 {
-    const ScRangeData* pRangeData = GetRangeData( *pToken);
+    const ScRangeData* pRangeData = GetRangeData( *mpToken);
     if (pRangeData)
     {
         sal_uInt16 nErr = pRangeData->GetErrCode();
@@ -5257,7 +5257,7 @@ void ScCompiler::fillAddInToken(::std::vector< ::com::sun::star::sheet::FormulaO
 // -----------------------------------------------------------------------------
 bool ScCompiler::HandleSingleRef()
 {
-    ScSingleRefData& rRef = static_cast<ScToken*>(pToken.get())->GetSingleRef();
+    ScSingleRefData& rRef = static_cast<ScToken*>(mpToken.get())->GetSingleRef();
     rRef.CalcAbsIfRel( aPos );
     if ( !rRef.Valid() )
     {
@@ -5469,7 +5469,7 @@ bool ScCompiler::HandleSingleRef()
 // -----------------------------------------------------------------------------
 bool ScCompiler::HandleDbData()
 {
-    ScDBData* pDBData = pDoc->GetDBCollection()->getNamedDBs().findByIndex(pToken->GetIndex());
+    ScDBData* pDBData = pDoc->GetDBCollection()->getNamedDBs().findByIndex(mpToken->GetIndex());
     if ( !pDBData )
         SetError(errNoName);
     else if ( !bCompileForFAP )

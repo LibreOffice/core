@@ -43,7 +43,7 @@ typedef boost::ptr_vector<SfxPoolItem> _SwNumFmtsAttrs;
 
 class SW_DLLPUBLIC SwNumRulesWithName
 {
-    String aName;
+    String maName;
     // the NumRule's formats _have_ to be independent of a document
     // (They should always be there!)
     class SW_DLLPRIVATE _SwNumFmtGlobal
@@ -68,7 +68,7 @@ class SW_DLLPUBLIC SwNumRulesWithName
     _SwNumFmtGlobal* aFmts[ MAXLEVEL ];
 
 protected:
-    void SetName(const String& rSet) {aName = rSet;}
+    void SetName(const String& rSet) {maName = rSet;}
 
 public:
     SwNumRulesWithName(const SwNumRule &, const String &);
@@ -78,7 +78,7 @@ public:
 
     const SwNumRulesWithName &operator=(const SwNumRulesWithName &);
 
-    const String& GetName() const               { return aName; }
+    const String& GetName() const               { return maName; }
     void MakeNumRule( SwWrtShell& rSh, SwNumRule& rChg ) const;
 
     void Store( SvStream& );

@@ -294,7 +294,7 @@ protected:
 
     OpCodeMapPtr        mxSymbols;              // which symbols are used
 
-    FormulaTokenRef     pToken;                 // current token
+    FormulaTokenRef     mpToken;                // current token
     FormulaTokenRef     pCurrentFactorToken;    // current factor token (of Factor() method)
     FormulaTokenArray*  pArr;
     ExternalReferenceHelper* pExternalRef;

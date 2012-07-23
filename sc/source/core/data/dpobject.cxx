@@ -2964,7 +2964,7 @@ bool ScDPCollection::DBCaches::remove(const ScDPCache* p)
 }
 
 ScDPCollection::ScDPCollection(ScDocument* pDocument) :
-    pDoc( pDocument ),
+    mpDoc( pDocument ),
     maSheetCaches(pDocument),
     maNameCaches(pDocument),
     maDBCaches(pDocument)
@@ -2972,10 +2972,10 @@ ScDPCollection::ScDPCollection(ScDocument* pDocument) :
 }
 
 ScDPCollection::ScDPCollection(const ScDPCollection& r) :
-    pDoc(r.pDoc),
-    maSheetCaches(r.pDoc),
-    maNameCaches(r.pDoc),
-    maDBCaches(r.pDoc)
+    mpDoc(r.mpDoc),
+    maSheetCaches(r.mpDoc),
+    maNameCaches(r.mpDoc),
+    maDBCaches(r.mpDoc)
 {
 }
 
@@ -3193,7 +3193,7 @@ void ScDPCollection::CopyToTab( SCTAB nOld, SCTAB nNew )
         e.SetTab(nNew);
         std::auto_ptr<ScDPObject> pNew(new ScDPObject(rObj));
         pNew->SetOutRange(aOutRange);
-        pDoc->ApplyFlagsTab(s.Col(), s.Row(), e.Col(), e.Row(), s.Tab(), SC_MF_DP_TABLE);
+        mpDoc->ApplyFlagsTab(s.Col(), s.Row(), e.Col(), e.Row(), s.Tab(), SC_MF_DP_TABLE);
         aAdded.push_back(pNew);
     }
 
@@ -3316,7 +3316,7 @@ void ScDPCollection::FreeTable(ScDPObject* pDPObj)
     const ScRange& rOutRange = pDPObj->GetOutRange();
     const ScAddress& s = rOutRange.aStart;
     const ScAddress& e = rOutRange.aEnd;
-    pDoc->RemoveFlagsTab(s.Col(), s.Row(), e.Col(), e.Row(), s.Tab(), SC_MF_DP_TABLE);
+    mpDoc->RemoveFlagsTab(s.Col(), s.Row(), e.Col(), e.Row(), s.Tab(), SC_MF_DP_TABLE);
     TablesType::iterator itr = maTables.begin(), itrEnd = maTables.end();
     for (; itr != itrEnd; ++itr)
     {
@@ -3334,7 +3334,7 @@ bool ScDPCollection::InsertNewTable(ScDPObject* pDPObj)
     const ScRange& rOutRange = pDPObj->GetOutRange();
     const ScAddress& s = rOutRange.aStart;
     const ScAddress& e = rOutRange.aEnd;
-    pDoc->ApplyFlagsTab(s.Col(), s.Row(), e.Col(), e.Row(), s.Tab(), SC_MF_DP_TABLE);
+    mpDoc->ApplyFlagsTab(s.Col(), s.Row(), e.Col(), e.Row(), s.Tab(), SC_MF_DP_TABLE);
 
     maTables.push_back(pDPObj);
     return true;
@@ -3343,7 +3343,7 @@ bool ScDPCollection::InsertNewTable(ScDPObject* pDPObj)
 bool ScDPCollection::HasDPTable(SCCOL nCol, SCROW nRow, SCTAB nTab) const
 {
     const ScMergeFlagAttr* pMergeAttr = static_cast<const ScMergeFlagAttr*>(
-            pDoc->GetAttr(nCol, nRow, nTab, ATTR_MERGE_FLAG));
+            mpDoc->GetAttr(nCol, nRow, nTab, ATTR_MERGE_FLAG));
 
     if (!pMergeAttr)
         return false;

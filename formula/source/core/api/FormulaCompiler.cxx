@@ -900,7 +900,7 @@ bool FormulaCompiler::GetToken()
     if ( nRecursion > nRecursionMax )
     {
         SetError( errStackOverflow );
-        pToken = new FormulaByteToken( ocStop );
+        mpToken = new FormulaByteToken( ocStop );
         return false;
     }
     if ( bAutoCorrect && !pStack )
@@ -919,18 +919,18 @@ bool FormulaCompiler::GetToken()
              nWasColRowName = 1;
         else
              nWasColRowName = 0;
-        pToken = pArr->Next();
-        while( pToken && pToken->GetOpCode() == ocSpaces )
+        mpToken = pArr->Next();
+        while( mpToken && mpToken->GetOpCode() == ocSpaces )
         {
             if ( nWasColRowName )
                 nWasColRowName++;
             if ( bAutoCorrect && !pStack )
-                CreateStringFromToken( aCorrectedFormula, pToken.get(), false );
-            pToken = pArr->Next();
+                CreateStringFromToken( aCorrectedFormula, mpToken.get(), false );
+            mpToken = pArr->Next();
         }
-        if ( bAutoCorrect && !pStack && pToken )
-            CreateStringFromToken( aCorrectedSymbol, pToken.get(), false );
-        if( !pToken )
+        if ( bAutoCorrect && !pStack && mpToken )
+            CreateStringFromToken( aCorrectedSymbol, mpToken.get(), false );
+        if( !mpToken )
         {
             if( pStack )
             {
@@ -942,41 +942,41 @@ bool FormulaCompiler::GetToken()
         }
         else
         {
-            if ( nWasColRowName >= 2 && pToken->GetOpCode() == ocColRowName )
+            if ( nWasColRowName >= 2 && mpToken->GetOpCode() == ocColRowName )
             {   // convert an ocSpaces to ocIntersect in RPN
-                pToken = new FormulaByteToken( ocIntersect );
+                mpToken = new FormulaByteToken( ocIntersect );
                 pArr->nIndex--;     // we advanced to the second ocColRowName, step back
             }
         }
     }
     if( bStop )
     {
-        pToken = new FormulaByteToken( ocStop );
+        mpToken = new FormulaByteToken( ocStop );
         return false;
     }
-    if( pToken->GetOpCode() == ocSubTotal )
+    if( mpToken->GetOpCode() == ocSubTotal )
         glSubTotal = true;
-    else if ( pToken->IsExternalRef() )
+    else if ( mpToken->IsExternalRef() )
     {
-        return HandleExternalReference(*pToken);
+        return HandleExternalReference(*mpToken);
     }
-    else if( pToken->GetOpCode() == ocName )
+    else if( mpToken->GetOpCode() == ocName )
     {
         return HandleRange();
     }
-    else if( pToken->GetOpCode() == ocColRowName )
+    else if( mpToken->GetOpCode() == ocColRowName )
     {
         return HandleSingleRef();
     }
-    else if( pToken->GetOpCode() == ocDBArea )
+    else if( mpToken->GetOpCode() == ocDBArea )
     {
         return HandleDbData();
     }
-    else if( pToken->GetType() == svSingleRef )
+    else if( mpToken->GetType() == svSingleRef )
     {
         pArr->nRefs++;
     }
-    else if( pToken->GetType() == svDoubleRef )
+    else if( mpToken->GetType() == svDoubleRef )
     {
         pArr->nRefs++;
     }
@@ -993,21 +993,21 @@ void FormulaCompiler::Factor()
 
     CurrentFactor pFacToken( this );
 
-    OpCode eOp = pToken->GetOpCode();
+    OpCode eOp = mpToken->GetOpCode();
     if( eOp == ocPush || eOp == ocColRowNameAuto || eOp == ocMatRef ||
             eOp == ocDBArea
             || (bCompileForFAP && ((eOp == ocName) || (eOp == ocDBArea)
             || (eOp == ocColRowName) || (eOp == ocBad)))
         )
     {
-        PutCode( pToken );
+        PutCode( mpToken );
         eOp = NextToken();
         if( eOp == ocOpen )
         {
             // PUSH( is an error that may be caused by an unknown function.
             SetError(
-                ( pToken->GetType() == svString
-               || pToken->GetType() == svSingleRef )
+                ( mpToken->GetType() == svString
+               || mpToken->GetType() == svSingleRef )
                ? errNoName : errOperatorExpected );
             if ( bAutoCorrect && !pStack )
             {   // assume multiplication
@@ -1028,7 +1028,7 @@ void FormulaCompiler::Factor()
         eOp = Expression();
         while ((eOp == ocSep) && (!pArr->GetCodeError() || bIgnoreErrors))
         {   // range list  (A1;A2)  converted to  (A1~A2)
-            pFacToken = pToken;
+            pFacToken = mpToken;
             NextToken();
             eOp = Expression();
             // Do not ignore error here, regardless of bIgnoreErrors, otherwise
@@ -1077,7 +1077,7 @@ void FormulaCompiler::Factor()
         }
         if (SC_OPCODE_START_NO_PAR <= eOp && eOp < SC_OPCODE_STOP_NO_PAR)
         {
-            pFacToken = pToken;
+            pFacToken = mpToken;
             eOp = NextToken();
             if (eOp != ocOpen)
             {
@@ -1097,7 +1097,7 @@ void FormulaCompiler::Factor()
         else if( eOp == ocNot || eOp == ocNeg
               || (SC_OPCODE_START_1_PAR <= eOp && eOp < SC_OPCODE_STOP_1_PAR) )
         {
-            pFacToken = pToken;
+            pFacToken = mpToken;
             eOp = NextToken();
             if( nNumFmt == NUMBERFORMAT_UNDEFINED && eOp == ocNot )
                 nNumFmt = NUMBERFORMAT_LOGICAL;
@@ -1125,7 +1125,7 @@ void FormulaCompiler::Factor()
                 || (bCompileForFAP && ((eOp == ocIf) || (eOp == ocChose)))
             )
         {
-            pFacToken = pToken;
+            pFacToken = mpToken;
             OpCode eMyLastOp = eOp;
             eOp = NextToken();
             bool bNoParam = false;
@@ -1174,7 +1174,7 @@ void FormulaCompiler::Factor()
         else if (eOp == ocIf || eOp == ocChose)
         {
             // the PC counters are -1
-            pFacToken = pToken;
+            pFacToken = mpToken;
             if ( eOp == ocIf )
                 pFacToken->GetJump()[ 0 ] = 3;  // if, else, behind
             else
@@ -1203,7 +1203,7 @@ void FormulaCompiler::Factor()
                 NextToken();
                 eOp = Expression();
                 // ocSep or ocClose terminate the subexpression
-                PutCode( pToken );
+                PutCode( mpToken );
             }
             if (eOp != ocClose)
                 SetError(errPairExpected);
@@ -1222,7 +1222,7 @@ void FormulaCompiler::Factor()
         }
         else if ( eOp == ocMissing )
         {
-            PutCode( pToken );
+            PutCode( mpToken );
             eOp = NextToken();
         }
         else if ( eOp == ocClose )
@@ -1238,9 +1238,9 @@ void FormulaCompiler::Factor()
                 bCorrected = true;
             }
         }
-        else if ( pToken->IsExternalRef() )
+        else if ( mpToken->IsExternalRef() )
         {
-            PutCode(pToken);
+            PutCode(mpToken);
             eOp = NextToken();
         }
         else
@@ -1266,10 +1266,10 @@ void FormulaCompiler::Factor()
 void FormulaCompiler::RangeLine()
 {
     Factor();
-    while (pToken->GetOpCode() == ocRange)
+    while (mpToken->GetOpCode() == ocRange)
     {
         FormulaToken** pCode1 = pCode - 1;
-        FormulaTokenRef p = pToken;
+        FormulaTokenRef p = mpToken;
         NextToken();
         Factor();
         FormulaToken** pCode2 = pCode - 1;
@@ -1283,9 +1283,9 @@ void FormulaCompiler::RangeLine()
 void FormulaCompiler::IntersectionLine()
 {
     RangeLine();
-    while (pToken->GetOpCode() == ocIntersect)
+    while (mpToken->GetOpCode() == ocIntersect)
     {
-        FormulaTokenRef p = pToken;
+        FormulaTokenRef p = mpToken;
         NextToken();
         RangeLine();
         PutCode(p);
@@ -1297,9 +1297,9 @@ void FormulaCompiler::IntersectionLine()
 void FormulaCompiler::UnionLine()
 {
     IntersectionLine();
-    while (pToken->GetOpCode() == ocUnion)
+    while (mpToken->GetOpCode() == ocUnion)
     {
-        FormulaTokenRef p = pToken;
+        FormulaTokenRef p = mpToken;
         NextToken();
         IntersectionLine();
         PutCode(p);
@@ -1310,12 +1310,12 @@ void FormulaCompiler::UnionLine()
 
 void FormulaCompiler::UnaryLine()
 {
-    if( pToken->GetOpCode() == ocAdd )
+    if( mpToken->GetOpCode() == ocAdd )
         GetToken();
-    else if (SC_OPCODE_START_UN_OP <= pToken->GetOpCode() &&
-            pToken->GetOpCode() < SC_OPCODE_STOP_UN_OP)
+    else if (SC_OPCODE_START_UN_OP <= mpToken->GetOpCode() &&
+            mpToken->GetOpCode() < SC_OPCODE_STOP_UN_OP)
     {
-        FormulaTokenRef p = pToken;
+        FormulaTokenRef p = mpToken;
         NextToken();
         UnaryLine();
         PutCode( p );
@@ -1329,9 +1329,9 @@ void FormulaCompiler::UnaryLine()
 void FormulaCompiler::PostOpLine()
 {
     UnaryLine();
-    while ( pToken->GetOpCode() == ocPercentSign )
+    while ( mpToken->GetOpCode() == ocPercentSign )
     {   // this operator _follows_ its operand
-        PutCode( pToken );
+        PutCode( mpToken );
         NextToken();
     }
 }
@@ -1341,9 +1341,9 @@ void FormulaCompiler::PostOpLine()
 void FormulaCompiler::PowLine()
 {
     PostOpLine();
-    while (pToken->GetOpCode() == ocPow)
+    while (mpToken->GetOpCode() == ocPow)
     {
-        FormulaTokenRef p = pToken;
+        FormulaTokenRef p = mpToken;
         NextToken();
         PostOpLine();
         PutCode(p);
@@ -1355,9 +1355,9 @@ void FormulaCompiler::PowLine()
 void FormulaCompiler::MulDivLine()
 {
     PowLine();
-    while (pToken->GetOpCode() == ocMul || pToken->GetOpCode() == ocDiv)
+    while (mpToken->GetOpCode() == ocMul || mpToken->GetOpCode() == ocDiv)
     {
-        FormulaTokenRef p = pToken;
+        FormulaTokenRef p = mpToken;
         NextToken();
         PowLine();
         PutCode(p);
@@ -1369,9 +1369,9 @@ void FormulaCompiler::MulDivLine()
 void FormulaCompiler::AddSubLine()
 {
     MulDivLine();
-    while (pToken->GetOpCode() == ocAdd || pToken->GetOpCode() == ocSub)
+    while (mpToken->GetOpCode() == ocAdd || mpToken->GetOpCode() == ocSub)
     {
-        FormulaTokenRef p = pToken;
+        FormulaTokenRef p = mpToken;
         NextToken();
         MulDivLine();
         PutCode(p);
@@ -1383,9 +1383,9 @@ void FormulaCompiler::AddSubLine()
 void FormulaCompiler::ConcatLine()
 {
     AddSubLine();
-    while (pToken->GetOpCode() == ocAmpersand)
+    while (mpToken->GetOpCode() == ocAmpersand)
     {
-        FormulaTokenRef p = pToken;
+        FormulaTokenRef p = mpToken;
         NextToken();
         AddSubLine();
         PutCode(p);
@@ -1397,9 +1397,9 @@ void FormulaCompiler::ConcatLine()
 void FormulaCompiler::CompareLine()
 {
     ConcatLine();
-    while (pToken->GetOpCode() >= ocEqual && pToken->GetOpCode() <= ocGreaterEqual)
+    while (mpToken->GetOpCode() >= ocEqual && mpToken->GetOpCode() <= ocGreaterEqual)
     {
-        FormulaTokenRef p = pToken;
+        FormulaTokenRef p = mpToken;
         NextToken();
         ConcatLine();
         PutCode(p);
@@ -1411,9 +1411,9 @@ void FormulaCompiler::CompareLine()
 void FormulaCompiler::NotLine()
 {
     CompareLine();
-    while (pToken->GetOpCode() == ocNot)
+    while (mpToken->GetOpCode() == ocNot)
     {
-        FormulaTokenRef p = pToken;
+        FormulaTokenRef p = mpToken;
         NextToken();
         CompareLine();
         PutCode(p);
@@ -1432,15 +1432,15 @@ OpCode FormulaCompiler::Expression()
         return ocStop;      //! generate token instead?
     }
     NotLine();
-    while (pToken->GetOpCode() == ocAnd || pToken->GetOpCode() == ocOr)
+    while (mpToken->GetOpCode() == ocAnd || mpToken->GetOpCode() == ocOr)
     {
-        FormulaTokenRef p = pToken;
-        pToken->SetByte( 2 );       // 2 parameters!
+        FormulaTokenRef p = mpToken;
+        mpToken->SetByte( 2 );       // 2 parameters!
         NextToken();
         NotLine();
         PutCode(p);
     }
-    return pToken->GetOpCode();
+    return mpToken->GetOpCode();
 }
 // -----------------------------------------------------------------------------
 void FormulaCompiler::SetError(sal_uInt16 /*nError*/)
@@ -1801,7 +1801,7 @@ OpCode FormulaCompiler::NextToken()
 {
     if( !GetToken() )
         return ocStop;
-    OpCode eOp = pToken->GetOpCode();
+    OpCode eOp = mpToken->GetOpCode();
     // There must be an operator before a push
     if ( (eOp == ocPush || eOp == ocColRowNameAuto) &&
             !( (eLastOp == ocOpen) || (eLastOp == ocSep) ||
