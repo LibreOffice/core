@@ -659,7 +659,7 @@ void lcl_MoveBorderPropertiesToFrame(uno::Sequence<beans::PropertyValue>& rFrame
         }
         rFrameProperties.realloc(nStart);
     }
-    catch( const uno::Exception& rEx )
+    catch( const uno::Exception& )
     {
     }
 }
