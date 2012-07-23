@@ -147,6 +147,7 @@ public:
 
 
     // Only for callbacks.
+    void                    addConference( TeleConference* pConference );
     void                    setChannelReadyHandlerInvoked( bool b ) { mbChannelReadyHandlerInvoked = b; }
     bool                    isChannelReadyHandlerInvoked() const { return mbChannelReadyHandlerInvoked; }
     void                    setAccountManagerReadyHandlerInvoked( bool b );
@@ -192,19 +193,7 @@ public:
 
     TpAccount*              getAccount( const rtl::OString& rAccountID );
 
-/* Callbacks; not for use outside this class. */
-    static void             DBusChannelHandler(
-        TpSimpleHandler*            /*handler*/,
-        TpAccount*                  pAccount,
-        TpConnection*               /*connection*/,
-        GList*                      pChannels,
-        GList*                      /*requests_satisfied*/,
-        gint64                      /*user_action_time*/,
-        TpHandleChannelsContext*    pContext,
-        gpointer                    pUserData);
-
 private:
-    void                    addConference( TeleConference* );
     void                    ensureLegacyChannel( TpAccount* pAccount, TpContact* pBuddy );
 
     bool                    mbChannelReadyHandlerInvoked : 1;

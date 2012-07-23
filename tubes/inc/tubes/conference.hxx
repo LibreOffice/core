@@ -71,6 +71,7 @@ public:
     typedef void          (*FileSentCallback)( bool aSuccess, void* pUserData);
     TUBES_DLLPUBLIC void    sendFile( rtl::OUString &localUri, FileSentCallback pCallback, void* pUserData);
     TUBES_DLLPUBLIC const OString& getUuid() const { return msUuid; }
+    void                    setUuid( const OString& rUuid ) { msUuid = rUuid; }
 
     // --- following only to be called only by manager's callbacks ---
     // TODO: make friends instead
@@ -79,6 +80,7 @@ public:
     TpDBusTubeChannel*      getChannel() const  { return mpChannel; }
     bool                    offerTube();
     bool                    acceptTube();
+    bool                    setTube( GDBusConnection* pTube );
     /// got tube accepted on other end as well?
     bool                    isTubeOpen() const { return mpTube != NULL; }
 
@@ -86,22 +88,9 @@ public:
     void                    setTubeOfferedHandlerInvoked( bool b ) { mbTubeOfferedHandlerInvoked = b; }
     bool                    isTubeOfferedHandlerInvoked() const { return mbTubeOfferedHandlerInvoked; }
 
-    static void             TubeOfferedHandler(GObject* pSource, GAsyncResult* pResult, gpointer pUserData);
-    static void             TubeAcceptedHandler(GObject* pSource, GAsyncResult* pResult, gpointer pUserData);
-
-    static void             methodCallHandler(GDBusConnection*       pConnection,
-                                              const gchar*           pSender,
-                                              const gchar*           pObjectPath,
-                                              const gchar*           pInterfaceName,
-                                              const gchar*           pMethodName,
-                                              GVariant*              pParameters,
-                                              GDBusMethodInvocation* pInvocation,
-                                              void*                  pUserData);
-
 private:
     typedef ::std::queue<OString> TelePacketQueue;
     bool                    spinUntilTubeEstablished();
-    bool                    setTube( GDBusConnection* pTube);
 
     TeleManager*            mpManager;
     TpAccount*              mpAccount;

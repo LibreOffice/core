@@ -58,7 +58,7 @@ struct InfoLogger
 #define INFO_LOGGER(s)
 #endif // SAL_LOG_INFO
 
-void TeleConference::methodCallHandler(
+static void TeleConference_MethodCallHandler(
     GDBusConnection*       /*pConnection*/,
     const gchar*           pSender,
     const gchar*           /*pObjectPath*/,
@@ -68,15 +68,15 @@ void TeleConference::methodCallHandler(
     GDBusMethodInvocation* pInvocation,
     void*                  pUserData)
 {
-    INFO_LOGGER_F( "TeleConference::methodCallHandler");
+    INFO_LOGGER_F( "TeleConference_MethodCallHandler");
 
     TeleConference* pConference = reinterpret_cast<TeleConference*>(pUserData);
-    SAL_WARN_IF( !pConference, "tubes", "TeleConference::methodCallHandler: no conference");
+    SAL_WARN_IF( !pConference, "tubes", "TeleConference_MethodCallHandler: no conference");
     if (!pConference)
         return;
 
     TeleManager* pManager = pConference->getManager();
-    SAL_WARN_IF( !pManager, "tubes", "TeleConference::methodCallHandler: no manager");
+    SAL_WARN_IF( !pManager, "tubes", "TeleConference_MethodCallHandler: no manager");
     if (!pManager)
         return;
 
@@ -104,11 +104,11 @@ void TeleConference::methodCallHandler(
     const char* pPacketData = reinterpret_cast<const char*>( g_variant_get_data( ay));
     gsize nPacketSize = g_variant_get_size( ay);
 
-    SAL_WARN_IF( !pPacketData, "tubes", "TeleConference::methodCallHandler: couldn't get packet data");
+    SAL_WARN_IF( !pPacketData, "tubes", "TeleConference_MethodCallHandler: couldn't get packet data");
     if (!pPacketData)
         return;
 
-    SAL_INFO( "tubes", "TeleConference::methodCallHandler: received packet from sender "
+    SAL_INFO( "tubes", "TeleConference_MethodCallHandler: received packet from sender "
             << (pSender ? pSender : "(null)") << " with size " << nPacketSize);
     pConference->queue( pPacketData, nPacketSize );
     g_dbus_method_invocation_return_value( pInvocation, 0 );
@@ -142,15 +142,15 @@ static void TeleConference_ChannelCloseHandler(
 }
 
 
-void TeleConference::TubeOfferedHandler(
+static void TeleConference_TubeOfferedHandler(
         GObject*      pSource,
         GAsyncResult* pResult,
         gpointer      pUserData)
 {
-    INFO_LOGGER_F( "TeleConference::TubeOfferedHandler");
+    INFO_LOGGER_F( "TeleConference_TubeOfferedHandler");
 
     TeleConference* pConference = reinterpret_cast<TeleConference*>(pUserData);
-    SAL_WARN_IF( !pConference, "tubes", "TeleConference::TubeOfferedHandler: no conference");
+    SAL_WARN_IF( !pConference, "tubes", "TeleConference_TubeOfferedHandler: no conference");
     if (!pConference)
         return;
 
@@ -163,7 +163,7 @@ void TeleConference::TubeOfferedHandler(
 
     // "can't find contact ... presence" means contact is not a contact.
     /* FIXME: detect and handle */
-    SAL_WARN_IF( !pTube, "tubes", "TeleConference::TubeOfferedHandler: entered with error: " << pError->message);
+    SAL_WARN_IF( !pTube, "tubes", "TeleConference_TubeOfferedHandler: entered with error: " << pError->message);
     if (pError) {
         g_error_free( pError);
         return;
@@ -173,15 +173,15 @@ void TeleConference::TubeOfferedHandler(
 }
 
 
-void TeleConference::TubeAcceptedHandler(
+static void TeleConference_TubeAcceptedHandler(
         GObject*      pSource,
         GAsyncResult* pResult,
         gpointer      pUserData)
 {
-    INFO_LOGGER_F( "TeleConference::TubeAcceptedHandler");
+    INFO_LOGGER_F( "TeleConference_TubeAcceptedHandler");
 
     TeleConference* pConference = reinterpret_cast<TeleConference*>(pUserData);
-    SAL_WARN_IF( !pConference, "tubes", "TeleConference::TubeAcceptedHandler: no conference");
+    SAL_WARN_IF( !pConference, "tubes", "TeleConference_TubeAcceptedHandler: no conference");
     if (!pConference)
         return;
 
@@ -192,14 +192,14 @@ void TeleConference::TubeAcceptedHandler(
     GDBusConnection* pTube = tp_dbus_tube_channel_accept_finish(
             pChannel, pResult, &pError);
 
-    SAL_WARN_IF( !pTube, "tubes", "TeleConference::TubeAcceptedHandler: entered with error: " << pError->message);
+    SAL_WARN_IF( !pTube, "tubes", "TeleConference_TubeAcceptedHandler: entered with error: " << pError->message);
     if (pError) {
         g_error_free( pError);
         return;
     }
     GHashTable* pParameters = tp_dbus_tube_channel_get_parameters( pChannel);
     const char* sUuid = tp_asv_get_string( pParameters, LIBO_TUBES_UUID);
-    pConference->msUuid = OString( sUuid);
+    pConference->setUuid( OString( sUuid));
 
     pConference->setTube( pTube);
 }
@@ -263,7 +263,7 @@ bool TeleConference::acceptTube()
         return false;
 
     tp_dbus_tube_channel_accept_async( mpChannel,
-            &TeleConference::TubeAcceptedHandler,
+            TeleConference_TubeAcceptedHandler,
             this);
     return spinUntilTubeEstablished();
 }
@@ -284,7 +284,7 @@ bool TeleConference::offerTube()
     tp_dbus_tube_channel_offer_async(
             mpChannel,
             pParameters,
-            &TeleConference::TubeOfferedHandler,
+            TeleConference_TubeOfferedHandler,
             this);
 
     return spinUntilTubeEstablished();
@@ -303,7 +303,7 @@ bool TeleConference::setTube( GDBusConnection* pTube)
     guint registration_id;
     static const GDBusInterfaceVTable interface_vtable =
     {
-        &TeleConference::methodCallHandler,
+        TeleConference_MethodCallHandler,
         NULL,
         NULL,
         { NULL },
