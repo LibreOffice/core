@@ -193,8 +193,6 @@ void BasicIDEShell::Init()
     pObjectCatalog = 0;
     bCreatingWindow = sal_False;
 
-    bObjectCatalogDisplay = sal_True;
-
     pTabBar = new BasicIDETabBar( &GetViewFrame()->GetWindow() );
     pTabBar->SetSplitHdl( LINK( this, BasicIDEShell, TabBarSplitHdl ) );
     bTabBarSplitted = sal_False;
