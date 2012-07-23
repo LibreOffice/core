@@ -93,6 +93,16 @@ zypper in mingw32-cross-gcc mingw32-cross-gcc-c++ mingw32-python-devel \
     mingw32-libcppunit-devel mingw32-libredland mingw32-libredland-devel \
     mingw32-libmythes mingw32-libmythes-devel
 
+You also need wine, ideally:
+
+zypper ar http://download.opensuse.org/repositories/Emulators:/Wine/<your_os>/Emulators:Wine.repo
+
+zypper in wine wine-devel wine-devel-32bit
+
+And in order to be able to use 'winegcc -m32', also
+
+zypper in glibc-devel-32bit gcc-32bit
+
 There might be more that are missing, please read carefully what autogen.sh
 tells you, and either remove one of the --with-system-*, or install the
 missing dependency.

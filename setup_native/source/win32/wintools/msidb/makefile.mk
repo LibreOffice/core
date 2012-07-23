@@ -27,7 +27,7 @@ TARGET=sn_msidb
 $(BIN)/msidb.exe.so: $(BIN)/msidb.exe
 
 $(BIN)/msidb.exe:
-	$(WINEGCC) -o $(BIN)/msidb.exe msidb.c -municode -lmsi 
+	$(WINEGCC) -o $(BIN)/msidb.exe msidb.c -m32 -municode -lmsi
 
 # --- Targets --------------------------------------------------------------
 
