@@ -281,6 +281,86 @@ void TestBreakIterator::testWordBoundaries()
             CPPUNIT_ASSERT(m_xBreak->isEndWord(aTest, aBounds.endPos, aLocale, mode));
         }
     }
+
+    //See https://issues.apache.org/ooo/show_bug.cgi?id=13494
+    {
+        const rtl::OUString aBase("xxAAxxBBxxCCxx");
+        const sal_Unicode aTests[] =
+        {
+            '\'', ';', ',', '.', '!', '@', '#', '%', '&', '*',
+            '(', ')', '_', '-', '{', '}', '[', ']', '\"', '/',
+            '\\', '?', '~', '$', '+', '^', '=', '<', '>', '|'
+        };
+
+        const sal_Int32 aDoublePositions[] = {0, 2, 4, 6, 8, 10, 12, 14};
+        for (size_t j = 0; j < SAL_N_ELEMENTS(aTests); ++j)
+        {
+            rtl::OUString aTest = aBase.replace('x', aTests[j]);
+            sal_Int32 nPos = -1;
+            size_t i = 0;
+            do
+            {
+                CPPUNIT_ASSERT(i < SAL_N_ELEMENTS(aDoublePositions));
+                nPos = m_xBreak->nextWord(aTest, nPos, aLocale, i18n::WordType::ANYWORD_IGNOREWHITESPACES).startPos;
+                CPPUNIT_ASSERT(nPos == aDoublePositions[i++]);
+            }
+            while (nPos < aTest.getLength());
+            nPos = aTest.getLength();
+            i = SAL_N_ELEMENTS(aDoublePositions)-1;
+            do
+            {
+                nPos = m_xBreak->previousWord(aTest, nPos, aLocale, i18n::WordType::ANYWORD_IGNOREWHITESPACES).startPos;
+                CPPUNIT_ASSERT(nPos == aDoublePositions[--i]);
+            }
+            while (nPos > 0);
+        }
+
+        const sal_Int32 aSinglePositions[] = {0, 1, 3, 4, 6, 7, 9, 10};
+        for (size_t j = 1; j < SAL_N_ELEMENTS(aTests); ++j)
+        {
+            rtl::OUString aTest = aBase.replaceAll(rtl::OUString("xx"), rtl::OUString(aTests[j]));
+            sal_Int32 nPos = -1;
+            size_t i = 0;
+            do
+            {
+                CPPUNIT_ASSERT(i < SAL_N_ELEMENTS(aSinglePositions));
+                nPos = m_xBreak->nextWord(aTest, nPos, aLocale, i18n::WordType::ANYWORD_IGNOREWHITESPACES).startPos;
+                CPPUNIT_ASSERT(nPos == aSinglePositions[i++]);
+            }
+            while (nPos < aTest.getLength());
+            nPos = aTest.getLength();
+            i = SAL_N_ELEMENTS(aSinglePositions)-1;
+            do
+            {
+                nPos = m_xBreak->previousWord(aTest, nPos, aLocale, i18n::WordType::ANYWORD_IGNOREWHITESPACES).startPos;
+                CPPUNIT_ASSERT(nPos == aSinglePositions[--i]);
+            }
+            while (nPos > 0);
+        }
+
+        const sal_Int32 aSingleQuotePositions[] = {0, 1, 9, 10};
+        CPPUNIT_ASSERT(aTests[0] == '\'');
+        {
+            rtl::OUString aTest = aBase.replaceAll(rtl::OUString("xx"), rtl::OUString(aTests[0]));
+            sal_Int32 nPos = -1;
+            size_t i = 0;
+            do
+            {
+                CPPUNIT_ASSERT(i < SAL_N_ELEMENTS(aSingleQuotePositions));
+                nPos = m_xBreak->nextWord(aTest, nPos, aLocale, i18n::WordType::ANYWORD_IGNOREWHITESPACES).startPos;
+                CPPUNIT_ASSERT(nPos == aSingleQuotePositions[i++]);
+            }
+            while (nPos < aTest.getLength());
+            nPos = aTest.getLength();
+            i = SAL_N_ELEMENTS(aSingleQuotePositions)-1;
+            do
+            {
+                nPos = m_xBreak->previousWord(aTest, nPos, aLocale, i18n::WordType::ANYWORD_IGNOREWHITESPACES).startPos;
+                CPPUNIT_ASSERT(nPos == aSingleQuotePositions[--i]);
+            }
+            while (nPos > 0);
+        }
+    }
 }
 
 //See http://qa.openoffice.org/issues/show_bug.cgi?id=111152
