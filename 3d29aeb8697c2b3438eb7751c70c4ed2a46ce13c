@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAMn////k\u003d",
+        "filename": "desktop/source/app/app.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1713,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2012-07-23T11:35:47Z",
+      "side": 1,
+      "message": "Tying this to --invisible is not correct. With --invisible there is no UI, so collaboration would be quite challenging ;-)\n\nI think with a proper Listen/Unlisten implementation we do not need a command line option at all, or do we? A \"listen always\" option instead should go into the user configuration at the end, IMHO.",
+      "revId": "3d29aeb8697c2b3438eb7751c70c4ed2a46ce13c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn////g\u003d",
+        "filename": "desktop/source/app/app.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1714,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2012-07-23T11:35:47Z",
+      "side": 1,
+      "message": "Init listening from within the dialog should still be possible, if implemented..",
+      "revId": "3d29aeb8697c2b3438eb7751c70c4ed2a46ce13c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn////o\u003d",
+        "filename": "sc/source/ui/collab/contacts.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2012-07-23T11:35:47Z",
+      "side": 1,
+      "message": "I\u0027d prefer if we used SAL_INFO(\"sc.tubes\",...) instead of fprintf, fprintf would have to be removed at the end and SAL_INFO could stay in, just that code has to be built with debug\u003dtrue to actually see output.",
+      "revId": "3d29aeb8697c2b3438eb7751c70c4ed2a46ce13c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
