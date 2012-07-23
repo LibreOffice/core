@@ -53,6 +53,8 @@ TARFILE_MD5=f02578f5218f217a9f20e9c30e119c6a
 PATCH_FILES=$(TARFILE_NAME).patch
 #https://svn.boost.org/trac/boost/ticket/3780
 PATCH_FILES+=boost.3780.aliasing.patch
+#https://svn.boost.org/trac/boost/ticket/4127
+PATCH_FILES+=boost.4127.warnings.patch
 #https://svn.boost.org/trac/boost/ticket/4713
 PATCH_FILES+=boost.4713.warnings.patch
 #https://svn.boost.org/trac/boost/ticket/5119
