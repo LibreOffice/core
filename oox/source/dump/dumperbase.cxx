@@ -332,7 +332,7 @@ void StringHelper::appendHex( OUStringBuffer& rStr, sal_Int64 nData, bool bPrefi
 static sal_uInt64
 lcl_ConvertDouble(double const f)
 {
-    sal_uInt64 i;
+    sal_uInt64 i = sal_uInt64();
     for (size_t j = 0; j < sizeof(double); ++j)
     {   // hopefully both endian independent and strict aliasing safe
         reinterpret_cast<char *>(&i)[j] = reinterpret_cast<char const *>(&f)[j];
