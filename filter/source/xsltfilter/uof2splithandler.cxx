@@ -22,7 +22,7 @@
  // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_filter.hxx"
 
-//This file is about the conversion of the UOF v2.0 and ODF document format from CS2C 20120610.
+//This file is about the conversion of the UOF v2.0 and ODF document format
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>

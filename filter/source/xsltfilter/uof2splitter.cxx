@@ -20,9 +20,10 @@
  **************************************************************/
 
  // MARKER(update_precomp.py): autogen include statement, do not remove
+//This file is about the conversion of the UOF v2.0 and ODF document format
 #include "precompiled_filter.hxx"
 
-//This file is about the conversion of the UOF v2.0 and ODF document format from CS2C 20120610.
+
 #include <cppuhelper/implbase4.hxx>
 #include <com/sun/star/xml/sax/XParser.hpp>
 #include <com/sun/star/xml/sax/InputSource.hpp>

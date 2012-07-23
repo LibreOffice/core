@@ -20,7 +20,7 @@
  **************************************************************/
 
  // MARKER(update_precomp.py): autogen include statement, do not remove
-//This file is about the conversion of the UOF v2.0 and ODF document format from CS2C 20120610.
+//This file is about the conversion of the UOF v2.0 and ODF document format
 #ifndef FILTER_SOURCE_XSLTFILTER_CONTAINERHELPER_HXX
 #define FILTER_SOURCE_XSLTFILTER_CONTAINERHELPER_HXX
 

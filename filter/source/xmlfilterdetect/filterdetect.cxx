@@ -55,10 +55,10 @@
 #include <unotools/ucbhelper.hxx>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 
-// This is added by wangyumin from 2012-02-24 for UOF2 deep type detection
+//UOF v2 deep type detection
 #include "../xsltfilter/uof2storage.cxx"
 #include <rtl/string.hxx>
-/// end added
+
 
 using rtl::OUString;
 using com::sun::star::uno::Sequence;
@@ -103,7 +103,7 @@ Reference< com::sun::star::frame::XModel > xModel;
         Sequence<PropertyValue > lProps ;
 
         com::sun::star::uno::Reference< com::sun::star::io::XInputStream > xInStream;
-        com::sun::star::uno::Reference< com::sun::star::io::XInputStream > xIn;//added by wangyumin on 2012-02-27
+        com::sun::star::uno::Reference< com::sun::star::io::XInputStream > xIn;
         ::rtl::OUString temp;
         //OSL_ENSURE( sal_False, " starting Detect" );
         const PropertyValue * pValue = aArguments.getConstArray();
@@ -132,7 +132,7 @@ Reference< com::sun::star::frame::XModel > xModel;
             else if ( pValue[i].Name.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "InputStream" ) ) )
             {
                 pValue[i].Value >>= xInStream ;
-                pValue[i].Value >>= xIn ;//added by wangyumin on 2012-02-27
+                pValue[i].Value >>= xIn ;
             }
 
         }
@@ -191,7 +191,7 @@ Reference< com::sun::star::frame::XModel > xModel;
         if(sTypeName.equalsAscii(""))
         {
             //sTypeName=::rtl::OUString::createFromAscii("writer_Flat_XML_File");
-            /// begin added by wangyumin for uof2 deep type detection on 2012-02-27
+            //UOF v2.0 deep type detection
             if(sUrl.indexOf( ::rtl::OUString::createFromAscii(".uot") ) != -1 ||
                 sUrl.indexOf( ::rtl::OUString::createFromAscii(".uos") ) != -1 ||
                 sUrl.indexOf( ::rtl::OUString::createFromAscii(".uop") ) != -1)
@@ -226,7 +226,6 @@ Reference< com::sun::star::frame::XModel > xModel;
                     }
                 }
             }
-            /// end added
         }
         else
         {

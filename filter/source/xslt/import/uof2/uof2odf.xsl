@@ -18,7 +18,7 @@
 * under the License. *  
 *************************************************************/-->
  <!--MARKER(update_precomp.py): autogen include statement, do not remove-->
- <!--//This file is about the conversion of the UOF v2.0 and ODF document format from CS2C 20120610.-->
+ <!--//This file is about the conversion of the UOF v2.0 and ODF document format-->
 <xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xforms="http://www.w3.org/2002/xforms" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:anim="urn:oasis:names:tc:opendocument:xmlns:animation:1.0" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:dt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882" xmlns:fn="http://www.w3.org/2005/xpath-functions" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:html="http://www.w3.org/TR/REC-html40" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:nsof="http://neoshineoffice.com" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:presentation="urn:oasis:names:tc:opendocument:xmlns:presentation:1.0" xmlns:pzip="urn:cleverage:xmlns:post-processings:zip" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:smil="urn:oasis:names:tc:opendocument:xmlns:smil-compatible:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:uof="http://schemas.uof.org/cn/2009/uof" xmlns:书签="http://schemas.uof.org/cn/2009/bookmarks" xmlns:元="http://schemas.uof.org/cn/2009/metadata" xmlns:公式="http://schemas.uof.org/cn/2009/equations" xmlns:图="http://schemas.uof.org/cn/2009/graph" xmlns:图形="http://schemas.uof.org/cn/2009/graphics" xmlns:图表="http://schemas.uof.org/cn/2009/chart" xmlns:字="http://schemas.uof.org/cn/2009/wordproc" xmlns:对象="http://schemas.uof.org/cn/2009/objects" xmlns:式样="http://schemas.uof.org/cn/2009/styles" xmlns:扩展="http://schemas.uof.org/cn/2009/extend" xmlns:数="http://www.w3.org/1998/Math/MathML" xmlns:数据="http://schemas.uof.org/cn/2009/usd" xmlns:演="http://schemas.uof.org/cn/2009/presentation" xmlns:表="http://schemas.uof.org/cn/2009/spreadsheet" xmlns:规则="http://schemas.uof.org/cn/2009/rules" xmlns:超链="http://schemas.uof.org/cn/2009/hyperlinks" exclude-result-prefixes="uof 表 演 字 图 数 pzip 元 超链 图形 对象 公式 书签 数据 扩展 规则 式样">
 	<xsl:output omit-xml-declaration="no" encoding="utf-8" version="1.0" method="xml" standalone="yes" indent="no"/>
 	<xsl:strip-space elements="*"/>
@@ -2764,7 +2764,6 @@
 			<xsl:attribute name="fo:hyphenation-remain-char-count">2</xsl:attribute>
 			<xsl:attribute name="fo:hyphenation-push-char-count">2</xsl:attribute>
 		</xsl:if>
-		<!--baopengli 2011-03-03 alert end-->
 	</xsl:template>
 	<xsl:template match="字:是否取消行号_4193" mode="paragraph">
 		<xsl:attribute name="text:number-lines"><xsl:choose><xsl:when test="string(.)='1' or string(.)='true'">false</xsl:when><xsl:otherwise>true</xsl:otherwise></xsl:choose></xsl:attribute>
@@ -3680,7 +3679,7 @@
 				<xsl:attribute name="fo:width"><xsl:value-of select="concat($imagewidth,$uofUnit)"/></xsl:attribute>
 				<xsl:attribute name="fo:height"><xsl:value-of select="concat($imageheight,$uofUnit)"/></xsl:attribute>
 			</xsl:if>
-			<!--hsr 演中编号的对齐-->
+			<!--演中编号的对齐-->
 			<xsl:choose>
 				<xsl:when test="$document_type='presentation'">
 					<xsl:if test="字:缩进_411D/字:左_410E/字:绝对_4107">
@@ -8890,7 +8889,7 @@ iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAIAAABLbSncAAAAKElEQVR4nGNRZrhz57+yCuNdBjCAs1kg
 			<xsl:value-of select="@图形引用_C62E"/>
 		</xsl:variable>
 		<xsl:if test="../演:动画_6B1A/演:序列_6B1B[@对象引用_6C28 = $tuxing]">
-			<!--xuliehao yao.wang@cs2c.com.cn-->
+			
 			<xsl:attribute name="draw:id"><xsl:value-of select="$tuxing"/></xsl:attribute>
 		</xsl:if>
 	</xsl:template>
@@ -9542,7 +9541,7 @@ iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAIAAABLbSncAAAAKElEQVR4nGNRZrhz57+yCuNdBjCAs1kg
 		<xsl:param name="refobject"/>
 		<xsl:attribute name="xlink:href"><xsl:variable name="path"><xsl:value-of select="$refobject/对象:路径_D703"/></xsl:variable><xsl:choose><xsl:when test="starts-with( $path,'/data')"><xsl:value-of select="replace($refobject/对象:路径_D703,'/data','Pictures')"/></xsl:when><xsl:otherwise><xsl:choose><!--'/' is for maybe absolute path--><xsl:when test="starts-with($path,'.') or starts-with($path,'/')"><xsl:value-of select="$path"/></xsl:when><xsl:otherwise><xsl:choose><xsl:when test="substring($path,2,1)=':'"><xsl:value-of select="concat( '/',$path)"/></xsl:when><xsl:otherwise><xsl:value-of select="$path"/></xsl:otherwise></xsl:choose></xsl:otherwise></xsl:choose></xsl:otherwise></xsl:choose></xsl:attribute>
 	</xsl:template>
-	<!-- object data ending , yao.wang@cs2c.com.cn -->
+	
 	<xsl:template name="DrawFrame">
 		<xsl:param name="picstyle"/>
 		<xsl:element name="draw:frame">
@@ -9550,38 +9549,6 @@ iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAIAAABLbSncAAAAKElEQVR4nGNRZrhz57+yCuNdBjCAs1kg
 			<xsl:call-template name="DrawCommAttr">
 				<xsl:with-param name="picstyle" select="$picstyle"/>
 			</xsl:call-template>
-			<!-- yao.wang@cs2c.com.cn , starting -->
-			<!--xsl:if test="$picstyle/图:其他对象引用_8038">
-				<xsl:variable name="cs">
-					<xsl:value-of select="$picstyle/图:其他对象引用_8038"/>
-				</xsl:variable>
-				<xsl:choose>
-					<xsl:when test="/uof:UOF_0000/对象:对象数据集_D700/对象:对象数据_D701[@标识符_D704=$cs]">
-						<xsl:element name="draw:frame">
-							<xsl:for-each select="key('other-styles',$picstyle/图:其他对象引用_8038)">
-								<draw:image xlink:actuate="onLoad" xlink:show="embed" xlink:type="simple">
-									<xsl:attribute name="xlink:href"><xsl:value-of select="对象:路径_D703"/></xsl:attribute>
-								</draw:image>
-							</xsl:for-each>
-						</xsl:element>
-					</xsl:when>
-					<!-xsl:when test="/uof:UOF_0000/对象:对象数据集_D700/对象:对象数据_D701[@标识符_D704=$cs]">
-						<xsl:variable name="refobject" select="/uof:UOF_0000/对象:对象数据集_D700/对象:对象数据_D701[@标识符_D704=$cs]"/>
-						<xsl:call-template name="FrmContent">
-							<xsl:with-param name="refobject" select="$refobject"/>
-						</xsl:call-template>
-					</xsl:when->
-					<xsl:when test="/uof:UOF_0000/公式:公式集_C200/公式:数学公式_C201[@标识符_C202=$cs]">
-						<xsl:variable name="refobject" select="/uof:UOF_0000/公式:公式集_C200/公式:数学公式_C201[@标识符_C202=$cs]"/>
-						<xsl:element name="draw:object">
-							<xsl:element name="math:math">
-								<xsl:copy-of select="$refobject/公式:math_C203/*"/>
-							</xsl:element>
-						</xsl:element>
-					</xsl:when>
-				</xsl:choose>
-			</xsl:if-->
-			<!-- yao.wang@cs2c.com.cn , ending. -->
 			<xsl:if test="$picstyle/图:其他对象引用_8038">
 				<xsl:variable name="cs">
 					<xsl:value-of select="$picstyle/图:其他对象引用_8038"/>
@@ -9876,7 +9843,7 @@ iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAIAAABLbSncAAAAKElEQVR4nGNRZrhz57+yCuNdBjCAs1kg
 					</xsl:for-each>
 				</xsl:element>
 			</xsl:when-->
-			<!--integrated Conversion the customshape or frame by anhongyun -->
+			<!--integrated Conversion the customshape or frame -->
 			<!-- change this type to draw:frame -->
 			<xsl:when test="$picstyle/图:图片数据引用_8037">
 				<!--用‘图:预定义图形_8018/图:属性_801D/图:图片属性_801E’判断也可以-->
@@ -13152,91 +13119,6 @@ iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAIAAABLbSncAAAAKElEQVR4nGNRZrhz57+yCuNdBjCAs1kg
 	<!--xsl:key name="condtionalcells" match="/uof:UOF_0000/表:电子表格文档_E826/表:工作表_E825/表:工作表内容_E80E/表:行_E7F1/表:单元格_E7F2" use="@表:条件格式化"/>
 	<xsl:key name="cellstyles" match="/uof:UOF_0000/式样:式样集_990B/式样:单元格式样集_9915/式样:单元格式样_9916" use="@标识符_E7AC"/-->
 	<xsl:template match="规则:条件格式化_B629">
-		<!--xsl:variable name="var_ConditionName" select="@表:名称"/>
-		<xsl:variable name="var_ConditionMap">
-			<xsl:element name="style:map">
-				<xsl:variable name="condition-text">
-					<xsl:choose>
-						<xsl:when test="表:条件/@表:类型='cell value'">
-							<xsl:choose>
-								<xsl:when test="表:条件/表:操作码/text()='between' ">
-									<xsl:value-of select="concat('cell-content-is-between','(',表:第一操作数/text(),',',表:第二操作数/text(),')')"/>
-								</xsl:when>
-								<xsl:when test=" 表:条件/表:操作码/text()='not between'">
-									<xsl:value-of select="concat('cell-content-is-not-between','(',表:第一操作数/text(),',',表:第二操作数/text(),')')"/>
-								</xsl:when>
-								<xsl:when test=" 表:条件/表:操作码/text()='equal to'">
-									<xsl:value-of select="concat('cell-content()=', 表:条件/表:第一操作数/text())"/>
-								</xsl:when>
-								<xsl:when test=" 表:条件/表:操作码/text()='not equal to'">
-									<xsl:value-of select="concat('cell-content()!=',表:条件/表:第一操作数/text())"/>
-								</xsl:when>
-								<xsl:when test=" 表:条件/表:操作码/text()='greater than'">
-									<xsl:value-of select="concat('cell-content()&gt;',表:条件/表:第一操作数/text())"/>
-								</xsl:when>
-								<xsl:when test=" 表:条件/表:操作码/text()='less than'">
-									<xsl:value-of select="concat('cell-content()&lt;',表:条件/表:第一操作数/text())"/>
-								</xsl:when>
-								<xsl:when test=" 表:条件/表:操作码/text()='greater than or equal to'">
-									<xsl:value-of select="concat('cell-content()&gt;=',表:条件/表:第一操作数/text())"/>
-								</xsl:when>
-								<xsl:when test=" 表:条件/表:操作码/text()='less than or equal to'">
-									<xsl:value-of select="concat('cell-content()&lt;=',表:条件/表:第一操作数/text())"/>
-								</xsl:when>
-							</xsl:choose>
-						</xsl:when>
-						<xsl:when test="表:条件/@表:类型='formula'">
-							<xsl:value-of select="concat('is-true-formula','(',表:第一操作数/text(),')')"/>
-						</xsl:when>
-					</xsl:choose>
-				</xsl:variable>
-				<xsl:variable name="address">
-					<xsl:value-of select="表:区域集/表:区域"/>
-				</xsl:variable>
-				<xsl:variable name="apos">&apos;</xsl:variable>
-				<xsl:attribute name="style:condition"><xsl:value-of select="$condition-text"/></xsl:attribute>
-				<xsl:attribute name="style:apply-style-name"><xsl:value-of select="表:条件/表:格式/@表:式样引用"/></xsl:attribute>
-				<xsl:attribute name="style:base-cell-address">
-					<xsl:value-of select="concat(substring-before(substring-after($address,$apos),$apos),'.',substring-before(substring-after(substring-after($address,':'),'$'),'$'),substring-after(substring-after(substring-after($address,':'),'$'),'$'))"/></xsl:attribute>
-			</xsl:element>		
-		</xsl:variable>
-		<xsl:for-each-group select="key('condtionalcells', @名称_E822)" group-by="@表:式样引用">
-			<xsl:variable name="var_DefaultStyle" select="current-grouping-key()"/>
-			<xsl:element name="style:style">
-				<xsl:attribute name="style:name" select="concat($var_ConditionName, $var_DefaultStyle)"/>
-				<xsl:attribute name="style:family">table-cell</xsl:attribute>
-				<xsl:attribute name="style:display-name" select="concat($var_ConditionName, $var_DefaultStyle)"/>
-				<xsl:attribute name="style:parent-style-name">Default</xsl:attribute>
-				<xsl:for-each select="key('cellstyles', $var_DefaultStyle)">
-					<xsl:if test="表:数字格式_E7A9">
-						<xsl:attribute name="style:data-style-name"><xsl:value-of select="concat( @标识符_E7AC, 'F')"/></xsl:attribute>
-					</xsl:if>
-					<xsl:element name="style:table-cell-properties">
-						<xsl:call-template name="TableCellProperties"/>
-					</xsl:element>
-					<xsl:if test="表:对齐格式_E7A8">
-						<xsl:call-template name="TableParaProperties"/>
-					</xsl:if>
-					<xsl:if test="表:字体格式_E7A7">
-						<xsl:element name="style:text-properties">
-							<xsl:for-each select="表:字体格式_E7A7">
-								<xsl:call-template name="TextProperties"/>
-							</xsl:for-each>
-						</xsl:element>
-					</xsl:if>
-				</xsl:for-each>	
-				<xsl:copy-of select="$var_ConditionMap/style:map"/>
-			</xsl:element>
-		</xsl:for-each-group>
-		<xsl:if test="key('condtionalcells', @表:名称)[not(@表:式样引用)]">
-			<xsl:element name="style:style">
-				<xsl:attribute name="style:name" select="$var_ConditionName"/>
-				<xsl:attribute name="style:family">table-cell</xsl:attribute>
-				<xsl:attribute name="style:display-name" select="$var_ConditionName"/>
-				<xsl:attribute name="style:parent-style-name">Default</xsl:attribute>
-				<xsl:copy-of select="$var_ConditionMap/style:map"/>
-			</xsl:element>
-		</xsl:if-->
 		<xsl:for-each select="规则:条件_B62B">
 			<xsl:element name="style:map">
 				<xsl:variable name="condition-text">
@@ -16494,7 +16376,7 @@ iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAIAAABLbSncAAAAKElEQVR4nGNRZrhz57+yCuNdBjCAs1kg
 									<xsl:when test="@列号_E7ED != ''">
 										<xsl:value-of select="@列号_E7ED"/>
 									</xsl:when>
-									<!--wjk add 列中的列号和单元格中的列号编号不同-->
+									<!--列中的列号和单元格中的列号编号不同-->
 									<xsl:when test="@列号_E7BC != ''">
 										<xsl:value-of select="@列号_E7BC"/>
 									</xsl:when>

@@ -1445,7 +1445,7 @@ File gid_File_Xsl_Import_uof_uof2odf_presentation
     Dir = gid_Dir_Share_Xslt_Import_uof;
     Name = "/xslt/import/uof/uof2odf_presentation.xsl";
 End
-/// This is added by wangyumin for uof2-filter from cs2c yumin.wang@cs2c.com.cn on 2012-5-22 14:23:39
+///Begin for uof2-filter
 File  gid_File_Xsl_Export_uof2_odf2uof
     TXT_FILE_BODY;
     Styles = (PACKED);
@@ -1459,7 +1459,7 @@ File gid_File_Xsl_Import_uof2_uof2odf
     Dir = gid_Dir_Share_Xslt_Import_uof2;
     Name = "/xslt/import/uof2/uof2odf.xsl";
 End
-/// End added by wangyumin on 2012-5-22 14:23:39
+/// End
 File gid_File_Xsl_Export_Wordml_Ooo2wordml_Border
     TXT_FILE_BODY;
     Styles = (PACKED);

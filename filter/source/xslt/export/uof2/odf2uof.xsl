@@ -18,7 +18,7 @@
 * under the License.  *  
 *************************************************************/-->
  <!--MARKER(update_precomp.py): autogen include statement, do not remove-->
- <!--//This file is about the conversion of the UOF v2.0 and ODF document format from CS2C 20120610.-->
+ <!--This file is about the conversion of the UOF v2.0 and ODF document format-->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:anim="urn:oasis:names:tc:opendocument:xmlns:animation:1.0" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:dt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882" xmlns:fn="http://www.w3.org/2005/xpath-functions" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:html="http://www.w3.org/TR/REC-html40" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:of="urn:oasis:names:tc:opendocument:xmlns:of:1.2" xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:presentation="urn:oasis:names:tc:opendocument:xmlns:presentation:1.0" xmlns:pzip="urn:cleverage:xmlns:post-processings:zip" xmlns:rdfa="http://docs.oasis-open.org/opendocument/meta/rdfa#" xmlns:fun="http://NSO.com" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:smil="urn:oasis:names:tc:opendocument:xmlns:smil-compatible:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:uof="http://schemas.uof.org/cn/2009/uof" xmlns:xdt="http://www.w3.org/2005/xpath-datatypes" xmlns:xforms="http://www.w3.org/2002/xforms" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:书签="http://schemas.uof.org/cn/2009/bookmarks" xmlns:元="http://schemas.uof.org/cn/2009/metadata" xmlns:公式="http://schemas.uof.org/cn/2009/equations" xmlns:图="http://schemas.uof.org/cn/2009/graph" xmlns:图形="http://schemas.uof.org/cn/2009/graphics" xmlns:图表="http://schemas.uof.org/cn/2009/chart" xmlns:字="http://schemas.uof.org/cn/2009/wordproc" xmlns:对象="http://schemas.uof.org/cn/2009/objects" xmlns:式样="http://schemas.uof.org/cn/2009/styles" xmlns:扩展="http://schemas.uof.org/cn/2009/extend" xmlns:数="http://www.w3.org/1998/Math/MathML" xmlns:数据="http://schemas.uof.org/cn/2009/usd" xmlns:演="http://schemas.uof.org/cn/2009/presentation" xmlns:表="http://schemas.uof.org/cn/2009/spreadsheet" xmlns:规则="http://schemas.uof.org/cn/2009/rules" xmlns:超链="http://schemas.uof.org/cn/2009/hyperlinks" exclude-result-prefixes="office style text table draw xlink dc meta number presentation chart dr3d form script config ooo ooow oooc dom smil fun anim pzip fo svg math xforms" office:version="1.0" version="2.0">
 	<xsl:output encoding="utf-8" indent="no" method="xml" omit-xml-declaration="no" standalone="no" version="1.0" name="xml"/>
 	<xsl:variable name="documentType">
@@ -2288,7 +2288,7 @@
 				</xsl:call-template>
 			</xsl:otherwise>
 		</xsl:choose>
-		<!--liyuan end 070921-->
+		
 	</xsl:template>
 	<xsl:template name="字:编号格式表示-list">
 		<xsl:variable name="jibie">
@@ -3686,7 +3686,7 @@
 						<xsl:variable name="angle">
 							<xsl:value-of select="@draw:angle div 10"/>
 						</xsl:variable>
-						<xsl:attribute name="渐变方向_8013"><xsl:choose><xsl:when test="0 &lt; number($angle) and number($angle) &lt; 25">0</xsl:when><xsl:when test="25 &lt; number($angle) and number($angle) &lt; 70">45</xsl:when><xsl:when test="70 &lt; number($angle) and number($angle) &lt; 115">90</xsl:when><xsl:when test="115 &lt; number($angle) and number($angle) &lt; 160">135</xsl:when><xsl:when test="160 &lt; number($angle) and number($angle)&lt;205">180</xsl:when><xsl:when test="205&lt;number($angle) and number($angle)&lt;250">225</xsl:when><xsl:when test="250&lt;number($angle) and number($angle)&lt;295">270</xsl:when><xsl:when test="295&lt;number($angle) and number($angle)&lt;340">315</xsl:when><xsl:when test="340&lt;number($angle) and number($angle)&lt;360">360</xsl:when><!--lijian 0926--><xsl:otherwise>0</xsl:otherwise><!--lijian 0926--></xsl:choose></xsl:attribute>
+						<xsl:attribute name="渐变方向_8013"><xsl:choose><xsl:when test="0 &lt; number($angle) and number($angle) &lt; 25">0</xsl:when><xsl:when test="25 &lt; number($angle) and number($angle) &lt; 70">45</xsl:when><xsl:when test="70 &lt; number($angle) and number($angle) &lt; 115">90</xsl:when><xsl:when test="115 &lt; number($angle) and number($angle) &lt; 160">135</xsl:when><xsl:when test="160 &lt; number($angle) and number($angle)&lt;205">180</xsl:when><xsl:when test="205&lt;number($angle) and number($angle)&lt;250">225</xsl:when><xsl:when test="250&lt;number($angle) and number($angle)&lt;295">270</xsl:when><xsl:when test="295&lt;number($angle) and number($angle)&lt;340">315</xsl:when><xsl:when test="340&lt;number($angle) and number($angle)&lt;360">360</xsl:when><xsl:otherwise>0</xsl:otherwise></xsl:choose></xsl:attribute>
 						<xsl:attribute name="边界_8014"><xsl:value-of select="substring-before(@draw:border,'%')"/></xsl:attribute>
 						<xsl:if test="@draw:cx">
 							<xsl:attribute name="种子X位置_8015"><xsl:value-of select="substring-before(@draw:cx,'%')"/></xsl:attribute>
@@ -3849,7 +3849,7 @@
 							<xsl:when test="key('markerSize',$graphproperty/@draw:marker-start)/@svg:viewBox = '0 0 350 140'">7</xsl:when>
 							<xsl:when test="key('markerSize',$graphproperty/@draw:marker-start)/@svg:viewBox = '0 0 350 210'">8</xsl:when>
 							<xsl:when test="key('markerSize',$graphproperty/@draw:marker-start)/@svg:viewBox = '0 0 350 350'">9</xsl:when>
-							<!--anhongyun 20111016 schema 校验问题，只允许整型-->
+							<!--schema 校验问题，只允许整型-->
 							<xsl:otherwise>10</xsl:otherwise>
 						</xsl:choose>
 					</图:大小_8001>
@@ -4684,7 +4684,7 @@
 				<!--暂时无法判断draw:modifiers中只有一个数值时，这个值是x坐标还是y坐标。目前统一记在x坐标中-->
 				<xsl:attribute name="x_C606"><xsl:choose><xsl:when test="contains($modifiers,' ')"><xsl:value-of select="substring-before($modifiers,' ')"/></xsl:when><xsl:otherwise><xsl:value-of select="$modifiers"/></xsl:otherwise></xsl:choose></xsl:attribute>
 				<xsl:if test="contains($modifiers,' ')">
-					<xsl:attribute name="y_C607"><!--anhongyun 20111016 schema校验问题--><xsl:value-of select="substring-before(substring-after($modifiers,' '),' ')"/></xsl:attribute>
+					<xsl:attribute name="y_C607"><!--schema校验问题--><xsl:value-of select="substring-before(substring-after($modifiers,' '),' ')"/></xsl:attribute>
 				</xsl:if>
 			</图:控制点_8039>
 		</xsl:if>
@@ -5866,7 +5866,7 @@
 			<xsl:variable name="rowStyleName" select="./@table:style-name"/>
 			<xsl:element name="字:表行属性_41BD">
 				<xsl:for-each select="key('RowStyle',$rowStyleName)/style:table-row-properties[@style:row-height or @style:min-row-height]">
-					<!--chenhao20081120-->
+					
 					<xsl:variable name="style_name">
 						<xsl:variable name="bb">
 							<xsl:for-each select="../preceding-sibling::*[@style:family = 'table-row']">
@@ -8040,7 +8040,6 @@
 						<xsl:value-of select="string(.)"/>
 					</xsl:otherwise>
 				</xsl:choose>
-				<!--end-->
 			</字:文本串_415B>
 		</字:句_419D>
 		<xsl:element name="字:域结束_41A0">
@@ -8137,7 +8136,6 @@
 						<xsl:value-of select="string(.)"/>
 					</xsl:otherwise>
 				</xsl:choose>
-				<!--end-->
 			</字:文本串_415B>
 		</字:句_419D>
 		<xsl:element name="字:域结束_41A0">
@@ -10287,9 +10285,6 @@
 	<xsl:template match="table:consolidation"/>
 	<xsl:template match="table:dde-links"/>
 	<xsl:template name="SpreadsheetCommonRule">
-		<!--插件中新增条件格式化预处理
-		<xsl:apply-templates mode="common" select="/office:document/office:body/office:spreadsheet/table:calculation-settings"/>
-		<xsl:apply-templates mode="common" select="/office:document/office:body/office:spreadsheet/table:content-validations"/>-->
 		<xsl:if test="/office:document/office:automatic-styles/style:style[@style:family='table-cell' and style:map]">
 			<xsl:element name="规则:条件格式化集_B618">
 				<xsl:call-template name="create-condition-format"/>
@@ -12349,7 +12344,6 @@
 					<xsl:attribute name="y_C607"><xsl:value-of select="fun:Convert2uofUnit(@svg:y)"/></xsl:attribute>
 				</xsl:if>
 			</图表:位置_E70A>
-			<!--anhongyun 20081222-->
 			<xsl:if test="@chart:legend-position">
 				<xsl:variable name="position">
 					<xsl:variable name="legend-position" select="@chart:legend-position"/>
@@ -12597,7 +12591,7 @@
 					<xsl:otherwise>A4</xsl:otherwise>
 				</xsl:choose>
 			</xsl:variable>
-			<!--wjk 去掉纸型 on 2011 05 11-->
+			<!--去掉纸型-->
 			<!--xsl:attribute name="纸型_C60C"><xsl:value-of select="$paperType"/></xsl:attribute-->
 			<xsl:variable name="uofwidth">
 				<xsl:choose>
@@ -15208,7 +15202,7 @@
 				</xsl:choose>
 			</xsl:variable>
 			<xsl:attribute name="对象引用_6C28"><xsl:value-of select="$targetName"/></xsl:attribute>
-			<!--适应最新序列号 wangzhenxing20111013-->
+			<!--适应最新序列号-->
 			<演:定时_6B2E>
 				<xsl:variable name="animationSpeed">
 					<!--very slow 5s	slow 3s medium 2s	fast 1s		very fast 0.5s-->
@@ -15898,11 +15892,9 @@
 					<xsl:when test="parent::anim:par/anim:animate/@smil:to='0.5pt' ">
 						<xsl:attribute name="预定义尺寸_6B92">smaller</xsl:attribute>
 					</xsl:when>
-					<!--from zhangyq modify 20090306-->
 					<xsl:when test="parent::anim:par/anim:animate/@smil:to='1.5pt' ">
 						<xsl:attribute name="预定义尺寸_6B92">larger</xsl:attribute>
 					</xsl:when>
-					<!--from zhangyq modify 20090306 end-->
 					<xsl:when test="parent::anim:par/anim:animate/@smil:to='4pt' ">
 						<xsl:attribute name="预定义尺寸_6B92">huge</xsl:attribute>
 					</xsl:when>
@@ -15944,7 +15936,7 @@
 						<xsl:attribute name="自定义透明度_6BA5"><xsl:value-of select="number(substring(../anim:set/@smil:to,1,4)) * 100"/></xsl:attribute>
 					</xsl:otherwise>
 				</xsl:choose>
-				<xsl:attribute name="期间_6BA6"><!--begin--><xsl:variable name="qijian" select="string(../anim:set[1]/@smil:dur)"/><xsl:choose><xsl:when test="$qijian='until next click'">until-next-click</xsl:when><xsl:when test="$qijian='indefinite'">until-end-of-slide</xsl:when><xsl:when test="$qijian='1.0s' or $qijian='1s'">1.0</xsl:when><xsl:when test="$qijian='2s' or $qijian='2.0s'">2.0</xsl:when><xsl:when test="$qijian='3s' or $qijian='3.0s'">3.0</xsl:when><xsl:when test="$qijian='4s' or $qijian='4.0s'">4.0</xsl:when><xsl:when test="$qijian='5s' or $qijian='5.0s'">5.0</xsl:when><xsl:when test="$qijian='0.5s'">0.5</xsl:when><xsl:otherwise>2.0</xsl:otherwise></xsl:choose></xsl:attribute>
+				<xsl:attribute name="期间_6BA6"><xsl:variable name="qijian" select="string(../anim:set[1]/@smil:dur)"/><xsl:choose><xsl:when test="$qijian='until next click'">until-next-click</xsl:when><xsl:when test="$qijian='indefinite'">until-end-of-slide</xsl:when><xsl:when test="$qijian='1.0s' or $qijian='1s'">1.0</xsl:when><xsl:when test="$qijian='2s' or $qijian='2.0s'">2.0</xsl:when><xsl:when test="$qijian='3s' or $qijian='3.0s'">3.0</xsl:when><xsl:when test="$qijian='4s' or $qijian='4.0s'">4.0</xsl:when><xsl:when test="$qijian='5s' or $qijian='5.0s'">5.0</xsl:when><xsl:when test="$qijian='0.5s'">0.5</xsl:when><xsl:otherwise>2.0</xsl:otherwise></xsl:choose></xsl:attribute>
 			</演:透明_6BA3>
 		</演:基本型_6B42>
 	</xsl:template>
@@ -16025,7 +16017,7 @@
 			</演:不饱和_6BAF>
 		</演:细微型_6B66>
 	</xsl:template>
-	<!--垂直突出显示 RO缺失-->
+	<!--垂直突出显示-->
 	<!--flash bulb	忽明忽暗	   -->
 	<xsl:template match="@presentation:preset-id[. = 'ooo-emphasis-flash-bulb']">
 		<演:细微型_6B66>
