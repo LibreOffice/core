@@ -39,6 +39,8 @@
 #include <osl/mutex.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/uuid.h>
+
+#include <telepathy-glib/telepathy-glib.h>
 #include <map>
 
 namespace css = ::com::sun::star;

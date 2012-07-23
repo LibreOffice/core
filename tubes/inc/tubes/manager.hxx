@@ -37,7 +37,6 @@
 #include <salhelper/thread.hxx>
 #include <rtl/ref.hxx>
 #include <tools/link.hxx>
-#include <telepathy-glib/telepathy-glib.h>
 
 // For testing purposes, we might need more in future.
 #define LIBO_TUBES_DBUS_INTERFACE "org.libreoffice.calc"
@@ -46,6 +45,10 @@
 
 namespace osl { class Mutex; }
 class TeleManagerImpl;
+typedef struct _TpAccount TpAccount;
+typedef struct _TpContact TpContact;
+typedef struct _GMainLoop GMainLoop;
+typedef struct _GMainContext GMainContext;
 
 /** Interface to Telepathy DBus Tubes.
 

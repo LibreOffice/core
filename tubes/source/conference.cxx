@@ -31,6 +31,7 @@
 #include <tubes/constants.h>
 #include <tubes/file-transfer-helper.h>
 
+#include <telepathy-glib/telepathy-glib.h>
 #include <queue>
 
 #if defined SAL_LOG_INFO
