@@ -808,7 +808,7 @@ void MinimalCommandEnv::handle(
 */
 static bool needsInstallBundledExtensionBlobs (
     const ::rtl::OUString& rsMarkerURL,
-    ::osl::Directory& rDirectory)
+    const ::rtl::OUString& rsDirectoryURL)
 {
     ::osl::DirectoryItem aMarkerItem;
     if (::osl::DirectoryItem::get(rsMarkerURL, aMarkerItem) == ::osl::File::E_NOENT)
@@ -826,14 +826,18 @@ static bool needsInstallBundledExtensionBlobs (
 
     const TimeValue aMarkerModifyTime (aMarkerStat.getModifyTime());
 
-    if (rDirectory.open() != osl::File::E_None)
+    ::osl::Directory aDirectory (rsDirectoryURL);
+    if (aDirectory.open() != osl::File::E_None)
     {
         // No extension directory.  Nothing to be done.
         return false;
     }
 
+    // Check the date of each extension in the given directory.  If
+    // any of them is newer than the marker file then an installation
+    // is necessary.
     ::osl::DirectoryItem aDirectoryItem;
-    while (rDirectory.getNextItem(aDirectoryItem) == osl::File::E_None)
+    while (aDirectory.getNextItem(aDirectoryItem) == osl::File::E_None)
     {
         ::osl::FileStatus aFileStat (FileStatusMask_ModifyTime);
         if (aDirectoryItem.getFileStatus(aFileStat) != ::osl::File::E_None)
@@ -842,11 +846,30 @@ static bool needsInstallBundledExtensionBlobs (
             continue;
         if (aFileStat.getModifyTime().Seconds > aMarkerModifyTime.Seconds)
         {
-            rDirectory.close();
+            aDirectory.close();
             return true;
         }
     }
-    rDirectory.close();
+    aDirectory.close();
+
+    // Also check the last modification time of the containing
+    // directory.  This ensures installation after an update of
+    // OpenOffice.  Without it the extensions have the date on which
+    // they where built, not the date on which they where installed.
+    if (::osl::DirectoryItem::get(rsDirectoryURL, aDirectoryItem) == osl::File::E_None)
+    {
+        ::osl::FileStatus aDirectoryStat (FileStatusMask_ModifyTime);
+        const ::osl::FileBase::RC eResult (aDirectoryItem.getFileStatus(aDirectoryStat));
+        if (eResult == ::osl::File::E_None)
+        {
+            rtl_logfile_longTrace("|    checking last modification time of containing directory %s\n", U2A(rsDirectoryURL));
+            if (aDirectoryStat.getModifyTime().Seconds > aMarkerModifyTime.Seconds)
+            {
+                rtl_logfile_longTrace("|        containing directory is newer than marker\n");
+                return true;
+            }
+        }
+    }
 
     // No file in the directory is newer than the marker.
     return false;
@@ -864,7 +887,7 @@ static void installBundledExtensionBlobs()
     // than the marker we have to install any extension.
     ::rtl::OUString sMarkerURL (RTL_CONSTASCII_USTRINGPARAM("$BUNDLED_EXTENSIONS_USER/lastsynchronized.bundled"));
     ::rtl::Bootstrap::expandMacros(sMarkerURL);
-    if ( ! needsInstallBundledExtensionBlobs(sMarkerURL, aDir))
+    if ( ! needsInstallBundledExtensionBlobs(sMarkerURL, aDirUrl))
         return;
     writeLastModified(sMarkerURL);
 
