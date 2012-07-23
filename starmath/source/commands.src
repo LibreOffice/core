@@ -864,7 +864,7 @@ Menu RID_COMMANDMENU
                                 {
                                     Identifier = RID_ARCCOTX;
                                     HelpId = HID_SMA_ARCCOTX;
-                                    Text = "arcot(x)";
+                                    Text = "arccot(x)";
                                 };
                                 MenuItem
                                 {
