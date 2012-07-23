@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAMn////A\u003d",
+        "filename": "desktop/source/app/app.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1713,
+      "author": {
+        "id": 1000035
+      },
+      "writtenOn": "2012-07-23T20:27:42Z",
+      "side": 1,
+      "message": "The idea is that we have our service registered by .service file and Channel Dispatcher calls ./soffice --invisible. LibreOffice then accepts channel, file, open it, and there is UI.\nAlso it could work if we already run LibreOffice without registering but I did not try it yet.\n\nI\u0027ve left the Listen option for the case if we don\u0027t have .service file.\nAnd I did not want registering to be default because you can register only once and then get errors with second LibreOffice running.",
+      "parentUuid": "AAAAMn////k\u003d",
+      "revId": "3d29aeb8697c2b3438eb7751c70c4ed2a46ce13c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAMn////g\u003d",
         "filename": "desktop/source/app/app.cxx",
         "patchSetId": 1
@@ -47,6 +65,24 @@
       "writtenOn": "2012-07-23T11:35:47Z",
       "side": 1,
       "message": "I\u0027d prefer if we used SAL_INFO(\"sc.tubes\",...) instead of fprintf, fprintf would have to be removed at the end and SAL_INFO could stay in, just that code has to be built with debug\u003dtrue to actually see output.",
+      "revId": "3d29aeb8697c2b3438eb7751c70c4ed2a46ce13c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///+4\u003d",
+        "filename": "sc/source/ui/collab/contacts.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1000035
+      },
+      "writtenOn": "2012-07-23T20:27:42Z",
+      "side": 1,
+      "message": "But that\u0027s the reason to use fprintf, because I am not doing debug build in sc/.\nIt\u0027s slow and I am re-building quite often to test changes.\nBut sure, the code I am pushing could be without any fprintf. It\u0027s there since Michael\u0027s hacking.",
+      "parentUuid": "AAAAMn////o\u003d",
       "revId": "3d29aeb8697c2b3438eb7751c70c4ed2a46ce13c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false

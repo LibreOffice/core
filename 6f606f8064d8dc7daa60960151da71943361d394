@@ -16,6 +16,24 @@
       "revId": "6f606f8064d8dc7daa60960151da71943361d394",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///+8\u003d",
+        "filename": "sc/source/ui/collab/contacts.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1000035
+      },
+      "writtenOn": "2012-07-23T20:27:42Z",
+      "side": 0,
+      "message": "I will leave Unlisten for later. It even might not be necessary.",
+      "parentUuid": "AAAAMn////s\u003d",
+      "revId": "6f606f8064d8dc7daa60960151da71943361d394",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
