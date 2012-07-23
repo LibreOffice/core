@@ -133,6 +133,7 @@ public:
     struct OOX_DLLPUBLIC AttributeList
     {
         bool hasAttribute( int token ) const;
+        OUString& operator[] (int token);
         rtl::OUString attribute( int token, const rtl::OUString& def = rtl::OUString()) const;
         bool attribute( int token, bool def ) const;
         sal_Unicode attribute( int token, sal_Unicode def ) const;
@@ -148,6 +149,8 @@ public:
         Tag( int token = XML_TOKEN_INVALID,
             const com::sun::star::uno::Reference< com::sun::star::xml::sax::XFastAttributeList >& attributes = com::sun::star::uno::Reference< com::sun::star::xml::sax::XFastAttributeList >(),
             const rtl::OUString& text = rtl::OUString());
+        Tag( int token,
+            const AttributeList& attribs);
         int token; ///< tag type, or XML_TOKEN_INVALID
         AttributeList attributes;
         rtl::OUString text;
@@ -236,7 +239,9 @@ class OOX_DLLPUBLIC XmlStreamBuilder
 {
 public:
     void appendOpeningTag( int token,
-        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XFastAttributeList >& attributes );
+        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XFastAttributeList >& attributes = com::sun::star::uno::Reference< com::sun::star::xml::sax::XFastAttributeList >());
+    void appendOpeningTag( int token,
+        const AttributeList& attribs );
     void appendClosingTag( int token );
     // appends the characters after the last appended token
     void appendCharacters( const rtl::OUString& characters );

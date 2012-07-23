@@ -114,6 +114,11 @@ static OUString tokenToString( int token )
 
 } // namespace
 
+OUString& XmlStream::AttributeList::operator[] (int token)
+{
+    return attrs[token];
+}
+
 rtl::OUString XmlStream::AttributeList::attribute( int token, const rtl::OUString& def ) const
 {
     std::map< int, rtl::OUString >::const_iterator find = attrs.find( token );
@@ -162,6 +167,12 @@ XmlStream::Tag::Tag( int t, const uno::Reference< xml::sax::XFastAttributeList >
 : token( t )
 , attributes( AttributeListBuilder( a ))
 , text( txt )
+{
+}
+
+XmlStream::Tag::Tag( int t, const AttributeList& a )
+: token( t )
+, attributes( a )
 {
 }
 
@@ -333,6 +344,11 @@ void XmlStream::handleUnexpectedTag()
 
 
 void XmlStreamBuilder::appendOpeningTag( int token, const uno::Reference< xml::sax::XFastAttributeList >& attrs )
+{
+    tags.push_back( Tag( OPENING( token ), attrs ));
+}
+
+void XmlStreamBuilder::appendOpeningTag( int token, const AttributeList& attrs )
 {
     tags.push_back( Tag( OPENING( token ), attrs ));
 }
