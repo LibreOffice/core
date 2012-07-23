@@ -1,6 +1,7 @@
 --- misc/boost_1_44_0/boost/smart_ptr/make_shared.hpp	(revision 69250)
 +++ misc/build/boost_1_44_0/boost/smart_ptr/make_shared.hpp	(revision 69251)
-@@ -50,5 +50,16 @@
+@@ -49,7 +49,18 @@
+     {
          if( initialized_ )
          {
 +#if defined( __GNUC__ )
@@ -17,3 +18,4 @@
 +
              initialized_ = false;
          }
+     }
