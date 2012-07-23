@@ -58,12 +58,12 @@ Point ScOutputData::PrePrintDrawingLayer(long nLogStX, long nLogStY )
     long nLayoutSign(bLayoutRTL ? -1 : 1);
 
     for (nCol=0; nCol<nX1; nCol++)
-        aOffset.X() -= pDoc->GetColWidth( nCol, nTab ) * nLayoutSign;
-    aOffset.Y() -= pDoc->GetRowHeight( 0, nY1-1, nTab );
+        aOffset.X() -= mpDoc->GetColWidth( nCol, nTab ) * nLayoutSign;
+    aOffset.Y() -= mpDoc->GetRowHeight( 0, nY1-1, nTab );
 
     long nDataWidth = 0;
     for (nCol=nX1; nCol<=nX2; nCol++)
-        nDataWidth += pDoc->GetColWidth( nCol, nTab );
+        nDataWidth += mpDoc->GetColWidth( nCol, nTab );
 
     if ( bLayoutRTL )
         aOffset.X() += nDataWidth;
@@ -79,8 +79,8 @@ Point ScOutputData::PrePrintDrawingLayer(long nLogStX, long nLogStY )
         aMMOffset += Point( nLogStX, nLogStY );
 
     for (nCol=nX1; nCol<=nX2; nCol++)
-        aRect.Right() += pDoc->GetColWidth( nCol, nTab );
-    aRect.Bottom() += pDoc->GetRowHeight( nY1, nY2, nTab );
+        aRect.Right() += mpDoc->GetColWidth( nCol, nTab );
+    aRect.Bottom() += mpDoc->GetRowHeight( nY1, nY2, nTab );
 
     aRect.Left()   = (long) (aRect.Left()   * HMM_PER_TWIPS);
     aRect.Top()    = (long) (aRect.Top()    * HMM_PER_TWIPS);
@@ -94,19 +94,19 @@ Point ScOutputData::PrePrintDrawingLayer(long nLogStX, long nLogStY )
         if(pLocalDrawView)
         {
             // #i76114# MapMode has to be set because BeginDrawLayers uses GetPaintRegion
-            MapMode aOldMode = pDev->GetMapMode();
+            MapMode aOldMode = mpDev->GetMapMode();
             if (!bMetaFile)
-                pDev->SetMapMode( MapMode( MAP_100TH_MM, aMMOffset, aOldMode.GetScaleX(), aOldMode.GetScaleY() ) );
+                mpDev->SetMapMode( MapMode( MAP_100TH_MM, aMMOffset, aOldMode.GetScaleX(), aOldMode.GetScaleY() ) );
 
             // #i74769# work with SdrPaintWindow directly
             // #i76114# pass bDisableIntersect = true, because the intersection of the table area
             // with the Window's paint region can be empty
             Region aRectRegion(aRect);
-            mpTargetPaintWindow = pLocalDrawView->BeginDrawLayers(pDev, aRectRegion, true);
+            mpTargetPaintWindow = pLocalDrawView->BeginDrawLayers(mpDev, aRectRegion, true);
             OSL_ENSURE(mpTargetPaintWindow, "BeginDrawLayers: Got no SdrPaintWindow (!)");
 
             if (!bMetaFile)
-                pDev->SetMapMode( aOldMode );
+                mpDev->SetMapMode( aOldMode );
         }
     }
 
@@ -118,11 +118,11 @@ void ScOutputData::PostPrintDrawingLayer(const Point& rMMOffset) // #i74768#
 {
     // #i74768# just use offset as in PrintDrawingLayer() to also get the form controls
     // painted with offset
-    MapMode aOldMode = pDev->GetMapMode();
+    MapMode aOldMode = mpDev->GetMapMode();
 
     if (!bMetaFile)
     {
-        pDev->SetMapMode( MapMode( MAP_100TH_MM, rMMOffset, aOldMode.GetScaleX(), aOldMode.GetScaleY() ) );
+        mpDev->SetMapMode( MapMode( MAP_100TH_MM, rMMOffset, aOldMode.GetScaleX(), aOldMode.GetScaleY() ) );
     }
 
     if(pViewShell || pDrawView)
@@ -140,7 +140,7 @@ void ScOutputData::PostPrintDrawingLayer(const Point& rMMOffset) // #i74768#
     // #i74768#
     if (!bMetaFile)
     {
-        pDev->SetMapMode( aOldMode );
+        mpDev->SetMapMode( aOldMode );
     }
 }
 
@@ -161,16 +161,16 @@ void ScOutputData::PrintDrawingLayer(const sal_uInt16 nLayer, const Point& rMMOf
     }
 
     // #109985#
-    if(bHideAllDrawingLayer || (!pDoc->GetDrawLayer()))
+    if(bHideAllDrawingLayer || (!mpDoc->GetDrawLayer()))
     {
         return;
     }
 
-    MapMode aOldMode = pDev->GetMapMode();
+    MapMode aOldMode = mpDev->GetMapMode();
 
     if (!bMetaFile)
     {
-        pDev->SetMapMode( MapMode( MAP_100TH_MM, rMMOffset, aOldMode.GetScaleX(), aOldMode.GetScaleY() ) );
+        mpDev->SetMapMode( MapMode( MAP_100TH_MM, rMMOffset, aOldMode.GetScaleX(), aOldMode.GetScaleY() ) );
     }
 
     // #109985#
@@ -178,14 +178,14 @@ void ScOutputData::PrintDrawingLayer(const sal_uInt16 nLayer, const Point& rMMOf
 
     if (!bMetaFile)
     {
-        pDev->SetMapMode( aOldMode );
+        mpDev->SetMapMode( aOldMode );
     }
 }
 
 // #109985#
 void ScOutputData::DrawSelectiveObjects(const sal_uInt16 nLayer)
 {
-    ScDrawLayer* pModel = pDoc->GetDrawLayer();
+    ScDrawLayer* pModel = mpDoc->GetDrawLayer();
     if (!pModel)
         return;
 
@@ -193,9 +193,9 @@ void ScOutputData::DrawSelectiveObjects(const sal_uInt16 nLayer)
     //  by the application, so it's still needed when using DrawLayer().
 
     SdrOutliner& rOutl = pModel->GetDrawOutliner();
-    rOutl.EnableAutoColor( bUseStyleColor );
+    rOutl.EnableAutoColor( mbUseStyleColor );
     rOutl.SetDefaultHorizontalTextDirection(
-                (EEHorizontalTextDirection)pDoc->GetEditTextDirection( nTab ) );
+                (EEHorizontalTextDirection)mpDoc->GetEditTextDirection( nTab ) );
 
     //  #i69767# The hyphenator must be set (used to be before drawing a text shape with hyphenation).
     //  LinguMgr::GetHyphenator (EditEngine) uses a wrapper now that creates the real hyphenator on demand,
@@ -203,10 +203,10 @@ void ScOutputData::DrawSelectiveObjects(const sal_uInt16 nLayer)
 
     pModel->UseHyphenator();
 
-    sal_uLong nOldDrawMode = pDev->GetDrawMode();
-    if ( bUseStyleColor && Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
+    sal_uLong nOldDrawMode = mpDev->GetDrawMode();
+    if ( mbUseStyleColor && Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
     {
-        pDev->SetDrawMode( nOldDrawMode | DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL |
+        mpDev->SetDrawMode( nOldDrawMode | DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL |
                             DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT );
     }
 
@@ -221,12 +221,12 @@ void ScOutputData::DrawSelectiveObjects(const sal_uInt16 nLayer)
 
             if(pPageView)
             {
-                pPageView->DrawLayer(sal::static_int_cast<SdrLayerID>(nLayer), pDev);
+                pPageView->DrawLayer(sal::static_int_cast<SdrLayerID>(nLayer), mpDev);
             }
         }
     }
 
-    pDev->SetDrawMode(nOldDrawMode);
+    mpDev->SetDrawMode(nOldDrawMode);
 
     // #109985#
     return;

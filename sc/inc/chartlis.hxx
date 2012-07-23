@@ -78,7 +78,7 @@ private:
 
     rtl::OUString maName;
     ScChartUnoData* pUnoData;
-    ScDocument*     pDoc;
+    ScDocument*     mpDoc;
     bool            bUsed:1;  // for ScChartListenerCollection::FreeUnused
     bool            bDirty:1;
     bool            bSeriesRangesScheduled:1;

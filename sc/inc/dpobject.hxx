@@ -422,7 +422,7 @@ private:
 private:
     typedef ::boost::ptr_vector<ScDPObject> TablesType;
 
-    ScDocument* pDoc;
+    ScDocument* mpDoc;
     TablesType maTables;
     SheetCaches maSheetCaches;
     NameCaches maNameCaches;

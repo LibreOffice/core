@@ -123,7 +123,7 @@ ScChartListener::ScChartListener( const rtl::OUString& rName, ScDocument* pDocP,
     mpTokens(new vector<ScTokenRef>),
     maName(rName),
     pUnoData( NULL ),
-    pDoc( pDocP ),
+    mpDoc( pDocP ),
     bUsed( false ),
     bDirty( false ),
     bSeriesRangesScheduled( false )
@@ -137,7 +137,7 @@ ScChartListener::ScChartListener( const rtl::OUString& rName, ScDocument* pDocP,
     mpTokens(pTokens),
     maName(rName),
     pUnoData( NULL ),
-    pDoc( pDocP ),
+    mpDoc( pDocP ),
     bUsed( false ),
     bDirty( false ),
     bSeriesRangesScheduled( false )
@@ -150,7 +150,7 @@ ScChartListener::ScChartListener( const ScChartListener& r ) :
     mpTokens(new vector<ScTokenRef>(*r.mpTokens)),
     maName(r.maName),
     pUnoData( NULL ),
-    pDoc( r.pDoc ),
+    mpDoc( r.mpDoc ),
     bUsed( false ),
     bDirty( r.bDirty ),
     bSeriesRangesScheduled( r.bSeriesRangesScheduled )
@@ -163,9 +163,9 @@ ScChartListener::ScChartListener( const ScChartListener& r ) :
         // Re-register this new listener for the files that the old listener
         // was listening to.
 
-        ScExternalRefManager* pRefMgr = pDoc->GetExternalRefManager();
+        ScExternalRefManager* pRefMgr = mpDoc->GetExternalRefManager();
         const boost::unordered_set<sal_uInt16>& rFileIds = r.mpExtRefListener->getAllFileIds();
-        mpExtRefListener.reset(new ExternalRefListener(*this, pDoc));
+        mpExtRefListener.reset(new ExternalRefListener(*this, mpDoc));
         boost::unordered_set<sal_uInt16>::const_iterator itr = rFileIds.begin(), itrEnd = rFileIds.end();
         for (; itr != itrEnd; ++itr)
         {
@@ -184,7 +184,7 @@ ScChartListener::~ScChartListener()
     if (mpExtRefListener.get())
     {
         // Stop listening to all external files.
-        ScExternalRefManager* pRefMgr = pDoc->GetExternalRefManager();
+        ScExternalRefManager* pRefMgr = mpDoc->GetExternalRefManager();
         const boost::unordered_set<sal_uInt16>& rFileIds = mpExtRefListener->getAllFileIds();
         boost::unordered_set<sal_uInt16>::const_iterator itr = rFileIds.begin(), itrEnd = rFileIds.end();
         for (; itr != itrEnd; ++itr)
@@ -228,11 +228,11 @@ void ScChartListener::Notify( SvtBroadcaster&, const SfxHint& rHint )
 
 void ScChartListener::Update()
 {
-    if ( pDoc->IsInInterpreter() )
+    if ( mpDoc->IsInInterpreter() )
     {   // If interpreting do nothing and restart timer so we don't
         // interfere with interpreter and don't produce an Err522 or similar.
         // This may happen if we are rescheduled via Basic function.
-        pDoc->GetChartListenerCollection()->StartTimer();
+        mpDoc->GetChartListenerCollection()->StartTimer();
         return ;
     }
     if ( pUnoData )
@@ -244,10 +244,10 @@ void ScChartListener::Update()
                                         0, 0, 0, 0 );
         pUnoData->GetListener()->chartDataChanged( aEvent );
     }
-    else if ( pDoc->GetAutoCalc() )
+    else if ( mpDoc->GetAutoCalc() )
     {
         bDirty = false;
-        pDoc->UpdateChart(GetName());
+        mpDoc->UpdateChart(GetName());
     }
 }
 
@@ -335,7 +335,7 @@ void ScChartListener::StartListeningTo()
         // no references to listen to.
         return;
 
-    for_each(mpTokens->begin(), mpTokens->end(), StartEndListening(pDoc, *this, true));
+    for_each(mpTokens->begin(), mpTokens->end(), StartEndListening(mpDoc, *this, true));
 }
 
 void ScChartListener::EndListeningTo()
@@ -344,7 +344,7 @@ void ScChartListener::EndListeningTo()
         // no references to listen to.
         return;
 
-    for_each(mpTokens->begin(), mpTokens->end(), StartEndListening(pDoc, *this, false));
+    for_each(mpTokens->begin(), mpTokens->end(), StartEndListening(mpDoc, *this, false));
 }
 
 
@@ -377,7 +377,7 @@ void ScChartListener::UpdateChartIntersecting( const ScRange& rRange )
     if (ScRefTokenHelper::intersects(*mpTokens, pToken))
     {
         // force update (chart has to be loaded), don't use ScChartListener::Update
-        pDoc->UpdateChart(GetName());
+        mpDoc->UpdateChart(GetName());
     }
 }
 
@@ -386,13 +386,13 @@ void ScChartListener::UpdateSeriesRanges()
 {
     ScRangeListRef pRangeList(new ScRangeList);
     ScRefTokenHelper::getRangeListFromTokens(*pRangeList, *mpTokens);
-    pDoc->SetChartRangeList(GetName(), pRangeList);
+    mpDoc->SetChartRangeList(GetName(), pRangeList);
 }
 
 ScChartListener::ExternalRefListener* ScChartListener::GetExtRefListener()
 {
     if (!mpExtRefListener.get())
-        mpExtRefListener.reset(new ExternalRefListener(*this, pDoc));
+        mpExtRefListener.reset(new ExternalRefListener(*this, mpDoc));
 
     return mpExtRefListener.get();
 }
@@ -400,7 +400,7 @@ ScChartListener::ExternalRefListener* ScChartListener::GetExtRefListener()
 void ScChartListener::SetUpdateQueue()
 {
     bDirty = true;
-    pDoc->GetChartListenerCollection()->StartTimer();
+    mpDoc->GetChartListenerCollection()->StartTimer();
 }
 
 bool ScChartListener::operator==( const ScChartListener& r ) const
@@ -408,7 +408,7 @@ bool ScChartListener::operator==( const ScChartListener& r ) const
     bool b1 = (mpTokens.get() && !mpTokens->empty());
     bool b2 = (r.mpTokens.get() && !r.mpTokens->empty());
 
-    if (pDoc != r.pDoc || bUsed != r.bUsed || bDirty != r.bDirty ||
+    if (mpDoc != r.mpDoc || bUsed != r.bUsed || bDirty != r.bDirty ||
         bSeriesRangesScheduled != r.bSeriesRangesScheduled ||
         GetName() != r.GetName() || b1 != b2)
         return false;

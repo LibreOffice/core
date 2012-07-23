@@ -186,7 +186,7 @@ void SwChapterNumRules::ApplyNumRules(const SwNumRulesWithName &rCopy, sal_uInt1
 
 SwNumRulesWithName::SwNumRulesWithName( const SwNumRule &rCopy,
                                         const String &rName )
-    : aName(rName)
+    : maName(rName)
 {
     for( sal_uInt16 n = 0; n < MAXLEVEL; ++n )
     {
@@ -214,7 +214,7 @@ const SwNumRulesWithName& SwNumRulesWithName::operator=(const SwNumRulesWithName
 {
     if( this != &rCopy )
     {
-        aName = rCopy.aName;
+        maName = rCopy.maName;
         for( int n = 0; n < MAXLEVEL; ++n )
         {
             delete aFmts[ n ];
@@ -232,7 +232,7 @@ const SwNumRulesWithName& SwNumRulesWithName::operator=(const SwNumRulesWithName
 SwNumRulesWithName::SwNumRulesWithName( SvStream &rStream, sal_uInt16 nVersion )
 {
     CharSet eEncoding = osl_getThreadTextEncoding();
-    aName = rStream.ReadUniOrByteString(eEncoding);
+    maName = rStream.ReadUniOrByteString(eEncoding);
 
     char c;
     for(sal_uInt16 n = 0; n < MAXLEVEL; ++n )
@@ -256,7 +256,7 @@ SwNumRulesWithName::SwNumRulesWithName( SvStream &rStream, sal_uInt16 nVersion )
 void SwNumRulesWithName::MakeNumRule( SwWrtShell& rSh, SwNumRule& rChg ) const
 {
     // #i89178#
-    rChg = SwNumRule( aName, numfunc::GetDefaultPositionAndSpaceMode() );
+    rChg = SwNumRule( maName, numfunc::GetDefaultPositionAndSpaceMode() );
     rChg.SetAutoRule( sal_False );
     _SwNumFmtGlobal* pFmt;
     for( sal_uInt16 n = 0; n < MAXLEVEL; ++n )
@@ -271,7 +271,7 @@ void SwNumRulesWithName::MakeNumRule( SwWrtShell& rSh, SwNumRule& rChg ) const
 void SwNumRulesWithName::Store( SvStream &rStream )
 {
     CharSet eEncoding = osl_getThreadTextEncoding();
-    rStream.WriteUniOrByteString(aName, eEncoding);
+    rStream.WriteUniOrByteString(maName, eEncoding);
 
     for( sal_uInt16 n = 0; n < MAXLEVEL; ++n )
     {

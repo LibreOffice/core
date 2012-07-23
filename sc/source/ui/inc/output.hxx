@@ -140,13 +140,13 @@ private:
         void adjustForHyperlinkInPDF(Point aURLStart, OutputDevice* pDev);
     };
 
-    OutputDevice* pDev;         // Device
-    OutputDevice* pRefDevice;   // printer if used for preview
+    OutputDevice* mpDev;        // Device
+    OutputDevice* mpRefDevice;  // printer if used for preview
     OutputDevice* pFmtDevice;   // reference for text formatting
     ScTableInfo& mrTabInfo;
     RowInfo* pRowInfo;          // Info-Block
     SCSIZE nArrCount;           // belegte Zeilen im Info-Block
-    ScDocument* pDoc;           // Dokument
+    ScDocument* mpDoc;          // Dokument
     SCTAB nTab;                 // Tabelle
     long nScrX;                 // Ausgabe Startpos. (Pixel)
     long nScrY;
@@ -162,8 +162,8 @@ private:
     SCCOL nVisX2;
     SCROW nVisY2;
     ScOutputType eType;         // Bildschirm/Drucker ...
-    double nPPTX;               // Pixel per Twips
-    double nPPTY;
+    double mnPPTX;              // Pixel per Twips
+    double mnPPTY;
 //  sal_uInt16 nZoom;               // Zoom-Faktor (Prozent) - fuer GetFont
     Fraction aZoomX;
     Fraction aZoomY;
@@ -185,18 +185,18 @@ private:
     bool bPagebreakMode;        // Seitenumbruch-Vorschau
     bool bSolidBackground;      // weiss statt transparent
 
-    bool bUseStyleColor;
-    bool bForceAutoColor;
+    bool mbUseStyleColor;
+    bool mbForceAutoColor;
 
-    sal_Bool bSyntaxMode;           // Syntax-Highlighting
+    sal_Bool mbSyntaxMode;          // Syntax-Highlighting
     Color* pValueColor;
     Color* pTextColor;
     Color* pFormulaColor;
 
     Color   aGridColor;
 
-    bool    bShowNullValues;
-    bool    bShowFormulas;
+    bool    mbShowNullValues;
+    bool    mbShowFormulas;
     bool    bShowSpellErrors;   // Spell-Errors in EditObjekten anzeigen
     bool    bMarkClipped;
 
@@ -263,7 +263,7 @@ public:
 
     void    SetContentDevice( OutputDevice* pContentDev );
 
-    void    SetRefDevice( OutputDevice* pRDev ) { pRefDevice = pFmtDevice = pRDev; }
+    void    SetRefDevice( OutputDevice* pRDev ) { mpRefDevice = pFmtDevice = pRDev; }
     void    SetFmtDevice( OutputDevice* pRDev ) { pFmtDevice = pRDev; }
     void    SetEditObject( SdrObject* pObj )    { pEditObj = pObj; }
     void    SetViewShell( ScTabViewShell* pSh ) { pViewShell = pSh; }
@@ -272,7 +272,7 @@ public:
     void    SetDrawView( FmFormView* pNew )     { pDrawView = pNew; }
 
     void    SetSolidBackground( sal_Bool bSet )     { bSolidBackground = bSet; }
-    void    SetUseStyleColor( sal_Bool bSet )       { bUseStyleColor = bSet; }
+    void    SetUseStyleColor( sal_Bool bSet )       { mbUseStyleColor = bSet; }
 
     void    SetEditCell( SCCOL nCol, SCROW nRow );
     void    SetSyntaxMode( sal_Bool bNewMode );
