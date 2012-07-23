@@ -69,7 +69,10 @@ void VclEventListeners::Call( VclSimpleEvent* pEvent ) const
         ImplDelData aDel( pWinEvent->GetWindow() );
         while ( aIter != aCopy.end() && ! aDel.IsDead() )
         {
-            (*aIter).Call( pEvent );
+            Link &rLink = *aIter;
+            // check this hasn't been removed in some re-enterancy scenario fdo#47368
+            if( std::find(m_aListeners.begin(), m_aListeners.end(), rLink) != m_aListeners.end() )
+                rLink.Call( pEvent );
             aIter++;
         }
     }
@@ -77,7 +80,9 @@ void VclEventListeners::Call( VclSimpleEvent* pEvent ) const
     {
         while ( aIter != aCopy.end() )
         {
-            (*aIter).Call( pEvent );
+            Link &rLink = *aIter;
+            if( std::find(m_aListeners.begin(), m_aListeners.end(), rLink) != m_aListeners.end() )
+                rLink.Call( pEvent );
             aIter++;
         }
     }
