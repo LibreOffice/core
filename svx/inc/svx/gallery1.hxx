@@ -141,7 +141,6 @@ private:
 
     SVX_DLLPUBLIC GalleryThemeEntry*            ImplGetThemeEntry( const rtl::OUString& rThemeName );
     GalleryThemeEntry*          ImplGetThemeEntry( sal_uIntPtr nThemeId );
-    GalleryImportThemeEntry*    ImplGetImportThemeEntry( const rtl::OUString& rImportName );
 
     GalleryTheme*               ImplGetCachedTheme( const GalleryThemeEntry* pThemeEntry );
     void                        ImplDeleteCachedTheme( GalleryTheme* pTheme );
@@ -169,8 +168,6 @@ public:
     SVX_DLLPUBLIC void          ReleaseTheme( GalleryTheme* pTheme, SfxListener& rListener );
 
 public:
-
-    INetURLObject               GetImportURL( const String& rThemeName );
 
     const INetURLObject&        GetUserURL() const { return aUserURL; }
     const INetURLObject&        GetRelativeURL() const { return aRelURL; }
