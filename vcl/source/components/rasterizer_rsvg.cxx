@@ -119,7 +119,6 @@ public:
     // LibRSVG
     void rsvg_init() { (*mp_rsvg_init)(); }
     RsvgHandle* rsvg_handle_new_from_data( const guint8* data, gsize size, GError** error) { return( (*mp_rsvg_handle_new_from_data)( data, size, error ) ); }
-    gboolean rsvg_handle_close( RsvgHandle* handle, GError** error ) { return( (*mp_rsvg_handle_close)( handle, error ) ); }
     void rsvg_handle_set_dpi_x_y( RsvgHandle* handle, double dpix, double dpiy ) { (*mp_rsvg_handle_set_dpi_x_y)( handle, dpix, dpiy ); }
     void rsvg_handle_get_dimensions( RsvgHandle* handle, RsvgDimensionData* dimensions ) { (*mp_rsvg_handle_get_dimensions)( handle, dimensions ); }
     gboolean rsvg_handle_render_cairo( RsvgHandle* handle, cairo_t* cairo ) { return( (*mp_rsvg_handle_render_cairo)( handle, cairo ) ); }
@@ -139,7 +138,6 @@ private:
     // LibRSVG
     void (*mp_rsvg_init)( void );
     RsvgHandle* (*mp_rsvg_handle_new_from_data)( const guint8*, gsize, GError** );
-    gboolean (*mp_rsvg_handle_close)( RsvgHandle*, GError** );
     void (*mp_rsvg_handle_set_dpi_x_y)( RsvgHandle*, double, double );
     void (*mp_rsvg_handle_get_dimensions)( RsvgHandle*, RsvgDimensionData* );
     gboolean (*mp_rsvg_handle_render_cairo)( RsvgHandle*, cairo_t* );
@@ -191,14 +189,12 @@ LibraryWrapper::LibraryWrapper() :
     {
         mp_rsvg_init = ( void (*)( void ) ) osl_getAsciiFunctionSymbol( mpRSVGLib, "rsvg_init" );
         mp_rsvg_handle_new_from_data = ( RsvgHandle* (*)( const guint8*, gsize, GError** ) ) osl_getAsciiFunctionSymbol( mpRSVGLib, "rsvg_handle_new_from_data" );
-        mp_rsvg_handle_close = ( gboolean (*)( RsvgHandle*, GError** ) ) osl_getAsciiFunctionSymbol( mpRSVGLib, "rsvg_handle_close" );
         mp_rsvg_handle_set_dpi_x_y = ( void (*)( RsvgHandle*, double, double ) ) osl_getAsciiFunctionSymbol( mpRSVGLib, "rsvg_handle_set_dpi_x_y" );
         mp_rsvg_handle_get_dimensions = ( void (*)( RsvgHandle*, RsvgDimensionData* ) ) osl_getAsciiFunctionSymbol( mpRSVGLib, "rsvg_handle_get_dimensions" );
         mp_rsvg_handle_render_cairo = ( gboolean (*)( RsvgHandle*, cairo_t* ) ) osl_getAsciiFunctionSymbol( mpRSVGLib, "rsvg_handle_render_cairo" );
 
         if( !( mp_rsvg_init &&
                mp_rsvg_handle_new_from_data &&
-               mp_rsvg_handle_close &&
                mp_rsvg_handle_set_dpi_x_y &&
                mp_rsvg_handle_get_dimensions &&
                mp_rsvg_handle_render_cairo ) )
@@ -417,12 +413,15 @@ uno::Reference< graphic::XGraphic > Rasterizer::implGetXGraphicFromSurface( cair
         }
         while( nReadSize == nBlockSize );
 
-        if( aDataBuffer.size() &&
-            ( NULL != ( mpRsvgHandle = rLib.rsvg_handle_new_from_data( reinterpret_cast< sal_uInt8* >( &aDataBuffer[ 0 ] ),
-                                                                       aDataBuffer.size(), NULL ) ) ) &&
-            !rLib.rsvg_handle_close( mpRsvgHandle, NULL ) )
+        if (aDataBuffer.size())
         {
-            implFreeRsvgHandle();
+            //See: fdo#50975 rsvg_handle_new_from_data calls
+            //rsvg_handle_fill_with_data which itself calls rsvg_handle_close
+            //on success.  Older versions of librsvg (e.g. 2.16.1) don't
+            //protect against rsvg_handle_close getting called twice, so we
+            //shouldn't additionally call svg_handle_close here.
+            mpRsvgHandle = rLib.rsvg_handle_new_from_data( reinterpret_cast< sal_uInt8* >( &aDataBuffer[ 0 ] ),
+                                                                       aDataBuffer.size(), NULL );
         }
     }
 
