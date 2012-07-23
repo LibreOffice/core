@@ -190,6 +190,10 @@ inline void ObjectEntry::append(
     ::std::pair< Ptr2ObjectMap::iterator, bool > insertion(
         pEnv->aPtr2ObjectMap.insert( Ptr2ObjectMap::value_type(
                                          pInterface, this ) ) );
+    // No idea if the code above has side-effects and can't be just
+    // bypassed in the no-OSL_ASSERT case, so avoid "unused variable" like this instead.
+    (void) insertion;
+
     OSL_ASSERT( insertion.second ||
                 (find( pInterface, 0 ) >= 0 &&
                  // points to the same object entry:
