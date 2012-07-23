@@ -442,9 +442,8 @@ sal_Bool ScOutlineDocFunc::SelectLevel( SCTAB nTab, sal_Bool bColumns, sal_uInt1
 
 //------------------------------------------------------------------------
 
-sal_Bool ScOutlineDocFunc::ShowMarkedOutlines( const ScRange& rRange, sal_Bool bRecord, sal_Bool bApi )
+sal_Bool ScOutlineDocFunc::ShowMarkedOutlines( const ScRange& rRange, sal_Bool bRecord )
 {
-    (void)bApi;
     sal_Bool bDone = false;
 
     SCCOL nStartCol = rRange.aStart.Col();

@@ -351,7 +351,7 @@ void ScDBFunc::ShowMarkedOutlines( sal_Bool bRecord )
     {
         ScDocShell* pDocSh = GetViewData()->GetDocShell();
         ScOutlineDocFunc aFunc(*pDocSh);
-        sal_Bool bDone = aFunc.ShowMarkedOutlines( aRange, bRecord, false );
+        sal_Bool bDone = aFunc.ShowMarkedOutlines( aRange, bRecord );
         if (bDone)
             UpdateScrollBars();
     }

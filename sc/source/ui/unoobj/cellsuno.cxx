@@ -7961,7 +7961,7 @@ void SAL_CALL ScTableSheetObj::showDetail( const table::CellRangeAddress& rCellR
         ScRange aMarkRange;
         ScUnoConversion::FillScRange( aMarkRange, rCellRange );
         ScOutlineDocFunc aFunc(*pDocSh);
-        aFunc.ShowMarkedOutlines( aMarkRange, sal_True, sal_True );
+        aFunc.ShowMarkedOutlines( aMarkRange, sal_True );
     }
 }
 
