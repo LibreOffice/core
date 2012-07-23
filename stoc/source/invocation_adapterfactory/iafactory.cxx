@@ -861,11 +861,10 @@ Reference< XInterface > FactoryImpl::createAdapter(
                 &adapter_set, m_receiver2adapters, xKey.get(), rTypes );
             if (0 == that) // again no entry
             {
-                pair< t_ptr_set::iterator, bool > insertion(
-                    adapter_set->insert( pNew ) );
-                // Avoid unused variable warning
-                (void) insertion;
-                OSL_ASSERT( insertion.second );
+                pair< t_ptr_set::iterator, bool > i(adapter_set->insert(pNew));
+                SAL_WARN_IF(
+                    !i.second, "stoc",
+                    "set already contains " << *(i.first) << " != " << pNew);
                 that = pNew;
             }
             else

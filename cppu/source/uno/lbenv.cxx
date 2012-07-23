@@ -187,17 +187,14 @@ inline void ObjectEntry::append(
     typelib_typedescription_acquire( (typelib_TypeDescription *) pTypeDescr );
     aNewEntry.pTypeDescr = pTypeDescr;
 
-    ::std::pair< Ptr2ObjectMap::iterator, bool > insertion(
+    ::std::pair< Ptr2ObjectMap::iterator, bool > i(
         pEnv->aPtr2ObjectMap.insert( Ptr2ObjectMap::value_type(
                                          pInterface, this ) ) );
-    // No idea if the code above has side-effects and can't be just
-    // bypassed in the no-OSL_ASSERT case, so avoid "unused variable" like this instead.
-    (void) insertion;
-
-    OSL_ASSERT( insertion.second ||
-                (find( pInterface, 0 ) >= 0 &&
-                 // points to the same object entry:
-                 insertion.first->second == this) );
+    SAL_WARN_IF(
+        !i.second && (find(pInterface, 0) == -1 || i.first->second != this),
+        "cppu",
+        "map already contains " << i.first->second << " != " << this << " for "
+            << pInterface);
     aInterfaces.push_back( aNewEntry );
 }
 
