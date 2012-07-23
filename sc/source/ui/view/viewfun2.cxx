@@ -1241,7 +1241,7 @@ sal_Bool ScViewFunc::RemoveMerge( sal_Bool bRecord )
         }
         while (bExtended);
 
-        sal_Bool bOk = pDocSh->GetDocFunc().UnmergeCells(aOption, bRecord, false );
+        sal_Bool bOk = pDocSh->GetDocFunc().UnmergeCells(aOption, bRecord );
         aExtended = aOption.getFirstSingleRange();
         MarkRange( aExtended );
 

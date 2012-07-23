@@ -1608,7 +1608,7 @@ sal_Bool ScDocFunc::InsertCells( const ScRange& rRange, const ScMarkData* pTabMa
                         ScRange aRange( *iIter );
                         if( pDoc->HasAttrib( aRange, HASATTR_OVERLAPPED | HASATTR_MERGED ) )
                         {
-                            UnmergeCells( aRange, sal_True, sal_True );
+                            UnmergeCells( aRange, sal_True );
                         }
                     }
                 }
@@ -2016,7 +2016,7 @@ sal_Bool ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMa
                         ScRange aRange( *iIter );
                         if( pDoc->HasAttrib( aRange, HASATTR_OVERLAPPED | HASATTR_MERGED ) )
                         {
-                            UnmergeCells( aRange, sal_True, sal_True );
+                            UnmergeCells( aRange, sal_True );
                         }
                     }
                 }
@@ -2484,7 +2484,7 @@ sal_Bool ScDocFunc::MoveBlock( const ScRange& rSource, const ScAddress& rDestPos
 
     // skipped rows and merged cells don't mix
     if ( !bIncludeFiltered && pClipDoc->HasClipFilteredRows() )
-        UnmergeCells( aPasteDest, false, sal_True );
+        UnmergeCells( aPasteDest, false );
 
     VirtualDevice aVirtDev;
     sal_Bool bDestHeight = AdjustRowHeight(
@@ -4495,17 +4495,17 @@ sal_Bool ScDocFunc::MergeCells( const ScCellMergeOption& rOption, sal_Bool bCont
     return sal_True;
 }
 
-sal_Bool ScDocFunc::UnmergeCells( const ScRange& rRange, sal_Bool bRecord, sal_Bool bApi )
+sal_Bool ScDocFunc::UnmergeCells( const ScRange& rRange, sal_Bool bRecord )
 {
     ScCellMergeOption aOption(rRange.aStart.Col(), rRange.aStart.Row(), rRange.aEnd.Col(), rRange.aEnd.Row());
     SCTAB nTab1 = rRange.aStart.Tab(), nTab2 = rRange.aEnd.Tab();
     for (SCTAB i = nTab1; i <= nTab2; ++i)
         aOption.maTabs.insert(i);
 
-    return UnmergeCells(aOption, bRecord, bApi);
+    return UnmergeCells(aOption, bRecord);
 }
 
-bool ScDocFunc::UnmergeCells( const ScCellMergeOption& rOption, sal_Bool bRecord, sal_Bool bApi )
+bool ScDocFunc::UnmergeCells( const ScCellMergeOption& rOption, sal_Bool bRecord )
 {
     using ::std::set;
 

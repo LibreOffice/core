@@ -186,8 +186,8 @@ public:
 
     virtual sal_Bool        MergeCells( const ScCellMergeOption& rOption, sal_Bool bContents,
                                         sal_Bool bRecord, sal_Bool bApi );
-    virtual sal_Bool        UnmergeCells( const ScRange& rRange, sal_Bool bRecord, sal_Bool bApi );
-    virtual bool            UnmergeCells( const ScCellMergeOption& rOption, sal_Bool bRecord, sal_Bool bApi );
+    sal_Bool        UnmergeCells( const ScRange& rRange, sal_Bool bRecord );
+    bool            UnmergeCells( const ScCellMergeOption& rOption, sal_Bool bRecord );
 
     virtual bool            SetNewRangeNames( ScRangeName* pNewRanges, bool bModifyDoc = true, SCTAB nTab = -1 );     // takes ownership of pNewRanges //nTab = -1 for local range names
     virtual bool            ModifyRangeNames( const ScRangeName& rNewRanges, SCTAB nTab = -1 );
