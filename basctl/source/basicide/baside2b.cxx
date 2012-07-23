@@ -2006,6 +2006,7 @@ sal_Bool WatchTreeListBox::ImplBasicEntryEdited( SvLBoxEntry* pEntry, const Stri
         bError = sal_True;
         SbxBase::ResetError();
     }
+    (void)bError; // used to Beep.
 
     UpdateWatches();
 

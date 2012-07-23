@@ -779,7 +779,7 @@ void ColorConfigWindow_Impl::SetAppearance ()
     ColorListBox aSampleColorList(this);
     {
         XColorListRef const xColorTable = XColorList::CreateStdColorList();
-        for (unsigned i = 0; i != xColorTable->Count(); ++i)
+        for (sal_Int32 i = 0; i != xColorTable->Count(); ++i)
         {
             XColorEntry& rEntry = *xColorTable->GetColor(i);
             aSampleColorList.InsertEntry(rEntry.GetColor(), rEntry.GetName());
