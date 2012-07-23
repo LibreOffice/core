@@ -78,8 +78,9 @@ static inline bool idefaultConstructElements(
             pSeq = reallocSeq( pSeq, sizeof(sal_Unicode), nAlloc );
         if (pSeq != 0)
         {
-            ::rtl_zeroMemory(
+            memset(
                 pSeq->elements + (sizeof(sal_Unicode) * nStartIndex),
+                0,
                 sizeof(sal_Unicode) * (nStopIndex - nStartIndex) );
         }
         break;
@@ -88,8 +89,9 @@ static inline bool idefaultConstructElements(
             pSeq = reallocSeq( pSeq, sizeof(sal_Bool), nAlloc );
         if (pSeq != 0)
         {
-            ::rtl_zeroMemory(
+            memset(
                 pSeq->elements + (sizeof(sal_Bool) * nStartIndex),
+                0,
                 sizeof(sal_Bool) * (nStopIndex - nStartIndex) );
         }
         break;
@@ -98,8 +100,9 @@ static inline bool idefaultConstructElements(
             pSeq = reallocSeq( pSeq, sizeof(sal_Int8), nAlloc );
         if (pSeq != 0)
         {
-            ::rtl_zeroMemory(
+            memset(
                 pSeq->elements + (sizeof(sal_Int8) * nStartIndex),
+                0,
                 sizeof(sal_Int8) * (nStopIndex - nStartIndex) );
         }
         break;
@@ -109,8 +112,9 @@ static inline bool idefaultConstructElements(
             pSeq = reallocSeq( pSeq, sizeof(sal_Int16), nAlloc );
         if (pSeq != 0)
         {
-            ::rtl_zeroMemory(
+            memset(
                 pSeq->elements + (sizeof(sal_Int16) * nStartIndex),
+                0,
                 sizeof(sal_Int16) * (nStopIndex - nStartIndex) );
         }
         break;
@@ -120,8 +124,9 @@ static inline bool idefaultConstructElements(
             pSeq = reallocSeq( pSeq, sizeof(sal_Int32), nAlloc );
         if (pSeq != 0)
         {
-            ::rtl_zeroMemory(
+            memset(
                 pSeq->elements + (sizeof(sal_Int32) * nStartIndex),
+                0,
                 sizeof(sal_Int32) * (nStopIndex - nStartIndex) );
         }
         break;
@@ -131,8 +136,9 @@ static inline bool idefaultConstructElements(
             pSeq = reallocSeq( pSeq, sizeof(sal_Int64), nAlloc );
         if (pSeq != 0)
         {
-            ::rtl_zeroMemory(
+            memset(
                 pSeq->elements + (sizeof(sal_Int64) * nStartIndex),
+                0,
                 sizeof(sal_Int64) * (nStopIndex - nStartIndex) );
         }
         break;
@@ -334,8 +340,9 @@ static inline bool idefaultConstructElements(
             pSeq = reallocSeq( pSeq, sizeof(void *), nAlloc );
         if (pSeq != 0)
         {
-            ::rtl_zeroMemory(
+            memset(
                 pSeq->elements + (sizeof(void *) * nStartIndex),
+                0,
                 sizeof(void *) * (nStopIndex - nStartIndex) );
         }
         break;

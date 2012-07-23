@@ -1735,8 +1735,10 @@ extern "C" CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_register(
                 pTDR->pType->nSize = (*ppNewDescription)->nSize;
                 pTDR->pType->nAlignment = (*ppNewDescription)->nAlignment;
 
-                ::rtl_zeroMemory(
-                    *ppNewDescription +1, nSize - sizeof( typelib_TypeDescription ) );
+                memset(
+                    *ppNewDescription +1,
+                    0,
+                    nSize - sizeof( typelib_TypeDescription ) );
 
                 if( pTDR->pType->bOnDemand && !(*ppNewDescription)->bOnDemand )
                 {

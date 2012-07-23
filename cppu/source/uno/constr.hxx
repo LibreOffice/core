@@ -19,8 +19,8 @@
 #ifndef CONSTR_HXX
 #define CONSTR_HXX
 
+#include <string.h>
 #include "prim.hxx"
-
 
 namespace cppu
 {
@@ -90,7 +90,7 @@ inline void _defaultConstructArray(
     case typelib_TypeClass_FLOAT:
     case typelib_TypeClass_DOUBLE:
     case typelib_TypeClass_INTERFACE:
-        ::rtl_zeroMemory(pMem, nElementSize * nTotalElements);
+        memset(pMem, 0, nElementSize * nTotalElements);
         break;
 
     case typelib_TypeClass_STRING:
