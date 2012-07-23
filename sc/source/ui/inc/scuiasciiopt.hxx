@@ -82,7 +82,6 @@ class ScImportAsciiDlg : public ModalDialog
 
     String                      aCharSetUser;
     String                      aColumnUser;
-    String                      aFldSepList;
     String                      aTextSepList;
     String                      maFieldSeparators;  // selected field separators
     sal_Unicode                 mcTextSep;
