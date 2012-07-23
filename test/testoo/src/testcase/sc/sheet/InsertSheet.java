@@ -21,14 +21,11 @@
 package testcase.sc.sheet;
 
 import static org.junit.Assert.*;
-import static org.openoffice.test.vcl.Tester.*;
 import static testlib.UIMap.*;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-
 import testlib.Log;
 
 /**

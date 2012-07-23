@@ -47,25 +47,17 @@ public class ValidityDateSupport1024Columns {
     private static IDList idList = new IDList(new File("./ids"));
     public static final VclMessageBox ActiveMsgBox = new VclMessageBox(idList.getId("UID_ACTIVE"), "Message on message box.");
 
-    /**
-     * TestCapture helps us to do
-     * 1. Take a screenshot when failure occurs.
-     * 2. Collect extra data when OpenOffice crashes.
-     */
     @Rule
     public Log LOG = new Log();
 
-    /**
-     * initApp helps us to do
-     * 1. Patch the OpenOffice to enable automation if necessary.
-     * 2. Start OpenOffice with automation enabled if necessary.
-     * 3. Reset OpenOffice to startcenter.
-     *
-     * @throws java.lang.Exception
-     */
     @Before
     public void setUp() throws Exception {
-        initApp();
+        app.start();
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        app.close();
     }
 
     /**
@@ -74,13 +66,8 @@ public class ValidityDateSupport1024Columns {
     @Test
     public void testValidityDateSupport1024Columns() {
         startcenter.menuItem("File->New->Spreadsheet").select();
-        sleep(1);
-
-        CalcUtil.selectRange("Sheet1.ALM1000");
         CalcUtil.selectRange("Sheet1.ALM1000:Sheet1.ALO1005");
-
         calc.menuItem("Data->Validity...").select();
-        sleep(1);
 
         SC_ValidityCriteriaTabpage.select();
         SC_ValidityCriteriaAllowList.select("Date");
@@ -90,39 +77,31 @@ public class ValidityDateSupport1024Columns {
         SC_ValidityShowErrorMessage.check();
         SC_ValidityErrorMessageTitle.setText("Stop to enter");
         SC_ValidityErrorMessage.setText("Invalid value");
-        typeKeys("<tab>");
-        typeKeys("<enter>");
-        sleep(1);
+        SC_ValidityErrorAlertTabPage.ok();
 
         CalcUtil.selectRange("Sheet1.ALM1001");
-        SC_CellInput.activate();
-        typeKeys("02/01/08");
-        typeKeys("<enter>");
+        SC_InputBar_Input.activate();
+        typeKeys("02/01/08<enter>");
         assertEquals("02/01/08",CalcUtil.getCellText("Sheet1.ALM1001"));
 
         CalcUtil.selectRange("Sheet1.ALM1002");
-        SC_CellInput.activate();
-        typeKeys("01/02/08");
-        typeKeys("<enter>");
+        SC_InputBar_Input.activate();
+        typeKeys("01/02/08<enter>");
         assertEquals("01/02/08",CalcUtil.getCellText("Sheet1.ALM1002"));
 
         CalcUtil.selectRange("Sheet1.ALM1003");
-        SC_CellInput.activate();
-        typeKeys("01/01/08");
-        typeKeys("<enter>");
+        SC_InputBar_Input.activate();
+        typeKeys("01/01/08<enter>");
         assertEquals("Invalid value",ActiveMsgBox.getMessage());
         ActiveMsgBox.ok();
         assertEquals("",CalcUtil.getCellText("Sheet1.ALM1003"));
 
         CalcUtil.selectRange("Sheet1.AML1003");
-        SC_CellInput.activate();
-        typeKeys("12/31/07");
-        typeKeys("<enter>");
+        SC_InputBar_Input.activate();
+        typeKeys("12/31/07<enter>");
         assertEquals("Invalid value",ActiveMsgBox.getMessage());
         ActiveMsgBox.ok();
         assertEquals("",CalcUtil.getCellText("Sheet1.AML1003"));
-
-        }
-
+    }
 }
 
