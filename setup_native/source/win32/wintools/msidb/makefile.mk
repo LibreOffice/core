@@ -20,10 +20,14 @@ TARGET=sn_msidb
 .IF "$(WINEGCC)"==""
 @all:
     @echo "No winegcc present, not building msidb..."
-.ELSE
-@all:
-    @echo "Not building msidb yet, stay tuned..."
 .ENDIF
+
+@all: $(BIN)/msidb.exe $(BIN)/msidb.exe.so
+
+$(BIN)/msidb.exe.so: $(BIN)/msidb.exe
+
+$(BIN)/msidb.exe:
+	$(WINEGCC) -o $(BIN)/msidb.exe msidb.c -municode -lmsi 
 
 # --- Targets --------------------------------------------------------------
 

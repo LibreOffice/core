@@ -20,10 +20,14 @@ TARGET=sn_msiinfo
 .IF "$(WINEGCC)"==""
 @all:
     @echo "No winegcc present, not building msiinfo..."
-.ELSE
-@all:
-    @echo "Not building msiinfo yet, stay tuned..."
 .ENDIF
+
+@all: $(BIN)/msiinfo.exe $(BIN)/msiinfo.exe.so
+
+$(BIN)/msiinfo.exe.so: $(BIN)/msiinfo.exe
+
+$(BIN)/msiinfo.exe:
+	$(WINEGCC) -o $(BIN)/msiinfo.exe msiinfo.c -mconsole -municode -lmsi 
 
 # --- Targets --------------------------------------------------------------
 

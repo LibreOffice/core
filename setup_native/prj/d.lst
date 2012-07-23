@@ -1,7 +1,13 @@
 mkdir: %_DEST%\bin\osl
 ..\%__SRC%\bin\*.dll %_DEST%\bin\*.dll
 ..\%__SRC%\bin\*.exe %_DEST%\bin\*.exe
+..\%__SRC%\bin\*.exe.so %_DEST%\bin\*.exe.so
 ..\%__SRC%\class\*.jar %_DEST%\bin\*.jar
+symlink: %_DEST%\bin\makecab.exe %_DEST%\bin\makecab
+symlink: %_DEST%\bin\msidb.exe %_DEST%\bin\msidb
+symlink: %_DEST%\bin\msiinfo.exe %_DEST%\bin\msiinfo
+symlink: %_DEST%\bin\msimsp.exe %_DEST%\bin\msimsp
+symlink: %_DEST%\bin\msitran.exe %_DEST%\bin\msitran
 
 mkdir: %_DEST%\bin\userscripts
 ..\%__SRC%\bin\install %_DEST%\bin\userscripts\install
