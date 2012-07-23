@@ -2530,6 +2530,28 @@ void SwTabFrmPainter::PaintLines( OutputDevice& rDev, const SwRect& rRect ) cons
                         aPaintEnd.Y() = aUpperAligned._Bottom();
                 }
 
+                // logically vertical lines are painted centered on the line,
+                // logically horizontal lines are painted "below" the line
+                bool const isBelow((mrTabFrm.IsVertical()) ? !bHori : bHori);
+                double const offsetStart = (isBelow)
+                    ?   aStyles[0].GetWidth() / 2.0
+                    :   std::max<double>(aStyles[1].GetWidth(),
+                            aStyles[3].GetWidth()) / 2.0;
+                double const offsetEnd = (isBelow)
+                    ?   aStyles[0].GetWidth() / 2.0
+                    :   std::max<double>(aStyles[4].GetWidth(),
+                            aStyles[6].GetWidth()) / 2.0;
+                if (mrTabFrm.IsVertical())
+                {
+                    aPaintStart.X() -= static_cast<long>(offsetStart + 0.5);
+                    aPaintEnd.X()   -= static_cast<long>(offsetEnd   + 0.5);
+                }
+                else
+                {
+                    aPaintStart.Y() += static_cast<long>(offsetStart + 0.5);
+                    aPaintEnd.Y()   += static_cast<long>(offsetEnd   + 0.5);
+                }
+
                 aPaintStart.X() -= nTwipXCorr; // nHalfPixelSzW - 2 to assure that we do not leave the pixel
                 aPaintEnd.X()   -= nTwipXCorr;
                 aPaintStart.Y() -= nTwipYCorr;
@@ -2728,19 +2750,10 @@ void SwTabFrmPainter::Insert( const SwFrm& rFrm, const SvxBoxItem& rBoxItem )
     aR.MirrorSelf();
     aB.MirrorSelf();
 
-    const SwTwips nHalfBottomWidth = aB.GetWidth() / 2;
-    const SwTwips nHalfTopWidth = (bBottomAsTop)
-            ? nHalfBottomWidth : aT.GetWidth() / 2;
-
-    // these are positions of the lines
-    const SwTwips nLeft   =
-        aBorderRect._Left()  - ((bVert) ? nHalfBottomWidth : 0);
-    const SwTwips nRight  =
-        aBorderRect._Right() - ((bVert) ? nHalfTopWidth : 0);
-    const SwTwips nTop    =
-        aBorderRect._Top()   + ((bVert) ? 0 : nHalfTopWidth);
-    const SwTwips nBottom =
-        aBorderRect._Bottom()+ ((bVert) ? 0 : nHalfBottomWidth);
+    const SwTwips nLeft   = aBorderRect._Left();
+    const SwTwips nRight  = aBorderRect._Right();
+    const SwTwips nTop    = aBorderRect._Top();
+    const SwTwips nBottom = aBorderRect._Bottom();
 
     aL.SetRefMode( svx::frame::REFMODE_CENTERED );
     aR.SetRefMode( svx::frame::REFMODE_CENTERED );
