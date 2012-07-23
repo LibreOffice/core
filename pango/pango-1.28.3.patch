@@ -65,7 +65,7 @@
  # Checks for LibThai
 --- misc/pango-1.28.3/pango/pangoatsui-fontmap.c
 +++ misc/build/pango-1.28.3/pango/pangoatsui-fontmap.c
-@@ -27,6 +27,12 @@
+@@ -27,6 +27,17 @@
  #include "pango-impl-utils.h"
  #include "modules.h"
  
@@ -75,12 +75,17 @@
 +typedef int NSColorRenderingIntent;
 +#endif
 +
++#if MAC_OS_X_VERSION_MAX_ALLOWED < 1070 && MACOSX_SDK_VERSION >= 1070
++// Avoid a problem in at least the XCode 4.5DP3 SDK 10.7 headers
++#import <CoreData/NSPersistentStoreRequest.h>
++#endif
++
  #import <Cocoa/Cocoa.h>
  
  typedef struct _FontHashKey      FontHashKey;
 --- misc/pango-1.28.3/pango/pangocairo-atsuifont.c
 +++ misc/build/pango-1.28.3/pango/pangocairo-atsuifont.c
-@@ -22,6 +22,12 @@
+@@ -22,6 +22,17 @@
  
  #include "config.h"
  
@@ -88,6 +93,11 @@
 +@class CALayer;
 +@class NSViewController;
 +typedef int NSColorRenderingIntent;
++#endif
++
++#if MAC_OS_X_VERSION_MAX_ALLOWED < 1070 && MACOSX_SDK_VERSION >= 1070
++// Avoid a problem in at least the XCode 4.5DP3 SDK 10.7 headers
++#import <CoreData/NSPersistentStoreRequest.h>
 +#endif
 +
  #import <Cocoa/Cocoa.h>
