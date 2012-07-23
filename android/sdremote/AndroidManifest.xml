@@ -27,7 +27,7 @@
         <service android:name=".communication.CommunicationService" >
         </service>
 
-        <activity android:name=".ThumbnailActivity" >
+        <activity android:name=".ThumbnailFragment" >
         </activity>
         <activity
             android:name=".PresentationActivity"

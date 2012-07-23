@@ -10,14 +10,11 @@ package org.libreoffice.impressremote.communication;
 
 import java.util.ArrayList;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
 import android.util.Base64;
-import android.util.SparseArray;
 
 public class Receiver {
 
@@ -34,7 +31,6 @@ public class Receiver {
 	}
 
 	public void parseCommand(ArrayList<String> aCommand) {
-		System.out.println("parsing " + aCommand.get(0));
 		if (mActivityMessenger == null) {
 			return;
 		}
@@ -44,7 +40,7 @@ public class Receiver {
 			mSlideShow = new SlideShow(aSlideShowlength);
 
 			Message aMessage = Message.obtain(null,
-					CommunicationService.MSG_SLIDESHOW_STARTED);
+			                CommunicationService.MSG_SLIDESHOW_STARTED);
 			Bundle aData = new Bundle();
 			aMessage.setData(aData);
 			try {
@@ -60,7 +56,7 @@ public class Receiver {
 
 				int aSlideNumber = Integer.parseInt(aCommand.get(1));
 				Message aMessage = Message.obtain(null,
-						CommunicationService.MSG_SLIDE_CHANGED);
+				                CommunicationService.MSG_SLIDE_CHANGED);
 				Bundle aData = new Bundle();
 				aData.putInt("slide_number", aSlideNumber);
 				aMessage.setData(aData);
@@ -79,7 +75,7 @@ public class Receiver {
 
 				// Notify the frontend
 				Message aMessage = Message.obtain(null,
-						CommunicationService.MSG_SLIDE_PREVIEW);
+				                CommunicationService.MSG_SLIDE_PREVIEW);
 				Bundle aData = new Bundle();
 				aData.putInt("slide_number", aSlideNumber);
 				aMessage.setData(aData);

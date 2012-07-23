@@ -21,7 +21,8 @@ public class PresentationActivity extends Activity {
 	private CommunicationService mCommunicationService;
 	private boolean mIsBound = false;
 	private FrameLayout mLayout;
-	ThumbnailActivity mThumbnailFragment;
+	ThumbnailFragment mThumbnailFragment;
+	PresentationFragment mPresentationFragment;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -34,9 +35,13 @@ public class PresentationActivity extends Activity {
 		FragmentManager fragmentManager = getFragmentManager();
 		FragmentTransaction fragmentTransaction = fragmentManager
 		                .beginTransaction();
-		mThumbnailFragment = new ThumbnailActivity();
-		fragmentTransaction.add(R.id.framelayout, mThumbnailFragment,
-		                "fragment_thumbnail");
+		mThumbnailFragment = new ThumbnailFragment();
+		mPresentationFragment = new PresentationFragment();
+
+		// fragmentTransaction.add(R.id.framelayout, mThumbnailFragment,
+		// "fragment_thumbnail");
+		fragmentTransaction.add(R.id.framelayout, mPresentationFragment,
+		                "fragment_presentation");
 		fragmentTransaction.commit();
 
 		mLayout = (FrameLayout) findViewById(R.id.framelayout);

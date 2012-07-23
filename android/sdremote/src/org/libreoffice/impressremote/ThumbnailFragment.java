@@ -26,7 +26,7 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class ThumbnailActivity extends Fragment {
+public class ThumbnailFragment extends Fragment {
 
 	private CommunicationService mCommunicationService;
 
@@ -48,6 +48,10 @@ public class ThumbnailActivity extends Fragment {
 
 		mGrid.setOnItemClickListener(new ClickListener());
 		mContext = container.getContext();
+
+		if (mCommunicationService != null && mSlideShow != null) {
+			mGrid.setAdapter(new ThumbnailAdapter(mContext, mSlideShow));
+		}
 
 		return v;
 	}
@@ -114,7 +118,9 @@ public class ThumbnailActivity extends Fragment {
 	                CommunicationService aCommunicationService) {
 		mCommunicationService = aCommunicationService;
 		mSlideShow = mCommunicationService.getSlideShow();
-		mGrid.setAdapter(new ThumbnailAdapter(mContext, mSlideShow));
+		if (mGrid != null) {
+			mGrid.setAdapter(new ThumbnailAdapter(mContext, mSlideShow));
+		}
 	}
 
 	public void handleMessage(Message aMessage) {
