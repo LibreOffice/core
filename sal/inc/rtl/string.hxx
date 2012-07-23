@@ -320,12 +320,9 @@ public:
 
       @since LibreOffice 3.4
     */
-    sal_Bool isEmpty() const SAL_THROW(())
+    bool isEmpty() const SAL_THROW(())
     {
-        if ( pData->length )
-            return sal_False;
-        else
-            return sal_True;
+        return pData->length == 0;
     }
 
     /**
