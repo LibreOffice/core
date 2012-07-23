@@ -133,8 +133,12 @@ ScImportOptionsDlg::ScImportOptionsDlg(
         aBtnCancel  ( this, ScResId( BTN_CANCEL ) ),
         aBtnHelp    ( this, ScResId( BTN_HELP ) )
 {
+    String sFieldSep( ScResId( SCSTR_FIELDSEP ) );
+    sFieldSep.SearchAndReplaceAscii( "%TAB",   String(ScResId(SCSTR_FIELDSEP_TAB)) );
+    sFieldSep.SearchAndReplaceAscii( "%SPACE", String(ScResId(SCSTR_FIELDSEP_SPACE)) );
+
     // im Ctor-Initializer nicht moeglich (MSC kann das nicht):
-    pFieldSepTab = new ScDelimiterTable( String(ScResId(SCSTR_FIELDSEP)) );
+    pFieldSepTab = new ScDelimiterTable( sFieldSep );
     pTextSepTab  = new ScDelimiterTable( String(ScResId(SCSTR_TEXTSEP)) );
 
     String aStr = pFieldSepTab->FirstDel();

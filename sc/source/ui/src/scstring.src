@@ -512,7 +512,17 @@ String SCSTR_COLUMN_USER
 
 String SCSTR_FIELDSEP
 {
-    Text [ en-US ] = ",\t44\t;\t59\t:\t58\t{Tab}\t9\t{space}\t32 " ;
+    Text = ",\t44\t;\t59\t:\t58\t{%TAB}\t9\t{%SPACE}\t32 " ;
+};
+
+String SCSTR_FIELDSEP_TAB
+{
+    Text [ en-US ] = "Tab" ;
+};
+
+String SCSTR_FIELDSEP_SPACE
+{
+    Text [ en-US ] = "space" ;
 };
 
 String SCSTR_TEXTSEP

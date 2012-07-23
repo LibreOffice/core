@@ -929,7 +929,10 @@
 #define SCSTR_FORMULA_SYNTAX_XL_A1   (STR_START + 410)
 #define SCSTR_FORMULA_SYNTAX_XL_R1C1 (STR_START + 411)
 
-#define STR_END                 (SCSTR_FORMULA_SYNTAX_XL_R1C1)
+#define SCSTR_FIELDSEP_TAB      (STR_START + 412)
+#define SCSTR_FIELDSEP_SPACE    (STR_START + 413)
+
+#define STR_END                 (SCSTR_FIELDSEP_SPACE)
 
 #define BMP_START               (STR_END)
 
