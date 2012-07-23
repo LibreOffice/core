@@ -48,11 +48,17 @@
 #include <filter/msfilter/util.hxx>
 #include <filter/msfilter/escherex.hxx>
 #include <comphelper/string.hxx>
+#include <tools/globname.hxx>
+#include <comphelper/classids.hxx>
+#include <comphelper/embeddedobjectcontainer.hxx>
 
+#include <oox/mathml/import.hxx>
 #include <doctok/sprmids.hxx> // NS_sprm namespace
 #include <doctok/resourceids.hxx> // NS_rtf namespace
 #include <ooxml/resourceids.hxx> // NS_ooxml namespace
 #include <ooxml/OOXMLFastTokens.hxx> // ooxml namespace
+#include <oox/token/namespaces.hxx> // oox namespace
+#include <oox/token/tokens.hxx>
 
 #include <rtfsdrimport.hxx>
 #include <rtftokenizer.hxx>
@@ -943,6 +949,7 @@ void RTFDocumentImpl::text(OUString& rString)
         case DESTINATION_SUBJECT:
         case DESTINATION_DOCCOMM:
         case DESTINATION_ATNID:
+        case DESTINATION_MR:
             m_aStates.top().aDestinationText.append(rString);
             break;
         case DESTINATION_EQINSTRUCTION:
@@ -1389,6 +1396,54 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
             break;
         case RTF_ATNID:
             m_aStates.top().nDestinationState = DESTINATION_ATNID;
+            break;
+        case RTF_MMATH:
+            // Nothing to do here (just enter the destination) till RTF_MMATHPR is implemented.
+            break;
+        case RTF_MOMATH:
+            {
+                uno::Reference<xml::sax::XFastAttributeList> aAttribs;
+                m_aMathBuffer.appendOpeningTag(oox::NMSP_officeMath | oox::XML_oMath, aAttribs);
+                m_aStates.top().nDestinationState = DESTINATION_MOMATH;
+            }
+            break;
+        case RTF_MR:
+            m_aStates.top().nDestinationState = DESTINATION_MR;
+            break;
+        case RTF_MF:
+            {
+                uno::Reference<xml::sax::XFastAttributeList> aAttribs;
+                m_aMathBuffer.appendOpeningTag(oox::NMSP_officeMath | oox::XML_f, aAttribs);
+                m_aStates.top().nDestinationState = DESTINATION_MF;
+            }
+            break;
+        case RTF_MFPR:
+            {
+                uno::Reference<xml::sax::XFastAttributeList> aAttribs;
+                m_aMathBuffer.appendOpeningTag(oox::NMSP_officeMath | oox::XML_fPr, aAttribs);
+                m_aStates.top().nDestinationState = DESTINATION_MFPR;
+            }
+            break;
+        case RTF_MCTRLPR:
+            {
+                uno::Reference<xml::sax::XFastAttributeList> aAttribs;
+                m_aMathBuffer.appendOpeningTag(oox::NMSP_officeMath | oox::XML_ctrlPr, aAttribs);
+                m_aStates.top().nDestinationState = DESTINATION_MCTRLPR;
+            }
+            break;
+        case RTF_MNUM:
+            {
+                uno::Reference<xml::sax::XFastAttributeList> aAttribs;
+                m_aMathBuffer.appendOpeningTag(oox::NMSP_officeMath | oox::XML_num, aAttribs);
+                m_aStates.top().nDestinationState = DESTINATION_MNUM;
+            }
+            break;
+        case RTF_MDEN:
+            {
+                uno::Reference<xml::sax::XFastAttributeList> aAttribs;
+                m_aMathBuffer.appendOpeningTag(oox::NMSP_officeMath | oox::XML_den, aAttribs);
+                m_aStates.top().nDestinationState = DESTINATION_MDEN;
+            }
             break;
         default:
             SAL_INFO("writerfilter", OSL_THIS_FUNC << ": TODO handle destination '" << lcl_RtfToString(nKeyword) << "'");
@@ -3443,6 +3498,44 @@ int RTFDocumentImpl::popState()
         parBreak();
         m_bNeedPap = true;
     }
+    else if (m_aStates.top().nDestinationState == DESTINATION_MOMATH)
+    {
+        uno::Reference<xml::sax::XFastAttributeList> aAttribs;
+        m_aMathBuffer.appendClosingTag(oox::NMSP_officeMath | oox::XML_oMath);
+
+        SvGlobalName aGlobalName(SO3_SM_CLASSID);
+        comphelper::EmbeddedObjectContainer aContainer;
+        OUString aName;
+        uno::Reference<embed::XEmbeddedObject> xObject = aContainer.CreateEmbeddedObject(aGlobalName.GetByteSequence(), aName);
+        uno::Reference<util::XCloseable> xComponent(xObject->getComponent(), uno::UNO_QUERY);
+        if( oox::FormulaImportBase* pImport = dynamic_cast<oox::FormulaImportBase*>(xComponent.get()))
+            pImport->readFormulaOoxml(m_aMathBuffer);
+        RTFValue::Pointer_t pValue(new RTFValue(xObject));
+        RTFSprms aMathAttributes;
+        aMathAttributes.set(NS_ooxml::LN_starmath, pValue);
+        writerfilter::Reference<Properties>::Pointer_t const pProperties(new RTFReferenceProperties(aMathAttributes));
+        Mapper().props(pProperties);
+        m_aMathBuffer = oox::formulaimport::XmlStreamBuilder();
+    }
+    else if (m_aStates.top().nDestinationState == DESTINATION_MR)
+    {
+        uno::Reference<xml::sax::XFastAttributeList> aAttribs;
+        m_aMathBuffer.appendOpeningTag(oox::NMSP_officeMath | oox::XML_r, aAttribs);
+        m_aMathBuffer.appendOpeningTag(oox::NMSP_officeMath | oox::XML_t, aAttribs);
+        m_aMathBuffer.appendCharacters(m_aStates.top().aDestinationText.makeStringAndClear());
+        m_aMathBuffer.appendClosingTag(oox::NMSP_officeMath | oox::XML_t);
+        m_aMathBuffer.appendClosingTag(oox::NMSP_officeMath | oox::XML_r);
+    }
+    else if (m_aStates.top().nDestinationState == DESTINATION_MF)
+        m_aMathBuffer.appendClosingTag(oox::NMSP_officeMath | oox::XML_f);
+    else if (m_aStates.top().nDestinationState == DESTINATION_MFPR)
+        m_aMathBuffer.appendClosingTag(oox::NMSP_officeMath | oox::XML_fPr);
+    else if (m_aStates.top().nDestinationState == DESTINATION_MCTRLPR)
+        m_aMathBuffer.appendClosingTag(oox::NMSP_officeMath | oox::XML_ctrlPr);
+    else if (m_aStates.top().nDestinationState == DESTINATION_MNUM)
+        m_aMathBuffer.appendClosingTag(oox::NMSP_officeMath | oox::XML_num);
+    else if (m_aStates.top().nDestinationState == DESTINATION_MDEN)
+        m_aMathBuffer.appendClosingTag(oox::NMSP_officeMath | oox::XML_den);
 
     // See if we need to end a track change
     RTFValue::Pointer_t pTrackchange = m_aStates.top().aCharacterSprms.find(NS_ooxml::LN_trackchange);

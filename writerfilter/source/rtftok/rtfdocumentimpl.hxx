@@ -35,6 +35,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <oox/helper/graphichelper.hxx>
+#include <oox/mathml/importutils.hxx>
 #include <rtl/strbuf.hxx>
 
 #include <rtftok/RTFDocument.hxx>
@@ -118,7 +119,14 @@ namespace writerfilter {
             DESTINATION_TITLE,
             DESTINATION_SUBJECT,
             DESTINATION_DOCCOMM,
-            DESTINATION_ATNID
+            DESTINATION_ATNID,
+            DESTINATION_MOMATH,
+            DESTINATION_MR,
+            DESTINATION_MF,
+            DESTINATION_MFPR,
+            DESTINATION_MCTRLPR,
+            DESTINATION_MNUM,
+            DESTINATION_MDEN
         };
 
         enum RTFBorderState
@@ -512,6 +520,8 @@ namespace writerfilter {
                 rtl::OUStringBuffer m_aUnicodeBuffer;
                 /// Same for hex characters.
                 rtl::OStringBuffer m_aHexBuffer;
+                /// Formula import.
+                oox::formulaimport::XmlStreamBuilder m_aMathBuffer;
         };
     } // namespace rtftok
 } // namespace writerfilter
