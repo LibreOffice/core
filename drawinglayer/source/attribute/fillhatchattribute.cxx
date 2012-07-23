@@ -42,6 +42,7 @@ namespace drawinglayer
             double                                  mfDistance;
             double                                  mfAngle;
             basegfx::BColor                         maColor;
+            sal_uInt32                              mnMinimalDiscreteDistance;
 
             // bitfield
             unsigned                                mbFillBackground : 1;
@@ -51,12 +52,14 @@ namespace drawinglayer
                 double fDistance,
                 double fAngle,
                 const basegfx::BColor& rColor,
+                sal_uInt32 nMinimalDiscreteDistance,
                 bool bFillBackground)
             :   mnRefCount(0),
                 meStyle(eStyle),
                 mfDistance(fDistance),
                 mfAngle(fAngle),
                 maColor(rColor),
+                mnMinimalDiscreteDistance(nMinimalDiscreteDistance),
                 mbFillBackground(bFillBackground)
             {
             }
@@ -66,6 +69,7 @@ namespace drawinglayer
             double getDistance() const { return mfDistance; }
             double getAngle() const { return mfAngle; }
             const basegfx::BColor& getColor() const { return maColor; }
+            sal_uInt32 getMinimalDiscreteDistance() const { return mnMinimalDiscreteDistance; }
             bool isFillBackground() const { return mbFillBackground; }
 
             bool operator==(const ImpFillHatchAttribute& rCandidate) const
@@ -74,7 +78,8 @@ namespace drawinglayer
                     && getDistance() == rCandidate.getDistance()
                     && getAngle() == rCandidate.getAngle()
                     && getColor() == rCandidate.getColor()
-                    && isFillBackground()  == rCandidate.isFillBackground());
+                    && getMinimalDiscreteDistance() == rCandidate.getMinimalDiscreteDistance()
+                    && isFillBackground() == rCandidate.isFillBackground());
             }
 
             static ImpFillHatchAttribute* get_global_default()
@@ -87,6 +92,7 @@ namespace drawinglayer
                         HATCHSTYLE_SINGLE,
                         0.0, 0.0,
                         basegfx::BColor(),
+                        3, // same as VCL
                         false);
 
                     // never delete; start with RefCount 1, not 0
@@ -102,9 +108,16 @@ namespace drawinglayer
             double fDistance,
             double fAngle,
             const basegfx::BColor& rColor,
+            sal_uInt32 nMinimalDiscreteDistance,
             bool bFillBackground)
-        :   mpFillHatchAttribute(new ImpFillHatchAttribute(
-                eStyle, fDistance, fAngle, rColor, bFillBackground))
+        :   mpFillHatchAttribute(
+                new ImpFillHatchAttribute(
+                    eStyle,
+                    fDistance,
+                    fAngle,
+                    rColor,
+                    nMinimalDiscreteDistance,
+                    bFillBackground))
         {
         }
 
@@ -191,6 +204,11 @@ namespace drawinglayer
         const basegfx::BColor& FillHatchAttribute::getColor() const
         {
             return mpFillHatchAttribute->getColor();
+        }
+
+        sal_uInt32 FillHatchAttribute::getMinimalDiscreteDistance() const
+        {
+            return mpFillHatchAttribute->getMinimalDiscreteDistance();
         }
 
         bool FillHatchAttribute::isFillBackground() const
