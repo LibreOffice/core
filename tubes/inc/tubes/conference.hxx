@@ -32,11 +32,14 @@
 #include <sal/config.h>
 #include "tubes/tubesdllapi.h"
 #include <rtl/ustring.hxx>
-#include <telepathy-glib/telepathy-glib.h>
 #include <tubes/warnings_guard_boost_signals2.hpp>
 
 class TeleManager;
 class TeleConferenceImpl;
+typedef struct _TpAccount TpAccount;
+typedef struct _TpContact TpContact;
+typedef struct _TpDBusTubeChannel TpDBusTubeChannel;
+typedef struct _GDBusConnection GDBusConnection;
 
 /** Conference setup by TeleManager */
 class TeleConference

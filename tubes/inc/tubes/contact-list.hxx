@@ -32,9 +32,11 @@
 #include <utility>
 #include <vector>
 
-#include <telepathy-glib/telepathy-glib.h>
-
 #include "tubes/tubesdllapi.h"
+
+typedef struct _TpAccount TpAccount;
+typedef struct _TpContact TpContact;
+typedef struct _TpAccountManager TpAccountManager;
 
 typedef ::std::pair< TpAccount *, TpContact * > AccountContactPair;
 typedef ::std::vector< AccountContactPair > AccountContactPairV;

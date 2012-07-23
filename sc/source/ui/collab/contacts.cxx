@@ -39,6 +39,8 @@
 #include <vcl/dialog.hxx>
 #include <svx/simptabl.hxx>
 
+#include <telepathy-glib/telepathy-glib.h>
+
 #define CONTACTS_DLG
 
 #ifdef CONTACTS_DLG
