@@ -29,7 +29,7 @@
 
 #include <stdio.h>
 #include <dlfcn.h>
-#if MAC_OS_X_VERSION_MIN_REQUIRED < 1070
+#if MACOSX_SDK_VERSION < 1070
 #include <cxxabi.h>
 #else
 #include <typeinfo>
@@ -54,14 +54,14 @@ using namespace ::std;
 using namespace ::osl;
 using namespace ::rtl;
 using namespace ::com::sun::star::uno;
-#if MAC_OS_X_VERSION_MIN_REQUIRED < 1070
+#if MACOSX_SDK_VERSION < 1070
 using namespace ::__cxxabiv1;
 #endif
 
 namespace CPPU_CURRENT_NAMESPACE
 {
 
-#if MAC_OS_X_VERSION_MIN_REQUIRED >= 1070
+#if MACOSX_SDK_VERSION >= 1070
 
 // MacOSX10.4u.sdk/usr/include/c++/4.0.0/cxxabi.h defined
 // __cxxabiv1::__class_type_info and __cxxabiv1::__si_class_type_info but
@@ -234,7 +234,7 @@ type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr ) SAL_THR
                     // ensure availability of base
                     type_info * base_rtti = getRTTI(
                         (typelib_CompoundTypeDescription *)pTypeDescr->pBaseTypeDescription );
-#if MAC_OS_X_VERSION_MIN_REQUIRED < 1070
+#if MACOSX_SDK_VERSION < 1070
                     rtti = new __si_class_type_info(
                         strdup( rttiName ), (__class_type_info *)base_rtti );
 #else
@@ -245,7 +245,7 @@ type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr ) SAL_THR
                 else
                 {
                     // this class has no base class
-#if MAC_OS_X_VERSION_MIN_REQUIRED < 1070
+#if MACOSX_SDK_VERSION < 1070
                     rtti = new __class_type_info( strdup( rttiName ) );
 #else
                     rtti = create_FAKE_class_type_info( strdup( rttiName ) );
