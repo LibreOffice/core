@@ -862,12 +862,8 @@ static bool needsInstallBundledExtensionBlobs (
         const ::osl::FileBase::RC eResult (aDirectoryItem.getFileStatus(aDirectoryStat));
         if (eResult == ::osl::File::E_None)
         {
-            rtl_logfile_longTrace("|    checking last modification time of containing directory %s\n", U2A(rsDirectoryURL));
             if (aDirectoryStat.getModifyTime().Seconds > aMarkerModifyTime.Seconds)
-            {
-                rtl_logfile_longTrace("|        containing directory is newer than marker\n");
                 return true;
-            }
         }
     }
 
