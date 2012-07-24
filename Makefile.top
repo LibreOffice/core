@@ -320,7 +320,8 @@ clean: clean-host clean-build
 
 clean-host:
 	rm -fr $(DEVINSTALLDIR)
-	rm -fr $(SOLARVER)/$(INPATH) # not necessarily below SRCDIR
+	rm -fr $(OUTDIR)
+	rm -fr $(WORKDIR)
 	rm -fr $(SRCDIR)/*/$(INPATH)
 	rm -fr install
 
