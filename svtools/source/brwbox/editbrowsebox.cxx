@@ -898,7 +898,7 @@ namespace svt
             return sal_False;
         }
 
-        EditBrowseBox * pTHIS = (EditBrowseBox *) this;
+        EditBrowseBox * pTHIS = const_cast<EditBrowseBox *> (this);
 
         // save the cell content if
         // a) a selection is beeing made
