@@ -214,6 +214,7 @@ void ScCalcOptionsDialog::SelectionChanged()
                 maBtnTrue.Check(false);
                 maBtnFalse.Check(true);
             }
+            maFtAnnotation.SetText(maDescEmptyStringAsZero);
         }
         break;
         default:
