@@ -235,7 +235,6 @@ public:
 
     void                SetCollaboration( TeleConference* pConference );
     TeleConference*     GetConference();
-    ScDocFuncRecv*      GetReceiver();
     // TODO: I think this could be moved to TeleManager later.
     void                SendFile( const rtl::OUString &rURL );
 
