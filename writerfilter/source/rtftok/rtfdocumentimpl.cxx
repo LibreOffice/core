@@ -954,6 +954,7 @@ void RTFDocumentImpl::text(OUString& rString)
         case DESTINATION_MCHR:
         case DESTINATION_MPOS:
         case DESTINATION_MVERTJC:
+        case DESTINATION_MSTRIKEH:
         case DESTINATION_MBEGCHR:
         case DESTINATION_MENDCHR:
         case DESTINATION_MSUBHIDE:
@@ -1461,6 +1462,16 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
         case RTF_MVERTJC:
             m_aStates.top().nDestinationState = DESTINATION_MVERTJC;
             break;
+        case RTF_MSTRIKEH:
+            m_aStates.top().nDestinationState = DESTINATION_MSTRIKEH;
+            break;
+        case RTF_MHIDETOP:
+        case RTF_MHIDEBOT:
+        case RTF_MHIDELEFT:
+        case RTF_MHIDERIGHT:
+            // SmOoxmlImport::handleBorderBox will ignore these anyway, so silently ignore for now.
+            m_aStates.top().nDestinationState = DESTINATION_SKIP;
+            break;
         case RTF_MSUBHIDE:
             m_aStates.top().nDestinationState = DESTINATION_MSUBHIDE;
             break;
@@ -1552,6 +1563,14 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
         case RTF_MGROUPCHRPR:
             m_aMathBuffer.appendOpeningTag(M_TOKEN(groupChrPr));
             m_aStates.top().nDestinationState = DESTINATION_MGROUPCHRPR;
+            break;
+        case RTF_MBORDERBOX:
+            m_aMathBuffer.appendOpeningTag(M_TOKEN(borderBox));
+            m_aStates.top().nDestinationState = DESTINATION_MBORDERBOX;
+            break;
+        case RTF_MBORDERBOXPR:
+            m_aMathBuffer.appendOpeningTag(M_TOKEN(borderBoxPr));
+            m_aStates.top().nDestinationState = DESTINATION_MBORDERBOXPR;
             break;
         default:
             SAL_INFO("writerfilter", OSL_THIS_FUNC << ": TODO handle destination '" << lcl_RtfToString(nKeyword) << "'");
@@ -3697,6 +3716,7 @@ int RTFDocumentImpl::popState()
     case DESTINATION_MCHR:
     case DESTINATION_MPOS:
     case DESTINATION_MVERTJC:
+    case DESTINATION_MSTRIKEH:
     case DESTINATION_MBEGCHR:
     case DESTINATION_MENDCHR:
     case DESTINATION_MSUBHIDE:
@@ -3709,6 +3729,7 @@ int RTFDocumentImpl::popState()
         {
             case DESTINATION_MCHR: nToken = M_TOKEN(chr); break;
             case DESTINATION_MPOS: nToken = M_TOKEN(pos); break;
+            case DESTINATION_MSTRIKEH: nToken = M_TOKEN(strikeH); break;
             case DESTINATION_MVERTJC: nToken = M_TOKEN(pos); break;
             case DESTINATION_MBEGCHR: nToken = M_TOKEN(begChr); break;
             case DESTINATION_MENDCHR: nToken = M_TOKEN(endChr); break;
@@ -3742,6 +3763,8 @@ int RTFDocumentImpl::popState()
     case DESTINATION_MLIMUPPPR: m_aMathBuffer.appendClosingTag(M_TOKEN(limUppPr)); break;
     case DESTINATION_MGROUPCHR: m_aMathBuffer.appendClosingTag(M_TOKEN(groupChr)); break;
     case DESTINATION_MGROUPCHRPR: m_aMathBuffer.appendClosingTag(M_TOKEN(groupChrPr)); break;
+    case DESTINATION_MBORDERBOX: m_aMathBuffer.appendClosingTag(M_TOKEN(borderBox)); break;
+    case DESTINATION_MBORDERBOXPR: m_aMathBuffer.appendClosingTag(M_TOKEN(borderBoxPr)); break;
     default: break;
     }
 
