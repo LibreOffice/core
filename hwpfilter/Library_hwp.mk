@@ -67,7 +67,6 @@ $(eval $(call gb_Library_add_exception_objects,hwp,\
     hwpfilter/source/hcode \
     hwpfilter/source/hfont \
     hwpfilter/source/hgzip \
-    hwpfilter/source/himgutil \
     hwpfilter/source/hinfo \
     hwpfilter/source/hiodev \
     hwpfilter/source/hpara \

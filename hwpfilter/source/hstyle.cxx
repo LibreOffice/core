@@ -28,6 +28,8 @@
 
 #include "precompile.h"
 
+#include <comphelper/newarray.hxx>
+
 #include    "hwplib.h"
 #include    "hwpfile.h"
 #include    "hstyle.h"
@@ -132,7 +134,7 @@ bool HWPStyle::Read(HWPFile & hwpf)
     ParaShape pshape;
 
     hwpf.Read2b(&nstyles, 1);
-    style = new StyleData[nstyles];
+    style = ::comphelper::newArray_null<StyleData>(nstyles);
     if (!style)
         return false;
 

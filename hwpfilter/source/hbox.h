@@ -69,12 +69,8 @@ struct HBox
  * @returns True if reading from stream is successful.
  */
         virtual int   Read(HWPFile &hwpf);
-/**
- * @param hstr Buffer to save string
- * @param slen Size of buffer
- * @returns The string having each proper format by pointer
- */
-        virtual int   GetString(hchar *hstr, int slen = 255);
+
+        virtual hchar_string GetString();
     private:
         static int boxCount;
 };
@@ -171,10 +167,8 @@ struct DateCode: public HBox
 
     DateCode();
     virtual int Read(HWPFile &hwpf);
-/**
- * @returns Length of date string
- */
-    virtual int GetString(hchar *hstr, int slen = 255);
+
+    virtual hchar_string GetString();
 };
 
 /**
@@ -412,8 +406,8 @@ struct TxtBox: public FBox
 struct Columns
 {
      int *data;
-     int nCount;
-     int nTotal;
+     size_t nCount;
+     size_t nTotal;
      Columns(){
           nCount = 0;
           nTotal = INIT_SIZE;
@@ -423,8 +417,12 @@ struct Columns
 
      void AddColumnsSize(){
           int *tmp = data;
+          if (nTotal + ADD_AMOUNT < nTotal) // overflow
+          {
+              throw ::std::bad_alloc();
+          }
           data = new int[nTotal + ADD_AMOUNT];
-          for( int i = 0 ; i < nTotal ; i++ )
+          for (size_t i = 0 ; i < nTotal ; i++)
                 data[i] = tmp[i];
           nTotal += ADD_AMOUNT;
           delete[] tmp;
@@ -435,13 +433,13 @@ struct Columns
                 data[nCount++] = pos;
                 return;
           }
-          for( int i = 0 ; i < nCount; i++ ){
+          for (size_t i = 0 ; i < nCount; i++ ) {
                 if( pos < data[i] + ALLOWED_GAP && pos > data[i] - ALLOWED_GAP )
                      return;  // Already exist;
                 if( pos < data[i] ){
                      if( nCount == nTotal )
                           AddColumnsSize();
-                     for( int j = nCount ; j > i ; j-- )
+                     for (size_t j = nCount ; j > i ; j--)
                           data[j] = data[j-1];
                      data[i] = pos;
                      nCount++;
@@ -458,7 +456,7 @@ struct Columns
      {
           if( pos == 0 )
                 return 0;
-          for( int i = 0 ; i < nCount; i++){
+          for (size_t i = 0 ; i < nCount; i++) {
                 if( pos < data[i] + ALLOWED_GAP && pos > data[i] - ALLOWED_GAP )
                      return i;
           }
@@ -469,8 +467,8 @@ struct Columns
 struct Rows
 {
      int *data;
-     int nCount;
-     int nTotal;
+     size_t nCount;
+     size_t nTotal;
      Rows(){
           nCount = 0;
           nTotal = INIT_SIZE;
@@ -480,8 +478,12 @@ struct Rows
 
      void AddRowsSize(){
           int *tmp = data;
+          if (nTotal + ADD_AMOUNT < nTotal) // overflow
+          {
+              throw ::std::bad_alloc();
+          }
           data = new int[nTotal + ADD_AMOUNT];
-          for( int i = 0 ; i < nTotal ; i++ )
+          for (size_t i = 0 ; i < nTotal ; i++)
                 data[i] = tmp[i];
           nTotal += ADD_AMOUNT;
           delete[] tmp;
@@ -492,13 +494,13 @@ struct Rows
                 data[nCount++] = pos;
                 return;
           }
-          for( int i = 0 ; i < nCount; i++ ){
+          for (size_t i = 0 ; i < nCount; i++) {
                 if( pos < data[i] + ALLOWED_GAP && pos > data[i] - ALLOWED_GAP )
                      return;  // Already exist;
                 if( pos < data[i] ){
                      if( nCount == nTotal )
                           AddRowsSize();
-                     for( int j = nCount ; j > i ; j-- )
+                     for (size_t j = nCount ; j > i ; j--)
                           data[j] = data[j-1];
                      data[i] = pos;
                      nCount++;
@@ -515,7 +517,7 @@ struct Rows
      {
           if( pos == 0 )
                 return 0;
-          for( int i = 0 ; i < nCount; i++){
+          for (size_t i = 0 ; i < nCount; i++) {
                 if( pos < data[i] + ALLOWED_GAP && pos > data[i] - ALLOWED_GAP )
                      return i;
           }
@@ -869,7 +871,7 @@ struct MailMerge: public HBox
     MailMerge();
 
     virtual int Read(HWPFile &hwpf);
-    virtual int GetString(hchar *, int slen = 255);
+    virtual hchar_string GetString();
 };
 
 // char compositon(23)
@@ -1007,7 +1009,7 @@ class Outline: public HBox
         Outline();
 
         virtual int   Read(HWPFile &hwpf);
-        hchar *GetUnicode(hchar *, int slen = 255);
+        hchar_string GetUnicode() const;
 };
 
 /* ¹­À½ ºóÄ­(30) */
