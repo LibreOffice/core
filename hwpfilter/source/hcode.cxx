@@ -1191,31 +1191,28 @@ hchar ksc5601_han_to_ucs2 (hchar input)
     return '?';
 }
 
-hchar* hstr2ucsstr(hchar* hstr, hchar* ubuf)
+hchar_string hstr2ucsstr(hchar const* hstr)
 {
-  int i = 0, j;
-  int res;
-  hchar dest[3];
-  hchar *tmp = ubuf;
-  for( ; *hstr ; ){
-      res = hcharconv(*hstr++, dest, UNICODE);
-      for( j = 0 ; j < res ; j++)
-            tmp[i++] = dest[j];
-  }
-
-  tmp[i]= '\0';
-  return ubuf;
+    hchar_string ret;
+    hchar dest[3];
+    for( ; *hstr ; ){
+        int const res = hcharconv(*hstr++, dest, UNICODE);
+        for (int j = 0 ; j < res ; j++) {
+            ret.push_back(dest[j]);
+        }
+    }
+    return ret;
 }
+
 /**
  * 한컴스트링을 완성형스트링으로 변환한다
  */
-int hstr2ksstr(hchar* hstr, char* buf)
+::std::string hstr2ksstr(hchar const* hstr)
 {
-
-    int i = 0, res, j;
+    ::std::string ret;
+    int res, j;
     int c;
      hchar dest[3];
-    char *tmp = buf;
     for( ; *hstr ; )
     {
         res = hcharconv(*hstr++, dest, KS);
@@ -1223,17 +1220,17 @@ int hstr2ksstr(hchar* hstr, char* buf)
               c = dest[j];
               if( c < 32 ) c = ' ';
               else if( c < 256 )
-                    tmp[i++] = sal::static_int_cast<char>(c);
+              {
+                  ret.push_back(sal::static_int_cast<char>(c));
+              }
               else
               {
-                    tmp[i++] = sal::static_int_cast<char>((c >> 8 ) & 0xff);
-                    tmp[i++] = sal::static_int_cast<char>(c & 0xff);
+                  ret.push_back(sal::static_int_cast<char>((c >> 8 ) & 0xff));
+                  ret.push_back(sal::static_int_cast<char>(c & 0xff));
               }
           }
     }
-    tmp[i]= '\0';
-
-    return i;
+    return ret;
 }
 
 
@@ -1241,25 +1238,22 @@ int hstr2ksstr(hchar* hstr, char* buf)
  * 한글에서 영문외의 문자까지 포함할 수 있는 kchar타입의 문자열을
  * 한글에서 사용하는 hchar타입의 문자열로 변환한다.
  */
-unsigned short *kstr2hstr( unsigned char *src, unsigned short *dest )
+hchar_string kstr2hstr(unsigned char const* src)
 {
-    int i=0, ii;
-    unsigned short* tmp = dest;
-
-    for(i=0,ii=0 ; src[i] != '\0' ; i++,ii++ )
+    hchar_string ret;
+    for (unsigned int i = 0; src[i] != '\0' ; i++)
     {
         if ( src[i] < 127 )
         {
-            tmp[ii] = src[i];
+            ret.push_back(src[i]);
         }
         else
         {
-            tmp[ii] = src[i] << 8 | src[i+1];
+            ret.push_back(src[i] << 8 | src[i+1]);
             i++;
         }
     }
-    tmp[ii] = '\0';
-    return dest;
+    return ret;
 }
 
 
@@ -1331,119 +1325,87 @@ char *hcolor2str(uchar color, uchar shade, char *buf, bool bIsChar)
 }
 
 
-char *urltounix(const char *src, char *dest )
+::std::string urltounix(const char *src)
 {
+    ::std::string ret;
+    unsigned int i = 0;
     if( src[0] == 'C' && src[1] == ':' && src[2] == '\\' ) // Home Dir
     {
-        unsigned int i, len;
-        sprintf(dest,"file://%s/", getenv("HOME") );
-        len = strlen( dest );
-
-        for( i = 0 ; i + 3 < strlen(src) ; i++ )
-        {
-            if( src[i + 3] == '\\')
-                dest[i + len] = '/';
-            else
-                dest[i + len] = src[ i +3];
-        }
-        dest[i + len] = '\0';
-        return dest;
+        ret.append("file://");
+        ret.append(getenv("HOME"));
+        ret.push_back('/');
+        i = 3; // skip first 3
     }
     else if( src[0] == 'D' && src[1] == ':' && src[2] == '\\' ) // Root Dir
     {
-        unsigned int i, len;
-        sprintf(dest,"file:///");
-        len = strlen( dest );
-        for( i = 0 ; i + 3 < strlen(src) ; i++ )
-        {
-            if( src[i + 3] == '\\')
-                dest[i + len] = '/';
-            else
-                dest[i + len] = src[i+3];
-        }
-        dest[i + len] = '\0';
-        return dest;
+        ret.append("file:///");
+        i = 3; // skip first 3
     }
     else if( !strncmp(src,"http",4)  ) // Start from "http"
-     {
-        unsigned int i;
-        for( i = 0 ; i < strlen(src) ; i++ )
-        {
-            if( src[i] == '\\')
-                dest[i] = '/';
-            else
-                dest[i] = src[i];
-        }
-        dest[i] = '\0';
-        return dest;
+    {
+        // nothing special here, just copy
     }
      else
     {
-        unsigned int i, len, srclen;
-          srclen = strlen(src);
-          char ext[4];
-          strncpy(ext,src + srclen - 3,3);
-          ext[3]=0;
-#ifdef _WIN32
-          if( _strnicmp(ext,"HWP",3) && _strnicmp(ext,"HWT",3))
-#else
-          if( strcasecmp(ext,"HWP") && strcasecmp(ext,"HWT"))
-#endif
-              sprintf(dest, "http://");
-          len = strlen(dest);
-        for( i = 0 ; i < strlen(src) ; i++ )
+        unsigned int srclen = strlen(src);
+        if (3 < srclen)
         {
-            if( src[i] == '\\')
-                dest[i+len] = '/';
-            else
-                dest[i+len] = src[i];
+            char const*const ext = src + (srclen-3);
+#ifdef _WIN32
+            if (_strnicmp(ext,"HWP",3) && _strnicmp(ext,"HWT",3))
+#else
+            if (strcasecmp(ext,"HWP") && strcasecmp(ext,"HWT"))
+#endif
+            {
+                ret.append("http://");
+            }
         }
-        dest[i+len] = '\0';
-        return dest;
      }
+     for (; i < strlen(src); i++)
+     {
+        if (src[i] == '\\') {
+            ret.push_back('/');
+        } else {
+            ret.push_back(src[i]);
+        }
+     }
+     return ret;
 }
 
 #ifdef _WIN32
-char *urltowin(const char *src, char *dest )
+::std::string urltowin(const char *src)
 {
+    std::string ret;
     if( !_strnicmp(src, "http", 4))
      {
-        int i;
-        for( i = 0 ; i < sal::static_int_cast<int>(strlen(src)) ; i++ )
-        {
-            if( src[i] == '\\')
-                dest[i] = '/';
-            else
-                dest[i] = src[i];
-        }
-        dest[i] = '\0';
-        return dest;
+        // nothing special here, just copy
     }
      else
     {
-        int i, len, srclen;
-          srclen = strlen(src);
-          char ext[4];
-          strncpy(ext,src + srclen - 3,3);
-          ext[3]=0;
-          //printf("hcode.cxx : ext = %s\n",ext);
-
-          if( !_strnicmp(ext,"HWP",3) || !_strnicmp(ext,"HWT",3)){
-                strcpy(dest,src);
-                return dest;
-          }
-          sprintf(dest, "http://");
-          len = strlen(dest);
-        for( i = 0 ; i < sal::static_int_cast<int>(strlen(src)) ; i++ )
+        unsigned int srclen = strlen(src);
+        if (3 < srclen)
         {
-            if( src[i] == '\\')
-                dest[i+len] = '/';
+            char const*const ext = src + (srclen-3);
+            if (_strnicmp(ext,"HWP",3) && _strnicmp(ext,"HWT",3))
+            {
+                ret.append("http://");
+            }
             else
-                dest[i+len] = src[i];
+            {
+                ret.append(src); // no backslash conversion
+                return ret;
+            }
         }
-        dest[i+len] = '\0';
-        return dest;
-     }
+	 }
+    for (unsigned int i = 0; i < strlen(src); i++)
+    {
+        if (src[i] == '\\') {
+            ret.push_back('/');
+        } else {
+            ret.push_back(src[i]);
+        }
+    }
+    return ret;
 }
 #endif
 
