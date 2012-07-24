@@ -318,8 +318,11 @@ void SwAutoCompleteWord::SetMaxCount( sal_uInt16 nNewMax )
         sal_uInt16 nLRUIndex = nNewMax-1;
         while( nNewMax < aWordLst.size() && nLRUIndex < aLRULst.size())
         {
-            SvStringsISortDtor::iterator it = aWordLst.find( aLRULst[ nLRUIndex++ ] );
+            SvStringsISortDtor::const_iterator it =
+                aWordLst.find( aLRULst[ nLRUIndex++ ] );
             OSL_ENSURE( aWordLst.end() != it, "String not found" );
+            //FIXME this is utterly horrid: SwAutoCompleteString should
+            // NOT derive from String
             SwAutoCompleteString* pDel = (SwAutoCompleteString*) *it;
             aWordLst.erase( it );
             delete pDel;
