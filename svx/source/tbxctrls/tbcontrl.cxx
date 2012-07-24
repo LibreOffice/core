@@ -2118,7 +2118,7 @@ SfxPopupWindow* SvxFontColorToolBoxControl::CreatePopupWindow()
                 mLastColor);
 
     pColorWin->StartPopupMode( &GetToolBox(),
-        FLOATWIN_POPUPMODE_GRABFOCUS|FLOATWIN_POPUPMODE_ALLOWTEAROFF );
+        FLOATWIN_POPUPMODE_GRABFOCUS|FLOATWIN_POPUPMODE_ALLOWTEAROFF|FLOATWIN_POPUPMODE_NOAPPFOCUSCLOSE );
     pColorWin->StartSelection();
     SetPopupWindow( pColorWin );
     return pColorWin;
@@ -2194,7 +2194,7 @@ SfxPopupWindow* SvxColorToolBoxControl::CreatePopupWindow()
                                     mLastColor);
 
     pColorWin->StartPopupMode( &GetToolBox(),
-        FLOATWIN_POPUPMODE_GRABFOCUS|FLOATWIN_POPUPMODE_ALLOWTEAROFF );
+        FLOATWIN_POPUPMODE_GRABFOCUS|FLOATWIN_POPUPMODE_ALLOWTEAROFF|FLOATWIN_POPUPMODE_NOAPPFOCUSCLOSE );
     pColorWin->StartSelection();
     SetPopupWindow( pColorWin );
     return pColorWin;
@@ -2322,7 +2322,7 @@ SfxPopupWindow* SvxColorExtToolBoxControl::CreatePopupWindow()
     }
 
     pColorWin->StartPopupMode( &GetToolBox(),
-        FLOATWIN_POPUPMODE_GRABFOCUS|FLOATWIN_POPUPMODE_ALLOWTEAROFF );
+        FLOATWIN_POPUPMODE_GRABFOCUS|FLOATWIN_POPUPMODE_ALLOWTEAROFF|FLOATWIN_POPUPMODE_NOAPPFOCUSCLOSE );
     pColorWin->StartSelection();
     SetPopupWindow( pColorWin );
     bChoiceFromPalette = sal_True;
@@ -2450,7 +2450,10 @@ SfxPopupWindow* SvxFrameToolBoxControl::CreatePopupWindow()
     SvxFrameWindow_Impl* pFrameWin = new SvxFrameWindow_Impl(
                                         GetSlotId(), m_xFrame, &GetToolBox() );
 
-    pFrameWin->StartPopupMode( &GetToolBox(), FLOATWIN_POPUPMODE_GRABFOCUS | FLOATWIN_POPUPMODE_ALLOWTEAROFF );
+    pFrameWin->StartPopupMode( &GetToolBox(),
+                               FLOATWIN_POPUPMODE_GRABFOCUS |
+                               FLOATWIN_POPUPMODE_ALLOWTEAROFF |
+                               FLOATWIN_POPUPMODE_NOAPPFOCUSCLOSE );
     pFrameWin->StartSelection();
     SetPopupWindow( pFrameWin );
 
@@ -2499,7 +2502,10 @@ SfxPopupWindowType SvxFrameLineStyleToolBoxControl::GetPopupWindowType() const
 SfxPopupWindow* SvxFrameLineStyleToolBoxControl::CreatePopupWindow()
 {
     SvxLineWindow_Impl* pLineWin = new SvxLineWindow_Impl( GetSlotId(), m_xFrame, &GetToolBox() );
-    pLineWin->StartPopupMode( &GetToolBox(), FLOATWIN_POPUPMODE_GRABFOCUS | FLOATWIN_POPUPMODE_ALLOWTEAROFF );
+    pLineWin->StartPopupMode( &GetToolBox(),
+                              FLOATWIN_POPUPMODE_GRABFOCUS |
+                              FLOATWIN_POPUPMODE_ALLOWTEAROFF |
+                              FLOATWIN_POPUPMODE_NOAPPFOCUSCLOSE );
     SetPopupWindow( pLineWin );
 
     return pLineWin;
@@ -2564,7 +2570,7 @@ SfxPopupWindow* SvxFrameLineColorToolBoxControl::CreatePopupWindow()
                                         mLastColor);
 
     pColorWin->StartPopupMode( &GetToolBox(),
-        FLOATWIN_POPUPMODE_GRABFOCUS|FLOATWIN_POPUPMODE_ALLOWTEAROFF );
+        FLOATWIN_POPUPMODE_GRABFOCUS|FLOATWIN_POPUPMODE_ALLOWTEAROFF|FLOATWIN_POPUPMODE_NOAPPFOCUSCLOSE );
     pColorWin->StartSelection();
     SetPopupWindow( pColorWin );
     return pColorWin;
