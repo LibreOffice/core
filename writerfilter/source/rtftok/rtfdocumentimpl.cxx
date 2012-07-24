@@ -3230,17 +3230,21 @@ int RTFDocumentImpl::popState()
     bool bPopFrame = false;
     RTFParserState aState(m_aStates.top());
 
-    if (m_aStates.top().nDestinationState == DESTINATION_FONTTABLE)
+    switch (m_aStates.top().nDestinationState)
+    {
+    case DESTINATION_FONTTABLE:
     {
         writerfilter::Reference<Table>::Pointer_t const pTable(new RTFReferenceTable(m_aFontTableEntries));
         Mapper().table(NS_rtf::LN_FONTTABLE, pTable);
     }
-    else if (m_aStates.top().nDestinationState == DESTINATION_STYLESHEET)
+    break;
+    case DESTINATION_STYLESHEET:
     {
         writerfilter::Reference<Table>::Pointer_t const pTable(new RTFReferenceTable(m_aStyleTableEntries));
         Mapper().table(NS_rtf::LN_STYLESHEET, pTable);
     }
-    else if (m_aStates.top().nDestinationState == DESTINATION_LISTOVERRIDETABLE)
+    break;
+    case DESTINATION_LISTOVERRIDETABLE:
     {
         RTFSprms aListTableAttributes;
         writerfilter::Reference<Properties>::Pointer_t const pProp(new RTFReferenceProperties(aListTableAttributes, m_aListTableSprms));
@@ -3249,14 +3253,12 @@ int RTFDocumentImpl::popState()
         writerfilter::Reference<Table>::Pointer_t const pTable(new RTFReferenceTable(aListTableEntries));
         Mapper().table(NS_rtf::LN_LISTTABLE, pTable);
     }
-    else if (aState.nDestinationState == DESTINATION_LISTENTRY)
-    {
+    break;
+    case DESTINATION_LISTENTRY:
         for (RTFSprms::Iterator_t i = aState.aListLevelEntries.begin(); i != aState.aListLevelEntries.end(); ++i)
             aState.aTableSprms.set(i->first, i->second, false);
-    }
-    else if (m_aStates.top().nDestinationState == DESTINATION_FIELDINSTRUCTION)
-    {
-        if (m_aFormfieldAttributes.size() || m_aFormfieldSprms.size())
+    break;
+    case DESTINATION_FIELDINSTRUCTION:
         {
             RTFValue::Pointer_t pValue(new RTFValue(m_aFormfieldAttributes, m_aFormfieldSprms));
             RTFSprms aFFAttributes;
@@ -3269,15 +3271,14 @@ int RTFDocumentImpl::popState()
         }
         if (!m_bEq)
             singleChar(0x14);
-    }
-    else if (m_aStates.top().nDestinationState == DESTINATION_FIELDRESULT)
-    {
+    break;
+    case DESTINATION_FIELDRESULT:
         if (!m_bEq)
             singleChar(0x15);
         else
             m_bEq = false;
-    }
-    else if (m_aStates.top().nDestinationState == DESTINATION_LEVELTEXT)
+    break;
+    case DESTINATION_LEVELTEXT:
     {
         OUString aStr = m_aStates.top().aDestinationText.makeStringAndClear();
 
@@ -3291,7 +3292,8 @@ int RTFDocumentImpl::popState()
         RTFValue::Pointer_t pValue(new RTFValue(aValue, true));
         aState.aTableAttributes.set(NS_ooxml::LN_CT_LevelText_val, pValue);
     }
-    else if (m_aStates.top().nDestinationState == DESTINATION_LEVELNUMBERS)
+    break;
+    case DESTINATION_LEVELNUMBERS:
     {
         RTFSprms& rAttributes = aState.aTableSprms.find(NS_ooxml::LN_CT_Lvl_lvlText)->getAttributes();
         RTFValue::Pointer_t pValue = rAttributes.find(NS_ooxml::LN_CT_LevelText_val);
@@ -3313,9 +3315,10 @@ int RTFDocumentImpl::popState()
         }
         pValue->setString(aBuf.makeStringAndClear());
     }
-    else if (m_aStates.top().nDestinationState == DESTINATION_SHAPEPROPERTYNAME
-            || m_aStates.top().nDestinationState == DESTINATION_SHAPEPROPERTYVALUE
-            || m_aStates.top().nDestinationState == DESTINATION_SHAPEPROPERTY)
+    break;
+    case DESTINATION_SHAPEPROPERTYNAME:
+    case DESTINATION_SHAPEPROPERTYVALUE:
+    case DESTINATION_SHAPEPROPERTY:
     {
         aShape = m_aStates.top().aShape;
         aPicture = m_aStates.top().aPicture;
@@ -3326,42 +3329,47 @@ int RTFDocumentImpl::popState()
             aShape.aProperties.back().second = m_aStates.top().aDestinationText.makeStringAndClear();
         bPopShapeProperties = true;
     }
-    else if (m_aStates.top().nDestinationState == DESTINATION_PICPROP
-            || m_aStates.top().nDestinationState == DESTINATION_SHAPEINSTRUCTION)
-    {
+    break;
+    case DESTINATION_PICPROP:
+    case DESTINATION_SHAPEINSTRUCTION:
         if (!m_bObject)
             m_pSdrImport->resolve(m_aStates.top().aShape);
-    }
-    else if (m_aStates.top().nDestinationState == DESTINATION_BOOKMARKSTART)
+    break;
+    case DESTINATION_BOOKMARKSTART:
     {
         OUString aStr = m_aStates.top().aDestinationText.makeStringAndClear();
         int nPos = m_aBookmarks.size();
         m_aBookmarks[aStr] = nPos;
         Mapper().props(lcl_getBookmarkProperties(nPos, aStr));
     }
-    else if (m_aStates.top().nDestinationState == DESTINATION_BOOKMARKEND)
+    break;
+    case DESTINATION_BOOKMARKEND:
         Mapper().props(lcl_getBookmarkProperties(m_aBookmarks[m_aStates.top().aDestinationText.makeStringAndClear()]));
-    else if (m_aStates.top().nDestinationState == DESTINATION_PICT)
+    break;
+    case DESTINATION_PICT:
         resolvePict(true);
-    else if (m_aStates.top().nDestinationState == DESTINATION_SHAPEPROPERTYVALUEPICT)
-    {
+    break;
+    case DESTINATION_SHAPEPROPERTYVALUEPICT:
         bPopPictureProperties = true;
         aPicture = m_aStates.top().aPicture;
         aDestinationText = m_aStates.top().aDestinationText;
-    }
-    else if (m_aStates.top().nDestinationState == DESTINATION_SHAPETEXT)
+    break;
+    case DESTINATION_SHAPETEXT:
         m_pCurrentBuffer = 0; // Just disable buffering, don't empty it yet.
-    else if (m_aStates.top().nDestinationState == DESTINATION_FORMFIELDNAME)
+    break;
+    case DESTINATION_FORMFIELDNAME:
     {
         RTFValue::Pointer_t pValue(new RTFValue(m_aStates.top().aDestinationText.makeStringAndClear()));
         m_aFormfieldSprms.set(NS_ooxml::LN_CT_FFData_name, pValue);
     }
-    else if (m_aStates.top().nDestinationState == DESTINATION_FORMFIELDLIST)
+    break;
+    case DESTINATION_FORMFIELDLIST:
     {
         RTFValue::Pointer_t pValue(new RTFValue(m_aStates.top().aDestinationText.makeStringAndClear()));
         m_aFormfieldSprms.set(NS_ooxml::LN_CT_FFDDList_listEntry, pValue);
     }
-    else if (m_aStates.top().nDestinationState == DESTINATION_DATAFIELD && m_bFormField)
+    break;
+    case DESTINATION_DATAFIELD:
     {
         OString aStr = OUStringToOString(m_aStates.top().aDestinationText.makeStringAndClear(), m_aStates.top().nCurrentEncoding);
         // decode hex dump
@@ -3407,26 +3415,45 @@ int RTFDocumentImpl::popState()
 
         m_bFormField = false;
     }
-    else if (m_aStates.top().nDestinationState == DESTINATION_CREATIONTIME && m_xDocumentProperties.is())
+    break;
+    case DESTINATION_CREATIONTIME:
+    if (m_xDocumentProperties.is())
         m_xDocumentProperties->setCreationDate(lcl_getDateTime(m_aStates));
-    else if (m_aStates.top().nDestinationState == DESTINATION_REVISIONTIME && m_xDocumentProperties.is())
+    break;
+    case DESTINATION_REVISIONTIME:
+    if (m_xDocumentProperties.is())
         m_xDocumentProperties->setModificationDate(lcl_getDateTime(m_aStates));
-    else if (m_aStates.top().nDestinationState == DESTINATION_PRINTTIME && m_xDocumentProperties.is())
+    break;
+    case DESTINATION_PRINTTIME:
+    if (m_xDocumentProperties.is())
         m_xDocumentProperties->setPrintDate(lcl_getDateTime(m_aStates));
-    else if (m_aStates.top().nDestinationState == DESTINATION_AUTHOR && m_xDocumentProperties.is())
+    break;
+    case DESTINATION_AUTHOR:
+    if (m_xDocumentProperties.is())
         m_xDocumentProperties->setAuthor(m_aStates.top().aDestinationText.makeStringAndClear());
-    else if (m_aStates.top().nDestinationState == DESTINATION_KEYWORDS && m_xDocumentProperties.is())
+    break;
+    case DESTINATION_KEYWORDS:
+    if (m_xDocumentProperties.is())
         m_xDocumentProperties->setKeywords(comphelper::string::convertCommaSeparated(m_aStates.top().aDestinationText.makeStringAndClear()));
-    else if (m_aStates.top().nDestinationState == DESTINATION_COMMENT && m_xDocumentProperties.is())
+    break;
+    case DESTINATION_COMMENT:
+    if (m_xDocumentProperties.is())
         m_xDocumentProperties->setGenerator(m_aStates.top().aDestinationText.makeStringAndClear());
-    else if (m_aStates.top().nDestinationState == DESTINATION_TITLE && m_xDocumentProperties.is())
+    break;
+    case DESTINATION_TITLE:
+    if (m_xDocumentProperties.is())
         m_xDocumentProperties->setTitle(m_aStates.top().aDestinationText.makeStringAndClear());
-    else if (m_aStates.top().nDestinationState == DESTINATION_SUBJECT && m_xDocumentProperties.is())
+    break;
+    case DESTINATION_SUBJECT:
+    if (m_xDocumentProperties.is())
         m_xDocumentProperties->setSubject(m_aStates.top().aDestinationText.makeStringAndClear());
-    else if (m_aStates.top().nDestinationState == DESTINATION_DOCCOMM && m_xDocumentProperties.is())
+    break;
+    case DESTINATION_DOCCOMM:
+    if (m_xDocumentProperties.is())
         m_xDocumentProperties->setDescription(m_aStates.top().aDestinationText.makeStringAndClear());
-    else if (m_aStates.top().nDestinationState == DESTINATION_OPERATOR
-            || m_aStates.top().nDestinationState == DESTINATION_COMPANY)
+    break;
+    case DESTINATION_OPERATOR:
+    case DESTINATION_COMPANY:
     {
         OUString aName = m_aStates.top().nDestinationState == DESTINATION_OPERATOR ? OUString("Operator") : OUString("Company");
         if (m_xDocumentProperties.is())
@@ -3436,7 +3463,8 @@ int RTFDocumentImpl::popState()
                     uno::makeAny(m_aStates.top().aDestinationText.makeStringAndClear()));
         }
     }
-    else if (m_aStates.top().nDestinationState == DESTINATION_OBJDATA)
+    break;
+    case DESTINATION_OBJDATA:
     {
         m_pObjectData.reset(new SvMemoryStream());
         int b = 0, count = 2;
@@ -3489,7 +3517,8 @@ int RTFDocumentImpl::popState()
         RTFValue::Pointer_t pValue(new RTFValue(aOLEAttributes));
         m_aObjectSprms.set(NS_ooxml::LN_OLEObject_OLEObject, pValue);
     }
-    else if (m_aStates.top().nDestinationState == DESTINATION_OBJECT)
+    break;
+    case DESTINATION_OBJECT:
     {
         RTFSprms aObjAttributes;
         RTFSprms aObjSprms;
@@ -3508,7 +3537,8 @@ int RTFDocumentImpl::popState()
         m_aObjectSprms.clear();
         m_bObject = false;
     }
-    else if (m_aStates.top().nDestinationState == DESTINATION_ANNOTATIONDATE)
+    break;
+    case DESTINATION_ANNOTATIONDATE:
     {
         OUString aStr(OStringToOUString(lcl_DTTM22OString(m_aStates.top().aDestinationText.makeStringAndClear().toInt32()),
                     m_aStates.top().nCurrentEncoding));
@@ -3518,11 +3548,14 @@ int RTFDocumentImpl::popState()
         writerfilter::Reference<Properties>::Pointer_t const pProperties(new RTFReferenceProperties(aAnnAttributes));
         Mapper().props(pProperties);
     }
-    else if (m_aStates.top().nDestinationState == DESTINATION_ANNOTATIONAUTHOR)
+    break;
+    case DESTINATION_ANNOTATIONAUTHOR:
         m_aAuthor = m_aStates.top().aDestinationText.makeStringAndClear();
-    else if (m_aStates.top().nDestinationState == DESTINATION_ATNID)
+    break;
+    case DESTINATION_ATNID:
         m_aAuthorInitials = m_aStates.top().aDestinationText.makeStringAndClear();
-    else if (m_aStates.top().nDestinationState == DESTINATION_FALT)
+    break;
+    case DESTINATION_FALT:
     {
         OUString aStr(m_aStates.top().aDestinationText.makeStringAndClear());
         RTFValue::Pointer_t pValue(new RTFValue(aStr));
@@ -3530,10 +3563,13 @@ int RTFDocumentImpl::popState()
         aSprms = m_aStates.top().aTableSprms;
         bFaltEnd = true;
     }
-    else if (m_aStates.top().nDestinationState == DESTINATION_FLYMAINCONTENT
-            || m_aStates.top().nDestinationState == DESTINATION_SHPPICT)
+    break;
+    case DESTINATION_FLYMAINCONTENT:
+    case DESTINATION_SHPPICT:
         bPopFrame = true;
-    else if (m_aStates.top().nDestinationState == DESTINATION_DRAWINGOBJECT && m_aStates.top().aDrawingObject.xShape.is())
+    break;
+    case DESTINATION_DRAWINGOBJECT:
+    if (m_aStates.top().aDrawingObject.xShape.is())
     {
         RTFDrawingObject& rDrawing = m_aStates.top().aDrawingObject;
         uno::Reference<drawing::XShape> xShape(rDrawing.xShape);
@@ -3552,13 +3588,16 @@ int RTFDocumentImpl::popState()
         Mapper().startShape(xShape);
         Mapper().endShape();
     }
-    else if (m_aStates.top().nDestinationState == DESTINATION_SHAPE && m_aStates.top().aFrame.inFrame())
+    break;
+    case DESTINATION_SHAPE:
+    if (m_aStates.top().aFrame.inFrame())
     {
         m_aStates.top().resetFrame();
         parBreak();
         m_bNeedPap = true;
     }
-    else if (m_aStates.top().nDestinationState == DESTINATION_MOMATH)
+    break;
+    case DESTINATION_MOMATH:
     {
         m_aMathBuffer.appendClosingTag(M_TOKEN(oMath));
 
@@ -3576,31 +3615,24 @@ int RTFDocumentImpl::popState()
         Mapper().props(pProperties);
         m_aMathBuffer = oox::formulaimport::XmlStreamBuilder();
     }
-    else if (m_aStates.top().nDestinationState == DESTINATION_MR)
-    {
+    break;
+    case DESTINATION_MR:
         m_aMathBuffer.appendOpeningTag(M_TOKEN(r));
         m_aMathBuffer.appendOpeningTag(M_TOKEN(t));
         m_aMathBuffer.appendCharacters(m_aStates.top().aDestinationText.makeStringAndClear());
         m_aMathBuffer.appendClosingTag(M_TOKEN(t));
         m_aMathBuffer.appendClosingTag(M_TOKEN(r));
-    }
-    else if (m_aStates.top().nDestinationState == DESTINATION_MF)
-        m_aMathBuffer.appendClosingTag(M_TOKEN(f));
-    else if (m_aStates.top().nDestinationState == DESTINATION_MFPR)
-        m_aMathBuffer.appendClosingTag(M_TOKEN(fPr));
-    else if (m_aStates.top().nDestinationState == DESTINATION_MCTRLPR)
-        m_aMathBuffer.appendClosingTag(M_TOKEN(ctrlPr));
-    else if (m_aStates.top().nDestinationState == DESTINATION_MNUM)
-        m_aMathBuffer.appendClosingTag(M_TOKEN(num));
-    else if (m_aStates.top().nDestinationState == DESTINATION_MDEN)
-        m_aMathBuffer.appendClosingTag(M_TOKEN(den));
-    else if (m_aStates.top().nDestinationState == DESTINATION_MACC)
-        m_aMathBuffer.appendClosingTag(M_TOKEN(acc));
-    else if (m_aStates.top().nDestinationState == DESTINATION_MACCPR)
-        m_aMathBuffer.appendClosingTag(M_TOKEN(accPr));
-    else if (m_aStates.top().nDestinationState == DESTINATION_MCHR ||
-            m_aStates.top().nDestinationState == DESTINATION_MBEGCHR ||
-            m_aStates.top().nDestinationState == DESTINATION_MENDCHR)
+    break;
+    case DESTINATION_MF: m_aMathBuffer.appendClosingTag(M_TOKEN(f)); break;
+    case DESTINATION_MFPR: m_aMathBuffer.appendClosingTag(M_TOKEN(fPr)); break;
+    case DESTINATION_MCTRLPR: m_aMathBuffer.appendClosingTag(M_TOKEN(ctrlPr)); break;
+    case DESTINATION_MNUM: m_aMathBuffer.appendClosingTag(M_TOKEN(num)); break;
+    case DESTINATION_MDEN: m_aMathBuffer.appendClosingTag(M_TOKEN(den)); break;
+    case DESTINATION_MACC: m_aMathBuffer.appendClosingTag(M_TOKEN(acc)); break;
+    case DESTINATION_MACCPR: m_aMathBuffer.appendClosingTag(M_TOKEN(accPr)); break;
+    case DESTINATION_MCHR:
+    case DESTINATION_MBEGCHR:
+    case DESTINATION_MENDCHR:
     {
         oox::formulaimport::XmlStream::AttributeList aAttribs;
         aAttribs[M_TOKEN(val)] = m_aStates.top().aDestinationText.makeStringAndClear();
@@ -3615,28 +3647,20 @@ int RTFDocumentImpl::popState()
         m_aMathBuffer.appendOpeningTag(nToken, aAttribs);
         m_aMathBuffer.appendClosingTag(nToken);
     }
-    else if (m_aStates.top().nDestinationState == DESTINATION_ME)
-        m_aMathBuffer.appendClosingTag(M_TOKEN(e));
-    else if (m_aStates.top().nDestinationState == DESTINATION_MBAR)
-        m_aMathBuffer.appendClosingTag(M_TOKEN(bar));
-    else if (m_aStates.top().nDestinationState == DESTINATION_MBARPR)
-        m_aMathBuffer.appendClosingTag(M_TOKEN(barPr));
-    else if (m_aStates.top().nDestinationState == DESTINATION_MD)
-        m_aMathBuffer.appendClosingTag(M_TOKEN(d));
-    else if (m_aStates.top().nDestinationState == DESTINATION_MDPR)
-        m_aMathBuffer.appendClosingTag(M_TOKEN(dPr));
-    else if (m_aStates.top().nDestinationState == DESTINATION_MFUNC)
-        m_aMathBuffer.appendClosingTag(M_TOKEN(func));
-    else if (m_aStates.top().nDestinationState == DESTINATION_MFUNCPR)
-        m_aMathBuffer.appendClosingTag(M_TOKEN(funcPr));
-    else if (m_aStates.top().nDestinationState == DESTINATION_MFNAME)
-        m_aMathBuffer.appendClosingTag(M_TOKEN(fName));
-    else if (m_aStates.top().nDestinationState == DESTINATION_MLIMLOW)
-        m_aMathBuffer.appendClosingTag(M_TOKEN(limLow));
-    else if (m_aStates.top().nDestinationState == DESTINATION_MLIMLOWPR)
-        m_aMathBuffer.appendClosingTag(M_TOKEN(limLowPr));
-    else if (m_aStates.top().nDestinationState == DESTINATION_MLIM)
-        m_aMathBuffer.appendClosingTag(M_TOKEN(lim));
+    break;
+    case DESTINATION_ME: m_aMathBuffer.appendClosingTag(M_TOKEN(e)); break;
+    case DESTINATION_MBAR: m_aMathBuffer.appendClosingTag(M_TOKEN(bar)); break;
+    case DESTINATION_MBARPR: m_aMathBuffer.appendClosingTag(M_TOKEN(barPr)); break;
+    case DESTINATION_MD: m_aMathBuffer.appendClosingTag(M_TOKEN(d)); break;
+    case DESTINATION_MDPR: m_aMathBuffer.appendClosingTag(M_TOKEN(dPr)); break;
+    case DESTINATION_MFUNC: m_aMathBuffer.appendClosingTag(M_TOKEN(func)); break;
+    case DESTINATION_MFUNCPR: m_aMathBuffer.appendClosingTag(M_TOKEN(funcPr)); break;
+    case DESTINATION_MFNAME: m_aMathBuffer.appendClosingTag(M_TOKEN(fName)); break;
+    case DESTINATION_MLIMLOW: m_aMathBuffer.appendClosingTag(M_TOKEN(limLow)); break;
+    case DESTINATION_MLIMLOWPR: m_aMathBuffer.appendClosingTag(M_TOKEN(limLowPr)); break;
+    case DESTINATION_MLIM: m_aMathBuffer.appendClosingTag(M_TOKEN(lim)); break;
+    default: break;
+    }
 
     // See if we need to end a track change
     RTFValue::Pointer_t pTrackchange = m_aStates.top().aCharacterSprms.find(NS_ooxml::LN_trackchange);
