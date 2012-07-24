@@ -136,7 +136,13 @@ namespace writerfilter {
             DESTINATION_MD,
             DESTINATION_MDPR,
             DESTINATION_MBEGCHR,
-            DESTINATION_MENDCHR
+            DESTINATION_MENDCHR,
+            DESTINATION_MFUNC,
+            DESTINATION_MFUNCPR,
+            DESTINATION_MFNAME,
+            DESTINATION_MLIMLOW,
+            DESTINATION_MLIMLOWPR,
+            DESTINATION_MLIM
         };
 
         enum RTFBorderState
