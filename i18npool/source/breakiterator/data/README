@@ -705,15 +705,9 @@ Date:   Fri Nov 7 14:14:53 2003 +0000
     INTEGRATION: CWS i18n08 (1.1.2); FILE ADDED
     2003/08/08 23:30:57 khong 1.1.2.1: #i17155# fix line breakiterator rule to make slash and hyphen as part of word when doing line break
 
-commit 7ff54c632497706b354d8befd5e2ceb75fa4ba9c
-Author: Jens-Heiner Rechtien <hr@openoffice.org>
-Date:   Fri Nov 7 14:14:35 2003 +0000
-
-    INTEGRATION: CWS i18n08 (1.1.2); FILE ADDED
-    2003/08/08 23:29:12 khong 1.1.2.1: #i13451# add '-' as midLetter for Catalan dictionary word breakiterator
-
 done, regression tests added:
 
+#i13451# add '-' as midLetter for Catalan dictionary word breakiterator
 #i13494# fix word breakiterator rule to handle punctuations and signs correctly
 #i29548# Fix Thai word breakiterator problem
 #i11993# #i14904# fix word breakiterator issues
