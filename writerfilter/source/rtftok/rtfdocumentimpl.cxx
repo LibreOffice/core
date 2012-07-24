@@ -69,6 +69,11 @@
 
 #define TWIP_TO_MM100(TWIP)     ((TWIP) >= 0 ? (((TWIP)*127L+36L)/72L) : (((TWIP)*127L-36L)/72L))
 #define M_TOKEN(token) OOX_TOKEN(officeMath, token)
+#define OPEN_M_TOKEN( rtftok, ooxtok ) \
+        case RTF_M##rtftok: \
+            m_aMathBuffer.appendOpeningTag(M_TOKEN(ooxtok)); \
+            m_aStates.top().nDestinationState = DESTINATION_M##rtftok; \
+            break
 
 using std::make_pair;
 using rtl::OString;
@@ -1410,61 +1415,11 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
         case RTF_MOMATHPARA:
             // Nothing to do here (just enter the destination) till RTF_MMATHPR is implemented.
             break;
-        case RTF_MOMATH:
-            m_aMathBuffer.appendOpeningTag(M_TOKEN(oMath));
-            m_aStates.top().nDestinationState = DESTINATION_MOMATH;
-            break;
-        case RTF_MR:
-            m_aStates.top().nDestinationState = DESTINATION_MR;
-            break;
-        case RTF_MF:
-            m_aMathBuffer.appendOpeningTag(M_TOKEN(f));
-            m_aStates.top().nDestinationState = DESTINATION_MF;
-            break;
-        case RTF_MFPR:
-            m_aMathBuffer.appendOpeningTag(M_TOKEN(fPr));
-            m_aStates.top().nDestinationState = DESTINATION_MFPR;
-            break;
-        case RTF_MCTRLPR:
-            m_aMathBuffer.appendOpeningTag(M_TOKEN(ctrlPr));
-            m_aStates.top().nDestinationState = DESTINATION_MCTRLPR;
-            break;
-        case RTF_MNUM:
-            m_aMathBuffer.appendOpeningTag(M_TOKEN(num));
-            m_aStates.top().nDestinationState = DESTINATION_MNUM;
-            break;
-        case RTF_MDEN:
-            m_aMathBuffer.appendOpeningTag(M_TOKEN(den));
-            m_aStates.top().nDestinationState = DESTINATION_MDEN;
-            break;
-        case RTF_MACC:
-            m_aMathBuffer.appendOpeningTag(M_TOKEN(acc));
-            m_aStates.top().nDestinationState = DESTINATION_MACC;
-            break;
-        case RTF_MACCPR:
-            m_aMathBuffer.appendOpeningTag(M_TOKEN(accPr));
-            m_aStates.top().nDestinationState = DESTINATION_MACCPR;
-            break;
-        case RTF_MBAR:
-            m_aMathBuffer.appendOpeningTag(M_TOKEN(bar));
-            m_aStates.top().nDestinationState = DESTINATION_MBAR;
-            break;
-        case RTF_MBARPR:
-            m_aMathBuffer.appendOpeningTag(M_TOKEN(barPr));
-            m_aStates.top().nDestinationState = DESTINATION_MBARPR;
-            break;
-        case RTF_MCHR:
-            m_aStates.top().nDestinationState = DESTINATION_MCHR;
-            break;
-        case RTF_MPOS:
-            m_aStates.top().nDestinationState = DESTINATION_MPOS;
-            break;
-        case RTF_MVERTJC:
-            m_aStates.top().nDestinationState = DESTINATION_MVERTJC;
-            break;
-        case RTF_MSTRIKEH:
-            m_aStates.top().nDestinationState = DESTINATION_MSTRIKEH;
-            break;
+        case RTF_MR: m_aStates.top().nDestinationState = DESTINATION_MR; break;
+        case RTF_MCHR: m_aStates.top().nDestinationState = DESTINATION_MCHR; break;
+        case RTF_MPOS: m_aStates.top().nDestinationState = DESTINATION_MPOS; break;
+        case RTF_MVERTJC: m_aStates.top().nDestinationState = DESTINATION_MVERTJC; break;
+        case RTF_MSTRIKEH: m_aStates.top().nDestinationState = DESTINATION_MSTRIKEH; break;
         case RTF_MHIDETOP:
         case RTF_MHIDEBOT:
         case RTF_MHIDELEFT:
@@ -1472,106 +1427,42 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
             // SmOoxmlImport::handleBorderBox will ignore these anyway, so silently ignore for now.
             m_aStates.top().nDestinationState = DESTINATION_SKIP;
             break;
-        case RTF_MSUBHIDE:
-            m_aStates.top().nDestinationState = DESTINATION_MSUBHIDE;
-            break;
-        case RTF_MSUPHIDE:
-            m_aStates.top().nDestinationState = DESTINATION_MSUPHIDE;
-            break;
-        case RTF_MBEGCHR:
-            m_aStates.top().nDestinationState = DESTINATION_MBEGCHR;
-            break;
-        case RTF_MENDCHR:
-            m_aStates.top().nDestinationState = DESTINATION_MENDCHR;
-            break;
-        case RTF_ME:
-            m_aMathBuffer.appendOpeningTag(M_TOKEN(e));
-            m_aStates.top().nDestinationState = DESTINATION_ME;
-            break;
-        case RTF_MD:
-            m_aMathBuffer.appendOpeningTag(M_TOKEN(d));
-            m_aStates.top().nDestinationState = DESTINATION_MD;
-            break;
-        case RTF_MDPR:
-            m_aMathBuffer.appendOpeningTag(M_TOKEN(dPr));
-            m_aStates.top().nDestinationState = DESTINATION_MDPR;
-            break;
-        case RTF_MFUNC:
-            m_aMathBuffer.appendOpeningTag(M_TOKEN(func));
-            m_aStates.top().nDestinationState = DESTINATION_MFUNC;
-            break;
-        case RTF_MFUNCPR:
-            m_aMathBuffer.appendOpeningTag(M_TOKEN(funcPr));
-            m_aStates.top().nDestinationState = DESTINATION_MFUNCPR;
-            break;
-        case RTF_MFNAME:
-            m_aMathBuffer.appendOpeningTag(M_TOKEN(fName));
-            m_aStates.top().nDestinationState = DESTINATION_MFNAME;
-            break;
-        case RTF_MLIMLOW:
-            m_aMathBuffer.appendOpeningTag(M_TOKEN(limLow));
-            m_aStates.top().nDestinationState = DESTINATION_MLIMLOW;
-            break;
-        case RTF_MLIMLOWPR:
-            m_aMathBuffer.appendOpeningTag(M_TOKEN(limLowPr));
-            m_aStates.top().nDestinationState = DESTINATION_MLIMLOWPR;
-            break;
-        case RTF_MLIM:
-            m_aMathBuffer.appendOpeningTag(M_TOKEN(lim));
-            m_aStates.top().nDestinationState = DESTINATION_MLIM;
-            break;
-        case RTF_MM:
-            m_aMathBuffer.appendOpeningTag(M_TOKEN(m));
-            m_aStates.top().nDestinationState = DESTINATION_MM;
-            break;
-        case RTF_MMPR:
-            m_aMathBuffer.appendOpeningTag(M_TOKEN(mPr));
-            m_aStates.top().nDestinationState = DESTINATION_MMPR;
-            break;
-        case RTF_MMR:
-            m_aMathBuffer.appendOpeningTag(M_TOKEN(mr));
-            m_aStates.top().nDestinationState = DESTINATION_MMR;
-            break;
-        case RTF_MNARY:
-            m_aMathBuffer.appendOpeningTag(M_TOKEN(nary));
-            m_aStates.top().nDestinationState = DESTINATION_MNARY;
-            break;
-        case RTF_MNARYPR:
-            m_aMathBuffer.appendOpeningTag(M_TOKEN(naryPr));
-            m_aStates.top().nDestinationState = DESTINATION_MNARYPR;
-            break;
-        case RTF_MSUB:
-            m_aMathBuffer.appendOpeningTag(M_TOKEN(sub));
-            m_aStates.top().nDestinationState = DESTINATION_MSUB;
-            break;
-        case RTF_MSUP:
-            m_aMathBuffer.appendOpeningTag(M_TOKEN(sup));
-            m_aStates.top().nDestinationState = DESTINATION_MSUP;
-            break;
-        case RTF_MLIMUPP:
-            m_aMathBuffer.appendOpeningTag(M_TOKEN(limUpp));
-            m_aStates.top().nDestinationState = DESTINATION_MLIMUPP;
-            break;
-        case RTF_MLIMUPPPR:
-            m_aMathBuffer.appendOpeningTag(M_TOKEN(limUppPr));
-            m_aStates.top().nDestinationState = DESTINATION_MLIMUPPPR;
-            break;
-        case RTF_MGROUPCHR:
-            m_aMathBuffer.appendOpeningTag(M_TOKEN(groupChr));
-            m_aStates.top().nDestinationState = DESTINATION_MGROUPCHR;
-            break;
-        case RTF_MGROUPCHRPR:
-            m_aMathBuffer.appendOpeningTag(M_TOKEN(groupChrPr));
-            m_aStates.top().nDestinationState = DESTINATION_MGROUPCHRPR;
-            break;
-        case RTF_MBORDERBOX:
-            m_aMathBuffer.appendOpeningTag(M_TOKEN(borderBox));
-            m_aStates.top().nDestinationState = DESTINATION_MBORDERBOX;
-            break;
-        case RTF_MBORDERBOXPR:
-            m_aMathBuffer.appendOpeningTag(M_TOKEN(borderBoxPr));
-            m_aStates.top().nDestinationState = DESTINATION_MBORDERBOXPR;
-            break;
+        case RTF_MSUBHIDE: m_aStates.top().nDestinationState = DESTINATION_MSUBHIDE; break;
+        case RTF_MSUPHIDE: m_aStates.top().nDestinationState = DESTINATION_MSUPHIDE; break;
+        case RTF_MBEGCHR: m_aStates.top().nDestinationState = DESTINATION_MBEGCHR; break;
+        case RTF_MENDCHR: m_aStates.top().nDestinationState = DESTINATION_MENDCHR; break;
+        OPEN_M_TOKEN(OMATH, oMath);
+        OPEN_M_TOKEN(F, f);
+        OPEN_M_TOKEN(FPR, fPr);
+        OPEN_M_TOKEN(CTRLPR, ctrlPr);
+        OPEN_M_TOKEN(NUM, num);
+        OPEN_M_TOKEN(DEN, den);
+        OPEN_M_TOKEN(ACC, acc);
+        OPEN_M_TOKEN(ACCPR, accPr);
+        OPEN_M_TOKEN(BAR, bar);
+        OPEN_M_TOKEN(BARPR, barPr);
+        OPEN_M_TOKEN(E, e);
+        OPEN_M_TOKEN(D, d);
+        OPEN_M_TOKEN(DPR, dPr);
+        OPEN_M_TOKEN(FUNC, func);
+        OPEN_M_TOKEN(FUNCPR, funcPr);
+        OPEN_M_TOKEN(FNAME, fName);
+        OPEN_M_TOKEN(LIMLOW, limLow);
+        OPEN_M_TOKEN(LIMLOWPR, limLowPr);
+        OPEN_M_TOKEN(LIM, lim);
+        OPEN_M_TOKEN(M, m);
+        OPEN_M_TOKEN(MPR, mPr);
+        OPEN_M_TOKEN(MR, mr);
+        OPEN_M_TOKEN(NARY, nary);
+        OPEN_M_TOKEN(NARYPR, naryPr);
+        OPEN_M_TOKEN(SUB, sub);
+        OPEN_M_TOKEN(SUP, sup);
+        OPEN_M_TOKEN(LIMUPP, limUpp);
+        OPEN_M_TOKEN(LIMUPPPR, limUppPr);
+        OPEN_M_TOKEN(GROUPCHR, groupChr);
+        OPEN_M_TOKEN(GROUPCHRPR, groupChrPr);
+        OPEN_M_TOKEN(BORDERBOX, borderBox);
+        OPEN_M_TOKEN(BORDERBOXPR, borderBoxPr);
         default:
             SAL_INFO("writerfilter", OSL_THIS_FUNC << ": TODO handle destination '" << lcl_RtfToString(nKeyword) << "'");
             // Make sure we skip destinations (even without \*) till we don't handle them
