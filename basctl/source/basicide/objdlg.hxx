@@ -64,7 +64,7 @@ public:
     virtual ~ObjectCatalog();
 
     void                UpdateEntries();
-    void                SetCurrentEntry( BasicEntryDescriptor& rDesc );
+    void                SetCurrentEntry (IDEBaseWindow* pCurWin);
     void                SetCancelHdl( const Link& rLink ) { aCancelHdl = rLink; }
 };
 

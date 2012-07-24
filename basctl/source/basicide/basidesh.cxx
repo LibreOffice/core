@@ -542,11 +542,7 @@ void BasicIDEShell::ShowObjectDialog( sal_Bool bShow, sal_Bool bCreateOrDestroy 
             if ( pObjectCatalog )
             {
                 pObjectCatalog->SetCancelHdl( LINK( this, BasicIDEShell, ObjectDialogCancelHdl ) );
-                BasicEntryDescriptor aDesc;
-                IDEBaseWindow* pCurWin_ = GetCurWindow();
-                if ( pCurWin_ )
-                    aDesc = pCurWin_->CreateEntryDescriptor();
-                pObjectCatalog->SetCurrentEntry( aDesc );
+                pObjectCatalog->SetCurrentEntry(pCurWin);
             }
         }
 
