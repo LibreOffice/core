@@ -161,6 +161,10 @@ interface WebSourceView
     [
         StateMethod = GetState ;
     ]
+    SID_BLUETOOTH_SENDDOC
+    [
+        StateMethod = GetState ;
+    ]
     SID_EXPORTDOC
     [
         StateMethod = GetState ;

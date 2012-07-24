@@ -52,6 +52,11 @@ interface View
         ExecMethod = ExecMisc_Impl ;
         StateMethod = GetState_Impl ;
     ]
+    SID_BLUETOOTH_SENDDOC // ole(no) api(todo)
+    [
+        ExecMethod = ExecMisc_Impl ;
+        StateMethod = GetState_Impl ;
+    ]
      //---------------------------------------------------------------------
     SID_PRINTDOC // ole(no) api(play/rec)
     [

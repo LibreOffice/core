@@ -57,15 +57,20 @@ public:
         TYPE_ASPDF
     };
 
-private:
+protected:
     enum SaveResult
     {
         SAVE_SUCCESSFULL,
         SAVE_CANCELLED,
         SAVE_ERROR
     };
-
     ::std::vector< ::rtl::OUString > maAttachedDocuments;
+    SaveResult          SaveDocumentAsFormat( const rtl::OUString& aSaveFileName,
+                                              const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xFrameOrModel,
+                                              const rtl::OUString& rType,
+                                              rtl::OUString& rFileNamePath );
+
+private:
     AddressList_Impl*   mpToList;
     AddressList_Impl*   mpCcList;
     AddressList_Impl*   mpBccList;
@@ -76,10 +81,6 @@ private:
     sal_Bool            mbLoadDone;
 
     void                ClearList( AddressList_Impl* pList );
-    SaveResult          SaveDocumentAsFormat( const rtl::OUString& aSaveFileName,
-                                              const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xFrameOrModel,
-                                              const rtl::OUString& rType,
-                                              rtl::OUString& rFileNamePath );
     SaveResult          ShowFilterOptionsDialog( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xSMGR,
                                                  const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > xModel,
                                                  const ::rtl::OUString& rFilterName,

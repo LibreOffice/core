@@ -67,6 +67,7 @@
 #include "sfxlocal.hrc"
 #include <sfx2/sfxbasecontroller.hxx>
 #include "sfx2/mailmodelapi.hxx"
+#include "bluthsndapi.hxx"
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/event.hxx>
 #include <sfx2/fcontnr.hxx>
@@ -594,6 +595,26 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
 
             break;
         }
+
+        case SID_BLUETOOTH_SENDDOC:
+        {
+            SfxBluetoothModel aModel;
+            SfxObjectShell* pDoc = GetObjectShell();
+            if ( pDoc && pDoc->QueryHiddenInformation(
+                            WhenSaving, &GetViewFrame()->GetWindow() ) != RET_YES )
+                break;
+            uno::Reference < frame::XFrame > xFrame( pFrame->GetFrame().GetFrameInterface() );
+            SfxMailModel::SendMailResult eResult = aModel.SaveAndSend( xFrame, rtl::OUString() );
+            if( eResult == SfxMailModel::SEND_MAIL_ERROR )
+            {
+                    InfoBox aBox( SFX_APP()->GetTopWindow(), SfxResId( MSG_ERROR_SEND_MAIL ));
+                    aBox.Execute();
+                    rReq.Ignore();
+            }
+            else
+                rReq.Done();
+        }
+        break;
 
         // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         case SID_WEBHTML:
