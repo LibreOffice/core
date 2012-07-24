@@ -80,6 +80,12 @@ private:
     void UpdateNewHeightMF();
     void UpdateResolutionLB();
 
+    void Compress(SvStream& aStream);
+
+
+    double GetViewWidthInch();
+    double GetViewHeightInch();
+
 public:
     CompressGraphicsDialog( Window* pParent, const Graphic& rGraphic, const Size& rViewSize100mm, SfxBindings& rBindings );
     virtual ~CompressGraphicsDialog();
