@@ -243,21 +243,26 @@ double ScInterpreter::ConvertStringToValue( const String& rStr )
         SetError( mnStringNoValueError);
         return fValue;
     }
-    // The number scanner does not accept empty strings or strings containing
-    // only spaces, be on par in these cases with what was accepted in OOo and
-    // is in AOO (see also the #else branch below) and convert to 0 to prevent
-    // interoperability nightmares.
-    if (!rStr.Len())
-        return fValue;
-    else if (rStr.GetChar(0) == ' ')
+
+    if (GetGlobalConfig().mbEmptyStringAsZero)
     {
-        const sal_Unicode* p = rStr.GetBuffer() + 1;
-        const sal_Unicode* const pStop = p - 1 + rStr.Len();
-        while (p < pStop && *p == ' ')
-            ++p;
-        if (p == pStop)
+        // The number scanner does not accept empty strings or strings
+        // containing only spaces, be on par in these cases with what was
+        // accepted in OOo and is in AOO (see also the else branch below) and
+        // convert to 0 to prevent interoperability nightmares.
+        if (!rStr.Len())
             return fValue;
+        else if (rStr.GetChar(0) == ' ')
+        {
+            const sal_Unicode* p = rStr.GetBuffer() + 1;
+            const sal_Unicode* const pStop = p - 1 + rStr.Len();
+            while (p < pStop && *p == ' ')
+                ++p;
+            if (p == pStop)
+                return fValue;
+        }
     }
+
     sal_uInt32 nFIndex = 0;
     if (!pFormatter->IsNumberFormat(rStr, nFIndex, fValue))
     {
