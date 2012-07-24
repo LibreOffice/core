@@ -5185,7 +5185,7 @@ void SwWW8ImplReader::SetOutLineStyles()
 
         int nMax = 0;
         myIter aEnd2 = aRuleMap.end();
-        for (myIter aIter = aRuleMap.begin(); aIter != aEnd2; ++aIter++)
+        for (myIter aIter = aRuleMap.begin(); aIter != aEnd2; ++aIter)
         {
             if (aIter->second > nMax)
             {
