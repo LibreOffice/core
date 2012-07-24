@@ -8,6 +8,10 @@ import pl.polidea.coverflow.CoverFlow;
 import android.app.Fragment;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.RectF;
 import android.os.Bundle;
 import android.os.Message;
 import android.view.LayoutInflater;
@@ -44,7 +48,11 @@ public class PresentationFragment extends Fragment {
 		String summary = "<html><body>This is just a test<br/><ul><li>And item</li><li>And again</li></ul>More text<br/>Blabla<br/>Blabla<br/>blabla<br/>Blabla</body></html>";
 		mNotes.loadData(summary, "text/html", null);
 
+		//		TextView aText = new TextView();
+		//		aText.setText
+
 		mTopView = (CoverFlow) v.findViewById(R.id.presentation_coverflow);
+
 		mLayout = v.findViewById(R.id.presentation_layout);
 
 		mHandle = (ImageView) v.findViewById(R.id.presentation_handle);
@@ -62,8 +70,6 @@ public class PresentationFragment extends Fragment {
 		@Override
 		public boolean onTouch(View aView, MotionEvent aEvent) {
 
-			LayoutParams aParams = mTopView.getLayoutParams();
-
 			switch (aEvent.getAction()) {
 			case MotionEvent.ACTION_DOWN:
 				mHandle.setImageResource(R.drawable.handle_light);
@@ -72,20 +78,36 @@ public class PresentationFragment extends Fragment {
 				mHandle.setImageResource(R.drawable.handle_default);
 				break;
 			case MotionEvent.ACTION_MOVE:
+				LayoutParams aParams = mTopView.getLayoutParams();
 				int aHeight = mTopView.getHeight();
-				aParams.height = aHeight + (int) (aEvent.getY());
 
 				final int DRAG_MARGIN = 120;
 
-				int aSize = mLayout.getHeight();
+				// Set Height
+				aParams.height = aHeight + (int) (aEvent.getY());
+				int aViewSize = mLayout.getHeight();
 				if (aParams.height < DRAG_MARGIN) {
 					aParams.height = DRAG_MARGIN;
-				} else if (aParams.height > aSize - DRAG_MARGIN) {
-					aParams.height = aSize - DRAG_MARGIN;
+				} else if (aParams.height > aViewSize - DRAG_MARGIN) {
+					aParams.height = aViewSize - DRAG_MARGIN;
 				}
-
 				mTopView.setLayoutParams(aParams);
-				mTopView.setImageHeight(aParams.height);
+
+				// Now deal with the internal height
+				AbstractCoverFlowImageAdapter aAdapter = (AbstractCoverFlowImageAdapter) mTopView
+				                .getAdapter();
+				//				double adjustRatio = (mTopView.getImageHeight() + (int) (aEvent
+				//				                .getY())) / mTopView.getImageHeight();
+				aAdapter.setHeight(mTopView.getImageHeight()
+				                + (int) (aEvent.getY()));
+				mTopView.setImageHeight(mTopView.getImageHeight()
+				                + (int) (aEvent.getY()));
+
+				//				aAdapter.setWidth((float) (adjustRatio * mTopView
+				//				                .getImageWidth()));
+				//				mTopView.setImageWidth((float) (adjustRatio * mTopView
+				//				                .getImageWidth()));
+				aAdapter.notifyDataSetChanged();
 				break;
 			}
 			// TODO Auto-generated method stub
@@ -188,7 +210,27 @@ public class PresentationFragment extends Fragment {
 		@Override
 		protected Bitmap createBitmap(int position) {
 			Bitmap aBitmap = mSlideShow.getImage(position);
-			return aBitmap;
+			final int borderWidth = 8;
+
+			Paint p = new Paint(Paint.ANTI_ALIAS_FLAG);
+			p.setShadowLayer(borderWidth, 0, 0, Color.BLACK);
+
+			//			RectF aRect = new RectF(borderWidth, borderWidth, borderWidth
+			//			                + aBitmap.getWidth(), borderWidth
+			//			                + aBitmap.getHeight());
+			RectF aRect = new RectF(borderWidth, borderWidth, borderWidth
+			                + aBitmap.getWidth(), borderWidth
+			                + aBitmap.getHeight());
+			Bitmap aOut = Bitmap.createBitmap(aBitmap.getWidth() + 2
+			                * borderWidth, aBitmap.getHeight() + 2
+			                * borderWidth, aBitmap.getConfig());
+			Canvas canvas = new Canvas(aOut);
+			canvas.drawColor(Color.TRANSPARENT);
+			canvas.drawRect(aRect, p);
+			//canvas.drawBitmap(aBitmap, null, aRect, null);
+			canvas.drawBitmap(aBitmap, null, aRect, null);
+
+			return aOut;
 		}
 	}
 }
