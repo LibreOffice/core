@@ -343,10 +343,9 @@ class VCL_DLLPUBLIC Bitmap
 {
 private:
 
-    ImpBitmap*              mpImpBmp;
-    MapMode                 maPrefMapMode;
-    Size                    maPrefSize;
-
+    ImpBitmap*          mpImpBmp;
+    MapMode             maPrefMapMode;
+    Size                maPrefSize;
 
 public:
 
@@ -356,59 +355,63 @@ public:
     SAL_DLLPRIVATE void                 ImplSetImpBitmap( ImpBitmap* pImpBmp );
     SAL_DLLPRIVATE void                 ImplAssignWithSize( const Bitmap& rBitmap );
 
-    SAL_DLLPRIVATE static sal_Bool          ImplReadDIB( SvStream& rIStm, Bitmap& rBmp, sal_uLong nOffset, sal_Bool bMSOFormat = sal_False );
-    SAL_DLLPRIVATE static sal_Bool          ImplReadDIBFileHeader( SvStream& rIStm, sal_uLong& rOffset );
-    SAL_DLLPRIVATE static sal_Bool          ImplReadDIBInfoHeader( SvStream& rIStm, DIBInfoHeader& rHeader, sal_Bool& bTopDown, sal_Bool bMSOFormat = sal_False );
-    SAL_DLLPRIVATE static sal_Bool          ImplReadDIBPalette( SvStream& rIStm, BitmapWriteAccess& rAcc, sal_Bool bQuad );
-    SAL_DLLPRIVATE static sal_Bool          ImplReadDIBBits( SvStream& rIStm, DIBInfoHeader& rHeader, BitmapWriteAccess& rAcc, sal_Bool bTopDown );
-    SAL_DLLPRIVATE sal_Bool                 ImplWriteDIB( SvStream& rOStm, BitmapReadAccess& rAcc, sal_Bool bCompressed ) const;
-    SAL_DLLPRIVATE static sal_Bool          ImplWriteDIBFileHeader( SvStream& rOStm, BitmapReadAccess& rAcc );
-    SAL_DLLPRIVATE static sal_Bool          ImplWriteDIBPalette( SvStream& rOStm, BitmapReadAccess& rAcc );
-    SAL_DLLPRIVATE static sal_Bool          ImplWriteDIBBits( SvStream& rOStm, BitmapReadAccess& rAcc,
-                                                             sal_uLong nCompression, sal_uInt32& rImageSize );
+    SAL_DLLPRIVATE static sal_Bool      ImplReadDIB( SvStream& rIStm, Bitmap& rBmp, sal_uLong nOffset, sal_Bool bMSOFormat = sal_False );
+    SAL_DLLPRIVATE static sal_Bool      ImplReadDIBFileHeader( SvStream& rIStm, sal_uLong& rOffset );
+    SAL_DLLPRIVATE static sal_Bool      ImplReadDIBInfoHeader( SvStream& rIStm, DIBInfoHeader& rHeader, sal_Bool& bTopDown, sal_Bool bMSOFormat = sal_False );
+    SAL_DLLPRIVATE static sal_Bool      ImplReadDIBPalette( SvStream& rIStm, BitmapWriteAccess& rAcc, sal_Bool bQuad );
+    SAL_DLLPRIVATE static sal_Bool      ImplReadDIBBits( SvStream& rIStm, DIBInfoHeader& rHeader, BitmapWriteAccess& rAcc, sal_Bool bTopDown );
+    SAL_DLLPRIVATE sal_Bool             ImplWriteDIB( SvStream& rOStm, BitmapReadAccess& rAcc, sal_Bool bCompressed ) const;
+    SAL_DLLPRIVATE static sal_Bool      ImplWriteDIBFileHeader( SvStream& rOStm, BitmapReadAccess& rAcc );
+    SAL_DLLPRIVATE static sal_Bool      ImplWriteDIBPalette( SvStream& rOStm, BitmapReadAccess& rAcc );
+    SAL_DLLPRIVATE static sal_Bool      ImplWriteDIBBits( SvStream& rOStm, BitmapReadAccess& rAcc,
+                                                            sal_uLong nCompression, sal_uInt32& rImageSize );
     SAL_DLLPRIVATE static void          ImplDecodeRLE( sal_uInt8* pBuffer, DIBInfoHeader& rHeader,
-                                           BitmapWriteAccess& rAcc, sal_Bool bRLE4 );
-    SAL_DLLPRIVATE static sal_Bool          ImplWriteRLE( SvStream& rOStm, BitmapReadAccess& rAcc, sal_Bool bRLE4 );
+                                                            BitmapWriteAccess& rAcc, sal_Bool bRLE4 );
+    SAL_DLLPRIVATE static sal_Bool      ImplWriteRLE( SvStream& rOStm, BitmapReadAccess& rAcc, sal_Bool bRLE4 );
 
-    SAL_DLLPRIVATE sal_Bool                 ImplScaleFast( const double& rScaleX, const double& rScaleY );
-    SAL_DLLPRIVATE sal_Bool                 ImplScaleInterpolate( const double& rScaleX, const double& rScaleY );
-    SAL_DLLPRIVATE bool                     ImplScaleConvolution( const double& rScaleX, const double& rScaleY, Kernel& aKernel);
+    SAL_DLLPRIVATE sal_Bool             ImplScaleFast( const double& rScaleX, const double& rScaleY );
+    SAL_DLLPRIVATE sal_Bool             ImplScaleInterpolate( const double& rScaleX, const double& rScaleY );
+    SAL_DLLPRIVATE bool                 ImplScaleConvolution( const double& rScaleX, const double& rScaleY, Kernel& aKernel);
+    SAL_DLLPRIVATE bool                 ImplTransformAveraging( const double& rScaleX, const double& rScaleY,
+                                                const Rectangle& rRotatedRectangle, const long nAngle10, const Color& rFillColor );
+    SAL_DLLPRIVATE bool                 ImplTransformBilinearFiltering( const double& rScaleX, const double& rScaleY,
+                                                const Rectangle& rRotatedRectangle, const long nAngle10, const Color& rFillColor );
 
-    SAL_DLLPRIVATE static void              ImplCalculateContributions( const int aSourceSize, const int aDestinationSize,
+    SAL_DLLPRIVATE static void          ImplCalculateContributions( const int aSourceSize, const int aDestinationSize,
                                                 int& aNumberOfContributions, double*& pWeights, int*& pPixels, int*& pCount,
                                                 Kernel& aKernel );
 
-    SAL_DLLPRIVATE bool                     ImplConvolutionPass( Bitmap& aNewBitmap, const int nNewSize, BitmapReadAccess* pReadAcc,
+    SAL_DLLPRIVATE bool                 ImplConvolutionPass( Bitmap& aNewBitmap, const int nNewSize, BitmapReadAccess* pReadAcc,
                                                 int aNumberOfContributions, double* pWeights, int* pPixels, int* pCount );
 
-    SAL_DLLPRIVATE sal_Bool                 ImplMakeMono( sal_uInt8 cThreshold );
-    SAL_DLLPRIVATE sal_Bool                 ImplMakeMonoDither();
-    SAL_DLLPRIVATE sal_Bool                 ImplMakeGreyscales( sal_uInt16 nGreyscales );
-    SAL_DLLPRIVATE sal_Bool                 ImplConvertUp( sal_uInt16 nBitCount, Color* pExtColor = NULL );
-    SAL_DLLPRIVATE sal_Bool                 ImplConvertDown( sal_uInt16 nBitCount, Color* pExtColor = NULL );
-    SAL_DLLPRIVATE sal_Bool                 ImplConvertGhosted();
-    SAL_DLLPRIVATE sal_Bool                 ImplDitherMatrix();
-    SAL_DLLPRIVATE sal_Bool                 ImplDitherFloyd();
-    SAL_DLLPRIVATE sal_Bool                 ImplDitherFloyd16();
-    SAL_DLLPRIVATE sal_Bool                 ImplReduceSimple( sal_uInt16 nColorCount );
-    SAL_DLLPRIVATE sal_Bool                 ImplReducePopular( sal_uInt16 nColorCount );
-    SAL_DLLPRIVATE sal_Bool                 ImplReduceMedian( sal_uInt16 nColorCount );
+    SAL_DLLPRIVATE sal_Bool             ImplMakeMono( sal_uInt8 cThreshold );
+    SAL_DLLPRIVATE sal_Bool             ImplMakeMonoDither();
+    SAL_DLLPRIVATE sal_Bool             ImplMakeGreyscales( sal_uInt16 nGreyscales );
+    SAL_DLLPRIVATE sal_Bool             ImplConvertUp( sal_uInt16 nBitCount, Color* pExtColor = NULL );
+    SAL_DLLPRIVATE sal_Bool             ImplConvertDown( sal_uInt16 nBitCount, Color* pExtColor = NULL );
+    SAL_DLLPRIVATE sal_Bool             ImplConvertGhosted();
+    SAL_DLLPRIVATE sal_Bool             ImplDitherMatrix();
+    SAL_DLLPRIVATE sal_Bool             ImplDitherFloyd();
+    SAL_DLLPRIVATE sal_Bool             ImplDitherFloyd16();
+    SAL_DLLPRIVATE sal_Bool             ImplReduceSimple( sal_uInt16 nColorCount );
+    SAL_DLLPRIVATE sal_Bool             ImplReducePopular( sal_uInt16 nColorCount );
+    SAL_DLLPRIVATE sal_Bool             ImplReduceMedian( sal_uInt16 nColorCount );
     SAL_DLLPRIVATE void                 ImplMedianCut( sal_uLong* pColBuf, BitmapPalette& rPal,
-                                           long nR1, long nR2, long nG1, long nG2, long nB1, long nB2,
-                                           long nColors, long nPixels, long& rIndex );
-    SAL_DLLPRIVATE sal_Bool                 ImplConvolute3( const long* pMatrix, long nDivisor,
+                                                long nR1, long nR2, long nG1, long nG2, long nB1, long nB2,
+                                                long nColors, long nPixels, long& rIndex );
+    SAL_DLLPRIVATE sal_Bool             ImplConvolute3( const long* pMatrix, long nDivisor,
                                                             const BmpFilterParam* pFilterParam, const Link* pProgress );
-    SAL_DLLPRIVATE sal_Bool                 ImplMedianFilter( const BmpFilterParam* pFilterParam, const Link* pProgress );
-    SAL_DLLPRIVATE sal_Bool                 ImplSobelGrey( const BmpFilterParam* pFilterParam, const Link* pProgress );
-    SAL_DLLPRIVATE sal_Bool                 ImplEmbossGrey( const BmpFilterParam* pFilterParam, const Link* pProgress );
-    SAL_DLLPRIVATE sal_Bool                 ImplSolarize( const BmpFilterParam* pFilterParam, const Link* pProgress );
-    SAL_DLLPRIVATE sal_Bool                 ImplSepia( const BmpFilterParam* pFilterParam, const Link* pProgress );
-    SAL_DLLPRIVATE sal_Bool                 ImplMosaic( const BmpFilterParam* pFilterParam, const Link* pProgress );
-    SAL_DLLPRIVATE sal_Bool                 ImplPopArt( const BmpFilterParam* pFilterParam, const Link* pProgress );
+    SAL_DLLPRIVATE sal_Bool             ImplMedianFilter( const BmpFilterParam* pFilterParam, const Link* pProgress );
+    SAL_DLLPRIVATE sal_Bool             ImplSobelGrey( const BmpFilterParam* pFilterParam, const Link* pProgress );
+    SAL_DLLPRIVATE sal_Bool             ImplEmbossGrey( const BmpFilterParam* pFilterParam, const Link* pProgress );
+    SAL_DLLPRIVATE sal_Bool             ImplSolarize( const BmpFilterParam* pFilterParam, const Link* pProgress );
+    SAL_DLLPRIVATE sal_Bool             ImplSepia( const BmpFilterParam* pFilterParam, const Link* pProgress );
+    SAL_DLLPRIVATE sal_Bool             ImplMosaic( const BmpFilterParam* pFilterParam, const Link* pProgress );
+    SAL_DLLPRIVATE sal_Bool             ImplPopArt( const BmpFilterParam* pFilterParam, const Link* pProgress );
 
-    SAL_DLLPRIVATE bool                     ImplSeparableBlurFilter( const double aRadius = 0.7 );
-    SAL_DLLPRIVATE bool                     ImplSeparableUnsharpenFilter( const double aRadius = 0.7 );
-    SAL_DLLPRIVATE void                     ImplBlurContributions( const int aSize, const int aNumberOfContributions,
+    SAL_DLLPRIVATE bool                 ImplSeparableBlurFilter( const double aRadius = 0.7 );
+    SAL_DLLPRIVATE bool                 ImplSeparableUnsharpenFilter( const double aRadius = 0.7 );
+    SAL_DLLPRIVATE void                 ImplBlurContributions( const int aSize, const int aNumberOfContributions,
                                                 double* pBlurVector, double*& pWeights, int*& pPixels, int*& pCount );
 public:
 
@@ -633,8 +636,7 @@ public:
 
         @return sal_True, if the operation was completed successfully.
      */
-    sal_Bool                    Scale( const Size& rNewSize,
-                                   sal_uLong nScaleFlag = BMP_SCALE_DEFAULT );
+    sal_Bool                    Scale( const Size& rNewSize, sal_uLong nScaleFlag = BMP_SCALE_DEFAULT );
 
     /** Scale the bitmap
 
@@ -646,8 +648,12 @@ public:
 
         @return sal_True, if the operation was completed successfully.
      */
-    sal_Bool                    Scale( const double& rScaleX, const double& rScaleY,
-                                   sal_uLong nScaleFlag = BMP_SCALE_DEFAULT );
+    sal_Bool                    Scale( const double& rScaleX, const double& rScaleY, sal_uLong nScaleFlag = BMP_SCALE_DEFAULT );
+
+    /** Scale, crop and rotate the bitmap */
+    sal_Bool                    ScaleCropRotate(
+        const double& rScaleX, const double& rScaleY, const Rectangle& rRectPixel, long nAngle10,
+        const Color& rFillColor, sal_uLong nScaleFlag = BMP_SCALE_DEFAULT );
 
     /** Rotate bitmap by the specified angle
 
