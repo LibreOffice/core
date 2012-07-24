@@ -2364,24 +2364,6 @@ if test "$_os" != "WINNT" -o "$WITH_MINGW" = "yes"; then
     AC_PROG_CC
 fi
 
-dnl We need winegcc when building MinGW build to be able to cross-build msi tools
-AC_PATH_PROG(WINEGCC, winegcc)
-if test "$WITH_MINGW" = "yes" ; then
-    if test "$WINEGCC" = ""; then
-        AC_MSG_ERROR([winegcc was not found, please install wine-devel, or wine-devel-32bit])
-    fi
-    CC_save="$CC"
-    CC="$WINEGCC -m32"
-    AC_LINK_IFELSE([AC_LANG_PROGRAM([
-#include <stdio.h>
-        ],[
-printf ("hello world\n");
-        ])],,
-        [AC_MSG_ERROR([winegcc cannot build 32bit binaries, please install glibc-devel-32bit and gcc-32bit])]
-    )
-    CC="$CC_save"
-fi
-
 COMPATH=`dirname "$CC"`
 if test "$COMPATH" = "."; then
     AC_PATH_PROGS(COMPATH, $CC)
@@ -5904,13 +5886,85 @@ else
 fi
 AC_SUBST(BUILD_DMAKE)
 
+dnl ===================================================================
+dnl Test which package format to use
+dnl ===================================================================
+AC_MSG_CHECKING([which package format to use])
+if test -n "$with_package_format"; then
+    for i in $with_package_format; do
+        case "$i" in
+        aix | bsd | deb | inst | tardist | osx | pkg | rpm | setld | native | portable | archive | dmg | installed | msi)
+            ;;
+        *)
+            AC_MSG_ERROR([unsupported format $i. Supported by EPM are:
+aix - AIX software distribution
+bsd - FreeBSD, NetBSD, or OpenBSD software distribution
+deb - Debian software distribution
+inst or tardist - IRIX software distribution
+osx - MacOS X software distribution
+pkg - Solaris software distribution
+rpm - RedHat software distribution
+setld - Tru64 (setld) software distribution
+native - "Native" software distribution for the platform
+portable - Portable software distribution
+
+LibreOffice additionally supports:
+archive - .tar.gz or .zip
+dmg - Mac OS X .dmg
+installed - installation tree
+msi - Windows .msi
+        ])
+            ;;
+        esac
+    done
+    PKGFORMAT="$with_package_format"
+elif test "$enable_epm" = "yes"; then
+    # defaults
+    case "$_os" in
+    Darwin)
+        PKGFORMAT=dmg
+        ;;
+    SunOS)
+        PKGFORMAT=pkg
+        ;;
+    Linux)
+        # if building on Debian, default should be deb...
+        if test -e /etc/debian_version; then
+            PKGFORMAT=deb
+        else
+            PKGFORMAT=rpm
+        fi
+        ;;
+    AIX)
+        PKGFORMAT=rpm
+        ;;
+    OpenBSD|DragonFly)
+        PKGFORMAT=portable
+        ;;
+    *BSD)
+        PKGFORMAT=bsd
+        ;;
+    WINNT)
+        PKGFORMAT=msi
+        ;;
+    # we never should get here since we check the arciecture/os at the beginning,
+    # but go sure...
+    *)
+        AC_MSG_ERROR([unknown system])
+    esac
+else
+    PKGFORMAT=native
+fi
+AC_MSG_RESULT([$PKGFORMAT])
+AC_SUBST(PKGFORMAT)
+
+dnl ===================================================================
+dnl Check for epm (not needed for Windows)
+dnl ===================================================================
 AC_MSG_CHECKING([whether to enable EPM for packing])
 BUILD_EPM=NO
 if test "$enable_epm" = "yes"; then
     AC_MSG_RESULT([yes])
-    dnl ===================================================================
-    dnl Check for epm - not needed for Windows
-    dnl ===================================================================
     if test "$_os" != "WINNT"; then
         if test -n "$with_epm"; then
             EPM=$with_epm
@@ -5955,71 +6009,6 @@ if test "$enable_epm" = "yes"; then
         fi
     fi
 
-    # test which package format to use
-    AC_MSG_CHECKING([which package format to use])
-
-    # defaults
-    case "$_os" in
-    Darwin)
-        PKGFORMAT=dmg
-        ;;
-    SunOS)
-        PKGFORMAT=pkg
-        ;;
-    Linux)
-        # if building on Debian, default should be deb...
-        if test -e /etc/debian_version; then
-            PKGFORMAT=deb
-        else
-            PKGFORMAT=rpm
-        fi
-        ;;
-    AIX)
-        PKGFORMAT=rpm
-        ;;
-    OpenBSD|DragonFly)
-        PKGFORMAT=portable
-        ;;
-    *BSD)
-        PKGFORMAT=bsd
-        ;;
-    WINNT)
-        PKGFORMAT=msi
-        ;;
-    # we never should get here since we check the arciecture/os at the beginning,
-    # but go sure...
-    *)
-        AC_MSG_ERROR([unknown system])
-    esac
-    if test -n "$with_package_format"; then
-        for i in $with_package_format; do
-            case "$i" in
-            aix | bsd | deb | inst | tardist | osx | pkg | rpm | setld | native | portable | archive | dmg | installed | msi)
-                ;;
-            *)
-                AC_MSG_ERROR([unsupported format $i. Supported by EPM are:
-aix - AIX software distribution
-bsd - FreeBSD, NetBSD, or OpenBSD software distribution
-deb - Debian software distribution
-inst or tardist - IRIX software distribution
-osx - MacOS X software distribution
-pkg - Solaris software distribution
-rpm - RedHat software distribution
-setld - Tru64 (setld) software distribution
-native - "Native" software distribution for the platform
-portable - Portable software distribution
-LibreOffice additionally supports:
-archive - .tar.gz or .zip
-dmg - Mac OS X .dmg
-installed - installation tree
-msi - Windows .msi
-            ])
-                ;;
-            esac
-        done
-        PKGFORMAT="$with_package_format"
-    fi
-    AC_MSG_RESULT([$PKGFORMAT])
     if echo "$PKGFORMAT" | $EGREP rpm 2>&1 >/dev/null; then
         AC_MSG_CHECKING([for rpm])
         for a in "$RPM" rpmbuild rpm; do
@@ -6100,11 +6089,29 @@ msi - Windows .msi
 else
     AC_MSG_RESULT([no])
     EPM=NO
-    PKGFORMAT=native
 fi
 AC_SUBST(EPM)
 AC_SUBST(BUILD_EPM)
-AC_SUBST(PKGFORMAT)
+
+dnl ===================================================================
+dnl We need winegcc when building MinGW build to be able to cross-build msi tools
+dnl ===================================================================
+if test "$WITH_MINGW" = "yes" -a "$PKGFORMAT" = "msi" ; then
+    AC_PATH_PROG(WINEGCC, winegcc)
+    if test "$WINEGCC" = ""; then
+        AC_MSG_ERROR([winegcc was not found, please install wine-devel, or wine-devel-32bit])
+    fi
+    CC_save="$CC"
+    CC="$WINEGCC -m32"
+    AC_LINK_IFELSE([AC_LANG_PROGRAM([
+#include <stdio.h>
+        ],[
+printf ("hello world\n");
+        ])],,
+        [AC_MSG_ERROR([winegcc cannot build 32bit binaries, please install glibc-devel-32bit and gcc-32bit])]
+    )
+    CC="$CC_save"
+fi
 
 dnl ===================================================================
 dnl Check for gperf
