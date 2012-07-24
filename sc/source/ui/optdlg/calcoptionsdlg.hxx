@@ -43,7 +43,7 @@ public:
     virtual ~ScCalcOptionsDialog();
 
     DECL_LINK( SettingsSelHdl, Control* );
-    DECL_LINK( BtnToggleHdl, RadioButton* );
+    DECL_LINK( BtnToggleHdl, void* );
 
     const ScCalcConfig& GetConfig() const;
 

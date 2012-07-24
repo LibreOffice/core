@@ -312,7 +312,7 @@ IMPL_LINK(ScCalcOptionsDialog, SettingsSelHdl, Control*, pCtrl)
     return 0;
 }
 
-IMPL_LINK(ScCalcOptionsDialog, BtnToggleHdl, RadioButton*, pBtn)
+IMPL_LINK_NOARG(ScCalcOptionsDialog, BtnToggleHdl)
 {
     RadioValueChanged();
     return 0;
