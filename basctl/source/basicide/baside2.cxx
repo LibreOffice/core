@@ -1010,6 +1010,9 @@ void ModulWindow::ExecuteCommand( SfxRequest& rReq )
         }
         break;
         case SID_BASICIDE_MATCHGROUP:
+        {
+            GetEditView()->MatchGroup();
+        }
         break;
         case SID_BASICIDE_TOGGLEBRKPNT:
         {
