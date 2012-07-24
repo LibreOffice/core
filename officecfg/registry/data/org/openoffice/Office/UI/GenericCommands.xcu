@@ -4109,6 +4109,11 @@
                     <value xml:lang="en-US">E-mail as P~DF...</value>
                 </prop>
             </node>
+            <node oor:name=".uno:SendViaBluetooth" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Send Via ~Bluetooth...</value>
+                </prop>
+            </node>
             <node oor:name=".uno:ExportToPDF" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">Export as P~DF...</value>

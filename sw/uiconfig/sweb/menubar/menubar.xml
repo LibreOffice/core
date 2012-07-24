@@ -19,6 +19,7 @@
         <menu:menupopup>
           <menu:menuitem menu:id=".uno:SendMail"/>
           <menu:menuitem menu:id=".uno:SendMailDocAsPDF"/>
+          <menu:menuitem menu:id=".uno:SendViaBluetooth"/>
         </menu:menupopup>
       </menu:menu>
       <menu:menuseparator/>

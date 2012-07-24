@@ -24,6 +24,7 @@
           <menu:menuitem menu:id=".uno:SendMailDocAsOOo"/>
           <menu:menuitem menu:id=".uno:SendMailDocAsMS"/>
           <menu:menuitem menu:id=".uno:SendMailDocAsPDF"/>
+          <menu:menuitem menu:id=".uno:SendViaBluetooth"/>
           <menu:menuseparator/>
           <menu:menuitem menu:id=".uno:NewGlobalDoc"/>
           <menu:menuitem menu:id=".uno:NewHtmlDoc"/>
