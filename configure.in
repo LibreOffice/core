@@ -5135,9 +5135,14 @@ fi
 AC_SUBST([JITC_PROCESSOR_TYPE])
 
 if test $_os = "WINNT"; then
-    SCPDEFS="$SCPDEFS -DWITH_VC_REDIST"
+    AC_MSG_CHECKING([for Microsoft_VC100_CRT_x86.msm])
+    if ./oowintool --msvc-find-msms-vc100; then
+        AC_MSG_RESULT([yes])
+        SCPDEFS="$SCPDEFS -DWITH_VC100_REDIST"
+    else
+        AC_MSG_RESULT([no])
+    fi
 fi
-AC_SUBST(WITH_VC_REDIST)
 
 dnl ===================================================================
 dnl Checks for Java
