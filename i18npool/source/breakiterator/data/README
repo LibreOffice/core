@@ -698,15 +698,9 @@ Date:   Tue Jan 20 12:20:28 2004 +0000
     INTEGRATION: CWS i18n10 (1.12.4); FILE MERGED
     2003/12/17 20:15:43 khong 1.12.4.1: #i22138# #112506# migrate to ICU collator and remove link to tool library
 
-commit 825b2bb5d875a9d94e2ee5549d7cfb78b0aed933
-Author: Jens-Heiner Rechtien <hr@openoffice.org>
-Date:   Fri Nov 7 14:14:53 2003 +0000
-
-    INTEGRATION: CWS i18n08 (1.1.2); FILE ADDED
-    2003/08/08 23:30:57 khong 1.1.2.1: #i17155# fix line breakiterator rule to make slash and hyphen as part of word when doing line break
-
 done, regression tests added:
 
+#i17155# fix line breakiterator rule to make slash and hyphen as part of word when doing line break
 #i13451# add '-' as midLetter for Catalan dictionary word breakiterator
 #i13494# fix word breakiterator rule to handle punctuations and signs correctly
 #i29548# Fix Thai word breakiterator problem
