@@ -55,6 +55,9 @@ public class Receiver {
 			if (aInstruction.equals("slide_updated")) {
 
 				int aSlideNumber = Integer.parseInt(aCommand.get(1));
+
+				mSlideShow.setCurrentSlide(aSlideNumber);
+
 				Message aMessage = Message.obtain(null,
 				                CommunicationService.MSG_SLIDE_CHANGED);
 				Bundle aData = new Bundle();

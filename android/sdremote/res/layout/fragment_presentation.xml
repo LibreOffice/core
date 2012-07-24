@@ -11,11 +11,13 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dip"
-        coverflow:imageHeight="150dip"
-        coverflow:imageReflectionRatio="0.2"
-        coverflow:imageWidth="100dip"
-        coverflow:reflectionGap="2dip"
-        coverflow:withReflection="true" />
+        coverflow:imageHeight="160dip"
+
+        coverflow:imageWidth="200dip"
+
+        coverflow:withReflection="false" />
+    <!--         coverflow:imageReflectionRatio="0.2"
+                coverflow:reflectionGap="2dip" -->
 
     <ImageView
         android:id="@+id/presentation_handle"

@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.webkit.WebView;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ImageView;
 
 public class PresentationFragment extends Fragment {
@@ -49,9 +50,8 @@ public class PresentationFragment extends Fragment {
 		mHandle = (ImageView) v.findViewById(R.id.presentation_handle);
 		mHandle.setOnTouchListener(new SizeListener());
 
-		if (mCommunicationService != null && mSlideShow != null) {
-			mTopView.setAdapter(new ThumbnailAdapter(mContext, mSlideShow));
-		}
+		// Call again to set things up if necessary.
+		setCommunicationService(mCommunicationService);
 
 		return v;
 	}
@@ -85,6 +85,7 @@ public class PresentationFragment extends Fragment {
 				}
 
 				mTopView.setLayoutParams(aParams);
+				mTopView.setImageHeight(aParams.height);
 				break;
 			}
 			// TODO Auto-generated method stub
@@ -93,11 +94,18 @@ public class PresentationFragment extends Fragment {
 	}
 
 	// ----------------------------------------------------- CLICK LISTENER ----
-	protected class ClickListener implements AdapterView.OnItemClickListener {
-		public void onItemClick(AdapterView<?> parent, View v, int position,
-		                long id) {
+
+	protected class ClickListener implements OnItemSelectedListener {
+
+		@Override
+		public void onItemSelected(AdapterView<?> arg0, View arg1,
+		                int aPosition, long arg3) {
 			if (mCommunicationService != null)
-				mCommunicationService.getTransmitter().gotoSlide(position);
+				mCommunicationService.getTransmitter().gotoSlide(aPosition);
+		}
+
+		@Override
+		public void onNothingSelected(AdapterView<?> arg0) {
 		}
 	}
 
@@ -105,10 +113,16 @@ public class PresentationFragment extends Fragment {
 	public void setCommunicationService(
 	                CommunicationService aCommunicationService) {
 		mCommunicationService = aCommunicationService;
+		if (mCommunicationService == null)
+			return;
+
 		mSlideShow = mCommunicationService.getSlideShow();
-		if (mTopView != null) {
+		if (mTopView != null && mSlideShow != null) {
 			mTopView.setAdapter(new ThumbnailAdapter(mContext, mSlideShow));
+			mTopView.setSelection(mSlideShow.getCurrentSlide(), true);
+			mTopView.setOnItemSelectedListener(new ClickListener());
 		}
+
 	}
 
 	public void handleMessage(Message aMessage) {

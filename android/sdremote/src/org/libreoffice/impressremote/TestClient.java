@@ -65,6 +65,7 @@ public class TestClient extends Activity {
 		// TODO Auto-generated method stub
 		mCommunicationService.disconnect();
 		stopService(new Intent(this, CommunicationService.class));
+		finish();
 		super.onBackPressed();
 	}
 

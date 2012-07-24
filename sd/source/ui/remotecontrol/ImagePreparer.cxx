@@ -58,7 +58,7 @@ void ImagePreparer::execute()
 void ImagePreparer::sendPreview( sal_uInt32 aSlideNumber )
 {
     sal_uInt64 aSize;
-    uno::Sequence<sal_Int8> aImageData = preparePreview( aSlideNumber, 140, 100,
+    uno::Sequence<sal_Int8> aImageData = preparePreview( aSlideNumber, 320, 240,
         aSize );
     if ( !xController->isRunning() )
         return;

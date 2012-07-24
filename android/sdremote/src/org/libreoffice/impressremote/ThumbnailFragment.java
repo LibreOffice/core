@@ -24,6 +24,7 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.ImageView.ScaleType;
 import android.widget.TextView;
 
 public class ThumbnailFragment extends Fragment {
@@ -69,6 +70,10 @@ public class ThumbnailFragment extends Fragment {
 
 	private void setSelected(int position) {
 		formatUnselected(mCurrentImage, mCurrentText);
+
+		if (mGrid == null) {
+			return;
+		}
 
 		View aV = mGrid.getChildAt(position);
 		if (aV != null) {
@@ -190,6 +195,11 @@ public class ThumbnailFragment extends Fragment {
 			if (aBitmap != null) {
 				aImage.setImageBitmap(aBitmap);
 			}
+
+			// Width
+			int aWidth = (mGrid.getWidth()) / 3 - 20;
+			aImage.setMaxWidth(aWidth);
+			aImage.setScaleType(ScaleType.MATRIX);
 
 			aText.setText(String.valueOf(position + 1));
 
