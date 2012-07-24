@@ -1377,6 +1377,14 @@
                         </enumeration>
                     </constraints>
                 </prop>
+                <prop oor:name="EmptyStringAsZero" oor:type="xs:boolean" oor:nillable="false">
+                    <!-- UIHints: Tools - Options  Spreadsheet  Formula -->
+                    <info>
+                        <author>kyoshida</author>
+                        <desc>Whether to treat empty string formula result as equivalent of having a numeric zero value.</desc>
+                    </info>
+                    <value>false</value>
+                </prop>
             </group>
         </group>
 		<group oor:name="Revision">
