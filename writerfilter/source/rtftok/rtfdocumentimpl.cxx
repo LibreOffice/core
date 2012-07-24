@@ -1507,6 +1507,13 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
     if (cCh > 0)
     {
         OUString aStr(OStringToOUString(OString(cCh), RTL_TEXTENCODING_MS_1252));
+        if ((nKeyword == RTF_LBRACE || nKeyword == RTF_RBRACE) && m_aStates.top().nDestinationState == DESTINATION_MR)
+        {
+            if (nKeyword == RTF_LBRACE)
+                aStr = "\\{";
+            else
+                aStr = "\\}";
+        }
         text(aStr);
         return 0;
     }
@@ -3122,7 +3129,6 @@ int RTFDocumentImpl::pushState()
             m_aStates.top().nDestinationState == DESTINATION_SHAPETEXT ||
             m_aStates.top().nDestinationState == DESTINATION_FORMFIELD ||
             (m_aStates.top().nDestinationState == DESTINATION_FIELDINSTRUCTION && !m_bEq) ||
-            m_aStates.top().nDestinationState == DESTINATION_MOMATH ||
             m_aStates.top().nDestinationState == DESTINATION_MNUM ||
             m_aStates.top().nDestinationState == DESTINATION_MDEN ||
             m_aStates.top().nDestinationState == DESTINATION_ME)
@@ -3133,6 +3139,8 @@ int RTFDocumentImpl::pushState()
         m_aStates.top().nDestinationState = DESTINATION_REVISIONENTRY;
     else if (m_aStates.top().nDestinationState == DESTINATION_EQINSTRUCTION)
         m_aStates.top().nDestinationState = DESTINATION_NORMAL;
+    else if (m_aStates.top().nDestinationState == DESTINATION_MOMATH)
+        m_aStates.top().nDestinationState = DESTINATION_MR;
 
     return 0;
 }
