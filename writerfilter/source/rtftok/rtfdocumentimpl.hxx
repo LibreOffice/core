@@ -164,7 +164,15 @@ namespace writerfilter {
             DESTINATION_MBORDERBOXPR,
             DESTINATION_MRAD,
             DESTINATION_MRADPR,
-            DESTINATION_MDEG
+            DESTINATION_MDEG,
+            DESTINATION_MSSUB,
+            DESTINATION_MSSUBPR,
+            DESTINATION_MSSUP,
+            DESTINATION_MSSUPPR,
+            DESTINATION_MSSUBSUP,
+            DESTINATION_MSSUBSUPPR,
+            DESTINATION_MSPRE,
+            DESTINATION_MSPREPR,
         };
 
         enum RTFBorderState

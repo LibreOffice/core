@@ -1468,6 +1468,14 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
         OPEN_M_TOKEN(RAD, rad);
         OPEN_M_TOKEN(RADPR, radPr);
         OPEN_M_TOKEN(DEG, deg);
+        OPEN_M_TOKEN(SSUB, sSub);
+        OPEN_M_TOKEN(SSUBPR, sSubPr);
+        OPEN_M_TOKEN(SSUP, sSup);
+        OPEN_M_TOKEN(SSUPPR, sSupPr);
+        OPEN_M_TOKEN(SSUBSUP, sSubSup);
+        OPEN_M_TOKEN(SSUBSUPPR, sSubSupPr);
+        OPEN_M_TOKEN(SPRE, sPre);
+        OPEN_M_TOKEN(SPREPR, sPrePr);
         default:
             SAL_INFO("writerfilter", OSL_THIS_FUNC << ": TODO handle destination '" << lcl_RtfToString(nKeyword) << "'");
             // Make sure we skip destinations (even without \*) till we don't handle them
@@ -3667,6 +3675,14 @@ int RTFDocumentImpl::popState()
     case DESTINATION_MRAD: m_aMathBuffer.appendClosingTag(M_TOKEN(rad)); break;
     case DESTINATION_MRADPR: m_aMathBuffer.appendClosingTag(M_TOKEN(radPr)); break;
     case DESTINATION_MDEG: m_aMathBuffer.appendClosingTag(M_TOKEN(deg)); break;
+    case DESTINATION_MSSUB: m_aMathBuffer.appendClosingTag(M_TOKEN(sSub)); break;
+    case DESTINATION_MSSUBPR: m_aMathBuffer.appendClosingTag(M_TOKEN(sSubPr)); break;
+    case DESTINATION_MSSUP: m_aMathBuffer.appendClosingTag(M_TOKEN(sSup)); break;
+    case DESTINATION_MSSUPPR: m_aMathBuffer.appendClosingTag(M_TOKEN(sSupPr)); break;
+    case DESTINATION_MSSUBSUP: m_aMathBuffer.appendClosingTag(M_TOKEN(sSubSup)); break;
+    case DESTINATION_MSSUBSUPPR: m_aMathBuffer.appendClosingTag(M_TOKEN(sSubSupPr)); break;
+    case DESTINATION_MSPRE: m_aMathBuffer.appendClosingTag(M_TOKEN(sPre)); break;
+    case DESTINATION_MSPREPR: m_aMathBuffer.appendClosingTag(M_TOKEN(sPrePr)); break;
     default: break;
     }
 
