@@ -9,14 +9,12 @@
 
 $(eval $(call gb_Executable_Executable,mork_helper))
 
-# hack, how to do it right?
 $(eval $(call gb_Executable_set_include,mork_helper,\
     -I$(SRCDIR)/connectivity/source/inc \
-    -I$(SRCDIR)/solver/unxlngx6.pro/inc/offapi \
     $$(INCLUDE) \
 ))
 
-$(eval $(call gb_Executable_use_sdk_api,mozbootstrap))
+$(eval $(call gb_Executable_use_sdk_api,mork_helper))
 
 $(eval $(call gb_Executable_use_libraries,mork_helper,\
     mork \
