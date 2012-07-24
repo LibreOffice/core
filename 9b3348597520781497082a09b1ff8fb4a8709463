@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAMn///9Y\u003d",
+        "filename": "sc/source/ui/undo/undocell.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 306,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2012-07-24T19:37:21Z",
+      "side": 0,
+      "message": "See overall review comment about code execution.",
+      "revId": "9b3348597520781497082a09b1ff8fb4a8709463",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///9U\u003d",
+        "filename": "sc/source/ui/view/viewfun3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1763,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2012-07-24T19:37:21Z",
+      "side": 0,
+      "message": "See overall review comment about code execution.",
+      "revId": "9b3348597520781497082a09b1ff8fb4a8709463",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///9Q\u003d",
+        "filename": "sc/source/ui/view/viewfunc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 657,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2012-07-24T19:37:21Z",
+      "side": 0,
+      "message": "See overall review comment about code execution.",
+      "revId": "9b3348597520781497082a09b1ff8fb4a8709463",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///9M\u003d",
+        "filename": "sc/source/ui/view/viewfunc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 846,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2012-07-24T19:37:21Z",
+      "side": 0,
+      "message": "See overall review comment about code execution.",
+      "revId": "9b3348597520781497082a09b1ff8fb4a8709463",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///9I\u003d",
+        "filename": "sc/source/ui/view/viewfunc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1378,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2012-07-24T19:37:21Z",
+      "side": 0,
+      "message": "See overall review comment about code execution.\n\nEspecially assembling properties of all attributes is costly.",
+      "revId": "9b3348597520781497082a09b1ff8fb4a8709463",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///9E\u003d",
+        "filename": "sc/source/ui/view/viewfunc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2347,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2012-07-24T19:37:21Z",
+      "side": 0,
+      "message": "See overall review comment about code execution.",
+      "revId": "9b3348597520781497082a09b1ff8fb4a8709463",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
