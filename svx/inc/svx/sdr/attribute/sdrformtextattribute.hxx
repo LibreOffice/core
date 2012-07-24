@@ -64,7 +64,6 @@ namespace drawinglayer
             sal_Int32 getFormTextStart() const;
             sal_Int32 getFormTextShdwXVal() const;
             sal_Int32 getFormTextShdwYVal() const;
-            sal_uInt16 getFormTextShdwTransp() const;
             XFormTextStyle getFormTextStyle() const;
             XFormTextAdjust getFormTextAdjust() const;
             XFormTextShadow getFormTextShadow() const;

@@ -372,11 +372,6 @@ namespace drawinglayer
             return mpSdrFormTextAttribute->getFormTextShdwYVal();
         }
 
-        sal_uInt16 SdrFormTextAttribute::getFormTextShdwTransp() const
-        {
-            return mpSdrFormTextAttribute->getFormTextShdwTransp();
-        }
-
         XFormTextStyle SdrFormTextAttribute::getFormTextStyle() const
         {
             return mpSdrFormTextAttribute->getFormTextStyle();
