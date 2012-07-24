@@ -21,8 +21,9 @@ public class PresentationActivity extends Activity {
 	private CommunicationService mCommunicationService;
 	private boolean mIsBound = false;
 	private FrameLayout mLayout;
-	ThumbnailFragment mThumbnailFragment;
-	PresentationFragment mPresentationFragment;
+	private ThumbnailFragment mThumbnailFragment;
+	private PresentationFragment mPresentationFragment;
+	private ActionBarManager mActionBarManager;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -49,16 +50,11 @@ public class PresentationActivity extends Activity {
 		mIsBound = true;
 	}
 
-	// @Override
-	// public boolean onCreateOptionsMenu(Menu menu) {
-	// MenuInflater inflater = getMenuInflater();
-	// inflater.inflate(R.menu.main_activity, menu);
-	// return true;
-	// }
-
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.activity_presentation, menu);
+		getMenuInflater().inflate(R.menu.actionbar_presentation, menu);
+		mActionBarManager = new ActionBarManager(this, menu,
+		                mCommunicationService);
 		return true;
 	}
 

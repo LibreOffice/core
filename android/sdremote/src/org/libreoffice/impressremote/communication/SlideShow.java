@@ -58,7 +58,42 @@ public class SlideShow {
 		 */
 		private long aTime = 0;
 
+		private long mCountdownTime = 0;
+
 		private boolean mIsRunning = false;
+
+		private boolean mIsCountdown = false;
+
+		/**
+		 * Set whether this timer should be a normal or a countdown timer.
+		 * @param aIsCountdown
+		 * 		Whether this should be a countdown timer.
+		 */
+		public void setCountdown(boolean aIsCountdown) {
+			mIsCountdown = aIsCountdown;
+			if (mIsRunning) {
+				mIsRunning = false;
+				aTime = 0;
+			}
+		}
+
+		/**
+		 * Set the countdown time. Can be set, and isn't lost, whatever mode
+		 * the timer is running in.
+		 * @param aCountdownTime
+		 * 				The countdown time.
+		 */
+		public void setCountdownTime(long aCountdownTime) {
+			mCountdownTime = aCountdownTime;
+		}
+
+		public long getCountdownTime() {
+			return mCountdownTime;
+		}
+
+		public boolean isCountdown() {
+			return mIsCountdown;
+		}
 
 		public boolean isRunning() {
 			return mIsRunning;
@@ -77,6 +112,7 @@ public class SlideShow {
 				return;
 
 			aTime = System.currentTimeMillis() - aTime;
+			mIsRunning = true;
 		}
 
 		public void stopTimer() {
@@ -84,15 +120,35 @@ public class SlideShow {
 				return;
 
 			aTime = System.currentTimeMillis() - aTime;
+			mIsRunning = false;
 		}
 
+		/**
+		 * Get either how long this timer has been running, or how long the
+		 * timer still has left to run.
+		 * @return
+		 */
 		public long getTimeMillis() {
-			if (mIsRunning)
-				return (System.currentTimeMillis() - aTime);
-			else
-				return aTime;
-		}
+			long aTimeRunning;
+			// Determine how long we've been going.
+			if (mIsRunning) {
+				aTimeRunning = System.currentTimeMillis() - aTime;
+			} else {
+				aTimeRunning = aTime;
+			}
+			// And give the time going, or time left
+			if (!mIsCountdown) {
+				return aTimeRunning;
+			} else {
+				long aRet = mCountdownTime - aTimeRunning;
+				if (aRet < 0) { // We have completed!
+					mIsRunning = false;
+					aRet = 0;
+				}
+				return aRet;
+			}
 
+		}
 	}
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

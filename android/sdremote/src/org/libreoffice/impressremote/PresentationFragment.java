@@ -47,6 +47,7 @@ public class PresentationFragment extends Fragment {
 
 		String summary = "<html><body>This is just a test<br/><ul><li>And item</li><li>And again</li></ul>More text<br/>Blabla<br/>Blabla<br/>blabla<br/>Blabla</body></html>";
 		mNotes.loadData(summary, "text/html", null);
+		mNotes.setBackgroundColor(Color.TRANSPARENT);
 
 		//		TextView aText = new TextView();
 		//		aText.setText
@@ -79,11 +80,13 @@ public class PresentationFragment extends Fragment {
 				break;
 			case MotionEvent.ACTION_MOVE:
 				LayoutParams aParams = mTopView.getLayoutParams();
+				int aHeightOriginal = mTopView.getHeight();
 				int aHeight = mTopView.getHeight();
 
 				final int DRAG_MARGIN = 120;
 
 				// Set Height
+
 				aParams.height = aHeight + (int) (aEvent.getY());
 				int aViewSize = mLayout.getHeight();
 				if (aParams.height < DRAG_MARGIN) {
@@ -91,23 +94,24 @@ public class PresentationFragment extends Fragment {
 				} else if (aParams.height > aViewSize - DRAG_MARGIN) {
 					aParams.height = aViewSize - DRAG_MARGIN;
 				}
+
+				int aDiff = aParams.height - aHeightOriginal;
 				mTopView.setLayoutParams(aParams);
 
 				// Now deal with the internal height
+				System.out.println("Before:W:" + mTopView.getImageWidth()
+				                + ":H:" + mTopView.getImageHeight());
 				AbstractCoverFlowImageAdapter aAdapter = (AbstractCoverFlowImageAdapter) mTopView
 				                .getAdapter();
-				//				double adjustRatio = (mTopView.getImageHeight() + (int) (aEvent
-				//				                .getY())) / mTopView.getImageHeight();
-				aAdapter.setHeight(mTopView.getImageHeight()
-				                + (int) (aEvent.getY()));
-				mTopView.setImageHeight(mTopView.getImageHeight()
-				                + (int) (aEvent.getY()));
-
-				//				aAdapter.setWidth((float) (adjustRatio * mTopView
-				//				                .getImageWidth()));
-				//				mTopView.setImageWidth((float) (adjustRatio * mTopView
-				//				                .getImageWidth()));
+				int aHeightNew = (int) (mTopView.getImageHeight() + aDiff);
+				aAdapter.setHeight(aHeightNew);
+				mTopView.setImageHeight(aHeightNew);
+				int aWidthNew = aHeightNew * 180 / 150;
+				aAdapter.setWidth(aWidthNew);
+				mTopView.setImageWidth(aWidthNew);
 				aAdapter.notifyDataSetChanged();
+				System.out.println("After:W:" + mTopView.getImageWidth()
+				                + ":H:" + mTopView.getImageHeight());
 				break;
 			}
 			// TODO Auto-generated method stub
