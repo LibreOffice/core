@@ -27,16 +27,21 @@ import static testlib.UIMap.*;
 
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
+import java.io.FileOutputStream;
+import java.io.PrintStream;
+import java.util.HashMap;
 
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import org.openoffice.test.OpenOffice;
 import org.openoffice.test.common.Condition;
 import org.openoffice.test.common.FileUtil;
 import org.openoffice.test.common.GraphicsUtil;
 import org.openoffice.test.common.SystemUtil;
+import org.openoffice.test.common.Testspace;
 
 import testlib.CalcUtil;
 import testlib.Log;
@@ -46,17 +51,28 @@ public class LongRun {
     @Rule
     public Log LOG = new Log();
 
+    private PrintStream result = null;
+
+    private String pid = null;
+
     /**
      * @throws java.lang.Exception
      */
     @Before
     public void setUp() throws Exception {
+        OpenOffice.killAll();
         app.start();
+        result = new PrintStream(new FileOutputStream(Testspace.getFile("output/longrun.csv")));
+        HashMap<String, Object> proccessInfo = SystemUtil.findProcess(".*soffice\\.bin.*");
+        pid = (String)proccessInfo.get("pid");
+        result.println("Iterator,Time,Memory(KB),CPU(%)");
+        LOG.info("Result will be saved to " + Testspace.getPath("output/longrun.csv"));
     }
 
     @After
     public void tearDown() throws Exception {
         app.close();
+        result.close();
     }
 
     Rectangle rect = new Rectangle(400, 200, 60, 60);
@@ -84,58 +100,36 @@ public class LongRun {
     @Test
     public void testLongRun() throws Exception {
         startcenter.menuItem("File->New->Text Document").select();
-        writer.focus();
-        typeText("Long-running test...");
-//      for (int i = 0; i < 1000000; i++) {
-//          long start = System.currentTimeMillis();
-//          calc.menuItem("File->New->Spreadsheet").select();
-////            Tester.click(840, 420);
-////            sleep(1);
-//
-////            condition.waitForTrue("Time out to wait the control to be enabled!", 5, 0.5);
-////            Tester.click(400, 200);
-////            // Close it by clicking main menu
-//          calc.menuItem("File->Close").select();
-////            app.dispatch(".uno:CloseDoc");
-////            sleep(0.3);
-////            System.out.println(calc.getScreenRectangle());
-////            Tester.click(1670, 70);
-//          long end = System.currentTimeMillis();
-//          System.out.println("Iterator: " + i + ", Elapsed Hours: " + ((end - start)));
-//          //
-//          // // sleep(1);
-//      }
-
-//      app.reset();
-
+        writer.typeKeys("Long-running test...");
         for(int i = 0 ; i < 1000; i++){
-            long start = System.currentTimeMillis();
             saveNewDocument("helloworld_saveas.odt");
-            saveNewDocument("helloworld_saveas.ott");
-            saveNewDocument("helloworld_saveas.sxw");
-            saveNewDocument("helloworld_saveas.stw");
-            saveNewDocument("helloworld_saveas.doc");
-            saveNewDocument("helloworld_saveas.txt");
-            saveNewSpreadsheet("helloworld_saveas.ods");
-            saveNewSpreadsheet("helloworld_saveas.ots");
-            saveNewSpreadsheet("helloworld_saveas.sxc");
-            saveNewSpreadsheet("helloworld_saveas.stc");
-            saveNewSpreadsheet("helloworld_saveas.xls");
-            saveNewPresentation("helloworld_saveas.odp");
-            saveNewPresentation("helloworld_saveas.otp");
-            saveNewPresentation("helloworld_saveas.ppt");
-            saveNewPresentation("helloworld_saveas.pot");
-            saveNewPresentation("helloworld_saveas.sxi");
-            saveNewPresentation("helloworld_saveas.sti");
-            saveNewMath("math_saveas.sxm");
-            saveNewMath("math_saveas.mml");
-            saveNewDrawing("draw_saveas.odg");
-            saveNewDrawing("draw_saveas.otg");
-            saveNewDrawing("draw_saveas.sxd");
-            saveNewDrawing("draw_saveas.std");
-            long end = System.currentTimeMillis();
-            LOG.info("Iterator: " + i + ", Elapsed Hours: " + ((end - start) / 3600000));
-            SystemUtil.execScript("ps -eo vsz,rss,comm | grep soffice.bin");
+//          saveNewDocument("helloworld_saveas.ott");
+//          saveNewDocument("helloworld_saveas.sxw");
+//          saveNewDocument("helloworld_saveas.stw");
+//          saveNewDocument("helloworld_saveas.doc");
+//          saveNewDocument("helloworld_saveas.txt");
+//          saveNewSpreadsheet("helloworld_saveas.ods");
+//          saveNewSpreadsheet("helloworld_saveas.ots");
+//          saveNewSpreadsheet("helloworld_saveas.sxc");
+//          saveNewSpreadsheet("helloworld_saveas.stc");
+//          saveNewSpreadsheet("helloworld_saveas.xls");
+//          saveNewPresentation("helloworld_saveas.odp");
+//          saveNewPresentation("helloworld_saveas.otp");
+//          saveNewPresentation("helloworld_saveas.ppt");
+//          saveNewPresentation("helloworld_saveas.pot");
+//          saveNewPresentation("helloworld_saveas.sxi");
+//          saveNewPresentation("helloworld_saveas.sti");
+//          saveNewMath("math_saveas.sxm");
+//          saveNewMath("math_saveas.mml");
+//          saveNewDrawing("draw_saveas.odg");
+//          saveNewDrawing("draw_saveas.otg");
+//          saveNewDrawing("draw_saveas.sxd");
+//          saveNewDrawing("draw_saveas.std");
+            HashMap<String, Object> perfData = SystemUtil.getProcessPerfData(pid);
+            String record = i + "," + System.currentTimeMillis() + "," + perfData.get("rss") + "," + perfData.get("pcpu");
+            LOG.info("Record: " + record);
+            result.println(record);
+            result.flush();
         }
     }
 
