@@ -3217,6 +3217,7 @@ int RTFDocumentImpl::popState()
     bool bFaltEnd = false;
     bool bPopFrame = false;
     RTFParserState aState(m_aStates.top());
+    sal_Int32 nMathToken = 0;
 
     switch (m_aStates.top().nDestinationState)
     {
@@ -3618,34 +3619,20 @@ int RTFDocumentImpl::popState()
     case DESTINATION_MDEN: m_aMathBuffer.appendClosingTag(M_TOKEN(den)); break;
     case DESTINATION_MACC: m_aMathBuffer.appendClosingTag(M_TOKEN(acc)); break;
     case DESTINATION_MACCPR: m_aMathBuffer.appendClosingTag(M_TOKEN(accPr)); break;
-    case DESTINATION_MCHR:
-    case DESTINATION_MPOS:
-    case DESTINATION_MVERTJC:
-    case DESTINATION_MSTRIKEH:
-    case DESTINATION_MDEGHIDE:
-    case DESTINATION_MBEGCHR:
-    case DESTINATION_MENDCHR:
-    case DESTINATION_MSUBHIDE:
-    case DESTINATION_MSUPHIDE:
+    case DESTINATION_MCHR: if (!nMathToken) nMathToken = M_TOKEN(chr);
+    case DESTINATION_MPOS: if (!nMathToken) nMathToken = M_TOKEN(pos);
+    case DESTINATION_MVERTJC: if (!nMathToken) nMathToken = M_TOKEN(vertJc);
+    case DESTINATION_MSTRIKEH: if (!nMathToken) nMathToken = M_TOKEN(strikeH);
+    case DESTINATION_MDEGHIDE: if (!nMathToken) nMathToken = M_TOKEN(degHide);
+    case DESTINATION_MBEGCHR: if (!nMathToken) nMathToken = M_TOKEN(begChr);
+    case DESTINATION_MENDCHR: if (!nMathToken) nMathToken = M_TOKEN(endChr);
+    case DESTINATION_MSUBHIDE: if (!nMathToken) nMathToken = M_TOKEN(subHide);
+    case DESTINATION_MSUPHIDE: if (!nMathToken) nMathToken = M_TOKEN(supHide);
     {
         oox::formulaimport::XmlStream::AttributeList aAttribs;
         aAttribs[M_TOKEN(val)] = m_aStates.top().aDestinationText.makeStringAndClear();
-        sal_Int32 nToken = 0;
-        switch (m_aStates.top().nDestinationState)
-        {
-            case DESTINATION_MCHR: nToken = M_TOKEN(chr); break;
-            case DESTINATION_MPOS: nToken = M_TOKEN(pos); break;
-            case DESTINATION_MSTRIKEH: nToken = M_TOKEN(strikeH); break;
-            case DESTINATION_MDEGHIDE: nToken = M_TOKEN(degHide); break;
-            case DESTINATION_MVERTJC: nToken = M_TOKEN(pos); break;
-            case DESTINATION_MBEGCHR: nToken = M_TOKEN(begChr); break;
-            case DESTINATION_MENDCHR: nToken = M_TOKEN(endChr); break;
-            case DESTINATION_MSUBHIDE: nToken = M_TOKEN(subHide); break;
-            case DESTINATION_MSUPHIDE: nToken = M_TOKEN(supHide); break;
-            default: break;
-        }
-        m_aMathBuffer.appendOpeningTag(nToken, aAttribs);
-        m_aMathBuffer.appendClosingTag(nToken);
+        m_aMathBuffer.appendOpeningTag(nMathToken, aAttribs);
+        m_aMathBuffer.appendClosingTag(nMathToken);
     }
     break;
     case DESTINATION_ME: m_aMathBuffer.appendClosingTag(M_TOKEN(e)); break;
