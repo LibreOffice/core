@@ -1650,6 +1650,19 @@ void ScConditionalFormatList::UpdateReference( UpdateRefMode eUpdateRefMode,
 {
     for( iterator itr = begin(); itr != end(); ++itr)
         itr->UpdateReference( eUpdateRefMode, rRange, nDx, nDy, nDz );
+
+    if( eUpdateRefMode == URM_INSDEL )
+    {
+        // need to check which must be deleted
+        iterator itr = begin();
+        while(itr != end())
+        {
+            if(itr->GetRange().empty())
+                maConditionalFormats.erase(itr++);
+            else
+                ++itr;
+        }
+    }
 }
 
 void ScConditionalFormatList::RenameCellStyle( const String& rOld, const String& rNew )

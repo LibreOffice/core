@@ -150,6 +150,29 @@ private:
     bool mbFirst;
 };
 
+class FindDeletedRange : public ::std::unary_function<const ScRange*, bool>
+{
+public:
+    FindDeletedRange( SCsCOL nDx, SCsROW nDy): mnDx(nDx), mnDy(nDy) {}
+    FindDeletedRange( const FindDeletedRange& r) : mnDx(r.mnDx), mnDy(r.mnDy) {}
+    bool operator() (const ScRange* p)
+    {
+        ScAddress rStart = p->aStart;
+        ScAddress rEnd = p->aEnd;
+
+        if( rEnd.Col() +mnDx < rStart.Col() )
+            return true;
+        if( rEnd.Row() + mnDy < rStart.Row() )
+            return true;
+
+        return false;
+    }
+
+private:
+    SCsCOL mnDx;
+    SCsROW mnDy;
+};
+
 }
 
 // === ScRangeList ====================================================
@@ -383,6 +406,14 @@ bool ScRangeList::UpdateReference(
     SCROW nRow2;
     SCTAB nTab2;
     rWhere.GetVars( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
+
+    // delete all entries that are fully deleted
+    if( eUpdateRefMode == URM_INSDEL && (nDx < 0 || nDy < 0) )
+    {
+        vector<ScRange*>::iterator itr = std::remove_if(maRanges.begin(), maRanges.end(), FindDeletedRange(nDx, nDy));
+        for_each(itr, maRanges.end(), ScDeleteObjectByPtr<ScRange>());
+        maRanges.erase(itr, maRanges.end());
+    }
 
     vector<ScRange*>::iterator itr = maRanges.begin(), itrEnd = maRanges.end();
     for (; itr != itrEnd; ++itr)
