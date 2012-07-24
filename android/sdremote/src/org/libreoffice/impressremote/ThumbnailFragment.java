@@ -101,8 +101,6 @@ public class ThumbnailFragment extends Fragment {
 		}
 	}
 
-	// ------------------------------------------------- SERVICE CONNECTION ----
-
 	// ----------------------------------------------------- CLICK LISTENER ----
 	protected class ClickListener implements AdapterView.OnItemClickListener {
 		public void onItemClick(AdapterView<?> parent, View v, int position,

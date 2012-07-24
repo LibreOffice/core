@@ -69,8 +69,10 @@ public class PresentationActivity extends Activity {
 			mCommunicationService = ((CommunicationService.CBinder) aService)
 			                .getService();
 			mCommunicationService.setActivityMessenger(mMessenger);
+
+			mPresentationFragment
+			                .setCommunicationService(mCommunicationService);
 			mThumbnailFragment.setCommunicationService(mCommunicationService);
-			// TODO: add mCommunicationSercie to all fragments.
 
 		}
 
@@ -85,6 +87,7 @@ public class PresentationActivity extends Activity {
 	protected class MessageHandler extends Handler {
 		@Override
 		public void handleMessage(Message aMessage) {
+			mPresentationFragment.handleMessage(aMessage);
 			mThumbnailFragment.handleMessage(aMessage);
 			// Bundle aData = aMessage.getData();
 			// TODO: pass to fragments

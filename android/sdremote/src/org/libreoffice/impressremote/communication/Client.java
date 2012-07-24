@@ -60,7 +60,6 @@ public abstract class Client {
 				String aTemp;
 				// read until empty line
 				while ((aTemp = aReader.readLine()).length() != 0) {
-					System.out.println("Read:" + aTemp);
 					aList.add(aTemp);
 				}
 				mReceiver.parseCommand(aList);

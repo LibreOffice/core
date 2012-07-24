@@ -1,16 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/presentation_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:id="@+id/presentation_layout">
+    android:orientation="vertical" >
 
-    <ImageView
-        android:id="@+id/imageView1"
-        android:layout_width="wrap_content"
+    <pl.polidea.coverflow.CoverFlow
+        xmlns:coverflow="http://schemas.android.com/apk/res/org.libreoffice.impressremote"
+        android:id="@+id/presentation_coverflow"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:contentDescription="TODO"
-        android:src="@drawable/testimage" />
+        android:layout_marginTop="5dip"
+        coverflow:imageHeight="150dip"
+        coverflow:imageReflectionRatio="0.2"
+        coverflow:imageWidth="100dip"
+        coverflow:reflectionGap="2dip"
+        coverflow:withReflection="true" />
 
     <ImageView
         android:id="@+id/presentation_handle"
@@ -25,12 +30,12 @@
         android:src="@drawable/handle" />
 
     <ScrollView
-        android:id="@+id/scrollView1"
+        android:id="@+id/presentation_scrollview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
 
         <WebView
-            android:id="@+id/textView1"
+            android:id="@+id/presentation_notes"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     </ScrollView>
