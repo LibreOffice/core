@@ -349,4 +349,21 @@ void osl_interlockedCountCheckForSingleCPU(void)
 #endif /* defined(_SC_NPROCESSORS_CONF) */
 #endif
 
+#if defined(__GNUC__)
+//force the __data_start symbol to exist in any executables that link against
+//libuno_sal so that dlopening of the libgcj provided libjvm.so on some
+//platforms where it needs that symbol will succeed. e.g. Debian mips/lenny
+//with gcc 4.3. With this in place the smoketest succeeds with libgcj provided
+//java. Quite possibly also required/helpful for s390x/s390 and maybe some
+//others. Without it the dlopen of libjvm.so will fail with __data_start
+//not found
+#pragma weak __data_start
+extern int __data_start[];
+#pragma weak data_start
+extern int data_start[];
+#pragma weak _end
+extern int _end[];
+static void *dummy[] __attribute__((used)) = {__data_start, data_start, _end};
+#endif
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
