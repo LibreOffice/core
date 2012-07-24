@@ -32,6 +32,7 @@
 #include <RptResId.hrc>
 #include "rptui_slotid.hrc"
 #include <tools/debug.hxx>
+#include <tools/diagnose_ex.h>
 #include <com/sun/star/awt/XLayoutConstrains.hpp>
 #include <com/sun/star/inspection/ObjectInspector.hpp>
 #include <com/sun/star/inspection/DefaultHelpProvider.hpp>
@@ -125,6 +126,7 @@ PropBrw::PropBrw(const Reference< XMultiServiceFactory >&   _xORB,Window* pParen
     catch (Exception&)
     {
         OSL_FAIL("PropBrw::PropBrw: could not create/initialize my frame!");
+        DBG_UNHANDLED_EXCEPTION();
         m_xMeAsFrame.clear();
     }
 
@@ -177,6 +179,7 @@ PropBrw::PropBrw(const Reference< XMultiServiceFactory >&   _xORB,Window* pParen
         catch (Exception&)
         {
             OSL_FAIL("PropBrw::PropBrw: could not create/initialize the browser controller!");
+            DBG_UNHANDLED_EXCEPTION();
             try
             {
                 ::comphelper::disposeComponent(m_xBrowserController);
