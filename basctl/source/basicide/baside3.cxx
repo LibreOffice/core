@@ -693,10 +693,10 @@ void DialogWindow::UpdateBrowser()
 
 static ::rtl::OUString aResourceResolverPropName( RTL_CONSTASCII_USTRINGPARAM( "ResourceResolver" ));
 
-sal_Bool DialogWindow::SaveDialog()
+bool DialogWindow::SaveDialog()
 {
     DBG_CHKTHIS( DialogWindow, 0 );
-    sal_Bool bDone = sal_False;
+    bool bDone = false;
 
     Reference< lang::XMultiServiceFactory > xMSF( ::comphelper::getProcessServiceFactory() );
     Reference < XFilePicker > xFP;
@@ -956,9 +956,9 @@ LanguageMismatchQueryBox::LanguageMismatchQueryBox( Window* pParent,
     SetImage( QueryBox::GetStandardImage() );
 }
 
-sal_Bool implImportDialog( Window* pWin, const ::rtl::OUString& rCurPath, const ScriptDocument& rDocument, const ::rtl::OUString& aLibName )
+bool implImportDialog( Window* pWin, const ::rtl::OUString& rCurPath, const ScriptDocument& rDocument, const ::rtl::OUString& aLibName )
 {
-    sal_Bool bDone = sal_False;
+    bool bDone = false;
 
     Reference< lang::XMultiServiceFactory > xMSF( ::comphelper::getProcessServiceFactory() );
     Reference < XFilePicker > xFP;
@@ -1247,7 +1247,7 @@ sal_Bool implImportDialog( Window* pWin, const ::rtl::OUString& rCurPath, const 
                 pIDEShell->SetCurWindow( pNewDlgWin, sal_True );
             }
 
-            bDone = sal_True;
+            bDone = true;
         }
         catch(const Exception& )
         {}
@@ -1256,14 +1256,13 @@ sal_Bool implImportDialog( Window* pWin, const ::rtl::OUString& rCurPath, const 
     return bDone;
 }
 
-sal_Bool DialogWindow::ImportDialog()
+bool DialogWindow::ImportDialog()
 {
     DBG_CHKTHIS( DialogWindow, 0 );
 
     const ScriptDocument& rDocument = GetDocument();
     ::rtl::OUString aLibName = GetLibName();
-    sal_Bool bRet = implImportDialog( this, aCurPath, rDocument, aLibName );
-    return bRet;
+    return implImportDialog( this, aCurPath, rDocument, aLibName );
 }
 
 DlgEdModel* DialogWindow::GetModel() const

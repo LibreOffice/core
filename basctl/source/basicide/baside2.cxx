@@ -417,10 +417,10 @@ void ModulWindow::BasicStop()
     aStatus.bIsRunning = false;
 }
 
-sal_Bool ModulWindow::LoadBasic()
+bool ModulWindow::LoadBasic()
 {
     DBG_CHKTHIS( ModulWindow, 0 );
-    sal_Bool bDone = sal_False;
+    bool bDone = false;
 
     Reference< lang::XMultiServiceFactory > xMSF( ::comphelper::getProcessServiceFactory() );
     Reference < XFilePicker > xFP;
@@ -462,7 +462,7 @@ sal_Bool ModulWindow::LoadBasic()
             if ( nError )
                 ErrorHandler::HandleError( nError );
             else
-                bDone = sal_True;
+                bDone = true;
         }
         else
             ErrorBox( this, WB_OK | WB_DEF_OK, IDE_RESSTR(RID_STR_COULDNTREAD) ).Execute();
@@ -471,10 +471,10 @@ sal_Bool ModulWindow::LoadBasic()
 }
 
 
-sal_Bool ModulWindow::SaveBasicSource()
+bool ModulWindow::SaveBasicSource()
 {
     DBG_CHKTHIS( ModulWindow, 0 );
-    sal_Bool bDone = sal_False;
+    bool bDone = false;
 
     Reference< lang::XMultiServiceFactory > xMSF( ::comphelper::getProcessServiceFactory() );
     Reference < XFilePicker > xFP;
@@ -517,7 +517,7 @@ sal_Bool ModulWindow::SaveBasicSource()
             if ( nError )
                 ErrorHandler::HandleError( nError );
             else
-                bDone = sal_True;
+                bDone = true;
         }
         else
             ErrorBox( this, WB_OK | WB_DEF_OK, String( IDEResId( RID_STR_COULDNTWRITE) ) ).Execute();
@@ -526,27 +526,27 @@ sal_Bool ModulWindow::SaveBasicSource()
     return bDone;
 }
 
-sal_Bool implImportDialog( Window* pWin, const ::rtl::OUString& rCurPath, const ScriptDocument& rDocument, const ::rtl::OUString& aLibName );
+bool implImportDialog( Window* pWin, const ::rtl::OUString& rCurPath, const ScriptDocument& rDocument, const ::rtl::OUString& aLibName );
 
-sal_Bool ModulWindow::ImportDialog()
+bool ModulWindow::ImportDialog()
 {
     const ScriptDocument& rDocument = GetDocument();
     ::rtl::OUString aLibName = GetLibName();
     return implImportDialog( this, aCurPath, rDocument, aLibName );
 }
 
-sal_Bool ModulWindow::ToggleBreakPoint( sal_uLong nLine )
+bool ModulWindow::ToggleBreakPoint( sal_uLong nLine )
 {
     DBG_ASSERT( XModule().Is(), "Kein Modul!" );
 
-    sal_Bool bNewBreakPoint = sal_False;
+    bool bNewBreakPoint = false;
 
     if ( XModule().Is() )
     {
         CheckCompileBasic();
         if ( aStatus.bError )
         {
-            return sal_False;
+            return false;
         }
 
         BreakPoint* pBrk = GetBreakPoints().FindBreakPoint( nLine );
@@ -560,7 +560,7 @@ sal_Bool ModulWindow::ToggleBreakPoint( sal_uLong nLine )
             if ( xModule->SetBP( (sal_uInt16)nLine) )
             {
                 GetBreakPoints().InsertSorted( new BreakPoint( nLine ) );
-                bNewBreakPoint = sal_True;
+                bNewBreakPoint = true;
                 if ( StarBASIC::IsRunning() )
                 {
                     for ( sal_uInt16 nMethod = 0; nMethod < xModule->GetMethods()->Count(); nMethod++ )
@@ -593,7 +593,7 @@ void ModulWindow::UpdateBreakPoint( const BreakPoint& rBrk )
 }
 
 
-sal_Bool ModulWindow::BasicToggleBreakPoint()
+bool ModulWindow::BasicToggleBreakPoint()
 {
     DBG_CHKTHIS( ModulWindow, 0 );
     AssertValidEditEngine();
@@ -602,12 +602,12 @@ sal_Bool ModulWindow::BasicToggleBreakPoint()
     aSel.GetStart().GetPara()++;    // Basic lines start at 1!
     aSel.GetEnd().GetPara()++;
 
-    sal_Bool bNewBreakPoint = sal_False;
+    bool bNewBreakPoint = false;
 
     for ( sal_uLong nLine = aSel.GetStart().GetPara(); nLine <= aSel.GetEnd().GetPara(); nLine++ )
     {
         if ( ToggleBreakPoint( nLine ) )
-            bNewBreakPoint = sal_True;
+            bNewBreakPoint = true;
     }
 
     aXEditorWindow.GetBrkWindow().Invalidate();
@@ -1184,7 +1184,7 @@ void ModulWindow::FrameWindowMoved()
 
 
 
-void ModulWindow::ShowCursor( sal_Bool bOn )
+void ModulWindow::ShowCursor( bool bOn )
 {
     if ( GetEditEngine() )
     {
@@ -1217,7 +1217,7 @@ void ModulWindow::Deactivating()
         GetEditView()->EraseVirtualDevice();
 }
 
-sal_uInt16 ModulWindow::StartSearchAndReplace( const SvxSearchItem& rSearchItem, sal_Bool bFromStart )
+sal_uInt16 ModulWindow::StartSearchAndReplace( const SvxSearchItem& rSearchItem, bool bFromStart )
 {
     // one could also relinquish syntaxhighlighting/formatting instead of the stupid replace-everything...
     AssertValidEditEngine();
@@ -1406,8 +1406,8 @@ ModulWindowLayout::ModulWindowLayout( Window* pParent ) :
     aWatchWindow( this ),
     aStackWindow( this ),
     aObjectCatalog( this ),
-    bVSplitted(sal_False),
-    bHSplitted(sal_False),
+    bVSplitted(false),
+    bHSplitted(false),
     m_pModulWindow(0),
     m_aImagesNormal(IDEResId(RID_IMGLST_LAYOUT))
 {
@@ -1549,9 +1549,9 @@ void ModulWindowLayout::ArrangeWindows()
 IMPL_LINK( ModulWindowLayout, SplitHdl, Splitter *, pSplitter )
 {
     if ( pSplitter == &aVSplitter )
-        bVSplitted = sal_True;
+        bVSplitted = true;
     else
-        bHSplitted = sal_True;
+        bHSplitted = true;
 
     ArrangeWindows();
     return 0;

@@ -217,7 +217,7 @@ void BasicIDEShell::ExecuteCurrent( SfxRequest& rReq )
                                     {
                                         if ( pCurWin )
                                             pWin->SetSizePixel( pCurWin->GetSizePixel() );
-                                        nFound = ((ModulWindow*)pWin)->StartSearchAndReplace( (const SvxSearchItem&)rItem, sal_True );
+                                        nFound = ((ModulWindow*)pWin)->StartSearchAndReplace( (const SvxSearchItem&)rItem, true );
                                     }
                                     if ( nFound )
                                     {
@@ -238,7 +238,7 @@ void BasicIDEShell::ExecuteCurrent( SfxRequest& rReq )
                                     pWin = 0;
                             }
                             if ( !nFound && bSearchedFromStart )
-                                nFound = ((ModulWindow*)pCurWin)->StartSearchAndReplace( (const SvxSearchItem&)rItem, sal_True );
+                                nFound = ((ModulWindow*)pCurWin)->StartSearchAndReplace( (const SvxSearchItem&)rItem, true );
                             if ( bChangeCurWindow )
                                 SetCurWindow( pWin, sal_True );
                         }

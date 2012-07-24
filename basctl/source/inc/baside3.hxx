@@ -80,8 +80,8 @@ public:
     sal_Bool                RenameDialog( const ::rtl::OUString& rNewName );
     void                DisableBrowser();
     void                UpdateBrowser();
-    sal_Bool                SaveDialog();
-    sal_Bool                ImportDialog();
+    bool                SaveDialog();
+    bool                ImportDialog();
 
     virtual ::rtl::OUString      GetTitle();
     virtual BasicEntryDescriptor CreateEntryDescriptor();
