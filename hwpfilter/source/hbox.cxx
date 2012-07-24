@@ -63,11 +63,11 @@ int HBox::WSize(void)
 }
 
 
-int HBox::GetString(hchar * hstr, int )
+hchar_string HBox::GetString()
 {
-    *hstr++ = hh;
-    *hstr = 0;
-    return 1;
+    hchar_string ret;
+    ret.push_back(hh);
+    return ret;
 }
 
 
@@ -143,10 +143,10 @@ DateCode::DateCode(void):HBox(CH_DATE_CODE)
 #define _DATECODE_WEEK_DEFINES_
 #include "datecode.h"
 
-int DateCode::GetString(hchar * hstr, int slen)
+hchar_string DateCode::GetString()
 {
+    hchar_string ret;
     const hchar *fmt;
-    hchar *d;
     int i, num;
     const char *form;
     char cbuf[256];
@@ -156,8 +156,7 @@ int DateCode::GetString(hchar * hstr, int slen)
     format[DATE_SIZE - 1] = 0;
     fmt = format[0] ? format : defaultform;
 
-    d = hstr;
-    for (; *fmt && ((int) (d - hstr) < DATE_SIZE) && slen > 1; fmt++)
+    for (; *fmt && ((int) ret.size() < DATE_SIZE); fmt++)
     {
         form = (add_zero) ? "%02d" : "%d";
 
@@ -221,8 +220,7 @@ int DateCode::GetString(hchar * hstr, int slen)
                 num = date[MIN];
                 break;
             case '6':
-                *d++ = kor_week[date[WEEK]];
-                slen--;
+                ret.push_back(kor_week[date[WEEK]]);
                 break;
             case '^':
                 memcpy(cbuf, eng_week + date[WEEK] * 3, 3);
@@ -233,11 +231,8 @@ int DateCode::GetString(hchar * hstr, int slen)
                 strcpy(cbuf, en_week[date[WEEK]]);
                 break;
             case '7':
-                if (slen > 3)
-                {
-                    *d++ = 0xB5A1;
-                    *d++ = (is_pm) ? 0xD281 : 0xB8E5;
-                }
+                ret.push_back(0xB5A1);
+                ret.push_back((is_pm) ? 0xD281 : 0xB8E5);
                 break;
             case '&':
                 strcpy(cbuf, (is_pm) ? "p.m." : "a.m.");
@@ -270,28 +265,24 @@ int DateCode::GetString(hchar * hstr, int slen)
                 fmt++;
                 if (*fmt == '6')
                 {
-                    *d++ = china_week[date[WEEK]];
-                    slen--;
+                    ret.push_back(china_week[date[WEEK]]);
                     break;
                 }
                 break;
             default:
                 if (*fmt == '\\' && *++fmt == 0)
                     goto done;
-                *d++ = *fmt;
-                slen--;
+                ret.push_back(*fmt);
         }
         if (num != -1)
             sprintf(cbuf, form, num);
-        for (i = 0; 0 != cbuf[i] && slen > 1; i++)
+        for (i = 0; 0 != cbuf[i]; i++)
         {
-            *d++ = *(cbuf + i);
-            slen--;
+            ret.push_back(*(cbuf + i));
         }
     }
     done:
-    *d = 0;
-    return hstrlen(hstr);
+    return ret;
 }
 
 
@@ -432,10 +423,9 @@ Footnote::~Footnote(void)
 // 홀수쪽시작/감추기 (21)
 
 // mail merge(22)
-int MailMerge::GetString(hchar * hstr, int )
+hchar_string MailMerge::GetString()
 {
-    *hstr = 0;
-    return 0;
+    return hchar_string();
 }
 
 
@@ -580,7 +570,7 @@ enum
     number는 값이 그대로 들어가 있다. 즉, 1.2.1에는 1,2,1이 들어가 있다.
     style 은 1부터 값이 들어가 있다. hbox.h에 정의된 데로..
  */
-hchar *Outline::GetUnicode(hchar * hstr, int)
+hchar_string Outline::GetUnicode() const
 {
     const hchar *p;
      hchar buffer[255];
@@ -608,14 +598,14 @@ hchar *Outline::GetUnicode(hchar * hstr, int)
                     strcat(buf, cur_num_str);
                 }
                 str2hstr(buf, buffer);
-                     return hstr2ucsstr(buffer, hstr);
+                return hstr2ucsstr(buffer);
             }
             case OLSTY_NUMSIG1:
             case OLSTY_NUMSIG2:
             case OLSTY_NUMSIG3:
                 {
                 getOutlineNumStr(shape, level, number[level], buffer);
-                     return hstr2ucsstr(buffer, hstr);
+                return hstr2ucsstr(buffer);
                 }
             case OLSTY_BULLET1:
             case OLSTY_BULLET2:
@@ -626,7 +616,7 @@ hchar *Outline::GetUnicode(hchar * hstr, int)
                 p = GetOutlineStyleChars(shape);
                 buffer[0] = p[level];
                 buffer[1] = 0;
-                     return hstr2ucsstr(buffer, hstr);
+                     return hstr2ucsstr(buffer);
                 }
             case OLSTY_USER:
             case OLSTY_BULUSER:
@@ -713,11 +703,11 @@ hchar *Outline::GetUnicode(hchar * hstr, int)
                         buffer[l++] = deco[i][1];
                     }
                     buffer[l] = 0;
-                    return hstr2ucsstr(buffer, hstr);
+                    return hstr2ucsstr(buffer);
                 }
         }
     }
-     return hstr2ucsstr(buffer, hstr);
+    return hstr2ucsstr(buffer);
 }
 
 

@@ -19,6 +19,8 @@
 
 #include "precompile.h"
 
+#include <comphelper/newarray.hxx>
+
 #include <list>
 
 #include "hwpfile.h"
@@ -77,20 +79,30 @@ int FieldCode::Read(HWPFile & hwpf)
     hwpf.Read4b(&len3, 1);
     hwpf.Read4b(&binlen, 1);
 
-    str1 = new hchar[len1];
-    str2 = new hchar[len2];
-    str3 = new hchar[len3];
+    ulong const len1_ = ((len1 > 1024) ? 1024 : len1) / sizeof(hchar);
+    ulong const len2_ = ((len2 > 1024) ? 1024 : len2) / sizeof(hchar);
+    ulong const len3_ = ((len3 > 1024) ? 1024 : len3) / sizeof(hchar);
+
+    str1 = new hchar[len1_ ? len1_ : 1];
+    str2 = new hchar[len2_ ? len2_ : 1];
+    str3 = new hchar[len3_ ? len3_ : 1];
     bin = new char[binlen];
 
-    hwpf.Read2b(str1, len1/2);
-    hwpf.Read2b(str2, len2/2);
-    hwpf.Read2b(str3, len3/2);
+    hwpf.Read2b(str1, len1_);
+    hwpf.SkipBlock(len1 - (len1_ * sizeof(hchar)));
+    str1[len1_ ? (len1_ - 1) : 0] = 0;
+    hwpf.Read2b(str2, len2_);
+    hwpf.SkipBlock(len2 - (len2_ * sizeof(hchar)));
+    str2[len2_ ? (len2_ - 1) : 0] = 0;
+    hwpf.Read2b(str3, len3_);
+    hwpf.SkipBlock(len3 - (len3_ * sizeof(hchar)));
+    str3[len3_ ? (len3_ - 1) : 0] = 0;
 
     hwpf.ReadBlock(bin, binlen);
 
      if( type[0] == 3 && type[1] == 2 ){ /* 만든날짜로서 포맷을 생성해야 한다. */
           DateCode *pDate = new DateCode;
-          for( int i = 0 ;i < (int)(len3/2) ; i++ ){
+          for (int i = 0 ; i < static_cast<int>(len3_); i++) {
                 if(str3[i] == 0 ) break;
                 if( i >= DATE_SIZE ) break;
                 pDate->format[i] = str3[i];
@@ -277,7 +289,10 @@ int TxtBox::Read(HWPFile & hwpf)
         return hwpf.SetState(HWP_InvalidFileFormat);
      }
 
-    cell = new Cell[ncell];
+    cell = ::comphelper::newArray_null<Cell>(ncell);
+    if (!cell) {
+        return hwpf.SetState(HWP_InvalidFileFormat);
+    }
     for (ii = 0; ii < ncell; ii++)
     {
         cell[ii].Read(hwpf);
@@ -285,7 +300,10 @@ int TxtBox::Read(HWPFile & hwpf)
     }
     if (ncell == 1)
         style.cell = &cell[0];
-    plists = new std::list < HWPPara* >[ncell];
+    plists = ::comphelper::newArray_null< std::list< HWPPara* > >(ncell);
+    if (!plists) {
+        return hwpf.SetState(HWP_InvalidFileFormat);
+    }
     for (ii = 0; ii < ncell; ii++)
         hwpf.ReadParaList(plists[ii]);
      // caption
@@ -300,7 +318,10 @@ int TxtBox::Read(HWPFile & hwpf)
                 tbl->rows.insert(cell[ii].y);
                 tbl->rows.insert(cell[ii].y + cell[ii].h);
           }
-          TCell* *pArr = new TCell*[ncell];
+          TCell* *pArr = ::comphelper::newArray_null<TCell *>(ncell);
+          if (!pArr) {
+                return hwpf.SetState(HWP_InvalidFileFormat);
+          }
           for( ii = 0 ; ii < ncell; ii++)
           {
                 TCell *tcell = new TCell;
