@@ -25,7 +25,7 @@
 <project basedir="." default="test">
     <property file="build.properties" />
     <property environment="env" />
-    <property name="src" value="./src" />
+    <property name="src" value="./source" />
     <property name="out" value="output"/>
     <property name="classes" value="${out}/class" />
     <property name="lib" value="${out}/lib" />
@@ -34,7 +34,7 @@
     <property name="env.TESTSPACE" value="../testspace" />
     <property name="junit.home" value="${env.JUNIT_HOME}" />
     <property name="testspace" value="${env.TESTSPACE}" />
-    <property name="test.classes" value="testsuite/BVT.class" />
+    <property name="test.classes" value="testsuite/gui/BVT.class" />
     <property name="test.output" value="${testspace}/output" />
     <property name="test.result" value="${test.output}/result" />
     <property name="test.report" value="${test.output}/report" />
