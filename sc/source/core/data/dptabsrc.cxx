@@ -2577,7 +2577,8 @@ bool ScDPMember::IsNamedItem(SCROW nIndex) const
                 (long)::rtl::math::approxFloor( pData->GetValue() ),
                 nHier, nLev );
             //  fValue is converted from integer, so simple comparison works
-            return nComp == GetItemData().GetValue();
+            const ScDPItemData* pData2 = GetItemData();
+            return pData && nComp == pData2->GetValue();
         }
     }
 
@@ -2613,7 +2614,8 @@ void ScDPMember::FillItemData( ScDPItemData& rData ) const
 {
     //! handle date hierarchy...
 
-    rData = GetItemData() ;
+    const ScDPItemData* pData = GetItemData();
+    rData = (pData ? *pData : ScDPItemData());
 }
 
 const OUString* ScDPMember::GetLayoutName() const
@@ -2628,7 +2630,10 @@ long ScDPMember::GetDim() const
 
 rtl::OUString ScDPMember::GetNameStr() const
 {
-    return pSource->GetData()->GetFormattedString(nDim, GetItemData());
+    const ScDPItemData* pData = GetItemData();
+    if (pData)
+        return pSource->GetData()->GetFormattedString(nDim, *pData);
+    return rtl::OUString();
 }
 
 ::rtl::OUString SAL_CALL ScDPMember::getName() throw(uno::RuntimeException)
@@ -2723,9 +2728,11 @@ const ScDPCache* ScDPSource::GetCache()
     return ( GetData()!=NULL) ? GetData()->GetCacheTable().getCache() : NULL ;
 }
 
-const ScDPItemData& ScDPMember::GetItemData() const
+const ScDPItemData* ScDPMember::GetItemData() const
 {
-    return *pSource->GetItemDataById(nDim, mnDataId);
+    const ScDPItemData* pData = pSource->GetItemDataById(nDim, mnDataId);
+    SAL_WARN_IF( !pData, "sc", "ScDPMember::GetItemData: what data? nDim " << nDim << ", mnDataId " << mnDataId);
+    return pData;
 }
 
 const ScDPItemData* ScDPSource::GetItemDataById(long nDim, long nId)
