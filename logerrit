@@ -31,20 +31,44 @@ ask_tristate() {
 
 }
 
+submit() {
+		BRANCH=$1
+		if test -z "$BRANCH"
+		then
+			BRANCH=`git symbolic-ref HEAD 2> /dev/null`
+			BRANCH="${BRANCH##refs/heads/}"
+			if test -z "$BRANCH"
+			then
+				echo "no branch specified, and could not guess the current branch"
+				exit 1
+			fi
+			echo "no branch specified, guessing current branch $BRANCH"
+		fi
+		git push $GERRITURL HEAD:refs/for/$BRANCH
+}
+
 case "$1" in
 	help)
 		echo "Usage: ./logerrit subcommand [options]"
+		echo "simple and basic tool to interact with LibreOffice gerrit"
 		echo "subcommands:"
-		echo "             test                 test your gerrit setup"
-		echo "             submit [BRANCH]      submit your change for review to a branch"
-		echo "             nextchange [BRANCH]   reset branch to the remote to start with the next change"
-		echo "             checkout CHANGEID    checkout the changes for review"
-		echo "             pull CHANGEID        pull (and merge) the changes on current branch"
-		echo "             cherry-pick CHANGEID cherry-pick the change on current branch"
-		echo "             patch CHANGEID       show the change as a patch"
-		echo "             review [CHANGEID]    interactively review a change (current one if no changeid given)"
-		echo "             query ....           query for changes for review on project core"
+		echo "             test                    test your gerrit setup"
+		echo " --- for submitters:"
+		echo "             submit BRANCH           submit your change for review"
+		echo "             resubmit BRANCH         create a new Change-Id and submit your change for review"
+		echo "                                     (yes, this modifies your last commit)"
+		echo "             releasepick SHA1 BRANCH cherry-picks commit SHA1 on BRANCH and submits it for review"
+		echo "             nextchange BRANCH       reset branch to the remote to start with the next change"
+		echo " --- for reviewers:"
+		echo "             checkout CHANGEID       checkout the changes for review"
+		echo "             pull CHANGEID           pull (and merge) the changes on current branch"
+		echo "             cherry-pick CHANGEID    cherry-pick the change on current branch"
+		echo "             patch CHANGEID          show the change as a patch"
+		echo "             review CHANGEID         interactively review a change (current one if no changeid given)"
+		echo "             query ....              query for changes for review on project core"
 		echo "             <any other gerrit command>"
+		echo "advanced users should consider using git review instead:"
+		echo "http://wiki.documentfoundation.org/Development/GitReview"
 		exit
 	;;
 	test)
@@ -58,20 +82,23 @@ case "$1" in
 		fi
 	;;
 	submit)
-		BRANCH=$2
-		if test -z "$BRANCH"
-		then
-			BRANCH=`git symbolic-ref HEAD 2> /dev/null`
-			BRANCH="${BRANCH##refs/heads/}"
-			if test -z "$BRANCH"
-			then
-				echo "no branch specified, and could not guess the current branch"
-				exit 1
-			fi
-			echo "no branch specified, guessing current branch $BRANCH"
-		fi
-		git push $GERRITURL HEAD:refs/for/$BRANCH
+        submit $2
 	;;
+    resubmit)
+        git log -1 --pretty=%B | grep -v ^Change-Id: | git commit --amend -F -
+        submit $2
+    ;;
+    releasepick)
+        # probably a bad idea as is -- no sane rollback on failure
+        BRANCH=`git symbolic-ref HEAD 2> /dev/null`
+        SOMETHINGSTASHED=FALSE
+        git stash && SOMETHINGSTASHED=TRUE
+        git checkout $3
+        git cherry-pick -x $2
+        git log -1 --pretty=%B | grep -v ^Change-Id: | git commit --amend -F -
+        submit $3
+        git checkout $BRANCH
+        test "$SOMETHINGSTASHED" = "TRUE" && git stash pop 
 	nextchange)
 		if test -n "`git status -s -uno`"
 		then
