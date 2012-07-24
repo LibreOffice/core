@@ -173,7 +173,6 @@ PropBrw::PropBrw(const Reference< XMultiServiceFactory >&   _xORB,Window* pParen
                     uno::Reference< uno::XInterface > xDefaultHelpProvider( inspection::DefaultHelpProvider::create( m_xInspectorContext, xInspectorUI ) );
                 }
             }
-            xFactoryProperties->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ) ) ,makeAny(xOwnContext));
         }
         catch (Exception&)
         {
@@ -182,9 +181,6 @@ PropBrw::PropBrw(const Reference< XMultiServiceFactory >&   _xORB,Window* pParen
             {
                 ::comphelper::disposeComponent(m_xBrowserController);
                 ::comphelper::disposeComponent(m_xBrowserComponentWindow);
-                Reference< XPropertySet > xFactoryProperties( m_xORB, UNO_QUERY_THROW );
-                if ( xOwnContext.is() )
-                    xFactoryProperties->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ) ) ,makeAny(xOwnContext));
             }
             catch(Exception&) { }
             m_xBrowserController.clear();
