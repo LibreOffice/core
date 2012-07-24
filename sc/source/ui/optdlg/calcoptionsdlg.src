@@ -125,7 +125,7 @@ ModalDialog RID_SCDLG_FORMULA_CALCOPTIONS
 
     String STR_EMPTY_STRING_AS_ZERO_DESC
     {
-        Text [ en-US ] = "Blah.";
+        Text [ en-US ] = "This option determines whether or not an empty string is to be treated as having a value of zero when used in arithmetic.";
     };
 
     String STR_TRUE
