@@ -29,10 +29,12 @@
 #ifndef INCLUDED_TUBES_CONTACT_LIST_HXX
 #define INCLUDED_TUBES_CONTACT_LIST_HXX
 
+#include <set>
 #include <utility>
 #include <vector>
 
 #include "tubes/tubesdllapi.h"
+#include <tubes/warnings_guard_boost_signals2.hpp>
 
 typedef struct _TpAccount TpAccount;
 typedef struct _TpContact TpContact;
@@ -49,8 +51,12 @@ public:
 
     AccountContactPairV     getContacts();
 
+    /** Emitted when a contact changes its presence. */
+    boost::signals2::signal<void ()> sigContactListChanged;
+
 private:
     TpAccountManager*       mpAccountManager;
+    std::set< TpContact* >  maRegistered;
 
 };
 

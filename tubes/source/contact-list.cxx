@@ -92,6 +92,15 @@ tb_contact_is_online (TpContact *contact)
     }
 }
 
+static void presence_changed_cb( TpContact* /* contact */,
+                                 guint      /* type */,
+                                 gchar*     /* status */,
+                                 gchar*     /* message */,
+                                 gpointer   pContactList )
+{
+    reinterpret_cast<ContactList*> (pContactList)->sigContactListChanged();
+}
+
 AccountContactPairV ContactList::getContacts()
 {
   GList *accounts;
@@ -121,6 +130,12 @@ AccountContactPairV ContactList::getContacts()
         {
           TpContact *contact =
               reinterpret_cast<TpContact *>(g_ptr_array_index (contacts, i));
+          if (maRegistered.find (contact) == maRegistered.end())
+          {
+              maRegistered.insert (contact);
+              g_signal_connect (contact, "presence-changed",
+                      G_CALLBACK (presence_changed_cb), this );
+          }
 
           if (contact != self &&
               tb_contact_is_online (contact))
