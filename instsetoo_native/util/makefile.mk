@@ -41,11 +41,6 @@ PYTHONPATH:=$(PWD)$/$(BIN):$(SOLARLIBDIR):$(SOLARLIBDIR)$/python:$(SOLARLIBDIR)$
 .ENDIF			# "$(GUI)"=="WNT"
 .EXPORT: PYTHONPATH
 
-.IF "$(OS)$(COM)" == "WNTGCC"
-# i.e. cross-compiling
-FORCE2ARCHIVE=TRUE
-.ENDIF
-
 ENABLE_DOWNLOADSETS*=TRUE
 
 .EXPORT: ENABLE_DOWNLOADSETS
@@ -127,10 +122,6 @@ ALLTAR : openofficedev_$(defaultlangiso) ooodevlanguagepack $(eq,$(OS),MACOSX $(
 .ENDIF
 .ENDIF # "$(ENABLE_RELEASE_BUILD)"=="TRUE"
 .ENDIF			# "$(GUI)"!="WNT" && "$(EPM)"=="NO"
-
-.IF "$(FORCE2ARCHIVE)" == "TRUE"
-PKGFORMAT = archive
-.END
 
 .IF "$(MAKETARGETS:e)"!=""
 PKGFORMAT+=$(MAKETARGETS:e:s/.//)
