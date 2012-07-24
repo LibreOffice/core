@@ -755,7 +755,7 @@ public:
 
     rtl::OUString GetNameStr() const;
     void                    FillItemData( ScDPItemData& rData ) const;
-    const ScDPItemData&  GetItemData() const;
+    const ScDPItemData*  GetItemData() const;
     SCROW GetItemDataId() const { return mnDataId; }
     bool IsNamedItem(SCROW nIndex) const;
 
