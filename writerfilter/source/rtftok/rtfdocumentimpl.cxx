@@ -3181,30 +3181,30 @@ int RTFDocumentImpl::pushState()
 
     m_nGroup++;
 
-    if (m_aStates.top().nDestinationState == DESTINATION_FONTTABLE)
-        m_aStates.top().nDestinationState = DESTINATION_FONTENTRY;
-    else if (m_aStates.top().nDestinationState == DESTINATION_STYLESHEET)
-        m_aStates.top().nDestinationState = DESTINATION_STYLEENTRY;
-    else if (m_aStates.top().nDestinationState == DESTINATION_FIELDRESULT ||
-            m_aStates.top().nDestinationState == DESTINATION_SHAPETEXT ||
-            m_aStates.top().nDestinationState == DESTINATION_FORMFIELD ||
-            (m_aStates.top().nDestinationState == DESTINATION_FIELDINSTRUCTION && !m_bEq) ||
-            m_aStates.top().nDestinationState == DESTINATION_MNUM ||
-            m_aStates.top().nDestinationState == DESTINATION_MDEN ||
-            m_aStates.top().nDestinationState == DESTINATION_ME ||
-            m_aStates.top().nDestinationState == DESTINATION_MFNAME ||
-            m_aStates.top().nDestinationState == DESTINATION_MLIM ||
-            m_aStates.top().nDestinationState == DESTINATION_MSUB ||
-            m_aStates.top().nDestinationState == DESTINATION_MSUP)
+    switch (m_aStates.top().nDestinationState)
+    {
+    case DESTINATION_FONTTABLE: m_aStates.top().nDestinationState = DESTINATION_FONTENTRY; break;
+    case DESTINATION_STYLESHEET: m_aStates.top().nDestinationState = DESTINATION_STYLEENTRY; break;
+    case DESTINATION_FIELDRESULT:
+    case DESTINATION_SHAPETEXT:
+    case DESTINATION_FORMFIELD:
+    case DESTINATION_EQINSTRUCTION:
+    case DESTINATION_MNUM:
+    case DESTINATION_MDEN:
+    case DESTINATION_ME:
+    case DESTINATION_MFNAME:
+    case DESTINATION_MLIM:
+    case DESTINATION_MSUB:
+    case DESTINATION_MSUP:
         m_aStates.top().nDestinationState = DESTINATION_NORMAL;
-    else if (m_aStates.top().nDestinationState == DESTINATION_FIELDINSTRUCTION && m_bEq)
-        m_aStates.top().nDestinationState = DESTINATION_EQINSTRUCTION;
-    else if (m_aStates.top().nDestinationState == DESTINATION_REVISIONTABLE)
-        m_aStates.top().nDestinationState = DESTINATION_REVISIONENTRY;
-    else if (m_aStates.top().nDestinationState == DESTINATION_EQINSTRUCTION)
-        m_aStates.top().nDestinationState = DESTINATION_NORMAL;
-    else if (m_aStates.top().nDestinationState == DESTINATION_MOMATH)
-        m_aStates.top().nDestinationState = DESTINATION_MR;
+    break;
+    case DESTINATION_FIELDINSTRUCTION:
+        m_aStates.top().nDestinationState = !m_bEq ? DESTINATION_NORMAL : DESTINATION_EQINSTRUCTION;
+    break;
+    case DESTINATION_REVISIONTABLE: m_aStates.top().nDestinationState = DESTINATION_REVISIONENTRY; break;
+    case DESTINATION_MOMATH: m_aStates.top().nDestinationState = DESTINATION_MR; break;
+    default: break;
+    }
 
     return 0;
 }
