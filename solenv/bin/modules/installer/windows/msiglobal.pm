@@ -1272,7 +1272,7 @@ sub get_guid_list
     # "-c" for uppercase output
 
     my $systemcall = "$uuidgen -n$number |";
-    if ( $ENV{'CROSS_COMPILING'} eq 'YES' )
+    if ( $installer::globals::isunix )
     {
         # -n is not present in the non-windows uuidgen
         $systemcall = "for I in `seq 1 $number` ; do uuidgen ; done |";

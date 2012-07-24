@@ -462,7 +462,7 @@ BEGIN
         $libextension = "\.dll";
         $isunix = 0;
         $iswin = 1;
-                $archiveformat = ".zip";
+        $archiveformat = ".zip";
         %savedmapping = ();
         %savedrevmapping = ();
         %savedrev83mapping = ();

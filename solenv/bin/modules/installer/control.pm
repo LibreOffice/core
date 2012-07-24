@@ -79,6 +79,12 @@ sub check_system_path
     # All platforms: zip
     # Windows only: "msiinfo.exe", "msidb.exe", "uuidgen.exe", "makecab.exe", "msitran.exe", "expand.exe" for msi database and packaging
 
+    if ($ENV{'CROSS_COMPILING'} eq 'YES')
+    {
+        # we build our own msi* etc. tools when cross-compiling
+        $ENV{'PATH'} .= $installer::globals::pathseparator . $ENV{'OUTDIR_FOR_BUILD'} . '/bin';
+    }
+
     my $onefile;
     my $error = 0;
     my $pathvariable = $ENV{'PATH'};
@@ -103,7 +109,11 @@ sub check_system_path
 
     if (($installer::globals::iswin) && ($installer::globals::iswindowsbuild))
     {
-        @needed_files_in_path = ("zip.exe", "msiinfo.exe", "msidb.exe", "uuidgen.exe", "makecab.exe", "msitran.exe", "expand.exe");
+        @needed_files_in_path = ("zip.exe", "msiinfo.exe", "msidb.exe", "uuidgen", "makecab.exe", "msitran.exe", "expand.exe");
+    }
+    elsif ($installer::globals::isunix && $installer::globals::packageformat eq 'msi')
+    {
+        @needed_files_in_path = ("zip", "msiinfo.exe", "msidb.exe", "uuidgen", "makecab.exe", "msitran.exe", "cabextract");
     }
     elsif ($installer::globals::iswin)
     {
@@ -168,6 +178,10 @@ sub get_makecab_version
     my $makecabversion = -1;
 
     my $systemcall = "makecab.exe |";
+    if ( $installer::globals::isunix )
+    {
+        $systemcall = "$ENV{'OUTDIR_FOR_BUILD'}/bin/makecab.exe |";
+    }
     my @makecaboutput = ();
 
     open (CAB, $systemcall);
