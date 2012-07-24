@@ -960,6 +960,7 @@ void RTFDocumentImpl::text(OUString& rString)
         case DESTINATION_MPOS:
         case DESTINATION_MVERTJC:
         case DESTINATION_MSTRIKEH:
+        case DESTINATION_MDEGHIDE:
         case DESTINATION_MBEGCHR:
         case DESTINATION_MENDCHR:
         case DESTINATION_MSUBHIDE:
@@ -1420,6 +1421,7 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
         case RTF_MPOS: m_aStates.top().nDestinationState = DESTINATION_MPOS; break;
         case RTF_MVERTJC: m_aStates.top().nDestinationState = DESTINATION_MVERTJC; break;
         case RTF_MSTRIKEH: m_aStates.top().nDestinationState = DESTINATION_MSTRIKEH; break;
+        case RTF_MDEGHIDE: m_aStates.top().nDestinationState = DESTINATION_MDEGHIDE; break;
         case RTF_MHIDETOP:
         case RTF_MHIDEBOT:
         case RTF_MHIDELEFT:
@@ -1463,6 +1465,9 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
         OPEN_M_TOKEN(GROUPCHRPR, groupChrPr);
         OPEN_M_TOKEN(BORDERBOX, borderBox);
         OPEN_M_TOKEN(BORDERBOXPR, borderBoxPr);
+        OPEN_M_TOKEN(RAD, rad);
+        OPEN_M_TOKEN(RADPR, radPr);
+        OPEN_M_TOKEN(DEG, deg);
         default:
             SAL_INFO("writerfilter", OSL_THIS_FUNC << ": TODO handle destination '" << lcl_RtfToString(nKeyword) << "'");
             // Make sure we skip destinations (even without \*) till we don't handle them
@@ -3130,6 +3135,7 @@ int RTFDocumentImpl::pushState()
     case DESTINATION_MLIM:
     case DESTINATION_MSUB:
     case DESTINATION_MSUP:
+    case DESTINATION_MDEG:
         m_aStates.top().nDestinationState = DESTINATION_NORMAL;
     break;
     case DESTINATION_FIELDINSTRUCTION:
@@ -3608,6 +3614,7 @@ int RTFDocumentImpl::popState()
     case DESTINATION_MPOS:
     case DESTINATION_MVERTJC:
     case DESTINATION_MSTRIKEH:
+    case DESTINATION_MDEGHIDE:
     case DESTINATION_MBEGCHR:
     case DESTINATION_MENDCHR:
     case DESTINATION_MSUBHIDE:
@@ -3621,6 +3628,7 @@ int RTFDocumentImpl::popState()
             case DESTINATION_MCHR: nToken = M_TOKEN(chr); break;
             case DESTINATION_MPOS: nToken = M_TOKEN(pos); break;
             case DESTINATION_MSTRIKEH: nToken = M_TOKEN(strikeH); break;
+            case DESTINATION_MDEGHIDE: nToken = M_TOKEN(degHide); break;
             case DESTINATION_MVERTJC: nToken = M_TOKEN(pos); break;
             case DESTINATION_MBEGCHR: nToken = M_TOKEN(begChr); break;
             case DESTINATION_MENDCHR: nToken = M_TOKEN(endChr); break;
@@ -3656,6 +3664,9 @@ int RTFDocumentImpl::popState()
     case DESTINATION_MGROUPCHRPR: m_aMathBuffer.appendClosingTag(M_TOKEN(groupChrPr)); break;
     case DESTINATION_MBORDERBOX: m_aMathBuffer.appendClosingTag(M_TOKEN(borderBox)); break;
     case DESTINATION_MBORDERBOXPR: m_aMathBuffer.appendClosingTag(M_TOKEN(borderBoxPr)); break;
+    case DESTINATION_MRAD: m_aMathBuffer.appendClosingTag(M_TOKEN(rad)); break;
+    case DESTINATION_MRADPR: m_aMathBuffer.appendClosingTag(M_TOKEN(radPr)); break;
+    case DESTINATION_MDEG: m_aMathBuffer.appendClosingTag(M_TOKEN(deg)); break;
     default: break;
     }
 
