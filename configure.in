@@ -5953,7 +5953,12 @@ elif test "$enable_epm" = "yes"; then
         AC_MSG_ERROR([unknown system])
     esac
 else
-    PKGFORMAT=native
+    if test "$WITH_MINGW" = "yes"; then
+        # when tested, we should default this to 'msi', instead of 'archive'
+        PKGFORMAT=archive
+    else
+        PKGFORMAT=native
+    fi
 fi
 AC_MSG_RESULT([$PKGFORMAT])
 AC_SUBST(PKGFORMAT)
