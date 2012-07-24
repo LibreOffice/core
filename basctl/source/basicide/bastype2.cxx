@@ -559,9 +559,12 @@ void BasicTreeListBox::onDocumentSaveAsDone( const ScriptDocument& /*_rDocument*
     UpdateEntries();
 }
 
-void BasicTreeListBox::onDocumentClosed( const ScriptDocument& /*_rDocument*/ )
+void BasicTreeListBox::onDocumentClosed( const ScriptDocument& rDocument )
 {
     UpdateEntries();
+    // The document is not yet actually deleted, so we need to remove its entry
+    // manually.
+    RemoveEntry(rDocument);
 }
 
 void BasicTreeListBox::onDocumentTitleChanged( const ScriptDocument& /*_rDocument*/ )
@@ -578,7 +581,7 @@ void BasicTreeListBox::UpdateEntries()
 {
     BasicEntryDescriptor aCurDesc( GetEntryDescriptor( FirstSelected() ) );
 
-
+    // removing the invalid entries
     SvLBoxEntry* pLastValid = 0;
     SvLBoxEntry* pEntry = First();
     while ( pEntry )
@@ -586,17 +589,34 @@ void BasicTreeListBox::UpdateEntries()
         if ( IsValidEntry( pEntry ) )
             pLastValid = pEntry;
         else
-        {
-            delete (BasicEntry*)pEntry->GetUserData();
-            GetModel()->Remove( pEntry );
-        }
+            RemoveEntry(pEntry);
         pEntry = pLastValid ? Next( pLastValid ) : First();
     }
-
 
     ScanAllEntries();
 
     SetCurrentEntry( aCurDesc );
+}
+
+// Removes the entry from the tree.
+void BasicTreeListBox::RemoveEntry (SvLBoxEntry* pEntry)
+{
+    // removing the associated user data
+    delete (BasicEntry*)pEntry->GetUserData();
+    // removing the entry
+    GetModel()->Remove( pEntry );
+}
+
+// Removes the entry of rDocument.
+void BasicTreeListBox::RemoveEntry (ScriptDocument const& rDocument)
+{
+    // finding the entry of rDocument
+    for (SvLBoxEntry* pEntry = First(); pEntry; pEntry = Next(pEntry))
+        if (rDocument == GetEntryDescriptor(pEntry).GetDocument())
+        {
+            RemoveEntry(pEntry);
+            break;
+        }
 }
 
 SvLBoxEntry* BasicTreeListBox::CloneEntry( SvLBoxEntry* pSource )

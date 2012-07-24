@@ -195,6 +195,8 @@ public:
     SvLBoxEntry*    AddEntry( const ::rtl::OUString& rText, const Image& rImage,
                               SvLBoxEntry* pParent, bool bChildrenOnDemand,
                               std::auto_ptr< BasicEntry > aUserData );
+    void            RemoveEntry (SvLBoxEntry*);
+    void            RemoveEntry (ScriptDocument const&);
 
     ::rtl::OUString GetRootEntryName( const ScriptDocument& rDocument, LibraryLocation eLocation ) const;
     void            GetRootEntryBitmaps( const ScriptDocument& rDocument, Image& rImage );
