@@ -22,20 +22,21 @@
 /**
  *
  */
-package testcase.sc.subtotals;
+package testcase.gui.sc.subtotals;
 
 import static org.junit.Assert.*;
 import static org.openoffice.test.vcl.Tester.*;
-import static testlib.AppUtil.*;
-import static testlib.UIMap.*;
+import static org.openoffice.test.common.Testspace.*;
+import static testlib.gui.AppUtil.*;
+import static testlib.gui.UIMap.*;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import testlib.CalcUtil;
-import testlib.Log;
+import testlib.gui.CalcUtil;
+import testlib.gui.Log;
 
 /**
  *
@@ -49,7 +50,7 @@ public class SubtotalsFunctions {
     @Before
     public void setUp() throws Exception {
         app.start();
-        String file = testFile("sc/SubtotalsSampleFile.ods");
+        String file = prepareData("sc/SubtotalsSampleFile.ods");
         startcenter.menuItem("File->Open...").select();
         submitOpenDlg(file);
         sleep(2);

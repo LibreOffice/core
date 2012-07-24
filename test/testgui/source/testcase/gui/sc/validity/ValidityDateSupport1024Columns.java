@@ -21,10 +21,10 @@
 
 
 
-package testcase.sc.validity;
+package testcase.gui.sc.validity;
 
-import static testlib.AppUtil.*;
-import static testlib.UIMap.*;
+import static testlib.gui.AppUtil.*;
+import static testlib.gui.UIMap.*;
 
 import java.io.File;
 
@@ -39,8 +39,8 @@ import org.openoffice.test.vcl.IDList;
 import org.openoffice.test.vcl.widgets.VclMessageBox;
 
 
-import testlib.CalcUtil;
-import testlib.Log;
+import testlib.gui.CalcUtil;
+import testlib.gui.Log;
 
 
 public class ValidityDateSupport1024Columns {

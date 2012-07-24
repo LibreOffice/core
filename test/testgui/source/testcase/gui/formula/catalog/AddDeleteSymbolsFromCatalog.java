@@ -24,16 +24,17 @@
 /**
  *
  */
-package testcase.formula.catalog;
+package testcase.gui.formula.catalog;
 
-import static testlib.AppUtil.*;
-import static testlib.UIMap.*;
+import static testlib.gui.AppUtil.*;
+import static testlib.gui.UIMap.*;
 import static org.junit.Assert.*;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import testlib.Log;
+
+import testlib.gui.Log;
 
 /**
  *

@@ -26,11 +26,11 @@
  */
 
 
-package testcase.performance.benchmark;
+package testcase.gui.performance.benchmark;
 
 import static org.openoffice.test.vcl.Tester.*;
-import static testlib.AppUtil.*;
-import static testlib.UIMap.*;
+import static testlib.gui.AppUtil.*;
+import static testlib.gui.UIMap.*;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -220,7 +220,7 @@ public class Filter {
     {
         System.out.println(fileName + " Load Show");
         long tr = 0;
-        String file = testFile(fileName);
+        String file = Testspace.prepareData(fileName);
         startcenter.menuItem("File->Open...").select();
         FilePicker_Path.setText(file);
         FilePicker_Open.click();
@@ -280,7 +280,7 @@ public class Filter {
     {
         System.out.println(fileName + " Load Finish");
         long tr = 0;
-        String file = testFile(fileName);
+        String file = Testspace.prepareData(fileName);
         startcenter.menuItem("File->Open...").select();
 //      submitOpenDlg(file);
         FilePicker_Path.setText(file);
@@ -338,7 +338,7 @@ public class Filter {
 //      System.out.println(fileName);
         long tr = 0;
         sleep(2);
-        String file = testFile(fileName_i);
+        String file = Testspace.prepareData(fileName_i);
         startcenter.menuItem("File->Open...").select();
         submitOpenDlg(file);
         sleep(8);

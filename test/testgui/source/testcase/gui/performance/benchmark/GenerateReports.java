@@ -25,7 +25,7 @@
  *
  */
 
-package testcase.performance.benchmark;
+package testcase.gui.performance.benchmark;
 
 import java.io.File;
 import java.io.BufferedReader;
@@ -44,18 +44,13 @@ import org.junit.Before;
 import org.junit.Test;
 import org.openoffice.test.common.FileUtil;
 
-import testlib.CalcUtil;
+import testlib.gui.CalcUtil;
 
 import static org.openoffice.test.vcl.Tester.sleep;
 import static org.openoffice.test.vcl.Tester.typeKeys;
-import static testlib.AppUtil.*;
-import static testlib.UIMap.SC_InsertColumnsRowsdialog;
-import static testlib.UIMap.app;
-import static testlib.UIMap.dialog;
-import static testlib.UIMap.startcenter;
-import static testlib.UIMap.writer;
-import static testlib.CalcUtil.*;
-import static testlib.UIMap.*;
+import static testlib.gui.AppUtil.*;
+import static testlib.gui.CalcUtil.*;
+import static testlib.gui.UIMap.*;
 
 public class GenerateReports {
     static public void computeResults(String resultDir)

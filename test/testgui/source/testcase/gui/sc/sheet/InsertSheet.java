@@ -18,15 +18,17 @@
  * under the License.
  *
  *************************************************************/
-package testcase.sc.sheet;
+package testcase.gui.sc.sheet;
 
 import static org.junit.Assert.*;
-import static testlib.UIMap.*;
+import static testlib.gui.UIMap.*;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import testlib.Log;
+
+import testlib.gui.Log;
 
 /**
  * Before running the testing class, you need specify the AOO location firstly with system property openoffice.home.
