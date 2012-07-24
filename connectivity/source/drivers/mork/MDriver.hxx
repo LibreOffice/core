@@ -40,14 +40,20 @@ namespace com { namespace sun { namespace star {
 } } }
 namespace rtl { class OUString; }
 
+namespace connectivity
+{
+    namespace mozab
+    {
+        class ProfileAccess;
+    }
+}
+
 namespace connectivity { namespace mork {
 
 namespace css = com::sun::star;
 
-com::sun::star::uno::Reference< com::sun::star::uno::XInterface > SAL_CALL
-create(
-    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
-        const &);
+css::uno::Reference< css::uno::XInterface > SAL_CALL
+create(css::uno::Reference< css::uno::XComponentContext > const &);
 
 class MorkDriver:
     public cppu::WeakImplHelper2< css::lang::XServiceInfo, css::sdbc::XDriver >,
@@ -60,6 +66,8 @@ public:
     static css::uno::Sequence< ::rtl::OUString > getSupportedServiceNames_Static()
         throw (css::uno::RuntimeException);
 private:
+
+    connectivity::mozab::ProfileAccess* m_ProfileAccess;
     virtual ~MorkDriver() {}
 
     virtual rtl::OUString SAL_CALL getImplementationName()

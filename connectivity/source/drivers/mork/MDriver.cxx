@@ -9,8 +9,10 @@
 
 #include "MDriver.hxx"
 #include "MConnection.hxx"
+#include "MNSProfileDiscover.hxx"
 
 using namespace connectivity::mork;
+using namespace connectivity::mozab;
 
 namespace connectivity
 {
@@ -26,6 +28,7 @@ namespace connectivity
 MorkDriver::MorkDriver(css::uno::Reference< css::uno::XComponentContext > const context):
     context_(context)
 {
+    m_ProfileAccess = new ProfileAccess();
     assert(context.is());
 }
 
@@ -73,7 +76,6 @@ css::uno::Reference< css::sdbc::XConnection > MorkDriver::connect(
     css::uno::Sequence< css::beans::PropertyValue > const & info)
     throw (css::sdbc::SQLException, css::uno::RuntimeException)
 {
-    //... TODO
     (void) url; (void) info; // avoid warnings
     //    return static_cast< cppu::OWeakObject * >(new MConnection(this));
     return NULL;

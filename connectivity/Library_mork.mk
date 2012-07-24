@@ -20,12 +20,16 @@ $(eval $(call gb_Library_use_libraries,mork, \
     cppu \
     cppuhelper \
     sal \
+    dbtools \
     $(gb_STDLIBS) \
 ))
 
 $(eval $(call gb_Library_use_sdk_api,mork))
 
 $(eval $(call gb_Library_add_exception_objects,mork, \
+    connectivity/source/drivers/mork/MNSFolders \
+    connectivity/source/drivers/mork/MNSINIParser \
+    connectivity/source/drivers/mork/MNSProfileDiscover \
     connectivity/source/drivers/mork/MorkParser \
     connectivity/source/drivers/mork/MDriver \
     connectivity/source/drivers/mork/MConnection \

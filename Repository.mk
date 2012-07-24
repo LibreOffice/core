@@ -43,6 +43,7 @@ $(eval $(call gb_Helper_register_executables,NONE, \
     idxdict \
     lngconvex \
     localize \
+    mork_helper \
     mkunroll \
     osl_process_child \
     pdf2xml \
