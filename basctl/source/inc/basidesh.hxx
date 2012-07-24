@@ -66,7 +66,7 @@ class BasicIDEShell :public SfxViewShell
 {
 friend class JavaDebuggingListenerImpl;
 friend class LocalizationMgr;
-    friend sal_Bool implImportDialog( Window* pWin, const ::rtl::OUString& rCurPath, const ScriptDocument& rDocument, const ::rtl::OUString& aLibName );
+    friend bool implImportDialog( Window* pWin, const ::rtl::OUString& rCurPath, const ScriptDocument& rDocument, const ::rtl::OUString& aLibName );
     friend bool BasicIDE::RemoveDialog( const ScriptDocument& rDocument, const ::rtl::OUString& rLibName, const ::rtl::OUString& rDlgName );
 
     ObjectCatalog*      pObjectCatalog;

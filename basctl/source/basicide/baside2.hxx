@@ -377,20 +377,20 @@ public:
     bool            BasicStepInto();
     bool            BasicStepOut();
     void            BasicStop();
-    sal_Bool            BasicToggleBreakPoint();
+    bool            BasicToggleBreakPoint();
     void            BasicToggleBreakPointEnabled();
     void            ManageBreakPoints();
     void            UpdateBreakPoint( const BreakPoint& rBrk );
     void            BasicAddWatch();
     void            BasicRemoveWatch();
 
-    sal_Bool            LoadBasic();
-    sal_Bool            SaveBasicSource();
-    sal_Bool            ImportDialog();
+    bool            LoadBasic();
+    bool            SaveBasicSource();
+    bool            ImportDialog();
 
     void            EditMacro( const String& rMacroName );
 
-    sal_Bool            ToggleBreakPoint( sal_uLong nLine );
+    bool            ToggleBreakPoint( sal_uLong nLine );
 
     BasicStatus&    GetBasicStatus() { return aStatus; }
 
@@ -398,10 +398,10 @@ public:
     virtual sal_Bool    IsPasteAllowed();
 
     void            FrameWindowMoved();
-    void            ShowCursor( sal_Bool bOn );
+    void            ShowCursor( bool bOn );
 
     virtual sal_uInt16  GetSearchOptions();
-    sal_uInt16          StartSearchAndReplace( const SvxSearchItem& rSearchItem, sal_Bool bFromStart = sal_False );
+    sal_uInt16          StartSearchAndReplace( const SvxSearchItem& rSearchItem, bool bFromStart = false );
 
     virtual Window* GetLayoutWindow();
 
@@ -435,8 +435,8 @@ private:
     StackWindow     aStackWindow;
     ObjectCatalog   aObjectCatalog;
 
-    sal_Bool            bVSplitted;
-    sal_Bool            bHSplitted;
+    bool            bVSplitted;
+    bool            bHSplitted;
 
     ModulWindow * m_pModulWindow;
 
