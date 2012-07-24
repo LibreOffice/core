@@ -2578,7 +2578,7 @@ bool ScDPMember::IsNamedItem(SCROW nIndex) const
                 nHier, nLev );
             //  fValue is converted from integer, so simple comparison works
             const ScDPItemData* pData2 = GetItemData();
-            return pData && nComp == pData2->GetValue();
+            return pData2 && nComp == pData2->GetValue();
         }
     }
 
