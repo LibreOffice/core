@@ -248,7 +248,7 @@ class LoadEnv : private ThreadHelpBase
 
         /** @short  deinitialize an instance of this class in the right way.
          */
-        virtual ~LoadEnv();
+        ~LoadEnv();
 
         //_______________________________________
 
@@ -315,14 +315,13 @@ class LoadEnv : private ThreadHelpBase
             @throw  A RuntimeException in case any internal process indicates, that
                     the whole runtime cant be used any longer.
          */
-        virtual void initializeLoading(const ::rtl::OUString&                                           sURL            ,
+        void initializeLoading(const ::rtl::OUString&                                           sURL            ,
                                        const css::uno::Sequence< css::beans::PropertyValue >&           lMediaDescriptor,
                                        const css::uno::Reference< css::frame::XFrame >&                 xBaseFrame      ,
                                        const ::rtl::OUString&                                           sTarget         ,
                                              sal_Int32                                                  nSearchFlags    ,
                                              EFeature                                                   eFeature        = E_NO_FEATURE         ,
-                                             EContentType                                               eContentType    = E_UNSUPPORTED_CONTENT)
-            throw(LoadEnvException, css::uno::RuntimeException);
+                                             EContentType                                               eContentType    = E_UNSUPPORTED_CONTENT);
 
         //_______________________________________
 
@@ -346,8 +345,7 @@ class LoadEnv : private ThreadHelpBase
             @throw  A RuntimeException in case any internal process indicates, that
                     the whole runtime cant be used any longer.
          */
-        virtual void startLoading()
-            throw(LoadEnvException, css::uno::RuntimeException);
+        void startLoading();
 
         //_______________________________________
 
@@ -371,21 +369,19 @@ class LoadEnv : private ThreadHelpBase
             @throw  A RuntimeException in case any internal process indicates, that
                     the whole runtime cant be used any longer.
          */
-        virtual sal_Bool waitWhileLoading(sal_uInt32 nTimeout = 0)
-            throw(LoadEnvException, css::uno::RuntimeException);
+        sal_Bool waitWhileLoading(sal_uInt32 nTimeout = 0);
 
         //_______________________________________
         /** TODO document me ... */
-        virtual void cancelLoading()
-            throw(LoadEnvException, css::uno::RuntimeException);
+        void cancelLoading();
 
         //_______________________________________
         /** TODO document me ... */
-        virtual css::uno::Reference< css::frame::XFrame > getTarget() const;
+        css::uno::Reference< css::frame::XFrame > getTarget() const;
 
         //_______________________________________
         /** TODO document me ... */
-        virtual css::uno::Reference< css::lang::XComponent > getTargetComponent() const;
+        css::uno::Reference< css::lang::XComponent > getTargetComponent() const;
 
 
     //___________________________________________

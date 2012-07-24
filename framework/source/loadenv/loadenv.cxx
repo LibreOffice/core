@@ -251,7 +251,6 @@ void LoadEnv::initializeLoading(const ::rtl::OUString&                          
                                       sal_Int32                                                  nSearchFlags    ,
                                       EFeature                                                   eFeature        , // => use default ...
                                       EContentType                                               eContentType    ) // => use default ...
-    throw(LoadEnvException, css::uno::RuntimeException)
 {
     // SAFE -> ----------------------------------
     WriteGuard aWriteLock(m_aLock);
@@ -377,7 +376,6 @@ void LoadEnv::initializeUIDefaults( const css::uno::Reference< css::lang::XMulti
 
 
 void LoadEnv::startLoading()
-    throw(LoadEnvException, css::uno::RuntimeException)
 {
     // SAFE ->
     ReadGuard aReadLock(m_aLock);
@@ -431,7 +429,6 @@ void LoadEnv::startLoading()
         Current implementation counts yield calls only ...
 -----------------------------------------------*/
 sal_Bool LoadEnv::waitWhileLoading(sal_uInt32 nTimeout)
-    throw(LoadEnvException, css::uno::RuntimeException)
 {
     // Because its not a good idea to block the main thread
     // (and we can't be sure that we are currently not used inside the
@@ -468,7 +465,6 @@ sal_Bool LoadEnv::waitWhileLoading(sal_uInt32 nTimeout)
 
 
 void LoadEnv::cancelLoading()
-    throw(LoadEnvException, css::uno::RuntimeException)
 {
     // PARTIAL(!) SAFE -> ------------------------------
     ReadGuard aReadLock(m_aLock);
