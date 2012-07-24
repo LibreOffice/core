@@ -927,8 +927,6 @@ namespace svt
         if (nNewRow != nEditRow)
         {
             Window& rWindow = GetDataWindow();
-            // don't paint too much
-            // update the status immediatly if possible
             if ((nEditRow >= 0) && (GetBrowserFlags() & EBBF_NO_HANDLE_COLUMN_CONTENT) == 0)
             {
                 Rectangle aRect = GetFieldRectPixel(nEditRow, 0, sal_False );
@@ -937,7 +935,7 @@ namespace svt
                 // probably because it is part of a bitfield
                 pTHIS->bPaintStatus = static_cast< sal_Bool >
                     (( GetBrowserFlags() & EBBF_HANDLE_COLUMN_TEXT ) == EBBF_HANDLE_COLUMN_TEXT );
-                rWindow.Paint(aRect);
+                rWindow.Invalidate(aRect);
                 pTHIS->bPaintStatus = sal_True;
             }
 
