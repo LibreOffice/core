@@ -207,13 +207,14 @@ SfxPoolItem* ScTpFormulaItem::Clone( SfxItemPool * ) const
 
 #define CFGPATH_FORMULA           "Office.Calc/Formula"
 
-#define SCFORMULAOPT_GRAMMAR           0
-#define SCFORMULAOPT_ENGLISH_FUNCNAME  1
-#define SCFORMULAOPT_SEP_ARG           2
-#define SCFORMULAOPT_SEP_ARRAY_ROW     3
-#define SCFORMULAOPT_SEP_ARRAY_COL     4
-#define SCFORMULAOPT_STRING_REF_SYNTAX 5
-#define SCFORMULAOPT_COUNT             6
+#define SCFORMULAOPT_GRAMMAR              0
+#define SCFORMULAOPT_ENGLISH_FUNCNAME     1
+#define SCFORMULAOPT_SEP_ARG              2
+#define SCFORMULAOPT_SEP_ARRAY_ROW        3
+#define SCFORMULAOPT_SEP_ARRAY_COL        4
+#define SCFORMULAOPT_STRING_REF_SYNTAX    5
+#define SCFORMULAOPT_EMPTY_STRING_AS_ZERO 6
+#define SCFORMULAOPT_COUNT                7
 
 Sequence<OUString> ScFormulaCfg::GetPropertyNames()
 {
@@ -225,6 +226,7 @@ Sequence<OUString> ScFormulaCfg::GetPropertyNames()
         "Syntax/SeparatorArrayRow",      // SCFORMULAOPT_SEP_ARRAY_ROW
         "Syntax/SeparatorArrayCol",      // SCFORMULAOPT_SEP_ARRAY_COL
         "Syntax/StringRefAddressSyntax", // SCFORMULAOPT_STRING_REF_SYNTAX
+        "Syntax/EmptyStringAsZero",      // SCFORMULAOPT_EMPTY_STRING_AS_ZERO
     };
     Sequence<OUString> aNames(SCFORMULAOPT_COUNT);
     OUString* pNames = aNames.getArray();
@@ -341,6 +343,15 @@ ScFormulaCfg::ScFormulaCfg() :
                     GetCalcConfig().meStringRefAddressSyntax = eConv;
                 }
                 break;
+                case SCFORMULAOPT_EMPTY_STRING_AS_ZERO:
+                {
+                    sal_Bool bVal = GetCalcConfig().mbEmptyStringAsZero;
+                    pValues[nProp] >>= bVal;
+                    GetCalcConfig().mbEmptyStringAsZero = bVal;
+                }
+                break;
+                default:
+                    ;
                 }
             }
         }
@@ -397,6 +408,14 @@ void ScFormulaCfg::Commit()
                 pValues[nProp] <<= nVal;
             }
             break;
+            case SCFORMULAOPT_EMPTY_STRING_AS_ZERO:
+            {
+                sal_Bool bVal = GetCalcConfig().mbEmptyStringAsZero;
+                pValues[nProp] <<= bVal;
+            }
+            break;
+            default:
+                ;
         }
     }
     PutProperties(aNames, aValues);
