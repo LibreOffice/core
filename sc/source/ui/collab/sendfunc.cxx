@@ -205,7 +205,9 @@ ScDocFuncSend::~ScDocFuncSend()
     fprintf( stderr, "Sender destroyed !\n" );
     if (mpConference)
         mpConference->close();
-    delete mpDirect;
+
+    if (!dynamic_cast<ScDocFuncDemo*> (mpDirect))
+        delete mpDirect;
 }
 
 void ScDocFuncSend::SetCollaboration( TeleConference* pConference )
