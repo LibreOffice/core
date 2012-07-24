@@ -190,6 +190,9 @@ public:
         sHeader += String( ScResId( STR_HEADER_NAME ) );
         sHeader += '\t';
         maList.InsertHeaderEntry( sHeader, HEADERBAR_APPEND, HIB_LEFT );
+
+        mpManager->getContactList()->sigContactListChanged.connect(
+                boost::bind( &TubeContacts::Populate, this ) );
     }
     virtual ~TubeContacts()
     {
@@ -204,6 +207,8 @@ public:
 
     void Populate()
     {
+        SAL_INFO( "sc.tubes", "Populating contact list dialog" );
+        maList.Clear();
         ContactList *pContacts = mpManager->getContactList();
         if ( pContacts )
         {
@@ -272,7 +277,7 @@ namespace tubes {
 void createContacts()
 {
 #ifdef CONTACTS_DLG
-    TubeContacts *pContacts = new TubeContacts();
+    static TubeContacts *pContacts = new TubeContacts();
     pContacts->Populate();
 #endif
 }
