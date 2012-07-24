@@ -406,11 +406,6 @@ namespace drawinglayer
             return mpSdrTextAttribute->isFixedCellHeight();
         }
 
-        bool SdrTextAttribute::isWrongSpell() const
-        {
-            return mpSdrTextAttribute->isWrongSpell();
-        }
-
         const SdrFormTextAttribute& SdrTextAttribute::getSdrFormTextAttribute() const
         {
             return mpSdrTextAttribute->getSdrFormTextAttribute();

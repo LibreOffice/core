@@ -105,7 +105,6 @@ namespace drawinglayer
             bool isScroll() const;
             bool isInEditMode() const;
             bool isFixedCellHeight() const;
-            bool isWrongSpell() const;
             const SdrFormTextAttribute& getSdrFormTextAttribute() const;
             sal_Int32 getTextLeftDistance() const;
             sal_Int32 getTextUpperDistance() const;
