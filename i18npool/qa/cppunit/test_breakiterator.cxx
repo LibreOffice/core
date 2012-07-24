@@ -45,6 +45,8 @@
 
 #include <string.h>
 
+#include <stack>
+
 using namespace ::com::sun::star;
 
 class TestBreakIterator : public test::BootstrapFixtureBase
@@ -558,19 +560,56 @@ void TestBreakIterator::testAsian()
 }
 
 //A test to ensure that our thai word boundary detection is useful
-//http://lists.freedesktop.org/archives/libreoffice/2012-February/025959.html
 void TestBreakIterator::testThai()
 {
     lang::Locale aLocale;
     aLocale.Language = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("th"));
     aLocale.Country = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TH"));
 
-    const sal_Unicode THAI1[] = { 0x0E01, 0x0E38, 0x0E2B, 0x0E25, 0x0E32, 0x0E1A };
-    ::rtl::OUString aTest(THAI1, SAL_N_ELEMENTS(THAI1));
-    i18n::Boundary aBounds = m_xBreak->getWordBoundary(aTest, 0, aLocale,
-        i18n::WordType::DICTIONARY_WORD, true);
-    CPPUNIT_ASSERT_MESSAGE("Should skip full word",
-        aBounds.startPos == 0 && aBounds.endPos == aTest.getLength());
+    //See http://lists.freedesktop.org/archives/libreoffice/2012-February/025959.html
+    {
+        const sal_Unicode THAI[] = { 0x0E01, 0x0E38, 0x0E2B, 0x0E25, 0x0E32, 0x0E1A };
+        ::rtl::OUString aTest(THAI, SAL_N_ELEMENTS(THAI));
+        i18n::Boundary aBounds = m_xBreak->getWordBoundary(aTest, 0, aLocale,
+            i18n::WordType::DICTIONARY_WORD, true);
+        CPPUNIT_ASSERT_MESSAGE("Should skip full word",
+            aBounds.startPos == 0 && aBounds.endPos == aTest.getLength());
+    }
+
+    //See https://issues.apache.org/ooo/show_bug.cgi?id=29548
+    //make sure forwards and back are consistent
+    {
+        const sal_Unicode THAI[] =
+        {
+            0x0E2D, 0x0E38, 0x0E17, 0x0E22, 0x0E32, 0x0E19, 0x0E41,
+            0x0E2B, 0x0E48, 0x0E07, 0x0E0A, 0x0E32, 0x0E15, 0x0E34,
+            0x0E19, 0x0E49, 0x0E33, 0x0E2B, 0x0E19, 0x0E32, 0x0E27,
+            0x0E2D, 0x0E38, 0x0E17, 0x0E22, 0x0E32, 0x0E19, 0x0E41,
+            0x0E2B, 0x0E48, 0x0E07, 0x0E0A, 0x0E32, 0x0E15, 0x0E34,
+            0x0E19, 0x0E49, 0x0E33, 0x0E2B, 0x0E19, 0x0E32, 0x0E27
+        };
+        ::rtl::OUString aTest(THAI, SAL_N_ELEMENTS(THAI));
+
+        std::stack<sal_Int32> aPositions;
+        sal_Int32 nPos = -1;
+        do
+        {
+            nPos = m_xBreak->nextWord(aTest, nPos, aLocale, i18n::WordType::ANYWORD_IGNOREWHITESPACES).startPos;
+            aPositions.push(nPos);
+        }
+        while (nPos < aTest.getLength());
+        nPos = aTest.getLength();
+        CPPUNIT_ASSERT(!aPositions.empty());
+        aPositions.pop();
+        do
+        {
+            CPPUNIT_ASSERT(!aPositions.empty());
+            nPos = m_xBreak->previousWord(aTest, nPos, aLocale, i18n::WordType::ANYWORD_IGNOREWHITESPACES).startPos;
+            CPPUNIT_ASSERT(nPos == aPositions.top());
+            aPositions.pop();
+        }
+        while (nPos > 0);
+    }
 }
 
 #if TODO
