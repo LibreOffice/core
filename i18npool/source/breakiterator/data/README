@@ -590,22 +590,6 @@ Date:   Fri Jul 30 13:38:57 2004 +0000
     2004/06/14 23:24:16 khong 1.8.92.2: #112772# Japanese word breakiterator is not correct
     2004/06/11 19:23:04 khong 1.8.92.1: #112772# Japanese word breakiterator is not correct
 
-commit 6138176b324d55efb1970ad4506c3aee41061d6f
-Author: Kurt Zenker <kz@openoffice.org>
-Date:   Fri Jul 30 13:38:43 2004 +0000
-
-    INTEGRATION: CWS i18n13 (1.15.2); FILE MERGED
-    2004/06/17 20:29:38 khong 1.15.2.3: #
-    2004/06/11 18:59:43 khong 1.15.2.2: #i29548# Fix Thai word breakiterator problem
-    2004/06/08 21:11:34 khong 1.15.2.1: #i29548# Fix Thai word breakiterator problem
-
-commit 25e78ca2315f780c2708dd51824aba36c29bc7b7
-Author: Kurt Zenker <kz@openoffice.org>
-Date:   Fri Jul 30 13:38:30 2004 +0000
-
-    INTEGRATION: CWS i18n13 (1.4.162); FILE MERGED
-    2004/06/08 21:11:33 khong 1.4.162.1: #i29548# Fix Thai word breakiterator problem
-
 commit d6b8dabc3dc4811e1152d411a8428ccb334d16ab
 Author: Kurt Zenker <kz@openoffice.org>
 Date:   Fri Jul 30 13:38:17 2004 +0000
@@ -731,4 +715,5 @@ Date:   Fri Nov 7 14:14:35 2003 +0000
 done, regression tests added:
 
 #i13494# fix word breakiterator rule to handle punctuations and signs correctly
+#i29548# Fix Thai word breakiterator problem
 #i11993# #i14904# fix word breakiterator issues
