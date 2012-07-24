@@ -1493,6 +1493,18 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
             m_aMathBuffer.appendOpeningTag(M_TOKEN(lim));
             m_aStates.top().nDestinationState = DESTINATION_MLIM;
             break;
+        case RTF_MM:
+            m_aMathBuffer.appendOpeningTag(M_TOKEN(m));
+            m_aStates.top().nDestinationState = DESTINATION_MM;
+            break;
+        case RTF_MMPR:
+            m_aMathBuffer.appendOpeningTag(M_TOKEN(mPr));
+            m_aStates.top().nDestinationState = DESTINATION_MMPR;
+            break;
+        case RTF_MMR:
+            m_aMathBuffer.appendOpeningTag(M_TOKEN(mr));
+            m_aStates.top().nDestinationState = DESTINATION_MMR;
+            break;
         default:
             SAL_INFO("writerfilter", OSL_THIS_FUNC << ": TODO handle destination '" << lcl_RtfToString(nKeyword) << "'");
             // Make sure we skip destinations (even without \*) till we don't handle them
@@ -3155,7 +3167,9 @@ int RTFDocumentImpl::pushState()
             (m_aStates.top().nDestinationState == DESTINATION_FIELDINSTRUCTION && !m_bEq) ||
             m_aStates.top().nDestinationState == DESTINATION_MNUM ||
             m_aStates.top().nDestinationState == DESTINATION_MDEN ||
-            m_aStates.top().nDestinationState == DESTINATION_ME)
+            m_aStates.top().nDestinationState == DESTINATION_ME ||
+            m_aStates.top().nDestinationState == DESTINATION_MFNAME ||
+            m_aStates.top().nDestinationState == DESTINATION_MLIM)
         m_aStates.top().nDestinationState = DESTINATION_NORMAL;
     else if (m_aStates.top().nDestinationState == DESTINATION_FIELDINSTRUCTION && m_bEq)
         m_aStates.top().nDestinationState = DESTINATION_EQINSTRUCTION;
@@ -3659,6 +3673,9 @@ int RTFDocumentImpl::popState()
     case DESTINATION_MLIMLOW: m_aMathBuffer.appendClosingTag(M_TOKEN(limLow)); break;
     case DESTINATION_MLIMLOWPR: m_aMathBuffer.appendClosingTag(M_TOKEN(limLowPr)); break;
     case DESTINATION_MLIM: m_aMathBuffer.appendClosingTag(M_TOKEN(lim)); break;
+    case DESTINATION_MM: m_aMathBuffer.appendClosingTag(M_TOKEN(m)); break;
+    case DESTINATION_MMPR: m_aMathBuffer.appendClosingTag(M_TOKEN(mPr)); break;
+    case DESTINATION_MMR: m_aMathBuffer.appendClosingTag(M_TOKEN(mr)); break;
     default: break;
     }
 
