@@ -429,7 +429,7 @@ dev-install: build
 	@rm -rf $(DEVINSTALLDIR)
 	@mkdir $(DEVINSTALLDIR)
 ifeq ($(OS_FOR_BUILD),WNT)
-	cd instsetoo_native && unset MAKEFLAGS && $(SOLARENV)/bin/build.pl FORCE2ARCHIVE=TRUE
+	cd instsetoo_native && unset MAKEFLAGS && $(SOLARENV)/bin/build.pl PKGFORMAT=archive
 	unzip -d "$(DEVINSTALLDIR)" "$(SRCDIR)/instsetoo_native/$(INPATH)/LibreOffice_Dev/archive/install/en-US/LibO*_install-arc_en-US.zip"
 	mv "$(DEVINSTALLDIR)"/LibO*_install-arc_en-US/* "$(DEVINSTALLDIR)"/opt
 else
@@ -446,7 +446,7 @@ install-tb:
 	@rm -rf $(DEVINSTALLDIR)
 	@mkdir $(DEVINSTALLDIR)
 ifeq ($(OS_FOR_BUILD),WNT)
-	cd instsetoo_native && unset MAKEFLAGS && $(SOLARENV)/bin/build.pl FORCE2ARCHIVE=TRUE
+	cd instsetoo_native && unset MAKEFLAGS && $(SOLARENV)/bin/build.pl PKGFORMAT=archive
 	unzip -d "$(DEVINSTALLDIR)" "$(SRCDIR)/instsetoo_native/$(INPATH)/LibreOffice_Dev/archive/install/en-US/LibO*_install-arc_en-US.zip"
 	mv "$(DEVINSTALLDIR)"/LibO*_install-arc_en-US/* "$(DEVINSTALLDIR)"/opt
 else
