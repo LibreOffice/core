@@ -129,8 +129,7 @@ void CompressGraphicsDialog::Update()
 
     String aViewSizeString;
 
-    int aValX = aPixelSize.Width()  * 100 / MetricField::ConvertValue(m_aViewSize100mm.Width(),  2, MAP_100TH_MM, FUNIT_INCH);
-    //int aValY = aPixelSize.Height() * 100 / MetricField::ConvertValue(m_aViewSize100mm.Height(), 2, MAP_100TH_MM, FUNIT_INCH);
+    int aValX = (int) (aPixelSize.Width() / GetViewWidthInch());
 
     aViewSizeString += GetUnitString( m_aViewSize100mm.Width(), eFieldUnit, cSep );
     aViewSizeString += String( " x " ) ;
@@ -156,13 +155,13 @@ void CompressGraphicsDialog::Update()
 
 void CompressGraphicsDialog::UpdateNewWidthMF()
 {
-    int nPixelX = (sal_Int32)((double)MetricField::ConvertValue(m_aViewSize100mm.Width(),   2, MAP_100TH_MM, FUNIT_INCH) / 100 * m_dResolution );
+    int nPixelX = (sal_Int32)( GetViewWidthInch() * m_dResolution );
     m_aMFNewWidth.SetText( UniString::CreateFromInt32( nPixelX ) );
 }
 
 void CompressGraphicsDialog::UpdateNewHeightMF()
 {
-    int nPixelY = (sal_Int32)((double)MetricField::ConvertValue(m_aViewSize100mm.Height(),  2, MAP_100TH_MM, FUNIT_INCH) / 100 * m_dResolution );
+    int nPixelY = (sal_Int32)( GetViewHeightInch() * m_dResolution );
     m_aMFNewHeight.SetText( UniString::CreateFromInt32( nPixelY ) );
 }
 
@@ -171,11 +170,46 @@ void CompressGraphicsDialog::UpdateResolutionLB()
     m_aResolutionLB.SetText( UniString::CreateFromInt32( (sal_Int32) m_dResolution ) );
 }
 
+double CompressGraphicsDialog::GetViewWidthInch()
+{
+    return (double) MetricField::ConvertValue(m_aViewSize100mm.Width(),  2, MAP_100TH_MM, FUNIT_INCH) / 100.0;
+}
+
+double CompressGraphicsDialog::GetViewHeightInch()
+{
+    return (double) MetricField::ConvertValue(m_aViewSize100mm.Height(),  2, MAP_100TH_MM, FUNIT_INCH) / 100.0;
+}
+
+void CompressGraphicsDialog::Compress(SvStream& aStream)
+{
+    long nPixelX = (long)( GetViewWidthInch() * m_dResolution );
+    long nPixelY = (long)( GetViewHeightInch() * m_dResolution );
+
+    BitmapEx bitmap = m_aGraphic.GetBitmapEx();
+    if ( m_aReduceResolutionCB.IsChecked() )
+    {
+        bitmap.Scale( Size( nPixelX, nPixelY ), BMP_SCALE_BEST );
+    }
+    Graphic aScaledGraphic = Graphic( bitmap );
+    GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
+
+    Sequence< PropertyValue > aFilterData( 3 );
+    aFilterData[ 0 ].Name = "Interlaced";
+    aFilterData[ 0 ].Value <<= (sal_Int32) 0;
+    aFilterData[ 1 ].Name = "Compression";
+    aFilterData[ 1 ].Value <<= (sal_Int32) m_aCompressionMF.GetValue();
+    aFilterData[ 2 ].Name = "Quality";
+    aFilterData[ 2 ].Value <<= (sal_Int32) m_aQualityMF.GetValue();
+
+    String aGraphicFormatName = m_aLosslessRB.IsChecked() ? String( "png" ) : String( "jpg" );
+
+    sal_uInt16 nFilterFormat = rFilter.GetExportFormatNumberForShortName( aGraphicFormatName );
+    rFilter.ExportGraphic( aScaledGraphic, String( "test" ), aStream, nFilterFormat, &aFilterData );
+}
+
 IMPL_LINK_NOARG( CompressGraphicsDialog, NewWidthModifiedHdl )
 {
-    int aNewPixelWidth = m_aMFNewWidth.GetValue();
-    double aViewWidthInch = (double) MetricField::ConvertValue(m_aViewSize100mm.Width(),  2, MAP_100TH_MM, FUNIT_INCH) / 100;
-    m_dResolution =  aNewPixelWidth / aViewWidthInch;
+    m_dResolution =  m_aMFNewWidth.GetValue() / GetViewWidthInch();
 
     UpdateNewHeightMF();
     UpdateResolutionLB();
@@ -186,9 +220,7 @@ IMPL_LINK_NOARG( CompressGraphicsDialog, NewWidthModifiedHdl )
 
 IMPL_LINK_NOARG( CompressGraphicsDialog, NewHeightModifiedHdl )
 {
-    int aNewPixelHeight = m_aMFNewHeight.GetValue();
-    double aViewHeightInch = (double) MetricField::ConvertValue(m_aViewSize100mm.Height(),  2, MAP_100TH_MM, FUNIT_INCH) / 100;
-    m_dResolution =  aNewPixelHeight / aViewHeightInch;
+    m_dResolution =  m_aMFNewHeight.GetValue() / GetViewHeightInch();
 
     UpdateNewWidthMF();
     UpdateResolutionLB();
@@ -233,32 +265,9 @@ IMPL_LINK_NOARG( CompressGraphicsDialog, CalculateClickHdl )
 
     if ( m_dResolution > 0  )
     {
-        long nPixelX = (long)((double) MetricField::ConvertValue(m_aViewSize100mm.Width(),   2, MAP_100TH_MM, FUNIT_INCH) / 100.0 * m_dResolution );
-        long nPixelY = (long)((double) MetricField::ConvertValue(m_aViewSize100mm.Height(),  2, MAP_100TH_MM, FUNIT_INCH) / 100.0 * m_dResolution );
-
-        BitmapEx bitmap = m_aGraphic.GetBitmapEx();
-        if ( m_aReduceResolutionCB.IsChecked() )
-        {
-            bitmap.Scale( Size( nPixelX, nPixelY ), BMP_SCALE_BEST );
-        }
-        Graphic aScaledGraphic = Graphic( bitmap );
-        GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
-
-        Sequence< PropertyValue > aFilterData( 3 );
-        aFilterData[ 0 ].Name = "Interlaced";
-        aFilterData[ 0 ].Value <<= (sal_Int32) 0;
-        aFilterData[ 1 ].Name = "Compression";
-        aFilterData[ 1 ].Value <<= (sal_Int32) m_aCompressionMF.GetValue();
-        aFilterData[ 2 ].Name = "Quality";
-        aFilterData[ 2 ].Value <<= (sal_Int32) m_aQualityMF.GetValue();
-
         SvMemoryStream aMemStream;
         aMemStream.SetVersion( SOFFICE_FILEFORMAT_CURRENT );
-
-        String aGraphicFormatName = m_aLosslessRB.IsChecked() ? String( "png" ) : String( "jpg" );
-
-        sal_uInt16 nFilterFormat = rFilter.GetExportFormatNumberForShortName( aGraphicFormatName );
-        rFilter.ExportGraphic( aScaledGraphic, String( "test" ), aMemStream, nFilterFormat, &aFilterData );
+        Compress( aMemStream );
         aMemStream.Seek( STREAM_SEEK_TO_END );
         aSize = aMemStream.Tell();
     }
@@ -277,33 +286,13 @@ Graphic CompressGraphicsDialog::GetCompressedGraphic()
 {
     if ( m_dResolution > 0  )
     {
-        long nPixelX = (long)((double) MetricField::ConvertValue( m_aViewSize100mm.Width(),   2, MAP_100TH_MM, FUNIT_INCH) / 100.0 * m_dResolution );
-        long nPixelY = (long)((double) MetricField::ConvertValue( m_aViewSize100mm.Height(),  2, MAP_100TH_MM, FUNIT_INCH) / 100.0 * m_dResolution );
-
-        BitmapEx bitmap = m_aGraphic.GetBitmapEx();
-        bitmap.Scale(Size(nPixelX, nPixelY), BMP_SCALE_BEST);
-        Graphic aScaledGraphic = Graphic (bitmap);
         GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
-
-        Sequence< PropertyValue > aFilterData( 3 );
-        aFilterData[ 0 ].Name = "Interlaced";
-        aFilterData[ 0 ].Value <<= (sal_Int32) 0;
-        aFilterData[ 1 ].Name = "Compression";
-        aFilterData[ 1 ].Value <<= (sal_Int32) m_aCompressionMF.GetValue();
-        aFilterData[ 2 ].Name = "Quality";
-        aFilterData[ 2 ].Value <<= (sal_Int32) m_aQualityMF.GetValue();
-
+        Graphic aResultGraphic = Graphic ();
         SvMemoryStream aMemStream;
         aMemStream.SetVersion( SOFFICE_FILEFORMAT_CURRENT );
-        Graphic aResultGraphic = Graphic ();
-
-        String aGraphicFormatName = m_aLosslessRB.IsChecked() ? String( "png" ) : String( "jpg" );
-
-        sal_uInt16 nFilterFormat = rFilter.GetExportFormatNumberForShortName(aGraphicFormatName );
-        rFilter.ExportGraphic( aScaledGraphic, String("test"), aMemStream, nFilterFormat, &aFilterData );
+        Compress( aMemStream );
         aMemStream.Seek( STREAM_SEEK_TO_BEGIN );
         rFilter.ImportGraphic( aResultGraphic, String("test"), aMemStream );
-
         return aResultGraphic;
     }
     return m_aGraphic;
