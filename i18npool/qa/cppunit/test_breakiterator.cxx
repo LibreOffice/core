@@ -68,7 +68,9 @@ public:
 
     CPPUNIT_TEST_SUITE(TestBreakIterator);
     CPPUNIT_TEST(testLineBreaking);
+#if (U_ICU_VERSION_MAJOR_NUM > 4)
     CPPUNIT_TEST(testWordBoundaries);
+#endif
     CPPUNIT_TEST(testGraphemeIteration);
     CPPUNIT_TEST(testWeak);
     CPPUNIT_TEST(testAsian);
