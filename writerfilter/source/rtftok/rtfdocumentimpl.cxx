@@ -954,6 +954,8 @@ void RTFDocumentImpl::text(OUString& rString)
         case DESTINATION_MCHR:
         case DESTINATION_MBEGCHR:
         case DESTINATION_MENDCHR:
+        case DESTINATION_MSUBHIDE:
+        case DESTINATION_MSUPHIDE:
             m_aStates.top().aDestinationText.append(rString);
             break;
         case DESTINATION_EQINSTRUCTION:
@@ -1451,6 +1453,12 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
         case RTF_MCHR:
             m_aStates.top().nDestinationState = DESTINATION_MCHR;
             break;
+        case RTF_MSUBHIDE:
+            m_aStates.top().nDestinationState = DESTINATION_MSUBHIDE;
+            break;
+        case RTF_MSUPHIDE:
+            m_aStates.top().nDestinationState = DESTINATION_MSUPHIDE;
+            break;
         case RTF_MBEGCHR:
             m_aStates.top().nDestinationState = DESTINATION_MBEGCHR;
             break;
@@ -1504,6 +1512,22 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
         case RTF_MMR:
             m_aMathBuffer.appendOpeningTag(M_TOKEN(mr));
             m_aStates.top().nDestinationState = DESTINATION_MMR;
+            break;
+        case RTF_MNARY:
+            m_aMathBuffer.appendOpeningTag(M_TOKEN(nary));
+            m_aStates.top().nDestinationState = DESTINATION_MNARY;
+            break;
+        case RTF_MNARYPR:
+            m_aMathBuffer.appendOpeningTag(M_TOKEN(naryPr));
+            m_aStates.top().nDestinationState = DESTINATION_MNARYPR;
+            break;
+        case RTF_MSUB:
+            m_aMathBuffer.appendOpeningTag(M_TOKEN(sub));
+            m_aStates.top().nDestinationState = DESTINATION_MSUB;
+            break;
+        case RTF_MSUP:
+            m_aMathBuffer.appendOpeningTag(M_TOKEN(sup));
+            m_aStates.top().nDestinationState = DESTINATION_MSUP;
             break;
         default:
             SAL_INFO("writerfilter", OSL_THIS_FUNC << ": TODO handle destination '" << lcl_RtfToString(nKeyword) << "'");
@@ -3169,7 +3193,9 @@ int RTFDocumentImpl::pushState()
             m_aStates.top().nDestinationState == DESTINATION_MDEN ||
             m_aStates.top().nDestinationState == DESTINATION_ME ||
             m_aStates.top().nDestinationState == DESTINATION_MFNAME ||
-            m_aStates.top().nDestinationState == DESTINATION_MLIM)
+            m_aStates.top().nDestinationState == DESTINATION_MLIM ||
+            m_aStates.top().nDestinationState == DESTINATION_MSUB ||
+            m_aStates.top().nDestinationState == DESTINATION_MSUP)
         m_aStates.top().nDestinationState = DESTINATION_NORMAL;
     else if (m_aStates.top().nDestinationState == DESTINATION_FIELDINSTRUCTION && m_bEq)
         m_aStates.top().nDestinationState = DESTINATION_EQINSTRUCTION;
@@ -3647,6 +3673,8 @@ int RTFDocumentImpl::popState()
     case DESTINATION_MCHR:
     case DESTINATION_MBEGCHR:
     case DESTINATION_MENDCHR:
+    case DESTINATION_MSUBHIDE:
+    case DESTINATION_MSUPHIDE:
     {
         oox::formulaimport::XmlStream::AttributeList aAttribs;
         aAttribs[M_TOKEN(val)] = m_aStates.top().aDestinationText.makeStringAndClear();
@@ -3656,6 +3684,8 @@ int RTFDocumentImpl::popState()
             case DESTINATION_MCHR: nToken = M_TOKEN(chr); break;
             case DESTINATION_MBEGCHR: nToken = M_TOKEN(begChr); break;
             case DESTINATION_MENDCHR: nToken = M_TOKEN(endChr); break;
+            case DESTINATION_MSUBHIDE: nToken = M_TOKEN(subHide); break;
+            case DESTINATION_MSUPHIDE: nToken = M_TOKEN(supHide); break;
             default: break;
         }
         m_aMathBuffer.appendOpeningTag(nToken, aAttribs);
@@ -3676,6 +3706,10 @@ int RTFDocumentImpl::popState()
     case DESTINATION_MM: m_aMathBuffer.appendClosingTag(M_TOKEN(m)); break;
     case DESTINATION_MMPR: m_aMathBuffer.appendClosingTag(M_TOKEN(mPr)); break;
     case DESTINATION_MMR: m_aMathBuffer.appendClosingTag(M_TOKEN(mr)); break;
+    case DESTINATION_MNARY: m_aMathBuffer.appendClosingTag(M_TOKEN(nary)); break;
+    case DESTINATION_MNARYPR: m_aMathBuffer.appendClosingTag(M_TOKEN(naryPr)); break;
+    case DESTINATION_MSUB: m_aMathBuffer.appendClosingTag(M_TOKEN(sub)); break;
+    case DESTINATION_MSUP: m_aMathBuffer.appendClosingTag(M_TOKEN(sup)); break;
     default: break;
     }
 
