@@ -221,11 +221,6 @@ TeleConference* ScDocFuncSend::GetConference()
     return mpConference;
 }
 
-ScDocFuncRecv* ScDocFuncSend::GetReceiver()
-{
-    return mpDirect;
-}
-
 void ScDocFuncSend::EnterListAction( sal_uInt16 nNameResId )
 {
     // Want to group these operations for the other side ...
