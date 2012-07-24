@@ -965,6 +965,7 @@ void RTFDocumentImpl::text(OUString& rString)
         case DESTINATION_MENDCHR:
         case DESTINATION_MSUBHIDE:
         case DESTINATION_MSUPHIDE:
+        case DESTINATION_MTYPE:
             m_aStates.top().aDestinationText.append(rString);
             break;
         case DESTINATION_EQINSTRUCTION:
@@ -1422,6 +1423,7 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
         case RTF_MVERTJC: m_aStates.top().nDestinationState = DESTINATION_MVERTJC; break;
         case RTF_MSTRIKEH: m_aStates.top().nDestinationState = DESTINATION_MSTRIKEH; break;
         case RTF_MDEGHIDE: m_aStates.top().nDestinationState = DESTINATION_MDEGHIDE; break;
+        case RTF_MTYPE: m_aStates.top().nDestinationState = DESTINATION_MTYPE; break;
         case RTF_MHIDETOP:
         case RTF_MHIDEBOT:
         case RTF_MHIDELEFT:
@@ -3628,6 +3630,7 @@ int RTFDocumentImpl::popState()
     case DESTINATION_MENDCHR: if (!nMathToken) nMathToken = M_TOKEN(endChr);
     case DESTINATION_MSUBHIDE: if (!nMathToken) nMathToken = M_TOKEN(subHide);
     case DESTINATION_MSUPHIDE: if (!nMathToken) nMathToken = M_TOKEN(supHide);
+    case DESTINATION_MTYPE: if (!nMathToken) nMathToken = M_TOKEN(type);
     {
         oox::formulaimport::XmlStream::AttributeList aAttribs;
         aAttribs[M_TOKEN(val)] = m_aStates.top().aDestinationText.makeStringAndClear();

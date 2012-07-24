@@ -173,6 +173,7 @@ namespace writerfilter {
             DESTINATION_MSSUBSUPPR,
             DESTINATION_MSPRE,
             DESTINATION_MSPREPR,
+            DESTINATION_MTYPE,
         };
 
         enum RTFBorderState
