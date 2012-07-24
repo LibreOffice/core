@@ -443,7 +443,47 @@ sal_Bool BitmapEx::Scale( const Size& rNewSize, sal_uLong nScaleFlag )
     return bRet;
 }
 
-// ------------------------------------------------------------------
+sal_Bool BitmapEx::ScaleCropRotate(
+        const double& rScaleX, const double& rScaleY, const Rectangle& rRectPixel, long nAngle10,
+        const Color& rFillColor, sal_uLong nScaleFlag )
+{
+    sal_Bool bRet = sal_False;
+
+    if( !!aBitmap )
+    {
+        const sal_Bool bTransRotate = ( Color( COL_TRANSPARENT ) == rFillColor );
+
+        if( bTransRotate )
+        {
+            if( eTransparent == TRANSPARENT_COLOR )
+            {
+                bRet = aBitmap.ScaleCropRotate( rScaleX, rScaleY, rRectPixel, nAngle10, aTransparentColor, nScaleFlag );
+            }
+            else
+            {
+                bRet = aBitmap.ScaleCropRotate( rScaleX, rScaleY, rRectPixel, nAngle10, COL_BLACK, nScaleFlag );
+                if( eTransparent == TRANSPARENT_NONE )
+                {
+                    aMask = Bitmap( aBitmapSize, 1 );
+                    aMask.Erase( COL_BLACK );
+                    eTransparent = TRANSPARENT_BITMAP;
+                }
+
+                if( bRet && !!aMask )
+                    aMask.ScaleCropRotate( rScaleX, rScaleY, rRectPixel, nAngle10, COL_WHITE, nScaleFlag );
+            }
+        }
+        else
+        {
+            bRet = aBitmap.ScaleCropRotate( rScaleX, rScaleY, rRectPixel, nAngle10, rFillColor, nScaleFlag );
+
+            if( bRet && ( eTransparent == TRANSPARENT_BITMAP ) && !!aMask )
+                aMask.ScaleCropRotate( rScaleX, rScaleY, rRectPixel, nAngle10, COL_WHITE, nScaleFlag );
+        }
+    }
+
+    return bRet;
+}
 
 sal_Bool BitmapEx::Rotate( long nAngle10, const Color& rFillColor )
 {
