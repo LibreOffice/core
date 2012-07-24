@@ -1209,6 +1209,7 @@ void BasicIDEShell::SetCurWindow( IDEBaseWindow* pNewWin, sal_Bool bUpdateTabBar
             GetViewFrame()->GetWindow().SetHelpId( HID_BASICIDE_MODULWINDOW );
             SfxObjectShell::SetCurrentComponent( NULL );
         }
+        pModulLayout->GetObjectCatalog().SetCurrentEntry(pCurWin);
         SetUndoManager( pCurWin ? pCurWin->GetUndoManager() : 0 );
         InvalidateBasicIDESlots();
         EnableScrollbars( pCurWin ? sal_True : sal_False );

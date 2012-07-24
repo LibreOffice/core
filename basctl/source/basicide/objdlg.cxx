@@ -232,9 +232,12 @@ void ObjectCatalog::UpdateEntries()
     aMacroTreeList.UpdateEntries();
 }
 
-void ObjectCatalog::SetCurrentEntry( BasicEntryDescriptor& rDesc )
+void ObjectCatalog::SetCurrentEntry (IDEBaseWindow* pCurWin)
 {
-    aMacroTreeList.SetCurrentEntry( rDesc );
+    BasicEntryDescriptor aDesc;
+    if (pCurWin)
+        aDesc = pCurWin->CreateEntryDescriptor();
+    aMacroTreeList.SetCurrentEntry(aDesc);
 }
 
 ObjectCatalogToolBox_Impl::ObjectCatalogToolBox_Impl(
