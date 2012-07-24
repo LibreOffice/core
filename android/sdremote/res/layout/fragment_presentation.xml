@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:id="@+id/presentation_layout">
 
     <ImageView
         android:id="@+id/imageView1"
@@ -11,40 +12,17 @@
         android:contentDescription="TODO"
         android:src="@drawable/testimage" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <ImageView
+        android:id="@+id/presentation_handle"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/presentation_handle" >
-
-        <ImageView
-            android:id="@+id/imageView4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.5"
-            android:contentDescription="TODO"
-            android:paddingLeft="6dp"
-            android:scaleType="fitXY"
-            android:src="@drawable/handle_line" />
-
-        <ImageView
-            android:id="@+id/imageView3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:contentDescription="TODO"
-            android:src="@drawable/handle_center" />
-
-        <ImageView
-            android:id="@+id/imageView2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.5"
-            android:maxWidth="500dp"
-            android:paddingRight="6dp"
-            android:scaleType="fitXY"
-            android:src="@drawable/handle_line"
-            android:contentDescription="TODO"/>
-    </LinearLayout>
+        android:layout_marginLeft="6dp"
+        android:layout_marginRight="6dp"
+        android:contentDescription="TODO"
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/handle" />
 
     <ScrollView
         android:id="@+id/scrollView1"
