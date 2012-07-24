@@ -125,6 +125,21 @@ void TestBreakIterator::testLineBreaking()
             CPPUNIT_ASSERT_MESSAGE("Expected a break at the the start of the word", aResult.breakIndex == aWord.getLength()+1);
         }
     }
+
+    //See https://issues.apache.org/ooo/show_bug.cgi?id=17155
+    {
+        rtl::OUString aTest(RTL_CONSTASCII_USTRINGPARAM("foo /bar/baz"));
+
+        aLocale.Language = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("en"));
+        aLocale.Country = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("US"));
+
+        {
+            //Here we want the line break to leave /bar/ba clumped together on the next line
+            i18n::LineBreakResults aResult = m_xBreak->getLineBreak(aTest, strlen("foo /bar/ba"), aLocale, 0,
+                aHyphOptions, aUserOptions);
+            CPPUNIT_ASSERT_MESSAGE("Expected a break at the first slash", aResult.breakIndex == 4);
+        }
+    }
 }
 
 //See https://bugs.freedesktop.org/show_bug.cgi?id=49629
