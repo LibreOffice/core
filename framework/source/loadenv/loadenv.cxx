@@ -463,57 +463,6 @@ sal_Bool LoadEnv::waitWhileLoading(sal_uInt32 nTimeout)
     // <- SAFE ----------------------------------
 }
 
-
-void LoadEnv::cancelLoading()
-{
-    // PARTIAL(!) SAFE -> ------------------------------
-    ReadGuard aReadLock(m_aLock);
-
-    // Still running? Might waitWhileLoading()
-    // runned into the timeout!
-    if (m_xAsynchronousJob.is())
-    {
-        // try to cancel it ... if its an asynchronous frame loader
-        css::uno::Reference< css::frame::XFrameLoader > xAsyncLoader(m_xAsynchronousJob, css::uno::UNO_QUERY);
-        if (xAsyncLoader.is())
-        {
-            aReadLock.unlock();
-            // <- BREAK SAFE ------------------------------
-            xAsyncLoader->cancel();
-            // <- RESTART SAFE ----------------------------
-            aReadLock.lock();
-            /* Attention:
-                After returning from any cancel/dispose call, neither the frame nor weself
-                may be called back. Because only we can cancel this job, we already know
-                the result! => Thats why its not usefull nor neccessary to wait for any
-                asynchronous listener notification.
-            */
-            m_bLoaded = sal_False;
-            m_xAsynchronousJob.clear();
-        }
-        // or may be its a content handler? Such handler can't be cancelled in its running
-        // operation :-( And we can't deregister us there again :-(
-        // => The only chance is an exception :-)
-        else
-            throw LoadEnvException(LoadEnvException::ID_STILL_RUNNING);
-    }
-
-    impl_reactForLoadingState();
-
-    aReadLock.unlock();
-    // <- PARTIAL(!) SAFE ------------------------------
-}
-
-
-css::uno::Reference< css::frame::XFrame > LoadEnv::getTarget() const
-{
-    // SAFE ->
-    ReadGuard aReadLock(m_aLock);
-    return m_xTargetFrame;
-    // <- SAFE
-}
-
-
 css::uno::Reference< css::lang::XComponent > LoadEnv::getTargetComponent() const
 {
     // SAFE ->
