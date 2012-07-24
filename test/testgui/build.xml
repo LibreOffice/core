@@ -59,7 +59,7 @@
         <mkdir dir="${classes}" />
         <mkdir dir="${lib}" />
         <copy includeemptydirs="false" todir="${classes}">
-            <fileset dir="src">
+            <fileset dir="${src}">
                 <exclude name="**/*.java" />
             </fileset>
         </copy>
