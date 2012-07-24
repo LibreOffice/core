@@ -373,14 +373,6 @@ class LoadEnv : private ThreadHelpBase
 
         //_______________________________________
         /** TODO document me ... */
-        void cancelLoading();
-
-        //_______________________________________
-        /** TODO document me ... */
-        css::uno::Reference< css::frame::XFrame > getTarget() const;
-
-        //_______________________________________
-        /** TODO document me ... */
         css::uno::Reference< css::lang::XComponent > getTargetComponent() const;
 
 
