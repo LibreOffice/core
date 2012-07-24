@@ -1272,6 +1272,11 @@ sub get_guid_list
     # "-c" for uppercase output
 
     my $systemcall = "$uuidgen -n$number |";
+    if ( $ENV{'CROSS_COMPILING'} eq 'YES' )
+    {
+        # -n is not present in the non-windows uuidgen
+        $systemcall = "for I in `seq 1 $number` ; do uuidgen ; done |";
+    }
     open (UUIDGEN, "$systemcall" ) or die("uuidgen is missing.");
     my @uuidlist = <UUIDGEN>;
     close (UUIDGEN);
