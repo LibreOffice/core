@@ -1469,6 +1469,30 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
             m_aMathBuffer.appendOpeningTag(M_TOKEN(dPr));
             m_aStates.top().nDestinationState = DESTINATION_MDPR;
             break;
+        case RTF_MFUNC:
+            m_aMathBuffer.appendOpeningTag(M_TOKEN(func));
+            m_aStates.top().nDestinationState = DESTINATION_MFUNC;
+            break;
+        case RTF_MFUNCPR:
+            m_aMathBuffer.appendOpeningTag(M_TOKEN(funcPr));
+            m_aStates.top().nDestinationState = DESTINATION_MFUNCPR;
+            break;
+        case RTF_MFNAME:
+            m_aMathBuffer.appendOpeningTag(M_TOKEN(fName));
+            m_aStates.top().nDestinationState = DESTINATION_MFNAME;
+            break;
+        case RTF_MLIMLOW:
+            m_aMathBuffer.appendOpeningTag(M_TOKEN(limLow));
+            m_aStates.top().nDestinationState = DESTINATION_MLIMLOW;
+            break;
+        case RTF_MLIMLOWPR:
+            m_aMathBuffer.appendOpeningTag(M_TOKEN(limLowPr));
+            m_aStates.top().nDestinationState = DESTINATION_MLIMLOWPR;
+            break;
+        case RTF_MLIM:
+            m_aMathBuffer.appendOpeningTag(M_TOKEN(lim));
+            m_aStates.top().nDestinationState = DESTINATION_MLIM;
+            break;
         default:
             SAL_INFO("writerfilter", OSL_THIS_FUNC << ": TODO handle destination '" << lcl_RtfToString(nKeyword) << "'");
             // Make sure we skip destinations (even without \*) till we don't handle them
@@ -3601,6 +3625,18 @@ int RTFDocumentImpl::popState()
         m_aMathBuffer.appendClosingTag(M_TOKEN(d));
     else if (m_aStates.top().nDestinationState == DESTINATION_MDPR)
         m_aMathBuffer.appendClosingTag(M_TOKEN(dPr));
+    else if (m_aStates.top().nDestinationState == DESTINATION_MFUNC)
+        m_aMathBuffer.appendClosingTag(M_TOKEN(func));
+    else if (m_aStates.top().nDestinationState == DESTINATION_MFUNCPR)
+        m_aMathBuffer.appendClosingTag(M_TOKEN(funcPr));
+    else if (m_aStates.top().nDestinationState == DESTINATION_MFNAME)
+        m_aMathBuffer.appendClosingTag(M_TOKEN(fName));
+    else if (m_aStates.top().nDestinationState == DESTINATION_MLIMLOW)
+        m_aMathBuffer.appendClosingTag(M_TOKEN(limLow));
+    else if (m_aStates.top().nDestinationState == DESTINATION_MLIMLOWPR)
+        m_aMathBuffer.appendClosingTag(M_TOKEN(limLowPr));
+    else if (m_aStates.top().nDestinationState == DESTINATION_MLIM)
+        m_aMathBuffer.appendClosingTag(M_TOKEN(lim));
 
     // See if we need to end a track change
     RTFValue::Pointer_t pTrackchange = m_aStates.top().aCharacterSprms.find(NS_ooxml::LN_trackchange);
