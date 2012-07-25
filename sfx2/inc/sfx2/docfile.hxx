@@ -40,7 +40,6 @@
 #include <tools/string.hxx>
 #include <svl/lstner.hxx>
 
-#include <tools/globname.hxx>
 #include <cppuhelper/weak.hxx>
 #include <ucbhelper/content.hxx>
 
@@ -70,7 +69,6 @@ class SFX2_DLLPUBLIC SfxMedium : public SvRefBase
 {
     StreamMode          nStorOpenMode;
     INetURLObject*      pURLObj;
-    SvGlobalName        aFilterClass;
     SfxMedium_Impl*     pImp;
 
 #if _SOLAR__PRIVATE
