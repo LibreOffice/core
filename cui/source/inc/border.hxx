@@ -106,8 +106,8 @@ private:
     FixedText           aFtShadowColor;
     ColorListBox        aLbShadowColor;
 
-    //properties - "Merge with next paragraph" in Writer
-    FixedLine           aPropertiesFL;
+
+    FixedLine           aPropertiesFL;///< properties - "Merge with next paragraph" in Writer
     CheckBox            aMergeWithNextCB;
     // #i29550#
     CheckBox            aMergeAdjacentBordersCB;
@@ -117,13 +117,13 @@ private:
     ImageList           aBorderImgLstH;
     ImageList           aBorderImgLst;
 
-    long                nMinValue;  // minimum distance
-    int                 nSWMode;    // table, textframe, paragraph
+    long                nMinValue;  ///< minimum distance
+    int                 nSWMode;    ///< table, textframe, paragraph
 
-    bool                mbHorEnabled;       /// true = Inner horizontal border enabled.
-    bool                mbVerEnabled;       /// true = Inner vertical border enabled.
-    bool                mbTLBREnabled;      /// true = Top-left to bottom-right border enabled.
-    bool                mbBLTREnabled;      /// true = Bottom-left to top-right border enabled.
+    bool                mbHorEnabled;       ///< true = Inner horizontal border enabled.
+    bool                mbVerEnabled;       ///< true = Inner vertical border enabled.
+    bool                mbTLBREnabled;      ///< true = Top-left to bottom-right border enabled.
+    bool                mbBLTREnabled;      ///< true = Bottom-left to top-right border enabled.
     bool                mbUseMarginItem;
     bool                mbSync;
 
@@ -148,7 +148,7 @@ private:
     // Filler
     void                FillLineListBox_Impl();
 
-    // share for individual Frame-/Core-Line
+    /// share for individual Frame-/Core-Line
     void                ResetFrameLine_Impl( svx::FrameBorderType eBorder,
                                              const editeng::SvxBorderLine* pCurLine,
                                              bool bValid );

@@ -221,7 +221,7 @@ struct DoubleString
 {
     String  sShort;
     String  sLong;
-    void*   pUserData; // CheckBox -> form. Text Bool -> selection text
+    void*   pUserData; ///< CheckBox -> form. Text Bool -> selection text
 };
 typedef std::vector<DoubleString> DoubleStringArray;
 typedef std::map<LanguageType, DoubleStringArray> DoubleStringTable;
@@ -318,8 +318,8 @@ private:
     DECL_LINK(NewDelHdl, PushButton*);
     DECL_LINK(SelectHdl, ListBox*);
     DECL_LINK(ModifyHdl, Edit*);
-
-    void            RefillReplaceBoxes(sal_Bool bFromReset, //Box filled with new language
+                    /// Box filled with new language
+    void            RefillReplaceBoxes(sal_Bool bFromReset,
                                         LanguageType eOldLanguage,
                                         LanguageType eNewLanguage);
 public:
@@ -344,10 +344,10 @@ class OfaQuoteTabPage : public SfxTabPage
     using TabPage::ActivatePage;
 
 private:
-    // For anything but writer
+    /// For anything but writer
     SvxCheckListBox aCheckLB;
 
-    // Just for writer
+    /// Just for writer
     SvxSimpleTableContainer m_aSwCheckLBContainer;
     OfaACorrCheckListBox    aSwCheckLB;
     String          sHeader1;
@@ -426,12 +426,12 @@ class OfaAutoCompleteTabPage : public SfxTabPage
         virtual long PreNotify( NotifyEvent& rNEvt );
     };
 
-    CheckBox        aCBActiv; //Enable word completion
-    CheckBox        aCBAppendSpace;//Append space
-    CheckBox        aCBAsTip; //Show as tip
+    CheckBox        aCBActiv; ///<Enable word completion
+    CheckBox        aCBAppendSpace;///<Append space
+    CheckBox        aCBAsTip; ///<Show as tip
 
-    CheckBox        aCBCollect;//Collect words
-    CheckBox        aCBRemoveList;//...save the list for later use...
+    CheckBox        aCBCollect;///<Collect words
+    CheckBox        aCBRemoveList;///<...save the list for later use...
 
     FixedText       aFTExpandKey;
     ListBox         aDCBExpandKey;
@@ -480,7 +480,7 @@ private:
     PushButton              m_aPropertiesPB;
     FixedText               m_aTitleFT;
 
-    // construction via Create()
+    /// construction via Create()
     OfaSmartTagOptionsTabPage( Window* pParent, const SfxItemSet& rSet );
 
     /** Inserts items into m_aSmartTagTypesLB
