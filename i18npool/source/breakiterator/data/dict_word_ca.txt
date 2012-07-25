@@ -21,18 +21,24 @@ $Katakana  = [[:Script = KATAKANA:] [:name = KATAKANA-HIRAGANA PROLONGED SOUND M
                                    [:name = HALFWIDTH KATAKANA VOICED SOUND MARK:]
                                    [:name = HALFWIDTH KATAKANA SEMI-VOICED SOUND MARK:]];
 
+$Ideographic = [:Ideographic:];
+$Hangul = [:Script = HANGUL:];
 
 $ALetter   = [[:Alphabetic:] [:name= COMMERCIAL AT:] [:name= HEBREW PUNCTUATION GERESH:]
+                           - $Ideographic
                            - $Katakana
+                           - $Hangul
                            - [:Script = Thai:]
                            - [:Script = Lao:]
                            - [:Script = Hiragana:]];
                            
-$MidLetter = [[:name = APOSTROPHE:] [:name = GRAVE ACCENT:] \u0084 [:name = SOFT HYPHEN:] [:name = MIDDLE DOT:] [:name = GREEK TONOS:] [:name= FULL STOP:]
+$MidLetter = [[:name = APOSTROPHE:] [:name = GRAVE ACCENT:] \u0084 [:name = SOFT HYPHEN:] [:name = MIDDLE DOT:] [:name = GREEK TONOS:] [:name= FULL STOP:] 
               [:name = HEBREW PUNCTUATION GERSHAYIM:] [:name = DOUBLE VERTICAL LINE:] [:name = LEFT SINGLE QUOTATION MARK:]
-              [:name = RIGHT SINGLE QUOTATION MARK:] [:name = HYPHENATION POINT:] [:name = PRIME:] [:name = HYPHEN-MINUS:]];  
-              
+              [:name = RIGHT SINGLE QUOTATION MARK:] [:name = HYPHENATION POINT:] [:name = PRIME:] 
+              [:name = HYPHEN-MINUS:] ];
+
 $SufixLetter = [:name= FULL STOP:];
+              
 
 $MidNum    = [[:LineBreak = Infix_Numeric:] [:name= COMMERCIAL AT:] \u0084 [:name = GREEK TONOS:] [:name = ARABIC DECIMAL SEPARATOR:]
              [:name = LEFT SINGLE QUOTATION MARK:] [:name = RIGHT SINGLE QUOTATION MARK:] [:name = SINGLE HIGH-REVERSED-9 QUOTATION MARK:]
@@ -60,7 +66,7 @@ $Extend     = [[:Grapheme_Extend = TRUE:]];
 #
 ####################################################################################
 
-$Format    = [[:Cf:]];
+$Format    = [[:Cf:] - $TheZWSP];
 
 
 
@@ -80,6 +86,8 @@ $MidNumEx     = $MidNum    $Extend*;
 $MidLetterEx  = $MidLetter $Extend*;
 $SufixLetterEx= $SufixLetter $Extend*;
 $KatakanaEx   = $Katakana  $Extend*;
+$IdeographicEx= $Ideographic  $Extend*;
+$HangulEx = $Hangul  $Extend*;
 $FormatEx     = $Format    $Extend*;
 
 
@@ -111,7 +119,8 @@ $KatakanaEx ($FormatEx* $KatakanaEx)* {300};
 #                           Separated from the "Everything Else" rule, below, only so that they
 #                           can be tagged with a return value.   TODO:  is this what we want?
 #
-# [:IDEOGRAPHIC:] $Extend* {400};
+$IdeographicEx ($FormatEx* $IdeographicEx)* {400};
+$HangulEx ($FormatEx* $HangulEx)* {400};
 
 #
 #  Everything Else, with no tag.
@@ -132,7 +141,7 @@ $CR $LF;
 #    reaches something that can only be the start (and probably only) char in a "word".
 #    A space or punctuation meets the test.
 #
-$NonStarters = [$Numeric $ALetter $Katakana [:P:] [:S:] $MidLetter $MidNum $SufixLetter $Extend $Format];
+$NonStarters = [$Numeric $ALetter $Katakana $Ideographic $Hangul [:P:] [:S:] $MidLetter $MidNum $SufixLetter $Extend $Format];
 
 #!.*;
 ! ($NonStarters* | \n \r) .;
