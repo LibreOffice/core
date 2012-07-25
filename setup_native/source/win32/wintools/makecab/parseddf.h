@@ -34,3 +34,5 @@ unsigned int ParseDdf(char * ddfFile, PCCAB vars, DDFSRCFILE ** srcListH, unsign
 #endif
 
 #endif /* __PARSEDDF_H__ */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
