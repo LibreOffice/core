@@ -80,7 +80,8 @@
 using namespace ::com::sun::star;
 
 
-class WW8SelBoxInfo: public SwSelBoxes
+class WW8SelBoxInfo
+    : public std::vector<SwTableBox*>
 {
 private:
     WW8SelBoxInfo(const WW8SelBoxInfo&);
@@ -3330,10 +3331,9 @@ SwTableBox* WW8TabDesc::UpdateTableMergeGroup(  WW8_TCell&     rCell,
         }
         if( pTheMergeGroup )
         {
-            // aktuelle Box der Merge-Gruppe hinzufuegen
-            pTheMergeGroup->insert( pActBox );
-
-            // Target-Box zurueckmelden
+            // add current box to merge group
+            pTheMergeGroup->push_back(pActBox);
+            // return target box
             pResult = (*pTheMergeGroup)[ 0 ];
         }
     }

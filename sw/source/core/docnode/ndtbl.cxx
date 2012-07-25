@@ -2947,7 +2947,7 @@ void SwCollectTblLineBoxes::AddBox( const SwTableBox& rBox )
 {
     aPosArr.push_back(nWidth);
     SwTableBox* p = (SwTableBox*)&rBox;
-    aBoxes.insert( p );
+    m_Boxes.push_back(p);
     nWidth = nWidth + (sal_uInt16)rBox.GetFrmFmt()->GetFrmSize().GetWidth();
 }
 
@@ -2972,7 +2972,7 @@ const SwTableBox* SwCollectTblLineBoxes::GetBoxOfPos( const SwTableBox& rBox )
             --n;
 
         nWidth = nWidth + (sal_uInt16)rBox.GetFrmFmt()->GetFrmSize().GetWidth();
-        pRet = aBoxes[ n ];
+        pRet = m_Boxes[ n ];
     }
     return pRet;
 }
@@ -2996,7 +2996,7 @@ sal_Bool SwCollectTblLineBoxes::Resize( sal_uInt16 nOffset, sal_uInt16 nOldWidth
         }
 
         aPosArr.erase( aPosArr.begin(), aPosArr.begin() + n );
-        aBoxes.erase( aBoxes.begin(), aBoxes.begin() + n );
+        m_Boxes.erase(m_Boxes.begin(), m_Boxes.begin() + n);
 
         // dann die Positionen der neuen Size anpassen
         for( n = 0; n < aPosArr.size(); ++n )

@@ -71,7 +71,7 @@ SW_DLLPUBLIC void _DeleteBox( SwTable& rTbl, SwTableBox* pBox, SwUndo* pUndo = 0
 class SwCollectTblLineBoxes
 {
     std::vector<sal_uInt16> aPosArr;
-    SwSelBoxes aBoxes;
+    std::vector<SwTableBox*> m_Boxes;
     SwHistory* pHst;
     sal_uInt16 nMode, nWidth;
     sal_Bool bGetFromTop : 1;
@@ -79,7 +79,7 @@ class SwCollectTblLineBoxes
 
 public:
     SwCollectTblLineBoxes( sal_Bool bTop, sal_uInt16 nMd = 0, SwHistory* pHist=0 )
-        : aBoxes(),
+        :
         pHst( pHist ), nMode( nMd ), nWidth( 0 ),
         bGetFromTop( bTop ), bGetValues( sal_True )
 
@@ -89,14 +89,14 @@ public:
     const SwTableBox* GetBoxOfPos( const SwTableBox& rBox );
     void AddToUndoHistory( const SwCntntNode& rNd );
 
-    sal_uInt16 Count() const                { return aBoxes.size(); }
+    size_t Count() const                { return m_Boxes.size(); }
     const SwTableBox& GetBox( std::size_t nPos, sal_uInt16* pWidth = 0 ) const
         {
             // hier wird die EndPos der Spalte benoetigt!
             if( pWidth )
                 *pWidth = (nPos+1 == aPosArr.size()) ? nWidth
                                                     : aPosArr[ nPos+1 ];
-            return *aBoxes[ nPos ];
+            return *m_Boxes[ nPos ];
         }
 
     sal_Bool IsGetFromTop() const           { return bGetFromTop; }
