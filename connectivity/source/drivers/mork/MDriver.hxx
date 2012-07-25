@@ -40,16 +40,8 @@ namespace com { namespace sun { namespace star {
 } } }
 namespace rtl { class OUString; }
 
-namespace connectivity
-{
-    namespace mozab
-    {
-        class ProfileAccess;
-    }
-}
-
 namespace connectivity { namespace mork {
-
+class ProfileAccess;
 namespace css = com::sun::star;
 
 css::uno::Reference< css::uno::XInterface > SAL_CALL
@@ -67,7 +59,7 @@ public:
         throw (css::uno::RuntimeException);
 private:
 
-    connectivity::mozab::ProfileAccess* m_ProfileAccess;
+    ProfileAccess* m_ProfileAccess;
     virtual ~MorkDriver() {}
 
     virtual rtl::OUString SAL_CALL getImplementationName()

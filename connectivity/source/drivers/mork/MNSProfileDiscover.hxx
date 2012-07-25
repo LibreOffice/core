@@ -31,18 +31,24 @@
 #include <vector>
 #include <map>
 
+#if defined LO_DLLIMPLEMENTATION_MORK
+#define LO_DLLPUBLIC_MORK SAL_DLLPUBLIC_EXPORT
+#else
+#define LO_DLLPUBLIC_MORK SAL_DLLPUBLIC_IMPORT
+#endif
+
 using namespace com::sun::star::mozilla;
 namespace connectivity
 {
-    namespace mozab
+    namespace mork
     {
         class ProfileStruct;
     }
 }
-typedef ::std::map < ::rtl::OUString, ::connectivity::mozab::ProfileStruct* > ProfileList;
+typedef ::std::map < ::rtl::OUString, ::connectivity::mork::ProfileStruct* > ProfileList;
 namespace connectivity
 {
-    namespace mozab
+    namespace mork
     {
         class ProfileStruct
         {
@@ -70,7 +76,7 @@ namespace connectivity
         };
 
         //Used to query profiles information
-        class ProfileAccess
+        class LO_DLLPUBLIC_MORK ProfileAccess
         {
         public:
 

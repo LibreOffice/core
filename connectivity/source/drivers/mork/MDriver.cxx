@@ -12,7 +12,6 @@
 #include "MNSProfileDiscover.hxx"
 
 using namespace connectivity::mork;
-using namespace connectivity::mozab;
 
 namespace connectivity
 {
@@ -77,8 +76,11 @@ css::uno::Reference< css::sdbc::XConnection > MorkDriver::connect(
     throw (css::sdbc::SQLException, css::uno::RuntimeException)
 {
     (void) url; (void) info; // avoid warnings
-    //    return static_cast< cppu::OWeakObject * >(new MConnection(this));
-    return NULL;
+    css::uno::Reference< css::sdbc::XConnection > xCon;
+    OConnection* pCon = new OConnection(this);
+    xCon = pCon;    // important here because otherwise the connection could be deleted inside (refcount goes -> 0)
+    pCon->construct(url, info);
+    return xCon;
 }
 
 sal_Bool MorkDriver::acceptsURL(rtl::OUString const & url)

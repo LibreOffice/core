@@ -36,6 +36,7 @@ $(eval $(call gb_Module_add_targets,connectivity,\
 	Configuration_calc \
 	Configuration_dbase \
 	Configuration_flat \
+	Configuration_mork \
 	Configuration_mysql \
 	Configuration_odbc \
 	Executable_mork_helper \
@@ -118,28 +119,28 @@ $(eval $(call gb_Module_add_targets,connectivity,\
 ))
 endif
 
-ifeq ($(if $(or $(filter-out YES,$(WITH_MOZILLA)),$(filter YES,$(SYSTEM_MOZILLA)),$(filter MACOSX,$(OS))),YES),YES)
-$(eval $(call gb_Module_add_targets,connectivity,\
-	Library_mozbootstrap \
-))
-else
+#ifeq ($(if $(or $(filter-out YES,$(WITH_MOZILLA)),$(filter YES,$(SYSTEM_MOZILLA)),$(filter MACOSX,$(OS))),YES),YES)
+#$(eval $(call gb_Module_add_targets,connectivity,\
+#	Library_mozbootstrap \
+#))
+#else
 
-$(eval $(call gb_Module_add_targets,connectivity,\
-	Library_mozab \
-	Library_mozabdrv \
-))
+#$(eval $(call gb_Module_add_targets,connectivity,\
+#	Library_mozab \
+#	Library_mozabdrv \
+#))
 
-ifeq ($(OS),WNT)
-$(eval $(call gb_Module_add_targets,connectivity,\
-	Configuration_mozab \
-))
-else
-$(eval $(call gb_Module_add_targets,connectivity,\
-	Configuration_mozab2 \
-))
-endif
+#ifeq ($(OS),WNT)
+#$(eval $(call gb_Module_add_targets,connectivity,\
+#	Configuration_mozab \
+#))
+#else
+#$(eval $(call gb_Module_add_targets,connectivity,\
+#	Configuration_mozab2 \
+#))
+#endif
 
-endif
+#endif
 
 ifneq ($(filter QADEVOOO,$(BUILD_TYPE)),)
 $(eval $(call gb_Module_add_subsequentcheck_targets,connectivity,\

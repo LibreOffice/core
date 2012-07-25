@@ -28,7 +28,7 @@
 
 namespace connectivity
 {
-    namespace mozab
+    namespace mork
     {
         ProfileStruct::ProfileStruct(MozillaProductType aProduct,::rtl::OUString aProfileName,
             const ::rtl::OUString& aProfilePath

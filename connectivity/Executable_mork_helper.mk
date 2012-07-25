@@ -17,7 +17,10 @@ $(eval $(call gb_Executable_set_include,mork_helper,\
 $(eval $(call gb_Executable_use_sdk_api,mork_helper))
 
 $(eval $(call gb_Executable_use_libraries,mork_helper,\
+    cppu \
+    cppuhelper \
     mork \
+    sal \
 ))
 
 $(eval $(call gb_Executable_add_exception_objects,mork_helper,\
