@@ -19,7 +19,9 @@
         android:id="@+id/presentation_slidenumber"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        />
+        android:layout_gravity="center_horizontal"
+        android:text="" />
+
     <ImageView
         android:id="@+id/presentation_handle"
         android:layout_width="fill_parent"

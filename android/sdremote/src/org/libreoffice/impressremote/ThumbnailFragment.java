@@ -58,6 +58,15 @@ public class ThumbnailFragment extends Fragment {
 	}
 
 	@Override
+	public void onDestroyView() {
+		super.onDestroyView();
+		mGrid = null;
+		mContext = null;
+		mCurrentImage = null;
+		mCurrentText = null;
+	}
+
+	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
@@ -192,14 +201,14 @@ public class ThumbnailFragment extends Fragment {
 			}
 
 			Bitmap aBitmap = mSlideShow.getImage(position);
-			if (aBitmap != null) {
-				aImage.setImageBitmap(aBitmap);
-			}
-
 			// Width
 			int aWidth = (mGrid.getWidth()) / 3 - 20;
 			aImage.setMaxWidth(aWidth);
-			aImage.setScaleType(ScaleType.MATRIX);
+			aImage.setScaleType(ScaleType.FIT_CENTER);
+
+			if (aBitmap != null) {
+				aImage.setImageBitmap(aBitmap);
+			}
 
 			aText.setText(String.valueOf(position + 1));
 

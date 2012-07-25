@@ -38,6 +38,9 @@ public class PresentationFragment extends Fragment {
 	private CommunicationService mCommunicationService;
 	private SlideShow mSlideShow;
 
+	private float mOriginalCoverflowWidth;
+	private float mOriginalCoverflowHeight;
+
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 	                Bundle savedInstanceState) {
 		mContext = container.getContext();
@@ -66,6 +69,9 @@ public class PresentationFragment extends Fragment {
 		// Call again to set things up if necessary.
 		setCommunicationService(mCommunicationService);
 
+		// Save the height/width for future reference
+		mOriginalCoverflowHeight = mTopView.getImageHeight();
+		mOriginalCoverflowWidth = mTopView.getImageWidth();
 		return v;
 	}
 
@@ -84,38 +90,51 @@ public class PresentationFragment extends Fragment {
 				break;
 			case MotionEvent.ACTION_MOVE:
 				LayoutParams aParams = mTopView.getLayoutParams();
-				int aHeightOriginal = mTopView.getHeight();
 				int aHeight = mTopView.getHeight();
+				int aViewSize = mLayout.getHeight();
 
 				final int DRAG_MARGIN = 120;
 
-				// Set Height
-
-				aParams.height = aHeight + (int) (aEvent.getY());
-				int aViewSize = mLayout.getHeight();
-				if (aParams.height < DRAG_MARGIN) {
-					aParams.height = DRAG_MARGIN;
-				} else if (aParams.height > aViewSize - DRAG_MARGIN) {
-					aParams.height = aViewSize - DRAG_MARGIN;
+				// Calculate height change, taking limits into account
+				int aDiff = (int) (aEvent.getY());
+				System.out.println("Diff1 is :" + aDiff);
+				if (aDiff + aHeight < DRAG_MARGIN) {
+					aDiff = DRAG_MARGIN - aHeight;
+				} else if ((aHeight + aDiff) > (aViewSize - DRAG_MARGIN)) {
+					aDiff = (aViewSize - DRAG_MARGIN) - aHeight;
 				}
 
-				int aDiff = aParams.height - aHeightOriginal;
-				mTopView.setLayoutParams(aParams);
-
 				// Now deal with the internal height
-				System.out.println("Before:W:" + mTopView.getImageWidth()
-				                + ":H:" + mTopView.getImageHeight());
 				AbstractCoverFlowImageAdapter aAdapter = (AbstractCoverFlowImageAdapter) mTopView
 				                .getAdapter();
-				int aHeightNew = (int) (mTopView.getImageHeight() + aDiff);
+
+				double aRatio = mOriginalCoverflowWidth
+				                / mOriginalCoverflowHeight;
+				System.out.println("Diff2 is :" + aDiff);
+				float aHeightNew = mTopView.getImageHeight() + aDiff;
+				float aWidthNew = (float) (aRatio * aHeightNew);
+
+				//				 Too wide -- so scale down
+				if (aWidthNew > mLayout.getWidth() - 50) {
+					aWidthNew = mLayout.getWidth() - 50;
+					aHeightNew = (float) (aWidthNew / aRatio);
+					aDiff = (int) (aHeightNew - mTopView.getImageHeight());
+				}
+
+				// Set the new settings -- it turns out that changing the
+				// internal height now works, and changing the views height
+				// is unnecessary / even causes problems.
+				//				aParams.height += aDiff;
+				//				mTopView.setLayoutParams(aParams);
+
 				aAdapter.setHeight(aHeightNew);
 				mTopView.setImageHeight(aHeightNew);
-				int aWidthNew = aHeightNew * 180 / 150;
 				aAdapter.setWidth(aWidthNew);
 				mTopView.setImageWidth(aWidthNew);
+
+				// We need to update the view now
 				aAdapter.notifyDataSetChanged();
-				System.out.println("After:W:" + mTopView.getImageWidth()
-				                + ":H:" + mTopView.getImageHeight());
+
 				break;
 			}
 			// TODO Auto-generated method stub
@@ -162,7 +181,7 @@ public class PresentationFragment extends Fragment {
 			int aSlide = aData.getInt("slide_number");
 			mTopView.setSelection(aSlide, true);
 
-			mNumberText.setText(mSlideShow.getCurrentSlide() + "/"
+			mNumberText.setText((mSlideShow.getCurrentSlide() + 1) + "/"
 			                + mSlideShow.getSize());
 
 			break;
