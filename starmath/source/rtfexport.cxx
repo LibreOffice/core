@@ -41,7 +41,7 @@ SmRtfExport::SmRtfExport(const SmNode* pIn)
 
 bool SmRtfExport::ConvertFromStarMath(OStringBuffer& rBuffer)
 {
-    if (m_pTree == NULL)
+    if (!m_pTree)
         return false;
     m_pBuffer = &rBuffer;
     m_pBuffer->append("{" OOO_STRING_SVTOOLS_RTF_IGNORE "\\moMath");
@@ -67,6 +67,9 @@ void SmRtfExport::HandleNode(const SmNode* pNode, int nLevel)
             break;
         case NBRACE:
             HandleBrace( static_cast< const SmBraceNode* >( pNode ), nLevel );
+            break;
+        case NOPER:
+            HandleOperator(static_cast<const SmOperNode*>(pNode), nLevel);
             break;
         case NBINHOR:
             HandleBinaryOperation(static_cast<const SmBinHorNode*>(pNode), nLevel);
@@ -275,9 +278,78 @@ OString mathSymbolToString(const SmNode* node)
 }
 }
 
-void SmRtfExport::HandleOperator(const SmOperNode* /*pNode*/, int /*nLevel*/)
+void SmRtfExport::HandleOperator(const SmOperNode* pNode, int nLevel)
 {
-    SAL_INFO("starmath.rtf", "TODO: " << OSL_THIS_FUNC);
+    SAL_INFO("starmath.rtf", "Operator: " << int(pNode->GetToken().eType));
+    switch (pNode->GetToken().eType)
+    {
+        case TINT:
+        case TIINT:
+        case TIIINT:
+        case TLINT:
+        case TLLINT:
+        case TLLLINT:
+        case TPROD:
+        case TCOPROD:
+        case TSUM:
+        {
+            const SmSubSupNode* subsup = pNode->GetSubNode(0)->GetType() == NSUBSUP ? static_cast<const SmSubSupNode*>(pNode->GetSubNode(0)) : 0;
+            const SmNode* operation = subsup ? subsup->GetBody() : pNode->GetSubNode(0);
+            m_pBuffer->append("{\\mnary ");
+            m_pBuffer->append("{\\mnaryPr ");
+            m_pBuffer->append("{\\mchr ");
+            m_pBuffer->append(mathSymbolToString(operation));
+            m_pBuffer->append("}"); // mchr
+            if (!subsup || !subsup->GetSubSup(CSUB))
+                m_pBuffer->append("{\\msubHide 1}");
+            if (!subsup || !subsup->GetSubSup(CSUP))
+                m_pBuffer->append("{\\msupHide 1}");
+            m_pBuffer->append("}"); // mnaryPr
+            if (!subsup || !subsup->GetSubSup(CSUB))
+                m_pBuffer->append("{\\msub }");
+            else
+            {
+                m_pBuffer->append("{\\msub ");
+                HandleNode(subsup->GetSubSup(CSUB), nLevel + 1);
+                m_pBuffer->append("}"); // msub
+            }
+            if (!subsup || !subsup->GetSubSup( CSUP ))
+                m_pBuffer->append("{\\msup }");
+            else
+            {
+                m_pBuffer->append("{\\msup ");
+                HandleNode(subsup->GetSubSup(CSUP), nLevel + 1);
+                m_pBuffer->append("}"); // msup
+            }
+            m_pBuffer->append("{\\me ");
+            HandleNode(pNode->GetSubNode(1), nLevel + 1); // body
+            m_pBuffer->append("}"); // me
+            m_pBuffer->append("}"); // mnary
+            break;
+        }
+        case TLIM:
+            m_pBuffer->append("{\\mfunc ");
+            m_pBuffer->append("{\\mfName ");
+            m_pBuffer->append("{\\mlimLow ");
+            m_pBuffer->append("{\\me ");
+            HandleNode(pNode->GetSymbol(), nLevel + 1);
+            m_pBuffer->append("}"); // me
+            m_pBuffer->append("{\\mlim ");
+            if (const SmSubSupNode* subsup = pNode->GetSubNode(0)->GetType() == NSUBSUP ? static_cast<const SmSubSupNode*>( pNode->GetSubNode(0)) : 0)
+                if (subsup->GetSubSup(CSUB))
+                    HandleNode(subsup->GetSubSup(CSUB), nLevel + 1);
+            m_pBuffer->append("}"); // mlim
+            m_pBuffer->append("}"); // mlimLow
+            m_pBuffer->append("}"); // mfName
+            m_pBuffer->append("{\\me ");
+            HandleNode(pNode->GetSubNode(1), nLevel + 1); // body
+            m_pBuffer->append("}"); // me
+            m_pBuffer->append("}"); // mfunc
+            break;
+        default:
+            SAL_INFO("starmath.rtf", "TODO: " << OSL_THIS_FUNC << " unhandled oper type");
+            break;
+    }
 }
 
 void SmRtfExport::HandleSubSupScript(const SmSubSupNode* /*pNode*/, int /*nLevel*/)
