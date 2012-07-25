@@ -148,8 +148,6 @@ public:
     boost::shared_ptr< ConfigurationChanges > createChanges() const;
 
 private:
-    rtl::OUString extendLocalizedPath(rtl::OUString const & path) const;
-
     com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
         context_;
 

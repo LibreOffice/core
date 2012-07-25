@@ -64,6 +64,51 @@ struct TheConfigurationWrapper:
         TheConfigurationWrapper >
 {};
 
+OUString getDefaultLocale(
+    css::uno::Reference< css::uno::XComponentContext > const & context)
+{
+    css::lang::Locale locale(
+        css::uno::Reference< css::lang::XLocalizable >(
+            css::configuration::theDefaultProvider::get(context),
+            css::uno::UNO_QUERY_THROW)->
+        getLocale());
+    OUStringBuffer buf;
+    SAL_WARN_IF(
+        locale.Language.indexOf('-') != -1, "comphelper",
+        "Locale language \"" << locale.Language << "\" contains \"-\"");
+    buf.append(locale.Language);
+    SAL_WARN_IF(
+        locale.Country.isEmpty() && !locale.Variant.isEmpty(), "comphelper",
+        "Locale has empty country but non-empty variant \"" << locale.Variant
+            << '"');
+    if (!locale.Country.isEmpty()) {
+        buf.append('-');
+        SAL_WARN_IF(
+            locale.Country.indexOf('-') != -1, "comphelper",
+            "Locale language \"" << locale.Country << "\" contains \"-\"");
+        buf.append(locale.Country);
+        if (!locale.Variant.isEmpty()) {
+            buf.append('-');
+            buf.append(locale.Variant);
+        }
+    }
+    return buf.makeStringAndClear();
+}
+
+OUString extendLocalizedPath(OUString const & path, OUString const & locale) {
+    rtl::OUStringBuffer buf(path);
+    buf.append("/['*");
+    SAL_WARN_IF(
+        locale.match("*"), "comphelper",
+        "Locale \"" << locale << "\" starts with \"-\"");
+    assert(locale.indexOf('&') == -1);
+    assert(locale.indexOf('"') == -1);
+    assert(locale.indexOf('\'') == -1);
+    buf.append(locale);
+    buf.append("']");
+    return buf.makeStringAndClear();
+}
+
 }
 
 boost::shared_ptr< comphelper::ConfigurationChanges >
@@ -82,7 +127,9 @@ void comphelper::ConfigurationChanges::commit() const {
 
 comphelper::ConfigurationChanges::ConfigurationChanges(
     css::uno::Reference< css::uno::XComponentContext > const & context):
-    access_(css::configuration::ReadWriteAccess::create(context))
+    access_(
+        css::configuration::ReadWriteAccess::create(
+            context, getDefaultLocale(context)))
 {}
 
 void comphelper::ConfigurationChanges::setPropertyValue(
@@ -114,7 +161,8 @@ comphelper::detail::ConfigurationWrapper::get(
 
 comphelper::detail::ConfigurationWrapper::ConfigurationWrapper(
     css::uno::Reference< css::uno::XComponentContext > const & context):
-    context_(context), access_(css::configuration::ReadOnlyAccess::get(context))
+    context_(context),
+    access_(css::configuration::ReadOnlyAccess::create(context, "*"))
 {}
 
 comphelper::detail::ConfigurationWrapper::~ConfigurationWrapper() {}
@@ -137,7 +185,8 @@ css::uno::Any
 comphelper::detail::ConfigurationWrapper::getLocalizedPropertyValue(
     rtl::OUString const & path) const
 {
-    return access_->getByHierarchicalName(extendLocalizedPath(path));
+    return access_->getByHierarchicalName(
+        extendLocalizedPath(path, getDefaultLocale(context_)));
 }
 
 void comphelper::detail::ConfigurationWrapper::setLocalizedPropertyValue(
@@ -145,7 +194,7 @@ void comphelper::detail::ConfigurationWrapper::setLocalizedPropertyValue(
     rtl::OUString const & path, com::sun::star::uno::Any const & value) const
 {
     assert(batch.get() != 0);
-    batch->setPropertyValue(extendLocalizedPath(path), value);
+    batch->setPropertyValue(path, value);
 }
 
 css::uno::Reference< css::container::XHierarchicalNameAccess >
@@ -153,7 +202,10 @@ comphelper::detail::ConfigurationWrapper::getGroupReadOnly(
     rtl::OUString const & path) const
 {
     return css::uno::Reference< css::container::XHierarchicalNameAccess >(
-        access_->getByHierarchicalName(path), css::uno::UNO_QUERY_THROW);
+        (css::configuration::ReadOnlyAccess::create(
+            context_, getDefaultLocale(context_))->
+         getByHierarchicalName(path)),
+        css::uno::UNO_QUERY_THROW);
 }
 
 css::uno::Reference< css::container::XHierarchicalNameReplace >
@@ -170,7 +222,10 @@ comphelper::detail::ConfigurationWrapper::getSetReadOnly(
     rtl::OUString const & path) const
 {
     return css::uno::Reference< css::container::XNameAccess >(
-        access_->getByHierarchicalName(path), css::uno::UNO_QUERY_THROW);
+        (css::configuration::ReadOnlyAccess::create(
+            context_, getDefaultLocale(context_))->
+         getByHierarchicalName(path)),
+        css::uno::UNO_QUERY_THROW);
 }
 
 css::uno::Reference< css::container::XNameContainer >
@@ -186,48 +241,6 @@ boost::shared_ptr< comphelper::ConfigurationChanges >
 comphelper::detail::ConfigurationWrapper::createChanges() const {
     return boost::shared_ptr< ConfigurationChanges >(
         new ConfigurationChanges(context_));
-}
-
-rtl::OUString comphelper::detail::ConfigurationWrapper::extendLocalizedPath(
-    rtl::OUString const & path) const
-{
-    rtl::OUStringBuffer buf(path);
-    buf.appendAscii(RTL_CONSTASCII_STRINGPARAM("/['"));
-    css::lang::Locale locale(
-        css::uno::Reference< css::lang::XLocalizable >(
-            css::configuration::theDefaultProvider::get(context_),
-            css::uno::UNO_QUERY_THROW)->
-        getLocale());
-    SAL_WARN_IF(
-        locale.Language.indexOf('-') != -1, "comphelper",
-        "Locale language \"" << locale.Language << "\" contains \"-\"");
-    assert(locale.Language.indexOf('&') == -1);
-    assert(locale.Language.indexOf('"') == -1);
-    assert(locale.Language.indexOf('\'') == -1);
-    buf.append(locale.Language);
-    SAL_WARN_IF(
-        locale.Country.isEmpty() && !locale.Variant.isEmpty(), "comphelper",
-        "Locale has empty country but non-empty variant \"" << locale.Variant
-            << '"');
-    if (!locale.Country.isEmpty()) {
-        buf.append('-');
-        SAL_WARN_IF(
-            locale.Country.indexOf('-') != -1, "comphelper",
-            "Locale language \"" << locale.Country << "\" contains \"-\"");
-        assert(locale.Country.indexOf('&') == -1);
-        assert(locale.Country.indexOf('"') == -1);
-        assert(locale.Country.indexOf('\'') == -1);
-        buf.append(locale.Country);
-        if (!locale.Variant.isEmpty()) {
-            buf.append('-');
-            assert(locale.Variant.indexOf('&') == -1);
-            assert(locale.Variant.indexOf('"') == -1);
-            assert(locale.Variant.indexOf('\'') == -1);
-            buf.append(locale.Variant);
-        }
-    }
-    buf.appendAscii(RTL_CONSTASCII_STRINGPARAM("']"));
-    return buf.makeStringAndClear();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

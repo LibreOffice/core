@@ -1484,6 +1484,81 @@ rtl::Reference< Node > Access::getParentNode() {
 }
 
 rtl::Reference< ChildAccess > Access::getChild(rtl::OUString const & name) {
+    if (getNode()->kind() == Node::KIND_LOCALIZED_PROPERTY && name.match("*")) {
+        OUString locale(name.copy(1));
+        if (locale.match("*")) {
+            SAL_WARN(
+                "configmgr",
+                ("access best-matching localized property value via"
+                 " \"*<locale>\" with <locale> \"")
+                    << locale << "\" recursively starting with \"*\"");
+            return getChild(locale);
+        }
+        SAL_WARN_IF(
+            locale.isEmpty(), "configmgr",
+            ("access best-matching localized property value via \"*<locale>\""
+             " with empty <locale>; falling back to defaults"));
+        if (!locale.isEmpty()) {
+            // Find best match using an adaption of RFC 4647 lookup matching
+            // rules, removing "-" or "_" delimited segments from the end:
+            for (;;) {
+                rtl::Reference< ChildAccess > child(getChild(locale));
+                if (child.is()) {
+                    return child;
+                }
+                sal_Int32 i = locale.getLength() - 1;
+                while (i > 0 && locale[i] != '-' && locale[i] != '_') {
+                    --i;
+                }
+                if (i <= 0) {
+                    break;
+                }
+                locale = locale.copy(0, i);
+            }
+            // As a workaround for broken xcu data that does not use shortest
+            // xml:lang attributes, look for the first entry with the same first
+            // segment as the requested language tag before falling back to
+            // defaults (see fdo#33638):
+            assert(
+                !locale.isEmpty() && locale.indexOf('-') == -1 &&
+                locale.indexOf('_') == -1);
+            std::vector< rtl::Reference< ChildAccess > > children(
+                getAllChildren());
+            for (std::vector< rtl::Reference< ChildAccess > >::iterator i(
+                     children.begin());
+                 i != children.end(); ++i)
+            {
+                OUString name2((*i)->getNameInternal());
+                if (name2.match(locale) &&
+                    (name2.getLength() == locale.getLength() ||
+                     name2[locale.getLength()] == '-' ||
+                     name2[locale.getLength()] == '_'))
+                {
+                    return *i;
+                }
+            }
+        }
+        // Defaults are the "en-US" locale, the "en" locale, the empty string
+        // locale, the first child (if any), or a null ChildAccess, in that
+        // order:
+        rtl::Reference< ChildAccess > child(getChild("en-US"));
+        if (child.is()) {
+            return child;
+        }
+        child = getChild("en");
+        if (child.is()) {
+            return child;
+        }
+        child = getChild(OUString());
+        if (child.is()) {
+            return child;
+        }
+        std::vector< rtl::Reference< ChildAccess > > children(getAllChildren());
+        if (!children.empty()) {
+            return children.front();
+        }
+        return rtl::Reference< ChildAccess >();
+    }
     ModifiedChildren::iterator i(modifiedChildren_.find(name));
     return i == modifiedChildren_.end()
         ? getUnmodifiedChild(name) : getModifiedChild(i);
