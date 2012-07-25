@@ -74,7 +74,6 @@ class SFX2_DLLPUBLIC SfxMedium : public SvRefBase
     SvStream*           pInStream;
     SvStream*           pOutStream;
     const SfxFilter*    pFilter;
-    SfxItemSet*         pSet;
     SfxMedium_Impl*     pImp;
 
     com::sun::star::uno::Reference<com::sun::star::io::XInputStream>
