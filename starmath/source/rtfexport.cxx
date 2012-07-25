@@ -130,8 +130,8 @@ void SmRtfExport::HandleText(const SmNode* pNode, int /*nLevel*/)
     for (xub_StrLen i = 0; i < pTemp->GetText().Len(); i++)
     {
         sal_uInt16 nChar = pTemp->GetText().GetChar(i);
-        // TODO special/non-ascii chars?
-        m_pBuffer->append(OUStringToOString(OUString(SmTextNode::ConvertSymbolToUnicode(nChar)), RTL_TEXTENCODING_UTF8));
+        OUString aValue(SmTextNode::ConvertSymbolToUnicode(nChar));
+        m_pBuffer->append(msfilter::rtfutil::OutString(aValue, RTL_TEXTENCODING_MS_1252));
     }
 
     m_pBuffer->append("}");
