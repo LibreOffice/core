@@ -68,7 +68,6 @@ class DateTime;
 
 class SFX2_DLLPUBLIC SfxMedium : public SvRefBase
 {
-    sal_uInt32          eError;
     StreamMode          nStorOpenMode;
     INetURLObject*      pURLObj;
     SvGlobalName        aFilterClass;
@@ -77,7 +76,6 @@ class SFX2_DLLPUBLIC SfxMedium : public SvRefBase
     const SfxFilter*    pFilter;
     SfxItemSet*         pSet;
     SfxMedium_Impl*     pImp;
-    rtl::OUString       aLongName;
 
     com::sun::star::uno::Reference<com::sun::star::io::XInputStream>
     m_xInputStreamToLoadFrom;
@@ -254,9 +252,8 @@ public:
     SAL_DLLPRIVATE void SetUpdatePickList(sal_Bool);
     SAL_DLLPRIVATE sal_Bool IsUpdatePickList() const;
 
-    SAL_DLLPRIVATE void SetLongName(const rtl::OUString &rName)
-                        { aLongName = rName; }
-    SAL_DLLPRIVATE const rtl::OUString & GetLongName() const { return aLongName; }
+    SAL_DLLPRIVATE void SetLongName(const rtl::OUString &rName);
+    SAL_DLLPRIVATE const rtl::OUString & GetLongName() const;
     SAL_DLLPRIVATE ErrCode CheckOpenMode_Impl( sal_Bool bSilent, sal_Bool bAllowRO = sal_True );
     SAL_DLLPRIVATE sal_Bool IsPreview_Impl();
     SAL_DLLPRIVATE void ClearBackup_Impl();

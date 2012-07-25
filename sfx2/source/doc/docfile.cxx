@@ -242,6 +242,8 @@ void SAL_CALL SfxMediumHandler_Impl::handle( const com::sun::star::uno::Referenc
 class SfxMedium_Impl
 {
 public:
+    sal_uInt32 m_eError;
+
     ::ucbhelper::Content aContent;
     bool bUpdatePickList:1;
     bool bIsTemp:1;
@@ -267,6 +269,7 @@ public:
 
     OUString m_aName;
     OUString m_aLogicName;
+    OUString m_aLongName;
 
     uno::Reference < embed::XStorage > xStorage;
 
@@ -316,8 +319,9 @@ public:
 };
 
 //------------------------------------------------------------------
-SfxMedium_Impl::SfxMedium_Impl( SfxMedium* pAntiImplP )
- :  bUpdatePickList(true),
+SfxMedium_Impl::SfxMedium_Impl( SfxMedium* pAntiImplP ) :
+    m_eError(SVSTREAM_OK),
+    bUpdatePickList(true),
     bIsTemp( false ),
     bForceSynchron( false ),
     bDownloadDone( true ),
@@ -361,7 +365,7 @@ SfxMedium_Impl::~SfxMedium_Impl()
 
 void SfxMedium::ResetError()
 {
-    eError = SVSTREAM_OK;
+    pImp->m_eError = SVSTREAM_OK;
     if( pInStream )
         pInStream->ResetError();
     if( pOutStream )
@@ -396,15 +400,15 @@ void SfxMedium::AddLog( const ::rtl::OUString& aMessage )
 //------------------------------------------------------------------
 void SfxMedium::SetError( sal_uInt32 nError, const ::rtl::OUString& aLogMessage )
 {
-    eError = nError;
-    if ( eError != ERRCODE_NONE && !aLogMessage.isEmpty() )
+    pImp->m_eError = nError;
+    if ( pImp->m_eError != ERRCODE_NONE && !aLogMessage.isEmpty() )
         AddLog( aLogMessage );
 }
 
 //------------------------------------------------------------------
 sal_uInt32 SfxMedium::GetErrorCode() const
 {
-    sal_uInt32 lError=eError;
+    sal_uInt32 lError = pImp->m_eError;
     if(!lError && pInStream)
         lError=pInStream->GetErrorCode();
     if(!lError && pOutStream)
@@ -558,12 +562,12 @@ SvStream* SfxMedium::GetInStream()
     {
         pInStream = new SvFileStream( pImp->m_aName, nStorOpenMode );
 
-        eError = pInStream->GetError();
+        pImp->m_eError = pInStream->GetError();
 
-        if( !eError && (nStorOpenMode & STREAM_WRITE)
+        if( !pImp->m_eError && (nStorOpenMode & STREAM_WRITE)
                     && ! pInStream->IsWritable() )
         {
-            eError = ERRCODE_IO_ACCESSDENIED;
+            pImp->m_eError = ERRCODE_IO_ACCESSDENIED;
             delete pInStream;
             pInStream = NULL;
         }
@@ -1507,7 +1511,7 @@ sal_Bool SfxMedium::UseBackupToRestore_Impl( ::ucbhelper::Content& aOriginalCont
         // TODO/LATER: a message should be used to let user know about the backup
         pImp->m_bRemoveBackup = false;
         // TODO/LATER: needs a specific error code
-        eError = ERRCODE_IO_GENERAL;
+        pImp->m_eError = ERRCODE_IO_GENERAL;
     }
 
     return false;
@@ -1588,29 +1592,29 @@ sal_Bool SfxMedium::TransactedTransferForFS_Impl( const INetURLObject& aSource,
     }
     catch ( const ::com::sun::star::ucb::CommandAbortedException& )
     {
-        eError = ERRCODE_ABORT;
+        pImp->m_eError = ERRCODE_ABORT;
     }
     catch ( const ::com::sun::star::ucb::CommandFailedException& )
     {
-        eError = ERRCODE_ABORT;
+        pImp->m_eError = ERRCODE_ABORT;
     }
     catch (const ::com::sun::star::ucb::ContentCreationException& ex)
     {
-        eError = ERRCODE_IO_GENERAL;
+        pImp->m_eError = ERRCODE_IO_GENERAL;
         if (
             (ex.eError == ::com::sun::star::ucb::ContentCreationError_NO_CONTENT_PROVIDER    ) ||
             (ex.eError == ::com::sun::star::ucb::ContentCreationError_CONTENT_CREATION_FAILED)
            )
         {
-            eError = ERRCODE_IO_NOTEXISTSPATH;
+            pImp->m_eError = ERRCODE_IO_NOTEXISTSPATH;
         }
     }
     catch (const ::com::sun::star::uno::Exception&)
     {
-       eError = ERRCODE_IO_GENERAL;
+       pImp->m_eError = ERRCODE_IO_GENERAL;
     }
 
-    if( !eError || (eError & ERRCODE_WARNING_MASK) )
+    if( !pImp->m_eError || (pImp->m_eError & ERRCODE_WARNING_MASK) )
     {
         if ( pImp->xStorage.is() )
             CloseStorage();
@@ -1644,7 +1648,7 @@ sal_Bool SfxMedium::TransactedTransferForFS_Impl( const INetURLObject& aSource,
                     }
                     else
                     {
-                        eError = ERRCODE_SFX_CANTCREATEBACKUP;
+                        pImp->m_eError = ERRCODE_SFX_CANTCREATEBACKUP;
                     }
                 }
                 else
@@ -1656,26 +1660,26 @@ sal_Bool SfxMedium::TransactedTransferForFS_Impl( const INetURLObject& aSource,
             }
             catch ( const ::com::sun::star::ucb::CommandAbortedException& )
             {
-                eError = ERRCODE_ABORT;
+                pImp->m_eError = ERRCODE_ABORT;
             }
             catch ( const ::com::sun::star::ucb::CommandFailedException& )
             {
-                eError = ERRCODE_ABORT;
+                pImp->m_eError = ERRCODE_ABORT;
             }
             catch ( const ::com::sun::star::ucb::InteractiveIOException& r )
             {
                 if ( r.Code == IOErrorCode_ACCESS_DENIED )
-                    eError = ERRCODE_IO_ACCESSDENIED;
+                    pImp->m_eError = ERRCODE_IO_ACCESSDENIED;
                 else if ( r.Code == IOErrorCode_NOT_EXISTING )
-                    eError = ERRCODE_IO_NOTEXISTS;
+                    pImp->m_eError = ERRCODE_IO_NOTEXISTS;
                 else if ( r.Code == IOErrorCode_CANT_READ )
-                    eError = ERRCODE_IO_CANTREAD;
+                    pImp->m_eError = ERRCODE_IO_CANTREAD;
                 else
-                    eError = ERRCODE_IO_GENERAL;
+                    pImp->m_eError = ERRCODE_IO_GENERAL;
             }
             catch ( const ::com::sun::star::uno::Exception& )
             {
-                eError = ERRCODE_IO_GENERAL;
+                pImp->m_eError = ERRCODE_IO_GENERAL;
             }
 
                if ( bResult )
@@ -1693,7 +1697,7 @@ sal_Bool SfxMedium::TransactedTransferForFS_Impl( const INetURLObject& aSource,
             }
         }
         else
-            eError = ERRCODE_IO_CANTREAD;
+            pImp->m_eError = ERRCODE_IO_CANTREAD;
     }
 
     return bResult;
@@ -1781,7 +1785,7 @@ void SfxMedium::Transfer_Impl()
             OSL_FAIL( "The medium name is not convertable!\n" );
     }
 
-    if ( !aNameURL.isEmpty() && ( !eError || (eError & ERRCODE_WARNING_MASK) ) )
+    if ( !aNameURL.isEmpty() && ( !pImp->m_eError || (pImp->m_eError & ERRCODE_WARNING_MASK) ) )
     {
         RTL_LOGFILE_CONTEXT( aLog, "sfx2 (mv76033) SfxMedium::Transfer_Impl, copying to target" );
 
@@ -1853,7 +1857,7 @@ void SfxMedium::Transfer_Impl()
         GetContent();
         if ( !pImp->aContent.get().is() )
         {
-            eError = ERRCODE_IO_NOTEXISTS;
+            pImp->m_eError = ERRCODE_IO_NOTEXISTS;
             return;
         }
 
@@ -1956,21 +1960,21 @@ void SfxMedium::Transfer_Impl()
             }
             catch (const ::com::sun::star::ucb::ContentCreationException& ex)
             {
-                eError = ERRCODE_IO_GENERAL;
+                pImp->m_eError = ERRCODE_IO_GENERAL;
                 if (
                     (ex.eError == ::com::sun::star::ucb::ContentCreationError_NO_CONTENT_PROVIDER    ) ||
                     (ex.eError == ::com::sun::star::ucb::ContentCreationError_CONTENT_CREATION_FAILED)
                    )
                 {
-                    eError = ERRCODE_IO_NOTEXISTSPATH;
+                    pImp->m_eError = ERRCODE_IO_NOTEXISTSPATH;
                 }
             }
             catch (const ::com::sun::star::uno::Exception&)
             {
-                eError = ERRCODE_IO_GENERAL;
+                pImp->m_eError = ERRCODE_IO_GENERAL;
             }
 
-            if ( !eError || (eError & ERRCODE_WARNING_MASK) )
+            if ( !pImp->m_eError || (pImp->m_eError & ERRCODE_WARNING_MASK) )
             {
                 // free resources, otherwise the transfer may fail
                 if ( pImp->xStorage.is() )
@@ -1997,37 +2001,37 @@ void SfxMedium::Transfer_Impl()
                 try
                 {
                     if (!aTransferContent.transferContent( aSourceContent, ::ucbhelper::InsertOperation_COPY, aFileName, nNameClash ))
-                        eError = ERRCODE_IO_GENERAL;
+                        pImp->m_eError = ERRCODE_IO_GENERAL;
                 }
                 catch ( const ::com::sun::star::ucb::CommandAbortedException& )
                 {
-                    eError = ERRCODE_ABORT;
+                    pImp->m_eError = ERRCODE_ABORT;
                 }
                 catch ( const ::com::sun::star::ucb::CommandFailedException& )
                 {
-                    eError = ERRCODE_ABORT;
+                    pImp->m_eError = ERRCODE_ABORT;
                 }
                 catch ( const ::com::sun::star::ucb::InteractiveIOException& r )
                 {
                     if ( r.Code == IOErrorCode_ACCESS_DENIED )
-                        eError = ERRCODE_IO_ACCESSDENIED;
+                        pImp->m_eError = ERRCODE_IO_ACCESSDENIED;
                     else if ( r.Code == IOErrorCode_NOT_EXISTING )
-                        eError = ERRCODE_IO_NOTEXISTS;
+                        pImp->m_eError = ERRCODE_IO_NOTEXISTS;
                     else if ( r.Code == IOErrorCode_CANT_READ )
-                        eError = ERRCODE_IO_CANTREAD;
+                        pImp->m_eError = ERRCODE_IO_CANTREAD;
                     else
-                        eError = ERRCODE_IO_GENERAL;
+                        pImp->m_eError = ERRCODE_IO_GENERAL;
                 }
                 catch ( const ::com::sun::star::uno::Exception& )
                 {
-                    eError = ERRCODE_IO_GENERAL;
+                    pImp->m_eError = ERRCODE_IO_GENERAL;
                 }
 
                 // do not switch from temporary file in case of nonfile protocol
             }
         }
 
-        if ( ( !eError || (eError & ERRCODE_WARNING_MASK) ) && !pImp->pTempFile )
+        if ( ( !pImp->m_eError || (pImp->m_eError & ERRCODE_WARNING_MASK) ) && !pImp->pTempFile )
         {
             // without a TempFile the physical and logical name should be the same after successful transfer
               ::utl::LocalFileHelper::ConvertURLToPhysicalName(
@@ -2165,7 +2169,7 @@ void SfxMedium::DoBackup_Impl()
 
     if ( !bSuccess )
     {
-        eError = ERRCODE_SFX_CANTCREATEBACKUP;
+        pImp->m_eError = ERRCODE_SFX_CANTCREATEBACKUP;
     }
 }
 
@@ -2380,7 +2384,16 @@ sal_Bool SfxMedium::IsUpdatePickList() const
 {
     return pImp? pImp->bUpdatePickList: true;
 }
-//----------------------------------------------------------------
+
+void SfxMedium::SetLongName(const OUString &rName)
+{
+    pImp->m_aLongName = rName;
+}
+
+const OUString& SfxMedium::GetLongName() const
+{
+    return pImp->m_aLongName;
+}
 
 void SfxMedium::SetDoneLink( const Link& rLink )
 {
@@ -2489,7 +2502,6 @@ void SfxMedium::Init_Impl()
 
 //------------------------------------------------------------------
 SfxMedium::SfxMedium() :
-    eError( SVSTREAM_OK ),
     nStorOpenMode( SFX_STREAM_READWRITE ),
     pURLObj(0),
     pInStream(0),
@@ -2837,7 +2849,6 @@ void SfxMedium::CompleteReOpen()
 }
 
 SfxMedium::SfxMedium(const String &rName, StreamMode nOpenMode, const SfxFilter *pFlt, SfxItemSet *pInSet) :
-    eError( SVSTREAM_OK ),
     nStorOpenMode( SFX_STREAM_READWRITE ),
     pURLObj(0),
     pInStream(0),
