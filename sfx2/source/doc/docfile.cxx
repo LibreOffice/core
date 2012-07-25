@@ -262,6 +262,7 @@ public:
     bool m_bOriginallyReadOnly:1;
     bool m_bRoot:1;
     bool m_bTriedStorage:1;
+    bool m_bRemote:1;
 
     uno::Reference < embed::XStorage > xStorage;
 
@@ -330,6 +331,7 @@ SfxMedium_Impl::SfxMedium_Impl( SfxMedium* pAntiImplP )
     m_bOriginallyReadOnly(false),
     m_bRoot(false),
     m_bTriedStorage(false),
+    m_bRemote(false),
     pAntiImpl( pAntiImplP ),
     nFileVersion( 0 ),
     pOrigFilter( 0 ),
@@ -534,7 +536,7 @@ Reference < XContent > SfxMedium::GetContent() const
     {
         SvtSaveOptions aOpt;
         bool bIsRemote = IsRemote();
-        if( (bIsRemote && !aOpt.IsSaveRelINet()) || (!bRemote && !aOpt.IsSaveRelFSys()) )
+        if( (bIsRemote && !aOpt.IsSaveRelINet()) || (!pImp->m_bRemote && !aOpt.IsSaveRelFSys()) )
             return ::rtl::OUString();
     }
 
@@ -2356,7 +2358,7 @@ void SfxMedium::GetMedium_Impl()
 //----------------------------------------------------------------
 sal_Bool SfxMedium::IsRemote()
 {
-    return bRemote;
+    return pImp->m_bRemote;
 }
 
 //------------------------------------------------------------------
@@ -2724,15 +2726,16 @@ void SfxMedium::SetIsRemote_Impl()
         case INET_PROT_NEWS:
         case INET_PROT_IMAP:
         case INET_PROT_VIM:
-            bRemote = true; break;
+            pImp->m_bRemote = true;
+        break;
         default:
-            bRemote = GetName().compareToAscii("private:msgid", 13) == 0;
+            pImp->m_bRemote = GetName().compareToAscii("private:msgid", 13) == 0;
             break;
     }
 
     // As files that are written to the remote transmission must also be able
     // to be read.
-    if( bRemote )
+    if (pImp->m_bRemote)
         nStorOpenMode |= STREAM_READ;
 }
 
