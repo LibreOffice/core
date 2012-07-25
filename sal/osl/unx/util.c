@@ -349,7 +349,8 @@ void osl_interlockedCountCheckForSingleCPU(void)
 #endif /* defined(_SC_NPROCESSORS_CONF) */
 #endif
 
-#if defined(__GNUC__)
+//might be useful on other platforms, but doesn't compiler under MACOSX anyway
+#if defined(__GNUC__) && defined(LINUX)
 //force the __data_start symbol to exist in any executables that link against
 //libuno_sal so that dlopening of the libgcj provided libjvm.so on some
 //platforms where it needs that symbol will succeed. e.g. Debian mips/lenny
