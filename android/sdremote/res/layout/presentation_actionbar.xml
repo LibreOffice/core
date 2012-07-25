@@ -12,10 +12,12 @@
         android:textOff=""
         android:textOn="" />
 
-    <TextView
+    <ToggleButton
         android:id="@+id/actionbar_time"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:background="@drawable/actionbar_toggle"
         android:gravity="center"
         android:textColor="#FFFFFF"
         android:textSize="22dp" />

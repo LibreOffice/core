@@ -20,7 +20,6 @@ import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.FrameLayout;
-import android.widget.TextView;
 import android.widget.ToggleButton;
 
 public class PresentationActivity extends Activity {
@@ -107,7 +106,7 @@ public class PresentationActivity extends Activity {
 	private class ActionBarManager implements OnClickListener,
 	                FragmentManager.OnBackStackChangedListener {
 
-		private TextView mTimeLabel;
+		private ToggleButton mTimeLabel;
 		private ToggleButton mThumbnailButton;
 
 		private String aTimeFormat = getResources().getString(
@@ -134,7 +133,7 @@ public class PresentationActivity extends Activity {
 			                .findViewById(R.id.actionbar_thumbnailtoggle);
 			mThumbnailButton.setOnClickListener(this);
 
-			mTimeLabel = (TextView) aBar.getCustomView().findViewById(
+			mTimeLabel = (ToggleButton) aBar.getCustomView().findViewById(
 			                R.id.actionbar_time);
 			mThumbnailButton.setOnClickListener(this);
 
