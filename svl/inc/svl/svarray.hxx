@@ -80,6 +80,7 @@
 
 #include <string.h>     // memmove()
 #include <limits.h>     // USHRT_MAX
+#include <osl/diagnose.h>
 #include <rtl/alloc.h>
 #include <tools/solar.h>
 
