@@ -962,10 +962,12 @@ void RTFDocumentImpl::text(OUString& rString)
         case DESTINATION_MSTRIKEH:
         case DESTINATION_MDEGHIDE:
         case DESTINATION_MBEGCHR:
+        case DESTINATION_MSEPCHR:
         case DESTINATION_MENDCHR:
         case DESTINATION_MSUBHIDE:
         case DESTINATION_MSUPHIDE:
         case DESTINATION_MTYPE:
+        case DESTINATION_MGROW:
             m_aStates.top().aDestinationText.append(rString);
             break;
         case DESTINATION_EQINSTRUCTION:
@@ -1424,6 +1426,7 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
         case RTF_MSTRIKEH: m_aStates.top().nDestinationState = DESTINATION_MSTRIKEH; break;
         case RTF_MDEGHIDE: m_aStates.top().nDestinationState = DESTINATION_MDEGHIDE; break;
         case RTF_MTYPE: m_aStates.top().nDestinationState = DESTINATION_MTYPE; break;
+        case RTF_MGROW: m_aStates.top().nDestinationState = DESTINATION_MGROW; break;
         case RTF_MHIDETOP:
         case RTF_MHIDEBOT:
         case RTF_MHIDELEFT:
@@ -1434,6 +1437,7 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
         case RTF_MSUBHIDE: m_aStates.top().nDestinationState = DESTINATION_MSUBHIDE; break;
         case RTF_MSUPHIDE: m_aStates.top().nDestinationState = DESTINATION_MSUPHIDE; break;
         case RTF_MBEGCHR: m_aStates.top().nDestinationState = DESTINATION_MBEGCHR; break;
+        case RTF_MSEPCHR: m_aStates.top().nDestinationState = DESTINATION_MSEPCHR; break;
         case RTF_MENDCHR: m_aStates.top().nDestinationState = DESTINATION_MENDCHR; break;
         OPEN_M_TOKEN(OMATH, oMath);
         OPEN_M_TOKEN(F, f);
@@ -1478,6 +1482,8 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
         OPEN_M_TOKEN(SSUBSUPPR, sSubSupPr);
         OPEN_M_TOKEN(SPRE, sPre);
         OPEN_M_TOKEN(SPREPR, sPrePr);
+        OPEN_M_TOKEN(BOX, box);
+        OPEN_M_TOKEN(EQARR, eqArr);
         default:
             SAL_INFO("writerfilter", OSL_THIS_FUNC << ": TODO handle destination '" << lcl_RtfToString(nKeyword) << "'");
             // Make sure we skip destinations (even without \*) till we don't handle them
@@ -3138,6 +3144,8 @@ int RTFDocumentImpl::pushState()
     case DESTINATION_SHAPETEXT:
     case DESTINATION_FORMFIELD:
     case DESTINATION_EQINSTRUCTION:
+        m_aStates.top().nDestinationState = DESTINATION_NORMAL;
+    break;
     case DESTINATION_MNUM:
     case DESTINATION_MDEN:
     case DESTINATION_ME:
@@ -3146,7 +3154,7 @@ int RTFDocumentImpl::pushState()
     case DESTINATION_MSUB:
     case DESTINATION_MSUP:
     case DESTINATION_MDEG:
-        m_aStates.top().nDestinationState = DESTINATION_NORMAL;
+        m_aStates.top().nDestinationState = DESTINATION_MR;
     break;
     case DESTINATION_FIELDINSTRUCTION:
         m_aStates.top().nDestinationState = !m_bEq ? DESTINATION_NORMAL : DESTINATION_EQINSTRUCTION;
@@ -3627,10 +3635,12 @@ int RTFDocumentImpl::popState()
     case DESTINATION_MSTRIKEH: if (!nMathToken) nMathToken = M_TOKEN(strikeH);
     case DESTINATION_MDEGHIDE: if (!nMathToken) nMathToken = M_TOKEN(degHide);
     case DESTINATION_MBEGCHR: if (!nMathToken) nMathToken = M_TOKEN(begChr);
+    case DESTINATION_MSEPCHR: if (!nMathToken) nMathToken = M_TOKEN(sepChr);
     case DESTINATION_MENDCHR: if (!nMathToken) nMathToken = M_TOKEN(endChr);
     case DESTINATION_MSUBHIDE: if (!nMathToken) nMathToken = M_TOKEN(subHide);
     case DESTINATION_MSUPHIDE: if (!nMathToken) nMathToken = M_TOKEN(supHide);
     case DESTINATION_MTYPE: if (!nMathToken) nMathToken = M_TOKEN(type);
+    case DESTINATION_MGROW: if (!nMathToken) nMathToken = M_TOKEN(grow);
     {
         oox::formulaimport::XmlStream::AttributeList aAttribs;
         aAttribs[M_TOKEN(val)] = m_aStates.top().aDestinationText.makeStringAndClear();
@@ -3673,6 +3683,8 @@ int RTFDocumentImpl::popState()
     case DESTINATION_MSSUBSUPPR: m_aMathBuffer.appendClosingTag(M_TOKEN(sSubSupPr)); break;
     case DESTINATION_MSPRE: m_aMathBuffer.appendClosingTag(M_TOKEN(sPre)); break;
     case DESTINATION_MSPREPR: m_aMathBuffer.appendClosingTag(M_TOKEN(sPrePr)); break;
+    case DESTINATION_MBOX: m_aMathBuffer.appendClosingTag(M_TOKEN(box)); break;
+    case DESTINATION_MEQARR: m_aMathBuffer.appendClosingTag(M_TOKEN(eqArr)); break;
     default: break;
     }
 
