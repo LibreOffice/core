@@ -258,6 +258,8 @@ public:
     bool m_bVersionsAlreadyLoaded:1;
     bool m_bLocked:1;
     bool m_bGotDateTime:1;
+    bool m_bRemoveBackup:1;
+    bool m_bOriginallyReadOnly:1;
 
     uno::Reference < embed::XStorage > xStorage;
 
@@ -291,7 +293,6 @@ public:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler > xInteraction;
 
-    bool        m_bRemoveBackup;
     ::rtl::OUString m_aBackupURL;
 
     // the following member is changed and makes sence only during saving
@@ -302,8 +303,6 @@ public:
     util::DateTime m_aDateTime;
 
     uno::Reference< logging::XSimpleLogRing > m_xLogRing;
-
-    bool m_originallyReadOnly;
 
     SfxMedium_Impl( SfxMedium* pAntiImplP );
     ~SfxMedium_Impl();
@@ -325,15 +324,15 @@ SfxMedium_Impl::SfxMedium_Impl( SfxMedium* pAntiImplP )
     m_bVersionsAlreadyLoaded( false ),
     m_bLocked( false ),
     m_bGotDateTime( false ),
+    m_bRemoveBackup( false ),
+    m_bOriginallyReadOnly(false),
     pAntiImpl( pAntiImplP ),
     nFileVersion( 0 ),
     pOrigFilter( 0 ),
     aExpireTime( Date( Date::SYSTEM ) + 10, Time( Time::SYSTEM ) ),
     pTempFile( NULL ),
     nLastStorageError( 0 ),
-    m_bRemoveBackup( false ),
-    m_nSignatureState( SIGNATURESTATE_NOSIGNATURES ),
-    m_originallyReadOnly(false)
+    m_nSignatureState( SIGNATURESTATE_NOSIGNATURES )
 {
     aDoneLink.CreateMutex();
 }
@@ -1051,7 +1050,7 @@ bool SfxMedium::LockOrigFileOnDemand( sal_Bool bLoading, sal_Bool bNoUI )
 #endif
 
                 if ( bContentReadonly )
-                    pImp->m_originallyReadOnly = true;
+                    pImp->m_bOriginallyReadOnly = true;
             }
 
             // do further checks only if the file not readonly in fs
@@ -2894,12 +2893,12 @@ SfxMedium::SfxMedium( const ::com::sun::star::uno::Sequence< ::com::sun::star::b
 
     SFX_ITEMSET_ARG( pSet, pReadOnlyItem, SfxBoolItem, SID_DOC_READONLY, false );
     if ( pReadOnlyItem && pReadOnlyItem->GetValue() )
-        pImp->m_originallyReadOnly = true;
+        pImp->m_bOriginallyReadOnly = true;
 
     SFX_ITEMSET_ARG( pSet, pFileNameItem, SfxStringItem, SID_FILE_NAME, false );
     if (!pFileNameItem) throw uno::RuntimeException();
     aLogicName = pFileNameItem->GetValue();
-    nStorOpenMode = pImp->m_originallyReadOnly ? SFX_STREAM_READONLY : SFX_STREAM_READWRITE;
+    nStorOpenMode = pImp->m_bOriginallyReadOnly ? SFX_STREAM_READONLY : SFX_STREAM_READWRITE;
     Init_Impl();
 }
 
@@ -3248,7 +3247,7 @@ sal_Bool SfxMedium::IsReadOnly()
 
 bool SfxMedium::IsOriginallyReadOnly() const
 {
-    return pImp->m_originallyReadOnly;
+    return pImp->m_bOriginallyReadOnly;
 }
 
 //----------------------------------------------------------------
