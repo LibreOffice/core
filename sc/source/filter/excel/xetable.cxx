@@ -2146,14 +2146,26 @@ XclExpDimensions* XclExpRowBuffer::GetDimensions()
 
 XclExpRow& XclExpRowBuffer::GetOrCreateRow( sal_uInt32 nXclRow, bool bRowAlwaysEmpty )
 {
-    RowMap::iterator itr = maRowMap.find(nXclRow);
-    if (itr == maRowMap.end())
+    RowMap::iterator itr = maRowMap.begin();
+    ScDocument& rDoc = GetRoot().GetDoc();
+    SCTAB nScTab = GetRoot().GetCurrScTab();
+    for ( size_t nFrom = maRowMap.size(); nFrom <= nXclRow; ++nFrom )
     {
-        RowRef p(new XclExpRow(GetRoot(), nXclRow, maOutlineBfr, bRowAlwaysEmpty));
-        ::std::pair<RowMap::iterator, bool> r = maRowMap.insert(RowMap::value_type(nXclRow, p));
-        itr = r.first;
+        itr = maRowMap.find(nFrom);
+        if ( itr == maRowMap.end() )
+        {
+            // only create RowMap entries for rows that differ from previous,
+            // or if it is the desired row
+            if ( !nFrom || ( nFrom == nXclRow ) || ( nFrom && ( rDoc.GetRowHeight(nFrom, nScTab, false) != rDoc.GetRowHeight(nFrom-1, nScTab, false) ) ) )
+            {
+                RowRef p(new XclExpRow(GetRoot(), nFrom, maOutlineBfr, bRowAlwaysEmpty));
+                maRowMap.insert(RowMap::value_type(nFrom, p));
+            }
+        }
     }
+    itr = maRowMap.find(nXclRow);
     return *itr->second;
+
 }
 
 // ============================================================================
