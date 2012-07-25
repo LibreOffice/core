@@ -72,7 +72,6 @@ class SFX2_DLLPUBLIC SfxMedium : public SvRefBase
     INetURLObject*      pURLObj;
     SvGlobalName        aFilterClass;
     SvStream*           pInStream;
-    SvStream*           pOutStream;
     SfxMedium_Impl*     pImp;
 
 #if _SOLAR__PRIVATE
