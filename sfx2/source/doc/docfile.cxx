@@ -2387,15 +2387,13 @@ sal_Bool SfxMedium::IsRemote()
 
 void SfxMedium::SetUpdatePickList(sal_Bool bVal)
 {
-    if(!pImp)
-        pImp = new SfxMedium_Impl( this );
     pImp->bUpdatePickList = bVal;
 }
 //------------------------------------------------------------------
 
 sal_Bool SfxMedium::IsUpdatePickList() const
 {
-    return pImp? pImp->bUpdatePickList: true;
+    return pImp->bUpdatePickList;
 }
 
 void SfxMedium::SetLongName(const OUString &rName)
