@@ -73,7 +73,6 @@ class SFX2_DLLPUBLIC SfxMedium : public SvRefBase
     SvGlobalName        aFilterClass;
     SvStream*           pInStream;
     SvStream*           pOutStream;
-    const SfxFilter*    pFilter;
     SfxMedium_Impl*     pImp;
 
     com::sun::star::uno::Reference<com::sun::star::io::XInputStream>
@@ -134,7 +133,7 @@ public:
 
     void                SetReferer( const String& rRefer );
     void                SetFilter(const SfxFilter *pFlt, sal_Bool bResetOrig = sal_False);
-    const SfxFilter *   GetFilter() const { return pFilter; }
+    const SfxFilter* GetFilter() const;
     const SfxFilter *   GetOrigFilter( sal_Bool bNotCurrent = sal_False ) const;
     const rtl::OUString& GetOrigURL() const;
 

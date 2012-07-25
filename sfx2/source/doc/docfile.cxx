@@ -274,6 +274,7 @@ public:
     uno::Reference < embed::XStorage > xStorage;
 
     mutable SfxItemSet* m_pSet;
+    const SfxFilter* m_pFilter;
     SfxMedium*       pAntiImpl;
 
     long             nFileVersion;
@@ -343,6 +344,7 @@ SfxMedium_Impl::SfxMedium_Impl( SfxMedium* pAntiImplP ) :
     m_bRemote(false),
     m_bInputStreamIsReadOnly(false),
     m_pSet(NULL),
+    m_pFilter(NULL),
     pAntiImpl( pAntiImplP ),
     nFileVersion( 0 ),
     pOrigFilter( 0 ),
@@ -2510,7 +2512,6 @@ SfxMedium::SfxMedium() :
     pURLObj(0),
     pInStream(0),
     pOutStream(0),
-    pFilter(0),
     pImp(new SfxMedium_Impl( this ))
 {
     Init_Impl();
@@ -2564,15 +2565,20 @@ SfxMedium::GetInteractionHandler()
 
 void SfxMedium::SetFilter( const SfxFilter* pFilterP, sal_Bool /*bResetOrig*/ )
 {
-    pFilter = pFilterP;
+    pImp->m_pFilter = pFilterP;
     pImp->nFileVersion = 0;
+}
+
+const SfxFilter* SfxMedium::GetFilter() const
+{
+    return pImp->m_pFilter;
 }
 
 //----------------------------------------------------------------
 
 const SfxFilter* SfxMedium::GetOrigFilter( sal_Bool bNotCurrent ) const
 {
-    return ( pImp->pOrigFilter || bNotCurrent ) ? pImp->pOrigFilter : pFilter;
+    return ( pImp->pOrigFilter || bNotCurrent ) ? pImp->pOrigFilter : pImp->m_pFilter;
 }
 
 //----------------------------------------------------------------
@@ -2856,10 +2862,10 @@ SfxMedium::SfxMedium(const String &rName, StreamMode nOpenMode, const SfxFilter 
     pURLObj(0),
     pInStream(0),
     pOutStream(0),
-    pFilter(pFlt),
     pImp(new SfxMedium_Impl( this ))
 {
     pImp->m_pSet = pInSet;
+    pImp->m_pFilter = pFlt;
     pImp->m_aLogicName = rName;
     nStorOpenMode = nOpenMode;
     Init_Impl();
@@ -2871,7 +2877,6 @@ SfxMedium::SfxMedium( const ::com::sun::star::uno::Sequence< ::com::sun::star::b
     pURLObj(0),
     pInStream(0),
     pOutStream(0),
-    pFilter(0),
     pImp(new SfxMedium_Impl( this ))
 {
     SfxAllItemSet *pParams = new SfxAllItemSet( SFX_APP()->GetPool() );
@@ -2882,7 +2887,7 @@ SfxMedium::SfxMedium( const ::com::sun::star::uno::Sequence< ::com::sun::star::b
     SFX_ITEMSET_ARG( pImp->m_pSet, pFilterNameItem, SfxStringItem, SID_FILTER_NAME, false );
     if( pFilterNameItem )
         aFilterName = pFilterNameItem->GetValue();
-    pFilter = SFX_APP()->GetFilterMatcher().GetFilter4FilterName( aFilterName );
+    pImp->m_pFilter = SFX_APP()->GetFilterMatcher().GetFilter4FilterName( aFilterName );
 
     SFX_ITEMSET_ARG( pImp->m_pSet, pSalvageItem, SfxStringItem, SID_DOC_SALVAGE, false );
     if( pSalvageItem )
@@ -2934,8 +2939,8 @@ SfxMedium::SfxMedium( const uno::Reference < embed::XStorage >& rStor, const Str
     pImp->m_bRoot = bRootP;
 
     String aType = SfxFilter::GetTypeFromStorage( rStor );
-    pFilter = SFX_APP()->GetFilterMatcher().GetFilter4EA( aType );
-    DBG_ASSERT( pFilter, "No Filter for storage found!" );
+    pImp->m_pFilter = SFX_APP()->GetFilterMatcher().GetFilter4EA( aType );
+    DBG_ASSERT( pImp->m_pFilter, "No Filter for storage found!" );
 
     Init_Impl();
     pImp->xStorage = rStor;
@@ -2956,8 +2961,8 @@ SfxMedium::SfxMedium( const uno::Reference < embed::XStorage >& rStor, const Str
 {
     pImp->m_bRoot = bRootP;
 
-	pFilter = SFX_APP()->GetFilterMatcher().GetFilter4EA( rTypeName );
-    DBG_ASSERT( pFilter, "No Filter for storage found!" );
+    pImp->m_pFilter = SFX_APP()->GetFilterMatcher().GetFilter4EA( rTypeName );
+    DBG_ASSERT( pImp->m_pFilter, "No Filter for storage found!" );
 
     Init_Impl();
     pImp->xStorage = rStor;
@@ -2991,8 +2996,6 @@ SfxMedium::~SfxMedium()
             OSL_FAIL("Couldn't remove temporary file!");
         }
     }
-
-    pFilter = 0;
 
     delete pURLObj;
     delete pImp;
@@ -3256,8 +3259,8 @@ sal_Bool SfxMedium::IsReadOnly()
 
     // a) ReadOnly filter cant produce read/write contents!
     bReadOnly = (
-                    (pFilter                                                                         ) &&
-                    ((pFilter->GetFilterFlags() & SFX_FILTER_OPENREADONLY) == SFX_FILTER_OPENREADONLY)
+                    (pImp->m_pFilter                                                                         ) &&
+                    ((pImp->m_pFilter->GetFilterFlags() & SFX_FILTER_OPENREADONLY) == SFX_FILTER_OPENREADONLY)
                 );
 
     // b) if filter allow read/write contents .. check open mode of the storage
