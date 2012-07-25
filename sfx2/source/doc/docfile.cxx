@@ -367,13 +367,10 @@ SfxMedium_Impl::SfxMedium_Impl( SfxMedium* pAntiImplP ) :
 //------------------------------------------------------------------
 SfxMedium_Impl::~SfxMedium_Impl()
 {
-
     aDoneLink.ClearPendingCall();
     aAvailableLink.ClearPendingCall();
 
-    if ( pTempFile )
-        delete pTempFile;
-
+    delete pTempFile;
     delete m_pSet;
     delete m_pURLObj;
 }
