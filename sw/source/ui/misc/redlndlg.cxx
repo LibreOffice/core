@@ -397,12 +397,13 @@ void SwRedlineAcceptDlg::Activate()
         return;
 
     SwView *pView = ::GetActiveView();
-    SwWait aWait( *pView->GetDocShell(), sal_False );
-
-    aUsedSeqNo.clear();
 
     if (!pView) // can happen when switching to another app, when a Listbox in the dialog
         return; // had the focus previously (actually THs Bug)
+
+    SwWait aWait( *pView->GetDocShell(), sal_False );
+
+    aUsedSeqNo.clear();
 
     // did something change?
     SwWrtShell* pSh = pView->GetWrtShellPtr();
