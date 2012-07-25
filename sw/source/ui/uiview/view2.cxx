@@ -2032,7 +2032,7 @@ long SwView::InsertMedium( sal_uInt16 nSlotId, SfxMedium* pMedium, sal_Int16 nVe
             delete pMedium;
             return -1;
         }
-        pDocSh->RegisterTransfer( *pMedium );
+
         pMedium->DownLoad();    // ggfs. den DownLoad anstossen
         if( aRef.Is() && 1 < aRef->GetRefCount() )  // noch gueltige Ref?
         {

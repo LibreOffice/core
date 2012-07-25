@@ -1043,20 +1043,6 @@ void SfxObjectShell::SetActivateEvent_Impl(sal_uInt16 nId )
         pImp->nEventId = nId;
 }
 
-//--------------------------------------------------------------------
-
-void SfxObjectShell::RegisterTransfer( SfxMedium& rMedium )
-/*  [Description]
-
-    All media, which are placed in order to load parts of a document must be
-    registered by a related SfxObjectShell. Thus documents can be canceled.
-*/
-{
-    rMedium.SetReferer( GetMedium()->GetName() );
-}
-
-//-------------------------------------------------------------------------
-
 void SfxObjectShell::PrepareReload( )
 /*  [Description]
 

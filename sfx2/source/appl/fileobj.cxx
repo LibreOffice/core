@@ -267,8 +267,6 @@ sal_Bool SvFileObject::LoadFile_Impl()
     xMed->setStreamToLoadFrom(
         aStreamToLoadFrom.m_xInputStreamToLoadFrom,
         aStreamToLoadFrom.m_bIsReadOnly);
-    if( sReferer.Len() )
-        xMed->SetReferer( sReferer );
 
     if( !bSynchron )
     {

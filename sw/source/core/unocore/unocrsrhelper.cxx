@@ -875,7 +875,6 @@ void InsertFile(SwUnoCrsr* pUnoCrsr,
     // this sourcecode is not responsible for the lifetime of the shell, SfxObjectShellLock should not be used
     SfxObjectShellRef aRef( pDocSh );
 
-    pDocSh->RegisterTransfer( *pMed );
     pMed->DownLoad();   // if necessary: start the download
     if( aRef.Is() && 1 < aRef->GetRefCount() )  // Ref still valid?
     {

@@ -790,25 +790,11 @@ namespace frm
     #ifdef USE_REGISTER_TRANSFER
             if( pObjSh )
             {
-                // Medium registrieren, damit abgebrochen werden kann
-                pObjSh->RegisterTransfer( *m_pMedium );
-
                 // Target-Frame uebertragen, damit auch javascript:-URLs
                 // "geladen" werden koennen.
                 const SfxMedium *pShMedium = pObjSh->GetMedium();
                 if( pShMedium )
                     m_pMedium->SetLoadTargetFrame(pShMedium->GetLoadTargetFrame());
-            }
-            else
-            {
-                // Keine Object-Shell, aber ein Medium? Dann uebernehmen wir
-                // zumindest den Referer.
-                if( xModel.is() )
-                {
-                    ::rtl::OUString sReferer( xModel->getURL() );
-                    if( sReferer.getLength() )
-                        m_pMedium->SetReferer( OUStringToString(sReferer, CHARSET_SYSTEM) );
-                }
             }
     #else
             if( pObjSh )
@@ -818,13 +804,6 @@ namespace frm
                 const SfxMedium *pShMedium = pObjSh->GetMedium();
                 if( pShMedium )
                     m_pMedium->SetLoadTargetFrame(pShMedium->GetLoadTargetFrame());
-            }
-
-            if( xModel.is() )
-            {
-                ::rtl::OUString sReferer( xModel->getURL() );
-                if( !sReferer.isEmpty() )
-                    m_pMedium->SetReferer( sReferer );
             }
     #endif
 
