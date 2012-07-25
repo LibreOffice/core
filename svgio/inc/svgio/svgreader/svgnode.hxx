@@ -50,6 +50,7 @@ namespace svgio
     namespace svgreader
     {
         typedef ::std::vector< SvgNode* > SvgNodeVector;
+        typedef ::std::vector< const SvgStyleAttributes* > SvgStyleAttributeVector;
 
         enum XmlSpace
         {
@@ -78,6 +79,13 @@ namespace svgio
 
             /// XmlSpace value
             XmlSpace                    maXmlSpace;
+
+            /// CSS styles
+            SvgStyleAttributeVector     maCssStyleVector;
+
+        protected:
+            /// helper to evtl. link to css style
+            const SvgStyleAttributes* checkForCssStyle(const rtl::OUString& rClassStr, const SvgStyleAttributes& rOriginal) const;
 
         public:
             SvgNode(

@@ -139,12 +139,18 @@ namespace svgio
             TextAnchor_end
         };
 
+        enum FillRule
+        {
+            FillRule_notset,
+            FillRule_nonzero,
+            FillRule_evenodd
+        };
+
         class SvgStyleAttributes
         {
         private:
             SvgNode&                    mrOwner;
             const SvgStyleAttributes*   mpCssStyleParent;
-
             SvgPaint                    maFill;
             SvgPaint                    maStroke;
             SvgPaint                    maStopColor;
@@ -187,17 +193,18 @@ namespace svgio
             rtl::OUString               maMarkerEndXLink;
             const SvgMarkerNode*        mpMarkerEndXLink;
 
+            /// fill rule
+            FillRule                    maFillRule;
+
+            // ClipRule setting (only valid wne mbIsClipPathContent == true, default is FillRule_nonzero)
+            FillRule                    maClipRule;
+
             /// bitfield
-            bool                        maFillRule : 1; // true: NonZero, false: EvenOdd
-            bool                        maFillRuleSet : 1;
 
             // defines if this attributes are part of a ClipPath. If yes,
             // rough geometry will be created on decomposition by patching
             // vaules for fill, stroke, strokeWidth and others
             bool                        mbIsClipPathContent : 1;
-
-            // ClipRule setting (only valid wne mbIsClipPathContent == true)
-            bool                        mbClipRule : 1; // true == nonzero(default), false == evenodd
 
             /// internal helpers
             void add_fillGradient(
@@ -256,8 +263,9 @@ namespace svgio
                 const drawinglayer::primitive2d::Primitive2DSequence& rSource,
                 const basegfx::B2DHomMatrix* pTransform) const;
 
-            /// helper to evtl. link to css style
-            void checkForCssStyle(const rtl::OUString& rClassStr) const;
+            /// helper to set mpCssStyleParent temporarily for CSS style hierarchies
+            void setCssStyleParent(const SvgStyleAttributes* pNew) { mpCssStyleParent = pNew; }
+            const SvgStyleAttributes* getCssStyleParent() const { return mpCssStyleParent; }
 
             /// scan helpers
             void readStyle(const rtl::OUString& rCandidate);
@@ -307,8 +315,8 @@ namespace svgio
             void setFillOpacity(const SvgNumber& rFillOpacity = SvgNumber()) { maFillOpacity = rFillOpacity; }
 
             /// fill rule content
-            bool getFillRule() const;
-            void setFillRule(const bool* pFillRule = 0);
+            const FillRule getFillRule() const;
+            void setFillRule(const FillRule aFillRule = FillRule_notset) { maFillRule = aFillRule; }
 
             /// fill StrokeDasharray content
             const SvgNumberVector& getStrokeDasharray() const;
