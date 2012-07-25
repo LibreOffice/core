@@ -26,10 +26,12 @@
  *
  ************************************************************************/
 
-#ifndef _MySVXACORR_HXX
-#define _MySVXACORR_HXX
+#ifndef EE_SVXACORR_HXX
+#define EE_SVXACORR_HXX
 
 #include <com/sun/star/embed/XStorage.hpp>
+
+#include <o3tl/sorted_vector.hxx>
 #include <tools/rtti.hxx>
 #include <i18npool/lang.h>
 #include <tools/time.hxx>
@@ -45,11 +47,25 @@
 class CharClass;
 class SfxPoolItem;
 class SvxAutoCorrect;
-class SvStringsISortDtor;
 class SfxObjectShell;
 class SotStorageRef;
 class SotStorage;
 class Window;
+
+struct CompareSvStringsISortDtor
+{
+    bool operator()( String* const& lhs, String* const& rhs ) const
+    {
+        return lhs->CompareIgnoreCaseToAscii( *rhs ) == COMPARE_LESS;
+    }
+};
+
+class SvStringsISortDtor
+    : public o3tl::sorted_vector<String*, CompareSvStringsISortDtor>
+{
+public:
+    ~SvStringsISortDtor() { DeleteAndDestroyAll(); }
+};
 
 // Auto correct flags
 const long CptlSttSntnc     = 0x00000001;   // Capital letters at the beginning of a sentence

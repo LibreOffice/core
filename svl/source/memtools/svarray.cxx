@@ -28,10 +28,4 @@ sal_uInt16 SvPtrarr::GetPos( const VoidPtr& aElement ) const
     return ( n >= nA ? USHRT_MAX : n );
 }
 
-
-bool CompareSvStringsISortDtor::operator()( String* const& lhs, String* const& rhs ) const
-{
-    return lhs->CompareIgnoreCaseToAscii( *rhs ) == COMPARE_LESS;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -31,24 +31,8 @@
 #include <deque>
 
 #include <tools/string.hxx>
-#include <o3tl/sorted_vector.hxx>
 
 typedef String* StringPtr;
-
-#ifndef _SVSTDARR_STRINGSISORTDTOR_DECL
-
-struct SVL_DLLPUBLIC CompareSvStringsISortDtor
-{
-    bool operator()( String* const& lhs, String* const& rhs ) const;
-};
-class SVL_DLLPUBLIC SvStringsISortDtor : public o3tl::sorted_vector<String*, CompareSvStringsISortDtor >
-{
-public:
-    ~SvStringsISortDtor() { DeleteAndDestroyAll(); }
-};
-
-#define _SVSTDARR_STRINGSISORTDTOR_DECL
-#endif
 
 typedef std::deque< xub_StrLen > SvXub_StrLens;
 
