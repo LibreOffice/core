@@ -71,7 +71,6 @@ class SFX2_DLLPUBLIC SfxMedium : public SvRefBase
     sal_uInt32          eError;
     StreamMode          nStorOpenMode;
     INetURLObject*      pURLObj;
-    rtl::OUString       aName;
     SvGlobalName        aFilterClass;
     SvStream*           pInStream;
     SvStream*           pOutStream;
