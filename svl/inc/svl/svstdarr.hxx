@@ -31,6 +31,4 @@
 
 #include <tools/string.hxx>
 
-typedef String* StringPtr;
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

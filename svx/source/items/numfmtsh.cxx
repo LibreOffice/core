@@ -696,7 +696,7 @@ short SvxNumberFormatShell::FillEListWithFormats_Impl( std::vector<String*>& rLi
         CategoryToPos_Impl(nMyCat,nMyType);
         aNewFormNInfo=  pNumEntry->GetFormatstring();
 
-        const StringPtr pStr = new String(aNewFormNInfo);
+        String *const pStr = new String(aNewFormNInfo);
 
         if ( nNFEntry == nCurFormatKey )
         {
@@ -740,7 +740,7 @@ short SvxNumberFormatShell::FillEListWithDateTime_Impl( std::vector<String*>& rL
             CategoryToPos_Impl(nMyCat,nMyType);
             aNewFormNInfo=  pNumEntry->GetFormatstring();
 
-            const StringPtr pStr = new String(aNewFormNInfo);
+            String *const pStr = new String(aNewFormNInfo);
 
             if ( nNFEntry == nCurFormatKey )
             {
@@ -829,7 +829,7 @@ short SvxNumberFormatShell::FillEListWithSysCurrencys( std::vector<String*>& rLi
         CategoryToPos_Impl(nMyCat,nMyType);
         aNewFormNInfo=  pNumEntry->GetFormatstring();
 
-        const StringPtr pStr = new String(aNewFormNInfo);
+        String *const pStr = new String(aNewFormNInfo);
 
         if ( nNFEntry == nCurFormatKey )
         {
@@ -871,7 +871,7 @@ short SvxNumberFormatShell::FillEListWithSysCurrencys( std::vector<String*>& rLi
                     CategoryToPos_Impl(nMyCat,nMyType);
                     aNewFormNInfo=  pNumEntry->GetFormatstring();
 
-                    const StringPtr pStr = new String(aNewFormNInfo);
+                    String *const pStr = new String(aNewFormNInfo);
 
                     if ( nKey == nCurFormatKey ) nSelPos =aCurEntryList.size();
                     rList.push_back( pStr );
@@ -1033,7 +1033,7 @@ short SvxNumberFormatShell::FillEListWithUserCurrencys( std::vector<String*>& rL
         size_t j;
         for( j=0; j < aList.size(); ++j )
         {
-            const StringPtr pTestStr=aList[j];
+            const String * pTestStr=aList[j];
 
             if(*pTestStr==aInsStr)
             {
@@ -1125,7 +1125,7 @@ short SvxNumberFormatShell::FillEListWithUsD_Impl( std::vector<String*>& rList,
                 }
                 if(bFlag)
                 {
-                    const StringPtr pStr = new String(aNewFormNInfo);
+                    String *const pStr = new String(aNewFormNInfo);
 
                     if ( nKey == nCurFormatKey ) nSelPos = aCurEntryList.size();
                     rList.push_back( pStr );

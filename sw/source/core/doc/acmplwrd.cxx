@@ -354,7 +354,7 @@ void SwAutoCompleteWord::SetMinWordLen( sal_uInt16 n )
 sal_Bool SwAutoCompleteWord::GetRange( const String& rWord, sal_uInt16& rStt,
                                     sal_uInt16& rEnd ) const
 {
-    const StringPtr pStr = (StringPtr)&rWord;
+    const String * pStr = &rWord;
     editeng::IAutoCompleteString hack(*pStr); // UGLY
     rStt = m_WordList.find(&hack) - m_WordList.begin();
     rEnd = rStt;
