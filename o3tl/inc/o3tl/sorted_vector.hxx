@@ -68,11 +68,6 @@ public:
     }
 
     // hack: public erase with const_iterator, should not change sort order
-    void erase(const_iterator const& position)
-    {
-        base_t::erase(begin_nonconst() + (position - begin()));
-    }
-
     void erase(const_iterator const& first, const_iterator const& last)
     {
         base_t::erase(begin_nonconst() + (first - begin()),

@@ -320,7 +320,7 @@ void SwAutoCompleteWord::SetMaxCount( sal_uInt16 nNewMax )
                 m_WordList.find(aLRULst[ nLRUIndex++ ]);
             OSL_ENSURE( m_WordList.end() != it, "String not found" );
             editeng::IAutoCompleteString *const pDel = *it;
-            m_WordList.erase(it);
+            m_WordList.erase(it - m_WordList.begin());
             delete pDel;
         }
         aLRULst.erase( aLRULst.begin() + nNewMax - 1, aLRULst.end() );
@@ -383,7 +383,6 @@ void SwAutoCompleteWord::CheckChangedList(
             SwAutoCompleteString *const pDel =
                 dynamic_cast<SwAutoCompleteString*>(m_WordList[nMyPos]);
             m_WordList.erase(nMyPos);
-
             SwAutoCompleteStringPtrDeque::iterator it = std::find( aLRULst.begin(), aLRULst.end(), pDel );
             OSL_ENSURE( aLRULst.end() != it, "String not found" );
             aLRULst.erase( it );
