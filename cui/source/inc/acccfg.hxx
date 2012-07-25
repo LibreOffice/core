@@ -90,7 +90,8 @@ public:
 struct TAccInfo
 {
     public:
-
+        /** its important to set sal_True as default -
+        because only fix entries will be disabled later ...*/
         TAccInfo(      sal_Int32 nKeyPos ,
                        sal_Int32 nListPos,
                  const KeyCode&  aKey    )
@@ -99,8 +100,6 @@ struct TAccInfo
             , m_bIsConfigurable(sal_True )
             , m_sCommand       (         )
             , m_aKey           (aKey     )
-            // its important to set sal_True as default -
-            // because only fix entries will be disabled later ...
         {}
 
         sal_Bool isConfigured() const

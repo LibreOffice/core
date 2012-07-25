@@ -174,8 +174,8 @@ private:
 
     SvxConfigEntry* pRootEntry;
 
-    // static holder of the default menu data
-    static MenuSaveInData* pDefaultData;
+
+    static MenuSaveInData* pDefaultData;    ///< static holder of the default menu data
 
     static void SetDefaultData( MenuSaveInData* pData ) {pDefaultData = pData;}
     static MenuSaveInData* GetDefaultData() { return pDefaultData; }
@@ -214,7 +214,7 @@ public:
 
     ~MenuSaveInData();
 
-    // methods inherited from SaveInData
+    /// methods inherited from SaveInData
     SvxEntries*         GetEntries();
     void                SetEntries( SvxEntries* );
     bool                HasURL( const rtl::OUString& URL ) { (void)URL; return sal_False; }
@@ -242,8 +242,8 @@ private:
     bool                        bIsMovable;
     bool                        bIsParentData;
 
-    // toolbar specific properties
-    bool                        bIsVisible;
+
+    bool                        bIsVisible;    ///< toolbar specific properties
     sal_Int32                   nStyle;
 
     ::com::sun::star::uno::Reference<
@@ -414,8 +414,8 @@ protected:
 
     SvxScriptSelectorDialog*            pSelectorDlg;
 
-    // the ResourceURL to select when opening the dialog
-    rtl::OUString                       m_aURLToSelect;
+
+    rtl::OUString                       m_aURLToSelect;  ///< the ResourceURL to select when opening the dialog
 
     ::com::sun::star::uno::Reference
         < ::com::sun::star::frame::XFrame > m_xFrame;

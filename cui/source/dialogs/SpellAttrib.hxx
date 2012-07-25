@@ -50,7 +50,7 @@ struct SpellErrorDescription
     ::rtl::OUString                                     sExplanationURL;
     ::com::sun::star::lang::Locale                      aLocale;
     ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XProofreader > xGrammarChecker;
-    ::rtl::OUString                                     sServiceName; //service name of GrammarChecker/SpellChecker
+    ::rtl::OUString                                     sServiceName; ///< service name of GrammarChecker/SpellChecker
     ::com::sun::star::uno::Sequence< ::rtl::OUString >  aSuggestions;
     ::rtl::OUString                                     sRuleId;
 

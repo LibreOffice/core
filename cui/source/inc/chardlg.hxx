@@ -175,7 +175,7 @@ public:
     void                SetFontList( const SvxFontListItem& rItem );
     void                EnableRelativeMode();
     void                EnableSearchMode();
-    //                  the writer uses SID_ATTR_BRUSH as font background
+    ///                  the writer uses SID_ATTR_BRUSH as font background
     void                SetPreviewBackgroundToCharacter();
 
     void                DisableControls( sal_uInt16 nDisable );
@@ -261,7 +261,7 @@ public:
 
     void                DisableControls( sal_uInt16 nDisable );
     void                EnableFlash();
-    //                  the writer uses SID_ATTR_BRUSH as font background
+    ///                  the writer uses SID_ATTR_BRUSH as font background
     void                SetPreviewBackgroundToCharacter();
     virtual void        PageCreated (SfxAllItemSet aSet);
 };
@@ -336,7 +336,7 @@ public:
     virtual void        Reset( const SfxItemSet& rSet );
     virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
     virtual void        FillUserData();
-    //                  the writer uses SID_ATTR_BRUSH as font background
+    ///                  the writer uses SID_ATTR_BRUSH as font background
     void                SetPreviewBackgroundToCharacter();
     virtual void        PageCreated (SfxAllItemSet aSet);
 };
@@ -381,7 +381,7 @@ public:
 
     virtual void        Reset( const SfxItemSet& rSet );
     virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
-    //                  the writer uses SID_ATTR_BRUSH as font background
+    ///                  the writer uses SID_ATTR_BRUSH as font background
     void                SetPreviewBackgroundToCharacter();
     virtual void        PageCreated (SfxAllItemSet aSet);
 };
