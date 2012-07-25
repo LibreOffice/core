@@ -265,6 +265,8 @@ public:
     bool m_bRemote:1;
     bool m_bInputStreamIsReadOnly:1;
 
+    OUString m_aName;
+
     uno::Reference < embed::XStorage > xStorage;
 
     SfxMedium*       pAntiImpl;
@@ -500,8 +502,8 @@ Reference < XContent > SfxMedium::GetContent() const
         {
             // TODO: OSL_FAIL("SfxMedium::GetContent()\nCreate Content? This code exists as fallback only. Please clarify, why its used.");
             rtl::OUString aURL;
-            if ( !aName.isEmpty() )
-                ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aName, aURL );
+            if ( !pImp->m_aName.isEmpty() )
+                ::utl::LocalFileHelper::ConvertPhysicalNameToURL( pImp->m_aName, aURL );
             else if ( !aLogicName.isEmpty() )
                 aURL = GetURLObject().GetMainURL( INetURLObject::NO_DECODE );
             if (!aURL.isEmpty() )
@@ -553,7 +555,7 @@ SvStream* SfxMedium::GetInStream()
 
     if ( pImp->pTempFile )
     {
-        pInStream = new SvFileStream( aName, nStorOpenMode );
+        pInStream = new SvFileStream( pImp->m_aName, nStorOpenMode );
 
         eError = pInStream->GetError();
 
@@ -627,7 +629,7 @@ SvStream* SfxMedium::GetOutStream()
 
         if ( pImp->pTempFile )
         {
-            pOutStream = new SvFileStream( aName, STREAM_STD_READWRITE );
+            pOutStream = new SvFileStream( pImp->m_aName, STREAM_STD_READWRITE );
             CloseStorage();
         }
     }
@@ -675,11 +677,11 @@ sal_Bool SfxMedium::CloseOutStream_Impl()
 //------------------------------------------------------------------
 const rtl::OUString& SfxMedium::GetPhysicalName() const
 {
-    if ( aName.isEmpty() && !aLogicName.isEmpty() )
+    if ( pImp->m_aName.isEmpty() && !aLogicName.isEmpty() )
         (( SfxMedium*)this)->CreateFileStream();
 
     // return the name then
-    return aName;
+    return pImp->m_aName;
 }
 
 //------------------------------------------------------------------
@@ -733,7 +735,7 @@ sal_Bool SfxMedium::IsStorage()
     if ( pImp->pTempFile )
     {
         rtl::OUString aURL;
-        if ( !::utl::LocalFileHelper::ConvertPhysicalNameToURL( aName, aURL ) )
+        if ( !::utl::LocalFileHelper::ConvertPhysicalNameToURL( pImp->m_aName, aURL ) )
         {
             OSL_FAIL("Physical name not convertable!");
         }
@@ -1279,7 +1281,7 @@ uno::Reference < embed::XStorage > SfxMedium::GetStorage( sal_Bool bCreateTempIf
     else
     {
         CloseStreams_Impl();
-        aArgs[0] <<= ::rtl::OUString( aName );
+        aArgs[0] <<= pImp->m_aName;
         aArgs[1] <<= embed::ElementModes::READ;
         pImp->bStorageBasedOnInStream = false;
     }
@@ -1548,8 +1550,8 @@ sal_Bool SfxMedium::StorageCommit_Impl()
                             {
                                 // connect the medium to the temporary file of the storage
                                 pImp->aContent = ::ucbhelper::Content();
-                                aName = aBackupExc.TemporaryFileURL;
-                                OSL_ENSURE( !aName.isEmpty(), "The exception _must_ contain the temporary URL!\n" );
+                                pImp->m_aName = aBackupExc.TemporaryFileURL;
+                                OSL_ENSURE( !pImp->m_aName.isEmpty(), "The exception _must_ contain the temporary URL!\n" );
                             }
                         }
 
@@ -1774,7 +1776,7 @@ void SfxMedium::Transfer_Impl()
     else if ( !aLogicName.isEmpty() && pImp->m_bSalvageMode )
     {
         // makes sence only in case logic name is set
-        if ( !::utl::LocalFileHelper::ConvertPhysicalNameToURL( aName, aNameURL ) )
+        if ( !::utl::LocalFileHelper::ConvertPhysicalNameToURL( pImp->m_aName, aNameURL ) )
             OSL_FAIL( "The medium name is not convertable!\n" );
     }
 
@@ -2027,8 +2029,8 @@ void SfxMedium::Transfer_Impl()
         if ( ( !eError || (eError & ERRCODE_WARNING_MASK) ) && !pImp->pTempFile )
         {
             // without a TempFile the physical and logical name should be the same after successful transfer
-              ::utl::LocalFileHelper::ConvertURLToPhysicalName( GetURLObject().GetMainURL( INetURLObject::NO_DECODE ),
-                                                              aName );
+              ::utl::LocalFileHelper::ConvertURLToPhysicalName(
+                  GetURLObject().GetMainURL( INetURLObject::NO_DECODE ), pImp->m_aName );
             pImp->m_bSalvageMode = false;
         }
     }
@@ -2214,7 +2216,7 @@ void SfxMedium::GetLockingStream_Impl()
             aMedium[comphelper::MediaDescriptor::PROP_STREAM()] >>= pImp->m_xLockingStream;
             aMedium[comphelper::MediaDescriptor::PROP_INPUTSTREAM()] >>= xInputStream;
 
-            if ( !pImp->pTempFile && aName.isEmpty() )
+            if ( !pImp->pTempFile && pImp->m_aName.isEmpty() )
             {
                 // the medium is still based on the original file, it makes sence to initialize the streams
                 if ( pImp->m_xLockingStream.is() )
@@ -2259,9 +2261,9 @@ void SfxMedium::GetMedium_Impl()
         {
             uno::Sequence < beans::PropertyValue > xProps;
             rtl::OUString aFileName;
-            if (!aName.isEmpty())
+            if (!pImp->m_aName.isEmpty())
             {
-                if ( !::utl::LocalFileHelper::ConvertPhysicalNameToURL( aName, aFileName ) )
+                if ( !::utl::LocalFileHelper::ConvertPhysicalNameToURL( pImp->m_aName, aFileName ) )
                 {
                     OSL_FAIL("Physical name not convertable!");
                 }
@@ -2286,7 +2288,7 @@ void SfxMedium::GetMedium_Impl()
             {
                 pImp->xInputStream = m_xInputStreamToLoadFrom;
                 pImp->xInputStream->skipBytes(0);
-                if (pImp->m_m_bInputStreamIsReadOnly)
+                if (pImp->m_bInputStreamIsReadOnly)
                     GetItemSet()->Put( SfxBoolItem( SID_DOC_READONLY, true ) );
             }
             else
@@ -2441,8 +2443,8 @@ void SfxMedium::Init_Impl()
 
             // try to convert the URL into a physical name - but never change a physical name
             // physical name may be set if the logical name is changed after construction
-            if ( aName.isEmpty() )
-                ::utl::LocalFileHelper::ConvertURLToPhysicalName( GetURLObject().GetMainURL( INetURLObject::NO_DECODE ), aName );
+            if ( pImp->m_aName.isEmpty() )
+                ::utl::LocalFileHelper::ConvertURLToPhysicalName( GetURLObject().GetMainURL( INetURLObject::NO_DECODE ), pImp->m_aName );
             else
             {
                 DBG_ASSERT( pSalvageItem, "Suspicious change of logical name!" );
@@ -2765,7 +2767,7 @@ const OUString& SfxMedium::GetOrigURL() const
 
 void SfxMedium::SetPhysicalName_Impl( const rtl::OUString& rNameP )
 {
-    if ( rNameP != aName )
+    if ( rNameP != pImp->m_aName )
     {
         if( pImp->pTempFile )
         {
@@ -2773,10 +2775,10 @@ void SfxMedium::SetPhysicalName_Impl( const rtl::OUString& rNameP )
             pImp->pTempFile = NULL;
         }
 
-        if ( !aName.isEmpty() || !rNameP.isEmpty() )
+        if ( !pImp->m_aName.isEmpty() || !rNameP.isEmpty() )
             pImp->aContent = ::ucbhelper::Content();
 
-        aName = rNameP;
+        pImp->m_aName = rNameP;
         pImp->m_bTriedStorage = false;
         pImp->bIsStorage = false;
     }
@@ -2805,7 +2807,7 @@ void SfxMedium::CompleteReOpen()
     {
         pTmpFile = pImp->pTempFile;
         pImp->pTempFile = NULL;
-        aName = String();
+        pImp->m_aName = OUString();
     }
 
     GetMedium_Impl();
@@ -2819,7 +2821,7 @@ void SfxMedium::CompleteReOpen()
         }
         pImp->pTempFile = pTmpFile;
         if ( pImp->pTempFile )
-            aName = pImp->pTempFile->GetFileName();
+            pImp->m_aName = pImp->pTempFile->GetFileName();
     }
     else
     {
@@ -2964,10 +2966,10 @@ SfxMedium::~SfxMedium()
 
     delete pSet;
 
-    if( pImp->bIsTemp && !aName.isEmpty() )
+    if( pImp->bIsTemp && !pImp->m_aName.isEmpty() )
     {
         rtl::OUString aTemp;
-        if ( !::utl::LocalFileHelper::ConvertPhysicalNameToURL( aName, aTemp ))
+        if ( !::utl::LocalFileHelper::ConvertPhysicalNameToURL( pImp->m_aName, aTemp ))
         {
             OSL_FAIL("Physical name not convertable!");
         }
@@ -3105,7 +3107,7 @@ const uno::Sequence < util::RevisionTag >& SfxMedium::GetVersionList( bool _bNoR
 {
     // if the medium has no name, then this medium should represent a new document and can have no version info
     if ( ( !_bNoReload || !pImp->m_bVersionsAlreadyLoaded ) && !pImp->aVersions.getLength() &&
-         ( !aName.isEmpty() || !aLogicName.isEmpty() ) && GetStorage().is() )
+         ( !pImp->m_aName.isEmpty() || !aLogicName.isEmpty() ) && GetStorage().is() )
     {
         uno::Reference < document::XDocumentRevisionListPersistence > xReader( comphelper::getProcessServiceFactory()->createInstance(
                 ::rtl::OUString("com.sun.star.document.DocumentRevisionListPersistence") ), uno::UNO_QUERY );
@@ -3305,14 +3307,14 @@ void SfxMedium::CreateTempFile( sal_Bool bReplace )
             return;
 
         DELETEZ( pImp->pTempFile );
-        aName = String();
+        pImp->m_aName = OUString();
     }
 
     pImp->pTempFile = new ::utl::TempFile();
     pImp->pTempFile->EnableKillingFile( true );
-    aName = pImp->pTempFile->GetFileName();
+    pImp->m_aName = pImp->pTempFile->GetFileName();
     ::rtl::OUString aTmpURL = pImp->pTempFile->GetURL();
-    if ( aName.isEmpty() || aTmpURL.isEmpty() )
+    if ( pImp->m_aName.isEmpty() || aTmpURL.isEmpty() )
     {
         SetError( ERRCODE_IO_CANTWRITE, ::rtl::OUString( OSL_LOG_PREFIX  ) );
         return;
@@ -3408,8 +3410,8 @@ void SfxMedium::CreateTempFileNoCopy()
 
     pImp->pTempFile = new ::utl::TempFile();
     pImp->pTempFile->EnableKillingFile( true );
-    aName = pImp->pTempFile->GetFileName();
-    if ( aName.isEmpty() )
+    pImp->m_aName = pImp->pTempFile->GetFileName();
+    if ( pImp->m_aName.isEmpty() )
     {
         SetError( ERRCODE_IO_CANTWRITE, ::rtl::OUString( OSL_LOG_PREFIX  ) );
         return;
