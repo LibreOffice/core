@@ -348,21 +348,6 @@ SfxMedium_Impl::~SfxMedium_Impl()
         delete pTempFile;
 }
 
-//================================================================
-
-#define IMPL_CTOR(rootVal,URLVal)           \
-     eError( SVSTREAM_OK ),                 \
-                                            \
-     bRoot( rootVal ),                      \
-     bSetFilter( false ),               \
-     bTriedStorage( false ),            \
-                                            \
-     nStorOpenMode( SFX_STREAM_READWRITE ), \
-     pURLObj( URLVal ),                     \
-     pInStream(0),                          \
-     pOutStream( 0 )
-
-//------------------------------------------------------------------
 void SfxMedium::ResetError()
 {
     eError = SVSTREAM_OK;
@@ -2488,9 +2473,15 @@ void SfxMedium::Init_Impl()
 }
 
 //------------------------------------------------------------------
-SfxMedium::SfxMedium()
-:   IMPL_CTOR( false, 0 ),  // bRoot, pURLObj
-
+SfxMedium::SfxMedium() :
+    eError( SVSTREAM_OK ),
+    bRoot( false ),
+    bSetFilter( false ),
+    bTriedStorage( false ),
+    nStorOpenMode( SFX_STREAM_READWRITE ),
+    pURLObj(0),
+    pInStream(0),
+    pOutStream(0),
     pFilter(0),
     pSet(0),
     pImp(new SfxMedium_Impl( this ))
@@ -2832,13 +2823,15 @@ void SfxMedium::CompleteReOpen()
     pImp->bUseInteractionHandler = bUseInteractionHandler;
 }
 
-//------------------------------------------------------------------
-SfxMedium::SfxMedium
-(
-    const String &rName, StreamMode nOpenMode,
-    const SfxFilter *pFlt, SfxItemSet *pInSet
-)
-:   IMPL_CTOR( false, 0 ),  // bRoot, pURLObj
+SfxMedium::SfxMedium(const String &rName, StreamMode nOpenMode, const SfxFilter *pFlt, SfxItemSet *pInSet) :
+    eError( SVSTREAM_OK ),
+    bRoot( false ),
+    bSetFilter( false ),
+    bTriedStorage( false ),
+    nStorOpenMode( SFX_STREAM_READWRITE ),
+    pURLObj(0),
+    pInStream(0),
+    pOutStream(0),
     pFilter(pFlt),
     pSet( pInSet ),
     pImp(new SfxMedium_Impl( this ))
@@ -2849,8 +2842,14 @@ SfxMedium::SfxMedium
 }
 
 
-SfxMedium::SfxMedium( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgs )
-    : IMPL_CTOR( false, 0 ),  // bRoot, pURLObj
+SfxMedium::SfxMedium( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgs ) :
+    bRoot( false ),
+    bSetFilter( false ),
+    bTriedStorage( false ),
+    nStorOpenMode( SFX_STREAM_READWRITE ),
+    pURLObj(0),
+    pInStream(0),
+    pOutStream(0),
     pFilter(0),
     pSet(0),
     pImp(new SfxMedium_Impl( this ))
@@ -2905,8 +2904,14 @@ SfxMedium::SfxMedium( const ::com::sun::star::uno::Sequence< ::com::sun::star::b
 
 //------------------------------------------------------------------
 
-SfxMedium::SfxMedium( const uno::Reference < embed::XStorage >& rStor, const String& rBaseURL, const SfxItemSet* p, sal_Bool bRootP )
-:   IMPL_CTOR( bRootP, 0 ), // bRoot, pURLObj
+SfxMedium::SfxMedium( const uno::Reference < embed::XStorage >& rStor, const String& rBaseURL, const SfxItemSet* p, sal_Bool bRootP ) :
+    bRoot( bRootP ),
+    bSetFilter( false ),
+    bTriedStorage( false ),
+    nStorOpenMode( SFX_STREAM_READWRITE ),
+    pURLObj(0),
+    pInStream(0),
+    pOutStream(0),
     pSet(0),
     pImp( new SfxMedium_Impl( this ))
 {
@@ -2924,8 +2929,14 @@ SfxMedium::SfxMedium( const uno::Reference < embed::XStorage >& rStor, const Str
         GetItemSet()->Put( *p );
 }
 
-SfxMedium::SfxMedium( const uno::Reference < embed::XStorage >& rStor, const String& rBaseURL, const String& rTypeName, const SfxItemSet* p, sal_Bool bRootP )
-:   IMPL_CTOR( bRootP, 0 ),	// bRoot, pURLObj
+SfxMedium::SfxMedium( const uno::Reference < embed::XStorage >& rStor, const String& rBaseURL, const String& rTypeName, const SfxItemSet* p, sal_Bool bRootP ) :
+    bRoot( bRootP ),
+    bSetFilter( false ),
+    bTriedStorage( false ),
+    nStorOpenMode( SFX_STREAM_READWRITE ),
+    pURLObj(0),
+    pInStream(0),
+    pOutStream(0),
     pSet(0),
     pImp( new SfxMedium_Impl( this ))
 {
