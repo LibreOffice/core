@@ -380,3 +380,5 @@ DDFERR ParseDdf(char* ddfFile, PCCAB ccab, DDFSRCFILE ** srcListH, unsigned int 
 
     return DDF_OK;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
