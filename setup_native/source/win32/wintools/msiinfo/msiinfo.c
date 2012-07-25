@@ -204,7 +204,7 @@ int wmain(int argc, WCHAR *argv[])
         argv++; argc--;
     }
 
-    if (strcmpW(dbfile, h1) == 0 || strcmpW(dbfile, h2) == 0)
+    if (!dbfile || strcmpW(dbfile, h1) == 0 || strcmpW(dbfile, h2) == 0)
     {
         usage();
         return 0;
