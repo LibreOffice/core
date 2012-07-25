@@ -329,7 +329,8 @@ int main(int argc, char *argv[])
     if (ddfFile == NULL)
     {
         cabLog(CABLOG_ERR, "No DDF file specified.");
-        return 1;
+        usage();
+        return 0;
     }
 
     cabLog(CABLOG_MSG, "=== Parsing directive file \"%s\"===", ddfFile);
@@ -377,3 +378,5 @@ int main(int argc, char *argv[])
     cabLog(CABLOG_MSG, "Cabinet file %s/%s created.", ddfVars.szCabPath, ddfVars.szCab);
     return 0;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
