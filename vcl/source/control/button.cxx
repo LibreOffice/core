@@ -825,7 +825,6 @@ void PushButton::ImplDrawPushButtonContent( OutputDevice* pDev, sal_uLong nDrawF
 {
     const StyleSettings&    rStyleSettings = GetSettings().GetStyleSettings();
     Rectangle               aInRect = rRect;
-    Rectangle               bInRect = rRect;
     Color                   aColor;
     XubString               aText = PushButton::GetText(); // PushButton:: wegen MoreButton
     sal_uInt16                  nTextStyle = ImplGetTextStyle( nDrawFlags );
@@ -854,7 +853,6 @@ void PushButton::ImplDrawPushButtonContent( OutputDevice* pDev, sal_uLong nDrawF
         nStyle = SYMBOL_DRAW_DISABLE;
 
     Size aSize = rRect.GetSize();
-    Size bSize = rRect.GetSize();
     Point aPos = rRect.TopLeft();
 
     sal_uLong nImageSep = 1 + (pDev->GetTextHeight()-10)/2;
@@ -862,21 +860,23 @@ void PushButton::ImplDrawPushButtonContent( OutputDevice* pDev, sal_uLong nDrawF
         nImageSep = 1;
     if ( mnDDStyle == PUSHBUTTON_DROPDOWN_MENUBUTTON )
     {
+        Rectangle aHotspotRect = rRect;
         if ( aText.Len() && ! (ImplGetButtonState() & BUTTON_DRAW_NOTEXT) )
         {
             // calculate symbol size
             long nSymbolSize    = pDev->GetTextHeight() / 2 + 1;
-            aInRect.Right()    -= 2; //rectangle width
-            aInRect.Left()      = aInRect.Right() - nSymbolSize;
 
-            //caluclate dimension of recent documents hotspot rectangle
+            // caluclate dimension of hotspot rectangle
+            aHotspotRect.Left() = aHotspotRect.Right() - 2*nSymbolSize;
 
-            bInRect.Right()    += 10; //rectangle width
-            bInRect.Left()      = bInRect.Right() - 3*nSymbolSize;
-            bSize.Width()      -= ( 5 + nSymbolSize );
-            ImplDrawAlignedImage( pDev, aPos, bSize, bLayout, nImageSep,
+            // center symbol rectangle inside hotspot rectangle
+            aInRect.Right() = aHotspotRect.Right() - nSymbolSize/2 + 1;
+            aInRect.Left()  = aInRect.Right() - nSymbolSize;
+
+            aSize.Width() -= aHotspotRect.GetWidth();
+
+            ImplDrawAlignedImage( pDev, aPos, aSize, bLayout, nImageSep,
                                   nDrawFlags, nTextStyle, NULL, true );
-
         }
         else
             ImplCalcSymbolRect( aInRect );
@@ -887,15 +887,20 @@ void PushButton::ImplDrawPushButtonContent( OutputDevice* pDev, sal_uLong nDrawF
             DecorationView aDecoView( pDev );
             if( bMenuBtnSep )
             {
-                long nX = bInRect.Left() - 3*nDistance;
-                Point aStartPt( nX+10, bInRect.Top()+nDistance );
-                Point aEndPt( nX, bInRect.Bottom()-nDistance );
+                long nX = aHotspotRect.Left();
+                Point aStartPt( nX, aHotspotRect.Top()+nDistance );
+                Point aEndPt( nX, aHotspotRect.Bottom()-nDistance );
                 aDecoView.DrawSeparator( aStartPt, aEndPt );
             }
 
             aDecoView.DrawSymbol( aInRect, SYMBOL_SPIN_DOWN, aColor, nStyle );
-            bInRect.Left() -= -3*nDistance;
-            ImplSetSymbolRect( bInRect );
+
+            // hack: include decoration into hotspot rectangle (hopefully +10 is enough)
+            aHotspotRect.Right() += 10;
+            aHotspotRect.Bottom() += 10;
+            aHotspotRect.Top() -= 10;
+
+            ImplSetSymbolRect( aHotspotRect );
         }
 
     }
