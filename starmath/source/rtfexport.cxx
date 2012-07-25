@@ -86,6 +86,9 @@ void SmRtfExport::HandleNode(const SmNode* pNode, int nLevel)
         case NMATH:
             HandleMath(pNode, nLevel);
             break;
+        case NSUBSUP:
+            HandleSubSupScript(static_cast<const SmSubSupNode*>(pNode), nLevel);
+            break;
         case NEXPRESSION:
             HandleAllSubNodes(pNode, nLevel);
             break;
@@ -381,14 +384,122 @@ void SmRtfExport::HandleOperator(const SmOperNode* pNode, int nLevel)
     }
 }
 
-void SmRtfExport::HandleSubSupScript(const SmSubSupNode* /*pNode*/, int /*nLevel*/)
+void SmRtfExport::HandleSubSupScript(const SmSubSupNode* pNode, int nLevel)
 {
-    SAL_INFO("starmath.rtf", "TODO: " << OSL_THIS_FUNC);
+    // set flags to a bitfield of which sub/sup items exists
+    int flags = (pNode->GetSubSup(CSUB) ? (1 << CSUB) : 0)
+            | (pNode->GetSubSup(CSUP) ? (1 << CSUP) : 0)
+            | (pNode->GetSubSup(RSUB) ? (1 << RSUB) : 0)
+            | (pNode->GetSubSup(RSUP) ? (1 << RSUP) : 0)
+            | (pNode->GetSubSup(LSUB) ? (1 << LSUB) : 0)
+            | (pNode->GetSubSup(LSUP) ? (1 << LSUP) : 0);
+    HandleSubSupScriptInternal(pNode, nLevel, flags);
 }
 
-void SmRtfExport::HandleSubSupScriptInternal(const SmSubSupNode* /*pNode*/, int /*nLevel*/, int /*flags*/)
+void SmRtfExport::HandleSubSupScriptInternal(const SmSubSupNode* pNode, int nLevel, int flags)
 {
-    SAL_INFO("starmath.rtf", "TODO: " << OSL_THIS_FUNC);
+// rtf supports only a certain combination of sub/super scripts, but LO can have any,
+// so try to merge it using several tags if necessary
+    if (flags == 0) // none
+        return;
+    if ((flags & (1 << RSUP | 1 << RSUB)) == (1 << RSUP | 1 << RSUB))
+    { // m:sSubSup
+        m_pBuffer->append("{\\msSubSup ");
+        m_pBuffer->append("{\\me ");
+        flags &= ~(1 << RSUP | 1 << RSUB);
+        if (flags == 0)
+            HandleNode(pNode->GetBody(), nLevel + 1);
+        else
+            HandleSubSupScriptInternal(pNode, nLevel, flags);
+        m_pBuffer->append("}"); // me
+        m_pBuffer->append("{\\msub ");
+        HandleNode(pNode->GetSubSup(RSUB), nLevel + 1);
+        m_pBuffer->append("}"); // msub
+        m_pBuffer->append("{\\msup ");
+        HandleNode(pNode->GetSubSup(RSUP ), nLevel + 1);
+        m_pBuffer->append("}"); // msup
+        m_pBuffer->append("}"); // msubSup
+    }
+    else if ((flags & (1 << RSUB)) == 1 << RSUB)
+    { // m:sSub
+        m_pBuffer->append("{\\msSub ");
+        m_pBuffer->append("{\\me ");
+        flags &= ~(1 << RSUB);
+        if (flags == 0)
+            HandleNode(pNode->GetBody(), nLevel + 1);
+        else
+            HandleSubSupScriptInternal(pNode, nLevel, flags);
+        m_pBuffer->append("}"); // me
+        m_pBuffer->append("{\\msub ");
+        HandleNode(pNode->GetSubSup(RSUB), nLevel + 1);
+        m_pBuffer->append("}"); // msub
+        m_pBuffer->append("}"); // msSub
+    }
+    else if ((flags & (1 << RSUP)) == 1 << RSUP)
+    { // m:sSup
+        m_pBuffer->append("{\\msSup ");
+        m_pBuffer->append("{\\me ");
+        flags &= ~(1 << RSUP);
+        if (flags == 0)
+            HandleNode(pNode->GetBody(), nLevel + 1);
+        else
+            HandleSubSupScriptInternal(pNode, nLevel, flags);
+        m_pBuffer->append("}"); // me
+        m_pBuffer->append("{\\msup ");
+        HandleNode(pNode->GetSubSup(RSUP), nLevel + 1);
+        m_pBuffer->append("}"); // msup
+        m_pBuffer->append("}"); // msSup
+    }
+    else if ((flags & (1 << LSUP | 1 << LSUB)) == (1 << LSUP | 1 << LSUB))
+    { // m:sPre
+        m_pBuffer->append("{\\msPre ");
+        m_pBuffer->append("{\\msub ");
+        HandleNode(pNode->GetSubSup(LSUB ), nLevel + 1);
+        m_pBuffer->append("}"); // msub
+        m_pBuffer->append("{\\msup ");
+        HandleNode(pNode->GetSubSup(LSUP), nLevel + 1);
+        m_pBuffer->append("}"); // msup
+        m_pBuffer->append("{\\me ");
+        flags &= ~(1 << LSUP | 1 << LSUB);
+        if (flags == 0)
+            HandleNode(pNode->GetBody(), nLevel + 1);
+        else
+            HandleSubSupScriptInternal(pNode, nLevel, flags);
+        m_pBuffer->append("}"); // me
+        m_pBuffer->append("}"); // msPre
+    }
+    else if ((flags & (1 << CSUB)) == (1 << CSUB))
+    { // m:limLow looks like a good element for central superscript
+        m_pBuffer->append("{\\mlimLow ");
+        m_pBuffer->append("{\\me ");
+        flags &= ~(1 << CSUB);
+        if (flags == 0)
+            HandleNode(pNode->GetBody(), nLevel + 1);
+        else
+            HandleSubSupScriptInternal(pNode, nLevel, flags);
+        m_pBuffer->append("}"); // me
+        m_pBuffer->append("{\\mlim ");
+        HandleNode(pNode->GetSubSup(CSUB), nLevel + 1);
+        m_pBuffer->append("}"); // mlim
+        m_pBuffer->append("}"); // mlimLow
+    }
+    else if ((flags & (1 << CSUP)) == (1 << CSUP))
+    { // m:limUpp looks like a good element for central superscript
+        m_pBuffer->append("{\\mlimUpp ");
+        m_pBuffer->append("{\\me ");
+        flags &= ~(1 << CSUP);
+        if (flags == 0)
+            HandleNode(pNode->GetBody(), nLevel + 1);
+        else
+            HandleSubSupScriptInternal(pNode, nLevel, flags);
+        m_pBuffer->append("}"); // me
+        m_pBuffer->append("{\\mlim ");
+        HandleNode(pNode->GetSubSup(CSUP), nLevel + 1);
+        m_pBuffer->append("}"); // mlim
+        m_pBuffer->append("}"); // mlimUpp
+    }
+    else
+        SAL_INFO("starmath.rtf", "TODO: " << OSL_THIS_FUNC << " unhandled subsup type");
 }
 
 void SmRtfExport::HandleMatrix(const SmMatrixNode* pNode, int nLevel)
