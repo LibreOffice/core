@@ -34,13 +34,20 @@
 
 module com { module sun { module star { module configuration {
 
-/* Provides easy read-only access to the complete configuration.
+/** Provides easy read-only access to the complete configuration.
 
-   <p>This singleton is still unpublished and unstable.</p>
+    <p>This service is still unpublished and unstable.</p>
 
-   @since LibreOffice 3.6
+    @since LibreOffice 3.7
 */
-singleton ReadOnlyAccess: com::sun::star::container::XHierarchicalNameAccess;
+service ReadOnlyAccess: com::sun::star::container::XHierarchicalNameAccess {
+    /** Service constructor.
+
+        @param locale a string representation of the locale to use for localized
+        properties; use <code>*</code> for all-locale access
+    */
+    create([in] string locale);
+};
 
 }; }; }; };
 

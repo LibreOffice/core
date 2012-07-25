@@ -30,15 +30,21 @@
 #include "sal/config.h"
 
 #include "boost/noncopyable.hpp"
-#include "cppuhelper/implbase2.hxx"
-#include "com/sun/star/lang/XServiceInfo.hpp"
 #include "com/sun/star/container/NoSuchElementException.hpp"
 #include "com/sun/star/container/XHierarchicalNameAccess.hpp"
+#include "com/sun/star/lang/IllegalArgumentException.hpp"
+#include "com/sun/star/lang/NotInitializedException.hpp"
+#include "com/sun/star/lang/XInitialization.hpp"
+#include "com/sun/star/lang/XServiceInfo.hpp"
+#include "com/sun/star/uno/Any.hxx"
+#include "com/sun/star/uno/Exception.hpp"
 #include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/RuntimeException.hpp"
 #include "com/sun/star/uno/Sequence.hxx"
 #include "com/sun/star/uno/XComponentContext.hpp"
 #include "com/sun/star/uno/XInterface.hpp"
+#include "cppuhelper/implbase3.hxx"
+#include "cppuhelper/weak.hxx"
 #include "osl/mutex.hxx"
 #include "rtl/ref.hxx"
 #include "rtl/ustring.h"
@@ -57,12 +63,15 @@ namespace {
 namespace css = com::sun::star;
 
 class Service:
-    public cppu::WeakImplHelper2<
-        css::lang::XServiceInfo, css::container::XHierarchicalNameAccess >,
+    public cppu::WeakImplHelper3<
+        css::lang::XServiceInfo, css::lang::XInitialization,
+        css::container::XHierarchicalNameAccess >,
     private boost::noncopyable
 {
 public:
-    Service(css::uno::Reference< css::uno::XComponentContext > const & context);
+    explicit Service(
+        css::uno::Reference< css::uno::XComponentContext > const & context):
+        context_(context) {}
 
 private:
     virtual ~Service() {}
@@ -79,28 +88,55 @@ private:
     getSupportedServiceNames() throw (css::uno::RuntimeException)
     { return read_only_access::getSupportedServiceNames(); }
 
+    virtual void SAL_CALL initialize(
+        css::uno::Sequence< css::uno::Any > const & aArguments)
+        throw (css::uno::Exception, css::uno::RuntimeException);
+
     virtual css::uno::Any SAL_CALL getByHierarchicalName(
         rtl::OUString const & aName)
         throw (
             css::container::NoSuchElementException, css::uno::RuntimeException)
-    { return root_->getByHierarchicalName(aName); }
+    { return getRoot()->getByHierarchicalName(aName); }
 
     virtual sal_Bool SAL_CALL hasByHierarchicalName(rtl::OUString const & aName)
         throw (css::uno::RuntimeException)
-    { return root_->hasByHierarchicalName(aName); }
+    { return getRoot()->hasByHierarchicalName(aName); }
 
+    rtl::Reference< RootAccess > getRoot();
+
+    css::uno::Reference< css::uno::XComponentContext > context_;
+
+    osl::Mutex mutex_;
     rtl::Reference< RootAccess > root_;
 };
 
-Service::Service(
-    css::uno::Reference< css::uno::XComponentContext > const & context)
+void Service::initialize(css::uno::Sequence< css::uno::Any > const & aArguments)
+    throw (css::uno::Exception, css::uno::RuntimeException)
 {
-    osl::MutexGuard guard(*lock());
-    Components & components = Components::getSingleton(context);
-    root_ = new RootAccess(
-        components, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/")),
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("*")), false);
+    OUString locale;
+    if (aArguments.getLength() != 1 || !(aArguments[0] >>= locale)) {
+        throw css::lang::IllegalArgumentException(
+            "not exactly one string argument",
+            static_cast< cppu::OWeakObject * >(this), -1);
+    }
+    osl::MutexGuard g1(mutex_);
+    if (root_.is()) {
+        throw css::uno::RuntimeException(
+            "already initialized", static_cast< cppu::OWeakObject * >(this));
+    }
+    osl::MutexGuard g2(*lock());
+    Components & components = Components::getSingleton(context_);
+    root_ = new RootAccess(components, "/", locale, false);
     components.addRootAccess(root_);
+}
+
+rtl::Reference< RootAccess > Service::getRoot() {
+    osl::MutexGuard g(mutex_);
+    if (!root_.is()) {
+        throw css::lang::NotInitializedException(
+            "not initialized", static_cast< cppu::OWeakObject * >(this));
+    }
+    return root_;
 }
 
 }
