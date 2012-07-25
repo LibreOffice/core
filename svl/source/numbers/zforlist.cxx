@@ -28,7 +28,6 @@
 #include <comphelper/processfactory.hxx>
 #include <unotools/misccfg.hxx>
 
-#include <svl/svstdarr.hxx>
 
 #define _ZFORLIST_CXX
 #include <osl/mutex.hxx>

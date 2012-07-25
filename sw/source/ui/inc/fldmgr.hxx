@@ -28,7 +28,6 @@
 #ifndef _FLDMGR_HXX
 #define _FLDMGR_HXX
 
-#include <svl/svstdarr.hxx>
 #include <tools/string.hxx>
 #include "swdllapi.h"
 #include "swtypes.hxx"

@@ -57,7 +57,8 @@
  */
 
 #include <vector>
-#include <svl/svstdarr.hxx>
+
+#include <rtl/ustring.hxx>
 
 class SwCacheObj;
 

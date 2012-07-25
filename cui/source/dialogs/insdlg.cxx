@@ -76,7 +76,6 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::ui::dialogs;
 using ::rtl::OUString;
 
-#include <svl/svstdarr.hxx>
 
 static String impl_getSvtResString( sal_uInt32 nId )
 {

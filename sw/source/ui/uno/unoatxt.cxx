@@ -30,7 +30,6 @@
 #include <osl/mutex.hxx>
 #include <osl/diagnose.h>
 #include <vcl/svapp.hxx>
-#include <svl/svstdarr.hxx>
 #include <svtools/unoevent.hxx>
 #include <svl/urihelper.hxx>
 #include <sfx2/event.hxx>

@@ -52,7 +52,6 @@
 #include <svtools/svtreebx.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <sfx2/basedlgs.hxx>
-#include <svl/svstdarr.hxx>
 #include <sfx2/minarray.hxx>
 #include "cfgutil.hxx"
 

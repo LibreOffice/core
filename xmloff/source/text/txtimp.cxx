@@ -31,7 +31,6 @@
 
 #include <boost/scoped_array.hpp>
 
-#include <svl/svstdarr.hxx>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/text/XChapterNumberingSupplier.hpp>
@@ -69,6 +68,7 @@
 #include <txtlists.hxx>
 #include <xmloff/odffields.hxx>
 #include <comphelper/stlunosequence.hxx>
+#include <tools/string.hxx>
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;

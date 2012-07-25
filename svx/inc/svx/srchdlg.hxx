@@ -39,7 +39,6 @@
 #include <sfx2/childwin.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <svl/svarray.hxx>
-#include <svl/svstdarr.hxx>
 #include <svtools/svmedit.hxx>
 #include <svl/srchdefs.hxx>
 #include "svx/svxdllapi.h"

@@ -36,7 +36,6 @@
 #include <xmloff/xmltoken.hxx>
 #include "xmloff/i18nmap.hxx"
 #include <xmloff/xmluconv.hxx>
-#include <svl/svstdarr.hxx>
 #include "xmltabi.hxx"
 
 using ::rtl::OUString;

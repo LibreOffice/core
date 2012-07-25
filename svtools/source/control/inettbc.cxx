@@ -57,7 +57,6 @@
 #include <svl/itemset.hxx>
 #include "svl/urihelper.hxx"
 #include <unotools/pathoptions.hxx>
-#include <svl/svstdarr.hxx>
 #include <ucbhelper/commandenvironment.hxx>
 #include <ucbhelper/content.hxx>
 #include <unotools/localfilehelper.hxx>

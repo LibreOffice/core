@@ -38,7 +38,6 @@
 #include "unotools/useroptions.hxx"
 #include "rtl/instance.hxx"
 #include <svl/svl.hrc>
-#include "svl/svstdarr.hxx"
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;

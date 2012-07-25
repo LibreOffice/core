@@ -53,7 +53,6 @@
 class SwList;
 
 #include <IDocumentExternalData.hxx>
-#include <svl/svstdarr.hxx>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <vcl/timer.hxx>

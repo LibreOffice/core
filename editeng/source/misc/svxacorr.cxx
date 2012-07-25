@@ -32,7 +32,6 @@
 #include <i18npool/mslangid.hxx>
 #include <vcl/svapp.hxx>
 #include <sot/storinfo.hxx>
-#include <svl/svstdarr.hxx>
 #include <svl/fstathelper.hxx>
 #include <svtools/helpopt.hxx>
 #include <svl/urihelper.hxx>

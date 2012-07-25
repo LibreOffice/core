@@ -45,7 +45,6 @@
 #include <sfx2/viewsh.hxx>
 #include <svl/flagitem.hxx>
 #include <svl/intitem.hxx>
-#include <svl/svstdarr.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
 #include <unotools/misccfg.hxx>

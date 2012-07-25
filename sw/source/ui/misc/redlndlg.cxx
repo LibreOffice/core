@@ -29,7 +29,6 @@
 #include <redline.hxx>
 #include <tools/datetime.hxx>
 #include <vcl/msgbox.hxx>
-#include <svl/svstdarr.hxx>
 #include <svl/eitem.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>

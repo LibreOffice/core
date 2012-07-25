@@ -43,6 +43,7 @@
 
 #include <tools/debug.hxx>
 #include <tools/fontenum.hxx>
+#include <tools/string.hxx>
 
 #include <sax/tools/converter.hxx>
 
@@ -62,7 +63,6 @@
 
 #include <xmloff/xmlnumi.hxx>
 
-#include <svl/svstdarr.hxx>
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;

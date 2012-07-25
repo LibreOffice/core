@@ -39,7 +39,6 @@
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmltoken.hxx>
 #include "XMLTextColumnsContext.hxx"
-#include <svl/svstdarr.hxx>
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;

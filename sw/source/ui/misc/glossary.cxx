@@ -36,7 +36,6 @@
 #include <vcl/menu.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/help.hxx>
-#include <svl/svstdarr.hxx>
 #include <svl/stritem.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/lingucfg.hxx>

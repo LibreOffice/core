@@ -33,7 +33,6 @@
 
 #include <unotools/transliterationwrapper.hxx>
 
-#include <svl/svstdarr.hxx>
 
 #ifndef __RSC //autogen
 #include <tools/errinf.hxx>

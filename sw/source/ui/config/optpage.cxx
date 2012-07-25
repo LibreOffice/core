@@ -30,7 +30,6 @@
 #undef SW_DLLIMPLEMENTATION
 #endif
 
-#include <svl/svstdarr.hxx>
 #include <optpage.hxx>
 #include <doc.hxx>
 #include <hintids.hxx>

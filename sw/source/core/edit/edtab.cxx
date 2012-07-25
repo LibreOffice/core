@@ -21,7 +21,6 @@
 #include <hintids.hxx>
 #include <hints.hxx>
 
-#include <svl/svstdarr.hxx>
 
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>

@@ -32,7 +32,6 @@
 #include <com/sun/star/sdbc/XResultSet.hpp>
 
 #include <svx/fmsearch.hxx>
-#include <svl/svstdarr.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>

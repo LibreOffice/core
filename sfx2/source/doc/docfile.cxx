@@ -80,7 +80,6 @@
 #include <svl/intitem.hxx>
 #include <svtools/svparser.hxx> // SvKeyValue
 #include <cppuhelper/weakref.hxx>
-#include <svl/svstdarr.hxx>
 
 #include <unotools/streamwrap.hxx>
 

@@ -34,7 +34,6 @@
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/ListboxControlActions.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
-#include <svl/svstdarr.hxx>
 #include <svl/aeitem.hxx>
 #include <SwStyleNameMapper.hxx>
 #include <docary.hxx>

@@ -105,7 +105,6 @@
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <fmtflcnt.hxx>
-#include <svl/svstdarr.hxx>
 #include <editeng/brshitem.hxx>
 #include <fmtclds.hxx>
 #include <dcontact.hxx>

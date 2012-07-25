@@ -33,7 +33,6 @@
 
 #include "svx/svxdllapi.h"
 
-#include <svl/svstdarr.hxx>
 #include <svl/zforlist.hxx>
 
 #include <vector>

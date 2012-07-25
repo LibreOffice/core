@@ -51,7 +51,6 @@
 #include <sfx2/objsh.hxx>
 #include <svl/stritem.hxx>
 #include <svl/urihelper.hxx>
-#include <svl/svstdarr.hxx>
 #include <svl/zforlist.hxx>
 #include <svtools/htmlkywd.hxx>
 #include <svtools/htmlout.hxx>

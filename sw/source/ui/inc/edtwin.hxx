@@ -37,7 +37,6 @@
 #include <svtools/transfer.hxx>
 #include <swevent.hxx>
 
-#include <svl/svstdarr.hxx>
 
 class   SwWrtShell;
 class   SwView;

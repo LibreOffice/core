@@ -35,7 +35,6 @@
 #include <swundo.hxx>
 #include <shells.hrc>
 #include <caption.hxx>
-#include <svl/svstdarr.hxx>
 #include <svtools/filter.hxx>
 #include <svx/htmlmode.hxx>
 #include <doc.hxx>

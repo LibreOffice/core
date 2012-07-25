@@ -50,7 +50,6 @@
 #include <svl/languageoptions.hxx>
 #include <svtools/langtab.hxx>
 #include <svl/slstitm.hxx>
-#include <svl/svstdarr.hxx>
 #include <svl/stritem.hxx>
 
 #include <ndtxt.hxx>

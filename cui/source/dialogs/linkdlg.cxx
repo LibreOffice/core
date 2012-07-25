@@ -51,7 +51,6 @@
 
 #include <dialmgr.hxx>
 
-#include <svl/svstdarr.hxx>
 
 #define FILEOBJECT ( OBJECT_CLIENT_FILE & ~OBJECT_CLIENT_SO )
 

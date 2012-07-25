@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-#include <svl/svstdarr.hxx>
 #include <doc.hxx>
 #include <cntfrm.hxx>       // OSL_ENSURE(in ~SwTxtFtn()
 #include <pagefrm.hxx>      // RemoveFtn()

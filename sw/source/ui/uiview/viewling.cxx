@@ -28,7 +28,6 @@
 
 #include <hintids.hxx>
 
-#include <svl/svstdarr.hxx>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/linguistic2/XThesaurus.hpp>
 #include <com/sun/star/linguistic2/ProofreadingResult.hpp>

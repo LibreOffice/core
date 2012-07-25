@@ -28,7 +28,6 @@
 #ifndef _SWHTML_HXX
 #define _SWHTML_HXX
 
-#include <svl/svstdarr.hxx>
 #include <sfx2/sfxhtml.hxx>
 #include <svl/macitem.hxx>
 #include <editeng/svxenum.hxx>

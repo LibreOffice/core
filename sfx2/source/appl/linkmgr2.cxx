@@ -41,7 +41,6 @@
 #include "impldde.hxx"
 #include "app.hrc"
 #include "sfx2/sfxresid.hxx"
-#include <svl/svstdarr.hxx>
 
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/util/XCloseable.hpp>

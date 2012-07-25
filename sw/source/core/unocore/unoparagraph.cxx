@@ -43,7 +43,6 @@
 #include <vcl/svapp.hxx>
 #include <docsh.hxx>
 
-#include <svl/svstdarr.hxx>
 
 #include <com/sun/star/beans/SetPropertyTolerantFailed.hpp>
 #include <com/sun/star/beans/GetPropertyTolerantResult.hpp>

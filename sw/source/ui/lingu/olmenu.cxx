@@ -42,7 +42,6 @@
 #include "wrtsh.hxx"
 #include "wview.hxx"
 
-#include <svl/svstdarr.hxx>
 #include <comphelper/anytostring.hxx>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/exc_hlp.hxx>

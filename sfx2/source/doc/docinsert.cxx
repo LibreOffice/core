@@ -38,7 +38,6 @@
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
 #include <svl/stritem.hxx>
-#include <svl/svstdarr.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;

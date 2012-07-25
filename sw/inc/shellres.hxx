@@ -28,7 +28,6 @@
 #ifndef _SHELLRES_HXX
 #define _SHELLRES_HXX
 
-#include <svl/svstdarr.hxx>
 #include <swdllapi.h>
 #include <tools/string.hxx>
 #include <tools/rc.hxx>

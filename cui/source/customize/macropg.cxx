@@ -30,7 +30,6 @@
 
 #include "macropg.hxx"
 #include <vcl/msgbox.hxx>
-#include <svl/svstdarr.hxx>
 #include <svtools/svmedit.hxx>
 #include <svl/eitem.hxx>
 #include <tools/diagnose_ex.h>
