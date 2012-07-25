@@ -30,10 +30,15 @@ $(eval $(call gb_CppunitTest_add_exception_objects,tubes_test, \
 	tubes/qa/test_manager \
 ))
 
-$(eval $(call gb_CppunitTest_add_linked_libs,tubes_test, \
+$(eval $(call gb_CppunitTest_use_packages,tubes_test,tubes_inc))
+
+$(eval $(call gb_CppunitTest_use_library_objects,tubes_test,tubes))
+
+$(eval $(call gb_CppunitTest_use_libraries,tubes_test, \
+	comphelper \
+	cppu \
 	sal \
-	tubes \
-	unotest \
+	utl \
 	$(gb_STDLIBS) \
 ))
 
@@ -41,13 +46,6 @@ $(eval $(call gb_CppunitTest_use_externals,tubes_test,\
 	telepathy \
 ))
 
-$(eval $(call gb_CppunitTest_set_include,tubes_test,\
-	-I$(SRCDIR)/tubes/inc \
-	$$(INCLUDE) \
-))
-
-$(eval $(call gb_CppunitTest_add_api,tubes_test, \
-	udkapi \
-))
+$(eval $(call gb_CppunitTest_use_udk_api,tubes_test))
 
 # vim: set noet sw=4 ts=4:

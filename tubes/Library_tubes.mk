@@ -43,7 +43,6 @@ $(eval $(call gb_Library_use_libraries,tubes,\
 	comphelper \
 	cppu \
 	sal \
-	salhelper \
 ))
 
 $(eval $(call gb_Library_use_externals,tubes,\
