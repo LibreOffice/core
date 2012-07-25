@@ -31,6 +31,7 @@
 
 #include <rtl/oustringostreaminserter.hxx>
 #include <svtools/rtfkeywd.hxx>
+#include <filter/msfilter/rtfutil.hxx>
 
 SmRtfExport::SmRtfExport(const SmNode* pIn)
     : m_pTree(pIn)
@@ -58,6 +59,9 @@ void SmRtfExport::HandleNode(const SmNode* pNode, int nLevel)
 
     switch(pNode->GetType())
     {
+        case NATTRIBUT:
+            HandleAttribute( static_cast< const SmAttributNode* >( pNode ), nLevel );
+            break;
         case NTEXT:
             HandleText(pNode,nLevel);
             break;
@@ -170,9 +174,70 @@ void SmRtfExport::HandleBinaryOperation(const SmBinHorNode* pNode, int nLevel)
     }
 }
 
-void SmRtfExport::HandleAttribute(const SmAttributNode* /*pNode*/, int /*nLevel*/)
+void SmRtfExport::HandleAttribute(const SmAttributNode* pNode, int nLevel)
 {
-    SAL_INFO("starmath.rtf", "TODO: " << OSL_THIS_FUNC);
+    switch (pNode->Attribute()->GetToken().eType)
+    {
+        case TCHECK:
+        case TACUTE:
+        case TGRAVE:
+        case TBREVE:
+        case TCIRCLE:
+        case TVEC:
+        case TTILDE:
+        case THAT:
+        case TDOT:
+        case TDDOT:
+        case TDDDOT:
+        case TWIDETILDE:
+        case TWIDEHAT:
+        case TWIDEVEC:
+        case TBAR:
+        {
+            m_pBuffer->append("{\\macc ");
+            m_pBuffer->append("{\\maccPr ");
+            m_pBuffer->append("{\\mchr ");
+            OUString aValue(pNode->Attribute()->GetToken().cMathChar);
+            m_pBuffer->append(msfilter::rtfutil::OutString(aValue, RTL_TEXTENCODING_MS_1252));
+            m_pBuffer->append("}"); // mchr
+            m_pBuffer->append("}"); // maccPr
+            m_pBuffer->append("{\\me ");
+            HandleNode( pNode->Body(), nLevel + 1 );
+            m_pBuffer->append("}"); // me
+            m_pBuffer->append("}"); // macc
+            break;
+        }
+        case TOVERLINE:
+        case TUNDERLINE:
+            m_pBuffer->append("{\\mbar ");
+            m_pBuffer->append("{\\mbarPr ");
+            m_pBuffer->append("{\\mpos ");
+            m_pBuffer->append((pNode->Attribute()->GetToken().eType == TUNDERLINE ) ? "bot" : "top");
+            m_pBuffer->append("}"); // mpos
+            m_pBuffer->append("}"); // mbarPr
+            m_pBuffer->append("{\\me ");
+            HandleNode( pNode->Body(), nLevel + 1 );
+            m_pBuffer->append("}"); // me
+            m_pBuffer->append("}"); // mbar
+            break;
+        case TOVERSTRIKE:
+            m_pBuffer->append("{\\mborderBox ");
+            m_pBuffer->append("{\\mborderBoxPr ");
+            m_pBuffer->append("{\\mhideTop 1}");
+            m_pBuffer->append("{\\mhideBot 1}");
+            m_pBuffer->append("{\\mhideLeft 1}");
+            m_pBuffer->append("{\\mhideRight 1}");
+            m_pBuffer->append("{\\mstrikeH 1}");
+            m_pBuffer->append("}"); // mborderBoxPr
+            m_pBuffer->append("{\\me ");
+            HandleNode( pNode->Body(), nLevel + 1 );
+            m_pBuffer->append("}"); // me
+            m_pBuffer->append("}"); // mborderBox
+            break;
+        default:
+            HandleAllSubNodes( pNode, nLevel );
+            break;
+    }
 }
 
 void SmRtfExport::HandleMath(const SmNode* pNode, int nLevel)
