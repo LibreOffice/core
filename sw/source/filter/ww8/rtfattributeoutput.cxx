@@ -78,6 +78,7 @@
 #include <svx/fmglob.hxx>
 #include <svx/svdouno.hxx>
 #include <filter/msfilter/msoleexp.hxx>
+#include <filter/msfilter/rtfutil.hxx>
 #include <svtools/miscopt.hxx>
 
 #include <docufld.hxx>
@@ -439,7 +440,7 @@ OStringBuffer& RtfAttributeOutput::Styles()
 void RtfAttributeOutput::RawText( const String& rText, bool /*bForceUnicode*/, rtl_TextEncoding eCharSet )
 {
     SAL_INFO("sw.rtf", OSL_THIS_FUNC);
-    m_aRunText->append(m_rExport.OutString(rText, eCharSet));
+    m_aRunText->append(msfilter::rtfutil::OutString(rText, eCharSet));
 }
 
 void RtfAttributeOutput::StartRuby( const SwTxtNode& /*rNode*/, xub_StrLen /*nPos*/, const SwFmtRuby& /*rRuby*/ )
@@ -467,14 +468,14 @@ bool RtfAttributeOutput::StartURL( const String& rUrl, const String& rTarget )
     if( sURL.Len() )
     {
         m_aStyles.append("\"");
-        m_aStyles.append(m_rExport.OutString( sURL, m_rExport.eCurrentEncoding));
+        m_aStyles.append(msfilter::rtfutil::OutString( sURL, m_rExport.eCurrentEncoding));
         m_aStyles.append("\" ");
     }
 
     if( rTarget.Len() )
     {
         m_aStyles.append("\\\\t \"");
-        m_aStyles.append(m_rExport.OutString( rTarget, m_rExport.eCurrentEncoding));
+        m_aStyles.append(msfilter::rtfutil::OutString( rTarget, m_rExport.eCurrentEncoding));
         m_aStyles.append("\" ");
     }
 
@@ -1106,7 +1107,7 @@ void RtfAttributeOutput::EndStyle()
     m_rExport.InsStyle(m_nStyleId, aStyles);
     m_aStylesheet.append(aStyles);
     m_aStylesheet.append(' ');
-    m_aStylesheet.append(m_rExport.OutString(m_rStyleName, m_rExport.eCurrentEncoding));
+    m_aStylesheet.append(msfilter::rtfutil::OutString(m_rStyleName, m_rExport.eCurrentEncoding));
     m_aStylesheet.append(";}");
     m_aStylesheet.append(m_rExport.sNewLine);
 }
@@ -1389,8 +1390,8 @@ void RtfAttributeOutput::NumberingLevel( sal_uInt8 nLevel,
     }
     else
     {
-        m_rExport.Strm() << "\\'" << m_rExport.OutHex( rNumberingString.Len(), 2 ).getStr();
-        m_rExport.Strm() << m_rExport.OutString( rNumberingString, m_rExport.eDefaultEncoding ).getStr();
+        m_rExport.Strm() << "\\'" << msfilter::rtfutil::OutHex( rNumberingString.Len(), 2 ).getStr();
+        m_rExport.Strm() << msfilter::rtfutil::OutString( rNumberingString, m_rExport.eDefaultEncoding ).getStr();
     }
 
     m_rExport.Strm() << ";}";
@@ -1399,7 +1400,7 @@ void RtfAttributeOutput::NumberingLevel( sal_uInt8 nLevel,
     m_rExport.Strm() << "{" << OOO_STRING_SVTOOLS_RTF_LEVELNUMBERS;
     for( sal_uInt8 i = 0; i <= nLevel && pNumLvlPos[ i ]; ++i )
     {
-        m_rExport.Strm() << "\\'" << m_rExport.OutHex(pNumLvlPos[ i ], 2).getStr();
+        m_rExport.Strm() << "\\'" << msfilter::rtfutil::OutHex(pNumLvlPos[ i ], 2).getStr();
     }
     m_rExport.Strm() << ";}";
 
@@ -1433,11 +1434,11 @@ void RtfAttributeOutput::WriteField_Impl( const SwField* pFld, ww::eField /*eTyp
     {
         m_aRunText->append("{" OOO_STRING_SVTOOLS_RTF_FIELD);
         m_aRunText->append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FLDINST " ");
-        m_aRunText->append(m_rExport.OutString(rFldCmd, m_rExport.eCurrentEncoding));
+        m_aRunText->append(msfilter::rtfutil::OutString(rFldCmd, m_rExport.eCurrentEncoding));
         m_aRunText->append("}{" OOO_STRING_SVTOOLS_RTF_FLDRSLT " ");
     }
     if (pFld)
-        m_aRunText->append(m_rExport.OutString(pFld->ExpandField(true), m_rExport.eDefaultEncoding));
+        m_aRunText->append(msfilter::rtfutil::OutString(pFld->ExpandField(true), m_rExport.eDefaultEncoding));
     if (bHasInstructions)
         m_aRunText->append("}}");
 }
@@ -1447,7 +1448,7 @@ void RtfAttributeOutput::WriteBookmarks_Impl( std::vector< rtl::OUString >& rSta
     for ( std::vector< OUString >::const_iterator it = rStarts.begin(), end = rStarts.end(); it != end; ++it )
     {
         m_aRun->append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_BKMKSTART " ");
-        m_aRun->append(m_rExport.OutString(*it, m_rExport.eCurrentEncoding));
+        m_aRun->append(msfilter::rtfutil::OutString(*it, m_rExport.eCurrentEncoding));
         m_aRun->append('}');
     }
     rStarts.clear();
@@ -1455,7 +1456,7 @@ void RtfAttributeOutput::WriteBookmarks_Impl( std::vector< rtl::OUString >& rSta
     for ( std::vector< OUString >::const_iterator it = rEnds.begin(), end = rEnds.end(); it != end; ++it )
     {
         m_aRun->append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_BKMKEND " ");
-        m_aRun->append(m_rExport.OutString(*it, m_rExport.eCurrentEncoding));
+        m_aRun->append(msfilter::rtfutil::OutString(*it, m_rExport.eCurrentEncoding));
         m_aRun->append('}');
     }
     rEnds.clear();
@@ -1676,7 +1677,7 @@ void RtfAttributeOutput::OutputFlyFrame_Impl( const sw::Frame& rFrame, const Poi
                             aStr = aBuf.makeStringAndClear();
                             pStr = aStr.getStr();
                             for (int i = 0; i < aStr.getLength(); i++, pStr++)
-                                m_aRun->append(m_rExport.OutHex(*pStr, 2));
+                                m_aRun->append(msfilter::rtfutil::OutHex(*pStr, 2));
                             m_aRun->append('}');
                             m_aRun->append("}{" OOO_STRING_SVTOOLS_RTF_FLDRSLT " ");
                             xPropSet->getPropertyValue("Text") >>= aTmp;
@@ -2312,7 +2313,7 @@ void RtfAttributeOutput::WriteTextFootnoteNumStr(const SwFmtFtn& rFootnote)
     if (!rFootnote.GetNumStr().Len())
         m_aRun->append(OOO_STRING_SVTOOLS_RTF_CHFTN);
     else
-        m_aRun->append(m_rExport.OutString(rFootnote.GetNumStr(), m_rExport.eCurrentEncoding));
+        m_aRun->append(msfilter::rtfutil::OutString(rFootnote.GetNumStr(), m_rExport.eCurrentEncoding));
 }
 
 void RtfAttributeOutput::TextFootnote_Impl( const SwFmtFtn& rFootnote )
@@ -2524,7 +2525,7 @@ void RtfAttributeOutput::ParaNumRule_Impl( const SwTxtNode* pTxtNd, sal_Int32 nL
             if (sTxt.Len())
             {
                 m_aStyles.append(' ');
-                m_aStyles.append(m_rExport.OutString(sTxt, m_rExport.eDefaultEncoding));
+                m_aStyles.append(msfilter::rtfutil::OutString(sTxt, m_rExport.eDefaultEncoding));
             }
 
             if( bExportNumRule )
@@ -3249,7 +3250,7 @@ void lcl_AppendSP( OStringBuffer& rBuffer,
     rBuffer.append( cName ); //"PropName"
     rBuffer.append( "}{" OOO_STRING_SVTOOLS_RTF_SV " " );
 // "}{ \sv "
-    rBuffer.append( rExport.OutString( rValue, rExport.eCurrentEncoding ) );
+    rBuffer.append( msfilter::rtfutil::OutString( rValue, rExport.eCurrentEncoding ) );
     rBuffer.append( "}}" );
 }
 

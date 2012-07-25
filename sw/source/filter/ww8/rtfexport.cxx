@@ -64,6 +64,7 @@
 #include <comphelper/string.hxx>
 #include <rtl/oustringostreaminserter.hxx>
 #include <svtools/rtfkeywd.hxx>
+#include <filter/msfilter/rtfutil.hxx>
 #include <unotools/configmgr.hxx>
 
 #if OSL_DEBUG_LEVEL > 1
@@ -271,7 +272,7 @@ void RtfExport::WriteRevTab()
         const String* pAuthor = GetRedline(i);
         Strm() << '{';
         if (pAuthor)
-            Strm() << OutString(*pAuthor, eDefaultEncoding).getStr();
+            Strm() << msfilter::rtfutil::OutString(*pAuthor, eDefaultEncoding).getStr();
         Strm() << ";}";
     }
     Strm() << '}' << sNewLine;
@@ -348,14 +349,14 @@ void RtfExport::DoFormText(const SwInputField* pFld )
     m_pAttrOutput->RunText().append( OOO_STRING_SVTOOLS_RTF_FFTYPETXT  "0" );
 
     if( !sName.isEmpty() )
-        m_pAttrOutput->RunText().append( "{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FFNAME " ").append( OutString( sName, eDefaultEncoding )).append( "}" );
+        m_pAttrOutput->RunText().append( "{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FFNAME " ").append( msfilter::rtfutil::OutString( sName, eDefaultEncoding )).append( "}" );
     if( !sHelp.isEmpty() )
-        m_pAttrOutput->RunText().append( "{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FFHELPTEXT " ").append( OutString( sHelp, eDefaultEncoding )).append( "}" );
-    m_pAttrOutput->RunText().append( "{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FFDEFTEXT " ").append( OutString( sResult, eDefaultEncoding )).append( "}" );
+        m_pAttrOutput->RunText().append( "{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FFHELPTEXT " ").append( msfilter::rtfutil::OutString( sHelp, eDefaultEncoding )).append( "}" );
+    m_pAttrOutput->RunText().append( "{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FFDEFTEXT " ").append( msfilter::rtfutil::OutString( sResult, eDefaultEncoding )).append( "}" );
     if( !sStatus.isEmpty() )
-        m_pAttrOutput->RunText().append( "{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FFSTATTEXT " ").append( OutString( sStatus, eDefaultEncoding )).append( "}");
+        m_pAttrOutput->RunText().append( "{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FFSTATTEXT " ").append( msfilter::rtfutil::OutString( sStatus, eDefaultEncoding )).append( "}");
     m_pAttrOutput->RunText().append( "}}}{" OOO_STRING_SVTOOLS_RTF_FLDRSLT " " );
-    m_pAttrOutput->RunText().append( OutString( sResult, eDefaultEncoding )).append( "}}" );
+    m_pAttrOutput->RunText().append( msfilter::rtfutil::OutString( sResult, eDefaultEncoding )).append( "}}" );
 }
 
 sal_uLong RtfExport::ReplaceCr( sal_uInt8 )
@@ -455,7 +456,7 @@ void RtfExport::WritePageDescTable()
                 break;
         Strm() << OOO_STRING_SVTOOLS_RTF_PGDSCNXT;
         OutULong( i ) << ' ';
-        Strm() << OutString( rPageDesc.GetName(), eDefaultEncoding).getStr() << ";}";
+        Strm() << msfilter::rtfutil::OutString( rPageDesc.GetName(), eDefaultEncoding).getStr() << ";}";
     }
     Strm() << '}' << sNewLine;
     bOutPageDescs = sal_False;
@@ -816,121 +817,9 @@ void RtfExport::OutUnicode(const sal_Char *pToken, const String &rContent)
     if (rContent.Len())
     {
         Strm() << '{' << pToken << ' ';
-        Strm() << OutString( rContent, eCurrentEncoding ).getStr();
+        Strm() << msfilter::rtfutil::OutString( rContent, eCurrentEncoding ).getStr();
         Strm() << '}';
     }
-}
-
-OString RtfExport::OutHex(sal_uLong nHex, sal_uInt8 nLen)
-{
-    sal_Char aNToABuf[] = "0000000000000000";
-
-    OSL_ENSURE( nLen < sizeof(aNToABuf), "nLen is too big" );
-    if( nLen >= sizeof(aNToABuf) )
-        nLen = (sizeof(aNToABuf)-1);
-
-    // Set pointer to the buffer end
-    sal_Char* pStr = aNToABuf + (sizeof(aNToABuf)-1);
-    for( sal_uInt8 n = 0; n < nLen; ++n )
-    {
-        *(--pStr) = (sal_Char)(nHex & 0xf ) + 48;
-        if( *pStr > '9' )
-            *pStr += 39;
-        nHex >>= 4;
-    }
-    return OString(pStr);
-}
-
-OString RtfExport::OutChar(sal_Unicode c, int *pUCMode, rtl_TextEncoding eDestEnc)
-{
-    OStringBuffer aBuf;
-    const sal_Char* pStr = 0;
-    // 0x0b instead of \n, etc because of the replacements in SwWW8AttrIter::GetSnippet()
-    switch (c)
-    {
-        case 0x0b:
-            // hard line break
-            pStr = OOO_STRING_SVTOOLS_RTF_LINE;
-            break;
-        case '\t':
-            pStr = OOO_STRING_SVTOOLS_RTF_TAB;
-            break;
-        case '\\':
-        case '}':
-        case '{':
-            aBuf.append('\\');
-            aBuf.append((sal_Char)c);
-            break;
-        case 0xa0:
-            // non-breaking space
-            pStr = "\\~";
-            break;
-        case 0x1e:
-            // non-breaking hyphen
-            pStr = "\\_";
-            break;
-        case 0x1f:
-            // optional hyphen
-            pStr = "\\-";
-            break;
-        default:
-            if (c >= ' ' && c <= '~')
-                aBuf.append((sal_Char)c);
-            else {
-                OUString sBuf(&c, 1);
-                OString sConverted;
-                sBuf.convertToString(&sConverted, eDestEnc, OUSTRING_TO_OSTRING_CVTFLAGS);
-                const sal_Int32 nLen = sConverted.getLength();
-
-                if (pUCMode)
-                {
-                    if (*pUCMode != nLen)
-                    {
-                        aBuf.append("\\uc");
-                        aBuf.append((sal_Int32)nLen);
-                        // #i47831# add an additional whitespace, so that "document whitespaces" are not ignored.
-                        aBuf.append(' ');
-                        *pUCMode = nLen;
-                    }
-                    aBuf.append("\\u");
-                    aBuf.append((sal_Int32)c);
-                }
-
-                for (sal_Int32 nI = 0; nI < nLen; ++nI)
-                {
-                    aBuf.append("\\'");
-                    aBuf.append(OutHex(sConverted.getStr()[nI], 2));
-                }
-            }
-    }
-    if (pStr) {
-        aBuf.append(pStr);
-        switch (c)
-        {
-            case 0xa0:
-            case 0x1e:
-            case 0x1f:
-                break;
-            default:
-                aBuf.append(' ');
-        }
-    }
-    return aBuf.makeStringAndClear();
-}
-
-OString RtfExport::OutString(const String &rStr, rtl_TextEncoding eDestEnc)
-{
-    SAL_INFO("sw.rtf", OSL_THIS_FUNC << ", rStr = '" << OUString(rStr) << "'");
-    OStringBuffer aBuf;
-    int nUCMode = 1;
-    for (xub_StrLen n = 0; n < rStr.Len(); ++n)
-        aBuf.append(OutChar(rStr.GetChar(n), &nUCMode, eDestEnc));
-    if (nUCMode != 1) {
-        aBuf.append(OOO_STRING_SVTOOLS_RTF_UC);
-        aBuf.append((sal_Int32)1);
-        aBuf.append(" "); // #i47831# add an additional whitespace, so that "document whitespaces" are not ignored.;
-    }
-    return aBuf.makeStringAndClear();
 }
 
 void RtfExport::OutDateTime(const sal_Char* pStr, const util::DateTime& rDT )
