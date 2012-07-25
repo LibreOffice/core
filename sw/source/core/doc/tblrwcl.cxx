@@ -78,7 +78,7 @@ using namespace ::com::sun::star;
 #define CHECK_TABLE(t)
 #endif
 
-typedef o3tl::sorted_vector<SwTableLine*> SwSortTableLines;
+typedef std::map<SwTableLine*, sal_uInt16> SwTableLineWidthMap_t;
 
 // In order to set the Frame Formats for the Boxes, it's enough to look
 // up the current one in the array. If it's already there return the new one.
@@ -104,8 +104,7 @@ struct _CpyTabFrm
 struct CR_SetBoxWidth
 {
     SwSelBoxes aBoxes;
-    SwSortTableLines aLines;
-    std::vector<sal_uInt16> aLinesWidth;
+    SwTableLineWidthMap_t m_LineWidthMap;
     SwShareBoxFmts aShareFmts;
     SwTableNode* pTblNd;
     SwUndoTblNdsChg* pUndo;
@@ -127,7 +126,8 @@ struct CR_SetBoxWidth
         nMode = pTblNd->GetTable().GetTblChgMode();
     }
     CR_SetBoxWidth( const CR_SetBoxWidth& rCpy )
-        : aLines( rCpy.aLines ),
+        : m_LineWidthMap(rCpy.m_LineWidthMap)
+        ,
         pTblNd( rCpy.pTblNd ),
         pUndo( rCpy.pUndo ),
         nDiff( rCpy.nDiff ), nSide( rCpy.nSide ),
@@ -137,7 +137,6 @@ struct CR_SetBoxWidth
         bBigger( rCpy.bBigger ), bLeft( rCpy.bLeft ),
         bSplittBox( rCpy.bSplittBox ), bAnyBoxFnd( rCpy.bAnyBoxFnd )
     {
-        aLinesWidth = rCpy.aLinesWidth;
     }
 
     SwUndoTblNdsChg* CreateUndo( SwUndoId eUndoType )
@@ -153,24 +152,19 @@ struct CR_SetBoxWidth
     void AddBoxWidth( const SwTableBox& rBox, sal_uInt16 nWidth )
     {
         SwTableLine* p = (SwTableLine*)rBox.GetUpper();
-        std::pair<SwSortTableLines::const_iterator, bool> aPair = aLines.insert( p );
-        sal_uInt16 nFndPos = aPair.first - aLines.begin();
-        if( aPair.second )
-            aLinesWidth.insert( aLinesWidth.begin() + nFndPos, nWidth );
-        else
-            aLinesWidth[ nFndPos ] = aLinesWidth[ nFndPos ] + nWidth;
+        std::pair<SwTableLineWidthMap_t::iterator, bool> aPair =
+            m_LineWidthMap.insert(std::make_pair(p,nWidth));
+        if (!aPair.second)
+        {
+            aPair.first->second += nWidth;
+        }
     }
 
     sal_uInt16 GetBoxWidth( const SwTableLine& rLn ) const
     {
         SwTableLine* p = (SwTableLine*)&rLn;
-        SwSortTableLines::const_iterator it = aLines.find( p );
-        sal_uInt16 nFndPos;
-        if( it != aLines.end() )
-            nFndPos = aLinesWidth[ it - aLines.begin() ];
-        else
-            nFndPos = 0;
-        return nFndPos;
+        SwTableLineWidthMap_t::const_iterator const it = m_LineWidthMap.find(p);
+        return (it != m_LineWidthMap.end()) ? it->second : 0;
     }
 };
 
