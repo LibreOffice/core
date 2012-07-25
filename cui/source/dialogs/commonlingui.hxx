@@ -110,10 +110,7 @@ public:
     inline  PushButton*         GetButton( ButtonType _eType )          { return implGetButton( _eType  ); }
     inline  const PushButton*   GetButton( ButtonType _eType ) const    { return implGetButton( _eType  ); }
 
-    /** users of this class may want to insert own controls in some places, where the ordinary
-        Z-Order determined by construction time is not sufficient
-        Use the following methods for this
-        control groups in this window which cannot be devided (e.g. are adjacent in the Z order)*/
+    /// control groups in this window which cannot be devided (e.g. are adjacent in the Z order)
     enum ControlGroup
     {
         eLeftRightWords,    ///< the controls for the two words (original and suggestion), including the labels
@@ -121,6 +118,11 @@ public:
         eActionButtons,     ///< the group of "ignore(all)" / "change(all)" buttons
         eDialogButtons      ///< the group of dialog control buttons (help and close)
     };
+
+    /** Users of this class may want to insert own controls in some places,
+        where the ordinary Z-Order determined by construction time is not
+        sufficient. Use the following methods for this.
+     */
     void    InsertControlGroup( Window& _rFirstGroupWindow, Window& _rLastGroupWindow, ControlGroup _eInsertAfter );
 
     /** enlarges the window

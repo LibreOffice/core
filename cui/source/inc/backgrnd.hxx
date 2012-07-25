@@ -65,12 +65,14 @@ public:
     virtual void        Reset( const SfxItemSet& rSet );
     virtual void        FillUserData();
     virtual void        PointChanged( Window* pWindow, RECT_POINT eRP );
+
     /// Shift-ListBox activation
     void                ShowSelector();
     /// for the Writer (cells/rows/tables)
     void                ShowTblControl();
     /// for the Writer (paragraph/characters)
     void                ShowParaControl(sal_Bool bCharOnly = sal_False);
+
     void                EnableTransparency(sal_Bool bColor, sal_Bool bGraphic);
     virtual void        PageCreated (SfxAllItemSet aSet);
 protected:
