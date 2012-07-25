@@ -39,6 +39,7 @@
 #include <com/sun/star/i18n/ScriptType.hpp>
 
 #include <vector>
+#include <deque>
 #include <svtools/colorcfg.hxx>
 #include <svtools/sampletext.hxx>
 
@@ -51,7 +52,6 @@
 #include <svl/itempool.hxx>
 #include <svl/stritem.hxx>                  // SfxStringItem
 #include <svl/languageoptions.hxx>
-#include <svl/svstdarr.hxx>
 
 #include <editeng/colritem.hxx>
 #include <editeng/fontitem.hxx>
@@ -146,7 +146,7 @@ class FontPrevWin_Impl
 
     Reference < XBreakIterator >    xBreak;
     std::vector<sal_uIntPtr>        aTextWidth;
-    SvXub_StrLens                   aScriptChg;
+    std::deque<xub_StrLen>         aScriptChg;
     std::vector<sal_uInt16>         aScriptType;
     SvxFont                         aCJKFont;
     SvxFont                         aCTLFont;
