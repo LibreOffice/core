@@ -444,16 +444,16 @@ sal_Bool BitmapEx::Scale( const Size& rNewSize, sal_uLong nScaleFlag )
 }
 
 sal_Bool BitmapEx::ScaleCropRotate(
-        const double& rScaleX, const double& rScaleY, const Rectangle& rRectPixel, long nAngle10,
-        const Color& rFillColor, sal_uLong nScaleFlag )
+        const double& rScaleX, const double& rScaleY, const Rectangle& rRectPixel,
+        long nAngle10, const Color& rFillColor, sal_uLong nScaleFlag )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
+
+    const bool bTransparentRotate = ( Color( COL_TRANSPARENT ) == rFillColor );
 
     if( !!aBitmap )
     {
-        const sal_Bool bTransRotate = ( Color( COL_TRANSPARENT ) == rFillColor );
-
-        if( bTransRotate )
+        if( bTransparentRotate )
         {
             if( eTransparent == TRANSPARENT_COLOR )
             {
@@ -481,6 +481,9 @@ sal_Bool BitmapEx::ScaleCropRotate(
                 aMask.ScaleCropRotate( rScaleX, rScaleY, rRectPixel, nAngle10, COL_WHITE, nScaleFlag );
         }
     }
+
+    if (bRet)
+        aBitmapSize = aBitmap.GetSizePixel();
 
     return bRet;
 }

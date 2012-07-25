@@ -60,7 +60,7 @@ private:
     Size                aBitmapSize;
     Color               aTransparentColor;
     TransparentType     eTransparent;
-    sal_Bool                bAlpha;
+    sal_Bool            bAlpha;
 
 public:
 

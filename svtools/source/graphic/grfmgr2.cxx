@@ -304,11 +304,11 @@ sal_Bool GraphicManager::ImplCreateOutput( OutputDevice* pOutputDevice,
     bool        isHorizontalMirrored = ( rAttributes.GetMirrorFlags() & BMP_MIRROR_HORZ ) != 0;
     bool        isVerticalMirrored   = ( rAttributes.GetMirrorFlags() & BMP_MIRROR_VERT ) != 0;
 
-    Rectangle   aBitmapRectangle( aOutPointInPixels, aOutSizeInPixels );
 
     // calculate output sizes
     if( !pResultBitmapEx )
     {
+        Rectangle aBitmapRectangle( aOutPointInPixels, aOutSizeInPixels );
         Rectangle aOutRect( Point(), pOutputDevice->GetOutputSizePixel() );
 
         if( pOutputDevice->GetOutDevType() == OUTDEV_WINDOW )
@@ -332,7 +332,6 @@ sal_Bool GraphicManager::ImplCreateOutput( OutputDevice* pOutputDevice,
                 aOutRect.Top()    - aBitmapRectangle.Top(),
                 aOutRect.Right()  - aBitmapRectangle.Left(),
                 aOutRect.Bottom() - aBitmapRectangle.Top() );
-
         }
     }
     else
@@ -352,14 +351,11 @@ sal_Bool GraphicManager::ImplCreateOutput( OutputDevice* pOutputDevice,
 
     // do transformation
 
-    // #105229# Don't scale if output size equals bitmap size
-    // #107226# Copy through only if we're not mirroring
     if( !isHorizontalMirrored &&
         !isVerticalMirrored &&
-        aOutSizeInPixels == rBitmapSizePixels &&
-        !nRotation)
+        !nRotation &&
+        aOutSizeInPixels == rBitmapSizePixels)
     {
-        // #107226# Use original dimensions when just copying through
         aOutPoint = pOutputDevice->PixelToLogic( aOutPointInPixels );
         aOutSize = pOutputDevice->PixelToLogic( aOutSizeInPixels );
         bRet = true;
@@ -374,20 +370,33 @@ sal_Bool GraphicManager::ImplCreateOutput( OutputDevice* pOutputDevice,
         if( isHorizontalMirrored || isVerticalMirrored )
             bRet = aBitmapEx.Mirror( rAttributes.GetMirrorFlags() );
 
-        // depending on the flags, scale the image to the desired proportions
-        // use FAST scale if no smooth scale is desired
-        if( nFlags & GRFMGR_DRAW_SMOOTHSCALE)
+        if (nRotation)
         {
             Polygon aPoly( Rectangle( Point(), aUnrotatedSizeInPixels) );
             aPoly.Rotate( Point(), nRotation );
             Rectangle aNewBound( aPoly.GetBoundRect() );
-            Rectangle aCropRectangle2 (
-                aCropRectangle.Left() + aNewBound.Left(),
-                aCropRectangle.Top() + aNewBound.Top(),
-                aCropRectangle.Right() + aNewBound.Left(),
-                aCropRectangle.Bottom() + aNewBound.Top());
 
-            bRet = aBitmapEx.ScaleCropRotate( fScaleX, fScaleY, aCropRectangle2, nRotation, COL_TRANSPARENT );
+            aCropRectangle = Rectangle (
+                                aCropRectangle.Left()   + aNewBound.Left(),
+                                aCropRectangle.Top()    + aNewBound.Top(),
+                                aCropRectangle.Right()  + aNewBound.Left(),
+                                aCropRectangle.Bottom() + aNewBound.Top() );
+        }
+        if( nFlags & GRFMGR_DRAW_SMOOTHSCALE)
+        {
+            bRet = aBitmapEx.ScaleCropRotate( fScaleX, fScaleY, aCropRectangle, nRotation, COL_TRANSPARENT );
+        }
+        else
+        {
+            aCropRectangle = Rectangle (
+                                aCropRectangle.Left()   / fScaleX,
+                                aCropRectangle.Right()  / fScaleX,
+                                aCropRectangle.Top()    / fScaleY,
+                                aCropRectangle.Bottom() / fScaleY );
+
+            bRet = aBitmapEx.Crop( aCropRectangle );
+            if (bRet)
+                bRet = aBitmapEx.Scale( fScaleX, fScaleY );
         }
     }
 
