@@ -50,10 +50,8 @@ namespace svgio
 
         const SvgStyleAttributes* SvgMarkerNode::getSvgStyleAttributes() const
         {
-            static OUString aClassStr(OUString::createFromAscii("marker"));
-            maSvgStyleAttributes.checkForCssStyle(aClassStr);
-
-            return &maSvgStyleAttributes;
+            static rtl::OUString aClassStr(rtl::OUString::createFromAscii("marker"));
+            return checkForCssStyle(aClassStr, maSvgStyleAttributes);
         }
 
         void SvgMarkerNode::parseAttribute(const OUString& rTokenName, SVGToken aSVGToken, const OUString& aContent)

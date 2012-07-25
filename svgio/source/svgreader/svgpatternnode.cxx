@@ -64,10 +64,8 @@ namespace svgio
 
         const SvgStyleAttributes* SvgPatternNode::getSvgStyleAttributes() const
         {
-            static OUString aClassStr(OUString::createFromAscii("pattern"));
-            maSvgStyleAttributes.checkForCssStyle(aClassStr);
-
-            return &maSvgStyleAttributes;
+            static rtl::OUString aClassStr(rtl::OUString::createFromAscii("pattern"));
+            return checkForCssStyle(aClassStr, maSvgStyleAttributes);
         }
 
         void SvgPatternNode::parseAttribute(const OUString& rTokenName, SVGToken aSVGToken, const OUString& aContent)

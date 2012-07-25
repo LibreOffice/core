@@ -47,10 +47,8 @@ namespace svgio
 
         const SvgStyleAttributes* SvgEllipseNode::getSvgStyleAttributes() const
         {
-            static OUString aClassStr(OUString::createFromAscii("ellipse"));
-            maSvgStyleAttributes.checkForCssStyle(aClassStr);
-
-            return &maSvgStyleAttributes;
+            static rtl::OUString aClassStr(rtl::OUString::createFromAscii("ellipse"));
+            return checkForCssStyle(aClassStr, maSvgStyleAttributes);
         }
 
         void SvgEllipseNode::parseAttribute(const OUString& rTokenName, SVGToken aSVGToken, const OUString& aContent)

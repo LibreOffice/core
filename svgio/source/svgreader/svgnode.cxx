@@ -35,6 +35,96 @@ namespace svgio
             return 0;
         }
 
+        const SvgStyleAttributes* SvgNode::checkForCssStyle(const rtl::OUString& rClassStr, const SvgStyleAttributes& rOriginal) const
+        {
+            const SvgDocument& rDocument = getDocument();
+
+            if(rDocument.hasSvgStyleAttributesById())
+            {
+                if(getClass())
+                {
+                    // find all referenced CSS styles, a list of entries is allowed
+                    const rtl::OUString* pClassList = getClass();
+                    const sal_Int32 nLen(pClassList->getLength());
+                    sal_Int32 nPos(0);
+                    const SvgStyleAttributes* pNew = 0;
+
+                    skip_char(*pClassList, sal_Unicode(' '), nPos, nLen);
+
+                    while(nPos < nLen)
+                    {
+                        rtl::OUStringBuffer aTokenValue;
+
+                        copyToLimiter(*pClassList, sal_Unicode(' '), nPos, aTokenValue, nLen);
+                        skip_char(*pClassList, sal_Unicode(' '), nPos, nLen);
+
+                        rtl::OUString aId(rtl::OUString::createFromAscii("."));
+                        const rtl::OUString aOUTokenValue(aTokenValue.makeStringAndClear());
+
+                        // look for CSS style common to token
+                        aId = aId + aOUTokenValue;
+                        pNew = rDocument.findSvgStyleAttributesById(aId);
+
+                        if(!pNew && rClassStr.getLength())
+                        {
+                            // look for CSS style common to class.token
+                            aId = rClassStr + aId;
+
+                            pNew = rDocument.findSvgStyleAttributesById(aId);
+                        }
+
+                        if(pNew)
+                        {
+                            const_cast< SvgNode* >(this)->maCssStyleVector.push_back(pNew);
+                        }
+                    }
+                }
+
+                if(maCssStyleVector.empty() && getId())
+                {
+                    // if none found, search for CSS style equal to Id
+                    const SvgStyleAttributes* pNew = rDocument.findSvgStyleAttributesById(*getId());
+
+                    if(pNew)
+                    {
+                        const_cast< SvgNode* >(this)->maCssStyleVector.push_back(pNew);
+                    }
+                }
+
+                if(maCssStyleVector.empty() && rClassStr.getLength())
+                {
+                    // if none found, search for CSS style equal to class type
+                    const SvgStyleAttributes* pNew = rDocument.findSvgStyleAttributesById(rClassStr);
+
+                    if(pNew)
+                    {
+                        const_cast< SvgNode* >(this)->maCssStyleVector.push_back(pNew);
+                    }
+                }
+            }
+
+            if(maCssStyleVector.empty())
+            {
+                return &rOriginal;
+            }
+            else
+            {
+                // set CssStyleParent at maCssStyleVector members to hang them in front of
+                // the existing style
+                SvgStyleAttributes* pCurrent = const_cast< SvgStyleAttributes* >(&rOriginal);
+
+                for(sal_uInt32 a(0); a < maCssStyleVector.size(); a++)
+                {
+                    SvgStyleAttributes* pCandidate = const_cast< SvgStyleAttributes* >(maCssStyleVector[maCssStyleVector.size() - a - 1]);
+
+                    pCandidate->setCssStyleParent(pCurrent);
+                    pCurrent = pCandidate;
+                }
+
+                return pCurrent;
+            }
+        }
+
         SvgNode::SvgNode(
             SVGToken aType,
             SvgDocument& rDocument,
@@ -46,7 +136,8 @@ namespace svgio
             maChildren(),
             mpId(0),
             mpClass(0),
-            maXmlSpace(XmlSpace_notset)
+            maXmlSpace(XmlSpace_notset),
+            maCssStyleVector()
         {
             OSL_ENSURE(SVGTokenUnknown != maType, "SvgNode with unknown type created (!)");
 
