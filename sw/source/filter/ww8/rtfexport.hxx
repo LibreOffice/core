@@ -168,9 +168,6 @@ public:
     SvStream& OutLong( long nVal );
     void OutUnicode(const sal_Char *pToken, const String &rContent);
     void OutDateTime(const sal_Char* pStr, const util::DateTime& rDT );
-    static rtl::OString OutChar(sal_Unicode c, int *pUCMode, rtl_TextEncoding eDestEnc);
-    static rtl::OString OutString(const String &rStr, rtl_TextEncoding eDestEnc);
-    static rtl::OString OutHex(sal_uLong nHex, sal_uInt8 nLen);
     void OutPageDescription( const SwPageDesc& rPgDsc, sal_Bool bWriteReset, sal_Bool bCheckForFirstPage );
 
     sal_uInt16 GetColor( const Color& rColor ) const;
