@@ -433,7 +433,6 @@ public:
     // Transfer IFace
     void                        AbortImport();
     sal_Bool                    IsAbortingImport() const;
-    void                        RegisterTransfer( SfxMedium& rMedium );
     sal_Bool                    IsReloading() const;
     void                        FinishedLoading( sal_uInt16 nWhich = SFX_LOADED_ALL );
     void                        TemplateDisconnectionAfterLoad();

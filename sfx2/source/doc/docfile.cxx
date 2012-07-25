@@ -287,7 +287,6 @@ public:
 
     const SfxFilter* pOrigFilter;
     rtl::OUString    aOrigURL;
-    String           aReferer;
     DateTime         aExpireTime;
     SfxFrameWeak     wLoadTargetFrame;
     SvKeyValueIteratorRef xAttributes;
@@ -3006,15 +3005,6 @@ const INetURLObject& SfxMedium::GetURLObject() const
 
     return *pImp->m_pURLObj;
 }
-
-//----------------------------------------------------------------
-
-void SfxMedium::SetReferer( const String& rRefer )
-{
-    pImp->aReferer = rRefer;
-}
-
-//----------------------------------------------------------------
 
 void SfxMedium::SetExpired_Impl( const DateTime& rDateTime )
 {

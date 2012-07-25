@@ -1742,10 +1742,6 @@ sal_Bool SwHTMLParser::FileDownload( const String& rURL,
     // Ein Medium anlegen
     SfxMedium aDLMedium( rURL, STREAM_READ | STREAM_SHARE_DENYWRITE );
 
-    // Medium registrieren, damit abgebrochen werden kann
-    if( pDoc->GetDocShell() )
-        pDoc->GetDocShell()->RegisterTransfer( aDLMedium );
-
     SvStream* pStream = aDLMedium.GetInStream();
     if( pStream )
     {

@@ -1622,9 +1622,6 @@ sal_Bool SfxObjectShell::SaveTo_Impl
 
         AddLog( ::rtl::OUString( OSL_LOG_PREFIX "Medium commit."  ) );
 
-        // transfer data to its destinated location
-        // the medium commits the storage or the stream it is based on
-        RegisterTransfer( rMedium );
         bOk = rMedium.Commit();
 
         if ( bOk )
