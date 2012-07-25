@@ -20,8 +20,7 @@ TARGET=sn_msidb
 .IF "$(WINEGCC)"==""
 @all:
     @echo "No winegcc present, not building msidb..."
-.ENDIF
-
+.ELSE
 @all: $(BIN)/msidb.exe $(BIN)/msidb.exe.so
 
 $(BIN)/msidb.exe.so: $(BIN)/msidb.exe
@@ -34,3 +33,4 @@ $(BIN)/msidb.exe:
 .INCLUDE : target.mk
 
 # -------------------------------------------------------------------------
+.ENDIF

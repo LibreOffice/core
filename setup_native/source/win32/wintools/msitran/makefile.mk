@@ -20,8 +20,7 @@ TARGET=sn_msitran
 .IF "$(WINEGCC)"==""
 @all:
     @echo "No winegcc present, not building msitran..."
-.ENDIF
-
+.ELSE
 @all: $(BIN)/msitran.exe $(BIN)/msitran.exe.so
 
 $(BIN)/msitran.exe.so: $(BIN)/msitran.exe
@@ -33,4 +32,4 @@ $(BIN)/msitran.exe:
 
 .INCLUDE : target.mk
 
-# -------------------------------------------------------------------------
+.ENDIF

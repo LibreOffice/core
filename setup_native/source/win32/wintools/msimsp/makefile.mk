@@ -20,8 +20,7 @@ TARGET=sn_msimsp
 .IF "$(WINEGCC)"==""
 @all:
     @echo "No winegcc present, not building msimsp..."
-.ENDIF
-
+.ELSE
 @all: $(BIN)/msimsp.exe $(BIN)/msimsp.exe.so
 
 $(BIN)/msimsp.exe.so: $(BIN)/msimsp.exe
@@ -33,4 +32,4 @@ $(BIN)/msimsp.exe:
 
 .INCLUDE : target.mk
 
-# -------------------------------------------------------------------------
+.ENDIF
