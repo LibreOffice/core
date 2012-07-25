@@ -210,13 +210,13 @@ void SVGAttributeWriter::AddGradientDef( const Rectangle& rObjRect, const Gradie
         Rectangle aRect( aPoly.GetBoundRect() );
 
         // adjust start/end colors with intensities
-        aStartColor.SetRed( (sal_uInt8)( (long) aStartColor.GetRed() * rGradient.GetStartIntensity() ) / 100 );
-        aStartColor.SetGreen( (sal_uInt8)( (long) aStartColor.GetGreen() * rGradient.GetStartIntensity() ) / 100 );
-        aStartColor.SetBlue( (sal_uInt8)( (long) aStartColor.GetBlue() * rGradient.GetStartIntensity() ) / 100 );
+        aStartColor.SetRed( (sal_uInt8)( ( (long) aStartColor.GetRed() * rGradient.GetStartIntensity() ) / 100 ) );
+        aStartColor.SetGreen( (sal_uInt8)( ( (long) aStartColor.GetGreen() * rGradient.GetStartIntensity() ) / 100 ) );
+        aStartColor.SetBlue( (sal_uInt8)( ( (long) aStartColor.GetBlue() * rGradient.GetStartIntensity() ) / 100 ) );
 
-        aEndColor.SetRed( (sal_uInt8)( (long) aEndColor.GetRed() * rGradient.GetEndIntensity() ) / 100 );
-        aEndColor.SetGreen( (sal_uInt8)( (long) aEndColor.GetGreen() * rGradient.GetEndIntensity() ) / 100 );
-        aEndColor.SetBlue( (sal_uInt8)( (long) aEndColor.GetBlue() * rGradient.GetEndIntensity() ) / 100 );
+        aEndColor.SetRed( (sal_uInt8)( ( (long) aEndColor.GetRed() * rGradient.GetEndIntensity() ) / 100 ) );
+        aEndColor.SetGreen( (sal_uInt8)( ( (long) aEndColor.GetGreen() * rGradient.GetEndIntensity() ) / 100 ) );
+        aEndColor.SetBlue( (sal_uInt8)( ( (long) aEndColor.GetBlue() * rGradient.GetEndIntensity() ) / 100 ) );
 
         mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrId,
                             ( rGradientId = B2UCONST( "Gradient_" ) ) += ::rtl::OUString::valueOf( nCurGradientId++ ) );
@@ -853,53 +853,91 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const String& rText,
 
     if( nLen > 1 )
     {
-        aNormSize.Width() = pDX[ nLen - 2 ] + mpVDev->GetTextWidth( rText.GetChar(  nLen - 1 ) );
+        ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XBreakIterator > xBI( ::vcl::unohelper::CreateBreakIterator() );
+        const ::com::sun::star::lang::Locale& rLocale = Application::GetSettings().GetLocale();
+        sal_Int32 nCurPos = 0, nLastPos = 0, nX = aPos.X();
 
-        if( nWidth && aNormSize.Width() && ( nWidth != aNormSize.Width() ) )
+        if ( mrExport.IsUseTSpans() )
         {
-            const double fFactor = (double) nWidth / aNormSize.Width();
+            mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrX, ::rtl::OUString::valueOf( aPos.X() ) );
+            mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrY, ::rtl::OUString::valueOf( aPos.Y() ) );
+            SvXMLElementExport aElem( mrExport, XML_NAMESPACE_NONE, aXMLElemText, sal_True, sal_False );
+            {
+                rtl::OUString aString;
+                for( sal_Bool bCont = sal_True; bCont; )
+                {
+                    sal_Int32 nCount = 1;
+                    const ::rtl::OUString   aSpace( ' ' );
 
-            for( i = 0; i < ( nLen - 1 ); i++ )
-                pDX[ i ] = FRound( pDX[ i ] * fFactor );
+                    nLastPos = nCurPos;
+                    nCurPos = xBI->nextCharacters( rText, nCurPos, rLocale, ::com::sun::star::i18n::CharacterIteratorMode::SKIPCELL, nCount, nCount );
+                    nCount = nCurPos - nLastPos;
+                    bCont = ( nCurPos < rText.Len() ) && nCount;
+
+                    if( nCount )
+                    {
+                        aString += rtl::OUString::valueOf( nX );
+                        if( bCont )
+                        {
+                            sal_Int32 nWidth = pDX[ nCurPos - 1 ];
+                            if ( bApplyMapping )
+                                nWidth = ImplMap( nWidth );
+                            nX = aPos.X() + nWidth;
+                            aString += aSpace;
+                        }
+                    }
+                }
+                mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrX, aString );
+                SvXMLElementExport aElem( mrExport, XML_NAMESPACE_NONE, aXMLElemTSpan, sal_True, sal_False );
+                mrExport.GetDocHandler()->characters( rText );
+            }
         }
         else
         {
-            ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XBreakIterator > xBI( ::vcl::unohelper::CreateBreakIterator() );
-            const ::com::sun::star::lang::Locale& rLocale = Application::GetSettings().GetLocale();
-            sal_Int32 nCurPos = 0, nLastPos = 0, nX = aPos.X();
+            aNormSize.Width() = pDX[ nLen - 2 ] + mpVDev->GetTextWidth( rText.GetChar(  nLen - 1 ) );
 
-            // write single glyphs at absolute text positions
-            for( sal_Bool bCont = sal_True; bCont; )
+            if( nWidth && aNormSize.Width() && ( nWidth != aNormSize.Width() ) )
             {
-                sal_Int32 nCount = 1;
+                const double fFactor = (double) nWidth / aNormSize.Width();
 
-                nLastPos = nCurPos;
-                nCurPos = xBI->nextCharacters( rText, nCurPos, rLocale,
-                                            ::com::sun::star::i18n::CharacterIteratorMode::SKIPCELL,
-                                            nCount, nCount );
-
-                nCount = nCurPos - nLastPos;
-                bCont = ( nCurPos < rText.Len() ) && nCount;
-
-                if( nCount )
+                for( i = 0; i < ( nLen - 1 ); i++ )
+                    pDX[ i ] = FRound( pDX[ i ] * fFactor );
+            }
+            else
+            {
+                // write single glyphs at absolute text positions
+                for( sal_Bool bCont = sal_True; bCont; )
                 {
-                    const ::rtl::OUString aGlyph( rText.Copy( nLastPos, nCount ) );
+                    sal_Int32 nCount = 1;
 
-                    mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrX, ::rtl::OUString::valueOf( nX ) );
-                    mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrY, ::rtl::OUString::valueOf( aPos.Y() ) );
+                    nLastPos = nCurPos;
+                    nCurPos = xBI->nextCharacters( rText, nCurPos, rLocale,
+                                                ::com::sun::star::i18n::CharacterIteratorMode::SKIPCELL,
+                                                nCount, nCount );
 
+                    nCount = nCurPos - nLastPos;
+                    bCont = ( nCurPos < rText.Len() ) && nCount;
+
+                    if( nCount )
                     {
-                        SvXMLElementExport aElem( mrExport, XML_NAMESPACE_NONE, aXMLElemText, sal_True, sal_False );
-                        mrExport.GetDocHandler()->characters( aGlyph );
-                    }
+                        const ::rtl::OUString aGlyph( rText.Copy( nLastPos, nCount ) );
 
-                    if( bCont )
-                    {
-                        // #118796# do NOT access pDXArray, it may be zero (!)
-                        sal_Int32 nWidth = pDX[ nCurPos - 1 ];
-                        if ( bApplyMapping )
-                            nWidth = ImplMap( nWidth );
-                        nX = aPos.X() + nWidth;
+                        mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrX, ::rtl::OUString::valueOf( nX ) );
+                        mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrY, ::rtl::OUString::valueOf( aPos.Y() ) );
+
+                        {
+                            SvXMLElementExport aElem( mrExport, XML_NAMESPACE_NONE, aXMLElemText, sal_True, sal_False );
+                            mrExport.GetDocHandler()->characters( aGlyph );
+                        }
+
+                        if( bCont )
+                        {
+                            // #118796# do NOT access pDXArray, it may be zero (!)
+                            sal_Int32 nWidth = pDX[ nCurPos - 1 ];
+                            if ( bApplyMapping )
+                                nWidth = ImplMap( nWidth );
+                            nX = aPos.X() + nWidth;
+                        }
                     }
                 }
             }
@@ -994,8 +1032,8 @@ void SVGActionWriter::ImplWriteBmp( const BitmapEx& rBmpEx,
                     aPt = rPt;
                     aSz = rSz;
                 }
-
-                if( xExtDocHandler.is() )
+                const Rectangle aRect( aPt, aSz );
+                if( mrExport.IsVisible( aRect ) && xExtDocHandler.is() )
                 {
                     static const sal_uInt32     nPartLen = 64;
                     const ::rtl::OUString   aSpace( ' ' );
@@ -1888,8 +1926,9 @@ SVGWriter::~SVGWriter()
 
 ANY SAL_CALL SVGWriter::queryInterface( const NMSP_UNO::Type & rType ) throw( NMSP_UNO::RuntimeException )
 {
-    const ANY aRet( NMSP_CPPU::queryInterface( rType, static_cast< NMSP_SVG::XSVGWriter* >( this ) ) );
-
+    const ANY aRet( NMSP_CPPU::queryInterface( rType,
+            static_cast< NMSP_SVG::XSVGWriter* >( this ),
+            static_cast< NMSP_LANG::XInitialization* >( this ) ) );
     return( aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType ) );
 }
 
@@ -1919,12 +1958,22 @@ void SAL_CALL SVGWriter::write( const REF( NMSP_SAX::XDocumentHandler )& rxDocHa
     aMemStm >> aMtf;
 
     const REF( NMSP_SAX::XDocumentHandler ) xDocumentHandler( rxDocHandler );
-    const Sequence< PropertyValue > aFilterData;
-
-    SVGExport* pWriter = new SVGExport( mxFact, xDocumentHandler, aFilterData );
+    SVGExport* pWriter = new SVGExport( mxFact, xDocumentHandler, maFilterData );
 
     pWriter->writeMtf( aMtf );
     delete pWriter;
+}
+
+// -----------------------------------------------------------------------------
+
+void SVGWriter::initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments )
+    throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException)
+{
+    if ( aArguments.getLength() == 1 )
+    {
+        ::com::sun::star::uno::Any aArg = aArguments.getConstArray()[0];
+        aArg >>= maFilterData;
+    }
 }
 
 // -----------------------------------------------------------------------------
@@ -1955,7 +2004,7 @@ Sequence< rtl::OUString > SAL_CALL SVGWriter_getSupportedServiceNames()
 {
     Sequence< rtl::OUString > aRet( 1 );
 
-    aRet.getArray()[ 0 ] = rtl::OUString ( RTL_CONSTASCII_USTRINGPARAM ( SVG_WRITER_SERVICE_NAME ) );
+    aRet.getArray()[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( SVG_WRITER_SERVICE_NAME ) );
 
     return aRet;
 }
@@ -1967,4 +2016,3 @@ Reference< XInterface > SAL_CALL SVGWriter_createInstance( const Reference< XMul
 {
     return( static_cast< cppu::OWeakObject* >( new SVGWriter( rSMgr ) ) );
 }
-

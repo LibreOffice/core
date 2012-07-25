@@ -66,6 +66,7 @@
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <com/sun/star/svg/XSVGWriter.hpp>
+#include <com/sun/star/lang/XInitialization.hpp>
 
 // -----------------------------------------------------------------------------
 
@@ -234,11 +235,12 @@ public:
                                            const ::rtl::OUString* pElementId = NULL );
 };
 
-class SVGWriter : public NMSP_CPPU::OWeakObject, NMSP_SVG::XSVGWriter
+class SVGWriter : public NMSP_CPPU::OWeakObject, NMSP_SVG::XSVGWriter, com::sun::star::lang::XInitialization
 {
 private:
 
-    REF( NMSP_LANG::XMultiServiceFactory )  mxFact;
+    REF( NMSP_LANG::XMultiServiceFactory )                                  mxFact;
+    com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >   maFilterData;
 
                                             SVGWriter();
 
@@ -255,6 +257,10 @@ public:
     // XSVGWriter
     virtual void SAL_CALL                   write( const REF( NMSP_SAX::XDocumentHandler )& rxDocHandler,
                                                    const SEQ( sal_Int8 )& rMtfSeq ) throw( NMSP_UNO::RuntimeException );
+
+    // ::com::sun::star::lang::XInitialization
+    void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
+
 };
 
 ::rtl::OUString SVGWriter_getImplementationName ()
@@ -275,6 +281,5 @@ sal_Bool SAL_CALL SVGWriter_supportsService( const ::rtl::OUString& ServiceName 
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
     SAL_CALL SVGWriter_createInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rSMgr)
         throw ( ::com::sun::star::uno::Exception );
-
 
 #endif

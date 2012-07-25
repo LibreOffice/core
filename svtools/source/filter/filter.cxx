@@ -2066,8 +2066,10 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& 
                             ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > xSaxWriter( xMgr->createInstance(
                                 ::rtl::OUString::createFromAscii( "com.sun.star.xml.sax.Writer" ) ), ::com::sun::star::uno::UNO_QUERY );
 
-                            ::com::sun::star::uno::Reference< ::com::sun::star::svg::XSVGWriter > xSVGWriter( xMgr->createInstance(
-                                ::rtl::OUString::createFromAscii( "com.sun.star.svg.SVGWriter" ) ), ::com::sun::star::uno::UNO_QUERY );
+                            com::sun::star::uno::Sequence< com::sun::star::uno::Any > aArguments( 1 );
+                            aArguments[ 0 ] <<= aConfigItem.GetFilterData();
+                            ::com::sun::star::uno::Reference< ::com::sun::star::svg::XSVGWriter > xSVGWriter( xMgr->createInstanceWithArguments(
+                                ::rtl::OUString::createFromAscii( "com.sun.star.svg.SVGWriter" ), aArguments ), ::com::sun::star::uno::UNO_QUERY );
 
                             if( xSaxWriter.is() && xSVGWriter.is() )
                             {

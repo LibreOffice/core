@@ -79,7 +79,6 @@
 #include <svx/svdxcgv.hxx>
 #include <svx/svdobj.hxx>
 #include <xmloff/xmlexp.hxx>
-
 #include "svgfilter.hxx"
 #include "svgscript.hxx"
 
@@ -113,6 +112,17 @@ class SVGExport : public SvXMLExport
 {
     typedef ::std::list< ::basegfx::B2DPolyPolygon > B2DPolyPolygonList;
 
+    rtl::OUString   maGlyphPlacement;
+
+    sal_Bool    mbTinyProfile;
+    sal_Bool    mbTSpans;
+    sal_Bool    mbEmbedFonts;
+    sal_Bool    mbNativeTextDecoration;
+    sal_Bool    mbOpacity;
+    sal_Bool    mbGradient;
+
+    Rectangle   maViewBox;
+
 public:
 
     SVGExport( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
@@ -121,12 +131,17 @@ public:
 
     virtual ~SVGExport();
 
-    sal_Bool IsUseTinyProfile() const;
-    sal_Bool IsEmbedFonts() const;
-    sal_Bool IsUseNativeTextDecoration() const;
-    ::rtl::OUString GetGlyphPlacement() const;
-    sal_Bool IsUseOpacity() const;
-    sal_Bool IsUseGradient() const;
+    sal_Bool IsUseTinyProfile() const { return mbTinyProfile; };
+    sal_Bool IsUseTSpans() const { return mbTSpans; };
+    sal_Bool IsEmbedFonts() const { return mbEmbedFonts; };
+    sal_Bool IsUseNativeTextDecoration() const { return mbNativeTextDecoration; };
+    ::rtl::OUString GetGlyphPlacement() const { return maGlyphPlacement; };
+    sal_Bool IsUseOpacity() const { return mbOpacity; };
+    sal_Bool IsUseGradient() const { return mbGradient; };
+
+    const Rectangle& GetViewBox() const { return maViewBox; };
+    void SetViewBox( const Rectangle& rViewBox ) { maViewBox = rViewBox; };
+    sal_Bool IsVisible( const Rectangle& rRect ) const { return GetViewBox().IsOver( rRect ); };
 
     void  pushClip( const ::basegfx::B2DPolyPolygon& rPolyPoly );
     void  popClip();
@@ -145,8 +160,7 @@ virtual sal_uInt32      exportDoc( enum ::xmloff::token::XMLTokenEnum /* eClass 
 
 private:
 
-    const Sequence< PropertyValue >&    mrFilterData;
-    B2DPolyPolygonList                  maClipList;
+    B2DPolyPolygonList      maClipList;
 
     SVGExport();
 };

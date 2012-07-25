@@ -31,7 +31,6 @@
 #include "svgfilter.hxx"
 #include "impsvgdialog.hxx"
 
-#include <svtools/FilterConfigItem.hxx>
 #include <svx/unopage.hxx>
 #include <svx/unoshape.hxx>
 #include <svx/svdpage.hxx>
@@ -49,10 +48,40 @@ using ::rtl::OUString;
 SVGExport::SVGExport(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
     const Reference< XDocumentHandler >& rxHandler,
-    const Sequence< PropertyValue >& rFilterData ) :
-        SvXMLExport( xServiceFactory, MAP_100TH_MM ),
-        mrFilterData( rFilterData )
+    const Sequence< PropertyValue >& rFilterData )
+: SvXMLExport( xServiceFactory, MAP_100TH_MM )
+, mbTinyProfile         ( sal_True )
+, mbTSpans              ( sal_True )
+, mbEmbedFonts          ( sal_False )
+, mbNativeTextDecoration( sal_True )
+, mbOpacity             ( sal_True )
+, mbGradient            ( sal_True )
 {
+    for ( sal_Int32 i = 0, nCount = rFilterData.getLength(); i < nCount; i++ )
+    {
+        if ( rFilterData[ i ].Name == B2UCONST( SVG_PROP_TINYPROFILE ) )
+            rFilterData[ i ].Value >>= mbTinyProfile;
+        else if ( rFilterData[ i ].Name == B2UCONST( "TSpans" ) )
+            rFilterData[ i ].Value >>= mbTSpans;
+        else if ( rFilterData[ i ].Name == B2UCONST( SVG_PROP_EMBEDFONTS ) )
+            rFilterData[ i ].Value >>= mbEmbedFonts;
+        else if ( rFilterData[ i ].Name == B2UCONST( SVG_PROP_NATIVEDECORATION ) )
+            rFilterData[ i ].Value >>= mbNativeTextDecoration;
+        else if ( rFilterData[ i ].Name == B2UCONST( "GlyphPlacement" ) )
+            rFilterData[ i ].Value >>= maGlyphPlacement;
+        else if ( rFilterData[ i ].Name == B2UCONST( SVG_PROP_OPACITY ) )
+            rFilterData[ i ].Value >>= mbOpacity;
+        else if ( rFilterData[ i ].Name == B2UCONST( SVG_PROP_GRADIENT ) )
+            rFilterData[ i ].Value >>= mbGradient;
+    }
+    if ( mbTinyProfile )
+        mbNativeTextDecoration = sal_False;
+    else
+    {
+        mbTSpans = sal_False;
+        mbOpacity = sal_True;
+        mbGradient = sal_True;
+    }
     SetDocHandler( rxHandler );
     GetDocHandler()->startDocument();
 }
@@ -62,80 +91,6 @@ SVGExport::SVGExport(
 SVGExport::~SVGExport()
 {
     GetDocHandler()->endDocument();
-}
-
-// -----------------------------------------------------------------------------
-
-sal_Bool SVGExport::IsUseTinyProfile() const
-{
-    sal_Bool bRet = sal_False;
-
-    if( mrFilterData.getLength() > 0 )
-        mrFilterData[ 0 ].Value >>= bRet;
-
-    return bRet;
-}
-
-// -----------------------------------------------------------------------------
-
-sal_Bool SVGExport::IsEmbedFonts() const
-{
-    sal_Bool bRet = sal_False;
-
-    if( mrFilterData.getLength() > 1 )
-        mrFilterData[ 1 ].Value >>= bRet;
-
-    return bRet;
-}
-
-// -----------------------------------------------------------------------------
-
-sal_Bool SVGExport::IsUseNativeTextDecoration() const
-{
-    sal_Bool bRet = !IsUseTinyProfile();
-
-    if( bRet && ( mrFilterData.getLength() > 2 ) )
-        mrFilterData[ 2 ].Value >>= bRet;
-
-    return bRet;
-}
-
-// -----------------------------------------------------------------------------
-
-::rtl::OUString SVGExport::GetGlyphPlacement() const
-{
-    ::rtl::OUString aRet;
-
-    if( mrFilterData.getLength() > 3 )
-        mrFilterData[ 3 ].Value >>= aRet;
-    else
-        aRet = B2UCONST( "abs" );
-
-    return aRet;
-}
-
-// -----------------------------------------------------------------------------
-
-sal_Bool SVGExport::IsUseOpacity() const
-{
-    sal_Bool bRet = !IsUseTinyProfile();
-
-    if( !bRet && ( mrFilterData.getLength() > 4 ) )
-        mrFilterData[ 4 ].Value >>= bRet;
-
-    return bRet;
-}
-
-// -----------------------------------------------------------------------------
-
-sal_Bool SVGExport::IsUseGradient() const
-{
-    sal_Bool bRet = !IsUseTinyProfile();
-
-    if( !bRet && ( mrFilterData.getLength() > 5 ) )
-        mrFilterData[ 5 ].Value >>= bRet;
-
-    return bRet;
 }
 
 // -----------------------------------------------------------------------------
@@ -478,7 +433,7 @@ sal_Bool SVGFilter::implExportDocument( const Reference< XDrawPages >& rxMasterP
     aAttr += OUString::valueOf( nDocWidth );
     aAttr += B2UCONST( " " );
     aAttr += OUString::valueOf( nDocHeight );
-
+    mpSVGExport->SetViewBox( Rectangle( Point(), Size( nDocWidth, nDocHeight ) ) );
     mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "viewBox", aAttr );
     mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "preserveAspectRatio", B2UCONST( "xMidYMid" ) );
     mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "fill-rule", B2UCONST( "evenodd" ) );
@@ -1272,7 +1227,13 @@ void SVGExport::writeMtf( const GDIMetaFile& rMtf )
     aAttr += B2UCONST( " " );
     aAttr += rtl::OUString::valueOf( aSize.Height() * 100L );
     AddAttribute( XML_NAMESPACE_NONE, "viewBox", aAttr );
+    SetViewBox( Rectangle( Point(), Size( aSize.Width() * 100, aSize.Height() * 100 ) ) );
 
+    // standard line width is based on 1 pixel on a 90 DPI device (0.28222mmm)
+    AddAttribute( XML_NAMESPACE_NONE, "stroke-width", OUString::valueOf( 28.222 ) );
+    AddAttribute( XML_NAMESPACE_NONE, "stroke-linejoin", B2UCONST( "round" ) );
+
+    AddAttribute( XML_NAMESPACE_NONE, "xml:space", B2UCONST( "preserve" ) );
     {
         SvXMLElementExport  aSVG( *this, XML_NAMESPACE_NONE, "svg", sal_True, sal_True );
 
