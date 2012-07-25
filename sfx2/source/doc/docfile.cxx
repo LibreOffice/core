@@ -254,7 +254,6 @@ public:
     bool bIsStorage:1;
     bool bUseInteractionHandler:1;
     bool bAllowDefaultIntHdl:1;
-    bool bIsCharsetInitialized:1;
     bool bDisposeStorage:1;
     bool bStorageBasedOnInStream:1;
     bool m_bSalvageMode:1;
@@ -305,7 +304,6 @@ public:
     uno::Reference< io::XStream > m_xLockingStream;
 
     sal_uInt32                  nLastStorageError;
-    ::rtl::OUString             aCharset;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler > xInteraction;
 
@@ -336,7 +334,6 @@ SfxMedium_Impl::SfxMedium_Impl( SfxMedium* pAntiImplP ) :
     bIsStorage( false ),
     bUseInteractionHandler( true ),
     bAllowDefaultIntHdl( false ),
-    bIsCharsetInitialized( false ),
     bStorageBasedOnInStream( false ),
     m_bSalvageMode( false ),
     m_bVersionsAlreadyLoaded( false ),
@@ -3070,8 +3067,6 @@ SvKeyValueIterator* SfxMedium::GetHeaderAttributes_Impl()
 
         if ( GetContent().is() )
         {
-            pImp->bIsCharsetInitialized = true;
-
             try
             {
                 Any aAny = pImp->aContent.getPropertyValue( ::rtl::OUString("MediaType") );
@@ -3412,12 +3407,6 @@ void SfxMedium::CreateTempFileNoCopy()
 
     CloseOutStream_Impl();
     CloseStorage();
-}
-
-void SfxMedium::SetCharset( ::rtl::OUString aChs )
-{
-    pImp->bIsCharsetInitialized = true;
-    pImp->aCharset = aChs;
 }
 
 sal_Bool SfxMedium::SignContents_Impl( sal_Bool bScriptingContent, const ::rtl::OUString& aODFVersion, sal_Bool bHasValidDocumentSignature )
