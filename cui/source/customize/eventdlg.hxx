@@ -45,8 +45,8 @@ class SvxEventConfigPage : public _SvxMacroTabPage
     SvxEventConfigPage & operator= (const SvxEventConfigPage &);
 
 public:
-                    /// this is only to let callers know that there is a LateInit which *must* be called
-                    struct EarlyInit { };
+
+                    struct EarlyInit { }; ///< this is only to let callers know that there is a LateInit which *must* be called
                     SvxEventConfigPage( Window *pParent, const SfxItemSet& rSet, EarlyInit );
                     ~SvxEventConfigPage();
 

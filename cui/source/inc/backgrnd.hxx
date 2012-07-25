@@ -36,16 +36,6 @@
 #include <svtools/valueset.hxx>
 #include <svx/dlgctrl.hxx>
 
-// class SvxBackgroundTabPage --------------------------------------------
-/*
-{k:\svx\prototyp\dialog\backgrnd.bmp}
-    [Description]
-    With this TabPage a Brush (e. g. for a frame's background color)
-    can be set.
-    [Items]
-    <SvxBrushItem>:     <SID_ATTR_BRUSH>;
-*/
-
 //------------------------------------------------------------------------
 // forwards:
 
@@ -55,7 +45,14 @@ struct SvxBackgroundTable_Impl;
 struct SvxBackgroundPara_Impl;
 struct SvxBackgroundPage_Impl;
 class SvxBrushItem;
-//------------------------------------------------------------------------
+/** class SvxBackgroundTabPage --------------------------------------------
+{k:\svx\prototyp\dialog\backgrnd.bmp}
+    [Description]
+    With this TabPage a Brush (e. g. for a frame's background color)
+    can be set.
+    [Items]
+    <SvxBrushItem>:     <SID_ATTR_BRUSH>;
+*/
 
 class SvxBackgroundTabPage : public SvxTabPage
 {
@@ -68,10 +65,12 @@ public:
     virtual void        Reset( const SfxItemSet& rSet );
     virtual void        FillUserData();
     virtual void        PointChanged( Window* pWindow, RECT_POINT eRP );
-
-    void                ShowSelector(); // Shift-ListBox activation
-    void                ShowTblControl(); // for the Writer (cells/rows/tables)
-    void                ShowParaControl(sal_Bool bCharOnly = sal_False); // for the Writer (paragraph/characters)
+    /// Shift-ListBox activation
+    void                ShowSelector();
+    /// for the Writer (cells/rows/tables)
+    void                ShowTblControl();
+    /// for the Writer (paragraph/characters)
+    void                ShowParaControl(sal_Bool bCharOnly = sal_False);
     void                EnableTransparency(sal_Bool bColor, sal_Bool bGraphic);
     virtual void        PageCreated (SfxAllItemSet aSet);
 protected:
@@ -92,8 +91,8 @@ private:
     ValueSet                aBackgroundColorSet;
     FixedLine               aBackgroundColorBox;
     BackgroundPreviewImpl*  pPreviewWin1;
-    //color transparency
-    FixedText               aColTransFT;
+
+    FixedText               aColTransFT;///<color transparency
     MetricField             aColTransMF;
     CheckBox                aBtnPreview;
     // Background Bitmap ----------------------------------
@@ -106,8 +105,8 @@ private:
     RadioButton             aBtnTile;
     SvxRectCtl              aWndPosition;
     FixedInfo               aFtFile;
-    //transparency of graphics
-    FixedLine               aGraphTransFL;
+
+    FixedLine               aGraphTransFL;///<transparency of graphics
     MetricField             aGraphTransMF;
 
     BackgroundPreviewImpl*  pPreviewWin2;
@@ -129,10 +128,8 @@ private:
     SvxBackgroundPage_Impl* pPageImpl;
     SvxOpenGraphicDialog* pImportDlg;
 
-    // Items for Sw-Table must be corrected
-    SvxBackgroundTable_Impl*    pTableBck_Impl;
-    // also for the paragraph style
-    SvxBackgroundPara_Impl* pParaBck_Impl;
+    SvxBackgroundTable_Impl*    pTableBck_Impl;///< Items for Sw-Table must be corrected
+    SvxBackgroundPara_Impl* pParaBck_Impl;///< also for the paragraph style
 
 #ifdef _SVX_BACKGRND_CXX
     void                FillColorValueSets_Impl();

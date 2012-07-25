@@ -110,15 +110,16 @@ public:
     inline  PushButton*         GetButton( ButtonType _eType )          { return implGetButton( _eType  ); }
     inline  const PushButton*   GetButton( ButtonType _eType ) const    { return implGetButton( _eType  ); }
 
-    // users of this class may want to insert own controls in some places, where the ordinary
-    // Z-Order determined by construction time is not sufficient
-    // Use the following methods for this
-    enum ControlGroup // control groups in this window which cannot be devided (e.g. are adjacent in the Z order)
+    /** users of this class may want to insert own controls in some places, where the ordinary
+        Z-Order determined by construction time is not sufficient
+        Use the following methods for this
+        control groups in this window which cannot be devided (e.g. are adjacent in the Z order)*/
+    enum ControlGroup
     {
-        eLeftRightWords,    // the controls for the two words (original and suggestion), including the labels
-        eSuggestionLabel,   // the label for the suggestion
-        eActionButtons,     // the group of "ignore(all)" / "change(all)" buttons
-        eDialogButtons      // the group of dialog control buttons (help and close)
+        eLeftRightWords,    ///< the controls for the two words (original and suggestion), including the labels
+        eSuggestionLabel,   ///< the label for the suggestion
+        eActionButtons,     ///< the group of "ignore(all)" / "change(all)" buttons
+        eDialogButtons      ///< the group of dialog control buttons (help and close)
     };
     void    InsertControlGroup( Window& _rFirstGroupWindow, Window& _rLastGroupWindow, ControlGroup _eInsertAfter );
 
@@ -140,7 +141,7 @@ public:
     inline Edit&        GetWordInputControl()           { return aNewWordED; }
     inline const Edit&  GetWordInputControl() const { return aNewWordED; }
 
-    // returns the location (upper-left corner) of the group of action buttons
+    /// @return the location (upper-left corner) of the group of action buttons
     inline Point    GetActionButtonsLocation( ) const { return aIgnoreBtn.GetPosPixel(); }
 };
 

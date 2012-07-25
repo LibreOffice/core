@@ -68,7 +68,7 @@ class LookUpComboBox_Impl : public ComboBox
     Button *                    m_pBtn;
     SvxThesaurusDialog_Impl &   m_rDialogImpl;
 
-    // disable copy c-tor and assignment operator
+    /// disable copy c-factor and assignment operator
     LookUpComboBox_Impl( const LookUpComboBox_Impl & );
     LookUpComboBox_Impl & operator = ( const LookUpComboBox_Impl & );
 
@@ -90,7 +90,7 @@ class ReplaceEdit_Impl : public Edit
 {
     Button *                    m_pBtn;
 
-    // disable copy c-tor and assignment operator
+    /// disable copy c-factor and assignment operator
     ReplaceEdit_Impl( const ReplaceEdit_Impl & );
     ReplaceEdit_Impl & operator = ( const ReplaceEdit_Impl & );
 
@@ -146,7 +146,7 @@ class ThesaurusAlternativesCtrl_Impl :
     typedef std::map< const SvLBoxEntry *, AlternativesExtraData >  UserDataMap_t;
     UserDataMap_t           m_aUserData;
 
-    // disable copy c-tor and assignment operator
+    /// disable copy c-factor and assignment operator
     ThesaurusAlternativesCtrl_Impl( const ThesaurusAlternativesCtrl_Impl & );
     ThesaurusAlternativesCtrl_Impl & operator = ( const ThesaurusAlternativesCtrl_Impl & );
 
