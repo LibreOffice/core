@@ -1834,7 +1834,7 @@ void SAL_CALL SfxBaseModel::initNew()
     if ( m_pData->m_pObjectShell.Is() )
     {
         if( m_pData->m_pObjectShell->GetMedium() )
-            throw DOUBLEINITIALIZATIONEXCEPTION();
+            throw frame::DoubleInitializationException();
 
         sal_Bool bRes = m_pData->m_pObjectShell->DoInitNew( NULL );
         sal_uInt32 nErrCode = m_pData->m_pObjectShell->GetError() ?
@@ -1867,7 +1867,7 @@ void SAL_CALL SfxBaseModel::load(   const uno::Sequence< beans::PropertyValue >&
     {
         if( m_pData->m_pObjectShell->GetMedium() )
             // if a Medium is present, the document is already initialized
-            throw DOUBLEINITIALIZATIONEXCEPTION();
+            throw frame::DoubleInitializationException();
 
         SfxMedium* pMedium = new SfxMedium( seqArguments );
         String aFilterName;
@@ -3515,7 +3515,7 @@ embed::VisualRepresentation SAL_CALL SfxBaseModel::getPreferredVisualRepresentat
 void SAL_CALL SfxBaseModel::loadFromStorage( const uno::Reference< XSTORAGE >& xStorage,
                                              const uno::Sequence< beans::PropertyValue >& aMediaDescriptor )
     throw ( lang::IllegalArgumentException,
-            DOUBLEINITIALIZATIONEXCEPTION,
+            frame::DoubleInitializationException,
             IOEXCEPTION,
             EXCEPTION,
             uno::RuntimeException )
