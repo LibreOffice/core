@@ -67,8 +67,7 @@ class DateTime;
 
 class SFX2_DLLPUBLIC SfxMedium : public SvRefBase
 {
-    StreamMode          nStorOpenMode;
-    SfxMedium_Impl*     pImp;
+    SfxMedium_Impl* pImp;
 
 #if _SOLAR__PRIVATE
     SAL_DLLPRIVATE void SetIsRemote_Impl();
@@ -164,7 +163,7 @@ public:
     sal_Bool            IsRoot() const;
     void                CloseStorage();
 
-    StreamMode          GetOpenMode() const { return nStorOpenMode; }
+    StreamMode          GetOpenMode() const;
     void                SetOpenMode( StreamMode nStorOpen, sal_Bool bDontClose = sal_False );
 
     SvStream*           GetInStream();
