@@ -84,6 +84,7 @@
 #include "mathtype.hxx"
 #include "ooxmlexport.hxx"
 #include "ooxmlimport.hxx"
+#include "rtfexport.hxx"
 #include "mathmlimport.hxx"
 #include "mathmlexport.hxx"
 #include <sfx2/sfxsids.hrc>
@@ -984,6 +985,16 @@ bool SmDocShell::writeFormulaOoxml( ::sax_fastparser::FSHelperPtr m_pSerializer,
         ArrangeFormula();
     SmOoxmlExport aEquation( aText, pTree, version );
     return aEquation.ConvertFromStarMath( m_pSerializer );
+}
+
+void SmDocShell::writeFormulaRtf(OStringBuffer& rBuffer)
+{
+    if (!pTree)
+        Parse();
+    if (pTree && !IsFormulaArranged())
+        ArrangeFormula();
+    SmRtfExport aEquation(pTree);
+    aEquation.ConvertFromStarMath(rBuffer);
 }
 
 bool SmDocShell::readFormulaOoxml( oox::formulaimport::XmlStream& stream )

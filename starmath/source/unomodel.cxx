@@ -1123,6 +1123,11 @@ void SmModel::writeFormulaOoxml( ::sax_fastparser::FSHelperPtr m_pSerializer, oo
     static_cast< SmDocShell* >( GetObjectShell())->writeFormulaOoxml( m_pSerializer, version );
 }
 
+void SmModel::writeFormulaRtf(OStringBuffer& rBuffer)
+{
+    static_cast<SmDocShell*>(GetObjectShell())->writeFormulaRtf(rBuffer);
+}
+
 void SmModel::readFormulaOoxml( oox::formulaimport::XmlStream& stream )
 {
     static_cast< SmDocShell* >( GetObjectShell())->readFormulaOoxml( stream );

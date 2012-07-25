@@ -75,6 +75,7 @@ $(eval $(call gb_Library_add_exception_objects,sm,\
         starmath/source/node \
         starmath/source/ooxmlexport \
         starmath/source/ooxmlimport \
+        starmath/source/rtfexport \
         starmath/source/parse \
         starmath/source/rect \
         starmath/source/register \

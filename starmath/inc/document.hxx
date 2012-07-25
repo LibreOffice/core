@@ -23,6 +23,7 @@
 #define SMDLL   1
 
 #include <rtl/ustring.hxx>
+#include <rtl/strbuf.hxx>
 #include <sfx2/docfac.hxx>
 #include <sfx2/objsh.hxx>
 #include <sot/sotref.hxx>
@@ -155,6 +156,7 @@ class SmDocShell : public SfxObjectShell, public SfxListener
     void                InvalidateCursor();
 
     bool writeFormulaOoxml( ::sax_fastparser::FSHelperPtr m_pSerializer, oox::core::OoxmlVersion version );
+    void writeFormulaRtf(OStringBuffer& rBuffer);
     bool readFormulaOoxml( oox::formulaimport::XmlStream& stream );
 
 public:

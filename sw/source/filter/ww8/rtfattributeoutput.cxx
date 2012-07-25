@@ -102,6 +102,7 @@
 #include <rtf.hxx>
 
 #include <vcl/cvtgrf.hxx>
+#include <oox/mathml/export.hxx>
 
 #include <com/sun/star/i18n/ScriptType.hpp>
 
@@ -3372,9 +3373,39 @@ void RtfAttributeOutput::FlyFrameOLEData( SwOLENode& rOLENode )
     }
 }
 
+bool RtfAttributeOutput::FlyFrameOLEMath(SwOLENode& rOLENode)
+{
+    SAL_INFO("sw.rtf", OSL_THIS_FUNC);
+
+    uno::Reference <embed::XEmbeddedObject> xObj(const_cast<SwOLENode&>(rOLENode).GetOLEObj().GetOleRef());
+    sal_Int64 nAspect = rOLENode.GetAspect();
+    svt::EmbeddedObjectRef aObjRef(xObj, nAspect);
+    SvGlobalName aObjName(aObjRef->getClassID());
+
+    if (!SotExchange::IsMath(aObjName))
+        return false;
+
+    uno::Reference<util::XCloseable> xClosable(xObj->getComponent(), uno::UNO_QUERY);
+    oox::FormulaExportBase* pBase = dynamic_cast<oox::FormulaExportBase*>(xClosable.get());
+    SAL_WARN_IF(!pBase, "sw.rtf", "Math OLE object cannot write out RTF");
+    if (pBase)
+    {
+        m_aRunText->append("{\\mmath");
+        OStringBuffer aBuf;
+        pBase->writeFormulaRtf(aBuf);
+        m_aRunText->append(aBuf.makeStringAndClear());
+        m_aRunText->append("}");
+    }
+
+    return true;
+}
+
 void RtfAttributeOutput::FlyFrameOLE( const SwFlyFrmFmt* pFlyFrmFmt, SwOLENode& rOLENode, const Size& rSize )
 {
     SAL_INFO("sw.rtf", OSL_THIS_FUNC);
+
+    if (FlyFrameOLEMath(rOLENode))
+        return;
 
     SvMemoryStream aStream;
     const sal_uInt8* pGraphicAry = 0;

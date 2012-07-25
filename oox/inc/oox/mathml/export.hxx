@@ -29,6 +29,7 @@
 #define _OOXMLEXPORT_HXX
 
 #include <sax/fshelper.hxx>
+#include <rtl/strbuf.hxx>
 #include <oox/core/filterbase.hxx>
 #include <oox/dllapi.h>
 
@@ -36,13 +37,14 @@ namespace oox
 {
 
 /**
- Interface class, StarMath will implement writeFormulaOoxml() to write out OOXML
+ Interface class, StarMath will implement writeFormula*() to write out markup
  representing the formula.
  */
 class OOX_DLLPUBLIC FormulaExportBase
 {
 public:
     virtual void writeFormulaOoxml( ::sax_fastparser::FSHelperPtr m_pSerializer, oox::core::OoxmlVersion version ) = 0;
+    virtual void writeFormulaRtf( OStringBuffer& rBuffer ) = 0;
 
 protected:
     FormulaExportBase();
