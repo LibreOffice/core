@@ -242,6 +242,7 @@ void SAL_CALL SfxMediumHandler_Impl::handle( const com::sun::star::uno::Referenc
 class SfxMedium_Impl
 {
 public:
+    StreamMode m_nStorOpenMode;
     sal_uInt32 m_eError;
 
     ::ucbhelper::Content aContent;
@@ -327,6 +328,7 @@ public:
 
 //------------------------------------------------------------------
 SfxMedium_Impl::SfxMedium_Impl( SfxMedium* pAntiImplP ) :
+    m_nStorOpenMode(SFX_STREAM_READWRITE),
     m_eError(SVSTREAM_OK),
     bUpdatePickList(true),
     bIsTemp( false ),
@@ -572,11 +574,11 @@ SvStream* SfxMedium::GetInStream()
 
     if ( pImp->pTempFile )
     {
-        pImp->m_pInStream = new SvFileStream( pImp->m_aName, nStorOpenMode );
+        pImp->m_pInStream = new SvFileStream(pImp->m_aName, pImp->m_nStorOpenMode);
 
         pImp->m_eError = pImp->m_pInStream->GetError();
 
-        if( !pImp->m_eError && (nStorOpenMode & STREAM_WRITE)
+        if (!pImp->m_eError && (pImp->m_nStorOpenMode & STREAM_WRITE)
                     && ! pImp->m_pInStream->IsWritable() )
         {
             pImp->m_eError = ERRCODE_IO_ACCESSDENIED;
@@ -736,7 +738,7 @@ sal_Bool SfxMedium::Commit()
         GetInitFileDate( true );
 
     // remove truncation mode from the flags
-    nStorOpenMode &= (~STREAM_TRUNC);
+    pImp->m_nStorOpenMode &= (~STREAM_TRUNC);
     return bResult;
 }
 
@@ -1371,7 +1373,7 @@ uno::Reference < embed::XStorage > SfxMedium::GetStorage( sal_Bool bCreateTempIf
                     aTmpStream.Close();
 
                     // Open data as Storage
-                    nStorOpenMode = SFX_STREAM_READONLY;
+                    pImp->m_nStorOpenMode = SFX_STREAM_READONLY;
                     pImp->xStorage = comphelper::OStorageHelper::GetStorageFromURL( aTmpName, embed::ElementModes::READ );
                     pImp->bStorageBasedOnInStream = false;
                     rtl::OUString aTemp;
@@ -1487,13 +1489,17 @@ sal_Bool SfxMedium::WillDisposeStorageOnClose_Impl()
     return pImp->bDisposeStorage;
 }
 
-//------------------------------------------------------------------
+StreamMode SfxMedium::GetOpenMode() const
+{
+    return pImp->m_nStorOpenMode;
+}
+
 void SfxMedium::SetOpenMode( StreamMode nStorOpen,
                              sal_Bool bDontClose )
 {
-    if ( nStorOpenMode != nStorOpen )
+    if ( pImp->m_nStorOpenMode != nStorOpen )
     {
-        nStorOpenMode = nStorOpen;
+        pImp->m_nStorOpenMode = nStorOpen;
 
         if( !bDontClose )
         {
@@ -2295,7 +2301,7 @@ void SfxMedium::GetMedium_Impl()
             if ( !bFromTempFile )
             {
                 GetItemSet()->Put( SfxStringItem( SID_FILE_NAME, aFileName ) );
-                if( !(nStorOpenMode & STREAM_WRITE ) )
+                if( !(pImp->m_nStorOpenMode & STREAM_WRITE) )
                     GetItemSet()->Put( SfxBoolItem( SID_DOC_READONLY, true ) );
                 if (xInteractionHandler.is())
                     GetItemSet()->Put( SfxUnoAnyItem( SID_INTERACTIONHANDLER, makeAny(xInteractionHandler) ) );
@@ -2513,9 +2519,7 @@ void SfxMedium::Init_Impl()
 }
 
 //------------------------------------------------------------------
-SfxMedium::SfxMedium() :
-    nStorOpenMode( SFX_STREAM_READWRITE ),
-    pImp(new SfxMedium_Impl( this ))
+SfxMedium::SfxMedium() : pImp(new SfxMedium_Impl(this))
 {
     Init_Impl();
 }
@@ -2767,7 +2771,7 @@ void SfxMedium::SetIsRemote_Impl()
     // As files that are written to the remote transmission must also be able
     // to be read.
     if (pImp->m_bRemote)
-        nStorOpenMode |= STREAM_READ;
+        pImp->m_nStorOpenMode |= STREAM_READ;
 }
 
 
@@ -2861,20 +2865,18 @@ void SfxMedium::CompleteReOpen()
 }
 
 SfxMedium::SfxMedium(const String &rName, StreamMode nOpenMode, const SfxFilter *pFlt, SfxItemSet *pInSet) :
-    nStorOpenMode( SFX_STREAM_READWRITE ),
-    pImp(new SfxMedium_Impl( this ))
+    pImp(new SfxMedium_Impl(this))
 {
     pImp->m_pSet = pInSet;
     pImp->m_pFilter = pFlt;
     pImp->m_aLogicName = rName;
-    nStorOpenMode = nOpenMode;
+    pImp->m_nStorOpenMode = nOpenMode;
     Init_Impl();
 }
 
 
 SfxMedium::SfxMedium( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgs ) :
-    nStorOpenMode( SFX_STREAM_READWRITE ),
-    pImp(new SfxMedium_Impl( this ))
+    pImp(new SfxMedium_Impl(this))
 {
     SfxAllItemSet *pParams = new SfxAllItemSet( SFX_APP()->GetPool() );
     pImp->m_pSet = pParams;
@@ -2919,7 +2921,7 @@ SfxMedium::SfxMedium( const ::com::sun::star::uno::Sequence< ::com::sun::star::b
     SFX_ITEMSET_ARG( pImp->m_pSet, pFileNameItem, SfxStringItem, SID_FILE_NAME, false );
     if (!pFileNameItem) throw uno::RuntimeException();
     pImp->m_aLogicName = pFileNameItem->GetValue();
-    nStorOpenMode = pImp->m_bOriginallyReadOnly ? SFX_STREAM_READONLY : SFX_STREAM_READWRITE;
+    pImp->m_nStorOpenMode = pImp->m_bOriginallyReadOnly ? SFX_STREAM_READONLY : SFX_STREAM_READWRITE;
     Init_Impl();
 }
 
@@ -2927,8 +2929,7 @@ SfxMedium::SfxMedium( const ::com::sun::star::uno::Sequence< ::com::sun::star::b
 //------------------------------------------------------------------
 
 SfxMedium::SfxMedium( const uno::Reference < embed::XStorage >& rStor, const String& rBaseURL, const SfxItemSet* p, sal_Bool bRootP ) :
-    nStorOpenMode( SFX_STREAM_READWRITE ),
-    pImp( new SfxMedium_Impl( this ))
+    pImp(new SfxMedium_Impl(this))
 {
     pImp->m_bRoot = bRootP;
 
@@ -2947,8 +2948,7 @@ SfxMedium::SfxMedium( const uno::Reference < embed::XStorage >& rStor, const Str
 }
 
 SfxMedium::SfxMedium( const uno::Reference < embed::XStorage >& rStor, const String& rBaseURL, const String& rTypeName, const SfxItemSet* p, sal_Bool bRootP ) :
-    nStorOpenMode( SFX_STREAM_READWRITE ),
-    pImp( new SfxMedium_Impl( this ))
+    pImp(new SfxMedium_Impl(this))
 {
     pImp->m_bRoot = bRootP;
 
@@ -3324,7 +3324,7 @@ void SfxMedium::CreateTempFile( sal_Bool bReplace )
         return;
     }
 
-    if ( !( nStorOpenMode & STREAM_TRUNC ) )
+    if ( !(pImp->m_nStorOpenMode & STREAM_TRUNC) )
     {
         bool bTransferSuccess = false;
 
@@ -3671,7 +3671,7 @@ sal_Bool SfxMedium::CallApproveHandler( const uno::Reference< task::XInteraction
 
                 // remove the readonly state
                 bool bWasReadonly = false;
-                nStorOpenMode = SFX_STREAM_READWRITE;
+                pImp->m_nStorOpenMode = SFX_STREAM_READWRITE;
                 SFX_ITEMSET_ARG( pImp->m_pSet, pReadOnlyItem, SfxBoolItem, SID_DOC_READONLY, false );
                 if ( pReadOnlyItem && pReadOnlyItem->GetValue() )
                     bWasReadonly = true;
@@ -3702,7 +3702,7 @@ sal_Bool SfxMedium::CallApproveHandler( const uno::Reference< task::XInteraction
                     if ( bWasReadonly )
                     {
                         // set the readonly state back
-                        nStorOpenMode = SFX_STREAM_READONLY;
+                        pImp->m_nStorOpenMode = SFX_STREAM_READONLY;
                         GetItemSet()->Put( SfxBoolItem(SID_DOC_READONLY, true));
                     }
                     GetMedium_Impl();
