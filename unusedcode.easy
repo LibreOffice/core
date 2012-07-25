@@ -216,7 +216,6 @@ binfilter::SwChartLines::DeleteAndDestroy(unsigned short, unsigned short)
 binfilter::SwDependentFields::DeleteAndDestroy(unsigned short, unsigned short)
 binfilter::SwDestroyList::DeleteAndDestroy(unsigned short, unsigned short)
 binfilter::SwDestroyList::Seek_Entry(binfilter::SwSectionFrm*, unsigned short*) const
-binfilter::SwInsHardBlankSoftHyph::~SwInsHardBlankSoftHyph()
 binfilter::SwRects::SwRects(unsigned short, unsigned char)
 binfilter::SwRubyList::DeleteAndDestroy(unsigned short, unsigned short)
 binfilter::SwSortDrawObjs::DeleteAndDestroy(unsigned short, unsigned short)
