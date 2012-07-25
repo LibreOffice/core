@@ -130,7 +130,7 @@ sub make_relative_ddf_path
     }
 
     $sourcepath =~ s/\Q$windowstemppath\E//;
-    $sourcepath =~ s/^\\//;
+    $sourcepath =~ s/^[\\\/]//;
 
     return $sourcepath;
 }
