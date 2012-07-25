@@ -87,6 +87,9 @@ void SmRtfExport::HandleNode(const SmNode* pNode, int nLevel)
             //Root Node, PILE equivalent, i.e. vertical stack
             HandleTable(pNode,nLevel);
             break;
+        case NMATRIX:
+            HandleMatrix(static_cast<const SmMatrixNode*>(pNode), nLevel);
+            break;
         case NLINE:
             HandleAllSubNodes(pNode, nLevel);
             break;
@@ -362,9 +365,22 @@ void SmRtfExport::HandleSubSupScriptInternal(const SmSubSupNode* /*pNode*/, int 
     SAL_INFO("starmath.rtf", "TODO: " << OSL_THIS_FUNC);
 }
 
-void SmRtfExport::HandleMatrix(const SmMatrixNode* /*pNode*/, int /*nLevel*/)
+void SmRtfExport::HandleMatrix(const SmMatrixNode* pNode, int nLevel)
 {
-    SAL_INFO("starmath.rtf", "TODO: " << OSL_THIS_FUNC);
+    m_pBuffer->append("{\\mm ");
+    for (int row = 0; row < pNode->GetNumRows(); ++row )
+    {
+        m_pBuffer->append("{\\mmr ");
+        for (int col = 0; col < pNode->GetNumCols(); ++col )
+        {
+            m_pBuffer->append("{\\me ");
+            if (const SmNode* node = pNode->GetSubNode(row * pNode->GetNumCols() + col))
+                HandleNode(node, nLevel + 1);
+            m_pBuffer->append("}"); // me
+        }
+        m_pBuffer->append("}"); // mmr
+    }
+    m_pBuffer->append("}"); // mm
 }
 
 void SmRtfExport::HandleBrace(const SmBraceNode* pNode, int nLevel)
