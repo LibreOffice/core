@@ -25,10 +25,13 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _ACMPLWRD_HXX
-#define _ACMPLWRD_HXX
 
-#include <svl/svstdarr.hxx>
+#ifndef SW_ACMPLWRD_HXX
+#define SW_ACMPLWRD_HXX
+
+#include <deque>
+
+#include <editeng/swafopt.hxx>
 
 class SwDoc;
 class SwAutoCompleteWord_Impl;
@@ -41,7 +44,8 @@ class SwAutoCompleteWord
 {
     friend class SwAutoCompleteClient;
 
-    SvStringsISortDtor aWordLst; // contains extended strings carrying source information
+    /// contains extended strings carrying source information
+    editeng::SortedAutoCompleteStrings m_WordList;
     SwAutoCompleteStringPtrDeque aLRULst;
 
     SwAutoCompleteWord_Impl* pImpl;
@@ -57,7 +61,8 @@ public:
 
     sal_Bool GetRange( const String& rWord, sal_uInt16& rStt, sal_uInt16& rEnd ) const;
 
-    const String& operator[]( sal_uInt16 n ) const { return *aWordLst[ n ]; }
+    const String& operator[](size_t n) const
+        { return m_WordList[n]->GetAutoCompleteString(); }
 
     bool IsLockWordLstLocked() const           { return bLockWordLst; }
     void SetLockWordLstLocked( bool bFlag ) { bLockWordLst = bFlag; }
@@ -67,8 +72,9 @@ public:
     sal_uInt16 GetMinWordLen() const                { return nMinWrdLen; }
     void SetMinWordLen( sal_uInt16 n );
 
-    const SvStringsISortDtor& GetWordList() const { return aWordLst; }
-    void CheckChangedList( const SvStringsISortDtor& rNewLst );
+    const editeng::SortedAutoCompleteStrings& GetWordList() const
+        { return m_WordList; }
+    void CheckChangedList(const editeng::SortedAutoCompleteStrings& rNewLst);
 };
 
 

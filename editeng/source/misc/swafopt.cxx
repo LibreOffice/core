@@ -86,7 +86,7 @@ SvxSwAutoFmtFlags::SvxSwAutoFmtFlags()
 
     nAutoCmpltWordLen = 10;
     nAutoCmpltListLen = 500;
-    pAutoCmpltList = 0;
+    m_pAutoCompleteList = 0;
     pSmartTagMgr = 0;
 }
 
@@ -140,7 +140,7 @@ SvxSwAutoFmtFlags& SvxSwAutoFmtFlags::operator=( const SvxSwAutoFmtFlags& rAFFla
     bAutoCmpltEndless = rAFFlags.bAutoCmpltEndless;
     bAutoCmpltAppendBlanc = rAFFlags.bAutoCmpltAppendBlanc;
     bAutoCmpltShowAsTip = rAFFlags.bAutoCmpltShowAsTip;
-    pAutoCmpltList = rAFFlags.pAutoCmpltList;
+    m_pAutoCompleteList = rAFFlags.m_pAutoCompleteList;
     pSmartTagMgr = rAFFlags.pSmartTagMgr;
     nAutoCmpltExpandKey = rAFFlags.nAutoCmpltExpandKey;
 

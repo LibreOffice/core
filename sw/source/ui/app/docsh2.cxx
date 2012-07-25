@@ -642,8 +642,8 @@ void SwDocShell::Execute(SfxRequest& rReq)
 
             rACW.SetLockWordLstLocked( true );
 
-            SvStringsISortDtor aTmpLst( rACW.GetWordList() );
-            pAFlags->pAutoCmpltList = &aTmpLst;
+            editeng::SortedAutoCompleteStrings aTmpLst( rACW.GetWordList() );
+            pAFlags->m_pAutoCompleteList = &aTmpLst;
 
             SfxApplication* pApp = SFX_APP();
             SfxRequest aAppReq(SID_AUTO_CORRECT_DLG, SFX_CALLMODE_SYNCHRON, pApp->GetPool());
@@ -670,11 +670,11 @@ void SwDocShell::Execute(SfxRequest& rReq)
             SwEditShell::SetAutoFmtFlags( pAFlags );
             rACW.SetMinWordLen( pAFlags->nAutoCmpltWordLen );
             rACW.SetMaxCount( pAFlags->nAutoCmpltListLen );
-            if( pAFlags->pAutoCmpltList )  // any changes?
+            if (pAFlags->m_pAutoCompleteList)  // any changes?
             {
                 rACW.CheckChangedList( aTmpLst );
                 // clear the temp WordList pointer
-                pAFlags->pAutoCmpltList = 0;
+                pAFlags->m_pAutoCompleteList = 0;
             }
             // remove all pointer we never delete the strings
             aTmpLst.clear();
