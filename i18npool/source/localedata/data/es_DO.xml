@@ -38,6 +38,7 @@
     <MeasurementSystem>Metric</MeasurementSystem>
   </LC_CTYPE>
   <LC_FORMAT replaceFrom="[CURRENCY]" replaceTo="[$RD$-1C0A] ">
+    <DateAcceptancePattern>D/M</DateAcceptancePattern>
     <FormatElement msgid="DateFormatskey1" default="true" type="short" usage="DATE" formatindex="18">
       <FormatCode>D/MM/AA</FormatCode>
     </FormatElement>
