@@ -272,6 +272,7 @@ public:
     OUString m_aLongName;
 
     uno::Reference < embed::XStorage > xStorage;
+    uno::Reference<io::XInputStream> m_xInputStreamToLoadFrom;
 
     mutable SfxItemSet* m_pSet;
     const SfxFilter* m_pFilter;
@@ -2295,9 +2296,9 @@ void SfxMedium::GetMedium_Impl()
                     GetItemSet()->Put( SfxUnoAnyItem( SID_INTERACTIONHANDLER, makeAny(xInteractionHandler) ) );
             }
 
-            if ( m_xInputStreamToLoadFrom.is() )
+            if ( pImp->m_xInputStreamToLoadFrom.is() )
             {
-                pImp->xInputStream = m_xInputStreamToLoadFrom;
+                pImp->xInputStream = pImp->m_xInputStreamToLoadFrom;
                 pImp->xInputStream->skipBytes(0);
                 if (pImp->m_bInputStreamIsReadOnly)
                     GetItemSet()->Put( SfxBoolItem( SID_DOC_READONLY, true ) );
@@ -3059,7 +3060,7 @@ SfxFrame* SfxMedium::GetLoadTargetFrame() const
 
 void SfxMedium::setStreamToLoadFrom(const com::sun::star::uno::Reference<com::sun::star::io::XInputStream>& xInputStream,sal_Bool bIsReadOnly )
 {
-    m_xInputStreamToLoadFrom = xInputStream;
+    pImp->m_xInputStreamToLoadFrom = xInputStream;
     pImp->m_bInputStreamIsReadOnly = bIsReadOnly;
 }
 
