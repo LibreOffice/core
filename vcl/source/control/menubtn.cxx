@@ -153,9 +153,8 @@ void MenuButton::MouseButtonDown( const MouseEvent& rMEvt )
     bool bExecute = true;
     if ( mnMenuMode & MENUBUTTON_MENUMODE_TIMED )
     {
-        // if the separated dropdown symbol is hit,
-        // execute the popup immediately
-        if( ! ImplGetSymbolRect().IsInside( rMEvt.GetPosPixel() ) )
+        // if the separated dropdown symbol is not hit, delay the popup execution
+        if( rMEvt.GetPosPixel().X() <= ImplGetSeparatorX() )
         {
             if ( !mpMenuTimer )
             {
