@@ -81,7 +81,7 @@ protected:
     // up by FinishFileDownload. To cancel the download should a shell be
     // left. It can only exist a single download at the same time, For every
     // started download FinshFileDownload must be called.
-    void StartFileDownload( const String& rURL, SfxObjectShell *pSh=0 );
+    void StartFileDownload(const OUString& rURL);
 
     // End of an asynchronous file download. Returns TRUE if the download
     // was successful. The read file is then passed into String.

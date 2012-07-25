@@ -225,7 +225,7 @@ IMAPOBJ_SETEVENT:
     return bNewArea;
 }
 
-void SfxHTMLParser::StartFileDownload( const String& rURL, SfxObjectShell* /*pSh*/ )
+void SfxHTMLParser::StartFileDownload(const OUString& rURL)
 {
     DBG_ASSERT( !pDLMedium, "StartFileDownload when active Download" );
     if( pDLMedium )
