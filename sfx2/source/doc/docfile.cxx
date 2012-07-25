@@ -277,6 +277,7 @@ public:
     mutable SfxItemSet* m_pSet;
     const SfxFilter* m_pFilter;
     SfxMedium*       pAntiImpl;
+    SvStream* m_pInStream;
     SvStream* m_pOutStream;
 
     long             nFileVersion;
@@ -348,6 +349,7 @@ SfxMedium_Impl::SfxMedium_Impl( SfxMedium* pAntiImplP ) :
     m_pSet(NULL),
     m_pFilter(NULL),
     pAntiImpl( pAntiImplP ),
+    m_pInStream(NULL),
     m_pOutStream(NULL),
     nFileVersion( 0 ),
     pOrigFilter( 0 ),
@@ -375,8 +377,8 @@ SfxMedium_Impl::~SfxMedium_Impl()
 void SfxMedium::ResetError()
 {
     pImp->m_eError = SVSTREAM_OK;
-    if( pInStream )
-        pInStream->ResetError();
+    if( pImp->m_pInStream )
+        pImp->m_pInStream->ResetError();
     if( pImp->m_pOutStream )
         pImp->m_pOutStream->ResetError();
 }
@@ -418,8 +420,8 @@ void SfxMedium::SetError( sal_uInt32 nError, const ::rtl::OUString& aLogMessage 
 sal_uInt32 SfxMedium::GetErrorCode() const
 {
     sal_uInt32 lError = pImp->m_eError;
-    if(!lError && pInStream)
-        lError=pInStream->GetErrorCode();
+    if(!lError && pImp->m_pInStream)
+        lError = pImp->m_pInStream->GetErrorCode();
     if(!lError && pImp->m_pOutStream)
         lError = pImp->m_pOutStream->GetErrorCode();
     return lError;
@@ -564,24 +566,24 @@ Reference < XContent > SfxMedium::GetContent() const
 //------------------------------------------------------------------
 SvStream* SfxMedium::GetInStream()
 {
-    if ( pInStream )
-        return pInStream;
+    if ( pImp->m_pInStream )
+        return pImp->m_pInStream;
 
     if ( pImp->pTempFile )
     {
-        pInStream = new SvFileStream( pImp->m_aName, nStorOpenMode );
+        pImp->m_pInStream = new SvFileStream( pImp->m_aName, nStorOpenMode );
 
-        pImp->m_eError = pInStream->GetError();
+        pImp->m_eError = pImp->m_pInStream->GetError();
 
         if( !pImp->m_eError && (nStorOpenMode & STREAM_WRITE)
-                    && ! pInStream->IsWritable() )
+                    && ! pImp->m_pInStream->IsWritable() )
         {
             pImp->m_eError = ERRCODE_IO_ACCESSDENIED;
-            delete pInStream;
-            pInStream = NULL;
+            delete pImp->m_pInStream;
+            pImp->m_pInStream = NULL;
         }
         else
-            return pInStream;
+            return pImp->m_pInStream;
     }
 
     GetMedium_Impl();
@@ -589,7 +591,7 @@ SvStream* SfxMedium::GetInStream()
     if ( GetError() )
         return NULL;
 
-    return pInStream;
+    return pImp->m_pInStream;
 }
 
 //------------------------------------------------------------------
@@ -603,19 +605,19 @@ void SfxMedium::CloseInStream_Impl()
     // if there is a storage based on the InStream, we have to
     // close the storage, too, because otherwise the storage
     // would use an invalid ( deleted ) stream.
-    if ( pInStream && pImp->xStorage.is() )
+    if ( pImp->m_pInStream && pImp->xStorage.is() )
     {
         if ( pImp->bStorageBasedOnInStream )
             CloseStorage();
     }
 
-    if ( pInStream && !GetContent().is() )
+    if ( pImp->m_pInStream && !GetContent().is() )
     {
         CreateTempFile( true );
         return;
     }
 
-    DELETEZ( pInStream );
+    DELETEZ( pImp->m_pInStream );
     if ( pImp->m_pSet )
         pImp->m_pSet->ClearItem( SID_INPUTSTREAM );
 
@@ -676,7 +678,7 @@ sal_Bool SfxMedium::CloseOutStream_Impl()
         pImp->m_pOutStream = NULL;
     }
 
-    if ( !pInStream )
+    if ( !pImp->m_pInStream )
     {
         // input part of the stream is not used so the whole stream can be closed
         // TODO/LATER: is it correct?
@@ -703,7 +705,7 @@ void SfxMedium::CreateFileStream()
 {
     ForceSynchronStream_Impl( true );
     GetInStream();
-    if( pInStream )
+    if( pImp->m_pInStream )
     {
         CreateTempFile( false );
         pImp->bIsTemp = true;
@@ -718,8 +720,8 @@ sal_Bool SfxMedium::Commit()
         StorageCommit_Impl();
     else if( pImp->m_pOutStream  )
         pImp->m_pOutStream->Flush();
-    else if( pInStream  )
-        pInStream->Flush();
+    else if( pImp->m_pInStream  )
+        pImp->m_pInStream->Flush();
 
     if ( GetError() == SVSTREAM_OK )
     {
@@ -759,8 +761,8 @@ sal_Bool SfxMedium::IsStorage()
     }
     else if ( GetInStream() )
     {
-        pImp->bIsStorage = SotStorage::IsStorageFile( pInStream ) && !SotStorage::IsOLEStorage( pInStream );
-        if ( !pInStream->GetError() && !pImp->bIsStorage )
+        pImp->bIsStorage = SotStorage::IsStorageFile( pImp->m_pInStream ) && !SotStorage::IsOLEStorage( pImp->m_pInStream );
+        if ( !pImp->m_pInStream->GetError() && !pImp->bIsStorage )
             pImp->m_bTriedStorage = true;
     }
 
@@ -830,7 +832,7 @@ uno::Reference < embed::XStorage > SfxMedium::GetOutputStorage()
         return pImp->xStorage;
 
     // if necessary close stream that was used for reading
-    if ( pInStream && !pInStream->IsWritable() )
+    if ( pImp->m_pInStream && !pImp->m_pInStream->IsWritable() )
         CloseInStream();
 
     DBG_ASSERT( !pImp->m_pOutStream, "OutStream in a readonly Medium?!" );
@@ -1314,8 +1316,8 @@ uno::Reference < embed::XStorage > SfxMedium::GetStorage( sal_Bool bCreateTempIf
     if( ( pImp->nLastStorageError = GetError() ) != SVSTREAM_OK )
     {
         pImp->xStorage = 0;
-        if ( pInStream )
-            pInStream->Seek(0);
+        if ( pImp->m_pInStream )
+            pImp->m_pInStream->Seek(0);
         return uno::Reference< embed::XStorage >();
     }
 
@@ -1391,8 +1393,8 @@ uno::Reference < embed::XStorage > SfxMedium::GetStorage( sal_Bool bCreateTempIf
     if ( bResetStorage )
     {
         pImp->xStorage = 0;
-        if ( pInStream )
-            pInStream->Seek( 0L );
+        if ( pImp->m_pInStream )
+            pImp->m_pInStream->Seek( 0L );
     }
 
     pImp->bIsStorage = pImp->xStorage.is();
@@ -2249,7 +2251,7 @@ void SfxMedium::GetLockingStream_Impl()
 //----------------------------------------------------------------
 void SfxMedium::GetMedium_Impl()
 {
-    if ( !pInStream )
+    if ( !pImp->m_pInStream )
     {
         pImp->bDownloadDone = false;
         Reference< ::com::sun::star::task::XInteractionHandler > xInteractionHandler = GetInteractionHandler();
@@ -2361,9 +2363,9 @@ void SfxMedium::GetMedium_Impl()
         if ( !GetError() )
         {
             if ( pImp->xStream.is() )
-                pInStream = utl::UcbStreamHelper::CreateStream( pImp->xStream );
+                pImp->m_pInStream = utl::UcbStreamHelper::CreateStream( pImp->xStream );
             else if ( pImp->xInputStream.is() )
-                pInStream = utl::UcbStreamHelper::CreateStream( pImp->xInputStream );
+                pImp->m_pInStream = utl::UcbStreamHelper::CreateStream( pImp->xInputStream );
         }
 
         pImp->bDownloadDone = true;
@@ -2420,7 +2422,7 @@ void SfxMedium::DownLoad( const Link& aLink )
 {
     SetDoneLink( aLink );
     GetInStream();
-    if ( pInStream && !aLink.IsSet() )
+    if ( pImp->m_pInStream && !aLink.IsSet() )
     {
         while( !pImp->bDownloadDone )
             Application::Yield();
@@ -2513,7 +2515,6 @@ void SfxMedium::Init_Impl()
 SfxMedium::SfxMedium() :
     nStorOpenMode( SFX_STREAM_READWRITE ),
     pURLObj(0),
-    pInStream(0),
     pImp(new SfxMedium_Impl( this ))
 {
     Init_Impl();
@@ -2862,7 +2863,6 @@ void SfxMedium::CompleteReOpen()
 SfxMedium::SfxMedium(const String &rName, StreamMode nOpenMode, const SfxFilter *pFlt, SfxItemSet *pInSet) :
     nStorOpenMode( SFX_STREAM_READWRITE ),
     pURLObj(0),
-    pInStream(0),
     pImp(new SfxMedium_Impl( this ))
 {
     pImp->m_pSet = pInSet;
@@ -2876,7 +2876,6 @@ SfxMedium::SfxMedium(const String &rName, StreamMode nOpenMode, const SfxFilter 
 SfxMedium::SfxMedium( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgs ) :
     nStorOpenMode( SFX_STREAM_READWRITE ),
     pURLObj(0),
-    pInStream(0),
     pImp(new SfxMedium_Impl( this ))
 {
     SfxAllItemSet *pParams = new SfxAllItemSet( SFX_APP()->GetPool() );
@@ -2932,7 +2931,6 @@ SfxMedium::SfxMedium( const ::com::sun::star::uno::Sequence< ::com::sun::star::b
 SfxMedium::SfxMedium( const uno::Reference < embed::XStorage >& rStor, const String& rBaseURL, const SfxItemSet* p, sal_Bool bRootP ) :
     nStorOpenMode( SFX_STREAM_READWRITE ),
     pURLObj(0),
-    pInStream(0),
     pImp( new SfxMedium_Impl( this ))
 {
     pImp->m_bRoot = bRootP;
@@ -2954,7 +2952,6 @@ SfxMedium::SfxMedium( const uno::Reference < embed::XStorage >& rStor, const Str
 SfxMedium::SfxMedium( const uno::Reference < embed::XStorage >& rStor, const String& rBaseURL, const String& rTypeName, const SfxItemSet* p, sal_Bool bRootP ) :
     nStorOpenMode( SFX_STREAM_READWRITE ),
     pURLObj(0),
-    pInStream(0),
     pImp( new SfxMedium_Impl( this ))
 {
     pImp->m_bRoot = bRootP;
@@ -3040,9 +3037,9 @@ sal_Bool SfxMedium::IsExpired() const
 
 void SfxMedium::ForceSynchronStream_Impl( sal_Bool bForce )
 {
-    if( pInStream )
+    if( pImp->m_pInStream )
     {
-        SvLockBytes* pBytes = pInStream->GetLockBytes();
+        SvLockBytes* pBytes = pImp->m_pInStream->GetLockBytes();
         if( pBytes )
             pBytes->SetSynchronMode( bForce );
     }
@@ -3370,7 +3367,7 @@ void SfxMedium::CreateTempFile( sal_Bool bReplace )
             }
         }
 
-        if ( !bTransferSuccess && pInStream )
+        if ( !bTransferSuccess && pImp->m_pInStream )
         {
             // the case when there is no URL-access available or this is a remote protocoll
             // but there is an input stream
@@ -3380,13 +3377,13 @@ void SfxMedium::CreateTempFile( sal_Bool bReplace )
                 char        *pBuf = new char [8192];
                 sal_uInt32   nErr = ERRCODE_NONE;
 
-                pInStream->Seek(0);
+                pImp->m_pInStream->Seek(0);
                 pImp->m_pOutStream->Seek(0);
 
-                while( !pInStream->IsEof() && nErr == ERRCODE_NONE )
+                while( !pImp->m_pInStream->IsEof() && nErr == ERRCODE_NONE )
                 {
-                    sal_uInt32 nRead = pInStream->Read( pBuf, 8192 );
-                    nErr = pInStream->GetError();
+                    sal_uInt32 nRead = pImp->m_pInStream->Read( pBuf, 8192 );
+                    nErr = pImp->m_pInStream->GetError();
                     pImp->m_pOutStream->Write( pBuf, nRead );
                 }
 
@@ -3576,7 +3573,7 @@ sal_Bool SfxMedium::HasStorage_Impl() const
 
 sal_Bool SfxMedium::IsOpen() const
 {
-    return pInStream || pImp->m_pOutStream || pImp->xStorage.is();
+    return pImp->m_pInStream || pImp->m_pOutStream || pImp->xStorage.is();
 }
 
 ::rtl::OUString SfxMedium::CreateTempCopyWithExt( const ::rtl::OUString& aURL )

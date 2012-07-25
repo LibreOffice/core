@@ -71,7 +71,6 @@ class SFX2_DLLPUBLIC SfxMedium : public SvRefBase
     StreamMode          nStorOpenMode;
     INetURLObject*      pURLObj;
     SvGlobalName        aFilterClass;
-    SvStream*           pInStream;
     SfxMedium_Impl*     pImp;
 
 #if _SOLAR__PRIVATE
