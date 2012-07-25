@@ -69,7 +69,6 @@ class DateTime;
 class SFX2_DLLPUBLIC SfxMedium : public SvRefBase
 {
     sal_uInt32          eError;
-    bool                bTriedStorage:1;
     bool                bRemote:1;
     StreamMode          nStorOpenMode;
     INetURLObject*      pURLObj;

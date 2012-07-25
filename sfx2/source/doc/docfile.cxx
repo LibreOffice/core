@@ -261,6 +261,7 @@ public:
     bool m_bRemoveBackup:1;
     bool m_bOriginallyReadOnly:1;
     bool m_bRoot:1;
+    bool m_bTriedStorage:1;
 
     uno::Reference < embed::XStorage > xStorage;
 
@@ -328,6 +329,7 @@ SfxMedium_Impl::SfxMedium_Impl( SfxMedium* pAntiImplP )
     m_bRemoveBackup( false ),
     m_bOriginallyReadOnly(false),
     m_bRoot(false),
+    m_bTriedStorage(false),
     pAntiImpl( pAntiImplP ),
     nFileVersion( 0 ),
     pOrigFilter( 0 ),
@@ -721,7 +723,7 @@ sal_Bool SfxMedium::IsStorage()
     if ( pImp->xStorage.is() )
         return true;
 
-    if ( bTriedStorage )
+    if ( pImp->m_bTriedStorage )
         return pImp->bIsStorage;
 
     if ( pImp->pTempFile )
@@ -733,13 +735,13 @@ sal_Bool SfxMedium::IsStorage()
         }
         pImp->bIsStorage = SotStorage::IsStorageFile( aURL ) && !SotStorage::IsOLEStorage( aURL);
         if ( !pImp->bIsStorage )
-            bTriedStorage = true;
+            pImp->m_bTriedStorage = true;
     }
     else if ( GetInStream() )
     {
         pImp->bIsStorage = SotStorage::IsStorageFile( pInStream ) && !SotStorage::IsOLEStorage( pInStream );
         if ( !pInStream->GetError() && !pImp->bIsStorage )
-            bTriedStorage = true;
+            pImp->m_bTriedStorage = true;
     }
 
     return pImp->bIsStorage;
@@ -1213,7 +1215,7 @@ bool SfxMedium::LockOrigFileOnDemand( sal_Bool bLoading, sal_Bool bNoUI )
 //------------------------------------------------------------------
 uno::Reference < embed::XStorage > SfxMedium::GetStorage( sal_Bool bCreateTempIfNo )
 {
-    if ( pImp->xStorage.is() || bTriedStorage )
+    if ( pImp->xStorage.is() || pImp->m_bTriedStorage )
         return pImp->xStorage;
 
     uno::Sequence< uno::Any > aArgs( 2 );
@@ -1297,7 +1299,7 @@ uno::Reference < embed::XStorage > SfxMedium::GetStorage( sal_Bool bCreateTempIf
         return uno::Reference< embed::XStorage >();
     }
 
-    bTriedStorage = true;
+    pImp->m_bTriedStorage = true;
 
     // TODO/LATER: Get versionlist on demand
     if ( pImp->xStorage.is() )
@@ -1448,7 +1450,7 @@ void SfxMedium::CloseStorage()
         pImp->bStorageBasedOnInStream = false;
     }
 
-    bTriedStorage = false;
+    pImp->m_bTriedStorage = false;
     pImp->bIsStorage = false;
 }
 
@@ -2479,7 +2481,6 @@ void SfxMedium::Init_Impl()
 //------------------------------------------------------------------
 SfxMedium::SfxMedium() :
     eError( SVSTREAM_OK ),
-    bTriedStorage( false ),
     nStorOpenMode( SFX_STREAM_READWRITE ),
     pURLObj(0),
     pInStream(0),
@@ -2771,7 +2772,7 @@ void SfxMedium::SetPhysicalName_Impl( const rtl::OUString& rNameP )
             pImp->aContent = ::ucbhelper::Content();
 
         aName = rNameP;
-        bTriedStorage = false;
+        pImp->m_bTriedStorage = false;
         pImp->bIsStorage = false;
     }
 }
@@ -2827,7 +2828,6 @@ void SfxMedium::CompleteReOpen()
 
 SfxMedium::SfxMedium(const String &rName, StreamMode nOpenMode, const SfxFilter *pFlt, SfxItemSet *pInSet) :
     eError( SVSTREAM_OK ),
-    bTriedStorage( false ),
     nStorOpenMode( SFX_STREAM_READWRITE ),
     pURLObj(0),
     pInStream(0),
@@ -2843,7 +2843,6 @@ SfxMedium::SfxMedium(const String &rName, StreamMode nOpenMode, const SfxFilter 
 
 
 SfxMedium::SfxMedium( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgs ) :
-    bTriedStorage( false ),
     nStorOpenMode( SFX_STREAM_READWRITE ),
     pURLObj(0),
     pInStream(0),
@@ -2903,7 +2902,6 @@ SfxMedium::SfxMedium( const ::com::sun::star::uno::Sequence< ::com::sun::star::b
 //------------------------------------------------------------------
 
 SfxMedium::SfxMedium( const uno::Reference < embed::XStorage >& rStor, const String& rBaseURL, const SfxItemSet* p, sal_Bool bRootP ) :
-    bTriedStorage( false ),
     nStorOpenMode( SFX_STREAM_READWRITE ),
     pURLObj(0),
     pInStream(0),
@@ -2928,7 +2926,6 @@ SfxMedium::SfxMedium( const uno::Reference < embed::XStorage >& rStor, const Str
 }
 
 SfxMedium::SfxMedium( const uno::Reference < embed::XStorage >& rStor, const String& rBaseURL, const String& rTypeName, const SfxItemSet* p, sal_Bool bRootP ) :
-    bTriedStorage( false ),
     nStorOpenMode( SFX_STREAM_READWRITE ),
     pURLObj(0),
     pInStream(0),
