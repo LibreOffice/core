@@ -260,6 +260,7 @@ public:
     bool m_bGotDateTime:1;
     bool m_bRemoveBackup:1;
     bool m_bOriginallyReadOnly:1;
+    bool m_bRoot:1;
 
     uno::Reference < embed::XStorage > xStorage;
 
@@ -326,6 +327,7 @@ SfxMedium_Impl::SfxMedium_Impl( SfxMedium* pAntiImplP )
     m_bGotDateTime( false ),
     m_bRemoveBackup( false ),
     m_bOriginallyReadOnly(false),
+    m_bRoot(false),
     pAntiImpl( pAntiImplP ),
     nFileVersion( 0 ),
     pOrigFilter( 0 ),
@@ -1421,7 +1423,11 @@ void SfxMedium::CloseZipStorage_Impl()
     }
 }
 
-//------------------------------------------------------------------
+sal_Bool SfxMedium::IsRoot() const
+{
+    return pImp->m_bRoot;
+}
+
 void SfxMedium::CloseStorage()
 {
     if ( pImp->xStorage.is() )
@@ -2475,7 +2481,6 @@ void SfxMedium::Init_Impl()
 //------------------------------------------------------------------
 SfxMedium::SfxMedium() :
     eError( SVSTREAM_OK ),
-    bRoot( false ),
     bSetFilter( false ),
     bTriedStorage( false ),
     nStorOpenMode( SFX_STREAM_READWRITE ),
@@ -2825,7 +2830,6 @@ void SfxMedium::CompleteReOpen()
 
 SfxMedium::SfxMedium(const String &rName, StreamMode nOpenMode, const SfxFilter *pFlt, SfxItemSet *pInSet) :
     eError( SVSTREAM_OK ),
-    bRoot( false ),
     bSetFilter( false ),
     bTriedStorage( false ),
     nStorOpenMode( SFX_STREAM_READWRITE ),
@@ -2843,7 +2847,6 @@ SfxMedium::SfxMedium(const String &rName, StreamMode nOpenMode, const SfxFilter 
 
 
 SfxMedium::SfxMedium( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgs ) :
-    bRoot( false ),
     bSetFilter( false ),
     bTriedStorage( false ),
     nStorOpenMode( SFX_STREAM_READWRITE ),
@@ -2905,7 +2908,6 @@ SfxMedium::SfxMedium( const ::com::sun::star::uno::Sequence< ::com::sun::star::b
 //------------------------------------------------------------------
 
 SfxMedium::SfxMedium( const uno::Reference < embed::XStorage >& rStor, const String& rBaseURL, const SfxItemSet* p, sal_Bool bRootP ) :
-    bRoot( bRootP ),
     bSetFilter( false ),
     bTriedStorage( false ),
     nStorOpenMode( SFX_STREAM_READWRITE ),
@@ -2915,6 +2917,8 @@ SfxMedium::SfxMedium( const uno::Reference < embed::XStorage >& rStor, const Str
     pSet(0),
     pImp( new SfxMedium_Impl( this ))
 {
+    pImp->m_bRoot = bRootP;
+
     String aType = SfxFilter::GetTypeFromStorage( rStor );
     pFilter = SFX_APP()->GetFilterMatcher().GetFilter4EA( aType );
     DBG_ASSERT( pFilter, "No Filter for storage found!" );
@@ -2930,7 +2934,6 @@ SfxMedium::SfxMedium( const uno::Reference < embed::XStorage >& rStor, const Str
 }
 
 SfxMedium::SfxMedium( const uno::Reference < embed::XStorage >& rStor, const String& rBaseURL, const String& rTypeName, const SfxItemSet* p, sal_Bool bRootP ) :
-    bRoot( bRootP ),
     bSetFilter( false ),
     bTriedStorage( false ),
     nStorOpenMode( SFX_STREAM_READWRITE ),
@@ -2940,6 +2943,8 @@ SfxMedium::SfxMedium( const uno::Reference < embed::XStorage >& rStor, const Str
     pSet(0),
     pImp( new SfxMedium_Impl( this ))
 {
+    pImp->m_bRoot = bRootP;
+
 	pFilter = SFX_APP()->GetFilterMatcher().GetFilter4EA( rTypeName );
     DBG_ASSERT( pFilter, "No Filter for storage found!" );
 

@@ -69,7 +69,6 @@ class DateTime;
 class SFX2_DLLPUBLIC SfxMedium : public SvRefBase
 {
     sal_uInt32          eError;
-    bool                bRoot:1;
     bool                bSetFilter:1;
     bool                bTriedStorage:1;
     bool                bRemote:1;
@@ -179,7 +178,7 @@ public:
     void                CloseInStream();
     sal_Bool            CloseOutStream();
 
-    sal_Bool            IsRoot() const { return bRoot; }
+    sal_Bool            IsRoot() const;
     void                CloseStorage();
 
     StreamMode          GetOpenMode() const { return nStorOpenMode; }
