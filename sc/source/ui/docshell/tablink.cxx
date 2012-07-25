@@ -472,7 +472,7 @@ bool ScDocumentLoader::GetFilterName( const String& rFileName,
         if ( pDocSh->HasName() )
         {
             SfxMedium* pMed = pDocSh->GetMedium();
-            if ( rFileName == pMed->GetName() )
+            if ( pMed->GetName().equals(rFileName) )
             {
                 rFilter = pMed->GetFilter()->GetFilterName();
                 rOptions = GetOptions(*pMed);

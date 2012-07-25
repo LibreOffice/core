@@ -2077,11 +2077,10 @@ const ScDocument* ScExternalRefManager::getInMemorySrcDocument(sal_uInt16 nFileI
     while (pShell)
     {
         SfxMedium* pMedium = pShell->GetMedium();
-        if (pMedium && pMedium->GetName().Len())
+        if (pMedium && !pMedium->GetName().isEmpty())
         {
-            OUString aName = pMedium->GetName();
             // TODO: We should make the case sensitivity platform dependent.
-            if (pFileName->equalsIgnoreAsciiCase(aName))
+            if (pFileName->equalsIgnoreAsciiCase(pMedium->GetName()))
             {
                 // Found !
                 pSrcDoc = pShell->GetDocument();

@@ -405,7 +405,7 @@ void SfxFrame::UpdateDescriptor( SfxObjectShell *pDoc )
 
     GetParentFrame();
     const SfxMedium *pMed = pDoc->GetMedium();
-    GetDescriptor()->SetActualURL( pMed->GetOrigURL() );
+    GetDescriptor()->SetActualURL( String(pMed->GetOrigURL()) );
 
     SFX_ITEMSET_ARG( pMed->GetItemSet(), pItem, SfxBoolItem, SID_EDITDOC, sal_False );
     sal_Bool bEditable = ( !pItem || pItem->GetValue() );

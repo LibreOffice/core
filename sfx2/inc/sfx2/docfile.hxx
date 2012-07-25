@@ -69,9 +69,10 @@ class DateTime;
 class SFX2_DLLPUBLIC SfxMedium : public SvRefBase
 {
     sal_uInt32          eError;
-    sal_Bool            bRoot:1,
-                        bSetFilter:1,
-                        bTriedStorage;
+    bool                bRoot:1;
+    bool                bSetFilter:1;
+    bool                bTriedStorage:1;
+    bool                bRemote:1;
     StreamMode          nStorOpenMode;
     INetURLObject*      pURLObj;
     rtl::OUString       aName;
@@ -81,9 +82,8 @@ class SFX2_DLLPUBLIC SfxMedium : public SvRefBase
     const SfxFilter*    pFilter;
     SfxItemSet*         pSet;
     SfxMedium_Impl*     pImp;
-    String              aLogicName;
-    String              aLongName;
-    sal_Bool            bRemote;
+    rtl::OUString       aLogicName;
+    rtl::OUString       aLongName;
 
     com::sun::star::uno::Reference<com::sun::star::io::XInputStream>
     m_xInputStreamToLoadFrom;
@@ -145,14 +145,14 @@ public:
     void                SetFilter(const SfxFilter *pFlt, sal_Bool bResetOrig = sal_False);
     const SfxFilter *   GetFilter() const { return pFilter; }
     const SfxFilter *   GetOrigFilter( sal_Bool bNotCurrent = sal_False ) const;
-    const String&       GetOrigURL() const;
+    const rtl::OUString& GetOrigURL() const;
 
     SfxItemSet  *       GetItemSet() const;
     void                Close();
     void                CloseAndRelease();
     void                ReOpen();
     void                CompleteReOpen();
-    const String&       GetName() const {return aLogicName;}
+    const rtl::OUString& GetName() const;
     const INetURLObject& GetURLObject() const;
 
     void                CheckFileDate( const ::com::sun::star::util::DateTime& aInitDate );
@@ -260,9 +260,9 @@ public:
     SAL_DLLPRIVATE void SetUpdatePickList(sal_Bool);
     SAL_DLLPRIVATE sal_Bool IsUpdatePickList() const;
 
-    SAL_DLLPRIVATE void SetLongName(const String &rName)
+    SAL_DLLPRIVATE void SetLongName(const rtl::OUString &rName)
                         { aLongName = rName; }
-    SAL_DLLPRIVATE const String & GetLongName() const { return aLongName; }
+    SAL_DLLPRIVATE const rtl::OUString & GetLongName() const { return aLongName; }
     SAL_DLLPRIVATE ErrCode CheckOpenMode_Impl( sal_Bool bSilent, sal_Bool bAllowRO = sal_True );
     SAL_DLLPRIVATE sal_Bool IsPreview_Impl();
     SAL_DLLPRIVATE void ClearBackup_Impl();

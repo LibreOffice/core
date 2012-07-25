@@ -1238,7 +1238,7 @@ uno::Sequence< security::DocumentSignatureInformation > SfxObjectShell::ImplAnal
     uno::Sequence< security::DocumentSignatureInformation > aResult;
     uno::Reference< security::XDocumentDigitalSignatures > xLocSigner = xSigner;
 
-    if ( GetMedium() && GetMedium()->GetName().Len() && IsOwnStorageFormat_Impl( *GetMedium())  && GetMedium()->GetStorage().is() )
+    if ( GetMedium() && !GetMedium()->GetName().isEmpty() && IsOwnStorageFormat_Impl( *GetMedium())  && GetMedium()->GetStorage().is() )
     {
         try
         {
@@ -1301,7 +1301,7 @@ void SfxObjectShell::ImplSign( sal_Bool bScriptingContent )
     // Check if it is stored in OASIS format...
     if  (   GetMedium()
         &&  GetMedium()->GetFilter()
-        &&  GetMedium()->GetName().Len()
+        &&  !GetMedium()->GetName().isEmpty()
         &&  (   !GetMedium()->GetFilter()->IsOwnFormat()
             ||  !GetMedium()->HasStorage_Impl()
             )
@@ -1334,7 +1334,7 @@ void SfxObjectShell::ImplSign( sal_Bool bScriptingContent )
 
     bool bNoSig = false;
 
-    if ( IsModified() || !GetMedium() || !GetMedium()->GetName().Len()
+    if ( IsModified() || !GetMedium() || GetMedium()->GetName().isEmpty()
       || (!aODFVersion.equals( ODFVER_012_TEXT ) && !bHasSign) )
     {
         // the document might need saving ( new, modified or in ODF1.1 format without signature )
@@ -1346,7 +1346,7 @@ void SfxObjectShell::ImplSign( sal_Bool bScriptingContent )
               || (!bHasSign && QueryBox( NULL, SfxResId( RID_XMLSEC_QUERY_SAVEBEFORESIGN ) ).Execute() == RET_YES) )
             {
                 sal_uInt16 nId = SID_SAVEDOC;
-                if ( !GetMedium() || !GetMedium()->GetName().Len() )
+                if ( !GetMedium() || GetMedium()->GetName().isEmpty() )
                     nId = SID_SAVEASDOC;
                 SfxRequest aSaveRequest( nId, 0, GetPool() );
                 //ToDo: Review. We needed to call SetModified, otherwise the document would not be saved.
@@ -1378,7 +1378,7 @@ void SfxObjectShell::ImplSign( sal_Bool bScriptingContent )
             return;
         }
 
-        if ( IsModified() || !GetMedium() || !GetMedium()->GetName().Len() )
+        if ( IsModified() || !GetMedium() || GetMedium()->GetName().isEmpty() )
             return;
     }
 
