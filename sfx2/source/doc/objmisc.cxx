@@ -1668,18 +1668,6 @@ void SfxHeaderAttributes_Impl::SetAttribute( const SvKeyValue& rKV )
             pDoc->GetMedium()->SetExpired_Impl( Date( 1, 1, 1970 ) );
         }
     }
-    else if( rKV.GetKey().CompareIgnoreCaseToAscii( "content-type" ) == COMPARE_EQUAL )
-    {
-        String sType, sSubType;
-        INetContentTypeParameterList aParameters;
-
-        if (INetContentTypes::parse(aValue, sType, sSubType, &aParameters))
-        {
-            const INetContentTypeParameter * pCharset = aParameters.find("charset");
-            if (pCharset != 0)
-                pDoc->GetMedium()->SetCharset( pCharset->m_sValue );
-        }
-    }
 }
 
 void SfxHeaderAttributes_Impl::Append( const SvKeyValue& rKV )

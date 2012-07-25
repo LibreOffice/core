@@ -201,7 +201,6 @@ public:
     ::rtl::OUString     SwitchDocumentToTempFile();
     sal_Bool            SwitchDocumentToFile( ::rtl::OUString aURL );
 
-    void                SetCharset( ::rtl::OUString );
     ::rtl::OUString     GetBaseURL( bool bForSaving=false );
 
 #if _SOLAR__PRIVATE
