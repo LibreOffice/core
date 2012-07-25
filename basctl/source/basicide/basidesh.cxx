@@ -176,7 +176,7 @@ void BasicIDEShell::Init()
 
     SvxSearchDialogWrapper::RegisterChildWindow( sal_False );
 
-    BasicIDEGlobals::GetExtraData()->ShellInCriticalSection() = sal_True;
+    BasicIDEGlobals::GetExtraData()->ShellInCriticalSection() = true;
 
     SetName( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "BasicIDE" ) ) );
     SetHelpId( SVX_INTERFACE_BASIDE_VIEWSH );
@@ -205,7 +205,7 @@ void BasicIDEShell::Init()
 
     BasicIDEGlobals::ShellCreated(this);
 
-    BasicIDEGlobals::GetExtraData()->ShellInCriticalSection() = sal_False;
+    BasicIDEGlobals::GetExtraData()->ShellInCriticalSection() = false;
 
     // It's enough to create the controller ...
     // It will be public by using magic :-)
@@ -225,7 +225,7 @@ BasicIDEShell::~BasicIDEShell()
     BasicIDEGlobals::ShellDestroyed(this);
 
     // so that on a basic saving error, the shell doesn't pop right up again
-    BasicIDEGlobals::GetExtraData()->ShellInCriticalSection() = sal_True;
+    BasicIDEGlobals::GetExtraData()->ShellInCriticalSection() = true;
 
     SetWindow( 0 );
     SetCurWindow( 0 );
@@ -246,7 +246,7 @@ BasicIDEShell::~BasicIDEShell()
         if ( pListener )
             pListener->removeContainerListener( m_aCurDocument, m_aCurLibName );
 
-    BasicIDEGlobals::GetExtraData()->ShellInCriticalSection() = sal_False;
+    BasicIDEGlobals::GetExtraData()->ShellInCriticalSection() = false;
 
     GnBasicIDEShellCount--;
 }

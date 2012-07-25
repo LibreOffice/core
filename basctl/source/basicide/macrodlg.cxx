@@ -55,7 +55,7 @@ using ::std::pair;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-MacroChooser::MacroChooser( Window* pParnt, sal_Bool bCreateEntries ) :
+MacroChooser::MacroChooser( Window* pParnt, bool bCreateEntries ) :
         SfxModalDialog(     pParnt, IDEResId( RID_MACROCHOOSER ) ),
         aMacroNameTxt(      this,   IDEResId( RID_TXT_MACRONAME ) ),
         aMacroNameEdit(     this,   IDEResId( RID_ED_MACRONAME ) ),
@@ -77,11 +77,11 @@ MacroChooser::MacroChooser( Window* pParnt, sal_Bool bCreateEntries ) :
     FreeResource();
 
     nMode = MACROCHOOSER_ALL;
-    bNewDelIsDel = sal_True;
+    bNewDelIsDel = true;
 
     // the Sfx doesn't aske the BasicManger whether modified or not
     // => start saving in case of a change without a into the BasicIDE.
-    bForceStoreBasic = sal_False;
+    bForceStoreBasic = false;
 
     aMacrosInTxtBaseStr = aMacrosInTxt.GetText();
 
@@ -253,7 +253,7 @@ short MacroChooser::Execute()
 }
 
 
-void MacroChooser::EnableButton( Button& rButton, sal_Bool bEnable )
+void MacroChooser::EnableButton( Button& rButton, bool bEnable )
 {
     if ( bEnable )
     {
@@ -326,7 +326,7 @@ void MacroChooser::DeleteMacro()
         sal_uInt16 nStart, nEnd;
         pMethod->GetLineRange( nStart, nEnd );
         pModule->GetMethods()->Remove( pMethod );
-        CutLines( aSource, nStart-1, nEnd-nStart+1, sal_True );
+        CutLines( aSource, nStart-1, nEnd-nStart+1, true );
         pModule->SetSource32( aSource );
 
         // update module in library
@@ -337,7 +337,7 @@ void MacroChooser::DeleteMacro()
         SvLBoxEntry* pEntry = aMacroBox.FirstSelected();
         DBG_ASSERT( pEntry, "DeleteMacro: Entry ?!" );
         aMacroBox.GetModel()->Remove( pEntry );
-        bForceStoreBasic = sal_True;
+        bForceStoreBasic = true;
     }
 }
 
@@ -419,7 +419,7 @@ void MacroChooser::CheckButtons()
     SbMethod* pMethod = GetMacro();
 
     // check, if corresponding libraries are readonly
-    sal_Bool bReadOnly = sal_False;
+    bool bReadOnly = false;
     sal_uInt16 nDepth = pCurEntry ? aBasicBox.GetModel()->GetDepth( pCurEntry ) : 0;
     if ( nDepth == 1 || nDepth == 2 )
     {
@@ -430,26 +430,26 @@ void MacroChooser::CheckButtons()
         if ( ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) && xModLibContainer->isLibraryReadOnly( aOULibName ) ) ||
                 ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aOULibName ) && xDlgLibContainer->isLibraryReadOnly( aOULibName ) ) )
         {
-            bReadOnly = sal_True;
+            bReadOnly = true;
         }
     }
 
     if ( nMode != MACROCHOOSER_RECORDING )
     {
         // Run...
-        sal_Bool bEnable = pMethod ? sal_True : sal_False;
+        bool bEnable = pMethod ? true : false;
         if ( ( nMode != MACROCHOOSER_CHOOSEONLY ) && StarBASIC::IsRunning() )
-            bEnable = sal_False;
+            bEnable = false;
         EnableButton( aRunButton, bEnable );
     }
 
     // organising still possible?
 
     // Assign...
-    EnableButton( aAssignButton, pMethod ? sal_True : sal_False );
+    EnableButton( aAssignButton, pMethod ? true : false );
 
     // Edit...
-    EnableButton( aEditButton, pMacroEntry ? sal_True : sal_False );
+    EnableButton( aEditButton, pMacroEntry ? true : false );
 
     // aOrganizeButton
     EnableButton( aOrganizeButton, !StarBASIC::IsRunning() && ( nMode == MACROCHOOSER_ALL ));
@@ -459,8 +459,8 @@ void MacroChooser::CheckButtons()
     bool bShare = ( aDesc.GetLocation() == LIBRARY_LOCATION_SHARE );
     EnableButton( aNewDelButton,
         !StarBASIC::IsRunning() && ( nMode == MACROCHOOSER_ALL ) && !bProtected && !bReadOnly && !bShare );
-    sal_Bool bPrev = bNewDelIsDel;
-    bNewDelIsDel = pMethod ? sal_True : sal_False;
+    bool bPrev = bNewDelIsDel;
+    bNewDelIsDel = pMethod ? true : false;
     if ( ( bPrev != bNewDelIsDel ) && ( nMode == MACROCHOOSER_ALL ) )
     {
         String aBtnText( bNewDelIsDel ? IDEResId( RID_STR_BTNDEL) : IDEResId( RID_STR_BTNNEW ) );
@@ -609,7 +609,7 @@ IMPL_LINK( MacroChooser, EditModifyHdl, Edit *, pEdit )
         if ( aMacroBox.GetEntryCount() )
         {
             String aEdtText( aMacroNameEdit.GetText() );
-            sal_Bool bFound = sal_False;
+            bool bFound = false;
             for ( sal_uInt16 n = 0; n < aMacroBox.GetEntryCount(); n++ )
             {
                 SvLBoxEntry* pEntry = aMacroBox.GetEntry( n );
@@ -617,7 +617,7 @@ IMPL_LINK( MacroChooser, EditModifyHdl, Edit *, pEdit )
                 if ( aMacroBox.GetEntryText( pEntry ).CompareIgnoreCaseToAscii( aEdtText ) == COMPARE_EQUAL )
                 {
                     SaveSetCurEntry( aMacroBox, pEntry );
-                    bFound = sal_True;
+                    bFound = true;
                     break;
                 }
             }
@@ -826,7 +826,7 @@ IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton )
 
         BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
         if ( pIDEShell && pIDEShell->IsAppBasicModified() )
-            bForceStoreBasic = sal_True;
+            bForceStoreBasic = true;
 
         aBasicBox.UpdateEntries();
     }
@@ -851,20 +851,20 @@ void MacroChooser::SetMode( sal_uInt16 nM )
     if ( nMode == MACROCHOOSER_ALL )
     {
         aRunButton.SetText( String( IDEResId( RID_STR_RUN ) ) );
-        EnableButton( aNewDelButton, sal_True );
-        EnableButton( aOrganizeButton, sal_True );
+        EnableButton( aNewDelButton, true );
+        EnableButton( aOrganizeButton, true );
     }
     else if ( nMode == MACROCHOOSER_CHOOSEONLY )
     {
         aRunButton.SetText( String( IDEResId( RID_STR_CHOOSE ) ) );
-        EnableButton( aNewDelButton, sal_False );
-        EnableButton( aOrganizeButton, sal_False );
+        EnableButton( aNewDelButton, false );
+        EnableButton( aOrganizeButton, false );
     }
     else if ( nMode == MACROCHOOSER_RECORDING )
     {
         aRunButton.SetText( String( IDEResId( RID_STR_RECORD ) ) );
-        EnableButton( aNewDelButton, sal_False );
-        EnableButton( aOrganizeButton, sal_False );
+        EnableButton( aNewDelButton, false );
+        EnableButton( aOrganizeButton, false );
 
         aAssignButton.Hide();
         aEditButton.Hide();

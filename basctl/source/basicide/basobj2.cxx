@@ -265,13 +265,13 @@ namespace
 
     BasicIDEGlobals::ensure();
 
-    BasicIDEGlobals::GetExtraData()->ChoosingMacro() = sal_True;
+    BasicIDEGlobals::GetExtraData()->ChoosingMacro() = true;
 
     String aScriptURL;
     sal_Bool bError = sal_False;
     SbMethod* pMethod = NULL;
 
-    ::std::auto_ptr< MacroChooser > pChooser( new MacroChooser( NULL, sal_True ) );
+    ::std::auto_ptr< MacroChooser > pChooser( new MacroChooser( NULL, true ) );
     if ( bChooseOnly || !SvtModuleOptions().IsBasicIDE() )
         pChooser->SetMode( MACROCHOOSER_CHOOSEONLY );
 
@@ -281,7 +281,7 @@ namespace
 
     short nRetValue = pChooser->Execute();
 
-    BasicIDEGlobals::GetExtraData()->ChoosingMacro() = sal_False;
+    BasicIDEGlobals::GetExtraData()->ChoosingMacro() = false;
 
     switch ( nRetValue )
     {

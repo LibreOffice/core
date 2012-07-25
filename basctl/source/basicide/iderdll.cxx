@@ -154,8 +154,8 @@ BasicIDEData* BasicIDEDLL::GetExtraData()
 BasicIDEData::BasicIDEData() : aObjCatPos( INVPOSITION, INVPOSITION )
 {
     nBasicDialogCount = 0;
-    bChoosingMacro = sal_False;
-    bShellInCriticalSection = sal_False;
+    bChoosingMacro = false;
+    bShellInCriticalSection = false;
     pSearchItem = new SvxSearchItem( SID_SEARCH_ITEM );
 
     StarBASIC::SetGlobalBreakHdl( LINK( this, BasicIDEData, GlobalBasicBreakHdl ) );
