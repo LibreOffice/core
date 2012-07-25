@@ -26,6 +26,7 @@
  *
  ************************************************************************/
 
+#include "sal/config.h"
 
 #include "desktopdllapi.h"
 
@@ -37,14 +38,21 @@
 #include <rtl/bootstrap.hxx>
 #include <tools/extendapplicationenvironment.hxx>
 
+#if defined WNT
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+#endif
+
 int SVMain();
 
 // -=-= main() -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 extern "C" int DESKTOP_DLLPUBLIC soffice_main()
 {
-#if defined(ANDROID)
+#if defined ANDROID || defined WNT
     try {
+#endif
+#if defined(ANDROID)
         rtl::Bootstrap::setIniFilename(
                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("file:///assets/program/lofficerc")));
 #endif
@@ -75,10 +83,20 @@ extern "C" int DESKTOP_DLLPUBLIC soffice_main()
     }
 #endif
     return SVMain();
-#ifdef ANDROID
+#if defined ANDROID || defined WNT
     } catch (const ::com::sun::star::uno::Exception &e) {
+#if defined ANDROID
         fprintf (stderr, "Not handled UNO exception at main: '%s'\n",
                  rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr());
+#elif defined WNT
+        MessageBoxW(
+            0,
+            reinterpret_cast< LPCWSTR >(
+                rtl::OUString("Unhandled exception:\n" + e.Message).getStr()),
+            reinterpret_cast< LPCWSTR >(rtl::OUString("Fatal Error").getStr()),
+            (MB_OK | MB_ICONERROR | MB_DEFBUTTON1 | MB_TASKMODAL
+             | MB_SETFOREGROUND | MB_TOPMOST));
+#endif
         throw; // to get exception type printed
     }
 #endif
