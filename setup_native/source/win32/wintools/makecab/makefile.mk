@@ -20,8 +20,7 @@ TARGET=sn_makecab
 .IF "$(WINEGCC)"==""
 @all:
     @echo "No winegcc present, not building makecab..."
-.ENDIF
-
+.ELSE
 @all: $(BIN)/makecab.exe $(BIN)/makecab.exe.so
 
 $(BIN)/makecab.exe.so: $(BIN)/makecab.exe
@@ -33,4 +32,4 @@ $(BIN)/makecab.exe:
 
 .INCLUDE : target.mk
 
-# -------------------------------------------------------------------------
+.ENDIF
