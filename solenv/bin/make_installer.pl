@@ -1779,7 +1779,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
             # Then the language specific msi database can be created
 
-            if ( $installer::globals::iswin )   # only possible on a Windows platform
+            if ( $installer::globals::iswin || $installer::globals::packageformat eq 'msi' )
             {
                 my $msidatabasename = installer::windows::msiglobal::get_msidatabasename($allvariableshashref, $onelanguage);
                 my $msifilename = $languageidtdir . $installer::globals::separator . $msidatabasename;
@@ -1812,7 +1812,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
         my $defaultlanguage = installer::languages::get_default_language($languagesarrayref);
 
-        if ( $installer::globals::iswin )   # only possible on a Windows platform
+        if ( $installer::globals::iswin || $installer::globals::packageformat eq 'msi' )
         {
             if  ( $#{$languagesarrayref} > 0 )
             {
@@ -1868,7 +1868,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
         # Only for Windows and only on a windows platform.
         #######################################################
 
-        if ( $installer::globals::iswin )   # only possible on a Windows platform
+        if ( $installer::globals::iswin || $installer::globals::packageformat eq 'msi' )
         {
             installer::logger::print_message( "... packaging installation set ... \n" );
             installer::windows::msiglobal::execute_packaging($packjobref, $loggingdir, $allvariableshashref);
