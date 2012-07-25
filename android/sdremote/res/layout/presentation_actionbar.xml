@@ -4,19 +4,20 @@
     android:layout_height="match_parent"
     android:orientation="horizontal" >
 
-    <ImageButton
+    <ToggleButton
         android:id="@+id/actionbar_thumbnailtoggle"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:background="@drawable/empty"
-        android:src="@drawable/icon_thumbs" />
+        android:background="@drawable/actionbar_thumbs"
+        android:textOff=""
+        android:textOn="" />
 
     <TextView
         android:id="@+id/actionbar_time"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:textSize="22dp"
-        android:textColor="#FFFFFF"/>
+        android:textColor="#FFFFFF"
+        android:textSize="22dp" />
 
 </LinearLayout>

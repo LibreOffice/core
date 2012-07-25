@@ -20,8 +20,8 @@ import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.FrameLayout;
-import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 public class PresentationActivity extends Activity {
 	private CommunicationService mCommunicationService;
@@ -104,10 +104,11 @@ public class PresentationActivity extends Activity {
 		}
 	}
 
-	private class ActionBarManager implements OnClickListener {
+	private class ActionBarManager implements OnClickListener,
+	                FragmentManager.OnBackStackChangedListener {
 
 		private TextView mTimeLabel;
-		private ImageButton mThumbnailButton;
+		private ToggleButton mThumbnailButton;
 
 		private String aTimeFormat = getResources().getString(
 		                R.string.actionbar_timeformat);
@@ -129,13 +130,16 @@ public class PresentationActivity extends Activity {
 			aBar.setCustomView(R.layout.presentation_actionbar);
 
 			// Set up the various components
-			mThumbnailButton = (ImageButton) aBar.getCustomView().findViewById(
-			                R.id.actionbar_thumbnailtoggle);
+			mThumbnailButton = (ToggleButton) aBar.getCustomView()
+			                .findViewById(R.id.actionbar_thumbnailtoggle);
 			mThumbnailButton.setOnClickListener(this);
 
 			mTimeLabel = (TextView) aBar.getCustomView().findViewById(
 			                R.id.actionbar_time);
 			mThumbnailButton.setOnClickListener(this);
+
+			// Listen for fragment changes
+			getFragmentManager().addOnBackStackChangedListener(this);
 
 			// Setup the auto updater
 			timerHandler.removeCallbacks(timerUpdateThread);
@@ -170,16 +174,27 @@ public class PresentationActivity extends Activity {
 		@Override
 		public void onClick(View aSource) {
 			if (aSource == mThumbnailButton) {
-				FragmentTransaction ft = getFragmentManager()
-				                .beginTransaction();
-				ft.replace(R.id.framelayout, mThumbnailFragment);
-				ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-				ft.addToBackStack(null);
-				ft.commit();
+				if (!mThumbnailFragment.isVisible()) {
+					FragmentTransaction ft = getFragmentManager()
+					                .beginTransaction();
+					ft.replace(R.id.framelayout, mThumbnailFragment);
+					ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+					ft.addToBackStack(null);
+					ft.commit();
+				} else {
+					getFragmentManager().popBackStack();
+				}
 			} else if (aSource == mTimeLabel) {
 
 			}
 
+		}
+
+		@Override
+		public void onBackStackChanged() {
+			if (getFragmentManager().getBackStackEntryCount() == 0) {
+				mThumbnailButton.setChecked(false);
+			}
 		}
 	}
 
