@@ -227,7 +227,7 @@ class SvxConfigEntry
 {
 private:
 
-    // common properties
+    /// common properties
     sal_uInt16                      nId;
     ::rtl::OUString             aHelpText;
     ::rtl::OUString             aLabel;
@@ -242,8 +242,8 @@ private:
     bool                        bIsMovable;
     bool                        bIsParentData;
 
-
-    bool                        bIsVisible;    ///< toolbar specific properties
+    /// toolbar specific properties
+    bool                        bIsVisible;
     sal_Int32                   nStyle;
 
     ::com::sun::star::uno::Reference<
@@ -414,8 +414,8 @@ protected:
 
     SvxScriptSelectorDialog*            pSelectorDlg;
 
-
-    rtl::OUString                       m_aURLToSelect;  ///< the ResourceURL to select when opening the dialog
+    /// the ResourceURL to select when opening the dialog
+    rtl::OUString                       m_aURLToSelect;
 
     ::com::sun::star::uno::Reference
         < ::com::sun::star::frame::XFrame > m_xFrame;

@@ -89,14 +89,13 @@ public:
 struct TAccInfo
 {
     public:
-        /** its important to set sal_True as default -
-        because only fix entries will be disabled later ...*/
         TAccInfo(      sal_Int32 nKeyPos ,
                        sal_Int32 nListPos,
                  const KeyCode&  aKey    )
             : m_nKeyPos        (nKeyPos  )
             , m_nListPos       (nListPos )
-            , m_bIsConfigurable(sal_True )
+            , m_bIsConfigurable(sal_True ) /**< its important to set sal_True as default -
+                                                because only fix entries will be disabled later ... */
             , m_sCommand       (         )
             , m_aKey           (aKey     )
         {}
