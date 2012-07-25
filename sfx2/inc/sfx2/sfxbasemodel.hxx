@@ -139,7 +139,6 @@
 #define NOSUPPORTEXCEPTION      ::com::sun::star::lang::NoSupportException
 #define RUNTIMEEXCEPTION        ::com::sun::star::uno::RuntimeException
 #define CLOSEVETOEXCEPTION      ::com::sun::star::util::CloseVetoException
-#define DOUBLEINITIALIZATIONEXCEPTION      ::com::sun::star::frame::DoubleInitializationException
 #define ILLEGALARGUMENTEXCEPTION ::com::sun::star::lang::IllegalArgumentException
 #define IOEXCEPTION             ::com::sun::star::io::IOException
 #define EXCEPTION               ::com::sun::star::uno::Exception
@@ -1042,7 +1041,7 @@ public:
     virtual void SAL_CALL loadFromStorage( const REFERENCE< XSTORAGE >& xStorage,
                                             const ::com::sun::star::uno::Sequence< PROPERTYVALUE >& aMediaDescriptor )
         throw ( ILLEGALARGUMENTEXCEPTION,
-                DOUBLEINITIALIZATIONEXCEPTION,
+                com::sun::star::frame::DoubleInitializationException,
                 IOEXCEPTION,
                 EXCEPTION,
                 RUNTIMEEXCEPTION );
