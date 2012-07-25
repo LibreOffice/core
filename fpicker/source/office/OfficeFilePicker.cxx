@@ -31,7 +31,6 @@
 #include <algorithm>
 #endif
 #include <tools/urlobj.hxx>
-#include "svl/svstdarr.hxx"
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/ui/dialogs/FilePickerEvent.hpp>
 #include <com/sun/star/ui/dialogs/FilePreviewImageFormats.hpp>

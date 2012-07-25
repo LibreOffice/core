@@ -43,7 +43,6 @@
 #include <svl/svdde.hxx>
 #include <unotools/tempfile.hxx>
 #include <osl/file.hxx>
-#include <svl/svstdarr.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/lang/XInitialization.hpp>

@@ -34,7 +34,6 @@
 #include <svx/htmlmode.hxx>
 #include <svl/style.hxx>
 #include <svtools/htmlcfg.hxx>
-#include <svl/svstdarr.hxx>
 #include <svl/cjkoptions.hxx>
 #include "docsh.hxx"
 #include "wrtsh.hxx"

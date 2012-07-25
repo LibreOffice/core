@@ -56,7 +56,6 @@
 #include <svl/svarray.hxx>
 #include <svl/lstner.hxx>
 
-#include <svl/svstdarr.hxx>
 #include <sfx2/mnuitem.hxx>
 #include "svx/fmtools.hxx"
 #include "svx/fmsrccfg.hxx"

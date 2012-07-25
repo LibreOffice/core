@@ -84,7 +84,6 @@
 #include <tools/datetime.hxx>
 #include <tools/urlobj.hxx>
 #include <svx/dataaccessdescriptor.hxx>
-#include <svl/svstdarr.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <textapi.hxx>

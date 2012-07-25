@@ -34,7 +34,6 @@
 #include <vcl/timer.hxx>
 #include <sfx2/module.hxx>
 #include <sfx2/shell.hxx>
-#include <svl/svstdarr.hxx>
 #include <viewopt.hxx>
 
 #include <mdiexp.hxx>

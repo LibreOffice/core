@@ -28,7 +28,6 @@
 #ifndef _FTNIDX_HXX
 #define _FTNIDX_HXX
 
-#include <svl/svstdarr.hxx>
 #include <svl/svarray.hxx>
 #include <vector>
 

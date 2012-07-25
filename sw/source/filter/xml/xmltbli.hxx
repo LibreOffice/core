@@ -35,7 +35,6 @@
 #include <boost/unordered_map.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <vector>
-#include <svl/svstdarr.hxx>
 
 class SwXMLImport;
 class SwTableNode;

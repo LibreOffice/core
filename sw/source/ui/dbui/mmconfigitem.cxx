@@ -53,7 +53,6 @@
 #include <dbui.hrc>
 #include <vector>
 #include <unomid.h>
-#include <svl/svstdarr.hxx>
 
 using namespace utl;
 using ::rtl::OUString;

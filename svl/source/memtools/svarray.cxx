@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svl/svstdarr.hxx>
 #include <svl/svarray.hxx>
 
 SV_IMPL_VARARR(SvPtrarr,VoidPtr)

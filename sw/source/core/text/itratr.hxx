@@ -33,7 +33,6 @@
 #include "swfont.hxx"
 #include "porlay.hxx"
 
-#include <svl/svstdarr.hxx>
 
 class OutputDevice;
 class SwFont;

@@ -32,7 +32,6 @@
 
 #include <hintids.hxx>
 
-#include <svl/svstdarr.hxx>
 #include <vcl/msgbox.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svx/hdft.hxx>

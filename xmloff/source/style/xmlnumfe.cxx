@@ -27,7 +27,6 @@
  ************************************************************************/
 
 #include <comphelper/string.hxx>
-#include <svl/svstdarr.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
 #include <svl/numuno.hxx>

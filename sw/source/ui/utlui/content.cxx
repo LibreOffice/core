@@ -27,7 +27,6 @@
  ************************************************************************/
 
 #include <comphelper/string.hxx>
-#include <svl/svstdarr.hxx>
 #include <svl/urlbmk.hxx>
 #include <tools/urlobj.hxx>
 #include <sfx2/docfile.hxx>

@@ -56,7 +56,6 @@
 #include <vcl/msgbox.hxx>
 #include <svtools/ehdl.hxx>
 #include <svtools/sfxecode.hxx>
-#include <svl/svstdarr.hxx>
 
 #include "newhelp.hxx"
 #include <sfx2/objsh.hxx>

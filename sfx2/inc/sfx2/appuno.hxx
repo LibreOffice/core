@@ -44,7 +44,6 @@
 
 #include <tools/errcode.hxx>
 #include <svl/svarray.hxx>
-#include <svl/svstdarr.hxx>
 #include <sfx2/sfxuno.hxx>
 
 class SfxObjectShell;

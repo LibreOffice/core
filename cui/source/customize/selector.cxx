@@ -71,7 +71,6 @@ using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::container;
 
-#include <svl/svstdarr.hxx>
 #include <svtools/imagemgr.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/diagnose_ex.h>

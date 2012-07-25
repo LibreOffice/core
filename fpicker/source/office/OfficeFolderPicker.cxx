@@ -23,7 +23,6 @@
 
 #include <list>
 #include <tools/urlobj.hxx>
-#include "svl/svstdarr.hxx"
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
 #include <com/sun/star/container/XSet.hpp>
 #include <com/sun/star/uno/Any.hxx>

@@ -39,7 +39,6 @@
 #include "svtools/sfxecode.hxx"
 #include "svl/svarray.hxx"
 #include "svtools/svtabbx.hxx"
-#include "svl/svstdarr.hxx"
 #include <toolkit/helper/vclunohelper.hxx>
 #include <unotools/localfilehelper.hxx>
 

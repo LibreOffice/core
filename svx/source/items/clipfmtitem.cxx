@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-#include <svl/svstdarr.hxx>
 #include <svx/clipfmtitem.hxx>
 #include <com/sun/star/frame/status/ClipboardFormats.hpp>
 

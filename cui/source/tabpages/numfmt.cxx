@@ -33,7 +33,6 @@
 #include <unotools/localedatawrapper.hxx>
 #include <i18npool/lang.h>
 #include <svx/dialogs.hrc>
-#include <svl/svstdarr.hxx>
 #include <svtools/colorcfg.hxx>
 
 #define _SVX_NUMFMT_CXX

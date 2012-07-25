@@ -30,7 +30,6 @@
 
 #include <hintids.hxx>
 
-#include <svl/svstdarr.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <vcl/virdev.hxx>
 #include <com/sun/star/drawing/XShape.hpp>

@@ -27,7 +27,6 @@
  ************************************************************************/
 
 #include <SwStyleNameMapper.hxx>
-#include <svl/svstdarr.hxx>
 #include <tools/resmgr.hxx>
 #include <poolfmt.hxx>
 #include <rcid.hrc>

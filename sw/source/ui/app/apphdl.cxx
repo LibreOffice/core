@@ -30,7 +30,6 @@
 
 #include <osl/diagnose.h>
 #include <tools/link.hxx>
-#include <svl/svstdarr.hxx>
 #include <svl/urihelper.hxx>
 #include <unotools/pathoptions.hxx>
 #include <svtools/accessibilityoptions.hxx>

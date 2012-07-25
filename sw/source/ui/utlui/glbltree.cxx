@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-#include <svl/svstdarr.hxx>
 #include <vcl/msgbox.hxx>
 #include <svl/stritem.hxx>
 #include <sfx2/fcontnr.hxx>

@@ -27,7 +27,7 @@
  ************************************************************************/
 
 #include <tools/debug.hxx>
-#include <svl/svstdarr.hxx>
+#include <tools/string.hxx>
 #include <xmloff/nmspmap.hxx>
 #include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>

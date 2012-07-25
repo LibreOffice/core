@@ -28,7 +28,6 @@
 
 #include <hintids.hxx>
 
-#include <svl/svstdarr.hxx>
 #include <editeng/unolingu.hxx>
 #include <editeng/langitem.hxx>
 #include <swtypes.hxx>

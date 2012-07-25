@@ -43,7 +43,6 @@
 #include <sfx2/viewfrm.hxx>
 #include <svl/stritem.hxx>
 #include <svl/zforlist.hxx>
-#include <svl/svstdarr.hxx>
 #include <svx/svdview.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/sound.hxx>

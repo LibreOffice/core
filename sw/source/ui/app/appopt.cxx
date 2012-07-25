@@ -28,7 +28,6 @@
 
 #include <cmdid.h>          // Function-Ids
 
-#include <svl/svstdarr.hxx>
 
 #include <com/sun/star/i18n/ScriptType.hpp>
 

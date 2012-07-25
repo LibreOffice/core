@@ -29,7 +29,6 @@
 #include <hintids.hxx>
 #include <tools/stream.hxx>
 #include <comphelper/string.hxx>
-#include <svl/svstdarr.hxx>
 #include <editeng/fontitem.hxx>
 #include <pam.hxx>
 #include <doc.hxx>

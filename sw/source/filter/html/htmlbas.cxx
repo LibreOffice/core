@@ -30,7 +30,6 @@
 #include <comphelper/string.hxx>
 #include <rtl/strbuf.hxx>
 #include <sfx2/sfx.hrc>
-#include <svl/svstdarr.hxx>
 #include <basic/sbx.hxx>
 #include <basic/basmgr.hxx>
 #include <basic/sbmod.hxx>

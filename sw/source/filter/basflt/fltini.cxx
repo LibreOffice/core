@@ -33,7 +33,6 @@
 #include <i18npool/mslangid.hxx>
 #include <vcl/msgbox.hxx>
 #include <svtools/parhtml.hxx>
-#include <svl/svstdarr.hxx>
 #include <sot/storage.hxx>
 #include <sot/clsids.hxx>
 #include <sfx2/app.hxx>

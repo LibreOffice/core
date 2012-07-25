@@ -29,7 +29,6 @@
 #include <com/sun/star/text/NotePrintMode.hpp>
 #include <cstdarg>
 #include <cmdid.h>
-#include <svl/svstdarr.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/progress.hxx>
 #include <sfx2/app.hxx>

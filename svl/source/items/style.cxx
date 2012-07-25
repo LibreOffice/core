@@ -30,7 +30,6 @@
 #include <svl/filerec.hxx>
 #include <svl/itemiter.hxx>
 #include <svl/style.hxx>
-#include <svl/svstdarr.hxx>
 #include <unotools/syslocale.hxx>
 #include <algorithm>
 #include <comphelper/servicehelper.hxx>

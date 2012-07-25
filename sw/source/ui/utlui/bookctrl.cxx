@@ -19,7 +19,6 @@
 
 #include "hintids.hxx"
 
-#include <svl/svstdarr.hxx>
 #include <svl/intitem.hxx>
 #include <svl/stritem.hxx>
 #include <sfx2/dispatch.hxx>

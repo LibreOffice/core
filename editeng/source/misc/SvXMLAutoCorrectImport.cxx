@@ -28,7 +28,6 @@
 
 #include <SvXMLAutoCorrectImport.hxx>
 #include <vcl/svapp.hxx>
-#include <svl/svstdarr.hxx>
 #include <xmloff/xmltoken.hxx>
 
 using namespace ::com::sun::star;

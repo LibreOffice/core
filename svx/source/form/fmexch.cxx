@@ -35,7 +35,6 @@
 #include <svtools/svtreebx.hxx>
 #include <tools/diagnose_ex.h>
 
-#include <svl/svstdarr.hxx>
 
 //........................................................................
 namespace svxform

@@ -62,7 +62,6 @@
 #include <svtools/localresaccess.hxx>
 #include <svtools/addresstemplate.hxx>
 #include <comphelper/processfactory.hxx>
-#include <svl/svstdarr.hxx>
 
 sal_Bool SfxOrganizeListBox_Impl::bDropMoveOk = sal_True;
 

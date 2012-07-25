@@ -30,7 +30,6 @@
 #include <svtools/svparser.hxx>
 #include <tools/stream.hxx>
 #include <tools/debug.hxx>
-#include <svl/svstdarr.hxx>
 #include <rtl/textcvt.h>
 #include <rtl/tencinfo.h>
 

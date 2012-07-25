@@ -32,7 +32,6 @@
 
 #include "hintids.hxx"
 
-#include <svl/svstdarr.hxx>
 #include <svx/htmlmode.hxx>
 #include <svx/svxids.hrc>
 #include <sfx2/app.hxx>

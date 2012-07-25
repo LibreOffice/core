@@ -47,7 +47,6 @@
 
 #include <sfx2/mnumgr.hxx>
 
-#include <svl/svstdarr.hxx>
 #include <svtools/menuoptions.hxx>
 
 #include "virtmenu.hxx"

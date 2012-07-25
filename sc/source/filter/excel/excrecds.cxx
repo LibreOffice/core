@@ -58,7 +58,6 @@
 #include <svl/zformat.hxx>
 #include <svtools/ctrltool.hxx>
 
-#include <svl/svstdarr.hxx>
 
 #include <string.h>
 

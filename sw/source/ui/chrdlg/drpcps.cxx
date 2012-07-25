@@ -31,7 +31,6 @@
 #endif
 
 #include <hintids.hxx>
-#include <svl/svstdarr.hxx>
 
 #include "cmdid.h"
 #include "swmodule.hxx"

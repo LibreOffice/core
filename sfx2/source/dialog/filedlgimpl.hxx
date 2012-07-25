@@ -28,7 +28,6 @@
 #include <com/sun/star/ui/dialogs/XFilePickerListener.hpp>
 #include <com/sun/star/ui/dialogs/XDialogClosedListener.hpp>
 #include <sfx2/fcontnr.hxx>
-#include <svl/svstdarr.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <comphelper/sequenceasvector.hxx>
 

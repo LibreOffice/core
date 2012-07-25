@@ -28,7 +28,6 @@
 
 #include <hintids.hxx>
 #include <helpid.h>
-#include <svl/svstdarr.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
