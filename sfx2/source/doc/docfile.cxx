@@ -275,6 +275,8 @@ public:
     uno::Reference<io::XInputStream> m_xInputStreamToLoadFrom;
 
     mutable SfxItemSet* m_pSet;
+    mutable INetURLObject* m_pURLObj;
+
     const SfxFilter* m_pFilter;
     SfxMedium*       pAntiImpl;
     SvStream* m_pInStream;
@@ -347,6 +349,7 @@ SfxMedium_Impl::SfxMedium_Impl( SfxMedium* pAntiImplP ) :
     m_bRemote(false),
     m_bInputStreamIsReadOnly(false),
     m_pSet(NULL),
+    m_pURLObj(NULL),
     m_pFilter(NULL),
     pAntiImpl( pAntiImplP ),
     m_pInStream(NULL),
@@ -372,6 +375,7 @@ SfxMedium_Impl::~SfxMedium_Impl()
         delete pTempFile;
 
     delete m_pSet;
+    delete m_pURLObj;
 }
 
 void SfxMedium::ResetError()
@@ -2480,7 +2484,7 @@ void SfxMedium::Init_Impl()
     if ( pSalvageItem && pSalvageItem->GetValue().Len() )
     {
         pImp->m_aLogicName = pSalvageItem->GetValue();
-        DELETEZ( pURLObj );
+        DELETEZ( pImp->m_pURLObj );
         pImp->m_bSalvageMode = true;
     }
 
@@ -2514,7 +2518,6 @@ void SfxMedium::Init_Impl()
 //------------------------------------------------------------------
 SfxMedium::SfxMedium() :
     nStorOpenMode( SFX_STREAM_READWRITE ),
-    pURLObj(0),
     pImp(new SfxMedium_Impl( this ))
 {
     Init_Impl();
@@ -2779,7 +2782,7 @@ void SfxMedium::SetName( const String& aNameP, sal_Bool bSetOrigURL )
     if( bSetOrigURL )
         pImp->aOrigURL = aNameP;
     pImp->m_aLogicName = aNameP;
-    DELETEZ( pURLObj );
+    DELETEZ( pImp->m_pURLObj );
     pImp->aContent = ::ucbhelper::Content();
     Init_Impl();
 }
@@ -2862,7 +2865,6 @@ void SfxMedium::CompleteReOpen()
 
 SfxMedium::SfxMedium(const String &rName, StreamMode nOpenMode, const SfxFilter *pFlt, SfxItemSet *pInSet) :
     nStorOpenMode( SFX_STREAM_READWRITE ),
-    pURLObj(0),
     pImp(new SfxMedium_Impl( this ))
 {
     pImp->m_pSet = pInSet;
@@ -2875,7 +2877,6 @@ SfxMedium::SfxMedium(const String &rName, StreamMode nOpenMode, const SfxFilter 
 
 SfxMedium::SfxMedium( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgs ) :
     nStorOpenMode( SFX_STREAM_READWRITE ),
-    pURLObj(0),
     pImp(new SfxMedium_Impl( this ))
 {
     SfxAllItemSet *pParams = new SfxAllItemSet( SFX_APP()->GetPool() );
@@ -2930,7 +2931,6 @@ SfxMedium::SfxMedium( const ::com::sun::star::uno::Sequence< ::com::sun::star::b
 
 SfxMedium::SfxMedium( const uno::Reference < embed::XStorage >& rStor, const String& rBaseURL, const SfxItemSet* p, sal_Bool bRootP ) :
     nStorOpenMode( SFX_STREAM_READWRITE ),
-    pURLObj(0),
     pImp( new SfxMedium_Impl( this ))
 {
     pImp->m_bRoot = bRootP;
@@ -2951,7 +2951,6 @@ SfxMedium::SfxMedium( const uno::Reference < embed::XStorage >& rStor, const Str
 
 SfxMedium::SfxMedium( const uno::Reference < embed::XStorage >& rStor, const String& rBaseURL, const String& rTypeName, const SfxItemSet* p, sal_Bool bRootP ) :
     nStorOpenMode( SFX_STREAM_READWRITE ),
-    pURLObj(0),
     pImp( new SfxMedium_Impl( this ))
 {
     pImp->m_bRoot = bRootP;
@@ -2992,7 +2991,6 @@ SfxMedium::~SfxMedium()
         }
     }
 
-    delete pURLObj;
     delete pImp;
 }
 
@@ -3003,15 +3001,14 @@ const OUString& SfxMedium::GetName() const
 
 const INetURLObject& SfxMedium::GetURLObject() const
 {
-    if( !pURLObj )
+    if (!pImp->m_pURLObj)
     {
-        SfxMedium* pThis = const_cast < SfxMedium* > (this);
-        pThis->pURLObj = new INetURLObject( pImp->m_aLogicName );
-        if ( pThis->pURLObj->HasMark() )
-            (*pThis->pURLObj) = INetURLObject( pImp->m_aLogicName ).GetURLNoMark();
+        pImp->m_pURLObj = new INetURLObject( pImp->m_aLogicName );
+        if (pImp->m_pURLObj->HasMark())
+            *pImp->m_pURLObj = INetURLObject( pImp->m_aLogicName ).GetURLNoMark();
     }
 
-    return *pURLObj;
+    return *pImp->m_pURLObj;
 }
 
 //----------------------------------------------------------------
