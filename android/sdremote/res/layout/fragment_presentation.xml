@@ -15,6 +15,11 @@
         coverflow:imageWidth="180dip"
         coverflow:withReflection="false" />
 
+    <TextView
+        android:id="@+id/presentation_slidenumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
     <ImageView
         android:id="@+id/presentation_handle"
         android:layout_width="fill_parent"

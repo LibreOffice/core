@@ -24,6 +24,7 @@ import android.webkit.WebView;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 public class PresentationFragment extends Fragment {
 
@@ -32,6 +33,7 @@ public class PresentationFragment extends Fragment {
 	private View mLayout;
 	private WebView mNotes;
 	private Context mContext;
+	private TextView mNumberText;
 
 	private CommunicationService mCommunicationService;
 	private SlideShow mSlideShow;
@@ -55,6 +57,8 @@ public class PresentationFragment extends Fragment {
 		mTopView = (CoverFlow) v.findViewById(R.id.presentation_coverflow);
 
 		mLayout = v.findViewById(R.id.presentation_layout);
+
+		mNumberText = (TextView) v.findViewById(R.id.presentation_slidenumber);
 
 		mHandle = (ImageView) v.findViewById(R.id.presentation_handle);
 		mHandle.setOnTouchListener(new SizeListener());
@@ -157,6 +161,10 @@ public class PresentationFragment extends Fragment {
 		case CommunicationService.MSG_SLIDE_CHANGED:
 			int aSlide = aData.getInt("slide_number");
 			mTopView.setSelection(aSlide, true);
+
+			mNumberText.setText(mSlideShow.getCurrentSlide() + "/"
+			                + mSlideShow.getSize());
+
 			break;
 		case CommunicationService.MSG_SLIDE_PREVIEW:
 			int aNSlide = aData.getInt("slide_number");
@@ -185,32 +193,6 @@ public class PresentationFragment extends Fragment {
 			return mSlideShow.getSize();
 		}
 
-		// @Override
-		// public View getView(int position, View convertView, ViewGroup parent)
-		// {
-		// LayoutInflater aInflater = (LayoutInflater) mContext
-		// .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		// View v = aInflater.inflate(R.layout.slide_thumbnail, null);
-		//
-		// ImageView aImage = (ImageView) v.findViewById(R.id.sub_thumbnail);
-		// TextView aText = (TextView) v.findViewById(R.id.sub_number);
-		//
-		// // Do the image & number styling
-		// int aBorderWidth = getResources().getInteger(
-		// R.integer.thumbnail_border_width);
-		// aImage.setPadding(aBorderWidth, aBorderWidth, aBorderWidth,
-		// aBorderWidth);
-		//
-		// Bitmap aBitmap = mSlideShow.getImage(position);
-		// if (aBitmap != null) {
-		// aImage.setImageBitmap(aBitmap);
-		// }
-		//
-		// aText.setText(String.valueOf(position + 1));
-		//
-		// return v;
-		// }
-
 		@Override
 		protected Bitmap createBitmap(int position) {
 			Bitmap aBitmap = mSlideShow.getImage(position);
@@ -219,9 +201,6 @@ public class PresentationFragment extends Fragment {
 			Paint p = new Paint(Paint.ANTI_ALIAS_FLAG);
 			p.setShadowLayer(borderWidth, 0, 0, Color.BLACK);
 
-			//			RectF aRect = new RectF(borderWidth, borderWidth, borderWidth
-			//			                + aBitmap.getWidth(), borderWidth
-			//			                + aBitmap.getHeight());
 			RectF aRect = new RectF(borderWidth, borderWidth, borderWidth
 			                + aBitmap.getWidth(), borderWidth
 			                + aBitmap.getHeight());
@@ -231,7 +210,6 @@ public class PresentationFragment extends Fragment {
 			Canvas canvas = new Canvas(aOut);
 			canvas.drawColor(Color.TRANSPARENT);
 			canvas.drawRect(aRect, p);
-			//canvas.drawBitmap(aBitmap, null, aRect, null);
 			canvas.drawBitmap(aBitmap, null, aRect, null);
 
 			return aOut;

@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
-    <item android:id="@+id/actionbar_presenation_thumbnail"></item>
-    <item android:id="@+id/actionbar_presentation_timer">
-        <menu>
-            <item android:id="@+id/actionbar_presentation_timer_pause"/>
-        </menu>
-    </item>
-    <item android:id="@+id/actionbar_presentation_submenu">
-        <menu>
-            <item android:id="@+id/actionbar_presentation_submenu_blank" android:title="@string/presentation_blank_screen"/>
-            <item android:id="@+id/actionbar_presentation_submenu_options" android:title="@string/options"/>
-        </menu>
-    </item>
 
+    <item
+        android:id="@+id/actionbar_presentation_submenu"
+        android:showAsAction="always">
+        <menu>
+            <item
+                android:id="@+id/actionbar_presentation_submenu_blank"
+                android:title="@string/presentation_blank_screen"/>
+            <item
+                android:id="@+id/actionbar_presentation_submenu_options"
+                android:title="@string/options"/>
+        </menu>
+    </item>
 
 </menu>

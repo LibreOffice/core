@@ -50,6 +50,7 @@ public class TestClient extends Activity {
 	protected void onResume() {
 		super.onResume();
 		doBindService();
+
 	}
 
 	// FIXME: move all necessary code to CommunicationService.onUnbind
