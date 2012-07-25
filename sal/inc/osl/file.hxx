@@ -31,6 +31,8 @@
 
 #include "sal/config.h"
 
+#include <string.h>
+
 #include <cassert>
 
 #include <osl/time.h>
@@ -444,7 +446,7 @@ public:
     VolumeInfo( sal_uInt32 nMask ): _nMask( nMask )
     {
         _aInfo.uStructSize = sizeof( oslVolumeInfo );
-        rtl_zeroMemory( &_aInfo.uValidFields, sizeof( oslVolumeInfo ) - sizeof( sal_uInt32 ) );
+        memset( &_aInfo.uValidFields, 0, sizeof( oslVolumeInfo ) - sizeof( sal_uInt32 ) );
         _aInfo.pDeviceHandle = &_aDevice._aHandle;
     }
 
@@ -692,7 +694,7 @@ public:
     FileStatus( sal_uInt32 nMask ): _nMask( nMask )
     {
         _aStatus.uStructSize = sizeof( oslFileStatus );
-        rtl_zeroMemory( &_aStatus.uValidFields, sizeof( oslFileStatus ) - sizeof( sal_uInt32 ) );
+        memset( &_aStatus.uValidFields, 0, sizeof( oslFileStatus ) - sizeof( sal_uInt32 ) );
     }
 
     /** Destructor.

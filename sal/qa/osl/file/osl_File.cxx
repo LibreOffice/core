@@ -6063,7 +6063,7 @@ namespace osl_Directory
     void rm_test_path(const OUString& path)
     {
         sal_Unicode buffer[PATH_BUFFER_SIZE];
-        rtl_copyMemory(buffer, path.getStr(), (path.getLength() + 1) * sizeof(sal_Unicode));
+        memcpy(buffer, path.getStr(), (path.getLength() + 1) * sizeof(sal_Unicode));
 
         sal_Int32 i = rtl_ustr_lastIndexOfChar(buffer, '/');
         if (i == path.getLength())
@@ -6185,7 +6185,7 @@ namespace osl_Directory
         {
             char* drv = get_unused_drive_letter();
             char buff[PATH_BUFFER_SIZE];
-            rtl_zeroMemory(buff, sizeof(buff));
+            memset(buff, 0, sizeof(buff));
 
             strncpy(buff, drv, 1);
             strcat(buff, ":\\");

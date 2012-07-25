@@ -130,7 +130,7 @@ sal_Int32 SAL_CALL rtl_ustr_valueOfFloat(sal_Unicode * pStr, float f)
         0, sal_True);
     nLen = pResult->length;
     OSL_ASSERT(nLen < RTL_USTR_MAX_VALUEOFFLOAT);
-    rtl_copyMemory(pStr, pResult->buffer, (nLen + 1) * sizeof(sal_Unicode));
+    memcpy(pStr, pResult->buffer, (nLen + 1) * sizeof(sal_Unicode));
     rtl_uString_release(pResult);
     return nLen;
 }
@@ -146,7 +146,7 @@ sal_Int32 SAL_CALL rtl_ustr_valueOfDouble(sal_Unicode * pStr, double d)
         0, sal_True);
     nLen = pResult->length;
     OSL_ASSERT(nLen < RTL_USTR_MAX_VALUEOFDOUBLE);
-    rtl_copyMemory(pStr, pResult->buffer, (nLen + 1) * sizeof(sal_Unicode));
+    memcpy(pStr, pResult->buffer, (nLen + 1) * sizeof(sal_Unicode));
     rtl_uString_release(pResult);
     return nLen;
 }
@@ -1055,12 +1055,12 @@ void rtl_uString_newReplaceFirst(
         if (n != 0) {
             (*newStr)->length = n;
             assert(i >= 0 && i < str->length);
-            rtl_copyMemory(
+            memcpy(
                 (*newStr)->buffer, str->buffer, i * sizeof (sal_Unicode));
-            rtl_copyMemory(
+            memcpy(
                 (*newStr)->buffer + i, to->buffer,
                 to->length * sizeof (sal_Unicode));
-            rtl_copyMemory(
+            memcpy(
                 (*newStr)->buffer + i + to->length,
                 str->buffer + i + from->length,
                 (str->length - i - from->length) * sizeof (sal_Unicode));
@@ -1097,12 +1097,12 @@ void rtl_uString_newReplaceFirstAsciiL(
             rtl_uString_new_WithLength(newStr, n);
             (*newStr)->length = n;
             assert(i >= 0 && i < str->length);
-            rtl_copyMemory(
+            memcpy(
                 (*newStr)->buffer, str->buffer, i * sizeof (sal_Unicode));
-            rtl_copyMemory(
+            memcpy(
                 (*newStr)->buffer + i, to->buffer,
                 to->length * sizeof (sal_Unicode));
-            rtl_copyMemory(
+            memcpy(
                 (*newStr)->buffer + i + to->length,
                 str->buffer + i + fromLength,
                 (str->length - i - fromLength) * sizeof (sal_Unicode));
@@ -1140,13 +1140,13 @@ void rtl_uString_newReplaceFirstAsciiLAsciiL(
             rtl_uString_new_WithLength(newStr, n);
             (*newStr)->length = n;
             assert(i >= 0 && i < str->length);
-            rtl_copyMemory(
+            memcpy(
                 (*newStr)->buffer, str->buffer, i * sizeof (sal_Unicode));
             for (sal_Int32 j = 0; j != toLength; ++j) {
                 assert(static_cast< unsigned char >(to[j]) <= 0x7F);
                 (*newStr)->buffer[i + j] = to[j];
             }
-            rtl_copyMemory(
+            memcpy(
                 (*newStr)->buffer + i + toLength,
                 str->buffer + i + fromLength,
                 (str->length - i - fromLength) * sizeof (sal_Unicode));

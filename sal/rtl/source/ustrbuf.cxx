@@ -26,6 +26,8 @@
  *
  ************************************************************************/
 
+#include <string.h>
+
 #include <osl/interlck.h>
 
 #include <rtl/ustrbuf.hxx>
@@ -44,7 +46,7 @@ void SAL_CALL rtl_uStringbuffer_newFromStr_WithLength( rtl_uString ** newStr,
 
     rtl_uString_new_WithLength( newStr, count + 16 );
     (*newStr)->length = count;
-    rtl_copyMemory( (*newStr)->buffer, value, count * sizeof(sal_Unicode));
+    memcpy( (*newStr)->buffer, value, count * sizeof(sal_Unicode));
     RTL_LOG_STRING_NEW( *newStr );
     return;
 }
@@ -84,7 +86,7 @@ sal_Int32 SAL_CALL rtl_uStringbuffer_newFromStringBuffer( rtl_uString ** newStr,
 
     if (oldStr->length > 0) {
         (*newStr)->length = oldStr->length;
-        rtl_copyMemory( (*newStr)->buffer, oldStr->buffer, oldStr->length * sizeof(sal_Unicode));
+        memcpy( (*newStr)->buffer, oldStr->buffer, oldStr->length * sizeof(sal_Unicode));
     }
     RTL_LOG_STRING_NEW( *newStr );
     return newCapacity;
@@ -106,7 +108,7 @@ void SAL_CALL rtl_uStringbuffer_ensureCapacity
         pNew->length = (*This)->length;
         *This = pNew;
 
-        rtl_copyMemory( (*This)->buffer, pTmp->buffer, pTmp->length * sizeof(sal_Unicode) );
+        memcpy( (*This)->buffer, pTmp->buffer, pTmp->length * sizeof(sal_Unicode) );
 
         RTL_LOG_STRING_NEW( pTmp ); // with accurate contents
         rtl_uString_release( pTmp );
@@ -147,7 +149,7 @@ void SAL_CALL rtl_uStringbuffer_insert( rtl_uString ** This,
             /* optimized for 1 character */
             pBuf[offset] = *str;
         else if( len > 1 )
-            rtl_copyMemory( pBuf + offset, str, len * sizeof(sal_Unicode) );
+            memcpy( pBuf + offset, str, len * sizeof(sal_Unicode) );
         (*This)->length = nOldLen + len;
         pBuf[ nOldLen + len ] = 0;
     }

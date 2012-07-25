@@ -191,7 +191,7 @@ sal_Bool Initialize( void )
     // read ini-File
     rc=pFile->setPos( osl_Pos_Absolut, 0 );
     pBuffer=(sal_Char*) rtl_allocateMemory( (sal_uInt32) (uBytesRequested+1)*sizeof(sal_Char) );
-    rtl_zeroMemory( pBuffer, (sal_uInt32)(uBytesRequested+1)*sizeof(sal_Char) );
+    memset( pBuffer, 0, (sal_uInt32)(uBytesRequested+1)*sizeof(sal_Char) );
 
     rc=pFile->read( pBuffer , uBytesRequested , uBytesRead );
     if ( rc!=FileBase::E_None )
@@ -852,7 +852,7 @@ void FileWriteAndReadTest( void )
     //----------------------------------------------------
 
     pReadBuffer=(sal_Char*) rtl_allocateMemory( (sal_uInt32)(nLen+1)*sizeof(sal_Char) );
-    rtl_zeroMemory( pReadBuffer, (sal_uInt32)(nLen+1)*sizeof(sal_Char) );
+    memset( pReadBuffer, 0, (sal_uInt32)(nLen+1)*sizeof(sal_Char) );
     rc=pFile->read( pReadBuffer , nLen,uRead );
     print_error( rtl::OString( "Read File" ), rc );
 

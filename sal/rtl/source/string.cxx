@@ -93,7 +93,7 @@ sal_Int32 SAL_CALL rtl_str_valueOfFloat(sal_Char * pStr, float f)
         sal_True);
     nLen = pResult->length;
     OSL_ASSERT(nLen < RTL_STR_MAX_VALUEOFFLOAT);
-    rtl_copyMemory(pStr, pResult->buffer, (nLen + 1) * sizeof(sal_Char));
+    memcpy(pStr, pResult->buffer, (nLen + 1) * sizeof(sal_Char));
     rtl_string_release(pResult);
     return nLen;
 }
@@ -109,7 +109,7 @@ sal_Int32 SAL_CALL rtl_str_valueOfDouble(sal_Char * pStr, double d)
         0, sal_True);
     nLen = pResult->length;
     OSL_ASSERT(nLen < RTL_STR_MAX_VALUEOFDOUBLE);
-    rtl_copyMemory(pStr, pResult->buffer, (nLen + 1) * sizeof(sal_Char));
+    memcpy(pStr, pResult->buffer, (nLen + 1) * sizeof(sal_Char));
     rtl_string_release(pResult);
     return nLen;
 }
@@ -362,9 +362,9 @@ void rtl_string_newReplaceFirst(
         if (n != 0) {
             (*newStr)->length = n;
             assert(i >= 0 && i < str->length);
-            rtl_copyMemory((*newStr)->buffer, str->buffer, i);
-            rtl_copyMemory((*newStr)->buffer + i, to, toLength);
-            rtl_copyMemory(
+            memcpy((*newStr)->buffer, str->buffer, i);
+            memcpy((*newStr)->buffer + i, to, toLength);
+            memcpy(
                 (*newStr)->buffer + i + toLength, str->buffer + i + fromLength,
                 str->length - i - fromLength);
         }

@@ -26,6 +26,8 @@
  *
  ************************************************************************/
 
+#include <string.h>
+
 #include <osl/interlck.h>
 #include <rtl/strbuf.hxx>
 #include <rtl/memory.h>
@@ -45,7 +47,7 @@ void SAL_CALL rtl_stringbuffer_newFromStr_WithLength( rtl_String ** newStr,
 
     rtl_string_new_WithLength( newStr, count + 16 );
     (*newStr)->length = count;
-    rtl_copyMemory( (*newStr)->buffer, value, count );
+    memcpy( (*newStr)->buffer, value, count );
     return;
 }
 
@@ -64,7 +66,7 @@ sal_Int32 SAL_CALL rtl_stringbuffer_newFromStringBuffer( rtl_String ** newStr,
     rtl_string_new_WithLength( newStr, newCapacity );
     if (oldStr->length > 0) {
         (*newStr)->length = oldStr->length;
-        rtl_copyMemory( (*newStr)->buffer, oldStr->buffer, oldStr->length );
+        memcpy( (*newStr)->buffer, oldStr->buffer, oldStr->length );
     }
     return newCapacity;
 }
@@ -88,7 +90,7 @@ void SAL_CALL rtl_stringbuffer_ensureCapacity
         pNew->length = (*This)->length;
         *This = pNew;
 
-        rtl_copyMemory( (*This)->buffer, pTmp->buffer, pTmp->length );
+        memcpy( (*This)->buffer, pTmp->buffer, pTmp->length );
         rtl_string_release( pTmp );
     }
 }
@@ -131,7 +133,7 @@ void SAL_CALL rtl_stringbuffer_insert( rtl_String ** This,
                             /* optimized for 1 character */
             pBuf[offset] = *str;
         else if( n > 1 )
-            rtl_copyMemory( pBuf + offset, str, len * sizeof(sal_Char) );
+            memcpy( pBuf + offset, str, len * sizeof(sal_Char) );
         (*This)->length = nOldLen + len;
         pBuf[ nOldLen + len ] = 0;
     }

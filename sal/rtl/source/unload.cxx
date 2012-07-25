@@ -26,6 +26,8 @@
  *
  ************************************************************************/
 
+#include <string.h>
+
 #include <rtl/unload.h>
 #include <rtl/alloc.h>
 #include <rtl/ustring.hxx>
@@ -203,7 +205,7 @@ extern "C" sal_Bool rtl_moduleCount_canUnload( rtl_StandardModuleCount * that, T
         MutexGuard guard( getUnloadingMutex());
         if (libUnused && (that->counter == 0))
         {
-            rtl_copyMemory(libUnused, &that->unusedSince, sizeof(TimeValue));
+            memcpy(libUnused, &that->unusedSince, sizeof(TimeValue));
         }
     }
     return (that->counter == 0);

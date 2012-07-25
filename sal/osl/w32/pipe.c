@@ -26,6 +26,8 @@
  *
  ************************************************************************/
 
+#include <string.h>
+
 #include "system.h"
 
 #include <osl/pipe.h>
@@ -314,7 +316,7 @@ oslPipe SAL_CALL osl_acceptPipe(oslPipe pPipe)
     OSL_ASSERT(pPipe);
     OSL_ASSERT(pPipe->m_File != INVALID_HANDLE_VALUE);
 
-    rtl_zeroMemory(&os, sizeof(OVERLAPPED));
+    memset(&os, 0, sizeof(OVERLAPPED));
     os.hEvent = pPipe->m_AcceptEvent;
     ResetEvent(pPipe->m_AcceptEvent);
 
@@ -389,7 +391,7 @@ sal_Int32 SAL_CALL osl_receivePipe(oslPipe pPipe,
 
     OSL_ASSERT(pPipe);
 
-    rtl_zeroMemory(&os,sizeof(OVERLAPPED));
+    memset(&os, 0, sizeof(OVERLAPPED));
     os.hEvent = pPipe->m_ReadEvent;
 
     ResetEvent(pPipe->m_ReadEvent);
@@ -428,7 +430,7 @@ sal_Int32 SAL_CALL osl_sendPipe(oslPipe pPipe,
 
     OSL_ASSERT(pPipe);
 
-    rtl_zeroMemory(&os, sizeof(OVERLAPPED));
+    memset(&os, 0, sizeof(OVERLAPPED));
     os.hEvent = pPipe->m_WriteEvent;
     ResetEvent(pPipe->m_WriteEvent);
 

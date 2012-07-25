@@ -53,6 +53,7 @@
 #include <vector>
 #include <algorithm>
 #include <string>
+#include <string.h>
 
 //#################################################
 extern "C" oslFileHandle SAL_CALL osl_createFileHandleFromOSHandle( HANDLE hFile, sal_uInt32 uFlags );
@@ -218,7 +219,7 @@ namespace /* private */
             OSL_ASSERT(envv.getLength());
 
             sal_uInt32 n = envv.getLength() + 1; // copy the final '\0', too
-            rtl_copyMemory(
+            memcpy(
                 reinterpret_cast<void*>(&environment[pos]),
                 reinterpret_cast<const void*>(envv.getStr()),
                 n * sizeof(sal_Unicode));

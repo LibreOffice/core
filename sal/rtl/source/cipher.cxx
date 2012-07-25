@@ -26,6 +26,8 @@
  *
  ************************************************************************/
 
+#include <string.h>
+
 #include <sal/types.h>
 #include <rtl/alloc.h>
 #include <rtl/memory.h>
@@ -668,8 +670,8 @@ static rtlCipherError __rtl_cipherBF_init (
 
     key = &(ctx->m_key);
 
-    rtl_copyMemory (key, &__rtl_cipherBF_key, sizeof (CipherKeyBF));
-    rtl_zeroMemory (&(ctx->m_iv), sizeof(ctx->m_iv));
+    memcpy (key, &__rtl_cipherBF_key, sizeof (CipherKeyBF));
+    memset (&(ctx->m_iv), 0, sizeof(ctx->m_iv));
     ctx->m_offset = 0;
 
     for (i = 0, k = 0; i < CIPHER_ROUNDS_BF + 2; ++i)
@@ -710,7 +712,7 @@ static rtlCipherError __rtl_cipherBF_init (
         nArgLen = ((nArgLen < 8) ? nArgLen : 8);
         if (eMode == rtl_Cipher_ModeStream)
         {
-            rtl_copyMemory (ctx->m_iv.m_byte, pArgData, nArgLen);
+            memcpy (ctx->m_iv.m_byte, pArgData, nArgLen);
         }
         else
         {

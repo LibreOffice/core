@@ -26,6 +26,8 @@
  *
  ************************************************************************/
 
+#include <string.h>
+
 #include <osl/diagnose.h>
 #include <osl/interlck.h>
 
@@ -61,7 +63,7 @@ void SAL_CALL rtl_byte_sequence_reference2One(
             pNew = (sal_Sequence *)rtl_allocateMemory( SAL_SEQUENCE_HEADER_SIZE + nElements );
 
             if ( pNew != 0 )
-                rtl_copyMemory( pNew->elements, pSequence->elements, nElements );
+                memcpy( pNew->elements, pSequence->elements, nElements );
 
             if (! osl_decrementInterlockedCount( &pSequence->nRefCount ))
                 rtl_freeMemory( pSequence );
@@ -103,12 +105,12 @@ void SAL_CALL rtl_byte_sequence_realloc(
         {
             if (nSize > nElements)
             {
-                rtl_copyMemory( pNew->elements, pSequence->elements, nElements );
-                rtl_zeroMemory( pNew->elements + nElements, nSize - nElements );
+                memcpy( pNew->elements, pSequence->elements, nElements );
+                memset( pNew->elements + nElements, 0, nSize - nElements );
             }
             else
             {
-                rtl_copyMemory( pNew->elements, pSequence->elements, nSize );
+                memcpy( pNew->elements, pSequence->elements, nSize );
             }
         }
 
@@ -207,7 +209,7 @@ void SAL_CALL rtl_byte_sequence_constructFromArray(
 {
     rtl_byte_sequence_constructNoDefault( ppSequence , nLength );
     if ( *ppSequence != 0 )
-        rtl_copyMemory( (*ppSequence)->elements, pData, nLength );
+        memcpy( (*ppSequence)->elements, pData, nLength );
 }
 
 //==================================================================================================
