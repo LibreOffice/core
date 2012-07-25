@@ -13,6 +13,7 @@
   </LC_INFO>
   <LC_CTYPE ref="zh_CN"/>
   <LC_FORMAT>
+    <DateAcceptancePattern>M/D</DateAcceptancePattern>
     <!-- Fixed number formats. Index range is 0-5. -->
     <FormatElement msgid="NumberFormatskey1" default="true" type="medium" usage="FIXED_NUMBER"  formatindex="0">
       <FormatCode>General</FormatCode>
