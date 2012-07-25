@@ -664,9 +664,9 @@ long BasicTreeListBox::ExpandingHdl()
     return bOK;
 }
 
-sal_Bool BasicTreeListBox::IsEntryProtected( SvLBoxEntry* pEntry )
+bool BasicTreeListBox::IsEntryProtected( SvLBoxEntry* pEntry )
 {
-    sal_Bool bProtected = sal_False;
+    bool bProtected = false;
     if ( pEntry && ( GetModel()->GetDepth( pEntry ) == 1 ) )
     {
         BasicEntryDescriptor aDesc( GetEntryDescriptor( pEntry ) );
@@ -681,7 +681,7 @@ sal_Bool BasicTreeListBox::IsEntryProtected( SvLBoxEntry* pEntry )
                 Reference< script::XLibraryContainerPassword > xPasswd( xModLibContainer, UNO_QUERY );
                 if ( xPasswd.is() && xPasswd->isLibraryPasswordProtected( aOULibName ) && !xPasswd->isLibraryPasswordVerified( aOULibName ) )
                 {
-                    bProtected = sal_True;
+                    bProtected = true;
                 }
             }
         }

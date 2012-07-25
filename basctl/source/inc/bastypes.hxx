@@ -183,8 +183,8 @@ public:
     virtual void    BasicStarted();
     virtual void    BasicStopped();
 
-    sal_Bool            IsSuspended() const
-                        { return ( nStatus & BASWIN_SUSPENDED ) ? sal_True : sal_False; }
+    bool            IsSuspended() const
+                        { return ( nStatus & BASWIN_SUSPENDED ) ? true : false; }
 
     const ScriptDocument&
                     GetDocument() const { return m_aDocument; }
@@ -265,7 +265,7 @@ public:
     LibInfoItem*    GetInfo( const LibInfoKey& rKey );
 };
 
-void            CutLines( ::rtl::OUString& rStr, sal_Int32 nStartLine, sal_Int32 nLines, sal_Bool bEraseTrailingEmptyLines = sal_False );
+void            CutLines( ::rtl::OUString& rStr, sal_Int32 nStartLine, sal_Int32 nLines, bool bEraseTrailingEmptyLines = false );
 ::rtl::OUString CreateMgrAndLibStr( const ::rtl::OUString& rMgrName, const ::rtl::OUString& rLibName );
 sal_uLong           CalcLineCount( SvStream& rStream );
 

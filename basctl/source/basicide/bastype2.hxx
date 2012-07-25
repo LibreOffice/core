@@ -177,7 +177,7 @@ public:
     void            ScanAllEntries();
     void            UpdateEntries();
 
-    sal_Bool            IsEntryProtected( SvLBoxEntry* pEntry );
+    bool            IsEntryProtected( SvLBoxEntry* pEntry );
 
     void            SetMode( sal_uInt16 nM ) { nMode = nM; }
     sal_uInt16          GetMode() const { return nMode; }

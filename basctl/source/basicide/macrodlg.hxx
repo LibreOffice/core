@@ -60,8 +60,8 @@ private:
     PushButton              aNewLibButton;
     PushButton              aNewModButton;
 
-    sal_Bool                bNewDelIsDel;
-    sal_Bool                bForceStoreBasic;
+    bool                bNewDelIsDel;
+    bool                bForceStoreBasic;
 
     sal_uInt16              nMode;
 
@@ -75,7 +75,7 @@ private:
     void                SaveSetCurEntry( SvTreeListBox& rBox, SvLBoxEntry* pEntry );
     void                UpdateFields();
 
-    void                EnableButton( Button& rButton, sal_Bool bEnable );
+    void                EnableButton( Button& rButton, bool bEnable );
 
     String              GetInfo( SbxVariable* pVar );
 
@@ -83,7 +83,7 @@ private:
     void                RestoreMacroDescription();
 
 public:
-                        MacroChooser( Window* pParent, sal_Bool bCreateEntries = sal_True );
+                        MacroChooser( Window* pParent, bool bCreateEntries = true );
                         ~MacroChooser();
 
     SbMethod*           GetMacro();

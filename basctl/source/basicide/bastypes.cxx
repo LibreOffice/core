@@ -555,7 +555,7 @@ void BasicIDETabBar::Sort()
     }
 }
 
-void CutLines( ::rtl::OUString& rStr, sal_Int32 nStartLine, sal_Int32 nLines, sal_Bool bEraseTrailingEmptyLines )
+void CutLines( ::rtl::OUString& rStr, sal_Int32 nStartLine, sal_Int32 nLines, bool bEraseTrailingEmptyLines )
 {
     sal_Int32 nStartPos = 0;
     sal_Int32 nLine = 0;

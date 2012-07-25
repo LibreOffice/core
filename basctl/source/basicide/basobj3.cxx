@@ -92,7 +92,7 @@ SbMethod* CreateMacro( SbModule* pModule, const String& rMacroName )
             aMacroName = String( RTL_CONSTASCII_USTRINGPARAM( "Main" ) );
         else
         {
-            sal_Bool bValid = sal_False;
+            bool bValid = false;
             String aStdMacroText( RTL_CONSTASCII_USTRINGPARAM( "Macro" ) );
             sal_uInt16 nMacro = 1;
             while ( !bValid )
@@ -100,7 +100,7 @@ SbMethod* CreateMacro( SbModule* pModule, const String& rMacroName )
                 aMacroName = aStdMacroText;
                 aMacroName += String::CreateFromInt32( nMacro );
                 // test whether existing...
-                bValid = pModule->GetMethods()->Find( aMacroName, SbxCLASS_METHOD ) ? sal_False : sal_True;
+                bValid = pModule->GetMethods()->Find( aMacroName, SbxCLASS_METHOD ) ? false : true;
                 nMacro++;
             }
         }
@@ -432,7 +432,7 @@ long HandleBasicError( StarBASIC* pBasic )
         BasicManager* pBasMgr = BasicIDE::FindBasicManager( pBasic );
         if ( pBasMgr )
         {
-            sal_Bool bProtected = sal_False;
+            bool bProtected = false;
             ScriptDocument aDocument( ScriptDocument::getDocumentForBasicManager( pBasMgr ) );
             OSL_ENSURE( aDocument.isValid(), "BasicIDE::HandleBasicError: no document for the given BasicManager!" );
             if ( aDocument.isValid() )
@@ -444,7 +444,7 @@ long HandleBasicError( StarBASIC* pBasic )
                     Reference< script::XLibraryContainerPassword > xPasswd( xModLibContainer, UNO_QUERY );
                     if ( xPasswd.is() && xPasswd->isLibraryPasswordProtected( aOULibName ) && !xPasswd->isLibraryPasswordVerified( aOULibName ) )
                     {
-                        bProtected = sal_True;
+                        bProtected = true;
                     }
                 }
             }

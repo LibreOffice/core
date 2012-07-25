@@ -48,8 +48,8 @@ private:
 
     sal_uInt16          nBasicDialogCount;
 
-    sal_Bool            bChoosingMacro;
-    sal_Bool            bShellInCriticalSection;
+    bool            bChoosingMacro;
+    bool            bShellInCriticalSection;
 
 protected:
     DECL_LINK( GlobalBasicBreakHdl, StarBASIC * );
@@ -63,8 +63,8 @@ public:
     BasicEntryDescriptor&   GetLastEntryDescriptor()    { return m_aLastEntryDesc; }
     void                    SetLastEntryDescriptor( BasicEntryDescriptor& rDesc ) { m_aLastEntryDesc = rDesc; }
 
-    sal_Bool&                   ChoosingMacro()             { return bChoosingMacro; }
-    sal_Bool&                   ShellInCriticalSection()    { return bShellInCriticalSection; }
+    bool&                   ChoosingMacro()             { return bChoosingMacro; }
+    bool&                   ShellInCriticalSection()    { return bShellInCriticalSection; }
 
     sal_uInt16                  GetBasicDialogCount() const { return nBasicDialogCount; }
     void                    IncBasicDialogCount()       { nBasicDialogCount++; }
