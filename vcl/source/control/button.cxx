@@ -825,6 +825,7 @@ void PushButton::ImplDrawPushButtonContent( OutputDevice* pDev, sal_uLong nDrawF
 {
     const StyleSettings&    rStyleSettings = GetSettings().GetStyleSettings();
     Rectangle               aInRect = rRect;
+    Rectangle               bInRect = rRect;
     Color                   aColor;
     XubString               aText = PushButton::GetText(); // PushButton:: wegen MoreButton
     sal_uInt16                  nTextStyle = ImplGetTextStyle( nDrawFlags );
@@ -853,6 +854,7 @@ void PushButton::ImplDrawPushButtonContent( OutputDevice* pDev, sal_uLong nDrawF
         nStyle = SYMBOL_DRAW_DISABLE;
 
     Size aSize = rRect.GetSize();
+    Size bSize = rRect.GetSize();
     Point aPos = rRect.TopLeft();
 
     sal_uLong nImageSep = 1 + (pDev->GetTextHeight()-10)/2;
@@ -862,14 +864,19 @@ void PushButton::ImplDrawPushButtonContent( OutputDevice* pDev, sal_uLong nDrawF
     {
         if ( aText.Len() && ! (ImplGetButtonState() & BUTTON_DRAW_NOTEXT) )
         {
-            // calc Symbol- and Textrect
+            // calculate symbol size
             long nSymbolSize    = pDev->GetTextHeight() / 2 + 1;
-            aInRect.Right()    -= 5;
+            aInRect.Right()    -= 2; //rectangle width
             aInRect.Left()      = aInRect.Right() - nSymbolSize;
-            aSize.Width()      -= ( 5 + nSymbolSize );
 
-            ImplDrawAlignedImage( pDev, aPos, aSize, bLayout, nImageSep,
+            //caluclate dimension of recent documents hotspot rectangle
+
+            bInRect.Right()    += 10; //rectangle width
+            bInRect.Left()      = bInRect.Right() - 3*nSymbolSize;
+            bSize.Width()      -= ( 5 + nSymbolSize );
+            ImplDrawAlignedImage( pDev, aPos, bSize, bLayout, nImageSep,
                                   nDrawFlags, nTextStyle, NULL, true );
+
         }
         else
             ImplCalcSymbolRect( aInRect );
@@ -880,15 +887,17 @@ void PushButton::ImplDrawPushButtonContent( OutputDevice* pDev, sal_uLong nDrawF
             DecorationView aDecoView( pDev );
             if( bMenuBtnSep )
             {
-                long nX = aInRect.Left() - 2*nDistance;
-                Point aStartPt( nX, aInRect.Top()+nDistance );
-                Point aEndPt( nX, aInRect.Bottom()-nDistance );
+                long nX = bInRect.Left() - 3*nDistance;
+                Point aStartPt( nX+10, bInRect.Top()+nDistance );
+                Point aEndPt( nX, bInRect.Bottom()-nDistance );
                 aDecoView.DrawSeparator( aStartPt, aEndPt );
             }
+
             aDecoView.DrawSymbol( aInRect, SYMBOL_SPIN_DOWN, aColor, nStyle );
-            aInRect.Left() -= 2*nDistance;
-            ImplSetSymbolRect( aInRect );
+            bInRect.Left() -= -3*nDistance;
+            ImplSetSymbolRect( bInRect );
         }
+
     }
     else
     {
