@@ -259,6 +259,10 @@ sub generate_cab_file_list
             # Writing the makecab system call
 
             my $oneline = "makecab.exe /V3 /F " . $ddffilename . " 2\>\&1 |" . "\n";
+            if ( $installer::globals::isunix )
+            {
+                $oneline = "$ENV{'OUTDIR_FOR_BUILD'}/bin/makecab.exe /V3 /F " . $ddffilename . " 2\>\&1 |" . "\n";
+            }
 
             push(@cabfilelist, $oneline);
 
@@ -352,6 +356,10 @@ sub generate_cab_file_list
             # Writing the makecab system call
 
             my $oneline = "makecab.exe /V3 /F " . $ddffilename . " 2\>\&1 |" . "\n";
+            if ( $installer::globals::isunix )
+            {
+                $oneline = "$ENV{'OUTDIR_FOR_BUILD'}/bin/makecab.exe /V3 /F " . $ddffilename . " 2\>\&1 |" . "\n";
+            }
 
             push(@cabfilelist, $oneline);
 
@@ -428,6 +436,10 @@ sub generate_cab_file_list
             # Writing the makecab system call
 
             my $oneline = "makecab.exe /V3 /F " . $ddffilename . " 2\>\&1 |" . "\n";
+            if ( $installer::globals::isunix )
+            {
+                $oneline = "$ENV{'OUTDIR_FOR_BUILD'}/bin/makecab.exe /V3 /F " . $ddffilename . " 2\>\&1 |" . "\n";
+            }
 
             push(@cabfilelist, $oneline);
 
@@ -492,6 +504,10 @@ sub generate_cab_file_list
 
         # my $oneline = "makecab.exe /F " . $ddffilename . "\n";
         my $oneline = "makecab.exe /V3 /F " . $ddffilename . " 2\>\&1 |" . "\n";
+        if ( $installer::globals::isunix )
+        {
+            $oneline = "$ENV{'OUTDIR_FOR_BUILD'}/bin/makecab.exe /V3 /F " . $ddffilename . " 2\>\&1 |" . "\n";
+        }
 
         push(@cabfilelist, $oneline);
 
@@ -543,6 +559,10 @@ sub generate_cab_file_list
         # Writing the makecab system call
 
         my $oneline = "makecab.exe /F " . $ddffilename . "\n";
+        if ( $installer::globals::isunix )
+        {
+            $oneline = "$ENV{'OUTDIR_FOR_BUILD'}/bin/makecab.exe /F " . $ddffilename . "\n";
+        }
 
         push(@cabfilelist, $oneline);
 
@@ -696,6 +716,10 @@ sub create_msi_database
     # -i : include the following tables ("*" includes all available tables)
 
     my $msidb = "msidb.exe";    # Has to be in the path
+    if ( $installer::globals::isunix )
+    {
+        $msidb = "$ENV{'OUTDIR_FOR_BUILD'}/bin/msidb.exe";
+    }
     my $extraslash = "";        # Has to be set for non-ActiveState perl
 
     installer::logger::include_header_into_logfile("Creating msi database");
@@ -929,6 +953,10 @@ sub write_summary_into_msi_database
     installer::logger::include_header_into_logfile("Writing summary information stream");
 
     my $msiinfo = "msiinfo.exe";    # Has to be in the path
+    if ( $installer::globals::isunix )
+    {
+        $msiinfo = "$ENV{'OUTDIR_FOR_BUILD'}/bin/msiinfo.exe";
+    }
 
     my $sislanguage = "en-US";  # title, comment, keyword, and appname are always in English
 
@@ -984,6 +1012,11 @@ sub create_transforms
     my $cscript = "cscript.exe";    # Has to be in the path
     my $msitran = "msitran.exe";    # Has to be in the path
     my $msidb = "msidb.exe";    # Has to be in the path
+    if ( $installer::globals::isunix )
+    {
+        $infoline = "ERROR: We cannot create transformations yet (we cannot use cscript.exe when cross-compiling)\n";
+        push( @installer::globals::logfileinfo, $infoline);
+    }
     my $tmpdir = $ENV{TMPDIR};    # Variable %TEMP% will be set to it for WiLangId.vbs to work
     my $wilangid = $ENV{WINDOWS_SDK_HOME} . "/Samples/SysMgmt/Msi/scripts/WiLangId.vbs";
 
@@ -1549,6 +1582,10 @@ sub include_cabs_into_msi
     push( @installer::globals::logfileinfo, $infoline);
 
     my $msidb = "msidb.exe";    # Has to be in the path
+    if ( $installer::globals::isunix )
+    {
+        $msidb = "$ENV{'OUTDIR_FOR_BUILD'}/bin/msidb.exe";
+    }
     my $extraslash = "";        # Has to be set for non-ActiveState perl
 
     my $msifilename = $installer::globals::msidatabasename;
@@ -2094,3 +2131,4 @@ sub read_saved_mappings
 
 1;
 
+# vim:set shiftwidth=4 softtabstop=4 expandtab:
