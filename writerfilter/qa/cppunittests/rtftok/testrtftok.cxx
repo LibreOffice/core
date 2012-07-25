@@ -43,7 +43,7 @@ public:
 
     virtual void setUp();
 
-    virtual bool load(const rtl::OUString &, const rtl::OUString &rURL, const rtl::OUString &);
+    virtual bool load(const OUString &, const OUString &rURL, const OUString &);
     void test();
 
     CPPUNIT_TEST_SUITE(RtfTest);
@@ -57,24 +57,22 @@ void RtfTest::setUp()
 {
     test::BootstrapFixture::setUp();
 
-    m_xFilter = uno::Reference< document::XFilter >(m_xSFactory->createInstance(
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Writer.RtfFilter"))),
-        uno::UNO_QUERY_THROW);
+    m_xFilter = uno::Reference< document::XFilter >(m_xSFactory->createInstance("com.sun.star.comp.Writer.RtfFilter"), uno::UNO_QUERY_THROW);
 }
 
-bool RtfTest::load(const rtl::OUString &, const rtl::OUString &rURL, const rtl::OUString &)
+bool RtfTest::load(const OUString &, const OUString &rURL, const OUString &)
 {
     uno::Sequence< beans::PropertyValue > aDescriptor(1);
-    aDescriptor[0].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("URL"));
+    aDescriptor[0].Name = "URL";
     aDescriptor[0].Value <<= rURL;
     return m_xFilter->filter(aDescriptor);
 }
 
 void RtfTest::test()
 {
-    testDir(rtl::OUString(),
+    testDir(OUString(),
         getURLFromSrc("/writerfilter/qa/cppunittests/rtftok/data/"),
-        rtl::OUString());
+        OUString());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(RtfTest);
