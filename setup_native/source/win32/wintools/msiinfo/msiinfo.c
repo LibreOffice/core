@@ -250,3 +250,5 @@ int wmain(int argc, WCHAR *argv[])
     msiinfoDisplayProperties(dbfile);
     return 0;
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
