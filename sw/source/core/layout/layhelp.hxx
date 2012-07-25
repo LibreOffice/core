@@ -25,12 +25,13 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _LAYHELP_HXX
-#define _LAYHELP_HXX
 
-#include <svl/svstdarr.hxx>
+#ifndef SW_LAYHELP_HXX
+#define SW_LAYHELP_HXX
+
 #include <swrect.hxx>
 #include <vector>
+#include <deque>
 
 class SwDoc;
 class SwFrm;
@@ -60,7 +61,7 @@ typedef boost::ptr_vector<SwFlyCache> SwPageFlyCache;
 
 class SwLayCacheImpl : public std::vector<sal_uLong>
 {
-    SvXub_StrLens aOffset;
+    std::deque<xub_StrLen> aOffset;
     std::vector<sal_uInt16> aType;
     SwPageFlyCache aFlyCache;
     sal_Bool bUseFlyCache;

@@ -28,12 +28,9 @@
 ***********************************************************************/
 
 #include "svl/svldllapi.h"
-#include <deque>
 
 #include <tools/string.hxx>
 
 typedef String* StringPtr;
-
-typedef std::deque< xub_StrLen > SvXub_StrLens;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

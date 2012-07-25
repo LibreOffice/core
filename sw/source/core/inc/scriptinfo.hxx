@@ -25,11 +25,12 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _SCRIPTINFO_HXX
-#define _SCRIPTINFO_HXX
 
-#include <svl/svstdarr.hxx>
+#ifndef SW_SCRIPTINFO_HXX
+#define SW_SCRIPTINFO_HXX
+
 #include <list>
+#include <deque>
 #include "swscanner.hxx"
 
 class SwTxtNode;
@@ -37,6 +38,7 @@ class Point;
 class MultiSelection;
 class String;
 typedef std::list< xub_StrLen > PositionList;
+typedef std::deque< xub_StrLen > SvXub_StrLens;
 
 #define SPACING_PRECISION_FACTOR 100
 

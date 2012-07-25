@@ -1141,7 +1141,7 @@ class HTMLEndPosLst
 {
     _HTMLEndLst aStartLst;  // nach Anfangs-Psoitionen sortierte Liste
     _HTMLEndLst aEndLst;    // nach End-Psotionen sortierte Liste
-    SvXub_StrLens aScriptChgLst;    // positions where script changes
+    std::deque<xub_StrLen> aScriptChgLst;    // positions where script changes
                                     // 0 is not contained in this list,
                                     // but the text length
     // the script that is valif up to the position
