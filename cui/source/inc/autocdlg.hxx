@@ -40,6 +40,8 @@ class CharClass;
 class CollatorWrapper;
 class SmartTagMgr;
 
+namespace editeng { class SortedAutoCompleteStrings; }
+
 // class OfaAutoCorrDlg --------------------------------------------------
 
 class OfaAutoCorrDlg : public SfxTabDialog
@@ -439,7 +441,7 @@ class OfaAutoCompleteTabPage : public SfxTabPage
     NumericField    aNFMaxEntries;
     AutoCompleteMultiListBox    aLBEntries;
     PushButton                  aPBEntries;
-    SvStringsISortDtor*         pAutoCmpltList;
+    editeng::SortedAutoCompleteStrings* m_pAutoCompleteList;
     sal_uInt16                      nAutoCmpltListCnt;
 
     DECL_LINK( CheckHdl, CheckBox* );

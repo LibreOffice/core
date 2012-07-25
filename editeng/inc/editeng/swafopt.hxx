@@ -16,21 +16,57 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SVXSWAFOPT_HXX
-#define _SVXSWAFOPT_HXX
+
+#ifndef EE_SVXSWAFOPT_HXX
+#define EE_SVXSWAFOPT_HXX
+
+#include <o3tl/sorted_vector.hxx>
+
+#include <tools/string.hxx>
 
 #include <vcl/font.hxx>
 #include "editeng/editengdllapi.h"
 
-class SvStringsISortDtor;
 class SmartTagMgr;
+
+namespace editeng {
+
+class EDITENG_DLLPUBLIC IAutoCompleteString
+{
+private:
+    String m_String;
+public:
+    explicit IAutoCompleteString(String const& rString) : m_String(rString) {}
+    virtual ~IAutoCompleteString() {}
+    String const& GetAutoCompleteString() const { return m_String; }
+};
+
+struct CompareAutoCompleteString
+{
+    bool operator()(IAutoCompleteString *const& lhs,
+                    IAutoCompleteString *const& rhs) const
+    {
+        return lhs->GetAutoCompleteString().CompareIgnoreCaseToAscii(
+                rhs->GetAutoCompleteString()) == COMPARE_LESS;
+    }
+};
+
+class SortedAutoCompleteStrings
+  : public o3tl::sorted_vector<IAutoCompleteString*, CompareAutoCompleteString>
+{
+public:
+    ~SortedAutoCompleteStrings() { DeleteAndDestroyAll(); }
+};
+
+} // namespace editeng
 
 // Class of options for AutoFormat
 struct EDITENG_DLLPUBLIC SvxSwAutoFmtFlags
 {
     Font aBulletFont;
     Font aByInputBulletFont;
-    const SvStringsISortDtor* pAutoCmpltList;  // only valid inside the Dialog!!!
+    /// only valid inside the Dialog!!!
+    const editeng::SortedAutoCompleteStrings * m_pAutoCompleteList;
     SmartTagMgr* pSmartTagMgr;
 
     sal_Unicode cBullet;

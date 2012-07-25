@@ -2224,7 +2224,7 @@ OfaAutoCompleteTabPage::OfaAutoCompleteTabPage( Window* pParent,
     aNFMaxEntries   (this, CUI_RES(NF_MAX_ENTRIES)),
     aLBEntries      (*this, CUI_RES(LB_ENTRIES)),
     aPBEntries      (this, CUI_RES(PB_ENTRIES)),
-    pAutoCmpltList( 0 ),
+    m_pAutoCompleteList( 0 ),
     nAutoCmpltListCnt( 0 )
 {
     FreeResource();
@@ -2303,10 +2303,10 @@ sal_Bool OfaAutoCompleteTabPage::FillItemSet( SfxItemSet& )
         pOpt->nAutoCmpltExpandKey = (sal_uInt16)nKey;
    }
 
-    if( pAutoCmpltList && nAutoCmpltListCnt != aLBEntries.GetEntryCount() )
+    if (m_pAutoCompleteList && nAutoCmpltListCnt != aLBEntries.GetEntryCount())
     {
         bModified = sal_True;
-        pOpt->pAutoCmpltList = pAutoCmpltList;
+        pOpt->m_pAutoCompleteList = m_pAutoCompleteList;
     }
     if( bModified )
     {
@@ -2342,14 +2342,16 @@ void OfaAutoCompleteTabPage::Reset( const SfxItemSet&  )
             }
     }
 
-    if( pOpt->pAutoCmpltList && pOpt->pAutoCmpltList->size() )
+    if (pOpt->m_pAutoCompleteList && pOpt->m_pAutoCompleteList->size())
     {
-        pAutoCmpltList = (SvStringsISortDtor*)pOpt->pAutoCmpltList;
-        pOpt->pAutoCmpltList = 0;
-        nAutoCmpltListCnt = pAutoCmpltList->size();
-        for( sal_uInt16 n = 0; n < nAutoCmpltListCnt; ++n )
+        m_pAutoCompleteList = const_cast<editeng::SortedAutoCompleteStrings*>(
+                pOpt->m_pAutoCompleteList);
+        pOpt->m_pAutoCompleteList = 0;
+        nAutoCmpltListCnt = m_pAutoCompleteList->size();
+        for (size_t n = 0; n < nAutoCmpltListCnt; ++n)
         {
-            const StringPtr pStr = (*pAutoCmpltList)[ n ];
+            const String* pStr =
+                &(*m_pAutoCompleteList)[n]->GetAutoCompleteString();
             sal_uInt16 nPos = aLBEntries.InsertEntry( *pStr );
             aLBEntries.SetEntryData( nPos, (void*)pStr );
         }
@@ -2371,13 +2373,15 @@ void OfaAutoCompleteTabPage::ActivatePage( const SfxItemSet& )
 
 IMPL_LINK_NOARG(OfaAutoCompleteTabPage, DeleteHdl)
 {
-    sal_uInt16 nSelCnt = pAutoCmpltList ? aLBEntries.GetSelectEntryCount() : 0;
+    sal_uInt16 nSelCnt =
+        (m_pAutoCompleteList) ? aLBEntries.GetSelectEntryCount() : 0;
     while( nSelCnt )
     {
         sal_uInt16 nPos = aLBEntries.GetSelectEntryPos( --nSelCnt );
         StringPtr pStr = (StringPtr)aLBEntries.GetEntryData( nPos );
         aLBEntries.RemoveEntry( nPos );
-        pAutoCmpltList->erase( pStr );
+        editeng::IAutoCompleteString hack(*pStr); // UGLY
+        m_pAutoCompleteList->erase(&hack);
     }
     return 0;
 }
@@ -2400,7 +2404,7 @@ IMPL_LINK( OfaAutoCompleteTabPage, CheckHdl, CheckBox*, pBox )
 void OfaAutoCompleteTabPage::CopyToClipboard() const
 {
     sal_uInt16 nSelCnt = aLBEntries.GetSelectEntryCount();
-    if( pAutoCmpltList && nSelCnt )
+    if (m_pAutoCompleteList && nSelCnt)
     {
         TransferDataContainer* pCntnr = new TransferDataContainer;
         ::com::sun::star::uno::Reference<

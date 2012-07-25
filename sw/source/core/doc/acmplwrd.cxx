@@ -85,7 +85,8 @@ public:
 
 typedef const SwDoc* SwDocPtr;
 typedef std::vector<SwDocPtr> SwDocPtrVector;
-class SwAutoCompleteString : public String
+class SwAutoCompleteString
+    : public editeng::IAutoCompleteString
 {
 #if OSL_DEBUG_LEVEL > 0
     static sal_uLong nSwAutoCompleteStringCount;
@@ -184,8 +185,9 @@ void SwAutoCompleteWord_Impl::RemoveDocument(const SwDoc& rDoc)
     }
 }
 
-SwAutoCompleteString::SwAutoCompleteString(const String& rStr, xub_StrLen nPos, xub_StrLen nLen) :
-            String( rStr, nPos, nLen )
+SwAutoCompleteString::SwAutoCompleteString(
+            const String& rStr, xub_StrLen const nPos, xub_StrLen const nLen)
+    : editeng::IAutoCompleteString(String(rStr, nPos, nLen))
 {
 #if OSL_DEBUG_LEVEL > 0
     ++nSwAutoCompleteStringCount;
@@ -223,7 +225,7 @@ bool SwAutoCompleteString::RemoveDocument(const SwDoc& rDoc)
 }
 
 SwAutoCompleteWord::SwAutoCompleteWord( sal_uInt16 nWords, sal_uInt16 nMWrdLen )
-    : aWordLst(),
+    :
     pImpl(new SwAutoCompleteWord_Impl(*this)),
     nMaxCount( nWords ),
     nMinWrdLen( nMWrdLen ),
@@ -233,12 +235,7 @@ SwAutoCompleteWord::SwAutoCompleteWord( sal_uInt16 nWords, sal_uInt16 nMWrdLen )
 
 SwAutoCompleteWord::~SwAutoCompleteWord()
 {
-    for(sal_uInt16 nPos = aWordLst.size(); nPos; nPos--)
-    {
-        SwAutoCompleteString* pCurrent = (SwAutoCompleteString*)aWordLst[ nPos - 1 ];
-        aWordLst.erase( aWordLst.begin() + nPos - 1 );
-        delete pCurrent;
-    }
+    m_WordList.DeleteAndDestroyAll(); // so the assertion below works
     delete pImpl;
 #if OSL_DEBUG_LEVEL > 0
     sal_uLong nStrings = SwAutoCompleteString::GetElementCount();
@@ -273,8 +270,9 @@ sal_Bool SwAutoCompleteWord::InsertWord( const String& rWord, SwDoc& rDoc )
     {
         SwAutoCompleteString* pNew = new SwAutoCompleteString( aNewWord, 0, nWrdLen );
         pNew->AddDocument(rDoc);
-        std::pair<SvStringsISortDtor::const_iterator, bool> aInsPair;
-        if( (aInsPair = aWordLst.insert( pNew )).second )
+        std::pair<editeng::SortedAutoCompleteStrings::const_iterator, bool>
+            aInsPair = m_WordList.insert(pNew);
+        if (aInsPair.second)
         {
             bRet = sal_True;
             if (aLRULst.size() >= nMaxCount)
@@ -283,7 +281,7 @@ sal_Bool SwAutoCompleteWord::InsertWord( const String& rWord, SwDoc& rDoc )
                 // so that there is space for the first one
                 SwAutoCompleteString* pDel = aLRULst.back();
                 aLRULst.pop_back();
-                aWordLst.erase( pDel );
+                m_WordList.erase(pDel);
                 delete pDel;
             }
             aLRULst.push_front(pNew);
@@ -316,15 +314,13 @@ void SwAutoCompleteWord::SetMaxCount( sal_uInt16 nNewMax )
     {
         // remove the trailing ones
         sal_uInt16 nLRUIndex = nNewMax-1;
-        while( nNewMax < aWordLst.size() && nLRUIndex < aLRULst.size())
+        while (nNewMax < m_WordList.size() && nLRUIndex < aLRULst.size())
         {
-            SvStringsISortDtor::const_iterator it =
-                aWordLst.find( aLRULst[ nLRUIndex++ ] );
-            OSL_ENSURE( aWordLst.end() != it, "String not found" );
-            //FIXME this is utterly horrid: SwAutoCompleteString should
-            // NOT derive from String
-            SwAutoCompleteString* pDel = (SwAutoCompleteString*) *it;
-            aWordLst.erase( it );
+            editeng::SortedAutoCompleteStrings::const_iterator it =
+                m_WordList.find(aLRULst[ nLRUIndex++ ]);
+            OSL_ENSURE( m_WordList.end() != it, "String not found" );
+            editeng::IAutoCompleteString *const pDel = *it;
+            m_WordList.erase(it);
             delete pDel;
         }
         aLRULst.erase( aLRULst.begin() + nNewMax - 1, aLRULst.end() );
@@ -337,11 +333,12 @@ void SwAutoCompleteWord::SetMinWordLen( sal_uInt16 n )
     // Do you really want to remove all words that are less than the minWrdLen?
     if( n < nMinWrdLen )
     {
-        for( sal_uInt16 nPos = 0; nPos < aWordLst.size(); ++nPos  )
-            if( aWordLst[ nPos ]->Len() < n )
+        for (size_t nPos = 0; nPos < m_WordList.size(); ++nPos)
+            if (m_WordList[ nPos ]->GetAutoCompleteString().Len() < n)
             {
-                SwAutoCompleteString* pDel = (SwAutoCompleteString*) aWordLst[ nPos ];
-                aWordLst.erase(aWordLst.begin() + nPos);
+                SwAutoCompleteString *const pDel =
+                    dynamic_cast<SwAutoCompleteString*>(m_WordList[nPos]);
+                m_WordList.erase(nPos);
 
                 SwAutoCompleteStringPtrDeque::iterator it = std::find( aLRULst.begin(), aLRULst.end(), pDel );
                 OSL_ENSURE( aLRULst.end() != it, "String not found" );
@@ -358,28 +355,34 @@ sal_Bool SwAutoCompleteWord::GetRange( const String& rWord, sal_uInt16& rStt,
                                     sal_uInt16& rEnd ) const
 {
     const StringPtr pStr = (StringPtr)&rWord;
-    rStt = aWordLst.find( pStr ) - aWordLst.begin();
+    editeng::IAutoCompleteString hack(*pStr); // UGLY
+    rStt = m_WordList.find(&hack) - m_WordList.begin();
     rEnd = rStt;
 
     const ::utl::TransliterationWrapper& rSCmp = GetAppCmpStrIgnore();
-    while( rEnd < aWordLst.size() && rSCmp.isMatch( rWord, *aWordLst[ rEnd ]))
+    while (rEnd < m_WordList.size() &&
+            rSCmp.isMatch(rWord, m_WordList[rEnd]->GetAutoCompleteString()))
+    {
         ++rEnd;
+    }
 
     return rStt < rEnd;
 }
 
-void SwAutoCompleteWord::CheckChangedList( const SvStringsISortDtor& rNewLst )
+void SwAutoCompleteWord::CheckChangedList(
+        const editeng::SortedAutoCompleteStrings& rNewLst)
 {
-    sal_uInt16 nMyLen = aWordLst.size(), nNewLen = rNewLst.size();
-    sal_uInt16 nMyPos = 0, nNewPos = 0;
+    size_t nMyLen = m_WordList.size(), nNewLen = rNewLst.size();
+    size_t nMyPos = 0, nNewPos = 0;
 
     for( ; nMyPos < nMyLen && nNewPos < nNewLen; ++nMyPos, ++nNewPos )
     {
-        const StringPtr pStr = rNewLst[ nNewPos ];
-        while( aWordLst[ nMyPos ] != pStr )
+        const editeng::IAutoCompleteString * pStr = rNewLst[ nNewPos ];
+        while (m_WordList[nMyPos] != pStr)
         {
-            SwAutoCompleteString* pDel = (SwAutoCompleteString*) aWordLst[ nMyPos ];
-            aWordLst.erase(aWordLst.begin() + nMyPos);
+            SwAutoCompleteString *const pDel =
+                dynamic_cast<SwAutoCompleteString*>(m_WordList[nMyPos]);
+            m_WordList.erase(nMyPos);
 
             SwAutoCompleteStringPtrDeque::iterator it = std::find( aLRULst.begin(), aLRULst.end(), pDel );
             OSL_ENSURE( aLRULst.end() != it, "String not found" );
@@ -395,14 +398,16 @@ void SwAutoCompleteWord::CheckChangedList( const SvStringsISortDtor& rNewLst )
         // clear LRU array first then delete the string object
         for( ; nNewPos < nMyLen; ++nNewPos )
         {
-            SwAutoCompleteString* pDel = (SwAutoCompleteString*) aWordLst[ nNewPos ];
+            SwAutoCompleteString *const pDel =
+                dynamic_cast<SwAutoCompleteString*>(m_WordList[nNewPos]);
             SwAutoCompleteStringPtrDeque::iterator it = std::find( aLRULst.begin(), aLRULst.end(), pDel );
             OSL_ENSURE( aLRULst.end() != it, "String not found" );
             aLRULst.erase( it );
             delete pDel;
         }
         // remove from array
-        aWordLst.erase( aWordLst.begin() + nMyPos, aWordLst.begin() + nMyLen);
+        m_WordList.erase(m_WordList.begin() + nMyPos,
+                         m_WordList.begin() + nMyLen);
     }
 }
 
@@ -412,12 +417,13 @@ void SwAutoCompleteWord::DocumentDying(const SwDoc& rDoc)
 
     SvxAutoCorrect* pACorr = SvxAutoCorrCfg::Get().GetAutoCorrect();
     const sal_Bool bDelete = !pACorr->GetSwFlags().bAutoCmpltKeepList;
-    for(sal_uInt16 nPos = aWordLst.size(); nPos; nPos--)
+    for (size_t nPos = m_WordList.size(); nPos; nPos--)
     {
-        SwAutoCompleteString* pCurrent = (SwAutoCompleteString*)aWordLst[ nPos - 1 ];
+        SwAutoCompleteString *const pCurrent =
+            dynamic_cast<SwAutoCompleteString*>(m_WordList[nPos - 1]);
         if(pCurrent->RemoveDocument(rDoc) && bDelete)
         {
-            aWordLst.erase( aWordLst.begin() + nPos - 1 );
+            m_WordList.erase(nPos - 1);
             SwAutoCompleteStringPtrDeque::iterator it = std::find( aLRULst.begin(), aLRULst.end(), pCurrent );
             OSL_ENSURE( aLRULst.end() != it, "word not found in LRU list" );
             aLRULst.erase( it );
