@@ -340,7 +340,7 @@ void SdPage::ConnectLink()
         **********************************************************************/
         ::sd::DrawDocShell* pDocSh = ((SdDrawDocument*) pModel)->GetDocSh();
 
-        if (!pDocSh || pDocSh->GetMedium()->GetOrigURL() != maFileName)
+        if (!pDocSh || !pDocSh->GetMedium()->GetOrigURL().equals(maFileName))
         {
             // Keine Links auf Dokument-eigene Seiten!
             mpPageLink = new SdPageLink(this, maFileName, maBookmarkName);

@@ -935,7 +935,7 @@ void SfxDocumentPage::ImplUpdateSignatures()
     if ( pDoc )
     {
         SfxMedium* pMedium = pDoc->GetMedium();
-        if ( pMedium && pMedium->GetName().Len() && pMedium->GetStorage().is() )
+        if ( pMedium && !pMedium->GetName().isEmpty() && pMedium->GetStorage().is() )
         {
             Reference< security::XDocumentDigitalSignatures > xD(
                 comphelper::getProcessServiceFactory()->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.security.DocumentDigitalSignatures" ) ) ), uno::UNO_QUERY );

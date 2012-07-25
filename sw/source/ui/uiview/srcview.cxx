@@ -823,9 +823,11 @@ void SwSrcView::Load(SwDocShell* pDocShell)
             SwWriter aWriter( aMedium, *pDocShell->GetDoc() );
             WriterRef xWriter;
             ::GetHTMLWriter(aEmptyStr, aMedium.GetBaseURL( true ), xWriter);
-            String sWriteName = pDocShell->HasName() ?
-                                    pMedium->GetName() :
-                                        (const String&) sFileURL;
+            String sWriteName;
+            if (pDocShell->HasName())
+                sWriteName = pMedium->GetName();
+            else
+                sWriteName = sFileURL;
             sal_uLong nRes = aWriter.Write(xWriter, &sWriteName);
             if(nRes)
             {

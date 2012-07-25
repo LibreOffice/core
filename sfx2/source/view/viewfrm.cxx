@@ -597,8 +597,11 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                 SfxMedium *pMedium = xOldObj->GetMedium();
 
                 // Remove Frameset before the FramesetView may disappear
-                String aURL = pURLItem ? pURLItem->GetValue() :
-                                pMedium->GetName();
+                String aURL;
+                if (pURLItem)
+                    aURL = pURLItem->GetValue();
+                else
+                    aURL = pMedium->GetName();
 
                 sal_Bool bHandsOff =
                     ( pMedium->GetURLObject().GetProtocol() == INET_PROT_FILE && !xOldObj->IsDocShared() );

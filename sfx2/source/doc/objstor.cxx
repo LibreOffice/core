@@ -795,7 +795,7 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
             SFX_ITEMSET_ARG( pMedium->GetItemSet(), pAsTempItem, SfxBoolItem, SID_TEMPLATE, sal_False);
             SFX_ITEMSET_ARG( pMedium->GetItemSet(), pPreviewItem, SfxBoolItem, SID_PREVIEW, sal_False);
             SFX_ITEMSET_ARG( pMedium->GetItemSet(), pHiddenItem, SfxBoolItem, SID_HIDDEN, sal_False);
-            if( bOk && pMedium->GetOrigURL().Len()
+            if( bOk && !pMedium->GetOrigURL().isEmpty()
             && !( pAsTempItem && pAsTempItem->GetValue() )
             && !( pPreviewItem && pPreviewItem->GetValue() )
             && !( pHiddenItem && pHiddenItem->GetValue() ) )
@@ -1147,8 +1147,8 @@ sal_Bool SfxObjectShell::SaveTo_Impl
 
     // use UCB for case sensitive/insensitive file name comparison
     if ( pMedium
-      && pMedium->GetName().CompareIgnoreCaseToAscii( "private:stream", 14 ) != COMPARE_EQUAL
-      && rMedium.GetName().CompareIgnoreCaseToAscii( "private:stream", 14 ) != COMPARE_EQUAL
+      && !pMedium->GetName().equalsIgnoreAsciiCaseAscii("private:stream")
+      && !rMedium.GetName().equalsIgnoreAsciiCaseAscii("private:stream")
       && ::utl::UCBContentHelper::EqualURLs( pMedium->GetName(), rMedium.GetName() ) )
     {
         bStoreToSameLocation = sal_True;
@@ -1643,7 +1643,7 @@ sal_Bool SfxObjectShell::SaveTo_Impl
                     if ( bNeedsDisconnectionOnFail )
                         ConnectTmpStorage_Impl( pImp->m_xDocStorage, NULL );
                 }
-                else if ( pMedium->GetName().Len()
+                else if (!pMedium->GetName().isEmpty()
                   || ( pMedium->HasStorage_Impl() && pMedium->WillDisposeStorageOnClose_Impl() ) )
                 {
                     OSL_ENSURE( pMedium->GetName().Len(), "Fallback is used, the medium without name should not dispose the storage!\n" );
@@ -1934,7 +1934,7 @@ sal_Bool SfxObjectShell::DoSaveCompleted( SfxMedium* pNewMed )
     {
         if( bMedChanged )
         {
-            if( pNewMed->GetName().Len() )
+            if (!pNewMed->GetName().isEmpty())
                 bHasName = sal_True;
             Broadcast( SfxSimpleHint(SFX_HINT_NAMECHANGED) );
             getDocProperties()->setGenerator(
@@ -2039,7 +2039,7 @@ sal_Bool SfxObjectShell::DoSaveCompleted( SfxMedium* pNewMed )
             pNewMed->SetCachedSignatureState_Impl( SIGNATURESTATE_NOSIGNATURES ); // set the default value back
 
             // Set new title
-            if ( pNewMed->GetName().Len() && SFX_CREATE_MODE_EMBEDDED != eCreateMode )
+            if (!pNewMed->GetName().isEmpty() && SFX_CREATE_MODE_EMBEDDED != eCreateMode)
                 InvalidateName();
             SetModified(sal_False); // reset only by set medium
             Broadcast( SfxSimpleHint(SFX_HINT_MODECHANGED) );

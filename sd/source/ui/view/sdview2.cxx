@@ -542,7 +542,7 @@ sal_Int8 View::AcceptDrop( const AcceptDropEvent& rEvt, DropTargetHelper& rTarge
                 else if( pSourceView )
                 {
                     if( !( nDropAction & DND_ACTION_LINK ) ||
-                        pSourceView->GetDocSh()->GetMedium()->GetName().Len() )
+                        !pSourceView->GetDocSh()->GetMedium()->GetName().isEmpty() )
                     {
                         nRet = nDropAction;
                     }
@@ -787,9 +787,9 @@ sal_Int8 View::ExecuteDrop( const ExecuteDropEvent& rEvt, DropTargetHelper& rTar
                                 sal_Int32 nIndex = aBookmark.indexOf( (sal_Unicode)'#' );
                                 if( nIndex != -1 )
                                 {
-                                    const String aDocName( aBookmark.copy( 0, nIndex ) );
+                                    const OUString aDocName( aBookmark.copy( 0, nIndex ) );
 
-                                    if( mpDocSh->GetMedium()->GetName() == aDocName || mpDocSh->GetName() == aDocName )
+                                    if (mpDocSh->GetMedium()->GetName() == aDocName || aDocName.equals(mpDocSh->GetName()))
                                     {
                                         // internal jump, only use the part after and including '#'
                                         eClickAction = presentation::ClickAction_BOOKMARK;

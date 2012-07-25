@@ -61,7 +61,7 @@ void SwURLStateChanged::Notify( SfxBroadcaster& , const SfxHint& rHint )
 
         if( pDoc->GetDocShell() && pDoc->GetDocShell()->GetMedium() &&
             // If this is our Doc, we can also have local jumps!
-            sURL == pDoc->GetDocShell()->GetMedium()->GetName() )
+            pDoc->GetDocShell()->GetMedium()->GetName().equals(sURL) )
             (sBkmk = pIURL->GetMark()).Insert( INET_MARK_TOKEN, 0 );
 
         sal_Bool bAction = sal_False, bUnLockView = sal_False;

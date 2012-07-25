@@ -266,7 +266,7 @@ public:
     long             nFileVersion;
 
     const SfxFilter* pOrigFilter;
-    String           aOrigURL;
+    rtl::OUString    aOrigURL;
     String           aPreRedirectionURL;
     String           aReferer;
     DateTime         aExpireTime;
@@ -464,7 +464,7 @@ sal_Bool SfxMedium::DocNeedsFileDateCheck()
 //------------------------------------------------------------------
 util::DateTime SfxMedium::GetInitFileDate( sal_Bool bIgnoreOldValue )
 {
-    if ( ( bIgnoreOldValue || !pImp->m_bGotDateTime ) && aLogicName.Len() )
+    if ( ( bIgnoreOldValue || !pImp->m_bGotDateTime ) && !aLogicName.isEmpty() )
     {
         try
         {
@@ -510,7 +510,7 @@ Reference < XContent > SfxMedium::GetContent() const
             rtl::OUString aURL;
             if ( !aName.isEmpty() )
                 ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aName, aURL );
-            else if ( aLogicName.Len() )
+            else if ( !aLogicName.isEmpty() )
                 aURL = GetURLObject().GetMainURL( INetURLObject::NO_DECODE );
             if (!aURL.isEmpty() )
                 ::ucbhelper::Content::create( aURL, xEnv, pImp->aContent );
@@ -683,7 +683,7 @@ sal_Bool SfxMedium::CloseOutStream_Impl()
 //------------------------------------------------------------------
 const rtl::OUString& SfxMedium::GetPhysicalName() const
 {
-    if ( aName.isEmpty() && aLogicName.Len() )
+    if ( aName.isEmpty() && !aLogicName.isEmpty() )
         (( SfxMedium*)this)->CreateFileStream();
 
     // return the name then
@@ -787,7 +787,7 @@ void SfxMedium::StorageBackup_Impl()
     ::ucbhelper::Content aOriginalContent;
     Reference< ::com::sun::star::ucb::XCommandEnvironment > xDummyEnv;
 
-    sal_Bool bBasedOnOriginalFile = ( !pImp->pTempFile && !( aLogicName.Len() && pImp->m_bSalvageMode )
+    bool bBasedOnOriginalFile = ( !pImp->pTempFile && !( !aLogicName.isEmpty() && pImp->m_bSalvageMode )
         && !GetURLObject().GetMainURL( INetURLObject::NO_DECODE ).isEmpty()
         && ::utl::LocalFileHelper::IsLocalFile( GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) )
         && ::utl::UCBContentHelper::IsDocument( GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) ) );
@@ -818,7 +818,7 @@ uno::Reference < embed::XStorage > SfxMedium::GetOutputStorage()
 
     // if the medium was constructed with a Storage: use this one, not a temp. storage
     // if a temporary storage already exists: use it
-    if ( pImp->xStorage.is() && ( !aLogicName.Len() || pImp->pTempFile ) )
+    if ( pImp->xStorage.is() && ( aLogicName.isEmpty() || pImp->pTempFile ) )
         return pImp->xStorage;
 
     // if necessary close stream that was used for reading
@@ -1777,7 +1777,7 @@ void SfxMedium::Transfer_Impl()
     rtl::OUString aNameURL;
     if ( pImp->pTempFile )
         aNameURL = pImp->pTempFile->GetURL();
-    else if ( aLogicName.Len() && pImp->m_bSalvageMode )
+    else if ( !aLogicName.isEmpty() && pImp->m_bSalvageMode )
     {
         // makes sence only in case logic name is set
         if ( !::utl::LocalFileHelper::ConvertPhysicalNameToURL( aName, aNameURL ) )
@@ -1793,7 +1793,7 @@ void SfxMedium::Transfer_Impl()
 
         // in case an output stream is provided from outside and the URL is correct
         // commit to the stream
-        if( aLogicName.CompareToAscii( "private:stream", 14 ) == COMPARE_EQUAL )
+        if (aLogicName.compareToAscii("private:stream", 14) == 0)
         {
             // TODO/LATER: support storing to SID_STREAM
                SFX_ITEMSET_ARG( pSet, pOutStreamItem, SfxUnoAnyItem, SID_OUTPUTSTREAM, sal_False);
@@ -2429,7 +2429,7 @@ void SfxMedium::Init_Impl()
         pSet->ClearItem( SID_DOC_SALVAGE );
     }
 
-    if( aLogicName.Len() )
+    if (!aLogicName.isEmpty())
     {
         INetURLObject aUrl( aLogicName );
         INetProtocol eProt = aUrl.GetProtocol();
@@ -2468,13 +2468,13 @@ void SfxMedium::Init_Impl()
     SFX_ITEMSET_ARG( pSet, pOutStreamItem, SfxUnoAnyItem, SID_OUTPUTSTREAM, sal_False);
     if( pOutStreamItem
      && ( !( pOutStreamItem->GetValue() >>= rOutStream )
-          || !aLogicName.CompareToAscii( "private:stream", 14 ) == COMPARE_EQUAL ) )
+          || (aLogicName.compareToAscii("private:stream", 14) == 0)) )
     {
         pSet->ClearItem( SID_OUTPUTSTREAM );
         OSL_FAIL( "Unexpected Output stream parameter!\n" );
     }
 
-    if ( aLogicName.Len() )
+    if (!aLogicName.isEmpty())
     {
         // if the logic name is set it should be set in MediaDescriptor as well
         SFX_ITEMSET_ARG( pSet, pFileNameItem, SfxStringItem, SID_FILE_NAME, sal_False );
@@ -2733,7 +2733,7 @@ void SfxMedium::SetIsRemote_Impl()
         case INET_PROT_VIM:
             bRemote = sal_True; break;
         default:
-            bRemote = ( GetName().CompareToAscii( "private:msgid", 13 ) == COMPARE_EQUAL );
+            bRemote = GetName().compareToAscii("private:msgid", 13) == 0;
             break;
     }
 
@@ -2747,7 +2747,7 @@ void SfxMedium::SetIsRemote_Impl()
 
 void SfxMedium::SetName( const String& aNameP, sal_Bool bSetOrigURL )
 {
-    if( !pImp->aOrigURL.Len() )
+    if (pImp->aOrigURL.isEmpty())
         pImp->aOrigURL = aLogicName;
     if( bSetOrigURL )
         pImp->aOrigURL = aNameP;
@@ -2758,9 +2758,9 @@ void SfxMedium::SetName( const String& aNameP, sal_Bool bSetOrigURL )
 }
 
 //----------------------------------------------------------------
-const String& SfxMedium::GetOrigURL() const
+const OUString& SfxMedium::GetOrigURL() const
 {
-    return !pImp->aOrigURL.Len() ? (String &)aLogicName : pImp->aOrigURL;
+    return pImp->aOrigURL.isEmpty() ? aLogicName : pImp->aOrigURL;
 }
 
 //----------------------------------------------------------------
@@ -2974,7 +2974,11 @@ SfxMedium::~SfxMedium()
     delete pImp;
 }
 
-//----------------------------------------------------------------
+const OUString& SfxMedium::GetName() const
+{
+    return aLogicName;
+}
+
 const INetURLObject& SfxMedium::GetURLObject() const
 {
     if( !pURLObj )
@@ -3086,7 +3090,7 @@ const uno::Sequence < util::RevisionTag >& SfxMedium::GetVersionList( bool _bNoR
 {
     // if the medium has no name, then this medium should represent a new document and can have no version info
     if ( ( !_bNoReload || !pImp->m_bVersionsAlreadyLoaded ) && !pImp->aVersions.getLength() &&
-         ( !aName.isEmpty() || aLogicName.Len() ) && GetStorage().is() )
+         ( !aName.isEmpty() || !aLogicName.isEmpty() ) && GetStorage().is() )
     {
         uno::Reference < document::XDocumentRevisionListPersistence > xReader( comphelper::getProcessServiceFactory()->createInstance(
                 ::rtl::OUString("com.sun.star.document.DocumentRevisionListPersistence") ), uno::UNO_QUERY );
