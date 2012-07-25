@@ -988,7 +988,7 @@ sub write_summary_into_msi_database
 
     if ($returnvalue)
     {
-        $infoline = "ERROR: Could not execute $msiinfo!\n";
+        $infoline = "ERROR: Could not execute $systemcall\n";
         push( @installer::globals::logfileinfo, $infoline);
     }
     else
