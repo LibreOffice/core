@@ -22,7 +22,6 @@
 
 class StarBASIC;
 class SvxSearchItem;
-class Accelerator;
 
 #include <tools/gen.hxx>
 #include <tools/link.hxx>
@@ -35,7 +34,6 @@ class Accelerator;
 class BasicIDEData
 {
 private:
-    Accelerator*    pAccelerator;
     SvxSearchItem*  pSearchItem;
 
     LibInfos        aLibInfos;
@@ -50,7 +48,6 @@ private:
 
     sal_uInt16          nBasicDialogCount;
 
-    sal_Bool            OLD_bRelMacroRecording;
     sal_Bool            bChoosingMacro;
     sal_Bool            bShellInCriticalSection;
 

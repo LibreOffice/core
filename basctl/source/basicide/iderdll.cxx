@@ -159,8 +159,6 @@ BasicIDEData::BasicIDEData() : aObjCatPos( INVPOSITION, INVPOSITION )
     pSearchItem = new SvxSearchItem( SID_SEARCH_ITEM );
 
     StarBASIC::SetGlobalBreakHdl( LINK( this, BasicIDEData, GlobalBasicBreakHdl ) );
-
-    pAccelerator = 0;
 }
 
 BasicIDEData::~BasicIDEData()
@@ -174,7 +172,6 @@ BasicIDEData::~BasicIDEData()
 //  StarBASIC::setGlobalStarScriptListener( XEngineListenerRef() );
 
     delete pSearchItem;
-    //delete pAccelerator;
 }
 
 SvxSearchItem& BasicIDEData::GetSearchItem() const
