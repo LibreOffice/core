@@ -263,6 +263,7 @@ public:
     bool m_bRoot:1;
     bool m_bTriedStorage:1;
     bool m_bRemote:1;
+    bool m_bInputStreamIsReadOnly:1;
 
     uno::Reference < embed::XStorage > xStorage;
 
@@ -332,6 +333,7 @@ SfxMedium_Impl::SfxMedium_Impl( SfxMedium* pAntiImplP )
     m_bRoot(false),
     m_bTriedStorage(false),
     m_bRemote(false),
+    m_bInputStreamIsReadOnly(false),
     pAntiImpl( pAntiImplP ),
     nFileVersion( 0 ),
     pOrigFilter( 0 ),
@@ -2284,7 +2286,7 @@ void SfxMedium::GetMedium_Impl()
             {
                 pImp->xInputStream = m_xInputStreamToLoadFrom;
                 pImp->xInputStream->skipBytes(0);
-                if(m_bInputStreamIsReadOnly)
+                if (pImp->m_m_bInputStreamIsReadOnly)
                     GetItemSet()->Put( SfxBoolItem( SID_DOC_READONLY, true ) );
             }
             else
@@ -3037,7 +3039,12 @@ SfxFrame* SfxMedium::GetLoadTargetFrame() const
 {
     return pImp->wLoadTargetFrame;
 }
-//----------------------------------------------------------------
+
+void SfxMedium::setStreamToLoadFrom(const com::sun::star::uno::Reference<com::sun::star::io::XInputStream>& xInputStream,sal_Bool bIsReadOnly )
+{
+    m_xInputStreamToLoadFrom = xInputStream;
+    pImp->m_bInputStreamIsReadOnly = bIsReadOnly;
+}
 
 void SfxMedium::SetLoadTargetFrame(SfxFrame* pFrame )
 {
