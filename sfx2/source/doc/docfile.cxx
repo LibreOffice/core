@@ -261,7 +261,6 @@ public:
     bool m_bRemoveBackup:1;
     bool m_bOriginallyReadOnly:1;
     bool m_bRoot:1;
-    bool m_bSetFilter:1;
 
     uno::Reference < embed::XStorage > xStorage;
 
@@ -329,7 +328,6 @@ SfxMedium_Impl::SfxMedium_Impl( SfxMedium* pAntiImplP )
     m_bRemoveBackup( false ),
     m_bOriginallyReadOnly(false),
     m_bRoot(false),
-    m_bSetFilter(false),
     pAntiImpl( pAntiImplP ),
     nFileVersion( 0 ),
     pOrigFilter( 0 ),
@@ -1480,8 +1478,6 @@ void SfxMedium::SetOpenMode( StreamMode nStorOpen,
             CloseStreams_Impl();
         }
     }
-
-    pImp->m_bSetFilter = false;
 }
 
 //------------------------------------------------------------------
