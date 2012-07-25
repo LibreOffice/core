@@ -26,101 +26,75 @@
  * instead of those above.
  */
 
-#include <sal/precppunit.hxx>
+#include <sal/types.h>
 
-#include <tubes/contact-list.hxx>
-#include <tubes/manager.hxx>
-
-#include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
+
+#include <rtl/bootstrap.hxx>
 #include <rtl/string.hxx>
 #include <rtl/ustring.hxx>
-#include <rtl/bootstrap.hxx>
-#include <unotest/bootstrapfixturebase.hxx>
+#include <tubes/conference.hxx>
+#include <tubes/contact-list.hxx>
+#include <tubes/manager.hxx>
+#include <unotools/localfilehelper.hxx>
+
+#include <telepathy-glib/telepathy-glib.h>
 
 namespace {
 
-class TestTeleTubes: public test::BootstrapFixtureBase
+class TestTeleTubes: public CppUnit::TestFixture
 {
 public:
 
-    TestTeleTubes();
-    ~TestTeleTubes();
-    void testSetupManager1();
-    void testSetupManager2();
-    void testCreateAccountManager1();
-    void testCreateAccountManager2();
-    void testRegisterClients1();
-    void testRegisterClients2();
+    TestTeleTubes() {}
+    ~TestTeleTubes() {}
+    // This could happen in costructor wasn't there TestTeleTubes instance for each test:
+    void testInitialize();
+    void testCreateAccountManager();
+    void testRegisterClients();
     void testContactList();
-    void testPrepareAccountManager1();
-    void testPrepareAccountManager2();
-    void testStartBuddySession1();
-    void testStartBuddySession2();
+    void testPrepareAccountManager();
+    void testStartBuddySession();
     void testSendPacket();
     void testReceivePacket();
     void testSendFile();
-    void testDestroyManager1();
-    void testDestroyManager2();
-    void testDestroyAccepterContact();
+    void testDestroyTeleTubes();
     void testFailAlways();
 
-    void ReceiverCallback( TeleConference* pConference, const TelePacket &rPacket );
-
-    GMainLoop*                  mpMainLoop;
-    void spinMainLoop();
-
+    void ReceiverCallback( const OString &rPacket );
     static void FileSent( bool success, void *user_data);
-    void FileReceived( rtl::OUString& aUri );
 
     // Order is significant.
     CPPUNIT_TEST_SUITE( TestTeleTubes );
-    CPPUNIT_TEST( testSetupManager1 );
-    CPPUNIT_TEST( testSetupManager2 );
-    CPPUNIT_TEST( testCreateAccountManager1 );
-    CPPUNIT_TEST( testCreateAccountManager2 );
-    CPPUNIT_TEST( testRegisterClients1 );
-    CPPUNIT_TEST( testRegisterClients2 );
-    CPPUNIT_TEST( testPrepareAccountManager1 );
-    CPPUNIT_TEST( testPrepareAccountManager2 );
+    CPPUNIT_TEST( testInitialize );
+    CPPUNIT_TEST( testCreateAccountManager );
+    CPPUNIT_TEST( testRegisterClients );
+    CPPUNIT_TEST( testPrepareAccountManager );
     CPPUNIT_TEST( testContactList );
-    CPPUNIT_TEST( testStartBuddySession1 );
-    CPPUNIT_TEST( testStartBuddySession2 );
+    CPPUNIT_TEST( testStartBuddySession );
     CPPUNIT_TEST( testSendPacket );
     CPPUNIT_TEST( testReceivePacket );
     CPPUNIT_TEST( testSendFile );
-    CPPUNIT_TEST( testDestroyManager1 );
-    CPPUNIT_TEST( testDestroyManager2 );
-    CPPUNIT_TEST( testDestroyAccepterContact );
+    CPPUNIT_TEST( testDestroyTeleTubes );
 #if 0
     CPPUNIT_TEST( testFailAlways );     // test failure displays SAL_LOG, uncomment for debugging
 #endif
     CPPUNIT_TEST_SUITE_END();
-
-private:
-// XXX The Jabber accounts specified in test-config.ini need to be setup in
-// Empathy, enabled, connected, and on each other's rosters.
-    rtl::OUString             maTestConfigIniURL;
-    rtl::Bootstrap            maTestConfig;
-
-    rtl::OString              maOffererIdentifier;
-    rtl::OString              maAccepterIdentifier;
-
-    bool                      maFileSentSuccess;
-    rtl::OUString             maFileReceivedUri;
-
-    sal_uInt32                mnPacketReceivedEmissions;
 };
 
 // static, not members, so they actually survive cppunit test iteration
-static TeleManager* mpManager1 = NULL;
-static TeleManager* mpManager2 = NULL;
-
-static TpContact*   mpAccepterContact = NULL;
-
-static sal_uInt32 nSentPackets = 0;
+static TeleConference*      mpConference1 = NULL;
+static TeleManager*         mpManager = NULL;
+static TpContact*           mpAccepterContact = NULL;
+static GMainLoop*           mpMainLoop = NULL;
+static bool                 maFileSentSuccess = false;
+static sal_uInt32           mnSentPackets = 0;
+static sal_uInt32           mnPacketReceivedEmissions = 0;
+static OUString             maTestConfigIniURL;
+static OString              maOffererIdentifier;
+static OString              maAccepterIdentifier;
 
 static gboolean
 timed_out (void *user_data)
@@ -133,44 +107,37 @@ timed_out (void *user_data)
     return FALSE;
 }
 
-TestTeleTubes::TestTeleTubes()
-    : maTestConfigIniURL(getURLFromSrc("/tubes/qa/test-config.ini")),
-      maTestConfig(maTestConfigIniURL),
-      mnPacketReceivedEmissions(0)
+void TestTeleTubes::testInitialize()
 {
+    utl::LocalFileHelper::ConvertPhysicalNameToURL(
+            OUString::createFromAscii( getenv("SRCDIR") ) + "/tubes/qa/test-config.ini",
+            maTestConfigIniURL );
+    rtl::Bootstrap aTestConfig( maTestConfigIniURL );
+
     TeleManager::addSuffixToNames( "TeleTest");
 
     rtl::OUString aOffererIdentifier;
     CPPUNIT_ASSERT_MESSAGE( "See README for how to set up test-config.ini",
-        maTestConfig.getFrom("offerer", aOffererIdentifier));
+        aTestConfig.getFrom("offerer", aOffererIdentifier));
     maOffererIdentifier = OUStringToOString( aOffererIdentifier, RTL_TEXTENCODING_UTF8);
 
     rtl::OUString aAccepterIdentifier;
     CPPUNIT_ASSERT_MESSAGE( "See README for how to set up test-config.ini",
-        maTestConfig.getFrom("accepter", aAccepterIdentifier));
+        aTestConfig.getFrom("accepter", aAccepterIdentifier));
     maAccepterIdentifier = OUStringToOString( aAccepterIdentifier, RTL_TEXTENCODING_UTF8);
 
     mpMainLoop = g_main_loop_new (NULL, FALSE);
     g_timeout_add_seconds (10, timed_out, mpMainLoop);
-}
 
-TestTeleTubes::~TestTeleTubes()
-{
-    g_main_loop_unref( mpMainLoop);
-    mpMainLoop = NULL;
-}
-
-void TestTeleTubes::spinMainLoop()
-{
-    g_main_loop_run( mpMainLoop);
+    mpManager = TeleManager::get();
 }
 
 void TestTeleTubes::testContactList()
 {
-    CPPUNIT_ASSERT( mpManager1);
-    CPPUNIT_ASSERT( mpManager1->getAccountManagerStatus() == TeleManager::AMS_PREPARED);
+    CPPUNIT_ASSERT( mpManager);
+    CPPUNIT_ASSERT( mpManager->getAccountManagerStatus() == TeleManager::AMS_PREPARED);
 
-    ContactList *cl = mpManager1->getContactList();
+    ContactList *cl = mpManager->getContactList();
 
     AccountContactPairV pairs;
 
@@ -211,173 +178,113 @@ void TestTeleTubes::testContactList()
         mpAccepterContact);
 }
 
-void TestTeleTubes::testSetupManager1()
+void TestTeleTubes::testPrepareAccountManager()
 {
-    mpManager1 = new TeleManager(true);
-}
-
-void TestTeleTubes::testSetupManager2()
-{
-    mpManager2 = new TeleManager();
-}
-
-void TestTeleTubes::testPrepareAccountManager1()
-{
-    mpManager1->prepareAccountManager();
-    TeleManager::AccountManagerStatus eStatus = mpManager1->getAccountManagerStatus();
+    mpManager->prepareAccountManager();
+    TeleManager::AccountManagerStatus eStatus = mpManager->getAccountManagerStatus();
     CPPUNIT_ASSERT( eStatus == TeleManager::AMS_PREPARED);
 }
 
-void TestTeleTubes::testPrepareAccountManager2()
+void TestTeleTubes::ReceiverCallback( const OString & rPacket )
 {
-    mpManager2->prepareAccountManager();
-    TeleManager::AccountManagerStatus eStatus = mpManager2->getAccountManagerStatus();
-    CPPUNIT_ASSERT( eStatus == TeleManager::AMS_PREPARED);
-}
-
-void TestTeleTubes::ReceiverCallback( TeleConference* pConference, const TelePacket & )
-{
-    SAL_INFO( "tubes", "TestTeleTubes::ReceiverCallback: " << pConference);
-    if (pConference)
+    SAL_INFO( "tubes", "TestTeleTubes::ReceiverCallback: " << rPacket.getStr());
+    if (!rPacket.isEmpty())
     {
         // we could pop a packet here
         mnPacketReceivedEmissions++;
     }
 }
 
-void TestTeleTubes::testStartBuddySession1()
+void TestTeleTubes::testStartBuddySession()
 {
-    TpAccount *pAcc1 = mpManager1->getAccount(maOffererIdentifier);
+    TpAccount *pAcc1 = mpManager->getAccount(maOffererIdentifier);
     CPPUNIT_ASSERT( pAcc1 != 0);
     /* This has to run after testContactList has run successfully. */
     CPPUNIT_ASSERT( mpAccepterContact != 0);
-    bool bStarted = mpManager1->startBuddySession( pAcc1, mpAccepterContact);
-    CPPUNIT_ASSERT( bStarted == true);
+    mpConference1 = mpManager->startBuddySession( pAcc1, mpAccepterContact);
+    CPPUNIT_ASSERT( mpConference1 != NULL);
 }
 
-void TestTeleTubes::testStartBuddySession2()
+void TestTeleTubes::testCreateAccountManager()
 {
-    //bool bStarted = mpManager2->startBuddySession( sAcc2, sAcc1);
-    //CPPUNIT_ASSERT( bStarted == true);
-}
-
-void TestTeleTubes::testCreateAccountManager1()
-{
-    bool bConnected = mpManager1->createAccountManager();
+    bool bConnected = mpManager->createAccountManager();
     CPPUNIT_ASSERT( bConnected == true);
 }
 
-void TestTeleTubes::testCreateAccountManager2()
+void TestTeleTubes::testRegisterClients()
 {
-    bool bConnected = mpManager2->createAccountManager();
-    CPPUNIT_ASSERT( bConnected == true);
-}
-
-void TestTeleTubes::testRegisterClients1()
-{
-    bool bRegistered = mpManager1->registerClients();
-    CPPUNIT_ASSERT( bRegistered == true);
-}
-
-void TestTeleTubes::testRegisterClients2()
-{
-    bool bRegistered = mpManager2->registerClients();
+    bool bRegistered = mpManager->registerClients();
     CPPUNIT_ASSERT( bRegistered == true);
 }
 
 void TestTeleTubes::testSendPacket()
 {
-    TelePacket aPacket( "", RTL_CONSTASCII_STRINGPARAM( "from 1 to 2"));
+    OString aPacket( "from 1 to 2" );
 
-    mpManager1->sigPacketReceived.connect( boost::bind( &TestTeleTubes::ReceiverCallback, this, _1, _2 ) );
-    nSentPackets = mpManager1->sendPacket( aPacket);
-    CPPUNIT_ASSERT( nSentPackets == 2); // expect out+in conference, as own instance accepted self
-    CPPUNIT_ASSERT( mnPacketReceivedEmissions == 2 );
+    mpConference1->sigPacketReceived.connect( boost::bind( &TestTeleTubes::ReceiverCallback, this, _1 ) );
+    bool bSentPacket = mpConference1->sendPacket( aPacket );
+    CPPUNIT_ASSERT( bSentPacket );
+    mnSentPackets++;
+    CPPUNIT_ASSERT( mnPacketReceivedEmissions == 1 );
 }
 
 void TestTeleTubes::testReceivePacket()
 {
-    TelePacket aPacket( "", RTL_CONSTASCII_STRINGPARAM( "from 1 to 2"));
-    TelePacket aReceived;
-    sal_uInt32 nReceivedPackets = 0;
-    /* We expect to get every packet we send pushed onto the queue to be echoed
-     * locally; and since we are also listening at the "other end", we expect
-     * to receive a copy of each packet as well.
+    /* We can't get to the TeleConference accepting our packets.
+     * It's stored in TeleManager but available only after receiving file
+     * and extracting UUID from the name.
      */
-    sal_uInt32 nExpectedPackets = nSentPackets * 2;
-    bool bOk;
 
+    sal_uInt32 nReceivedPackets = 0;
+    /* We expect to get every packet we send pushed
+     * onto the queue to be echoed locally.
+     */
+    bool bOk;
     do
     {
-        do
+        OString aReceived;
+        bOk = mpConference1->popPacket( aReceived );
+        if (bOk)
         {
-            bOk = mpManager1->popPacket( aReceived);
-            if (bOk)
-            {
-                ++nReceivedPackets;
-                CPPUNIT_ASSERT( aPacket == aReceived);
-            }
-        } while (bOk);
-        if (nReceivedPackets < nExpectedPackets)
-            mpManager1->iterateLoop();
-    } while (nReceivedPackets < nExpectedPackets);
-    CPPUNIT_ASSERT( nReceivedPackets == nExpectedPackets);
+            ++nReceivedPackets;
+            CPPUNIT_ASSERT( "from 1 to 2" == aReceived );
+        }
+    } while (bOk);
+    CPPUNIT_ASSERT( nReceivedPackets == mnSentPackets );
 }
 
-void TestTeleTubes::FileSent( bool success, void *user_data)
+void TestTeleTubes::FileSent( bool success, void * )
 {
-    TestTeleTubes *self = reinterpret_cast<TestTeleTubes *>(user_data);
-
-    self->maFileSentSuccess = success;
-    g_main_loop_quit (self->mpMainLoop);
-}
-
-void TestTeleTubes::FileReceived( rtl::OUString& aUri )
-{
-    maFileReceivedUri = aUri;
+    maFileSentSuccess = success;
     g_main_loop_quit (mpMainLoop);
 }
 
 void TestTeleTubes::testSendFile()
 {
-    TpAccount *pAcc1 = mpManager1->getAccount(maOffererIdentifier);
-    CPPUNIT_ASSERT( pAcc1 != 0);
     /* This has to run after testContactList has run successfully. */
     CPPUNIT_ASSERT( mpAccepterContact != 0);
 
-    mpManager1->sigFileReceived.connect(
-        boost::bind(&TestTeleTubes::FileReceived, this, _1));
-
-    mpManager1->sendFile( maTestConfigIniURL,
-        &TestTeleTubes::FileSent, this);
-    /* Waiting for two events: FileSent and FileReceived both quit the mainloop */
-    spinMainLoop();
-    spinMainLoop();
+    mpConference1->sendFile( maTestConfigIniURL,
+        &TestTeleTubes::FileSent, NULL);
+    /* Waiting for event: FileSent quits the mainloop */
+    g_main_loop_run( mpMainLoop);
 
     CPPUNIT_ASSERT( maFileSentSuccess);
-    CPPUNIT_ASSERT_MESSAGE(
-        OUStringToOString( maFileReceivedUri, RTL_TEXTENCODING_UTF8).getStr(),
-        maFileReceivedUri == "file:///tmp/LibreOffice-collab-test-config.ini");
+    // Currently there is no way to check that the file was received !
 }
 
-void TestTeleTubes::testDestroyManager1()
-{
-    delete mpManager1;
-    mpManager1 = NULL;
-}
-
-void TestTeleTubes::testDestroyManager2()
-{
-    delete mpManager2;
-    mpManager2 = NULL;
-}
-
-void TestTeleTubes::testDestroyAccepterContact()
+void TestTeleTubes::testDestroyTeleTubes()
 {
     if (mpAccepterContact) {
         g_object_unref(mpAccepterContact);
         mpAccepterContact = NULL;
     }
+    if (mpManager)
+        mpManager->unref();
+    g_main_loop_unref( mpMainLoop );
+    if (mpConference1)
+        mpConference1->close();
+    delete mpConference1;
 }
 
 void TestTeleTubes::testFailAlways()

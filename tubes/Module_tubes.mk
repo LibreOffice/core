@@ -35,9 +35,9 @@ $(eval $(call gb_Module_add_targets,tubes,\
 	Executable_liboapprover \
 ))
 
-# $(eval $(call gb_Module_add_check_targets,tubes,\
-#    CppunitTest_tubes_test \
-# ))
+$(eval $(call gb_Module_add_subsequentcheck_targets,tubes,\
+	CppunitTest_tubes_test \
+))
 
 endif
 

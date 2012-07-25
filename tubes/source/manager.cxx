@@ -223,9 +223,12 @@ void TeleManager_TransferDone( EmpathyFTHandler *handler, TpFileTransferChannel 
 
     sal_Int32 first = aUri.indexOf('_');
     sal_Int32 last = aUri.lastIndexOf('_');
-    OString sUuid( OUStringToOString( aUri.copy( first + 1, last - first - 1),
+    if (first != last)
+    {
+        OString sUuid( OUStringToOString( aUri.copy( first + 1, last - first - 1),
                 RTL_TEXTENCODING_UTF8));
-    TeleManager::setCurrentUuid( sUuid );
+        TeleManager::setCurrentUuid( sUuid );
+    }
     TeleManager_fileReceived( aUri );
 
     g_object_unref( handler);
