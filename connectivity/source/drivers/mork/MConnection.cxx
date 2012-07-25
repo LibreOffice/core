@@ -15,6 +15,8 @@
 #include <connectivity/dbexception.hxx>
 #include <connectivity/sqlerror.hxx>
 
+#include "resource/common_res.hrc"
+
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/TransactionIsolation.hpp>
@@ -67,9 +69,43 @@ void SAL_CALL OConnection::release() throw()
 void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyValue >& info)  throw(SQLException)
 {
     (void) info; // avoid warnings
-    OSL_TRACE("IN OConnection::construct()" );
+    SAL_INFO("mork", "IN OConnection::construct()" );
     //  open file
     setURL(url);
+    //
+    // Skip 'sdbc:mozab: part of URL
+    //
+    sal_Int32 nLen = url.indexOf(':');
+    nLen = url.indexOf(':',nLen+1);
+    OSL_ENSURE( url.copy( 0, nLen ) == "sdbc:address", "OConnection::construct: invalid start of the URI - should never have survived XDriver::acceptsURL!" );
+
+    ::rtl::OUString aAddrbookURI(url.copy(nLen+1));
+    // Get Scheme
+    nLen = aAddrbookURI.indexOf(':');
+    ::rtl::OUString aAddrbookScheme;
+    ::rtl::OUString sAdditionalInfo;
+    if ( nLen == -1 )
+    {
+        // There isn't any subschema: - but could be just subschema
+        if ( !aAddrbookURI.isEmpty() )
+        {
+            aAddrbookScheme= aAddrbookURI;
+        }
+        else
+        {
+            SAL_WARN("mork", "No subschema given!!!");
+            throwGenericSQLException( STR_URI_SYNTAX_ERROR, *this );
+        }
+    }
+    else
+    {
+        aAddrbookScheme = aAddrbookURI.copy(0, nLen);
+        sAdditionalInfo = aAddrbookURI.copy( nLen + 1 );
+    }
+
+    SAL_INFO("mork", "URI = " << ((OUtoCStr(aAddrbookURI)) ? (OUtoCStr(aAddrbookURI)):("NULL")) );
+    SAL_INFO("mork", "Scheme = " << ((OUtoCStr(aAddrbookScheme)) ?  (OUtoCStr(aAddrbookScheme)):("NULL")) );
+
 }
 // XServiceInfo
 // --------------------------------------------------------------------------------
@@ -94,7 +130,7 @@ Reference< XPreparedStatement > SAL_CALL OConnection::prepareStatement( const ::
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
 
-    OSL_TRACE("OConnection::prepareStatement( %s )", OUtoCStr( _sSql ) );
+    SAL_INFO("mork", "OConnection::prepareStatement( " << OUtoCStr( _sSql ) << " )");
     return NULL;
 }
 // --------------------------------------------------------------------------------
@@ -102,7 +138,7 @@ Reference< XPreparedStatement > SAL_CALL OConnection::prepareCall( const ::rtl::
 {
     OSL_UNUSED( _sSql );
     ::dbtools::throwFeatureNotImplementedException( "XConnection::prepareCall", *this );
-    OSL_TRACE("OConnection::prepareCall( %s )", OUtoCStr( _sSql ) );
+    SAL_INFO("mork", "OConnection::prepareCall( " << OUtoCStr( _sSql ) << " )");
     return NULL;
 }
 // --------------------------------------------------------------------------------
@@ -110,7 +146,7 @@ Reference< XPreparedStatement > SAL_CALL OConnection::prepareCall( const ::rtl::
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     // when you need to transform SQL92 to you driver specific you can do it here
-    OSL_TRACE("OConnection::nativeSQL( %s )", OUtoCStr( _sSql ) );
+    SAL_INFO("OConnection::nativeSQL( %s )", OUtoCStr( _sSql ) );
 
     return _sSql;
 }
