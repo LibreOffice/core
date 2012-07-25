@@ -80,6 +80,9 @@ void SmRtfExport::HandleNode(const SmNode* pNode, int nLevel)
         case NBINVER:
             HandleFractions(pNode, nLevel);
             break;
+        case NROOT:
+            HandleRoot(static_cast<const SmRootNode*>(pNode), nLevel);
+            break;
         case NMATH:
             HandleMath(pNode, nLevel);
             break;
@@ -95,6 +98,9 @@ void SmRtfExport::HandleNode(const SmNode* pNode, int nLevel)
             break;
         case NLINE:
             HandleAllSubNodes(pNode, nLevel);
+            break;
+        case NPLACE:
+            // explicitly do nothing, MSOffice treats that as a placeholder if item is missing
             break;
         default:
             SAL_INFO("starmath.rtf", "TODO: " << OSL_THIS_FUNC << " unhandled node type");
@@ -267,9 +273,26 @@ void SmRtfExport::HandleMath(const SmNode* pNode, int nLevel)
     }
 }
 
-void SmRtfExport::HandleRoot(const SmRootNode* /*pNode*/, int /*nLevel*/)
+void SmRtfExport::HandleRoot(const SmRootNode* pNode, int nLevel)
 {
-    SAL_INFO("starmath.rtf", "TODO: " << OSL_THIS_FUNC);
+    m_pBuffer->append("{\\mrad ");
+    if (const SmNode* argument = pNode->Argument())
+    {
+        m_pBuffer->append("{\\mdeg ");
+        HandleNode(argument, nLevel + 1);
+        m_pBuffer->append("}"); // mdeg
+    }
+    else
+    {
+        m_pBuffer->append("{\\mradPr ");
+        m_pBuffer->append("{\\mdegHide 1}");
+        m_pBuffer->append("}"); // mradPr
+        m_pBuffer->append("{\\mdeg }"); // empty but present
+    }
+    m_pBuffer->append("{\\me ");
+    HandleNode(pNode->Body(), nLevel + 1);
+    m_pBuffer->append("}"); // me
+    m_pBuffer->append("}"); // mrad
 }
 
 namespace {
