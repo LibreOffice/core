@@ -48,6 +48,11 @@ sub unpack_cabinet_file
     push( @installer::globals::logfileinfo, $infoline);
 
     my $expandfile = "expand.exe";  # Has to be in the path
+    if ( $installer::globals::isunix )
+    {
+        $infoline = "ERROR: We need to change this to use cabextract instead of expand.exe\n";
+        push( @installer::globals::logfileinfo, $infoline);
+    }
 
     # expand.exe has to be located in the system directory.
     # Cygwin has another tool expand.exe, that converts tabs to spaces. This cannot be used of course.
@@ -104,6 +109,10 @@ sub include_tables_into_pcpfile
     my ($fullmsidatabasepath, $workdir, $tables) = @_;
 
     my $msidb = "msidb.exe";    # Has to be in the path
+    if ( $installer::globals::isunix )
+    {
+        $msidb = "$ENV{'OUTDIR_FOR_BUILD'}/bin/msidb.exe";
+    }
     my $infoline = "";
     my $systemcall = "";
     my $returnvalue = "";
@@ -159,6 +168,10 @@ sub extract_tables_from_pcpfile
     my ($fullmsidatabasepath, $workdir, $tablelist) = @_;
 
     my $msidb = "msidb.exe";    # Has to be in the path
+    if ( $installer::globals::isunix )
+    {
+        $msidb = "$ENV{'OUTDIR_FOR_BUILD'}/bin/msidb.exe";
+    }
     my $infoline = "";
     my $systemcall = "";
     my $returnvalue = "";
@@ -699,6 +712,10 @@ sub write_sis_info
     if ( ! -f $msidatabase ) { installer::exiter::exit_program("ERROR: Cannot find file $msidatabase", "write_sis_info"); }
 
     my $msiinfo = "msiinfo.exe";    # Has to be in the path
+    if ( $installer::globals::isunix )
+    {
+        $msiinfo = "$ENV{'OUTDIR_FOR_BUILD'}/bin/msiinfo.exe";
+    }
     my $infoline = "";
     my $systemcall = "";
     my $returnvalue = "";
