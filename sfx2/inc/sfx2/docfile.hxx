@@ -75,9 +75,6 @@ class SFX2_DLLPUBLIC SfxMedium : public SvRefBase
     SvStream*           pOutStream;
     SfxMedium_Impl*     pImp;
 
-    com::sun::star::uno::Reference<com::sun::star::io::XInputStream>
-    m_xInputStreamToLoadFrom;
-
 #if _SOLAR__PRIVATE
     SAL_DLLPRIVATE void SetIsRemote_Impl();
     SAL_DLLPRIVATE void CloseInStream_Impl();
