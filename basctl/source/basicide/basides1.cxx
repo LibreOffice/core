@@ -151,7 +151,7 @@ void BasicIDEShell::ExecuteCurrent( SfxRequest& rReq )
                 {
                     // memorize item because of the adjustments...
                     BasicIDEGlobals::GetExtraData()->SetSearchItem( (const SvxSearchItem&)rItem );
-                    sal_uInt16 nFound = 0;
+                    sal_Int32 nFound = 0;
                     sal_Bool bCanceled = sal_False;
                     if ( ((const SvxSearchItem&)rItem).GetCommand() == SVX_SEARCHCMD_REPLACE_ALL )
                     {
