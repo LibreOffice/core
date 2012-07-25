@@ -65,6 +65,9 @@ void SmRtfExport::HandleNode(const SmNode* pNode, int nLevel)
         case NTEXT:
             HandleText(pNode,nLevel);
             break;
+        case NVERTICAL_BRACE:
+            HandleVerticalBrace(static_cast<const SmVerticalBraceNode*>(pNode), nLevel);
+            break;
         case NBRACE:
             HandleBrace( static_cast< const SmBraceNode* >( pNode ), nLevel );
             break;
@@ -428,9 +431,44 @@ void SmRtfExport::HandleBrace(const SmBraceNode* pNode, int nLevel)
     m_pBuffer->append("}"); // md
 }
 
-void SmRtfExport::HandleVerticalBrace(const SmVerticalBraceNode* /*pNode*/, int /*nLevel*/)
+void SmRtfExport::HandleVerticalBrace(const SmVerticalBraceNode* pNode, int nLevel)
 {
-    SAL_INFO("starmath.rtf", "TODO: " << OSL_THIS_FUNC);
+    SAL_INFO("starmath.rtf", "Vertical: " << int(pNode->GetToken().eType));
+    switch (pNode->GetToken().eType)
+    {
+        case TOVERBRACE:
+        case TUNDERBRACE:
+        {
+            bool top = (pNode->GetToken().eType == TOVERBRACE);
+            if (top)
+                m_pBuffer->append("{\\mlimUpp ");
+            else
+                m_pBuffer->append("{\\mlimLow ");
+            m_pBuffer->append("{\\me ");
+            m_pBuffer->append("{\\mgroupChr ");
+            m_pBuffer->append("{\\mgroupChrPr ");
+            m_pBuffer->append("{\\mchr ");
+            m_pBuffer->append(mathSymbolToString(pNode->Brace()));
+            m_pBuffer->append("}"); // mchr
+            // TODO not sure if pos and vertJc are correct
+            m_pBuffer->append("{\\mpos ").append(top ? "top" : "bot").append("}");
+            m_pBuffer->append("{\\mvertJc ").append(top ? "bot" : "top").append("}");
+            m_pBuffer->append("}"); // mgroupChrPr
+            m_pBuffer->append("{\\me ");
+            HandleNode(pNode->Body(), nLevel + 1);
+            m_pBuffer->append("}"); // me
+            m_pBuffer->append("}"); // mgroupChr
+            m_pBuffer->append("}"); // me
+            m_pBuffer->append("{\\mlim ");
+            HandleNode(pNode->Script(), nLevel + 1);
+            m_pBuffer->append("}"); // mlim
+            m_pBuffer->append("}"); // mlimUpp or mlimLow
+            break;
+        }
+        default:
+            SAL_INFO("starmath.rtf", "TODO: " << OSL_THIS_FUNC << " unhandled vertical brace type");
+            break;
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
