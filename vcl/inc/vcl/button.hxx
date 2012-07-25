@@ -66,8 +66,9 @@ public:
     SAL_DLLPRIVATE const Rectangle& ImplGetFocusRect() const;
     SAL_DLLPRIVATE void             ImplSetSymbolAlign( SymbolAlign eAlign );
     SAL_DLLPRIVATE void             ImplSetSmallSymbol( sal_Bool bSmall = sal_True );
-    SAL_DLLPRIVATE const Rectangle& ImplGetSymbolRect() const;
-    SAL_DLLPRIVATE void             ImplSetSymbolRect(const Rectangle&);
+    /// The x-coordinate of the vertical separator line, use in MenuButton subclass only.
+    SAL_DLLPRIVATE long             ImplGetSeparatorX() const;
+    SAL_DLLPRIVATE void             ImplSetSeparatorX( long nX );
 
 protected:
                         Button( WindowType nType );
