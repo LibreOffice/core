@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-#include <svl/svstdarr.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/field.hxx>
 #include <vcl/keycodes.hxx>
@@ -2378,7 +2377,7 @@ IMPL_LINK_NOARG(OfaAutoCompleteTabPage, DeleteHdl)
     while( nSelCnt )
     {
         sal_uInt16 nPos = aLBEntries.GetSelectEntryPos( --nSelCnt );
-        StringPtr pStr = (StringPtr)aLBEntries.GetEntryData( nPos );
+        String* pStr = static_cast<String*>(aLBEntries.GetEntryData(nPos));
         aLBEntries.RemoveEntry( nPos );
         editeng::IAutoCompleteString hack(*pStr); // UGLY
         m_pAutoCompleteList->erase(&hack);
