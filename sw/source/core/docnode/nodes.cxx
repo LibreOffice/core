@@ -1226,7 +1226,7 @@ void SwNodes::Delete(const SwNodeIndex &rIndex, sal_uLong nNodes)
                                 pOutlineNds->Seek_Entry( pNd, &nIdxPos ))
                         {
                             // loesche die Gliederungs-Indizies.
-                            pOutlineNds->erase( pOutlineNds->begin() + nIdxPos );
+                            pOutlineNds->erase(nIdxPos);
                             bUpdateOutline = sal_True;
                         }
                         pTxtNode->InvalidateNumRule();
@@ -1528,7 +1528,7 @@ void SwNodes::DelNodes( const SwNodeIndex & rStart, sal_uLong nCnt )
                 sal_uInt16 nIdxPos;
                 if( pOutlineNds->Seek_Entry( pNd, &nIdxPos ))
                 {
-                    pOutlineNds->erase( pOutlineNds->begin() + nIdxPos );
+                    pOutlineNds->erase(nIdxPos);
                     bUpdateNum = 1;
                 }
             }

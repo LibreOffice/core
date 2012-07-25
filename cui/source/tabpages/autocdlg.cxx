@@ -1540,7 +1540,7 @@ sal_Bool OfaAutocorrExceptPage::FillItemSet( SfxItemSet&  )
                     if( !lcl_FindInArray(rArrays.aDoubleCapsStrings, *pString))
                     {
                       delete (*pWrdList)[ i ];
-                      pWrdList->erase( pWrdList->begin() + i );
+                      pWrdList->erase(i);
                     }
                 }
 
@@ -1565,7 +1565,7 @@ sal_Bool OfaAutocorrExceptPage::FillItemSet( SfxItemSet&  )
                     if( !lcl_FindInArray(rArrays.aAbbrevStrings, *pString))
                     {
                         delete (*pCplList)[ i ];
-                        pCplList->erase( pCplList->begin() + i );
+                        pCplList->erase(i);
                     }
                 }
 
@@ -1594,7 +1594,7 @@ sal_Bool OfaAutocorrExceptPage::FillItemSet( SfxItemSet&  )
             if( USHRT_MAX == aDoubleCapsLB.GetEntryPos(*pString) )
             {
                 delete (*pWrdList)[ i ];
-                pWrdList->erase( pWrdList->begin() + i );
+                pWrdList->erase(i);
             }
         }
         nCount = aDoubleCapsLB.GetEntryCount();
@@ -1619,7 +1619,7 @@ sal_Bool OfaAutocorrExceptPage::FillItemSet( SfxItemSet&  )
             if( USHRT_MAX == aAbbrevLB.GetEntryPos(*pString) )
             {
                 delete (*pCplList)[ i ];
-                pCplList->erase( pCplList->begin() + i );
+                pCplList->erase(i);
             }
         }
         nCount = aAbbrevLB.GetEntryCount();
