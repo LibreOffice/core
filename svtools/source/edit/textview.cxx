@@ -1367,7 +1367,7 @@ void TextView::InsertNewText( const rtl::OUString& rStr, sal_Bool bSelect )
     */
     sal_Int32 nLen = rStr.getLength();
     sal_Int32 nPos = 0;
-    while( nLen )
+    do
     {
         sal_Int32 nChunkLen = nLen > 65534 ? 65534 : nLen;
         String aChunk( rStr.copy( nPos, nChunkLen ) );
@@ -1390,6 +1390,8 @@ void TextView::InsertNewText( const rtl::OUString& rStr, sal_Bool bSelect )
         nLen -= nChunkLen;
         nPos += nChunkLen;
     }
+    while( nLen );
+
     mpImpl->mpTextEngine->UndoActionEnd();
 
     mpImpl->mpTextEngine->FormatAndUpdate( this );
