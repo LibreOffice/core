@@ -65,6 +65,9 @@ void SmRtfExport::HandleNode(const SmNode* pNode, int nLevel)
         case NTEXT:
             HandleText(pNode,nLevel);
             break;
+        case NBRACE:
+            HandleBrace( static_cast< const SmBraceNode* >( pNode ), nLevel );
+            break;
         case NBINHOR:
             HandleBinaryOperation(static_cast<const SmBinHorNode*>(pNode), nLevel);
             break;
@@ -260,6 +263,18 @@ void SmRtfExport::HandleRoot(const SmRootNode* /*pNode*/, int /*nLevel*/)
     SAL_INFO("starmath.rtf", "TODO: " << OSL_THIS_FUNC);
 }
 
+namespace {
+OString mathSymbolToString(const SmNode* node)
+{
+    assert(node->GetType() == NMATH);
+    const SmTextNode* txtnode = static_cast<const SmTextNode*>(node);
+    assert(txtnode->GetText().Len() == 1);
+    sal_Unicode chr = SmTextNode::ConvertSymbolToUnicode(txtnode->GetText().GetChar(0));
+    OUString aValue(chr);
+    return msfilter::rtfutil::OutString(aValue, RTL_TEXTENCODING_MS_1252);
+}
+}
+
 void SmRtfExport::HandleOperator(const SmOperNode* /*pNode*/, int /*nLevel*/)
 {
     SAL_INFO("starmath.rtf", "TODO: " << OSL_THIS_FUNC);
@@ -280,9 +295,49 @@ void SmRtfExport::HandleMatrix(const SmMatrixNode* /*pNode*/, int /*nLevel*/)
     SAL_INFO("starmath.rtf", "TODO: " << OSL_THIS_FUNC);
 }
 
-void SmRtfExport::HandleBrace(const SmBraceNode* /*pNode*/, int /*nLevel*/)
+void SmRtfExport::HandleBrace(const SmBraceNode* pNode, int nLevel)
 {
-    SAL_INFO("starmath.rtf", "TODO: " << OSL_THIS_FUNC);
+    m_pBuffer->append("{\\md ");
+    m_pBuffer->append("{\\mdPr ");
+    m_pBuffer->append("{\\mbegChr ");
+    m_pBuffer->append(mathSymbolToString(pNode->OpeningBrace()));
+    m_pBuffer->append("}"); // mbegChr
+    std::vector< const SmNode* > subnodes;
+    if (pNode->Body()->GetType() == NBRACEBODY)
+    {
+        const SmBracebodyNode* body = static_cast<const SmBracebodyNode*>( pNode->Body());
+        bool separatorWritten = false; // assume all separators are the same
+        for (int i = 0; i < body->GetNumSubNodes(); ++i)
+        {
+            const SmNode* subnode = body->GetSubNode(i);
+            if (subnode->GetType() == NMATH)
+            { // do not write, but write what separator it is
+                const SmMathSymbolNode* math = static_cast<const SmMathSymbolNode*>(subnode);
+                if(!separatorWritten)
+                {
+                    m_pBuffer->append("{\\msepChr ");
+                    m_pBuffer->append(mathSymbolToString(math));
+                    m_pBuffer->append("}"); // msepChr
+                    separatorWritten = true;
+                }
+            }
+            else
+                subnodes.push_back(subnode);
+        }
+    }
+    else
+        subnodes.push_back(pNode->Body());
+    m_pBuffer->append("{\\mendChr ");
+    m_pBuffer->append(mathSymbolToString(pNode->ClosingBrace()));
+    m_pBuffer->append("}"); // mendChr
+    m_pBuffer->append("}"); // mdPr
+    for (unsigned int i = 0; i < subnodes.size(); ++i)
+    {
+        m_pBuffer->append("{\\me ");
+        HandleNode(subnodes[ i ], nLevel + 1);
+        m_pBuffer->append("}"); // me
+    }
+    m_pBuffer->append("}"); // md
 }
 
 void SmRtfExport::HandleVerticalBrace(const SmVerticalBraceNode* /*pNode*/, int /*nLevel*/)
