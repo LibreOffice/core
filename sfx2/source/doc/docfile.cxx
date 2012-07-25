@@ -136,10 +136,10 @@ static const sal_Int8 LOCK_UI_SUCCEEDED = 1;
 static const sal_Int8 LOCK_UI_TRY = 2;
 
 //----------------------------------------------------------------
-sal_Bool IsSystemFileLockingUsed()
+bool IsSystemFileLockingUsed()
 {
     // check whether system file locking has been used, the default value is false
-    sal_Bool bUseSystemLock = false;
+    bool bUseSystemLock = false;
     try
     {
 
@@ -163,10 +163,10 @@ sal_Bool IsSystemFileLockingUsed()
 }
 
 //----------------------------------------------------------------
-sal_Bool IsOOoLockFileUsed()
+bool IsOOoLockFileUsed()
 {
     // check whether system file locking has been used, the default value is false
-    sal_Bool bOOoLockFileUsed = false;
+    bool bOOoLockFileUsed = false;
     try
     {
 
@@ -291,7 +291,7 @@ public:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler > xInteraction;
 
-    sal_Bool        m_bRemoveBackup;
+    bool        m_bRemoveBackup;
     ::rtl::OUString m_aBackupURL;
 
     // the following member is changed and makes sence only during saving
@@ -545,7 +545,7 @@ Reference < XContent > SfxMedium::GetContent() const
     if ( bForSaving )
     {
         SvtSaveOptions aOpt;
-        sal_Bool bIsRemote = IsRemote();
+        bool bIsRemote = IsRemote();
         if( (bIsRemote && !aOpt.IsSaveRelINet()) || (!bRemote && !aOpt.IsSaveRelFSys()) )
             return ::rtl::OUString();
     }
@@ -719,7 +719,7 @@ sal_Bool SfxMedium::Commit()
         Transfer_Impl();
     }
 
-    sal_Bool bResult = ( GetError() == SVSTREAM_OK );
+    bool bResult = ( GetError() == SVSTREAM_OK );
 
     if ( bResult && DocNeedsFileDateCheck() )
         GetInitFileDate( true );
@@ -762,7 +762,7 @@ sal_Bool SfxMedium::IsStorage()
 //------------------------------------------------------------------
 sal_Bool SfxMedium::IsPreview_Impl()
 {
-    sal_Bool bPreview = false;
+    bool bPreview = false;
     SFX_ITEMSET_ARG( GetItemSet(), pPreview, SfxBoolItem, SID_PREVIEW, false);
     if ( pPreview )
         bPreview = pPreview->GetValue();
@@ -1013,7 +1013,7 @@ bool SfxMedium::LockOrigFileOnDemand( sal_Bool bLoading, sal_Bool bNoUI )
 
         if ( !bResult && !IsReadOnly() )
         {
-            sal_Bool bContentReadonly = false;
+            bool bContentReadonly = false;
             if ( bLoading && ::utl::LocalFileHelper::IsLocalFile( GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) ) )
             {
                 // let the original document be opened to check the possibility to open it for editing
@@ -1071,11 +1071,11 @@ bool SfxMedium::LockOrigFileOnDemand( sal_Bool bLoading, sal_Bool bNoUI )
                     sal_Int8 bUIStatus = LOCK_UI_NOLOCK;
 
                     // check whether system file locking has been used, the default value is false
-                    sal_Bool bUseSystemLock = ::utl::LocalFileHelper::IsLocalFile( aLogicName ) && IsSystemFileLockingUsed();
+                    bool bUseSystemLock = ::utl::LocalFileHelper::IsLocalFile( aLogicName ) && IsSystemFileLockingUsed();
 
                     // TODO/LATER: This implementation does not allow to detect the system lock on saving here, actually this is no big problem
                     // if system lock is used the writeable stream should be available
-                    sal_Bool bHandleSysLocked = ( bLoading && bUseSystemLock && !pImp->xStream.is() && !pOutStream );
+                    bool bHandleSysLocked = ( bLoading && bUseSystemLock && !pImp->xStream.is() && !pOutStream );
 
                     do
                     {
@@ -1155,7 +1155,7 @@ bool SfxMedium::LockOrigFileOnDemand( sal_Bool bLoading, sal_Bool bNoUI )
                                 {
                                 }
 
-                                sal_Bool bOwnLock = false;
+                                bool bOwnLock = false;
 
                                 if ( !bHandleSysLocked )
                                 {
@@ -1322,7 +1322,7 @@ uno::Reference < embed::XStorage > SfxMedium::GetStorage( sal_Bool bCreateTempIf
 
     SFX_ITEMSET_ARG( pSet, pVersion, SfxInt16Item, SID_VERSION, false);
 
-    sal_Bool bResetStorage = false;
+    bool bResetStorage = false;
     if ( pVersion && pVersion->GetValue() )
     {
         // Read all available versions
@@ -1519,7 +1519,7 @@ sal_Bool SfxMedium::UseBackupToRestore_Impl( ::ucbhelper::Content& aOriginalCont
 //------------------------------------------------------------------
 sal_Bool SfxMedium::StorageCommit_Impl()
 {
-    sal_Bool bResult = false;
+    bool bResult = false;
     Reference< ::com::sun::star::ucb::XCommandEnvironment > xDummyEnv;
     ::ucbhelper::Content aOriginalContent;
 
@@ -1580,7 +1580,7 @@ sal_Bool SfxMedium::TransactedTransferForFS_Impl( const INetURLObject& aSource,
                                                  const INetURLObject& aDest,
                                                  const Reference< ::com::sun::star::ucb::XCommandEnvironment >& xComEnv )
 {
-    sal_Bool bResult = false;
+    bool bResult = false;
     Reference< ::com::sun::star::ucb::XCommandEnvironment > xDummyEnv;
     Reference< XOutputStream > aDestStream;
     ::ucbhelper::Content aOriginalContent;
@@ -1623,11 +1623,11 @@ sal_Bool SfxMedium::TransactedTransferForFS_Impl( const INetURLObject& aSource,
         ::ucbhelper::Content aTempCont;
         if( ::ucbhelper::Content::create( aSource.GetMainURL( INetURLObject::NO_DECODE ), xDummyEnv, aTempCont ) )
         {
-            sal_Bool bTransactStarted = false;
+            bool bTransactStarted = false;
             SFX_ITEMSET_ARG( GetItemSet(), pOverWrite, SfxBoolItem, SID_OVERWRITE, false );
                SFX_ITEMSET_ARG( GetItemSet(), pRename, SfxBoolItem, SID_RENAME, false );
-            sal_Bool bRename = pRename ? pRename->GetValue() : false;
-            sal_Bool bOverWrite = pOverWrite ? pOverWrite->GetValue() : !bRename;
+            bool bRename = pRename ? pRename->GetValue() : false;
+            bool bOverWrite = pOverWrite ? pOverWrite->GetValue() : !bRename;
 
             try
             {
@@ -2125,7 +2125,7 @@ void SfxMedium::DoBackup_Impl()
     if ( !::utl::UCBContentHelper::IsDocument( aSource.GetMainURL( INetURLObject::NO_DECODE ) ) )
         return;
 
-    sal_Bool        bSuccess = false;
+    bool        bSuccess = false;
 
     // get path for backups
     String aBakDir = SvtPathOptions().GetBackupPath();
@@ -2277,7 +2277,7 @@ void SfxMedium::GetMedium_Impl()
 
             // in case the temporary file exists the streams should be initialized from it,
             // but the original MediaDescriptor should not be changed
-            sal_Bool bFromTempFile = ( pImp->pTempFile != NULL );
+            bool bFromTempFile = ( pImp->pTempFile != NULL );
 
             if ( !bFromTempFile )
             {
@@ -2788,7 +2788,7 @@ void SfxMedium::SetPhysicalName_Impl( const rtl::OUString& rNameP )
 
 void SfxMedium::ReOpen()
 {
-    sal_Bool bUseInteractionHandler = pImp->bUseInteractionHandler;
+    bool bUseInteractionHandler = pImp->bUseInteractionHandler;
     pImp->bUseInteractionHandler = false;
     GetMedium_Impl();
     pImp->bUseInteractionHandler = bUseInteractionHandler;
@@ -2799,7 +2799,7 @@ void SfxMedium::ReOpen()
 void SfxMedium::CompleteReOpen()
 {
     // do not use temporary file for reopen and in case of success throw the temporary file away
-    sal_Bool bUseInteractionHandler = pImp->bUseInteractionHandler;
+    bool bUseInteractionHandler = pImp->bUseInteractionHandler;
     pImp->bUseInteractionHandler = false;
 
     ::utl::TempFile* pTmpFile = NULL;
@@ -3223,7 +3223,7 @@ sal_Bool SfxMedium::SaveVersionList_Impl( sal_Bool /*bUseXML*/ )
 //----------------------------------------------------------------
 sal_Bool SfxMedium::IsReadOnly()
 {
-    sal_Bool bReadOnly = false;
+    bool bReadOnly = false;
 
     // a) ReadOnly filter cant produce read/write contents!
     bReadOnly = (
@@ -3256,7 +3256,7 @@ sal_Bool SfxMedium::SetWritableForUserOnly( const ::rtl::OUString& aURL )
 {
     // UCB does not allow to allow write access only for the user,
     // use osl API
-    sal_Bool bResult = false;
+    bool bResult = false;
 
     ::osl::DirectoryItem aDirItem;
     if ( ::osl::DirectoryItem::get( aURL, aDirItem ) == ::osl::FileBase::E_None )
@@ -3305,7 +3305,7 @@ void SfxMedium::CreateTempFile( sal_Bool bReplace )
 
     if ( !( nStorOpenMode & STREAM_TRUNC ) )
     {
-        sal_Bool bTransferSuccess = false;
+        bool bTransferSuccess = false;
 
         if ( GetContent().is()
           && ::utl::LocalFileHelper::IsLocalFile( GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) )
@@ -3412,7 +3412,7 @@ void SfxMedium::SetCharset( ::rtl::OUString aChs )
 
 sal_Bool SfxMedium::SignContents_Impl( sal_Bool bScriptingContent, const ::rtl::OUString& aODFVersion, sal_Bool bHasValidDocumentSignature )
 {
-    sal_Bool bChanges = false;
+    bool bChanges = false;
 
     // the medium should be closed to be able to sign, the caller is responsible to close it
     if ( !IsOpen() && !GetError() )
@@ -3593,7 +3593,7 @@ sal_Bool SfxMedium::IsOpen() const
 
 sal_Bool SfxMedium::CallApproveHandler( const uno::Reference< task::XInteractionHandler >& xHandler, uno::Any aRequest, sal_Bool bAllowAbort )
 {
-    sal_Bool bResult = false;
+    bool bResult = false;
 
     if ( xHandler.is() )
     {
@@ -3649,7 +3649,7 @@ sal_Bool SfxMedium::CallApproveHandler( const uno::Reference< task::XInteraction
                 SetName( aNewURL );
 
                 // remove the readonly state
-                sal_Bool bWasReadonly = false;
+                bool bWasReadonly = false;
                 nStorOpenMode = SFX_STREAM_READWRITE;
                 SFX_ITEMSET_ARG( pSet, pReadOnlyItem, SfxBoolItem, SID_DOC_READONLY, false );
                 if ( pReadOnlyItem && pReadOnlyItem->GetValue() )
@@ -3697,7 +3697,7 @@ sal_Bool SfxMedium::CallApproveHandler( const uno::Reference< task::XInteraction
 sal_Bool SfxMedium::SwitchDocumentToFile( ::rtl::OUString aURL )
 {
     // the method is only for storage based documents
-    sal_Bool bResult = false;
+    bool bResult = false;
     ::rtl::OUString aOrigURL = aLogicName;
 
     if ( !aURL.isEmpty() && !aOrigURL.isEmpty() )
