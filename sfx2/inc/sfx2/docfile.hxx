@@ -83,7 +83,6 @@ class SFX2_DLLPUBLIC SfxMedium : public SvRefBase
 
     com::sun::star::uno::Reference<com::sun::star::io::XInputStream>
     m_xInputStreamToLoadFrom;
-    bool                m_bInputStreamIsReadOnly;
 
 #if _SOLAR__PRIVATE
     SAL_DLLPRIVATE void SetIsRemote_Impl();
@@ -131,8 +130,9 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >
                         GetInteractionHandler();
 
-    void setStreamToLoadFrom(const com::sun::star::uno::Reference<com::sun::star::io::XInputStream>& xInputStream,sal_Bool bIsReadOnly )
-    { m_xInputStreamToLoadFrom = xInputStream; m_bInputStreamIsReadOnly = bIsReadOnly; }
+    void setStreamToLoadFrom(
+        const com::sun::star::uno::Reference<com::sun::star::io::XInputStream>& xInputStream,
+        sal_Bool bIsReadOnly);
 
     void                SetLoadTargetFrame(SfxFrame* pFrame );
     SfxFrame*           GetLoadTargetFrame() const;
