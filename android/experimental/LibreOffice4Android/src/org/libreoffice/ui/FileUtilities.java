@@ -194,6 +194,24 @@ public class FileUtilities {
 		}
 		return;
 	}
+
+    static boolean hasThumbnail(File file)
+    {
+        String filename = file.getName();
+        if( lookupExtension( filename ) == DOC ) // only do this for docs for now
+        {
+            // Will need another method to check if Thumb is up-to-date - or extend this one?
+            if( new File( file.getParent() , getThumbnailName( file ) ).isFile() )
+                return true;
+            return false; // If it's a document with no thumb
+        }
+        return true;
+    }
+
+    static String getThumbnailName( File file )
+    {
+        return "." + file.getName().split("[.]")[0] + ".png" ;
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
