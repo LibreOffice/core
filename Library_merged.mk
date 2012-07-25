@@ -88,4 +88,8 @@ $(eval $(call gb_Library_use_libraries,merged,\
 ))
 endif
 
+ifeq ($(ENABLE_TELEPATHY),TRUE)
+$(eval $(call gb_Library_use_libraries,merged,tubes))
+endif
+
 # vim: set noet sw=4 ts=4:
