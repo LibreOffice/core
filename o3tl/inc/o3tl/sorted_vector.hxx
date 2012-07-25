@@ -34,7 +34,6 @@ public:
     typedef typename std::vector<Value>::size_type size_type;
 
     using base_t::clear;
-    using base_t::erase;
     using base_t::empty;
     using base_t::size;
 
@@ -56,7 +55,7 @@ public:
         iterator it = lower_bound_nonconst( x );
         if (it != base_t::end() && !less_than(x, *it))
         {
-            erase( it );
+            base_t::erase(it);
             return 1;
         }
         return 0;
@@ -67,7 +66,12 @@ public:
         base_t::erase( begin_nonconst() + index );
     }
 
-    // hack: public erase with const_iterator, should not change sort order
+    // like C++ 2011: erase with const_iterator (doesn't change sort order)
+    void erase(const_iterator const& position)
+    {   // C++98 has vector::erase(iterator), so call that
+        base_t::erase(begin_nonconst() + (position - begin()));
+    }
+
     void erase(const_iterator const& first, const_iterator const& last)
     {
         base_t::erase(begin_nonconst() + (first - begin()),
