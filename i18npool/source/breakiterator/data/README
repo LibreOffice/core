@@ -69,85 +69,6 @@ Date:   Thu Oct 2 13:51:29 2008 +0000
 
     #i80412#
 
-commit 672a654fa6b447df0397942c1fa6594bb63264b9
-Author: Kurt Zenker <kz@openoffice.org>
-Date:   Thu Aug 14 15:31:04 2008 +0000
-
-    INTEGRATION: CWS i18n44 (1.2.132); FILE MERGED
-    2008/07/23 23:07:46 khong 1.2.132.1: #i85411# Apply patch for ZWSP
-
-commit c75401da0c36bb518c41971d07660010ec745dd0
-Author: Kurt Zenker <kz@openoffice.org>
-Date:   Thu Aug 14 15:30:52 2008 +0000
-
-    INTEGRATION: CWS i18n44 (1.2.230); FILE MERGED
-    2008/07/23 23:07:46 khong 1.2.230.1: #i85411# Apply patch for ZWSP
-
-commit 43f49bd7d04fcc64941b5576a804f1b8bab76423
-Author: Kurt Zenker <kz@openoffice.org>
-Date:   Thu Aug 14 15:30:39 2008 +0000
-
-    INTEGRATION: CWS i18n44 (1.3.314); FILE MERGED
-    2008/07/23 23:07:46 khong 1.3.314.1: #i85411# Apply patch for ZWSP
-
-commit 8c4bc258ab77b586325a868d75094b1e041bd57e
-Author: Kurt Zenker <kz@openoffice.org>
-Date:   Thu Aug 14 15:30:26 2008 +0000
-
-    INTEGRATION: CWS i18n44 (1.5.214); FILE MERGED
-    2008/07/23 23:07:45 khong 1.5.214.1: #i85411# Apply patch for ZWSP
-
-commit 0c008c4b9b1957fffb62175a31a7085f98afbd6a
-Author: Kurt Zenker <kz@openoffice.org>
-Date:   Thu Aug 14 15:30:05 2008 +0000
-
-    INTEGRATION: CWS i18n44 (1.3.214); FILE MERGED
-    2008/07/23 23:07:45 khong 1.3.214.1: #i85411# Apply patch for ZWSP
-
-commit 01a7b977a133a910845c7226f36640f2edaf2ce9
-Author: Kurt Zenker <kz@openoffice.org>
-Date:   Thu Aug 14 15:29:53 2008 +0000
-
-    INTEGRATION: CWS i18n44 (1.2.184); FILE MERGED
-    2008/07/23 23:07:45 khong 1.2.184.1: #i85411# Apply patch for ZWSP
-
-commit 77cd396b673caa67dc1d56ecf44ee5f619244e77
-Author: Kurt Zenker <kz@openoffice.org>
-Date:   Thu Aug 14 15:29:40 2008 +0000
-
-    INTEGRATION: CWS i18n44 (1.2.114); FILE MERGED
-    2008/07/23 23:07:45 khong 1.2.114.1: #i85411# Apply patch for ZWSP
-
-commit 1e8949e19eb5f63504ab634c9a3e55b4b48484e0
-Author: Kurt Zenker <kz@openoffice.org>
-Date:   Thu Aug 14 15:29:27 2008 +0000
-
-    INTEGRATION: CWS i18n44 (1.4.214); FILE MERGED
-    2008/07/23 23:07:45 khong 1.4.214.1: #i85411# Apply patch for ZWSP
-
-commit 601733f145bf518eec4d29c2319c1f61ebd83d96
-Author: Kurt Zenker <kz@openoffice.org>
-Date:   Thu Aug 14 15:29:14 2008 +0000
-
-    INTEGRATION: CWS i18n44 (1.5.214); FILE MERGED
-    2008/07/23 23:07:45 khong 1.5.214.2: #i85411# Apply patch for ZWSP
-    2008/07/23 07:35:04 khong 1.5.214.1: #i85411# Apply patch for ZWSP
-
-commit 744a220b2950f488c50e7380fd45232e24921438
-Author: Kurt Zenker <kz@openoffice.org>
-Date:   Thu Aug 14 15:28:18 2008 +0000
-
-    INTEGRATION: CWS i18n44 (1.3.18); FILE MERGED
-    2008/07/23 23:07:45 khong 1.3.18.1: #i85411# Apply patch for ZWSP
-
-commit 8ead581613efb4ecd6121a195e04c4f5a7bc8bf1
-Author: Kurt Zenker <kz@openoffice.org>
-Date:   Thu Aug 14 15:27:36 2008 +0000
-
-    INTEGRATION: CWS i18n44 (1.27.6); FILE MERGED
-    2008/07/24 16:12:44 khong 1.27.6.2: #i85411# Apply patch for ZWSP
-    2008/07/23 23:07:44 khong 1.27.6.1: #i85411# Apply patch for ZWSP
-
 commit 9964a76ef58786bba47d409970512d7ded6c8889
 Author: Rüdiger Timm <rt@openoffice.org>
 Date:   Wed Jul 2 07:53:05 2008 +0000
@@ -700,6 +621,7 @@ Date:   Tue Jan 20 12:20:28 2004 +0000
 
 done, regression tests added:
 
+#i85411# Apply patch for ZWSP
 #i17155# fix line breakiterator rule to make slash and hyphen as part of word when doing line break
 #i13451# add '-' as midLetter for Catalan dictionary word breakiterator
 #i13494# fix word breakiterator rule to handle punctuations and signs correctly

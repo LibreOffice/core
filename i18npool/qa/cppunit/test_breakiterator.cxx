@@ -397,6 +397,44 @@ void TestBreakIterator::testWordBoundaries()
         while (nPos++ < aTest.getLength());
         CPPUNIT_ASSERT(i == SAL_N_ELEMENTS(aExpected));
     }
+
+    //See https://issues.apache.org/ooo/show_bug.cgi?id=85411
+    for (int j = 0; j < 2; ++j)
+    {
+        switch (j)
+        {
+            case 0:
+                aLocale.Language = rtl::OUString("en");
+                aLocale.Country = rtl::OUString("US");
+                break;
+            case 1:
+                aLocale.Language = rtl::OUString("ca");
+                aLocale.Country = rtl::OUString("ES");
+                break;
+            default:
+                CPPUNIT_ASSERT(false);
+                break;
+        }
+
+        const sal_Unicode TEST[] =
+        {
+            'I', 0x200B, 'w', 'a', 'n', 't', 0x200B, 't', 'o', 0x200B, 'g', 'o'
+        };
+        rtl::OUString aTest(TEST, SAL_N_ELEMENTS(TEST));
+
+        sal_Int32 nPos = 0;
+        sal_Int32 aExpected[] = {1, 6, 9, 12};
+        size_t i = 0;
+        do
+        {
+            CPPUNIT_ASSERT(i < SAL_N_ELEMENTS(aExpected));
+            nPos = m_xBreak->getWordBoundary(aTest, nPos, aLocale,
+                i18n::WordType::DICTIONARY_WORD, true).endPos;
+            CPPUNIT_ASSERT(aExpected[i++] == nPos);
+        }
+        while (nPos++ < aTest.getLength());
+        CPPUNIT_ASSERT(i == SAL_N_ELEMENTS(aExpected));
+    }
 }
 
 //See http://qa.openoffice.org/issues/show_bug.cgi?id=111152
