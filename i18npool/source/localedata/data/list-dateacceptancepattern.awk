@@ -7,12 +7,13 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-# Usage: gawk -f list-dateacceptancepattern.awk *.xml [--html]
+# Usage: gawk -f list-dateacceptancepattern.awk *.xml [--sep [--html]]
 #
 # Outputs three lists of locales, one with DateAcceptancePattern elements
 # defined, one with inherited LC_FORMAT elements and thus date patterns, and
 # one where no DateAcceptancePattern are defined.
 #
+# If --sep is given, display date separator for each locale.
 # If --html is given as the last parameter, format output suitable for
 # inclusion in HTML.
 
@@ -22,18 +23,19 @@ BEGIN {
         html = 1
         --ARGC
     }
+    sep = 0
+    if (ARGV[ARGC-1] == "--sep") {
+        sep = 1
+        --ARGC
+    }
     file = ""
     offlocale = 0
-    offpatterns = 1
+    offpatterncount = 1
     offinherit = 2
-    inheritedcount = 0
-    if (html)
-        print "<p>"
-    else
-        print ""
-    print "Locales with explicit DateAcceptancePattern elements:"
-    if (html)
-        print "<ul>"
+    offbequeath = 3
+    offdatesep = 4
+    offdateformat = 5
+    offpatterns = 6
 }
 
 
@@ -41,13 +43,16 @@ file != FILENAME {
     if (file)
         endFile()
     file = FILENAME
-    patterns = 0
+    patterncount = 0
     inherited = ""
+    formatelement = 0
+    datesep = ""
+    dateformat = ""
 }
 
 /<DateAcceptancePattern>/ {
     split( $0, a, /<|>/ )
-    pattern[patterns++] = a[3]
+    patterns[patterncount++] = a[3]
 }
 
 # pattern inherited as well
@@ -56,30 +61,77 @@ file != FILENAME {
     inherited = a[2]
 }
 
+/<FormatElement[^>]* formatindex="21"[^>]*>/ { formatelement = 1 }
+/<FormatCode>/ {
+    if (formatelement)
+    {
+        formatelement = 0
+        split( $0, a, /<|>/ )
+        split( a[3], b, /[0-9A-Za-z\[\~\]]+/ )
+        datesep = b[2]
+        dateformat = a[3]
+    }
+}
+
 
 END {
     if (file)
         endFile()
 
-    PROCINFO["sorted_in"] = "@ind_str_asc"
-
     fillAllInherited()
 
+    PROCINFO["sorted_in"] = "@ind_str_asc"
+
+    if (html)
+        print "<p>"
+    else
+        print ""
+    printLine( "Trailing + indicates that another locale inherits from this." )
+    if (sep)
+        printLine( "Appended is the locale's date separator and edit format code." )
+    printLine("")
+    printLine( "Locales with explicit DateAcceptancePattern elements:" )
     if (html)
     {
+        print "<ul>"
+        for (i in LocaleList)
+        {
+            if (LocaleList[i][offpatterns][0])
+            {
+                print "  <li> " getInheritance( LocaleList[i][offlocale], LocaleList[i][offlocale])
+                print "  <ul>"
+                for (p = 0; p < LocaleList[i][offpatterncount]; ++p)
+                {
+                    print "    <li> " LocaleList[i][offpatterns][p]
+                }
+                print "  </ul>"
+            }
+        }
         print "</ul>"
         print "\n<p>"
     }
     else
-        print "\n"
-
-    print "Locales inheriting patterns:"
-    if (html)
     {
-        print "<br>"
         for (i in LocaleList)
         {
-            if (LocaleList[i][offinherit] && LocaleList[i][offpatterns])
+            if (LocaleList[i][offpatterns][0])
+            {
+                print getInheritance( LocaleList[i][offlocale], LocaleList[i][offlocale])
+                for (p = 0; p < LocaleList[i][offpatterncount]; ++p)
+                {
+                    print "    " LocaleList[i][offpatterns][p]
+                }
+            }
+        }
+        print "\n"
+    }
+
+    printLine( "Locales inheriting patterns:" )
+    if (html)
+    {
+        for (i in LocaleList)
+        {
+            if (LocaleList[i][offinherit] && LocaleList[i][offpatterncount])
                 print getInheritance( LocaleList[i][offlocale], LocaleList[i][offlocale]) "&nbsp;&nbsp;&nbsp; "
         }
         print "\n<p>"
@@ -88,23 +140,20 @@ END {
     {
         for (i in LocaleList)
         {
-            if (LocaleList[i][offinherit] && LocaleList[i][offpatterns])
+            if (LocaleList[i][offinherit] && LocaleList[i][offpatterncount])
                 print getInheritance( LocaleList[i][offlocale], LocaleList[i][offlocale])
         }
         print "\n"
     }
 
-    print "Locales without explicit DateAcceptancePattern elements:"
-    if (html)
-        print "<br>"
-    print "(one implicit full date pattern is always generated)"
-    if (html)
-        print "<p>"
+    printLine( "Locales without explicit DateAcceptancePattern elements:" )
+    printLine( "(one implicit full date pattern is always generated)" )
     if (html)
     {
+        print "<p>"
         for (i in LocaleList)
         {
-            if (!LocaleList[i][offpatterns])
+            if (!LocaleList[i][offpatterncount])
                 print getInheritance( LocaleList[i][offlocale], LocaleList[i][offlocale]) "&nbsp;&nbsp;&nbsp; "
         }
     }
@@ -112,36 +161,31 @@ END {
     {
         for (i in LocaleList)
         {
-            if (!LocaleList[i][offpatterns])
+            if (!LocaleList[i][offpatterncount])
                 print getInheritance( LocaleList[i][offlocale], LocaleList[i][offlocale])
         }
     }
 }
 
 
+function printLine( text ) {
+    print text
+    if (html)
+        print "<br>"
+}
+
+
 function endFile(       locale ) {
     locale =  getLocale( file)
     LocaleList[locale][offlocale] = locale
-    LocaleList[locale][offpatterns] = patterns
-    if (patterns)
+    LocaleList[locale][offpatterncount] = patterncount
+    LocaleList[locale][offdatesep] = datesep
+    LocaleList[locale][offdateformat] = dateformat
+    if (patterncount)
     {
-        if (html)
+        for ( i=0; i<patterncount; ++i )
         {
-            print "  <li> " locale ":"
-            print "  <ul>"
-            for ( i=0; i<patterns; ++i )
-            {
-                print "    <li> " pattern[i]
-            }
-            print "  </ul>"
-        }
-        else
-        {
-            print locale ":"
-            for ( i=0; i<patterns; ++i )
-            {
-                print "    " pattern[i]
-            }
+            LocaleList[locale][offpatterns][i] = patterns[i]
         }
     }
     else if (inherited)
@@ -158,24 +202,33 @@ function getLocale( file,       tmp ) {
 
 
 function fillInherited( locale ) {
-    if (!LocaleList[locale][offpatterns] && LocaleList[locale][offinherit])
-        LocaleList[locale][offpatterns] = fillInherited( LocaleList[locale][offinherit])
-    return LocaleList[locale][offpatterns]
+    LocaleList[locale][offbequeath] = 1
+    if (!LocaleList[locale][offpatterncount] && LocaleList[locale][offinherit])
+        LocaleList[locale][offpatterncount] = fillInherited( LocaleList[locale][offinherit])
+    return LocaleList[locale][offpatterncount]
 }
 
 
 function fillAllInherited(      i ) {
     for (i in LocaleList)
     {
-        if (!LocaleList[i][offpatterns] && LocaleList[i][offinherit])
-            LocaleList[i][offpatterns] = fillInherited( LocaleList[i][offinherit])
+        LocaleList[i][offbequeath] = 0
+    }
+    for (i in LocaleList)
+    {
+        if (!LocaleList[i][offpatterncount] && LocaleList[i][offinherit])
+            LocaleList[i][offpatterncount] = fillInherited( LocaleList[i][offinherit])
     }
 }
 
 
 function getInheritance( str, locale ) {
+    if (LocaleList[locale][offbequeath])
+        str = str " +"
     if (LocaleList[locale][offinherit])
         str = getInheritance( str " = " LocaleList[locale][offinherit], LocaleList[locale][offinherit])
+    else if (sep)
+        str = str "\t'" LocaleList[locale][offdatesep] "'  (" LocaleList[locale][offdateformat] ")"
     return str
 }
 
