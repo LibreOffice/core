@@ -145,8 +145,7 @@ struct SwContentAtPos
 const int CRSR_POSOLD = 0x01,   // cursor stays at old position
           CRSR_POSCHG = 0x02;   // position changed by the layout
 
-// Helperfunction to resolve backward references in regular expressions
-
+/// Helperfunction to resolve backward references in regular expressions
 String *ReplaceBackReferences( const com::sun::star::util::SearchOptions& rSearchOpt, SwPaM* pPam );
 
 class SW_DLLPUBLIC SwCrsrShell
@@ -164,7 +163,7 @@ class SW_DLLPUBLIC SwCrsrShell
 
 public:
 
-    /* for calling UpdateCrsr */
+    /** for calling UpdateCrsr */
     enum CrsrFlag {
         UPDOWN      = (1 << 0),     ///< keep Up/Down on columns
         SCROLLWIN   = (1 << 1),     ///< scroll window
@@ -180,9 +179,9 @@ private:
     Point   aOldRBPos;          ///< Right/Bottom of last VisArea
                                 // (used in Invalidate by Cursor)
 
-    Link aFlyMacroLnk;          /*!< Link will be called, if the Crsr is set
+    Link aFlyMacroLnk;          /**< Link will be called, if the Crsr is set
                                    into a fly. A macro can be then becalled */
-    Link aChgLnk;               /*!< link will be called by every attribut/
+    Link aChgLnk;               /**< link will be called by every attribut/
                                    format changes at cursor position.*/
     Link aGrfArrivedLnk;        ///< Link calls to UI if a graphic is arrived
 
@@ -192,13 +191,13 @@ private:
 
     IBlockCursor *pBlockCrsr;   ///< interface of cursor for block (=rectangular) selection
 
-    SwShellTableCrsr* pTblCrsr; /*!< table Crsr; only in tables when the
+    SwShellTableCrsr* pTblCrsr; /**< table Crsr; only in tables when the
                                    selection lays over 2 columns */
 
     SwNodeIndex* pBoxIdx;       ///< for recognizing of the changed
     SwTableBox* pBoxPtr;        ///< table row
 
-    long nUpDownX;              /*!< try to move the cursor on up/down always
+    long nUpDownX;              /**< try to move the cursor on up/down always
                                    in the same column */
     long nLeftFrmPos;
     sal_uLong nAktNode;             // save CursorPos at Start-Action

@@ -145,14 +145,14 @@ struct SwCrsrMoveState
     sal_Bool bFieldInfo;            ///< should be fields recognized?
     sal_Bool bPosCorr;              ///< Point had to be corrected
     sal_Bool bFtnNoInfo;            ///< recognized footnote numbering
-    sal_Bool bExactOnly;            ///< let GetCrsrOfst look for exact matches only,
-                                    // i.e. never let it run into GetCntntPos
+    sal_Bool bExactOnly;            /**< let GetCrsrOfst look for exact matches only,
+                                         i.e. never let it run into GetCntntPos */
     sal_Bool bFillRet;              ///< only used temporary in FillMode
     sal_Bool bSetInReadOnly;        ///< ReadOnly areas may be entered
     sal_Bool bRealWidth;            ///< Calculation of the width required
     sal_Bool b2Lines;               ///< Check 2line portions and fill p2Lines
     sal_Bool bNoScroll;             ///< No scrolling of undersized textframes
-    sal_Bool bPosMatchesBounds;     /*!< GetCrsrOfst should not return the next
+    sal_Bool bPosMatchesBounds;     /**< GetCrsrOfst should not return the next
                                        position if screen position is inside second
                                        have of bound rect */
 
@@ -163,8 +163,8 @@ struct SwCrsrMoveState
        cursor in front of label
      */
     sal_Bool bInFrontOfLabel;
-    sal_Bool bInNumPortion;         // point is in number portion #i23726#
-    int nInNumPostionOffset;     // distance from number portion's start
+    sal_Bool bInNumPortion;         ///< point is in number portion #i23726#
+    int nInNumPostionOffset;        ///< distance from number portion's start
 
     SwCrsrMoveState( CrsrMoveState eSt = MV_NONE ) :
         pFill( NULL ),
