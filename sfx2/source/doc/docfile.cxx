@@ -261,6 +261,7 @@ public:
     bool m_bRemoveBackup:1;
     bool m_bOriginallyReadOnly:1;
     bool m_bRoot:1;
+    bool m_bSetFilter:1;
 
     uno::Reference < embed::XStorage > xStorage;
 
@@ -328,6 +329,7 @@ SfxMedium_Impl::SfxMedium_Impl( SfxMedium* pAntiImplP )
     m_bRemoveBackup( false ),
     m_bOriginallyReadOnly(false),
     m_bRoot(false),
+    m_bSetFilter(false),
     pAntiImpl( pAntiImplP ),
     nFileVersion( 0 ),
     pOrigFilter( 0 ),
@@ -1479,7 +1481,7 @@ void SfxMedium::SetOpenMode( StreamMode nStorOpen,
         }
     }
 
-    bSetFilter  = false;
+    pImp->m_bSetFilter = false;
 }
 
 //------------------------------------------------------------------
@@ -2481,7 +2483,6 @@ void SfxMedium::Init_Impl()
 //------------------------------------------------------------------
 SfxMedium::SfxMedium() :
     eError( SVSTREAM_OK ),
-    bSetFilter( false ),
     bTriedStorage( false ),
     nStorOpenMode( SFX_STREAM_READWRITE ),
     pURLObj(0),
@@ -2830,7 +2831,6 @@ void SfxMedium::CompleteReOpen()
 
 SfxMedium::SfxMedium(const String &rName, StreamMode nOpenMode, const SfxFilter *pFlt, SfxItemSet *pInSet) :
     eError( SVSTREAM_OK ),
-    bSetFilter( false ),
     bTriedStorage( false ),
     nStorOpenMode( SFX_STREAM_READWRITE ),
     pURLObj(0),
@@ -2847,7 +2847,6 @@ SfxMedium::SfxMedium(const String &rName, StreamMode nOpenMode, const SfxFilter 
 
 
 SfxMedium::SfxMedium( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgs ) :
-    bSetFilter( false ),
     bTriedStorage( false ),
     nStorOpenMode( SFX_STREAM_READWRITE ),
     pURLObj(0),
@@ -2908,7 +2907,6 @@ SfxMedium::SfxMedium( const ::com::sun::star::uno::Sequence< ::com::sun::star::b
 //------------------------------------------------------------------
 
 SfxMedium::SfxMedium( const uno::Reference < embed::XStorage >& rStor, const String& rBaseURL, const SfxItemSet* p, sal_Bool bRootP ) :
-    bSetFilter( false ),
     bTriedStorage( false ),
     nStorOpenMode( SFX_STREAM_READWRITE ),
     pURLObj(0),
@@ -2934,7 +2932,6 @@ SfxMedium::SfxMedium( const uno::Reference < embed::XStorage >& rStor, const Str
 }
 
 SfxMedium::SfxMedium( const uno::Reference < embed::XStorage >& rStor, const String& rBaseURL, const String& rTypeName, const SfxItemSet* p, sal_Bool bRootP ) :
-    bSetFilter( false ),
     bTriedStorage( false ),
     nStorOpenMode( SFX_STREAM_READWRITE ),
     pURLObj(0),
