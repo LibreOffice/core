@@ -16,6 +16,7 @@ import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
 import android.text.format.DateFormat;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -135,7 +136,7 @@ public class PresentationActivity extends Activity {
 
 			mTimeLabel = (ToggleButton) aBar.getCustomView().findViewById(
 			                R.id.actionbar_time);
-			mThumbnailButton.setOnClickListener(this);
+			mTimeLabel.setOnClickListener(this);
 
 			// Listen for fragment changes
 			getFragmentManager().addOnBackStackChangedListener(this);
@@ -184,7 +185,11 @@ public class PresentationActivity extends Activity {
 					getFragmentManager().popBackStack();
 				}
 			} else if (aSource == mTimeLabel) {
-
+				System.out.println("added");
+				LayoutInflater aInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+				View v = aInflater.inflate(R.layout.presentation_clockbar,
+				                mLayout);
+				//				mLayout.addView(v);
 			}
 
 		}
