@@ -77,7 +77,6 @@ class SFX2_DLLPUBLIC SfxMedium : public SvRefBase
     const SfxFilter*    pFilter;
     SfxItemSet*         pSet;
     SfxMedium_Impl*     pImp;
-    rtl::OUString       aLogicName;
     rtl::OUString       aLongName;
 
     com::sun::star::uno::Reference<com::sun::star::io::XInputStream>
