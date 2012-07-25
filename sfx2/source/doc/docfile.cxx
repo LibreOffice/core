@@ -287,7 +287,6 @@ public:
 
     const SfxFilter* pOrigFilter;
     rtl::OUString    aOrigURL;
-    String           aPreRedirectionURL;
     String           aReferer;
     DateTime         aExpireTime;
     SfxFrameWeak     wLoadTargetFrame;
