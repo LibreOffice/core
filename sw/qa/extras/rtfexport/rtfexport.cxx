@@ -55,6 +55,10 @@ public:
     void testMathEqarray();
     void testMathD();
     void testMathEscaping();
+    void testMathLim();
+    void testMathMatrix();
+    void testMathBox();
+    void testMathMso2007();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -66,12 +70,16 @@ public:
     CPPUNIT_TEST(testFdo50831);
     CPPUNIT_TEST(testFdo48335);
     CPPUNIT_TEST(testFdo38244);
-    // No idea why does this fail with gcc-4.4, probably independent.
-#if (__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 5) || defined(__clang__))
+    // With gcc-4.4, the dynamic_cast in RtfAttributeOutput::FlyFrameOLEMath() fails, strange.
+#if !(__GNUC__ == 4 && __GNUC_MINOR__ == 4)
     CPPUNIT_TEST(testMathAccents);
     CPPUNIT_TEST(testMathEqarray);
     CPPUNIT_TEST(testMathD);
     CPPUNIT_TEST(testMathEscaping);
+    CPPUNIT_TEST(testMathLim);
+    CPPUNIT_TEST(testMathMatrix);
+    CPPUNIT_TEST(testMathBox);
+    CPPUNIT_TEST(testMathMso2007);
 #endif
 #endif
     CPPUNIT_TEST_SUITE_END();
@@ -242,6 +250,71 @@ void Test::testMathEscaping()
     roundtrip("math-escaping.rtf");
     OUString aActual = getFormula(getRun(getParagraph(1), 1));
     OUString aExpected("á \\{", 5, RTL_TEXTENCODING_UTF8);
+    CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
+}
+
+void Test::testMathLim()
+{
+    roundtrip("math-lim.rtf");
+    OUString aActual = getFormula(getRun(getParagraph(1), 1));
+    OUString aExpected("lim from {x → 1} {x}", 22, RTL_TEXTENCODING_UTF8);
+    CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
+}
+
+void Test::testMathMatrix()
+{
+    roundtrip("math-matrix.rtf");
+    OUString aActual = getFormula(getRun(getParagraph(1), 1));
+    OUString aExpected("left [matrix {1 # 2 ## 3 # 4} right ]");
+    CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
+}
+
+void Test::testMathBox()
+{
+    roundtrip("math-mbox.rtf");
+    OUString aActual = getFormula(getRun(getParagraph(1), 1));
+    OUString aExpected("a");
+    CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
+}
+
+void Test::testMathMso2007()
+{
+    roundtrip("math-mso2007.rtf");
+    OUString aActual = getFormula(getRun(getParagraph(1), 1));
+    OUString aExpected("A = π {r} ^ {2}", 16, RTL_TEXTENCODING_UTF8);
+    CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
+
+    aActual = getFormula(getRun(getParagraph(2), 1));
+    aExpected = OUString("{left (x + a right )} ^ {n} = sum from {k = 0} to {n} {left (stack { n # k } right ) {x} ^ {k} {a} ^ {n − k}}", 111, RTL_TEXTENCODING_UTF8);
+    CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
+
+    aActual = getFormula(getRun(getParagraph(3), 1));
+    aExpected = OUString("{left (1 + x right )} ^ {n} = 1 + {nx} over {1 !} + {n left (n − 1 right ) {x} ^ {2}} over {2 !} + …", 104, RTL_TEXTENCODING_UTF8);
+    CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
+
+    aActual = getFormula(getRun(getParagraph(4), 1));
+    aExpected = OUString("f left (x right ) = {a} rsub {0} + sum from {n = 1} to {∞} {left ({a} rsub {n} cos {nπx} over {L} + {b} rsub {n} sin {nπx} over {L} right )}", 144,
+            RTL_TEXTENCODING_UTF8);
+    CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
+
+    aActual = getFormula(getRun(getParagraph(5), 1));
+    aExpected = "{a} ^ {2} + {b} ^ {2} = {c} ^ {2}";
+    CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
+
+    aActual = getFormula(getRun(getParagraph(6), 1));
+    aExpected = OUString("x = {− b ± sqrt {{b} ^ {2} − 4 ac}} over {2 a}", 51, RTL_TEXTENCODING_UTF8);
+    CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
+
+    aActual = getFormula(getRun(getParagraph(7), 1));
+    aExpected = OUString("{e} ^ {x} = 1 + {x} over {1 !} + {{x} ^ {2}} over {2 !} + {{x} ^ {3}} over {3 !} + … , − ∞ < x < ∞", 106, RTL_TEXTENCODING_UTF8);
+    CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
+
+    aActual = getFormula(getRun(getParagraph(8), 1));
+    aExpected = OUString("sin α ± sin β = 2 sin {1} over {2} left (α ± β right ) cos {1} over {2} left (α ∓ β right )", 101, RTL_TEXTENCODING_UTF8);
+    CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
+
+    aActual = getFormula(getRun(getParagraph(9), 1));
+    aExpected = OUString("cos α + cos β = 2 cos {1} over {2} left (α + β right ) cos {1} over {2} left (α − β right )", 99, RTL_TEXTENCODING_UTF8);
     CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
 }
 
