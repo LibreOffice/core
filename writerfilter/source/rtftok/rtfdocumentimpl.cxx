@@ -3616,11 +3616,17 @@ int RTFDocumentImpl::popState()
     }
     break;
     case DESTINATION_MR:
-        m_aMathBuffer.appendOpeningTag(M_TOKEN(r));
-        m_aMathBuffer.appendOpeningTag(M_TOKEN(t));
-        m_aMathBuffer.appendCharacters(m_aStates.top().aDestinationText.makeStringAndClear());
-        m_aMathBuffer.appendClosingTag(M_TOKEN(t));
-        m_aMathBuffer.appendClosingTag(M_TOKEN(r));
+    {
+        OUString aStr = m_aStates.top().aDestinationText.makeStringAndClear();
+        if (!aStr.isEmpty())
+        {
+            m_aMathBuffer.appendOpeningTag(M_TOKEN(r));
+            m_aMathBuffer.appendOpeningTag(M_TOKEN(t));
+            m_aMathBuffer.appendCharacters(aStr);
+            m_aMathBuffer.appendClosingTag(M_TOKEN(t));
+            m_aMathBuffer.appendClosingTag(M_TOKEN(r));
+        }
+    }
     break;
     case DESTINATION_MF: m_aMathBuffer.appendClosingTag(M_TOKEN(f)); break;
     case DESTINATION_MFPR: m_aMathBuffer.appendClosingTag(M_TOKEN(fPr)); break;
