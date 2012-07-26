@@ -624,8 +624,7 @@ Desktop::Desktop()
 Desktop::~Desktop()
 {
 #ifdef ENABLE_TELEPATHY
-    if (m_pTeleManager)
-        m_pTeleManager->unref();
+    delete m_pTeleManager;
 #endif
 }
 
@@ -1708,7 +1707,7 @@ int Desktop::Main()
     SetSplashScreenProgress(60);
 
 #ifdef ENABLE_TELEPATHY
-    m_pTeleManager = TeleManager::get();
+    m_pTeleManager = new TeleManager();
     bool bListen = rCmdLineArgs.IsInvisible();
     m_pTeleManager->init( bListen );
 #endif

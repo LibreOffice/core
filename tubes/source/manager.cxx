@@ -81,10 +81,6 @@ TeleManagerImpl* TeleManager::pImpl     = NULL;
 sal_uInt32       TeleManager::nRefCount = 0;
 rtl::OString     TeleManager::aNameSuffix;
 
-sal_uInt32       TeleManager::nAnotherRefCount = 0;
-TeleManager*     TeleManager::pSingleton = NULL;
-
-
 /** Refcounted singleton implementation class. */
 class TeleManagerImpl
 {
@@ -390,6 +386,7 @@ TeleManager::TeleManager()
     :
         mbChannelReadyHandlerInvoked( false)
 {
+    SAL_INFO( "tubes", "TeleManager::get: count: " << nRefCount );
     // The glib object types need to be initialized, else we aren't going
     // anywhere.
     g_type_init();
@@ -399,7 +396,6 @@ TeleManager::TeleManager()
     if (!pImpl)
         pImpl = new TeleManagerImpl;
 }
-
 
 TeleManager::~TeleManager()
 {
@@ -411,29 +407,7 @@ TeleManager::~TeleManager()
         delete pImpl;
         pImpl = NULL;
     }
-}
-
-TeleManager *
-TeleManager::get()
-{
-    MutexGuard aGuard( GetAnotherMutex());
-    SAL_INFO( "tubes", "TeleManager::get: count: " << nAnotherRefCount );
-    if (!pSingleton)
-        pSingleton = new TeleManager();
-
-    nAnotherRefCount++;
-    return pSingleton;
-}
-
-void
-TeleManager::unref()
-{
-    MutexGuard aGuard( GetAnotherMutex());
-    if (nAnotherRefCount && --nAnotherRefCount == 0) {
-        delete pSingleton;
-        pSingleton = NULL;
-    }
-    SAL_INFO( "tubes", "TeleManager::unref: count: " << nAnotherRefCount );
+    SAL_INFO( "tubes", "TeleManager::unref: count: " << nRefCount );
 }
 
 bool TeleManager::init( bool bListen )
@@ -912,19 +886,6 @@ Mutex& TeleManager::GetMutex()
     }
     return *pMutex;
 }
-
-Mutex& TeleManager::GetAnotherMutex()
-{
-    static Mutex* pMutex = NULL;
-    if (!pMutex)
-    {
-        MutexGuard aGuard( Mutex::getGlobalMutex());
-        if (!pMutex)
-            pMutex = new Mutex;
-    }
-    return *pMutex;
-}
-
 
 // static
 void TeleManager::addSuffixToNames( const char* pName )

@@ -72,11 +72,9 @@ public:
     /** Prepare tube manager with account and service to be offered/listened
         to.
      */
-    TeleManager();
-    ~TeleManager();
+    TUBES_DLLPUBLIC                         TeleManager();
+    TUBES_DLLPUBLIC                         ~TeleManager();
 
-    TUBES_DLLPUBLIC static TeleManager*     get();
-    TUBES_DLLPUBLIC void                    unref();
     TUBES_DLLPUBLIC bool                    init( bool bListen );
 
     /** Connect to DBus and create AccountManager. */
@@ -196,13 +194,6 @@ private:
     static TeleManagerImpl* pImpl;
     static sal_uInt32       nRefCount;
     static rtl::OString     aNameSuffix;
-
-    /* FIXME: double-singletonning is bad. These two are used by ::get and
-     * ::unref, and are a quick hack so that we can have a demo working.
-     */
-    static TeleManager*     pSingleton;
-    static sal_uInt32       nAnotherRefCount;
-    static ::osl::Mutex&    GetAnotherMutex();
 
     friend class TeleManagerImpl;   // access to mutex
 
