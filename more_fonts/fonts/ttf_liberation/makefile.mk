@@ -1,29 +1,20 @@
-#*************************************************************************
 #
-# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
-# Copyright 2000, 2010 Oracle and/or its affiliates.
+# This file is part of the LibreOffice project.
 #
-# OpenOffice.org - a multi-platform office productivity suite
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
-# This file is part of OpenOffice.org.
+# This file incorporates work covered by the following license notice:
 #
-# OpenOffice.org is free software: you can redistribute it and/or modify
-# it under the terms of the GNU Lesser General Public License version 3
-# only, as published by the Free Software Foundation.
+#   Licensed to the Apache Software Foundation (ASF) under one or more
+#   contributor license agreements. See the NOTICE file distributed
+#   with this work for additional information regarding copyright
+#   ownership. The ASF licenses this file to you under the Apache
+#   License, Version 2.0 (the "License"); you may not use this file
+#   except in compliance with the License. You may obtain a copy of
+#   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
-# OpenOffice.org is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU Lesser General Public License version 3 for more details
-# (a copy is included in the LICENSE file that accompanied this code).
-#
-# You should have received a copy of the GNU Lesser General Public License
-# version 3 along with OpenOffice.org.  If not, see
-# <http://www.openoffice.org/license.html>
-# for a copy of the LGPLv3 License.
-#
-#*************************************************************************
 
 PRJ=..$/..
 
@@ -35,10 +26,12 @@ TARGET=ttf_liberation
 .INCLUDE :	settings.mk
 
 # --- Files --------------------------------------------------------
-
-TARFILE_NAME=liberation-fonts-ttf-1.07.1
-TARFILE_MD5=0be45d54cc5e1c2e3102e32b8c190346
-TARFILE_ROOTDIR=liberation-fonts-ttf-1.07.1
+# Note: Current release does not include Liberation Sans Narrow font because
+# that couldn't be relicensed to OFL, so we take the Narrow version from
+# the old release
+TARFILE_NAME=liberation-fonts-ttf-2.00.0
+TARFILE_MD5=cfbf1ac6f61bf6cf45342a0cc9381be5
+TARFILE_ROOTDIR=liberation-fonts-ttf-2.00.0
 
 PATCH_FILES=
 
@@ -57,4 +50,3 @@ BUILD_FLAGS=
 .IF "$(WITH_FONTS)"!="NO"
 .INCLUDE : tg_ext.mk
 .ENDIF
-
