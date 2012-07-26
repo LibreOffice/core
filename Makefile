@@ -18,7 +18,7 @@ SRCDIR:=$(patsubst %/,%,$(dir $(realpath $(firstword $(MAKEFILE_LIST)))))
 .PHONY : $(filter-out $(SRCDIR)/config_host.mk,$(MAKECMDGOALS))
 
 # recursively invoke Makefile.top, which includes config_host.mk
-$(firstword $(MAKECMDGOALS)) : $(SRCDIR)/config_host.mk
+$(filter-out help,$(firstword $(MAKECMDGOALS))) : $(SRCDIR)/config_host.mk
 	$(MAKE) -r -f $(SRCDIR)/Makefile.top $(MAKECMDGOALS)
 
 # run configure in an environment not polluted by config_host.mk
@@ -32,6 +32,10 @@ $(SRCDIR)/config_host.mk : \
 
 # dummy rule in case autogen.lastrun does not exist
 $(SRCDIR)/autogen.lastrun:
+	@true
+
+help:
+	@cat $(SRCDIR)/solenv/gbuild/gbuild.help.txt
 	@true
 
 # vim: set noet sw=4 ts=4:
