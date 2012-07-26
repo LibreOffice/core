@@ -169,7 +169,6 @@ IDLFILES=\
     TextAdjust.idl\
     TextAnimationDirection.idl\
     TextAnimationKind.idl\
-    TextFitToSizeType.idl\
     TextHorizontalAdjust.idl\
     TextProperties.idl\
     TextShape.idl\

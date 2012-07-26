@@ -51,7 +51,6 @@
 #include <com/sun/star/drawing/TextAnimationDirection.hpp>
 #include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
-#include <com/sun/star/drawing/TextFitToSizeType.hpp>
 #include <com/sun/star/drawing/MeasureTextHorzPos.hpp>
 #include <com/sun/star/drawing/MeasureTextVertPos.hpp>
 #include <xmloff/controlpropertyhdl.hxx>
@@ -142,7 +141,7 @@ const XMLPropertyMapEntry aXMLSDProperties[] =
     GMAP( "TextVerticalAdjust",             XML_NAMESPACE_DRAW, XML_TEXTAREA_VERTICAL_ALIGN,    XML_SD_TYPE_VERTICAL_ALIGN, 0 ),
     GMAP( "TextAutoGrowHeight",             XML_NAMESPACE_DRAW, XML_AUTO_GROW_HEIGHT,       XML_TYPE_BOOL, 0 ),
     GMAP( "TextAutoGrowWidth",              XML_NAMESPACE_DRAW, XML_AUTO_GROW_WIDTH,        XML_TYPE_BOOL, 0 ),
-    GMAP( "TextFitToSize",                  XML_NAMESPACE_DRAW, XML_FIT_TO_SIZE,            XML_SD_TYPE_FITTOSIZE, 0 ),
+    GMAP( "TextFitToSize",                  XML_NAMESPACE_DRAW, XML_FIT_TO_SIZE,            XML_TYPE_BOOL, 0 ),
     GMAP( "TextContourFrame",               XML_NAMESPACE_DRAW, XML_FIT_TO_CONTOUR,         XML_TYPE_BOOL, 0 ),
     GMAP( "TextMaximumFrameHeight",         XML_NAMESPACE_FO,   XML_MAX_HEIGHT,             XML_TYPE_MEASURE, 0 ),
     GMAP( "TextMaximumFrameWidth",          XML_NAMESPACE_FO,   XML_MAX_WIDTH,              XML_TYPE_MEASURE, 0 ),
@@ -627,15 +626,6 @@ SvXMLEnumMapEntry __READONLY_DATA pXML_VerticalAlign_Enum[] =
     { XML_TOKEN_INVALID, 0 }
 };
 
-SvXMLEnumMapEntry __READONLY_DATA pXML_FitToSize_Enum[] =
-{
-    { XML_FALSE,        drawing::TextFitToSizeType_NONE },
-    { XML_TRUE,         drawing::TextFitToSizeType_PROPORTIONAL },
-    { XML_TRUE,         drawing::TextFitToSizeType_ALLLINES },
-    { XML_TRUE,         drawing::TextFitToSizeType_RESIZEATTR },
-    { XML_TOKEN_INVALID, 0 }
-};
-
 SvXMLEnumMapEntry __READONLY_DATA pXML_MeasureUnit_Enum[] =
 {
     { XML_AUTOMATIC,    0 },
@@ -1058,9 +1048,6 @@ const XMLPropertyHandler* XMLSdPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
                 break;
             case XML_SD_TYPE_VERTICAL_ALIGN:
                 pHdl = new XMLEnumPropertyHdl( pXML_VerticalAlign_Enum, ::getCppuType((const com::sun::star::drawing::TextVerticalAdjust*)0) );
-                break;
-            case XML_SD_TYPE_FITTOSIZE:
-                pHdl = new XMLEnumPropertyHdl( pXML_FitToSize_Enum, ::getCppuType((const com::sun::star::drawing::TextFitToSizeType*)0) );
                 break;
             case XML_SD_TYPE_MEASURE_UNIT:
                 pHdl = new XMLEnumPropertyHdl( pXML_MeasureUnit_Enum, ::getCppuType((const sal_Int32*)0) );

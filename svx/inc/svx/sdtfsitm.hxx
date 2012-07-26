@@ -27,41 +27,18 @@
 #include <svx/svddef.hxx>
 #include "svx/svxdllapi.h"
 
-enum SdrFitToSizeType {SDRTEXTFIT_NONE,         // - kein FitToSize
-                       SDRTEXTFIT_PROPORTIONAL, // - Alle Buchstaben proportional umgroessern
-                       SDRTEXTFIT_ALLLINES,     // - Zus. jede Zeile separat in der Breite stretchen
-                       SDRTEXTFIT_RESIZEATTR};  // - Bei Rahmenumgroesserung (ausser Autogrow) wird
-                                                //   die Schriftgroesse umattributiert (hart)
-
-// Bei SDRTEXTFIT_PROPORTIONAL und SDRTEXTFIT_ALLLINES gibt es kein AutoGrow und
-// keine automatischen Umbrueche.
-// Ist SDRTEXTFIT_RESIZEATTR gesetzt, so wird beim umgroessern des Textrahmens
-// (ausser bei AutoGrow) die Schrift durch harte Attributierung ebenfalls
-// umgegroessert.
-// Bei AutoGrowingWidth gibt es ebenfalls keine automatischen Umbrueche (erst bei
-// TextMaxFrameWidth).
-
 //--------------------------------
 // class SdrTextFitToSizeTypeItem
 //--------------------------------
-class SVX_DLLPUBLIC SdrTextFitToSizeTypeItem: public SfxEnumItem {
+class SVX_DLLPUBLIC SdrTextFitToSizeTypeItem: public SfxBoolItem {
 public:
     TYPEINFO();
-    SdrTextFitToSizeTypeItem(SdrFitToSizeType eFit=SDRTEXTFIT_NONE): SfxEnumItem(SDRATTR_TEXT_FITTOSIZE,(sal_uInt16)eFit) {}
-    SdrTextFitToSizeTypeItem(SvStream& rIn)                        : SfxEnumItem(SDRATTR_TEXT_FITTOSIZE,rIn)  {}
-    virtual SfxPoolItem*     Clone(SfxItemPool* pPool=NULL) const;
-    virtual SfxPoolItem*     Create(SvStream& rIn, sal_uInt16 nVer) const;
-    virtual sal_uInt16           GetValueCount() const; // { return 4; }
-            SdrFitToSizeType GetValue() const      { return (SdrFitToSizeType)SfxEnumItem::GetValue(); }
-
-    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
-    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
-
-    virtual String  GetValueTextByPos(sal_uInt16 nPos) const;
+    SdrTextFitToSizeTypeItem(sal_Bool bFit = sal_False): SfxBoolItem(SDRATTR_TEXT_FITTOSIZE, bFit) {}
+    SdrTextFitToSizeTypeItem(SvStream& rIn) : SfxBoolItem(SDRATTR_TEXT_FITTOSIZE, rIn) {}
+    virtual SfxPoolItem* Clone(SfxItemPool* pPool = NULL) const;
+    virtual SfxPoolItem* Create(SvStream& rIn, sal_uInt16 nVer) const;
+    virtual String GetValueTextByVal(sal_Bool bVal) const;
     virtual SfxItemPresentation GetPresentation(SfxItemPresentation ePres, SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric, String& rText, const IntlWrapper * = 0) const;
-    virtual int              HasBoolValue() const;
-    virtual sal_Bool             GetBoolValue() const;
-    virtual void             SetBoolValue(sal_Bool bVal);
 };
 
 #endif

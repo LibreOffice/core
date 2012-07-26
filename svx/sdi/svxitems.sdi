@@ -395,7 +395,7 @@ item SvxCellHorJustifyEnum  SvxHorJustifyItem;
 item SvxCellVerJustifyEnum  SvxVerJustifyItem;
 item SvxCellOrientationEnum SvxOrientationItem;
 item BOOL                   SdrShadowItem;
-item INT16                  SdrTextFitToSizeTypeItem;  // enum
+item BOOL                   SdrTextFitToSizeTypeItem;
 item String                 SfxStringListItem;  // serialized into one concatenated string
 item double                 SvxDoubleItem;
 item String                 OfaPtrItem;  // serialized into one concatenated string

@@ -3731,8 +3731,7 @@ SdrObject* SvxMSDffManager::ImportFontWork( SvStream& rStCt, SfxItemSet& rSet, R
         {
             pNewObj->SetModel( pSdrModel );
             ((SdrRectObj*)pNewObj)->SetText( aObjectText );
-            SdrFitToSizeType eFTS = SDRTEXTFIT_PROPORTIONAL;
-            rSet.Put( SdrTextFitToSizeTypeItem( eFTS ) );
+            rSet.Put( SdrTextFitToSizeTypeItem( sal_True ) );
             rSet.Put( SdrTextAutoGrowHeightItem( sal_False ) );
             rSet.Put( SdrTextAutoGrowWidthItem( sal_False ) );
             rSet.Put( SvxFontItem( FAMILY_DONTKNOW, aFontName, String(),
@@ -4420,11 +4419,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                                 case mso_alignTextRight : eHorzAdjust = SDRTEXTHORZADJUST_RIGHT; break;
                             }
                             aSet.Put( SdrTextHorzAdjustItem( eHorzAdjust ) );
-
-                            SdrFitToSizeType eFTS = SDRTEXTFIT_NONE;
-                            if ( eGeoTextAlign == mso_alignTextStretch )
-                                eFTS = SDRTEXTFIT_ALLLINES;
-                            aSet.Put( SdrTextFitToSizeTypeItem( eFTS ) );
+                            aSet.Put(SdrTextFitToSizeTypeItem(eGeoTextAlign == mso_alignTextStretch ? sal_True: sal_False));
                         }
                         if ( IsProperty( DFF_Prop_gtextSpacing ) )
                         {

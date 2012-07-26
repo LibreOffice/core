@@ -10851,7 +10851,7 @@ SfxBoolItem TextdirectionTopToBottom SID_TEXTDIRECTION_TOP_TO_BOTTOM
 ]
 
 //--------------------------------------------------------------------------
-SdrTextFitToSizeTypeItem TextFitToSize SID_ATTR_TEXT_FITTOSIZE
+SfxBoolItem TextFitToSize SID_ATTR_TEXT_FITTOSIZE
 
 [
     /* flags: */

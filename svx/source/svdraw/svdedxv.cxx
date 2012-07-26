@@ -672,9 +672,10 @@ sal_Bool SdrObjEditView::SdrBeginTextEdit(
             if ( !pTextObj->IsContourTextFrame() )
             {
                 // FitToSize erstmal nicht mit ContourFrame
-                SdrFitToSizeType eFit = pTextObj->GetFitToSize();
-                if (eFit==SDRTEXTFIT_PROPORTIONAL || eFit==SDRTEXTFIT_ALLLINES)
+                if(pTextObj->GetFitToSize())
+                {
                     aTextRect = aAnchorRect;
+                }
             }
 
             aTextEditArea = aTextRect;
@@ -741,9 +742,10 @@ sal_Bool SdrObjEditView::SdrBeginTextEdit(
                 // #71519#
                 if(!bExtraInvalidate)
                 {
-                    SdrFitToSizeType eFit = pTextObj->GetFitToSize();
-                    if(eFit == SDRTEXTFIT_PROPORTIONAL || eFit == SDRTEXTFIT_ALLLINES)
+                    if(pTextObj->GetFitToSize())
+                    {
                         bExtraInvalidate = sal_True;
+                    }
                 }
 
                 if(bExtraInvalidate)

@@ -217,7 +217,6 @@
 #include "com/sun/star/drawing/TextAdjust.hpp"
 #include "com/sun/star/drawing/TextAnimationDirection.hpp"
 #include "com/sun/star/drawing/TextAnimationKind.hpp"
-#include "com/sun/star/drawing/TextFitToSizeType.hpp"
 #include "com/sun/star/drawing/TextHorizontalAdjust.hpp"
 #include "com/sun/star/drawing/TextVerticalAdjust.hpp"
 #include "com/sun/star/drawing/TextureKind.hpp"

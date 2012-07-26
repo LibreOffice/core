@@ -1223,7 +1223,7 @@ SdrObject* SwWW8ImplReader::ReadTxtBox( WW8_DPHEAD* pHd, const WW8_DO* pDo,
     SetStdAttr( rSet, aTxtB.aLnt, aTxtB.aShd );
     SetFill( rSet, aTxtB.aFill );
 
-    rSet.Put( SdrTextFitToSizeTypeItem( SDRTEXTFIT_NONE ) );
+    rSet.Put( SdrTextFitToSizeTypeItem( sal_False ) );
     rSet.Put( SdrTextAutoGrowWidthItem(false));
     rSet.Put( SdrTextAutoGrowHeightItem(false));
     rSet.Put( SdrTextLeftDistItem(  MIN_BORDER_DIST*2 ) );
@@ -2868,7 +2868,7 @@ SwFrmFmt* SwWW8ImplReader::MungeTextIntoDrawBox(SdrObject* pTrueObject,
         SfxItemSet aSet(pDrawModel->GetItemPool());
         aSet.Put(XFillStyleItem(XFILL_NONE));
         aSet.Put(XLineStyleItem(XLINE_NONE));
-        aSet.Put(SdrTextFitToSizeTypeItem( SDRTEXTFIT_NONE ));
+        aSet.Put(SdrTextFitToSizeTypeItem( sal_False ));
         aSet.Put(SdrTextAutoGrowHeightItem(false));
         aSet.Put(SdrTextAutoGrowWidthItem(false));
         pSdrTextObj->SetMergedItemSet(aSet);

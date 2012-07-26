@@ -75,8 +75,6 @@ FASTBOOL SdrTextObj::AdjustTextFrameWidthAndHeight(Rectangle& rR, FASTBOOL bHgt,
 {
     if (bTextFrame && pModel!=NULL && !rR.IsEmpty())
     {
-        SdrFitToSizeType eFit=GetFitToSize();
-        FASTBOOL bFitToSize=(eFit==SDRTEXTFIT_PROPORTIONAL || eFit==SDRTEXTFIT_ALLLINES);
         FASTBOOL bWdtGrow=bWdt && IsAutoGrowWidth();
         FASTBOOL bHgtGrow=bHgt && IsAutoGrowHeight();
         SdrTextAniKind eAniKind=GetTextAniKind();
@@ -84,7 +82,7 @@ FASTBOOL SdrTextObj::AdjustTextFrameWidthAndHeight(Rectangle& rR, FASTBOOL bHgt,
         FASTBOOL bScroll=eAniKind==SDRTEXTANI_SCROLL || eAniKind==SDRTEXTANI_ALTERNATE || eAniKind==SDRTEXTANI_SLIDE;
         FASTBOOL bHScroll=bScroll && (eAniDir==SDRTEXTANI_LEFT || eAniDir==SDRTEXTANI_RIGHT);
         FASTBOOL bVScroll=bScroll && (eAniDir==SDRTEXTANI_UP || eAniDir==SDRTEXTANI_DOWN);
-        if (!bFitToSize && (bWdtGrow || bHgtGrow))
+        if (!GetFitToSize() && (bWdtGrow || bHgtGrow))
         {
             Rectangle aR0(rR);
             long nHgt=0,nMinHgt=0,nMaxHgt=0;

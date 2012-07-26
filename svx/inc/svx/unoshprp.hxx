@@ -40,7 +40,6 @@
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/drawing/TextAnimationDirection.hpp>
 #include <com/sun/star/drawing/TextAnimationKind.hpp>
-#include <com/sun/star/drawing/TextFitToSizeType.hpp>
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
 #include <com/sun/star/drawing/ConnectorType.hpp>
@@ -283,7 +282,7 @@
     { MAP_CHAR_LEN(UNO_NAME_TEXT_AUTOGROWHEIGHT),   SDRATTR_TEXT_AUTOGROWHEIGHT,    &::getBooleanCppuType(),        0,      0}, \
     { MAP_CHAR_LEN(UNO_NAME_TEXT_AUTOGROWWIDTH),    SDRATTR_TEXT_AUTOGROWWIDTH,     &::getBooleanCppuType(),        0,      0}, \
     { MAP_CHAR_LEN(UNO_NAME_TEXT_CONTOURFRAME),     SDRATTR_TEXT_CONTOURFRAME,      &::getBooleanCppuType(),        0,      0}, \
-    { MAP_CHAR_LEN(UNO_NAME_TEXT_FITTOSIZE),        SDRATTR_TEXT_FITTOSIZE,         &::getCppuType((const ::com::sun::star::drawing::TextFitToSizeType*)0), 0,      0}, \
+    { MAP_CHAR_LEN(UNO_NAME_TEXT_FITTOSIZE),        SDRATTR_TEXT_FITTOSIZE,         &::getBooleanCppuType(),        0,      0}, \
     { MAP_CHAR_LEN(UNO_NAME_TEXT_HORZADJUST),       SDRATTR_TEXT_HORZADJUST,        &::getCppuType((const ::com::sun::star::drawing::TextHorizontalAdjust*)0),  0,      0}, \
     { MAP_CHAR_LEN(UNO_NAME_TEXT_LEFTDIST),         SDRATTR_TEXT_LEFTDIST,          &::getCppuType((const sal_Int32*)0),        0,      SFX_METRIC_ITEM}, \
     { MAP_CHAR_LEN(UNO_NAME_TEXT_LOWERDIST),        SDRATTR_TEXT_LOWERDIST,         &::getCppuType((const sal_Int32*)0),        0,      SFX_METRIC_ITEM}, \
