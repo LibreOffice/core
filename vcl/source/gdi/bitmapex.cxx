@@ -393,11 +393,13 @@ sal_Bool BitmapEx::ScaleCropRotate(
 {
     bool bRet = false;
 
-    const bool bTransparentRotate = ( Color( COL_TRANSPARENT ) == rFillColor );
-
     if( !!aBitmap )
     {
-        if( bTransparentRotate )
+        const bool bTransparentRotate = ( Color( COL_TRANSPARENT ) == rFillColor );
+
+        bool bRightAngleRotation = (nAngle10 == 0 || nAngle10 == 900 || nAngle10 == 1800 || nAngle10 == 2700);
+
+        if( !bRightAngleRotation && bTransparentRotate )
         {
             if( eTransparent == TRANSPARENT_COLOR )
             {
