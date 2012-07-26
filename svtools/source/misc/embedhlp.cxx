@@ -561,16 +561,24 @@ SvStream* EmbeddedObjectRef::GetGraphicStream( sal_Bool bUpdate ) const
         {
             const sal_Int32 nConstBufferSize = 32000;
             SvStream *pStream = new SvMemoryStream( 32000, 32000 );
-            sal_Int32 nRead=0;
-            uno::Sequence < sal_Int8 > aSequence ( nConstBufferSize );
-            do
+            try
             {
-                nRead = xStream->readBytes ( aSequence, nConstBufferSize );
-                pStream->Write( aSequence.getConstArray(), nRead );
+                sal_Int32 nRead=0;
+                uno::Sequence < sal_Int8 > aSequence ( nConstBufferSize );
+                do
+                {
+                    nRead = xStream->readBytes ( aSequence, nConstBufferSize );
+                    pStream->Write( aSequence.getConstArray(), nRead );
+                }
+                while ( nRead == nConstBufferSize );
+                pStream->Seek(0);
+                return pStream;
             }
-            while ( nRead == nConstBufferSize );
-            pStream->Seek(0);
-            return pStream;
+            catch (const uno::Exception& ex)
+            {
+                delete pStream;
+                xStream.clear();
+            }
         }
     }
 
