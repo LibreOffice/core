@@ -746,6 +746,9 @@ public:
     SCROW       LastNonFilteredRow(SCROW nStartRow, SCROW nEndRow) const;
     SCROW       CountNonFilteredRows(SCROW nStartRow, SCROW nEndRow) const;
 
+    bool IsManualRowHeight(SCROW nRow) const;
+    void SetRowHeightManual(SCROW nRow, bool bManual);
+
     void        SyncColRowFlags();
 
     void        StripHidden( SCCOL& rX1, SCROW& rY1, SCCOL& rX2, SCROW& rY2 );

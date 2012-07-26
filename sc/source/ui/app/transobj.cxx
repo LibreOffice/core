@@ -632,9 +632,6 @@ void ScTransferObj::InitDocShell()
             else
                 pDestDoc->SetColWidth( nCol, 0, pDoc->GetColWidth( nCol, nSrcTab ) );
 
-        ScBitMaskCompressedArray< SCROW, sal_uInt8> & rDestRowFlags =
-            pDestDoc->GetRowFlagsArrayModifiable(0);
-
         for (SCROW nRow = nStartY; nRow <= nEndY; ++nRow)
         {
             sal_uInt8 nSourceFlags = pDoc->GetRowFlags(nRow, nSrcTab);
@@ -645,8 +642,8 @@ void ScTransferObj::InitDocShell()
                 pDestDoc->SetRowHeight( nRow, 0, pDoc->GetOriginalHeight( nRow, nSrcTab ) );
 
                 //  if height was set manually, that flag has to be copied, too
-                if ( nSourceFlags & CR_MANUALSIZE )
-                    rDestRowFlags.OrValue( nRow, CR_MANUALSIZE);
+                bool bManual = pDoc->IsManualRowHeight(nRow, nSrcTab);
+                pDestDoc->SetRowHeightManual(nRow, 0, bManual);
             }
         }
 

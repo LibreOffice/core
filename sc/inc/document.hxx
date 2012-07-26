@@ -1341,7 +1341,6 @@ public:
     SC_DLLPUBLIC sal_uInt8          GetRowFlags( SCROW nRow, SCTAB nTab ) const;
 
     SC_DLLPUBLIC const ScBitMaskCompressedArray< SCROW, sal_uInt8> & GetRowFlagsArray( SCTAB nTab ) const;
-    SC_DLLPUBLIC       ScBitMaskCompressedArray< SCROW, sal_uInt8> & GetRowFlagsArrayModifiable( SCTAB nTab );
 
     SC_DLLPUBLIC void           GetAllRowBreaks(::std::set<SCROW>& rBreaks, SCTAB nTab, bool bPage, bool bManual) const;
     SC_DLLPUBLIC void           GetAllColBreaks(::std::set<SCCOL>& rBreaks, SCTAB nTab, bool bPage, bool bManual) const;
@@ -1370,6 +1369,9 @@ public:
     SCROW                       FirstNonFilteredRow(SCROW nStartRow, SCROW nEndRow, SCTAB nTab);
     SCROW                       LastNonFilteredRow(SCROW nStartRow, SCROW nEndRow, SCTAB nTab);
     SCROW                       CountNonFilteredRows(SCROW nStartRow, SCROW nEndRow, SCTAB nTab);
+
+    bool IsManualRowHeight(SCROW nRow, SCTAB nTab) const;
+    void SetRowHeightManual(SCROW nRow, SCTAB nTab, bool bManual);
 
     /**
      * Write all column row flags to table's flag data, because not all column
