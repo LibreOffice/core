@@ -25,6 +25,7 @@
  * instead of those above.
  */
 
+#include <com/sun/star/container/XContentEnumerationAccess.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
@@ -162,7 +163,7 @@ protected:
     }
 
     // Get paragraph (counted from 1), optionally check it contains the given text.
-    uno::Reference< text::XTextRange > getParagraph( int number, rtl::OUString content ) const
+    uno::Reference< text::XTextRange > getParagraph( int number, rtl::OUString content = OUString() ) const
     {
         uno::Reference<text::XTextDocument> textDocument(mxComponent, uno::UNO_QUERY);
         uno::Reference<container::XEnumerationAccess> paraEnumAccess(textDocument->getText(), uno::UNO_QUERY);
@@ -175,6 +176,26 @@ protected:
         if( !content.isEmpty())
             CPPUNIT_ASSERT_EQUAL( content, paragraph->getString());
         return paragraph;
+    }
+
+    /// Get run (counted from 1) of a paragraph.
+    uno::Reference<text::XTextRange> getRun(uno::Reference<text::XTextRange> xParagraph, int number) const
+    {
+        uno::Reference<container::XEnumerationAccess> xRunEnumAccess(xParagraph, uno::UNO_QUERY);
+        uno::Reference<container::XEnumeration> xRunEnum = xRunEnumAccess->createEnumeration();
+        for (int i = 1; i < number; ++i)
+            xRunEnum->nextElement();
+        uno::Reference<text::XTextRange> xRun(xRunEnum->nextElement(), uno::UNO_QUERY);
+        return xRun;
+    }
+
+    /// Get math formula string of a run.
+    OUString getFormula(uno::Reference<text::XTextRange> xRun) const
+    {
+        uno::Reference<container::XContentEnumerationAccess> xContentEnumAccess(xRun, uno::UNO_QUERY);
+        uno::Reference<container::XEnumeration> xContentEnum(xContentEnumAccess->createContentEnumeration(""), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xFormula(xContentEnum->nextElement(), uno::UNO_QUERY);
+        return getProperty<OUString>(getProperty< uno::Reference<beans::XPropertySet> >(xFormula, "Model"), "Formula");
     }
 
     uno::Reference<lang::XComponent> mxComponent;

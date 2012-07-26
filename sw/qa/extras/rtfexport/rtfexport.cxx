@@ -27,11 +27,11 @@
 
 #include "../swmodeltestbase.hxx"
 
-#include <com/sun/star/frame/XStorable.hpp>
-#include <com/sun/star/view/XViewSettingsSupplier.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+#include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/text/XPageCursor.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
+#include <com/sun/star/view/XViewSettingsSupplier.hpp>
 
 #include <unotools/tempfile.hxx>
 #include <vcl/svapp.hxx>
@@ -51,6 +51,8 @@ public:
     void testFdo50831();
     void testFdo48335();
     void testFdo38244();
+    void testMathAccents();
+    void testMathEqarray();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -62,6 +64,8 @@ public:
     CPPUNIT_TEST(testFdo50831);
     CPPUNIT_TEST(testFdo48335);
     CPPUNIT_TEST(testFdo38244);
+    CPPUNIT_TEST(testMathAccents);
+    CPPUNIT_TEST(testMathEqarray);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -200,6 +204,22 @@ void Test::testFdo38244()
     uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
     xPropertySet.set(xFields->nextElement(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("M"), getProperty<OUString>(xPropertySet, "Initials"));
+}
+
+void Test::testMathAccents()
+{
+    roundtrip("math-accents.rtf");
+    OUString aActual = getFormula(getRun(getParagraph(1), 1));
+    OUString aExpected("acute {a} grave {a} check {a} breve {a} circle {a} widevec {a} widetilde {a} widehat {a} dot {a} widevec {a} widevec {a} widetilde {a} underline {a}");
+    CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
+}
+
+void Test::testMathEqarray()
+{
+    roundtrip("math-eqarray.rtf");
+    OUString aActual = getFormula(getRun(getParagraph(1), 1));
+    OUString aExpected("y = left lbrace stack { 0, x < 0 # 1, x = 0 # {x} ^ {2} , x > 0 } right none");
+    CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
