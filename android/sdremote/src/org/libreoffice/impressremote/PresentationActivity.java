@@ -110,6 +110,8 @@ public class PresentationActivity extends Activity {
 		private ToggleButton mTimeLabel;
 		private ToggleButton mThumbnailButton;
 
+		private View mClockBar;
+
 		private String aTimeFormat = getResources().getString(
 		                R.string.actionbar_timeformat);
 		private String aTimerFormat = getResources().getString(
@@ -185,11 +187,40 @@ public class PresentationActivity extends Activity {
 					getFragmentManager().popBackStack();
 				}
 			} else if (aSource == mTimeLabel) {
-				System.out.println("added");
-				LayoutInflater aInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-				View v = aInflater.inflate(R.layout.presentation_clockbar,
-				                mLayout);
-				//				mLayout.addView(v);
+				if (mClockBar == null) {
+					LayoutInflater aInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+					mClockBar = aInflater.inflate(
+					                R.layout.presentation_clockbar, mLayout);
+					mClockBar = mLayout.findViewById(R.id.clockbar);
+					if (!mTimerOn) {
+						((ToggleButton) mClockBar
+						                .findViewById(R.id.clockbar_toggle_clockmode))
+						                .setChecked(true);
+					} else {
+						boolean aIsCountdown = mCommunicationService
+						                .getSlideShow().getTimer()
+						                .isCountdown();
+						((ToggleButton) mClockBar
+						                .findViewById(R.id.clockbar_toggle_stopwatchmode))
+						                .setChecked(!aIsCountdown);
+						((ToggleButton) mClockBar
+						                .findViewById(R.id.clockbar_toggle_countdownmode))
+						                .setChecked(aIsCountdown);
+					}
+
+				} else {
+					//					mClockBar.setVisibility(View.INVISIBLE);
+
+					//					((ViewGroup) mClockBar.getParent()).removeView(mClockBar);
+					if (mClockBar.getVisibility() == View.VISIBLE) {
+						mClockBar.setVisibility(View.INVISIBLE);
+					} else {
+						mClockBar.setVisibility(View.VISIBLE);
+						mClockBar.bringToFront();
+					}
+					//					mLayout.removeView(mClockBar);
+					//					mClockBar = null;
+				}
 			}
 
 		}
