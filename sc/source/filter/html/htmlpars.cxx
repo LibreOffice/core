@@ -472,14 +472,14 @@ void ScHTMLLayoutParser::ModifyOffset( ScHTMLColOffset* pOffset, sal_uInt16& nOl
     {
         do
         {
-            (*pOffset)[nPos] += nDiff;
+            const_cast<sal_uLong&>((*pOffset)[nPos]) += nDiff;
         } while ( nPos-- );
     }
     else
     {
         do
         {
-            (*pOffset)[nPos] += nDiff;
+            const_cast<sal_uLong&>((*pOffset)[nPos]) += nDiff;
         } while ( ++nPos < (sal_uInt16)pOffset->size() );
     }
 }

@@ -3797,7 +3797,9 @@ void SwRTFParser::SetSwgValues( SfxItemSet& rSet )
             // Tabs anpassen !!
             for( sal_uInt16 n = 0; n < aTStop.Count(); ++n)
                 if( SVX_TAB_ADJUST_DEFAULT != aTStop[n].GetAdjustment() )
-                    aTStop[n].GetTabPos() -= nOffset;
+                {
+                    const_cast<SvxTabStop&>(aTStop[n]).GetTabPos() -= nOffset;
+                }
 
             // negativer Einzug, dann auf 0 Pos einen Tab setzen
             if( rLR.GetTxtFirstLineOfst() < 0 )

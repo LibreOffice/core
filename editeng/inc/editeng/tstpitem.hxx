@@ -150,8 +150,6 @@ public:
 
     const SvxTabStop& operator[]( const sal_uInt16 nPos ) const
                         { return maTabStops[nPos]; }
-    SvxTabStop& operator[]( const sal_uInt16 nPos )
-                        { return maTabStops[nPos]; }
 
     // "pure virtual Methods" from SfxPoolItem
     virtual int              operator==( const SfxPoolItem& ) const;
