@@ -1,5 +1,9 @@
 package org.libreoffice.impressremote;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.TimeZone;
+
 import org.libreoffice.impressremote.communication.CommunicationService;
 import org.libreoffice.impressremote.communication.SlideShow.Timer;
 
@@ -17,6 +21,7 @@ import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
 import android.text.format.DateFormat;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
@@ -24,6 +29,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 import android.widget.ToggleButton;
 
 public class PresentationActivity extends Activity {
@@ -108,7 +114,8 @@ public class PresentationActivity extends Activity {
 	}
 
 	private class ActionBarManager implements OnClickListener,
-	                FragmentManager.OnBackStackChangedListener {
+	                FragmentManager.OnBackStackChangedListener,
+	                TextView.OnEditorActionListener {
 
 		private ToggleButton mTimeLabel;
 		private ToggleButton mThumbnailButton;
@@ -209,6 +216,7 @@ public class PresentationActivity extends Activity {
 			mCountdownButton = (Button) mCountdownBar
 			                .findViewById(R.id.clockbar_countdown_button);
 			mCountdownButton.setOnClickListener(this);
+			mCountdownEntry.setOnEditorActionListener(this);
 
 			updateClockBar();
 
@@ -223,13 +231,34 @@ public class PresentationActivity extends Activity {
 			boolean aIsCountdown = mCommunicationService.getSlideShow()
 			                .getTimer().isCountdown();
 			// Stopwatch
-			mClockBar_stopwatchButton.setChecked(mTimerOn && !aIsCountdown);
-			mStopwatchBar.setVisibility(mTimerOn && !aIsCountdown ? View.VISIBLE
+			boolean aStopwatchMode = mTimerOn && !aIsCountdown;
+			mClockBar_stopwatchButton.setChecked(aStopwatchMode);
+			mStopwatchBar.setVisibility(aStopwatchMode ? View.VISIBLE
 			                : View.INVISIBLE);
+			if (aStopwatchMode) {
+				Timer aTimer = mCommunicationService.getSlideShow().getTimer();
+				if (aTimer.isRunning()) {
+					mStopwatchButtonRun.setText(R.string.clock_timer_pause);
+					mStopwatchButtonReset.setText(R.string.clock_timer_restart);
+				} else {
+					mStopwatchButtonRun.setText(R.string.clock_timer_start);
+					mStopwatchButtonReset.setText(R.string.clock_timer_reset);
+				}
+			}
+
 			// Countdown
+			boolean aCountdownMode = mTimerOn && aIsCountdown;
 			mClockBar_countdownButton.setChecked(mTimerOn && aIsCountdown);
 			mCountdownBar.setVisibility(mTimerOn && aIsCountdown ? View.VISIBLE
 			                : View.INVISIBLE);
+			if (aCountdownMode) {
+				Timer aTimer = mCommunicationService.getSlideShow().getTimer();
+				if (aTimer.isRunning()) {
+					mCountdownButton.setText(R.string.clock_timer_pause);
+				} else {
+					mCountdownButton.setText(R.string.clock_timer_resume);
+				}
+			}
 
 		}
 
@@ -287,10 +316,16 @@ public class PresentationActivity extends Activity {
 				updateClockBar();
 			} else if (aSource == mClockBar_stopwatchButton) {
 				mTimerOn = true;
+				if (aTimer.isCountdown()) { // Changing mode.
+					aTimer.reset();
+				}
 				aTimer.setCountdown(false);
 				updateClockBar();
 			} else if (aSource == mClockBar_countdownButton) {
 				mTimerOn = true;
+				if (!aTimer.isCountdown()) { // Changing mode
+					aTimer.reset();
+				}
 				aTimer.setCountdown(true);
 				updateClockBar();
 			}
@@ -309,9 +344,14 @@ public class PresentationActivity extends Activity {
 				} else {
 					aTimer.reset();
 				}
-
+				updateClockBar();
 			} else if (aSource == mCountdownButton) {
-
+				if (aTimer.isRunning()) {
+					aTimer.stopTimer();
+				} else {
+					aTimer.startTimer();
+				}
+				updateClockBar();
 			}
 
 		}
@@ -321,6 +361,36 @@ public class PresentationActivity extends Activity {
 			if (getFragmentManager().getBackStackEntryCount() == 0) {
 				mThumbnailButton.setChecked(false);
 			}
+		}
+
+		@Override
+		public boolean onEditorAction(TextView tv, int aID, KeyEvent aEvent) {
+			if (aEvent.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
+
+				long aTime = 0;
+				try {
+					SimpleDateFormat aFormat = new SimpleDateFormat("HH:mm:ss");
+					aFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+					aTime = aFormat.parse(mCountdownEntry.getText().toString())
+					                .getTime();
+				} catch (ParseException e) {
+				}
+				if (aTime == 0) {
+					try {
+						SimpleDateFormat aFormat = new SimpleDateFormat("mm:ss");
+						aFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+						aTime = aFormat.parse(
+						                mCountdownEntry.getText().toString())
+						                .getTime();
+					} catch (ParseException e) {
+					}
+				}
+				System.out.println("atime=" + aTime);
+				mCommunicationService.getSlideShow().getTimer()
+				                .setCountdownTime(aTime);
+				return true;
+			}
+			return false;
 		}
 	}
 
