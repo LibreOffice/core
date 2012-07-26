@@ -110,7 +110,11 @@ public class PresentationActivity extends Activity {
 		private ToggleButton mTimeLabel;
 		private ToggleButton mThumbnailButton;
 
+		// ------- CLOCKBAR
 		private View mClockBar;
+		private ToggleButton mClockBar_clockButton;
+		private ToggleButton mClockBar_stopwatchButton;
+		private ToggleButton mClockBar_countdownButton;
 
 		private String aTimeFormat = getResources().getString(
 		                R.string.actionbar_timeformat);
@@ -140,6 +144,8 @@ public class PresentationActivity extends Activity {
 			                R.id.actionbar_time);
 			mTimeLabel.setOnClickListener(this);
 
+			setupClockBar();
+
 			// Listen for fragment changes
 			getFragmentManager().addOnBackStackChangedListener(this);
 
@@ -147,6 +153,36 @@ public class PresentationActivity extends Activity {
 			timerHandler.removeCallbacks(timerUpdateThread);
 			timerHandler.postDelayed(timerUpdateThread, 50);
 
+		}
+
+		private void setupClockBar() {
+			LayoutInflater aInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			aInflater.inflate(R.layout.presentation_clockbar, mLayout);
+			mClockBar = mLayout.findViewById(R.id.clockbar);
+			mClockBar.setVisibility(View.INVISIBLE);
+
+			mClockBar_clockButton = (ToggleButton) mClockBar
+			                .findViewById(R.id.clockbar_toggle_clockmode);
+			mClockBar_stopwatchButton = (ToggleButton) mClockBar
+			                .findViewById(R.id.clockbar_toggle_stopwatchmode);
+			mClockBar_countdownButton = (ToggleButton) mClockBar
+			                .findViewById(R.id.clockbar_toggle_countdownmode);
+			mClockBar_clockButton.setOnClickListener(this);
+			mClockBar_stopwatchButton.setOnClickListener(this);
+			mClockBar_countdownButton.setOnClickListener(this);
+
+			updateClockBar();
+
+		}
+
+		private void updateClockBar() {
+			// TODO: show/hide the sub bar
+			mClockBar_clockButton.setChecked(!mTimerOn);
+
+			boolean aIsCountdown = mCommunicationService.getSlideShow()
+			                .getTimer().isCountdown();
+			mClockBar_stopwatchButton.setChecked(mTimerOn && !aIsCountdown);
+			mClockBar_countdownButton.setChecked(mTimerOn && aIsCountdown);
 		}
 
 		private Handler timerHandler = new Handler();
@@ -175,6 +211,7 @@ public class PresentationActivity extends Activity {
 
 		@Override
 		public void onClick(View aSource) {
+			// --------------------------------- ACTIONBAR BUTTONS -------------
 			if (aSource == mThumbnailButton) {
 				if (!mThumbnailFragment.isVisible()) {
 					FragmentTransaction ft = getFragmentManager()
@@ -187,40 +224,28 @@ public class PresentationActivity extends Activity {
 					getFragmentManager().popBackStack();
 				}
 			} else if (aSource == mTimeLabel) {
-				if (mClockBar == null) {
-					LayoutInflater aInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-					mClockBar = aInflater.inflate(
-					                R.layout.presentation_clockbar, mLayout);
-					mClockBar = mLayout.findViewById(R.id.clockbar);
-					if (!mTimerOn) {
-						((ToggleButton) mClockBar
-						                .findViewById(R.id.clockbar_toggle_clockmode))
-						                .setChecked(true);
-					} else {
-						boolean aIsCountdown = mCommunicationService
-						                .getSlideShow().getTimer()
-						                .isCountdown();
-						((ToggleButton) mClockBar
-						                .findViewById(R.id.clockbar_toggle_stopwatchmode))
-						                .setChecked(!aIsCountdown);
-						((ToggleButton) mClockBar
-						                .findViewById(R.id.clockbar_toggle_countdownmode))
-						                .setChecked(aIsCountdown);
-					}
 
+				if (mClockBar.getVisibility() == View.VISIBLE) {
+					mClockBar.setVisibility(View.INVISIBLE);
 				} else {
-					//					mClockBar.setVisibility(View.INVISIBLE);
-
-					//					((ViewGroup) mClockBar.getParent()).removeView(mClockBar);
-					if (mClockBar.getVisibility() == View.VISIBLE) {
-						mClockBar.setVisibility(View.INVISIBLE);
-					} else {
-						mClockBar.setVisibility(View.VISIBLE);
-						mClockBar.bringToFront();
-					}
-					//					mLayout.removeView(mClockBar);
-					//					mClockBar = null;
+					mClockBar.setVisibility(View.VISIBLE);
+					mClockBar.bringToFront();
 				}
+			}
+			// ------------------------------------ CLOCKBAR BUTTONS -----------
+			if (aSource == mClockBar_clockButton) {
+				mTimerOn = false;
+				updateClockBar();
+			} else if (aSource == mClockBar_stopwatchButton) {
+				mTimerOn = true;
+				mCommunicationService.getSlideShow().getTimer()
+				                .setCountdown(false);
+				updateClockBar();
+			} else if (aSource == mClockBar_countdownButton) {
+				mTimerOn = true;
+				mCommunicationService.getSlideShow().getTimer()
+				                .setCountdown(true);
+				updateClockBar();
 			}
 
 		}
