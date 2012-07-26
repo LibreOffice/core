@@ -649,7 +649,7 @@ void Desktop::Init()
             // copy bundled folder to the user directory
             osl::FileBase::RC rc = osl::Directory::createPath(aUserPath);
             (void) rc;
-            copy_bundled_recursive( aPreregBundledPath, aUserPath, +1 );
+            if (false) copy_bundled_recursive( aPreregBundledPath, aUserPath, +1 );
         }
     }
 #endif
