@@ -41,6 +41,9 @@ public class PresentationFragment extends Fragment {
 	private float mOriginalCoverflowWidth;
 	private float mOriginalCoverflowHeight;
 
+	private float mNewCoverflowWidth = 0;
+	private float mNewCoverflowHeight = 0;
+
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 	                Bundle savedInstanceState) {
 		mContext = container.getContext();
@@ -72,6 +75,18 @@ public class PresentationFragment extends Fragment {
 		// Save the height/width for future reference
 		mOriginalCoverflowHeight = mTopView.getImageHeight();
 		mOriginalCoverflowWidth = mTopView.getImageWidth();
+
+		if (mNewCoverflowHeight != 0) {
+			ThumbnailAdapter aAdapter = (ThumbnailAdapter) mTopView
+			                .getAdapter();
+			aAdapter.setHeight(mNewCoverflowHeight);
+			mTopView.setImageHeight(mNewCoverflowHeight);
+			aAdapter.setWidth(mNewCoverflowWidth);
+			mTopView.setImageWidth(mNewCoverflowWidth);
+
+			// We need to update the view now
+			aAdapter.notifyDataSetChanged();
+		}
 		return v;
 	}
 
@@ -126,6 +141,9 @@ public class PresentationFragment extends Fragment {
 				// is unnecessary / even causes problems.
 				//				aParams.height += aDiff;
 				//				mTopView.setLayoutParams(aParams);
+
+				mNewCoverflowHeight = aHeightNew;
+				mNewCoverflowWidth = aWidthNew;
 
 				aAdapter.setHeight(aHeightNew);
 				mTopView.setImageHeight(aHeightNew);
