@@ -248,7 +248,7 @@ installer::control::set_addsystemintegration($allvariableshashref);
 ########################################################
 
 my $oldloggingdir = $loggingdir;
-installer::systemactions::remove_empty_directory($oldloggingdir);
+installer::systemactions::remove_complete_directory($oldloggingdir);
 $loggingdir = installer::systemactions::create_directories("logging", "");
 $loggingdir = $loggingdir . $installer::globals::separator;
 $installer::globals::exitlog = $loggingdir;
