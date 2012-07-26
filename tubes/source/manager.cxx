@@ -26,9 +26,11 @@
  * instead of those above.
  */
 
-#include "tubes/manager.hxx"
-#include "tubes/constants.h"
-#include "tubes/file-transfer-helper.h"
+#include <tubes/manager.hxx>
+#include <tubes/conference.hxx>
+#include <tubes/constants.h>
+#include <tubes/contact-list.hxx>
+#include <tubes/file-transfer-helper.h>
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/frame/XComponentLoader.hpp>
