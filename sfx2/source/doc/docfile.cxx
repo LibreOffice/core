@@ -248,7 +248,6 @@ public:
     ::ucbhelper::Content aContent;
     bool bUpdatePickList:1;
     bool bIsTemp:1;
-    bool bForceSynchron:1;
     bool bDownloadDone:1;
     bool bDontCallDoneLinkOnSharingError:1;
     bool bIsStorage:1;
@@ -328,7 +327,6 @@ SfxMedium_Impl::SfxMedium_Impl( SfxMedium* pAntiImplP ) :
     m_eError(SVSTREAM_OK),
     bUpdatePickList(true),
     bIsTemp( false ),
-    bForceSynchron( false ),
     bDownloadDone( true ),
     bDontCallDoneLinkOnSharingError( false ),
     bIsStorage( false ),
@@ -3021,7 +3019,6 @@ void SfxMedium::ForceSynchronStream_Impl( sal_Bool bForce )
         if( pBytes )
             pBytes->SetSynchronMode( bForce );
     }
-    pImp->bForceSynchron = bForce;
 }
 
 //----------------------------------------------------------------
