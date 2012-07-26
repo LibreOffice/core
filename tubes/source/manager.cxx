@@ -89,7 +89,6 @@ TeleManager*     TeleManager::pSingleton = NULL;
 class TeleManagerImpl
 {
 public:
-    GMainLoop*                          mpLoop;
     TpAutomaticClientFactory*           mpFactory;
     TpBaseClient*                       mpClient;
     TpBaseClient*                       mpFileTransferClient;
@@ -387,7 +386,7 @@ static void TeleManager_AccountManagerReadyHandler(
 }
 
 
-TeleManager::TeleManager( bool bCreateOwnGMainLoop )
+TeleManager::TeleManager()
     :
         mbChannelReadyHandlerInvoked( false)
 {
@@ -399,11 +398,6 @@ TeleManager::TeleManager( bool bCreateOwnGMainLoop )
     ++nRefCount;
     if (!pImpl)
         pImpl = new TeleManagerImpl;
-
-    // We need a main loop, else no callbacks.
-    /* TODO: could the loop be run in another thread? */
-    if (bCreateOwnGMainLoop && !pImpl->mpLoop)
-        pImpl->mpLoop = g_main_loop_new( NULL, FALSE);
 }
 
 
@@ -860,50 +854,34 @@ rtl::OString TeleManager::getFullObjectPath()
 
 void TeleManager::iterateLoop()
 {
-    GMainContext* pContext = getMainContext();
-    g_main_context_iteration( pContext, TRUE);
+    g_main_context_iteration( NULL, TRUE );
 }
 
 
 void TeleManager::iterateLoop( CallBackInvokedFunc pFunc )
 {
-    GMainContext* pContext = getMainContext();
     while (!(*pFunc)())
     {
-        g_main_context_iteration( pContext, TRUE);
+        g_main_context_iteration( NULL, TRUE );
     }
 }
 
 
 void TeleManager::iterateLoop( ManagerCallBackInvokedFunc pFunc )
 {
-    GMainContext* pContext = getMainContext();
     while (!(this->*pFunc)())
     {
-        g_main_context_iteration( pContext, TRUE);
+        g_main_context_iteration( NULL, TRUE );
     }
 }
 
 
 void TeleManager::iterateLoop( const TeleConference* pConference, ConferenceCallBackInvokedFunc pFunc )
 {
-    GMainContext* pContext = getMainContext();
     while (!(pConference->*pFunc)())
     {
-        g_main_context_iteration( pContext, TRUE);
+        g_main_context_iteration( NULL, TRUE );
     }
-}
-
-
-GMainLoop* TeleManager::getMainLoop() const
-{
-    return pImpl->mpLoop;
-}
-
-
-GMainContext* TeleManager::getMainContext() const
-{
-    return (pImpl->mpLoop ? g_main_loop_get_context( pImpl->mpLoop) : NULL);
 }
 
 
@@ -958,7 +936,6 @@ void TeleManager::addSuffixToNames( const char* pName )
 
 TeleManagerImpl::TeleManagerImpl()
     :
-        mpLoop( NULL),
         mpFactory( NULL),
         mpClient( NULL),
         mpFileTransferClient( NULL),
@@ -986,8 +963,6 @@ TeleManagerImpl::~TeleManagerImpl()
         g_object_unref( mpAccountManager);
     if (mpContactList)
         delete mpContactList;
-    if (mpLoop)
-        g_main_loop_unref( mpLoop);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
