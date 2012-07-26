@@ -82,8 +82,6 @@ const extern sal_uLong nVCLRLut[ 6 ] = { 16, 17, 18, 19, 20, 21 };
 const extern sal_uLong nVCLGLut[ 6 ] = { 0, 6, 12, 18, 24, 30 };
 const extern sal_uLong nVCLBLut[ 6 ] = { 0, 36, 72, 108, 144, 180 };
 
-// ------------------------------------------------------------------------
-
 const extern sal_uLong nVCLDitherLut[ 256 ] =
 {
        0, 49152, 12288, 61440,  3072, 52224, 15360, 64512,   768, 49920, 13056,
@@ -111,8 +109,6 @@ const extern sal_uLong nVCLDitherLut[ 256 ] =
    39424, 23040, 42496, 26112, 38400, 22016, 43264, 26880, 39168, 22784, 42240,
    25856, 38144, 21760
 };
-
-// ------------------------------------------------------------------------
 
 const extern sal_uLong nVCLLut[ 256 ] =
 {
@@ -150,8 +146,6 @@ const extern sal_uLong nVCLLut[ 256 ] =
     318928,320214,321500,322786,324072,325358,326644,327930
 };
 
-// ------------------------------------------------------------------------
-
 const long FloydMap[256] =
 {
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -172,8 +166,6 @@ const long FloydMap[256] =
     5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5
 };
 
-// ------------------------------------------------------------------------
-
 const long FloydError1[61] =
 {
     -7680, -7424, -7168, -6912, -6656, -6400, -6144,
@@ -185,8 +177,6 @@ const long FloydError1[61] =
     3840, 4096, 4352, 4608, 4864, 5120, 5376, 5632,
     5888, 6144, 6400, 6656, 6912, 7168, 7424, 7680
 };
-
-// ------------------------------------------------------------------------
 
 const long FloydError3[61] =
 {
@@ -200,8 +190,6 @@ const long FloydError3[61] =
     13824, 14592, 15360, 16128, 16896, 17664, 18432,
     19200, 19968, 20736, 21504, 22272, 23040
 };
-
-// ------------------------------------------------------------------------
 
 const long FloydError5[61] =
 {
@@ -217,8 +205,6 @@ const long FloydError5[61] =
     38400
 };
 
-// ------------------------------------------------------------------------
-
 const long FloydError7[61] =
 {
     -53760, -51968, -50176, -48384, -46592, -44800,
@@ -232,8 +218,6 @@ const long FloydError7[61] =
     41216, 43008, 44800, 46592, 48384, 50176, 51968,
     53760
 };
-
-// ------------------------------------------------------------------------
 
 const long FloydIndexMap[6] =
 {
@@ -362,8 +346,6 @@ sal_Bool Bitmap::Convert( BmpConversion eConversion )
     return bRet;
 }
 
-// ------------------------------------------------------------------------
-
 sal_Bool Bitmap::ImplMakeMono( sal_uInt8 cThreshold )
 {
     BitmapReadAccess*   pReadAcc = AcquireReadAccess();
@@ -434,8 +416,6 @@ sal_Bool Bitmap::ImplMakeMono( sal_uInt8 cThreshold )
 
     return bRet;
 }
-
-// ------------------------------------------------------------------------
 
 sal_Bool Bitmap::ImplMakeMonoDither()
 {
@@ -510,8 +490,6 @@ sal_Bool Bitmap::ImplMakeMonoDither()
 
     return bRet;
 }
-
-// ------------------------------------------------------------------------
 
 sal_Bool Bitmap::ImplMakeGreyscales( sal_uInt16 nGreys )
 {
@@ -625,8 +603,6 @@ sal_Bool Bitmap::ImplMakeGreyscales( sal_uInt16 nGreys )
     return bRet;
 }
 
-// ------------------------------------------------------------------------
-
 sal_Bool Bitmap::ImplConvertUp( sal_uInt16 nBitCount, Color* pExtColor )
 {
     DBG_ASSERT( nBitCount > GetBitCount(), "New BitCount must be greater!" );
@@ -700,8 +676,6 @@ sal_Bool Bitmap::ImplConvertUp( sal_uInt16 nBitCount, Color* pExtColor )
 
     return bRet;
 }
-
-// ------------------------------------------------------------------------
 
 sal_Bool Bitmap::ImplConvertDown( sal_uInt16 nBitCount, Color* pExtColor )
 {
@@ -827,8 +801,6 @@ sal_Bool Bitmap::ImplConvertDown( sal_uInt16 nBitCount, Color* pExtColor )
     return bRet;
 }
 
-// ------------------------------------------------------------------------
-
 sal_Bool Bitmap::ImplConvertGhosted()
 {
     Bitmap              aNewBmp;
@@ -903,8 +875,6 @@ sal_Bool Bitmap::ImplConvertGhosted()
     return bRet;
 }
 
-// ------------------------------------------------------------------------
-
 sal_Bool Bitmap::Scale( const double& rScaleX, const double& rScaleY, sal_uLong nScaleFlag )
 {
     bool bRet;
@@ -950,8 +920,6 @@ sal_Bool Bitmap::Scale( const double& rScaleX, const double& rScaleY, sal_uLong 
     return bRet;
 }
 
-// ------------------------------------------------------------------------
-
 sal_Bool Bitmap::Scale( const Size& rNewSize, sal_uLong nScaleFlag )
 {
     const Size  aSize( GetSizePixel() );
@@ -968,8 +936,6 @@ sal_Bool Bitmap::Scale( const Size& rNewSize, sal_uLong nScaleFlag )
 
     return bRet;
 }
-
-// ------------------------------------------------------------------------
 
 sal_Bool Bitmap::ImplScaleFast( const double& rScaleX, const double& rScaleY )
 {
@@ -1039,8 +1005,6 @@ sal_Bool Bitmap::ImplScaleFast( const double& rScaleX, const double& rScaleY )
 
     return bRet;
 }
-
-// ------------------------------------------------------------------------
 
 sal_Bool Bitmap::ImplScaleInterpolate( const double& rScaleX, const double& rScaleY )
 {
@@ -1276,8 +1240,6 @@ sal_Bool Bitmap::ImplScaleInterpolate( const double& rScaleX, const double& rSca
     return bRet;
 }
 
-// ------------------------------------------------------------------------
-
 sal_Bool Bitmap::Dither( sal_uLong nDitherFlags )
 {
     sal_Bool bRet = sal_False;
@@ -1295,8 +1257,6 @@ sal_Bool Bitmap::Dither( sal_uLong nDitherFlags )
 
     return bRet;
 }
-
-// ------------------------------------------------------------------------
 
 sal_Bool Bitmap::ImplDitherMatrix()
 {
@@ -1365,8 +1325,6 @@ sal_Bool Bitmap::ImplDitherMatrix()
 
     return bRet;
 }
-
-// ------------------------------------------------------------------------
 
 sal_Bool Bitmap::ImplDitherFloyd()
 {
@@ -1507,8 +1465,6 @@ sal_Bool Bitmap::ImplDitherFloyd()
     return bRet;
 }
 
-// ------------------------------------------------------------------------
-
 sal_Bool Bitmap::ImplDitherFloyd16()
 {
     BitmapReadAccess*   pReadAcc = AcquireReadAccess();
@@ -1598,8 +1554,6 @@ sal_Bool Bitmap::ImplDitherFloyd16()
     return bRet;
 }
 
-// ------------------------------------------------------------------------
-
 sal_Bool Bitmap::ReduceColors( sal_uInt16 nColorCount, BmpReduce eReduce )
 {
     sal_Bool bRet;
@@ -1620,8 +1574,6 @@ sal_Bool Bitmap::ReduceColors( sal_uInt16 nColorCount, BmpReduce eReduce )
 
     return bRet;
 }
-
-// ------------------------------------------------------------------------
 
 sal_Bool Bitmap::ImplReduceSimple( sal_uInt16 nColorCount )
 {
@@ -1685,15 +1637,11 @@ sal_Bool Bitmap::ImplReduceSimple( sal_uInt16 nColorCount )
     return bRet;
 }
 
-// ------------------------------------------------------------------------
-
 struct PopularColorCount
 {
     sal_uInt32  mnIndex;
     sal_uInt32  mnCount;
 };
-
-// ------------------------------------------------------------------------
 
 extern "C" int __LOADONCALLAPI ImplPopularCmpFnc( const void* p1, const void* p2 )
 {
@@ -1708,8 +1656,6 @@ extern "C" int __LOADONCALLAPI ImplPopularCmpFnc( const void* p1, const void* p2
 
     return nRet;
 }
-
-// ------------------------------------------------------------------------
 
 sal_Bool Bitmap::ImplReducePopular( sal_uInt16 nColCount )
 {
@@ -1856,8 +1802,6 @@ sal_Bool Bitmap::ImplReducePopular( sal_uInt16 nColCount )
     return bRet;
 }
 
-// ------------------------------------------------------------------------
-
 sal_Bool Bitmap::ImplReduceMedian( sal_uInt16 nColCount )
 {
     BitmapReadAccess*   pRAcc = AcquireReadAccess();
@@ -1946,8 +1890,6 @@ sal_Bool Bitmap::ImplReduceMedian( sal_uInt16 nColCount )
 
     return bRet;
 }
-
-// ------------------------------------------------------------------------
 
 void Bitmap::ImplMedianCut( sal_uLong* pColBuf, BitmapPalette& rPal,
                             long nR1, long nR2, long nG1, long nG2, long nB1, long nB2,
@@ -2080,21 +2022,15 @@ void Bitmap::ImplMedianCut( sal_uLong* pColBuf, BitmapPalette& rPal,
     }
 }
 
-// ------------------------------------------------------------------------
-
 sal_Bool Bitmap::Vectorize( PolyPolygon& rPolyPoly, sal_uLong nFlags, const Link* pProgress )
 {
     return ImplVectorizer().ImplVectorize( *this, rPolyPoly, nFlags, pProgress );
 }
 
-// ------------------------------------------------------------------------
-
 sal_Bool Bitmap::Vectorize( GDIMetaFile& rMtf, sal_uInt8 cReduce, sal_uLong nFlags, const Link* pProgress )
 {
     return ImplVectorizer().ImplVectorize( *this, rMtf, cReduce, nFlags, pProgress );
 }
-
-// ------------------------------------------------------------------------
 
 sal_Bool Bitmap::Adjust( short nLuminancePercent, short nContrastPercent,
                      short nChannelRPercent, short nChannelGPercent, short nChannelBPercent,
