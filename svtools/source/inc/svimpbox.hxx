@@ -44,7 +44,6 @@ class SvLBoxTreeList;
 class SvImpLBox;
 class SvLBoxEntry;
 class SvLBoxTab;
-class TabBar;
 namespace comphelper
 {
     namespace string
@@ -105,7 +104,6 @@ private:
     SvLBoxButton*       pActiveButton;
     SvLBoxEntry*        pActiveEntry;
     SvLBoxTab*          pActiveTab;
-    TabBar*             pTabBar;
 
     ScrollBar           aVerSBar;
     ScrollBar           aHorSBar;
