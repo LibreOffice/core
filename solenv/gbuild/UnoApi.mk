@@ -131,7 +131,7 @@ endef
 
 define gb_UnoApi__use_api
 $(call gb_UnoApiHeadersTarget_use_api,$(1),$(2))
-$(call gb_UnoApi_get_target,$(1)) : $(call gb_UnoApi_get_target,$(2))
+$(call gb_UnoApi_get_target,$(1)) :| $(call gb_UnoApi_get_target,$(2))
 
 endef
 
