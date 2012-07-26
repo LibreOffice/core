@@ -260,7 +260,6 @@ public:
     bool m_bGotDateTime:1;
     bool m_bRemoveBackup:1;
     bool m_bOriginallyReadOnly:1;
-    bool m_bRoot:1;
     bool m_bTriedStorage:1;
     bool m_bRemote:1;
     bool m_bInputStreamIsReadOnly:1;
@@ -334,7 +333,6 @@ SfxMedium_Impl::SfxMedium_Impl( SfxMedium* pAntiImplP ) :
     m_bGotDateTime( false ),
     m_bRemoveBackup( false ),
     m_bOriginallyReadOnly(false),
-    m_bRoot(false),
     m_bTriedStorage(false),
     m_bRemote(false),
     m_bInputStreamIsReadOnly(false),
@@ -1434,11 +1432,6 @@ void SfxMedium::CloseZipStorage_Impl()
 
         pImp->m_xZipStorage = uno::Reference< embed::XStorage >();
     }
-}
-
-sal_Bool SfxMedium::IsRoot() const
-{
-    return pImp->m_bRoot;
 }
 
 void SfxMedium::CloseStorage()
@@ -2904,31 +2897,11 @@ SfxMedium::SfxMedium( const ::com::sun::star::uno::Sequence< ::com::sun::star::b
 
 //------------------------------------------------------------------
 
-SfxMedium::SfxMedium( const uno::Reference < embed::XStorage >& rStor, const String& rBaseURL, const SfxItemSet* p, sal_Bool bRootP ) :
+SfxMedium::SfxMedium( const uno::Reference < embed::XStorage >& rStor, const String& rBaseURL, const SfxItemSet* p ) :
     pImp(new SfxMedium_Impl(this))
 {
-    pImp->m_bRoot = bRootP;
-
     String aType = SfxFilter::GetTypeFromStorage( rStor );
     pImp->m_pFilter = SFX_APP()->GetFilterMatcher().GetFilter4EA( aType );
-    DBG_ASSERT( pImp->m_pFilter, "No Filter for storage found!" );
-
-    Init_Impl();
-    pImp->xStorage = rStor;
-    pImp->bDisposeStorage = false;
-
-    // always take BaseURL first, could be overwritten by ItemSet
-    GetItemSet()->Put( SfxStringItem( SID_DOC_BASEURL, rBaseURL ) );
-    if ( p )
-        GetItemSet()->Put( *p );
-}
-
-SfxMedium::SfxMedium( const uno::Reference < embed::XStorage >& rStor, const String& rBaseURL, const String& rTypeName, const SfxItemSet* p, sal_Bool bRootP ) :
-    pImp(new SfxMedium_Impl(this))
-{
-    pImp->m_bRoot = bRootP;
-
-    pImp->m_pFilter = SFX_APP()->GetFilterMatcher().GetFilter4EA( rTypeName );
     DBG_ASSERT( pImp->m_pFilter, "No Filter for storage found!" );
 
     Init_Impl();
