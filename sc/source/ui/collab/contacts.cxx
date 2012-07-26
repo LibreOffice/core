@@ -170,7 +170,7 @@ public:
         maBtnListen( this, ScResId( BTN_LISTEN ) ),
         maListContainer( this, ScResId( CTL_LIST ) ),
         maList( maListContainer ),
-        mpManager( TeleManager::get() )
+        mpManager( new TeleManager() )
     {
         Hide();
         maBtnConnect.SetClickHdl( LINK( this, TubeContacts, BtnConnectHdl ) );
@@ -196,7 +196,7 @@ public:
     }
     virtual ~TubeContacts()
     {
-        mpManager->unref();
+        delete mpManager;
     }
 
     static rtl::OUString fromUTF8( const char *pStr )

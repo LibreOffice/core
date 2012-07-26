@@ -129,7 +129,7 @@ void TestTeleTubes::testInitialize()
     mpMainLoop = g_main_loop_new (NULL, FALSE);
     g_timeout_add_seconds (10, timed_out, mpMainLoop);
 
-    mpManager = TeleManager::get();
+    mpManager = new TeleManager();
 }
 
 void TestTeleTubes::testContactList()
@@ -279,12 +279,11 @@ void TestTeleTubes::testDestroyTeleTubes()
         g_object_unref(mpAccepterContact);
         mpAccepterContact = NULL;
     }
-    if (mpManager)
-        mpManager->unref();
     g_main_loop_unref( mpMainLoop );
     if (mpConference1)
         mpConference1->close();
     delete mpConference1;
+    delete mpManager;
 }
 
 void TestTeleTubes::testFailAlways()
