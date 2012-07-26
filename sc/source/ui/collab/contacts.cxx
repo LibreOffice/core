@@ -34,6 +34,8 @@
 #include "docsh.hxx"
 #include "scresid.hxx"
 #include <svtools/filter.hxx>
+#include <tubes/conference.hxx>
+#include <tubes/contact-list.hxx>
 #include <tubes/manager.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/dialog.hxx>
