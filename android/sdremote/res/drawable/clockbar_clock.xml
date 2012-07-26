@@ -2,8 +2,10 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <item android:drawable="@drawable/actionbar_toggle"/>
-    <item><bitmap
-        android:src="@drawable/actionbar_icon_thumbs"
-        android:gravity="center"  /></item>
+    <item>
+        <bitmap
+            android:gravity="center"
+            android:src="@drawable/clockbar_icon_clock" />
+    </item>
 
 </layer-list>

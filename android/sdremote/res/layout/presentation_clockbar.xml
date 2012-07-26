@@ -2,29 +2,34 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:background="#BB000000">
+    android:background="#EE313131"
+    android:orientation="horizontal" >
 
     <ToggleButton
         android:id="@+id/clockbar_toggle_clockmode"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-
-        android:text="ToggleButton" />
+        android:background="@drawable/clockbar_clock"
+        android:textOff=""
+        android:textOn="" />
 
     <ToggleButton
         android:id="@+id/clockbar_toggle_stopwatchmode"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="@drawable/actionbar_toggle" />
+        android:background="@drawable/clockbar_stopwatch"
+        android:textOff=""
+        android:textOn="" />
 
     <ToggleButton
         android:id="@+id/clockbar_toggle_countdownmode"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="@drawable/actionbar_toggle" />
+        android:background="@drawable/clockbar_countdown"
+        android:textOff=""
+        android:textOn="" />
 
 </LinearLayout>

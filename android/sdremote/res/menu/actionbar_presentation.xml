@@ -4,7 +4,7 @@
     <item
         android:id="@+id/actionbar_presentation_submenu"
         android:showAsAction="always"
-        android:icon="@drawable/icon_overflow">
+        android:icon="@drawable/actionbar_icon_overflow">
         <menu>
             <item
                 android:id="@+id/actionbar_presentation_submenu_blank"
