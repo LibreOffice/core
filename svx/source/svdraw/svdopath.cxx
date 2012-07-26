@@ -1799,6 +1799,10 @@ void SdrPathObj::ImpForceKind()
         {
             aRect = ImpGetBoundRect(GetPathPoly());
         }
+
+        // #116244# reset rotation
+        aGeo.nDrehWink = aGeo.nShearWink = 0;
+        aGeo.RecalcSinCos(); aGeo.RecalcTan();
     }
 
     // #i75974# adapt polygon state to object type. This may include a reinterpretation
