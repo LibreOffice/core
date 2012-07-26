@@ -242,7 +242,7 @@ public:
 
     bool isValid (const rtl::OUString &rType) const
     {
-        bool bRet = false;
+        bool bRet = true;
 
         if (meApp == FILTER_APP_WRITER)
         {
