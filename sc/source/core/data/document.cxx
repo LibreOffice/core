@@ -3754,13 +3754,6 @@ sal_uInt8 ScDocument::GetRowFlags( SCROW nRow, SCTAB nTab ) const
     return 0;
 }
 
-ScBitMaskCompressedArray< SCROW, sal_uInt8> & ScDocument::GetRowFlagsArrayModifiable(
-        SCTAB nTab )
-{
-    return const_cast< ScBitMaskCompressedArray< SCROW, sal_uInt8> & >(
-            GetRowFlagsArray( nTab));
-}
-
 const ScBitMaskCompressedArray< SCROW, sal_uInt8> & ScDocument::GetRowFlagsArray(
         SCTAB nTab ) const
 {
@@ -3991,6 +3984,22 @@ SCROW ScDocument::CountNonFilteredRows(SCROW nStartRow, SCROW nEndRow, SCTAB nTa
         return 0;
 
     return maTabs[nTab]->CountNonFilteredRows(nStartRow, nEndRow);
+}
+
+bool ScDocument::IsManualRowHeight(SCROW nRow, SCTAB nTab) const
+{
+    if (!ValidTab(nTab) || nTab >= static_cast<SCTAB>(maTabs.size()) || !maTabs[nTab])
+        return false;
+
+    return maTabs[nTab]->IsManualRowHeight(nRow);
+}
+
+void ScDocument::SetRowHeightManual(SCROW nRow, SCTAB nTab, bool bManual)
+{
+    if (!ValidTab(nTab) || nTab >= static_cast<SCTAB>(maTabs.size()) || !maTabs[nTab])
+        return;
+
+    maTabs[nTab]->SetRowHeightManual(nRow, bManual);
 }
 
 void ScDocument::SyncColRowFlags()

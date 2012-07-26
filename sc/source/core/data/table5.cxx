@@ -954,6 +954,19 @@ SCROW ScTable::CountNonFilteredRows(SCROW nStartRow, SCROW nEndRow) const
     return nCount;
 }
 
+bool ScTable::IsManualRowHeight(SCROW nRow) const
+{
+    return (pRowFlags->GetValue(nRow) & CR_MANUALSIZE) != 0;
+}
+
+void ScTable::SetRowHeightManual(SCROW nRow, bool bManual)
+{
+    if (bManual)
+        pRowFlags->OrValue(nRow, CR_MANUALSIZE);
+    else
+        pRowFlags->AndValue(nRow, sal::static_int_cast<sal_uInt8>(~CR_MANUALSIZE));
+}
+
 namespace {
 
 void lcl_syncFlags(ScFlatBoolColSegments& rColSegments, ScFlatBoolRowSegments& rRowSegments,
