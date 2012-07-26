@@ -90,7 +90,8 @@ public:
     TpBaseClient*                       mpFileTransferClient;
     TpAccountManager*                   mpAccountManager;
     TeleManager::AccountManagerStatus   meAccountManagerStatus;
-    bool                                mbAccountManagerReadyHandlerInvoked;
+    bool                                mbAccountManagerReadyHandlerInvoked : 1;
+    bool                                mbChannelReadyHandlerInvoked : 1;
     ContactList*                        mpContactList;
     OString                             msCurrentUUID;
     typedef std::map< OString, TeleConference* > MapStringConference;
@@ -383,8 +384,6 @@ static void TeleManager_AccountManagerReadyHandler(
 
 
 TeleManager::TeleManager()
-    :
-        mbChannelReadyHandlerInvoked( false)
 {
     SAL_INFO( "tubes", "TeleManager::get: count: " << nRefCount );
     // The glib object types need to be initialized, else we aren't going
@@ -734,10 +733,19 @@ void TeleManager::setAccountManagerReadyHandlerInvoked( bool b )
     pImpl->mbAccountManagerReadyHandlerInvoked = b;
 }
 
-
 bool TeleManager::isAccountManagerReadyHandlerInvoked() const
 {
     return pImpl->mbAccountManagerReadyHandlerInvoked;
+}
+
+void TeleManager::setChannelReadyHandlerInvoked( bool b )
+{
+    pImpl->mbChannelReadyHandlerInvoked = b;
+}
+
+bool TeleManager::isChannelReadyHandlerInvoked() const
+{
+    return pImpl->mbChannelReadyHandlerInvoked;
 }
 
 ContactList* TeleManager::getContactList() const
@@ -902,7 +910,8 @@ TeleManagerImpl::TeleManagerImpl()
         mpFileTransferClient( NULL),
         mpAccountManager( NULL),
         meAccountManagerStatus( TeleManager::AMS_UNINITIALIZED),
-        mbAccountManagerReadyHandlerInvoked( false)
+        mbAccountManagerReadyHandlerInvoked( false),
+        mbChannelReadyHandlerInvoked( false)
 {
 }
 

@@ -141,8 +141,8 @@ public:
 
     // Only for callbacks.
     void                    addConference( TeleConference* pConference );
-    void                    setChannelReadyHandlerInvoked( bool b ) { mbChannelReadyHandlerInvoked = b; }
-    bool                    isChannelReadyHandlerInvoked() const { return mbChannelReadyHandlerInvoked; }
+    void                    setChannelReadyHandlerInvoked( bool b );
+    bool                    isChannelReadyHandlerInvoked() const;
     void                    setAccountManagerReadyHandlerInvoked( bool b );
     bool                    isAccountManagerReadyHandlerInvoked() const;
 
@@ -188,8 +188,6 @@ public:
 
 private:
     void                    ensureLegacyChannel( TpAccount* pAccount, TpContact* pBuddy );
-
-    bool                    mbChannelReadyHandlerInvoked : 1;
 
     static TeleManagerImpl* pImpl;
     static sal_uInt32       nRefCount;
