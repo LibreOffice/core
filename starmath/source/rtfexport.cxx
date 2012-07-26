@@ -46,7 +46,7 @@ bool SmRtfExport::ConvertFromStarMath(OStringBuffer& rBuffer)
     m_pBuffer = &rBuffer;
     m_pBuffer->append("{" OOO_STRING_SVTOOLS_RTF_IGNORE "\\moMath");
     HandleNode(m_pTree, 0);
-    m_pBuffer->append("}");
+    m_pBuffer->append("}"); // moMath
     return true;
 }
 
@@ -73,6 +73,9 @@ void SmRtfExport::HandleNode(const SmNode* pNode, int nLevel)
             break;
         case NOPER:
             HandleOperator(static_cast<const SmOperNode*>(pNode), nLevel);
+            break;
+        case NUNHOR:
+            HandleUnaryOperation(static_cast<const SmUnHorNode*>(pNode), nLevel);
             break;
         case NBINHOR:
             HandleBinaryOperation(static_cast<const SmBinHorNode*>(pNode), nLevel);
@@ -134,9 +137,17 @@ void SmRtfExport::HandleAllSubNodes(const SmNode* pNode, int nLevel)
     }
 }
 
-void SmRtfExport::HandleVerticalStack(const SmNode* /*pNode*/, int /*nLevel*/)
+void SmRtfExport::HandleVerticalStack(const SmNode* pNode, int nLevel)
 {
-    SAL_INFO("starmath.rtf", "TODO: " << OSL_THIS_FUNC);
+    m_pBuffer->append("{\\meqArr ");
+    int size = pNode->GetNumSubNodes();
+    for (int i = 0; i < size; ++i)
+    {
+        m_pBuffer->append("{\\me ");
+        HandleNode(pNode->GetSubNode( i ), nLevel + 1);
+        m_pBuffer->append("}"); // me
+    }
+    m_pBuffer->append("}"); // meqArr
 }
 
 void SmRtfExport::HandleText(const SmNode* pNode, int /*nLevel*/)
@@ -152,7 +163,7 @@ void SmRtfExport::HandleText(const SmNode* pNode, int /*nLevel*/)
         m_pBuffer->append(msfilter::rtfutil::OutString(aValue, RTL_TEXTENCODING_MS_1252));
     }
 
-    m_pBuffer->append("}");
+    m_pBuffer->append("}"); // mr
 }
 
 void SmRtfExport::HandleFractions(const SmNode* pNode, int nLevel, const char* type)
@@ -176,9 +187,9 @@ void SmRtfExport::HandleFractions(const SmNode* pNode, int nLevel, const char* t
     m_pBuffer->append("}"); // mf
 }
 
-void SmRtfExport::HandleUnaryOperation(const SmUnHorNode* /*pNode*/, int /*nLevel*/)
+void SmRtfExport::HandleUnaryOperation(const SmUnHorNode* pNode, int nLevel)
 {
-    SAL_INFO("starmath.rtf", "TODO: " << OSL_THIS_FUNC);
+    HandleAllSubNodes(pNode, nLevel);
 }
 
 void SmRtfExport::HandleBinaryOperation(const SmBinHorNode* pNode, int nLevel)
@@ -303,6 +314,8 @@ OString mathSymbolToString(const SmNode* node)
 {
     assert(node->GetType() == NMATH);
     const SmTextNode* txtnode = static_cast<const SmTextNode*>(node);
+    if (txtnode->GetText().Len() == 0)
+        return OString();
     assert(txtnode->GetText().Len() == 1);
     sal_Unicode chr = SmTextNode::ConvertSymbolToUnicode(txtnode->GetText().GetChar(0));
     OUString aValue(chr);
