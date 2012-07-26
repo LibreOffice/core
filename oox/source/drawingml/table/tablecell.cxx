@@ -44,7 +44,8 @@ using ::com::sun::star::drawing::LineStyle;
 namespace oox { namespace drawingml { namespace table {
 
 TableCell::TableCell()
-: mnRowSpan ( 1 )
+: mpTextBody( new TextBody() )
+, mnRowSpan ( 1 )
 , mnGridSpan( 1 )
 , mbhMerge( sal_False )
 , mbvMerge( sal_False )
