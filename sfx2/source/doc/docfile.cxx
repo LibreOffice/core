@@ -280,8 +280,6 @@ public:
     SvStream* m_pInStream;
     SvStream* m_pOutStream;
 
-    long             nFileVersion;
-
     const SfxFilter* pOrigFilter;
     rtl::OUString    aOrigURL;
     DateTime         aExpireTime;
@@ -347,7 +345,6 @@ SfxMedium_Impl::SfxMedium_Impl( SfxMedium* pAntiImplP ) :
     pAntiImpl( pAntiImplP ),
     m_pInStream(NULL),
     m_pOutStream(NULL),
-    nFileVersion( 0 ),
     pOrigFilter( 0 ),
     aExpireTime( Date( Date::SYSTEM ) + 10, Time( Time::SYSTEM ) ),
     pTempFile( NULL ),
@@ -2562,7 +2559,6 @@ SfxMedium::GetInteractionHandler()
 void SfxMedium::SetFilter( const SfxFilter* pFilterP, sal_Bool /*bResetOrig*/ )
 {
     pImp->m_pFilter = pFilterP;
-    pImp->nFileVersion = 0;
 }
 
 const SfxFilter* SfxMedium::GetFilter() const
