@@ -30,13 +30,8 @@
 #define INCLUDED_TUBES_MANAGER_HXX
 
 #include <sal/config.h>
-#include "tubes/tubesdllapi.h"
-#include "tubes/conference.hxx"
-#include "tubes/contact-list.hxx"
+#include <tubes/tubesdllapi.h>
 #include <rtl/ustring.hxx>
-#include <salhelper/thread.hxx>
-#include <rtl/ref.hxx>
-#include <tools/link.hxx>
 
 // For testing purposes, we might need more in future.
 #define LIBO_TUBES_DBUS_INTERFACE "org.libreoffice.calc"
@@ -44,11 +39,11 @@
 #define LIBO_TUBES_DBUS_PATH "/org/libreoffice/calc"
 
 namespace osl { class Mutex; }
+class ContactList;
+class TeleConference;
 class TeleManagerImpl;
 typedef struct _TpAccount TpAccount;
 typedef struct _TpContact TpContact;
-typedef struct _GMainLoop GMainLoop;
-typedef struct _GMainContext GMainContext;
 
 /** Interface to Telepathy DBus Tubes.
 
@@ -192,8 +187,6 @@ private:
     static TeleManagerImpl* pImpl;
     static sal_uInt32       nRefCount;
     static rtl::OString     aNameSuffix;
-
-    friend class TeleManagerImpl;   // access to mutex
 
     static ::osl::Mutex&    GetMutex();
 };
