@@ -102,6 +102,10 @@
 
 #include "langselect.hxx"
 
+#ifdef ENABLE_TELEPATHY
+#include <tubes/manager.hxx>
+#endif
+
 #if defined MACOSX
 #include <errno.h>
 #include <sys/wait.h>
