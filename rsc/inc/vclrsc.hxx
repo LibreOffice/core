@@ -96,8 +96,6 @@ typedef sal_uInt16 WindowBorderStyle;
 
 #define WINDOW_BORDER_NORMAL            ((WindowBorderStyle)0x0001)
 #define WINDOW_BORDER_MONO              ((WindowBorderStyle)0x0002)
-#define WINDOW_BORDER_ACTIVE            ((WindowBorderStyle)0x0004)
-#define WINDOW_BORDER_DOUBLEOUT         ((WindowBorderStyle)0x0008)
 #define WINDOW_BORDER_MENU              ((WindowBorderStyle)0x0010)
 #define WINDOW_BORDER_NOBORDER          ((WindowBorderStyle)0x1000)
 

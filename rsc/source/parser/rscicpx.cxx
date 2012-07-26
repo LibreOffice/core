@@ -314,8 +314,6 @@ RscTop * RscTypCont::InitClassWindow( RscTop * pSuper, RscEnum * pMapUnit,
     // Konstanten in Tabelle stellen
     SETCONST( pBorderStyleEnum, pHS->getID( "WINDOW_BORDER_NORMAL" ),    WINDOW_BORDER_NORMAL );
     SETCONST( pBorderStyleEnum, pHS->getID( "WINDOW_BORDER_MONO" ),      WINDOW_BORDER_MONO );
-    SETCONST( pBorderStyleEnum, pHS->getID( "WINDOW_BORDER_ACTIVE" ),    WINDOW_BORDER_ACTIVE );
-    SETCONST( pBorderStyleEnum, pHS->getID( "WINDOW_BORDER_DOUBLEOUT" ), WINDOW_BORDER_DOUBLEOUT );
     SETCONST( pBorderStyleEnum, pHS->getID( "WINDOW_BORDER_MENU" ),      WINDOW_BORDER_MENU );
     SETCONST( pBorderStyleEnum, pHS->getID( "WINDOW_BORDER_NOBORDER" ),  WINDOW_BORDER_NOBORDER );
 
