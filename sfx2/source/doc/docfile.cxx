@@ -3646,7 +3646,7 @@ sal_Bool SfxMedium::CallApproveHandler( const uno::Reference< task::XInteraction
     return aResult;
 }
 
-sal_Bool SfxMedium::SwitchDocumentToFile( ::rtl::OUString aURL )
+sal_Bool SfxMedium::SwitchDocumentToFile( const rtl::OUString& aURL )
 {
     // the method is only for storage based documents
     bool bResult = false;
