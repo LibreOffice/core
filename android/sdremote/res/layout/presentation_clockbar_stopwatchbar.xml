@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/clockbar_stopwatchbar"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#DD4D4D4D"
+    android:gravity="left|top"
+    android:orientation="horizontal" >
+
+    <Button
+        android:id="@+id/clockbar_stopwatch_run"
+        android:layout_width="0dip"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Test" />
+
+    <Button
+        android:id="@+id/clockbar_stopwatch_reset"
+        android:layout_width="0dip"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Test" />
+
+</LinearLayout>

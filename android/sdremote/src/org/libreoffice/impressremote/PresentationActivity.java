@@ -20,6 +20,8 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ToggleButton;
 
@@ -116,6 +118,16 @@ public class PresentationActivity extends Activity {
 		private ToggleButton mClockBar_stopwatchButton;
 		private ToggleButton mClockBar_countdownButton;
 
+		// ------- STOPWATCH BAR
+		private View mStopwatchBar;
+		private Button mStopwatchButtonRun;
+		private Button mStopwatchButtonReset;
+
+		// ------- COUNTDOWN BAR
+		private View mCountdownBar;
+		private EditText mCountdownEntry;
+		private Button mCountdownButton;
+
 		private String aTimeFormat = getResources().getString(
 		                R.string.actionbar_timeformat);
 		private String aTimerFormat = getResources().getString(
@@ -156,6 +168,7 @@ public class PresentationActivity extends Activity {
 		}
 
 		private void setupClockBar() {
+			// ClockBar
 			LayoutInflater aInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			aInflater.inflate(R.layout.presentation_clockbar, mLayout);
 			mClockBar = mLayout.findViewById(R.id.clockbar);
@@ -171,18 +184,39 @@ public class PresentationActivity extends Activity {
 			mClockBar_stopwatchButton.setOnClickListener(this);
 			mClockBar_countdownButton.setOnClickListener(this);
 
+			// Stopwatch bar
+			aInflater.inflate(R.layout.presentation_clockbar_stopwatchbar,
+			                mLayout);
+			mStopwatchBar = mLayout.findViewById(R.id.clockbar_stopwatchbar);
+			mStopwatchBar.setVisibility(View.INVISIBLE);
+
+			// Countdown bar
+			aInflater.inflate(R.layout.presentation_clockbar_countdownbar,
+			                mLayout);
+			mCountdownBar = mLayout.findViewById(R.id.clockbar_countdownbar);
+			mCountdownBar.setVisibility(View.INVISIBLE);
+
 			updateClockBar();
 
 		}
 
 		private void updateClockBar() {
-			// TODO: show/hide the sub bar
 			mClockBar_clockButton.setChecked(!mTimerOn);
+
+			mCountdownBar.setY(mClockBar.getHeight());
+			mStopwatchBar.setY(mClockBar.getHeight());
 
 			boolean aIsCountdown = mCommunicationService.getSlideShow()
 			                .getTimer().isCountdown();
+			// Stopwatch
 			mClockBar_stopwatchButton.setChecked(mTimerOn && !aIsCountdown);
+			mStopwatchBar.setVisibility(mTimerOn && !aIsCountdown ? View.VISIBLE
+			                : View.INVISIBLE);
+			// Countdown
 			mClockBar_countdownButton.setChecked(mTimerOn && aIsCountdown);
+			mCountdownBar.setVisibility(mTimerOn && aIsCountdown ? View.VISIBLE
+			                : View.INVISIBLE);
+
 		}
 
 		private Handler timerHandler = new Handler();

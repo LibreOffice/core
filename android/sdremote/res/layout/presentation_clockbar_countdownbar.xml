@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/clockbar_countdownbar"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#DD4D4D4D"
+    android:gravity="left|top"
+    android:orientation="horizontal" >
+
+    <EditText
+        android:id="@+id/clockbar_countdown_time"
+        android:layout_width="0dip"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:ems="10"
+        android:inputType="time" >
+    </EditText>
+
+    <Button
+        android:id="@+id/clockbar_countdown_button"
+        android:layout_width="0dip"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Test" />
+
+</LinearLayout>
