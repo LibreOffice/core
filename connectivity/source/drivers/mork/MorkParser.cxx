@@ -576,3 +576,29 @@ std::string &MorkParser::getColumn( int oid )
 
     return foundIter->second;
 }
+
+void MorkParser::dumpColumns()
+{
+    for ( MorkDict::iterator cellsIter = columns_.begin();
+          cellsIter != columns_.end(); cellsIter++ )
+    {
+        char buffer[20];
+        sprintf( buffer, "%d", cellsIter->first );
+        std::string value = cellsIter->second;
+        //SAL_INFO("connectivity.mork", "dumpColumns: " << buffer << " => " << value);
+        std::cout << "dumpColumns: " << buffer << " => " << value << std::endl;
+    }
+}
+
+void MorkParser::dumpValues()
+{
+    for ( MorkDict::iterator cellsIter = values_.begin();
+          cellsIter != values_.end(); cellsIter++ )
+    {
+        char buffer[20];
+        sprintf( buffer, "%d", cellsIter->first );
+        std::string value = cellsIter->second;
+        //SAL_INFO("connectivity.mork", "dumpValues: " << buffer << " => " << value);
+        std::cout << "dumpValues: " << buffer << " => " << value << std::endl;
+    }
+}

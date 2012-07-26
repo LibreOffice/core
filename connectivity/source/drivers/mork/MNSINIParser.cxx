@@ -26,11 +26,7 @@ IniParser::IniParser(OUString const & rIniName) throw(com::sun::star::io::IOExce
     if (osl_File_E_None != osl_getFileURLFromSystemPath(rIniName.pData, &iniUrl.pData))
         return;
 
-
-#if OSL_DEBUG_LEVEL > 0
-    OString sFile = OUStringToOString(iniUrl, RTL_TEXTENCODING_ASCII_US);
-    OSL_TRACE(__FILE__" -- parser() - %s\n", sFile.getStr());
-#endif
+    SAL_INFO("connectivity.mork", "IniParser: " << iniUrl);
     oslFileHandle handle=NULL;
     oslFileError fileError = osl_File_E_INVAL;
     try{
@@ -39,10 +35,8 @@ IniParser::IniParser(OUString const & rIniName) throw(com::sun::star::io::IOExce
     }
     catch(const ::com::sun::star::io::IOException&)
     {
-#if OSL_DEBUG_LEVEL > 0
-        OString file_tmp = OUStringToOString(iniUrl, RTL_TEXTENCODING_ASCII_US);
-        OSL_TRACE( __FILE__" -- couldn't open file: %s", file_tmp.getStr() );
-#endif
+        SAL_WARN("connectivity.mork", "IniParser -- couldn't open file: " << iniUrl);
+        return;
     }
 
     if (osl_File_E_None == fileError)
@@ -94,8 +88,7 @@ IniParser::IniParser(OUString const & rIniName) throw(com::sun::star::io::IOExce
 #if OSL_DEBUG_LEVEL > 0
     else
     {
-        OString file_tmp = OUStringToOString(iniUrl, RTL_TEXTENCODING_ASCII_US);
-        OSL_TRACE( __FILE__" -- couldn't open file: %s", file_tmp.getStr() );
+        SAL_WARN("connectivity.mork", "IniParser -- couldn't open file: " << iniUrl);
     }
 #endif
 }

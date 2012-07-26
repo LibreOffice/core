@@ -31,11 +31,7 @@
 #include <vector>
 #include <map>
 
-#if defined LO_DLLIMPLEMENTATION_MORK
-#define LO_DLLPUBLIC_MORK SAL_DLLPUBLIC_EXPORT
-#else
-#define LO_DLLPUBLIC_MORK SAL_DLLPUBLIC_IMPORT
-#endif
+#include "dllapi.h"
 
 using namespace com::sun::star::mozilla;
 namespace connectivity

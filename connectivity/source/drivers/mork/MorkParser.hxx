@@ -34,8 +34,12 @@
 #ifndef _MORK_PARSER_HXX_
 #define _MORK_PARSER_HXX_
 
+#include <sal/types.h>
+
 #include <string>
 #include <map>
+
+#include "dllapi.h"
 
 // Types
 
@@ -76,7 +80,7 @@ enum MorkTerm
 
 /// Class MorkParser
 
-class MorkParser
+class LO_DLLPUBLIC_MORK MorkParser
 {
 public:
 
@@ -112,6 +116,8 @@ public:
 
     std::string &getColumn( int oid );
 
+    void dumpColumns();
+    void dumpValues();
 
 protected: // Members
 
