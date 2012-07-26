@@ -191,7 +191,7 @@ public:
     void                CreateTempFile( sal_Bool bReplace = sal_True );
     void                CreateTempFileNoCopy();
     ::rtl::OUString     SwitchDocumentToTempFile();
-    sal_Bool            SwitchDocumentToFile( ::rtl::OUString aURL );
+    sal_Bool            SwitchDocumentToFile( const rtl::OUString& aURL );
 
     ::rtl::OUString     GetBaseURL( bool bForSaving=false );
 
