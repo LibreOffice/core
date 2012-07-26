@@ -2452,6 +2452,8 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
 
                             SfxItemSet aSet( pSdrModel->GetItemPool() );
                             ApplyAttributes( rStCtrl, aSet );
+                            pPresObj->SetLogicRect(pText->GetLogicRect());
+                            ApplyTextAnchorAttributes( *pTextObj, aSet );
                             pPresObj->SetMergedItemSet(aSet);
 
                             if ( ( eAktPageKind != PPT_NOTEPAGE ) && ( pSlideLayout->aPlacementId[ i ] != (sal_uLong)-1 ) )
