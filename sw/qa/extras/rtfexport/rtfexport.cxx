@@ -51,12 +51,10 @@ public:
     void testFdo50831();
     void testFdo48335();
     void testFdo38244();
-    // No idea why does this fail with gcc-4.4, probably independent.
-#if (__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 5) || defined(__clang__))
     void testMathAccents();
     void testMathEqarray();
     void testMathD();
-#endif
+    void testMathEscaping();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -68,9 +66,13 @@ public:
     CPPUNIT_TEST(testFdo50831);
     CPPUNIT_TEST(testFdo48335);
     CPPUNIT_TEST(testFdo38244);
+    // No idea why does this fail with gcc-4.4, probably independent.
+#if (__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 5) || defined(__clang__))
     CPPUNIT_TEST(testMathAccents);
     CPPUNIT_TEST(testMathEqarray);
     CPPUNIT_TEST(testMathD);
+    CPPUNIT_TEST(testMathEscaping);
+#endif
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -232,6 +234,14 @@ void Test::testMathD()
     roundtrip("math-d.rtf");
     OUString aActual = getFormula(getRun(getParagraph(1), 1));
     OUString aExpected("left (x mline y mline z right ) left (1 right ) left [2 right ] left ldbracket 3 right rdbracket left lline 4 right rline left ldline 5 right rdline left langle 6 right rangle left langle a mline b right rangle left ({x} over {y} right )");
+    CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
+}
+
+void Test::testMathEscaping()
+{
+    roundtrip("math-escaping.rtf");
+    OUString aActual = getFormula(getRun(getParagraph(1), 1));
+    OUString aExpected("á \\{", 5, RTL_TEXTENCODING_UTF8);
     CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
 }
 
