@@ -249,7 +249,6 @@ public:
     bool bUpdatePickList:1;
     bool bIsTemp:1;
     bool bDownloadDone:1;
-    bool bDontCallDoneLinkOnSharingError:1;
     bool bIsStorage:1;
     bool bUseInteractionHandler:1;
     bool bAllowDefaultIntHdl:1;
@@ -328,7 +327,6 @@ SfxMedium_Impl::SfxMedium_Impl( SfxMedium* pAntiImplP ) :
     bUpdatePickList(true),
     bIsTemp( false ),
     bDownloadDone( true ),
-    bDontCallDoneLinkOnSharingError( false ),
     bIsStorage( false ),
     bUseInteractionHandler( true ),
     bAllowDefaultIntHdl( false ),
