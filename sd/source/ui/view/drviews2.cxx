@@ -155,8 +155,8 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                     SdrObject* pObj = NULL;
                     const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
                     sal_uLong nCount = rMarkList.GetMarkCount();
-
-                    sal_Int32 nNewLineWidth = ((const XLineWidthItem&)rReq.GetArgs()->Get(XATTR_LINEWIDTH)).GetValue();
+                    const sal_Int32 nNewLineWidth(((const XLineWidthItem&)rReq.GetArgs()->Get(XATTR_LINEWIDTH)).GetValue());
+                    const bool bUndo(mpDrawView->IsUndoEnabled());
 
                     for (sal_uLong i=0; i<nCount; i++)
                     {
@@ -193,8 +193,27 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                             }
 
                             if(bSetItemSet)
+                            {
+                                if(bUndo)
+                                {
+                                    if(!bMergeUndo)
+                                    {
+                                        pUndoManager->EnterListAction( String(), String() );
+                                        mpDrawView->BegUndo();
+                                        bMergeUndo = sal_True;
+                                    }
+
+                                    mpDrawView->AddUndo(GetDoc()->GetSdrUndoFactory().CreateUndoAttrObject(*pObj));
+                                }
+
                                 pObj->SetMergedItemSet(aAttr);
+                            }
                         }
+                    }
+
+                    if(bMergeUndo)
+                    {
+                        mpDrawView->EndUndo();
                     }
                 }
 
@@ -204,7 +223,6 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                     SdrObject* pObj = NULL;
                     const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
                     sal_uLong nCount = rMarkList.GetMarkCount();
-
                     const bool bUndo = mpDrawView->IsUndoEnabled();
 
                     for (sal_uLong i=0; i<nCount; i++)
@@ -217,10 +235,10 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                         {
                             aAttr.Put(pObj->GetMergedItemSet());
 
-                            const XFillStyleItem& rFillStyle =
-                            (const XFillStyleItem&) aAttr.Get(XATTR_FILLSTYLE);
+                            const XFillStyleItem& rFillStyle = (const XFillStyleItem&) aAttr.Get(XATTR_FILLSTYLE);
+                            const XLineStyleItem& rLineStyle = (const XLineStyleItem&) aAttr.Get(XATTR_LINESTYLE);
 
-                            if (rFillStyle.GetValue() == XFILL_NONE)
+                            if(XFILL_NONE == rFillStyle.GetValue() && XLINE_NONE == rLineStyle.GetValue())
                             {
                                 if( bUndo )
                                 {
