@@ -15,6 +15,7 @@
 #include "cell.hxx"
 #include "docfunc.hxx"
 class TeleConference;
+typedef struct _TpContact TpContact;
 
 namespace {
 
@@ -236,7 +237,7 @@ public:
     void                SetCollaboration( TeleConference* pConference );
     TeleConference*     GetConference();
     // TODO: I think this could be moved to TeleManager later.
-    void                SendFile( const rtl::OUString &rURL );
+    void                SendFile( TpContact* pContact, const rtl::OUString &rURL );
 
     virtual void        EnterListAction( sal_uInt16 nNameResId );
     virtual void        EndListAction();

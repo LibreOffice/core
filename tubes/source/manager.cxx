@@ -221,6 +221,7 @@ void TeleManager_TransferDone( EmpathyFTHandler *handler, TpFileTransferChannel 
 
     sal_Int32 first = aUri.indexOf('_');
     sal_Int32 last = aUri.lastIndexOf('_');
+    SAL_WARN_IF( first == last, "tubes", "No UUID to associate with the file!" );
     if (first != last)
     {
         OString sUuid( OUStringToOString( aUri.copy( first + 1, last - first - 1),
@@ -600,7 +601,7 @@ TeleConference* TeleManager::startGroupSession( TpAccount *pAccount,
 
     setChannelReadyHandlerInvoked( false);
 
-    TeleConference* pConference = new TeleConference( this, NULL, NULL );
+    TeleConference* pConference = new TeleConference( this, NULL, NULL, aSessionId );
 
     tp_account_channel_request_create_and_handle_channel_async(
             pChannelRequest, NULL, TeleManager_ChannelReadyHandler, pConference);
