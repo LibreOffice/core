@@ -1,6 +1,7 @@
 package org.libreoffice.impressremote;
 
 import org.libreoffice.impressremote.communication.CommunicationService;
+import org.libreoffice.impressremote.communication.SlideShow.Timer;
 
 import android.app.ActionBar;
 import android.app.Activity;
@@ -190,11 +191,24 @@ public class PresentationActivity extends Activity {
 			mStopwatchBar = mLayout.findViewById(R.id.clockbar_stopwatchbar);
 			mStopwatchBar.setVisibility(View.INVISIBLE);
 
+			mStopwatchButtonRun = (Button) mStopwatchBar
+			                .findViewById(R.id.clockbar_stopwatch_run);
+			mStopwatchButtonReset = (Button) mStopwatchBar
+			                .findViewById(R.id.clockbar_stopwatch_reset);
+			mStopwatchButtonRun.setOnClickListener(this);
+			mStopwatchButtonReset.setOnClickListener(this);
+
 			// Countdown bar
 			aInflater.inflate(R.layout.presentation_clockbar_countdownbar,
 			                mLayout);
 			mCountdownBar = mLayout.findViewById(R.id.clockbar_countdownbar);
 			mCountdownBar.setVisibility(View.INVISIBLE);
+
+			mCountdownEntry = (EditText) mCountdownBar
+			                .findViewById(R.id.clockbar_countdown_time);
+			mCountdownButton = (Button) mCountdownBar
+			                .findViewById(R.id.clockbar_countdown_button);
+			mCountdownButton.setOnClickListener(this);
 
 			updateClockBar();
 
@@ -245,6 +259,7 @@ public class PresentationActivity extends Activity {
 
 		@Override
 		public void onClick(View aSource) {
+			Timer aTimer = mCommunicationService.getSlideShow().getTimer();
 			// --------------------------------- ACTIONBAR BUTTONS -------------
 			if (aSource == mThumbnailButton) {
 				if (!mThumbnailFragment.isVisible()) {
@@ -267,19 +282,36 @@ public class PresentationActivity extends Activity {
 				}
 			}
 			// ------------------------------------ CLOCKBAR BUTTONS -----------
-			if (aSource == mClockBar_clockButton) {
+			else if (aSource == mClockBar_clockButton) {
 				mTimerOn = false;
 				updateClockBar();
 			} else if (aSource == mClockBar_stopwatchButton) {
 				mTimerOn = true;
-				mCommunicationService.getSlideShow().getTimer()
-				                .setCountdown(false);
+				aTimer.setCountdown(false);
 				updateClockBar();
 			} else if (aSource == mClockBar_countdownButton) {
 				mTimerOn = true;
-				mCommunicationService.getSlideShow().getTimer()
-				                .setCountdown(true);
+				aTimer.setCountdown(true);
 				updateClockBar();
+			}
+			// ------------------------------------- TIMER BUTTONS
+			else if (aSource == mStopwatchButtonRun) {
+				if (aTimer.isRunning()) {
+					aTimer.stopTimer();
+				} else {
+					aTimer.startTimer();
+				}
+				updateClockBar();
+			} else if (aSource == mStopwatchButtonReset) {
+				if (aTimer.isRunning()) {
+					aTimer.reset();
+					aTimer.startTimer();
+				} else {
+					aTimer.reset();
+				}
+
+			} else if (aSource == mCountdownButton) {
+
 			}
 
 		}

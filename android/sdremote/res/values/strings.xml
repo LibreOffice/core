@@ -7,6 +7,11 @@
     <string name="presentation_ui_resizehandle">Handle to resize view.</string>
     <string name="presentation_blank_screen">Blank Screen</string>
     <string name="options">Options</string>
-    <string name="actionbar_timeformat">hh:mm</string>
-    <string name="actionbar_timerformat">h:m:ss</string>
+    <string name="actionbar_timeformat">h:mmaa</string>
+    <string name="actionbar_timerformat">mm:ss</string>
+    <string name="clock_timer_start">Start</string>
+    <string name="clock_timer_pause">Pause</string>
+    <string name="clock_timer_restart">Restart</string>
+    <string name="clock_timer_reset">Reset</string>
+    <string name="clock_timer_resume">Resume</string>
 </resources>
