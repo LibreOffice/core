@@ -362,6 +362,7 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
         }
     }
 
+    ScConditionalFormatList* pCondFormList = GetCondFormList(nTab);
     for (nArrX=0; nArrX<=nX2+2; nArrX++)                    // links & rechts + 1
     {
         nX = (nArrX>0) ? nArrX-1 : MAXCOL+1;                    // negativ -> ungueltig
@@ -476,7 +477,6 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
                         sal_uLong nConditional = ((const SfxUInt32Item&)pPattern->
                                                 GetItem(ATTR_CONDITIONAL)).GetValue();
 
-                        ScConditionalFormatList* pCondFormList = GetCondFormList(nTab);
                         const ScConditionalFormat* pCondForm = NULL;
                         if ( nConditional && pCondFormList )
                             pCondForm = pCondFormList->GetFormat( nConditional );
