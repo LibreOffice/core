@@ -510,7 +510,7 @@ static void TeleConference_FTReady( EmpathyFTHandler *handler, GError *error, gp
 }
 
 
-void TeleConference::sendFile( rtl::OUString &localUri, FileSentCallback pCallback, void* pUserData)
+void TeleConference::sendFile( TpContact* pContact, rtl::OUString &localUri, FileSentCallback pCallback, void* pUserData)
 {
     INFO_LOGGER( "TeleConference::sendFile");
 
@@ -524,7 +524,7 @@ void TeleConference::sendFile( rtl::OUString &localUri, FileSentCallback pCallba
     SendFileRequest *pReq = new SendFileRequest( pCallback, pUserData);
 
     empathy_ft_handler_new_outgoing( mpAccount,
-        tp_channel_get_target_contact( TP_CHANNEL( mpChannel)),
+        pContact,
         pSource,
         0,
         TeleConference_FTReady, pReq);

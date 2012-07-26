@@ -156,7 +156,7 @@ void ScDocFuncSend::SendMessage( ScChangeOpWriter &rOp )
         mpDirect->RecvMessage( rOp.toString() );
 }
 
-void ScDocFuncSend::SendFile( const rtl::OUString &sUuid )
+void ScDocFuncSend::SendFile( TpContact* pContact, const rtl::OUString &sUuid )
 {
     String aTmpPath = utl::TempFile::CreateTempName();
     aTmpPath.Append( OUString("_") );
@@ -182,8 +182,8 @@ void ScDocFuncSend::SendFile( const rtl::OUString &sUuid )
     fprintf( stderr, "Temp file is '%s'\n",
              rtl::OUStringToOString( aFileURL, RTL_TEXTENCODING_UTF8 ).getStr() );
 
-    if (mpConference)
-        mpConference->sendFile( aFileURL, file_sent_cb, NULL );
+    if (pContact)
+        mpConference->sendFile( pContact, aFileURL, file_sent_cb, NULL );
     else
         TeleManager_fileReceived( aFileURL );
 
@@ -249,7 +249,7 @@ sal_Bool ScDocFuncSend::SetNormalString( bool& o_rbNumFmtSet, const ScAddress& r
     o_rbNumFmtSet = false;
 
     if ( rtl::OUString( rText ) == "saveme" )
-        SendFile( rText );
+        SendFile( NULL, rText );
 
     if ( rtl::OUString( rText ) == "contacts" )
         tubes::createContacts();

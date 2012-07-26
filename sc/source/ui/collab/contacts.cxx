@@ -107,6 +107,8 @@ class TubeContacts : public ModelessDialog
             {
                 TpContact* pContact = pAC->mpContact;
                 pSender->GetConference()->invite( pContact );
+                pSender->SendFile( pContact, OStringToOUString(
+                            pSender->GetConference()->getUuid(), RTL_TEXTENCODING_UTF8 ) );
             }
         }
     }
@@ -135,7 +137,7 @@ class TubeContacts : public ModelessDialog
             {
                 ScDocFuncSend* pSender = EnsureScDocFuncSendInCurrentSfxObjectShell();
                 pSender->SetCollaboration( pConference );
-                pSender->SendFile( OStringToOUString(
+                pSender->SendFile( pContact, OStringToOUString(
                             pConference->getUuid(), RTL_TEXTENCODING_UTF8 ) );
             }
         }

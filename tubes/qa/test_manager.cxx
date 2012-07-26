@@ -264,7 +264,7 @@ void TestTeleTubes::testSendFile()
     /* This has to run after testContactList has run successfully. */
     CPPUNIT_ASSERT( mpAccepterContact != 0);
 
-    mpConference1->sendFile( maTestConfigIniURL,
+    mpConference1->sendFile( mpAccepterContact, maTestConfigIniURL,
         &TestTeleTubes::FileSent, NULL);
     /* Waiting for event: FileSent quits the mainloop */
     g_main_loop_run( mpMainLoop);

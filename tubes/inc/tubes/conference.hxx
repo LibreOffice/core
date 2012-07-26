@@ -66,7 +66,7 @@ public:
     boost::signals2::signal<void (const OString&)> sigPacketReceived;
 
     typedef void          (*FileSentCallback)( bool aSuccess, void* pUserData);
-    TUBES_DLLPUBLIC void    sendFile( rtl::OUString &localUri, FileSentCallback pCallback, void* pUserData);
+    TUBES_DLLPUBLIC void    sendFile( TpContact* pContact, rtl::OUString &localUri, FileSentCallback pCallback, void* pUserData);
     TUBES_DLLPUBLIC const OString& getUuid() const { return msUuid; }
 
     // --- following only to be called only by manager's callbacks ---
