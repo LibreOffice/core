@@ -52,53 +52,53 @@ void SwPamRanges::Insert( const SwNodeIndex& rIdx1, const SwNodeIndex& rIdx2 )
     if( aRg.nEnd < aRg.nStart )
     {   aRg.nStart = aRg.nEnd; aRg.nEnd = rIdx1.GetIndex(); }
 
-    _SwPamRanges::iterator it = lower_bound( aRg );
+    _SwPamRanges::const_iterator it = lower_bound(aRg); //search Insert Position
     sal_uInt16 nPos = it - begin();
-    if( !empty() && (*it) == aRg)        // suche Insert Position
+    if (!empty() && (it != end()) && (*it) == aRg)
     {
-        // ist der im Array stehende kleiner ??
-        SwPamRange& rTmp = _SwPamRanges::operator[](nPos);
+        // is the one in the Array smaller?
+        SwPamRange const& rTmp = _SwPamRanges::operator[](nPos);
         if( rTmp.nEnd < aRg.nEnd )
         {
             aRg.nEnd = rTmp.nEnd;
-            erase( begin() + nPos );      // zusammenfassen
+            erase(begin() + nPos); // combine
         }
         else
-            return;     // ende, weil schon alle zusammengefasst waren
+            return; // done, because by precondition everything is combined
     }
 
     sal_Bool bEnde;
     do {
         bEnde = sal_True;
 
-        // mit dem Vorgaenger zusammenfassen ??
+        // combine with predecessor?
         if( nPos > 0 )
         {
-            SwPamRange& rTmp = _SwPamRanges::operator[](nPos-1);
+            SwPamRange const& rTmp = _SwPamRanges::operator[](nPos-1);
             if( rTmp.nEnd == aRg.nStart
                 || rTmp.nEnd+1 == aRg.nStart )
             {
                 aRg.nStart = rTmp.nStart;
                 bEnde = sal_False;
-                erase( begin() + --nPos );        // zusammenfassen
+                erase( begin() + --nPos ); // combine
             }
-            // SSelection im Bereich ??
+            // range contained in rTmp?
             else if( rTmp.nStart <= aRg.nStart && aRg.nEnd <= rTmp.nEnd )
                 return;
         }
-            // mit dem Nachfolger zusammenfassen ??
+        // combine with successor?
         if( nPos < size() )
         {
-            SwPamRange& rTmp = _SwPamRanges::operator[](nPos);
+            SwPamRange const& rTmp = _SwPamRanges::operator[](nPos);
             if( rTmp.nStart == aRg.nEnd ||
                 rTmp.nStart == aRg.nEnd+1 )
             {
                 aRg.nEnd = rTmp.nEnd;
                 bEnde = sal_False;
-                erase( begin() + nPos );      // zusammenfassen
+                erase( begin() + nPos ); // combine
             }
 
-            // SSelection im Bereich ??
+            // range contained in rTmp?
             else if( rTmp.nStart <= aRg.nStart && aRg.nEnd <= rTmp.nEnd )
                 return;
         }
