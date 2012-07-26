@@ -207,6 +207,8 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
                                     ITEM_MAX_HEIGHT-THUMBNAIL_MAX_HEIGHT,
                                     ITEM_PADDING);
 
+    mpSearchView->setItemStateHdl(LINK(this,SfxTemplateManagerDlg,TVTemplateStateHdl));
+
     // Set OK button position
     Point aBtnPos;
     Size aBtnSize = maButtonClose.GetSizePixel();
