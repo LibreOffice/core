@@ -29,7 +29,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/salnativewidgets.hxx>
 #include <vcl/help.hxx>
-#include <svtools/tabbar.hxx>
 
 #include <stack>
 
@@ -54,7 +53,6 @@ sal_Int32 SvImpLBox::s_nImageRefCount   = 0;
 
 SvImpLBox::SvImpLBox( SvTreeListBox* pLBView, SvLBoxTreeList* pLBTree, WinBits nWinStyle) :
 
-    pTabBar( NULL ),
     aVerSBar( pLBView, WB_DRAG | WB_VSCROLL ),
     aHorSBar( pLBView, WB_DRAG | WB_HSCROLL ),
     aScrBarBox( pLBView ),
@@ -281,13 +279,7 @@ void SvImpLBox::Clear()
     aVerSBar.SetRange( aRange );
     aOutputSize = pView->Control::GetOutputSizePixel();
     nFlags &= ~(F_VER_SBARSIZE_WITH_HBAR | F_HOR_SBARSIZE_WITH_VBAR );
-    if( pTabBar )
-    {
-        aOutputSize.Height() -= nHorSBarHeight;
-        nFlags |= F_VER_SBARSIZE_WITH_HBAR;
-    }
-    if( !pTabBar )
-        aHorSBar.Hide();
+    aHorSBar.Hide();
     aHorSBar.SetThumbPos( 0 );
     MapMode aMapMode( pView->GetMapMode());
     aMapMode.SetOrigin( Point(0,0) );
@@ -1154,39 +1146,13 @@ void SvImpLBox::DrawNet()
     pView->SetLineColor( aOldLineColor );
 }
 
-
-static long GetOptSize( TabBar* pTabBar )
-{
-    return pTabBar->CalcWindowSizePixel().Width();
-}
-
 void SvImpLBox::PositionScrollBars( Size& rSize, sal_uInt16 nMask )
 {
     long nOverlap = 0;
 
     Size aVerSize( nVerSBarWidth, rSize.Height() );
     Size aHorSize( rSize.Width(), nHorSBarHeight );
-    long nTabBarWidth = 0;
-    if( pTabBar )
-    {
-        nTabBarWidth = GetOptSize( pTabBar );
-        long nMaxWidth = (rSize.Width() * 700) / 1000;
-        if( nTabBarWidth > nMaxWidth )
-        {
-            nTabBarWidth = nMaxWidth;
-            pTabBar->SetStyle( pTabBar->GetStyle() | WB_MINSCROLL );
-        }
-        else
-        {
-            WinBits nStyle = pTabBar->GetStyle();
-            nStyle &= ~(WB_MINSCROLL);
-            pTabBar->SetStyle( nStyle );
-        }
-        aHorSize.Width() -= nTabBarWidth;
-        Size aTabSize( pTabBar->GetSizePixel() );
-        aTabSize.Width() = nTabBarWidth;
-        pTabBar->SetSizePixel( aTabSize );
-    }
+
     if( nMask & 0x0001 )
         aHorSize.Width() -= nVerSBarWidth;
     if( nMask & 0x0002 )
@@ -1198,23 +1164,18 @@ void SvImpLBox::PositionScrollBars( Size& rSize, sal_uInt16 nMask )
 
     aHorSize.Width() += 2 * nOverlap;
     Point aHorPos( -nOverlap, rSize.Height() - aHorSize.Height() + nOverlap );
-    if( pTabBar )
-        pTabBar->SetPosPixel( aHorPos );
-    aHorPos.X() += nTabBarWidth;
+
     aHorSBar.SetPosSizePixel( aHorPos, aHorSize );
 
     if( nMask & 0x0001 )
         rSize.Width() = aVerPos.X();
     if( nMask & 0x0002 )
         rSize.Height() = aHorPos.Y();
-    if( pTabBar )
-        pTabBar->Show();
 
     if( (nMask & (0x0001|0x0002)) == (0x0001|0x0002) )
         aScrBarBox.Show();
     else
         aScrBarBox.Hide();
-
 }
 
 // nResult: Bit0 == VerSBar Bit1 == HorSBar
@@ -1236,10 +1197,11 @@ sal_uInt16 SvImpLBox::AdjustScrollBars( Size& rSize )
     aOrigin.X() *= -1;
     nMaxRight += aOrigin.X() - 1;
     long nVis = nMostRight - aOrigin.X();
-    if( pTabBar || (
-        (nWindowStyle & WB_HSCROLL) &&
-        (nVis < nMostRight || nMaxRight < nMostRight) ))
+    if( (nWindowStyle & WB_HSCROLL) &&
+        (nVis < nMostRight || nMaxRight < nMostRight) )
+    {
         bHorBar = sal_True;
+    }
 
     // number of entries that are not collapsed
     sal_uLong nTotalCount = pView->GetVisibleCount();
@@ -1335,8 +1297,7 @@ sal_uInt16 SvImpLBox::AdjustScrollBars( Size& rSize )
         aHorSBar.Show();
     else
     {
-        if( !pTabBar )
-            aHorSBar.Hide();
+        aHorSBar.Hide();
     }
     rSize = aOSize;
     return nResult;

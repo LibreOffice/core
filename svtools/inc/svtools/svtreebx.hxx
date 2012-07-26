@@ -36,7 +36,6 @@
 // forward and defines ---------------------------------------------------
 
 class SvImpLBox;
-class TabBar;
 
 #define SV_TAB_BORDER 8
 
