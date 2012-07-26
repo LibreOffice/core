@@ -287,7 +287,6 @@ public:
     SvKeyValueIteratorRef xAttributes;
 
     svtools::AsynchronLink  aDoneLink;
-    svtools::AsynchronLink  aAvailableLink;
 
     uno::Sequence < util::RevisionTag > aVersions;
 
@@ -358,7 +357,6 @@ SfxMedium_Impl::SfxMedium_Impl( SfxMedium* pAntiImplP ) :
 SfxMedium_Impl::~SfxMedium_Impl()
 {
     aDoneLink.ClearPendingCall();
-    aAvailableLink.ClearPendingCall();
 
     delete pTempFile;
     delete m_pSet;
@@ -2402,13 +2400,6 @@ const OUString& SfxMedium::GetLongName() const
 void SfxMedium::SetDoneLink( const Link& rLink )
 {
     pImp->aDoneLink = rLink;
-}
-
-//----------------------------------------------------------------
-
-void SfxMedium::SetDataAvailableLink( const Link& rLink )
-{
-    pImp->aAvailableLink = rLink;
 }
 
 void SfxMedium::DownLoad( const Link& aLink )

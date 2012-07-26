@@ -81,7 +81,6 @@ SvFileObject::~SvFileObject()
 {
     if ( xMed.Is() )
     {
-        xMed->SetDataAvailableLink( Link() );
         xMed->SetDoneLink( Link() );
         xMed.Clear();
     }
@@ -274,7 +273,6 @@ sal_Bool SvFileObject::LoadFile_Impl()
         bWaitForData = sal_True;
 
         SfxMediumRef xTmpMed = xMed;
-        xMed->SetDataAvailableLink( STATIC_LINK( this, SvFileObject, LoadGrfNewData_Impl ) );
         bInCallDownLoad = sal_True;
         xMed->DownLoad( STATIC_LINK( this, SvFileObject, LoadGrfReady_Impl ) );
         bInCallDownLoad = sal_False;
@@ -337,7 +335,6 @@ sal_Bool SvFileObject::GetGraphic_Impl( Graphic& rGrf, SvStream* pStream )
 
             if( !pDownLoadData->aGrf.GetContext() )
             {
-                xMed->SetDataAvailableLink( Link() );
                 delete pDownLoadData, pDownLoadData = 0;
                 bDataReady = sal_True;
                 bWaitForData = sal_False;
@@ -513,7 +510,6 @@ IMPL_STATIC_LINK( SvFileObject, LoadGrfReady_Impl, void*, EMPTYARG )
         pThis->bLoadAgain = sal_True;
         if( pThis->xMed.Is() )
         {
-            pThis->xMed->SetDataAvailableLink( Link() );
             pThis->xMed->SetDoneLink( Link() );
 
             Application::PostUserEvent(
@@ -532,56 +528,6 @@ IMPL_STATIC_LINK( SvFileObject, DelMedium_Impl, SfxMediumRef*, pDelMed )
 {
     (void)pThis;
     delete pDelMed;
-    return 0;
-}
-
-IMPL_STATIC_LINK( SvFileObject, LoadGrfNewData_Impl, void*, EMPTYARG )
-{
-    // When we come form here there it can not be an error no more.
-    if( pThis->bInNewData )
-        return 0;
-
-    pThis->bInNewData = sal_True;
-    pThis->bLoadError = sal_False;
-
-    if( !pThis->pDownLoadData )
-    {
-        pThis->pDownLoadData = new Impl_DownLoadData(
-                        STATIC_LINK( pThis, SvFileObject, LoadGrfNewData_Impl ) );
-        // Set Zero-link, so that no temporary graphics can be swapped out,
-        // the filter checks whether a link is set already => if so, is _no_
-        // new link set, the link here must be set (before it is first
-        // filtered), to prevent, that the context will be reset
-        // (aynchronous loading)
-        if( !pThis->bNativFormat )
-        {
-            static GfxLink aDummyLink;
-            pThis->pDownLoadData->aGrf.SetLink( aDummyLink );
-        }
-    }
-
-    pThis->NotifyDataChanged();
-
-    SvStream* pStrm = pThis->xMed.Is() ? pThis->xMed->GetInStream() : 0;
-    if( pStrm && pStrm->GetError() )
-    {
-        if( ERRCODE_IO_PENDING == pStrm->GetError() )
-            pStrm->ResetError();
-
-        // a DataReady in DataChanged?
-        else if( pThis->bWaitForData && pThis->pDownLoadData )
-        {
-            pThis->bLoadError = sal_True;
-        }
-    }
-
-    if( pThis->bDataReady )
-    {
-        // Graphic is finished, also send DataChanged from Status change
-        pThis->SendStateChg_Impl( pStrm->GetError() ? sfx2::LinkManager::STATE_LOAD_ERROR : sfx2::LinkManager::STATE_LOAD_OK );
-    }
-
-    pThis->bInNewData = sal_False;
     return 0;
 }
 
