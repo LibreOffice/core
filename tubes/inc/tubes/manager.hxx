@@ -71,12 +71,8 @@ public:
 
     /** Prepare tube manager with account and service to be offered/listened
         to.
-
-        @param bCreateOwnGMainLoop
-            Whether to create and iterate an own GMainLoop. For testing
-            purposes when no GMainLoop is available.
      */
-    TeleManager( bool bCreateOwnGMainLoop = false );
+    TeleManager();
     ~TeleManager();
 
     TUBES_DLLPUBLIC static TeleManager*     get();
@@ -141,11 +137,6 @@ public:
     static void                             setCurrentUuid( const OString& rUuid );
 
     void                    disconnect();
-
-    /// Only for use with MainLoopFlusher
-    GMainLoop*              getMainLoop() const;
-
-    GMainContext*           getMainContext() const;
 
     static rtl::OString     createUuid();
 
