@@ -1,0 +1,123 @@
+Only in misc/build/Python-2.7.3/Lib: plat-freebsd9
+diff -ru misc/Python-2.7.3/Lib/test/test_threading.py misc/build/Python-2.7.3/Lib/test/test_threading.py
+--- misc/Python-2.7.3/Lib/test/test_threading.py	2012-04-09 18:07:32.000000000 -0500
++++ misc/build/Python-2.7.3/Lib/test/test_threading.py	2012-07-24 22:39:03.000000000 -0500
+@@ -421,7 +421,7 @@
+     # #12316 and #11870), and fork() from a worker thread is known to trigger
+     # problems with some operating systems (issue #3863): skip problematic tests
+     # on platforms known to behave badly.
+-    platforms_to_skip = ('freebsd4', 'freebsd5', 'freebsd6', 'netbsd5',
++    platforms_to_skip = ('freebsd4', 'freebsd5', 'freebsd6', 'freebsd7', 'freebsd8', 'freebsd9', 'netbsd5',
+                          'os2emx')
+ 
+     def _run_and_join(self, script):
+diff -ru misc/Python-2.7.3/Modules/_ctypes/libffi/configure misc/build/Python-2.7.3/Modules/_ctypes/libffi/configure
+--- misc/Python-2.7.3/Modules/_ctypes/libffi/configure	2012-04-09 18:07:33.000000000 -0500
++++ misc/build/Python-2.7.3/Modules/_ctypes/libffi/configure	2012-07-24 22:39:03.000000000 -0500
+@@ -6289,7 +6289,7 @@
+   rm -rf conftest*
+   ;;
+ 
+-x86_64-*kfreebsd*-gnu|x86_64-*linux*|ppc*-*linux*|powerpc*-*linux*| \
++amd64-*-freebsd*|x86_64-*kfreebsd*-gnu|x86_64-*linux*|ppc*-*linux*|powerpc*-*linux*| \
+ s390*-*linux*|s390*-*tpf*|sparc*-*linux*)
+   # Find out which ABI we are using.
+   echo 'int i;' > conftest.$ac_ext
+diff -ru misc/Python-2.7.3/Python/thread_pthread.h misc/build/Python-2.7.3/Python/thread_pthread.h
+--- misc/Python-2.7.3/Python/thread_pthread.h	2012-04-09 18:07:35.000000000 -0500
++++ misc/build/Python-2.7.3/Python/thread_pthread.h	2012-07-24 22:39:03.000000000 -0500
+@@ -56,7 +56,6 @@
+    in default setting.  So the process scope is preferred to get
+    enough number of threads to work. */
+ #ifdef __FreeBSD__
+-#include <osreldate.h>
+ #if __FreeBSD_version >= 500000 && __FreeBSD_version < 504101
+ #undef PTHREAD_SYSTEM_SCHED_SUPPORTED
+ #endif
+@@ -161,6 +160,9 @@
+ {
+     pthread_t th;
+     int status;
++#ifdef __FreeBSD__
++	sigset_t set, oset;
++#endif
+ #if defined(THREAD_STACK_SIZE) || defined(PTHREAD_SYSTEM_SCHED_SUPPORTED)
+     pthread_attr_t attrs;
+ #endif
+@@ -172,6 +174,9 @@
+     if (!initialized)
+         PyThread_init_thread();
+ 
++#ifdef __FreeBSD__
++	SET_THREAD_SIGMASK(SIG_SETMASK, &oset, NULL);
++#endif
+ #if defined(THREAD_STACK_SIZE) || defined(PTHREAD_SYSTEM_SCHED_SUPPORTED)
+     if (pthread_attr_init(&attrs) != 0)
+         return -1;
+@@ -189,7 +194,10 @@
+ #if defined(PTHREAD_SYSTEM_SCHED_SUPPORTED)
+     pthread_attr_setscope(&attrs, PTHREAD_SCOPE_SYSTEM);
+ #endif
+-
++#ifdef __FreeBSD__
++	sigfillset(&set);
++	SET_THREAD_SIGMASK(SIG_BLOCK, &set, &oset);
++#endif
+     status = pthread_create(&th,
+ #if defined(THREAD_STACK_SIZE) || defined(PTHREAD_SYSTEM_SCHED_SUPPORTED)
+                              &attrs,
+@@ -200,6 +208,9 @@
+                              (void *)arg
+                              );
+ 
++#ifdef __FreeBSD__
++	SET_THREAD_SIGMASK(SIG_SETMASK, &oset, NULL);
++#endif
+ #if defined(THREAD_STACK_SIZE) || defined(PTHREAD_SYSTEM_SCHED_SUPPORTED)
+     pthread_attr_destroy(&attrs);
+ #endif
+diff -ru misc/Python-2.7.3/configure misc/build/Python-2.7.3/configure
+--- misc/Python-2.7.3/configure	2012-04-09 18:07:36.000000000 -0500
++++ misc/build/Python-2.7.3/configure	2012-07-24 22:39:03.000000000 -0500
+@@ -4916,7 +4916,7 @@
+           ;;
+     SunOS*)
+ 	  LDLIBRARY='libpython$(VERSION).so'
+-	  BLDLIBRARY='-Wl,-R,$(LIBDIR) -L. -lpython$(VERSION)'
++	  BLDLIBRARY=-R\'\$\$ORIGIN\'' -L. -lpython$(VERSION)'
+ 	  RUNSHARED=LD_LIBRARY_PATH=`pwd`:${LD_LIBRARY_PATH}
+ 	  INSTSONAME="$LDLIBRARY".$SOVERSION
+           ;;
+@@ -4924,11 +4924,6 @@
+ 	  LDLIBRARY='libpython$(VERSION).so'
+ 	  BLDLIBRARY='-L. -lpython$(VERSION)'
+ 	  RUNSHARED=LD_LIBRARY_PATH=`pwd`:${LD_LIBRARY_PATH}
+-	  case $ac_sys_system in
+-	      FreeBSD*)
+-		SOVERSION=`echo $SOVERSION|cut -d "." -f 1`
+-		;;
+-	  esac
+ 	  INSTSONAME="$LDLIBRARY".$SOVERSION
+ 	  ;;
+     hp*|HP*)
+diff -ru misc/Python-2.7.3/setup.py misc/build/Python-2.7.3/setup.py
+--- misc/Python-2.7.3/setup.py	2012-04-09 18:07:36.000000000 -0500
++++ misc/build/Python-2.7.3/setup.py	2012-07-24 22:39:03.000000000 -0500
+@@ -1432,7 +1432,7 @@
+             macros = dict()
+             libraries = []
+ 
+-        elif platform in ('freebsd4', 'freebsd5', 'freebsd6', 'freebsd7', 'freebsd8'):
++        elif platform in ('freebsd4', 'freebsd5', 'freebsd6', 'freebsd7', 'freebsd8', 'freebsd9'):
+             # FreeBSD's P1003.1b semaphore support is very experimental
+             # and has many known problems. (as of June 2008)
+             macros = dict()
+@@ -1484,7 +1484,7 @@
+             missing.append('linuxaudiodev')
+ 
+         if (platform in ('linux2', 'freebsd4', 'freebsd5', 'freebsd6',
+-                        'freebsd7', 'freebsd8')
++                        'freebsd7', 'freebsd8', 'freebsd9')
+             or platform.startswith("gnukfreebsd")):
+             exts.append( Extension('ossaudiodev', ['ossaudiodev.c']) )
+         else:

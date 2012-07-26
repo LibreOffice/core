@@ -201,13 +201,8 @@ if (ENABLE_MEDIAWIKI == YES)
     URL2 = $(SVN_TRUNK)$(MD5)-$(name)
 
 if (SYSTEM_PYTHON != YES)
-    MD5 = bc702168a2af16869201dbe91e46ae48
-    name = LICENSE_Python-2.6.1
-    URL1 = $(SVN_TRUNK)$(MD5)-$(name)
-
-if (SYSTEM_PYTHON != YES)
-    MD5 = e81c2f0953aa60f8062c05a4673f2be0
-    name = Python-2.6.1.tar.bz2
+    MD5 = c57477edd6d18bd9eeca2f21add73919
+    name = Python-2.7.3.tar.bz2
     URL1 = $(SVN_TRUNK)$(MD5)-$(name)
 
 if (GUI!=UNX || SYSTEM_ZLIB!=YES)

@@ -21,8 +21,8 @@
 # when you want to change the python version, you must update the d.lst
 # in the python project accordingly !!!
 PYMAJOR=2
-PYMINOR=6
-PYMICRO=1
+PYMINOR=7
+PYMICRO=3
 PYVERSION=$(PYMAJOR).$(PYMINOR).$(PYMICRO)
 
 .IF "$(GUI)" == "UNX"

@@ -54,9 +54,14 @@ FINDLIBFILES_TMP:=$(subst,/,$/ \
     $(shell @$(FIND) $(SOLARLIBDIR)$/python -type f| $(GREP) -v "\.pyc" |$(GREP) -v "\.py~" |$(GREP) -v .orig | $(GREP) -v _failed))
 FINDLIBFILES=$(subst,$(SOLARLIBDIR)$/python, $(FINDLIBFILES_TMP))
 
+FINDINCFILES_TMP:=$(subst,/,$/ \
+    $(shell @$(FIND) $(SOLARINCDIR)$/python -type f| $(GREP) -v "\.h~" | $(GREP) -v _failed))
+FINDINCFILES=$(subst,$(SOLARINCDIR)$/python, $(FINDINCFILES_TMP))
+
 FILES=\
     $(PYTHONBINARY)	\
-    $(foreach,i,$(FINDLIBFILES) $(DESTROOT)$/lib$(i)) 
+    $(foreach,i,$(FINDLIBFILES) $(DESTROOT)$/lib$(i)) \
+    $(foreach,i,$(FINDINCFILES) $(DESTROOT)$/include$/python$(PYMAJOR).$(PYMINOR)$(i))
 
 .IF "$(OS)" == "WNT"
 APP1TARGET = python
@@ -98,6 +103,11 @@ $(BIN)$/$(PYDIRNAME).zip : $(FILES)
 
 $(DESTROOT)$/lib$/% : $(SOLARLIBDIR)$/python$/%
     -$(MKDIRHIER) $(@:d) 
+    -rm -f $@
+    cat $< > $@
+
+$(DESTROOT)$/include$/python$(PYMAJOR).$(PYMINOR)%: $(SOLARINCDIR)$/python$/%
+    -$(MKDIRHIER) $(@:d)
     -rm -f $@
     cat $< > $@
 
