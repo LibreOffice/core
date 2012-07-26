@@ -145,7 +145,6 @@ public:
     sal_Bool            IsOpen() const; // { return aStorage.Is() || pInStream; }
     void                DownLoad( const Link& aLink = Link());
     void                SetDoneLink( const Link& rLink );
-    void                SetDataAvailableLink( const Link& rLink );
 
     sal_uInt32          GetErrorCode() const;
     sal_uInt32          GetError() const

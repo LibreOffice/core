@@ -739,8 +739,6 @@ namespace frm
                 delete m_pMedium;
 
             m_pMedium = new SfxMedium(rURL, STREAM_STD_READ);
-            m_pMedium->SetDataAvailableLink(
-                    STATIC_LINK(this, OClickableImageBaseModel, DataAvailableLink));
 
             // Das XModel suchen, um an die Object-Shell oder zumindest den
             // Referer zu gelangen.
@@ -844,14 +842,6 @@ namespace frm
     {
         ::osl::MutexGuard aGuard( pThis->m_aMutex );
         pThis->DownloadDone();
-        return 0;
-    }
-
-    //------------------------------------------------------------------------------
-    IMPL_STATIC_LINK( OClickableImageBaseModel, DataAvailableLink, void*, EMPTYARG )
-    {
-        ::osl::MutexGuard aGuard( pThis->m_aMutex );
-        pThis->DataAvailable();
         return 0;
     }
 

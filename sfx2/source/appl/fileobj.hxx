@@ -58,7 +58,6 @@ class SvFileObject : public sfx2::SvLinkSource
 
     DECL_STATIC_LINK( SvFileObject, DelMedium_Impl, SfxMediumRef* );
     DECL_STATIC_LINK( SvFileObject, LoadGrfReady_Impl, void* );
-    DECL_STATIC_LINK( SvFileObject, LoadGrfNewData_Impl, void* );
     DECL_LINK( DialogClosedHdl, sfx2::FileDialogHelper* );
 
 protected:
