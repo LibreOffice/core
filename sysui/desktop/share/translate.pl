@@ -119,7 +119,7 @@ foreach $template (keys %templates) {
     # templates exist
     unless(open(TEMPLATE, $outfile)) {
         print STDERR "Warning: No template found for item $_: $outfile: $!\n";
-        next;
+        exit -1;
     }
 
     # open output file

@@ -72,12 +72,16 @@ MIMELIST = \
     master-document \
     oasis-text \
     oasis-text-template \
+    oasis-text-flat-xml \
     oasis-spreadsheet \
     oasis-spreadsheet-template \
+    oasis-spreadsheet-flat-xml \
     oasis-drawing \
     oasis-drawing-template \
+    oasis-drawing-flat-xml \
     oasis-presentation \
     oasis-presentation-template \
+    oasis-presentation-flat-xml \
     oasis-formula \
     oasis-master-document \
     oasis-database \
