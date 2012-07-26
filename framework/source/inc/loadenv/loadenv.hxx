@@ -58,26 +58,21 @@
 //_______________________________________________
 // namespace
 
-namespace framework{
+namespace framework {
 
 namespace css = ::com::sun::star;
 class QuietInteraction;
-//_______________________________________________
-// definitions
 
 /** @short  implements general mechainsm for loading documents.
 
     @descr  An instance of this class can be used inside the API calls
-            XComponentLoader::loadComponentFromURL() and XDispatch::dispatch()
-            (of course in its derived interfaces too :-)).
+            XComponentLoader::loadComponentFromURL() and
+            XDispatch::dispatch().
 
     @author as96863
  */
 class LoadEnv : private ThreadHelpBase
 {
-    //___________________________________________
-    // structs, types, etc.
-
     public:
 
         /** @short  enable/disable special features
@@ -100,8 +95,6 @@ class LoadEnv : private ThreadHelpBase
             /// enable loading of resources, which are not related to a target frame! (see concept of ContentHandler)
             E_ALLOW_CONTENTHANDLER = 2
         };
-
-        //_______________________________________
 
         /** @short  classify a content.
 
@@ -130,9 +123,6 @@ class LoadEnv : private ThreadHelpBase
             /// special mode for non real loading, In such case the model is given directly!
             E_CAN_BE_SET
         };
-
-    //___________________________________________
-    // member
 
     private:
 
@@ -225,9 +215,6 @@ class LoadEnv : private ThreadHelpBase
 
         QuietInteraction*   m_pQuietInteraction;
 
-    //___________________________________________
-    // native interface
-
     public:
 
         /** @short  initialize a new instance of this load environment.
@@ -244,16 +231,10 @@ class LoadEnv : private ThreadHelpBase
         LoadEnv(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR)
             throw(LoadEnvException, css::uno::RuntimeException);
 
-        //_______________________________________
-
         /** @short  deinitialize an instance of this class in the right way.
          */
         ~LoadEnv();
 
-        //_______________________________________
-
-        /** @short  DRAFT TODO
-         */
         static css::uno::Reference< css::lang::XComponent > loadComponentFromURL(const css::uno::Reference< css::frame::XComponentLoader >&    xLoader,
                                                                                  const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR  ,
                                                                                  const ::rtl::OUString&                                        sURL   ,
@@ -263,8 +244,6 @@ class LoadEnv : private ThreadHelpBase
             throw(css::lang::IllegalArgumentException,
                   css::io::IOException               ,
                   css::uno::RuntimeException         );
-
-        //_______________________________________
 
         /** @short  set some changeable parameters for a new load request.
 
@@ -323,8 +302,6 @@ class LoadEnv : private ThreadHelpBase
                                              EFeature                                                   eFeature        = E_NO_FEATURE         ,
                                              EContentType                                               eContentType    = E_UNSUPPORTED_CONTENT);
 
-        //_______________________________________
-
         /** @short  start loading of the resource represented by this loadenv instance.
 
             @descr  There is no direct return value possible here. Because it depends
@@ -374,10 +351,6 @@ class LoadEnv : private ThreadHelpBase
         //_______________________________________
         /** TODO document me ... */
         css::uno::Reference< css::lang::XComponent > getTargetComponent() const;
-
-
-    //___________________________________________
-    // static interface
 
     public:
 
@@ -444,9 +417,6 @@ class LoadEnv : private ThreadHelpBase
         void impl_reactForLoadingState()
             throw(LoadEnvException, css::uno::RuntimeException);
 
-    //___________________________________________
-    // private helper
-
     private:
 
         /** @short  tries to detect the type and the filter of the specified content.
@@ -470,8 +440,6 @@ class LoadEnv : private ThreadHelpBase
         void impl_detectTypeAndFilter()
             throw(LoadEnvException, css::uno::RuntimeException);
 
-        //_______________________________________
-
         /** @short  tries to ask user for it's filter decision in case
                     normal detection failed.
 
@@ -484,8 +452,6 @@ class LoadEnv : private ThreadHelpBase
          */
         ::rtl::OUString impl_askUserForTypeAndFilterIfAllowed()
             throw(LoadEnvException, css::uno::RuntimeException);
-
-        //_______________________________________
 
         /** @short  tries to use ContentHandler objects for loading.
 
@@ -508,8 +474,6 @@ class LoadEnv : private ThreadHelpBase
         sal_Bool impl_handleContent()
             throw(LoadEnvException, css::uno::RuntimeException);
 
-        //_______________________________________
-
         /** @short  tries to use FrameLoader objects for loading.
 
             @descr  First the target frame will be located. If it could be found
@@ -528,8 +492,6 @@ class LoadEnv : private ThreadHelpBase
          */
         sal_Bool impl_loadContent()
             throw(LoadEnvException, css::uno::RuntimeException);
-
-        //_______________________________________
 
         /** @short  checks if the specified content is already loaded.
 
@@ -556,8 +518,6 @@ class LoadEnv : private ThreadHelpBase
          */
         css::uno::Reference< css::frame::XFrame > impl_searchAlreadyLoaded()
             throw(LoadEnvException, css::uno::RuntimeException);
-
-        //_______________________________________
 
         /** @short  search for any target frame, which seems to be useable
                     for this load request.
@@ -590,8 +550,6 @@ class LoadEnv : private ThreadHelpBase
         css::uno::Reference< css::frame::XFrame > impl_searchRecycleTarget()
             throw(LoadEnvException, css::uno::RuntimeException);
 
-        //_______________________________________
-
         /** @short  because showing of a frame is needed more then once ...
                     it's implemented as an seperate method .-)
 
@@ -620,8 +578,6 @@ class LoadEnv : private ThreadHelpBase
         void impl_makeFrameWindowVisible(const css::uno::Reference< css::awt::XWindow >& xWindow      ,
                                                sal_Bool                                  bForceToFront);
 
-        //_______________________________________
-
         /** @short  checks whether a frame is already used for another load request or not.
 
             @descr  Such frames cant be used for our "recycle feature"!
@@ -635,21 +591,15 @@ class LoadEnv : private ThreadHelpBase
          */
         sal_Bool impl_isFrameAlreadyUsedForLoading(const css::uno::Reference< css::frame::XFrame >& xFrame) const;
 
-        //_______________________________________
-
         /** @short  try to determine the used application module
                     of this load request and applay right position and size
                     for this document window ... hopefully before we show it .-)
          */
         void impl_applyPersistentWindowState(const css::uno::Reference< css::awt::XWindow >& xWindow);
 
-        //_______________________________________
-
         /** @short  determine if it's allowed to open new document frames.
          */
         sal_Bool impl_furtherDocsAllowed();
-
-        //_______________________________________
 
         /** @short  jumps to the requested bookmark inside a given document.
          */
