@@ -54,7 +54,7 @@ public class SortDialogSetting {
         app.start();
 
         // Create a new spreadsheet document
-        startcenter.menuItem("File->New->Spreadsheet").select();
+        app.dispatch("private:factory/scalc");
     }
 
     @After
@@ -90,7 +90,7 @@ public class SortDialogSetting {
         app.dispatch(".uno:ChangeCaseToLower"); // In case SC capitalize first letter automatically
 
         // "Data->Sort...", choose "Ascending", check "Case sensitive"
-        calc.menuItem("Data->Sort...").select();
+        app.dispatch(".uno:DataSort");
         SortOptionsPage.select();
         SortOptionsPage_CaseSensitive.check();
         SortOptionsPage.ok();
@@ -99,21 +99,21 @@ public class SortDialogSetting {
         assertArrayEquals("Sorted result", expectedSortedResult, CalcUtil.getCellTexts("A2:A6"));
 
         // Uodo/redo
-        calc.menuItem("Edit->Undo: Sort").select();
+        app.dispatch(".uno:Undo");
         assertArrayEquals("Undo sorted result", data, CalcUtil.getCellTexts("A2:A6"));
-        calc.menuItem("Edit->Redo: Sort").select();
+        app.dispatch(".uno:Redo");
         assertArrayEquals("Redo sorted result", expectedSortedResult, CalcUtil.getCellTexts("A2:A6"));
 
         // Save and close document
         String saveTo = getPath("temp/" + "RowsSortWithOptionsCaseSensitive.ods");
-        calc.menuItem("File->Save As...").select();
+        app.dispatch(".uno:SaveAs");
         FileUtil.deleteFile(saveTo);
         submitSaveDlg(saveTo);
-        calc.menuItem("File->Close").select();
+        app.dispatch(".uno:CloseDoc");
         openStartcenter();
 
         // Reopen and verify sorted result
-        startcenter.menuItem("File->Open...").select();
+        app.dispatch(".uno:Open");
         submitOpenDlg(saveTo);
         calc.waitForExistence(10, 2);
         assertArrayEquals("Saved sorted result", expectedSortedResult, CalcUtil.getCellTexts("A2:A6"));
@@ -149,7 +149,7 @@ public class SortDialogSetting {
         typeKeys("D<down>FLK<down>E<down>BC<down>GE<down>AB");
 
         // Data->Sort..., choose "Ascending", check "Copy sort results to:"
-        calc.menuItem("Data->Sort...").select();
+        app.dispatch(".uno:DataSort");
         SortOptionsPage.select();
         SortOptionsPage_CopyResultTo.check();
         SortOptionsPage_CopyResultToEdit.setText("$Sheet3.$A4");
@@ -159,20 +159,20 @@ public class SortDialogSetting {
         assertArrayEquals("Copy sorted result to", expectedSortedResult, CalcUtil.getCellTexts("$Sheet3.$A4:$B9"));
 
         // Uodo/redo
-        calc.menuItem("Edit->Undo: Sort").select();
+        app.dispatch(".uno:Undo");
         assertEquals("Undo sorted result", "", CalcUtil.getCellText("$Sheet3.$A4"));
-        calc.menuItem("Edit->Redo: Sort").select();
+        app.dispatch(".uno:Redo");
         assertArrayEquals("Redo sorted result", expectedSortedResult, CalcUtil.getCellTexts("$Sheet3.$A4:$B9"));
 
         // Move focus to sheet2 then select a cell range, Insert->Names->Define...
         CalcUtil.selectRange("$Sheet2.$A1:$B3");
-        calc.menuItem("Insert->Names->Define...").select();
+        app.dispatch(".uno:DefineName");
         DefineNamesDlg_NameEdit.setText("cellRange");
         DefineNamesDlg.ok();
 
         // Set focus to the original data, Data->Sort...
         CalcUtil.selectRange("$Sheet1.$B1");
-        calc.menuItem("Data->Sort...").select();
+        app.dispatch(".uno:DataSort");
         SortOptionsPage.select();
         SortOptionsPage_CopyResultTo.check();
         SortOptionsPage_CopyResultToCellRange.select("cellRange");
@@ -182,21 +182,21 @@ public class SortDialogSetting {
         assertArrayEquals("Copy sorted result to cell range", expectedSortedResult, CalcUtil.getCellTexts("$Sheet2.$A1:$B6"));
 
         // Uodo/redo
-        calc.menuItem("Edit->Undo: Sort").select();
+        app.dispatch(".uno:Undo");
         assertEquals("Undo sorted result", "", CalcUtil.getCellText("$Sheet2.$A1"));
-        calc.menuItem("Edit->Redo: Sort").select();
+        app.dispatch(".uno:Redo");
         assertArrayEquals("Redo sorted result", expectedSortedResult, CalcUtil.getCellTexts("$Sheet2.$A1:$B6"));
 
         // Save and close document
         String saveTo = getPath("temp/" + "RowsSortWithOptionsCopyResultTo.ods");
-        calc.menuItem("File->Save As...").select();
+        app.dispatch(".uno:SaveAs");
         FileUtil.deleteFile(saveTo);
         submitSaveDlg(saveTo);
-        calc.menuItem("File->Close").select();
+        app.dispatch(".uno:CloseDoc");
         openStartcenter();
 
         // Reopen and verify sorted result
-        startcenter.menuItem("File->Open...").select();
+        app.dispatch(".uno:Open");
         submitOpenDlg(saveTo);
         calc.waitForExistence(10, 2);
         assertArrayEquals("Saved sorted result", expectedSortedResult, CalcUtil.getCellTexts("$Sheet3.$A4:$B9"));
@@ -241,36 +241,36 @@ public class SortDialogSetting {
         typeKeys("D<down>FLK<down>E<down>BC<down>GE<down>AB");
 
         // "Data->Sort...", choose "Ascending", sort first by Column B
-        calc.menuItem("Data->Sort...").select();
+        app.dispatch(".uno:DataSort");
         SortPage_Ascending1.check();
-        SortPage_By1.select("Column B");
+        SortPage_By1.select(2); // "Column B"
         SortPage.ok();
 
         // Verify sorted result
         assertArrayEquals("Sorted result", expectedResultSortByColumnBAscending, CalcUtil.getCellTexts("A1:B6"));
 
         // Uodo/redo
-        calc.menuItem("Edit->Undo: Sort").select();
+        app.dispatch(".uno:Undo");
         assertArrayEquals("Undo sorted result", data, CalcUtil.getCellTexts("A1:B6"));
-        calc.menuItem("Edit->Redo: Sort").select();
+        app.dispatch(".uno:Redo");
         assertArrayEquals("Redo sorted result", expectedResultSortByColumnBAscending, CalcUtil.getCellTexts("A1:B6"));
-        calc.menuItem("Edit->Undo: Sort").select();
+        app.dispatch(".uno:Undo");
 
         // Save and close document
         String saveTo = getPath("temp/" + "SortCriteriaSortFirstBy.ods");
-        calc.menuItem("File->Save As...").select();
+        app.dispatch(".uno:SaveAs");
         FileUtil.deleteFile(saveTo);
         submitSaveDlg(saveTo);
-        calc.menuItem("File->Close").select();
+        app.dispatch(".uno:CloseDoc");
         openStartcenter();
 
         // Reopen, "Data->Sort...", choose "Descending", sort first by Column A
-        startcenter.menuItem("File->Open...").select();
+        app.dispatch(".uno:Open");
         submitOpenDlg(saveTo);
         calc.waitForExistence(10, 2);
-        calc.menuItem("Data->Sort...").select();
+        app.dispatch(".uno:DataSort");
         SortPage_Descending1.check();
-        SortPage_By1.select("Column A");
+        SortPage_By1.select(1); // "Column A"
         SortPage.ok();
 
         // Verify sorted result
@@ -315,37 +315,37 @@ public class SortDialogSetting {
         typeKeys("D<down>FLK<down>E<down>AB<down>GE<down>AB");
 
         // "Data->Sort...", choose "Ascending", sort first by Column B
-        calc.menuItem("Data->Sort...").select();
+        app.dispatch(".uno:DataSort");
         SortPage_Ascending1.check();
-        SortPage_By1.select("Column B");
+        SortPage_By1.select(2); // "Column B"
         SortPage.ok();
 
         // Verify sorted result
         assertArrayEquals("Sorted result", expectedResultSortFirstByB, CalcUtil.getCellTexts("A1:B6"));
 
         // Uodo/redo
-        calc.menuItem("Edit->Undo: Sort").select();
+        app.dispatch(".uno:Undo");
         assertArrayEquals("Undo sorted result", data, CalcUtil.getCellTexts("A1:B6"));
-        calc.menuItem("Edit->Redo: Sort").select();
+        app.dispatch(".uno:Redo");
         assertArrayEquals("Redo sorted result", expectedResultSortFirstByB, CalcUtil.getCellTexts("A1:B6"));
-        calc.menuItem("Edit->Undo: Sort").select();
+        app.dispatch(".uno:Undo");
 
         // Save and close document
         String saveTo = getPath("temp/" + "SortCriteriaSortSecondBy.ods");
-        calc.menuItem("File->Save As...").select();
+        app.dispatch(".uno:SaveAs");
         FileUtil.deleteFile(saveTo);
         submitSaveDlg(saveTo);
-        calc.menuItem("File->Close").select();
+        app.dispatch(".uno:CloseDoc");
         openStartcenter();
 
         // Reopen, "Data->Sort...", sort first by Column B "Ascending", sort second by Column A "Descending"
-        startcenter.menuItem("File->Open...").select();
+        app.dispatch(".uno:Open");
         submitOpenDlg(saveTo);
         calc.waitForExistence(10, 2);
-        calc.menuItem("Data->Sort...").select();
-        SortPage_By1.select("Column B");
+        app.dispatch(".uno:DataSort");
+        SortPage_By1.select(2); // "Column B"
         SortPage_Ascending1.check();
-        SortPage_By2.select("Column A");
+        SortPage_By2.select(1); // "Column A"
         SortPage_Descending2.check();
         SortPage.ok();
 
@@ -411,11 +411,10 @@ public class SortDialogSetting {
         typeKeys("AB<down>FLK<down>E<down>AB<down>GE<down>AB<down>EFYU<down>DS<down>AB");
         CalcUtil.selectRange("C1");
         typeKeys("2<down>5<down>4<down>1<down>6<down>2<down>7<down>8<down>1");
-        sleep(0.5);
 
         // "Data->Sort...", choose "Ascending", sort first by Column B
-        calc.menuItem("Data->Sort...").select();
-        SortPage_By1.select("Column B");
+        app.dispatch(".uno:DataSort");
+        SortPage_By1.select(2); // "Column B"
         SortPage_Ascending1.check();
         SortPage.ok();
 
@@ -423,28 +422,28 @@ public class SortDialogSetting {
         assertArrayEquals("Sorted result", expectedResultSortFirstByB, CalcUtil.getCellTexts("A1:C9"));
 
         // Uodo/redo
-        calc.menuItem("Edit->Undo: Sort").select();
+        app.dispatch(".uno:Undo");
         assertArrayEquals("Undo sorted result", data, CalcUtil.getCellTexts("A1:C9"));
-        calc.menuItem("Edit->Redo: Sort").select();
+        app.dispatch(".uno:Redo");
         assertArrayEquals("Redo sorted result", expectedResultSortFirstByB, CalcUtil.getCellTexts("A1:C9"));
-        calc.menuItem("Edit->Undo: Sort").select();
+        app.dispatch(".uno:Undo");
 
         // Save and close document
         String saveTo = getPath("temp/" + "SortCriteriaSortThirdBy.ods");
-        calc.menuItem("File->Save As...").select();
+        app.dispatch(".uno:SaveAs");
         FileUtil.deleteFile(saveTo);
         submitSaveDlg(saveTo);
-        calc.menuItem("File->Close").select();
+        app.dispatch(".uno:CloseDoc");
         openStartcenter();
 
         // Reopen, "Data->Sort...", sort first by Column B "Ascending", sort second by Column C "Descending"
-        startcenter.menuItem("File->Open...").select();
+        app.dispatch(".uno:Open");
         submitOpenDlg(saveTo);
         calc.waitForExistence(10, 2);
-        calc.menuItem("Data->Sort...").select();
-        SortPage_By1.select("Column B");
+        app.dispatch(".uno:DataSort");
+        SortPage_By1.select(2); // "Column B"
         SortPage_Ascending1.check();
-        SortPage_By2.select("Column C");
+        SortPage_By2.select(3); // "Column C"
         SortPage_Descending2.check();
         SortPage.ok();
 
@@ -452,12 +451,12 @@ public class SortDialogSetting {
         assertArrayEquals("Sorted result", expectedResultSortSecondByC, CalcUtil.getCellTexts("A1:C9"));
 
         // "Data->Sort...", sort first by Column B "Ascending", sort second by Column C "Descending", sort third by Column A "Descending"
-        calc.menuItem("Data->Sort...").select();
-        SortPage_By1.select("Column B");
+        app.dispatch(".uno:DataSort");
+        SortPage_By1.select(2); // "Column B"
         SortPage_Ascending1.check();
-        SortPage_By2.select("Column C");
+        SortPage_By2.select(3); // "Column C"
         SortPage_Descending2.check();
-        SortPage_By3.select("Column A");
+        SortPage_By3.select(1); // "Column A"
         SortPage_Descending3.check();
         SortPage.ok();
 
@@ -465,21 +464,21 @@ public class SortDialogSetting {
         assertArrayEquals("Sorted result", expectedResultSortThirdByA, CalcUtil.getCellTexts("A1:C9"));
 
         // Uodo/redo
-        calc.menuItem("Edit->Undo: Sort").select();
+        app.dispatch(".uno:Undo");
         assertArrayEquals("Undo sorted result", expectedResultSortSecondByC, CalcUtil.getCellTexts("A1:C9"));
-        calc.menuItem("Edit->Redo: Sort").select();
+        app.dispatch(".uno:Redo");
         assertArrayEquals("Redo sorted result", expectedResultSortThirdByA, CalcUtil.getCellTexts("A1:C9"));
 
         // Save and close document
         saveTo = getPath("temp/" + "SortCriteriaSortThirdBy1.ods");
-        calc.menuItem("File->Save As...").select();
+        app.dispatch(".uno:SaveAs");
         FileUtil.deleteFile(saveTo);
         submitSaveDlg(saveTo);
-        calc.menuItem("File->Close").select();
+        app.dispatch(".uno:CloseDoc");
         openStartcenter();
 
         // Reopen and verify data sort is not lost
-        startcenter.menuItem("File->Open...").select();
+        app.dispatch(".uno:Open");
         submitOpenDlg(saveTo);
         calc.waitForExistence(10, 2);
         assertArrayEquals("Saved sorted result", expectedResultSortThirdByA, CalcUtil.getCellTexts("A1:C9"));
@@ -515,12 +514,12 @@ public class SortDialogSetting {
         // Click "Copy" button, "OK", close the document
         OptionsDlg_SortListsTabCopy.click();
         OptionsDlg.ok();
-        calc.menuItem("File->Close").select();
+        app.dispatch(".uno:CloseDoc");
         MsgBox_AdditionalRowsNotSaved.no();
         // Dependencies end
 
         // Create a new spreadsheet document
-        startcenter.menuItem("File->New->Spreadsheet").select();
+        app.dispatch("private:factory/scalc");
 
         // Input some data
         String[][] data = new String[][] {
@@ -557,12 +556,12 @@ public class SortDialogSetting {
 
         // "Data->Sort...", "Options" tab, check "Range contains column labels", no custom sort order, "Ascending", sort first by Color
         CalcUtil.selectRange("A1:A7");
-        calc.menuItem("Data->Sort...").select();
+        app.dispatch(".uno:DataSort");
         SortOptionsPage.select();
         SortOptionsPage_RangeContainsColumnLabels.check();
         SortOptionsPage_CustomSortOrder.uncheck();
         SortPage.select();
-        SortPage_By1.select("Color");
+        SortPage_By1.select(1); // "Color"
         SortPage_Ascending1.check();
         SortPage.ok();
 
@@ -570,26 +569,28 @@ public class SortDialogSetting {
         assertArrayEquals("Sorted result without custom sort order", expectedResultNoCustomSortOrder, CalcUtil.getCellTexts("A1:A7"));
 
         // Uodo/redo
-        calc.menuItem("Edit->Undo: Sort").select();
+        app.dispatch(".uno:Undo");
         assertArrayEquals("Undo sorted result", data, CalcUtil.getCellTexts("A1:A7"));
-        calc.menuItem("Edit->Redo: Sort").select();
+        app.dispatch(".uno:Redo");
         assertArrayEquals("Redo sorted result", expectedResultNoCustomSortOrder, CalcUtil.getCellTexts("A1:A7"));
-        calc.menuItem("Edit->Undo: Sort").select();
+        app.dispatch(".uno:Undo");
 
         // Copy original data to sheet2
         CalcUtil.selectRange("A1:A7");
-        calc.menuItem("Edit->Copy").select();
-        CalcUtil.selectRange("Sheet2.A1");
-        calc.menuItem("Edit->Paste").select();
+        app.dispatch(".uno:Copy");
+        app.dispatch(".uno:SelectTables");
+        SCSheetsList.select(1);
+        SCSelectSheetsDlg.ok();
+        app.dispatch(".uno:Paste");
 
         // "Data->Sort...", "Options" tab, check "Range contains column labels", choose custom sort order, "Ascending", sort first by Color
-        calc.menuItem("Data->Sort...").select();
+        app.dispatch(".uno:DataSort");
         SortOptionsPage.select();
         SortOptionsPage_RangeContainsColumnLabels.check();
         SortOptionsPage_CustomSortOrder.check();
         SortOptionsPage_CustomSortOrderList.select("red,yellow,blue,green,white,black");
         SortPage.select();
-        SortPage_By1.select("Color");
+        SortPage_By1.select(1); // "Color"
         SortPage_Ascending1.check();
         SortPage.ok();
 
@@ -597,25 +598,31 @@ public class SortDialogSetting {
         assertArrayEquals("Sorted result with custom sort order", expectedResultCustomSortOrder, CalcUtil.getCellTexts("A1:A7"));
 
         // Uodo/redo
-        calc.menuItem("Edit->Undo: Sort").select();
+        app.dispatch(".uno:Undo");
         assertArrayEquals("Undo sorted result", data, CalcUtil.getCellTexts("A1:A7"));
-        calc.menuItem("Edit->Redo: Sort").select();
+        app.dispatch(".uno:Redo");
         assertArrayEquals("Redo sorted result", expectedResultCustomSortOrder, CalcUtil.getCellTexts("A1:A7"));
 
         // Save and close document
         String saveTo = getPath("temp/" + "SortOptionsCustomSortOrderPredefineFromCopyList.ods");
-        calc.menuItem("File->Save As...").select();
+        app.dispatch(".uno:SaveAs");
         FileUtil.deleteFile(saveTo);
         submitSaveDlg(saveTo);
-        calc.menuItem("File->Close").select();
+        app.dispatch(".uno:CloseDoc");
         openStartcenter();
 
         // Reopen and verify sorted result
-        startcenter.menuItem("File->Open...").select();
+        app.dispatch(".uno:Open");
         submitOpenDlg(saveTo);
         calc.waitForExistence(10, 2);
-        assertArrayEquals("Original data", data, CalcUtil.getCellTexts("$Sheet1.$A1:$A7"));
-        assertArrayEquals("Saved sorted result", expectedResultCustomSortOrder, CalcUtil.getCellTexts("$Sheet2.$A1:$A7"));
+        app.dispatch(".uno:SelectTables");
+        SCSheetsList.select(0); // Sheet 1
+        SCSelectSheetsDlg.ok();
+        assertArrayEquals("Original data", data, CalcUtil.getCellTexts("$A1:$A7"));
+        app.dispatch(".uno:SelectTables");
+        SCSheetsList.select(1); // Sheet 2
+        SCSelectSheetsDlg.ok();
+        assertArrayEquals("Saved sorted result", expectedResultCustomSortOrder, CalcUtil.getCellTexts("$A1:$A7"));
     }
 
     /**
@@ -643,14 +650,12 @@ public class SortDialogSetting {
         OptionsDlg_SortListsTabNew.click();
         typeKeys("white,red,yellow,blue,green,black");
         OptionsDlg_SortListsTabAdd.click();
-        sleep(0.5);
         OptionsDlg.ok();
-        calc.menuItem("File->Close").select();
+        app.dispatch(".uno:CloseDoc");
         // Dependencies end
 
         // Create a new spreadsheet document
-        startcenter.menuItem("File->New->Spreadsheet").select();
-        sleep(3);
+        app.dispatch("private:factory/scalc");
 
         // Input some data
         String[][] data = new String[][] {
@@ -687,12 +692,12 @@ public class SortDialogSetting {
 
         // "Data->Sort...", "Options" tab, check "Range contains column labels", no custom sort order, "Ascending", sort first by Color
         CalcUtil.selectRange("A1:A7");
-        calc.menuItem("Data->Sort...").select();
+        app.dispatch(".uno:DataSort");
         SortOptionsPage.select();
         SortOptionsPage_RangeContainsColumnLabels.check();
         SortOptionsPage_CustomSortOrder.uncheck();
         SortPage.select();
-        SortPage_By1.select("Color");
+        SortPage_By1.select(1); // "Color"
         SortPage_Ascending1.check();
         SortPage.ok();
 
@@ -700,26 +705,28 @@ public class SortDialogSetting {
         assertArrayEquals("Sorted result without custom sort order", expectedResultNoCustomSortOrder, CalcUtil.getCellTexts("A1:A7"));
 
         // Uodo/redo
-        calc.menuItem("Edit->Undo: Sort").select();
+        app.dispatch(".uno:Undo");
         assertArrayEquals("Undo sorted result", data, CalcUtil.getCellTexts("A1:A7"));
-        calc.menuItem("Edit->Redo: Sort").select();
+        app.dispatch(".uno:Redo");
         assertArrayEquals("Redo sorted result", expectedResultNoCustomSortOrder, CalcUtil.getCellTexts("A1:A7"));
-        calc.menuItem("Edit->Undo: Sort").select();
+        app.dispatch(".uno:Undo");
 
         // Copy original data to sheet2
         CalcUtil.selectRange("A1:A7");
-        calc.menuItem("Edit->Copy").select();
-        CalcUtil.selectRange("Sheet2.A1");
-        calc.menuItem("Edit->Paste").select();
+        app.dispatch(".uno:Copy");
+        app.dispatch(".uno:SelectTables");
+        SCSheetsList.select(1); // Sheet 2
+        SCSelectSheetsDlg.ok();
+        app.dispatch(".uno:Paste");
 
         // "Data->Sort...", "Options" tab, check "Range contains column labels", choose custom sort order, "Ascending", sort first by Color
-        calc.menuItem("Data->Sort...").select();
+        app.dispatch(".uno:DataSort");
         SortOptionsPage.select();
         SortOptionsPage_RangeContainsColumnLabels.check();
         SortOptionsPage_CustomSortOrder.check();
         SortOptionsPage_CustomSortOrderList.select("white,red,yellow,blue,green,black");
         SortPage.select();
-        SortPage_By1.select("Color");
+        SortPage_By1.select(1); // "Color"
         SortPage_Ascending1.check();
         SortPage.ok();
 
@@ -727,26 +734,33 @@ public class SortDialogSetting {
         assertArrayEquals("Sorted result with custom sort order", expectedResultCustomSortOrder, CalcUtil.getCellTexts("A1:A7"));
 
         // Uodo/redo
-        calc.menuItem("Edit->Undo: Sort").select();
+        app.dispatch(".uno:Undo");
         assertArrayEquals("Undo sorted result", data, CalcUtil.getCellTexts("A1:A7"));
-        calc.menuItem("Edit->Redo: Sort").select();
+        app.dispatch(".uno:Redo");
         assertArrayEquals("Redo sorted result", expectedResultCustomSortOrder, CalcUtil.getCellTexts("A1:A7"));
 
         // Save and close document
         String saveTo = getPath("temp/" + "SortOptionsCustomSortOrderPredefineFromNewList.ods");
-        calc.menuItem("File->Save As...").select();
+        app.dispatch(".uno:SaveAs");
         FileUtil.deleteFile(saveTo);
         submitSaveDlg(saveTo);
-        calc.menuItem("File->Close").select();
+        app.dispatch(".uno:CloseDoc");
         openStartcenter();
 
         // Reopen and verify sorted result
-        startcenter.menuItem("File->Open...").select();
+        app.dispatch(".uno:Open");
         submitOpenDlg(saveTo);
         calc.waitForExistence(10, 2);
-        assertArrayEquals("Original data", data, CalcUtil.getCellTexts("$Sheet1.$A1:$A7"));
-        assertArrayEquals("Saved sorted result", expectedResultCustomSortOrder, CalcUtil.getCellTexts("$Sheet2.$A1:$A7"));
+        app.dispatch(".uno:SelectTables");
+        SCSheetsList.select(0); // Sheet 1
+        SCSelectSheetsDlg.ok();
+        assertArrayEquals("Original data", data, CalcUtil.getCellTexts("$A1:$A7"));
+        app.dispatch(".uno:SelectTables");
+        SCSheetsList.select(1); // Sheet 2
+        SCSelectSheetsDlg.ok();
+        assertArrayEquals("Saved sorted result", expectedResultCustomSortOrder, CalcUtil.getCellTexts("$A1:$A7"));
     }
+
 
     /**
      * Test sort options: sort columns, direction "Left to right"
@@ -764,14 +778,15 @@ public class SortDialogSetting {
         };
         CalcUtil.selectRange("A1");
         typeKeys("Units<right>7<right>27<right>4<right>12<right>3<right>6");
+        sleep(1);   // If no sleep, some strings lost
 
         // "Data->Sort...", check "Range contains column labels", "Left to right", sort first by"Units", "Ascending"
-        calc.menuItem("Data->Sort...").select();
+        app.dispatch(".uno:DataSort");
         SortOptionsPage.select();
         SortOptionsPage_RangeContainsColumnLabels.check();
         SortOptionsPage_LeftToRight.check();
         SortPage.select();
-        SortPage_By1.select("Units");
+        SortPage_By1.select(1); // Choose "Units"
         SortPage_Ascending1.check();
         SortPage.ok();
 
@@ -779,21 +794,21 @@ public class SortDialogSetting {
         assertArrayEquals("Sorted result", expectedSortedResult, CalcUtil.getCellTexts("A1:G1"));
 
         // Uodo/redo
-        calc.menuItem("Edit->Undo: Sort").select();
+        app.dispatch(".uno:Undo");
         assertArrayEquals("Undo sorted result", data, CalcUtil.getCellTexts("A1:G1"));
-        calc.menuItem("Edit->Redo: Sort").select();
+        app.dispatch(".uno:Redo");
         assertArrayEquals("Redo sorted result", expectedSortedResult, CalcUtil.getCellTexts("A1:G1"));
 
         // Save and close document
         String saveTo = getPath("temp/" + "SortOptionsDirectionSortColumns.ods");
-        calc.menuItem("File->Save As...").select();
+        app.dispatch(".uno:SaveAs");
         FileUtil.deleteFile(saveTo);
         submitSaveDlg(saveTo);
-        calc.menuItem("File->Close").select();
+        app.dispatch(".uno:CloseDoc");
         openStartcenter();
 
         // Reopen and verify sorted result
-        startcenter.menuItem("File->Open...").select();
+        app.dispatch(".uno:Open");
         submitOpenDlg(saveTo);
         calc.waitForExistence(10, 2);
         assertArrayEquals("Saved sorted result", expectedSortedResult, CalcUtil.getCellTexts("A1:G1"));
@@ -838,7 +853,6 @@ public class SortDialogSetting {
 
         // Input source data
         String file = prepareData("sc/SortOptionsIncludeFormats.ods");
-        //      String file = testFile("sc/FFC252FFCSC_XML_Datarange0235.xls");
         app.dispatch(".uno:Open", 3);
         submitOpenDlg(file);
         calc.waitForExistence(10, 2);
@@ -888,12 +902,12 @@ public class SortDialogSetting {
         //      FormatCellsDlg_NumbersPage.ok();
 
         // "Data->Sort...", check "Range contains column labels", check "Include formats", sort first by "Units", "Ascending"
-        calc.menuItem("Data->Sort...").select();
+        app.dispatch(".uno:DataSort");
         SortOptionsPage.select();
         SortOptionsPage_RangeContainsColumnLabels.check();
         SortOptionsPage_IncludeFormats.check();
         SortPage.select();
-        SortPage_By1.select("Units");
+        SortPage_By1.select(1); // "Units"
         SortPage_Ascending1.check();
         SortPage.ok();
 
@@ -901,25 +915,25 @@ public class SortDialogSetting {
         assertArrayEquals("Sorted result include formats", expectedSortedResultIncludeFormat, CalcUtil.getCellTexts("A1:A7"));
 
         // Uodo/redo
-        calc.menuItem("Edit->Undo: Sort").select();
+        app.dispatch(".uno:Undo");
         assertArrayEquals("Undo sorted result", dataWithCurrencyFormats, CalcUtil.getCellTexts("A1:A7"));
-        calc.menuItem("Edit->Redo: Sort").select();
+        app.dispatch(".uno:Redo");
         assertArrayEquals("Redo sorted result", expectedSortedResultIncludeFormat, CalcUtil.getCellTexts("A1:A7"));
-        calc.menuItem("Edit->Undo: Sort").select();
+        app.dispatch(".uno:Undo");
 
         // Copy the original data to sheet2
         CalcUtil.selectRange("A1:A7");
-        calc.menuItem("Edit->Copy").select();
+        app.dispatch(".uno:Copy");
         CalcUtil.selectRange("Sheet2.A1");
-        calc.menuItem("Edit->Paste").select();
+        app.dispatch(".uno:Paste");
 
         // "Data->Sort...", check "Range contains column labels", uncheck "Include formats", sort first by "Units", "Ascending"
-        calc.menuItem("Data->Sort...").select();
+        app.dispatch(".uno:DataSort");
         SortOptionsPage.select();
         SortOptionsPage_RangeContainsColumnLabels.check();
         SortOptionsPage_IncludeFormats.uncheck();
         SortPage.select();
-        SortPage_By1.select("Units");
+        SortPage_By1.select(1); // "Units"
         SortPage_Ascending1.check();
         SortPage.ok();
 
@@ -927,21 +941,21 @@ public class SortDialogSetting {
         assertArrayEquals("Sorted result exclude formats", expectedSortedResultExcludeFormat, CalcUtil.getCellTexts("A1:A7"));
 
         // Uodo/redo
-        calc.menuItem("Edit->Undo: Sort").select();
+        app.dispatch(".uno:Undo");
         assertArrayEquals("Undo sorted result", dataWithCurrencyFormats, CalcUtil.getCellTexts("A1:A7"));
-        calc.menuItem("Edit->Redo: Sort").select();
+        app.dispatch(".uno:Redo");
         assertArrayEquals("Redo sorted result", expectedSortedResultExcludeFormat, CalcUtil.getCellTexts("A1:A7"));
 
         // Save and close document
         String saveTo = getPath("temp/" + "SortOptionsIncludeFormats.ods");
-        calc.menuItem("File->Save As...").select();
+        app.dispatch(".uno:SaveAs");
         FileUtil.deleteFile(saveTo);
         submitSaveDlg(saveTo);
-        calc.menuItem("File->Close").select();
+        app.dispatch(".uno:CloseDoc");
         openStartcenter();
 
         // Reopen and verify sorted result
-        startcenter.menuItem("File->Open...").select();
+        app.dispatch(".uno:Open");
         submitOpenDlg(saveTo);
         calc.waitForExistence(10, 2);
         assertArrayEquals("Original data", dataWithCurrencyFormats, CalcUtil.getCellTexts("$Sheet1.$A1:$A7"));
@@ -989,13 +1003,14 @@ public class SortDialogSetting {
         };
         CalcUtil.selectRange("A1");
         typeKeys("D<down>C<down>B<down>A<down>E");
+        sleep(1);   // If no sleep, some strings lost
 
         // "Data->Sort...", uncheck "Range contains column labels", sort first by "Column A", "Ascending"
-        calc.menuItem("Data->Sort...").select();
+        app.dispatch(".uno:DataSort");
         SortOptionsPage.select();
         SortOptionsPage_RangeContainsColumnLabels.uncheck();
         SortPage.select();
-        SortPage_By1.select("Column A");
+        SortPage_By1.select(1); // "Column A"
         SortPage_Ascending1.check();
         SortPage.ok();
 
@@ -1003,9 +1018,9 @@ public class SortDialogSetting {
         assertArrayEquals("Sorted result", expectedSortedResult1, CalcUtil.getCellTexts("A1:A5"));
 
         // Uodo/redo
-        calc.menuItem("Edit->Undo: Sort").select();
+        app.dispatch(".uno:Undo");
         assertArrayEquals("Undo sorted result", data1, CalcUtil.getCellTexts("A1:A5"));
-        calc.menuItem("Edit->Redo: Sort").select();
+        app.dispatch(".uno:Redo");
         assertArrayEquals("Redo sorted result", expectedSortedResult1, CalcUtil.getCellTexts("A1:A5"));
 
         // Input data2 into same sheet, data1 and data2 are not overlapped
@@ -1014,13 +1029,13 @@ public class SortDialogSetting {
 
         // Focus on data2, "Data->Sort...", "Copy result to" partially overlap with data1, sort first by "Column G", "Ascending"
         CalcUtil.selectRange("G10");
-        calc.menuItem("Data->Sort...").select();
+        app.dispatch(".uno:DataSort");
         SortOptionsPage.select();
         SortOptionsPage_RangeContainsColumnLabels.uncheck();
         SortOptionsPage_CopyResultTo.check();
         SortOptionsPage_CopyResultToEdit.setText("A4");
         SortPage.select();
-        SortPage_By1.select("Column G");
+        SortPage_By1.select(1); // "Column G"
         SortPage_Ascending1.check();
         SortPage.ok();
 
@@ -1029,14 +1044,14 @@ public class SortDialogSetting {
 
         // Save and close document
         String saveTo = getPath("temp/" + "SortOptionsMultipleSortDataOverlap.ods");
-        calc.menuItem("File->Save As...").select();
+        app.dispatch(".uno:SaveAs");
         FileUtil.deleteFile(saveTo);
         submitSaveDlg(saveTo);
-        calc.menuItem("File->Close").select();
+        app.dispatch(".uno:CloseDoc");
         openStartcenter();
 
         // Reopen and verify sorted result
-        startcenter.menuItem("File->Open...").select();
+        app.dispatch(".uno:Open");
         submitOpenDlg(saveTo);
         calc.waitForExistence(10, 2);
         assertArrayEquals("Saved sorted result", expectedSortedResultDataOverlap, CalcUtil.getCellTexts("A1:A8"));
@@ -1083,15 +1098,16 @@ public class SortDialogSetting {
         };
         CalcUtil.selectRange("A1");
         typeKeys("D<down>C<down>B<down>A<down>E");
+        sleep(1);   // If no sleep, some strings lost
 
         // "Data->Sort...", uncheck "Range contains column labels", check "Case sensitive" and "Include formats", sort first by "Column A", "Ascending"
-        calc.menuItem("Data->Sort...").select();
+        app.dispatch(".uno:DataSort");
         SortOptionsPage.select();
         SortOptionsPage_RangeContainsColumnLabels.uncheck();
         SortOptionsPage_CaseSensitive.check();
         SortOptionsPage_IncludeFormats.check();
         SortPage.select();
-        SortPage_By1.select("Column A");
+        SortPage_By1.select(1); // "Column A"
         SortPage_Ascending1.check();
         SortPage.ok();
 
@@ -1099,9 +1115,9 @@ public class SortDialogSetting {
         assertArrayEquals("Sorted result1", expectedSortedResult1, CalcUtil.getCellTexts("A1:A5"));
 
         // Uodo/redo
-        calc.menuItem("Edit->Undo: Sort").select();
+        app.dispatch(".uno:Undo");
         assertArrayEquals("Undo sorted result", data1, CalcUtil.getCellTexts("A1:A5"));
-        calc.menuItem("Edit->Redo: Sort").select();
+        app.dispatch(".uno:Redo");
         assertArrayEquals("Redo sorted result", expectedSortedResult1, CalcUtil.getCellTexts("A1:A5"));
 
         // Input data2 into same sheet, data1 and data2 are not overlapped
@@ -1110,13 +1126,13 @@ public class SortDialogSetting {
 
         // Focus on data2, "Data->Sort...", check "Range contains column labels", uncheck "Case sensitive" and "Include formats", sort first by "Numbers", "Ascending"
         CalcUtil.selectRange("G10");
-        calc.menuItem("Data->Sort...").select();
+        app.dispatch(".uno:DataSort");
         SortOptionsPage.select();
         SortOptionsPage_RangeContainsColumnLabels.check();
         SortOptionsPage_CaseSensitive.uncheck();
         SortOptionsPage_IncludeFormats.uncheck();
         SortPage.select();
-        SortPage_By1.select("Numbers");
+        SortPage_By1.select(1); // "Numbers"
         SortPage_Ascending1.check();
         SortPage.ok();
 
@@ -1124,13 +1140,13 @@ public class SortDialogSetting {
         assertArrayEquals("Sorted result2", expectedSortedResult2, CalcUtil.getCellTexts("G10:G15"));
 
         // Uodo/redo
-        calc.menuItem("Edit->Undo: Sort").select();
+        app.dispatch(".uno:Undo");
         assertArrayEquals("Undo sorted result", data2, CalcUtil.getCellTexts("G10:G15"));
-        calc.menuItem("Edit->Redo: Sort").select();
+        app.dispatch(".uno:Redo");
         assertArrayEquals("Redo sorted result", expectedSortedResult2, CalcUtil.getCellTexts("G10:G15"));
 
         // Open sort dialog, check its setting
-        calc.menuItem("Data->Sort...").select();
+        app.dispatch(".uno:DataSort");
         SortOptionsPage.select();
         assertTrue("Range contains column labels should be checked", SortOptionsPage_RangeContainsColumnLabels.isChecked());
         assertFalse("Case sensitive should not be checked", SortOptionsPage_CaseSensitive.isChecked());
@@ -1139,19 +1155,19 @@ public class SortDialogSetting {
 
         // Save and close document
         String saveTo = getPath("temp/" + "SortOptionsMultipleSortParameterSaved.ods");
-        calc.menuItem("File->Save As...").select();
+        app.dispatch(".uno:SaveAs");
         FileUtil.deleteFile(saveTo);
         submitSaveDlg(saveTo);
-        calc.menuItem("File->Close").select();
+        app.dispatch(".uno:CloseDoc");
         openStartcenter();
 
         // Reopen and verify sorted result and sort parameters
-        startcenter.menuItem("File->Open...").select();
+        app.dispatch(".uno:Open");
         submitOpenDlg(saveTo);
         calc.waitForExistence(10, 2);
         assertArrayEquals("Saved sorted result1", expectedSortedResult1, CalcUtil.getCellTexts("A1:A5"));
         assertArrayEquals("Saved sorted result2", expectedSortedResult2, CalcUtil.getCellTexts("G10:G15"));
-        calc.menuItem("Data->Sort...").select();
+        app.dispatch(".uno:DataSort");
         SortOptionsPage.select();
         assertTrue("Range contains column labels should be checked", SortOptionsPage_RangeContainsColumnLabels.isChecked());
         assertFalse("Case sensitive should not be checked", SortOptionsPage_CaseSensitive.isChecked());

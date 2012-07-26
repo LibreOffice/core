@@ -49,7 +49,8 @@ public class ChartDialogSetting {
         app.start();
 
         // Create a new spreadsheet document
-        startcenter.menuItem("File->New->Spreadsheet").select();
+        app.dispatch("private:factory/scalc");
+        app.dispatch(".uno:InsertObjectChart");
     }
 
     @After
@@ -64,22 +65,11 @@ public class ChartDialogSetting {
      */
     @Test
     public void testChartDialogCancelBack() {
-        calc.menuItem("Insert->Chart...").select();
         WizardNextButton.click();
         assertTrue(ChartRangeChooseTabPage.isEnabled());
         WizardBackButton.click();
         assertTrue(ChartTypeChooseTabPage.isEnabled());
         Chart_Wizard.cancel();
         assertFalse(Chart_Wizard.exists());
-    }
-
-    /**
-     * Verify Chart Wizard dialog title words
-     */
-    @Test
-    public void testChartWizardTitle() {
-        calc.menuItem("Insert->Chart...").select();
-        assertEquals("Chart Wizard",Chart_Wizard.getText());
-        Chart_Wizard.cancel();
     }
 }

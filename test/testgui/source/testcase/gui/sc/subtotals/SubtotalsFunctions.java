@@ -51,11 +51,11 @@ public class SubtotalsFunctions {
     public void setUp() throws Exception {
         app.start();
         String file = prepareData("sc/SubtotalsSampleFile.ods");
-        startcenter.menuItem("File->Open...").select();
+        app.dispatch(".uno:Open");
         submitOpenDlg(file);
         sleep(2);
         CalcUtil.selectRange("A1:E7");
-        calc.menuItem("Data->Subtotals...").select();
+        app.dispatch(".uno:DataSubTotals");
     }
 
     @After
@@ -64,14 +64,14 @@ public class SubtotalsFunctions {
     }
 
     /**
-     *
+     * Just support en-US language
      * Verify Average function in SubTotals
      */
     @Test
     public void testAverage() {
-        SCSubTotalsGroupByListBox.select("Team");
+        SCSubTotalsGroupByListBox.select(4);    // "Team"
         SCCalcSubTotalForColumns.click(10, 25);
-        SCCalcSubTotolsFuncionList.select("Average");
+        SCCalcSubTotolsFuncionList.select(2);   // "Average"
         SCSubTotalsGroup1Dialog.ok();
         sleep(1);
 
@@ -82,13 +82,13 @@ public class SubtotalsFunctions {
     }
 
     /**
-     *
+     * Just support en-US language
      * Verify Count Numbers only function in SubTotals
      */
     @Test
     public void testCountNumbersOnly() {
         SCCalcSubTotalForColumns.click(10, 45);
-        SCCalcSubTotolsFuncionList.select("Count (numbers only)");
+        SCCalcSubTotolsFuncionList.select(6);   // "Count (numbers only)"
         SCSubTotalsGroup1Dialog.ok();
         sleep(1);
 
@@ -99,13 +99,13 @@ public class SubtotalsFunctions {
     }
 
     /**
-     *
+     * Just support en-US language
      * Verify Max Numbers function in SubTotals
      */
     @Test
     public void testMax() {
         SCCalcSubTotalForColumns.click(10, 45);
-        SCCalcSubTotolsFuncionList.select("Max");
+        SCCalcSubTotolsFuncionList.select(3);   // "Max"
         SCSubTotalsGroup1Dialog.ok();
         sleep(1);
 
@@ -116,13 +116,13 @@ public class SubtotalsFunctions {
     }
 
     /**
-     *
+     * Just support en-US language
      * Verify Min Numbers function in SubTotals
      */
     @Test
     public void testMin() {
         SCCalcSubTotalForColumns.click(10, 45);
-        SCCalcSubTotolsFuncionList.select("Min");
+        SCCalcSubTotolsFuncionList.select(4);   // "Min"
         SCSubTotalsGroup1Dialog.ok();
         sleep(1);
 
@@ -133,13 +133,13 @@ public class SubtotalsFunctions {
     }
 
     /**
-     *
+     * Just support en-US language
      * Verify Product function in SubTotals
      */
     @Test
     public void testProduct() {
         SCCalcSubTotalForColumns.click(10, 45);
-        SCCalcSubTotolsFuncionList.select("Product");
+        SCCalcSubTotolsFuncionList.select(5);   // "Product"
         SCSubTotalsGroup1Dialog.ok();
         sleep(1);
 
@@ -150,13 +150,13 @@ public class SubtotalsFunctions {
     }
 
     /**
-     *
+     * Just support en-US language
      * Verify StDevP (Population) function in SubTotals
      */
     @Test
     public void testStDevPPopulation() {
         SCCalcSubTotalForColumns.click(10, 45);
-        SCCalcSubTotolsFuncionList.select("StDevP (Population)");
+        SCCalcSubTotolsFuncionList.select(8);   // "StDevP (Population)"
         SCSubTotalsGroup1Dialog.ok();
         sleep(1);
 
@@ -167,13 +167,13 @@ public class SubtotalsFunctions {
     }
 
     /**
-     *
+     * Just support en-US language
      * Verify sum function in SubTotals
      */
     @Test
     public void testSum() {
         SCCalcSubTotalForColumns.click(10, 45);
-        SCCalcSubTotolsFuncionList.select("Sum");
+        SCCalcSubTotolsFuncionList.select(0);   // "Sum"
         SCSubTotalsGroup1Dialog.ok();
         sleep(1);
 
@@ -184,13 +184,13 @@ public class SubtotalsFunctions {
     }
 
     /**
-     *
+     * Just support en-US language
      * Verify Var Sample function in SubTotals
      */
     @Test
     public void testVarSample() {
         SCCalcSubTotalForColumns.click(10, 45);
-        SCCalcSubTotolsFuncionList.select("Var (Sample)");
+        SCCalcSubTotolsFuncionList.select(9);   // "Var (Sample)"
         SCSubTotalsGroup1Dialog.ok();
         sleep(1);
 
@@ -201,12 +201,12 @@ public class SubtotalsFunctions {
     }
 
     /**
-     *
+     * Just support en-US language
      * Verify Don't sort in Sub totals
      */
     @Test
     public void testDoNotSortOption() {
-        SCSubTotalsGroupByListBox.select("Team");
+        SCSubTotalsGroupByListBox.select(4);    // "Team"
         SCCalcSubTotalForColumns.click(10, 25);
         SCSubTotalsOptionsTabPage.select();
         SCSubtotalsPreSortToGroupCheckBox.uncheck();
@@ -220,7 +220,7 @@ public class SubtotalsFunctions {
     }
 
     /**
-     *
+     * Just support en-US language
      * Verify SubTotals Options default UI
      */
     @Test
@@ -240,20 +240,20 @@ public class SubtotalsFunctions {
     }
 
     /**
-     *
+     * Just support en-US language
      * Verify Subtotals using all group
      */
     @Test
     public void testUsingAllGroup() {
         SCSubTotalsGroup1Dialog.select();
-        SCSubTotalsGroupByListBox.select("Level");
+        SCSubTotalsGroupByListBox.select(1);    // "Level"
         SCCalcSubTotalForColumns.click(10, 45);
         SCSubTotalsGroup2Dialog.select();
-        SCSubTotalsGroupByListBox.select("Team");
+        SCSubTotalsGroupByListBox.select(4);    // "Team"
         SCCalcSubTotalForColumns.click(10, 25);
-        SCCalcSubTotolsFuncionList.select("Max");
+        SCCalcSubTotolsFuncionList.select(3);   // "Max"
         SCSubTotalsGroup3Dialog.select();
-        SCSubTotalsGroupByListBox.select("Name");
+        SCSubTotalsGroupByListBox.select(5);    // "Name"
         SCCalcSubTotalForColumns.click(10, 25);
         SCSubTotalsGroup1Dialog.select();
         SCSubTotalsGroup1Dialog.ok();
@@ -270,7 +270,7 @@ public class SubtotalsFunctions {
 
 
     /**
-     *
+     * Just support en-US language
      * Verify Subtotals_Recalculate and refresh results when data rows deleted.
      */
     @Test
@@ -285,7 +285,7 @@ public class SubtotalsFunctions {
                 { "Grand Total", "", "21", "", "" } }, CalcUtil.getCellTexts("A1:E11"));
 
         CalcUtil.selectRange("A3:E3");
-        calc.menuItem("Edit->Delete Cells...").select();
+        app.dispatch(".uno:DeleteCell");
         SCDeleteCellsDeleteRowsRadioButton.check();
         SCDeleteCellsDialog.ok();
         sleep(1);
@@ -298,14 +298,13 @@ public class SubtotalsFunctions {
     }
 
     /**
-     *
      * Verify Recalculates when source data changed with Average function in SubTotals
      */
     @Test
     public void testRecalculateWhenDataChanged() {
-        SCSubTotalsGroupByListBox.select("Team");
+        SCSubTotalsGroupByListBox.select(4);    // "Team"
         SCCalcSubTotalForColumns.click(10,25);
-        SCCalcSubTotolsFuncionList.select("Average");
+        SCCalcSubTotolsFuncionList.select(2);   // "Average"
         SCSubTotalsGroup1Dialog.ok();
         sleep(1);
 

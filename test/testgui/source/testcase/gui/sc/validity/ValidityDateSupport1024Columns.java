@@ -65,13 +65,13 @@ public class ValidityDateSupport1024Columns {
      */
     @Test
     public void testValidityDateSupport1024Columns() {
-        startcenter.menuItem("File->New->Spreadsheet").select();
-        CalcUtil.selectRange("Sheet1.ALM1000:Sheet1.ALO1005");
-        calc.menuItem("Data->Validity...").select();
+        app.dispatch("private:factory/scalc");
+        CalcUtil.selectRange("ALM1000:ALO1005");
+        app.dispatch(".uno:Validation");
 
         SC_ValidityCriteriaTabpage.select();
-        SC_ValidityCriteriaAllowList.select("Date");
-        SC_ValidityDecimalCompareOperator.select("greater than");
+        SC_ValidityCriteriaAllowList.select(3); // "Date"
+        SC_ValidityDecimalCompareOperator.select(2);    // "greater than"
         SC_ValiditySourceInput.setText("01/01/08");
         SC_ValidityErrorAlertTabPage.select();
         SC_ValidityShowErrorMessage.check();
@@ -79,29 +79,29 @@ public class ValidityDateSupport1024Columns {
         SC_ValidityErrorMessage.setText("Invalid value");
         SC_ValidityErrorAlertTabPage.ok();
 
-        CalcUtil.selectRange("Sheet1.ALM1001");
+        CalcUtil.selectRange("ALM1001");
         SC_InputBar_Input.activate();
         typeKeys("02/01/08<enter>");
-        assertEquals("02/01/08",CalcUtil.getCellText("Sheet1.ALM1001"));
+        assertEquals("02/01/08",CalcUtil.getCellText("ALM1001"));
 
-        CalcUtil.selectRange("Sheet1.ALM1002");
+        CalcUtil.selectRange("ALM1002");
         SC_InputBar_Input.activate();
         typeKeys("01/02/08<enter>");
-        assertEquals("01/02/08",CalcUtil.getCellText("Sheet1.ALM1002"));
+        assertEquals("01/02/08",CalcUtil.getCellText("ALM1002"));
 
-        CalcUtil.selectRange("Sheet1.ALM1003");
+        CalcUtil.selectRange("ALM1003");
         SC_InputBar_Input.activate();
         typeKeys("01/01/08<enter>");
         assertEquals("Invalid value",ActiveMsgBox.getMessage());
         ActiveMsgBox.ok();
-        assertEquals("",CalcUtil.getCellText("Sheet1.ALM1003"));
+        assertEquals("",CalcUtil.getCellText("ALM1003"));
 
-        CalcUtil.selectRange("Sheet1.AML1003");
+        CalcUtil.selectRange("AML1003");
         SC_InputBar_Input.activate();
         typeKeys("12/31/07<enter>");
         assertEquals("Invalid value",ActiveMsgBox.getMessage());
         ActiveMsgBox.ok();
-        assertEquals("",CalcUtil.getCellText("Sheet1.AML1003"));
+        assertEquals("",CalcUtil.getCellText("AML1003"));
     }
 }
 

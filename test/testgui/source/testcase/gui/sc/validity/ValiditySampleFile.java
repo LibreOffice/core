@@ -90,7 +90,6 @@ public class ValiditySampleFile {
         SC_InputBar_Input.activate();
         typeKeys("<backspace><enter>");
 
-        assertEquals("Invalid value.",ActiveMsgBox.getMessage());
         ActiveMsgBox.ok();
         assertEquals("8",CalcUtil.getCellText("F5"));
     }
@@ -106,9 +105,9 @@ public class ValiditySampleFile {
         submitOpenDlg(file);
         calc.waitForExistence(10, 2);
 
-        CalcUtil.selectRange("Sheet1.F19");
+        CalcUtil.selectRange("F19");
         typeKeys("d<enter>");
-        CalcUtil.selectRange("Sheet1.F17");
+        CalcUtil.selectRange("F17");
         typeKeys("Test<enter>");
 
         assertEquals("Test",CalcUtil.getCellText("F17"));

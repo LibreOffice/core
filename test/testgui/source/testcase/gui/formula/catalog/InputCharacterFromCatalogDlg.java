@@ -49,12 +49,10 @@ public class InputCharacterFromCatalogDlg {
         app.start();
 
         // New a formula document
-        startcenter.menuItem("File->New->Formula").select();
-        sleep(3);
+        app.dispatch("private:factory/smath");
 
         // Click catalog button
         math_CatalogButton.click();
-        sleep(1);
 
         // Verify if the "Symbols" dialog pop up
         assertTrue("Symbols dialog does not pop up", math_SymbolsDlg.exists(3));
@@ -73,22 +71,19 @@ public class InputCharacterFromCatalogDlg {
     public void testInputGreekFromCatalog() throws Exception{
 
         // Select "Greek", click "Edit" button to get the selected Symbol
-        math_SymbolsDlgListbox.select("Greek");
+        math_SymbolsDlgListbox.select(0);
         math_SymbolsDlgEditButton.click();
-        sleep(1);
         String selectedSymbol = math_EditSymbolsDlgSymbol.getText();
         math_EditSymbolsDlg.ok();
-        sleep(1);
 
         // Insert the selected symbol
         math_SymbolsDlgInsertButton.click();
         math_SymbolsDlgCloseButton.click();
 
         // Verify if the symbol is inserted successfully
-        math_EditWindow.activate();
-        math_EditWindow.menuItem("Edit->Select All").select();
-        math_EditWindow.menuItem("Edit->Copy").select();
-        sleep(1);
+        math_EditWindow.click(5, 5);
+        app.dispatch(".uno:Select");
+        app.dispatch(".uno:Copy");
         assertEquals("Symbol is not inserted succcessfully", "%".concat(selectedSymbol).concat(" "), app.getClipboard());   // add "%" in the front, add " " in the end
 
         // Close all dialogs
@@ -103,12 +98,10 @@ public class InputCharacterFromCatalogDlg {
     public void testInputIGreekFromCatalog() throws Exception{
 
         // Select "iGreek", click "Edit" button to get the selected Symbol
-        math_SymbolsDlgListbox.select("iGreek");
+        math_SymbolsDlgListbox.select(1);
         math_SymbolsDlgEditButton.click();
-        sleep(1);
         String selectedSymbol = math_EditSymbolsDlgSymbol.getText();
         math_EditSymbolsDlg.ok();
-        sleep(1);
 
         // Insert the selected symbol
         math_SymbolsDlgInsertButton.click();
@@ -116,9 +109,8 @@ public class InputCharacterFromCatalogDlg {
 
         // Verify if the symbol is inserted successfully
         math_EditWindow.click(5, 5);
-        math_EditWindow.menuItem("Edit->Select All").select();
-        math_EditWindow.menuItem("Edit->Copy").select();
-        sleep(1);
+        app.dispatch(".uno:Select");
+        app.dispatch(".uno:Copy");
         assertEquals("Symbol is not inserted succcessfully", "%".concat(selectedSymbol).concat(" "), app.getClipboard());   // add "%" in the front, add " " in the end
 
         // Close all dialogs
@@ -133,21 +125,19 @@ public class InputCharacterFromCatalogDlg {
     public void testInputSpecialFromCatalog() throws Exception{
 
         // Select "Special", "Insert" the default first symbol
-        math_SymbolsDlgListbox.select("Special");
+        math_SymbolsDlgListbox.select(2);
         math_SymbolsDlgInsertButton.click();
 
         // Click "Edit" button to get the selected Symbol
         math_SymbolsDlgEditButton.click();
-        sleep(1);
         String selectedSymbol = math_EditSymbolsDlgSymbol.getText();
         math_EditSymbolsDlg.ok();
         math_SymbolsDlgCloseButton.click();
 
         // Verify if the symbol is inserted successfully
         math_EditWindow.click(5, 5);
-        math_EditWindow.menuItem("Edit->Select All").select();
-        math_EditWindow.menuItem("Edit->Copy").select();
-        sleep(1);
+        app.dispatch(".uno:Select");
+        app.dispatch(".uno:Copy");
         assertEquals("Symbol is not inserted succcessfully", "%".concat(selectedSymbol).concat(" "), app.getClipboard());   // add "%" in the front, add " " in the end
 
         // Close all dialogs

@@ -49,20 +49,17 @@ public class AddDeleteSymbolsFromCatalog {
         app.start();
 
         // New a formula document
-        startcenter.menuItem("File->New->Formula").select();
-        sleep(3);
+        app.dispatch("private:factory/smath");
 
         // Click catalog button
         math_CatalogButton.click();
-        sleep(1);
 
         // Verify if the "Symbols" dialog pop up
         assertTrue("Symbols dialog does not pop up", math_SymbolsDlg.exists(3));
 
         // Select "Special", click "Edit" button
-        math_SymbolsDlgListbox.select("Special");
+        math_SymbolsDlgListbox.select(2);
         math_SymbolsDlgEditButton.click();
-        sleep(1);
 
         // Verify if the "Edit Symbols" dialog pop up
         assertTrue("Edit Symbols dialog does not pop up", math_EditSymbolsDlg.exists(3));
@@ -87,7 +84,6 @@ public class AddDeleteSymbolsFromCatalog {
         int nIndex = 1;
         do {
             math_EditSymbolsDlgViewControl.click(100*nIndex, 10);   // risk: after 6 or 7 circles, this will click out of ViewControl
-            sleep(1);
             selectedSymbol = math_EditSymbolsDlgSymbol.getText();
             nIndex++;
             // Find if the selected symbol is already in the list
@@ -102,7 +98,6 @@ public class AddDeleteSymbolsFromCatalog {
         } while (bSelectSymbolNotInList);
         math_EditSymbolsDlgAdd.click();
         math_EditSymbolsDlg.ok();
-        sleep(1);
 
         // Verify if the symbol is added to Symbol set
         math_SymbolsDlgEditButton.click();
@@ -138,7 +133,6 @@ public class AddDeleteSymbolsFromCatalog {
         String selectedSymbol = math_EditSymbolsDlgSymbol.getText();
         math_EditSymbolsDlgModify.click();
         math_EditSymbolsDlg.ok();
-        sleep(1);
 
         // Verify if the font of symbol is modified successfully
         math_SymbolsDlgEditButton.click();
@@ -167,7 +161,6 @@ public class AddDeleteSymbolsFromCatalog {
         String selectedSymbol = math_EditSymbolsDlgSymbol.getText();
         math_EditSymbolsDlgModify.click();
         math_EditSymbolsDlg.ok();
-        sleep(1);
 
         // Verify if the typeface of symbol is modified successfully
         math_SymbolsDlgEditButton.click();
@@ -191,7 +184,6 @@ public class AddDeleteSymbolsFromCatalog {
         String selectedSymbol = math_EditSymbolsDlgSymbol.getText();
         math_EditSymbolsDlgDelete.click();
         math_EditSymbolsDlg.ok();
-        sleep(1);
 
         // Verify if the selected symbol is deleted successfully
         math_SymbolsDlgEditButton.click();

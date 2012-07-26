@@ -52,7 +52,7 @@ public class Fitler {
         app.start();
 
         // Create a new spreadsheet document
-        startcenter.menuItem("File->New->Spreadsheet").select();
+        app.dispatch("private:factory/scalc");
     }
 
     @After
@@ -62,7 +62,7 @@ public class Fitler {
 
     /**
      *
-     * Verify Chart Wizard dialog title words
+     * Verify 2+ won't be treated as 2
      */
     @Ignore("Bug 120076")
     public void testAutoFilterWithPlusSign() {

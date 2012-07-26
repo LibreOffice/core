@@ -99,7 +99,7 @@ public class BVTFileType {
     private void saveNewDocument(String file) {
         String saveTo = getPath("temp/" + file);
         //Create a new text document
-        app.dispatch("private:factory/swriter", 3);
+        app.dispatch("private:factory/swriter");
         sleep(3);
 
         // Input some text by keyboard
@@ -107,7 +107,7 @@ public class BVTFileType {
 
         String text = "~!@#$%^&*()_+QWERTYUIOP{}|:LKJHGFDSAZXCVBNM<>? ";
         typeText(text);
-        app.dispatch(".uno:SelectAll", 3);
+        app.dispatch(".uno:SelectAll");
         app.setClipboard(".wrong");
         sleep(1);
         typeKeys("<$copy>");
@@ -119,7 +119,7 @@ public class BVTFileType {
         // Set the text style
         writer.openContextMenu();
 //      menuItem("Text Properties...").select();
-        app.dispatch(".uno:FontDialog", 3);
+        app.dispatch(".uno:FontDialog");
         EffectsPage.select();
         EffectsPage_Color.select(6);
         EffectsPage.ok();
@@ -134,14 +134,14 @@ public class BVTFileType {
 
 
         // Close it by clicking main menu
-        app.dispatch(".uno:CloseDoc", 3);
+        app.dispatch(".uno:CloseDoc");
         openStartcenter();
         // Reopen the saved file
-        app.dispatch(".uno:Open", 3);
+        app.dispatch(".uno:Open");
         submitOpenDlg(saveTo);
         writer.waitForExistence(10, 2);
 
-        app.dispatch(".uno:SelectAll", 3);
+        app.dispatch(".uno:SelectAll");
         app.setClipboard(".wrong");
         typeKeys("<$copy>");
         sleep(1);
@@ -253,16 +253,16 @@ public class BVTFileType {
         if (AlienFormatDlg.exists(3))
             AlienFormatDlg.ok();
         // Close it by clicking main menu
-        app.dispatch(".uno:CloseDoc", 3);
+        app.dispatch(".uno:CloseDoc");
         openStartcenter();
         // Reopen the saved file
-        app.dispatch(".uno:Open", 3);
+        app.dispatch(".uno:Open");
         submitOpenDlg(saveTo);
         impress.waitForExistence(10, 2);
         sleep(2);
         impress.click(3, 3);
         typeKeys("<tab><enter>");
-        app.dispatch(".uno:SelectAll", 3);
+        app.dispatch(".uno:SelectAll");
 //      app.setClipboard(".wrong");
         typeKeys("<$copy>");
         sleep(1);
@@ -319,11 +319,11 @@ public class BVTFileType {
         String bmp_green = prepareData("pure_green_64x64.bmp");
 
         // Create a new drawing document
-        app.dispatch("private:factory/sdraw", 3);
+        app.dispatch("private:factory/sdraw");
         sleep(3);
 
         // Insert a picture fully filled with green
-        app.dispatch(".uno:InsertGraphic", 3);
+        app.dispatch(".uno:InsertGraphic");
         submitOpenDlg(bmp_green);
         sleep(3);
         // Focus on edit pane
@@ -343,11 +343,11 @@ public class BVTFileType {
             AlienFormatDlg.ok();    // Keep the current format
 
         // Close it by clicking main menu
-        app.dispatch(".uno:CloseDoc", 3);
+        app.dispatch(".uno:CloseDoc");
         openStartcenter();
 
         // Reopen the saved file
-        app.dispatch(".uno:Open", 3);
+        app.dispatch(".uno:Open");
         submitOpenDlg(saveTo);
         draw.waitForExistence(10, 2);
 
@@ -395,7 +395,7 @@ public class BVTFileType {
         String saveTo = getPath("temp/" + filename);
 
         // Create a new math
-        app.dispatch("private:factory/smath", 3);
+        app.dispatch("private:factory/smath");
         sleep(3);
 
         // Verify if the Elements window is active
@@ -404,7 +404,7 @@ public class BVTFileType {
         // Insert a formula
         String text = "5 times 3 = 15";
         typeText(text);
-        app.dispatch(".uno:Select", 3);
+        app.dispatch(".uno:Select");
         typeKeys("<$copy>");
         sleep(1);
 
@@ -420,21 +420,21 @@ public class BVTFileType {
             AlienFormatDlg.ok();    // Keep the current format
 
         // Close it by clicking main menu
-        app.dispatch(".uno:CloseDoc", 3);
+        app.dispatch(".uno:CloseDoc");
         openStartcenter();
 
         // Reopen the saved file
-        app.dispatch(".uno:Open", 3);
+        app.dispatch(".uno:Open");
         submitOpenDlg(saveTo);
         math_EditWindow.waitForExistence(10, 2);
 
         // Verify if the formula still exists in the file
-        app.dispatch(".uno:Select", 3);
+        app.dispatch(".uno:Select");
         typeKeys("<$copy>");
         sleep(1);
         assertEquals("The typed formula into math is saved", text, app.getClipboard());
 
         // Close the file to avoid the app closing the Elements window automatically
-        app.dispatch(".uno:CloseDoc", 3);
+        app.dispatch(".uno:CloseDoc");
     }
 }

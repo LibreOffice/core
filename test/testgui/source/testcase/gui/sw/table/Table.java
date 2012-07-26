@@ -63,27 +63,25 @@ public class Table {
     public void testConvertTableToText() throws Exception{
 
         //Create a new text document
-        startcenter.menuItem("File->New->Text Document").select();
-        sleep(3);
+        app.dispatch("private:factory/swriter");
 
         // Insert a table and input some data
-        writer.menuItem("Insert->Table...").select();
+        app.dispatch(".uno:InsertTable");
         writer_InsertTable.ok();
         writer.focus();
         typeKeys("1<right>2<right>3<right>4");
         sleep(1);
 
         // Convert table to text
-        writer.menuItem("Table->Convert->Table to Text...").select();
+        app.dispatch(".uno:ConvertTableToText");
         assertTrue("Convert Table to Text dialog pop up", writer_ConvertTableToTextDlg.exists());
         typeKeys("<enter>");
-        sleep(1);
 
         // Verify if text is converted successfully
-        writer.menuItem("Edit->Select All").select();
+        app.dispatch(".uno:SelectAll");
         app.dispatch(".uno:Copy");
         if (SystemUtil.isWindows())
-            assertEquals("Converted text", "1\t2\r\n3\t4\r\n", app.getClipboard()); // windows�лس�������\r\n
+            assertEquals("Converted text", "1\t2\r\n3\t4\r\n", app.getClipboard()); // in windows, \n is \r\n
         else
             assertEquals("Converted text", "1\t2\n3\t4\n", app.getClipboard());
     }

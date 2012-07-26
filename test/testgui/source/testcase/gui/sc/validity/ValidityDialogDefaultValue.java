@@ -44,8 +44,8 @@ public class ValidityDialogDefaultValue {
         app.start();
 
         // New a spreadsheet, open Validity dialog
-        startcenter.menuItem("File->New->Spreadsheet").select();
-        calc.menuItem("Data->Validity...").select();
+        app.dispatch("private:factory/scalc");
+        app.dispatch(".uno:Validation");
     }
 
     @After
@@ -60,7 +60,7 @@ public class ValidityDialogDefaultValue {
     public void testValidityUICellRange() {
 
         SC_ValidityCriteriaTabpage.select();
-        SC_ValidityCriteriaAllowList.select("Cell range");
+        SC_ValidityCriteriaAllowList.select(5); // "Cell range"
 
         assertEquals(true,SC_ValidityAllowBlankCells.isChecked());
         assertEquals(true,SC_ValidityShowSelectionList.isChecked());
@@ -79,12 +79,12 @@ public class ValidityDialogDefaultValue {
 
         SC_ValidityErrorAlertTabPage.select();
         assertEquals(true,SC_ValidityErrorAlertActionList.isEnabled());
-        assertEquals("Stop",SC_ValidityErrorAlertActionList.getSelText());
+//      assertEquals("Stop",SC_ValidityErrorAlertActionList.getSelText());  // Do not test this. Do it in GVT.
         assertEquals(true,SC_ValidityErrorMessageTitle.isEnabled());
         assertEquals("",SC_ValidityErrorMessageTitle.getText());
         assertEquals(true,SC_ValidityErrorMessage.isEnabled());
         assertEquals("",SC_ValidityErrorMessage.getText());
-        SC_ValidityErrorAlertActionList.select("Macro");
+        SC_ValidityErrorAlertActionList.select(3);  // "Macro"
         assertEquals(true,SC_ValidityErrorBrowseButton.isEnabled());
     }
 

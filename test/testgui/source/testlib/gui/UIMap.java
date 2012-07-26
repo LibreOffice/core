@@ -348,6 +348,8 @@ public class UIMap {
     // Spreadsheet: "Select Sheets" dialog
     public static final VclDialog SCSelectSheetsDlg = dialog(".uno:SelectTables");
     public static final VclListBox SCSheetsList = listbox("SC_HID_SELECTTABLES");
+    public static final VclWindow SD_NavigatorDlg = window("SD_HID_SD_NAVIGATOR");
+    public static final VclTabPage SD_HeaderAndFooterDlgSlideTab = tabpage("SD_HID_SD_TABPAGE_HEADERFOOTER_SLIDE");
 
 
 

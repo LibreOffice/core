@@ -66,8 +66,7 @@ public class OpenDocumentWithHeaderFooter {
         submitOpenDlg(file);
 
         //check after reopen
-        impress.menuItem("View->Header and Footer...").select();
-        sleep(1);
+        app.dispatch(".uno:HeaderAndFooter");
         assertEquals(true,SD_DateAndTimeFooterOnSlide.isChecked());
         assertEquals("fixed date",SD_FixedDateAndTimeOnSlideInput.getText());
         assertEquals(true,SD_FooterTextOnSlide.isChecked());
@@ -78,20 +77,18 @@ public class OpenDocumentWithHeaderFooter {
         SD_ApplyToAllButtonOnSlideFooter.click();
 
         //save to odp and reopen
-        impress.menuItem("File->Save As...").select();
+        app.dispatch(".uno:SaveAs");
         String saveTo2 = getPath("temp/" + "AOO3.4HeaderFooter.odp");
         FileUtil.deleteFile(saveTo2);
         submitSaveDlg(saveTo2);
-        impress.menuItem("File->Close").select();
-        sleep(1);
+        app.dispatch(".uno:CloseDoc");
 
         openStartcenter();
         app.dispatch(".uno:Open");
         String openFrom2=getPath("temp/" + "AOO3.4HeaderFooter.odp");
         submitOpenDlg(openFrom2);
 
-        impress.menuItem("View->Header and Footer...").select();
-        sleep(1);
+        app.dispatch(".uno:HeaderAndFooter");
         assertEquals(false,SD_SlideNumAsFooterOnSlide.isChecked());
         //end-save to odp and reopen
     }
@@ -109,8 +106,7 @@ public class OpenDocumentWithHeaderFooter {
         submitOpenDlg(file);
 
         //check after reopen
-        impress.menuItem("View->Header and Footer...").select();
-        sleep(1);
+        app.dispatch(".uno:HeaderAndFooter");
         assertEquals(true,SD_DateAndTimeFooterOnSlide.isChecked());
         assertEquals("testdte",SD_FixedDateAndTimeOnSlideInput.getText());
         assertEquals(true,SD_FooterTextOnSlide.isChecked());
@@ -121,23 +117,20 @@ public class OpenDocumentWithHeaderFooter {
         SD_ApplyToAllButtonOnSlideFooter.click();
 
         //save to ppt and reopen
-        impress.menuItem("File->Save As...").select();
+        app.dispatch(".uno:SaveAs");
         String saveTo = getPath("temp/" + "gfdd.ppt");
         FileUtil.deleteFile(saveTo);
         submitSaveDlg(saveTo);
         if (AlienFormatDlg.exists(3))
             AlienFormatDlg.ok();
-        sleep(1);
-        impress.menuItem("File->Close").select();
-        sleep(1);
+        app.dispatch(".uno:CloseDoc");
 
         openStartcenter();
         app.dispatch(".uno:Open");
         String openFrom=getPath("temp/" + "gfdd.ppt");
         submitOpenDlg(openFrom);
 
-        impress.menuItem("View->Header and Footer...").select();
-        sleep(1);
+        app.dispatch(".uno:HeaderAndFooter");
         assertEquals(false,SD_SlideNumAsFooterOnSlide.isChecked());
         //end-save to ppt and reopen
 
@@ -148,20 +141,18 @@ public class OpenDocumentWithHeaderFooter {
         //end
 
         //save to odp and reopen
-        impress.menuItem("File->Save As...").select();
+        app.dispatch(".uno:SaveAs");
         String saveTo2 = getPath("temp/" + "gfdd.odp");
         FileUtil.deleteFile(saveTo2);
         submitSaveDlg(saveTo2);
-        impress.menuItem("File->Close").select();
-        sleep(1);
+        app.dispatch(".uno:CloseDoc");
 
         openStartcenter();
         app.dispatch(".uno:Open");
         String openFrom2=getPath("temp/" + "gfdd.odp");
         submitOpenDlg(openFrom2);
 
-        impress.menuItem("View->Header and Footer...").select();
-        sleep(1);
+        app.dispatch(".uno:HeaderAndFooter");
         assertEquals(false,SD_SlideNumAsFooterOnSlide.isChecked());
         //end-save to odp and reopen
     }
