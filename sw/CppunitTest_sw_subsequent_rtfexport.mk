@@ -65,6 +65,7 @@ $(eval $(call gb_CppunitTest_use_ure,sw_subsequent_rtfexport))
 $(eval $(call gb_CppunitTest_use_components,sw_subsequent_rtfexport,\
     comphelper/util/comphelp \
     configmgr/source/configmgr \
+    embeddedobj/util/embobj \
     fileaccess/source/fileacc \
     filter/source/config/cache/filterconfig1 \
     framework/util/fwk \
@@ -73,6 +74,7 @@ $(eval $(call gb_CppunitTest_use_components,sw_subsequent_rtfexport,\
     package/util/package2 \
     sax/source/expatwrap/expwrap \
     sfx2/util/sfx \
+    starmath/util/sm \
     svl/source/fsstor/fsstorage \
     svtools/util/svt \
     sw/util/msword \
@@ -81,6 +83,7 @@ $(eval $(call gb_CppunitTest_use_components,sw_subsequent_rtfexport,\
     toolkit/util/tk \
     ucb/source/core/ucb1 \
     ucb/source/ucp/file/ucpfile1 \
+    unotools/util/utl \
     unoxml/source/service/unoxml \
     writerfilter/util/writerfilter \
 ))
