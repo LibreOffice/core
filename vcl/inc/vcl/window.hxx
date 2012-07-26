@@ -289,8 +289,6 @@ typedef sal_uInt16 StateChangedType;
 // Border-Styles fuer SetBorder()
 #define WINDOW_BORDER_NORMAL            ((sal_uInt16)0x0001)
 #define WINDOW_BORDER_MONO              ((sal_uInt16)0x0002)
-#define WINDOW_BORDER_ACTIVE            ((sal_uInt16)0x0004)
-#define WINDOW_BORDER_DOUBLEOUT         ((sal_uInt16)0x0008)
 #define WINDOW_BORDER_MENU              ((sal_uInt16)0x0010)
 #define WINDOW_BORDER_TOPBOTTOM         ((sal_uInt16)0x0020)
 #define WINDOW_BORDER_NWF               ((sal_uInt16)0x0040)
