@@ -85,7 +85,7 @@ public:
     void Insert( const SearchAttrItem& rItem )
         { SrchAttrItemList::push_back( rItem ); }
     // deletes the pointer to the items
-    void Remove( sal_uInt16 nPos, sal_uInt16 nLen = 1 );
+    void Remove(size_t nPos, size_t nLen = 1);
 };
 
 #ifndef SV_NODIALOG
