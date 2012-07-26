@@ -41,8 +41,9 @@
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/uno/Reference.h>
 #include <osl/mutex.hxx>
+
 #ifdef ENABLE_TELEPATHY
-#include <tubes/manager.hxx>
+class TeleManager;
 #endif
 
 using namespace com::sun::star::task;
