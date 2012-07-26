@@ -7,6 +7,7 @@ import java.util.TimeZone;
 import org.libreoffice.impressremote.communication.CommunicationService;
 import org.libreoffice.impressremote.communication.SlideShow.Timer;
 
+import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.FragmentManager;
@@ -43,26 +44,22 @@ public class PresentationActivity extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_presentation);
 
 		bindService(new Intent(this, CommunicationService.class), mConnection,
 		                Context.BIND_IMPORTANT);
+		mIsBound = true;
+
+		setContentView(R.layout.activity_presentation);
+		mLayout = (FrameLayout) findViewById(R.id.framelayout);
+		mThumbnailFragment = new ThumbnailFragment();
+		mPresentationFragment = new PresentationFragment();
 
 		FragmentManager fragmentManager = getFragmentManager();
 		FragmentTransaction fragmentTransaction = fragmentManager
 		                .beginTransaction();
-		mThumbnailFragment = new ThumbnailFragment();
-		mPresentationFragment = new PresentationFragment();
-
-		// fragmentTransaction.add(R.id.framelayout, mThumbnailFragment,
-		// "fragment_thumbnail");
 		fragmentTransaction.add(R.id.framelayout, mPresentationFragment,
 		                "fragment_presentation");
 		fragmentTransaction.commit();
-
-		mLayout = (FrameLayout) findViewById(R.id.framelayout);
-
-		mIsBound = true;
 	}
 
 	@Override
@@ -94,22 +91,12 @@ public class PresentationActivity extends Activity {
 
 	final Messenger mMessenger = new Messenger(new MessageHandler());
 
+	@SuppressLint("HandlerLeak")
 	protected class MessageHandler extends Handler {
 		@Override
 		public void handleMessage(Message aMessage) {
 			mPresentationFragment.handleMessage(aMessage);
 			mThumbnailFragment.handleMessage(aMessage);
-			// Bundle aData = aMessage.getData();
-			// TODO: pass to fragments
-			// switch (aMessage.what) {
-			// case CommunicationService.MSG_SLIDE_CHANGED:
-			// int aSlide = aData.getInt("slide_number");
-			// break;
-			// case CommunicationService.MSG_SLIDE_PREVIEW:
-			// // int aNSlide = aData.getInt("slide_number");
-			// break;
-			//
-			// }
 		}
 	}
 
@@ -149,13 +136,8 @@ public class PresentationActivity extends Activity {
 		public ActionBarManager() {
 
 			ActionBar aBar = getActionBar();
-			// Set custom view and unset the title.
-			aBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM,
-			                ActionBar.DISPLAY_SHOW_CUSTOM
-			                                | ActionBar.DISPLAY_SHOW_TITLE);
 			aBar.setCustomView(R.layout.presentation_actionbar);
 
-			// Set up the various components
 			mThumbnailButton = (ToggleButton) aBar.getCustomView()
 			                .findViewById(R.id.actionbar_thumbnailtoggle);
 			mThumbnailButton.setOnClickListener(this);
@@ -166,10 +148,8 @@ public class PresentationActivity extends Activity {
 
 			setupClockBar();
 
-			// Listen for fragment changes
 			getFragmentManager().addOnBackStackChangedListener(this);
 
-			// Setup the auto updater
 			timerHandler.removeCallbacks(timerUpdateThread);
 			timerHandler.postDelayed(timerUpdateThread, 50);
 
@@ -385,7 +365,6 @@ public class PresentationActivity extends Activity {
 					} catch (ParseException e) {
 					}
 				}
-				System.out.println("atime=" + aTime);
 				mCommunicationService.getSlideShow().getTimer()
 				                .setCountdownTime(aTime);
 				return true;

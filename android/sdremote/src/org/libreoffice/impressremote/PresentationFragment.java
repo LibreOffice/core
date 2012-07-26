@@ -112,7 +112,6 @@ public class PresentationFragment extends Fragment {
 
 				// Calculate height change, taking limits into account
 				int aDiff = (int) (aEvent.getY());
-				System.out.println("Diff1 is :" + aDiff);
 				if (aDiff + aHeight < DRAG_MARGIN) {
 					aDiff = DRAG_MARGIN - aHeight;
 				} else if ((aHeight + aDiff) > (aViewSize - DRAG_MARGIN)) {
@@ -125,7 +124,6 @@ public class PresentationFragment extends Fragment {
 
 				double aRatio = mOriginalCoverflowWidth
 				                / mOriginalCoverflowHeight;
-				System.out.println("Diff2 is :" + aDiff);
 				float aHeightNew = mTopView.getImageHeight() + aDiff;
 				float aWidthNew = (float) (aRatio * aHeightNew);
 
@@ -136,12 +134,6 @@ public class PresentationFragment extends Fragment {
 					aDiff = (int) (aHeightNew - mTopView.getImageHeight());
 				}
 
-				// Set the new settings -- it turns out that changing the
-				// internal height now works, and changing the views height
-				// is unnecessary / even causes problems.
-				//				aParams.height += aDiff;
-				//				mTopView.setLayoutParams(aParams);
-
 				mNewCoverflowHeight = aHeightNew;
 				mNewCoverflowWidth = aWidthNew;
 
@@ -150,7 +142,7 @@ public class PresentationFragment extends Fragment {
 				aAdapter.setWidth(aWidthNew);
 				mTopView.setImageWidth(aWidthNew);
 
-				// We need to update the view now
+				// Force an update of the view
 				aAdapter.notifyDataSetChanged();
 
 				break;
