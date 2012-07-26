@@ -87,7 +87,7 @@ void FiltersTest::recursiveScan(const rtl::OUString &rFilter, const rtl::OUStrin
         else
         {
             rtl::OUString sTmpFile;
-            bool bCVE = false;
+            bool bEncrypted = false;
 
             sal_Int32 nLastSlash = sURL.lastIndexOf('/');
 
@@ -97,14 +97,19 @@ void FiltersTest::recursiveScan(const rtl::OUString &rFilter, const rtl::OUStrin
                 if (sURL.getStr()[nLastSlash+1] == '.')
                     continue;
 
-                if (sURL.matchAsciiL(RTL_CONSTASCII_STRINGPARAM("CVE"), nLastSlash+1))
-                    bCVE = true;
+                if (
+                    (sURL.matchAsciiL(RTL_CONSTASCII_STRINGPARAM("CVE"), nLastSlash+1)) ||
+                    (sURL.matchAsciiL(RTL_CONSTASCII_STRINGPARAM("EDB"), nLastSlash+1))
+                   )
+                {
+                    bEncrypted = true;
+                }
             }
 
             rtl::OString aRes(rtl::OUStringToOString(sURL,
                 osl_getThreadTextEncoding()));
 
-            if (bCVE)
+            if (bEncrypted)
             {
                 CPPUNIT_ASSERT(osl::FileBase::E_None == osl::FileBase::createTempFile(NULL, NULL, &sTmpFile));
                 decode(sURL, sTmpFile);
@@ -118,7 +123,7 @@ void FiltersTest::recursiveScan(const rtl::OUString &rFilter, const rtl::OUStrin
             bool bRes = load(rFilter, sURL, rUserData);
             sal_uInt32 nEndTime = osl_getGlobalTimer();
 
-            if (bCVE)
+            if (bEncrypted)
                 CPPUNIT_ASSERT(osl::FileBase::E_None == osl::File::remove(sTmpFile));
 
             fprintf(stderr, "%s,%" SAL_PRIuUINT32"\n",
