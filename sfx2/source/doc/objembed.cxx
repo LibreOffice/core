@@ -236,7 +236,7 @@ void SfxObjectShell::DoDraw_Impl( OutputDevice* pDev,
     if( pMtf )
         pMtf->Record( pDev );
 
-        Draw( pDev, rSetup, nAspect );
+    Draw( pDev, rSetup, nAspect );
 
     // Restore Device settings
     pDev->Pop();
