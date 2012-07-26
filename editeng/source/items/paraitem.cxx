@@ -967,8 +967,7 @@ sal_uInt16 SvxTabStopItem::GetPos( const sal_Int32 nPos ) const
 
 SvxTabStopItem& SvxTabStopItem::operator=( const SvxTabStopItem& rTSI )
 {
-    maTabStops.clear();
-    maTabStops.insert( rTSI.maTabStops );
+    maTabStops = rTSI.maTabStops;
     return *this;
 }
 
