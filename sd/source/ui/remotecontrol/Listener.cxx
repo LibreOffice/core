@@ -29,29 +29,25 @@ Listener::Listener( const ::rtl::Reference<Server>& rServer, sd::Transmitter *aT
       mPreparer()
 {
     pTransmitter = aTransmitter;
-    fprintf( stderr, "Listener created %p\n", this );
 }
 
 Listener::~Listener()
 {
-    fprintf( stderr, "Listener destroyed %p\n", this );
 }
 
 void Listener::init( const css::uno::Reference< css::presentation::XSlideShowController >& aController)
 {
-    fprintf( stderr, "Initing\n" );
     if ( aController.is() )
     {
-        fprintf( stderr, "Is -- now copying refrerence.\n" );
         mController = css::uno::Reference< css::presentation::XSlideShowController >( aController );
-        fprintf( stderr, "Registering listener\n" );
         aController->addSlideShowListener( this );
-        fprintf( stderr, "Registered listener.\n" );
 
         sal_Int32 aSlides = aController->getSlideCount();
+	sal_Int32 aCurrentSlide = aController->getCurrentSlideIndex();
         OStringBuffer aBuffer;
         aBuffer.append( "slideshow_started\n" )
-               .append( OString::valueOf( aSlides ) ).append( "\n\n" );
+               .append( OString::valueOf( aSlides ) ).append("\n")
+	       .append( OString::valueOf( aCurrentSlide ) ).append( "\n\n" );
 
         pTransmitter->addMessage( aBuffer.makeStringAndClear(),
                                   Transmitter::Priority::HIGH );
@@ -61,7 +57,6 @@ void Listener::init( const css::uno::Reference< css::presentation::XSlideShowCon
     }
     else
     {
-        fprintf( stderr, "Couldn't register listener -- aController isn't\n" );
     }
 }
 
@@ -114,7 +109,6 @@ void SAL_CALL Listener::hyperLinkClicked (const rtl::OUString &)
 void SAL_CALL Listener::slideTransitionStarted (void)
     throw (css::uno::RuntimeException)
 {
-    fprintf( stderr, "slideTransitionStarted\n" );
     sal_Int32 aSlide = mController->getCurrentSlideIndex();
 
     OStringBuffer aBuilder( "slide_updated\n" );
@@ -140,7 +134,6 @@ void SAL_CALL Listener::slideAnimationsEnded (void)
 
 void SAL_CALL Listener::disposing (void)
 {
-    fprintf( stderr, "disposing void\n" );
     if ( mPreparer.is() )
     {
         delete mPreparer.get();
@@ -160,7 +153,6 @@ void SAL_CALL Listener::disposing (
     const css::lang::EventObject& rEvent)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    fprintf( stderr, "disposing with Events\n" );
     (void) rEvent;
     dispose();
 }

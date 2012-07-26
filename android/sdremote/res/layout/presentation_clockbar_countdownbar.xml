@@ -23,6 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:text="@string/clock_timer_start"
-        android:textColor="#FFFFFF" />
+        android:textColor="#FFFFFF"
+        android:background="#00000000" />
 
 </LinearLayout>

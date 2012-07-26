@@ -37,7 +37,9 @@ public class Receiver {
 		String aInstruction = aCommand.get(0);
 		if (aInstruction.equals("slideshow_started")) {
 			int aSlideShowlength = Integer.parseInt(aCommand.get(1));
+			int aCurrentSlide = Integer.parseInt(aCommand.get(2));
 			mSlideShow = new SlideShow(aSlideShowlength);
+			mSlideShow.setCurrentSlide(aCurrentSlide);
 
 			Message aMessage = Message.obtain(null,
 			                CommunicationService.MSG_SLIDESHOW_STARTED);

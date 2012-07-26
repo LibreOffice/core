@@ -12,13 +12,17 @@
         android:layout_width="0dip"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="@string/clock_timer_start" />
+        android:background="#00000000"
+        android:text="@string/clock_timer_start"
+        android:textColor="#FFFFFF" />
 
     <Button
         android:id="@+id/clockbar_stopwatch_reset"
         android:layout_width="0dip"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="@string/clock_timer_reset" />
+        android:background="#00000000"
+        android:text="@string/clock_timer_reset"
+        android:textColor="#FFFFFF" />
 
 </LinearLayout>

@@ -40,7 +40,6 @@ void Server::listenThread()
     pTransmitter->launch();
     Receiver aReceiver( pTransmitter );
     try {
-        fprintf( stderr, "Trying to add a Listener in listenThread\n" );
         uno::Reference< lang::XMultiServiceFactory > xServiceManager(
             ::comphelper::getProcessServiceFactory(), uno::UNO_QUERY_THROW );
         uno::Reference< frame::XFramesSupplier > xFramesSupplier( xServiceManager->createInstance(
@@ -52,9 +51,7 @@ void Server::listenThread()
         if ( xPresentation->isRunning() )
         {
             presentationStarted( xPresentation->getController() );
-            fprintf( stderr, "Added the listener\n");
         }
-        fprintf( stderr, "We aren't running\n" );
     }
     catch ( com::sun::star::uno::RuntimeException &e )
     {
@@ -93,7 +90,6 @@ void Server::listenThread()
         }
     }
     // TODO: deal with transmision errors gracefully.
-    fprintf( stderr, "done with transmitting\n" );
     presentationStopped();
 
     delete pTransmitter;

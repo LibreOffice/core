@@ -90,6 +90,11 @@ public class PresentationFragment extends Fragment {
 		return v;
 	}
 
+	private void updateSlideNumberDisplay() {
+		mNumberText.setText((mSlideShow.getCurrentSlide() + 1) + "/"
+		                + mSlideShow.getSize());
+	}
+
 	// -------------------------------------------------- RESIZING LISTENER ----
 	private class SizeListener implements OnTouchListener {
 
@@ -182,6 +187,7 @@ public class PresentationFragment extends Fragment {
 			mTopView.setOnItemSelectedListener(new ClickListener());
 		}
 
+		updateSlideNumberDisplay();
 	}
 
 	public void handleMessage(Message aMessage) {
@@ -190,10 +196,7 @@ public class PresentationFragment extends Fragment {
 		case CommunicationService.MSG_SLIDE_CHANGED:
 			int aSlide = aData.getInt("slide_number");
 			mTopView.setSelection(aSlide, true);
-
-			mNumberText.setText((mSlideShow.getCurrentSlide() + 1) + "/"
-			                + mSlideShow.getSize());
-
+			updateSlideNumberDisplay();
 			break;
 		case CommunicationService.MSG_SLIDE_PREVIEW:
 			int aNSlide = aData.getInt("slide_number");

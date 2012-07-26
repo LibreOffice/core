@@ -75,8 +75,11 @@ void Receiver::parseCommand( std::vector<OString> aCommand )
     {
         // FIXME: if 0 returned, then not a valid number
         sal_Int32 aSlide = aCommand[1].toInt32();
-        if ( xSlideShowController.is() )
+        if ( xSlideShowController.is() &&
+            xSlideShowController->getCurrentSlideIndex() != aSlide )
+        {
             xSlideShowController->gotoSlideIndex( aSlide );
+        }
     }
     else if ( aCommand[0].equals( "presentation_start" ) )
     {

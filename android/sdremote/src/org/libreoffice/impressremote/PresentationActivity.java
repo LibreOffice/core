@@ -25,6 +25,7 @@ import android.text.format.DateFormat;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -37,6 +38,7 @@ public class PresentationActivity extends Activity {
 	private CommunicationService mCommunicationService;
 	private boolean mIsBound = false;
 	private FrameLayout mLayout;
+	private FrameLayout mOuterLayout;
 	private ThumbnailFragment mThumbnailFragment;
 	private PresentationFragment mPresentationFragment;
 	private ActionBarManager mActionBarManager;
@@ -50,15 +52,19 @@ public class PresentationActivity extends Activity {
 		mIsBound = true;
 
 		setContentView(R.layout.activity_presentation);
-		mLayout = (FrameLayout) findViewById(R.id.framelayout);
+		mOuterLayout = (FrameLayout) findViewById(R.id.framelayout);
+		mLayout = new InterceptorLayout(this);
+		mOuterLayout.addView(mLayout);
+		mLayout.setId(R.id.presentation_innerFrame);
+		//		((FrameLayout) findViewById(R.id.framelayout)).addView(mLayout);
 		mThumbnailFragment = new ThumbnailFragment();
 		mPresentationFragment = new PresentationFragment();
 
 		FragmentManager fragmentManager = getFragmentManager();
 		FragmentTransaction fragmentTransaction = fragmentManager
 		                .beginTransaction();
-		fragmentTransaction.add(R.id.framelayout, mPresentationFragment,
-		                "fragment_presentation");
+		fragmentTransaction.add(R.id.presentation_innerFrame,
+		                mPresentationFragment, "fragment_presentation");
 		fragmentTransaction.commit();
 	}
 
@@ -155,12 +161,20 @@ public class PresentationActivity extends Activity {
 
 		}
 
+		public void hidePopups() {
+			if (mClockBar.getVisibility() == View.VISIBLE) {
+				mClockBar.setVisibility(View.INVISIBLE);
+				mStopwatchBar.setVisibility(View.INVISIBLE);
+				mCountdownBar.setVisibility(View.INVISIBLE);
+				mTimeLabel.setChecked(false);
+			}
+		}
+
 		private void setupClockBar() {
 			// ClockBar
 			LayoutInflater aInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			aInflater.inflate(R.layout.presentation_clockbar, mLayout);
-			mClockBar = mLayout.findViewById(R.id.clockbar);
-			mClockBar.setVisibility(View.INVISIBLE);
+			aInflater.inflate(R.layout.presentation_clockbar, mOuterLayout);
+			mClockBar = mOuterLayout.findViewById(R.id.clockbar);
 
 			mClockBar_clockButton = (ToggleButton) mClockBar
 			                .findViewById(R.id.clockbar_toggle_clockmode);
@@ -174,9 +188,9 @@ public class PresentationActivity extends Activity {
 
 			// Stopwatch bar
 			aInflater.inflate(R.layout.presentation_clockbar_stopwatchbar,
-			                mLayout);
-			mStopwatchBar = mLayout.findViewById(R.id.clockbar_stopwatchbar);
-			mStopwatchBar.setVisibility(View.INVISIBLE);
+			                mOuterLayout);
+			mStopwatchBar = mOuterLayout
+			                .findViewById(R.id.clockbar_stopwatchbar);
 
 			mStopwatchButtonRun = (Button) mStopwatchBar
 			                .findViewById(R.id.clockbar_stopwatch_run);
@@ -187,9 +201,9 @@ public class PresentationActivity extends Activity {
 
 			// Countdown bar
 			aInflater.inflate(R.layout.presentation_clockbar_countdownbar,
-			                mLayout);
-			mCountdownBar = mLayout.findViewById(R.id.clockbar_countdownbar);
-			mCountdownBar.setVisibility(View.INVISIBLE);
+			                mOuterLayout);
+			mCountdownBar = mOuterLayout
+			                .findViewById(R.id.clockbar_countdownbar);
 
 			mCountdownEntry = (EditText) mCountdownBar
 			                .findViewById(R.id.clockbar_countdown_time);
@@ -199,6 +213,7 @@ public class PresentationActivity extends Activity {
 			mCountdownEntry.setOnEditorActionListener(this);
 
 			updateClockBar();
+			hidePopups();
 
 		}
 
@@ -215,6 +230,7 @@ public class PresentationActivity extends Activity {
 			mClockBar_stopwatchButton.setChecked(aStopwatchMode);
 			mStopwatchBar.setVisibility(aStopwatchMode ? View.VISIBLE
 			                : View.INVISIBLE);
+			mStopwatchBar.bringToFront();
 			if (aStopwatchMode) {
 				Timer aTimer = mCommunicationService.getSlideShow().getTimer();
 				if (aTimer.isRunning()) {
@@ -231,6 +247,7 @@ public class PresentationActivity extends Activity {
 			mClockBar_countdownButton.setChecked(mTimerOn && aIsCountdown);
 			mCountdownBar.setVisibility(mTimerOn && aIsCountdown ? View.VISIBLE
 			                : View.INVISIBLE);
+			mCountdownBar.bringToFront();
 			if (aCountdownMode) {
 				Timer aTimer = mCommunicationService.getSlideShow().getTimer();
 				if (aTimer.isRunning()) {
@@ -274,7 +291,7 @@ public class PresentationActivity extends Activity {
 				if (!mThumbnailFragment.isVisible()) {
 					FragmentTransaction ft = getFragmentManager()
 					                .beginTransaction();
-					ft.replace(R.id.framelayout, mThumbnailFragment);
+					ft.replace(R.id.presentation_innerFrame, mThumbnailFragment);
 					ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
 					ft.addToBackStack(null);
 					ft.commit();
@@ -282,11 +299,11 @@ public class PresentationActivity extends Activity {
 					getFragmentManager().popBackStack();
 				}
 			} else if (aSource == mTimeLabel) {
-
 				if (mClockBar.getVisibility() == View.VISIBLE) {
-					mClockBar.setVisibility(View.INVISIBLE);
+					hidePopups();
 				} else {
 					mClockBar.setVisibility(View.VISIBLE);
+					updateClockBar();
 					mClockBar.bringToFront();
 				}
 			}
@@ -373,4 +390,28 @@ public class PresentationActivity extends Activity {
 		}
 	}
 
+	/**
+	 * Intermediate layout that catches all touches, used in order to hide
+	 * the clock menu as appropriate.
+	 * @author andy
+	 *
+	 */
+	private class InterceptorLayout extends FrameLayout {
+
+		public InterceptorLayout(Context context) {
+			super(context);
+		}
+
+		@Override
+		public boolean onInterceptTouchEvent(MotionEvent aEvent) {
+			mActionBarManager.hidePopups();
+			return super.onInterceptTouchEvent(aEvent);
+		}
+
+		@Override
+		public boolean onTouchEvent(MotionEvent aEvent) {
+			return super.onTouchEvent(aEvent);
+		}
+
+	}
 }
