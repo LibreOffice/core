@@ -5903,8 +5903,7 @@ void SvxMSDffManager::GetFidclData( sal_uInt32 nOffsDggL )
 void SvxMSDffManager::CheckTxBxStoryChain()
 {
     m_pShapeInfosById.reset(new SvxMSDffShapeInfos_ById);
-    // altes Info-Array ueberarbeiten
-    // (ist sortiert nach nTxBxComp)
+    // mangle old Info array, sorted by nTxBxComp
     sal_uLong nChain    = ULONG_MAX;
     sal_Bool bSetReplaceFALSE = sal_False;
     for (SvxMSDffShapeInfos_ByTxBxComp::iterator iter =
@@ -5916,21 +5915,21 @@ void SvxMSDffManager::CheckTxBxStoryChain()
         if( pObj->nTxBxComp )
         {
             pObj->bLastBoxInChain = sal_False;
-            // Gruppenwechsel ?
+            // group change?
             // #156763#
             // the text id also contains an internal drawing container id
             // to distinguish between text id of drawing objects in different
             // drawing containers.
             if( nChain != pObj->nTxBxComp )
             {
-                // voriger war letzter seiner Gruppe
+                // previous was last of its group
                 if (iter != m_pShapeInfosByTxBxComp->begin())
                 {
                     SvxMSDffShapeInfos_ByTxBxComp::iterator prev(iter);
                     --prev;
                     (*prev)->bLastBoxInChain = true;
                 }
-                // Merker und Hilfs-Flag zuruecksetzen
+                // reset mark and helper flag
                 mark = iter;
                 nChain = pObj->nTxBxComp;
                 bSetReplaceFALSE = !pObj->bReplaceByFly;
@@ -5938,10 +5937,9 @@ void SvxMSDffManager::CheckTxBxStoryChain()
             else
             if( !pObj->bReplaceByFly )
             {
-                // Objekt, das NICHT durch Rahmen ersetzt werden darf ?
-                // Hilfs-Flag setzen
+                // object that must NOT be replaced by frame?
                 bSetReplaceFALSE = sal_True;
-                // ggfs Flag in Anfang der Gruppe austragen
+                // maybe reset flags in start of group
                 for (SvxMSDffShapeInfos_ByTxBxComp::iterator itemp = mark;
                         itemp != iter; ++itemp)
                 {
@@ -5954,17 +5952,16 @@ void SvxMSDffManager::CheckTxBxStoryChain()
                 pObj->bReplaceByFly = sal_False;
             }
         }
-        // alle Shape-Info-Objekte in pShapeInfos umkopieren
-        // (aber nach nShapeId sortieren)
+        // copy all Shape Info objects to m_pShapeInfosById, sorted by nShapeId
         pObj->nTxBxComp = pObj->nTxBxComp & 0xFFFF0000;
         m_pShapeInfosById->insert( pObj );
     }
-    // voriger war letzter seiner Gruppe
+    // last one was last of its group
     if (!m_pShapeInfosByTxBxComp->empty())
     {
         (*m_pShapeInfosByTxBxComp->rbegin())->bLastBoxInChain = true;
     }
-    // urspruengliches Array freigeben, ohne Objekte zu zerstoeren
+    // free original array but don't free its elements
     m_pShapeInfosByTxBxComp.reset();
 }
 
