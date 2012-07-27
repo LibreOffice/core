@@ -71,7 +71,7 @@ uno::Any SwXRedlines::getByIndex(sal_Int32 nIndex)
         throw uno::RuntimeException();
     const SwRedlineTbl& rRedTbl = GetDoc()->GetRedlineTbl();
     uno::Any aRet;
-    if(!rRedTbl.empty() > nIndex && nIndex >= 0)
+    if ((rRedTbl.size() > static_cast<size_t>(nIndex)) && (nIndex >= 0))
     {
         uno::Reference <beans::XPropertySet> xRet = SwXRedlines::GetObject( *rRedTbl[nIndex], *GetDoc() );
         aRet <<= xRet;
