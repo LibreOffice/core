@@ -329,6 +329,7 @@ public:
     // only for gtk3 ...
     void pushIgnoreDamage();
     void popIgnoreDamage();
+    bool isDuringRender();
     void renderArea( cairo_t *cr, cairo_rectangle_t *src );
 #endif
     virtual ~GtkSalFrame();

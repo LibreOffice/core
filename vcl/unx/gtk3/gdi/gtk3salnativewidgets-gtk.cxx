@@ -979,7 +979,10 @@ void GtkSalGraphics::renderAreaToPix( cairo_t *cr,
         src += nStride;
         cairo_data += cairo_stride;
     }
+    if ( !mpFrame->isDuringRender() )
+        gtk_widget_queue_draw_area( mpFrame->getWindow(), ax, ay, awidth, aheight );
 }
+
 sal_Bool GtkSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion, ControlState,
                                                 const ImplControlValue&, const rtl::OUString&,
                                                 Rectangle &rNativeBoundingRegion, Rectangle &rNativeContentRegion )
@@ -1551,6 +1554,7 @@ void GtkSalGraphics::copyArea( long nDestX, long nDestY,
                                long nSrcWidth, long nSrcHeight,
                                sal_uInt16 nFlags )
 {
+#ifndef DISABLE_CLEVER_COPYAREA
     mpFrame->pushIgnoreDamage();
     SvpSalGraphics::copyArea( nDestX, nDestY, nSrcX, nSrcY, nSrcWidth, nSrcHeight, nFlags );
     mpFrame->popIgnoreDamage();
@@ -1595,10 +1599,12 @@ void GtkSalGraphics::copyArea( long nDestX, long nDestY,
     // FIXME: this will queue (duplicate) gtk+ re-rendering for the exposed area, c'est la vie
     gdk_window_move_region( gtk_widget_get_window( mpFrame->getWindow() ),
                             region, nDestX - nSrcX, nDestY - nSrcY );
-
     print_update_area( gtk_widget_get_window( mpFrame->getWindow() ), "after copy area" );
     cairo_region_destroy( clip_region );
     cairo_region_destroy( region );
+#else
+    SvpSalGraphics::copyArea( nDestX, nDestY, nSrcX, nSrcY, nSrcWidth, nSrcHeight, nFlags );
+#endif
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
