@@ -34,7 +34,7 @@
 #include <filter/msfilter/rtfutil.hxx>
 
 SmRtfExport::SmRtfExport(const SmNode* pIn)
-    : m_pTree(pIn)
+    : SmWordExportBase(pIn)
       , m_pBuffer(0)
 {
 }
@@ -52,90 +52,6 @@ bool SmRtfExport::ConvertFromStarMath(OStringBuffer& rBuffer)
 
 // NOTE: This is still work in progress and unfinished, but it already covers a good
 // part of the rtf math stuff.
-
-void SmRtfExport::HandleNode(const SmNode* pNode, int nLevel)
-{
-    SAL_INFO("starmath.rtf", "Node: " << nLevel << " " << int(pNode->GetType()) << " " << pNode->GetNumSubNodes());
-
-    switch(pNode->GetType())
-    {
-        case NATTRIBUT:
-            HandleAttribute( static_cast< const SmAttributNode* >( pNode ), nLevel );
-            break;
-        case NTEXT:
-            HandleText(pNode,nLevel);
-            break;
-        case NVERTICAL_BRACE:
-            HandleVerticalBrace(static_cast<const SmVerticalBraceNode*>(pNode), nLevel);
-            break;
-        case NBRACE:
-            HandleBrace( static_cast< const SmBraceNode* >( pNode ), nLevel );
-            break;
-        case NOPER:
-            HandleOperator(static_cast<const SmOperNode*>(pNode), nLevel);
-            break;
-        case NUNHOR:
-            HandleUnaryOperation(static_cast<const SmUnHorNode*>(pNode), nLevel);
-            break;
-        case NBINHOR:
-            HandleBinaryOperation(static_cast<const SmBinHorNode*>(pNode), nLevel);
-            break;
-        case NBINVER:
-            HandleFractions(pNode, nLevel);
-            break;
-        case NROOT:
-            HandleRoot(static_cast<const SmRootNode*>(pNode), nLevel);
-            break;
-        case NMATH:
-            HandleMath(pNode, nLevel);
-            break;
-        case NSUBSUP:
-            HandleSubSupScript(static_cast<const SmSubSupNode*>(pNode), nLevel);
-            break;
-        case NEXPRESSION:
-            HandleAllSubNodes(pNode, nLevel);
-            break;
-        case NTABLE:
-            //Root Node, PILE equivalent, i.e. vertical stack
-            HandleTable(pNode,nLevel);
-            break;
-        case NMATRIX:
-            HandleMatrix(static_cast<const SmMatrixNode*>(pNode), nLevel);
-            break;
-        case NLINE:
-            HandleAllSubNodes(pNode, nLevel);
-            break;
-        case NPLACE:
-            // explicitly do nothing, MSOffice treats that as a placeholder if item is missing
-            break;
-        default:
-            SAL_INFO("starmath.rtf", "TODO: " << OSL_THIS_FUNC << " unhandled node type");
-            break;
-    }
-}
-
-//Root Node, PILE equivalent, i.e. vertical stack
-void SmRtfExport::HandleTable(const SmNode* pNode, int nLevel)
-{
-    if (nLevel || pNode->GetNumSubNodes() > 1)
-        HandleVerticalStack(pNode, nLevel);
-    else
-        HandleAllSubNodes(pNode, nLevel);
-}
-
-void SmRtfExport::HandleAllSubNodes(const SmNode* pNode, int nLevel)
-{
-    int size = pNode->GetNumSubNodes();
-    for (int i = 0; i < size; ++i)
-    {
-        if (!pNode->GetSubNode(i))
-        {
-            OSL_FAIL("Subnode is NULL, parent node not handled properly");
-            continue;
-        }
-        HandleNode(pNode->GetSubNode(i), nLevel + 1);
-    }
-}
 
 void SmRtfExport::HandleVerticalStack(const SmNode* pNode, int nLevel)
 {
@@ -185,25 +101,6 @@ void SmRtfExport::HandleFractions(const SmNode* pNode, int nLevel, const char* t
     HandleNode(pNode->GetSubNode(2), nLevel + 1);
     m_pBuffer->append("}"); // mden
     m_pBuffer->append("}"); // mf
-}
-
-void SmRtfExport::HandleUnaryOperation(const SmUnHorNode* pNode, int nLevel)
-{
-    HandleAllSubNodes(pNode, nLevel);
-}
-
-void SmRtfExport::HandleBinaryOperation(const SmBinHorNode* pNode, int nLevel)
-{
-    SAL_INFO("starmath.rtf", "Binary: " << int(pNode->Symbol()->GetToken().eType));
-    // update HandleMath() when adding new items
-    switch (pNode->Symbol()->GetToken().eType)
-    {
-        case TDIVIDEBY:
-            return HandleFractions(pNode, nLevel, "lin");
-        default:
-            HandleAllSubNodes(pNode, nLevel);
-            break;
-    }
 }
 
 void SmRtfExport::HandleAttribute(const SmAttributNode* pNode, int nLevel)
@@ -268,21 +165,6 @@ void SmRtfExport::HandleAttribute(const SmAttributNode* pNode, int nLevel)
             break;
         default:
             HandleAllSubNodes( pNode, nLevel );
-            break;
-    }
-}
-
-void SmRtfExport::HandleMath(const SmNode* pNode, int nLevel)
-{
-    SAL_INFO("starmath.rtf", "Math: " << int(pNode->GetToken().eType));
-    switch (pNode->GetToken().eType)
-    {
-        case TDIVIDEBY:
-        case TACUTE:
-            // these are handled elsewhere, e.g. when handling BINHOR
-            OSL_ASSERT(false);
-        default:
-            HandleText(pNode, nLevel);
             break;
     }
 }
@@ -395,18 +277,6 @@ void SmRtfExport::HandleOperator(const SmOperNode* pNode, int nLevel)
             SAL_INFO("starmath.rtf", "TODO: " << OSL_THIS_FUNC << " unhandled oper type");
             break;
     }
-}
-
-void SmRtfExport::HandleSubSupScript(const SmSubSupNode* pNode, int nLevel)
-{
-    // set flags to a bitfield of which sub/sup items exists
-    int flags = (pNode->GetSubSup(CSUB) ? (1 << CSUB) : 0)
-            | (pNode->GetSubSup(CSUP) ? (1 << CSUP) : 0)
-            | (pNode->GetSubSup(RSUB) ? (1 << RSUB) : 0)
-            | (pNode->GetSubSup(RSUP) ? (1 << RSUP) : 0)
-            | (pNode->GetSubSup(LSUB) ? (1 << LSUB) : 0)
-            | (pNode->GetSubSup(LSUP) ? (1 << LSUP) : 0);
-    HandleSubSupScriptInternal(pNode, nLevel, flags);
 }
 
 void SmRtfExport::HandleSubSupScriptInternal(const SmSubSupNode* pNode, int nLevel, int flags)
@@ -616,6 +486,13 @@ void SmRtfExport::HandleVerticalBrace(const SmVerticalBraceNode* pNode, int nLev
             SAL_INFO("starmath.rtf", "TODO: " << OSL_THIS_FUNC << " unhandled vertical brace type");
             break;
     }
+}
+
+void SmRtfExport::HandleBlank()
+{
+    m_pBuffer->append("{\\mr ");
+    m_pBuffer->append(" ");
+    m_pBuffer->append("}"); // mr
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -90,6 +90,7 @@ $(eval $(call gb_Library_add_exception_objects,sm,\
         starmath/source/utility \
         starmath/source/view \
         starmath/source/visitors \
+        starmath/source/wordexportbase \
 ))
 
 
