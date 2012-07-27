@@ -62,7 +62,7 @@ public:
     SvStream* GetStrm()                 { return pStrm;     }
     void  SetStrm( SvStream*, sal_Bool );
     void  SetStrm( UCBStorageStream* );
-	sal_Bool  IsWritable()					{ return ( pStrm && pStrm->IsWritable() ); }
+    sal_Bool  IsWritable()                  { return ( pStrm && pStrm->IsWritable() ); }
     sal_Bool  Good()                        { return sal_Bool( nError == SVSTREAM_OK ); }
     sal_Bool  Bad()                         { return sal_Bool( nError != SVSTREAM_OK ); }
     sal_uLong GetError()                    { return nError;    }

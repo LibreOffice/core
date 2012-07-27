@@ -46,7 +46,7 @@
 
 StgDirEntry::StgDirEntry( const void* pBuffer, sal_uInt32 nBufferLen, sal_Bool * pbOk ) : StgAvlNode()
 {
-	*pbOk = aEntry.Load( pBuffer, nBufferLen );
+    *pbOk = aEntry.Load( pBuffer, nBufferLen );
 
     InitMembers();
 }
@@ -259,9 +259,9 @@ void StgDirEntry::OpenStream( StgIo& rIo, sal_Bool bForceBig )
     sal_Int32 nThreshold = (sal_uInt16) rIo.aHdr.GetThreshold();
     delete pStgStrm;
     if( !bForceBig && aEntry.GetSize() < nThreshold )
-		pStgStrm = new StgSmallStrm( rIo, *this );
+        pStgStrm = new StgSmallStrm( rIo, *this );
     else
-		pStgStrm = new StgDataStrm( rIo, *this );
+        pStgStrm = new StgDataStrm( rIo, *this );
     if( bInvalid && aEntry.GetSize() )
     {
         // This entry has invalid data, so delete that data

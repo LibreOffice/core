@@ -95,7 +95,7 @@ void StgIo::SetupStreams()
         if( pRoot )
         {
             pDataFAT = new StgDataStrm( *this, aHdr.GetDataFATStart(), -1 );
-			pDataStrm = new StgDataStrm( *this, *pRoot );
+            pDataStrm = new StgDataStrm( *this, *pRoot );
             pDataFAT->SetIncrement( 1 << aHdr.GetPageSize() );
             pDataStrm->SetIncrement( GetDataPageSize() );
             pDataStrm->SetEntry( *pRoot );
@@ -154,7 +154,7 @@ public:
 
     sal_Int32 GetPageSize() { return nPageSize; }
     sal_Int32 Count() { return nPages; }
-	sal_Int32 operator[]( sal_Int32 nOffset )
+    sal_Int32 operator[]( sal_Int32 nOffset )
     {
         OSL_ENSURE( nOffset >= 0 && nOffset < nPages, "Unexpected offset!" );
         return nOffset >= 0 && nOffset < nPages ? pFat[ nOffset ] : -2;
@@ -206,8 +206,8 @@ sal_uLong EasyFat::Mark( sal_Int32 nPage, sal_Int32 nCount, sal_Int32 nExpect )
     sal_Int32 nCurPage = nPage;
     while( nCount != 0 )
     {
-		if( nCurPage < 0 || nCurPage >= nPages )
-			return FAT_OUTOFBOUNDS;
+        if( nCurPage < 0 || nCurPage >= nPages )
+            return FAT_OUTOFBOUNDS;
         pFree[ nCurPage ] = sal_False;
         nCurPage = pFat[ nCurPage ];
         //Stream zu lang
@@ -265,7 +265,7 @@ sal_uLong Validator::ValidateMasterFATs()
     sal_Int32 nCount = rIo.aHdr.GetFATSize();
     sal_uLong nErr;
     if ( !rIo.pFAT )
-	    return FAT_INMEMORYERROR;
+        return FAT_INMEMORYERROR;
 
     for( sal_Int32 i = 0; i < nCount; i++ )
     {
@@ -282,7 +282,7 @@ sal_uLong Validator::ValidateMasterFATs()
 sal_uLong Validator::MarkAll( StgDirEntry *pEntry )
 {
     if ( !pEntry )
-	    return FAT_INMEMORYERROR;
+        return FAT_INMEMORYERROR;
 
     StgIterator aIter( *pEntry );
     sal_uLong nErr = FAT_OK;
@@ -311,7 +311,7 @@ sal_uLong Validator::MarkAll( StgDirEntry *pEntry )
 sal_uLong Validator::ValidateDirectoryEntries()
 {
     if ( !rIo.pTOC )
-	    return FAT_INMEMORYERROR;
+        return FAT_INMEMORYERROR;
 
     // Normale DirEntries
     sal_uLong nErr = MarkAll( rIo.pTOC->GetRoot() );

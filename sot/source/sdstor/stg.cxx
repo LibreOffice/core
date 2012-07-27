@@ -114,7 +114,7 @@ OLEStorageBase::~OLEStorageBase()
     }
 
 
-	if( pIo && !pIo->DecRef() )
+    if( pIo && !pIo->DecRef() )
     {
         delete pIo;
         pIo = NULL;
@@ -473,7 +473,7 @@ void Storage::Init( sal_Bool bCreate )
     bIsRoot = sal_True;
 
     OSL_ENSURE( pIo, "The pointer may not be empty at this point!" );
-	if( pIo->Good() && pIo->GetStrm() )
+    if( pIo->Good() && pIo->GetStrm() )
     {
         sal_uLong nSize = pIo->GetStrm()->Seek( STREAM_SEEK_TO_END );
         pIo->GetStrm()->Seek( 0L );
@@ -549,7 +549,7 @@ const String& Storage::GetName() const
 
 void Storage::FillInfoList( SvStorageInfoList* pList ) const
 {
-	if( Validate() && pList )
+    if( Validate() && pList )
     {
         StgIterator aIter( *pEntry );
         StgDirEntry* p = aIter.First();

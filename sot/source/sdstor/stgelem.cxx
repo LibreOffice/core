@@ -121,7 +121,7 @@ sal_Bool StgHeader::Load( StgIo& rIo )
     {
         SvStream& r = *rIo.GetStrm();
         bResult = Load( r );
-	    bResult = ( bResult && rIo.Good() );
+        bResult = ( bResult && rIo.Good() );
     }
 
     return bResult;
@@ -257,7 +257,7 @@ sal_Bool StgEntry::Init()
     nLeft = 0;
     nRight = 0;
     nChild = 0;
-	memset( &aClsId, 0, sizeof( aClsId ) );
+    memset( &aClsId, 0, sizeof( aClsId ) );
     nFlags = 0;
     nMtime[0] = 0; nMtime[1] = 0;
     nAtime[0] = 0; nAtime[1] = 0;
@@ -362,7 +362,7 @@ sal_Bool StgEntry::Load( const void* pFrom, sal_uInt32 nBufSize )
     if ( nBufSize < 128 )
         return sal_False;
 
-	SvMemoryStream r( (sal_Char*) pFrom, nBufSize, STREAM_READ );
+    SvMemoryStream r( (sal_Char*) pFrom, nBufSize, STREAM_READ );
     for( short i = 0; i < 32; i++ )
         r >> nName[ i ];            // 00 name as WCHAR
     r >> nNameLen                   // 40 size of name in bytes including 00H
@@ -388,7 +388,7 @@ sal_Bool StgEntry::Load( const void* pFrom, sal_uInt32 nBufSize )
     if (n > nMaxLegalStr)
         return sal_False;
 
-	if ((nSize < 0 && cType != STG_STORAGE) || (nPage1 < 0 && nPage1 != -2))
+    if ((nSize < 0 && cType != STG_STORAGE) || (nPage1 < 0 && nPage1 != -2))
     {
         // the size makes no sense for the substorage
         // TODO/LATER: actually the size should be an unsigned value, but in this case it would mean a stream of more than 2Gb
