@@ -586,24 +586,10 @@ Date:   Mon Mar 8 16:17:05 2004 +0000
     INTEGRATION: CWS i18n09 (1.2.2); FILE MERGED
     2003/12/04 23:45:37 khong 1.2.2.3: #i22602# make dot stick on beginning of a word when doing line break
     2003/12/04 23:12:37 khong 1.2.2.2: #i21392# change line break rule to match with MS office
-    2003/12/03 19:32:02 khong 1.2.2.1: #i19716# fix wrong line break on bracket characters
-
-commit 15f41851842866c9a486eb9cfa258907c472f69f
-Author: Jens-Heiner Rechtien <hr@openoffice.org>
-Date:   Mon Mar 8 16:16:53 2004 +0000
-
-    INTEGRATION: CWS i18n09 (1.2.2); FILE MERGED
-    2003/12/03 02:17:55 khong 1.2.2.1: #110105# Set word boundary between CJK and Latin script type
-
-commit a83ef0cbe99b66241615b238c1d287a6da04e51e
-Author: Jens-Heiner Rechtien <hr@openoffice.org>
-Date:   Mon Mar 8 16:16:16 2004 +0000
-
-    INTEGRATION: CWS i18n09 (1.2.2); FILE MERGED
-    2003/12/03 02:17:54 khong 1.2.2.1: #110105# Set word boundary between CJK and Latin script type
 
 done, regression tests added:
 
+#i19716# fix wrong line break on bracket characters
 #i21290# extend Greek script type
 #i21907# fix isBeginWord and isEndWord problem
 #i85411# Apply patch for ZWSP

@@ -140,6 +140,22 @@ void TestBreakIterator::testLineBreaking()
             CPPUNIT_ASSERT_MESSAGE("Expected a break at the first slash", aResult.breakIndex == 4);
         }
     }
+
+    //See https://issues.apache.org/ooo/show_bug.cgi?id=19716
+    {
+        rtl::OUString aTest(RTL_CONSTASCII_USTRINGPARAM("aaa]aaa"));
+
+        aLocale.Language = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("en"));
+        aLocale.Country = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("US"));
+
+        {
+            //Here we want the line break to move the whole lot to the next line
+            i18n::LineBreakResults aResult = m_xBreak->getLineBreak(aTest, aTest.getLength()-2, aLocale, 0,
+                aHyphOptions, aUserOptions);
+            fprintf(stderr, "suggestion was %d\n", aResult.breakIndex);
+            CPPUNIT_ASSERT_MESSAGE("Expected a break at the start of the line, not at ]", aResult.breakIndex == 0);
+        }
+    }
 }
 
 //See https://bugs.freedesktop.org/show_bug.cgi?id=49629
