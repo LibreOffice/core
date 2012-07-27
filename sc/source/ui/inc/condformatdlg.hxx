@@ -127,8 +127,8 @@ private:
     DECL_LINK( EntryTypeHdl, ListBox* );
 
 public:
-    ScCondFrmtEntry( Window* pParent, ScDocument* pDoc );
-    ScCondFrmtEntry( Window* pParent, ScDocument* pDoc, const ScFormatEntry* pFormatEntry );
+    ScCondFrmtEntry( Window* pParent, ScDocument* pDoc, const ScAddress& rPos );
+    ScCondFrmtEntry( Window* pParent, ScDocument* pDoc, const ScFormatEntry* pFormatEntry, const ScAddress& rPos );
     virtual ~ScCondFrmtEntry();
 
     virtual long Notify( NotifyEvent& rNEvt );

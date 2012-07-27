@@ -113,7 +113,7 @@ void SetDataBarEntryTypes( const ScColorScaleEntry& rEntry, ListBox& rLbType, Ed
 
 }
 
-ScCondFrmtEntry::ScCondFrmtEntry(Window* pParent, ScDocument* pDoc):
+ScCondFrmtEntry::ScCondFrmtEntry(Window* pParent, ScDocument* pDoc, const ScAddress& rPos):
     Control(pParent, ScResId( RID_COND_ENTRY ) ),
     mbActive(false),
     meType(CONDITION),
@@ -144,6 +144,7 @@ ScCondFrmtEntry::ScCondFrmtEntry(Window* pParent, ScDocument* pDoc):
     maEdDataBarMax( this, ScResId( ED_COL_SCALE ) ),
     maBtOptions( this, ScResId( BTN_OPTIONS ) ),
     mpDoc(pDoc),
+    maPos(rPos),
     mnIndex(0),
     maStrCondition(ScResId( STR_CONDITION ).toString())
 {
@@ -179,7 +180,7 @@ ScCondFrmtEntry::ScCondFrmtEntry(Window* pParent, ScDocument* pDoc):
     EntryTypeHdl(&maLbEntryTypeMax);
 }
 
-ScCondFrmtEntry::ScCondFrmtEntry(Window* pParent, ScDocument* pDoc, const ScFormatEntry* pFormatEntry):
+ScCondFrmtEntry::ScCondFrmtEntry(Window* pParent, ScDocument* pDoc, const ScFormatEntry* pFormatEntry, const ScAddress& rPos):
     Control(pParent, ScResId( RID_COND_ENTRY ) ),
     mbActive(false),
     meType(CONDITION),
@@ -209,7 +210,8 @@ ScCondFrmtEntry::ScCondFrmtEntry(Window* pParent, ScDocument* pDoc, const ScForm
     maEdDataBarMin( this, ScResId( ED_COL_SCALE ) ),
     maEdDataBarMax( this, ScResId( ED_COL_SCALE ) ),
     maBtOptions( this, ScResId( BTN_OPTIONS ) ),
-    mpDoc(pDoc)
+    mpDoc(pDoc),
+    maPos(rPos)
 {
     SetControlBackground(GetSettings().GetStyleSettings().GetDialogColor());
     FreeResource();
@@ -966,7 +968,7 @@ ScCondFormatList::ScCondFormatList(Window* pParent, const ResId& rResId, ScDocum
         size_t nCount = pFormat->size();
         for (size_t nIndex = 0; nIndex < nCount; ++nIndex)
         {
-            maEntries.push_back(new ScCondFrmtEntry( this, mpDoc, pFormat->GetEntry(nIndex)));
+            maEntries.push_back(new ScCondFrmtEntry( this, mpDoc, pFormat->GetEntry(nIndex), maPos ));
         }
     }
 
@@ -1050,7 +1052,7 @@ ScCondFormatDlg::ScCondFormatDlg(Window* pParent, ScDocument* pDoc, const ScCond
     maBtnRemove( this, ScResId( BTN_REMOVE ) ),
     maBtnOk( this, ScResId( BTN_OK ) ),
     maBtnCancel( this, ScResId( BTN_CANCEL ) ),
-    maCondFormList( this, ScResId( CTRL_LIST ), pDoc, pFormat, rRange, maPos ),
+    maCondFormList( this, ScResId( CTRL_LIST ), pDoc, pFormat, rRange, rPos ),
     mpDoc(pDoc),
     mpFormat(pFormat),
     maPos(rPos)
@@ -1074,7 +1076,7 @@ ScConditionalFormat* ScCondFormatDlg::GetConditionalFormat() const
 
 IMPL_LINK_NOARG( ScCondFormatList, AddBtnHdl )
 {
-    ScCondFrmtEntry* pNewEntry = new ScCondFrmtEntry(this, mpDoc);
+    ScCondFrmtEntry* pNewEntry = new ScCondFrmtEntry(this, mpDoc, maPos);
     maEntries.push_back( pNewEntry );
     for(EntryContainer::iterator itr = maEntries.begin(); itr != maEntries.end(); ++itr)
     {
