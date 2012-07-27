@@ -23,9 +23,9 @@
 #include <algorithm>
 #include <comphelper/string.hxx>
 #include <svl/svdde.hxx>
-#include <svl/svarray.hxx>
 #include <tools/debug.hxx>
 #include <osl/thread.h>
+#include <o3tl/sorted_vector.hxx>
 
 enum DdeItemType
 {
@@ -41,8 +41,7 @@ struct DdeItemImpData
     DdeItemImpData( sal_uLong nH ) : nHCnv( nH ), nCnt( 1 ) {}
 };
 
-SV_DECL_VARARR( DdeItemImp, DdeItemImpData, 1 )
-SV_IMPL_VARARR( DdeItemImp, DdeItemImpData )
+class DdeItemImp : public std::vector<DdeItemImpData> {};
 
 // --- DdeInternat::SvrCallback() ----------------------------------
 
@@ -864,7 +863,7 @@ void DdeItem::IncMonitor( sal_uLong nHCnv )
     }
     else
     {
-        for( sal_uInt16 n = pImpData->Count(); n; )
+        for( sal_uInt16 n = pImpData->size(); n; )
             if( (*pImpData)[ --n ].nHCnv == nHCnv )
             {
                 ++(*pImpData)[ n ].nHCnv;
@@ -872,7 +871,7 @@ void DdeItem::IncMonitor( sal_uLong nHCnv )
             }
     }
 
-    pImpData->Insert( DdeItemImpData( nHCnv ), pImpData->Count() );
+    pImpData->push_back( DdeItemImpData( nHCnv ) );
 }
 
 // --- DdeItem::DecMonitor() ------------------------------------------
@@ -881,14 +880,17 @@ void DdeItem::DecMonitor( sal_uLong nHCnv )
 {
     if( pImpData )
     {
-        DdeItemImpData* pData = (DdeItemImpData*)pImpData->GetData();
-        for( sal_uInt16 n = pImpData->Count(); n; --n, ++pData )
+        for( sal_uInt16 n = 0; n < pImpData->size(); ++n )
+        {
+            DdeItemImpData* pData = &(*pImpData)[n];
             if( pData->nHCnv == nHCnv )
             {
                 if( !pData->nCnt || !--pData->nCnt )
                 {
-                    if( 1 < pImpData->Count() )
-                        pImpData->Remove( pImpData->Count() - n );
+                    if( 1 < pImpData->size() )
+                    {
+                        pImpData->erase(pImpData->begin() + n);
+                    }
                     else
                     {
                         delete pImpData, pImpData = 0;
@@ -898,6 +900,7 @@ void DdeItem::DecMonitor( sal_uLong nHCnv )
                 }
                 return ;
             }
+        }
     }
 }
 
@@ -907,8 +910,10 @@ short DdeItem::GetLinks()
 {
     short nCnt = 0;
     if( pImpData )
-        for( sal_uInt16 n = pImpData->Count(); n; )
+        for( sal_uInt16 n = pImpData->size(); n; )
+        {
             nCnt = nCnt + (*pImpData)[ --n ].nCnt;
+        }
     return nCnt;
 }
 
