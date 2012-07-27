@@ -28,9 +28,20 @@
 
 $(eval $(call gb_CustomTarget_CustomTarget,i18npool/indexentry))
 
-$(call gb_CustomTarget_get_target,i18npool/indexentry) : \
-	$(patsubst %.txt,$(call gb_CustomTarget_get_workdir,i18npool/indexentry)/%.cxx,$(notdir \
-		$(wildcard $(SRCDIR)/i18npool/source/indexentry/data/*.txt)))
+i18npool_IDXTXTS := \
+    indexdata_ko_dict.txt \
+    indexdata_zh_pinyin.txt \
+    indexdata_zh_radical.txt \
+    indexdata_zh_stroke.txt \
+    indexdata_zh_TW_radical.txt \
+    indexdata_zh_TW_stroke.txt \
+    indexdata_zh_zhuyin.txt \
+    ko_phonetic.txt \
+    zh_pinyin.txt \
+    zh_zhuyin.txt
+
+$(call gb_CustomTarget_get_target,i18npool/indexentry) : $(SRCDIR)/i18npool/CustomTarget_indexentry.mk \
+	$(patsubst %.txt,$(call gb_CustomTarget_get_workdir,i18npool/indexentry)/%.cxx,$(i18npool_IDXTXTS))
 
 $(call gb_CustomTarget_get_workdir,i18npool/indexentry)/%.cxx : \
 		$(SRCDIR)/i18npool/source/indexentry/data/%.txt \
