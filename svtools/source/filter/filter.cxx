@@ -198,6 +198,44 @@ inline String ImpGetExtension( const String &rPath )
     return aExt;
 }
 
+bool isPCT(SvStream& rStream, sal_uLong nStreamPos, sal_uLong nStreamLen)
+{
+    sal_uInt8 sBuf[3];
+    // store number format
+    sal_uInt16 oldNumberFormat = rStream.GetNumberFormatInt();
+    sal_uInt32 nOffset; // in ms documents the pict format is used without the first 512 bytes
+    for ( nOffset = 0; ( nOffset <= 512 ) && ( ( nStreamPos + nOffset + 14 ) <= nStreamLen ); nOffset += 512 )
+    {
+        short y1,x1,y2,x2;
+        sal_Bool bdBoxOk = sal_True;
+
+        rStream.Seek( nStreamPos + nOffset);
+        // size of the pict in version 1 pict ( 2bytes) : ignored
+        rStream.SeekRel(2);
+        // bounding box (bytes 2 -> 9)
+        rStream.SetNumberFormatInt(NUMBERFORMAT_INT_BIGENDIAN);
+        rStream >> y1 >> x1 >> y2 >> x2;
+        rStream.SetNumberFormatInt(oldNumberFormat); // reset format
+
+        if (x1 > x2 || y1 > y2 || // bad bdbox
+            (x1 == x2 && y1 == y2) || // 1 pixel picture
+            x2-x1 > 2048 || y2-y1 > 2048 ) // picture anormaly big
+          bdBoxOk = sal_False;
+
+        // read version op
+        rStream.Read( sBuf,3 );
+        // see http://developer.apple.com/legacy/mac/library/documentation/mac/pdf/Imaging_With_QuickDraw/Appendix_A.pdf
+        // normal version 2 - page A23 and A24
+        if ( sBuf[ 0 ] == 0x00 && sBuf[ 1 ] == 0x11 && sBuf[ 2 ] == 0x02)
+            return true;
+        // normal version 1 - page A25
+        else if (sBuf[ 0 ] == 0x11 && sBuf[ 1 ] == 0x01 && bdBoxOk)
+            return true;
+    }
+    return false;
+}
+
+
 /*************************************************************************
 |*
 |*    ImpPeekGraphicFormat()
@@ -533,49 +571,10 @@ static sal_Bool ImpPeekGraphicFormat( SvStream& rStream, String& rFormatExtensio
     if( !bTest || ( rFormatExtension.CompareToAscii( "PCT", 3 ) == COMPARE_EQUAL ) )
     {
         bSomethingTested = sal_True;
-        sal_uInt8 sBuf[3];
-        // store number format
-        sal_uInt16 oldNumberFormat = rStream.GetNumberFormatInt();
-        sal_uInt32 nOffset; // in ms documents the pict format is used without the first 512 bytes
-        for ( nOffset = 0; ( nOffset <= 512 ) && ( ( nStreamPos + nOffset + 14 ) <= nStreamLen ); nOffset += 512 )
+        if (isPCT(rStream, nStreamPos, nStreamLen))
         {
-            short y1,x1,y2,x2;
-            sal_Bool bdBoxOk = sal_True;
-
-            rStream.Seek( nStreamPos + nOffset);
-            // size of the pict in version 1 pict ( 2bytes) : ignored
-            rStream.SeekRel(2);
-            // bounding box (bytes 2 -> 9)
-            rStream.SetNumberFormatInt(NUMBERFORMAT_INT_BIGENDIAN);
-            rStream >> y1 >> x1 >> y2 >> x2;
-            rStream.SetNumberFormatInt(oldNumberFormat); // reset format
-
-            if (x1 > x2 || y1 > y2 || // bad bdbox
-                (x1 == x2 && y1 == y2) || // 1 pixel picture
-                x2-x1 > 2048 || y2-y1 > 2048 ) // picture anormaly big
-              bdBoxOk = sal_False;
-
-            // read version op
-            rStream.Read( sBuf,3 );
-            // see http://developer.apple.com/legacy/mac/library/documentation/mac/pdf/Imaging_With_QuickDraw/Appendix_A.pdf
-            // normal version 2 - page A23 and A24
-            if ( sBuf[ 0 ] == 0x00 && sBuf[ 1 ] == 0x11 && sBuf[ 2 ] == 0x02)
-            {
-              rFormatExtension = rtl::OUString("PCT");
-              return sal_True;
-            }
-            // normal version 1 - page A25
-            else if (sBuf[ 0 ] == 0x11 && sBuf[ 1 ] == 0x01 && bdBoxOk) {
-              rFormatExtension = rtl::OUString("PCT");
-              return sal_True;
-            }
-            // previous code kept in order to do not break any compatibility
-            // probably eroneous
-            else if ( sBuf[ 0 ] == 0x00 && sBuf[ 1 ] == 0x11 && sBuf[ 2 ] == 0x01 && bdBoxOk)
-            {
-              rFormatExtension = rtl::OUString("PCT");
-              return sal_True;
-            }
+            rFormatExtension = rtl::OUString("PCT");
+            return sal_True;
         }
     }
 
