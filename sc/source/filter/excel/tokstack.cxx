@@ -524,7 +524,7 @@ bool TokenPool::GetElement( const sal_uInt16 nId )
                     pScToken->AddExternalSingleReference(r.mnFileId, r.maTabName, r.maRef);
                 }
                 else
-                    bRet - false;
+                    bRet = false;
             }
             break;
             case T_ExtRefA:
@@ -536,7 +536,7 @@ bool TokenPool::GetElement( const sal_uInt16 nId )
                     pScToken->AddExternalDoubleReference(r.mnFileId, r.maTabName, r.maRef);
                 }
                 else
-                    bRet - false;
+                    bRet = false;
             }
             break;
             default:
