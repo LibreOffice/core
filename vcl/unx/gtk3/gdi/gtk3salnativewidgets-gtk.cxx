@@ -765,8 +765,6 @@ sal_Bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart
     GtkShadowType shadow;
     gint renderType = RENDER_BACKGROUND_AND_FRAME;
     GtkStyleContext *context = NULL;
-    GtkStyleContext *additionalContext = NULL;
-    bool renderWindowBackground = true;
     const gchar *styleClass = NULL;
 
     NWConvertVCLStateToGTKState(nState, &flags, &shadow);
@@ -808,24 +806,20 @@ sal_Bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart
             styleClass = GTK_STYLE_CLASS_CHECK;
             context = mpMenuItemStyle;
             renderType = RENDER_CHECK;
-            renderWindowBackground = false;
             break;
         case PART_MENU_ITEM_RADIO_MARK:
             styleClass = GTK_STYLE_CLASS_RADIO;
             context = mpMenuItemStyle;
             renderType = RENDER_RADIO;
-            renderWindowBackground = false;
             break;
         case PART_MENU_SEPARATOR:
             styleClass = GTK_STYLE_CLASS_SEPARATOR;
             context = mpMenuItemStyle;
             renderType = RENDER_LINE;
-            additionalContext = mpMenuStyle;
             break;
         case PART_MENU_SUBMENU_ARROW:
             context = mpMenuStyle;
             renderType = RENDER_ARROW;
-            renderWindowBackground = false;
             break;
         }
         break;
@@ -840,7 +834,6 @@ sal_Bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart
             flags = (GtkStateFlags)(flags |
                     ( (aValue.getTristateVal() == BUTTONVALUE_ON) ? GTK_STATE_FLAG_ACTIVE : GTK_STATE_FLAG_NORMAL));
             context = mpToolButtonStyle;
-            additionalContext = mpToolbarStyle;
             break;
         default:
             return sal_False;
@@ -852,7 +845,6 @@ sal_Bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart
         context = mpCheckButtonStyle;
         styleClass = GTK_STYLE_CLASS_CHECK;
         renderType = RENDER_CHECK;
-        renderWindowBackground = false;
         break;
     case CTRL_RADIOBUTTON:
         flags = (GtkStateFlags)(flags |
@@ -860,7 +852,6 @@ sal_Bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart
         context = mpCheckButtonStyle;
         styleClass = GTK_STYLE_CLASS_RADIO;
         renderType = RENDER_RADIO;
-        renderWindowBackground = false;
         break;
     case CTRL_PUSHBUTTON:
         context = mpButtonStyle;
@@ -872,7 +863,6 @@ sal_Bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart
         case PART_DRAW_BACKGROUND_HORZ:
             context = mpScrollbarStyle;
             renderType = RENDER_SCROLLBAR;
-            renderWindowBackground = false;
             break;
         }
         break;
@@ -885,22 +875,7 @@ sal_Bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart
     cairo_surface_t* surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32,
                                                           translatedRegion.width, translatedRegion.height);
     cairo_t *cr = cairo_create(surface);
-    cairo_surface_destroy(surface);
-
-    if (!additionalContext && renderWindowBackground)
-        additionalContext = gtk_widget_get_style_context(mpWindow);
-
-    if (additionalContext)
-    {
-        gtk_style_context_save(additionalContext);
-        gtk_style_context_set_state(additionalContext, flags);
-
-        gtk_render_background(additionalContext, cr,
-                              0, 0,
-                              translatedRegion.width, translatedRegion.height);
-
-        gtk_style_context_restore(additionalContext);
-    }
+    cairo_surface_destroy(surface); // unref
 
     gtk_style_context_save(context);
     gtk_style_context_set_state(context, flags);
@@ -957,7 +932,7 @@ sal_Bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart
     gtk_style_context_restore(context);
 
     renderAreaToPix(cr, &translatedRegion);
-    cairo_destroy(cr);
+    cairo_destroy(cr); // unref
 
     return sal_True;
 }
