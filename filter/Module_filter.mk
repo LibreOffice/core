@@ -77,6 +77,7 @@ $(eval $(call gb_Module_add_targets,filter,\
 endif
 
 $(eval $(call gb_Module_add_check_targets,filter,\
+    CppunitTest_filter_pict_test \
     CppunitTest_filter_tga_test \
     CppunitTest_filter_tiff_test \
 ))
