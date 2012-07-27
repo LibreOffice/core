@@ -41,12 +41,17 @@ public:
     void testZoom();
     void defaultTabStopNotInStyles();
     void testFdo38244();
+    void testMathEscape();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
     CPPUNIT_TEST(testZoom);
     CPPUNIT_TEST(defaultTabStopNotInStyles);
     CPPUNIT_TEST(testFdo38244);
+    // See rtfexport test on why this is blacklisted.
+#if !(__GNUC__ == 4 && __GNUC_MINOR__ == 4)
+    CPPUNIT_TEST(testMathEscape);
+#endif
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -157,6 +162,12 @@ void Test::testFdo38244()
         bCaught = true;
     }
     CPPUNIT_ASSERT_EQUAL(true, bCaught);
+}
+
+void Test::testMathEscape()
+{
+    roundtrip("math-escape.docx");
+    CPPUNIT_ASSERT_EQUAL(OUString("\\{ left [ right ] left ( right ) \\}"), getFormula(getRun(getParagraph(1), 1)));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

@@ -66,6 +66,7 @@ $(eval $(call gb_CppunitTest_use_ure,sw_subsequent_ooxmlexport))
 $(eval $(call gb_CppunitTest_use_components,sw_subsequent_ooxmlexport,\
     comphelper/util/comphelp \
     configmgr/source/configmgr \
+    embeddedobj/util/embobj \
     fileaccess/source/fileacc \
     filter/source/config/cache/filterconfig1 \
     framework/util/fwk \
@@ -79,6 +80,7 @@ $(eval $(call gb_CppunitTest_use_components,sw_subsequent_ooxmlexport,\
     sw/util/swd \
     sw/util/msword \
     sfx2/util/sfx \
+    starmath/util/sm \
     svl/source/fsstor/fsstorage \
     svtools/util/svt \
     toolkit/util/tk \

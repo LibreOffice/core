@@ -1535,13 +1535,6 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
     if (cCh > 0)
     {
         OUString aStr(OStringToOUString(OString(cCh), RTL_TEXTENCODING_MS_1252));
-        if ((nKeyword == RTF_LBRACE || nKeyword == RTF_RBRACE) && m_aStates.top().nDestinationState == DESTINATION_MR)
-        {
-            if (nKeyword == RTF_LBRACE)
-                aStr = "\\{";
-            else
-                aStr = "\\}";
-        }
         text(aStr);
         return 0;
     }

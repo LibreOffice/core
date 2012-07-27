@@ -597,7 +597,7 @@ OUString SmOoxmlImport::handleR()
         }
     }
     stream.ensureClosingTag( M_TOKEN( r ));
-    return text;
+    return text.replaceAll("{", "\\{").replaceAll("}", "\\}");
 }
 
 OUString SmOoxmlImport::handleRad()
