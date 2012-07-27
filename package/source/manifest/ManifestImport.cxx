@@ -158,7 +158,7 @@ void SAL_CALL ManifestImport::startElement( const OUString& aName, const uno::Re
                 }
             }
         }
-        else if ( aIter->m_aConvertedName.equalsAscii( ELEMENT_ALGORITHM ) )
+        else if ( aIter->m_aConvertedName.equalsAscii( ELEMENT_ENCRYPTION_DATA ) )
         {
             if ( aConvertedName.equalsAscii( ELEMENT_ALGORITHM ) )
             {
@@ -255,12 +255,13 @@ void SAL_CALL ManifestImport::endElement( const OUString& aName )
         return;
 
     const OUString aConvertedName = ConvertName( aName );
-    if( !aConvertedName.equalsAscii( ELEMENT_FILE_ENTRY ) )
-        return;
     if( !aStack.rbegin()->m_aConvertedName.equals( aConvertedName ) )
         return;
 
     aStack.pop_back();
+
+    if( !aConvertedName.equalsAscii( ELEMENT_FILE_ENTRY ) )
+        return;
 
     // create the property sequence
     // Put full-path property first for MBA
