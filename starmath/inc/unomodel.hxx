@@ -93,7 +93,7 @@ public:
 
     // oox::FormulaExportBase
     virtual void writeFormulaOoxml( ::sax_fastparser::FSHelperPtr m_pSerializer, oox::core::OoxmlVersion version );
-    virtual void writeFormulaRtf(OStringBuffer& rBuffer);
+    virtual void writeFormulaRtf(OStringBuffer& rBuffer, rtl_TextEncoding nEncoding);
     // oox::FormulaImportBase
     virtual void readFormulaOoxml( oox::formulaimport::XmlStream& stream );
     virtual Size getFormulaSize() const;

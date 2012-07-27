@@ -44,7 +44,7 @@ class OOX_DLLPUBLIC FormulaExportBase
 {
 public:
     virtual void writeFormulaOoxml( ::sax_fastparser::FSHelperPtr m_pSerializer, oox::core::OoxmlVersion version ) = 0;
-    virtual void writeFormulaRtf( OStringBuffer& rBuffer ) = 0;
+    virtual void writeFormulaRtf( OStringBuffer& rBuffer, rtl_TextEncoding nEncoding ) = 0;
 
 protected:
     FormulaExportBase();
