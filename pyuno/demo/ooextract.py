@@ -30,18 +30,18 @@ from com.sun.star.uno import Exception as UnoException
 from com.sun.star.io import IOException,XInputStream, XOutputStream
 
 class OutputStream( Base, XOutputStream ):
-      def __init__( self ):
-	  self.closed = 0
-	  
-      def closeOutput(self):
-	  self.closed = 1
+    def __init__( self ):
+        self.closed = 0
 
-      def writeBytes( self, seq ):
-	  sys.stdout.write( seq.value )
+    def closeOutput(self):
+        self.closed = 1
 
-      def flush( self ):
-	  pass
-      
+    def writeBytes( self, seq ):
+        sys.stdout.write( seq.value )
+
+    def flush( self ):
+        pass
+
 
 def main():
     retVal = 0
@@ -60,12 +60,12 @@ def main():
                 url = "uno:" + a + ";urp;StarOffice.ComponentContext"
             if o == "--html":
                 filterName = "HTML (StarWriter)"
-            
-        print filterName
+
+        print(filterName)
         if not len( args ):
-              usage()
-              sys.exit()
-              
+            usage()
+            sys.exit()
+
         ctxLocal = uno.getComponentContext()
         smgrLocal = ctxLocal.ServiceManager
 
@@ -90,25 +90,25 @@ def main():
                     raise UnoException( "Couldn't open stream for unknown reason", None )
 
                 doc.storeToURL("private:stream",outProps)
-            except IOException, e:
+            except IOException as e:
                 sys.stderr.write( "Error during conversion: " + e.Message + "\n" )
                 retVal = 1
-            except UnoException, e:
+            except UnoException as e:
                 sys.stderr.write( "Error ("+repr(e.__class__)+") during conversion:" + e.Message + "\n" )
                 retVal = 1
             if doc:
                 doc.dispose()
 
-    except UnoException, e:
+    except UnoException as e:
         sys.stderr.write( "Error ("+repr(e.__class__)+") :" + e.Message + "\n" )
         retVal = 1
-    except getopt.GetoptError,e:
+    except getopt.GetoptError as e:
         sys.stderr.write( str(e) + "\n" )
         usage()
         retVal = 1
 
     sys.exit(retVal)
-    
+
 def usage():
     sys.stderr.write( "usage: ooextract.py --help |\n"+
                   "       [-c <connection-string> | --connection-string=<connection-string>\n"+
@@ -127,4 +127,4 @@ def usage():
                   "        Instead of the text filter, the writer html filter is used\n"
                   )
 
-main()    
+main()

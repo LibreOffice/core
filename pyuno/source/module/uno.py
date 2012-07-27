@@ -31,8 +31,8 @@ _g_delegatee = __builtin__.__dict__["__import__"]
 
 def getComponentContext():
     """ returns the UNO component context, that was used to initialize the python runtime.
-    """ 
-    return _g_ctx      
+    """
+    return _g_ctx
 
 def getConstantByName( constant ):
     "Looks up the value of a idl constant by giving its explicit name"
@@ -41,7 +41,7 @@ def getConstantByName( constant ):
 def getTypeByName( typeName):
     """ returns a uno.Type instance of the type given by typeName. In case the
         type does not exist, a com.sun.star.uno.RuntimeException is raised.
-    """ 
+    """
     return pyuno.getTypeByName( typeName )
 
 def createUnoStruct( typeName, *args ):
@@ -70,7 +70,7 @@ def isInterface( obj ):
 
 def generateUuid():
     "returns a 16 byte sequence containing a newly generated uuid or guid, see rtl/uuid.h "
-    return pyuno.generateUuid()        
+    return pyuno.generateUuid()
 
 def systemPathToFileUrl( systemPath ):
     "returns a file-url for the given system path"
@@ -100,9 +100,9 @@ def setCurrentContext( newContext ):
     """
     return pyuno.setCurrentContext( newContext )
 
-        
+
 class Enum:
-    "Represents a UNO idl enum, use an instance of this class to explicitly pass a boolean to UNO" 
+    "Represents a UNO idl enum, use an instance of this class to explicitly pass a boolean to UNO"
     #typeName the name of the enum as a string
     #value    the actual value of this enum as a string
     def __init__(self,typeName, value):
@@ -138,7 +138,7 @@ class Type:
         return self.typeName.__hash__()
 
 class Bool(object):
-    """Represents a UNO boolean, use an instance of this class to explicitly 
+    """Represents a UNO boolean, use an instance of this class to explicitly
        pass a boolean to UNO.
        Note: This class is deprecated. Use python's True and False directly instead
     """
@@ -161,13 +161,13 @@ class Char:
 
     def __repr__(self):
         return "<Char instance %s>" % (self.value, )
-        
+
     def __eq__(self, that):
         if isinstance(that, (str, unicode)):
             if len(that) > 1:
                 return False
             return self.value == that[0]
-        if isinstance(that, Char):        
+        if isinstance(that, Char):
             return self.value == that.value
         return False
 
@@ -178,12 +178,12 @@ class Char:
 #    def __repr__(self):
 #        return "<ByteSequence instance %s>" % str.__repr__(self)
 
-    # for a little bit compatitbility; setting value is not possible as 
+    # for a little bit compatibility; setting value is not possible as
     # strings are immutable
 #    def _get_value(self):
 #        return self
 #
-#    value = property(_get_value)        
+#    value = property(_get_value)
 
 class ByteSequence:
     def __init__(self, value):
@@ -236,7 +236,7 @@ class Any:
 def invoke( object, methodname, argTuple ):
     "use this function to pass exactly typed anys to the callee (using uno.Any)"
     return pyuno.invoke( object, methodname, argTuple )
-    
+
 #---------------------------------------------------------------------------------------
 # don't use any functions beyond this point, private section, likely to change
 #---------------------------------------------------------------------------------------
@@ -254,56 +254,56 @@ def _uno_import( name, *optargs, **kwargs ):
     mod = None
     d = sys.modules
     for x in modnames:
-        if d.has_key(x):
-           mod = d[x]
+        if x in d:
+            mod = d[x]
         else:
-           mod = pyuno.__class__(x)  # How to create a module ??
+            mod = pyuno.__class__(x)  # How to create a module ??
         d = mod.__dict__
 
     RuntimeException = pyuno.getClass( "com.sun.star.uno.RuntimeException" )
     for x in fromlist:
-       if not d.has_key(x):
-          if x.startswith( "typeOf" ):
-             try: 
-                d[x] = pyuno.getTypeByName( name + "." + x[6:len(x)] )
-             except RuntimeException,e:
-                raise ImportError( "type " + name + "." + x[6:len(x)] +" is unknown" )
-          else:
-            try:
-                # check for structs, exceptions or interfaces
-                d[x] = pyuno.getClass( name + "." + x )
-            except RuntimeException,e:
-                # check for enums 
+        if x not in d:
+            if x.startswith( "typeOf" ):
                 try:
-                   d[x] = Enum( name , x )
-                except RuntimeException,e2:
-                   # check for constants
-                   try:
-                      d[x] = getConstantByName( name + "." + x )
-                   except RuntimeException,e3:
-                      # no known uno type !
-                      raise ImportError( "type "+ name + "." +x + " is unknown" )
+                    d[x] = pyuno.getTypeByName( name + "." + x[6:len(x)] )
+                except RuntimeException as e:
+                    raise ImportError( "type " + name + "." + x[6:len(x)] +" is unknown" )
+            else:
+                try:
+                    # check for structs, exceptions or interfaces
+                    d[x] = pyuno.getClass( name + "." + x )
+                except RuntimeException as e:
+                    # check for enums
+                    try:
+                        d[x] = Enum( name , x )
+                    except RuntimeException as e2:
+                        # check for constants
+                        try:
+                            d[x] = getConstantByName( name + "." + x )
+                        except RuntimeException as e3:
+                            # no known uno type !
+                            raise ImportError( "type "+ name + "." +x + " is unknown" )
     return mod
 
-# hook into the __import__ chain    
+# hook into the __import__ chain
 __builtin__.__dict__["__import__"] = _uno_import
-        
+
 # private function, don't use
 def _impl_extractName(name):
-    r = range (len(name)-1,0,-1)
+    r = list(range(len(name)-1,0,-1))
     for i in r:
         if name[i] == ".":
-           name = name[i+1:len(name)]
-           break
-    return name            
+            name = name[i+1:len(name)]
+            break
+    return name
 
 # private, referenced from the pyuno shared library
 def _uno_struct__init__(self,*args):
     if len(args) == 1 and hasattr(args[0], "__class__") and args[0].__class__ == self.__class__ :
-       self.__dict__["value"] = args[0]
+        self.__dict__["value"] = args[0]
     else:
-       self.__dict__["value"] = pyuno._createUnoStructHelper(self.__class__.__pyunostruct__,args)
-    
+        self.__dict__["value"] = pyuno._createUnoStructHelper(self.__class__.__pyunostruct__,args)
+
 # private, referenced from the pyuno shared library
 def _uno_struct__getattr__(self,name):
     return __builtin__.getattr(self.__dict__["value"],name)
@@ -315,14 +315,14 @@ def _uno_struct__setattr__(self,name,value):
 # private, referenced from the pyuno shared library
 def _uno_struct__repr__(self):
     return repr(self.__dict__["value"])
-    
+
 def _uno_struct__str__(self):
     return str(self.__dict__["value"])
 
 # private, referenced from the pyuno shared library
 def _uno_struct__eq__(self,cmp):
     if hasattr(cmp,"value"):
-       return self.__dict__["value"] == cmp.__dict__["value"]
+        return self.__dict__["value"] == cmp.__dict__["value"]
     return False
 
 # referenced from pyuno shared lib and pythonscript.py
@@ -330,7 +330,7 @@ def _uno_extract_printable_stacktrace( trace ):
     mod = None
     try:
         mod = __import__("traceback")
-    except ImportError,e:
+    except ImportError as e:
         pass
     ret = ""
     if mod:

@@ -26,9 +26,9 @@ from com.sun.star.sdb.CommandType import COMMAND
 def main():
 
     connectionString = "socket,host=localhost,port=2002"
-    
+
     url = "uno:"+connectionString + ";urp;StarOffice.ComponentContext"
-    
+
     localCtx = uno.getComponentContext()
     localSmgr = localCtx.ServiceManager
     resolver = localSmgr.createInstanceWithContext(
@@ -43,12 +43,12 @@ def main():
 
     rowset.execute();
 
-    print "Identifier\tAuthor"
+    print("Identifier\tAuthor")
 
     id = rowset.findColumn( "IDENTIFIER" )
     author = rowset.findColumn( "AUTHOR" )
     while rowset.next():
-        print rowset.getString( id ) + "\t" + repr( rowset.getString( author ) )
+        print(rowset.getString( id ) + "\t" + repr( rowset.getString( author ) ))
 
 
     rowset.dispose();

@@ -72,7 +72,7 @@ def _propertymode_to_str( mode ):
     if PROP_ATTR_MAYBEVOID & mode:
         ret = ret + "maybevoid "
     return ret.rstrip()
-    
+
 def inspect( obj , out ):
     if isinstance( obj, uno.Type ) or \
        isinstance( obj, uno.Char ) or \
@@ -102,7 +102,7 @@ def inspect( obj , out ):
             out.write( "  " + ii.typeName + "\n" )
     else:
         out.write( "  unknown\n" )
-        
+
     access = introspection.inspect( obj )
     methods = access.getMethods( METHOD_CONCEPT_ALL )
     out.write( "Methods:\n" )
@@ -126,56 +126,56 @@ def createSingleServiceFactory( clazz, implementationName, serviceNames ):
     return _FactoryHelper_( clazz, implementationName, serviceNames )
 
 class _ImplementationHelperEntry:
-      def __init__(self, ctor,serviceNames):
-	  self.ctor = ctor
-	  self.serviceNames = serviceNames
-	  
+    def __init__(self, ctor,serviceNames):
+        self.ctor = ctor
+        self.serviceNames = serviceNames
+
 class ImplementationHelper:
-      def __init__(self):
-	  self.impls = {}
-	  
-      def addImplementation( self, ctor, implementationName, serviceNames ):
-          self.impls[implementationName] =  _ImplementationHelperEntry(ctor,serviceNames)
-	  
-      def writeRegistryInfo( self, regKey, smgr ):
-          for i in self.impls.items():
-	      keyName = "/"+ i[0] + "/UNO/SERVICES"
-	      key = regKey.createKey( keyName )
-	      for serviceName in i[1].serviceNames:
-		  key.createKey( serviceName )
-          return 1
+    def __init__(self):
+        self.impls = {}
 
-      def getComponentFactory( self, implementationName , regKey, smgr ):
-	  entry = self.impls.get( implementationName, None )
-	  if entry == None:
-	     raise RuntimeException( implementationName + " is unknown" , None )
-	  return createSingleServiceFactory( entry.ctor, implementationName, entry.serviceNames )
+    def addImplementation( self, ctor, implementationName, serviceNames ):
+        self.impls[implementationName] =  _ImplementationHelperEntry(ctor,serviceNames)
 
-      def getSupportedServiceNames( self, implementationName ):
-	  entry = self.impls.get( implementationName, None )
-	  if entry == None:
-	     raise RuntimeException( implementationName + " is unknown" , None )
-	  return entry.serviceNames	     
-	  
-      def supportsService( self, implementationName, serviceName ):
-	  entry = self.impls.get( implementationName,None )
-	  if entry == None:
-	     raise RuntimeException( implementationName + " is unknown", None )
-          return serviceName in entry.serviceNames	     
+    def writeRegistryInfo( self, regKey, smgr ):
+        for i in list(self.impls.items()):
+            keyName = "/"+ i[0] + "/UNO/SERVICES"
+            key = regKey.createKey( keyName )
+            for serviceName in i[1].serviceNames:
+                key.createKey( serviceName )
+        return 1
 
-	  
+    def getComponentFactory( self, implementationName , regKey, smgr ):
+        entry = self.impls.get( implementationName, None )
+        if entry == None:
+            raise RuntimeException( implementationName + " is unknown" , None )
+        return createSingleServiceFactory( entry.ctor, implementationName, entry.serviceNames )
+
+    def getSupportedServiceNames( self, implementationName ):
+        entry = self.impls.get( implementationName, None )
+        if entry == None:
+            raise RuntimeException( implementationName + " is unknown" , None )
+        return entry.serviceNames
+
+    def supportsService( self, implementationName, serviceName ):
+        entry = self.impls.get( implementationName,None )
+        if entry == None:
+            raise RuntimeException( implementationName + " is unknown", None )
+        return serviceName in entry.serviceNames
+
+
 class ImplementationEntry:
-      def __init__(self, implName, supportedServices, clazz ):
-	  self.implName = implName
-	  self.supportedServices = supportedServices
-	  self.clazz = clazz
+    def __init__(self, implName, supportedServices, clazz ):
+        self.implName = implName
+        self.supportedServices = supportedServices
+        self.clazz = clazz
 
 def writeRegistryInfoHelper( smgr, regKey, seqEntries ):
     for entry in seqEntries:
         keyName = "/"+ entry.implName + "/UNO/SERVICES"
-	key = regKey.createKey( keyName )
-	for serviceName in entry.supportedServices:
-	    key.createKey( serviceName )
+        key = regKey.createKey( keyName )
+        for serviceName in entry.supportedServices:
+            key.createKey( serviceName )
 
 def systemPathToFileUrl( systemPath ):
     "returns a file-url for the given system path"
@@ -188,11 +188,11 @@ def fileUrlToSystemPath( url ):
 def absolutize( path, relativeUrl ):
     "returns an absolute file url from the given urls"
     return pyuno.absolutize( path, relativeUrl )
-        
+
 def getComponentFactoryHelper( implementationName, smgr, regKey, seqEntries ):
     for x in seqEntries:
-	if x.implName == implementationName:
-	   return createSingleServiceFactory( x.clazz, implementationName, x.supportedServices )
+        if x.implName == implementationName:
+            return createSingleServiceFactory( x.clazz, implementationName, x.supportedServices )
 
 def addComponentsToContext( toBeExtendedContext, contextRuntime, componentUrls, loaderName ):
     smgr = contextRuntime.ServiceManager
@@ -204,56 +204,56 @@ def addComponentsToContext( toBeExtendedContext, contextRuntime, componentUrls, 
     #   create a temporary registry
     for componentUrl in componentUrls:
         reg = smgr.createInstanceWithContext( "com.sun.star.registry.SimpleRegistry", contextRuntime )
-	reg.open( "", 0, 1 )
+        reg.open( "", 0, 1 )
         if not isWin and componentUrl.endswith( ".uno" ):  # still allow platform independent naming
             if isMac:
-               componentUrl = componentUrl + ".dylib"
+                componentUrl = componentUrl + ".dylib"
             else:
-               componentUrl = componentUrl + ".so"
+                componentUrl = componentUrl + ".so"
 
-	implReg.registerImplementation( loaderName,componentUrl, reg )
-	rootKey = reg.getRootKey()
-	implementationKey = rootKey.openKey( "IMPLEMENTATIONS" )
-	implNames = implementationKey.getKeyNames()
-	extSMGR = toBeExtendedContext.ServiceManager
-	for x in implNames:
-	    fac = loader.activate( max(x.split("/")),"",componentUrl,rootKey)
-	    extSMGR.insert( fac )
-	reg.close()
-	    	    
+        implReg.registerImplementation( loaderName,componentUrl, reg )
+        rootKey = reg.getRootKey()
+        implementationKey = rootKey.openKey( "IMPLEMENTATIONS" )
+        implNames = implementationKey.getKeyNames()
+        extSMGR = toBeExtendedContext.ServiceManager
+        for x in implNames:
+            fac = loader.activate( max(x.split("/")),"",componentUrl,rootKey)
+            extSMGR.insert( fac )
+        reg.close()
+
 # never shrinks !
 _g_typeTable = {}
 def _unohelper_getHandle( self):
-   ret = None
-   if _g_typeTable.has_key( self.__class__ ):
-     ret = _g_typeTable[self.__class__]
-   else:
-     names = {}
-     traverse = list(self.__class__.__bases__)
-     while len( traverse ) > 0:
-         item = traverse.pop()
-         bases = item.__bases__
-         if uno.isInterface( item ):
-             names[item.__pyunointerface__] = None
-         elif len(bases) > 0:
-             # the "else if", because we only need the most derived interface
-             traverse = traverse + list(bases)#
+    ret = None
+    if self.__class__ in _g_typeTable:
+        ret = _g_typeTable[self.__class__]
+    else:
+        names = {}
+        traverse = list(self.__class__.__bases__)
+        while len( traverse ) > 0:
+            item = traverse.pop()
+            bases = item.__bases__
+            if uno.isInterface( item ):
+                names[item.__pyunointerface__] = None
+            elif len(bases) > 0:
+                # the "else if", because we only need the most derived interface
+                traverse = traverse + list(bases)#
 
-     lst = names.keys()
-     types = []
-     for x in lst:
-         t = uno.getTypeByName( x )
-         types.append( t )
-         
-     ret = tuple(types) , uno.generateUuid()
-     _g_typeTable[self.__class__] = ret
-   return ret
-  
+        lst = list(names.keys())
+        types = []
+        for x in lst:
+            t = uno.getTypeByName( x )
+            types.append( t )
+
+        ret = tuple(types) , uno.generateUuid()
+        _g_typeTable[self.__class__] = ret
+    return ret
+
 class Base(XTypeProvider):
-      def getTypes( self ):
-	  return _unohelper_getHandle( self )[0]
-      def getImplementationId(self):
-	  return _unohelper_getHandle( self )[1]
+    def getTypes( self ):
+        return _unohelper_getHandle( self )[0]
+    def getImplementationId(self):
+        return _unohelper_getHandle( self )[1]
 
 class CurrentContext(XCurrentContext, Base ):
     """a current context implementation, which first does a lookup in the given
@@ -271,28 +271,27 @@ class CurrentContext(XCurrentContext, Base ):
             return self.oldContext.getValueByName( name )
         else:
             return None
-        
+
 # -------------------------------------------------
 # implementation details
 # -------------------------------------------------
 class _FactoryHelper_( XSingleComponentFactory, XServiceInfo, Base ):
-      def __init__( self, clazz, implementationName, serviceNames ):
-	  self.clazz = clazz
-	  self.implementationName = implementationName
-	  self.serviceNames = serviceNames
-	  
-      def getImplementationName( self ):
-	  return self.implementationName
+    def __init__( self, clazz, implementationName, serviceNames ):
+        self.clazz = clazz
+        self.implementationName = implementationName
+        self.serviceNames = serviceNames
 
-      def supportsService( self, ServiceName ):
-	  return ServiceName in self.serviceNames
+    def getImplementationName( self ):
+        return self.implementationName
 
-      def getSupportedServiceNames( self ):
-	  return self.serviceNames
+    def supportsService( self, ServiceName ):
+        return ServiceName in self.serviceNames
 
-      def createInstanceWithContext( self, context ):
-	  return self.clazz( context )
-	      
-      def createInstanceWithArgumentsAndContext( self, args, context ):
-	  return self.clazz( context, *args )
-      
+    def getSupportedServiceNames( self ):
+        return self.serviceNames
+
+    def createInstanceWithContext( self, context ):
+        return self.clazz( context )
+
+    def createInstanceWithArgumentsAndContext( self, args, context ):
+        return self.clazz( context, *args )
