@@ -70,7 +70,6 @@ i18npool_BRKTXTS := \
     char.brk \
     count_word_fi.brk \
     count_word.brk \
-    dict_word_ca.brk \
     dict_word_fi.brk \
     dict_word_he.brk \
     dict_word_hu.brk \
