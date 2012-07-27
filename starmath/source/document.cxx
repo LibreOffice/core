@@ -987,14 +987,14 @@ bool SmDocShell::writeFormulaOoxml( ::sax_fastparser::FSHelperPtr m_pSerializer,
     return aEquation.ConvertFromStarMath( m_pSerializer );
 }
 
-void SmDocShell::writeFormulaRtf(OStringBuffer& rBuffer)
+void SmDocShell::writeFormulaRtf(OStringBuffer& rBuffer, rtl_TextEncoding nEncoding)
 {
     if (!pTree)
         Parse();
     if (pTree && !IsFormulaArranged())
         ArrangeFormula();
     SmRtfExport aEquation(pTree);
-    aEquation.ConvertFromStarMath(rBuffer);
+    aEquation.ConvertFromStarMath(rBuffer, nEncoding);
 }
 
 bool SmDocShell::readFormulaOoxml( oox::formulaimport::XmlStream& stream )

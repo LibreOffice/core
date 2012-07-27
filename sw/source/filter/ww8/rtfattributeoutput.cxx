@@ -3393,7 +3393,7 @@ bool RtfAttributeOutput::FlyFrameOLEMath(SwOLENode& rOLENode)
     {
         m_aRunText->append("{\\mmath");
         OStringBuffer aBuf;
-        pBase->writeFormulaRtf(aBuf);
+        pBase->writeFormulaRtf(aBuf, m_rExport.eCurrentEncoding);
         m_aRunText->append(aBuf.makeStringAndClear());
         m_aRunText->append("}");
     }

@@ -39,11 +39,12 @@ SmRtfExport::SmRtfExport(const SmNode* pIn)
 {
 }
 
-bool SmRtfExport::ConvertFromStarMath(OStringBuffer& rBuffer)
+bool SmRtfExport::ConvertFromStarMath(OStringBuffer& rBuffer, rtl_TextEncoding nEncoding)
 {
     if (!m_pTree)
         return false;
     m_pBuffer = &rBuffer;
+    m_nEncoding = nEncoding;
     m_pBuffer->append("{" OOO_STRING_SVTOOLS_RTF_IGNORE LO_STRING_SVTOOLS_RTF_MOMATH " ");
     HandleNode(m_pTree, 0);
     m_pBuffer->append("}"); // moMath
@@ -76,7 +77,7 @@ void SmRtfExport::HandleText(const SmNode* pNode, int /*nLevel*/)
     {
         sal_uInt16 nChar = pTemp->GetText().GetChar(i);
         OUString aValue(SmTextNode::ConvertSymbolToUnicode(nChar));
-        m_pBuffer->append(msfilter::rtfutil::OutString(aValue, RTL_TEXTENCODING_MS_1252));
+        m_pBuffer->append(msfilter::rtfutil::OutString(aValue, m_nEncoding));
     }
 
     m_pBuffer->append("}"); // mr
@@ -127,7 +128,7 @@ void SmRtfExport::HandleAttribute(const SmAttributNode* pNode, int nLevel)
             m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_MACCPR " ");
             m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_MCHR " ");
             OUString aValue(pNode->Attribute()->GetToken().cMathChar);
-            m_pBuffer->append(msfilter::rtfutil::OutString(aValue, RTL_TEXTENCODING_MS_1252));
+            m_pBuffer->append(msfilter::rtfutil::OutString(aValue, m_nEncoding));
             m_pBuffer->append("}"); // mchr
             m_pBuffer->append("}"); // maccPr
             m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_ME " ");
@@ -192,7 +193,7 @@ void SmRtfExport::HandleRoot(const SmRootNode* pNode, int nLevel)
 }
 
 namespace {
-OString mathSymbolToString(const SmNode* node)
+OString mathSymbolToString(const SmNode* node, rtl_TextEncoding nEncoding)
 {
     assert(node->GetType() == NMATH);
     const SmTextNode* txtnode = static_cast<const SmTextNode*>(node);
@@ -201,7 +202,7 @@ OString mathSymbolToString(const SmNode* node)
     assert(txtnode->GetText().Len() == 1);
     sal_Unicode chr = SmTextNode::ConvertSymbolToUnicode(txtnode->GetText().GetChar(0));
     OUString aValue(chr);
-    return msfilter::rtfutil::OutString(aValue, RTL_TEXTENCODING_MS_1252);
+    return msfilter::rtfutil::OutString(aValue, nEncoding);
 }
 }
 
@@ -225,7 +226,7 @@ void SmRtfExport::HandleOperator(const SmOperNode* pNode, int nLevel)
             m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_MNARY " ");
             m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_MNARYPR " ");
             m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_MCHR " ");
-            m_pBuffer->append(mathSymbolToString(operation));
+            m_pBuffer->append(mathSymbolToString(operation, m_nEncoding));
             m_pBuffer->append("}"); // mchr
             if (!subsup || !subsup->GetSubSup(CSUB))
                 m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_MSUBHIDE " 1}");
@@ -408,7 +409,7 @@ void SmRtfExport::HandleBrace(const SmBraceNode* pNode, int nLevel)
     m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_MD " ");
     m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_MDPR " ");
     m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_MBEGCHR " ");
-    m_pBuffer->append(mathSymbolToString(pNode->OpeningBrace()));
+    m_pBuffer->append(mathSymbolToString(pNode->OpeningBrace(), m_nEncoding));
     m_pBuffer->append("}"); // mbegChr
     std::vector< const SmNode* > subnodes;
     if (pNode->Body()->GetType() == NBRACEBODY)
@@ -424,7 +425,7 @@ void SmRtfExport::HandleBrace(const SmBraceNode* pNode, int nLevel)
                 if(!separatorWritten)
                 {
                     m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_MSEPCHR " ");
-                    m_pBuffer->append(mathSymbolToString(math));
+                    m_pBuffer->append(mathSymbolToString(math, m_nEncoding));
                     m_pBuffer->append("}"); // msepChr
                     separatorWritten = true;
                 }
@@ -436,7 +437,7 @@ void SmRtfExport::HandleBrace(const SmBraceNode* pNode, int nLevel)
     else
         subnodes.push_back(pNode->Body());
     m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_MENDCHR " ");
-    m_pBuffer->append(mathSymbolToString(pNode->ClosingBrace()));
+    m_pBuffer->append(mathSymbolToString(pNode->ClosingBrace(), m_nEncoding));
     m_pBuffer->append("}"); // mendChr
     m_pBuffer->append("}"); // mdPr
     for (unsigned int i = 0; i < subnodes.size(); ++i)
@@ -465,7 +466,7 @@ void SmRtfExport::HandleVerticalBrace(const SmVerticalBraceNode* pNode, int nLev
             m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_MGROUPCHR " ");
             m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_MGROUPCHRPR " ");
             m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_MCHR " ");
-            m_pBuffer->append(mathSymbolToString(pNode->Brace()));
+            m_pBuffer->append(mathSymbolToString(pNode->Brace(), m_nEncoding));
             m_pBuffer->append("}"); // mchr
             // TODO not sure if pos and vertJc are correct
             m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_MPOS " ").append(top ? "top" : "bot").append("}");
