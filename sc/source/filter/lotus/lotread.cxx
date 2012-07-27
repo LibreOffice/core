@@ -71,7 +71,7 @@ FltError ImportLotus::Read()
     {
         *pIn >> nOp >> nRecLen;
 
-        if( pIn->IsEof() )
+		if( pIn->IsEof() || nNextRec > SAL_MAX_UINT32 - nRecLen - 4 )
             eAkt = S_END;
 
         nNextRec += nRecLen + 4;
@@ -166,17 +166,25 @@ FltError ImportLotus::Read()
                 break;
 
                 case 0x001b:                            // extended attributes
-                Read( nSubType );
-                nRecLen -= 2;
-                switch( nSubType )
+                if (nRecLen > 2)
                 {
-                    case 2007:                              // ROW PRESENTATION
-                    RowPresentation( nRecLen );
-                    break;
+                    Read( nSubType );
+                    nRecLen -= 2;
+                    switch( nSubType )
+                    {
+                        case 2007:                      // ROW PRESENTATION
+                            RowPresentation( nRecLen );
+                            break;
 
-                    case 14000:                             // NAMED SHEET
-                    NamedSheet();
-                    break;
+                        case 14000:                     // NAMED SHEET
+                            NamedSheet();
+                            break;
+                    }
+                }
+                else
+                {
+                    eRet = eERR_FORMAT;
+                    eAkt = S_END;
                 }
             }
 
@@ -187,12 +195,6 @@ FltError ImportLotus::Read()
             // -----------------------------------------------------------
             case S_END:                                             // S_END
             break;
-            // -----------------------------------------------------------
-#if OSL_DEBUG_LEVEL > 0
-            default:
-            OSL_FAIL( "*ImportLotus::Read(): State unbekannt!" );
-            eAkt = S_END;
-#endif
         }
 
         OSL_ENSURE( nNextRec >= pIn->Tell(),
@@ -257,7 +259,7 @@ FltError ImportLotus::Read( SvStream& rIn )
     {
         *pIn >> nOp >> nRecLen;
 
-        if( pIn->IsEof() )
+		if( pIn->IsEof() || nNextRec > SAL_MAX_UINT32 - nRecLen - 4 )
             bRead = false;
         else
         {

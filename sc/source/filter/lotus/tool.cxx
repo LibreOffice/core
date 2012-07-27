@@ -51,11 +51,7 @@
 
 //--------------------------------------------------------- EXTERNE VARIABLEN -
 extern WKTYP                eTyp;           // -> filter.cxx, aktueller Dateityp
-extern sal_Char*            pDummy2;        // -> memory.cxx
 extern ScDocument*          pDoc;           // -> filter.cxx, Aufhaenger zum Dokumentzugriff
-extern CharSet              eCharNach;      // -> filter.cxx, Zeichenkonvertierung von->nach
-
-extern sal_Bool                 bFormInit;      // -> memory.cxx, fuer GetFormHandle()
 
 //--------------------------------------------------------- GLOBALE VARIABLEN -
 sal_uInt8                       nDefaultFormat; // -> op.cpp, Standard-Zellenformat
@@ -81,6 +77,8 @@ void PutFormString( SCCOL nCol, SCROW nRow, SCTAB nTab, sal_Char* pString )
 {
     // Label-Format-Auswertung
     OSL_ENSURE( pString != NULL, "PutFormString(): pString == NULL" );
+    if (!pString)
+        return;
 
     sal_Char            cForm;
     SvxHorJustifyItem*  pJustify = NULL;
@@ -112,12 +110,9 @@ void PutFormString( SCCOL nCol, SCROW nRow, SCTAB nTab, sal_Char* pString )
             pJustify = pAttrStandard;
     }
 
-    if( pString )
-    {
-        pDoc->ApplyAttr( nCol, nRow, nTab, *pJustify );
-        ScStringCell*   pZelle = new ScStringCell( String( pString, pLotusRoot->eCharsetQ ) );
-        pDoc->PutCell( nCol, nRow, nTab, pZelle, true );
-    }
+    pDoc->ApplyAttr( nCol, nRow, nTab, *pJustify );
+    ScStringCell*	pZelle = new ScStringCell( String( pString, pLotusRoot->eCharsetQ ) );
+    pDoc->PutCell( nCol, nRow, nTab, pZelle, true );
 }
 
 

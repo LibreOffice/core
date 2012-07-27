@@ -63,9 +63,6 @@ WKTYP               eTyp;
 extern sal_Bool         bEOF;           // zeigt Ende der Datei
 sal_Bool                bEOF;
 
-extern CharSet      eCharNach;      // Zeichenkonvertierung von->nach
-CharSet             eCharNach;
-
 extern CharSet      eCharVon;
 CharSet             eCharVon;
 
@@ -73,15 +70,10 @@ extern ScDocument*  pDoc;           // Aufhaenger zum Dokumentzugriff
 ScDocument*         pDoc;
 
 
-extern sal_Char*    pPuffer;        // -> memory.cxx
-extern sal_Char*    pDummy1;        // -> memory.cxx
-
 extern OPCODE_FKT   pOpFkt[ FKT_LIMIT ];
                                     // -> optab.cxx, Tabelle moeglicher Opcodes
 extern OPCODE_FKT   pOpFkt123[ FKT_LIMIT123 ];
                                     // -> optab.cxx, Table of possible Opcodes
-
-extern long         nDateiLaenge;   // -> datei.cpp, ...der gerade offenen Datei
 
 LOTUS_ROOT*         pLotusRoot = NULL;
 
@@ -196,9 +188,10 @@ WKTYP ScanVersion( SvStream& aStream )
             aStream >> nVersNr;
             if( aStream.IsEof() ) return eWK_Error;
             if( nVersNr == 0x0004 && nRecLen == 26 )
-            {   // 4 Bytes von 26 gelesen->22 ueberlesen
-                aStream.Read( pDummy1, 22 );
-                return eWK3;
+			{	// 4 bytes of 26 read => skip 22 (read instead of seek to make IsEof() work just in case)
+                sal_Char aDummy[22];
+                aStream.Read( aDummy, 22 );
+                return aStream.IsEof() ? eWK_Error : eWK3;
             }
             break;
         case 0x1003:
