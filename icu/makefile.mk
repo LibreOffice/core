@@ -149,7 +149,7 @@ icu_LDFLAGS+=-lgnustl_shared
 .ENDIF
 
 CONFIGURE_ACTION+=sh -c 'CPPFLAGS="$(EXTRA_CDEFS)" CFLAGS="$(icu_CFLAGS)" CXXFLAGS="$(icu_CXXFLAGS)" LDFLAGS="$(icu_LDFLAGS) $(LDFLAGSADD)" \
-./configure --enable-layout $(STATIC_OR_SHARED) $(BUILD_AND_HOST) $(DISABLE_64BIT) $(DISABLE_STRICT) $(DISABLE_DYLOAD) $(LIBRARY_SUFFIX)'
+./configure --enable-layout --disable-samples $(STATIC_OR_SHARED) $(BUILD_AND_HOST) $(DISABLE_64BIT) $(DISABLE_STRICT) $(DISABLE_DYLOAD) $(LIBRARY_SUFFIX)'
 
 .IF "$(OS)" == "MACOSX"
 CONFIGURE_ACTION += \
@@ -229,7 +229,7 @@ BUILD_AND_HOST=--build=i586-pc-mingw32 --enable-64bit-libs=no
 .ENDIF
 
 CONFIGURE_ACTION+=sh -c 'CFLAGS="-O -D_MT" CXXFLAGS="-O -D_MT" LDFLAGS="$(icu_LDFLAGS)" LIBS="$(icu_LIBS)" \
-./configure $(BUILD_AND_HOST) --enable-layout --disable-static --enable-shared'
+./configure $(BUILD_AND_HOST) --enable-layout --disable-static --enable-shared --disable-samples'
 
 CONFIGURE_FLAGS=
 
