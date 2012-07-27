@@ -81,7 +81,7 @@ using namespace com::sun::star;
 
 #define DEFCHARSET          RTL_TEXTENCODING_MS_1252
 
-#define SC10TOSTRING(p)		String((p),DEFCHARSET)
+#define SC10TOSTRING(p)     String((p),DEFCHARSET)
 
 const SCCOL SC10MAXCOL = 255;   // #i85906# don't try to load more columns than there are in the file
 
@@ -103,7 +103,7 @@ static void lcl_ReadFixedString( SvStream& rStream, void* pData, size_t nLen )
 
 static void lcl_ReadFileHeader(SvStream& rStream, Sc10FileHeader& rFileHeader)
 {
-	lcl_ReadFixedString( rStream, &rFileHeader.CopyRight, sizeof(rFileHeader.CopyRight));
+    lcl_ReadFixedString( rStream, &rFileHeader.CopyRight, sizeof(rFileHeader.CopyRight));
     rStream >> rFileHeader.Version;
     rStream.Read(&rFileHeader.Reserved, sizeof(rFileHeader.Reserved));
 }
@@ -111,7 +111,7 @@ static void lcl_ReadFileHeader(SvStream& rStream, Sc10FileHeader& rFileHeader)
 
 static void lcl_ReadTabProtect(SvStream& rStream, Sc10TableProtect& rProtect)
 {
-	lcl_ReadFixedString( rStream, &rProtect.PassWord, sizeof(rProtect.PassWord));
+    lcl_ReadFixedString( rStream, &rProtect.PassWord, sizeof(rProtect.PassWord));
     rStream >> rProtect.Flags;
     rStream >> rProtect.Protect;
 }
@@ -119,7 +119,7 @@ static void lcl_ReadTabProtect(SvStream& rStream, Sc10TableProtect& rProtect)
 
 static void lcl_ReadSheetProtect(SvStream& rStream, Sc10SheetProtect& rProtect)
 {
-	lcl_ReadFixedString( rStream, &rProtect.PassWord, sizeof(rProtect.PassWord));
+    lcl_ReadFixedString( rStream, &rProtect.PassWord, sizeof(rProtect.PassWord));
     rStream >> rProtect.Flags;
     rStream >> rProtect.Protect;
 }
@@ -163,7 +163,7 @@ static void lcl_ReadLogFont(SvStream& rStream, Sc10LogFont& rFont)
     rStream >> rFont.lfClipPrecision;
     rStream >> rFont.lfQuality;
     rStream >> rFont.lfPitchAndFamily;
-	lcl_ReadFixedString( rStream, &rFont.lfFaceName, sizeof(rFont.lfFaceName));
+    lcl_ReadFixedString( rStream, &rFont.lfFaceName, sizeof(rFont.lfFaceName));
 }
 
 
@@ -178,7 +178,7 @@ static void lcl_ReadBlockRect(SvStream& rStream, Sc10BlockRect& rBlock)
 
 static void lcl_ReadHeadFootLine(SvStream& rStream, Sc10HeadFootLine& rLine)
 {
-	lcl_ReadFixedString( rStream, &rLine.Title, sizeof(rLine.Title));
+    lcl_ReadFixedString( rStream, &rLine.Title, sizeof(rLine.Title));
     lcl_ReadLogFont(rStream, rLine.LogFont);
     rStream >> rLine.HorJustify;
     rStream >> rLine.VerJustify;
@@ -213,7 +213,7 @@ static void lcl_ReadPageFormat(SvStream& rStream, Sc10PageFormat& rFormat)
     rStream >> rFormat.PrintColRow;
     rStream >> rFormat.PrintNote;
     rStream >> rFormat.TopBottomDir;
-	lcl_ReadFixedString( rStream, &rFormat.PrintAreaName, sizeof(rFormat.PrintAreaName));
+    lcl_ReadFixedString( rStream, &rFormat.PrintAreaName, sizeof(rFormat.PrintAreaName));
     lcl_ReadBlockRect(rStream, rFormat.PrintArea);
     rStream.Read(&rFormat.PrnZoom, sizeof(rFormat.PrnZoom));
     rStream >> rFormat.FirstPageNo;
@@ -247,7 +247,7 @@ static void lcl_ReadGraphHeader(SvStream& rStream, Sc10GraphHeader& rHeader)
 
 static void lcl_ReadImageHeaer(SvStream& rStream, Sc10ImageHeader& rHeader)
 {
-	lcl_ReadFixedString( rStream, &rHeader.FileName, sizeof(rHeader.FileName));
+    lcl_ReadFixedString( rStream, &rHeader.FileName, sizeof(rHeader.FileName));
     rStream >> rHeader.Typ;
     rStream >> rHeader.Linked;
     rStream >> rHeader.x1;
@@ -303,8 +303,8 @@ static void lcl_ReadChartTypeData(SvStream& rStream, Sc10ChartTypeData& rTypeDat
     rStream >> rTypeData.DrawMode;
     rStream >> rTypeData.GraphType;
     rStream >> rTypeData.GraphStyle;
-	lcl_ReadFixedString( rStream, &rTypeData.GraphTitle, sizeof(rTypeData.GraphTitle));
-	lcl_ReadFixedString( rStream, &rTypeData.BottomTitle, sizeof(rTypeData.BottomTitle));
+    lcl_ReadFixedString( rStream, &rTypeData.GraphTitle, sizeof(rTypeData.GraphTitle));
+    lcl_ReadFixedString( rStream, &rTypeData.BottomTitle, sizeof(rTypeData.BottomTitle));
     sal_uInt16 i;
     for (i = 0; i < 256; i++)
         rStream >> rTypeData.SymbolData[i];
@@ -320,7 +320,7 @@ static void lcl_ReadChartTypeData(SvStream& rStream, Sc10ChartTypeData& rTypeDat
         rStream >> rTypeData.NumGraphStyles[i];
     rStream >> rTypeData.ShowLegend;
     for (i = 0; i < 256; i++)
-		lcl_ReadFixedString( rStream, &rTypeData.LegendText[i], sizeof(Sc10ChartText));
+        lcl_ReadFixedString( rStream, &rTypeData.LegendText[i], sizeof(Sc10ChartText));
     rStream >> rTypeData.ExplodePie;
     rStream >> rTypeData.FontUse;
     for (i = 0; i < 5; i++)
@@ -333,8 +333,8 @@ static void lcl_ReadChartTypeData(SvStream& rStream, Sc10ChartTypeData& rTypeDat
     rStream >> rTypeData.Labels;
     rStream >> rTypeData.LabelEvery;
     for (i = 0; i < 50; i++)
-		lcl_ReadFixedString( rStream, &rTypeData.LabelText[i], sizeof(Sc10ChartText));
-	lcl_ReadFixedString( rStream, &rTypeData.LeftTitle, sizeof(rTypeData.LeftTitle));
+        lcl_ReadFixedString( rStream, &rTypeData.LabelText[i], sizeof(Sc10ChartText));
+    lcl_ReadFixedString( rStream, &rTypeData.LeftTitle, sizeof(rTypeData.LeftTitle));
     rStream.Read(&rTypeData.Reserved, sizeof(rTypeData.Reserved));
 }
 
@@ -546,7 +546,7 @@ Sc10PatternCollection::Sc10PatternCollection(SvStream& rStream) :
 
 Sc10DataBaseData::Sc10DataBaseData(SvStream& rStream)
 {
-	lcl_ReadFixedString( rStream, &DataBaseRec.Name, sizeof(DataBaseRec.Name));
+    lcl_ReadFixedString( rStream, &DataBaseRec.Name, sizeof(DataBaseRec.Name));
     rStream >> DataBaseRec.Tab;
     lcl_ReadBlockRect(rStream, DataBaseRec.Block);
     rStream >> DataBaseRec.RowHeader;
@@ -561,21 +561,21 @@ Sc10DataBaseData::Sc10DataBaseData(SvStream& rStream)
     rStream >> DataBaseRec.QueryField0;
     rStream >> DataBaseRec.QueryOp0;
     rStream >> DataBaseRec.QueryByString0;
-	lcl_ReadFixedString( rStream, &DataBaseRec.QueryString0, sizeof(DataBaseRec.QueryString0));
+    lcl_ReadFixedString( rStream, &DataBaseRec.QueryString0, sizeof(DataBaseRec.QueryString0));
     DataBaseRec.QueryValue0 = ScfTools::ReadLongDouble(rStream);
 
     rStream >> DataBaseRec.QueryConnect1;
     rStream >> DataBaseRec.QueryField1;
     rStream >> DataBaseRec.QueryOp1;
     rStream >> DataBaseRec.QueryByString1;
-	lcl_ReadFixedString( rStream, &DataBaseRec.QueryString1, sizeof(DataBaseRec.QueryString1));
+    lcl_ReadFixedString( rStream, &DataBaseRec.QueryString1, sizeof(DataBaseRec.QueryString1));
     DataBaseRec.QueryValue1 = ScfTools::ReadLongDouble(rStream);
 
     rStream >> DataBaseRec.QueryConnect2;
     rStream >> DataBaseRec.QueryField2;
     rStream >> DataBaseRec.QueryOp2;
     rStream >> DataBaseRec.QueryByString2;
-	lcl_ReadFixedString( rStream, &DataBaseRec.QueryString2, sizeof(DataBaseRec.QueryString2));
+    lcl_ReadFixedString( rStream, &DataBaseRec.QueryString2, sizeof(DataBaseRec.QueryString2));
     DataBaseRec.QueryValue2 = ScfTools::ReadLongDouble(rStream);
 }
 
@@ -588,7 +588,7 @@ Sc10DataBaseCollection::Sc10DataBaseCollection(SvStream& rStream) :
   rStream >> ID;
   if (ID == DataBaseID)
   {
-	lcl_ReadFixedString( rStream, ActName, sizeof(ActName));
+    lcl_ReadFixedString( rStream, ActName, sizeof(ActName));
     sal_uInt16 nAnz;
     rStream >> nAnz;
     for (sal_uInt16 i=0; (i < nAnz) && (nError == 0); i++)
@@ -1762,13 +1762,13 @@ void Sc10Import::LoadColAttr(SCCOL Col, SCTAB Tab)
                 {
                     switch (pFont->PitchAndFamily & 0xF0)
                     {
-                        case ffDontCare   : eFam = FAMILY_DONTKNOW;		break;
-                        case ffRoman      : eFam = FAMILY_ROMAN;		break;
-                        case ffSwiss      : eFam = FAMILY_SWISS;		break;
-                        case ffModern     : eFam = FAMILY_MODERN;		break;
-                        case ffScript     : eFam = FAMILY_SCRIPT;		break;
-                        case ffDecorative : eFam = FAMILY_DECORATIVE;	break;
-                        default: eFam = FAMILY_DONTKNOW;		break;
+                        case ffDontCare   : eFam = FAMILY_DONTKNOW;     break;
+                        case ffRoman      : eFam = FAMILY_ROMAN;        break;
+                        case ffSwiss      : eFam = FAMILY_SWISS;        break;
+                        case ffModern     : eFam = FAMILY_MODERN;       break;
+                        case ffScript     : eFam = FAMILY_SCRIPT;       break;
+                        case ffDecorative : eFam = FAMILY_DECORATIVE;   break;
+                        default: eFam = FAMILY_DONTKNOW;        break;
                     }
                     ScPatternAttr aScPattern(pDoc->GetPool());
                     aScPattern.GetItemSet().Put(SvxFontItem(eFam, SC10TOSTRING( pFont->FaceName ), EMPTY_STRING,
@@ -2394,14 +2394,14 @@ void Sc10Import::LoadObjects()
           {
             Sc10ChartHeader ChartHeader;
             Sc10ChartSheetData ChartSheetData;
-			Sc10ChartTypeData* pTypeData = new (::std::nothrow) Sc10ChartTypeData;
+            Sc10ChartTypeData* pTypeData = new (::std::nothrow) Sc10ChartTypeData;
             if (!pTypeData)
                 nError = errOutOfMemory;
             else
             {
                 lcl_ReadChartHeader(rStream, ChartHeader);
 
-                //!	altes Metafile verwenden ??
+                //! altes Metafile verwenden ??
                 rStream.SeekRel(ChartHeader.Size);
 
                 lcl_ReadChartSheetData(rStream, ChartSheetData);
