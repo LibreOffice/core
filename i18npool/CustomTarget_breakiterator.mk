@@ -65,20 +65,35 @@ i18npool_GENCMNTARGET :=
 i18npool_GENCMN := $(SYSTEM_GENCMN)
 endif
 
-i18npool_BRKFILES := $(subst .txt,.brk,$(notdir \
-	$(wildcard $(SRCDIR)/i18npool/source/breakiterator/data/*.txt)))
+i18npool_BRKTXTS := \
+    char_in.brk \
+    char.brk \
+    count_word_fi.brk \
+    count_word.brk \
+    dict_word_ca.brk \
+    dict_word_fi.brk \
+    dict_word_he.brk \
+    dict_word_hu.brk \
+    dict_word_nodash.brk \
+    dict_word_prepostdash.brk \
+    dict_word.brk \
+    edit_word_he.brk \
+    edit_word_hu.brk \
+    edit_word.brk \
+    line.brk \
+    sent.brk
 
 # 'gencmn', 'genbrk' and 'genccode' are tools generated and delivered by icu project to process icu breakiterator rules.
 # The output of gencmn generates warnings under Windows. We want to minimize the patches to external tools,
 # so the output (OpenOffice_dat.c) is changed here to include a pragma to disable the warnings.
 # Output of gencmn is redirected to OpenOffice_tmp.c with the -t switch.
-$(i18npool_BIDIR)/OpenOffice_dat.c : \
-		$(patsubst %.brk,$(i18npool_BIDIR)/%_brk.c,$(i18npool_BRKFILES)) \
+$(i18npool_BIDIR)/OpenOffice_dat.c : $(SRCDIR)/i18npool/CustomTarget_breakiterator.mk \
+		$(patsubst %.brk,$(i18npool_BIDIR)/%_brk.c,$(i18npool_BRKTXTS)) \
 		$(i18npool_GENCMNTARGET)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),CMN,1)
 	$(call gb_Helper_abbreviate_dirs,\
 		RESPONSEFILE=$(shell $(gb_MKTEMP)) && \
-		$(foreach brk,$(i18npool_BRKFILES),echo '$(brk)' >> $${RESPONSEFILE} && ) \
+		$(foreach brk,$(i18npool_BRKTXTS),echo '$(brk)' >> $${RESPONSEFILE} && ) \
 		$(i18npool_GENCMN) -n OpenOffice -t tmp -S -d $(i18npool_BIDIR)/ 0 $${RESPONSEFILE} && \
 		rm -f $${RESPONSEFILE} && \
 		echo '#ifdef _MSC_VER' > $@ && \
