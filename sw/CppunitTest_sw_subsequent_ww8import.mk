@@ -81,8 +81,7 @@ $(eval $(call gb_CppunitTest_use_components,sw_subsequent_ww8import,\
     ucb/source/core/ucb1 \
     ucb/source/ucp/file/ucpfile1 \
     unoxml/source/service/unoxml \
-    $(if $(filter DESKTOP,$(BUILD_TYPE)), \
-        xmlhelp/util/ucpchelp1) \
+    $(if $(filter DESKTOP,$(BUILD_TYPE)),xmlhelp/util/ucpchelp1) \
 ))
 
 $(eval $(call gb_CppunitTest_use_configuration,sw_subsequent_ww8import))
