@@ -1693,7 +1693,7 @@ sal_Bool ScTable::CreateExcelQuery(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW 
             while (nCol <= nCol2)
             {
                 GetInputString( nCol, nRow, aCellStr );
-                ScGlobal::pCharClass->toUpper( aCellStr );
+//                ScGlobal::pCharClass->toUpper( aCellStr ); // #i119637
                 if (aCellStr.Len() > 0)
                 {
                     if (nIndex < nNewEntries)
