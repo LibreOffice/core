@@ -1009,6 +1009,12 @@ void   SwTableColumnPage::ModifyHdl( PercentField* pEdit )
             if(pEdit == pFieldArr[i])
                 break;
 
+        if (MET_FIELDS <= i)
+        {
+            OSL_ENSURE(false, "cannot happen.");
+            return;
+        }
+
         SetVisibleWidth(aValueTbl[i], static_cast< SwTwips >(pEdit->DenormalizePercent(pEdit->GetValue( FUNIT_TWIP ))) );
         nAktPos = aValueTbl[i];
 
