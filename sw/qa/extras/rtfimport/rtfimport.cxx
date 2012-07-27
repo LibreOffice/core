@@ -44,6 +44,7 @@
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>
 #include <com/sun/star/text/XTextFramesSupplier.hpp>
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
+#include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 
@@ -98,6 +99,7 @@ public:
     void testFdo49659();
     void testFdo46966();
     void testFdo52066();
+    void testFdo48033();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -139,6 +141,7 @@ public:
     CPPUNIT_TEST(testFdo49659);
     CPPUNIT_TEST(testFdo46966);
     CPPUNIT_TEST(testFdo52066);
+    CPPUNIT_TEST(testFdo48033);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -826,6 +829,29 @@ void Test::testFdo52066()
     uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
     uno::Reference<drawing::XShape> xShape(xDraws->getByIndex(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(TWIP_TO_MM100(19)), xShape->getSize().Height);
+}
+
+void Test::testFdo48033()
+{
+    /*
+     * The problem was that the picture was in the first cell, instead of the second one.
+     *
+     * oTable = ThisComponent.TextTables(0)
+     * oParas = oTable.getCellByName("B1").Text.createEnumeration
+     * oPara = oParas.nextElement
+     * oRuns = oPara.createEnumeration
+     * oRun = oRuns.nextElement
+     * xray oRun.TextPortionType ' Frame, was Text
+     */
+    load("fdo48033.rtf");
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xCell(xTable->getCellByName("B1"), uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xCell->getText(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
+    uno::Reference<text::XTextRange> xPara(xParaEnum->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Frame"), getProperty<OUString>(getRun(xPara, 1), "TextPortionType"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
