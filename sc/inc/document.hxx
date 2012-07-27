@@ -1371,7 +1371,6 @@ public:
     SCROW                       CountNonFilteredRows(SCROW nStartRow, SCROW nEndRow, SCTAB nTab);
 
     bool IsManualRowHeight(SCROW nRow, SCTAB nTab) const;
-    void SetRowHeightManual(SCROW nRow, SCTAB nTab, bool bManual);
 
     /**
      * Write all column row flags to table's flag data, because not all column

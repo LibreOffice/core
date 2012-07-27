@@ -3994,14 +3994,6 @@ bool ScDocument::IsManualRowHeight(SCROW nRow, SCTAB nTab) const
     return maTabs[nTab]->IsManualRowHeight(nRow);
 }
 
-void ScDocument::SetRowHeightManual(SCROW nRow, SCTAB nTab, bool bManual)
-{
-    if (!ValidTab(nTab) || nTab >= static_cast<SCTAB>(maTabs.size()) || !maTabs[nTab])
-        return;
-
-    maTabs[nTab]->SetRowHeightManual(nRow, bManual);
-}
-
 void ScDocument::SyncColRowFlags()
 {
     TableContainer::iterator it = maTabs.begin();
