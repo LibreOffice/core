@@ -2014,7 +2014,6 @@ bool ScTable::CreateExcelQuery(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow
             while (nCol <= nCol2)
             {
                 GetInputString( nCol, nRow, aCellStr );
-                aCellStr = ScGlobal::pCharClass->uppercase(aCellStr);
                 if (!aCellStr.isEmpty())
                 {
                     if (nIndex < nNewEntries)
