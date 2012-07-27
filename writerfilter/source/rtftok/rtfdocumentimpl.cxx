@@ -202,6 +202,19 @@ static util::DateTime lcl_getDateTime(std::stack<RTFParserState>& aStates)
             aStates.top().nDay, aStates.top().nMonth, aStates.top().nYear);
 }
 
+static void lcl_DestinationToMath(OUStringBuffer& rDestinationText, oox::formulaimport::XmlStreamBuilder& rMathBuffer)
+{
+    OUString aStr = rDestinationText.makeStringAndClear();
+    if (!aStr.isEmpty())
+    {
+        rMathBuffer.appendOpeningTag(M_TOKEN(r));
+        rMathBuffer.appendOpeningTag(M_TOKEN(t));
+        rMathBuffer.appendCharacters(aStr);
+        rMathBuffer.appendClosingTag(M_TOKEN(t));
+        rMathBuffer.appendClosingTag(M_TOKEN(r));
+    }
+}
+
 RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& xContext,
         uno::Reference<io::XInputStream> const& xInputStream,
         uno::Reference<lang::XComponent> const& xDstDoc,
@@ -3131,7 +3144,11 @@ int RTFDocumentImpl::pushState()
     if (m_aStates.empty())
         aState = m_aDefaultState;
     else
+    {
+        if (m_aStates.top().nDestinationState == DESTINATION_MR)
+            lcl_DestinationToMath(m_aStates.top().aDestinationText, m_aMathBuffer);
         aState = m_aStates.top();
+    }
     m_aStates.push(aState);
     m_aStates.top().aDestinationText.setLength(0);
 
@@ -3616,19 +3633,7 @@ int RTFDocumentImpl::popState()
         m_aMathBuffer = oox::formulaimport::XmlStreamBuilder();
     }
     break;
-    case DESTINATION_MR:
-    {
-        OUString aStr = m_aStates.top().aDestinationText.makeStringAndClear();
-        if (!aStr.isEmpty())
-        {
-            m_aMathBuffer.appendOpeningTag(M_TOKEN(r));
-            m_aMathBuffer.appendOpeningTag(M_TOKEN(t));
-            m_aMathBuffer.appendCharacters(aStr);
-            m_aMathBuffer.appendClosingTag(M_TOKEN(t));
-            m_aMathBuffer.appendClosingTag(M_TOKEN(r));
-        }
-    }
-    break;
+    case DESTINATION_MR: lcl_DestinationToMath(m_aStates.top().aDestinationText, m_aMathBuffer); break;
     case DESTINATION_MF: m_aMathBuffer.appendClosingTag(M_TOKEN(f)); break;
     case DESTINATION_MFPR: m_aMathBuffer.appendClosingTag(M_TOKEN(fPr)); break;
     case DESTINATION_MCTRLPR: m_aMathBuffer.appendClosingTag(M_TOKEN(ctrlPr)); break;

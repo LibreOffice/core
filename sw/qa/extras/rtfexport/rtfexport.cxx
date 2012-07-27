@@ -67,6 +67,7 @@ public:
     void testMathSepchr();
     void testMathSubscripts();
     void testMathVerticalstacks();
+    void testMathRuns();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -96,6 +97,7 @@ public:
     CPPUNIT_TEST(testMathSepchr);
     CPPUNIT_TEST(testMathSubscripts);
     CPPUNIT_TEST(testMathVerticalstacks);
+    CPPUNIT_TEST(testMathRuns);
 #endif
 #endif
     CPPUNIT_TEST_SUITE_END();
@@ -395,6 +397,13 @@ void Test::testMathVerticalstacks()
     CPPUNIT_ASSERT_EQUAL(OUString("{a} / {b}"), getFormula(getRun(getParagraph(2), 1)));
     CPPUNIT_ASSERT_EQUAL(OUString("stack { a # b }"), getFormula(getRun(getParagraph(3), 1)));
     CPPUNIT_ASSERT_EQUAL(OUString("stack { a # stack { b # c } }"), getFormula(getRun(getParagraph(4), 1)));
+}
+
+void Test::testMathRuns()
+{
+    roundtrip("math-runs.rtf");
+    // was [](){}, i.e. first curly bracket had an incorrect position
+    CPPUNIT_ASSERT_EQUAL(OUString("\\{ left [ right ] left ( right ) \\}"), getFormula(getRun(getParagraph(1), 1)));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
