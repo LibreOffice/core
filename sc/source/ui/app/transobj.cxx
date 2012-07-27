@@ -634,7 +634,6 @@ void ScTransferObj::InitDocShell()
 
         for (SCROW nRow = nStartY; nRow <= nEndY; ++nRow)
         {
-            sal_uInt8 nSourceFlags = pDoc->GetRowFlags(nRow, nSrcTab);
             if ( pDoc->RowHidden(nRow, nSrcTab) )
                 pDestDoc->ShowRow( nRow, 0, false );
             else
