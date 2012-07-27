@@ -117,8 +117,15 @@ BitmapEx::BitmapEx( const Bitmap& rBmp, const Bitmap& rMask ) :
         eTransparent    ( !rMask ? TRANSPARENT_NONE : TRANSPARENT_BITMAP ),
         bAlpha          ( sal_False )
 {
-    DBG_ASSERT( !rMask || rBmp.GetSizePixel() == rMask.GetSizePixel(),
-                "BitmapEx::BitmapEx(): size mismatch for bitmap and mask." );
+    if(!rMask)
+    {
+        OSL_ENSURE(false, "Empty mask given (!)");
+    }
+    else if(rBmp.GetSizePixel() != rMask.GetSizePixel())
+    {
+        OSL_ENSURE(false, "Mask size differs from Bitmap size, corrected Mask (!)");
+        aMask.Scale(rBmp.GetSizePixel());
+    }
 
     // Ensure a mask is exactly one bit deep
     if( !!aMask && aMask.GetBitCount() != 1 )
@@ -135,8 +142,15 @@ BitmapEx::BitmapEx( const Bitmap& rBmp, const AlphaMask& rAlphaMask ) :
         eTransparent    ( !rAlphaMask ? TRANSPARENT_NONE : TRANSPARENT_BITMAP ),
         bAlpha          ( !rAlphaMask ? sal_False : sal_True )
 {
-    DBG_ASSERT( !rAlphaMask || rBmp.GetSizePixel() == rAlphaMask.GetSizePixel(),
-                "BitmapEx::BitmapEx(): size mismatch for bitmap and alpha mask." );
+    if(!rAlphaMask)
+    {
+        OSL_ENSURE(false, "Empty alpha given (!)");
+    }
+    else if(rBmp.GetSizePixel() != rAlphaMask.GetSizePixel())
+    {
+        OSL_ENSURE(false, "Alpha size differs from Bitmap size, corrected Mask (!)");
+        aMask.Scale(rBmp.GetSizePixel());
+    }
 
     // #i75531# the workaround below can go when
     // X11SalGraphics::drawAlphaBitmap()'s render acceleration
