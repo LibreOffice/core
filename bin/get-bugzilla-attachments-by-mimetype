@@ -141,7 +141,7 @@ def get_through_rpc_query(rpcurl, showurl, mimetype, prefix, suffix):
         bugs = result['bugs']
         print len(bugs), 'bugs to process'
         for bug in bugs:
-            url = showurl + str(bug['bug_id'])
+            url = showurl + str(bug['id'])
             get_from_bug_url_via_xml(url, mimetype, prefix, suffix)
     except xmlrpclib.Fault, err:
         print "A fault occurred"
