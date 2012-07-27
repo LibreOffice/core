@@ -109,7 +109,6 @@ private:
 
     ::rtl::OUString msCurrentMainViewURL;
     bool mbIsEnabled;
-    bool mbConfigurationControllerIsDisposing;
 
     void HandleMainViewSwitch (
         const ::rtl::OUString& rsViewURL,
