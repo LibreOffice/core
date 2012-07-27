@@ -1,0 +1,68 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#include <unotest/filters-test.hxx>
+#include <test/bootstrapfixture.hxx>
+#include <svtools/FilterConfigItem.hxx>
+#include <tools/stream.hxx>
+#include <vcl/graph.hxx>
+
+#include <osl/file.hxx>
+#include <osl/process.h>
+
+extern "C"
+{
+    SAL_DLLPUBLIC_EXPORT sal_Bool __LOADONCALLAPI
+        GraphicImport(SvStream & rStream, Graphic & rGraphic,
+        FilterConfigItem*, sal_Bool);
+}
+
+using namespace ::com::sun::star;
+
+/* Implementation of Filters test */
+
+class PictFilterTest
+    : public test::FiltersTest
+    , public test::BootstrapFixture
+{
+public:
+    PictFilterTest() : BootstrapFixture(true, false) {}
+
+    virtual bool load(const rtl::OUString &, const rtl::OUString &rURL, const rtl::OUString &);
+
+    /**
+     * Ensure CVEs remain unbroken
+     */
+    void testCVEs();
+
+    CPPUNIT_TEST_SUITE(PictFilterTest);
+    CPPUNIT_TEST(testCVEs);
+    CPPUNIT_TEST_SUITE_END();
+};
+
+bool PictFilterTest::load(const rtl::OUString &,
+    const rtl::OUString &rURL, const rtl::OUString &)
+{
+    SvFileStream aFileStream(rURL, STREAM_READ);
+    Graphic aGraphic;
+    return GraphicImport(aFileStream, aGraphic, NULL, 0);
+}
+
+void PictFilterTest::testCVEs()
+{
+    testDir(rtl::OUString(),
+        getURLFromSrc("/filter/qa/cppunit/data/pict/"),
+        rtl::OUString());
+}
+
+CPPUNIT_TEST_SUITE_REGISTRATION(PictFilterTest);
+
+CPPUNIT_PLUGIN_IMPLEMENT();
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
