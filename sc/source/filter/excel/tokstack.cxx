@@ -475,7 +475,8 @@ bool TokenPool::GetElement( const sal_uInt16 nId )
                         else
                             pScToken->AddExternal( p->aText, p->eId );
                     }
-                    bRet = false;
+                    else
+                        bRet = false;
                 }
                 break;
             case T_Nlf:
