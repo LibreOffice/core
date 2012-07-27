@@ -6106,8 +6106,8 @@ AC_SUBST(BUILD_EPM)
 dnl ===================================================================
 dnl We need winegcc when building MinGW build to be able to cross-build msi tools
 dnl ===================================================================
+AC_PATH_PROG(WINEGCC, winegcc)
 if test "$WITH_MINGW" = "yes" -a "$PKGFORMAT" = "msi" ; then
-    AC_PATH_PROG(WINEGCC, winegcc)
     if test "$WINEGCC" = ""; then
         AC_MSG_ERROR([winegcc was not found, please install wine-devel, or wine-devel-32bit])
     fi
@@ -6122,7 +6122,6 @@ printf ("hello world\n");
     )
     CC="$CC_save"
 fi
-AC_SUBST(WINEGCC)
 
 dnl ===================================================================
 dnl Check for gperf
