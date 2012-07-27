@@ -59,6 +59,9 @@ public:
     void testMathMatrix();
     void testMathBox();
     void testMathMso2007();
+    void testMathNary();
+    void testMathLimupp();
+    void testMathStrikeh();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -80,6 +83,9 @@ public:
     CPPUNIT_TEST(testMathMatrix);
     CPPUNIT_TEST(testMathBox);
     CPPUNIT_TEST(testMathMso2007);
+    CPPUNIT_TEST(testMathNary);
+    CPPUNIT_TEST(testMathLimupp);
+    CPPUNIT_TEST(testMathStrikeh);
 #endif
 #endif
     CPPUNIT_TEST_SUITE_END();
@@ -316,6 +322,31 @@ void Test::testMathMso2007()
     aActual = getFormula(getRun(getParagraph(9), 1));
     aExpected = OUString("cos α + cos β = 2 cos {1} over {2} left (α + β right ) cos {1} over {2} left (α − β right )", 99, RTL_TEXTENCODING_UTF8);
     CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
+}
+
+void Test::testMathNary()
+{
+    roundtrip("math-nary.rtf");
+    OUString aActual = getFormula(getRun(getParagraph(1), 1));
+    OUString aExpected("lllint from {1} to {2} {x + 1} prod from {a} {b} sum to {2} {x}");
+    CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
+}
+
+void Test::testMathLimupp()
+{
+    roundtrip("math-limupp.rtf");
+    OUString aActual = getFormula(getRun(getParagraph(1), 1));
+    CPPUNIT_ASSERT_EQUAL(OUString("{abcd} overbrace {4}"), aActual);
+
+    aActual = getFormula(getRun(getParagraph(2), 1));
+    CPPUNIT_ASSERT_EQUAL(OUString("{xyz} underbrace {3}"), aActual);
+}
+
+void Test::testMathStrikeh()
+{
+    roundtrip("math-strikeh.rtf");
+    OUString aActual = getFormula(getRun(getParagraph(1), 1));
+    CPPUNIT_ASSERT_EQUAL(OUString("overstrike {abc}"), aActual);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
