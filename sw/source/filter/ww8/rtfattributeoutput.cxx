@@ -3374,7 +3374,7 @@ void RtfAttributeOutput::FlyFrameOLEData( SwOLENode& rOLENode )
     }
 }
 
-bool RtfAttributeOutput::FlyFrameOLEMath(SwOLENode& rOLENode)
+bool RtfAttributeOutput::FlyFrameOLEMath(const SwFlyFrmFmt* pFlyFrmFmt, SwOLENode& rOLENode, const Size& rSize)
 {
     SAL_INFO("sw.rtf", OSL_THIS_FUNC);
 
@@ -3386,17 +3386,51 @@ bool RtfAttributeOutput::FlyFrameOLEMath(SwOLENode& rOLENode)
     if (!SotExchange::IsMath(aObjName))
         return false;
 
+    m_aRunText->append("{\\mmath");
     uno::Reference<util::XCloseable> xClosable(xObj->getComponent(), uno::UNO_QUERY);
     oox::FormulaExportBase* pBase = dynamic_cast<oox::FormulaExportBase*>(xClosable.get());
     SAL_WARN_IF(!pBase, "sw.rtf", "Math OLE object cannot write out RTF");
     if (pBase)
     {
-        m_aRunText->append("{\\mmath");
         OStringBuffer aBuf;
         pBase->writeFormulaRtf(aBuf, m_rExport.eCurrentEncoding);
         m_aRunText->append(aBuf.makeStringAndClear());
-        m_aRunText->append("}");
     }
+
+    // Replacement graphic.
+    m_aRunText->append("{\\mmathPict");
+
+    m_aRunText->append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_SHPPICT);
+    Size aSize(sw::util::GetSwappedInSize(rOLENode));
+    Size aRendered(aSize);
+    aRendered.Width() = rSize.Width();
+    aRendered.Height() = rSize.Height();
+    Graphic* pGraphic = rOLENode.GetGraphic();
+    Size aMapped(pGraphic->GetPrefSize());
+    const SwCropGrf &rCr = (const SwCropGrf &)rOLENode.GetAttr(RES_GRFATR_CROPGRF);
+    const sal_Char* pBLIPType = OOO_STRING_SVTOOLS_RTF_PNGBLIP;
+    const sal_uInt8* pGraphicAry = 0;
+    SvMemoryStream aStream;
+    if (GraphicConverter::Export(aStream, *pGraphic, CVT_PNG) != ERRCODE_NONE)
+        OSL_FAIL("failed to export the graphic");
+    aStream.Seek(STREAM_SEEK_TO_END);
+    sal_uInt32 nSize = aStream.Tell();
+    pGraphicAry = (sal_uInt8*)aStream.GetData();
+    m_aRunText->append(ExportPICT( pFlyFrmFmt, aSize, aRendered, aMapped, rCr, pBLIPType, pGraphicAry, nSize, m_rExport ));
+    m_aRunText->append("}"); // shppict
+    m_aRunText->append("{" OOO_STRING_SVTOOLS_RTF_NONSHPPICT);
+    pBLIPType = OOO_STRING_SVTOOLS_RTF_WMETAFILE;
+    SvMemoryStream aWmfStream;
+    if (GraphicConverter::Export(aWmfStream, *pGraphic, CVT_WMF) != ERRCODE_NONE)
+        OSL_FAIL("failed to export the graphic");
+    aWmfStream.Seek(STREAM_SEEK_TO_END);
+    nSize = aWmfStream.Tell();
+    pGraphicAry = (sal_uInt8*)aStream.GetData();
+    m_aRunText->append(ExportPICT( pFlyFrmFmt, aSize, aRendered, aMapped, rCr, pBLIPType, pGraphicAry, nSize, m_rExport ));
+    m_aRunText->append("}"); // nonshppict
+
+    m_aRunText->append("}"); // mmathPict
+    m_aRunText->append("}"); // mmath
 
     return true;
 }
@@ -3405,7 +3439,7 @@ void RtfAttributeOutput::FlyFrameOLE( const SwFlyFrmFmt* pFlyFrmFmt, SwOLENode& 
 {
     SAL_INFO("sw.rtf", OSL_THIS_FUNC);
 
-    if (FlyFrameOLEMath(rOLENode))
+    if (FlyFrameOLEMath(pFlyFrmFmt, rOLENode, rSize))
         return;
 
     SvMemoryStream aStream;

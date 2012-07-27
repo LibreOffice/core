@@ -2018,6 +2018,7 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
             }
             break;
         case RTF_NONSHPPICT:
+        case RTF_MMATHPICT: // Picture group used by readers not understanding \moMath group
             m_aStates.top().nDestinationState = DESTINATION_SKIP;
             break;
         case RTF_CLBRDRT:
