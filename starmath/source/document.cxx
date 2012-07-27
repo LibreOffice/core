@@ -983,7 +983,7 @@ bool SmDocShell::writeFormulaOoxml( ::sax_fastparser::FSHelperPtr m_pSerializer,
         Parse();
     if( pTree && !IsFormulaArranged() )
         ArrangeFormula();
-    SmOoxmlExport aEquation( aText, pTree, version );
+    SmOoxmlExport aEquation( pTree, version );
     return aEquation.ConvertFromStarMath( m_pSerializer );
 }
 
