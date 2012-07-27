@@ -61,9 +61,10 @@ DBG_NAMEEX( Region )
 
 // =======================================================================
 
-static long aImplNumeratorAry[MAP_PIXEL+1] =
+static int const s_ImplArySize = MAP_PIXEL+1;
+static long aImplNumeratorAry[s_ImplArySize] =
     {    1,   1,   5,  50,    1,   1,  1, 1,  1,    1, 1 };
-static long aImplDenominatorAry[MAP_PIXEL+1] =
+static long aImplDenominatorAry[s_ImplArySize] =
      { 2540, 254, 127, 127, 1000, 100, 10, 1, 72, 1440, 1 };
 
 // -----------------------------------------------------------------------
@@ -1660,9 +1661,9 @@ basegfx::B2DPolyPolygon OutputDevice::PixelToLogic( const basegfx::B2DPolyPolygo
 #define ENTER3( eUnitSource, eUnitDest )                                \
     long nNumerator      = 1;       \
     long nDenominator    = 1;       \
-    DBG_ASSERT( eUnitSource <= MAP_PIXEL, "nonpermitted source map unit");  \
-    DBG_ASSERT( eUnitDest <= MAP_PIXEL, "nonpermitted destination map unit");   \
-    if( (eUnitSource <= MAP_PIXEL) && (eUnitDest <= MAP_PIXEL) )    \
+	DBG_ASSERT( eUnitSource < s_ImplArySize, "Invalid source map unit");	\
+	DBG_ASSERT( eUnitDest < s_ImplArySize, "Invalid destination map unit");	\
+	if( (eUnitSource < s_ImplArySize) && (eUnitDest < s_ImplArySize) )	\
     {   \
         nNumerator   = aImplNumeratorAry[eUnitSource] *             \
                            aImplDenominatorAry[eUnitDest];              \
