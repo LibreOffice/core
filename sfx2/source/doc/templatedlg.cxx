@@ -537,42 +537,17 @@ IMPL_LINK(SfxTemplateManagerDlg, MoveMenuSelectHdl, Menu*, pMenu)
 {
     sal_uInt16 nMenuId = pMenu->GetCurItemId();
 
-    if (nMenuId == MNI_MOVE_NEW)
+    if (mpSearchView->IsVisible())
     {
-        InputDialog dlg(SfxResId(STR_INPUT_NEW).toString(),this);
-
-        int ret = dlg.Execute();
-
-        if (ret)
-        {
-            rtl::OUString aName = dlg.getEntryText();
-
-            if (!aName.isEmpty())
-            {
-                sal_uInt16 nNewRegionId = maView->createRegion(aName);
-
-                if (nNewRegionId)
-                {
-                    // Move templates to desired folder if for some reason move fails
-                    // try copying them.
-                    if (!maView->moveTemplates(maSelTemplates,nNewRegionId,false) &&
-                            !maView->moveTemplates(maSelTemplates,nNewRegionId,true))
-                    {
-                    }
-                }
-            }
-        }
+        // Check if we are searching the local or remote templates
+        if (mpCurView == maView)
+            localSearchMoveTo(nMenuId);
     }
     else
     {
-        // Try to move the template, if isnt possible try to copy it.
-
-        sal_uInt16 nItemId = maView->GetItemId(nMenuId-MNI_MOVE_FOLDER_BASE);
-
-        if (!maView->moveTemplates(maSelTemplates,nItemId,false) &&
-                !maView->moveTemplates(maSelTemplates,nItemId,true))
-        {
-        }
+        // Check if we are displaying the local or remote templates
+        if (mpCurView == maView)
+            localMoveTo(nMenuId);
     }
 
     return 0;
@@ -861,6 +836,74 @@ void SfxTemplateManagerDlg::switchMainView(bool bDisplayLocal)
 
         maView->Hide();
         mpOnlineView->Show();
+    }
+}
+
+void SfxTemplateManagerDlg::localMoveTo(sal_uInt16 nMenuId)
+{
+    sal_uInt16 nItemId = 0;
+
+    if (nMenuId == MNI_MOVE_NEW)
+    {
+        InputDialog dlg(SfxResId(STR_INPUT_NEW).toString(),this);
+
+        int ret = dlg.Execute();
+
+        if (ret)
+        {
+            rtl::OUString aName = dlg.getEntryText();
+
+            if (!aName.isEmpty())
+                nItemId = maView->createRegion(aName);
+        }
+    }
+    else
+    {
+        nItemId = maView->GetItemId(nMenuId-MNI_MOVE_FOLDER_BASE);
+    }
+
+    if (nItemId)
+    {
+        // Move templates to desired folder if for some reason move fails
+        // try copying them.
+        if (!maView->moveTemplates(maSelTemplates,nItemId,false) &&
+                !maView->moveTemplates(maSelTemplates,nItemId,true))
+        {
+        }
+    }
+}
+
+void SfxTemplateManagerDlg::localSearchMoveTo(sal_uInt16 nMenuId)
+{
+    sal_uInt16 nItemId = 0;
+
+    if (nMenuId == MNI_MOVE_NEW)
+    {
+        InputDialog dlg(SfxResId(STR_INPUT_NEW).toString(),this);
+
+        int ret = dlg.Execute();
+
+        if (ret)
+        {
+            rtl::OUString aName = dlg.getEntryText();
+
+            if (!aName.isEmpty())
+                nItemId = maView->createRegion(aName);
+        }
+    }
+    else
+    {
+        nItemId = maView->GetItemId(nMenuId-MNI_MOVE_FOLDER_BASE);
+    }
+
+    if (nItemId)
+    {
+        // Move templates to desired folder if for some reason move fails
+        // try copying them.
+        if (!maView->moveTemplates(maSelTemplates,nItemId,false) &&
+                !maView->moveTemplates(maSelTemplates,nItemId,true))
+        {
+        }
     }
 }
 

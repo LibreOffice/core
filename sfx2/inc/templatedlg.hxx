@@ -81,6 +81,22 @@ private:
     // Exchange view between local/online view.
     void switchMainView (bool bDisplayLocal);
 
+    /**
+     *
+     * Move templates stored in the filesystem to another folder.
+     *
+     **/
+
+    void localMoveTo (sal_uInt16 nMenuId);
+
+    /**
+     *
+     * Move search result templates stored in the filesystem to another folder.
+     *
+     **/
+
+    void localSearchMoveTo (sal_uInt16 nMenuId);
+
 private:
 
     PushButton aButtonAll;
