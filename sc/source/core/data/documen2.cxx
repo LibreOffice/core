@@ -871,6 +871,12 @@ bool ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pOnlyM
         SetNoListening( false );
         maTabs[nOldPos]->StartAllListeners();
         maTabs[nNewPos]->StartAllListeners();
+
+        ScConditionalFormatList* pNewList = new ScConditionalFormatList(*maTabs[nOldPos]->GetCondFormList());
+        pNewList->UpdateReference(URM_COPY, ScRange( 0, 0, nNewPos , MAXCOL, MAXROW,
+                                        nNewPos), 0, 0, nDz);
+        maTabs[nNewPos]->SetCondFormList( pNewList );
+
         SetDirty();
         SetAutoCalc( bOldAutoCalc );
 
