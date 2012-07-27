@@ -331,7 +331,7 @@ sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly, ErrCode& nError)
 
     xml::sax::InputSource aParserInput;
     if (pMedium)
-        aParserInput.sSystemId = OUString(pMedium->GetName());
+        aParserInput.sSystemId = pMedium->GetName();
 
     if ( !xStorage.is() && pMedium )
         xStorage = pMedium->GetStorage();
