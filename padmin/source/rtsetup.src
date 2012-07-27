@@ -175,7 +175,7 @@ TabPage RID_RTS_DEVICEPAGE
     FixedText RID_RTS_DEVICE_PRINTLANG_TXT
     {
         Pos = MAP_APPFONT( 5, 130 );
-        Size = MAP_APPFONT( 80, 8 );
+        Size = MAP_APPFONT( 100, 8 );
         Text [ en-US ] = "Printer ~Language type";
     };
     ListBox RID_RTS_DEVICE_PRINTLANG_BOX
