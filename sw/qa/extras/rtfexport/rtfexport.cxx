@@ -63,6 +63,10 @@ public:
     void testMathLimupp();
     void testMathStrikeh();
     void testMathPlaceholders();
+    void testMathRad();
+    void testMathSepchr();
+    void testMathSubscripts();
+    void testMathVerticalstacks();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -88,6 +92,10 @@ public:
     CPPUNIT_TEST(testMathLimupp);
     CPPUNIT_TEST(testMathStrikeh);
     CPPUNIT_TEST(testMathPlaceholders);
+    CPPUNIT_TEST(testMathRad);
+    CPPUNIT_TEST(testMathSepchr);
+    CPPUNIT_TEST(testMathSubscripts);
+    CPPUNIT_TEST(testMathVerticalstacks);
 #endif
 #endif
     CPPUNIT_TEST_SUITE_END();
@@ -356,6 +364,37 @@ void Test::testMathPlaceholders()
     roundtrip("math-placeholders.rtf");
     OUString aActual = getFormula(getRun(getParagraph(1), 1));
     CPPUNIT_ASSERT_EQUAL(OUString("sum from <?> to <?> <?>"), aActual);
+}
+
+void Test::testMathRad()
+{
+    roundtrip("math-rad.rtf");
+    OUString aActual = getFormula(getRun(getParagraph(1), 1));
+    CPPUNIT_ASSERT_EQUAL(OUString("sqrt {4} nroot {3} {x + 1}"), aActual);
+}
+
+void Test::testMathSepchr()
+{
+    roundtrip("math-sepchr.rtf");
+    OUString aActual = getFormula(getRun(getParagraph(1), 1));
+    CPPUNIT_ASSERT_EQUAL(OUString("AxByBzC"), aActual);
+}
+
+void Test::testMathSubscripts()
+{
+    roundtrip("math-subscripts.rtf");
+    OUString aActual = getFormula(getRun(getParagraph(1), 1));
+    OUString aExpected("{x} ^ {y} + {e} ^ {x} {x} ^ {b} {x} rsub {b} {a} rsub {c} rsup {b} {x} lsub {2} lsup {1} {{x csup {6} csub {3}} lsub {4} lsup {5}} rsub {2} rsup {1}");
+    CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
+}
+
+void Test::testMathVerticalstacks()
+{
+    roundtrip("math-vertical-stacks.rtf");
+    CPPUNIT_ASSERT_EQUAL(OUString("{a} over {b}"), getFormula(getRun(getParagraph(1), 1)));
+    CPPUNIT_ASSERT_EQUAL(OUString("{a} / {b}"), getFormula(getRun(getParagraph(2), 1)));
+    CPPUNIT_ASSERT_EQUAL(OUString("stack { a # b }"), getFormula(getRun(getParagraph(3), 1)));
+    CPPUNIT_ASSERT_EQUAL(OUString("stack { a # stack { b # c } }"), getFormula(getRun(getParagraph(4), 1)));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
