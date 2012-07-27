@@ -2990,6 +2990,12 @@ void GtkSalFrame::popIgnoreDamage()
 {
     m_nDuringRender--;
 }
+
+bool GtkSalFrame::isDuringRender()
+{
+    return m_nDuringRender;
+}
+
 #endif
 
 void GtkSalFrame::damaged (const basegfx::B2IBox& rDamageRect)
@@ -2997,27 +3003,29 @@ void GtkSalFrame::damaged (const basegfx::B2IBox& rDamageRect)
 #if !GTK_CHECK_VERSION(3,0,0)
     (void)rDamageRect;
 #else
-    if (m_nDuringRender)
+    if ( isDuringRender() )
         return;
 #if OSL_DEBUG_LEVEL > 1
     long long area = rDamageRect.getWidth() * rDamageRect.getHeight();
     if( area > 32 * 1024 )
-        fprintf( stderr, "bitmap damaged  %d %d (%dx%d) area %lld\n",
+    {
+        fprintf( stderr, "bitmap damaged  %d %d (%dx%d) area %lld widget\n",
                  (int) rDamageRect.getMinX(),
                  (int) rDamageRect.getMinY(),
                  (int) rDamageRect.getWidth(),
                  (int) rDamageRect.getHeight(),
                  area );
+    }
 #endif
     /* FIXME: this is a dirty hack, to render buttons correctly, we
      * should of course remove the -100 and + 200, but the whole area
      * won't be rendered then.
      */
     gtk_widget_queue_draw_area( m_pWindow,
-                                rDamageRect.getMinX() - 100,
-                                rDamageRect.getMinY() - 100,
-                                rDamageRect.getWidth() + 200,
-                                rDamageRect.getHeight() + 200 );
+                                rDamageRect.getMinX() - 1,
+                                rDamageRect.getMinY() - 1,
+                                rDamageRect.getWidth() + 2,
+                                rDamageRect.getHeight() + 2 );
 #endif
 }
 
