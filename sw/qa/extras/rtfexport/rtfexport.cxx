@@ -62,6 +62,7 @@ public:
     void testMathNary();
     void testMathLimupp();
     void testMathStrikeh();
+    void testMathPlaceholders();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -86,6 +87,7 @@ public:
     CPPUNIT_TEST(testMathNary);
     CPPUNIT_TEST(testMathLimupp);
     CPPUNIT_TEST(testMathStrikeh);
+    CPPUNIT_TEST(testMathPlaceholders);
 #endif
 #endif
     CPPUNIT_TEST_SUITE_END();
@@ -347,6 +349,13 @@ void Test::testMathStrikeh()
     roundtrip("math-strikeh.rtf");
     OUString aActual = getFormula(getRun(getParagraph(1), 1));
     CPPUNIT_ASSERT_EQUAL(OUString("overstrike {abc}"), aActual);
+}
+
+void Test::testMathPlaceholders()
+{
+    roundtrip("math-placeholders.rtf");
+    OUString aActual = getFormula(getRun(getParagraph(1), 1));
+    CPPUNIT_ASSERT_EQUAL(OUString("sum from <?> to <?> <?>"), aActual);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
