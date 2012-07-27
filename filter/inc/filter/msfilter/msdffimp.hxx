@@ -32,7 +32,6 @@
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <tools/solar.h>
-#include <svl/svarray.hxx>
 #include <tools/color.hxx>
 #include <tools/gen.hxx>
 #include <svx/msdffdef.hxx>
@@ -46,6 +45,7 @@
 #include <set>
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <boost/ptr_container/ptr_set.hpp>
+#include <o3tl/sorted_vector.hxx>
 
 class Graphic;
 class SvStream;
@@ -177,7 +177,6 @@ public:
 
 #define COL_DEFAULT RGB_COLORDATA( 0xFA, 0xFB, 0xFC )
 
-typedef SvxMSDffShapeInfo* SvxMSDffShapeInfo_Ptr;
 typedef ::std::map< sal_Int32, SdrObject* > SvxMSDffShapeIdContainer;
 
 #define SVEXT_PERSIST_STREAM "\002OlePres000"
@@ -191,7 +190,16 @@ public:
 };
 
 // the following will be sorted explicitly:
-SV_DECL_PTRARR_SORT_DEL_VISIBILITY( SvxMSDffShapeInfos, SvxMSDffShapeInfo_Ptr, 16, MSFILTER_DLLPUBLIC )
+class SvxMSDffShapeInfos
+    : public o3tl::sorted_vector<SvxMSDffShapeInfo*,
+                o3tl::less_ptr_to<SvxMSDffShapeInfo> >
+{
+public:
+    ~SvxMSDffShapeInfos()
+    {
+        DeleteAndDestroyAll();
+    }
+};
 
 #define SVXMSDFF_SETTINGS_CROP_BITMAPS      1
 #define SVXMSDFF_SETTINGS_IMPORT_PPT        2

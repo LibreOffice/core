@@ -5362,10 +5362,10 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
                 SvxMSDffShapeInfo aTmpRec( 0, pImpRec->nShapeId );
                 aTmpRec.bSortByShapeId = sal_True;
 
-                sal_uInt16 nFound;
-                if( pShapeInfos->Seek_Entry( &aTmpRec, &nFound ) )
+                SvxMSDffShapeInfos::const_iterator it = pShapeInfos->find( &aTmpRec );
+                if( it != pShapeInfos->end() )
                 {
-                    SvxMSDffShapeInfo& rInfo = *pShapeInfos->GetObject(nFound);
+                    SvxMSDffShapeInfo& rInfo = **it;
                     pTextImpRec->bReplaceByFly   = rInfo.bReplaceByFly;
                     pTextImpRec->bLastBoxInChain = rInfo.bLastBoxInChain;
                 }
@@ -5715,13 +5715,6 @@ void SvxMSDffManager::RemoveFromShapeOrder( SdrObject* pObject ) const
 
 
 //---------------------------------------------------------------------------
-//  Hilfs Deklarationen
-//---------------------------------------------------------------------------
-
-SV_IMPL_OP_PTRARR_SORT( SvxMSDffShapeInfos,     SvxMSDffShapeInfo_Ptr   );
-
-
-//---------------------------------------------------------------------------
 //  exported class: Public Methods
 //---------------------------------------------------------------------------
 
@@ -5896,10 +5889,8 @@ void SvxMSDffManager::GetFidclData( sal_uInt32 nOffsDggL )
 void SvxMSDffManager::CheckTxBxStoryChain()
 {
     SvxMSDffShapeInfos* pOld = pShapeInfos;
-    sal_uInt16 nCnt             = pOld->Count();
-    pShapeInfos             = new SvxMSDffShapeInfos( (nCnt < 255)
-                                                     ? nCnt
-                                                     : 255 );
+    sal_uInt16 nCnt             = pOld->size();
+    pShapeInfos             = new SvxMSDffShapeInfos;
     // altes Info-Array ueberarbeiten
     // (ist sortiert nach nTxBxComp)
     sal_uLong nChain    = ULONG_MAX;
@@ -5908,7 +5899,7 @@ void SvxMSDffManager::CheckTxBxStoryChain()
     sal_uInt16 nObj;
     for( nObj = 0; nObj < nCnt; ++nObj )
     {
-        SvxMSDffShapeInfo* pObj = pOld->GetObject( nObj );
+        SvxMSDffShapeInfo* pObj = (*pOld)[nObj];
         if( pObj->nTxBxComp )
         {
             pObj->bLastBoxInChain = sal_False;
@@ -5921,7 +5912,7 @@ void SvxMSDffManager::CheckTxBxStoryChain()
             {
                 // voriger war letzter seiner Gruppe
                 if( nObj )
-                    pOld->GetObject( nObj-1 )->bLastBoxInChain = sal_True;
+                    (*pOld)[ nObj-1 ]->bLastBoxInChain = sal_True;
                 // Merker und Hilfs-Flag zuruecksetzen
                 nObjMark = nObj;
                 nChain = pObj->nTxBxComp;
@@ -5935,7 +5926,7 @@ void SvxMSDffManager::CheckTxBxStoryChain()
                 bSetReplaceFALSE = sal_True;
                 // ggfs Flag in Anfang der Gruppe austragen
                 for( sal_uInt16 nObj2 = nObjMark; nObj2 < nObj; ++nObj2 )
-                    pOld->GetObject( nObj2 )->bReplaceByFly = sal_False;
+                    (*pOld)[ nObj2 ]->bReplaceByFly = sal_False;
             }
 
             if( bSetReplaceFALSE )
@@ -5947,13 +5938,13 @@ void SvxMSDffManager::CheckTxBxStoryChain()
         // (aber nach nShapeId sortieren)
         pObj->bSortByShapeId = sal_True;
         pObj->nTxBxComp = pObj->nTxBxComp & 0xFFFF0000;
-        pShapeInfos->Insert( pObj );
+        pShapeInfos->insert( pObj );
     }
     // voriger war letzter seiner Gruppe
     if( nObj )
-        pOld->GetObject( nObj-1 )->bLastBoxInChain = sal_True;
+        (*pOld)[ nObj-1 ]->bLastBoxInChain = sal_True;
     // urspruengliches Array freigeben, ohne Objekte zu zerstoeren
-    pOld->Remove((sal_uInt16)0, nCnt);
+    pOld->clear();
     delete pOld;
 }
 
@@ -6357,7 +6348,7 @@ sal_Bool SvxMSDffManager::GetShapeContainerData( SvStream& rSt,
         {
             aInfo.bReplaceByFly = sal_True;
         }
-        pShapeInfos->Insert(  new SvxMSDffShapeInfo(  aInfo          ) );
+        pShapeInfos->insert(  new SvxMSDffShapeInfo(  aInfo          ) );
         pShapeOrders->push_back( new SvxMSDffShapeOrder( aInfo.nShapeId ) );
     }
 
@@ -6379,11 +6370,9 @@ sal_Bool SvxMSDffManager::GetShape(sal_uLong nId, SdrObject*&         rpShape,
     SvxMSDffShapeInfo aTmpRec(0, nId);
     aTmpRec.bSortByShapeId = sal_True;
 
-    sal_uInt16 nFound;
-    if( pShapeInfos->Seek_Entry(&aTmpRec, &nFound) )
+    SvxMSDffShapeInfos::const_iterator it = pShapeInfos->find( &aTmpRec );
+    if( it != pShapeInfos->end() )
     {
-        SvxMSDffShapeInfo& rInfo = *pShapeInfos->GetObject( nFound );
-
         // eventuell altes Errorflag loeschen
         if( rStCtrl.GetError() )
             rStCtrl.ResetError();
@@ -6391,7 +6380,8 @@ sal_Bool SvxMSDffManager::GetShape(sal_uLong nId, SdrObject*&         rpShape,
         sal_uLong nOldPosCtrl = rStCtrl.Tell();
         sal_uLong nOldPosData = pStData ? pStData->Tell() : nOldPosCtrl;
         // das Shape im Steuer Stream anspringen
-        bool bSeeked = (rInfo.nFilePos == rStCtrl.Seek(rInfo.nFilePos));
+        sal_uLong const nFilePos((*it)->nFilePos);
+        bool bSeeked = (nFilePos == rStCtrl.Seek(nFilePos));
 
         // Falls missglueckt, den Fehlerstatus zuruecksetzen und Pech gehabt!
         if (!bSeeked || rStCtrl.GetError())

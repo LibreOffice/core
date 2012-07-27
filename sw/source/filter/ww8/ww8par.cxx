@@ -594,10 +594,10 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
                 SvxMSDffShapeInfo aTmpRec( 0, pImpRec->nShapeId );
                 aTmpRec.bSortByShapeId = sal_True;
 
-                sal_uInt16 nFound;
-                if( GetShapeInfos()->Seek_Entry( &aTmpRec, &nFound ) )
+                SvxMSDffShapeInfos::const_iterator it = GetShapeInfos()->find( &aTmpRec );
+                if( it != GetShapeInfos()->end() )
                 {
-                    SvxMSDffShapeInfo& rInfo = *GetShapeInfos()->GetObject(nFound);
+                    SvxMSDffShapeInfo& rInfo = **it;
                     pImpRec->bReplaceByFly   = rInfo.bReplaceByFly;
                     pImpRec->bLastBoxInChain = rInfo.bLastBoxInChain;
                 }
