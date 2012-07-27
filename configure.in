@@ -1011,6 +1011,12 @@ AC_ARG_ENABLE(coretext,
         [Use CoreText framework on Mac (instead of ATSU).]),
 )
 
+AC_ARG_ENABLE(winegcc,
+    AS_HELP_STRING([--enable-winegcc],
+        [Enable use of winegcc during the build, in order to create msi* tools
+         needed for MinGW cross-compilation.]),
+)
+
 dnl ===================================================================
 dnl Optional Packages (--with/without-)
 dnl ===================================================================
@@ -3557,6 +3563,7 @@ if test "$cross_compiling" = "yes"; then
     test -n "$with_system_expat_for_build" && sub_conf_opts="$sub_conf_opts --with-system-expat"
     test "$with_system_icu_for_build" = "yes" -o "$with_system_icu_for_build" = "force" && sub_conf_opts="$sub_conf_opts --with-system-icu"
     test -n "$with_system_libxml_for_build" && sub_conf_opts="$sub_conf_opts --with-system-libxml"
+    test "$WITH_MINGW" = "yes" && sub_conf_opts="$sub_conf_opts --enable-winegcc"
     sub_conf_opts="$sub_conf_opts $with_build_platform_configure_options"
     ./configure \
         --disable-mozilla \
@@ -6106,13 +6113,16 @@ AC_SUBST(BUILD_EPM)
 dnl ===================================================================
 dnl We need winegcc when building MinGW build to be able to cross-build msi tools
 dnl ===================================================================
-AC_PATH_PROG(WINEGCC, winegcc)
-if test "$WITH_MINGW" = "yes" -a "$PKGFORMAT" = "msi" ; then
+WINEGCC=
+if test "$enable_winegcc" = "yes" ; then
+    AC_PATH_PROG(WINEGCC, winegcc)
     if test "$WINEGCC" = ""; then
         AC_MSG_ERROR([winegcc was not found, please install wine-devel, or wine-devel-32bit])
     fi
     CC_save="$CC"
+    ac_exeext_save="$ac_exeext"
     CC="$WINEGCC -m32"
+    ac_exeext=".exe"
     AC_LINK_IFELSE([AC_LANG_PROGRAM([
 #include <stdio.h>
         ],[
@@ -6121,7 +6131,9 @@ printf ("hello world\n");
         [AC_MSG_ERROR([winegcc cannot build 32bit binaries, please install glibc-devel-32bit and gcc-32bit])]
     )
     CC="$CC_save"
+    ac_exeext="$ac_exeext_save"
 fi
+AC_SUBST(WINEGCC)
 
 dnl ===================================================================
 dnl Check for gperf
