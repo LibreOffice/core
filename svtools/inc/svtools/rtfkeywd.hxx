@@ -1201,6 +1201,8 @@
 #define LO_STRING_SVTOOLS_RTF_MSUP "\\msup"
 #define LO_STRING_SVTOOLS_RTF_MTYPE "\\mtype"
 #define LO_STRING_SVTOOLS_RTF_MVERTJC "\\mvertJc"
+#define LO_STRING_SVTOOLS_RTF_MMATH "\\mmath"
+#define LO_STRING_SVTOOLS_RTF_MMATHPICT "\\mmathPict"
 
 #endif // _RTFKEYWD_HXX
 

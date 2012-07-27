@@ -419,7 +419,7 @@ private:
     /// Output graphic fly frames.
     void FlyFrameGraphic( const SwFlyFrmFmt* pFlyFrmFmt, const SwGrfNode* pGrfNode );
     void FlyFrameOLE( const SwFlyFrmFmt* pFlyFrmFmt, SwOLENode& rOLENode, const Size& rSize );
-    void FlyFrameOLEData( SwOLENode& rOLENode );
+    void FlyFrameOLEReplacement(const SwFlyFrmFmt* pFlyFrmFmt, SwOLENode& rOLENode, const Size& rSize);
     /// Math export.
     bool FlyFrameOLEMath(const SwFlyFrmFmt* pFlyFrmFmt, SwOLENode& rOLENode, const Size& rSize);
 
