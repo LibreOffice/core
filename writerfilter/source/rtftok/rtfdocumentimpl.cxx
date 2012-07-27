@@ -801,7 +801,13 @@ int RTFDocumentImpl::resolvePict(bool bInline)
     }
     writerfilter::Reference<Properties>::Pointer_t const pProperties(new RTFReferenceProperties(aAttributes, aSprms));
     checkFirstRun();
-    Mapper().props(pProperties);
+    if (!m_pCurrentBuffer)
+        Mapper().props(pProperties);
+    else
+    {
+        RTFValue::Pointer_t pValue(new RTFValue(aAttributes, aSprms));
+        m_pCurrentBuffer->push_back(make_pair(BUFFER_PROPS, pValue));
+    }
 
     return 0;
 }
