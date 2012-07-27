@@ -22,6 +22,8 @@
 
 #include <tools/errcode.hxx>
 
+#define SCERR_NONE 0
+
 // ERRCODE_CLASS_READ - file related, displays "Read-Error" in MsgBox
 #define SCERR_IMPORT_CONNECT        (   1 | ERRCODE_CLASS_READ | ERRCODE_AREA_SC )
 #define SCERR_IMPORT_OPEN           (   2 | ERRCODE_CLASS_READ | ERRCODE_AREA_SC )

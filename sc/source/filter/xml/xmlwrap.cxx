@@ -135,7 +135,7 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(uno::Reference<lang::XMultiSe
                 sStream = sOldDocName;
             }
             else
-                return false;
+                return SCERR_NONE;
 
             aParserInput.aInputStream = xDocStream->getInputStream();
             uno::Reference < beans::XPropertySet > xSet( xDocStream, uno::UNO_QUERY );
@@ -170,7 +170,7 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(uno::Reference<lang::XMultiSe
         xInfoSet->setPropertyValue( sPropName, uno::makeAny( sStream ) );
     }
 
-    sal_uInt32 nReturn(0);
+    sal_uInt32 nReturn = SCERR_NONE;
     rDoc.SetRangeOverflowType(0);   // is modified by the importer if limits are exceeded
 
     uno::Reference<xml::sax::XDocumentHandler> xDocHandler(
