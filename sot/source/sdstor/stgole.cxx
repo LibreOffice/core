@@ -115,23 +115,28 @@ sal_Bool StgCompObjStream::Load()
         *this >> aClsId;
         sal_Int32 nLen1 = 0;
         *this >> nLen1;
-        // higher bits are ignored
-        nLen1 &= 0xFFFF;
-        sal_Char* p = new sal_Char[ (sal_uInt16) nLen1 ];
-        if( Read( p, nLen1 ) == (sal_uLong) nLen1 )
+        if ( nLen1 > 0 )
         {
-            //The encoding here is "ANSI", which is pretty useless seeing as
-            //the actual codepage used doesn't seem to be specified/stored
-            //anywhere :-(. Might as well pick 1252 and be consistent on
-            //all platforms and envs
-            //http://www.openoffice.org/nonav/issues/showattachment.cgi/68668/Orginal%20Document.doc
-            //for a good edge-case example
-            aUserName = nLen1 ? String( p, RTL_TEXTENCODING_MS_1252 ) : String();
-            nCbFormat = ReadClipboardFormat( *this );
+            // higher bits are ignored
+            sal_uLong nStrLen = ::std::min( nLen1, (sal_Int32)0xFFFE );
+
+            sal_Char* p = new sal_Char[ nStrLen+1 ];
+            p[nStrLen] = 0;
+            if( Read( p, nStrLen ) == nStrLen )
+            {
+                //The encoding here is "ANSI", which is pretty useless seeing as
+                //the actual codepage used doesn't seem to be specified/stored
+                //anywhere :-(. Might as well pick 1252 and be consistent on
+                //all platforms and envs
+                //http://www.openoffice.org/nonav/issues/showattachment.cgi/68668/Orginal%20Document.doc
+                //for a good edge-case example
+                aUserName = nStrLen ? String( p, RTL_TEXTENCODING_MS_1252 ) : String();
+                nCbFormat = ReadClipboardFormat( *this );
+            }
+            else
+                SetError( SVSTREAM_GENERALERROR );
+            delete [] p;
         }
-        else
-            SetError( SVSTREAM_GENERALERROR );
-        delete [] p;
     }
     return sal_Bool( GetError() == SVSTREAM_OK );
 }

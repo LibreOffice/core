@@ -35,8 +35,8 @@ sal_uLong ReadClipboardFormat( SvStream & rStm )
     if( nLen > 0 )
     {
         // get a string name
-        sal_Char * p = new sal_Char[ nLen ];
-        if( rStm.Read( p, nLen ) == (sal_uLong) nLen )
+        sal_Char * p = new( ::std::nothrow ) sal_Char[ nLen ];
+        if( p && rStm.Read( p, nLen ) == (sal_uLong) nLen )
         {
             nFormat = SotExchange::RegisterFormatName(rtl::OUString(p, nLen-1, RTL_TEXTENCODING_ASCII_US));
         }

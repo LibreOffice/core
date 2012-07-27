@@ -60,6 +60,7 @@ typedef boost::unordered_map
 
 StgPage::StgPage( StgCache* p, short n )
 {
+    OSL_ENSURE( n >= 512, "Unexpected page size is provided!" );
     pCache = p;
     nData  = n;
     bDirty = sal_False;
@@ -123,11 +124,15 @@ StgCache::~StgCache()
 
 void StgCache::SetPhysPageSize( short n )
 {
-    nPageSize = n;
-    sal_uLong nPos = pStrm->Tell();
-    sal_uLong nFileSize = pStrm->Seek( STREAM_SEEK_TO_END );
-    nPages = lcl_GetPageCount( nFileSize, nPageSize );
-    pStrm->Seek( nPos );
+    OSL_ENSURE( n >= 512, "Unexpecte page size is provided!" );
+    if ( n >= 512 )
+    {
+        nPageSize = n;
+        sal_uLong nPos = pStrm->Tell();
+        sal_uLong nFileSize = pStrm->Seek( STREAM_SEEK_TO_END );
+        nPages = lcl_GetPageCount( nFileSize, nPageSize );
+        pStrm->Seek( nPos );
+    }
 }
 
 // Create a new cache element
@@ -181,19 +186,24 @@ StgPage* StgCache::Create( sal_Int32 nPg )
 
 void StgCache::Erase( StgPage* pElem )
 {
-    //remove from LRU
-    pElem->pNext1->pLast1 = pElem->pLast1;
-    pElem->pLast1->pNext1 = pElem->pNext1;
-    if( pCur == pElem )
-        pCur = ( pElem->pNext1 == pElem ) ? NULL : pElem->pNext1;
-    if( pLRUCache )
-        ((UsrStgPagePtr_Impl*)pLRUCache)->erase( pElem->nPage );
-    // remove from Sorted
-    pElem->pNext2->pLast2 = pElem->pLast2;
-    pElem->pLast2->pNext2 = pElem->pNext2;
-    if( pElem1 == pElem )
-        pElem1 = ( pElem->pNext2 == pElem ) ? NULL : pElem->pNext2;
-    delete pElem;
+    OSL_ENSURE( pElem, "The pointer should not be NULL!" );
+    if ( pElem )
+    {
+        OSL_ENSURE( pElem->pNext1 && pElem->pLast1, "The pointers may not be NULL!" );
+        //remove from LRU
+        pElem->pNext1->pLast1 = pElem->pLast1;
+        pElem->pLast1->pNext1 = pElem->pNext1;
+        if( pCur == pElem )
+            pCur = ( pElem->pNext1 == pElem ) ? NULL : pElem->pNext1;
+        if( pLRUCache )
+            ((UsrStgPagePtr_Impl*)pLRUCache)->erase( pElem->nPage );
+        // remove from Sorted
+        pElem->pNext2->pLast2 = pElem->pLast2;
+        pElem->pLast2->pNext2 = pElem->pNext2;
+        if( pElem1 == pElem )
+            pElem1 = ( pElem->pNext2 == pElem ) ? NULL : pElem->pNext2;
+        delete pElem;
+    }
 }
 
 // remove all cache elements without flushing them
@@ -225,9 +235,11 @@ StgPage* StgCache::Find( sal_Int32 nPage )
     {
         // page found
         StgPage* pFound = (*aIt).second;
+        OSL_ENSURE( pFound, "The pointer may not be NULL!" );
 
         if( pFound != pCur )
         {
+            OSL_ENSURE( pFound->pNext1 && pFound->pLast1, "The pointers may not be NULL!" );
             // remove from LRU
             pFound->pNext1->pLast1 = pFound->pLast1;
             pFound->pLast1->pNext1 = pFound->pNext1;
@@ -274,7 +286,10 @@ StgPage* StgCache::Copy( sal_Int32 nNew, sal_Int32 nOld )
         // old page: we must have this data!
         StgPage* q = Get( nOld, sal_True );
         if( q )
+        {
+            OSL_ENSURE( p->nData == q->nData, "Unexpected page size!" );
             memcpy( p->pData, q->pData, p->nData );
+        }
     }
     p->SetDirty();
     return p;
@@ -449,8 +464,12 @@ sal_Bool StgCache::Write( sal_Int32 nPage, void* pBuf, sal_Int32 nPg )
     if( Good() )
     {
         sal_uLong nPos = Page2Pos( nPage );
-        sal_uLong nBytes = nPg * nPageSize;
+        sal_uLong nBytes = 0;
+        if ( SAL_MAX_INT32 / nPg > nPageSize )
+            nBytes = nPg * nPageSize;
+
         // fixed address and size for the header
+        // nPageSize must be >= 512, otherwise the header can not be written here, we check it on import
         if( nPage == -1 )
             nPos = 0L, nBytes = 512;
         if( pStrm->Tell() != nPos )
