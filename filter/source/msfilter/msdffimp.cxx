@@ -3225,6 +3225,20 @@ DffRecordHeader* DffRecordManager::GetRecordHeader( sal_uInt16 nRecId, DffSeekTo
 //  private Methoden
 //---------------------------------------------------------------------------
 
+bool CompareSvxMSDffShapeInfoById::operator() (
+    ::boost::shared_ptr<SvxMSDffShapeInfo> const& lhs,
+    ::boost::shared_ptr<SvxMSDffShapeInfo> const& rhs) const
+{
+    return lhs->nShapeId < rhs->nShapeId;
+}
+
+bool CompareSvxMSDffShapeInfoByTxBxComp::operator() (
+    ::boost::shared_ptr<SvxMSDffShapeInfo> const& lhs,
+    ::boost::shared_ptr<SvxMSDffShapeInfo> const& rhs) const
+{
+    return lhs->nTxBxComp < rhs->nTxBxComp;
+}
+
 void SvxMSDffManager::Scale( sal_Int32& rVal ) const
 {
     if ( bNeedMap )
@@ -5359,11 +5373,12 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
             // das Objekt durch einen Rahmen ersetzen, ansonsten
             if( bTextFrame )
             {
-                SvxMSDffShapeInfo aTmpRec( 0, pImpRec->nShapeId );
-                aTmpRec.bSortByShapeId = sal_True;
+                ::boost::shared_ptr<SvxMSDffShapeInfo> const pTmpRec(
+                    new SvxMSDffShapeInfo(0, pImpRec->nShapeId));
 
-                SvxMSDffShapeInfos::const_iterator it = pShapeInfos->find( &aTmpRec );
-                if( it != pShapeInfos->end() )
+                SvxMSDffShapeInfos_ById::const_iterator const it =
+                    m_pShapeInfosById->find(pTmpRec);
+                if (it != m_pShapeInfosById->end())
                 {
                     SvxMSDffShapeInfo& rInfo = **it;
                     pTextImpRec->bReplaceByFly   = rInfo.bReplaceByFly;
@@ -5730,7 +5745,7 @@ SvxMSDffManager::SvxMSDffManager(SvStream& rStCtrl_,
     :DffPropertyReader( *this ),
      pFormModel( NULL ),
      pBLIPInfos( new SvxMSDffBLIPInfos  ),
-     pShapeInfos(  new SvxMSDffShapeInfos ),
+     m_pShapeInfosByTxBxComp( new SvxMSDffShapeInfos_ByTxBxComp ),
      pShapeOrders( new SvxMSDffShapeOrders ),
      nDefaultFontHeight( nDefaultFontHeight_),
      nOffsDgg( nOffsDgg_ ),
@@ -5776,7 +5791,7 @@ SvxMSDffManager::SvxMSDffManager( SvStream& rStCtrl_, const String& rBaseURL )
     :DffPropertyReader( *this ),
      pFormModel( NULL ),
      pBLIPInfos(   new SvxMSDffBLIPInfos  ),
-     pShapeInfos(  new SvxMSDffShapeInfos ),
+     m_pShapeInfosByTxBxComp( new SvxMSDffShapeInfos_ByTxBxComp ),
      pShapeOrders( new SvxMSDffShapeOrders ),
      nDefaultFontHeight( 24 ),
      nOffsDgg( 0 ),
@@ -5797,7 +5812,6 @@ SvxMSDffManager::SvxMSDffManager( SvStream& rStCtrl_, const String& rBaseURL )
 SvxMSDffManager::~SvxMSDffManager()
 {
     delete pBLIPInfos;
-    delete pShapeInfos;
     delete pShapeOrders;
     delete pFormModel;
 }
@@ -5888,18 +5902,17 @@ void SvxMSDffManager::GetFidclData( sal_uInt32 nOffsDggL )
 
 void SvxMSDffManager::CheckTxBxStoryChain()
 {
-    SvxMSDffShapeInfos* pOld = pShapeInfos;
-    sal_uInt16 nCnt             = pOld->size();
-    pShapeInfos             = new SvxMSDffShapeInfos;
+    m_pShapeInfosById.reset(new SvxMSDffShapeInfos_ById);
     // altes Info-Array ueberarbeiten
     // (ist sortiert nach nTxBxComp)
     sal_uLong nChain    = ULONG_MAX;
-    sal_uInt16 nObjMark = 0;
     sal_Bool bSetReplaceFALSE = sal_False;
-    sal_uInt16 nObj;
-    for( nObj = 0; nObj < nCnt; ++nObj )
+    for (SvxMSDffShapeInfos_ByTxBxComp::iterator iter =
+                m_pShapeInfosByTxBxComp->begin(),
+            mark = m_pShapeInfosByTxBxComp->begin();
+         iter != m_pShapeInfosByTxBxComp->end(); ++iter)
     {
-        SvxMSDffShapeInfo* pObj = (*pOld)[nObj];
+        boost::shared_ptr<SvxMSDffShapeInfo> const pObj = *iter;
         if( pObj->nTxBxComp )
         {
             pObj->bLastBoxInChain = sal_False;
@@ -5911,10 +5924,14 @@ void SvxMSDffManager::CheckTxBxStoryChain()
             if( nChain != pObj->nTxBxComp )
             {
                 // voriger war letzter seiner Gruppe
-                if( nObj )
-                    (*pOld)[ nObj-1 ]->bLastBoxInChain = sal_True;
+                if (iter != m_pShapeInfosByTxBxComp->begin())
+                {
+                    SvxMSDffShapeInfos_ByTxBxComp::iterator prev(iter);
+                    --prev;
+                    (*prev)->bLastBoxInChain = true;
+                }
                 // Merker und Hilfs-Flag zuruecksetzen
-                nObjMark = nObj;
+                mark = iter;
                 nChain = pObj->nTxBxComp;
                 bSetReplaceFALSE = !pObj->bReplaceByFly;
             }
@@ -5925,8 +5942,11 @@ void SvxMSDffManager::CheckTxBxStoryChain()
                 // Hilfs-Flag setzen
                 bSetReplaceFALSE = sal_True;
                 // ggfs Flag in Anfang der Gruppe austragen
-                for( sal_uInt16 nObj2 = nObjMark; nObj2 < nObj; ++nObj2 )
-                    (*pOld)[ nObj2 ]->bReplaceByFly = sal_False;
+                for (SvxMSDffShapeInfos_ByTxBxComp::iterator itemp = mark;
+                        itemp != iter; ++itemp)
+                {
+                    (*itemp)->bReplaceByFly = false;
+                }
             }
 
             if( bSetReplaceFALSE )
@@ -5936,16 +5956,16 @@ void SvxMSDffManager::CheckTxBxStoryChain()
         }
         // alle Shape-Info-Objekte in pShapeInfos umkopieren
         // (aber nach nShapeId sortieren)
-        pObj->bSortByShapeId = sal_True;
         pObj->nTxBxComp = pObj->nTxBxComp & 0xFFFF0000;
-        pShapeInfos->insert( pObj );
+        m_pShapeInfosById->insert( pObj );
     }
     // voriger war letzter seiner Gruppe
-    if( nObj )
-        (*pOld)[ nObj-1 ]->bLastBoxInChain = sal_True;
+    if (!m_pShapeInfosByTxBxComp->empty())
+    {
+        (*m_pShapeInfosByTxBxComp->rbegin())->bLastBoxInChain = true;
+    }
     // urspruengliches Array freigeben, ohne Objekte zu zerstoeren
-    pOld->clear();
-    delete pOld;
+    m_pShapeInfosByTxBxComp.reset();
 }
 
 
@@ -6348,7 +6368,8 @@ sal_Bool SvxMSDffManager::GetShapeContainerData( SvStream& rSt,
         {
             aInfo.bReplaceByFly = sal_True;
         }
-        pShapeInfos->insert(  new SvxMSDffShapeInfo(  aInfo          ) );
+        m_pShapeInfosByTxBxComp->insert(::boost::shared_ptr<SvxMSDffShapeInfo>(
+                    new SvxMSDffShapeInfo(aInfo)));
         pShapeOrders->push_back( new SvxMSDffShapeOrder( aInfo.nShapeId ) );
     }
 
@@ -6367,11 +6388,12 @@ sal_Bool SvxMSDffManager::GetShapeContainerData( SvStream& rSt,
 sal_Bool SvxMSDffManager::GetShape(sal_uLong nId, SdrObject*&         rpShape,
                                           SvxMSDffImportData& rData)
 {
-    SvxMSDffShapeInfo aTmpRec(0, nId);
-    aTmpRec.bSortByShapeId = sal_True;
+    ::boost::shared_ptr<SvxMSDffShapeInfo> const pTmpRec(
+        new SvxMSDffShapeInfo(0, nId));
 
-    SvxMSDffShapeInfos::const_iterator it = pShapeInfos->find( &aTmpRec );
-    if( it != pShapeInfos->end() )
+    SvxMSDffShapeInfos_ById::const_iterator const it =
+        m_pShapeInfosById->find(pTmpRec);
+    if (it != m_pShapeInfosById->end())
     {
         // eventuell altes Errorflag loeschen
         if( rStCtrl.GetError() )

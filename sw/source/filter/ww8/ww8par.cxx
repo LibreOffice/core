@@ -591,11 +591,12 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
             // das Objekt durch einen Rahmen ersetzen, ansonsten
             if( bIsSimpleDrawingTextBox )
             {
-                SvxMSDffShapeInfo aTmpRec( 0, pImpRec->nShapeId );
-                aTmpRec.bSortByShapeId = sal_True;
+                ::boost::shared_ptr<SvxMSDffShapeInfo> const pTmpRec(
+                        new SvxMSDffShapeInfo(0, pImpRec->nShapeId));
 
-                SvxMSDffShapeInfos::const_iterator it = GetShapeInfos()->find( &aTmpRec );
-                if( it != GetShapeInfos()->end() )
+                SvxMSDffShapeInfos_ById::const_iterator const it =
+                    GetShapeInfos()->find(pTmpRec);
+                if (it != GetShapeInfos()->end())
                 {
                     SvxMSDffShapeInfo& rInfo = **it;
                     pImpRec->bReplaceByFly   = rInfo.bReplaceByFly;

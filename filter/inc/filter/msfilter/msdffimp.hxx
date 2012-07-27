@@ -26,26 +26,36 @@
  *
  ************************************************************************/
 
-#ifndef _MSDFFIMP_HXX
-#define _MSDFFIMP_HXX
+#ifndef FLT_MSDFFIMP_HXX
+#define FLT_MSDFFIMP_HXX
+
+#include <string.h>
+
+#include <map>
+#include <vector>
+#include <set>
+
+#include <boost/shared_ptr.hpp>
+#include <boost/scoped_ptr.hpp>
+#include <boost/ptr_container/ptr_vector.hpp>
+#include <boost/ptr_container/ptr_set.hpp>
 
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+
 #include <tools/solar.h>
 #include <tools/color.hxx>
 #include <tools/gen.hxx>
-#include <svx/msdffdef.hxx>
-#include <vcl/graph.hxx>
-#include <string.h>
-#include <map>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <filter/msfilter/msfilterdllapi.h>
+
 #include <sot/storage.hxx>
-#include <vector>
-#include <set>
-#include <boost/ptr_container/ptr_vector.hpp>
-#include <boost/ptr_container/ptr_set.hpp>
-#include <o3tl/sorted_vector.hxx>
+
+#include <vcl/graph.hxx>
+
+#include <svx/msdffdef.hxx>
+
+#include <filter/msfilter/msfilterdllapi.h>
+
 
 class Graphic;
 class SvStream;
@@ -189,17 +199,22 @@ public:
     ~SvxMSDffShapeOrders();
 };
 
-// the following will be sorted explicitly:
-class SvxMSDffShapeInfos
-    : public o3tl::sorted_vector<SvxMSDffShapeInfo*,
-                o3tl::less_ptr_to<SvxMSDffShapeInfo> >
+struct MSFILTER_DLLPUBLIC CompareSvxMSDffShapeInfoById
 {
-public:
-    ~SvxMSDffShapeInfos()
-    {
-        DeleteAndDestroyAll();
-    }
+    bool operator()(::boost::shared_ptr<SvxMSDffShapeInfo> const& lhs,
+                    ::boost::shared_ptr<SvxMSDffShapeInfo> const& rhs) const;
 };
+struct MSFILTER_DLLPUBLIC CompareSvxMSDffShapeInfoByTxBxComp
+{
+    bool operator()(::boost::shared_ptr<SvxMSDffShapeInfo> const& lhs,
+                    ::boost::shared_ptr<SvxMSDffShapeInfo> const& rhs) const;
+};
+
+// the following will be sorted explicitly:
+typedef ::std::set< ::boost::shared_ptr<SvxMSDffShapeInfo>,
+            CompareSvxMSDffShapeInfoById > SvxMSDffShapeInfos_ById;
+typedef ::std::multiset< ::boost::shared_ptr<SvxMSDffShapeInfo>,
+            CompareSvxMSDffShapeInfoByTxBxComp> SvxMSDffShapeInfos_ByTxBxComp;
 
 #define SVXMSDFF_SETTINGS_CROP_BITMAPS      1
 #define SVXMSDFF_SETTINGS_IMPORT_PPT        2
@@ -463,7 +478,8 @@ class MSFILTER_DLLPUBLIC SvxMSDffManager : public DffPropertyReader
 {
     FmFormModel*            pFormModel;
     SvxMSDffBLIPInfos*      pBLIPInfos;
-    SvxMSDffShapeInfos*     pShapeInfos;
+    ::boost::scoped_ptr<SvxMSDffShapeInfos_ByTxBxComp> m_pShapeInfosByTxBxComp;
+    ::boost::scoped_ptr<SvxMSDffShapeInfos_ById> m_pShapeInfosById;
     SvxMSDffShapeOrders*    pShapeOrders;
     sal_uLong               nDefaultFontHeight;
     sal_uInt32              nOffsDgg;
@@ -751,8 +767,8 @@ public:
                           const Rectangle& rClientRect,
                           const Rectangle& rGlobalChildRect );
 
-    inline const SvxMSDffShapeInfos* GetShapeInfos( void ) const
-        { return pShapeInfos; }
+    inline const SvxMSDffShapeInfos_ById* GetShapeInfos( void ) const
+        { return m_pShapeInfosById.get(); }
 
     inline const SvxMSDffShapeOrders* GetShapeOrders( void ) const
         { return pShapeOrders; }
@@ -820,7 +836,6 @@ struct SvxMSDffShapeInfo
     sal_uInt32 nTxBxComp;
 
     sal_Bool bReplaceByFly  :1; ///< shape can be replaced by a frame in Writer
-    sal_Bool bSortByShapeId :1;
     sal_Bool bLastBoxInChain:1;
 
     explicit SvxMSDffShapeInfo(sal_uLong nFPos, sal_uInt32 nId=0, // sal_uLong nBIdx=0,
@@ -830,7 +845,6 @@ struct SvxMSDffShapeInfo
         nTxBxComp( (nSeqId << 16) + nBoxId )
         {
             bReplaceByFly   = sal_False;
-            bSortByShapeId  = sal_False;
             bLastBoxInChain = sal_True;
         }
     SvxMSDffShapeInfo(SvxMSDffShapeInfo& rInfo):
@@ -839,20 +853,10 @@ struct SvxMSDffShapeInfo
         nTxBxComp( rInfo.nTxBxComp )
         {
             bReplaceByFly   = rInfo.bReplaceByFly;
-            bSortByShapeId  = rInfo.bSortByShapeId;
             bLastBoxInChain = rInfo.bLastBoxInChain;
         }
-    sal_Bool operator==( const SvxMSDffShapeInfo& rEntry ) const
-    {
-        return bSortByShapeId ? (nShapeId  == rEntry.nShapeId)
-                              : (nTxBxComp == rEntry.nTxBxComp && this == &rEntry);
-    }
-    sal_Bool operator<( const SvxMSDffShapeInfo& rEntry ) const
-    {
-        return bSortByShapeId ? (nShapeId  < rEntry.nShapeId)
-                              : (nTxBxComp < rEntry.nTxBxComp);
-    }
 };
+
 
 struct SvxMSDffShapeOrder
 {
