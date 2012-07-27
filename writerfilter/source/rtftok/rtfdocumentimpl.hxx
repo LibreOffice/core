@@ -65,7 +65,6 @@ namespace writerfilter {
             DESTINATION_COLORTABLE,
             DESTINATION_STYLESHEET,
             DESTINATION_STYLEENTRY,
-            DESTINATION_EQINSTRUCTION,
             DESTINATION_FIELD,
             DESTINATION_FIELDINSTRUCTION,
             DESTINATION_FIELDRESULT,
@@ -563,7 +562,6 @@ namespace writerfilter {
 
                 RTFReferenceTable::Entries_t m_aStyleTableEntries;
                 int m_nCurrentStyleIndex;
-                bool m_bEq;
                 bool m_bFormField;
                 /// If a frame start token is already sent to dmapper (nesting them is not OK).
                 bool m_bIsInFrame;

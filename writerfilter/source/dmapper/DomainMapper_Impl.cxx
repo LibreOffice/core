@@ -2092,6 +2092,7 @@ if(!bFilled)
             {OUString("DOCPROPERTY"),   "",                         "", FIELD_DOCPROPERTY },
             {OUString("DOCVARIABLE"),   "User",                     "", FIELD_DOCVARIABLE  },
             {OUString("EDITTIME"),      "DocInfo.EditTime",         "", FIELD_EDITTIME     },
+            {OUString("EQ"),            "",                         "", FIELD_EQ     },
             {OUString("FILLIN"),        "Input",                    "", FIELD_FILLIN       },
             {OUString("FILENAME"),      "FileName",                 "", FIELD_FILENAME     },
 //            {OUString("FILESIZE"),      "",                         "", FIELD_FILESIZE     },
@@ -2639,6 +2640,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                 case FIELD_DOCPROPERTY:
                 case FIELD_TOC:
                 case FIELD_TC:
+                case FIELD_EQ:
                         bCreateField = false;
                         break;
                 case FIELD_FORMCHECKBOX :
@@ -2761,6 +2763,37 @@ void DomainMapper_Impl::CloseFieldCommand()
                     break;
                     case FIELD_EDITTIME     :
                         //it's a numbering type, no number format! SetNumberFormat( pContext->GetCommand(), xFieldProperties );
+                    break;
+                    case FIELD_EQ:
+                    {
+                        OUString aCommand = pContext->GetCommand().trim();
+                        nSpaceIndex = aCommand.indexOf(' ');
+                        if(nSpaceIndex > 0)
+                            aCommand = aCommand.copy(nSpaceIndex).trim();
+                        if (aCommand.compareTo("\\s", 2) == 0)
+                        {
+                            aCommand = aCommand.copy(2);
+                            if (aCommand.compareTo("\\do", 3) == 0)
+                            {
+                                aCommand = aCommand.copy(3);
+                                sal_Int32 nStartIndex = aCommand.indexOf('(');
+                                sal_Int32 nEndIndex = aCommand.indexOf(')');
+                                if (nStartIndex > 0 && nEndIndex > 0)
+                                {
+                                    // nDown is the requested "lower by" value in points.
+                                    sal_Int32 nDown = aCommand.copy(0, nStartIndex).toInt32();
+                                    OUString aContent = aCommand.copy(nStartIndex + 1, nEndIndex - nStartIndex - 1);
+                                    PropertyMapPtr pCharContext = GetTopContext();
+                                    // dHeight is the font size of the current style.
+                                    double dHeight = 0;
+                                    if (GetPropertyFromStyleSheet(PROP_CHAR_HEIGHT) >>= dHeight)
+                                        // Character escapement should be given in negative percents for subscripts.
+                                        pCharContext->Insert(PROP_CHAR_ESCAPEMENT, true, uno::makeAny( sal_Int16(- 100 * nDown / dHeight) ) );
+                                    appendTextPortion(aContent, pCharContext);
+                                }
+                            }
+                        }
+                    }
                     break;
                     case FIELD_FILLIN       :
                     {

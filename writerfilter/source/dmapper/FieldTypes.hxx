@@ -74,6 +74,7 @@ enum FieldId
         ww8filterimprovement: multiple languages now supported
      */
     ,FIELD_EDITTIME
+    ,FIELD_EQ
     /* FILLIN "text to fill in" \d defaultanswer \o \* MERGEFORMAT ->
         Function-InputField
      */

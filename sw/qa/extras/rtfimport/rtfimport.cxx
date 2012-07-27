@@ -100,6 +100,7 @@ public:
     void testFdo46966();
     void testFdo52066();
     void testFdo48033();
+    void testFdo36089();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -142,6 +143,7 @@ public:
     CPPUNIT_TEST(testFdo46966);
     CPPUNIT_TEST(testFdo52066);
     CPPUNIT_TEST(testFdo48033);
+    CPPUNIT_TEST(testFdo36089);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -852,6 +854,12 @@ void Test::testFdo48033()
     uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
     uno::Reference<text::XTextRange> xPara(xParaEnum->nextElement(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("Frame"), getProperty<OUString>(getRun(xPara, 1), "TextPortionType"));
+}
+
+void Test::testFdo36089()
+{
+    load("fdo36089.rtf");
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(-50), getProperty<sal_Int16>(getRun(getParagraph(1), 2), "CharEscapement"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

@@ -260,7 +260,6 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
     m_nCurrentFontIndex(0),
     m_aStyleTableEntries(),
     m_nCurrentStyleIndex(0),
-    m_bEq(false),
     m_bFormField(false),
     m_bIsInFrame(false),
     m_aUnicodeBuffer(),
@@ -989,10 +988,6 @@ void RTFDocumentImpl::text(OUString& rString)
         case DESTINATION_MGROW:
             m_aStates.top().aDestinationText.append(rString);
             break;
-        case DESTINATION_EQINSTRUCTION:
-            if ( rString.getLength() > 3 && rString.copy(0, 2) == "do" && rString.copy(2).toInt32() > 0 )
-                dispatchFlag(RTF_SUB);
-            break;
         default: bRet = false; break;
     }
     if (bRet)
@@ -1134,11 +1129,7 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
                 if (aBuf.toString().indexOf(OString("FORM")) != -1 )
                     m_bFormField = true;
 
-                // EQ fields are not really fields in fact.
-                if (aBuf.toString().equals("EQ"))
-                    m_bEq = true;
-                else
-                    singleChar(0x13);
+                singleChar(0x13);
                 m_aStates.top().nDestinationState = DESTINATION_FIELDINSTRUCTION;
             }
             break;
@@ -3160,7 +3151,6 @@ int RTFDocumentImpl::pushState()
     case DESTINATION_FIELDRESULT:
     case DESTINATION_SHAPETEXT:
     case DESTINATION_FORMFIELD:
-    case DESTINATION_EQINSTRUCTION:
         m_aStates.top().nDestinationState = DESTINATION_NORMAL;
     break;
     case DESTINATION_MNUM:
@@ -3174,7 +3164,7 @@ int RTFDocumentImpl::pushState()
         m_aStates.top().nDestinationState = DESTINATION_MR;
     break;
     case DESTINATION_FIELDINSTRUCTION:
-        m_aStates.top().nDestinationState = !m_bEq ? DESTINATION_NORMAL : DESTINATION_EQINSTRUCTION;
+        m_aStates.top().nDestinationState = DESTINATION_NORMAL;
     break;
     case DESTINATION_REVISIONTABLE: m_aStates.top().nDestinationState = DESTINATION_REVISIONENTRY; break;
     case DESTINATION_MOMATH: m_aStates.top().nDestinationState = DESTINATION_MR; break;
@@ -3285,14 +3275,10 @@ int RTFDocumentImpl::popState()
             m_aFormfieldAttributes.clear();
             m_aFormfieldSprms.clear();
         }
-        if (!m_bEq)
-            singleChar(0x14);
+        singleChar(0x14);
     break;
     case DESTINATION_FIELDRESULT:
-        if (!m_bEq)
-            singleChar(0x15);
-        else
-            m_bEq = false;
+        singleChar(0x15);
     break;
     case DESTINATION_LEVELTEXT:
     {
