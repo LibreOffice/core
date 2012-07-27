@@ -602,25 +602,10 @@ Date:   Mon Mar 8 16:16:16 2004 +0000
     INTEGRATION: CWS i18n09 (1.2.2); FILE MERGED
     2003/12/03 02:17:54 khong 1.2.2.1: #110105# Set word boundary between CJK and Latin script type
 
-commit f0939f43315a21f5134cd631773ddae7cfef4493
-Author: Jens-Heiner Rechtien <hr@openoffice.org>
-Date:   Mon Mar 8 16:16:04 2004 +0000
-
-    INTEGRATION: CWS i18n09 (1.12.2); FILE MERGED
-    2003/12/09 19:35:48 khong 1.12.2.4: #112021# fix word boundary problem on begining and end of the string
-    2003/12/08 23:47:26 khong 1.12.2.3: #i21907# fix isBeginWord and isEndWord problem
-    2003/11/18 22:55:08 khong 1.12.2.2: #i21290# #i22530# #i14640# extend CTL script support, extend Greek script type
-    2003/11/18 22:31:59 khong 1.12.2.1: #i21290# #i22530# #i14640# extend CTL script support, extend Greek script type
-
-commit 8311f89a42e6a4b8147191880470da415c9d7483
-Author: Rüdiger Timm <rt@openoffice.org>
-Date:   Tue Jan 20 12:20:28 2004 +0000
-
-    INTEGRATION: CWS i18n10 (1.12.4); FILE MERGED
-    2003/12/17 20:15:43 khong 1.12.4.1: #i22138# #112506# migrate to ICU collator and remove link to tool library
-
 done, regression tests added:
 
+#i21290# extend Greek script type
+#i21907# fix isBeginWord and isEndWord problem
 #i85411# Apply patch for ZWSP
 #i17155# fix line breakiterator rule to make slash and hyphen as part of word when doing line break
 #i13451# add '-' as midLetter for Catalan dictionary word breakiterator
