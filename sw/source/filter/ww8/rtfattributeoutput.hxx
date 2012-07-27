@@ -421,7 +421,7 @@ private:
     void FlyFrameOLE( const SwFlyFrmFmt* pFlyFrmFmt, SwOLENode& rOLENode, const Size& rSize );
     void FlyFrameOLEData( SwOLENode& rOLENode );
     /// Math export.
-    bool FlyFrameOLEMath(SwOLENode& rOLENode);
+    bool FlyFrameOLEMath(const SwFlyFrmFmt* pFlyFrmFmt, SwOLENode& rOLENode, const Size& rSize);
 
     /*
      * Table methods.
