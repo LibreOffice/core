@@ -134,7 +134,7 @@ void LocalizationMgr::implEnableDisableResourceForAllLibraryDialogs( HandleResou
     for( sal_Int32 i = 0 ; i < nDlgCount ; i++ )
     {
         String aDlgName = pDlgNames[ i ];
-        DialogWindow* pWin = m_pIDEShell->FindDlgWin( m_aDocument, m_aLibName, aDlgName, sal_False );
+        DialogWindow* pWin = m_pIDEShell->FindDlgWin( m_aDocument, m_aLibName, aDlgName, false );
         if( pWin && pWin->IsA( TYPE( DialogWindow ) ) )
         {
             DialogWindow* pDialogWin = static_cast< DialogWindow* >( pWin );

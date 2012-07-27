@@ -120,7 +120,7 @@ protected:
     sal_uInt16              InsertWindowInTable( IDEBaseWindow* pNewWin );
     virtual sal_uInt16      PrepareClose( sal_Bool bUI, sal_Bool bForBrowsing );
 
-    void                SetCurWindow( IDEBaseWindow* pNewWin, sal_Bool bUpdateTabBar = sal_False, sal_Bool bRememberAsCurrent = sal_True );
+    void                SetCurWindow( IDEBaseWindow* pNewWin, bool bUpdateTabBar = false, bool bRememberAsCurrent = true );
     void                ManageToolbars();
     void                RemoveWindow( IDEBaseWindow* pWindow, sal_Bool bDestroy, sal_Bool bAllowChangeCurWindow = sal_True );
     void                ArrangeTabBar();
@@ -128,7 +128,7 @@ protected:
     ModulWindow*        CreateBasWin( const ScriptDocument& rDocument, const ::rtl::OUString& rLibName, const ::rtl::OUString& rModName );
     DialogWindow*       CreateDlgWin( const ScriptDocument& rDocument, const ::rtl::OUString& rLibName, const ::rtl::OUString& rDlgName );
 
-    ModulWindow*        FindBasWin( const ScriptDocument& rDocument, const ::rtl::OUString& rLibName, const ::rtl::OUString& rModName, sal_Bool bCreateIfNotExist, sal_Bool bFindSuspended = sal_False );
+    ModulWindow*        FindBasWin( const ScriptDocument& rDocument, const ::rtl::OUString& rLibName, const ::rtl::OUString& rModName, bool bCreateIfNotExist, bool bFindSuspended = false );
     ModulWindow*        ShowActiveModuleWindow( StarBASIC* pBasic );
 
     virtual void        SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
@@ -204,7 +204,7 @@ public:
     ModulWindowLayout*  GetLayoutWindow() const { return pModulLayout; }
 
     IDEBaseWindow*      FindWindow( const ScriptDocument& rDocument, const ::rtl::OUString& rLibName = ::rtl::OUString(), const ::rtl::OUString& rName = ::rtl::OUString(), BasicIDEType nType = BASICIDE_TYPE_UNKNOWN, sal_Bool bFindSuspended = sal_False );
-    DialogWindow*       FindDlgWin( const ScriptDocument& rDocument, const ::rtl::OUString& rLibName, const ::rtl::OUString& rDlgName, sal_Bool bCreateIfNotExist, sal_Bool bFindSuspended = sal_False );
+    DialogWindow*       FindDlgWin( const ScriptDocument& rDocument, const ::rtl::OUString& rLibName, const ::rtl::OUString& rDlgName, bool bCreateIfNotExist, bool bFindSuspended = false );
     IDEBaseWindow*      FindApplicationWindow();
     sal_Bool                NextPage( sal_Bool bPrev = sal_False );
 

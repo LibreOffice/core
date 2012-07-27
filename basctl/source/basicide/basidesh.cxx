@@ -109,7 +109,7 @@ public:
     {
         rtl::OUString sModuleName;
         if( mpShell && ( Event.Accessor >>= sModuleName ) )
-            mpShell->FindBasWin( mpShell->m_aCurDocument, mpShell->m_aCurLibName, sModuleName, sal_True, sal_False );
+            mpShell->FindBasWin( mpShell->m_aCurDocument, mpShell->m_aCurLibName, sModuleName, true, false );
     }
     virtual void SAL_CALL elementReplaced( const container::ContainerEvent& ) throw( com::sun::star::uno::RuntimeException ) { }
     virtual void SAL_CALL elementRemoved( const container::ContainerEvent& Event ) throw( com::sun::star::uno::RuntimeException )
@@ -337,7 +337,7 @@ void BasicIDEShell::onDocumentClosed( const ScriptDocument& _rDocument )
     if ( bSetCurLib )
         SetCurLib( ScriptDocument::getApplicationScriptDocument(), ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Standard")), true, false );
     else if ( bSetCurWindow )
-        SetCurWindow( FindApplicationWindow(), sal_True );
+        SetCurWindow( FindApplicationWindow(), true );
 }
 
 void BasicIDEShell::onDocumentTitleChanged( const ScriptDocument& /*_rDocument*/ )
@@ -409,7 +409,7 @@ sal_uInt16 BasicIDEShell::PrepareClose( sal_Bool bUI, sal_Bool bForBrowsing )
             {
                 if ( !m_aCurLibName.isEmpty() && ( pWin->IsDocument( m_aCurDocument ) || pWin->GetLibName() != m_aCurLibName ) )
                     SetCurLib( ScriptDocument::getApplicationScriptDocument(), ::rtl::OUString(), false );
-                SetCurWindow( pWin, sal_True );
+                SetCurWindow( pWin, true );
                 bCanClose = sal_False;
             }
         }
@@ -494,7 +494,7 @@ sal_Bool BasicIDEShell::NextPage( sal_Bool bPrev )
     if ( nPos < pTabBar->GetPageCount() )
     {
         IDEBaseWindow* pWin = aIDEWindowTable[ pTabBar->GetPageId( nPos ) ];
-        SetCurWindow( pWin, sal_True );
+        SetCurWindow( pWin, true );
         bRet = sal_True;
     }
 
@@ -654,7 +654,7 @@ void BasicIDEShell::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId&,
 
 void BasicIDEShell::CheckWindows()
 {
-    sal_Bool bSetCurWindow = sal_False;
+    bool bSetCurWindow = false;
     std::vector<IDEBaseWindow*> aDeleteVec;
     for( IDEWindowTable::const_iterator it = aIDEWindowTable.begin(); it != aIDEWindowTable.end(); ++it )
     {
@@ -667,11 +667,11 @@ void BasicIDEShell::CheckWindows()
         IDEBaseWindow* pWin = *it;
         pWin->StoreData();
         if ( pWin == pCurWin )
-            bSetCurWindow = sal_True;
+            bSetCurWindow = true;
         RemoveWindow( pWin, sal_True, sal_False );
     }
     if ( bSetCurWindow )
-        SetCurWindow( FindApplicationWindow(), sal_True );
+        SetCurWindow( FindApplicationWindow(), true );
 }
 
 
@@ -695,7 +695,7 @@ void BasicIDEShell::RemoveWindows( const ScriptDocument& rDocument, const ::rtl:
         RemoveWindow( pWin, bDestroy, sal_False );
     }
     if ( bChangeCurWindow )
-        SetCurWindow( FindApplicationWindow(), sal_True );
+        SetCurWindow( FindApplicationWindow(), true );
 }
 
 
@@ -788,7 +788,7 @@ void BasicIDEShell::UpdateWindows()
                             for ( sal_Int32 j = 0 ; j < nModCount ; j++ )
                             {
                                 ::rtl::OUString aModName = pModNames[ j ];
-                                ModulWindow* pWin = FindBasWin( *doc, aLibName, aModName, sal_False );
+                                ModulWindow* pWin = FindBasWin( *doc, aLibName, aModName, false );
                                 if ( !pWin )
                                     pWin = CreateBasWin( *doc, aLibName, aModName );
                                 if ( !pNextActiveWindow && pLibInfoItem && pLibInfoItem->GetCurrentName() == aModName &&
@@ -819,7 +819,7 @@ void BasicIDEShell::UpdateWindows()
                                 ::rtl::OUString aDlgName = pDlgNames[ j ];
                                 // this find only looks for non-suspended windows;
                                 // suspended windows are handled in CreateDlgWin
-                                DialogWindow* pWin = FindDlgWin( *doc, aLibName, aDlgName, sal_False );
+                                DialogWindow* pWin = FindDlgWin( *doc, aLibName, aDlgName, false );
                                 if ( !pWin )
                                     pWin = CreateDlgWin( *doc, aLibName, aDlgName );
                                 if ( !pNextActiveWindow && pLibInfoItem && pLibInfoItem->GetCurrentName() == aDlgName &&
@@ -843,7 +843,7 @@ void BasicIDEShell::UpdateWindows()
     {
         if ( !pNextActiveWindow )
             pNextActiveWindow = FindApplicationWindow();
-        SetCurWindow( pNextActiveWindow, sal_True );
+        SetCurWindow( pNextActiveWindow, true );
     }
 }
 
@@ -856,9 +856,9 @@ void BasicIDEShell::RemoveWindow( IDEBaseWindow* pWindow_, sal_Bool bDestroy, sa
     if ( pWindow_ == pCurWin )
     {
         if ( bAllowChangeCurWindow )
-            SetCurWindow( FindApplicationWindow(), sal_True );
+            SetCurWindow( FindApplicationWindow(), true );
         else
-            SetCurWindow( NULL, sal_False );
+            SetCurWindow( NULL, false );
     }
     if ( bDestroy )
     {

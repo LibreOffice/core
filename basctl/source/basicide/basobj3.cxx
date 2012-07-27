@@ -230,7 +230,7 @@ bool RemoveDialog( const ScriptDocument& rDocument, const ::rtl::OUString& rLibN
     BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
     if ( pIDEShell )
     {
-        DialogWindow* pDlgWin = pIDEShell->FindDlgWin( rDocument, rLibName, rDlgName, sal_False );
+        DialogWindow* pDlgWin = pIDEShell->FindDlgWin( rDocument, rLibName, rDlgName, false );
         if( pDlgWin )
         {
             Reference< container::XNameContainer > xDialogModel = pDlgWin->GetDialog();
@@ -344,17 +344,17 @@ void StopBasic()
 
 //----------------------------------------------------------------------------
 
-void BasicStopped( sal_Bool* pbAppWindowDisabled,
-        sal_Bool* pbDispatcherLocked, sal_uInt16* pnWaitCount,
+void BasicStopped( bool* pbAppWindowDisabled,
+        bool* pbDispatcherLocked, sal_uInt16* pnWaitCount,
         SfxUInt16Item** ppSWActionCount, SfxUInt16Item** ppSWLockViewCount )
 {
     // maybe there are some locks to be removed after an error
     // or an explicit cancelling of the basic...
 
     if ( pbAppWindowDisabled )
-        *pbAppWindowDisabled = sal_False;
+        *pbAppWindowDisabled = false;
     if ( pbDispatcherLocked )
-        *pbDispatcherLocked = sal_False;
+        *pbDispatcherLocked = false;
     if ( pnWaitCount )
         *pnWaitCount = 0;
     if ( ppSWActionCount )
@@ -381,7 +381,7 @@ void BasicStopped( sal_Bool* pbAppWindowDisabled,
     {
         pDefParent->Enable( sal_True );
         if ( pbAppWindowDisabled )
-            *pbAppWindowDisabled = sal_True;
+            *pbAppWindowDisabled = true;
     }
 
 }
