@@ -152,7 +152,6 @@ void TestBreakIterator::testLineBreaking()
             //Here we want the line break to move the whole lot to the next line
             i18n::LineBreakResults aResult = m_xBreak->getLineBreak(aTest, aTest.getLength()-2, aLocale, 0,
                 aHyphOptions, aUserOptions);
-            fprintf(stderr, "suggestion was %d\n", aResult.breakIndex);
             CPPUNIT_ASSERT_MESSAGE("Expected a break at the start of the line, not at ]", aResult.breakIndex == 0);
         }
     }
