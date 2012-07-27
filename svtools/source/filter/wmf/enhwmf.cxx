@@ -168,6 +168,21 @@ static float GetSwapFloat( SvStream& rSt )
 }
 #endif
 
+struct BLENDFUNCTION{
+    unsigned char aBlendOperation;
+    unsigned char aBlendFlags;
+    unsigned char aSrcConstantAlpha;
+    unsigned char aAlphaFormat;
+
+    friend SvStream& operator>>( SvStream& rIn, BLENDFUNCTION& rBlendFun );
+};
+
+SvStream& operator>>( SvStream& rIn, BLENDFUNCTION& rBlendFun )
+{
+    rIn >> rBlendFun.aBlendOperation >> rBlendFun.aBlendFlags >>
+             rBlendFun.aSrcConstantAlpha >> rBlendFun.aAlphaFormat;
+    return rIn;
+}
 SvStream& operator>>( SvStream& rIn, XForm& rXForm )
 {
     if ( sizeof( float ) != 4 )
@@ -805,7 +820,63 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
                 pOut->SetClipPath( aPolyPoly, iMode, sal_False );
             }
             break;
+            case EMR_ALPHABLEND:
+            {
+               sal_Int32    xDest, yDest, cxDest, cyDest;
 
+               BLENDFUNCTION aFunc;
+               sal_Int32  xSrc, ySrc;
+               XForm    xformSrc;
+               sal_uInt32   BkColorSrc,iUsageSrc ,offBmiSrc,cbBmiSrc,offBitsSrc,cbBitsSrc ,cxSrc,cySrc ;
+
+               sal_uInt32   nStart = pWMF->Tell() - 8;
+                pWMF->SeekRel( 0x10 );
+
+                *pWMF >> xDest >> yDest >> cxDest >> cyDest >> aFunc >> xSrc >> ySrc
+                        >> xformSrc >> BkColorSrc >> iUsageSrc >> offBmiSrc >> cbBmiSrc
+                            >> offBitsSrc >> cbBitsSrc >>cxSrc>>cySrc ;
+
+                sal_uInt32  dwRop = SRCAND|SRCINVERT;
+
+                Bitmap      aBitmap;
+                Rectangle   aRect( Point( xDest, yDest ), Size( cxDest+1, cyDest+1 ) );
+
+                if ( (cbBitsSrc > (SAL_MAX_UINT32 - 14)) || ((SAL_MAX_UINT32 - 14) - cbBitsSrc < cbBmiSrc) )
+                    bStatus = sal_False;
+                else
+                {
+                    sal_uInt32 nSize = cbBmiSrc + cbBitsSrc + 14;
+                    if ( nSize <= ( nEndPos - nStartPos ) )
+                    {
+                        char* pBuf = new char[ nSize ];
+                        SvMemoryStream aTmp( pBuf, nSize, STREAM_READ | STREAM_WRITE );
+                        aTmp.ObjectOwnsMemory( sal_True );
+                        aTmp << (sal_uInt8)'B'
+                             << (sal_uInt8)'M'
+                             << (sal_uInt32)cbBitsSrc
+                             << (sal_uInt16)0
+                             << (sal_uInt16)0
+                             << (sal_uInt32)cbBmiSrc + 14;
+                        pWMF->Seek( nStart + offBmiSrc );
+                        pWMF->Read( pBuf + 14, cbBmiSrc );
+                        pWMF->Seek( nStart + offBitsSrc );
+                        pWMF->Read( pBuf + 14 + cbBmiSrc, cbBitsSrc );
+                        aTmp.Seek( 0 );
+                        aBitmap.Read( aTmp, sal_True );
+                        // test if it is sensible to crop
+                        if ( ( cxSrc > 0 ) && ( cySrc > 0 ) &&
+                            ( xSrc >= 0 ) && ( ySrc >= 0 ) &&
+                                ( xSrc + cxSrc <= aBitmap.GetSizePixel().Width() ) &&
+                                    ( ySrc + cySrc <= aBitmap.GetSizePixel().Height() ) )
+                        {
+                            Rectangle aCropRect( Point( xSrc, ySrc ), Size( cxSrc, cySrc ) );
+                            aBitmap.Crop( aCropRect );
+                        }
+                         aBmpSaveList.Insert( new BSaveStruct( aBitmap, aRect, dwRop ), LIST_APPEND );
+                    }
+                }
+            }
+            break;
             case EMR_BITBLT :   // PASSTHROUGH INTENDED
             case EMR_STRETCHBLT :
             {
@@ -1225,7 +1296,6 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
             case EMR_COLORCORRECTPALETTE :      WinMtfAssertHandler( "ColorCorrectPalette" );       break;
             case EMR_SETICMPROFILEA :           WinMtfAssertHandler( "SetICMProfileA" );            break;
             case EMR_SETICMPROFILEW :           WinMtfAssertHandler( "SetICMProfileW" );            break;
-            case EMR_ALPHABLEND :               WinMtfAssertHandler( "Alphablend" );                break;
             case EMR_TRANSPARENTBLT :           WinMtfAssertHandler( "TransparenBlt" );             break;
             case EMR_TRANSPARENTDIB :           WinMtfAssertHandler( "TransparenDib" );             break;
             case EMR_GRADIENTFILL :             WinMtfAssertHandler( "GradientFill" );              break;
