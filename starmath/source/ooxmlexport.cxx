@@ -35,9 +35,8 @@
 using namespace oox;
 using namespace oox::core;
 
-SmOoxmlExport::SmOoxmlExport( const String &rIn, const SmNode* pIn, OoxmlVersion v )
-: str( rIn )
-, pTree( pIn )
+SmOoxmlExport::SmOoxmlExport( const SmNode* pIn, OoxmlVersion v )
+: pTree( pIn )
 , version( v )
 {
 }

@@ -40,7 +40,7 @@
 class SmOoxmlExport
 {
 public:
-    SmOoxmlExport( const String &rIn,const SmNode* pIn, oox::core::OoxmlVersion version );
+    SmOoxmlExport( const SmNode* pIn, oox::core::OoxmlVersion version );
     bool ConvertFromStarMath( ::sax_fastparser::FSHelperPtr m_pSerializer );
 private:
     void HandleNode( const SmNode* pNode, int nLevel );
@@ -60,7 +60,6 @@ private:
     void HandleMatrix( const SmMatrixNode* pNode, int nLevel );
     void HandleBrace( const SmBraceNode* pNode, int nLevel );
     void HandleVerticalBrace( const SmVerticalBraceNode* pNode, int nLevel );
-    String str;
     const SmNode* const pTree;
     ::sax_fastparser::FSHelperPtr m_pSerializer;
     oox::core::OoxmlVersion version;
