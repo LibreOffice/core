@@ -320,6 +320,7 @@ mimetypes = {
     'image/x-sgf': 'sgf',
     'image/x-svm': 'svm',
     'image/x-wmf': 'wmf',
+    'image/x-pict': 'pict',
 }
 
 # disabled for now, this would download gigs of pngs/jpegs...
@@ -332,7 +333,6 @@ common_noncore_mimetypes = [
     ('image/x-met', 'met'),
     ('image/x-portable-bitmap', 'pbm'),
     ('image/x-photo-cd', 'pcd'),
-    ('image/x-pict', 'pict'),
     ('image/x-pcx', 'pcx'),
     ('image/x-portable-graymap', 'pgm'),
     ('image/x-portable-pixmap', 'ppm'),
