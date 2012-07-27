@@ -747,7 +747,6 @@ public:
     SCROW       CountNonFilteredRows(SCROW nStartRow, SCROW nEndRow) const;
 
     bool IsManualRowHeight(SCROW nRow) const;
-    void SetRowHeightManual(SCROW nRow, bool bManual);
 
     void        SyncColRowFlags();
 

@@ -643,7 +643,7 @@ void ScTransferObj::InitDocShell()
 
                 //  if height was set manually, that flag has to be copied, too
                 bool bManual = pDoc->IsManualRowHeight(nRow, nSrcTab);
-                pDestDoc->SetRowHeightManual(nRow, 0, bManual);
+                pDestDoc->SetManualHeight(nRow, nRow, 0, bManual);
             }
         }
 
