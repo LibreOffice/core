@@ -8,8 +8,10 @@
  */
 
 #include "diagnose_ex.h"
+#include "MNSProfileDiscover.hxx"
 #include "MConnection.hxx"
 #include "MDriver.hxx"
+#include "MorkParser.hxx"
 
 #include <connectivity/dbcharset.hxx>
 #include <connectivity/dbexception.hxx>
@@ -41,6 +43,8 @@ using namespace com::sun::star::sdbcx;
 
 namespace connectivity { namespace mork {
 
+static const int defaultScope = 0x80;
+
 // -----------------------------------------------------------------------------
 
 OConnection::OConnection(MorkDriver* _pDriver)
@@ -48,7 +52,8 @@ OConnection::OConnection(MorkDriver* _pDriver)
     ,m_pDriver(_pDriver)
 {
     m_pDriver->acquire();
-
+    m_pProfileAccess = new ProfileAccess();
+    m_pMork = new MorkParser();
 }
 //-----------------------------------------------------------------------------
 OConnection::~OConnection()
@@ -58,6 +63,8 @@ OConnection::~OConnection()
         close();
     m_pDriver->release();
     m_pDriver = NULL;
+    delete m_pProfileAccess;
+    delete m_pMork;
 }
 //-----------------------------------------------------------------------------
 void SAL_CALL OConnection::release() throw()
@@ -93,7 +100,7 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
         }
         else
         {
-            SAL_WARN("mork", "No subschema given!!!");
+            SAL_WARN("connectivity.mork", "No subschema given!!!");
             throwGenericSQLException( STR_URI_SYNTAX_ERROR, *this );
         }
     }
@@ -106,7 +113,39 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
     SAL_INFO("connectvity.mork", "URI = " << ((OUtoCStr(aAddrbookURI)) ? (OUtoCStr(aAddrbookURI)):("NULL")) );
     SAL_INFO("connectvity.mork", "Scheme = " << ((OUtoCStr(aAddrbookScheme)) ?  (OUtoCStr(aAddrbookScheme)):("NULL")) );
 
+    ::rtl::OUString defaultProfile = m_pProfileAccess->getDefaultProfile(::com::sun::star::mozilla::MozillaProductType_Thunderbird);
+    SAL_INFO("connectivity.mork", "DefaultProfile: " << defaultProfile);
+
+    ::rtl::OUString path = m_pProfileAccess->getProfilePath(::com::sun::star::mozilla::MozillaProductType_Thunderbird, defaultProfile);
+    SAL_INFO("connectivity.mork", "ProfilePath: " << path);
+
+    path += rtl::OUString( "/abook.mab" );
+
+    SAL_INFO("connectivity.mork", "AdressbookPath: " << path);
+
+    rtl::OString strPath = ::rtl::OUStringToOString(path, RTL_TEXTENCODING_UTF8 );
+
+    // Open and parse mork file
+    if (!m_pMork->open(strPath.getStr()))
+    {
+        SAL_WARN("connectivity.mork", "Can not parse mork file!");
+        throwGenericSQLException( STR_COULD_NOT_LOAD_FILE, *this );
+    }
+
+    // check that we can retrieve the tables:
+    MorkTableMap *Tables = m_pMork->getTables( defaultScope );
+    MorkTableMap::iterator tableIter;
+    if (Tables)
+    {
+        // Iterate all tables
+        for ( tableIter = Tables->begin(); tableIter != Tables->end(); tableIter++ )
+        {
+            if ( 0 == tableIter->first ) continue;
+            SAL_INFO("connectivity.mork", "table->first : " << tableIter->first);
+        }
+    }
 }
+
 // XServiceInfo
 // --------------------------------------------------------------------------------
 IMPLEMENT_SERVICE_INFO(OConnection, "com.sun.star.sdbc.drivers.mork.OConnection", "com.sun.star.sdbc.Connection")

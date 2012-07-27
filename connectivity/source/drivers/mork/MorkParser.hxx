@@ -50,11 +50,6 @@ typedef std::map< int, MorkRowMap > RowScopeMap;      // Row scope
 typedef std::map< int, RowScopeMap > MorkTableMap;    // Table id
 typedef std::map< int, MorkTableMap > TableScopeMap;  // Table Scope
 
-// Mork header of supported format version
-const char *MorkMagicHeader = "// <!-- <mdb:mork:z v=\"1.4\"/> -->";
-
-const char *MorkDictColumnMeta = "<(a=c)>";
-
 // Error codes
 enum MorkErrors
 {

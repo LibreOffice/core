@@ -311,7 +311,6 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     lwpft \
 	MacOSXSpell \
     merged \
-    mork \
     mozab2 \
     mozabdrv \
     msfilter \
@@ -449,6 +448,7 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
     macab1 \
     macabdrv1 \
     mcnttype \
+    mork \
     mozbootstrap \
     officebean \
     package2 \

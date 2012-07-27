@@ -23,6 +23,9 @@
 
 #include <memory>
 
+// do we want here namespace too?
+class MorkParser;
+
 namespace connectivity
 {
     namespace mork
@@ -30,6 +33,7 @@ namespace connectivity
         namespace css = com::sun::star;
 
         class MorkDriver;
+        class ProfileAccess;
         class ErrorDescriptor;
 
         typedef connectivity::OMetaConnection OConnection_BASE; // implements basics and text encoding
@@ -46,8 +50,12 @@ namespace connectivity
             ::com::sun::star::sdbc::SQLWarning      m_aLastWarning;
             MorkDriver*                             m_pDriver;      //  Pointer to the owning
                                                                     //  driver object
+            // Profile Access
+            ProfileAccess* m_pProfileAccess;
+            // Mork Parser
+            MorkParser* m_pMork;
             // Store Catalog
-            ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XTablesSupplier>         m_xCatalog;
+            ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XTablesSupplier> m_xCatalog;
 
         public:
             virtual void construct( const ::rtl::OUString& url,const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& info) throw(::com::sun::star::sdbc::SQLException);

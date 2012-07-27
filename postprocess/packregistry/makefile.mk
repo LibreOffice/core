@@ -13,7 +13,7 @@
 # only, as published by the Free Software Foundation.
 #
 # OpenOffice.org is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# but WITHOUT ANY WARRANTY; without even the imp
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU Lesser General Public License version 3 for more details
 # (a copy is included in the LICENSE file that accompanied this code).
@@ -351,16 +351,17 @@ MY_FILES_main += $(MY_MOD)/org/openoffice/Office/DataAccess/Drivers-tdeab.xcu
 MY_FILES_main += $(MY_MOD)/org/openoffice/Office/DataAccess/Drivers-kab.xcu
 MY_DRIVERS += kab
 .END
-.IF "$(SYSTEM_MOZILLA)" != "YES" && "$(WITH_MOZILLA)" != "NO" && \
-        "$(OS)" != "MACOSX"
-.IF "$(OS)" == "WNT"
-MY_FILES_main += $(MY_MOD)/org/openoffice/Office/DataAccess/Drivers-mozab.xcu
-MY_DRIVERS += mozab
-.ELSE
-MY_FILES_main += $(MY_MOD)/org/openoffice/Office/DataAccess/Drivers-mozab2.xcu
-MY_DRIVERS += mozab2
-.END
-.END
+#.IF "$(SYSTEM_MOZILLA)" != "YES" && "$(WITH_MOZILLA)" != "NO" && \
+#        "$(OS)" != "MACOSX"
+#.IF "$(OS)" == "WNT"
+#MY_FILES_main += $(MY_MOD)/org/openoffice/Office/DataAccess/Drivers-mozab.xcu
+#MY_DRIVERS += mozab
+#.ELSE
+#MY_FILES_main += $(MY_MOD)/org/openoffice/Office/DataAccess/Drivers-mozab2.xcu
+#MY_DRIVERS += mozab2
+#.END
+#.END
+MY_FILES_main += $(MY_MOD)/org/openoffice/Office/DataAccess/Drivers-mork.xcu
 .IF "$(SYSTEM_LIBEXTTEXTCAT_DATA)" != ""
 MY_FILES_main += $(MY_MOD)/org/openoffice/Office/Paths-externallibexttextcatdata.xcu
 .ELSE

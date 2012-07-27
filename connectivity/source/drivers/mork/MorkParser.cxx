@@ -42,6 +42,12 @@
 
 std::string g_Empty = "";
 
+// Mork header of supported format version
+const char *MorkMagicHeader = "// <!-- <mdb:mork:z v=\"1.4\"/> -->";
+
+const char *MorkDictColumnMeta = "<(a=c)>";
+
+
 MorkParser::MorkParser( int DefaultScope ) :
     columns_(),
     values_(),
