@@ -29,38 +29,31 @@
 #ifndef SM_RTFEXPORT_HXX
 #define SM_RTFEXPORT_HXX
 
-#include "node.hxx"
+#include "wordexportbase.hxx"
 
 #include <rtl/strbuf.hxx>
 
 /**
  Class implementing writing of formulas to RTF.
  */
-class SmRtfExport
+class SmRtfExport : public SmWordExportBase
 {
 public:
     SmRtfExport(const SmNode* pIn);
     bool ConvertFromStarMath(OStringBuffer& rBuffer);
 private:
-    void HandleNode(const SmNode* pNode, int nLevel);
-    void HandleAllSubNodes(const SmNode* pNode, int nLevel);
-    void HandleTable(const SmNode* pNode, int nLevel);
-    void HandleVerticalStack(const SmNode* pNode, int nLevel);
-    void HandleText(const SmNode* pNode, int nLevel);
-    void HandleMath(const SmNode* pNode, int nLevel);
-    void HandleFractions(const SmNode* pNode, int nLevel, const char* type = NULL);
-    void HandleUnaryOperation(const SmUnHorNode* pNode, int nLevel);
-    void HandleBinaryOperation(const SmBinHorNode* pNode, int nLevel);
-    void HandleRoot(const SmRootNode* pNode, int nLevel);
-    void HandleAttribute(const SmAttributNode* pNode, int nLevel);
-    void HandleOperator(const SmOperNode* pNode, int nLevel);
-    void HandleSubSupScript(const SmSubSupNode* pNode, int nLevel);
-    void HandleSubSupScriptInternal(const SmSubSupNode* pNode, int nLevel, int flags);
-    void HandleMatrix(const SmMatrixNode* pNode, int nLevel);
-    void HandleBrace(const SmBraceNode* pNode, int nLevel);
-    void HandleVerticalBrace(const SmVerticalBraceNode* pNode, int nLevel);
+    virtual void HandleVerticalStack(const SmNode* pNode, int nLevel);
+    virtual void HandleText(const SmNode* pNode, int nLevel);
+    virtual void HandleFractions(const SmNode* pNode, int nLevel, const char* type = NULL);
+    virtual void HandleRoot(const SmRootNode* pNode, int nLevel);
+    virtual void HandleAttribute(const SmAttributNode* pNode, int nLevel);
+    virtual void HandleOperator(const SmOperNode* pNode, int nLevel);
+    virtual void HandleSubSupScriptInternal(const SmSubSupNode* pNode, int nLevel, int flags);
+    virtual void HandleMatrix(const SmMatrixNode* pNode, int nLevel);
+    virtual void HandleBrace(const SmBraceNode* pNode, int nLevel);
+    virtual void HandleVerticalBrace(const SmVerticalBraceNode* pNode, int nLevel);
+    virtual void HandleBlank();
 
-    const SmNode* const m_pTree;
     OStringBuffer* m_pBuffer;
 };
 
