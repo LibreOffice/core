@@ -1104,6 +1104,8 @@ sal_Bool GraphicDescriptor::ImpDetectMET( SvStream&, sal_Bool )
 |*
 \************************************************************************/
 
+extern bool isPCT(SvStream& rStream, sal_uLong nStreamPos, sal_uLong nStreamLen);
+
 sal_Bool GraphicDescriptor::ImpDetectPCT( SvStream& rStm, sal_Bool )
 {
     sal_Bool bRet = aPathExt.CompareToAscii( "pct", 3 ) == COMPARE_EQUAL;
@@ -1111,23 +1113,14 @@ sal_Bool GraphicDescriptor::ImpDetectPCT( SvStream& rStm, sal_Bool )
         nFormat = GFF_PCT;
     else
     {
-        sal_Int32 nStmPos = rStm.Tell();
-
-        sal_uInt8 sBuf[4];
-
-        rStm.SeekRel( 522 );
-        rStm.Read( sBuf, 3 );
-
-        if( !rStm.GetError() )
+        sal_Size nStreamPos = rStm.Tell();
+        sal_Size nStreamLen = rStm.remainingSize();
+        if (isPCT(rStm, nStreamPos, nStreamLen))
         {
-            if ( ( sBuf[0] == 0x00 ) && ( sBuf[1] == 0x11 ) &&
-                 ( ( sBuf[2] == 0x01 ) || ( sBuf[2] == 0x02 ) ) )
-            {
-                bRet = sal_True;
-                nFormat = GFF_PCT;
-            }
+            bRet = sal_True;
+            nFormat = GFF_PCT;
         }
-        rStm.Seek( nStmPos );
+        rStm.Seek(nStreamPos);
     }
 
     return bRet;

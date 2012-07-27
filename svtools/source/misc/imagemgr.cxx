@@ -121,6 +121,7 @@ static SvtExtensionResIdMapping_Impl const ExtensionMap_Impl[] =
     { "pas",   sal_True,  STR_DESCRIPTION_SOURCEFILE,            0 },
     { "pcd",   sal_True,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_PCD },
     { "pct",   sal_True,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_PCT },
+    { "pict",   sal_True,  STR_DESCRIPTION_GRAPHIC_DOC,          IMG_PCT },
     { "pcx",   sal_True,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_PCX },
     { "pl",    sal_True,  STR_DESCRIPTION_SOURCEFILE,            0 },
     { "png",   sal_True,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_PNG },
