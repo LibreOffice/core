@@ -2733,15 +2733,13 @@ sal_Bool GtkSalGraphics::NWPaintGTKListBox( GdkDrawable* gdkDrawable,
                                         const ImplControlValue& aValue,
                                         const OUString& rCaption )
 {
-    Rectangle        pixmapRect;
-    Rectangle        widgetRect;
     Rectangle        aIndicatorRect;
     GtkStateType    stateType;
     GtkShadowType    shadowType;
     gint            bInteriorFocus;
     gint            nFocusLineWidth;
     gint            nFocusPadding;
-    gint            x,y;
+    gint            x,y,w,h;
     GdkRectangle    clipRect;
 
     NWEnsureGTKButton( m_nXScreen );
@@ -2749,26 +2747,15 @@ sal_Bool GtkSalGraphics::NWPaintGTKListBox( GdkDrawable* gdkDrawable,
     NWEnsureGTKScrolledWindow( m_nXScreen );
     NWConvertVCLStateToGTKState( nState, &stateType, &shadowType );
 
-    // Find the overall bounding rect of the buttons's drawing area,
-    // plus its actual draw rect excluding adornment
-    pixmapRect = rControlRectangle;
-    if ( nPart == PART_WINDOW )
-    {
-        // Make the widget a _bit_ bigger
-        pixmapRect.SetPos( Point( pixmapRect.Left() - 1,
-                                  pixmapRect.Top() - 1 ) );
-        pixmapRect.SetSize( Size( pixmapRect.GetWidth() + 2,
-                                  pixmapRect.GetHeight() + 2 ) );
-    }
-
-    widgetRect = pixmapRect;
-    x = pixmapRect.Left();
-    y = pixmapRect.Top();
-
     // set up references to correct drawable and cliprect
     NWSetWidgetState( gWidgetData[m_nXScreen].gBtnWidget, nState, stateType );
     NWSetWidgetState( gWidgetData[m_nXScreen].gOptionMenuWidget, nState, stateType );
     NWSetWidgetState( gWidgetData[m_nXScreen].gScrolledWindowWidget, nState, stateType );
+
+    x = rControlRectangle.Left();
+    y = rControlRectangle.Top();
+    w = rControlRectangle.GetWidth();
+    h = rControlRectangle.GetHeight();
 
     if ( nPart != PART_WINDOW )
     {
@@ -2790,19 +2777,15 @@ sal_Bool GtkSalGraphics::NWPaintGTKListBox( GdkDrawable* gdkDrawable,
         {
             // Listboxes must paint opaque since some themes have alpha-channel enabled bodies
             gtk_paint_flat_box( m_pWindow->style, gdkDrawable, GTK_STATE_NORMAL, GTK_SHADOW_NONE,
-                                &clipRect, m_pWindow, "base", x, y,
-                                pixmapRect.GetWidth(), pixmapRect.GetHeight() );
+                                &clipRect, m_pWindow, "base", x, y, w, h);
             gtk_paint_box( gWidgetData[m_nXScreen].gOptionMenuWidget->style, gdkDrawable, stateType, shadowType, &clipRect,
                            gWidgetData[m_nXScreen].gOptionMenuWidget, "optionmenu",
-                           x+(widgetRect.Left() - pixmapRect.Left()),
-                           y+(widgetRect.Top() - pixmapRect.Top()),
-                           widgetRect.GetWidth(), widgetRect.GetHeight() );
-            aIndicatorRect = NWGetListBoxIndicatorRect( m_nXScreen, nType, nPart, widgetRect, nState,
+                           x, y, w, h);
+            aIndicatorRect = NWGetListBoxIndicatorRect( m_nXScreen, nType, nPart, rControlRectangle, nState,
                                                         aValue, rCaption );
             gtk_paint_tab( gWidgetData[m_nXScreen].gOptionMenuWidget->style, gdkDrawable, stateType, shadowType, &clipRect,
                            gWidgetData[m_nXScreen].gOptionMenuWidget, "optionmenutab",
-                           x+(aIndicatorRect.Left() - pixmapRect.Left()),
-                           y+(aIndicatorRect.Top() - pixmapRect.Top()),
+                           aIndicatorRect.Left(), aIndicatorRect.Top(),
                            aIndicatorRect.GetWidth(), aIndicatorRect.GetHeight() );
         }
         else
@@ -2811,8 +2794,7 @@ sal_Bool GtkSalGraphics::NWPaintGTKListBox( GdkDrawable* gdkDrawable,
 
             gtk_paint_shadow( gWidgetData[m_nXScreen].gScrolledWindowWidget->style, gdkDrawable, GTK_STATE_NORMAL, shadowType,
                 &clipRect, gWidgetData[m_nXScreen].gScrolledWindowWidget, "scrolled_window",
-                x+(widgetRect.Left() - pixmapRect.Left()), y+(widgetRect.Top() - pixmapRect.Top()),
-                widgetRect.GetWidth(), widgetRect.GetHeight() );
+                x, y, w, h );
         }
     }
 
