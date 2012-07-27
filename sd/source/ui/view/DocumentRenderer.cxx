@@ -1508,13 +1508,13 @@ private:
             {
                 case 1:
                     aInfo.mnDrawMode = DRAWMODE_GRAYLINE | DRAWMODE_GRAYFILL
-                        | DRAWMODE_BLACKTEXT | DRAWMODE_GRAYBITMAP
+                        | DRAWMODE_GRAYTEXT | DRAWMODE_GRAYBITMAP
                         | DRAWMODE_GRAYGRADIENT;
                     break;
 
                 case 2:
-                    aInfo.mnDrawMode = DRAWMODE_BLACKLINE | DRAWMODE_BLACKTEXT
-                        | DRAWMODE_WHITEFILL | DRAWMODE_GRAYBITMAP
+                    aInfo.mnDrawMode = DRAWMODE_BLACKLINE | DRAWMODE_WHITEFILL
+                        | DRAWMODE_BLACKTEXT | DRAWMODE_WHITEBITMAP
                         | DRAWMODE_WHITEGRADIENT;
                     break;
 
