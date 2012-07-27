@@ -59,7 +59,7 @@ DialogWindow* BasicIDEShell::CreateDlgWin( const ScriptDocument& rDocument, cons
         aDlgName = rDocument.createObjectName( E_DIALOGS, aLibName );
 
     // maybe there's a suspended one?
-    pWin = FindDlgWin( rDocument, aLibName, aDlgName, sal_False, sal_True );
+    pWin = FindDlgWin( rDocument, aLibName, aDlgName, false, true );
 
     if ( !pWin )
     {
@@ -108,14 +108,14 @@ DialogWindow* BasicIDEShell::CreateDlgWin( const ScriptDocument& rDocument, cons
         pTabBar->InsertPage( (sal_uInt16)nKey, aDlgName );
         pTabBar->Sort();
         if ( !pCurWin )
-            SetCurWindow( pWin, sal_False, sal_False );
+            SetCurWindow( pWin, false, false );
     }
 
     bCreatingWindow = sal_False;
     return pWin;
 }
 
-DialogWindow* BasicIDEShell::FindDlgWin( const ScriptDocument& rDocument, const ::rtl::OUString& rLibName, const ::rtl::OUString& rDlgName, sal_Bool bCreateIfNotExist, sal_Bool bFindSuspended )
+DialogWindow* BasicIDEShell::FindDlgWin( const ScriptDocument& rDocument, const ::rtl::OUString& rLibName, const ::rtl::OUString& rDlgName, bool bCreateIfNotExist, bool bFindSuspended )
 {
     DialogWindow* pDlgWin = 0;
     for( IDEWindowTable::const_iterator it = aIDEWindowTable.begin(); it != aIDEWindowTable.end(); ++it )

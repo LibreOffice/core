@@ -266,7 +266,7 @@ String EditorWindow::GetWordAtCursor()
 
 void EditorWindow::RequestHelp( const HelpEvent& rHEvt )
 {
-    sal_Bool bDone = sal_False;
+    bool bDone = false;
 
     // Should have been activated at some point
     if ( pEditEngine )
@@ -275,7 +275,7 @@ void EditorWindow::RequestHelp( const HelpEvent& rHEvt )
         {
             String aKeyword = GetWordAtCursor();
             Application::GetHelp()->SearchKeyword( aKeyword );
-            bDone = sal_True;
+            bDone = true;
         }
         else if ( rHEvt.GetMode() & HELPMODE_QUICK )
         {
@@ -325,7 +325,7 @@ void EditorWindow::RequestHelp( const HelpEvent& rHEvt )
                 }
             }
             Help::ShowQuickHelp( this, Rectangle( aTopLeft, Size( 1, 1 ) ), aHelpText, QUICKHELP_TOP|QUICKHELP_LEFT);
-            bDone = sal_True;
+            bDone = true;
         }
     }
 
@@ -1954,7 +1954,7 @@ sal_Bool WatchTreeListBox::EditedEntry( SvLBoxEntry* pEntry, const rtl::OUString
     if( cFirst == '\"' && cLast == '\"' )
         aResult = aResult.Copy( 1, nResultLen - 2 );
 
-    sal_Bool bResModified = ( aResult != aEditingRes ) ? sal_True : sal_False;
+    bool bResModified = ( aResult != aEditingRes );
     sal_Bool bRet = sal_False;
 
     if ( bResModified )

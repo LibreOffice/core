@@ -192,7 +192,7 @@ ModulWindow* BasicIDEShell::CreateBasWin( const ScriptDocument& rDocument, const
         aModName = rDocument.createObjectName( E_SCRIPTS, aLibName );
 
     // maybe there's an suspended one?
-    pWin = FindBasWin( rDocument, aLibName, aModName, sal_False, sal_True );
+    pWin = FindBasWin( rDocument, aLibName, aModName, false, true );
 
     if ( !pWin )
     {
@@ -205,7 +205,7 @@ ModulWindow* BasicIDEShell::CreateBasWin( const ScriptDocument& rDocument, const
 
         if ( bSuccess )
         {
-            pWin = FindBasWin( rDocument, aLibName, aModName, sal_False, sal_True );
+            pWin = FindBasWin( rDocument, aLibName, aModName, false, true );
             if( !pWin )
             {
                 // new module window
@@ -242,13 +242,13 @@ ModulWindow* BasicIDEShell::CreateBasWin( const ScriptDocument& rDocument, const
     pTabBar->Sort();
     pWin->GrabScrollBars( &aHScrollBar, &aVScrollBar );
     if ( !pCurWin )
-        SetCurWindow( pWin, sal_False, sal_False );
+        SetCurWindow( pWin, false, false );
 
     bCreatingWindow = sal_False;
     return pWin;
 }
 
-ModulWindow* BasicIDEShell::FindBasWin( const ScriptDocument& rDocument, const ::rtl::OUString& rLibName, const ::rtl::OUString& rModName, sal_Bool bCreateIfNotExist, sal_Bool bFindSuspended )
+ModulWindow* BasicIDEShell::FindBasWin( const ScriptDocument& rDocument, const ::rtl::OUString& rLibName, const ::rtl::OUString& rModName, bool bCreateIfNotExist, bool bFindSuspended )
 {
     ModulWindow* pModWin = 0;
     for( IDEWindowTable::const_iterator it = aIDEWindowTable.begin();

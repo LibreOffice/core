@@ -43,7 +43,7 @@ namespace BasicIDE
     StarBASIC*  FindBasic( const SbxVariable* pVar );
     void            StopBasic();
     long         HandleBasicError( StarBASIC* pBasic );
-    void            BasicStopped( sal_Bool* pbAppWindowDisabled = 0, sal_Bool* pbDispatcherLocked = 0, sal_uInt16* pnWaitCount = 0,
+    void            BasicStopped( bool* pbAppWindowDisabled = 0, bool* pbDispatcherLocked = 0, sal_uInt16* pnWaitCount = 0,
                             SfxUInt16Item** ppSWActionCount = 0, SfxUInt16Item** ppSWLockViewCount = 0 );
 
     sal_Bool            IsValidSbxName( const String& rName );
