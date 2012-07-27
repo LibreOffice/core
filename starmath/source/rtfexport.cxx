@@ -44,7 +44,7 @@ bool SmRtfExport::ConvertFromStarMath(OStringBuffer& rBuffer)
     if (!m_pTree)
         return false;
     m_pBuffer = &rBuffer;
-    m_pBuffer->append("{" OOO_STRING_SVTOOLS_RTF_IGNORE "\\moMath");
+    m_pBuffer->append("{" OOO_STRING_SVTOOLS_RTF_IGNORE LO_STRING_SVTOOLS_RTF_MOMATH " ");
     HandleNode(m_pTree, 0);
     m_pBuffer->append("}"); // moMath
     return true;
@@ -55,11 +55,11 @@ bool SmRtfExport::ConvertFromStarMath(OStringBuffer& rBuffer)
 
 void SmRtfExport::HandleVerticalStack(const SmNode* pNode, int nLevel)
 {
-    m_pBuffer->append("{\\meqArr ");
+    m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_MEQARR " ");
     int size = pNode->GetNumSubNodes();
     for (int i = 0; i < size; ++i)
     {
-        m_pBuffer->append("{\\me ");
+        m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_ME " ");
         HandleNode(pNode->GetSubNode( i ), nLevel + 1);
         m_pBuffer->append("}"); // me
     }
@@ -68,7 +68,7 @@ void SmRtfExport::HandleVerticalStack(const SmNode* pNode, int nLevel)
 
 void SmRtfExport::HandleText(const SmNode* pNode, int /*nLevel*/)
 {
-    m_pBuffer->append("{\\mr ");
+    m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_MR " ");
 
     SmTextNode* pTemp=(SmTextNode* )pNode;
     SAL_INFO("starmath.rtf", "Text: " << pTemp->GetText());
@@ -84,20 +84,20 @@ void SmRtfExport::HandleText(const SmNode* pNode, int /*nLevel*/)
 
 void SmRtfExport::HandleFractions(const SmNode* pNode, int nLevel, const char* type)
 {
-    m_pBuffer->append("{\\mf ");
+    m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_MF " ");
     if (type)
     {
-        m_pBuffer->append("{\\mfPr ");
-        m_pBuffer->append("{\\mtype ");
+        m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_MFPR " ");
+        m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_MTYPE " ");
         m_pBuffer->append(type);
         m_pBuffer->append("}"); // mtype
         m_pBuffer->append("}"); // mfPr
     }
     OSL_ASSERT(pNode->GetNumSubNodes() == 3);
-    m_pBuffer->append("{\\mnum ");
+    m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_MNUM " ");
     HandleNode(pNode->GetSubNode(0), nLevel + 1);
     m_pBuffer->append("}"); // mnum
-    m_pBuffer->append("{\\mden ");
+    m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_MDEN " ");
     HandleNode(pNode->GetSubNode(2), nLevel + 1);
     m_pBuffer->append("}"); // mden
     m_pBuffer->append("}"); // mf
@@ -123,14 +123,14 @@ void SmRtfExport::HandleAttribute(const SmAttributNode* pNode, int nLevel)
         case TWIDEVEC:
         case TBAR:
         {
-            m_pBuffer->append("{\\macc ");
-            m_pBuffer->append("{\\maccPr ");
-            m_pBuffer->append("{\\mchr ");
+            m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_MACC " ");
+            m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_MACCPR " ");
+            m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_MCHR " ");
             OUString aValue(pNode->Attribute()->GetToken().cMathChar);
             m_pBuffer->append(msfilter::rtfutil::OutString(aValue, RTL_TEXTENCODING_MS_1252));
             m_pBuffer->append("}"); // mchr
             m_pBuffer->append("}"); // maccPr
-            m_pBuffer->append("{\\me ");
+            m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_ME " ");
             HandleNode( pNode->Body(), nLevel + 1 );
             m_pBuffer->append("}"); // me
             m_pBuffer->append("}"); // macc
@@ -138,27 +138,27 @@ void SmRtfExport::HandleAttribute(const SmAttributNode* pNode, int nLevel)
         }
         case TOVERLINE:
         case TUNDERLINE:
-            m_pBuffer->append("{\\mbar ");
-            m_pBuffer->append("{\\mbarPr ");
-            m_pBuffer->append("{\\mpos ");
+            m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_MBAR " ");
+            m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_MBARPR " ");
+            m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_MPOS " ");
             m_pBuffer->append((pNode->Attribute()->GetToken().eType == TUNDERLINE ) ? "bot" : "top");
             m_pBuffer->append("}"); // mpos
             m_pBuffer->append("}"); // mbarPr
-            m_pBuffer->append("{\\me ");
+            m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_ME " ");
             HandleNode( pNode->Body(), nLevel + 1 );
             m_pBuffer->append("}"); // me
             m_pBuffer->append("}"); // mbar
             break;
         case TOVERSTRIKE:
-            m_pBuffer->append("{\\mborderBox ");
-            m_pBuffer->append("{\\mborderBoxPr ");
-            m_pBuffer->append("{\\mhideTop 1}");
-            m_pBuffer->append("{\\mhideBot 1}");
-            m_pBuffer->append("{\\mhideLeft 1}");
-            m_pBuffer->append("{\\mhideRight 1}");
-            m_pBuffer->append("{\\mstrikeH 1}");
+            m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_MBORDERBOX " ");
+            m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_MBORDERBOXPR " ");
+            m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_MHIDETOP " 1}");
+            m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_MHIDEBOT " 1}");
+            m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_MHIDELEFT " 1}");
+            m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_MHIDERIGHT " 1}");
+            m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_MSTRIKEH " 1}");
             m_pBuffer->append("}"); // mborderBoxPr
-            m_pBuffer->append("{\\me ");
+            m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_ME " ");
             HandleNode( pNode->Body(), nLevel + 1 );
             m_pBuffer->append("}"); // me
             m_pBuffer->append("}"); // mborderBox
@@ -171,21 +171,21 @@ void SmRtfExport::HandleAttribute(const SmAttributNode* pNode, int nLevel)
 
 void SmRtfExport::HandleRoot(const SmRootNode* pNode, int nLevel)
 {
-    m_pBuffer->append("{\\mrad ");
+    m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_MRAD " ");
     if (const SmNode* argument = pNode->Argument())
     {
-        m_pBuffer->append("{\\mdeg ");
+        m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_MDEG " ");
         HandleNode(argument, nLevel + 1);
         m_pBuffer->append("}"); // mdeg
     }
     else
     {
-        m_pBuffer->append("{\\mradPr ");
-        m_pBuffer->append("{\\mdegHide 1}");
+        m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_MRADPR " ");
+        m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_MDEGHIDE " 1}");
         m_pBuffer->append("}"); // mradPr
-        m_pBuffer->append("{\\mdeg }"); // empty but present
+        m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_MDEG " }"); // empty but present
     }
-    m_pBuffer->append("{\\me ");
+    m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_ME " ");
     HandleNode(pNode->Body(), nLevel + 1);
     m_pBuffer->append("}"); // me
     m_pBuffer->append("}"); // mrad
@@ -222,53 +222,53 @@ void SmRtfExport::HandleOperator(const SmOperNode* pNode, int nLevel)
         {
             const SmSubSupNode* subsup = pNode->GetSubNode(0)->GetType() == NSUBSUP ? static_cast<const SmSubSupNode*>(pNode->GetSubNode(0)) : 0;
             const SmNode* operation = subsup ? subsup->GetBody() : pNode->GetSubNode(0);
-            m_pBuffer->append("{\\mnary ");
-            m_pBuffer->append("{\\mnaryPr ");
-            m_pBuffer->append("{\\mchr ");
+            m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_MNARY " ");
+            m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_MNARYPR " ");
+            m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_MCHR " ");
             m_pBuffer->append(mathSymbolToString(operation));
             m_pBuffer->append("}"); // mchr
             if (!subsup || !subsup->GetSubSup(CSUB))
-                m_pBuffer->append("{\\msubHide 1}");
+                m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_MSUBHIDE " 1}");
             if (!subsup || !subsup->GetSubSup(CSUP))
-                m_pBuffer->append("{\\msupHide 1}");
+                m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_MSUPHIDE " 1}");
             m_pBuffer->append("}"); // mnaryPr
             if (!subsup || !subsup->GetSubSup(CSUB))
-                m_pBuffer->append("{\\msub }");
+                m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_MSUB " }");
             else
             {
-                m_pBuffer->append("{\\msub ");
+                m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_MSUB " ");
                 HandleNode(subsup->GetSubSup(CSUB), nLevel + 1);
                 m_pBuffer->append("}"); // msub
             }
             if (!subsup || !subsup->GetSubSup( CSUP ))
-                m_pBuffer->append("{\\msup }");
+                m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_MSUP " }");
             else
             {
-                m_pBuffer->append("{\\msup ");
+                m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_MSUP " ");
                 HandleNode(subsup->GetSubSup(CSUP), nLevel + 1);
                 m_pBuffer->append("}"); // msup
             }
-            m_pBuffer->append("{\\me ");
+            m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_ME " ");
             HandleNode(pNode->GetSubNode(1), nLevel + 1); // body
             m_pBuffer->append("}"); // me
             m_pBuffer->append("}"); // mnary
             break;
         }
         case TLIM:
-            m_pBuffer->append("{\\mfunc ");
-            m_pBuffer->append("{\\mfName ");
-            m_pBuffer->append("{\\mlimLow ");
-            m_pBuffer->append("{\\me ");
+            m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_MFUNC " ");
+            m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_MFNAME " ");
+            m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_MLIMLOW " ");
+            m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_ME " ");
             HandleNode(pNode->GetSymbol(), nLevel + 1);
             m_pBuffer->append("}"); // me
-            m_pBuffer->append("{\\mlim ");
+            m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_MLIM " ");
             if (const SmSubSupNode* subsup = pNode->GetSubNode(0)->GetType() == NSUBSUP ? static_cast<const SmSubSupNode*>( pNode->GetSubNode(0)) : 0)
                 if (subsup->GetSubSup(CSUB))
                     HandleNode(subsup->GetSubSup(CSUB), nLevel + 1);
             m_pBuffer->append("}"); // mlim
             m_pBuffer->append("}"); // mlimLow
             m_pBuffer->append("}"); // mfName
-            m_pBuffer->append("{\\me ");
+            m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_ME " ");
             HandleNode(pNode->GetSubNode(1), nLevel + 1); // body
             m_pBuffer->append("}"); // me
             m_pBuffer->append("}"); // mfunc
@@ -287,62 +287,62 @@ void SmRtfExport::HandleSubSupScriptInternal(const SmSubSupNode* pNode, int nLev
         return;
     if ((flags & (1 << RSUP | 1 << RSUB)) == (1 << RSUP | 1 << RSUB))
     { // m:sSubSup
-        m_pBuffer->append("{\\msSubSup ");
-        m_pBuffer->append("{\\me ");
+        m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_MSSUBSUP " ");
+        m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_ME " ");
         flags &= ~(1 << RSUP | 1 << RSUB);
         if (flags == 0)
             HandleNode(pNode->GetBody(), nLevel + 1);
         else
             HandleSubSupScriptInternal(pNode, nLevel, flags);
         m_pBuffer->append("}"); // me
-        m_pBuffer->append("{\\msub ");
+        m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_MSUB " ");
         HandleNode(pNode->GetSubSup(RSUB), nLevel + 1);
         m_pBuffer->append("}"); // msub
-        m_pBuffer->append("{\\msup ");
+        m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_MSUP " ");
         HandleNode(pNode->GetSubSup(RSUP ), nLevel + 1);
         m_pBuffer->append("}"); // msup
         m_pBuffer->append("}"); // msubSup
     }
     else if ((flags & (1 << RSUB)) == 1 << RSUB)
     { // m:sSub
-        m_pBuffer->append("{\\msSub ");
-        m_pBuffer->append("{\\me ");
+        m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_MSSUB " ");
+        m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_ME " ");
         flags &= ~(1 << RSUB);
         if (flags == 0)
             HandleNode(pNode->GetBody(), nLevel + 1);
         else
             HandleSubSupScriptInternal(pNode, nLevel, flags);
         m_pBuffer->append("}"); // me
-        m_pBuffer->append("{\\msub ");
+        m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_MSUB " ");
         HandleNode(pNode->GetSubSup(RSUB), nLevel + 1);
         m_pBuffer->append("}"); // msub
         m_pBuffer->append("}"); // msSub
     }
     else if ((flags & (1 << RSUP)) == 1 << RSUP)
     { // m:sSup
-        m_pBuffer->append("{\\msSup ");
-        m_pBuffer->append("{\\me ");
+        m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_MSSUP " ");
+        m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_ME " ");
         flags &= ~(1 << RSUP);
         if (flags == 0)
             HandleNode(pNode->GetBody(), nLevel + 1);
         else
             HandleSubSupScriptInternal(pNode, nLevel, flags);
         m_pBuffer->append("}"); // me
-        m_pBuffer->append("{\\msup ");
+        m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_MSUP " ");
         HandleNode(pNode->GetSubSup(RSUP), nLevel + 1);
         m_pBuffer->append("}"); // msup
         m_pBuffer->append("}"); // msSup
     }
     else if ((flags & (1 << LSUP | 1 << LSUB)) == (1 << LSUP | 1 << LSUB))
     { // m:sPre
-        m_pBuffer->append("{\\msPre ");
-        m_pBuffer->append("{\\msub ");
+        m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_MSPRE " ");
+        m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_MSUB " ");
         HandleNode(pNode->GetSubSup(LSUB ), nLevel + 1);
         m_pBuffer->append("}"); // msub
-        m_pBuffer->append("{\\msup ");
+        m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_MSUP " ");
         HandleNode(pNode->GetSubSup(LSUP), nLevel + 1);
         m_pBuffer->append("}"); // msup
-        m_pBuffer->append("{\\me ");
+        m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_ME " ");
         flags &= ~(1 << LSUP | 1 << LSUB);
         if (flags == 0)
             HandleNode(pNode->GetBody(), nLevel + 1);
@@ -353,30 +353,30 @@ void SmRtfExport::HandleSubSupScriptInternal(const SmSubSupNode* pNode, int nLev
     }
     else if ((flags & (1 << CSUB)) == (1 << CSUB))
     { // m:limLow looks like a good element for central superscript
-        m_pBuffer->append("{\\mlimLow ");
-        m_pBuffer->append("{\\me ");
+        m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_MLIMLOW " ");
+        m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_ME " ");
         flags &= ~(1 << CSUB);
         if (flags == 0)
             HandleNode(pNode->GetBody(), nLevel + 1);
         else
             HandleSubSupScriptInternal(pNode, nLevel, flags);
         m_pBuffer->append("}"); // me
-        m_pBuffer->append("{\\mlim ");
+        m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_MLIM " ");
         HandleNode(pNode->GetSubSup(CSUB), nLevel + 1);
         m_pBuffer->append("}"); // mlim
         m_pBuffer->append("}"); // mlimLow
     }
     else if ((flags & (1 << CSUP)) == (1 << CSUP))
     { // m:limUpp looks like a good element for central superscript
-        m_pBuffer->append("{\\mlimUpp ");
-        m_pBuffer->append("{\\me ");
+        m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_MLIMUPP " ");
+        m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_ME " ");
         flags &= ~(1 << CSUP);
         if (flags == 0)
             HandleNode(pNode->GetBody(), nLevel + 1);
         else
             HandleSubSupScriptInternal(pNode, nLevel, flags);
         m_pBuffer->append("}"); // me
-        m_pBuffer->append("{\\mlim ");
+        m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_MLIM " ");
         HandleNode(pNode->GetSubSup(CSUP), nLevel + 1);
         m_pBuffer->append("}"); // mlim
         m_pBuffer->append("}"); // mlimUpp
@@ -387,13 +387,13 @@ void SmRtfExport::HandleSubSupScriptInternal(const SmSubSupNode* pNode, int nLev
 
 void SmRtfExport::HandleMatrix(const SmMatrixNode* pNode, int nLevel)
 {
-    m_pBuffer->append("{\\mm ");
+    m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_MM " ");
     for (int row = 0; row < pNode->GetNumRows(); ++row )
     {
-        m_pBuffer->append("{\\mmr ");
+        m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_MMR " ");
         for (int col = 0; col < pNode->GetNumCols(); ++col )
         {
-            m_pBuffer->append("{\\me ");
+            m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_ME " ");
             if (const SmNode* node = pNode->GetSubNode(row * pNode->GetNumCols() + col))
                 HandleNode(node, nLevel + 1);
             m_pBuffer->append("}"); // me
@@ -405,9 +405,9 @@ void SmRtfExport::HandleMatrix(const SmMatrixNode* pNode, int nLevel)
 
 void SmRtfExport::HandleBrace(const SmBraceNode* pNode, int nLevel)
 {
-    m_pBuffer->append("{\\md ");
-    m_pBuffer->append("{\\mdPr ");
-    m_pBuffer->append("{\\mbegChr ");
+    m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_MD " ");
+    m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_MDPR " ");
+    m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_MBEGCHR " ");
     m_pBuffer->append(mathSymbolToString(pNode->OpeningBrace()));
     m_pBuffer->append("}"); // mbegChr
     std::vector< const SmNode* > subnodes;
@@ -423,7 +423,7 @@ void SmRtfExport::HandleBrace(const SmBraceNode* pNode, int nLevel)
                 const SmMathSymbolNode* math = static_cast<const SmMathSymbolNode*>(subnode);
                 if(!separatorWritten)
                 {
-                    m_pBuffer->append("{\\msepChr ");
+                    m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_MSEPCHR " ");
                     m_pBuffer->append(mathSymbolToString(math));
                     m_pBuffer->append("}"); // msepChr
                     separatorWritten = true;
@@ -435,13 +435,13 @@ void SmRtfExport::HandleBrace(const SmBraceNode* pNode, int nLevel)
     }
     else
         subnodes.push_back(pNode->Body());
-    m_pBuffer->append("{\\mendChr ");
+    m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_MENDCHR " ");
     m_pBuffer->append(mathSymbolToString(pNode->ClosingBrace()));
     m_pBuffer->append("}"); // mendChr
     m_pBuffer->append("}"); // mdPr
     for (unsigned int i = 0; i < subnodes.size(); ++i)
     {
-        m_pBuffer->append("{\\me ");
+        m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_ME " ");
         HandleNode(subnodes[ i ], nLevel + 1);
         m_pBuffer->append("}"); // me
     }
@@ -458,25 +458,25 @@ void SmRtfExport::HandleVerticalBrace(const SmVerticalBraceNode* pNode, int nLev
         {
             bool top = (pNode->GetToken().eType == TOVERBRACE);
             if (top)
-                m_pBuffer->append("{\\mlimUpp ");
+                m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_MLIMUPP " ");
             else
-                m_pBuffer->append("{\\mlimLow ");
-            m_pBuffer->append("{\\me ");
-            m_pBuffer->append("{\\mgroupChr ");
-            m_pBuffer->append("{\\mgroupChrPr ");
-            m_pBuffer->append("{\\mchr ");
+                m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_MLIMLOW " ");
+            m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_ME " ");
+            m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_MGROUPCHR " ");
+            m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_MGROUPCHRPR " ");
+            m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_MCHR " ");
             m_pBuffer->append(mathSymbolToString(pNode->Brace()));
             m_pBuffer->append("}"); // mchr
             // TODO not sure if pos and vertJc are correct
-            m_pBuffer->append("{\\mpos ").append(top ? "top" : "bot").append("}");
-            m_pBuffer->append("{\\mvertJc ").append(top ? "bot" : "top").append("}");
+            m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_MPOS " ").append(top ? "top" : "bot").append("}");
+            m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_MVERTJC " ").append(top ? "bot" : "top").append("}");
             m_pBuffer->append("}"); // mgroupChrPr
-            m_pBuffer->append("{\\me ");
+            m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_ME " ");
             HandleNode(pNode->Body(), nLevel + 1);
             m_pBuffer->append("}"); // me
             m_pBuffer->append("}"); // mgroupChr
             m_pBuffer->append("}"); // me
-            m_pBuffer->append("{\\mlim ");
+            m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_MLIM " ");
             HandleNode(pNode->Script(), nLevel + 1);
             m_pBuffer->append("}"); // mlim
             m_pBuffer->append("}"); // mlimUpp or mlimLow
@@ -490,7 +490,7 @@ void SmRtfExport::HandleVerticalBrace(const SmVerticalBraceNode* pNode, int nLev
 
 void SmRtfExport::HandleBlank()
 {
-    m_pBuffer->append("{\\mr ");
+    m_pBuffer->append("{" LO_STRING_SVTOOLS_RTF_MR " ");
     m_pBuffer->append(" ");
     m_pBuffer->append("}"); // mr
 }
