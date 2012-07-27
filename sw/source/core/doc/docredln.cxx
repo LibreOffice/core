@@ -2811,7 +2811,7 @@ sal_uInt16 SwRedlineTbl::FindNextSeqNo( sal_uInt16 nSeqNo, sal_uInt16 nSttPos,
     {
         nEnd = size();
         if( nLookahead && USHRT_MAX != nLookahead &&
-            nSttPos + nLookahead < size() )
+            static_cast<size_t>(nSttPos + nLookahead) < size() )
             nEnd = nSttPos + nLookahead;
 
         for( ; nSttPos < nEnd; ++nSttPos )
