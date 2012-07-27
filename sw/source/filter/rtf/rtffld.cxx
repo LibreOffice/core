@@ -155,7 +155,10 @@ static RTF_FLD_TYPES _WhichFld( String& rName, String& rNext )
         {
             rName = rName.Copy( nFndPos, static_cast< xub_StrLen >(nLen) );
             nFndPos += nTokenStt + static_cast< xub_StrLen >(nLen);
-            while( rNext.GetChar( nFndPos ) == ' ' )    ++nFndPos;
+            while ((nFndPos < rNext.Len()) && (rNext.GetChar(nFndPos) == ' '))
+            {
+                ++nFndPos;
+            }
             rNext.Erase( 0, nFndPos );
             rNext = comphelper::string::stripEnd(rNext, ' ');
             return aFldNmArr[n].eFldType;
@@ -387,8 +390,10 @@ int SwRTFParser::MakeFieldInst( String& rFieldStr )
     {
         xub_StrLen nStartDel = nPos;
         nPos += 2;
-        while (aSaveStr.GetChar(nPos) == ' ')
+        while ((nPos < aSaveStr.Len()) && (aSaveStr.GetChar(nPos) == ' '))
+        {
             ++nPos;
+        }
         if (aSaveStr.EqualsIgnoreCaseAscii("MERGEFORMAT", nPos, 11))
         {
             xub_StrLen nNoDel = (nPos + 11 ) - nStartDel;
@@ -430,7 +435,9 @@ int SwRTFParser::MakeFieldInst( String& rFieldStr )
             if( STRING_NOTFOUND != ( nPos = aSaveStr.SearchAscii( "\\*" )) )
             {
                 nPos += 2;
-                while( aSaveStr.GetChar(nPos) == ' ' ) nPos++;
+                while ((nPos < aSaveStr.Len()) &&
+                       (aSaveStr.GetChar(nPos) == ' '))
+                { nPos++; }
                 aSaveStr.Erase( 0, nPos );
 
                 // steht jetzt geanu auf dem Format-Namen
@@ -449,7 +456,9 @@ int SwRTFParser::MakeFieldInst( String& rFieldStr )
             if( STRING_NOTFOUND != ( nPos = aSaveStr.SearchAscii( "\\*" )) )
             {
                 nPos += 2;
-                while( aSaveStr.GetChar(nPos) == ' ' ) nPos++;
+                while ((nPos < aSaveStr.Len()) &&
+                       (aSaveStr.GetChar(nPos) == ' '))
+                { nPos++; }
                 aSaveStr.Erase( 0, nPos );
 
                 // steht jetzt geanu auf dem Format-Namen
@@ -529,7 +538,7 @@ int SwRTFParser::MakeFieldInst( String& rFieldStr )
             // werden:
             //  \\data -> Datenbank-Name als Field
             //  DATA -> Datenbank-Info
-            sal_Bool bField = rFieldStr.GetChar( 0 ) != 'D';
+            bool const bField = rFieldStr.Len() && rFieldStr.GetChar(0) != 'D';
 
             // nur der Name interressiert
             if( STRING_NOTFOUND != (nPos = aSaveStr.Search( '.' )) )

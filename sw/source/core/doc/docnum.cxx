@@ -89,6 +89,9 @@ namespace {
     }
 }
 
+#include <stdlib.h>
+
+
 inline sal_uInt8 GetUpperLvlChg( sal_uInt8 nCurLvl, sal_uInt8 nLevel, sal_uInt16 nMask )
 {
     if( 1 < nLevel )
@@ -2164,6 +2167,11 @@ SwNumRule* SwDoc::FindNumRulePtr( const String& rName ) const
 
 void SwDoc::AddNumRule(SwNumRule * pRule)
 {
+    if ((SAL_MAX_UINT16 - 1) <= pNumRuleTbl->size())
+    {
+        OSL_ENSURE(false, "SwDoc::AddNumRule: table full.");
+        abort(); // this should never happen on real documents
+    }
     pNumRuleTbl->push_back(pRule);
     maNumRuleMap[pRule->GetName()] = pRule;
     pRule->SetNumRuleMap(&maNumRuleMap);
