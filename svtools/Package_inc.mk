@@ -142,7 +142,6 @@ $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/svtresid.hxx,svtools/s
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/svtdllapi.h,svtools/svtdllapi.h))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/svtools.hrc,svtools/svtools.hrc))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/svtreebx.hxx,svtools/svtreebx.hxx))
-$(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/svxbox.hxx,svtools/svxbox.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/syntaxhighlight.hxx,svtools/syntaxhighlight.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/tabbar.hxx,svtools/tabbar.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/table/tablecontrolinterface.hxx,svtools/table/tablecontrolinterface.hxx))

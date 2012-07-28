@@ -23,7 +23,6 @@
 #include <vcl/ctrl.hxx>
 #include <svtools/stdctrl.hxx>
 #include <vcl/edit.hxx>
-#include <svtools/svxbox.hxx>
 #include <vcl/button.hxx>
 #include <vcl/group.hxx>
 #include <vcl/dialog.hxx>

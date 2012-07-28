@@ -29,12 +29,13 @@
 #ifndef _EDTSPELL_HXX
 #define _EDTSPELL_HXX
 
-#include <svtools/svxbox.hxx>
-#include <editeng/svxenum.hxx>
-#include <editeng/splwrap.hxx>
-#include <editeng/svxacorr.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <editeng/editengdllapi.h>
+#include <editeng/splwrap.hxx>
+#include <editeng/svxacorr.hxx>
+#include <editeng/svxenum.hxx>
+#include <tools/link.hxx>
+#include <vcl/outdev.hxx>
 
 namespace com { namespace sun { namespace star { namespace linguistic2 {
     class XSpellChecker1;

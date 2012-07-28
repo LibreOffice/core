@@ -43,7 +43,6 @@
 #include <com/sun/star/uno/Reference.hxx>
 
 
-#include <svtools/svxbox.hxx>
 #include <svx/langbox.hxx>
 #include <memory>
 #include <svtools/svmedit.hxx>
