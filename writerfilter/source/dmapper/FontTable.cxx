@@ -102,7 +102,7 @@ void FontTable::lcl_attribute(Id Name, Value & val)
         break;
         case NS_ooxml::LN_CT_Charset_characterSet:
         {
-            rtl::OString tmp;
+            OString tmp;
             sValue.convertToString( &tmp, RTL_TEXTENCODING_ASCII_US, OUSTRING_TO_OSTRING_CVTFLAGS );
             m_pImpl->pCurrentEntry->nTextEncoding = rtl_getTextEncodingFromMimeCharset( tmp.getStr() );
         break;

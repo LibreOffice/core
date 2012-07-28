@@ -95,7 +95,7 @@ string toString(uno::Reference< text::XTextRange > textRange)
     if (textRange.get())
     {
         OUString aOUStr = textRange->getString();
-        rtl::OString aOStr(aOUStr.getStr(), aOUStr.getLength(),  RTL_TEXTENCODING_ASCII_US );
+        OString aOStr(aOUStr.getStr(), aOUStr.getLength(),  RTL_TEXTENCODING_ASCII_US );
 
         result = aOStr.getStr();
     }

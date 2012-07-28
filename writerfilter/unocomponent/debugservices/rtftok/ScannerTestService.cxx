@@ -55,17 +55,17 @@ const sal_Char ScannerTestService::IMPLEMENTATION_NAME[40] = "debugservices.rtft
 
 struct ScannerTestServiceHelper
 {
-    size_t operator()(const rtl::OString &str) const
+    size_t operator()(const OString &str) const
     {
         return str.hashCode();
     }
-    bool operator()(const rtl::OString &str1, const rtl::OString &str2) const
+    bool operator()(const OString &str1, const OString &str2) const
     {
         return str1.compareTo(str2)==0;
     }
 };
 
-typedef ::boost::unordered_set< ::rtl::OString, ScannerTestServiceHelper, ScannerTestServiceHelper > ScannerTestServiceTokenMap;
+typedef ::boost::unordered_set< OString, ScannerTestServiceHelper, ScannerTestServiceHelper > ScannerTestServiceTokenMap;
 
 class MyRtfScannerHandler : public writerfilter::rtftok::RTFScannerHandler
 {
@@ -82,7 +82,7 @@ class MyRtfScannerHandler : public writerfilter::rtftok::RTFScannerHandler
 
     void dest(char* token, char* /*value*/)
     {
-        destMap.insert(rtl::OString(token));
+        destMap.insert(OString(token));
         if (strcmp(token, "objdata")==0)
         {
             binBuffer.clear();
@@ -92,7 +92,7 @@ class MyRtfScannerHandler : public writerfilter::rtftok::RTFScannerHandler
     }
     void ctrl(char*token, char* /*value*/)
     {
-        ctrlMap.insert(rtl::OString(token));
+        ctrlMap.insert(OString(token));
     }
     void lbrace(void)
     {

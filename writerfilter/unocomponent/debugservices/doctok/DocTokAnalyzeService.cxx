@@ -105,8 +105,8 @@ public:
                     (&pNew, reinterpret_cast<const sal_Char *>(&aSeq[0]),
                      nCount);
 
-                rtl::OString aTmp(pNew);
-                OUString aTail(rtl::OStringToOUString
+                OString aTmp(pNew);
+                OUString aTail(OStringToOUString
                                     (aTmp, RTL_TEXTENCODING_ASCII_US));
                 mString = mString.concat(aTail);
             }
@@ -169,7 +169,7 @@ sal_Int32 SAL_CALL AnalyzeService::run
         {
             uno::Reference<ucb::XSimpleFileAccess2> xFileAccess(ucb::SimpleFileAccess::create(xContext));
 
-            rtl::OString aStr;
+            OString aStr;
             aURL.convertToString(&aStr, RTL_TEXTENCODING_ASCII_US,
                                  OUSTRING_TO_OSTRING_CVTFLAGS);
 

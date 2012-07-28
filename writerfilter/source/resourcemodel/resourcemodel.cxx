@@ -407,7 +407,7 @@ void WW8StreamHandler::info(const string & info_)
 
 void WW8PropertiesHandler::attribute(Id name, Value & val)
 {
-    boost::shared_ptr<rtl::OString> pStr(new ::rtl::OString());
+    boost::shared_ptr<OString> pStr(new OString());
     OUString aStr = val.getString();
     aStr.convertToString(pStr.get(), RTL_TEXTENCODING_ASCII_US,
                          OUSTRING_TO_OSTRING_CVTFLAGS);

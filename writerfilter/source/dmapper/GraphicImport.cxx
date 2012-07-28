@@ -1244,11 +1244,11 @@ void GraphicImport::lcl_sprm(Sprm & rSprm)
         break;
         default:
 #if OSL_DEBUG_LEVEL > 0
-            ::rtl::OString sMessage( "GraphicImport::sprm() - Id: ");
-            sMessage += ::rtl::OString::valueOf( sal_Int32( nSprmId ), 10 );
-            sMessage += ::rtl::OString(" / 0x");
-            sMessage += ::rtl::OString::valueOf( sal_Int32( nSprmId ), 16 );
-            OSL_FAIL( sMessage.getStr())
+            OString sMessage( "GraphicImport::sprm() - Id: ");
+            sMessage += OString::valueOf( sal_Int32( nSprmId ), 10 );
+            sMessage += " / 0x";
+            sMessage += OString::valueOf( sal_Int32( nSprmId ), 16 );
+            SAL_WARN("writerfilter", sMessage.getStr());
 #endif
             ;
     }

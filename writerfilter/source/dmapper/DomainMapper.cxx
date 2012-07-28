@@ -1437,15 +1437,15 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
         default:
             {
 #if OSL_DEBUG_LEVEL > 0
-            ::rtl::OString sMessage( "DomainMapper::attribute() - Id: ");
-            sMessage += ::rtl::OString::valueOf( sal_Int32( nName ), 10 );
-            sMessage += ::rtl::OString(" / 0x");
-            sMessage += ::rtl::OString::valueOf( sal_Int32( nName ), 16 );
-            sMessage += ::rtl::OString(" value: ");
-            sMessage += ::rtl::OString::valueOf( sal_Int32( nIntValue ), 10 );
-            sMessage += ::rtl::OString(" / 0x");
-            sMessage += ::rtl::OString::valueOf( sal_Int32( nIntValue ), 16 );
-            OSL_FAIL( sMessage.getStr()); //
+            OString sMessage("DomainMapper::attribute() - Id: ");
+            sMessage += OString::valueOf( sal_Int32( nName ), 10 );
+            sMessage += " / 0x";
+            sMessage += OString::valueOf( sal_Int32( nName ), 16 );
+            sMessage += " value: ";
+            sMessage += OString::valueOf( sal_Int32( nIntValue ), 10 );
+            sMessage += " / 0x";
+            sMessage += OString::valueOf( sal_Int32( nIntValue ), 16 );
+            SAL_WARN("writerfilter", sMessage.getStr());
 #endif
             }
         }

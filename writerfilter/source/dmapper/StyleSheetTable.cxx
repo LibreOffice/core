@@ -873,19 +873,19 @@ void StyleSheetTable::ApplyStyleSheets( FontTablePtr rFontTable )
                         catch( const lang::WrappedTargetException& rWrapped)
                         {
                             (void) rWrapped;
-                            rtl::OString aMessage("Some style properties could not be set");
+                            OString aMessage("Some style properties could not be set");
 #if OSL_DEBUG_LEVEL > 0
                             beans::UnknownPropertyException aUnknownPropertyException;
 
                             if( rWrapped.TargetException >>= aUnknownPropertyException )
                             {
-                                aMessage += rtl::OString(": " );
-                                ::rtl::OString sTemp;
+                                aMessage += ": ";
+                                OString sTemp;
                                 aUnknownPropertyException.Message.convertToString(&sTemp, RTL_TEXTENCODING_ASCII_US, 0 );
                                 aMessage += sTemp;
                             }
 #endif
-                            OSL_FAIL( aMessage.getStr());
+                            SAL_WARN("writerfilter", aMessage.getStr());
                         }
                         catch( const uno::Exception& rEx)
                         {
