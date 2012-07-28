@@ -16,11 +16,13 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
+import android.preference.PreferenceManager;
 import android.text.format.DateFormat;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -71,7 +73,13 @@ public class PresentationActivity extends Activity {
 
 	@Override
 	public boolean dispatchKeyEvent(KeyEvent event) {
-		if (mPresentationFragment.isVisible() || mThumbnailFragment.isVisible()) {
+		SharedPreferences aPref = PreferenceManager
+		                .getDefaultSharedPreferences(this);
+		boolean aVolumeSwitching = aPref.getBoolean("option_volumeswitching",
+		                false);
+		boolean aRelevantFragmentVisible = mPresentationFragment.isVisible()
+		                || mThumbnailFragment.isVisible();
+		if (aVolumeSwitching && aRelevantFragmentVisible) {
 
 			int action = event.getAction();
 			int keyCode = event.getKeyCode();
