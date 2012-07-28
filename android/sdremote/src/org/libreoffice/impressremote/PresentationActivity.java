@@ -17,7 +17,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -152,11 +151,9 @@ public class PresentationActivity extends Activity {
 			boolean aRelevantFragmentVisible = mPresentationFragment
 			                .isVisible() || mThumbnailFragment.isVisible();
 			if (aRelevantFragmentVisible) {
-				Bitmap aBitmap = mCommunicationService.getSlideShow().getImage(
-				                mCommunicationService.getSlideShow()
-				                                .getCurrentSlide());
 
-				BlankScreenFragment aFragment = new BlankScreenFragment(aBitmap);
+				BlankScreenFragment aFragment = new BlankScreenFragment(
+				                mCommunicationService);
 
 				FragmentTransaction ft = getFragmentManager()
 				                .beginTransaction();

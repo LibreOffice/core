@@ -52,8 +52,12 @@ public class Transmitter {
 	 * @param aColor
 	 */
 	public void blankScreen(Color aColor) {
-		// Fixme: check how to get colour in integer form.
+		// FIXME: check how to get colour in integer form.
 		mClient.sendCommand("presentation_blank_screen\n" + aColor + "\n\n");
+	}
+
+	public void resume() {
+		mClient.sendCommand("presentation_resume\n\n");
 	}
 
 	public void startPresentation() {

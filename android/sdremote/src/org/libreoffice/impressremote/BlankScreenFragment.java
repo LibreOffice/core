@@ -1,5 +1,7 @@
 package org.libreoffice.impressremote;
 
+import org.libreoffice.impressremote.communication.CommunicationService;
+
 import android.app.Fragment;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -14,10 +16,10 @@ import android.widget.ImageView;
 
 public class BlankScreenFragment extends Fragment {
 
-	Bitmap mBitmap;
+	CommunicationService mCommunicationService;
 
-	public BlankScreenFragment(Bitmap aBitmap) {
-		mBitmap = aBitmap;
+	public BlankScreenFragment(CommunicationService aCommunicationService) {
+		mCommunicationService = aCommunicationService;
 	}
 
 	@Override
@@ -27,6 +29,9 @@ public class BlankScreenFragment extends Fragment {
 		View v = inflater.inflate(R.layout.fragment_blankscreen, container,
 		                false);
 
+		Bitmap aBitmap = mCommunicationService.getSlideShow().getImage(
+		                mCommunicationService.getSlideShow().getCurrentSlide());
+
 		// Process the image
 		final int borderWidth = 8;
 
@@ -34,19 +39,27 @@ public class BlankScreenFragment extends Fragment {
 		p.setShadowLayer(borderWidth, 0, 0, Color.BLACK);
 
 		RectF aRect = new RectF(borderWidth, borderWidth, borderWidth
-		                + mBitmap.getWidth(), borderWidth + mBitmap.getHeight());
-		Bitmap aOut = Bitmap.createBitmap(mBitmap.getWidth() + 2 * borderWidth,
-		                mBitmap.getHeight() + 2 * borderWidth,
-		                mBitmap.getConfig());
+		                + aBitmap.getWidth(), borderWidth + aBitmap.getHeight());
+		Bitmap aOut = Bitmap.createBitmap(aBitmap.getWidth() + 2 * borderWidth,
+		                aBitmap.getHeight() + 2 * borderWidth,
+		                aBitmap.getConfig());
 		Canvas canvas = new Canvas(aOut);
 		canvas.drawColor(Color.TRANSPARENT);
 		canvas.drawRect(aRect, p);
-		canvas.drawBitmap(mBitmap, null, aRect, null);
+		canvas.drawBitmap(aBitmap, null, aRect, null);
 
 		ImageView aImage = (ImageView) v
 		                .findViewById(R.id.blankscreen_slidepreview);
 		aImage.setImageBitmap(aOut);
+
+		mCommunicationService.getTransmitter().blankScreen();
 		// TODO Auto-generated method stub
 		return v;
+	}
+
+	@Override
+	public void onDestroyView() {
+		super.onDestroyView();
+		mCommunicationService.getTransmitter().resume();
 	}
 }
