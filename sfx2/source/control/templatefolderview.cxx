@@ -442,7 +442,7 @@ sal_uInt16 TemplateFolderView::createRegion(const rtl::OUString &rName)
     if ( IsReallyVisible() && IsUpdateMode() )
         Invalidate();
 
-    return true;
+    return pItem->mnId;
 }
 
 bool TemplateFolderView::removeRegion(const sal_uInt16 nItemId)
