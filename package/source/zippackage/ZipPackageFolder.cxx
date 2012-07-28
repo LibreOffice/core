@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <string.h>
+
 #include <ZipPackageFolder.hxx>
 #include <ZipFile.hxx>
 #include <ZipOutputStream.hxx>
@@ -764,7 +766,7 @@ sal_Int64 SAL_CALL ZipPackageFolder::getSomething( const uno::Sequence< sal_Int8
 {
     sal_Int64 nMe = 0;
     if ( aIdentifier.getLength() == 16 &&
-         0 == rtl_compareMemory(static_getImplementationId().getConstArray(),  aIdentifier.getConstArray(), 16 ) )
+         0 == memcmp(static_getImplementationId().getConstArray(),  aIdentifier.getConstArray(), 16 ) )
         nMe = reinterpret_cast < sal_Int64 > ( this );
     return nMe;
 }

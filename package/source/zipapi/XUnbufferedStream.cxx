@@ -182,7 +182,7 @@ sal_Int32 SAL_CALL XUnbufferedStream::readBytes( Sequence< sal_Int8 >& aData, sa
             {
                 sal_Int16 nHeadRead = static_cast< sal_Int16 >(( nRequestedBytes > mnHeaderToRead ?
                                                                                  mnHeaderToRead : nRequestedBytes ));
-                rtl_copyMemory ( aData.getArray(), maHeader.getConstArray() + maHeader.getLength() - mnHeaderToRead, nHeadRead );
+                memcpy ( aData.getArray(), maHeader.getConstArray() + maHeader.getLength() - mnHeaderToRead, nHeadRead );
                 mnHeaderToRead = mnHeaderToRead - nHeadRead;
 
                 if ( nHeadRead < nRequestedBytes )
@@ -275,7 +275,7 @@ sal_Int32 SAL_CALL XUnbufferedStream::readBytes( Sequence< sal_Int8 >& aData, sa
                             {
                                 sal_Int32 nOldLen = maCompBuffer.getLength();
                                 maCompBuffer.realloc( nOldLen + aSuffix.getLength() );
-                                rtl_copyMemory( maCompBuffer.getArray() + nOldLen, aSuffix.getConstArray(), aSuffix.getLength() );
+                                memcpy( maCompBuffer.getArray() + nOldLen, aSuffix.getConstArray(), aSuffix.getLength() );
                             }
                         }
                     }

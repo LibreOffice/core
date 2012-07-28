@@ -276,19 +276,19 @@ void ZipFile::StaticFillHeader( const ::rtl::Reference< EncryptionData >& rData,
     *(pHeader++) = static_cast< sal_Int8 >(( nMediaTypeLength >> 8 ) & 0xFF);
 
     // Then the salt content
-    rtl_copyMemory ( pHeader, rData->m_aSalt.getConstArray(), nSaltLength );
+    memcpy ( pHeader, rData->m_aSalt.getConstArray(), nSaltLength );
     pHeader += nSaltLength;
 
     // Then the IV content
-    rtl_copyMemory ( pHeader, rData->m_aInitVector.getConstArray(), nIVLength );
+    memcpy ( pHeader, rData->m_aInitVector.getConstArray(), nIVLength );
     pHeader += nIVLength;
 
     // Then the digest content
-    rtl_copyMemory ( pHeader, rData->m_aDigest.getConstArray(), nDigestLength );
+    memcpy ( pHeader, rData->m_aDigest.getConstArray(), nDigestLength );
     pHeader += nDigestLength;
 
     // Then the mediatype itself
-    rtl_copyMemory ( pHeader, aMediaType.getStr(), nMediaTypeLength );
+    memcpy ( pHeader, aMediaType.getStr(), nMediaTypeLength );
     pHeader += nMediaTypeLength;
 }
 
@@ -356,15 +356,15 @@ sal_Bool ZipFile::StaticFillData (  ::rtl::Reference< BaseEncryptionData > & rDa
             if ( nSaltLength == rStream->readBytes ( aBuffer, nSaltLength ) )
             {
                 rData->m_aSalt.realloc ( nSaltLength );
-                rtl_copyMemory ( rData->m_aSalt.getArray(), aBuffer.getConstArray(), nSaltLength );
+                memcpy ( rData->m_aSalt.getArray(), aBuffer.getConstArray(), nSaltLength );
                 if ( nIVLength == rStream->readBytes ( aBuffer, nIVLength ) )
                 {
                     rData->m_aInitVector.realloc ( nIVLength );
-                    rtl_copyMemory ( rData->m_aInitVector.getArray(), aBuffer.getConstArray(), nIVLength );
+                    memcpy ( rData->m_aInitVector.getArray(), aBuffer.getConstArray(), nIVLength );
                     if ( nDigestLength == rStream->readBytes ( aBuffer, nDigestLength ) )
                     {
                         rData->m_aDigest.realloc ( nDigestLength );
-                        rtl_copyMemory ( rData->m_aDigest.getArray(), aBuffer.getConstArray(), nDigestLength );
+                        memcpy ( rData->m_aDigest.getArray(), aBuffer.getConstArray(), nDigestLength );
 
                         if ( nMediaTypeLength == rStream->readBytes ( aBuffer, nMediaTypeLength ) )
                         {
@@ -464,7 +464,7 @@ sal_Bool ZipFile::StaticHasValidPassword( const uno::Reference< lang::XMultiServ
     {
         sal_Int32 nOldLen = aDecryptBuffer.getLength();
         aDecryptBuffer.realloc( nOldLen + aDecryptBuffer2.getLength() );
-        rtl_copyMemory( aDecryptBuffer.getArray() + nOldLen, aDecryptBuffer2.getArray(), aDecryptBuffer2.getLength() );
+        memcpy( aDecryptBuffer.getArray() + nOldLen, aDecryptBuffer2.getArray(), aDecryptBuffer2.getLength() );
     }
 
     if ( aDecryptBuffer.getLength() > n_ConstDigestLength )
@@ -479,7 +479,7 @@ sal_Bool ZipFile::StaticHasValidPassword( const uno::Reference< lang::XMultiServ
     // If we don't have a digest, then we have to assume that the password is correct
     if (  rData->m_aDigest.getLength() != 0  &&
           ( aDigestSeq.getLength() != rData->m_aDigest.getLength() ||
-            0 != rtl_compareMemory ( aDigestSeq.getConstArray(),
+            0 != memcmp ( aDigestSeq.getConstArray(),
                                      rData->m_aDigest.getConstArray(),
                                     aDigestSeq.getLength() ) ) )
     {

@@ -28,6 +28,7 @@
 #include <com/sun/star/xml/crypto/DigestID.hpp>
 #include <com/sun/star/xml/crypto/CipherID.hpp>
 
+#include <string.h>
 
 #include <ZipPackageStream.hxx>
 #include <ZipPackage.hxx>
@@ -691,7 +692,7 @@ sal_Int64 SAL_CALL ZipPackageStream::getSomething( const Sequence< sal_Int8 >& a
 {
     sal_Int64 nMe = 0;
     if ( aIdentifier.getLength() == 16 &&
-         0 == rtl_compareMemory( static_getImplementationId().getConstArray(), aIdentifier.getConstArray(), 16 ) )
+         0 == memcmp( static_getImplementationId().getConstArray(), aIdentifier.getConstArray(), 16 ) )
         nMe = reinterpret_cast < sal_Int64 > ( this );
     return nMe;
 }

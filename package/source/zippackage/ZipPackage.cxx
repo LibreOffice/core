@@ -1697,7 +1697,7 @@ Sequence< sal_Int8 > ZipPackage::getUnoTunnelImplementationId( void )
 sal_Int64 SAL_CALL ZipPackage::getSomething( const uno::Sequence< sal_Int8 >& aIdentifier )
     throw( RuntimeException )
 {
-    if ( aIdentifier.getLength() == 16 && 0 == rtl_compareMemory( getUnoTunnelImplementationId().getConstArray(),  aIdentifier.getConstArray(), 16 ) )
+    if ( aIdentifier.getLength() == 16 && 0 == memcmp( getUnoTunnelImplementationId().getConstArray(),  aIdentifier.getConstArray(), 16 ) )
         return reinterpret_cast < sal_Int64 > ( this );
     return 0;
 }
