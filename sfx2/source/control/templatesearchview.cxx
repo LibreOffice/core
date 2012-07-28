@@ -9,20 +9,7 @@
 
 #include "templatesearchview.hxx"
 
-#include <sfx2/templateviewitem.hxx>
-
-struct TemplateSearchViewItem : public TemplateViewItem
-{
-    TemplateSearchViewItem (ThumbnailView &rView, Window *pParent)
-        : TemplateViewItem(rView,pParent)
-    {}
-
-    virtual ~TemplateSearchViewItem ()
-    {}
-
-    sal_uInt16 mnIdx;       // Template associated Index
-    sal_uInt16 mnRegionId;  // Template associated Region id
-};
+#include "templatesearchviewitem.hxx"
 
 TemplateSearchView::TemplateSearchView (Window *pParent, WinBits nWinStyle)
     : ThumbnailView(pParent,nWinStyle)
