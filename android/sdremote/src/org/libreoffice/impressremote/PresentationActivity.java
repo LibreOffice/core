@@ -17,6 +17,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -143,15 +144,27 @@ public class PresentationActivity extends Activity {
 		Intent aIntent;
 		switch (item.getItemId()) {
 		case R.id.actionbar_presentation_submenu_options:
-			//			FragmentTransaction ft = getFragmentManager().beginTransaction();
-			//			ft.replace(R.id.presentation_innerFrame, new SettingsFragment());
-			//			ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-			//			ft.addToBackStack(null);
-			//			ft.commit();
+
 			aIntent = new Intent(this, SettingsActivity.class);
 			startActivity(aIntent);
 			return true;
 		case R.id.actionbar_presentation_submenu_blank:
+			boolean aRelevantFragmentVisible = mPresentationFragment
+			                .isVisible() || mThumbnailFragment.isVisible();
+			if (aRelevantFragmentVisible) {
+				Bitmap aBitmap = mCommunicationService.getSlideShow().getImage(
+				                mCommunicationService.getSlideShow()
+				                                .getCurrentSlide());
+
+				BlankScreenFragment aFragment = new BlankScreenFragment(aBitmap);
+
+				FragmentTransaction ft = getFragmentManager()
+				                .beginTransaction();
+				ft.replace(R.id.presentation_innerFrame, aFragment);
+				ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+				ft.addToBackStack(null);
+				ft.commit();
+			}
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
