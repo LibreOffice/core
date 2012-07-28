@@ -180,7 +180,10 @@ int SalAquaPicker::run()
         startDirectory = NSHomeDirectory();
     }
 
+#if defined(LIBO_WERROR) && defined(__clang__) && MACOSX_SDK_VERSION >= 1070
+#pragma GCC diagnostic push
 #pragma GCC diagnostic warning "-Wdeprecated-declarations"
+#endif
     switch(m_nDialogType) {
         case NAVIGATIONSERVICES_DIRECTORY:
         case NAVIGATIONSERVICES_OPEN:
@@ -200,8 +203,9 @@ int SalAquaPicker::run()
             implsetDisplayDirectory([[NSURL fileURLWithPath:pDir] OUStringForInfo:FULLPATH]);
         }
     }
-#pragma GCC diagnostic error "-Wdeprecated-declarations"
-
+#if defined(LIBO_WERROR) && defined(__clang__) && MACOSX_SDK_VERSION >= 1070
+#pragma GCC diagnostic pop
+#endif
     DBG_PRINT_EXIT(CLASS_NAME, __func__, retVal);
 
     [pool release];
