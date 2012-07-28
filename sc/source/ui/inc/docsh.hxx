@@ -212,6 +212,7 @@ public:
     virtual sal_Bool    Load( SfxMedium& rMedium );
     virtual sal_Bool    LoadFrom( SfxMedium& rMedium );
     virtual sal_Bool    ConvertFrom( SfxMedium &rMedium );
+    virtual bool        LoadExternal(SfxMedium& rMedium, const rtl::OUString& rProvider);
     virtual sal_Bool    Save();
     virtual sal_Bool    SaveAs( SfxMedium& rMedium );
     virtual sal_Bool    ConvertTo( SfxMedium &rMedium );

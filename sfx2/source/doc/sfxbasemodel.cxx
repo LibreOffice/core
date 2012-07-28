@@ -1831,9 +1831,23 @@ void SAL_CALL SfxBaseModel::initNew()
     }
 }
 
-//________________________________________________________________________________________________________
-// XLoadable
-//________________________________________________________________________________________________________
+namespace {
+
+OUString getFilterProvider(const uno::Sequence<beans::PropertyValue>& rArgs)
+{
+    OUString aStr;
+    for (sal_Int32 i = 0, n = rArgs.getLength(); i < n; ++i)
+    {
+        if (rArgs[i].Name == "FilterProvider")
+        {
+            rArgs[i].Value >>= aStr;
+            return aStr;
+        }
+    }
+    return aStr;
+}
+
+}
 
 void SAL_CALL SfxBaseModel::load(   const uno::Sequence< beans::PropertyValue >& seqArguments )
         throw (::com::sun::star::frame::DoubleInitializationException,
@@ -1855,6 +1869,17 @@ void SAL_CALL SfxBaseModel::load(   const uno::Sequence< beans::PropertyValue >&
             throw frame::DoubleInitializationException();
 
         SfxMedium* pMedium = new SfxMedium( seqArguments );
+
+        OUString aFilterProvider = getFilterProvider(seqArguments);
+        if (!aFilterProvider.isEmpty())
+        {
+            if (!m_pData->m_pObjectShell->DoLoadExternal(pMedium, aFilterProvider))
+                delete pMedium;
+
+            pMedium->SetUpdatePickList(false);
+            return;
+        }
+
         String aFilterName;
         SFX_ITEMSET_ARG( pMedium->GetItemSet(), pFilterNameItem, SfxStringItem, SID_FILTER_NAME, sal_False );
         if( pFilterNameItem )

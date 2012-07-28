@@ -95,6 +95,12 @@ const ::rtl::OUString& MediaDescriptor::PROP_FILTERNAME()
     return sProp;
 }
 
+const OUString& MediaDescriptor::PROP_FILTERPROVIDER()
+{
+    static const OUString aProp("FilterProvider");
+    return aProp;
+}
+
 const ::rtl::OUString& MediaDescriptor::PROP_FILTEROPTIONS()
 {
     static const ::rtl::OUString sProp(RTL_CONSTASCII_USTRINGPARAM("FilterOptions"));

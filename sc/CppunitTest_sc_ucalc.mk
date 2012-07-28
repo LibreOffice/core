@@ -43,6 +43,10 @@ ifeq ($(ENABLE_TELEPATHY),TRUE)
 $(eval $(call gb_CppunitTest_use_libraries,sc_ucalc,tubes))
 endif
 
+$(eval $(call gb_CppunitTest_use_externals,sc_ucalc,\
+	orcus \
+))
+
 $(eval $(call gb_CppunitTest_use_libraries,sc_ucalc, \
     avmedia \
     basegfx \

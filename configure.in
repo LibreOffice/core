@@ -1637,6 +1637,11 @@ AC_ARG_WITH(system-redland,
         [Use redland library already on system.]),,
     [with_system_redland="$with_system_libs"])
 
+AC_ARG_WITH(system-orcus,
+    AS_HELP_STRING([--with-system-orcus],
+        [Use orcus library already on system.]),,
+    [with_system_orcus="$with_system_libs"])
+
 AC_ARG_WITH(system-mozilla,
     AS_HELP_STRING([--with-system-mozilla],
         [Use Mozilla already on system. Note that some components cannot be built
@@ -4837,7 +4842,7 @@ _ACEOF
     AC_LINK_IFELSE([AC_LANG_PROGRAM([[
 #include <iostream>
 using namespace std;
-]], [[ try { throw 42; } catch (int e) { cout << "Yep, " << e << endl; } ]])],[   
+]], [[ try { throw 42; } catch (int e) { cout << "Yep, " << e << endl; } ]])],[
             MINGW_GCCDLL=`$OBJDUMP -p conftest.exe | grep 'DLL Name: libgcc' | $SED -e 's@.*DLL Name: @@'`
             if test -n "$MINGW_GCCDLL"; then
                 MINGW_SHARED_GCCLIB=YES
@@ -4847,14 +4852,14 @@ using namespace std;
                 AC_MSG_RESULT([no])
             fi
        ],[ AC_MSG_RESULT([no])
-       
+
     ])
 
     AC_MSG_CHECKING([for dynamic libstdc++])
     AC_LINK_IFELSE([AC_LANG_PROGRAM([[
 #include <iostream>
 using namespace std;
-]], [[ cout << "Hello there." << endl; ]])],[   
+]], [[ cout << "Hello there." << endl; ]])],[
             MINGW_GXXDLL=`$OBJDUMP -p conftest.exe | grep 'DLL Name: libstdc++' | $SED -e 's@.*DLL Name: @@'`
             if test -n "$MINGW_GXXDLL"; then
                 mingw_gxxdll_root=${MINGW_GXXDLL%.dll}
@@ -4871,7 +4876,7 @@ using namespace std;
                 AC_MSG_RESULT([no])
             fi
        ],[ AC_MSG_RESULT([no])
-       
+
     ])
 
     AC_LANG_POP([C++])
@@ -8587,6 +8592,25 @@ AC_SUBST([MINGW_RAPTOR_DLL])
 AC_SUBST([MINGW_RASQAL_DLL])
 AC_SUBST([MINGW_REDLAND_DLL])
 AC_SUBST([MINGW_SQLITE3_DLL])
+
+dnl ===================================================================
+dnl Check for system orcus
+dnl ===================================================================
+AC_MSG_CHECKING([which orcus library to use])
+if test "$with_system_orcus" = "yes"; then
+    AC_MSG_RESULT([external])
+    SYSTEM_ORCUS=YES
+    ORCUS_CFLAGS="`$PKG_CONFIG --cflags liborcus-0.2`"
+    ORCUS_LIBS="`$PKG_CONFIG --libs liborcus-0.2`"
+    PKG_CHECK_MODULES(ORCUS, orcus >= 0.1.0)
+else
+    AC_MSG_RESULT([internal])
+    BUILD_TYPE="$BUILD_TYPE ORCUS"
+    SYSTEM_ORCUS=NO
+fi
+AC_SUBST(SYSTEM_ORCUS)
+AC_SUBST(ORCUS_CFLAGS)
+AC_SUBST(ORCUS_LIBS)
 
 dnl ===================================================================
 dnl Check for system hunspell

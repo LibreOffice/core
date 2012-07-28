@@ -91,13 +91,13 @@
 const char PROP_TYPES[] = "Types";
 const char PROP_NAME[] = "Name";
 
-
-namespace framework{
+namespace framework {
 
 // may there exist already a define .-(
 #ifndef css
 namespace css = ::com::sun::star;
 #endif
+using namespace com::sun::star;
 
 
 class LoadEnvListener : private ThreadHelpBase
@@ -716,6 +716,37 @@ LoadEnv::EContentType LoadEnv::classifyContent(const ::rtl::OUString&           
     return E_UNSUPPORTED_CONTENT;
 }
 
+namespace {
+
+bool queryOrcusTypeAndFilter(const uno::Sequence<beans::PropertyValue>& rDescriptor, OUString& rType, OUString& rFilter)
+{
+    OUString aURL;
+    sal_Int32 nSize = rDescriptor.getLength();
+    for (sal_Int32 i = 0; i < nSize; ++i)
+    {
+        const beans::PropertyValue& rProp = rDescriptor[i];
+        if (rProp.Name == "URL")
+        {
+            rProp.Value >>= aURL;
+            break;
+        }
+    }
+
+    if (aURL.isEmpty() || aURL.copy(0,8).equalsIgnoreAsciiCase("private:"))
+        return false;
+
+    if (aURL.endsWith(".csv"))
+    {
+        // Use .csv as the first test file type.
+        rType = "generic_Text";
+        rFilter = "orcus-test-filter";
+        return true;
+    }
+
+    return false;
+}
+
+}
 
 void LoadEnv::impl_detectTypeAndFilter()
     throw(LoadEnvException, css::uno::RuntimeException)
@@ -736,7 +767,18 @@ void LoadEnv::impl_detectTypeAndFilter()
     aReadLock.unlock();
     // <- SAFE
 
-    ::rtl::OUString sType;
+    rtl::OUString sType, sFilter;
+
+    if (queryOrcusTypeAndFilter(lDescriptor, sType, sFilter) && !sType.isEmpty() && !sFilter.isEmpty())
+    {
+        // Orcus type detected.  Skip the normal type detection process.
+        m_lMediaDescriptor << lDescriptor;
+        m_lMediaDescriptor[comphelper::MediaDescriptor::PROP_TYPENAME()] <<= sType;
+        m_lMediaDescriptor[comphelper::MediaDescriptor::PROP_FILTERNAME()] <<= sFilter;
+        m_lMediaDescriptor[comphelper::MediaDescriptor::PROP_FILTERPROVIDER()] <<= OUString("orcus");
+        return;
+    }
+
     css::uno::Reference< css::document::XTypeDetection > xDetect(xSMGR->createInstance(SERVICENAME_TYPEDETECTION), css::uno::UNO_QUERY);
     if (xDetect.is())
         sType = xDetect->queryTypeByDescriptor(lDescriptor, sal_True); /*TODO should deep detection be able for enable/disable it from outside? */
@@ -753,7 +795,7 @@ void LoadEnv::impl_detectTypeAndFilter()
     m_lMediaDescriptor[::comphelper::MediaDescriptor::PROP_TYPENAME()] <<= sType;
     // Is there an already detected (may be preselected) filter?
     // see below ...
-    ::rtl::OUString sFilter = m_lMediaDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_FILTERNAME(), ::rtl::OUString());
+    sFilter = m_lMediaDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_FILTERNAME(), ::rtl::OUString());
 
     aWriteLock.unlock();
     // <- SAFE

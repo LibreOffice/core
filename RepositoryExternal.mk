@@ -2,7 +2,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2009 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -1856,6 +1856,31 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO,\
 
 endif # SYSTEM_PYTHON
 
+ifeq ($(SYSTEM_ORCUS),YES)
+
+define gb_LinkTarget__use_orcus
+$(call gb_LinkTarget_set_include,$(1),\
+	$$(INCLUDE) \
+    $(ORCUS_CFLAGS) \
+)
+$(call gb_LinkTarget_add_libs,$(1),$(ORCUS_LIBS))
+
+endef
+
+else # !SYSTEM_ORCUS
+
+$(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
+	orcuslib \
+))
+
+define gb_LinkTarget__use_orcus
+$(call gb_LinkTarget_use_static_libraries,$(1),\
+	orcuslib \
+)
+
+endef
+
+endif # SYSTEM_ORCUS
 
 # MacOSX-only frameworks ############################################
 # (in alphabetical order)

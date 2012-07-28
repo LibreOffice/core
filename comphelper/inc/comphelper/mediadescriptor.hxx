@@ -59,6 +59,7 @@ class COMPHELPER_DLLPUBLIC MediaDescriptor : public SequenceAsHashMap
         static const ::rtl::OUString& PROP_ENCRYPTIONDATA();
         static const ::rtl::OUString& PROP_FILENAME();
         static const ::rtl::OUString& PROP_FILTERNAME();
+        static const ::rtl::OUString& PROP_FILTERPROVIDER();
         static const ::rtl::OUString& PROP_FILTEROPTIONS();
         static const ::rtl::OUString& PROP_FRAME();
         static const ::rtl::OUString& PROP_FRAMENAME();

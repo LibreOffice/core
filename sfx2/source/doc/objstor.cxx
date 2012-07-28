@@ -821,6 +821,12 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
     return bOk;
 }
 
+bool SfxObjectShell::DoLoadExternal(SfxMedium *pMed, const OUString& rProvider)
+{
+    pMedium = pMed;
+    return LoadExternal(*pMedium, rProvider);
+}
+
 sal_uInt32 SfxObjectShell::HandleFilter( SfxMedium* pMedium, SfxObjectShell* pDoc )
 {
     sal_uInt32 nError = ERRCODE_NONE;
@@ -3509,6 +3515,12 @@ sal_Bool SfxObjectShell::WriteThumbnail( sal_Bool bEncrypted,
 
 void SfxObjectShell::UpdateLinks()
 {
+}
+
+bool SfxObjectShell::LoadExternal(SfxMedium&, const OUString&)
+{
+    // Not implemented. It's an error if the code path ever comes here.
+    return false;
 }
 
 void SfxObjectShell::CheckConfigOptions()

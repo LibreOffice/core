@@ -112,6 +112,8 @@
 #include "cellsuno.hxx"
 #include "dpobject.hxx"
 #include "markdata.hxx"
+#include "orcushandler.hxx"
+
 #ifdef ENABLE_TELEPATHY
 #include "sccollaboration.hxx"
 #endif
@@ -1495,6 +1497,20 @@ sal_Bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
     bIsEmpty = false;
 
     return bRet;
+}
+
+bool ScDocShell::LoadExternal(SfxMedium& rMed, const OUString& rProvider)
+{
+    if (rProvider == "orcus")
+    {
+        if (!ScOrcusFilters::importCSV(aDocument, rMed.GetName()))
+            return false;
+
+        FinishedLoading(SFX_LOADED_MAINDOCUMENT | SFX_LOADED_IMAGES);
+        return true;
+    }
+
+    return false;
 }
 
 
