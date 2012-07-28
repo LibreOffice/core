@@ -110,9 +110,6 @@ BUILD_ACTION=$(ENV_BUILD) make && make install
 
 BUILD_DIR=PCbuild
 
-PATCH_FILES=Python-$(PYVERSION)-vc.patch \
-    Python-$(PYVERSION)-ssl-vc.patch 
-
 # Build python executable and then runs a minimal script. Running the minimal script
 # ensures that certain *.pyc files are generated which would otherwise be created on
 # solver during registration in insetoo_native
