@@ -48,6 +48,7 @@ using rtl::OUString;
 #define _DEMOSTOR_LOOPS           1000 /* 1000, 2000 */
 
 #define _DEMOSTOR_REMOVE          0
+#define _DEMOSTOR_REBUILD         0
 
 enum Options
 {
