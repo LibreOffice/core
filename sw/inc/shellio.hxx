@@ -54,7 +54,6 @@ class SfxFilter;
 class SfxItemPool;
 class SfxItemSet;
 class SfxMedium;
-class SvPtrarr;
 class SvStream;
 class SvxFontItem;
 class SvxMacroTableDtor;

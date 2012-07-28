@@ -199,7 +199,7 @@ sal_Bool UCB_IsDirectory( const String& rURL )
     // get a list of files from the folder of the URL
     // options: pExtension = 0 -> all, else this specific extension
     //          pDateTime != 0 -> returns also the modified date/time of
-    //                       the files in a SvPtrarr -->
+    //                       the files in a std::vector<String*> -->
     //                       !! objects must be deleted from the caller!!
 bool UCB_GetFileListOfFolder( const String& rURL,
                                 std::vector<String*>& rList,

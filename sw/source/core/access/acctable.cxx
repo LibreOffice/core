@@ -294,7 +294,7 @@ void SwAccessibleTableData_Impl::GetSelection(
                 const SwCellFrm *pCFrm =
                         static_cast < const SwCellFrm * >( pLower );
                 SwTableBox *pBox =
-                    const_cast< SwTableBox *>( pCFrm->GetTabBox() ); //SVPtrArr!
+                    const_cast< SwTableBox *>( pCFrm->GetTabBox() );
                 if( rSelBoxes.find( pBox ) == rSelBoxes.end() )
                 {
                     const Int32Set_Impl rRowsOrCols =
@@ -1198,7 +1198,7 @@ sal_Bool SAL_CALL SwAccessibleTable::isAccessibleSelected(
         {
             const SwCellFrm *pCFrm = static_cast < const SwCellFrm * >( pFrm );
             SwTableBox *pBox =
-                const_cast< SwTableBox *>( pCFrm->GetTabBox() ); //SVPtrArr!
+                const_cast< SwTableBox *>( pCFrm->GetTabBox() );
             bRet = pSelBoxes->find( pBox ) != pSelBoxes->end();
         }
     }
