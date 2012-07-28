@@ -25,10 +25,8 @@
 #include <svl/smplhint.hxx>
 #include <svl/lstner.hxx>
 
-SV_DECL_PTRARR( SfxListenerArr_Impl, SfxListener*, 0 )
-
-#define _SFX_BRDCST_CXX
 #include <svl/brdcst.hxx>
+#include <algorithm>
 
 //====================================================================
 DBG_NAME(SfxBroadcaster)
@@ -44,16 +42,11 @@ void SfxBroadcaster::Broadcast( const SfxHint &rHint )
 {
     DBG_CHKTHIS(SfxBroadcaster, 0);
 
-    // is anybody to notify?
-    if ( aListeners.Count() /*! || aGlobListeners.Count() */ )
+    // notify all registered listeners exactly once
+    for (size_t n = 0; n < aListeners.size(); ++n)
     {
-        // notify all registered listeners exactly once
-        for ( sal_uInt16 n = 0; n < aListeners.Count(); ++n )
-        {
-            SfxListener* pListener = aListeners[n];
-            if ( pListener )
-                pListener->Notify( *this, rHint );
-        }
+        SfxListener* pListener = aListeners[n];
+        pListener->Notify( *this, rHint );
     }
 }
 
@@ -66,11 +59,10 @@ SfxBroadcaster::~SfxBroadcaster()
     Broadcast( SfxSimpleHint(SFX_HINT_DYING) );
 
     // remove all still registered listeners
-    for ( sal_uInt16 nPos = 0; nPos < aListeners.Count(); ++nPos )
+    for (size_t nPos = 0; nPos < aListeners.size(); ++nPos)
     {
         SfxListener *pListener = aListeners[nPos];
-        if ( pListener )
-            pListener->RemoveBroadcaster_Impl(*this);
+        pListener->RemoveBroadcaster_Impl(*this);
     }
 }
 
@@ -92,11 +84,10 @@ SfxBroadcaster::SfxBroadcaster( const SfxBroadcaster &rBC )
 {
     DBG_CTOR(SfxBroadcaster, 0);
 
-    for ( sal_uInt16 n = 0; n < rBC.aListeners.Count(); ++n )
+    for (size_t n = 0; n < rBC.aListeners.size(); ++n)
     {
         SfxListener *pListener = rBC.aListeners[n];
-        if ( pListener )
-            pListener->StartListening( *this );
+        pListener->StartListening( *this );
     }
 }
 
@@ -104,25 +95,11 @@ SfxBroadcaster::SfxBroadcaster( const SfxBroadcaster &rBC )
 
 // add a new SfxListener to the list
 
-sal_Bool SfxBroadcaster::AddListener( SfxListener& rListener )
+void SfxBroadcaster::AddListener( SfxListener& rListener )
 {
     DBG_CHKTHIS(SfxBroadcaster, 0);
-    const SfxListener *pListener = &rListener;
-    const SfxListener *pNull = 0;
-    sal_uInt16 nFreePos = aListeners.GetPos( pNull );
-    if ( nFreePos < aListeners.Count() )
-        aListeners.GetData()[nFreePos] = pListener;
-    else if ( aListeners.Count() < (USHRT_MAX-1) )
-        aListeners.Insert( pListener, aListeners.Count() );
-    else
-    {
-        OSL_FAIL( "array overflow" );
-        return sal_False;
-    }
 
-    DBG_ASSERT( USHRT_MAX != aListeners.GetPos(pListener),
-                "AddListener failed" );
-    return sal_True;
+    aListeners.push_back(&rListener);
 }
 
 //--------------------------------------------------------------------
@@ -140,12 +117,10 @@ void SfxBroadcaster::ListenersGone()
 
 void SfxBroadcaster::Forward(SfxBroadcaster& rBC, const SfxHint& rHint)
 {
-    const sal_uInt16 nCount = aListeners.Count();
-    for ( sal_uInt16 i = 0; i < nCount; ++i )
+    for (size_t i = 0; i < aListeners.size(); ++i)
     {
         SfxListener *pListener = aListeners[i];
-        if ( pListener )
-            pListener->Notify( rBC, rHint );
+        pListener->Notify( rBC, rHint );
     }
 }
 
@@ -157,23 +132,13 @@ void SfxBroadcaster::RemoveListener( SfxListener& rListener )
 {
     {DBG_CHKTHIS(SfxBroadcaster, 0);}
     const SfxListener *pListener = &rListener;
-    sal_uInt16 nPos = aListeners.GetPos(pListener);
-    DBG_ASSERT( nPos != USHRT_MAX, "RemoveListener: Listener unknown" );
-    aListeners.GetData()[nPos] = 0;
+
+    SfxListenerArr_Impl::iterator aIter = std::remove(aListeners.begin(), aListeners.end(), pListener);
+    DBG_ASSERT( aIter != aListeners.end(), "RemoveListener: Listener unknown" );
+    aListeners.erase(aIter, aListeners.end());
+
     if ( !HasListeners() )
         ListenersGone();
 }
-
-//--------------------------------------------------------------------
-
-sal_Bool SfxBroadcaster::HasListeners() const
-{
-    for ( sal_uInt16 n = 0; n < aListeners.Count(); ++n )
-        if ( aListeners.GetObject(n) != 0 )
-            return sal_True;
-    return sal_False;
-}
-
-//--------------------------------------------------------------------
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

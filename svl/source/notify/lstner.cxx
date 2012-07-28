@@ -85,15 +85,13 @@ sal_Bool SfxListener::StartListening( SfxBroadcaster& rBroadcaster, sal_Bool bPr
 
     if ( !bPreventDups || !IsListening( rBroadcaster ) )
     {
-        if ( rBroadcaster.AddListener(*this) )
-        {
-            aBCs.push_back( &rBroadcaster );
+        rBroadcaster.AddListener(*this);
+        aBCs.push_back( &rBroadcaster );
 
-            DBG_ASSERT( IsListening(rBroadcaster), "StartListening failed" );
-            return sal_True;
-        }
-
+        DBG_ASSERT( IsListening(rBroadcaster), "StartListening failed" );
+        return sal_True;
     }
+
     return sal_False;
 }
 

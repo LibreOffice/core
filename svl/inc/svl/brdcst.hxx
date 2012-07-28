@@ -21,25 +21,22 @@
 
 #include "svl/svldllapi.h"
 #include <tools/rtti.hxx>
-#include <svl/svarray.hxx>
+#include <vector>
 
 class SfxListener;
 class SfxHint;
-
-#ifndef _SFX_BRDCST_CXX
-typedef SvPtrarr SfxListenerArr_Impl;
-#endif
 
 //-------------------------------------------------------------------------
 
 class SVL_DLLPUBLIC SfxBroadcaster
 {
-friend class SfxListener;
+    friend class SfxListener;
+    typedef std::vector<SfxListener*> SfxListenerArr_Impl;
 
     SfxListenerArr_Impl     aListeners;
 
 private:
-    sal_Bool         AddListener( SfxListener& rListener );
+    void                    AddListener( SfxListener& rListener );
     void                    RemoveListener( SfxListener& rListener );
     const SfxBroadcaster&   operator=(const SfxBroadcaster &); // verboten
 
@@ -55,10 +52,18 @@ public:
     virtual                 ~SfxBroadcaster();
 
     void                    Broadcast( const SfxHint &rHint );
-    sal_Bool                    HasListeners() const;
-    sal_uInt16                  GetListenerCount() const { return aListeners.Count(); }
+    bool                    HasListeners() const
+    {
+        return !aListeners.empty();
+    }
+    size_t                  GetListenerCount() const
+    {
+        return aListeners.size();
+    }
     SfxListener*            GetListener( sal_uInt16 nNo ) const
-                            { return (SfxListener*) aListeners[nNo]; }
+    {
+        return aListeners[nNo];
+    }
 };
 
 #endif
