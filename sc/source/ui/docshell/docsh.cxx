@@ -441,7 +441,7 @@ sal_Bool ScDocShell::LoadXML( SfxMedium* pLoadMedium, const ::com::sun::star::un
     if(sGenerator.indexOf(SC_LIBO_PROD_NAME) == -1)
         DoHardRecalc(false);
     else //still need to recalc volatile formula cells
-        DoRecalc(false);
+        aDocument.CalcFormulaTree(false, false, false);
 
     aDocument.EnableAdjustHeight(false);
 

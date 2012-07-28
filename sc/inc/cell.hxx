@@ -376,7 +376,7 @@ public:
     void            GetFormula( rtl::OUStringBuffer& rBuffer,
                                 const formula::FormulaGrammar::Grammar = formula::FormulaGrammar::GRAM_DEFAULT ) const;
 
-    void            SetDirty();
+    void            SetDirty( bool bDirtyFlag=true );
     void            SetDirtyVar();
     // If setting entire document dirty after load, no broadcasts but still append to FormulaTree.
     void            SetDirtyAfterLoad();
@@ -472,7 +472,7 @@ public:
     virtual void    Notify( SvtBroadcaster& rBC, const SfxHint& rHint);
     void            SetCompile( bool bVal ) { bCompile = bVal; }
     ScDocument*     GetDocument() const     { return pDocument; }
-    void            SetMatColsRows( SCCOL nCols, SCROW nRows );
+    void            SetMatColsRows( SCCOL nCols, SCROW nRows, bool bDirtyFlag=true );
     void            GetMatColsRows( SCCOL& nCols, SCROW& nRows ) const;
 
                     // cell belongs to ChangeTrack and not to the real document

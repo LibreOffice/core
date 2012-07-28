@@ -1726,17 +1726,17 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
 }
 
 
-void ScFormulaCell::SetMatColsRows( SCCOL nCols, SCROW nRows )
+void ScFormulaCell::SetMatColsRows( SCCOL nCols, SCROW nRows, bool bDirtyFlag )
 {
     ScMatrixFormulaCellToken* pMat = aResult.GetMatrixFormulaCellTokenNonConst();
     if (pMat)
-        pMat->SetMatColsRows( nCols, nRows);
+        pMat->SetMatColsRows( nCols, nRows );
     else if (nCols || nRows)
     {
         aResult.SetToken( new ScMatrixFormulaCellToken( nCols, nRows));
         // Setting the new token actually forces an empty result at this top
         // left cell, so have that recalculated.
-        SetDirty();
+        SetDirty( bDirtyFlag );
     }
 }
 
@@ -1805,7 +1805,7 @@ void ScFormulaCell::Notify( SvtBroadcaster&, const SfxHint& rHint)
     }
 }
 
-void ScFormulaCell::SetDirty()
+void ScFormulaCell::SetDirty( bool bDirtyFlag )
 {
     if ( !IsInChangeTrack() )
     {
@@ -1819,7 +1819,8 @@ void ScFormulaCell::SetDirty()
             // setzen, z.B. in CompileTokenArray
             if ( !bDirty || !pDocument->IsInFormulaTree( this ) )
             {
-                SetDirtyVar();
+                if( bDirtyFlag )
+                    SetDirtyVar();
                 pDocument->AppendToFormulaTrack( this );
                 pDocument->TrackFormulas();
             }

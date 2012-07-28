@@ -770,7 +770,8 @@ public:
                                         const ScMarkData& rMark,
                                         const rtl::OUString& rFormula,
                                         const ScTokenArray* p = NULL,
-                                        const formula::FormulaGrammar::Grammar = formula::FormulaGrammar::GRAM_DEFAULT );
+                                        const formula::FormulaGrammar::Grammar = formula::FormulaGrammar::GRAM_DEFAULT,
+                                        bool bDirtyFlag=true );
     SC_DLLPUBLIC void           InsertTableOp(const ScTabOpParam& rParam,   // multi-operation
                                   SCCOL nCol1, SCROW nRow1,
                                   SCCOL nCol2, SCROW nRow2, const ScMarkData& rMark);
@@ -1657,7 +1658,8 @@ public:
     void                PutInFormulaTree( ScFormulaCell* pCell );
     void                RemoveFromFormulaTree( ScFormulaCell* pCell );
     void                CalcFormulaTree( bool bOnlyForced = false,
-                                        bool bNoProgressBar = false );
+                                         bool bNoProgressBar = false,
+                                         bool bDirtyFlag=true );
     void                ClearFormulaTree();
     void                AppendToFormulaTrack( ScFormulaCell* pCell );
     void                RemoveFromFormulaTrack( ScFormulaCell* pCell );
