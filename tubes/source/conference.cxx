@@ -131,7 +131,13 @@ static void TeleConference_MethodCallHandler(
 
     SAL_INFO( "tubes", "TeleConference_MethodCallHandler: received packet from sender "
             << (pSender ? pSender : "(null)") << " with size " << nPacketSize);
-    pConference->queue( OString( pPacketData, nPacketSize ) );
+    OString aPacket( pPacketData, nPacketSize );
+    pConference->queue( aPacket );
+    // Master needs to send the packet back to impose ordering,
+    // so the slave can execute his command.
+    if (pConference->isMaster())
+        pConference->sendPacket( aPacket );
+
     g_dbus_method_invocation_return_value( pInvocation, 0 );
 
     g_variant_unref( ay);
@@ -226,12 +232,14 @@ static void TeleConference_TubeAcceptedHandler(
 }
 
 
-TeleConference::TeleConference( TeleManager* pManager, TpAccount* pAccount, TpDBusTubeChannel* pChannel, const OString sUuid )
+TeleConference::TeleConference( TeleManager* pManager, TpAccount* pAccount,
+        TpDBusTubeChannel* pChannel, const OString sUuid, bool bMaster )
     :
-        mpManager( pManager),
-        mpAccount( NULL),
-        mpChannel( NULL),
-        msUuid( sUuid),
+        mpManager( pManager ),
+        mpAccount( NULL ),
+        mpChannel( NULL ),
+        msUuid( sUuid ),
+        mbMaster( bMaster ),
         pImpl( new TeleConferenceImpl() )
 {
     setChannel( pAccount, pChannel );
@@ -431,12 +439,17 @@ bool TeleConference::sendPacket( const OString& rPacket )
             G_DBUS_CALL_FLAGS_NONE,
             -1, NULL, NULL, NULL);
 
-    /* FIXME: need to impose an ordering on packets. */
-    queue( rPacket );
+    // If we started the session, we can execute commands immediately.
+    if (mbMaster)
+        queue( rPacket );
 
     return true;
 }
 
+bool TeleConference::isMaster() const
+{
+    return mbMaster;
+}
 
 void TeleConference::queue( const OString &rPacket )
 {

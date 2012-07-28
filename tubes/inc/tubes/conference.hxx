@@ -46,7 +46,11 @@ class TeleConference
 {
 public:
 
-    TeleConference( TeleManager* pManager, TpAccount *pAccount, TpDBusTubeChannel* pChannel, const OString sUuid = OString() );
+    TeleConference( TeleManager* pManager,
+                    TpAccount* pAccount,
+                    TpDBusTubeChannel* pChannel,
+                    const OString sUuid = OString(),
+                    bool bMaster = false );
     ~TeleConference();
 
     /// Close channel and call finalize()
@@ -80,6 +84,7 @@ public:
     bool                    setTube( GDBusConnection* pTube );
     void                    setTubeOfferedHandlerInvoked( bool b );
     bool                    isTubeOfferedHandlerInvoked() const;
+    bool                    isMaster() const;
     /** Queue incoming data as OString */
     void                    queue( const OString& rPacket );
     void                    setUuid( const OString& rUuid ) { msUuid = rUuid; }
@@ -97,6 +102,7 @@ private:
     TpAccount*              mpAccount;
     TpDBusTubeChannel*      mpChannel;
     OString                 msUuid;
+    bool                    mbMaster;
     TeleConferenceImpl*     pImpl;
 };
 

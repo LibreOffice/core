@@ -676,7 +676,7 @@ TeleConference* TeleManager::startBuddySession( TpAccount *pAccount, TpContact *
 
     setChannelReadyHandlerInvoked( false);
 
-    TeleConference* pConference = new TeleConference( this, NULL, NULL, createUuid() );
+    TeleConference* pConference = new TeleConference( this, NULL, NULL, createUuid(), true );
 
     tp_account_channel_request_create_and_handle_channel_async(
             pChannelRequest, NULL, TeleManager_ChannelReadyHandler, pConference );
