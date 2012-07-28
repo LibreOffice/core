@@ -167,10 +167,7 @@ public class PresentationActivity extends Activity {
 		public ActionBarManager() {
 
 			ActionBar aBar = getActionBar();
-			aBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM,
-			                ActionBar.DISPLAY_SHOW_CUSTOM
-			                                | ActionBar.DISPLAY_SHOW_TITLE
-			                                | ActionBar.DISPLAY_USE_LOGO);
+			aBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
 			aBar.setCustomView(R.layout.presentation_actionbar);
 
 			mThumbnailButton = (ToggleButton) aBar.getCustomView()
