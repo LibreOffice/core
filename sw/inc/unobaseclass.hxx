@@ -146,7 +146,7 @@ namespace sw {
                   C *const pThis)
     {
         if ((rId.getLength() == 16) &&
-            (0 == rtl_compareMemory(C::getUnoTunnelId().getConstArray(),
+            (0 == memcmp(C::getUnoTunnelId().getConstArray(),
                                     rId.getConstArray(), 16)))
         {
             return ::sal::static_int_cast< sal_Int64 >(
