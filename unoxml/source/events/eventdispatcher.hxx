@@ -79,6 +79,8 @@ public:
         xmlNodePtr const pNode,
         Reference<XNode> const& xNode,
         Reference< XEvent > const& xEvent) const;
+
+    ~CEventDispatcher();
 };
 
 }}

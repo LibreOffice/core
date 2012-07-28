@@ -74,6 +74,16 @@ namespace DOM { namespace events {
         }
     }
 
+    CEventDispatcher::~CEventDispatcher()
+    {
+        // delete the multimaps for the various types
+        for (TypeListenerMap::iterator aI = m_CaptureListeners.begin(); aI != m_CaptureListeners.end(); ++aI)
+            delete aI->second;
+
+        for (TypeListenerMap::iterator aI = m_TargetListeners.begin(); aI != m_TargetListeners.end(); ++aI)
+            delete aI->second;
+    }
+
     void CEventDispatcher::callListeners(
             TypeListenerMap const& rTMap,
             xmlNodePtr const pNode,
