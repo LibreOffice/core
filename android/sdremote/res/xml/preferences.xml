@@ -5,7 +5,8 @@
     <SwitchPreference
         android:defaultValue="false"
         android:key="option_volumeswitching"
-        android:title="@string/options_volumeswitching" />
+        android:title="@string/options_volumeswitching"
+         android:summary="@string/options_volumeswitching_descripton"/>
 
     <Preference
         android:key="option_switchcomputer"

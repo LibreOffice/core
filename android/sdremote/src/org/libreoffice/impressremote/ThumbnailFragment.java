@@ -136,11 +136,14 @@ public class ThumbnailFragment extends Fragment {
 	}
 
 	public void handleMessage(Message aMessage) {
+		if (!isVisible()) {
+			return;
+		}
+
 		Bundle aData = aMessage.getData();
 		switch (aMessage.what) {
 		case CommunicationService.MSG_SLIDE_CHANGED:
 			int aSlide = aData.getInt("slide_number");
-			setSelected(aSlide);
 			break;
 		case CommunicationService.MSG_SLIDE_PREVIEW:
 			mGrid.invalidateViews();

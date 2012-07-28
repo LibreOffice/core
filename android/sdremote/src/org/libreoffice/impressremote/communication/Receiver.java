@@ -20,7 +20,7 @@ public class Receiver {
 
 	private Messenger mActivityMessenger;
 
-	private SlideShow mSlideShow = null;
+	private SlideShow mSlideShow = new SlideShow();
 
 	public SlideShow getSlideShow() {
 		return mSlideShow;
@@ -38,7 +38,7 @@ public class Receiver {
 		if (aInstruction.equals("slideshow_started")) {
 			int aSlideShowlength = Integer.parseInt(aCommand.get(1));
 			int aCurrentSlide = Integer.parseInt(aCommand.get(2));
-			mSlideShow = new SlideShow(aSlideShowlength);
+			mSlideShow.setLength(aSlideShowlength);
 			mSlideShow.setCurrentSlide(aCurrentSlide);
 
 			Message aMessage = Message.obtain(null,

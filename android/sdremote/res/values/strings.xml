@@ -14,8 +14,11 @@
     <string name="clock_timer_restart">Restart</string>
     <string name="clock_timer_reset">Reset</string>
     <string name="clock_timer_resume">Resume</string>
-    <string name="options_autodecline">Auto-decline calls</string>
-    <string name="options_volumeswitching">Change slides using volume buttons</string>
+    <string name="options_autodecline">Decline Calls</string>
+    <string name="options_description">Automatically decline all incoming calls.</string>
+    <string name="options_volumeswitching">Volume Switching</string>
+    <string name="options_volumeswitching_descripton">Change slides using volume buttons</string>
     <string name="options_switchcomputer">Switch computer</string>
     <string name="blankscreen_return">Return to Slide</string>
+
 </resources>

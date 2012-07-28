@@ -18,7 +18,10 @@ public class SlideShow {
 	private int mSize = 0;
 	private int mCurrentSlide = 0;
 
-	protected SlideShow(int aSize) {
+	protected SlideShow() {
+	}
+
+	protected void setLength(int aSize) {
 		mSize = aSize;
 	}
 
