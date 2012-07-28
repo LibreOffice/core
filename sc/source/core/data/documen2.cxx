@@ -396,11 +396,8 @@ ScDocument::~ScDocument()
     delete pBASM;       // BroadcastAreaSlotMachine
     pBASM = NULL;
 
-    if (pUnoBroadcaster)
-    {
-        delete pUnoBroadcaster;     // broadcasted nochmal SFX_HINT_DYING
-        pUnoBroadcaster = NULL;
-    }
+    delete pUnoBroadcaster;     // broadcasted nochmal SFX_HINT_DYING
+    pUnoBroadcaster = NULL;
 
     delete pUnoRefUndoList;
     delete pUnoListenerCalls;
@@ -702,70 +699,72 @@ bool ScDocument::GetDataStart( SCTAB nTab, SCCOL& rStartCol, SCROW& rStartRow ) 
 
 bool ScDocument::MoveTab( SCTAB nOldPos, SCTAB nNewPos, ScProgress* pProgress )
 {
-    if (nOldPos == nNewPos) return false;
-    bool bValid = false;
+    if (nOldPos == nNewPos)
+        return false;
+
     SCTAB nTabCount = static_cast<SCTAB>(maTabs.size());
+    if(nTabCount < 2)
+        return false;
+
+    bool bValid = false;
     if (VALIDTAB(nOldPos) && nOldPos < nTabCount )
     {
         if (maTabs[nOldPos])
         {
-            if (nTabCount > 1)
-            {
-                bool bOldAutoCalc = GetAutoCalc();
-                SetAutoCalc( false );   // Mehrfachberechnungen vermeiden
-                SetNoListening( true );
-                if (nNewPos == SC_TAB_APPEND || nNewPos >= nTabCount)
-                    nNewPos = nTabCount-1;
+            bool bOldAutoCalc = GetAutoCalc();
+            SetAutoCalc( false );   // Mehrfachberechnungen vermeiden
+            SetNoListening( true );
+            if (nNewPos == SC_TAB_APPEND || nNewPos >= nTabCount)
+                nNewPos = nTabCount-1;
 
-                //  Referenz-Updaterei
-                //! mit UpdateReference zusammenfassen!
+            //  Referenz-Updaterei
+            //! mit UpdateReference zusammenfassen!
 
-                SCsTAB nDz = ((SCsTAB)nNewPos) - (SCsTAB)nOldPos;
-                ScRange aSourceRange( 0,0,nOldPos, MAXCOL,MAXROW,nOldPos );
-                if (pRangeName)
-                    pRangeName->UpdateTabRef(nOldPos, 3, nNewPos);
-                pDBCollection->UpdateMoveTab( nOldPos, nNewPos );
-                xColNameRanges->UpdateReference( URM_REORDER, this, aSourceRange, 0,0,nDz );
-                xRowNameRanges->UpdateReference( URM_REORDER, this, aSourceRange, 0,0,nDz );
-                if (pDPCollection)
-                    pDPCollection->UpdateReference( URM_REORDER, aSourceRange, 0,0,nDz );
-                if (pDetOpList)
-                    pDetOpList->UpdateReference( this, URM_REORDER, aSourceRange, 0,0,nDz );
-                UpdateChartRef( URM_REORDER,
-                                    0,0,nOldPos, MAXCOL,MAXROW,nOldPos, 0,0,nDz );
-                UpdateRefAreaLinks( URM_REORDER, aSourceRange, 0,0,nDz );
-                if ( pValidationList )
-                    pValidationList->UpdateMoveTab( nOldPos, nNewPos );
-                if ( pUnoBroadcaster )
-                    pUnoBroadcaster->Broadcast( ScUpdateRefHint( URM_REORDER,
-                                    aSourceRange, 0,0,nDz ) );
+            SCsTAB nDz = ((SCsTAB)nNewPos) - (SCsTAB)nOldPos;
+            ScRange aSourceRange( 0,0,nOldPos, MAXCOL,MAXROW,nOldPos );
+            if (pRangeName)
+                pRangeName->UpdateTabRef(nOldPos, 3, nNewPos);
+            pDBCollection->UpdateMoveTab( nOldPos, nNewPos );
+            xColNameRanges->UpdateReference( URM_REORDER, this, aSourceRange, 0,0,nDz );
+            xRowNameRanges->UpdateReference( URM_REORDER, this, aSourceRange, 0,0,nDz );
+            if (pDPCollection)
+                pDPCollection->UpdateReference( URM_REORDER, aSourceRange, 0,0,nDz );
+            if (pDetOpList)
+                pDetOpList->UpdateReference( this, URM_REORDER, aSourceRange, 0,0,nDz );
+            UpdateChartRef( URM_REORDER,
+                    0,0,nOldPos, MAXCOL,MAXROW,nOldPos, 0,0,nDz );
+            UpdateRefAreaLinks( URM_REORDER, aSourceRange, 0,0,nDz );
+            if ( pValidationList )
+                pValidationList->UpdateMoveTab( nOldPos, nNewPos );
+            if ( pUnoBroadcaster )
+                pUnoBroadcaster->Broadcast( ScUpdateRefHint( URM_REORDER,
+                            aSourceRange, 0,0,nDz ) );
 
-                ScTable* pSaveTab = maTabs[nOldPos];
-                maTabs.erase(maTabs.begin()+nOldPos);
-                maTabs.insert(maTabs.begin()+nNewPos, pSaveTab);
-                TableContainer::iterator it = maTabs.begin();
-                for (SCTAB i = 0; i < nTabCount; i++)
-                    if (maTabs[i])
-                        maTabs[i]->UpdateMoveTab( nOldPos, nNewPos, i, pProgress );
-                it = maTabs.begin();
-                for (; it != maTabs.end(); ++it)
-                    if (*it)
-                        (*it)->UpdateCompile();
-                SetNoListening( false );
-                it = maTabs.begin();
-                for (; it != maTabs.end(); ++it)
-                    if (*it)
-                        (*it)->StartAllListeners();
-                // sheet names of references may not be valid until sheet is moved
-                pChartListenerCollection->UpdateScheduledSeriesRanges();
-                SetDirty();
-                SetAutoCalc( bOldAutoCalc );
+            ScTable* pSaveTab = maTabs[nOldPos];
+            maTabs.erase(maTabs.begin()+nOldPos);
+            maTabs.insert(maTabs.begin()+nNewPos, pSaveTab);
+            TableContainer::iterator it = maTabs.begin();
+            for (SCTAB i = 0; i < nTabCount; i++)
+                if (maTabs[i])
+                    maTabs[i]->UpdateMoveTab( nOldPos, nNewPos, i, pProgress );
+            it = maTabs.begin();
+            for (; it != maTabs.end(); ++it)
+                if (*it)
+                    (*it)->UpdateCompile();
+            SetNoListening( false );
+            it = maTabs.begin();
+            for (; it != maTabs.end(); ++it)
+                if (*it)
+                    (*it)->StartAllListeners();
+            // sheet names of references may not be valid until sheet is moved
+            pChartListenerCollection->UpdateScheduledSeriesRanges();
+            SetDirty();
+            SetAutoCalc( bOldAutoCalc );
 
-                if (pDrawLayer)
-                    DrawMovePage( static_cast<sal_uInt16>(nOldPos), static_cast<sal_uInt16>(nNewPos) );
+            if (pDrawLayer)
+                DrawMovePage( static_cast<sal_uInt16>(nOldPos), static_cast<sal_uInt16>(nNewPos) );
 
-                bValid = true;
-            }
+            bValid = true;
         }
     }
     return bValid;
@@ -788,9 +787,9 @@ bool ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pOnlyM
 
     bool bValid;
     if (bPrefix)
-        bValid = ( ValidNewTabName(aName) );
+        bValid = ValidNewTabName(aName);
     else
-        bValid = ( !GetTable( aName, nDummy ) );
+        bValid = !GetTable( aName, nDummy );
 
     bool bOldAutoCalc = GetAutoCalc();
     SetAutoCalc( false );   // Mehrfachberechnungen vermeiden
@@ -858,8 +857,7 @@ bool ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pOnlyM
                                         maTabs[nNewPos], pOnlyMarked );
         maTabs[nNewPos]->SetTabBgColor(maTabs[nOldPos]->GetTabBgColor());
 
-        SCsTAB nDz;
-        nDz = ((short)nNewPos) - (short)nOldPos;
+        SCsTAB nDz = (static_cast<SCsTAB>(nNewPos)) - static_cast<SCsTAB>(nOldPos);
         maTabs[nNewPos]->UpdateReference(URM_COPY, 0, 0, nNewPos , MAXCOL, MAXROW,
                                         nNewPos, 0, 0, nDz, NULL);
 
