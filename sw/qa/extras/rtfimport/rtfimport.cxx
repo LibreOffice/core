@@ -26,6 +26,7 @@
  */
 
 #include "../swmodeltestbase.hxx"
+#include "bordertest.hxx"
 
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/graphic/GraphicType.hpp>
@@ -104,6 +105,7 @@ public:
     void testFdo49892();
     void testFdo48446();
     void testFdo47495();
+    void testAllGapsWord();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -150,6 +152,7 @@ public:
     CPPUNIT_TEST(testFdo49892);
     CPPUNIT_TEST(testFdo48446);
     CPPUNIT_TEST(testFdo47495);
+    CPPUNIT_TEST(testAllGapsWord);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -903,6 +906,13 @@ void Test::testFdo47495()
     load("fdo47495.rtf");
     // Used to have 4 paragraphs, as a result the original bugdoc had 2 pages instead of 1.
     CPPUNIT_ASSERT_EQUAL(2, getParagraphs());
+}
+
+void Test::testAllGapsWord()
+{
+    load("all_gaps_word.rtf");
+    BorderTest borderTest;
+    borderTest.testTheBorders(mxComponent);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
