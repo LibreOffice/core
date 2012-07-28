@@ -19,10 +19,105 @@
 
 #include <svl/svarray.hxx>
 
-SV_IMPL_VARARR(SvPtrarr,VoidPtr)
+SvPtrarr::SvPtrarr( sal_uInt16 nInit )
+    : pData (0),
+      nFree (nInit),
+      nA    (0)
+{
+    if( nInit )
+    {
+        pData = (VoidPtr*)(rtl_allocateMemory(sizeof(VoidPtr) * nInit));
+        OSL_ENSURE( pData, "CTOR, allocate");
+    }
+}
+
+void SvPtrarr::_resize (size_t n)
+{
+    sal_uInt16 nL = ((n < USHRT_MAX) ? sal_uInt16(n) : USHRT_MAX);
+    VoidPtr* pE = (VoidPtr*)(rtl_reallocateMemory (pData, sizeof(VoidPtr) * nL));
+    if ((pE != 0) || (nL == 0))
+    {
+        pData = pE;
+        nFree = nL - nA;
+    }
+}
+
+void SvPtrarr::Insert( const VoidPtr& aE, sal_uInt16 nP )
+{
+    OSL_ENSURE(nP <= nA && nA < USHRT_MAX, "Ins 1");
+    if (nFree < 1)
+        _resize (nA + ((nA > 1) ? nA : 1));
+    if( pData && nP < nA )
+        memmove( pData+nP+1, pData+nP, (nA-nP) * sizeof( VoidPtr ));
+    *(pData+nP) = (VoidPtr&)aE;
+    ++nA; --nFree;
+}
+
+void SvPtrarr::Insert( const VoidPtr* pE, sal_uInt16 nL, sal_uInt16 nP )
+{
+    OSL_ENSURE(nP<=nA && ((long)nA+nL)<USHRT_MAX,"Ins n");
+    if (nFree < nL)
+        _resize (nA + ((nA > nL) ? nA : nL));
+    if( pData && nP < nA )
+        memmove( pData+nP+nL, pData+nP, (nA-nP) * sizeof( VoidPtr ));
+    if( pE )
+        memcpy( pData+nP, pE, nL * sizeof( VoidPtr ));
+    nA = nA + nL; nFree = nFree - nL;
+}
+
+void SvPtrarr::Replace( const VoidPtr& aE, sal_uInt16 nP )
+{
+    if( nP < nA )
+        *(pData+nP) = (VoidPtr&)aE;
+}
+
+void SvPtrarr::Replace( const VoidPtr *pE, sal_uInt16 nL, sal_uInt16 nP )
+{
+    if( pE && nP < nA )
+    {
+        if( nP + nL < nA )
+            memcpy( pData + nP, pE, nL * sizeof( VoidPtr ));
+        else if( nP + nL < nA + nFree )\
+        {
+            memcpy( pData + nP, pE, nL * sizeof( VoidPtr ));
+            nP = nP + (nL - nA);
+            nFree = nP;
+        }
+        else
+        {
+            sal_uInt16 nTmpLen = nA + nFree - nP;
+            memcpy( pData + nP, pE, nTmpLen * sizeof( VoidPtr ));
+            nA = nA + nFree;
+            nFree = 0;
+            Insert( pE + nTmpLen, nL - nTmpLen, nA );
+        }
+    }
+}
+
+void SvPtrarr::Remove( sal_uInt16 nP, sal_uInt16 nL )
+{
+    if( !nL )
+        return;
+    OSL_ENSURE( nP < nA && nP + nL <= nA,"Del");
+    if( pData && nP+1 < nA )
+        memmove( pData+nP, pData+nP+nL, (nA-nP-nL) * sizeof( VoidPtr ));
+    nA = nA - nL; nFree = nFree + nL;
+    if (nFree > nA)
+        _resize (nA);
+}
+
+void SvPtrarr::_ForEach( sal_uInt16 nStt, sal_uInt16 nE,
+            FnForEach_SvPtrarr fnCall, void* pArgs )
+{
+    if( nStt >= nE || nE > nA )
+        return;
+    for( ; nStt < nE && (*fnCall)( *(const VoidPtr*)(pData+nStt), pArgs ); nStt++)
+        ;
+}
 
 sal_uInt16 SvPtrarr::GetPos( const VoidPtr& aElement ) const
-{   sal_uInt16 n;
+{
+    sal_uInt16 n;
     for( n=0; n < nA && *(GetData()+n) != aElement; ) n++;
     return ( n >= nA ? USHRT_MAX : n );
 }

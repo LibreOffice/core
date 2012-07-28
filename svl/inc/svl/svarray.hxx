@@ -24,12 +24,6 @@
 *
 *   Hier folgt die Beschreibung fuer die exportierten Makros:
 *
-*       SV_DECL_VARARR(nm, AE, IS, GS)
-*       SV_IMPL_VARARR( nm, AE )
-*           definiere/implementiere ein Array das einfache Objecte
-*           enthaelt. (Sie werden im Speicher verschoben, koennen also
-*           z.B. keine String sein)
-*
 *       SV_DECL_PTRARR_SORT(nm, AE, IS, GS)
 *       SV_IMPL_PTRARR_SORT( nm,AE )
 *           defieniere/implementiere ein Sort-Array mit Pointern, das nach
@@ -63,208 +57,12 @@
 
 class String;
 
-#ifndef CONCAT
-#define CONCAT(x,y) x##y
-#endif
-
 class DummyType;
 inline void* operator new( size_t, DummyType* pPtr )
 {
     return pPtr;
 }
 inline void operator delete( void*, DummyType* ) {}
-
-#ifndef DBG_UTIL
-
-#define _SVVARARR_DEF_GET_OP_INLINE( nm, ArrElem ) \
-ArrElem& operator[](sal_uInt16 nP) const { return *(pData+nP); }\
-\
-void Insert( const nm * pI, sal_uInt16 nP,\
-             sal_uInt16 nS = 0, sal_uInt16 nE = USHRT_MAX )\
-{\
-    if( USHRT_MAX == nE ) \
-        nE = pI->nA; \
-    if( nS < nE ) \
-        Insert( (const ArrElem*)pI->pData+nS, (sal_uInt16)nE-nS, nP );\
-}
-
-#define _SVVARARR_IMPL_GET_OP_INLINE( nm, ArrElem )
-
-#else // DBG_UTIL
-
-#define _SVVARARR_DEF_GET_OP_INLINE( nm,ArrElem )\
-ArrElem& operator[](sal_uInt16 nP) const;\
-void Insert( const nm *pI, sal_uInt16 nP,\
-                sal_uInt16 nS = 0, sal_uInt16 nE = USHRT_MAX );
-
-#define _SVVARARR_IMPL_GET_OP_INLINE( nm, ArrElem )\
-ArrElem& nm::operator[](sal_uInt16 nP) const\
-{\
-    OSL_ENSURE( pData && nP < nA,"Op[]");\
-    return *(pData+nP);\
-}\
-void nm::Insert( const nm *pI, sal_uInt16 nP, sal_uInt16 nStt, sal_uInt16 nE)\
-{\
-    OSL_ENSURE(nP<=nA,"Ins,Ar[Start.End]");\
-    if( USHRT_MAX == nE ) \
-        nE = pI->nA; \
-    if( nStt < nE ) \
-        Insert( (const ArrElem*)pI->pData+nStt, (sal_uInt16)nE-nStt, nP );\
-}
-
-#endif // DBG_UTIL
-
-#define _SV_DECL_VARARR_GEN(nm, AE, IS, AERef, vis )\
-typedef sal_Bool (*FnForEach_##nm)( const AERef, void* );\
-class vis nm\
-{\
-protected:\
-    AE    *pData;\
-    sal_uInt16 nFree;\
-    sal_uInt16 nA;\
-\
-    void _resize(size_t n);\
-\
-public:\
-    nm( sal_uInt16= IS );\
-    ~nm() { rtl_freeMemory( pData ); }\
-\
-    _SVVARARR_DEF_GET_OP_INLINE(nm, AE )\
-    AERef GetObject(sal_uInt16 nP) const { return (*this)[nP]; } \
-\
-    void Insert( const AERef aE, sal_uInt16 nP );\
-    void Insert( const AE *pE, sal_uInt16 nL, sal_uInt16 nP );\
-    void Remove( sal_uInt16 nP, sal_uInt16 nL = 1 );\
-    void Replace( const AERef aE, sal_uInt16 nP );\
-    void Replace( const AE *pE, sal_uInt16 nL, sal_uInt16 nP );\
-    sal_uInt16 Count() const { return nA; }\
-    const AE* GetData() const { return (const AE*)pData; }\
-\
-    void ForEach( CONCAT( FnForEach_, nm ) fnForEach, void* pArgs = 0 )\
-    {\
-        _ForEach( 0, nA, fnForEach, pArgs );\
-    }\
-    void ForEach( sal_uInt16 nS, sal_uInt16 nE, \
-                    CONCAT( FnForEach_, nm ) fnForEach, void* pArgs = 0 )\
-    {\
-        _ForEach( nS, nE, fnForEach, pArgs );\
-    }\
-\
-    void _ForEach( sal_uInt16 nStt, sal_uInt16 nE, \
-            CONCAT( FnForEach_, nm ) fnCall, void* pArgs = 0 );\
-\
-
-#define SV_DECL_VARARR_GEN(nm, AE, IS, AERef, vis )\
-_SV_DECL_VARARR_GEN(nm, AE, IS, AERef, vis )\
-private:\
-nm( const nm& );\
-nm& operator=( const nm& );\
-};
-
-#define SV_DECL_VARARR(nm, AE, IS) \
-SV_DECL_VARARR_GEN(nm, AE, IS, AE &, )
-
-#define SV_IMPL_VARARR_GEN( nm, AE, AERef )\
-nm::nm( sal_uInt16 nInit )\
-    : pData (0),\
-      nFree (nInit),\
-      nA    (0)\
-{\
-    if( nInit )\
-    {\
-        pData = (AE*)(rtl_allocateMemory(sizeof(AE) * nInit));\
-        OSL_ENSURE( pData, "CTOR, allocate");\
-    }\
-}\
-\
-void nm::_resize (size_t n)\
-{\
-    sal_uInt16 nL = ((n < USHRT_MAX) ? sal_uInt16(n) : USHRT_MAX);\
-    AE* pE = (AE*)(rtl_reallocateMemory (pData, sizeof(AE) * nL));\
-    if ((pE != 0) || (nL == 0))\
-    {\
-        pData = pE;\
-        nFree = nL - nA;\
-    }\
-}\
-\
-void nm::Insert( const AERef aE, sal_uInt16 nP )\
-{\
-    OSL_ENSURE(nP <= nA && nA < USHRT_MAX, "Ins 1");\
-    if (nFree < 1)\
-        _resize (nA + ((nA > 1) ? nA : 1));\
-    if( pData && nP < nA )\
-        memmove( pData+nP+1, pData+nP, (nA-nP) * sizeof( AE ));\
-    *(pData+nP) = (AE&)aE;\
-    ++nA; --nFree;\
-}\
-\
-void nm::Insert( const AE* pE, sal_uInt16 nL, sal_uInt16 nP )\
-{\
-    OSL_ENSURE(nP<=nA && ((long)nA+nL)<USHRT_MAX,"Ins n");\
-    if (nFree < nL)\
-        _resize (nA + ((nA > nL) ? nA : nL));\
-    if( pData && nP < nA )\
-        memmove( pData+nP+nL, pData+nP, (nA-nP) * sizeof( AE ));\
-    if( pE )\
-        memcpy( pData+nP, pE, nL * sizeof( AE ));\
-    nA = nA + nL; nFree = nFree - nL;\
-}\
-\
-void nm::Replace( const AERef aE, sal_uInt16 nP )\
-{\
-    if( nP < nA )\
-        *(pData+nP) = (AE&)aE;\
-}\
-\
-void nm::Replace( const AE *pE, sal_uInt16 nL, sal_uInt16 nP )\
-{\
-    if( pE && nP < nA )\
-    {\
-        if( nP + nL < nA )\
-            memcpy( pData + nP, pE, nL * sizeof( AE ));\
-        else if( nP + nL < nA + nFree )\
-        {\
-            memcpy( pData + nP, pE, nL * sizeof( AE ));\
-            nP = nP + (nL - nA); \
-            nFree = nP;\
-        }\
-        else \
-        {\
-            sal_uInt16 nTmpLen = nA + nFree - nP; \
-            memcpy( pData + nP, pE, nTmpLen * sizeof( AE ));\
-            nA = nA + nFree; \
-            nFree = 0; \
-            Insert( pE + nTmpLen, nL - nTmpLen, nA );\
-        }\
-    }\
-}\
-\
-void nm::Remove( sal_uInt16 nP, sal_uInt16 nL )\
-{\
-    if( !nL )\
-        return;\
-    OSL_ENSURE( nP < nA && nP + nL <= nA,"Del");\
-    if( pData && nP+1 < nA )\
-        memmove( pData+nP, pData+nP+nL, (nA-nP-nL) * sizeof( AE ));\
-    nA = nA - nL; nFree = nFree + nL;\
-    if (nFree > nA)\
-        _resize (nA);\
-}\
-\
-void nm::_ForEach( sal_uInt16 nStt, sal_uInt16 nE, \
-            CONCAT( FnForEach_, nm ) fnCall, void* pArgs )\
-{\
-    if( nStt >= nE || nE > nA )\
-        return;\
-    for( ; nStt < nE && (*fnCall)( *(const AE*)(pData+nStt), pArgs ); nStt++)\
-        ;\
-}\
-\
-_SVVARARR_IMPL_GET_OP_INLINE(nm, AE )\
-
-#define SV_IMPL_VARARR( nm, AE ) \
-SV_IMPL_VARARR_GEN( nm, AE, AE & )
 
 #define SV_DECL_PTRARR_GEN(nm, AE, IS, Base, AERef, VPRef, vis )\
 class vis nm: public Base \
@@ -366,9 +164,55 @@ void nm::DeleteAndDestroy( sal_uInt16 nP, sal_uInt16 nL )\
 }
 
 typedef void* VoidPtr;
+typedef sal_Bool (*FnForEach_SvPtrarr)( const VoidPtr&, void* );
+class SVL_DLLPUBLIC SvPtrarr
+{
+protected:
+    VoidPtr    *pData;
+    sal_uInt16 nFree;
+    sal_uInt16 nA;
 
-_SV_DECL_VARARR_GEN( SvPtrarr, VoidPtr, 0, VoidPtr &, SVL_DLLPUBLIC )
-sal_uInt16 GetPos( const VoidPtr & aE ) const;
+    void _resize(size_t n);
+
+public:
+    SvPtrarr( sal_uInt16= 0 );
+    ~SvPtrarr() { rtl_freeMemory( pData ); }
+
+    VoidPtr& operator[](sal_uInt16 nP) const { return *(pData+nP); }
+
+    void Insert( const SvPtrarr * pI, sal_uInt16 nP,
+                 sal_uInt16 nS = 0, sal_uInt16 nE = USHRT_MAX )
+    {
+        if( USHRT_MAX == nE )
+            nE = pI->nA;
+        if( nS < nE )
+            Insert( (const VoidPtr*)pI->pData+nS, (sal_uInt16)nE-nS, nP );
+    }
+
+    VoidPtr& GetObject(sal_uInt16 nP) const { return (*this)[nP]; }
+
+    void Insert( const VoidPtr& aE, sal_uInt16 nP );
+    void Insert( const VoidPtr *pE, sal_uInt16 nL, sal_uInt16 nP );
+    void Remove( sal_uInt16 nP, sal_uInt16 nL = 1 );
+    void Replace( const VoidPtr& aE, sal_uInt16 nP );
+    void Replace( const VoidPtr *pE, sal_uInt16 nL, sal_uInt16 nP );
+    sal_uInt16 Count() const { return nA; }
+    const VoidPtr* GetData() const { return (const VoidPtr*)pData; }
+
+    void ForEach( FnForEach_SvPtrarr fnForEach, void* pArgs = 0 )
+    {
+        _ForEach( 0, nA, fnForEach, pArgs );
+    }
+    void ForEach( sal_uInt16 nS, sal_uInt16 nE,
+                    FnForEach_SvPtrarr fnForEach, void* pArgs = 0 )
+    {
+        _ForEach( nS, nE, fnForEach, pArgs );
+    }
+
+    void _ForEach( sal_uInt16 nStt, sal_uInt16 nE,
+            FnForEach_SvPtrarr fnCall, void* pArgs = 0 );
+
+    sal_uInt16 GetPos( const VoidPtr & aE ) const;
 };
 
 // SORTARR - Begin
