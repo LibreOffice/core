@@ -52,7 +52,6 @@
 #include <comphelper/extract.hxx>
 #include <tools/resid.hxx>
 #include <tools/diagnose_ex.h>
-#include <vcl/sound.hxx>
 #include <vcl/menu.hxx>
 
 #include "svx/fmresids.hrc"

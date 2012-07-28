@@ -24,7 +24,6 @@
 
 #include <com/sun/star/frame/XTitle.hpp>
 
-#include <vcl/sound.hxx>
 #include <basidesh.hxx>
 #include <basidesh.hrc>
 #include <baside2.hxx>

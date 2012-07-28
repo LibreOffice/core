@@ -28,7 +28,6 @@
 
 #include <svl/intitem.hxx>
 #include <svl/zforlist.hxx>
-#include <vcl/sound.hxx>
 #include <formula/token.hxx>
 
 #include "document.hxx"

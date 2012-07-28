@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <vcl/sound.hxx>
 
 #define _SVX_NOIDERESIDS
 #include "breakpoint.hxx"

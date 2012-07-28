@@ -36,7 +36,6 @@
 #include <vcl/cursor.hxx>
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/sound.hxx>
 #include <tools/stream.hxx>
 
 #include <sot/formats.hxx>

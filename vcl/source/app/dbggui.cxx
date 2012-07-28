@@ -49,7 +49,6 @@
 #include "vcl/field.hxx"
 #include "vcl/msgbox.hxx"
 #include "vcl/wrkwin.hxx"
-#include "vcl/sound.hxx"
 #include "vcl/threadex.hxx"
 
 #include "svdata.hxx"
@@ -1664,7 +1663,6 @@ void DbgPrintMsgBox( const char* pLine )
         }
 #endif
 
-        Sound::Beep( SOUND_ERROR );
 #ifdef UNX
         fprintf( stderr, "%s\n", pLine );
         return;

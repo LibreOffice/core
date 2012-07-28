@@ -29,7 +29,6 @@
 
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <hintids.hxx>
-#include <vcl/sound.hxx>
 #include <tools/shl.hxx> // SW_MOD
 #include <editeng/pgrditem.hxx>
 #include <editeng/lrspitem.hxx>

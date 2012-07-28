@@ -60,7 +60,6 @@
 #include <svtools/cliplistener.hxx>
 #include <svl/whiter.hxx>
 #include <vcl/msgbox.hxx>
-#include <vcl/sound.hxx>
 #include <sot/formats.hxx>
 #include <svtools/transfer.hxx>
 #include <svl/stritem.hxx>

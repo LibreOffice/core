@@ -28,7 +28,6 @@
 
 #include "scitems.hxx"
 #include <vcl/msgbox.hxx>
-#include <vcl/sound.hxx>
 
 #include "gridwin.hxx"
 #include "tabvwsh.hxx"

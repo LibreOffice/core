@@ -36,7 +36,6 @@
 #include <vcl/unohelp.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/event.hxx>
-#include <vcl/sound.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/cursor.hxx>
@@ -483,10 +482,7 @@ long ImplHandleMouseEvent( Window* pWindow, sal_uInt16 nSVEvent, sal_Bool bMouse
             }
 
             if ( nSVEvent == EVENT_MOUSEBUTTONDOWN )
-            {
-                Sound::Beep( SOUND_DISABLE, pChild );
                 return 1;
-            }
             else
             {
                 // Set normal MousePointer for disabled windows
@@ -1970,9 +1966,7 @@ void ImplHandleClose( Window* pWindow )
     }
 
     // check whether close is allowed
-    if ( !pWin->IsEnabled() || !pWin->IsInputEnabled() || pWin->IsInModalMode() )
-        Sound::Beep( SOUND_DISABLE, pWin );
-    else
+    if ( pWin->IsEnabled() && pWin->IsInputEnabled() && !pWin->IsInModalMode() )
     {
         DelayedCloseEvent* pEv = new DelayedCloseEvent;
         pEv->pWindow = pWin;

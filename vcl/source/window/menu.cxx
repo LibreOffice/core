@@ -41,7 +41,6 @@
 #include "vcl/floatwin.hxx"
 #include "vcl/wrkwin.hxx"
 #include "vcl/timer.hxx"
-#include "vcl/sound.hxx"
 #include "vcl/decoview.hxx"
 #include "vcl/bitmap.hxx"
 #include "vcl/menu.hxx"

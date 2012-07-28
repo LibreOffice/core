@@ -43,7 +43,6 @@
 #include <svx/svdview.hxx>
 #include <sot/factory.hxx>
 #include <svl/itemiter.hxx>
-#include <vcl/sound.hxx>
 #include <tools/bigint.hxx>
 #include <sot/storage.hxx>
 #include <svtools/insdlg.hxx>

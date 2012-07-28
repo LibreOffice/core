@@ -25,7 +25,6 @@
 #include <com/sun/star/util/XFlushable.hpp>
 
 #include <stdlib.h>
-#include <vcl/sound.hxx>
 #include <vcl/msgbox.hxx>
 #include <tools/string.hxx>
 #include <svl/itempool.hxx>

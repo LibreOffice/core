@@ -25,7 +25,6 @@
 #include <sfx2/dispatch.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/fixed.hxx>
-#include <vcl/sound.hxx>
 #include <dialmgr.hxx>
 #include <cuires.hrc>
 #include "cuitbxform.hxx"

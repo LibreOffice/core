@@ -49,7 +49,6 @@
 #include <vcl/field.hxx>
 #include <vcl/bmpacc.hxx>
 #include <vcl/decoview.hxx>
-#include <vcl/sound.hxx>
 #include <vcl/svapp.hxx>
 
 #include <toolkit/helper/vclunohelper.hxx>

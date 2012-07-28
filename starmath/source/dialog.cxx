@@ -29,7 +29,6 @@
 #include <vcl/msgbox.hxx>
 #include <svtools/ctrltool.hxx>
 #include <sfx2/printer.hxx>
-#include <vcl/sound.hxx>
 #include <vcl/help.hxx>
 #include <vcl/sndstyle.hxx>
 #include <vcl/waitobj.hxx>

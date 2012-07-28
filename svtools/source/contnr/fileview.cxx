@@ -73,7 +73,6 @@
 #include <osl/conditn.hxx>
 #include <salhelper/timer.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/sound.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <unotools/intlwrapper.hxx>
 #include <unotools/syslocale.hxx>

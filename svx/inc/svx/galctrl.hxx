@@ -29,7 +29,6 @@
 #include <vcl/menu.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/combobox.hxx>
-#include <vcl/sound.hxx>
 #include <svl/slstitm.hxx>
 #include <svtools/transfer.hxx>
 #include <svtools/valueset.hxx>

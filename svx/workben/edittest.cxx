@@ -41,7 +41,6 @@
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/font.hxx>
-#include <vcl/sound.hxx>
 #include <vcl/print.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/help.hxx>

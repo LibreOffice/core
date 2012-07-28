@@ -38,7 +38,6 @@
 #include "vcl/tabpage.hxx"
 #include "vcl/tabctrl.hxx"
 #include "vcl/controllayout.hxx"
-#include "vcl/sound.hxx"
 #include "vcl/lstbox.hxx"
 
 #include "controldata.hxx"

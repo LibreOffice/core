@@ -30,7 +30,6 @@
 #include <string.h>         // for strchr()
 #include <hintids.hxx>
 
-#include <vcl/sound.hxx>
 #include <editeng/cscoitem.hxx>
 #include <editeng/brkitem.hxx>
 #include <linguistic/lngprops.hxx>
@@ -179,8 +178,6 @@ void lcl_SkipAttr( const SwTxtNode *pNode, SwIndex &rIdx, xub_StrLen &rStart )
     {
         // skip all special attributes
         do {
-            // "Beep" for every single one we skip
-            Sound::Beep(SOUND_ERROR);
             rIdx++;
         } while( (rStart = rIdx.GetIndex()) < pNode->GetTxt().Len()
                && !lcl_MayOverwrite(pNode, rStart) );

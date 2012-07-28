@@ -61,7 +61,6 @@
 #include <tools/shl.hxx>
 
 #include <vcl/wrkwin.hxx>
-#include <vcl/sound.hxx>
 #include <svx/fmshell.hxx>
 #include "fmshimp.hxx"
 #include <svx/fmpage.hxx>

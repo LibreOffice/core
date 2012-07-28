@@ -41,7 +41,6 @@
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
 #include <vcl/msgbox.hxx>
-#include <vcl/sound.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/waitobj.hxx>
 #include <vcl/wrkwin.hxx>

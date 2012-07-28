@@ -36,7 +36,6 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <vcl/help.hxx>
-#include <vcl/sound.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/urlobj.hxx>
 #include <svl/urlbmk.hxx>

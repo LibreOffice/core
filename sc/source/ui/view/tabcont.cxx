@@ -29,7 +29,6 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/docfile.hxx>
-#include <vcl/sound.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/svapp.hxx>
 #include "tabcont.hxx"

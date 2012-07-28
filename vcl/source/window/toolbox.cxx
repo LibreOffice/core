@@ -38,7 +38,6 @@
 #include <vcl/accel.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/help.hxx>
-#include <vcl/sound.hxx>
 #include <vcl/spin.h>
 #include <vcl/toolbox.hxx>
 #include <vcl/bitmap.hxx>
@@ -5204,7 +5203,6 @@ void ToolBox::KeyInput( const KeyEvent& rKEvt )
                 ImplToolItem *pItem = ImplGetItem( mnHighItemId );
                 if( !pItem->mbEnabled )
                 {
-                    Sound::Beep( SOUND_DISABLE, this );
                     bGrabFocusToDocument = sal_True;
                 }
             }

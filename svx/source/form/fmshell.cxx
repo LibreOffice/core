@@ -77,7 +77,6 @@
 #include <svx/svdpagv.hxx>
 #include <sfx2/objitem.hxx>
 #include <sfx2/viewsh.hxx>
-#include <vcl/sound.hxx>
 #include "fmexpl.hxx"
 #include "formcontrolling.hxx"
 #include <svl/numuno.hxx>

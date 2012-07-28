@@ -108,7 +108,6 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/app/session \
     vcl/source/app/settings \
     vcl/source/app/solarmutex \
-    vcl/source/app/sound \
     vcl/source/app/stdtext \
     vcl/source/app/svapp \
     vcl/source/app/svdata \

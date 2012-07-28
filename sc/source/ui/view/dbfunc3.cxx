@@ -31,7 +31,6 @@
 #include <sfx2/bindings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/msgbox.hxx>
-#include <vcl/sound.hxx>
 #include <vcl/waitobj.hxx>
 #include <svl/zforlist.hxx>
 #include <sfx2/app.hxx>

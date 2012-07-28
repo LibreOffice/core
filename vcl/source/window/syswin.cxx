@@ -30,7 +30,6 @@
 
 #include <vcl/svapp.hxx>
 #include <vcl/menu.hxx>
-#include <vcl/sound.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/event.hxx>
 #include <vcl/syswin.hxx>
@@ -207,10 +206,7 @@ sal_Bool SystemWindow::Close()
     else
         nStyle = GetStyle();
     if ( !(nStyle & WB_CLOSEABLE) )
-    {
-        Sound::Beep( SOUND_DISABLE, this );
         return sal_False;
-    }
 
     Hide();
 

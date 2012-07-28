@@ -71,7 +71,6 @@ protected:
     FixedImage*         mpFixedImage;
     XubString           maMessText;
     Image               maImage;
-    sal_uInt16              mnSoundType;
     sal_Bool                mbHelpBtn;
     CheckBox*           mpCheckBox;
     XubString           maCheckBoxText;

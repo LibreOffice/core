@@ -64,7 +64,6 @@
 #include "app.hrc"
 #include "sdresid.hxx"
 #include "strings.hrc"
-#include <vcl/sound.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svx/svdpagv.hxx>

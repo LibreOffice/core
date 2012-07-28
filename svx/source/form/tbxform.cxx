@@ -38,7 +38,6 @@
 #include "formtoolbars.hxx"
 
 
-#include <vcl/sound.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
 #include "svx/tbxctl.hxx"

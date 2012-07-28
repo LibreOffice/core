@@ -45,7 +45,6 @@
 #include <svtools/xtextedt.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/msgbox.hxx>
-#include <vcl/sound.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

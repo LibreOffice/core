@@ -38,7 +38,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/fixed.hxx>
-#include <vcl/sound.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/button.hxx>
 #include <vcl/mnemonic.hxx>
@@ -69,7 +68,6 @@ void MessBox::ImplInitMessBoxData()
 {
     mpFixedText         = NULL;
     mpFixedImage        = NULL;
-    mnSoundType         = 0;
     mbHelpBtn           = sal_False;
     mpCheckBox          = NULL;
     mbCheck             = sal_False;
@@ -415,8 +413,6 @@ void MessBox::StateChanged( StateChangedType nType )
     if ( nType == STATE_CHANGE_INITSHOW )
     {
         ImplPosControls();
-        if ( mnSoundType )
-            Sound::Beep( (SoundType)(mnSoundType-1), this );
     }
     ButtonDialog::StateChanged( nType );
 }
@@ -458,7 +454,6 @@ void InfoBox::ImplInitInfoBoxData()
         SetText( Application::GetDisplayName() );
 
     SetImage( InfoBox::GetStandardImage() );
-    mnSoundType = ((sal_uInt16)SOUND_INFO)+1;
 }
 
 // -----------------------------------------------------------------------
@@ -494,7 +489,6 @@ void WarningBox::ImplInitWarningBoxData()
         SetText( Application::GetDisplayName() );
 
     SetImage( WarningBox::GetStandardImage() );
-    mnSoundType = ((sal_uInt16)SOUND_WARNING)+1;
 }
 
 // -----------------------------------------------------------------------
@@ -540,7 +534,6 @@ void ErrorBox::ImplInitErrorBoxData()
         SetText( Application::GetDisplayName() );
 
     SetImage( ErrorBox::GetStandardImage() );
-    mnSoundType = ((sal_uInt16)SOUND_ERROR)+1;
 }
 
 // -----------------------------------------------------------------------
@@ -586,7 +579,6 @@ void QueryBox::ImplInitQueryBoxData()
         SetText( Application::GetDisplayName() );
 
     SetImage( QueryBox::GetStandardImage() );
-    mnSoundType = ((sal_uInt16)SOUND_QUERY)+1;
 }
 
 // -----------------------------------------------------------------------

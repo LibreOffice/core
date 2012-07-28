@@ -29,7 +29,6 @@
 #include <stdio.h>
 
 #include <tools/shl.hxx>
-#include <vcl/sound.hxx>
 #include <vcl/svapp.hxx>
 #include <svtools/colorcfg.hxx>
 #include <svl/eitem.hxx>
@@ -476,9 +475,7 @@ IMPL_LINK_NOARG(SvxCharMapData, CharSelectHdl)
     {
         String aText = aShowText.GetText();
 
-        if ( aText.Len() == CHARMAP_MAXLEN )
-            Sound::Beep( SOUND_WARNING );
-        else
+        if ( aText.Len() != CHARMAP_MAXLEN )
         {
             sal_UCS4 cChar = aShowSet.GetSelectCharacter();
             // using the new UCS4 constructor

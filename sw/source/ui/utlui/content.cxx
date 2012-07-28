@@ -33,7 +33,6 @@
 #include <sfx2/dispatch.hxx>
 #include <vcl/help.hxx>
 #include <sot/formats.hxx>
-#include <vcl/sound.hxx>
 #include <uiitems.hxx>
 #include <fmtinfmt.hxx>
 #include <txtinet.hxx>

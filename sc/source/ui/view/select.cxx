@@ -27,7 +27,6 @@
  ************************************************************************/
 
 #include <tools/urlobj.hxx>
-#include <vcl/sound.hxx>
 #include <vcl/svapp.hxx>
 #include <sfx2/docfile.hxx>
 

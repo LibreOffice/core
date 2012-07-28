@@ -31,7 +31,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/button.hxx>
 #include <vcl/decoview.hxx>
-#include <vcl/sound.hxx>
 #include <vcl/salnativewidgets.hxx>
 
 struct SvLBoxButtonData_Impl

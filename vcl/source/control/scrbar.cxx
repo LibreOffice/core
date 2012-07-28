@@ -28,7 +28,6 @@
 
 
 #include "vcl/event.hxx"
-#include "vcl/sound.hxx"
 #include "vcl/decoview.hxx"
 #include "vcl/scrbar.hxx"
 #include "vcl/timer.hxx"
@@ -970,8 +969,6 @@ void ScrollBar::MouseButtonDown( const MouseEvent& rMEvt )
                 meScrollType    = SCROLL_LINEUP;
                 mnDragDraw      = SCRBAR_DRAW_BTN1;
             }
-            else
-                Sound::Beep( SOUND_DISABLE, this );
         }
         else if ( HitTestNativeControl( CTRL_SCROLLBAR, bHorizontal? PART_BUTTON_RIGHT: PART_BUTTON_DOWN,
                     aControlRegion, rMousePos, bIsInside )?
@@ -984,8 +981,6 @@ void ScrollBar::MouseButtonDown( const MouseEvent& rMEvt )
                 meScrollType    = SCROLL_LINEDOWN;
                 mnDragDraw      = SCRBAR_DRAW_BTN2;
             }
-            else
-                Sound::Beep( SOUND_DISABLE, this );
         }
         else
         {
@@ -1028,8 +1023,6 @@ void ScrollBar::MouseButtonDown( const MouseEvent& rMEvt )
                     mnStateFlags |= SCRBAR_STATE_THUMB_DOWN;
                     ImplDraw( mnDragDraw, this );
                 }
-                else
-                    Sound::Beep( SOUND_DISABLE, this );
             }
             else if( HitTestNativeControl( CTRL_SCROLLBAR, bHorizontal? PART_TRACK_HORZ_AREA : PART_TRACK_VERT_AREA,
                                            aControlRegion, rMousePos, bIsInside )?

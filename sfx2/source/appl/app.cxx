@@ -33,7 +33,6 @@
 #include <basic/sbmod.hxx>
 #include <svtools/asynclink.hxx>
 #include <svl/stritem.hxx>
-#include <vcl/sound.hxx>
 #include <svl/eitem.hxx>
 #include <svl/urlbmk.hxx>
 #include <vcl/msgbox.hxx>

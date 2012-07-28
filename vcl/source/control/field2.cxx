@@ -29,7 +29,6 @@
 #include <comphelper/string.hxx>
 #include <tools/rc.h>
 #include <vcl/svapp.hxx>
-#include <vcl/sound.hxx>
 #include <vcl/event.hxx>
 #include <vcl/field.hxx>
 #include <vcl/unohelp.hxx>

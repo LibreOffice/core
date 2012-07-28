@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-#include <vcl/sound.hxx>
 #include <sfx2/bindings.hxx>
 
 #include "olinefun.hxx"

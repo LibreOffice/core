@@ -46,7 +46,6 @@
 #include <svtools/svtabbx.hxx>
 #include <svl/urlbmk.hxx>
 #include <vcl/cursor.hxx>
-#include <vcl/sound.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/hatch.hxx>
 #include <sot/formats.hxx>

@@ -37,7 +37,6 @@
 #include "dialog.hrc"
 #include "passwd.hrc"
 
-#include "vcl/sound.hxx"
 #include "vcl/arrange.hxx"
 
 // -----------------------------------------------------------------------
@@ -61,7 +60,6 @@ IMPL_LINK_INLINE_START( SfxPasswordDialog, EditModifyHdl, Edit *, pEdit )
         }
         if( bReset )
         {
-            Sound::Beep( SOUND_ERROR );
             pEdit->SetSelection( Selection( 0, nLen ) );
             pEdit->ReplaceSelected( aFilter.makeStringAndClear() );
         }

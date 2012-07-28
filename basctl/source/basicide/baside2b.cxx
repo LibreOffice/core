@@ -37,7 +37,6 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <vcl/msgbox.hxx>
-#include <vcl/sound.hxx>
 #include <svl/urihelper.hxx>
 #include <svtools/xtextedt.hxx>
 #include <svtools/txtattr.hxx>

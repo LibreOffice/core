@@ -45,7 +45,6 @@
 #include <svl/zforlist.hxx>
 #include <svx/svdview.hxx>
 #include <vcl/msgbox.hxx>
-#include <vcl/sound.hxx>
 #include <vcl/waitobj.hxx>
 
 #include <basic/sbstar.hxx>

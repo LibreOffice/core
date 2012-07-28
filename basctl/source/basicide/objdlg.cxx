@@ -32,7 +32,6 @@
 #include <svl/itemset.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/taskpanelist.hxx>
-#include <vcl/sound.hxx>
 
 ObjectCatalog::ObjectCatalog( Window * pParent )
     :BasicDockingWindow( pParent, IDEResId( RID_BASICIDE_OBJCAT ) )

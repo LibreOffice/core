@@ -35,7 +35,6 @@
 #include <sfx2/navigat.hxx>
 #include <svl/stritem.hxx>
 #include <svl/urlbmk.hxx>
-#include <vcl/sound.hxx>
 #include <unotools/charclass.hxx>
 #include <stdlib.h>
 

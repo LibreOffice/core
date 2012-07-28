@@ -29,7 +29,6 @@
 
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <hintids.hxx>
-#include <vcl/sound.hxx>
 #include <vcl/lazydelete.hxx>
 #include <tools/poly.hxx>
 #include <svx/xoutbmp.hxx>
