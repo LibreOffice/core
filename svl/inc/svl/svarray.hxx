@@ -30,19 +30,6 @@
 *           enthaelt. (Sie werden im Speicher verschoben, koennen also
 *           z.B. keine String sein)
 *
-*       SV_DECL_PTRARR(nm, AE, IS, GS)
-*       SV_IMPL_PTRARR(nm, AE)
-*           definiere/implementiere ein Array das Pointer haelt. Diese
-*           werden von aussen angelegt und zerstoert. Das IMPL-Makro
-*           wird nur benoetigt, wenn die DeleteAndDestroy Methode genutzt
-*           wird, diese loescht dann die Pointer und ruft deren Destruktoren
-*
-*       SV_DECL_PTRARR_DEL(nm, AE, IS, GS)
-*       SV_IMPL_PTRARR(nm, AE)
-*           definiere/implementiere ein Array das Pointer haelt. Diese
-*           werden von aussen angelegt und im Destructor zerstoert.
-*
-*
 *       SV_DECL_PTRARR_SORT(nm, AE, IS, GS)
 *       SV_IMPL_PTRARR_SORT( nm,AE )
 *           defieniere/implementiere ein Sort-Array mit Pointern, das nach
@@ -64,16 +51,6 @@
 *           defieniere/implementiere ein Sort-Array mit Pointern, das nach
 *           Objecten sortiert ist. Basiert auf einem PTRARR_DEL.
 *           Sortierung mit Hilfe der Object-operatoren "<" und "=="
-*
-*       SV_DECL_VARARR_SORT(nm, AE, IS, GS)
-*       SV_IMPL_VARARR_SORT( nm,AE )
-*           defieniere/implementiere ein Sort-Array mit einfachen Objecten.
-*           Basiert auf einem VARARR.
-*           Sortierung mit Hilfe der Object-operatoren "<" und "=="
-*
-* JP 09.10.96:  vordefinierte Arrays:
-*   SortArr:    SvStringsSort, SvStringsSortDtor,
-*               SvStringsISort, SvStringsISortDtor
 ***********************************************************************/
 
 #include "svl/svldllapi.h"
@@ -186,9 +163,6 @@ nm& operator=( const nm& );\
 
 #define SV_DECL_VARARR(nm, AE, IS) \
 SV_DECL_VARARR_GEN(nm, AE, IS, AE &, )
-
-#define SV_DECL_VARARR_VISIBILITY(nm, AE, IS, vis ) \
-SV_DECL_VARARR_GEN(nm, AE, IS, AE &, vis )
 
 #define SV_IMPL_VARARR_GEN( nm, AE, AERef )\
 nm::nm( sal_uInt16 nInit )\
@@ -334,9 +308,6 @@ private:\
     nm& operator=( const nm& );\
 };
 
-#define SV_DECL_PTRARR(nm, AE, IS)\
-SV_DECL_PTRARR_GEN(nm, AE, IS, SvPtrarr, AE &, VoidPtr &, )
-
 #define SV_DECL_PTRARR_VISIBILITY(nm, AE, IS, vis)\
 SV_DECL_PTRARR_GEN(nm, AE, IS, SvPtrarr, AE &, VoidPtr &, vis )
 
@@ -383,12 +354,6 @@ private:\
     nm& operator=( const nm& );\
 };
 
-#define SV_DECL_PTRARR_DEL(nm, AE, IS)\
-SV_DECL_PTRARR_DEL_GEN(nm, AE, IS, SvPtrarr, AE &, VoidPtr &, )
-
-#define SV_DECL_PTRARR_DEL_VISIBILITY(nm, AE, IS, vis)\
-SV_DECL_PTRARR_DEL_GEN(nm, AE, IS, SvPtrarr, AE &, VoidPtr &, vis)
-
 #define SV_IMPL_PTRARR_GEN(nm, AE, Base)\
 void nm::DeleteAndDestroy( sal_uInt16 nP, sal_uInt16 nL )\
 { \
@@ -399,9 +364,6 @@ void nm::DeleteAndDestroy( sal_uInt16 nP, sal_uInt16 nL )\
         Base::Remove( nP, nL ); \
     } \
 }
-
-#define SV_IMPL_PTRARR(nm, AE )\
-SV_IMPL_PTRARR_GEN(nm, AE, SvPtrarr )
 
 typedef void* VoidPtr;
 
@@ -611,10 +573,6 @@ private:\
 #define SV_DECL_PTRARR_SORT(nm, AE, IS)\
 _SV_DECL_PTRARR_SORT(nm, AE, IS,)
 
-#define SV_DECL_PTRARR_SORT_VISIBILITY(nm, AE, IS, vis)\
-_SV_DECL_PTRARR_SORT(nm, AE, IS, vis)
-
-
 #define _SV_DECL_PTRARR_SORT_DEL(nm, AE, IS, vis)\
 _SV_DECL_PTRARR_SORT_ALG(nm, AE, IS, vis)\
     ~nm() { DeleteAndDestroy( 0, Count() ); }\
@@ -625,30 +583,6 @@ private:\
 
 #define SV_DECL_PTRARR_SORT_DEL(nm, AE, IS)\
 _SV_DECL_PTRARR_SORT_DEL(nm, AE, IS,)
-
-#define SV_DECL_PTRARR_SORT_DEL_VISIBILITY(nm, AE, IS, vis)\
-_SV_DECL_PTRARR_SORT_DEL(nm, AE, IS, vis)
-
-#define _SV_DECL_VARARR_SORT(nm, AE, IS, vis)\
-SV_DECL_VARARR_VISIBILITY(nm##_SAR, AE, IS, vis)\
-_SORT_CLASS_DEF(nm, AE, IS, vis) \
-    const AE& operator[](sal_uInt16 nP) const {\
-        return nm##_SAR::operator[]( nP );\
-    }\
-    const AE& GetObject(sal_uInt16 nP) const {\
-        return nm##_SAR::GetObject( nP );\
-    }\
-    sal_Bool Seek_Entry( const AE & aE, sal_uInt16* pP = 0 ) const;\
-private:\
-    nm( const nm& );\
-    nm& operator=( const nm& );\
-};
-
-#define SV_DECL_VARARR_SORT(nm, AE, IS)\
-_SV_DECL_VARARR_SORT(nm, AE, IS,)
-
-#define SV_DECL_VARARR_SORT_VISIBILITY(nm, AE, IS, vis)\
-_SV_DECL_VARARR_SORT(nm, AE, IS, vis)
 
 #define SV_IMPL_PTRARR_SORT( nm,AE )\
 _SV_IMPL_SORTAR_ALG( nm,AE )\
@@ -673,11 +607,6 @@ _SV_IMPL_SORTAR_ALG( nm,AE )\
         } \
     } \
 _SV_SEEK_PTR_TO_OBJECT( nm,AE )
-
-#define SV_IMPL_VARARR_SORT( nm,AE )\
-SV_IMPL_VARARR(nm##_SAR, AE)\
-_SV_IMPL_SORTAR_ALG( nm,AE )\
-_SV_SEEK_OBJECT( nm,AE )
 
 #if defined(ICC) || defined(GCC) || (defined(WNT) && _MSC_VER >= 1400)
 #define C40_INSERT( c, p, n ) Insert( (c const *&) p, n )
