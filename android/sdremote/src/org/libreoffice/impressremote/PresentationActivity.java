@@ -69,6 +69,28 @@ public class PresentationActivity extends Activity {
 		fragmentTransaction.commit();
 	}
 
+	@Override
+	public boolean dispatchKeyEvent(KeyEvent event) {
+		if (mPresentationFragment.isVisible() || mThumbnailFragment.isVisible()) {
+
+			int action = event.getAction();
+			int keyCode = event.getKeyCode();
+			switch (keyCode) {
+			case KeyEvent.KEYCODE_VOLUME_UP:
+				if (action == KeyEvent.ACTION_UP) {
+					mCommunicationService.getTransmitter().nextTransition();
+				}
+				return true;
+			case KeyEvent.KEYCODE_VOLUME_DOWN:
+				if (action == KeyEvent.ACTION_DOWN) {
+					mCommunicationService.getTransmitter().previousTransition();
+				}
+				return true;
+			}
+		}
+		return super.dispatchKeyEvent(event);
+	}
+
 	private ServiceConnection mConnection = new ServiceConnection() {
 		@Override
 		public void onServiceConnected(ComponentName aClassName,
