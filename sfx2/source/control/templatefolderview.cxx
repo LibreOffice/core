@@ -496,6 +496,92 @@ bool TemplateFolderView::removeTemplate (const sal_uInt16 nItemId)
     return true;
 }
 
+bool TemplateFolderView::moveTemplate (const ThumbnailViewItem *pItem, const sal_uInt16 nSrcItem,
+                                       const sal_uInt16 nTargetItem, bool bCopy)
+{
+    bool bRet = true;
+    bool bRefresh = false;
+
+    TemplateFolderViewItem *pTarget = NULL;
+    TemplateFolderViewItem *pSrc = NULL;
+
+    for (size_t i = 0, n = mItemList.size(); i < n; ++i)
+    {
+        if (mItemList[i]->mnId == nTargetItem)
+            pTarget = static_cast<TemplateFolderViewItem*>(mItemList[i]);
+        else if (mItemList[i]->mnId == nSrcItem)
+            pSrc = static_cast<TemplateFolderViewItem*>(mItemList[i]);
+    }
+
+    if (pTarget && pSrc)
+    {
+        sal_uInt16 nSrcRegionId = nSrcItem-1;
+        sal_uInt16 nTargetRegion = pTarget->mnId-1;
+        sal_uInt16 nTargetIdx = mpDocTemplates->GetCount(nTargetRegion);    // Next Idx
+
+        const TemplateViewItem *pViewItem = static_cast<const TemplateViewItem*>(pItem);
+
+        bool bOK;
+
+        if (bCopy)
+            bOK = mpDocTemplates->Copy(nTargetRegion,nTargetIdx,nSrcRegionId,pViewItem->mnId-1);
+        else
+            bOK = mpDocTemplates->Move(nTargetRegion,nTargetIdx,nSrcRegionId,pViewItem->mnId-1);
+
+        if (!bOK)
+            return false;
+
+        // move template to destination
+
+        TemplateItemProperties aTemplateItem;
+        aTemplateItem.nId = nTargetIdx + 1;
+        aTemplateItem.nRegionId = nTargetRegion;
+        aTemplateItem.aName = pViewItem->maTitle;
+        aTemplateItem.aPath = pViewItem->getPath();
+        aTemplateItem.aType = pViewItem->getFileType();
+        aTemplateItem.aThumbnail = pViewItem->maPreview1;
+
+        pTarget->maTemplates.push_back(aTemplateItem);
+
+        if (!bCopy)
+        {
+            // remove template from overlay and from cached data
+
+            std::vector<TemplateItemProperties>::iterator aIter;
+            for (aIter = pSrc->maTemplates.begin(); aIter != pSrc->maTemplates.end(); ++aIter)
+            {
+                if (aIter->nId == pViewItem->mnId)
+                {
+                    pSrc->maTemplates.erase(aIter);
+
+                    mpItemView->RemoveItem(pViewItem->mnId);
+                    break;
+                }
+            }
+        }
+
+        bRefresh = true;
+    }
+    else
+        bRet = false;
+
+    if (bRefresh)
+    {
+        lcl_updateThumbnails(pSrc);
+        lcl_updateThumbnails(pTarget);
+
+        CalculateItemPositions();
+
+        if (IsReallyVisible() && IsUpdateMode())
+        {
+            Invalidate();
+            mpItemView->Invalidate();
+        }
+    }
+
+    return bRet;
+}
+
 bool TemplateFolderView::moveTemplates(std::set<const ThumbnailViewItem *> &rItems,
                                        const sal_uInt16 nTargetItem, bool bCopy)
 {
