@@ -14,4 +14,7 @@
     <string name="clock_timer_restart">Restart</string>
     <string name="clock_timer_reset">Reset</string>
     <string name="clock_timer_resume">Resume</string>
+    <string name="options_autodecline">Auto-decline calls</string>
+    <string name="options_volumeswitching">Change slides using volume buttons</string>
+    <string name="options_switchcomputer">Switch computer</string>
 </resources>

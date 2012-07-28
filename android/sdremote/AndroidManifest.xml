@@ -17,8 +17,7 @@
         android:theme="@style/Theme.ImpressRemote" >
         <activity
             android:name="TestClient"
-            android:label=""
-            >
+            android:label="" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -32,6 +31,10 @@
         <activity
             android:name=".PresentationActivity"
             android:label="@string/title_activity_presentation" >
+        </activity>
+        <activity
+            android:name=".SettingsActivity"
+            android:label="@string/options" >
         </activity>
     </application>
 

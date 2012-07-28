@@ -25,6 +25,7 @@ import android.text.format.DateFormat;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -68,13 +69,6 @@ public class PresentationActivity extends Activity {
 		fragmentTransaction.commit();
 	}
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.actionbar_presentation, menu);
-		mActionBarManager = new ActionBarManager();
-		return true;
-	}
-
 	private ServiceConnection mConnection = new ServiceConnection() {
 		@Override
 		public void onServiceConnected(ComponentName aClassName,
@@ -106,12 +100,43 @@ public class PresentationActivity extends Activity {
 		}
 	}
 
+	// ---------------------------------------------- ACTION BAR ---------------
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.actionbar_presentation, menu);
+		mActionBarManager = new ActionBarManager();
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		Intent aIntent;
+		switch (item.getItemId()) {
+		case R.id.actionbar_presentation_submenu_options:
+			//			FragmentTransaction ft = getFragmentManager().beginTransaction();
+			//			ft.replace(R.id.presentation_innerFrame, new SettingsFragment());
+			//			ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+			//			ft.addToBackStack(null);
+			//			ft.commit();
+			aIntent = new Intent(this, SettingsActivity.class);
+			startActivity(aIntent);
+			return true;
+		case R.id.actionbar_presentation_submenu_blank:
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
+		}
+	}
+
 	private class ActionBarManager implements OnClickListener,
 	                FragmentManager.OnBackStackChangedListener,
 	                TextView.OnEditorActionListener {
 
 		private ToggleButton mTimeLabel;
 		private ToggleButton mThumbnailButton;
+
+		private View mDropdownOptions;
+		private View mDropdownBlank;
 
 		// ------- CLOCKBAR
 		private View mClockBar;
@@ -142,6 +167,10 @@ public class PresentationActivity extends Activity {
 		public ActionBarManager() {
 
 			ActionBar aBar = getActionBar();
+			aBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM,
+			                ActionBar.DISPLAY_SHOW_CUSTOM
+			                                | ActionBar.DISPLAY_SHOW_TITLE
+			                                | ActionBar.DISPLAY_USE_LOGO);
 			aBar.setCustomView(R.layout.presentation_actionbar);
 
 			mThumbnailButton = (ToggleButton) aBar.getCustomView()

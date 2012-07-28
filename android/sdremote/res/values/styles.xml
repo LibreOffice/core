@@ -13,7 +13,6 @@
 
     <style name="Theme.ImpressRemote.ActionBar" parent="android:style/Widget.Holo.Light.ActionBar">
         <item name="android:background">@color/orange</item>
-        <item name="android:displayOptions">showCustom</item>
     </style>
 
     <style name="Theme.ImpressRemote.ActionBarWidget" parent="android:style/Widget.Holo.Light">
