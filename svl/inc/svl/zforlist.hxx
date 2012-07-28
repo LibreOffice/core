@@ -671,7 +671,7 @@ public:
     /// Return the decimal separator matching the locale of the given format
     String GetFormatDecimalSep( sal_uInt32 nFormat ) const;
 
-    /// Return a <type>SvPtrArr</type> with pointers to <type>NfCurrencyEntry</type> entries
+    /// Return a <type>NfCurrencyTable</type> with pointers to <type>NfCurrencyEntry</type> entries
     static const NfCurrencyTable& GetTheCurrencyTable();
 
     /** Searches, according to the default locale currency, an entry of the
