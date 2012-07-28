@@ -773,9 +773,14 @@ void SalAquaFilePicker::updateSaveFileNameExtension() {
         rtl::OUString suffix = (*(aStringList.begin())).copy(1);
         NSString *requiredFileType = [NSString stringWithOUString:suffix];
 
+#if defined(LIBO_WERROR) && defined(__clang__) && MACOSX_SDK_VERSION >= 1070
+#pragma GCC diagnostic push
 #pragma GCC diagnostic warning "-Wdeprecated-declarations"
+#endif
         [m_pDialog setRequiredFileType:requiredFileType];
-#pragma GCC diagnostic error "-Wdeprecated-declarations"
+#if defined(LIBO_WERROR) && defined(__clang__) && MACOSX_SDK_VERSION >= 1070
+#pragma GCC diagnostic pop
+#endif
 
         OSL_TRACE("disallowing other file types");
         [m_pDialog setAllowsOtherFileTypes:NO];
