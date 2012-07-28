@@ -26,6 +26,7 @@
  */
 
 #include "../swmodeltestbase.hxx"
+#include "bordertest.hxx"
 
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
@@ -49,6 +50,7 @@ public:
     void testN652364();
     void testN757118();
     void testN757905();
+    void testAllGapsWord();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -58,6 +60,7 @@ public:
     CPPUNIT_TEST(testN652364);
     CPPUNIT_TEST(testN757118);
     CPPUNIT_TEST(testN757905);
+    CPPUNIT_TEST(testAllGapsWord);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -222,6 +225,14 @@ void Test::testN757905()
     OUString aHeight = parseDump("/root/page/body/txt/infos/bounds", "height");
     CPPUNIT_ASSERT(sal_Int32(31) < aHeight.toInt32());
 }
+
+void Test::testAllGapsWord()
+{
+    load("all_gaps_word.doc");
+    BorderTest borderTest;
+    borderTest.testTheBorders(mxComponent);
+}
+
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
 

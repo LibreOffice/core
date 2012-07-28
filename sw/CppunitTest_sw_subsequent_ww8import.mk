@@ -51,6 +51,7 @@ $(eval $(call gb_CppunitTest_use_externals,sw_subsequent_ww8import,\
 $(eval $(call gb_CppunitTest_set_include,sw_subsequent_ww8import,\
     -I$(SRCDIR)/sw/inc \
     -I$(SRCDIR)/sw/source/core/inc \
+    -I$(SRCDIR)/sw/qa/extras/inc \
     $$(INCLUDE) \
 ))
 
