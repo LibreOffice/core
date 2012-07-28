@@ -17,4 +17,5 @@
     <string name="options_autodecline">Auto-decline calls</string>
     <string name="options_volumeswitching">Change slides using volume buttons</string>
     <string name="options_switchcomputer">Switch computer</string>
+    <string name="blankscreen_return">Return to Slide</string>
 </resources>

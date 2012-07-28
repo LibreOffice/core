@@ -4,7 +4,9 @@
     <color name="orange">#EE4400</color>
     <color name="grey">#303030</color>
     <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
     <color name="light_grey">#E8E9E8</color>
+    <color name="medium_grey">#C1C2C1</color>
 
     <integer name="thumbnail_border_width">3</integer>
 
@@ -45,7 +47,7 @@
         <item name="android:textAppearanceLargePopupMenu">@style/Theme.ImpressRemote.ActionBarMenuItem</item> <!-- <item name="android:actionBarWidgetTheme">@style/Theme.ImpressRemote.ActionBarWidget</item> -->
         <item name="android:actionDropDownStyle">@style/Theme.ImpressRemote.ActionBarMenu</item>
         <item name="android:windowBackground">@color/light_grey</item>
-         <item name="android:homeAsUpIndicator">@drawable/up_indicator_white</item>
+        <item name="android:homeAsUpIndicator">@drawable/up_indicator_white</item>
     </style>
 
 </resources>

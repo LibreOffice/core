@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="10dip"
+    android:gravity="left"
+    android:orientation="vertical" >
+
+    <ImageView
+        android:id="@+id/blankscreen_blankimage"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:scaleType="fitXY"
+        android:src="@drawable/rectangle_black" />
+
+    <ImageView
+        android:id="@+id/blankscreen_divider"
+        android:layout_width="fill_parent"
+        android:layout_height="1dip"
+        android:layout_below="@+id/blankscreen_blankimage"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dip"
+        android:src="@color/medium_grey" />
+
+    <ImageView
+        android:id="@+id/blankscreen_slidepreview"
+        android:layout_width="0dip"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/blankscreen_divider"
+        android:layout_toLeftOf="@+id/blankscreen_return"
+        android:src="@drawable/rectangle_black" />
+
+    <TextView
+        android:id="@+id/blankscreen_return"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:gravity="center"
+        android:layout_below="@id/blankscreen_divider"
+        android:text="@string/blankscreen_return" />
+
+</RelativeLayout>
