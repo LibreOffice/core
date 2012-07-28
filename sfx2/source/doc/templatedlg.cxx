@@ -11,6 +11,7 @@
 
 #include "inputdlg.hxx"
 #include "templatesearchview.hxx"
+#include "templatesearchviewitem.hxx"
 
 #include <comphelper/processfactory.hxx>
 #include <sfx2/filedlghelper.hxx>
@@ -900,9 +901,16 @@ void SfxTemplateManagerDlg::localSearchMoveTo(sal_uInt16 nMenuId)
     {
         // Move templates to desired folder if for some reason move fails
         // try copying them.
-        if (!maView->moveTemplates(maSelTemplates,nItemId,false) &&
-                !maView->moveTemplates(maSelTemplates,nItemId,true))
+        std::set<const ThumbnailViewItem*>::const_iterator aIter;
+        for (aIter = maSelTemplates.begin(); aIter != maSelTemplates.end(); ++aIter)
         {
+            const TemplateSearchViewItem *pItem =
+                    static_cast<const TemplateSearchViewItem*>(*aIter);
+
+            if(!maView->moveTemplate(pItem,pItem->mnRegionId+1,nItemId,false)
+                    && !maView->moveTemplate(pItem,pItem->mnRegionId+1,nItemId,true))
+            {
+            }
         }
     }
 }
