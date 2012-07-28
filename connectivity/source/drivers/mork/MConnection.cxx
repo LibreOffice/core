@@ -76,7 +76,7 @@ void SAL_CALL OConnection::release() throw()
 void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyValue >& info)  throw(SQLException)
 {
     (void) info; // avoid warnings
-    SAL_INFO("connectvity.mork", "IN OConnection::construct()" );
+    SAL_INFO("connectvity.mork", "=> OConnection::construct()" );
     //  open file
     setURL(url);
     //
@@ -153,6 +153,8 @@ IMPLEMENT_SERVICE_INFO(OConnection, "com.sun.star.sdbc.drivers.mork.OConnection"
 // --------------------------------------------------------------------------------
 Reference< XStatement > SAL_CALL OConnection::createStatement(  ) throw(SQLException, RuntimeException)
 {
+    SAL_INFO("connectvity.mork", "=> OConnection::createStatement()" );
+
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
 
@@ -165,6 +167,8 @@ Reference< XStatement > SAL_CALL OConnection::createStatement(  ) throw(SQLExcep
 // --------------------------------------------------------------------------------
 Reference< XPreparedStatement > SAL_CALL OConnection::prepareStatement( const ::rtl::OUString& _sSql ) throw(SQLException, RuntimeException)
 {
+    SAL_INFO("connectvity.mork", "=> OConnection::prepareStatement()" );
+
     OSL_UNUSED( _sSql );
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
@@ -175,6 +179,8 @@ Reference< XPreparedStatement > SAL_CALL OConnection::prepareStatement( const ::
 // --------------------------------------------------------------------------------
 Reference< XPreparedStatement > SAL_CALL OConnection::prepareCall( const ::rtl::OUString& _sSql ) throw(SQLException, RuntimeException)
 {
+    SAL_INFO("connectvity.mork", "=> OConnection::prepareCall()" );
+    SAL_INFO("connectvity.mork", "sql: " << _sSql);
     OSL_UNUSED( _sSql );
     ::dbtools::throwFeatureNotImplementedException( "XConnection::prepareCall", *this );
     SAL_INFO("connectvity.mork", "OConnection::prepareCall( " << OUtoCStr( _sSql ) << " )");
@@ -183,6 +189,9 @@ Reference< XPreparedStatement > SAL_CALL OConnection::prepareCall( const ::rtl::
 // --------------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OConnection::nativeSQL( const ::rtl::OUString& _sSql ) throw(SQLException, RuntimeException)
 {
+    SAL_INFO("connectvity.mork", "=> OConnection::nativeSQL()" );
+    SAL_INFO("connectvity.mork", "sql: " << _sSql);
+
     ::osl::MutexGuard aGuard( m_aMutex );
     // when you need to transform SQL92 to you driver specific you can do it here
     SAL_INFO("connectvity.mork", "OConnection::nativeSQL(" << _sSql << " )" );

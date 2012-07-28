@@ -27,6 +27,7 @@ namespace connectivity
 MorkDriver::MorkDriver(css::uno::Reference< css::uno::XComponentContext > const context):
     context_(context)
 {
+    SAL_INFO("connectvity.mork", "=> MorkDriver::MorkDriver()" );
     m_ProfileAccess = new ProfileAccess();
     assert(context.is());
 }
@@ -75,6 +76,8 @@ css::uno::Reference< css::sdbc::XConnection > MorkDriver::connect(
     css::uno::Sequence< css::beans::PropertyValue > const & info)
     throw (css::sdbc::SQLException, css::uno::RuntimeException)
 {
+    SAL_INFO("connectvity.mork", "=> MorkDriver::connect()" );
+
     (void) url; (void) info; // avoid warnings
     css::uno::Reference< css::sdbc::XConnection > xCon;
     OConnection* pCon = new OConnection(this);
@@ -86,9 +89,11 @@ css::uno::Reference< css::sdbc::XConnection > MorkDriver::connect(
 sal_Bool MorkDriver::acceptsURL(rtl::OUString const & url)
     throw (css::sdbc::SQLException, css::uno::RuntimeException)
 {
+    SAL_INFO("connectvity.mork", "=> MorkDriver::acceptsURL()" );
+
     //... TODO
     (void) url; // avoid warnings
-    return false;
+    return true;
 }
 
 css::uno::Sequence< css::sdbc::DriverPropertyInfo > MorkDriver::getPropertyInfo(

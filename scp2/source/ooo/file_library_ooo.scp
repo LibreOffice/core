@@ -880,16 +880,7 @@ File gid_File_Lib_Mcnttype
   #endif
 End
 
-File gid_File_Lib_Mork
-    LIB_FILE_BODY;
-    Styles = (PACKED);
-    Dir = SCP2_OOO_BIN_DIR;
-  #ifdef UNX
-    Name = STRING(CONCAT2(libmork,UNXSUFFIX));
-  #else
-    Name = "mork.dll";
-  #endif
-End
+STD_LIB_FILE(gid_File_Lib_Mork,mork)
 
 STD_LIB_FILE(gid_File_Lib_WpftWriter,wpftwriter)
 
