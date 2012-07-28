@@ -169,7 +169,7 @@ static const SfxFilter* lcl_DetectExcelXML( SvStream& rStream, SfxFilterMatcher&
     if ( nBytesRead >= 3 && aBuffer[0] == 0xEF && aBuffer[1] == 0xBB && aBuffer[2] == 0xBF )
         nXMLStart = 3;
 
-    if ( nBytesRead >= nXMLStart + 5 && rtl_compareMemory( aBuffer+nXMLStart, "<?xml", 5 ) == 0 )
+    if ( nBytesRead >= nXMLStart + 5 && memcmp( aBuffer+nXMLStart, "<?xml", 5 ) == 0 )
     {
         // Be consistent with XMLFilterDetect service: Check for presence of "Workbook" in XML file.
 

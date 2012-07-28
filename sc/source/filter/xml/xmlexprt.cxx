@@ -565,7 +565,7 @@ void ScXMLExport::SetSourceStream( const uno::Reference<io::XInputStream>& xNewS
         uno::Sequence<sal_Int8> aFileStart(nLen);
         sal_Int32 nRead = xSourceStream->readBytes( aFileStart, nLen );
 
-        if ( nRead != nLen || rtl_compareMemory( aFileStart.getConstArray(), pXmlHeader, nLen ) != 0 )
+        if ( nRead != nLen || memcmp( aFileStart.getConstArray(), pXmlHeader, nLen ) != 0 )
         {
             // invalid - ignore stream, save normally
             xSourceStream.clear();

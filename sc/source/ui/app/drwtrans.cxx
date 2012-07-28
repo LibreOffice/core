@@ -794,7 +794,7 @@ sal_Int64 SAL_CALL ScDrawTransferObj::getSomething( const com::sun::star::uno::S
 {
     sal_Int64 nRet;
     if( ( rId.getLength() == 16 ) &&
-        ( 0 == rtl_compareMemory( getUnoTunnelId().getConstArray(), rId.getConstArray(), 16 ) ) )
+        ( 0 == memcmp( getUnoTunnelId().getConstArray(), rId.getConstArray(), 16 ) ) )
     {
         nRet = reinterpret_cast< sal_Int64 >( this );
     }

@@ -865,7 +865,7 @@ sal_Int64 SAL_CALL ScTransferObj::getSomething( const com::sun::star::uno::Seque
 {
     sal_Int64 nRet;
     if( ( rId.getLength() == 16 ) &&
-        ( 0 == rtl_compareMemory( getUnoTunnelId().getConstArray(), rId.getConstArray(), 16 ) ) )
+        ( 0 == memcmp( getUnoTunnelId().getConstArray(), rId.getConstArray(), 16 ) ) )
     {
         nRet = reinterpret_cast< sal_Int64 >( this );
     }
