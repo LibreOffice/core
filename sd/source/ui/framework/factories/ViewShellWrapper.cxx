@@ -195,7 +195,7 @@ sal_Int64 SAL_CALL ViewShellWrapper::getSomething (const Sequence<sal_Int8>& rId
     sal_Int64 nResult = 0;
 
     if (rId.getLength() == 16
-        && rtl_compareMemory(getUnoTunnelId().getConstArray(), rId.getConstArray(), 16) == 0)
+        && memcmp(getUnoTunnelId().getConstArray(), rId.getConstArray(), 16) == 0)
     {
         nResult = reinterpret_cast<sal_Int64>(this);
     }

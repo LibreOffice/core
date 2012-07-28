@@ -32,7 +32,6 @@
 #include <svl/itemset.hxx>
 #include <svx/svdpool.hxx>
 #include <comphelper/extract.hxx>
-#include <rtl/memory.h>
 #include <svx/xflbstit.hxx>
 #include <svx/xflbmtit.hxx>
 #include <svx/svdobj.hxx>

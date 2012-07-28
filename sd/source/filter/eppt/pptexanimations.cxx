@@ -64,7 +64,6 @@
 #include <com/sun/star/container/XChild.hpp>
 #include <comphelper/processfactory.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <rtl/memory.h>
 
 #include <vcl/vclenum.hxx>
 #include <svx/svdotext.hxx>
@@ -553,7 +552,7 @@ void AnimationExporter::exportNode( SvStream& rStrm, Reference< XAnimationNode >
                 {
                     EscherExAtom aAnimNodeExAtom( rStrm, DFF_msofbtAnimNode );
                     AnimationNode aAnim;
-                    rtl_zeroMemory( &aAnim, sizeof( aAnim ) );
+                    memset( &aAnim, 0, sizeof( aAnim ) );
                     aAnim.mnGroupType = mso_Anim_GroupType_PAR;
                     aAnim.mnNodeType = 1;
                     // attribute Restart
@@ -799,7 +798,7 @@ void AnimationExporter::exportAnimNode( SvStream& rStrm, const Reference< XAnima
 {
     EscherExAtom    aAnimNodeExAtom( rStrm, DFF_msofbtAnimNode );
     AnimationNode   aAnim;
-    rtl_zeroMemory( &aAnim, sizeof( aAnim ) );
+    memset( &aAnim, 0, sizeof( aAnim ) );
 
     // attribute Restart
     switch( xNode->getRestart() )
@@ -889,7 +888,7 @@ void AnimationExporter::exportAnimNode( SvStream& rStrm, const Reference< XAnima
 void AnimationExporter::GetUserData( const Sequence< NamedValue >& rUserData, const Any ** pAny, sal_Size nLen )
 {
     // storing user data into pAny, to allow direct access later
-    rtl_zeroMemory( pAny, nLen );
+    memset( pAny, 0, nLen );
     if ( rUserData.getLength() )
     {
     const NamedValue* p = rUserData.getConstArray();

@@ -35,7 +35,6 @@
 #include <editeng/unotext.hxx>
 
 #include <comphelper/extract.hxx>
-#include <rtl/memory.h>
 
 #include "unohelp.hxx"
 #include "unoprnms.hxx"

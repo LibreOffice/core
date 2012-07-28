@@ -42,7 +42,6 @@
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/serviceinfohelper.hxx>
 
-#include <rtl/memory.h>
 #include <editeng/unofield.hxx>
 #include <unomodel.hxx>
 #include <sfx2/dispatch.hxx>
@@ -331,10 +330,10 @@ sal_Int64 SAL_CALL SdXImpressDocument::getSomething( const ::com::sun::star::uno
 {
     if( rIdentifier.getLength() == 16 )
     {
-        if( (0 == rtl_compareMemory( SdXImpressDocument::getUnoTunnelId().getConstArray(), rIdentifier.getConstArray(), 16 )) )
+        if( (0 == memcmp( SdXImpressDocument::getUnoTunnelId().getConstArray(), rIdentifier.getConstArray(), 16 )) )
             return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(this));
 
-        if( (0 == rtl_compareMemory( SdrModel::getUnoTunnelImplementationId().getConstArray(), rIdentifier.getConstArray(), 16 )) )
+        if( (0 == memcmp( SdrModel::getUnoTunnelImplementationId().getConstArray(), rIdentifier.getConstArray(), 16 )) )
             return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(mpDoc));
     }
 
