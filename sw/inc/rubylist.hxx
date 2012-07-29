@@ -28,7 +28,6 @@
 #ifndef _RUBYLIST_HXX
 #define _RUBYLIST_HXX
 
-#include <svl/svarray.hxx>
 #include <swtypes.hxx>
 #include <fmtruby.hxx>
 #include <boost/ptr_container/ptr_vector.hpp>

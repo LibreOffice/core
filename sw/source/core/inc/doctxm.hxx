@@ -29,7 +29,6 @@
 #ifndef _DOCTXM_HXX
 #define _DOCTXM_HXX
 
-#include <svl/svarray.hxx>
 #include <tools/gen.hxx>
 #include <tox.hxx>
 #include <section.hxx>

@@ -29,7 +29,6 @@
 #define SW_MVSAVE_HXX
 
 #include <vcl/keycod.hxx>
-#include <svl/svarray.hxx>
 #include <IDocumentMarkAccess.hxx>
 #include <vector>
 #include <deque>

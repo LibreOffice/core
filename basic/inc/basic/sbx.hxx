@@ -21,7 +21,6 @@
 #define _SBXCLASS_HXX
 
 #include "tools/ref.hxx"
-#include "svl/svarray.hxx"
 #include "svl/smplhint.hxx"
 #include "svl/lstner.hxx"
 

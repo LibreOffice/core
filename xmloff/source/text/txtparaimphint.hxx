@@ -21,7 +21,6 @@
 
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <svl/svarray.hxx>
 #include <xmloff/xmlimp.hxx>
 #include "XMLTextFrameContext.hxx"
 #include <xmloff/XMLEventsImportContext.hxx>

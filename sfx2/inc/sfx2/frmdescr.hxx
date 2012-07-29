@@ -26,7 +26,6 @@
 #include <svl/poolitem.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/string.hxx>
-#include <svl/svarray.hxx>
 #include <tools/gen.hxx>
 
 class SvStream;

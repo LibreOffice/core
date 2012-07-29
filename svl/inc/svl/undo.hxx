@@ -22,7 +22,6 @@
 #include "svl/svldllapi.h"
 #include <tools/rtti.hxx>
 #include <tools/string.hxx>
-#include <svl/svarray.hxx>
 
 #include <boost/scoped_ptr.hpp>
 

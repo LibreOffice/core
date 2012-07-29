@@ -28,7 +28,6 @@
 #include <tools/solar.h>
 #include <tools/debug.hxx>
 #include <tools/string.hxx>
-#include <svl/svarray.hxx>
 #include <svl/hint.hxx>
 
 typedef long SfxArgumentError;

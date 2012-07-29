@@ -37,7 +37,6 @@
 #include <vcl/lstbox.hxx>
 #include <svtools/svmedit.hxx>
 #include <sfx2/basedlgs.hxx>
-#include <svl/svarray.hxx>
 #include <unotools/configitem.hxx>
 #include <numfmtlb.hxx>
 #include <swdbdata.hxx>

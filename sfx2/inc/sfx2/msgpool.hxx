@@ -25,7 +25,6 @@
 
 #include <sfx2/msg.hxx>
 #include <tools/string.hxx>
-#include <svl/svarray.hxx>
 
 #include <string>
 #include <vector>

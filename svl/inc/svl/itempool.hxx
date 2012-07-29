@@ -25,7 +25,6 @@
 #include <limits.h>
 #include <tools/solar.h>
 #include <tools/string.hxx>
-#include <svl/svarray.hxx>
 #include <svl/poolitem.hxx>
 #include <vector>
 

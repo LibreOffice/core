@@ -20,7 +20,6 @@
 
 #include "propacc.hxx"
 
-#include <svl/svarray.hxx>
 #include <basic/sbstar.hxx>
 #include <sbunoobj.hxx>
 

@@ -30,7 +30,6 @@
 #ifndef _TEXTDAT2_HXX
 #define _TEXTDAT2_HXX
 
-#include <svl/svarray.hxx>
 #include <vcl/seleng.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/cursor.hxx>

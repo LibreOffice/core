@@ -28,7 +28,6 @@
 #ifndef _UINUMS_HXX
 #define _UINUMS_HXX
 
-#include <svl/svarray.hxx>
 #include <numrule.hxx>
 #include "swdllapi.h"
 #include <boost/ptr_container/ptr_vector.hpp>

@@ -28,10 +28,7 @@
 #ifndef _SWLBOX_HXX
 #define _SWLBOX_HXX
 
-#include <svl/svarray.hxx>
-
 #include <vcl/lstbox.hxx>
-
 #include <vcl/combobox.hxx>
 #include "swdllapi.h"
 #include <boost/ptr_container/ptr_vector.hpp>

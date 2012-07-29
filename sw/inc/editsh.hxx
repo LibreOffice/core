@@ -31,7 +31,6 @@
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <tools/string.hxx>
-#include <svl/svarray.hxx>
 #include <vcl/font.hxx>
 #include <editeng/swafopt.hxx>
 #include "swdllapi.h"

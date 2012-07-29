@@ -30,7 +30,6 @@
 #define SC_VIEWUNO_HXX
 
 #include <sfx2/sfxbasecontroller.hxx>
-#include <svl/svarray.hxx>
 #include <svl/itemprop.hxx>
 #include <com/sun/star/view/XFormLayerAccess.hpp>
 #include <com/sun/star/view/XSelectionChangeListener.hpp>

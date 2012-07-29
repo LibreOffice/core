@@ -29,7 +29,6 @@
 #define __FRAMEWORK_CLASSES_STATUSBARCONFIGURATION_HXX_
 
 #include <framework/fwedllapi.h>
-#include <svl/svarray.hxx>
 #include <tools/stream.hxx>
 #include <vcl/status.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>

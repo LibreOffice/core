@@ -31,13 +31,11 @@
 #include <cppuhelper/weakref.hxx>
 
 #include <i18npool/lang.h>
+#include <svl/poolitem.hxx>
 #include <tools/string.hxx>
 #include <osl/diagnose.h>
 
 #include <editeng/svxenum.hxx>
-#include <svl/svarray.hxx>
-#include <svl/poolitem.hxx>
-#include "swdllapi.h"
 #include <swtypes.hxx>
 #include <toxe.hxx>
 #include <calbck.hxx>

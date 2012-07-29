@@ -39,7 +39,6 @@
 #include <vcl/lstbox.hxx>
 #include <svx/ctredlin.hxx>
 #include <svx/simptabl.hxx>
-#include <svl/svarray.hxx>
 #include "chgtrack.hxx"
 #include "chgviset.hxx"
 #include <vcl/timer.hxx>

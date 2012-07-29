@@ -28,8 +28,6 @@
 #ifndef _SORTOPT_HXX
 #define _SORTOPT_HXX
 
-
-#include <svl/svarray.hxx>
 #include <tools/string.hxx>
 #include "swdllapi.h"
 #include <vector>

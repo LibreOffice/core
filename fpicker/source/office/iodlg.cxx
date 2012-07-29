@@ -37,7 +37,6 @@
 #include "unotools/viewoptions.hxx"
 #include "svtools/fileview.hxx"
 #include "svtools/sfxecode.hxx"
-#include "svl/svarray.hxx"
 #include "svtools/svtabbx.hxx"
 #include <toolkit/helper/vclunohelper.hxx>
 #include <unotools/localfilehelper.hxx>

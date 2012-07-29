@@ -31,7 +31,6 @@
 #include <tools/urlobj.hxx>
 #include <osl/mutex.hxx>
 #include <rtl/memory.h>
-#include <svl/svarray.hxx>
 #include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmluconv.hxx>

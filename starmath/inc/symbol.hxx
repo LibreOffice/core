@@ -22,7 +22,6 @@
 
 #include <vcl/font.hxx>
 #include <svl/lstner.hxx>
-#include <svl/svarray.hxx>
 
 #include <map>
 #include <vector>

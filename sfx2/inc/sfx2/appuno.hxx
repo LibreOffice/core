@@ -43,7 +43,6 @@
 #include <cppuhelper/implbase4.hxx>
 
 #include <tools/errcode.hxx>
-#include <svl/svarray.hxx>
 #include <sfx2/sfxuno.hxx>
 
 class SfxObjectShell;

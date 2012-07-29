@@ -33,7 +33,6 @@
 #include <limits.h>
 #include <vector>
 
-#include <svl/svarray.hxx>
 #include <svl/itempool.hxx>
 
 // STATIC DATA -----------------------------------------------------------

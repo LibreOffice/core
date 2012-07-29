@@ -29,7 +29,6 @@
 #define _UNOTXDOC_HXX
 
 #include "swdllapi.h"
-#include <svl/svarray.hxx>
 #include <sfx2/sfxbasemodel.hxx>
 
 #include <com/sun/star/beans/PropertyValues.hpp>

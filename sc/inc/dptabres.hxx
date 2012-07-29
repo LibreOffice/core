@@ -32,7 +32,6 @@
 #include "global.hxx"
 #include "dpcachetable.hxx"
 
-#include <svl/svarray.hxx>
 #include <tools/string.hxx>
 #include <com/sun/star/sheet/MemberResult.hpp>
 #include <com/sun/star/sheet/DataResult.hpp>

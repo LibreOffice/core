@@ -30,7 +30,6 @@
 #define __FRAMEWORK_XML_EVENTSCONFIGURATION_HXX_
 
 #include <framework/fwedllapi.h>
-#include <svl/svarray.hxx>
 #include <tools/stream.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>

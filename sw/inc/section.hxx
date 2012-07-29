@@ -35,7 +35,6 @@
 
 #include <tools/rtti.hxx>
 #include <tools/ref.hxx>
-#include <svl/svarray.hxx>
 #include <svl/smplhint.hxx>
 #include <sfx2/lnkbase.hxx>
 #include <sfx2/Metadatable.hxx>

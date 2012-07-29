@@ -24,7 +24,6 @@
 #include <com/sun/star/uno/Sequence.hxx>
 
 #include <vcl/timer.hxx>
-#include <svl/svarray.hxx>
 #include <vector>
 #include <algorithm>
 

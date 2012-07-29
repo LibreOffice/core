@@ -33,7 +33,6 @@
 #include <boost/unordered_set.hpp>
 #include <functional>
 #include <svl/broadcast.hxx>
-#include <svl/svarray.hxx>
 
 #include "global.hxx"
 #include "brdcst.hxx"

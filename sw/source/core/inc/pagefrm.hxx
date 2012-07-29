@@ -29,8 +29,6 @@
 #define _PAGEFRM_HXX
 
 #include <viewsh.hxx>
-#include <svl/svarray.hxx>
-
 #include "ftnboss.hxx"
 #include <tools/mempool.hxx>
 

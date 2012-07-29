@@ -25,7 +25,6 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/interfacecontainer.h>
-#include <svl/svarray.hxx>
 
 #include "linguistic/misc.hxx"
 #include "lngopt.hxx"

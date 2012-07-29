@@ -21,7 +21,6 @@
 
 #include "svl/svldllapi.h"
 #include <tools/rtti.hxx>
-#include <svl/svarray.hxx>
 #include <deque>
 
 class SfxBroadcaster;

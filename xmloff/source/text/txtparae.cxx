@@ -28,7 +28,6 @@
 
 #include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
 #include <tools/debug.hxx>
-#include <svl/svarray.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/types.h>
 

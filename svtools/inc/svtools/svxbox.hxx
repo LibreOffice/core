@@ -30,7 +30,6 @@
 
 // include ---------------------------------------------------------------
 
-#include <svl/svarray.hxx>
 #include <tools/string.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/combobox.hxx>

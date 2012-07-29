@@ -31,7 +31,6 @@
 #include <com/sun/star/embed/XClassifiedObject.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <tools/rtti.hxx>
-#include <svl/svarray.hxx>
 #include "swdllapi.h"
 #include <swtypes.hxx>
 #include <ring.hxx>

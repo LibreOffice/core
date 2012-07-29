@@ -27,7 +27,6 @@
  ************************************************************************/
 
 #include <svtools/fontsubstconfig.hxx>
-#include <svl/svarray.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>

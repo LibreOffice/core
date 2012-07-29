@@ -29,7 +29,6 @@
 #define _FLYPOS_HXX
 
 
-#include <svl/svarray.hxx>
 #include <swdllapi.h>
 #include <set>
 

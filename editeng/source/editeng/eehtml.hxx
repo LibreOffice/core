@@ -29,8 +29,6 @@
 #ifndef _EEHTML_HXX
 #define _EEHTML_HXX
 
-#include <svl/svarray.hxx>
-
 #include <editdoc.hxx>
 #include <svtools/parhtml.hxx>
 

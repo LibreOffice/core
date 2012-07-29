@@ -27,7 +27,6 @@
  ************************************************************************/
 
 #include <rtl/ustring.hxx>
-#include <svl/svarray.hxx>
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <boost/ptr_container/ptr_set.hpp>

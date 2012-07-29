@@ -39,7 +39,6 @@
 
 #include <boost/scoped_ptr.hpp>
 
-#include <svl/svarray.hxx>
 #include "hintids.hxx"          // _Always_ before the solar-items!
 #include <svx/algitem.hxx>
 #include <editeng/fontitem.hxx>

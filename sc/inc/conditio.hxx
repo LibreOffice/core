@@ -32,7 +32,6 @@
 #include "global.hxx"
 #include "address.hxx"
 #include "formula/grammar.hxx"
-#include <svl/svarray.hxx>
 #include "scdllapi.h"
 #include "rangelst.hxx"
 

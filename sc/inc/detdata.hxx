@@ -29,7 +29,6 @@
 #ifndef SC_DETDATA_HXX
 #define SC_DETDATA_HXX
 
-#include <svl/svarray.hxx>
 #include <boost/ptr_container/ptr_vector.hpp>
 #include "global.hxx"
 

@@ -30,7 +30,6 @@
 #define _NOTEURL_HXX
 
 
-#include <svl/svarray.hxx>
 #include <tools/string.hxx>
 #include "swrect.hxx"
 #include <boost/ptr_container/ptr_vector.hpp>

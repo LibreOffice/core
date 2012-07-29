@@ -32,7 +32,6 @@
 #include <vector>
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
-#include <svl/svarray.hxx>
 #include <editeng/borderline.hxx>
 #include "swtypes.hxx"
 #include "swrect.hxx"

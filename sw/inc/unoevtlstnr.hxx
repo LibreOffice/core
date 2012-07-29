@@ -28,7 +28,6 @@
 #ifndef _UNOEVTLSTNR_HXX
 #define _UNOEVTLSTNR_HXX
 
-#include <svl/svarray.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <vector>
 

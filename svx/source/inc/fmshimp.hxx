@@ -53,7 +53,6 @@
 #include <svx/svdmark.hxx>
 #include <svx/fmsearch.hxx>
 #include <svx/svxids.hrc>
-#include <svl/svarray.hxx>
 #include <svl/lstner.hxx>
 
 #include <sfx2/mnuitem.hxx>
