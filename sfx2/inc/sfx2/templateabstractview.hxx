@@ -37,6 +37,8 @@ public:
     void sortOverlayItems (const boost::function<bool (const ThumbnailViewItem*,
                                                        const ThumbnailViewItem*) > &func);
 
+    void setOverlayItemStateHdl (const Link &aLink) { maOverlayItemStateHdl = aLink; }
+
     void setOverlayDblClickHdl (const Link &rLink);
 
     void setOverlayCloseHdl (const Link &rLink);
@@ -49,9 +51,12 @@ protected:
 
     virtual void OnSelectionMode (bool bMode);
 
+    DECL_LINK(OverlayItemStateHdl, const ThumbnailViewItem*);
+
 protected:
 
     TemplateView *mpItemView;
+    Link maOverlayItemStateHdl;
 };
 
 #endif // __SFX2_TEMPLATEABSTRACTVIEW_HXX__

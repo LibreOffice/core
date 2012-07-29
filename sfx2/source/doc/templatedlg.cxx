@@ -188,7 +188,7 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
                               ITEM_PADDING);
 
     maView->setItemStateHdl(LINK(this,SfxTemplateManagerDlg,TVFolderStateHdl));
-    maView->setTemplateStateHdl(LINK(this,SfxTemplateManagerDlg,TVTemplateStateHdl));
+    maView->setOverlayItemStateHdl(LINK(this,SfxTemplateManagerDlg,TVTemplateStateHdl));
     maView->setOverlayDblClickHdl(LINK(this,SfxTemplateManagerDlg,OpenTemplateHdl));
     maView->setOverlayCloseHdl(LINK(this,SfxTemplateManagerDlg,CloseOverlayHdl));
 

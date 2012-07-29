@@ -163,7 +163,6 @@ TemplateFolderView::TemplateFolderView ( Window* pParent, const ResId& rResId, b
                                   ITEM_MAX_HEIGHT-THUMBNAIL_MAX_HEIGHT,
                                   ITEM_PADDING);
 
-    mpItemView->setItemStateHdl(LINK(this,TemplateFolderView,TVTemplateStateHdl));
     mpItemView->setChangeNameHdl(LINK(this,TemplateFolderView,ChangeNameHdl));
 }
 
@@ -607,12 +606,6 @@ void TemplateFolderView::OnItemDblClicked (ThumbnailViewItem *pRegionItem)
 
     mbActive = false;
     mpItemView->Show();
-}
-
-IMPL_LINK(TemplateFolderView, TVTemplateStateHdl, const ThumbnailViewItem*, pItem)
-{
-    maTemplateStateHdl.Call((void*)pItem);
-    return 0;
 }
 
 IMPL_LINK(TemplateFolderView, ChangeNameHdl, TemplateView*, pView)

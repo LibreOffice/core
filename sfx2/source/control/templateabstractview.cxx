@@ -24,12 +24,14 @@ TemplateAbstractView::TemplateAbstractView (Window *pParent, WinBits nWinStyle, 
     : ThumbnailView(pParent,nWinStyle,bDisableTransientChildren),
       mpItemView(new TemplateView(this))
 {
+    mpItemView->setItemStateHdl(LINK(this,TemplateAbstractView,OverlayItemStateHdl));
 }
 
 TemplateAbstractView::TemplateAbstractView(Window *pParent, const ResId &rResId, bool bDisableTransientChildren)
     : ThumbnailView(pParent,rResId,bDisableTransientChildren),
       mpItemView(new TemplateView(this))
 {
+    mpItemView->setItemStateHdl(LINK(this,TemplateAbstractView,OverlayItemStateHdl));
 }
 
 TemplateAbstractView::~TemplateAbstractView ()
@@ -193,6 +195,12 @@ void TemplateAbstractView::OnSelectionMode (bool bMode)
     }
     else
         ThumbnailView::OnSelectionMode(bMode);
+}
+
+IMPL_LINK(TemplateAbstractView, OverlayItemStateHdl, const ThumbnailViewItem*, pItem)
+{
+    maOverlayItemStateHdl.Call((void*)pItem);
+    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

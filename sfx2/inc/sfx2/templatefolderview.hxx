@@ -47,8 +47,6 @@ public:
     std::vector<TemplateItemProperties>
         getFilteredItems (const boost::function<bool (const TemplateItemProperties&) > &rFunc) const;
 
-    void setTemplateStateHdl (const Link &aLink) { maTemplateStateHdl = aLink; }
-
     sal_uInt16 createRegion (const rtl::OUString &rName);
 
     bool removeRegion (const sal_uInt16 nItemId);
@@ -68,8 +66,6 @@ private:
 
     virtual void OnItemDblClicked (ThumbnailViewItem *pRegionItem);
 
-    DECL_LINK(TVTemplateStateHdl, const ThumbnailViewItem*);
-
     DECL_LINK(ChangeNameHdl, TemplateView*);
 
 private:
@@ -77,7 +73,6 @@ private:
     bool mbFilteredResults;     // Flag keep track if overlay has been filtered so folders can get filtered too afterwards
     FILTER_APPLICATION meFilterOption;
     SfxDocumentTemplates *mpDocTemplates;
-    Link maTemplateStateHdl;
 };
 
 #endif // TEMPLATEFOLDERVIEW_HXX
