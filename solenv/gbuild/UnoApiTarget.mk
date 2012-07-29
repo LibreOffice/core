@@ -30,6 +30,7 @@
 
 gb_UnoApiPartTarget_IDLCTARGET := $(call gb_Executable_get_target_for_build,idlc)
 gb_UnoApiPartTarget_IDLCCOMMAND := $(gb_Helper_set_ld_path) SOLARBINDIR=$(OUTDIR_FOR_BUILD)/bin $(gb_UnoApiPartTarget_IDLCTARGET)
+gb_UnoApiPartTarget_UCPPTARGET := $(call gb_Executable_get_target_for_build,ucpp)
 
 # The .urd files are actually created by the gb_UnoApiPartTarget__command,
 # invoked for the per-directory .done files.
@@ -68,7 +69,8 @@ define gb_UnoApiPartTarget__command
 endef
 
 $(call gb_UnoApiPartTarget_get_target,%.done) : \
-		$(gb_UnoApiPartTarget_IDLCTARGET)
+		$(gb_UnoApiPartTarget_IDLCTARGET) \
+		| $(gb_UnoApiPartTarget_UCPPTARGET)
 	$(call gb_UnoApiPartTarget__command,$@,$*,$(filter-out $(gb_UnoApiPartTarget_IDLCTARGET),$?))
 
 ifeq ($(gb_FULLDEPS),$(true))
@@ -135,10 +137,7 @@ $(if $(or $(and $(1),$(2),$(3)),$(and $(1),$(2)),$(and $(2),$(3)),$(and $(1),$(3
 $(if $(4),,$(error No root has been set for the rdb file))
 endef
 
-# FIXME cannot have a dependency on $(gb_UnoApiTarget_RDBMAKERTARGET) here
-# because that leads to dependency cycle because rdbmaker depends on offapi
-$(call gb_UnoApiTarget_get_target,%) : $(gb_UnoApiTarget_XML2CMPTARGET) \
-		$(gb_UnoApiTarget_REGCOMPARETARGET) $(gb_UnoApiTarget_REGMERGETARGET)
+$(call gb_UnoApiTarget_get_target,%) :
 	$(call gb_UnoApiTarget__check_mode,$(UNOAPI_FILES),$(UNOAPI_MERGE),$(UNOAPI_XML),$(UNOAPI_ROOT))
 	$(call gb_UnoApiTarget__command,$@,$*)
 
@@ -231,6 +230,7 @@ endef
 
 define gb_UnoApiTarget_merge_api
 $(foreach rdb,$(2),$(call gb_UnoApiTarget__merge_api,$(1),$(rdb)))
+$(call gb_UnoApiTarget_get_target,$(1)) : $(gb_UnoApiTarget_REGMERGETARGET)
 
 endef
 
@@ -249,6 +249,8 @@ define gb_UnoApiTarget_set_xmlfile
 $(call gb_UnoApiTarget_get_target,$(1)) : UNOAPI_XML := $(SRCDIR)/$(2)
 $(call gb_UnoApiTarget_get_target,$(1)) : $(SRCDIR)/$(2)
 $(call gb_UnoApiTarget_get_target,$(1)) : $(gb_UnoApiTarget_XMLRDB)
+$(call gb_UnoApiTarget_get_target,$(1)) : $(gb_UnoApiTarget_XML2CMPTARGET)
+$(call gb_UnoApiTarget_get_target,$(1)) : $(gb_UnoApiTarget_RDBMAKERTARGET)
 
 endef
 
@@ -258,6 +260,7 @@ endef
 
 define gb_UnoApiTarget_set_reference_rdbfile
 $(call gb_UnoApiTarget_get_target,$(1)) : UNOAPI_REFERENCE := $(SRCDIR)/$(strip $(2)).rdb
+$(call gb_UnoApiTarget_get_target,$(1)) : $(gb_UnoApiTarget_REGCOMPARETARGET)
 
 endef
 
