@@ -64,42 +64,6 @@ inline void* operator new( size_t, DummyType* pPtr )
 }
 inline void operator delete( void*, DummyType* ) {}
 
-#define SV_DECL_PTRARR_VISIBILITY(nm, AE, IS, vis)\
-class vis nm: public SvPtrarr \
-{\
-public:\
-    nm( sal_uInt16 nIni=IS )\
-        : SvPtrarr(nIni) {}\
-    void Insert( const nm *pI, sal_uInt16 nP, \
-            sal_uInt16 nS = 0, sal_uInt16 nE = USHRT_MAX ) {\
-        SvPtrarr::Insert((const SvPtrarr*)pI, nP, nS, nE);\
-    }\
-    void Insert( const AE & aE, sal_uInt16 nP ) {\
-        SvPtrarr::Insert( (const VoidPtr &)aE, nP );\
-    }\
-    void Insert( const AE *pE, sal_uInt16 nL, sal_uInt16 nP ) {\
-        SvPtrarr::Insert( (const VoidPtr*)pE, nL, nP );\
-    }\
-    void Remove( sal_uInt16 nP, sal_uInt16 nL = 1) {\
-        SvPtrarr::Remove(nP,nL);\
-    }\
-    const AE* GetData() const {\
-        return (const AE*)SvPtrarr::GetData();\
-    }\
-    AE operator[]( sal_uInt16 nP )const  { \
-        return (AE)SvPtrarr::operator[](nP); }\
-    AE GetObject(sal_uInt16 nP) const { \
-        return (AE)SvPtrarr::GetObject(nP); }\
-    \
-    sal_uInt16 GetPos( const AE & aE ) const { \
-        return SvPtrarr::GetPos((const VoidPtr &)aE);\
-    }\
-    void DeleteAndDestroy( sal_uInt16 nP, sal_uInt16 nL=1 );\
-private:\
-    nm( const nm& );\
-    nm& operator=( const nm& );\
-};
-
 typedef void* VoidPtr;
 class SVL_DLLPUBLIC SvPtrarr
 {
@@ -136,88 +100,6 @@ public:
 };
 
 // SORTARR - Begin
-
-#define _SORT_CLASS_DEF(nm, AE, IS, vis)\
-class vis nm : private nm##_SAR \
-{\
-public:\
-    nm(sal_uInt16 nSize = IS)\
-        : nm##_SAR(nSize) {}\
-    void Insert( const nm *pI, sal_uInt16 nS=0, sal_uInt16 nE=USHRT_MAX );\
-    sal_Bool Insert( const AE& aE );\
-    sal_Bool Insert( const AE& aE, sal_uInt16& rP );\
-    void Insert( const AE *pE, sal_uInt16 nL );\
-    void Remove( sal_uInt16 nP, sal_uInt16 nL = 1 );\
-    void Remove( const AE& aE, sal_uInt16 nL = 1 );\
-    sal_uInt16 Count() const  {   return nm##_SAR::Count(); }\
-    const AE* GetData() const { return (const AE*)pData; }\
-\
-/* Das Ende stehe im DECL-Makro !!! */
-
-#define _SV_SEEK_PTR(nm,AE)\
-sal_Bool nm::Seek_Entry( const AE aE, sal_uInt16* pP ) const\
-{\
-    register sal_uInt16 nO  = nm##_SAR::Count(),\
-            nM, \
-            nU = 0;\
-    if( nO > 0 )\
-    {\
-        nO--;\
-        register long rCmp = (long)aE;\
-        while( nU <= nO )\
-        {\
-            nM = nU + ( nO - nU ) / 2;\
-            if( (long)*(pData + nM) == rCmp )\
-            {\
-                if( pP ) *pP = nM;\
-                return sal_True;\
-            }\
-            else if( (long)*(pData+ nM) < (long)aE  )\
-                nU = nM + 1;\
-            else if( nM == 0 )\
-            {\
-                if( pP ) *pP = nU;\
-                return sal_False;\
-            }\
-            else\
-                nO = nM - 1;\
-        }\
-    }\
-    if( pP ) *pP = nU;\
-    return sal_False;\
-}
-
-#define _SV_SEEK_PTR_TO_OBJECT( nm,AE )\
-sal_Bool nm::Seek_Entry( const AE aE, sal_uInt16* pP ) const\
-{\
-    register sal_uInt16 nO  = nm##_SAR::Count(),\
-            nM, \
-            nU = 0;\
-    if( nO > 0 )\
-    {\
-        nO--;\
-        while( nU <= nO )\
-        {\
-            nM = nU + ( nO - nU ) / 2;\
-            if( *(*((AE*)pData + nM)) == *(aE) )\
-            {\
-                if( pP ) *pP = nM;\
-                return sal_True;\
-            }\
-            else if( *(*((AE*)pData + nM)) < *(aE) )\
-                nU = nM + 1;\
-            else if( nM == 0 )\
-            {\
-                if( pP ) *pP = nU;\
-                return sal_False;\
-            }\
-            else\
-                nO = nM - 1;\
-        }\
-    }\
-    if( pP ) *pP = nU;\
-    return sal_False;\
-}
 
 #define _SV_IMPL_SORTAR_ALG(nm, AE)\
 void nm::Insert( const nm * pI, sal_uInt16 nS, sal_uInt16 nE )\
@@ -275,14 +157,55 @@ void nm::Remove( const AE &aE, sal_uInt16 nL )\
         nm##_SAR::Remove( nP, nL);\
 }\
 
-#define _SORTARR_BLC_CASTS(nm, AE )\
-    sal_uInt16 GetPos( const AE& aE ) const { \
-        return SvPtrarr::GetPos((const VoidPtr&)aE);\
-    }
-
 #define _SV_DECL_PTRARR_SORT_ALG(nm, AE, IS, vis)\
-SV_DECL_PTRARR_VISIBILITY(nm##_SAR, AE, IS, vis)\
-_SORT_CLASS_DEF(nm, AE, IS, vis)\
+class vis nm##_SAR: public SvPtrarr \
+{\
+public:\
+    nm##_SAR( sal_uInt16 nIni=IS )\
+        : SvPtrarr(nIni) {}\
+    void Insert( const nm##_SAR *pI, sal_uInt16 nP, \
+            sal_uInt16 nS = 0, sal_uInt16 nE = USHRT_MAX ) {\
+        SvPtrarr::Insert((const SvPtrarr*)pI, nP, nS, nE);\
+    }\
+    void Insert( const AE & aE, sal_uInt16 nP ) {\
+        SvPtrarr::Insert( (const VoidPtr &)aE, nP );\
+    }\
+    void Insert( const AE *pE, sal_uInt16 nL, sal_uInt16 nP ) {\
+        SvPtrarr::Insert( (const VoidPtr*)pE, nL, nP );\
+    }\
+    void Remove( sal_uInt16 nP, sal_uInt16 nL = 1) {\
+        SvPtrarr::Remove(nP,nL);\
+    }\
+    const AE* GetData() const {\
+        return (const AE*)SvPtrarr::GetData();\
+    }\
+    AE operator[]( sal_uInt16 nP )const  { \
+        return (AE)SvPtrarr::operator[](nP); }\
+    AE GetObject(sal_uInt16 nP) const { \
+        return (AE)SvPtrarr::GetObject(nP); }\
+    \
+    sal_uInt16 GetPos( const AE & aE ) const { \
+        return SvPtrarr::GetPos((const VoidPtr &)aE);\
+    }\
+    void DeleteAndDestroy( sal_uInt16 nP, sal_uInt16 nL=1 );\
+private:\
+    nm##_SAR( const nm##_SAR& );\
+    nm##_SAR& operator=( const nm##_SAR& );\
+};\
+\
+class vis nm : private nm##_SAR \
+{\
+public:\
+    nm(sal_uInt16 nSize = IS)\
+        : nm##_SAR(nSize) {}\
+    void Insert( const nm *pI, sal_uInt16 nS=0, sal_uInt16 nE=USHRT_MAX );\
+    sal_Bool Insert( const AE& aE );\
+    sal_Bool Insert( const AE& aE, sal_uInt16& rP );\
+    void Insert( const AE *pE, sal_uInt16 nL );\
+    void Remove( sal_uInt16 nP, sal_uInt16 nL = 1 );\
+    void Remove( const AE& aE, sal_uInt16 nL = 1 );\
+    sal_uInt16 Count() const  {   return nm##_SAR::Count(); }\
+    const AE* GetData() const { return (const AE*)pData; }\
     AE operator[](sal_uInt16 nP) const {\
         return nm##_SAR::operator[]( nP );\
     }\
@@ -291,54 +214,111 @@ _SORT_CLASS_DEF(nm, AE, IS, vis)\
     }\
     sal_Bool Seek_Entry( const AE aE, sal_uInt16* pP = 0 ) const;\
     void DeleteAndDestroy( sal_uInt16 nP, sal_uInt16 nL=1 ); \
-    _SORTARR_BLC_CASTS(nm, AE )\
+    sal_uInt16 GetPos( const AE& aE ) const { \
+        return SvPtrarr::GetPos((const VoidPtr&)aE);\
+    }\
 \
 /* Das Ende stehe im DECL-Makro !!! */
 
-#define _SV_DECL_PTRARR_SORT(nm, AE, IS, vis)\
-_SV_DECL_PTRARR_SORT_ALG(nm, AE, IS, vis)\
-private:\
-    nm( const nm& );\
-    nm& operator=( const nm& );\
-};
-
 #define SV_DECL_PTRARR_SORT(nm, AE, IS)\
-_SV_DECL_PTRARR_SORT(nm, AE, IS,)
-
-#define _SV_DECL_PTRARR_SORT_DEL(nm, AE, IS, vis)\
-_SV_DECL_PTRARR_SORT_ALG(nm, AE, IS, vis)\
-    ~nm() { DeleteAndDestroy( 0, Count() ); }\
+_SV_DECL_PTRARR_SORT_ALG(nm, AE, IS,)\
 private:\
     nm( const nm& );\
     nm& operator=( const nm& );\
 };
 
 #define SV_DECL_PTRARR_SORT_DEL(nm, AE, IS)\
-_SV_DECL_PTRARR_SORT_DEL(nm, AE, IS,)
+_SV_DECL_PTRARR_SORT_ALG(nm, AE, IS,)\
+    ~nm() { DeleteAndDestroy( 0, Count() ); }\
+private:\
+    nm( const nm& );\
+    nm& operator=( const nm& );\
+};
 
 #define SV_IMPL_PTRARR_SORT( nm,AE )\
 _SV_IMPL_SORTAR_ALG( nm,AE )\
-    void nm::DeleteAndDestroy( sal_uInt16 nP, sal_uInt16 nL ) { \
-        if( nL ) {\
-            OSL_ENSURE( nP < nA && nP + nL <= nA, "ERR_VAR_DEL" );\
-            for( sal_uInt16 n=nP; n < nP + nL; n++ ) \
-                delete *((AE*)pData+n); \
-            SvPtrarr::Remove( nP, nL ); \
-        } \
+void nm::DeleteAndDestroy( sal_uInt16 nP, sal_uInt16 nL ) { \
+    if( nL ) {\
+        OSL_ENSURE( nP < nA && nP + nL <= nA, "ERR_VAR_DEL" );\
+        for( sal_uInt16 n=nP; n < nP + nL; n++ ) \
+            delete *((AE*)pData+n); \
+        SvPtrarr::Remove( nP, nL ); \
     } \
-_SV_SEEK_PTR( nm, AE )
+} \
+sal_Bool nm::Seek_Entry( const AE aE, sal_uInt16* pP ) const\
+{\
+    register sal_uInt16 nO  = nm##_SAR::Count(),\
+            nM, \
+            nU = 0;\
+    if( nO > 0 )\
+    {\
+        nO--;\
+        register long rCmp = (long)aE;\
+        while( nU <= nO )\
+        {\
+            nM = nU + ( nO - nU ) / 2;\
+            if( (long)*(pData + nM) == rCmp )\
+            {\
+                if( pP ) *pP = nM;\
+                return sal_True;\
+            }\
+            else if( (long)*(pData+ nM) < (long)aE  )\
+                nU = nM + 1;\
+            else if( nM == 0 )\
+            {\
+                if( pP ) *pP = nU;\
+                return sal_False;\
+            }\
+            else\
+                nO = nM - 1;\
+        }\
+    }\
+    if( pP ) *pP = nU;\
+    return sal_False;\
+}
 
 #define SV_IMPL_OP_PTRARR_SORT( nm,AE )\
 _SV_IMPL_SORTAR_ALG( nm,AE )\
-    void nm::DeleteAndDestroy( sal_uInt16 nP, sal_uInt16 nL ) { \
-        if( nL ) {\
-            OSL_ENSURE( nP < nA && nP + nL <= nA, "ERR_VAR_DEL" );\
-            for( sal_uInt16 n=nP; n < nP + nL; n++ ) \
-                delete *((AE*)pData+n); \
-            SvPtrarr::Remove( nP, nL ); \
-        } \
+void nm::DeleteAndDestroy( sal_uInt16 nP, sal_uInt16 nL ) { \
+    if( nL ) {\
+        OSL_ENSURE( nP < nA && nP + nL <= nA, "ERR_VAR_DEL" );\
+        for( sal_uInt16 n=nP; n < nP + nL; n++ ) \
+            delete *((AE*)pData+n); \
+        SvPtrarr::Remove( nP, nL ); \
     } \
-_SV_SEEK_PTR_TO_OBJECT( nm,AE )
+} \
+sal_Bool nm::Seek_Entry( const AE aE, sal_uInt16* pP ) const\
+{\
+    register sal_uInt16 nO  = nm##_SAR::Count(),\
+            nM, \
+            nU = 0;\
+    if( nO > 0 )\
+    {\
+        nO--;\
+        while( nU <= nO )\
+        {\
+            nM = nU + ( nO - nU ) / 2;\
+            if( *(*((AE*)pData + nM)) == *(aE) )\
+            {\
+                if( pP ) *pP = nM;\
+                return sal_True;\
+            }\
+            else if( *(*((AE*)pData + nM)) < *(aE) )\
+                nU = nM + 1;\
+            else if( nM == 0 )\
+            {\
+                if( pP ) *pP = nU;\
+                return sal_False;\
+            }\
+            else\
+                nO = nM - 1;\
+        }\
+    }\
+    if( pP ) *pP = nU;\
+    return sal_False;\
+}
+
+
 
 #if defined(ICC) || defined(GCC) || (defined(WNT) && _MSC_VER >= 1400)
 #define C40_INSERT( c, p, n ) Insert( (c const *&) p, n )
