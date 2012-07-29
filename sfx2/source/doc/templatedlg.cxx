@@ -768,7 +768,7 @@ void SfxTemplateManagerDlg::OnTemplateDelete ()
     std::set<const ThumbnailViewItem*>::const_iterator pIter;
     for (pIter = maSelTemplates.begin(); pIter != maSelTemplates.end();)
     {
-        if (maView->removeTemplate((*pIter)->mnId))
+        if (maView->removeTemplate((*pIter)->mnId,maView->getOverlayRegionId()+1))
             maSelTemplates.erase(pIter++);
         else
             ++pIter;

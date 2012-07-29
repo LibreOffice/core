@@ -457,10 +457,9 @@ bool TemplateFolderView::removeRegion(const sal_uInt16 nItemId)
     return true;
 }
 
-bool TemplateFolderView::removeTemplate (const sal_uInt16 nItemId)
+bool TemplateFolderView::removeTemplate (const sal_uInt16 nItemId, const sal_uInt16 nSrcItemId)
 {
-    sal_uInt16 nRegionId = mpItemView->getId();
-    sal_uInt16 nItemRegionId = nRegionId + 1;
+    sal_uInt16 nRegionId = nSrcItemId - 1;
     sal_uInt16 nTemplateId = nItemId - 1;
 
     if (!mpDocTemplates->Delete(nRegionId,nTemplateId))
@@ -468,7 +467,7 @@ bool TemplateFolderView::removeTemplate (const sal_uInt16 nItemId)
 
     for (size_t i = 0, n = mItemList.size(); i < n; ++i)
     {
-        if (mItemList[i]->mnId == nItemRegionId)
+        if (mItemList[i]->mnId == nSrcItemId)
         {
 
             TemplateFolderViewItem *pItem = static_cast<TemplateFolderViewItem*>(mItemList[i]);

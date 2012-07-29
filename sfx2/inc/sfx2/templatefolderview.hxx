@@ -53,7 +53,7 @@ public:
 
     bool removeRegion (const sal_uInt16 nItemId);
 
-    bool removeTemplate (const sal_uInt16 nItemId);
+    bool removeTemplate (const sal_uInt16 nItemId, const sal_uInt16 nSrcItemId);
 
     bool moveTemplate (const ThumbnailViewItem* pItem, const sal_uInt16 nSrcItem,
                        const sal_uInt16 nTargetItem, bool bCopy);
