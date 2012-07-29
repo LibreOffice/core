@@ -35,7 +35,7 @@ $(dir $(call gb_CliUnoApiTarget_get_target,%)).dir :
 $(dir $(call gb_CliUnoApiTarget_get_target,%))%/.dir :
 	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
 
-$(call gb_CliUnoApiTarget_get_target,%) :
+$(call gb_CliUnoApiTarget_get_target,%) : $(gb_CliUnoApiTarget_TARGET)
 	$(call gb_CliUnoApiTarget__command,$@,$*,$<)
 
 .PHONY : $(call gb_CliUnoApiTarget_get_clean_target,%)
@@ -52,7 +52,6 @@ $(call gb_CliUnoApiTarget_get_target,$(1)) : CLI_UNOAPI_DEPS :=
 $(call gb_CliUnoApiTarget_get_target,$(1)) : CLI_UNOAPI_KEYFILE :=
 $(call gb_CliUnoApiTarget_get_target,$(1)) : CLI_UNOAPI_VERSION :=
 
-$(call gb_CliUnoApiTarget_get_target,$(1)) : $(gb_CliUnoApiTarget_TARGET)
 $(call gb_CliUnoApiTarget_get_target,$(1)) :| $(dir $(call gb_CliUnoApiTarget_get_target,$(1))).dir
 
 endef
