@@ -1726,7 +1726,7 @@ extern "C" CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_register(
                 sal_Int32 nSize = getDescriptionSize( (*ppNewDescription)->eTypeClass );
 
                 // copy all specific data for the descriptions
-                ::rtl_copyMemory(
+                memcpy(
                     pTDR->pType +1,
                     *ppNewDescription +1,
                     nSize - sizeof(typelib_TypeDescription) );

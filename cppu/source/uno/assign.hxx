@@ -19,6 +19,8 @@
 #ifndef ASSIGN_HXX
 #define ASSIGN_HXX
 
+#include <string.h>
+
 #include "prim.hxx"
 #include "destr.hxx"
 #include "constr.hxx"
@@ -128,7 +130,7 @@ inline sal_Bool _assignArray(
     case typelib_TypeClass_DOUBLE:
         for (i=0; i < nTotalElements; i++)
         {
-            ::rtl_copyMemory((sal_Char *)pDest + i * nElementSize,
+            memcpy((sal_Char *)pDest + i * nElementSize,
                              (sal_Char *)pSource + i * nElementSize,
                              nElementSize);
         }

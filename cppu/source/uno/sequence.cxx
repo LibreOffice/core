@@ -17,7 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <rtl/memory.h>
+#include <string.h>
+
 #include <rtl/alloc.h>
 #include <osl/diagnose.h>
 #include <osl/interlck.h>
@@ -380,7 +381,7 @@ static inline bool icopyConstructFromElements(
             pSeq = reallocSeq( pSeq, sizeof(sal_Unicode), nAlloc );
         if (pSeq != 0)
         {
-            ::rtl_copyMemory(
+            memcpy(
                 pSeq->elements + (sizeof(sal_Unicode) * nStartIndex),
                 (char *)pSourceElements + (sizeof(sal_Unicode) * nStartIndex),
                 sizeof(sal_Unicode) * (nStopIndex - nStartIndex) );
@@ -391,7 +392,7 @@ static inline bool icopyConstructFromElements(
             pSeq = reallocSeq( pSeq, sizeof(sal_Bool), nAlloc );
         if (pSeq != 0)
         {
-            ::rtl_copyMemory(
+            memcpy(
                 pSeq->elements + (sizeof(sal_Bool) * nStartIndex),
                 (char *)pSourceElements + (sizeof(sal_Bool) * nStartIndex),
                 sizeof(sal_Bool) * (nStopIndex - nStartIndex) );
@@ -402,7 +403,7 @@ static inline bool icopyConstructFromElements(
             pSeq = reallocSeq( pSeq, sizeof(sal_Int8), nAlloc );
         if (pSeq != 0)
         {
-            ::rtl_copyMemory(
+            memcpy(
                 pSeq->elements + (sizeof(sal_Int8) * nStartIndex),
                 (char *)pSourceElements + (sizeof(sal_Int8) * nStartIndex),
                 sizeof(sal_Int8) * (nStopIndex - nStartIndex) );
@@ -414,7 +415,7 @@ static inline bool icopyConstructFromElements(
             pSeq = reallocSeq( pSeq, sizeof(sal_Int16), nAlloc );
         if (pSeq != 0)
         {
-            ::rtl_copyMemory(
+            memcpy(
                 pSeq->elements + (sizeof(sal_Int16) * nStartIndex),
                 (char *)pSourceElements + (sizeof(sal_Int16) * nStartIndex),
                 sizeof(sal_Int16) * (nStopIndex - nStartIndex) );
@@ -426,7 +427,7 @@ static inline bool icopyConstructFromElements(
             pSeq = reallocSeq( pSeq, sizeof(sal_Int32), nAlloc );
         if (pSeq != 0)
         {
-            ::rtl_copyMemory(
+            memcpy(
                 pSeq->elements + (sizeof(sal_Int32) * nStartIndex),
                 (char *)pSourceElements + (sizeof(sal_Int32) * nStartIndex),
                 sizeof(sal_Int32) * (nStopIndex - nStartIndex) );
@@ -438,7 +439,7 @@ static inline bool icopyConstructFromElements(
             pSeq = reallocSeq( pSeq, sizeof(sal_Int64), nAlloc );
         if (pSeq != 0)
         {
-            ::rtl_copyMemory(
+            memcpy(
                 pSeq->elements + (sizeof(sal_Int64) * nStartIndex),
                 (char *)pSourceElements + (sizeof(sal_Int64) * nStartIndex),
                 sizeof(sal_Int64) * (nStopIndex - nStartIndex) );
@@ -449,7 +450,7 @@ static inline bool icopyConstructFromElements(
             pSeq = reallocSeq( pSeq, sizeof(float), nAlloc );
         if (pSeq != 0)
         {
-            ::rtl_copyMemory(
+            memcpy(
                 pSeq->elements + (sizeof(float) * nStartIndex),
                 (char *)pSourceElements + (sizeof(float) * nStartIndex),
                 sizeof(float) * (nStopIndex - nStartIndex) );
@@ -460,7 +461,7 @@ static inline bool icopyConstructFromElements(
             pSeq = reallocSeq( pSeq, sizeof(double), nAlloc );
         if (pSeq != 0)
         {
-            ::rtl_copyMemory(
+            memcpy(
                 pSeq->elements + (sizeof(double) * nStartIndex),
                 (char *)pSourceElements + (sizeof(double) * nStartIndex),
                 sizeof(double) * (nStopIndex - nStartIndex) );
@@ -471,7 +472,7 @@ static inline bool icopyConstructFromElements(
             pSeq = reallocSeq( pSeq, sizeof(sal_Int32), nAlloc );
         if (pSeq != 0)
         {
-            ::rtl_copyMemory(
+            memcpy(
                 pSeq->elements + (sizeof(sal_Int32) * nStartIndex),
                 (char *)pSourceElements + (sizeof(sal_Int32) * nStartIndex),
                 sizeof(sal_Int32) * (nStopIndex - nStartIndex) );
