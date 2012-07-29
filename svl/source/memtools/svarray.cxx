@@ -65,35 +65,6 @@ void SvPtrarr::Insert( const VoidPtr* pE, sal_uInt16 nL, sal_uInt16 nP )
     nA = nA + nL; nFree = nFree - nL;
 }
 
-void SvPtrarr::Replace( const VoidPtr& aE, sal_uInt16 nP )
-{
-    if( nP < nA )
-        *(pData+nP) = (VoidPtr&)aE;
-}
-
-void SvPtrarr::Replace( const VoidPtr *pE, sal_uInt16 nL, sal_uInt16 nP )
-{
-    if( pE && nP < nA )
-    {
-        if( nP + nL < nA )
-            memcpy( pData + nP, pE, nL * sizeof( VoidPtr ));
-        else if( nP + nL < nA + nFree )\
-        {
-            memcpy( pData + nP, pE, nL * sizeof( VoidPtr ));
-            nP = nP + (nL - nA);
-            nFree = nP;
-        }
-        else
-        {
-            sal_uInt16 nTmpLen = nA + nFree - nP;
-            memcpy( pData + nP, pE, nTmpLen * sizeof( VoidPtr ));
-            nA = nA + nFree;
-            nFree = 0;
-            Insert( pE + nTmpLen, nL - nTmpLen, nA );
-        }
-    }
-}
-
 void SvPtrarr::Remove( sal_uInt16 nP, sal_uInt16 nL )
 {
     if( !nL )
@@ -104,15 +75,6 @@ void SvPtrarr::Remove( sal_uInt16 nP, sal_uInt16 nL )
     nA = nA - nL; nFree = nFree + nL;
     if (nFree > nA)
         _resize (nA);
-}
-
-void SvPtrarr::_ForEach( sal_uInt16 nStt, sal_uInt16 nE,
-            FnForEach_SvPtrarr fnCall, void* pArgs )
-{
-    if( nStt >= nE || nE > nA )
-        return;
-    for( ; nStt < nE && (*fnCall)( *(const VoidPtr*)(pData+nStt), pArgs ); nStt++)
-        ;
 }
 
 sal_uInt16 SvPtrarr::GetPos( const VoidPtr& aElement ) const

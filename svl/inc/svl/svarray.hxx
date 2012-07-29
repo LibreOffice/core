@@ -80,12 +80,6 @@ public:\
     void Insert( const AE *pE, sal_uInt16 nL, sal_uInt16 nP ) {\
         Base::Insert( (const VoidPtr*)pE, nL, nP );\
     }\
-    void Replace( const AERef aE, sal_uInt16 nP ) {\
-        Base::Replace( (const VPRef)aE, nP );\
-    }\
-    void Replace( const AE *pE, sal_uInt16 nL, sal_uInt16 nP ) {\
-        Base::Replace( (const VoidPtr*)pE, nL, nP );\
-    }\
     void Remove( sal_uInt16 nP, sal_uInt16 nL = 1) {\
         Base::Remove(nP,nL);\
     }\
@@ -110,7 +104,6 @@ private:\
 SV_DECL_PTRARR_GEN(nm, AE, IS, SvPtrarr, AE &, VoidPtr &, vis )
 
 typedef void* VoidPtr;
-typedef sal_Bool (*FnForEach_SvPtrarr)( const VoidPtr&, void* );
 class SVL_DLLPUBLIC SvPtrarr
 {
 protected:
@@ -140,24 +133,8 @@ public:
     void Insert( const VoidPtr& aE, sal_uInt16 nP );
     void Insert( const VoidPtr *pE, sal_uInt16 nL, sal_uInt16 nP );
     void Remove( sal_uInt16 nP, sal_uInt16 nL = 1 );
-    void Replace( const VoidPtr& aE, sal_uInt16 nP );
-    void Replace( const VoidPtr *pE, sal_uInt16 nL, sal_uInt16 nP );
     sal_uInt16 Count() const { return nA; }
     const VoidPtr* GetData() const { return (const VoidPtr*)pData; }
-
-    void ForEach( FnForEach_SvPtrarr fnForEach, void* pArgs = 0 )
-    {
-        _ForEach( 0, nA, fnForEach, pArgs );
-    }
-    void ForEach( sal_uInt16 nS, sal_uInt16 nE,
-                    FnForEach_SvPtrarr fnForEach, void* pArgs = 0 )
-    {
-        _ForEach( nS, nE, fnForEach, pArgs );
-    }
-
-    void _ForEach( sal_uInt16 nStt, sal_uInt16 nE,
-            FnForEach_SvPtrarr fnCall, void* pArgs = 0 );
-
     sal_uInt16 GetPos( const VoidPtr & aE ) const;
 };
 
