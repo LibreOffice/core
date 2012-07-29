@@ -91,6 +91,7 @@
 #include <basegfx/tools/zoomtools.hxx>
 
 #define SPLIT_MARGIN    30
+#define SPLIT_HANDLE_SIZE   5
 #define SC_ICONSIZE     36
 
 #define SC_SCROLLBAR_MIN    30
