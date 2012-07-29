@@ -1042,6 +1042,22 @@ void ThumbnailView::SelectItem( sal_uInt16 nItemId )
     }
 }
 
+void ThumbnailView::unselectItems()
+{
+    for (size_t i = 0, n = mItemList.size(); i < n; ++i)
+    {
+        if (mItemList[i]->isSelected())
+        {
+            mItemList[i]->setSelection(false);
+
+            maItemStateHdl.Call(mItemList[i]);
+        }
+    }
+
+    if (IsReallyVisible() && IsUpdateMode())
+        Invalidate();
+}
+
 rtl::OUString ThumbnailView::GetItemText( sal_uInt16 nItemId ) const
 {
     size_t nPos = GetItemPos( nItemId );

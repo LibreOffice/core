@@ -221,6 +221,14 @@ public:
     bool IsItemSelected( sal_uInt16 nItemId ) const
         { return nItemId == mnSelItemId; }
 
+    /**
+     *
+     * @brief unselect all current selected items.
+     *
+     **/
+
+    void unselectItems ();
+
     rtl::OUString GetItemText( sal_uInt16 nItemId ) const;
 
     void SetColor( const Color& rColor );
