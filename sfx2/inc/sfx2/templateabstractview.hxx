@@ -29,6 +29,8 @@ public:
 
     virtual void showOverlay (bool bVisible) = 0;
 
+    sal_uInt16 getOverlayRegionId () const;
+
     // Check if the overlay is visible or not.
     bool isOverlayVisible () const;
 

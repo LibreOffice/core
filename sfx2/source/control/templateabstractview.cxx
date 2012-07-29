@@ -28,6 +28,11 @@ TemplateAbstractView::~TemplateAbstractView ()
     delete mpItemView;
 }
 
+sal_uInt16 TemplateAbstractView::getOverlayRegionId() const
+{
+    return mpItemView->getId();
+}
+
 bool TemplateAbstractView::isOverlayVisible () const
 {
     return mpItemView->IsVisible();
