@@ -64,44 +64,41 @@ inline void* operator new( size_t, DummyType* pPtr )
 }
 inline void operator delete( void*, DummyType* ) {}
 
-#define SV_DECL_PTRARR_GEN(nm, AE, IS, Base, AERef, VPRef, vis )\
-class vis nm: public Base \
+#define SV_DECL_PTRARR_VISIBILITY(nm, AE, IS, vis)\
+class vis nm: public SvPtrarr \
 {\
 public:\
     nm( sal_uInt16 nIni=IS )\
-        : Base(nIni) {}\
+        : SvPtrarr(nIni) {}\
     void Insert( const nm *pI, sal_uInt16 nP, \
             sal_uInt16 nS = 0, sal_uInt16 nE = USHRT_MAX ) {\
-        Base::Insert((const Base*)pI, nP, nS, nE);\
+        SvPtrarr::Insert((const SvPtrarr*)pI, nP, nS, nE);\
     }\
-    void Insert( const AERef aE, sal_uInt16 nP ) {\
-        Base::Insert( (const VPRef )aE, nP );\
+    void Insert( const AE & aE, sal_uInt16 nP ) {\
+        SvPtrarr::Insert( (const VoidPtr &)aE, nP );\
     }\
     void Insert( const AE *pE, sal_uInt16 nL, sal_uInt16 nP ) {\
-        Base::Insert( (const VoidPtr*)pE, nL, nP );\
+        SvPtrarr::Insert( (const VoidPtr*)pE, nL, nP );\
     }\
     void Remove( sal_uInt16 nP, sal_uInt16 nL = 1) {\
-        Base::Remove(nP,nL);\
+        SvPtrarr::Remove(nP,nL);\
     }\
     const AE* GetData() const {\
-        return (const AE*)Base::GetData();\
+        return (const AE*)SvPtrarr::GetData();\
     }\
     AE operator[]( sal_uInt16 nP )const  { \
-        return (AE)Base::operator[](nP); }\
+        return (AE)SvPtrarr::operator[](nP); }\
     AE GetObject(sal_uInt16 nP) const { \
-        return (AE)Base::GetObject(nP); }\
+        return (AE)SvPtrarr::GetObject(nP); }\
     \
-    sal_uInt16 GetPos( const AERef aE ) const { \
-        return Base::GetPos((const VPRef)aE);\
+    sal_uInt16 GetPos( const AE & aE ) const { \
+        return SvPtrarr::GetPos((const VoidPtr &)aE);\
     }\
     void DeleteAndDestroy( sal_uInt16 nP, sal_uInt16 nL=1 );\
 private:\
     nm( const nm& );\
     nm& operator=( const nm& );\
 };
-
-#define SV_DECL_PTRARR_VISIBILITY(nm, AE, IS, vis)\
-SV_DECL_PTRARR_GEN(nm, AE, IS, SvPtrarr, AE &, VoidPtr &, vis )
 
 typedef void* VoidPtr;
 class SVL_DLLPUBLIC SvPtrarr
