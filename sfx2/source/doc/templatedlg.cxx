@@ -24,6 +24,7 @@
 #include <tools/urlobj.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <vcl/edit.hxx>
+#include <vcl/msgbox.hxx>
 #include <vcl/toolbox.hxx>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -913,6 +914,11 @@ void SfxTemplateManagerDlg::localSearchMoveTo(sal_uInt16 nMenuId)
             }
         }
     }
+
+    // Deselect all items and update search results
+    mpSearchView->unselectItems();
+
+    SearchUpdateHdl(mpSearchEdit);
 }
 
 void lcl_createTemplate(uno::Reference< com::sun::star::frame::XComponentLoader > xDesktop,
