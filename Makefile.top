@@ -44,6 +44,7 @@ basic\
 bean\
 binaryurp\
 boost\
+bridges\
 canvas\
 chart2\
 cli_ure\
@@ -191,7 +192,6 @@ apache-commons\
 beanshell\
 berkeleydb\
 binfilter \
-bridges\
 cairo\
 cppunit\
 crashrep\

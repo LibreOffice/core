@@ -48,7 +48,7 @@ $(eval $(call gb_Module_add_targets,bridges,\
 	$(if $(filter GCCLINUX6,$(COM)$(OS)$(CPU)$(CPUNAME)),\
 		Library_gcc3_linux_m68k \
 	) \
-	$(if $(filter GCCLINUXM,$(COM)$(OS)$(CPU)),\
+	$(if $(and $(filter GCCM,$(COM)$(CPU)),$(filter ANDROID LINUX,$(OS))),\
 		Library_gcc3_linux_mips \
 	) \
 	$(if $(filter GCCLINUXPPOWERPC64,$(COM)$(OS)$(CPU)$(CPUNAME)),\
