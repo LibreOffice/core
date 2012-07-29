@@ -403,12 +403,15 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_URE, \
     affine_uno \
 	cli_cppuhelper_native \
 	cli_uno \
+	gcc3_uno \
+	java_uno \
     jpipe \
     juh \
     juhx \
     log_uno \
     sal_textenc \
     sunjavaplugin \
+	sunpro5_uno \
     unsafe_uno \
     xmlreader \
 ))
@@ -417,6 +420,8 @@ ifeq ($(OS),WNT)
 
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_URE, \
     jpipx \
+	msci_uno \
+	mscx_uno \
 ))
 
 endif

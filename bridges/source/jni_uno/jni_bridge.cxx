@@ -461,7 +461,7 @@ void SAL_CALL java_env_disposing( uno_Environment * java_env )
 #endif
 
 //------------------------------------------------------------------------------
-void SAL_CALL uno_initEnvironment( uno_Environment * java_env )
+SAL_DLLPUBLIC_EXPORT void SAL_CALL uno_initEnvironment( uno_Environment * java_env )
     SAL_THROW_EXTERN_C()
 {
     java_env->environmentDisposing = java_env_disposing;
@@ -479,7 +479,7 @@ void SAL_CALL uno_initEnvironment( uno_Environment * java_env )
 #endif
 
 //------------------------------------------------------------------------------
-void SAL_CALL uno_ext_getMapping(
+SAL_DLLPUBLIC_EXPORT void SAL_CALL uno_ext_getMapping(
     uno_Mapping ** ppMapping, uno_Environment * pFrom, uno_Environment * pTo )
     SAL_THROW_EXTERN_C()
 {
