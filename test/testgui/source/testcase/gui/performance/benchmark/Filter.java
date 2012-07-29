@@ -32,40 +32,94 @@ import static org.openoffice.test.vcl.Tester.*;
 import static testlib.gui.AppUtil.*;
 import static testlib.gui.UIMap.*;
 
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.HashMap;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.openoffice.test.OpenOffice;
 import org.openoffice.test.common.Testspace;
+import org.openoffice.test.common.SystemUtil;
+
+import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class Filter {
+//  @Rule
+
+    public String counterOutput = null;
+    private String pid = null;
+    private Timer timer = new Timer();
 
     @Before
-    public void setUp(){
+    public void setUp() throws FileNotFoundException{
+
+        OpenOffice.killAll();
         app.start();
+        String processSoffice = null;
+        if(SystemUtil.isWindows())
+        {
+            processSoffice = ".*soffice\\.exe.*";
+        }
+        else
+        {
+            processSoffice = ".*soffice\\.bin.*";
+        }
+        HashMap<String, Object> proccessInfo = SystemUtil.findProcess(processSoffice);
+        pid = (String)proccessInfo.get("pid");
     }
 
     @Test
     public void pvtFilter()
     {
-        String pvt_result_path = Testspace.getPath("output/pvt_filter_results.txt");
-        String counterLists =  Testspace.getPath("data/pvt_benchmark/perfmon/counterlist.txt");
         String counterOutput = Testspace.getPath("output/output_perfmon");
-        String createCounters = Testspace.getPath("data/pvt_benchmark/perfmon/createCounters.bat");
-        String stopCounters = Testspace.getPath("data/pvt_benchmark/perfmon/stopCounters.bat");
-
-        Testspace.prepareData("pvt_benchmark/perfmon/counterlist.txt");
-        Testspace.prepareData("pvt_benchmark/perfmon/createCounters.bat");
-        Testspace.prepareData("pvt_benchmark/perfmon/stopCounters.bat");
+        String pvt_result_path = Testspace.getPath("output/pvt_filter_results.txt");
         Testspace.prepareData("pvt_benchmark/output_start.ods", "output/output_start.ods");
 
+
         try {
-            String []cmdargs_start = {"cmd.exe", "/C", "start", createCounters, counterOutput, counterLists};
-            java.lang.Runtime.getRuntime().exec(cmdargs_start);
-            sleep(5);
+            if(SystemUtil.isWindows())
+            {
+                String counterLists =  Testspace.getPath("data/pvt_benchmark/perfmon/counterlist.txt");
+                String createCounters = Testspace.getPath("data/pvt_benchmark/perfmon/createCounters.bat");
+
+                Testspace.prepareData("pvt_benchmark/perfmon/counterlist.txt");
+                Testspace.prepareData("pvt_benchmark/perfmon/createCounters.bat");
+
+                String []cmdargs_start = {"cmd.exe", "/C", "start", createCounters, counterOutput, counterLists};
+                java.lang.Runtime.getRuntime().exec(cmdargs_start);
+                sleep(5);
+            }
+            else
+            {
+                final FileWriter counterOut = new FileWriter(counterOutput);
+                counterOut.write("Time,Memory(KB),CPU(%)");
+
+                timer.schedule(new TimerTask(){
+                    public void run(){
+                        HashMap<String, Object> perfData = SystemUtil.getProcessPerfData(pid);
+                        String record = System.currentTimeMillis() + "," + perfData.get("rss") + "," + perfData.get("pcpu");
+                        try {
+                            counterOut.write(record + System.getProperty("line.separator"));
+                            counterOut.flush();
+                        } catch (IOException e) {
+                            // TODO Auto-generated catch block
+                            e.printStackTrace();
+                        }
+                    }
+                }, 0, 1000);
+            }
+
             FileWriter out = new FileWriter(pvt_result_path);
             out.write("Test Start: " + System.getProperty("line.separator"));
+
+            HashMap<String, Object> perfData = SystemUtil.getProcessPerfData(pid);
+
             for(int i = 0; i < 8; i++)
             {
                 System.out.println("This is the " + i + " time");
@@ -76,76 +130,87 @@ public class Filter {
 //              out.write("New Spreadsheet Result: " + perfNew("Spreadsheet") + System.getProperty("line.separator"));
 //              out.flush();
 
-                out.write("Plain ODT Load Show Result: " + perfLoadShow("pvt_benchmark/sw_plain_120p_odf1.2.odt") + System.getProperty("line.separator"));
+                out.write(getTime() + "," + "Plain ODT Load Show Result: " + perfLoadShow("pvt_benchmark/sw_plain_120p_odf1.2.odt") + System.getProperty("line.separator"));
                 out.flush();
-                out.write("Plain DOC Load Show Result: " + perfLoadShow("pvt_benchmark/sw_plain_120p.doc") + System.getProperty("line.separator"));
+                out.write(getTime() + "," + "Plain DOC Load Show Result: " + perfLoadShow("pvt_benchmark/sw_plain_120p.doc") + System.getProperty("line.separator"));
                 out.flush();
-                out.write("Complex ODT Load Show Result: " + perfLoadShow("pvt_benchmark/sw_complex_100p_odf1.2.odt") + System.getProperty("line.separator"));
+                out.write(getTime() + "," + "Complex ODT Load Show Result: " + perfLoadShow("pvt_benchmark/sw_complex_100p_odf1.2.odt") + System.getProperty("line.separator"));
                 out.flush();
-                out.write("Complex DOC Load Show Result: " + perfLoadShow("pvt_benchmark/sw_complex_100p.doc") + System.getProperty("line.separator"));
+                out.write(getTime() + "," + "Complex DOC Load Show Result: " + perfLoadShow("pvt_benchmark/sw_complex_100p.doc") + System.getProperty("line.separator"));
                 out.flush();
-                out.write("Plain ODP Load Show Result: " + perfLoadShow("pvt_benchmark/sd_plain_50p_odf1.2.odp") + System.getProperty("line.separator"));
+                out.write(getTime() + "," + "Plain ODP Load Show Result: " + perfLoadShow("pvt_benchmark/sd_plain_50p_odf1.2.odp") + System.getProperty("line.separator"));
                 out.flush();
-                out.write("Plain PPT Load Show Result: " + perfLoadShow("pvt_benchmark/sd_plain_50p.ppt") + System.getProperty("line.separator"));
+                out.write(getTime() + "," + "Plain PPT Load Show Result: " + perfLoadShow("pvt_benchmark/sd_plain_50p.ppt") + System.getProperty("line.separator"));
                 out.flush();
-                out.write("Complex ODP Load Show Result: " + perfLoadShow("pvt_benchmark/sd_complex_51p_odf1.2.odp") + System.getProperty("line.separator"));
+                out.write(getTime() + "," + "Complex ODP Load Show Result: " + perfLoadShow("pvt_benchmark/sd_complex_51p_odf1.2.odp") + System.getProperty("line.separator"));
                 out.flush();
-                out.write("Complex PPT Load Show Result: " + perfLoadShow("pvt_benchmark/sd_complex_51p.ppt") + System.getProperty("line.separator"));
+                out.write(getTime() + "," + "Complex PPT Load Show Result: " + perfLoadShow("pvt_benchmark/sd_complex_51p.ppt") + System.getProperty("line.separator"));
                 out.flush();
-                out.write("Plain ODS Load Show Result: " + perfLoadShow("pvt_benchmark/sc_plain_4sh_5kcell_new_odf1.2.ods") + System.getProperty("line.separator"));
+                out.write(getTime() + "," + "Plain ODS Load Show Result: " + perfLoadShow("pvt_benchmark/sc_plain_4sh_5kcell_new_odf1.2.ods") + System.getProperty("line.separator"));
                 out.flush();
-                out.write("Plain XLS Load Show Result: " + perfLoadShow("pvt_benchmark/sc_plain_4sh_5kcell.xls") + System.getProperty("line.separator"));
+                out.write(getTime() + "," + "Plain XLS Load Show Result: " + perfLoadShow("pvt_benchmark/sc_plain_4sh_5kcell.xls") + System.getProperty("line.separator"));
                 out.flush();
-                out.write("Complex ODS Load Show Result: " + perfLoadShow("pvt_benchmark/sc_complex_13sh_4kcell_new_odf1.2.ods") + System.getProperty("line.separator"));
+                out.write(getTime() + "," + "Complex ODS Load Show Result: " + perfLoadShow("pvt_benchmark/sc_complex_13sh_4kcell_new_odf1.2.ods") + System.getProperty("line.separator"));
                 out.flush();
-                out.write("Complex XLS Load Show Result: " + perfLoadShow("pvt_benchmark/sc_complex_13sh_4kcell.xls") + System.getProperty("line.separator"));
-                out.flush();
-
-                out.write("Plain ODT Load Finish Result: " + perfLoadFinish("pvt_benchmark/sw_plain_120p_odf1.2.odt", 110) + System.getProperty("line.separator"));
-                out.flush();
-                out.write("Plain DOC Load Finish Result: " + perfLoadFinish("pvt_benchmark/sw_plain_120p.doc", 110) + System.getProperty("line.separator"));
-                out.flush();
-                out.write("Complex ODT Load Finish Result: " + perfLoadFinish("pvt_benchmark/sw_complex_100p_odf1.2.odt", 100) + System.getProperty("line.separator"));
-                out.flush();
-                out.write("Complex DOC Load Finish Result: " + perfLoadFinish("pvt_benchmark/sw_complex_100p.doc", 95) + System.getProperty("line.separator"));
-                out.flush();
-                out.write("Plain ODP Load Finish Result: " + perfLoadFinish("pvt_benchmark/sd_plain_50p_odf1.2.odp", 50) + System.getProperty("line.separator"));
-                out.flush();
-                out.write("Plain PPT Load Finish Result: " + perfLoadFinish("pvt_benchmark/sd_plain_50p.ppt", 50) + System.getProperty("line.separator"));
-                out.flush();
-                out.write("Complex ODP Load Finish Result: " + perfLoadFinish("pvt_benchmark/sd_complex_51p_odf1.2.odp", 51) + System.getProperty("line.separator"));
-                out.flush();
-                out.write("Complex PPT Load Finish Result: " + perfLoadFinish("pvt_benchmark/sd_complex_51p.ppt", 51) + System.getProperty("line.separator"));
+                out.write(getTime() + "," + "Complex XLS Load Show Result: " + perfLoadShow("pvt_benchmark/sc_complex_13sh_4kcell.xls") + System.getProperty("line.separator"));
                 out.flush();
 
-                out.write("Plain ODT Save Result: " + perfSave("pvt_benchmark/sw_plain_120p_odf1.2.odt") + System.getProperty("line.separator"));
+                out.write(getTime() + "," + "Plain ODT Load Finish Result: " + perfLoadFinish("pvt_benchmark/sw_plain_120p_odf1.2.odt", 110) + System.getProperty("line.separator"));
                 out.flush();
-                out.write("Plain DOC Save Result: " + perfSave("pvt_benchmark/sw_plain_120p.doc") + System.getProperty("line.separator"));
+                out.write(getTime() + "," + "Plain DOC Load Finish Result: " + perfLoadFinish("pvt_benchmark/sw_plain_120p.doc", 110) + System.getProperty("line.separator"));
                 out.flush();
-                out.write("Complex ODT Save Result: " + perfSave("pvt_benchmark/sw_complex_100p_odf1.2.odt") + System.getProperty("line.separator"));
+                out.write(getTime() + "," + "Complex ODT Load Finish Result: " + perfLoadFinish("pvt_benchmark/sw_complex_100p_odf1.2.odt", 100) + System.getProperty("line.separator"));
                 out.flush();
-                out.write("Complex DOC Save Result: " + perfSave("pvt_benchmark/sw_complex_100p.doc") + System.getProperty("line.separator"));
+                out.write(getTime() + "," + "Complex DOC Load Finish Result: " + perfLoadFinish("pvt_benchmark/sw_complex_100p.doc", 95) + System.getProperty("line.separator"));
                 out.flush();
-                out.write("Plain ODP Save Result: " + perfSave("pvt_benchmark/sd_plain_50p_odf1.2.odp") + System.getProperty("line.separator"));
+                out.write(getTime() + "," + "Plain ODP Load Finish Result: " + perfLoadFinish("pvt_benchmark/sd_plain_50p_odf1.2.odp", 50) + System.getProperty("line.separator"));
                 out.flush();
-                out.write("Plain PPT Save Result: " + perfSave("pvt_benchmark/sd_plain_50p.ppt") + System.getProperty("line.separator"));
+                out.write(getTime() + "," + "Plain PPT Load Finish Result: " + perfLoadFinish("pvt_benchmark/sd_plain_50p.ppt", 50) + System.getProperty("line.separator"));
                 out.flush();
-                out.write("Complex ODP Save Result: " + perfSave("pvt_benchmark/sd_complex_51p_odf1.2.odp") + System.getProperty("line.separator"));
+                out.write(getTime() + "," + "Complex ODP Load Finish Result: " + perfLoadFinish("pvt_benchmark/sd_complex_51p_odf1.2.odp", 51) + System.getProperty("line.separator"));
                 out.flush();
-                out.write("Complex PPT Save Result: " + perfSave("pvt_benchmark/sd_complex_51p.ppt") + System.getProperty("line.separator"));
+                sleep(5);
+                out.write(getTime() + "," + "Complex PPT Load Finish Result: " + perfLoadFinish("pvt_benchmark/sd_complex_51p.ppt", 51) + System.getProperty("line.separator"));
                 out.flush();
-                out.write("Plain ODS Save Result: " + perfSave("pvt_benchmark/sc_plain_4sh_5kcell_new_odf1.2.ods") + System.getProperty("line.separator"));
+
+                out.write(getTime() + "," + "Plain ODT Save Result: " + perfSave("pvt_benchmark/sw_plain_120p_odf1.2.odt") + System.getProperty("line.separator"));
                 out.flush();
-                out.write("Plain XLS Save Result: " + perfSave("pvt_benchmark/sc_plain_4sh_5kcell.xls") + System.getProperty("line.separator"));
+                out.write(getTime() + "," + "Plain DOC Save Result: " + perfSave("pvt_benchmark/sw_plain_120p.doc") + System.getProperty("line.separator"));
                 out.flush();
-                out.write("Complex ODS Save Result: " + perfSave("pvt_benchmark/sc_complex_13sh_4kcell_new_odf1.2.ods") + System.getProperty("line.separator"));
+                out.write(getTime() + "," + "Complex ODT Save Result: " + perfSave("pvt_benchmark/sw_complex_100p_odf1.2.odt") + System.getProperty("line.separator"));
                 out.flush();
-                out.write("Complex XLS Save Result: " + perfSave("pvt_benchmark/sc_complex_13sh_4kcell.xls") + System.getProperty("line.separator"));
+                out.write(getTime() + "," + "Complex DOC Save Result: " + perfSave("pvt_benchmark/sw_complex_100p.doc") + System.getProperty("line.separator"));
+                out.flush();
+                out.write(getTime() + "," + "Plain ODP Save Result: " + perfSave("pvt_benchmark/sd_plain_50p_odf1.2.odp") + System.getProperty("line.separator"));
+                out.flush();
+                out.write(getTime() + "," + "Plain PPT Save Result: " + perfSave("pvt_benchmark/sd_plain_50p.ppt") + System.getProperty("line.separator"));
+                out.flush();
+                out.write(getTime() + "," + "Complex ODP Save Result: " + perfSave("pvt_benchmark/sd_complex_51p_odf1.2.odp") + System.getProperty("line.separator"));
+                out.flush();
+                sleep(5);
+                out.write(getTime() + "," + "Complex PPT Save Result: " + perfSave("pvt_benchmark/sd_complex_51p.ppt") + System.getProperty("line.separator"));
+                out.flush();
+                out.write(getTime() + "," + "Plain ODS Save Result: " + perfSave("pvt_benchmark/sc_plain_4sh_5kcell_new_odf1.2.ods") + System.getProperty("line.separator"));
+                out.flush();
+                out.write(getTime() + "," + "Plain XLS Save Result: " + perfSave("pvt_benchmark/sc_plain_4sh_5kcell.xls") + System.getProperty("line.separator"));
+                out.flush();
+                out.write(getTime() + "," + "Complex ODS Save Result: " + perfSave("pvt_benchmark/sc_complex_13sh_4kcell_new_odf1.2.ods") + System.getProperty("line.separator"));
+                out.flush();
+                out.write(getTime() + "," + "Complex XLS Save Result: " + perfSave("pvt_benchmark/sc_complex_13sh_4kcell.xls") + System.getProperty("line.separator"));
                 out.flush();
             }
             out.close();
-            String []cmdargs_end = {"cmd.exe", "/C", "start", stopCounters};
-            java.lang.Runtime.getRuntime().exec(cmdargs_end);
+            if(SystemUtil.isWindows())
+            {
+                String stopCounters = Testspace.getPath("data/pvt_benchmark/perfmon/stopCounters.bat");
+                Testspace.prepareData("pvt_benchmark/perfmon/stopCounters.bat");
+                String []cmdargs_end = {"cmd.exe", "/C", "start", stopCounters};
+                java.lang.Runtime.getRuntime().exec(cmdargs_end);
+            }
+            else
+            {
+                timer.cancel();
+            }
 
         } catch (IOException e) {
             // TODO Auto-generated catch block
@@ -156,6 +221,14 @@ public class Filter {
         GenerateReports genReport = new GenerateReports();
         genReport.computeResults(pvt_result_path);
 
+    }
+
+    public String getTime() {
+
+        Date d=new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+        String date=sdf.format(d);
+        return date;
     }
 
     public long perfNew(String fileType)
@@ -288,6 +361,10 @@ public class Filter {
         tr = System.currentTimeMillis();
         while(true)
         {
+            while(!statusbar("FWK_HID_STATUSBAR").exists())
+            {
+                ;
+            }
             if(getLoadedPage(fileName) >= destPage)
             {
                 break;
@@ -295,7 +372,7 @@ public class Filter {
         }
         tr = System.currentTimeMillis() - tr;
         sleep(5);
-        System.out.println("Load Finish Time: " + tr);
+//      System.out.println("Load Finish Time: " + tr);
 
         if(fileName.contains("odt") || fileName.contains("doc") || fileName.contains("docx"))
         {

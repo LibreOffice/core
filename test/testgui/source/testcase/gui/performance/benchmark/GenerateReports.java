@@ -62,10 +62,11 @@ public class GenerateReports {
             String testScenario;
             String testResult;
 
-            while(line != null)
+            while((line = in.readLine())!= null)
             {
-                testScenario = line.substring(0, line.indexOf(":"));
-                testResult = line.substring(line.indexOf(":") + 2);
+                String temp = line.substring(9);
+                testScenario = temp.substring(0, temp.indexOf(":"));
+                testResult = temp.substring(temp.indexOf(":") + 2);
                 System.out.println(testScenario + " " + testResult);
                 if(map.containsKey(testScenario))
                 {
@@ -77,7 +78,7 @@ public class GenerateReports {
                     array.add(testResult);
                     map.put(testScenario, array);
                 }
-                line = in.readLine();
+//              line = in.readLine();
             }
 
 
