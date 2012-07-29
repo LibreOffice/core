@@ -78,8 +78,9 @@ ifneq ($(OS),IOS)
 
 $(eval $(call gb_Helper_register_executables,SDK, \
     autodoc \
-    javamaker \
+    climaker \
     cppumaker \
+    javamaker \
     regcompare \
     uno-skeletonmaker \
 ))
@@ -400,6 +401,8 @@ endif
 
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_URE, \
     affine_uno \
+	cli_cppuhelper_native \
+	cli_uno \
     jpipe \
     juh \
     juhx \

@@ -328,6 +328,10 @@ include $(foreach class, \
 	UnoApiMerge \
 	UnpackedTarball \
 	InternalUnoApi \
+	CliAssembly \
+	CliLibrary \
+	CliNativeLibrary \
+	CliUnoApi \
 	Zip \
 	AllLangZip \
 	Configuration \

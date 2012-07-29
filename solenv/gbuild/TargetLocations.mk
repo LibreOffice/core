@@ -28,6 +28,9 @@
 
 # outdir target pattern
 
+gb_CliLibrary_get_target = $(gb_Helper_OUTDIRLIBDIR)/$(1)$(gb_CliLibrary_EXT)
+gb_CliNativeLibrary_get_target = $(gb_Helper_OUTDIRLIBDIR)/$(1)$(gb_CliNativeLibrary_EXT)
+gb_CliUnoApi_get_target = $(gb_Helper_OUTDIRLIBDIR)/$(1)$(gb_CliUnoApi_EXT)
 gb_ComponentTarget_get_outdir_target = $(OUTDIR)/xml/component/$(1).component
 gb_Dictionary_get_target = $(OUTDIR)/pck/$(1).oxt
 gb_Executable_get_target = $(OUTDIR)/bin/$(1)$(gb_Executable_EXT)
@@ -79,6 +82,12 @@ gb_AllLangZip_get_target = $(WORKDIR)/AllLangZip/$(1)
 gb_AsmObject_get_target = $(WORKDIR)/AsmObject/$(1).o
 gb_CObject_get_target = $(WORKDIR)/CObject/$(1).o
 gb_GenCObject_get_target = $(WORKDIR)/GenCObject/$(1).o
+gb_CliAssembly_get_target = $(WORKDIR)/CliAssembly/$(1).done
+gb_CliAssemblyTarget_get_target = $(WORKDIR)/CliAssemblyTarget/$(1)$(gb_CliAssemblyTarget_POLICYEXT)
+gb_CliConfigTarget_get_target = $(WORKDIR)/CliConfigTarget/$(1).config
+gb_CliLibraryTarget_get_target = $(WORKDIR)/CliLibraryTarget/$(1)$(gb_CliLibraryTarget_EXT)
+gb_CliNativeLibraryTarget_get_target = $(WORKDIR)/CliNativeLibraryTarget/$(1)$(gb_CliNativeLibraryTarget_EXT)
+gb_CliUnoApiTarget_get_target = $(WORKDIR)/CliUnoApiTarget/$(1)$(gb_CliUnoApiTarget_EXT)
 gb_ComponentTarget_get_target = $(WORKDIR)/ComponentTarget/$(1).component
 gb_ComponentsTarget_get_target = $(WORKDIR)/ComponentsTarget/$(1).components
 gb_CppunitTest_get_target = $(WORKDIR)/CppunitTest/$(1).test
@@ -197,6 +206,12 @@ endef
 $(eval $(call gb_Helper_make_clean_targets,\
 	AllLangResTarget \
 	AllLangZip \
+	CliAssembly \
+	CliAssemblyTarget \
+	CliConfigTarget \
+	CliLibraryTarget \
+	CliNativeLibraryTarget \
+	CliUnoApiTarget \
 	ComponentTarget \
 	ComponentsTarget \
 	ExtensionTarget \
@@ -244,6 +259,9 @@ $(eval $(call gb_Helper_make_clean_targets,\
 ))
 
 $(eval $(call gb_Helper_make_outdir_clean_targets,\
+	CliLibrary \
+	CliNativeLibrary \
+	CliUnoApi \
 	Dictionary \
 	Executable \
 	Extension \

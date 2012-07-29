@@ -401,6 +401,7 @@ gb_Library_PLAINLIBS_NONE += \
 	d3d9 \
 	d3dx \
 	ddraw \
+	delayimp \
 	gdi32 \
 	gdiplus \
 	gnu_getopt \
@@ -411,8 +412,11 @@ gb_Library_PLAINLIBS_NONE += \
 	libcmt \
 	libcmtd \
 	mpr \
+	mscoree \
 	msi \
 	msimg32 \
+	msvcmrt \
+	msvcmrtd \
 	msvcrt \
 	msvcprt \
 	$(gb_Library_win32_OLDNAMES) \
@@ -732,6 +736,11 @@ endef
 # InstallScript class
 
 gb_InstallScript_EXT := .inf
+
+# CliAssemblyTarget class
+
+gb_CliAssemblyTarget_POLICYEXT := $(gb_Library_DLLEXT)
+gb_CliAssemblyTarget_get_dll = $(gb_Library_OUTDIRLOCATION)/$(1)$(gb_CliAssemblyTarget_POLICYEXT)
 
 # ExtensionTarget class
 

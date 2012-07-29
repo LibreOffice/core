@@ -455,6 +455,11 @@ endef
 
 gb_InstallScript_EXT := .inf
 
+# CliAssemblyTarget class
+
+gb_CliAssemblyTarget_POLICYEXT :=
+gb_CliAssemblyTarget_get_dll :=
+
 # ExtensionTarget class
 
 gb_ExtensionTarget_LICENSEFILE_DEFAULT := $(OUTDIR)/bin/osl/license.txt
