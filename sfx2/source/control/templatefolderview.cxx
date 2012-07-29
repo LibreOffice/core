@@ -38,127 +38,6 @@
 
 void lcl_updateThumbnails (TemplateFolderViewItem *pItem);
 
-BitmapEx lcl_ScaleImg (const BitmapEx &rImg, long width, long height)
-{
-    BitmapEx aImg = rImg;
-
-    int sWidth = std::min(aImg.GetSizePixel().getWidth(),width);
-    int sHeight = std::min(aImg.GetSizePixel().getHeight(),height);
-
-    aImg.Scale(Size(sWidth,sHeight),BMP_SCALE_INTERPOLATE);
-
-    return aImg;
-}
-
-BitmapEx lcl_fetchThumbnail (const rtl::OUString &msURL, long width, long height)
-{
-    using namespace ::com::sun::star;
-    using namespace ::com::sun::star::uno;
-
-    // Load the thumbnail from a template document.
-    uno::Reference<io::XInputStream> xIStream;
-
-    uno::Reference< lang::XMultiServiceFactory > xServiceManager (
-        ::comphelper::getProcessServiceFactory());
-    if (xServiceManager.is())
-    {
-        try
-        {
-            uno::Reference<lang::XSingleServiceFactory> xStorageFactory(
-                xServiceManager->createInstance( "com.sun.star.embed.StorageFactory"),
-                uno::UNO_QUERY);
-
-            if (xStorageFactory.is())
-            {
-                uno::Sequence<uno::Any> aArgs (2);
-                aArgs[0] <<= msURL;
-                aArgs[1] <<= embed::ElementModes::READ;
-                uno::Reference<embed::XStorage> xDocStorage (
-                    xStorageFactory->createInstanceWithArguments(aArgs),
-                    uno::UNO_QUERY);
-
-                try
-                {
-                    if (xDocStorage.is())
-                    {
-                        uno::Reference<embed::XStorage> xStorage (
-                            xDocStorage->openStorageElement(
-                                "Thumbnails",
-                                embed::ElementModes::READ));
-                        if (xStorage.is())
-                        {
-                            uno::Reference<io::XStream> xThumbnailCopy (
-                                xStorage->cloneStreamElement("thumbnail.png"));
-                            if (xThumbnailCopy.is())
-                                xIStream = xThumbnailCopy->getInputStream();
-                        }
-                    }
-                }
-                catch (const uno::Exception& rException)
-                {
-                    OSL_TRACE (
-                        "caught exception while trying to access Thumbnail/thumbnail.png of %s: %s",
-                        ::rtl::OUStringToOString(msURL,
-                            RTL_TEXTENCODING_UTF8).getStr(),
-                        ::rtl::OUStringToOString(rException.Message,
-                            RTL_TEXTENCODING_UTF8).getStr());
-                }
-
-                try
-                {
-                    // An (older) implementation had a bug - The storage
-                    // name was "Thumbnail" instead of "Thumbnails".  The
-                    // old name is still used as fallback but this code can
-                    // be removed soon.
-                    if ( ! xIStream.is())
-                    {
-                        uno::Reference<embed::XStorage> xStorage (
-                            xDocStorage->openStorageElement( "Thumbnail",
-                                embed::ElementModes::READ));
-                        if (xStorage.is())
-                        {
-                            uno::Reference<io::XStream> xThumbnailCopy (
-                                xStorage->cloneStreamElement("thumbnail.png"));
-                            if (xThumbnailCopy.is())
-                                xIStream = xThumbnailCopy->getInputStream();
-                        }
-                    }
-                }
-                catch (const uno::Exception& rException)
-                {
-                    OSL_TRACE (
-                        "caught exception while trying to access Thumbnails/thumbnail.png of %s: %s",
-                        ::rtl::OUStringToOString(msURL,
-                            RTL_TEXTENCODING_UTF8).getStr(),
-                        ::rtl::OUStringToOString(rException.Message,
-                            RTL_TEXTENCODING_UTF8).getStr());
-                }
-            }
-        }
-        catch (const uno::Exception& rException)
-        {
-            OSL_TRACE (
-                "caught exception while trying to access tuhmbnail of %s: %s",
-                ::rtl::OUStringToOString(msURL,
-                    RTL_TEXTENCODING_UTF8).getStr(),
-                ::rtl::OUStringToOString(rException.Message,
-                    RTL_TEXTENCODING_UTF8).getStr());
-        }
-    }
-
-    // Extract the image from the stream.
-    BitmapEx aThumbnail;
-    if (xIStream.is())
-    {
-        ::std::auto_ptr<SvStream> pStream (
-            ::utl::UcbStreamHelper::CreateStream (xIStream));
-        ::vcl::PNGReader aReader (*pStream);
-        aThumbnail = aReader.Read ();
-    }
-
-    return lcl_ScaleImg(aThumbnail,width,height);
-}
-
 // Display template items depending on the generator application
 class ViewFilter_Application
 {
@@ -331,7 +210,7 @@ void TemplateFolderView::Populate ()
             aProperties.aName = aName;
             aProperties.aPath = aURL;
             aProperties.aType = aType;
-            aProperties.aThumbnail = lcl_fetchThumbnail(aURL,THUMBNAIL_MAX_WIDTH,THUMBNAIL_MAX_HEIGHT);
+            aProperties.aThumbnail = TemplateAbstractView::fetchThumbnail(aURL,THUMBNAIL_MAX_WIDTH,THUMBNAIL_MAX_HEIGHT);
 
             pItem->maTemplates.push_back(aProperties);
         }
@@ -688,7 +567,7 @@ void TemplateFolderView::copyFrom (TemplateFolderViewItem *pItem, const rtl::OUS
         aTemplate.nId = nId;
         aTemplate.nRegionId = nRegionId;
         aTemplate.aName = mpDocTemplates->GetName(nRegionId,nId);
-        aTemplate.aThumbnail = lcl_fetchThumbnail(rPath,128,128);
+        aTemplate.aThumbnail = TemplateAbstractView::fetchThumbnail(rPath,128,128);
         aTemplate.aPath = rPath;
         aTemplate.aType = SvFileInformationManager::GetDescription(INetURLObject(rPath));
 
@@ -765,15 +644,15 @@ void lcl_updateThumbnails (TemplateFolderViewItem *pItem)
     {
         if (i == 0)
         {
-            pItem->maPreview1 = lcl_ScaleImg(pItem->maTemplates[i].aThumbnail,
-                                            THUMBNAIL_MAX_WIDTH*0.75,
-                                            THUMBNAIL_MAX_HEIGHT*0.75);
+            pItem->maPreview1 = TemplateAbstractView::scaleImg(pItem->maTemplates[i].aThumbnail,
+                                                               THUMBNAIL_MAX_WIDTH*0.75,
+                                                               THUMBNAIL_MAX_HEIGHT*0.75);
         }
         else
         {
-            pItem->maPreview2 = lcl_ScaleImg(pItem->maTemplates[i].aThumbnail,
-                                            THUMBNAIL_MAX_WIDTH*0.75,
-                                            THUMBNAIL_MAX_HEIGHT*0.75);
+            pItem->maPreview2 = TemplateAbstractView::scaleImg(pItem->maTemplates[i].aThumbnail,
+                                                               THUMBNAIL_MAX_WIDTH*0.75,
+                                                               THUMBNAIL_MAX_HEIGHT*0.75);
         }
     }
 }

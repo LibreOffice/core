@@ -41,6 +41,10 @@ public:
 
     void setOverlayCloseHdl (const Link &rLink);
 
+    static BitmapEx scaleImg (const BitmapEx &rImg, long width, long height);
+
+    static BitmapEx fetchThumbnail (const rtl::OUString &msURL, long width, long height);
+
 protected:
 
     virtual void OnSelectionMode (bool bMode);
