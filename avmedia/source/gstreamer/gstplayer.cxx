@@ -38,7 +38,9 @@
 #include "gstframegrabber.hxx"
 #include "gstwindow.hxx"
 
-#include <gst/interfaces/xoverlay.h>
+#ifndef AVMEDIA_GST_0_10
+#  include <gst/video/videooverlay.h>
+#endif
 
 #define AVMEDIA_GST_PLAYER_IMPLEMENTATIONNAME "com.sun.star.comp.avmedia.Player_GStreamer"
 #define AVMEDIA_GST_PLAYER_SERVICENAME "com.sun.star.media.Player_GStreamer"
@@ -96,7 +98,7 @@ Player::~Player()
         if( mpPlaybin )
         {
             gst_element_set_state( mpPlaybin, GST_STATE_NULL );
-            gst_object_unref( GST_OBJECT( mpPlaybin ) );
+            g_object_unref( G_OBJECT( mpPlaybin ) );
 
             mpPlaybin = NULL;
         }
@@ -110,7 +112,7 @@ Player::~Player()
 
 // ------------------------------------------------------------------------------
 
-static gboolean gst_pipeline_bus_callback( GstBus *, GstMessage *message, gpointer data )
+static gboolean pipeline_bus_callback( GstBus *, GstMessage *message, gpointer data )
 {
     Player* pPlayer = static_cast<Player*>(data);
 
@@ -119,7 +121,7 @@ static gboolean gst_pipeline_bus_callback( GstBus *, GstMessage *message, gpoint
     return TRUE;
 }
 
-static GstBusSyncReply gst_pipeline_bus_sync_handler( GstBus *, GstMessage * message, gpointer data )
+static GstBusSyncReply pipeline_bus_sync_handler( GstBus *, GstMessage * message, gpointer data )
 {
     Player* pPlayer = static_cast<Player*>(data);
 
@@ -144,7 +146,7 @@ void Player::processMessage( GstMessage *message )
             if( newstate == GST_STATE_PAUSED &&
                 pendingstate == GST_STATE_VOID_PENDING &&
                 mpXOverlay )
-                gst_x_overlay_expose( mpXOverlay );
+                gst_video_overlay_expose( mpXOverlay );
 
         if (mbPlayPending)
             mbPlayPending = ((newstate == GST_STATE_READY) || (newstate == GST_STATE_PAUSED));
@@ -152,6 +154,26 @@ void Player::processMessage( GstMessage *message )
     default:
         break;
     }
+}
+
+static gboolean wrap_element_query_position (GstElement *element, GstFormat format, gint64 *cur)
+{
+#ifdef AVMEDIA_GST_0_10
+    GstFormat my_format = format;
+    return gst_element_query_position( mpPlaybin, &my_format, cur) && my_format == format && *cur > 0L;
+#else
+    return gst_element_query_position( element, format, cur );
+#endif
+}
+
+static gboolean wrap_element_query_duration (GstElement *element, GstFormat format, gint64 *duration)
+{
+#ifdef AVMEDIA_GST_0_10
+    GstFormat my_format = format;
+    return gst_element_query_duration( mpPlaybin, &my_format, duration) && my_format == format && *duration > 0L;
+#else
+    return gst_element_query_duration( element, format, duration );
+#endif
 }
 
 GstBusSyncReply Player::processSyncMessage( GstMessage *message )
@@ -169,17 +191,17 @@ GstBusSyncReply Player::processSyncMessage( GstMessage *message )
     }
 #endif
 
-    if (message->structure) {
-        if( !strcmp( gst_structure_get_name( message->structure ), "prepare-xwindow-id" ) && mnWindowID != 0 ) {
-            if( mpXOverlay )
-                g_object_unref( G_OBJECT ( mpXOverlay ) );
-            mpXOverlay = GST_X_OVERLAY( GST_MESSAGE_SRC( message ) );
-            g_object_ref( G_OBJECT ( mpXOverlay ) );
-            gst_x_overlay_set_xwindow_id( mpXOverlay, mnWindowID );
-            return GST_BUS_DROP;
-        }
+    if (gst_message_has_name (message, "prepare-xwindow-id") && mnWindowID != 0 )
+    {
+        if( mpXOverlay )
+            g_object_unref( G_OBJECT ( mpXOverlay ) );
+        mpXOverlay = GST_VIDEO_OVERLAY( GST_MESSAGE_SRC( message ) );
+        g_object_ref( G_OBJECT ( mpXOverlay ) );
+        gst_video_overlay_set_window_handle( mpXOverlay, mnWindowID );
+        return GST_BUS_DROP;
     }
 
+#ifdef AVMEDIA_GST_0_10
     if( GST_MESSAGE_TYPE( message ) == GST_MESSAGE_STATE_CHANGED ) {
         if( message->src == GST_OBJECT( mpPlaybin ) ) {
             GstState newstate, pendingstate;
@@ -193,10 +215,8 @@ GstBusSyncReply Player::processSyncMessage( GstMessage *message )
                 DBG( "%p change to paused received", this );
 
                 if( mnDuration == 0) {
-                    GstFormat format = GST_FORMAT_TIME;
                     gint64 gst_duration = 0L;
-
-                    if( gst_element_query_duration( mpPlaybin, &format, &gst_duration) && format == GST_FORMAT_TIME && gst_duration > 0L )
+                    if( wrap_element_query_duration( mpPlaybin, GST_FORMAT_TIME, &gst_duration) )
                         mnDuration = gst_duration;
                 }
 
@@ -234,6 +254,40 @@ GstBusSyncReply Player::processSyncMessage( GstMessage *message )
                 }
             }
         }
+#else
+    // We get to use the exciting new playbin2 ! (now known as playbin)
+    if( GST_MESSAGE_TYPE( message ) == GST_MESSAGE_ASYNC_DONE ) {
+        if( mnDuration == 0) {
+            gint64 gst_duration = 0L;
+            if( wrap_element_query_duration( mpPlaybin, GST_FORMAT_TIME, &gst_duration) )
+                mnDuration = gst_duration;
+        }
+        if( mnWidth == 0 ) {
+            GstPad *pad = NULL;
+            GstCaps *caps;
+
+            g_signal_emit_by_name( mpPlaybin, "get-video-pad", 0, &pad );
+
+            if( pad ) {
+                int w = 0, h = 0;
+
+                caps = gst_pad_get_current_caps( pad );
+
+                if( gst_structure_get( gst_caps_get_structure (caps, 0),
+                                       "width", G_TYPE_INT, &w,
+                                       "height", G_TYPE_INT, &h,
+                                       NULL ) ) {
+                    mnWidth = w;
+                    mnHeight = h;
+
+                    DBG( "queried size: %d x %d", mnWidth, mnHeight );
+
+                    maSizeCondition.set();
+                }
+                gst_caps_unref( caps );
+            }
+        }
+#endif
     } else if( GST_MESSAGE_TYPE( message ) == GST_MESSAGE_ERROR ) {
         if( mnWidth == 0 ) {
             // an error occurred, set condition so that OOo thread doesn't wait for us
@@ -265,9 +319,9 @@ void Player::preparePlaybin( const ::rtl::OUString& rURL, bool bFakeVideo )
         g_object_set( G_OBJECT( mpPlaybin ), "uri", ascURL.getStr() , NULL );
 
         pBus = gst_element_get_bus( mpPlaybin );
-        gst_bus_add_watch( pBus, gst_pipeline_bus_callback, this );
+        gst_bus_add_watch( pBus, pipeline_bus_callback, this );
         DBG( "%p set sync handler", this );
-        gst_bus_set_sync_handler( pBus, gst_pipeline_bus_sync_handler, this );
+        gst_bus_set_sync_handler( pBus, pipeline_bus_sync_handler, this );
         g_object_unref( pBus );
 }
 
@@ -387,7 +441,7 @@ double SAL_CALL Player::getMediaTime(  )
         // get current position in the stream
         GstFormat format = GST_FORMAT_TIME;
         gint64 gst_position;
-        if( gst_element_query_position( mpPlaybin, &format, &gst_position ) && format == GST_FORMAT_TIME && gst_position > 0L )
+        if( wrap_element_query_position( mpPlaybin, GST_FORMAT_TIME, &gst_position ) )
             position = gst_position / 1E9;
     }
 
