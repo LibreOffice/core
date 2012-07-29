@@ -28,22 +28,21 @@ class ScViewData;
 class ScTabSplitter : public Splitter
 {
 private:
-    ScViewData*     pViewData;
-    sal_Bool            bFixed;
+    ScViewData *const pViewData;
+    bool bFixed;
 
 protected:
     virtual void    MouseMove( const MouseEvent& rMEvt );
     virtual void    MouseButtonUp( const MouseEvent& rMEvt );
     virtual void    MouseButtonDown( const MouseEvent& rMEvt );
-
     virtual void    Splitting( Point& rSplitPos );
 
 public:
-                    ScTabSplitter( Window* pParent, WinBits nWinStyle,
-                                    ScViewData* pData );
-                    ~ScTabSplitter();
+    ScTabSplitter( Window* pParent, WinBits nWinStyle, ScViewData* pData );
+    ~ScTabSplitter();
 
-    void            SetFixed(sal_Bool bSet);
+    void Paint( const Rectangle& rPaintRect );
+    void SetFixed(bool bSet);
 };
 
 

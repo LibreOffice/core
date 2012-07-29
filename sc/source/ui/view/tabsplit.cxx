@@ -82,7 +82,7 @@ void ScTabSplitter::Splitting( Point& rSplitPos )
 }
 
 
-void ScTabSplitter::SetFixed(sal_Bool bSet)
+void ScTabSplitter::SetFixed(bool bSet)
 {
     bFixed = bSet;
     if (bSet)
@@ -93,6 +93,88 @@ void ScTabSplitter::SetFixed(sal_Bool bSet)
         SetPointer(POINTER_VSPLIT);
 }
 
+void ScTabSplitter::Paint( const Rectangle& rRect )
+{
+    const Color oldFillCol = GetFillColor();
+    const Color oldLineCol = GetLineColor();
 
+    if (IsHorizontal())
+    {
+        if (pViewData->GetHSplitMode()==SC_SPLIT_NONE)
+        {
+            // Black border
+            SetLineColor(Color(COL_BLACK));
+            SetFillColor();
+            DrawRect(rRect);
+            // Internal frame
+            const long xl = rRect.Left()+1;
+            const long yt = rRect.Top()+2;
+            const long xr = rRect.Right()-1;
+            const long yb = rRect.Bottom()-2;
+            SetLineColor(GetSettings().GetStyleSettings().GetLightColor());
+            for (long x=xl; x<xr; x+=2)
+            {
+                DrawLine(Point(x,yt), Point(x,yb));
+            }
+            DrawLine(Point(xl,yt-1), Point(xr,yt-1));
+            SetLineColor(GetSettings().GetStyleSettings().GetShadowColor());
+            for (long x=xl+1; x<=xr; x+=2)
+            {
+                DrawLine(Point(x,yt), Point(x,yb));
+            }
+            DrawLine(Point(xl,yb+1), Point(xr,yb+1));
+        }
+        else
+        {
+            SetLineColor(GetSettings().GetStyleSettings().GetLightColor());
+            DrawLine(rRect.TopLeft(), rRect.BottomLeft());
+            SetLineColor(GetSettings().GetStyleSettings().GetShadowColor());
+            DrawLine(rRect.TopRight(), rRect.BottomRight());
+            SetLineColor();
+            SetFillColor(GetSettings().GetStyleSettings().GetFaceColor());
+            DrawRect(Rectangle(Point(rRect.Left()+1, rRect.Top()), Point(rRect.Right()-1, rRect.Bottom())));
+        }
+    }
+    else
+    {
+        if (pViewData->GetVSplitMode()==SC_SPLIT_NONE)
+        {
+            // Black border
+            SetLineColor(Color(COL_BLACK));
+            SetFillColor();
+            DrawRect(rRect);
+            // Internal frame
+            const long xl = rRect.Left()+2;
+            const long yt = rRect.Top()+1;
+            const long xr = rRect.Right()-2;
+            const long yb = rRect.Bottom()-1;
+            SetLineColor(GetSettings().GetStyleSettings().GetLightColor());
+            for (long y=yt; y<yb; y+=2)
+            {
+                DrawLine(Point(xl,y), Point(xr,y));
+            }
+            DrawLine(Point(xl-1,yt), Point(xl-1,yb));
+            SetLineColor(GetSettings().GetStyleSettings().GetShadowColor());
+            for (long y=yt+1; y<=yb; y+=2)
+            {
+                DrawLine(Point(xl,y), Point(xr,y));
+            }
+            DrawLine(Point(xr+1,yt), Point(xr+1,yb));
+        }
+        else
+        {
+            SetLineColor(GetSettings().GetStyleSettings().GetLightColor());
+            DrawLine(rRect.TopLeft(), rRect.TopRight());
+            SetLineColor(GetSettings().GetStyleSettings().GetShadowColor());
+            DrawLine(rRect.BottomLeft(), rRect.BottomRight());
+            SetLineColor();
+            SetFillColor(GetSettings().GetStyleSettings().GetFaceColor());
+            DrawRect(Rectangle(Point(rRect.Left(), rRect.Top()+1), Point(rRect.Right(), rRect.Bottom()-1)));
+        }
+    }
+
+    SetFillColor(oldFillCol);
+    SetLineColor(oldLineCol);
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
