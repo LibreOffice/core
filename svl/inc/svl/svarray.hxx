@@ -109,60 +109,6 @@ private:\
 #define SV_DECL_PTRARR_VISIBILITY(nm, AE, IS, vis)\
 SV_DECL_PTRARR_GEN(nm, AE, IS, SvPtrarr, AE &, VoidPtr &, vis )
 
-#define SV_DECL_PTRARR_DEL_GEN(nm, AE, IS, Base, AERef, VPRef, vis )\
-class vis nm: public Base \
-{\
-public:\
-    nm( sal_uInt16 nIni=IS )\
-        : Base(nIni) {}\
-    ~nm() { DeleteAndDestroy( 0, Count() ); }\
-    void Insert( const nm *pI, sal_uInt16 nP, \
-            sal_uInt16 nS = 0, sal_uInt16 nE = USHRT_MAX ) {\
-        Base::Insert((const Base*)pI, nP, nS, nE);\
-    }\
-    void Insert( const AERef aE, sal_uInt16 nP ) {\
-        Base::Insert((const VPRef)aE, nP );\
-    }\
-    void Insert( const AE *pE, sal_uInt16 nL, sal_uInt16 nP ) {\
-        Base::Insert( (const VoidPtr *)pE, nL, nP );\
-    }\
-    void Replace( const AERef aE, sal_uInt16 nP ) {\
-        Base::Replace( (const VPRef)aE, nP );\
-    }\
-    void Replace( const AE *pE, sal_uInt16 nL, sal_uInt16 nP ) {\
-        Base::Replace( (const VoidPtr*)pE, nL, nP );\
-    }\
-    void Remove( sal_uInt16 nP, sal_uInt16 nL = 1) {\
-        Base::Remove(nP,nL);\
-    }\
-    const AE* GetData() const {\
-        return (const AE*)Base::GetData();\
-    }\
-    AE operator[]( sal_uInt16 nP )const  { \
-        return (AE)Base::operator[](nP); }\
-    AE GetObject( sal_uInt16 nP )const  { \
-        return (AE)Base::GetObject(nP); }\
-    \
-    sal_uInt16 GetPos( const AERef aE ) const { \
-        return Base::GetPos((const VPRef)aE);\
-    } \
-    void DeleteAndDestroy( sal_uInt16 nP, sal_uInt16 nL=1 );\
-private:\
-    nm( const nm& );\
-    nm& operator=( const nm& );\
-};
-
-#define SV_IMPL_PTRARR_GEN(nm, AE, Base)\
-void nm::DeleteAndDestroy( sal_uInt16 nP, sal_uInt16 nL )\
-{ \
-    if( nL ) {\
-        OSL_ENSURE( nP < nA && nP + nL <= nA,"Del");\
-        for( sal_uInt16 n=nP; n < nP + nL; n++ ) \
-            delete *((AE*)pData+n); \
-        Base::Remove( nP, nL ); \
-    } \
-}
-
 typedef void* VoidPtr;
 typedef sal_Bool (*FnForEach_SvPtrarr)( const VoidPtr&, void* );
 class SVL_DLLPUBLIC SvPtrarr
@@ -285,38 +231,6 @@ sal_Bool nm::Seek_Entry( const AE aE, sal_uInt16* pP ) const\
                 return sal_True;\
             }\
             else if( *(*((AE*)pData + nM)) < *(aE) )\
-                nU = nM + 1;\
-            else if( nM == 0 )\
-            {\
-                if( pP ) *pP = nU;\
-                return sal_False;\
-            }\
-            else\
-                nO = nM - 1;\
-        }\
-    }\
-    if( pP ) *pP = nU;\
-    return sal_False;\
-}
-
-#define _SV_SEEK_OBJECT( nm,AE )\
-sal_Bool nm::Seek_Entry( const AE & aE, sal_uInt16* pP ) const\
-{\
-    register sal_uInt16 nO  = nm##_SAR::Count(),\
-            nM, \
-            nU = 0;\
-    if( nO > 0 )\
-    {\
-        nO--;\
-        while( nU <= nO )\
-        {\
-            nM = nU + ( nO - nU ) / 2;\
-            if( *(pData + nM) == aE )\
-            {\
-                if( pP ) *pP = nM;\
-                return sal_True;\
-            }\
-            else if( *(pData + nM) < aE )\
                 nU = nM + 1;\
             else if( nM == 0 )\
             {\
@@ -454,13 +368,9 @@ _SV_SEEK_PTR_TO_OBJECT( nm,AE )
 
 #if defined(ICC) || defined(GCC) || (defined(WNT) && _MSC_VER >= 1400)
 #define C40_INSERT( c, p, n ) Insert( (c const *&) p, n )
-#define C40_PTR_INSERT( c, p ) Insert( (c const *&) p )
-#define C40_REPLACE( c, p, n ) Replace( (c const *&) p, n )
 #define C40_GETPOS( c, r) GetPos( (c const *&) r )
 #else
 #define C40_INSERT( c, p, n ) Insert( p, n )
-#define C40_PTR_INSERT( c, p ) Insert( p )
-#define C40_REPLACE( c, p, n ) Replace( p, n )
 #define C40_GETPOS( c, r) GetPos( r )
 #endif
 
