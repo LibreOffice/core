@@ -22,22 +22,6 @@
 
 #include "cgm.hxx"
 
-// ---------------------------------------------------------------
-
-//      CGM_LEVEL1                      0x0001  // VERSION 1 METAFILE
-//      CGM_LEVEL2                      0x0002
-//      CGM_LEVEL3                      0x0003
-//      CGM_GDSF_ONLY                   0x00F0
-//      CGM_GDSF_ONLY                   0x00F0
-#define CGM_UNKNOWN_LEVEL               0x00F1
-#define CGM_UNKNOWN_COMMAND             0x00F2
-#define CGM_DESCRIPTION                 0x00F3
-
-#define CGM_EXTENDED_PRIMITIVES_SET     0x0100  // INDICATES PRIMITIVES WHICH ARE AVAILABLE IN
-                                                // LEVEL 1 BUT ARE NOT DEFINED IN ISO 7942(GKS)
-#define CGM_DRAWING_PLUS_CONTROL_SET    0x0200  // INDICATES THAT THIS IS AN ADDITIONAL LEVEL 1
-                                                // ELEMENT
-
 #define BMCOL( _col ) BitmapColor( (sal_Int8)(_col >> 16 ), (sal_Int8)( _col >> 8 ), (sal_Int8)_col )
 
 #include <vcl/salbtype.hxx>
