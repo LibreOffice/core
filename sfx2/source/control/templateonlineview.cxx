@@ -39,7 +39,6 @@ enum
     ROW_SIZE,
     ROW_DATE_MOD,
     ROW_DATE_CREATE,
-    ROW_IS_DOCUMENT,
     ROW_TARGET_URL,
     ROW_IS_HIDDEN,
     ROW_IS_REMOTE,
@@ -120,24 +119,23 @@ void TemplateOnlineView::OnItemDblClicked(ThumbnailViewItem *pItem)
     try
     {
 
-        uno::Sequence< rtl::OUString > aProps(9);
+        uno::Sequence< rtl::OUString > aProps(8);
 
         aProps[0] = "Title";
         aProps[1] = "Size";
         aProps[2] = "DateModified";
         aProps[3] = "DateCreated";
-        aProps[4] = "IsDocument";
-        aProps[5] = "TargetURL";
-        aProps[6] = "IsHidden";
-        aProps[7] = "IsRemote";
-        aProps[8] = "IsRemoveable";
+        aProps[4] = "TargetURL";
+        aProps[5] = "IsHidden";
+        aProps[6] = "IsRemote";
+        aProps[7] = "IsRemoveable";
 
         ucbhelper::Content aContent(aURL,m_xCmdEnv);
 
         uno::Reference< XResultSet > xResultSet;
         uno::Reference< XDynamicResultSet > xDynResultSet;
 
-        ucbhelper::ResultSetInclude eInclude = ucbhelper::INCLUDE_FOLDERS_AND_DOCUMENTS;
+        ucbhelper::ResultSetInclude eInclude = ucbhelper::INCLUDE_DOCUMENTS_ONLY;
         xDynResultSet = aContent.createDynamicCursor( aProps, eInclude );
 
         if ( xDynResultSet.is() )
@@ -154,11 +152,10 @@ void TemplateOnlineView::OnItemDblClicked(ThumbnailViewItem *pItem)
             sal_uInt16 nIdx = 0;
             while ( xResultSet->next() )
             {
-                bool bIsDocument = xRow->getBoolean( ROW_IS_DOCUMENT ) && !xRow->wasNull();
                 bool bIsHidden = xRow->getBoolean( ROW_IS_HIDDEN );
 
                 // don't show hidden files or anything besides documents
-                if ( bIsDocument && (!bIsHidden || xRow->wasNull()) )
+                if ( !bIsHidden || xRow->wasNull() )
                 {
                     aDT = xRow->getTimestamp( ROW_DATE_MOD );
                     bool bContainsDate = !xRow->wasNull();
