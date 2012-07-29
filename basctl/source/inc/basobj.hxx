@@ -27,6 +27,7 @@ class SbMethod;
 class SbModule;
 class SbxVariable;
 class StarBASIC;
+class String;
 class SfxUInt16Item;
 class SfxBindings;
 class Window;

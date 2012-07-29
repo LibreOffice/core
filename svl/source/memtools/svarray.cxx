@@ -18,6 +18,7 @@
  */
 
 #include <svl/svarray.hxx>
+#include <string.h>     // memmove()
 
 SvPtrarr::SvPtrarr( sal_uInt16 nInit )
     : pData (0),
@@ -63,6 +64,15 @@ void SvPtrarr::Insert( const VoidPtr* pE, sal_uInt16 nL, sal_uInt16 nP )
     if( pE )
         memcpy( pData+nP, pE, nL * sizeof( VoidPtr ));
     nA = nA + nL; nFree = nFree - nL;
+}
+
+void SvPtrarr::Insert( const SvPtrarr * pI, sal_uInt16 nP,
+             sal_uInt16 nS, sal_uInt16 nE )
+{
+    if( USHRT_MAX == nE )
+        nE = pI->nA;
+    if( nS < nE )
+        Insert( (const VoidPtr*)pI->pData+nS, (sal_uInt16)nE-nS, nP );
 }
 
 void SvPtrarr::Remove( sal_uInt16 nP, sal_uInt16 nL )

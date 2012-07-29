@@ -49,20 +49,10 @@
 
 #include "svl/svldllapi.h"
 
-#include <string.h>     // memmove()
 #include <limits.h>     // USHRT_MAX
 #include <osl/diagnose.h>
 #include <rtl/alloc.h>
 #include <tools/solar.h>
-
-class String;
-
-class DummyType;
-inline void* operator new( size_t, DummyType* pPtr )
-{
-    return pPtr;
-}
-inline void operator delete( void*, DummyType* ) {}
 
 typedef void* VoidPtr;
 class SVL_DLLPUBLIC SvPtrarr
@@ -81,13 +71,7 @@ public:
     VoidPtr& operator[](sal_uInt16 nP) const { return *(pData+nP); }
 
     void Insert( const SvPtrarr * pI, sal_uInt16 nP,
-                 sal_uInt16 nS = 0, sal_uInt16 nE = USHRT_MAX )
-    {
-        if( USHRT_MAX == nE )
-            nE = pI->nA;
-        if( nS < nE )
-            Insert( (const VoidPtr*)pI->pData+nS, (sal_uInt16)nE-nS, nP );
-    }
+                 sal_uInt16 nS = 0, sal_uInt16 nE = USHRT_MAX );
 
     VoidPtr& GetObject(sal_uInt16 nP) const { return (*this)[nP]; }
 
