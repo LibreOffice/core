@@ -765,13 +765,43 @@ void SfxTemplateManagerDlg::OnTemplateProperties ()
 
 void SfxTemplateManagerDlg::OnTemplateDelete ()
 {
-    std::set<const ThumbnailViewItem*>::const_iterator pIter;
-    for (pIter = maSelTemplates.begin(); pIter != maSelTemplates.end();)
+    if (mpSearchView->IsVisible())
     {
-        if (maView->removeTemplate((*pIter)->mnId,maView->getOverlayRegionId()+1))
-            maSelTemplates.erase(pIter++);
-        else
-            ++pIter;
+        std::set<const ThumbnailViewItem*>::const_iterator pIter;
+        for (pIter = maSelTemplates.begin(); pIter != maSelTemplates.end();)
+        {
+            const TemplateSearchViewItem *pItem =
+                    static_cast<const TemplateSearchViewItem*>(*pIter);
+
+            sal_uInt16 nItemId = pItem->mnIdx + 1;
+            sal_uInt16 nItemRegionId = pItem->mnRegionId + 1;
+
+            if (maView->removeTemplate(nItemId,nItemRegionId))
+                maSelTemplates.erase(pIter++);
+            else
+                ++pIter;
+        }
+
+        // Update search results
+        if (maSelTemplates.empty())
+        {
+            mpTemplateBar->Show(false);
+            mpViewBar->Show();
+            mpActionBar->Show();
+        }
+
+        SearchUpdateHdl(mpSearchEdit);
+    }
+    else
+    {
+        std::set<const ThumbnailViewItem*>::const_iterator pIter;
+        for (pIter = maSelTemplates.begin(); pIter != maSelTemplates.end();)
+        {
+            if (maView->removeTemplate((*pIter)->mnId,maView->getOverlayRegionId()+1))
+                maSelTemplates.erase(pIter++);
+            else
+                ++pIter;
+        }
     }
 }
 
