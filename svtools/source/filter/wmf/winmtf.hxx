@@ -77,11 +77,11 @@
 #define BLACK_PEN               7
 #define NULL_PEN                8
 #define OEM_FIXED_FONT          10
-//      ANSI_FIXED_FONT         11
-//      ANSI_VAR_FONT           12
-//      SYSTEM_FONT             13
-//      DEVICE_DEFAULT_FONT     14
-//      DEFAULT_PALETTE         15
+#define ANSI_FIXED_FONT         11
+#define ANSI_VAR_FONT           12
+#define SYSTEM_FONT             13
+#define DEVICE_DEFAULT_FONT     14
+#define DEFAULT_PALETTE         15
 #define SYSTEM_FIXED_FONT       16
 
 
@@ -122,10 +122,12 @@
 #define BLACKONWHITE            1
 #define WHITEONBLACK            2
 #define COLORONCOLOR            3
+#define HALFTONE                4
 #define MAXSTRETCHBLTMODE       4
 #define STRETCH_ANDSCANS        BLACKONWHITE
 #define STRETCH_ORSCANS         WHITEONBLACK
 #define STRETCH_DELETESCANS     COLORONCOLOR
+#define STRETCH_HALFTONE        HALFTONE
 
 #define LF_FACESIZE             32
 
@@ -185,6 +187,11 @@ struct WMF_EXTERNALHEADER;
 #define PS_ALTERNATE            8
 #define PS_STYLE_MASK           15
 
+#define PS_ENDCAP_ROUND     0x000
+#define PS_ENDCAP_SQUARE    0x100
+#define PS_ENDCAP_FLAT      0x200
+#define PS_ENDCAP_MASK      0xF00
+
 #define PS_JOIN_ROUND       0x0000
 #define PS_JOIN_BEVEL       0x1000
 #define PS_JOIN_MITER       0x2000
@@ -220,9 +227,9 @@ struct WMF_EXTERNALHEADER;
 /*WINVER >= 0x0400*/
 #define ETO_GLYPH_INDEX         0x0010
 #define ETO_RTLREADING          0x0080
-//      ETO_NUMERICSLOCAL       0x0400
-//      ETO_NUMERICSLATIN       0x0800
-//      ETO_IGNORELANGUAGE      0x1000
+#define ETO_NUMERICSLOCAL       0x0400
+#define ETO_NUMERICSLATIN       0x0800
+#define ETO_IGNORELANGUAGE      0x1000
 /*_WIN32_WINNT >= 0x0500*/
 #define ETO_PDY                 0x2000
 

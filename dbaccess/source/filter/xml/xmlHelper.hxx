@@ -25,7 +25,7 @@
 
 #include <memory>
 
-//      CTF_DB_ROWHEIGHT                            (XML_DB_CTF_START + 1)
+#define CTF_DB_ROWHEIGHT                            (XML_DB_CTF_START + 1)
 #define CTF_DB_ISVISIBLE                            (XML_DB_CTF_START + 2)
 #define CTF_DB_MASTERPAGENAME                       (XML_DB_CTF_START + 3)
 #define CTF_DB_NUMBERFORMAT                         (XML_DB_CTF_START + 4)

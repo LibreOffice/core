@@ -39,9 +39,9 @@ class String;
 #ifndef ADVISEMODE_NODATA
 // Must be the same value as Ole2 ADVF_*
 #define ADVISEMODE_NODATA       0x01
-//      ADVISEMODE_PRIMEFIRST   0x02
+#define ADVISEMODE_PRIMEFIRST   0x02
 #define ADVISEMODE_ONLYONCE     0x04
-//      ADVISEMODE_DATAONSTOP   0x40
+#define ADVISEMODE_DATAONSTOP   0x40
 #endif
 
 namespace sfx2
