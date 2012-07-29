@@ -39,12 +39,20 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
 	$(if $(filter BLUEZ,$(BUILD_TYPE)),\
 		bluez_bluetooth \
 	) \
+	bridges \
     canvas \
     chart2 \
+	cli_ure \
+	$(if $(filter DESKTOP,$(BUILD_TYPE)),\
+		codemaker \
+	) \
+	comphelper \
     configmgr \
     connectivity \
 	cosv \
     cppcanvas \
+	cppu \
+	cppuhelper \
 	cpputools \
     cui \
     dbaccess \
@@ -73,8 +81,14 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
 	i18npool \
 	i18nutil \
     idl \
+	$(if $(filter DESKTOP,$(BUILD_TYPE)),\
+		idlc \
+	) \
 	io \
 	javaunohelper \
+	jurt \
+	jvmaccess \
+	jvmfwk \
 	libcdr \
 	libcmis \
 	libmspub \
@@ -97,6 +111,8 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
 	) \
     np_sdk \
 	o3tl \
+	offapi \
+	officecfg \
     oovbaapi \
     oox \
     package \
@@ -108,11 +124,17 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
 	$(if $(filter QADEVOOO,$(BUILD_TYPE)),\
 		qadevOOo \
 	) \
+	$(if $(filter DESKTOP,$(BUILD_TYPE)),\
+		rdbmaker \
+	) \
 	regexp \
+	registry \
 	remotebridges \
     reportbuilder \
     reportdesign \
+	ridljar \
     rsc \
+	salhelper \
     sane \
 	sax \
     sc \
@@ -130,6 +152,8 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
     smoketest \
     sot \
     starmath \
+	stoc \
+	store \
     svl \
     svtools \
     svx \
@@ -143,6 +167,9 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
     tubes \
     twain \
     ucb \
+	ucbhelper \
+	ucpp \
+	udkapi \
 	udm \
     unixODBC \
     UnoControls \
@@ -167,6 +194,7 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
 	    helpcompiler \
 	    xmlhelp) \
     xmloff \
+	xmlreader \
     xmlscript \
     xmlsecurity \
 ))
