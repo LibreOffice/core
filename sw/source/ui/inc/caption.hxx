@@ -45,7 +45,6 @@ private:
     String          sCaption;
     sal_uInt16          nPos;
     sal_uInt16          nLevel;
-//  sal_Unicode     cSeparator;
     String          sSeparator;
     String          sCharacterStyle;
 
@@ -84,8 +83,6 @@ public:
     inline sal_uInt16           GetLevel() const                { return nLevel; }
     inline void             SetLevel(const sal_uInt16 nLvl)     { nLevel = nLvl; }
 
-//  inline sal_Unicode      GetSeparator() const                { return cSeparator; }
-//  inline void             SetSeparator(const sal_Unicode cSep){ cSeparator = cSep; }
     inline const String&    GetSeparator() const                { return sSeparator; }
     inline void             SetSeparator(const String& rSep)    { sSeparator = rSep; }
 
@@ -103,8 +100,6 @@ public:
     InsCaptionOpt&          operator= ( const InsCaptionOpt& rOpt );
     inline sal_Bool             operator< ( const InsCaptionOpt & rObj ) const
                                                 { return aOleId < rObj.aOleId; }
-//  friend SvStream&        operator>>( SvStream& rIStream, InsCaptionOpt& rCapOpt );
-//  friend SvStream&        operator<<( SvStream& rOStream, const InsCaptionOpt& rCapOpt );
 };
 
 #endif

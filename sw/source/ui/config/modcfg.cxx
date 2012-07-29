@@ -56,21 +56,21 @@ using namespace com::sun::star::uno;
 #define GLOB_NAME_MATH      3
 #define GLOB_NAME_CHART     4
 
-SV_IMPL_PTRARR_SORT(InsCapOptArr, InsCaptionOptPtr)
-
-InsCaptionOpt* InsCaptionOptArr::Find(const SwCapObjType eType, const SvGlobalName *pOleId) const
+InsCaptionOpt* InsCaptionOptArr::Find(const SwCapObjType eType, const SvGlobalName *pOleId)
 {
-    for (sal_uInt16 i = 0; i < Count(); i++ )
+    for (InsCapOptArr::iterator aI = m_aInsCapOptArr.begin(); aI != m_aInsCapOptArr.end(); ++aI)
     {
-        InsCaptionOpt* pObj = GetObject(i);
-        if (pObj->GetObjType() == eType &&
-            (eType != OLE_CAP ||
-             (pOleId &&
-              pObj->GetOleId() == *pOleId)))
-            return pObj;
+        InsCaptionOpt &rObj = *aI;
+        if (rObj.GetObjType() == eType && (eType != OLE_CAP || (pOleId && rObj.GetOleId() == *pOleId)))
+            return &rObj;
     }
 
-    return 0;
+    return NULL;
+}
+
+void InsCaptionOptArr::Insert(InsCaptionOpt* pObj)
+{
+    m_aInsCapOptArr.push_back(pObj); //takes ownership
 }
 
 const InsCaptionOpt* SwModuleOptions::GetCapOption(

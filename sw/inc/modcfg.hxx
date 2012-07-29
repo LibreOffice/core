@@ -28,10 +28,10 @@
 #ifndef _MODOPT_HXX
 #define _MODOPT_HXX
 
+#include <boost/ptr_container/ptr_vector.hpp>
 #include <tools/string.hxx>
 #include <tools/wintypes.hxx>
 #include <vcl/field.hxx>
-#include <svl/svarray.hxx>
 #include <unotools/configitem.hxx>
 #include "swdllapi.h"
 #include "authratr.hxx"
@@ -43,15 +43,15 @@
 class SwModuleOptions;
 
 class InsCaptionOpt;
-typedef InsCaptionOpt* InsCaptionOptPtr;
-SV_DECL_PTRARR_SORT_DEL(InsCapOptArr, InsCaptionOptPtr, 0)
 
-class InsCaptionOptArr : public InsCapOptArr
+class InsCaptionOptArr
 {
-    friend class SwModuleOptions;
-    friend class SwInsertConfig;
-protected:
-    InsCaptionOpt* Find(const SwCapObjType eType, const SvGlobalName *pOleId = 0) const;
+private:
+    typedef boost::ptr_vector<InsCaptionOpt> InsCapOptArr;
+    InsCapOptArr m_aInsCapOptArr;
+public:
+    InsCaptionOpt* Find(const SwCapObjType eType, const SvGlobalName *pOleId = 0);
+    void Insert(InsCaptionOpt* pObj);
 };
 
 class SwRevisionConfig : public utl::ConfigItem
