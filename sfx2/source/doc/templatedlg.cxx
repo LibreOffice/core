@@ -757,6 +757,8 @@ void SfxTemplateManagerDlg::OnTemplateEdit ()
         {
         }
     }
+
+    Close();
 }
 
 void SfxTemplateManagerDlg::OnTemplateProperties ()
