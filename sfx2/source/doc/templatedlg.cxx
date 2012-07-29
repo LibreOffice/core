@@ -200,6 +200,7 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
                                     ITEM_MAX_HEIGHT-THUMBNAIL_MAX_HEIGHT,
                                     ITEM_PADDING);
 
+    mpOnlineView->setOverlayDblClickHdl(LINK(this,SfxTemplateManagerDlg,OpenTemplateHdl));
     mpOnlineView->setOverlayCloseHdl(LINK(this,SfxTemplateManagerDlg,CloseOverlayHdl));
 
     mpSearchView->SetSizePixel(aThumbSize);
