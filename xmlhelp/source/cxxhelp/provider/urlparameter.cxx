@@ -32,7 +32,6 @@
 #include <string.h>
 #include <osl/diagnose.hxx>
 #include <osl/thread.h>
-#include <rtl/memory.h>
 #include <osl/file.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/queryinterface.hxx>
@@ -1206,8 +1205,8 @@ void InputStreamTransformer::addToBuffer( const char* buffer_,int len_ )
 
     char* tmp = buffer;
     buffer = new char[ len+len_ ];
-    rtl_copyMemory( (void*)(buffer),(void*)(tmp),sal_uInt32( len ) );
-    rtl_copyMemory( (void*)(buffer+len),(void*)(buffer_),sal_uInt32( len_ ) );
+    memcpy( (void*)(buffer),(void*)(tmp),sal_uInt32( len ) );
+    memcpy( (void*)(buffer+len),(void*)(buffer_),sal_uInt32( len_ ) );
     delete[] tmp;
     len += len_;
 }

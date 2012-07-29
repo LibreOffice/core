@@ -32,7 +32,6 @@
 #include <osl/process.h>
 #include <rtl/uri.hxx>
 #include <osl/file.hxx>
-#include <rtl/memory.h>
 #include <com/sun/star/lang/Locale.hpp>
 #include <rtl/ustrbuf.hxx>
 #include "inputstream.hxx"
@@ -1197,11 +1196,11 @@ void Databases::popupDocument( URLParameter* urlPar,char **buffer,int *byteCount
 
     *buffer = new char[ 1+*byteCount ];
 
-    rtl_copyMemory( *buffer,pop1,l1 );
-    rtl_copyMemory( *buffer+l1,pop2,l2 );
-    rtl_copyMemory( *buffer+(l1+l2),pop3,l3 );
-    rtl_copyMemory( *buffer+(l1+l2+l3),pop4,l4 );
-    rtl_copyMemory( *buffer+(l1+l2+l3+l4),pop5,l5 );
+    memcpy( *buffer,pop1,l1 );
+    memcpy( *buffer+l1,pop2,l2 );
+    memcpy( *buffer+(l1+l2),pop3,l3 );
+    memcpy( *buffer+(l1+l2+l3),pop4,l4 );
+    memcpy( *buffer+(l1+l2+l3+l4),pop5,l5 );
     (*buffer)[*byteCount] = 0;
 }
 
@@ -1306,7 +1305,7 @@ void Databases::cascadingStylesheet( const rtl::OUString& Language,
     *byteCount = m_nCustomCSSDocLength;
     *buffer = new char[ 1 + *byteCount ];
     (*buffer)[*byteCount] = 0;
-    rtl_copyMemory( *buffer,m_pCustomCSSDoc,m_nCustomCSSDocLength );
+    memcpy( *buffer,m_pCustomCSSDoc,m_nCustomCSSDocLength );
 
 }
 
@@ -1377,7 +1376,7 @@ void Databases::setActiveText( const rtl::OUString& Module,
         *byteCount = nSize;
         *buffer = new char[ 1 + nSize ];
         (*buffer)[nSize] = 0;
-        rtl_copyMemory( *buffer, pData, nSize );
+        memcpy( *buffer, pData, nSize );
     }
     else
     {

@@ -20,7 +20,6 @@
 #define _XMLSEARCH_QE_QUERY_HXX_
 
 #include <sal/types.h>
-#include <rtl/memory.h>
 #include <rtl/ustring.hxx>
 #include <vector>
 

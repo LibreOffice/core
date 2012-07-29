@@ -26,6 +26,7 @@
  *
  ************************************************************************/
 
+#include <string.h>
 
 #include <rtl/memory.h>
 #include "bufferedinputstream.hxx"
@@ -69,10 +70,10 @@ BufferedInputStream::BufferedInputStream(const Reference<XInputStream>& xInputSt
             {
                 tmp = m_pBuffer;
                 m_pBuffer = new sal_Int8[m_nBufferSize+num];
-                rtl_copyMemory((void *)(m_pBuffer),
+                memcpy((void *)(m_pBuffer),
                                (void *)(tmp),
                                sal_uInt32(m_nBufferSize));
-                rtl_copyMemory((void *)(m_pBuffer+m_nBufferSize),
+                memcpy((void *)(m_pBuffer+m_nBufferSize),
                                (void *)(aData.getArray()),
                                sal_uInt32(num));
                 m_nBufferSize += num;
@@ -142,7 +143,7 @@ sal_Int32 SAL_CALL BufferedInputStream::readBytes( Sequence< sal_Int8 >& aData,s
     if( aData.getLength() < nBytesToRead )
         aData.realloc(nBytesToRead);
 
-    rtl_copyMemory((void*)(aData.getArray()),
+    memcpy((void*)(aData.getArray()),
                    (void*)(m_pBuffer+m_nBufferLocation),
                    nBytesToRead);
 
