@@ -815,6 +815,12 @@ void SfxTemplateManagerDlg::OnFolderDelete()
         else
             ++pIter;
     }
+
+    if (maSelFolders.empty())
+    {
+        mpViewBar->EnableItem(TBI_TEMPLATE_IMPORT,false);
+        mpViewBar->HideItem(TBI_TEMPLATE_FOLDER_DEL);
+    }
 }
 
 void SfxTemplateManagerDlg::centerTopButtons()
