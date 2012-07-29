@@ -82,7 +82,7 @@ void ScTabSplitter::Splitting( Point& rSplitPos )
 }
 
 
-void ScTabSplitter::SetFixed(sal_Bool bSet)
+void ScTabSplitter::SetFixed(bool bSet)
 {
     bFixed = bSet;
     if (bSet)
@@ -93,6 +93,96 @@ void ScTabSplitter::SetFixed(sal_Bool bSet)
         SetPointer(POINTER_VSPLIT);
 }
 
+void ScTabSplitter::Paint( const Rectangle& rRect )
+{
+    const Color oldFillCol = GetFillColor();
+    const Color oldLineCol = GetLineColor();
 
+    if (IsHorizontal())
+    {
+        switch (pViewData->GetHSplitMode())
+        {
+            case SC_SPLIT_NONE:
+            {
+                // Draw 3D border
+                SetLineColor(GetSettings().GetStyleSettings().GetShadowColor());
+                DrawLine(rRect.TopRight(), rRect.BottomRight());
+                DrawLine(rRect.BottomLeft(), rRect.BottomRight());
+                SetLineColor(GetSettings().GetStyleSettings().GetLightColor());
+                DrawLine(rRect.TopLeft(), rRect.TopRight());
+                DrawLine(rRect.TopLeft(), rRect.BottomLeft());
+                // Fill internal rectangle
+                SetLineColor();
+                SetFillColor(GetSettings().GetStyleSettings().GetFaceColor());
+                DrawRect(Rectangle(rRect.Left()+1, rRect.Top()+1, rRect.Right()-1, rRect.Bottom()-1));
+                // Draw handle
+                SetLineColor(Color(COL_BLACK));
+                SetFillColor(Color(COL_BLACK));
+                const long xc = rRect.Right()+rRect.Left();
+                const long h4 = rRect.GetHeight()/4;
+                // First xc fraction is truncated, second one is rounded. This will draw a centered line
+                // in handlers with odd width and a centered rectangle in those with even width.
+                DrawRect(Rectangle(Point(xc/2, rRect.Top()+h4), Point((xc+1)/2, rRect.Bottom()-h4)));
+                break;
+            }
+            case SC_SPLIT_NORMAL:
+                SetLineColor(GetSettings().GetStyleSettings().GetLightColor());
+                DrawLine(rRect.TopLeft(), rRect.BottomLeft());
+                SetLineColor(GetSettings().GetStyleSettings().GetShadowColor());
+                DrawLine(rRect.TopRight(), rRect.BottomRight());
+                SetLineColor();
+                SetFillColor(GetSettings().GetStyleSettings().GetFaceColor());
+                DrawRect(Rectangle(Point(rRect.Left()+1, rRect.Top()), Point(rRect.Right()-1, rRect.Bottom())));
+                break;
+            case SC_SPLIT_FIX:
+                // Nothing to draw
+                break;
+        }
+    }
+    else
+    {
+        switch (pViewData->GetVSplitMode())
+        {
+            case SC_SPLIT_NONE:
+            {
+                // Draw 3D border
+                SetLineColor(GetSettings().GetStyleSettings().GetShadowColor());
+                DrawLine(rRect.TopRight(), rRect.BottomRight());
+                DrawLine(rRect.BottomLeft(), rRect.BottomRight());
+                SetLineColor(GetSettings().GetStyleSettings().GetLightColor());
+                DrawLine(rRect.TopLeft(), rRect.TopRight());
+                DrawLine(rRect.TopLeft(), rRect.BottomLeft());
+                // Fill internal rectangle
+                SetLineColor();
+                SetFillColor(GetSettings().GetStyleSettings().GetFaceColor());
+                DrawRect(Rectangle(rRect.Left()+1, rRect.Top()+1, rRect.Right()-1, rRect.Bottom()-1));
+                // Draw handle
+                SetLineColor(Color(COL_BLACK));
+                SetFillColor(Color(COL_BLACK));
+                const long yc = rRect.Top()+rRect.Bottom();
+                const long w4 = rRect.GetWidth()/4;
+                // First yc fraction is truncated, second one is rounded. This will draw a centered line
+                // in handlers with odd height and a centered rectangle in those with even height.
+                DrawRect(Rectangle(Point(rRect.Left()+w4, yc/2), Point(rRect.Right()-w4, (yc+1)/2)));
+                break;
+            }
+            case SC_SPLIT_NORMAL:
+                SetLineColor(GetSettings().GetStyleSettings().GetLightColor());
+                DrawLine(rRect.TopLeft(), rRect.TopRight());
+                SetLineColor(GetSettings().GetStyleSettings().GetShadowColor());
+                DrawLine(rRect.BottomLeft(), rRect.BottomRight());
+                SetLineColor();
+                SetFillColor(GetSettings().GetStyleSettings().GetFaceColor());
+                DrawRect(Rectangle(Point(rRect.Left(), rRect.Top()+1), Point(rRect.Right(), rRect.Bottom()-1)));
+                break;
+            case SC_SPLIT_FIX:
+                // Nothing to draw
+                break;
+        }
+    }
+
+    SetFillColor(oldFillCol);
+    SetLineColor(oldLineCol);
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

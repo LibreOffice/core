@@ -64,7 +64,6 @@ namespace chart2 { namespace data {
     struct HighlightedRange;
 }}}}}
 
-#define SPLIT_HANDLE_SIZE   3
 #define SC_FORCEMODE_NONE   0xff
 
 // ---------------------------------------------------------------------------
