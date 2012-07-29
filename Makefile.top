@@ -46,6 +46,7 @@ binaryurp\
 boost\
 canvas\
 chart2\
+cli_ure\
 clucene\
 codemaker\
 comphelper\
@@ -192,7 +193,6 @@ berkeleydb\
 binfilter \
 bridges\
 cairo\
-cli_ure\
 cppunit\
 crashrep\
 ct2n\
