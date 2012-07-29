@@ -26,6 +26,13 @@
 #include <com/sun/star/ucb/XContentAccess.hpp>
 #include <com/sun/star/ucb/XDynamicResultSet.hpp>
 
+#define ITEM_MAX_WIDTH 192
+#define ITEM_MAX_HEIGHT 192
+#define ITEM_PADDING 5
+#define ITEM_SPACE 20
+#define THUMBNAIL_MAX_HEIGHT 128 - 2*ITEM_PADDING
+#define THUMBNAIL_MAX_WIDTH ITEM_MAX_WIDTH - 2*ITEM_PADDING
+
 using namespace com::sun::star;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::task;
@@ -176,6 +183,9 @@ void TemplateOnlineView::OnItemDblClicked(ThumbnailViewItem *pItem)
                     aTemplateItem.nId = nIdx+1;
                     aTemplateItem.nRegionId = pItem->mnId-1;
                     aTemplateItem.aPath = sRealURL;
+                    aTemplateItem.aThumbnail = TemplateAbstractView::fetchThumbnail(sRealURL,
+                                                                                    THUMBNAIL_MAX_WIDTH,
+                                                                                    THUMBNAIL_MAX_HEIGHT);
 //                    pData->mbIsRemote = xRow->getBoolean( ROW_IS_REMOTE ) && !xRow->wasNull();
 //                    pData->mbIsRemoveable = xRow->getBoolean( ROW_IS_REMOVEABLE ) && !xRow->wasNull();
                     aTemplateItem.aName = xRow->getString( ROW_TITLE );
