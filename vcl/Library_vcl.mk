@@ -97,6 +97,7 @@ $(eval $(call gb_Library_use_externals,vcl,\
 	icule \
 	icuuc \
 	lcms2 \
+	gio \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,vcl,\

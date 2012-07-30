@@ -121,6 +121,19 @@ void SAL_CALL MenuBarWrapper::dispose() throw (::com::sun::star::uno::RuntimeExc
     m_bDisposed = sal_True;
 }
 
+//void generateFullMenuBar( MenuBarManager *pMenuBarManager, MenuBar *pMenuBar )
+//{
+//    for (int i=0; i < pMenuBar->GetItemCount(); i++)
+//    {
+//        sal_Int16 nId = pMenuBar->GetItemId( i );
+
+//        String aCommandLabel = pMenuBar->GetItemCommand( nId );
+
+//        String label = pMenuBarManager->RetrieveLabelFromCommand( aCommandLabel );
+//        pMenuBar->SetItemText( nId, label );
+//    }
+//}
+
 // XInitialization
 void SAL_CALL MenuBarWrapper::initialize( const Sequence< Any >& aArguments ) throw ( Exception, RuntimeException )
 {
@@ -167,7 +180,6 @@ void SAL_CALL MenuBarWrapper::initialize( const Sequence< Any >& aArguments ) th
                     // Fill menubar with container contents
                     sal_uInt16 nId = 1;
                     MenuBarManager::FillMenuWithConfiguration( nId, pVCLMenuBar, aModuleIdentifier, m_xConfigData, xTrans );
-//                    pVCLMenuBar->Freeze();
                 }
             }
             catch ( const NoSuchElementException& )
@@ -203,15 +215,15 @@ void SAL_CALL MenuBarWrapper::initialize( const Sequence< Any >& aArguments ) th
                                                                       sal_True );
 
                 m_xMenuBarManager = Reference< XComponent >( static_cast< OWeakObject *>( pMenuBarManager ), UNO_QUERY );
+
+//                pMenuBarManager->GenerateFullMenuHierarchy( pVCLMenuBar );
+                pVCLMenuBar->Freeze();
             }
 
             // Initialize toolkit menu bar implementation to have awt::XMenuBar for data exchange.
             // Don't use this toolkit menu bar or one of its functions. It is only used as a data container!
             pAwtMenuBar = new VCLXMenuBar( pVCLMenuBar );
             m_xMenuBar = Reference< XMenuBar >( static_cast< OWeakObject *>( pAwtMenuBar ), UNO_QUERY );
-
-            // Freeze the menubar
-            pVCLMenuBar->Freeze();
         }
     }
 }

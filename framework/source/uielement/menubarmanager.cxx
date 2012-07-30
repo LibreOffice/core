@@ -885,8 +885,9 @@ IMPL_LINK( MenuBarManager, Activate, AbstractMenu *, pMenu )
                 ( pMenu->GetItemText( nItemId ).Len() == 0 ))
             {
                 String aCommand = pMenu->GetItemCommand( nItemId );
-                if ( aCommand.Len() > 0 )
+                if ( aCommand.Len() > 0 ) {
                     pMenu->SetItemText( nItemId, RetrieveLabelFromCommand( aCommand ));
+                }
             }
         }
 
@@ -1025,6 +1026,9 @@ IMPL_LINK( MenuBarManager, Activate, AbstractMenu *, pMenu )
             }
         }
     }
+
+    // Freeze the menu
+//    m_pVCLMenu->Freeze();
 
     return 1;
 }
@@ -2120,6 +2124,29 @@ void MenuBarManager::SetHdl()
         m_xURLTransformer.set(
              URLTransformer::create(
                  ::comphelper::getComponentContext(mxServiceFactory)) );
+}
+
+void MenuBarManager::GenerateFullMenuHierarchy( AbstractMenu* pMenu )
+{
+    if (pMenu) {
+        for (int i=0; i < pMenu->GetItemCount(); i++)
+        {
+            sal_Int16 nId = pMenu->GetItemId( i );
+
+//            this->Activate( pMenu->GetPopupMenu( nId ) );
+//            this->Activate(pMenu);
+//            this->Deactivate(pMenu);
+
+            String aCommandLabel = pMenu->GetItemCommand( nId );
+            ::rtl::OUString aCommand( aCommandLabel );
+
+            String label = RetrieveLabelFromCommand( aCommandLabel );
+            pMenu->SetItemText( nId, label );
+
+            AddMenu( this, aCommand, nId );
+            GenerateFullMenuHierarchy( pMenu->GetPopupMenu( nId ) );
+        }
+    }
 }
 
 }

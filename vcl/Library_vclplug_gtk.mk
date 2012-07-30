@@ -89,10 +89,11 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_gtk,\
     vcl/unx/gtk/gdi/salnativewidgets-gtk \
     vcl/unx/gtk/window/gtkframe \
     vcl/unx/gtk/window/gtkobject \
-	vcl/unx/gtk/fpicker/resourceprovider \
-	vcl/unx/gtk/fpicker/SalGtkPicker \
-	vcl/unx/gtk/fpicker/SalGtkFilePicker \
-	vcl/unx/gtk/fpicker/SalGtkFolderPicker \
+    vcl/unx/gtk/window/gtksalmenu \
+    vcl/unx/gtk/fpicker/resourceprovider \
+    vcl/unx/gtk/fpicker/SalGtkPicker \
+    vcl/unx/gtk/fpicker/SalGtkFilePicker \
+    vcl/unx/gtk/fpicker/SalGtkFolderPicker \
 ))
 
 ifeq ($(ENABLE_GTK_PRINT),TRUE)

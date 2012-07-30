@@ -170,6 +170,8 @@ class MenuBarManager : public com::sun::star::frame::XStatusListener            
         void SetItemContainer( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& rItemContainer );
         void GetPopupController( PopupControllerCache& rPopupController );
 
+        void GenerateFullMenuHierarchy( AbstractMenu* pMenu );
+
     protected:
         DECL_LINK(Highlight, void *);
         DECL_LINK( Activate, AbstractMenu * );

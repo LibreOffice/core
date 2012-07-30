@@ -29,6 +29,7 @@
 #include <unx/gtk/gtkobject.hxx>
 #include <unx/gtk/atkbridge.hxx>
 #include <unx/gtk/gtkprn.hxx>
+#include <unx/gtk/gtksalmenu.hxx>
 #include <headless/svpvd.hxx>
 #include <headless/svpbmp.hxx>
 #include <vcl/apptypes.hxx>
@@ -507,6 +508,31 @@ SalBitmap* GtkInstance::CreateSalBitmap()
 #else
     return X11SalInstance::CreateSalBitmap();
 #endif
+}
+
+SalMenu* GtkInstance::CreateMenu( sal_Bool bMenuBar, Menu* pVCLMenu )
+{
+    GtkSalMenu *pSalMenu = new GtkSalMenu( bMenuBar );
+    pSalMenu->mpVCLMenu = pVCLMenu;
+
+    return static_cast<SalMenu*>( pSalMenu );
+}
+
+void GtkInstance::DestroyMenu( SalMenu* pMenu )
+{
+    (void)pMenu;
+    OSL_ENSURE( pMenu == 0, "DestroyMenu called with non-native menus" );
+}
+
+SalMenuItem* GtkInstance::CreateMenuItem( const SalItemParams* )
+{
+    return NULL;
+}
+
+void GtkInstance::DestroyMenuItem( SalMenuItem* pItem )
+{
+    (void)pItem;
+    OSL_ENSURE( pItem == 0, "DestroyMenu called with non-native menus" );
 }
 
 SalTimer* GtkInstance::CreateSalTimer()
