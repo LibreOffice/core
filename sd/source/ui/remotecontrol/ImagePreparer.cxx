@@ -35,6 +35,7 @@
 #include <rtl/strbuf.hxx>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/document/XExporter.hpp>
 #include <com/sun/star/lang/XServiceName.hpp>
@@ -82,6 +83,7 @@ void ImagePreparer::execute()
         }
         sendNotes( i );
     }
+//     notesToHtml( 0 );
     mRef.clear();
 }
 
@@ -207,12 +209,101 @@ void ImagePreparer::sendNotes( sal_uInt32 aSlideNumber )
     aBuffer.append( OString::valueOf( sal_Int32( aSlideNumber ) ).getStr() );
     aBuffer.append( "\n" );
 
+    aBuffer.append( "<html><body>" );
     aBuffer.append( aNotes );
+    aBuffer.append( "</html></body>" );
     aBuffer.append( "\n\n" );
     pTransmitter->addMessage( aBuffer.makeStringAndClear(),
         Transmitter::Priority::LOW );
 }
 
+
+OString ImagePreparer::notesToHtml( sal_uInt32 aSlideNumber )
+{
+    OString aRet("");
+
+    OUString aFileURL;
+    FileBase::createTempFile( 0, 0, &aFileURL );
+    fprintf( stderr, OUStringToOString( aFileURL, RTL_TEXTENCODING_UTF8).getStr() );
+
+    if ( !xController->isRunning() )
+        return "";
+
+    // Get the filter
+    uno::Reference< lang::XMultiServiceFactory > xServiceManager(
+        ::comphelper::getProcessServiceFactory(),
+        uno::UNO_QUERY_THROW );
+
+    uno::Reference< container::XNameAccess > xFilterFactory(
+        xServiceManager->createInstance( "com.sun.star.document.FilterFactory" ), uno::UNO_QUERY_THROW );
+
+    if ( xFilterFactory->hasByName( "com.sun.star.comp.Writer.XmlFilterAdaptor" ) )
+        fprintf ( stderr, "Is contained\n" );
+    else fprintf( stderr, "Not contained\n" );
+
+//     uno::Sequence<Any> aList(6);
+//     aList[0] <<= OUString("com.sun.star.documentconversion.XSLTFilter");
+//     aList[1] <<= OUString("");
+//     aList[2] <<= OUString("com.sun.star.comp.Impress.XMLOasisImporter");
+//     aList[3] <<= OUString("com.sun.star.comp.Impress.XMLOasisExporter"),
+//     aList[4] <<= OUString("");
+//     aList[5] <<= OUString("../share/xslt/export/xhtml/opendoc2xhtml.xsl");
+
+//     uno::Reference< lang::XMultiServiceFactory > xFilterF( xFilterFactory, uno::UNO_QUERY_THROW );
+//         xFilterF->createInstanceWithArguments(OUString("com.sun.star.comp.Writer.XmlFilterAdaptor"), aList);
+
+    css::uno::Reference< document::XFilter > xFilter( xFilterFactory->getByName(
+        "com.sun.star.comp.Writer.XmlFilterAdaptor" ), uno::UNO_QUERY_THROW );
+
+    // Get the page
+    uno::Reference< lang::XComponent > xNotesPage;
+    uno::Reference< drawing::XDrawPage > xSourceDoc(
+        xController->getSlideByIndex( aSlideNumber ),
+        uno::UNO_QUERY_THROW );
+
+    uno::Reference<presentation::XPresentationPage> xPresentationPage(
+        xSourceDoc, UNO_QUERY);
+    if (xPresentationPage.is())
+        xNotesPage = uno::Reference< lang::XComponent >(
+            xPresentationPage->getNotesPage(), uno::UNO_QUERY_THROW );
+    else
+        return "";
+
+    // Start Exporting
+    uno::Reference< document::XExporter > xExporter( xFilter,
+        uno::UNO_QUERY_THROW );
+
+    xExporter->setSourceDocument( xNotesPage );
+
+    uno::Sequence< beans::PropertyValue > aProps(1);
+
+    aProps[0].Name = "URL";
+    aProps[0].Value <<= aFileURL;
+
+//     aProps[1].Name = "com.sun.star.comp.Impress.XMLOasisExporter";
+//     aProps[1].Value <<= OUString( "../share/xslt/export/xhtml/opendoc2xhtml.xsl" );
+//     aProps[2].Name = "FilterData";
+//     aProps[2].Value <<= aFilterData;
+
+    fprintf( stderr, "Trying to filter\n" );
+    xFilter->filter( aProps );
+
+    // FIXME: error handling.
+
+//     File aFile( aFileURL );
+//     aFile.open(0);
+//     sal_uInt64 aRead;
+//     rSize = 0;
+//     aFile.getSize( rSize );
+//     uno::Sequence<sal_Int8> aContents( rSize );
+
+//     aFile.read( aContents.getArray(), rSize, aRead );
+//     aFile.close();
+//     File::remove( aFileURL );
+//     return aContents;
+
+    return aRet;
+}
 
 // Code copied from sdremote/source/presenter/PresenterNotesView.cxx
 OString ImagePreparer::prepareNotes( sal_uInt32 aSlideNumber )
