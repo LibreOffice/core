@@ -21,9 +21,16 @@
 
 
 
+enum SdrFitToSizeType
+{
+    SDRTEXTFIT_NONE ,
+    SDRTEXTFIT_PROPORTIONAL ,
+    SDRTEXTFIT_ALLLINES ,
+    SDRTEXTFIT_RESIZEATTR
+}
 item UINT32 SvxObjectItem ;
 item BOOL SdrShadowItem ;
-item BOOL SdrTextFitToSizeTypeItem ;
+item SdrFitToSizeType SdrTextFitToSizeTypeItem ;
 
 
 interface DrawView

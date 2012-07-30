@@ -70,8 +70,8 @@ void SetAlignmentState( SdrView* pSdrView, SfxItemSet& rSet )
         if( pObj->ISA(SdrObjCustomShape) )
         {
             sal_Int32 nOldAlignment = nAlignment;
-            SdrTextHorzAdjustItem& rTextHorzAdjustItem = (SdrTextHorzAdjustItem&)pObj->GetMergedItem( SDRATTR_TEXT_HORZADJUST );
-            SdrTextFitToSizeTypeItem& rTextFitToSizeTypeItem = (SdrTextFitToSizeTypeItem&)pObj->GetMergedItem( SDRATTR_TEXT_FITTOSIZE );
+            SdrTextHorzAdjustItem&      rTextHorzAdjustItem    = (SdrTextHorzAdjustItem&)pObj->GetMergedItem( SDRATTR_TEXT_HORZADJUST );
+            SdrTextFitToSizeTypeItem&   rTextFitToSizeTypeItem = (SdrTextFitToSizeTypeItem&)pObj->GetMergedItem( SDRATTR_TEXT_FITTOSIZE );
             switch ( rTextHorzAdjustItem.GetValue() )
             {
                 case SDRTEXTHORZADJUST_LEFT   : nAlignment = 0; break;
@@ -79,9 +79,9 @@ void SetAlignmentState( SdrView* pSdrView, SfxItemSet& rSet )
                 case SDRTEXTHORZADJUST_RIGHT  : nAlignment = 2; break;
                 case SDRTEXTHORZADJUST_BLOCK  :
                 {
-                    if ( rTextFitToSizeTypeItem.GetValue() == sal_False )
+                    if ( rTextFitToSizeTypeItem.GetValue() == SDRTEXTFIT_NONE )
                         nAlignment = 3;
-                    else
+                    else if ( rTextFitToSizeTypeItem.GetValue() == SDRTEXTFIT_ALLLINES )
                         nAlignment = 4;
                 }
             }
@@ -302,11 +302,11 @@ static void impl_execute( SdrView*, SfxRequest& rReq, SdrCustomShapeGeometryItem
                 sal_Int32 nValue = ((const SfxInt32Item*)rReq.GetArgs()->GetItem(SID_FONTWORK_ALIGNMENT))->GetValue();
                 if ( ( nValue >= 0 ) && ( nValue < 5 ) )
                 {
-                    sal_Bool bFTS = sal_False;
+                    SdrFitToSizeType eFTS = SDRTEXTFIT_NONE;
                     SdrTextHorzAdjust eHorzAdjust;
                     switch ( nValue )
                     {
-                        case 4 : bFTS = sal_True; // passthrough
+                        case 4 : eFTS = SDRTEXTFIT_ALLLINES; // passthrough
                         case 3 : eHorzAdjust = SDRTEXTHORZADJUST_BLOCK; break;
                         default:
                         case 0 : eHorzAdjust = SDRTEXTHORZADJUST_LEFT; break;
@@ -314,7 +314,7 @@ static void impl_execute( SdrView*, SfxRequest& rReq, SdrCustomShapeGeometryItem
                         case 2 : eHorzAdjust = SDRTEXTHORZADJUST_RIGHT; break;
                     }
                     pObj->SetMergedItem( SdrTextHorzAdjustItem( eHorzAdjust ) );
-                    pObj->SetMergedItem( SdrTextFitToSizeTypeItem( bFTS ) );
+                    pObj->SetMergedItem( SdrTextFitToSizeTypeItem( eFTS ) );
                     pObj->BroadcastObjectChange();
                 }
             }

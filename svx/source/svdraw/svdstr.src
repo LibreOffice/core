@@ -1209,6 +1209,14 @@ String STR_ItemValFITTOSIZEPROP
 {
     Text [ en-US ] = "Proportional" ;
 };
+String STR_ItemValFITTOSIZEALLLINES
+{
+    Text [ en-US ] = "Fit to size (all rows separately) " ;
+};
+String STR_ItemValFITTOSIZERESIZEAT
+{
+    Text [ en-US ] = "Use hard attributes" ;
+};
  ///////////////////////////////////////////////////////////////////////////////////////////////////
 String STR_ItemValTEXTVADJTOP
 {

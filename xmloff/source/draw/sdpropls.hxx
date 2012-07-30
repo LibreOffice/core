@@ -75,6 +75,7 @@ extern const XMLPropertyMapEntry aXMLSDPresPageProps_onlyHeadersFooter[];
 #define XML_TYPE_TEXT_ANIMATION_STEPS               (XML_SD_TYPES_START + 24 )
 #define XML_SD_TYPE_TEXT_ALIGN                      (XML_SD_TYPES_START + 25 )
 #define XML_SD_TYPE_VERTICAL_ALIGN                  (XML_SD_TYPES_START + 26 )
+#define XML_SD_TYPE_FITTOSIZE                       (XML_SD_TYPES_START + 27 )
 #define XML_SD_TYPE_MEASURE_HALIGN                  (XML_SD_TYPES_START + 28 )
 #define XML_SD_TYPE_MEASURE_VALIGN                  (XML_SD_TYPES_START + 29 )
 #define XML_SD_TYPE_MEASURE_UNIT                    (XML_SD_TYPES_START + 30 )

@@ -953,7 +953,7 @@ void ImpSdrGDIMetaFileImport::ImportText( const Point& rPos, const XubString& rS
         pText->SetMergedItem ( SdrTextLowerDistItem (0));
         pText->SetMergedItem ( SdrTextRightDistItem (0));
         pText->SetMergedItem ( SdrTextLeftDistItem (0));
-        pText->SetMergedItem( SdrTextFitToSizeTypeItem( sal_True ) );
+        pText->SetMergedItem( SdrTextFitToSizeTypeItem( SDRTEXTFIT_ALLLINES ) );
     }
     else
         pText->SetMergedItem( SdrTextAutoGrowWidthItem( true ) );

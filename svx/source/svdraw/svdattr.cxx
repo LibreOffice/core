@@ -25,6 +25,7 @@
 #include "precompiled_svx.hxx"
 
 
+#include <com/sun/star/drawing/TextFitToSizeType.hpp>
 #include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #include <com/sun/star/drawing/TextAnimationKind.hpp>
@@ -1093,22 +1094,23 @@ SfxItemPresentation __EXPORT SdrCaptionEscDirItem::GetPresentation(SfxItemPresen
 ////////////////////////////////////////////////////////////////////////////////
 
 // FitToSize
-TYPEINIT1_AUTOFACTORY(SdrTextFitToSizeTypeItem,SfxBoolItem);
+TYPEINIT1_AUTOFACTORY(SdrTextFitToSizeTypeItem,SfxEnumItem);
 
-SfxPoolItem* __EXPORT SdrTextFitToSizeTypeItem::Clone(SfxItemPool* /*pPool*/) const { return new SdrTextFitToSizeTypeItem(*this); }
+SfxPoolItem* __EXPORT SdrTextFitToSizeTypeItem::Clone(SfxItemPool* /*pPool*/) const         { return new SdrTextFitToSizeTypeItem(*this); }
 
 SfxPoolItem* __EXPORT SdrTextFitToSizeTypeItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const { return new SdrTextFitToSizeTypeItem(rIn); }
 
-XubString __EXPORT SdrTextFitToSizeTypeItem::GetValueTextByVal(sal_Bool bVal) const
+sal_uInt16 __EXPORT SdrTextFitToSizeTypeItem::GetValueCount() const { return 4; }
+
+XubString __EXPORT SdrTextFitToSizeTypeItem::GetValueTextByPos(sal_uInt16 nPos) const
 {
-    if (bVal) return ImpGetResStr(STR_ItemValFITTOSIZEPROP);
-    else return ImpGetResStr(STR_ItemValFITTOSIZENONE);
+    return ImpGetResStr(STR_ItemValFITTOSIZENONE+nPos);
 }
 
 SfxItemPresentation __EXPORT SdrTextFitToSizeTypeItem::GetPresentation(SfxItemPresentation ePres,
-    SfxMapUnit /*eCoreMetric*/, SfxMapUnit /*ePresMetric*/, XubString& rText, const IntlWrapper *) const
+                      SfxMapUnit /*eCoreMetric*/, SfxMapUnit /*ePresMetric*/, XubString& rText, const IntlWrapper *) const
 {
-    rText=GetValueTextByVal(GetValue());
+    rText=GetValueTextByPos(sal::static_int_cast< sal_uInt16 >(GetValue()));
     if (ePres==SFX_ITEM_PRESENTATION_COMPLETE) {
         String aStr;
 
@@ -1117,6 +1119,37 @@ SfxItemPresentation __EXPORT SdrTextFitToSizeTypeItem::GetPresentation(SfxItemPr
         rText.Insert(aStr, 0);
     }
     return ePres;
+}
+
+int  __EXPORT SdrTextFitToSizeTypeItem::HasBoolValue() const { return sal_True; }
+
+sal_Bool __EXPORT SdrTextFitToSizeTypeItem::GetBoolValue() const { return GetValue()!=SDRTEXTFIT_NONE; }
+
+void __EXPORT SdrTextFitToSizeTypeItem::SetBoolValue(sal_Bool bVal) { SetValue(sal::static_int_cast< sal_uInt16 >(bVal ? SDRTEXTFIT_PROPORTIONAL : SDRTEXTFIT_NONE)); }
+
+sal_Bool SdrTextFitToSizeTypeItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
+{
+    drawing::TextFitToSizeType eFS = (drawing::TextFitToSizeType)GetValue();
+    rVal <<= eFS;
+
+    return sal_True;
+}
+
+sal_Bool SdrTextFitToSizeTypeItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/)
+{
+    drawing::TextFitToSizeType eFS;
+    if(!(rVal >>= eFS))
+    {
+        sal_Int32 nEnum = 0;
+        if(!(rVal >>= nEnum))
+            return sal_False;
+
+        eFS = (drawing::TextFitToSizeType) nEnum;
+    }
+
+    SetValue( sal::static_int_cast< sal_uInt16 >( (SdrFitToSizeType)eFS ) );
+
+    return sal_True;
 }
 
 TYPEINIT1_AUTOFACTORY(SdrTextVertAdjustItem,SfxEnumItem);

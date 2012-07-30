@@ -712,11 +712,11 @@ FASTBOOL SdrTextObj::NbcSetMaxTextFrameWidth(long nWdt)
     return sal_False;
 }
 
-FASTBOOL SdrTextObj::NbcSetFitToSize(sal_Bool bFit)
+FASTBOOL SdrTextObj::NbcSetFitToSize(SdrFitToSizeType eFit)
 {
     if(bTextFrame)
     {
-        SetObjectItem(SdrTextFitToSizeTypeItem(bFit));
+        SetObjectItem(SdrTextFitToSizeTypeItem(eFit));
         return sal_True;
     }
     return sal_False;
@@ -829,7 +829,11 @@ void SdrTextObj::TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRect, FAS
     SdrTextHorzAdjust eHAdj=GetTextHorizontalAdjust();
     SdrTextAniKind      eAniKind=GetTextAniKind();
     SdrTextAniDirection eAniDirection=GetTextAniDirection();
+
+    SdrFitToSizeType eFit=GetFitToSize();
+    FASTBOOL bFitToSize=(eFit==SDRTEXTFIT_PROPORTIONAL || eFit==SDRTEXTFIT_ALLLINES);
     FASTBOOL bContourFrame=IsContourTextFrame();
+
     FASTBOOL bFrame=IsTextFrame();
     sal_uIntPtr nStat0=rOutliner.GetControlWord();
     Size aNullSize;
@@ -840,7 +844,7 @@ void SdrTextObj::TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRect, FAS
         rOutliner.SetMaxAutoPaperSize(Size(1000000,1000000));
     }
 
-    if (!GetFitToSize() && !bContourFrame)
+    if (!bFitToSize && !bContourFrame)
     {
         long nAnkWdt=aAnkRect.GetWidth();
         long nAnkHgt=aAnkRect.GetHeight();
@@ -1266,7 +1270,9 @@ basegfx::B2DPolyPolygon SdrTextObj::TakeContour() const
         Rectangle aR;
         TakeTextRect(rOutliner,aR,sal_False,&aAnchor2);
         rOutliner.Clear();
-        if (GetFitToSize()) aR=aAnchor2;
+        SdrFitToSizeType eFit=GetFitToSize();
+        FASTBOOL bFitToSize=(eFit==SDRTEXTFIT_PROPORTIONAL || eFit==SDRTEXTFIT_ALLLINES);
+        if (bFitToSize) aR=aAnchor2;
         Polygon aPol(aR);
         if (aGeo.nDrehWink!=0) RotatePoly(aPol,aR.TopLeft(),aGeo.nSin,aGeo.nCos);
 
@@ -1382,7 +1388,8 @@ void SdrTextObj::ImpSetupDrawOutlinerForPaint( FASTBOOL         bContourFrame,
     if (!bContourFrame)
     {
         // FitToSize erstmal nicht mit ContourFrame
-        if(GetFitToSize())
+        SdrFitToSizeType eFit=GetFitToSize();
+        if (eFit==SDRTEXTFIT_PROPORTIONAL || eFit==SDRTEXTFIT_ALLLINES)
         {
             sal_uIntPtr nStat=rOutliner.GetControlWord();
             nStat|=EE_CNTRL_STRETCHING|EE_CNTRL_AUTOPAGESIZE;
@@ -1396,7 +1403,8 @@ void SdrTextObj::ImpSetupDrawOutlinerForPaint( FASTBOOL         bContourFrame,
     if (!bContourFrame)
     {
         // FitToSize erstmal nicht mit ContourFrame
-        if(GetFitToSize())
+        SdrFitToSizeType eFit=GetFitToSize();
+        if (eFit==SDRTEXTFIT_PROPORTIONAL || eFit==SDRTEXTFIT_ALLLINES)
         {
             ImpSetCharStretching(rOutliner,rTextRect,rAnchorRect,rFitXKorreg);
             rPaintRect=rAnchorRect;
@@ -1551,16 +1559,14 @@ void SdrTextObj::RestGeoData(const SdrObjGeoData& rGeo)
     SetTextSizeDirty();
 }
 
-sal_Bool SdrTextObj::GetFitToSize() const
+SdrFitToSizeType SdrTextObj::GetFitToSize() const
 {
-    sal_Bool bType(sal_False);
+    SdrFitToSizeType eType = SDRTEXTFIT_NONE;
 
     if(!IsAutoGrowWidth())
-    {
-        bType = ((SdrTextFitToSizeTypeItem&)(GetObjectItem(SDRATTR_TEXT_FITTOSIZE))).GetValue();
-    }
+        eType = ((SdrTextFitToSizeTypeItem&)(GetObjectItem(SDRATTR_TEXT_FITTOSIZE))).GetValue();
 
-    return bType;
+    return eType;
 }
 
 void SdrTextObj::ForceOutlinerParaObject()

@@ -21,6 +21,7 @@
 
 
 #include <vbahelper/helperdecl.hxx>
+#include <com/sun/star/drawing/TextFitToSizeType.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <vbahelper/vbatextframe.hxx>
 
@@ -37,8 +38,9 @@ VbaTextFrame::setAsMSObehavior()
 {
     //set property TextWordWrap default as False.
     // TextFitToSize control the text content. it seems we should set the default as False.
+    // com.sun.star.drawing.TextFitToSizeType.NONE
     m_xPropertySet->setPropertyValue( rtl::OUString::createFromAscii( "TextWordWrap" ), uno::makeAny( sal_False ) );
-    m_xPropertySet->setPropertyValue( rtl::OUString::createFromAscii( "TextFitToSize" ), uno::makeAny( sal_False ) );
+    m_xPropertySet->setPropertyValue( rtl::OUString::createFromAscii( "TextFitToSize" ), uno::makeAny( drawing::TextFitToSizeType_NONE ) );
 }
 
 sal_Int32 VbaTextFrame::getMargin( rtl::OUString sMarginType )

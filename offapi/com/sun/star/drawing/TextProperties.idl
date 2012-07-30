@@ -51,6 +51,10 @@
 #include <com/sun/star/style/ParagraphPropertiesComplex.idl>
 #endif
 
+#ifndef __com_sun_star_drawing_TextFitToSizeType_idl__
+#include <com/sun/star/drawing/TextFitToSizeType.idl>
+#endif
+
 #ifndef __com_sun_star_drawing_TextAdjust_idl__
 #include <com/sun/star/drawing/TextAdjust.idl>
 #endif
@@ -172,7 +176,7 @@ published service TextProperties
     /** With this set to <TRUE/>, the text inside of the <type>Shape</type>
         is stretched to fit into the <type>Shape</type>.
      */
-    [property] boolean TextFitToSize;
+    [property] com::sun::star::drawing::TextFitToSizeType TextFitToSize;
 
     //-------------------------------------------------------------------------
 

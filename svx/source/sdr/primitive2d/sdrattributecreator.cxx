@@ -527,7 +527,7 @@ namespace drawinglayer
                     }
                 }
 
-                const sal_Bool bFitToSize(rTextObj.GetFitToSize());
+                const SdrFitToSizeType eFit(rTextObj.GetFitToSize());
                 const SdrTextAniKind eAniKind(rTextObj.GetTextAniKind());
 
                 // #i107346#
@@ -545,7 +545,7 @@ namespace drawinglayer
                     rTextObj.GetTextHorizontalAdjust(rSet),
                     rTextObj.GetTextVerticalAdjust(rSet),
                     ((const SdrTextContourFrameItem&)rSet.Get(SDRATTR_TEXT_CONTOURFRAME)).GetValue(),
-                    bFitToSize,
+                    (SDRTEXTFIT_PROPORTIONAL == eFit || SDRTEXTFIT_ALLLINES == eFit),
                     ((const XFormTextHideFormItem&)rSet.Get(XATTR_FORMTXTHIDEFORM)).GetValue(),
                     SDRTEXTANI_BLINK == eAniKind,
                     SDRTEXTANI_SCROLL == eAniKind || SDRTEXTANI_ALTERNATE == eAniKind || SDRTEXTANI_SLIDE == eAniKind,

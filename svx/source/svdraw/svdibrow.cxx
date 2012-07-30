@@ -821,8 +821,8 @@ FASTBOOL IsItemIneffective(sal_uInt16 nWhich, const SfxItemSet* pSet, sal_uInt16
         case SDRATTR_TEXT_VERTADJUST:
         case SDRATTR_TEXT_HORZADJUST: {
             if (ImpGetItem(*pSet,SDRATTR_TEXT_FITTOSIZE,pItem)) {
-                sal_Bool bFit=((const SdrTextFitToSizeTypeItem*)pItem)->GetValue();
-                if (bFit) return sal_True;
+                SdrFitToSizeType eFit=((const SdrTextFitToSizeTypeItem*)pItem)->GetValue();
+                if (eFit!=SDRTEXTFIT_NONE) return sal_True;
             }
         } break;
 

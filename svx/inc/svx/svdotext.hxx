@@ -294,7 +294,7 @@ protected:
     FASTBOOL NbcSetAutoGrowWidth(bool bAuto);
     FASTBOOL NbcSetMinTextFrameWidth(long nWdt);
     FASTBOOL NbcSetMaxTextFrameWidth(long nWdt);
-    FASTBOOL NbcSetFitToSize(sal_Bool bFit);
+    FASTBOOL NbcSetFitToSize(SdrFitToSizeType eFit);
 
     // Konstruktoren fuer beschriftete Zeichenobjekte
     SdrTextObj();
@@ -386,7 +386,7 @@ public:
     long GetMinTextFrameWidth() const;
     long GetMaxTextFrameWidth() const;
 
-    sal_Bool GetFitToSize() const;
+    SdrFitToSizeType GetFitToSize() const;
     const Rectangle &GetGeoRect() const { return aRect; }
 
     // Feststellen, ob TextFontwork

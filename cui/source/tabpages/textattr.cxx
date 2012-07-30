@@ -347,8 +347,9 @@ void __EXPORT SvxTextAttrPage::Reset( const SfxItemSet& rAttrs )
     // Am Rahmen anpassen
     if ( rAttrs.GetItemState( SDRATTR_TEXT_FITTOSIZE ) != SFX_ITEM_DONTCARE )
     {
-        const sal_Bool bFTS = ( ( const SdrTextFitToSizeTypeItem& )rAttrs.Get( SDRATTR_TEXT_FITTOSIZE ) ).GetValue();
-        aTsbFitToSize.SetState( bFTS ? STATE_CHECK : STATE_NOCHECK );
+        SdrFitToSizeType eFTS = (SdrFitToSizeType)
+                    ( ( const SdrTextFitToSizeTypeItem& )rAttrs.Get( SDRATTR_TEXT_FITTOSIZE ) ).GetValue();
+        aTsbFitToSize.SetState( eFTS == SDRTEXTFIT_NONE ? STATE_NOCHECK : STATE_CHECK );
         aTsbFitToSize.EnableTriState( sal_False );
     }
     else
@@ -442,15 +443,16 @@ sal_Bool SvxTextAttrPage::FillItemSet( SfxItemSet& rAttrs)
     eState = aTsbFitToSize.GetState();
     if( eState != aTsbFitToSize.GetSavedValue() )
     {
-        sal_Bool bFTS;
+        SdrFitToSizeType eFTS;
         switch( eState )
         {
             default: ; //prevent warning
                 DBG_ERROR( "svx::SvxTextAttrPage::FillItemSet(), unhandled state!" );
-            case STATE_NOCHECK: bFTS = sal_False; break;
-            case STATE_CHECK: bFTS = sal_True; break;
+            case STATE_NOCHECK: eFTS = SDRTEXTFIT_NONE; break;
+            //case STATE_CHECK: eFTS = SDRTEXTFIT_RESIZEATTR; break;
+            case STATE_CHECK: eFTS = SDRTEXTFIT_PROPORTIONAL; break;
         }
-        rAttrs.Put( SdrTextFitToSizeTypeItem( bFTS ) );
+        rAttrs.Put( SdrTextFitToSizeTypeItem( eFTS ) );
     }
 
     // zentriert

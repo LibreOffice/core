@@ -69,7 +69,8 @@ sal_Bool SdrTextObj::BegTextEdit(SdrOutliner& rOutl)
     rOutl.Init( nOutlinerMode );
     rOutl.SetRefDevice( pModel->GetRefDevice() );
 
-    const sal_Bool bFitToSize(GetFitToSize());
+    SdrFitToSizeType eFit=GetFitToSize();
+    FASTBOOL bFitToSize=(eFit==SDRTEXTFIT_PROPORTIONAL || eFit==SDRTEXTFIT_ALLLINES);
     FASTBOOL bContourFrame=IsContourTextFrame();
     ImpSetTextEditParams();
 
@@ -141,7 +142,8 @@ sal_Bool SdrTextObj::BegTextEdit(SdrOutliner& rOutl)
 
 void SdrTextObj::TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, Rectangle* pViewInit, Rectangle* pViewMin) const
 {
-    const sal_Bool bFitToSize(GetFitToSize());
+    SdrFitToSizeType eFit=GetFitToSize();
+    FASTBOOL bFitToSize=(eFit==SDRTEXTFIT_PROPORTIONAL || eFit==SDRTEXTFIT_ALLLINES);
     Size aPaperMin,aPaperMax;
     Rectangle aViewInit;
     TakeTextAnchorRect(aViewInit);
@@ -325,7 +327,11 @@ void SdrTextObj::ImpSetTextEditParams() const
         Size aPaperMax;
         Rectangle aEditArea;
         TakeTextEditArea(&aPaperMin,&aPaperMax,&aEditArea,NULL);
+        //SdrFitToSizeType eFit=GetFitToSize();
+        //FASTBOOL bFitToSize=(eFit==SDRTEXTFIT_PROPORTIONAL || eFit==SDRTEXTFIT_ALLLINES);
         FASTBOOL bContourFrame=IsContourTextFrame();
+        //EVAnchorMode eAM=(EVAnchorMode)GetOutlinerViewAnchorMode();
+        //sal_uIntPtr nViewAnz=pEdtOutl->GetViewCount();
         pEdtOutl->SetMinAutoPaperSize(aPaperMin);
         pEdtOutl->SetMaxAutoPaperSize(aPaperMax);
         pEdtOutl->SetPaperSize(Size());

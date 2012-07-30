@@ -355,6 +355,8 @@
 #define STR_ItemValCAPTIONESCBESTFIT       (STR_ItemValBegin + 10)
 #define STR_ItemValFITTOSIZENONE           (STR_ItemValBegin + 11)
 #define STR_ItemValFITTOSIZEPROP           (STR_ItemValBegin + 12)
+#define STR_ItemValFITTOSIZEALLLINES       (STR_ItemValBegin + 13)
+#define STR_ItemValFITTOSIZERESIZEAT       (STR_ItemValBegin + 14)
 #define STR_ItemValTEXTVADJTOP             (STR_ItemValBegin + 15)
 #define STR_ItemValTEXTVADJCENTER          (STR_ItemValBegin + 16)
 #define STR_ItemValTEXTVADJBOTTOM          (STR_ItemValBegin + 17)

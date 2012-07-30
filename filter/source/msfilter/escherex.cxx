@@ -77,6 +77,7 @@
 #include <com/sun/star/drawing/ProjectionMode.hpp>
 #include <com/sun/star/text/XSimpleText.hpp>
 #include <com/sun/star/drawing/ShadeMode.hpp>
+#include <com/sun/star/drawing/TextFitToSizeType.hpp>
 #include <vcl/hatch.hxx>
 #include <com/sun/star/awt/XGraphics.hpp>
 #include <com/sun/star/awt/FontSlant.hpp>
@@ -3146,6 +3147,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                             if ( EscherPropertyValueHelper::GetPropertyValue( aAny, aXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "TextHorizontalAdjust" ) ), sal_True ) )
                             {
                                 MSO_GeoTextAlign  gTextAlign = mso_alignTextCenter;
+                                SdrFitToSizeType  eFTS( ((SdrTextFitToSizeTypeItem&)pCustoShape->GetMergedItem( SDRATTR_TEXT_FITTOSIZE )).GetValue() );
                                 drawing::TextHorizontalAdjust   eHA( drawing::TextHorizontalAdjust_LEFT );
                                 aAny >>= eHA;
                                 switch( eHA )
@@ -3161,9 +3163,8 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                                     break;
                                 case drawing::TextHorizontalAdjust_BLOCK:
                                     {
-                                        const sal_Bool bFTS(((SdrTextFitToSizeTypeItem&)pCustoShape->GetMergedItem(SDRATTR_TEXT_FITTOSIZE)).GetValue());
-
-                                        if(bFTS)
+                                        SdrFitToSizeType  eFTS( ((SdrTextFitToSizeTypeItem&)pCustoShape->GetMergedItem( SDRATTR_TEXT_FITTOSIZE )).GetValue() );
+                                        if ( eFTS == SDRTEXTFIT_ALLLINES)
                                         {
                                             gTextAlign = mso_alignTextStretch;
                                         }

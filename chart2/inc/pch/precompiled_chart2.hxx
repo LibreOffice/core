@@ -91,6 +91,7 @@
 #include "com/sun/star/drawing/ProjectionMode.hpp"
 #include "com/sun/star/drawing/RectanglePoint.hpp"
 #include "com/sun/star/drawing/ShadeMode.hpp"
+#include "com/sun/star/drawing/TextFitToSizeType.hpp"
 #include "com/sun/star/drawing/TextHorizontalAdjust.hpp"
 #include "com/sun/star/drawing/TextVerticalAdjust.hpp"
 #include "com/sun/star/drawing/XDrawPage.hpp"

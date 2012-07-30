@@ -449,7 +449,7 @@ void GetTextAreaOutline( const FWData& rFWData, const SdrObject* pCustomShape, F
 void GetFontWorkOutline( FWData& rFWData, const SdrObject* pCustomShape )
 {
     SdrTextHorzAdjust eHorzAdjust( ((SdrTextHorzAdjustItem&)pCustomShape->GetMergedItem( SDRATTR_TEXT_HORZADJUST )).GetValue() );
-    const sal_Bool bFTS(((SdrTextFitToSizeTypeItem&)pCustomShape->GetMergedItem(SDRATTR_TEXT_FITTOSIZE)).GetValue());
+    SdrFitToSizeType  eFTS( ((SdrTextFitToSizeTypeItem&)pCustomShape->GetMergedItem( SDRATTR_TEXT_FITTOSIZE )).GetValue() );
 
     std::vector< FWTextArea >::iterator aTextAreaIter = rFWData.vTextAreas.begin();
     std::vector< FWTextArea >::iterator aTextAreaIEnd = rFWData.vTextAreas.end();
@@ -468,7 +468,7 @@ void GetFontWorkOutline( FWData& rFWData, const SdrObject* pCustomShape )
     while ( aTextAreaIter != aTextAreaIEnd )
     {
         GetTextAreaOutline( rFWData, pCustomShape, *aTextAreaIter, bSameLetterHeights );
-        if(bFTS )
+        if ( eFTS == SDRTEXTFIT_ALLLINES )
         {
             std::vector< FWParagraphData >::iterator aParagraphIter( aTextAreaIter->vParagraphs.begin() );
             std::vector< FWParagraphData >::iterator aParagraphIEnd( aTextAreaIter->vParagraphs.end() );
