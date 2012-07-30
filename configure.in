@@ -3340,7 +3340,7 @@ linux-androideabi*)
         CPU=I
         CPUNAME=INTEL
         RTL_ARCH=x86
-        OUTPATH=unxandri
+        OUTPATH=unxandi
         ;;
     *)
         AC_MSG_ERROR([Unsupported host_cpu $host_cpu for host_os $host_os])
