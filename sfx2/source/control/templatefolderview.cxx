@@ -601,7 +601,7 @@ void TemplateFolderView::copyFrom (TemplateFolderViewItem *pItem, const rtl::OUS
     if (mpDocTemplates->CopyFrom(nRegionId,nId,aPath))
     {
         TemplateItemProperties aTemplate;
-        aTemplate.nId = nId;
+        aTemplate.nId = nId+1;
         aTemplate.nRegionId = nRegionId;
         aTemplate.aName = mpDocTemplates->GetName(nRegionId,nId);
         aTemplate.aThumbnail = TemplateAbstractView::fetchThumbnail(rPath,128,128);
