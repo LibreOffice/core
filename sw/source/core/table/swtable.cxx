@@ -1293,7 +1293,7 @@ void SwTable::NewSetTabCols( Parm &rParm, const SwTabCols &rNew,
     if( bCurRowOnly )
     {
         const SwTableLine* pCurrLine = pStart->GetUpper();
-        sal_uInt16 nCurr = rLines.C40_GETPOS( SwTableLine, pCurrLine );
+        sal_uInt16 nCurr = rLines.GetPos( pCurrLine );
         if( nCurr >= USHRT_MAX )
             return;
 

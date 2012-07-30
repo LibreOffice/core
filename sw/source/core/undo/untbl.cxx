@@ -1568,7 +1568,7 @@ SwTableLine* lcl_FindTableLine( const SwTable& rTable,
                                   rBox.GetUpper()->GetUpper()->GetTabLines()
                                 : rTable.GetTabLines();
     const SwTableLine* pLine = rBox.GetUpper();
-    sal_uInt16 nLineNo = rTableLines.C40_GETPOS( SwTableLine, pLine );
+    sal_uInt16 nLineNo = rTableLines.GetPos( pLine );
     pRet = rTableLines[nLineNo - 1];
 
     return pRet;
@@ -1619,7 +1619,7 @@ void SwUndoTblNdsChg::SaveNewBoxes( const SwTableNode& rTblNd,
             const SwTableBox* pSourceBox = NULL;
             const SwTableBox* pCheckBox = NULL;
             const SwTableLine* pBoxLine = pBox->GetUpper();
-            sal_uInt16 nLineDiff = lcl_FindParentLines(rTbl,*pBox).C40_GETPOS(SwTableLine,pBoxLine);
+            sal_uInt16 nLineDiff = lcl_FindParentLines(rTbl,*pBox).GetPos(pBoxLine);
             sal_uInt16 nLineNo = 0;
             for( sal_uInt16 j = 0; j < rBoxes.size(); ++j )
             {
@@ -1628,7 +1628,7 @@ void SwUndoTblNdsChg::SaveNewBoxes( const SwTableNode& rTblNd,
                 {
                     const SwTableLine* pCheckLine = pCheckBox->GetUpper();
                     sal_uInt16 nCheckLine = lcl_FindParentLines( rTbl, *pCheckBox ).
-                    C40_GETPOS( SwTableLine, pCheckLine );
+                    GetPos( pCheckLine );
                     if( ( !pSourceBox || nCheckLine > nLineNo ) && nCheckLine < nLineDiff )
                     {
                         nLineNo = nCheckLine;

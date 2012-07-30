@@ -236,10 +236,8 @@ sal_Bool nm::Seek_Entry( const AE aE, sal_uInt16* pP ) const\
 
 #if defined(ICC) || defined(GCC) || (defined(WNT) && _MSC_VER >= 1400)
 #define C40_INSERT( c, p, n ) Insert( (c const *&) p, n )
-#define C40_GETPOS( c, r) GetPos( (c const *&) r )
 #else
 #define C40_INSERT( c, p, n ) Insert( p, n )
-#define C40_GETPOS( c, r) GetPos( r )
 #endif
 
 #endif  //_SVARRAY_HXX

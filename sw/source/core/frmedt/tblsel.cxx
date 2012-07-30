@@ -2146,13 +2146,13 @@ void _FndBox::SetTableLines( const SwTable &rTable )
         return;
 
     SwTableLine* pTmpLine = GetLines().front().GetLine();
-    sal_uInt16 nPos = rTable.GetTabLines().C40_GETPOS( SwTableLine, pTmpLine );
+    sal_uInt16 nPos = rTable.GetTabLines().GetPos( pTmpLine );
     OSL_ENSURE( USHRT_MAX != nPos, "Line steht nicht in der Tabelle" );
     if( nPos )
         pLineBefore = rTable.GetTabLines()[ nPos - 1 ];
 
     pTmpLine = GetLines().back().GetLine();
-    nPos = rTable.GetTabLines().C40_GETPOS( SwTableLine, pTmpLine );
+    nPos = rTable.GetTabLines().GetPos( pTmpLine );
     OSL_ENSURE( USHRT_MAX != nPos, "Line steht nicht in der Tabelle" );
     if( ++nPos < rTable.GetTabLines().size() )
         pLineBehind = rTable.GetTabLines()[nPos];

@@ -501,7 +501,7 @@ SwBoxSelection* SwTable::CollectBoxSelection( const SwPaM& rPam ) const
                                     pOuterBox->FindStartOfRowSpan( *this, USHRT_MAX );
                                 nOutSpan = rBox.getRowSpan();
                                 const SwTableLine* pTmpL = rBox.GetUpper();
-                                nCheck = GetTabLines().C40_GETPOS( SwTableLine, pTmpL );
+                                nCheck = GetTabLines().GetPos( pTmpL );
                                 if( nCheck < nTop )
                                     bOkay = false;
                                 if( pOuterBox == pLeftBox )
@@ -617,7 +617,7 @@ long lcl_InsertPosition( SwTable &rTable, std::vector<sal_uInt16>& rInsPos,
         long nWidth = rBoxes[j]->GetFrmFmt()->GetFrmSize().GetWidth();
         nAddWidth += nWidth;
         sal_uInt16 nCurrBox = pLine->GetTabBoxes().GetPos( pBox );
-        sal_uInt16 nCurrLine = rTable.GetTabLines().C40_GETPOS(SwTableLine, pLine );
+        sal_uInt16 nCurrLine = rTable.GetTabLines().GetPos( pLine );
         OSL_ENSURE( nCurrLine != USHRT_MAX, "Time to say Good-Bye.." );
         if( rInsPos[ nCurrLine ] == USHRT_MAX )
         {
@@ -977,8 +977,8 @@ void SwTable::_FindSuperfluousRows( SwSelBoxes& rBoxes,
         pFirstLn = rBoxes[0]->GetUpper();
         pLastLn = rBoxes.back()->GetUpper();
     }
-    sal_uInt16 nFirstLn = GetTabLines().C40_GETPOS(SwTableLine, pFirstLn );
-    sal_uInt16 nLastLn = GetTabLines().C40_GETPOS(SwTableLine, pLastLn );
+    sal_uInt16 nFirstLn = GetTabLines().GetPos( pFirstLn );
+    sal_uInt16 nLastLn = GetTabLines().GetPos( pLastLn );
     for( sal_uInt16 nRow = nFirstLn; nRow <= nLastLn; ++nRow )
     {
         SwTableLine* pLine = aLines[nRow];
@@ -1018,7 +1018,7 @@ SwTableBox& SwTableBox::FindStartOfRowSpan( const SwTable& rTable, sal_uInt16 nM
     long nLeftBorder = lcl_Box2LeftBorder( *this );
     SwTableBox* pBox = this;
     const SwTableLine* pMyUpper = GetUpper();
-    sal_uInt16 nLine = rTable.GetTabLines().C40_GETPOS(SwTableLine, pMyUpper );
+    sal_uInt16 nLine = rTable.GetTabLines().GetPos( pMyUpper );
     if( nLine && nLine < rTable.GetTabLines().size() )
     {
         SwTableBox* pNext;
@@ -1048,7 +1048,7 @@ SwTableBox& SwTableBox::FindEndOfRowSpan( const SwTable& rTable, sal_uInt16 nMax
     if( nMaxStep > --nAbsSpan )
         nMaxStep = (sal_uInt16)nAbsSpan;
     const SwTableLine* pMyUpper = GetUpper();
-    sal_uInt16 nLine = rTable.GetTabLines().C40_GETPOS(SwTableLine, pMyUpper );
+    sal_uInt16 nLine = rTable.GetTabLines().GetPos( pMyUpper );
     nMaxStep = nLine + nMaxStep;
     if( nMaxStep >= rTable.GetTabLines().size() )
         nMaxStep = rTable.GetTabLines().size() - 1;
@@ -1072,7 +1072,7 @@ void lcl_getAllMergedBoxes( const SwTable& rTable, SwSelBoxes& rBoxes, SwTableBo
     if( pBox->getRowSpan() == 1 )
         return;
     const SwTableLine* pMyUpper = pBox->GetUpper();
-    sal_uInt16 nLine = rTable.GetTabLines().C40_GETPOS(SwTableLine, pMyUpper );
+    sal_uInt16 nLine = rTable.GetTabLines().GetPos( pMyUpper );
     long nLeftBorder = lcl_Box2LeftBorder( *pBox );
     sal_uInt16 nCount = rTable.GetTabLines().size();
     while( ++nLine < nCount && pBox && pBox->getRowSpan() != -1 )
@@ -1214,7 +1214,7 @@ void lcl_SophisticatedFillLineIndices( SwLineOffsetArray &rArr,
         {
             const SwTableLine *pLine = rBox.GetUpper();
             const sal_uInt16 nEnd = sal_uInt16( rBox.getRowSpan() +
-                rTable.GetTabLines().C40_GETPOS( SwTableLine, pLine ) );
+                rTable.GetTabLines().GetPos(  pLine ) );
             // The next if statement is a small optimization
             if( aLnOfs.first != nEnd || aLnOfs.second != rBox.getRowSpan() )
             {
@@ -1310,7 +1310,7 @@ sal_uInt16 lcl_CalculateSplitLineHeights( SwSplitLines &rCurr, SwSplitLines &rNe
         const SwTableBox &rBox = rBoxes[ i ]->FindStartOfRowSpan( rTable );
         OSL_ENSURE( rBox.getRowSpan() > 0, "Didn't I say 'StartOfRowSpan' ??" );
         const SwTableLine *pLine = rBox.GetUpper();
-        const sal_uInt16 nStart = rTable.GetTabLines().C40_GETPOS( SwTableLine, pLine );
+        const sal_uInt16 nStart = rTable.GetTabLines().GetPos( pLine );
         const sal_uInt16 nEnd = sal_uInt16( rBox.getRowSpan() + nStart - 1 );
         // The next if statement is a small optimization
         if( aLnOfs.first != nStart || aLnOfs.second != nEnd )
@@ -1366,7 +1366,7 @@ sal_uInt16 lcl_LineIndex( const SwTable& rTable, const SwSelBoxes& rBoxes,
     {
         SwTableBox *pBox = rBoxes[i];
         const SwTableLine* pLine = rBoxes[i]->GetUpper();
-        sal_uInt16 nPos = rTable.GetTabLines().C40_GETPOS( SwTableLine, pLine );
+        sal_uInt16 nPos = rTable.GetTabLines().GetPos( pLine );
         if( USHRT_MAX != nPos )
         {
             if( bBehind )
@@ -1555,7 +1555,7 @@ void SwTable::PrepareDelBoxes( const SwSelBoxes& rBoxes )
             {
                 long nLeft = lcl_Box2LeftBorder( *pBox );
                 SwTableLine *pLine = pBox->GetUpper();
-                sal_uInt16 nLinePos = GetTabLines().C40_GETPOS(SwTableLine, pLine);
+                sal_uInt16 nLinePos = GetTabLines().GetPos( pLine);
                 OSL_ENSURE( nLinePos < USHRT_MAX, "Box/table mismatch" );
                 if( nRowSpan > 1 )
                 {

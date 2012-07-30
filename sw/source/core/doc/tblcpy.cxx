@@ -196,12 +196,12 @@ namespace
             _FndLines &rFndLines = rFndBox.GetLines();
             maCols.push_front(0);
             const SwTableLine* pLine = rFndLines.front().GetLine();
-            sal_uInt16 nStartLn = rTable.GetTabLines().C40_GETPOS( SwTableLine, pLine );
+            sal_uInt16 nStartLn = rTable.GetTabLines().GetPos( pLine );
             sal_uInt16 nEndLn = nStartLn;
             if( rFndLines.size() > 1 )
             {
                 pLine = rFndLines.back().GetLine();
-                nEndLn = rTable.GetTabLines().C40_GETPOS( SwTableLine, pLine );
+                nEndLn = rTable.GetTabLines().GetPos( pLine );
             }
             if( nStartLn < USHRT_MAX && nEndLn < USHRT_MAX )
             {
@@ -795,7 +795,7 @@ sal_Bool SwTable::InsTable( const SwTable& rCpyTbl, const SwNodeIndex& rSttBox,
         SwTableLine* pNxtLine = pMyBox->GetUpper();
         while( pNxtLine->GetUpper() )
             pNxtLine = pNxtLine->GetUpper()->GetUpper();
-        sal_uInt16 nPos = GetTabLines().C40_GETPOS( SwTableLine, pNxtLine );
+        sal_uInt16 nPos = GetTabLines().GetPos( pNxtLine );
         // Is there a next?
         if( nPos + 1 >= (sal_uInt16)GetTabLines().size() )
             bDelCntnt = sal_False;      // there is none, all goes into the last Box
@@ -847,7 +847,7 @@ sal_Bool SwTable::InsTable( const SwTable& rCpyTbl, const SwSelBoxes& rSelBoxes,
     if( 1 != rCpyTbl.GetTabSortBoxes().size() )
     {
         SwTableLine* pSttLine = pSttBox->GetUpper();
-        sal_uInt16 nSttLine = GetTabLines().C40_GETPOS( SwTableLine, pSttLine );
+        sal_uInt16 nSttLine = GetTabLines().GetPos( pSttLine );
         _FndBox* pFndBox;
 
         sal_uInt16 nFndCnt = aFndBox.GetLines().size();
@@ -858,7 +858,7 @@ sal_Bool SwTable::InsTable( const SwTable& rCpyTbl, const SwSelBoxes& rSelBoxes,
         sal_uInt16 nTstLns = 0;
         pFLine = &aFndBox.GetLines().front();
         pSttLine = pFLine->GetLine();
-        nSttLine = GetTabLines().C40_GETPOS( SwTableLine, pSttLine );
+        nSttLine = GetTabLines().GetPos( pSttLine );
         // Do we have as many rows, actually?
         if( 1 == nFndCnt )
         {

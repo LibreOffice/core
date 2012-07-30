@@ -3145,7 +3145,7 @@ sal_Bool SwDoc::SplitTable( const SwPosition& rPos, sal_uInt16 eHdlnMode,
                 pLine = pLine->GetUpper()->GetUpper();
 
             // in pLine steht jetzt die GrundLine.
-            aMsgHnt.nSplitLine = rTbl.GetTabLines().C40_GETPOS( SwTableLine, pLine );
+            aMsgHnt.nSplitLine = rTbl.GetTabLines().GetPos( pLine );
         }
 
         String sNewTblNm( GetUniqueTblName() );
@@ -3371,7 +3371,7 @@ SwTableNode* SwNodes::SplitTable( const SwNodeIndex& rPos, sal_Bool bAfter,
         pLine = pLine->GetUpper()->GetUpper();
 
     // in pLine steht jetzt die GrundLine.
-    sal_uInt16 nLinePos = rTbl.GetTabLines().C40_GETPOS( SwTableLine, pLine );
+    sal_uInt16 nLinePos = rTbl.GetTabLines().GetPos( pLine );
     if( USHRT_MAX == nLinePos ||
         ( bAfter ? ++nLinePos >= rTbl.GetTabLines().size() : !nLinePos ))
         return 0;       // nicht gefunden oder letze Line !!
