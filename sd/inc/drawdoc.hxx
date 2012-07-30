@@ -160,8 +160,8 @@ namespace sd
 class SdDrawDocument : public FmFormModel
 {
 private:
-    ::sd::Outliner*     mpOutliner;         // local outliner for outline mode
-    ::sd::Outliner*     mpInternalOutliner;  // internal outliner for creation of text objects
+    ::sd::Outliner*     mpOutliner;         ///< local outliner for outline mode
+    ::sd::Outliner*     mpInternalOutliner;  ///< internal outliner for creation of text objects
     Timer*              mpWorkStartupTimer;
     Timer*              mpOnlineSpellingTimer;
     sd::ShapeList*      mpOnlineSpellingList;
@@ -183,7 +183,7 @@ private:
 
     sal_Bool                mbOnlineSpell;
     sal_Bool                mbSummationOfParagraphs;
-    bool                mbStartWithPresentation;        // is set to true when starting with command line parameter -start
+    bool                mbStartWithPresentation;        ///< is set to true when starting with command line parameter -start
     LanguageType        meLanguage;
     LanguageType        meLanguageCJK;
     LanguageType        meLanguageCTL;
@@ -564,7 +564,7 @@ public:
 
     sd::UndoManager* GetUndoManager() const;
 
-    /* converts the given western font height to a corresponding ctl font height, deppending on the system language */
+    /** converts the given western font height to a corresponding ctl font height, deppending on the system language */
     static sal_uInt32 convertFontHeightToCTL( sal_uInt32 nWesternFontHeight );
 
     /** Get the style sheet pool if it was a SdStyleSheetPool.
@@ -653,8 +653,8 @@ private:
 namespace sd
 {
 
-// an instance of this guard disables modification of a document
-// during its lifetime
+/**an instance of this guard disables modification of a document
+ during its lifetime*/
 class ModifyGuard
 {
 public:
