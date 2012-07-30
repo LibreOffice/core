@@ -29,6 +29,7 @@
 
 #include <hintids.hxx>
 #include <rtl/math.hxx>
+#include <svl/svarray.hxx>
 #include <unotools/collatorwrapper.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -66,6 +67,11 @@ CollatorWrapper*    SwSortElement::pSortCollator = 0;
 lang::Locale*             SwSortElement::pLocale = 0;
 String*             SwSortElement::pLastAlgorithm = 0;
 LocaleDataWrapper*  SwSortElement::pLclData = 0;
+
+// List of all sorted elements
+typedef SwSortElement*      SwSortElementPtr;
+
+SV_DECL_PTRARR_SORT(SwSortElements, SwSortElementPtr, 0)
 
 SV_IMPL_OP_PTRARR_SORT( SwSortElements, SwSortElementPtr );
 

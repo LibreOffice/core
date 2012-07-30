@@ -29,7 +29,6 @@
 #ifndef _SORT_HXX
 #define _SORT_HXX
 
-#include <svl/svarray.hxx>
 #include <ndindex.hxx>
 #include <vector>
 
@@ -53,11 +52,6 @@ namespace com {
         }
     }
 }
-
-// List of all sorted elements
-typedef SwSortElement*      SwSortElementPtr;
-
-SV_DECL_PTRARR_SORT(SwSortElements, SwSortElementPtr, 0)
 
 class SwMovedBoxes : public std::vector<const SwTableBox*>
 {
