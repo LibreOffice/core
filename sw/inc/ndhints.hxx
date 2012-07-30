@@ -29,8 +29,8 @@
 #define _NDHINTS_HXX
 
 
-#include <svl/svarray.hxx>
 #include <tools/mempool.hxx>
+#include <o3tl/sorted_vector.hxx>
 
 #include "swtypes.hxx"
 
@@ -71,9 +71,17 @@ MakeRedlineTxtAttr( SwDoc & rDoc, SfxPoolItem& rAttr );
 
  // Class SwpHtStart/End
 
+struct CompareSwpHtStart
+{
+    bool operator()(SwTxtAttr* const lhs, SwTxtAttr* const rhs) const;
+};
+class SwpHtStart : public o3tl::sorted_vector<SwTxtAttr*, CompareSwpHtStart> {};
 
-SV_DECL_PTRARR_SORT(SwpHtStart,SwTxtAttr*,1)
-SV_DECL_PTRARR_SORT(SwpHtEnd,SwTxtAttr*,1)
+struct CompareSwpHtEnd
+{
+    bool operator()(SwTxtAttr* const lhs, SwTxtAttr* const rhs) const;
+};
+class SwpHtEnd : public o3tl::sorted_vector<SwTxtAttr*, CompareSwpHtEnd> {};
 
 // Class SwpHintsArr
 
@@ -102,18 +110,17 @@ public:
     inline       SwTxtAttr * GetEnd  ( const sal_uInt16 nPos )
         { return m_HintEnds  [nPos]; }
 
-    inline sal_uInt16 GetEndCount()   const { return m_HintEnds  .Count(); }
-    inline sal_uInt16 GetStartCount() const { return m_HintStarts.Count(); }
+    inline sal_uInt16 GetEndCount()   const { return m_HintEnds  .size(); }
+    inline sal_uInt16 GetStartCount() const { return m_HintStarts.size(); }
 
     inline sal_uInt16 GetStartOf( const SwTxtAttr *pHt ) const;
-    inline sal_uInt16 GetPos( const SwTxtAttr *pHt ) const
-        { return m_HintStarts.GetPos( pHt ); }
+    sal_uInt16 GetPos( const SwTxtAttr *pHt ) const;
 
     inline SwTxtAttr * GetTextHint( const sal_uInt16 nIdx )
         { return GetStart(nIdx); }
     inline const SwTxtAttr * operator[]( const sal_uInt16 nIdx ) const
         { return m_HintStarts[nIdx]; }
-    inline sal_uInt16 Count() const { return m_HintStarts.Count(); }
+    inline sal_uInt16 Count() const { return m_HintStarts.size(); }
 
 #ifdef DBG_UTIL
     bool Check() const;
@@ -205,12 +212,12 @@ SvStream &operator<<(SvStream &aS, const SwpHints &rHints); //$ ostream
 
 inline sal_uInt16 SwpHintsArray::GetStartOf( const SwTxtAttr *pHt ) const
 {
-    sal_uInt16 nPos;
-    if ( !m_HintStarts.Seek_Entry( pHt, &nPos ) )
+    SwpHtStart::const_iterator it = m_HintStarts.find( (SwTxtAttr*)pHt );
+    if ( it == m_HintStarts.end() )
     {
-        nPos = USHRT_MAX;
+        return USHRT_MAX;
     }
-    return nPos;
+    return it - m_HintStarts.begin();
 }
 
 inline SwTxtAttr *SwpHintsArray::Cut( const sal_uInt16 nPosInStart )

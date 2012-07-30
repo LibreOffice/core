@@ -36,9 +36,6 @@
 #endif
 
 
-_SV_IMPL_SORTAR_ALG( SwpHtStart, SwTxtAttr* )
-_SV_IMPL_SORTAR_ALG( SwpHtEnd, SwTxtAttr* )
-
 inline void DumpHints(const SwpHtStart &, const SwpHtEnd &) { }
 
 /*************************************************************************
@@ -125,76 +122,14 @@ static sal_Bool lcl_IsLessEnd( const SwTxtAttr &rHt1, const SwTxtAttr &rHt2 )
     return ( nHt1 < nHt2 );
 }
 
-/*************************************************************************
- *                      SwpHtStart::Seek_Entry()
- *************************************************************************/
-
-sal_Bool SwpHtStart::Seek_Entry( const SwTxtAttr *pElement, sal_uInt16 *pPos ) const
+bool CompareSwpHtStart::operator()(SwTxtAttr* const lhs, SwTxtAttr* const rhs) const
 {
-    sal_uInt16 nOben = Count(), nMitte, nUnten = 0;
-    if( nOben > 0 )
-    {
-        nOben--;
-        while( nUnten <= nOben )
-        {
-            nMitte = nUnten + ( nOben - nUnten ) / 2;
-            const SwTxtAttr *pMitte = (*this)[nMitte];
-            if( IsEqual( *pMitte, *pElement ) )
-            {
-                *pPos = nMitte;
-                return sal_True;
-            }
-            else
-                if( lcl_IsLessStart( *pMitte, *pElement ) )
-                    nUnten = nMitte + 1;
-                else
-                    if( nMitte == 0 )
-                    {
-                        *pPos = nUnten;
-                        return sal_False;
-                    }
-                    else
-                        nOben = nMitte - 1;
-        }
-    }
-    *pPos = nUnten;
-    return sal_False;
+  return lcl_IsLessStart( *lhs, *rhs );
 }
 
-/*************************************************************************
- *                      SwpHtEnd::Seek_Entry()
- *************************************************************************/
-
-sal_Bool SwpHtEnd::Seek_Entry( const SwTxtAttr *pElement, sal_uInt16 *pPos ) const
+bool CompareSwpHtEnd::operator()(SwTxtAttr* const lhs, SwTxtAttr* const rhs) const
 {
-    sal_uInt16 nOben = Count(), nMitte, nUnten = 0;
-    if( nOben > 0 )
-    {
-        nOben--;
-        while( nUnten <= nOben )
-        {
-            nMitte = nUnten + ( nOben - nUnten ) / 2;
-            const SwTxtAttr *pMitte = (*this)[nMitte];
-            if( IsEqual( *pMitte, *pElement ) )
-            {
-                *pPos = nMitte;
-                return sal_True;
-            }
-            else
-                if( lcl_IsLessEnd( *pMitte, *pElement ) )
-                    nUnten = nMitte + 1;
-                else
-                    if( nMitte == 0 )
-                    {
-                        *pPos = nUnten;
-                        return sal_False;
-                    }
-                    else
-                        nOben = nMitte - 1;
-        }
-    }
-    *pPos = nUnten;
-    return sal_False;
+  return lcl_IsLessEnd( *lhs, *rhs );
 }
 
 /*************************************************************************
@@ -205,27 +140,32 @@ void SwpHintsArray::Insert( const SwTxtAttr *pHt )
 {
     Resort();
 #if OSL_DEBUG_LEVEL > 0
-    sal_uInt16 nPos;
-    OSL_ENSURE(!m_HintStarts.Seek_Entry( pHt, &nPos ),
+    OSL_ENSURE(m_HintStarts.find( (SwTxtAttr*)pHt ) == m_HintStarts.end(),
             "Insert: hint already in HtStart");
-    OSL_ENSURE(!m_HintEnds.Seek_Entry( pHt, &nPos ),
+    OSL_ENSURE(m_HintEnds.find( (SwTxtAttr*)pHt ) == m_HintEnds.end(),
             "Insert: hint already in HtEnd");
 #endif
-    m_HintStarts.Insert( pHt );
-    m_HintEnds.Insert( pHt );
+    m_HintStarts.insert( (SwTxtAttr*)pHt );
+    m_HintEnds.insert( (SwTxtAttr*)pHt );
 }
 
 void SwpHintsArray::DeleteAtPos( const sal_uInt16 nPos )
 {
     // optimization: nPos is the position in the Starts array
-    const SwTxtAttr *pHt = m_HintStarts[ nPos ];
-    m_HintStarts.Remove( nPos );
+    SwTxtAttr *pHt = m_HintStarts[ nPos ];
+    m_HintStarts.erase( m_HintStarts.begin() + nPos );
 
     Resort();
 
-    sal_uInt16 nEndPos;
-    m_HintEnds.Seek_Entry( pHt, &nEndPos );
-    m_HintEnds.Remove( nEndPos );
+    m_HintEnds.erase( pHt );
+}
+
+sal_uInt16 SwpHintsArray::GetPos( const SwTxtAttr *pHt ) const
+{
+    SwpHtStart::const_iterator it = m_HintStarts.find( (SwTxtAttr*)pHt );
+    if( it == m_HintStarts.end() )
+        return USHRT_MAX;
+    return it - m_HintStarts.begin();
 }
 
 #ifdef DBG_UTIL
@@ -246,7 +186,7 @@ void SwpHintsArray::DeleteAtPos( const sal_uInt16 nPos )
 bool SwpHintsArray::Check() const
 {
     // 1) gleiche Anzahl in beiden Arrays
-    CHECK_ERR( m_HintStarts.Count() == m_HintEnds.Count(),
+    CHECK_ERR( m_HintStarts.size() == m_HintEnds.size(),
         "HintsCheck: wrong sizes" );
     xub_StrLen nLastStart = 0;
     xub_StrLen nLastEnd   = 0;
@@ -294,13 +234,13 @@ bool SwpHintsArray::Check() const
         // --- Ueberkreuzungen ---
 
         // 5) gleiche Pointer in beiden Arrays
-        if( !m_HintStarts.Seek_Entry( pHt, &nIdx ) )
+        if( m_HintStarts.find( (SwTxtAttr*)pHt ) == m_HintStarts.end() )
             nIdx = STRING_LEN;
 
         CHECK_ERR( STRING_LEN != nIdx, "HintsCheck: no GetStartOf" );
 
         // 6) gleiche Pointer in beiden Arrays
-        if( !m_HintEnds.Seek_Entry( pHt, &nIdx ) )
+        if( m_HintEnds.find( (SwTxtAttr*)pHt ) == m_HintEnds.end() )
             nIdx = STRING_LEN;
 
         CHECK_ERR( STRING_LEN != nIdx, "HintsCheck: no GetEndOf" );
@@ -386,13 +326,13 @@ bool SwpHintsArray::Resort()
     const SwTxtAttr *pLast = 0;
     sal_uInt16 i;
 
-    for ( i = 0; i < m_HintStarts.Count(); ++i )
+    for ( i = 0; i < m_HintStarts.size(); ++i )
     {
-        const SwTxtAttr *pHt = m_HintStarts[i];
+        SwTxtAttr *pHt = m_HintStarts[i];
         if( pLast && !lcl_IsLessStart( *pLast, *pHt ) )
         {
-            m_HintStarts.Remove( i );
-            m_HintStarts.Insert( pHt );
+            m_HintStarts.erase( m_HintStarts.begin() + i );
+            m_HintStarts.insert( pHt );
             pHt = m_HintStarts[i];
             if ( pHt != pLast )
                 --i;
@@ -402,13 +342,13 @@ bool SwpHintsArray::Resort()
     }
 
     pLast = 0;
-    for ( i = 0; i < m_HintEnds.Count(); ++i )
+    for ( i = 0; i < m_HintEnds.size(); ++i )
     {
-        const SwTxtAttr *pHt = m_HintEnds[i];
+        SwTxtAttr *pHt = m_HintEnds[i];
         if( pLast && !lcl_IsLessEnd( *pLast, *pHt ) )
         {
-            m_HintEnds.Remove( i );
-            m_HintEnds.Insert( pHt );
+            m_HintEnds.erase( m_HintEnds.begin() + i );
+            m_HintEnds.insert( pHt );
             pHt = m_HintEnds[i]; // normalerweise == pLast
             // Wenn die Unordnung etwas groesser ist (24200),
             // muessen wir Position i erneut vergleichen.
