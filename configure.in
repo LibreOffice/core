@@ -134,6 +134,12 @@ if test -n "$with_android_ndk"; then
    # What if the NDK at some point starts including several toolchains for different
    # gcc versions (like some 3rd-party improved NDK builds already do)?
    # Then the use of a wildcard below will break.
+
+   # That indeed happened with NDK r8b, which has both gcc 4.4.3 and 4.6
+   # -based toolchains. The latter has interesting new features, like the
+   # possiblity to use the gold linker, which should bring a nice speedup to
+   # linking especially our libmerged. Work to support that in progress. Until
+   # that is done, please use no newer NDK than r8.
    if test "$with_android_arch" = "arm"; then
         ANDROID_ABI_PREBUILT_BIN=`echo $ANDROID_NDK_HOME/toolchains/$with_android_arch-linux*/prebuilt/*/bin`
         android_gcc_prefix=arm-linux-androideabi
