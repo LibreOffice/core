@@ -17,24 +17,24 @@
 #include "ImagePreparer.hxx"
 #include "Listener.hxx"
 #include "Receiver.hxx"
-#include "Server.hxx"
+#include "RemoteServer.hxx"
 
 using namespace std;
 using namespace sd;
 using namespace ::com::sun::star;
 using rtl::OString;
 
-Server::Server()
-:  Thread( "ServerThread" ), mSocket()
+RemoteServer::RemoteServer()
+:  Thread( "RemoteServerThread" ), mSocket()
 {
 }
 
-Server::~Server()
+RemoteServer::~RemoteServer()
 {
 }
 
 // Run as a thread
-void Server::listenThread()
+void RemoteServer::listenThread()
 {
     pTransmitter = new Transmitter( mStreamSocket );
     pTransmitter->launch();
@@ -98,7 +98,7 @@ void Server::listenThread()
 }
 
 
-void Server::execute()
+void RemoteServer::execute()
 {
     osl::SocketAddr aAddr( "0", PORT );
     if ( !mSocket.bind( aAddr ) )
@@ -120,12 +120,12 @@ void Server::execute()
 
 }
 
-void Server::informListenerDestroyed()
+void RemoteServer::informListenerDestroyed()
 {
     mListener.clear();
 }
 
-void Server::presentationStarted( const css::uno::Reference<
+void RemoteServer::presentationStarted( const css::uno::Reference<
      css::presentation::XSlideShowController > &rController )
 {
     if ( pTransmitter )
@@ -135,7 +135,7 @@ void Server::presentationStarted( const css::uno::Reference<
     }
 }
 
-void Server::presentationStopped()
+void RemoteServer::presentationStopped()
 {
     if ( mListener.is() )
     {
@@ -144,23 +144,23 @@ void Server::presentationStopped()
     }
 }
 
-Server *sd::Server::spServer = NULL;
-Transmitter *sd::Server::pTransmitter = NULL;
-rtl::Reference<Listener> sd::Server::mListener = NULL;
+RemoteServer *sd::RemoteServer::spServer = NULL;
+Transmitter *sd::RemoteServer::pTransmitter = NULL;
+rtl::Reference<Listener> sd::RemoteServer::mListener = NULL;
 
-void Server::setup()
+void RemoteServer::setup()
 {
   if (spServer)
     return;
 
-  spServer = new Server();
+  spServer = new RemoteServer();
   spServer->launch();
 }
 
 void SdDLL::RegisterRemotes()
 {
   fprintf( stderr, "Register our remote control goodness\n" );
-  sd::Server::setup();
+  sd::RemoteServer::setup();
 
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

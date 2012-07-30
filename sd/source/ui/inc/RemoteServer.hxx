@@ -37,7 +37,7 @@ namespace sd
     class Listener;
     class ImagePreparer;
 
-    class Server : public salhelper::Thread
+    class RemoteServer : public salhelper::Thread
     {
         public:
             static void setup();
@@ -46,9 +46,9 @@ namespace sd
             static void presentationStopped();
             void informListenerDestroyed();
         private:
-            Server();
-            ~Server();
-            static Server *spServer;
+            RemoteServer();
+            ~RemoteServer();
+            static RemoteServer *spServer;
             osl::AcceptorSocket mSocket;
             osl::StreamSocket mStreamSocket;
             void listenThread();

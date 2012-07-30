@@ -22,7 +22,7 @@ using rtl::OString;
 using rtl::OStringBuffer;
 
 
-Listener::Listener( const ::rtl::Reference<Server>& rServer, sd::Transmitter *aTransmitter  )
+Listener::Listener( const ::rtl::Reference<RemoteServer>& rServer, sd::Transmitter *aTransmitter  )
     : ::cppu::WeakComponentImplHelper1< XSlideShowListener >( m_aMutex ),
       mServer( rServer ),
       pTransmitter( NULL ),

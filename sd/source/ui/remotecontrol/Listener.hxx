@@ -19,7 +19,7 @@
 #include <osl/socket.hxx>
 #include <rtl/ref.hxx>
 
-#include "Server.hxx"
+#include "RemoteServer.hxx"
 #include "Transmitter.hxx"
 #include "ImagePreparer.hxx"
 
@@ -35,7 +35,7 @@ class Listener
       public ::cppu::WeakComponentImplHelper1< css::presentation::XSlideShowListener >
 {
 public:
-    Listener( const ::rtl::Reference<Server>& rServer, sd::Transmitter *aTransmitter );
+    Listener( const ::rtl::Reference<RemoteServer>& rServer, sd::Transmitter *aTransmitter );
     ~Listener();
     void init( const css::uno::Reference< css::presentation::XSlideShowController >& aController );
 
@@ -65,7 +65,7 @@ public:
     throw (com::sun::star::uno::RuntimeException);
 
 private:
-    rtl::Reference<Server> mServer;
+    rtl::Reference<RemoteServer> mServer;
     sd::Transmitter *pTransmitter;
     css::uno::Reference< css::presentation::XSlideShowController > mController;
     rtl::Reference<sd::ImagePreparer> mPreparer;
