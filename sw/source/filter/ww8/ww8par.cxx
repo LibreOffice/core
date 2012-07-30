@@ -3461,6 +3461,26 @@ void wwSectionManager::SetUseOn(wwSection &rSection)
         rSection.mpTitlePage->WriteUseOn(
             (UseOnPage) (eUseBase | nsUseOnPage::PD_HEADERSHARE | nsUseOnPage::PD_FOOTERSHARE));
     }
+
+    if( nsUseOnPage::PD_MIRROR != (UseOnPage)(eUse & nsUseOnPage::PD_MIRROR) )
+    {
+        if( rSection.maSep.bkc == 3 )
+        {
+            if( rSection.mpPage )
+                rSection.mpPage->SetUseOn( nsUseOnPage::PD_LEFT );
+            if( rSection.mpTitlePage )
+                rSection.mpTitlePage->SetUseOn( nsUseOnPage::PD_LEFT );
+        }
+        else if( rSection.maSep.bkc == 4 )
+        {
+            if( rSection.mpPage )
+                rSection.mpPage->SetUseOn( nsUseOnPage::PD_RIGHT );
+            if( rSection.mpTitlePage )
+                rSection.mpTitlePage->SetUseOn( nsUseOnPage::PD_RIGHT );
+        }
+
+    }
+
 }
 
 //Set the page descriptor on this node, handle the different cases for a text
@@ -3542,8 +3562,19 @@ SwFmtPageDesc wwSectionManager::SetSwFmtPageDesc(mySegIter &rIter,
 
     //Set page before hd/ft
     const wwSection *pPrevious = 0;
-    if (rIter != rStart)
-        pPrevious = &(*(rIter-1));
+
+    mySegIter aPrev = rIter;
+    while( aPrev!= rStart )
+    {
+        aPrev--;
+        pPrevious = &(*(aPrev));
+        if( aPrev->IsContinous())
+            continue;
+        else{
+            break;
+        }
+    }
+
     SetHdFt(*rIter, std::distance(rStart, rIter), pPrevious);
     SetUseOn(*rIter);
 
