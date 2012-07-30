@@ -58,6 +58,9 @@ public:
 
     bool moveTemplates (std::set<const ThumbnailViewItem*> &rItems, const sal_uInt16 nTargetItem, bool bCopy);
 
+    void copyFrom (const sal_uInt16 nRegionItemId, const OUString &rName,
+                   const BitmapEx &rThumbnail, const OUString &rPath);
+
     void copyFrom (TemplateFolderViewItem *pItem, const rtl::OUString &rPath);
 
 private:

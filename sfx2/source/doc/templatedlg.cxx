@@ -552,6 +552,8 @@ IMPL_LINK(SfxTemplateManagerDlg, MoveMenuSelectHdl, Menu*, pMenu)
         // Check if we are displaying the local or remote templates
         if (mpCurView == maView)
             localMoveTo(nMenuId);
+        else
+            remoteMoveTo(nMenuId);
     }
 
     return 0;
@@ -911,6 +913,42 @@ void SfxTemplateManagerDlg::localMoveTo(sal_uInt16 nMenuId)
         if (!maView->moveTemplates(maSelTemplates,nItemId,false) &&
                 !maView->moveTemplates(maSelTemplates,nItemId,true))
         {
+        }
+    }
+}
+
+void SfxTemplateManagerDlg::remoteMoveTo(const sal_uInt16 nMenuId)
+{
+    sal_uInt16 nItemId = 0;
+
+    if (nMenuId == MNI_MOVE_NEW)
+    {
+        InputDialog dlg(SfxResId(STR_INPUT_NEW).toString(),this);
+
+        int ret = dlg.Execute();
+
+        if (ret)
+        {
+            rtl::OUString aName = dlg.getEntryText();
+
+            if (!aName.isEmpty())
+                nItemId = maView->createRegion(aName);
+        }
+    }
+    else
+    {
+        nItemId = maView->GetItemId(nMenuId-MNI_MOVE_FOLDER_BASE);
+    }
+
+    if (nItemId)
+    {
+        std::set<const ThumbnailViewItem*>::const_iterator aIter;
+        for (aIter = maSelTemplates.begin(); aIter != maSelTemplates.end(); ++aIter)
+        {
+            const TemplateSearchViewItem *pItem =
+                    static_cast<const TemplateSearchViewItem*>(*aIter);
+
+            maView->copyFrom(nItemId,pItem->maTitle,pItem->maPreview1,pItem->getPath());
         }
     }
 }

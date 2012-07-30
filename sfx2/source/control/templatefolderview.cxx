@@ -551,6 +551,44 @@ bool TemplateFolderView::moveTemplates(std::set<const ThumbnailViewItem *> &rIte
     return ret;
 }
 
+void TemplateFolderView::copyFrom(const sal_uInt16 nRegionItemId, const OUString &rName,
+                                  const BitmapEx &rThumbnail, const OUString &rPath)
+{
+    sal_uInt16 nId = 0;
+    sal_uInt16 nRegionId = nRegionItemId - 1;
+
+    if (!mItemList.empty())
+        nId = (mItemList.back())->mnId;
+
+    String aPath(rPath);
+
+    if (mpDocTemplates->CopyFrom(nRegionId,nId,aPath))
+    {
+        TemplateItemProperties aTemplate;
+        aTemplate.nId = nId+1;
+        aTemplate.nRegionId = nRegionId;
+        aTemplate.aName = aPath;
+        aTemplate.aThumbnail = rThumbnail;
+        aTemplate.aPath = mpDocTemplates->GetPath(nRegionId,nId);
+        aTemplate.aType = SvFileInformationManager::GetDescription(INetURLObject(aPath));
+
+        for (size_t i = 0, n = mItemList.size(); i < n; ++i)
+        {
+            if (mItemList[i]->mnId == nRegionItemId)
+            {
+                TemplateFolderViewItem *pItem =
+                        static_cast<TemplateFolderViewItem*>(mItemList[i]);
+
+                pItem->maTemplates.push_back(aTemplate);
+
+                lcl_updateThumbnails(pItem);
+            }
+        }
+
+        CalculateItemPositions();
+    }
+}
+
 void TemplateFolderView::copyFrom (TemplateFolderViewItem *pItem, const rtl::OUString &rPath)
 {
     sal_uInt16 nId = 0;

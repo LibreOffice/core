@@ -89,6 +89,8 @@ private:
 
     void localMoveTo (sal_uInt16 nMenuId);
 
+    void remoteMoveTo (const sal_uInt16 nMenuId);
+
     /**
      *
      * Move search result templates stored in the filesystem to another folder.
