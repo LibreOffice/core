@@ -212,6 +212,7 @@ void TemplateOnlineView::OnItemDblClicked(ThumbnailViewItem *pItem)
                 }
             }
 
+            mpItemView->setName(pItem->maTitle);
             mpItemView->InsertItems(aItems);
             mpItemView->Show();
         }
