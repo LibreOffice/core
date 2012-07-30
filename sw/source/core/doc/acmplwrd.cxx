@@ -224,18 +224,19 @@ bool SwAutoCompleteString::RemoveDocument(const SwDoc& rDoc)
     return false;
 }
 
-SwAutoCompleteWord::SwAutoCompleteWord( sal_uInt16 nWords, sal_uInt16 nMWrdLen )
-    :
+SwAutoCompleteWord::SwAutoCompleteWord( sal_uInt16 nWords, sal_uInt16 nMWrdLen ) :
     pImpl(new SwAutoCompleteWord_Impl(*this)),
     nMaxCount( nWords ),
     nMinWrdLen( nMWrdLen ),
     bLockWordLst( sal_False )
 {
+    m_LookupTree = new LatinLookupTree(OUString("default"));
 }
 
 SwAutoCompleteWord::~SwAutoCompleteWord()
 {
     m_WordList.DeleteAndDestroyAll(); // so the assertion below works
+    delete m_LookupTree;
     delete pImpl;
 #if OSL_DEBUG_LEVEL > 0
     sal_uLong nStrings = SwAutoCompleteString::GetElementCount();
@@ -272,6 +273,9 @@ sal_Bool SwAutoCompleteWord::InsertWord( const String& rWord, SwDoc& rDoc )
         pNew->AddDocument(rDoc);
         std::pair<editeng::SortedAutoCompleteStrings::const_iterator, bool>
             aInsPair = m_WordList.insert(pNew);
+
+        m_LookupTree->insert( OUString(aNewWord) );
+
         if (aInsPair.second)
         {
             bRet = sal_True;
@@ -351,22 +355,19 @@ void SwAutoCompleteWord::SetMinWordLen( sal_uInt16 n )
     nMinWrdLen = n;
 }
 
-sal_Bool SwAutoCompleteWord::GetRange( const String& rWord, sal_uInt16& rStt,
-                                    sal_uInt16& rEnd ) const
+bool SwAutoCompleteWord::GetWordsMatching(String aMatch, std::vector<String>& aWords) const
 {
-    const String * pStr = &rWord;
-    editeng::IAutoCompleteString hack(*pStr); // UGLY
-    rStt = m_WordList.find(&hack) - m_WordList.begin();
-    rEnd = rStt;
+    OUString aStringRoot = OUString(aMatch);
+    m_LookupTree->gotoNode( aStringRoot );
+    OUString aAutocompleteWord = m_LookupTree->suggestAutoCompletion();
+    if (aAutocompleteWord.isEmpty())
+        return false;
 
-    const ::utl::TransliterationWrapper& rSCmp = GetAppCmpStrIgnore();
-    while (rEnd < m_WordList.size() &&
-            rSCmp.isMatch(rWord, m_WordList[rEnd]->GetAutoCompleteString()))
-    {
-        ++rEnd;
-    }
+    OUString aCompleteWord = aStringRoot + aAutocompleteWord;
 
-    return rStt < rEnd;
+    aWords.push_back( String(aCompleteWord) );
+
+    return true;
 }
 
 void SwAutoCompleteWord::CheckChangedList(

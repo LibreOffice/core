@@ -32,6 +32,7 @@
 #include <deque>
 
 #include <editeng/swafopt.hxx>
+#include <editeng/LatinLookupTree.hxx>
 
 class SwDoc;
 class SwAutoCompleteWord_Impl;
@@ -46,6 +47,7 @@ class SwAutoCompleteWord
 
     /// contains extended strings carrying source information
     editeng::SortedAutoCompleteStrings m_WordList;
+    LookupTree* m_LookupTree;
     SwAutoCompleteStringPtrDeque aLRULst;
 
     SwAutoCompleteWord_Impl* pImpl;
@@ -74,7 +76,10 @@ public:
 
     const editeng::SortedAutoCompleteStrings& GetWordList() const
         { return m_WordList; }
+
     void CheckChangedList(const editeng::SortedAutoCompleteStrings& rNewLst);
+
+    bool GetWordsMatching(String aMatch, std::vector<String>& aWords) const;
 };
 
 

@@ -1377,10 +1377,10 @@ SwRect SwTxtFrm::SmartTagScan( SwCntntNode* /*pActNode*/, xub_StrLen /*nActPos*/
         rtl::OUString aExpandText = aConversionMap.getViewText();
 
         // Ownership ov ConversionMap is passed to SwXTextMarkup object!
-        Reference< com::sun::star::text::XTextMarkup > xTextMarkup =
+        com::sun::star::uno::Reference< com::sun::star::text::XTextMarkup > xTextMarkup =
              new SwXTextMarkup( *pNode, aConversionMap );
 
-        Reference< ::com::sun::star::frame::XController > xController = pNode->GetDoc()->GetDocShell()->GetController();
+        com::sun::star::uno::Reference< ::com::sun::star::frame::XController > xController = pNode->GetDoc()->GetDocShell()->GetController();
 
         xub_StrLen nLangBegin = nBegin;
         xub_StrLen nLangEnd = nEnd;

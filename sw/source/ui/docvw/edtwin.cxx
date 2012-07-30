@@ -5612,31 +5612,27 @@ void QuickHelpData::FillStrArr( SwWrtShell& rSh, const String& rWord )
 
     // Add matching words from AutoCompleteWord list
     const SwAutoCompleteWord& rACList = rSh.GetAutoCompleteWords();
-    sal_uInt16 nPos, nEnd;
-    // TODO - GetRange only performs a case insensitive match for ASCII
-    if ( rACList.GetRange( rWord, nPos, nEnd ) )
+    std::vector<String> strings;
+    if ( rACList.GetWordsMatching( rWord, strings ) )
     {
-        for ( ; nPos < nEnd; ++nPos )
+        for (unsigned int i= 0; i<strings.size(); i++)
         {
-            const String& rStr = rACList[nPos];
-            // Check string longer than word
-            if ( rStr.Len() > rWord.Len() )
+            String aCompletedString = strings[i];
+            if ( aWordCase == CASE_LOWER )
+                m_aHelpStrings.push_back( rCC.lowercase( aCompletedString ) );
+            else if ( aWordCase == CASE_SENTENCE )
             {
-                if ( aWordCase == CASE_LOWER )
-                    m_aHelpStrings.push_back( rCC.lowercase( rStr ) );
-                else if ( aWordCase == CASE_SENTENCE )
-                {
-                    String sTmp = rCC.lowercase( rStr );
-                    sTmp.SetChar( 0, rStr.GetChar(0) );
-                    m_aHelpStrings.push_back( sTmp );
-                }
-                else if ( aWordCase == CASE_UPPER )
-                    m_aHelpStrings.push_back( rCC.uppercase( rStr ) );
-                else // CASE_OTHER - use retrieved capitalization
-                    m_aHelpStrings.push_back( rStr );
+                String sTmp = rCC.lowercase( aCompletedString );
+                sTmp.SetChar( 0, aCompletedString.GetChar(0) );
+                m_aHelpStrings.push_back( sTmp );
             }
+            else if ( aWordCase == CASE_UPPER )
+                m_aHelpStrings.push_back( rCC.uppercase( aCompletedString ) );
+            else // CASE_OTHER - use retrieved capitalization
+                m_aHelpStrings.push_back( aCompletedString );
         }
     }
+
 }
 
 namespace {
