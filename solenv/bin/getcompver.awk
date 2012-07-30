@@ -68,6 +68,15 @@ BEGIN {
         CCversion = substr($0, 0, index($0, "-") - 1)
     }
 }
+# NDK r8b has "4.6.x-google"
+/^[0-9]*[.][0-9]*[.][a-z]*-[0-9a-z]*$/ {
+    if ( compiler_matched == 0 ) {
+	# Include the second period in the match so that
+	# we will get a micro version of zero
+	x = match(  $0, /^[0-9]*[.][0-9]*[.]/ )
+        CCversion = substr($0, RSTART, RLENGTH)
+    }
+}
 END {
     if ( num == "true" ) {
         tokencount = split (CCversion,vertoken,".")
