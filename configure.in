@@ -7248,11 +7248,6 @@ if test "$with_system_saxon" = "yes"; then
         AC_CHECK_FILE($SAXON_JAR, [],
                [AC_MSG_ERROR(saxon.jar replacement not found.)], [])
     fi
-    if test -n "$SERIALIZER_JAR"; then
-        AC_CHECK_FILE($SERIALIZER_JAR, [],
-               [AC_MSG_ERROR(serializer.jar not found.)], [])
-        AC_SUBST(SERIALIZER_JAR)
-    fi
 
     dnl Saxon comes in two practically available versions, the out-of-date saxonb which
     dnl supports the Java extensions that LibreOffice uses, and the up-to-date saxon he
