@@ -63,7 +63,8 @@ extern "C" {
 
 
 /* SAL_MATH_FINITE(d): test double d on INFINITY, NaN et al. */
-#if !defined SOLARIS && defined(__cplusplus) \
+#if !defined SOLARIS && !defined ANDROID \
+                     && defined(__cplusplus) \
                      && ( defined(__GXX_EXPERIMENTAL_CXX0X__) || __cplusplus >= 201103L )
 #define SAL_MATH_FINITE(d) std::isfinite(d)
 #elif defined( WNT)
