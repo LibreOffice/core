@@ -66,7 +66,7 @@ public:
 
 class SwRedlineItr
 {
-    SwpHtStart_SAR aHints;
+    std::deque<SwTxtAttr *> m_Hints;
     const SwDoc& rDoc;
     const SwTxtNode& rNd;
     SwAttrHandler& rAttrHandler;

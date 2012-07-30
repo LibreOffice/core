@@ -275,7 +275,7 @@ short SwRedlineItr::_Seek( SwFont& rFnt, xub_StrLen nNew, xub_StrLen nOld )
                                 const_cast<SwDoc&>(rDoc),
                                 *const_cast<SfxPoolItem*>(pItem) );
                             pAttr->SetPriorityAttr( sal_True );
-                            aHints.C40_INSERT( SwTxtAttr, pAttr, aHints.Count());
+                            m_Hints.push_back(pAttr);
                             rAttrHandler.PushAndChg( *pAttr, rFnt );
                             if( RES_CHRATR_COLOR == nWhich )
                                 rFnt.SetNoCol( sal_True );
@@ -338,10 +338,10 @@ void SwRedlineItr::_Clear( SwFont* pFnt )
 {
     OSL_ENSURE( bOn, "SwRedlineItr::Clear: Off?" );
     bOn = sal_False;
-    while( aHints.Count() )
+    while (!m_Hints.empty())
     {
-        SwTxtAttr *pPos = aHints[ 0 ];
-        aHints.Remove(0);
+        SwTxtAttr *pPos = m_Hints.front();
+        m_Hints.pop_front();
         if( pFnt )
             rAttrHandler.PopAndChg( *pPos, *pFnt );
         else
@@ -377,9 +377,9 @@ sal_Bool SwRedlineItr::_ChkSpecialUnderline() const
     // Wenn die Unterstreichung oder das Escapement vom Redling kommt,
     // wenden wir immer das SpecialUnderlining, d.h. die Unterstreichung
     // unter der Grundlinie an.
-    for( MSHORT i = 0; i < aHints.Count(); ++i )
+    for (MSHORT i = 0; i < m_Hints.size(); ++i)
     {
-        MSHORT nWhich = aHints[i]->Which();
+        MSHORT nWhich = m_Hints[i]->Which();
         if( RES_CHRATR_UNDERLINE == nWhich ||
             RES_CHRATR_ESCAPEMENT == nWhich )
             return sal_True;
