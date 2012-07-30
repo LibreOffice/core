@@ -54,10 +54,6 @@ inline sal_Bool IsEqual( const SwTxtAttr &rHt1, const SwTxtAttr &rHt2 )
  *                      IsLessStart()
  *************************************************************************/
 
-// SV_IMPL_OP_PTRARR_SORT( SwpHtStart, SwTxtAttr* )
-// kein SV_IMPL_PTRARR_SORT( name,ArrElement )
-// unser SEEK_PTR_TO_OBJECT_NOTL( name,ArrElement )
-
 // Sortierreihenfolge: Start, Ende (umgekehrt!), Which-Wert (umgekehrt!),
 //                     als letztes die Adresse selbst
 

@@ -25,26 +25,11 @@
 *   Hier folgt die Beschreibung fuer die exportierten Makros:
 *
 *       SV_DECL_PTRARR_SORT(nm, AE, IS, GS)
-*       SV_IMPL_PTRARR_SORT( nm,AE )
-*           defieniere/implementiere ein Sort-Array mit Pointern, das nach
-*           Pointern sortiert ist. Basiert auf einem PTRARR
-*
-*       SV_DECL_PTRARR_SORT_DEL(nm, AE, IS, GS)
-*       SV_IMPL_PTRARR_SORT( nm,AE )
-*           defieniere/implementiere ein Sort-Array mit Pointern, das nach
-*           Pointern sortiert ist. Basiert auf einem PTRARR_DEL
-*
-*       SV_DECL_PTRARR_SORT(nm, AE, IS, GS)
 *       SV_IMPL_OP_PTRARR_SORT( nm,AE )
 *           defieniere/implementiere ein Sort-Array mit Pointern, das nach
 *           Objecten sortiert ist. Basiert auf einem PTRARR.
 *           Sortierung mit Hilfe der Object-operatoren "<" und "=="
 *
-*       SV_DECL_PTRARR_SORT_DEL(nm, AE, IS, GS)
-*       SV_IMPL_OP_PTRARR_SORT( nm,AE )
-*           defieniere/implementiere ein Sort-Array mit Pointern, das nach
-*           Objecten sortiert ist. Basiert auf einem PTRARR_DEL.
-*           Sortierung mit Hilfe der Object-operatoren "<" und "=="
 ***********************************************************************/
 
 #include "svl/svldllapi.h"
@@ -141,8 +126,8 @@ void nm::Remove( const AE &aE, sal_uInt16 nL )\
         nm##_SAR::Remove( nP, nL);\
 }\
 
-#define _SV_DECL_PTRARR_SORT_ALG(nm, AE, IS, vis)\
-class vis nm##_SAR: public SvPtrarr \
+#define SV_DECL_PTRARR_SORT(nm, AE, IS)\
+class nm##_SAR: public SvPtrarr \
 {\
 public:\
     nm##_SAR( sal_uInt16 nIni=IS )\
@@ -177,7 +162,7 @@ private:\
     nm##_SAR& operator=( const nm##_SAR& );\
 };\
 \
-class vis nm : private nm##_SAR \
+class nm : private nm##_SAR \
 {\
 public:\
     nm(sal_uInt16 nSize = IS)\
@@ -201,65 +186,10 @@ public:\
     sal_uInt16 GetPos( const AE& aE ) const { \
         return SvPtrarr::GetPos((const VoidPtr&)aE);\
     }\
-\
-/* Das Ende stehe im DECL-Makro !!! */
-
-#define SV_DECL_PTRARR_SORT(nm, AE, IS)\
-_SV_DECL_PTRARR_SORT_ALG(nm, AE, IS,)\
 private:\
     nm( const nm& );\
     nm& operator=( const nm& );\
 };
-
-#define SV_DECL_PTRARR_SORT_DEL(nm, AE, IS)\
-_SV_DECL_PTRARR_SORT_ALG(nm, AE, IS,)\
-    ~nm() { DeleteAndDestroy( 0, Count() ); }\
-private:\
-    nm( const nm& );\
-    nm& operator=( const nm& );\
-};
-
-#define SV_IMPL_PTRARR_SORT( nm,AE )\
-_SV_IMPL_SORTAR_ALG( nm,AE )\
-void nm::DeleteAndDestroy( sal_uInt16 nP, sal_uInt16 nL ) { \
-    if( nL ) {\
-        OSL_ENSURE( nP < nA && nP + nL <= nA, "ERR_VAR_DEL" );\
-        for( sal_uInt16 n=nP; n < nP + nL; n++ ) \
-            delete *((AE*)pData+n); \
-        SvPtrarr::Remove( nP, nL ); \
-    } \
-} \
-sal_Bool nm::Seek_Entry( const AE aE, sal_uInt16* pP ) const\
-{\
-    register sal_uInt16 nO  = nm##_SAR::Count(),\
-            nM, \
-            nU = 0;\
-    if( nO > 0 )\
-    {\
-        nO--;\
-        register long rCmp = (long)aE;\
-        while( nU <= nO )\
-        {\
-            nM = nU + ( nO - nU ) / 2;\
-            if( (long)*(pData + nM) == rCmp )\
-            {\
-                if( pP ) *pP = nM;\
-                return sal_True;\
-            }\
-            else if( (long)*(pData+ nM) < (long)aE  )\
-                nU = nM + 1;\
-            else if( nM == 0 )\
-            {\
-                if( pP ) *pP = nU;\
-                return sal_False;\
-            }\
-            else\
-                nO = nM - 1;\
-        }\
-    }\
-    if( pP ) *pP = nU;\
-    return sal_False;\
-}
 
 #define SV_IMPL_OP_PTRARR_SORT( nm,AE )\
 _SV_IMPL_SORTAR_ALG( nm,AE )\
