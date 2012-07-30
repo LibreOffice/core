@@ -35,7 +35,7 @@ PATCH_FILES=\
             mdds_0.6.0-unused-parameter.patch \
             mdds_0.6.0-unreachable-code.patch \
 	    0001-fix-linking-error-with-boost-1.50.patch \
-
+            0001-Workaround-for-gcc-bug.patch
 
 CONFIGURE_DIR=
 CONFIGURE_ACTION=

@@ -1,0 +1,27 @@
+From e1c795c8734119985ea09bf4d9f860d11e440b2a Mon Sep 17 00:00:00 2001
+From: Kohei Yoshida <kohei.yoshida@gmail.com>
+Date: Mon, 30 Jul 2012 14:36:24 -0400
+Subject: [PATCH] Workaround for gcc bug.
+
+c.f. http://gcc.gnu.org/bugzilla/show_bug.cgi?id=44963
+---
+ include/mdds/multi_type_vector_types.hpp |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
+
+diff --git a/include/mdds/multi_type_vector_types.hpp b/include/mdds/multi_type_vector_types.hpp
+index 78f18cb..6189139 100644
+--- a/include/mdds/multi_type_vector_types.hpp
++++ misc/build/mdds_0.6.0/include/mdds/multi_type_vector_types.hpp
+@@ -218,7 +218,8 @@ public:
+         typename store_type::const_iterator it_end = it;
+         std::advance(it_end, len);
+         d.reserve(d.size() + len);
+-        std::copy(it, it_end, std::back_inserter(d));
++        for (; it != it_end; ++it)
++            d.push_back(*it);
+     }
+
+     static void assign_values_from_block(
+--
+1.7.7
+
