@@ -195,6 +195,18 @@ public class FileUtilities {
 		return;
 	}
 
+    static boolean isHidden( File file ){
+        if( file.getName().startsWith(".") )
+            return true;
+        return false;
+    }
+
+    static boolean isThumbnail( File file ){
+        if( isHidden(file) && file.getName().endsWith(".png") )
+            return true;
+        return false;
+    }
+
     static boolean hasThumbnail(File file)
     {
         String filename = file.getName();

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ This file is part of the LibreOffice project.
+ This Source Code Form is subject to the terms of the Mozilla Public
+ License, v. 2.0. If a copy of the MPL was not distributed with this
+ file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <org.libreoffice.ui.FolderIconView
+        android:id="@+id/folder_icon"
+        android:layout_width="100dp"
+        android:layout_height="142dp"
+        android:paddingTop="15dp"
+        android:paddingBottom="10dp"
+        android:layout_gravity="center" >
+    </org.libreoffice.ui.FolderIconView>
+
+    <TextView
+        android:id="@+id/grid_item_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@+id/label"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:layout_gravity="center"
+        android:textSize="15dp"
+        android:textStyle="bold"
+        android:maxLines="2">
+    </TextView>
+
+</LinearLayout>

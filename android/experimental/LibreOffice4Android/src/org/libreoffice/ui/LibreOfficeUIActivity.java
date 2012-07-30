@@ -10,6 +10,7 @@ package org.libreoffice.ui;
 
 import org.libreoffice.R;
 import org.libreoffice.android.DocumentLoader;
+import org.libreoffice.android.Bootstrap;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -35,6 +36,8 @@ import android.graphics.Shader.TileMode;
 
 import android.app.ActionBar.OnNavigationListener;
 import android.app.Activity;
+import android.os.AsyncTask;
+import android.graphics.Bitmap;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -56,6 +59,28 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
+
+import com.sun.star.awt.Size;
+import com.sun.star.awt.XBitmap;
+import com.sun.star.awt.XControl;
+import com.sun.star.awt.XDevice;
+import com.sun.star.awt.XToolkit2;
+import com.sun.star.beans.PropertyValue;
+import com.sun.star.frame.XComponentLoader;
+import com.sun.star.frame.XController;
+import com.sun.star.frame.XFrame;
+import com.sun.star.frame.XModel;
+import com.sun.star.lang.XEventListener;
+import com.sun.star.lang.XMultiComponentFactory;
+import com.sun.star.lang.XTypeProvider;
+import com.sun.star.uno.Type;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XComponentContext;
+import com.sun.star.view.XRenderable;
+
+import java.io.*;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 
 public class LibreOfficeUIActivity extends SherlockActivity implements ActionBar.OnNavigationListener {
     private String tag = "file_manager";
@@ -84,6 +109,20 @@ public class LibreOfficeUIActivity extends SherlockActivity implements ActionBar
 	GridView gv;
 	ListView lv;
 	
+    private static final String TAG = "ThumbnailGenerator";
+    private static final int SMALLSIZE = 128;
+
+    long timingOverhead;
+    XComponentContext context;
+    XMultiComponentFactory mcf;
+    XComponentLoader componentLoader;
+    XToolkit2 toolkit;
+    XDevice dummySmallDevice;
+    Object doc;
+    int pageCount;
+    int currentPage;
+    XRenderable renderable;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
@@ -173,7 +212,11 @@ public class LibreOfficeUIActivity extends SherlockActivity implements ActionBar
     	fileNames = new String[ filePaths.length ];
     	FileUtilities.sortFiles( filePaths, sortMode );
     	for( int i = 0; i < fileNames.length; i++){
-    		fileNames[ i ] = filePaths[ i ].getName();
+            fileNames[ i ] = filePaths[ i ].getName();
+            if( !FileUtilities.hasThumbnail( filePaths[ i ] ) )
+            {
+                //new ThumbnailGenerator( filePaths[ i ] );
+            }
     	}
     	if( viewMode == GRID_VIEW){
     		gv.setAdapter( new GridItemAdapter(getApplicationContext(), currentDirectory, filePaths ) );
@@ -583,8 +626,309 @@ class ListItemAdapter implements ListAdapter{
 			return false;
 		}
 
-	}	
+    }
 
+    class ThumbnailGenerator{
+        private File file;
+
+        ThumbnailGenerator( File file ){
+            this.file = file;
+            try {
+                long t0 = System.currentTimeMillis();
+                long t1 = System.currentTimeMillis();
+                timingOverhead = t1 - t0;
+
+                Bootstrap.setup(LibreOfficeUIActivity.this);
+
+                Bootstrap.putenv("SAL_LOG=yes");
+
+                // Load a lot of shlibs here explicitly in advance because that
+                // makes debugging work better, sigh
+                Bootstrap.dlopen("libvcllo.so");
+                Bootstrap.dlopen("libmergedlo.so");
+                Bootstrap.dlopen("libswdlo.so");
+                Bootstrap.dlopen("libswlo.so");
+
+                // Log.i(TAG, "Sleeping NOW");
+                // Thread.sleep(20000);
+
+                context = com.sun.star.comp.helper.Bootstrap.defaultBootstrap_InitialComponentContext();
+
+                Log.i(TAG, "context is" + (context!=null ? " not" : "") + " null");
+
+                mcf = context.getServiceManager();
+
+                Log.i(TAG, "mcf is" + (mcf!=null ? " not" : "") + " null");
+
+                String input = file.getAbsolutePath();
+                if (input == null)
+                    input = "/assets/test1.odt";
+
+                // We need to fake up an argv, and the argv[0] even needs to
+                // point to some file name that we can pretend is the "program".
+                // setCommandArgs() will prefix argv[0] with the app's data
+                // directory.
+
+                String[] argv = { "lo-document-loader", input };
+
+                Bootstrap.setCommandArgs(argv);
+
+                Bootstrap.initVCL();
+
+                Object desktop = mcf.createInstanceWithContext
+                    ("com.sun.star.frame.Desktop", context);
+
+                Log.i(TAG, "desktop is" + (desktop!=null ? " not" : "") + " null");
+
+                Bootstrap.initUCBHelper();
+
+                componentLoader = (XComponentLoader) UnoRuntime.queryInterface(XComponentLoader.class, desktop);
+
+                Log.i(TAG, "componentLoader is" + (componentLoader!=null ? " not" : "") + " null");
+                // Load the wanted document
+                new DocumentLoadTask().executeOnExecutor(AsyncTask.SERIAL_EXECUTOR, "file://" + input);
+            }
+            catch (Exception e) {
+                e.printStackTrace(System.err);
+            }
+        }
+
+        class DocumentLoadTask
+            extends AsyncTask<String, Void, Integer>
+        {
+
+            ByteBuffer renderPage(int number, int width , int height)
+            {
+                try {
+                    // Use dummySmallDevice with no scale of offset just to find out
+                    // the paper size of this page.
+
+                    PropertyValue renderProps[] = new PropertyValue[3];
+                    renderProps[0] = new PropertyValue();
+                    renderProps[0].Name = "IsPrinter";
+                    renderProps[0].Value = new Boolean(true);
+                    renderProps[1] = new PropertyValue();
+                    renderProps[1].Name = "RenderDevice";
+                    renderProps[1].Value = dummySmallDevice;
+                    renderProps[2] = new PropertyValue();
+                    renderProps[2].Name = "View";
+                    renderProps[2].Value = new MyXController();
+
+                    // getRenderer returns a set of properties that include the PageSize
+                    long t0 = System.currentTimeMillis();
+                    PropertyValue rendererProps[] = renderable.getRenderer(number, doc, renderProps);
+                    long t1 = System.currentTimeMillis();
+                    Log.i(TAG, "w,h getRenderer took " + ((t1-t0)-timingOverhead) + " ms");
+
+                    int pageWidth = 0, pageHeight = 0;
+                    for (int i = 0; i < rendererProps.length; i++) {
+                        if (rendererProps[i].Name.equals("PageSize")) {
+                            pageWidth = ((Size) rendererProps[i].Value).Width;
+                            pageHeight = ((Size) rendererProps[i].Value).Height;
+                            Log.i(TAG, " w,h PageSize: " + pageWidth + "x" + pageHeight);
+                        }
+                    }
+
+                    // Create a new device with the correct scale and offset
+                    ByteBuffer bb = ByteBuffer.allocateDirect(width*height*4);
+                    long wrapped_bb = Bootstrap.new_byte_buffer_wrapper(bb);
+
+                    XDevice device;
+                    if (pageWidth == 0) {
+                        // Huh?
+                        device = toolkit.createScreenCompatibleDeviceUsingBuffer(width, height, 1, 1, 0, 0, wrapped_bb);
+                    } else {
+
+                        // Scale so that it fits our device which has a resolution of 96/in (see
+                        // SvpSalGraphics::GetResolution()). The page size returned from getRenderer() is in 1/mm * 100.
+
+                        int scaleNumerator, scaleDenominator;
+
+                        // If the view has a wider aspect ratio than the page, fit
+                        // height; otherwise, fit width
+                        if ((double) width / height > (double) pageWidth / pageHeight) {
+                            scaleNumerator = height;
+                            scaleDenominator = pageHeight / 2540 * 96;
+                        } else {
+                            scaleNumerator = width;
+                            scaleDenominator = pageWidth / 2540 * 96;
+                        }
+                        Log.i(TAG, "w,h Scaling with " + scaleNumerator + "/" + scaleDenominator);
+
+                        device = toolkit.createScreenCompatibleDeviceUsingBuffer(width, height,
+                                                                                 scaleNumerator, scaleDenominator,
+                                                                                 0, 0,
+                                                                                 wrapped_bb);
+                    }
+
+                    // Update the property that points to the device
+                    renderProps[1].Value = device;
+
+                    t0 = System.currentTimeMillis();
+                    renderable.render(number, doc, renderProps);
+                    t1 = System.currentTimeMillis();
+                    Log.i(TAG, "w,h Rendering page " + number + " took " + ((t1-t0)-timingOverhead) + " ms");
+
+                    Bootstrap.force_full_alpha_bb(bb, 0, width * height * 4);
+
+                    return bb;
+                }
+                catch (Exception e) {
+                    e.printStackTrace(System.err);
+                    finish();
+                }
+
+                return null;
+            }
+
+            protected void onPreExecute (){
+            //TODO put doc loading & set-up here?
+            }
+
+            protected Integer doInBackground(String... params)
+            {
+                try {
+                    String url = params[0];
+                    Log.i(TAG, "Attempting to load " + url);
+
+                    PropertyValue loadProps[] = new PropertyValue[3];
+                    loadProps[0] = new PropertyValue();
+                    loadProps[0].Name = "Hidden";
+                    loadProps[0].Value = new Boolean(true);
+                    loadProps[1] = new PropertyValue();
+                    loadProps[1].Name = "ReadOnly";
+                    loadProps[1].Value = new Boolean(true);
+                    loadProps[2] = new PropertyValue();
+                    loadProps[2].Name = "Preview";
+                    loadProps[2].Value = new Boolean(true);
+
+                    long t0 = System.currentTimeMillis();
+                    doc = componentLoader.loadComponentFromURL(url, "_blank", 0, loadProps);
+                    long t1 = System.currentTimeMillis();
+                    Log.i(TAG, "Loading took " + ((t1-t0)-timingOverhead) + " ms");
+
+                    Object toolkitService = mcf.createInstanceWithContext
+                        ("com.sun.star.awt.Toolkit", context);
+                    toolkit = (XToolkit2) UnoRuntime.queryInterface(XToolkit2.class, toolkitService);
+
+                    renderable = (XRenderable) UnoRuntime.queryInterface(XRenderable.class, doc);
+
+                    // Set up dummySmallDevice and use it to find out the number
+                    // of pages ("renderers").
+                    ByteBuffer smallbb = ByteBuffer.allocateDirect(SMALLSIZE*SMALLSIZE*4);
+                    long wrapped_smallbb = Bootstrap.new_byte_buffer_wrapper(smallbb);
+                    dummySmallDevice = toolkit.createScreenCompatibleDeviceUsingBuffer(SMALLSIZE, SMALLSIZE, 1, 1, 0, 0, wrapped_smallbb);
+
+                    PropertyValue renderProps[] = new PropertyValue[3];
+                    renderProps[0] = new PropertyValue();
+                    renderProps[0].Name = "IsPrinter";
+                    renderProps[0].Value = new Boolean(true);
+                    renderProps[1] = new PropertyValue();
+                    renderProps[1].Name = "RenderDevice";
+                    renderProps[1].Value = dummySmallDevice;
+                    renderProps[2] = new PropertyValue();
+                    renderProps[2].Name = "View";
+                    renderProps[2].Value = new MyXController();
+
+                    Log.i(TAG, "Document is" + (doc!=null ? " not" : "") + " null");
+                    t0 = System.currentTimeMillis();
+                    pageCount = renderable.getRendererCount(doc, renderProps);
+                    t1 = System.currentTimeMillis();
+                    Log.i(TAG, "getRendererCount: " + pageCount + ", took " + ((t1-t0)-timingOverhead) + " ms");
+                }
+                catch (Exception e) {
+                    e.printStackTrace(System.err);
+                    finish();
+                }
+                return new Integer( 0 );
+        }
+
+            protected void onPostExecute(Integer result){
+                int widthInPx = 120;
+                int heightInPx = 120;
+                ByteBuffer bb = renderPage( 0 , widthInPx , heightInPx);
+                Bitmap bm = Bitmap.createBitmap( widthInPx , heightInPx , Bitmap.Config.ARGB_8888);
+                bm.copyPixelsFromBuffer(bb);
+                File dir = file.getParentFile();
+                File thumbnailFile = new File( dir , "." + file.getName().split("[.]")[0] + ".png");
+                try {
+                    ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+                    bm.compress(Bitmap.CompressFormat.PNG, 40, bytes);
+                    thumbnailFile.createNewFile();
+                    FileOutputStream fo = new FileOutputStream( thumbnailFile );
+                    fo.write(bytes.toByteArray());
+                } catch (IOException e) {
+                    // TODO: handle exception
+                }
+        }
+        }
+
+        class MyXController
+            implements XController
+        {
+
+        XFrame frame;
+        XModel model;
+
+        public void attachFrame(XFrame frame)
+        {
+            Log.i(TAG, "attachFrame");
+            this.frame = frame;
+        }
+
+        public boolean attachModel(XModel model)
+        {
+            Log.i(TAG, "attachModel");
+            this.model = model;
+            return true;
+        }
+
+        public boolean suspend(boolean doSuspend)
+        {
+            Log.i(TAG, "suspend");
+            return false;
+        }
+
+        public Object getViewData()
+        {
+            Log.i(TAG, "getViewData");
+            return null;
+        }
+
+        public void restoreViewData(Object data)
+        {
+            Log.i(TAG, "restoreViewData");
+        }
+
+        public XModel getModel()
+        {
+            Log.i(TAG, "getModel");
+            return model;
+        }
+
+        public XFrame getFrame()
+        {
+            Log.i(TAG, "getFrame");
+            return frame;
+        }
+
+        public void dispose()
+        {
+            Log.i(TAG, "dispose");
+        }
+
+        public void addEventListener(XEventListener listener)
+        {
+            Log.i(TAG, "addEventListener");
+        }
+
+        public void removeEventListener(XEventListener listener)
+        {
+            Log.i(TAG, "removeEventListener");
+        }
+    }
+
+    }
 }
 
 

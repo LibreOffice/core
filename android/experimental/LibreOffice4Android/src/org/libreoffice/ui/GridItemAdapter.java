@@ -89,9 +89,16 @@ public class GridItemAdapter extends BaseAdapter{
                     .findViewById(R.id.grid_item_image);
             if( filePaths[position].isDirectory() ) // Is a folder
             {
-                // Eventually have thumbnails of each sub file on a black circle
-                // For now just a folder icon
+                // Default view is a generic folder icon.
                 imageView.setImageResource(R.drawable.folder);
+                // How should we handle empty folders / folders with no thumbnails? -> new files
+                gridView =  inflater.inflate(R.layout.file_explorer_folder_icon, null);
+                org.libreoffice.ui.FolderIconView icon =
+                    (org.libreoffice.ui.FolderIconView)gridView.findViewById(R.id.folder_icon);
+                icon.setDir( filePaths[position]);
+                textView = (TextView) gridView.findViewById(R.id.grid_item_label);
+                textView.setText(filePaths[position].getName());
+                return gridView;
             }
             else
             {
