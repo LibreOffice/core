@@ -11883,11 +11883,6 @@ dnl Setting up the environment.
 dnl ===================================================================
 echo "setting up the build environment variables..."
 
-if test -z "$COMPATH"; then
-    AC_MSG_ERROR([No compiler found.])
-fi
-AC_SUBST(COMPATH)
-
 if test "$build_os" = "cygwin"; then
     if test "$DISABLE_ACTIVEX" = "YES"; then
         ATL_LIB="$WINDOWS_SDK_HOME/lib" # Doesn't exist for VSE
