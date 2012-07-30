@@ -58,7 +58,6 @@ public class TestClient extends Activity {
 	@Override
 	protected void onPause() {
 		super.onPause();
-		// doUnbindService();
 	}
 
 	@Override
@@ -66,6 +65,7 @@ public class TestClient extends Activity {
 		// TODO Auto-generated method stub
 		mCommunicationService.disconnect();
 		stopService(new Intent(this, CommunicationService.class));
+		doUnbindService();
 		finish();
 		super.onBackPressed();
 	}

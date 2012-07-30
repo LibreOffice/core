@@ -184,8 +184,32 @@ uno::Sequence<sal_Int8> ImagePreparer::preparePreview(
 void ImagePreparer::sendNotes( sal_uInt32 aSlideNumber )
 {
 
-    OString aOut = prepareNotes( aSlideNumber );
+    OString aNotes = prepareNotes( aSlideNumber );
 
+    if ( aNotes.getLength() == 0 )
+        return;
+
+//     OUStringBuffer aStrBuffer;
+//     ::sax::Converter::encodeBase64( aStrBuffer, aTemp );
+//
+//     OString aNotes = OUStringToOString(
+//         aStrBuffer.makeStringAndClear(), RTL_TEXTENCODING_UTF8 );
+
+    if ( !xController->isRunning() )
+        return;
+
+    // Start the writing
+    OStringBuffer aBuffer;
+
+    aBuffer.append( "slide_notes\n" );
+
+    aBuffer.append( OString::valueOf( sal_Int32( aSlideNumber ) ).getStr() );
+    aBuffer.append( "\n" );
+
+    aBuffer.append( aNotes );
+    aBuffer.append( "\n\n" );
+    pTransmitter->addMessage( aBuffer.makeStringAndClear(),
+        Transmitter::Priority::LOW );
 }
 
 
