@@ -1,0 +1,27 @@
+From 09937e5d6b4b82efbff40da2aa50fb02f2250bb2 Mon Sep 17 00:00:00 2001
+From: David Tardon <dtardon@redhat.com>
+Date: Sat, 28 Jul 2012 14:32:47 +0200
+Subject: [PATCH] fix linking error with boost 1.50
+
+---
+ include/mdds/mixed_type_matrix_storage.hpp | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/include/mdds/mixed_type_matrix_storage.hpp b/include/mdds/mixed_type_matrix_storage.hpp
+index fa0bf25..bb4e354 100644
+--- a/include/mdds/mixed_type_matrix_storage.hpp
++++ misc/build/mdds_0.6.0/include/mdds/mixed_type_matrix_storage.hpp
+@@ -32,6 +32,10 @@
+ 
+ #include <boost/ptr_container/ptr_vector.hpp>
+ #include <boost/ptr_container/ptr_map.hpp>
++// Boost.Pool indirectly pulls in Boost.System, causing linking error
++// with Boost 1.50, because some (deprecated) symbols from System are
++// not found.
++#define BOOST_SYSTEM_NO_DEPRECATED
+ #include <boost/pool/object_pool.hpp>
+ 
+ namespace mdds {
+-- 
+1.7.11.2
+

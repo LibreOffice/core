@@ -33,7 +33,9 @@ PATCH_FILES=\
 	    mdds_0.6.0.patch \
 	    0001-help-compiler-select-the-right-overload-of-vector-in.patch \
             mdds_0.6.0-unused-parameter.patch \
-            mdds_0.6.0-unreachable-code.patch
+            mdds_0.6.0-unreachable-code.patch \
+	    0001-fix-linking-error-with-boost-1.50.patch \
+
 
 CONFIGURE_DIR=
 CONFIGURE_ACTION=
