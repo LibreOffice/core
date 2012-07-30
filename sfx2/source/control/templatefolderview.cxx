@@ -604,7 +604,9 @@ void TemplateFolderView::copyFrom (TemplateFolderViewItem *pItem, const rtl::OUS
         aTemplate.nId = nId+1;
         aTemplate.nRegionId = nRegionId;
         aTemplate.aName = mpDocTemplates->GetName(nRegionId,nId);
-        aTemplate.aThumbnail = TemplateAbstractView::fetchThumbnail(rPath,128,128);
+        aTemplate.aThumbnail = TemplateAbstractView::fetchThumbnail(rPath,
+                                                                    THUMBNAIL_MAX_WIDTH,
+                                                                    THUMBNAIL_MAX_HEIGHT);
         aTemplate.aPath = rPath;
         aTemplate.aType = SvFileInformationManager::GetDescription(INetURLObject(rPath));
 
