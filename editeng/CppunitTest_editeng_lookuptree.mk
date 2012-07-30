@@ -26,24 +26,46 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_Module_Module,editeng))
+$(eval $(call gb_CppunitTest_CppunitTest,editeng_lookuptree))
 
-$(eval $(call gb_Module_add_targets,editeng,\
-    AllLangResTarget_editeng \
-    Library_editeng \
-    Package_inc \
+$(eval $(call gb_CppunitTest_add_exception_objects,editeng_lookuptree, \
+    editeng/qa/lookuptree/lookuptree_test \
 ))
 
-# add any runtime tests (unit tests) here
-# remove if no tests
-$(eval $(call gb_Module_add_check_targets,editeng,\
-    CppunitTest_editeng_core \
-    CppunitTest_editeng_borderline \
-    CppunitTest_editeng_lookuptree \
+$(eval $(call gb_CppunitTest_use_libraries,editeng_lookuptree, \
+    xo \
+    basegfx \
+    editeng \
+    lng \
+    svt \
+    tk \
+    vcl \
+    svl \
+    sot \
+    utl \
+    tl \
+    comphelper \
+    ucbhelper \
+    cppuhelper \
+    cppu \
+    sal \
+    salhelper \
+    i18nisolang1 \
+    i18nutil \
+    $(gb_STDLIBS) \
 ))
 
-# add any subsequent checks (e.g. complex tests) here
-$(eval $(call gb_Module_add_subsequentcheck_targets,editeng,\
+$(eval $(call gb_CppunitTest_use_externals,editeng_lookuptree,\
+    icuuc \
+))
+
+$(eval $(call gb_CppunitTest_set_include,editeng_lookuptree,\
+    $$(INCLUDE) \
+))
+
+$(eval $(call gb_CppunitTest_use_api,editeng_lookuptree,\
+    offapi \
+    udkapi \
 ))
 
 # vim: set noet sw=4 ts=4:

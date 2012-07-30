@@ -2,7 +2,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2000, 2011 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -125,6 +125,9 @@ $(eval $(call gb_Library_add_exception_objects,editeng,\
     editeng/source/uno/unoviwou \
     editeng/source/xml/xmltxtexp \
     editeng/source/xml/xmltxtimp \
+    editeng/source/lookuptree/LatinLookupTree \
+    editeng/source/lookuptree/LatinTreeNode \
+    editeng/source/lookuptree/Node \
 ))
 
 # add libraries to be linked to editeng; again these names need to be given as

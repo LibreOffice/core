@@ -2,7 +2,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2000, 2011 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -153,5 +153,10 @@ $(eval $(call gb_Package_add_file,editeng_inc,inc/editeng/widwitem.hxx,editeng/w
 $(eval $(call gb_Package_add_file,editeng_inc,inc/editeng/writingmodeitem.hxx,editeng/writingmodeitem.hxx))
 $(eval $(call gb_Package_add_file,editeng_inc,inc/editeng/wrlmitem.hxx,editeng/wrlmitem.hxx))
 $(eval $(call gb_Package_add_file,editeng_inc,inc/editeng/xmlcnitm.hxx,editeng/xmlcnitm.hxx))
+$(eval $(call gb_Package_add_file,editeng_inc,inc/editeng/LookupTree.hxx,editeng/LookupTree.hxx))
+$(eval $(call gb_Package_add_file,editeng_inc,inc/editeng/Node.hxx,editeng/Node.hxx))
+$(eval $(call gb_Package_add_file,editeng_inc,inc/editeng/TreeHead.hxx,editeng/TreeHead.hxx))
+$(eval $(call gb_Package_add_file,editeng_inc,inc/editeng/LatinLookupTree.hxx,editeng/LatinLookupTree.hxx))
+$(eval $(call gb_Package_add_file,editeng_inc,inc/editeng/LatinTreeNode.hxx,editeng/LatinTreeNode.hxx))
 
 # vim: set noet sw=4 ts=4:
