@@ -583,28 +583,96 @@ std::string &MorkParser::getColumn( int oid )
     return foundIter->second;
 }
 
-void MorkParser::dumpColumns()
+void MorkParser::dump()
 {
-    for ( MorkDict::iterator cellsIter = columns_.begin();
-          cellsIter != columns_.end(); cellsIter++ )
-    {
-        char buffer[20];
-        sprintf( buffer, "%d", cellsIter->first );
-        std::string value = cellsIter->second;
-        //SAL_INFO("connectivity.mork", "dumpColumns: " << buffer << " => " << value);
-        std::cout << "dumpColumns: " << buffer << " => " << value << std::endl;
-    }
-}
+    std::cout << "Column Dict:\r\n";
+    std::cout << "=============================================\r\n\r\n";
 
-void MorkParser::dumpValues()
-{
-    for ( MorkDict::iterator cellsIter = values_.begin();
-          cellsIter != values_.end(); cellsIter++ )
+    //// columns dict
+    for ( MorkDict::iterator iter = columns_.begin();
+          iter != columns_.end(); iter++ )
     {
-        char buffer[20];
-        sprintf( buffer, "%d", cellsIter->first );
-        std::string value = cellsIter->second;
-        //SAL_INFO("connectivity.mork", "dumpValues: " << buffer << " => " << value);
-        std::cout << "dumpValues: " << buffer << " => " << value << std::endl;
+        std::cout  << std::hex << std::uppercase << iter->first
+                   << " : "
+                   << iter->second
+                   << std::endl;
+    }
+
+    //// values dict
+    std::cout << "\r\nValues Dict:\r\n";
+    std::cout << "=============================================\r\n\r\n";
+
+    for ( MorkDict::iterator iter = values_.begin();
+          iter != values_.end(); iter++ )
+    {
+        if (iter->first >= nextAddValueId_) {
+            continue;
+        }
+
+        std::cout << std::hex << std::uppercase << iter->first
+                  << " : "
+                  << iter->second
+                  << "\r\n";
+    }
+
+    std::cout << std::endl << "Data:" << std::endl;
+    std::cout << "============================================="
+              << std::endl << std::endl;
+
+    //// Mork data
+    for ( TableScopeMap::iterator iter = mork_.begin();
+          iter != mork_.end(); iter++ )
+    {
+        std::cout << "\r\n Scope:" << std::hex << std::uppercase
+                  << iter->first << std::endl;
+
+        for ( MorkTableMap::iterator TableIter = iter->second.begin();
+              TableIter != iter->second.end(); TableIter++ )
+        {
+            std::cout << "\t Table:"
+                      << ( ( int ) TableIter->first < 0 ? "-" : " " )
+                      << std::hex << std::uppercase << "\r\n";
+
+            for (RowScopeMap::iterator RowScopeIter = TableIter->second.begin();
+                 RowScopeIter != TableIter->second.end(); RowScopeIter++ )
+            {
+                std::cout << "\t\t RowScope:"
+                          << std::hex << std::uppercase
+                          << RowScopeIter->first << std::endl;
+
+                for (MorkRowMap::iterator RowIter = RowScopeIter->second.begin();
+                     RowIter != RowScopeIter->second.end(); RowIter++ )
+                {
+                    std::cout << "\t\t\t Row Id:"
+                              << ((int) RowIter->first < 0 ? "-" : " ")
+                              << std::hex << std::uppercase
+                              << RowIter->first << std::endl;
+                    std::cout << "\t\t\t\t Cells:" << std::endl;
+
+                    for (MorkCells::iterator CellsIter = RowIter->second.begin();
+                         CellsIter != RowIter->second.end(); CellsIter++ )
+                    {
+                        // Write ids
+                        std::cout << "\t\t\t\t\t"
+                                  << std::hex << std::uppercase
+                                  << CellsIter->first
+                                  << " : "
+                                  << std::hex << std::uppercase
+                                  << CellsIter->second
+                                  << "  =>  ";
+
+                        MorkDict::iterator FoundIter = values_.find( CellsIter->second );
+                        if ( FoundIter != values_.end() )
+                        {
+                            // Write string values
+                            std::cout << columns_[ CellsIter->first ].c_str()
+                                      << " : "
+                                      << FoundIter->second.c_str()
+                                      << std::endl;
+                        }
+                    }
+                }
+            }
+        }
     }
 }

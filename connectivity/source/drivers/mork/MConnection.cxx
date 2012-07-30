@@ -11,6 +11,8 @@
 #include "MNSProfileDiscover.hxx"
 #include "MConnection.hxx"
 #include "MDriver.hxx"
+#include "MDatabaseMetaData.hxx"
+
 #include "MorkParser.hxx"
 
 #include <connectivity/dbcharset.hxx>
@@ -24,12 +26,6 @@
 #include <com/sun/star/sdbc/TransactionIsolation.hpp>
 
 #include <comphelper/officeresourcebundle.hxx>
-
-#if OSL_DEBUG_LEVEL > 0
-# define OUtoCStr( x ) ( ::rtl::OUStringToOString ( (x), RTL_TEXTENCODING_ASCII_US).getStr())
-#else /* OSL_DEBUG_LEVEL */
-# define OUtoCStr( x ) ("dummy")
-#endif /* OSL_DEBUG_LEVEL */
 
 using namespace dbtools;
 
@@ -110,8 +106,8 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
         sAdditionalInfo = aAddrbookURI.copy( nLen + 1 );
     }
 
-    SAL_INFO("connectvity.mork", "URI = " << ((OUtoCStr(aAddrbookURI)) ? (OUtoCStr(aAddrbookURI)):("NULL")) );
-    SAL_INFO("connectvity.mork", "Scheme = " << ((OUtoCStr(aAddrbookScheme)) ?  (OUtoCStr(aAddrbookScheme)):("NULL")) );
+    SAL_INFO("connectvity.mork", "URI = " << aAddrbookURI );
+    SAL_INFO("connectvity.mork", "Scheme = " << aAddrbookScheme );
 
     ::rtl::OUString defaultProfile = m_pProfileAccess->getDefaultProfile(::com::sun::star::mozilla::MozillaProductType_Thunderbird);
     SAL_INFO("connectivity.mork", "DefaultProfile: " << defaultProfile);
@@ -173,7 +169,7 @@ Reference< XPreparedStatement > SAL_CALL OConnection::prepareStatement( const ::
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
 
-    SAL_INFO("connectvity.mork", "OConnection::prepareStatement( " << OUtoCStr( _sSql ) << " )");
+    SAL_INFO("connectvity.mork", "OConnection::prepareStatement( " << _sSql << " )");
     return NULL;
 }
 // --------------------------------------------------------------------------------
@@ -183,7 +179,7 @@ Reference< XPreparedStatement > SAL_CALL OConnection::prepareCall( const ::rtl::
     SAL_INFO("connectvity.mork", "sql: " << _sSql);
     OSL_UNUSED( _sSql );
     ::dbtools::throwFeatureNotImplementedException( "XConnection::prepareCall", *this );
-    SAL_INFO("connectvity.mork", "OConnection::prepareCall( " << OUtoCStr( _sSql ) << " )");
+    SAL_INFO("connectvity.mork", "OConnection::prepareCall( " << _sSql << " )");
     return NULL;
 }
 // --------------------------------------------------------------------------------
@@ -232,9 +228,21 @@ sal_Bool SAL_CALL OConnection::isClosed(  ) throw(SQLException, RuntimeException
 // --------------------------------------------------------------------------------
 Reference< XDatabaseMetaData > SAL_CALL OConnection::getMetaData(  ) throw(SQLException, RuntimeException)
 {
+    SAL_INFO("connectvity.mork", "=> OConnection::getMetaData()" );
+
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
-    return NULL;
+
+    // here we have to create the class with biggest interface
+    // The answer is 42 :-)
+    Reference< XDatabaseMetaData > xMetaData = m_xMetaData;
+    if(!xMetaData.is())
+    {
+        xMetaData = new ODatabaseMetaData(this); // need the connection because it can return it
+        m_xMetaData = xMetaData;
+    }
+
+    return xMetaData;
 }
 // --------------------------------------------------------------------------------
 void SAL_CALL OConnection::setReadOnly( sal_Bool /*readOnly*/ ) throw(SQLException, RuntimeException)

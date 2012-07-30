@@ -61,8 +61,7 @@ bool openAddressBook(const std::string& path)
         }
     }
 
-    mork.dumpColumns();
-    mork.dumpValues();
+    mork.dump();
 
     return true;
 }

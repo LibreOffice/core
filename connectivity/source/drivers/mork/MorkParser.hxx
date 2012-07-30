@@ -111,8 +111,7 @@ public:
 
     std::string &getColumn( int oid );
 
-    void dumpColumns();
-    void dumpValues();
+    void dump();
 
 protected: // Members
 
