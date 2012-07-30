@@ -1457,7 +1457,7 @@ void SdrTextObj::RestGeoData(const SdrObjGeoData& rGeo)
 { // RectsDirty is called by SdrObject
     SdrAttrObj::RestGeoData(rGeo);
     SdrTextObjGeoData& rTGeo=(SdrTextObjGeoData&)rGeo;
-    aRect  =rTGeo.aRect;
+    NbcSetLogicRect(rTGeo.aRect);
     aGeo   =rTGeo.aGeo;
     SetTextSizeDirty();
 }
