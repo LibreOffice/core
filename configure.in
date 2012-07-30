@@ -2487,8 +2487,14 @@ if test "$_os" = "Darwin"; then
         AC_MSG_WARN([Building with SDK 10.7 is known to fail in vcl])
         echo "Building with SDK 10.7 is known to fail in vcl" >> warn
         ;;
+    10.8)
+        MACOSX_SDK_PATH="`xcode-select -print-path`/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk"
+        MACOSX_SDK_VERSION="1080"
+        AC_MSG_WARN([Building with SDK 10.8 is known to fail in vcl])
+        echo "Building with SDK 10.8 is known to fail in vcl" >> warn
+        ;;
     *)
-        AC_MSG_ERROR([$with_macosx_sdk is not a supported SDK value, supported value are 10.4, 10.5, 10.6 and 10.7])
+        AC_MSG_ERROR([$with_macosx_sdk is not a supported SDK value, supported value are 10.4--8])
         ;;
     esac
     AC_MSG_CHECKING([the presence of the SDK $with_macosx_sdk])
@@ -2532,8 +2538,17 @@ if test "$_os" = "Darwin"; then
             CXX="g++-4.2 -m32"
         fi
         ;;
+    10.8)
+        MAC_OS_X_VERSION_MIN_REQUIRED="1080"
+        AC_MSG_WARN([Building with a minimum version requirement > 10.4 break 10.4 compatibility. do not use for deliverable build])
+        echo "Building with a minimum version requirement > 10.4 break 10.4 compatibility. do not use for deliverable build" >>warn
+        if test -z "$save_CC"; then
+            CC="gcc-4.2 -m32"
+            CXX="g++-4.2 -m32"
+        fi
+        ;;
     *)
-        AC_MSG_ERROR([with-macosx-version-min-required $with_macosx_version_min_required is not a supported value, supported value are 10.4, 10.5, 10.6 and 10.7])
+        AC_MSG_ERROR([with-macosx-version-min-required $with_macosx_version_min_required is not a supported value, supported value are 10.4--8])
         ;;
     esac
 
@@ -2551,8 +2566,11 @@ if test "$_os" = "Darwin"; then
     10.7)
         MAC_OS_X_VERSION_MAX_ALLOWED="1070"
         ;;
+    10.8)
+        MAC_OS_X_VERSION_MAX_ALLOWED="1080"
+        ;;
     *)
-        AC_MSG_ERROR([with-macosx-version-max-allowed $with_macosx_version_max_allowed is not a supported value, supported value are 10.4, 10.5, 10.6 and 10.7])
+        AC_MSG_ERROR([with-macosx-version-max-allowed $with_macosx_version_max_allowed is not a supported value, supported value are 10.4--8])
         ;;
     esac
 
@@ -6747,7 +6765,7 @@ else
             case $with_macosx_sdk in
             10.6)
                 python_version=2.6;;
-            10.7)
+            10.7|10.8)
                 python_version=2.7;;
             *)
                 # ???
