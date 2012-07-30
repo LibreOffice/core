@@ -109,6 +109,9 @@
 #define FALSE 0
 #endif
 
+char* base_dir_var = "$(SRCDIR)";
+char* current_dir;
+char* base_dir;
 
 #ifdef __GNUC__
 #define clz __builtin_clz
@@ -684,21 +687,66 @@ int fd;
     return buffer;
 }
 
-static void _cancel_relative(char* base, char** ref_cursor, char** ref_cursor_out, char* end)
+static inline void print_nodotdot(char* path)
 {
-    char* cursor = *ref_cursor;
-    char* cursor_out = *ref_cursor_out;
-
-    do
+char* pathpart;
+char* lastnondotdot;
+    pathpart = path;
+    lastnondotdot = NULL;
+    while(pathpart != NULL)
     {
-        cursor += 3;
-        while(cursor_out > base && cursor_out[-1] == '/')
-            cursor_out--;
-        while(cursor_out > base && *--cursor_out != '/');
+        if(strncmp(pathpart, "/../", 4) == 0)
+        {
+            if(!lastnondotdot)
+                break; /* this should never happen with abs. paths */
+            memmove(lastnondotdot, pathpart+4, strlen(pathpart)-3);
+            lastnondotdot = NULL;
+            pathpart = path;
+        }
+        else
+        {
+            lastnondotdot = pathpart+1;
+            pathpart = strchr(pathpart+1,'/');
+        }
     }
-    while(cursor + 3 < end && !memcmp(cursor, "/../", 4));
-    *ref_cursor = cursor;
-    *ref_cursor_out = cursor_out;
+    fputs(path, stdout);
+}
+
+/* prefix paths to absolute */
+static inline void print_fullpaths(char* line)
+{
+char* token;
+char* buffer;
+size_t buffersize;
+size_t current_dir_length;
+size_t token_length;;
+
+    current_dir_length = strlen(current_dir);
+    buffer = NULL;
+    buffersize = 0;
+    token = strtok(line," ");
+    while(token != NULL)
+    {
+        if(*token == ':' || *token == '\\' || *token == '/' || *token == '$')
+        {
+            fputs(token, stdout);
+        }
+        else
+        {
+            token_length=strlen(token);
+            if(buffersize < current_dir_length+token_length+2)
+            {
+                buffersize = current_dir_length+token_length+1024;
+                buffer = realloc(buffer, buffersize);
+            }
+            strcpy(buffer, current_dir);
+            strcat(buffer, "/");
+            strcat(buffer, token);
+            print_nodotdot(buffer);
+        }
+        fputc(' ', stdout);
+        token = strtok(NULL," ");
+    }
 }
 
 static int _process(struct hash* dep_hash, char* fn)
@@ -732,13 +780,6 @@ off_t size;
             }
             else if(*cursor == '/')
             {
-                if(cursor + 3 < end)
-                {
-                    if(!memcmp(cursor, "/../", 4))
-                    {
-                        _cancel_relative(base, &cursor, &cursor_out, end);
-                    }
-                }
                 *cursor_out++ = *cursor++;
             }
             else if(*cursor == '\n')
@@ -757,14 +798,14 @@ off_t size;
                              */
                             if(hash_store(dep_hash, base, (int)(cursor_out - base)))
                             {
-                                puts(base);
+                                print_fullpaths(base);
                                 putc('\n', stdout);
                             }
                         }
                         else
                         {
                             /* rule with dep, just write it */
-                            puts(base);
+                            print_fullpaths(base);
                             putc('\n', stdout);
                         }
                     }
@@ -825,8 +866,8 @@ off_t in_list_size = 0;
 char* in_list;
 char* in_list_cursor;
 char* in_list_base;
+char* buffer;
 struct hash* dep_hash;
-char* base_dir;
 
     if(argc < 2)
     {
@@ -836,9 +877,28 @@ char* base_dir;
     base_dir = getenv("SRCDIR");
     if(!base_dir)
     {
-        fputs("Error: SRCDIR si missing in the environement\n", stderr);
+        fputs("Error: SRCDIR is missing in the environement\n", stderr);
         return 1;
     }
+    current_dir = getcwd(NULL, 0);
+    size_t base_dir_length = strlen(base_dir);
+    size_t current_dir_length = strlen(current_dir);
+    if(strncmp(base_dir, current_dir, base_dir_length) == 0)
+    {
+        if(current_dir_length == base_dir_length)
+        {
+            current_dir = base_dir_var;
+        }
+        else
+        {
+            buffer = malloc(strlen(base_dir_var)+current_dir_length-base_dir_length+1);
+            strcpy(buffer, base_dir_var);
+            strcat(buffer, current_dir+base_dir_length);
+            free(current_dir);
+            current_dir=buffer;
+        }
+    }
+
     in_list = file_load(argv[1], &in_list_size, &rc);
     if(!rc)
     {
