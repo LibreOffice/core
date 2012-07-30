@@ -90,6 +90,8 @@ struct SwSortElement
     sal_Bool operator<(const SwSortElement& ) const;
 
     double StrToDouble(const String& rStr) const;
+private:
+    int keycompare(const SwSortElement& rCmp, sal_uInt16 nKey) const;
 };
 
 // sort text

@@ -133,6 +133,44 @@ double SwSortElement::StrToDouble( const String& rStr ) const
     return nRet;
 }
 
+int SwSortElement::keycompare(const SwSortElement& rCmp, sal_uInt16 nKey) const
+{
+    int nCmp = 0;
+    // The actual comparison
+    const SwSortElement *pOrig, *pCmp;
+
+    const SwSortKey* pSrtKey = pOptions->aKeys[ nKey ];
+    if( pSrtKey->eSortOrder == SRT_ASCENDING )
+        pOrig = this, pCmp = &rCmp;
+    else
+        pOrig = &rCmp, pCmp = this;
+
+    if( pSrtKey->bIsNumeric )
+    {
+        double n1 = pOrig->GetValue( nKey );
+        double n2 = pCmp->GetValue( nKey );
+
+        nCmp = n1 < n2 ? -1 : n1 == n2 ? 0 : 1;
+    }
+    else
+    {
+        if( !pLastAlgorithm || *pLastAlgorithm != pSrtKey->sSortType )
+        {
+            if( pLastAlgorithm )
+                *pLastAlgorithm = pSrtKey->sSortType;
+            else
+                pLastAlgorithm = new String( pSrtKey->sSortType );
+            pSortCollator->loadCollatorAlgorithm( *pLastAlgorithm,
+                    *pLocale,
+                    pOptions->bIgnoreCase ? SW_COLLATOR_IGNORES : 0 );
+        }
+
+        nCmp = pSortCollator->compareString(
+                    pOrig->GetKey( nKey ), pCmp->GetKey( nKey ));
+    }
+    return nCmp;
+}
+
 /*--------------------------------------------------------------------
     Description: Comparison operators
  --------------------------------------------------------------------*/
@@ -146,49 +184,17 @@ sal_Bool SwSortElement::operator==(const SwSortElement& ) const
  --------------------------------------------------------------------*/
 sal_Bool SwSortElement::operator<(const SwSortElement& rCmp) const
 {
-
     // The actual comparison
     for(sal_uInt16 nKey = 0; nKey < pOptions->aKeys.size(); ++nKey)
     {
-        const SwSortElement *pOrig, *pCmp;
+        int nCmp = keycompare(rCmp, nKey);
 
-        const SwSortKey* pSrtKey = pOptions->aKeys[ nKey ];
-        if( pSrtKey->eSortOrder == SRT_ASCENDING )
-            pOrig = this, pCmp = &rCmp;
-        else
-            pOrig = &rCmp, pCmp = this;
+        if (nCmp == 0)
+            continue;
 
-        if( pSrtKey->bIsNumeric )
-        {
-            double n1 = pOrig->GetValue( nKey );
-            double n2 = pCmp->GetValue( nKey );
-
-            if( n1 == n2 )
-                continue;
-
-            return n1 < n2;
-        }
-        else
-        {
-            if( !pLastAlgorithm || *pLastAlgorithm != pSrtKey->sSortType )
-            {
-                if( pLastAlgorithm )
-                    *pLastAlgorithm = pSrtKey->sSortType;
-                else
-                    pLastAlgorithm = new String( pSrtKey->sSortType );
-                pSortCollator->loadCollatorAlgorithm( *pLastAlgorithm,
-                        *pLocale,
-                        pOptions->bIgnoreCase ? SW_COLLATOR_IGNORES : 0 );
-            }
-
-            sal_Int32 nCmp = pSortCollator->compareString(
-                        pOrig->GetKey( nKey ), pCmp->GetKey( nKey ));
-            if( 0 == nCmp )
-                continue;
-
-            return -1 == nCmp;
-        }
+        return nCmp < 0;
     }
+
     return sal_False;
 }
 
