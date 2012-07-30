@@ -33,6 +33,9 @@
 
 #include "hwpreader.hxx"
 #include <math.h>
+
+#include <comphelper/newarray.hxx>
+
 #include "formula.h"
 #include "cspline.h"
 
@@ -47,7 +50,7 @@ extern int getRepFamilyName(const char* , char *, double &ratio);
 #endif
 
 // To be shorten source code by realking
-#define hconv(x,y) OUString(hstr2ucsstr(x,y))
+#define hconv(x)        OUString(hstr2ucsstr(x).c_str())
 #define ascii(x)        OUString::createFromAscii(x)
 #define rstartEl(x,y)   do { if (m_rxDocumentHandler.is()) m_rxDocumentHandler->startElement(x,y); } while(0)
 #define rendEl(x)       do { if (m_rxDocumentHandler.is()) m_rxDocumentHandler->endElement(x); } while(0)
@@ -80,8 +83,6 @@ extern int getRepFamilyName(const char* , char *, double &ratio);
     rendEl(ascii("text:span")); \
     tstart = false
 
-static hchar gstr[1024];
-static hchar sbuf[256];
 static hchar *field = 0L;
 static char buf[1024];
 
@@ -256,21 +257,21 @@ void HwpReader::makeMeta()
     if (hwpinfo->summary.title[0])
     {
         rstartEl(ascii("dc:title"), rList);
-        rchars((hconv(hwpinfo->summary.title, gstr)));
+        rchars((hconv(hwpinfo->summary.title)));
         rendEl(ascii("dc:title"));
     }
 
     if (hwpinfo->summary.subject[0])
     {
         rstartEl(ascii("dc:subject"), rList);
-        rchars((hconv(hwpinfo->summary.subject, gstr)));
+        rchars((hconv(hwpinfo->summary.subject)));
         rendEl(ascii("dc:subject"));
     }
 
     if (hwpinfo->summary.author[0])
     {
         rstartEl(ascii("meta:initial-creator"), rList);
-        rchars((hconv(hwpinfo->summary.author, gstr)));
+        rchars((hconv(hwpinfo->summary.author)));
         rendEl(ascii("meta:initial-creator"));
     }
 
@@ -344,31 +345,31 @@ void HwpReader::makeMeta()
         if (hwpinfo->summary.keyword[0][0])
         {
             rstartEl(ascii("meta:keyword"), rList);
-            rchars((hconv(hwpinfo->summary.keyword[0], gstr)));
+            rchars((hconv(hwpinfo->summary.keyword[0])));
             rendEl(ascii("meta:keyword"));
         }
         if (hwpinfo->summary.keyword[1][0])
         {
             rstartEl(ascii("meta:keyword"), rList);
-            rchars((hconv(hwpinfo->summary.keyword[1], gstr)));
+            rchars((hconv(hwpinfo->summary.keyword[1])));
             rendEl(ascii("meta:keyword"));
         }
         if (hwpinfo->summary.etc[0][0])
         {
             rstartEl(ascii("meta:keyword"), rList);
-            rchars((hconv(hwpinfo->summary.etc[0], gstr)));
+            rchars((hconv(hwpinfo->summary.etc[0])));
             rendEl(ascii("meta:keyword"));
         }
         if (hwpinfo->summary.etc[1][0])
         {
             rstartEl(ascii("meta:keyword"), rList);
-            rchars((hconv(hwpinfo->summary.etc[1], gstr)));
+            rchars((hconv(hwpinfo->summary.etc[1])));
             rendEl(ascii("meta:keyword"));
         }
         if (hwpinfo->summary.etc[2][0])
         {
             rstartEl(ascii("meta:keyword"), rList);
-            rchars((hconv(hwpinfo->summary.etc[2], gstr)));
+            rchars((hconv(hwpinfo->summary.etc[2])));
             rendEl(ascii("meta:keyword"));
         }
         rendEl(ascii("meta:keywords"));
@@ -514,7 +515,7 @@ void HwpReader::makeDrawMiscStyle( HWPDrawingObject *hdo )
                 if( !prop->pictype )
                 {
                     padd( ascii("xlink:href"), sXML_CDATA,
-                        hconv(kstr2hstr( (uchar *)urltounix(prop->szPatternFile, buf), sbuf), gstr));
+                            hconv(kstr2hstr( (uchar *)urltounix(prop->szPatternFile).c_str()).c_str()));
                 }
                 else
                 {
@@ -523,7 +524,7 @@ void HwpReader::makeDrawMiscStyle( HWPDrawingObject *hdo )
                         emp = hwpfile.GetEmPictureByName(prop->szPatternFile);
                     if( emp )
                     {
-                        char filename[128];
+                        char filename[128+17+9];
                         char dirname[128];
                         int fd;
 #ifdef _WIN32
@@ -557,7 +558,7 @@ void HwpReader::makeDrawMiscStyle( HWPDrawingObject *hdo )
                     else
                     {
                         padd( ascii("xlink:href"), sXML_CDATA,
-                            hconv(kstr2hstr( (uchar *)urltounix(prop->szPatternFile, buf), sbuf), gstr));
+                        hconv(kstr2hstr( (uchar *)urltounix(prop->szPatternFile).c_str()).c_str()));
                     }
 
                 }
@@ -738,7 +739,7 @@ void HwpReader::makeStyles()
     for (int ii = 0; ii < hwpstyle->Num(); ii++)
     {
         unsigned char *stylename = (unsigned char *) hwpstyle->GetName(ii);
-        padd(ascii("style:name"), sXML_CDATA, (hconv(kstr2hstr(stylename, sbuf), gstr)));
+        padd(ascii("style:name"), sXML_CDATA, (hconv(kstr2hstr(stylename).c_str())));
         padd(ascii("style:family"), sXML_CDATA, ascii("paragraph"));
         padd(ascii("style:parent-style-name"), sXML_CDATA, ascii("Standard"));
 
@@ -1336,10 +1337,10 @@ void HwpReader::parseCharShape(CharShape * cshape)
     padd(ascii("style:font-size-asian"), sXML_CDATA,
         ascii(Int2Str(cshape->size / 25, "%dpt", buf)));
 
-    char tmp[128];
-    hstr2ksstr(kstr2hstr((unsigned char *) hwpfont->GetFontName(0, cshape->font[0]), sbuf), tmp);
+    ::std::string const tmp = hstr2ksstr(kstr2hstr(
+        (unsigned char *) hwpfont->GetFontName(0, cshape->font[0])).c_str());
     double fRatio = 1.0;
-    int size = getRepFamilyName(tmp,buf, fRatio);
+    int size = getRepFamilyName(tmp.c_str(), buf, fRatio);
 
     padd(ascii("fo:font-family"), sXML_CDATA,
         OUString(buf, size, RTL_TEXTENCODING_EUC_KR));
@@ -1720,10 +1721,10 @@ void HwpReader::makePageStyle()
              if( hwpinfo->back_info.type == 1 ){
 #ifdef _WIN32
                  padd(ascii("xlink:href"), sXML_CDATA,
-                      hconv(kstr2hstr((uchar *) urltowin(hwpinfo->back_info.filename, buf), sbuf), gstr));
+                      hconv(kstr2hstr((uchar*) urltowin(hwpinfo->back_info.filename).c_str()).c_str()));
 #else
                  padd(ascii("xlink:href"), sXML_CDATA,
-                    hconv(kstr2hstr( (uchar *)urltounix(hwpinfo->back_info.filename, buf), sbuf), gstr));
+                    hconv(kstr2hstr( (uchar *)urltounix(hwpinfo->back_info.filename).c_str()).c_str()));
 #endif
                  padd(ascii("xlink:type"), sXML_CDATA, ascii("simple"));
                  padd(ascii("xlink:actuate"), sXML_CDATA, ascii("onLoad"));
@@ -1884,10 +1885,9 @@ void HwpReader::makeTableStyle(Table *tbl)
     rendEl(ascii("style:style"));
 
 // --------------- column ---------------- //
-    int i ;
-    for( i = 0 ; i < tbl->columns.nCount -1 ; i++ )
+    for (size_t i = 0 ; i < tbl->columns.nCount -1 ; i++)
     {
-        sprintf(buf,"Table%d.%c",hbox->style.boxnum, 'A'+i);
+        sprintf(buf,"Table%d.%c",hbox->style.boxnum, static_cast<char>('A'+i));
         padd(ascii("style:name"), sXML_CDATA, ascii( buf ));
         padd(ascii("style:family"), sXML_CDATA,ascii("table-column"));
         rstartEl(ascii("style:style"), rList);
@@ -1901,9 +1901,9 @@ void HwpReader::makeTableStyle(Table *tbl)
     }
 
 // --------------- row ---------------- //
-    for( i = 0 ; i < tbl->rows.nCount -1 ; i++ )
+    for (size_t i = 0 ; i < tbl->rows.nCount -1 ; i++)
     {
-        sprintf(buf,"Table%d.row%d",hbox->style.boxnum, i + 1);
+        sprintf(buf,"Table%d.row%ld",hbox->style.boxnum, i + 1);
         padd(ascii("style:name"), sXML_CDATA, ascii( buf ));
         padd(ascii("style:family"), sXML_CDATA,ascii("table-row"));
         rstartEl(ascii("style:style"), rList);
@@ -1917,7 +1917,7 @@ void HwpReader::makeTableStyle(Table *tbl)
     }
 
 // --------------- cell --------------------- //
-    for( i = 0 ; i < tbl->cells.count(); i++ )
+    for (int i = 0 ; i < tbl->cells.count(); i++)
     {
         TCell *tcell = tbl->cells.find(i);
         sprintf(buf,"Table%d.%c%d",hbox->style.boxnum, 'A'+ tcell->nColumnIndex, tcell->nRowIndex +1);
@@ -2694,13 +2694,10 @@ char *HwpReader::getPStyleName(int index, char *_buf)
 }
 
 
-void HwpReader::makeChars(hchar *str, int size)
+void HwpReader::makeChars(hchar_string & rStr)
 {
-    if (size)
-    {
-        str[size] = '\0';
-        rchars(OUString(str));
-    }
+    rchars(OUString(rStr.c_str()));
+    rStr.clear();
 }
 
 
@@ -2709,8 +2706,9 @@ void HwpReader::makeChars(hchar *str, int size)
  */
 void HwpReader::make_text_p0(HWPPara * para, sal_Bool bParaStart)
 {
+    hchar_string str;
     int n;
-    int l = 0, res;
+    int res;
      hchar dest[3];
     unsigned char firstspace = 0;
     if( !bParaStart)
@@ -2744,15 +2742,13 @@ void HwpReader::make_text_p0(HWPPara * para, sal_Bool bParaStart)
     {
         if (para->hhstr[n]->hh == CH_SPACE && !firstspace)
         {
-            makeChars(gstr, l);
-            l = 0;
+            makeChars(str);
             rstartEl(ascii("text:s"), rList);
             rendEl(ascii("text:s"));
         }
         else if (para->hhstr[n]->hh == CH_END_PARA)
         {
-            makeChars(gstr, l);
-            l = 0;
+            makeChars(str);
             rendEl(ascii("text:span"));
             rendEl(ascii("text:p"));
             break;
@@ -2765,7 +2761,9 @@ void HwpReader::make_text_p0(HWPPara * para, sal_Bool bParaStart)
                 firstspace = 1;
                 res = hcharconv(para->hhstr[n]->hh, dest, UNICODE);
                 for( int j = 0 ; j < res; j++ )
-                    gstr[l++] =  dest[j];
+                {
+                    str.push_back(dest[j]);
+                }
         }
     }
 }
@@ -2776,8 +2774,9 @@ void HwpReader::make_text_p0(HWPPara * para, sal_Bool bParaStart)
  */
 void HwpReader::make_text_p1(HWPPara * para,sal_Bool bParaStart)
 {
+    hchar_string str;
     int n;
-    int l = 0, res;
+    int res;
      hchar dest[3];
     int curr = para->cshape.index;
     unsigned char firstspace = 0;
@@ -2814,8 +2813,7 @@ void HwpReader::make_text_p1(HWPPara * para,sal_Bool bParaStart)
     {
         if (para->GetCharShape(n)->index != curr)
         {
-            makeChars(gstr, l);
-            l = 0;
+            makeChars(str);
             rendEl(ascii("text:span"));
             curr = para->GetCharShape(n)->index;
             padd(ascii("text:style-name"), sXML_CDATA,
@@ -2825,15 +2823,13 @@ void HwpReader::make_text_p1(HWPPara * para,sal_Bool bParaStart)
         }
         if (para->hhstr[n]->hh == CH_SPACE && !firstspace)
         {
-            makeChars(gstr, l);
-            l = 0;
+            makeChars(str);
             rstartEl(ascii("text:s"), rList);
             rendEl(ascii("text:s"));
         }
         else if (para->hhstr[n]->hh == CH_END_PARA)
         {
-            makeChars(gstr, l);
-            l = 0;
+            makeChars(str);
             rendEl(ascii("text:span"));
             rendEl(ascii("text:p"));
             break;
@@ -2848,7 +2844,9 @@ void HwpReader::make_text_p1(HWPPara * para,sal_Bool bParaStart)
                 firstspace = 1;
                 res = hcharconv(para->hhstr[n]->hh, dest, UNICODE);
                 for( int j = 0 ; j < res; j++ )
-                    gstr[l++] =  dest[j];
+                {
+                    str.push_back(dest[j]);
+                }
         }
     }
 }
@@ -2859,9 +2857,9 @@ void HwpReader::make_text_p1(HWPPara * para,sal_Bool bParaStart)
  */
 void HwpReader::make_text_p3(HWPPara * para,sal_Bool bParaStart)
 {
+    hchar_string str;
     int n, res;
      hchar dest[3];
-    size_t l = 0;
     unsigned char firstspace = 0;
     bool pstart = bParaStart;
     bool tstart = false;
@@ -2891,12 +2889,11 @@ void HwpReader::make_text_p3(HWPPara * para,sal_Bool bParaStart)
     {
         if( para->hhstr[n]->hh == CH_END_PARA )
         {
-            if( l > 0 )
+            if (str.size() > 0)
             {
                 if( !pstart ){ STARTP;}
                 if( !tstart ){ STARTT;}
-                makeChars(gstr, l);
-                l = 0;
+                makeChars(str);
             }
             if( tstart ){ ENDT;}
             if( !pstart ){ STARTP;}
@@ -2907,8 +2904,7 @@ void HwpReader::make_text_p3(HWPPara * para,sal_Bool bParaStart)
         {
             if( !pstart ) {STARTP;}
             if( !tstart ) {STARTT;}
-            makeChars(gstr, l);
-            l = 0;
+            makeChars(str);
             rstartEl(ascii("text:s"), rList);
             pList->clear();
             rendEl(ascii("text:s"));
@@ -2920,9 +2916,8 @@ void HwpReader::make_text_p3(HWPPara * para,sal_Bool bParaStart)
                     {
                          if( !pstart ) {STARTP;}
                          if( !tstart ) {STARTT;}
-                         makeChars(gstr, l);
+                         makeChars(str);
                          ENDT;
-                         l = 0;
                     }
             if( para->hhstr[n]->hh == CH_SPACE )
                 firstspace = 0;
@@ -2930,7 +2925,9 @@ void HwpReader::make_text_p3(HWPPara * para,sal_Bool bParaStart)
                 firstspace = 1;
                 res = hcharconv(para->hhstr[n]->hh, dest, UNICODE);
                 for( int j = 0 ; j < res; j++ )
-                    gstr[l++] =  dest[j];
+                {
+                    str.push_back(dest[j]);
+                }
         }
         else if (para->hhstr[n]->hh == CH_FIELD)
         {
@@ -2939,15 +2936,14 @@ void HwpReader::make_text_p3(HWPPara * para,sal_Bool bParaStart)
             {
                 if( !pstart ) {STARTP;}
                 if( !tstart ) {STARTT;}
-                makeChars(gstr, l);
-                l = 0;
+                makeChars(str);
                 firstspace = 1;
                      if( hbox->type[0] == 4 && hbox->type[1] == 0 )
                      {
                          field = hbox->str3;
                      }
                      else{
-                         makeFieldCode(hbox);
+                         makeFieldCode(str, hbox);
                      }
                 infield = true;
             }
@@ -2956,12 +2952,11 @@ void HwpReader::make_text_p3(HWPPara * para,sal_Bool bParaStart)
                 firstspace = 1;
                      if( hbox->type[0] == 4 && hbox->type[1] == 0 )
                      {
-                         gstr[l] = 0;
-                         makeFieldCode(hbox);
+                         makeFieldCode(str, hbox);
                          field = 0L;
                      }
                 infield = false;
-                l = 0;
+                str.clear();
             }
         }
         else
@@ -2971,8 +2966,7 @@ void HwpReader::make_text_p3(HWPPara * para,sal_Bool bParaStart)
                 case CH_BOOKMARK:
                     if( !pstart ) {STARTP;}
                     if( !tstart ) {STARTT;}
-                    makeChars(gstr, l);
-                    l = 0;
+                    makeChars(str);
                     makeBookmark((Bookmark *) para->hhstr[n]);
                     break;
                 case CH_DATE_FORM:                // 7
@@ -2980,17 +2974,15 @@ void HwpReader::make_text_p3(HWPPara * para,sal_Bool bParaStart)
                 case CH_DATE_CODE:                // 8
                     if( !pstart ) {STARTP;}
                     if( !tstart ) {STARTT;}
-                    makeChars(gstr, l);
-                    l = 0;
+                    makeChars(str);
                     makeDateCode((DateCode *) para->hhstr[n]);
                     break;
                 case CH_TAB:                      // 9
                     if( !pstart ) {STARTP;}
-                    if( l > 0 )
+                    if (str.size() > 0)
                     {
                         if( !tstart ) {STARTT;}
-                        makeChars(gstr, l);
-                        l = 0;
+                        makeChars(str);
                     }
                     makeTab((Tab *) para->hhstr[n]);
                     break;
@@ -3003,17 +2995,15 @@ void HwpReader::make_text_p3(HWPPara * para,sal_Bool bParaStart)
                     {
                         if( !pstart ) {STARTP;}
                         if( !tstart ) {STARTT;}
-                        makeChars(gstr, l);
-                        l = 0;
+                        makeChars(str);
                     }
                     else
                     {
                         if( !pstart ) {STARTP;}
-                        if( l > 0 )
+                        if (str.size() > 0)
                         {
                             if( !tstart ) {STARTT;}
-                            makeChars(gstr, l);
-                            l = 0;
+                            makeChars(str);
                         }
                         if( tstart ) {ENDT;}
                     }
@@ -3038,17 +3028,15 @@ void HwpReader::make_text_p3(HWPPara * para,sal_Bool bParaStart)
                     {
                         if( !pstart ) {STARTP;}
                         if( !tstart ) {STARTT;}
-                        makeChars(gstr, l);
-                        l = 0;
+                        makeChars(str);
                     }
                     else
                     {
                         if( !pstart ) {STARTP;}
-                        if( l > 0 )
+                        if (str.size() > 0)
                         {
                             if( !tstart ) {STARTT;}
-                            makeChars(gstr, l);
-                            l = 0;
+                            makeChars(str);
                         }
                         if( tstart ) {ENDT;}
                     }
@@ -3058,12 +3046,11 @@ void HwpReader::make_text_p3(HWPPara * para,sal_Bool bParaStart)
                 case CH_LINE:                     // 14
                 {
                     Line *hbox = (Line *) para->hhstr[n];
-                    if( l > 0 )
+                    if (str.size() > 0)
                     {
                         if( !pstart ) {STARTP;}
                         if( !tstart ) {STARTT;}
-                        makeChars(gstr, l);
-                        l = 0;
+                        makeChars(str);
                     }
                     if( tstart ) {ENDT;}
                     if( pstart ) {ENDP;}
@@ -3074,22 +3061,19 @@ void HwpReader::make_text_p3(HWPPara * para,sal_Bool bParaStart)
                 case CH_HIDDEN:                   // 15
                     if( !pstart ) {STARTP;}
                     if( !tstart ) {STARTT;}
-                    makeChars(gstr, l);
-                    l = 0;
+                    makeChars(str);
                     makeHidden((Hidden *) para->hhstr[n]);
                     break;
                 case CH_FOOTNOTE:                 // 17
                     if( !pstart ) {STARTP;}
                     if( !tstart ) {STARTT;}
-                    makeChars(gstr, l);
-                    l = 0;
+                    makeChars(str);
                     makeFootnote((Footnote *) para->hhstr[n]);
                     break;
                 case CH_AUTO_NUM:                 // 18
                     if( !pstart ) {STARTP;}
                     if( !tstart ) {STARTT;}
-                    makeChars(gstr, l);
-                    l = 0;
+                    makeChars(str);
                     makeAutoNum((AutoNum *) para->hhstr[n]);
                     break;
                 case CH_NEW_NUM:                  // 19 -skip
@@ -3099,8 +3083,7 @@ void HwpReader::make_text_p3(HWPPara * para,sal_Bool bParaStart)
                 case CH_MAIL_MERGE:               // 22
                     if( !pstart ) {STARTP;}
                     if( !tstart ) {STARTT;}
-                    makeChars(gstr, l);
-                    l = 0;
+                    makeChars(str);
                     makeMailMerge((MailMerge *) para->hhstr[n]);
                     break;
                 case CH_COMPOSE:                  /* 23 - 글자겹침 */
@@ -3110,27 +3093,24 @@ void HwpReader::make_text_p3(HWPPara * para,sal_Bool bParaStart)
                 case CH_TOC_MARK:                 /* 25 아래의 3개는 작업해야 한다. */
                     if( !pstart ) {STARTP;}
                     if( !tstart ) {STARTT;}
-                    makeChars(gstr, l);
-                    l = 0;
+                    makeChars(str);
                     makeTocMark((TocMark *) para->hhstr[n]);
                     break;
                 case CH_INDEX_MARK:               // 26
                     if( !pstart ) {STARTP;}
                     if( !tstart ) {STARTT;}
-                    makeChars(gstr, l);
-                    l = 0;
+                    makeChars(str);
                     makeIndexMark((IndexMark *) para->hhstr[n]);
                     break;
                 case CH_OUTLINE:                  // 28
                     if( !pstart ) {STARTP;}
                     if( !tstart ) {STARTT;}
-                    makeChars(gstr, l);
-                    l = 0;
+                    makeChars(str);
                     makeOutline((Outline *) para->hhstr[n]);
                     break;
                      case CH_FIXED_SPACE:
                      case CH_KEEP_SPACE:
-                          gstr[l++] = 0x0020;
+                          str.push_back(0x0020);
                           break;
                 }
         }
@@ -3138,108 +3118,108 @@ void HwpReader::make_text_p3(HWPPara * para,sal_Bool bParaStart)
 }
 
 
-void HwpReader::makeFieldCode(FieldCode *hbox)
+void HwpReader::makeFieldCode(hchar_string & rStr, FieldCode *hbox)
 {
 /* 누름틀 */
     if( hbox->type[0] == 4 && hbox->type[1] == 0 )
     {
         padd(ascii("text:placeholder-type"), sXML_CDATA, ascii("text"));
           if( field )
-              padd(ascii("text:description"), sXML_CDATA, hconv(field, sbuf));
+              padd(ascii("text:description"), sXML_CDATA, hconv(field));
         rstartEl( ascii("text:placeholder"), rList);
         pList->clear();
-        rchars( OUString(gstr));
+        rchars( OUString(rStr.c_str()));
         rendEl( ascii("text:placeholder") );
     }
 /* 문서요약 */
     else if( hbox->type[0] == 3 && hbox->type[1] == 0 )
     {
-        if( hconv( hbox->str3, gstr ).equals(OUString(RTL_CONSTASCII_USTRINGPARAM("title"))))
+        if (hconv(hbox->str3).equals(OUString(RTL_CONSTASCII_USTRINGPARAM("title"))))
         {
             rstartEl( ascii("text:title"), rList );
-            rchars(  hconv(hbox->str2, gstr) );
+            rchars(  hconv(hbox->str2) );
             rendEl( ascii("text:title") );
         }
-        else if( hconv( hbox->str3, gstr ).equals(OUString(RTL_CONSTASCII_USTRINGPARAM("subject"))))
+        else if (hconv(hbox->str3).equals(OUString(RTL_CONSTASCII_USTRINGPARAM("subject"))))
         {
             rstartEl( ascii("text:subject"), rList );
-            rchars(  hconv(hbox->str2, gstr) );
+            rchars(  hconv(hbox->str2) );
             rendEl( ascii("text:subject") );
         }
-        else if( hconv( hbox->str3, gstr ).equals(OUString(RTL_CONSTASCII_USTRINGPARAM("author"))))
+        else if (hconv(hbox->str3).equals(OUString(RTL_CONSTASCII_USTRINGPARAM("author"))))
         {
             rstartEl( ascii("text:author-name"), rList );
-            rchars(  hconv(hbox->str2, gstr) );
+            rchars(  hconv(hbox->str2) );
             rendEl( ascii("text:author-name") );
         }
-        else if( hconv( hbox->str3, gstr ).equals(OUString(RTL_CONSTASCII_USTRINGPARAM("keywords"))))
+        else if (hconv(hbox->str3).equals(OUString(RTL_CONSTASCII_USTRINGPARAM("keywords"))))
         {
             rstartEl( ascii("text:keywords"), rList );
-            rchars(  hconv(hbox->str2, gstr) );
+            rchars(  hconv(hbox->str2) );
             rendEl( ascii("text:keywords") );
         }
     }
 /* 개인정보 */
     else if( hbox->type[0] == 3 && hbox->type[1] == 1 )
     {
-        if( hconv( hbox->str3, gstr ).equals(OUString(RTL_CONSTASCII_USTRINGPARAM("User"))))
+        if (hconv(hbox->str3).equals(OUString(RTL_CONSTASCII_USTRINGPARAM("User"))))
         {
             rstartEl( ascii("text:sender-lastname"), rList );
-            rchars(  hconv(hbox->str2, gstr) );
+            rchars(  hconv(hbox->str2) );
             rendEl( ascii("text:sender-lastname") );
         }
-        else if( hconv( hbox->str3, gstr ).equals(OUString(RTL_CONSTASCII_USTRINGPARAM("Company"))))
+        else if (hconv(hbox->str3).equals(OUString(RTL_CONSTASCII_USTRINGPARAM("Company"))))
         {
             rstartEl( ascii("text:sender-company"), rList );
-            rchars(  hconv(hbox->str2, gstr) );
+            rchars(  hconv(hbox->str2) );
             rendEl( ascii("text:sender-company") );
         }
-        else if( hconv( hbox->str3, gstr ).equals(OUString(RTL_CONSTASCII_USTRINGPARAM("Position"))))
+        else if (hconv(hbox->str3).equals(OUString(RTL_CONSTASCII_USTRINGPARAM("Position"))))
         {
             rstartEl( ascii("text:sender-title"), rList );
-            rchars(  hconv(hbox->str2, gstr) );
+            rchars(  hconv(hbox->str2) );
             rendEl( ascii("text:sender-title") );
         }
-        else if( hconv( hbox->str3, gstr ).equals(OUString(RTL_CONSTASCII_USTRINGPARAM("Division"))))
+        else if (hconv(hbox->str3).equals(OUString(RTL_CONSTASCII_USTRINGPARAM("Division"))))
         {
             rstartEl( ascii("text:sender-position"), rList );
-            rchars(  hconv(hbox->str2, gstr) );
+            rchars(  hconv(hbox->str2) );
             rendEl( ascii("text:sender-position") );
         }
-        else if( hconv( hbox->str3, gstr ).equals(OUString(RTL_CONSTASCII_USTRINGPARAM("Fax"))))
+        else if (hconv(hbox->str3).equals(OUString(RTL_CONSTASCII_USTRINGPARAM("Fax"))))
         {
             rstartEl( ascii("text:sender-fax"), rList );
-            rchars(  hconv(hbox->str2, gstr) );
+            rchars(  hconv(hbox->str2) );
             rendEl( ascii("text:sender-fax") );
         }
-        else if( hconv( hbox->str3, gstr ).equals(OUString(RTL_CONSTASCII_USTRINGPARAM("Pager"))))
+        else if (hconv(hbox->str3).equals(OUString(RTL_CONSTASCII_USTRINGPARAM("Pager"))))
         {
             rstartEl( ascii("text:phone-private"), rList );
-            rchars(  hconv(hbox->str2, gstr) );
+            rchars(  hconv(hbox->str2) );
             rendEl( ascii("text:phone-private") );
         }
-        else if( hconv( hbox->str3, gstr ).equals(OUString(RTL_CONSTASCII_USTRINGPARAM("E-mail"))))
+        else if (hconv(hbox->str3).equals(OUString(RTL_CONSTASCII_USTRINGPARAM("E-mail"))))
         {
             rstartEl( ascii("text:sender-email"), rList );
-            rchars(  hconv(hbox->str2, gstr) );
+            rchars(  hconv(hbox->str2) );
             rendEl( ascii("text:sender-email") );
         }
-        else if( hconv( hbox->str3, gstr ).equals(OUString(RTL_CONSTASCII_USTRINGPARAM("Zipcode(office)"))))
+        else if (hconv(hbox->str3).equals(OUString(RTL_CONSTASCII_USTRINGPARAM("Zipcode(office)"))))
         {
             rstartEl( ascii("text:sender-postal-code"), rList );
-            rchars(  hconv(hbox->str2, gstr) );
+            rchars(  hconv(hbox->str2) );
             rendEl( ascii("text:sender-postal-code") );
         }
-        else if( hconv( hbox->str3, gstr ).equals(OUString(RTL_CONSTASCII_USTRINGPARAM("Phone(office)"))))
+        else if (hconv(hbox->str3).equals(OUString(RTL_CONSTASCII_USTRINGPARAM("Phone(office)"))))
         {
             rstartEl( ascii("text:sender-phone-work"), rList );
-            rchars(  hconv(hbox->str2, gstr) );
+            rchars(  hconv(hbox->str2) );
             rendEl( ascii("text:sender-phone-work") );
         }
-        else if( hconv( hbox->str3, gstr ).equals(OUString(RTL_CONSTASCII_USTRINGPARAM("Address(office)"))))
+        else if (hconv(hbox->str3).equals(OUString(RTL_CONSTASCII_USTRINGPARAM("Address(office)"))))
         {
             rstartEl( ascii("text:sender-street"), rList );
-            rchars(  hconv(hbox->str2, gstr) );
+            rchars(  hconv(hbox->str2) );
             rendEl( ascii("text:sender-street") );
         }
 
@@ -3251,7 +3231,7 @@ void HwpReader::makeFieldCode(FieldCode *hbox)
                      ascii(Int2Str(hbox->m_pDate->key, "N%d", buf)));
             rstartEl( ascii("text:creation-date"), rList );
             pList->clear();
-            rchars(  hconv(hbox->str2, gstr) );
+            rchars(  hconv(hbox->str2) );
             rendEl( ascii("text:creation-date") );
      }
 }
@@ -3265,21 +3245,21 @@ void HwpReader::makeBookmark(Bookmark * hbox)
 {
     if (hbox->type == 0)
     {
-        padd(ascii("text:name"), sXML_CDATA, (hconv(hbox->id, gstr)));
+        padd(ascii("text:name"), sXML_CDATA, (hconv(hbox->id)));
         rstartEl(ascii("text:bookmark"), rList);
         pList->clear();
         rendEl(ascii("text:bookmark"));
     }
     else if (hbox->type == 1)                     /* 블록 북마크일 경우 시작과 끝이 있다 */
     {
-        padd(ascii("text:name"), sXML_CDATA, (hconv(hbox->id, gstr)));
+        padd(ascii("text:name"), sXML_CDATA, (hconv(hbox->id)));
         rstartEl(ascii("text:bookmark-start"), rList);
         pList->clear();
         rendEl(ascii("text:bookmark-start"));
     }
     else if (hbox->type == 2)
     {
-        padd(ascii("text:name"), sXML_CDATA, (hconv(hbox->id, gstr)));
+        padd(ascii("text:name"), sXML_CDATA, (hconv(hbox->id)));
         rstartEl(ascii("text:bookmark-end"), rList);
         pList->clear();
         rendEl(ascii("text:bookmark-end"));
@@ -3423,10 +3403,11 @@ void HwpReader::makeDateFormat(DateCode * hbox)
             case '~':                             // Chinese Locale
                 break;
             default:
+                hchar sbuf[2];
                 sbuf[0] = *fmt;
                 sbuf[1] = 0;
                 rstartEl(ascii("number:text"), rList);
-                rchars((hconv(sbuf, gstr)));
+                rchars((hconv(sbuf)));
                 rendEl(ascii("number:text"));
                 break;
         }
@@ -3442,8 +3423,8 @@ void HwpReader::makeDateCode(DateCode * hbox)
         ascii(Int2Str(hbox->key, "N%d", buf)));
     rstartEl( ascii("text:date"), rList );
     pList->clear();
-    hbox->GetString(sbuf, 255);
-    rchars((hconv(sbuf, gstr)));
+    hchar_string const boxstr = hbox->GetString();
+    rchars((hconv(boxstr.c_str())));
     rendEl( ascii("text:date") );
 }
 
@@ -3466,10 +3447,9 @@ void HwpReader::makeTable(TxtBox * hbox)
 
     Table *tbl = hbox->m_pTable;
 // ----------- column ---------------- //
-    int i ;
-    for( i = 0 ; i < tbl->columns.nCount -1 ; i++ )
+    for (size_t i = 0 ; i < tbl->columns.nCount -1 ; i++)
     {
-        sprintf(buf,"Table%d.%c",hbox->style.boxnum, 'A'+i);
+        sprintf(buf,"Table%d.%c",hbox->style.boxnum, static_cast<char>('A'+i));
         padd(ascii("table:style-name"), sXML_CDATA, ascii( buf ));
         rstartEl(ascii("table:table-column"), rList);
         pList->clear();
@@ -3478,7 +3458,7 @@ void HwpReader::makeTable(TxtBox * hbox)
 
 // ----------- cell ---------------- //
     int j = -1, k = -1;
-    for( i = 0 ; i < tbl->cells.count(); i++ )
+    for (int i = 0 ; i < tbl->cells.count(); i++)
     {
         TCell *tcell = tbl->cells.find(i);
         if( tcell->nRowIndex > j )
@@ -3692,7 +3672,7 @@ void HwpReader::makeFormula(TxtBox * hbox)
         {
             if (!cshape)
                 cshape = pPar->GetCharShape(n);
-            if (l >= sizeof(mybuf)-1)
+            if (l >= sizeof(mybuf)-7)
                 break;
                 res = hcharconv(pPar->hhstr[n]->hh, dest, UNICODE);
                 for( int j = 0 ; j < res; j++ ){
@@ -3708,7 +3688,7 @@ void HwpReader::makeFormula(TxtBox * hbox)
                     }
                 }
         }
-        if (l >= sizeof(mybuf)-1)
+        if (l >= sizeof(mybuf)-7)
             break;
         mybuf[l++] = '\n';
         pPar = pPar->Next();
@@ -3735,32 +3715,35 @@ void HwpReader::makeHyperText(TxtBox * hbox)
      if( !hypert ) return;
 
     if( strlen((char *)hypert->filename) > 0 ){
-              char tmp[256];
-              char tmp2[256];
-              int nSize = hstr2ksstr(hypert->bookmark, tmp);
+              ::std::string const tmp = hstr2ksstr(hypert->bookmark);
+              ::std::string const tmp2 = hstr2ksstr(kstr2hstr(
 #ifdef _WIN32
-              int nSize2 = hstr2ksstr(kstr2hstr((uchar *) urltowin((char *)hypert->filename, buf), sbuf), tmp2);
+                  (uchar *) urltowin((char *)hypert->filename).c_str()).c_str());
 #else
-              int nSize2 = hstr2ksstr(kstr2hstr( (uchar *)urltounix((char *)hypert->filename, buf), sbuf), tmp2);
+                  (uchar *) urltounix((char *)hypert->filename).c_str()).c_str());
 #endif
           padd(ascii("xlink:type"), sXML_CDATA, ascii("simple"));
-          if( strlen(tmp) > 0 && strcmp( tmp, "[HTML]") ){
-              sprintf( buf, "%s#%s",tmp2, tmp);
-              padd(ascii("xlink:href"), sXML_CDATA, OUString(buf, nSize2 + nSize+1, RTL_TEXTENCODING_EUC_KR));
+          if (tmp.size() > 0 && strcmp(tmp.c_str(), "[HTML]")) {
+              ::std::string tmp3(tmp2);
+              tmp3.push_back('#');
+              tmp3.append(tmp);
+              padd(ascii("xlink:href"), sXML_CDATA,
+                  OUString(tmp3.c_str(), tmp3.size()+1, RTL_TEXTENCODING_EUC_KR));
           }
           else{
-              sprintf( buf, "%s",tmp2);
-              padd(ascii("xlink:href"), sXML_CDATA, OUString(buf, nSize2, RTL_TEXTENCODING_EUC_KR));
+              padd(ascii("xlink:href"), sXML_CDATA,
+                  OUString(tmp2.c_str(), tmp2.size()+1, RTL_TEXTENCODING_EUC_KR));
 
           }
      }
     else
     {
-        char tmp[256];
         padd(ascii("xlink:type"), sXML_CDATA, ascii("simple"));
-        int nSize = hstr2ksstr(hypert->bookmark, tmp);
-        sprintf( buf, "#%s", tmp);
-        padd(ascii("xlink:href"), sXML_CDATA, OUString(buf, nSize+1, RTL_TEXTENCODING_EUC_KR));
+        ::std::string tmp;
+        tmp.push_back('#');
+        tmp.append(hstr2ksstr(hypert->bookmark));
+        padd(ascii("xlink:href"), sXML_CDATA,
+                OUString(tmp.c_str(), tmp.size()+1, RTL_TEXTENCODING_EUC_KR));
     }
     rstartEl(ascii("draw:a"), rList);
     pList->clear();
@@ -3833,16 +3816,16 @@ void HwpReader::makePicture(Picture * hbox)
                 padd(ascii("xlink:type"), sXML_CDATA, ascii("simple"));
 #ifdef _WIN32
                 if( hbox->follow[4] != 0 )
-                    padd(ascii("xlink:href"), sXML_CDATA, (hconv(kstr2hstr(hbox->follow + 4, sbuf), gstr)));
+                    padd(ascii("xlink:href"), sXML_CDATA, (hconv(kstr2hstr(hbox->follow + 4).c_str())));
                 else
-                    padd(ascii("xlink:href"), sXML_CDATA, (hconv(kstr2hstr(hbox->follow + 5, sbuf), gstr)));
+                    padd(ascii("xlink:href"), sXML_CDATA, (hconv(kstr2hstr(hbox->follow + 5).c_str())));
 #else
                 if( hbox->follow[4] != 0 )
                     padd(ascii("xlink:href"), sXML_CDATA,
-                        (hconv(kstr2hstr((uchar *)urltounix((char *)(hbox->follow + 4), buf), sbuf), gstr)));
+                        (hconv(kstr2hstr((uchar *)urltounix((char *)(hbox->follow + 4)).c_str()).c_str())));
                 else
                     padd(ascii("xlink:href"), sXML_CDATA,
-                        (hconv(kstr2hstr((uchar *)urltounix((char *)(hbox->follow + 5), buf), sbuf), gstr)));
+                        (hconv(kstr2hstr((uchar *)urltounix((char *)(hbox->follow + 5)).c_str()).c_str())));
 #endif
                 rstartEl(ascii("draw:a"), rList);
                 pList->clear();
@@ -3894,10 +3877,10 @@ void HwpReader::makePicture(Picture * hbox)
             if ( hbox->pictype == PICTYPE_FILE ){
 #ifdef _WIN32
                 sprintf(buf, "file:///%s", hbox->picinfo.picun.path );
-                padd(ascii("xlink:href"), sXML_CDATA, (hconv(kstr2hstr((uchar *) buf, sbuf), gstr)));
+                padd(ascii("xlink:href"), sXML_CDATA, (hconv(kstr2hstr((uchar *) buf).c_str())));
 #else
                 padd(ascii("xlink:href"), sXML_CDATA,
-                    (hconv(kstr2hstr((uchar *) urltounix( hbox->picinfo.picun.path, buf), sbuf), gstr)));
+                    (hconv(kstr2hstr((uchar *) urltounix(hbox->picinfo.picun.path).c_str()).c_str())));
 #endif
                 padd(ascii("xlink:type"), sXML_CDATA, ascii("simple"));
                 padd(ascii("xlink:show"), sXML_CDATA, ascii("embed"));
@@ -4362,7 +4345,10 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
 
                     OUString oustr;
 
-                    if (drawobj->u.freeform.npt > 2){
+                    if ((drawobj->u.freeform.npt > 2) &&
+                        (static_cast<size_t>(drawobj->u.freeform.npt) <
+                         (::std::numeric_limits<int>::max() / sizeof(double))))
+                    {
                               int n, i;
                               if( bIsNatural == sal_True )
                                   n = drawobj->u.freeform.npt;
@@ -4604,7 +4590,8 @@ void HwpReader::makeLine(Line *   )
  */
 void HwpReader::makeHidden(Hidden * hbox)
 {
-    int l = 0, res;
+    hchar_string str;
+    int res;
      hchar dest[3];
 
     padd(ascii("text:condition"), sXML_CDATA, ascii(""));
@@ -4620,11 +4607,13 @@ void HwpReader::makeHidden(Hidden * hbox)
         {
               res = hcharconv(para->hhstr[n]->hh, dest, UNICODE);
               for( int j = 0 ; j < res ; j++ )
-                    gstr[l++] = dest[j];
+              {
+                    str.push_back(dest[j]);
+              }
         }
         para = para->Next();
     }
-    makeChars(gstr, l);
+    makeChars(str);
     rendEl(ascii("text:hidden-text"));
 }
 
@@ -4769,8 +4758,8 @@ void HwpReader::makeShowPageNum()
  */
 void HwpReader::makeMailMerge(MailMerge * hbox)
 {
-    hbox->GetString(sbuf, 255);
-    rchars((hconv(sbuf, gstr)));
+    hchar_string const boxstr = hbox->GetString();
+    rchars((hconv(boxstr.c_str())));
 }
 
 
@@ -4795,7 +4784,7 @@ void HwpReader::makeIndexMark(IndexMark *  )      /*hbox */
 void HwpReader::makeOutline(Outline * hbox)
 {
     if( hbox->kind == 1 )
-         rchars(OUString(hbox->GetUnicode(sbuf, 255)));
+        rchars(OUString(hbox->GetUnicode().c_str()));
 }
 
 

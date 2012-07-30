@@ -139,10 +139,10 @@ private:
     void make_text_p3(HWPPara *para, sal_Bool bParaStart = sal_False);
 
     /* -------- rDocument->characters(x) --------- */
-    void makeChars(hchar *, int);
+    void makeChars(hchar_string & rStr);
 
     /* -------- Special Char Parsing --------- */
-    void makeFieldCode(FieldCode *hbox);        //6
+    void makeFieldCode(hchar_string & rStr, FieldCode *hbox);		//6
     void makeBookmark(Bookmark *hbox);      //6
     void makeDateFormat(DateCode *hbox);    //7
     void makeDateCode(DateCode *hbox);      //8
