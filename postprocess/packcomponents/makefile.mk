@@ -398,6 +398,10 @@ my_components += component/connectivity/source/drivers/evoab2/evoab
 my_components += component/avmedia/source/gstreamer/avmediagstreamer
 .END
 
+.IF "$(OS)" != "WNT" && "$(ENABLE_GSTREAMER_0_10)" != ""
+my_components += component/avmedia/source/gstreamer/avmediagstreamer_0_10
+.END
+
 .INCLUDE: target.mk
 
 ALLTAR : $(MISC)/services.rdb

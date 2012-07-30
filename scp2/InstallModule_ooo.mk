@@ -152,6 +152,9 @@ $(eval $(call gb_InstallModule_add_defs,scp2/ooo,\
 	$(if $(filter TRUE,$(ENABLE_GSTREAMER)),\
 		-DGSTREAMER \
 	) \
+	$(if $(filter TRUE,$(ENABLE_GSTREAMER_0_10)),\
+		-DGSTREAMER_0_10 \
+	) \
 	$(if $(WINDOWS_SDK_HOME),\
 		-DHAVE_WINDOWS_SDK \
 	) \

@@ -33,7 +33,6 @@
 #include <vcl/syschild.hxx>
 #include <vcl/sysdata.hxx>
 
-
 #include "gstplayer.hxx"
 #include "gstframegrabber.hxx"
 #include "gstwindow.hxx"
@@ -45,8 +44,14 @@
 #define AVMEDIA_GST_PLAYER_IMPLEMENTATIONNAME "com.sun.star.comp.avmedia.Player_GStreamer"
 #define AVMEDIA_GST_PLAYER_SERVICENAME "com.sun.star.media.Player_GStreamer"
 
-#if OSL_DEBUG_LEVEL > 2
-#define DBG OSL_TRACE
+#ifdef AVMEDIA_GST_0_10
+#  define AVVERSION "gst 0.10: "
+#else
+#  define AVVERSION "gst 1.0: "
+#endif
+
+#if 1 //OSL_DEBUG_LEVEL > 2
+#define DBG(...) do { fprintf (stderr, "%s", AVVERSION); fprintf (stderr, __VA_ARGS__); fprintf (stderr, "\n"); } while (0);
 #else
 #define DBG(...)
 #endif
@@ -83,15 +88,22 @@ Player::Player( const uno::Reference< lang::XMultiServiceFactory >& rxMgr ) :
 
     mbInitialized = gst_init_check( &argc, &argv, &pError );
 
+    DBG( "%p Player::Player", this );
+
     if (pError != NULL)
+    {
         // TODO: thow an exception?
+        DBG( "%p Player::Player error '%s'", this, pError->message );
         g_error_free (pError);
+    }
 }
 
 // ------------------------------------------------------------------------------
 
 Player::~Player()
 {
+    DBG( "%p Player::~Player", this );
+
     // Release the elements and pipeline
     if( mbInitialized )
     {
@@ -160,7 +172,7 @@ static gboolean wrap_element_query_position (GstElement *element, GstFormat form
 {
 #ifdef AVMEDIA_GST_0_10
     GstFormat my_format = format;
-    return gst_element_query_position( mpPlaybin, &my_format, cur) && my_format == format && *cur > 0L;
+    return gst_element_query_position( element, &my_format, cur) && my_format == format && *cur > 0L;
 #else
     return gst_element_query_position( element, format, cur );
 #endif
@@ -170,7 +182,7 @@ static gboolean wrap_element_query_duration (GstElement *element, GstFormat form
 {
 #ifdef AVMEDIA_GST_0_10
     GstFormat my_format = format;
-    return gst_element_query_duration( mpPlaybin, &my_format, duration) && my_format == format && *duration > 0L;
+    return gst_element_query_duration( element, &my_format, duration) && my_format == format && *duration > 0L;
 #else
     return gst_element_query_duration( element, format, duration );
 #endif
@@ -178,21 +190,27 @@ static gboolean wrap_element_query_duration (GstElement *element, GstFormat form
 
 GstBusSyncReply Player::processSyncMessage( GstMessage *message )
 {
-    DBG( "%p processSyncMessage: %s", this, GST_MESSAGE_TYPE_NAME( message ) );
+//    DBG( "%p processSyncMessage has handle: %s", this, GST_MESSAGE_TYPE_NAME( message ) );
 
-#if OSL_DEBUG_LEVEL > 0
+#if 1 // OSL_DEBUG_LEVEL > 0
     if ( GST_MESSAGE_TYPE( message ) == GST_MESSAGE_ERROR )
     {
         GError* error;
         gchar* error_debug;
 
         gst_message_parse_error( message, &error, &error_debug );
-        OSL_TRACE("gstreamer error: '%s' debug: '%s'", error->message, error_debug);
+        fprintf(stderr, "gstreamer error: '%s' debug: '%s'", error->message, error_debug);
     }
 #endif
 
-    if (gst_message_has_name (message, "prepare-xwindow-id") && mnWindowID != 0 )
+#ifdef AVMEDIA_GST_0_10
+    if (message->structure &&
+        !strcmp( gst_structure_get_name( message->structure ), "prepare-xwindow-id" ) && mnWindowID != 0 )
+#else
+    if (gst_message_has_name (message, "prepare-window-handle") && mnWindowID != 0 )
+#endif
     {
+        DBG( "%p processSyncMessage has handle: %s", this, GST_MESSAGE_TYPE_NAME( message ) );
         if( mpXOverlay )
             g_object_unref( G_OBJECT ( mpXOverlay ) );
         mpXOverlay = GST_VIDEO_OVERLAY( GST_MESSAGE_SRC( message ) );
@@ -208,7 +226,8 @@ GstBusSyncReply Player::processSyncMessage( GstMessage *message )
 
             gst_message_parse_state_changed (message, NULL, &newstate, &pendingstate);
 
-            DBG( "%p state change received, new state %d", this, newstate );
+            DBG( "%p state change received, new state %d pending %d", this,
+                 (int)newstate, (int)pendingstate );
             if( newstate == GST_STATE_PAUSED &&
                 pendingstate == GST_STATE_VOID_PENDING ) {
 
@@ -280,7 +299,7 @@ GstBusSyncReply Player::processSyncMessage( GstMessage *message )
                     mnWidth = w;
                     mnHeight = h;
 
-                    DBG( "queried size: %d x %d", mnWidth, mnHeight );
+                    fprintf (stderr, "queried size: %d x %d", mnWidth, mnHeight );
 
                     maSizeCondition.set();
                 }
@@ -289,6 +308,7 @@ GstBusSyncReply Player::processSyncMessage( GstMessage *message )
         }
 #endif
     } else if( GST_MESSAGE_TYPE( message ) == GST_MESSAGE_ERROR ) {
+        fprintf (stderr, "Error !\n");
         if( mnWidth == 0 ) {
             // an error occurred, set condition so that OOo thread doesn't wait for us
             maSizeCondition.set();
@@ -353,7 +373,7 @@ bool Player::create( const ::rtl::OUString& rURL )
 
 // ------------------------------------------------------------------------------
 
-void SAL_CALL Player::start(  )
+void SAL_CALL Player::start()
     throw (uno::RuntimeException)
 {
     // set the pipeline state to READY and run the loop
@@ -366,7 +386,7 @@ void SAL_CALL Player::start(  )
 
 // ------------------------------------------------------------------------------
 
-void SAL_CALL Player::stop(  )
+void SAL_CALL Player::stop()
     throw (uno::RuntimeException)
 {
     // set the pipeline in PAUSED STATE
@@ -397,7 +417,7 @@ sal_Bool SAL_CALL Player::isPlaying()
 
 // ------------------------------------------------------------------------------
 
-double SAL_CALL Player::getDuration(  )
+double SAL_CALL Player::getDuration()
     throw (uno::RuntimeException)
 {
     // slideshow checks for non-zero duration, so cheat here
@@ -432,14 +452,13 @@ void SAL_CALL Player::setMediaTime( double fTime )
 
 // ------------------------------------------------------------------------------
 
-double SAL_CALL Player::getMediaTime(  )
+double SAL_CALL Player::getMediaTime()
     throw (uno::RuntimeException)
 {
     double position = 0.0;
 
     if( mpPlaybin ) {
         // get current position in the stream
-        GstFormat format = GST_FORMAT_TIME;
         gint64 gst_position;
         if( wrap_element_query_position( mpPlaybin, GST_FORMAT_TIME, &gst_position ) )
             position = gst_position / 1E9;
@@ -450,7 +469,7 @@ double SAL_CALL Player::getMediaTime(  )
 
 // ------------------------------------------------------------------------------
 
-double SAL_CALL Player::getRate(  )
+double SAL_CALL Player::getRate()
     throw (uno::RuntimeException)
 {
     double rate = 0.0;
@@ -475,7 +494,7 @@ void SAL_CALL Player::setPlaybackLoop( sal_Bool bSet )
 
 // ------------------------------------------------------------------------------
 
-sal_Bool SAL_CALL Player::isPlaybackLoop(  )
+sal_Bool SAL_CALL Player::isPlaybackLoop()
     throw (uno::RuntimeException)
 {
     // TODO check how to do with GST
@@ -506,7 +525,7 @@ void SAL_CALL Player::setMute( sal_Bool bSet )
 
 // ------------------------------------------------------------------------------
 
-sal_Bool SAL_CALL Player::isMute(  )
+sal_Bool SAL_CALL Player::isMute()
     throw (uno::RuntimeException)
 {
     return mbMuted;
@@ -530,7 +549,7 @@ void SAL_CALL Player::setVolumeDB( sal_Int16 nVolumeDB )
 
 // ------------------------------------------------------------------------------
 
-sal_Int16 SAL_CALL Player::getVolumeDB(  )
+sal_Int16 SAL_CALL Player::getVolumeDB()
     throw (uno::RuntimeException)
 {
     sal_Int16 nVolumeDB(0);
@@ -548,7 +567,7 @@ sal_Int16 SAL_CALL Player::getVolumeDB(  )
 
 // ------------------------------------------------------------------------------
 
-awt::Size SAL_CALL Player::getPreferredPlayerWindowSize(  )
+awt::Size SAL_CALL Player::getPreferredPlayerWindowSize()
     throw (uno::RuntimeException)
 {
     awt::Size aSize( 0, 0 );
@@ -556,7 +575,7 @@ awt::Size SAL_CALL Player::getPreferredPlayerWindowSize(  )
     DBG( "%p Player::getPreferredPlayerWindowSize, member %d x %d", this, mnWidth, mnHeight );
 
     TimeValue aTimeout = { 10, 0 };
-#if OSL_DEBUG_LEVEL > 2
+#if 1 // OSL_DEBUG_LEVEL > 2
     osl::Condition::Result aResult =
 #endif
                                  maSizeCondition.wait( &aTimeout );
@@ -612,7 +631,7 @@ uno::Reference< ::media::XPlayerWindow > SAL_CALL Player::createPlayerWindow( co
 
 // ------------------------------------------------------------------------------
 
-uno::Reference< media::XFrameGrabber > SAL_CALL Player::createFrameGrabber(  )
+uno::Reference< media::XFrameGrabber > SAL_CALL Player::createFrameGrabber()
     throw (uno::RuntimeException)
 {
     uno::Reference< media::XFrameGrabber > xRet;
@@ -622,7 +641,7 @@ uno::Reference< media::XFrameGrabber > SAL_CALL Player::createFrameGrabber(  )
 
 // ------------------------------------------------------------------------------
 
-::rtl::OUString SAL_CALL Player::getImplementationName(  )
+::rtl::OUString SAL_CALL Player::getImplementationName()
     throw (uno::RuntimeException)
 {
     return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( AVMEDIA_GST_PLAYER_IMPLEMENTATIONNAME ) );
@@ -638,7 +657,7 @@ sal_Bool SAL_CALL Player::supportsService( const ::rtl::OUString& ServiceName )
 
 // ------------------------------------------------------------------------------
 
-uno::Sequence< ::rtl::OUString > SAL_CALL Player::getSupportedServiceNames(  )
+uno::Sequence< ::rtl::OUString > SAL_CALL Player::getSupportedServiceNames()
     throw (uno::RuntimeException)
 {
     uno::Sequence< ::rtl::OUString > aRet(1);

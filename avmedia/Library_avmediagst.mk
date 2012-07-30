@@ -33,8 +33,9 @@ $(eval $(call gb_Library_set_componentfile,avmediagst,avmedia/source/gstreamer/a
 $(eval $(call gb_Library_set_include,avmediagst,\
 	$$(INCLUDE) \
 	-I$(SRCDIR)/avmedia/source/inc \
-	$(shell pkg-config --cflags gstreamer-0.10, gstreamer-plugins-base-0.10) \
+	$(GSTREAMER_CFLAGS) \
 ))
+$(eval $(call gb_Library_add_libs,avmediagst,$(GSTREAMER_LIBS)))
 
 $(eval $(call gb_Library_use_sdk_api,avmediagst))
 
@@ -52,11 +53,6 @@ $(eval $(call gb_Library_use_libraries,avmediagst,\
 	tl \
 	vcl \
 	$(gb_STDLIBS) \
-))
-
-$(eval $(call gb_Library_add_libs,avmediagst,\
-	$(shell pkg-config --libs gstreamer-0.10, gstreamer-plugins-base-0.10) \
-	-lgstinterfaces-0.10 \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,avmediagst,\

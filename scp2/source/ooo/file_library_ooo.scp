@@ -1476,7 +1476,11 @@ STD_LIB_FILE( gid_File_Lib_AVMedia, avmedia )
 
 #ifdef GSTREAMER
 SPECIAL_LIB_FILE_PATCH( gid_File_Lib_AVMediaGStreamer, avmediagst )
-#elif defined WNT
+#endif
+#ifdef GSTREAMER_0_10
+SPECIAL_LIB_FILE_PATCH( gid_File_Lib_AVMediaGStreamer_0_10, avmediagst_0_10 )
+#endif
+#if defined WNT
 #ifdef ENABLE_DIRECTX
 SPECIAL_LIB_FILE( gid_File_Lib_AVMediaWin, avmediawin )
 #endif

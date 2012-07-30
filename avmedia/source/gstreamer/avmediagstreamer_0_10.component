@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component loader="com.sun.star.loader.SharedLibrary" xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="com.sun.star.comp.media.Manager_GStreamer_0_10">
+    <service name="com.sun.star.comp.avmedia.Manager_GStreamer_0_10"/>
+  </implementation>
+</component>

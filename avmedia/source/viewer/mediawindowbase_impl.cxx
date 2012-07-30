@@ -70,10 +70,25 @@ uno::Reference< media::XPlayer > MediaWindowBaseImpl::createPlayer( const ::rtl:
     {
         try
         {
+            uno::Reference< ::com::sun::star::media::XManager > xManager;
 
-            uno::Reference< ::com::sun::star::media::XManager > xManager(
-                xFactory->createInstance( ::rtl::OUString( AVMEDIA_MANAGER_SERVICE_NAME ) ),
-                uno::UNO_QUERY );
+            try {
+                xManager = uno::Reference< ::com::sun::star::media::XManager >(
+                        xFactory->createInstance( AVMEDIA_MANAGER_SERVICE_NAME ),
+                        uno::UNO_QUERY );
+            } catch ( const uno::Exception &e ) {
+            }
+
+// a fallback path just for gstreamer which has
+// two significant versions deployed at once ...
+#ifdef AVMEDIA_MANAGER_SERVICE_NAME_OLD
+            if( !xManager.is() )
+            {
+                xManager = uno::Reference< ::com::sun::star::media::XManager >(
+                        xFactory->createInstance( AVMEDIA_MANAGER_SERVICE_NAME_OLD ),
+                        uno::UNO_QUERY );
+            }
+#endif
 
             if( xManager.is() )
             {

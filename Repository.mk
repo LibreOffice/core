@@ -426,6 +426,7 @@ endif
 
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
     avmediagst \
+    avmediagst_0_10 \
     avmediawin \
     cached1 \
     collator_data \

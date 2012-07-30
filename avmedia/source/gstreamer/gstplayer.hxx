@@ -34,7 +34,7 @@
 
 #include "com/sun/star/media/XPlayer.hpp"
 
-typedef struct _GstXOverlay GstXOverlay;
+typedef struct _GstVideoOverlay GstVideoOverlay;
 
 namespace avmedia { namespace gstreamer {
 
@@ -95,7 +95,7 @@ private:
     sal_Bool                mbInitialized;
 
     long                    mnWindowID;
-    GstXOverlay*            mpXOverlay;
+    GstVideoOverlay*        mpXOverlay;
     gint64                  mnDuration;
     int                     mnWidth;
     int                     mnHeight;

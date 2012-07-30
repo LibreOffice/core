@@ -40,6 +40,12 @@ $(eval $(call gb_Module_add_targets,avmedia,\
 ))
 endif
 
+ifeq ($(ENABLE_GSTREAMER_0_10),TRUE)
+$(eval $(call gb_Module_add_targets,avmedia,\
+	Library_avmediagst_0_10 \
+))
+endif
+
 ifeq ($(GUIBASE),aqua)
 $(eval $(call gb_Module_add_targets,avmedia,\
 	Library_avmediaQuickTime \

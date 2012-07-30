@@ -247,6 +247,7 @@ case "$host_os" in
 solaris*)
     test_gtk=yes
     build_gstreamer=yes
+    build_gstreamer_0_10=yes
     test_tde=yes
     test_kde=yes
     test_freetype=yes
@@ -276,6 +277,7 @@ solaris*)
 linux-gnu*|k*bsd*-gnu*)
     test_gtk=yes
     build_gstreamer=yes
+    build_gstreamer_0_10=yes
     test_tde=yes
     test_kde=yes
     test_kde4=yes
@@ -363,6 +365,7 @@ darwin*) # Mac OS X or iOS
 freebsd*)
     test_gtk=yes
     build_gstreamer=yes
+    build_gstreamer_0_10=yes
     test_tde=yes
     test_kde=yes
     test_kde4=yes
@@ -392,6 +395,7 @@ freebsd*)
 *netbsd*)
     test_gtk=yes
     build_gstreamer=yes
+    build_gstreamer_0_10=yes
     test_tde=no
     test_kde=no
     test_kde4=yes
@@ -420,6 +424,7 @@ openbsd*)
 dragonfly*)
     test_gtk=yes
     build_gstreamer=yes
+    build_gstreamer_0_10=yes
     test_tde=yes
     test_kde=yes
     test_kde4=yes
@@ -430,6 +435,7 @@ dragonfly*)
 
 linux-androideabi*)
     build_gstreamer=no
+    build_gstreamer_0_10=no
     test_cups=no
     test_fontconfig=no
     test_freetype=no
@@ -930,9 +936,14 @@ AC_ARG_ENABLE(randr-link,
 ,enable_randr_link=yes)
 
 AC_ARG_ENABLE(gstreamer,
-    AS_HELP_STRING([--disable-gstreamer],
+    AS_HELP_STRING([--enable-gstreamer],
+        [Enable building with the new gstreamer 1.0 avmedia backend.]),
+,enable_gstreamer=no)
+
+AC_ARG_ENABLE(gstreamer-0-10,
+    AS_HELP_STRING([--disable-gstreamer-0-10],
         [Disable building the gstreamer avmedia backend.]),
-,enable_gstreamer=yes)
+,enable_gstreamer_0_10=yes)
 
 AC_ARG_ENABLE(neon,
     AS_HELP_STRING([--disable-neon],
@@ -3903,6 +3914,7 @@ if test "$enable_headless" = "yes"; then
     test_fontconfig=yes
     test_gtk=no
     build_gstreamer=no
+    build_gstreamer_0_10=no
     test_tde=no
     test_kde=no
     test_kde4=no
@@ -9207,19 +9219,38 @@ dnl ===================================================================
 
 ENABLE_GSTREAMER=""
 
-if test  "$build_gstreamer" = "yes"; then
+if test "$build_gstreamer" = "yes"; then
 
     AC_MSG_CHECKING([whether to enable the GStreamer avmedia backend])
     if test "x$enable_gstreamer" != "xno"; then
         ENABLE_GSTREAMER="TRUE"
         AC_MSG_RESULT([yes])
-        PKG_CHECK_MODULES( GSTREAMER, gstreamer-0.10 gstreamer-plugins-base-0.10 )
+        PKG_CHECK_MODULES( GSTREAMER, gstreamer-1.0 gstreamer-plugins-base-1.0 gstreamer-video-1.0 )
+    else
+        AC_MSG_RESULT([no])
+    fi
+fi
+AC_SUBST(GSTREAMER_CFLAGS)
+AC_SUBST(GSTREAMER_LIBS)
+AC_SUBST(ENABLE_GSTREAMER)
+
+
+ENABLE_GSTREAMER_0_10=""
+if test "$build_gstreamer_0_10" = "yes"; then
+
+    AC_MSG_CHECKING([whether to enable the GStreamer avmedia backend])
+    if test "x$enable_gstreamer_0_10" != "xno"; then
+        ENABLE_GSTREAMER_0_10="TRUE"
+        AC_MSG_RESULT([yes])
+        PKG_CHECK_MODULES( GSTREAMER_0_10, gstreamer-0.10 gstreamer-plugins-base-0.10 )
     else
         AC_MSG_RESULT([no])
     fi
 fi
 
-AC_SUBST(ENABLE_GSTREAMER)
+AC_SUBST(GSTREAMER_0_10_CFLAGS)
+AC_SUBST(GSTREAMER_0_10_LIBS)
+AC_SUBST(ENABLE_GSTREAMER_0_10)
 
 dnl ===================================================================
 dnl Check whether the OpenGL libraries are available

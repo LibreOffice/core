@@ -269,7 +269,7 @@ namespace sdr
 
         drawinglayer::primitive2d::Primitive2DSequence ViewContact::createViewIndependentPrimitive2DSequence() const
         {
-            // This is the default impelemtation and should never be called (see header). If this is called,
+            // This is the default implementation and should never be called (see header). If this is called,
             // someone implemented a ViewContact (VC) visualisation object without defining the visualisation by
             // providing a seqence of primitives -> which cannot be correct.
             // Since we have no access to any known model data here, the default implementation creates a yellow placeholder
