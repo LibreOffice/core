@@ -115,6 +115,12 @@ AC_ARG_WITH(android-ndk,
         [Specify location of the Android Native Development Kit. Mandatory when building for Android.]),
 ,)
 
+AC_ARG_WITH(android-ndk-toolchain-version,
+    AS_HELP_STRING([--with-android-ndk-toolchain-version],
+        [Specify which toolchain version to use, of those present in the
+        Android NDK you are using. Mandatory if the NDK used has several
+        toolchain versions for the host architecture you are building for.]), ,)
+
 AC_ARG_WITH(android-sdk,
     AS_HELP_STRING([--with-android-sdk],
         [Specify location of the Android SDK. Mandatory when building for Android.]),
@@ -134,11 +140,17 @@ if test -n "$with_android_ndk"; then
     # possiblity to use the gold linker, which should bring a nice speedup to
     # linking especially our libmerged. Work to support that in progress. Until
     # that is done, please use no newer NDK than r8.
+
+    ANDROID_ABI_PREBUILT_BIN=`echo $ANDROID_NDK_HOME/toolchains/$host_cpu-*$with_android_ndk_toolchain_version/prebuilt/*/bin`
+    # Check if there are several toolchain versions
+    case "$ANDROID_ABI_PREBUILT_BIN" in
+    */bin\ */bin*)
+        AC_MSG_ERROR([Several toolchain versions in NDK, you must specify --with-android-ndk-toolchain-version])
+    esac
+
     if test $host_cpu = arm; then
-        ANDROID_ABI_PREBUILT_BIN=`echo $ANDROID_NDK_HOME/toolchains/$host_cpu-linux*/prebuilt/*/bin`
         android_gcc_prefix=arm-linux-androideabi
     else
-        ANDROID_ABI_PREBUILT_BIN=`echo $ANDROID_NDK_HOME/toolchains/$host_cpu-*/prebuilt/*/bin`
         android_gcc_prefix=i686-android-linux
     fi
 
