@@ -25,6 +25,8 @@
 #include <svl/poolitem.hxx>
 #include <tools/rtti.hxx>
 #include <tools/solar.h>
+#include <boost/scoped_ptr.hpp>
+#include <vector>
 
 class SfxItemPool;
 class SfxPoolItem;
@@ -55,6 +57,8 @@ class SVL_DLLPUBLIC SfxItemSet
     const SfxItemSet*           _pParent;       // Ableitung
     SfxItemArray                _aItems;        // Item-Feld
     sal_uInt16*                     _pWhichRanges;  // Array von Which-Bereichen
+    boost::scoped_ptr< std::vector<sal_uInt16> > m_pvWhichRanges; // array of Which-Ranges, if not reusing those of the pool
+
     sal_uInt16                      _nCount;        // Anzahl Items
 
     //---------------------------------------------------------------------
@@ -66,8 +70,6 @@ friend const char *DbgCheckItemSet( const void* );
 
 private:
     SVL_DLLPRIVATE void                     InitRanges_Impl(const sal_uInt16 *nWhichPairTable);
-    SVL_DLLPRIVATE void                     InitRanges_Impl(va_list pWhich, sal_uInt16 n1, sal_uInt16 n2, sal_uInt16 n3);
-    SVL_DLLPRIVATE void                     InitRanges_Impl(sal_uInt16 nWh1, sal_uInt16 nWh2);
 
 public:
     SfxItemArray                GetItems_Impl() const { return _aItems; }
@@ -141,7 +143,6 @@ public:
 
     SfxItemPool*                GetPool() const { return _pPool; }
     const sal_uInt16*               GetRanges() const { return _pWhichRanges; }
-    void                        SetRanges( const sal_uInt16 *pRanges );
     void                        MergeRange( sal_uInt16 nFrom, sal_uInt16 nTo );
     const SfxItemSet*           GetParent() const { return _pParent; }
 
