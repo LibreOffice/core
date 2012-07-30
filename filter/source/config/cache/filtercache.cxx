@@ -297,7 +297,7 @@ OUStringList FilterCache::getMatchingItemsByProps(      EItemType  eType  ,
     // search for right list
     // An exception is thrown - "eType" is unknown.
     // => rList will be valid everytimes next line is reached.
-    CacheItemList& rList = impl_getItemList(eType);
+    const CacheItemList& rList = impl_getItemList(eType);
 
     OUStringList lKeys;
 
@@ -333,9 +333,9 @@ sal_Bool FilterCache::hasItems(EItemType eType) const
     // search for right list
     // An exception is thrown - "eType" is unknown.
     // => rList will be valid everytimes next line is reached.
-    CacheItemList& rList = impl_getItemList(eType);
+    const CacheItemList& rList = impl_getItemList(eType);
 
-    return (rList.size()>0);
+    return !rList.empty();
     // <- SAFE
 }
 
@@ -350,7 +350,7 @@ OUStringList FilterCache::getItemNames(EItemType eType) const
     // search for right list
     // An exception is thrown - "eType" is unknown.
     // => rList will be valid everytimes next line is reached.
-    CacheItemList& rList = impl_getItemList(eType);
+    const CacheItemList& rList = impl_getItemList(eType);
 
     OUStringList lKeys;
     for (CacheItemList::const_iterator pIt  = rList.begin();
@@ -375,7 +375,7 @@ sal_Bool FilterCache::hasItem(      EItemType        eType,
     // search for right list
     // An exception is thrown - "eType" is unknown.
     // => rList will be valid everytimes next line is reached.
-    CacheItemList& rList = impl_getItemList(eType);
+    const CacheItemList& rList = impl_getItemList(eType);
 
     // if item could not be found - check if it can be loaded
     // from the underlying configuration layer. Might it was not already
@@ -791,10 +791,7 @@ void FilterCache::detectFlatForURL(const css::util::URL& aURL      ,
     // <- SAFE ----------------------------------
 }
 
-
-
-CacheItemList& FilterCache::impl_getItemList(EItemType eType) const
-    throw(css::uno::Exception)
+const CacheItemList& FilterCache::impl_getItemList(EItemType eType) const
 {
     // SAFE -> ----------------------------------
     ::osl::ResettableMutexGuard aLock(m_aLock);
@@ -814,7 +811,25 @@ CacheItemList& FilterCache::impl_getItemList(EItemType eType) const
     // <- SAFE ----------------------------------
 }
 
+CacheItemList& FilterCache::impl_getItemList(EItemType eType)
+{
+    // SAFE -> ----------------------------------
+    ::osl::ResettableMutexGuard aLock(m_aLock);
 
+    switch(eType)
+    {
+        case E_TYPE           : return m_lTypes          ;
+        case E_FILTER         : return m_lFilters        ;
+        case E_FRAMELOADER    : return m_lFrameLoaders   ;
+        case E_CONTENTHANDLER : return m_lContentHandlers;
+        case E_DETECTSERVICE  : return m_lDetectServices ;
+
+    }
+
+    throw css::uno::Exception(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "unknown sub container requested." )),
+                                            css::uno::Reference< css::uno::XInterface >()                      );
+    // <- SAFE ----------------------------------
+}
 
 css::uno::Reference< css::uno::XInterface > FilterCache::impl_openConfig(EConfigProvider eProvider)
     throw(css::uno::Exception)

@@ -679,8 +679,9 @@ class FilterCache : public BaseLock
             @throw      [css::uno::Exception]
                         if the required list does not exist.
          */
-        CacheItemList& impl_getItemList(EItemType eType) const
-            throw(css::uno::Exception);
+        const CacheItemList& impl_getItemList(EItemType eType) const;
+
+        CacheItemList& impl_getItemList(EItemType eType);
 
         //---------------------------------------
 
