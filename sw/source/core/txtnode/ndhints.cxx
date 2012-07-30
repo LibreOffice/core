@@ -45,9 +45,9 @@ inline void DumpHints(const SwpHtStart &, const SwpHtEnd &) { }
  *                        inline IsEqual()
  *************************************************************************/
 
-inline sal_Bool IsEqual( const SwTxtAttr &rHt1, const SwTxtAttr &rHt2 )
+static bool IsEqual( const SwTxtAttr &rHt1, const SwTxtAttr &rHt2 )
 {
-    return (long)(&rHt1) == (long)(&rHt2);
+    return &rHt1 == &rHt2;
 }
 
 /*************************************************************************
