@@ -90,6 +90,28 @@ public class Receiver {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+			} else if (aInstruction.equals("slide_notes")) {
+				int aSlideNumber = Integer.parseInt(aCommand.get(1));
+				String aNotes = new String();
+				for (int i = 2; i < aCommand.size(); i++) {
+					aNotes += aCommand.get(i);
+				}
+
+				// Store image internally
+				mSlideShow.putNotes(aSlideNumber, aNotes);
+
+				// Notify the frontend
+				Message aMessage = Message.obtain(null,
+				                CommunicationService.MSG_SLIDE_NOTES);
+				Bundle aData = new Bundle();
+				aData.putInt("slide_number", aSlideNumber);
+				aMessage.setData(aData);
+				try {
+					mActivityMessenger.send(aMessage);
+				} catch (RemoteException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 
 		}

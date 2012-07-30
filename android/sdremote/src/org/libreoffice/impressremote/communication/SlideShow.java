@@ -15,6 +15,8 @@ import android.util.SparseArray;
 public class SlideShow {
 
 	private SparseArray<byte[]> mPreviewImages = new SparseArray<byte[]>();
+	private SparseArray<String> mNotes = new SparseArray<String>();
+
 	private int mSize = 0;
 	private int mCurrentSlide = 0;
 
@@ -44,6 +46,14 @@ public class SlideShow {
 	public Bitmap getImage(int aSlide) {
 		byte[] aImage = mPreviewImages.get(aSlide);
 		return BitmapFactory.decodeByteArray(aImage, 0, aImage.length);
+	}
+
+	protected void putNotes(int aSlide, String aNotes) {
+		mNotes.put(aSlide, aNotes);
+	}
+
+	public String getNotes(int aSlide) {
+		return mNotes.get(aSlide);
 	}
 
 	// ---------------------------------------------------- TIMER --------------

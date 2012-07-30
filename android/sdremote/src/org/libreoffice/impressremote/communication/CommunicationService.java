@@ -34,6 +34,7 @@ public class CommunicationService extends Service {
 	public static final int MSG_SLIDESHOW_STARTED = 1;
 	public static final int MSG_SLIDE_CHANGED = 2;
 	public static final int MSG_SLIDE_PREVIEW = 3;
+	public static final int MSG_SLIDE_NOTES = 4;
 
 	private Transmitter mTransmitter;
 

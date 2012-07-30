@@ -91,8 +91,10 @@ public class PresentationFragment extends Fragment {
 	}
 
 	private void updateSlideNumberDisplay() {
-		mNumberText.setText((mSlideShow.getCurrentSlide() + 1) + "/"
-		                + mSlideShow.getSize());
+		int aSlide = mSlideShow.getCurrentSlide();
+		mNumberText.setText((aSlide + 1) + "/" + mSlideShow.getSize());
+		mNotes.loadData("<html><body>" + mSlideShow.getNotes(aSlide)
+		                + "</html></body>", "text/html", null);
 	}
 
 	// -------------------------------------------------- RESIZING LISTENER ----

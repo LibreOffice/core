@@ -38,6 +38,7 @@
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/document/XExporter.hpp>
 #include <com/sun/star/lang/XServiceName.hpp>
+#include <com/sun/star/presentation/XPresentationPage.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
 
 using namespace ::sd;
@@ -221,16 +222,24 @@ OString ImagePreparer::prepareNotes( sal_uInt32 aSlideNumber )
     if ( !xController->isRunning() )
         return "";
 
+    uno::Reference<css::drawing::XDrawPage> aNotesPage;
     uno::Reference< drawing::XDrawPage > xSourceDoc(
         xController->getSlideByIndex( aSlideNumber ),
         uno::UNO_QUERY_THROW );
+    uno::Reference<presentation::XPresentationPage> xPresentationPage(
+        xSourceDoc, UNO_QUERY);
+    if (xPresentationPage.is())
+        aNotesPage = xPresentationPage->getNotesPage();
+    else
+        return "";
+
 
     static const ::rtl::OUString sNotesShapeName (
         "com.sun.star.presentation.NotesShape" );
     static const ::rtl::OUString sTextShapeName (
         "com.sun.star.drawing.TextShape" );
 
-    uno::Reference<container::XIndexAccess> xIndexAccess ( xSourceDoc, UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess ( aNotesPage, UNO_QUERY);
     if (xIndexAccess.is())
     {
 
