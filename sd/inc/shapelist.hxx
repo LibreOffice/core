@@ -42,10 +42,10 @@ namespace sd
         /** removes all shapes from this list */
         void clear();
 
-        /** returns true if this list is empty */
+        /** @return true if this list is empty */
         bool isEmpty() const;
 
-        /** returns true if given shape is part of this list */
+        /** @return true if given shape is part of this list */
         bool hasShape( SdrObject& rObject ) const;
 
         /** returns the shape following the given shape in the list or 0

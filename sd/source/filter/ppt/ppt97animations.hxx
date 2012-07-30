@@ -35,22 +35,22 @@
 class SdrObject;
 class Ppt97Animation;
 
-// helper class for reading PPT AnimationInfoAtom
+/// helper class for reading PPT AnimationInfoAtom
 class Ppt97AnimationInfoAtom
 {
     friend class Ppt97Animation;
 
 //-- member
     sal_uInt32          nDimColor;
-    sal_uInt32          nFlags;         // 0x0004: time instead of click
+    sal_uInt32          nFlags;         ///< 0x0004: time instead of click
     sal_uInt32          nSoundRef;
-    sal_Int32           nDelayTime;     // 1/1000 sec
+    sal_Int32           nDelayTime;     ///< 1/1000 sec
     sal_uInt16          nOrderID;
     sal_uInt16          nSlideCount;
     sal_uInt8           nBuildType;
     sal_uInt8           nFlyMethod;
     sal_uInt8           nFlyDirection;
-    sal_uInt8           nAfterEffect; //nAfterEffect: 0: none; 1: change color; 2: dim on next effect; 3: dim after effect;
+    sal_uInt8           nAfterEffect;   ///< nAfterEffect: 0: none; 1: change color; 2: dim on next effect; 3: dim after effect;
     sal_uInt8           nSubEffect;
     sal_uInt8           nOLEVerb;
 
@@ -85,13 +85,13 @@ class Ppt97AnimationInfoAtom
 */
 };
 
-class Ppt97Animation
-{
-    /** this is a helping class for import of PPT 97 animations
+/** this is a helping class for import of PPT 97 animations
         1. use the constructor Ppt97Animation( SvStream& rIn ) to import informations from the stream
         2. use the set methods to modify and complete the data
         3. use the method createAndSetCustomAnimationEffect( ) to create an effect in sd model
     */
+class Ppt97Animation
+{
 
 public: //public methods
     Ppt97Animation( SvStream& rIn );
@@ -108,7 +108,8 @@ public: //public methods
     bool HasSoundEffect() const;
     sal_Int32 GetDimColor() const;
     sal_uInt32 GetSoundRef() const;
-    bool HasAnimateAssociatedShape() const; //true if the shape should be animated in addition to the text
+    /// @return true if the shape should be animated in addition to the text
+    bool HasAnimateAssociatedShape() const;
 
     //set methods
     void SetDimColor( sal_Int32 nDimColor );
@@ -130,11 +131,21 @@ private: //private methods
     bool HasAfterEffect_ChangeColor() const;
     bool HasAfterEffect_DimAtNextEffect() const;
     bool HasStopPreviousSound() const;
-    bool HasReverseOrder() const; //true if the text paragraphs should be animated in reverse order
-    sal_Int32 GetParagraphLevel() const; //paragraph level that is animated ( that paragraph and higher levels )
-    sal_Int16 GetTextAnimationType() const; //see com::sun::star::presentation::TextAnimationType
-    sal_Int16 GetEffectNodeType() const; //see com::sun::star::presentation::EffectNodeType
-    double GetDelayTimeInSeconds() const;//-1 for start on mouseclick or >= 0 for a delay in seconds for automatic start
+
+    /// @return true if the text paragraphs should be animated in reverse order
+    bool HasReverseOrder() const;
+
+    ///paragraph level that is animated ( that paragraph and higher levels )
+    sal_Int32 GetParagraphLevel() const;
+
+    ///@see com::sun::star::presentation::TextAnimationType
+    sal_Int16 GetTextAnimationType() const;
+
+    ///@see com::sun::star::presentation::EffectNodeType
+    sal_Int16 GetEffectNodeType() const;
+
+    /// @return -1 for start on mouseclick or >= 0 for a delay in seconds for automatic start
+    double GetDelayTimeInSeconds() const;
     bool GetSpecialDuration( double& rfDurationInSeconds ) const;
     bool GetSpecialTextIterationDelay( double& rfTextIterationDelay ) const;
 
@@ -143,8 +154,8 @@ private: //private methods
 
 private: //private member
     //input information:
-    Ppt97AnimationInfoAtom  m_aAtom;//pure input from stream
-    ::rtl::OUString         m_aSoundFileUrl;//this needs to be set in addition from outside as this class has not the knowledge to translate the sound bits to a file url/
+    Ppt97AnimationInfoAtom  m_aAtom;         ///< pure input from stream
+    ::rtl::OUString         m_aSoundFileUrl; ///< this needs to be set in addition from outside as this class has not the knowledge to translate the sound bits to a file url
 
     //cached generated output information:
     mutable bool            m_bDirtyCache;

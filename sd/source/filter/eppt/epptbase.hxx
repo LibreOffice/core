@@ -355,7 +355,7 @@ protected:
     sal_Bool            mbEmptyPresObj;
     sal_Int32           mnAngle;
 
-    sal_uInt32          mnPages;            // number of Slides ( w/o master pages & notes & handout )
+    sal_uInt32          mnPages;            ///< number of Slides ( w/o master pages & notes & handout )
     sal_uInt32          mnMasterPages;
 
     Fraction                        maFraction;

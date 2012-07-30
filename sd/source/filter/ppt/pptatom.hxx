@@ -38,34 +38,34 @@ public:
 
     inline const DffRecordHeader& getHeader() const;
 
-    /** returns true if at least one atim with the given nRecType is found */
+    /** @return true if at least one atim with the given nRecType is found */
     inline bool hasChildAtom( sal_uInt16 nRecType ) const;
 
-    /** returns the first child atom with nRecType or NULL */
+    /** @return the first child atom with nRecType or NULL */
     inline const Atom* findFirstChildAtom( sal_uInt16 nRecType ) const;
 
-    /** returns the next child atom after pLast with nRecType or NULL */
+    /** @return the next child atom after pLast with nRecType or NULL */
     const Atom* findNextChildAtom( sal_uInt16 nRecType, const Atom* pLast ) const;
 
-    /** returns the first child atom or NULL */
+    /** @return the first child atom or NULL */
     inline const Atom* findFirstChildAtom() const;
 
-    /** returns the next child atom after pLast or NULL */
+    /** @return the next child atom after pLast or NULL */
     inline const Atom* findNextChildAtom( const Atom* pLast ) const;
 
-    /** returns true if this atom is a container */
+    /** @return true if this atom is a container */
     inline bool isContainer() const;
 
     /** seeks to the contents of this atom */
     inline bool seekToContent() const;
 
-    /** returns the record type */
+    /** @return the record type */
     inline sal_uInt16 getType() const;
 
-    /** returns the record instance */
+    /** @return the record instance */
     inline sal_uInt16 getInstance() const;
 
-    /** returns the record length */
+    /** @return the record length */
     inline sal_uInt32 getLength() const;
 
 private:

@@ -37,26 +37,26 @@ public:
     PresObjKind             mePresObjKind;
 
     /* deprecated animation infos */
-    ::com::sun::star::presentation::AnimationEffect         meEffect;       // Animationseffekt
-    ::com::sun::star::presentation::AnimationEffect         meTextEffect;   // Animationseffekt fuer Textinhalt
-    ::com::sun::star::presentation::AnimationSpeed          meSpeed;            // Geschwindigkeit der Animation
-    sal_Bool                    mbActive;       // eingeschaltet ?
-    sal_Bool                    mbDimPrevious;  // Objekt abblenden
-    sal_Bool                    mbIsMovie;      // wenn Gruppenobjekt, dann Sequenz aus den
-    sal_Bool                    mbDimHide;      // verstecken statt abblenden
-    Color                   maBlueScreen;   // identifiziert "Hintergrundpixel"
-    Color                   maDimColor;     // zum Abblenden des Objekts
-    String                  maSoundFile;        // Pfad zum Soundfile in MSDOS-Notation
-    sal_Bool                    mbSoundOn;      // Sound ein/aus
-    sal_Bool                    mbPlayFull;     // Sound ganz abspielen
-    SdrPathObj*             mpPathObj;      // das Pfadobjekt
-    ::com::sun::star::presentation::ClickAction             meClickAction;  // Aktion bei Mausklick
-    ::com::sun::star::presentation::AnimationEffect         meSecondEffect; // fuer Objekt ausblenden
-    ::com::sun::star::presentation::AnimationSpeed          meSecondSpeed;  // fuer Objekt ausblenden
-    String                  maSecondSoundFile; // fuer Objekt ausblenden
-    sal_Bool                    mbSecondSoundOn;    // fuer Objekt ausblenden
-    sal_Bool                    mbSecondPlayFull;// fuer Objekt ausblenden
-    sal_uInt16                  mnVerb;         // fuer OLE-Objekt
+    ::com::sun::star::presentation::AnimationEffect meEffect;       ///< Animation effect
+    ::com::sun::star::presentation::AnimationEffect meTextEffect;   ///< Animation effect for text
+    ::com::sun::star::presentation::AnimationSpeed  meSpeed;        ///< Speed of the animation
+    sal_Bool                    mbActive;       ///< turned on?
+    sal_Bool                    mbDimPrevious;  ///< Object Dim
+    sal_Bool                    mbIsMovie;      ///< wenn Gruppenobjekt, dann Sequenz aus den
+    sal_Bool                    mbDimHide;      ///< hide rather than dim
+    Color                       maBlueScreen;   ///< identifies "background pixels"
+    Color                       maDimColor;     ///< zum Abblenden des Objekts
+    String                      maSoundFile;    ///< Path to the sound file in MS DOS notation
+    sal_Bool                    mbSoundOn;      ///< Sound on / off
+    sal_Bool                    mbPlayFull;     ///< Play sound quite
+    SdrPathObj*                 mpPathObj;      ///< The path object
+    ::com::sun::star::presentation::ClickAction     meClickAction;  ///< Action at mouse click
+    ::com::sun::star::presentation::AnimationEffect meSecondEffect; ///< for  Hidden  object
+    ::com::sun::star::presentation::AnimationSpeed  meSecondSpeed;  ///< for  Hidden  object
+    String                      maSecondSoundFile; ///< for  Hidden  object
+    sal_Bool                    mbSecondSoundOn;    ///< for  Hidden  object
+    sal_Bool                    mbSecondPlayFull;///< ffor  Hidden  object
+    sal_uInt16                  mnVerb;         ///< for OLE object
     sal_uLong                   mnPresOrder;
     SdrObject&              mrObject;
 
