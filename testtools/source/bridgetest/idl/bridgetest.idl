@@ -25,10 +25,10 @@
  *
  ************************************************************************/
 
-#include "com/sun/star/lang/IllegalArgumentException.idl"
-#include "com/sun/star/lang/XComponent.idl"
-#include "com/sun/star/uno/XComponentContext.idl"
-#include "com/sun/star/uno/XInterface.idl"
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#include <com/sun/star/lang/XComponent.idl>
+#include <com/sun/star/uno/XComponentContext.idl>
+#include <com/sun/star/uno/XInterface.idl>
 
 module test { module testtools { module bridgetest {
 

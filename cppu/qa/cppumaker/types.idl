@@ -18,14 +18,14 @@
 
 /*TODO: Do not depend on types for which C++ header files are only generated
   later in the build process in offuh: */
-#include "com/sun/star/lang/ClassNotFoundException.idl"
-#include "com/sun/star/lang/IllegalAccessException.idl"
-#include "com/sun/star/lang/Locale.idl"
-#include "com/sun/star/uno/DeploymentException.idl"
-#include "com/sun/star/uno/Exception.idl"
-#include "com/sun/star/uno/RuntimeException.idl"
-#include "com/sun/star/uno/XInterface.idl"
-#include "com/sun/star/uno/XNamingService.idl"
+#include <com/sun/star/lang/ClassNotFoundException.idl>
+#include <com/sun/star/lang/IllegalAccessException.idl>
+#include <com/sun/star/lang/Locale.idl>
+#include <com/sun/star/uno/DeploymentException.idl>
+#include <com/sun/star/uno/Exception.idl>
+#include <com/sun/star/uno/RuntimeException.idl>
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/uno/XNamingService.idl>
 
 singleton FILE: com::sun::star::uno::XInterface;
 singleton lconv: com::sun::star::uno::XInterface;

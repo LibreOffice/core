@@ -20,8 +20,8 @@
 #ifndef __com_sun_star_io_XAsyncOutputMonitor_idl__
 #define __com_sun_star_io_XAsyncOutputMonitor_idl__
 
-#include "com/sun/star/io/IOException.idl"
-#include "com/sun/star/uno/XInterface.idl"
+#include <com/sun/star/io/IOException.idl>
+#include <com/sun/star/uno/XInterface.idl>
 
 module com { module sun { module star { module io {
 

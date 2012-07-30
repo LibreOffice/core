@@ -20,7 +20,7 @@
 #ifndef __com_sun_star_util_theMacroExpander_idl__
 #define __com_sun_star_util_theMacroExpander_idl__
 
-#include "com/sun/star/util/MacroExpander.idl"
+#include <com/sun/star/util/MacroExpander.idl>
 
 module com {  module sun {  module star {  module util {
 

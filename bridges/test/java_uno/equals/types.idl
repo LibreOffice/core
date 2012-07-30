@@ -16,8 +16,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "com/sun/star/uno/Exception.idl"
-#include "com/sun/star/uno/XInterface.idl"
+#include <com/sun/star/uno/Exception.idl>
+#include <com/sun/star/uno/XInterface.idl>
 
 // UNO interfaces used between Java and native (C++) environments.
 

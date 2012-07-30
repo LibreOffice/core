@@ -20,7 +20,7 @@
 #ifndef __com_sun_star_reflection_XStructTypeDescription_idl__
 #define __com_sun_star_reflection_XStructTypeDescription_idl__
 
-#include "com/sun/star/reflection/XCompoundTypeDescription.idl"
+#include <com/sun/star/reflection/XCompoundTypeDescription.idl>
 
 module com {  module sun {  module star {  module reflection {
 

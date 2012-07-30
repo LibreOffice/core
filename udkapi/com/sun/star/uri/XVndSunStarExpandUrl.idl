@@ -20,8 +20,8 @@
 #ifndef __com_sun_star_uri_XVndSunStarExpandUrl_idl__
 #define __com_sun_star_uri_XVndSunStarExpandUrl_idl__
 
-#include "com/sun/star/lang/IllegalArgumentException.idl"
-#include "com/sun/star/uno/XInterface.idl"
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#include <com/sun/star/uno/XInterface.idl>
 
 module com { module sun { module star { module util {
     published interface XMacroExpander;

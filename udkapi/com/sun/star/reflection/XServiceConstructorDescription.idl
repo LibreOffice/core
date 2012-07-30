@@ -20,7 +20,7 @@
 #ifndef __com_sun_star_reflection_XServiceConstructorDescription2_idl__
 #define __com_sun_star_reflection_XServiceConstructorDescription2_idl__
 
-#include "com/sun/star/uno/XInterface.idl"
+#include <com/sun/star/uno/XInterface.idl>
 
 module com {  module sun {  module star {  module reflection {
 

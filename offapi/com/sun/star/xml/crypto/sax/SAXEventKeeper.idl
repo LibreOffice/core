@@ -29,9 +29,9 @@
 #include <com/sun/star/xml/sax/XDocumentHandler.idl>
 #include <com/sun/star/lang/XInitialization.idl>
 #include <com/sun/star/lang/XServiceInfo.idl>
-#include "XSecuritySAXEventKeeper.idl"
-#include "XReferenceResolvedBroadcaster.idl"
-#include "XSAXEventKeeperStatusChangeBroadcaster.idl"
+#include <XSecuritySAXEventKeeper.idl>
+#include <XReferenceResolvedBroadcaster.idl>
+#include <XSAXEventKeeperStatusChangeBroadcaster.idl>
 
 module com { module sun { module star { module xml { module crypto { module sax {
 

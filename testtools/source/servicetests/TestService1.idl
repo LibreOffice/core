@@ -19,7 +19,7 @@
 #ifndef __testtools_servicetests_TestService1_idl__
 #define __testtools_servicetests_TestService1_idl__
 
-#include "XTestService1.idl"
+#include <XTestService1.idl>
 
 module testtools { module servicetests {
 

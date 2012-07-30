@@ -29,11 +29,11 @@
 #include <com/sun/star/lang/XInitialization.idl>
 #include <com/sun/star/lang/XServiceInfo.idl>
 #include <com/sun/star/xml/crypto/XUriBinding.idl>
-#include "XReferenceResolvedListener.idl"
-#include "XReferenceCollector.idl"
-#include "XSignatureVerifyResultBroadcaster.idl"
-#include "XKeyCollector.idl"
-#include "XMissionTaker.idl"
+#include <XReferenceResolvedListener.idl>
+#include <XReferenceCollector.idl>
+#include <XSignatureVerifyResultBroadcaster.idl>
+#include <XKeyCollector.idl>
+#include <XMissionTaker.idl>
 
 module com { module sun { module star { module xml { module crypto { module sax {
 

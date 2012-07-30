@@ -20,8 +20,8 @@
 #ifndef __com_sun_star_uri_VndSunStarExpandUrlReference_idl__
 #define __com_sun_star_uri_VndSunStarExpandUrlReference_idl__
 
-#include "com/sun/star/uri/XUriReference.idl"
-#include "com/sun/star/uri/XVndSunStarExpandUrl.idl"
+#include <com/sun/star/uri/XUriReference.idl>
+#include <com/sun/star/uri/XVndSunStarExpandUrl.idl>
 
 module com { module sun { module star { module uri {
 

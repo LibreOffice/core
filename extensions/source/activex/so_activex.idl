@@ -6,7 +6,7 @@
 
 import "oaidl.idl";
 import "ocidl.idl";
-#include "olectl.h"
+#include <olectl.h>
 
 
     [

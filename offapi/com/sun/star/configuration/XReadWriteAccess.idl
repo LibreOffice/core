@@ -30,8 +30,8 @@
 #ifndef INCLUDED_COM_SUN_STAR_CONFIGURATION_XREADWRITEACCESS_IDL
 #define INCLUDED_COM_SUN_STAR_CONFIGURATION_XREADWRITEACCESS_IDL
 
-#include "com/sun/star/container/XHierarchicalNameReplace.idl"
-#include "com/sun/star/util/XChangesBatch.idl"
+#include <com/sun/star/container/XHierarchicalNameReplace.idl>
+#include <com/sun/star/util/XChangesBatch.idl>
 
 module com { module sun { module star { module configuration {
 

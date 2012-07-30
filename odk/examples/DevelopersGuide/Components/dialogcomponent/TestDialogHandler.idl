@@ -34,7 +34,7 @@
 #ifndef INCLUDED_COM_SUN_STAR_TEST_TESTDIALOGHANDLER_IDL
 #define INCLUDED_COM_SUN_STAR_TEST_TESTDIALOGHANDLER_IDL
 
-#include "XTestDialogHandler.idl"
+#include <XTestDialogHandler.idl>
 
 module com {  module sun {  module star {  module test {
     service TestDialogHandler : XTestDialogHandler;

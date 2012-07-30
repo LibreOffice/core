@@ -19,10 +19,10 @@
 #ifndef __testtools_servicetests_TestService2_idl__
 #define __testtools_servicetests_TestService2_idl__
 
-#include "TestService1.idl"
-#include "XTestService2.idl"
-#include "XTestService3.idl"
-#include "XTestService4.idl"
+#include <TestService1.idl>
+#include <XTestService2.idl>
+#include <XTestService3.idl>
+#include <XTestService4.idl>
 
 module testtools { module servicetests {
 

@@ -16,13 +16,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "com/sun/star/lang/ClassNotFoundException.idl"
-#include "com/sun/star/lang/IllegalAccessException.idl"
-#include "com/sun/star/uno/DeploymentException.idl"
-#include "com/sun/star/uno/Exception.idl"
-#include "com/sun/star/uno/RuntimeException.idl"
-#include "com/sun/star/uno/XInterface.idl"
-#include "com/sun/star/uno/XNamingService.idl"
+#include <com/sun/star/lang/ClassNotFoundException.idl>
+#include <com/sun/star/lang/IllegalAccessException.idl>
+#include <com/sun/star/uno/DeploymentException.idl>
+#include <com/sun/star/uno/Exception.idl>
+#include <com/sun/star/uno/RuntimeException.idl>
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/uno/XNamingService.idl>
 
 module test { module codemaker { module javamaker {
 

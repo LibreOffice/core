@@ -20,7 +20,7 @@
 #ifndef __com_sun_star_configuration_Update_idl__
 #define __com_sun_star_configuration_Update_idl__
 
-#include "com/sun/star/configuration/XUpdate.idl"
+#include <com/sun/star/configuration/XUpdate.idl>
 
 module com { module sun { module star { module configuration {
 

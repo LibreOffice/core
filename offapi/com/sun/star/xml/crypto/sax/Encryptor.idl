@@ -28,12 +28,12 @@
 #include <com/sun/star/uno/Exception.idl>
 #include <com/sun/star/lang/XInitialization.idl>
 #include <com/sun/star/lang/XServiceInfo.idl>
-#include "XReferenceResolvedListener.idl"
-#include "XReferenceCollector.idl"
-#include "XBlockerMonitor.idl"
-#include "XEncryptionResultBroadcaster.idl"
-#include "XKeyCollector.idl"
-#include "XMissionTaker.idl"
+#include <XReferenceResolvedListener.idl>
+#include <XReferenceCollector.idl>
+#include <XBlockerMonitor.idl>
+#include <XEncryptionResultBroadcaster.idl>
+#include <XKeyCollector.idl>
+#include <XMissionTaker.idl>
 
 module com { module sun { module star { module xml { module crypto { module sax {
 

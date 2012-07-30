@@ -29,7 +29,7 @@
 #ifndef INCLUDED_COM_SUN_STAR_DEPLOYMENT_INVALIDREMOVEDPARAMETEREXCEPTION_IDL
 #define INCLUDED_COM_SUN_STAR_DEPLOYMENT_INVALIDREMOVEDPARAMETEREXCEPTION_IDL
 
-#include "com/sun/star/uno/Exception.idl"
+#include <com/sun/star/uno/Exception.idl>
 
 module com { module sun { module star { module deployment {
 
