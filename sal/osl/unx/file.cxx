@@ -1552,7 +1552,7 @@ SAL_CALL osl_setFilePos (oslFileHandle Handle, sal_uInt32 uHow, sal_Int64 uOffse
             nPos = sal::static_int_cast< off_t >(pImpl->getPos());
             if ((0 > nOffset) && (-1*nOffset > nPos))
                 return osl_File_E_INVAL;
-            if (g_limit_off_t < nPos + nOffset)
+            if (g_limit_off_t < (sal_Int64) nPos + nOffset)
                 return osl_File_E_OVERFLOW;
             break;
 
@@ -1560,7 +1560,7 @@ SAL_CALL osl_setFilePos (oslFileHandle Handle, sal_uInt32 uHow, sal_Int64 uOffse
             nPos = sal::static_int_cast< off_t >(pImpl->getSize());
             if ((0 > nOffset) && (-1*nOffset > nPos))
                 return osl_File_E_INVAL;
-            if (g_limit_off_t < nPos + nOffset)
+            if (g_limit_off_t < (sal_Int64) nPos + nOffset)
                 return osl_File_E_OVERFLOW;
             break;
 
