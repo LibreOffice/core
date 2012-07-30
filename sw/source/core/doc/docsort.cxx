@@ -136,7 +136,7 @@ double SwSortElement::StrToDouble( const String& rStr ) const
 /*--------------------------------------------------------------------
     Description: Comparison operators
  --------------------------------------------------------------------*/
-sal_Bool SwSortElement::operator==(const SwSortElement& )
+sal_Bool SwSortElement::operator==(const SwSortElement& ) const
 {
     return sal_False;
 }
@@ -144,7 +144,7 @@ sal_Bool SwSortElement::operator==(const SwSortElement& )
 /*--------------------------------------------------------------------
     Description: Less-than operator for sorting
  --------------------------------------------------------------------*/
-sal_Bool SwSortElement::operator<(const SwSortElement& rCmp)
+sal_Bool SwSortElement::operator<(const SwSortElement& rCmp) const
 {
 
     // The actual comparison
