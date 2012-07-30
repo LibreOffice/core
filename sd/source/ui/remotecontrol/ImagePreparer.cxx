@@ -1,12 +1,30 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*
- * This file is part of the LibreOffice project.
+/*************************************************************************
  *
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
- */
-
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
 #include "ImagePreparer.hxx"
 
 #include <comphelper/processfactory.hxx>
@@ -19,11 +37,14 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/document/XExporter.hpp>
+#include <com/sun/star/lang/XServiceName.hpp>
+#include <com/sun/star/text/XTextRange.hpp>
 
-using namespace sd;
-using namespace rtl;
-using namespace osl;
+using namespace ::sd;
+using namespace ::rtl;
+using namespace ::osl;
 using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
 
 ImagePreparer::ImagePreparer(
     const uno::Reference<presentation::XSlideShowController>& rxController,
@@ -51,7 +72,15 @@ void ImagePreparer::execute()
         }
         sendPreview( i );
     }
-    fprintf( stderr, "ImagePreparer done\n" );
+    fprintf( stderr, "Preparing slide notes\n" );
+    for ( sal_uInt32 i = 0; i < aSlides; i++ )
+    {
+        if ( !xController->isRunning() ) // stopped/disposed of.
+        {
+            break;
+        }
+        sendNotes( i );
+    }
     mRef.clear();
 }
 
@@ -105,6 +134,7 @@ uno::Sequence<sal_Int8> ImagePreparer::preparePreview(
 
     if ( !xController->isRunning() )
         return uno::Sequence<sal_Int8>();
+
     uno::Reference< lang::XComponent > xSourceDoc(
         xController->getSlideByIndex( aSlideNumber ),
         uno::UNO_QUERY_THROW );
@@ -151,4 +181,72 @@ uno::Sequence<sal_Int8> ImagePreparer::preparePreview(
 
 }
 
+void ImagePreparer::sendNotes( sal_uInt32 aSlideNumber )
+{
+
+    OString aOut = prepareNotes( aSlideNumber );
+
+}
+
+
+// Code copied from sdremote/source/presenter/PresenterNotesView.cxx
+OString ImagePreparer::prepareNotes( sal_uInt32 aSlideNumber )
+{
+    OUString aRet("");
+
+    if ( !xController->isRunning() )
+        return "";
+
+    uno::Reference< drawing::XDrawPage > xSourceDoc(
+        xController->getSlideByIndex( aSlideNumber ),
+        uno::UNO_QUERY_THROW );
+
+    static const ::rtl::OUString sNotesShapeName (
+        "com.sun.star.presentation.NotesShape" );
+    static const ::rtl::OUString sTextShapeName (
+        "com.sun.star.drawing.TextShape" );
+
+    uno::Reference<container::XIndexAccess> xIndexAccess ( xSourceDoc, UNO_QUERY);
+    if (xIndexAccess.is())
+    {
+
+        // Iterate over all shapes and find the one that holds the text.
+        sal_Int32 nCount (xIndexAccess->getCount());
+        for (sal_Int32 nIndex=0; nIndex<nCount; ++nIndex)
+        {
+
+            uno::Reference<lang::XServiceName> xServiceName (
+                xIndexAccess->getByIndex(nIndex), UNO_QUERY);
+            if (xServiceName.is()
+                && xServiceName->getServiceName().equals(sNotesShapeName))
+            {
+                uno::Reference<text::XTextRange> xText (xServiceName, UNO_QUERY);
+                if (xText.is())
+                {
+                    aRet += xText->getString();
+                }
+            }
+            else
+            {
+                uno::Reference<drawing::XShapeDescriptor> xShapeDescriptor (
+                    xIndexAccess->getByIndex(nIndex), UNO_QUERY);
+                if (xShapeDescriptor.is())
+                {
+                    ::rtl::OUString sType (xShapeDescriptor->getShapeType());
+                    if (sType.equals(sNotesShapeName) || sType.equals(sTextShapeName))
+                    {
+                        uno::Reference<text::XTextRange> xText (
+                            xIndexAccess->getByIndex(nIndex), UNO_QUERY);
+                        if (xText.is())
+                        {
+                            aRet += xText->getString();
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return OUStringToOString(
+        aRet, RTL_TEXTENCODING_UTF8 );
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
