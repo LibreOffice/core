@@ -209,7 +209,7 @@ SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_canUnload(TimeValue * pTime) SA
 #define uno_initEnvironment CPPU_ENV_uno_initEnvironment
 #endif
 
-void SAL_CALL uno_initEnvironment(uno_Environment * pCppEnv)
+SAL_DLLPUBLIC_EXPORT void SAL_CALL uno_initEnvironment(uno_Environment * pCppEnv)
     SAL_THROW_EXTERN_C()
 {
     OSL_ENSURE( pCppEnv->pExtEnv, "### expected extended environment!" );
@@ -231,7 +231,7 @@ void SAL_CALL uno_initEnvironment(uno_Environment * pCppEnv)
 #define uno_ext_getMapping CPPU_ENV_uno_ext_getMapping
 #endif
 
-void SAL_CALL uno_ext_getMapping(
+SAL_DLLPUBLIC_EXPORT void SAL_CALL uno_ext_getMapping(
     uno_Mapping ** ppMapping, uno_Environment * pFrom, uno_Environment * pTo)
     SAL_THROW_EXTERN_C()
 {
