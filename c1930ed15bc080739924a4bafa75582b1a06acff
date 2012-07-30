@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAMn///7Y\u003d",
+        "filename": "sc/source/ui/inc/tabsplit.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2012-07-30T12:54:57Z",
+      "side": 1,
+      "message": "Was the intention here really to make the pointer const instead of const ScViewData?",
+      "revId": "c1930ed15bc080739924a4bafa75582b1a06acff",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///7U\u003d",
+        "filename": "sc/source/ui/inc/tabsplit.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2012-07-30T12:54:57Z",
+      "side": 1,
+      "message": "I would prefer if the \"real\" patch  would not be interspersed with white space changes. Btw, here the original indenting helps readability of the code as all method names are lined up in one column.",
+      "revId": "c1930ed15bc080739924a4bafa75582b1a06acff",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
