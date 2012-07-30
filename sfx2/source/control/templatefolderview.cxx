@@ -551,8 +551,8 @@ bool TemplateFolderView::moveTemplates(std::set<const ThumbnailViewItem *> &rIte
     return ret;
 }
 
-void TemplateFolderView::copyFrom(const sal_uInt16 nRegionItemId, const OUString &rName,
-                                  const BitmapEx &rThumbnail, const OUString &rPath)
+void TemplateFolderView::copyFrom(const sal_uInt16 nRegionItemId, const BitmapEx &rThumbnail,
+                                  const OUString &rPath)
 {
     sal_uInt16 nId = 0;
     sal_uInt16 nRegionId = nRegionItemId - 1;

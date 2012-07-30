@@ -948,7 +948,7 @@ void SfxTemplateManagerDlg::remoteMoveTo(const sal_uInt16 nMenuId)
             const TemplateSearchViewItem *pItem =
                     static_cast<const TemplateSearchViewItem*>(*aIter);
 
-            maView->copyFrom(nItemId,pItem->maTitle,pItem->maPreview1,pItem->getPath());
+            maView->copyFrom(nItemId,pItem->maPreview1,pItem->getPath());
         }
     }
 }
