@@ -1673,7 +1673,7 @@ void Polygon::Write( SvStream& rOStream ) const
     ImplWrite( rOStream );
 }
 
-// #i74631# numerical correction method for B2DPolygon
+// #i74631#/#i115917# numerical correction method for B2DPolygon
 void impCorrectContinuity(basegfx::B2DPolygon& roPolygon, sal_uInt32 nIndex, sal_uInt8 nCFlag)
 {
     const sal_uInt32 nPointCount(roPolygon.count());
@@ -1683,21 +1683,49 @@ void impCorrectContinuity(basegfx::B2DPolygon& roPolygon, sal_uInt32 nIndex, sal
     {
         if(roPolygon.isPrevControlPointUsed(nIndex) && roPolygon.isNextControlPointUsed(nIndex))
         {
+            // #i115917# Patch from osnola (modified, thanks for showing the porblem)
+            //
+            // The correction is needed because an integer polygon with control points
+            // is converted to double precision. When C1 or C2 is used the involved vectors
+            // may not have the same directions/lengths since these come from integer coordinates
+            //  and may have been snapped to different nearest integer coordinates. The snap error
+            // is in the range of +-1 in y and y, thus 0.0 <= error <= sqrt(2.0). Nonetheless,
+            // it needs to be corrected to be able to detect the continuity in this points
+            // correctly.
+            //
+            // We only have the integer data here (already in double precision form, but no mantisses
+            // used), so the best correction is to use:
+            //
+            // for C1: The longest vector since it potentially has best preserved the original vector.
+            //         Even better the sum of the vectors, weighted by their length. This gives the
+            //         normal vector addition to get the vector itself, lengths need to be preserved.
+            // for C2: The mediated vector(s) since both should be the same, but mirrored
+
+            // extract the point and vectors
             const basegfx::B2DPoint aPoint(roPolygon.getB2DPoint(nIndex));
+            const basegfx::B2DVector aNext(roPolygon.getNextControlPoint(nIndex) - aPoint);
+            const basegfx::B2DVector aPrev(aPoint - roPolygon.getPrevControlPoint(nIndex));
+
+            // calculate common direction vector, normalize
+            const basegfx::B2DVector aDirection(aNext + aPrev);
 
             if(POLY_SMOOTH == nCFlag)
             {
-                // C1: apply inverse direction of prev to next, keep length of next
-                const basegfx::B2DVector aOriginalNext(roPolygon.getNextControlPoint(nIndex) - aPoint);
-                basegfx::B2DVector aNewNext(aPoint - roPolygon.getPrevControlPoint(nIndex));
-
-                aNewNext.setLength(aOriginalNext.getLength());
-                roPolygon.setNextControlPoint(nIndex, basegfx::B2DPoint(aPoint + aNewNext));
+                // C1: apply common direction vector, preserve individual lengths
+                const double fInvDirectionLen(1.0 / aDirection.getLength());
+                roPolygon.setNextControlPoint(nIndex, basegfx::B2DPoint(aPoint + (aDirection * (aNext.getLength() * fInvDirectionLen))));
+                roPolygon.setPrevControlPoint(nIndex, basegfx::B2DPoint(aPoint - (aDirection * (aPrev.getLength() * fInvDirectionLen))));
             }
             else // POLY_SYMMTR
             {
-                // C2: apply inverse control point to next
-                roPolygon.setNextControlPoint(nIndex, (2.0 * aPoint) - roPolygon.getPrevControlPoint(nIndex));
+                // C2: get mediated length. Taking half of the unnormalized direction would be
+                // an approximation, but not correct.
+                const double fMedLength((aNext.getLength() + aPrev.getLength()) * (0.5 / aDirection.getLength()));
+                const basegfx::B2DVector aScaledDirection(aDirection * fMedLength);
+
+                // Bring Direction to correct length and apply
+                roPolygon.setNextControlPoint(nIndex, basegfx::B2DPoint(aPoint + aScaledDirection));
+                roPolygon.setPrevControlPoint(nIndex, basegfx::B2DPoint(aPoint - aScaledDirection));
             }
         }
     }
