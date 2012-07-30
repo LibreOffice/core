@@ -1,7 +1,7 @@
 
 %{
 /*
- * lexer for parsing ressource source files (*.src)
+ * lexer for parsing resource source files (*.src)
  *
  */
 
@@ -112,13 +112,13 @@ void YYWarning();
 
 [a-zA-Z]+[ \t]+[^={;\n]+\n[ \t]*"#".*\n[ \t]*"{"	|
 [a-zA-Z]+[ \t]+[^={;\n]+\n?([ \t]*"//".*\n)*[ \t]*"{"	{
-/* RESSOURCE // String TTT_XX ... */
-	WorkOnTokenSet( RESSOURCE, yytext );
+/* RESOURCE // String TTT_XX ... */
+	WorkOnTokenSet( RESOURCE, yytext );
 }
 
 ^[\t ]*[a-zA-Z_]+[\t ]*"\\"?[\t ]*\n?[ \t]*"{"[\t ]*"\\"?	{
-/* SMALRESSOURCE // String ... */
-	WorkOnTokenSet( SMALRESSOURCE, yytext );
+/* SMALRESOURCE // String ... */
+	WorkOnTokenSet( SMALRESOURCE, yytext );
 }
 
 [\t ]*[a-zA-Z0-9_]+[ \t]*("["[ \t]*[a-zA-Z0-9_\-]+[ \t]*"]"[ \t]*)?=[ \t]*L?\".*\".*\n?	{

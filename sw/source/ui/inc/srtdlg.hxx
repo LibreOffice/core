@@ -36,7 +36,7 @@
 #include <svx/langbox.hxx>
 
 class SwWrtShell;
-class CollatorRessource;
+class CollatorResource;
 
 class SwSortDlg : public SvxStandardDialog
 {
@@ -89,7 +89,7 @@ class SwSortDlg : public SvxStandardDialog
     String aNumericTxt;
 
     SwWrtShell          &rSh;
-    CollatorRessource* pColRes;
+    CollatorResource* pColRes;
 
     sal_uInt16 nX;
     sal_uInt16 nY;

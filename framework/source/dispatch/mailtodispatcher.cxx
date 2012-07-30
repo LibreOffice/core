@@ -260,7 +260,7 @@ void SAL_CALL MailToDispatcher::dispatchWithNotification( const css::util::URL& 
     @return     <TRUE/> if dispatch could be started successfully
                 Note: Our internal used shell executor doesn't return any state value - so we must
                 belive that call was successfully.
-                <FALSE/> if neccessary ressource couldn't be created or an exception was thrown.
+                <FALSE/> if neccessary resource couldn't be created or an exception was thrown.
 
     @modified   30.04.2002 14:49, as96863
 */

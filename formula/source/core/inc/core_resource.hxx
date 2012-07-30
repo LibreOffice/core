@@ -29,7 +29,7 @@ namespace formula
 {
     //==================================================================
     //= ResourceManager
-    //= handling ressources within the FORMULA-Core library
+    //= handling resources within the FORMULA-Core library
     //==================================================================
     class ResourceManager
     {
@@ -57,7 +57,7 @@ namespace formula
     //=========================================================================
     //= OModuleClient
     //=========================================================================
-    /** base class for objects which uses any global module-specific ressources
+    /** base class for objects which uses any global module-specific resources
     */
     class OModuleClient
     {

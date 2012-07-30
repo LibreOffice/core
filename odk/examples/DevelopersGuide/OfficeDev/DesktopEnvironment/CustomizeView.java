@@ -224,7 +224,7 @@ public class CustomizeView extends    JPanel
          * @param aEvent
          *          describes the check box and his state
          *          we can use to toogle the requested office
-         *          ressource.
+         *          resource.
          */
         public void actionPerformed(ActionEvent aEvent)
         {

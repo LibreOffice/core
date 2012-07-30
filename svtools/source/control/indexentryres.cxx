@@ -37,25 +37,25 @@
 //
 // -------------------------------------------------------------------------
 
-class IndexEntryRessourceData
+class IndexEntryResourceData
 {
-    friend class IndexEntryRessource;
+    friend class IndexEntryResource;
     private: /* data */
         rtl::OUString  ma_Name;
         rtl::OUString  ma_Translation;
     private: /* member functions */
-        IndexEntryRessourceData () {}
+        IndexEntryResourceData () {}
     public:
-        IndexEntryRessourceData ( const rtl::OUString &r_Algorithm, const rtl::OUString &r_Translation)
+        IndexEntryResourceData ( const rtl::OUString &r_Algorithm, const rtl::OUString &r_Translation)
                 : ma_Name (r_Algorithm), ma_Translation (r_Translation) {}
 
         const rtl::OUString& GetAlgorithm () const { return ma_Name; }
 
         const rtl::OUString& GetTranslation () const { return ma_Translation; }
 
-        ~IndexEntryRessourceData () {}
+        ~IndexEntryResourceData () {}
 
-        IndexEntryRessourceData& operator= (const IndexEntryRessourceData& r_From)
+        IndexEntryResourceData& operator= (const IndexEntryResourceData& r_From)
         {
             ma_Name         = r_From.GetAlgorithm();
             ma_Translation  = r_From.GetTranslation();
@@ -69,47 +69,47 @@ class IndexEntryRessourceData
 //
 // -------------------------------------------------------------------------
 
-#define INDEXENTRY_RESSOURCE_COUNT (STR_SVT_INDEXENTRY_END - STR_SVT_INDEXENTRY_START + 1)
+#define INDEXENTRY_RESOURCE_COUNT (STR_SVT_INDEXENTRY_END - STR_SVT_INDEXENTRY_START + 1)
 
-IndexEntryRessource::IndexEntryRessource()
+IndexEntryResource::IndexEntryResource()
 {
-        mp_Data = new IndexEntryRessourceData[INDEXENTRY_RESSOURCE_COUNT];
+        mp_Data = new IndexEntryResourceData[INDEXENTRY_RESOURCE_COUNT];
 
         #define ASCSTR(str) rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(str))
         #define RESSTR(rid) SvtResId(rid).toString()
 
         mp_Data[STR_SVT_INDEXENTRY_ALPHANUMERIC - STR_SVT_INDEXENTRY_START] =
-        IndexEntryRessourceData (ASCSTR("alphanumeric"), RESSTR(STR_SVT_INDEXENTRY_ALPHANUMERIC));
+        IndexEntryResourceData (ASCSTR("alphanumeric"), RESSTR(STR_SVT_INDEXENTRY_ALPHANUMERIC));
         mp_Data[STR_SVT_INDEXENTRY_DICTIONARY - STR_SVT_INDEXENTRY_START] =
-        IndexEntryRessourceData (ASCSTR("dict"), RESSTR(STR_SVT_INDEXENTRY_DICTIONARY));
+        IndexEntryResourceData (ASCSTR("dict"), RESSTR(STR_SVT_INDEXENTRY_DICTIONARY));
         mp_Data[STR_SVT_INDEXENTRY_PINYIN - STR_SVT_INDEXENTRY_START] =
-        IndexEntryRessourceData (ASCSTR("pinyin"), RESSTR(STR_SVT_INDEXENTRY_PINYIN));
+        IndexEntryResourceData (ASCSTR("pinyin"), RESSTR(STR_SVT_INDEXENTRY_PINYIN));
         mp_Data[STR_SVT_INDEXENTRY_PINYIN - STR_SVT_INDEXENTRY_START] =
-        IndexEntryRessourceData (ASCSTR("radical"), RESSTR(STR_SVT_INDEXENTRY_RADICAL));
+        IndexEntryResourceData (ASCSTR("radical"), RESSTR(STR_SVT_INDEXENTRY_RADICAL));
         mp_Data[STR_SVT_INDEXENTRY_STROKE - STR_SVT_INDEXENTRY_START] =
-        IndexEntryRessourceData (ASCSTR("stroke"), RESSTR(STR_SVT_INDEXENTRY_STROKE));
+        IndexEntryResourceData (ASCSTR("stroke"), RESSTR(STR_SVT_INDEXENTRY_STROKE));
         mp_Data[STR_SVT_INDEXENTRY_STROKE - STR_SVT_INDEXENTRY_START] =
-        IndexEntryRessourceData (ASCSTR("zhuyin"), RESSTR(STR_SVT_INDEXENTRY_ZHUYIN));
+        IndexEntryResourceData (ASCSTR("zhuyin"), RESSTR(STR_SVT_INDEXENTRY_ZHUYIN));
         mp_Data[STR_SVT_INDEXENTRY_ZHUYIN - STR_SVT_INDEXENTRY_START] =
-        IndexEntryRessourceData (ASCSTR("phonetic (alphanumeric first) (grouped by syllable)"),
+        IndexEntryResourceData (ASCSTR("phonetic (alphanumeric first) (grouped by syllable)"),
                     RESSTR(STR_SVT_INDEXENTRY_PHONETIC_FS));
         mp_Data[STR_SVT_INDEXENTRY_PHONETIC_FS - STR_SVT_INDEXENTRY_START] =
-        IndexEntryRessourceData (ASCSTR("phonetic (alphanumeric first) (grouped by consonant)"),
+        IndexEntryResourceData (ASCSTR("phonetic (alphanumeric first) (grouped by consonant)"),
                     RESSTR(STR_SVT_INDEXENTRY_PHONETIC_FC));
         mp_Data[STR_SVT_INDEXENTRY_PHONETIC_FC - STR_SVT_INDEXENTRY_START] =
-        IndexEntryRessourceData (ASCSTR("phonetic (alphanumeric last) (grouped by syllable)"),
+        IndexEntryResourceData (ASCSTR("phonetic (alphanumeric last) (grouped by syllable)"),
                     RESSTR(STR_SVT_INDEXENTRY_PHONETIC_LS));
         mp_Data[STR_SVT_INDEXENTRY_PHONETIC_LS - STR_SVT_INDEXENTRY_START] =
-        IndexEntryRessourceData (ASCSTR("phonetic (alphanumeric last) (grouped by consonant)"),
+        IndexEntryResourceData (ASCSTR("phonetic (alphanumeric last) (grouped by consonant)"),
                     RESSTR(STR_SVT_INDEXENTRY_PHONETIC_LC));
 }
 
-IndexEntryRessource::~IndexEntryRessource()
+IndexEntryResource::~IndexEntryResource()
 {
     delete[] mp_Data;
 }
 
-const rtl::OUString& IndexEntryRessource::GetTranslation(const rtl::OUString &r_Algorithm)
+const rtl::OUString& IndexEntryResource::GetTranslation(const rtl::OUString &r_Algorithm)
 {
     sal_Int32 nIndex = r_Algorithm.indexOf('.');
     rtl::OUString aLocaleFreeAlgorithm;
@@ -121,7 +121,7 @@ const rtl::OUString& IndexEntryRessource::GetTranslation(const rtl::OUString &r_
         aLocaleFreeAlgorithm = r_Algorithm.copy(nIndex, r_Algorithm.getLength() - nIndex);
     }
 
-    for (sal_uInt32 i = 0; i < INDEXENTRY_RESSOURCE_COUNT; i++)
+    for (sal_uInt32 i = 0; i < INDEXENTRY_RESOURCE_COUNT; i++)
         if (aLocaleFreeAlgorithm == mp_Data[i].GetAlgorithm())
             return mp_Data[i].GetTranslation();
     return r_Algorithm;

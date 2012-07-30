@@ -18,22 +18,22 @@
  */
 
 
-#include "RessourceManager.hxx"
+#include "ResourceManager.hxx"
 
 #include <tools/resmgr.hxx>
 
 namespace chart
 {
 
-ResMgr * RessourceManager::m_pRessourceManager = 0;
+ResMgr * ResourceManager::m_pResourceManager = 0;
 
-ResMgr & RessourceManager::getRessourceManager()
+ResMgr & ResourceManager::getResourceManager()
 {
     // not threadsafe
-    if( ! m_pRessourceManager )
-        m_pRessourceManager = ResMgr::CreateResMgr("chartcontroller");
-    OSL_ASSERT( m_pRessourceManager );
-    return *m_pRessourceManager;
+    if( ! m_pResourceManager )
+        m_pResourceManager = ResMgr::CreateResMgr("chartcontroller");
+    OSL_ASSERT( m_pResourceManager );
+    return *m_pResourceManager;
 }
 
 } //  namespace chart

@@ -320,7 +320,7 @@ ScDBData* ScXMLDatabaseRangeContext::ConvertToDBData(const OUString& rName)
     {
         ScImportParam aParam;
         aParam.bNative = bNative;
-        aParam.aDBName = sDatabaseName.isEmpty() ? sConnectionRessource : sDatabaseName;
+        aParam.aDBName = sDatabaseName.isEmpty() ? sConnectionResource : sDatabaseName;
         aParam.aStatement = sSourceObject;
         sheet::DataImportMode eMode = static_cast<sheet::DataImportMode>(nSourceType);
         switch (eMode)
@@ -741,7 +741,7 @@ ScXMLConResContext::ScXMLConResContext( ScXMLImport& rImport,
         }
     }
     if (!sConRes.isEmpty())
-        pDatabaseRangeContext->SetConnectionRessource(sConRes);
+        pDatabaseRangeContext->SetConnectionResource(sConRes);
 }
 
 ScXMLConResContext::~ScXMLConResContext()

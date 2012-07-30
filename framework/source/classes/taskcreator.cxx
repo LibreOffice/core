@@ -88,7 +88,7 @@ TaskCreator::TaskCreator( const css::uno::Reference< css::lang::XMultiServiceFac
 
 /*-****************************************************************************************************//**
     @short      deinitialize instance
-    @descr      We should release all used ressource which are not needed any longer.
+    @descr      We should release all used resource which are not needed any longer.
 
     @modified   16.05.2002 09:33, as96863
 *//*-*****************************************************************************************************/

@@ -52,7 +52,7 @@ namespace uui
     @seealso    method SetURL()
 
     @param      "pParentWindow"  , parent window for dialog
-    @param      "pResMgr"        , ressource manager
+    @param      "pResMgr"        , resource manager
     @return     -
 
     @onerror    -

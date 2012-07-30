@@ -215,7 +215,7 @@ class MenuDispatcher   :   // interfaces
 
         /*-****************************************************************************************************//**
             @short      dispose current instance
-            @descr      If service helper isn't required any longer call this method to release all used ressources.
+            @descr      If service helper isn't required any longer call this method to release all used resources.
 
             @seealso    -
 

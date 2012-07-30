@@ -548,8 +548,8 @@ ScTabPageSortOptions::~ScTabPageSortOptions()
 
 void ScTabPageSortOptions::Init()
 {
-    //  CollatorRessource has user-visible names for sort algorithms
-    pColRes = new CollatorRessource();
+    //  CollatorResource has user-visible names for sort algorithms
+    pColRes = new CollatorResource();
 
     //! use CollatorWrapper from document?
     pColWrap = new CollatorWrapper( comphelper::getProcessServiceFactory() );

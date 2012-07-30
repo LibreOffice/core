@@ -113,7 +113,7 @@ private:
 // Sort Options
 
 class ScDocument;
-class CollatorRessource;
+class CollatorResource;
 class CollatorWrapper;
 
 class ScTabPageSortOptions : public SfxTabPage
@@ -173,7 +173,7 @@ private:
     ScSortDlg*          pDlg;
     ScAddress           theOutPos;
 
-    CollatorRessource*  pColRes;
+    CollatorResource*  pColRes;
     CollatorWrapper*    pColWrap;
 
 #ifdef _TPSORT_CXX

@@ -522,7 +522,7 @@ sub parse_dlst
                 next;
             }
             push(@action_data, ['copy', $_]);
-            # for each ressource file (.res) copy its image list (.ilst)
+            # for each resource file (.res) copy its image list (.ilst)
             if ( /\.res\s/ ) {
                 my $imagelist = $_;
                 $imagelist =~ s/\.res/\.$ilst_ext/g;

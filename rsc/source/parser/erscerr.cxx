@@ -192,7 +192,7 @@ void RscError::WriteError( const ERRTYPE& rError, const char * pMessage )
             StdLstOut( "-fh=<filename> Header file.\n" );
             StdLstOut( "-fc=<filename> Code file.\n" );
             StdLstOut( "-ft=<filename> Touch a file when done in rsc2 (for dependencies)\n" );
-            StdLstOut( "-fr=<filename> Ressource constructor .cxx-file.\n" );
+            StdLstOut( "-fr=<filename> Resource constructor .cxx-file.\n" );
             StdLstOut( "-fx=<filename> Name of .src-file.\n" );
             StdLstOut( "-oil=<dir>     Output directory for image list files\n" );
             StdLstOut( "-r<ENV>=<path> replace <path> by <ENV> in image list files\n" );

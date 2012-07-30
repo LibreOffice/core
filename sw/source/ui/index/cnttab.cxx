@@ -1508,7 +1508,7 @@ IMPL_LINK(SwTOXSelectTabPage, LanguageHdl, ListBox*, pBox)
     Sequence< OUString > aSeq = pIndexEntryWrapper->GetAlgorithmList( aLcl );
 
     if( !pIndexRes )
-        pIndexRes = new IndexEntryRessource();
+        pIndexRes = new IndexEntryResource();
 
     String sOldString;
     void* pUserData;

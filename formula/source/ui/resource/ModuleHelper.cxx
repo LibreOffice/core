@@ -45,21 +45,21 @@ namespace formula
 */
 class OModuleImpl
 {
-    ResMgr* m_pRessources;
+    ResMgr* m_pResources;
 
 public:
     /// ctor
     OModuleImpl();
     ~OModuleImpl();
 
-    /// get the manager for the ressources of the module
+    /// get the manager for the resources of the module
     ResMgr* getResManager();
 };
 
 DBG_NAME( rpt_OModuleImpl )
 //-------------------------------------------------------------------------
 OModuleImpl::OModuleImpl()
-    :m_pRessources(NULL)
+    :m_pResources(NULL)
 {
     DBG_CTOR( rpt_OModuleImpl,NULL);
 
@@ -68,8 +68,8 @@ OModuleImpl::OModuleImpl()
 //-------------------------------------------------------------------------
 OModuleImpl::~OModuleImpl()
 {
-    if (m_pRessources)
-        delete m_pRessources;
+    if (m_pResources)
+        delete m_pResources;
 
     DBG_DTOR( rpt_OModuleImpl,NULL);
 }
@@ -79,12 +79,12 @@ ResMgr* OModuleImpl::getResManager()
 {
     // note that this method is not threadsafe, which counts for the whole class !
 
-    if (!m_pRessources)
+    if (!m_pResources)
     {
         // create a manager with a fixed prefix
-        m_pRessources = ResMgr::CreateResMgr("forui");
+        m_pResources = ResMgr::CreateResMgr("forui");
     }
-    return m_pRessources;
+    return m_pResources;
 }
 
 //=========================================================================

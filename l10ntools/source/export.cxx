@@ -359,9 +359,9 @@ int Export::Execute( int nToken, const char * pToken )
         // res. exists at cur. level
         pResData = ( (nLevel-1) < aResStack.size() ) ? aResStack[ nLevel-1 ] : NULL;
     }
-    else if (( nToken != RESSOURCE ) &&
-            ( nToken != RESSOURCEEXPR ) &&
-            ( nToken != SMALRESSOURCE ) &&
+    else if (( nToken != RESOURCE ) &&
+            ( nToken != RESOURCEEXPR ) &&
+            ( nToken != SMALRESOURCE ) &&
             ( nToken != LEVELUP ) &&
             ( nToken != NORMDEFINE ) &&
             ( nToken != RSCDEFINE ) &&
@@ -454,8 +454,8 @@ int Export::Execute( int nToken, const char * pToken )
         case RSCDEFINE:
             bDefine = sal_True; // res. defined in macro
 
-        case RESSOURCE:
-        case RESSOURCEEXPR: {
+        case RESOURCE:
+        case RESOURCEEXPR: {
             bDontWriteOutput = sal_False;
             if ( nToken != RSCDEFINE )
                 bNextMustBeDefineEOL = sal_False;
@@ -495,7 +495,7 @@ int Export::Execute( int nToken, const char * pToken )
             }
         }
         break;
-        case SMALRESSOURCE: {
+        case SMALRESOURCE: {
             bDontWriteOutput = sal_False;
             // this is the beginning of a new res.
             bNextMustBeDefineEOL = sal_False;

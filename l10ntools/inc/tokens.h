@@ -39,9 +39,9 @@
 /*------------------------------------------------------                    */
 #define CONDITION           501         /* #if... | #endif ... | ...        */
 #define EMPTYLINE           502         /*                                  */
-#define RESSOURCE           503         /* Menu MID_TEST                    */
-#define RESSOURCEEXPR       504         /* Menu ( MID_TEST + .. )           */
-#define SMALRESSOURCE       505         /* PageItem {                       */
+#define RESOURCE            503         /* Menu MID_TEST                    */
+#define RESOURCEEXPR        504         /* Menu ( MID_TEST + .. )           */
+#define SMALRESOURCE        505         /* PageItem {                       */
 #define TEXTLINE            506         /* TEXT = "hhh"                     */
 #define LONGTEXTLINE        507         /* TEXT = "hhh" TEST "HHH" ...      */
 #define TEXT                508         /* "Something like this"            */

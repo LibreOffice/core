@@ -105,7 +105,7 @@ $(eval $(call gb_Library_add_exception_objects,charttools,\
     chart2/source/tools/RelativePositionHelper \
     chart2/source/tools/RelativeSizeHelper \
     chart2/source/tools/ResId \
-    chart2/source/tools/RessourceManager \
+    chart2/source/tools/ResourceManager \
     chart2/source/tools/Scaling \
     chart2/source/tools/SceneProperties \
     chart2/source/tools/_serviceregistration_tools \

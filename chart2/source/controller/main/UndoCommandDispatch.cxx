@@ -29,7 +29,7 @@
 #include <vcl/svapp.hxx>
 #include <tools/diagnose_ex.h>
 
-// for ressource strings STR_UNDO and STR_REDO
+// for resource strings STR_UNDO and STR_REDO
 #include <svtools/svtools.hrc>
 #include <svtools/svtresid.hxx>
 

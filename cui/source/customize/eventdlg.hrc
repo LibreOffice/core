@@ -16,7 +16,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-/* StarView ressource header file */
+/* StarView resource header file */
 
  ////DF temp to figure out what's needed from these
 //DF #include "sfx.hrc"

@@ -19,14 +19,14 @@
 
 
 #include "ResId.hxx"
-#include "RessourceManager.hxx"
+#include "ResourceManager.hxx"
 #include <tools/string.hxx>
 
 namespace chart
 {
 
     SchResId::SchResId( sal_Int16 nId )
-        : ResId( nId, RessourceManager::getRessourceManager() )
+        : ResId( nId, ResourceManager::getResourceManager() )
     {
     }
 

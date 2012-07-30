@@ -119,7 +119,7 @@ class Job : public  css::lang::XTypeProvider
         /**
             For some special cases we must know the environment, in which
             this job runs. Means the frame inside which we may was triggered.
-            We use it too, to listen for closing events of this ressource.
+            We use it too, to listen for closing events of this resource.
 
             Please note: If m_xFrame is set - m_xModel should be NULL.
             Only one environment can be supported realy.
@@ -129,7 +129,7 @@ class Job : public  css::lang::XTypeProvider
         /**
             For some special cases we must know the environment, in which
             this job runs. Means the document inside which we may was triggered.
-            We use it too, to listen for closing events of this ressource.
+            We use it too, to listen for closing events of this resource.
 
             Please note: If m_xModel is set - m_xFrame should be NULL.
             Only one environment can be supported realy.

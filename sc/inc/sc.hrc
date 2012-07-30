@@ -647,7 +647,7 @@
 #define SID_SORT_USERDEF        (SC_PARAM_START+4)
 #define SID_SORT_NATURALSORT    (SC_PARAM_START+5)
 
-// ressources
+// resources
 
 #define RID_OBJECTBAR_APP       (SC_RESOURCE_START)
 #define RID_OBJECTBAR_FORMAT    (SC_RESOURCE_START+1)

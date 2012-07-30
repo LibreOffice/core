@@ -522,7 +522,7 @@ public class OOoBean
             if either of the arguments is out of the specified range.
 
         @throws java.io.IOException
-            if an IO error occurs reading the ressource specified by the URL.
+            if an IO error occurs reading the resource specified by the URL.
 
         @throws com.sun.star.lang.NoConnectionException
             if no connection can be established.
@@ -806,7 +806,7 @@ public class OOoBean
             if either of the arguments is out of the specified range.
 
         @throws java.io.IOException
-            if an IO error occurs reading the ressource specified by the URL.
+            if an IO error occurs reading the resource specified by the URL.
 
         @throws com.sun.star.lang.NoConnectionException
             if no connection is established.

@@ -176,7 +176,7 @@ RscCmdLine::RscCmdLine( int argc, char ** argv, RscError * pEH )
                 }
             }
             else if( !rsc_stricmp( (*ppStr) + 1, "PreLoad" ) )
-            { // Alle Ressourcen mit Preload
+            { // Alle Resourcen mit Preload
                 nCommands |= PRELOAD_FLAG;
             }
             else if( !rsc_stricmp( (*ppStr) + 1, "LITTLEENDIAN" ) )
@@ -249,7 +249,7 @@ RscCmdLine::RscCmdLine( int argc, char ** argv, RscError * pEH )
                 aOutputCxx = (*ppStr) + 4;
             }
             else if( !rsc_strnicmp( (*ppStr) + 1, "fr=", 3 ) )
-            { // Name fuer .cxx-file der Ressource Konstruktoren
+            { // Name fuer .cxx-file der Resource Konstruktoren
                 aOutputRcCtor = (*ppStr) + 4;
             }
             else if( !rsc_strnicmp( (*ppStr) + 1, "fx=", 3 ) )
@@ -992,7 +992,7 @@ ERRTYPE RscCompiler::Link()
         if ( NULL == (fExitFile = foutput = fopen( aTmpOutputRcCtor.getStr(), "w" )) )
             pTC->pEH->FatalError( ERR_OPENFILE, RscId(), aTmpOutputRcCtor.getStr() );
 
-        pTC->pEH->StdOut( "Generating .cxx ressource constructor file\n" );
+        pTC->pEH->StdOut( "Generating .cxx resource constructor file\n" );
 
         // Schreibe Datei
         pTC->WriteRcCtor( foutput );

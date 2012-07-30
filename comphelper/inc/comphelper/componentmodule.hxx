@@ -169,7 +169,7 @@ namespace comphelper
     //=========================================================================
     //= OModuleClient
     //=========================================================================
-    /** base class for objects which uses any global module-specific ressources
+    /** base class for objects which uses any global module-specific resources
     */
     class COMPHELPER_DLLPUBLIC OModuleClient
     {

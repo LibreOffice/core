@@ -590,7 +590,7 @@ public class Interceptor implements com.sun.star.frame.XFrameActionListener,
     // ____________________
 
     /**
-     * This class listen on the intercepted frame to free all used ressources on closing.
+     * This class listen on the intercepted frame to free all used resources on closing.
      * We forget the reference to the frame only here. Deregistration
      * isn't neccessary here - because this frame dies and wish to forgoten.
      *

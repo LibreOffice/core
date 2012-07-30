@@ -176,7 +176,7 @@ class PathSettings : public  css::lang::XTypeProvider             ,
             during this ctor runs! */
         PathSettings(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR);
 
-        /** free all used ressources ... if it was not already done. */
+        /** free all used resources ... if it was not already done. */
         virtual ~PathSettings();
 
         /** declaration of XInterface, XTypeProvider, XServiceInfo */

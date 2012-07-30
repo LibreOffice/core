@@ -121,7 +121,7 @@
 #define RC_RIBBAR_BEGIN             RC_RIBBAR
 #define RC_RIBBAR_END               (RC_RIBBAR_BEGIN + 79)
 
-// globale Ressourcen
+// globale Resourcen
 #define RC_GLOBALS_BEGIN            RC_GLOBALS
 #define RC_GLOBALS_END              (RC_GLOBALS_BEGIN + 120)
 

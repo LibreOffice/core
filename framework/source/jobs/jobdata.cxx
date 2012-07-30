@@ -152,7 +152,7 @@ void JobData::operator=( const JobData& rCopy )
 /**
     @short  let this instance die
     @descr  There is no chance any longer to work. We have to
-            release all used ressources and free used memory.
+            release all used resources and free used memory.
 */
 JobData::~JobData()
 {

@@ -555,7 +555,7 @@ void Job::impl_reactForJobResult( /*IN*/ const css::uno::Any& aResult )
             connection.
 
             Further we are listener for closing of the (possible valid)
-            given frame. We must be shure, that this ressource won't be gone
+            given frame. We must be shure, that this resource won't be gone
             if our internal job is still running.
 */
 void Job::impl_startListening()
@@ -795,7 +795,7 @@ void SAL_CALL Job::queryTermination( /*IN*/ const css::lang::EventObject& ) thro
 void SAL_CALL Job::notifyTermination( /*IN*/ const css::lang::EventObject& ) throw(css::uno::RuntimeException)
 {
     die();
-    // Do nothing else here. Our internal ressources was released ...
+    // Do nothing else here. Our internal resources was released ...
 }
 
 //________________________________
@@ -895,7 +895,7 @@ void SAL_CALL Job::queryClosing( const css::lang::EventObject& aEvent         ,
 void SAL_CALL Job::notifyClosing( const css::lang::EventObject& ) throw(css::uno::RuntimeException)
 {
     die();
-    // Do nothing else here. Our internal ressources was released ...
+    // Do nothing else here. Our internal resources was released ...
 }
 
 //________________________________
@@ -934,7 +934,7 @@ void SAL_CALL Job::disposing( const css::lang::EventObject& aEvent ) throw(css::
     /* } SAFE */
 
     die();
-    // Do nothing else here. Our internal ressources was released ...
+    // Do nothing else here. Our internal resources was released ...
 }
 
 } // namespace framework

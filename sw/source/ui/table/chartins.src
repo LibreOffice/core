@@ -24,7 +24,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-/* StarView ressource file */
+/* StarView resource file */
 #include "chartins.hrc"
 #include "helpid.h"
 ModelessDialog DLG_INSERT_CHART

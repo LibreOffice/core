@@ -24,8 +24,8 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-/* HelpID ressource file */
-/* HelpID ressource file */
+/* HelpID resource file */
+/* HelpID resource file */
 
 #include "cmdid.h"
 #include "helpid.h"

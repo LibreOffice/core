@@ -667,7 +667,7 @@ void SAL_CALL BackingComp::disposing( /*IN*/ const css::lang::EventObject& aEven
 /** kill this instance.
 
     It can be called from our owner frame only. But there is no possibility to check the calli.
-    We have to release all our internal used ressources and die. From this point we can throw
+    We have to release all our internal used resources and die. From this point we can throw
     DisposedExceptions for every further interface request ... but current implementation doesn`t do so ...
 
 */
@@ -782,7 +782,7 @@ void SAL_CALL BackingComp::removeEventListener( /*IN*/ const css::uno::Reference
                 currently not used
 
     @throw  com::sun::star::uno::RuntimeException
-                if some ressources are missing
+                if some resources are missing
                 Means if may be attachedFrame() wasn't called before.
  */
 

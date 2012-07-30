@@ -55,7 +55,7 @@ namespace COMPMOD_NAMESPACE
     */
     class OModuleImpl
     {
-        ResMgr*     m_pRessources;
+        ResMgr*     m_pResources;
         sal_Bool    m_bInitialized;
         rtl::OString m_sFilePrefix;
 
@@ -64,14 +64,14 @@ namespace COMPMOD_NAMESPACE
         OModuleImpl();
         ~OModuleImpl();
 
-        /// get the manager for the ressources of the module
+        /// get the manager for the resources of the module
         ResMgr* getResManager();
         void    setResourceFilePrefix(const ::rtl::OString& _rPrefix) { m_sFilePrefix = _rPrefix; }
     };
 
     //-------------------------------------------------------------------------
     OModuleImpl::OModuleImpl()
-        :m_pRessources(NULL)
+        :m_pResources(NULL)
         ,m_bInitialized(sal_False)
     {
     }
@@ -79,27 +79,27 @@ namespace COMPMOD_NAMESPACE
     //-------------------------------------------------------------------------
     OModuleImpl::~OModuleImpl()
     {
-        if (m_pRessources)
-            delete m_pRessources;
+        if (m_pResources)
+            delete m_pResources;
     }
 
     //-------------------------------------------------------------------------
     ResMgr* OModuleImpl::getResManager()
     {
         // note that this method is not threadsafe, which counts for the whole class !
-        if (!m_pRessources && !m_bInitialized)
+        if (!m_pResources && !m_bInitialized)
         {
             DBG_ASSERT(!m_sFilePrefix.isEmpty(), "OModuleImpl::getResManager: no resource file prefix!");
             // create a manager with a fixed prefix
-            m_pRessources = ResMgr::CreateResMgr(m_sFilePrefix.getStr());
-            DBG_ASSERT(m_pRessources,
+            m_pResources = ResMgr::CreateResMgr(m_sFilePrefix.getStr());
+            DBG_ASSERT(m_pResources,
                     rtl::OStringBuffer("OModuleImpl::getResManager: could not create the resource manager (file name: ")
                 .append(m_sFilePrefix)
                 .append(")!").getStr());
 
             m_bInitialized = sal_True;
         }
-        return m_pRessources;
+        return m_pResources;
     }
 
     //=========================================================================

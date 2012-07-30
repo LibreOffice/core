@@ -122,7 +122,7 @@ protected:
         rtl::OString &rText,
         const rtl::OString &rLangIndex )=0;
 
-    virtual void WorkOnRessourceEnd()=0;
+    virtual void WorkOnResourceEnd()=0;
 
     virtual void Output(const rtl::OString & rOutput)=0;
 
@@ -174,7 +174,7 @@ protected:
         const rtl::OString &rIsoLang
         );
 
-    void WorkOnRessourceEnd();
+    void WorkOnResourceEnd();
     void Output(const rtl::OString& rOutput);
 public:
     CfgExport(
@@ -202,7 +202,7 @@ private:
 protected:
     virtual void WorkOnText(rtl::OString &rText, const rtl::OString &rLangIndex);
 
-    void WorkOnRessourceEnd();
+    void WorkOnResourceEnd();
 
     void Output(const rtl::OString& rOutput);
 public:

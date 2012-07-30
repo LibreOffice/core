@@ -143,7 +143,7 @@ typedef ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleService
     //=========================================================================
     //= OModuleResourceClient
     //=========================================================================
-    /** base class for objects which uses any global module-specific ressources
+    /** base class for objects which uses any global module-specific resources
     */
     class OModuleResourceClient
     {
@@ -155,7 +155,7 @@ typedef ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleService
     //=========================================================================
     //= ModuleRes
     //=========================================================================
-    /** specialized ResId, using the ressource manager provided by the global module
+    /** specialized ResId, using the resource manager provided by the global module
     */
     class ModuleRes : public ::ResId
     {

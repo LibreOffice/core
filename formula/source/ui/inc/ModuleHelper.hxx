@@ -62,7 +62,7 @@ namespace formula
     //=========================================================================
     //= ModuleRes
     //=========================================================================
-    /** specialized ResId, using the ressource manager provided by the global module
+    /** specialized ResId, using the resource manager provided by the global module
     */
     class ModuleRes : public ::ResId
     {

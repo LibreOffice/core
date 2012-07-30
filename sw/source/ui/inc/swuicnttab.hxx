@@ -129,7 +129,7 @@ public:
     static sal_Bool IsNoNum(SwWrtShell& rSh, const String& rName);
 };
 
-class IndexEntryRessource;
+class IndexEntryResource;
 class IndexEntrySupplierWrapper;
 
 class SwTOXSelectTabPage : public SfxTabPage
@@ -204,7 +204,7 @@ class SwTOXSelectTabPage : public SfxTabPage
     FixedText       aSortAlgorithmFT;
     ListBox         aSortAlgorithmLB;
 
-    IndexEntryRessource* pIndexRes;
+    IndexEntryResource* pIndexRes;
 
     Point           aCBLeftPos1;
     Point           aCBLeftPos2;

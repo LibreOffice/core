@@ -36,7 +36,7 @@ namespace dbaccess
 
     //==================================================================
     //= ResourceManager
-    //= handling ressources within the DBA-Core library
+    //= handling resources within the DBA-Core library
     //==================================================================
     class ResourceManager
     {
@@ -101,7 +101,7 @@ namespace dbaccess
     //=========================================================================
     //= OModuleClient
     //=========================================================================
-    /** base class for objects which uses any global module-specific ressources
+    /** base class for objects which uses any global module-specific resources
     */
     class OModuleClient
     {

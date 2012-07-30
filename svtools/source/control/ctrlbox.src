@@ -55,7 +55,7 @@ String STR_SVT_AUTOMATIC_COLOR
 };
 
 /*
- * resources for CollatorRessource / CollatorRessourceData resp.
+ * resources for CollatorResource / CollatorResourceData resp.
  */
 
 String STR_SVT_COLLATE_ALPHANUMERIC

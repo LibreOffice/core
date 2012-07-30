@@ -1251,7 +1251,7 @@ void ResMgr::PopContext( const Resource* pResObj )
 
         // Resource freigeben
         if( (pTop->Flags & (RC_GLOBAL | RC_NOTFOUND)) == RC_GLOBAL )
-            // kann auch Fremd-Ressource sein
+            // kann auch Fremd-Resource sein
             InternalResMgr::FreeGlobalRes( pTop->aResHandle, pTop->pResource );
         decStack();
     }
@@ -1279,7 +1279,7 @@ RSHEADER_TYPE* ResMgr::CreateBlock( const ResId& rId )
         memcpy( pHeader, GetClass(), GetRemainSize() );
         Increment( pHeader->GetLocalOff() ); //ans Ende setzen
         if ( pHeader->GetLocalOff() != pHeader->GetGlobOff() )
-            // Hat Sub-Ressourcen, deshalb extra freigeben
+            // Hat Sub-Resourcen, deshalb extra freigeben
             PopContext();
     }
 

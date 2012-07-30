@@ -31,7 +31,7 @@ namespace frm
 
     //==================================================================
     //= ResourceManager
-    //= handling ressources within the FormLayer library
+    //= handling resources within the FormLayer library
     //==================================================================
     class ResourceManager
     {

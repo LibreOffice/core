@@ -110,7 +110,7 @@ char CommandLineSyntax[] =
 "-fs<slotmap file>          -fl<listing file>\n"
 "-fo<odl file>              -fd<data base file>\n"
 "-fi<item implementation>   -ft<type library file> (not OLE)\n"
-"-fr<ressource file>        -fm<makefile target file>\n"
+"-fr<resource file>         -fm<makefile target file>\n"
 "-fC<c++ source file>       -fH<c++ header file>\n"
 "-fc<c source file>         -fh<c header file>\n"
 "-rsc <*.srs header line>\n"

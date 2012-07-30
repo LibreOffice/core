@@ -462,7 +462,7 @@ IMPL_LINK( SwSortDlg, LanguageHdl, ListBox*, pLBox )
                             GetAppCollator().listCollatorAlgorithms( aLcl ));
 
     if( !pColRes )
-        pColRes = new CollatorRessource();
+        pColRes = new CollatorResource();
 
     const sal_uInt16 nLstBoxCnt = 3;
     ListBox* aLstArr[ nLstBoxCnt ] = { &aTypDLB1, &aTypDLB2, &aTypDLB3 };

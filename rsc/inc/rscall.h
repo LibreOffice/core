@@ -64,7 +64,7 @@ extern AtomContainer*   pHS;
 #define INCLUDE_FLAG      0x0040  // der Include-Pfad wurde erweitert
 #define MSCPREPRO_FLAG    0x0080  // spezial Preprozessor
 #define PRINTSYNTAX_FLAG  0x0100  // Syntax ausgeben
-#define PRELOAD_FLAG      0x0200  // Alle Ressourcen Preloaden
+#define PRELOAD_FLAG      0x0200  // Alle Resourcen Preloaden
 #define SMART_FLAG        0x0400  // abgekuertze Name
 #define SRSDEFAULT_FLAG   0x1000  // immer der Default geschrieben
 #define NOSYSRESTEST_FLAG 0x2000  // ueberprueft nicht die Richtigkeit von (bmp, ico, cur)

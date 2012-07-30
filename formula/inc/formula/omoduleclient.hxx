@@ -27,7 +27,7 @@
 
 namespace formula {
 
-/** Base class for objects which use any global module-specific ressources.
+/** Base class for objects which use any global module-specific resources.
 */
 class FORMULA_DLLPUBLIC OModuleClient: private boost::noncopyable
 {

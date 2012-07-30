@@ -172,7 +172,7 @@ JobResult::JobResult( const JobResult& rCopy )
 //________________________________
 /**
     @short      standard dtor
-    @descr      Free all internaly used ressources at the end of living.
+    @descr      Free all internaly used resources at the end of living.
 */
 JobResult::~JobResult()
 {

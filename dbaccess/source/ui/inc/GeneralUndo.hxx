@@ -25,7 +25,7 @@
 namespace dbaui
 {
     // ================================================================================================
-    // SbaCommentUndoAction - Undo-Basisklasse fuer Aktionen, deren GetComment einen aus einer Sba-Ressource
+    // SbaCommentUndoAction - Undo-Basisklasse fuer Aktionen, deren GetComment einen aus einer Sba-Resource
     // geladenen String liefert
 
     class OCommentUndoAction : public SfxUndoAction

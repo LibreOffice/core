@@ -80,7 +80,7 @@ class ScXMLDatabaseRangeContext : public SvXMLImportContext
     boost::scoped_ptr<ScQueryParam> mpQueryParam;
     ScRange maRange;
     rtl::OUString   sDatabaseRangeName;
-    rtl::OUString   sConnectionRessource;
+    rtl::OUString   sConnectionResource;
     rtl::OUString   sDatabaseName;
     rtl::OUString   sSourceObject;
     com::sun::star::uno::Sequence <com::sun::star::beans::PropertyValue> aSortSequence;
@@ -132,7 +132,7 @@ public:
     virtual void EndElement();
 
     void SetDatabaseName(const rtl::OUString sTempDatabaseName) { sDatabaseName = sTempDatabaseName; }
-    void SetConnectionRessource(const rtl::OUString sTempConRes) { sConnectionRessource = sTempConRes; }
+    void SetConnectionResource(const rtl::OUString sTempConRes) { sConnectionResource = sTempConRes; }
     void SetSourceObject(const rtl::OUString sTempSourceObject) { sSourceObject = sTempSourceObject; }
     void SetSourceType(const com::sun::star::sheet::DataImportMode nTempSourceType) { nSourceType = nTempSourceType; }
     void SetNative(const bool bTempNative) { bNative = bTempNative; }

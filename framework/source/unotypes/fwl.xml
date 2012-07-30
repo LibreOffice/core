@@ -9,7 +9,7 @@
         <author> Andreas Schluens </author>
         <name> com.sun.star.comp.framework.TypeDetection </name>
         <description>
-            Supports a type detection of a specified ressource (document).
+            Supports a type detection of a specified resource (document).
         </description>
         <loader-name> com.sun.star.loader.SharedLibrary </loader-name>
         <language> c++ </language>

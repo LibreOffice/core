@@ -117,11 +117,11 @@ JobDispatch::JobDispatch( /*IN*/ const css::uno::Reference< css::lang::XMultiSer
 //________________________________
 /**
     @short  let this instance die
-    @descr  We have to release all used ressources and free used memory.
+    @descr  We have to release all used resources and free used memory.
 */
 JobDispatch::~JobDispatch()
 {
-    // release all used ressources
+    // release all used resources
     m_xSMGR  = css::uno::Reference< css::lang::XMultiServiceFactory >();
     m_xFrame = css::uno::Reference< css::frame::XFrame >();
 }

@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef CHART2_RESSOURCEMANAGER_HXX
-#define CHART2_RESSOURCEMANAGER_HXX
+#ifndef CHART2_RESOURCEMANAGER_HXX
+#define CHART2_RESOURCEMANAGER_HXX
 
 #include "charttoolsdllapi.hxx"
 
@@ -27,21 +27,21 @@ class ResMgr;
 namespace chart
 {
 
-class RessourceManager
+class ResourceManager
 {
 public:
-    static ::ResMgr &  getRessourceManager();
+    static ::ResMgr &  getResourceManager();
 
 private:
     // not implemented -- avoid instantiation
-    RessourceManager();
+    ResourceManager();
 
-    static ::ResMgr *  m_pRessourceManager;
+    static ::ResMgr *  m_pResourceManager;
 };
 
 } //  namespace chart
 
-// CHART2_RESSOURCEMANAGER_HXX
+// CHART2_RESOURCEMANAGER_HXX
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

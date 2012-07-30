@@ -294,7 +294,7 @@ int CfgParser::ExecuteAnalyzedToken( int nToken, char *pToken )
                     break;
                     case CFG_TEXT_START: {
                         if ( sCurrentResTyp != sTokenName ) {
-                            WorkOnRessourceEnd();
+                            WorkOnResourceEnd();
                             rtl::OString sCur;
                             for( unsigned int i = 0; i < aLanguages.size(); ++i ){
                                 sCur = aLanguages[ i ];
@@ -330,7 +330,7 @@ int CfgParser::ExecuteAnalyzedToken( int nToken, char *pToken )
             }
             else if ( sTokenName == "label" ) {
                 if ( sCurrentResTyp != sTokenName ) {
-                    WorkOnRessourceEnd();
+                    WorkOnResourceEnd();
                     rtl::OString sCur;
                     for( unsigned int i = 0; i < aLanguages.size(); ++i ){
                         sCur = aLanguages[ i ];
@@ -348,7 +348,7 @@ int CfgParser::ExecuteAnalyzedToken( int nToken, char *pToken )
             if ( aStack.GetStackData() && ( aStack.GetStackData()->GetTagType() == sTokenName ))
             {
                 if (sCurrentText.isEmpty())
-                    WorkOnRessourceEnd();
+                    WorkOnResourceEnd();
                 aStack.Pop();
                 pStackData = aStack.GetStackData();
             }
@@ -476,7 +476,7 @@ CfgExport::~CfgExport()
 }
 
 /*****************************************************************************/
-void CfgExport::WorkOnRessourceEnd()
+void CfgExport::WorkOnResourceEnd()
 /*****************************************************************************/
 {
     if ( bLocalize ) {
@@ -612,7 +612,7 @@ void CfgMerge::Output(const rtl::OString& rOutput)
 }
 
 /*****************************************************************************/
-void CfgMerge::WorkOnRessourceEnd()
+void CfgMerge::WorkOnResourceEnd()
 /*****************************************************************************/
 {
 

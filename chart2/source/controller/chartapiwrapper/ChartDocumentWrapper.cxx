@@ -1490,7 +1490,7 @@ void SAL_CALL ChartDocumentWrapper::setDelegator(
     }
     else
     {
-        // this is a sort of dispose() from the new model,so release ressources here
+        // this is a sort of dispose() from the new model,so release resources here
         try
         {
             this->dispose();

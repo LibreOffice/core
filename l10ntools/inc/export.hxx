@@ -398,7 +398,7 @@ public:
 //
 
 /******************************************************************************
-* Purpose: holds information of data to merge (one ressource)
+* Purpose: holds information of data to merge (one resource)
 ******************************************************************************/
 
 class MergeDataFile;
