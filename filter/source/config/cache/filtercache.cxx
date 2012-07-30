@@ -295,7 +295,7 @@ OUStringList FilterCache::getMatchingItemsByProps(      EItemType  eType  ,
     ::osl::ResettableMutexGuard aLock(m_aLock);
 
     // search for right list
-    // An exception is thrown �f "eType" is unknown.
+    // An exception is thrown - "eType" is unknown.
     // => rList will be valid everytimes next line is reached.
     CacheItemList& rList = impl_getItemList(eType);
 
@@ -331,7 +331,7 @@ sal_Bool FilterCache::hasItems(EItemType eType) const
     ::osl::ResettableMutexGuard aLock(m_aLock);
 
     // search for right list
-    // An exception is thrown �f "eType" is unknown.
+    // An exception is thrown - "eType" is unknown.
     // => rList will be valid everytimes next line is reached.
     CacheItemList& rList = impl_getItemList(eType);
 
@@ -348,7 +348,7 @@ OUStringList FilterCache::getItemNames(EItemType eType) const
     ::osl::ResettableMutexGuard aLock(m_aLock);
 
     // search for right list
-    // An exception is thrown �f "eType" is unknown.
+    // An exception is thrown - "eType" is unknown.
     // => rList will be valid everytimes next line is reached.
     CacheItemList& rList = impl_getItemList(eType);
 
@@ -373,7 +373,7 @@ sal_Bool FilterCache::hasItem(      EItemType        eType,
     ::osl::ResettableMutexGuard aLock(m_aLock);
 
     // search for right list
-    // An exception is thrown �f "eType" is unknown.
+    // An exception is thrown - "eType" is unknown.
     // => rList will be valid everytimes next line is reached.
     CacheItemList& rList = impl_getItemList(eType);
 
@@ -461,7 +461,7 @@ void FilterCache::removeItem(      EItemType        eType,
     ::osl::ResettableMutexGuard aLock(m_aLock);
 
     // search for right list
-    // An exception is thrown �f "eType" is unknown.
+    // An exception is thrown - "eType" is unknown.
     // => rList will be valid everytimes next line is reached.
     CacheItemList& rList = impl_getItemList(eType);
 
@@ -484,7 +484,7 @@ void FilterCache::setItem(      EItemType        eType ,
     ::osl::ResettableMutexGuard aLock(m_aLock);
 
     // search for right list
-    // An exception is thrown �f "eType" is unknown.
+    // An exception is thrown - "eType" is unknown.
     // => rList will be valid everytimes next line is reached.
     CacheItemList& rList = impl_getItemList(eType);
 
