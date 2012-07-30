@@ -40,8 +40,8 @@ enum filterStatus
 };
 
 /*
- * NOTE, any files beginning with CVE- or EDB- will be assumed to be encrypted
- * using arcfour with key 0x435645, this is to silence panicky
+ * NOTE, any files beginning with CVE-, BID- or EDB- will be assumed to be
+ * encrypted using arcfour with key 0x435645, this is to silence panicky
  * virus/malware-checkers
  *
  * e.g.  m[de]crypt --bare -a arcfour -o hex -k 435645 -s 3

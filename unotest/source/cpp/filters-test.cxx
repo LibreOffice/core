@@ -98,6 +98,7 @@ void FiltersTest::recursiveScan(const rtl::OUString &rFilter, const rtl::OUStrin
                     continue;
 
                 if (
+                    (sURL.matchAsciiL(RTL_CONSTASCII_STRINGPARAM("BID"), nLastSlash+1)) ||
                     (sURL.matchAsciiL(RTL_CONSTASCII_STRINGPARAM("CVE"), nLastSlash+1)) ||
                     (sURL.matchAsciiL(RTL_CONSTASCII_STRINGPARAM("EDB"), nLastSlash+1))
                    )
