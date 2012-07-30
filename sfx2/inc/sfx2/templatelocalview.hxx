@@ -18,15 +18,6 @@
 class SfxDocumentTemplates;
 class TemplateLocalViewItem;
 
-enum FILTER_APPLICATION
-{
-    FILTER_APP_NONE,
-    FILTER_APP_WRITER,
-    FILTER_APP_CALC,
-    FILTER_APP_IMPRESS,
-    FILTER_APP_DRAW
-};
-
 class SFX2_DLLPUBLIC TemplateLocalView : public TemplateAbstractView
 {
 public:
@@ -42,7 +33,7 @@ public:
 
     virtual void showOverlay (bool bVisible);
 
-    void filterTemplatesByApp (const FILTER_APPLICATION &eApp);
+    virtual void filterTemplatesByApp (const FILTER_APPLICATION &eApp);
 
     std::vector<TemplateItemProperties>
         getFilteredItems (const boost::function<bool (const TemplateItemProperties&) > &rFunc) const;

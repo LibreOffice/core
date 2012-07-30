@@ -13,6 +13,32 @@
 #include <sfx2/thumbnailview.hxx>
 
 class TemplateView;
+class SfxDocumentTemplates;
+
+enum FILTER_APPLICATION
+{
+    FILTER_APP_NONE,
+    FILTER_APP_WRITER,
+    FILTER_APP_CALC,
+    FILTER_APP_IMPRESS,
+    FILTER_APP_DRAW
+};
+
+// Display template items depending on the generator application
+class ViewFilter_Application
+{
+public:
+
+    ViewFilter_Application (FILTER_APPLICATION App)
+        : mApp(App)
+    {}
+
+    bool operator () (const ThumbnailViewItem *pItem);
+
+private:
+
+    FILTER_APPLICATION mApp;
+};
 
 class SFX2_DLLPUBLIC TemplateAbstractView : public ThumbnailView
 {
@@ -26,6 +52,8 @@ public:
 
     // Fill view with template folders thumbnails
     virtual void Populate () = 0;
+
+    virtual void filterTemplatesByApp (const FILTER_APPLICATION &eApp) = 0;
 
     virtual void showOverlay (bool bVisible) = 0;
 

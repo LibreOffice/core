@@ -93,6 +93,12 @@ void TemplateOnlineView::Populate()
         Invalidate();
 }
 
+void TemplateOnlineView::filterTemplatesByApp(const FILTER_APPLICATION &eApp)
+{
+    if (mpItemView->IsVisible())
+        mpItemView->filterItems(ViewFilter_Application(eApp));
+}
+
 void TemplateOnlineView::showOverlay (bool bVisible)
 {
     mbActive = !bVisible;

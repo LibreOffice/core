@@ -38,49 +38,6 @@
 
 void lcl_updateThumbnails (TemplateLocalViewItem *pItem);
 
-// Display template items depending on the generator application
-class ViewFilter_Application
-{
-public:
-
-    ViewFilter_Application (SfxDocumentTemplates *pDocTemplates, FILTER_APPLICATION App)
-        : mApp(App), mpDocTemplates(pDocTemplates)
-    {}
-
-    bool operator () (const ThumbnailViewItem *pItem)
-    {
-        const TemplateViewItem *pTempItem = static_cast<const TemplateViewItem*>(pItem);
-
-        if (mApp == FILTER_APP_WRITER)
-        {
-            return pTempItem->getFileType() == "OpenDocument Text" ||
-                    pTempItem->getFileType() == "OpenDocument Text Template";
-        }
-        else if (mApp == FILTER_APP_CALC)
-        {
-            return pTempItem->getFileType() == "OpenDocument Spreadsheet" ||
-                    pTempItem->getFileType() == "OpenDocument Spreadsheet Template";
-        }
-        else if (mApp == FILTER_APP_IMPRESS)
-        {
-            return pTempItem->getFileType() == "OpenDocument Presentation" ||
-                    pTempItem->getFileType() == "OpenDocument Presentation Template";
-        }
-        else if (mApp == FILTER_APP_DRAW)
-        {
-            return pTempItem->getFileType() == "OpenDocument Drawing" ||
-                    pTempItem->getFileType() == "OpenDocument Drawing Template";
-        }
-
-        return true;
-    }
-
-private:
-
-    FILTER_APPLICATION mApp;
-    SfxDocumentTemplates *mpDocTemplates;
-};
-
 class FolderFilter_Application
 {
 public:
@@ -266,7 +223,7 @@ void TemplateLocalView::filterTemplatesByApp (const FILTER_APPLICATION &eApp)
     if (mpItemView->IsVisible())
     {
         mbFilteredResults = true;
-        mpItemView->filterItems(ViewFilter_Application(mpDocTemplates,eApp));
+        mpItemView->filterItems(ViewFilter_Application(eApp));
     }
     else
     {
@@ -642,7 +599,7 @@ void TemplateLocalView::OnItemDblClicked (ThumbnailViewItem *pRegionItem)
         mpItemView->setSelectionMode(true);
 
     if (meFilterOption != FILTER_APP_NONE)
-        mpItemView->filterItems(ViewFilter_Application(mpDocTemplates,meFilterOption));
+        mpItemView->filterItems(ViewFilter_Application(meFilterOption));
 
     mbActive = false;
     mpItemView->Show();

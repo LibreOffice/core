@@ -11,6 +11,7 @@
 
 #include <comphelper/processfactory.hxx>
 #include <sfx2/templateview.hxx>
+#include <sfx2/templateviewitem.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <vcl/pngread.hxx>
 
@@ -19,6 +20,34 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
+
+bool ViewFilter_Application::operator () (const ThumbnailViewItem *pItem)
+{
+    const TemplateViewItem *pTempItem = static_cast<const TemplateViewItem*>(pItem);
+
+    if (mApp == FILTER_APP_WRITER)
+    {
+        return pTempItem->getFileType() == "OpenDocument Text" ||
+                pTempItem->getFileType() == "OpenDocument Text Template";
+    }
+    else if (mApp == FILTER_APP_CALC)
+    {
+        return pTempItem->getFileType() == "OpenDocument Spreadsheet" ||
+                pTempItem->getFileType() == "OpenDocument Spreadsheet Template";
+    }
+    else if (mApp == FILTER_APP_IMPRESS)
+    {
+        return pTempItem->getFileType() == "OpenDocument Presentation" ||
+                pTempItem->getFileType() == "OpenDocument Presentation Template";
+    }
+    else if (mApp == FILTER_APP_DRAW)
+    {
+        return pTempItem->getFileType() == "OpenDocument Drawing" ||
+                pTempItem->getFileType() == "OpenDocument Drawing Template";
+    }
+
+    return true;
+}
 
 TemplateAbstractView::TemplateAbstractView (Window *pParent, WinBits nWinStyle, bool bDisableTransientChildren)
     : ThumbnailView(pParent,nWinStyle,bDisableTransientChildren),

@@ -264,31 +264,31 @@ SfxTemplateManagerDlg::~SfxTemplateManagerDlg ()
 
 IMPL_LINK_NOARG(SfxTemplateManagerDlg,ViewAllHdl)
 {
-    maView->filterTemplatesByApp(FILTER_APP_NONE);
+    mpCurView->filterTemplatesByApp(FILTER_APP_NONE);
     return 0;
 }
 
 IMPL_LINK_NOARG(SfxTemplateManagerDlg,ViewDocsHdl)
 {
-    maView->filterTemplatesByApp(FILTER_APP_WRITER);
+    mpCurView->filterTemplatesByApp(FILTER_APP_WRITER);
     return 0;
 }
 
 IMPL_LINK_NOARG(SfxTemplateManagerDlg,ViewPresentsHdl)
 {
-    maView->filterTemplatesByApp(FILTER_APP_IMPRESS);
+    mpCurView->filterTemplatesByApp(FILTER_APP_IMPRESS);
     return 0;
 }
 
 IMPL_LINK_NOARG(SfxTemplateManagerDlg,ViewSheetsHdl)
 {
-    maView->filterTemplatesByApp(FILTER_APP_CALC);
+    mpCurView->filterTemplatesByApp(FILTER_APP_CALC);
     return 0;
 }
 
 IMPL_LINK_NOARG(SfxTemplateManagerDlg,ViewDrawsHdl)
 {
-    maView->filterTemplatesByApp(FILTER_APP_DRAW);
+    mpCurView->filterTemplatesByApp(FILTER_APP_DRAW);
     return 0;
 }
 
