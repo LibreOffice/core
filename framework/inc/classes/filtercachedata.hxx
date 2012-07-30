@@ -76,71 +76,9 @@ namespace framework{
 //  exported const
 //_________________________________________________________________________________________________________________
 
-#define PACKAGENAME_TYPEDETECTION_STANDARD          DECLARE_ASCII("Office.TypeDetection"                            )   /// Names of our configuration files.
-#define PACKAGENAME_TYPEDETECTION_ADDITIONAL        DECLARE_ASCII("Office.TypeDetectionAdditional"                  )
-#define CFG_PATH_SEPERATOR                          DECLARE_ASCII("/"                                               )   /// separator for configuration paths
-#define PROPERTY_SEPERATOR                          sal_Unicode(',')                                                    /// separator for own formated property strings of types and filters
 #define DEFAULT_FILTERCACHE_VERSION                 6                                                                   /// these implmentation of FilterCache support different version of TypeDetection.xml! This define the current set default one.
 
 #define DEFAULT_FILTERCACHE_MODE                    CONFIG_MODE_DELAYED_UPDATE | CONFIG_MODE_ALL_LOCALES                                          /// ConfigItems could run in different modes: supported values are ... { CONFIG_MODE_IMMEDIATE_UPDATE, CONFIG_MODE_DELAYED_UPDATE, CONFIG_MODE_ALL_LOCALES }
-
-//*****************************************************************************************************************
-// This are all supported set-names of our filter configuration.
-//*****************************************************************************************************************
-#define SUBLIST_TYPES                               DECLARE_ASCII("Types"                                           )
-#define SUBLIST_FILTERS                             DECLARE_ASCII("Filters"                                         )
-#define SUBLIST_DETECTSERVICES                      DECLARE_ASCII("DetectServices"                                  )
-#define SUBLIST_FRAMELOADERS                        DECLARE_ASCII("FrameLoaders"                                    )
-#define SUBLIST_CONTENTHANDLERS                     DECLARE_ASCII("ContentHandlers"                                 )
-#define SUBLIST_DEFAULTS                            DECLARE_ASCII("Defaults"                                        )
-
-#define TEMPLATENAME_TYPE                           DECLARE_ASCII("Type"                                            )
-#define TEMPLATENAME_FILTER                         DECLARE_ASCII("Filter"                                          )
-#define TEMPLATENAME_DETECTSERVICE                  DECLARE_ASCII("DetectService"                                   )
-#define TEMPLATENAME_FRAMELOADER                    DECLARE_ASCII("FrameLoader"                                     )
-#define TEMPLATENAME_CONTENTHANDLER                 DECLARE_ASCII("ContentHandler"                                  )
-
-//*****************************************************************************************************************
-// These defines declare all supported names of configuration key names.
-// They are not sorted and could be shared by different base configuration items.
-//*****************************************************************************************************************
-#define SUBKEY_PREFERRED                            DECLARE_ASCII("Preferred"                                       )
-#define SUBKEY_INSTALLED                            DECLARE_ASCII("Installed"                                       )
-#define SUBKEY_NAME                                 DECLARE_ASCII("Name"                                            )
-#define SUBKEY_UINAME                               DECLARE_ASCII("UIName"                                          )
-#define SUBKEY_MEDIATYPE                            DECLARE_ASCII("MediaType"                                       )
-#define SUBKEY_CLIPBOARDFORMAT                      DECLARE_ASCII("ClipboardFormat"                                 )
-#define SUBKEY_URLPATTERN                           DECLARE_ASCII("URLPattern"                                      )
-#define SUBKEY_EXTENSIONS                           DECLARE_ASCII("Extensions"                                      )
-#define SUBKEY_DOCUMENTICONID                       DECLARE_ASCII("DocumentIconID"                                  )
-#define SUBKEY_TYPE                                 DECLARE_ASCII("Type"                                            )
-#define SUBKEY_DOCUMENTSERVICE                      DECLARE_ASCII("DocumentService"                                 )
-#define SUBKEY_FILTERSERVICE                        DECLARE_ASCII("FilterService"                                   )
-#define SUBKEY_FLAGS                                DECLARE_ASCII("Flags"                                           )
-#define SUBKEY_USERDATA                             DECLARE_ASCII("UserData"                                        )
-#define SUBKEY_FILEFORMATVERSION                    DECLARE_ASCII("FileFormatVersion"                               )
-#define SUBKEY_TEMPLATENAME                         DECLARE_ASCII("TemplateName"                                    )
-#define SUBKEY_TYPES                                DECLARE_ASCII("Types"                                           )
-#define SUBKEY_ORDER                                DECLARE_ASCII("Order"                                           )
-#define SUBKEY_DEFAULTDETECTOR                      DECLARE_ASCII("DetectService"                                   )
-#define SUBKEY_GENERICLOADER                        DECLARE_ASCII("FrameLoader"                                     )
-#define SUBKEY_DATA                                 DECLARE_ASCII("Data"                                            )
-#define SUBKEY_UICOMPONENT                          DECLARE_ASCII("UIComponent"                                     )
-
-//*****************************************************************************************************************
-// These defines declare all supported property names for our name container interface.
-// They are not sorted by using ... and could be shared by different methods and access operations.
-//*****************************************************************************************************************
-#define PROPERTY_NAME                               DECLARE_ASCII("Name"                                            )
-#define PROPERTY_PREFERRED                          DECLARE_ASCII("Preferred"                                       )
-#define PROPERTY_INSTALLED                          DECLARE_ASCII("Installed"                                       )
-#define PROPERTY_UINAME                             DECLARE_ASCII("UIName"                                          )
-#define PROPERTY_MEDIATYPE                          DECLARE_ASCII("MediaType"                                       )
-#define PROPERTY_TYPE                               DECLARE_ASCII("Type"                                            )
-#define PROPERTY_FLAGS                              DECLARE_ASCII("Flags"                                           )
-#define PROPERTY_USERDATA                           DECLARE_ASCII("UserData"                                        )
-#define PROPERTY_TYPES                              DECLARE_ASCII("Types"                                           )
-#define PROPERTY_ORDER                              DECLARE_ASCII("Order"                                           )
 
 //_________________________________________________________________________________________________________________
 //  exported definitions
