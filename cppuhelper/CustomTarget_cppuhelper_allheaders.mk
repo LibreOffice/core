@@ -34,7 +34,7 @@ $(call gb_CustomTarget_get_target,cppuhelper/allheaders) : \
 
 # dependency on Package_inc.mk should ensure this is updated whenever a new public header is added
 $(cppuhelper_allheaders_DIR)/cppuhelper_allheaders.hxx : \
-            CustomTarget_cppuhelper_allheaders.mk \
+            $(SRCDIR)/cppuhelper/CustomTarget_cppuhelper_allheaders.mk \
             | $(cppuhelper_allheaders_DIR)/.dir $(SRCDIR)/cppuhelper/Package_inc.mk
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,1)
 	printf '// Generated list of all cppuhelper/ includes\n' >  $@
