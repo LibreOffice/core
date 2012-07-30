@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAMn///7M\u003d",
+        "filename": "sc/source/ui/inc/tabsplit.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000094
+      },
+      "writtenOn": "2012-07-30T15:08:30Z",
+      "side": 1,
+      "message": "That was the real intention, since the pointer is never changed once initialized. As *pViewData is never modified by splitters, we can go for a const *const if you think it\u0027s safer.",
+      "parentUuid": "AAAAMn///7Y\u003d",
+      "revId": "c1930ed15bc080739924a4bafa75582b1a06acff",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAMn///7U\u003d",
         "filename": "sc/source/ui/inc/tabsplit.hxx",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2012-07-30T12:54:57Z",
       "side": 1,
       "message": "I would prefer if the \"real\" patch  would not be interspersed with white space changes. Btw, here the original indenting helps readability of the code as all method names are lined up in one column.",
+      "revId": "c1930ed15bc080739924a4bafa75582b1a06acff",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///7I\u003d",
+        "filename": "sc/source/ui/inc/tabsplit.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000094
+      },
+      "writtenOn": "2012-07-30T15:08:30Z",
+      "side": 1,
+      "message": "I\u0027ll revert the whitespaces changes, as you suggest. Is there any guideline on these subjects (whitespace modification and coding style)?",
+      "parentUuid": "AAAAMn///7U\u003d",
       "revId": "c1930ed15bc080739924a4bafa75582b1a06acff",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
