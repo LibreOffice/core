@@ -252,8 +252,6 @@ STDSHLCUIMT+=-ljemalloc
 
 .IF "$(HAVE_LD_HASH_STYLE)"  == "TRUE"
 LINKFLAGS += -Wl,--hash-style=$(WITH_LINKER_HASH_STYLE)
-.ELSE
-LINKFLAGS += -Wl,-zdynsort
 .ENDIF
 
 # libraries for linking applications
