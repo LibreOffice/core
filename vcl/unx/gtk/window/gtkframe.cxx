@@ -2477,19 +2477,6 @@ void GtkSalFrame::UpdateSettings( AllSettings& rSettings )
         ReleaseGraphics( pGraphics );
 }
 
-void GtkSalFrame::Beep( SoundType eType )
-{
-    switch( eType )
-    {
-        case SOUND_DEFAULT:
-        case SOUND_ERROR:
-            gdk_display_beep( getGdkDisplay() );
-            break;
-        default:
-            break;
-    }
-}
-
 const SystemEnvData* GtkSalFrame::GetSystemData() const
 {
     return &m_aSystemData;

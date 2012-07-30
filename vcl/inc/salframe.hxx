@@ -35,7 +35,6 @@
 #ifdef __cplusplus
 
 #include <vcl/ptrstyle.hxx>
-#include <vcl/sndstyle.hxx>
 
 #endif // __cplusplus
 #include <salwtype.hxx>
@@ -214,8 +213,6 @@ public:
     virtual LanguageType        GetInputLanguage() = 0;
 
     virtual void                UpdateSettings( AllSettings& rSettings ) = 0;
-
-    virtual void                Beep( SoundType eSoundType ) = 0;
 
     // returns system data (most prominent: window handle)
     virtual const SystemEnvData*    GetSystemData() const = 0;

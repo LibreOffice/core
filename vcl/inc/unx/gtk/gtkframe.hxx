@@ -396,8 +396,6 @@ public:
 
     virtual void                UpdateSettings( AllSettings& rSettings );
 
-    virtual void                Beep( SoundType eSoundType );
-
     // returns system data (most prominent: window handle)
     virtual const SystemEnvData*    GetSystemData() const;
 

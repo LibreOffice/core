@@ -2633,22 +2633,6 @@ bool X11SalFrame::SetPluginParent( SystemParentData* pNewParent )
     return true;
 }
 
-// Sound
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void X11SalFrame::Beep( SoundType eSoundType ) // not fully suported
-{
-    switch( eSoundType )
-    {
-        case SOUND_DEFAULT:
-        case SOUND_ERROR:
-            GetDisplay()->Beep();
-            break;
-        default:
-            // Excessive beeping averted
-            break;
-    }
-}
-
 // Event Handling
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static sal_uInt16 sal_GetCode( int state )

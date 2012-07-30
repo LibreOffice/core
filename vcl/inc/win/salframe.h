@@ -130,7 +130,6 @@ public:
     virtual sal_Bool                MapUnicodeToKeyCode( sal_Unicode aUnicode, LanguageType aLangType, KeyCode& rKeyCode );
     virtual LanguageType        GetInputLanguage();
     virtual void                UpdateSettings( AllSettings& rSettings );
-    virtual void                Beep( SoundType eSoundType );
     virtual const SystemEnvData*    GetSystemData() const;
     virtual SalPointerState     GetPointerState();
     virtual SalIndicatorState   GetIndicatorState();

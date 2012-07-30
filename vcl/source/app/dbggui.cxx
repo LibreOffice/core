@@ -1618,7 +1618,6 @@ long SolarMessageBoxExecutor::doIt()
 #ifdef WNT
     sal_Bool bOldCallTimer = pSVData->mbNoCallTimer;
     pSVData->mbNoCallTimer = sal_True;
-    MessageBeep( MB_ICONHAND );
     nResult = MessageBoxW( 0, (LPWSTR)m_sDebugMessage.GetBuffer(), L"Debug Output",
                                      MB_TASKMODAL | MB_YESNOCANCEL | MB_DEFBUTTON2 | MB_ICONSTOP );
     pSVData->mbNoCallTimer = bOldCallTimer;
@@ -1655,7 +1654,6 @@ void DbgPrintMsgBox( const char* pLine )
         // TODO: Shouldn't this be a IsDebuggerPresent()?
         if ( GetSystemMetrics( SM_DEBUG ) )
         {
-            MessageBeep( MB_ICONHAND );
             strcpy( aDbgOutBuf, pLine );
             strcat( aDbgOutBuf, "\r\n" );
             OutputDebugString( aDbgOutBuf );

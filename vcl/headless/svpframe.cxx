@@ -428,10 +428,6 @@ void SvpSalFrame::UpdateSettings( AllSettings& )
 {
 }
 
-void SvpSalFrame::Beep( SoundType )
-{
-}
-
 const SystemEnvData* SvpSalFrame::GetSystemData() const
 {
     return &m_aSystemChildData;

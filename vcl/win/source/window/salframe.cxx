@@ -2931,23 +2931,6 @@ const SystemEnvData* WinSalFrame::GetSystemData() const
 
 // -----------------------------------------------------------------------
 
-void WinSalFrame::Beep( SoundType eSoundType )
-{
-    static UINT aImplSoundTab[5] =
-    {
-        0,                              // SOUND_DEFAULT
-        MB_ICONASTERISK,                // SOUND_INFO
-        MB_ICONEXCLAMATION,             // SOUND_WARNING
-        MB_ICONHAND,                    // SOUND_ERROR
-        MB_ICONQUESTION                 // SOUND_QUERY
-    };
-
-    if( eSoundType != SOUND_DISABLE ) // don't beep on disable
-        MessageBeep( aImplSoundTab[eSoundType] );
-}
-
-// -----------------------------------------------------------------------
-
 SalFrame::SalPointerState WinSalFrame::GetPointerState()
 {
     SalPointerState aState;
@@ -4980,7 +4963,6 @@ static int ImplHandleSysCommand( HWND hWnd, WPARAM wParam, LPARAM lParam )
              (!bMaximize && (nCommand == SC_MAXIMIZE)) ||
              (bMaximize && (nCommand == SC_RESTORE)) )
         {
-            MessageBeep( 0 );
             return TRUE;
         }
     }

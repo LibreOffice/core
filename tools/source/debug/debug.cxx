@@ -631,15 +631,6 @@ static void DbgGetLogFileName( sal_Char* pStr )
 
 // -----------------------------------------------------------------------
 
-static void DbgDebugBeep()
-{
-#if defined( WNT )
-    MessageBeep( MB_ICONHAND );
-#endif
-}
-
-// -----------------------------------------------------------------------
-
 static DebugData* GetDebugData()
 {
     if ( !aDebugData.bInit )
@@ -1491,8 +1482,6 @@ void DbgOut( const sal_Char* pMsg, sal_uInt16 nDbgOut, const sal_Char* pFile, sa
     {
         nOut = pData->aDbgData.nErrorOut;
         pStr = "Error: ";
-        if ( pData->aDbgData.nErrorOut == DBG_OUT_FILE )
-            DbgDebugBeep();
     }
     else if ( nDbgOut == DBG_OUT_WARNING )
     {

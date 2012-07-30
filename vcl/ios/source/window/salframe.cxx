@@ -767,21 +767,6 @@ const SystemEnvData* IosSalFrame::GetSystemData() const
 
 // -----------------------------------------------------------------------
 
-void IosSalFrame::Beep( SoundType eSoundType )
-{
-    switch( eSoundType )
-    {
-    case SOUND_DISABLE:
-        // don't beep
-        break;
-    default:
-        // ???
-        break;
-    }
-}
-
-// -----------------------------------------------------------------------
-
 void IosSalFrame::SetPosSize(long /*nX*/, long /*nY*/, long /*nWidth*/, long /*nHeight*/, sal_uInt16 nFlags)
 {
     if ( !mpWindow )

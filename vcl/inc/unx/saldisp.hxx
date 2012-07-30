@@ -330,8 +330,6 @@ public:
     void            DbgPrintDisplayEvent(const char *pComment, XEvent *pEvent) const;
 #endif
 
-    void            Beep() const;
-
     void            ModifierMapping();
     void            SimulateKeyPress( sal_uInt16 nKeyCode );
     sal_uInt16          GetIndicatorState() const;

@@ -1344,21 +1344,6 @@ const SystemEnvData* AquaSalFrame::GetSystemData() const
 
 // -----------------------------------------------------------------------
 
-void AquaSalFrame::Beep( SoundType eSoundType )
-{
-    switch( eSoundType )
-    {
-    case SOUND_DISABLE:
-        // don't beep
-        break;
-    default:
-        NSBeep();
-        break;
-    }
-}
-
-// -----------------------------------------------------------------------
-
 void AquaSalFrame::SetPosSize(long nX, long nY, long nWidth, long nHeight, sal_uInt16 nFlags)
 {
     if ( !mpWindow )
