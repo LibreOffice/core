@@ -27,9 +27,12 @@
  */
 
 #include "sal/config.h"
+#include <tubes/tubesdllapi.h>
+
+class Collaboration;
 
 namespace tubes {
-    void createContacts();
+    void TUBES_DLLPUBLIC createContacts( Collaboration* pCollaboration );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

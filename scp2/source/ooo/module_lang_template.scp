@@ -88,6 +88,7 @@ Module gid_Module_Langpack_Resource_Template
              gid_File_Res_Tk,
              gid_File_Res_Acc,
              gid_File_Res_Tpl,
+             gid_File_Res_Tubes,
              gid_File_Res_Uui,
              gid_File_Res_Vcl,
              gid_File_Res_Wzi,

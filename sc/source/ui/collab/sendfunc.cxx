@@ -31,12 +31,13 @@
 #include <vector>
 
 #include "cell.hxx"
-#include "contacts.hxx"
 #include "docsh.hxx"
 #include "docfunc.hxx"
+#include "sccollaboration.hxx"
 #include "sendfunc.hxx"
-#include <tubes/manager.hxx>
 #include <tubes/conference.hxx>
+#include <tubes/contacts.hxx>
+#include <tubes/manager.hxx>
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include <unotools/tempfile.hxx>
@@ -252,7 +253,7 @@ sal_Bool ScDocFuncSend::SetNormalString( bool& o_rbNumFmtSet, const ScAddress& r
         SendFile( NULL, rText );
 
     if ( rtl::OUString( rText ) == "contacts" )
-        tubes::createContacts();
+        tubes::createContacts( new ScCollaboration() );
 
     return true; // needs some code auditing action
 }

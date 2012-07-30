@@ -26,22 +26,35 @@
  * instead of those above.
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
-#include <vector>
 #include "contacts.hrc"
-#include "sendfunc.hxx"
-#include "docsh.hxx"
-#include "scresid.hxx"
 #include <svtools/filter.hxx>
+#include <svx/simptabl.hxx>
+#include <tools/resid.hxx>
 #include <tubes/conference.hxx>
+#include <tubes/collaboration.hxx>
 #include <tubes/contact-list.hxx>
+#include <tubes/contacts.hxx>
 #include <tubes/manager.hxx>
+#include <unotools/confignode.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/dialog.hxx>
-#include <svx/simptabl.hxx>
+#include <vcl/unohelp.hxx>
 
+#include <vector>
+#include <boost/ptr_container/ptr_vector.hpp>
 #include <telepathy-glib/telepathy-glib.h>
+
+ResId TubesResId( sal_uInt32 nId )
+{
+    static ResMgr* pResMgr = NULL;
+    if (!pResMgr)
+    {
+        pResMgr = ResMgr::CreateResMgr( "tubes" );
+    }
+    return ResId( nId, *pResMgr );
+}
 
 #define CONTACTS_DLG
 
@@ -57,6 +70,7 @@ class TubeContacts : public ModelessDialog
     SvxSimpleTableContainer maListContainer;
     SvxSimpleTable          maList;
     TeleManager*            mpManager;
+    Collaboration*          mpCollaboration;
 
     DECL_LINK( BtnConnectHdl, void * );
     DECL_LINK( BtnGroupHdl, void * );
@@ -72,29 +86,6 @@ class TubeContacts : public ModelessDialog
     };
     boost::ptr_vector<AccountContact> maACs;
 
-    ScDocFuncSend* GetScDocFuncSendInCurrentSfxObjectShell()
-    {
-        ScDocShell *pScDocShell = dynamic_cast<ScDocShell*> (SfxObjectShell::Current());
-        ScDocFunc *pDocFunc = pScDocShell ? &pScDocShell->GetDocFunc() : NULL;
-        return dynamic_cast<ScDocFuncSend*> (pDocFunc);
-    }
-
-    ScDocFuncSend* EnsureScDocFuncSendInCurrentSfxObjectShell()
-    {
-        ScDocShell *pScDocShell = dynamic_cast<ScDocShell*> (SfxObjectShell::Current());
-        ScDocFunc *pDocFunc = pScDocShell ? &pScDocShell->GetDocFunc() : NULL;
-        ScDocFuncSend *pSender = dynamic_cast<ScDocFuncSend*> (pDocFunc);
-        if (!pSender)
-        {
-            // This means pDocFunc has to be ScDocFuncDirect* and we are not collaborating yet.
-            ScDocFuncDirect *pDirect = dynamic_cast<ScDocFuncDirect*> (pDocFunc);
-            ScDocFuncRecv *pReceiver = new ScDocFuncRecv( pDirect );
-            pSender = new ScDocFuncSend( *pScDocShell, pReceiver );
-            pScDocShell->SetDocFunc( pSender );
-        }
-        return pSender;
-    }
-
     void Invite()
     {
         AccountContact *pAC = NULL;
@@ -102,13 +93,12 @@ class TubeContacts : public ModelessDialog
             pAC = static_cast<AccountContact*> (maList.FirstSelected()->GetUserData());
         if (pAC)
         {
-            ScDocFuncSend *pSender = GetScDocFuncSendInCurrentSfxObjectShell();
-            if (pSender && pSender->GetConference())
+            if (mpCollaboration->GetConference())
             {
                 TpContact* pContact = pAC->mpContact;
-                pSender->GetConference()->invite( pContact );
-                pSender->SendFile( pContact, OStringToOUString(
-                            pSender->GetConference()->getUuid(), RTL_TEXTENCODING_UTF8 ) );
+                mpCollaboration->GetConference()->invite( pContact );
+                mpCollaboration->SendFile( pContact, OStringToOUString(
+                            mpCollaboration->GetConference()->getUuid(), RTL_TEXTENCODING_UTF8 ) );
             }
         }
     }
@@ -135,9 +125,8 @@ class TubeContacts : public ModelessDialog
                         tp_contact_get_identifier( pContact ) );
             else
             {
-                ScDocFuncSend* pSender = EnsureScDocFuncSendInCurrentSfxObjectShell();
-                pSender->SetCollaboration( pConference );
-                pSender->SendFile( pContact, OStringToOUString(
+                mpCollaboration->SetCollaboration( pConference );
+                mpCollaboration->SendFile( pContact, OStringToOUString(
                             pConference->getUuid(), RTL_TEXTENCODING_UTF8 ) );
             }
         }
@@ -158,23 +147,23 @@ class TubeContacts : public ModelessDialog
                 fprintf( stderr, "could not start group session\n" );
             else
             {
-                ScDocFuncSend* pSender = EnsureScDocFuncSendInCurrentSfxObjectShell();
-                pSender->SetCollaboration( pConference );
+                mpCollaboration->SetCollaboration( pConference );
             }
         }
     }
 
 public:
-    TubeContacts() :
-        ModelessDialog( NULL, ScResId( RID_SCDLG_CONTACTS ) ),
-        maLabel( this, ScResId( FL_LABEL ) ),
-        maBtnConnect( this, ScResId( BTN_CONNECT ) ),
-        maBtnGroup( this, ScResId( BTN_GROUP ) ),
-        maBtnInvite( this, ScResId( BTN_INVITE ) ),
-        maBtnListen( this, ScResId( BTN_LISTEN ) ),
-        maListContainer( this, ScResId( CTL_LIST ) ),
+    TubeContacts( Collaboration* pCollaboration ) :
+        ModelessDialog( NULL, TubesResId( RID_TUBES_DLG_CONTACTS ) ),
+        maLabel( this, TubesResId( FL_LABEL ) ),
+        maBtnConnect( this, TubesResId( BTN_CONNECT ) ),
+        maBtnGroup( this, TubesResId( BTN_GROUP ) ),
+        maBtnInvite( this, TubesResId( BTN_INVITE ) ),
+        maBtnListen( this, TubesResId( BTN_LISTEN ) ),
+        maListContainer( this, TubesResId( CTL_LIST ) ),
         maList( maListContainer ),
-        mpManager( new TeleManager() )
+        mpManager( new TeleManager() ),
+        mpCollaboration( pCollaboration )
     {
         Hide();
         maBtnConnect.SetClickHdl( LINK( this, TubeContacts, BtnConnectHdl ) );
@@ -189,9 +178,9 @@ public:
 
         maList.SvxSimpleTable::SetTabs( aStaticTabs );
         String sHeader( '\t' );
-        sHeader += String( ScResId( STR_HEADER_ALIAS ) );
+        sHeader += String( TubesResId( STR_HEADER_ALIAS ) );
         sHeader += '\t';
-        sHeader += String( ScResId( STR_HEADER_NAME ) );
+        sHeader += String( TubesResId( STR_HEADER_NAME ) );
         sHeader += '\t';
         maList.InsertHeaderEntry( sHeader, HEADERBAR_APPEND, HIB_LEFT );
 
@@ -200,6 +189,7 @@ public:
     }
     virtual ~TubeContacts()
     {
+        delete mpCollaboration;
         delete mpManager;
     }
 
@@ -278,10 +268,10 @@ IMPL_LINK_NOARG( TubeContacts, BtnListenHdl )
 #endif
 
 namespace tubes {
-void createContacts()
+void createContacts( Collaboration* pCollaboration )
 {
 #ifdef CONTACTS_DLG
-    static TubeContacts *pContacts = new TubeContacts();
+    static TubeContacts *pContacts = new TubeContacts( pCollaboration );
     pContacts->Populate();
 #endif
 }

@@ -38,7 +38,11 @@ $(eval $(call gb_CppunitTest_use_libraries,tubes_test, \
 	comphelper \
 	cppu \
 	sal \
+	svt \
+	svxcore \
+	tl \
 	utl \
+	vcl \
 	$(gb_STDLIBS) \
 ))
 

@@ -1,4 +1,4 @@
-#include "sc.hrc"   // -> RID_SCDLG_CONTACTS
+#define RID_TUBES_DLG_CONTACTS   1000
 
 #define FL_LABEL             1
 #define CTL_LIST             2

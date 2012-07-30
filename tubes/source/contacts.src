@@ -1,9 +1,8 @@
-#include "sc.hrc"
 #include "contacts.hrc"
 
-ModelessDialog RID_SCDLG_CONTACTS
+ModelessDialog RID_TUBES_DLG_CONTACTS
 {
-    HelpId = HID_SCPAGE_AREAS; // has to be something ...
+    HelpId = "TUBES_HID"; // has to be something ...
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Hide = FALSE ;

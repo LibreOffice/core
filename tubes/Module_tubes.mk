@@ -30,6 +30,7 @@ $(eval $(call gb_Module_Module,tubes))
 ifeq ($(ENABLE_TELEPATHY),TRUE)
 
 $(eval $(call gb_Module_add_targets,tubes,\
+	AllLangResTarget_tubes \
 	Library_tubes \
 	Package_inc \
 	Executable_liboapprover \

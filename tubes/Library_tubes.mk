@@ -43,6 +43,11 @@ $(eval $(call gb_Library_use_libraries,tubes,\
 	comphelper \
 	cppu \
 	sal \
+	svt \
+	svxcore \
+	tl \
+	utl \
+	vcl \
 ))
 
 $(eval $(call gb_Library_use_externals,tubes,\
@@ -51,8 +56,9 @@ $(eval $(call gb_Library_use_externals,tubes,\
 
 $(eval $(call gb_Library_add_exception_objects,tubes,\
 	tubes/source/conference \
-	tubes/source/manager \
 	tubes/source/contact-list \
+	tubes/source/contacts \
+	tubes/source/manager \
 ))
 
 $(eval $(call gb_Library_add_cobjects,tubes,\

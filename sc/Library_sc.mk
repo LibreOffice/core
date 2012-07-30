@@ -43,24 +43,16 @@ $(eval $(call gb_Library_add_defs,sc,\
 $(eval $(call gb_Library_use_sdk_api,sc))
 
 ifeq ($(ENABLE_TELEPATHY),TRUE)
-
-$(eval $(call gb_Library_use_libraries,sc,\
-	tubes \
-))
+$(eval $(call gb_Library_use_libraries,sc,tubes))
 
 $(eval $(call gb_Library_add_defs,sc,\
 	-DENABLE_TELEPATHY \
 ))
 
-$(eval $(call gb_Library_use_externals,sc,\
-	telepathy \
-))
-
 $(eval $(call gb_Library_add_exception_objects,sc,\
-	sc/source/ui/collab/contacts \
+	sc/source/ui/collab/sccollaboration \
 	sc/source/ui/collab/sendfunc \
 ))
-
 endif
 
 $(eval $(call gb_Library_use_libraries,sc,\

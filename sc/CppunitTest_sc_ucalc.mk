@@ -44,15 +44,7 @@ $(call gb_CxxObject_get_target,sc/qa/unit/ucalc): \
     $(WORKDIR)/AllLangRes/sc \
 
 ifeq ($(ENABLE_TELEPATHY),TRUE)
-
-$(eval $(call gb_CppunitTest_use_libraries,sc_ucalc,\
-	tubes \
-))
-
-$(eval $(call gb_CppunitTest_use_externals,sc_ucalc,\
-	telepathy \
-))
-
+$(eval $(call gb_CppunitTest_use_libraries,sc_ucalc,tubes))
 endif
 
 $(eval $(call gb_CppunitTest_use_libraries,sc_ucalc, \
