@@ -256,6 +256,9 @@ void ThumbnailView::CalculateItemPositions ()
     // calculate maximum number of visible columns
     mnCols = (sal_uInt16)((aWinSize.Width()-nScrBarWidth) / (mnItemWidth));
 
+    if (!mnCols)
+        mnCols = 1;
+
     if ( mnUserCols && mnUserCols < mnCols )
         mnCols = mnUserCols;
 
