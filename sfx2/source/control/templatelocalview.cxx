@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <sfx2/templatefolderview.hxx>
+#include <sfx2/templatelocalview.hxx>
 
 #include <comphelper/processfactory.hxx>
 #include <sfx2/doctempl.hxx>
@@ -36,7 +36,7 @@
 #define INIT_VIEW_COLS 3
 #define INIT_VIEW_LINES 1
 
-void lcl_updateThumbnails (TemplateFolderViewItem *pItem);
+void lcl_updateThumbnails (TemplateLocalViewItem *pItem);
 
 // Display template items depending on the generator application
 class ViewFilter_Application
@@ -92,7 +92,7 @@ public:
 
     bool operator () (const ThumbnailViewItem *pItem)
     {
-        TemplateFolderViewItem *pFolderItem = (TemplateFolderViewItem*)pItem;
+        TemplateLocalViewItem *pFolderItem = (TemplateLocalViewItem*)pItem;
 
         std::vector<TemplateItemProperties> &rTemplates = pFolderItem->maTemplates;
 
@@ -148,7 +148,7 @@ private:
     FILTER_APPLICATION meApp;
 };
 
-TemplateFolderView::TemplateFolderView ( Window* pParent, const ResId& rResId, bool bDisableTransientChildren)
+TemplateLocalView::TemplateLocalView ( Window* pParent, const ResId& rResId, bool bDisableTransientChildren)
     : TemplateAbstractView(pParent,rResId,bDisableTransientChildren),
       mbFilteredResults(false),
       meFilterOption(FILTER_APP_NONE),
@@ -163,15 +163,15 @@ TemplateFolderView::TemplateFolderView ( Window* pParent, const ResId& rResId, b
                                   ITEM_MAX_HEIGHT-THUMBNAIL_MAX_HEIGHT,
                                   ITEM_PADDING);
 
-    mpItemView->setChangeNameHdl(LINK(this,TemplateFolderView,ChangeNameHdl));
+    mpItemView->setChangeNameHdl(LINK(this,TemplateLocalView,ChangeNameHdl));
 }
 
-TemplateFolderView::~TemplateFolderView()
+TemplateLocalView::~TemplateLocalView()
 {
     delete mpDocTemplates;
 }
 
-void TemplateFolderView::Populate ()
+void TemplateLocalView::Populate ()
 {
     sal_uInt16 nCount = mpDocTemplates->GetRegionCount();
     for (sal_uInt16 i = 0; i < nCount; ++i)
@@ -184,7 +184,7 @@ void TemplateFolderView::Populate ()
             aRegionName += "...";
         }
 
-        TemplateFolderViewItem* pItem = new TemplateFolderViewItem( *this, this );
+        TemplateLocalViewItem* pItem = new TemplateLocalViewItem( *this, this );
         pItem->mnId = i+1;
         pItem->maTitle = aRegionName;
         pItem->setSelectClickHdl(LINK(this,ThumbnailView,OnItemSelected));
@@ -225,7 +225,7 @@ void TemplateFolderView::Populate ()
         Invalidate();
 }
 
-std::vector<rtl::OUString> TemplateFolderView::getFolderNames()
+std::vector<rtl::OUString> TemplateLocalView::getFolderNames()
 {
     size_t n = mItemList.size();
     std::vector<rtl::OUString> ret(n);
@@ -236,7 +236,7 @@ std::vector<rtl::OUString> TemplateFolderView::getFolderNames()
     return ret;
 }
 
-void TemplateFolderView::showOverlay (bool bVisible)
+void TemplateLocalView::showOverlay (bool bVisible)
 {
     mbActive = !bVisible;
     mpItemView->Show(bVisible);
@@ -259,7 +259,7 @@ void TemplateFolderView::showOverlay (bool bVisible)
     }
 }
 
-void TemplateFolderView::filterTemplatesByApp (const FILTER_APPLICATION &eApp)
+void TemplateLocalView::filterTemplatesByApp (const FILTER_APPLICATION &eApp)
 {
     meFilterOption = eApp;
 
@@ -275,13 +275,13 @@ void TemplateFolderView::filterTemplatesByApp (const FILTER_APPLICATION &eApp)
 }
 
 std::vector<TemplateItemProperties>
-TemplateFolderView::getFilteredItems(const boost::function<bool (const TemplateItemProperties&) > &rFunc) const
+TemplateLocalView::getFilteredItems(const boost::function<bool (const TemplateItemProperties&) > &rFunc) const
 {
     std::vector<TemplateItemProperties> aItems;
 
     for (size_t i = 0; i < mItemList.size(); ++i)
     {
-        TemplateFolderViewItem *pFolderItem = static_cast<TemplateFolderViewItem*>(mItemList[i]);
+        TemplateLocalViewItem *pFolderItem = static_cast<TemplateLocalViewItem*>(mItemList[i]);
 
         for (size_t j = 0; j < pFolderItem->maTemplates.size(); ++j)
         {
@@ -293,7 +293,7 @@ TemplateFolderView::getFilteredItems(const boost::function<bool (const TemplateI
     return aItems;
 }
 
-sal_uInt16 TemplateFolderView::createRegion(const rtl::OUString &rName)
+sal_uInt16 TemplateLocalView::createRegion(const rtl::OUString &rName)
 {
     sal_uInt16 nRegionId = mpDocTemplates->GetRegionCount();    // Next regionId
 
@@ -308,7 +308,7 @@ sal_uInt16 TemplateFolderView::createRegion(const rtl::OUString &rName)
         aRegionName += "...";
     }
 
-    TemplateFolderViewItem* pItem = new TemplateFolderViewItem( *this, this );
+    TemplateLocalViewItem* pItem = new TemplateLocalViewItem( *this, this );
     pItem->mnId = nRegionId+1;
     pItem->maTitle = aRegionName;
     pItem->setSelectClickHdl(LINK(this,ThumbnailView,OnItemSelected));
@@ -323,7 +323,7 @@ sal_uInt16 TemplateFolderView::createRegion(const rtl::OUString &rName)
     return pItem->mnId;
 }
 
-bool TemplateFolderView::removeRegion(const sal_uInt16 nItemId)
+bool TemplateLocalView::removeRegion(const sal_uInt16 nItemId)
 {
     sal_uInt16 nRegionId = nItemId - 1;
 
@@ -335,7 +335,7 @@ bool TemplateFolderView::removeRegion(const sal_uInt16 nItemId)
     return true;
 }
 
-bool TemplateFolderView::removeTemplate (const sal_uInt16 nItemId, const sal_uInt16 nSrcItemId)
+bool TemplateLocalView::removeTemplate (const sal_uInt16 nItemId, const sal_uInt16 nSrcItemId)
 {
     sal_uInt16 nRegionId = nSrcItemId - 1;
     sal_uInt16 nTemplateId = nItemId - 1;
@@ -348,7 +348,7 @@ bool TemplateFolderView::removeTemplate (const sal_uInt16 nItemId, const sal_uIn
         if (mItemList[i]->mnId == nSrcItemId)
         {
 
-            TemplateFolderViewItem *pItem = static_cast<TemplateFolderViewItem*>(mItemList[i]);
+            TemplateLocalViewItem *pItem = static_cast<TemplateLocalViewItem*>(mItemList[i]);
             std::vector<TemplateItemProperties>::iterator pIter;
             for (pIter = pItem->maTemplates.begin(); pIter != pItem->maTemplates.end(); ++pIter)
             {
@@ -373,21 +373,21 @@ bool TemplateFolderView::removeTemplate (const sal_uInt16 nItemId, const sal_uIn
     return true;
 }
 
-bool TemplateFolderView::moveTemplate (const ThumbnailViewItem *pItem, const sal_uInt16 nSrcItem,
+bool TemplateLocalView::moveTemplate (const ThumbnailViewItem *pItem, const sal_uInt16 nSrcItem,
                                        const sal_uInt16 nTargetItem, bool bCopy)
 {
     bool bRet = true;
     bool bRefresh = false;
 
-    TemplateFolderViewItem *pTarget = NULL;
-    TemplateFolderViewItem *pSrc = NULL;
+    TemplateLocalViewItem *pTarget = NULL;
+    TemplateLocalViewItem *pSrc = NULL;
 
     for (size_t i = 0, n = mItemList.size(); i < n; ++i)
     {
         if (mItemList[i]->mnId == nTargetItem)
-            pTarget = static_cast<TemplateFolderViewItem*>(mItemList[i]);
+            pTarget = static_cast<TemplateLocalViewItem*>(mItemList[i]);
         else if (mItemList[i]->mnId == nSrcItem)
-            pSrc = static_cast<TemplateFolderViewItem*>(mItemList[i]);
+            pSrc = static_cast<TemplateLocalViewItem*>(mItemList[i]);
     }
 
     if (pTarget && pSrc)
@@ -459,7 +459,7 @@ bool TemplateFolderView::moveTemplate (const ThumbnailViewItem *pItem, const sal
     return bRet;
 }
 
-bool TemplateFolderView::moveTemplates(std::set<const ThumbnailViewItem *> &rItems,
+bool TemplateLocalView::moveTemplates(std::set<const ThumbnailViewItem *> &rItems,
                                        const sal_uInt16 nTargetItem, bool bCopy)
 {
     bool ret = true;
@@ -468,15 +468,15 @@ bool TemplateFolderView::moveTemplates(std::set<const ThumbnailViewItem *> &rIte
     sal_uInt16 nSrcRegionId = mpItemView->getId();
     sal_uInt16 nSrcRegionItemId = nSrcRegionId + 1;
 
-    TemplateFolderViewItem *pTarget = NULL;
-    TemplateFolderViewItem *pSrc = NULL;
+    TemplateLocalViewItem *pTarget = NULL;
+    TemplateLocalViewItem *pSrc = NULL;
 
     for (size_t i = 0, n = mItemList.size(); i < n; ++i)
     {
         if (mItemList[i]->mnId == nTargetItem)
-            pTarget = static_cast<TemplateFolderViewItem*>(mItemList[i]);
+            pTarget = static_cast<TemplateLocalViewItem*>(mItemList[i]);
         else if (mItemList[i]->mnId == nSrcRegionItemId)
-            pSrc = static_cast<TemplateFolderViewItem*>(mItemList[i]);
+            pSrc = static_cast<TemplateLocalViewItem*>(mItemList[i]);
     }
 
     if (pTarget && pSrc)
@@ -551,7 +551,7 @@ bool TemplateFolderView::moveTemplates(std::set<const ThumbnailViewItem *> &rIte
     return ret;
 }
 
-void TemplateFolderView::copyFrom(const sal_uInt16 nRegionItemId, const BitmapEx &rThumbnail,
+void TemplateLocalView::copyFrom(const sal_uInt16 nRegionItemId, const BitmapEx &rThumbnail,
                                   const OUString &rPath)
 {
     sal_uInt16 nId = 0;
@@ -576,8 +576,8 @@ void TemplateFolderView::copyFrom(const sal_uInt16 nRegionItemId, const BitmapEx
         {
             if (mItemList[i]->mnId == nRegionItemId)
             {
-                TemplateFolderViewItem *pItem =
-                        static_cast<TemplateFolderViewItem*>(mItemList[i]);
+                TemplateLocalViewItem *pItem =
+                        static_cast<TemplateLocalViewItem*>(mItemList[i]);
 
                 pItem->maTemplates.push_back(aTemplate);
 
@@ -589,7 +589,7 @@ void TemplateFolderView::copyFrom(const sal_uInt16 nRegionItemId, const BitmapEx
     }
 }
 
-void TemplateFolderView::copyFrom (TemplateFolderViewItem *pItem, const rtl::OUString &rPath)
+void TemplateLocalView::copyFrom (TemplateLocalViewItem *pItem, const rtl::OUString &rPath)
 {
     sal_uInt16 nId = 0;
     sal_uInt16 nRegionId = pItem->mnId - 1;
@@ -618,7 +618,7 @@ void TemplateFolderView::copyFrom (TemplateFolderViewItem *pItem, const rtl::OUS
     }
 }
 
-void TemplateFolderView::Resize()
+void TemplateLocalView::Resize()
 {
     Size aWinSize = GetOutputSize();
     Size aViewSize = mpItemView->GetSizePixel();
@@ -629,14 +629,14 @@ void TemplateFolderView::Resize()
     mpItemView->SetPosPixel(aPos);
 }
 
-void TemplateFolderView::OnItemDblClicked (ThumbnailViewItem *pRegionItem)
+void TemplateLocalView::OnItemDblClicked (ThumbnailViewItem *pRegionItem)
 {
     // Fill templates
     sal_uInt16 nRegionId = pRegionItem->mnId-1;
 
     mpItemView->setId(nRegionId);
     mpItemView->setName(mpDocTemplates->GetRegionName(nRegionId));
-    mpItemView->InsertItems(static_cast<TemplateFolderViewItem*>(pRegionItem)->maTemplates);
+    mpItemView->InsertItems(static_cast<TemplateLocalViewItem*>(pRegionItem)->maTemplates);
 
     if (mbSelectionMode)
         mpItemView->setSelectionMode(true);
@@ -648,7 +648,7 @@ void TemplateFolderView::OnItemDblClicked (ThumbnailViewItem *pRegionItem)
     mpItemView->Show();
 }
 
-IMPL_LINK(TemplateFolderView, ChangeNameHdl, TemplateView*, pView)
+IMPL_LINK(TemplateLocalView, ChangeNameHdl, TemplateView*, pView)
 {
     sal_uInt16 nRegionId = pView->getId();
     sal_uInt16 nItemId = nRegionId + 1;
@@ -670,7 +670,7 @@ IMPL_LINK(TemplateFolderView, ChangeNameHdl, TemplateView*, pView)
     return true;
 }
 
-void lcl_updateThumbnails (TemplateFolderViewItem *pItem)
+void lcl_updateThumbnails (TemplateLocalViewItem *pItem)
 {
     // Update folder thumbnails
     for (size_t i = 0, n = pItem->maTemplates.size(); i < 2 && i < n; ++i)

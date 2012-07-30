@@ -16,8 +16,8 @@
 #include <comphelper/processfactory.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/sfxresid.hxx>
-#include <sfx2/templatefolderview.hxx>
-#include <sfx2/templatefolderviewitem.hxx>
+#include <sfx2/templatelocalview.hxx>
+#include <sfx2/templatelocalviewitem.hxx>
 #include <sfx2/templateonlineview.hxx>
 #include <sfx2/templateviewitem.hxx>
 #include <sfx2/thumbnailviewitem.hxx>
@@ -99,7 +99,7 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
       mpActionBar( new ToolBox(this, SfxResId(TBX_ACTION_ACTION))),
       mpTemplateBar( new ToolBox(this, SfxResId(TBX_ACTION_TEMPLATES))),
       mpSearchView(new TemplateSearchView(this)),
-      maView(new TemplateFolderView(this,SfxResId(TEMPLATE_VIEW))),
+      maView(new TemplateLocalView(this,SfxResId(TEMPLATE_VIEW))),
       mpOnlineView(new TemplateOnlineView(this, WB_VSCROLL,false)),
       mnSelectionCount(0),
       mxDesktop(comphelper::getProcessServiceFactory()->createInstance( "com.sun.star.frame.Desktop" ),uno::UNO_QUERY )
@@ -690,7 +690,7 @@ void SfxTemplateManagerDlg::OnTemplateImport ()
             std::set<const ThumbnailViewItem*>::const_iterator pIter;
             for (pIter = maSelFolders.begin(); pIter != maSelFolders.end(); ++pIter)
             {
-                TemplateFolderViewItem *pFolder = (TemplateFolderViewItem*)(*pIter);
+                TemplateLocalViewItem *pFolder = (TemplateLocalViewItem*)(*pIter);
 
                 for (size_t i = 0, n = aFiles.getLength(); i < n; ++i)
                     maView->copyFrom(pFolder,aFiles[i]);

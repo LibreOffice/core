@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <sfx2/templatefolderviewitem.hxx>
+#include <sfx2/templatelocalviewitem.hxx>
 
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
@@ -25,21 +25,21 @@ using namespace basegfx::tools;
 using namespace drawinglayer::attribute;
 using namespace drawinglayer::primitive2d;
 
-TemplateFolderViewItem::TemplateFolderViewItem (ThumbnailView &rView, Window *pParent)
+TemplateLocalViewItem::TemplateLocalViewItem (ThumbnailView &rView, Window *pParent)
     : ThumbnailViewItem(rView,pParent)
 {
 }
 
-TemplateFolderViewItem::~TemplateFolderViewItem ()
+TemplateLocalViewItem::~TemplateLocalViewItem ()
 {
 }
 
-void TemplateFolderViewItem::calculateItemsPosition (sal_uInt32 nMaxTextLenght)
+void TemplateLocalViewItem::calculateItemsPosition (sal_uInt32 nMaxTextLenght)
 {
     ThumbnailViewItem::calculateItemsPosition(nMaxTextLenght);
 }
 
-void TemplateFolderViewItem::Paint (drawinglayer::processor2d::BaseProcessor2D *pProcessor,
+void TemplateLocalViewItem::Paint (drawinglayer::processor2d::BaseProcessor2D *pProcessor,
                                     const ThumbnailItemAttributes *pAttrs)
 {
     int nCount = 0;

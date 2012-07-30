@@ -16,7 +16,7 @@
 #include <sfx2/templateproperties.hxx>
 
 class SfxDocumentTemplates;
-class TemplateFolderViewItem;
+class TemplateLocalViewItem;
 
 enum FILTER_APPLICATION
 {
@@ -27,13 +27,13 @@ enum FILTER_APPLICATION
     FILTER_APP_DRAW
 };
 
-class SFX2_DLLPUBLIC TemplateFolderView : public TemplateAbstractView
+class SFX2_DLLPUBLIC TemplateLocalView : public TemplateAbstractView
 {
 public:
 
-    TemplateFolderView ( Window* pParent, const ResId& rResId, bool bDisableTransientChildren = false );
+    TemplateLocalView ( Window* pParent, const ResId& rResId, bool bDisableTransientChildren = false );
 
-    virtual ~TemplateFolderView ();
+    virtual ~TemplateLocalView ();
 
     // Fill view with template folders thumbnails
     virtual void Populate ();
@@ -60,7 +60,7 @@ public:
 
     void copyFrom (const sal_uInt16 nRegionItemId, const BitmapEx &rThumbnail, const OUString &rPath);
 
-    void copyFrom (TemplateFolderViewItem *pItem, const rtl::OUString &rPath);
+    void copyFrom (TemplateLocalViewItem *pItem, const rtl::OUString &rPath);
 
 private:
 

@@ -136,8 +136,8 @@ $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/control/templateabstractview \
     sfx2/source/control/templateview \
     sfx2/source/control/templateviewitem \
-    sfx2/source/control/templatefolderview \
-    sfx2/source/control/templatefolderviewitem \
+    sfx2/source/control/templatelocalview \
+    sfx2/source/control/templatelocalviewitem \
     sfx2/source/control/templateonlineview \
     sfx2/source/control/templateonlineviewitem \
     sfx2/source/control/templatesearchview \

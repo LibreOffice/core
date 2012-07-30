@@ -18,7 +18,7 @@
 class Edit;
 class PopupMenu;
 class TemplateAbstractView;
-class TemplateFolderView;
+class TemplateLocalView;
 class TemplateOnlineView;
 class TemplateSearchView;
 class ThumbnailView;
@@ -115,7 +115,7 @@ private:
     ToolBox *mpTemplateBar;
     TemplateSearchView *mpSearchView;
     TemplateAbstractView *mpCurView;
-    TemplateFolderView *maView;
+    TemplateLocalView *maView;
     TemplateOnlineView *mpOnlineView;
     PopupMenu *mpCreateMenu;
     PopupMenu *mpActionMenu;

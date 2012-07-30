@@ -15,16 +15,16 @@
 
 class TemplateViewItem;
 
-class TemplateFolderViewItem : public ThumbnailViewItem
+class TemplateLocalViewItem : public ThumbnailViewItem
 {
 public:
 
     BitmapEx maPreview2;
     std::vector<TemplateItemProperties> maTemplates;
 
-    TemplateFolderViewItem (ThumbnailView &rView, Window *pParent);
+    TemplateLocalViewItem (ThumbnailView &rView, Window *pParent);
 
-    virtual ~TemplateFolderViewItem ();
+    virtual ~TemplateLocalViewItem ();
 
     virtual void calculateItemsPosition (sal_uInt32 nMaxTextLenght);
 
