@@ -55,7 +55,7 @@ class ExSoundEntry
 
                                 ExSoundEntry(const rtl::OUString& rSoundURL);
 
-        // returns the size of a complete SoundContainer
+        /// @return the size of a complete SoundContainer
         sal_uInt32              GetSize( sal_uInt32 nId ) const;
         void                    Write( SvStream& rSt, sal_uInt32 nId ) const;
 };
@@ -66,7 +66,7 @@ class ExSoundCollection
 
         sal_uInt32              GetId(const rtl::OUString&);
 
-        // returns the size of a complete SoundCollectionContainer
+        /// @return the size of a complete SoundCollectionContainer
         sal_uInt32              GetSize() const;
         void                    Write( SvStream& rSt ) const;
 
