@@ -148,6 +148,13 @@ if test -n "$with_android_ndk"; then
         AC_MSG_ERROR([Several toolchain versions in NDK, you must specify --with-android-ndk-toolchain-version])
     esac
 
+    toolchain_version_subdir=
+    case "`echo $ANDROID_NDK_HOME/toolchains/$host_cpu-*/prebuilt/*/bin`" in
+    */bin\ */bin*)
+        toolchain_version_subdir="${with_android_ndk_toolchain_version}/"
+        ;;
+    esac
+
     if test $host_cpu = arm; then
         android_gcc_prefix=arm-linux-androideabi
     else
@@ -162,9 +169,9 @@ if test -n "$with_android_ndk"; then
     test -z "$STRIP" && STRIP=$ANDROID_ABI_PREBUILT_BIN/$android_gcc_prefix-strip
 
     if test $host_cpu = arm; then
-        ANDROIDCFLAGS="-march=armv7-a -mfloat-abi=softfp -mfpu=neon -Wl,--fix-cortex-a8 --sysroot $ANDROID_NDK_HOME/platforms/android-9/arch-arm -L$ANDROID_NDK_HOME/sources/cxx-stl/gnu-libstdc++/libs/armeabi-v7a"
+        ANDROIDCFLAGS="-march=armv7-a -mfloat-abi=softfp -mfpu=neon -Wl,--fix-cortex-a8 --sysroot $ANDROID_NDK_HOME/platforms/android-9/arch-arm -L$ANDROID_NDK_HOME/sources/cxx-stl/gnu-libstdc++/${toolchain_version_subdir}libs/armeabi-v7a"
     else # x86
-        ANDROIDCFLAGS="-march=atom --sysroot $ANDROID_NDK_HOME/platforms/android-9/arch-x86 -L$ANDROID_NDK_HOME/sources/cxx-stl/gnu-libstdc++/libs/x86"
+        ANDROIDCFLAGS="-march=atom --sysroot $ANDROID_NDK_HOME/platforms/android-9/arch-x86 -L$ANDROID_NDK_HOME/sources/cxx-stl/gnu-libstdc++/${toolchain_version_subdir}libs/x86"
     fi
 
     # When using the 4.6 or newer toolchain, use the gold linker
@@ -175,9 +182,9 @@ if test -n "$with_android_ndk"; then
     esac
 
     if test $host_cpu = arm; then
-        ANDROIDCXXFLAGS="$ANDROIDCFLAGS -I $ANDROID_NDK_HOME/sources/cxx-stl/gnu-libstdc++/include -I$ANDROID_NDK_HOME/sources/cxx-stl/gnu-libstdc++/libs/armeabi-v7a/include"
+        ANDROIDCXXFLAGS="$ANDROIDCFLAGS -I $ANDROID_NDK_HOME/sources/cxx-stl/gnu-libstdc++/${toolchain_version_subdir}include -I$ANDROID_NDK_HOME/sources/cxx-stl/gnu-libstdc++/${toolchain_version_subdir}libs/armeabi-v7a/include"
     else # x86
-        ANDROIDCXXFLAGS="$ANDROIDCFLAGS -I $ANDROID_NDK_HOME/sources/cxx-stl/gnu-libstdc++/include -I$ANDROID_NDK_HOME/sources/cxx-stl/gnu-libstdc++/libs/x86/include"
+        ANDROIDCXXFLAGS="$ANDROIDCFLAGS -I $ANDROID_NDK_HOME/sources/cxx-stl/gnu-libstdc++/${toolchain_version_subdir}include -I$ANDROID_NDK_HOME/sources/cxx-stl/gnu-libstdc++/${toolchain_version_subdir}libs/x86/include"
     fi
 
     test -z "$CC" && CC="$ANDROID_ABI_PREBUILT_BIN/$android_gcc_prefix-gcc $ANDROIDCFLAGS"
