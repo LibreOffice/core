@@ -105,7 +105,6 @@ $(eval $(call gb_Library_add_exception_objects,svl,\
     svl/source/items/szitem \
     svl/source/items/visitem \
     svl/source/items/whiter \
-    svl/source/memtools/svarray \
     svl/source/misc/PasswordHelper \
     svl/source/misc/adrparse \
     svl/source/misc/documentlockfile \
