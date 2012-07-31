@@ -319,6 +319,9 @@ $(eval $(call dmake_modules_rules,$(dmake_modules)))
 clean: clean-host clean-build
 
 clean-host:
+ifeq ($(BUILD_DMAKE),YES)
+	if [ -f dmake/Makefile ] ; then $(GNUMAKE) -j $(GMAKE_PARALLELISM) -C dmake clean; fi
+endif
 	rm -fr $(DEVINSTALLDIR)
 	rm -fr $(OUTDIR)
 	rm -fr $(WORKDIR)
