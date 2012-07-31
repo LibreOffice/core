@@ -75,16 +75,19 @@ void TemplateOnlineView::Populate()
     uno::Reference < uno::XComponentContext > m_context(comphelper::getProcessComponentContext());
 
     // Load from user settings
-    maUrls = officecfg::Office::Common::Misc::FilePickerPlacesUrls::get(m_context);
-    maNames = officecfg::Office::Common::Misc::FilePickerPlacesNames::get(m_context);
+    com::sun::star::uno::Sequence< rtl::OUString >  aUrls =
+            officecfg::Office::Common::Misc::FilePickerPlacesUrls::get(m_context);
 
-    for (sal_Int32 i = 0; i < maUrls.getLength() && i < maNames.getLength(); ++i)
+    com::sun::star::uno::Sequence< rtl::OUString > aNames =
+            officecfg::Office::Common::Misc::FilePickerPlacesNames::get(m_context);
+
+    for (sal_Int32 i = 0; i < aUrls.getLength() && i < aNames.getLength(); ++i)
     {
         TemplateOnlineViewItem *pItem = new TemplateOnlineViewItem(*this,this);
 
         pItem->mnId = i+1;
-        pItem->maTitle = maNames[i];
-        pItem->setURL(maUrls[i]);
+        pItem->maTitle = aNames[i];
+        pItem->setURL(aUrls[i]);
 
         maRepositories.push_back(pItem);
     }
