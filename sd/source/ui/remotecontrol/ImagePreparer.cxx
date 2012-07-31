@@ -342,7 +342,7 @@ OString ImagePreparer::prepareNotes( sal_uInt32 aSlideNumber )
 
 sal_Bool ExportTo( uno::Reference< drawing::XDrawPage>& aNotesPage, String aUrl )
 {
-    ::rtl::OUString aFilterName( "com.sun.star.comp.Writer.XmlFilterAdaptor" );
+    ::rtl::OUString aFilterName( "XHTML Draw File" );
     uno::Reference< document::XExporter > xExporter;
 
     {
@@ -354,6 +354,8 @@ sal_Bool ExportTo( uno::Reference< drawing::XDrawPage>& aNotesPage, String aUrl 
         uno::Reference < container::XNameAccess > xFilters ( xFilterFact, uno::UNO_QUERY );
         if ( xFilters->hasByName( aFilterName ) )
             xFilters->getByName( aFilterName ) >>= aProps;
+        else
+            fprintf( stderr, "Couldn't find by name.\n" );
 
         ::rtl::OUString aFilterImplName;
         sal_Int32 nFilterProps = aProps.getLength();
@@ -367,15 +369,24 @@ sal_Bool ExportTo( uno::Reference< drawing::XDrawPage>& aNotesPage, String aUrl 
             }
         }
 
+        fprintf( stderr, "aName%s\n", OUStringToOString(aFilterImplName, RTL_TEXTENCODING_UTF8).getStr() );
         if ( !aFilterImplName.isEmpty() )
         {
             try{
             xExporter = uno::Reference< document::XExporter >
                 ( xFilterFact->createInstanceWithArguments( aFilterName, uno::Sequence < uno::Any >() ), uno::UNO_QUERY );
             }catch(const uno::Exception&)
-                { xExporter.clear(); }
+                {
+                    xExporter.clear();
+                    fprintf( stderr, "Couldn't create instance of filter.\n" );
+                }
         }
     }
+
+    if (xExporter.is())
+        fprintf( stderr, "Is!\n" );
+    else
+        fprintf( stderr, "Isn't\n" );
 
     if ( xExporter.is() )
     {
