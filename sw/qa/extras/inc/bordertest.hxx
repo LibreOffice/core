@@ -38,6 +38,9 @@ using rtl::OUString;
 typedef std::map<rtl::OUString, com::sun::star::table::BorderLine> BorderLineMap;
 typedef std::pair<rtl::OUString, com::sun::star::table::BorderLine> StringBorderPair;
 
+typedef std::map<rtl::OUString, com::sun::star::uno::Sequence< com::sun::star::table::BorderLine> > AllBordersMap;
+typedef std::pair<rtl::OUString, com::sun::star::uno::Sequence< com::sun::star::table::BorderLine> > StringSequencePair;
+
 using namespace com::sun::star;
 
 class BorderTest
@@ -184,5 +187,192 @@ public:
     } while(xParaEnum->hasMoreElements());
     }
 
+    void testOdtBorders(uno::Reference<lang::XComponent> mxComponent)
+    {
+        AllBordersMap map;
+        uno::Sequence< table::BorderLine > tempSequence(4);
+
+        tempSequence[0] = table::BorderLine(0, 2, 2, 35);   // left
+        tempSequence[1] = table::BorderLine(0, 2, 2, 35);   // right
+        tempSequence[2] = table::BorderLine(0, 2, 2, 35);   // top
+        tempSequence[3] = table::BorderLine(0, 2, 2, 35);   // bottom
+        map.insert(StringSequencePair(OUString("B2"), tempSequence));
+        tempSequence[0] = table::BorderLine(0, 0, 2, 0);
+        tempSequence[1] = table::BorderLine(0, 0, 2, 0);
+        tempSequence[2] = table::BorderLine(0, 0, 2, 0);
+        tempSequence[3] = table::BorderLine(0, 0, 2, 0);
+        map.insert(StringSequencePair(OUString("D2"), tempSequence));
+        tempSequence[0] = table::BorderLine(0, 2, 2, 88);
+        tempSequence[1] = table::BorderLine(0, 2, 2, 88);
+        tempSequence[2] = table::BorderLine(0, 2, 2, 88);
+        tempSequence[3] = table::BorderLine(0, 2, 2, 88);
+        map.insert(StringSequencePair(OUString("B4"), tempSequence));
+        tempSequence[0] = table::BorderLine(0, 0, 18, 0);
+        tempSequence[1] = table::BorderLine(0, 0, 18, 0);
+        tempSequence[2] = table::BorderLine(0, 0, 18, 0);
+        tempSequence[3] = table::BorderLine(0, 0, 18, 0);
+        map.insert(StringSequencePair(OUString("D4"), tempSequence));
+        tempSequence[0] = table::BorderLine(0, 35, 35, 35);
+        tempSequence[1] = table::BorderLine(0, 35, 35, 35);
+        tempSequence[2] = table::BorderLine(0, 35, 35, 35);
+        tempSequence[3] = table::BorderLine(0, 35, 35, 35);
+        map.insert(StringSequencePair(OUString("B6"), tempSequence));
+        tempSequence[0] = table::BorderLine(0, 0, 35, 0);
+        tempSequence[1] = table::BorderLine(0, 0, 35, 0);
+        tempSequence[2] = table::BorderLine(0, 0, 35, 0);
+        tempSequence[3] = table::BorderLine(0, 0, 35, 0);
+        map.insert(StringSequencePair(OUString("D6"), tempSequence));
+        tempSequence[0] = table::BorderLine(0, 88, 88, 88);
+        tempSequence[1] = table::BorderLine(0, 88, 88, 88);
+        tempSequence[2] = table::BorderLine(0, 88, 88, 88);
+        tempSequence[3] = table::BorderLine(0, 88, 88, 88);
+        map.insert(StringSequencePair(OUString("B8"), tempSequence));
+        tempSequence[0] = table::BorderLine(0, 0, 88, 0);
+        tempSequence[1] = table::BorderLine(0, 0, 88, 0);
+        tempSequence[2] = table::BorderLine(0, 0, 88, 0);
+        tempSequence[3] = table::BorderLine(0, 0, 88, 0);
+        map.insert(StringSequencePair(OUString("D8"), tempSequence));
+        tempSequence[0] = table::BorderLine(0, 2, 35, 88);
+        tempSequence[1] = table::BorderLine(0, 2, 35, 88);
+        tempSequence[2] = table::BorderLine(0, 2, 35, 88);
+        tempSequence[3] = table::BorderLine(0, 2, 35, 88);
+        map.insert(StringSequencePair(OUString("B10"), tempSequence));
+        tempSequence[0] = table::BorderLine(0, 0, 141, 0);
+        tempSequence[1] = table::BorderLine(0, 0, 141, 0);
+        tempSequence[2] = table::BorderLine(0, 0, 141, 0);
+        tempSequence[3] = table::BorderLine(0, 0, 141, 0);
+        map.insert(StringSequencePair(OUString("D10"), tempSequence));
+        tempSequence[0] = table::BorderLine(0, 2, 88, 88);
+        tempSequence[1] = table::BorderLine(0, 2, 88, 88);
+        tempSequence[2] = table::BorderLine(0, 2, 88, 88);
+        tempSequence[3] = table::BorderLine(0, 2, 88, 88);
+        map.insert(StringSequencePair(OUString("B12"), tempSequence));
+        tempSequence[0] = table::BorderLine(0, 0, 176, 0);
+        tempSequence[1] = table::BorderLine(0, 0, 176, 0);
+        tempSequence[2] = table::BorderLine(0, 0, 176, 0);
+        tempSequence[3] = table::BorderLine(0, 0, 176, 0);
+        map.insert(StringSequencePair(OUString("D12"), tempSequence));
+        tempSequence[0] = table::BorderLine(0, 2, 141, 88);
+        tempSequence[1] = table::BorderLine(0, 2, 141, 88);
+        tempSequence[2] = table::BorderLine(0, 2, 141, 88);
+        tempSequence[3] = table::BorderLine(0, 2, 141, 88);
+        map.insert(StringSequencePair(OUString("B14"), tempSequence));
+        tempSequence[0] = table::BorderLine(0, 35, 88, 88);
+        tempSequence[1] = table::BorderLine(0, 35, 88, 88);
+        tempSequence[2] = table::BorderLine(0, 35, 88, 88);
+        tempSequence[3] = table::BorderLine(0, 35, 88, 88);
+        map.insert(StringSequencePair(OUString("B16"), tempSequence));
+        tempSequence[0] = table::BorderLine(0, 88, 35, 35);
+        tempSequence[1] = table::BorderLine(0, 88, 35, 35);
+        tempSequence[2] = table::BorderLine(0, 88, 35, 35);
+        tempSequence[3] = table::BorderLine(0, 88, 35, 35);
+        map.insert(StringSequencePair(OUString("B18"), tempSequence));
+        tempSequence[0] = table::BorderLine(0, 88, 141, 88);
+        tempSequence[1] = table::BorderLine(0, 88, 141, 88);
+        tempSequence[2] = table::BorderLine(0, 88, 141, 88);
+        tempSequence[3] = table::BorderLine(0, 88, 141, 88);
+        map.insert(StringSequencePair(OUString("B20"), tempSequence));
+        tempSequence[0] = table::BorderLine(0, 141, 88, 88);
+        tempSequence[1] = table::BorderLine(0, 141, 88, 88);
+        tempSequence[2] = table::BorderLine(0, 141, 88, 88);
+        tempSequence[3] = table::BorderLine(0, 141, 88, 88);
+        map.insert(StringSequencePair(OUString("B22"), tempSequence));
+
+        uno::Reference<text::XTextDocument> textDocument(mxComponent, uno::UNO_QUERY);
+        uno::Reference<container::XEnumerationAccess> xParaEnumAccess(textDocument->getText(), uno::UNO_QUERY);
+        // list of paragraphs
+        uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
+        do
+        {
+            uno::Reference<lang::XServiceInfo> xServiceInfo;
+            if (xParaEnum->nextElement() >>= xServiceInfo)
+            {
+                if (xServiceInfo->supportsService("com.sun.star.text.TextTable"))
+                {
+                    uno::Reference<text::XTextTable> const xTextTable(xServiceInfo, uno::UNO_QUERY_THROW);
+                    uno::Sequence<rtl::OUString> const cells = xTextTable->getCellNames();
+                    uno::Sequence< uno::Sequence< sal_Int32 > > borderWidthSequence;
+                    sal_Int32 nLength = cells.getLength();
+
+                    AllBordersMap::iterator it;
+                    it = map.begin();
+
+                    for (sal_Int32 i = 0; i < nLength; ++i)
+                    {
+                    if(i%10==6 || (i%10==8 && i<60))    // only B and D cells have borders, every 2 rows
+                    {
+                        uno::Reference<table::XCell> xCell = xTextTable->getCellByName(cells[i]);
+                        uno::Reference< beans::XPropertySet > xPropSet(xCell, uno::UNO_QUERY_THROW);
+                        it = map.find(cells[i]);
+
+                        uno::Any aLeftBorder = xPropSet->getPropertyValue("LeftBorder");
+                        table::BorderLine aLeftBorderLine;
+                        if (aLeftBorder >>= aLeftBorderLine)
+                        {
+                            sal_Int32 innerLineWidth = aLeftBorderLine.InnerLineWidth;
+                            sal_Int32 outerLineWidth = aLeftBorderLine.OuterLineWidth;
+                            sal_Int32 lineDistance = aLeftBorderLine.LineDistance;
+
+                            sal_Int32 perfectInner = it->second[0].InnerLineWidth;
+                            sal_Int32 perfectOuter = it->second[0].OuterLineWidth;
+                            sal_Int32 perfectDistance = it->second[0].LineDistance;
+                            CPPUNIT_ASSERT_EQUAL(perfectInner, innerLineWidth);
+                            CPPUNIT_ASSERT_EQUAL(perfectOuter, outerLineWidth);
+                            CPPUNIT_ASSERT_EQUAL(perfectDistance, lineDistance);
+                        }
+
+                        uno::Any aRightBorder = xPropSet->getPropertyValue("RightBorder");
+                        table::BorderLine aRightBorderLine;
+                        if (aRightBorder >>= aRightBorderLine)
+                        {
+                            sal_Int32 innerLineWidth = aRightBorderLine.InnerLineWidth;
+                            sal_Int32 outerLineWidth = aRightBorderLine.OuterLineWidth;
+                            sal_Int32 lineDistance = aRightBorderLine.LineDistance;
+
+                            sal_Int32 perfectInner = it->second[1].InnerLineWidth;
+                            sal_Int32 perfectOuter = it->second[1].OuterLineWidth;
+                            sal_Int32 perfectDistance = it->second[1].LineDistance;
+                            CPPUNIT_ASSERT_EQUAL(perfectInner, innerLineWidth);
+                            CPPUNIT_ASSERT_EQUAL(perfectOuter, outerLineWidth);
+                            CPPUNIT_ASSERT_EQUAL(perfectDistance, lineDistance);
+                        }
+
+                        uno::Any aTopBorder = xPropSet->getPropertyValue("TopBorder");
+                        table::BorderLine aTopBorderLine;
+                        if (aTopBorder >>= aTopBorderLine)
+                        {
+                            sal_Int32 innerLineWidth = aTopBorderLine.InnerLineWidth;
+                            sal_Int32 outerLineWidth = aTopBorderLine.OuterLineWidth;
+                            sal_Int32 lineDistance = aTopBorderLine.LineDistance;
+
+                            sal_Int32 perfectInner = it->second[2].InnerLineWidth;
+                            sal_Int32 perfectOuter = it->second[2].OuterLineWidth;
+                            sal_Int32 perfectDistance = it->second[2].LineDistance;
+                            CPPUNIT_ASSERT_EQUAL(perfectInner, innerLineWidth);
+                            CPPUNIT_ASSERT_EQUAL(perfectOuter, outerLineWidth);
+                            CPPUNIT_ASSERT_EQUAL(perfectDistance, lineDistance);
+                        }
+
+                        uno::Any aBottomBorder = xPropSet->getPropertyValue("BottomBorder");
+                        table::BorderLine aBottomBorderLine;
+                        if (aBottomBorder >>= aBottomBorderLine)
+                        {
+                            sal_Int32 innerLineWidth = aBottomBorderLine.InnerLineWidth;
+                            sal_Int32 outerLineWidth = aBottomBorderLine.OuterLineWidth;
+                            sal_Int32 lineDistance = aBottomBorderLine.LineDistance;
+
+                            sal_Int32 perfectInner = it->second[3].InnerLineWidth;
+                            sal_Int32 perfectOuter = it->second[3].OuterLineWidth;
+                            sal_Int32 perfectDistance = it->second[3].LineDistance;
+                            CPPUNIT_ASSERT_EQUAL(perfectInner, innerLineWidth);
+                            CPPUNIT_ASSERT_EQUAL(perfectOuter, outerLineWidth);
+                            CPPUNIT_ASSERT_EQUAL(perfectDistance, lineDistance);
+                        }
+                    }
+                    }   //end of the 'for' loop
+                }
+            }
+        } while(xParaEnum->hasMoreElements());
+    }
 };
 #endif
