@@ -44,7 +44,7 @@ struct DdeImp;
 class DdeItemImp;
 struct Conversation;
 
-typedef ::std::vector< DdeService* > DdeServices;
+class DdeServices : public ::std::vector< DdeService* > {};
 typedef ::std::vector< long > DdeFormats;
 typedef ::std::vector< Conversation* > ConvList;
 
