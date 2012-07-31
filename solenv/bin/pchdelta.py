@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 # *************************************************************
 #  
 #  Licensed to the Apache Software Foundation (ASF) under one
@@ -25,7 +25,7 @@
 # Hacky little delta debug tool to figure out the proper includes for a pch file
 #
 # Usage:
-# 
+#
 # pchdelta.py <pch_target> <dir1> [<dir2> <dir3> ...]
 #
 # <pch_target>      File to perform delta debugging on. The section to test
@@ -82,7 +82,7 @@ def writePch(pchname, header, footer, acceptedlines, testlines):
     outputfile.write(MARKER)
     outputfile.write(footer)
     outputfile.close()
-    
+
 
 # ------------------------------------------------------------------------------
 # Recursive tester routine. Test the segment given and if an error is
@@ -165,6 +165,3 @@ if not testSequenceBuild(dirlist):
 print "Starting evaluation of " + str(len(lines)) + " lines"
 acceptedlines = binaryTest(dirlist, lines, pchname, header, footer, [], "", 0)
 writePch(pchname, header, footer, acceptedlines, [])
-
-
-
