@@ -148,6 +148,7 @@ void SwpHintsArray::DeleteAtPos( const sal_uInt16 nPos )
 
     bool const done = m_HintEnds.erase(pHt);
     assert(done);
+    (void) done; // unused in NDEBUG
 }
 
 sal_uInt16 SwpHintsArray::GetPos( const SwTxtAttr *pHt ) const
