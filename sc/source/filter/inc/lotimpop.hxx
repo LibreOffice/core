@@ -45,7 +45,6 @@ class ImportLotus : public ImportTyp
 {
 private:
     SvStream*           pIn;            // benoetigt wegen multiplem Read()!
-    LotusFontBuffer*    pFontBuff;
     LotusToSc           aConv;
     sal_uInt16              nTab;           // z.Zt. bearbeitete Tabelle
     sal_Int32               nExtTab;

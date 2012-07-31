@@ -125,7 +125,8 @@ void LotusToSc::DoFunc( DefTokenId eOc, sal_uInt8 nAnz, const sal_Char* pExtStri
             break;
         case ocChose:
         {// 1. Parameter ++
-            IncToken( eParam[ nAnz - 1 ] );
+            if (nAnz >= 1)
+                IncToken( eParam[ nAnz - 1 ] );
         }
             break;
         case ocFind:
@@ -138,7 +139,8 @@ void LotusToSc::DoFunc( DefTokenId eOc, sal_uInt8 nAnz, const sal_Char* pExtStri
         case ocMid:
         case ocReplace:
         {// 2. Parameter ++
-            IncToken( eParam[ nAnz - 2 ] );
+            if (nAnz >= 2)
+                IncToken( eParam[ nAnz - 2 ] );
         }
             break;
         case ocZins:
@@ -608,14 +610,18 @@ ConvErr LotusToSc::Convert( const ScTokenArray*& rpErg, sal_Int32& rRest,
 
                 if( nStrLen )
                 {
-//                  String  t( ReadString( aIn, nStrLen, eSrcChar ) );
-                    sal_Char*   p = new sal_Char[ nStrLen + 1 ];
-                    aIn.Read( p, nStrLen );
-                    p[ nStrLen ] = 0x00;
+					sal_Char*	p = new (::std::nothrow) sal_Char[ nStrLen + 1 ];
+                    if (p)
+                    {
+                        aIn.Read( p, nStrLen );
+                        p[ nStrLen ] = 0x00;
 
-                    DoFunc( ocNoName, nAnz, p );
+                        DoFunc( ocNoName, nAnz, p );
 
-                    delete[] p;
+                        delete[] p;
+                    }
+                    else
+                        DoFunc( ocNoName, nAnz, NULL );
                 }
                 else
                     DoFunc( ocNoName, nAnz, NULL );
@@ -1995,7 +2001,7 @@ const sal_Char* GetAddInName( const sal_uInt8 n )
 }
 
 
-DefTokenId lcl_KnownAddIn( const ByteString& sTest )
+static DefTokenId lcl_KnownAddIn( const ByteString& sTest )
 {
     DefTokenId  eId = ocNoName;
 
