@@ -1537,12 +1537,23 @@ void VDataSeriesGroup::getMinimumAndMaximiumYInContinuousXRange( double& rfMinY,
             if( fX < fMinX || fX > fMaxX )
                 continue;
             double fY = (*aSeriesIter)->getYValue( nN );
+
             if( ::rtl::math::isNan(fY) )
                 continue;
             if(rfMaxY<fY)
                 rfMaxY=fY;
             if(rfMinY>fY)
                 rfMinY=fY;
+            ////for stockchart with candlestick start
+            //todo:stockchart with candlestick has no values-y but values-min,values-max,values-first and values-last
+            //also check values-min,values-max for max and min value
+            double fYmax = (*aSeriesIter)->getY_Max( nN );
+            double fYmin = (*aSeriesIter)->getY_Min( nN );
+            if(!::rtl::math::isNan(fYmax))
+                if( rfMaxY<fYmax) rfMaxY=fYmax;
+            if(!::rtl::math::isNan(fYmin))
+                if( rfMinY>fYmin) rfMinY=fYmin;
+            ////for stockchart with candlestick end
         }
     }
     if(::rtl::math::isInf(rfMinY))
