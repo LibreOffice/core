@@ -521,28 +521,23 @@ double GetYearFrac( sal_Int32 nNullDate, sal_Int32 nStartDate, sal_Int32 nEndDat
     return double( nYears ) + double( nDayDiff ) / double( nDaysInYear );
 }
 
-
-double Fak( sal_Int32 n )
+double BinomialCoefficient( sal_Int64 n, sal_Int64 k )
 {
-    if( n > 0 )
-    {
-        double  fRet = n;
-        double  f = n - 1;
+    sal_Int64 fRet = 1;
 
-        while( f >= 2.0 )
-        {
-            fRet *= f;
-            f--;
-        }
-
-        return fRet;
-    }
-    else if( !n )
-        return 1.0;
-    else
+    if( k < 0 || k > n )
         return 0.0;
-}
 
+    if( k > n - k )
+        k = n - k;
+
+    for(sal_Int64 i = 0; i < k; i++ )
+    {
+        fRet = fRet * (n - (k - (i+1)));
+        fRet = fRet / (i+1);
+    }
+    return static_cast< double >( fRet );
+}
 
 double GetGcd( double f1, double f2 )
 {
