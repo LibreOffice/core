@@ -108,6 +108,8 @@ public:
     boost::shared_ptr< StyleSheetTable > GetStyleSheetTable( );
     GraphicZOrderHelper* graphicZOrderHelper();
 
+    bool IsInHeaderFooter() const;
+
 private:
     // Stream
     virtual void lcl_startSectionGroup();

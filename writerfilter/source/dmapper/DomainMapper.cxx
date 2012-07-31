@@ -3839,6 +3839,11 @@ GraphicZOrderHelper* DomainMapper::graphicZOrderHelper()
     return zOrderHelper.get();
 }
 
+bool DomainMapper::IsInHeaderFooter() const
+{
+    return m_pImpl->IsInHeaderFooter();
+}
+
 } //namespace dmapper
 } //namespace writerfilter
 

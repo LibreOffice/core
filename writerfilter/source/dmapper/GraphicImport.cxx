@@ -1390,10 +1390,12 @@ uno::Reference< text::XTextContent > GraphicImport::createGraphicObject( const b
                     uno::makeAny(m_pImpl->nTopPosition));
                 xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_VERT_ORIENT_RELATION ),
                 uno::makeAny(m_pImpl->nVertRelation));
-                if( !m_pImpl->bOpaque )
+
+                bool bOpaque = m_pImpl->bOpaque && !m_pImpl->rDomainMapper.IsInHeaderFooter( );
+                if( !bOpaque )
                 {
                     xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_OPAQUE ),
-                        uno::makeAny(m_pImpl->bOpaque));
+                        uno::makeAny(bOpaque));
                 }
                 xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_SURROUND ),
                         uno::makeAny(m_pImpl->nWrap));

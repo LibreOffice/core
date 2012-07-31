@@ -192,6 +192,7 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_sCurrentParaStyleId(),
         m_bInStyleSheetImport( false ),
         m_bInAnyTableImport( false ),
+        m_bInHeaderFooterImport( false ),
         m_bLineNumberingSet( false ),
         m_bIsInFootnoteProperties( true ),
         m_bIsCustomFtnMark( false ),
@@ -1268,6 +1269,8 @@ uno::Reference< beans::XPropertySet > DomainMapper_Impl::appendTextSectionAfter(
 
 void DomainMapper_Impl::PushPageHeader(SectionPropertyMap::PageType eType)
 {
+    m_bInHeaderFooterImport = true;
+
     //get the section context
     PropertyMapPtr pContext = DomainMapper_Impl::GetTopContextOfType(CONTEXT_SECTION);
     //ask for the header name of the given type
@@ -1307,6 +1310,8 @@ void DomainMapper_Impl::PushPageHeader(SectionPropertyMap::PageType eType)
 
 void DomainMapper_Impl::PushPageFooter(SectionPropertyMap::PageType eType)
 {
+    m_bInHeaderFooterImport = true;
+
     //get the section context
     PropertyMapPtr pContext = DomainMapper_Impl::GetTopContextOfType(CONTEXT_SECTION);
     //ask for the footer name of the given type
@@ -1350,6 +1355,7 @@ void DomainMapper_Impl::PopPageHeaderFooter()
     RemoveLastParagraph( );
     if (!m_aTextAppendStack.empty())
         m_aTextAppendStack.pop();
+    m_bInHeaderFooterImport = false;
 }
 
 
