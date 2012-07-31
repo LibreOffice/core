@@ -56,7 +56,10 @@ void Node::removeChild(Node*& pChild)
             {
                 i = m_lChildren.erase( i );
             }
-            ++i;
+            else
+            {
+                ++i;
+            }
         }
     }
 }
