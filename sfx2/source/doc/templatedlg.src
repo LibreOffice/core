@@ -45,6 +45,16 @@ String STR_INPUT_NEW
     Text [ en-US ] = "Enter folder name:";
 };
 
+String STR_REPOSITORY_LOCAL
+{
+    Text [ en-US ] = "Local";
+};
+
+String STR_REPOSITORY_NEW
+{
+    Text [ en-US ] = "New Repository";
+};
+
 ModelessDialog DLG_TEMPLATE_MANAGER
 {
     HelpId = CMD_SID_TEMPLATE_MANAGER;
@@ -187,14 +197,8 @@ ModelessDialog DLG_TEMPLATE_MANAGER
 
             ToolBoxItem
             {
-                Identifier = TBI_TEMPLATE_LOCAL;
-                Text [ en-US ] = "Local";
-            };
-
-            ToolBoxItem
-            {
-                Identifier = TBI_TEMPLATE_ONLINE;
-                Text [ en-US ] = "Online";
+                Identifier = TBI_TEMPLATE_REPOSITORY;
+                Text [ en-US ] = "Repository";
             };
 
             ToolBoxItem

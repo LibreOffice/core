@@ -14,6 +14,8 @@
 
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 
+class TemplateOnlineViewItem;
+
 class TemplateOnlineView : public TemplateAbstractView
 {
 public:
@@ -29,18 +31,21 @@ public:
 
     virtual void showOverlay (bool bVisible);
 
+    bool loadRepository (const sal_uInt16 nRepositoryId);
+
+    const std::vector<TemplateOnlineViewItem*>& getRepositories () const { return maRepositories; }
+
     void setItemDimensions (long ItemWidth, long ThumbnailHeight, long DisplayHeight, int itemPadding);
 
 private:
 
     virtual void Resize ();
 
-    virtual void OnItemDblClicked (ThumbnailViewItem *pItem);
-
 private:
 
     com::sun::star::uno::Sequence< rtl::OUString > maUrls;
     com::sun::star::uno::Sequence< rtl::OUString > maNames;
+    std::vector<TemplateOnlineViewItem*> maRepositories;
     com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment > m_xCmdEnv;
 };
 

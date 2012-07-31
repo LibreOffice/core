@@ -39,8 +39,7 @@
 #define BTN_TEMPLATE_CLOSE          24
 
 #define TBI_TEMPLATE_FOLDER_DEL     25
-#define TBI_TEMPLATE_LOCAL          26
-#define TBI_TEMPLATE_ONLINE         27
+#define TBI_TEMPLATE_REPOSITORY     26
 
 #define STR_CREATE_TEXT             260
 #define STR_CREATE_SHEET            261
@@ -54,6 +53,13 @@
 
 #define STR_MOVE_NEW                268
 #define STR_INPUT_NEW               271
+
+#define STR_REPOSITORY_LOCAL        272
+#define STR_REPOSITORY_NEW          273
+
+#define MNI_REPOSITORY_LOCAL        274
+#define MNI_REPOSITORY_NEW          275
+#define MNI_REPOSITORY_BASE         276
 
 #define IMG_ONLINE_REPOSITORY       100
 #define IMG_CREATE_TEXT             300

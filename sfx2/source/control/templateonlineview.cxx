@@ -66,6 +66,8 @@ TemplateOnlineView::TemplateOnlineView (Window *pParent, WinBits nWinStyle, bool
 
 TemplateOnlineView::~TemplateOnlineView ()
 {
+    for (size_t i = 0, n = maRepositories.size(); i < n; ++i)
+        delete maRepositories[i];
 }
 
 void TemplateOnlineView::Populate()
@@ -84,13 +86,8 @@ void TemplateOnlineView::Populate()
         pItem->maTitle = maNames[i];
         pItem->setURL(maUrls[i]);
 
-        mItemList.push_back(pItem);
+        maRepositories.push_back(pItem);
     }
-
-    CalculateItemPositions();
-
-    if (IsReallyVisible() && IsUpdateMode())
-        Invalidate();
 }
 
 void TemplateOnlineView::filterTemplatesByApp(const FILTER_APPLICATION &eApp)
@@ -113,20 +110,22 @@ void TemplateOnlineView::showOverlay (bool bVisible)
     }
 }
 
-void TemplateOnlineView::setItemDimensions(long ItemWidth, long ThumbnailHeight, long DisplayHeight, int itemPadding)
+bool TemplateOnlineView::loadRepository (const sal_uInt16 nRepositoryId)
 {
-    ThumbnailView::setItemDimensions(ItemWidth,ThumbnailHeight,DisplayHeight,itemPadding);
+    TemplateOnlineViewItem *pItem = NULL;
 
-    mpItemView->setItemDimensions(ItemWidth,ThumbnailHeight,DisplayHeight,itemPadding);
-}
+    for (size_t i = 0, n = maRepositories.size(); i < n; ++i)
+    {
+        if (maRepositories[i]->mnId == nRepositoryId)
+        {
+            pItem = maRepositories[i];
+            break;
+        }
+    }
 
-void TemplateOnlineView::Resize()
-{
-    mpItemView->SetSizePixel(GetSizePixel());
-}
+    if (!pItem)
+        return false;
 
-void TemplateOnlineView::OnItemDblClicked(ThumbnailViewItem *pItem)
-{
     rtl::OUString aURL = static_cast<TemplateOnlineViewItem*>(pItem)->getURL();
 
     try
@@ -156,6 +155,8 @@ void TemplateOnlineView::OnItemDblClicked(ThumbnailViewItem *pItem)
 
         if ( xResultSet.is() )
         {
+            mpItemView->Clear();
+
             uno::Reference< XRow > xRow( xResultSet, UNO_QUERY );
             uno::Reference< XContentAccess > xContentAccess( xResultSet, UNO_QUERY );
 
@@ -220,7 +221,6 @@ void TemplateOnlineView::OnItemDblClicked(ThumbnailViewItem *pItem)
 
             mpItemView->setName(pItem->maTitle);
             mpItemView->InsertItems(aItems);
-            mpItemView->Show();
         }
     }
     catch( ucb::CommandAbortedException& )
@@ -232,6 +232,20 @@ void TemplateOnlineView::OnItemDblClicked(ThumbnailViewItem *pItem)
     catch( uno::Exception& )
     {
     }
+
+    return true;
+}
+
+void TemplateOnlineView::setItemDimensions(long ItemWidth, long ThumbnailHeight, long DisplayHeight, int itemPadding)
+{
+    ThumbnailView::setItemDimensions(ItemWidth,ThumbnailHeight,DisplayHeight,itemPadding);
+
+    mpItemView->setItemDimensions(ItemWidth,ThumbnailHeight,DisplayHeight,itemPadding);
+}
+
+void TemplateOnlineView::Resize()
+{
+    mpItemView->SetSizePixel(GetSizePixel());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

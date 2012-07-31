@@ -19,6 +19,7 @@
 #include <sfx2/templatelocalview.hxx>
 #include <sfx2/templatelocalviewitem.hxx>
 #include <sfx2/templateonlineview.hxx>
+#include <sfx2/templateonlineviewitem.hxx>
 #include <sfx2/templateviewitem.hxx>
 #include <sfx2/thumbnailviewitem.hxx>
 #include <tools/urlobj.hxx>
@@ -118,6 +119,9 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
     mpActionMenu->InsertItem(MNI_ACTION_SORT_NAME,SfxResId(STR_ACTION_SORT_NAME).toString(),SfxResId(IMG_ACTION_SORT));
     mpActionMenu->SetSelectHdl(LINK(this,SfxTemplateManagerDlg,MenuSelectHdl));
 
+    mpRepositoryMenu = new PopupMenu;
+    mpRepositoryMenu->SetSelectHdl(LINK(this,SfxTemplateManagerDlg,RepositoryMenuSelectHdl));
+
     Size aWinSize = GetOutputSize();
 
     // Calculate thumbnail view minimum size
@@ -150,6 +154,7 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
     // Set toolbox button bits
     mpViewBar->EnableItem(TBI_TEMPLATE_IMPORT,false);
     mpViewBar->SetItemBits(TBI_TEMPLATE_CREATE, TIB_DROPDOWNONLY);
+    mpViewBar->SetItemBits(TBI_TEMPLATE_REPOSITORY, TIB_DROPDOWNONLY);
     mpActionBar->SetItemBits(TBI_TEMPLATE_ACTION, TIB_DROPDOWNONLY);
     mpTemplateBar->SetItemBits(TBI_TEMPLATE_MOVE,TIB_DROPDOWNONLY);
 
@@ -243,6 +248,8 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
 
     mpOnlineView->Populate();
 
+    createRepositoryMenu();
+
     maView->Populate();
     maView->Show();
 
@@ -260,6 +267,7 @@ SfxTemplateManagerDlg::~SfxTemplateManagerDlg ()
     delete mpOnlineView;
     delete mpCreateMenu;
     delete mpActionMenu;
+    delete mpRepositoryMenu;
 }
 
 IMPL_LINK_NOARG(SfxTemplateManagerDlg,ViewAllHdl)
@@ -335,12 +343,6 @@ IMPL_LINK_NOARG(SfxTemplateManagerDlg,TBXViewHdl)
         break;
     case TBI_TEMPLATE_FOLDER_DEL:
         OnFolderDelete();
-        break;
-    case TBI_TEMPLATE_LOCAL:
-        switchMainView(true);
-        break;
-    case TBI_TEMPLATE_ONLINE:
-        switchMainView(false);
         break;
     default:
         break;
@@ -438,6 +440,16 @@ IMPL_LINK(SfxTemplateManagerDlg, TBXDropdownHdl, ToolBox*, pBox)
         pBox->Invalidate();
         break;
     }
+    case TBI_TEMPLATE_REPOSITORY:
+        pBox->SetItemDown( nCurItemId, true );
+
+        mpRepositoryMenu->Execute(pBox,pBox->GetItemRect(TBI_TEMPLATE_REPOSITORY),
+                                  POPUPMENU_EXECUTE_DOWN);
+
+        pBox->SetItemDown( nCurItemId, false );
+        pBox->EndSelection();
+        pBox->Invalidate();
+        break;
     default:
         break;
     }
@@ -554,6 +566,31 @@ IMPL_LINK(SfxTemplateManagerDlg, MoveMenuSelectHdl, Menu*, pMenu)
             localMoveTo(nMenuId);
         else
             remoteMoveTo(nMenuId);
+    }
+
+    return 0;
+}
+
+IMPL_LINK(SfxTemplateManagerDlg, RepositoryMenuSelectHdl, Menu*, pMenu)
+{
+    sal_uInt16 nMenuId = pMenu->GetCurItemId();
+
+    if (nMenuId == MNI_REPOSITORY_LOCAL)
+    {
+        switchMainView(true);
+    }
+    else if (nMenuId == MNI_REPOSITORY_NEW)
+    {
+    }
+    else
+    {
+        sal_uInt16 nRepoId = nMenuId - MNI_REPOSITORY_BASE;
+
+        if (mpOnlineView->loadRepository(nRepoId))
+        {
+            switchMainView(false);
+            mpOnlineView->showOverlay(true);
+        }
     }
 
     return 0;
@@ -859,14 +896,26 @@ void SfxTemplateManagerDlg::centerTopButtons()
     maButtonSelMode.SetPosPixel(aBtnPos);
 }
 
+void SfxTemplateManagerDlg::createRepositoryMenu()
+{
+    mpRepositoryMenu->Clear();
+
+    mpRepositoryMenu->InsertItem(MNI_REPOSITORY_LOCAL,SfxResId(STR_REPOSITORY_LOCAL).toString());
+
+    const std::vector<TemplateOnlineViewItem*> &rRepos = mpOnlineView->getRepositories();
+
+    for (size_t i = 0, n = rRepos.size(); i < n; ++i)
+        mpRepositoryMenu->InsertItem(MNI_REPOSITORY_BASE+rRepos[i]->mnId,rRepos[i]->maTitle);
+
+    mpRepositoryMenu->InsertSeparator();
+    mpRepositoryMenu->InsertItem(MNI_REPOSITORY_NEW,SfxResId(STR_REPOSITORY_NEW).toString());
+}
+
 void SfxTemplateManagerDlg::switchMainView(bool bDisplayLocal)
 {
     if (bDisplayLocal)
     {
         mpCurView = maView;
-
-        mpViewBar->ShowItem(TBI_TEMPLATE_ONLINE);
-        mpViewBar->HideItem(TBI_TEMPLATE_LOCAL);
 
         // Enable deleting items from the filesystem
         mpTemplateBar->ShowItem(TBI_TEMPLATE_DELETE);
@@ -877,9 +926,6 @@ void SfxTemplateManagerDlg::switchMainView(bool bDisplayLocal)
     else
     {
         mpCurView = mpOnlineView;
-
-        mpViewBar->ShowItem(TBI_TEMPLATE_LOCAL);
-        mpViewBar->HideItem(TBI_TEMPLATE_ONLINE);
 
         // Disable deleting items from remote repositories
         mpTemplateBar->HideItem(TBI_TEMPLATE_DELETE);
