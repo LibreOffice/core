@@ -64,6 +64,7 @@ class StgHeader
     sal_Int32   nMasterFAT[ 109 ];          // 4C first 109 master FAT pages
 public:
     StgHeader();
+
     void  Init();                       // initialize the header
     sal_Bool  Load( StgIo& );
     sal_Bool  Load( SvStream& );
@@ -140,7 +141,7 @@ public:
     void    GetName( String& rName ) const;
                                         // fill in the name
     short   Compare( const StgEntry& ) const;   // compare two entries
-    sal_Bool    Load( const void* );
+	sal_Bool	Load( const void* pBuffer, sal_uInt32 nBufSize );
     void    Store( void* );
     StgEntryType GetType() const        { return (StgEntryType) cType;  }
     sal_Int32   GetStartPage() const        { return nPage1; }
