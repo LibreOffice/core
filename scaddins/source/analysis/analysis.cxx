@@ -689,26 +689,21 @@ AnalysisAddIn::getMultinomial( constREFXPS& xOpt, const SEQSEQ( sal_Int32 )& aVL
     if( aValList.Count() == 0 )
         return 0.0;
 
-    sal_Int32 nZ = 0;
-    double    fN = 1.0;
+    double nZ = 0;
+    double fRet = 1.0;
 
     for( const double *p = aValList.First(); p; p = aValList.Next() )
     {
-        double fInt = (*p >= 0.0) ? rtl::math::approxFloor( *p ) : rtl::math::approxCeil( *p );
-        if ( fInt < 0.0 || fInt > 170.0 )
+        double n = (*p >= 0.0) ? rtl::math::approxFloor( *p ) : rtl::math::approxCeil( *p );
+        if ( n < 0.0 )
             THROW_IAE;
-        sal_Int32 n = static_cast< sal_Int32 >( fInt );
-        if( n > 0 )
+
+        if( n > 0.0 )
         {
             nZ += n;
-            fN *= Fak( n );
+            fRet *= BinomialCoefficient(nZ, n);
         }
     }
-
-    if( nZ > 170 )
-        THROW_IAE;
-
-    double fRet = Fak( nZ ) / fN;
     RETURN_FINITE( fRet );
 }
 
