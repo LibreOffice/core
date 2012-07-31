@@ -26,11 +26,8 @@
 #include <tools/string.hxx>
 #include <tools/shl.hxx>
 #include <boost/noncopyable.hpp>
+#include <svl/svdde.hxx>
 #include <vector>
-
-class DdeService;
-class DdeTopic;
-class DdeItem;
 
 // ----------------
 // - Conversation -
@@ -112,7 +109,6 @@ struct DdeDataImp
 };
 
 class DdeConnection;
-class DdeServices;
 
 class DdeInstData : private boost::noncopyable
 {
