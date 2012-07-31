@@ -1013,31 +1013,33 @@ String DdeService::Formats()
 {
     String      s;
     long        f;
-    TCHAR       buf[128];
-    LPCTSTR     p;
     short       n = 0;
 
-    for ( size_t i = 0; i < aFormats.size(); ++i, n++ )
+    for (size_t i = 0; i < aFormats.size(); ++i, ++n)
     {
         f = aFormats[ i ];
         if ( n )
             s += '\t';
-        p = buf;
 
         switch( (sal_uInt16)f )
         {
             case CF_TEXT:
-                p = reinterpret_cast<LPCTSTR>(String::CreateFromAscii("TEXT").GetBuffer());
+                s += rtl::OUString("TEXT");
                 break;
             case CF_BITMAP:
-                p = reinterpret_cast<LPCTSTR>(String::CreateFromAscii("BITMAP").GetBuffer());
+                s += rtl::OUString("BITMAP");
                 break;
             default:
-                GetClipboardFormatName( (UINT)f, buf, sizeof(buf) / sizeof(TCHAR) );
+                {
+                    TCHAR buf[128];
+                    GetClipboardFormatName( (UINT)f, buf, sizeof(buf) / sizeof(TCHAR) );
+                    s += rtl::OUString(buf);
+                }
+                break;
         }
-        s += String( reinterpret_cast<const sal_Unicode*>(p) );
+
     }
-    s += String::CreateFromAscii("\r\n");
+    s += rtl::OUString("\r\n");
 
     return s;
 }
