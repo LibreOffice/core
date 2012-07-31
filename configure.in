@@ -2509,14 +2509,10 @@ if test "$_os" = "Darwin"; then
     10.7)
         MACOSX_SDK_PATH="`xcode-select -print-path`/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.7.sdk"
         MACOSX_SDK_VERSION="1070"
-        AC_MSG_WARN([Building with SDK 10.7 is known to fail in vcl])
-        echo "Building with SDK 10.7 is known to fail in vcl" >> warn
         ;;
     10.8)
         MACOSX_SDK_PATH="`xcode-select -print-path`/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk"
         MACOSX_SDK_VERSION="1080"
-        AC_MSG_WARN([Building with SDK 10.8 is known to fail in vcl])
-        echo "Building with SDK 10.8 is known to fail in vcl" >> warn
         ;;
     *)
         AC_MSG_ERROR([$with_macosx_sdk is not a supported SDK value, supported value are 10.4--8])
