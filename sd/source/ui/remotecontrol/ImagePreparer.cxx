@@ -33,10 +33,15 @@
 #include <rtl/ustrbuf.hxx>
 #include <sax/tools/converter.hxx>
 #include <rtl/strbuf.hxx>
+#include <unotools/streamwrap.hxx>
+
+#include <svl/itemset.hxx>
+#include <sfx2/docfile.hxx>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/document/XFilter.hpp>
+#include <com/sun/star/document/XImporter.hpp>
 #include <com/sun/star/document/XExporter.hpp>
 #include <com/sun/star/lang/XServiceName.hpp>
 #include <com/sun/star/presentation/XPresentationPage.hpp>
@@ -83,7 +88,7 @@ void ImagePreparer::execute()
         }
         sendNotes( i );
     }
-//     notesToHtml( 0 );
+     notesToHtml( 0 );
     mRef.clear();
 }
 
@@ -217,7 +222,7 @@ void ImagePreparer::sendNotes( sal_uInt32 aSlideNumber )
         Transmitter::Priority::LOW );
 }
 
-
+sal_Bool ExportTo( uno::Reference< drawing::XDrawPage>& aNotesPage, String aUrl );
 OString ImagePreparer::notesToHtml( sal_uInt32 aSlideNumber )
 {
     OString aRet("");
@@ -229,34 +234,11 @@ OString ImagePreparer::notesToHtml( sal_uInt32 aSlideNumber )
     if ( !xController->isRunning() )
         return "";
 
-    // Get the filter
-    uno::Reference< lang::XMultiServiceFactory > xServiceManager(
-        ::comphelper::getProcessServiceFactory(),
-        uno::UNO_QUERY_THROW );
 
-    uno::Reference< container::XNameAccess > xFilterFactory(
-        xServiceManager->createInstance( "com.sun.star.document.FilterFactory" ), uno::UNO_QUERY_THROW );
 
-    if ( xFilterFactory->hasByName( "com.sun.star.comp.Writer.XmlFilterAdaptor" ) )
-        fprintf ( stderr, "Is contained\n" );
-    else fprintf( stderr, "Not contained\n" );
-
-//     uno::Sequence<Any> aList(6);
-//     aList[0] <<= OUString("com.sun.star.documentconversion.XSLTFilter");
-//     aList[1] <<= OUString("");
-//     aList[2] <<= OUString("com.sun.star.comp.Impress.XMLOasisImporter");
-//     aList[3] <<= OUString("com.sun.star.comp.Impress.XMLOasisExporter"),
-//     aList[4] <<= OUString("");
-//     aList[5] <<= OUString("../share/xslt/export/xhtml/opendoc2xhtml.xsl");
-
-//     uno::Reference< lang::XMultiServiceFactory > xFilterF( xFilterFactory, uno::UNO_QUERY_THROW );
-//         xFilterF->createInstanceWithArguments(OUString("com.sun.star.comp.Writer.XmlFilterAdaptor"), aList);
-
-    css::uno::Reference< document::XFilter > xFilter( xFilterFactory->getByName(
-        "com.sun.star.comp.Writer.XmlFilterAdaptor" ), uno::UNO_QUERY_THROW );
 
     // Get the page
-    uno::Reference< lang::XComponent > xNotesPage;
+    uno::Reference< drawing::XDrawPage > xNotesPage;
     uno::Reference< drawing::XDrawPage > xSourceDoc(
         xController->getSlideByIndex( aSlideNumber ),
         uno::UNO_QUERY_THROW );
@@ -264,29 +246,13 @@ OString ImagePreparer::notesToHtml( sal_uInt32 aSlideNumber )
     uno::Reference<presentation::XPresentationPage> xPresentationPage(
         xSourceDoc, UNO_QUERY);
     if (xPresentationPage.is())
-        xNotesPage = uno::Reference< lang::XComponent >(
+        xNotesPage = uno::Reference< drawing::XDrawPage >(
             xPresentationPage->getNotesPage(), uno::UNO_QUERY_THROW );
     else
         return "";
 
-    // Start Exporting
-    uno::Reference< document::XExporter > xExporter( xFilter,
-        uno::UNO_QUERY_THROW );
 
-    xExporter->setSourceDocument( xNotesPage );
-
-    uno::Sequence< beans::PropertyValue > aProps(1);
-
-    aProps[0].Name = "URL";
-    aProps[0].Value <<= aFileURL;
-
-//     aProps[1].Name = "com.sun.star.comp.Impress.XMLOasisExporter";
-//     aProps[1].Value <<= OUString( "../share/xslt/export/xhtml/opendoc2xhtml.xsl" );
-//     aProps[2].Name = "FilterData";
-//     aProps[2].Value <<= aFilterData;
-
-    fprintf( stderr, "Trying to filter\n" );
-    xFilter->filter( aProps );
+    ExportTo( xNotesPage, aFileURL );
 
     // FIXME: error handling.
 
@@ -373,4 +339,114 @@ OString ImagePreparer::prepareNotes( sal_uInt32 aSlideNumber )
     return OUStringToOString(
         aRet, RTL_TEXTENCODING_UTF8 );
 }
+
+sal_Bool ExportTo( uno::Reference< drawing::XDrawPage>& aNotesPage, String aUrl )
+{
+    ::rtl::OUString aFilterName( "com.sun.star.comp.Writer.XmlFilterAdaptor" );
+    uno::Reference< document::XExporter > xExporter;
+
+    {
+        uno::Reference< lang::XMultiServiceFactory >  xMan = ::comphelper::getProcessServiceFactory();
+        uno::Reference < lang::XMultiServiceFactory > xFilterFact (
+                xMan->createInstance( "com.sun.star.document.FilterFactory" ), uno::UNO_QUERY );
+
+        uno::Sequence < beans::PropertyValue > aProps;
+        uno::Reference < container::XNameAccess > xFilters ( xFilterFact, uno::UNO_QUERY );
+        if ( xFilters->hasByName( aFilterName ) )
+            xFilters->getByName( aFilterName ) >>= aProps;
+
+        ::rtl::OUString aFilterImplName;
+        sal_Int32 nFilterProps = aProps.getLength();
+        for ( sal_Int32 nFilterProp = 0; nFilterProp<nFilterProps; nFilterProp++ )
+        {
+            const beans::PropertyValue& rFilterProp = aProps[nFilterProp];
+            if ( rFilterProp.Name.compareToAscii("FilterService") == 0 )
+            {
+                rFilterProp.Value >>= aFilterImplName;
+                break;
+            }
+        }
+
+        if ( !aFilterImplName.isEmpty() )
+        {
+            try{
+            xExporter = uno::Reference< document::XExporter >
+                ( xFilterFact->createInstanceWithArguments( aFilterName, uno::Sequence < uno::Any >() ), uno::UNO_QUERY );
+            }catch(const uno::Exception&)
+                { xExporter.clear(); }
+        }
+    }
+
+    if ( xExporter.is() )
+    {
+        try{
+        uno::Reference< lang::XComponent >  xComp( aNotesPage, uno::UNO_QUERY_THROW );
+        uno::Reference< document::XFilter > xFilter( xExporter, uno::UNO_QUERY_THROW );
+        xExporter->setSourceDocument( xComp );
+
+        com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue > aOldArgs ( 2 );
+        aOldArgs[0].Name = "FileName";
+        aOldArgs[0].Value <<= OUString( aUrl );
+        aOldArgs[1].Name = "FilterName";
+        aOldArgs[1].Value <<= OUString("com.sun.star.documentconversion.XSLTFilter");
+
+        SfxMedium rMedium( aUrl , STREAM_STD_WRITE  );
+
+        const com::sun::star::beans::PropertyValue * pOldValue = aOldArgs.getConstArray();
+        com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue > aArgs ( aOldArgs.getLength() );
+        com::sun::star::beans::PropertyValue * pNewValue = aArgs.getArray();
+
+
+        // put in the REAL file name, and copy all PropertyValues
+        const OUString sOutputStream ( RTL_CONSTASCII_USTRINGPARAM ( "OutputStream" ) );
+        const OUString sStream ( RTL_CONSTASCII_USTRINGPARAM ( "StreamForOutput" ) );
+        sal_Bool bHasOutputStream = sal_False;
+        sal_Bool bHasStream = sal_False;
+        sal_Bool bHasBaseURL = sal_False;
+        sal_Int32 i;
+        sal_Int32 nEnd = aOldArgs.getLength();
+
+        for ( i = 0; i < nEnd; i++ )
+        {
+            pNewValue[i] = pOldValue[i];
+            if ( pOldValue[i].Name == "FileName" )
+                pNewValue[i].Value <<= OUString ( rMedium.GetName() );
+            else if ( pOldValue[i].Name == sOutputStream )
+                bHasOutputStream = sal_True;
+            else if ( pOldValue[i].Name == sStream )
+                bHasStream = sal_True;
+            else if ( pOldValue[i].Name == "DocumentBaseURL" )
+                bHasBaseURL = sal_True;
+        }
+
+        if ( !bHasOutputStream )
+        {
+            aArgs.realloc ( ++nEnd );
+            aArgs[nEnd-1].Name = sOutputStream;
+            aArgs[nEnd-1].Value <<= uno::Reference < io::XOutputStream > ( new utl::OOutputStreamWrapper ( *rMedium.GetOutStream() ) );
+        }
+
+        // add stream as well, for OOX export and maybe others
+        if ( !bHasStream )
+        {
+            aArgs.realloc ( ++nEnd );
+            aArgs[nEnd-1].Name = sStream;
+            aArgs[nEnd-1].Value <<= com::sun::star::uno::Reference < com::sun::star::io::XStream > ( new utl::OStreamWrapper ( *rMedium.GetOutStream() ) );
+        }
+
+        if ( !bHasBaseURL )
+        {
+            aArgs.realloc ( ++nEnd );
+            aArgs[nEnd-1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "DocumentBaseURL" ) );
+            aArgs[nEnd-1].Value <<= rMedium.GetBaseURL( sal_True );
+        }
+
+        return xFilter->filter( aArgs );
+        }catch(const uno::Exception&)
+        {}
+    }
+
+    return sal_False;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
