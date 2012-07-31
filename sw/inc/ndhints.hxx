@@ -75,13 +75,15 @@ struct CompareSwpHtStart
 {
     bool operator()(SwTxtAttr* const lhs, SwTxtAttr* const rhs) const;
 };
-class SwpHtStart : public o3tl::sorted_vector<SwTxtAttr*, CompareSwpHtStart> {};
+class SwpHtStart : public o3tl::sorted_vector<SwTxtAttr*, CompareSwpHtStart,
+    o3tl::find_partialorder_ptrequals<SwTxtAttr*, CompareSwpHtStart> > {};
 
 struct CompareSwpHtEnd
 {
     bool operator()(SwTxtAttr* const lhs, SwTxtAttr* const rhs) const;
 };
-class SwpHtEnd : public o3tl::sorted_vector<SwTxtAttr*, CompareSwpHtEnd> {};
+class SwpHtEnd : public o3tl::sorted_vector<SwTxtAttr*, CompareSwpHtEnd,
+    o3tl::find_partialorder_ptrequals<SwTxtAttr*, CompareSwpHtEnd> > {};
 
 // Class SwpHintsArr
 
@@ -212,7 +214,8 @@ SvStream &operator<<(SvStream &aS, const SwpHints &rHints); //$ ostream
 
 inline sal_uInt16 SwpHintsArray::GetStartOf( const SwTxtAttr *pHt ) const
 {
-    SwpHtStart::const_iterator it = m_HintStarts.find( (SwTxtAttr*)pHt );
+    SwpHtStart::const_iterator const it =
+        m_HintStarts.find(const_cast<SwTxtAttr*>(pHt));
     if ( it == m_HintStarts.end() )
     {
         return USHRT_MAX;

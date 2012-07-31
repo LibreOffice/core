@@ -39,15 +39,6 @@
 inline void DumpHints(const SwpHtStart &, const SwpHtEnd &) { }
 
 /*************************************************************************
- *                        inline IsEqual()
- *************************************************************************/
-
-static bool IsEqual( const SwTxtAttr &rHt1, const SwTxtAttr &rHt2 )
-{
-    return &rHt1 == &rHt2;
-}
-
-/*************************************************************************
  *                      IsLessStart()
  *************************************************************************/
 
@@ -140,13 +131,15 @@ void SwpHintsArray::Insert( const SwTxtAttr *pHt )
 {
     Resort();
 #if OSL_DEBUG_LEVEL > 0
-    OSL_ENSURE(m_HintStarts.find( (SwTxtAttr*)pHt ) == m_HintStarts.end(),
+    OSL_ENSURE(
+        m_HintStarts.find(const_cast<SwTxtAttr*>(pHt)) == m_HintStarts.end(),
             "Insert: hint already in HtStart");
-    OSL_ENSURE(m_HintEnds.find( (SwTxtAttr*)pHt ) == m_HintEnds.end(),
+    OSL_ENSURE(
+        m_HintEnds.find(const_cast<SwTxtAttr*>(pHt)) == m_HintEnds.end(),
             "Insert: hint already in HtEnd");
 #endif
-    m_HintStarts.insert( (SwTxtAttr*)pHt );
-    m_HintEnds.insert( (SwTxtAttr*)pHt );
+    m_HintStarts.insert( const_cast<SwTxtAttr*>(pHt) );
+    m_HintEnds  .insert( const_cast<SwTxtAttr*>(pHt) );
 }
 
 void SwpHintsArray::DeleteAtPos( const sal_uInt16 nPos )
@@ -157,15 +150,23 @@ void SwpHintsArray::DeleteAtPos( const sal_uInt16 nPos )
 
     Resort();
 
-    m_HintEnds.erase( pHt );
+    bool const done = m_HintEnds.erase(pHt);
+    assert(done);
 }
 
 sal_uInt16 SwpHintsArray::GetPos( const SwTxtAttr *pHt ) const
 {
-    SwpHtStart::const_iterator it = m_HintStarts.find( (SwTxtAttr*)pHt );
-    if( it == m_HintStarts.end() )
-        return USHRT_MAX;
-    return it - m_HintStarts.begin();
+    // DO NOT use find() here!
+    // if called from SwTxtNode::InsertItem, pHt has already been deleted,
+    // so it cannot be dereferenced
+    for (size_t i = 0; i < m_HintStarts.size(); ++i)
+    {
+        if (m_HintStarts[i] == pHt)
+        {
+            return i;
+        }
+    }
+    return USHRT_MAX;
 }
 
 #ifdef DBG_UTIL
@@ -234,13 +235,13 @@ bool SwpHintsArray::Check() const
         // --- Ueberkreuzungen ---
 
         // 5) gleiche Pointer in beiden Arrays
-        if( m_HintStarts.find( (SwTxtAttr*)pHt ) == m_HintStarts.end() )
+        if (m_HintStarts.find(const_cast<SwTxtAttr*>(pHt)) == m_HintStarts.end())
             nIdx = STRING_LEN;
 
         CHECK_ERR( STRING_LEN != nIdx, "HintsCheck: no GetStartOf" );
 
         // 6) gleiche Pointer in beiden Arrays
-        if( m_HintEnds.find( (SwTxtAttr*)pHt ) == m_HintEnds.end() )
+        if (m_HintEnds.find(const_cast<SwTxtAttr*>(pHt)) == m_HintEnds.end())
             nIdx = STRING_LEN;
 
         CHECK_ERR( STRING_LEN != nIdx, "HintsCheck: no GetEndOf" );
