@@ -1709,6 +1709,9 @@ void AxTextBoxModel::convertFromProperties( PropertySet& rPropSet, const Control
     if ( rPropSet.getProperty( bRes,  PROP_HideInactiveSelection ) )
         setFlag( mnFlags, AX_FLAGS_HIDESELECTION, bRes );
     rPropSet.getProperty( maValue, ( mbAwtModel ? PROP_Text : PROP_DefaultText ) );
+    if (maValue.isEmpty() && !mbAwtModel)
+        // No default value? Then try exporting the current one.
+        rPropSet.getProperty( maValue, PROP_Text);
     sal_Int16 nTmp(0);
     if ( rPropSet.getProperty( nTmp, PROP_MaxTextLen ) )
         mnMaxLength = nTmp;
