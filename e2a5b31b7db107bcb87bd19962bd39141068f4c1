@@ -1,0 +1,565 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAMn///4k\u003d",
+        "filename": "sd/inc/anminfo.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-07-31T18:01:36Z",
+      "side": 1,
+      "message": "this would be better translated as \"Animation effect for text content\" or not?",
+      "revId": "e2a5b31b7db107bcb87bd19962bd39141068f4c1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///4g\u003d",
+        "filename": "sd/inc/anminfo.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-07-31T18:01:36Z",
+      "side": 1,
+      "message": "is \"dimming\" here the correct word or should it be better \"fade out\" or the like?",
+      "revId": "e2a5b31b7db107bcb87bd19962bd39141068f4c1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///4c\u003d",
+        "filename": "sd/inc/anminfo.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-07-31T18:01:36Z",
+      "side": 1,
+      "message": "\"if group object than it is a sequence of them\"",
+      "revId": "e2a5b31b7db107bcb87bd19962bd39141068f4c1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///4Y\u003d",
+        "filename": "sd/inc/anminfo.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-07-31T18:01:36Z",
+      "side": 1,
+      "message": "\"for dimming the object\" (or \"fading\", see above)",
+      "revId": "e2a5b31b7db107bcb87bd19962bd39141068f4c1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///4U\u003d",
+        "filename": "sd/inc/anminfo.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-07-31T18:01:36Z",
+      "side": 1,
+      "message": "rather \"play sound completely\"",
+      "revId": "e2a5b31b7db107bcb87bd19962bd39141068f4c1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///4Q\u003d",
+        "filename": "sd/inc/anminfo.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-07-31T18:01:36Z",
+      "side": 1,
+      "message": "\"for object fading\"",
+      "revId": "e2a5b31b7db107bcb87bd19962bd39141068f4c1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///4M\u003d",
+        "filename": "sd/inc/anminfo.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-07-31T18:01:36Z",
+      "side": 1,
+      "message": "see above",
+      "revId": "e2a5b31b7db107bcb87bd19962bd39141068f4c1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///4I\u003d",
+        "filename": "sd/inc/anminfo.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-07-31T18:01:36Z",
+      "side": 1,
+      "message": "see above",
+      "revId": "e2a5b31b7db107bcb87bd19962bd39141068f4c1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///4o\u003d",
+        "filename": "sd/inc/anminfo.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-07-31T18:01:36Z",
+      "side": 1,
+      "message": "see above + you have a typo here :-)",
+      "revId": "e2a5b31b7db107bcb87bd19962bd39141068f4c1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///4E\u003d",
+        "filename": "sd/inc/sdpage.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-07-31T18:01:36Z",
+      "side": 1,
+      "message": "why do you write type with a capital here?",
+      "revId": "e2a5b31b7db107bcb87bd19962bd39141068f4c1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///4A\u003d",
+        "filename": "sd/inc/sdpage.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-07-31T18:01:36Z",
+      "side": 1,
+      "message": "I would remove the \"(sal_True/sal_False)\" here, since this is obvious by having a bool type",
+      "revId": "e2a5b31b7db107bcb87bd19962bd39141068f4c1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///38\u003d",
+        "filename": "sd/inc/sdpage.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-07-31T18:01:36Z",
+      "side": 1,
+      "message": "yeah, only have translated :-)\nshould be: \"will (not) be displayed during show\" or the like\nalso please without \"(...)\"",
+      "revId": "e2a5b31b7db107bcb87bd19962bd39141068f4c1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///34\u003d",
+        "filename": "sd/inc/sdpage.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-07-31T18:01:36Z",
+      "side": 1,
+      "message": "see above, no \"(...)\"",
+      "revId": "e2a5b31b7db107bcb87bd19962bd39141068f4c1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///30\u003d",
+        "filename": "sd/inc/sdpage.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-07-31T18:01:36Z",
+      "side": 1,
+      "message": "why each word here with capital letters?",
+      "revId": "e2a5b31b7db107bcb87bd19962bd39141068f4c1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///3w\u003d",
+        "filename": "sd/inc/sdpage.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-07-31T18:01:36Z",
+      "side": 1,
+      "message": "should be \"generated page name by GetPageName\", your comment does not really make sense ;-)",
+      "revId": "e2a5b31b7db107bcb87bd19962bd39141068f4c1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///3s\u003d",
+        "filename": "sd/inc/sdpage.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-07-31T18:01:36Z",
+      "side": 1,
+      "message": "file name (\u003c\u003d space between)",
+      "revId": "e2a5b31b7db107bcb87bd19962bd39141068f4c1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///3o\u003d",
+        "filename": "sd/inc/sdpage.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-07-31T18:01:36Z",
+      "side": 1,
+      "message": "bookmark name (\u003c\u003d space between)",
+      "revId": "e2a5b31b7db107bcb87bd19962bd39141068f4c1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///3k\u003d",
+        "filename": "sd/inc/sdpage.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-07-31T18:01:36Z",
+      "side": 1,
+      "message": "\"show background object on whole page\"",
+      "revId": "e2a5b31b7db107bcb87bd19962bd39141068f4c1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///3g\u003d",
+        "filename": "sd/inc/sdpage.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-07-31T18:01:36Z",
+      "side": 1,
+      "message": "text encoding (\u003c\u003d space)",
+      "revId": "e2a5b31b7db107bcb87bd19962bd39141068f4c1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///3Y\u003d",
+        "filename": "sd/inc/sdpage.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-07-31T18:01:36Z",
+      "side": 1,
+      "message": "print orientation (\u003c\u003d space)",
+      "revId": "e2a5b31b7db107bcb87bd19962bd39141068f4c1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///3c\u003d",
+        "filename": "sd/inc/sdpage.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-07-31T18:01:36Z",
+      "side": 1,
+      "message": "\"PageLink\" (only for linked pages)",
+      "revId": "e2a5b31b7db107bcb87bd19962bd39141068f4c1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///3U\u003d",
+        "filename": "sd/inc/sdpage.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 274,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-07-31T18:01:36Z",
+      "side": 1,
+      "message": "in my eyes you can remove this line completely, since (a) it does not provide much useful information and (b) there are not only virtual methods below there",
+      "revId": "e2a5b31b7db107bcb87bd19962bd39141068f4c1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///3Q\u003d",
+        "filename": "sd/inc/sdpage.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 323,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-07-31T18:01:36Z",
+      "side": 1,
+      "message": "why extra space after \"@return\"?",
+      "revId": "e2a5b31b7db107bcb87bd19962bd39141068f4c1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///3M\u003d",
+        "filename": "sd/inc/sdpage.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 332,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-07-31T18:01:36Z",
+      "side": 1,
+      "message": "why extra space after \"@return\"?",
+      "revId": "e2a5b31b7db107bcb87bd19962bd39141068f4c1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///3I\u003d",
+        "filename": "sd/inc/sdpage.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 345,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-07-31T18:01:36Z",
+      "side": 1,
+      "message": "Please rewrite this comment as it does not make sense after your change!",
+      "revId": "e2a5b31b7db107bcb87bd19962bd39141068f4c1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///3A\u003d",
+        "filename": "sd/inc/sdpptwrp.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-07-31T18:01:36Z",
+      "side": 1,
+      "message": "looks as if the code that this comment describes was (re)moved and this comment seems to be unnecessary... but I might be wrong",
+      "revId": "e2a5b31b7db107bcb87bd19962bd39141068f4c1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///3E\u003d",
+        "filename": "sd/inc/sdpptwrp.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-07-31T18:01:36Z",
+      "side": 1,
+      "message": "should be \"restores\" or not?",
+      "revId": "e2a5b31b7db107bcb87bd19962bd39141068f4c1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///28\u003d",
+        "filename": "sd/inc/sdxmlwrp.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-07-31T18:01:36Z",
+      "side": 1,
+      "message": "in all other files you used \"///\u003c\", here only \"///\"",
+      "revId": "e2a5b31b7db107bcb87bd19962bd39141068f4c1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///24\u003d",
+        "filename": "sd/inc/sdxmlwrp.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-07-31T18:01:36Z",
+      "side": 1,
+      "message": "see above",
+      "revId": "e2a5b31b7db107bcb87bd19962bd39141068f4c1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///20\u003d",
+        "filename": "sd/inc/sdxmlwrp.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-07-31T18:01:36Z",
+      "side": 1,
+      "message": "see above",
+      "revId": "e2a5b31b7db107bcb87bd19962bd39141068f4c1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///2w\u003d",
+        "filename": "sd/source/filter/eppt/pptexsoundcollection.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-07-31T18:01:36Z",
+      "side": 1,
+      "message": "I would remove the \"the\" here",
+      "revId": "e2a5b31b7db107bcb87bd19962bd39141068f4c1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///2s\u003d",
+        "filename": "sd/source/filter/eppt/pptexsoundcollection.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-07-31T18:01:36Z",
+      "side": 1,
+      "message": "same as above (no \"the\")",
+      "revId": "e2a5b31b7db107bcb87bd19962bd39141068f4c1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///2o\u003d",
+        "filename": "sd/source/filter/ppt/ppt97animations.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-07-31T18:01:36Z",
+      "side": 1,
+      "message": "this looks kind of ugly... Why not (a) again \"///\u003c\" or (b) move it above the line as \"/** ... */\" ?",
+      "revId": "e2a5b31b7db107bcb87bd19962bd39141068f4c1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
