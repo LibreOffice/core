@@ -104,6 +104,8 @@ void LatinLookupTree::insert(const int nProbability)
 
 void LatinLookupTree::remove(OUString sKey)
 {
+    returnToRoot();
+
     if ( !sKey.isEmpty() )
     {
         removeKey( sKey );
