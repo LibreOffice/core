@@ -91,7 +91,6 @@
 using namespace ::com::sun::star;
 
 
-// OD 2004-03-23 #i26791
 TYPEINIT2(SwFlyFrm,SwLayoutFrm,SwAnchoredObject);
 
 /*************************************************************************
@@ -102,10 +101,7 @@ TYPEINIT2(SwFlyFrm,SwLayoutFrm,SwAnchoredObject);
 
 SwFlyFrm::SwFlyFrm( SwFlyFrmFmt *pFmt, SwFrm* pSib, SwFrm *pAnch ) :
     SwLayoutFrm( pFmt, pSib ),
-    // OD 2004-03-22 #i26791#
-    SwAnchoredObject(),
-    // OD 2004-05-27 #i26791# - moved to <SwAnchoredObject>
-//    aRelPos(),
+    SwAnchoredObject(), // #i26791#
     pPrevLink( 0 ),
     pNextLink( 0 ),
     bInCnt( sal_False ),
@@ -171,23 +167,21 @@ SwFlyFrm::SwFlyFrm( SwFlyFrmFmt *pFmt, SwFrm* pSib, SwFrm *pAnch ) :
     Frm().Width( rFrmSize.GetWidth() );
     Frm().Height( rFrmSize.GetHeightSizeType() == ATT_VAR_SIZE ? MINFLY : rFrmSize.GetHeight() );
 
-    //Hoehe Fix oder Variabel oder was?
+    // Fixed or variable Height?
     if ( rFrmSize.GetHeightSizeType() == ATT_MIN_SIZE )
         bMinHeight = sal_True;
     else if ( rFrmSize.GetHeightSizeType() == ATT_FIX_SIZE )
         bFixSize = sal_True;
 
-    // OD 2004-02-12 #110582#-2 - insert columns, if necessary
+    // insert columns, if necessary
     InsertColumns();
 
     //Erst das Init, dann den Inhalt, denn zum Inhalt koennen  widerum
     //Objekte/Rahmen gehoeren die dann angemeldet werden.
     InitDrawObj( sal_False );
 
-    // OD 2004-01-19 #110582#
     Chain( pAnch );
 
-    // OD 2004-01-19 #110582#
     InsertCnt();
 
     //Und erstmal in den Wald stellen die Kiste, damit bei neuen Dokument nicht
@@ -195,7 +189,6 @@ SwFlyFrm::SwFlyFrm( SwFlyFrmFmt *pFmt, SwFrm* pSib, SwFrm *pAnch ) :
     Frm().Pos().X() = Frm().Pos().Y() = FAR_AWAY;
 }
 
-// OD 2004-01-19 #110582#
 void SwFlyFrm::Chain( SwFrm* _pAnch )
 {
     // Connect to chain neighboors.
@@ -227,7 +220,6 @@ void SwFlyFrm::Chain( SwFrm* _pAnch )
     }
 }
 
-// OD 2004-01-19 #110582#
 void SwFlyFrm::InsertCnt()
 {
     if ( !GetPrevLink() )
@@ -239,7 +231,7 @@ void SwFlyFrm::InsertCnt()
         ::_InsertCnt( Lower() ? (SwLayoutFrm*)((SwLayoutFrm*)Lower())->Lower() : (SwLayoutFrm*)this,
                       GetFmt()->GetDoc(), nIndex );
 
-        //NoTxt haben immer eine FixHeight.
+        // NoTxt always have a fixed height.
         if ( Lower() && Lower()->IsNoTxtFrm() )
         {
             bFixSize = sal_True;
@@ -248,7 +240,6 @@ void SwFlyFrm::InsertCnt()
     }
 }
 
- // OD 2004-02-12 #110582#-2
  void SwFlyFrm::InsertColumns()
  {
     // #i97379#
