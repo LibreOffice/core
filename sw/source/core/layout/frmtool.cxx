@@ -1851,6 +1851,10 @@ SwBorderAttrs::SwBorderAttrs( const SwModify *pMod, const SwFrm *pConstructor ) 
     {
         pTxtFrm->GetTxtNode()->ClearLRSpaceItemDueToListLevelIndents( rLR );
     }
+    else if ( pConstructor->IsNoTxtFrm() )
+    {
+        rLR = SvxLRSpaceItem ( RES_LR_SPACE );
+    }
 
     //Achtung: Die USHORTs fuer die gecache'ten Werte werden absichtlich
     //nicht initialisiert!
