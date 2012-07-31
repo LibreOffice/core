@@ -18,7 +18,7 @@ endif
 include $(SRCDIR)/config_$(gb_Side).mk
 
 ifeq ($(GMAKE_OPTIONS),)
-ifeq ($(VERBOSE),)
+ifeq ($(verbose)$(VERBOSE),)
 export GMAKE_OPTIONS:=-rs
 else
 export GMAKE_OPTIONS:=-r
