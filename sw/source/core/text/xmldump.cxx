@@ -282,7 +282,7 @@ void SwFrm::dumpAsXml( xmlTextWriterPtr writer )
         name = "txt";
         break;
     case FRM_NOTXT:
-        name = "txt";
+        name = "notxt";
         break;
     };
 
