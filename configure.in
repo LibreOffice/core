@@ -142,10 +142,8 @@ if test -n "$with_android_ndk"; then
     # that is done, please use no newer NDK than r8.
 
     if test $host_cpu = arm; then
-        android_gcc_prefix=arm-linux-androideabi
         android_cpu=arm
     else
-        android_gcc_prefix=i686-android-linux
         # host_cpu is something like "i386" or "i686" I guess, NDK uses
         # "x86" in some contexts
         android_cpu=x86
@@ -166,6 +164,16 @@ if test -n "$with_android_ndk"; then
         ANDROID_NDK_TOOLCHAIN_VERSION_SUBDIR="${with_android_ndk_toolchain_version}/"
         ;;
     esac
+
+    if test $host_cpu = arm; then
+       android_gcc_prefix=arm-linux-androideabi
+    elif test -f $ANDROID_ABI_PREBUILT_BIN/i686-android-linux-gcc; then
+        android_gcc_prefix=i686-android-linux
+    elif test -f $ANDROID_ABI_PREBUILT_BIN/i686-linux-android-gcc; then
+        android_gcc_prefix=i686-linux-android
+    else
+        AC_MSG_ERROR([Can't figure out the toolchain prefix])
+    fi
 
     test -z "$SYSBASE" && export SYSBASE=$ANDROID_NDK_HOME/platforms/android-9/arch-$android_cpu
     test -z "$AR" && AR=$ANDROID_ABI_PREBUILT_BIN/$android_gcc_prefix-ar
