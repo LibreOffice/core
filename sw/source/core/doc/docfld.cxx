@@ -1106,12 +1106,10 @@ void SwDoc::FldsToCalc( SwCalc& rCalc, const _SetGetExpFld& rToThisFld )
 
     if( !pUpdtFlds->GetSortLst()->empty() )
     {
-        _SetGetExpFlds::const_iterator itLast = pUpdtFlds->GetSortLst()->lower_bound( (_SetGetExpFld*)&rToThisFld );
-        if (pUpdtFlds->GetSortLst()->end() != itLast && **itLast == rToThisFld)
-        {
-            ++itLast;
-        }
-
+        _SetGetExpFlds::const_iterator const itLast = std::upper_bound(
+                pUpdtFlds->GetSortLst()->begin(),
+                pUpdtFlds->GetSortLst()->end(),
+                const_cast<_SetGetExpFld*>(&rToThisFld));
         for( _SetGetExpFlds::const_iterator it = pUpdtFlds->GetSortLst()->begin(); it != itLast; ++it )
             lcl_CalcFld( *this, rCalc, **it, pMgr );
     }
@@ -1154,14 +1152,10 @@ void SwDoc::FldsToExpand( SwHash**& ppHashTbl, sal_uInt16& rTblSize,
     ppHashTbl = new SwHash*[ rTblSize ];
     memset( ppHashTbl, 0, sizeof( _HashStr* ) * rTblSize );
 
-    _SetGetExpFlds::const_iterator itLast;
-    {
-        itLast = pUpdtFlds->GetSortLst()->lower_bound( (_SetGetExpFld*)&rToThisFld );
-        if (pUpdtFlds->GetSortLst()->end() != itLast && **itLast == rToThisFld)
-        {
-            ++itLast;
-        }
-    }
+    _SetGetExpFlds::const_iterator const itLast = std::upper_bound(
+        pUpdtFlds->GetSortLst()->begin(),
+        pUpdtFlds->GetSortLst()->end(),
+        const_cast<_SetGetExpFld*>(&rToThisFld));
 
     for( _SetGetExpFlds::const_iterator it = pUpdtFlds->GetSortLst()->begin(); it != itLast; ++it )
     {
