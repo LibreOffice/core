@@ -339,6 +339,7 @@ my_components += \
 
 .IF "$(OS)" == "WNT"
 my_components += \
+    component/connectivity/source/drivers/ado/ado \
     component/dtrans/source/generic/dtrans \
     component/dtrans/util/dnd \
     component/dtrans/util/ftransl \
