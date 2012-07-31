@@ -406,6 +406,7 @@ public:
 
 class VCL_DLLPUBLIC CheckBox : public Button
 {
+private:
     Rectangle       maStateRect;
     Rectangle       maMouseRect;
     TriState        meState;
@@ -424,7 +425,7 @@ class VCL_DLLPUBLIC CheckBox : public Button
     SAL_DLLPRIVATE void         ImplDrawCheckBox( bool bLayout = false );
     SAL_DLLPRIVATE long         ImplGetImageToTextDistance() const;
     SAL_DLLPRIVATE Size         ImplGetCheckImageSize() const;
-private:
+
     // Copy assignment is forbidden and not implemented.
     SAL_DLLPRIVATE              CheckBox(const CheckBox &);
     SAL_DLLPRIVATE              CheckBox& operator= (const CheckBox &);
@@ -432,19 +433,15 @@ private:
 protected:
     using Control::ImplInitSettings;
     using Window::ImplInit;
-    // allows the behaviour of horizontal placement of the checbox image to be
-    // overridden.
-    virtual void ImplHandleHoriAlign( const Point& rPos, const Size& rSize,
-                                    const Size& rImageSize, Rectangle& rStateRect );
     SAL_DLLPRIVATE void         ImplInit( Window* pParent, WinBits nStyle );
     SAL_DLLPRIVATE void         ImplLoadRes( const ResId& rResId );
-                   virtual void FillLayoutData() const;
-                   virtual const Font&
+    SAL_DLLPRIVATE virtual void FillLayoutData() const;
+    SAL_DLLPRIVATE virtual const Font&
                                 GetCanonicalFont( const StyleSettings& _rStyle ) const;
-                   virtual const Color&
+    SAL_DLLPRIVATE virtual const Color&
                                 GetCanonicalTextColor( const StyleSettings& _rStyle ) const;
 
-                   virtual void ImplDrawCheckBoxState();
+    SAL_DLLPRIVATE virtual void ImplDrawCheckBoxState();
     SAL_DLLPRIVATE const Rectangle& GetStateRect() const { return maStateRect; }
     SAL_DLLPRIVATE const Rectangle& GetMouseRect() const { return maMouseRect; }
 public:
