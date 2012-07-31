@@ -26,10 +26,10 @@
  *
  ************************************************************************/
 
+#include <boost/ptr_container/ptr_set.hpp>
 
 #include <hintids.hxx>
 #include <rtl/math.hxx>
-#include <svl/svarray.hxx>
 #include <unotools/collatorwrapper.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -71,9 +71,8 @@ LocaleDataWrapper*  SwSortElement::pLclData = 0;
 // List of all sorted elements
 typedef SwSortElement*      SwSortElementPtr;
 
-SV_DECL_PTRARR_SORT(SwSortElements, SwSortElementPtr, 0)
-
-SV_IMPL_OP_PTRARR_SORT( SwSortElements, SwSortElementPtr );
+typedef ::boost::ptr_multiset<SwSortTxtElement> SwSortTxtElements;
+typedef ::boost::ptr_multiset<SwSortBoxElement> SwSortBoxElements;
 
 /*--------------------------------------------------------------------
     Description: Construct a SortElement for the Sort
@@ -404,12 +403,12 @@ sal_Bool SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
 
     SwNodeIndex aStart(pStart->nNode);
     SwSortElement::Init( this, rOpt );
-    SwSortElements aSortArr;
+    SwSortTxtElements aSortSet;
     while( aStart <= pEnd->nNode )
     {
         // Iterate over a selected Area
         SwSortTxtElement* pSE = new SwSortTxtElement( aStart );
-        aSortArr.Insert(pSE);
+        aSortSet.insert(pSE);
         aStart++;
     }
 
@@ -425,11 +424,12 @@ sal_Bool SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
 
     GetIDocumentUndoRedo().DoUndo(false);
 
-    for ( sal_uInt16 n = 0; n < aSortArr.Count(); ++n )
+    size_t n = 0;
+    for (SwSortTxtElements::const_iterator it = aSortSet.begin();
+            it != aSortSet.end(); ++it, ++n)
     {
-        SwSortTxtElement* pBox = (SwSortTxtElement*)aSortArr[n];
         aStart      = nBeg + n;
-        aRg.aStart  = pBox->aPos.GetIndex();
+        aRg.aStart  = it->aPos.GetIndex();
         aRg.aEnd    = aRg.aStart.GetIndex() + 1;
 
         // Move Nodes
@@ -438,10 +438,12 @@ sal_Bool SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
 
         // Insert Move in Undo
         if(pUndoSort)
-            pUndoSort->Insert(pBox->nOrg, nBeg + n);
+        {
+            pUndoSort->Insert(it->nOrg, nBeg + n);
+        }
     }
     // Delete all elements from the SortArray
-    aSortArr.DeleteAndDestroy(0, aSortArr.Count());
+    aSortSet.clear();
     SwSortElement::Finit();
 
     if( pRedlPam )
@@ -585,7 +587,7 @@ sal_Bool SwDoc::SortTbl(const SwSelBoxes& rBoxes, const SwSortOptions& rOpt)
 
     // Sort SortList by Key
     SwSortElement::Init( this, rOpt, &aFlatBox );
-    SwSortElements aSortList;
+    SwSortBoxElements aSortList;
 
     // When sorting, do not include the first row if the HeaderLine is repeated
     sal_uInt16 i;
@@ -593,18 +595,23 @@ sal_Bool SwDoc::SortTbl(const SwSelBoxes& rBoxes, const SwSortOptions& rOpt)
     for( i = nStart; i < nCount; ++i)
     {
         SwSortBoxElement* pEle = new SwSortBoxElement( i );
-        aSortList.Insert(pEle);
+        aSortList.insert(pEle);
     }
 
     // Move after Sorting
     SwMovedBoxes aMovedList;
-    for(i=0; i < aSortList.Count(); ++i)
+    i = 0;
+    for (SwSortBoxElements::const_iterator it = aSortList.begin();
+            it != aSortList.end(); ++i, ++it)
     {
-        SwSortBoxElement* pBox = (SwSortBoxElement*)aSortList[i];
         if(rOpt.eDirection == SRT_ROWS)
-            MoveRow(this, aFlatBox, pBox->nRow, i + nStart, aMovedList, pUndoSort);
+        {
+            MoveRow(this, aFlatBox, it->nRow, i+nStart, aMovedList, pUndoSort);
+        }
         else
-            MoveCol(this, aFlatBox, pBox->nRow, i + nStart, aMovedList, pUndoSort);
+        {
+            MoveCol(this, aFlatBox, it->nRow, i+nStart, aMovedList, pUndoSort);
+        }
     }
 
     // Restore table frames:
@@ -617,7 +624,7 @@ sal_Bool SwDoc::SortTbl(const SwSelBoxes& rBoxes, const SwSortOptions& rOpt)
     UpdateCharts( pTblNd->GetTable().GetFrmFmt()->GetName() );
 
     // Delete all Elements in the SortArray
-    aSortList.DeleteAndDestroy( 0, aSortList.Count() );
+    aSortList.clear();
     SwSortElement::Finit();
 
     SetModified();
