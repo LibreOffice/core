@@ -49,7 +49,8 @@ PATCH_FILES=\
     python-md5.patch \
     python-ssl.patch \
     python-$(PYVERSION)-sysbase.patch \
-    python-$(PYVERSION)-nohardlink.patch
+    python-$(PYVERSION)-nohardlink.patch \
+    python-$(PYVERSION)-pcbuild.patch
 
 CONFIGURE_DIR=
 
@@ -108,8 +109,6 @@ BUILD_ACTION=$(ENV_BUILD) make && make install
 #.ENDIF
 
 BUILD_DIR=PCbuild
-
-PATCH_FILES=python-$(PYVERSION)-pcbuild.patch
 
 # Build python executable and then runs a minimal script. Running the minimal script
 # ensures that certain *.pyc files are generated which would otherwise be created on
