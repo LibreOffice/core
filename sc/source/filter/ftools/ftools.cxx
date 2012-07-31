@@ -280,7 +280,8 @@ ByteString ScfTools::ReadCString( SvStream& rStrm )
 {
     rtl::OStringBuffer aRet;
 
-    while (1)
+    sal_uInt32 nLen = 0;
+    while (nLen++ < STRING_MAXLEN)
     {
         sal_Char cChar(0);
         rStrm >> cChar;
@@ -288,7 +289,9 @@ ByteString ScfTools::ReadCString( SvStream& rStrm )
             break;
         aRet.append(cChar);
     }
-
+    // Callers assume that a 0-byte was read and may advance their book keeping
+    // counters by String.Len()+1, don't put back cChar!=0 if STRING_MAXLEN was
+    // reached.
     return aRet.makeStringAndClear();
 }
 
@@ -296,7 +299,8 @@ ByteString ScfTools::ReadCString( SvStream& rStrm, sal_Int32& rnBytesLeft )
 {
     rtl::OStringBuffer aRet;
 
-    while (1)
+    sal_uInt32 nLen = 0;
+    while (nLen++ < STRING_MAXLEN)
     {
         sal_Char cChar(0);
         rStrm >> cChar;
