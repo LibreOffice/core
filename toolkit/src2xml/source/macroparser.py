@@ -33,7 +33,7 @@ class MacroParser(object):
 
     def parse (self):
         """
-A macro with arguments must have its open paren immediately following 
+A macro with arguments must have its open paren immediately following
 its name without any whitespace.
 """
         if self.debug:
@@ -66,7 +66,7 @@ its name without any whitespace.
     def parseArgs (self, buffer):
         """Parse arguments.
 
-The buffer is expected to be formatted like '(a, b, c)' where the first 
+The buffer is expected to be formatted like '(a, b, c)' where the first
 character is the open paren.
 """
         scope = 0
@@ -126,7 +126,7 @@ character is the open paren.
             self.macro.tokens = mclexer.getTokens()
             if self.debug:
                 print self.macro.tokens
-            
+
             if not self.isValidMacro(self.macro):
                 self.macro = None
 

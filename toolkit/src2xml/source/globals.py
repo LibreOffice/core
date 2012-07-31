@@ -21,7 +21,7 @@
 
 import sys
 
-class ParseError (Exception): 
+class ParseError (Exception):
     pass
 
 def error (msg, exit=0):
@@ -101,7 +101,7 @@ class Element(Node):
             chars += '>'
             for child in self.getChildren():
                 chars += child.dump(level+1)
-    
+
             chars += "\n"+Element.INDENT*level
             chars += "</%s>"%self.name
 

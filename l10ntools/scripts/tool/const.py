@@ -29,5 +29,3 @@ class _const:
 
 import sys
 sys.modules[__name__] = _const()
-
-

@@ -46,7 +46,7 @@ Examples:
 
     def format_examples (self):
         return examples
-    
+
     if 'epilog' in  p.__dict__:
         p.formatter.format_epilog = format_examples
         p.epilog = examples
@@ -243,6 +243,6 @@ def main ():
             dry_one_file (f, options)
         else:
             do_one_file (f, options)
-        
+
 if __name__ == '__main__':
     main ()

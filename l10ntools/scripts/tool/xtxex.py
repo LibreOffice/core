@@ -22,21 +22,21 @@
 from l10ntool import AbstractL10nTool
 from sdf import SdfEntity
 import sys
-import shutil 
+import shutil
 
 class Xtxex(AbstractL10nTool):
-    _resource_type       = "xtx" 
-       
+    _resource_type       = "xtx"
+
     def __init__(self):
         AbstractL10nTool.__init__(self)
-        
-    def merge_file(self, inputfilename, outputfilename, parsed_file_ref, lang, is_forced_lang, sdfdata): 
+
+    def merge_file(self, inputfilename, outputfilename, parsed_file_ref, lang, is_forced_lang, sdfdata):
         # Special handling for en-US files
-        if lang == "en-US":             
+        if lang == "en-US":
             mod_outputfilename = outputfilename
             # mod here if needed
             self.copy_file(inputfilename, mod_outputfilename)
-            return      
+            return
         # merge usual lang
         sdfline = self.prepare_sdf_line(inputfilename,lang)
         if sdfdata.has_key(sdfline.get_id()):
@@ -50,11 +50,11 @@ class Xtxex(AbstractL10nTool):
                 sys.exit(-1)
             else:
                 f.close()
-            return        
+            return
         # no sdf data found then copy en-US source file
         if is_forced_lang:
             self.copy_file(inputfilename, outputfilename)
-               
+
     ##### Extract a single File
     def extract_file(self, inputfile):
         lines = []
@@ -67,7 +67,7 @@ class Xtxex(AbstractL10nTool):
         else:
             f.close()
         # remove legal header
-        lines = [line for line in lines if len(line) > 0 and not line[0] == '#']        
+        lines = [line for line in lines if len(line) > 0 and not line[0] == '#']
         # escape all returns
         lines = [line.replace('\n', "\\n") for line in lines]
         line = ''.join(lines)
@@ -84,5 +84,5 @@ class Xtxex(AbstractL10nTool):
             lang = self._source_language
         return SdfEntity(project=self._options.project_name, source_file=self.get_filename_string(inputfile),
                           resource_type=self._resource_type, gid="none", lid="none", langid=lang,text="")
-         
+
 run = Xtxex()

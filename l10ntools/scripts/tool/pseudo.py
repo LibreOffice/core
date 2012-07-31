@@ -19,12 +19,12 @@
 #  
 #**************************************************************
 
-# to support macosx baseline machines from Cretaceous period 
+# to support macosx baseline machines from Cretaceous period
 
 # incomplete set() class implementation of Python 2.4
 class PseudoSet:
     _list = []
-   
+
     def __str__(self):
         return str(self._list)
 
@@ -56,10 +56,10 @@ class PseudoSet:
             return PseudoSet(tmplist)
         else:
             print "__and__(None)"
-                    
+
     def __iter__(self):
         return self._list.__iter__()
-    
+
     def __items__(self):
         return self._list.items()
 
@@ -67,16 +67,16 @@ class PseudoSet:
         return keys(self._list)
 
     def _remove_dupes(self, list):
-        tmpdict = {} 
+        tmpdict = {}
         for key in list:
             tmpdict[key] = 1
         return tmpdict.keys()
 
-# incomplete OrderedDict() class implementation 
+# incomplete OrderedDict() class implementation
 class PseudoOrderedDict(dict):
     _keylist        = []
     _valuelist      = []
-    
+
     def __init__(self, defaults={}):
         dict.__init__(self)
         for n,v in defaults.items():
@@ -86,7 +86,7 @@ class PseudoOrderedDict(dict):
         self._keylist.append(key)
         self._valuelist.append(value)
         return dict.__setitem__(self, key, value)
-        
+
     def __delattr__(self, key):
         self._keylist.__delattr__(key)
         self._valuelist.__delattr__(dict[key])
@@ -96,17 +96,17 @@ class PseudoOrderedDict(dict):
         self._keylist.__delitem__(key)
         self._valuelist.__delitem__(dict[key])
         return dict.__delitem__(self, key)
-        
+
     def __iter__(self):
         raise NotImplementedError("__iter__")
-    
+
     def __iterkeys__(self):
         return self._keylist
-    
+
     def iteritems(self):
         #return self._valuelist
         return zip(self._keylist, self._valuelist)
-   
+
     def items(self):
         return zip(self._keylist,self._valuelist)
 
@@ -118,15 +118,15 @@ class PseudoOrderedDict(dict):
 
     def __keysattr__(self):
         return self._keylist
-    
+
     def pop(self, key):
         self._keylist.pop(key)
         self._valuelist.pop(key)
         return dict.__pop__(self, key)
-    
+
     def popitem(self):
         raise NotImplementedError("popitem")
-    
+
 def _testdriver_set():
     list, list1 = [] ,[]
     list.append("a")

@@ -26,35 +26,35 @@ class SdfData:
     _filename        = "";
     _dict            = PseudoOrderedDict()
     _languages_found = [];
-    
+
     def __init__ (self, filename=""):
         self._filename = filename
-    
+
     def __getitem__(self, key):
         if self._dict.has_key(key):
             return self._dict[key]
         else:
             return None
-    
+
     def has_key(self, key):
         return self._dict.has_key(key)
-    
+
     def __setitem__(self, key, value):
         self._dict[key] = value
-    
+
     def get_languages_found_in_sdf(self):
         return PseudoSet(self._languages_found)
 
     def read(self):
         try:
             f = open(self._filename, "r")
-            lines = [line.rstrip('\n') for line in f.readlines()] 
+            lines = [line.rstrip('\n') for line in f.readlines()]
         except IOError:
             print "ERROR: Trying to read "+ self._filename
             raise
         else:
             f.close()
-        for line in lines:        
+        for line in lines:
             entity = SdfEntity()
             entity.set_properties(line)
             self._dict[entity.get_id()] = entity
@@ -62,7 +62,7 @@ class SdfData:
 
     def write(self, filename):
         try:
-            f = open(filename, "w+") 
+            f = open(filename, "w+")
             for value in self._dict.itervalues():
                 #f.write( repr(value)+"\n" )
                 f.write(value + "\n")
@@ -73,7 +73,7 @@ class SdfData:
             f.close()
 
 import sys
-class SdfEntity: 
+class SdfEntity:
     # Sdf format columns
     project         = ""
     source_file     = ""
@@ -90,7 +90,7 @@ class SdfEntity:
     quickhelptext   = ""
     title           = ""
     date            = ""
-    
+
     import const
     const._PROJECT_POS         = 0
     const._SOURCE_FILE_POS     = 1
@@ -107,8 +107,8 @@ class SdfEntity:
     const._QUICKHELPTEXT_POS   = 12
     const._TITLE_POS           = 13
     const._DATE_POS            = 14
-        
-    def __init__(self, project="", source_file="", dummy1="0", resource_type="", gid="", lid="", helpid="", platform="", dummy2="0", langid="", 
+
+    def __init__(self, project="", source_file="", dummy1="0", resource_type="", gid="", lid="", helpid="", platform="", dummy2="0", langid="",
                        text="", helptext="", quickhelptext="", title="", date=""):
         self.project        = project;
         self.source_file    = source_file;
@@ -133,32 +133,32 @@ class SdfEntity:
     def set_properties(self, line):
         splitted = line.split("\t")
         if len(splitted) == 15:
-            self.project        = splitted[ self.const._PROJECT_POS ]             
-            self.source_file    = splitted[ self.const._SOURCE_FILE_POS ]     
-            self.dummy1         = splitted[ self.const._DUMMY1_POS ]         
-            self.resource_type  = splitted[ self.const._RESOURCE_TYPE_POS ] 
-            self.gid            = splitted[ self.const._GID_POS ]             
-            self.lid            = splitted[ self.const._LID_POS ]             
-            self.helpid         = splitted[ self.const._HELPID_POS ]         
-            self.platform       = splitted[ self.const._PLATFORM_POS ]         
-            self.dummy2         = splitted[ self.const._DUMMY2_POS ]         
-            self.langid         = splitted[ self.const._LANGID_POS ]         
-            self.text           = splitted[ self.const._TEXT_POS ]             
-            self.helptext       = splitted[ self.const._HELPTEXT_POS ]         
-            self.quickhelptext  = splitted[ self.const._QUICKHELPTEXT_POS ] 
-            self.title          = splitted[ self.const._TITLE_POS ]         
-            self.date           = splitted[ self.const._DATE_POS ]            
+            self.project        = splitted[ self.const._PROJECT_POS ]
+            self.source_file    = splitted[ self.const._SOURCE_FILE_POS ]
+            self.dummy1         = splitted[ self.const._DUMMY1_POS ]
+            self.resource_type  = splitted[ self.const._RESOURCE_TYPE_POS ]
+            self.gid            = splitted[ self.const._GID_POS ]
+            self.lid            = splitted[ self.const._LID_POS ]
+            self.helpid         = splitted[ self.const._HELPID_POS ]
+            self.platform       = splitted[ self.const._PLATFORM_POS ]
+            self.dummy2         = splitted[ self.const._DUMMY2_POS ]
+            self.langid         = splitted[ self.const._LANGID_POS ]
+            self.text           = splitted[ self.const._TEXT_POS ]
+            self.helptext       = splitted[ self.const._HELPTEXT_POS ]
+            self.quickhelptext  = splitted[ self.const._QUICKHELPTEXT_POS ]
+            self.title          = splitted[ self.const._TITLE_POS ]
+            self.date           = splitted[ self.const._DATE_POS ]
 
     def get_file_id(self):
         return self.project + "\\" + self.source_file
-    
+
     def get_resource_path(self):
-            return self.source_file[0:self.source_file.rfind( "\\" )-1]
-    
+        return self.source_file[0:self.source_file.rfind( "\\" )-1]
+
     def __str__(self):
-        return ''.join([self.project, "\t", self.source_file, "\t", self.dummy1, "\t", self.resource_type, "\t" , 
-            self.gid, "\t", self.lid, "\t", self.helpid, "\t", self.platform, "\t", self.dummy2, "\t" , self.langid, 
+        return ''.join([self.project, "\t", self.source_file, "\t", self.dummy1, "\t", self.resource_type, "\t" ,
+            self.gid, "\t", self.lid, "\t", self.helpid, "\t", self.platform, "\t", self.dummy2, "\t" , self.langid,
             "\t", self.text, "\t", self.helptext, "\t", self.quickhelptext, "\t" , self.title, "\t", self.date ])
-    
+
     def get_id(self):
         return ''.join([self.project, self.gid, self.lid, self.source_file, self.resource_type, self.platform, self.helpid, self.langid])

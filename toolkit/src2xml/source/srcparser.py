@@ -24,7 +24,7 @@ from globals import *
 import srclexer
 
 # simple name translation map
-postTransMap = {"ok-button": "okbutton", 
+postTransMap = {"ok-button": "okbutton",
                 "cancel-button": "cancelbutton",
                 "help-button": "helpbutton"}
 
@@ -139,11 +139,11 @@ class MacroExpander(object):
     def parseValues (self):
         """Parse tokens to get macro function variable values.
 
-Be aware that there is an implicit quotes around the text between the open 
-paren, the comma(s), and the close paren.  For instance, if a macro is defined 
-as FOO(a, b) and is used as FOO(one two three, and four), then the 'a' must be 
-replaced with 'one two three', and the 'b' replaced with 'and four'.  In other 
-words, whitespace does not end a token.  
+Be aware that there is an implicit quotes around the text between the open
+paren, the comma(s), and the close paren.  For instance, if a macro is defined
+as FOO(a, b) and is used as FOO(one two three, and four), then the 'a' must be
+replaced with 'one two three', and the 'b' replaced with 'and four'.  In other
+words, whitespace does not end a token.
 
 """
         values = []
@@ -250,17 +250,17 @@ This is the main loop for the parser.  This is where it all begins and ends.
     # Token Handlers
 
     """
-Each token handler takes the current token position and returns the position 
-of the last token processed.  For the most part, the current token position 
-and the last processed token are one and the same, in which case the handler 
-can simply return the position value it receives without incrementing it.  
+Each token handler takes the current token position and returns the position
+of the last token processed.  For the most part, the current token position
+and the last processed token are one and the same, in which case the handler
+can simply return the position value it receives without incrementing it.
 
-If you need to read ahead to process more tokens than just the current token, 
-make sure that the new token position points to the last token that has been 
-processed, not the next token that has not yet been processed.  This is 
-because the main loop increments the token position when it returns from the 
+If you need to read ahead to process more tokens than just the current token,
+make sure that the new token position points to the last token that has been
+processed, not the next token that has not yet been processed.  This is
+because the main loop increments the token position when it returns from the
 handler.
-""" 
+"""
 
     # assignment token '='
     def assignment (self, i):
@@ -272,7 +272,7 @@ handler.
 
         self.tokenBuf = []
         return i
-    
+
     # open brace token '{'
     def openBrace (self, i):
         bufSize = len(self.tokenBuf)
@@ -326,11 +326,11 @@ handler.
         if len(self.tokenBuf) == 0:
             pass
         elif scope == 0:
-            # We are not supposed to have any statment in global scope.  
+            # We are not supposed to have any statment in global scope.
             # Just ignore this statement.
             pass
         else:
-            # Statement within a scope.  Import it as an attribute for the 
+            # Statement within a scope.  Import it as an attribute for the
             # current element.
             elem = self.elementStack[-1]
 
@@ -433,5 +433,3 @@ handler.
             raise ParseError ('')
 
         return eval(values[0]), eval(values[1])
-
-

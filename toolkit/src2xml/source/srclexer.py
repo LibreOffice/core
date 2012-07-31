@@ -55,7 +55,7 @@ def dumpTokens (tokens, toError=False):
     indent = "    "
     line = ''
     chars = ''
-    
+
     for token in tokens:
         if token in '{<':
             if len(line) > 0:
@@ -98,7 +98,7 @@ class HeaderData(object):
 class SrcLexer(object):
     """Lexicographical analyzer for .src format.
 
-The role of a lexer is to parse the source file and break it into 
+The role of a lexer is to parse the source file and break it into
 appropriate tokens.  Such tokens are later passed to a parser to
 build the syntax tree.
 """
@@ -182,7 +182,7 @@ build the syntax tree.
             if item != SrcLexer.VISIBLE:
                 return False
         return True
-        
+
     def tokenize (self):
         self.init()
 
@@ -364,7 +364,7 @@ build the syntax tree.
             return eval(buf)
         except:
             return True
-        
+
     def handleMacroDefine (self, buf):
 
         mparser = macroparser.MacroParser(buf)
@@ -399,7 +399,7 @@ build the syntax tree.
         if not headerPath:
             error("included header file " + headerSub + " not found\n", self.stopOnHeader)
             return
-        
+
         if self.debug:
             progress ("%s found\n"%headerPath)
 

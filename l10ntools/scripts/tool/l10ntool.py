@@ -30,9 +30,9 @@ import shutil
 class AbstractL10nTool:
     _options            = {}
     _args               = ""
-    _resource_type      = "" 
+    _resource_type      = ""
     _source_language    = "en-US"
-   
+
     ##### Implement these abstract methods
 
     ##### Nameing scheme for the output files
@@ -58,9 +58,9 @@ class AbstractL10nTool:
     ################### Extract a single File ######################################################
     def extract_file(self, inputfile):
         pass
-    
+
     ################################################################################################
-     
+
     def format_outputfile(self, filename, language):
         extension = filename[filename.rfind('.')+1:]
         file = filename[:filename.rfind('.')]
@@ -78,26 +78,26 @@ class AbstractL10nTool:
             return ""
         else:
             return self._options.outputfile[:self._options.outputfile.rfind('/')]
-            
+
     def merge(self,  sdfdata):
         langset,forcedset, foundset = PseudoSet(), PseudoSet() , PseudoSet()
 
-        if self._options.languages:       
-            langset = PseudoSet(self._options.languages)  
-        if self._options.forcedlanguages: 
-            forcedset = PseudoSet(self._options.forcedlanguages) 
-        if sdfdata.get_languages_found_in_sdf(): 
-            foundset = sdfdata.get_languages_found_in_sdf() 
-    
-        if self.has_multi_inputfiles(): 
+        if self._options.languages:
+            langset = PseudoSet(self._options.languages)
+        if self._options.forcedlanguages:
+            forcedset = PseudoSet(self._options.forcedlanguages)
+        if sdfdata.get_languages_found_in_sdf():
+            foundset = sdfdata.get_languages_found_in_sdf()
+
+        if self.has_multi_inputfiles():
             filelist = self.read_inputfile_list()
         else:
             filelist = self._options.inputfile
-            
+
         for inputfile in filelist:
             ref = self.parse_file(inputfile)
             # Don't write that files if there is no l10n present
-            if ((langset & foundset) - forcedset):  # all langs given and found in sdf without enforced 
+            if ((langset & foundset) - forcedset):  # all langs given and found in sdf without enforced
                 [self.merge_file(inputfile,self.format_outputfile(inputfile, lang), ref, lang, False, sdfdata) for lang in ((langset & foundset) - forcedset)]
             # Always write those files even if there is no l10n available
             if forcedset: # all enforced langs
@@ -105,15 +105,15 @@ class AbstractL10nTool:
             # In case a big file have to be written
             if ((langset & foundset) | forcedset): # all langs given ,found in sdf and enforced ones
                 self.merge_one_big_file(inputfile, self.format_outputfile(inputfile, lang), ref, ((langset & foundset) | forcedset), sdfdata)
-    
-    def has_multi_inputfiles(self): 
+
+    def has_multi_inputfiles(self):
         return self._options.inputfile[0] == '@'
 
     def copy_file(self, inputfilename, outputfilename):
-        try: 
+        try:
             os.remove(outputfilename)
         except:
-            pass    
+            pass
 
         try:
             os.remove(outputfilename)
@@ -125,7 +125,7 @@ class AbstractL10nTool:
         except IOError:
             print "ERROR: Can not copy file '" + inputfilename + "' to " + "'" + outputfilename + "'"
             sys.exit(-1)
-    
+
     def extract(self):
         try:
             f = open(self._options.outputfile, "w+")
@@ -134,7 +134,7 @@ class AbstractL10nTool:
             print "ERROR: Can not write file " + self._options.outputfile
         else:
             f.close()
-            
+
     # Parse the common options
     def parse_options(self):
         parser = OptionParser()
@@ -147,19 +147,19 @@ class AbstractL10nTool:
         parser.add_option("-r", "--projectroot",     dest="project_root",    metavar="PATH", help=""                              )
         parser.add_option("-f", "--forcedlanguages", dest="forcedlanguages", metavar="ISOCODE[,ISOCODE]", help="Always merge those langs even if no l10n is available for those langs" )
         parser.add_option("-l", "--languages",       dest="languages",       metavar="ISOCODE[,ISOCODE]", help="Merge those langs if l10n is found for each")
-        parser.add_option("-s", "--pattern",         dest="pattern",         metavar="", help=""                                  )        
+        parser.add_option("-s", "--pattern",         dest="pattern",         metavar="", help=""                                  )
         parser.add_option("-q", "--quiet",           action="store_true",    dest="quietmode", help="",default=False)
         (self._options, self.args) = parser.parse_args()
-        
+
         # -l "de,pr,pt-BR" => [ "de" , "pt" , "pt-BR" ]
         parse_complex_arg = lambda arg: arg.split(",")
-        
-        if self._options.forcedlanguages: 
-            self._options.forcedlanguages = parse_complex_arg(self._options.forcedlanguages) 
-        if self._options.languages:       
-            self._options.languages = parse_complex_arg(self._options.languages) 
+
+        if self._options.forcedlanguages:
+            self._options.forcedlanguages = parse_complex_arg(self._options.forcedlanguages)
+        if self._options.languages:
+            self._options.languages = parse_complex_arg(self._options.languages)
         self.test_options()
-        
+
     def __init__(self):
         self.parse_options()
         if self._options.input_sdf_file != None and len(self._options.input_sdf_file):
@@ -183,7 +183,7 @@ class AbstractL10nTool:
             except IOError:
                 print "Error: Can not create dir " + dir
                 sys.exit(-1)
-            
+
     def test_options(self):
         opt = self._options
         is_valid = lambda x: x != None and len(x) > 0
@@ -193,7 +193,7 @@ class AbstractL10nTool:
                 ( is_valid(opt.inputfile) and is_valid(opt.outputFile)) ))))
         print "Strange options ..."
         sys.exit( -1 )
-                     
+
     def read_inputfile_list(self):
         if self.has_multi_inputfiles():
             lines = []
@@ -206,9 +206,8 @@ class AbstractL10nTool:
             else:
                 f.close()
             return lines
-        
+
     def get_filename_string(self, inputfile):
         absfile = os.path.realpath(os.path.abspath(inputfile))
-        absroot = os.path.realpath(os.path.abspath(self._options.project_root)) 
+        absroot = os.path.realpath(os.path.abspath(self._options.project_root))
         return absfile[len(absroot)+1:].replace('/','\\')
-    
