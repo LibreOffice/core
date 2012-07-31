@@ -71,24 +71,6 @@ public:
 // SORTARR - Begin
 
 #define _SV_IMPL_SORTAR_ALG(nm, AE)\
-void nm::Insert( const nm * pI, sal_uInt16 nS, sal_uInt16 nE )\
-{\
-    if( USHRT_MAX == nE )\
-        nE = pI->Count();\
-    sal_uInt16 nP;\
-    const AE * pIArr = pI->GetData();\
-    for( ; nS < nE; ++nS )\
-    {\
-        if( ! Seek_Entry( *(pIArr+nS), &nP) )\
-                nm##_SAR::Insert( *(pIArr+nS), nP );\
-        if( ++nP >= Count() )\
-        {\
-            nm##_SAR::Insert( pI, nP, nS+1, nE );\
-            nS = nE;\
-        }\
-    }\
-}\
-\
 sal_Bool nm::Insert( const AE & aE )\
 {\
     sal_uInt16 nP;\
@@ -98,33 +80,12 @@ sal_Bool nm::Insert( const AE & aE )\
         nm##_SAR::Insert( aE, nP );\
     return !bExist;\
 }\
-sal_Bool nm::Insert( const AE & aE, sal_uInt16& rP )\
-{\
-    sal_Bool bExist;\
-    bExist = Seek_Entry( aE, &rP );\
-    if( ! bExist )\
-        nm##_SAR::Insert( aE, rP );\
-    return !bExist;\
-}\
-void nm::Insert( const AE* pE, sal_uInt16 nL)\
-{\
-    sal_uInt16 nP;\
-    for( sal_uInt16 n = 0; n < nL; ++n )\
-        if( ! Seek_Entry( *(pE+n), &nP ))\
-            nm##_SAR::Insert( *(pE+n), nP );\
-}\
+\
 void nm::Remove( sal_uInt16 nP, sal_uInt16 nL )\
 {\
     if( nL )\
         nm##_SAR::Remove( nP, nL);\
-}\
-\
-void nm::Remove( const AE &aE, sal_uInt16 nL )\
-{\
-    sal_uInt16 nP;\
-    if( nL && Seek_Entry( aE, &nP ) )   \
-        nm##_SAR::Remove( nP, nL);\
-}\
+}
 
 #define SV_DECL_PTRARR_SORT(nm, AE, IS)\
 class nm##_SAR: public SvPtrarr \
@@ -167,12 +128,8 @@ class nm : private nm##_SAR \
 public:\
     nm(sal_uInt16 nSize = IS)\
         : nm##_SAR(nSize) {}\
-    void Insert( const nm *pI, sal_uInt16 nS=0, sal_uInt16 nE=USHRT_MAX );\
     sal_Bool Insert( const AE& aE );\
-    sal_Bool Insert( const AE& aE, sal_uInt16& rP );\
-    void Insert( const AE *pE, sal_uInt16 nL );\
     void Remove( sal_uInt16 nP, sal_uInt16 nL = 1 );\
-    void Remove( const AE& aE, sal_uInt16 nL = 1 );\
     sal_uInt16 Count() const  {   return nm##_SAR::Count(); }\
     const AE* GetData() const { return (const AE*)pData; }\
     AE operator[](sal_uInt16 nP) const {\

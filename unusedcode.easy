@@ -38,21 +38,9 @@ SvXMLStyleIndices_Impl::Remove(SvXMLStyleIndex_Impl*)
 SvtSlideSorterBarOptions::AddListenerLink(Link const&)
 SvtSlideSorterBarOptions::RemoveListenerLink(Link const&)
 SvxPositionSizeTabPage::GetRect()
-SwSortElements::Insert(SwSortElement* const&, unsigned short&)
-SwSortElements::Insert(SwSortElement* const*, unsigned short)
-SwSortElements::Insert(SwSortElements const*, unsigned short, unsigned short)
-SwSortElements::Remove(SwSortElement* const&, unsigned short)
 SwSortElements::Remove(unsigned short, unsigned short)
 SwXMLTableColumnsSortByWidth_Impl::GetPos(SwXMLTableColumn_Impl const*) const
 SwXMLTableColumnsSortByWidth_Impl::Remove(SwXMLTableColumn_Impl*)
-SwpHtEnd::Insert(SwTxtAttr const*&, unsigned short&)
-SwpHtEnd::Insert(SwTxtAttr const**, unsigned short)
-SwpHtEnd::Insert(SwpHtEnd const*, unsigned short, unsigned short)
-SwpHtEnd::Remove(SwTxtAttr const*&, unsigned short)
-SwpHtStart::Insert(SwTxtAttr const*&, unsigned short&)
-SwpHtStart::Insert(SwTxtAttr const**, unsigned short)
-SwpHtStart::Insert(SwpHtStart const*, unsigned short, unsigned short)
-SwpHtStart::Remove(SwTxtAttr const*&, unsigned short)
 TempFile::IsValid() const
 TextEngine::GetLeftMargin() const
 ThumbnailView::GetItemCount() const
