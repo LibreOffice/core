@@ -127,7 +127,12 @@ public:
     sal_uInt8 GetOutCntnr() const { return nOutputMode & HTML_CNTNR_MASK; }
 };
 
-class SwHTMLPosFlyFrms : public o3tl::sorted_vector<SwHTMLPosFlyFrm*, o3tl::less_ptr_to<SwHTMLPosFlyFrm> > {};
+class SwHTMLPosFlyFrms
+    : public o3tl::sorted_vector<SwHTMLPosFlyFrm*,
+                o3tl::less_ptr_to<SwHTMLPosFlyFrm>,
+                o3tl::find_partialorder_ptrequals<SwHTMLPosFlyFrm*,
+                    o3tl::less_ptr_to<SwHTMLPosFlyFrm> > >
+{};
 
 #endif
 
