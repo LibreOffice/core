@@ -75,7 +75,6 @@
 #include <boost/ptr_container/ptr_vector.hpp>
 
 typedef std::vector<SdrObject*> SdrObjArray;
-//  SV_DECL_OBJARR(FmFormArray, ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm>, 32, 16);
 DECLARE_STL_VECTOR( ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm > ,FmFormArray);
 
 // catch database exceptions if they occur

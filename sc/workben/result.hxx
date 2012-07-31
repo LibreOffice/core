@@ -29,7 +29,6 @@
 #ifndef SC_RESULT_HXX
 #define SC_RESULT_HXX
 
-#include <svl/svarray.hxx>
 #include <vcl/timer.hxx>
 #include <tools/string.hxx>
 #include <boost/ptr_container/ptr_vector.hpp>
