@@ -27,7 +27,9 @@
 
 #include "../swmodeltestbase.hxx"
 
+#include <com/sun/star/form/validation/XValidatableFormComponent.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
+#include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
@@ -39,10 +41,12 @@ class Test : public SwModelTestBase
 {
 public:
     void testN325936();
+    void testFdo45724();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
     CPPUNIT_TEST(testN325936);
+    CPPUNIT_TEST(testFdo45724);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -78,6 +82,17 @@ void Test::testN325936()
     uno::Reference<beans::XPropertySet> xPropertySet(xDraws->getByIndex(0), uno::UNO_QUERY);
     sal_Int32 nValue = getProperty< sal_Int32 >(xDraws->getByIndex(0), "BackColorTransparency");
     CPPUNIT_ASSERT_EQUAL(sal_Int32(100), nValue);
+}
+
+void Test::testFdo45724()
+{
+    roundtrip("fdo45724.odt");
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    uno::Reference<drawing::XControlShape> xControlShape(xDraws->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<form::validation::XValidatableFormComponent> xComponent(xControlShape->getControl(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(COL_WHITE, getProperty<sal_uInt32>(xComponent, "BackgroundColor"));
+    CPPUNIT_ASSERT_EQUAL(OUString("xxx"), xComponent->getCurrentValue().get<OUString>());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

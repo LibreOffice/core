@@ -85,6 +85,7 @@ $(eval $(call gb_CppunitTest_use_components,sw_subsequent_ww8export,\
     i18npool/util/i18npool \
     package/source/xstor/xstor \
     package/util/package2 \
+    sax/source/expatwrap/expwrap \
     sw/util/msword \
     sw/util/sw \
     sw/util/swd \
