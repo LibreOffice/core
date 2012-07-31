@@ -101,6 +101,8 @@ class ScXMLTableRowCellContext : public SvXMLImportContext
     void PutFormulaCell             ( const ScAddress& rScCurrentPos );
     void AddFormulaCell             ( const ScAddress& rScCellPos );
 
+    bool HasSpecialCaseFormulaText() const;
+
 public:
 
     ScXMLTableRowCellContext( ScXMLImport& rImport, sal_uInt16 nPrfx,

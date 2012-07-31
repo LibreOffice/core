@@ -188,9 +188,9 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
                     ::sax::Converter::convertDouble(fValue, sValue);
                     bIsEmpty = false;
 
-                    //if office:value="0", treat like text in case the formula
-                    //result is "Err:###", "#N/A", or matrix reference cell with
-                    //blank text result until we confirm otherwise.
+                    //if office:value="0", let's get the text:p in case this is
+                    //a special case in HasSpecialCaseFormulaText(). If it
+                    //turns out not to be a special case, we'll use the 0 value.
                     if(fValue == 0.0)
                         bFormulaTextResult = true;
                 }
@@ -262,6 +262,11 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
             bFormulaTextResult = true;
         if(nCellType == util::NumberFormat::DATETIME)
             nCellType = util::NumberFormat::UNDEFINED;
+        //if bIsEmpty is true at this point, then there is no office value.
+        //we must get the text:p (even if it is empty) in case this a special
+        //case in HasSpecialCaseFormulaText().
+        if(bIsEmpty)
+            bFormulaTextResult = true;
     }
     rXMLImport.GetStylesImportHelper()->SetAttributes(pStyleName, pCurrencySymbol, nCellType);
 }
@@ -748,7 +753,7 @@ void ScXMLTableRowCellContext::SetFormulaCell(ScFormulaCell* pFCell) const
 {
     if(pFCell)
     {
-        if( bFormulaTextResult && pOUTextValue && !pOUTextValue->isEmpty() )
+        if( bFormulaTextResult && pOUTextValue )
             pFCell->SetHybridString( *pOUTextValue );
         else
             pFCell->SetHybridDouble( fValue );
@@ -1109,26 +1114,23 @@ void ScXMLTableRowCellContext::AddFormulaCell( const ScAddress& rCellPos )
     }
 }
 
-namespace{
-
-bool isSpecialValue(const rtl::OUString& rStr, sal_Int16& rnCellType)
+//There are cases where a formula cell is exported with an office:value of 0 or
+//no office:value at all, but the formula cell will have a text:p value which
+//contains the intended formula result.
+//These cases include when a formula result:
+// - is blank
+// - has a constant error value beginning with "#" (such as "#VALUE!" or "#N/A")
+// - has an "Err:[###]" (where "[###]" is an error number)
+bool ScXMLTableRowCellContext::HasSpecialCaseFormulaText() const
 {
-    if( (rStr.indexOf("Err:")  > -1) || (rStr.indexOf("#N/A") > -1) )
+    if(  pOUTextContent &&
+         ( pOUTextContent->isEmpty() || (pOUTextContent->indexOf("#") > -1) ||
+           (pOUTextContent->indexOf("Err:")  > -1) )
+      )
         return true;
-    //If a matrix formula has a matrix reference cell that is intended to have
-    //a blank text result, the matrix reference cell is actually saved(export)
-    //as a float cell with 0 as the value and empty <text:p/>.
-    //Import works around this by setting these cells as text cells so that
-    //the blank text is used for display instead of the number 0.
-    if( rStr.isEmpty() )
-    {
-        rnCellType = util::NumberFormat::TEXT;
-        return true;
-    }
     return false;
 }
 
-}
 
 void ScXMLTableRowCellContext::EndElement()
 {
@@ -1146,10 +1148,11 @@ void ScXMLTableRowCellContext::EndElement()
         }
     }
 
-    //if this is a blank matrix formula result, "Err:###", or "#N/A" then
-    //use text:p string because of the way export saves these types of cells.
-    if( bFormulaTextResult && pOUTextContent && isSpecialValue(*pOUTextContent, nCellType) )
+    if( bFormulaTextResult && HasSpecialCaseFormulaText() )
+    {
         pOUTextValue.reset(*pOUTextContent);
+        nCellType = util::NumberFormat::TEXT;
+    }
 
     ScAddress aCellPos = rXMLImport.GetTables().GetCurrentCellPos();
     if( aCellPos.Col() > 0 && nRepeatedRows > 1 )
