@@ -44,13 +44,12 @@ all:
 TARFILE_NAME=Python-$(PYVERSION)
 TARFILE_MD5=c57477edd6d18bd9eeca2f21add73919
 PATCH_FILES=\
-    python-$(PYVERSION).patch \
+    python-solaris.patch \
     python-freebsd.patch \
     python-md5.patch \
     python-ssl.patch \
     python-$(PYVERSION)-sysbase.patch \
-    python-$(PYVERSION)-nohardlink.patch \
-    python-$(PYVERSION)-pcbuild.patch
+    python-$(PYVERSION)-nohardlink.patch
 
 CONFIGURE_DIR=
 
@@ -109,6 +108,8 @@ BUILD_ACTION=$(ENV_BUILD) make && make install
 #.ENDIF
 
 BUILD_DIR=PCbuild
+
+PATCH_FILES=python-$(PYVERSION)-pcbuild.patch
 
 # Build python executable and then runs a minimal script. Running the minimal script
 # ensures that certain *.pyc files are generated which would otherwise be created on
