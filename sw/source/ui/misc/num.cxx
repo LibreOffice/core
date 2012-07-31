@@ -263,6 +263,11 @@ void SwNumPositionTabPage::InitControls()
         nMask <<= 1;
 
     }
+    if (MAXLEVEL <= nLvl)
+    {
+        OSL_ENSURE(false, "cannot happen.");
+        return;
+    }
     if(bSameDistBorderNum)
     {
         long nDistBorderNum;

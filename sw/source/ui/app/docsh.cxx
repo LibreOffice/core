@@ -1221,7 +1221,7 @@ uno::Reference< frame::XController >
     return aRet;
 }
 
-static const char* pEventNames[] =
+static const char* s_EventNames[] =
 {
     "OnPageCountChange",
     "OnMailMerge",
@@ -1230,6 +1230,7 @@ static const char* pEventNames[] =
     "OnFieldMergeFinished",
     "OnLayoutFinished"
 };
+static sal_Int32 const s_nEvents(sizeof(s_EventNames)/sizeof(s_EventNames[0]));
 
 Sequence< OUString >    SwDocShell::GetEventNames()
 {
@@ -1247,12 +1248,12 @@ Sequence< OUString >    SwDocShell::GetEventNames()
     return aRet;
 }
 
-static sal_Int32 nEvents=13;
-
 rtl::OUString SwDocShell::GetEventName( sal_Int32 nIndex )
 {
-    if ( nIndex<nEvents )
-        return ::rtl::OUString::createFromAscii(pEventNames[nIndex]);
+    if (nIndex < s_nEvents)
+    {
+        return ::rtl::OUString::createFromAscii(s_EventNames[nIndex]);
+    }
     return rtl::OUString();
 }
 

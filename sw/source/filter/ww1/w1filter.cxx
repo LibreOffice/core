@@ -1380,7 +1380,7 @@ SvxFontItem Ww1Fonts::GetFont(sal_uInt16 nFCode)
                 FAMILY_DONTKNOW, FAMILY_ROMAN, FAMILY_SWISS, FAMILY_MODERN,
                 FAMILY_SCRIPT, FAMILY_DECORATIVE
             };
-            if (b < sizeof(eFamilyA))
+            if (b < (sizeof(eFamilyA)/sizeof(eFamilyA[0])))
                 eFamily = eFamilyA[b];
         }
         else
