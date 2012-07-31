@@ -69,7 +69,6 @@ void CGMChart::DeleteTextEntry( TextEntry* pTextEntry )
             pTAttr = pTAttr->pNextAttribute;
             delete pTempTAttr;
         }
-        delete pTextEntry;
         ::std::vector< TextEntry* >::iterator it;
         for ( it = maTextEntryList.begin(); it < maTextEntryList.end(); ++it )
         {
@@ -79,6 +78,7 @@ void CGMChart::DeleteTextEntry( TextEntry* pTextEntry )
                 break;
             }
         }
+        delete pTextEntry;
     }
 };
 
