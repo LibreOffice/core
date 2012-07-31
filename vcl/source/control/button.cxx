@@ -2129,14 +2129,6 @@ if ( bNativeOK == sal_False )
 
 // -----------------------------------------------------------------------
 
-void RadioButton:: ImplHandleHoriAlign( const Point& rPos, const Size& /*rSize*/,
-                                    const Size& /*rImageSize*/, Rectangle& rStateRect )
-{
-    // align Checkbox image left ( always )
-    rStateRect.Left() = rPos.X();
-}
-// -----------------------------------------------------------------------
-
 void RadioButton::ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
                             const Point& rPos, const Size& rSize,
                             const Size& rImageSize, Rectangle& rStateRect,
@@ -2201,9 +2193,12 @@ void RadioButton::ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
         }
         else
         {
-            // allow specific handling of WB_CENTER, WB_LEFT & WB_RIGHT by
-            // by subclasses
-            ImplHandleHoriAlign( rPos, rSize, rImageSize, rStateRect );
+            if ( nWinStyle & WB_CENTER )
+                rStateRect.Left() = rPos.X()+((rSize.Width()-rImageSize.Width())/2);
+            else if ( nWinStyle & WB_RIGHT )
+                rStateRect.Left() = rPos.X()+rSize.Width()-rImageSize.Width(); //-1;
+            else
+                rStateRect.Left() = rPos.X(); //+1;
             if ( nWinStyle & WB_VCENTER )
                 rStateRect.Top() = rPos.Y()+((rSize.Height()-rImageSize.Height())/2);
             else if ( nWinStyle & WB_BOTTOM )

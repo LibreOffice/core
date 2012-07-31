@@ -314,10 +314,6 @@ private:
 protected:
     using Control::ImplInitSettings;
     using Window::ImplInit;
-    // allows the behaviour of horizontal placement of the checbox image to be
-    // overridden.
-    virtual void ImplHandleHoriAlign( const Point& rPos, const Size& rSize,
-                                    const Size& rImageSize, Rectangle& rStateRect );
     SAL_DLLPRIVATE void     ImplInit( Window* pParent, WinBits nStyle );
     SAL_DLLPRIVATE void     ImplLoadRes( const ResId& rResId );
 
