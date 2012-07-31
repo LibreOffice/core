@@ -1390,7 +1390,7 @@ void findAutoLayoutShapesImpl( SdPage& rPage, const LayoutDescriptor& rDescripto
     bool bMissing = false;
 
     // for each entry in the layoutdescriptor, arrange a presentation shape
-    for( i = 0; (i < PRESOBJ_MAX) && (rDescriptor.meKind[i] != PRESOBJ_NONE); i++ )
+    for (i = 0; (i < MAX_PRESOBJS) && (rDescriptor.meKind[i] != PRESOBJ_NONE); i++)
     {
         PresObjKind eKind = rDescriptor.meKind[i];
         SdrObject* pObj = 0;
@@ -1412,7 +1412,7 @@ void findAutoLayoutShapesImpl( SdPage& rPage, const LayoutDescriptor& rDescripto
     if( bMissing && bInit )
     {
         // for each entry in the layoutdescriptor, look for an alternative shape
-        for( i = 0; (i < PRESOBJ_MAX) && (rDescriptor.meKind[i] != PRESOBJ_NONE); i++ )
+        for (i = 0; (i < MAX_PRESOBJS) && (rDescriptor.meKind[i] != PRESOBJ_NONE); i++)
         {
             if( rShapes[i] )
                 continue;
@@ -1572,7 +1572,7 @@ void SdPage::SetAutoLayout(AutoLayout eLayout, sal_Bool bInit, sal_Bool bCreate 
     int i;
 
     // for each entry in the layoutdescriptor, arrange a presentation shape
-    for( i = 0; (i < PRESOBJ_MAX) && (aDescriptor.meKind[i] != PRESOBJ_NONE); i++ )
+    for (i = 0; (i < MAX_PRESOBJS) && (aDescriptor.meKind[i] != PRESOBJ_NONE); i++)
     {
         PresObjKind eKind = aDescriptor.meKind[i];
         SdrObject* pObj = InsertAutoLayoutShape( aLayoutShapes[i], eKind, aDescriptor.mbVertical[i], aRectangle[i], bInit );
