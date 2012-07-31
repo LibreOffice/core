@@ -82,8 +82,9 @@ HDDEDATA CALLBACK _export DdeInternal::SvrCallback(
                 DdeQueryString( pInst->hDdeInstSvr, hText1, chTopicBuf,
                                 sizeof(chTopicBuf)/sizeof(TCHAR), CP_WINUNICODE );
 
-            for( pService = rAll.First();pService;pService = rAll.Next() )
+            for (DdeServices::iterator aI = rAll.begin(); aI != rAll.end(); ++aI)
             {
+                pService = *aI;
                 if ( !hText2 || ( *pService->pName == hText2 ) )
                 {
                     String sTopics( pService->Topics() );
@@ -113,8 +114,9 @@ HDDEDATA CALLBACK _export DdeInternal::SvrCallback(
                 return (HDDEDATA)NULL;
 
             HSZPAIR* q = pPairs;
-            for( pService = rAll.First(); pService; pService = rAll.Next() )
+            for (DdeServices::iterator aI = rAll.begin(); aI != rAll.end(); ++aI)
             {
+                pService = *aI;
                 if ( !hText2 || (*pService->pName == hText2 ) )
                 {
                     String sTopics( pService->Topics() );
@@ -177,8 +179,9 @@ HDDEDATA CALLBACK _export DdeInternal::SvrCallback(
             return (HDDEDATA)NULL;
     }
 
-    for ( pService = rAll.First(); pService; pService = rAll.Next() )
+    for (DdeServices::iterator aI = rAll.begin(); aI != rAll.end(); ++aI)
     {
+        pService = *aI;
         for ( size_t i = 0, n = pService->pConv->size(); i < n; ++i )
         {
             pC = (*pService->pConv)[ i ];
@@ -365,8 +368,9 @@ DdeService* DdeInternal::FindService( HSZ hService )
 {
     DdeService*  s;
     DdeServices& rSvc = DdeService::GetServices();
-    for ( s = rSvc.First(); s; s = rSvc.Next() )
+    for (DdeServices::iterator aI = rSvc.begin(); aI != rSvc.end(); ++aI)
     {
+        s = *aI;
         if ( *s->pName == hService )
             return s;
     }
@@ -1033,7 +1037,7 @@ String DdeService::Formats()
                 {
                     TCHAR buf[128];
                     GetClipboardFormatName( (UINT)f, buf, sizeof(buf) / sizeof(TCHAR) );
-                    s += rtl::OUString(buf);
+                    s += rtl::OUString(reinterpret_cast<sal_Unicode*>(buf));
                 }
                 break;
         }
