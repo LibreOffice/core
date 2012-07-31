@@ -58,6 +58,8 @@ MorkParser::MorkParser( int DefaultScope ) :
     morkPos_(0),
     nextAddValueId_(0x7fffffff),
     defaultScope_(DefaultScope),
+    defaultListScope_(0x81),
+    defaultTableId_(1),
     nowParsing_(NPValues)
 {
 }
@@ -465,6 +467,20 @@ inline void MorkParser::setCurrentRow( int TableScope, int TableId, int RowScope
         TableScope = defaultScope_;
     }
 
+    // 01.08.2012 davido
+    // TableId 0 is wrong here.
+    // Straying rows (rows that defined outside the table) belong to the default scope and table is the last was seen: 1:^80
+    // (at least i read so the specification)
+    if (TableId)
+    {
+        defaultTableId_ = TableId;
+    }
+
+    if (!TableId)
+    {
+        TableId = defaultTableId_;
+    }
+
     currentCells_ = &( mork_[ abs( TableScope ) ][ abs( TableId ) ][ abs( RowScope ) ][ abs( RowId ) ] );
 }
 
@@ -631,7 +647,7 @@ void MorkParser::dump()
         {
             std::cout << "\t Table:"
                       << ( ( int ) TableIter->first < 0 ? "-" : " " )
-                      << std::hex << std::uppercase << "\r\n";
+                      << std::hex << std::uppercase << TableIter->first << std::endl;
 
             for (RowScopeMap::iterator RowScopeIter = TableIter->second.begin();
                  RowScopeIter != TableIter->second.end(); RowScopeIter++ )

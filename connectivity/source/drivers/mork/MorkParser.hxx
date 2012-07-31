@@ -152,6 +152,8 @@ protected: // Data
     unsigned morkPos_;
     int nextAddValueId_;
     int defaultScope_;
+    int defaultListScope_;
+    int defaultTableId_;
 
     // Indicates intity is being parsed
     enum { NPColumns, NPValues, NPRows } nowParsing_;
