@@ -128,8 +128,7 @@ class Element(Node):
 
     def __dumpAttrs (self):
         text = ''
-        keys = self.attrs.keys()
-        keys.sort()
+        keys = sorted(self.attrs.keys())
         for key in keys:
             value = self.attrs[key]
             text += ' %s="%s"'%(key, value)

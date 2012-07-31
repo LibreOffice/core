@@ -223,8 +223,7 @@ build the syntax tree.
         if not self.parentLexer and self.debug:
             progress ("-"*68 + "\n")
             progress ("All defines found in this translation unit:\n")
-            keys = self.defines.keys()
-            keys.sort()
+            keys = sorted(self.defines.keys())
             for key in keys:
                 progress ("@ %s\n"%key)
 

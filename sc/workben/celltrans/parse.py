@@ -62,8 +62,7 @@ class LocaleData(object):
         chars += "\"), OUString(), OUString());\n\n"
 
         # pre instantiations of localized function names.
-        funcs = self.funcList.keys()
-        funcs.sort()
+        funcs = sorted(self.funcList.keys())
         chars += "// pre instantiations of localized function names\n"
         for func in funcs:
             for item in self.funcList[func]:

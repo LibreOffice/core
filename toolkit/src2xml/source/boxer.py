@@ -38,11 +38,9 @@ class DlgLayoutBuilder(object):
 
     def build (self):
         root = Element('vbox')
-        ys = self.rows.keys()
-        ys.sort()
+        ys = sorted(self.rows.keys())
         for y in ys:
-            xs = self.rows[y].keys()
-            xs.sort()
+            xs = sorted(self.rows[y].keys())
 
             if len(xs) == 1:
                 root.appendChild(self.rows[y][xs[0]])
