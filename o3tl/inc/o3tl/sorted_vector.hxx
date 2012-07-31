@@ -17,12 +17,18 @@
 namespace o3tl
 {
 
+// forward declared because it's default tempate arg for sorted_vector
+template<class Value, class Compare>
+struct find_unique;
+
 /** Represents a sorted vector of values.
 
     @tpl Value class of item to be stored in container
     @tpl Compare comparison method
+    @tpl Find   look up index of a Value in the array
 */
-template <class Value, class Compare = std::less<Value> >
+template<class Value, class Compare = std::less<Value>,
+         class Find = find_unique<Value, Compare> >
 class sorted_vector
     : private std::vector<Value>
 {
@@ -41,21 +47,22 @@ public:
 
     std::pair<const_iterator,bool> insert( const Value& x )
     {
-        iterator it = lower_bound_nonconst( x );
-        if (it == base_t::end() || less_than(x, *it))
+        std::pair<const_iterator, bool> const ret(Find()(begin(), end(), x));
+        if (!ret.second)
         {
-            it = base_t::insert( it, x );
-            return std::make_pair( it, true );
+            const_iterator const it = base_t::insert(
+                            begin_nonconst() + (ret.first - begin()), x);
+            return std::make_pair(it, true);
         }
-        return std::make_pair( it, false );
+        return std::make_pair(ret.first, false);
     }
 
     size_type erase( const Value& x )
     {
-        iterator it = lower_bound_nonconst( x );
-        if (it != base_t::end() && !less_than(x, *it))
+        std::pair<const_iterator, bool> const ret(Find()(begin(), end(), x));
+        if (ret.second)
         {
-            base_t::erase(it);
+            base_t::erase(begin_nonconst() + (ret.first - begin()));
             return 1;
         }
         return 0;
@@ -122,15 +129,11 @@ public:
      */
     const_iterator find( const Value& x ) const
     {
-        const_iterator it = lower_bound( x );
-        if (it == base_t::end() || less_than(x, *it))
-        {
-            return base_t::end();
-        }
-        return it;
+        std::pair<const_iterator, bool> const ret(Find()(begin(), end(), x));
+        return (ret.second) ? ret.first : end();
     }
 
-    void insert( sorted_vector<Value,Compare> &rOther )
+    void insert( sorted_vector<Value,Compare,Find> &rOther )
     {
        // optimisation for the rather common case that we are overwriting this with the contents
        // of another sorted vector
@@ -153,16 +156,6 @@ public:
     }
 
 private:
-    /** just makes the code easier to read */
-    bool less_than(const Value& lhs, const Value& rhs) const
-    {
-        return Compare().operator()(lhs, rhs);
-    }
-
-    iterator lower_bound_nonconst( const Value& x )
-    {
-        return std::lower_bound( base_t::begin(), base_t::end(), x, Compare() );
-    }
 
     typename base_t::iterator begin_nonconst() { return base_t::begin(); }
     typename base_t::iterator end_nonconst()   { return base_t::end(); }
@@ -181,6 +174,47 @@ template <class T> struct less_ptr_to : public std::binary_function <T*,T*,bool>
     }
 };
 
+/** the elements are totally ordered by Compare,
+    for no 2 elements !Compare(a,b) && !Compare(b,a) is true
+  */
+template<class Value, class Compare>
+struct find_unique
+{
+    typedef typename sorted_vector<Value, Compare, find_unique>
+                ::const_iterator const_iterator;
+    std::pair<const_iterator, bool> operator()(
+            const_iterator first, const_iterator last,
+            Value const& v)
+    {
+        const_iterator const it = std::lower_bound(first, last, v, Compare());
+        return std::make_pair(it, (it != last && !Compare()(v, *it)));
+    }
+};
+
+/** the elments are partially ordered by Compare,
+    2 elements are allowed if they are not the same element (pointer equal)
+  */
+template<class Value, class Compare>
+struct find_partialorder_ptrequals
+{
+    typedef typename sorted_vector<Value, Compare, find_partialorder_ptrequals>
+                ::const_iterator const_iterator;
+    std::pair<const_iterator, bool> operator()(
+            const_iterator first, const_iterator last,
+            Value const& v)
+    {
+        std::pair<const_iterator, const_iterator> const its =
+            std::equal_range(first, last, v, Compare());
+        for (const_iterator it = its.first; it != its.second; ++it)
+        {
+            if (v == *it)
+            {
+                return std::make_pair(it, true);
+            }
+        }
+        return std::make_pair(its.first, false);
+    }
+};
 
 }   // namespace o3tl
 #endif
