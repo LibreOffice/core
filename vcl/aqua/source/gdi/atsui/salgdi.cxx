@@ -128,6 +128,12 @@ inline FourCharCode GetTag(const char aTagName[5])
 static unsigned GetUShort( const unsigned char* p ){return((p[0]<<8)+p[1]);}
 static unsigned GetUInt( const unsigned char* p ) { return((p[0]<<24)+(p[1]<<16)+(p[2]<<8)+p[3]);}
 
+#if MACOSX_SDK_VERSION >= 1070
+extern "C" {
+extern ATSFontRef FMGetATSFontRefFromFont(FMFont iFont);
+}
+#endif
+
 const ImplFontCharMap* ImplMacFontData::GetImplFontCharMap() const
 {
     // return the cached charmap

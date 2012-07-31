@@ -201,6 +201,12 @@ static void UpdateAttributesFromPSName( const String& rPSName, ImplDevFontAttrib
 
 // -----------------------------------------------------------------------
 
+#if MACOSX_SDK_VERSION >= 1070
+extern "C" {
+extern ATSFontRef FMGetATSFontRefFromFont(FMFont iFont);
+}
+#endif
+
 static bool GetDevFontAttributes( ATSUFontID nFontID, ImplDevFontAttributes& rDFA )
 {
     // all ATSU fonts are device fonts that can be directly rotated
