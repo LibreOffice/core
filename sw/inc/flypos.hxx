@@ -55,7 +55,7 @@ public:
     sal_uInt32 GetOrdNum() const { return nOrdNum; }
 };
 
-class SW_DLLPUBLIC SwPosFlyFrms : public std::set<SwPosFlyFrm*> {};
+class SwPosFlyFrms : public std::multiset<SwPosFlyFrm*> {};
 
 #endif // _FLYPOS_HXX
 
