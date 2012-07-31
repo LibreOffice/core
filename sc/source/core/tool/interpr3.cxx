@@ -462,6 +462,9 @@ double ScInterpreter::Fakultaet(double x)
 
 double ScInterpreter::BinomKoeff(double n, double k)
 {
+    // this method has been duplicated as BinomialCoefficient()
+    // in scaddins/source/analysis/analysishelper.cxx
+
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::BinomKoeff" );
     double nVal = 0.0;
     k = ::rtl::math::approxFloor(k);

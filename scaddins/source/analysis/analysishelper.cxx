@@ -521,28 +521,31 @@ double GetYearFrac( sal_Int32 nNullDate, sal_Int32 nStartDate, sal_Int32 nEndDat
     return double( nYears ) + double( nDayDiff ) / double( nDaysInYear );
 }
 
-
-double Fak( sal_Int32 n )
+double BinomialCoefficient( double n, double k )
 {
-    if( n > 0 )
-    {
-        double  fRet = n;
-        double  f = n - 1;
+    // This method is a copy of BinomKoeff()
+    // found in sc/source/core/tool/interpr3.cxx
 
-        while( f >= 2.0 )
-        {
-            fRet *= f;
-            f--;
-        }
-
-        return fRet;
-    }
-    else if( !n )
-        return 1.0;
+    double nVal = 0.0;
+    k = ::rtl::math::approxFloor(k);
+    if (n < k)
+        nVal = 0.0;
+    else if (k == 0.0)
+        nVal = 1.0;
     else
-        return 0.0;
+    {
+        nVal = n/k;
+        n--;
+        k--;
+        while (k > 0.0)
+        {
+            nVal *= n/k;
+            k--;
+            n--;
+        }
+    }
+    return nVal;
 }
-
 
 double GetGcd( double f1, double f2 )
 {

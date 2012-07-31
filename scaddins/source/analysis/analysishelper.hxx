@@ -94,7 +94,7 @@ inline double       GetYearFrac( constREFXPS& xOpt, sal_Int32 nStartDate, sal_In
                         THROWDEF_RTE_IAE;
 inline void         AlignDate( sal_uInt16& rDay, sal_uInt16 nMonth, sal_uInt16 nYear );
 
-double              Fak( sal_Int32 n );
+double              BinomialCoefficient( double n, double k );
 double              GetGcd( double f1, double f2 );
 double              ConvertToDec( const STRING& rFromNum, sal_uInt16 nBaseFrom, sal_uInt16 nCharLim ) THROWDEF_RTE_IAE;
 STRING              ConvertFromDec(
