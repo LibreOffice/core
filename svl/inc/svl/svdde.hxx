@@ -23,7 +23,6 @@
 #include "svl/svldllapi.h"
 #include <sot/exchange.hxx>
 #include <tools/string.hxx>
-#include <tools/list.hxx>
 #include <tools/link.hxx>
 #include <vector>
 
@@ -45,12 +44,7 @@ struct DdeImp;
 class DdeItemImp;
 struct Conversation;
 
-#ifndef _SVDDE_NOLISTS
-DECLARE_LIST( DdeServices, DdeService* )
-#else
-typedef List DdeServices;
-#endif
-
+typedef ::std::vector< DdeService* > DdeServices;
 typedef ::std::vector< long > DdeFormats;
 typedef ::std::vector< Conversation* > ConvList;
 

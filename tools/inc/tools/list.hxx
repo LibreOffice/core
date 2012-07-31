@@ -63,67 +63,6 @@ public:
                 { return Container::operator !=( rList ); }
 };
 
-// ----------------
-// - DECLARE_LIST -
-// ----------------
-
-#define DECLARE_LIST( ClassName, Type )                                 \
-class ClassName : private List                                          \
-{                                                                       \
-public:                                                                 \
-                using List::Clear;                                      \
-                using List::Count;                                      \
-                using List::GetCurPos;                                  \
-                                                                        \
-                ClassName( sal_uInt16 _nInitSize = 16,                      \
-                           sal_uInt16 _nReSize = 16 ) :                     \
-                    List( _nInitSize, _nReSize ) {}                     \
-                ClassName( sal_uInt16 _nBlockSize, sal_uInt16 _nInitSize,       \
-                           sal_uInt16 _nReSize ) :                          \
-                    List( _nBlockSize, _nInitSize, _nReSize ) {}        \
-                ClassName( const ClassName& rClassName ) :              \
-                    List( rClassName ) {}                               \
-                                                                        \
-    void        Insert( Type p, sal_uIntPtr nIndex )                          \
-                    { List::Insert( (void*)p, nIndex ); }               \
-    void        Insert( Type p )                                        \
-                    { List::Insert( (void*)p ); }                       \
-    Type        Remove()                                                \
-                    { return (Type)List::Remove(); }                    \
-    Type        Remove( sal_uIntPtr nIndex )                                  \
-                    { return (Type)List::Remove( nIndex ); }            \
-    Type        Remove( Type p )                                        \
-                    { return (Type)List::Remove( (void*)p ); }          \
-    Type        Replace( Type p, sal_uIntPtr nIndex )                         \
-                    { return (Type)List::Replace( (void*)p, nIndex ); } \
-    Type        Replace( Type pNew, Type pOld )                         \
-                    { return (Type)List::Replace( (void*)pNew,          \
-                                                  (void*)pOld ); }      \
-                                                                        \
-    Type        GetCurObject() const                                    \
-                    { return (Type)List::GetCurObject(); }              \
-    Type        GetObject( sal_uIntPtr nIndex ) const                         \
-                    { return (Type)List::GetObject( nIndex ); }         \
-    sal_uIntPtr       GetPos( const Type p ) const                            \
-                    { return List::GetPos( (const void*)p ); }          \
-                                                                        \
-    Type        Seek( sal_uIntPtr nIndex )                                    \
-                    { return (Type)List::Seek( nIndex ); }              \
-    Type        Seek( void* p ) { return (Type)List::Seek( p ); }       \
-    Type        First()         { return (Type)List::First(); }         \
-    Type        Last()          { return (Type)List::Last(); }          \
-    Type        Next()          { return (Type)List::Next(); }          \
-    Type        Prev()          { return (Type)List::Prev(); }          \
-                                                                        \
-    ClassName&  operator =( const ClassName& rClassName )               \
-                    { List::operator =( rClassName ); return *this; }   \
-                                                                        \
-    sal_Bool        operator ==( const ClassName& rList ) const             \
-                    { return List::operator ==( rList ); }              \
-    sal_Bool        operator !=( const ClassName& rList ) const             \
-                    { return List::operator !=( rList ); }              \
-};
-
 #endif // _LIST_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

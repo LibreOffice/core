@@ -461,7 +461,7 @@ DdeService::DdeService( const String& rService )
     pConv = new ConvList;
 
     if ( pInst->pServicesSvr )
-        pInst->pServicesSvr->Insert( this );
+        pInst->pServicesSvr->push_back( this );
 
     pName = new DdeString( pInst->hDdeInstSvr, rService );
     if ( nStatus == DMLERR_NO_ERROR )
@@ -486,7 +486,7 @@ DdeService::~DdeService()
     DdeInstData* pInst = ImpGetInstData();
     DBG_ASSERT(pInst,"SVDDE:No instance data");
     if ( pInst->pServicesSvr )
-        pInst->pServicesSvr->Remove( this );
+        pInst->pServicesSvr->erase(std::remove(pInst->pServicesSvr->begin(), pInst->pServicesSvr->end(), this), pInst->pServicesSvr->end());
 
     // MT: Im Auftrage des Herrn (AM) auskommentiert...
     // Grund:
