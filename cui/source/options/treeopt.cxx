@@ -1926,13 +1926,18 @@ bool isNodeActive( OptionsNode* pNode, Module* pModule )
 void OfaTreeOptionsDialog::LoadExtensionOptions( const rtl::OUString& rExtensionId )
 {
     Module* pModule = NULL;
-    Reference< XMultiServiceFactory > xMSFac = comphelper::getProcessServiceFactory();
+
     // when called by Tools - Options then load nodes of active module
     if ( rExtensionId.isEmpty() )
+    {
+        Reference< XMultiServiceFactory > xMSFac = comphelper::getProcessServiceFactory();
         pModule = LoadModule( GetModuleIdentifier( xMSFac, Reference< XFrame >() ) );
+    }
 
     VectorOfNodes aNodeList = LoadNodes( pModule, rExtensionId );
     InsertNodes( aNodeList );
+
+    delete pModule;
 }
 
 rtl::OUString OfaTreeOptionsDialog::GetModuleIdentifier(
