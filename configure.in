@@ -141,27 +141,33 @@ if test -n "$with_android_ndk"; then
     # linking especially our libmerged. Work to support that in progress. Until
     # that is done, please use no newer NDK than r8.
 
-    ANDROID_ABI_PREBUILT_BIN=`echo $ANDROID_NDK_HOME/toolchains/$host_cpu-*$with_android_ndk_toolchain_version/prebuilt/*/bin`
+    if test $host_cpu = arm; then
+        android_gcc_prefix=arm-linux-androideabi
+        android_cpu=arm
+    else
+        android_gcc_prefix=i686-android-linux
+        # host_cpu is something like "i386" or "i686" I guess, NDK uses
+        # "x86" in some contexts
+        android_cpu=x86
+    fi
+
+    ANDROID_ABI_PREBUILT_BIN=`echo $ANDROID_NDK_HOME/toolchains/$android_cpu-*$with_android_ndk_toolchain_version/prebuilt/*/bin`
     # Check if there are several toolchain versions
     case "$ANDROID_ABI_PREBUILT_BIN" in
     */bin\ */bin*)
         AC_MSG_ERROR([Several toolchain versions in NDK, you must specify --with-android-ndk-toolchain-version])
     esac
 
-    toolchain_version_subdir=
-    case "`echo $ANDROID_NDK_HOME/toolchains/$host_cpu-*/prebuilt/*/bin`" in
+    # This stays empty if there is just one version of the toolchain in the NDK
+    ANDROID_NDK_TOOLCHAIN_VERSION_SUBDIR=
+    case "`echo $ANDROID_NDK_HOME/toolchains/$android_cpu-*/prebuilt/*/bin`" in
     */bin\ */bin*)
-        toolchain_version_subdir="${with_android_ndk_toolchain_version}/"
+        # Trailing slash intentional and necessary, compare to how this is used
+        ANDROID_NDK_TOOLCHAIN_VERSION_SUBDIR="${with_android_ndk_toolchain_version}/"
         ;;
     esac
 
-    if test $host_cpu = arm; then
-        android_gcc_prefix=arm-linux-androideabi
-    else
-        android_gcc_prefix=i686-android-linux
-    fi
-
-    test -z "$SYSBASE" && export SYSBASE=$ANDROID_NDK_HOME/platforms/android-9/arch-$host_cpu
+    test -z "$SYSBASE" && export SYSBASE=$ANDROID_NDK_HOME/platforms/android-9/arch-$android_cpu
     test -z "$AR" && AR=$ANDROID_ABI_PREBUILT_BIN/$android_gcc_prefix-ar
     test -z "$NM" && NM=$ANDROID_ABI_PREBUILT_BIN/$android_gcc_prefix-nm
     test -z "$OBJDUMP" && OBJDUMP=$ANDROID_ABI_PREBUILT_BIN/$android_gcc_prefix-objdump
@@ -169,9 +175,9 @@ if test -n "$with_android_ndk"; then
     test -z "$STRIP" && STRIP=$ANDROID_ABI_PREBUILT_BIN/$android_gcc_prefix-strip
 
     if test $host_cpu = arm; then
-        ANDROIDCFLAGS="-Wno-psabi -march=armv7-a -mfloat-abi=softfp -mfpu=neon -Wl,--fix-cortex-a8 --sysroot $ANDROID_NDK_HOME/platforms/android-9/arch-arm -L$ANDROID_NDK_HOME/sources/cxx-stl/gnu-libstdc++/${toolchain_version_subdir}libs/armeabi-v7a"
+        ANDROIDCFLAGS="-Wno-psabi -march=armv7-a -mfloat-abi=softfp -mfpu=neon -Wl,--fix-cortex-a8 --sysroot $ANDROID_NDK_HOME/platforms/android-9/arch-arm -L$ANDROID_NDK_HOME/sources/cxx-stl/gnu-libstdc++/${ANDROID_NDK_TOOLCHAIN_VERSION_SUBDIR}libs/armeabi-v7a"
     else # x86
-        ANDROIDCFLAGS="-Wno-psabi -march=atom --sysroot $ANDROID_NDK_HOME/platforms/android-9/arch-x86 -L$ANDROID_NDK_HOME/sources/cxx-stl/gnu-libstdc++/${toolchain_version_subdir}libs/x86"
+        ANDROIDCFLAGS="-Wno-psabi -march=atom --sysroot $ANDROID_NDK_HOME/platforms/android-9/arch-x86 -L$ANDROID_NDK_HOME/sources/cxx-stl/gnu-libstdc++/${ANDROID_NDK_TOOLCHAIN_VERSION_SUBDIR}libs/x86"
     fi
 
     # When using the 4.6 or newer toolchain, use the gold linker
@@ -181,16 +187,27 @@ if test -n "$with_android_ndk"; then
         ;;
     esac
 
+    # gdbserver can be in different locations
+    if test -f $ANDROID_NDK_HOME/toolchains/arm-linux-androideabi-4.4.3/prebuilt/gdbserver; then
+        ANDROID_NDK_GDBSERVER=$ANDROID_NDK_HOME/toolchains/arm-linux-androideabi-4.4.3/prebuilt/gdbserver
+    elif test -f $ANDROID_NDK_HOME/prebuilt/android-$android_cpu/gdbserver/gdbserver; then
+        ANDROID_NDK_GDBSERVER=$ANDROID_NDK_HOME/prebuilt/android-$android_cpu/gdbserver/gdbserver
+    else
+        AC_MSG_ERROR([Can't find gdbserver for your Android target])
+    fi
+
     if test $host_cpu = arm; then
-        ANDROIDCXXFLAGS="$ANDROIDCFLAGS -I $ANDROID_NDK_HOME/sources/cxx-stl/gnu-libstdc++/${toolchain_version_subdir}include -I$ANDROID_NDK_HOME/sources/cxx-stl/gnu-libstdc++/${toolchain_version_subdir}libs/armeabi-v7a/include"
+        ANDROIDCXXFLAGS="$ANDROIDCFLAGS -I $ANDROID_NDK_HOME/sources/cxx-stl/gnu-libstdc++/${ANDROID_NDK_TOOLCHAIN_VERSION_SUBDIR}include -I$ANDROID_NDK_HOME/sources/cxx-stl/gnu-libstdc++/${ANDROID_NDK_TOOLCHAIN_VERSION_SUBDIR}libs/armeabi-v7a/include"
     else # x86
-        ANDROIDCXXFLAGS="$ANDROIDCFLAGS -I $ANDROID_NDK_HOME/sources/cxx-stl/gnu-libstdc++/${toolchain_version_subdir}include -I$ANDROID_NDK_HOME/sources/cxx-stl/gnu-libstdc++/${toolchain_version_subdir}libs/x86/include"
+        ANDROIDCXXFLAGS="$ANDROIDCFLAGS -I $ANDROID_NDK_HOME/sources/cxx-stl/gnu-libstdc++/${ANDROID_NDK_TOOLCHAIN_VERSION_SUBDIR}include -I$ANDROID_NDK_HOME/sources/cxx-stl/gnu-libstdc++/${ANDROID_NDK_TOOLCHAIN_VERSION_SUBDIR}libs/x86/include"
     fi
 
     test -z "$CC" && CC="$ANDROID_ABI_PREBUILT_BIN/$android_gcc_prefix-gcc $ANDROIDCFLAGS"
     test -z "$CXX" && CXX="$ANDROID_ABI_PREBUILT_BIN/$android_gcc_prefix-g++ $ANDROIDCXXFLAGS"
 fi
 AC_SUBST(ANDROID_NDK_HOME)
+AC_SUBST(ANDROID_NDK_TOOLCHAIN_VERSION_SUBDIR)
+AC_SUBST(ANDROID_NDK_GDBSERVER)
 
 dnl ===================================================================
 dnl Also --with-android-sdk is mandatory
