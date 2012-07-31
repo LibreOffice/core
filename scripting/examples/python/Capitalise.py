@@ -26,16 +26,16 @@ def getNewString( theString ) :
         return ""
     # should we tokenize on "."?
     if theString[0].isupper() and len(theString)>=2 and theString[1].isupper() :
-	# first two chars are UC => first UC, rest LC
+        # first two chars are UC => first UC, rest LC
         newString=theString[0:1].upper() + theString[1:].lower();
     elif theString[0].isupper():
-	# first char UC => all to LC
+        # first char UC => all to LC
         newString=theString.lower()
     else: # all to UC.
         newString=theString.upper()
     return newString;
 
-def capitalisePython( ): 
+def capitalisePython( ):
     """Change the case of a selection, or current word from upper case, to first char upper case, to all lower case to upper case..."""
     import string
 
@@ -51,7 +51,7 @@ def capitalisePython( ):
     count = xIndexAccess.getCount();
     if(count>=1):  #ie we have a selection
         i=0
-	while i < count :
+        while i < count :
             xTextRange = xIndexAccess.getByIndex(i);
             #print "string: " + xTextRange.getString();
             theString = xTextRange.getString();
@@ -74,7 +74,7 @@ def capitalisePython( ):
                 if newString:
                     xTextRange.setString(newString);
                     xSelectionSupplier.select(xTextRange);
-	    i+= 1
+            i+= 1
 
 
 # lists the scripts, that shall be visible inside OOo. Can be omited, if

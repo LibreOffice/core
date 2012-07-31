@@ -36,19 +36,19 @@ def insertTextIntoCell( table, cellName, text, color ):
 
 
 def createTable():
-    """creates a new writer document and inserts a table with some data (also known as the SWriter sample)""" 
+    """creates a new writer document and inserts a table with some data (also known as the SWriter sample)"""
     ctx = uno.getComponentContext()
     smgr = ctx.ServiceManager
     desktop = smgr.createInstanceWithContext( "com.sun.star.frame.Desktop",ctx)
-    
+
     # open a writer document
     doc = desktop.loadComponentFromURL( "private:factory/swriter","_blank", 0, () )
-    
+
     text = doc.Text
     cursor = text.createTextCursor()
     text.insertString( cursor, "The first line in the newly created text document.\n", 0 )
     text.insertString( cursor, "Now we are in the second line\n" , 0 )
-    
+
     # create a text table
     table = doc.createInstance( "com.sun.star.text.TextTable" )
 
