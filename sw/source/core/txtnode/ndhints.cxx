@@ -130,14 +130,10 @@ bool CompareSwpHtEnd::operator()(SwTxtAttr* const lhs, SwTxtAttr* const rhs) con
 void SwpHintsArray::Insert( const SwTxtAttr *pHt )
 {
     Resort();
-#if OSL_DEBUG_LEVEL > 0
-    OSL_ENSURE(
-        m_HintStarts.find(const_cast<SwTxtAttr*>(pHt)) == m_HintStarts.end(),
-            "Insert: hint already in HtStart");
-    OSL_ENSURE(
-        m_HintEnds.find(const_cast<SwTxtAttr*>(pHt)) == m_HintEnds.end(),
-            "Insert: hint already in HtEnd");
-#endif
+    assert(m_HintStarts.find(const_cast<SwTxtAttr*>(pHt))
+            == m_HintStarts.end()); // "Insert: hint already in HtStart"
+    assert(m_HintEnds.find(const_cast<SwTxtAttr*>(pHt))
+            == m_HintEnds.end());   // "Insert: hint already in HtEnd"
     m_HintStarts.insert( const_cast<SwTxtAttr*>(pHt) );
     m_HintEnds  .insert( const_cast<SwTxtAttr*>(pHt) );
 }
