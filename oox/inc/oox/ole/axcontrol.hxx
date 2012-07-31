@@ -219,7 +219,8 @@ public:
     void                convertToMSColor(
                             PropertySet& rPropSet,
                             sal_Int32 nPropId,
-                            sal_uInt32& nOleColor ) const;
+                            sal_uInt32& nOleColor,
+                            sal_uInt32 nDefault = 0 ) const;
 
 
     /** Converts the passed StdPic picture stream to UNO properties. */

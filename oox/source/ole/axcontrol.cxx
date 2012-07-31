@@ -273,11 +273,13 @@ void ControlConverter::convertColor( PropertyMap& rPropMap, sal_Int32 nPropId, s
     rPropMap.setProperty( nPropId, OleHelper::decodeOleColor( mrGraphicHelper, nOleColor, mbDefaultColorBgr ) );
 }
 
-void ControlConverter::convertToMSColor( PropertySet& rPropSet, sal_Int32 nPropId, sal_uInt32& nOleColor ) const
+void ControlConverter::convertToMSColor( PropertySet& rPropSet, sal_Int32 nPropId, sal_uInt32& nOleColor, sal_uInt32 nDefault ) const
 {
     sal_uInt32 nRGB = 0;
-    rPropSet.getProperty( nRGB, nPropId );
-    nOleColor = OleHelper::encodeOleColor( nRGB );
+    if (rPropSet.getProperty( nRGB, nPropId ))
+        nOleColor = OleHelper::encodeOleColor( nRGB );
+    else
+        nOleColor = nDefault;
 }
 void ControlConverter::convertPicture( PropertyMap& rPropMap, const StreamDataSequence& rPicData ) const
 {
@@ -1717,7 +1719,7 @@ void AxTextBoxModel::convertFromProperties( PropertySet& rPropSet, const Control
     if ( rPropSet.getProperty( bRes,  PROP_VScroll ) )
         setFlag( mnScrollBars, AX_SCROLLBAR_VERTICAL, bRes );
 
-    rConv.convertToMSColor( rPropSet, PROP_BackgroundColor, mnBackColor );
+    rConv.convertToMSColor( rPropSet, PROP_BackgroundColor, mnBackColor, 0x80000005L );
 
     rConv.convertToAxBorder( rPropSet, mnBorderColor, mnBorderStyle, mnSpecialEffect );
     AxMorphDataModelBase::convertFromProperties( rPropSet, rConv );
