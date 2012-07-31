@@ -143,7 +143,10 @@ struct CompareSwRedlineTbl
 {
     bool operator()(SwRedline* const &lhs, SwRedline* const &rhs) const;
 };
-class _SwRedlineTbl : public o3tl::sorted_vector<SwRedline*, CompareSwRedlineTbl> {
+class _SwRedlineTbl
+    : public o3tl::sorted_vector<SwRedline*, CompareSwRedlineTbl,
+        o3tl::find_partialorder_ptrequals<SwRedline*, CompareSwRedlineTbl> >
+{
 public:
     ~_SwRedlineTbl();
 };
