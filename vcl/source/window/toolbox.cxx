@@ -542,12 +542,6 @@ void ToolBox::ImplDrawBackground( ToolBox* pThis, const Rectangle &rRect )
     // execute pending paint requests
     ImplCheckUpdate( pThis );
 
-    if ( pThis->IsNativeControlSupported(CTRL_WINDOW_BACKGROUND,PART_ENTIRE_CONTROL) &&
-        pThis->DrawNativeControl(CTRL_WINDOW_BACKGROUND,PART_ENTIRE_CONTROL,rRect,
-            CTRL_STATE_ENABLED,ImplControlValue(0),rtl::OUString())
-        )
-        return;
-
     ImplDockingWindowWrapper *pWrapper = ImplGetDockingManager()->GetDockingWindowWrapper( pThis );
     sal_Bool bIsInPopupMode = pThis->ImplIsInPopupMode();
 
