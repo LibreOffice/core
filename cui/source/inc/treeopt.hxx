@@ -192,9 +192,7 @@ private:
                                          const com::sun::star::uno::Reference<
                                             com::sun::star::frame::XFrame >& xFrame );
     Module*         LoadModule( const rtl::OUString& rModuleIdentifier );
-    void            LoadNodes( Module* pModule,
-                               const rtl::OUString& rExtensionId,
-                               VectorOfNodes& rOutNodeList );
+    VectorOfNodes   LoadNodes( Module* pModule, const rtl::OUString& rExtensionId );
     void            InsertNodes( const VectorOfNodes& rNodeList );
 
 protected:

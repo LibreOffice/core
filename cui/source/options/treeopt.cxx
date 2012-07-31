@@ -1931,8 +1931,7 @@ void OfaTreeOptionsDialog::LoadExtensionOptions( const rtl::OUString& rExtension
     if ( rExtensionId.isEmpty() )
         pModule = LoadModule( GetModuleIdentifier( xMSFac, Reference< XFrame >() ) );
 
-    VectorOfNodes aNodeList;
-    LoadNodes( pModule, rExtensionId, aNodeList );
+    VectorOfNodes aNodeList = LoadNodes( pModule, rExtensionId );
     InsertNodes( aNodeList );
 }
 
@@ -2033,10 +2032,11 @@ Module* OfaTreeOptionsDialog::LoadModule(
     return pModule;
 }
 
-void OfaTreeOptionsDialog::LoadNodes(
-    Module* pModule, const rtl::OUString& rExtensionId,
-    VectorOfNodes& rOutNodeList )
+VectorOfNodes OfaTreeOptionsDialog::LoadNodes(
+    Module* pModule, const rtl::OUString& rExtensionId)
 {
+    VectorOfNodes aOutNodeList;
+
     Reference< XNameAccess > xSet(
         officecfg::Office::OptionsDialog::Nodes::get());
     VectorOfNodes aNodeList;
@@ -2148,7 +2148,7 @@ void OfaTreeOptionsDialog::LoadNodes(
             // do not insert nodes without leaves
             if ( pNode->m_aLeaves.size() > 0 || pNode->m_aGroupedLeaves.size() > 0 )
             {
-                pModule ? aNodeList.push_back( pNode ) : rOutNodeList.push_back( pNode );
+                pModule ? aNodeList.push_back( pNode ) : aOutNodeList.push_back( pNode );
             }
         }
     }
@@ -2164,7 +2164,7 @@ void OfaTreeOptionsDialog::LoadNodes(
                 OptionsNode* pNode = aNodeList[j];
                 if ( pNode->m_sId == sNodeId )
                 {
-                    rOutNodeList.push_back( pNode );
+                    aOutNodeList.push_back( pNode );
                     aNodeList.erase( aNodeList.begin() + j );
                     break;
                 }
@@ -2172,8 +2172,9 @@ void OfaTreeOptionsDialog::LoadNodes(
         }
 
         for ( i = 0; i < aNodeList.size(); ++i )
-            rOutNodeList.push_back( aNodeList[i] );
+            aOutNodeList.push_back( aNodeList[i] );
     }
+    return aOutNodeList;
 }
 
 sal_uInt16 lcl_getGroupId( const rtl::OUString& rGroupName, const SvTreeListBox& rTreeLB )
