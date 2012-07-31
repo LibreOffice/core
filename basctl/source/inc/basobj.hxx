@@ -84,7 +84,7 @@ namespace BasicIDE
         const ScriptDocument& rDocument, const ::rtl::OUString& rLibName, const ::rtl::OUString& rModName )
         throw( ::com::sun::star::container::NoSuchElementException );
 
-    sal_Bool                    HasMethod(
+    bool                    HasMethod(
         const ScriptDocument& rDocument, const ::rtl::OUString& rLibName, const ::rtl::OUString& rModName, const ::rtl::OUString& rMethName );
 
     // new methods for dialogs

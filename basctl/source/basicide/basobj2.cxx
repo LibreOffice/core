@@ -108,7 +108,7 @@ sal_Bool IsValidSbxName( const String& rName )
     return sal_True;
 }
 
-static sal_Bool StringCompareLessThan( const String& rStr1, const String& rStr2 )
+static bool StringCompareLessThan( const String& rStr1, const String& rStr2 )
 {
     return (rStr1.CompareIgnoreCaseToAscii( rStr2 ) == COMPARE_LESS);
 }
@@ -268,7 +268,7 @@ namespace
     BasicIDEGlobals::GetExtraData()->ChoosingMacro() = true;
 
     String aScriptURL;
-    sal_Bool bError = sal_False;
+    bool bError = false;
     SbMethod* pMethod = NULL;
 
     ::std::auto_ptr< MacroChooser > pChooser( new MacroChooser( NULL, true ) );
@@ -358,7 +358,7 @@ namespace
                     if ( xLimitToDocument != aDocument.getDocument() )
                     {
                         // error
-                        bError = sal_True;
+                        bError = true;
                         ErrorBox( NULL, WB_OK | WB_DEF_OK, String( IDEResId( RID_STR_ERRORCHOOSEMACRO ) ) ).Execute();
                     }
                 }
@@ -433,9 +433,9 @@ Sequence< ::rtl::OUString > GetMethodNames( const ScriptDocument& rDocument, con
 
 //----------------------------------------------------------------------------
 
-sal_Bool HasMethod( const ScriptDocument& rDocument, const ::rtl::OUString& rLibName, const ::rtl::OUString& rModName, const ::rtl::OUString& rMethName )
+bool HasMethod( const ScriptDocument& rDocument, const ::rtl::OUString& rLibName, const ::rtl::OUString& rModName, const ::rtl::OUString& rMethName )
 {
-    sal_Bool bHasMethod = sal_False;
+    bool bHasMethod = false;
 
     ::rtl::OUString aOUSource;
     if ( rDocument.hasModule( rLibName, rModName ) && rDocument.getModule( rLibName, rModName, aOUSource ) )
@@ -447,7 +447,7 @@ sal_Bool HasMethod( const ScriptDocument& rDocument, const ::rtl::OUString& rLib
         {
             SbMethod* pMethod = (SbMethod*)pMethods->Find( rMethName, SbxCLASS_METHOD );
             if ( pMethod && !pMethod->IsHidden() )
-                bHasMethod = sal_True;
+                bHasMethod = true;
         }
     }
 

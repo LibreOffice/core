@@ -1201,7 +1201,7 @@ bool implImportDialog( Window* pWin, const ::rtl::OUString& rCurPath, const Scri
                 {
                     IDEBaseWindow* pDlgWin = pIDEShell->FindDlgWin( rDocument, aLibName, aNewDlgName, false, true );
                     if( pDlgWin != NULL )
-                        pIDEShell->RemoveWindow( pDlgWin, sal_True );
+                        pIDEShell->RemoveWindow( pDlgWin, true );
                     BasicIDE::MarkDocumentModified( rDocument );
                 }
                 else

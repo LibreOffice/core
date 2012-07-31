@@ -1,4 +1,3 @@
-
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
@@ -95,7 +94,7 @@ void BasicIDEShell::ExecuteCurrent( SfxRequest& rReq )
         case SID_BASICIDE_HIDECURPAGE:
         {
             pCurWin->StoreData();
-            RemoveWindow( pCurWin, sal_False );
+            RemoveWindow( pCurWin, false );
         }
         break;
         case SID_BASICIDE_DELETECURRENT:
@@ -120,7 +119,7 @@ void BasicIDEShell::ExecuteCurrent( SfxRequest& rReq )
                 {
                     if ( BasicIDE::RemoveDialog( aDocument, aLibName, aName ) )
                     {
-                        RemoveWindow( pCurWin, sal_True );
+                        RemoveWindow( pCurWin, true );
                         BasicIDE::MarkDocumentModified( aDocument );
                     }
                 }
@@ -578,7 +577,7 @@ void BasicIDEShell::ExecuteGlobal( SfxRequest& rReq )
             {
                 if ( m_aCurLibName.isEmpty() || ( aDocument == m_aCurDocument && aLibName == m_aCurLibName ) )
                 {
-                    RemoveWindows( aDocument, aLibName, sal_True );
+                    RemoveWindows( aDocument, aLibName, true );
                     if ( aDocument == m_aCurDocument && aLibName == m_aCurLibName )
                     {
                         m_aCurDocument = ScriptDocument::getApplicationScriptDocument();
@@ -636,7 +635,7 @@ void BasicIDEShell::ExecuteGlobal( SfxRequest& rReq )
             ScriptDocument aDocument( rSbxItem.GetDocument() );
             IDEBaseWindow* pWin = FindWindow( aDocument, rSbxItem.GetLibName(), rSbxItem.GetName(), rSbxItem.GetType(), sal_True );
             if ( pWin )
-                RemoveWindow( pWin, sal_True );
+                RemoveWindow( pWin, true );
         }
         break;
         case SID_BASICIDE_SHOWSBX:
@@ -1119,7 +1118,7 @@ void BasicIDEShell::SetCurWindow( IDEBaseWindow* pNewWin, bool bUpdateTabBar, bo
         pModulLayout->Show();
         AdjustPosSizePixel( Point( 0, 0 ), GetViewFrame()->GetWindow().GetOutputSizePixel() );
         SetWindow( pModulLayout );
-        EnableScrollbars( sal_False );
+        EnableScrollbars( false );
         aVScrollBar.Hide();
     }
 
@@ -1209,7 +1208,7 @@ void BasicIDEShell::SetCurWindow( IDEBaseWindow* pNewWin, bool bUpdateTabBar, bo
         pModulLayout->GetObjectCatalog().SetCurrentEntry(pCurWin);
         SetUndoManager( pCurWin ? pCurWin->GetUndoManager() : 0 );
         InvalidateBasicIDESlots();
-        EnableScrollbars( pCurWin ? sal_True : sal_False );
+        EnableScrollbars( pCurWin ? true : false );
 
         if ( m_pCurLocalizationMgr )
             m_pCurLocalizationMgr->handleTranslationbar();
@@ -1426,7 +1425,7 @@ void BasicIDEShell::Activate( sal_Bool bMDI )
         if( pCurWin && pCurWin->IsA( TYPE( DialogWindow ) ) )
             ((DialogWindow*)pCurWin)->UpdateBrowser();
 
-        ShowObjectDialog( sal_True, sal_False );
+        ShowObjectDialog( true, false );
     }
 }
 
@@ -1458,7 +1457,7 @@ void BasicIDEShell::Deactivate( sal_Bool bMDI )
             }
         }
 
-        ShowObjectDialog( sal_False, sal_False );
+        ShowObjectDialog( false, false );
     }
 }
 

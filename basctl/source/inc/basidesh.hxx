@@ -96,13 +96,13 @@ friend class ContainerListenerImpl;
     void                InitTabBar();
     void                InitScrollBars();
     void                CheckWindows();
-    void                RemoveWindows( const ScriptDocument& rDocument, const ::rtl::OUString& rLibName, sal_Bool bDestroy );
+    void                RemoveWindows( const ScriptDocument& rDocument, const ::rtl::OUString& rLibName, bool bDestroy );
     void                UpdateWindows();
-    void                ShowObjectDialog( sal_Bool bShow, sal_Bool bCreateOrDestroy );
+    void                ShowObjectDialog( bool bShow, bool bCreateOrDestroy );
     void                InvalidateBasicIDESlots();
-    void                StoreAllWindowData( sal_Bool bPersistent = sal_True );
+    void                StoreAllWindowData( bool bPersistent = true );
     void                SetMDITitle();
-    void                EnableScrollbars( sal_Bool bEnable );
+    void                EnableScrollbars( bool bEnable );
     void                SetCurLib( const ScriptDocument& rDocument, ::rtl::OUString aLibName, bool bUpdateWindows = true , bool bCheck = true );
     void                SetCurLibForLocalization( const ScriptDocument& rDocument, ::rtl::OUString aLibName );
 
@@ -122,7 +122,7 @@ protected:
 
     void                SetCurWindow( IDEBaseWindow* pNewWin, bool bUpdateTabBar = false, bool bRememberAsCurrent = true );
     void                ManageToolbars();
-    void                RemoveWindow( IDEBaseWindow* pWindow, sal_Bool bDestroy, sal_Bool bAllowChangeCurWindow = sal_True );
+    void                RemoveWindow( IDEBaseWindow* pWindow, bool bDestroy, bool bAllowChangeCurWindow = true );
     void                ArrangeTabBar();
 
     ModulWindow*        CreateBasWin( const ScriptDocument& rDocument, const ::rtl::OUString& rLibName, const ::rtl::OUString& rModName );

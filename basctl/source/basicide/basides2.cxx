@@ -47,7 +47,7 @@ namespace css = ::com::sun::star;
 
 IMPL_LINK_NOARG_INLINE_START(BasicIDEShell, ObjectDialogCancelHdl)
 {
-    ShowObjectDialog( sal_False, sal_True );
+    ShowObjectDialog( false, true );
     return 0;
 }
 IMPL_LINK_NOARG_INLINE_END(BasicIDEShell, ObjectDialogCancelHdl)

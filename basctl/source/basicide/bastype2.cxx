@@ -252,19 +252,19 @@ void BasicTreeListBox::ImpCreateLibEntries( SvLBoxEntry* pDocumentRootEntry, con
         if ( eLocation == rDocument.getLibraryLocation( aLibName ) )
         {
             // check, if the module library is loaded
-            sal_Bool bModLibLoaded = sal_False;
+            bool bModLibLoaded = false;
             ::rtl::OUString aOULibName( aLibName );
             Reference< script::XLibraryContainer > xModLibContainer( rDocument.getLibraryContainer( E_SCRIPTS ) );
             if ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) && xModLibContainer->isLibraryLoaded( aOULibName ) )
-                bModLibLoaded = sal_True;
+                bModLibLoaded = true;
 
             // check, if the dialog library is loaded
-            sal_Bool bDlgLibLoaded = sal_False;
+            bool bDlgLibLoaded = false;
             Reference< script::XLibraryContainer > xDlgLibContainer( rDocument.getLibraryContainer( E_DIALOGS ) );
             if ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aOULibName ) && xDlgLibContainer->isLibraryLoaded( aOULibName ) )
-                bDlgLibLoaded = sal_True;
+                bDlgLibLoaded = true;
 
-            sal_Bool bLoaded = bModLibLoaded || bDlgLibLoaded;
+            bool bLoaded = bModLibLoaded || bDlgLibLoaded;
 
             // if only one of the libraries is loaded, load also the other
             if ( bLoaded )

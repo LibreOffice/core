@@ -119,7 +119,7 @@ public:
         {
             IDEBaseWindow* pWin = mpShell->FindWindow( mpShell->m_aCurDocument, mpShell->m_aCurLibName, sModuleName, BASICIDE_TYPE_MODULE, sal_True );
             if( pWin )
-                mpShell->RemoveWindow( pWin, sal_True, sal_True );
+                mpShell->RemoveWindow( pWin, true, true );
         }
     }
 
@@ -326,7 +326,7 @@ void BasicIDEShell::onDocumentClosed( const ScriptDocument& _rDocument )
         pWin->StoreData();
         if ( pWin == pCurWin )
             bSetCurWindow = true;
-        RemoveWindow( pWin, sal_True, sal_False );
+        RemoveWindow( pWin, true, false );
     }
 
     // remove lib info
@@ -358,7 +358,7 @@ void BasicIDEShell::onDocumentModeChanged( const ScriptDocument& _rDocument )
     }
 }
 
-void BasicIDEShell::StoreAllWindowData( sal_Bool bPersistent )
+void BasicIDEShell::StoreAllWindowData( bool bPersistent )
 {
     for( IDEWindowTable::const_iterator it = aIDEWindowTable.begin(); it != aIDEWindowTable.end(); ++it )
     {
@@ -415,7 +415,7 @@ sal_uInt16 BasicIDEShell::PrepareClose( sal_Bool bUI, sal_Bool bForBrowsing )
         }
 
         if ( bCanClose )
-            StoreAllWindowData( sal_False );    // don't write on the disk, that will be done later automatically
+            StoreAllWindowData( false );    // don't write on the disk, that will be done later automatically
 
         return bCanClose;
     }
@@ -531,7 +531,7 @@ void BasicIDEShell::ArrangeTabBar()
 
 
 
-void BasicIDEShell::ShowObjectDialog( sal_Bool bShow, sal_Bool bCreateOrDestroy )
+void BasicIDEShell::ShowObjectDialog( bool bShow, bool bCreateOrDestroy )
 {
     if ( bShow )
     {
@@ -668,7 +668,7 @@ void BasicIDEShell::CheckWindows()
         pWin->StoreData();
         if ( pWin == pCurWin )
             bSetCurWindow = true;
-        RemoveWindow( pWin, sal_True, sal_False );
+        RemoveWindow( pWin, true, false );
     }
     if ( bSetCurWindow )
         SetCurWindow( FindApplicationWindow(), true );
@@ -676,9 +676,9 @@ void BasicIDEShell::CheckWindows()
 
 
 
-void BasicIDEShell::RemoveWindows( const ScriptDocument& rDocument, const ::rtl::OUString& rLibName, sal_Bool bDestroy )
+void BasicIDEShell::RemoveWindows( const ScriptDocument& rDocument, const ::rtl::OUString& rLibName, bool bDestroy )
 {
-    sal_Bool bChangeCurWindow = pCurWin ? sal_False : sal_True;
+    bool bChangeCurWindow = pCurWin ? false : true;
     std::vector<IDEBaseWindow*> aDeleteVec;
     for( IDEWindowTable::const_iterator it = aIDEWindowTable.begin(); it != aIDEWindowTable.end(); ++it )
     {
@@ -690,9 +690,9 @@ void BasicIDEShell::RemoveWindows( const ScriptDocument& rDocument, const ::rtl:
     {
         IDEBaseWindow* pWin = *it;
         if ( pWin == pCurWin )
-            bChangeCurWindow = sal_True;
+            bChangeCurWindow = true;
         pWin->StoreData();
-        RemoveWindow( pWin, bDestroy, sal_False );
+        RemoveWindow( pWin, bDestroy, false );
     }
     if ( bChangeCurWindow )
         SetCurWindow( FindApplicationWindow(), true );
@@ -703,7 +703,7 @@ void BasicIDEShell::RemoveWindows( const ScriptDocument& rDocument, const ::rtl:
 void BasicIDEShell::UpdateWindows()
 {
     // remove all windows that may not be displayed
-    sal_Bool bChangeCurWindow = pCurWin ? sal_False : sal_True;
+    bool bChangeCurWindow = pCurWin ? false : true;
     if ( !m_aCurLibName.isEmpty() )
     {
         std::vector<IDEBaseWindow*> aDeleteVec;
@@ -713,7 +713,7 @@ void BasicIDEShell::UpdateWindows()
             if ( !pWin->IsDocument( m_aCurDocument ) || pWin->GetLibName() != m_aCurLibName )
             {
                 if ( pWin == pCurWin )
-                    bChangeCurWindow = sal_True;
+                    bChangeCurWindow = true;
                 pWin->StoreData();
                 // The request of RUNNING prevents the crash when in reschedule.
                 // Window is frozen at first, later the windows should be changed
@@ -724,7 +724,7 @@ void BasicIDEShell::UpdateWindows()
         }
         for ( std::vector<IDEBaseWindow*>::const_iterator it = aDeleteVec.begin(); it != aDeleteVec.end(); ++it )
         {
-            RemoveWindow( *it, sal_False, sal_False );
+            RemoveWindow( *it, false, false );
         }
     }
 
@@ -754,14 +754,14 @@ void BasicIDEShell::UpdateWindows()
             if ( m_aCurLibName.isEmpty() || ( *doc == m_aCurDocument && aLibName == m_aCurLibName ) )
             {
                 // check, if library is password protected and not verified
-                sal_Bool bProtected = sal_False;
+                bool bProtected = false;
                 Reference< script::XLibraryContainer > xModLibContainer( doc->getLibraryContainer( E_SCRIPTS ) );
                 if ( xModLibContainer.is() && xModLibContainer->hasByName( aLibName ) )
                 {
                     Reference< script::XLibraryContainerPassword > xPasswd( xModLibContainer, UNO_QUERY );
                     if ( xPasswd.is() && xPasswd->isLibraryPasswordProtected( aLibName ) && !xPasswd->isLibraryPasswordVerified( aLibName ) )
                     {
-                        bProtected = sal_True;
+                        bProtected = true;
                     }
                 }
 
@@ -847,7 +847,7 @@ void BasicIDEShell::UpdateWindows()
     }
 }
 
-void BasicIDEShell::RemoveWindow( IDEBaseWindow* pWindow_, sal_Bool bDestroy, sal_Bool bAllowChangeCurWindow )
+void BasicIDEShell::RemoveWindow( IDEBaseWindow* pWindow_, bool bDestroy, bool bAllowChangeCurWindow )
 {
     DBG_ASSERT( pWindow_, "Kann keinen NULL-Pointer loeschen!" );
     sal_uLong nKey = GetIDEWindowId( pWindow_ );
@@ -954,7 +954,7 @@ void BasicIDEShell::InvalidateBasicIDESlots()
     }
 }
 
-void BasicIDEShell::EnableScrollbars( sal_Bool bEnable )
+void BasicIDEShell::EnableScrollbars( bool bEnable )
 {
     if ( bEnable )
     {
