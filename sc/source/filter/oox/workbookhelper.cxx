@@ -553,6 +553,10 @@ void WorkbookGlobals::initialize( bool bWorkbookFile )
         //! TODO: localize progress bar text
         mxProgressBar.reset( new SegmentProgressBar( mrBaseFilter.getStatusIndicator(), CREATE_OUSTRING( "Loading..." ) ) );
         mxFmlaParser.reset( new FormulaParser( *this ) );
+
+        //prevent unnecessary broadcasts and "half way listeners" as
+        //is done in ScDocShell::BeforeXMLLoading() for ods
+        getScDocument().SetInsertingFromOtherDoc(true);
     }
     else if( mrBaseFilter.isExportFilter() )
     {
@@ -604,6 +608,10 @@ void WorkbookGlobals::finalize()
         aPropSet.setProperty( PROP_IsChangeReadOnlyEnabled, false );
         // #111099# open forms in alive mode (has no effect, if no controls in document)
         aPropSet.setProperty( PROP_ApplyFormDesignMode, false );
+
+        //stop preventing establishment of listeners as is done in
+        //ScDocShell::AfterXMLLoading() for ods
+        getScDocument().SetInsertingFromOtherDoc(false);
     }
 }
 
