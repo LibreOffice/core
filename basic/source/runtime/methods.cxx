@@ -861,14 +861,12 @@ RTLFUNC(Hex)
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
     else
     {
-        char aBuffer[17];
         SbxVariableRef pArg = rPar.Get( 1 );
-        // converting value to unsigned
+        // converting value to unsigned and limit to 2 or 4 byte representation
         sal_uInt32 nVal = pArg->IsInteger() ?
             static_cast<sal_uInt16>(pArg->GetInteger()) :
             static_cast<sal_uInt32>(pArg->GetLong());
-        snprintf( aBuffer, sizeof(aBuffer), "%"SAL_PRIXUINT32, nVal );
-        rPar.Get(0)->PutString( rtl::OUString::createFromAscii( aBuffer ) );
+        rPar.Get(0)->PutString( rtl::OUString::valueOf( sal_Int64(nVal), 16 ) );
     }
 }
 
