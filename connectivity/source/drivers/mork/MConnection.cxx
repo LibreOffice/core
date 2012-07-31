@@ -72,7 +72,7 @@ void SAL_CALL OConnection::release() throw()
 void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyValue >& info)  throw(SQLException)
 {
     (void) info; // avoid warnings
-    SAL_INFO("connectvity.mork", "=> OConnection::construct()" );
+    SAL_INFO("connectivity.mork", "=> OConnection::construct()" );
     //  open file
     setURL(url);
     //
@@ -106,8 +106,8 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
         sAdditionalInfo = aAddrbookURI.copy( nLen + 1 );
     }
 
-    SAL_INFO("connectvity.mork", "URI = " << aAddrbookURI );
-    SAL_INFO("connectvity.mork", "Scheme = " << aAddrbookScheme );
+    SAL_INFO("connectivity.mork", "URI = " << aAddrbookURI );
+    SAL_INFO("connectivity.mork", "Scheme = " << aAddrbookScheme );
 
     ::rtl::OUString defaultProfile = m_pProfileAccess->getDefaultProfile(::com::sun::star::mozilla::MozillaProductType_Thunderbird);
     SAL_INFO("connectivity.mork", "DefaultProfile: " << defaultProfile);
@@ -149,7 +149,7 @@ IMPLEMENT_SERVICE_INFO(OConnection, "com.sun.star.sdbc.drivers.mork.OConnection"
 // --------------------------------------------------------------------------------
 Reference< XStatement > SAL_CALL OConnection::createStatement(  ) throw(SQLException, RuntimeException)
 {
-    SAL_INFO("connectvity.mork", "=> OConnection::createStatement()" );
+    SAL_INFO("connectivity.mork", "=> OConnection::createStatement()" );
 
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
@@ -163,34 +163,34 @@ Reference< XStatement > SAL_CALL OConnection::createStatement(  ) throw(SQLExcep
 // --------------------------------------------------------------------------------
 Reference< XPreparedStatement > SAL_CALL OConnection::prepareStatement( const ::rtl::OUString& _sSql ) throw(SQLException, RuntimeException)
 {
-    SAL_INFO("connectvity.mork", "=> OConnection::prepareStatement()" );
+    SAL_INFO("connectivity.mork", "=> OConnection::prepareStatement()" );
 
     OSL_UNUSED( _sSql );
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
 
-    SAL_INFO("connectvity.mork", "OConnection::prepareStatement( " << _sSql << " )");
+    SAL_INFO("connectivity.mork", "OConnection::prepareStatement( " << _sSql << " )");
     return NULL;
 }
 // --------------------------------------------------------------------------------
 Reference< XPreparedStatement > SAL_CALL OConnection::prepareCall( const ::rtl::OUString& _sSql ) throw(SQLException, RuntimeException)
 {
-    SAL_INFO("connectvity.mork", "=> OConnection::prepareCall()" );
-    SAL_INFO("connectvity.mork", "sql: " << _sSql);
+    SAL_INFO("connectivity.mork", "=> OConnection::prepareCall()" );
+    SAL_INFO("connectivity.mork", "sql: " << _sSql);
     OSL_UNUSED( _sSql );
     ::dbtools::throwFeatureNotImplementedException( "XConnection::prepareCall", *this );
-    SAL_INFO("connectvity.mork", "OConnection::prepareCall( " << _sSql << " )");
+    SAL_INFO("connectivity.mork", "OConnection::prepareCall( " << _sSql << " )");
     return NULL;
 }
 // --------------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OConnection::nativeSQL( const ::rtl::OUString& _sSql ) throw(SQLException, RuntimeException)
 {
-    SAL_INFO("connectvity.mork", "=> OConnection::nativeSQL()" );
-    SAL_INFO("connectvity.mork", "sql: " << _sSql);
+    SAL_INFO("connectivity.mork", "=> OConnection::nativeSQL()" );
+    SAL_INFO("connectivity.mork", "sql: " << _sSql);
 
     ::osl::MutexGuard aGuard( m_aMutex );
     // when you need to transform SQL92 to you driver specific you can do it here
-    SAL_INFO("connectvity.mork", "OConnection::nativeSQL(" << _sSql << " )" );
+    SAL_INFO("connectivity.mork", "OConnection::nativeSQL(" << _sSql << " )" );
 
     return _sSql;
 }
@@ -228,7 +228,7 @@ sal_Bool SAL_CALL OConnection::isClosed(  ) throw(SQLException, RuntimeException
 // --------------------------------------------------------------------------------
 Reference< XDatabaseMetaData > SAL_CALL OConnection::getMetaData(  ) throw(SQLException, RuntimeException)
 {
-    SAL_INFO("connectvity.mork", "=> OConnection::getMetaData()" );
+    SAL_INFO("connectivity.mork", "=> OConnection::getMetaData()" );
 
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);

@@ -36,7 +36,7 @@ using namespace connectivity::mork;
 // -------------------------------------------------------------------------
 MDatabaseMetaDataHelper::MDatabaseMetaDataHelper()
 {
-    SAL_INFO("connectvity.mork", "=> MDatabaseMetaDataHelper::MDatabaseMetaDataHelper()" );
+    SAL_INFO("connectivity.mork", "=> MDatabaseMetaDataHelper::MDatabaseMetaDataHelper()" );
 }
 
 // -------------------------------------------------------------------------
@@ -50,7 +50,7 @@ sal_Bool MDatabaseMetaDataHelper::getTableStrings( OConnection*                 
     ::rtl::OUString                             sAbURI;
     ::rtl::OString                              sAbURIString;
 
-    SAL_INFO("connectvity.mork", "=> MDatabaseMetaDataHelper::getTableStrings()");
+    SAL_INFO("connectivity.mork", "=> MDatabaseMetaDataHelper::getTableStrings()");
     _pCon->getMorkParser();
     // TODO: retrieve Tables from MorkParser
     // only put for now the private adress book
@@ -64,11 +64,11 @@ sal_Bool MDatabaseMetaDataHelper::getTables( OConnection* _pCon,
                                              ODatabaseMetaDataResultSet::ORows& _rRows)
 {
 
-    SAL_INFO("connectvity.mork", "=> MDatabaseMetaDataHelper::getTables()");
+    SAL_INFO("connectivity.mork", "=> MDatabaseMetaDataHelper::getTables()");
 
     static ODatabaseMetaDataResultSet::ORows    aRows;
 
-    SAL_INFO("connectvity.mork", "=> MDatabaseMetaDataHelper::getTables()" );
+    SAL_INFO("connectivity.mork", "=> MDatabaseMetaDataHelper::getTables()" );
     ::osl::MutexGuard aGuard( m_aMetaMutex );
 
     ODatabaseMetaDataResultSet::ORows().swap(aRows); // this makes real clear where memory is freed as well
@@ -86,7 +86,7 @@ sal_Bool MDatabaseMetaDataHelper::getTables( OConnection* _pCon,
 
         ::rtl::OUString aTableName  = tables[i];
         //::rtl::OUString aTableType      = tabletypes[i];
-        SAL_INFO("connectvity.mork", "TableName: " << aTableName );
+        SAL_INFO("connectivity.mork", "TableName: " << aTableName );
 
 
         // return tables to caller
@@ -101,7 +101,7 @@ sal_Bool MDatabaseMetaDataHelper::getTables( OConnection* _pCon,
                 aTableName = rtl::OUString::createFromAscii("AddressBook");
             }
 
-            SAL_INFO("connectvity.mork", "TableName: " << aTableName);
+            SAL_INFO("connectivity.mork", "TableName: " << aTableName);
 
             aRow.push_back( new ORowSetValueDecorator( aTableName ) ); // Table name
 //            aRow.push_back( new ORowSetValueDecorator( aTableType ) ); // Table type

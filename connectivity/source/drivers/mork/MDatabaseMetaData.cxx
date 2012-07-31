@@ -71,9 +71,9 @@ ODatabaseMetaDataResultSet::ORows& SAL_CALL ODatabaseMetaData::getColumnRows(
         const ::rtl::OUString& tableNamePattern,
         const ::rtl::OUString& columnNamePattern ) throw(SQLException)
 {
-    SAL_INFO("connectvity.mork", "=> ODatabaseMetaData::getColumnRows()" );
-    SAL_INFO("connectvity.mork", "tableNamePattern: " << tableNamePattern);
-    SAL_INFO("connectvity.mork", "columnNamePattern: " << columnNamePattern);
+    SAL_INFO("connectivity.mork", "=> ODatabaseMetaData::getColumnRows()" );
+    SAL_INFO("connectivity.mork", "tableNamePattern: " << tableNamePattern);
+    SAL_INFO("connectivity.mork", "columnNamePattern: " << columnNamePattern);
 
     static ODatabaseMetaDataResultSet::ORows aRows;
     ODatabaseMetaDataResultSet::ORow aRow(19);
@@ -131,7 +131,7 @@ ODatabaseMetaDataResultSet::ORows& SAL_CALL ODatabaseMetaData::getColumnRows(
             // TABLE_NAME
             aRow[3] = new ORowSetValueDecorator( tables[j] );
 
-            SAL_INFO("connectvity.mork", "\tTableName = : " << tables[j]);
+            SAL_INFO("connectivity.mork", "\tTableName = : " << tables[j]);
 
 #if 0
             // Iterate over all collumns in the table.
@@ -151,7 +151,7 @@ ODatabaseMetaDataResultSet::ORows& SAL_CALL ODatabaseMetaData::getColumnRows(
                 }
             }
 #endif
-            SAL_INFO("connectvity.mork", "\tTableName = : " << tables[j]);
+            SAL_INFO("connectivity.mork", "\tTableName = : " << tables[j]);
             std::string name = "name";
             OUString ouName(name.c_str(), name.length(), RTL_TEXTENCODING_UTF8);
             // COLUMN_NAME
@@ -949,7 +949,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
     const Any& /*catalog*/, const ::rtl::OUString& /*schemaPattern*/,
     const ::rtl::OUString& tableNamePattern, const Sequence< ::rtl::OUString >& /*types*/ ) throw(SQLException, RuntimeException)
 {
-    SAL_INFO("connectvity.mork", "=> ODatabaseMetaData::getTables()" );
+    SAL_INFO("connectivity.mork", "=> ODatabaseMetaData::getTables()" );
     // this returns an empty resultset where the column-names are already set
     // in special the metadata of the resultset already returns the right columns
     ODatabaseMetaDataResultSet* pResultSet = new ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::eTables);
@@ -974,7 +974,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTablePrivileges(
     const Any& /*catalog*/, const ::rtl::OUString& /*schemaPattern*/, const ::rtl::OUString& tableNamePattern ) throw(SQLException, RuntimeException)
 {
-    SAL_INFO("connectvity.mork", "=> ODatabaseMetaData::getTablePrivileges()" );
+    SAL_INFO("connectivity.mork", "=> ODatabaseMetaData::getTablePrivileges()" );
     ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::eTablePrivileges);
     Reference< XResultSet > xRef = NULL;
 
@@ -1008,7 +1008,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTablePrivileges(
             // TABLE_NAME
             aRow[2] = new ORowSetValueDecorator( tables[j] );
 
-            SAL_INFO("connectvity.mork", "\tTableName = : " << tables[j]);
+            SAL_INFO("connectivity.mork", "\tTableName = : " << tables[j]);
 
                 aRow[6] = ::connectivity::ODatabaseMetaDataResultSet::getSelectValue();
                 aRows.push_back(aRow);
