@@ -59,7 +59,7 @@ public class GridItemAdapter extends BaseAdapter{
 		return null;//filePaths[ position ];
 	}
 
-	public long getItemId(int arg0) {
+    public long getItemId(int position) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
@@ -72,10 +72,10 @@ public class GridItemAdapter extends BaseAdapter{
 			View gridView;
 
 			if (convertView == null) {
+                    gridView = new View(mContext);
 			} else {
 				gridView = (View) convertView;
 			}
-			gridView = new View(mContext);
 
 			// get layout from mobile.xml
 			gridView = inflater.inflate(R.layout.file_explorer_grid_item, null);
@@ -135,4 +135,7 @@ public class GridItemAdapter extends BaseAdapter{
 			return gridView;
 	}
 
+    public void update(){
+        this.notifyDataSetChanged();
+    }
 }

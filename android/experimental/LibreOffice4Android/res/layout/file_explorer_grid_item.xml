@@ -16,6 +16,7 @@
         android:layout_height="142dp"
         android:paddingTop="15dp"
         android:paddingBottom="10dp"
+        android:scaleType="fitStart"
         android:layout_gravity="center" >
     </ImageView>
  

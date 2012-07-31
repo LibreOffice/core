@@ -215,7 +215,7 @@ public class LibreOfficeUIActivity extends SherlockActivity implements ActionBar
             fileNames[ i ] = filePaths[ i ].getName();
             if( !FileUtilities.hasThumbnail( filePaths[ i ] ) )
             {
-                //new ThumbnailGenerator( filePaths[ i ] );
+                new ThumbnailGenerator( filePaths[ i ] );
             }
     	}
     	if( viewMode == GRID_VIEW){
@@ -485,6 +485,11 @@ public class LibreOfficeUIActivity extends SherlockActivity implements ActionBar
 		return true;
 	}
 	
+    private int dpToPx( int dp ){
+        final float scale = getApplicationContext().getResources().getDisplayMetrics().density;
+        return (int) (dp * scale + 0.5f);
+    }
+
 class ListItemAdapter implements ListAdapter{
 		private Context mContext;
 		private File[] filePaths;
@@ -633,64 +638,11 @@ class ListItemAdapter implements ListAdapter{
 
         ThumbnailGenerator( File file ){
             this.file = file;
-            try {
-                long t0 = System.currentTimeMillis();
-                long t1 = System.currentTimeMillis();
-                timingOverhead = t1 - t0;
-
-                Bootstrap.setup(LibreOfficeUIActivity.this);
-
-                Bootstrap.putenv("SAL_LOG=yes");
-
-                // Load a lot of shlibs here explicitly in advance because that
-                // makes debugging work better, sigh
-                Bootstrap.dlopen("libvcllo.so");
-                Bootstrap.dlopen("libmergedlo.so");
-                Bootstrap.dlopen("libswdlo.so");
-                Bootstrap.dlopen("libswlo.so");
-
-                // Log.i(TAG, "Sleeping NOW");
-                // Thread.sleep(20000);
-
-                context = com.sun.star.comp.helper.Bootstrap.defaultBootstrap_InitialComponentContext();
-
-                Log.i(TAG, "context is" + (context!=null ? " not" : "") + " null");
-
-                mcf = context.getServiceManager();
-
-                Log.i(TAG, "mcf is" + (mcf!=null ? " not" : "") + " null");
-
                 String input = file.getAbsolutePath();
                 if (input == null)
                     input = "/assets/test1.odt";
-
-                // We need to fake up an argv, and the argv[0] even needs to
-                // point to some file name that we can pretend is the "program".
-                // setCommandArgs() will prefix argv[0] with the app's data
-                // directory.
-
-                String[] argv = { "lo-document-loader", input };
-
-                Bootstrap.setCommandArgs(argv);
-
-                Bootstrap.initVCL();
-
-                Object desktop = mcf.createInstanceWithContext
-                    ("com.sun.star.frame.Desktop", context);
-
-                Log.i(TAG, "desktop is" + (desktop!=null ? " not" : "") + " null");
-
-                Bootstrap.initUCBHelper();
-
-                componentLoader = (XComponentLoader) UnoRuntime.queryInterface(XComponentLoader.class, desktop);
-
-                Log.i(TAG, "componentLoader is" + (componentLoader!=null ? " not" : "") + " null");
                 // Load the wanted document
                 new DocumentLoadTask().executeOnExecutor(AsyncTask.SERIAL_EXECUTOR, "file://" + input);
-            }
-            catch (Exception e) {
-                e.printStackTrace(System.err);
-            }
         }
 
         class DocumentLoadTask
@@ -781,13 +733,67 @@ class ListItemAdapter implements ListAdapter{
                 return null;
             }
 
-            protected void onPreExecute (){
-            //TODO put doc loading & set-up here?
+            protected void onPreExecute ()
+            {
+                try{
+
+                }
+                catch (Exception e) {
+                    e.printStackTrace(System.err);
+                }
             }
 
             protected Integer doInBackground(String... params)
             {
                 try {
+                    long t0 = System.currentTimeMillis();
+                    long t1 = System.currentTimeMillis();
+                    timingOverhead = t1 - t0;
+
+                    Bootstrap.setup(LibreOfficeUIActivity.this);
+
+                    Bootstrap.putenv("SAL_LOG=yes");
+
+                    // Load a lot of shlibs here explicitly in advance because that
+                    // makes debugging work better, sigh
+                    Bootstrap.dlopen("libvcllo.so");
+                    Bootstrap.dlopen("libmergedlo.so");
+                    Bootstrap.dlopen("libswdlo.so");
+                    Bootstrap.dlopen("libswlo.so");
+
+                    // Log.i(TAG, "Sleeping NOW");
+                    // Thread.sleep(20000);
+
+                    context = com.sun.star.comp.helper.Bootstrap.defaultBootstrap_InitialComponentContext();
+
+                    Log.i(TAG, "context is" + (context!=null ? " not" : "") + " null");
+
+                    mcf = context.getServiceManager();
+
+                    Log.i(TAG, "mcf is" + (mcf!=null ? " not" : "") + " null");
+
+                    // We need to fake up an argv, and the argv[0] even needs to
+                    // point to some file name that we can pretend is the "program".
+                    // setCommandArgs() will prefix argv[0] with the app's data
+                    // directory.
+
+                    String[] argv = { "lo-document-loader", file.getAbsolutePath() };
+
+                    Bootstrap.setCommandArgs(argv);
+
+                    Bootstrap.initVCL();
+
+                    Object desktop = mcf.createInstanceWithContext
+                        ("com.sun.star.frame.Desktop", context);
+
+                    Log.i(TAG, "desktop is" + (desktop!=null ? " not" : "") + " null");
+
+                    Bootstrap.initUCBHelper();
+
+                    componentLoader = (XComponentLoader) UnoRuntime.queryInterface(XComponentLoader.class, desktop);
+
+                    Log.i(TAG, "componentLoader is" + (componentLoader!=null ? " not" : "") + " null");
+
                     String url = params[0];
                     Log.i(TAG, "Attempting to load " + url);
 
@@ -802,9 +808,9 @@ class ListItemAdapter implements ListAdapter{
                     loadProps[2].Name = "Preview";
                     loadProps[2].Value = new Boolean(true);
 
-                    long t0 = System.currentTimeMillis();
+                    t0 = System.currentTimeMillis();
                     doc = componentLoader.loadComponentFromURL(url, "_blank", 0, loadProps);
-                    long t1 = System.currentTimeMillis();
+                    t1 = System.currentTimeMillis();
                     Log.i(TAG, "Loading took " + ((t1-t0)-timingOverhead) + " ms");
 
                     Object toolkitService = mcf.createInstanceWithContext
@@ -844,8 +850,8 @@ class ListItemAdapter implements ListAdapter{
         }
 
             protected void onPostExecute(Integer result){
-                int widthInPx = 120;
-                int heightInPx = 120;
+                int widthInPx = dpToPx( 100 );
+                int heightInPx = dpToPx( (int)( 100*Math.sqrt(2) ) );
                 ByteBuffer bb = renderPage( 0 , widthInPx , heightInPx);
                 Bitmap bm = Bitmap.createBitmap( widthInPx , heightInPx , Bitmap.Config.ARGB_8888);
                 bm.copyPixelsFromBuffer(bb);
@@ -860,6 +866,7 @@ class ListItemAdapter implements ListAdapter{
                 } catch (IOException e) {
                     // TODO: handle exception
                 }
+                ( (GridItemAdapter)gv.getAdapter() ).update();
         }
         }
 
