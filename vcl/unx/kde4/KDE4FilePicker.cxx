@@ -398,9 +398,12 @@ uno::Any SAL_CALL KDE4FilePicker::getValue( sal_Int16 controlId, sal_Int16 )
         switch (controlId)
         {
             case ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION:
-            // we ignore this one and rely on KFileDialog to provide the function,
-            // always return true, here meaning "it's been taken care of"
-                res = uno::Any( true );
+            // We ignore this one and rely on KFileDialog to provide the function.
+            // Always return false, to pretend we do not support this, otherwise
+            // LO core would try to be smart and cut the extension in some places,
+            // interfering with KFileDialog's handling of it. KFileDialog also
+            // saves the value of the setting, so LO core is not needed for that either.
+                res = uno::Any( false );
                 break;
             case ExtendedFilePickerElementIds::CHECKBOX_PASSWORD:
             case ExtendedFilePickerElementIds::CHECKBOX_FILTEROPTIONS:
