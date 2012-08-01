@@ -27,13 +27,12 @@ struct find_unique;
     @tpl Compare comparison method
     @tpl Find   look up index of a Value in the array
 */
-template<typename Value, typename Compare = std::less<Value>,
-     template<typename, typename> class Find = find_unique >
+template<class Value, class Compare = std::less<Value>,
+         class Find = find_unique<Value, Compare> >
 class sorted_vector
     : private std::vector<Value>
 {
 private:
-    typedef Find<Value, Compare> Find_t;
     typedef typename std::vector<Value> base_t;
     typedef typename std::vector<Value>::iterator  iterator;
 public:
@@ -48,7 +47,7 @@ public:
 
     std::pair<const_iterator,bool> insert( const Value& x )
     {
-        std::pair<const_iterator, bool> const ret(Find_t()(begin(), end(), x));
+        std::pair<const_iterator, bool> const ret(Find()(begin(), end(), x));
         if (!ret.second)
         {
             const_iterator const it = base_t::insert(
@@ -60,7 +59,7 @@ public:
 
     size_type erase( const Value& x )
     {
-        std::pair<const_iterator, bool> const ret(Find_t()(begin(), end(), x));
+        std::pair<const_iterator, bool> const ret(Find()(begin(), end(), x));
         if (ret.second)
         {
             base_t::erase(begin_nonconst() + (ret.first - begin()));
@@ -130,7 +129,7 @@ public:
      */
     const_iterator find( const Value& x ) const
     {
-        std::pair<const_iterator, bool> const ret(Find_t()(begin(), end(), x));
+        std::pair<const_iterator, bool> const ret(Find()(begin(), end(), x));
         return (ret.second) ? ret.first : end();
     }
 

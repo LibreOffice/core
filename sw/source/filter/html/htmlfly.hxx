@@ -130,7 +130,8 @@ public:
 class SwHTMLPosFlyFrms
     : public o3tl::sorted_vector<SwHTMLPosFlyFrm*,
                 o3tl::less_ptr_to<SwHTMLPosFlyFrm>,
-                o3tl::find_partialorder_ptrequals>
+                o3tl::find_partialorder_ptrequals<SwHTMLPosFlyFrm*,
+                    o3tl::less_ptr_to<SwHTMLPosFlyFrm> > >
 {};
 
 #endif

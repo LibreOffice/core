@@ -136,7 +136,8 @@ public:
     void testBasics_FindPtr()
     {
         o3tl::sorted_vector<SwContent*, o3tl::less_ptr_to<SwContent>,
-            o3tl::find_partialorder_ptrequals> aVec;
+            o3tl::find_partialorder_ptrequals<SwContent*,
+                o3tl::less_ptr_to<SwContent> > > aVec;
         SwContent *p1 = new SwContent(1);
         SwContent *p2 = new SwContent(2);
         SwContent *p2_2 = new SwContent(2);
@@ -194,7 +195,8 @@ public:
     void testErase_FindPtr()
     {
         o3tl::sorted_vector<SwContent*, o3tl::less_ptr_to<SwContent>,
-            o3tl::find_partialorder_ptrequals> aVec;
+            o3tl::find_partialorder_ptrequals<SwContent*,
+                o3tl::less_ptr_to<SwContent> > > aVec;
         SwContent *p1 = new SwContent(1);
         SwContent *p1_2 = new SwContent(1);
         SwContent *p1_3 = new SwContent(1);
