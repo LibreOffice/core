@@ -890,6 +890,7 @@ struct hash* dep_hash;
         if(current_dir_length == base_dir_length)
         {
             current_dir = base_dir_var;
+            current_dir_length = kBASE_DIR_VAR_LENGTH;
         }
         else
         {
