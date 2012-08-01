@@ -268,6 +268,7 @@ namespace svt
         EnableChildTransparentMode();
 
         pBox = new TriStateBox(this,WB_CENTER|WB_VCENTER);
+        pBox->SetLegacyNoTextAlign( true );
         pBox->EnableChildTransparentMode();
         pBox->SetPaintTransparent( sal_True );
         pBox->SetClickHdl( LINK( this, CheckBoxControl, OnClick ) );

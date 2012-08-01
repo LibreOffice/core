@@ -2188,9 +2188,9 @@ void RadioButton::ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
         }
         else
         {
-            if ( nWinStyle & WB_CENTER )
+            if ( mbLegacyNoTextAlign && ( nWinStyle & WB_CENTER ) )
                 rStateRect.Left() = rPos.X()+((rSize.Width()-rImageSize.Width())/2);
-            else if ( nWinStyle & WB_RIGHT )
+            else if ( mbLegacyNoTextAlign && ( nWinStyle & WB_RIGHT ) )
                 rStateRect.Left() = rPos.X()+rSize.Width()-rImageSize.Width(); //-1;
             else
                 rStateRect.Left() = rPos.X(); //+1;
@@ -2417,7 +2417,7 @@ void RadioButton::ImplCallClick( sal_Bool bGrabFocus, sal_uInt16 nFocusFlags )
 // -----------------------------------------------------------------------
 
 RadioButton::RadioButton( Window* pParent, WinBits nStyle ) :
-    Button( WINDOW_RADIOBUTTON )
+    Button( WINDOW_RADIOBUTTON ), mbLegacyNoTextAlign( false )
 {
     ImplInitRadioButtonData();
     ImplInit( pParent, nStyle );
@@ -2426,7 +2426,7 @@ RadioButton::RadioButton( Window* pParent, WinBits nStyle ) :
 // -----------------------------------------------------------------------
 
 RadioButton::RadioButton( Window* pParent, const ResId& rResId ) :
-    Button( WINDOW_RADIOBUTTON )
+    Button( WINDOW_RADIOBUTTON ), mbLegacyNoTextAlign( false )
 {
     ImplInitRadioButtonData();
     rResId.SetRT( RSC_RADIOBUTTON );
@@ -3252,9 +3252,9 @@ void CheckBox::ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
     }
     else
     {
-        if ( nWinStyle & WB_CENTER )
+        if ( mbLegacyNoTextAlign && ( nWinStyle & WB_CENTER ) )
             rStateRect.Left() = rPos.X()+((rSize.Width()-rImageSize.Width())/2);
-        else if ( nWinStyle & WB_RIGHT )
+        else if ( mbLegacyNoTextAlign && ( nWinStyle & WB_RIGHT ) )
             rStateRect.Left() = rPos.X()+rSize.Width()-rImageSize.Width();
         else
             rStateRect.Left() = rPos.X();
@@ -3350,7 +3350,7 @@ void CheckBox::ImplCheck()
 // -----------------------------------------------------------------------
 
 CheckBox::CheckBox( Window* pParent, WinBits nStyle ) :
-    Button( WINDOW_CHECKBOX )
+    Button( WINDOW_CHECKBOX ), mbLegacyNoTextAlign( false )
 {
     ImplInitCheckBoxData();
     ImplInit( pParent, nStyle );
@@ -3359,7 +3359,7 @@ CheckBox::CheckBox( Window* pParent, WinBits nStyle ) :
 // -----------------------------------------------------------------------
 
 CheckBox::CheckBox( Window* pParent, const ResId& rResId ) :
-    Button( WINDOW_CHECKBOX )
+    Button( WINDOW_CHECKBOX ), mbLegacyNoTextAlign( false )
 {
     ImplInitCheckBoxData();
     rResId.SetRT( RSC_CHECKBOX );
