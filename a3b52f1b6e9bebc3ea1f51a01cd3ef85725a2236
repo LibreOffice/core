@@ -1,0 +1,1160 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAMn///1k\u003d",
+        "filename": "sw/inc/dbmgr.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-01T10:16:07Z",
+      "side": 1,
+      "message": "please add a space between \"///\u003c\" and text",
+      "revId": "a3b52f1b6e9bebc3ea1f51a01cd3ef85725a2236",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///1w\u003d",
+        "filename": "sw/inc/dbmgr.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-01T10:16:07Z",
+      "side": 1,
+      "message": "looks kind of ugly from code design stand point...\nplease align indentation in next line (212) so that the first character is below the first character of \"prevent\"",
+      "revId": "a3b52f1b6e9bebc3ea1f51a01cd3ef85725a2236",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///1s\u003d",
+        "filename": "sw/inc/dbmgr.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 313,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-01T10:16:07Z",
+      "side": 1,
+      "message": "Can you please add spaces between text and \"*\" on both edges of the comment?",
+      "revId": "a3b52f1b6e9bebc3ea1f51a01cd3ef85725a2236",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///1o\u003d",
+        "filename": "sw/inc/dbmgr.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 323,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-01T10:16:07Z",
+      "side": 1,
+      "message": "please add a space between \"///\" and text",
+      "revId": "a3b52f1b6e9bebc3ea1f51a01cd3ef85725a2236",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///1g\u003d",
+        "filename": "sw/inc/dcontact.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-01T10:16:07Z",
+      "side": 1,
+      "message": "please add a space between \"///\" and text",
+      "revId": "a3b52f1b6e9bebc3ea1f51a01cd3ef85725a2236",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///1c\u003d",
+        "filename": "sw/inc/dcontact.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-01T10:16:07Z",
+      "side": 1,
+      "message": "please remove comment line completely since \"virtual methods of  SwClient\" does not provide additional information",
+      "revId": "a3b52f1b6e9bebc3ea1f51a01cd3ef85725a2236",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///1Y\u003d",
+        "filename": "sw/inc/dcontact.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-01T10:16:07Z",
+      "side": 1,
+      "message": "please add a space between text and \"*/\"",
+      "revId": "a3b52f1b6e9bebc3ea1f51a01cd3ef85725a2236",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///1U\u003d",
+        "filename": "sw/inc/dcontact.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-01T10:16:07Z",
+      "side": 1,
+      "message": "please add a space between text and \"*/\"",
+      "revId": "a3b52f1b6e9bebc3ea1f51a01cd3ef85725a2236",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///1Q\u003d",
+        "filename": "sw/inc/dcontact.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 262,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-01T10:16:07Z",
+      "side": 1,
+      "message": "please add a space between text and \"*/\"",
+      "revId": "a3b52f1b6e9bebc3ea1f51a01cd3ef85725a2236",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///1M\u003d",
+        "filename": "sw/inc/dcontact.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 341,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-01T10:16:07Z",
+      "side": 1,
+      "message": "please add a space between text and \"*/\"",
+      "revId": "a3b52f1b6e9bebc3ea1f51a01cd3ef85725a2236",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///1I\u003d",
+        "filename": "sw/inc/dcontact.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 348,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-01T10:16:07Z",
+      "side": 1,
+      "message": "please add a space between text and \"*/\" + does this comment fit in one line (80-100 chars)?",
+      "revId": "a3b52f1b6e9bebc3ea1f51a01cd3ef85725a2236",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///1E\u003d",
+        "filename": "sw/inc/dcontact.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 352,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-01T10:16:07Z",
+      "side": 1,
+      "message": "please add a space between text and \"*/\"",
+      "revId": "a3b52f1b6e9bebc3ea1f51a01cd3ef85725a2236",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///1A\u003d",
+        "filename": "sw/inc/dcontact.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 356,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-01T10:16:07Z",
+      "side": 1,
+      "message": "please add a space between text and \"*/\"",
+      "revId": "a3b52f1b6e9bebc3ea1f51a01cd3ef85725a2236",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///08\u003d",
+        "filename": "sw/inc/dcontact.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 360,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-01T10:16:07Z",
+      "side": 1,
+      "message": "please add a space between text and \"*/\"",
+      "revId": "a3b52f1b6e9bebc3ea1f51a01cd3ef85725a2236",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///04\u003d",
+        "filename": "sw/inc/dcontact.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 364,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-01T10:16:07Z",
+      "side": 1,
+      "message": "please add a space between text and \"*/\"",
+      "revId": "a3b52f1b6e9bebc3ea1f51a01cd3ef85725a2236",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///00\u003d",
+        "filename": "sw/inc/dcontact.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 367,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-01T10:16:07Z",
+      "side": 1,
+      "message": "please add a space between text and \"*/\"",
+      "revId": "a3b52f1b6e9bebc3ea1f51a01cd3ef85725a2236",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///0w\u003d",
+        "filename": "sw/inc/dcontact.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 373,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-01T10:16:07Z",
+      "side": 1,
+      "message": "please add a space between text and \"*/\"",
+      "revId": "a3b52f1b6e9bebc3ea1f51a01cd3ef85725a2236",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///0s\u003d",
+        "filename": "sw/inc/dcontact.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 392,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-01T10:16:07Z",
+      "side": 1,
+      "message": "please add a space between text and \"*/\"",
+      "revId": "a3b52f1b6e9bebc3ea1f51a01cd3ef85725a2236",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///0o\u003d",
+        "filename": "sw/inc/dcontact.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 448,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-01T10:16:07Z",
+      "side": 1,
+      "message": "please add a space between text and \"*/\"",
+      "revId": "a3b52f1b6e9bebc3ea1f51a01cd3ef85725a2236",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///0k\u003d",
+        "filename": "sw/inc/dcontact.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 451,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-01T10:16:07Z",
+      "side": 1,
+      "message": "please add a space between text and \"*/\"",
+      "revId": "a3b52f1b6e9bebc3ea1f51a01cd3ef85725a2236",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///0g\u003d",
+        "filename": "sw/inc/dcontact.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 456,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-01T10:16:07Z",
+      "side": 1,
+      "message": "please add a space between text and \"*/\"",
+      "revId": "a3b52f1b6e9bebc3ea1f51a01cd3ef85725a2236",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///0c\u003d",
+        "filename": "sw/inc/dcontact.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 463,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-01T10:16:07Z",
+      "side": 1,
+      "message": "please add a space between text and \"*/\"",
+      "revId": "a3b52f1b6e9bebc3ea1f51a01cd3ef85725a2236",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///0Y\u003d",
+        "filename": "sw/inc/dcontact.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 467,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-01T10:16:07Z",
+      "side": 1,
+      "message": "please add a space between text and \"*/\"",
+      "revId": "a3b52f1b6e9bebc3ea1f51a01cd3ef85725a2236",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///0U\u003d",
+        "filename": "sw/inc/dcontact.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 474,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-01T10:16:07Z",
+      "side": 1,
+      "message": "please add a space between text and \"*/\"",
+      "revId": "a3b52f1b6e9bebc3ea1f51a01cd3ef85725a2236",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///0Q\u003d",
+        "filename": "sw/inc/dcontact.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 477,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-01T10:16:07Z",
+      "side": 1,
+      "message": "please add a space between \"///\" and text",
+      "revId": "a3b52f1b6e9bebc3ea1f51a01cd3ef85725a2236",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///0M\u003d",
+        "filename": "sw/inc/ddefld.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-01T10:16:07Z",
+      "side": 1,
+      "message": "please add a space between text and \"*/\"",
+      "revId": "a3b52f1b6e9bebc3ea1f51a01cd3ef85725a2236",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///0I\u003d",
+        "filename": "sw/inc/doc.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 308,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-01T10:16:07Z",
+      "side": 1,
+      "message": "please make the comment style consistent (so here it would go behind *pDfltFrmFmt)",
+      "revId": "a3b52f1b6e9bebc3ea1f51a01cd3ef85725a2236",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///0E\u003d",
+        "filename": "sw/inc/doc.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 333,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-01T10:16:07Z",
+      "side": 1,
+      "message": "please add a space between text and \"*/\"",
+      "revId": "a3b52f1b6e9bebc3ea1f51a01cd3ef85725a2236",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///0A\u003d",
+        "filename": "sw/inc/doc.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 356,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-01T10:16:07Z",
+      "side": 1,
+      "message": "please add a space between text and \"*/\"",
+      "revId": "a3b52f1b6e9bebc3ea1f51a01cd3ef85725a2236",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///z8\u003d",
+        "filename": "sw/inc/doc.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 380,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-01T10:16:07Z",
+      "side": 1,
+      "message": "please add a space between text and \"*/\"",
+      "revId": "a3b52f1b6e9bebc3ea1f51a01cd3ef85725a2236",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///z4\u003d",
+        "filename": "sw/inc/doc.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 383,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-01T10:16:07Z",
+      "side": 1,
+      "message": "please add a space between text and \"*/\"",
+      "revId": "a3b52f1b6e9bebc3ea1f51a01cd3ef85725a2236",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///z0\u003d",
+        "filename": "sw/inc/doc.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 417,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-01T10:16:07Z",
+      "side": 1,
+      "message": "please add a space between text and \"*/\"",
+      "revId": "a3b52f1b6e9bebc3ea1f51a01cd3ef85725a2236",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///zw\u003d",
+        "filename": "sw/inc/doc.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 424,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-01T10:16:07Z",
+      "side": 1,
+      "message": "please align the indentation of the two comments (L424, L425) with those above",
+      "revId": "a3b52f1b6e9bebc3ea1f51a01cd3ef85725a2236",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///zs\u003d",
+        "filename": "sw/inc/doc.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 443,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-01T10:16:07Z",
+      "side": 1,
+      "message": "please add a space between \"///\u003c\" and text",
+      "revId": "a3b52f1b6e9bebc3ea1f51a01cd3ef85725a2236",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///zo\u003d",
+        "filename": "sw/inc/doc.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 444,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-01T10:16:07Z",
+      "side": 1,
+      "message": "please add a space between \"///\u003c\" and text",
+      "revId": "a3b52f1b6e9bebc3ea1f51a01cd3ef85725a2236",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///zk\u003d",
+        "filename": "sw/inc/doc.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 445,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-01T10:16:07Z",
+      "side": 1,
+      "message": "please add a space between \"/**\u003c\" and text",
+      "revId": "a3b52f1b6e9bebc3ea1f51a01cd3ef85725a2236",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///zg\u003d",
+        "filename": "sw/inc/doc.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 448,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-01T10:16:07Z",
+      "side": 1,
+      "message": "please add a space between text and \"*/\"",
+      "revId": "a3b52f1b6e9bebc3ea1f51a01cd3ef85725a2236",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///zc\u003d",
+        "filename": "sw/inc/doc.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 468,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-01T10:16:07Z",
+      "side": 1,
+      "message": "please add a space between text and \"*/\"",
+      "revId": "a3b52f1b6e9bebc3ea1f51a01cd3ef85725a2236",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///zY\u003d",
+        "filename": "sw/inc/doc.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 477,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-01T10:16:07Z",
+      "side": 1,
+      "message": "please add a space between text and \"*/\"",
+      "revId": "a3b52f1b6e9bebc3ea1f51a01cd3ef85725a2236",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///zU\u003d",
+        "filename": "sw/inc/doc.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 480,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-01T10:16:07Z",
+      "side": 1,
+      "message": "please add a space between text and \"*/\"",
+      "revId": "a3b52f1b6e9bebc3ea1f51a01cd3ef85725a2236",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///zQ\u003d",
+        "filename": "sw/inc/doc.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 616,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-01T10:16:07Z",
+      "side": 1,
+      "message": "please add a space between text and \"*/\"",
+      "revId": "a3b52f1b6e9bebc3ea1f51a01cd3ef85725a2236",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///zM\u003d",
+        "filename": "sw/inc/doc.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 650,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-01T10:16:07Z",
+      "side": 1,
+      "message": "please add a space between text and \"*/\"",
+      "revId": "a3b52f1b6e9bebc3ea1f51a01cd3ef85725a2236",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///zI\u003d",
+        "filename": "sw/inc/doc.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 680,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-01T10:16:07Z",
+      "side": 1,
+      "message": "please add a space between text and \"*/\"",
+      "revId": "a3b52f1b6e9bebc3ea1f51a01cd3ef85725a2236",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///zE\u003d",
+        "filename": "sw/inc/doc.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 966,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-01T10:16:07Z",
+      "side": 1,
+      "message": "please add a space between \"//\u003c\" and text",
+      "revId": "a3b52f1b6e9bebc3ea1f51a01cd3ef85725a2236",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///zA\u003d",
+        "filename": "sw/inc/doc.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1043,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-01T10:16:07Z",
+      "side": 1,
+      "message": "please add a space between text and \"*/\"",
+      "revId": "a3b52f1b6e9bebc3ea1f51a01cd3ef85725a2236",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///y8\u003d",
+        "filename": "sw/inc/doc.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1172,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-01T10:16:07Z",
+      "side": 1,
+      "message": "please add a space between text and \"*/\"",
+      "revId": "a3b52f1b6e9bebc3ea1f51a01cd3ef85725a2236",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///y0\u003d",
+        "filename": "sw/inc/doc.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1180,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-01T10:16:07Z",
+      "side": 1,
+      "message": "please add a space between text and \"*/\"",
+      "revId": "a3b52f1b6e9bebc3ea1f51a01cd3ef85725a2236",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///y4\u003d",
+        "filename": "sw/inc/doc.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1189,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-01T10:16:07Z",
+      "side": 1,
+      "message": "please add a space between text and \"*/\"",
+      "revId": "a3b52f1b6e9bebc3ea1f51a01cd3ef85725a2236",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///yw\u003d",
+        "filename": "sw/inc/doc.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1204,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-01T10:16:07Z",
+      "side": 1,
+      "message": "please remove one space between text and \"*/\"",
+      "revId": "a3b52f1b6e9bebc3ea1f51a01cd3ef85725a2236",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///ys\u003d",
+        "filename": "sw/inc/doc.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1256,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-01T10:16:07Z",
+      "side": 1,
+      "message": "please add a space between text and \"*/\"",
+      "revId": "a3b52f1b6e9bebc3ea1f51a01cd3ef85725a2236",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///yo\u003d",
+        "filename": "sw/inc/doc.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1265,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-01T10:16:07Z",
+      "side": 1,
+      "message": "hmm... this comment does not look much useful. I think you can remove it.",
+      "revId": "a3b52f1b6e9bebc3ea1f51a01cd3ef85725a2236",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///yk\u003d",
+        "filename": "sw/inc/doc.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1282,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-01T10:16:07Z",
+      "side": 1,
+      "message": "please add a space between \"/**\" and text",
+      "revId": "a3b52f1b6e9bebc3ea1f51a01cd3ef85725a2236",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///yg\u003d",
+        "filename": "sw/inc/doc.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1283,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-01T10:16:07Z",
+      "side": 1,
+      "message": "please add a space between text and \"*/\"",
+      "revId": "a3b52f1b6e9bebc3ea1f51a01cd3ef85725a2236",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///yc\u003d",
+        "filename": "sw/inc/doc.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1330,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-01T10:16:07Z",
+      "side": 1,
+      "message": "please add a space between text and \"*/\"",
+      "revId": "a3b52f1b6e9bebc3ea1f51a01cd3ef85725a2236",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///yY\u003d",
+        "filename": "sw/inc/doc.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1346,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-01T10:16:07Z",
+      "side": 1,
+      "message": "please add a space between text and \"*/\"",
+      "revId": "a3b52f1b6e9bebc3ea1f51a01cd3ef85725a2236",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///yU\u003d",
+        "filename": "sw/inc/doc.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1351,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-01T10:16:07Z",
+      "side": 1,
+      "message": "please add a space between text and \"*/\"",
+      "revId": "a3b52f1b6e9bebc3ea1f51a01cd3ef85725a2236",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///yQ\u003d",
+        "filename": "sw/inc/doc.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1356,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-01T10:16:07Z",
+      "side": 1,
+      "message": "please add a space between text and \"*/\"",
+      "revId": "a3b52f1b6e9bebc3ea1f51a01cd3ef85725a2236",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///yM\u003d",
+        "filename": "sw/inc/doc.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1377,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-01T10:16:07Z",
+      "side": 1,
+      "message": "please add a space between text and \"*/\"",
+      "revId": "a3b52f1b6e9bebc3ea1f51a01cd3ef85725a2236",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///yI\u003d",
+        "filename": "sw/inc/doc.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1487,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-01T10:16:07Z",
+      "side": 1,
+      "message": "please add a space between text and \"*/\"",
+      "revId": "a3b52f1b6e9bebc3ea1f51a01cd3ef85725a2236",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///yE\u003d",
+        "filename": "sw/inc/doc.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1581,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-01T10:16:07Z",
+      "side": 1,
+      "message": "please add a space between text and \"*/\"",
+      "revId": "a3b52f1b6e9bebc3ea1f51a01cd3ef85725a2236",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///yA\u003d",
+        "filename": "sw/inc/doc.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1590,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-01T10:16:07Z",
+      "side": 1,
+      "message": "please add a space between text and \"*/\"",
+      "revId": "a3b52f1b6e9bebc3ea1f51a01cd3ef85725a2236",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///x8\u003d",
+        "filename": "sw/inc/doc.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1700,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-01T10:16:07Z",
+      "side": 1,
+      "message": "please add a space between text and \"*/\"",
+      "revId": "a3b52f1b6e9bebc3ea1f51a01cd3ef85725a2236",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///x4\u003d",
+        "filename": "sw/inc/doc.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1720,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-01T10:16:07Z",
+      "side": 1,
+      "message": "please add a space between text and \"*/\"",
+      "revId": "a3b52f1b6e9bebc3ea1f51a01cd3ef85725a2236",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///x0\u003d",
+        "filename": "sw/inc/doc.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1771,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-01T10:16:07Z",
+      "side": 1,
+      "message": "please add a space between text and \"*/\"",
+      "revId": "a3b52f1b6e9bebc3ea1f51a01cd3ef85725a2236",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///xw\u003d",
+        "filename": "sw/inc/doc.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1775,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-01T10:16:07Z",
+      "side": 1,
+      "message": "Textbausteine \u003d text modules",
+      "revId": "a3b52f1b6e9bebc3ea1f51a01cd3ef85725a2236",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///xs\u003d",
+        "filename": "sw/inc/doc.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1823,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-01T10:16:07Z",
+      "side": 1,
+      "message": "please add a space between text and \"*/\"",
+      "revId": "a3b52f1b6e9bebc3ea1f51a01cd3ef85725a2236",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///xo\u003d",
+        "filename": "sw/inc/doc.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1856,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-01T10:16:07Z",
+      "side": 1,
+      "message": "please add a space between text and \"*/\"",
+      "revId": "a3b52f1b6e9bebc3ea1f51a01cd3ef85725a2236",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///xk\u003d",
+        "filename": "sw/inc/doc.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1879,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-01T10:16:07Z",
+      "side": 1,
+      "message": "please add a space between text and \"*/\"",
+      "revId": "a3b52f1b6e9bebc3ea1f51a01cd3ef85725a2236",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
