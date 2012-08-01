@@ -46,7 +46,7 @@ class DlgEdObj: public SdrUnoObj
     friend class DlgEdForm;
 
 private:
-    sal_Bool        bIsListening;
+    bool        bIsListening;
     DlgEdForm*      pDlgEdForm;
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener> m_xPropertyChangeListener;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener>  m_xContainerListener;
@@ -64,7 +64,7 @@ protected:
     void StartListening();
     using SfxListener::EndListening;
     void EndListening(sal_Bool bRemoveListener = sal_True);
-    sal_Bool    isListening() const { return bIsListening; }
+    bool    isListening() const { return bIsListening; }
 
     virtual bool TransformSdrToControlCoordinates(
         sal_Int32 nXIn, sal_Int32 nYIn, sal_Int32 nWidthIn, sal_Int32 nHeightIn,

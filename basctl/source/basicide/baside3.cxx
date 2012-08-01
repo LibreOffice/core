@@ -661,16 +661,16 @@ Reference< container::XNameContainer > DialogWindow::GetDialog() const
     return pEditor->GetDialog();
 }
 
-sal_Bool DialogWindow::RenameDialog( const ::rtl::OUString& rNewName )
+bool DialogWindow::RenameDialog( const ::rtl::OUString& rNewName )
 {
     if ( !BasicIDE::RenameDialog( this, GetDocument(), GetLibName(), GetName(), rNewName ) )
-        return sal_False;
+        return false;
 
     SfxBindings* pBindings = BasicIDE::GetBindingsPtr();
     if ( pBindings )
         pBindings->Invalidate( SID_DOC_MODIFIED );
 
-    return sal_True;
+    return true;
 }
 
 void DialogWindow::DisableBrowser()

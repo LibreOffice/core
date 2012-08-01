@@ -214,9 +214,9 @@ void AccessibleDialogWindow::UpdateBounds()
 
 // -----------------------------------------------------------------------------
 
-sal_Bool AccessibleDialogWindow::IsChildVisible( const ChildDescriptor& rDesc )
+bool AccessibleDialogWindow::IsChildVisible( const ChildDescriptor& rDesc )
 {
-    sal_Bool bVisible = sal_False;
+    bool bVisible = false;
 
     if ( m_pDialogWindow )
     {
@@ -250,7 +250,7 @@ sal_Bool AccessibleDialogWindow::IsChildVisible( const ChildDescriptor& rDesc )
                         // check, if the shape's bounding box intersects with the bounding box of its parent
                         Rectangle aParentRect( Point( 0, 0 ), m_pDialogWindow->GetSizePixel() );
                         if ( aParentRect.IsOver( aRect ) )
-                            bVisible = sal_True;
+                            bVisible = true;
                     }
                 }
             }

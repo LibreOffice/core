@@ -77,7 +77,7 @@ public:
     DlgEdModel*         GetModel() const;
     DlgEdPage*          GetPage() const;
     DlgEdView*          GetView() const;
-    sal_Bool                RenameDialog( const ::rtl::OUString& rNewName );
+    bool                RenameDialog( const ::rtl::OUString& rNewName );
     void                DisableBrowser();
     void                UpdateBrowser();
     bool                SaveDialog();

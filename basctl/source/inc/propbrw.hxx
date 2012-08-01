@@ -48,7 +48,7 @@ class SdrView;
 class PropBrw : public SfxFloatingWindow , public SfxListener, public SfxBroadcaster
 {
 private:
-    sal_Bool        m_bInitialStateChange;
+    bool        m_bInitialStateChange;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
                     m_xORB;

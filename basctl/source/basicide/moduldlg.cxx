@@ -601,7 +601,7 @@ void ObjectPage::CheckButtons()
     ScriptDocument aDocument( aDesc.GetDocument() );
     ::rtl::OUString aLibName( aDesc.GetLibName() );
     ::rtl::OUString aLibSubName( aDesc.GetLibSubName() );
-    sal_Bool bVBAEnabled = aDocument.isInVBAMode();
+    bool bVBAEnabled = aDocument.isInVBAMode();
     sal_uInt16 nMode = aBasicBox.GetMode();
 
     sal_uInt16 nDepth = pCurEntry ? aBasicBox.GetModel()->GetDepth( pCurEntry ) : 0;
@@ -617,7 +617,7 @@ void ObjectPage::CheckButtons()
 
     // enable/disable new module/dialog buttons
     LibraryLocation eLocation( aDesc.GetLocation() );
-    sal_Bool bReadOnly = sal_False;
+    bool bReadOnly = false;
     if ( nDepth > 0 )
     {
         Reference< script::XLibraryContainer2 > xModLibContainer( aDocument.getLibraryContainer( E_SCRIPTS ), UNO_QUERY );
@@ -625,7 +625,7 @@ void ObjectPage::CheckButtons()
         if ( ( xModLibContainer.is() && xModLibContainer->hasByName( aLibName ) && xModLibContainer->isLibraryReadOnly( aLibName ) ) ||
              ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aLibName ) && xDlgLibContainer->isLibraryReadOnly( aLibName ) ) )
         {
-            bReadOnly = sal_True;
+            bReadOnly = true;
         }
     }
     if ( bReadOnly || eLocation == LIBRARY_LOCATION_SHARE )

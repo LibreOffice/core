@@ -101,7 +101,7 @@ DBG_NAME(PropBrw)
 PropBrw::PropBrw( const Reference< XMultiServiceFactory >& _xORB, SfxBindings* _pBindings, PropBrwMgr* _pMgr, Window* _pParent,
             const Reference< XModel >& _rxContextDocument )
     :SfxFloatingWindow( _pBindings, _pMgr, _pParent, WinBits( WB_STDMODELESS | WB_SIZEABLE | WB_3DLOOK | WB_ROLLABLE ) )
-    ,m_bInitialStateChange(sal_True)
+    ,m_bInitialStateChange(true)
     ,m_xORB(_xORB)
     ,m_xContextDocument( _rxContextDocument )
     ,pView( NULL )
@@ -509,7 +509,7 @@ void PropBrw::ImplUpdate( const Reference< XModel >& _rxContextDocument, SdrView
         {
             if ( m_xBrowserComponentWindow.is() )
                 m_xBrowserComponentWindow->setFocus();
-            m_bInitialStateChange = sal_False;
+            m_bInitialStateChange = false;
         }
 
         const SdrMarkList& rMarkList = pView->GetMarkedObjectList();

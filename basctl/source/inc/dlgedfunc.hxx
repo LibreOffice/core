@@ -67,7 +67,7 @@ public:
 class DlgEdFuncSelect : public DlgEdFunc
 {
 protected:
-    sal_Bool    bMarkAction;
+    bool    bMarkAction;
 
 public:
     DlgEdFuncSelect( DlgEditor* pParent );

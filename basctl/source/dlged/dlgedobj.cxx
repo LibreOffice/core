@@ -55,7 +55,7 @@ DBG_NAME(DlgEdObj);
 
 DlgEdObj::DlgEdObj()
           :SdrUnoObj(String(), sal_False)
-          ,bIsListening(sal_False)
+          ,bIsListening(false)
           ,pDlgEdForm( NULL )
 {
     DBG_CTOR(DlgEdObj, NULL);
@@ -66,7 +66,7 @@ DlgEdObj::DlgEdObj()
 DlgEdObj::DlgEdObj(const ::rtl::OUString& rModelName,
                    const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rxSFac)
           :SdrUnoObj(rModelName, rxSFac, sal_False)
-          ,bIsListening(sal_False)
+          ,bIsListening(false)
           ,pDlgEdForm( NULL )
 {
     DBG_CTOR(DlgEdObj, NULL);
@@ -1129,7 +1129,7 @@ void DlgEdObj::StartListening()
 
     if (!isListening())
     {
-        bIsListening = sal_True;
+        bIsListening = true;
 
         // XPropertyChangeListener
         Reference< XPropertySet > xControlModel( GetUnoControlModel() , UNO_QUERY );
@@ -1167,7 +1167,7 @@ void DlgEdObj::EndListening(sal_Bool bRemoveListener)
 
     if (isListening())
     {
-        bIsListening = sal_False;
+        bIsListening = false;
 
         if (bRemoveListener)
         {

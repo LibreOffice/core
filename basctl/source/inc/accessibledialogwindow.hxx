@@ -86,7 +86,7 @@ protected:
     void                    UpdateSelected();
     void                    UpdateBounds();
 
-    sal_Bool                IsChildVisible( const ChildDescriptor& rDesc );
+    bool                IsChildVisible( const ChildDescriptor& rDesc );
 
     void                    InsertChild( const ChildDescriptor& rDesc );
     void                    RemoveChild( const ChildDescriptor& rDesc );

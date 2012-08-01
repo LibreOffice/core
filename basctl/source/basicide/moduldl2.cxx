@@ -906,7 +906,7 @@ void LibPage::InsertLib()
                 InfoBox( this, IDE_RESSTR(RID_STR_NOLIBINSTORAGE) ).Execute();
             else
             {
-                sal_Bool bChanges = sal_False;
+                bool bChanges = false;
                 ::rtl::OUString aExtension( aURLObj.getExtension() );
                 ::rtl::OUString aLibExtension(RTL_CONSTASCII_USTRINGPARAM("xlb"));
                 ::rtl::OUString aContExtension(RTL_CONSTASCII_USTRINGPARAM("xlc"));
@@ -918,7 +918,7 @@ void LibPage::InsertLib()
                 if ( pLibDlg->Execute() )
                 {
                     sal_uLong nNewPos = aLibBox.GetEntryCount();
-                    sal_Bool bRemove = sal_False;
+                    bool bRemove = false;
                     sal_Bool bReplace = pLibDlg->IsReplace();
                     sal_Bool bReference = pLibDlg->IsReference();
                     for ( sal_uInt16 nLib = 0; nLib < pLibDlg->GetLibBox().GetEntryCount(); nLib++ )
@@ -957,7 +957,7 @@ void LibPage::InsertLib()
                                     }
 
                                     // remove existing libraries
-                                    bRemove = sal_True;
+                                    bRemove = true;
                                 }
                                 else
                                 {
@@ -1134,7 +1134,7 @@ void LibPage::InsertLib()
 
                             // insert listbox entry
                             ImpInsertLibEntry( aLibName, aLibBox.GetEntryCount() );
-                            bChanges = sal_True;
+                            bChanges = true;
                         }
                     }
 
@@ -1430,14 +1430,14 @@ void LibPage::DeleteCurrent()
     String aLibName( aLibBox.GetEntryText( pCurEntry, 0 ) );
 
     // check, if library is link
-    sal_Bool bIsLibraryLink = sal_False;
+    bool bIsLibraryLink = false;
     ::rtl::OUString aOULibName( aLibName );
     Reference< script::XLibraryContainer2 > xModLibContainer( m_aCurDocument.getLibraryContainer( E_SCRIPTS ), UNO_QUERY );
     Reference< script::XLibraryContainer2 > xDlgLibContainer( m_aCurDocument.getLibraryContainer( E_DIALOGS ), UNO_QUERY );
     if ( ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) && xModLibContainer->isLibraryLink( aOULibName ) ) ||
          ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aOULibName ) && xDlgLibContainer->isLibraryLink( aOULibName ) ) )
     {
-        bIsLibraryLink = sal_True;
+        bIsLibraryLink = true;
     }
 
     if ( QueryDelLib( aLibName, bIsLibraryLink, this ) )
@@ -1591,14 +1591,14 @@ void createLibImpl( Window* pWin, const ScriptDocument& rDocument,
     String aLibName;
     String aLibStdName( String( RTL_CONSTASCII_USTRINGPARAM( "Library" ) ) );
     //String aLibStdName( IDEResId( RID_STR_STDLIBNAME ) );
-    sal_Bool bValid = sal_False;
+    bool bValid = false;
     sal_uInt16 i = 1;
     while ( !bValid )
     {
         aLibName = aLibStdName;
         aLibName += String::CreateFromInt32( i );
         if ( !rDocument.hasLibrary( E_SCRIPTS, aLibName ) && !rDocument.hasLibrary( E_DIALOGS, aLibName ) )
-            bValid = sal_True;
+            bValid = true;
         i++;
     }
 

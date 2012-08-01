@@ -469,7 +469,7 @@ sal_Bool DlgEdFuncInsert::MouseMove( const MouseEvent& rMEvt )
 
 DlgEdFuncSelect::DlgEdFuncSelect( DlgEditor* pParent_ ) :
     DlgEdFunc( pParent_ ),
-    bMarkAction(sal_False)
+    bMarkAction(false)
 {
 }
 
@@ -529,7 +529,7 @@ sal_Bool DlgEdFuncSelect::MouseButtonDown( const MouseEvent& rMEvt )
             {
                 // select object
                 pView->BegMarkObj(aMDPos);
-                bMarkAction = sal_True;
+                bMarkAction = true;
             }
         }
     }
@@ -572,7 +572,7 @@ sal_Bool DlgEdFuncSelect::MouseButtonUp( const MouseEvent& rMEvt )
         }
     }
 
-    bMarkAction = sal_False;
+    bMarkAction = false;
 
     pWindow->SetPointer( pView->GetPreferedPointer( aPnt, pWindow, nHitLog ) );
     pWindow->ReleaseMouse();
