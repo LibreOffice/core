@@ -342,9 +342,9 @@ static void lclDumpAnyValue( Any value)
         } else if( value >>= aMatrix ) {
             fprintf (stderr,"Matrix\n%f %f %f\n%f %f %f\n%f %f %f\n", aMatrix.Line1.Column1, aMatrix.Line1.Column2, aMatrix.Line1.Column3, aMatrix.Line2.Column1, aMatrix.Line2.Column2, aMatrix.Line2.Column3, aMatrix.Line3.Column1, aMatrix.Line3.Column2, aMatrix.Line3.Column3);
         } else if( value >>= intValue )
-            fprintf (stderr,"%d            (hex: %x)\n", intValue, intValue);
+            fprintf (stderr,"%" SAL_PRIdINT32 "            (hex: %" SAL_PRIxUINT32 ")\n", intValue, intValue);
         else if( value >>= uintValue )
-            fprintf (stderr,"%d            (hex: %x)\n", uintValue, uintValue);
+            fprintf (stderr,"%" SAL_PRIuUINT32 "            (hex: %" SAL_PRIxUINT32 ")\n", uintValue, uintValue);
         else if( value >>= int16Value )
             fprintf (stderr,"%d            (hex: %x)\n", int16Value, int16Value);
         else if( value >>= uint16Value )
