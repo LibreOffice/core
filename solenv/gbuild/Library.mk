@@ -74,7 +74,7 @@ $(call gb_LinkTarget_add_defs,$(2),\
 	$(gb_Library_DEFS) \
 )
 $(call gb_Library__get_final_target,$(1)) : $(call gb_Library_get_target,$(1))
-$(call gb_Library_get_target,$(1)) : $(call gb_LinkTarget_get_target,$(2)) \
+$(call gb_Library_get_target,$(1)) : $(call gb_LinkTarget_get_target,$(2)) $(call gb_LinkTarget_get_dep_target,$(2)) \
 	| $(dir $(call gb_Library_get_target,$(1))).dir
 $(call gb_Library_get_clean_target,$(1)) : $(call gb_LinkTarget_get_clean_target,$(2))
 $(call gb_Library_Library_platform,$(1),$(2),$(gb_Library_DLLDIR)/$(call gb_Library_get_dllname,$(1)))
