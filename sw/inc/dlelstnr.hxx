@@ -60,7 +60,7 @@ class SwLinguServiceEventListener :
     com::sun::star::uno::Reference<
         com::sun::star::linguistic2::XProofreadingIterator >    xGCIterator;
 
-    // disallow use of copy-constructor and assignment operator
+    /// disallow use of copy-constructor and assignment operator
     SwLinguServiceEventListener(const SwLinguServiceEventListener &);
     SwLinguServiceEventListener & operator = (const SwLinguServiceEventListener &);
 
@@ -68,16 +68,16 @@ public:
     SwLinguServiceEventListener();
     virtual ~SwLinguServiceEventListener();
 
-    // XEventListener
+    /// XEventListener
     virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& rEventObj ) throw(::com::sun::star::uno::RuntimeException);
 
-    // XDictionaryListEventListener
+    /// XDictionaryListEventListener
     virtual void SAL_CALL processDictionaryListEvent( const ::com::sun::star::linguistic2::DictionaryListEvent& rDicListEvent) throw( ::com::sun::star::uno::RuntimeException );
 
-    // XLinguServiceEventListener
+    /// XLinguServiceEventListener
     virtual void SAL_CALL processLinguServiceEvent( const ::com::sun::star::linguistic2::LinguServiceEvent& rLngSvcEvent ) throw(::com::sun::star::uno::RuntimeException);
 
-    // XTerminateListener
+    /// XTerminateListener
     virtual void SAL_CALL queryTermination( const ::com::sun::star::lang::EventObject& rEventObj ) throw(::com::sun::star::frame::TerminationVetoException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL notifyTermination( const ::com::sun::star::lang::EventObject& rEventObj ) throw(::com::sun::star::uno::RuntimeException);
 };
