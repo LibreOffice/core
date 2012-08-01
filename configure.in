@@ -1062,7 +1062,8 @@ AC_ARG_ENABLE(postgresql-sdbc,
 
 AC_ARG_ENABLE(coretext,
     AS_HELP_STRING([--enable-coretext],
-        [Use CoreText framework on Mac (instead of ATSU).]),
+        [Use CoreText framework on Mac (instead of ATSU).
+        Known to not work properly, use only if you plan to work on that.]),
 )
 
 AC_ARG_ENABLE(winegcc,
