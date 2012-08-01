@@ -43,7 +43,7 @@ class SwFrm;
 class SW_DLLPUBLIC SwDBFieldType : public SwValueFieldType
 {
     SwDBData    aDBData;        //
-    rtl::OUString sName;          // only used in ::GetName() !
+    rtl::OUString sName;          ///< only used in ::GetName() !
     String      sColumn;
     long        nRefCnt;
 
@@ -73,7 +73,7 @@ public:
 class SW_DLLPUBLIC SwDBField : public SwValueField
 {
     rtl::OUString aContent;
-    rtl::OUString sFieldCode; // contains Word's field code
+    rtl::OUString sFieldCode; ///< contains Word's field code
     sal_uInt16  nSubType;
     sal_Bool    bIsInBodyTxt    : 1;
     sal_Bool    bValidValue     : 1;
@@ -88,7 +88,7 @@ public:
 
     virtual SwFieldType*    ChgTyp( SwFieldType* );
 
-    // Current text.
+    /// Current text.
     inline  void        SetExpansion(const String& rStr);
 
     virtual sal_uInt16      GetSubType() const;
@@ -96,13 +96,13 @@ public:
 
     virtual String      GetFieldName() const;
 
-    // For calculations in expressions.
+    /// For calculations in expressions.
     void                ChgValue( double d, sal_Bool bVal );
 
-    // Get the evaluation via DBMgr string.
+    /// Get the evaluation via DBMgr string.
     void                Evaluate();
 
-    // Evaluation for header and footer.
+    /// Evaluation for header and footer.
     void                ChangeExpansion( const SwFrm*, const SwTxtFld* );
     void                InitContent();
     void                InitContent(const String& rExpansion);
@@ -113,14 +113,14 @@ public:
     inline void         ClearInitialized()      { bInitialized = sal_False; }
     inline void         SetInitialized()        { bInitialized = sal_True; }
 
-    // Get name.
+    /// Get name.
     virtual const rtl::OUString& GetPar1() const;
 
-    // access to the command string
+    /// access to the command string
     const rtl::OUString& GetFieldCode() const { return sFieldCode;}
     void                SetFieldCode(const rtl::OUString& rStr) { sFieldCode = rStr; }
 
-    // DBName
+    /// DBName
     inline const SwDBData&  GetDBData() const { return ((SwDBFieldType*)GetTyp())->GetDBData(); }
     virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const;
     virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich );
@@ -129,7 +129,7 @@ public:
 inline  void SwDBField::SetExpansion(const String& rStr)
     { aContent = rStr; }
 
-// set from UpdateExpFlds (the Node-Position is known there)
+/// set from UpdateExpFlds (the Node-Position is known there)
 inline void SwDBField::ChgBodyTxtFlag( sal_Bool bIsInBody )
     { bIsInBodyTxt = bIsInBody; }
 
@@ -149,7 +149,7 @@ protected:
     SwDBNameInfField(SwFieldType* pTyp, const SwDBData& rDBData, sal_uLong nFmt = 0);
 
 public:
-    // DBName
+    /// DBName
     inline const SwDBData&  GetRealDBData() { return aDBData; }
 
     SwDBData                GetDBData(SwDoc* pDoc);
