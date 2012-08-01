@@ -32,7 +32,7 @@ class SalFrame;
 
 struct SalItemParams
 {
-    sal_uInt16          nId;                    // item Id
+    sal_uInt16      nId;                    // item Id
     MenuItemType    eType;                  // MenuItem-Type
     MenuItemBits    nBits;                  // MenuItem-Bits
     Menu*           pMenu;                  // Pointer to Menu
@@ -81,6 +81,7 @@ public:
     virtual bool ShowNativePopupMenu(FloatingWindow * pWin, const Rectangle& rRect, sal_uLong nFlags);
     virtual bool AddMenuBarButton( const SalMenuButtonItem& ); // return false if not implemented or failure
     virtual void RemoveMenuBarButton( sal_uInt16 nId );
+    virtual void Freeze() {}
 
     // return an empty rectangle if not implemented
     // return Rectangle( Point( -1, -1 ), Size( 1, 1 ) ) if menu bar buttons implemented

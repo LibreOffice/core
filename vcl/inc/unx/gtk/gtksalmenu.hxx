@@ -39,15 +39,19 @@
 class GtkSalMenu : public SalMenu
 {
 private:
-    sal_Bool    mbMenuBar;
+    sal_Bool                mbMenuBar;
+
+    virtual void publishMenu();
 
 public:
     Menu*                   mpVCLMenu;
     const GtkSalFrame*      mpFrame;
     GMenuModel*             mpParentMenuModel;
     GMenuModel*             mpMenuModel;
+    GMenuModel*             mpSectionMenuModel;
     gchar*                  aDBusMenubarPath;
     GDBusConnection*        pSessionBus;
+    sal_Int32               mMenubarId;
 
     GtkSalMenu( sal_Bool bMenuBar );
     virtual ~GtkSalMenu();
@@ -65,6 +69,7 @@ public:
     virtual void SetItemImage( unsigned nPos, SalMenuItem* pSalMenuItem, const Image& rImage);
     virtual void SetAccelerator( unsigned nPos, SalMenuItem* pSalMenuItem, const KeyCode& rKeyCode, const rtl::OUString& rKeyName );
     virtual void GetSystemMenuData( SystemMenuData* pData );
+    virtual void Freeze();
 };
 
 class GtkSalMenuItem : public SalMenuItem

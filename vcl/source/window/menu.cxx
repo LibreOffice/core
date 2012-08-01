@@ -6040,65 +6040,8 @@ ImplMenuDelData::~ImplMenuDelData()
 }
 
 #include <iostream>
-#include <gio/gio.h>
 
 using namespace std;
-
-GMenu* generateMenuBar( AbstractMenu *pMenu )
-{
-    GMenu *menu = g_menu_new();
-
-    g_menu_append(menu, "Submenu1", NULL);
-
-    return menu;
-}
-
-#define BUS_NAME "org.libreoffice.LibreOffice"
-#define OBJ_PATH "/org/libreoffice/LibreOffice"
-
-void publishMenu( GMenuModel *menu )
-{
-    GActionGroup *group;
-    GDBusConnection *bus;
-    GError *error = NULL;
-    gchar *path;
-    guint id;
-
-    bus = g_bus_get_sync(G_BUS_TYPE_SESSION, NULL, NULL);
-    group = G_ACTION_GROUP( g_simple_action_group_new() );
-
-    //    g_print ("Exporting menus on the bus...\n");
-    //    if (!g_dbus_connection_export_menu_model (bus, OBJ_PATH, menu, &error))
-    //    {
-    //        g_warning ("Menu export failed: %s", error->message);
-    //        exit (1);
-    //    }
-    //    g_print ("Exporting actions on the bus...\n");
-    //    if (!g_dbus_connection_export_action_group (bus, OBJ_PATH, group, &error))
-    //    {
-    //        g_warning ("Action export failed: %s", error->message);
-    //        exit (1);
-    //    }
-
-    g_bus_own_name_on_connection (bus, BUS_NAME, G_BUS_NAME_OWNER_FLAGS_NONE, NULL, NULL, NULL, NULL);
-
-
-    /* export the new menu, if there is one */
-    if (menu != NULL)
-    {
-        /* try getting the preferred name */
-        path = g_strconcat (OBJ_PATH, "/menus/", "menubar", NULL);
-        id = g_dbus_connection_export_menu_model (bus, path, menu, NULL);
-
-        /* keep trying until we get a working name... */
-        for (int i = 0; id == 0; i++)
-        {
-            g_free (path);
-            path = g_strdup_printf ("%s/menus/%s%d",OBJ_PATH, "menubar", i);
-            id = g_dbus_connection_export_menu_model (bus, path, menu, NULL);
-        }
-    }
-}
 
 void printMenu( AbstractMenu* pMenu ) {
     if ( pMenu ) {
@@ -6128,10 +6071,13 @@ void printMenu( AbstractMenu* pMenu ) {
 
 void Menu::Freeze() {
     printMenu( this );
-
-//    GMenuModel *menu = G_MENU_MODEL( generateMenuBar(this) );
-//    publishMenu( menu );
     cout << "============================================================" << endl;
+
+    SalMenu *pSalMenu = ImplGetSalMenu();
+
+    if ( pSalMenu ) {
+        pSalMenu->Freeze();
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
