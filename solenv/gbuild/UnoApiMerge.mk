@@ -38,6 +38,8 @@ $(call gb_UnoApiMerge_get_target,$(1)) :| $(dir $(call gb_UnoApiMerge_get_target
 $(call gb_UnoApiMerge_get_target,$(1)) : $(call gb_UnoApiTarget_get_target,$(1))
 $(call gb_UnoApiMerge_get_clean_target,$(1)) : $(call gb_UnoApiTarget_get_clean_target,$(1))
 
+$(call gb_UnoApiTarget_get_headers_target,$(1)) : $(gb_Helper_MISCDUMMY)
+
 $(call gb_Deliver_add_deliverable,$(call gb_UnoApiMerge_get_target,$(1)),$(call gb_UnoApiTarget_get_target,$(1)),$(1))
 
 $$(eval $$(call gb_Module_register_target,$(call gb_UnoApiMerge_get_target,$(1)),$(call gb_UnoApiMerge_get_clean_target,$(1))))
@@ -50,6 +52,7 @@ endef
 
 define gb_UnoApiMerge__use_api
 $(call gb_UnoApiTarget_merge_api,$(1),$(2))
+$(call gb_UnoApiTarget_get_external_headers_target,$(1)) : $(call gb_UnoApiTarget_get_headers_target,$(2))
 
 endef
 

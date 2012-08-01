@@ -47,6 +47,7 @@ $(call gb_UnoApi_get_clean_target,$(1)) : $(call gb_UnoApiHeadersTarget_get_clea
 $(call gb_UnoApi_get_clean_target,$(1)) : $(call gb_Package_get_clean_target,$(1)_idl)
 $(call gb_UnoApi_get_clean_target,$(1)) : $(call gb_Package_get_clean_target,$(1)_inc)
 
+$(call gb_UnoApiTarget_get_headers_target,$(1)) : $(call gb_Package_get_target,$(1)_idl)
 $(call gb_Package_get_preparation_target,$(1)_inc) : $(call gb_UnoApiHeadersTarget_get_target,$(1))
 
 $(call gb_Deliver_add_deliverable,$(call gb_UnoApi_get_target,$(1)),$(call gb_UnoApiTarget_get_target,$(1)),$(1))
@@ -132,6 +133,7 @@ endef
 define gb_UnoApi__use_api
 $(call gb_UnoApiHeadersTarget_use_api,$(1),$(2))
 $(call gb_UnoApi_get_target,$(1)) :| $(call gb_UnoApi_get_target,$(2))
+$(call gb_UnoApiTarget_get_external_headers_target,$(1)) : $(call gb_UnoApiTarget_get_headers_target,$(2))
 
 endef
 
