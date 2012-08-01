@@ -64,6 +64,7 @@ public class OpenDocumentWithHeaderFooter {
         String file = prepareData("sd/AOO3.4HeaderFooter.odp");
         app.dispatch(".uno:Open");
         submitOpenDlg(file);
+        sleep(2);   // If no sleep, error occur on mac
 
         //check after reopen
         app.dispatch(".uno:HeaderAndFooter");

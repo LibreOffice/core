@@ -19,12 +19,11 @@
  *
  *************************************************************/
 
-
-
 /**
  *
  */
 package testcase.gui;
+
 import static org.openoffice.test.common.Testspace.*;
 import static org.junit.Assert.*;
 import static org.openoffice.test.vcl.Tester.*;
@@ -64,6 +63,7 @@ public class BVTFileType {
 
     /**
      * Test New/Save a text document
+     *
      * @throws Exception
      */
     @Test
@@ -98,7 +98,7 @@ public class BVTFileType {
 
     private void saveNewDocument(String file) {
         String saveTo = getPath("temp/" + file);
-        //Create a new text document
+        // Create a new text document
         app.dispatch("private:factory/swriter");
         sleep(3);
 
@@ -114,24 +114,24 @@ public class BVTFileType {
         sleep(1);
 
         // Verify the text via system clip board
-        Assert.assertEquals("The typed text into writer", text, app.getClipboard());
+        Assert.assertEquals("The typed text into writer", text,
+                app.getClipboard());
 
         // Set the text style
         writer.openContextMenu();
-//      menuItem("Text Properties...").select();
+        // menuItem("Text Properties...").select();
         app.dispatch(".uno:FontDialog");
         EffectsPage.select();
         EffectsPage_Color.select(6);
         EffectsPage.ok();
         sleep(2);
 
-        //Save the text document
+        // Save the text document
         app.dispatch(".uno:SaveAs");
         FileUtil.deleteFile(saveTo);
         submitSaveDlg(saveTo);
         if (AlienFormatDlg.exists(3))
             AlienFormatDlg.ok();
-
 
         // Close it by clicking main menu
         app.dispatch(".uno:CloseDoc");
@@ -146,7 +146,8 @@ public class BVTFileType {
         typeKeys("<$copy>");
         sleep(1);
         // Verify if the text still exists in the file
-        Assert.assertEquals("The typed text into writer is saved!", text, app.getClipboard());
+        Assert.assertEquals("The typed text into writer is saved!", text,
+                app.getClipboard());
     }
 
     @Test
@@ -159,23 +160,20 @@ public class BVTFileType {
         saveNewSpreadsheet("helloworld_saveas.ots");
     }
 
-
     @Test
     public void testSaveNewSXC() throws Exception {
         saveNewSpreadsheet("helloworld_saveas.sxc");
     }
-
 
     @Test
     public void testSaveNewSTC() throws Exception {
         saveNewSpreadsheet("helloworld_saveas.stc");
     }
 
-//  @Test
-//  public void testSaveNewCSV() throws Exception {
-//      saveNewSpreadsheet("helloworld_saveas.csv");
-//  }
-
+    // @Test
+    // public void testSaveNewCSV() throws Exception {
+    // saveNewSpreadsheet("helloworld_saveas.csv");
+    // }
 
     @Test
     public void testSaveNewXLS() throws Exception {
@@ -201,7 +199,8 @@ public class BVTFileType {
         app.dispatch(".uno:Open");
         submitOpenDlg(saveTo);
         calc.waitForExistence(10, 2);
-        Assert.assertEquals("The typed text is saved!", text, CalcUtil.getCellText("A65536"));
+        Assert.assertEquals("The typed text is saved!", text,
+                CalcUtil.getCellText("A65536"));
     }
 
     @Test
@@ -224,7 +223,6 @@ public class BVTFileType {
         saveNewPresentation("helloworld_saveas.pot");
     }
 
-
     @Test
     public void testSaveNewSXI() throws Exception {
         saveNewPresentation("helloworld_saveas.sxi");
@@ -234,7 +232,6 @@ public class BVTFileType {
     public void testSaveNewSTI() throws Exception {
         saveNewPresentation("helloworld_saveas.sti");
     }
-
 
     private void saveNewPresentation(String file) {
         String saveTo = getPath("temp/" + file);
@@ -263,11 +260,11 @@ public class BVTFileType {
         impress.click(3, 3);
         typeKeys("<tab><enter>");
         app.dispatch(".uno:SelectAll");
-//      app.setClipboard(".wrong");
+        // app.setClipboard(".wrong");
         typeKeys("<$copy>");
         sleep(1);
-        Assert.assertEquals("The typed text is saved!", text,
-                app.getClipboard().trim());
+        Assert.assertEquals("The typed text is saved!", text, app
+                .getClipboard().trim());
     }
 
     // drawing
@@ -305,13 +302,12 @@ public class BVTFileType {
     }
 
     /**
-     * New/Save a draw document
-     * 1. New a draw document
-     * 2. Insert a picture
-     * 3. Save it as the input filename
-     * 4. Reopen the saved file
-     * 5. Check if the picture is still there
-     * @param filename: filename to be saved
+     * New/Save a draw document 1. New a draw document 2. Insert a picture 3.
+     * Save it as the input filename 4. Reopen the saved file 5. Check if the
+     * picture is still there
+     *
+     * @param filename
+     *            : filename to be saved
      * @throws Exception
      */
     public void saveNewDrawing(String filename) {
@@ -327,20 +323,22 @@ public class BVTFileType {
         submitOpenDlg(bmp_green);
         sleep(3);
         // Focus on edit pane
-        draw.click(5,5);
+        draw.click(5, 5);
         sleep(1);
 
         // Verify if the picture is inserted successfully
-        Rectangle rectangle = GraphicsUtil.findRectangle(draw.getScreenRectangle(), 0xFF00FF00);
+        Rectangle rectangle = GraphicsUtil.findRectangle(
+                draw.getScreenRectangle(), 0xFF00FF00);
         assertNotNull("Green rectangle: " + rectangle, rectangle);
 
         // Save the drawing
         app.dispatch(".uno:SaveAs");
         FileUtil.deleteFile(saveTo);
         submitSaveDlg(saveTo);
-        // If the format is supported by OO1.0, ask whether to change to the latest format
+        // If the format is supported by OO1.0, ask whether to change to the
+        // latest format
         if (AlienFormatDlg.exists(3))
-            AlienFormatDlg.ok();    // Keep the current format
+            AlienFormatDlg.ok(); // Keep the current format
 
         // Close it by clicking main menu
         app.dispatch(".uno:CloseDoc");
@@ -352,7 +350,8 @@ public class BVTFileType {
         draw.waitForExistence(10, 2);
 
         // Verify if the picture still exists in the file
-        Rectangle rectangle1 = GraphicsUtil.findRectangle(draw.getScreenRectangle(), 0xFF00FF00);
+        Rectangle rectangle1 = GraphicsUtil.findRectangle(
+                draw.getScreenRectangle(), 0xFF00FF00);
         assertNotNull("Green rectangle: " + rectangle1, rectangle1);
     }
 
@@ -361,7 +360,7 @@ public class BVTFileType {
      * Test save a new math as .odf
      */
     @Test
-    public void testSaveNewODF() throws Exception{
+    public void testSaveNewODF() throws Exception {
         saveNewMath("math_saveas.odf");
     }
 
@@ -369,7 +368,7 @@ public class BVTFileType {
      * Test save a new math as .sxm
      */
     @Test
-    public void testSaveNewSXM() throws Exception{
+    public void testSaveNewSXM() throws Exception {
         saveNewMath("math_saveas.sxm");
     }
 
@@ -377,18 +376,16 @@ public class BVTFileType {
      * Test save a new math as .mml
      */
     @Test
-    public void testSaveNewMML() throws Exception{
+    public void testSaveNewMML() throws Exception {
         saveNewMath("math_saveas.mml");
     }
 
     /**
-     * New/Save a math
-     * 1. New a math
-     * 2. Insert a formula
-     * 3. Save it as the input filename
-     * 4. Reopen the saved file
-     * 5. Check if the formula is still there
-     * @param filename: filename to be saved
+     * New/Save a math 1. New a math 2. Insert a formula 3. Save it as the input
+     * filename 4. Reopen the saved file 5. Check if the formula is still there
+     *
+     * @param filename
+     *            : filename to be saved
      * @throws Exception
      */
     public void saveNewMath(String filename) {
@@ -415,9 +412,10 @@ public class BVTFileType {
         app.dispatch(".uno:SaveAs");
         FileUtil.deleteFile(saveTo);
         submitSaveDlg(saveTo);
-        // If the format is supported by OO1.0, ask whether to change to the latest format
+        // If the format is supported by OO1.0, ask whether to change to the
+        // latest format
         if (AlienFormatDlg.exists(3))
-            AlienFormatDlg.ok();    // Keep the current format
+            AlienFormatDlg.ok(); // Keep the current format
 
         // Close it by clicking main menu
         app.dispatch(".uno:CloseDoc");
@@ -432,9 +430,11 @@ public class BVTFileType {
         app.dispatch(".uno:Select");
         typeKeys("<$copy>");
         sleep(1);
-        assertEquals("The typed formula into math is saved", text, app.getClipboard());
+        assertEquals("The typed formula into math is saved", text,
+                app.getClipboard());
 
-        // Close the file to avoid the app closing the Elements window automatically
+        // Close the file to avoid the app closing the Elements window
+        // automatically
         app.dispatch(".uno:CloseDoc");
     }
 }

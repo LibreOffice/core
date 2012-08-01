@@ -43,6 +43,7 @@ import org.openoffice.test.vcl.widgets.VclTabControl;
 import org.openoffice.test.vcl.widgets.VclTabPage;
 import org.openoffice.test.vcl.widgets.VclToolBox;
 import org.openoffice.test.vcl.widgets.VclWindow;
+import org.openoffice.test.vcl.widgets.VclTreeListBox;
 
 /**
  * Define all UI controls in the class.
@@ -58,7 +59,6 @@ public class UIMap {
     public static VclEditBox editbox(String id) {
         return new VclEditBox(idList.getId(id));
     }
-
 
     public static VclControl control(String id) {
         return new VclControl(idList.getId(id));
@@ -88,16 +88,13 @@ public class UIMap {
         return new VclToolBox(idList.getId(id));
     }
 
-
     public static VclButton button(String id) {
         return new VclButton(idList.getId(id));
     }
 
-
     public static VclMessageBox msgbox(String text) {
         return new VclMessageBox(idList.getId("UID_ACTIVE"), text);
     }
-
 
     public static VclMenuItem menuItem(String text) {
         return new VclMenuItem(text);
@@ -114,6 +111,11 @@ public class UIMap {
     public static VclDockingWin dockingwin(String id){
         return new VclDockingWin(idList.getId(id));
     }
+
+    public static VclTreeListBox tree(String id) {
+        return new VclTreeListBox(idList.getId(id));
+    }
+
     public static final OpenOffice oo = new OpenOffice(null);
     public static final VclApp app = VclApp.getDefault();
     public static final VclWindow writer = window("SW_HID_EDIT_WIN");
@@ -211,7 +213,8 @@ public class UIMap {
     public static final VclButton math_ElementsUnaryBinary = button("STARMATH_HID_SMA_UNBINOPS_CAT");
     public static final VclButton math_ElementsUnaryBinaryPlus = button("STARMATH_HID_SMA_PLUSX");
     public static final VclControl MacroWarningOK = control("Ok");
-    public static final VclListBox OptionsDlgList = listbox("CUI_HID_OFADLG_TREELISTBOX");
+    public static final VclTreeListBox OptionsDlgList = tree("CUI_HID_OFADLG_TREELISTBOX");
+//  public static final VclListBox OptionsDlgList = listbox("CUI_HID_OFADLG_TREELISTBOX");
     public static final VclDialog OptionsDlg = dialog("CUI_HID_OFADLG_OPTIONS_TREE");
     public static final VclButton OptionsDlg_MacroSecurityButton = button("cui:PushButton:RID_SVXPAGE_INET_SECURITY:PB_SEC_MACROSEC");
     public static final VclControl MacroSecurityDlg = control("XMLSECURITY_HID_XMLSEC_TP_SECLEVEL");
@@ -350,7 +353,9 @@ public class UIMap {
     public static final VclListBox SCSheetsList = listbox("SC_HID_SELECTTABLES");
     public static final VclWindow SD_NavigatorDlg = window("SD_HID_SD_NAVIGATOR");
     public static final VclTabPage SD_HeaderAndFooterDlgSlideTab = tabpage("SD_HID_SD_TABPAGE_HEADERFOOTER_SLIDE");
-
+    public static final VclButton SC_FunctionWizardDlg_Next = button("formula:PushButton:RID_FORMULADLG_FORMULA:BTN_FORWARD");
+    public static final VclTreeListBox OptionsDlg_PathTabTree = tree("CUI_HID_OPTPATH_CTL_PATH");
+    public static final VclTreeListBox OptionsDlg_MicorOfficeTree = tree("CUI_HID_OFAPAGE_MSFLTR2_CLB");
 
 
 }

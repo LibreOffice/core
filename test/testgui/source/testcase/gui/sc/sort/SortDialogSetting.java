@@ -500,16 +500,17 @@ public class SortDialogSetting {
         // Select the cell range, "Tools->Options...->OpenOffice.org Spreadsheets->Sort Lists"
         CalcUtil.selectRange("A1:A6");
         app.dispatch(".uno:OptionsTreeDialog");
-        // Select "Sort Lists": start. Shrink the tree list and select
-        OptionsDlgList.select(0);
-        typeKeys("<left>");
-        for (int i=0; i<6; i++) {
-            typeKeys("<down><left>");
-        }
-        OptionsDlgList.select(3);
-        typeKeys("<right>");
+        OptionsDlgList.collapseAll();
+//      // Select "Sort Lists": start. Shrink the tree list and select
+//      OptionsDlgList.select(0);
+//      typeKeys("<left>");
+//      for (int i=0; i<6; i++) {
+//          typeKeys("<down><left>");
+//      }
+        OptionsDlgList.expand(3);
+//      typeKeys("<right>");
         OptionsDlgList.select(7);
-        // Select "Sort Lists": end
+//      // Select "Sort Lists": end
 
         // Click "Copy" button, "OK", close the document
         OptionsDlg_SortListsTabCopy.click();
@@ -821,8 +822,6 @@ public class SortDialogSetting {
     @Test
     public void testSortOptionsIncludeFormats() throws Exception{
 
-        // Create a new spreadsheet document
-
         String[][] dataWithCurrencyFormats = new String[][] {
                 {"Units"},
                 {"$32.00"},
@@ -851,55 +850,13 @@ public class SortDialogSetting {
                 {"74.00 \u0440\u0443\u0431"},
         };
 
-        // Input source data
+        // Open sample file to get source data
         String file = prepareData("sc/SortOptionsIncludeFormats.ods");
         app.dispatch(".uno:Open", 3);
         submitOpenDlg(file);
         calc.waitForExistence(10, 2);
 
         assertArrayEquals("source", dataWithCurrencyFormats, CalcUtil.getCellTexts("A1:A7"));
-
-        //      CalcUtil.selectRange("A1");
-        //      typeKeys("Units<down>$32.00<down>57.00 \u20ac<down>\u20a4 74<down>R$ 50.00<down>\u062c.\u0645. 27.00<down>7.00 \u0440\u0443\u0431.");
-
-        //      // Set Currency formats
-        //      CalcUtil.selectRange("A2");
-        //      typeKeys("<ctrl 1>");
-        ////        calc.menuItem("Fortmat->Cells...").select(); error: can not find item "Format"
-        //      FormatCellsDlg_NumbersPage.select();
-        //      FormatCellsDlg_NumbersPageCategory.select("Currency");
-        //      FormatCellsDlg_NumbersPageCurrencyFormat.select("$ English (USA)");
-        //      FormatCellsDlg_NumbersPage.ok();
-        //      CalcUtil.selectRange("A3");
-        //      typeKeys("<ctrl 1>");
-        //      FormatCellsDlg_NumbersPage.select();
-        //      FormatCellsDlg_NumbersPageCategory.select("Currency");
-        //      FormatCellsDlg_NumbersPageCurrencyFormat.select("\u20ac Spanish (Spain)");
-        //      FormatCellsDlg_NumbersPage.ok();
-        //      CalcUtil.selectRange("A4");
-        //      typeKeys("<ctrl 1>");
-        //      FormatCellsDlg_NumbersPage.select();
-        //      FormatCellsDlg_NumbersPageCategory.select("Currency");
-        //      FormatCellsDlg_NumbersPageCurrencyFormat.select("\u20a4 Latin");
-        //      FormatCellsDlg_NumbersPage.ok();
-        //      CalcUtil.selectRange("A5");
-        //      typeKeys("<ctrl 1>");
-        //      FormatCellsDlg_NumbersPage.select();
-        //      FormatCellsDlg_NumbersPageCategory.select("Currency");
-        //      FormatCellsDlg_NumbersPageCurrencyFormat.select("R$ Portuguese (Brazil)");
-        //      FormatCellsDlg_NumbersPage.ok();
-        //      CalcUtil.selectRange("A6");
-        //      typeKeys("<ctrl 1>");
-        //      FormatCellsDlg_NumbersPage.select();
-        //      FormatCellsDlg_NumbersPageCategory.select("Currency");
-        //      FormatCellsDlg_NumbersPageCurrencyFormat.select("\u062c.\u0645. Arabic (Egypt)");
-        //      FormatCellsDlg_NumbersPage.ok();
-        //      CalcUtil.selectRange("A7");
-        //      typeKeys("<ctrl 1>");
-        //      FormatCellsDlg_NumbersPage.select();
-        //      FormatCellsDlg_NumbersPageCategory.select("Currency");
-        //      FormatCellsDlg_NumbersPageCurrencyFormat.select("\u0440\u0443\u0431. Russian");
-        //      FormatCellsDlg_NumbersPage.ok();
 
         // "Data->Sort...", check "Range contains column labels", check "Include formats", sort first by "Units", "Ascending"
         app.dispatch(".uno:DataSort");

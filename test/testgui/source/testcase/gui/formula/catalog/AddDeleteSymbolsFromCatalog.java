@@ -50,6 +50,7 @@ public class AddDeleteSymbolsFromCatalog {
 
         // New a formula document
         app.dispatch("private:factory/smath");
+        sleep(3);   // If no sleep, can not find math_SymbolsDlg in mac
 
         // Click catalog button
         math_CatalogButton.click();

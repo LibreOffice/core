@@ -19,12 +19,11 @@
  *
  *************************************************************/
 
-
-
 /**
  *
  */
 package testcase.gui;
+
 import static org.openoffice.test.common.Testspace.*;
 import static org.junit.Assert.*;
 import static org.openoffice.test.vcl.Tester.*;
@@ -49,7 +48,6 @@ import testlib.gui.Log;
  */
 public class BVTFunction {
 
-
     @Rule
     public Log LOG = new Log();
 
@@ -63,13 +61,12 @@ public class BVTFunction {
         app.close();
     }
 
-
     @Test
-    public void testExportAsPDF() throws Exception  {
+    public void testExportAsPDF() throws Exception {
         String file = prepareData("export_pdf.odt");
         String exportTo = getPath("temp/odt.pdf");
 
-        app.dispatch(".uno:Open", 3);
+        app.dispatch(".uno:Open");
         submitOpenDlg(file);
         writer.waitForExistence(10, 2);
         app.dispatch(".uno:ExportToPDF");
@@ -79,36 +76,37 @@ public class BVTFunction {
         assertTrue("PDF is exported?", new File(exportTo).exists());
         assertTrue(toolbox(".HelpId:standardbar").exists(5));
         button(".uno:ExportDirectToPDF").click();
-        assertEquals("PDF - Portable Document Format (.pdf)", FileSave_FileType.getSelText());
+        assertEquals("PDF - Portable Document Format (.pdf)",
+                FileSave_FileType.getSelText());
         FileSave.cancel();
     }
 
     /**
-     * Test the File -- Print Dialog  show
+     * Test the File -- Print Dialog show
      *
      */
     @Test
-    public void testPrintDialog()
-    {
-        //Create a new text document
-        app.dispatch("private:factory/swriter", 3);
+    public void testPrintDialog() {
+        // Create a new text document
+        app.dispatch("private:factory/swriter");
         sleep(3);
-        app.dispatch(".uno:Print", 3);
+        app.dispatch(".uno:Print");
         assertTrue(File_PrintDlg.exists(5));
         File_PrintDlg.cancel();
     }
 
     /**
-     * Test the File -- Java Dialog  show
+     * Test the File -- Java Dialog show
      *
      */
     @Test
-    public void testJavaDialog()
-    {
+    public void testJavaDialog() {
 
-        //Create a new text document and launch a Wizards dialog which need JVM work correctly.
-        app.dispatch("private:factory/swriter", 3);
-        File tempfile=new File(oo.getUserInstallation(),"user/template/myAgendaTemplate.ott");
+        // Create a new text document and launch a Wizards dialog which need JVM
+        // work correctly.
+        app.dispatch("private:factory/swriter");
+        File tempfile = new File(oo.getUserInstallation(),
+                "user/template/myAgendaTemplate.ott");
         FileUtil.deleteFile(tempfile);
         sleep(3);
         app.dispatch("service:com.sun.star.wizards.agenda.CallWizard?start");
@@ -118,10 +116,10 @@ public class BVTFunction {
         sleep(10);
         writer.focus();
         sleep(1);
-        app.dispatch(".uno:SelectAll", 3);
+        app.dispatch(".uno:SelectAll");
         typeKeys("<$copy>");
-        //System.out.println("now txt:"+app.getClipboard());
-//      assertTrue(app.getClipboard().startsWith("<Name>"));
+        // System.out.println("now txt:"+app.getClipboard());
+        // assertTrue(app.getClipboard().startsWith("<Name>"));
         assertNotNull(app.getClipboard());
     }
 
@@ -130,21 +128,18 @@ public class BVTFunction {
      *
      */
     @Test
-    public void testMacroToolsOrgDialog()
-    {
+    public void testMacroToolsOrgDialog() {
         app.dispatch(".uno:MacroOrganizer?TabId:short=1");
         assertTrue(MacroDialogsPage.exists(5));
         MacroDialogsPage.cancel();
     }
-
 
     /**
      * Test the About Dialog show
      *
      */
     @Test
-    public void testAboutDialog()
-    {
+    public void testAboutDialog() {
         app.dispatch(".uno:About");
         assertTrue(AboutDialog.exists(5));
         AboutDialog.ok();
@@ -152,74 +147,77 @@ public class BVTFunction {
 
     /**
      * Test inserting a picture in text document
+     *
      * @throws Exception
      */
-
 
     @Test
     public void testInsertPictureInDocument() throws Exception {
         String bmp_green = prepareData("pure_green_64x64.bmp");
         String bmp_red = prepareData("pure_red_64x64.bmp");
 
-        //Create a new text document
-        app.dispatch("private:factory/swriter", 3);
+        // Create a new text document
+        app.dispatch("private:factory/swriter");
         sleep(3);
 
-        //Insert a picture fully filled with green
+        // Insert a picture fully filled with green
         writer.click(400, 400);
-        app.dispatch(".uno:InsertGraphic", 3);
+        app.dispatch(".uno:InsertGraphic");
         submitOpenDlg(bmp_green);
         sleep(3);
         writer.click(0.5, 0.5);
         sleep(1);
 
         // Verify if the picture is inserted successfully
-        Rectangle rectangle = GraphicsUtil.findRectangle(writer.getScreenRectangle(), 0xFF00FF00);
+        Rectangle rectangle = GraphicsUtil.findRectangle(
+                writer.getScreenRectangle(), 0xFF00FF00);
 
         assertNotNull("Green rectangle: " + rectangle, rectangle);
 
-        //insert another picture
-        app.dispatch(".uno:InsertGraphic", 3);
+        // insert another picture
+        app.dispatch(".uno:InsertGraphic");
         submitOpenDlg(bmp_red);
         sleep(3);
         writer.click(0.5, 0.5);
         sleep(1);
         // Verify if the picture is inserted successfully
-        rectangle = GraphicsUtil.findRectangle(writer.getScreenRectangle(), 0xFFFF0000);
+        rectangle = GraphicsUtil.findRectangle(writer.getScreenRectangle(),
+                0xFFFF0000);
         assertNotNull("Red rectangle: " + rectangle, rectangle);
     }
-
 
     @Test
     public void testInsertPictureInSpreadsheet() throws Exception {
         String bmp_green = prepareData("pure_green_64x64.bmp");
         String bmp_red = prepareData("pure_red_64x64.bmp");
 
-        //Create a new text document
-        app.dispatch("private:factory/scalc", 3);
+        // Create a new text document
+        app.dispatch("private:factory/scalc");
         sleep(3);
 
-        //Insert a picture fully filled with green
-        app.dispatch(".uno:InsertGraphic", 3);
+        // Insert a picture fully filled with green
+        app.dispatch(".uno:InsertGraphic");
         submitOpenDlg(bmp_green);
         sleep(3);
         calc.click(0.5, 0.5);
         sleep(1);
 
         // Verify if the picture is inserted successfully
-        Rectangle rectangle = GraphicsUtil.findRectangle(calc.getScreenRectangle(), 0xFF00FF00);
+        Rectangle rectangle = GraphicsUtil.findRectangle(
+                calc.getScreenRectangle(), 0xFF00FF00);
 
         assertNotNull("Green rectangle: " + rectangle, rectangle);
-//      assertEquals(new Rectangle(0,0,64,64), rectangle);
+        // assertEquals(new Rectangle(0,0,64,64), rectangle);
         CalcUtil.selectRange("C1");
-        //insert another picture
-        app.dispatch(".uno:InsertGraphic", 3);
+        // insert another picture
+        app.dispatch(".uno:InsertGraphic");
         submitOpenDlg(bmp_red);
         sleep(3);
         calc.click(0.5, 0.5);
         sleep(1);
         // Verify if the picture is inserted successfully
-        rectangle = GraphicsUtil.findRectangle(calc.getScreenRectangle(), 0xFFFF0000);
+        rectangle = GraphicsUtil.findRectangle(calc.getScreenRectangle(),
+                0xFFFF0000);
         assertNotNull("Red rectangle: " + rectangle, rectangle);
     }
 
@@ -228,56 +226,62 @@ public class BVTFunction {
         String bmp_green = prepareData("pure_green_64x64.bmp");
         String bmp_red = prepareData("pure_red_64x64.bmp");
 
-        //Create a new text document
+        // Create a new text document
         app.dispatch("private:factory/simpress?slot=6686");
         PresentationWizard.ok();
         sleep(3);
 
-        //Insert a picture fully filled with green
-        app.dispatch(".uno:InsertGraphic", 3);
+        // Insert a picture fully filled with green
+        app.dispatch(".uno:InsertGraphic");
         submitOpenDlg(bmp_green);
         sleep(3);
-        impress.click(5,5);
+        impress.click(5, 5);
         sleep(1);
 
         // Verify if the picture is inserted successfully
-        Rectangle rectangle = GraphicsUtil.findRectangle(impress.getScreenRectangle(), 0xFF00FF00);
+        Rectangle rectangle = GraphicsUtil.findRectangle(
+                impress.getScreenRectangle(), 0xFF00FF00);
 
         assertNotNull("Green rectangle: " + rectangle, rectangle);
-//      assertEquals(new Rectangle(0,0,64,64), rectangle);
+        // assertEquals(new Rectangle(0,0,64,64), rectangle);
 
-        //insert another picture
-        app.dispatch(".uno:InsertGraphic", 3);
+        // insert another picture
+        app.dispatch(".uno:InsertGraphic");
         submitOpenDlg(bmp_red);
         sleep(3);
         impress.click(1, 1);
         sleep(1);
         // Verify if the picture is inserted successfully
-        rectangle = GraphicsUtil.findRectangle(impress.getScreenRectangle(), 0xFFFF0000);
+        rectangle = GraphicsUtil.findRectangle(impress.getScreenRectangle(),
+                0xFFFF0000);
         assertNotNull("Red rectangle: " + rectangle, rectangle);
     }
 
     @Test
     public void testSlideShow() throws Exception {
         String file = prepareData("slideshow.odp");
-        app.dispatch(".uno:Open", 3);
+        app.dispatch(".uno:Open");
         submitOpenDlg(file);
         impress.waitForExistence(10, 2);
-        app.dispatch(".uno:Presentation", 3);
+        app.dispatch(".uno:Presentation");
         sleep(3);
-        Rectangle rectangle = GraphicsUtil.findRectangle(SlideShow.getScreenRectangle(), 0xFFFF0000);
+        Rectangle rectangle = GraphicsUtil.findRectangle(
+                SlideShow.getScreenRectangle(), 0xFFFF0000);
         assertNotNull("1st slide appears", rectangle);
         SlideShow.click(0.5, 0.5);
         sleep(2);
-        rectangle = GraphicsUtil.findRectangle(SlideShow.getScreenRectangle(), 0xFF00FF00);
+        rectangle = GraphicsUtil.findRectangle(SlideShow.getScreenRectangle(),
+                0xFF00FF00);
         assertNotNull("2nd slide appears", rectangle);
         typeKeys("<enter>");
         sleep(2);
-        rectangle = GraphicsUtil.findRectangle(SlideShow.getScreenRectangle(), 0xFF0000FF);
+        rectangle = GraphicsUtil.findRectangle(SlideShow.getScreenRectangle(),
+                0xFF0000FF);
         assertNotNull("3rd slide appears", rectangle);
         SlideShow.click(0.5, 0.5);
         sleep(2);
-        rectangle = GraphicsUtil.findRectangle(SlideShow.getScreenRectangle(), 0xFF0000FF);
+        rectangle = GraphicsUtil.findRectangle(SlideShow.getScreenRectangle(),
+                0xFF0000FF);
         assertNull("The end", rectangle);
         SlideShow.click(0.5, 0.5);
         sleep(3);
@@ -287,10 +291,10 @@ public class BVTFunction {
     @Test
     public void testFind() {
         String file = prepareData("find.odt");
-        app.dispatch(".uno:Open", 3);
+        app.dispatch(".uno:Open");
         submitOpenDlg(file);
         writer.waitForExistence(10, 2);
-        app.dispatch(".uno:SearchDialog", 3);
+        app.dispatch(".uno:SearchDialog");
         FindDlg_For.setText("OpenOffice");
         FindDlg_Find.click();
         sleep(1);
@@ -308,110 +312,86 @@ public class BVTFunction {
         msgbox("Search key replaced 3 times.").ok();
         FindDlg.close();
         sleep(1);
-        app.dispatch(".uno:SelectAll", 3);
+        app.dispatch(".uno:SelectAll");
         typeKeys("<$copy>");
-        assertEquals("Apache Awesome OpenOffice is comprised of six personal productivity applications: a word processor (and its web-authoring component), spreadsheet, presentation graphics, drawing, equation editor, and database. Awesome OpenOffice is released on Windows, Solaris, Linux and Macintosh operation systems, with more communities joining, including a mature FreeBSD port. Awesome OpenOffice is localized, supporting over 110 languages worldwide. ", app.getClipboard());
+        assertEquals(
+                "Apache Awesome OpenOffice is comprised of six personal productivity applications: a word processor (and its web-authoring component), spreadsheet, presentation graphics, drawing, equation editor, and database. Awesome OpenOffice is released on Windows, Solaris, Linux and Macintosh operation systems, with more communities joining, including a mature FreeBSD port. Awesome OpenOffice is localized, supporting over 110 languages worldwide. ",
+                app.getClipboard());
     }
 
     @Test
     public void testFillInSpreadsheet() {
-        String[][] expected1 = new String[][] {
-                {"1"},
-                {"1"},
-                {"1"},
-                {"1"},
-                {"1"},
-                {"1"},
-        };
-        String[][] expected2 = new String[][] {
-                {"2"},
-                {"2"},
-                {"2"},
-                {"2"},
-                {"2"},
-                {"2"},
-        };
+        String[][] expected1 = new String[][] { { "1" }, { "1" }, { "1" },
+                { "1" }, { "1" }, { "1" }, };
+        String[][] expected2 = new String[][] { { "2" }, { "2" }, { "2" },
+                { "2" }, { "2" }, { "2" }, };
 
-        String[][] expected3 = new String[][] {
-                {"Hi friends","Hi friends","Hi friends", "Hi friends"}
-        };
+        String[][] expected3 = new String[][] { { "Hi friends", "Hi friends",
+                "Hi friends", "Hi friends" } };
 
-        String[][] expected4 = new String[][] {
-                {"99999.999","99999.999","99999.999", "99999.999"}
-        };
+        String[][] expected4 = new String[][] { { "99999.999", "99999.999",
+                "99999.999", "99999.999" } };
         String[][] expected5 = new String[][] {
 
-        { "99999.999", "-10" },
-        { "100000.999", "-9" },
-        { "100001.999", "-8" },
-                { "100002.999", "-7" },
-            { "100003.999", "-6" }
+        { "99999.999", "-10" }, { "100000.999", "-9" }, { "100001.999", "-8" },
+                { "100002.999", "-7" }, { "100003.999", "-6" }
 
         };
-        //Create a new text document
-        app.dispatch("private:factory/scalc", 3);
+        // Create a new text document
+        app.dispatch("private:factory/scalc");
         sleep(3);
 
         CalcUtil.selectRange("C5");
         typeKeys("1<enter>");
         CalcUtil.selectRange("C5:C10");
-        app.dispatch(".uno:FillDown", 3);
-        assertArrayEquals("Fill Down:", expected1, CalcUtil.getCellTexts("C5:C10"));
+        app.dispatch(".uno:FillDown");
+        assertArrayEquals("Fill Down:", expected1,
+                CalcUtil.getCellTexts("C5:C10"));
 
         CalcUtil.selectRange("D10");
         typeKeys("2<enter>");
         CalcUtil.selectRange("D5:D10");
-        app.dispatch(".uno:FillUp", 3);
-        assertArrayEquals("Fill Up:", expected2, CalcUtil.getCellTexts("D5:D10"));
+        app.dispatch(".uno:FillUp");
+        assertArrayEquals("Fill Up:", expected2,
+                CalcUtil.getCellTexts("D5:D10"));
 
         CalcUtil.selectRange("A1");
         typeKeys("Hi friends<enter>");
         CalcUtil.selectRange("A1:D1");
-        app.dispatch(".uno:FillRight", 3);
-        assertArrayEquals("Fill Right:", expected3, CalcUtil.getCellTexts("A1:D1"));
+        app.dispatch(".uno:FillRight");
+        assertArrayEquals("Fill Right:", expected3,
+                CalcUtil.getCellTexts("A1:D1"));
 
         CalcUtil.selectRange("D2");
         typeKeys("99999.999<enter>");
         CalcUtil.selectRange("A2:D2");
-        app.dispatch(".uno:FillLeft", 3);
-        assertArrayEquals("Fill left:", expected4, CalcUtil.getCellTexts("A2:D2"));
+        app.dispatch(".uno:FillLeft");
+        assertArrayEquals("Fill left:", expected4,
+                CalcUtil.getCellTexts("A2:D2"));
 
         CalcUtil.selectRange("E1");
         typeKeys("99999.999<tab>-10<enter>");
 
         CalcUtil.selectRange("E1:F5");
-        app.dispatch(".uno:FillSeries", 3);
+        app.dispatch(".uno:FillSeries");
         FillSeriesDlg.ok();
         sleep(1);
-        assertArrayEquals("Fill series..", expected5, CalcUtil.getCellTexts("E1:F5"));
+        assertArrayEquals("Fill series..", expected5,
+                CalcUtil.getCellTexts("E1:F5"));
     }
 
     @Test
     public void testSort() {
-        String[][] expected1 = new String[][] {
-                { "-9999999" },
-                { "-1.1" },
-                { "-1.1" },
-                { "0" },
-                { "0" },
-                { "0.1" },
-                { "10" },
-                { "12" },
-                { "9999999" },
-                { "9999999" },
+        String[][] expected1 = new String[][] { { "-9999999" }, { "-1.1" },
+                { "-1.1" }, { "0" }, { "0" }, { "0.1" }, { "10" }, { "12" },
+                { "9999999" }, { "9999999" },
 
         };
-        String[][] expected2 = new String[][] {
-                { "TRUE", "Oracle" },
-                { "TRUE", "OpenOffice" },
-                { "FALSE", "OpenOffice" },
-                { "TRUE", "IBM" },
-                { "FALSE", "IBM" },
-                { "TRUE", "Google" },
-                { "FALSE", "facebook " },
-                { "TRUE", "Apache" },
-                { "TRUE", "!yahoo" },
-                { "TRUE", "" },
+        String[][] expected2 = new String[][] { { "TRUE", "Oracle" },
+                { "TRUE", "OpenOffice" }, { "FALSE", "OpenOffice" },
+                { "TRUE", "IBM" }, { "FALSE", "IBM" }, { "TRUE", "Google" },
+                { "FALSE", "facebook " }, { "TRUE", "Apache" },
+                { "TRUE", "!yahoo" }, { "TRUE", "" },
 
         };
 
@@ -427,7 +407,7 @@ public class BVTFunction {
 
         };
         String file = prepareData("sort.ods");
-        app.dispatch(".uno:Open", 3);
+        app.dispatch(".uno:Open");
         submitOpenDlg(file);
         calc.waitForExistence(10, 2);
         CalcUtil.selectRange("A1:A10");
@@ -436,7 +416,8 @@ public class BVTFunction {
         assertEquals(1, SortPage_By1.getSelIndex());
         SortPage.ok();
         sleep(1);
-        assertArrayEquals("Sorted Data", expected1, CalcUtil.getCellTexts("A1:A10"));
+        assertArrayEquals("Sorted Data", expected1,
+                CalcUtil.getCellTexts("A1:A10"));
         CalcUtil.selectRange("B1:C10");
         app.dispatch(".uno:DataSort");
 
@@ -458,111 +439,111 @@ public class BVTFunction {
         SortPage.ok();
         sleep(1);
 
-        assertArrayEquals("Sorted Data", expected2, CalcUtil.getCellTexts("B1:C10"));
+        assertArrayEquals("Sorted Data", expected2,
+                CalcUtil.getCellTexts("B1:C10"));
         CalcUtil.selectRange("D1:D7");
         app.dispatch(".uno:DataSort");
         SortWarningDlg_Current.click();
         SortOptionsPage.select();
         SortOptionsPage_RangeContainsColumnLabels.uncheck();
         SortOptionsPage_CustomSortOrder.check();
-        SortOptionsPage_CustomSortOrderList.select("Sunday,Monday,Tuesday,Wednesday,Thursday,Friday,Saturday");
+        SortOptionsPage_CustomSortOrderList
+                .select("Sunday,Monday,Tuesday,Wednesday,Thursday,Friday,Saturday");
         SortOptionsPage.ok();
         sleep(1);
-        assertArrayEquals("Sorted Data", expected3, CalcUtil.getCellTexts("D1:D7"));
+        assertArrayEquals("Sorted Data", expected3,
+                CalcUtil.getCellTexts("D1:D7"));
 
         CalcUtil.selectRange("E1:E10");
         app.dispatch(".uno:DataSort");
         SortWarningDlg_Current.click();
         SortPage.ok();
         sleep(1);
-        assertArrayEquals("Sorted Data", expected4, CalcUtil.getCellTexts("E1:E10"));
+        assertArrayEquals("Sorted Data", expected4,
+                CalcUtil.getCellTexts("E1:E10"));
     }
 
     /**
-     * Test insert a chart in a draw document
-     * 1. New a draw document
-     * 2. Insert a chart
-     * 3. Check if the chart is inserted successfully
+     * Test insert a chart in a draw document 1. New a draw document 2. Insert a
+     * chart 3. Check if the chart is inserted successfully
+     *
      * @throws Exception
      */
     @Test
-    public void testInsertChartInDraw() throws Exception{
+    public void testInsertChartInDraw() throws Exception {
 
         // Create a new drawing document
-        app.dispatch("private:factory/sdraw", 3);
+        app.dispatch("private:factory/sdraw");
         sleep(3);
 
         // Insert a chart
-        app.dispatch(".uno:InsertObjectChart", 3);
+        app.dispatch(".uno:InsertObjectChart");
         sleep(3);
 
         // Verify if the chart is inserted successfully
         assertTrue(chart.exists(3));
         // Focus on edit pane
-        draw.click(5,5);
+        draw.click(5, 5);
         sleep(1);
     }
 
     /**
-     * Test insert a chart in a text document
-     * 1. New a text document
-     * 2. Insert a chart
-     * 3. Check if the chart is inserted successfully
+     * Test insert a chart in a text document 1. New a text document 2. Insert a
+     * chart 3. Check if the chart is inserted successfully
+     *
      * @throws Exception
      */
     @Test
-    public void testInsertChartInDocument() throws Exception{
+    public void testInsertChartInDocument() throws Exception {
 
         // Create a new text document
-        app.dispatch("private:factory/swriter", 3);
+        app.dispatch("private:factory/swriter");
         sleep(3);
 
         // Insert a chart
-        app.dispatch(".uno:InsertObjectChart", 3);
+        app.dispatch(".uno:InsertObjectChart");
         sleep(3);
 
         // Verify if the chart is inserted successfully
         assertTrue(chart.exists(3));
         // Focus on edit pane
-        writer.click(5,5);
+        writer.click(5, 5);
         sleep(1);
     }
 
     /**
-     * Test insert a chart in a spreadsheet document
-     * 1. New a spreadsheet document
-     * 2. Insert a chart
-     * 3. Check if the chart is inserted successfully
+     * Test insert a chart in a spreadsheet document 1. New a spreadsheet
+     * document 2. Insert a chart 3. Check if the chart is inserted successfully
+     *
      * @throws Exception
      */
     @Test
-    public void testInsertChartInSpreadsheet() throws Exception{
+    public void testInsertChartInSpreadsheet() throws Exception {
 
         // Create a new spreadsheet document
-        app.dispatch("private:factory/scalc", 3);
+        app.dispatch("private:factory/scalc");
         sleep(3);
 
         // Insert a chart
-        app.dispatch(".uno:InsertObjectChart", 3);
+        app.dispatch(".uno:InsertObjectChart");
         sleep(3);
         Chart_Wizard.ok();
 
         // Verify if the chart is inserted successfully
         assertTrue(chart.exists(3));
         // Focus on edit pane
-        calc.click(5,5);
+        calc.click(5, 5);
         sleep(1);
     }
 
     /**
-     * Test insert a chart in a presentation document
-     * 1. New a presentation document
-     * 2. Insert a chart
-     * 3. Check if the chart is inserted successfully
+     * Test insert a chart in a presentation document 1. New a presentation
+     * document 2. Insert a chart 3. Check if the chart is inserted successfully
+     *
      * @throws Exception
      */
     @Test
-    public void testInsertChartInPresentation() throws Exception{
+    public void testInsertChartInPresentation() throws Exception {
 
         // Create a new presentation document
         app.dispatch("private:factory/simpress?slot=6686");
@@ -570,32 +551,31 @@ public class BVTFunction {
         sleep(3);
 
         // Insert a chart
-        app.dispatch(".uno:InsertObjectChart", 3);
+        app.dispatch(".uno:InsertObjectChart");
         sleep(3);
 
         // Verify if the chart is inserted successfully
         assertTrue(chart.exists(3));
         // Focus on edit pane
-        impress.click(5,5);
+        impress.click(5, 5);
         sleep(1);
     }
 
     /**
-     * Test insert a table in a draw document
-     * 1. New a draw document
-     * 2. Insert a default table
-     * 3. Check if the table is inserted successfully
+     * Test insert a table in a draw document 1. New a draw document 2. Insert a
+     * default table 3. Check if the table is inserted successfully
+     *
      * @throws Exception
      */
     @Test
-    public void testInsertTableInDraw() throws Exception{
+    public void testInsertTableInDraw() throws Exception {
 
         // Create a new drawing document
-        app.dispatch("private:factory/sdraw", 3);
+        app.dispatch("private:factory/sdraw");
         sleep(3);
 
         // Insert a table
-        app.dispatch(".uno:InsertTable", 3);
+        app.dispatch(".uno:InsertTable");
         InsertTable.ok();
         sleep(3);
 
@@ -603,48 +583,48 @@ public class BVTFunction {
         assertTrue(Table_Toolbar.exists(3));
 
         // Focus on edit pane
-        draw.click(5,5);
+        draw.click(5, 5);
         sleep(1);
     }
 
     /**
-     * Test insert a table in a text document
-     * 1. New a text document
-     * 2. Insert a default table
-     * 3. Check if the table is inserted successfully
+     * Test insert a table in a text document 1. New a text document 2. Insert a
+     * default table 3. Check if the table is inserted successfully
+     *
      * @throws Exception
      */
     @Test
-    public void testInsertTableInDocument() throws Exception{
+    public void testInsertTableInDocument() throws Exception {
 
         // Create a new text document
-        app.dispatch("private:factory/swriter", 3);
+        app.dispatch("private:factory/swriter");
         sleep(3);
 
         // Insert a table
-        app.dispatch(".uno:InsertTable", 3);
+        app.dispatch(".uno:InsertTable");
         writer_InsertTable.ok();
         sleep(3);
 
         // Verify if the table toolbar is active
         assertTrue(Table_Toolbar.exists(3));
 
-//      // Check the statusbar to verify if the table is inserted successfully
-//      assertEquals("Table1:A1", StatusBar.getItemText(7));
+        // // Check the statusbar to verify if the table is inserted
+        // successfully
+        // assertEquals("Table1:A1", StatusBar.getItemText(7));
         // Focus on edit pane
-        writer.click(5,5);
+        writer.click(5, 5);
         sleep(1);
     }
 
     /**
-     * Test insert a table in a presentation document
-     * 1. New a presentation document
-     * 2. Insert a default table
-     * 3. Check if the table is inserted successfully
+     * Test insert a table in a presentation document 1. New a presentation
+     * document 2. Insert a default table 3. Check if the table is inserted
+     * successfully
+     *
      * @throws Exception
      */
     @Test
-    public void testInsertTableInPresentation() throws Exception{
+    public void testInsertTableInPresentation() throws Exception {
 
         // Create a new presentation document
         app.dispatch("private:factory/simpress?slot=6686");
@@ -652,33 +632,33 @@ public class BVTFunction {
         sleep(3);
 
         // Insert a table
-        app.dispatch(".uno:InsertTable", 3);
+        app.dispatch(".uno:InsertTable");
         InsertTable.ok();
         sleep(3);
 
         // Verify if the table toolbar is active
         assertTrue(Table_Toolbar.exists(3));
 
-//      // Check the statusbar to verify if the table is inserted successfully
-//      assertEquals("Table selected", StatusBar.getItemText(0));
+        // // Check the statusbar to verify if the table is inserted
+        // successfully
+        // assertEquals("Table selected", StatusBar.getItemText(0));
         // Focus on edit pane
-        impress.click(5,5);
+        impress.click(5, 5);
         sleep(1);
     }
 
-
     /**
-     * Test insert a function in a spreadsheet document via Sum button
-     * 1. New a spreadsheet document
-     * 2. Insert a function via Sum button
-     * 3. Check if the result is correct
+     * Test insert a function in a spreadsheet document via Sum button 1. New a
+     * spreadsheet document 2. Insert a function via Sum button 3. Check if the
+     * result is correct
+     *
      * @throws Exception
      */
     @Test
-    public void testInsertFunctionInSCViaSumButton() throws Exception{
+    public void testInsertFunctionInSCViaSumButton() throws Exception {
 
         // Create a new spreadsheet document
-        app.dispatch("private:factory/scalc", 3);
+        app.dispatch("private:factory/scalc");
         sleep(3);
 
         // Insert source numbers
@@ -696,53 +676,52 @@ public class BVTFunction {
         typeKeys("<enter>");
 
         // Verify if the calculated result is equal to the expected result
-        assertEquals("The calculated result", expectedResult, CalcUtil.getCellText("C1"));
+        assertEquals("The calculated result", expectedResult,
+                CalcUtil.getCellText("C1"));
     }
 
     /**
-     * Test insert a function in a spreadsheet document via inputbar
-     * 1. New a spreadsheet document
-     * 2. Insert a function via inputbar: POWER
-     * 3. Check if the result is correct
+     * Test insert a function in a spreadsheet document via inputbar 1. New a
+     * spreadsheet document 2. Insert a function via inputbar: COS 3. Check if
+     * the result is correct
+     *
      * @throws Exception
      */
     @Test
-    public void testInsertFunctionInSCViaInputbar() throws Exception{
+    public void testInsertFunctionInSCViaInputbar() throws Exception {
 
         // Create a new spreadsheet document
-        app.dispatch("private:factory/scalc", 3);
+        app.dispatch("private:factory/scalc");
         sleep(3);
 
         // Insert source numbers and expected result
-        String sourceBase = "5";
-        String sourcePower = "3";
-        String expectedResult = "125";
+        String sourceData = "0";
+        String expectedResult = "1";
         CalcUtil.selectRange("A1");
-        typeKeys(sourceBase);
-        CalcUtil.selectRange("B1");
-        typeKeys(sourcePower);
+        typeKeys(sourceData);
 
-        // Insert a function via inputbar: POWER
+        // Insert a function via inputbar: COS
         CalcUtil.selectRange("D1");
-        SC_InputBar_Input.inputKeys("=POWER(A1;B1)");
+        SC_InputBar_Input.inputKeys("=COS(A1)");
         typeKeys("<enter>");
 
         // Verify if the calculated result is equal to the expected result
-        assertEquals("The calculated result", expectedResult, CalcUtil.getCellText("D1"));
+        assertEquals("The calculated result", expectedResult,
+                CalcUtil.getCellText("D1"));
     }
 
     /**
-     * Test insert a function in a spreadsheet document via Function Wizard Dialog
-     * 1. New a spreadsheet document
-     * 2. Insert a function via Function Wizard Dialog: ABS
-     * 3. Check if the result is correct
+     * Test insert a function in a spreadsheet document via Function Wizard
+     * Dialog 1. New a spreadsheet document 2. Insert a function via Function
+     * Wizard Dialog: ABS 3. Check if the result is correct
+     *
      * @throws Exception
      */
     @Test
-    public void testInsertFunctionInSCViaFunctionWizard() throws Exception{
+    public void testInsertFunctionInSCViaFunctionWizard() throws Exception {
 
         // Create a new spreadsheet document
-        app.dispatch("private:factory/scalc", 3);
+        app.dispatch("private:factory/scalc");
         sleep(3);
 
         // Insert source number
@@ -754,13 +733,16 @@ public class BVTFunction {
 
         // Insert a function via Function Wizard Dialog: ABS
         CalcUtil.selectRange("B1");
-        app.dispatch(".uno:FunctionDialog", 3);
-        SC_FunctionWizardDlg_FunctionList.doubleClick(5,5);
+        app.dispatch(".uno:FunctionDialog");
+//      SC_FunctionWizardDlg_FunctionList.doubleClick(5, 5);
+        SC_FunctionWizardDlg_FunctionList.select("ABS");
+        SC_FunctionWizardDlg_Next.click();  // Use "Next" button
 
         SC_FunctionWizardDlg_Edit1.inputKeys("A1");
         SC_FunctionWizardDlg.ok();
 
         // Verify if the calculated result is equal to the expected result
-        assertEquals("The calculated result", expectedResult, CalcUtil.getCellText("B1"));
+        assertEquals("The calculated result", expectedResult,
+                CalcUtil.getCellText("B1"));
     }
 }
