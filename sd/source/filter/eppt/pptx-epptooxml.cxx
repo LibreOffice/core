@@ -986,11 +986,7 @@ void PowerPointExport::WriteAnimationNodeCommonPropsStart( FSHelperPtr pFS, cons
     }
 
     const Sequence< NamedValue > aUserData = rXNode->getUserData();
-
-    // ids start from 1, DFF_ANIM_PROPERTY_ID_COUNT is the highest id
-    // number
-    const Any* pAny[ DFF_ANIM_PROPERTY_ID_COUNT + 1];
-
+    const Any* pAny[ DFF_ANIM_PROPERTY_ID_COUNT ];
     AnimationExporter::GetUserData( aUserData, pAny, sizeof( pAny ) );
 
     sal_Int16 nType = 0;
