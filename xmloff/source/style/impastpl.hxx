@@ -32,6 +32,7 @@
 #include <sal/types.h>
 #include <svl/cntnrsrt.hxx>
 #include <rtl/ustring.hxx>
+#include <set>
 #include <vector>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
@@ -41,7 +42,7 @@
 
 class SvXMLAutoStylePoolP;
 class SvXMLAutoStylePoolParentsP_Impl;
-class SvXMLAutoStylePoolNamesP_Impl;
+typedef std::set<rtl::OUString> SvXMLAutoStylePoolNamesP_Impl;
 class SvXMLExportPropertyMapper;
 class SvXMLExport;
 
@@ -89,14 +90,6 @@ public:
 };
 
 DECLARE_CONTAINER_SORT( XMLFamilyDataList_Impl, XMLFamilyData_Impl )
-
-///////////////////////////////////////////////////////////////////////////////
-//
-//
-//
-
-DECLARE_CONTAINER_SORT_DEL( SvXMLAutoStylePoolNamesP_Impl,
-                           ::rtl::OUString )
 
 ///////////////////////////////////////////////////////////////////////////////
 //

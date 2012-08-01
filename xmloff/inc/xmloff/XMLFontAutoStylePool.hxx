@@ -24,9 +24,10 @@
 #include "xmloff/dllapi.h"
 #include <rtl/ustring.hxx>
 #include <xmloff/uniref.hxx>
+#include <set>
 
 class XMLFontAutoStylePool_Impl;
-class XMLFontAutoStylePoolNames_Impl;
+typedef std::set<rtl::OUString> XMLFontAutoStylePoolNames_Impl;
 class SvXMLExport;
 
 class XMLOFF_DLLPUBLIC XMLFontAutoStylePool : public UniRefBase
@@ -34,7 +35,7 @@ class XMLOFF_DLLPUBLIC XMLFontAutoStylePool : public UniRefBase
     SvXMLExport& rExport;
 
     XMLFontAutoStylePool_Impl *pPool;
-    XMLFontAutoStylePoolNames_Impl *pNames;
+    XMLFontAutoStylePoolNames_Impl m_aNames;
     sal_uInt32 nName;
 
 protected:

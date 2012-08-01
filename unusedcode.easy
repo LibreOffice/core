@@ -29,16 +29,11 @@ String::CreateFromAscii(char const*)
 String::CreateFromAscii(char const*, unsigned short)
 String::String(unsigned short const*)
 String::String(unsigned short const*, unsigned short)
-SvXMLAutoStylePoolNamesP_Impl::GetPos(rtl::OUString const*) const
-SvXMLAutoStylePoolNamesP_Impl::Remove(rtl::OUString*)
 SvXMLAutoStylePoolParentsP_Impl::GetPos(SvXMLAutoStylePoolParentP_Impl const*) const
 SvXMLAutoStylePoolParentsP_Impl::Remove(SvXMLAutoStylePoolParentP_Impl*)
-SvXMLStyleIndices_Impl::GetPos(SvXMLStyleIndex_Impl const*) const
-SvXMLStyleIndices_Impl::Remove(SvXMLStyleIndex_Impl*)
 SvtSlideSorterBarOptions::AddListenerLink(Link const&)
 SvtSlideSorterBarOptions::RemoveListenerLink(Link const&)
 SvxPositionSizeTabPage::GetRect()
-SwSortElements::Remove(unsigned short, unsigned short)
 SwXMLTableColumnsSortByWidth_Impl::GetPos(SwXMLTableColumn_Impl const*) const
 SwXMLTableColumnsSortByWidth_Impl::Remove(SwXMLTableColumn_Impl*)
 TempFile::IsValid() const
@@ -62,12 +57,8 @@ X11SalGraphics::SetMask(int&, int&, unsigned int&, unsigned int&, int&, int&, un
 X509Certificate_NssImpl::getImplementation(com::sun::star::uno::Reference<com::sun::star::uno::XInterface>)
 XMLFamilyDataList_Impl::GetPos(XMLFamilyData_Impl const*) const
 XMLFamilyDataList_Impl::Remove(XMLFamilyData_Impl*)
-XMLFontAutoStylePoolNames_Impl::GetPos(rtl::OUString const*) const
-XMLFontAutoStylePoolNames_Impl::Remove(rtl::OUString*)
 XMLFontAutoStylePool_Impl::GetPos(XMLFontAutoStylePoolEntry_Impl const*) const
 XMLFontAutoStylePool_Impl::Remove(XMLFontAutoStylePoolEntry_Impl*)
-XMLTextListAutoStylePoolNames_Impl::GetPos(rtl::OUString const*) const
-XMLTextListAutoStylePoolNames_Impl::Remove(rtl::OUString*)
 XMLTextListAutoStylePool_Impl::GetPos(XMLTextListAutoStylePoolEntry_Impl const*) const
 XMLTextListAutoStylePool_Impl::Remove(XMLTextListAutoStylePoolEntry_Impl*)
 XclExpColorScale::XclExpColorScale(XclExpRoot const&, ScColorScaleFormat const&)

@@ -63,6 +63,7 @@
 #include "PageMasterImportContext.hxx"
 #include "PageMasterImportPropMapper.hxx"
 
+#include <set>
 #include <vector>
 
 using ::rtl::OUString;
@@ -243,29 +244,29 @@ public:
     const SvXMLStyleContext *GetStyle() const { return pStyle; }
 };
 
-int SvXMLStyleIndexCmp_Impl( const SvXMLStyleIndex_Impl& r1,
-                              const SvXMLStyleIndex_Impl& r2 )
+struct SvXMLStyleIndexCmp_Impl
 {
-    int nRet;
-    if( (sal_uInt16)r1.GetFamily() < (sal_uInt16)r2.GetFamily() )
-        nRet = -1;
-    else if( (sal_uInt16)r1.GetFamily() > (sal_uInt16)r2.GetFamily() )
-        nRet = 1;
-    else
-        nRet = (int)r1.GetName().compareTo( r2.GetName() );
+    bool operator()(const SvXMLStyleIndex_Impl& r1, const SvXMLStyleIndex_Impl& r2)
+    {
+        sal_Int32 nRet;
 
-    return nRet;
-}
+        if( (sal_uInt16)r1.GetFamily() < (sal_uInt16)r2.GetFamily() )
+            nRet = -1;
+        else if( (sal_uInt16)r1.GetFamily() > (sal_uInt16)r2.GetFamily() )
+            nRet = 1;
+        else
+            nRet = r1.GetName().compareTo( r2.GetName() );
+
+        return nRet < 0;
+    }
+};
 
 // ---------------------------------------------------------------------
 
 typedef SvXMLStyleContext *SvXMLStyleContextPtr;
 typedef vector< SvXMLStyleContextPtr > SvXMLStyleContexts_Impl;
 
-DECLARE_CONTAINER_SORT_DEL( SvXMLStyleIndices_Impl, SvXMLStyleIndex_Impl )
-IMPL_CONTAINER_SORT( SvXMLStyleIndices_Impl, SvXMLStyleIndex_Impl,
-                       SvXMLStyleIndexCmp_Impl )
-
+typedef std::set<SvXMLStyleIndex_Impl, SvXMLStyleIndexCmp_Impl> SvXMLStyleIndices_Impl;
 
 class SvXMLStylesContext_Impl
 {
@@ -357,17 +358,8 @@ const SvXMLStyleContext *SvXMLStylesContext_Impl::FindStyleChildContext(
                     "Performance warning: sdbcx::Index created multiple times" );
 #endif
         ((SvXMLStylesContext_Impl *)this)->pIndices =
-            new SvXMLStyleIndices_Impl(
-                sal::static_int_cast< sal_uInt16 >( aStyles.size() ), 5 );
-        for( size_t i = 0; i < aStyles.size(); i++ )
-        {
-            SvXMLStyleIndex_Impl* pStyleIndex = new SvXMLStyleIndex_Impl( aStyles[ i ] );
-            if (!pIndices->Insert( pStyleIndex ))
-            {
-                OSL_FAIL("Here is a double Style");
-                delete pStyleIndex;
-            }
-        }
+            new SvXMLStyleIndices_Impl( aStyles.begin(), aStyles.end() );
+        SAL_WARN_IF(pIndices->size() != aStyles.size(), "xmloff", "Here is a duplicate Style");
 #ifdef DBG_UTIL
         ((SvXMLStylesContext_Impl *)this)->nIndexCreated++;
 #endif
@@ -376,9 +368,9 @@ const SvXMLStyleContext *SvXMLStylesContext_Impl::FindStyleChildContext(
     if( pIndices )
     {
         SvXMLStyleIndex_Impl aIndex( nFamily, rName );
-        sal_uLong nPos = 0;
-        if( pIndices->Seek_Entry( &aIndex, &nPos ) )
-            pStyle = pIndices->GetObject( nPos )->GetStyle();
+        SvXMLStyleIndices_Impl::iterator aFind = pIndices->find(aIndex);
+        if( aFind != pIndices->end() )
+            pStyle = aFind->GetStyle();
     }
     else
     {

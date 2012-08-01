@@ -58,7 +58,7 @@ SvXMLAutoStylePoolPropertiesP_Impl::SvXMLAutoStylePoolPropertiesP_Impl( XMLFamil
         sBuffer.append( OUString::valueOf( (sal_Int32)pFamilyData->mnName ) );
         msName = sBuffer.makeStringAndClear();
     }
-    while( pFamilyData->mpNameList->Seek_Entry( &msName, 0 ) );
+    while( pFamilyData->mpNameList->find(msName) != pFamilyData->mpNameList->end() );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

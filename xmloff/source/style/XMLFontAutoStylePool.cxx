@@ -42,18 +42,6 @@ using ::rtl::OUStringBuffer;
 using namespace ::com::sun::star::uno;
 using namespace ::xmloff::token;
 
-int XMLFontAutoStylePoolNameCmp_Impl( const OUString& r1,
-                                      const OUString& r2 )
-{
-    return (int)r1.compareTo( r2 );
-}
-
-DECLARE_CONTAINER_SORT_DEL( XMLFontAutoStylePoolNames_Impl,
-                            OUString )
-IMPL_CONTAINER_SORT( XMLFontAutoStylePoolNames_Impl,
-                     OUString,
-                     XMLFontAutoStylePoolNameCmp_Impl )
-
 class XMLFontAutoStylePoolEntry_Impl
 {
     OUString    sName;
@@ -148,15 +136,13 @@ IMPL_CONTAINER_SORT( XMLFontAutoStylePool_Impl,
 
 XMLFontAutoStylePool::XMLFontAutoStylePool( SvXMLExport& rExp ) :
     rExport( rExp ),
-    pPool( new XMLFontAutoStylePool_Impl( 5, 5 ) ),
-    pNames( new XMLFontAutoStylePoolNames_Impl( 5, 5 ) )
+    pPool( new XMLFontAutoStylePool_Impl( 5, 5 ) )
 {
 }
 
 XMLFontAutoStylePool::~XMLFontAutoStylePool()
 {
     delete pPool;
-    delete pNames;
 }
 
 OUString XMLFontAutoStylePool::Add(
@@ -191,12 +177,12 @@ OUString XMLFontAutoStylePool::Add(
         if( sName.isEmpty() )
             sName = OUString::valueOf( sal_Unicode( 'F' ) );
 
-        if( pNames->Seek_Entry( &sName, 0 ) )
+        if( m_aNames.find(sName) != m_aNames.end() )
         {
             sal_Int32 nCount = 1;
             OUString sPrefix( sName );
             sName += OUString::valueOf( nCount );
-            while( pNames->Seek_Entry( &sName, 0 ) )
+            while( m_aNames.find(sName) != m_aNames.end() )
             {
                 sName = sPrefix;
                 sName += OUString::valueOf( ++nCount );
@@ -207,7 +193,7 @@ OUString XMLFontAutoStylePool::Add(
             new XMLFontAutoStylePoolEntry_Impl( sName, rFamilyName, rStyleName,
                                                 nFamily, nPitch, eEnc );
         pPool->Insert( pEntry );
-        pNames->Insert( new OUString( sName ) );
+        m_aNames.insert(sName);
     }
 
     return sPoolName;

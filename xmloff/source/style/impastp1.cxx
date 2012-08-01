@@ -52,13 +52,13 @@ XMLFamilyData_Impl::XMLFamilyData_Impl(
 
 {
     mpParentList = new SvXMLAutoStylePoolParentsP_Impl( 5, 5 );
-    mpNameList   = new SvXMLAutoStylePoolNamesP_Impl( 5, 5 );
+    mpNameList   = new SvXMLAutoStylePoolNamesP_Impl;
 }
 
 XMLFamilyData_Impl::~XMLFamilyData_Impl()
 {
-    if( mpParentList ) delete mpParentList;
-    if( mpNameList ) delete mpNameList;
+    delete mpParentList;
+    delete mpNameList;
     DBG_ASSERT( !pCache || !pCache->size(), "auto style pool cache is not empty!" );
     if( pCache )
     {
@@ -71,8 +71,7 @@ XMLFamilyData_Impl::~XMLFamilyData_Impl()
 
 void XMLFamilyData_Impl::ClearEntries()
 {
-    if( mpParentList )
-        delete mpParentList;
+    delete mpParentList;
     mpParentList = new SvXMLAutoStylePoolParentsP_Impl( 5, 5 );
     DBG_ASSERT( !pCache || !pCache->size(), "auto style pool cache is not empty!" );
     if( pCache )
@@ -104,30 +103,5 @@ int XMLFamilyDataSort_Impl( const XMLFamilyData_Impl& r1, const XMLFamilyData_Im
 //
 
 IMPL_CONTAINER_SORT( XMLFamilyDataList_Impl, XMLFamilyData_Impl, XMLFamilyDataSort_Impl )
-
-//#############################################################################
-//
-// Sorted list of OUString - elements
-//
-
-///////////////////////////////////////////////////////////////////////////////
-//
-// Sort-function for OUString-list
-//
-
-int SvXMLAutoStylePoolNamesPCmp_Impl( const OUString& r1,
-                                     const OUString& r2 )
-{
-    return (int)r1.compareTo( r2 );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-//
-// Implementation of sorted OUString-list
-//
-
-IMPL_CONTAINER_SORT( SvXMLAutoStylePoolNamesP_Impl,
-                     OUString,
-                     SvXMLAutoStylePoolNamesPCmp_Impl )
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -46,18 +46,6 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::style;
 
 
-int XMLTextListAutoStylePoolNameCmp_Impl( const OUString& r1,
-                                           const OUString& r2 )
-{
-    return (int)r1.compareTo( r2 );
-}
-
-DECLARE_CONTAINER_SORT_DEL( XMLTextListAutoStylePoolNames_Impl,
-                            OUString )
-IMPL_CONTAINER_SORT( XMLTextListAutoStylePoolNames_Impl,
-                     OUString,
-                     XMLTextListAutoStylePoolNameCmp_Impl )
-
 class XMLTextListAutoStylePoolEntry_Impl
 {
     OUString    sName;
@@ -132,7 +120,7 @@ XMLTextListAutoStylePoolEntry_Impl::XMLTextListAutoStylePoolEntry_Impl(
         sBuffer.append( (sal_Int32)rName );
         sName = sBuffer.makeStringAndClear();
     }
-    while( rNames.Seek_Entry( &sName, 0 ) );
+    while (rNames.find(sName) != rNames.end());
 }
 
 int XMLTextListAutoStylePoolEntryCmp_Impl(
@@ -169,7 +157,6 @@ XMLTextListAutoStylePool::XMLTextListAutoStylePool( SvXMLExport& rExp ) :
     rExport( rExp ),
     sPrefix( RTL_CONSTASCII_USTRINGPARAM("L") ),
     pPool( new XMLTextListAutoStylePool_Impl( 5, 5 ) ),
-    pNames( new XMLTextListAutoStylePoolNames_Impl( 5, 5 ) ),
     nName( 0 )
 {
     Reference<ucb::XAnyCompareFactory> xCompareFac( rExp.GetModel(), uno::UNO_QUERY );
@@ -189,18 +176,11 @@ XMLTextListAutoStylePool::~XMLTextListAutoStylePool()
     while ( nCount-- )
         delete pPool->Remove(nCount);
     delete pPool;
-
-    nCount = pNames->Count();
-    while ( nCount-- )
-        delete pNames->Remove(nCount);
-    delete pNames;
 }
 
 void XMLTextListAutoStylePool::RegisterName( const OUString& rName )
 {
-    OUString *pName = new OUString( rName );
-    if( !pNames->Insert( pName ) )
-        delete pName;
+    m_aNames.insert(rName);
 }
 
 sal_uInt32 XMLTextListAutoStylePool::Find( XMLTextListAutoStylePoolEntry_Impl* pEntry ) const
@@ -244,7 +224,7 @@ OUString XMLTextListAutoStylePool::Add(
     {
         XMLTextListAutoStylePoolEntry_Impl *pEntry =
             new XMLTextListAutoStylePoolEntry_Impl( pPool->Count(),
-                                               rNumRules, *pNames, sPrefix,
+                                               rNumRules, m_aNames, sPrefix,
                                                nName );
         pPool->Insert( pEntry );
         sName = pEntry->GetName();

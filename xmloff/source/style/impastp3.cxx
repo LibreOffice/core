@@ -123,7 +123,7 @@ sal_Bool SvXMLAutoStylePoolParentP_Impl::AddNamed( XMLFamilyData_Impl* pFamilyDa
         }
     }
 
-    if( !pFamilyData->mpNameList->Seek_Entry( &rName, 0 ) )
+    if(pFamilyData->mpNameList->find(rName) == pFamilyData->mpNameList->end())
     {
         SvXMLAutoStylePoolPropertiesP_Impl* pProperties =
                 new SvXMLAutoStylePoolPropertiesP_Impl( pFamilyData, rProperties );

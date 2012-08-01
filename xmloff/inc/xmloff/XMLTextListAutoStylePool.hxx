@@ -34,6 +34,7 @@
 #include "sal/types.h"
 #include <rtl/ustring.hxx>
 #include <com/sun/star/ucb/XAnyCompare.hpp>
+#include <set>
 
 namespace com { namespace sun { namespace star { namespace container {
     class XIndexReplace; } } } }
@@ -41,7 +42,7 @@ namespace rtl { class OUString; }
 
 
 class XMLTextListAutoStylePool_Impl;
-class XMLTextListAutoStylePoolNames_Impl;
+typedef std::set<rtl::OUString> XMLTextListAutoStylePoolNames_Impl;
 class XMLTextListAutoStylePoolEntry_Impl;
 class SvXMLExport;
 
@@ -52,7 +53,7 @@ class XMLOFF_DLLPUBLIC XMLTextListAutoStylePool
     ::rtl::OUString sPrefix;
 
     XMLTextListAutoStylePool_Impl *pPool;
-    XMLTextListAutoStylePoolNames_Impl *pNames;
+    XMLTextListAutoStylePoolNames_Impl m_aNames;
     sal_uInt32 nName;
 
     /** this is an optional NumRule compare component for applications where
