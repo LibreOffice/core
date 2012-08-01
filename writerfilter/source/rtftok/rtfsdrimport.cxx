@@ -37,6 +37,8 @@
 #include <filter/msfilter/escherex.hxx>
 #include <filter/msfilter/util.hxx>
 
+#include <dmapper/DomainMapper.hxx>
+#include "../dmapper/GraphicHelpers.hxx"
 #include <rtfsdrimport.hxx>
 
 using rtl::OString;
@@ -275,6 +277,14 @@ void RTFSdrImport::resolve(RTFShape& rShape)
             aViewBox.Width = i->second.toInt32();
         else if ( i->first == "geoBottom" )
             aViewBox.Height = i->second.toInt32();
+        else if ( i->first == "dhgt" )
+        {
+            writerfilter::dmapper::DomainMapper& rMapper = (writerfilter::dmapper::DomainMapper&)m_rImport.Mapper();
+            writerfilter::dmapper::GraphicZOrderHelper* pHelper = rMapper.graphicZOrderHelper();
+            sal_Int32 nZOrder = i->second.toInt32();
+            xPropertySet->setPropertyValue("ZOrder", uno::makeAny(pHelper->findZOrder(nZOrder)));
+            pHelper->addItem(xPropertySet, nZOrder);
+        }
         else
             SAL_INFO("writerfilter", OSL_THIS_FUNC << ": TODO handle shape property '" <<
                     OUStringToOString( i->first, RTL_TEXTENCODING_UTF8 ).getStr() << "':'" <<
