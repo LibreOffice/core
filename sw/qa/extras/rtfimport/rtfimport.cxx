@@ -101,6 +101,7 @@ public:
     void testFdo52066();
     void testFdo48033();
     void testFdo36089();
+    void testFdo49892();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -144,6 +145,7 @@ public:
     CPPUNIT_TEST(testFdo52066);
     CPPUNIT_TEST(testFdo48033);
     CPPUNIT_TEST(testFdo36089);
+    CPPUNIT_TEST(testFdo49892);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -860,6 +862,28 @@ void Test::testFdo36089()
 {
     load("fdo36089.rtf");
     CPPUNIT_ASSERT_EQUAL(sal_Int16(-50), getProperty<sal_Int16>(getRun(getParagraph(1), 2), "CharEscapement"));
+}
+
+void Test::testFdo49892()
+{
+    load("fdo49892.rtf");
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    for (int i = 0; i < xDraws->getCount(); ++i)
+    {
+        OUString aDescription = getProperty<OUString>(xDraws->getByIndex(i), "Description");
+        if (aDescription == "red")
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xDraws->getByIndex(i), "ZOrder"));
+        else if (aDescription == "green")
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty<sal_Int32>(xDraws->getByIndex(i), "ZOrder"));
+        else if (aDescription == "blue")
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(2), getProperty<sal_Int32>(xDraws->getByIndex(i), "ZOrder"));
+        else if (aDescription == "rect")
+        {
+            CPPUNIT_ASSERT_EQUAL(text::RelOrientation::PAGE_FRAME, getProperty<sal_Int16>(xDraws->getByIndex(i), "HoriOrientRelation"));
+            CPPUNIT_ASSERT_EQUAL(text::RelOrientation::PAGE_FRAME, getProperty<sal_Int16>(xDraws->getByIndex(i), "VertOrientRelation"));
+        }
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
