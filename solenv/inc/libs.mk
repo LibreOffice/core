@@ -300,7 +300,6 @@ USED_BOOTSTRP_LIBS= $(TOOLSLIB)
 USED_RCLIENT_LIBS =	$(VCLLIB) $(SOTLIB) $(TOOLSLIB) \
                     $(USED_UNO_LIBS)
 
-SABLOT3RDLIB=-lsablot
 APP3RDLIB=-lapp
 SAMPLE3RDLIB=-lsample
 HNJLIB*=-lhyphen
@@ -517,7 +516,6 @@ BFSO3LIB=bf_so.lib
 LEGACYSMGRLIB=ilegacy_binfilters.lib
 BFSVTOOLLIB=bf_svt.lib
 
-SABLOT3RDLIB= $(LIBPRE) sablot.lib
 APP3RDLIB= $(LIBPRE) app.lib
 SAMPLE3RDLIB= $(LIBPRE) sample.lib
 HNJLIB*=libhnj.lib
