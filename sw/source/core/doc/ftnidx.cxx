@@ -43,7 +43,7 @@ bool CompareSwFtnIdxs::operator()(SwTxtFtn* const& lhs, SwTxtFtn* const& rhs) co
 {
     sal_uLong nIdxLHS = _SwTxtFtn_GetIndex( lhs );
     sal_uLong nIdxRHS = _SwTxtFtn_GetIndex( rhs );
-    return ( nIdxLHS == nIdxRHS && lhs->GetStart() < rhs->GetStart() ) || nIdxLHS < nIdxRHS;
+    return ( nIdxLHS == nIdxRHS && *lhs->GetStart() < *rhs->GetStart() ) || nIdxLHS < nIdxRHS;
 }
 
 void SwFtnIdxs::UpdateFtn( const SwNodeIndex& rStt )

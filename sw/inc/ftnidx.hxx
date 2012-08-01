@@ -47,7 +47,7 @@ struct CompareSwFtnIdxs
     bool operator()(SwTxtFtn* const& lhs, SwTxtFtn* const& rhs) const;
 };
 
-class SwFtnIdxs : public o3tl::sorted_vector<SwTxtFtn*>
+class SwFtnIdxs : public o3tl::sorted_vector<SwTxtFtn*, CompareSwFtnIdxs>
 {
 public:
     SwFtnIdxs() {}
