@@ -321,6 +321,10 @@ void RTFSdrImport::resolve(RTFShape& rShape)
     {
         xShape->setPosition(awt::Point(rShape.nLeft, rShape.nTop));
         xShape->setSize(awt::Size(rShape.nRight - rShape.nLeft, rShape.nBottom - rShape.nTop));
+        if (rShape.nHoriOrientRelation != 0)
+            xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("HoriOrientRelation")), uno::makeAny(rShape.nHoriOrientRelation));
+        if (rShape.nVertOrientRelation != 0)
+            xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("VertOrientRelation")), uno::makeAny(rShape.nVertOrientRelation));
     }
 
     // Send it to dmapper
