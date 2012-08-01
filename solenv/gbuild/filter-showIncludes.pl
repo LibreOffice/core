@@ -43,6 +43,11 @@ while ( <STDIN> ) {
         chomp;
         s/\\/\//g;
 
+
+        # skip system headers, i.e. everything not under source or build dirs
+        if ( /$ENV{'SRCDIR'}|$ENV{'OUTDIR'}|$ENV{'WORKDIR'}/ )
+        {
+
         # X: -> /cygdrive/x/
         s/^(.):/\/cygdrive\/\l\1/;
 
@@ -51,6 +56,7 @@ while ( <STDIN> ) {
         if ( !defined $seen{$_} ) {
             $seen{$_} = 1;
             print $OUT " \\\n  $_";
+        }
         }
     }
     else {
