@@ -363,6 +363,10 @@ public interface Constant {
 
     public static final char M_IsItemEnabled = (M_WITH_RETURN | 59);
 
+    // For TreeListBox
+    public static final char M_Collapse = (M_WITH_RETURN | 60);
+    public static final char M_Expand = (M_WITH_RETURN | 61);
+
     // Symphony Special
     public static final char M_GetHelpText = (M_WITH_RETURN | 90);
     public static final char M_GetQuickHelpText = (M_WITH_RETURN | 91);

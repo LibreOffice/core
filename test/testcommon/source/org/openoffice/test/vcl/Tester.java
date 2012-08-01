@@ -40,7 +40,7 @@ public class Tester {
     static {
         try {
             robot = new Robot();
-            robot.setAutoDelay(5);
+            robot.setAutoDelay(10);
             robot.setAutoWaitForIdle(true);
         } catch (AWTException e) {
             e.printStackTrace();

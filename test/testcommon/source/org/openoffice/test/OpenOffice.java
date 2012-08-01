@@ -121,14 +121,14 @@ public class OpenOffice {
 
         versionProps = FileUtil.loadProperties(versionFile);
         addArgs(id);
-        addArgs("-nofirststartwizard", "-norestore", "-quickstart=no");
-        addRegistryModifications("<item oor:path=\"/org.openoffice.Office.Common/Misc\"><prop oor:name=\"UseSystemFileDialog\" oor:op=\"fuse\"><value>false</value></prop></item>",
-                "<item oor:path=\"/org.openoffice.Office.Common/Security/Scripting\"><prop oor:name=\"MacroSecurityLevel\" oor:op=\"fuse\"><value>0</value></prop></item>");
     }
 
     public static OpenOffice getDefault() {
         if (defaultInstance == null) {
             defaultInstance = new OpenOffice();
+            defaultInstance.addArgs("-nofirststartwizard", "-norestore", "-quickstart=no");
+            defaultInstance.addRegistryModifications("<item oor:path=\"/org.openoffice.Office.Common/Misc\"><prop oor:name=\"UseSystemFileDialog\" oor:op=\"fuse\"><value>false</value></prop></item>",
+                    "<item oor:path=\"/org.openoffice.Office.Common/Security/Scripting\"><prop oor:name=\"MacroSecurityLevel\" oor:op=\"fuse\"><value>0</value></prop></item>");
         }
 
         return defaultInstance;
@@ -230,6 +230,7 @@ public class OpenOffice {
     public void kill() {
         SystemUtil.killProcess(".*soffice.*" + id + ".*");
         process = null;
+        SystemUtil.sleep(1);
     }
 
     /**
