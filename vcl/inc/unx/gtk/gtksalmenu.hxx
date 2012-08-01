@@ -35,22 +35,29 @@
 #include <unx/salmenu.h>
 #include <gio/gio.h>
 
+#include <vector>
+
+class GtkSalMenuItem;
+class GtkSalMenuSection;
 
 class GtkSalMenu : public SalMenu
 {
 private:
+
     sal_Bool                mbMenuBar;
 
-    virtual void publishMenu();
+    virtual void publishMenu( GMenuModel* );
 
 public:
+    std::vector< GtkSalMenuSection* >       maSections;
+    std::vector< GtkSalMenuItem* >          maItems;
+    GtkSalMenuSection*                      mpCurrentSection;
+
     Menu*                   mpVCLMenu;
     const GtkSalFrame*      mpFrame;
-    GMenuModel*             mpParentMenuModel;
-    GMenuModel*             mpMenuModel;
-    GMenuModel*             mpSectionMenuModel;
     gchar*                  aDBusMenubarPath;
     GDBusConnection*        pSessionBus;
+    sal_Int32               mBusId;
     sal_Int32               mMenubarId;
 
     GtkSalMenu( sal_Bool bMenuBar );
@@ -70,6 +77,16 @@ public:
     virtual void SetAccelerator( unsigned nPos, SalMenuItem* pSalMenuItem, const KeyCode& rKeyCode, const rtl::OUString& rKeyName );
     virtual void GetSystemMenuData( SystemMenuData* pData );
     virtual void Freeze();
+};
+
+class GtkSalMenuItem;
+
+class GtkSalMenuSection
+{
+public:
+    std::vector< GtkSalMenuItem* >          maItems;
+
+    virtual ~GtkSalMenuSection();
 };
 
 class GtkSalMenuItem : public SalMenuItem
