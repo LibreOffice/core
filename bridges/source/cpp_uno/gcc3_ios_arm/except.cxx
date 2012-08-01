@@ -157,7 +157,9 @@ type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr ) SAL_THR
         {
             pair< t_rtti_map::iterator, bool > insertion(
                 m_rttis.insert( t_rtti_map::value_type( unoName, rtti ) ) );
-            OSL_ENSURE( insertion.second, "### inserting new rtti failed?!" );
+            SAL_WARN_IF( !insertion.second,
+                         "bridges",
+                         "inserting new rtti failed" );
         }
         else
         {
@@ -188,7 +190,9 @@ type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr ) SAL_THR
 
                 pair< t_rtti_map::iterator, bool > insertion(
                     m_generatedRttis.insert( t_rtti_map::value_type( unoName, rtti ) ) );
-                OSL_ENSURE( insertion.second, "### inserting new generated rtti failed?!" );
+                SAL_WARN_IF( !insertion.second,
+                             "bridges",
+                             "inserting new generated rtti failed" );
             }
             else // taking already generated rtti
             {
