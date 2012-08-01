@@ -200,6 +200,11 @@ sal_Int16 SAL_CALL KDE4FilePicker::execute()
         mutexrelease = Application::ReleaseSolarMutex();
     //block and wait for user input
     int result = _dialog->exec();
+    // HACK: KFileDialog uses KConfig("kdeglobals") for saving some settings
+    // (such as the auto-extension flag), but that doesn't update KGlobal::config()
+    // (which is probably a KDE bug), so force reading the new configuration,
+    // otherwise the next opening of the dialog would use the old settings.
+    KGlobal::config()->reparseConfiguration();
     if( !qApp->clipboard()->property( "useEventLoopWhenWaiting" ).toBool())
         Application::AcquireSolarMutex( mutexrelease );
     if( result == KFileDialog::Accepted)
