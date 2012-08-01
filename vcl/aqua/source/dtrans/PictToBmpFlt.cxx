@@ -81,6 +81,21 @@ bool PICTtoBMP(com::sun::star::uno::Sequence<sal_Int8>& aPict,
   return result;
 }
 
+#if MACOSX_SDK_VERSION >= 1070
+
+// This whole thing needs to be rewritten I guess. Or does this code
+// even get invoked on current OSes? Given that KillPicture() was
+// deprecated already in 10.4, back when somebody was actually working
+// on this code, hopefully knowing what he/she was doing, did he/she
+// really not pay attention and notice that this stuff is going to go
+// away?
+
+extern "C" {
+extern void KillPicture(PicHandle myPicture);
+}
+
+#endif
+
 bool BMPtoPICT(com::sun::star::uno::Sequence<sal_Int8>& aBmp,
                com::sun::star::uno::Sequence<sal_Int8>& aPict)
 {
@@ -118,22 +133,11 @@ bool BMPtoPICT(com::sun::star::uno::Sequence<sal_Int8>& aBmp,
       rtl_copyMemory(aPict.getArray(), ((sal_Int8*)*hPict), sz);
       HUnlock((Handle)hPict);
 
-#if MACOSX_SDK_VERSION < 1070
       // Release the data associated with the picture
       // Note: This function is deprecated in Mac OS X
       // 10.4.
 
-      // How nice. This whole thing needs to be rewritten I guess. Or
-      // does this code even get invoked on current OSes? Given that
-      // KillPicture() was deprecated already in 10.4, back when
-      // somebody was actually working on this code, hopefulluy
-      // knowing what he/she was doing, was it really not known that
-      // the stuff used here is going to go away?
-
       KillPicture(hPict);
-#else
-      SAL_WARN("vcl", "Here we used to call the deprecated KillPicture(), no idea what to do, so leaking...");
-#endif
 
       result = true;
     }
