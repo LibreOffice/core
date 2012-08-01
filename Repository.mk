@@ -639,6 +639,7 @@ $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
     codemaker \
     codemaker_cpp \
     codemaker_java \
+    cosv \
     dtobj \
     headless \
     libeay32 \

@@ -1,13 +1,3 @@
 cs	cosv	: sal soltools NULL
 cs	cosv								usr1	-	all	cs_mkout NULL
-cs	cosv\prj							get		-	all	cs_prj NULL
-cs	cosv\inc							get		-	all	cs_inc NULL
-cs	cosv\inc\cosv		  				get		-	all	cs_inc_cosv NULL
-cs	cosv\inc\cosv\template				get		-	all	cs_inc_templ NULL
-cs	cosv\source							get		-	all	cs_src NULL
-cs	cosv\source\inc						get		-	all	cs_src_inc NULL
-cs	cosv\source\service					nmake	-	all	cs_serv NULL
-cs	cosv\source\storage					nmake	-	all	cs_store NULL
-cs	cosv\source\strings					nmake	-	all	cs_string NULL
-cs	cosv\source\comphelp				nmake	-	all	cs_badcast NULL
-cs	cosv\util						    nmake	-	all	cs_util cs_serv cs_store cs_string cs_badcast NULL
+cs	cosv\prj							nmake		-	all	cs_prj NULL
