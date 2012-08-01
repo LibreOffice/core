@@ -30,6 +30,11 @@
                     <value>0</value>
                 </prop>
                 <prop oor:name="CheckInterval" oor:type="xs:long" oor:op="replace">
+                    <!--
+                        Every Day   =   86400
+                        Every Week  =  604800
+                        Every Month = 2592000
+                    -->
                     <value>604800</value>
                 </prop>
                 <prop oor:name="DownloadDestination" oor:type="xs:string" oor:op="replace">
