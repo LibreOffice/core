@@ -2308,7 +2308,7 @@ SvLBoxEntry* SvTreeListBox::GetLastEntryInView() const
         {
           Point aPos( GetEntryPosition(pNext) );
           const Size& rSize = pImp->GetOutputSize();
-          if( aPos.Y() < 0 || aPos.Y() >= rSize.Height() )
+          if( aPos.Y() < 0 || aPos.Y() + GetEntryHeight() >= rSize.Height() )
               break;
           else
               pEntry = pNext;
