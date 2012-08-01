@@ -77,7 +77,7 @@ void EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( EnhancedCustomShape
     rParameter.Value <<= nNewValue;
 }
 
-OUString EnhancedCustomShape2d::GetEquation( const sal_uInt16 nFlags, sal_Int16 nP1, sal_Int16 nP2, sal_Int16 nP3 )
+OUString EnhancedCustomShape2d::GetEquation( const sal_uInt16 nFlags, sal_Int32 nP1, sal_Int32 nP2, sal_Int32 nP3 )
 {
     OUString aEquation;
     bool b1Special = ( nFlags & 0x2000 ) != 0;
@@ -321,7 +321,7 @@ OUString EnhancedCustomShape2d::GetEquation( const sal_uInt16 nFlags, sal_Int16 
     return aEquation;
 }
 
-void EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( OUString& rParameter, const sal_Int16 nPara, const bool bIsSpecialValue )
+void EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( OUString& rParameter, const sal_Int32 nPara, const bool bIsSpecialValue )
 {
     if ( bIsSpecialValue )
     {

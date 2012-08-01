@@ -209,9 +209,9 @@ class EnhancedCustomShape2d : public SfxItemSet
         double                      GetEquationValueAsDouble( const sal_Int32 nIndex ) const;
         sal_Int32                   GetAdjustValueAsInteger( const sal_Int32 nIndex, const sal_Int32 nDefault = 0 ) const;
 
-        SVX_DLLPUBLIC static OUString      GetEquation( const sal_uInt16 nFlags, sal_Int16 nPara1, sal_Int16 nPara2, sal_Int16 nPara3 );
+        SVX_DLLPUBLIC static OUString      GetEquation( const sal_uInt16 nFlags, sal_Int32 nPara1, sal_Int32 nPara2, sal_Int32 nPara3 );
 
-        static void                 AppendEnhancedCustomShapeEquationParameter( OUString& rParameter, const sal_Int16 nPara, const bool bIsSpecialValue );
+        static void                 AppendEnhancedCustomShapeEquationParameter( OUString& rParameter, const sal_Int32 nPara, const bool bIsSpecialValue );
 
         static void                 SetEnhancedCustomShapeEquationParameter( com::sun::star::drawing::EnhancedCustomShapeParameter&
                                         rParameter, const sal_Int16 nPara, const sal_Bool bIsSpecialValue );

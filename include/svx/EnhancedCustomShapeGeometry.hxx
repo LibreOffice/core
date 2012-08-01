@@ -31,7 +31,7 @@ struct SvxMSDffVertPair
 struct SvxMSDffCalculationData
 {
     sal_uInt16  nFlags;
-    sal_Int16   nVal[ 3 ];
+    sal_Int32   nVal[ 3 ];
 };
 struct SvxMSDffTextRectangles
 {
