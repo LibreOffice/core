@@ -186,19 +186,22 @@ sal_Bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                    // associated with the clicked object is used only
 
                    // additionally you can also select a macro in Excel for a grouped
-                   // objects and this results in the macro being set for the elements
-                   // in the group and no macro is exported for the group
-
+                   // objects and this *usually* results in the macro being set
+                   // for the elements in the group and no macro is exported
+                   // for the group itself ( this however is not always true )
                    // if a macro and hlink are defined favour the hlink
-
                    // If a group object has no hyperlink use the hyperlink of the
                    // object clicked
 
                    if ( pObj->IsGroupObject() )
                    {
-                       SdrObject* pHit = NULL;
-                       if ( pView->PickObj(aMDPos, pView->getHitTolLog(), pHit, pPV, SDRSEARCH_DEEP ) )
-                           pObj = pHit;
+                       ScMacroInfo* pTmpInfo = ScDrawLayer::GetMacroInfo( pObj );
+                       if ( !pTmpInfo || pTmpInfo->GetMacro().isEmpty() )
+                       {
+                           SdrObject* pHit = NULL;
+                           if ( pView->PickObj(aMDPos, pView->getHitTolLog(), pHit, pPV, SDRSEARCH_DEEP ) )
+                               pObj = pHit;
+                       }
                    }
 
                    ScMacroInfo* pInfo = ScDrawLayer::GetMacroInfo( pObj, true );

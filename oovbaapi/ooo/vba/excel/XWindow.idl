@@ -51,6 +51,7 @@ interface XWindow : com::sun::star::uno::XInterface
     [attribute, readonly] XRange VisibleRange;
     [attribute] any WindowState;
     [attribute] any Zoom;
+    [attribute] double TabRatio;
     any SelectedSheets( [in] any Index );
     void SmallScroll( [in] any Down, [in] any Up, [in] any ToRight, [in] any ToLeft );
     void LargeScroll( [in] any Down, [in] any Up, [in] any ToRight, [in] any ToLeft );

@@ -255,14 +255,14 @@ public:
     void            SetTabBarWidth( long nNewWidth );
     /** Sets a relative tab bar width.
         @param fRelTabBarWidth  Tab bar width relative to frame window width (0.0 ... 1.0). */
-    void            SetRelTabBarWidth( double fRelTabBarWidth );
+    SC_DLLPUBLIC void            SetRelTabBarWidth( double fRelTabBarWidth );
     /** Sets a relative tab bar width. Tab bar is resized again in next DoResize().
         @param fRelTabBarWidth  Tab bar width relative to frame window width (0.0 ... 1.0). */
     void            SetPendingRelTabBarWidth( double fRelTabBarWidth );
     /** Returns the current tab bar width in pixels. */
     long            GetTabBarWidth() const;
     /** Returns the current tab bar width relative to the frame window width (0.0 ... 1.0). */
-    double          GetRelTabBarWidth() const;
+    SC_DLLPUBLIC double          GetRelTabBarWidth() const;
     /** Returns the pending tab bar width relative to the frame window width (0.0 ... 1.0). */
     double          GetPendingRelTabBarWidth() const;
 
