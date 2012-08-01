@@ -2318,6 +2318,12 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         case RTF_FACINGP:
                 m_aSettingsTableSprms.set(NS_ooxml::LN_CT_Settings_evenAndOddHeaders, RTFValue::Pointer_t(new RTFValue(1)));
                 break;
+        case RTF_SHPBXPAGE:
+                m_aStates.top().aShape.nHoriOrientRelation = text::RelOrientation::PAGE_FRAME;
+                break;
+        case RTF_SHPBYPAGE:
+                m_aStates.top().aShape.nVertOrientRelation = text::RelOrientation::PAGE_FRAME;
+                break;
         default:
             SAL_INFO("writerfilter", OSL_THIS_FUNC << ": TODO handle flag '" << lcl_RtfToString(nKeyword) << "'");
             aSkip.setParsed(false);
@@ -3986,6 +3992,16 @@ RTFPicture::RTFPicture()
     nCropR(0),
     eWMetafile(0),
     nStyle(BMPSTYLE_NONE)
+{
+}
+
+RTFShape::RTFShape()
+    : nLeft(0),
+    nTop(0),
+    nRight(0),
+    nBottom(0),
+    nHoriOrientRelation(0),
+    nVertOrientRelation(0)
 {
 }
 

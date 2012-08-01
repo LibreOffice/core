@@ -249,11 +249,14 @@ namespace writerfilter {
         class RTFShape
         {
             public:
+                RTFShape();
                 std::vector< std::pair<rtl::OUString, rtl::OUString> > aProperties;
                 int nLeft;
                 int nTop;
                 int nRight;
                 int nBottom;
+                sal_Int16 nHoriOrientRelation;
+                sal_Int16 nVertOrientRelation;
         };
 
         /// Stores the properties of a drawing object.
