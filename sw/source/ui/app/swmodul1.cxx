@@ -233,6 +233,8 @@ void SwModule::ApplyUsrPref(const SwViewOption &rUsrPref, SwView* pActView,
     // zum Schluss wird das Idle-Flag wieder gesetzt
     // #42510#
     pPref->SetIdle(sal_True);
+
+    delete pViewOpt;
 }
 /* -----------------------------28.09.00 12:36--------------------------------
 
