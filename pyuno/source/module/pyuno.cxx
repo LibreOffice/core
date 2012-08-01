@@ -639,8 +639,7 @@ static int PyUNO_cmp( PyObject *self, PyObject *that )
 
 static PyTypeObject PyUNOType =
 {
-    PyObject_HEAD_INIT (&PyType_Type)
-    0,
+    PyVarObject_HEAD_INIT(&PyType_Type, 0)
     const_cast< char * >("pyuno"),
     sizeof (PyUNO),
     0,

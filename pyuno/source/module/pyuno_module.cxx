@@ -486,9 +486,18 @@ static PyObject *isInterface( PyObject *, PyObject *args )
     {
         PyObject *obj = PyTuple_GetItem( args, 0 );
         Runtime r;
+#if PY_MAJOR_VERSION >= 3
+        return PyLong_FromLong( isInterfaceClass( r, obj ) );
+#else
         return PyInt_FromLong( isInterfaceClass( r, obj ) );
+
+#endif
     }
+#if PY_MAJOR_VERSION >= 3
+    return PyLong_FromLong( 0 );
+#else
     return PyInt_FromLong( 0 );
+#endif
 }
 
 static PyObject * generateUuid( PyObject *, PyObject * )

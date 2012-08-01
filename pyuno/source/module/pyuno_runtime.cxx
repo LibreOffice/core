@@ -65,8 +65,7 @@ namespace pyuno
 
 static PyTypeObject RuntimeImpl_Type =
 {
-    PyObject_HEAD_INIT (&PyType_Type)
-    0,
+    PyVarObject_HEAD_INIT(&PyType_Type, 0)
     const_cast< char * >("pyuno_runtime"),
     sizeof (RuntimeImpl),
     0,
@@ -438,7 +437,11 @@ PyRef Runtime::any2PyObject (const Any &a ) const
     {
         sal_Int32 l = 0;
         a >>= l;
+#if PY_MAJOR_VERSION >= 3
+        return PyRef( PyLong_FromLong (l), SAL_NO_ACQUIRE );
+#else
         return PyRef( PyInt_FromLong (l), SAL_NO_ACQUIRE );
+#endif
     }
     case typelib_TypeClass_UNSIGNED_LONG:
     {

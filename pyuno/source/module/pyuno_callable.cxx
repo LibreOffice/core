@@ -191,8 +191,7 @@ PyObject* PyUNO_callable_call (PyObject* self, PyObject* args, PyObject*)
 
 static PyTypeObject PyUNO_callable_Type =
 {
-    PyObject_HEAD_INIT (&PyType_Type)
-    0,
+    PyVarObject_HEAD_INIT(&PyType_Type, 0)
     const_cast< char * >("PyUNO_callable"),
     sizeof (PyUNO_callable),
     0,
