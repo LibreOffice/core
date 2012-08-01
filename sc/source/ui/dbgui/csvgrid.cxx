@@ -806,7 +806,8 @@ void ScCsvGrid::ImplSetTextLineFix( sal_Int32 nLine, const rtl::OUString& rTextL
     for( sal_uInt32 nColIx = 0; (nColIx < nColCount) && (nStrIx < nStrLen); ++nColIx )
     {
         sal_Int32 nColWidth = GetColumnWidth( nColIx );
-        rStrVec.push_back( rTextLine.copy( nStrIx, Max( nColWidth, static_cast<sal_Int32>(CSV_MAXSTRLEN) ) ) );
+        sal_Int32 nLen = std::min( std::min( nColWidth, static_cast<sal_Int32>(CSV_MAXSTRLEN) ), nStrLen - nStrIx);
+        rStrVec.push_back( rTextLine.copy( nStrIx, nLen ) );
         nStrIx = nStrIx + nColWidth;
     }
     InvalidateGfx();
