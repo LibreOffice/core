@@ -236,8 +236,9 @@ if (ENABLE_MEDIAWIKI == YES)
 if (SYSTEM_PYTHON != YES)
     MD5 = c57477edd6d18bd9eeca2f21add73919
     name = Python-2.7.3.tar.bz2
-    URL1 = $(OOO_EXTRAS)$(MD5)-$(name)
-    URL2 = $(SVN_TRUNK)$(MD5)-$(name)
+    URL1 = http://www.python.org/ftp/python/2.7.3/Python-2.7.3.tar.bz2
+    URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
+    URL3 = http://svn.apache.org/repos/asf/!svn/bc/1366182/incubator/ooo/trunk/ext_sources/$(MD5)-$(name)
 
 if (GUI!=UNX || SYSTEM_ZLIB!=YES)
     MD5 = c735eab2d659a96e5a594c9e8541ad63
