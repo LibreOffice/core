@@ -399,19 +399,19 @@ namespace drawinglayer
                         fPolyWidth, fPolyHeight,
                         aPolyRange.getMinX(), aPolyRange.getMinY()));
 
-                // create unit transform from unit vector [0.0 .. 1.0] along the X-Axis to given
-                // gradient vector defined by Start,End
-                const basegfx::B2DVector aVector(getEnd() - getStart());
+                // get start, end in object coordinates
+                const basegfx::B2DPoint aStart(aObjectTransform * getStart());
+                const basegfx::B2DPoint aEnd(aObjectTransform * getEnd());
+
+                // create transform from unit vector [0.0 .. 1.0] along the X-Axis to given
+                // gradient vector in object coordinates defined by Start, End
+                const basegfx::B2DVector aVector(aEnd - aStart);
                 const double fVectorLength(aVector.getLength());
-                basegfx::B2DHomMatrix aUnitGradientToGradient;
+                basegfx::B2DHomMatrix aUnitGradientToObject;
 
-                aUnitGradientToGradient.scale(fVectorLength, 1.0);
-                aUnitGradientToGradient.rotate(atan2(aVector.getY(), aVector.getX()));
-                aUnitGradientToGradient.translate(getStart().getX(), getStart().getY());
-
-                // create full transform from unit gradient coordinates to object coordinates
-                // including the SvgGradient transformation
-                basegfx::B2DHomMatrix aUnitGradientToObject(aObjectTransform * aUnitGradientToGradient);
+                aUnitGradientToObject.scale(fVectorLength, 1.0);
+                aUnitGradientToObject.rotate(atan2(aVector.getY(), aVector.getX()));
+                aUnitGradientToObject.translate(aStart.getX(), aStart.getY());
 
                 // create inverse from it
                 basegfx::B2DHomMatrix aObjectToUnitGradient(aUnitGradientToObject);
