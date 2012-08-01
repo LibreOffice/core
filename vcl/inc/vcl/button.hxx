@@ -292,7 +292,11 @@ private:
     sal_Bool            mbRadioCheck;
     sal_Bool            mbStateChanged;
     Link            maToggleHdl;
-
+    // when mbLegacyNoTextAlign is set then the old behaviour where
+    // the WB_LEFT, WB_RIGHT & WB_CENTER affect the image placement
+    // occurs, otherwise the image ( radiobutton circle ) is placed
+    // to the left or right ( depending on RTL or LTR settings )
+    bool            mbLegacyNoTextAlign;
     SAL_DLLPRIVATE void     ImplInitRadioButtonData();
     SAL_DLLPRIVATE WinBits  ImplInitStyle( const Window* pPrevWindow, WinBits nStyle );
     SAL_DLLPRIVATE void     ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground );
@@ -409,7 +413,11 @@ private:
     TriState        meSaveValue;
     sal_Bool            mbTriState;
     Link            maToggleHdl;
-
+    // when mbLegacyNoTextAlign is set then the old behaviour where
+    // the WB_LEFT, WB_RIGHT & WB_CENTER affect the image placement
+    // occurs, otherwise the image ( checkbox box ) is placed
+    // to the left or right ( depending on RTL or LTR settings )
+    bool            mbLegacyNoTextAlign;
     SAL_DLLPRIVATE void         ImplInitCheckBoxData();
     SAL_DLLPRIVATE WinBits      ImplInitStyle( const Window* pPrevWindow, WinBits nStyle );
     SAL_DLLPRIVATE void         ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground );
@@ -481,6 +489,8 @@ public:
 
     void            SetToggleHdl( const Link& rLink ) { maToggleHdl = rLink; }
     const Link&     GetToggleHdl() const { return maToggleHdl; }
+    bool            IsLegacyNoTextAlign() { return mbLegacyNoTextAlign; }
+    void            SetLegacyNoTextAlign( bool bVal ) { mbLegacyNoTextAlign = bVal; }
 };
 
 inline void CheckBox::Check( sal_Bool bCheck )
