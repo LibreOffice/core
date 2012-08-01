@@ -76,17 +76,6 @@ public:
                 { pWindow = pWin; }
 };
 
-class SfxFrameWindowFactory
-{
-    typedef SfxFrameWindow* (*FactoryFunc)( SfxFrame* pParent, const String& rName );
-    FactoryFunc pFunc;
-    String aName;
-public:
-    SfxFrameWindowFactory( FactoryFunc pFuncP, String aNameP );
-    String GetURLWildCard() { return aName; }
-    FactoryFunc GetFactory() { return pFunc; }
-};
-
 typedef sal_uIntPtr (*SfxDetectFilter)( SfxMedium& rMedium, const SfxFilter **, SfxFilterFlags nMust, SfxFilterFlags nDont );
 
 class SFX2_DLLPUBLIC SfxFilterContainer

@@ -65,7 +65,6 @@
 #include "lwpobjfactory.hxx"
 #include "lwpdefs.hxx"
 #include "lwpdoc.hxx"
-#include "lwptemp.hxx"
 #include "lwpstory.hxx"
 #include "lwplayout.hxx"
 #include "lwppara.hxx"

@@ -136,21 +136,6 @@ struct StringList_Impl : private Resource
 
 };
 
-class SfxBoolResetter
-{
-    sal_Bool&               _rVar;
-    sal_Bool                _bOld;
-
-public:
-                        SfxBoolResetter( sal_Bool &rVar )
-                        :   _rVar( rVar ),
-                            _bOld( rVar )
-                        {}
-
-                        ~SfxBoolResetter()
-                        { _rVar = _bOld; }
-};
-
 #define GPF() *(int*)0 = 0
 
 #endif // #ifndef _SFX_SFXTYPES_HXX

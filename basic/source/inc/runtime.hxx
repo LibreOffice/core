@@ -39,19 +39,6 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::container;
 
-
-namespace basicEncoder
-{
-
-// TODO: Use exported functionality (code is copied from deamons2/ucb)
-class AsciiEncoder
-{
-public:
-    static ::rtl::OUString decodeUnoUrlParamValue(const rtl::OUString & rSource);
-};
-
-}
-
 class SbiInstance;                  // active StarBASIC process
 class SbiRuntime;                   // active StarBASIC procedure instance
 

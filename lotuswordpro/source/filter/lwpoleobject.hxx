@@ -127,57 +127,6 @@ private:
     Rectangle m_SizeRect;
 };
 
-/**
-*  Added by  for SODC_2667,03/20/2006
-*  Read the OLE Object stream and get the info of the OLE picture
-*/
-#include <tools/stream.hxx>
-#include <vcl/gdimtf.hxx>
-#include <vcl/bitmap.hxx>
-#include <vcl/outdev.hxx>
-class LwpOlePres
-{
-    sal_uLong   nFormat;
-    sal_uInt16  nAspect;
-    Bitmap *        pBmp;
-    GDIMetaFile *   pMtf;
-
-    sal_uInt32  nAdvFlags;
-    sal_Int32   nJobLen;
-    sal_uInt8 * pJob;
-    Size    aSize;      // Groesse in 100TH_MM
-public:
-    LwpOlePres( sal_uLong nF )
-        : nFormat( nF )
-        , pBmp( NULL )
-        , pMtf( NULL )
-        , nAdvFlags( 0x2 ) // in Dokument gefunden
-        , nJobLen( 0 )
-        , pJob( NULL )
-    {}
-    ~LwpOlePres()
-    {
-        delete [] pJob;
-        delete pBmp;
-        delete pMtf;
-    }
-    void    SetMtf( const GDIMetaFile & rMtf )
-    {
-        if( pMtf )
-            delete pMtf;
-        pMtf = new GDIMetaFile( rMtf );
-    }
-    Bitmap *GetBitmap() const { return pBmp; }
-    GDIMetaFile *GetMetaFile() const { return pMtf; }
-    sal_uLong   GetFormat() const { return nFormat; }
-    void    SetAspect( sal_uInt16 nAsp ) { nAspect = nAsp; }
-    sal_uLong   GetAdviseFlags() const { return nAdvFlags; }
-    void    SetAdviseFlags( sal_uLong nAdv ) { nAdvFlags = nAdv; }
-    void    SetSize( const Size & rSize ) { aSize = rSize; }
-    Size GetSize() const { return aSize; }
-};
-
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

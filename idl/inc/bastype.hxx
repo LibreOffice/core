@@ -50,57 +50,6 @@ public:
 };
 
 
-class SvINT16
-{
-    short   nVal;
-public:
-                SvINT16() { nVal = 0; }
-                SvINT16( short n ) : nVal( n ) {}
-    SvINT16 &   operator = ( short n ) { nVal = n; return *this; }
-
-    operator    short &() { return nVal; }
-
-    friend SvStream& operator << (SvStream & rStm, const SvINT16 & r )
-                { SvUINT32::Write( rStm, (sal_uInt32)r.nVal ); return rStm; }
-    friend SvStream& operator >> (SvStream & rStm, SvINT16 & r )
-                { r.nVal = (short)SvUINT32::Read( rStm ); return rStm; }
-};
-
-
-class SvUINT16
-{
-    sal_uInt16  nVal;
-public:
-                SvUINT16() { nVal = 0; }
-                SvUINT16( sal_uInt16 n ) : nVal( n ) {}
-    SvUINT16 &  operator = ( sal_uInt16 n ) { nVal = n; return *this; }
-
-    operator    sal_uInt16 &() { return nVal; }
-
-    friend SvStream& operator << (SvStream & rStm, const SvUINT16 & r )
-                { SvUINT32::Write( rStm, (sal_uInt32)r.nVal ); return rStm; }
-    friend SvStream& operator >> (SvStream & rStm, SvUINT16 & r )
-                { r.nVal = (sal_uInt16)SvUINT32::Read( rStm ); return rStm; }
-};
-
-
-class SvINT32
-{
-    sal_Int32   nVal;
-public:
-                SvINT32() { nVal = 0; }
-                SvINT32( sal_Int32 n ) : nVal( n ) {}
-    SvINT32 &   operator = ( sal_Int32 n ) { nVal = n; return *this; }
-
-    operator    sal_Int32 &() { return nVal; }
-
-    friend SvStream& operator << (SvStream & rStm, const SvINT32 & r )
-                { SvUINT32::Write( rStm, (sal_uInt32)r.nVal ); return rStm; }
-    friend SvStream& operator >> (SvStream & rStm, SvINT32 & r )
-                { r.nVal = (sal_Int32)SvUINT32::Read( rStm ); return rStm; }
-};
-
-
 class Svint
 {
     int     nVal;

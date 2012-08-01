@@ -75,20 +75,6 @@ public:
 };
 
 /*************************************************************************
- *                          class DbgColor
- *************************************************************************/
-
-class DbgColor
-{
-    Font *pFnt;
-    Color aColor;
-public:
-        inline DbgColor( Font *pFont, const sal_Bool bOn = sal_True,
-                         const ColorData eColor = COL_BLUE );
-        inline ~DbgColor();
-};
-
-/*************************************************************************
  *                          class DbgBrush
  *************************************************************************/
 
@@ -121,23 +107,6 @@ inline SwDbgOut::SwDbgOut( OutputDevice* pOutDev, const sal_Bool bOn )
                :pOut( bOn ? pOutDev : 0 )
 { }
 
-
-inline DbgColor::DbgColor( Font *pFont, const sal_Bool bOn,
-                 const ColorData eColor )
-    :pFnt( bOn ? pFont : 0 )
-{
-    if( pFnt )
-    {
-        aColor = pFnt->GetColor();
-        pFnt->SetColor( Color( eColor ) );
-    }
-}
-
-inline DbgColor::~DbgColor()
-{
-    if( pFnt )
-        pFnt->SetColor( aColor );
-}
 
 inline DbgBackColor::DbgBackColor( OutputDevice* pOutDev, const sal_Bool bOn,
                            ColorData eColor )

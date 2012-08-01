@@ -78,20 +78,6 @@ struct ScPrintHFParam
 };
 
 
-// "Ersatz" fuer SV-JobSetup:
-
-class ScJobSetup
-{
-public:
-    ScJobSetup( SfxPrinter* pPrinter );
-
-    Size        aUserSize;
-    MapMode     aUserMapMode;
-    Paper   ePaper;
-    Orientation eOrientation;
-    sal_uInt16      nPaperBin;
-};
-
 struct ScPrintState                         //  Variablen aus ScPrintFunc retten
 {
     SCTAB   nPrintTab;
