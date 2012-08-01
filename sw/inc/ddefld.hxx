@@ -106,8 +106,8 @@ public:
     SwDDEField(SwDDEFieldType*);
     ~SwDDEField();
 
-    // Get parameter via types.
-    // Name cannot be changed.
+    /** Get parameter via types.
+     Name cannot be changed. */
     virtual const rtl::OUString& GetPar1() const;
 
     // Command

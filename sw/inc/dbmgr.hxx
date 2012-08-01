@@ -86,13 +86,13 @@ class SwMailMergeConfigItem;
 
 enum DBMgrOptions
 {
-    DBMGR_MERGE,             // Data records in fields.
-    DBMGR_INSERT,            // Data records in text.
-    DBMGR_MERGE_MAILMERGE,   // Print mail merge.
-    DBMGR_MERGE_MAILING,     // Send mail merge as email.
-    DBMGR_MERGE_MAILFILES,   // Save mail merg as files.
-    DBMGR_MERGE_DOCUMENTS,   // Print merged documents.
-    DBMGR_MERGE_SINGLE_FILE  // Save merge as single file.
+    DBMGR_MERGE,             ///< Data records in fields.
+    DBMGR_INSERT,            ///< Data records in text.
+    DBMGR_MERGE_MAILMERGE,   ///< Print mail merge.
+    DBMGR_MERGE_MAILING,     ///< Send mail merge as email.
+    DBMGR_MERGE_MAILFILES,   ///< Save mail merg as files.
+    DBMGR_MERGE_DOCUMENTS,   ///< Print merged documents.
+    DBMGR_MERGE_SINGLE_FILE  ///< Save merge as single file.
 };
 
 // -----------------------------------------------------------------------
@@ -151,7 +151,7 @@ struct SwMergeDescriptor
     sal_uInt16                                              nMergeType;
     SwWrtShell&                                         rSh;
     const ::svx::ODataAccessDescriptor&                 rDescriptor;
-    String                                              sSaveToFilter; //export filter to save resulting files
+    String                                              sSaveToFilter; ///< export filter to save resulting files
     String                                              sSaveToFilterOptions;
     com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aSaveToFilterData;
 
@@ -197,21 +197,21 @@ friend class SwConnectionDisposedListener_Impl;
 
     static SwDbtoolsClient* pDbtoolsClient;
 
-    String              sEMailAddrFld;      // Mailing: Column name of email address.
-    String              sSubject;           // Mailing: Subject
-    String              sAttached;          // Mailing: Attached Files.
-    sal_uInt16              nMergeType;
-    sal_Bool                bInitDBFields : 1;
-    sal_Bool                bSingleJobs : 1;    // Printing job when called from Basic.
-    sal_Bool                bCancel : 1;        // Mail merge save canceled.
+    String              sEMailAddrFld;      ///< Mailing: Column name of email address.
+    String              sSubject;           ///< Mailing: Subject
+    String              sAttached;          ///< Mailing: Attached Files.
+    sal_uInt16          nMergeType;
+    sal_Bool            bInitDBFields : 1;
+    sal_Bool            bSingleJobs : 1;    ///< Printing job when called from Basic.
+    sal_Bool            bCancel : 1;        ///< Mail merge save canceled.
 
-    sal_Bool                bInMerge    : 1;    //merge process active
-    sal_Bool                bMergeSilent : 1;   // suppress display of dialogs/boxes (used when called over API)
-    sal_Bool                bMergeLock : 1;     // prevent update of database fields while document is
-                                            // actually printed at the ViewShell
+    sal_Bool            bInMerge    : 1;    ///< merge process active
+    sal_Bool            bMergeSilent : 1;   ///< suppress display of dialogs/boxes (used when called over API)
+    sal_Bool            bMergeLock : 1;     /**< prevent update of database fields while document is
+                                             actually printed at the ViewShell */
     SwDSParamArr        aDataSourceParams;
     SwNewDBMgr_Impl*    pImpl;
-    const SwXMailMerge* pMergeEvtSrc;   // != 0 if mail merge events are to be send
+    const SwXMailMerge* pMergeEvtSrc;   ///< != 0 if mail merge events are to be send
 
     SW_DLLPRIVATE SwDSParam*          FindDSData(const SwDBData& rData, sal_Bool bCreate);
     SW_DLLPRIVATE SwDSParam*          FindDSConnection(const ::rtl::OUString& rSource, sal_Bool bCreate);
@@ -219,13 +219,13 @@ friend class SwConnectionDisposedListener_Impl;
 
     SW_DLLPRIVATE DECL_LINK( PrtCancelHdl, Button * );
 
-    // Insert data record as text into document.
+    /// Insert data record as text into document.
     SW_DLLPRIVATE void ImportFromConnection( SwWrtShell* pSh);
 
-    // Insert a single data record as text into document.
+    /// Insert a single data record as text into document.
     SW_DLLPRIVATE void ImportDBEntry(SwWrtShell* pSh);
 
-    // merge to file _and_ merge to e-Mail
+    /// merge to file _and_ merge to e-Mail
     SW_DLLPRIVATE sal_Bool          MergeMailFiles(SwWrtShell* pSh,
                                         const SwMergeDescriptor& rMergeDescriptor );
     SW_DLLPRIVATE sal_Bool          ToNextRecord(SwDSParam* pParam);
@@ -234,39 +234,39 @@ public:
     SwNewDBMgr();
     ~SwNewDBMgr();
 
-    // Current merge type. Cf. DBMgrOptions-enum.
+    /// Current merge type. Cf. DBMgrOptions-enum.
     inline sal_uInt16   GetMergeType() const            { return nMergeType; }
     inline void     SetMergeType( sal_uInt16 nTyp )     { nMergeType = nTyp; }
 
-    // MailMergeEvent source
+    /// MailMergeEvent source
     const SwXMailMerge *    GetMailMergeEvtSrc() const  { return pMergeEvtSrc; }
     void SetMailMergeEvtSrc( const SwXMailMerge *pSrc ) { pMergeEvtSrc = pSrc; }
 
     inline sal_Bool     IsMergeSilent() const           { return bMergeSilent != 0; }
     inline void     SetMergeSilent( sal_Bool bVal )     { bMergeSilent = bVal; }
 
-    // Merging of data records into fields.
+    /// Merging of data records into fields.
     sal_Bool            MergeNew( const SwMergeDescriptor& rMergeDesc );
     sal_Bool            Merge(SwWrtShell* pSh);
 
-    // Initialize data fields that lack name of database.
+    /// Initialize data fields that lack name of database.
     inline sal_Bool     IsInitDBFields() const  { return bInitDBFields; }
     inline void     SetInitDBFields(sal_Bool b) { bInitDBFields = b;    }
 
-    // Print / Save mail merge one by one or all together.
+    /// Print / Save mail merge one by one or all together.
     inline sal_Bool     IsSingleJobs() const    { return bSingleJobs;   }
     inline void     SetSingleJobs(sal_Bool b)   { bSingleJobs = b;  }
 
-    // Mailing: Set email data.
+    /// Mailing: Set email data.
     inline void     SetEMailColumn(const String& sColName) { sEMailAddrFld = sColName; }
     inline void     SetSubject(const String& sSbj) { sSubject = sSbj; }
     inline void     SetAttachment(const String& sAtt) { sAttached = sAtt; }
 
 
-    // Fill listbox with all table names of a database.
+    /// Fill listbox with all table names of a database.
     sal_Bool            GetTableNames(ListBox* pListBox, const String& rDBName );
 
-    // Fill listbox with all column names of a database table.
+    /// Fill listbox with all column names of a database table.
     sal_Bool            GetColumnNames(ListBox* pListBox,
                         const String& rDBName, const String& rTableName, sal_Bool bAppend = sal_False);
     sal_Bool            GetColumnNames(ListBox* pListBox,
@@ -298,19 +298,19 @@ public:
     void            InsertText(SwWrtShell& rSh,
                         const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& rProperties);
 
-    // check if a data source is open
+    /// check if a data source is open
     sal_Bool            IsDataSourceOpen(const String& rDataSource,
                                     const String& rTableOrQuery, sal_Bool bMergeOnly);
 
-    // open the source while fields are updated - for the calculator only!
+    /// open the source while fields are updated - for the calculator only!
     sal_Bool            OpenDataSource(const String& rDataSource, const String& rTableOrQuery,
                         sal_Int32 nCommandType = -1, bool bCreate = false);
     sal_uInt32      GetSelectedRecordId(const String& rDataSource, const String& rTableOrQuery, sal_Int32 nCommandType = -1);
     sal_Bool            GetColumnCnt(const String& rSourceName, const String& rTableName,
                             const String& rColumnName, sal_uInt32 nAbsRecordId, long nLanguage,
                             rtl::OUString& rResult, double* pNumber);
-    //create and store or find an already stored connection to a data source for use
-    //in SwFldMgr and SwDBTreeList
+    /** create and store or find an already stored connection to a data source for use
+    in SwFldMgr and SwDBTreeList */
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>
                     RegisterConnection(::rtl::OUString& rSource);
 
@@ -319,7 +319,7 @@ public:
     const SwDSParamArr& GetDSParamArray() const {return aDataSourceParams;}
 
 
-    //close all data sources - after fields were updated
+    /// close all data sources - after fields were updated
     void            CloseAll(sal_Bool bIncludingMerge = sal_True);
 
     sal_Bool            GetMergeColumnCnt(const String& rColumnName, sal_uInt16 nLanguage,
@@ -355,7 +355,7 @@ public:
     static String               LoadAndRegisterDataSource();
 
     static SwDbtoolsClient&    GetDbtoolsClient();
-    // has to be called from _FinitUI()
+    /// has to be called from _FinitUI()
     static void                RemoveDbtoolsClient();
 
     /** try to get the data source from the given connection through the XChild interface.
