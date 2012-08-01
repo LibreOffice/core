@@ -190,7 +190,7 @@ class Parser(object):
         chars = "// This file has been automatically generated.  Do not hand-edit this!\n"
         for obj in localeList:
             chars += "\n" + obj.dumpCode()
-    
+
         # Write to output file.
         file = open(self.outfile, 'w')
         file.write(chars)
@@ -199,4 +199,3 @@ class Parser(object):
 if __name__=='__main__':
     parser = Parser(sys.argv)
     parser.parse()
-
