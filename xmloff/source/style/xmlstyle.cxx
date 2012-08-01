@@ -246,7 +246,7 @@ public:
 
 struct SvXMLStyleIndexCmp_Impl
 {
-    bool operator()(const SvXMLStyleIndex_Impl& r1, const SvXMLStyleIndex_Impl& r2)
+    bool operator()(const SvXMLStyleIndex_Impl& r1, const SvXMLStyleIndex_Impl& r2) const
     {
         sal_Int32 nRet;
 
