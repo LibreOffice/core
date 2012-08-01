@@ -31,6 +31,8 @@
 #include <sal/config.h>
 
 #include <rtl/string.hxx>
+#include <tools/link.hxx>
+#include <vcl/salctype.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
@@ -55,6 +57,7 @@ class OOO_DLLPUBLIC_TEST BootstrapFixture : public BootstrapFixtureBase
 {
   bool m_bNeedUCB;
   bool m_bAssertOnDialog;
+  DECL_LINK( ImplInitFilterHdl, ConvertData* );
 
 public:
   BootstrapFixture( bool bAssertOnDialog = true, bool bNeedUCB = true );

@@ -41,6 +41,7 @@
 
 #include <vcl/svapp.hxx>
 #include <tools/resmgr.hxx>
+#include <svtools/filter.hxx>
 #include <unotools/syslocaleoptions.hxx>
 
 using namespace ::com::sun::star;
@@ -103,6 +104,9 @@ void test::BootstrapFixture::setUp()
 
     if( m_bAssertOnDialog )
         ErrorHandler::RegisterDisplay( aBasicErrorFunc );
+
+    // Make GraphicConverter work, normally done in desktop::Desktop::Main()
+    Application::SetFilterHdl( LINK( this, test::BootstrapFixture, ImplInitFilterHdl ) );
 }
 
 void test::BootstrapFixture::tearDown()
@@ -113,6 +117,11 @@ void test::BootstrapFixture::tearDown()
 
 test::BootstrapFixture::~BootstrapFixture()
 {
+}
+
+IMPL_LINK( test::BootstrapFixture, ImplInitFilterHdl, ConvertData*, pData )
+{
+    return GraphicFilter::GetGraphicFilter().GetFilterCallback().Call( pData );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
