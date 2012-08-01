@@ -5611,6 +5611,34 @@ sal_Bool StatementControl::Execute()
                                 }
                             }
                             break;
+                        case M_Collapse :
+                            if( nParams & PARAM_STR_1 )
+                            {
+                                ReportError( aUId, GEN_RES_STR1( S_SELECT_DESELECT_VIA_STRING_NOT_IMPLEMENTED, MethodString( nMethodId ) ) );
+                            }
+                            else
+                            {
+                                if ( ValueOK(aUId, MethodString( nMethodId ),nNr1,((SvLBox*)pControl)->GetVisibleCount()) )
+                                {
+                                    SvLBoxEntry *pEntry = (SvLBoxEntry*)((SvTreeListBox*)pControl)->GetEntryAtVisPos( nNr1-1 );
+                                    ((SvTreeListBox*)pControl)->Collapse ( pEntry );
+                                }
+                            }
+                            break;
+                        case M_Expand :
+                            if( nParams & PARAM_STR_1 )
+                            {
+                                ReportError( aUId, GEN_RES_STR1( S_SELECT_DESELECT_VIA_STRING_NOT_IMPLEMENTED, MethodString( nMethodId ) ) );
+                            }
+                            else
+                            {
+                                if ( ValueOK(aUId, MethodString( nMethodId ),nNr1,((SvLBox*)pControl)->GetVisibleCount()) )
+                                {
+                                    SvLBoxEntry *pEntry = (SvLBoxEntry*)((SvTreeListBox*)pControl)->GetEntryAtVisPos( nNr1-1 );
+                                    ((SvTreeListBox*)pControl)->Expand ( pEntry );
+                                }
+                            }
+                            break;
                         case M_GetSelText :
                             if ( ! (nParams & PARAM_USHORT_1) )
                                 nNr1 = 1;

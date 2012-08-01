@@ -285,6 +285,10 @@
 
 #define M_IsItemEnabled     ( M_WITH_RETURN | 59 )
 
+// TreeListBox
+#define M_Collapse      ( M_WITH_RETURN | 60 )
+#define M_Expand        ( M_WITH_RETURN | 61 )
+
 //#define M_SOFFICE           0x0800  // Command valid for Star/Open Office
 //#define M_MOZILLA           0x1000  // Command valid for Mozilla
 
