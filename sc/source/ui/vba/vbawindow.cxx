@@ -851,6 +851,28 @@ ScVbaWindow::PrintPreview( const css::uno::Any& EnableChanges ) throw (css::scri
     PrintPreviewHelper( EnableChanges, excel::getBestViewShell( m_xModel ) );
 }
 
+double SAL_CALL ScVbaWindow::getTabRatio() throw (css::uno::RuntimeException)
+{
+    ScTabViewShell* pViewShell = excel::getBestViewShell( m_xModel );
+    if ( pViewShell && pViewShell->GetViewData() && pViewShell->GetViewData()->GetView() )
+    {
+        double fRatio = pViewShell->GetViewData()->GetView()->GetRelTabBarWidth();
+        if ( fRatio >= 0.0 && fRatio <= 1.0 )
+            return fRatio;
+    }
+    return 0.0;
+}
+
+void SAL_CALL ScVbaWindow::setTabRatio( double fRatio ) throw (css::uno::RuntimeException)
+{
+    ScTabViewShell* pViewShell = excel::getBestViewShell( m_xModel );
+    if ( pViewShell && pViewShell->GetViewData() && pViewShell->GetViewData()->GetView() )
+    {
+        if ( fRatio >= 0.0 && fRatio <= 1.0 )
+            pViewShell->GetViewData()->GetView()->SetRelTabBarWidth( fRatio );
+    }
+}
+
 rtl::OUString
 ScVbaWindow::getServiceImplName()
 {
