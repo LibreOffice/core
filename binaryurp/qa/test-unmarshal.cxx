@@ -17,10 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifdef IOS
-#define CPPUNIT_PLUGIN_EXPORTED_NAME cppunitTest_binaryurp_unmarshal
-#endif
-
 #include "com/sun/star/io/IOException.hpp"
 #include "com/sun/star/uno/Sequence.hxx"
 #include "cppu/unotype.hxx"
