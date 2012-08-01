@@ -19,10 +19,6 @@
 
 #include <sal/types.h>
 
-#ifdef IOS
-#define CPPUNIT_PLUGIN_EXPORTED_NAME cppunitTest_qa_cppu_recursion
-#endif
-
 #include <cppunit/TestSuite.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/TestCase.h>

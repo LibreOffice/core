@@ -26,10 +26,6 @@
  *
  ************************************************************************/
 
-#ifdef IOS
-#define CPPUNIT_PLUGIN_EXPORTED_NAME cppunitTest_osl_old_test_file
-#endif
-
 // LLA:
 // this file is converted to use with testshl2
 // original was placed in sal/test/textenc.cxx

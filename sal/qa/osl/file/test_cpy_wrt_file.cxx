@@ -26,10 +26,6 @@
  *
  ************************************************************************/
 
-#ifdef IOS
-#define CPPUNIT_PLUGIN_EXPORTED_NAME cppunitTest_tcwf
-#endif
-
 #include <sal/types.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>

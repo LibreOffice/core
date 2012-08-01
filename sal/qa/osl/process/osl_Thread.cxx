@@ -26,10 +26,6 @@
  *
  ************************************************************************/
 
-#ifdef IOS
-#define CPPUNIT_PLUGIN_EXPORTED_NAME cppunitTest_osl_Thread
-#endif
-
 #ifdef WNT
 #if defined _MSC_VER
 #define NOMINMAX

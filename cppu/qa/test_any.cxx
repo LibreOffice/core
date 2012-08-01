@@ -19,10 +19,6 @@
 
 #include <sal/types.h>
 
-#ifdef IOS
-#define CPPUNIT_PLUGIN_EXPORTED_NAME cppunitTest_qa_cppu_any
-#endif
-
 #include <stdlib.h> // wntmsci10 does not like <cstdlib>
 
 #include <cppunit/TestSuite.h>
