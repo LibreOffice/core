@@ -58,7 +58,6 @@
 #endif
 
 #define RESFILENAME(name,lang)                STRING(CONCAT3(name,lang,.res))
-#define SHORTRESFILENAME(name,lang)           STRING(CONCAT3(name,lang,.res))
 #define READMETXTFILENAME(name,lang,ext)      STRING(CONCAT4(name,lang,.,ext))
 #define READMEFILENAME(name,lang)             STRING(CONCAT2(name,lang))
 #define EXTRAFILENAME(name,lang)              STRING(CONCAT3(name,lang,.zip))
