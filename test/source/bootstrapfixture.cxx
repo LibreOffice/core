@@ -48,10 +48,10 @@ using namespace ::com::sun::star;
 
 static void aBasicErrorFunc( const String &rErr, const String &rAction )
 {
-    rtl::OStringBuffer aErr( "Unexpected dialog: " );
-    aErr.append( rtl::OUStringToOString( rAction, RTL_TEXTENCODING_ASCII_US ) );
+    OStringBuffer aErr( "Unexpected dialog: " );
+    aErr.append( OUStringToOString( rAction, RTL_TEXTENCODING_ASCII_US ) );
     aErr.append( " Error: " );
-    aErr.append( rtl::OUStringToOString( rErr, RTL_TEXTENCODING_ASCII_US ) );
+    aErr.append( OUStringToOString( rErr, RTL_TEXTENCODING_ASCII_US ) );
     CPPUNIT_ASSERT_MESSAGE( aErr.getStr(), false);
 }
 
@@ -72,29 +72,28 @@ void test::BootstrapFixture::setUp()
     // force locale (and resource files loaded) to en-US
     const LanguageType eLang=LANGUAGE_ENGLISH_US;
 
-    rtl::OUString aLang, aCountry;
+    OUString aLang, aCountry;
     MsLangId::convertLanguageToIsoNames(eLang, aLang, aCountry);
-    lang::Locale aLocale(aLang, aCountry, rtl::OUString());
+    lang::Locale aLocale(aLang, aCountry, OUString());
     ResMgr::SetDefaultLocale( aLocale );
 
     if (m_bNeedUCB)
     {
         // initialise UCB-Broker
         uno::Sequence<uno::Any> aUcbInitSequence(2);
-        aUcbInitSequence[0] <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Local"));
-        aUcbInitSequence[1] <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Office"));
+        aUcbInitSequence[0] <<= OUString("Local");
+        aUcbInitSequence[1] <<= OUString("Office");
         bool bInitUcb = ucbhelper::ContentBroker::initialize(m_xSFactory, aUcbInitSequence);
         CPPUNIT_ASSERT_MESSAGE("Should be able to initialize UCB", bInitUcb);
 
         uno::Reference<ucb::XContentProviderManager> xUcb =
             ucbhelper::ContentBroker::get()->getContentProviderManagerInterface();
-        uno::Reference<ucb::XContentProvider> xFileProvider(m_xSFactory->createInstance(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.FileContentProvider"))), uno::UNO_QUERY);
-        xUcb->registerContentProvider(xFileProvider, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("file")), sal_True);
+        uno::Reference<ucb::XContentProvider> xFileProvider(m_xSFactory->createInstance("com.sun.star.ucb.FileContentProvider"), uno::UNO_QUERY);
+        xUcb->registerContentProvider(xFileProvider, "file", sal_True);
     }
 
     SvtSysLocaleOptions aLocalOptions;
-    rtl::OUString aLangISO = MsLangId::convertLanguageToIsoString( LANGUAGE_ENGLISH_US );
+    OUString aLangISO = MsLangId::convertLanguageToIsoString( LANGUAGE_ENGLISH_US );
     aLocalOptions.SetLocaleConfigString( aLangISO );
     aLocalOptions.SetUILocaleConfigString( aLangISO );
 
