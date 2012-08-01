@@ -327,6 +327,13 @@
   <LC_CURRENCY>
     <Currency default="true" usedInCompatibleFormatCodes="false">
       <CurrencyID>TRY</CurrencyID>
+      <CurrencySymbol>TL</CurrencySymbol>
+      <BankSymbol>TRY</BankSymbol>
+      <CurrencyName>Türk Lirası</CurrencyName>
+      <DecimalPlaces>2</DecimalPlaces>
+    </Currency>
+    <Currency default="false" usedInCompatibleFormatCodes="true">
+      <CurrencyID>TRY</CurrencyID>
       <CurrencySymbol>YTL</CurrencySymbol>
       <BankSymbol>TRY</BankSymbol>
       <CurrencyName>Yeni Türk Lirası</CurrencyName>
