@@ -11,6 +11,7 @@
 #define __SFX2_TEMPLATEONLINEVIEWITEM_HXX__
 
 #include <sfx2/thumbnailviewitem.hxx>
+#include <sfx2/templateproperties.hxx>
 
 class TemplateOnlineViewItem : public ThumbnailViewItem
 {
@@ -24,9 +25,16 @@ public:
 
     const rtl::OUString& getURL () const { return maUrl; }
 
+    void insertTemplate (const TemplateItemProperties &prop) { maTemplates.push_back(prop); }
+
+    void clearTemplates () { maTemplates.clear(); }
+
+    const std::vector<TemplateItemProperties>& getTemplates () const { return maTemplates; }
+
 private:
 
     rtl::OUString maUrl;
+    std::vector<TemplateItemProperties> maTemplates;
 };
 
 #endif // __SFX2_TEMPLATEONLINEVIEWITEM_HXX__

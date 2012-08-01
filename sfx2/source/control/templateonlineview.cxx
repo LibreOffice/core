@@ -113,7 +113,7 @@ void TemplateOnlineView::showOverlay (bool bVisible)
     }
 }
 
-bool TemplateOnlineView::loadRepository (const sal_uInt16 nRepositoryId)
+bool TemplateOnlineView::loadRepository (const sal_uInt16 nRepositoryId, bool bRefresh)
 {
     TemplateOnlineViewItem *pItem = NULL;
 
@@ -128,6 +128,9 @@ bool TemplateOnlineView::loadRepository (const sal_uInt16 nRepositoryId)
 
     if (!pItem)
         return false;
+
+    if (!pItem->getTemplates().empty() && !bRefresh)
+        return true;
 
     rtl::OUString aURL = static_cast<TemplateOnlineViewItem*>(pItem)->getURL();
 
@@ -158,6 +161,7 @@ bool TemplateOnlineView::loadRepository (const sal_uInt16 nRepositoryId)
 
         if ( xResultSet.is() )
         {
+            pItem->clearTemplates();
             mpItemView->Clear();
 
             uno::Reference< XRow > xRow( xResultSet, UNO_QUERY );
@@ -217,6 +221,7 @@ bool TemplateOnlineView::loadRepository (const sal_uInt16 nRepositoryId)
 
                     aTemplateItem.aType = SvFileInformationManager::GetFileDescription(INetURLObject(sRealURL));
 
+                    pItem->insertTemplate(aTemplateItem);
                     aItems.push_back(aTemplateItem);
                     ++nIdx;
                 }

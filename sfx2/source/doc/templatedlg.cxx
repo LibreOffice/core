@@ -590,7 +590,7 @@ IMPL_LINK(SfxTemplateManagerDlg, RepositoryMenuSelectHdl, Menu*, pMenu)
     {
         sal_uInt16 nRepoId = nMenuId - MNI_REPOSITORY_BASE;
 
-        if (mpOnlineView->loadRepository(nRepoId))
+        if (mpOnlineView->loadRepository(nRepoId,false))
         {
             switchMainView(false);
             mpOnlineView->showOverlay(true);

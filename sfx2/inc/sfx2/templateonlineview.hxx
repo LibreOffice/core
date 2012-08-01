@@ -11,6 +11,7 @@
 #define __SFX2_TEMPLATEONLINEVIEW_HXX__
 
 #include <sfx2/templateabstractview.hxx>
+#include <sfx2/templateproperties.hxx>
 
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 
@@ -31,7 +32,7 @@ public:
 
     virtual void showOverlay (bool bVisible);
 
-    bool loadRepository (const sal_uInt16 nRepositoryId);
+    bool loadRepository (const sal_uInt16 nRepositoryId, bool bRefresh);
 
     const std::vector<TemplateOnlineViewItem*>& getRepositories () const { return maRepositories; }
 
