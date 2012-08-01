@@ -107,15 +107,9 @@ void RTFSdrImport::resolve(RTFShape& rShape)
                 xPropertySet->setPropertyValue("FillColor", aAny);
         }
         else if ( i->first == "wzName" )
-        {
-            RTFValue::Pointer_t pValue(new RTFValue(i->second));
-            m_rImport.getState().aCharacterAttributes.set(NS_ooxml::LN_CT_NonVisualDrawingProps_name, pValue);
-        }
+            xPropertySet->setPropertyValue("Name", uno::makeAny(i->second));
         else if ( i->first == "wzDescription" )
-        {
-            RTFValue::Pointer_t pValue(new RTFValue(i->second));
-            m_rImport.getState().aCharacterAttributes.set(NS_ooxml::LN_CT_NonVisualDrawingProps_descr, pValue);
-        }
+            xPropertySet->setPropertyValue("Description", uno::makeAny(i->second));
         else if ( i->first == "pib" )
         {
             m_rImport.setDestinationText(i->second);
