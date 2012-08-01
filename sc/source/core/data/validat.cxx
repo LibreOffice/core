@@ -416,19 +416,18 @@ sal_Bool ScValidationData::DoError( Window* pParent, const String& rInput,
 sal_Bool ScValidationData::IsDataValid( const String& rTest, const ScPatternAttr& rPattern,
                                     const ScAddress& rPos ) const
 {
-    if ( eDataMode == SC_VALID_ANY )
-        return sal_True;                        // alles erlaubt
+    if ( eDataMode == SC_VALID_ANY ) // check if any cell content is allowed
+        return sal_True;
 
-    if ( rTest.GetChar(0) == '=' )
-        return false;                       // Formeln sind sonst immer ungueltig
+    if ( rTest.GetChar(0) == '=' )   // formulas do not pass the validity test
+        return sal_False;
 
-    if ( !rTest.Len() )
-        return IsIgnoreBlank();             // leer: wie eingestellt
+    if ( !rTest.Len() )              // check whether empty cells are allowed
+        return IsIgnoreBlank();
 
     SvNumberFormatter* pFormatter = GetDocument()->GetFormatTable();
 
-    //  Test, was es denn ist - wie in ScColumn::SetString
-
+    // get the value if any
     sal_uInt32 nFormat = rPattern.GetNumberFormat( pFormatter );
 
     double nVal;
@@ -439,7 +438,15 @@ sal_Bool ScValidationData::IsDataValid( const String& rTest, const ScPatternAttr
     else
         pCell = new ScStringCell( rTest );
 
-    sal_Bool bRet = IsDataValid( pCell, rPos );
+    sal_Bool bRet;
+    if (SC_VALID_TEXTLEN == eDataMode)
+    {
+        const double nLenVal = static_cast<double>( rTest.Len() );
+        ScValueCell aTmpCell( nLenVal );
+        bRet = IsCellValid( &aTmpCell, rPos );
+    }
+    else
+        bRet = IsDataValid( pCell, rPos );
 
     pCell->Delete();
     return bRet;
