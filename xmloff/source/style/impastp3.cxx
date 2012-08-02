@@ -169,24 +169,4 @@ OUString SvXMLAutoStylePoolParentP_Impl::Find( const XMLFamilyData_Impl& rFamily
     return sName;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Sort-function for sorted list of SvXMLAutoStylePoolParent_Impl-elements
-//
-
-int SvXMLAutoStylePoolParentPCmp_Impl( const SvXMLAutoStylePoolParentP_Impl& r1,
-                                       const SvXMLAutoStylePoolParentP_Impl& r2)
-{
-    return (int)r1.GetParent().compareTo( r2.GetParent() );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-//
-// Implementation of sorted list of SvXMLAutoStylePoolParent_Impl-elements
-//
-
-IMPL_CONTAINER_SORT( SvXMLAutoStylePoolParentsP_Impl,
-                     SvXMLAutoStylePoolParentP_Impl,
-                     SvXMLAutoStylePoolParentPCmp_Impl )
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

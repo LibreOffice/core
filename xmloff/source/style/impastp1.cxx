@@ -51,7 +51,7 @@ XMLFamilyData_Impl::XMLFamilyData_Impl(
       mnCount( 0 ), mnName( 0 ), maStrPrefix( rStrPrefix ), bAsFamily( bAsFam )
 
 {
-    mpParentList = new SvXMLAutoStylePoolParentsP_Impl( 5, 5 );
+    mpParentList = new SvXMLAutoStylePoolParentsP_Impl;
     mpNameList   = new SvXMLAutoStylePoolNamesP_Impl;
 }
 
@@ -72,7 +72,7 @@ XMLFamilyData_Impl::~XMLFamilyData_Impl()
 void XMLFamilyData_Impl::ClearEntries()
 {
     delete mpParentList;
-    mpParentList = new SvXMLAutoStylePoolParentsP_Impl( 5, 5 );
+    mpParentList = new SvXMLAutoStylePoolParentsP_Impl;
     DBG_ASSERT( !pCache || !pCache->size(), "auto style pool cache is not empty!" );
     if( pCache )
     {

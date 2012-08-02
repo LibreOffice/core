@@ -181,15 +181,16 @@ sal_Bool SvXMLAutoStylePoolP_Impl::Add(OUString& rName, sal_Int32 nFamily,
         SvXMLAutoStylePoolParentP_Impl *pParent = 0;
 
         SvXMLAutoStylePoolParentsP_Impl *pParents = rFamily.mpParentList;
-        sal_uLong nPos;
-        if( pParents->Seek_Entry( &aTmp, &nPos ) )
+        SvXMLAutoStylePoolParentsP_Impl::const_iterator const it2 =
+            pParents->find(&aTmp);
+        if (it2 != pParents->end())
         {
-            pParent = pParents->GetObject( nPos );
+            pParent = *it2;
         }
         else
         {
             pParent = new SvXMLAutoStylePoolParentP_Impl( rParent );
-            pParents->Insert( pParent );
+            pParents->insert( pParent );
         }
 
         if( pParent->Add( rFamily, rProperties, rName, bDontSeek ) )
@@ -228,15 +229,16 @@ sal_Bool SvXMLAutoStylePoolP_Impl::AddNamed(const OUString& rName, sal_Int32 nFa
         SvXMLAutoStylePoolParentP_Impl *pParent = 0;
 
         SvXMLAutoStylePoolParentsP_Impl *pParents = rFamily.mpParentList;
-        sal_uLong nPos;
-        if( pParents->Seek_Entry( &aTmp, &nPos ) )
+        SvXMLAutoStylePoolParentsP_Impl::const_iterator const it2 =
+            pParents->find(&aTmp);
+        if (it2 != pParents->end())
         {
-            pParent = pParents->GetObject( nPos );
+            pParent = *it2;
         }
         else
         {
             pParent = new SvXMLAutoStylePoolParentP_Impl( rParent );
-            pParents->Insert( pParent );
+            pParents->insert( pParent );
         }
 
         if( pParent->AddNamed( rFamily, rProperties, rName ) )
@@ -271,9 +273,12 @@ OUString SvXMLAutoStylePoolP_Impl::Find( sal_Int32 nFamily,
             rFamily.mpParentList;
 
         SvXMLAutoStylePoolParentP_Impl aTmp( rParent );
-        sal_uLong nPos;
-        if( pParents->Seek_Entry( &aTmp, &nPos ) )
-            sName = pParents->GetObject( nPos )->Find( rFamily, rProperties );
+        SvXMLAutoStylePoolParentsP_Impl::const_iterator const it2 =
+            pParents->find(&aTmp);
+        if (it2 != pParents->end())
+        {
+            sName = (*it2)->Find( rFamily, rProperties );
+        }
     }
 
     return sName;
@@ -322,11 +327,9 @@ void SvXMLAutoStylePoolP_Impl::exportXML(
         aExpStyles[i].mpProperties = 0;
     }
 
-    sal_uInt32 nParents = pParents->Count();
-    for( i=0; i < nParents; i++ )
+    for (size_t k = 0; k < pParents->size(); k++)
     {
-        const SvXMLAutoStylePoolParentP_Impl* pParent =
-            pParents->GetObject( i );
+        const SvXMLAutoStylePoolParentP_Impl *const pParent = (*pParents)[k];
         size_t nProperties = pParent->GetPropertiesList().size();
         for( size_t j = 0; j < nProperties; j++ )
         {

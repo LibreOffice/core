@@ -31,13 +31,13 @@
 
 #include <boost/ptr_container/ptr_set.hpp>
 #include <sal/types.h>
-#include <svl/cntnrsrt.hxx>
 #include <rtl/ustring.hxx>
 #include <set>
 #include <vector>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
+#include <o3tl/sorted_vector.hxx>
 #include <xmloff/maptype.hxx>
 #include <xmloff/xmlexppr.hxx>
 
@@ -154,8 +154,18 @@ public:
     }
 };
 
-DECLARE_CONTAINER_SORT_DEL( SvXMLAutoStylePoolParentsP_Impl,
-                            SvXMLAutoStylePoolParentP_Impl )
+struct SvXMLAutoStylePoolParentPCmp_Impl
+{
+    bool operator()( SvXMLAutoStylePoolParentP_Impl* const& lhs, SvXMLAutoStylePoolParentP_Impl* const& rhs) const
+    {
+        return lhs->GetParent().compareTo( rhs->GetParent() ) < 0;
+    }
+};
+class SvXMLAutoStylePoolParentsP_Impl : public o3tl::sorted_vector<SvXMLAutoStylePoolParentP_Impl*, SvXMLAutoStylePoolParentPCmp_Impl>
+{
+public:
+    ~SvXMLAutoStylePoolParentsP_Impl() { DeleteAndDestroyAll(); }
+};
 
 ///////////////////////////////////////////////////////////////////////////////
 //
