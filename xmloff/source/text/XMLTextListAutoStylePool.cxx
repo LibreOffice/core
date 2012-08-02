@@ -27,7 +27,7 @@
  ************************************************************************/
 
 #include <tools/debug.hxx>
-#include <svl/cntnrsrt.hxx>
+#include <o3tl/sorted_vector.hxx>
 #include <com/sun/star/ucb/XAnyCompareFactory.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/container/XIndexReplace.hpp>
@@ -123,40 +123,34 @@ XMLTextListAutoStylePoolEntry_Impl::XMLTextListAutoStylePoolEntry_Impl(
     while (rNames.find(sName) != rNames.end());
 }
 
-int XMLTextListAutoStylePoolEntryCmp_Impl(
-        const XMLTextListAutoStylePoolEntry_Impl& r1,
-        const XMLTextListAutoStylePoolEntry_Impl& r2 )
+struct XMLTextListAutoStylePoolEntryCmp_Impl
 {
-    int nRet;
-    if( r1.IsNamed() )
+    bool operator()(
+            XMLTextListAutoStylePoolEntry_Impl* const& r1,
+            XMLTextListAutoStylePoolEntry_Impl* const& r2 ) const
     {
-        if( r2.IsNamed() )
-             nRet = (int)r1.GetInternalName().compareTo( r2.GetInternalName());
+        if( r1->IsNamed() )
+        {
+            if( r2->IsNamed() )
+                return r1->GetInternalName().compareTo( r2->GetInternalName() ) < 0;
+            else
+                return true;
+        }
         else
-            nRet = -1;
+        {
+            if( r2->IsNamed() )
+                return false;
+            else
+                return r1->GetNumRules().get() < r2->GetNumRules().get();
+        }
     }
-    else
-    {
-        if( r2.IsNamed() )
-            nRet = 1;
-        else
-             nRet = (int)(r1.GetNumRules().get() - r2.GetNumRules().get());
-    }
-
-    return nRet;
-}
-
-typedef XMLTextListAutoStylePoolEntry_Impl *XMLTextListAutoStylePoolEntryPtr;
-DECLARE_CONTAINER_SORT( XMLTextListAutoStylePool_Impl,
-                        XMLTextListAutoStylePoolEntry_Impl )
-IMPL_CONTAINER_SORT( XMLTextListAutoStylePool_Impl,
-                     XMLTextListAutoStylePoolEntry_Impl,
-                     XMLTextListAutoStylePoolEntryCmp_Impl )
+};
+class XMLTextListAutoStylePool_Impl : public o3tl::sorted_vector<XMLTextListAutoStylePoolEntry_Impl*, XMLTextListAutoStylePoolEntryCmp_Impl> {};
 
 XMLTextListAutoStylePool::XMLTextListAutoStylePool( SvXMLExport& rExp ) :
     rExport( rExp ),
     sPrefix( RTL_CONSTASCII_USTRINGPARAM("L") ),
-    pPool( new XMLTextListAutoStylePool_Impl( 5, 5 ) ),
+    pPool( new XMLTextListAutoStylePool_Impl ),
     nName( 0 )
 {
     Reference<ucb::XAnyCompareFactory> xCompareFac( rExp.GetModel(), uno::UNO_QUERY );
@@ -172,9 +166,7 @@ XMLTextListAutoStylePool::XMLTextListAutoStylePool( SvXMLExport& rExp ) :
 XMLTextListAutoStylePool::~XMLTextListAutoStylePool()
 {
     // The XMLTextListAutoStylePoolEntry_Impl object in the pool need delete explicitly in dtor.
-    sal_uLong nCount = pPool->Count();
-    while ( nCount-- )
-        delete pPool->Remove(nCount);
+    pPool->DeleteAndDestroyAll();
     delete pPool;
 }
 
@@ -185,25 +177,26 @@ void XMLTextListAutoStylePool::RegisterName( const OUString& rName )
 
 sal_uInt32 XMLTextListAutoStylePool::Find( XMLTextListAutoStylePoolEntry_Impl* pEntry ) const
 {
-    sal_uLong nPos;
     if( !pEntry->IsNamed() && mxNumRuleCompare.is() )
     {
-        const sal_uInt32 nCount = pPool->Count();
+        const sal_uInt32 nCount = pPool->size();
 
         uno::Any aAny1, aAny2;
         aAny1 <<= pEntry->GetNumRules();
 
-        for( nPos = 0; nPos < nCount; nPos++ )
+        for( sal_uLong nPos = 0; nPos < nCount; nPos++ )
         {
-            aAny2 <<= pPool->GetObject(nPos)->GetNumRules();
+            aAny2 <<= (*pPool)[nPos]->GetNumRules();
 
             if( mxNumRuleCompare->compare( aAny1, aAny2 ) == 0 )
                 return nPos;
         }
     }
-    else if( pPool->Seek_Entry( pEntry, &nPos ) )
+    else
     {
-        return nPos;
+        XMLTextListAutoStylePool_Impl::const_iterator it = pPool->find( pEntry );
+        if( it != pPool->end() )
+            return it - pPool->begin();
     }
 
     return (sal_uInt32)-1;
@@ -218,15 +211,15 @@ OUString XMLTextListAutoStylePool::Add(
     sal_uInt32 nPos = Find( &aTmp );
     if( nPos != (sal_uInt32)-1 )
     {
-        sName = pPool->GetObject( nPos )->GetName();
+        sName = (*pPool)[ nPos ]->GetName();
     }
     else
     {
         XMLTextListAutoStylePoolEntry_Impl *pEntry =
-            new XMLTextListAutoStylePoolEntry_Impl( pPool->Count(),
+            new XMLTextListAutoStylePoolEntry_Impl( pPool->size(),
                                                rNumRules, m_aNames, sPrefix,
                                                nName );
-        pPool->Insert( pEntry );
+        pPool->insert( pEntry );
         sName = pEntry->GetName();
     }
 
@@ -241,7 +234,7 @@ OUString XMLTextListAutoStylePool::Add(
 
     sal_uInt32 nPos = Find( &aTmp );
     if( nPos != (sal_uInt32)-1 )
-        sName = pPool->GetObject( nPos )->GetName();
+        sName = (*pPool)[ nPos ]->GetName();
 
     return sName;
 }
@@ -253,19 +246,19 @@ OUString XMLTextListAutoStylePool::Add(
     XMLTextListAutoStylePoolEntry_Impl aTmp( rInternalName );
     sal_uInt32 nPos = Find( &aTmp );
     if( nPos != (sal_uInt32)-1 )
-        sName = pPool->GetObject( nPos )->GetName();
+        sName = (*pPool)[ nPos ]->GetName();
 
     return sName;
 }
 
 void XMLTextListAutoStylePool::exportXML() const
 {
-    sal_uInt32 nCount = pPool->Count();
+    sal_uInt32 nCount = pPool->size();
     if( !nCount )
         return;
 
     XMLTextListAutoStylePoolEntry_Impl **aExpEntries =
-        new XMLTextListAutoStylePoolEntryPtr[nCount];
+        new XMLTextListAutoStylePoolEntry_Impl*[nCount];
 
     sal_uInt32 i;
     for( i=0; i < nCount; i++ )
@@ -274,7 +267,7 @@ void XMLTextListAutoStylePool::exportXML() const
     }
     for( i=0; i < nCount; i++ )
     {
-        XMLTextListAutoStylePoolEntry_Impl *pEntry = pPool->GetObject(i);
+        XMLTextListAutoStylePoolEntry_Impl *pEntry = (*pPool)[i];
         DBG_ASSERT( pEntry->GetPos() < nCount, "Illegal pos" );
         aExpEntries[pEntry->GetPos()] = pEntry;
     }
