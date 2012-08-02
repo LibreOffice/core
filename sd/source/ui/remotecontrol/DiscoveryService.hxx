@@ -38,11 +38,13 @@ namespace sd
         private:
             DiscoveryService();
             ~DiscoveryService();
+
             static DiscoveryService *spService;
+            void execute();
 
             osl::DatagramSocket mSocket;
+            void replyTo( osl::SocketAddr& rAddr );
 
-            void execute();
     };
 }
 
