@@ -29,6 +29,7 @@
 
 #include <ctype.h>
 #include <tools/datetime.hxx>
+#include <tools/diagnose_ex.h>
 #include <rtl/tencinfo.h>
 #include <svl/itemiter.hxx>
 #include <svl/whiter.hxx>
@@ -801,12 +802,14 @@ void SvxRTFParser::ClearFontTbl()
 {
     for( sal_uInt32 nCnt = aFontTbl.Count(); nCnt; )
         delete aFontTbl.GetObject( --nCnt );
+    aFontTbl.Clear();
 }
 
 void SvxRTFParser::ClearStyleTbl()
 {
     for( sal_uInt32 nCnt = aStyleTbl.Count(); nCnt; )
         delete aStyleTbl.GetObject( --nCnt );
+    aStyleTbl.Clear();
 }
 
 void SvxRTFParser::ClearAttrStack()
@@ -1263,7 +1266,8 @@ bool SvxRTFParser::UncompressableStackEntry(const SvxRTFItemStackType &) const
 
 void SvxRTFItemStackType::Compress( const SvxRTFParser& rParser )
 {
-    DBG_ASSERT( pChildList, "There is no child list" );
+    ENSURE_OR_RETURN_VOID(pChildList, "Compress: no ChildList" );
+    ENSURE_OR_RETURN_VOID(pChildList->Count(), "Compress: ChildList empty");
 
     sal_uInt16 n;
     SvxRTFItemStackType* pTmp = (*pChildList)[0];

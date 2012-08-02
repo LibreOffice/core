@@ -216,6 +216,11 @@ void SwRTFParser::ReadTable( int nToken )
 
     sal_Int16 eVerOrient = text::VertOrientation::NONE;
     long nLineHeight = 0;
+    if (aMergeBoxes.empty()) // can this actually happen?
+    {
+        OSL_ASSERT(false);
+        aMergeBoxes.push_back(sal_False);
+    }
     SwBoxFrmFmts aBoxFmts;
     SwTableBoxFmt* pBoxFmt = pDoc->MakeTableBoxFmt();
     SvxFrameDirection eDir = FRMDIR_HORI_LEFT_TOP;
@@ -305,8 +310,11 @@ void SwRTFParser::ReadTable( int nToken )
                         {
                             --m_nCurrentBox;
                         }
-                        pFmt = static_cast<SwTableBoxFmt*>(
-                            pLine->GetTabBoxes()[ m_nCurrentBox ]->GetFrmFmt());
+                        if (m_nCurrentBox < pLine->GetTabBoxes().Count())
+                        {
+                            pFmt = static_cast<SwTableBoxFmt*>(
+                              pLine->GetTabBoxes()[m_nCurrentBox]->GetFrmFmt());
+                        }
                     }
                     else
                         pFmt = aBoxFmts[ aBoxFmts.Count()-1 ];
@@ -575,12 +583,6 @@ void SwRTFParser::ReadTable( int nToken )
 
         pOldTblNd = pTableNode;
         bNewTbl = sal_False;
-
-        {
-            //TabellenUmrandungen optimieren
-            void* p = pFmt;
-            aTblFmts.Insert( p, aTblFmts.Count() );
-        }
     }
     else
     {
@@ -675,12 +677,6 @@ void SwRTFParser::ReadTable( int nToken )
 
             m_nCurrentBox = 0;
             pOldTblNd = pTableNode;
-
-            {
-                // TabellenUmrandungen optimieren
-                void* p = pFmt;
-                aTblFmts.Insert( p, aTblFmts.Count() );
-            }
         }
     }
 
