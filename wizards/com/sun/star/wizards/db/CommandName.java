@@ -108,8 +108,15 @@ public class CommandName
                     String[] NameList;
                     NameList = new String[0];
                     NameList = JavaTools.ArrayoutofString(_DisplayName, ".");
-                    SchemaName = NameList[0];
-                    TableName = NameList[1]; // TODO Was ist mit diesem Fall: CatalogSep = "." und CatalogName = PropertyNames.EMPTY_STRING
+                    if (NameList.length > 1)
+                    {
+                        SchemaName = NameList[0];
+                        TableName = NameList[1];
+                    }
+                    else
+                    {
+                        TableName = _DisplayName;
+                    }
                 }
                 else
                 {
