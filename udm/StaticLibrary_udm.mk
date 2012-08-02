@@ -9,8 +9,11 @@
 
 $(eval $(call gb_StaticLibrary_StaticLibrary,udm))
 
+$(eval $(call gb_StaticLibrary_use_packages,udm,\
+	udm_inc \
+))
+
 $(eval $(call gb_StaticLibrary_set_include,udm,\
-    -I$(SRCDIR)/udm/inc \
     -I$(SRCDIR)/udm/source/inc \
     $$(INCLUDE) \
 ))
