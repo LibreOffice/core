@@ -41,6 +41,7 @@
 #include "xehelper.hxx"
 #include "xecontent.hxx"
 #include "xeescher.hxx"
+#include "postit.hxx"
 
 using namespace ::oox;
 
@@ -2355,8 +2356,10 @@ XclExpCellTable::XclExpCellTable( const XclExpRoot& rRoot ) :
         if( xCell )
             maRowBfr.AppendCell( xCell, bIsMergedBase );
 
-        if ( aAddNoteText.Len()  )
-            mxNoteList->AppendNewRecord( new XclExpNote( GetRoot(), aScPos, NULL, aAddNoteText ) );
+        ScNotes* pNotes = rDoc.GetNotes( nScTab );
+        const ScPostIt* pScNote = pNotes ? pNotes->findByAddress( aScPos ) : NULL;
+        if ( aAddNoteText.Len() || pScNote )
+            mxNoteList->AppendNewRecord( new XclExpNote( GetRoot(), aScPos, pScNote, aAddNoteText ) );
 
         // other sheet contents
         if( pPattern )
