@@ -28,10 +28,6 @@
 
 #include <sal/types.h>
 
-#ifdef IOS
-#define CPPUNIT_PLUGIN_EXPORTED_NAME cppunitTest_cppuhelper_propertysetmixin
-#endif
-
 #include "test/cppuhelper/propertysetmixin/CppSupplier.hpp"
 #include "test/cppuhelper/propertysetmixin/JavaSupplier.hpp"
 #include "test/cppuhelper/propertysetmixin/XSupplier.hpp"
