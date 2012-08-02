@@ -126,7 +126,7 @@ class StgDataStrm : public StgStrm      // a physical data stream
     void Init( sal_Int32 nBgn, sal_Int32 nLen );
 public:
     StgDataStrm( StgIo&, sal_Int32 nBgn, sal_Int32 nLen=-1 );
-    StgDataStrm( StgIo&, StgDirEntry* );
+	StgDataStrm( StgIo&, StgDirEntry& );
     void* GetPtr( sal_Int32 nPos, sal_Bool bForce, sal_Bool bDirty );
     void SetIncrement( short n ) { nIncr = n ; }
     virtual sal_Bool SetSize( sal_Int32 );
@@ -145,7 +145,7 @@ class StgSmallStrm : public StgStrm     // a logical data stream
     void Init( sal_Int32 nBgn, sal_Int32 nLen );
 public:
     StgSmallStrm( StgIo&, sal_Int32 nBgn, sal_Int32 nLen );
-    StgSmallStrm( StgIo&, StgDirEntry* );
+	StgSmallStrm( StgIo&, StgDirEntry& );
     virtual sal_Int32 Read( void*, sal_Int32 );
     virtual sal_Int32 Write( const void*, sal_Int32 );
     virtual sal_Bool IsSmallStrm() const { return sal_True; }

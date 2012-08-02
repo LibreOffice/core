@@ -100,7 +100,8 @@ const SvStream* OLEStorageBase::GetSvStream_Impl() const
 OLEStorageBase::OLEStorageBase( StgIo* p, StgDirEntry* pe, StreamMode& nMode )
     : nStreamMode( nMode ), pIo( p ), pEntry( pe )
 {
-    p->IncRef();
+    if ( p )
+        p->IncRef();
     if( pe )
         pe->nRefCnt++;
 }
@@ -117,21 +118,28 @@ OLEStorageBase::~OLEStorageBase()
             else
                 pEntry->Close();
         }
+
+        pEntry = NULL;
     }
 
 
-    if( !pIo->DecRef() )
+	if( pIo && !pIo->DecRef() )
+    {
         delete pIo;
+        pIo = NULL;
+    }
 }
 
 // Validate the instance for I/O
 
 sal_Bool OLEStorageBase::Validate_Impl( sal_Bool bWrite ) const
 {
-    if( pEntry
+    if( pIo
+        && pIo->pTOC
+        && pEntry
         && !pEntry->bInvalid
         &&  ( !bWrite || !pEntry->bDirect || ( nStreamMode & STREAM_WRITE ) ) )
-        return sal_True;
+            return sal_True;
     return sal_False;
 }
 
@@ -170,7 +178,7 @@ StorageStream::StorageStream( StgIo* p, StgDirEntry* q, StreamMode m )
              : OLEStorageBase( p, q, m_nMode ), nPos( 0L )
 {
     // The dir entry may be 0; this means that the stream is invalid.
-    if( q )
+    if( q && p )
     {
         if( q->nRefCnt == 1 )
         {
@@ -278,14 +286,21 @@ sal_Bool StorageStream::Commit()
 
 sal_Bool StorageStream::Revert()
 {
-    pEntry->Revert();
-    pIo->MoveError( *this );
-    return Good();
+    sal_Bool bResult = sal_False;
+
+    if ( Validate() )
+    {
+        pEntry->Revert();
+        pIo->MoveError( *this );
+        bResult = Good();
+    }
+
+    return bResult;
 }
 
 sal_Bool StorageStream::CopyTo( BaseStorageStream* pDest )
 {
-    if( !Validate() || !pDest->Validate( sal_True ) || Equals( *pDest ) )
+    if( !Validate() || !pDest || !pDest->Validate( sal_True ) || Equals( *pDest ) )
         return sal_False;
     pEntry->Copy( *pDest );
     pDest->Commit();
@@ -337,14 +352,20 @@ sal_Bool Storage::IsStorageFile( const String & rFileName )
 
 sal_Bool Storage::IsStorageFile( SvStream* pStream )
 {
-    StgHeader aHdr;
-    sal_uLong nPos = pStream->Tell();
-    sal_Bool bRet = ( aHdr.Load( *pStream ) && aHdr.Check() );
+    sal_Bool bRet = sal_False;
 
-    // It's not a stream error if it is too small for a OLE storage header
-    if ( pStream->GetErrorCode() == ERRCODE_IO_CANTSEEK )
-        pStream->ResetError();
-    pStream->Seek( nPos );
+    if ( pStream )
+    {
+        StgHeader aHdr;
+        sal_uLong nPos = pStream->Tell();
+        bRet = ( aHdr.Load( *pStream ) && aHdr.Check() );
+
+        // It's not a stream error if it is too small for a OLE storage header
+        if ( pStream->GetErrorCode() == ERRCODE_IO_CANTSEEK )
+            pStream->ResetError();
+        pStream->Seek( nPos );
+    }
+
     return bRet;
 }
 
@@ -459,7 +480,9 @@ void Storage::Init( sal_Bool bCreate )
     pEntry = NULL;
     sal_Bool bHdrLoaded = sal_False;
     bIsRoot = sal_True;
-    if( pIo->Good() )
+
+    OSL_ENSURE( pIo, "The pointer may not be empty at this point!" );
+	if( pIo->Good() && pIo->GetStrm() )
     {
         sal_uLong nSize = pIo->GetStrm()->Seek( STREAM_SEEK_TO_END );
         pIo->GetStrm()->Seek( 0L );
@@ -480,7 +503,7 @@ void Storage::Init( sal_Bool bCreate )
     // the file is empty
     if( !bHdrLoaded )
         pIo->Init();
-    if( pIo->Good() )
+    if( pIo->Good() && pIo->pTOC )
     {
         pEntry = pIo->pTOC->GetRoot();
         pEntry->nRefCnt++;
@@ -535,7 +558,7 @@ const String& Storage::GetName() const
 
 void Storage::FillInfoList( SvStorageInfoList* pList ) const
 {
-    if( Validate() )
+	if( Validate() && pList )
     {
         StgIterator aIter( *pEntry );
         StgDirEntry* p = aIter.First();
@@ -731,21 +754,24 @@ sal_Bool Storage::CopyTo( const String& rElem, BaseStorage* pDest, const String&
             BaseStorage* p1 = OpenStorage( rElem, INTERNAL_MODE );
             BaseStorage* p2 = pDest->OpenOLEStorage( rNew, STREAM_WRITE | STREAM_SHARE_DENYALL, pEntry->bDirect );
 
-            sal_uLong nTmpErr = p2->GetError();
-            if( !nTmpErr )
+            if ( p2 )
             {
-                p2->SetClassId( p1->GetClassId() );
-                p1->CopyTo( p2 );
-                SetError( p1->GetError() );
-
-                nTmpErr = p2->GetError();
+                sal_uLong nTmpErr = p2->GetError();
                 if( !nTmpErr )
-                    p2->Commit();
+                {
+                    p2->SetClassId( p1->GetClassId() );
+                    p1->CopyTo( p2 );
+                    SetError( p1->GetError() );
+
+                    nTmpErr = p2->GetError();
+                    if( !nTmpErr )
+                        p2->Commit();
+                    else
+                        pDest->SetError( nTmpErr );
+                }
                 else
                     pDest->SetError( nTmpErr );
             }
-            else
-                pDest->SetError( nTmpErr );
 
             delete p1;
             delete p2;
@@ -757,20 +783,23 @@ sal_Bool Storage::CopyTo( const String& rElem, BaseStorage* pDest, const String&
             BaseStorageStream* p1 = OpenStream( rElem, INTERNAL_MODE );
             BaseStorageStream* p2 = pDest->OpenStream( rNew, STREAM_WRITE | STREAM_SHARE_DENYALL, pEntry->bDirect );
 
-            sal_uLong nTmpErr = p2->GetError();
-            if( !nTmpErr )
+            if ( p2 )
             {
-                p1->CopyTo( p2 );
-                SetError( p1->GetError() );
-
-                nTmpErr = p2->GetError();
+                sal_uLong nTmpErr = p2->GetError();
                 if( !nTmpErr )
-                    p2->Commit();
+                {
+                    p1->CopyTo( p2 );
+                    SetError( p1->GetError() );
+
+                    nTmpErr = p2->GetError();
+                    if( !nTmpErr )
+                        p2->Commit();
+                    else
+                        pDest->SetError( nTmpErr );
+                }
                 else
                     pDest->SetError( nTmpErr );
             }
-            else
-                pDest->SetError( nTmpErr );
 
             delete p1;
             delete p2;
@@ -1028,17 +1057,23 @@ sal_Bool Storage::ValidateFAT()
 
 void Storage::SetDirty()
 {
-    pEntry->SetDirty();
+    if ( pEntry )
+        pEntry->SetDirty();
 }
 
 void Storage::SetClassId( const ClsId& rId )
 {
-    pEntry->aEntry.SetClassId( rId );
+    if ( pEntry )
+        pEntry->aEntry.SetClassId( rId );
 }
 
 const ClsId& Storage::GetClassId() const
 {
-    return pEntry->aEntry.GetClassId();
+    if ( pEntry )
+        return pEntry->aEntry.GetClassId();
+
+    static ClsId aDummyId = {0,0,0,0,0,0,0,0,0,0,0};
+    return aDummyId;
 }
 
 const SvStream* Storage::GetSvStream() const

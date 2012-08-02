@@ -27,7 +27,7 @@
  ************************************************************************/
 
 
-
+#include <osl/diagnose.h>
 #include "stgavl.hxx"
 
 StgAvlNode::StgAvlNode()
@@ -44,13 +44,16 @@ StgAvlNode::~StgAvlNode()
 
 StgAvlNode* StgAvlNode::Find( StgAvlNode* pFind )
 {
-    StgAvlNode* p = this;
-    while( p )
+    if ( pFind )
     {
-        short nRes = p->Compare( pFind );
-        if( !nRes )
-            return p;
-        else p = ( nRes < 0 ) ? p->pLeft : p->pRight;
+        StgAvlNode* p = this;
+        while( p )
+        {
+            short nRes = p->Compare( pFind );
+            if( !nRes )
+                return p;
+            else p = ( nRes < 0 ) ? p->pLeft : p->pRight;
+        }
     }
     return NULL;
 }
@@ -64,23 +67,28 @@ short StgAvlNode::Locate
 {
     short nRes = 0;
     StgAvlNode* pCur = this;
+
+    OSL_ENSURE( pPivot && pParent && pPrev, "The pointers may not be NULL!" );
     *pParent = *pPrev = NULL;
     *pPivot = this;
 
     // search tree for insertion point
-
-    while( pCur != NULL )
+    if ( pFind )
     {
-        // check for pPivot
-        if( pCur->nBalance != 0 )
-            *pPivot = pCur, *pParent = *pPrev;
-        // save pPrev location and see what direction to go
-        *pPrev = pCur;
-        nRes = pCur->Compare( pFind );
-        if( nRes == 0 )
-            break;
-        else pCur = ( nRes < 0 ) ? pCur->pLeft : pCur->pRight;
+        while( pCur != NULL )
+        {
+            // check for pPivot
+            if( pCur->nBalance != 0 )
+                *pPivot = pCur, *pParent = *pPrev;
+            // save pPrev location and see what direction to go
+            *pPrev = pCur;
+            nRes = pCur->Compare( pFind );
+            if( nRes == 0 )
+                break;
+            else pCur = ( nRes < 0 ) ? pCur->pLeft : pCur->pRight;
+        }
     }
+
     return( nRes );
 }
 
@@ -92,8 +100,10 @@ short StgAvlNode::Adjust( StgAvlNode** pHeavy, StgAvlNode* pNew )
     StgAvlNode* pCur = this;
     short nDelta;
     // no traversing
-    if( pCur == pNew )
+    OSL_ENSURE( pHeavy && pNew, "The pointers is not allowed to be NULL!" );
+    if( pCur == pNew || !pNew )
         return nBalance;
+
     short nRes = Compare( pNew );
     if( nRes > 0 )
     {
@@ -130,6 +140,7 @@ short StgAvlNode::Adjust( StgAvlNode** pHeavy, StgAvlNode* pNew )
 
 StgAvlNode* StgAvlNode::RotLL()
 {
+    OSL_ENSURE( pLeft, "The pointer is not allowed to be NULL!" );
     StgAvlNode *pHeavy = pLeft;
     pLeft = pHeavy->pRight;
     pHeavy->pRight = this;
@@ -141,7 +152,7 @@ StgAvlNode* StgAvlNode::RotLL()
 
 StgAvlNode* StgAvlNode::RotLR()
 {
-
+    OSL_ENSURE( pLeft && pLeft->pRight, "The pointer is not allowed to be NULL!" );
     StgAvlNode* pHeavy = pLeft;
     StgAvlNode* pNewRoot = pHeavy->pRight;
 
@@ -173,6 +184,7 @@ StgAvlNode* StgAvlNode::RotLR()
 
 StgAvlNode* StgAvlNode::RotRR()
 {
+    OSL_ENSURE( pRight, "The pointer is not allowed to be NULL!" );
     StgAvlNode* pHeavy = pRight;
     pRight = pHeavy->pLeft;
     pHeavy->pLeft = this;
@@ -184,6 +196,7 @@ StgAvlNode* StgAvlNode::RotRR()
 
 StgAvlNode* StgAvlNode::RotRL()
 {
+    OSL_ENSURE( pRight && pRight->pLeft, "The pointer is not allowed to be NULL!" );
     StgAvlNode* pHeavy = pRight;
     StgAvlNode* pNewRoot = pHeavy->pLeft;
     pHeavy->pLeft = pNewRoot->pRight;
@@ -213,7 +226,7 @@ StgAvlNode* StgAvlNode::RotRL()
 
 StgAvlNode* StgAvlNode::Rem( StgAvlNode** p, StgAvlNode* pDel, sal_Bool bPtrs )
 {
-    if( *p )
+    if( p && *p && pDel )
     {
         StgAvlNode* pCur = *p;
         short nRes = bPtrs ? short( pCur == pDel ) : short(pCur->Compare( pDel ));
@@ -267,14 +280,11 @@ StgAvlNode* StgAvlNode::Rem( StgAvlNode** p, StgAvlNode* pDel, sal_Bool bPtrs )
 
 void StgAvlNode::StgEnum( short& n )
 {
-    if( this )
-    {
-        if( pLeft )
-            pLeft->StgEnum( n );
-        nId = n++;
-        if( pRight )
-            pRight->StgEnum( n );
-    }
+    if( pLeft )
+        pLeft->StgEnum( n );
+    nId = n++;
+    if( pRight )
+        pRight->StgEnum( n );
 }
 
 // Add node to AVL tree.
@@ -283,6 +293,9 @@ void StgAvlNode::StgEnum( short& n )
 sal_Bool StgAvlNode::Insert( StgAvlNode** pRoot, StgAvlNode* pIns )
 {
     StgAvlNode* pPivot, *pHeavy, *pNewRoot, *pParent, *pPrev;
+    if ( !pRoot )
+        return sal_False;
+
     // special case - empty tree
     if( *pRoot == NULL )
     {
@@ -293,6 +306,8 @@ sal_Bool StgAvlNode::Insert( StgAvlNode** pRoot, StgAvlNode* pIns )
     short nRes = (*pRoot)->Locate( pIns, &pPivot, &pParent, &pPrev );
     if( !nRes )
         return sal_False;
+    OSL_ENSURE( pPivot && pPrev, "The pointers may not be NULL!" );
+
     // add new node
     if( nRes < 0 )
         pPrev->pLeft = pIns;
@@ -330,6 +345,9 @@ sal_Bool StgAvlNode::Insert( StgAvlNode** pRoot, StgAvlNode* pIns )
 
 sal_Bool StgAvlNode::Remove( StgAvlNode** pRoot, StgAvlNode* pDel, sal_Bool bDel )
 {
+    if ( !pRoot )
+        return sal_False;
+
     // special case - empty tree
     if( *pRoot == NULL )
         return sal_False;
@@ -360,6 +378,9 @@ sal_Bool StgAvlNode::Remove( StgAvlNode** pRoot, StgAvlNode* pDel, sal_Bool bDel
 sal_Bool StgAvlNode::Move
     ( StgAvlNode** pRoot1, StgAvlNode** pRoot2, StgAvlNode* pMove )
 {
+    if ( !pRoot1 )
+        return sal_False;
+
     // special case - empty tree
     if( *pRoot1 == NULL )
         return sal_False;
