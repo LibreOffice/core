@@ -42,6 +42,7 @@ public:
     void defaultTabStopNotInStyles();
     void testFdo38244();
     void testMathEscape();
+    void testFdo51034();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -52,6 +53,7 @@ public:
 #if !(__GNUC__ == 4 && __GNUC_MINOR__ == 4)
     CPPUNIT_TEST(testMathEscape);
 #endif
+    CPPUNIT_TEST(testFdo51034);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -168,6 +170,13 @@ void Test::testMathEscape()
 {
     roundtrip("math-escape.docx");
     CPPUNIT_ASSERT_EQUAL(OUString("\\{ left [ right ] left ( right ) \\}"), getFormula(getRun(getParagraph(1), 1)));
+}
+
+void Test::testFdo51034()
+{
+    // The problem was that the 'l' param of the HYPERLINK field was parsed with = "#", not += "#".
+    roundtrip("fdo51034.odt");
+    CPPUNIT_ASSERT_EQUAL(OUString("http://Www.google.com/#a"), getProperty<OUString>(getRun(getParagraph(1), 1), "HyperLinkURL"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
