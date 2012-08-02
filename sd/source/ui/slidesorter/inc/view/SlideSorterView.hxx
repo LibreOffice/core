@@ -225,15 +225,13 @@ public:
         const bool bAnimate = true);
     void SetPageUnderMouse (
         const model::SharedPageDescriptor& rpDescriptor,
-        const bool bAnimate = true,
-        const Point& rMousePosition = Point());
+        const bool bAnimate = true);
 
     bool SetState (
         const model::SharedPageDescriptor& rpDescriptor,
         const model::PageDescriptor::State eState,
         const bool bStateValue,
-        const bool bAnimate = true,
-        const Point& rMousePosition = Point());
+        const bool bAnimate = true);
 
     void UpdateOrientation (void);
 
