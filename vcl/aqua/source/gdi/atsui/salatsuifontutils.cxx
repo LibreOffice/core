@@ -307,7 +307,7 @@ static bool GetDevFontAttributes( ATSUFontID nFontID, ImplDevFontAttributes& rDF
         // convert to unicode name
         UniString aUtf16Name;
         if( eEncoding == RTL_TEXTENCODING_UNICODE ) // we are just interested in UTF16 encoded names
-            aUtf16Name = UniString( (const sal_Unicode*)&aNameBuffer[0], nNameLength/2 );
+            aUtf16Name = rtl::OUString( (const sal_Unicode*)&aNameBuffer[0], nNameLength/2 );
         else if( eEncoding == RTL_TEXTENCODING_UCS4 )
             aUtf16Name = UniString(); // TODO
         else // assume the non-unicode encoded names are byte encoded
