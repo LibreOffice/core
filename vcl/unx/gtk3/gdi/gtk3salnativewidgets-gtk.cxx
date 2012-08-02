@@ -1049,6 +1049,10 @@ sal_Bool GtkSalGraphics::getNativeControlRegion( ControlType nType, ControlPart 
                (nPart==PART_BUTTON_UP) || (nPart==PART_BUTTON_DOWN)  ) )
     {
         aEditRect = NWGetScrollButtonRect( nPart, rControlRegion );
+        if (!aEditRect.GetWidth())
+            aEditRect.Right() = aEditRect.Left() + 1;
+        if (!aEditRect.GetHeight())
+            aEditRect.Bottom() = aEditRect.Top() + 1;
     }
     else if ( (nType==CTRL_SPINBOX) &&
               ((nPart==PART_BUTTON_UP) || (nPart==PART_BUTTON_DOWN) ||
