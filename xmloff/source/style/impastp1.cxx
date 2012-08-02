@@ -82,26 +82,4 @@ void XMLFamilyData_Impl::ClearEntries()
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// friendfunction of class XMLFamilyData_Impl for sorting listelements
-//
-
-int XMLFamilyDataSort_Impl( const XMLFamilyData_Impl& r1, const XMLFamilyData_Impl& r2 )
-{
-    int nRet = 0;
-
-    if( r1.mnFamily != r2.mnFamily )
-        nRet = ( r1.mnFamily > r2.mnFamily ? 1 : -1 );
-
-    return nRet;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-//
-// Implementation of sorted list of XMLFamilyData_Impl - elements
-//
-
-IMPL_CONTAINER_SORT( XMLFamilyDataList_Impl, XMLFamilyData_Impl, XMLFamilyDataSort_Impl )
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

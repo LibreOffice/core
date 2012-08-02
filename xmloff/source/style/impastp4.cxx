@@ -56,20 +56,12 @@ using namespace ::xmloff::token;
 //
 
 SvXMLAutoStylePoolP_Impl::SvXMLAutoStylePoolP_Impl( SvXMLExport& rExp)
-    :   rExport( rExp ),
-        maFamilyList( 5, 5 )
+    :   rExport( rExp )
 {
 }
 
 SvXMLAutoStylePoolP_Impl::~SvXMLAutoStylePoolP_Impl()
 {
-    for (;;) {
-        XMLFamilyData_Impl* pData = maFamilyList.Remove( sal_uLong(0) );
-        if (pData == NULL) {
-            break;
-        }
-        delete pData;
-    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -85,8 +77,6 @@ void SvXMLAutoStylePoolP_Impl::AddFamily(
         sal_Bool bAsFamily )
 {
     // store family in a list if not already stored
-    sal_uLong nPos;
-
     sal_uInt16 nExportFlags = GetExport().getExportFlags();
     sal_Bool bStylesOnly = (nExportFlags & EXPORT_STYLES) != 0 && (nExportFlags & EXPORT_CONTENT) == 0;
 
@@ -98,10 +88,7 @@ void SvXMLAutoStylePoolP_Impl::AddFamily(
     }
 
     XMLFamilyData_Impl *pFamily = new XMLFamilyData_Impl( nFamily, rStrName, rMapper, aPrefix, bAsFamily );
-    if( !maFamilyList.Seek_Entry( pFamily, &nPos ) )
-        maFamilyList.Insert( pFamily );
-    else
-        delete pFamily;
+    maFamilyList.insert(pFamily);
 }
 
 void SvXMLAutoStylePoolP_Impl::SetFamilyPropSetMapper(
@@ -110,14 +97,9 @@ void SvXMLAutoStylePoolP_Impl::SetFamilyPropSetMapper(
 {
 
     XMLFamilyData_Impl aTemporary( nFamily );
-    sal_uLong nPos;
-
-    if( maFamilyList.Seek_Entry( &aTemporary, &nPos ) )
-    {
-        XMLFamilyData_Impl* pFamily = maFamilyList.GetObject( nPos );
-        if ( pFamily )
-            pFamily-> mxMapper = rMapper;
-    }
+    XMLFamilyDataList_Impl::iterator aFind = maFamilyList.find(aTemporary);
+    if (aFind != maFamilyList.end())
+        aFind->mxMapper = rMapper;
 }
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -126,17 +108,12 @@ void SvXMLAutoStylePoolP_Impl::SetFamilyPropSetMapper(
 
 void SvXMLAutoStylePoolP_Impl::RegisterName( sal_Int32 nFamily, const OUString& rName )
 {
-    SvXMLAutoStylePoolNamesP_Impl *pNames = 0;
-
-    sal_uLong nPos;
     XMLFamilyData_Impl aTmp( nFamily );
-    if( maFamilyList.Seek_Entry( &aTmp, &nPos ) )
-        pNames = maFamilyList.GetObject( nPos )->mpNameList;
-
-    DBG_ASSERT( pNames,
+    XMLFamilyDataList_Impl::iterator aFind = maFamilyList.find(aTmp);
+    DBG_ASSERT( aFind != maFamilyList.end(),
                 "SvXMLAutoStylePool_Impl::RegisterName: unknown family" );
-    if( pNames )
-        pNames->insert(rName);
+    if (aFind != maFamilyList.end())
+        aFind->mpNameList->insert(rName);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -153,18 +130,17 @@ void SvXMLAutoStylePoolP_Impl::GetRegisteredNames(
     vector<OUString> aNames;
 
     // iterate over families
-    sal_uInt32 nCount = maFamilyList.Count();
-    for( sal_uInt32 i = 0; i < nCount; i++ )
+    for(XMLFamilyDataList_Impl::iterator aJ = maFamilyList.begin(); aJ != maFamilyList.end(); ++aJ)
     {
-        XMLFamilyData_Impl* pFamily = maFamilyList.GetObject( i );
+        XMLFamilyData_Impl &rFamily = *aJ;
 
         // iterate over names
-        SvXMLAutoStylePoolNamesP_Impl* pNames = pFamily->mpNameList;
+        SvXMLAutoStylePoolNamesP_Impl* pNames = rFamily.mpNameList;
         if (!pNames)
             continue;
         for (SvXMLAutoStylePoolNamesP_Impl::const_iterator aI = pNames->begin(); aI != pNames->end(); ++aI)
         {
-            aFamilies.push_back( pFamily->mnFamily );
+            aFamilies.push_back( rFamily.mnFamily );
             aNames.push_back( *aI );
         }
     }
@@ -192,22 +168,20 @@ sal_Bool SvXMLAutoStylePoolP_Impl::Add(OUString& rName, sal_Int32 nFamily,
                 bool bDontSeek )
 {
     sal_Bool bRet(sal_False);
-    sal_uLong nPos;
 
-    XMLFamilyData_Impl *pFamily = 0;
     XMLFamilyData_Impl aTemporary( nFamily );
-    if( maFamilyList.Seek_Entry( &aTemporary, &nPos ) )
-    {
-        pFamily = maFamilyList.GetObject( nPos );
-    }
+    XMLFamilyDataList_Impl::iterator aFind = maFamilyList.find(aTemporary);
+    DBG_ASSERT(aFind != maFamilyList.end(), "SvXMLAutoStylePool_Impl::Add: unknown family");
 
-    DBG_ASSERT( pFamily, "SvXMLAutoStylePool_Impl::Add: unknown family" );
-    if( pFamily )
+    if (aFind != maFamilyList.end())
     {
+        XMLFamilyData_Impl &rFamily = *aFind;
+
         SvXMLAutoStylePoolParentP_Impl aTmp( rParent );
         SvXMLAutoStylePoolParentP_Impl *pParent = 0;
 
-        SvXMLAutoStylePoolParentsP_Impl *pParents = pFamily->mpParentList;
+        SvXMLAutoStylePoolParentsP_Impl *pParents = rFamily.mpParentList;
+        sal_uLong nPos;
         if( pParents->Seek_Entry( &aTmp, &nPos ) )
         {
             pParent = pParents->GetObject( nPos );
@@ -218,18 +192,18 @@ sal_Bool SvXMLAutoStylePoolP_Impl::Add(OUString& rName, sal_Int32 nFamily,
             pParents->Insert( pParent );
         }
 
-        if( pParent->Add( pFamily, rProperties, rName, bDontSeek ) )
+        if( pParent->Add( rFamily, rProperties, rName, bDontSeek ) )
         {
-            pFamily->mnCount++;
+            rFamily.mnCount++;
             bRet = sal_True;
         }
 
         if( bCache )
         {
-            if( !pFamily->pCache )
-                pFamily->pCache = new SvXMLAutoStylePoolCache_Impl();
-            if( pFamily->pCache->size() < MAX_CACHE_SIZE )
-                pFamily->pCache->push_back( new OUString( rName ) );
+            if( !rFamily.pCache )
+                rFamily.pCache = new SvXMLAutoStylePoolCache_Impl();
+            if( rFamily.pCache->size() < MAX_CACHE_SIZE )
+                rFamily.pCache->push_back( new OUString( rName ) );
         }
     }
 
@@ -241,22 +215,20 @@ sal_Bool SvXMLAutoStylePoolP_Impl::AddNamed(const OUString& rName, sal_Int32 nFa
 {
     // get family and parent the same way as in Add()
     sal_Bool bRet(sal_False);
-    sal_uLong nPos;
 
-    XMLFamilyData_Impl *pFamily = 0;
     XMLFamilyData_Impl aTemporary( nFamily );
-    if( maFamilyList.Seek_Entry( &aTemporary, &nPos ) )
-    {
-        pFamily = maFamilyList.GetObject( nPos );
-    }
+    XMLFamilyDataList_Impl::iterator aFind = maFamilyList.find(aTemporary);
+    DBG_ASSERT(aFind != maFamilyList.end(), "SvXMLAutoStylePool_Impl::Add: unknown family");
 
-    DBG_ASSERT( pFamily, "SvXMLAutoStylePool_Impl::Add: unknown family" );
-    if( pFamily )
+    if (aFind != maFamilyList.end())
     {
+        XMLFamilyData_Impl &rFamily = *aFind;
+
         SvXMLAutoStylePoolParentP_Impl aTmp( rParent );
         SvXMLAutoStylePoolParentP_Impl *pParent = 0;
 
-        SvXMLAutoStylePoolParentsP_Impl *pParents = pFamily->mpParentList;
+        SvXMLAutoStylePoolParentsP_Impl *pParents = rFamily.mpParentList;
+        sal_uLong nPos;
         if( pParents->Seek_Entry( &aTmp, &nPos ) )
         {
             pParent = pParents->GetObject( nPos );
@@ -267,9 +239,9 @@ sal_Bool SvXMLAutoStylePoolP_Impl::AddNamed(const OUString& rName, sal_Int32 nFa
             pParents->Insert( pParent );
         }
 
-        if( pParent->AddNamed( pFamily, rProperties, rName ) )
+        if( pParent->AddNamed( rFamily, rProperties, rName ) )
         {
-            pFamily->mnCount++;
+            rFamily.mnCount++;
             bRet = sal_True;
         }
     }
@@ -288,24 +260,20 @@ OUString SvXMLAutoStylePoolP_Impl::Find( sal_Int32 nFamily,
 {
     OUString sName;
 
-    sal_uLong nPos;
     XMLFamilyData_Impl aTemporary( nFamily );
-    XMLFamilyData_Impl *pFamily = 0;
-    if( maFamilyList.Seek_Entry( &aTemporary, &nPos ) )
+    XMLFamilyDataList_Impl::iterator aFind = maFamilyList.find(aTemporary);
+    DBG_ASSERT(aFind != maFamilyList.end(), "SvXMLAutoStylePool_Impl::Find: unknown family");
+
+    if (aFind != maFamilyList.end())
     {
-        pFamily = maFamilyList.GetObject( nPos );
-    }
-
-    DBG_ASSERT( pFamily, "SvXMLAutoStylePool_Impl::Find: unknown family" );
-
-    if( pFamily )
-    {
-        SvXMLAutoStylePoolParentP_Impl aTmp( rParent );
-
+        XMLFamilyData_Impl &rFamily = *aFind;
         const SvXMLAutoStylePoolParentsP_Impl* pParents =
-            pFamily->mpParentList;
+            rFamily.mpParentList;
+
+        SvXMLAutoStylePoolParentP_Impl aTmp( rParent );
+        sal_uLong nPos;
         if( pParents->Seek_Entry( &aTmp, &nPos ) )
-            sName = pParents->GetObject( nPos )->Find( pFamily, rProperties );
+            sName = pParents->GetObject( nPos )->Find( rFamily, rProperties );
     }
 
     return sName;
@@ -323,156 +291,153 @@ void SvXMLAutoStylePoolP_Impl::exportXML(
         const SvXMLNamespaceMap&,
         const SvXMLAutoStylePoolP *pAntiImpl) const
 {
-    sal_uInt32 nCount = 0;
-
     // Get list of parents for current family (nFamily)
-    sal_uLong nPos;
     XMLFamilyData_Impl aTmp( nFamily );
-    XMLFamilyData_Impl *pFamily = 0;
-    if( maFamilyList.Seek_Entry( &aTmp, &nPos ) )
+    XMLFamilyDataList_Impl::iterator aFind = maFamilyList.find(aTmp);
+    DBG_ASSERT( aFind != maFamilyList.end(),
+                "SvXMLAutoStylePool_Impl::exportXML: unknown family" );
+    if (aFind == maFamilyList.end())
+        return;
+
+    XMLFamilyData_Impl &rFamily = *aFind;
+    sal_uInt32 nCount = rFamily.mnCount;
+
+    if (!nCount)
+        return;
+
+    /////////////////////////////////////////////////////////////////////////////////////
+    // create, initialize and fill helper-structure (SvXMLAutoStylePoolProperties_Impl)
+    // wich contains a parent-name and a SvXMLAutoStylePoolProperties_Impl
+    //
+    const SvXMLAutoStylePoolParentsP_Impl *pParents =
+        rFamily.mpParentList;
+
+    SvXMLAutoStylePoolPExport_Impl* aExpStyles =
+        new SvXMLAutoStylePoolPExport_Impl[nCount];
+
+    sal_uInt32 i;
+    for( i=0; i < nCount; i++ )
     {
-        pFamily = maFamilyList.GetObject( nPos );
-        nCount         = pFamily->mnCount;
+        aExpStyles[i].mpParent = 0;
+        aExpStyles[i].mpProperties = 0;
     }
 
-    DBG_ASSERT( pFamily,
-                "SvXMLAutoStylePool_Impl::exportXML: unknown family" );
-    if( pFamily && nCount > 0 )
+    sal_uInt32 nParents = pParents->Count();
+    for( i=0; i < nParents; i++ )
     {
-        /////////////////////////////////////////////////////////////////////////////////////
-        // create, initialize and fill helper-structure (SvXMLAutoStylePoolProperties_Impl)
-        // wich contains a parent-name and a SvXMLAutoStylePoolProperties_Impl
-        //
-        const SvXMLAutoStylePoolParentsP_Impl *pParents =
-            pFamily->mpParentList;
-
-        SvXMLAutoStylePoolPExport_Impl* aExpStyles =
-            new SvXMLAutoStylePoolPExport_Impl[nCount];
-
-        sal_uInt32 i;
-        for( i=0; i < nCount; i++ )
+        const SvXMLAutoStylePoolParentP_Impl* pParent =
+            pParents->GetObject( i );
+        size_t nProperties = pParent->GetPropertiesList().size();
+        for( size_t j = 0; j < nProperties; j++ )
         {
-            aExpStyles[i].mpParent = 0;
-            aExpStyles[i].mpProperties = 0;
-        }
-
-        sal_uInt32 nParents = pParents->Count();
-        for( i=0; i < nParents; i++ )
-        {
-            const SvXMLAutoStylePoolParentP_Impl* pParent =
-                pParents->GetObject( i );
-            size_t nProperties = pParent->GetPropertiesList().size();
-            for( size_t j = 0; j < nProperties; j++ )
+            const SvXMLAutoStylePoolPropertiesP_Impl* pProperties =
+                pParent->GetPropertiesList()[ j ];
+            sal_uLong nPos = pProperties->GetPos();
+            DBG_ASSERT( nPos < nCount,
+                    "SvXMLAutoStylePool_Impl::exportXML: wrong position" );
+            if( nPos < nCount )
             {
-                const SvXMLAutoStylePoolPropertiesP_Impl* pProperties =
-                    pParent->GetPropertiesList()[ j ];
-                nPos = pProperties->GetPos();
-                DBG_ASSERT( nPos < nCount,
-                        "SvXMLAutoStylePool_Impl::exportXML: wrong position" );
-                if( nPos < nCount )
-                {
-                    DBG_ASSERT( !aExpStyles[nPos].mpProperties,
-                        "SvXMLAutoStylePool_Impl::exportXML: double position" );
-                    aExpStyles[nPos].mpProperties = pProperties;
-                    aExpStyles[nPos].mpParent = &pParent->GetParent();
-                }
+                DBG_ASSERT( !aExpStyles[nPos].mpProperties,
+                    "SvXMLAutoStylePool_Impl::exportXML: double position" );
+                aExpStyles[nPos].mpProperties = pProperties;
+                aExpStyles[nPos].mpParent = &pParent->GetParent();
             }
         }
+    }
 
-        /////////////////////////////////////////////////////////////////////////////////////
-        //
-        // create string to export for each XML-style. That means for each property-list
-        //
-        OUString aStrFamilyName = pFamily->maStrFamilyName;
+    /////////////////////////////////////////////////////////////////////////////////////
+    //
+    // create string to export for each XML-style. That means for each property-list
+    //
+    OUString aStrFamilyName = rFamily.maStrFamilyName;
 
-        for( i=0; i<nCount; i++ )
+    for( i=0; i<nCount; i++ )
+    {
+        DBG_ASSERT( aExpStyles[i].mpProperties,
+                    "SvXMLAutoStylePool_Impl::exportXML: empty position" );
+
+        if( aExpStyles[i].mpProperties )
         {
-            DBG_ASSERT( aExpStyles[i].mpProperties,
-                        "SvXMLAutoStylePool_Impl::exportXML: empty position" );
+            GetExport().AddAttribute(
+                XML_NAMESPACE_STYLE, XML_NAME,
+                aExpStyles[i].mpProperties->GetName() );
 
-            if( aExpStyles[i].mpProperties )
+            if( rFamily.bAsFamily )
             {
                 GetExport().AddAttribute(
-                    XML_NAMESPACE_STYLE, XML_NAME,
-                    aExpStyles[i].mpProperties->GetName() );
-
-                if( pFamily->bAsFamily )
-                {
-                    GetExport().AddAttribute(
-                        XML_NAMESPACE_STYLE, XML_FAMILY, aStrFamilyName );
-                }
-
-                if( !aExpStyles[i].mpParent->isEmpty() )
-                {
-                    GetExport().AddAttribute(
-                        XML_NAMESPACE_STYLE, XML_PARENT_STYLE_NAME,
-                        GetExport().EncodeStyleName(
-                            *aExpStyles[i].mpParent ) );
-                }
-
-                OUString sName;
-                if( pFamily->bAsFamily )
-                    sName = GetXMLToken(XML_STYLE);
-                else
-                    sName = pFamily->maStrFamilyName;
-
-                pAntiImpl->exportStyleAttributes(
-                    GetExport().GetAttrList(),
-                    nFamily,
-                    aExpStyles[i].mpProperties->GetProperties(),
-                    *pFamily->mxMapper.get()
-                        , GetExport().GetMM100UnitConverter(),
-                        GetExport().GetNamespaceMap()
-                    );
-
-                SvXMLElementExport aElem( GetExport(),
-                                          XML_NAMESPACE_STYLE, sName,
-                                          sal_True, sal_True );
-
-                sal_Int32 nStart(-1);
-                sal_Int32 nEnd(-1);
-                if (nFamily == XML_STYLE_FAMILY_PAGE_MASTER)
-                {
-                    nStart = 0;
-                    sal_Int32 nIndex = 0;
-                    UniReference< XMLPropertySetMapper > aPropMapper =
-                        pFamily->mxMapper->getPropertySetMapper();
-                    sal_Int16 nContextID;
-                    while(nIndex < aPropMapper->GetEntryCount() && nEnd == -1)
-                    {
-                        nContextID = aPropMapper->GetEntryContextId( nIndex );
-                        if (nContextID && ((nContextID & CTF_PM_FLAGMASK) != XML_PM_CTF_START))
-                            nEnd = nIndex;
-                        nIndex++;
-                    }
-                    if (nEnd == -1)
-                        nEnd = nIndex;
-                }
-
-                pFamily->mxMapper->exportXML(
-                    GetExport(),
-                    aExpStyles[i].mpProperties->GetProperties(),
-                    nStart, nEnd, XML_EXPORT_FLAG_IGN_WS );
-
-                pAntiImpl->exportStyleContent(
-                    GetExport().GetDocHandler(),
-                    nFamily,
-                    aExpStyles[i].mpProperties->GetProperties(),
-                    *pFamily->mxMapper.get(),
-                    GetExport().GetMM100UnitConverter(),
-                    GetExport().GetNamespaceMap()
-                    );
+                    XML_NAMESPACE_STYLE, XML_FAMILY, aStrFamilyName );
             }
-        }
 
-        delete[] aExpStyles;
+            if( !aExpStyles[i].mpParent->isEmpty() )
+            {
+                GetExport().AddAttribute(
+                    XML_NAMESPACE_STYLE, XML_PARENT_STYLE_NAME,
+                    GetExport().EncodeStyleName(
+                        *aExpStyles[i].mpParent ) );
+            }
+
+            OUString sName;
+            if( rFamily.bAsFamily )
+                sName = GetXMLToken(XML_STYLE);
+            else
+                sName = rFamily.maStrFamilyName;
+
+            pAntiImpl->exportStyleAttributes(
+                GetExport().GetAttrList(),
+                nFamily,
+                aExpStyles[i].mpProperties->GetProperties(),
+                *rFamily.mxMapper.get()
+                    , GetExport().GetMM100UnitConverter(),
+                    GetExport().GetNamespaceMap()
+                );
+
+            SvXMLElementExport aElem( GetExport(),
+                                      XML_NAMESPACE_STYLE, sName,
+                                      sal_True, sal_True );
+
+            sal_Int32 nStart(-1);
+            sal_Int32 nEnd(-1);
+            if (nFamily == XML_STYLE_FAMILY_PAGE_MASTER)
+            {
+                nStart = 0;
+                sal_Int32 nIndex = 0;
+                UniReference< XMLPropertySetMapper > aPropMapper =
+                    rFamily.mxMapper->getPropertySetMapper();
+                sal_Int16 nContextID;
+                while(nIndex < aPropMapper->GetEntryCount() && nEnd == -1)
+                {
+                    nContextID = aPropMapper->GetEntryContextId( nIndex );
+                    if (nContextID && ((nContextID & CTF_PM_FLAGMASK) != XML_PM_CTF_START))
+                        nEnd = nIndex;
+                    nIndex++;
+                }
+                if (nEnd == -1)
+                    nEnd = nIndex;
+            }
+
+            rFamily.mxMapper->exportXML(
+                GetExport(),
+                aExpStyles[i].mpProperties->GetProperties(),
+                nStart, nEnd, XML_EXPORT_FLAG_IGN_WS );
+
+            pAntiImpl->exportStyleContent(
+                GetExport().GetDocHandler(),
+                nFamily,
+                aExpStyles[i].mpProperties->GetProperties(),
+                *rFamily.mxMapper.get(),
+                GetExport().GetMM100UnitConverter(),
+                GetExport().GetNamespaceMap()
+                );
+        }
     }
+
+    delete[] aExpStyles;
 }
 
 void SvXMLAutoStylePoolP_Impl::ClearEntries()
 {
-    for(sal_uInt32 a = 0L; a < maFamilyList.Count(); a++)
-        maFamilyList[a]->ClearEntries();
+    for(XMLFamilyDataList_Impl::iterator aI = maFamilyList.begin(); aI != maFamilyList.end(); ++aI)
+        aI->ClearEntries();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

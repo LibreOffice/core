@@ -29,6 +29,7 @@
 #ifndef _XMLOFF_XMLASTPL_IMPL_HXX
 #define _XMLOFF_XMLASTPL_IMPL_HXX
 
+#include <boost/ptr_container/ptr_set.hpp>
 #include <sal/types.h>
 #include <svl/cntnrsrt.hxx>
 #include <rtl/ustring.hxx>
@@ -84,12 +85,12 @@ public:
     {}
     ~XMLFamilyData_Impl();
 
-    friend int XMLFamilyDataSort_Impl( const XMLFamilyData_Impl& r1, const XMLFamilyData_Impl& r2 );
+    friend bool operator<(const XMLFamilyData_Impl& r1, const XMLFamilyData_Impl& r2);
 
     void ClearEntries();
 };
 
-DECLARE_CONTAINER_SORT( XMLFamilyDataList_Impl, XMLFamilyData_Impl )
+typedef boost::ptr_set<XMLFamilyData_Impl> XMLFamilyDataList_Impl;
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -104,7 +105,7 @@ class SvXMLAutoStylePoolPropertiesP_Impl
 
 public:
 
-    SvXMLAutoStylePoolPropertiesP_Impl( XMLFamilyData_Impl* pFamilyData, const ::std::vector< XMLPropertyState >& rProperties );
+    SvXMLAutoStylePoolPropertiesP_Impl( XMLFamilyData_Impl& rFamilyData, const ::std::vector< XMLPropertyState >& rProperties );
 
     ~SvXMLAutoStylePoolPropertiesP_Impl()
     {
@@ -139,11 +140,11 @@ public:
 
     ~SvXMLAutoStylePoolParentP_Impl();
 
-    sal_Bool Add( XMLFamilyData_Impl* pFamilyData, const ::std::vector< XMLPropertyState >& rProperties, ::rtl::OUString& rName, bool bDontSeek = false );
+    sal_Bool Add( XMLFamilyData_Impl& rFamilyData, const ::std::vector< XMLPropertyState >& rProperties, ::rtl::OUString& rName, bool bDontSeek = false );
 
-    sal_Bool AddNamed( XMLFamilyData_Impl* pFamilyData, const ::std::vector< XMLPropertyState >& rProperties, const ::rtl::OUString& rName );
+    sal_Bool AddNamed( XMLFamilyData_Impl& rFamilyData, const ::std::vector< XMLPropertyState >& rProperties, const ::rtl::OUString& rName );
 
-    ::rtl::OUString Find( const XMLFamilyData_Impl* pFamilyData, const ::std::vector< XMLPropertyState >& rProperties ) const;
+    ::rtl::OUString Find( const XMLFamilyData_Impl& rFamilyData, const ::std::vector< XMLPropertyState >& rProperties ) const;
 
     const ::rtl::OUString& GetParent() const { return msParent; }
 

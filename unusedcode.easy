@@ -51,8 +51,6 @@ VirtualDevice::SetOutputSizePixelScaleOffsetAndBuffer(Size const&, Fraction cons
 Window::PostUserEvent(unsigned long&, unsigned long, void*)
 X11SalGraphics::SetMask(int&, int&, unsigned int&, unsigned int&, int&, int&, unsigned long)
 X509Certificate_NssImpl::getImplementation(com::sun::star::uno::Reference<com::sun::star::uno::XInterface>)
-XMLFamilyDataList_Impl::GetPos(XMLFamilyData_Impl const*) const
-XMLFamilyDataList_Impl::Remove(XMLFamilyData_Impl*)
 XMLFontAutoStylePool_Impl::GetPos(XMLFontAutoStylePoolEntry_Impl const*) const
 XMLFontAutoStylePool_Impl::Remove(XMLFontAutoStylePoolEntry_Impl*)
 XMLTextListAutoStylePool_Impl::GetPos(XMLTextListAutoStylePoolEntry_Impl const*) const

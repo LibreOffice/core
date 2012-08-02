@@ -56,7 +56,7 @@ SvXMLAutoStylePoolParentP_Impl::~SvXMLAutoStylePoolParentP_Impl()
 // if not added, yet.
 //
 
-sal_Bool SvXMLAutoStylePoolParentP_Impl::Add( XMLFamilyData_Impl* pFamilyData, const vector< XMLPropertyState >& rProperties, OUString& rName, bool bDontSeek )
+sal_Bool SvXMLAutoStylePoolParentP_Impl::Add( XMLFamilyData_Impl& rFamilyData, const vector< XMLPropertyState >& rProperties, OUString& rName, bool bDontSeek )
 {
     sal_Bool bAdded = sal_False;
     SvXMLAutoStylePoolPropertiesP_Impl *pProperties = 0;
@@ -75,7 +75,7 @@ sal_Bool SvXMLAutoStylePoolParentP_Impl::Add( XMLFamilyData_Impl* pFamilyData, c
         {
             break;
         }
-        else if( !bDontSeek && pFamilyData->mxMapper->Equals( pIS->GetProperties(), rProperties ) )
+        else if( !bDontSeek && rFamilyData.mxMapper->Equals( pIS->GetProperties(), rProperties ) )
         {
             pProperties = pIS;
             break;
@@ -84,7 +84,7 @@ sal_Bool SvXMLAutoStylePoolParentP_Impl::Add( XMLFamilyData_Impl* pFamilyData, c
 
     if( !pProperties )
     {
-        pProperties = new SvXMLAutoStylePoolPropertiesP_Impl( pFamilyData, rProperties );
+        pProperties = new SvXMLAutoStylePoolPropertiesP_Impl( rFamilyData, rProperties );
         SvXMLAutoStylePoolPropertiesPList_Impl::iterator it = maPropertiesList.begin();
         ::std::advance( it, i );
         maPropertiesList.insert( it, pProperties );
@@ -103,7 +103,7 @@ sal_Bool SvXMLAutoStylePoolParentP_Impl::Add( XMLFamilyData_Impl* pFamilyData, c
 // the same properties exists, a new one is added (like with bDontSeek).
 //
 
-sal_Bool SvXMLAutoStylePoolParentP_Impl::AddNamed( XMLFamilyData_Impl* pFamilyData, const vector< XMLPropertyState >& rProperties, const OUString& rName )
+sal_Bool SvXMLAutoStylePoolParentP_Impl::AddNamed( XMLFamilyData_Impl& rFamilyData, const vector< XMLPropertyState >& rProperties, const OUString& rName )
 {
     sal_Bool bAdded = sal_False;
     size_t i = 0;
@@ -123,10 +123,10 @@ sal_Bool SvXMLAutoStylePoolParentP_Impl::AddNamed( XMLFamilyData_Impl* pFamilyDa
         }
     }
 
-    if(pFamilyData->mpNameList->find(rName) == pFamilyData->mpNameList->end())
+    if(rFamilyData.mpNameList->find(rName) == rFamilyData.mpNameList->end())
     {
         SvXMLAutoStylePoolPropertiesP_Impl* pProperties =
-                new SvXMLAutoStylePoolPropertiesP_Impl( pFamilyData, rProperties );
+                new SvXMLAutoStylePoolPropertiesP_Impl( rFamilyData, rProperties );
         // ignore the generated name
         pProperties->SetName( rName );
         SvXMLAutoStylePoolPropertiesPList_Impl::iterator it = maPropertiesList.begin();
@@ -143,7 +143,7 @@ sal_Bool SvXMLAutoStylePoolParentP_Impl::AddNamed( XMLFamilyData_Impl* pFamilyDa
 // Search for a array of XMLPropertyState ( vector< XMLPropertyState > ) in list
 //
 
-OUString SvXMLAutoStylePoolParentP_Impl::Find( const XMLFamilyData_Impl* pFamilyData, const vector< XMLPropertyState >& rProperties ) const
+OUString SvXMLAutoStylePoolParentP_Impl::Find( const XMLFamilyData_Impl& rFamilyData, const vector< XMLPropertyState >& rProperties ) const
 {
     OUString sName;
     vector< XMLPropertyState>::size_type nItems = rProperties.size();
@@ -159,7 +159,7 @@ OUString SvXMLAutoStylePoolParentP_Impl::Find( const XMLFamilyData_Impl* pFamily
         {
             break;
         }
-        else if( pFamilyData->mxMapper->Equals( pIS->GetProperties(), rProperties ) )
+        else if( rFamilyData.mxMapper->Equals( pIS->GetProperties(), rProperties ) )
         {
             sName = pIS->GetName();
             break;
