@@ -50,7 +50,7 @@ NEON_NAME=neon-0.29.5
 
 TARFILE_NAME=$(NEON_NAME)
 TARFILE_MD5=ff369e69ef0f0143beb5626164e87ae2
-PATCH_FILES=neon.patch
+PATCH_FILES=neon.patch neon_ne_set_request_flag.patch
 
 .IF "$(GUI)"=="WNT"
     PATCH_FILES+=neon_exports_win.patch
