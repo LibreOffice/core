@@ -1,17 +1,3 @@
 ar	autodoc	:  cosv udm sal NULL
-ar	autodoc\source\ary\doc 			    nmake	-	all	ar_sr_doc NULL
-ar	autodoc\source\ary\idl	 			nmake	-	all	ar_sr_idl NULL
-ar	autodoc\source\ary\info	 			nmake	-	all	ar_sr_info NULL
-ar	autodoc\source\ary\kernel			nmake	-	all	ar_sr_kernel NULL
-ar	autodoc\source\ary_i\kernel			nmake	-	all	ar_sr_cinfo NULL
-ar	autodoc\source\display\html	        nmake	-	all	ar_sd_html NULL
-ar	autodoc\source\display\kernel	    nmake	-	all	ar_sd_kernel NULL
-ar	autodoc\source\display\idl          nmake	-	all	ar_sd_idl NULL
-ar	autodoc\source\display\toolkit      nmake	-	all	ar_sd_tkit NULL
-ar	autodoc\source\parser\kernel		nmake	-	all	ar_sp_krnl NULL
-ar	autodoc\source\parser\tokens		nmake	-	all	ar_sp_tok NULL
-ar	autodoc\source\parser_i\idl	  		nmake	-	all	ar_sp2_idl NULL
-ar	autodoc\source\parser_i\idoc  		nmake	-	all	ar_sp2_idoc NULL
-ar	autodoc\source\parser_i\tokens		nmake	-	all	ar_sp2_tok NULL
-ar	autodoc\source\tools				nmake	-	all	ar_st NULL
-ar	autodoc\source\exes\adc_uni			nmake	-	all	ar_se_uni ar_sr_doc ar_sr_idl ar_sr_info ar_sr_kernel ar_sr_cinfo ar_sd_html ar_sd_kernel ar_sd_idl ar_sp_krnl ar_sp_tok ar_sp2_idl ar_sd_tkit ar_sp2_idoc ar_sp2_tok ar_st NULL
+ar      autodoc                                                       usr1    -       all     ar_mkout NULL
+ar      autodoc\prj                                                   nmake           -       all     ar_prj NULL

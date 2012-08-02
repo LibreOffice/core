@@ -304,8 +304,6 @@ APP3RDLIB=-lapp
 SAMPLE3RDLIB=-lsample
 HNJLIB*=-lhyphen
 MYSPELLLIB=-lmyspell
-COSVLIB=-lcosv
-UDMLIB=-ludm
 ULINGULIB=-lulingu
 .IF "$(SYSTEM_HUNSPELL)" == "YES"
 HUNSPELLLIB=$(HUNSPELL_LIBS)
@@ -520,8 +518,6 @@ APP3RDLIB= $(LIBPRE) app.lib
 SAMPLE3RDLIB= $(LIBPRE) sample.lib
 HNJLIB*=libhnj.lib
 MYSPELLLIB= $(LIBPRE) myspell.lib
-COSVLIB=cosv.lib
-UDMLIB= $(LIBPRE) udm.lib
 ULINGULIB=$(LIBPRE) libulingu.lib
 .IF "$(SYSTEM_HUNSPELL)" == "YES"
 HUNSPELLLIB=$(HUNSPELL_LIBS)

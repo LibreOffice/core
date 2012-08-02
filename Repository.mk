@@ -73,6 +73,7 @@ $(eval $(call gb_Helper_register_executables,SDK, \
 ifneq ($(OS),IOS)
 
 $(eval $(call gb_Helper_register_executables,SDK, \
+    autodoc \
     javamaker \
     cppumaker \
     regcompare \
