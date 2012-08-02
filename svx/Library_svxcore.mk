@@ -379,7 +379,7 @@ $(eval $(call gb_Library_add_exception_objects,svxcore,\
     svx/source/xoutdev/xtablend \
 ))
 
-ifneq (,$(filter DBCONNECTIVITY,$(BUILD_TYPE))$(filter IOS,$(OS)))
+ifneq (,$(filter DBCONNECTIVITY,$(BUILD_TYPE)))
 $(eval $(call gb_Library_use_packages,svxcore,\
 	connectivity_inc \
 	connectivity_generated \

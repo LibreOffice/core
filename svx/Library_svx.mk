@@ -200,7 +200,7 @@ $(eval $(call gb_Library_add_exception_objects,svx,\
     svx/source/unogallery/unogalthemeprovider \
 ))
 
-ifneq (,$(filter DBCONNECTIVITY,$(BUILD_TYPE))$(filter IOS,$(OS)))
+ifneq (,$(filter DBCONNECTIVITY,$(BUILD_TYPE)))
 $(eval $(call gb_Library_add_exception_objects,svx,\
     svx/source/fmcomp/dbaobjectex \
     svx/source/form/databaselocationinput \
