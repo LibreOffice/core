@@ -2846,6 +2846,12 @@ void SvxNumPositionTabPage::InitControls()
         nMask <<= 1;
 
     }
+    if (SVX_MAX_NUM <= nLvl)
+    {
+        OSL_ENSURE(false, "cannot happen.");
+        return;
+    }
+
     if(bSameDistBorderNum)
     {
         long nDistBorderNum;
