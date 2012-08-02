@@ -95,14 +95,16 @@ public:
     sal_uInt32 GetRelWidth() const { return nRelWidth; }
 };
 
-sal_Int32 SwXMLTableColumnCmpWidth_Impl( const SwXMLTableColumn_Impl& r1,
-                                           const SwXMLTableColumn_Impl& r2 )
+struct SwXMLTableColumnCmpWidth_Impl
 {
-    sal_Int32 n = (sal_Int32)r1.GetWidthOpt() - (sal_Int32)r2.GetWidthOpt();
-    if( !n )
-        n = (sal_Int32)r1.GetRelWidth() - (sal_Int32)r2.GetRelWidth();
-    return n;
-}
+    bool operator()( SwXMLTableColumn_Impl* const& lhs, SwXMLTableColumn_Impl* const& rhs ) const
+    {
+        sal_Int32 n = (sal_Int32)lhs->GetWidthOpt() - (sal_Int32)rhs->GetWidthOpt();
+        if( !n )
+            n = (sal_Int32)lhs->GetRelWidth() - (sal_Int32)rhs->GetRelWidth();
+        return n < 0;
+    }
+};
 
 // ---------------------------------------------------------------------
 
@@ -111,10 +113,7 @@ public:
     ~SwXMLTableColumns_Impl() { DeleteAndDestroyAll(); }
 };
 
-DECLARE_CONTAINER_SORT( SwXMLTableColumnsSortByWidth_Impl,
-                        SwXMLTableColumn_Impl )
-IMPL_CONTAINER_SORT( SwXMLTableColumnsSortByWidth_Impl, SwXMLTableColumn_Impl,
-                     SwXMLTableColumnCmpWidth_Impl )
+class SwXMLTableColumnsSortByWidth_Impl : public o3tl::sorted_vector<SwXMLTableColumn_Impl*, SwXMLTableColumnCmpWidth_Impl> {};
 
 class SwXMLTableLines_Impl
 {
@@ -630,11 +629,10 @@ void SwXMLExport::ExportTableLinesAutoStyles( const SwTableLines& rLines,
                 pColumn->SetWidthOpt( nColAbsWidth, sal_False );
             }
 
-            sal_uLong nExpPos = 0;
-            if( rExpCols.Seek_Entry( pColumn, &nExpPos ) )
+            SwXMLTableColumnsSortByWidth_Impl::const_iterator it = rExpCols.find( pColumn );
+            if( it != rExpCols.end() )
             {
-                pColumn->SetStyleName(
-                        rExpCols.GetObject(nExpPos)->GetStyleName() );
+                pColumn->SetStyleName( (*it)->GetStyleName() );
             }
             else
             {
@@ -653,7 +651,7 @@ void SwXMLExport::ExportTableLinesAutoStyles( const SwTableLines& rLines,
 
                 pColumn->SetStyleName( sBuffer.makeStringAndClear() );
                 ExportTableColumnStyle( *pColumn );
-                rExpCols.Insert( pColumn );
+                rExpCols.insert( pColumn );
             }
         }
     }
@@ -773,7 +771,7 @@ void SwXMLExport::ExportTableAutoStyles( const SwTableNode& rTblNd )
         ExportTableFmt( *pTblFmt, nAbsWidth );
 
         OUString sName( pTblFmt->GetName() );
-        SwXMLTableColumnsSortByWidth_Impl aExpCols( 10, 10 );
+        SwXMLTableColumnsSortByWidth_Impl aExpCols;
         SwXMLTableFrmFmtsSort_Impl aExpRows( 10, 10 );
         SwXMLTableFrmFmtsSort_Impl aExpCells( 10, 10 );
         SwXMLTableInfo_Impl aTblInfo( &rTbl );
