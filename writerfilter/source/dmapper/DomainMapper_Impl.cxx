@@ -2806,7 +2806,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                                 if (aPartIt == aItEnd)
                                     break;
 
-                                sURL = OUString('#');
+                                sURL += OUString('#');
                                 sURL += *aPartIt;
                             }
                             else if (aPartIt->equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("\\m")) ||
