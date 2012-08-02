@@ -139,6 +139,11 @@ TextConversion_ko::getCharConversions(const OUString& aText, sal_Int32 nStartPos
     sal_Int16 (*getHangul2HanjaIndexCount)() = (sal_Int16 (*)()) getFunctionBySymbol("getHangul2HanjaIndexCount");
     const sal_uInt16* (*getHanja2HangulIndex)() = (const sal_uInt16* (*)()) getFunctionBySymbol("getHanja2HangulIndex");
     const sal_Unicode* (*getHanja2HangulData)() = (const sal_Unicode* (*)()) getFunctionBySymbol("getHanja2HangulData");
+#else
+#ifdef LIBO_WERROR
+#pragma GCC diagnostic push
+#pragma GCC diagnostic warning "-Wbool-conversions"
+#endif
 #endif
     if (toHanja && getHangul2HanjaIndex && getHangul2HanjaIndexCount && getHangul2HanjaData) {
         ch = aText[nStartPos];
@@ -186,6 +191,9 @@ TextConversion_ko::getCharConversions(const OUString& aText, sal_Int32 nStartPos
         }
         delete[] newStr;
     }
+#if defined(DISABLE_DYNLOADING) && defined(LIBO_WERROR)
+#pragma GCC diagnostic pop
+#endif
     return output;
 }
 
