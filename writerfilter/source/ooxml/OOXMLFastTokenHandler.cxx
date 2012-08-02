@@ -72,6 +72,8 @@ OOXMLFastTokenHandler::OOXMLFastTokenHandler
 {
     ::rtl::OUString sResult;
 
+#if 0
+    //FIXME this is broken: tokenmap::wordlist is not indexed by Token!
     if ( Token >= 0 || Token < OOXML_FAST_TOKENS_END )
     {
         static ::rtl::OUString aTokens[OOXML_FAST_TOKENS_END];
@@ -80,6 +82,9 @@ OOXMLFastTokenHandler::OOXMLFastTokenHandler
             aTokens[Token] = ::rtl::OUString::createFromAscii
                 (tokenmap::wordlist[Token].name);
     }
+#else
+    (void) Token;
+#endif
 
     return sResult;
 }
@@ -87,10 +92,17 @@ OOXMLFastTokenHandler::OOXMLFastTokenHandler
 css::uno::Sequence< ::sal_Int8 > SAL_CALL OOXMLFastTokenHandler::getUTF8Identifier(::sal_Int32 Token)
     throw (css::uno::RuntimeException)
 {
+#if 0
     if ( Token < 0  || Token >= OOXML_FAST_TOKENS_END )
+#endif
         return css::uno::Sequence< ::sal_Int8 >();
 
+#if 0
+    //FIXME this is broken: tokenmap::wordlist is not indexed by Token!
     return css::uno::Sequence< ::sal_Int8 >(reinterpret_cast< const sal_Int8 *>(tokenmap::wordlist[Token].name), strlen(tokenmap::wordlist[Token].name));
+#else
+    (void) Token;
+#endif
 }
 
 ::sal_Int32 SAL_CALL OOXMLFastTokenHandler::getTokenFromUTF8
