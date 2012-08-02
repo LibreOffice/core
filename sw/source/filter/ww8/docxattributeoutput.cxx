@@ -534,14 +534,6 @@ void DocxAttributeOutput::EndRun()
         m_pSerializer->endElementNS( XML_w, XML_hyperlink );
         m_closeHyperlinkInPreviousRun = false;
     }
-    // prepend the actual run start
-    if ( m_pHyperlinkAttrList )
-    {
-        XFastAttributeListRef xAttrList ( m_pHyperlinkAttrList );
-
-        m_pSerializer->startElementNS( XML_w, XML_hyperlink, xAttrList );
-        m_pHyperlinkAttrList = NULL;
-    }
 
     // Write the hyperlink and toc fields starts
     for ( std::vector<FieldInfos>::iterator pIt = m_Fields.begin(); pIt != m_Fields.end(); )
@@ -558,6 +550,15 @@ void DocxAttributeOutput::EndRun()
             }
         }
         ++pIt;
+    }
+
+    // Start the hyperlink after the fields separators or we would generate invalid file
+    if ( m_pHyperlinkAttrList )
+    {
+        XFastAttributeListRef xAttrList ( m_pHyperlinkAttrList );
+
+        m_pSerializer->startElementNS( XML_w, XML_hyperlink, xAttrList );
+        m_pHyperlinkAttrList = NULL;
     }
 
     DoWriteBookmarks( );
@@ -1216,9 +1217,10 @@ bool DocxAttributeOutput::StartURL( const String& rUrl, const String& rTarget )
         {
             OUString osUrl( sUrl );
 
-            ::rtl::OString sId = m_rExport.AddRelation(
-                S( "http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink" ),
-                osUrl );
+            OString sId = rtl::OUStringToOString( GetExport().GetFilter().addRelation( m_pSerializer->getOutputStream(),
+                        S( "http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink" ),
+                        osUrl, true ), RTL_TEXTENCODING_UTF8 );
+
             m_pHyperlinkAttrList->add( FSNS( XML_r, XML_id), sId.getStr());
         }
         else
@@ -3508,6 +3510,7 @@ void DocxAttributeOutput::FootnotesEndnotes( bool bFootnotes )
 
     m_pSerializer->startElementNS( XML_w, nBody,
             FSNS( XML_xmlns, XML_w ), "http://schemas.openxmlformats.org/wordprocessingml/2006/main",
+            FSNS( XML_xmlns, XML_r ), "http://schemas.openxmlformats.org/officeDocument/2006/relationships",
             FSEND );
 
     sal_Int32 nIndex = 0;

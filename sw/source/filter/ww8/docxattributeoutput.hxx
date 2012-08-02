@@ -613,7 +613,7 @@ public:
     virtual DocxExport& GetExport();
     const DocxExport& GetExport() const { return const_cast< DocxAttributeOutput* >( this )->GetExport(); }
 
-    /// For eg. the output of the styles, we need to switch the serializer to enother one.
+    /// For eg. the output of the styles, we need to switch the serializer to an other one.
     void SetSerializer( ::sax_fastparser::FSHelperPtr pSerializer ) { m_pSerializer = pSerializer; }
 
     /// Occasionnaly need to use this serializer from the outside
