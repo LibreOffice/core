@@ -604,7 +604,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
     my $allupdatelastsequences = "";
     my $allupdatediskids = "";
 
-    if ( $installer::globals::iswindowsbuild )
+    if ( $installer::globals::iswindowsbuild || $installer::globals::packageformat eq 'msi' )
     {
         if ( $allvariableshashref->{'UPDATE_DATABASE'} )
         {
@@ -625,7 +625,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
     if (!($installer::globals::is_copy_only_project))
     {
-        if (( $installer::globals::iswindowsbuild ) && ( $installer::globals::packageformat ne "archive" ) && ( $installer::globals::packageformat ne "installed" ))
+        if ((( $installer::globals::iswindowsbuild ) && ( $installer::globals::packageformat ne "archive" ) && ( $installer::globals::packageformat ne "installed" ) ) || $insaller::globals::packageformat eq 'msi' )
         {
             installer::windows::msiglobal::set_global_code_variables($languagesarrayref, $languagestringref, $allvariableshashref, $alloldproperties);
         }
