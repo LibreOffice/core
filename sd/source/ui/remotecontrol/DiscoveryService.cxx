@@ -67,6 +67,8 @@ void DiscoveryService::replyTo( sockaddr_in& rAddr )
 //     OStringBuffer aBuffer( "LOREMOTE_ADVERTISE\n" );
 //     aBuffer.append( aAddrString ).append( "\n" );
 //     mSocket.sendTo( rAddr, aBuffer.getStr(), aBuffer.getLength() );
+    OString aMessage("LOREMOTE_ADVERTISE\n");
+    sendto( mSocket, aMessage.getStr(), aMessage.getLength(), 0, (sockaddr*) &rAddr, sizeof(rAddr) );
 }
 
 void DiscoveryService::execute()
