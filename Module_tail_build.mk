@@ -28,6 +28,7 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
     accessibility \
     animations \
     apple_remote \
+	autodoc \
     avmedia \
     basctl \
     basebmp \
@@ -39,6 +40,7 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
     chart2 \
     configmgr \
     connectivity \
+	cosv \
     cppcanvas \
 	cpputools \
     cui \
@@ -119,6 +121,7 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
     tubes \
     twain \
     ucb \
+	udm \
     unixODBC \
     UnoControls \
     unodevtools \
