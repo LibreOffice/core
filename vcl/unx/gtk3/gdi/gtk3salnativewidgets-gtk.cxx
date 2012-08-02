@@ -972,9 +972,9 @@ void GtkSalGraphics::renderAreaToPix( cairo_t *cr,
         for (int x = 0; x < awidth && y < aheight; ++x)
         {
             double alpha = ((float)cairo_data[x*4 + 3])/255.0;
-            src[x*3 + 0] = src[x*3 + 0] * (1.0 - alpha) + cairo_data[x*4+0] * alpha;
-            src[x*3 + 1] = src[x*3 + 1] * (1.0 - alpha) + cairo_data[x*4+1] * alpha;
-            src[x*3 + 2] = src[x*3 + 2] * (1.0 - alpha) + cairo_data[x*4+2] * alpha;
+            src[x*3 + 0] = src[x*3 + 0] * (1.0 - alpha) + cairo_data[x*4+0];
+            src[x*3 + 1] = src[x*3 + 1] * (1.0 - alpha) + cairo_data[x*4+1];
+            src[x*3 + 2] = src[x*3 + 2] * (1.0 - alpha) + cairo_data[x*4+2];
         }
         src += nStride;
         cairo_data += cairo_stride;
