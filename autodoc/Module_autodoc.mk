@@ -8,8 +8,12 @@
 #
 $(eval $(call gb_Module_Module,autodoc))
 
+ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
+
 $(eval $(call gb_Module_add_targets,autodoc,\
     Executable_autodoc \
 ))
+
+endif
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:
