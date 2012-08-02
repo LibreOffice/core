@@ -42,11 +42,13 @@ class Test : public SwModelTestBase
 public:
     void testN325936();
     void testFdo45724();
+    void testFdo46020();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
     CPPUNIT_TEST(testN325936);
     CPPUNIT_TEST(testFdo45724);
+    CPPUNIT_TEST(testFdo46020);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -93,6 +95,15 @@ void Test::testFdo45724()
     uno::Reference<form::validation::XValidatableFormComponent> xComponent(xControlShape->getControl(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(COL_WHITE, getProperty<sal_uInt32>(xComponent, "BackgroundColor"));
     CPPUNIT_ASSERT_EQUAL(OUString("xxx"), xComponent->getCurrentValue().get<OUString>());
+}
+
+void Test::testFdo46020()
+{
+    // The footnote in that document wasn't exported, check that it is actually exported
+    roundtrip("fdo46020.odt");
+    uno::Reference<text::XFootnotesSupplier> xFootnotesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xFootnotes(xFootnotesSupplier->getFootnotes(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xFootnotes->getCount());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
