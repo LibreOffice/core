@@ -2871,7 +2871,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                                 if (aPartIt == aItEnd)
                                     break;
 
-                                sURL = OUString('#');
+                                sURL += OUString('#');
                                 sURL += *aPartIt;
                             }
                             else if ( *aPartIt == "\\m" || *aPartIt == "\\n" )
