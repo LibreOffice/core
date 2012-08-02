@@ -36,7 +36,6 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/numehelp.hxx>
-#include <svl/cntnrsrt.hxx>
 #include <svl/zforlist.hxx>
 #include <editeng/brshitem.hxx>
 #include <editeng/boxitem.hxx>

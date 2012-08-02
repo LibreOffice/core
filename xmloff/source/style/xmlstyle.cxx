@@ -39,7 +39,6 @@
 #include <com/sun/star/style/XAutoStyleFamily.hpp>
 #include "PageMasterPropMapper.hxx"
 #include <tools/debug.hxx>
-#include <svl/cntnrsrt.hxx>
 #include <svl/itemset.hxx>
 #include <xmloff/nmspmap.hxx>
 #include "xmloff/xmlnmspe.hxx"

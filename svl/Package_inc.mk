@@ -30,7 +30,6 @@ $(eval $(call gb_Package_add_file,svl_inc,inc/svl/broadcast.hxx,svl/broadcast.hx
 $(eval $(call gb_Package_add_file,svl_inc,inc/svl/cenumitm.hxx,svl/cenumitm.hxx))
 $(eval $(call gb_Package_add_file,svl_inc,inc/svl/cintitem.hxx,svl/cintitem.hxx))
 $(eval $(call gb_Package_add_file,svl_inc,inc/svl/cjkoptions.hxx,svl/cjkoptions.hxx))
-$(eval $(call gb_Package_add_file,svl_inc,inc/svl/cntnrsrt.hxx,svl/cntnrsrt.hxx))
 $(eval $(call gb_Package_add_file,svl_inc,inc/svl/cntwall.hxx,svl/cntwall.hxx))
 $(eval $(call gb_Package_add_file,svl_inc,inc/svl/cntwids.hrc,svl/cntwids.hrc))
 $(eval $(call gb_Package_add_file,svl_inc,inc/svl/converter.hxx,svl/converter.hxx))
