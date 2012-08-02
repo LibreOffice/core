@@ -3230,15 +3230,6 @@ int RTFDocumentImpl::popState()
     //                         ", dest state: " << m_aStates.top().nDestinationState);
 
     checkUnicode();
-    RTFSprms aSprms;
-    RTFSprms aAttributes;
-    OUStringBuffer aDestinationText;
-    RTFShape aShape;
-    RTFPicture aPicture;
-    bool bPopShapeProperties = false;
-    bool bPopPictureProperties = false;
-    bool bFaltEnd = false;
-    bool bPopFrame = false;
     RTFParserState aState(m_aStates.top());
     sal_Int32 nMathToken = 0;
 
@@ -3328,14 +3319,10 @@ int RTFDocumentImpl::popState()
     case DESTINATION_SHAPEPROPERTYVALUE:
     case DESTINATION_SHAPEPROPERTY:
     {
-        aShape = m_aStates.top().aShape;
-        aPicture = m_aStates.top().aPicture;
-        aAttributes = m_aStates.top().aCharacterAttributes;
         if (m_aStates.top().nDestinationState == DESTINATION_SHAPEPROPERTYNAME)
-            aShape.aProperties.push_back(make_pair(m_aStates.top().aDestinationText.makeStringAndClear(), OUString()));
-        else if (m_aStates.top().nDestinationState == DESTINATION_SHAPEPROPERTYVALUE && aShape.aProperties.size())
-            aShape.aProperties.back().second = m_aStates.top().aDestinationText.makeStringAndClear();
-        bPopShapeProperties = true;
+            aState.aShape.aProperties.push_back(make_pair(m_aStates.top().aDestinationText.makeStringAndClear(), OUString()));
+        else if (m_aStates.top().nDestinationState == DESTINATION_SHAPEPROPERTYVALUE && aState.aShape.aProperties.size())
+            aState.aShape.aProperties.back().second = m_aStates.top().aDestinationText.makeStringAndClear();
     }
     break;
     case DESTINATION_PICPROP:
@@ -3356,11 +3343,6 @@ int RTFDocumentImpl::popState()
     break;
     case DESTINATION_PICT:
         resolvePict(true);
-    break;
-    case DESTINATION_SHAPEPROPERTYVALUEPICT:
-        bPopPictureProperties = true;
-        aPicture = m_aStates.top().aPicture;
-        aDestinationText = m_aStates.top().aDestinationText;
     break;
     case DESTINATION_SHAPETEXT:
         m_pCurrentBuffer = 0; // Just disable buffering, don't empty it yet.
@@ -3567,14 +3549,8 @@ int RTFDocumentImpl::popState()
     {
         OUString aStr(m_aStates.top().aDestinationText.makeStringAndClear());
         RTFValue::Pointer_t pValue(new RTFValue(aStr));
-        m_aStates.top().aTableSprms.set(NS_ooxml::LN_CT_Font_altName, pValue);
-        aSprms = m_aStates.top().aTableSprms;
-        bFaltEnd = true;
+        aState.aTableSprms.set(NS_ooxml::LN_CT_Font_altName, pValue);
     }
-    break;
-    case DESTINATION_FLYMAINCONTENT:
-    case DESTINATION_SHPPICT:
-        bPopFrame = true;
     break;
     case DESTINATION_DRAWINGOBJECT:
     if (m_aStates.top().aDrawingObject.xShape.is())
@@ -3826,23 +3802,26 @@ int RTFDocumentImpl::popState()
         if (aState.nFieldStatus == FIELD_INSTRUCTION)
             singleChar(0x15);
     }
+    else if (aState.nDestinationState == DESTINATION_SHAPEPROPERTYVALUEPICT)
+    {
+        m_aStates.top().aPicture = aState.aPicture;
+        m_aStates.top().aDestinationText = aState.aDestinationText;
+    }
+    else if (aState.nDestinationState == DESTINATION_FALT)
+        m_aStates.top().aTableSprms = aState.aTableSprms;
     else if (m_aStates.size() && m_aStates.top().nDestinationState == DESTINATION_PICT)
         m_aStates.top().aPicture = aState.aPicture;
-    else if (bPopShapeProperties)
+    else if (aState.nDestinationState == DESTINATION_SHAPEPROPERTYNAME ||
+            aState.nDestinationState == DESTINATION_SHAPEPROPERTYVALUE ||
+            aState.nDestinationState == DESTINATION_SHAPEPROPERTY)
     {
-        m_aStates.top().aShape = aShape;
-        m_aStates.top().aPicture = aPicture;
-        m_aStates.top().aCharacterAttributes = aAttributes;
+        m_aStates.top().aShape = aState.aShape;
+        m_aStates.top().aPicture = aState.aPicture;
+        m_aStates.top().aCharacterAttributes = aState.aCharacterAttributes;
     }
-    else if (bFaltEnd)
-        m_aStates.top().aTableSprms = aSprms;
-    else if (bPopFrame)
+    else if (aState.nDestinationState == DESTINATION_FLYMAINCONTENT ||
+            aState.nDestinationState == DESTINATION_SHPPICT)
         m_aStates.top().aFrame = aState.aFrame;
-    if (bPopPictureProperties)
-    {
-        m_aStates.top().aPicture = aPicture;
-        m_aStates.top().aDestinationText = aDestinationText;
-    }
     if (m_pCurrentBuffer == &m_aSuperBuffer)
     {
         if (!m_bHasFootnote)
