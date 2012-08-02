@@ -46,6 +46,29 @@
 #include "lotrange.hxx"
 #include "lotattr.hxx"
 
+LOTUS_ROOT::LOTUS_ROOT( ScDocument* pDocP, CharSet eQ )
+    :
+        pDoc( pDocP),
+        pRangeNames( new LotusRangeList),
+        pScRangeName( pDocP->GetRangeName()),
+        eCharsetQ( eQ),
+        eFirstType( Lotus_X),
+        eActType( Lotus_X),
+        pRngNmBffWK3( new RangeNameBufferWK3),
+        pFontBuff( new LotusFontBuffer),
+        pAttrTable( new LotAttrTable)
+{
+}
+
+
+LOTUS_ROOT::~LOTUS_ROOT()
+{
+	delete pRangeNames;
+	delete pRngNmBffWK3;
+	delete pFontBuff;
+	delete pAttrTable;
+}
+
 
 static osl::Mutex aLotImpSemaphore;
 
@@ -58,30 +81,14 @@ ImportLotus::ImportLotus( SvStream& aStream, ScDocument* pDoc, CharSet eQ ) :
     // good point to start locking of import lotus
     aLotImpSemaphore.acquire();
 
-    pLotusRoot = new LOTUS_ROOT;
-    pLotusRoot->pDoc = pDoc;
-    pLotusRoot->pRangeNames = new LotusRangeList;
-    pLotusRoot->pScRangeName = pDoc->GetRangeName();
-    pLotusRoot->eCharsetQ = eQ;
-    pLotusRoot->eFirstType = Lotus_X;
-    pLotusRoot->eActType = Lotus_X;
-    pLotusRoot->pRngNmBffWK3 = new RangeNameBufferWK3;
-    pFontBuff = pLotusRoot->pFontBuff = new LotusFontBuffer;
-    pLotusRoot->pAttrTable = new LotAttrTable;
+	pLotusRoot = new LOTUS_ROOT( pDoc, eQ);
 }
 
 
 ImportLotus::~ImportLotus()
 {
-    delete pLotusRoot->pRangeNames;
-    delete pLotusRoot->pRngNmBffWK3;
-    delete pFontBuff;
-    delete pLotusRoot->pAttrTable;
     delete pLotusRoot;
-
-#if OSL_DEBUG_LEVEL > 0
     pLotusRoot = NULL;
-#endif
 
     // no need 4 pLotusRoot anymore
     aLotImpSemaphore.release();
@@ -132,7 +139,7 @@ void ImportLotus::Columnwidth( sal_uInt16 nRecLen )
     OSL_ENSURE( nRecLen >= 4, "*ImportLotus::Columnwidth(): Record zu kurz!" );
 
     sal_uInt8    nLTab, nWindow2;
-    sal_uInt16  nCnt = ( nRecLen - 4 ) / 2;
+	sal_uInt16	nCnt = (nRecLen < 4) ? 0 : ( nRecLen - 4 ) / 2;
 
     Read( nLTab );
     Read( nWindow2 );
@@ -164,7 +171,7 @@ void ImportLotus::Hiddencolumn( sal_uInt16 nRecLen )
     OSL_ENSURE( nRecLen >= 4, "*ImportLotus::Hiddencolumn(): Record zu kurz!" );
 
     sal_uInt8    nLTab, nWindow2;
-    sal_uInt16  nCnt = ( nRecLen - 4 ) / 2;
+	sal_uInt16	nCnt = (nRecLen < 4) ? 0 : ( nRecLen - 4 ) / 2;
 
     Read( nLTab );
     Read( nWindow2 );
@@ -190,18 +197,17 @@ void ImportLotus::Userrange( void )
 {
     sal_uInt16      nRangeType;
     ScRange     aScRange;
-    sal_Char*   pBuffer = new sal_Char[ 32 ];
 
     Read( nRangeType );
 
-    pIn->Read( pBuffer, 16 );
-    pBuffer[ 16 ] = ( sal_Char ) 0x00;  // zur Sicherheit...
-    String      aName( pBuffer, eQuellChar );
+	sal_Char aBuffer[ 17 ];
+	pIn->Read( aBuffer, 16 );
+	aBuffer[ 16 ] = 0;
+	String		aName( aBuffer, eQuellChar );
 
     Read( aScRange );
 
     pLotusRoot->pRngNmBffWK3->Add( aName, aScRange );
-    delete[] pBuffer;
 }
 
 
@@ -242,7 +248,7 @@ void ImportLotus::Labelcell( void )
 
 
 void ImportLotus::Numbercell( void )
-    {
+{
     ScAddress   aAddr;
     double      fVal;
 
@@ -276,7 +282,7 @@ ScFormulaCell *ImportLotus::Formulacell( sal_uInt16 n )
     Read( aAddr );
     Skip( 10 );
 
-    n -= 14;
+	n -= (n > 14) ? 14 : n;
 
     const ScTokenArray* pErg;
     sal_Int32               nRest = n;
@@ -292,7 +298,7 @@ ScFormulaCell *ImportLotus::Formulacell( sal_uInt16 n )
     pD->PutCell( aAddr.Col(), aAddr.Row(), aAddr.Tab(), pZelle, true );
 
     return NULL;
-    }
+}
 
 
 void ImportLotus::Read( String &r )
@@ -307,7 +313,7 @@ void ImportLotus::RowPresentation( sal_uInt16 nRecLen )
 
     sal_uInt8    nLTab, nFlags;
     sal_uInt16  nRow, nHeight;
-    sal_uInt16  nCnt = ( nRecLen - 4 ) / 8;
+	sal_uInt16	nCnt = (nRecLen < 4) ? 0 : ( nRecLen - 4 ) / 8;
 
     Read( nLTab );
     Skip( 1 );
@@ -358,52 +364,44 @@ void ImportLotus::Font_Face( void )
 
     Read( nNum );
 
-    // ACHTUNG: QUICK-HACK gegen unerklaerliche Loops
-    if( nNum > 7 )
-        return;
-    // ACHTUNG
+	if( nNum >= LotusFontBuffer::nSize )
+		return;     // nonsense
 
     Read( aName );
 
-    pFontBuff->SetName( nNum, aName );
+	pLotusRoot->pFontBuff->SetName( nNum, aName );
 }
 
 
 void ImportLotus::Font_Type( void )
 {
-    static const sal_uInt16 nAnz = 8;
-    sal_uInt16              nCnt;
-    sal_uInt16              nType;
-
-    for( nCnt = 0 ; nCnt < nAnz ; nCnt++ )
+	for( sal_uInt16 nCnt = 0 ; nCnt < LotusFontBuffer::nSize ; nCnt++ )
     {
+        sal_uInt16 nType;
         Read( nType );
-        pFontBuff->SetType( nCnt, nType );
+		pLotusRoot->pFontBuff->SetType( nCnt, nType );
     }
 }
 
 
 void ImportLotus::Font_Ysize( void )
 {
-    static const sal_uInt16 nAnz = 8;
-    sal_uInt16              nCnt;
-    sal_uInt16              nSize;
-
-    for( nCnt = 0 ; nCnt < nAnz ; nCnt++ )
+	for( sal_uInt16 nCnt = 0 ; nCnt < LotusFontBuffer::nSize ; nCnt++ )
     {
+        sal_uInt16 nSize;
         Read( nSize );
-        pFontBuff->SetHeight( nCnt, nSize );
+		pLotusRoot->pFontBuff->SetHeight( nCnt, nSize );
     }
 }
 
 
 void ImportLotus::_Row( const sal_uInt16 nRecLen )
-    {
+{
     OSL_ENSURE( nExtTab >= 0, "*ImportLotus::_Row(): Kann hier nicht sein!" );
 
     sal_uInt16          nRow;
     sal_uInt16          nHeight;
-    sal_uInt16          nCntDwn = ( nRecLen - 4 ) / 5;
+	sal_uInt16			nCntDwn = (nRecLen < 4) ? 0 : ( nRecLen - 4 ) / 5;
     SCCOL           nColCnt = 0;
     sal_uInt8           nRepeats;
     LotAttrWK3      aAttr;
@@ -467,7 +465,5 @@ void ImportLotus::_Row( const sal_uInt16 nRecLen )
     if( bCenter )
         // evtl. alte Center bemachen
         pD->DoMerge( static_cast<SCTAB> (nExtTab), nCenterStart, static_cast<SCROW> (nRow), nCenterEnd, static_cast<SCROW> (nRow) );
-    }
-
-
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
