@@ -38,6 +38,7 @@
 #include <unotools/tempfile.hxx>
 
 #include <editeng/langitem.hxx>
+#include <editeng/charhiddenitem.hxx>
 
 #include <sfx2/app.hxx>
 #include <sfx2/docfilt.hxx>
@@ -63,6 +64,8 @@
 #include "fmtfld.hxx"
 #include "redline.hxx"
 #include "docary.hxx"
+#include "modeltoviewhelper.hxx"
+#include "scriptinfo.hxx"
 
 SO2_DECL_REF(SwDocShell)
 SO2_IMPL_REF(SwDocShell)
@@ -81,6 +84,7 @@ public:
     void testPageDescName();
     void testFileNameFields();
     void testDocStat();
+    void testModelToViewHelper();
     void testSwScanner();
     void testUserPerceivedCharCount();
     void testGraphicAnchorDeletion();
@@ -90,6 +94,7 @@ public:
     CPPUNIT_TEST(testPageDescName);
     CPPUNIT_TEST(testFileNameFields);
     CPPUNIT_TEST(testDocStat);
+    CPPUNIT_TEST(testModelToViewHelper);
     CPPUNIT_TEST(testSwScanner);
     CPPUNIT_TEST(testUserPerceivedCharCount);
     CPPUNIT_TEST(testGraphicAnchorDeletion);
@@ -220,6 +225,112 @@ void SwDocTest::testUserPerceivedCharCount()
     ::rtl::OUString sGCLEF(GCLEF, SAL_N_ELEMENTS(GCLEF));
     sal_Int32 nCount = pBreakIter->getGraphemeCount(sGCLEF);
     CPPUNIT_ASSERT_MESSAGE("Surrogate Pair should be counted as single character", nCount == 1);
+}
+
+void SwDocTest::testModelToViewHelper()
+{
+    SwNodeIndex aIdx(m_pDoc->GetNodes().GetEndOfContent(), -1);
+    SwPaM aPaM(aIdx);
+
+    {
+        SwFmtFtn aFtn;
+        aFtn.SetNumStr(rtl::OUString("foo"));
+
+        m_pDoc->AppendTxtNode(*aPaM.GetPoint());
+        m_pDoc->InsertString(aPaM, rtl::OUString("AAAAA BBBBB "));
+        SwTxtNode* pTxtNode = aPaM.GetNode()->GetTxtNode();
+        xub_StrLen nPos = aPaM.GetPoint()->nContent.GetIndex();
+        pTxtNode->InsertItem(aFtn, nPos, nPos);
+        m_pDoc->InsertString(aPaM, rtl::OUString(" CCCCC "));
+        nPos = aPaM.GetPoint()->nContent.GetIndex();
+        pTxtNode->InsertItem(aFtn, nPos, nPos);
+        m_pDoc->InsertString(aPaM, rtl::OUString(" DDDDD"));
+        CPPUNIT_ASSERT(pTxtNode->GetTxt().Len() == (4*5) + 5 + 2);
+
+        //set start of selection to first B
+        aPaM.GetPoint()->nContent.Assign(aPaM.GetCntntNode(), 6);
+        aPaM.SetMark();
+        //set end of selection to last C
+        aPaM.GetPoint()->nContent.Assign(aPaM.GetCntntNode(), 14);
+        //set character attribute hidden on range
+        SvxCharHiddenItem aHidden(true, RES_CHRATR_HIDDEN);
+        m_pDoc->InsertPoolItem(aPaM, aHidden, 0 );
+
+        //turn on red-lining and show changes
+        m_pDoc->SetRedlineMode(nsRedlineMode_t::REDLINE_ON | nsRedlineMode_t::REDLINE_SHOW_DELETE|nsRedlineMode_t::REDLINE_SHOW_INSERT);
+        CPPUNIT_ASSERT_MESSAGE("redlining should be on", m_pDoc->IsRedlineOn());
+        CPPUNIT_ASSERT_MESSAGE("redlines should be visible", IDocumentRedlineAccess::IsShowChanges(m_pDoc->GetRedlineMode()));
+
+        //set start of selection to last A
+        aPaM.GetPoint()->nContent.Assign(aPaM.GetCntntNode(), 4);
+        aPaM.SetMark();
+        //set end of selection to second last B
+        aPaM.GetPoint()->nContent.Assign(aPaM.GetCntntNode(), 9);
+        m_pDoc->DeleteAndJoin(aPaM);    //redline-aware deletion api
+
+        {
+            ModelToViewHelper aModelToViewHelper(*pTxtNode, PASSTHROUGH);
+            rtl::OUString sViewText = aModelToViewHelper.getViewText();
+            rtl::OUString sModelText = pTxtNode->GetTxt();
+            CPPUNIT_ASSERT(sViewText == sModelText);
+        }
+
+        {
+            ModelToViewHelper aModelToViewHelper(*pTxtNode, EXPANDFIELDS);
+            rtl::OUString sViewText = aModelToViewHelper.getViewText();
+            CPPUNIT_ASSERT(sViewText == "AAAAA BBBBB foo CCCCC foo DDDDD");
+        }
+
+        {
+            ModelToViewHelper aModelToViewHelper(*pTxtNode, HIDEINVISIBLE);
+            rtl::OUString sViewText = aModelToViewHelper.getViewText();
+            rtl::OUStringBuffer aBuffer;
+            aBuffer.append("AAAAA CCCCC ");
+            aBuffer.append(CH_TXTATR_BREAKWORD);
+            aBuffer.append(" DDDDD");
+            CPPUNIT_ASSERT(sViewText == aBuffer.makeStringAndClear());
+        }
+
+        {
+            ModelToViewHelper aModelToViewHelper(*pTxtNode, HIDEREDLINED);
+            rtl::OUString sViewText = aModelToViewHelper.getViewText();
+            rtl::OUStringBuffer aBuffer;
+            aBuffer.append("AAAABB ");
+            aBuffer.append(CH_TXTATR_BREAKWORD);
+            aBuffer.append(" CCCCC ");
+            aBuffer.append(CH_TXTATR_BREAKWORD);
+            aBuffer.append(" DDDDD");
+            CPPUNIT_ASSERT(sViewText == aBuffer.makeStringAndClear());
+        }
+
+        {
+            ModelToViewHelper aModelToViewHelper(*pTxtNode, EXPANDFIELDS | HIDEINVISIBLE);
+            rtl::OUString sViewText = aModelToViewHelper.getViewText();
+            CPPUNIT_ASSERT(sViewText == "AAAAA CCCCC foo DDDDD");
+        }
+
+        {
+            ModelToViewHelper aModelToViewHelper(*pTxtNode, EXPANDFIELDS | HIDEREDLINED);
+            rtl::OUString sViewText = aModelToViewHelper.getViewText();
+            CPPUNIT_ASSERT(sViewText == "AAAABB foo CCCCC foo DDDDD");
+        }
+
+        {
+            ModelToViewHelper aModelToViewHelper(*pTxtNode, HIDEINVISIBLE | HIDEREDLINED);
+            rtl::OUString sViewText = aModelToViewHelper.getViewText();
+            rtl::OUStringBuffer aBuffer;
+            aBuffer.append("AAAACCCCC ");
+            aBuffer.append(CH_TXTATR_BREAKWORD);
+            aBuffer.append(" DDDDD");
+            CPPUNIT_ASSERT(sViewText == aBuffer.makeStringAndClear());
+        }
+
+        {
+            ModelToViewHelper aModelToViewHelper(*pTxtNode, EXPANDFIELDS | HIDEINVISIBLE | HIDEREDLINED);
+            rtl::OUString sViewText = aModelToViewHelper.getViewText();
+            CPPUNIT_ASSERT(sViewText == "AAAACCCCC foo DDDDD");
+        }
+    }
 }
 
 void SwDocTest::testSwScanner()

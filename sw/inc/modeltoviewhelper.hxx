@@ -34,7 +34,38 @@ class SwTxtNode;
     to expand the fields to get the string as it appears in the view. Two
     helper functions are provided to convert model positions to view positions
     and vice versa.
+
+           CH_TXTATR_BREAKWORD -> SwTxtNode will have field attributes associated with these
+                .       .
+                .       .
+                .       .
+    AAAAA BBBBB # CCCCC # DDDDD
+        | |  |    |
+        | |  |    |
+        | ---------
+        |    |  .
+        |    |  .
+        |    |  .......... bounds of a hidden text character attribute
+        ------
+           .
+           .
+           .............. a range of text defined in redline region as deleted
+
+    0000: pass through gives:                                        AAAAA BBBBB # CCCCC # DDDDD
+    0001: only expanding fields gives:                               AAAAA BBBBB foo CCCCC foo DDDDD
+    0010: only hiding hiddens gives:                                 AAAAA CCCCC # DDDDD
+    0100: only hiding redlines gives:                                AAAABB # CCCCC # DDDDD
+    0011: expanding fields + hiding hiddens gives:                   AAAAA CCCC foo DDDDD
+    0101: expanding fields + hiding redlines gives:                  AAAA B foo CCCCC foo DDDDD
+    0110: hiding hiddens + hiding redlines gives:                    AAAACCCC # DDDDD
+    0111: expanding fields + hiding hiddens + hiding redlines gives: AAAABB foo CCCCC foo DDDDD
 */
+
+#define PASSTHROUGH   0x0000
+#define EXPANDFIELDS  0x0001
+#define HIDEINVISIBLE 0x0002
+#define HIDEREDLINED  0x0004
+
 class ModelToViewHelper
 {
     /** For each field in the model string, there is an entry in the conversion
@@ -67,8 +98,10 @@ public:
         ModelPosition() : mnPos(0), mnSubPos(0), mbIsField(false) {}
     };
 
-    ModelToViewHelper(const SwTxtNode &rNode);
-    ModelToViewHelper() {}   //pass through filter, view == model
+    ModelToViewHelper(const SwTxtNode &rNode, int eMode = EXPANDFIELDS);
+    ModelToViewHelper() //pass through filter, view == model
+    {
+    }
 
     /** Converts a model position into a view position
 

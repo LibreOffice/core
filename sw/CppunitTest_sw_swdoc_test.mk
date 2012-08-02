@@ -77,6 +77,7 @@ $(eval $(call gb_CppunitTest_use_externals,sw_swdoc_test,\
 
 $(eval $(call gb_CppunitTest_set_include,sw_swdoc_test,\
     -I$(SRCDIR)/sw/source/ui/inc \
+    -I$(SRCDIR)/sw/source/core/inc \
     -I$(SRCDIR)/sw/inc \
     $$(INCLUDE) \
 ))
