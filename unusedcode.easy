@@ -25,10 +25,6 @@ SecurityEnvironment_NssImpl::getImplementation(com::sun::star::uno::Reference<co
 SotStorage::GetProperty(String const&, String const&, com::sun::star::uno::Any&)
 SpinButton::SpinButton(Window*, ResId const&)
 StgCache::Pos2Page(int)
-String::CreateFromAscii(char const*)
-String::CreateFromAscii(char const*, unsigned short)
-String::String(unsigned short const*)
-String::String(unsigned short const*, unsigned short)
 SvXMLAutoStylePoolParentsP_Impl::GetPos(SvXMLAutoStylePoolParentP_Impl const*) const
 SvXMLAutoStylePoolParentsP_Impl::Remove(SvXMLAutoStylePoolParentP_Impl*)
 SvtSlideSorterBarOptions::AddListenerLink(Link const&)

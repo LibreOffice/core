@@ -25,8 +25,8 @@
 
 // --- DdeString::DdeString() --------------------------------------
 
-DdeString::DdeString( DWORD hDdeInst, const sal_Unicode* p ) :
-                String( p )
+DdeString::DdeString( DWORD hDdeInst, const sal_Unicode* p )
+    : m_aString(p)
 {
     hString = DdeCreateStringHandle( hDdeInst, (LPTSTR)p, CP_WINUNICODE );
     hInst = hDdeInst;
@@ -34,10 +34,10 @@ DdeString::DdeString( DWORD hDdeInst, const sal_Unicode* p ) :
 
 // --- DdeString::DdeString() --------------------------------------
 
-DdeString::DdeString( DWORD hDdeInst, const String& r) :
-                String( r )
+DdeString::DdeString( DWORD hDdeInst, const rtl::OUString& r)
+    : m_aString(r)
 {
-    hString = DdeCreateStringHandle( hDdeInst, (LPTSTR)r.GetBuffer(), CP_WINUNICODE );
+    hString = DdeCreateStringHandle( hDdeInst, (LPTSTR)r.getStr(), CP_WINUNICODE );
     hInst = hDdeInst;
 }
 

@@ -108,7 +108,7 @@ public:
     virtual        ~DdeTransaction();
 
     sal_Bool            IsBusy() { return bBusy; }
-    const String&   GetName() const;
+    const rtl::OUString GetName() const;
 
     void            Execute();
 
@@ -258,7 +258,7 @@ public:
                     DdeItem( const DdeItem& );
                     virtual ~DdeItem();
 
-    const String&   GetName() const;
+    const rtl::OUString GetName() const;
     short           GetLinks();
     void            NotifyClient();
 };
@@ -294,7 +294,7 @@ public:
     virtual sal_Bool    Put( const DdeData* );
     virtual sal_Bool    Execute( const String* );
         // evt. ein neues anlegen; return 0 -> es konnte nicht angelegt werden
-    virtual sal_Bool MakeItem( const String& rItem );
+    virtual sal_Bool MakeItem( const rtl::OUString& rItem );
 
         // es wird ein Warm-/Hot-Link eingerichtet. Return-Wert
         // besagt ob es geklappt hat
@@ -308,7 +308,7 @@ private:
 
 private:
     DdeString*      pName;
-    String          aItem;
+    rtl::OUString   aItem;
     std::vector<DdeItem*> aItems;
     Link            aConnectLink;
     Link            aDisconnectLink;
@@ -317,10 +317,10 @@ private:
     Link            aExecLink;
 
 public:
-                    DdeTopic( SAL_UNUSED_PARAMETER const String& );
+                    DdeTopic( SAL_UNUSED_PARAMETER const rtl::OUString& );
     virtual        ~DdeTopic();
 
-    const String&   GetName() const;
+    const rtl::OUString GetName() const;
     long            GetConvId();
 
     void            SetConnectHdl( const Link& rLink ) { aConnectLink = rLink; }
@@ -340,7 +340,7 @@ public:
     void            InsertItem( DdeItem* );     // fuer eigene Ableitungen!
     DdeItem*        AddItem( const DdeItem& );  // werden kopiert !
     void            RemoveItem( const DdeItem& );
-    const String&   GetCurItem() { return aItem;  }
+    const rtl::OUString&   GetCurItem() { return aItem;  }
     const std::vector<DdeItem*>& GetItems() const  { return aItems; }
 
 private:
@@ -360,7 +360,7 @@ public:
     virtual sal_Bool    IsBusy();
     virtual String  GetHelp();
         // evt. ein neues anlegen; return 0 -> es konnte nicht angelegt werden
-    virtual sal_Bool    MakeTopic( const String& rItem );
+    virtual sal_Bool    MakeTopic( const rtl::OUString& rItem );
 
 protected:
     virtual String  Topics();
@@ -385,7 +385,7 @@ public:
                     DdeService( SAL_UNUSED_PARAMETER const String& );
     virtual        ~DdeService();
 
-    const String&   GetName() const;
+    const rtl::OUString GetName() const;
     short           GetError()              { return nStatus; }
 
     static DdeServices& GetServices();

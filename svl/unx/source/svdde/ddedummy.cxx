@@ -129,7 +129,7 @@ DdePoke::DdePoke( DdeConnection& rConnection, const String& rString, const DdeDa
 }
 
 
-DdeTopic::DdeTopic( const String& )
+DdeTopic::DdeTopic( const rtl::OUString& )
 {
 }
 
@@ -163,7 +163,7 @@ DdeData* DdeTopic::Get( SAL_UNUSED_PARAMETER sal_uLong )
   return NULL;
 }
 
-sal_Bool DdeTopic::MakeItem( SAL_UNUSED_PARAMETER const String& )
+sal_Bool DdeTopic::MakeItem( SAL_UNUSED_PARAMETER const rtl::OUString& )
 {
   return sal_False;
 }
@@ -188,9 +188,9 @@ sal_Bool DdeTopic::Put( SAL_UNUSED_PARAMETER const DdeData* )
   return sal_False;
 }
 
-const String& DdeTopic::GetName() const
+const rtl::OUString DdeTopic::GetName() const
 {
-  return String::EmptyString();
+  return rtl::OUString();
 }
 
 DdeService::DdeService( const String& )
@@ -248,14 +248,14 @@ void DdeService::RemoveTopic( SAL_UNUSED_PARAMETER const DdeTopic& )
 {
 }
 
-sal_Bool DdeService::MakeTopic( SAL_UNUSED_PARAMETER const String& )
+sal_Bool DdeService::MakeTopic( SAL_UNUSED_PARAMETER const rtl::OUString& )
 {
   return sal_False;
 }
 
-const String& DdeService::GetName() const
+const rtl::OUString DdeService::GetName() const
 {
-  return String::EmptyString();
+  return rtl::OUString();
 }
 
 namespace

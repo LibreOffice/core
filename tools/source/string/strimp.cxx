@@ -192,34 +192,6 @@ STRING::STRING( const STRING& rStr, xub_StrLen nPos, xub_StrLen nLen )
 
 // -----------------------------------------------------------------------
 
-STRING::STRING( const STRCODE* pCharStr )
-    : mpData(NULL)
-{
-    DBG_CTOR( STRING, DBGCHECKSTRING );
-
-    // Stringlaenge ermitteln
-    // Bei diesem Ctor darf NULL uebergeben werden
-    xub_StrLen nLen;
-    if ( pCharStr )
-        nLen = ImplStringLen( pCharStr );
-    else
-        nLen = 0;
-
-    // Ist es kein leerer String
-    if ( nLen )
-    {
-        // Verwaltungsdaten anlegen und String kopieren
-        mpData = ImplAllocData( nLen );
-        memcpy( mpData->maStr, pCharStr, nLen*sizeof( STRCODE ) );
-    }
-    else
-    {
-        STRING_NEW((STRING_TYPE **)&mpData);
-    }
-}
-
-// -----------------------------------------------------------------------
-
 STRING::~STRING()
 {
     DBG_DTOR( STRING, DBGCHECKSTRING );

@@ -119,7 +119,7 @@ namespace svx{
                 TEXT("ReturnAddress"),
                 szBuffer,
                 sizeof(szBuffer) ) )
-                maEMailAddrED.SetText( (sal_Unicode *)szBuffer );
+                maEMailAddrED.SetText(rtl::OUString((sal_Unicode *)szBuffer));
 
             DWORD   fAllowContact = sal_False;
             RegReadValue(

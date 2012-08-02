@@ -162,42 +162,6 @@ static sal_Int32 ImplStringICompareAscii( const sal_Unicode* pStr1, const sal_Ch
     return nRet;
 }
 
-// =======================================================================
-
-UniString UniString::CreateFromAscii( const sal_Char* pAsciiStr )
-{
-    DBG_ASSERT( pAsciiStr, "UniString::CreateFromAscii() - pAsciiStr is NULL" );
-
-    // Stringlaenge ermitteln
-    xub_StrLen nLen = ImplStringLen( pAsciiStr );
-
-    UniString aTempStr;
-    if ( nLen )
-    {
-        ImplCopyAsciiStr( aTempStr.AllocBuffer( nLen ), pAsciiStr, nLen );
-    }
-    return aTempStr;
-}
-
-// -----------------------------------------------------------------------
-
-UniString UniString::CreateFromAscii( const sal_Char* pAsciiStr, xub_StrLen nLen )
-{
-    DBG_ASSERT( pAsciiStr, "UniString::CreateFromAscii() - pAsciiStr is NULL" );
-
-    // Stringlaenge ermitteln
-    if ( nLen == STRING_LEN )
-        nLen = ImplStringLen( pAsciiStr );
-
-    UniString aTempStr;
-
-    if ( nLen )
-    {
-        ImplCopyAsciiStr( aTempStr.AllocBuffer( nLen ), pAsciiStr, nLen );
-    }
-    return aTempStr;
-}
-
 // -----------------------------------------------------------------------
 
 UniString& UniString::AssignAscii( const sal_Char* pAsciiStr )

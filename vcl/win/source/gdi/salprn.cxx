@@ -218,18 +218,18 @@ void WinSalInstance::GetPrinterQueueState( SalPrinterQueueInfo* pInfo )
             if( GetPrinterW( hPrinter, 2, (LPBYTE)pWinInfo2, nBytes, &nBytes ) )
             {
                 if( pWinInfo2->pDriverName )
-                    pInfo->maDriver = String( reinterpret_cast< const sal_Unicode* >(pWinInfo2->pDriverName) );
+                    pInfo->maDriver = rtl::OUString( reinterpret_cast< const sal_Unicode* >(pWinInfo2->pDriverName) );
                 XubString aPortName;
                 if ( pWinInfo2->pPortName )
-                    aPortName = String( reinterpret_cast< const sal_Unicode* >(pWinInfo2->pPortName) );
+                    aPortName = rtl::OUString( reinterpret_cast< const sal_Unicode* >(pWinInfo2->pPortName) );
                 // pLocation can be 0 (the Windows docu doesn't describe this)
                 if ( pWinInfo2->pLocation && *pWinInfo2->pLocation )
-                    pInfo->maLocation = String( reinterpret_cast< const sal_Unicode* >(pWinInfo2->pLocation) );
+                    pInfo->maLocation = rtl::OUString( reinterpret_cast< const sal_Unicode* >(pWinInfo2->pLocation) );
                 else
                     pInfo->maLocation = aPortName;
                 // pComment can be 0 (the Windows docu doesn't describe this)
                 if ( pWinInfo2->pComment )
-                    pInfo->maComment = String( reinterpret_cast< const sal_Unicode* >(pWinInfo2->pComment) );
+                    pInfo->maComment = rtl::OUString( reinterpret_cast< const sal_Unicode* >(pWinInfo2->pComment) );
                 pInfo->mnStatus      = ImplWinQueueStatusToSal( pWinInfo2->Status );
                 pInfo->mnJobs        = pWinInfo2->cJobs;
                 if( ! pInfo->mpSysData )

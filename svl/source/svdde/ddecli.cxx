@@ -341,9 +341,9 @@ void DdeTransaction::Execute()
 
 // --- DdeTransaction::GetName() -----------------------------------
 
-const String& DdeTransaction::GetName() const
+const rtl::OUString DdeTransaction::GetName() const
 {
-    return *pName;
+    return pName->toOUString();
 }
 
 // --- DdeTransaction::Data() --------------------------------------

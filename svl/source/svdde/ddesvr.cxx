@@ -95,7 +95,7 @@ HDDEDATA CALLBACK _export DdeInternal::SvrCallback(
                             sal_uInt16 n = 0;
                             while( STRING_NOTFOUND != n )
                             {
-                                String s( sTopics.GetToken( 0, '\t', n ));
+                                rtl::OUString s( sTopics.GetToken( 0, '\t', n ));
                                 if( s == reinterpret_cast<const sal_Unicode*>(chTopicBuf) )
                                     ++nTopics;
                             }
@@ -123,7 +123,7 @@ HDDEDATA CALLBACK _export DdeInternal::SvrCallback(
                     sal_uInt16 n = 0;
                     while( STRING_NOTFOUND != n )
                     {
-                        String s( sTopics.GetToken( 0, '\t', n ));
+                        rtl::OUString s( sTopics.GetToken( 0, '\t', n ));
                         s = comphelper::string::remove(s, '\n');
                         s = comphelper::string::remove(s, '\r');
                         if( !hText1 || s == reinterpret_cast<const sal_Unicode*>(chTopicBuf) )
@@ -224,7 +224,7 @@ found:
     if ( pItem )
         pTopic->aItem = pItem->GetName();
     else
-        pTopic->aItem.Erase();
+        pTopic->aItem = rtl::OUString();
 
     sal_Bool bRes = sal_False;
     pInst->hCurConvSvr = (long)hConv;
@@ -519,9 +519,9 @@ DdeService::~DdeService()
 
 // --- DdeService::GetName() ---------------------------------------
 
-const String& DdeService::GetName() const
+const rtl::OUString DdeService::GetName() const
 {
-    return *pName;
+    return pName->toOUString();
 }
 
 // --- DdeService::GetServices() -----------------------------------
@@ -612,7 +612,7 @@ void DdeService::RemoveFormat( sal_uLong nFmt )
 
 // --- DdeTopic::DdeTopic() ----------------------------------------
 
-DdeTopic::DdeTopic( const String& rName )
+DdeTopic::DdeTopic( const rtl::OUString& rName )
 {
     DdeInstData* pInst = ImpGetInstData();
     DBG_ASSERT(pInst,"SVDDE:No instance data");
@@ -635,9 +635,9 @@ DdeTopic::~DdeTopic()
 
 // --- DdeTopic::GetName() -----------------------------------------
 
-const String& DdeTopic::GetName() const
+const rtl::OUString DdeTopic::GetName() const
 {
-    return *pName;
+    return pName->toOUString();
 }
 
 // --- DdeTopic::IsSystemTopic() -----------------------------------
@@ -703,7 +703,7 @@ void DdeTopic::NotifyClient( const String& rItem )
     DBG_ASSERT(pInst,"SVDDE:No instance data");
     for ( iter = aItems.begin(); iter != aItems.end(); ++iter)
     {
-        if ( (*iter)->GetName() == rItem && (*iter)->pImpData)
+        if ( (*iter)->GetName().equals(rItem) && (*iter)->pImpData)
         {
             DdePostAdvise( pInst->hDdeInstSvr, *pName, *(*iter)->pName );
             break;
@@ -819,7 +819,7 @@ DdeItem::DdeItem( const DdeItem& r)
 {
     DdeInstData* pInst = ImpGetInstData();
     DBG_ASSERT(pInst,"SVDDE:No instance data");
-    pName = new DdeString( pInst->hDdeInstSvr, *r.pName );
+    pName = new DdeString( pInst->hDdeInstSvr, r.pName->toOUString() );
     nType = DDEITEM;
     pMyTopic = 0;
     pImpData = 0;
@@ -838,9 +838,9 @@ DdeItem::~DdeItem()
 
 // --- DdeItem::GetName() ------------------------------------------
 
-const String& DdeItem::GetName() const
+const rtl::OUString DdeItem::GetName() const
 {
-    return *pName;
+    return pName->toOUString();
 }
 
 // --- DdeItem::NotifyClient() ------------------------------------------
@@ -985,7 +985,7 @@ String DdeService::SysItems()
                     s += '\t';
                 s += (*iterItem)->GetName();
             }
-            s += String::CreateFromAscii("\r\n");
+            s += rtl::OUString("\r\n");
         }
     }
 
@@ -1006,7 +1006,7 @@ String DdeService::Topics()
             s += '\t';
         s += (*iter)->GetName();
     }
-    s += String::CreateFromAscii("\r\n");
+    s += rtl::OUString("\r\n");
 
     return s;
 }
@@ -1052,7 +1052,7 @@ String DdeService::Formats()
 
 String DdeService::Status()
 {
-    return IsBusy() ? String::CreateFromAscii("Busy\r\n") : String::CreateFromAscii("Ready\r\n");
+    return IsBusy() ? rtl::OUString("Busy\r\n") : rtl::OUString("Ready\r\n");
 }
 
 // --- DdeService::IsBusy() ----------------------------------------
@@ -1069,12 +1069,12 @@ String DdeService::GetHelp()
     return String();
 }
 
-sal_Bool DdeTopic::MakeItem( const String& )
+sal_Bool DdeTopic::MakeItem( const rtl::OUString& )
 {
     return sal_False;
 }
 
-sal_Bool DdeService::MakeTopic( const String& )
+sal_Bool DdeService::MakeTopic( const rtl::OUString& )
 {
     return sal_False;
 }

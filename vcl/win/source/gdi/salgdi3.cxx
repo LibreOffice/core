@@ -1010,8 +1010,8 @@ static ImplWinFontData* ImplLogMetricToDevFontDataW( const ENUMLOGFONTEXW* pLogF
 
 void ImplSalLogFontToFontW( HDC hDC, const LOGFONTW& rLogFont, Font& rFont )
 {
-    XubString aFontName( reinterpret_cast<const xub_Unicode*>(rLogFont.lfFaceName) );
-    if ( aFontName.Len() )
+    rtl::OUString aFontName( reinterpret_cast<const xub_Unicode*>(rLogFont.lfFaceName) );
+    if (!aFontName.isEmpty())
     {
         rFont.SetName( aFontName );
         rFont.SetCharSet( ImplCharSetToSal( rLogFont.lfCharSet ) );
@@ -1890,7 +1890,7 @@ int CALLBACK SalEnumFontsProcExW( const ENUMLOGFONTEXW* pLogFont,
                 pInfo->mbCourier = ImplSalWICompareAscii( pLogFont->elfLogFont.lfFaceName, "Courier" ) == 0;
             else
                 pInfo->mbCourier = FALSE;
-            String aName( reinterpret_cast<const sal_Unicode*>(pLogFont->elfLogFont.lfFaceName) );
+            String aName = rtl::OUString(reinterpret_cast<const sal_Unicode*>(pLogFont->elfLogFont.lfFaceName));
             pInfo->mpName = &aName;
             memcpy( pInfo->mpLogFontW->lfFaceName, pLogFont->elfLogFont.lfFaceName, (aName.Len()+1)*sizeof( wchar_t ) );
             pInfo->mpLogFontW->lfCharSet = pLogFont->elfLogFont.lfCharSet;
@@ -2745,13 +2745,13 @@ const void* WinSalGraphics::GetEmbedFontData( const PhysicalFontFace* pFont,
     const bool bPFA = (*aRawFontData.get() < 0x80);
     rInfo.m_nFontType = bPFA ? FontSubsetInfo::TYPE1_PFA : FontSubsetInfo::TYPE1_PFB;
     WCHAR aFaceName[64];
-    int nFNLen = ::GetTextFaceW( mhDC, 64, aFaceName );
+    sal_Int32 nFNLen = ::GetTextFaceW( mhDC, 64, aFaceName );
     // #i59854# strip eventual null byte
     while( nFNLen > 0 && aFaceName[nFNLen-1] == 0 )
         nFNLen--;
     if( nFNLen == 0 )
         *pDataLen = 0;
-    rInfo.m_aPSName     = String( reinterpret_cast<const sal_Unicode*>(aFaceName), sal::static_int_cast<sal_uInt16>(nFNLen) );
+    rInfo.m_aPSName     = rtl::OUString(reinterpret_cast<const sal_Unicode*>(aFaceName), nFNLen);
     rInfo.m_nAscent     = +aTm.tmAscent;
     rInfo.m_nDescent    = -aTm.tmDescent;
     rInfo.m_aFontBBox   = Rectangle( Point( -aTm.tmOverhang, -aTm.tmDescent ),

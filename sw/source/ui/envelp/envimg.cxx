@@ -45,7 +45,7 @@
 #include <unomid.h>
 
 #ifdef WNT
-#define NEXTLINE  UniString::CreateFromAscii("\r\n")
+#define NEXTLINE  rtl::OUString("\r\n")
 #else
 #define NEXTLINE  '\n'
 #endif

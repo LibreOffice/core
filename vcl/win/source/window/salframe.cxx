@@ -4632,7 +4632,7 @@ static int ImplMeasureItem( HWND hWnd, WPARAM wParam, LPARAM lParam )
         HFONT hfntOld = (HFONT) SelectObject(hdc, (HFONT) CreateFontIndirect( &ncm.lfMenuFont ));
 
         // menu text and accelerator
-        String aStr(pSalMenuItem->mText.GetBuffer() );
+        String aStr(pSalMenuItem->mText);
         if( pSalMenuItem->mAccelText.Len() )
         {
             aStr.AppendAscii(" ");
@@ -4775,7 +4775,7 @@ static int ImplDrawItem(HWND, WPARAM wParam, LPARAM lParam )
         hfntOld = (HFONT) SelectObject(pDI->hDC, (HFONT) CreateFontIndirect( &ncm.lfMenuFont ));
 
         SIZE strSize;
-        String aStr( pSalMenuItem->mText.GetBuffer() );
+        String aStr( pSalMenuItem->mText );
         GetTextExtentPoint32W( pDI->hDC, (LPWSTR) aStr.GetBuffer(),
                                 aStr.Len(), &strSize );
 
@@ -5167,7 +5167,7 @@ static sal_Bool ImplHandleIMECompositionInput( WinSalFrame* pFrame,
         {
             WCHAR* pTextBuf = new WCHAR[nTextLen];
             ImmGetCompositionStringW( hIMC, GCS_RESULTSTR, pTextBuf, nTextLen*sizeof( WCHAR ) );
-            aEvt.maText = XubString( reinterpret_cast<const xub_Unicode*>(pTextBuf), (xub_StrLen)nTextLen );
+            aEvt.maText = rtl::OUString( reinterpret_cast<const xub_Unicode*>(pTextBuf), (sal_Int32)nTextLen );
             delete [] pTextBuf;
         }
 
@@ -5193,7 +5193,7 @@ static sal_Bool ImplHandleIMECompositionInput( WinSalFrame* pFrame,
         {
             WCHAR* pTextBuf = new WCHAR[nTextLen];
             ImmGetCompositionStringW( hIMC, GCS_COMPSTR, pTextBuf, nTextLen*sizeof( WCHAR ) );
-            aEvt.maText = XubString( reinterpret_cast<const xub_Unicode*>(pTextBuf), (xub_StrLen)nTextLen );
+            aEvt.maText = rtl::OUString( reinterpret_cast<const xub_Unicode*>(pTextBuf), (sal_Int32)nTextLen );
             delete [] pTextBuf;
 
             BYTE*   pAttrBuf = NULL;

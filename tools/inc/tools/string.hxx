@@ -152,6 +152,8 @@ private:
     TOOLS_DLLPRIVATE UniString( const rtl::OString& rByteStr,
                                    rtl_TextEncoding eTextEncoding,
                                    sal_uInt32 nCvtFlags = BYTESTRING_TO_UNISTRING_CVTFLAGS );
+    TOOLS_DLLPRIVATE UniString( const sal_Unicode* pCharStr );
+    TOOLS_DLLPRIVATE UniString( const sal_Unicode* pCharStr, xub_StrLen nLen );
 
 public:
                         UniString();
@@ -159,8 +161,6 @@ public:
                         UniString( const UniString& rStr );
                         UniString( const UniString& rStr, xub_StrLen nPos, xub_StrLen nLen );
                         UniString( const rtl::OUString& rStr );
-                        UniString( const sal_Unicode* pCharStr );
-                        UniString( const sal_Unicode* pCharStr, xub_StrLen nLen );
                         UniString( sal_Unicode c );
                         UniString(char c); // ...but allow "UniString('a')"
                         UniString( const sal_Char* pByteStr,
@@ -176,9 +176,6 @@ public:
         return rtl::OUString( rtl_uStringBuffer_refReturn(
                                 reinterpret_cast<rtl_uString*>(mpData)), SAL_NO_ACQUIRE );
     }
-
-    static UniString    CreateFromAscii( const sal_Char* pAsciiStr );
-    static UniString    CreateFromAscii( const sal_Char* pAsciiStr, xub_StrLen nLen );
 
     static UniString    CreateFromInt32( sal_Int32 n, sal_Int16 nRadix = 10 );
     static const UniString& EmptyString();

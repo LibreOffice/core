@@ -81,19 +81,22 @@ public:
 // - DdeString -
 // -------------
 
-class DdeString : public String
+class DdeString
 {
+private:
+    rtl::OUString m_aString;
 protected:
     HSZ         hString;
     DWORD       hInst;
 
 public:
                 DdeString( DWORD, const sal_Unicode* );
-                DdeString( DWORD, const String& );
+                DdeString( DWORD, const rtl::OUString& );
                 ~DdeString();
 
     int         operator==( HSZ );
                 operator HSZ();
+    rtl::OUString toOUString() const { return m_aString; }
 };
 
 // --------------

@@ -603,7 +603,7 @@ static DdeTopic* FindTopic( const String & rLinkName, sal_uInt16* pItemStt )
 
     String sNm( rLinkName );
     sal_uInt16 nTokenPos = 0;
-    String sService( sNm.GetToken( 0, cTokenSeperator, nTokenPos ) );
+    rtl::OUString sService( sNm.GetToken( 0, cTokenSeperator, nTokenPos ) );
 
     DdeServices& rSvc = DdeService::GetServices();
     for (DdeServices::iterator aI = rSvc.begin(); aI != rSvc.end(); ++aI)
@@ -612,7 +612,7 @@ static DdeTopic* FindTopic( const String & rLinkName, sal_uInt16* pItemStt )
         if( pService->GetName() == sService )
         {
             // then we search for the Topic
-            String sTopic( sNm.GetToken( 0, cTokenSeperator, nTokenPos ) );
+            rtl::OUString sTopic( sNm.GetToken( 0, cTokenSeperator, nTokenPos ) );
             if( pItemStt )
                 *pItemStt = nTokenPos;
 

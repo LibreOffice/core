@@ -201,7 +201,7 @@ namespace dxcanvas
             const Point aEmptyPoint(0, 0);
 
             // create the String
-            const String aText(rText.Text.getStr());
+            const rtl::OUString aText(rText.Text);
 
             if( rLogicalAdvancements.getLength() )
             {

@@ -855,43 +855,6 @@ STRING STRING::GetToken( xub_StrLen nToken, STRCODE cTok, xub_StrLen& rIndex ) c
 
 // -----------------------------------------------------------------------
 
-STRING::STRING( const STRCODE* pCharStr, xub_StrLen nLen )
-: mpData(NULL)
-{
-    DBG_CTOR( STRING, DBGCHECKSTRING );
-    DBG_ASSERT( pCharStr, "String::String() - pCharStr is NULL" );
-
-    if ( nLen == STRING_LEN )
-        nLen = ImplStringLen( pCharStr );
-
-#ifdef DBG_UTIL
-    if ( DbgIsAssert() )
-    {
-        for ( xub_StrLen i = 0; i < nLen; i++ )
-        {
-            if ( !pCharStr[i] )
-            {
-                OSL_FAIL( "String::String() : nLen is wrong" );
-            }
-        }
-    }
-#endif
-
-    // Ist es kein leerer String
-    if ( nLen )
-    {
-        // Verwaltungsdaten anlegen und String kopieren
-        mpData = ImplAllocData( nLen );
-        memcpy( mpData->maStr, pCharStr, nLen*sizeof( STRCODE ) );
-    }
-    else
-    {
-        STRING_NEW((STRING_TYPE **)&mpData);
-    }
-}
-
-// -----------------------------------------------------------------------
-
 STRING& STRING::Append( const STRCODE* pCharStr, xub_StrLen nCharLen )
 {
     DBG_CHKTHIS( STRING, DBGCHECKSTRING );
