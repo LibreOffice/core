@@ -170,7 +170,9 @@ $(call tailbuild_serialize,$(wordlist 2,$(words $(1)),$(1))))
 endef
 
 $(eval $(call tailbuild_serialize,\
-	scfilt vbaobj sc msword swui sw sd \
+	scfilt \
+	$(if $(filter SCRIPTING,$(BUILD_TYPE)),vbaobj) \
+	sc msword swui sw sd \
 	$(if $(filter DBCONNECTIVITY,$(BUILD_TYPE)),dbu) \
 	writerfilter cui chartcontroller oox \
 	$(if $(filter TRUE,$(MERGELIBS)),merged,svxcore) \
