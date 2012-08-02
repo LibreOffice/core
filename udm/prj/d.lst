@@ -1,9 +1,0 @@
-mkdir: %_DEST%\inc\udm
-mkdir: %_DEST%\inc\udm\html
-mkdir: %_DEST%\inc\udm\xml
-
-..\%__SRC%\lib\udm.lib %_DEST%\lib\udm.lib
-..\%__SRC%\lib\libudm.a %_DEST%\lib\libudm.a
-..\inc\udm\html\*.hxx %_DEST%\inc\udm\html\*.hxx
-..\inc\udm\xml\*.hxx %_DEST%\inc\udm\xml\*.hxx
-

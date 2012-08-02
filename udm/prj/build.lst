@@ -1,11 +1,3 @@
 ud	udm	:  cosv NULL
 ud	udm								usr1	-	all	ud_mkout NULL
-ud	udm\prj							get		-	all	ud_prj NULL
-ud	udm\inc							get		-	all	ud_inc NULL
-ud	udm\inc\udm		  				get		-	all	udi_udm NULL
-ud	udm\inc\udm\html  				get		-	all	udiu_html NULL
-ud	udm\inc\udm\xml	  				get		-	all	udiu_xml NULL
-ud	udm\source						get	    -	all	ud_src NULL
-ud	udm\source\html					nmake	-	all	uds_html NULL
-ud	udm\source\xml					nmake	-	all	uds_xml NULL
-ud	udm\util						nmake	-	all ud_util uds_xml uds_html NULL
+ud	udm\prj							nmake		-	all	ud_prj NULL

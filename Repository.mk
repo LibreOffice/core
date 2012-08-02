@@ -658,6 +658,7 @@ $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
     salcpprt \
     testtools_bridgetest_s \
     transex \
+    udm \
     ulingu \
     vclmain \
     writerperfect \
