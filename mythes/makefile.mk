@@ -43,6 +43,7 @@ ADDITIONAL_FILES += makefile.mk
 
 PATCH_FILES=\
     mythes-1.2.0-vanilla-th-gen-idx.patch \
+    mythes-1.2.2-overflow.patch \
     mythes-1.2.0-makefile-mk.diff \
     mythes-1.2.0-android.patch
 
