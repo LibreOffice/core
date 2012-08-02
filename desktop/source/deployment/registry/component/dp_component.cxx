@@ -155,10 +155,6 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
 
         const Reference<registry::XSimpleRegistry> getRDB() const;
 
-        //Provides the read-only registry (e.g. not the one based on the duplicated
-        //rdb files
-        const Reference<registry::XSimpleRegistry> getRDB_RO() const;
-
     public:
         ComponentPackageImpl(
             ::rtl::Reference<PackageRegistryBackend> const & myBackend,
@@ -305,9 +301,9 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
     OUString m_commonRDB;
     OUString m_nativeRDB;
 
-    //URLs of the read-only rdbs (e.g. not the ones of the duplicated files)
-    OUString m_commonRDB_RO;
-    OUString m_nativeRDB_RO;
+    //URLs of the original rdbs (before any switching):
+    OUString m_commonRDB_orig;
+    OUString m_nativeRDB_orig;
 
     std::auto_ptr<ComponentBackendDb> m_backendDb;
 
@@ -315,17 +311,8 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
     ComponentBackendDb::Data readDataFromDb(OUString const & url);
     void revokeEntryFromDb(OUString const & url);
 
-
-    //These rdbs are for writing new service entries. The rdb files are copies
-    //which are created when services are added or removed.
     Reference<registry::XSimpleRegistry> m_xCommonRDB;
     Reference<registry::XSimpleRegistry> m_xNativeRDB;
-
-    //These rdbs are created on the read-only rdbs which are already used
-    //by UNO since the startup of the current session.
-    Reference<registry::XSimpleRegistry> m_xCommonRDB_RO;
-    Reference<registry::XSimpleRegistry> m_xNativeRDB_RO;
-
 
     void unorc_verify_init( Reference<XCommandEnvironment> const & xCmdEnv );
     void unorc_flush( Reference<XCommandEnvironment> const & xCmdEnv );
@@ -359,9 +346,6 @@ public:
 
     //Will be called from ComponentPackageImpl
     void initServiceRdbFiles();
-
-    //Creates the READ ONLY registries (m_xCommonRDB_RO,m_xNativeRDB_RO)
-    void initServiceRdbFiles_RO();
 };
 
 //______________________________________________________________________________
@@ -400,18 +384,6 @@ BackendImpl::ComponentPackageImpl::getRDB() const
         return that->m_xNativeRDB;
     else
         return that->m_xCommonRDB;
-}
-
-//Returns the read only RDB.
-const Reference<registry::XSimpleRegistry>
-BackendImpl::ComponentPackageImpl::getRDB_RO() const
-{
-    BackendImpl * that = getMyBackend();
-
-    if ( m_loader == "com.sun.star.loader.SharedLibrary" )
-        return that->m_xNativeRDB_RO;
-    else
-        return that->m_xCommonRDB_RO;
 }
 
 BackendImpl * BackendImpl::ComponentPackageImpl::getMyBackend() const
@@ -479,13 +451,13 @@ void BackendImpl::initServiceRdbFiles()
     ::ucbhelper::Content cacheDir( getCachePath(), xCmdEnv );
     ::ucbhelper::Content oldRDB;
     // switch common rdb:
-    if (!m_commonRDB_RO.isEmpty())
+    if (!m_commonRDB_orig.isEmpty())
     {
         create_ucb_content(
-            &oldRDB, makeURL( getCachePath(), m_commonRDB_RO),
+            &oldRDB, makeURL( getCachePath(), m_commonRDB_orig),
             xCmdEnv, false /* no throw */ );
     }
-    m_commonRDB = m_commonRDB_RO == "common.rdb" ? OUSTR("common_.rdb") : OUSTR("common.rdb");
+    m_commonRDB = m_commonRDB_orig == "common.rdb" ? OUSTR("common_.rdb") : OUSTR("common.rdb");
     if (oldRDB.get().is())
     {
         if (! cacheDir.transferContent(
@@ -499,15 +471,15 @@ void BackendImpl::initServiceRdbFiles()
         oldRDB = ::ucbhelper::Content();
     }
     // switch native rdb:
-    if (!m_nativeRDB_RO.isEmpty())
+    if (!m_nativeRDB_orig.isEmpty())
     {
         create_ucb_content(
-            &oldRDB, makeURL(getCachePath(), m_nativeRDB_RO),
+            &oldRDB, makeURL(getCachePath(), m_nativeRDB_orig),
             xCmdEnv, false /* no throw */ );
     }
     const OUString plt_rdb( getPlatformString() + OUSTR(".rdb") );
     const OUString plt_rdb_( getPlatformString() + OUSTR("_.rdb") );
-    m_nativeRDB = m_nativeRDB_RO.equals( plt_rdb ) ? plt_rdb_ : plt_rdb;
+    m_nativeRDB = m_nativeRDB_orig.equals( plt_rdb ) ? plt_rdb_ : plt_rdb;
     if (oldRDB.get().is())
     {
         if (! cacheDir.transferContent(
@@ -545,38 +517,6 @@ void BackendImpl::initServiceRdbFiles()
     }
 }
 
-void BackendImpl::initServiceRdbFiles_RO()
-{
-    const Reference<XCommandEnvironment> xCmdEnv;
-
-    // common rdb for java, native rdb for shared lib components
-    if (!m_commonRDB_RO.isEmpty())
-    {
-        m_xCommonRDB_RO.set(
-            m_xComponentContext->getServiceManager()
-            ->createInstanceWithContext(
-            OUSTR("com.sun.star.registry.SimpleRegistry"),
-            m_xComponentContext), UNO_QUERY_THROW);
-        m_xCommonRDB_RO->open(
-            makeURL(expandUnoRcUrl(getCachePath()), m_commonRDB_RO),
-            sal_True, //read-only
-            sal_True); // create data source if necessary
-    }
-    if (!m_nativeRDB_RO.isEmpty())
-    {
-        m_xNativeRDB_RO.set(
-            m_xComponentContext->getServiceManager()
-            ->createInstanceWithContext(
-            OUSTR("com.sun.star.registry.SimpleRegistry"),
-            m_xComponentContext), UNO_QUERY_THROW);
-        m_xNativeRDB_RO->open(
-            makeURL(expandUnoRcUrl(getCachePath()), m_nativeRDB_RO),
-            sal_True, //read-only
-            sal_True); // create data source if necessary
-    }
-}
-
-//______________________________________________________________________________
 BackendImpl::BackendImpl(
     Sequence<Any> const & args,
     Reference<XComponentContext> const & xComponentContext )
@@ -657,12 +597,7 @@ BackendImpl::BackendImpl(
     }
     else
     {
-        //do this before initServiceRdbFiles_RO, because it determines
-        //m_commonRDB and m_nativeRDB
         unorc_verify_init( xCmdEnv );
-
-        initServiceRdbFiles_RO();
-
         OUString dbFile = makeURL(getCachePath(), OUSTR("backenddb.xml"));
         m_backendDb.reset(
             new ComponentBackendDb(getComponentContext(), dbFile));
@@ -936,7 +871,7 @@ void BackendImpl::unorc_verify_init(
                             token.matchAsciiL(
                                 RTL_CONSTASCII_STRINGPARAM("?$ORIGIN/")))
                         {
-                            m_commonRDB_RO = token.copy(
+                            m_commonRDB_orig = token.copy(
                                 RTL_CONSTASCII_LENGTH("?$ORIGIN/"));
                             state = 2;
                         }
@@ -964,7 +899,7 @@ void BackendImpl::unorc_verify_init(
                     xCmdEnv, false /* no throw */ )) {
                 if (readLine( &line, OUSTR("UNO_SERVICES="), ucb_content,
                               RTL_TEXTENCODING_UTF8 )) {
-                    m_nativeRDB_RO = line.copy(
+                    m_nativeRDB_orig = line.copy(
                         sizeof ("UNO_SERVICES=?$ORIGIN/") - 1 );
                 }
             }
@@ -1025,10 +960,10 @@ void BackendImpl::unorc_flush( Reference<XCommandEnvironment> const & xCmdEnv )
     }
 
     // If we duplicated the common or native rdb then we must use those urls
-    //otherwise we use those of the original files. That is, m_commonRDB_RO and
-    //m_nativeRDB_RO;
-    OUString sCommonRDB(m_commonRDB.isEmpty() ? m_commonRDB_RO : m_commonRDB );
-    OUString sNativeRDB(m_nativeRDB.isEmpty() ? m_nativeRDB_RO : m_nativeRDB );
+    //otherwise we use those of the original files. That is, m_commonRDB_orig
+    //and m_nativeRDB_orig;
+    OUString sCommonRDB(m_commonRDB.isEmpty() ? m_commonRDB_orig : m_commonRDB );
+    OUString sNativeRDB(m_nativeRDB.isEmpty() ? m_nativeRDB_orig : m_nativeRDB );
 
     if (!sCommonRDB.isEmpty() || !sNativeRDB.isEmpty() ||
         !m_components.empty())
@@ -1443,7 +1378,7 @@ BackendImpl::ComponentPackageImpl::isRegistered_(
     {
         m_registered = REG_NOT_REGISTERED;
         bool bAmbiguousComponentName = false;
-        const Reference<registry::XSimpleRegistry> xRDB( getRDB_RO() );
+        const Reference<registry::XSimpleRegistry> xRDB( getRDB() );
         if (xRDB.is())
         {
             // lookup rdb for location URL:
