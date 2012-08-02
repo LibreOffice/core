@@ -15,6 +15,16 @@
 
 #include "DiscoveryService.hxx"
 
+#ifdef WIN32
+  #include <winsock.h>
+  typedef int socklen_t;
+#else
+  #include <sys/types.h>
+  #include <sys/socket.h>
+  #include <netinet/in.h>
+  #include <arpa/inet.h>
+#endif
+
 using namespace osl;
 using namespace rtl;
 using namespace sd;
@@ -22,9 +32,25 @@ using namespace std;
 
 DiscoveryService::DiscoveryService()
     :
-    Thread( "sd::DiscoveryService" ),
-    mSocket()
+    Thread( "sd::DiscoveryService" )
+//     mSocket()
 {
+    mSocket = socket( AF_INET, SOCK_DGRAM, IPPROTO_UDP );
+
+    sockaddr_in aAddr;
+    aAddr.sin_family = AF_INET;
+    aAddr.sin_addr.s_addr = htonl(INADDR_ANY);
+    aAddr.sin_port = htons( PORT_DISCOVERY );
+
+    bind( mSocket, (sockaddr*) &aAddr, sizeof(sockaddr_in) );
+
+    struct ip_mreq multicastRequest;
+
+    multicastRequest.imr_multiaddr.s_addr = inet_addr( "239.0.0.1" );
+    multicastRequest.imr_interface.s_addr = htonl(INADDR_ANY);
+
+    setsockopt( mSocket, IPPROTO_IP, IP_ADD_MEMBERSHIP,
+        &multicastRequest, sizeof(multicastRequest));
 }
 
 DiscoveryService::~DiscoveryService()
@@ -32,15 +58,15 @@ DiscoveryService::~DiscoveryService()
 }
 
 
-void DiscoveryService::replyTo( SocketAddr& rAddr )
+void DiscoveryService::replyTo( sockaddr_in& rAddr )
 {
-    SocketAddr aLocalAddr;
-    mSocket.getLocalAddr( aLocalAddr );
-    OString aAddrString = OUStringToOString( aLocalAddr.getHostname(),
-                                             RTL_TEXTENCODING_UTF8 );
-    OStringBuffer aBuffer( "LOREMOTE_ADVERTISE\n" );
-    aBuffer.append( aAddrString ).append( "\n" );
-    mSocket.sendTo( rAddr, aBuffer.getStr(), aBuffer.getLength() );
+//     SocketAddr aLocalAddr;
+//     mSocket.getLocalAddr( aLocalAddr );
+//     OString aAddrString = OUStringToOString( aLocalAddr.getHostname(),
+//                                              RTL_TEXTENCODING_UTF8 );
+//     OStringBuffer aBuffer( "LOREMOTE_ADVERTISE\n" );
+//     aBuffer.append( aAddrString ).append( "\n" );
+//     mSocket.sendTo( rAddr, aBuffer.getStr(), aBuffer.getLength() );
 }
 
 void DiscoveryService::execute()
@@ -50,24 +76,21 @@ void DiscoveryService::execute()
     vector<char> aBuffer;
     aRead = 0;
 
-
-
-    SocketAddr aListenAddr( "239.0.0.1", PORT_DISCOVERY );
-    mSocket.bind( aListenAddr );
-
-    SocketAddr aAddr;
     while ( true )
     {
         aBuffer.resize( aRead + 100 );
 
+        sockaddr_in aAddr;
+        socklen_t aLen = sizeof( aAddr );
         fprintf( stderr, "DiscoveryService waiting for packet\n" );
-        aRet = mSocket.recvFrom( &aBuffer[aRead], 100 );
+//         aRet = mSocket.recvFrom( &aBuffer[aRead], 100 );
+        recvfrom( mSocket, &aBuffer[aRead], 100, 0, (sockaddr*) &aAddr, &aLen );
         fprintf( stderr, "DiscoveryService received a packet.\n" );
-        if ( aRet == 0 )
-        {
-            fprintf( stderr, "Socket returned 0\n" );
-//             break; // I.e. transmission finished.
-        }
+//         if ( aRet == 0 )
+//         {
+//             fprintf( stderr, "Socket returned 0\n" );
+// //             break; // I.e. transmission finished.
+//         }
         aRead += aRet;
         vector<char>::iterator aIt;
         while ( (aIt = find( aBuffer.begin(), aBuffer.end(), '\n' ))

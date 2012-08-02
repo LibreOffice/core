@@ -27,8 +27,12 @@ namespace css = ::com::sun::star;
 
 #define CHARSET RTL_TEXTENCODING_UTF8
 
+struct sockaddr_in;
+
 namespace sd
 {
+
+
 
     class DiscoveryService : public salhelper::Thread
     {
@@ -42,8 +46,9 @@ namespace sd
             static DiscoveryService *spService;
             void execute();
 
-            osl::DatagramSocket mSocket;
-            void replyTo( osl::SocketAddr& rAddr );
+//             osl::DatagramSocket mSocket;
+            int mSocket;
+            void replyTo( sockaddr_in& rAddr );
 
     };
 }
