@@ -296,7 +296,7 @@ sub msvc_copy_msms($$)
     }
     foreach $fname ("Microsoft_VC100_CRT_x86$postfix.msm") {
         print STDERR "Copying $msm_path/$fname to $dest\n";
-        copy ("$msm_path/$fname", $dest) || print "copy failed: $!";
+        copy ("$msm_path/$fname", $dest) || print "copy failed: $!\n";
     }
 }
 
