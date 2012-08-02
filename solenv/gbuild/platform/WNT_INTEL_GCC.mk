@@ -163,7 +163,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(if $(LINKED_STATIC_LIBS),-Wl$(COMMA)--start-group $(foreach lib,$(LINKED_STATIC_LIBS),$(call gb_StaticLibrary_get_target,$(lib))) -Wl$(COMMA)--end-group) \
 		$(patsubst lib%.a,-l%,$(patsubst lib%.dll.a,-l%,$(foreach lib,$(LINKED_LIBS),$(call gb_Library_get_implibname,$(lib))))) \
 		$(LIBS) \
-		-Wl$(COMMA)-Map$(COMMA)$(basename $(DLLTARGET)).map \
+		-Wl$(COMMA)-Map$(COMMA)$(dir $(1))$(notdir $(basename $(DLLTARGET)).map) \
 		-Wl$(COMMA)--out-implib$(COMMA)$(1) \
 		-o $(dir $(1))/$(notdir $(DLLTARGET))))
 endef
@@ -298,16 +298,16 @@ gb_Library_IARCEXT := .a
 gb_Library_ILIBEXT := .lib
 
 define gb_Library_Library_platform
-$(call gb_LinkTarget_set_dlltarget,$(2),$(OUTDIR)/bin/$(notdir $(3)))
+$(call gb_LinkTarget_set_dlltarget,$(2),$(3))
 
 $(call gb_LinkTarget_add_auxtargets,$(2),\
 	$(patsubst %.dll,%.map,$(3)) \
 )
 
-$(call gb_Library_get_target,$(1)) \
-$(call gb_Library_get_clean_target,$(1)) : AUXTARGETS := $(OUTDIR)/bin/$(notdir $(3))
+$(call gb_Library_get_target,$(1)) :| $(OUTDIR)/bin/.dir
 
-$(call gb_Deliver_add_deliverable,$(OUTDIR)/bin/$(notdir $(3)),$(3),$(1))
+$(call gb_Library_get_target,$(1)) \
+$(call gb_Library_get_clean_target,$(1)) : AUXTARGETS := $(OUTDIR)/bin/$(notdir $(3)) $(OUTDIR)/bin/$(notdir $(patsubst %.dll,%.map,$(3)))
 
 $(call gb_Library_add_default_nativeres,$(1),$(1)/default)
 
