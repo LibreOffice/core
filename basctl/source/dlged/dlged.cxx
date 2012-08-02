@@ -189,7 +189,7 @@ DlgEditor::DlgEditor( const ::com::sun::star::uno::Reference< ::com::sun::star::
     ,pFunc(NULL)
     ,eMode( DLGED_SELECT )
     ,eActObj( OBJ_DLG_PUSHBUTTON )
-    ,bFirstDraw(sal_False)
+    ,bFirstDraw(false)
     ,aGridSize( 100, 100 )  // 100TH_MM
     ,bGridVisible(sal_False)
     ,bGridSnap(sal_True)
@@ -424,7 +424,7 @@ void DlgEditor::SetDialog( uno::Reference< container::XNameContainer > xUnoContr
         }
     }
 
-    bFirstDraw = sal_True;
+    bFirstDraw = true;
 
     pDlgEdModel->SetChanged( sal_False );
 }
@@ -510,7 +510,7 @@ IMPL_LINK_NOARG(DlgEditor, PaintTimeout)
         pWindow->IsVisible() &&
         (pWindow->GetOutputSize() != aMacSize) )
     {
-        bFirstDraw = sal_False;
+        bFirstDraw = false;
 
         // get property set
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xPSet(pDlgEdForm->GetUnoControlModel(), ::com::sun::star::uno::UNO_QUERY);

@@ -109,7 +109,7 @@ protected:
     DlgEdFunc*          pFunc;
     DlgEdMode           eMode;
     sal_uInt16              eActObj;
-    sal_Bool                bFirstDraw;
+    bool                bFirstDraw;
     Size                aGridSize;
     sal_Bool                bGridVisible;
     sal_Bool                bGridSnap;

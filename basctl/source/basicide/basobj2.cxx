@@ -187,7 +187,7 @@ bool RenameModule( Window* pErrorParent, const ScriptDocument& rDocument, const 
     BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
     if ( pIDEShell )
     {
-        IDEBaseWindow* pWin = pIDEShell->FindWindow( rDocument, rLibName, rNewName, BASICIDE_TYPE_MODULE, sal_True );
+        IDEBaseWindow* pWin = pIDEShell->FindWindow( rDocument, rLibName, rNewName, BASICIDE_TYPE_MODULE, true );
         if ( pWin )
         {
             // set new name in window

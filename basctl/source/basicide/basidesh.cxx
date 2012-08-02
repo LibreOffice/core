@@ -117,7 +117,7 @@ public:
         rtl::OUString sModuleName;
         if( mpShell  && ( Event.Accessor >>= sModuleName ) )
         {
-            IDEBaseWindow* pWin = mpShell->FindWindow( mpShell->m_aCurDocument, mpShell->m_aCurLibName, sModuleName, BASICIDE_TYPE_MODULE, sal_True );
+            IDEBaseWindow* pWin = mpShell->FindWindow( mpShell->m_aCurDocument, mpShell->m_aCurLibName, sModuleName, BASICIDE_TYPE_MODULE, true );
             if( pWin )
                 mpShell->RemoveWindow( pWin, true, true );
         }
@@ -191,11 +191,11 @@ void BasicIDEShell::Init()
     pCurWin = 0;
     m_aCurDocument = ScriptDocument::getApplicationScriptDocument();
     pObjectCatalog = 0;
-    bCreatingWindow = sal_False;
+    bCreatingWindow = false;
 
     pTabBar = new BasicIDETabBar( &GetViewFrame()->GetWindow() );
     pTabBar->SetSplitHdl( LINK( this, BasicIDEShell, TabBarSplitHdl ) );
-    bTabBarSplitted = sal_False;
+    bTabBarSplitted = false;
 
     nCurKey = 100;
     InitScrollBars();
@@ -460,7 +460,7 @@ void BasicIDEShell::OuterResizePixel( const Point &rPos, const Size &rSize )
 IMPL_LINK_INLINE_START( BasicIDEShell, TabBarSplitHdl, TabBar *, pTBar )
 {
     (void)pTBar;
-    bTabBarSplitted = sal_True;
+    bTabBarSplitted = true;
     ArrangeTabBar();
 
     return 0;
@@ -481,9 +481,9 @@ IMPL_LINK( BasicIDEShell, TabBarHdl, TabBar *, pCurTabBar )
 
 
 
-sal_Bool BasicIDEShell::NextPage( sal_Bool bPrev )
+bool BasicIDEShell::NextPage( bool bPrev )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     sal_uInt16 nPos = pTabBar->GetPagePos( pTabBar->GetCurPageId() );
 
     if ( bPrev )
@@ -495,7 +495,7 @@ sal_Bool BasicIDEShell::NextPage( sal_Bool bPrev )
     {
         IDEBaseWindow* pWin = aIDEWindowTable[ pTabBar->GetPageId( nPos ) ];
         SetCurWindow( pWin, true );
-        bRet = sal_True;
+        bRet = true;
     }
 
     return bRet;

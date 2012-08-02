@@ -174,7 +174,7 @@ void BasicIDEShell::CreateModulWindowLayout()
 
 ModulWindow* BasicIDEShell::CreateBasWin( const ScriptDocument& rDocument, const ::rtl::OUString& rLibName, const ::rtl::OUString& rModName )
 {
-    bCreatingWindow = sal_True;
+    bCreatingWindow = true;
 
     sal_uLong nKey = 0;
     ModulWindow* pWin = 0;
@@ -243,7 +243,7 @@ ModulWindow* BasicIDEShell::CreateBasWin( const ScriptDocument& rDocument, const
     if ( !pCurWin )
         SetCurWindow( pWin, false, false );
 
-    bCreatingWindow = sal_False;
+    bCreatingWindow = false;
     return pWin;
 }
 

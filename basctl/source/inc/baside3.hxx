@@ -61,7 +61,7 @@ protected:
     virtual void        DoInit();
     virtual void        DoScroll( ScrollBar* pCurScrollBar );
     virtual void        DataChanged( const DataChangedEvent& rDCEvt );
-    void                InitSettings(sal_Bool bFont,sal_Bool bForeground,sal_Bool bBackground);
+    void                InitSettings(bool bFont, bool bForeground, bool bBackground);
 
 public:
                         TYPEINFO();

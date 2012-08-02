@@ -633,7 +633,7 @@ void BasicIDEShell::ExecuteGlobal( SfxRequest& rReq )
             DBG_ASSERT( rReq.GetArgs(), "arguments expected" );
             const SbxItem& rSbxItem = (const SbxItem&)rReq.GetArgs()->Get(SID_BASICIDE_ARG_SBX );
             ScriptDocument aDocument( rSbxItem.GetDocument() );
-            IDEBaseWindow* pWin = FindWindow( aDocument, rSbxItem.GetLibName(), rSbxItem.GetName(), rSbxItem.GetType(), sal_True );
+            IDEBaseWindow* pWin = FindWindow( aDocument, rSbxItem.GetLibName(), rSbxItem.GetName(), rSbxItem.GetType(), true );
             if ( pWin )
                 RemoveWindow( pWin, true );
         }
@@ -1268,7 +1268,7 @@ IDEBaseWindow* BasicIDEShell::FindApplicationWindow()
     return FindWindow( ScriptDocument::getApplicationScriptDocument() );
 }
 
-IDEBaseWindow* BasicIDEShell::FindWindow( const ScriptDocument& rDocument, const ::rtl::OUString& rLibName, const ::rtl::OUString& rName, BasicIDEType nType, sal_Bool bFindSuspended )
+IDEBaseWindow* BasicIDEShell::FindWindow( const ScriptDocument& rDocument, const ::rtl::OUString& rLibName, const ::rtl::OUString& rName, BasicIDEType nType, bool bFindSuspended )
 {
     for( IDEWindowTable::const_iterator it = aIDEWindowTable.begin(); it != aIDEWindowTable.end(); ++it )
     {

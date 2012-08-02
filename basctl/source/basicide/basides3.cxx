@@ -43,7 +43,7 @@ using namespace ::com::sun::star::io;
 
 DialogWindow* BasicIDEShell::CreateDlgWin( const ScriptDocument& rDocument, const ::rtl::OUString& rLibName, const ::rtl::OUString& rDlgName )
 {
-    bCreatingWindow = sal_True;
+    bCreatingWindow = true;
 
     sal_uLong nKey = 0;
     DialogWindow* pWin = 0;
@@ -111,7 +111,7 @@ DialogWindow* BasicIDEShell::CreateDlgWin( const ScriptDocument& rDocument, cons
             SetCurWindow( pWin, false, false );
     }
 
-    bCreatingWindow = sal_False;
+    bCreatingWindow = false;
     return pWin;
 }
 

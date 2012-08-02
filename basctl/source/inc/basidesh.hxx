@@ -82,8 +82,8 @@ friend class LocalizationMgr;
     ScrollBar           aVScrollBar;
     ScrollBarBox        aScrollBarBox;
     BasicIDETabBar*     pTabBar;
-    sal_Bool                bTabBarSplitted;
-    sal_Bool                bCreatingWindow;
+    bool                bTabBarSplitted;
+    bool                bCreatingWindow;
     ModulWindowLayout*  pModulLayout;
     sal_Bool                m_bAppBasicModified;
     ::basctl::DocumentEventNotifier
@@ -203,10 +203,10 @@ public:
 
     ModulWindowLayout*  GetLayoutWindow() const { return pModulLayout; }
 
-    IDEBaseWindow*      FindWindow( const ScriptDocument& rDocument, const ::rtl::OUString& rLibName = ::rtl::OUString(), const ::rtl::OUString& rName = ::rtl::OUString(), BasicIDEType nType = BASICIDE_TYPE_UNKNOWN, sal_Bool bFindSuspended = sal_False );
+    IDEBaseWindow*      FindWindow( const ScriptDocument& rDocument, const ::rtl::OUString& rLibName = ::rtl::OUString(), const ::rtl::OUString& rName = ::rtl::OUString(), BasicIDEType nType = BASICIDE_TYPE_UNKNOWN, bool bFindSuspended = false );
     DialogWindow*       FindDlgWin( const ScriptDocument& rDocument, const ::rtl::OUString& rLibName, const ::rtl::OUString& rDlgName, bool bCreateIfNotExist, bool bFindSuspended = false );
     IDEBaseWindow*      FindApplicationWindow();
-    sal_Bool                NextPage( sal_Bool bPrev = sal_False );
+    bool                NextPage( bool bPrev = false );
 
     sal_Bool                IsAppBasicModified() const { return m_bAppBasicModified; }
     void                SetAppBasicModified( sal_Bool bModified = sal_True ) { m_bAppBasicModified = bModified; }

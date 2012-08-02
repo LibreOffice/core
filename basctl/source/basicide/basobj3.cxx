@@ -190,7 +190,7 @@ bool RenameDialog( Window* pErrorParent, const ScriptDocument& rDocument, const 
     }
 
     BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
-    IDEBaseWindow* pWin = pIDEShell ? pIDEShell->FindWindow( rDocument, rLibName, rOldName, BASICIDE_TYPE_DIALOG, sal_False ) : NULL;
+    IDEBaseWindow* pWin = pIDEShell ? pIDEShell->FindWindow( rDocument, rLibName, rOldName, BASICIDE_TYPE_DIALOG, false ) : NULL;
     Reference< XNameContainer > xExistingDialog;
     if ( pWin )
         xExistingDialog = ((DialogWindow*)pWin)->GetEditor()->GetDialog();

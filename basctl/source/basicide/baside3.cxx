@@ -74,7 +74,7 @@ DialogWindow::DialogWindow( Window* pParent, const ScriptDocument& rDocument, ::
         :IDEBaseWindow( pParent, rDocument, aLibName, aName )
         ,pUndoMgr(NULL)
 {
-    InitSettings( sal_True, sal_True, sal_True );
+    InitSettings( true, true, true );
 
     pEditor = new DlgEditor( rDocument.isDocument() ? rDocument.getDocument() : Reference< frame::XModel >() );
     pEditor->SetWindow( this );
@@ -1382,14 +1382,14 @@ void DialogWindow::DataChanged( const DataChangedEvent& rDCEvt )
 {
     if( (rDCEvt.GetType()==DATACHANGED_SETTINGS) && (rDCEvt.GetFlags() & SETTINGS_STYLE) )
     {
-        InitSettings( sal_True, sal_True, sal_True );
+        InitSettings( true, true, true );
         Invalidate();
     }
     else
         IDEBaseWindow::DataChanged( rDCEvt );
 }
 
-void DialogWindow::InitSettings(sal_Bool bFont,sal_Bool bForeground,sal_Bool bBackground)
+void DialogWindow::InitSettings(bool bFont, bool bForeground, bool bBackground)
 {
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
     if( bFont )
