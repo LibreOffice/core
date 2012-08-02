@@ -106,8 +106,7 @@ using namespace ::com::sun::star::container;
 
 class SwContentArr
     : public o3tl::sorted_vector<SwContent*, o3tl::less_ptr_to<SwContent>,
-                o3tl::find_partialorder_ptrequals<SwContent*,
-                    o3tl::less_ptr_to<SwContent> > >
+                o3tl::find_partialorder_ptrequals>
 {
 public:
     ~SwContentArr() { DeleteAndDestroyAll(); }

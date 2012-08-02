@@ -76,14 +76,14 @@ struct CompareSwpHtStart
     bool operator()(SwTxtAttr* const lhs, SwTxtAttr* const rhs) const;
 };
 class SwpHtStart : public o3tl::sorted_vector<SwTxtAttr*, CompareSwpHtStart,
-    o3tl::find_partialorder_ptrequals<SwTxtAttr*, CompareSwpHtStart> > {};
+    o3tl::find_partialorder_ptrequals> {};
 
 struct CompareSwpHtEnd
 {
     bool operator()(SwTxtAttr* const lhs, SwTxtAttr* const rhs) const;
 };
 class SwpHtEnd : public o3tl::sorted_vector<SwTxtAttr*, CompareSwpHtEnd,
-    o3tl::find_partialorder_ptrequals<SwTxtAttr*, CompareSwpHtEnd> > {};
+    o3tl::find_partialorder_ptrequals> {};
 
 // Class SwpHintsArr
 
