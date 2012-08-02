@@ -857,18 +857,4 @@ CGImageRef CreateCGImage( const Image& rImage )
     return xImage;
 }
 
-UIImage* CreateNSImage( const Image& rImage )
-{
-    CGImageRef xImage = CreateCGImage( rImage );
-
-    if( ! xImage )
-        return nil;
-
-    Size aSize( rImage.GetSizePixel() );
-    UIImage* pImage = [[UIImage alloc] initWithCGImage: xImage];
-    CGImageRelease( xImage );
-
-    return pImage;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
