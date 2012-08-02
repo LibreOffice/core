@@ -417,6 +417,7 @@ struct Sc10ColAttr
     Sc10ColData*    pData;
 
     Sc10ColAttr() : pData(NULL) {}
+    ~Sc10ColAttr() { delete [] pData; }
 };
 
 // GraphHeader
