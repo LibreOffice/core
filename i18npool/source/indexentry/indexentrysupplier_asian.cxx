@@ -103,7 +103,7 @@ IndexEntrySupplier_asian::getIndexCharacter( const OUString& rIndexEntry,
         if ( rLocale.Language == "ko" ) {
             if ( rAlgorithm == "dict" )
                 func = get_indexdata_ko_dict;
-        } else if ( rLocale.Language == "zh" )
+        } else if ( rLocale.Language == "zh" ) {
             if ( rAlgorithm == "pinyin" )
                 func = get_indexdata_zh_pinyin;
             else if ( rAlgorithm == "radical" )
@@ -112,6 +112,7 @@ IndexEntrySupplier_asian::getIndexCharacter( const OUString& rIndexEntry,
                 func = get_indexdata_zh_stroke;
             else if ( rAlgorithm == "zhuyin" )
                 func = get_indexdata_zh_zhuyin;
+        }
     }
 #endif
     if (func) {
