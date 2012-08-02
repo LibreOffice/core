@@ -734,6 +734,9 @@ sub create_msi_database
         $msifilename =~ s/\//\\\\/g;
         $extraslash = "\\";
     }
+    if ( $^O =~ /linux/i ) {
+        $extraslash = "\\";
+    }
     my $systemcall = $msidb . " -f " . $idtdirbase . " -d " . $msifilename . " -c " . "-i " . $extraslash . "*";
 
     my $returnvalue = system($systemcall);
@@ -988,7 +991,7 @@ sub write_summary_into_msi_database
 
     if ($returnvalue)
     {
-        $infoline = "ERROR: Could not execute $systemcall\n";
+        $infoline = "ERROR: Could not execute $systemcall (return $returnvalue)\n";
         push( @installer::globals::logfileinfo, $infoline);
     }
     else

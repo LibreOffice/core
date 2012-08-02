@@ -56,6 +56,9 @@ sub extract_all_tables_from_msidatabase
         $workdir =~ s/\//\\\\/g;
         $extraslash = "\\";
     }
+    if ( $^O =~ /linux/i) {
+        $extraslash = "\\";
+    }
 
     $systemcall = $msidb . " -d " . $fulldatabasepath . " -f " . $workdir . " -e " . $extraslash . "*";
     $returnvalue = system($systemcall);

@@ -298,6 +298,9 @@ sub extract_all_tables_from_pcpfile
         $localworkdir =~ s/\//\\\\/g;
         $extraslash = "\\";
     }
+    if ( $^O =~ /linux/i ) {
+        $extraslash = "\\";
+    }
 
     # Export of all tables by using "*"
 
