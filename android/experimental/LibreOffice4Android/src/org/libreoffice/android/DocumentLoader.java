@@ -33,6 +33,7 @@ import org.libreoffice.R;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
+import android.graphics.Matrix;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -1110,22 +1111,21 @@ public class DocumentLoader
         // Could easily make a new (larger) thumb but recycling
         // should be faster & more efficient, better for the environment ;-)
         //ll = (LinearLayout)findViewById( R.id.navigator);
-//        Bitmap bmp = ( (ThumbnailView)ll.getChildAt( 0 ) ).getBitmap();
 
-        ByteBuffer bb = renderPage( 0 , 100 , (int)( 100*Math.sqrt(2) )  );
-//        bb.flip();
-        Bitmap bmp = Bitmap.createBitmap( 100, (int)( 100*Math.sqrt(2) ), Bitmap.Config.ARGB_8888);
-        bmp.copyPixelsFromBuffer(bb);
+        Bitmap bmpAlpha = ( (ThumbnailView)ll.getChildAt( 0 ) ).getBitmap();
+        //For now use these 3 lines to turn the bitmap right way up.
+        Matrix m = new Matrix();
+        m.preScale( 1.0f , -1.0f );
+        Bitmap bmp = Bitmap.createBitmap( bmpAlpha, 0, 0, bmpAlpha.getWidth(), bmpAlpha.getHeight(), m, true);
 
         File file = new File(extras.getString("input"));
         Log.i(TAG ,"onDestroy " + extras.getString("input"));
         File dir = file.getParentFile();
         File thumbnailFile = new File( dir , "." + file.getName().split("[.]")[0] + ".png");
         try {
-            /*(ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-            bmp.compress(Bitmap.CompressFormat.JPEG, 40, bytes);
-            if( !thumbnailFile.isFile() )
-                thumbnailFile.createNewFile();
+            ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+            bmp.compress(Bitmap.CompressFormat.PNG, 40, bytes);
+            thumbnailFile.createNewFile();
             FileOutputStream fo = new FileOutputStream( thumbnailFile );
             fo.write(bytes.toByteArray());*/
             if( !thumbnailFile.isFile() )

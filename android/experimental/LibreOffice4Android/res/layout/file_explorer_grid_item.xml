@@ -8,16 +8,15 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingTop="10dp"
     android:orientation="vertical" >
     
 	<ImageView
         android:id="@+id/grid_item_image"
         android:layout_width="100dp"
         android:layout_height="142dp"
-        android:paddingTop="15dp"
-        android:paddingBottom="10dp"
         android:scaleType="fitStart"
-        android:layout_gravity="center" >
+        android:layout_gravity="center">
     </ImageView>
  
     <TextView
@@ -27,6 +26,7 @@
         android:text="@+id/label"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
+        android:paddingTop="10dp"
         android:layout_gravity="center"
         android:textSize="15dp" 
         android:textStyle="bold"

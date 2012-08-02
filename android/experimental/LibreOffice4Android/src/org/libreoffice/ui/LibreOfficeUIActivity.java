@@ -38,6 +38,7 @@ import android.app.ActionBar.OnNavigationListener;
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.graphics.Bitmap;
+import android.graphics.Matrix;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -855,11 +856,15 @@ class ListItemAdapter implements ListAdapter{
                 ByteBuffer bb = renderPage( 0 , widthInPx , heightInPx);
                 Bitmap bm = Bitmap.createBitmap( widthInPx , heightInPx , Bitmap.Config.ARGB_8888);
                 bm.copyPixelsFromBuffer(bb);
+
+                Matrix m = new Matrix();
+                m.preScale( 1.0f , -1.0f );
+                Bitmap bmp = Bitmap.createBitmap( bm, 0, 0, bm.getWidth(), bm.getHeight(), m, true);
                 File dir = file.getParentFile();
                 File thumbnailFile = new File( dir , "." + file.getName().split("[.]")[0] + ".png");
                 try {
                     ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-                    bm.compress(Bitmap.CompressFormat.PNG, 40, bytes);
+                    bmp.compress(Bitmap.CompressFormat.PNG, 40, bytes);
                     thumbnailFile.createNewFile();
                     FileOutputStream fo = new FileOutputStream( thumbnailFile );
                     fo.write(bytes.toByteArray());
