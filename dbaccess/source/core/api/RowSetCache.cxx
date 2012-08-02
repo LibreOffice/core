@@ -1042,7 +1042,7 @@ sal_Bool ORowSetCache::moveWindow()
                 else if(!m_bRowCountFinal)
                     m_nRowCount = std::max(nPos+1, m_nRowCount); //+1 because we successfully moved to row after nPos
                 else
-                    OSL_ENSURE(m_nRowCount > nPos, "Final m_nRowCount is smaller than row I moved to!");
+                    OSL_ENSURE(m_nRowCount >= nPos, "Final m_nRowCount is smaller than row I moved to!");
             }
             else
             {   // the end was reached before or at end() so we can set the start before or at nNewStartPos
