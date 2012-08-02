@@ -263,12 +263,14 @@ OUString SvXMLAutoStylePoolP_Impl::Find( sal_Int32 nFamily,
     OUString sName;
 
     XMLFamilyData_Impl aTemporary( nFamily );
-    XMLFamilyDataList_Impl::iterator aFind = maFamilyList.find(aTemporary);
-    DBG_ASSERT(aFind != maFamilyList.end(), "SvXMLAutoStylePool_Impl::Find: unknown family");
+    XMLFamilyDataList_Impl::const_iterator const iter =
+        maFamilyList.find(aTemporary);
+    OSL_ENSURE(iter != maFamilyList.end(),
+            "SvXMLAutoStylePool_Impl::Find: unknown family");
 
-    if (aFind != maFamilyList.end())
+    if (iter != maFamilyList.end())
     {
-        XMLFamilyData_Impl &rFamily = *aFind;
+        XMLFamilyData_Impl const& rFamily = *iter;
         const SvXMLAutoStylePoolParentsP_Impl* pParents =
             rFamily.mpParentList;
 
