@@ -279,15 +279,15 @@ static BOOL msidbExportStream(LPCWSTR dbfile, LPCWSTR wdir, LPCWSTR streamName)
 /***********************************************************************
  * msidbImportTables
  *
- * Takes a list of tables or '*' (for all) to export to text archive
+ * Takes a list of tables or '*' (for all) to import from text archive
  * files in specified folder
  *
- * For each table, a file called <tablename>.idt is exported containing
+ * For each table, a file called <tablename>.idt is imported containing
  * tab separated ASCII.
  *
  * Examples (note wildcard escape for *nix/bash):
- * msidb -d <pathtomsi>.msi -f <workdir> -e \*
- * msidb -d <pathtomsi>.msi -f <workdir> -e File Directory Binary
+ * msidb -d <pathtomsi>.msi -f <workdir> -i \*
+ * msidb -d <pathtomsi>.msi -f <workdir> -i File Directory Binary
  **********************************************************************/
 static BOOL msidbImportTables(LPCWSTR dbfile, LPCWSTR wdir, LPWSTR tables[], BOOL create)
 {
@@ -323,13 +323,17 @@ static BOOL msidbImportTables(LPCWSTR dbfile, LPCWSTR wdir, LPWSTR tables[], BOO
         {
             while ((ent = readdir(dir)) != NULL)
             {
+                if (ent->d_type != DT_REG) continue;
                 fileName = ent->d_name;
+                if (strcmp(fileName+strlen(fileName)-4*sizeof(fileName[0]), ".idt") != 0) continue;
                 if (strcmp(fileName, ".") == 0 || strcmp(fileName, "..") == 0) continue;
                 tableFile = strdupAtoW(CP_ACP, fileName);
                 r = MsiDatabaseImportW(dbhandle, wdir, tableFile);
                 free(tableFile);
             }
         }
+        else
+            return FALSE;
         closedir(dir);
         free(dirNameA);
     }
@@ -343,7 +347,6 @@ static BOOL msidbImportTables(LPCWSTR dbfile, LPCWSTR wdir, LPWSTR tables[], BOO
 
             lstrcpyW(tableFile, tables[i]);
             lstrcatW(tableFile, ext);
-
             r = MsiDatabaseImportW(dbhandle, wdir, tableFile);
             free(tableFile);
 
@@ -353,6 +356,7 @@ static BOOL msidbImportTables(LPCWSTR dbfile, LPCWSTR wdir, LPWSTR tables[], BOO
             }
         }
     }
+
     MsiDatabaseCommit(dbhandle);
     MsiCloseHandle(dbhandle);
     return TRUE;
@@ -476,10 +480,9 @@ int wmain(int argc, WCHAR *argv[])
             i = 0;
             while (argv[2] && argv[2][0] != '-' && i < 10)
             {
-                argv++; argc--; i++;
                 iTables[i] = argv[2];
+                argv++; argc--; i++;
             }
-
             break;
         case 'e':                   /* Export tables */
             i = 0;
@@ -549,6 +552,9 @@ int wmain(int argc, WCHAR *argv[])
     if (storageName)
         if (!msidbExportStorage(dbfile, wdir, storageName))
             return 6;
+
+    if (!iTables[0] && !oTables[0] && !streamName && !streamFiles[0] && !storageNames[0] && !storageName)
+        return 7;
 
     return 0;
 }
