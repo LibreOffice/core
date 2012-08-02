@@ -88,7 +88,7 @@ void ImagePreparer::execute()
         }
         sendNotes( i );
     }
-     notesToHtml( 0 );
+//      notesToHtml( 0 );
     mRef.clear();
 }
 

@@ -45,15 +45,24 @@ void DiscoveryService::replyTo( SocketAddr& rAddr )
 
 void DiscoveryService::execute()
 {
+    fprintf( stderr, "Discovery service is listening\n" );;
     sal_uInt64 aRet, aRead;
     vector<char> aBuffer;
     aRead = 0;
+
+
+
+    SocketAddr aListenAddr( "239.0.0.1", PORT_DISCOVERY );
+    mSocket.bind( aListenAddr );
 
     SocketAddr aAddr;
     while ( true )
     {
         aBuffer.resize( aRead + 100 );
+
+        fprintf( stderr, "DiscoveryService waiting for packet\n" );
         aRet = mSocket.recvFrom( &aBuffer[aRead], 100 );
+        fprintf( stderr, "DiscoveryService received a packet.\n" );
         if ( aRet == 0 )
         {
             fprintf( stderr, "Socket returned 0\n" );

@@ -55,6 +55,8 @@ public class CommunicationService extends Service {
 	@Override
 	public void onCreate() {
 		// TODO Create a notification (if configured).
+		ServerFinder aFinder = new ServerFinder();
+		aFinder.startFinding();
 	}
 
 	@Override

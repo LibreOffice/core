@@ -85,7 +85,8 @@ public class TestClient extends Activity {
 			mCommunicationService = ((CommunicationService.CBinder) aService)
 			                .getService();
 			mCommunicationService.connectTo(
-			                CommunicationService.Protocol.NETWORK, "10.0.2.2");
+			                CommunicationService.Protocol.NETWORK,
+			                "192.168.0.18");
 			mCommunicationService.setActivityMessenger(mMessenger);
 			enableButtons(true);
 		}
