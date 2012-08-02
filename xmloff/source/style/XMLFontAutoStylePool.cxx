@@ -26,7 +26,7 @@
  *
  ************************************************************************/
 
-#include <svl/cntnrsrt.hxx>
+#include <o3tl/sorted_vector.hxx>
 #include <tools/fontenum.hxx>
 #include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
@@ -106,37 +106,40 @@ inline XMLFontAutoStylePoolEntry_Impl::XMLFontAutoStylePoolEntry_Impl(
     eEnc( eE )
 {
 }
-int XMLFontAutoStylePoolEntryCmp_Impl(
-        const XMLFontAutoStylePoolEntry_Impl& r1,
-        const XMLFontAutoStylePoolEntry_Impl& r2 )
-{
-    sal_Int8 nEnc1(r1.GetEncoding() != RTL_TEXTENCODING_SYMBOL);
-    sal_Int8 nEnc2(r2.GetEncoding() != RTL_TEXTENCODING_SYMBOL);
-    if( nEnc1 != nEnc2 )
-        return nEnc1 - nEnc2;
-    else if( r1.GetPitch() != r2.GetPitch() )
-        return (int)r1.GetPitch() - (int)r2.GetPitch();
-    else if( r1.GetFamily() != r2.GetFamily() )
-        return (int)r1.GetFamily() - (int)r2.GetFamily();
-    else
-    {
-        sal_Int32 nCmp = r1.GetFamilyName().compareTo( r2.GetFamilyName() );
-        if( 0 == nCmp )
-            return (int)r1.GetStyleName().compareTo( r2.GetStyleName() );
-        else
-            return (int)nCmp;
-    }
-}
 
-DECLARE_CONTAINER_SORT_DEL( XMLFontAutoStylePool_Impl,
-                            XMLFontAutoStylePoolEntry_Impl )
-IMPL_CONTAINER_SORT( XMLFontAutoStylePool_Impl,
-                     XMLFontAutoStylePoolEntry_Impl,
-                     XMLFontAutoStylePoolEntryCmp_Impl )
+struct XMLFontAutoStylePoolEntryCmp_Impl {
+    bool operator()(
+        XMLFontAutoStylePoolEntry_Impl* const& r1,
+        XMLFontAutoStylePoolEntry_Impl* const& r2 ) const
+    {
+        sal_Int8 nEnc1(r1->GetEncoding() != RTL_TEXTENCODING_SYMBOL);
+        sal_Int8 nEnc2(r2->GetEncoding() != RTL_TEXTENCODING_SYMBOL);
+        if( nEnc1 != nEnc2 )
+            return nEnc1 < nEnc2;
+        else if( r1->GetPitch() != r2->GetPitch() )
+            return r1->GetPitch() < r2->GetPitch();
+        else if( r1->GetFamily() != r2->GetFamily() )
+            return r1->GetFamily() < r2->GetFamily();
+        else
+        {
+            sal_Int32 nCmp = r1->GetFamilyName().compareTo( r2->GetFamilyName() );
+            if( 0 == nCmp )
+                return r1->GetStyleName().compareTo( r2->GetStyleName() ) < 0;
+            else
+                return nCmp < 0;
+        }
+    }
+};
+
+class XMLFontAutoStylePool_Impl : public o3tl::sorted_vector<XMLFontAutoStylePoolEntry_Impl*, XMLFontAutoStylePoolEntryCmp_Impl>
+{
+public:
+    ~XMLFontAutoStylePool_Impl() { DeleteAndDestroyAll(); }
+};
 
 XMLFontAutoStylePool::XMLFontAutoStylePool( SvXMLExport& rExp ) :
     rExport( rExp ),
-    pPool( new XMLFontAutoStylePool_Impl( 5, 5 ) )
+    pPool( new XMLFontAutoStylePool_Impl )
 {
 }
 
@@ -155,10 +158,10 @@ OUString XMLFontAutoStylePool::Add(
     OUString sPoolName;
     XMLFontAutoStylePoolEntry_Impl aTmp( rFamilyName, rStyleName, nFamily,
                                           nPitch, eEnc );
-    sal_uLong nPos;
-    if( pPool->Seek_Entry( &aTmp, &nPos ) )
+    XMLFontAutoStylePool_Impl::const_iterator it = pPool->find( &aTmp );
+    if( it != pPool->end() )
     {
-        sPoolName = pPool->GetObject( nPos )->GetName();
+        sPoolName = (*it)->GetName();
     }
     else
     {
@@ -192,7 +195,7 @@ OUString XMLFontAutoStylePool::Add(
         XMLFontAutoStylePoolEntry_Impl *pEntry =
             new XMLFontAutoStylePoolEntry_Impl( sName, rFamilyName, rStyleName,
                                                 nFamily, nPitch, eEnc );
-        pPool->Insert( pEntry );
+        pPool->insert( pEntry );
         m_aNames.insert(sName);
     }
 
@@ -209,10 +212,10 @@ OUString XMLFontAutoStylePool::Add(
     OUString sName;
     XMLFontAutoStylePoolEntry_Impl aTmp( rFamilyName, rStyleName, nFamily,
                                           nPitch, eEnc );
-    sal_uLong nPos;
-    if( pPool->Seek_Entry( &aTmp, &nPos ) )
+    XMLFontAutoStylePool_Impl::const_iterator it = pPool->find( &aTmp );
+    if( it != pPool->end() )
     {
-        sName = pPool->GetObject( nPos )->GetName();
+        sName = (*it)->GetName();
     }
 
     return sName;
@@ -232,10 +235,10 @@ void XMLFontAutoStylePool::exportXML()
     XMLFontEncodingPropHdl aEncHdl;
     const SvXMLUnitConverter& rUnitConv = GetExport().GetMM100UnitConverter();
 
-    sal_uInt32 nCount = pPool->Count();
+    sal_uInt32 nCount = pPool->size();
     for( sal_uInt32 i=0; i<nCount; i++ )
     {
-        const XMLFontAutoStylePoolEntry_Impl *pEntry = pPool->GetObject( i );
+        const XMLFontAutoStylePoolEntry_Impl *pEntry = (*pPool)[ i ];
 
         GetExport().AddAttribute( XML_NAMESPACE_STYLE,
                                   XML_NAME, pEntry->GetName() );
