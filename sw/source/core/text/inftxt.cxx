@@ -1126,12 +1126,15 @@ void SwTxtPaintInfo::_DrawBackBrush( const SwLinePortion &rPor ) const
                         const rtl::OUString& rAuthor = rPostItField.GetFld()->GetPar1();
                         sal_uInt16 nIndex = pNd->GetDoc()->InsertRedlineAuthor(rAuthor);
                         pOutDev->SetFillColor( SwPostItMgr::GetColorLight(nIndex) );
+                        pOutDev->SetLineColor( SwPostItMgr::GetColorAnchor(nIndex) );
                         bFilled = true;
                     }
                 }
                 if (!bFilled)
+                {
                     pOutDev->SetFillColor( SwViewOption::GetFieldShadingsColor() );
-                pOutDev->SetLineColor( );
+                    pOutDev->SetLineColor( );
+                }
                 pOutDev->DrawRect( aIntersect.SVRect() );
                 pOutDev->Pop();
             }
