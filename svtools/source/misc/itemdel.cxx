@@ -55,10 +55,6 @@ public:
                  ~SfxItemDesruptor_Impl();
 };
 
-typedef std::vector<SfxItemDesruptor_Impl*> SfxItemDesruptorList_Impl;
-
-static SfxItemDesruptorList_Impl *pItemDesruptList = NULL;
-
 // ------------------------------------------------------------------------
 SfxItemDesruptor_Impl::SfxItemDesruptor_Impl( SfxPoolItem *pItemToDesrupt ):
     pItem(pItemToDesrupt),
@@ -71,13 +67,6 @@ SfxItemDesruptor_Impl::SfxItemDesruptor_Impl( SfxPoolItem *pItemToDesrupt ):
 
     // im Idle abarbeiten
     GetpApp()->InsertIdleHdl( aLink, 1 );
-
-    // und in Liste eintragen (damit geflusht werden kann)
-    SfxItemDesruptorList_Impl* &rpList = pItemDesruptList;
-    if ( !rpList )
-        rpList = new SfxItemDesruptorList_Impl;
-    SfxItemDesruptor_Impl *pThis = this;
-    rpList->push_back( pThis );
 }
 
 // ------------------------------------------------------------------------
@@ -87,13 +76,6 @@ SfxItemDesruptor_Impl::~SfxItemDesruptor_Impl()
 
     // aus Idle-Handler austragen
     GetpApp()->RemoveIdleHdl( aLink );
-
-    // und aus Liste austragen
-    SfxItemDesruptorList_Impl* &rpList = pItemDesruptList;
-    DBG_ASSERT( rpList, "no DesruptorList" );
-    const SfxItemDesruptor_Impl *pThis = this;
-    if ( rpList ) HACK(warum?)
-        rpList->erase( std::find( rpList->begin(), rpList->end(), pThis ) );
 
     // reset RefCount (was set to SFX_ITEMS_SPECIAL before!)
     pItem->SetRefCount( 0 );
