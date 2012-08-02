@@ -371,24 +371,26 @@ sal_Bool SvxAutoCorrect::FnCptlSttWrd( SvxAutoCorrDoc& rDoc, const String& rTxt,
         String sWord( rTxt.Copy( nSttPos - 1, nEndPos - nSttPos + 1 ));
         if( !FindInWrdSttExceptList(eLang, sWord) )
         {
+            // Check that word isn't correctly spelled before correcting:
             ::com::sun::star::uno::Reference<
                 ::com::sun::star::linguistic2::XSpellChecker1 > xSpeller =
                 SvxGetSpellChecker();
-            Sequence< ::com::sun::star::beans::PropertyValue > aEmptySeq;
-            // Check that word isn't correctly spelled before correcting
-            ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XSpellAlternatives > xSpellAlt
-                = xSpeller->spell(sWord, eLang, aEmptySeq);
-            if(xSpellAlt.is())
+            if( xSpeller->hasLanguage(eLang) )
             {
-                sal_Unicode cSave = rTxt.GetChar( nSttPos );
-                rtl::OUString sChar( cSave );
-                sChar = rCC.lowercase( sChar );
-                if( sChar[0] != cSave && rDoc.ReplaceRange( nSttPos, 1, sChar ))
+                Sequence< ::com::sun::star::beans::PropertyValue > aEmptySeq;
+                if (!xSpeller->spell(sWord, eLang, aEmptySeq).is())
                 {
-                    if( SaveWordWrdSttLst & nFlags )
-                        rDoc.SaveCpltSttWord( CptlSttWrd, nSttPos, sWord, cSave );
-                    bRet = sal_True;
+                    return false;
                 }
+            }
+            sal_Unicode cSave = rTxt.GetChar( nSttPos );
+            rtl::OUString sChar( cSave );
+            sChar = rCC.lowercase( sChar );
+            if( sChar[0] != cSave && rDoc.ReplaceRange( nSttPos, 1, sChar ))
+            {
+                if( SaveWordWrdSttLst & nFlags )
+                    rDoc.SaveCpltSttWord( CptlSttWrd, nSttPos, sWord, cSave );
+                bRet = sal_True;
             }
         }
     }
