@@ -259,6 +259,10 @@ interface XPackageManager
        Added extensions will be added to the database and removed extensions
        will be removed from the database.
 
+       @param force
+            whether to reinstall all extensions even if their versions have not
+            changed (see forceBundled parameter of
+            XExtensionManager.synchronize)
        @param xAddedExtension
             new extensions which may need to be registered.
 
@@ -268,7 +272,9 @@ interface XPackageManager
             If true - then at least one extension was removed or added. Otherwise
             nothing was changed.
     */
-    boolean synchronize([in] com::sun::star::task::XAbortChannel xAbortChannel,
+    boolean synchronize(
+                     [in] boolean force,
+                     [in] com::sun::star::task::XAbortChannel xAbortChannel,
                      [in] com::sun::star::ucb::XCommandEnvironment xCmdEnv )
         raises (DeploymentException,
                 com::sun::star::ucb::CommandFailedException,

@@ -568,7 +568,7 @@ void syncRepositories(
         if (xExtensionManager.is())
         {
             bModified = xExtensionManager->synchronize(
-                Reference<task::XAbortChannel>(), xCmdEnv);
+                force, Reference<task::XAbortChannel>(), xCmdEnv);
         }
     }
 

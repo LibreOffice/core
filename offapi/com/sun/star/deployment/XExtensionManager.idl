@@ -285,11 +285,19 @@ interface XExtensionManager
        The active extensions are determined. That is, shared or bundled extensions
        are not necessaryly registered (<member>XPackage::registerPackage</member>).
 
+       @param forceBundled
+              whether to reinstall all bundled extensions even if their versions
+              have not changed (which might be necessary when an upgraded
+              installation outdates references to any share/prereg/bundled/
+              data; this parameter can go again once no exisiting
+              UserInstallation's user/extensions/bundled/ data can contain any
+              $BUNDLED_EXTENSIONS_PREREG references any longer)
        @return
               If true - then at least one extension was removed or added. Otherwise
               nothing was changed.
     */
     boolean synchronize(
+        [in] boolean forceBundled,
         [in] com::sun::star::task::XAbortChannel xAbortChannel,
         [in] com::sun::star::ucb::XCommandEnvironment xCmdEnv )
         raises (DeploymentException,

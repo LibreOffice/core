@@ -82,6 +82,7 @@ class PackageManagerImpl : private ::dp_misc::MutexHolder, public t_pm_helper
         css::uno::Reference<css::deployment::XPackage> const & package);
 
     bool synchronizeRemovedExtensions(
+        bool force,
         css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv);
 
@@ -239,6 +240,7 @@ public:
         throw (::com::sun::star::uno::RuntimeException);
 
     virtual ::sal_Bool SAL_CALL synchronize(
+        sal_Bool force,
         css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv )
         throw (css::deployment::DeploymentException,
