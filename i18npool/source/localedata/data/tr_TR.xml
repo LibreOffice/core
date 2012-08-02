@@ -325,21 +325,21 @@
     </Calendar>
   </LC_CALENDAR>
   <LC_CURRENCY>
-    <Currency default="true" usedInCompatibleFormatCodes="false">
+    <Currency default="true" usedInCompatibleFormatCodes="true">
       <CurrencyID>TRY</CurrencyID>
       <CurrencySymbol>TL</CurrencySymbol>
       <BankSymbol>TRY</BankSymbol>
       <CurrencyName>Türk Lirası</CurrencyName>
       <DecimalPlaces>2</DecimalPlaces>
     </Currency>
-    <Currency default="false" usedInCompatibleFormatCodes="true">
+    <Currency default="false" usedInCompatibleFormatCodes="false" legacyOnly="true">
       <CurrencyID>TRY</CurrencyID>
       <CurrencySymbol>YTL</CurrencySymbol>
       <BankSymbol>TRY</BankSymbol>
       <CurrencyName>Yeni Türk Lirası</CurrencyName>
       <DecimalPlaces>2</DecimalPlaces>
     </Currency>
-    <Currency default="false" usedInCompatibleFormatCodes="true">
+    <Currency default="false" usedInCompatibleFormatCodes="false" legacyOnly="true">
       <CurrencyID>TRL</CurrencyID>
       <CurrencySymbol>TL</CurrencySymbol>
       <BankSymbol>TRL</BankSymbol>
