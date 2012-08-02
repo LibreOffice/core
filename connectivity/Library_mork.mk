@@ -21,11 +21,12 @@ $(eval $(call gb_Library_set_include,mork,\
 ))
 
 $(eval $(call gb_Library_use_libraries,mork, \
+    comphelper \
     cppu \
     cppuhelper \
+    dbtools \
     sal \
     salhelper \
-    dbtools \
     $(gb_STDLIBS) \
 ))
 
@@ -40,6 +41,10 @@ $(eval $(call gb_Library_add_exception_objects,mork, \
     connectivity/source/drivers/mork/MConnection \
     connectivity/source/drivers/mork/MDatabaseMetaData \
     connectivity/source/drivers/mork/MDatabaseMetaDataHelper \
+    connectivity/source/drivers/mork/MStatement \
+    connectivity/source/drivers/mork/MResultSet \
+    connectivity/source/drivers/mork/MResultSetMetaData \
+    connectivity/source/drivers/mork/MPreparedStatement \
     connectivity/source/drivers/mork/MServices \
 ))
 

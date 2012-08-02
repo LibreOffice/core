@@ -12,7 +12,7 @@
 #include "MConnection.hxx"
 #include "MDriver.hxx"
 #include "MDatabaseMetaData.hxx"
-
+#include "MPreparedStatement.hxx"
 #include "MorkParser.hxx"
 
 #include <connectivity/dbcharset.hxx>
@@ -164,12 +164,21 @@ Reference< XStatement > SAL_CALL OConnection::createStatement(  ) throw(SQLExcep
 Reference< XPreparedStatement > SAL_CALL OConnection::prepareStatement( const ::rtl::OUString& _sSql ) throw(SQLException, RuntimeException)
 {
     SAL_INFO("connectivity.mork", "=> OConnection::prepareStatement()" );
+    SAL_INFO("connectivity.mork", "OConnection::prepareStatement( " << _sSql << " )");
 
     OSL_UNUSED( _sSql );
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
 
-    SAL_INFO("connectivity.mork", "OConnection::prepareStatement( " << _sSql << " )");
+    // the pre
+    // create a statement
+    // the statement can only be executed more than once
+    OPreparedStatement* pPrepared = new OPreparedStatement(this,_sSql);
+    Reference< XPreparedStatement > xReturn = pPrepared;
+    pPrepared->lateInit();
+
+    m_aStatements.push_back(WeakReferenceHelper(xReturn));
+
     return NULL;
 }
 // --------------------------------------------------------------------------------

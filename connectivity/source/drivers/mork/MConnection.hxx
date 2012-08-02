@@ -61,6 +61,8 @@ namespace connectivity
             virtual void construct( const ::rtl::OUString& url,const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& info) throw(::com::sun::star::sdbc::SQLException);
             OConnection(MorkDriver* const driver);
             virtual ~OConnection();
+
+            MorkDriver* getDriver() {return m_pDriver;};
             MorkParser* getMorkParser() {return m_pMork;};
             void closeAllStatements () throw( ::com::sun::star::sdbc::SQLException);
 
