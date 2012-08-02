@@ -156,9 +156,9 @@ Reference< XStatement > SAL_CALL OConnection::createStatement(  ) throw(SQLExcep
 
     // create a statement
     // the statement can only be executed once
-    // Reference< XStatement > xReturn = new OStatement(this);
-    // m_aStatements.push_back(WeakReferenceHelper(xReturn));
-    return NULL;
+    Reference< XStatement > xReturn = new OStatement(this);
+    m_aStatements.push_back(WeakReferenceHelper(xReturn));
+    return xReturn;
 }
 // --------------------------------------------------------------------------------
 Reference< XPreparedStatement > SAL_CALL OConnection::prepareStatement( const ::rtl::OUString& _sSql ) throw(SQLException, RuntimeException)
@@ -178,8 +178,7 @@ Reference< XPreparedStatement > SAL_CALL OConnection::prepareStatement( const ::
     pPrepared->lateInit();
 
     m_aStatements.push_back(WeakReferenceHelper(xReturn));
-
-    return NULL;
+    return xReturn;
 }
 // --------------------------------------------------------------------------------
 Reference< XPreparedStatement > SAL_CALL OConnection::prepareCall( const ::rtl::OUString& _sSql ) throw(SQLException, RuntimeException)

@@ -82,7 +82,7 @@ namespace connectivity
 
             OValueRow                                   m_aRow;
 
-            connectivity::OSQLParser                    m_aParser;
+//            connectivity::OSQLParser                    m_aParser;
             ::boost::shared_ptr< ::connectivity::OSQLParseTreeIterator >
                                                         m_pSQLIterator;
 
@@ -188,7 +188,7 @@ namespace connectivity
             ~OStatement(){}
         public:
             // a constructor, for when the object needs to be returned:
-            OStatement( OConnection* _pConnection) : OCommonStatement( _pConnection){}
+            OStatement( OConnection* _pConnection);
             DECLARE_SERVICE_INFO();
 
             virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
