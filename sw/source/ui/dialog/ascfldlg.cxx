@@ -115,8 +115,6 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( Window* pParent, SwDocShell& rDocSh,
         {
             aBuffer[ nBytesRead ] = '0';
             aBuffer[ nBytesRead+1 ] = '0';
-            if( 0 != ( nBytesRead & 0x00000001 ) )
-                aBuffer[ nBytesRead + 2 ] = '0';
         }
 
         sal_Bool bCR = sal_False, bLF = sal_False, bNullChar = sal_False;
