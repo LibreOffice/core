@@ -274,7 +274,8 @@ void SwRTFParser::SetFlysInDoc()
 
         // liegt Ende und Start vom Naechsten im gleichen Node, dann muss
         // gesplittet werden
-        if( n + 1 < (sal_uInt16)aFlyArr.size() && pFlySave->nEndCnt &&
+        if (((static_cast<size_t>(n) + 1) < aFlyArr.size()) &&
+            pFlySave->nEndCnt &&
             pFlySave->nEndNd == aFlyArr[ n + 1 ]->nSttNd )
         {
             SwCntntNode *const pCNd = pFlySave->nEndNd.GetNode().GetCntntNode();
@@ -1226,6 +1227,10 @@ void SwRTFParser::InsPicture( const String& rGrfNm, const Graphic* pGrf,
     // #i83368# - Assure that graphic node is enclosed by fly frame node.
     if ( bReadSwFly && !mbReadCellWhileReadSwFly )
     {
+        OSL_ENSURE(!aFlyArr.empty(),
+            "SwRTFParser::InsPicture: fly array empty.");
+        if (!aFlyArr.empty())
+        {
         // erzeuge nur einen normalen GrafikNode und ersetze diesen gegen
         // den vorhandenen Textnode
         SwNodeIndex& rIdx = pPam->GetPoint()->nNode;
@@ -1245,6 +1250,7 @@ void SwRTFParser::InsPicture( const String& rGrfNm, const Graphic* pGrf,
             pFlySave = aFlyArr[ aFlyArr.size() - 2 ];
             if( pFlySave->nEndNd == rIdx )
                 pFlySave->nEndNd = rIdx.GetIndex() - 1;
+        }
         }
     }
     else

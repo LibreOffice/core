@@ -232,7 +232,6 @@ SwRTFParser::SwRTFParser(SwDoc* pD,
     maCharStyleMapper(*pD),
     maSegments(*this),
     maInsertedTables(*pD),
-    aTblFmts(0),
     mpBookmarkStart(0),
     mpRedlineStack(0),
     pGrfAttrSet(0),
@@ -599,7 +598,9 @@ bool rtfSections::SetCols(SwFrmFmt &rFmt, const rtfSection &rSection,
     {
         aCol._SetOrtho(false);
         sal_uInt16 nWishWidth = 0, nHalfPrev = 0;
-        for(sal_uInt16 n=0, i=0; n < rSection.maPageInfo.maColumns.size() && i < nCols; n += 2, ++i )
+        for (sal_uInt16 n=0, i=0;
+             (static_cast<size_t>(n)+1) < rSection.maPageInfo.maColumns.size() && i < nCols;
+             n += 2, ++i)
         {
             SwColumn* pCol = &aCol.GetColumns()[ i ];
             pCol->SetLeft( nHalfPrev );
@@ -2752,7 +2753,7 @@ sal_Bool lcl_SetFmtCol( SwFmt& rFmt, sal_uInt16 nCols, sal_uInt16 nColSpace,
         {
             aCol._SetOrtho( sal_False );
             sal_uInt16 nWishWidth = 0, nHalfPrev = 0;
-            for( sal_uInt16 n = 0, i = 0; n < rColumns.size(); n += 2, ++i )
+            for (sal_uInt16 n = 0, i = 0; static_cast<size_t>(n+1) < rColumns.size(); n += 2, ++i)
             {
                 SwColumn* pCol = &aCol.GetColumns()[ i ];
                 pCol->SetLeft( nHalfPrev );
