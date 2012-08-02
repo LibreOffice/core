@@ -14,6 +14,7 @@
 
 #include "sddll.hxx"
 
+#include "DiscoveryService.hxx"
 #include "ImagePreparer.hxx"
 #include "Listener.hxx"
 #include "Receiver.hxx"
@@ -161,6 +162,7 @@ void SdDLL::RegisterRemotes()
 {
   fprintf( stderr, "Register our remote control goodness\n" );
   sd::RemoteServer::setup();
+  sd::DiscoveryService::setup();
 
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
