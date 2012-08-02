@@ -1,1 +1,1 @@
-crs	cross_toolset	::	autodoc setup_native cross_tail_build NULL
+crs	cross_toolset	::	setup_native cross_tail_build NULL

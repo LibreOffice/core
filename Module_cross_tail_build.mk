@@ -28,8 +28,10 @@
 $(eval $(call gb_Module_Module,cross_tail_build))
 
 $(eval $(call gb_Module_add_moduledirs,cross_tail_build,\
+	autodoc \
 	basegfx \
 	binaryurp \
+	cosv \
 	i18npool \
 	i18nutil \
 	idl \
@@ -49,6 +51,7 @@ $(eval $(call gb_Module_add_moduledirs,cross_tail_build,\
 	sax \
 	shell \
 	tools \
+	udm \
 	unoil \
 	unotest \
 	unotools \
