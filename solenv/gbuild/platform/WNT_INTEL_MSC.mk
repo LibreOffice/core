@@ -228,7 +228,7 @@ gb_COMPILERNOOPTFLAGS := -Od
 ifeq ($(gb_FULLDEPS),$(true))
 gb_COMPILERDEPFLAGS := -showIncludes
 define gb_create_deps
-| $(GBUILDDIR)/filter-showIncludes.pl $(1) $(2) $(3); exit $${PIPESTATUS[0]}
+| $(GBUILDDIR)/platform/filter-showIncludes.awk -vdepfile=$(1) -vobjectfile=$(2) -vsourcefile=$(3); exit $${PIPESTATUS[0]}
 endef
 else
 gb_COMPILERDEPFLAGS :=
