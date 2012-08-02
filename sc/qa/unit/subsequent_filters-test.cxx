@@ -128,6 +128,7 @@ public:
     void testMatrixXLS();
     void testBorderODS();
     void testBorderXLS();
+    void testBordersOoo33();
     void testBugFixesODS();
     void testBugFixesXLS();
     void testBugFixesXLSX();
@@ -174,6 +175,7 @@ public:
     CPPUNIT_TEST(testMatrixXLS);
     CPPUNIT_TEST(testBorderODS);
     CPPUNIT_TEST(testBorderXLS);
+    CPPUNIT_TEST(testBordersOoo33);
     CPPUNIT_TEST(testBugFixesODS);
     CPPUNIT_TEST(testBugFixesXLS);
     CPPUNIT_TEST(testBugFixesXLSX);
@@ -768,6 +770,68 @@ void ScFiltersTest::testBorderXLS()
     CPPUNIT_ASSERT_EQUAL(pRight->GetBorderLineStyle(),
             table::BorderLineStyle::SOLID);
     CPPUNIT_ASSERT_EQUAL(pRight->GetWidth(),24L);
+}
+struct Border
+{
+    sal_Int16 column;
+    sal_Int32 row;
+    sal_Int32 leftWidth;
+    sal_Int32 topWidth;
+    sal_Int32 rightWidth;
+    sal_Int32 bottomWidth;
+    Border(sal_Int16 col, sal_Int32 r, sal_Int32 lW, sal_Int32 tW, sal_Int32 rW, sal_Int32 bW):
+    column(col), row(r), leftWidth(lW), topWidth(tW), rightWidth(rW), bottomWidth(bW) {};
+};
+
+void ScFiltersTest::testBordersOoo33()
+{
+    std::vector<Border> borders;
+    borders.push_back(Border(1, 1, 22, 22, 22, 22));
+    borders.push_back(Border(1, 3, 52, 52, 52, 52));
+    borders.push_back(Border(1, 5, 60, 60, 60, 60));
+    borders.push_back(Border(1, 7, 150, 150, 150, 150));
+    borders.push_back(Border(1, 9, 71, 71, 71, 71));
+    borders.push_back(Border(1, 11, 101, 101, 101, 101));
+    borders.push_back(Border(1, 13, 131, 131, 131, 131));
+    borders.push_back(Border(1, 15, 120, 120, 120, 120));
+    borders.push_back(Border(1, 17, 90, 90, 90, 90));
+    borders.push_back(Border(1, 19, 180, 180, 180, 180));
+    borders.push_back(Border(1, 21, 180, 180, 180, 180));
+    borders.push_back(Border(4, 1, 1, 1, 1, 1));
+    borders.push_back(Border(4, 3, 10, 10, 10, 10));
+    borders.push_back(Border(4, 5, 20, 20, 20, 20));
+    borders.push_back(Border(4, 7, 50, 50, 50, 50));
+    borders.push_back(Border(4, 9, 80, 80, 80, 80));
+    borders.push_back(Border(4, 11, 100, 100, 100, 100));
+
+    const rtl::OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("borders_ooo33."));
+    ScDocShellRef xDocSh = loadDoc( aFileNameBase, 0);
+
+    CPPUNIT_ASSERT_MESSAGE("Failed to load borders_ooo33.*", xDocSh.Is());
+    ScDocument* pDoc = xDocSh->GetDocument();
+
+    const editeng::SvxBorderLine* pLeft = NULL;
+    const editeng::SvxBorderLine* pTop = NULL;
+    const editeng::SvxBorderLine* pRight = NULL;
+    const editeng::SvxBorderLine* pBottom = NULL;
+    sal_Int16 temp = 0;
+    for(sal_Int16 i = 0; i<6; ++i)
+    {
+        for(sal_Int32 j = 0; j<22; ++j)
+        {
+            pDoc->GetBorderLines( i, j, 0, &pLeft, &pTop, &pRight, &pBottom );
+            if(pLeft!=NULL && pTop!=NULL && pRight!=NULL && pBottom!=NULL)
+            {
+                CPPUNIT_ASSERT_EQUAL(borders[temp].column, i);
+                CPPUNIT_ASSERT_EQUAL(borders[temp].row, j);
+                CPPUNIT_ASSERT_EQUAL(borders[temp].leftWidth, pLeft->GetWidth());
+                CPPUNIT_ASSERT_EQUAL(borders[temp].topWidth, pTop->GetWidth());
+                CPPUNIT_ASSERT_EQUAL(borders[temp].rightWidth, pRight->GetWidth());
+                CPPUNIT_ASSERT_EQUAL(borders[temp].bottomWidth, pBottom->GetWidth());
+                ++temp;
+            }
+        }
+    }
 }
 
 void ScFiltersTest::testBugFixesODS()
