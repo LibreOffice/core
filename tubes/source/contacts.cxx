@@ -117,10 +117,10 @@ class TubeContacts : public ModelessDialog
         {
             TpAccount* pAccount = pAC->mpAccount;
             TpContact* pContact = pAC->mpContact;
-            fprintf( stderr, "picked %s\n", tp_contact_get_identifier( pContact ) );
+            SAL_INFO( "tubes", "picked " << tp_contact_get_identifier( pContact ) );
             TeleConference* pConference = mpManager->startBuddySession( pAccount, pContact );
             if (!pConference)
-                fprintf( stderr, "could not start session with %s\n",
+                SAL_WARN( "tubes", "Could not start session with " <<
                         tp_contact_get_identifier( pContact ) );
             else
             {
@@ -139,11 +139,11 @@ class TubeContacts : public ModelessDialog
         if (pAC)
         {
             TpAccount* pAccount = pAC->mpAccount;
-            fprintf( stderr, "picked %s\n", tp_account_get_display_name( pAccount ) );
+            SAL_INFO( "tubes", "picked " << tp_account_get_display_name( pAccount ) );
             TeleConference* pConference = mpManager->startGroupSession( pAccount,
                     rtl::OUString("liboroom"), rtl::OUString("conference.jabber.org") );
             if (!pConference)
-                fprintf( stderr, "could not start group session\n" );
+                SAL_WARN( "tubes", "Could not start group session." );
             else
             {
                 mpCollaboration->SetCollaboration( pConference );
