@@ -92,17 +92,18 @@
                     versioncode="${version.code}"
                     versionname="${version.name}"
                     debug="${build.is.packaging.debug}"
-                    manifest="AndroidManifest.xml"
+                    manifest="${out.manifest.abs.file}"
                     assets="${asset.absolute.dir}"
-                    androidjar="${android.jar}"
+                    androidjar="${project.target.android.jar}"
                     apkfolder="${out.absolute.dir}"
                     nocrunch="${build.packaging.nocrunch}"
                     resourcefilename="${resource.package.file.name}"
                     resourcefilter="${aapt.resource.filter}"
-                    projectLibrariesResName="project.libraries.res"
-                    projectLibrariesPackageName="project.libraries.package"
+                    libraryResFolderPathRefid="project.library.res.folder.path"
+                    libraryPackagesRefid="project.library.packages"
                     previousBuildType="${build.last.target}"
-                    buildType="${build.target}">
+                    buildType="${build.target}"
+                    ignoreAssets="${aapt.ignore.assets}">
                 <res path="${out.res.absolute.dir}" />
                 <res path="${resource.absolute.dir}" />
                 <nocompress /> <!-- forces no compression on any files in assets or res/raw -->
