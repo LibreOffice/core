@@ -594,7 +594,7 @@ sal_Bool SwCrsrShell::MovePara(SwWhichPara fnWhichPara, SwPosPara fnPosPara )
 sal_Bool SwCrsrShell::MoveSection( SwWhichSection fnWhichSect,
                                 SwPosSection fnPosSect)
 {
-    SwCallLink aLk( *this );        // Crsr-Moves ueberwachen, evt. Link callen
+    SwCallLink aLk( *this ); // watch Crsr-Moves; call Link if needed
     SwCursor* pTmpCrsr = getShellCrsr( true );
     sal_Bool bRet = pTmpCrsr->MoveSection( fnWhichSect, fnPosSect );
     if( bRet )
