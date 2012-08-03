@@ -298,7 +298,7 @@ public:
      *         manages its life cycle; hence the caller must
      *         <i>not</i> delete this object.
      */
-    ScDPSaveDimension* GetDimensionByName(const ::rtl::OUString& rName);
+    SC_DLLPUBLIC ScDPSaveDimension* GetDimensionByName(const ::rtl::OUString& rName);
     SC_DLLPUBLIC ScDPSaveDimension* GetDataLayoutDimension();
     SC_DLLPUBLIC ScDPSaveDimension* GetExistingDataLayoutDimension() const;
 
