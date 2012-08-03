@@ -71,8 +71,7 @@ ContactList::~ContactList()
     mpAccountManager = NULL;
 }
 
-static bool
-tb_contact_is_online (TpContact *contact)
+bool tb_contact_is_online( TpContact *contact )
 {
     switch (tp_contact_get_presence_type (contact))
     {

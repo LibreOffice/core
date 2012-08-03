@@ -34,6 +34,7 @@
 #include <rtl/ustring.hxx>
 #include <tubes/warnings_guard_boost_signals2.hpp>
 
+class Collaboration;
 class TeleManager;
 class TeleConferenceImpl;
 typedef struct _TpAccount TpAccount;
@@ -73,6 +74,9 @@ public:
     TUBES_DLLPUBLIC void    sendFile( TpContact* pContact, rtl::OUString &localUri, FileSentCallback pCallback, void* pUserData);
     const OString&          getUuid() const { return msUuid; }
 
+    Collaboration*          getCollaboration() const { return mpCollaboration; }
+    void                    setCollaboration( Collaboration* pCollaboration ) { mpCollaboration = pCollaboration; }
+
     // --- following only to be called only by manager's callbacks ---
     // TODO: make friends instead
     void                    setChannel( TpAccount* pAccount, TpDBusTubeChannel* pChannel );
@@ -98,6 +102,7 @@ private:
     // Private:
     bool                    spinUntilTubeEstablished();
 
+    Collaboration*          mpCollaboration;
     TeleManager*            mpManager;
     TpAccount*              mpAccount;
     TpDBusTubeChannel*      mpChannel;

@@ -27,6 +27,8 @@
  */
 
 #include <tubes/manager.hxx>
+
+#include <tubes/collaboration.hxx>
 #include <tubes/conference.hxx>
 #include <tubes/constants.h>
 #include <tubes/contact-list.hxx>
@@ -103,6 +105,22 @@ public:
                             ~TeleManagerImpl();
 };
 
+bool tb_contact_is_online( TpContact* pContact );
+
+static void contact_presence_changed_cb( TpContact* pContact,
+                                         guint      /* type */,
+                                         gchar*     /* status */,
+                                         gchar*     /* message */,
+                                         gpointer   pConference )
+{
+    if (!tb_contact_is_online( pContact ))
+    {
+        Collaboration* pCollaboration =
+            reinterpret_cast<TeleConference*> (pConference)->getCollaboration();
+        if (pCollaboration)
+            pCollaboration->ContactLeft();
+    }
+}
 
 void TeleManager_DBusChannelHandler(
         TpSimpleHandler*            /*handler*/,
@@ -139,6 +157,10 @@ void TeleManager_DBusChannelHandler(
             TeleConference* pConference = new TeleConference( pManager, pAccount, TP_DBUS_TUBE_CHANNEL( pChannel ) );
             pConference->acceptTube();
             pManager->addConference( pConference );
+            TpContact* pContact = tp_channel_get_target_contact( pChannel );
+            if (pContact)
+                g_signal_connect( pContact, "presence-changed",
+                        G_CALLBACK (contact_presence_changed_cb), pConference );
         }
         else
         {
@@ -688,6 +710,9 @@ TeleConference* TeleManager::startBuddySession( TpAccount *pAccount, TpContact *
 
     if (!pConference->isReady())
         return NULL;
+
+    g_signal_connect( pBuddy, "presence-changed",
+            G_CALLBACK (contact_presence_changed_cb), pConference );
 
     return pConference;
 }

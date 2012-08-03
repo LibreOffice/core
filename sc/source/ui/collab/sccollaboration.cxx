@@ -21,6 +21,17 @@ ScCollaboration::~ScCollaboration()
 {
 }
 
+void ScCollaboration::ContactLeft()
+{
+    SAL_INFO( "sc.tubes", "Contact has left the collaboration" );
+    ScDocFuncSend* pSender = GetScDocFuncSend();
+    if (pSender)
+    {
+        delete pSender;
+        mpScDocShell->SetDocFunc( new ScDocFuncDirect( *mpScDocShell ) );
+    }
+}
+
 TeleConference* ScCollaboration::GetConference()
 {
     ScDocFuncSend* pSender = GetScDocFuncSend();

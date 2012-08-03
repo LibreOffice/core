@@ -23,6 +23,7 @@ public:
             Collaboration() {}
     virtual ~Collaboration() {}
 
+    virtual void                ContactLeft() = 0;
     virtual TeleConference*     GetConference() = 0;
     virtual sal_uInt64          GetId() = 0;
     virtual void                SetCollaboration( TeleConference* pConference ) = 0;

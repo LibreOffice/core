@@ -21,6 +21,7 @@ public:
                             ScCollaboration( ScDocShell* pScDocShell );
     virtual                 ~ScCollaboration();
 
+    virtual void            ContactLeft();
     virtual TeleConference* GetConference();
     virtual sal_uInt64      GetId();
     virtual void            SetCollaboration( TeleConference* pConference );
