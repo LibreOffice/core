@@ -34,7 +34,9 @@ public class SelectorActivity extends Activity {
 
 	private CommunicationService mCommunicationService;
 
+	private View mBluetoothContainer;
 	private LinearLayout mBluetoothList;
+	private View mNetworkContainer;
 	private LinearLayout mNetworkList;
 	private TextView mNoServerLabel;
 
@@ -49,7 +51,9 @@ public class SelectorActivity extends Activity {
 		LocalBroadcastManager.getInstance(this).registerReceiver(mListener,
 		                aFilter);
 
+		mBluetoothContainer = findViewById(R.id.selector_container_bluetooth);
 		mBluetoothList = (LinearLayout) findViewById(R.id.selector_list_bluetooth);
+		mNetworkContainer = findViewById(R.id.selector_container_network);
 		mNetworkList = (LinearLayout) findViewById(R.id.selector_list_network);
 		mNoServerLabel = (TextView) findViewById(R.id.selector_label_none);
 
@@ -109,53 +113,56 @@ public class SelectorActivity extends Activity {
 	private HashMap<Server, View> mNetworkServers = new HashMap<Server, View>();
 
 	private void refreshLists() {
-		if (mCommunicationService == null)
-			return;
+		if (mCommunicationService != null) {
 
-		Server[] aServers = mCommunicationService.getServers();
+			Server[] aServers = mCommunicationService.getServers();
 
-		// Bluetooth -- Remove old
-		for (Entry<Server, View> aEntry : mBluetoothServers.entrySet()) {
-			if (!Arrays.asList(aServers).contains(aEntry.getKey())) {
-				mBluetoothServers.remove(aEntry.getKey());
-				mBluetoothList.removeView(aEntry.getValue());
+			// Bluetooth -- Remove old
+			for (Entry<Server, View> aEntry : mBluetoothServers.entrySet()) {
+				if (!Arrays.asList(aServers).contains(aEntry.getKey())) {
+					mBluetoothServers.remove(aEntry.getKey());
+					mBluetoothList.removeView(aEntry.getValue());
+				}
 			}
-		}
-		// Network -- Remove old
-		for (Entry<Server, View> aEntry : mNetworkServers.entrySet()) {
-			if (!Arrays.asList(aServers).contains(aEntry.getKey())) {
-				mNetworkServers.remove(aEntry.getKey());
-				mNetworkList.removeView(aEntry.getValue());
+			// Network -- Remove old
+			for (Entry<Server, View> aEntry : mNetworkServers.entrySet()) {
+				if (!Arrays.asList(aServers).contains(aEntry.getKey())) {
+					mNetworkServers.remove(aEntry.getKey());
+					mNetworkList.removeView(aEntry.getValue());
+				}
 			}
-		}
-		// Add all new
-		for (Server aServer : aServers) {
-			boolean aIsBluetooth = (aServer.getProtocol() == Protocol.BLUETOOTH);
-			HashMap<Server, View> aMap = aIsBluetooth ? mBluetoothServers
-			                : mNetworkServers;
-			LinearLayout aLayout = aIsBluetooth ? mBluetoothList : mNetworkList;
+			// Add all new
+			for (Server aServer : aServers) {
+				boolean aIsBluetooth = (aServer.getProtocol() == Protocol.BLUETOOTH);
+				HashMap<Server, View> aMap = aIsBluetooth ? mBluetoothServers
+				                : mNetworkServers;
+				LinearLayout aLayout = aIsBluetooth ? mBluetoothList
+				                : mNetworkList;
 
-			if (!aMap.containsValue(aServer)) {
-				View aView = getLayoutInflater().inflate(
-				                R.layout.activity_selector_sublayout_server,
-				                aLayout);
-				TextView aText = (TextView) aView
-				                .findViewById(R.id.selector_sub_label);
-				aText.setText(aServer.getName());
-				aMap.put(aServer, aView);
+				if (!aMap.containsValue(aServer)) {
+					View aView = getLayoutInflater()
+					                .inflate(R.layout.activity_selector_sublayout_server,
+					                                aLayout);
+					TextView aText = (TextView) aView
+					                .findViewById(R.id.selector_sub_label);
+					aText.setText(aServer.getName());
+					aMap.put(aServer, aView);
+				}
+
 			}
-
 		}
 		// Hide as necessary
 
-		mBluetoothList.setVisibility((mBluetoothServers.size() != 0) ? View.VISIBLE
-		                : View.INVISIBLE);
-		mNetworkList.setVisibility((mNetworkServers.size() != 0) ? View.VISIBLE
-		                : View.INVISIBLE);
+		mBluetoothContainer
+		                .setVisibility((mBluetoothServers.size() != 0) ? View.VISIBLE
+		                                : View.GONE);
+		mNetworkContainer
+		                .setVisibility((mNetworkServers.size() != 0) ? View.VISIBLE
+		                                : View.GONE);
 
 		mNoServerLabel.setVisibility((mBluetoothServers.size() == 0)
 		                && (mNetworkServers.size() == 0) ? View.VISIBLE
-		                : View.INVISIBLE);
+		                : View.GONE);
 	}
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
