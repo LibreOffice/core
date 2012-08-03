@@ -123,7 +123,7 @@ public:
     TUBES_DLLPUBLIC TeleConference*         startBuddySession( TpAccount *pAccount, TpContact *pBuddy );
 
     /** Get a conference with current UUID to set a session. */
-    TUBES_DLLPUBLIC TeleConference*         getConference();
+    TUBES_DLLPUBLIC static TeleConference*  getConference();
 
     /** True if there has been tube channel received and is still not used. */
     TUBES_DLLPUBLIC static bool             hasWaitingConference();

@@ -165,7 +165,7 @@ void TeleManager::addConference( TeleConference* pConference )
 
 TeleConference* TeleManager::getConference()
 {
-    TeleManagerImpl::MapStringConference::iterator it =
+    TeleManagerImpl::MapStringConference::const_iterator it =
             pImpl->maAcceptedConferences.find( pImpl->msCurrentUUID );
     TeleConference* pConference = NULL;
     if (it != pImpl->maAcceptedConferences.end())

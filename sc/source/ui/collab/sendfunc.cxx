@@ -356,9 +356,7 @@ ScDocFunc *ScDocShell::CreateDocFunc()
         ScDocFuncDirect *pDirect = new ScDocFuncDirect( *this );
         ScDocFuncRecv *pReceiver = new ScDocFuncRecv( pDirect );
         ScDocFuncSend *pSender = new ScDocFuncSend( *this, pReceiver );
-        TeleManager *pManager = new TeleManager();
-        pSender->SetCollaboration( pManager->getConference() );
-        delete pManager;
+        pSender->SetCollaboration( TeleManager::getConference() );
         return pSender;
     }
     else
