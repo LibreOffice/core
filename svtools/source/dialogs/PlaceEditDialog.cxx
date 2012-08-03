@@ -26,24 +26,22 @@
  * instead of those above.
  */
 
-#include "OfficeFilePicker.hrc"
 #include "PlaceEditDialog.hrc"
-#include "fpsofficeResMgr.hxx"
-#include "PlacesListBox.hxx"
 #include "PlaceEditDialog.hxx"
 #include "ServerDetailsControls.hxx"
 
 #include <officecfg/Office/Common.hxx>
+#include <svtools/svtresid.hxx>
 #include <vcl/msgbox.hxx>
 
 using namespace boost;
 
 PlaceEditDialog::PlaceEditDialog(	Window* pParent ) :
-	ModalDialog( pParent, SvtResId( DLG_FPICKER_PLACE_EDIT ) ),
+    ModalDialog( pParent, SvtResId( DLG_FPICKER_PLACE_EDIT ) ),
     m_aFTServerName( this, SvtResId( FT_ADDPLACE_SERVERNAME ) ),
     m_aFTServerType( this, SvtResId( FT_ADDPLACE_SERVERTYPE ) ),
-	m_aEDServerName ( this, SvtResId( ED_ADDPLACE_SERVERNAME ) ),
-	m_aLBServerType ( this, SvtResId( LB_ADDPLACE_SERVERTYPE ) ),
+    m_aEDServerName ( this, SvtResId( ED_ADDPLACE_SERVERNAME ) ),
+    m_aLBServerType ( this, SvtResId( LB_ADDPLACE_SERVERTYPE ) ),
     m_pCurrentDetails( ),
     m_aFTHost( this, SvtResId( FT_ADDPLACE_HOST ) ),
     m_aEDHost( this, SvtResId( ED_ADDPLACE_HOST ) ),
@@ -68,14 +66,14 @@ PlaceEditDialog::PlaceEditDialog(	Window* pParent ) :
     m_aBTCancel ( this, SvtResId ( BT_ADDPLACE_CANCEL ) ),
     m_aBTDelete ( this, SvtResId (BT_ADDPLACE_DELETE ) )
 {
-	m_aBTOk.SetClickHdl( LINK( this, PlaceEditDialog, OKHdl) );
-	m_aBTOk.Enable( sal_False );
+    m_aBTOk.SetClickHdl( LINK( this, PlaceEditDialog, OKHdl) );
+    m_aBTOk.Enable( sal_False );
 
-	m_aEDServerName.SetModifyHdl( LINK( this, PlaceEditDialog, EditHdl) );
+    m_aEDServerName.SetModifyHdl( LINK( this, PlaceEditDialog, EditHdl) );
 
-	// This constructor is called when user request a place creation, so
-	// delete button is hidden.
-	m_aBTDelete.Hide();
+    // This constructor is called when user request a place creation, so
+    // delete button is hidden.
+    m_aBTDelete.Hide();
 
     m_aLBServerType.SetSelectHdl( LINK( this, PlaceEditDialog, SelectTypeHdl ) );
     m_aEDUsername.SetModifyHdl( LINK( this, PlaceEditDialog, EditUsernameHdl ) );
@@ -83,12 +81,12 @@ PlaceEditDialog::PlaceEditDialog(	Window* pParent ) :
     InitDetails( );
 }
 
-PlaceEditDialog::PlaceEditDialog( Window* pParent, const PlacePtr& pPlace ) :
-	ModalDialog( pParent, SvtResId( DLG_FPICKER_PLACE_EDIT ) ),
+PlaceEditDialog::PlaceEditDialog( Window* pParent, const boost::shared_ptr<Place>& pPlace ) :
+    ModalDialog( pParent, SvtResId( DLG_FPICKER_PLACE_EDIT ) ),
     m_aFTServerName( this, SvtResId( FT_ADDPLACE_SERVERNAME ) ),
     m_aFTServerType( this, SvtResId( FT_ADDPLACE_SERVERTYPE ) ),
-	m_aEDServerName ( this, SvtResId( ED_ADDPLACE_SERVERNAME ) ),
-	m_aLBServerType ( this, SvtResId( LB_ADDPLACE_SERVERTYPE ) ),
+    m_aEDServerName ( this, SvtResId( ED_ADDPLACE_SERVERNAME ) ),
+    m_aLBServerType ( this, SvtResId( LB_ADDPLACE_SERVERTYPE ) ),
     m_pCurrentDetails( ),
     m_aFTHost( this, SvtResId( FT_ADDPLACE_HOST ) ),
     m_aEDHost( this, SvtResId( ED_ADDPLACE_HOST ) ),
@@ -161,10 +159,15 @@ rtl::OUString PlaceEditDialog::GetServerUrl()
     return sUrl;
 }
 
-PlacePtr PlaceEditDialog::GetPlace()
+ResId PlaceEditDialog::GetResId(sal_uInt16 nId)
 {
-	PlacePtr newPlace( new Place( m_aEDServerName.GetText(), GetServerUrl(), true ) );
-	return newPlace;
+    return SvtResId( nId );
+}
+
+boost::shared_ptr<Place> PlaceEditDialog::GetPlace()
+{
+    boost::shared_ptr<Place> newPlace( new Place( m_aEDServerName.GetText(), GetServerUrl(), true ) );
+    return newPlace;
 }
 
 void PlaceEditDialog::InitDetails( )
@@ -236,15 +239,15 @@ void PlaceEditDialog::InitDetails( )
 
 IMPL_LINK ( PlaceEditDialog,  OKHdl, Button *, EMPTYARG )
 {
-	EndDialog( RET_OK );
-	return 1;
+    EndDialog( RET_OK );
+    return 1;
 }
 
 IMPL_LINK ( PlaceEditDialog, DelHdl, Button *, EMPTYARG )
 {
-	// ReUsing existing symbols...
-	EndDialog( RET_NO );
-	return 1;
+    // ReUsing existing symbols...
+    EndDialog( RET_NO );
+    return 1;
 }
 
 IMPL_LINK ( PlaceEditDialog, EditHdl, void *, EMPTYARG )
@@ -252,7 +255,7 @@ IMPL_LINK ( PlaceEditDialog, EditHdl, void *, EMPTYARG )
     rtl::OUString sUrl = GetServerUrl( );
     rtl::OUString sName = rtl::OUString( m_aEDServerName.GetText() ).trim( );
     m_aBTOk.Enable( !sName.isEmpty( ) && !sUrl.isEmpty( ) );
-	return 1;
+    return 1;
 }
 
 IMPL_LINK ( PlaceEditDialog, EditUsernameHdl, void *, EMPTYARG )

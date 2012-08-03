@@ -33,13 +33,13 @@
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 
+#include <comphelper/processfactory.hxx>
 #include <rtl/uri.hxx>
 #include <ucbhelper/content.hxx>
 #include <ucbhelper/commandenvironment.hxx>
 
 #include "PlaceEditDialog.hrc"
 
-#include "fpsofficeResMgr.hxx"
 #include "PlaceEditDialog.hxx"
 #include "ServerDetailsControls.hxx"
 

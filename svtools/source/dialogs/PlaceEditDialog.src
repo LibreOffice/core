@@ -28,7 +28,6 @@
  */
 
 #include "PlaceEditDialog.hrc"
-#include "OfficeFilePicker.hrc"
 
 // Place Edit Dialog --------------------------------------------------------------
 

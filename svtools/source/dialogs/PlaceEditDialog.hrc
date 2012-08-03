@@ -30,6 +30,9 @@
 #define _FPICKER_PLACEEDITDLG_HRC
 
 #include <svl/solar.hrc>
+#include <vcl/fpicker.hrc>
+
+#define DLG_FPICKER_PLACE_EDIT                      (RID_FPICKER_START+16)
 
 // DLG_FPICKER_PLACE_EDIT ------------------------------
 #define FT_ADDPLACE_SERVERNAME		  		    10

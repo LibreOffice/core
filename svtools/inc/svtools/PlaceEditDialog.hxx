@@ -28,8 +28,6 @@
 #ifndef _PLACEEDITDIALOG_HXX
 #define _PLACEEDITDIALOG_HXX
 
-#include "fpsofficeResMgr.hxx"
-#include "PlacesListBox.hxx"
 #include "ServerDetailsControls.hxx"
 
 #include <vcl/button.hxx>
@@ -39,11 +37,12 @@
 #include <vcl/lstbox.hxx>
 
 #include <svtools/inettbc.hxx>
+#include <svtools/place.hxx>
 
 #include <boost/shared_ptr.hpp>
 #include <vector>
 
-class PlaceEditDialog : public ModalDialog
+class SVT_DLLPUBLIC PlaceEditDialog : public ModalDialog
 {
 private :
 
@@ -92,16 +91,16 @@ private :
 public :
 
      PlaceEditDialog( Window* pParent);
-     PlaceEditDialog( Window* pParent, const PlacePtr& pPlace );
+     PlaceEditDialog(Window* pParent, const boost::shared_ptr<Place> &pPlace );
      ~PlaceEditDialog();
 
      // Returns a place instance with given informations
-     PlacePtr GetPlace();
+     boost::shared_ptr<Place> GetPlace();
 
      rtl::OUString GetServerName() 	{ return m_aEDServerName.GetText(); }
      rtl::OUString GetServerUrl();
 
-     ResId GetResId( sal_uInt16 nId ) { return SvtResId( nId ); };
+     ResId GetResId( sal_uInt16 nId );
 
 private:
 

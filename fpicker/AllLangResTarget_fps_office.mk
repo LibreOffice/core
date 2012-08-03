@@ -44,7 +44,6 @@ $(eval $(call gb_SrsTarget_use_packages,fps_office/res,\
 $(eval $(call gb_SrsTarget_add_files,fps_office/res,\
 	fpicker/source/office/OfficeFilePicker.src \
 	fpicker/source/office/iodlg.src \
-	fpicker/source/office/PlaceEditDialog.src \
 ))
 
 # vim: set noet sw=4 ts=4:

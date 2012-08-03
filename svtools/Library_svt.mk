@@ -138,8 +138,10 @@ $(eval $(call gb_Library_add_exception_objects,svt,\
     svtools/source/dialogs/filedlg2 \
     svtools/source/dialogs/insdlg \
     svtools/source/dialogs/mcvmath \
+    svtools/source/dialogs/PlaceEditDialog \
     svtools/source/dialogs/prnsetup \
     svtools/source/dialogs/roadmapwizard \
+    svtools/source/dialogs/ServerDetailsControls \
     svtools/source/dialogs/wizardmachine \
     svtools/source/dialogs/wizdlg \
     svtools/source/edit/editsyntaxhighlighter \

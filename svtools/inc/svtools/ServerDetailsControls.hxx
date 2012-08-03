@@ -28,10 +28,12 @@
 #ifndef _SERVERDETAILSCONTROLS_HXX
 #define _SERVERDETAILSCONTROLS_HXX
 
+#include <map>
+
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 
 #include <tools/urlobj.hxx>
-#include <vcl/ctrl.hxx>
+#include <vcl/button.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/field.hxx>
 #include <vcl/fixed.hxx>

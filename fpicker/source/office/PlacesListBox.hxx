@@ -31,44 +31,10 @@
 #include <iodlg.hxx>
 
 #include <boost/shared_ptr.hpp>
+#include <svtools/place.hxx>
 #include <svtools/svtabbx.hxx>
-#include <tools/urlobj.hxx>
 
 #include <vector>
-
-/** Class representing a file location: it mainly consist of display attributes and a URL.
-  */
-class Place
-{
-    private:
-        rtl::OUString msName;
-        INetURLObject maUrl;
-
-        bool mbEditable;
-
-    public:
-
-        Place( rtl::OUString sName, rtl::OUString sUrl, bool bEditable = false ) :
-			msName( sName ),
-			maUrl( sUrl ),
-			mbEditable( bEditable ) {};
-
-        ~Place( ) {};
-
-        Place( const Place& rCopy ) :
-            msName( rCopy.msName ),
-            maUrl( rCopy.maUrl ),
-            mbEditable( rCopy.mbEditable ) { };
-
-		void SetName(const rtl::OUString& aName )    { msName = aName; }
-		void SetUrl(const  rtl::OUString& aUrl )	 { maUrl.SetURL( aUrl ); }
-
-        rtl::OUString& GetName( ) { return msName; }
-        rtl::OUString GetUrl( ) { return maUrl.GetMainURL( INetURLObject::NO_DECODE ); }
-        INetURLObject& GetUrlObject( ) { return maUrl; }
-        bool  IsLocal( ) { return maUrl.GetProtocol() == INET_PROT_FILE; }
-        bool  IsEditable( ) { return mbEditable; }
-};
 
 typedef boost::shared_ptr< Place > PlacePtr;
 

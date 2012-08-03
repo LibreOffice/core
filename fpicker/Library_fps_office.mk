@@ -62,9 +62,7 @@ $(eval $(call gb_Library_add_exception_objects,fps_office,\
 	fpicker/source/office/OfficeControlAccess \
 	fpicker/source/office/OfficeFilePicker \
 	fpicker/source/office/OfficeFolderPicker \
-	fpicker/source/office/PlaceEditDialog \
 	fpicker/source/office/PlacesListBox \
-	fpicker/source/office/ServerDetailsControls \
 ))
 
 # vim: set noet sw=4 ts=4:

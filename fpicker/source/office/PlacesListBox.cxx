@@ -28,7 +28,7 @@
 
 #include <iodlg.hrc>
 #include <PlacesListBox.hxx>
-#include "PlaceEditDialog.hxx"
+#include <svtools/PlaceEditDialog.hxx>
 
 #include <vcl/msgbox.hxx>
 #include <svtools/headbar.hxx>
@@ -182,10 +182,10 @@ void PlacesListBox::SetSizePixel( const Size& rNewSize )
 
 Image PlacesListBox::getEntryIcon( PlacePtr pPlace )
 {
-	Image theImage = mpDlg->GetButtonImage( IMG_FILEDLG_PLACE_LOCAL );
+    Image theImage = mpDlg->GetButtonImage( IMG_FILEDLG_PLACE_LOCAL );
     if ( !pPlace->IsLocal( ) )
         theImage = mpDlg->GetButtonImage( IMG_FILEDLG_PLACE_REMOTE );
-	return theImage;
+    return theImage;
 }
 
 IMPL_LINK( PlacesListBox, Selection, void* , EMPTYARG )

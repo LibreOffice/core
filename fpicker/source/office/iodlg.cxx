@@ -19,7 +19,7 @@
 
 #include <sal/macros.h>
 #include "iodlg.hxx"
-#include "PlaceEditDialog.hxx"
+#include <svtools/PlaceEditDialog.hxx>
 #include "PlacesListBox.hxx"
 #include "fpsofficeResMgr.hxx"
 #include <tools/stream.hxx>
@@ -553,9 +553,9 @@ void SvtFileDialog::Init_Impl
         }
     }
 
-	Edit anOtherDummy( this, SvtResId( ED_EXPLORERFILE_CURRENTPATH ) );
-	_pImp->_pEdCurrentPath = new SvtURLBox( this, SvtResId(ED_EXPLORERFILE_CURRENTPATH) );
-	_pImp->_pEdCurrentPath->SetUrlFilter( &m_aURLFilter );
+    Edit anOtherDummy( this, SvtResId( ED_EXPLORERFILE_CURRENTPATH ) );
+    _pImp->_pEdCurrentPath = new SvtURLBox( this, SvtResId(ED_EXPLORERFILE_CURRENTPATH) );
+    _pImp->_pEdCurrentPath->SetUrlFilter( &m_aURLFilter );
     _pImp->_pEdCurrentPath->SetPosSizePixel( anOtherDummy.GetPosPixel(), anOtherDummy.GetSizePixel() );
     _pImp->_pEdCurrentPath->Show();
 
@@ -1396,35 +1396,35 @@ IMPL_STATIC_LINK( SvtFileDialog, FileNameModifiedHdl_Impl, void*, EMPTYARG )
 
 IMPL_STATIC_LINK ( SvtFileDialog, URLBoxModifiedHdl_Impl, void*, EMPTYARG )
 {
-	String _aPath = pThis->_pImp->_pEdCurrentPath->GetURL();
-	pThis->OpenURL_Impl(_aPath);
-	return 0;
+    String _aPath = pThis->_pImp->_pEdCurrentPath->GetURL();
+    pThis->OpenURL_Impl(_aPath);
+    return 0;
 }
 
 //*****************************************************************************
 
 IMPL_STATIC_LINK ( SvtFileDialog, ConnectToServerPressed_Hdl, void*, EMPTYARG )
 {
-	pThis->_pFileView->EndInplaceEditing( false );
+    pThis->_pFileView->EndInplaceEditing( false );
 
-	PlaceEditDialog aDlg( pThis );
-	short aRetCode = aDlg.Execute();
+    PlaceEditDialog aDlg( pThis );
+    short aRetCode = aDlg.Execute();
 
-	switch (aRetCode) {
-		case RET_OK :
-		{
-		    PlacePtr newPlace = aDlg.GetPlace();
-		    pThis->_pImp->_pPlaces->AppendPlace(newPlace);
+    switch (aRetCode) {
+        case RET_OK :
+        {
+            PlacePtr newPlace = aDlg.GetPlace();
+            pThis->_pImp->_pPlaces->AppendPlace(newPlace);
 
       break;
-		}
-		case RET_CANCEL :
-		default :
-			// Do Nothing
-			break;
-	};
+        }
+        case RET_CANCEL :
+        default :
+            // Do Nothing
+            break;
+    };
 
-	return 0;
+    return 0;
 }
 
 //*****************************************************************************
