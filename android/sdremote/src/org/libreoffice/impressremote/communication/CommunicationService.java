@@ -36,13 +36,15 @@ public class CommunicationService extends Service {
 	public static final int MSG_SLIDE_PREVIEW = 3;
 	public static final int MSG_SLIDE_NOTES = 4;
 
+	public static final String MSG_SERVERLIST_CHANGED = "SERVERLIST_CHANGED";
+
 	private Transmitter mTransmitter;
 
 	private Client mClient;
 
 	private Receiver mReceiver = new Receiver();
 
-	private ServerFinder mFinder = new ServerFinder();
+	private ServerFinder mFinder = new ServerFinder(this);
 
 	public void setActivityMessenger(Messenger aActivityMessenger) {
 		mReceiver.setActivityMessenger(aActivityMessenger);

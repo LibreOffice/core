@@ -10,7 +10,13 @@ import java.util.Vector;
 
 import org.libreoffice.impressremote.communication.CommunicationService.Server;
 
+import android.content.Context;
+import android.content.Intent;
+import android.support.v4.content.LocalBroadcastManager;
+
 public class ServerFinder {
+
+	private Context mContext;
 
 	private static final int PORT = 1598;
 	private static final String CHARSET = "UTF-8";
@@ -23,8 +29,8 @@ public class ServerFinder {
 
 	private Vector<Server> mServerList = new Vector<Server>();
 
-	public ServerFinder() {
-
+	public ServerFinder(Context aContext) {
+		mContext = aContext;
 	}
 
 	private void listenForServer() {
@@ -51,6 +57,10 @@ public class ServerFinder {
 			                aPacket.getAddress().toString(), "NONAME",
 			                System.currentTimeMillis());
 			mServerList.add(aServer);
+
+			Intent aIntent = new Intent(
+			                CommunicationService.MSG_SERVERLIST_CHANGED);
+			LocalBroadcastManager.getInstance(mContext).sendBroadcast(aIntent);
 
 		} catch (java.net.SocketTimeoutException e) {
 			// Ignore -- we want to timeout to enable checking whether we
