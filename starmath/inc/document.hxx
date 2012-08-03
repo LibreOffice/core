@@ -155,7 +155,7 @@ class SmDocShell : public SfxObjectShell, public SfxListener
      */
     void                InvalidateCursor();
 
-    bool writeFormulaOoxml( ::sax_fastparser::FSHelperPtr m_pSerializer, oox::core::OoxmlVersion version );
+    bool writeFormulaOoxml( ::sax_fastparser::FSHelperPtr pSerializer, oox::core::OoxmlVersion version );
     void writeFormulaRtf(OStringBuffer& rBuffer, rtl_TextEncoding nEncoding);
     bool readFormulaOoxml( oox::formulaimport::XmlStream& stream );
 
