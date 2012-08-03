@@ -56,9 +56,6 @@ ResId TubesResId( sal_uInt32 nId )
     return ResId( nId, *pResMgr );
 }
 
-#define CONTACTS_DLG
-
-#ifdef CONTACTS_DLG
 namespace {
 class TubeContacts : public ModelessDialog
 {
@@ -265,15 +262,12 @@ IMPL_LINK_NOARG( TubeContacts, BtnListenHdl )
 }
 
 } // anonymous namespace
-#endif
 
 namespace tubes {
 void createContacts( Collaboration* pCollaboration )
 {
-#ifdef CONTACTS_DLG
     static TubeContacts *pContacts = new TubeContacts( pCollaboration );
     pContacts->Populate();
-#endif
 }
 }
 
