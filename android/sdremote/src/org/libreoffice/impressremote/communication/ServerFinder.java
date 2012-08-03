@@ -6,7 +6,7 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
-import java.util.Vector;
+import java.util.HashMap;
 
 import org.libreoffice.impressremote.communication.CommunicationService.Server;
 
@@ -27,7 +27,7 @@ public class ServerFinder {
 
 	private boolean mFinishRequested = false;
 
-	private Vector<Server> mServerList = new Vector<Server>();
+	private HashMap<String, Server> mServerList = new HashMap<String, Server>();
 
 	public ServerFinder(Context aContext) {
 		mContext = aContext;
@@ -65,7 +65,7 @@ public class ServerFinder {
 			Server aServer = new Server(CommunicationService.Protocol.NETWORK,
 			                aPacket.getAddress().toString(), aName,
 			                System.currentTimeMillis());
-			mServerList.add(aServer);
+			mServerList.put(aServer.getAddress(), aServer);
 
 			//			System.out.println("SF FOUND: IP="
 			//			                + aPacket.getAddress().toString() + " HOSTNAME="
@@ -135,6 +135,6 @@ public class ServerFinder {
 	}
 
 	public Server[] getServerList() {
-		return mServerList.toArray(new Server[mServerList.size()]);
+		return mServerList.entrySet().toArray(new Server[mServerList.size()]);
 	}
 }
