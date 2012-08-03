@@ -45,8 +45,7 @@ $(eval $(call gb_Library_use_sdk_api,chartcontroller))
 
 $(eval $(call gb_Library_use_libraries,chartcontroller,\
     basegfx \
-    charttools \
-    chartview \
+    chartcore \
     comphelper \
     cppu \
     cppuhelper \

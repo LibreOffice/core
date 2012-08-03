@@ -168,9 +168,7 @@ copy-stuff: buildrcs
 		  scfiltlo \
 		  \
 		  chartcontrollerlo \
-		  chartviewlo \
-		  chartmodello \
-		  charttoolslo \
+		  chartcorelo \
 		  ); do \
 	    $(call COPYSO,$(OUTDIR)/lib/lib$${F}.so); \
 	done
@@ -230,11 +228,3 @@ run:
 	$(ANDROID_SDK_HOME)/platform-tools/adb push cmdline $(APP_DATA_PATH)/cmdline
 	$(ANDROID_SDK_HOME)/platform-tools/adb shell am start -n $(APP_PACKAGE)/$(BOOTSTRAP) -e lo-main-delay 20 -e lo-main-indirect-cmdline "$(APP_DATA_PATH)/cmdline"
 # add -e lo-strace yes # if you want that
-
-# If you reinstall an app several times, even if you uninstall it
-# between, disk space seems to leak that won't get recycled until you
-# stop and start...
-stop-start-cycle:
-	$(ANDROID_SDK_HOME)/platform-tools/adb shell stop && $(ANDROID_SDK_HOME)/platform-tools/adb shell start && sleep 10
-
-

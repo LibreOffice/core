@@ -51,3 +51,9 @@ uninstall:
 clean: properties
 	$(ANT) clean
 	rm -rf assets $(SODEST) $(OBJLOCAL)
+
+# If you reinstall an app several times, even if you uninstall it
+# between, disk space seems to leak that won't get recycled until you
+# stop and start...
+stop-start-cycle:
+	$(ANDROID_SDK_HOME)/platform-tools/adb shell stop && $(ANDROID_SDK_HOME)/platform-tools/adb shell start && sleep 10

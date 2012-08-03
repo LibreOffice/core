@@ -245,9 +245,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     basegfx \
     calc \
     chartcontroller \
-    chartmodel \
-    charttools \
-    chartview \
+    chartcore \
     cppcanvas \
     ctl \
     cui \

@@ -71,7 +71,7 @@ stuff:
 	cp $(OUTDIR)/bin/udkapi.rdb $(OUTDIR)/bin/types.rdb $(OUTDIR)/xml/ure/services.rdb $(APPDIR)
 #
 # a bunch of .component files
-	for F in framework/util/fwk i18npool/util/i18npool sfx2/util/sfx ucb/source/core/ucb1 ucb/source/ucp/file/ucpfile1 unoxml/source/service/unoxml configmgr/source/configmgr basic/util/sb chart2/source/controller/chartcontroller chart2/source/tools/charttools chart2/source/model/chartmodel comphelper/util/comphelp eventattacher/source/evtatt fileaccess/source/fileacc filter/source/config/cache/filterconfig1 oox/util/oox package/source/xstor/xstor package/util/package2 sax/source/expatwrap/expwrap sax/source/fastparser/fastsax sc/util/sc sc/util/scfilt scaddins/source/analysis/analysis scaddins/source/datefunc/date sot/util/sot svl/util/svl toolkit/util/tk ucb/source/ucp/tdoc/ucptdoc1 unotools/util/utl unoxml/source/rdf/unordf; do \
+	for F in framework/util/fwk i18npool/util/i18npool sfx2/util/sfx ucb/source/core/ucb1 ucb/source/ucp/file/ucpfile1 unoxml/source/service/unoxml configmgr/source/configmgr basic/util/sb chart2/source/controller/chartcontroller chart2/source/tools/chartcore comphelper/util/comphelp eventattacher/source/evtatt fileaccess/source/fileacc filter/source/config/cache/filterconfig1 oox/util/oox package/source/xstor/xstor package/util/package2 sax/source/expatwrap/expwrap sax/source/fastparser/fastsax sc/util/sc sc/util/scfilt scaddins/source/analysis/analysis scaddins/source/datefunc/date sot/util/sot svl/util/svl toolkit/util/tk ucb/source/ucp/tdoc/ucptdoc1 unotools/util/utl unoxml/source/rdf/unordf; do \
 		mkdir -p $(APPDIR)/ComponentTarget/`dirname $$F`; \
 	        cp $(WORKDIR)/ComponentTarget/$$F.component $(APPDIR)/ComponentTarget/$$F.component; \
 	done

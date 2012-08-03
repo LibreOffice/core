@@ -107,9 +107,7 @@ File gid_File_Lib_Ldapbe2
 End
 
 STD_LIB_FILE(gid_File_Lib_Chartcontroller, chartcontroller)
-STD_LIB_FILE(gid_File_Lib_Chartmodel, chartmodel)
-STD_LIB_FILE(gid_File_Lib_Charttools, charttools)
-STD_LIB_FILE(gid_File_Lib_Chartview, chartview)
+STD_LIB_FILE(gid_File_Lib_Chartcore, chartcore)
 
 
 #if defined _MSC_VER

@@ -21,14 +21,21 @@ copy-stuff:
 #
 	for F in $(strip \
 		   analysislo \
+		   avmedialo \
 		   basebmplo \
 		   basegfxlo \
 		   bootstrap.uno \
+		   canvastoolslo \
+		   chartcontrollerlo \
+		   chartcorelo \
 		   comphelpgcc3 \
+		   cppcanvaslo \
 		   ctllo \
 		   datelo \
 		   dbaxmllo \
 		   dbtoolslo \
+		   drawinglayerlo \
+		   embobj \
 		   evtattlo \
 		   expwrap.uno \
 		   fastsax.uno \
@@ -39,6 +46,7 @@ copy-stuff:
 		   fsstorage.uno \
 		   gcc3_uno \
 		   hwplo \
+		   hyphenlo \
 		   i18nisolang1gcc3 \
 		   i18npool.uno \
 		   i18nutilgcc3 \
@@ -53,9 +61,13 @@ copy-stuff:
 		   jvmaccessgcc3 \
 		   jvmfwk \
 		   libotouchlo \
+		   lnglo \
+		   lnthlo \
 		   lo-bootstrap \
 		   localebe1.uno \
 		   localedata_en \
+		   localedata_es \
+		   localedata_euro \
 		   localedata_others \
 		   lwpftlo \
 		   mergedlo \
@@ -66,17 +78,21 @@ copy-stuff:
 		   reg \
 		   saxlo \
 		   sclo \
+		   sclo \
 		   scdlo \
 		   scfiltlo \
+		   sdlo \
 		   sddlo \
 		   smdlo \
 		   sotlo \
+		   spelllo \
 		   stocservices.uno \
 		   store \
 		   svgfilterlo \
 		   svllo \
 		   swdlo \
 		   swlo \
+		   swdlo \
 		   t602filterlo \
 		   textinstream.uno \
 		   tllo \
@@ -99,6 +115,7 @@ copy-stuff:
 		   xmlfdlo \
 		   xmlreader \
 		   xmlsecurity \
+		   xoflo \
 		   xslt \
 		   xstor \
 		  ); do \
