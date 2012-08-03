@@ -261,8 +261,8 @@ void SmDocShell::ArrangeFormula()
     if (IsFormulaArranged())
         return;
 
-    //! Nur f�r die Dauer der Existenz dieses Objekts sind am Drucker die
-    //! richtigen Einstellungen garantiert.
+    // Only for the duration of the existence of this object the correct settings
+    // at the printer are guaranteed!
     SmPrinterAccess  aPrtAcc(*this);
     OutputDevice* pOutDev = aPrtAcc.GetRefDev();
 
@@ -273,7 +273,7 @@ void SmDocShell::ArrangeFormula()
 #endif
     }
 
-    // falls n�tig ein anderes OutputDevice holen f�r das formatiert wird
+    // if neccessary get another OutputDevice for which we format
     if (!pOutDev)
     {
         SmViewShell *pView = SmGetActiveView();
@@ -431,12 +431,10 @@ void SmDocShell::DrawFormula(OutputDevice &rDev, Point &rPosition, bool bDrawSel
     if (!IsFormulaArranged())
         ArrangeFormula();
 
-    //Problem: Was passiert mit dem WYSIWYG? Wir haben waehrend wir inplace aktiv
-    //sind kein Referenzdevice und sind auch nicht darauf ausgerichtet. Es kann
-    //also jetzt eine Differenz zwischen der VisArea (spricht die Groesse im Client)
-    //und der jetzt vorliegenden Groese geben.
-    //Idee: Die Differenz koennte, zumindest behelfsmaessig, mit SmNod::SetSize
-    //angepasst werden.
+    // Problem: What happens to WYSIWYG? While we're active inplace, we don't have a reference
+    // device and aren't aligned to that either. So now there can be a difference between the
+    // VisArea (i.e. the size within the client) and the current size.
+    // Idea: The difference could be adapted with SmNod::SetSize (no long-term solution)
 
     rPosition.X() += aFormat.GetDistance( DIS_LEFTSPACE );
     rPosition.Y() += aFormat.GetDistance( DIS_TOPSPACE  );
@@ -594,11 +592,9 @@ Printer* SmDocShell::GetPrt()
 
     if ( SFX_CREATE_MODE_EMBEDDED == GetCreateMode() )
     {
-        //Normalerweise wird der Printer vom Server besorgt. Wenn dieser aber
-        //keinen liefert (weil etwa noch keine connection da ist), kann es
-        //dennoch sein, dass wir den Printer kennen, denn dieser wird in
-        //OnDocumentPrinterChanged vom Server durchgereicht und dann temporaer
-        //festgehalten.
+        // Normally the server provides the printer. But if it doesn't provide one (e.g. because
+        // there is no connection) it still can be the case that we know the printer because it
+        // has been passed on by the server in OnDocumentPrinterChanged and being kept temporarily.
         Printer *pPrt = GetDocumentPrinter();
         if ( !pPrt && pTmpPrinter )
             pPrt = pTmpPrinter;

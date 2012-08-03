@@ -82,8 +82,7 @@ void SmConfig::ItemSetToConfig(const SfxItemSet &rSet)
         {
             SetIgnoreSpacesRight( bVal );
 
-            // (angezeigte) Formeln muessen entsprechen neu formatiert werden.
-            // Das erreichen wir mit:
+            // reformat (displayed) formulas accordingly
             Broadcast(SfxSimpleHint(HINT_FORMATCHANGED));
         }
     }

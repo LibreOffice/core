@@ -901,8 +901,8 @@ void SmLineNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell)
 {
     SmNode::Prepare(rFormat, rDocShell);
 
-    //! wir verwenden hier den 'FNT_VARIABLE' Font, da er vom Ascent und Descent
-    //! ia besser zum Rest der Formel passt als der 'FNT_MATH' Font.
+    // Here we use the 'FNT_VARIABLE' font since it's ascent and descent in general fit better
+    // to the rest of the formula compared to the 'FNT_MATH' font.
     GetFont() = rFormat.GetFont(FNT_VARIABLE);
     Flags() |= FLG_FONT;
 }
@@ -1234,18 +1234,17 @@ SmNode * SmBinVerNode::GetLeftMost()
 /**************************************************************************/
 
 
+/// @return value of the determinant formed by the two points
 double Det(const Point &rHeading1, const Point &rHeading2)
-    // gibt den Wert der durch die beiden Punkte gebildeten Determinante
-    // zurueck
 {
     return rHeading1.X() * rHeading2.Y() - rHeading1.Y() * rHeading2.X();
 }
 
 
+/// Is true iff the point 'rPoint1' belongs to the straight line through 'rPoint2'
+/// and has the direction vector 'rHeading2'
 bool IsPointInLine(const Point &rPoint1,
                    const Point &rPoint2, const Point &rHeading2)
-    // ergibt true genau dann, wenn der Punkt 'rPoint1' zu der Gerade gehoert die
-    // durch den Punkt 'rPoint2' geht und den Richtungsvektor 'rHeading2' hat
 {
     OSL_ENSURE(rHeading2 != Point(), "Sm : 0 vector");
 
@@ -1278,7 +1277,7 @@ sal_uInt16 GetLineIntersectionPoint(Point &rResult,
     sal_uInt16 nRes = 1;
     const double eps = 5.0 * DBL_EPSILON;
 
-    // sind die Richtumgsvektoren linear abhaengig ?
+    // are the direction vectors linearly dependent?
     double  fDet = Det(rHeading1, rHeading2);
     if (fabs(fDet) < eps)
     {
@@ -1287,8 +1286,8 @@ sal_uInt16 GetLineIntersectionPoint(Point &rResult,
     }
     else
     {
-        // hier achten wir nicht auf Rechengenauigkeit
-        // (das wuerde aufwendiger und lohnt sich hier kaum)
+        // here we do not pay attention to the computational accurancy
+        // (that would be more complicated and is not really worth it in this case)
         double fLambda = (    (rPoint1.Y() - rPoint2.Y()) * rHeading2.X()
                             - (rPoint1.X() - rPoint2.X()) * rHeading2.Y())
                          / fDet;
@@ -1309,11 +1308,10 @@ SmBinDiagonalNode::SmBinDiagonalNode(const SmToken &rNodeToken)
 }
 
 
+/// @return position and size of the diagonal line
+/// premise: SmRect of the node defines the limitation(!) consequently it has to be known upfront
 void SmBinDiagonalNode::GetOperPosSize(Point &rPos, Size &rSize,
                         const Point &rDiagPoint, double fAngleDeg) const
-    // gibt die Position und Groesse fuer den Diagonalstrich zurueck.
-    // Vor.: das SmRect des Nodes gibt die Begrenzung vor(!), muss also selbst
-    //      bereits bekannt sein.
 
 {
     const double  fPi   = 3.1415926535897932384626433;
@@ -1327,19 +1325,15 @@ void SmBinDiagonalNode::GetOperPosSize(Point &rPos, Size &rSize,
             aDiagHdg      ( (long)(100.0 * cos(fAngleRad)),
                             (long)(-100.0 * sin(fAngleRad)) );
 
-    long  nLeft, nRight, nTop, nBottom;     // Raender des Rechtecks fuer die
-                                            // Diagonale
+    long  nLeft, nRight, nTop, nBottom;     // margins of the rectangle for the diagonal
     Point aPoint;
     if (IsAscending())
     {
-        //
-        // obere rechte Ecke bestimmen
-        //
+        // determine top right corner
         GetLineIntersectionPoint(aPoint,
             Point(nRectLeft, nRectTop), aRightHdg,
             rDiagPoint, aDiagHdg);
-        //
-        // gibt es einen Schnittpunkt mit dem oberen Rand ?
+        // is there a point of intersection with the top border?
         if (aPoint.X() <= nRectRight)
         {
             nRight = aPoint.X();
@@ -1347,7 +1341,7 @@ void SmBinDiagonalNode::GetOperPosSize(Point &rPos, Size &rSize,
         }
         else
         {
-            // es muss einen Schnittpunkt mit dem rechten Rand geben!
+            // there has to be a point of intersection with the right border!
             GetLineIntersectionPoint(aPoint,
                 Point(nRectRight, nRectTop), aDownHdg,
                 rDiagPoint, aDiagHdg);
@@ -1356,14 +1350,11 @@ void SmBinDiagonalNode::GetOperPosSize(Point &rPos, Size &rSize,
             nTop   = aPoint.Y();
         }
 
-        //
-        // untere linke Ecke bestimmen
-        //
+        // determine bottom left corner
         GetLineIntersectionPoint(aPoint,
             Point(nRectLeft, nRectBottom), aRightHdg,
             rDiagPoint, aDiagHdg);
-        //
-        // gibt es einen Schnittpunkt mit dem unteren Rand ?
+        // is there a point of intersection with the bottom border?
         if (aPoint.X() >= nRectLeft)
         {
             nLeft   = aPoint.X();
@@ -1371,7 +1362,7 @@ void SmBinDiagonalNode::GetOperPosSize(Point &rPos, Size &rSize,
         }
         else
         {
-            // es muss einen Schnittpunkt mit dem linken Rand geben!
+            // there has to be a point of intersection with the left border!
             GetLineIntersectionPoint(aPoint,
                 Point(nRectLeft, nRectTop), aDownHdg,
                 rDiagPoint, aDiagHdg);
@@ -1382,14 +1373,11 @@ void SmBinDiagonalNode::GetOperPosSize(Point &rPos, Size &rSize,
     }
     else
     {
-        //
-        // obere linke Ecke bestimmen
-        //
+        // determine top left corner
         GetLineIntersectionPoint(aPoint,
             Point(nRectLeft, nRectTop), aRightHdg,
             rDiagPoint, aDiagHdg);
-        //
-        // gibt es einen Schnittpunkt mit dem oberen Rand ?
+        // is there a point of intersection with the top border?
         if (aPoint.X() >= nRectLeft)
         {
             nLeft = aPoint.X();
@@ -1397,7 +1385,7 @@ void SmBinDiagonalNode::GetOperPosSize(Point &rPos, Size &rSize,
         }
         else
         {
-            // es muss einen Schnittpunkt mit dem linken Rand geben!
+            // there has to be a point of intersection with the left border!
             GetLineIntersectionPoint(aPoint,
                 Point(nRectLeft, nRectTop), aDownHdg,
                 rDiagPoint, aDiagHdg);
@@ -1406,14 +1394,11 @@ void SmBinDiagonalNode::GetOperPosSize(Point &rPos, Size &rSize,
             nTop  = aPoint.Y();
         }
 
-        //
-        // untere rechte Ecke bestimmen
-        //
+        // determine bottom right corner
         GetLineIntersectionPoint(aPoint,
             Point(nRectLeft, nRectBottom), aRightHdg,
             rDiagPoint, aDiagHdg);
-        //
-        // gibt es einen Schnittpunkt mit dem unteren Rand ?
+        // is there a point of intersection with the bottom border?
         if (aPoint.X() <= nRectRight)
         {
             nRight  = aPoint.X();
@@ -1421,7 +1406,7 @@ void SmBinDiagonalNode::GetOperPosSize(Point &rPos, Size &rSize,
         }
         else
         {
-            // es muss einen Schnittpunkt mit dem rechten Rand geben!
+            // there has to be a point of intersection with the right border!
             GetLineIntersectionPoint(aPoint,
                 Point(nRectRight, nRectTop), aDownHdg,
                 rDiagPoint, aDiagHdg);
@@ -1439,9 +1424,8 @@ void SmBinDiagonalNode::GetOperPosSize(Point &rPos, Size &rSize,
 
 void SmBinDiagonalNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
 {
-    //! die beiden Argumente muessen in den Subnodes vor dem Operator kommen,
-    //! damit das anklicken im GraphicWindow den FormulaCursor richtig setzt
-    //! (vgl SmRootNode)
+    // Both arguments have to get into the SubNodes before the Operator so that clicking
+    // within the GraphicWindow sets the FormulaCursor correctly (cf. SmRootNode)
     SmNode *pLeft  = GetSubNode(0),
            *pRight = GetSubNode(1);
     OSL_ENSURE(pLeft, "Sm : NULL pointer");
@@ -1460,12 +1444,12 @@ void SmBinDiagonalNode::Arrange(const OutputDevice &rDev, const SmFormat &rForma
     pLeft->Arrange(aTmpDev, rFormat);
     pRight->Arrange(aTmpDev, rFormat);
 
-    // implizit die Weite (incl Rand) des Diagonalstrichs ermitteln
+    // determine implicitely the values (incl. the margin) of the diagonal line
     pOper->Arrange(aTmpDev, rFormat);
 
     long nDelta = pOper->GetWidth() * 8 / 10;
 
-    // TopLeft Position vom rechten Argument ermitteln
+    // determine TopLeft position from the right argument
     Point aPos;
     aPos.X() = pLeft->GetItalicRight() + nDelta + pRight->GetItalicLeftSpace();
     if (IsAscending())
@@ -1475,7 +1459,7 @@ void SmBinDiagonalNode::Arrange(const OutputDevice &rDev, const SmFormat &rForma
 
     pRight->MoveTo(aPos);
 
-    // neue Baseline bestimmen
+    // determine new baseline
     long nTmpBaseline = IsAscending() ? (pLeft->GetBottom() + pRight->GetTop()) / 2
                         : (pLeft->GetTop() + pRight->GetBottom()) / 2;
     Point  aLogCenter ((pLeft->GetItalicRight() + pRight->GetItalicLeft()) / 2,
@@ -1485,14 +1469,14 @@ void SmBinDiagonalNode::Arrange(const OutputDevice &rDev, const SmFormat &rForma
     ExtendBy(*pRight, RCP_NONE);
 
 
-    // Position und Groesse des Diagonalstrich ermitteln
+    // determine position and size of diagonal line
     Size  aTmpSize;
     GetOperPosSize(aPos, aTmpSize, aLogCenter, IsAscending() ? 60.0 : -60.0);
 
     // font specialist advised to change the width first
     pOper->AdaptToY(aTmpDev, aTmpSize.Height());
     pOper->AdaptToX(aTmpDev, aTmpSize.Width());
-    // und diese wirksam machen
+    // and make it active
     pOper->Arrange(aTmpDev, rFormat);
 
     pOper->MoveTo(aPos);
@@ -1728,16 +1712,16 @@ void SmBraceNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
 
     long  nFaceHeight = GetFont().GetSize().Height();
 
-    // Uebergroesse in % ermitteln
+    // determine oversize in %
     sal_uInt16  nPerc = 0;
     if (!bIsABS && bScale)
-    {   // im Fall von Klammern mit Uebergroesse...
+    {   // in case of oversize braces...
         sal_uInt16 nIndex = GetScaleMode() == SCALE_HEIGHT ?
                             DIS_BRACKETSIZE : DIS_NORMALBRACKETSIZE;
         nPerc = rFormat.GetDistance(nIndex);
     }
 
-    // ermitteln der Hoehe fuer die Klammern
+    // determine the height for the braces
     long  nBraceHeight;
     if (bScale)
     {
@@ -1749,11 +1733,11 @@ void SmBraceNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
     else
         nBraceHeight = nFaceHeight;
 
-    // Abstand zum Argument
+    // distance to the argument
     nPerc = bIsABS ? 0 : rFormat.GetDistance(DIS_BRACKETSPACE);
     long  nDist = nFaceHeight * nPerc / 100L;
 
-    // sofern erwuenscht skalieren der Klammern auf die gewuenschte Groesse
+    // if wanted, scale the braces to the wanted size
     if (bScale)
     {
         Size  aTmpSize (pLeft->GetFont().GetSize());
@@ -1781,7 +1765,7 @@ void SmBraceNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
     pLeft ->Arrange(rDev, rFormat);
     pRight->Arrange(rDev, rFormat);
 
-    // damit auch "\(a\) - (a) - left ( a right )" vernuenftig aussieht
+    // required in order to make "\(a\) - (a) - left ( a right )" look alright
     RectVerAlign  eVerAlign = bScale ? RVA_CENTERY : RVA_BASELINE;
 
     Point         aPos;
@@ -1880,9 +1864,9 @@ void SmVerticalBraceNode::Arrange(const OutputDevice &rDev, const SmFormat &rFor
 
     pBody->Arrange(aTmpDev, rFormat);
 
-    // Groesse wie bei Grenzen fuer diesen Teil
+    // size is the same as for limits for this part
     pScript->SetSize( Fraction( rFormat.GetRelSize(SIZ_LIMITS), 100 ) );
-    // etwas hoehere Klammern als normal
+    // braces are a bit taller than usually
     pBrace ->SetSize( Fraction(3, 2) );
 
     long  nItalicWidth = pBody->GetItalicWidth();
@@ -1892,7 +1876,7 @@ void SmVerticalBraceNode::Arrange(const OutputDevice &rDev, const SmFormat &rFor
     pBrace ->Arrange(aTmpDev, rFormat);
     pScript->Arrange(aTmpDev, rFormat);
 
-    // die relativen Position und die Abstaende zueinander bestimmen
+    // determine the relative position and the distances between each other
     RectPos  eRectPos;
     long nFontHeight = pBody->GetFont().GetSize().Height();
     long nDistBody   = nFontHeight * rFormat.GetDistance(DIS_ORNAMENTSIZE),
@@ -2000,7 +1984,7 @@ void SmOperNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
 
 
 void SmAlignNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
-    // setzt im ganzen subtree (incl aktuellem node) das alignment
+    // set alignment within the entire subtree (including current node)
 {
     OSL_ENSURE(GetNumSubNodes() > 0, "Sm: missing subnode");
 
@@ -2039,7 +2023,7 @@ void SmAttributNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
         pAttr->AdaptToX(rDev, pBody->GetItalicWidth());
     pAttr->Arrange(rDev, rFormat);
 
-    // get relative position of attribut
+    // get relative position of attribute
     RectVerAlign  eVerAlign;
     long          nDist = 0;
     switch (GetToken().eType)
@@ -2263,9 +2247,7 @@ void SmPolyLineNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
 
     long  nBorderwidth = GetFont().GetBorderWidth();
 
-    //
-    // Das Polygon mit den beiden Endpunkten bilden
-    //
+    // create polygon using both endpoints
     OSL_ENSURE(aPoly.GetSize() == 2, "Sm : wrong number of points");
     Point  aPointA, aPointB;
     if (GetToken().eType == TWIDESLASH)
@@ -2304,8 +2286,8 @@ void SmRootSymbolNode::AdaptToX(const OutputDevice &/*rDev*/, sal_uLong nWidth)
 
 void SmRootSymbolNode::AdaptToY(const OutputDevice &rDev, sal_uLong nHeight)
 {
-    // etwas extra Laenge damit der horizontale Balken spaeter ueber dem
-    // Argument positioniert ist
+    // some additional length so that the horizontal
+    // bar will be positioned above the argument
     SmMathSymbolNode::AdaptToY(rDev, nHeight + nHeight / 10L);
 }
 
@@ -2702,8 +2684,8 @@ void SmMathSymbolNode::AdaptToY(const OutputDevice &rDev, sal_uLong nHeight)
     GetFont().FreezeBorderWidth();
     Size  aFntSize (GetFont().GetSize());
 
-    // da wir nur die Hoehe skalieren wollen muesen wir hier ggf die Fontweite
-    // ermitteln um diese beizubehalten.
+    // Since we only want to scale the heigth, we might have
+    // to determine the font width in order to keep it
     if (aFntSize.Width() == 0)
     {
         OutputDevice &rDevNC = (OutputDevice &) rDev;
@@ -2903,7 +2885,7 @@ SmSpecialNode::SmSpecialNode(SmNodeType eNodeType, const SmToken &rNodeToken, sa
 
 
 SmSpecialNode::SmSpecialNode(const SmToken &rNodeToken) :
-    SmTextNode(NSPECIAL, rNodeToken, FNT_MATH)  //! default Font nicht immer richtig
+    SmTextNode(NSPECIAL, rNodeToken, FNT_MATH)  // default Font isn't always correct!
 {
     bIsFromGreekSymbolSet = lcl_IsFromGreekSymbolSet( rNodeToken.aText );
 }
@@ -2932,11 +2914,9 @@ void SmSpecialNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell
     // use same font size as is used for variables
     GetFont().SetSize( rFormat.GetFont( FNT_VARIABLE ).GetSize() );
 
-    //! eigentlich sollten nur WEIGHT_NORMAL und WEIGHT_BOLD vorkommen...
-    //! In der sms-Datei gibt es jedoch zB auch 'WEIGHT_ULTRALIGHT'
-    //! daher vergleichen wir hier mit  >  statt mit  !=  .
-    //! (Langfristig sollte die Notwendigkeit fuer 'PrepareAttribut', und damit
-    //! fuer dieses hier, mal entfallen.)
+    // Actually only WEIGHT_NORMAL and WEIGHT_BOLD should occur... However, the sms-file also
+    // contains e.g. 'WEIGHT_ULTRALIGHT'. Consequently, compare here with '>' instead of '!='.
+    // (In the long term the necessity for 'PrepareAttribut' and thus also for this here should be dropped)
     //
     //! see also SmFontStyles::GetStyleName
     if (IsItalic( GetFont() ))
@@ -3067,9 +3047,8 @@ void SmBlankNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell)
 {
     SmNode::Prepare(rFormat, rDocShell);
 
-    //! hier muss/sollte es lediglich nicht der StarMath Font sein,
-    //! damit fuer das in Arrange verwendete Zeichen ein "normales"
-    //! (ungecliptes) Rechteck erzeugt wird.
+    // Here it need/should not be the StarMath font, so that for the character
+    // used in Arrange a normal (non-clipped) rectangle is generated
     GetFont() = rFormat.GetFont(FNT_VARIABLE);
 
     Flags() |= FLG_FONT | FLG_BOLD | FLG_ITALIC;
@@ -3081,16 +3060,16 @@ void SmBlankNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
     SmTmpDevice  aTmpDev ((OutputDevice &) rDev, true);
     aTmpDev.SetFont(GetFont());
 
-    // Abstand von der Fonthoehe abhaengig machen
-    // (damit er beim skalieren (zB size *2 {a ~ b}) mitwaechst)
+    // make distance depend on the font heigth
+    // (so that it increases when scaling (e.g. size *2 {a ~ b})
     long  nDist  = GetFont().GetSize().Height() / 10L,
           nSpace = nNum * nDist;
 
-    // ein SmRect mit Baseline und allem drum und dran besorgen
+    // get a SmRect with Baseline and all the bells and whistles
     SmRect::operator = (SmRect(aTmpDev, &rFormat, rtl::OUString(' '),
                                GetFont().GetBorderWidth()));
 
-    // und dieses auf die gewuenschte Breite bringen
+    // and resize it to the requested size
     SetItalicSpaces(0, 0);
     SetWidth(nSpace);
 }

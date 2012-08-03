@@ -572,12 +572,12 @@ sal_Int32 SAL_CALL SmGraphicAccessible::getIndexAtPoint( const awt::Point& aPoin
     if (pWin)
     {
         const SmNode *pTree = pWin->GetView()->GetDoc()->GetFormulaTree();
-        //! kann NULL sein! ZB wenn bereits beim laden des Dokuments (bevor der
-        //! Parser angeworfen wurde) ins Fenster geklickt wird.
+        // can be NULL! e.g. if one clicks within the window already during loading of the
+        // document (before the parser even started)
         if (!pTree)
             return nRes;
 
-        // get position relativ to formula draw position
+        // get position relative to formula draw position
         Point  aPos( aPoint.X, aPoint.Y );
         aPos = pWin->PixelToLogic( aPos );
         aPos -= pWin->GetFormulaDrawPos();

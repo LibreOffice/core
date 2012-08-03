@@ -432,7 +432,7 @@ void SmEditWindow::KeyInput(const KeyEvent& rKEvt)
             SmViewShell *pView = GetView();
             if ( pView && !pView->KeyInput(rKEvt) )
             {
-                /* fuert bei F1 (Hilfe) zum Zerstoeren von this! */
+                // F1 (help) leads to the destruction of this
                 Flush();
                 if ( aModifyTimer.IsActive() )
                     aModifyTimer.Stop();
@@ -440,8 +440,8 @@ void SmEditWindow::KeyInput(const KeyEvent& rKEvt)
             }
             else
             {
-                //SFX hat evtl. Slot an der View gecallt und dabei (wg. Hack
-                //im SFX) den Focus auf die View gesetzt
+                // SFX has maybe called a slot of the view and thus (because of a hack in SFX)
+                // set the focus to the view
                 SfxViewShell* pVShell = GetView();
                 if ( pVShell && pVShell->ISA(SmViewShell) &&
                      ((SmViewShell*)pVShell)->GetGraphicWindow().HasFocus() )
@@ -562,7 +562,7 @@ Rectangle SmEditWindow::AdjustScrollBars()
 
 void SmEditWindow::SetScrollBarRanges()
 {
-    // Extra-Methode, nicht InitScrollBars, da auch fuer EditEngine-Events.
+    // Extra method, not InitScrollBars, since it's also being used for EditEngine events
     EditEngine *pEditEngine = GetEditEngine();
     if (pVScrollBar && pHScrollBar && pEditEngine && pEditView)
     {
@@ -623,8 +623,8 @@ void SmEditWindow::SetText(const XubString& rText)
         pEditEngine->SetText(rText);
         pEditEngine->ClearModifyFlag();
 
-        //! Hier die Timer neu zu starten verhindert, dass die Handler fuer andere
-        //! (im Augenblick nicht mehr aktive) Math Tasks aufgerufen werden.
+        // Restarting the timer here, prevents calling the handlers for other (currently inactive)
+        // math tasks
         aModifyTimer.Start();
 
         pEditView->SetSelection(eSelection);
@@ -712,8 +712,8 @@ void SmEditWindow::InsertCommand(sal_uInt16 nCommand)
     OSL_ENSURE( pEditView, "EditView missing" );
     if (pEditView)
     {
-        //Anfang der Selektion merken und hinterher den Cursor daraufsetzen. Nur so
-        //macht das SelNextMark() Sinn.
+        // Remember start of the selection and move the cursor there afterwards.
+        // Only this way the SelNextMark() makes sense...
         ESelection aSelection = pEditView->GetSelection();
         aSelection.nEndPos  = aSelection.nStartPos;
         aSelection.nEndPara = aSelection.nStartPara;
