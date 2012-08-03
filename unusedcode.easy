@@ -25,13 +25,9 @@ SecurityEnvironment_NssImpl::getImplementation(com::sun::star::uno::Reference<co
 SotStorage::GetProperty(String const&, String const&, com::sun::star::uno::Any&)
 SpinButton::SpinButton(Window*, ResId const&)
 StgCache::Pos2Page(int)
-SvXMLAutoStylePoolParentsP_Impl::GetPos(SvXMLAutoStylePoolParentP_Impl const*) const
-SvXMLAutoStylePoolParentsP_Impl::Remove(SvXMLAutoStylePoolParentP_Impl*)
 SvtSlideSorterBarOptions::AddListenerLink(Link const&)
 SvtSlideSorterBarOptions::RemoveListenerLink(Link const&)
 SvxPositionSizeTabPage::GetRect()
-SwXMLTableColumnsSortByWidth_Impl::GetPos(SwXMLTableColumn_Impl const*) const
-SwXMLTableColumnsSortByWidth_Impl::Remove(SwXMLTableColumn_Impl*)
 TempFile::IsValid() const
 TextEngine::GetLeftMargin() const
 ThumbnailView::GetItemCount() const
@@ -51,10 +47,6 @@ VirtualDevice::SetOutputSizePixelScaleOffsetAndBuffer(Size const&, Fraction cons
 Window::PostUserEvent(unsigned long&, unsigned long, void*)
 X11SalGraphics::SetMask(int&, int&, unsigned int&, unsigned int&, int&, int&, unsigned long)
 X509Certificate_NssImpl::getImplementation(com::sun::star::uno::Reference<com::sun::star::uno::XInterface>)
-XMLFontAutoStylePool_Impl::GetPos(XMLFontAutoStylePoolEntry_Impl const*) const
-XMLFontAutoStylePool_Impl::Remove(XMLFontAutoStylePoolEntry_Impl*)
-XMLTextListAutoStylePool_Impl::GetPos(XMLTextListAutoStylePoolEntry_Impl const*) const
-XMLTextListAutoStylePool_Impl::Remove(XMLTextListAutoStylePoolEntry_Impl*)
 XclExpColorScale::XclExpColorScale(XclExpRoot const&, ScColorScaleFormat const&)
 XclExpPivotCache::GetFieldAcc(rtl::OUString const&)
 binfilter::Dictionary::~Dictionary()
