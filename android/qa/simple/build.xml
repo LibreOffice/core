@@ -81,34 +81,5 @@
     -->
     <!-- version-tag: 1 -->
     <import file="${sdk.dir}/tools/ant/build.xml" />
-
-    <!-- Re-define the "-package-resources" target to not compress resources -->
-
-    <target name="-package-resources" depends="-crunch">
-        <!-- only package resources if *not* a library project -->
-        <do-only-if-not-library elseText="Library project: do not package resources..." >
-            <aapt executable="${aapt}"
-                    command="package"
-                    versioncode="${version.code}"
-                    versionname="${version.name}"
-                    debug="${build.is.packaging.debug}"
-                    manifest="AndroidManifest.xml"
-                    assets="${asset.absolute.dir}"
-                    androidjar="${android.jar}"
-                    apkfolder="${out.absolute.dir}"
-                    nocrunch="${build.packaging.nocrunch}"
-                    resourcefilename="${resource.package.file.name}"
-                    resourcefilter="${aapt.resource.filter}"
-                    projectLibrariesResName="project.libraries.res"
-                    projectLibrariesPackageName="project.libraries.package"
-                    previousBuildType="${build.last.target}"
-                    buildType="${build.target}">
-                <res path="${out.res.absolute.dir}" />
-                <res path="${resource.absolute.dir}" />
-                <nocompress /> <!-- forces no compression on any files in assets or res/raw -->
-                <!-- <nocompress extension="xml" /> forces no compression on specific file extensions in assets and res/raw -->
-            </aapt>
-        </do-only-if-not-library>
-    </target>
-
+    <import file="${android.library.reference.1}/no-resource-compress.xml" />
 </project>

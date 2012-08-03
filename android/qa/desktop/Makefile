@@ -14,8 +14,13 @@ BOOTSTRAP=org.libreoffice.android.Bootstrap
 
 APP_DATA_PATH=/data/data/$(APP_PACKAGE)
 
-SODEST=libs/armeabi-v7a
-OBJLOCAL=obj/local/armeabi-v7a
+ifeq ($(CPU),I)
+ABI_PATH=x86
+else
+ABI_PATH=armeabi-v7a
+endif
+SODEST=libs/$(ABI_PATH)
+OBJLOCAL=obj/local/$(ABI_PATH)
 
 define COPY
 cp $(1) $(SODEST)$(if $(2),/$(2)) && $(STRIP) --strip-debug $(SODEST)$(if $(2),/$(2),/$(notdir $(1))) && \
@@ -134,6 +139,7 @@ copy-stuff: buildrcs
 		  icuuclo \
 		  jvmaccessgcc3 \
 		  jvmfwk \
+		  libotouchlo \
 		  lnglo \
 		  introspection.uno \
 		  lnthlo \
@@ -192,7 +198,7 @@ copy-stuff: buildrcs
 
 #
 # Then the shared GNU C++ library
-	$(call COPY,$(ANDROID_NDK_HOME)/sources/cxx-stl/gnu-libstdc++/libs/armeabi-v7a/libgnustl_shared.so)
+	$(call COPY,$(ANDROID_NDK_HOME)/sources/cxx-stl/gnu-libstdc++/libs/$(ABI_PATH)/libgnustl_shared.so)
 #
 # Then other "assets" that can be left in the .apk. Let the directory
 # structure under assets mimic the install set - except for the fact
@@ -233,7 +239,7 @@ copy-stuff: buildrcs
 # Then gdbserver and gdb.setup so that we can debug with ndk-gdb.
 #
 	cp $(ANDROID_NDK_HOME)/toolchains/arm-linux-androideabi-4.4.3/prebuilt/gdbserver $(SODEST)
-	echo set solib-search-path ./obj/local/armeabi-v7a >$(SODEST)/gdb.setup
+	echo set solib-search-path ./obj/local/$(ABI_PATH) >$(SODEST)/gdb.setup
 
 
 build-ant: copy-stuff properties
