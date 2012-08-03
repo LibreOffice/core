@@ -25,7 +25,7 @@
 #include "precompiled_package.hxx"
 #include <ManifestImport.hxx>
 #include <ManifestDefines.hxx>
-#include <Base64Codec.hxx>
+#include <sax/tools/converter.hxx>
 
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <com/sun/star/xml/crypto/DigestID.hpp>
@@ -152,7 +152,7 @@ void SAL_CALL ManifestImport::startElement( const OUString& aName, const uno::Re
                         setProperty( PKG_MNFST_DIGESTALG, nDigestId );
                         const OUString& sChecksumData = aConvertedAttribs[sChecksumAttribute];
                         uno::Sequence < sal_Int8 > aDecodeBuffer;
-                        Base64Codec::decodeBase64( aDecodeBuffer, sChecksumData );
+                        ::sax::Converter::decodeBase64( aDecodeBuffer, sChecksumData );
                         setProperty( PKG_MNFST_DIGEST, aDecodeBuffer );
                     }
                 }
@@ -195,7 +195,7 @@ void SAL_CALL ManifestImport::startElement( const OUString& aName, const uno::Re
                          setProperty( PKG_MNFST_ENCALG, nCypherId );
                         const OUString& sInitVector = aConvertedAttribs[sInitialisationVectorAttribute];
                         uno::Sequence < sal_Int8 > aDecodeBuffer;
-                        Base64Codec::decodeBase64 ( aDecodeBuffer, sInitVector );
+                        ::sax::Converter::decodeBase64 ( aDecodeBuffer, sInitVector );
                          setProperty( PKG_MNFST_INIVECTOR, aDecodeBuffer );
                     }
                 }
@@ -209,7 +209,7 @@ void SAL_CALL ManifestImport::startElement( const OUString& aName, const uno::Re
                     {
                         const OUString& rSaltString = aConvertedAttribs[sSaltAttribute];
                         uno::Sequence < sal_Int8 > aDecodeBuffer;
-                        Base64Codec::decodeBase64 ( aDecodeBuffer, rSaltString );
+                        ::sax::Converter::decodeBase64 ( aDecodeBuffer, rSaltString );
                          setProperty( PKG_MNFST_SALT, aDecodeBuffer );
 
                         const OUString& rIterationCount = aConvertedAttribs[sIterationCountAttribute];
