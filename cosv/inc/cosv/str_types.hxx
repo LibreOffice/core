@@ -32,11 +32,8 @@ struct str
     typedef ::size_t    position;
     typedef ::size_t    size;
 
-    enum constants
-    {
-        npos = position(-1),
-        maxsize = size(-1)
-    };
+    static const position npos = -1;
+    static const size maxsize = -1;
 
     enum insert_mode
     {
