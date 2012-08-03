@@ -105,7 +105,23 @@ public:
                             ~TeleManagerImpl();
 };
 
+bool tb_account_is_online( TpAccount* pAccount );
 bool tb_contact_is_online( TpContact* pContact );
+
+static void account_presence_changed_cb( TpAccount* pAccount,
+                                         guint      /* type */,
+                                         gchar*     /* status */,
+                                         gchar*     /* message */,
+                                         gpointer   pConference )
+{
+    if (!tb_account_is_online( pAccount ))
+    {
+        Collaboration* pCollaboration =
+            reinterpret_cast<TeleConference*> (pConference)->getCollaboration();
+        if (pCollaboration)
+            pCollaboration->ContactLeft();
+    }
+}
 
 static void contact_presence_changed_cb( TpContact* pContact,
                                          guint      /* type */,
@@ -157,6 +173,10 @@ void TeleManager_DBusChannelHandler(
             TeleConference* pConference = new TeleConference( pManager, pAccount, TP_DBUS_TUBE_CHANNEL( pChannel ) );
             pConference->acceptTube();
             pManager->addConference( pConference );
+
+            g_signal_connect( pAccount, "presence-changed",
+                    G_CALLBACK (account_presence_changed_cb), pConference );
+
             TpContact* pContact = tp_channel_get_target_contact( pChannel );
             if (pContact)
                 g_signal_connect( pContact, "presence-changed",
@@ -636,6 +656,9 @@ TeleConference* TeleManager::startGroupSession( TpAccount *pAccount,
     if (!pConference->isReady())
         return NULL;
 
+    g_signal_connect( pAccount, "presence-changed",
+            G_CALLBACK (account_presence_changed_cb), pConference );
+
     return pConference;
 }
 
@@ -710,6 +733,9 @@ TeleConference* TeleManager::startBuddySession( TpAccount *pAccount, TpContact *
 
     if (!pConference->isReady())
         return NULL;
+
+    g_signal_connect( pAccount, "presence-changed",
+            G_CALLBACK (account_presence_changed_cb), pConference );
 
     g_signal_connect( pBuddy, "presence-changed",
             G_CALLBACK (contact_presence_changed_cb), pConference );

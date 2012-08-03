@@ -71,9 +71,9 @@ ContactList::~ContactList()
     mpAccountManager = NULL;
 }
 
-bool tb_contact_is_online( TpContact *contact )
+bool tb_presence_is_online( const TpConnectionPresenceType& presence )
 {
-    switch (tp_contact_get_presence_type (contact))
+    switch (presence)
     {
         case TP_CONNECTION_PRESENCE_TYPE_UNSET:
         case TP_CONNECTION_PRESENCE_TYPE_OFFLINE:
@@ -89,6 +89,16 @@ bool tb_contact_is_online( TpContact *contact )
         default:
             return false;
     }
+}
+
+bool tb_account_is_online( TpAccount *account )
+{
+    return tb_presence_is_online (tp_account_get_current_presence (account, NULL, NULL));
+}
+
+bool tb_contact_is_online( TpContact *contact )
+{
+    return tb_presence_is_online (tp_contact_get_presence_type (contact));
 }
 
 namespace tubes {
