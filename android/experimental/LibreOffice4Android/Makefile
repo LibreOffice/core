@@ -139,7 +139,7 @@ copy-stuff:
 	done
 #
 # Then the shared GNU C++ library
-	$(call COPYSO,$(ANDROID_NDK_HOME)/sources/cxx-stl/gnu-libstdc++/libs/$(ABI_PATH)/libgnustl_shared.so)
+	$(call COPYSO,$(ANDROID_NDK_HOME)/sources/cxx-stl/gnu-libstdc++/$(ANDROID_NDK_TOOLCHAIN_VERSION_SUBDIR)libs/$(ABI_PATH)/libgnustl_shared.so)
 #
 # Then other "assets". Let the directory structure under assets mimic
 # that under solver for now.
@@ -238,7 +238,7 @@ copy-stuff:
 #
 # Then gdbserver and gdb.setup so that we can debug with ndk-gdb.
 #
-	cp $(ANDROID_NDK_HOME)/toolchains/arm-linux-androideabi-4.4.3/prebuilt/gdbserver $(SODEST)
+	cp $(ANDROID_NDK_GDBSERVER) $(SODEST)
 	echo set solib-search-path ./obj/local/$(ABI_PATH) >$(SODEST)/gdb.setup
 
 build-ant: copy-stuff properties
@@ -274,4 +274,4 @@ run:
 
 clean: properties
 	$(ANT) clean
-	rm -rf assets libs obj
+	rm -rf assets libs $(SODEST) $(OBJLOCAL)
