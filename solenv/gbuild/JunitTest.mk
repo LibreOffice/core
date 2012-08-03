@@ -46,7 +46,8 @@ $(call gb_JunitTest_get_target,%) :
 	$(call gb_Helper_abbreviate_dirs,\
         rm -rf $(call gb_JunitTest_get_userdir,$*) && \
 		mkdir -p $(call gb_JunitTest_get_userdir,$*) && \
-        (DBGSV_ERROR_OUT=shell $(gb_JunitTest_JAVACOMMAND) \
+        (DBGSV_ERROR_OUT=shell DISABLE_SAL_DBGBOX=t \
+		    $(gb_JunitTest_JAVACOMMAND) \
             -cp "$(T_CP)" \
             $(DEFS) \
             org.junit.runner.JUnitCore \

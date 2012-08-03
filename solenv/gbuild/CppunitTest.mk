@@ -87,6 +87,7 @@ $(call gb_CppunitTest_get_target,%) :| $(gb_CppunitTest_CPPTESTTARGET)
 		$(if $(G_SLICE),G_SLICE=$(G_SLICE)) \
 		$(if $(GLIBCXX_FORCE_NEW),GLIBCXX_FORCE_NEW=$(GLIBCXX_FORCE_NEW)) \
 		$(if $(DBGSV_ERROR_OUT),DBGSV_ERROR_OUT=$(DBGSV_ERROR_OUT)) \
+		DISABLE_SAL_DBGBOX=t \
 		$(if $(SAL_DIAGNOSE_ABORT),SAL_DIAGNOSE_ABORT=$(SAL_DIAGNOSE_ABORT)) \
 		STAR_RESOURCEPATH=$(dir $(call gb_ResTarget_get_outdir_target,example)) \
 		$(gb_CppunitTest_GDBTRACE) $(gb_CppunitTest_VALGRINDTOOL) $(gb_CppunitTest_CPPTESTTARGET) \
