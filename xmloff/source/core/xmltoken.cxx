@@ -748,6 +748,7 @@ namespace xmloff { namespace token {
         TOKEN( "field-number",                    XML_FIELD_NUMBER ),
         TOKEN( "file-name",                       XML_FILE_NAME ),
         TOKEN( "fill",                            XML_FILL ),
+        TOKEN( "fill-character",                  XML_FILL_CHARACTER ),
         TOKEN( "fill-color",                      XML_FILL_COLOR ),
         TOKEN( "fill-gradient-name",              XML_FILL_GRADIENT_NAME ),
         TOKEN( "fill-hatch-name",                 XML_FILL_HATCH_NAME ),

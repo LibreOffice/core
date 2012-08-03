@@ -248,6 +248,7 @@ public:
 enum SvXMLStyleTokens
 {
     XML_TOK_STYLE_TEXT,
+    XML_TOK_STYLE_FILL_CHARACTER,
     XML_TOK_STYLE_NUMBER,
     XML_TOK_STYLE_SCIENTIFIC_NUMBER,
     XML_TOK_STYLE_FRACTION,
@@ -518,6 +519,7 @@ const SvXMLTokenMap& SvXMLNumImpData::GetStyleElemTokenMap()
         {
             //  elements in a style
             { XML_NAMESPACE_NUMBER, XML_TEXT,               XML_TOK_STYLE_TEXT              },
+            { XML_NAMESPACE_NUMBER, XML_FILL_CHARACTER,           XML_TOK_STYLE_FILL_CHARACTER   },
             { XML_NAMESPACE_NUMBER, XML_NUMBER,             XML_TOK_STYLE_NUMBER            },
             { XML_NAMESPACE_NUMBER, XML_SCIENTIFIC_NUMBER,  XML_TOK_STYLE_SCIENTIFIC_NUMBER },
             { XML_NAMESPACE_NUMBER, XML_FRACTION,           XML_TOK_STYLE_FRACTION          },
@@ -1100,6 +1102,13 @@ void SvXMLNumFmtElementContext::EndElement()
         case XML_TOK_STYLE_TEXT_CONTENT:
             rParent.AddToCode( OUString::valueOf((sal_Unicode)'@') );
             break;
+        case XML_TOK_STYLE_FILL_CHARACTER:
+            if ( aContent.getLength() )
+            {
+                rParent.AddToCode( OUString::valueOf((sal_Unicode)'*') );
+                rParent.AddToCode( OUString::valueOf( aContent[0] ) );
+            }
+            break;
         case XML_TOK_STYLE_BOOLEAN:
             // ignored - only default boolean format is supported
             break;
@@ -1432,6 +1441,7 @@ SvXMLImportContext* SvXMLNumFormatContext::CreateChildContext(
     switch (nToken)
     {
         case XML_TOK_STYLE_TEXT:
+        case XML_TOK_STYLE_FILL_CHARACTER:
         case XML_TOK_STYLE_NUMBER:
         case XML_TOK_STYLE_SCIENTIFIC_NUMBER:
         case XML_TOK_STYLE_FRACTION:

@@ -86,6 +86,7 @@ private:
     SAL_DLLPRIVATE void WriteMapElement_Impl( sal_Int32 nOp, double fLimit,
                                     sal_Int32 nKey, sal_Int32 nPart );
 
+    SAL_DLLPRIVATE void  WriteRepeatedElement_Impl( sal_Unicode ch );
     SAL_DLLPRIVATE sal_Bool WriteTextWithCurrency_Impl( const ::rtl::OUString& rString,
                             const ::com::sun::star::lang::Locale& rLocale );
     SAL_DLLPRIVATE void ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt32 nKey,

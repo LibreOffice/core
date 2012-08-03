@@ -533,6 +533,14 @@ void SvXMLNumFmtExport::WriteMinutesElement_Impl( sal_Bool bLong )
                               sal_True, sal_False );
 }
 
+void SvXMLNumFmtExport::WriteRepeatedElement_Impl( sal_Unicode nChar )
+{
+    FinishTextElement_Impl();
+    SvXMLElementExport aElem( rExport, XML_NAMESPACE_NUMBER, XML_FILL_CHARACTER,
+                                  sal_True, sal_False );
+    rExport.Characters( OUString::valueOf( nChar ) );
+}
+
 void SvXMLNumFmtExport::WriteSecondsElement_Impl( sal_Bool bLong, sal_uInt16 nDecimals )
 {
     FinishTextElement_Impl();
@@ -1562,6 +1570,14 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                 case NF_KEY_AP:
                     WriteAMPMElement_Impl();        // short/long?
                     bAnyContent = sal_True;
+                    break;
+                case NF_SYMBOLTYPE_STAR :
+                    // export only if ODF 1.2 extensions are enabled
+                    if( SvtSaveOptions().GetODFDefaultVersion() > SvtSaveOptions::ODFVER_012 )
+                    {
+                        if ( pElemStr && pElemStr->Len() > 1 )
+                            WriteRepeatedElement_Impl( pElemStr->GetChar( 1 ) );
+                    }
                     break;
             }
             nPrevType = nElemType;
