@@ -73,8 +73,8 @@ if (SOLAR_JAVA == TRUE)
     MD5 = 17960f35b2239654ba608cf1f3e256b3
     name = lucene-2.9.4-src.tar.gz
     URL1 = http://www.us.apache.org/dist/lucene/java/2.9.4/lucene-2.9.4-src.tar.gz
-    # Fall back to a version in SVN from a previous revsion.
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
+    # Fall back to a version in SVN from a previous revsion.
     URL3 = http://svn.apache.org/repos/asf/!svn/bc/1337615/incubator/ooo/trunk/ext_sources/$(MD5)-$(name)
  
 if (WITH_MOZILLA != NO)
@@ -137,7 +137,7 @@ if (SOLAR_JAVA==TRUE && (ENABLE_MEDIAWIKI==YES || ENABLE_REPORTBUILDER==YES))
     MD5 = 3c219630e4302863a9a83d0efde889db
     name = commons-logging-1.1.1-src.tar.gz
     # This seems to be the original host, but the MD5 sum does not match.
-    # URL1 = http://www.alliedquotes.com/mirrors/apache//commons/logging/source/commons-logging-1.1.1-src.tar.gz
+    # URL1 = http://<some-apache-mirror>/commons/logging/source/commons-logging-1.1.1-src.tar.gz
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
     URL3 = $(SVN_TRUNK)$(MD5)-$(name)
 
@@ -208,7 +208,7 @@ if (SOLAR_JAVA == TRUE)
     MD5 = 7e4e73c21f031d5a4c93c128baf7fd75
     name = apache-tomcat-5.5.35-src.tar.gz
     # This seems to be the original host, but the MD5 sum does not match.
-    # URL1 = http://apache.ziply.com/tomcat/tomcat-5/v5.5.35/bin/apache-tomcat-5.5.35.tar.gz
+    # URL1 = http://<mirror>/tomcat/tomcat-5/v5.5.35/bin/apache-tomcat-5.5.35.tar.gz
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
     URL3 = $(SVN_TRUNK)$(MD5)-$(name)
 
@@ -249,8 +249,9 @@ if (GUI!=UNX || SYSTEM_ZLIB!=YES)
 if ( true )
     MD5 = cf8a6967f7de535ae257fa411c98eb88
     name = mdds_0.3.0.tar.bz2
-    URL1 = $(OOO_EXTRAS)$(MD5)-$(name)
-    URL2 = $(SVN_TRUNK)$(MD5)-$(name)
+    URL1 = http://multidimalgorithm.googlecode.com/files/mdds_0.3.0.tar.bz2
+    URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
+    URL3 = $(SVN_TRUNK)$(MD5)-$(name)
 
 if (SYSTEM_VIGRA != YES)
     MD5 = ea91f2fb4212a21d708aced277e6e85a
@@ -262,8 +263,9 @@ if (SYSTEM_VIGRA != YES)
 if (SYSTEM_CURL != YES)
     MD5 = ecb2e37e45c9933e2a963cabe03670ab
     name = curl-7.19.7.tar.gz
-    URL1 = $(OOO_EXTRAS)$(MD5)-$(name)
-    URL2 = $(SVN_TRUNK)$(MD5)-$(name)
+    URL1 = http://curl.haxx.se/download/curl-7.19.7.tar.gz
+    URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
+    URL3 = $(SVN_TRUNK)$(MD5)-$(name)
 
 if (SYSTEM_EXPAT != YES)
     MD5 = ee8b492592568805593f81f8cdf2a04c
