@@ -55,8 +55,6 @@ public:
 
 private:
 
-    virtual void Resize ();
-
     virtual void OnItemDblClicked (ThumbnailViewItem *pRegionItem);
 
     DECL_LINK(ChangeNameHdl, TemplateView*);

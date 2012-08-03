@@ -29,12 +29,8 @@
 #define ITEM_MAX_WIDTH 192
 #define ITEM_MAX_HEIGHT 192
 #define ITEM_PADDING 5
-#define ITEM_SPACE 20
 #define THUMBNAIL_MAX_HEIGHT 128 - 2*ITEM_PADDING
 #define THUMBNAIL_MAX_WIDTH ITEM_MAX_WIDTH - 2*ITEM_PADDING
-
-#define INIT_VIEW_COLS 3
-#define INIT_VIEW_LINES 1
 
 void lcl_updateThumbnails (TemplateLocalViewItem *pItem);
 
@@ -111,11 +107,7 @@ TemplateLocalView::TemplateLocalView ( Window* pParent, const ResId& rResId, boo
       meFilterOption(FILTER_APP_NONE),
       mpDocTemplates(new SfxDocumentTemplates)
 {
-    Size aViewSize = mpItemView->CalcWindowSizePixel(INIT_VIEW_COLS,INIT_VIEW_LINES,
-                                                     ITEM_MAX_WIDTH,ITEM_MAX_HEIGHT,ITEM_SPACE);
-
     mpItemView->SetColor(Color(COL_WHITE));
-    mpItemView->SetSizePixel(aViewSize);
     mpItemView->setItemDimensions(ITEM_MAX_WIDTH,THUMBNAIL_MAX_HEIGHT,
                                   ITEM_MAX_HEIGHT-THUMBNAIL_MAX_HEIGHT,
                                   ITEM_PADDING);
@@ -573,17 +565,6 @@ void TemplateLocalView::copyFrom (TemplateLocalViewItem *pItem, const rtl::OUStr
 
         CalculateItemPositions();
     }
-}
-
-void TemplateLocalView::Resize()
-{
-    Size aWinSize = GetOutputSize();
-    Size aViewSize = mpItemView->GetSizePixel();
-
-    Point aPos;
-    aPos.setX((aWinSize.getWidth() - aViewSize.getWidth())/2);
-
-    mpItemView->SetPosPixel(aPos);
 }
 
 void TemplateLocalView::OnItemDblClicked (ThumbnailViewItem *pRegionItem)

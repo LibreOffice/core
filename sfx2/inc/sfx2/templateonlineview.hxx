@@ -40,10 +40,6 @@ public:
 
 private:
 
-    virtual void Resize ();
-
-private:
-
     std::vector<TemplateOnlineViewItem*> maRepositories;
     com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment > m_xCmdEnv;
 };

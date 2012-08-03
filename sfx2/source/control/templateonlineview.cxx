@@ -29,7 +29,6 @@
 #define ITEM_MAX_WIDTH 192
 #define ITEM_MAX_HEIGHT 192
 #define ITEM_PADDING 5
-#define ITEM_SPACE 20
 #define THUMBNAIL_MAX_HEIGHT 128 - 2*ITEM_PADDING
 #define THUMBNAIL_MAX_WIDTH ITEM_MAX_WIDTH - 2*ITEM_PADDING
 
@@ -249,11 +248,6 @@ void TemplateOnlineView::setItemDimensions(long ItemWidth, long ThumbnailHeight,
     ThumbnailView::setItemDimensions(ItemWidth,ThumbnailHeight,DisplayHeight,itemPadding);
 
     mpItemView->setItemDimensions(ItemWidth,ThumbnailHeight,DisplayHeight,itemPadding);
-}
-
-void TemplateOnlineView::Resize()
-{
-    mpItemView->SetSizePixel(GetSizePixel());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

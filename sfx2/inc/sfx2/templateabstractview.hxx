@@ -94,6 +94,8 @@ public:
 
 protected:
 
+    virtual void Resize();
+
     virtual void OnSelectionMode (bool bMode);
 
     DECL_LINK(OverlayItemStateHdl, const ThumbnailViewItem*);

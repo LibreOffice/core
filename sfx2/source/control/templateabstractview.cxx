@@ -228,6 +228,11 @@ BitmapEx TemplateAbstractView::fetchThumbnail (const rtl::OUString &msURL, long 
     return TemplateAbstractView::scaleImg(aThumbnail,width,height);
 }
 
+void TemplateAbstractView::Resize()
+{
+    mpItemView->SetSizePixel(GetSizePixel());
+}
+
 void TemplateAbstractView::OnSelectionMode (bool bMode)
 {
     if (mpItemView->IsVisible())
