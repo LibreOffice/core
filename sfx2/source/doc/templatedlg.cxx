@@ -624,7 +624,7 @@ IMPL_LINK(SfxTemplateManagerDlg, OpenTemplateHdl, ThumbnailViewItem*, pItem)
 IMPL_LINK_NOARG(SfxTemplateManagerDlg, SearchUpdateHdl)
 {
     // if the search view is hidden, hide the folder view and display search one
-    if (!mpSearchView->IsVisible())
+    if (!mpCurView->isOverlayVisible() && !mpSearchView->IsVisible())
     {
         mpSearchView->Clear();
         mpSearchView->Show();
@@ -635,30 +635,44 @@ IMPL_LINK_NOARG(SfxTemplateManagerDlg, SearchUpdateHdl)
 
     if (!aKeyword.isEmpty())
     {
-        mpSearchView->Clear();
-
-        std::vector<TemplateItemProperties> aItems =
-                maView->getFilteredItems(SearchView_Keyword(aKeyword));
-
-        size_t nCounter = 0;
-        for (size_t i = 0; i < aItems.size(); ++i)
+        if (mpCurView->isOverlayVisible())
         {
-            TemplateItemProperties *pItem = &aItems[i];
-
-            mpSearchView->AppendItem(++nCounter,pItem->nRegionId,
-                                     pItem->nId-1,
-                                     pItem->aName,
-                                     maView->GetItemText(pItem->nRegionId+1),
-                                     pItem->aPath,
-                                     pItem->aThumbnail);
+            mpCurView->filterTemplatesByKeyword(aKeyword);
         }
+        else
+        {
+            mpSearchView->Clear();
 
-        mpSearchView->Invalidate();
+            std::vector<TemplateItemProperties> aItems =
+                    maView->getFilteredItems(SearchView_Keyword(aKeyword));
+
+            size_t nCounter = 0;
+            for (size_t i = 0; i < aItems.size(); ++i)
+            {
+                TemplateItemProperties *pItem = &aItems[i];
+
+                mpSearchView->AppendItem(++nCounter,pItem->nRegionId,
+                                         pItem->nId-1,
+                                         pItem->aName,
+                                         maView->GetItemText(pItem->nRegionId+1),
+                                         pItem->aPath,
+                                         pItem->aThumbnail);
+            }
+
+            mpSearchView->Invalidate();
+        }
     }
     else
     {
-        mpSearchView->Hide();
-        mpCurView->Show();
+        if (mpCurView->isOverlayVisible())
+        {
+            mpCurView->filterTemplatesByApp(FILTER_APP_NONE);
+        }
+        else
+        {
+            mpSearchView->Hide();
+            mpCurView->Show();
+        }
     }
 
     return 0;

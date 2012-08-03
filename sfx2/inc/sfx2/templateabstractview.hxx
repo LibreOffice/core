@@ -40,6 +40,21 @@ private:
     FILTER_APPLICATION mApp;
 };
 
+class ViewFilter_Keyword
+{
+public:
+
+    ViewFilter_Keyword (const OUString &rKeyword)
+        : maKeyword(rKeyword)
+    {}
+
+    bool operator () (const ThumbnailViewItem *pItem);
+
+private:
+
+    OUString maKeyword;
+};
+
 class SFX2_DLLPUBLIC TemplateAbstractView : public ThumbnailView
 {
 public:
@@ -64,6 +79,8 @@ public:
 
     void sortOverlayItems (const boost::function<bool (const ThumbnailViewItem*,
                                                        const ThumbnailViewItem*) > &func);
+
+    virtual void filterTemplatesByKeyword (const OUString &rKeyword);
 
     void setOverlayItemStateHdl (const Link &aLink) { maOverlayItemStateHdl = aLink; }
 

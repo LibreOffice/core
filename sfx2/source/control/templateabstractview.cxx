@@ -49,6 +49,13 @@ bool ViewFilter_Application::operator () (const ThumbnailViewItem *pItem)
     return true;
 }
 
+bool ViewFilter_Keyword::operator ()(const ThumbnailViewItem *pItem)
+{
+    assert(pItem);
+
+    return pItem->maTitle.matchIgnoreAsciiCase(maKeyword);
+}
+
 TemplateAbstractView::TemplateAbstractView (Window *pParent, WinBits nWinStyle, bool bDisableTransientChildren)
     : ThumbnailView(pParent,nWinStyle,bDisableTransientChildren),
       mpItemView(new TemplateView(this))
@@ -82,6 +89,12 @@ void TemplateAbstractView::sortOverlayItems(const boost::function<bool (const Th
                                                                         const ThumbnailViewItem*) > &func)
 {
     mpItemView->sortItems(func);
+}
+
+void TemplateAbstractView::filterTemplatesByKeyword(const OUString &rKeyword)
+{
+    if (mpItemView->IsVisible())
+        mpItemView->filterItems(ViewFilter_Keyword(rKeyword));
 }
 
 void TemplateAbstractView::setOverlayDblClickHdl(const Link &rLink)
