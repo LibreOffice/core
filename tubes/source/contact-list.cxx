@@ -92,13 +92,16 @@ tb_contact_is_online (TpContact *contact)
     }
 }
 
+namespace tubes {
+    void reDrawAllContacts();
+}
 static void presence_changed_cb( TpContact* /* contact */,
                                  guint      /* type */,
                                  gchar*     /* status */,
                                  gchar*     /* message */,
-                                 gpointer   pContactList )
+                                 gpointer   /* pContactList*/ )
 {
-    reinterpret_cast<ContactList*> (pContactList)->sigContactListChanged();
+    tubes::reDrawAllContacts();
 }
 
 AccountContactPairV ContactList::getContacts()

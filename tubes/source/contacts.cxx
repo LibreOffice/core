@@ -182,9 +182,6 @@ public:
         sHeader += String( TubesResId( STR_HEADER_NAME ) );
         sHeader += '\t';
         maList.InsertHeaderEntry( sHeader, HEADERBAR_APPEND, HIB_LEFT );
-
-        mpManager->getContactList()->sigContactListChanged.connect(
-                boost::bind( &TubeContacts::Populate, this ) );
     }
     virtual ~TubeContacts()
     {
@@ -263,10 +260,12 @@ IMPL_LINK_NOARG( TubeContacts, BtnListenHdl )
     return 0;
 }
 
+// Mapping contacts dialog instance for each document
+typedef std::map< sal_uInt64, TubeContacts* > DialogsMap;
+static DialogsMap aDialogsMap;
+
 TubeContacts* ContactsFactory( Collaboration* pCollaboration )
 {
-    // Mapping contacts dialog instance for each document
-    static std::map< sal_uInt64, TubeContacts* > aDialogsMap;
     sal_uInt64 Id = pCollaboration->GetId();
     if (aDialogsMap.find( Id ) == aDialogsMap.end())
         aDialogsMap[ Id ] = new TubeContacts( pCollaboration );
@@ -281,6 +280,14 @@ void createContacts( Collaboration* pCollaboration )
     TubeContacts* pContacts = ContactsFactory( pCollaboration );
     pContacts->Populate();
 }
+
+void reDrawAllContacts()
+{
+    for (DialogsMap::const_iterator it = aDialogsMap.begin();
+            it != aDialogsMap.end(); ++it)
+        it->second->Populate();
+}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

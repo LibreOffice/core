@@ -34,7 +34,6 @@
 #include <vector>
 
 #include "tubes/tubesdllapi.h"
-#include <tubes/warnings_guard_boost_signals2.hpp>
 
 typedef struct _TpAccount TpAccount;
 typedef struct _TpContact TpContact;
@@ -50,9 +49,6 @@ public:
     ~ContactList();
 
     AccountContactPairV     getContacts();
-
-    /** Emitted when a contact changes its presence. */
-    boost::signals2::signal<void ()> sigContactListChanged;
 
 private:
     TpAccountManager*       mpAccountManager;
