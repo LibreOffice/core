@@ -230,10 +230,6 @@ sal_Bool SAL_CALL osl_assertFailedLine (
         return sal_False;
     }
 
-    /* if SAL assertions are disabled in general, stop here */
-    if ( getenv("DISABLE_SAL_DBGBOX") )
-        return doAbort;
-
     /* format message into buffer */
     if (pszMessage != 0)
     {

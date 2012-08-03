@@ -28,6 +28,8 @@
 
 #include "system.h"
 
+#include <stdio.h>
+
 #include <osl/diagnose.h>
 
 static pfunc_osl_printDebugMessage  _pPrintDebugMessage = NULL;
@@ -118,6 +120,10 @@ sal_Bool SAL_CALL osl_assertFailedLine(const sal_Char* pszFileName, sal_Int32 nL
 
             if (nCode == IDCANCEL)
                 return sal_True;    /* will cause oslDebugBreak */
+        }
+        else
+        {
+            fputs(szMessage, stderr); // fall back
         }
         return ( ( env != NULL ) && ( *env != '\0' ) );
     }
