@@ -20,13 +20,18 @@ ScCollaboration::~ScCollaboration()
 {
 }
 
-TeleConference* ScCollaboration::GetConference() const
+TeleConference* ScCollaboration::GetConference()
 {
     ScDocFuncSend* pSender = GetScDocFuncSend();
     if (pSender)
         return pSender->GetConference();
 
     return NULL;
+}
+
+sal_uInt64 ScCollaboration::GetId()
+{
+    return reinterpret_cast<sal_uInt64> (SfxObjectShell::Current());
 }
 
 void ScCollaboration::SetCollaboration( TeleConference* pConference )
@@ -52,7 +57,7 @@ void ScCollaboration::SendFile( TpContact* pContact, const OUString& rURL )
         pSender->SendFile( pContact, rURL );
 }
 
-ScDocFuncSend* ScCollaboration::GetScDocFuncSend() const
+ScDocFuncSend* ScCollaboration::GetScDocFuncSend()
 {
     ScDocShell *pScDocShell = dynamic_cast<ScDocShell*> (SfxObjectShell::Current());
     ScDocFunc *pDocFunc = pScDocShell ? &pScDocShell->GetDocFunc() : NULL;

@@ -23,7 +23,8 @@ public:
             Collaboration() {}
     virtual ~Collaboration() {}
 
-    virtual TeleConference*     GetConference() const = 0;
+    virtual TeleConference*     GetConference() = 0;
+    virtual sal_uInt64          GetId() = 0;
     virtual void                SetCollaboration( TeleConference* pConference ) = 0;
     // TODO: I think this could be moved to TeleManager later.
     virtual void                SendFile( TpContact* pContact, const OUString& rURL ) = 0;

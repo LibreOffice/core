@@ -42,9 +42,12 @@
 #include <vcl/dialog.hxx>
 #include <vcl/unohelp.hxx>
 
+#include <map>
 #include <vector>
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <telepathy-glib/telepathy-glib.h>
+
+namespace {
 
 ResId TubesResId( sal_uInt32 nId )
 {
@@ -56,7 +59,6 @@ ResId TubesResId( sal_uInt32 nId )
     return ResId( nId, *pResMgr );
 }
 
-namespace {
 class TubeContacts : public ModelessDialog
 {
     FixedLine               maLabel;
@@ -261,12 +263,22 @@ IMPL_LINK_NOARG( TubeContacts, BtnListenHdl )
     return 0;
 }
 
+TubeContacts* ContactsFactory( Collaboration* pCollaboration )
+{
+    // Mapping contacts dialog instance for each document
+    static std::map< sal_uInt64, TubeContacts* > aDialogsMap;
+    sal_uInt64 Id = pCollaboration->GetId();
+    if (aDialogsMap.find( Id ) == aDialogsMap.end())
+        aDialogsMap[ Id ] = new TubeContacts( pCollaboration );
+    return aDialogsMap[ Id ];
+}
+
 } // anonymous namespace
 
 namespace tubes {
 void createContacts( Collaboration* pCollaboration )
 {
-    static TubeContacts *pContacts = new TubeContacts( pCollaboration );
+    TubeContacts* pContacts = ContactsFactory( pCollaboration );
     pContacts->Populate();
 }
 }

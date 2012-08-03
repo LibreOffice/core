@@ -19,11 +19,12 @@ public:
                             ScCollaboration();
     virtual                 ~ScCollaboration();
 
-    virtual TeleConference* GetConference() const;
+    virtual TeleConference* GetConference();
+    virtual sal_uInt64      GetId();
     virtual void            SetCollaboration( TeleConference* pConference );
     virtual void            SendFile( TpContact* pContact, const OUString& rURL );
 private:
-    ScDocFuncSend*          GetScDocFuncSend() const;
+    ScDocFuncSend*          GetScDocFuncSend();
 };
 
 #endif // INCLUDED_SC_COLLABORATION_HXX
