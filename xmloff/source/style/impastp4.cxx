@@ -300,13 +300,13 @@ void SvXMLAutoStylePoolP_Impl::exportXML(
 {
     // Get list of parents for current family (nFamily)
     XMLFamilyData_Impl aTmp( nFamily );
-    XMLFamilyDataList_Impl::iterator aFind = maFamilyList.find(aTmp);
+    XMLFamilyDataList_Impl::const_iterator aFind = maFamilyList.find(aTmp);
     DBG_ASSERT( aFind != maFamilyList.end(),
                 "SvXMLAutoStylePool_Impl::exportXML: unknown family" );
     if (aFind == maFamilyList.end())
         return;
 
-    XMLFamilyData_Impl &rFamily = *aFind;
+    const XMLFamilyData_Impl &rFamily = *aFind;
     sal_uInt32 nCount = rFamily.mnCount;
 
     if (!nCount)
