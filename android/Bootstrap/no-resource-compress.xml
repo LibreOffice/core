@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="android_rules" default="debug">
+<project name="clobber_android_rules" default="debug">
+
+    <import file="${sdk.dir}/tools/ant/build.xml" />
 
 <!--
     This is copy/pasted from ${sdk.dir}/tools/ant/build.xml
