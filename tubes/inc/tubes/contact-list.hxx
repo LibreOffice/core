@@ -33,8 +33,6 @@
 #include <utility>
 #include <vector>
 
-#include "tubes/tubesdllapi.h"
-
 typedef struct _TpAccount TpAccount;
 typedef struct _TpContact TpContact;
 typedef struct _TpAccountManager TpAccountManager;
@@ -42,7 +40,7 @@ typedef struct _TpAccountManager TpAccountManager;
 typedef ::std::pair< TpAccount *, TpContact * > AccountContactPair;
 typedef ::std::vector< AccountContactPair > AccountContactPairV;
 
-class TUBES_DLLPUBLIC ContactList
+class ContactList
 {
 public:
     ContactList(TpAccountManager *pAccountManager);

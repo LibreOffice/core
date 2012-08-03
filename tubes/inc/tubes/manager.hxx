@@ -73,10 +73,10 @@ public:
     TUBES_DLLPUBLIC bool                    init( bool bListen );
 
     /** Connect to DBus and create AccountManager. */
-    TUBES_DLLPUBLIC bool                    createAccountManager();
+    bool                    createAccountManager();
 
     /** Setup client handlers. */
-    TUBES_DLLPUBLIC bool                    registerClients();
+    bool                    registerClients();
 
     /** Prepare the Telepathy Account Manager.
         Requires createAccountManager() to have succeeded.
@@ -86,13 +86,13 @@ public:
 
         TODO: this needs some signalling mechanism
      */
-    TUBES_DLLPUBLIC void                    prepareAccountManager();
-    TUBES_DLLPUBLIC AccountManagerStatus    getAccountManagerStatus() const;
+    void                    prepareAccountManager();
+    AccountManagerStatus    getAccountManagerStatus() const;
 
     /** Fetches the contact list. Returns 0 before connect() is called successfully.
         Is non-functional until prepareAccountManager().
      */
-    TUBES_DLLPUBLIC ContactList*            getContactList() const;
+    ContactList*            getContactList() const;
 
     /** Start a group session in a MUC.
 
@@ -108,7 +108,7 @@ public:
             empty, only the conference's UUID is used and rConferenceRoom is
             ignored, hopefully resulting in a local DBus tube.
      */
-    TUBES_DLLPUBLIC TeleConference*         startGroupSession( TpAccount *pAccount,
+    TeleConference*         startGroupSession( TpAccount *pAccount,
                                                 const rtl::OUString& rConferenceRoom,
                                                 const rtl::OUString& rConferenceServer );
 
@@ -120,7 +120,7 @@ public:
         @param pBuddy
             The buddy to be connected. Must be a contact of pAccount.
      */
-    TUBES_DLLPUBLIC TeleConference*         startBuddySession( TpAccount *pAccount, TpContact *pBuddy );
+    TeleConference*         startBuddySession( TpAccount *pAccount, TpContact *pBuddy );
 
     /** Get a conference with current UUID to set a session. */
     TUBES_DLLPUBLIC static TeleConference*  getConference();

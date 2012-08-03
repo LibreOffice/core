@@ -28,7 +28,6 @@ $(eval $(call gb_Package_Package,tubes_inc,$(SRCDIR)/tubes/inc))
 
 $(eval $(call gb_Package_add_file,tubes_inc,inc/tubes/collaboration.hxx,tubes/collaboration.hxx))
 $(eval $(call gb_Package_add_file,tubes_inc,inc/tubes/conference.hxx,tubes/conference.hxx))
-$(eval $(call gb_Package_add_file,tubes_inc,inc/tubes/contact-list.hxx,tubes/contact-list.hxx))
 $(eval $(call gb_Package_add_file,tubes_inc,inc/tubes/contacts.hxx,tubes/contacts.hxx))
 $(eval $(call gb_Package_add_file,tubes_inc,inc/tubes/manager.hxx,tubes/manager.hxx))
 $(eval $(call gb_Package_add_file,tubes_inc,inc/tubes/tubesdllapi.h,tubes/tubesdllapi.h))
