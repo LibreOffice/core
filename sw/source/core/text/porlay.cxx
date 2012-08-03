@@ -2192,14 +2192,7 @@ SwTwips SwTxtFrm::HangingMargin() const
     return nRet;
 }
 
-
-/*************************************************************************
- * SwScriptInfo::CalcHiddenRanges()
- *
- * Returns a MultiSection indicating the hidden ranges.
- *************************************************************************/
-
-void SwScriptInfo::CalcHiddenRanges( const SwTxtNode& rNode, MultiSelection& rHiddenMulti )
+void SwScriptInfo::selectHiddenTextProperty(const SwTxtNode& rNode, MultiSelection &rHiddenMulti)
 {
     const SfxPoolItem* pItem = 0;
     if( SFX_ITEM_SET == rNode.GetSwAttrSet().GetItemState( RES_CHRATR_HIDDEN, sal_True, &pItem ) &&
@@ -2209,7 +2202,6 @@ void SwScriptInfo::CalcHiddenRanges( const SwTxtNode& rNode, MultiSelection& rHi
     }
 
     const SwpHints* pHints = rNode.GetpSwpHints();
-    const SwTxtAttr* pTxtAttr = 0;
 
     if( pHints )
     {
@@ -2217,8 +2209,9 @@ void SwScriptInfo::CalcHiddenRanges( const SwTxtNode& rNode, MultiSelection& rHi
 
         while( nTmp < pHints->GetStartCount() )
         {
-            pTxtAttr = pHints->GetStart( nTmp++ );
-            const SvxCharHiddenItem* pHiddenItem = static_cast<const SvxCharHiddenItem*>( CharFmt::GetItem( *pTxtAttr, RES_CHRATR_HIDDEN ) );
+            const SwTxtAttr* pTxtAttr = pHints->GetStart( nTmp++ );
+            const SvxCharHiddenItem* pHiddenItem =
+                static_cast<const SvxCharHiddenItem*>( CharFmt::GetItem( *pTxtAttr, RES_CHRATR_HIDDEN ) );
             if( pHiddenItem )
             {
                 xub_StrLen nSt = *pTxtAttr->GetStart();
@@ -2231,11 +2224,12 @@ void SwScriptInfo::CalcHiddenRanges( const SwTxtNode& rNode, MultiSelection& rHi
             }
         }
     }
+}
 
-    // If there are any hidden ranges in the current text node, we have
-    // to unhide the redlining ranges:
+void SwScriptInfo::selectRedLineDeleted(const SwTxtNode& rNode, MultiSelection &rHiddenMulti, bool bSelect)
+{
     const IDocumentRedlineAccess& rIDRA = *rNode.getIDocumentRedlineAccess();
-    if ( rHiddenMulti.GetRangeCount() && IDocumentRedlineAccess::IsShowChanges( rIDRA.GetRedlineMode() ) )
+    if ( IDocumentRedlineAccess::IsShowChanges( rIDRA.GetRedlineMode() ) )
     {
         sal_uInt16 nAct = rIDRA.GetRedlinePos( rNode, USHRT_MAX );
 
@@ -2252,10 +2246,25 @@ void SwScriptInfo::CalcHiddenRanges( const SwTxtNode& rNode, MultiSelection& rHi
             if ( nRedlnEnd > nRedlStart )
             {
                 Range aTmp( nRedlStart, nRedlnEnd - 1 );
-                rHiddenMulti.Select( aTmp, false );
+                rHiddenMulti.Select( aTmp, bSelect );
             }
         }
     }
+}
+
+/*************************************************************************
+ * SwScriptInfo::CalcHiddenRanges()
+ *
+ * Returns a MultiSection indicating the hidden ranges.
+ *************************************************************************/
+
+void SwScriptInfo::CalcHiddenRanges( const SwTxtNode& rNode, MultiSelection& rHiddenMulti )
+{
+    selectHiddenTextProperty(rNode, rHiddenMulti);
+
+    // If there are any hidden ranges in the current text node, we have
+    // to unhide the redlining ranges:
+    selectRedLineDeleted(rNode, rHiddenMulti, false);
 
     //
     // We calculated a lot of stuff. Finally we can update the flags at the text node.

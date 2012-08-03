@@ -130,8 +130,9 @@ public:
 
     inline size_t CountHiddenChg() const;
     inline xub_StrLen GetHiddenChg( const size_t nCnt ) const;
-    static void CalcHiddenRanges( const SwTxtNode& rNode,
-                                                MultiSelection& rHiddenMulti );
+    static void CalcHiddenRanges(const SwTxtNode& rNode, MultiSelection& rHiddenMulti);
+    static void selectHiddenTextProperty(const SwTxtNode& rNode, MultiSelection &rHiddenMulti);
+    static void selectRedLineDeleted(const SwTxtNode& rNode, MultiSelection &rHiddenMulti, bool bSelect=true);
 
     // "high" level operations, nPos refers to string position
     xub_StrLen NextScriptChg( const xub_StrLen nPos ) const;
