@@ -97,7 +97,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		-MM -MT $(call gb_SrsPartTarget_get_target,$(1)) \
 		$(INCLUDE) \
 		$(DEFS) \
-		-c -x c++-header $(2) \
+		-c -x c-header $(2) \
 		-o $(call gb_SrsPartTarget_get_dep_target,$(1)))
 endef
 
