@@ -682,7 +682,6 @@ void EditorWindow::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                 ( 0, pModulWindow->GetBreakPointWindow().GetCurYOffset() - pEditView->GetStartDocPos().Y() );
             pModulWindow->GetLineNumberWindow().DoScroll
                 ( 0, pModulWindow->GetLineNumberWindow().GetCurYOffset() - pEditView->GetStartDocPos().Y() );
-            pModulWindow->Invalidate();
         }
         else if( rTextHint.GetId() == TEXT_HINT_TEXTHEIGHTCHANGED )
         {
