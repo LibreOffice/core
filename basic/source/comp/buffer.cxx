@@ -58,13 +58,13 @@ char* SbiBuffer::GetBuffer()
 // Test, if the buffer can contain n Bytes.
 // In case of doubt it will be enlarged
 
-sal_Bool SbiBuffer::Check( sal_uInt16 n )
+bool SbiBuffer::Check( sal_uInt16 n )
 {
-    if( !n ) return sal_True;
+    if( !n ) return true;
     if( ( static_cast<sal_uInt32>( nOff )+ n ) >  static_cast<sal_uInt32>( nSize ) )
     {
         if( nInc == 0 )
-            return sal_False;
+            return false;
         sal_uInt16 nn = 0;
         while( nn < n ) nn = nn + nInc;
         char* p;
@@ -75,7 +75,7 @@ sal_Bool SbiBuffer::Check( sal_uInt16 n )
             pParser->Error( SbERR_PROG_TOO_LARGE );
             nInc = 0;
             delete[] pBuf; pBuf = NULL;
-            return sal_False;
+            return false;
         }
         else
         {
@@ -86,7 +86,7 @@ sal_Bool SbiBuffer::Check( sal_uInt16 n )
             nSize = nSize + nn;
         }
     }
-    return sal_True;
+    return true;
 }
 
 // Patch of a Location
@@ -136,62 +136,62 @@ void SbiBuffer::Chain( sal_uInt32 off )
     }
 }
 
-sal_Bool SbiBuffer::operator +=( sal_Int8 n )
+bool SbiBuffer::operator +=( sal_Int8 n )
 {
     if( Check( 1 ) )
     {
-        *pCur++ = (char) n; nOff++; return sal_True;
-    } else return sal_False;
+        *pCur++ = (char) n; nOff++; return true;
+    } else return false;
 }
 
-sal_Bool SbiBuffer::operator +=( sal_uInt8 n )
+bool SbiBuffer::operator +=( sal_uInt8 n )
 {
     if( Check( 1 ) )
     {
-        *pCur++ = (char) n; nOff++; return sal_True;
-    } else return sal_False;
+        *pCur++ = (char) n; nOff++; return true;
+    } else return false;
 }
 
-sal_Bool SbiBuffer::operator +=( sal_Int16 n )
+bool SbiBuffer::operator +=( sal_Int16 n )
 {
     if( Check( 2 ) )
     {
         *pCur++ = (char) ( n & 0xFF );
         *pCur++ = (char) ( n >> 8 );
-        nOff += 2; return sal_True;
-    } else return sal_False;
+        nOff += 2; return true;
+    } else return false;
 }
 
-sal_Bool SbiBuffer::operator +=( sal_uInt16 n )
+bool SbiBuffer::operator +=( sal_uInt16 n )
 {
     if( Check( 2 ) )
     {
         *pCur++ = (char) ( n & 0xFF );
         *pCur++ = (char) ( n >> 8 );
-        nOff += 2; return sal_True;
-    } else return sal_False;
+        nOff += 2; return true;
+    } else return false;
 }
 
-sal_Bool SbiBuffer::operator +=( sal_uInt32 n )
+bool SbiBuffer::operator +=( sal_uInt32 n )
 {
     if( Check( 4 ) )
     {
         sal_uInt16 n1 = static_cast<sal_uInt16>( n & 0xFFFF );
         sal_uInt16 n2 = static_cast<sal_uInt16>( n >> 16 );
         if ( operator +=( n1 ) && operator +=( n2 ) )
-            return sal_True;
-        return sal_True;
+            return true;
+        return true;
     }
-    return sal_False;
+    return false;
 }
 
-sal_Bool SbiBuffer::operator +=( sal_Int32 n )
+bool SbiBuffer::operator +=( sal_Int32 n )
 {
     return operator +=( (sal_uInt32) n );
 }
 
 
-sal_Bool SbiBuffer::operator +=( const String& n )
+bool SbiBuffer::operator +=( const String& n )
 {
     sal_uInt16 l = n.Len() + 1;
     if( Check( l ) )
@@ -200,9 +200,9 @@ sal_Bool SbiBuffer::operator +=( const String& n )
         memcpy( pCur, aByteStr.getStr(), l );
         pCur += l;
         nOff = nOff + l;
-        return sal_True;
+        return true;
     }
-    else return sal_False;
+    else return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

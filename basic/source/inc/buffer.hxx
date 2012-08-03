@@ -32,19 +32,19 @@ class SbiBuffer {
     sal_uInt32  nOff;
     sal_uInt32  nSize;
     short   nInc;
-    sal_Bool    Check( sal_uInt16 );
+    bool    Check( sal_uInt16 );
 public:
     SbiBuffer( SbiParser*, short ); // increment
    ~SbiBuffer();
     void Patch( sal_uInt32, sal_uInt32 );
     void Chain( sal_uInt32 );
-    sal_Bool operator += (const String&);   // save basic-string
-    sal_Bool operator += (sal_Int8);        // save character
-    sal_Bool operator += (sal_Int16);       // save integer
-    sal_Bool operator += (sal_uInt8);       // save character
-    sal_Bool operator += (sal_uInt16);      // save integer
-    sal_Bool operator += (sal_uInt32);      // save integer
-    sal_Bool operator += (sal_Int32);       // save integer
+    bool operator += (const String&);   // save basic-string
+    bool operator += (sal_Int8);        // save character
+    bool operator += (sal_Int16);       // save integer
+    bool operator += (sal_uInt8);       // save character
+    bool operator += (sal_uInt16);      // save integer
+    bool operator += (sal_uInt32);      // save integer
+    bool operator += (sal_Int32);       // save integer
     char*  GetBuffer();             // give out buffer (delete yourself!)
     char*  GetBufferPtr(){ return pBuf; }
     sal_uInt32 GetSize()                { return nOff; }

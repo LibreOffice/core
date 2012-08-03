@@ -472,7 +472,7 @@ void DlgEdObj::PositionAndSizeChange( const beans::PropertyChangeEvent& evt )
                 {
                     Any aNewValue;
                     aNewValue <<= nNewValue;
-                    EndListening( sal_False );
+                    EndListening( false );
                     xPSet->setPropertyValue( evt.PropertyName, aNewValue );
                     StartListening();
                 }
@@ -523,7 +523,7 @@ void SAL_CALL DlgEdObj::NameChange( const  ::com::sun::star::beans::PropertyChan
             else
             {
                 // set old name property
-                EndListening(sal_False);
+                EndListening(false);
                 Reference< beans::XPropertySet >  xPSet(GetUnoControlModel(), UNO_QUERY);
                 Any aName;
                 aName <<= aOldName;
@@ -588,7 +588,7 @@ void DlgEdObj::TabIndexChange( const beans::PropertyChangeEvent& evt ) throw (Ru
         ::std::vector<DlgEdObj*>::iterator aIter;
         for ( aIter = aChildList.begin() ; aIter != aChildList.end() ; ++aIter )
         {
-            (*aIter)->EndListening( sal_False );
+            (*aIter)->EndListening( false );
         }
 
         Reference< container::XNameAccess > xNameAcc( pForm->GetUnoControlModel() , UNO_QUERY );
@@ -990,7 +990,7 @@ void DlgEdObj::NbcMove( const Size& rSize )
     SdrUnoObj::NbcMove( rSize );
 
     // stop listening
-    EndListening(sal_False);
+    EndListening(false);
 
     // set geometry properties
     SetPropsFromRect();
@@ -1009,7 +1009,7 @@ void DlgEdObj::NbcResize(const Point& rRef, const Fraction& xFract, const Fracti
     SdrUnoObj::NbcResize( rRef, xFract, yFract );
 
     // stop listening
-    EndListening(sal_False);
+    EndListening(false);
 
     // set geometry properties
     SetPropsFromRect();
@@ -1161,7 +1161,7 @@ void DlgEdObj::StartListening()
 
 //----------------------------------------------------------------------------
 
-void DlgEdObj::EndListening(sal_Bool bRemoveListener)
+void DlgEdObj::EndListening(bool bRemoveListener)
 {
     DBG_ASSERT(isListening(), "DlgEdObj::EndListening: not listening currently!");
 
@@ -1481,7 +1481,7 @@ void DlgEdForm::PositionAndSizeChange( const beans::PropertyChangeEvent& evt )
                     {
                         Any aNewValue;
                         aNewValue <<= nNewValue;
-                        EndListening( sal_False );
+                        EndListening( false );
                         xPSetForm->setPropertyValue( evt.PropertyName, aNewValue );
                         StartListening();
                     }
@@ -1523,7 +1523,7 @@ void DlgEdForm::PositionAndSizeChange( const beans::PropertyChangeEvent& evt )
                             {
                                 Any aValue;
                                 aValue <<= nNewX;
-                                EndListening( sal_False );
+                                EndListening( false );
                                 xPSet->setPropertyValue( DLGED_PROP_POSITIONX, aValue );
                                 StartListening();
                             }
@@ -1539,7 +1539,7 @@ void DlgEdForm::PositionAndSizeChange( const beans::PropertyChangeEvent& evt )
                             {
                                 Any aValue;
                                 aValue <<= nNewY;
-                                EndListening( sal_False );
+                                EndListening( false );
                                 xPSet->setPropertyValue( DLGED_PROP_POSITIONY, aValue );
                                 StartListening();
                             }
@@ -1583,7 +1583,7 @@ void DlgEdForm::UpdateTabIndices()
     ::std::vector<DlgEdObj*>::iterator aIter;
     for ( aIter = pChildren.begin() ; aIter != pChildren.end() ; ++aIter )
     {
-        (*aIter)->EndListening( sal_False );
+        (*aIter)->EndListening( false );
     }
 
     Reference< ::com::sun::star::container::XNameAccess > xNameAcc( GetUnoControlModel() , UNO_QUERY );
@@ -1744,7 +1744,7 @@ void DlgEdForm::NbcMove( const Size& rSize )
     SdrUnoObj::NbcMove( rSize );
 
     // set geometry properties of form
-    EndListening(sal_False);
+    EndListening(false);
     SetPropsFromRect();
     StartListening();
 
@@ -1752,7 +1752,7 @@ void DlgEdForm::NbcMove( const Size& rSize )
     ::std::vector<DlgEdObj*>::iterator aIter;
     for ( aIter = pChildren.begin() ; aIter != pChildren.end() ; ++aIter )
     {
-        (*aIter)->EndListening(sal_False);
+        (*aIter)->EndListening(false);
         (*aIter)->SetPropsFromRect();
         (*aIter)->StartListening();
     }
@@ -1768,7 +1768,7 @@ void DlgEdForm::NbcResize(const Point& rRef, const Fraction& xFract, const Fract
     SdrUnoObj::NbcResize( rRef, xFract, yFract );
 
     // set geometry properties of form
-    EndListening(sal_False);
+    EndListening(false);
     SetPropsFromRect();
     StartListening();
 
@@ -1776,7 +1776,7 @@ void DlgEdForm::NbcResize(const Point& rRef, const Fraction& xFract, const Fract
     ::std::vector<DlgEdObj*>::iterator aIter;
     for ( aIter = pChildren.begin() ; aIter != pChildren.end() ; ++aIter )
     {
-        (*aIter)->EndListening(sal_False);
+        (*aIter)->EndListening(false);
         (*aIter)->SetPropsFromRect();
         (*aIter)->StartListening();
     }
@@ -1792,7 +1792,7 @@ bool DlgEdForm::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
     bool bResult = SdrUnoObj::EndCreate(rStat, eCmd);
 
     // stop listening
-    EndListening(sal_False);
+    EndListening(false);
 
     // set geometry properties
     SetPropsFromRect();

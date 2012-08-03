@@ -551,7 +551,7 @@ IMPL_LINK_NOARG(DlgEditor, PaintTimeout)
 
                 // set dialog position and size
                 pDlgEdForm->SetSnapRect( Rectangle( aPos, aSize ) );
-                pDlgEdForm->EndListening(sal_False);
+                pDlgEdForm->EndListening(false);
                 pDlgEdForm->SetPropsFromRect();
                 pDlgEdForm->GetDlgEditor()->SetDialogModelChanged(sal_True);
                 pDlgEdForm->StartListening();

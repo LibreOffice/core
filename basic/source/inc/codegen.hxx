@@ -31,7 +31,7 @@ class SbiCodeGen {
     SbiBuffer aCode;
     short  nLine, nCol;         // for stmnt command
     short  nForLevel;           // #29955
-    sal_Bool bStmnt;            // sal_True: statement-opcode is pending
+    bool bStmnt;            // true: statement-opcode is pending
 public:
     SbiCodeGen( SbModule&, SbiParser*, short );
     SbiParser* GetParser() { return pParser; }

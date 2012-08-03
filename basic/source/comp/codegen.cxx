@@ -31,7 +31,7 @@ SbiCodeGen::SbiCodeGen( SbModule& r, SbiParser* p, short nInc )
          : rMod( r ), aCode( p, nInc )
 {
     pParser = p;
-    bStmnt = sal_False;
+    bStmnt = false;
     nLine = 0;
     nCol = 0;
     nForLevel = 0;
@@ -46,7 +46,7 @@ sal_uInt32 SbiCodeGen::GetPC()
 
 void SbiCodeGen::Statement()
 {
-    bStmnt = sal_True;
+    bStmnt = true;
 
     nLine = pParser->GetLine();
     nCol  = pParser->GetCol1();
@@ -62,7 +62,7 @@ void SbiCodeGen::GenStmnt()
 {
     if( bStmnt )
     {
-        bStmnt = sal_False;
+        bStmnt = false;
         Gen( _STMNT, nLine, nCol );
     }
 }
