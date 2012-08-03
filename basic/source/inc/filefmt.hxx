@@ -155,13 +155,6 @@ class SvStream;
 // sal_uInt16 number of objects
 // ....   object data
 
-
-// service routines (in IMAGE.CXX)
-
-sal_Bool  SbGood( SvStream& r );
-sal_uIntPtr SbOpenRecord( SvStream&, sal_uInt16 nSignature, sal_uInt16 nElem );
-void  SbCloseRecord( SvStream&, sal_uIntPtr );
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
