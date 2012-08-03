@@ -6,6 +6,9 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
+import java.util.Vector;
+
+import org.libreoffice.impressremote.communication.CommunicationService.Server;
 
 public class ServerFinder {
 
@@ -15,6 +18,10 @@ public class ServerFinder {
 	private DatagramSocket mSocket = null;
 
 	private Thread mListenerThread = null;
+
+	private boolean mFinishRequested = false;
+
+	private Vector<Server> mServerList = new Vector<Server>();
 
 	public ServerFinder() {
 
@@ -40,17 +47,14 @@ public class ServerFinder {
 			if (i == aBuffer.length || !aCommand.equals("LOREMOTE_ADVERTISE")) {
 				return;
 			}
-			System.out.println("SF: " + aPacket.getAddress().toString());
+			Server aServer = new Server(CommunicationService.Protocol.NETWORK,
+			                aPacket.getAddress().toString(), "NONAME",
+			                System.currentTimeMillis());
+			mServerList.add(aServer);
 
-			//			for (int j = i + 1; j < aBuffer.length; j++) {
-			//				if (aPacket.getData()[j] == '\n') {
-			//					aAddress = new String(aPacket.getData(), i + 1, j, CHARSET);
-			//				}
-			//			}
-			//
-			//			if (aAddress != null) {
-			//				System.out.println("Address is :" + aAddress + "\n");
-			//			}
+		} catch (java.net.SocketTimeoutException e) {
+			// Ignore -- we want to timeout to enable checking whether we
+			// should stop listening periodically
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -61,6 +65,8 @@ public class ServerFinder {
 	public void startFinding() {
 		if (mSocket != null)
 			return;
+
+		mFinishRequested = false;
 
 		if (mListenerThread == null) {
 			mListenerThread = new Thread() {
@@ -76,7 +82,8 @@ public class ServerFinder {
 						                PORT);
 						mSocket.send(aPacket);
 						System.out.println("SF:sent packet\n");
-						while (true) {
+						mSocket.setSoTimeout(1000 * 10);
+						while (!mFinishRequested) {
 							listenForServer();
 						}
 					} catch (SocketException e) {
@@ -99,7 +106,13 @@ public class ServerFinder {
 
 	public void stopFinding() {
 		if (mListenerThread != null) {
-
+			mFinishRequested = true;
+			mListenerThread = null;
 		}
 	}
+
+	public Server[] getServerList() {
+		return (Server[]) mServerList.toArray();
+	}
+
 }

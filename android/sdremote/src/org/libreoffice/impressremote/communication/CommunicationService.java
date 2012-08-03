@@ -42,6 +42,8 @@ public class CommunicationService extends Service {
 
 	private Receiver mReceiver = new Receiver();
 
+	private ServerFinder mFinder = new ServerFinder();
+
 	public void setActivityMessenger(Messenger aActivityMessenger) {
 		mReceiver.setActivityMessenger(aActivityMessenger);
 	}
@@ -55,8 +57,7 @@ public class CommunicationService extends Service {
 	@Override
 	public void onCreate() {
 		// TODO Create a notification (if configured).
-		ServerFinder aFinder = new ServerFinder();
-		aFinder.startFinding();
+		mFinder.startFinding();
 	}
 
 	@Override
@@ -66,6 +67,10 @@ public class CommunicationService extends Service {
 
 	public Transmitter getTransmitter() {
 		return mTransmitter;
+	}
+
+	public Server[] getServers() {
+		return mFinder.getServerList();
 	}
 
 	/**
@@ -102,10 +107,6 @@ public class CommunicationService extends Service {
 
 	}
 
-	public Server[] getServers() {
-		return null;
-	}
-
 	public void disconnect() {
 		mClient.closeConnection();
 	}
@@ -118,15 +119,18 @@ public class CommunicationService extends Service {
 	/**
 	 * Class describing a remote server.
 	 */
-	public class Server {
+	public static class Server {
 		private Protocol mProtocol;
 		private String mAddress;
 		private String mName;
+		private long mTimeDiscovered;
 
-		protected Server(Protocol aProtocol, String aAddress, String aName) {
+		protected Server(Protocol aProtocol, String aAddress, String aName,
+		                long aTimeDiscovered) {
 			mProtocol = aProtocol;
 			mAddress = aAddress;
 			mName = aName;
+			mTimeDiscovered = aTimeDiscovered;
 		}
 
 		public Protocol getProtocol() {
@@ -144,6 +148,10 @@ public class CommunicationService extends Service {
 		 */
 		public String getName() {
 			return mName;
+		}
+
+		public long getTimeDiscovered() {
+			return mTimeDiscovered;
 		}
 
 	}
