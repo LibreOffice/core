@@ -1,0 +1,395 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAMn///so\u003d",
+        "filename": "sw/source/core/docnode/ndcopy.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-03T20:44:43Z",
+      "side": 1,
+      "message": "this line can be removed",
+      "revId": "0b78137920ff60955ee0db4d8ba2f320be04bd17",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///sk\u003d",
+        "filename": "sw/source/core/docnode/ndcopy.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 287,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-03T20:44:43Z",
+      "side": 1,
+      "message": "Why do you add spaces between text and question marks?",
+      "revId": "0b78137920ff60955ee0db4d8ba2f320be04bd17",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///sg\u003d",
+        "filename": "sw/source/core/docnode/ndcopy.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 292,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-03T20:44:43Z",
+      "side": 1,
+      "message": "This line can be removed",
+      "revId": "0b78137920ff60955ee0db4d8ba2f320be04bd17",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///sc\u003d",
+        "filename": "sw/source/core/docnode/ndcopy.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 295,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-03T20:44:43Z",
+      "side": 1,
+      "message": "This line can be removed",
+      "revId": "0b78137920ff60955ee0db4d8ba2f320be04bd17",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///sY\u003d",
+        "filename": "sw/source/core/docnode/ndcopy.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 300,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-03T20:44:43Z",
+      "side": 1,
+      "message": "This line can be removed",
+      "revId": "0b78137920ff60955ee0db4d8ba2f320be04bd17",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///sU\u003d",
+        "filename": "sw/source/core/docnode/ndcopy.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 309,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-03T20:44:43Z",
+      "side": 1,
+      "message": "This line can be removed",
+      "revId": "0b78137920ff60955ee0db4d8ba2f320be04bd17",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///sQ\u003d",
+        "filename": "sw/source/core/docnode/ndcopy.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 335,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-03T20:44:43Z",
+      "side": 1,
+      "message": "Why do you add spaces between text and question mark?",
+      "revId": "0b78137920ff60955ee0db4d8ba2f320be04bd17",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///sM\u003d",
+        "filename": "sw/source/core/docnode/ndcopy.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 397,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-03T20:44:43Z",
+      "side": 1,
+      "message": "Why do you add spaces between text and question mark?",
+      "revId": "0b78137920ff60955ee0db4d8ba2f320be04bd17",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///sI\u003d",
+        "filename": "sw/source/core/docnode/ndcopy.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 461,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-03T20:44:43Z",
+      "side": 1,
+      "message": "Why do you add spaces between text and question mark?",
+      "revId": "0b78137920ff60955ee0db4d8ba2f320be04bd17",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///sE\u003d",
+        "filename": "sw/source/core/docnode/ndcopy.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 514,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-03T20:44:43Z",
+      "side": 1,
+      "message": "This line can be removed",
+      "revId": "0b78137920ff60955ee0db4d8ba2f320be04bd17",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///sA\u003d",
+        "filename": "sw/source/core/docnode/ndcopy.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 522,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-03T20:44:43Z",
+      "side": 1,
+      "message": "better: \"Special cases for Break-Attributes\"",
+      "revId": "0b78137920ff60955ee0db4d8ba2f320be04bd17",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///r8\u003d",
+        "filename": "sw/source/core/docnode/ndcopy.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 540,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-03T20:44:43Z",
+      "side": 1,
+      "message": "Does the markup (\"-----\") really provide additional benefit or can it be removed as well?",
+      "revId": "0b78137920ff60955ee0db4d8ba2f320be04bd17",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///r4\u003d",
+        "filename": "sw/source/core/docnode/ndcopy.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 541,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-03T20:44:43Z",
+      "side": 1,
+      "message": "This line can be removed",
+      "revId": "0b78137920ff60955ee0db4d8ba2f320be04bd17",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///r0\u003d",
+        "filename": "sw/source/core/docnode/ndcopy.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 772,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-03T20:44:43Z",
+      "side": 1,
+      "message": "Why adding extra lines here and not just a translation in place?",
+      "revId": "0b78137920ff60955ee0db4d8ba2f320be04bd17",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///rs\u003d",
+        "filename": "sw/source/core/docnode/ndcopy.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 961,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-03T20:44:43Z",
+      "side": 1,
+      "message": "Why do you add spaces between text and exclamation mark?",
+      "revId": "0b78137920ff60955ee0db4d8ba2f320be04bd17",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///ro\u003d",
+        "filename": "sw/source/core/docnode/ndcopy.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 965,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-03T20:44:43Z",
+      "side": 1,
+      "message": "Why do you add spaces between text and question mark?",
+      "revId": "0b78137920ff60955ee0db4d8ba2f320be04bd17",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///rk\u003d",
+        "filename": "sw/source/core/docnode/ndcopy.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1014,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-03T20:44:43Z",
+      "side": 1,
+      "message": "better: \"The end was also moved\"\n\nWouldn\u0027t it be better to move the comment into the code block instead of above the else statement?",
+      "revId": "0b78137920ff60955ee0db4d8ba2f320be04bd17",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///rY\u003d",
+        "filename": "sw/source/core/docnode/ndcopy.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1326,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-03T20:44:43Z",
+      "side": 1,
+      "message": "This line can be removed",
+      "revId": "0b78137920ff60955ee0db4d8ba2f320be04bd17",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///rg\u003d",
+        "filename": "sw/source/core/docnode/ndcopy.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1327,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-03T20:44:43Z",
+      "side": 1,
+      "message": "Does the markup provide so much benefit? I think, it can be removed from this comment.",
+      "revId": "0b78137920ff60955ee0db4d8ba2f320be04bd17",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///rc\u003d",
+        "filename": "sw/source/core/docnode/ndcopy.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1328,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-03T20:44:43Z",
+      "side": 1,
+      "message": "This line can be removed",
+      "revId": "0b78137920ff60955ee0db4d8ba2f320be04bd17",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///rU\u003d",
+        "filename": "sw/source/core/docnode/ndcopy.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1360,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-03T20:44:43Z",
+      "side": 1,
+      "message": "better: \"insufficient number of nodes\" instead of \"not enough nodes\"",
+      "revId": "0b78137920ff60955ee0db4d8ba2f320be04bd17",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///rQ\u003d",
+        "filename": "sw/source/core/docnode/ndcopy.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1407,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-03T20:44:43Z",
+      "side": 1,
+      "message": "better: \"collect\" instead of \"search together\"",
+      "revId": "0b78137920ff60955ee0db4d8ba2f320be04bd17",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///rM\u003d",
+        "filename": "sw/source/core/docnode/ndcopy.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1573,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-03T20:44:43Z",
+      "side": 1,
+      "message": "The content in this line still fits in the line above ;-)",
+      "revId": "0b78137920ff60955ee0db4d8ba2f320be04bd17",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

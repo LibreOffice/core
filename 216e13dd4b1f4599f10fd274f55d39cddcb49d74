@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAMn///rw\u003d",
+        "filename": "sw/source/core/docnode/ndcopy.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 802,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-03T20:44:43Z",
+      "side": 0,
+      "message": "Why did you delete the whole comment here?",
+      "revId": "216e13dd4b1f4599f10fd274f55d39cddcb49d74",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
