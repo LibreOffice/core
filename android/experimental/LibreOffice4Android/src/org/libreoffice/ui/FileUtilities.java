@@ -71,33 +71,38 @@ public class FileUtilities {
 
     private static final String getExtension(String filename)
     {
-	int nExt = filename.lastIndexOf('.');
-	if (nExt < 0)
-	    return "";
-	return filename.substring(nExt);
+        if (filename == null)
+            return "";
+        int nExt = filename.lastIndexOf('.');
+        if (nExt < 0)
+            return "";
+        return filename.substring(nExt);
     }
 
     private static final int lookupExtension(String filename)
     {
-	String extn = getExtension (filename);
-	if (!mExtnMap.containsKey(extn))
-	    return UNKNOWN;
-	return mExtnMap.get (extn);
+        String extn = getExtension (filename);
+        if (!mExtnMap.containsKey(extn))
+            return UNKNOWN;
+        return mExtnMap.get (extn);
     }
 
     static int getType(String filename)
     {
-	int type = lookupExtension (filename);
-	android.util.Log.d("debug", "extn : " + filename + " -> " + type);
-	return type;
+        int type = lookupExtension (filename);
+        android.util.Log.d("debug", "extn : " + filename + " -> " + type);
+        return type;
     }
 
     // Filter by mode, and/or in future by filename/wildcard
     static private boolean doAccept(String filename, int byMode, String byFilename)
     {
     android.util.Log.d("debug", "doAccept : " + filename + " mode " + byMode + " byFilename " + byFilename);
-    if (byMode == ALL && byFilename == ""){
-        if( filename.startsWith(".")){//ignore hidden files
+    if (filename == null)
+        return false;
+
+    if (byMode == ALL && byFilename == "") {
+        if( filename.startsWith(".")) {//ignore hidden files
             return false;
         }
         return true;
@@ -105,7 +110,7 @@ public class FileUtilities {
     // check extension
     if (byMode != ALL) {
         if (mExtnMap.get (getExtension (filename)) != byMode)
-        return false;
+            return false;
     }
     if (byFilename != "") {
         // FIXME return false on a non-match

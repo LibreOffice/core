@@ -21,11 +21,9 @@ copy-stuff:
 #
 	for F in $(strip \
 		   analysislo \
-		   avmedialo \
 		   basebmplo \
 		   basegfxlo \
 		   bootstrap.uno \
-		   canvastoolslo \
 		   chartcontrollerlo \
 		   chartcorelo \
 		   comphelpgcc3 \
@@ -34,7 +32,6 @@ copy-stuff:
 		   datelo \
 		   dbaxmllo \
 		   dbtoolslo \
-		   drawinglayerlo \
 		   embobj \
 		   evtattlo \
 		   expwrap.uno \

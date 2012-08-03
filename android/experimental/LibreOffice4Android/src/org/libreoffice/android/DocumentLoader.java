@@ -279,6 +279,12 @@ public class DocumentLoader
             // Use dummySmallDevice with no scale of offset just to find out
             // the paper size of this page.
             Log.i( TAG , "Render( " + Integer.toString( number ) + " )");
+
+            if (renderable == null) {
+                Log.i( TAG , "no renderable");
+                return null;
+            }
+
             PropertyValue renderProps[] = new PropertyValue[3];
             renderProps[0] = new PropertyValue();
             renderProps[0].Name = "IsPrinter";
@@ -356,12 +362,17 @@ public class DocumentLoader
 
         return null;
     }
-    
+
     ByteBuffer renderPage(int number, int width , int height)
     {
         try {
             // Use dummySmallDevice with no scale of offset just to find out
             // the paper size of this page.
+
+            if (renderable == null) {
+                Log.i( TAG , "no renderable to render page ( " + Integer.toString(number) + " )" );
+                return null;
+            }
 
             PropertyValue renderProps[] = new PropertyValue[3];
             renderProps[0] = new PropertyValue();
@@ -686,7 +697,8 @@ public class DocumentLoader
                 doc = componentLoader.loadComponentFromURL(url, "_blank", 0, loadProps);
                 publishProgress( new Integer( 33 ));
                 long t1 = System.currentTimeMillis();
-                Log.i(TAG, "Loading took " + ((t1-t0)-timingOverhead) + " ms");
+                Log.i(TAG, "Loading took " + ((t1-t0)-timingOverhead) + " ms => " +
+                      (doc == null ? "null" : "have") + "document");
 
                 Object toolkitService = mcf.createInstanceWithContext
                     ("com.sun.star.awt.Toolkit", context);
@@ -711,10 +723,18 @@ public class DocumentLoader
                 renderProps[2].Name = "View";
                 renderProps[2].Value = new MyXController();
 
-                t0 = System.currentTimeMillis();
-                pageCount = renderable.getRendererCount(doc, renderProps);
-                t1 = System.currentTimeMillis();
-                Log.i(TAG, "getRendererCount: " + pageCount + ", took " + ((t1-t0)-timingOverhead) + " ms");
+                if (renderable != null)
+                {
+                    t0 = System.currentTimeMillis();
+                    pageCount = renderable.getRendererCount(doc, renderProps);
+                    t1 = System.currentTimeMillis();
+                    Log.i(TAG, "getRendererCount: " + pageCount + ", took " + ((t1-t0)-timingOverhead) + " ms");
+                }
+                else
+                {
+                    pageCount = 1; // hack
+                    Log.i(TAG, "no / null renderable interface!");
+                }
             }
             catch (Exception e) {
                 e.printStackTrace(System.err);
@@ -726,7 +746,7 @@ public class DocumentLoader
         protected void onProgressUpdate(Integer progress){
         	progressView.setProgress( progress.intValue() );
         }
-        
+
         protected void onPostExecute(Integer result){
             Log.i(TAG, "onPostExecute: " + result);
             if (result == -1)

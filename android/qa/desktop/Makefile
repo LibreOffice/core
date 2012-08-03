@@ -93,14 +93,11 @@ copy-stuff: buildrcs
 #
 	for F in $(strip \
 		  analysislo \
-		  avmedialo \
 		  basebmplo \
 		  basegfxlo \
 		  bootstrap.uno \
-		  canvastoolslo \
 		  comphelpgcc3 \
 		  cppcanvaslo \
-		  drawinglayerlo \
 		  embobj \
 		  expwrap.uno \
 		  fileacc \
