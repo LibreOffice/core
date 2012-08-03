@@ -73,6 +73,9 @@ class ScOptSolverSave;
 class ScSheetSaveData;
 class ScFlatBoolRowSegments;
 struct ScColWidthParam;
+#ifdef ENABLE_TELEPATHY
+class Collaboration;
+#endif
 
 namespace sfx2 { class FileDialogHelper; }
 struct DocShell_Impl;
@@ -121,6 +124,9 @@ class SC_DLLPUBLIC ScDocShell: public SfxObjectShell, public SfxListener
     ScSheetSaveData*    pSheetSaveData;
 
     ScDocShellModificator* pModificator; // #109979#; is used to load XML (created in BeforeXMLLoading and destroyed in AfterXMLLoading)
+#ifdef ENABLE_TELEPATHY
+    Collaboration*      mpCollaboration;
+#endif
 
     SC_DLLPRIVATE void          InitItems();
     SC_DLLPRIVATE void          DoEnterHandler();
@@ -186,6 +192,9 @@ public:
     using SfxShell::Deactivate;         // with sal_Bool bMDI
     using SfxObjectShell::Print;        // print styles
 
+#ifdef ENABLE_TELEPATHY
+    SC_DLLPRIVATE Collaboration* GetCollaboration();
+#endif
     virtual void    Activate();
     virtual void    Deactivate();
 

@@ -185,7 +185,6 @@ public:
     }
     virtual ~TubeContacts()
     {
-        delete mpCollaboration;
         delete mpManager;
     }
 

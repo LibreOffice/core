@@ -112,6 +112,9 @@
 #include "cellsuno.hxx"
 #include "dpobject.hxx"
 #include "markdata.hxx"
+#ifdef ENABLE_TELEPATHY
+#include "sccollaboration.hxx"
+#endif
 
 #include <vector>
 #include <boost/shared_ptr.hpp>
@@ -2505,6 +2508,11 @@ ScDocFunc *ScDocShell::CreateDocFunc()
 {
     return new ScDocFuncDirect( *this );
 }
+#else
+Collaboration* ScDocShell::GetCollaboration()
+{
+    return mpCollaboration;
+}
 #endif
 
 ScDocShell::ScDocShell( const ScDocShell& rShell ) :
@@ -2531,6 +2539,9 @@ ScDocShell::ScDocShell( const ScDocShell& rShell ) :
     pSolverSaveData ( NULL ),
     pSheetSaveData  ( NULL ),
     pModificator    ( NULL )
+#ifdef ENABLE_TELEPATHY
+    , mpCollaboration( new ScCollaboration() )
+#endif
 {
     RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "nn93723", "ScDocShell::ScDocShell" );
 
@@ -2577,6 +2588,9 @@ ScDocShell::ScDocShell( const sal_uInt64 i_nSfxCreationFlags ) :
     pSolverSaveData ( NULL ),
     pSheetSaveData  ( NULL ),
     pModificator    ( NULL )
+#ifdef ENABLE_TELEPATHY
+    , mpCollaboration( new ScCollaboration() )
+#endif
 {
     RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "nn93723", "ScDocShell::ScDocShell" );
 
@@ -2635,6 +2649,9 @@ ScDocShell::~ScDocShell()
         OSL_FAIL("The Modificator should not exist");
         delete pModificator;
     }
+#ifdef ENABLE_TELEPATHY
+    delete mpCollaboration;
+#endif
 }
 
 //------------------------------------------------------------------

@@ -253,7 +253,7 @@ sal_Bool ScDocFuncSend::SetNormalString( bool& o_rbNumFmtSet, const ScAddress& r
         SendFile( NULL, rText );
 
     if ( rtl::OUString( rText ) == "contacts" )
-        tubes::createContacts( new ScCollaboration() );
+        tubes::createContacts( rDocShell.GetCollaboration() );
 
     return true; // needs some code auditing action
 }

@@ -118,7 +118,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
 
         case SID_COLLABORATION:
 #ifdef ENABLE_TELEPATHY
-            tubes::createContacts( new ScCollaboration() );
+            tubes::createContacts( GetViewData()->GetDocShell()->GetCollaboration() );
 #endif
             break;
 
