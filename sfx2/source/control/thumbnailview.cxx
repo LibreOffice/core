@@ -103,7 +103,6 @@ void ThumbnailView::ImplInit()
     mbScroll            = false;
     mbHasVisibleItems   = false;
     mbSelectionMode = false;
-    mbActive = true;
     maFilterFunc = ViewFilterAll();
     maColor = GetSettings().GetStyleSettings().GetDialogColor();
 
@@ -196,7 +195,7 @@ void ThumbnailView::ImplInitScrollBar()
 
 void ThumbnailView::DrawItem (ThumbnailViewItem *pItem)
 {
-    if (mbActive && pItem->isVisible())
+    if (pItem->isVisible())
     {
         Rectangle aRect = pItem->getDrawArea();
 
@@ -605,7 +604,7 @@ void ThumbnailView::MouseMove( const MouseEvent& rMEvt )
 {
     ThumbnailViewItem* pItem = ImplGetItem( ImplGetItem( rMEvt.GetPosPixel() ) );
 
-    if (pItem && mbActive)
+    if (pItem)
     {
         if (mnHighItemId != pItem->mnId && pItem->isVisible())
         {

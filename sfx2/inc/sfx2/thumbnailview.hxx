@@ -354,7 +354,6 @@ protected:
     bool mbIsTransientChildrenDisabled : 1;
     bool mbHasVisibleItems : 1;
     bool mbSelectionMode;
-    bool mbActive;
     Color maColor;
 
     Link maItemStateHdl;

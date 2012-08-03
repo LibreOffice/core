@@ -100,7 +100,6 @@ void TemplateOnlineView::filterTemplatesByApp(const FILTER_APPLICATION &eApp)
 
 void TemplateOnlineView::showOverlay (bool bVisible)
 {
-    mbActive = !bVisible;
     mpItemView->Show(bVisible);
 
     // Clear items is the overlay is closed.

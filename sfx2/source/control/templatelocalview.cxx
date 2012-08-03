@@ -187,7 +187,6 @@ std::vector<rtl::OUString> TemplateLocalView::getFolderNames()
 
 void TemplateLocalView::showOverlay (bool bVisible)
 {
-    mbActive = !bVisible;
     mpItemView->Show(bVisible);
 
     // Clear items is the overlay is closed.
@@ -582,7 +581,6 @@ void TemplateLocalView::OnItemDblClicked (ThumbnailViewItem *pRegionItem)
     if (meFilterOption != FILTER_APP_NONE)
         mpItemView->filterItems(ViewFilter_Application(meFilterOption));
 
-    mbActive = false;
     mpItemView->Show();
 }
 
