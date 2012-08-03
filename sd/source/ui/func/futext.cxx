@@ -87,6 +87,8 @@ namespace sd {
 static sal_uInt16 SidArray[] = {
     SID_STYLE_FAMILY2,                //    5542
     SID_STYLE_FAMILY5,                //    5545
+    SID_REDO,                         //    5700
+    SID_UNDO,                         //    5701
     SID_CUT,                          //    5710
     SID_COPY,                         //    5711
     SID_ATTR_TABSTOP,                 //   10002
