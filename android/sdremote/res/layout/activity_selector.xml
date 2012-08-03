@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dip"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:id="@+id/selector_container_bluetooth"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/selector_label_none"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/selector_noservers"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
+
+            <TextView
+                android:id="@+id/selector_label_bluetooth"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/bluetooth"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
+
+            <ImageView
+                android:id="@+id/selector_divider1"
+                android:layout_width="fill_parent"
+                android:layout_height="2dip"
+                android:src="@color/medium_grey" />
+
+            <LinearLayout
+                android:id="@+id/selector_list_bluetooth"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/selector_container_network"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/selector_label_network"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/wifi"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
+
+            <ImageView
+                android:id="@+id/selector_divider1"
+                android:layout_width="fill_parent"
+                android:layout_height="2dip"
+                android:src="@color/medium_grey" />
+
+            <LinearLayout
+                android:id="@+id/selector_list_network"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+        </LinearLayout>
+    </LinearLayout>
+
+</ScrollView>

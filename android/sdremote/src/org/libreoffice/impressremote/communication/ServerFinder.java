@@ -135,7 +135,6 @@ public class ServerFinder {
 	}
 
 	public Server[] getServerList() {
-		return (Server[]) mServerList.toArray();
+		return mServerList.toArray(new Server[mServerList.size()]);
 	}
-
 }

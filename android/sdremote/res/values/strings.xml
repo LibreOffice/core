@@ -20,5 +20,8 @@
     <string name="options_volumeswitching_descripton">Change slides using volume buttons</string>
     <string name="options_switchcomputer">Switch computer</string>
     <string name="blankscreen_return">Return to Slide</string>
+    <string name="bluetooth">Bluetooth</string>
+    <string name="wifi">WI-FI</string>
+    <string name="selector_noservers">Searching for computers…</string>
 
 </resources>

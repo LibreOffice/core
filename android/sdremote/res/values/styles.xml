@@ -7,6 +7,7 @@
     <color name="black">#000000</color>
     <color name="light_grey">#E8E9E8</color>
     <color name="medium_grey">#C1C2C1</color>
+    <color name="text_grey">#5E5F5F</color>
 
     <integer name="thumbnail_border_width">3</integer>
 
@@ -48,6 +49,7 @@
         <item name="android:actionDropDownStyle">@style/Theme.ImpressRemote.ActionBarMenu</item>
         <item name="android:windowBackground">@color/light_grey</item>
         <item name="android:homeAsUpIndicator">@drawable/up_indicator_white</item>
+        <item name="android:textColor">@color/text_grey</item>
     </style>
 
 </resources>
