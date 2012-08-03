@@ -12,7 +12,8 @@
 #include "docsh.hxx"
 #include "sendfunc.hxx"
 
-ScCollaboration::ScCollaboration()
+ScCollaboration::ScCollaboration( ScDocShell* pScDocShell ) :
+    mpScDocShell( pScDocShell )
 {
 }
 
@@ -31,21 +32,20 @@ TeleConference* ScCollaboration::GetConference()
 
 sal_uInt64 ScCollaboration::GetId()
 {
-    return reinterpret_cast<sal_uInt64> (SfxObjectShell::Current());
+    return reinterpret_cast<sal_uInt64> (mpScDocShell);
 }
 
 void ScCollaboration::SetCollaboration( TeleConference* pConference )
 {
-    ScDocShell* pScDocShell = dynamic_cast<ScDocShell*> (SfxObjectShell::Current());
-    ScDocFunc* pDocFunc = pScDocShell ? &pScDocShell->GetDocFunc() : NULL;
+    ScDocFunc* pDocFunc = &mpScDocShell->GetDocFunc();
     ScDocFuncSend* pSender = dynamic_cast<ScDocFuncSend*> (pDocFunc);
     if (!pSender)
     {
         // This means pDocFunc has to be ScDocFuncDirect* and we are not collaborating yet.
         ScDocFuncDirect *pDirect = dynamic_cast<ScDocFuncDirect*> (pDocFunc);
         ScDocFuncRecv *pReceiver = new ScDocFuncRecv( pDirect );
-        pSender = new ScDocFuncSend( *pScDocShell, pReceiver );
-        pScDocShell->SetDocFunc( pSender );
+        pSender = new ScDocFuncSend( *mpScDocShell, pReceiver );
+        mpScDocShell->SetDocFunc( pSender );
     }
     pSender->SetCollaboration( pConference );
 }
@@ -59,9 +59,7 @@ void ScCollaboration::SendFile( TpContact* pContact, const OUString& rURL )
 
 ScDocFuncSend* ScCollaboration::GetScDocFuncSend()
 {
-    ScDocShell *pScDocShell = dynamic_cast<ScDocShell*> (SfxObjectShell::Current());
-    ScDocFunc *pDocFunc = pScDocShell ? &pScDocShell->GetDocFunc() : NULL;
-    return dynamic_cast<ScDocFuncSend*> (pDocFunc);
+    return dynamic_cast<ScDocFuncSend*> (&mpScDocShell->GetDocFunc());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -12,11 +12,13 @@
 
 #include <tubes/collaboration.hxx>
 class ScDocFuncSend;
+class ScDocShell;
 
 class ScCollaboration : public Collaboration
 {
+    ScDocShell* mpScDocShell;
 public:
-                            ScCollaboration();
+                            ScCollaboration( ScDocShell* pScDocShell );
     virtual                 ~ScCollaboration();
 
     virtual TeleConference* GetConference();

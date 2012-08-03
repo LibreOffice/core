@@ -2540,7 +2540,7 @@ ScDocShell::ScDocShell( const ScDocShell& rShell ) :
     pSheetSaveData  ( NULL ),
     pModificator    ( NULL )
 #ifdef ENABLE_TELEPATHY
-    , mpCollaboration( new ScCollaboration() )
+    , mpCollaboration( new ScCollaboration( this ) )
 #endif
 {
     RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "nn93723", "ScDocShell::ScDocShell" );
@@ -2589,7 +2589,7 @@ ScDocShell::ScDocShell( const sal_uInt64 i_nSfxCreationFlags ) :
     pSheetSaveData  ( NULL ),
     pModificator    ( NULL )
 #ifdef ENABLE_TELEPATHY
-    , mpCollaboration( new ScCollaboration() )
+    , mpCollaboration( new ScCollaboration( this ) )
 #endif
 {
     RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "nn93723", "ScDocShell::ScDocShell" );
