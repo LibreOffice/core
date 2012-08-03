@@ -39,7 +39,7 @@ public class ServerFinder {
 
 		try {
 			String aCommand = null;
-			String aAddress = null;
+			String aName = null;
 			System.out.println("SF:listening for packet\n");
 			mSocket.receive(aPacket);
 			System.out.println("SF:received packet\n");
@@ -53,10 +53,23 @@ public class ServerFinder {
 			if (i == aBuffer.length || !aCommand.equals("LOREMOTE_ADVERTISE")) {
 				return;
 			}
+			for (int j = i; j < aBuffer.length; j++) {
+				if (aPacket.getData()[i] == '\n') {
+					aName = new String(aPacket.getData(), i + 1, j, CHARSET);
+					break;
+				}
+			}
+			if (aName == null) {
+				return;
+			}
 			Server aServer = new Server(CommunicationService.Protocol.NETWORK,
-			                aPacket.getAddress().toString(), "NONAME",
+			                aPacket.getAddress().toString(), aName,
 			                System.currentTimeMillis());
 			mServerList.add(aServer);
+
+			//			System.out.println("SF FOUND: IP="
+			//			                + aPacket.getAddress().toString() + " HOSTNAME="
+			//			                + aName);
 
 			Intent aIntent = new Intent(
 			                CommunicationService.MSG_SERVERLIST_CHANGED);

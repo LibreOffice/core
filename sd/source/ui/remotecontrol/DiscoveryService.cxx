@@ -60,15 +60,11 @@ DiscoveryService::~DiscoveryService()
 
 void DiscoveryService::replyTo( sockaddr_in& rAddr )
 {
-//     SocketAddr aLocalAddr;
-//     mSocket.getLocalAddr( aLocalAddr );
-//     OString aAddrString = OUStringToOString( aLocalAddr.getHostname(),
-//                                              RTL_TEXTENCODING_UTF8 );
-//     OStringBuffer aBuffer( "LOREMOTE_ADVERTISE\n" );
-//     aBuffer.append( aAddrString ).append( "\n" );
-//     mSocket.sendTo( rAddr, aBuffer.getStr(), aBuffer.getLength() );
-    OString aMessage("LOREMOTE_ADVERTISE\n");
-    sendto( mSocket, aMessage.getStr(), aMessage.getLength(), 0, (sockaddr*) &rAddr, sizeof(rAddr) );
+    OStringBuffer aBuffer("LOREMOTE_ADVERTISE\n");
+    aBuffer.append( OUStringToOString( osl::SocketAddr::getLocalHostname(),
+            RTL_TEXTENCODING_UTF8 ) ).append( "\n\n" );
+    sendto( mSocket, aBuffer.getStr(), aBuffer.getLength(), 0,
+            (sockaddr*) &rAddr, sizeof(rAddr) );
 }
 
 void DiscoveryService::execute()
