@@ -57,7 +57,7 @@ using namespace ::com::sun::star::util;
 
 typedef std::set<SwFmt*> SwpFmts;
 
-    // Sonderbehandlung fuer SvxFontItem, nur den Namen vergleichen:
+// Special case for SvxFontItem: only compare the name
 int CmpAttr( const SfxPoolItem& rItem1, const SfxPoolItem& rItem2 )
 {
     switch( rItem1.Which() )
