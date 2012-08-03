@@ -348,10 +348,8 @@ CXX_FOR_BUILD=ccache /Xcode3/usr/bin/g++-4.0 -mmacosx-version-min=10.4
 --build=x86_64-apple-darwin11
 --disable-zenity
 --enable-werror
---with-distro=LibreOfficeAndroid
 --disable-python
---without-helppack-integration
---without-myspell-dicts
+--with-distro=LibreOfficeAndroid
 --with-java
 
 And here is an autogen.lastrun for Android when cross-compiling from Linux:
@@ -363,12 +361,24 @@ CXX_FOR_BUILD=ccache g++
 --with-ant-home=/opt/apache-ant-1.8.2
 --build=x86_64-unknown-linux-gnu
 --disable-zenity
---with-distro=LibreOfficeAndroid
 --disable-python
+--with-distro=LibreOfficeAndroid
 --with-num-cpus=1
 --with-max-jobs=1
---without-helppack-integration
---without-myspell-dicts
+
+And here is an autogen.lastrun for Android when cross-compiling to x86 from Linux:
+
+CC_FOR_BUILD=ccache gcc
+CXX_FOR_BUILD=ccache g++
+--with-android-ndk=/opt/libreoffice/android-ndk-r8b
+--with-android-ndk-toolchain-version=4.6
+--with-android-sdk=/opt/libreoffice/android-sdk-linux
+--build=i586-suse-linux
+--enable-ccache
+--disable-zenity
+--with-distro=LibreOfficeAndroidX86
+--with-num-cpus=6
+--with-max-jobs=6
 
 There is no interactive end-user "app" you could run yet that would
 use LibreOffice code, but you can build some non-interactive unit

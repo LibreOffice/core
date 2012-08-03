@@ -1,0 +1,53 @@
+#
+# Common Makefile pieces for building Java / Android apps.
+#
+
+# Probably would be best to just stop fooling around with the possibilities to
+# set various stuff with the -env command line parameters (and environment
+# variables?) and in a plethora of rc files, and hardcode construction of
+# *all* required pathnames based on the app installation location for Android
+# (and iOS), etc. We don't really win anything by having so many layers of
+# configurability on platforms like Android and iOS where apps based on LO
+# code are very much self-contained pre-packaged thingies.
+APP_DATA_PATH=/data/data/$(APP_PACKAGE)
+
+# Adapt to both Intel and ARM architectures
+ifeq ($(CPU),I)
+ABI_PATH=x86
+else
+ABI_PATH=armeabi-v7a
+endif
+SODEST=libs/$(ABI_PATH)
+OBJLOCAL=obj/local/$(ABI_PATH)
+
+define COPYSO
+cp $(1) $(SODEST)$(if $(2),/$(2)) && $(STRIP) --strip-debug $(SODEST)$(if $(2),/$(2),/$(notdir $(1))) && \
+cp $(1) $(OBJLOCAL)$(if $(2),/$(2))
+endef
+
+define COPYSOJAR
+cp $(1) libs
+endef
+
+#
+# Helpful rules ...
+#
+
+properties:
+	echo sdk.dir=$(ANDROID_SDK_HOME) >local.properties
+	echo sdk.dir=$(ANDROID_SDK_HOME) >../../Bootstrap/local.properties
+	echo "APP_ABI := $(ABI_PATH)" > jni/Application.mk
+	echo "APP_PLATFORM := android-14" >> jni/Application.mk
+
+install: build-ant
+	unset JAVA_HOME && $(ANT) debug install
+	@echo
+	@echo 'Run it with something like what "make run" does (see Makefile)'
+	@echo
+
+uninstall:
+	$(ANDROID_SDK_HOME)/platform-tools/adb uninstall $(APP_PACKAGE)
+
+clean: properties
+	$(ANT) clean
+	rm -rf assets $(SODEST) $(OBJLOCAL)

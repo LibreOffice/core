@@ -1,45 +1,12 @@
 include ../../../config_host.mk
+include ../../Bootstrap/Makefile.shared
 
 # The package of this app
 APP_PACKAGE=org.libreoffice
 
-# We can't keep assuming APP_DATA_PATH like this, surely this can vary with
-# Android versions and whatnot, this is temporary and works at least with the
-# SDK 16 emulator...
-
-# Probably would be best to just stop fooling around with the possibilities to
-# set various stuff with the -env command line parameters (and environment
-# variables?) and in a plethora of rc files, and hardcode construction of
-# *all* required pathnames based on the app installation location for Android
-# (and iOS), etc. We don't really win anything by having so many layers of
-# configurability on platforms like Android and iOS where apps based on LO
-# code are very much self-contained pre-packaged thingies.
-APP_DATA_PATH=/data/data/$(APP_PACKAGE)
-
-ifeq ($(CPU),I)
-ABI_PATH=x86
-else
-ABI_PATH=armeabi-v7a
-endif
-SODEST=libs/$(ABI_PATH)
-OBJLOCAL=obj/local/$(ABI_PATH)
-
-define COPYSO
-cp $(1) $(SODEST)$(if $(2),/$(2)) && $(STRIP) --strip-debug $(SODEST)$(if $(2),/$(2),/$(notdir $(1))) && \
-cp $(1) $(OBJLOCAL)$(if $(2),/$(2))
-endef
-
-define COPYJAR
-cp $(1) libs
-endef
-
 # The default target just builds.
 
 all: build-ant
-
-properties:
-	echo sdk.dir=$(ANDROID_SDK_HOME) >local.properties
-	echo sdk.dir=$(ANDROID_SDK_HOME) >../../Bootstrap/local.properties
 
 copy-stuff:
 # First always clean
@@ -253,25 +220,11 @@ build-ant: copy-stuff properties
 		   unoil \
 		   unoloader \
 		  ); do \
-	    $(call COPYJAR,$(OUTDIR)/bin/$${F}.jar); \
+	    $(call COPYSOJAR,$(OUTDIR)/bin/$${F}.jar); \
 	done
 #
 	unset JAVA_HOME && $(ANT) debug
 
-install: build-ant
-	unset JAVA_HOME && $(ANT) debug install
-	@echo
-	@echo 'Run it with something like what "make run" does (see Makefile)'
-	@echo
-
-uninstall:
-	$(ANDROID_SDK_HOME)/platform-tools/adb uninstall $(APP_PACKAGE)
-
 run:
 # /data/local/tmp/sample-document.odt
 	adb shell am start -n $(APP_PACKAGE)/.ui.LibreOfficeUIActivity -e input /assets/test1.odt
-
-
-clean: properties
-	$(ANT) clean
-	rm -rf assets libs $(SODEST) $(OBJLOCAL)

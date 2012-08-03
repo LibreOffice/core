@@ -2,6 +2,7 @@
 # 'lo_main' from
 
 include ../../../config_host.mk
+include ../../Bootstrap/Makefile.shared
 
 # The package of this app
 APP_PACKAGE=org.libreoffice.android.libo
@@ -9,31 +10,9 @@ APP_PACKAGE=org.libreoffice.android.libo
 # The name of the Bootstrap activity class
 BOOTSTRAP=org.libreoffice.android.Bootstrap
 
-# The full path the the app's directory needs to be supplied in a
-# couple of places, unfortunately.
-
-APP_DATA_PATH=/data/data/$(APP_PACKAGE)
-
-ifeq ($(CPU),I)
-ABI_PATH=x86
-else
-ABI_PATH=armeabi-v7a
-endif
-SODEST=libs/$(ABI_PATH)
-OBJLOCAL=obj/local/$(ABI_PATH)
-
-define COPY
-cp $(1) $(SODEST)$(if $(2),/$(2)) && $(STRIP) --strip-debug $(SODEST)$(if $(2),/$(2),/$(notdir $(1))) && \
-cp $(1) $(OBJLOCAL)$(if $(2),/$(2))
-endef
-
 # The default target just builds.
 
 all: build-ant
-
-properties:
-	echo sdk.dir=$(ANDROID_SDK_HOME) >local.properties
-	echo sdk.dir=$(ANDROID_SDK_HOME) >../../Bootstrap/local.properties
 
 buildrcs:
 # main sofficerc ini ...
@@ -53,7 +32,7 @@ buildrcs:
 	echo "LO_LIB_DIR=file://$(APP_DATA_PATH)/lib/" >> assets/program/fundamentalrc
 	echo "URE_LIB_DIR=file://$(APP_DATA_PATH)/lib/" >> assets/program/fundamentalrc # checkme - is this used to find configs ?
 	echo "BRAND_BASE_DIR=file:///assets" >> assets/program/fundamentalrc
-	echo 'CONFIGURATION_LAYERS=xcsxcu:$${BRAND_BASE_DIR}/share/registry module:$${BRAND_BASE_DIR}/share/registry/modules res:$${BRAND_BASE_DIR}/share/registry user:$${$$BRAND_BASE_DIR/program/bootstraprc:UserInstallation}/user/registrymodifications.xcu' >> assets/program/fundamentalrc
+	echo 'CONFIGURATION_LAYERS=xcsxcu:$${BRAND_BASE_DIR}/share/registry module:$${BRAND_BASE_DIR}/share/registry/modules res:$${BRAND_BASE_DIR}/share/registry' >> assets/program/fundamentalrc
 	echo 'URE_BIN_DIR=file:///assets/ure/bin/dir/not-here/can-we/exec-anyway' >> assets/program/fundamentalrc
 	echo 'URE_MORE_TYPES=file:///assets/ure/share/misc/types.rdb file:///assets/program/types/types.rdb' >> assets/program/fundamentalrc
 	echo 'URE_MORE_SERVICES= <$$BRAND_BASE_DIR/program/services>*' >> assets/program/fundamentalrc
@@ -193,12 +172,12 @@ copy-stuff: buildrcs
 		  chartmodello \
 		  charttoolslo \
 		  ); do \
-	    $(call COPY,$(OUTDIR)/lib/lib$${F}.so); \
+	    $(call COPYSO,$(OUTDIR)/lib/lib$${F}.so); \
 	done
 
 #
 # Then the shared GNU C++ library
-	$(call COPY,$(ANDROID_NDK_HOME)/sources/cxx-stl/gnu-libstdc++/libs/$(ABI_PATH)/libgnustl_shared.so)
+	$(call COPYSO,$(ANDROID_NDK_HOME)/sources/cxx-stl/gnu-libstdc++/$(ANDROID_NDK_TOOLCHAIN_VERSION_SUBDIR)libs/$(ABI_PATH)/libgnustl_shared.so)
 #
 # Then other "assets" that can be left in the .apk. Let the directory
 # structure under assets mimic the install set - except for the fact
@@ -238,28 +217,18 @@ copy-stuff: buildrcs
 #
 # Then gdbserver and gdb.setup so that we can debug with ndk-gdb.
 #
-	cp $(ANDROID_NDK_HOME)/toolchains/arm-linux-androideabi-4.4.3/prebuilt/gdbserver $(SODEST)
+	cp $(ANDROID_NDK_GDBSERVER) $(SODEST)
 	echo set solib-search-path ./obj/local/$(ABI_PATH) >$(SODEST)/gdb.setup
 
 
 build-ant: copy-stuff properties
 	unset JAVA_HOME && $(ANT) debug
 
-install: copy-stuff properties
-	$(ANDROID_SDK_HOME)/platform-tools/adb shell rm -r $(APP_DATA_PATH)
-	unset JAVA_HOME && $(ANT) debug install
-	@echo
-	@echo 'Run it with "make run"'
-	@echo
-
-uninstall:
-	$(ANDROID_SDK_HOME)/platform-tools/adb uninstall $(APP_PACKAGE)
-
 run:
 	echo "-env:INIFILENAME=file:///assets/program/sofficerc" > cmdline
 #	echo "file:///assets/demo/writer.odt" > cmdline
 	$(ANDROID_SDK_HOME)/platform-tools/adb push cmdline $(APP_DATA_PATH)/cmdline
-	$(ANDROID_SDK_HOME)/platform-tools/adb shell am start -n $(APP_PACKAGE)/$(BOOTSTRAP) -e lo-strace yes -e lo-main-indirect-cmdline "$(APP_DATA_PATH)/cmdline"
+	$(ANDROID_SDK_HOME)/platform-tools/adb shell am start -n $(APP_PACKAGE)/$(BOOTSTRAP) -e lo-main-delay 20 -e lo-main-indirect-cmdline "$(APP_DATA_PATH)/cmdline"
 # add -e lo-strace yes # if you want that
 
 # If you reinstall an app several times, even if you uninstall it
@@ -268,7 +237,4 @@ run:
 stop-start-cycle:
 	$(ANDROID_SDK_HOME)/platform-tools/adb shell stop && $(ANDROID_SDK_HOME)/platform-tools/adb shell start && sleep 10
 
-clean: properties
-	$(ANT) clean
-	rm -rf assets $(SODEST) $(OBJLOCAL)
 
