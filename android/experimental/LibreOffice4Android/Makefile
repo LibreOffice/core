@@ -269,7 +269,7 @@ uninstall:
 
 run:
 # /data/local/tmp/sample-document.odt
-	adb shell am start -n org.libreoffice.android.examples/.DocumentLoader -e input /assets/test1.odt
+	adb shell am start -n $(APP_PACKAGE)/.ui.LibreOfficeUIActivity -e input /assets/test1.odt
 
 
 clean: properties
