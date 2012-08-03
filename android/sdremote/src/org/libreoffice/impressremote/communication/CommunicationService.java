@@ -59,7 +59,6 @@ public class CommunicationService extends Service {
 	@Override
 	public void onCreate() {
 		// TODO Create a notification (if configured).
-		mFinder.startFinding();
 	}
 
 	@Override
@@ -73,6 +72,14 @@ public class CommunicationService extends Service {
 
 	public Server[] getServers() {
 		return mFinder.getServerList();
+	}
+
+	public void startFindingServers() {
+		mFinder.startFinding();
+	}
+
+	public void stopFindingServers() {
+		mFinder.stopFinding();
 	}
 
 	/**

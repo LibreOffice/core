@@ -9,18 +9,18 @@
         android:layout_margin="10dip"
         android:orientation="vertical" >
 
+        <TextView
+            android:id="@+id/selector_label_none"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/selector_noservers"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
         <LinearLayout
             android:id="@+id/selector_container_bluetooth"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical" >
-
-            <TextView
-                android:id="@+id/selector_label_none"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/selector_noservers"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
 
             <TextView
                 android:id="@+id/selector_label_bluetooth"

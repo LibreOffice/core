@@ -21,6 +21,8 @@ public class ServerFinder {
 	private static final int PORT = 1598;
 	private static final String CHARSET = "UTF-8";
 
+	private static final long SEARCH_INTERVAL = 1000 * 20;
+
 	private DatagramSocket mSocket = null;
 
 	private Thread mListenerThread = null;
@@ -40,9 +42,7 @@ public class ServerFinder {
 		try {
 			String aCommand = null;
 			String aName = null;
-			System.out.println("SF:listening for packet\n");
 			mSocket.receive(aPacket);
-			System.out.println("SF:received packet\n");
 			int i;
 			for (i = 0; i < aBuffer.length; i++) {
 				if (aPacket.getData()[i] == '\n') {
@@ -95,18 +95,34 @@ public class ServerFinder {
 			mListenerThread = new Thread() {
 				@Override
 				public void run() {
+					long aTime = 0;
 					try {
 						mSocket = new DatagramSocket();
-						String aString = "LOREMOTE_SEARCH\n";
-						DatagramPacket aPacket = new DatagramPacket(
-						                aString.getBytes(CHARSET),
-						                aString.length(),
-						                InetAddress.getByName("239.0.0.1"),
-						                PORT);
-						mSocket.send(aPacket);
-						System.out.println("SF:sent packet\n");
 						mSocket.setSoTimeout(1000 * 10);
 						while (!mFinishRequested) {
+							if (System.currentTimeMillis() - aTime > SEARCH_INTERVAL) {
+								String aString = "LOREMOTE_SEARCH\n";
+								DatagramPacket aPacket = new DatagramPacket(
+								                aString.getBytes(CHARSET),
+								                aString.length(),
+								                InetAddress.getByName("239.0.0.1"),
+								                PORT);
+								mSocket.send(aPacket);
+								aTime = System.currentTimeMillis();
+								for (Server aServer : mServerList.values()) {
+									if (System.currentTimeMillis()
+									                - aServer.getTimeDiscovered() > 60 * 1000) {
+										mServerList.remove(aServer.getAddress());
+										Intent aIntent = new Intent(
+										                CommunicationService.MSG_SERVERLIST_CHANGED);
+										LocalBroadcastManager.getInstance(
+										                mContext)
+										                .sendBroadcast(aIntent);
+
+									}
+								}
+							}
+
 							listenForServer();
 						}
 					} catch (SocketException e) {
@@ -135,6 +151,6 @@ public class ServerFinder {
 	}
 
 	public Server[] getServerList() {
-		return mServerList.entrySet().toArray(new Server[mServerList.size()]);
+		return mServerList.values().toArray(new Server[mServerList.size()]);
 	}
 }

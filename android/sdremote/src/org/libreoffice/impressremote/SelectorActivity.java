@@ -70,6 +70,9 @@ public class SelectorActivity extends Activity {
 	protected void onPause() {
 		// TODO Auto-generated method stub
 		super.onPause();
+		if (mCommunicationService != null) {
+			mCommunicationService.stopFindingServers();
+		}
 		doUnbindService();
 	}
 
@@ -89,6 +92,7 @@ public class SelectorActivity extends Activity {
 		                IBinder aService) {
 			mCommunicationService = ((CommunicationService.CBinder) aService)
 			                .getService();
+			mCommunicationService.startFindingServers();
 		}
 
 		@Override
@@ -160,9 +164,8 @@ public class SelectorActivity extends Activity {
 		                .setVisibility((mNetworkServers.size() != 0) ? View.VISIBLE
 		                                : View.GONE);
 
-		mNoServerLabel.setVisibility((mBluetoothServers.size() == 0)
-		                && (mNetworkServers.size() == 0) ? View.VISIBLE
-		                : View.GONE);
+		mNoServerLabel.setVisibility(((mBluetoothServers.size() == 0) && (mNetworkServers
+		                .size() == 0)) ? View.VISIBLE : View.GONE);
 	}
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
