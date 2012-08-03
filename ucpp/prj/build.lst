@@ -1,3 +1,3 @@
 ucpp      ucpp  :  soltools NULL
 ucpp      ucpp     usr1           -       all     ucpp_mkout NULL
-ucpp      ucpp     nmake          -       all     ucpp_ucpp NULL
+ucpp      ucpp\prj     nmake          -       all     ucpp_ucpp NULL

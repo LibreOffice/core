@@ -137,6 +137,7 @@ tubes\
 twain\
 ucb\
 ucbhelper\
+ucpp\
 udkapi\
 unixODBC\
 unodevtools\
@@ -240,7 +241,6 @@ stax\
 stlport\
 sysui\
 tomcat\
-ucpp\
 udm\
 vigra\
 xpdf\
