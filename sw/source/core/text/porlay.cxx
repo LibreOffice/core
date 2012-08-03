@@ -1371,7 +1371,7 @@ sal_uInt16 SwScriptInfo::MaskHiddenRanges( const SwTxtNode& rNode, XubString& rT
                                        const xub_StrLen nStt, const xub_StrLen nEnd,
                                        const xub_Unicode cChar )
 {
-    SAL_WARN_IF( rNode.GetTxt().Len() != rText.Len(), "sw.core", "MaskHiddenRanges, string len mismatch" );
+    assert(rNode.GetTxt().Len() == rText.Len());
 
     PositionList aList;
     xub_StrLen nHiddenStart;
@@ -2194,6 +2194,9 @@ SwTwips SwTxtFrm::HangingMargin() const
 
 void SwScriptInfo::selectHiddenTextProperty(const SwTxtNode& rNode, MultiSelection &rHiddenMulti)
 {
+    assert((!rNode.GetTxt().Len() && rHiddenMulti.GetTotalRange().Len() == 1) ||
+           (rNode.GetTxt().Len() == rHiddenMulti.GetTotalRange().Len()));
+
     const SfxPoolItem* pItem = 0;
     if( SFX_ITEM_SET == rNode.GetSwAttrSet().GetItemState( RES_CHRATR_HIDDEN, sal_True, &pItem ) &&
         ((SvxCharHiddenItem*)pItem)->GetValue() )
@@ -2228,6 +2231,9 @@ void SwScriptInfo::selectHiddenTextProperty(const SwTxtNode& rNode, MultiSelecti
 
 void SwScriptInfo::selectRedLineDeleted(const SwTxtNode& rNode, MultiSelection &rHiddenMulti, bool bSelect)
 {
+    assert((!rNode.GetTxt().Len() && rHiddenMulti.GetTotalRange().Len() == 1) ||
+           (rNode.GetTxt().Len() == rHiddenMulti.GetTotalRange().Len()));
+
     const IDocumentRedlineAccess& rIDRA = *rNode.getIDocumentRedlineAccess();
     if ( IDocumentRedlineAccess::IsShowChanges( rIDRA.GetRedlineMode() ) )
     {
@@ -2243,6 +2249,8 @@ void SwScriptInfo::selectRedLineDeleted(const SwTxtNode& rNode, MultiSelection &
             xub_StrLen nRedlStart;
             xub_StrLen nRedlnEnd;
             pRed->CalcStartEnd( rNode.GetIndex(), nRedlStart, nRedlnEnd );
+            //clip it if the redline extends past the end of the nodes text
+            nRedlnEnd = std::min(nRedlnEnd, rNode.GetTxt().Len());
             if ( nRedlnEnd > nRedlStart )
             {
                 Range aTmp( nRedlStart, nRedlnEnd - 1 );

@@ -1860,8 +1860,8 @@ void SwTxtNode::CountWords( SwDocStat& rStat,
         return;
     }
 
-    // expand text into aConversionMap for scanner
-    const ModelToViewHelper aConversionMap(*this);
+    // ConversionMap to expand fields, remove invisible and redline deleted text for scanner
+    const ModelToViewHelper aConversionMap(*this, EXPANDFIELDS | HIDEINVISIBLE | HIDEREDLINED);
     rtl::OUString aExpandText = aConversionMap.getViewText();
 
     // map start and end points onto the ConversionMap
@@ -1873,12 +1873,6 @@ void SwTxtNode::CountWords( SwDocStat& rStat,
         OSL_ENSURE(aExpandText.getLength() >= 0, "Node text expansion error: length < 0." );
         return;
     }
-
-    // make a copy of the expanded text for masking redlined/hidden text with ' '
-    String textCopy = aExpandText;
-    const xub_Unicode cChar(' ');
-    const sal_uInt16 nNumOfMaskedChars = lcl_MaskRedlinesAndHiddenText( *this, textCopy, nExpandBegin, nExpandEnd, cChar, false );
-    aExpandText = textCopy;
 
     //do the count
     // all counts exclude hidden paras and hidden+redlined within para
@@ -1914,7 +1908,6 @@ void SwTxtNode::CountWords( SwDocStat& rStat,
     }
 
     nTmpChars = pBreakIt->getGraphemeCount(aExpandText, nExpandBegin, nExpandEnd);
-    nTmpChars -= nNumOfMaskedChars;
 
     // no nTmpCharsExcludingSpaces adjust needed neither for blanked out MaskedChars
     // nor for mid-word selection - set scanner bClip = true at creation
