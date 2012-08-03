@@ -513,7 +513,8 @@ public:
      */
     bool GetPreviewString( const String& sFormatString, double fPreviewNumber,
                           String& sOutString, Color** ppColor,
-                          LanguageType eLnge = LANGUAGE_DONTKNOW );
+                          LanguageType eLnge = LANGUAGE_DONTKNOW,
+                          bool bUseStarFormat = false );
 
     /** Same as <method>GetPreviewString</method> but the format code string
         may be either language/country eLnge or en_US english US */

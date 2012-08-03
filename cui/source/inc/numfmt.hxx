@@ -55,7 +55,8 @@ class SvxNumberPreviewImpl : public Window
 private:
     String          aPrevStr;
     Color           aPrevCol;
-
+    sal_Int32       mnPos;
+    sal_Unicode     mnChar;
     void            InitSettings( sal_Bool bForeground, sal_Bool bBackground );
 
 protected:

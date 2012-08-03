@@ -84,7 +84,8 @@ SvxNumberFormatShell::SvxNumberFormatShell( SvNumberFormatter*  pNumFormatter,
     nCurFormatKey   ( nFormatKey ),
     pCurCurrencyEntry(NULL),
     bBankingSymbol  (false),
-    nCurCurrencyEntryPos((sal_uInt16) SELPOS_NONE)
+    nCurCurrencyEntryPos((sal_uInt16) SELPOS_NONE),
+    bUseStarFormat  (false)
 {
     nValNum = DEFAULT_NUMVALUE;
 
@@ -115,7 +116,8 @@ SvxNumberFormatShell::SvxNumberFormatShell( SvNumberFormatter*  pNumFormatter,
     nCurFormatKey   ( nFormatKey ),
     pCurCurrencyEntry(NULL),
     bBankingSymbol  (false),
-    nCurCurrencyEntryPos((sal_uInt16) SELPOS_NONE)
+    nCurCurrencyEntryPos((sal_uInt16) SELPOS_NONE),
+    bUseStarFormat  (false)
 {
     //  #50441# When used in Writer, the SvxNumberInfoItem contains the
     //  original string in addition to the value
@@ -439,7 +441,7 @@ void SvxNumberFormatShell::MakePreviewString( const String& rFormatStr,
         //  real preview - not implemented in NumberFormatter for text formats
 
         pFormatter->GetPreviewString( rFormatStr, nValNum, rPreviewStr,
-                                      &rpFontColor, eCurLanguage );
+                                      &rpFontColor, eCurLanguage, bUseStarFormat );
     }
     else
     {
@@ -453,7 +455,7 @@ void SvxNumberFormatShell::MakePreviewString( const String& rFormatStr,
                                          rPreviewStr, &rpFontColor );
         else
             pFormatter->GetOutputString( nValNum, nExistingFormat,
-                                         rPreviewStr, &rpFontColor );
+                                         rPreviewStr, &rpFontColor, bUseStarFormat );
     }
 }
 
@@ -1152,7 +1154,7 @@ void SvxNumberFormatShell::GetPreviewString_Impl( String& rString, Color*& rpCol
     if ( bUseText )
         pFormatter->GetOutputString( aValStr, nCurFormatKey, rString, &rpColor );
     else
-        pFormatter->GetOutputString( nValNum, nCurFormatKey, rString, &rpColor );
+        pFormatter->GetOutputString( nValNum, nCurFormatKey, rString, &rpColor, bUseStarFormat );
 }
 
 // -----------------------------------------------------------------------

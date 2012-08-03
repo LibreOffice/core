@@ -50,6 +50,11 @@
 #include <sfx2/basedlgs.hxx>
 #include "svx/flagsdef.hxx"
 #include <vector>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::lang::XServiceInfo;
+using ::com::sun::star::uno::UNO_QUERY;
 
 #define NUMKEY_UNDEFINED SAL_MAX_UINT32
 
@@ -81,8 +86,9 @@ static sal_uInt16 pRanges[] =
 
 SvxNumberPreviewImpl::SvxNumberPreviewImpl( Window* pParent, const ResId& rResId ) :
 
-    Window( pParent, rResId )
-
+    Window( pParent, rResId ),
+    mnPos( STRING_NOTFOUND ),
+    mnChar( 0x0 )
 {
     Font aFont( GetFont() );
     aFont.SetTransparent( sal_True );
@@ -121,7 +127,16 @@ SvxNumberPreviewImpl::~SvxNumberPreviewImpl()
 void SvxNumberPreviewImpl::NotifyChange( const String& rPrevStr,
                                          const Color* pColor )
 {
+    // detect and strip out '*' related placeholders
     aPrevStr = rPrevStr;
+    mnPos = aPrevStr.Search( 0x1B );
+    if ( mnPos != STRING_NOTFOUND )
+    {
+        --mnPos;
+        mnChar = aPrevStr.GetChar( mnPos );
+        // delete placeholder and char to repeat
+        aPrevStr.Erase( mnPos, 2 );
+    }
     svtools::ColorConfig aColorConfig;
     Color aWindowTextColor( aColorConfig.GetColorValue( svtools::FONTCOLOR ).nColor );
     aPrevCol = pColor ? *pColor : aWindowTextColor;
@@ -144,12 +159,26 @@ void SvxNumberPreviewImpl::Paint( const Rectangle& )
 {
     Font    aDrawFont   = GetFont();
     Size    aSzWnd      = GetOutputSizePixel();
-    Point   aPosText    = Point( (aSzWnd.Width()  - GetTextWidth( aPrevStr )) /2,
-                                 (aSzWnd.Height() - GetTextHeight())/2 );
+    String aTmpStr( aPrevStr );
+    long    nLeadSpace = (aSzWnd.Width()  - GetTextWidth( aTmpStr )) /2;
 
     aDrawFont.SetColor( aPrevCol );
     SetFont( aDrawFont );
-    DrawText( aPosText, aPrevStr );
+
+    if ( mnPos != STRING_NOTFOUND )
+    {
+        long nCharWidth = GetTextWidth( rtl::OUString::valueOf( mnChar ) );
+        int nNumCharsToInsert = nLeadSpace / nCharWidth;
+
+        if ( nNumCharsToInsert )
+        {
+            for ( int i = 0; i < nNumCharsToInsert; ++i )
+                aTmpStr.Insert( mnChar, mnPos );
+        }
+    }
+    Point   aPosText    = Point( ( mnPos != STRING_NOTFOUND ) ? 0 : nLeadSpace,
+                                 (aSzWnd.Height() - GetTextHeight())/2 );
+    DrawText( aPosText, aTmpStr );
 }
 
 // -----------------------------------------------------------------------
@@ -521,6 +550,18 @@ void SvxNumberFormatTabPage::Reset( const SfxItemSet& rSet )
                                 eValType,
                                 nValDouble,
                                 &aValString );
+
+
+    bool bUseStarFormat = false;
+    SfxObjectShell* pDocSh  = SfxObjectShell::Current();
+    if ( pDocSh )
+    {
+        // is this a calc document
+        Reference< XServiceInfo > xSI( pDocSh->GetModel(), UNO_QUERY );
+        if ( xSI.is() )
+            bUseStarFormat = xSI->supportsService( rtl::OUString( "com.sun.star.sheet.SpreadsheetDocument" ) );
+    }
+    pNumFmtShell->SetUseStarFormat( bUseStarFormat );
 
     FillCurrencyBox();
 

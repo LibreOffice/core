@@ -1510,7 +1510,8 @@ bool SvNumberFormatter::GetPreviewString(const String& sFormatString,
                                          double fPreviewNumber,
                                          String& sOutString,
                                          Color** ppColor,
-                                         LanguageType eLnge)
+                                         LanguageType eLnge,
+                                         bool bUseStarFormat )
 {
     if (sFormatString.Len() == 0)                       // no empty string
         return false;
@@ -1532,9 +1533,15 @@ bool SvNumberFormatter::GetPreviewString(const String& sFormatString,
         sal_uInt32 CLOffset = ImpGenerateCL(eLnge);     // create new standard formats if necessary
         nKey = ImpIsEntry(p_Entry->GetFormatstring(),CLOffset, eLnge);
         if (nKey != NUMBERFORMAT_ENTRY_NOT_FOUND)       // already present
-            GetOutputString(fPreviewNumber,nKey,sOutString,ppColor);
+            GetOutputString(fPreviewNumber,nKey,sOutString,ppColor, bUseStarFormat);
         else
+        {
+            if ( bUseStarFormat )
+                p_Entry->SetStarFormatSupport( true );
             p_Entry->GetOutputString(fPreviewNumber,sOutString, ppColor);
+            if ( bUseStarFormat )
+                p_Entry->SetStarFormatSupport( false );
+        }
         delete p_Entry;
         return true;
     }

@@ -185,6 +185,8 @@ public:
     bool                IsInTable(sal_uInt16 nPos, bool bTmpBanking,
                             ::rtl::OUString const& rFmtString);
 
+    void                SetUseStarFormat( bool bUse ) { bUseStarFormat = bUse; }
+    bool                IsUseStarFormat( void ) { return bUseStarFormat; }
 private:
     static const double     DEFAULT_NUMVALUE;
 
@@ -206,7 +208,7 @@ private:
     bool                    bBankingSymbol;
     sal_uInt16              nCurCurrencyEntryPos;
     std::vector<String*>    aCurrencyFormatList;
-
+    bool                    bUseStarFormat;
 #ifdef _SVX_NUMFMTSH_CXX
     SVX_DLLPRIVATE short FillEntryList_Impl( std::vector<String*>& rList );
     SVX_DLLPRIVATE void  FillEListWithStd_Impl( std::vector<String*>& rList,sal_uInt16 aPrivCat, short &Pos);
