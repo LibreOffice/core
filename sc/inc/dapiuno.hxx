@@ -265,7 +265,7 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException);
 
     static const com::sun::star::uno::Sequence<sal_Int8>& getUnoTunnelId();
-    static ScDataPilotDescriptorBase* getImplementation( const com::sun::star::uno::Reference<
+    SC_DLLPUBLIC static ScDataPilotDescriptorBase* getImplementation( const com::sun::star::uno::Reference<
                                     com::sun::star::sheet::XDataPilotDescriptor> xObj );
 
                             // XTypeProvider (overloaded in ScDataPilotTableObj)

@@ -38,6 +38,8 @@ namespace com { namespace sun { namespace star {
     namespace sheet { class XDataPilotField; }
 } } }
 
+class ScDPObject;
+
 namespace oox {
 namespace xls {
 
@@ -374,6 +376,8 @@ public:
     /** Returns the source column index of the pivot field with the passed index, or -1. */
     sal_Int32           getCacheDatabaseIndex( sal_Int32 nFieldIdx ) const;
 
+    ScDPObject* getDPObject();
+
 private:
     typedef RefVector< PivotTableField >        PivotTableFieldVector;
     typedef RefVector< PivotTableFilter >       PivotTableFilterVector;
@@ -391,6 +395,7 @@ private:
     static void         importFields( IndexVector& orFields, SequenceInputStream& rStrm );
 
 private:
+    ScDPObject* mpDPObject;
     PivotTableFieldVector maFields;         /// All pivot table fields.
     PivotTableField     maDataField;        /// Data layout field.
     IndexVector         maRowFields;        /// Indexes to fields in row dimension.

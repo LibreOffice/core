@@ -54,6 +54,10 @@
 #include "addressconverter.hxx"
 #include "biffinputstream.hxx"
 
+#include "dapiuno.hxx"
+#include "dpobject.hxx"
+#include "dpsave.hxx"
+
 namespace oox {
 namespace xls {
 
@@ -63,6 +67,7 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::sheet;
 using namespace ::com::sun::star::table;
 using namespace ::com::sun::star::uno;
+using namespace com::sun::star;
 
 using ::rtl::OUString;
 
@@ -675,6 +680,9 @@ Reference< XDataPilotField > PivotTableField::convertRowColPageField( sal_Int32 
 
     if( xDPField.is() )
     {
+        // TODO: Use this to set properties directly, bypassing the slow uno layer.
+        ScDPObject* pDPObj = mrPivotTable.getDPObject();
+
         PropertySet aPropSet( xDPField );
         using namespace ::com::sun::star::sheet;
 
@@ -765,18 +773,27 @@ Reference< XDataPilotField > PivotTableField::convertRowColPageField( sal_Int32 
             aPropSet.setProperty( PROP_SortInfo, aSortInfo );
 
             // item settings
-            if( const PivotCacheField* pCacheField = mrPivotTable.getCacheField( mnFieldIndex ) ) try
+            if (const PivotCacheField* pCacheField = mrPivotTable.getCacheField(mnFieldIndex))
             {
-                Reference< XNameAccess > xDPItemsNA( xDPField->getItems(), UNO_QUERY_THROW );
-                for( ItemModelVector::iterator aIt = maItems.begin(), aEnd = maItems.end(); aIt != aEnd; ++aIt )
+                ScDPSaveData* pSaveData = pDPObj->GetSaveData();
+                ScDPSaveDimension* pDim = pSaveData->GetDimensionByName(pCacheField->getName());
+
+                try
                 {
-                    if( aIt->mnType == XML_data )
+                    for( ItemModelVector::iterator aIt = maItems.begin(), aEnd = maItems.end(); aIt != aEnd; ++aIt )
                     {
-                        if( const PivotCacheItem* pSharedItem = pCacheField->getCacheItem( aIt->mnCacheItem ) ) try
+                        if (aIt->mnType != XML_data)
+                            continue;
+
+                        const PivotCacheItem* pSharedItem = pCacheField->getCacheItem(aIt->mnCacheItem);
+                        if (!pSharedItem)
+                            continue;
+
+                        try
                         {
-                            PropertySet aItemProp( xDPItemsNA->getByName( pSharedItem->getName() ) );
-                            aItemProp.setProperty( PROP_ShowDetail, aIt->mbShowDetails );
-                            aItemProp.setProperty( PROP_IsHidden, aIt->mbHidden );
+                            ScDPSaveMember* pMem = pDim->GetMemberByName(pSharedItem->getName());
+                            pMem->SetShowDetails(aIt->mbShowDetails);
+                            pMem->SetIsVisible(!aIt->mbHidden);
                         }
                         catch( Exception& )
                         {
@@ -784,9 +801,7 @@ Reference< XDataPilotField > PivotTableField::convertRowColPageField( sal_Int32 
                         }
                     }
                 }
-            }
-            catch( Exception& )
-            {
+                catch (const Exception&) {}
             }
         }
     }
@@ -961,6 +976,7 @@ PTLocationModel::PTLocationModel() :
 
 PivotTable::PivotTable( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper ),
+    mpDPObject(NULL),
     maDataField( *this, OOX_PT_DATALAYOUTFIELD ),
     mpPivotCache( 0 )
 {
@@ -1215,6 +1231,15 @@ void PivotTable::finalizeImport()
                 mxDPDescriptor->setSourceRange( mpPivotCache->getSourceRange() );
                 mxDPDescriptor->setTag( maDefModel.maTag );
 
+                // TODO: This is a hack. Eventually we need to convert the whole thing to the internal API.
+                ScDataPilotDescriptorBase* pImpl = ScDataPilotDescriptorBase::getImplementation(mxDPDescriptor);
+                if (!pImpl)
+                    return;
+
+                mpDPObject = pImpl->GetDPObject();
+                if (!mpDPObject)
+                    return;
+
                 // global data pilot properties
                 PropertySet aDescProp( mxDPDescriptor );
                 aDescProp.setProperty( PROP_ColumnGrand, maDefModel.mbColGrandTotals );
@@ -1347,6 +1372,11 @@ const PivotCacheField* PivotTable::getCacheFieldOfDataField( sal_Int32 nDataItem
 sal_Int32 PivotTable::getCacheDatabaseIndex( sal_Int32 nFieldIdx ) const
 {
     return mpPivotCache ? mpPivotCache->getCacheDatabaseIndex( nFieldIdx ) : -1;
+}
+
+ScDPObject* PivotTable::getDPObject()
+{
+    return mpDPObject;
 }
 
 // private --------------------------------------------------------------------
