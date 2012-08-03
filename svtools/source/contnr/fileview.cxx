@@ -60,6 +60,7 @@
 
 #include <algorithm>
 #include <memory>
+#include <vector>
 #include <tools/urlobj.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
@@ -77,6 +78,7 @@
 #include <unotools/intlwrapper.hxx>
 #include <unotools/syslocale.hxx>
 #include <svl/urlfilter.hxx>
+#include <boost/ptr_container/ptr_set.hpp>
 
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sdbc;
@@ -235,8 +237,9 @@ public:
     inline                  HashedEntry( const HashedEntry& rCopy );
     virtual                 ~HashedEntry();
 
-    inline sal_Bool operator    ==( const HashedEntry& rRef ) const;
-    inline sal_Bool operator    !=( const HashedEntry& rRef ) const;
+    inline bool operator    ==( const HashedEntry& rRef ) const;
+    inline bool operator    !=( const HashedEntry& rRef ) const;
+    inline bool operator    <( const HashedEntry& rRef ) const;
 
     inline const OUString&  GetName() const;
 };
@@ -259,14 +262,22 @@ HashedEntry::~HashedEntry()
 {
 }
 
-inline sal_Bool HashedEntry::operator ==( const HashedEntry& rRef ) const
+inline bool HashedEntry::operator ==( const HashedEntry& rRef ) const
 {
     return mnHashCode == rRef.mnHashCode && maName.reverseCompareTo( rRef.maName ) == 0;
 }
 
-inline sal_Bool HashedEntry::operator !=( const HashedEntry& rRef ) const
+inline bool HashedEntry::operator !=( const HashedEntry& rRef ) const
 {
     return mnHashCode != rRef.mnHashCode || maName.reverseCompareTo( rRef.maName ) != 0;
+}
+
+inline bool HashedEntry::operator <( const HashedEntry& rRef ) const
+{
+    if( mnHashCode == rRef.mnHashCode )
+        return maName.reverseCompareTo( rRef.maName ) < 0;
+    else
+       return mnHashCode < rRef.mnHashCode;
 }
 
 inline const OUString& HashedEntry::GetName() const
@@ -275,93 +286,8 @@ inline const OUString& HashedEntry::GetName() const
 }
 
 // class HashedEntryList ----------------------------------------------
-
-class HashedEntryList : protected List
-{// provides a list of _unique_ Entries
-protected:
-    inline HashedEntry*         First();
-    inline HashedEntry*         Next();
-    inline void                 Append( HashedEntry* pNewEntry );
-public:
-    virtual                     ~HashedEntryList();
-
-    const HashedEntry*      Find( const OUString& rNameToSearchFor );
-    const HashedEntry*      Find( const HashedEntry& rToSearchFor );
-                                // not const, because First()/Next() is used
-    using List::Insert;
-    const HashedEntry&      Insert( HashedEntry* pInsertOrDelete );
-                                // don't care about pInsertOrDelete after this any more and handle it as invalid!
-                                // returns the Entry, which is effectively inserted
-
-    void                    Clear();
-};
-
-inline HashedEntry* HashedEntryList::First()
-{
-    return ( HashedEntry* ) List::First();
-}
-
-inline HashedEntry* HashedEntryList::Next()
-{
-    return ( HashedEntry* ) List::Next();
-}
-
-inline void HashedEntryList::Append( HashedEntry* pNew )
-{
-    List::Insert( pNew, LIST_APPEND );
-}
-
-HashedEntryList::~HashedEntryList()
-{
-    Clear();
-}
-
-const HashedEntry* HashedEntryList::Find( const OUString& rRefName )
-{   // simple linear search, which should be fast enough for this purpose
-    HashedEntry  aRef( rRefName );
-    HashedEntry* pIter = First();
-    while( pIter && *pIter != aRef )
-        pIter = Next();
-
-    return pIter;
-}
-
-const HashedEntry* HashedEntryList::Find( const HashedEntry& rRef )
-{   // simple linear search, which should be fast enough for this purpose
-    HashedEntry* pIter = First();
-    while( pIter && *pIter != rRef )
-        pIter = Next();
-
-    return pIter;
-}
-
-const HashedEntry& HashedEntryList::Insert( HashedEntry* pNew )
-{   // inserts (appends) only, if entry doesn't already exists
-    // if it already exists, pNew is deleted, because the caller must not worry about pNew any more
-
-    DBG_ASSERT( pNew, "HashedEntryList::Insert(): NULL-pointer can't be inserted" );
-
-    const HashedEntry* pSearch = Find( *pNew );
-    if( pSearch )
-    {
-        delete pNew;
-        return *pSearch;
-    }
-
-    Append( pNew );
-
-    return *pNew;
-}
-
-void HashedEntryList::Clear()
-{
-    HashedEntry* p = First();
-    while( p )
-    {
-        delete p;
-        p = Next();
-    }
-}
+// provides a list of _unique_ Entries
+class HashedEntryList : public boost::ptr_set<HashedEntry> {};
 
 // class NameTranslationEntry -----------------------------------------
 
@@ -411,10 +337,10 @@ public:
                                             // rBaseURL: path to folder for which the translation of the entries
                                             //  should be done
 
-    using List::operator==;
-    inline sal_Bool operator    ==( const HashedEntry& rRef ) const;
-    using List::operator!=;
-    inline sal_Bool operator    !=( const HashedEntry& rRef ) const;
+    using HashedEntryList::operator==;
+    using HashedEntryList::operator!=;
+    inline bool operator       ==( const HashedEntry& rRef ) const;
+    inline bool operator       !=( const HashedEntry& rRef ) const;
 
     const OUString*             Translate( const OUString& rName ) const;
                                             // returns NULL, if rName can't be found
@@ -452,7 +378,7 @@ void NameTranslationList::Init()
             sal_uInt16          nKeyCnt = aConfig.GetKeyCount();
 
             for( sal_uInt16 nCnt = 0 ; nCnt < nKeyCnt ; ++nCnt )
-                Insert( new NameTranslationEntry( aConfig.GetKeyName( nCnt ), aConfig.ReadKey( nCnt ) ) );
+                insert( new NameTranslationEntry( aConfig.GetKeyName( nCnt ), aConfig.ReadKey( nCnt ) ) );
         }
     }
     catch( Exception const & ) {}
@@ -467,27 +393,32 @@ NameTranslationList::NameTranslationList( const INetURLObject& rBaseURL ):
     Init();
 }
 
-inline sal_Bool NameTranslationList::operator ==( const HashedEntry& rRef ) const
+inline bool NameTranslationList::operator ==( const HashedEntry& rRef ) const
 {
     return maHashedURL == rRef;
 }
 
-inline sal_Bool NameTranslationList::operator !=( const HashedEntry& rRef ) const
+inline bool NameTranslationList::operator !=( const HashedEntry& rRef ) const
 {
     return maHashedURL != rRef;
 }
 
 const OUString* NameTranslationList::Translate( const OUString& rName ) const
 {
-    const NameTranslationEntry* pSearch = static_cast< const NameTranslationEntry* >(
-                                        ( const_cast< NameTranslationList* >( this ) )->Find( rName ) );
+    HashedEntry  aRef( rName );
+    const NameTranslationEntry* pSearch = NULL;
+    for( const_iterator it = begin(); it != end(); ++it )
+        if( (*it) == aRef )
+        {
+            pSearch = static_cast<const NameTranslationEntry*>(&*it);
+        }
 
-    return pSearch? &pSearch->GetTranslation() : NULL;
+    return pSearch ? &pSearch->GetTranslation() : NULL;
 }
 
 inline void NameTranslationList::Update()
 {
-    Clear();
+    clear();
     Init();
 }
 
