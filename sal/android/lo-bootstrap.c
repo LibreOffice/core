@@ -1408,9 +1408,9 @@ patch_libgnustl_shared(void)
           sizeof(expected_method_before_r7_code),
           &replacement_method_before_arm);
 }
+#endif // not X86
 
 // static native void patch_libgnustl_shared();
-
 __attribute__ ((visibility("default")))
 void
 Java_org_libreoffice_android_Bootstrap_patch_1libgnustl_1shared(JNIEnv* env,
@@ -1419,10 +1419,10 @@ Java_org_libreoffice_android_Bootstrap_patch_1libgnustl_1shared(JNIEnv* env,
     (void) env;
     (void) clazz;
 
+#ifndef X86
     patch_libgnustl_shared();
+#endif
 }
-
-#endif // not X86
 
 #define UNPACK_TREE "/assets/unpack"
 
