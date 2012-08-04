@@ -26,6 +26,7 @@
  *
  ************************************************************************/
 
+#include <string.h>
 
 #include "impdialog.hxx"
 #include "impdialog.hrc"
@@ -1317,8 +1318,8 @@ IMPL_LINK_NOARG(ImpPDFTabSecurityPage, ClickmaPbSetPwdHdl)
             maPreparedOwnerPassword = Sequence< NamedValue >();
 
         // trash clear text passwords string memory
-        rtl_zeroMemory( (void*)aUserPW.getStr(), aUserPW.getLength() );
-        rtl_zeroMemory( (void*)aOwnerPW.getStr(), aOwnerPW.getLength() );
+        memset( (void*)aUserPW.getStr(), 0, aUserPW.getLength() );
+        memset( (void*)aOwnerPW.getStr(), 0, aOwnerPW.getLength() );
     }
     enablePermissionControls();
     return 0;
