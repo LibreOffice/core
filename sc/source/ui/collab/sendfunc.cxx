@@ -50,20 +50,7 @@ namespace css = ::com::sun::star;
 // FIXME: this is only meant for demo I think
 extern void TeleManager_fileReceived( const OUString& );
 
-// FIXME: really ScDocFunc should be an abstract base
-ScDocFuncRecv::ScDocFuncRecv( ScDocFuncDirect *pChain )
-    : mpChain( pChain )
-{
-    fprintf( stderr, "Receiver created !\n" );
-}
-
-ScDocFuncRecv::~ScDocFuncRecv()
-{
-    fprintf( stderr, "Receiver destroyed !\n" );
-    delete mpChain;
-}
-
-void ScDocFuncRecv::RecvMessage( const rtl::OString &rString )
+void ScDocFuncSend::RecvMessage( const rtl::OString &rString )
 {
     try {
         ScChangeOpReader aReader( rtl::OUString( rString.getStr(),
@@ -73,26 +60,26 @@ void ScDocFuncRecv::RecvMessage( const rtl::OString &rString )
         if ( aReader.getMethod() == "setNormalString" )
         {
             bool bNumFmtSet = false;
-            mpChain->SetNormalString( bNumFmtSet, aReader.getAddress( 1 ), aReader.getString( 2 ),
+            mpDirect->SetNormalString( bNumFmtSet, aReader.getAddress( 1 ), aReader.getString( 2 ),
                                       aReader.getBool( 3 ) );
         }
         else if ( aReader.getMethod() == "putCell" )
         {
             ScBaseCell *pNewCell = aReader.getCell( 2 );
             if ( pNewCell )
-                mpChain->PutCell( aReader.getAddress( 1 ), pNewCell, aReader.getBool( 3 ) );
+                mpDirect->PutCell( aReader.getAddress( 1 ), pNewCell, aReader.getBool( 3 ) );
         }
         else if ( aReader.getMethod() == "enterListAction" )
-            mpChain->EnterListAction( aReader.getInt( 1 ) );
+            mpDirect->EnterListAction( aReader.getInt( 1 ) );
         else if ( aReader.getMethod() == "endListAction" )
-            mpChain->EndListAction();
+            mpDirect->EndListAction();
         else if ( aReader.getMethod() == "showNote" )
-            mpChain->ShowNote( aReader.getAddress( 1 ), aReader.getBool( 2 ) );
+            mpDirect->ShowNote( aReader.getAddress( 1 ), aReader.getBool( 2 ) );
         else if ( aReader.getMethod() == "setNoteText" )
-            mpChain->SetNoteText( aReader.getAddress( 1 ), aReader.getString( 2 ),
+            mpDirect->SetNoteText( aReader.getAddress( 1 ), aReader.getString( 2 ),
                                   aReader.getBool( 3 ) );
         else if ( aReader.getMethod() == "renameTable" )
-            mpChain->RenameTable( aReader.getInt( 1 ), aReader.getString( 2 ),
+            mpDirect->RenameTable( aReader.getInt( 1 ), aReader.getString( 2 ),
                                   aReader.getBool( 3 ), aReader.getBool( 4 ) );
         else
             fprintf( stderr, "Error: unknown message '%s' (%d)\n",
@@ -102,41 +89,10 @@ void ScDocFuncRecv::RecvMessage( const rtl::OString &rString )
     }
 }
 
-void ScDocFuncRecv::packetReceived( const OString &rPacket )
+void ScDocFuncSend::packetReceived( const OString &rPacket )
 {
     RecvMessage( rPacket );
 }
-
-/*
- * Provides a local bus that doesn't require an IM channel for
- * quick demoing, export INTERCEPT=demo # to enable.
- */
-class ScDocFuncDemo : public ScDocFuncRecv
-{
-    std::vector< boost::shared_ptr<ScDocFuncRecv> > maClients;
-  public:
-    // FIXME: really ScDocFuncRecv should be an abstract base
-    ScDocFuncDemo()
-        : ScDocFuncRecv()
-    {
-        fprintf( stderr, "Receiver created !\n" );
-    }
-    virtual ~ScDocFuncDemo() {}
-
-    void add_client (const boost::shared_ptr<ScDocFuncRecv> &aClient)
-    {
-        maClients.push_back( aClient );
-    }
-
-    virtual void RecvMessage( const rtl::OString &rString )
-    {
-        // FIXME: Lifecycle nightmare
-        std::vector< boost::shared_ptr<ScDocFuncRecv> > aCopy( maClients );
-        for (std::vector< boost::shared_ptr<ScDocFuncRecv> >::iterator i
-                 = aCopy.begin(); i != aCopy.end(); ++i)
-            (*i)->RecvMessage(rString);
-    }
-};
 
 extern "C"
 {
@@ -150,11 +106,7 @@ void ScDocFuncSend::SendMessage( ScChangeOpWriter &rOp )
 {
     fprintf( stderr, "Op: '%s'\n", rOp.toString().getStr() );
     if (mpConference)
-    {
         mpConference->sendPacket( rOp.toString() );
-    }
-    else // local demo mode
-        mpDirect->RecvMessage( rOp.toString() );
 }
 
 void ScDocFuncSend::SendFile( TpContact* pContact, const rtl::OUString &sUuid )
@@ -193,7 +145,7 @@ void ScDocFuncSend::SendFile( TpContact* pContact, const rtl::OUString &sUuid )
 
 // FIXME: really ScDocFunc should be an abstract base, so
 // we don't need the rDocSh hack/pointer
-ScDocFuncSend::ScDocFuncSend( ScDocShell& rDocSh, ScDocFuncRecv *pDirect )
+ScDocFuncSend::ScDocFuncSend( ScDocShell& rDocSh, ScDocFuncDirect *pDirect )
         : ScDocFunc( rDocSh ),
         mpDirect( pDirect ),
         mpConference( NULL )
@@ -207,8 +159,7 @@ ScDocFuncSend::~ScDocFuncSend()
     if (mpConference)
         mpConference->close();
 
-    if (!dynamic_cast<ScDocFuncDemo*> (mpDirect))
-        delete mpDirect;
+    delete mpDirect;
 }
 
 void ScDocFuncSend::SetCollaboration( TeleConference* pConference )
@@ -216,7 +167,7 @@ void ScDocFuncSend::SetCollaboration( TeleConference* pConference )
     mpConference = pConference;
     if (mpConference)
         mpConference->sigPacketReceived.connect( boost::bind(
-                    &ScDocFuncRecv::packetReceived, mpDirect, _1 ) );
+                    &ScDocFuncSend::packetReceived, this, _1 ) );
 }
 
 TeleConference* ScDocFuncSend::GetConference()
@@ -341,21 +292,9 @@ sal_Bool ScDocFuncSend::MergeCells( const ScCellMergeOption& rOption, sal_Bool b
 
 ScDocFunc *ScDocShell::CreateDocFunc()
 {
-    if (getenv ("INTERCEPT"))
+    if (TeleManager::hasWaitingConference())
     {
-        ScDocFuncDirect* pDirect = new ScDocFuncDirect( *this );
-        boost::shared_ptr<ScDocFuncRecv> pReceiver( new ScDocFuncRecv( pDirect ) );
-
-        static boost::shared_ptr<ScDocFuncDemo> aDemoBus( new ScDocFuncDemo() );
-        aDemoBus->add_client( pReceiver ); // a lifecycle horror no doubt.
-
-        return new ScDocFuncSend( *this, aDemoBus.get() );
-    }
-    else if (TeleManager::hasWaitingConference())
-    {
-        ScDocFuncDirect *pDirect = new ScDocFuncDirect( *this );
-        ScDocFuncRecv *pReceiver = new ScDocFuncRecv( pDirect );
-        ScDocFuncSend *pSender = new ScDocFuncSend( *this, pReceiver );
+        ScDocFuncSend *pSender = new ScDocFuncSend( *this, new ScDocFuncDirect( *this ) );
         TeleConference* pConference = TeleManager::getConference();
         pConference->setCollaboration( mpCollaboration );
         pSender->SetCollaboration( pConference );

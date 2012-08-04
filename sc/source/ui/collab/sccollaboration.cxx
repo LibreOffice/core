@@ -53,9 +53,7 @@ void ScCollaboration::SetCollaboration( TeleConference* pConference )
     if (!pSender)
     {
         // This means pDocFunc has to be ScDocFuncDirect* and we are not collaborating yet.
-        ScDocFuncDirect *pDirect = dynamic_cast<ScDocFuncDirect*> (pDocFunc);
-        ScDocFuncRecv *pReceiver = new ScDocFuncRecv( pDirect );
-        pSender = new ScDocFuncSend( *mpScDocShell, pReceiver );
+        pSender = new ScDocFuncSend( *mpScDocShell, dynamic_cast<ScDocFuncDirect*> (pDocFunc) );
         mpScDocShell->SetDocFunc( pSender );
     }
     pSender->SetCollaboration( pConference );

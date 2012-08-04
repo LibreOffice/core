@@ -204,34 +204,19 @@ public:
 
 } // anonymous namespace
 
-class ScDocFuncRecv
-{
-    ScDocFuncDirect *mpChain;
-
-protected:
-    ScDocFuncRecv() {}
-
-public:
-    // FIXME: really ScDocFunc should be an abstract base
-    ScDocFuncRecv( ScDocFuncDirect *pChain );
-    virtual ~ScDocFuncRecv();
-
-    void packetReceived( const OString &rPacket );
-
-    virtual void RecvMessage( const rtl::OString &rString );
-};
-
 class ScDocFuncSend : public ScDocFunc
 {
-    ScDocFuncRecv       *mpDirect;
+    ScDocFuncDirect     *mpDirect;
     TeleConference      *mpConference;
 
+    void packetReceived( const OString &rPacket );
+    void RecvMessage( const rtl::OString &rString );
     void SendMessage( ScChangeOpWriter &rOp );
 
 public:
     // FIXME: really ScDocFunc should be an abstract base, so
     // we don't need the rDocSh hack/pointer
-    ScDocFuncSend( ScDocShell& rDocSh, ScDocFuncRecv *pDirect );
+    ScDocFuncSend( ScDocShell& rDocSh, ScDocFuncDirect *pDirect );
     virtual ~ScDocFuncSend();
 
     void                SetCollaboration( TeleConference* pConference );
