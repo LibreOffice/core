@@ -10979,6 +10979,12 @@ fi
 AC_SUBST(GLIB_CFLAGS)
 AC_SUBST(GLIB_LIBS)
 
+dnl So far AFAIK no system has liblangtag, set this unconditionally for now.
+
+SYSTEM_LIBLANGTAG=NO
+BUILD_TYPE="$BUILD_TYPE LIBLANGTAG"
+AC_SUBST(SYSTEM_LIBLANGTAG)
+
 
 dnl ===================================================================
 dnl Test whether to build gettext runtime (libintl) or rely on the
