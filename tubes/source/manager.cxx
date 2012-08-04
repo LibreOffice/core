@@ -173,7 +173,7 @@ void TeleManager_DBusChannelHandler(
             SAL_INFO( "tubes", "accepting");
             aAccepted = true;
 
-            TeleConference* pConference = new TeleConference( pManager, pAccount, TP_DBUS_TUBE_CHANNEL( pChannel ) );
+            TeleConference* pConference = new TeleConference( pAccount, TP_DBUS_TUBE_CHANNEL( pChannel ) );
             pConference->acceptTube();
             pManager->addConference( pConference );
 
@@ -264,7 +264,7 @@ SAL_DLLPUBLIC_EXPORT void TeleManager_fileReceived( const rtl::OUString &rStr )
         if (sUuid == "demo")
         {
             sUuid = TeleManager::createUuid();
-            TeleConference* pConference = new TeleConference( NULL, NULL, NULL, sUuid );
+            TeleConference* pConference = new TeleConference( NULL, NULL, sUuid );
             TeleManager::addConference( pConference );
             TeleManager::registerDemoConference( pConference );
         }
@@ -405,12 +405,7 @@ static void TeleManager_ChannelReadyHandler(
     if (!pConference)
         return;
 
-    TeleManager* pManager = pConference->getManager();
-    SAL_WARN_IF( !pManager, "tubes", "TeleManager_ChannelReadyHandler: no manager");
-    if (!pManager)
-        return;
-
-    pManager->setChannelReadyHandlerInvoked( true);
+    TeleManager::setChannelReadyHandlerInvoked( true );
 
     TpAccountChannelRequest* pChannelRequest = TP_ACCOUNT_CHANNEL_REQUEST( pSourceObject);
     GError* pError = NULL;
@@ -628,7 +623,7 @@ TeleConference* TeleManager::startDemoSession()
 {
     INFO_LOGGER( "TeleManager::startDemoSession");
 
-    TeleConference* pConference = new TeleConference( NULL, NULL, NULL, "demo" );
+    TeleConference* pConference = new TeleConference( NULL, NULL, "demo" );
     registerDemoConference( pConference );
 
     return pConference;
@@ -681,7 +676,7 @@ TeleConference* TeleManager::startGroupSession( TpAccount *pAccount,
 
     setChannelReadyHandlerInvoked( false);
 
-    TeleConference* pConference = new TeleConference( this, NULL, NULL, aSessionId );
+    TeleConference* pConference = new TeleConference( NULL, NULL, aSessionId );
 
     tp_account_channel_request_create_and_handle_channel_async(
             pChannelRequest, NULL, TeleManager_ChannelReadyHandler, pConference);
@@ -759,7 +754,7 @@ TeleConference* TeleManager::startBuddySession( TpAccount *pAccount, TpContact *
 
     setChannelReadyHandlerInvoked( false);
 
-    TeleConference* pConference = new TeleConference( this, NULL, NULL, createUuid(), true );
+    TeleConference* pConference = new TeleConference( NULL, NULL, createUuid(), true );
 
     tp_account_channel_request_create_and_handle_channel_async(
             pChannelRequest, NULL, TeleManager_ChannelReadyHandler, pConference );

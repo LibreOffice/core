@@ -35,7 +35,6 @@
 #include <tubes/warnings_guard_boost_signals2.hpp>
 
 class Collaboration;
-class TeleManager;
 class TeleConferenceImpl;
 typedef struct _TpAccount TpAccount;
 typedef struct _TpContact TpContact;
@@ -47,8 +46,7 @@ class TeleConference
 {
 public:
 
-    TeleConference( TeleManager* pManager,
-                    TpAccount* pAccount,
+    TeleConference( TpAccount* pAccount,
                     TpDBusTubeChannel* pChannel,
                     const OString sUuid = OString(),
                     bool bMaster = false );
@@ -82,7 +80,6 @@ public:
     void                    setChannel( TpAccount* pAccount, TpDBusTubeChannel* pChannel );
     bool                    offerTube();
     bool                    acceptTube();
-    TeleManager*            getManager() const  { return mpManager; }
 
     // Only for callbacks.
     bool                    setTube( GDBusConnection* pTube );
@@ -103,7 +100,6 @@ private:
     bool                    spinUntilTubeEstablished();
 
     Collaboration*          mpCollaboration;
-    TeleManager*            mpManager;
     TpAccount*              mpAccount;
     TpDBusTubeChannel*      mpChannel;
     OString                 msUuid;

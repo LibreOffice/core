@@ -96,11 +96,6 @@ static void TeleConference_MethodCallHandler(
     if (!pConference)
         return;
 
-    TeleManager* pManager = pConference->getManager();
-    SAL_WARN_IF( !pManager, "tubes", "TeleConference_MethodCallHandler: no manager");
-    if (!pManager)
-        return;
-
     if (tp_strdiff (pMethodName, LIBO_TUBES_DBUS_MSG_METHOD))
     {
         g_dbus_method_invocation_return_error ( pInvocation,
@@ -232,10 +227,9 @@ static void TeleConference_TubeAcceptedHandler(
 }
 
 
-TeleConference::TeleConference( TeleManager* pManager, TpAccount* pAccount,
+TeleConference::TeleConference( TpAccount* pAccount,
         TpDBusTubeChannel* pChannel, const OString sUuid, bool bMaster )
     :
-        mpManager( pManager ),
         mpAccount( NULL ),
         mpChannel( NULL ),
         msUuid( sUuid ),
@@ -426,9 +420,8 @@ bool TeleConference::sendPacket( const OString& rPacket )
         return true;
     }
 
-    OSL_ENSURE( mpManager, "tubes: TeleConference::sendPacket: no TeleManager");
     SAL_WARN_IF( !pImpl->mpTube, "tubes", "TeleConference::sendPacket: no tube");
-    if (!(mpManager && pImpl->mpTube))
+    if (!pImpl->mpTube)
         return false;
 
     /* FIXME: in GLib 2.32 we can use g_variant_new_fixed_array(). It does

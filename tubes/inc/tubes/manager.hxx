@@ -144,7 +144,7 @@ public:
 
     // Only for callbacks.
     static void             addConference( TeleConference* pConference );
-    void                    setChannelReadyHandlerInvoked( bool b );
+    static void             setChannelReadyHandlerInvoked( bool b );
     bool                    isChannelReadyHandlerInvoked() const;
     void                    setAccountManagerReadyHandlerInvoked( bool b );
     bool                    isAccountManagerReadyHandlerInvoked() const;
