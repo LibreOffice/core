@@ -30,6 +30,7 @@
 #define SC_STRINGUTIL_HXX
 
 #include "rtl/ustring.hxx"
+#include "tools/string.hxx"
 #include "scdllapi.h"
 
 class SvNumberFormatter;
@@ -95,6 +96,10 @@ public:
      */
     static bool parseSimpleNumber(
         const ::rtl::OUString& rStr, sal_Unicode dsep, sal_Unicode gsep, double& rVal);
+
+    static xub_StrLen SC_DLLPUBLIC GetQuotedTokenCount(const UniString &rIn, const UniString& rQuotedPairs, sal_Unicode cTok = ';' );
+    static UniString  SC_DLLPUBLIC GetQuotedToken(const UniString &rIn, xub_StrLen nToken, const UniString& rQuotedPairs,
+                                        sal_Unicode cTok,  xub_StrLen& rIndex );
 };
 
 

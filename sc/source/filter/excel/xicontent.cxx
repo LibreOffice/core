@@ -45,6 +45,7 @@
 #include <editeng/postitem.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/crsditem.hxx>
+#include "stringutil.hxx"
 #include "document.hxx"
 #include "editutil.hxx"
 #include "cell.hxx"
@@ -946,12 +947,12 @@ void XclImpWebQuery::ReadWqtables( XclImpStream& rStrm )
 
         const sal_Unicode cSep = ';';
         String aQuotedPairs( RTL_CONSTASCII_USTRINGPARAM( "\"\"" ) );
-        xub_StrLen nTokenCnt = aTables.GetQuotedTokenCount( aQuotedPairs, ',' );
+        xub_StrLen nTokenCnt = ScStringUtil::GetQuotedTokenCount( aTables, aQuotedPairs, ',' );
         maTables.Erase();
         xub_StrLen nStringIx = 0;
         for( xub_StrLen nToken = 0; nToken < nTokenCnt; ++nToken )
         {
-            String aToken( aTables.GetQuotedToken( 0, aQuotedPairs, ',', nStringIx ) );
+            String aToken( ScStringUtil::GetQuotedToken( aTables, 0, aQuotedPairs, ',', nStringIx ) );
             sal_Int32 nTabNum = CharClass::isAsciiNumeric( aToken ) ? aToken.ToInt32() : 0;
             if( nTabNum > 0 )
                 ScGlobal::AddToken( maTables, ScfTools::GetNameFromHTMLIndex( static_cast< sal_uInt32 >( nTabNum ) ), cSep );

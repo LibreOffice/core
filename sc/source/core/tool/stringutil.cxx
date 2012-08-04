@@ -192,4 +192,131 @@ bool ScStringUtil::parseSimpleNumber(
     return true;
 }
 
+xub_StrLen ScStringUtil::GetQuotedTokenCount(const UniString &rIn, const UniString& rQuotedPairs, sal_Unicode cTok )
+{
+    assert( !(rQuotedPairs.Len()%2) );
+    assert( rQuotedPairs.Search(cTok) );
+
+    // Leerer String: TokenCount per Definition 0
+    if ( !rIn.Len() )
+        return 0;
+
+    xub_StrLen      nTokCount       = 1;
+    sal_Int32       nLen            = rIn.Len();
+    xub_StrLen      nQuotedLen      = rQuotedPairs.Len();
+    sal_Unicode         cQuotedEndChar  = 0;
+    const sal_Unicode*  pQuotedStr      = rQuotedPairs.GetBuffer();
+    const sal_Unicode*  pStr            = rIn.GetBuffer();
+    sal_Int32       nIndex          = 0;
+    while ( nIndex < nLen )
+    {
+        sal_Unicode c = *pStr;
+        if ( cQuotedEndChar )
+        {
+            // Ende des Quotes erreicht ?
+            if ( c == cQuotedEndChar )
+                cQuotedEndChar = 0;
+        }
+        else
+        {
+            // Ist das Zeichen ein Quote-Anfang-Zeichen ?
+            xub_StrLen nQuoteIndex = 0;
+            while ( nQuoteIndex < nQuotedLen )
+            {
+                if ( pQuotedStr[nQuoteIndex] == c )
+                {
+                    cQuotedEndChar = pQuotedStr[nQuoteIndex+1];
+                    break;
+                }
+                else
+                    nQuoteIndex += 2;
+            }
+
+            // Stimmt das Tokenzeichen ueberein, dann erhoehe TokCount
+            if ( c == cTok )
+                ++nTokCount;
+        }
+
+        ++pStr,
+        ++nIndex;
+    }
+
+    return nTokCount;
+}
+
+UniString ScStringUtil::GetQuotedToken(const UniString &rIn, xub_StrLen nToken, const UniString& rQuotedPairs,
+                               sal_Unicode cTok, xub_StrLen& rIndex )
+{
+    assert( !(rQuotedPairs.Len()%2) );
+    assert( rQuotedPairs.Search(cTok) == STRING_NOTFOUND );
+
+    const sal_Unicode*  pStr            = rIn.GetBuffer();
+    const sal_Unicode*  pQuotedStr      = rQuotedPairs.GetBuffer();
+    sal_Unicode         cQuotedEndChar  = 0;
+    xub_StrLen      nQuotedLen      = rQuotedPairs.Len();
+    xub_StrLen      nLen            = rIn.Len();
+    xub_StrLen      nTok            = 0;
+    xub_StrLen      nFirstChar      = rIndex;
+    xub_StrLen      i               = nFirstChar;
+
+    // Bestimme die Token-Position und Laenge
+    pStr += i;
+    while ( i < nLen )
+    {
+        sal_Unicode c = *pStr;
+        if ( cQuotedEndChar )
+        {
+            // Ende des Quotes erreicht ?
+            if ( c == cQuotedEndChar )
+                cQuotedEndChar = 0;
+        }
+        else
+        {
+            // Ist das Zeichen ein Quote-Anfang-Zeichen ?
+            xub_StrLen nQuoteIndex = 0;
+            while ( nQuoteIndex < nQuotedLen )
+            {
+                if ( pQuotedStr[nQuoteIndex] == c )
+                {
+                    cQuotedEndChar = pQuotedStr[nQuoteIndex+1];
+                    break;
+                }
+                else
+                    nQuoteIndex += 2;
+            }
+
+            // Stimmt das Tokenzeichen ueberein, dann erhoehe TokCount
+            if ( c == cTok )
+            {
+                ++nTok;
+
+                if ( nTok == nToken )
+                    nFirstChar = i+1;
+                else
+                {
+                    if ( nTok > nToken )
+                        break;
+                }
+            }
+        }
+
+        ++pStr,
+        ++i;
+    }
+
+    if ( nTok >= nToken )
+    {
+        if ( i < nLen )
+            rIndex = i+1;
+        else
+            rIndex = STRING_NOTFOUND;
+        return rIn.Copy( nFirstChar, i-nFirstChar );
+    }
+    else
+    {
+        rIndex = STRING_NOTFOUND;
+        return UniString();
+    }
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

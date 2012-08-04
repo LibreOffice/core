@@ -287,12 +287,6 @@ public:
     UniString           GetToken( xub_StrLen nToken, sal_Unicode cTok, xub_StrLen& rIndex ) const;
     UniString           GetToken( xub_StrLen nToken, sal_Unicode cTok = ';' ) const;
 
-    xub_StrLen          GetQuotedTokenCount( const UniString& rQuotedPairs, sal_Unicode cTok = ';' ) const;
-    UniString           GetQuotedToken( xub_StrLen nToken, const UniString& rQuotedPairs,
-                                        sal_Unicode cTok,  xub_StrLen& rIndex ) const;
-    UniString           GetQuotedToken( xub_StrLen nToken, const UniString& rQuotedPairs,
-                                        sal_Unicode cTok = ';' ) const;
-
     const sal_Unicode*  GetBuffer() const { return mpData->maStr; }
     sal_Unicode*        GetBufferAccess();
     void                ReleaseBufferAccess( xub_StrLen nLen = STRING_LEN );
@@ -321,13 +315,6 @@ inline UniString UniString::GetToken( xub_StrLen nToken, sal_Unicode cTok ) cons
 {
     xub_StrLen nTempPos = 0;
     return GetToken( nToken, cTok, nTempPos );
-}
-
-inline UniString UniString::GetQuotedToken( xub_StrLen nToken, const UniString& rQuotedPairs,
-                                            sal_Unicode cTok ) const
-{
-    xub_StrLen nTempPos = 0;
-    return GetQuotedToken( nToken, rQuotedPairs, cTok, nTempPos );
 }
 
 template< typename charT, typename traits > std::basic_ostream<charT, traits> &

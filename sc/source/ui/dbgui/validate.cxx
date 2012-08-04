@@ -45,6 +45,7 @@
 #include "scresid.hxx"
 #include "sc.hrc"       // -> Slot IDs
 
+#include "stringutil.hxx"
 #include "validat.hxx"
 #include "validate.hrc"
 #include "validate.hxx"
@@ -283,7 +284,7 @@ void lclGetFormulaFromStringList( String& rFmlaStr, const String& rStringList, s
 bool lclGetStringListFromFormula( String& rStringList, const String& rFmlaStr, sal_Unicode cFmlaSep )
 {
     String aQuotes( RTL_CONSTASCII_USTRINGPARAM( "\"\"" ) );
-    xub_StrLen nTokenCnt = rFmlaStr.GetQuotedTokenCount( aQuotes, cFmlaSep );
+    xub_StrLen nTokenCnt = ScStringUtil::GetQuotedTokenCount(rFmlaStr, aQuotes, cFmlaSep );
 
     rStringList.Erase();
     bool bIsStringList = (nTokenCnt > 0);
@@ -291,7 +292,7 @@ bool lclGetStringListFromFormula( String& rStringList, const String& rFmlaStr, s
 
     for( xub_StrLen nToken = 0, nStringIx = 0; bIsStringList && (nToken < nTokenCnt); ++nToken )
     {
-        String aToken( rFmlaStr.GetQuotedToken( 0, aQuotes, cFmlaSep, nStringIx ) );
+        String aToken( ScStringUtil::GetQuotedToken(rFmlaStr, 0, aQuotes, cFmlaSep, nStringIx ) );
         aToken = comphelper::string::strip(aToken, ' ');
         if( aToken.Len() )      // ignore empty tokens, i.e. "a";;"b"
         {
