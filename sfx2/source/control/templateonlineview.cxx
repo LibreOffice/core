@@ -53,6 +53,7 @@ enum
 
 TemplateOnlineView::TemplateOnlineView (Window *pParent, WinBits nWinStyle, bool bDisableTransientChildren)
     : TemplateAbstractView(pParent,nWinStyle,bDisableTransientChildren)
+    , mbIsSynced(true)
 {
     mpItemView->SetColor(Color(COL_WHITE));
 
@@ -251,6 +252,31 @@ void TemplateOnlineView::insertRepository(const OUString &rName, const OUString 
     pItem->setURL(rURL);
 
     maRepositories.push_back(pItem);
+
+    mbIsSynced = false;
+}
+
+void TemplateOnlineView::syncRepositories() const
+{
+    if (!mbIsSynced)
+    {
+        uno::Reference < uno::XComponentContext > pContext(comphelper::getProcessComponentContext());
+        boost::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create(pContext));
+
+        size_t nSize = maRepositories.size();
+        uno::Sequence<OUString> aUrls(nSize);
+        uno::Sequence<OUString> aNames(nSize);
+
+        for(size_t i = 0; i < nSize; ++i)
+        {
+            aUrls[i] = maRepositories[i]->getURL();
+            aNames[i] = maRepositories[i]->maTitle;
+        }
+
+        officecfg::Office::Common::Misc::FilePickerPlacesUrls::set(aUrls, batch, pContext);
+        officecfg::Office::Common::Misc::FilePickerPlacesNames::set(aNames, batch, pContext);
+        batch->commit();
+    }
 }
 
 void TemplateOnlineView::setItemDimensions(long ItemWidth, long ThumbnailHeight, long DisplayHeight, int itemPadding)

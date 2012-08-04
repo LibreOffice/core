@@ -259,6 +259,8 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
 
 SfxTemplateManagerDlg::~SfxTemplateManagerDlg ()
 {
+    mpOnlineView->syncRepositories();
+
     delete mpSearchEdit;
     delete mpViewBar;
     delete mpActionBar;

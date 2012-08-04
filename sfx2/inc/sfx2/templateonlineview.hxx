@@ -38,10 +38,13 @@ public:
 
     void insertRepository (const OUString &rName, const OUString &rURL);
 
+    void syncRepositories () const;
+
     void setItemDimensions (long ItemWidth, long ThumbnailHeight, long DisplayHeight, int itemPadding);
 
 private:
 
+    bool mbIsSynced;
     std::vector<TemplateOnlineViewItem*> maRepositories;
     com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment > m_xCmdEnv;
 };
