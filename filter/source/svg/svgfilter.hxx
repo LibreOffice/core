@@ -127,6 +127,7 @@ public:
 
     sal_Bool IsUseTinyProfile() const;
     sal_Bool IsEmbedFonts() const;
+    sal_Bool IsUsePositionedCharacters() const;
     sal_Bool IsUseNativeTextDecoration() const;
     sal_Bool IsUseOpacity() const;
 

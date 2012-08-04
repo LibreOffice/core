@@ -114,6 +114,9 @@ public:
                                           const Rectangle* pObjBoundRect = NULL, const Gradient* pFillGradient = NULL );
 
     void                    SetFontAttr( const Font& rFont );
+    void                    startFontSettings();
+    void                    endFontSettings();
+    void                    setFontFamily();
 
     static void             ImplGetColorStr( const Color& rColor, ::rtl::OUString& rColorStr );
 };
@@ -145,6 +148,75 @@ struct SVGShapeDescriptor
 class SVGAttributeWriter;
 class GDIMetaFile;
 
+// -------------------
+// - SVGTextWriter -
+// -------------------
+class SVGTextWriter
+{
+  private:
+    SVGExport&                                  mrExport;
+    SVGFontExport&                              mrFontExport;
+    SVGAttributeWriter*                         mpContext;
+    VirtualDevice*                              mpVDev;
+    MapMode*                                    mpTargetMapMode;
+    SvXMLElementExport*                         mpTextShapeElem;
+    SvXMLElementExport*                         mpTextParagraphElem;
+    SvXMLElementExport*                         mpTextPositionElem;
+    Point                                       maTextPos;
+    long int                                    mnTextWidth;
+    sal_Bool                                    mbIsPlacehlolderShape;
+    sal_Bool                                    mbIWS;
+    Font                                        maCurrentFont;
+    Font                                        maParentFont;
+
+  public:
+    SVGTextWriter( SVGExport& rExport, SVGFontExport& rFontExport );
+    virtual ~SVGTextWriter();
+
+    sal_Int32 setTextPosition( const GDIMetaFile& rMtf, sal_uLong& nCurAction );
+    void setTextProperties( const GDIMetaFile& rMtf, sal_uLong nCurAction );
+    void addFontAttributes( sal_Bool bIsTextContainer );
+
+    void startTextShape();
+    void endTextShape();
+    void startTextParagraph();
+    void endTextParagraph();
+    void startTextPosition( sal_Bool bExportX = sal_True, sal_Bool bExportY = sal_True);
+    void endTextPosition();
+    void writeTextPortion( const Point& rPos, const String& rText,
+                           sal_Bool bApplyMapping = sal_True );
+    void implWriteTextPortion( const Point& rPos, const String& rText,
+                               Color aTextColor, sal_Bool bApplyMapping );
+
+    void setVirtualDevice( VirtualDevice* pVDev, MapMode& rTargetMapMode )
+    {
+        if( !pVDev )
+            OSL_FAIL( "SVGTextWriter::setVirtualDevice: invalid virtual device." );
+        mpVDev = pVDev;
+        mpTargetMapMode = &rTargetMapMode;
+    }
+
+    void setContext( SVGAttributeWriter* pContext )
+    {
+        mpContext = pContext;
+    }
+
+    void setPlaceholderShapeFlag( sal_Bool bState )
+    {
+        mbIsPlacehlolderShape = bState;
+    }
+
+  private:
+    void implMap( const Size& rSz, Size& rDstSz ) const;
+    void implMap( const Point& rPt, Point& rDstPt ) const;
+    void implSetCurrentFont();
+    void implSetFontFamily();
+    template< typename SubType >
+    sal_Bool implGetTextPosition( const MetaAction* pAction, Point& raPos, sal_Bool& bEmpty );
+
+};
+
+
 class SVGActionWriter
 {
 private:
@@ -157,6 +229,7 @@ private:
     SVGExport&                                  mrExport;
     SVGFontExport&                              mrFontExport;
     SVGAttributeWriter*                         mpContext;
+    SVGTextWriter                               maTextWriter;
     VirtualDevice*                              mpVDev;
     MapMode                                     maTargetMapMode;
     sal_uInt32                                  mnInnerMtfCount;
@@ -170,6 +243,7 @@ private:
     SVGAttributeWriter*     ImplAcquireContext()
     {
         maContextStack.push( mpContext = new SVGAttributeWriter( mrExport, mrFontExport ) );
+        maTextWriter.setContext( mpContext );
         return mpContext;
     }
     void                    ImplReleaseContext()
@@ -180,6 +254,7 @@ private:
             maContextStack.pop();
         }
         mpContext = (maContextStack.empty() ? NULL : maContextStack.top());
+        maTextWriter.setContext( mpContext );
     }
 
     long                    ImplMap( sal_Int32 nVal ) const;
@@ -216,6 +291,8 @@ private:
 
     void                    ImplWriteActions( const GDIMetaFile& rMtf, sal_uInt32 nWriteFlags, const ::rtl::OUString* pElementId );
 
+    Font                    ImplSetCorrectFontHeight() const;
+
 public:
 
     static ::rtl::OUString  GetPathString( const PolyPolygon& rPolyPoly, sal_Bool bLine );
@@ -230,6 +307,7 @@ public:
                                            const GDIMetaFile& rMtf,
                                            sal_uInt32 nWriteFlags,
                                            const ::rtl::OUString* pElementId = NULL );
+    sal_Bool bIsTextShape;
 };
 
 #endif
