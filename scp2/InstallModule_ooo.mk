@@ -69,6 +69,7 @@ $(eval $(call gb_InstallModule_define_if_set,scp2/ooo,\
 	SYSTEM_LIBEXTTEXTCAT \
 	SYSTEM_LIBGSF \
 	SYSTEM_LIBJPEG \
+	SYSTEM_LIBLANGTAG \
 	SYSTEM_LIBRSVG \
 	SYSTEM_LIBXML \
 	SYSTEM_LIBXSLT \

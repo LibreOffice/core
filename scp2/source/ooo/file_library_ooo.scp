@@ -757,6 +757,24 @@ End
 
 #endif
 
+
+#ifndef SYSTEM_LIBLANGTAG
+
+#ifdef UNX
+File gid_File_Lib_Langtag
+    LIB_FILE_BODY;
+    // FIXME: use version vars; NOTE: currently it's 0.1.0 despite of being 0.2.0 ...
+    Name = STRING(CONCAT8(liblangtag,UNXSUFFIX,.,0,.,1,.,0));
+    Dir = SCP2_OOO_BIN_DIR;
+    Styles = (PACKED);
+End
+#else
+  // WNT statically linked to libi18nisolang1
+#endif
+
+#endif
+
+
 #ifdef SOLAR_JAVA
 
 STD_LIB_FILE( gid_File_Lib_Jdbc, jdbc)
