@@ -66,7 +66,7 @@ public:
     const OString&          getUuid() const { return msUuid; }
 
     Collaboration*          getCollaboration() const;
-    void                    setCollaboration( Collaboration* pCollaboration );
+    TUBES_DLLPUBLIC void    setCollaboration( Collaboration* pCollaboration );
 
     // --- following only to be called only by manager's callbacks ---
     // TODO: make friends instead
