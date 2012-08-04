@@ -27,68 +27,76 @@
 #include <rtl/ustring.hxx>
 #include <unotools/options.hxx>
 
-  /*@short          forward declaration to our private date container implementation
-    @descr          We use these class as internal member to support small memory requirements.
-                    You can create the container if it is neccessary. The class which use these mechanism
-                    is faster and smaller then a complete implementation!*/
+/** forward declaration to our private date container implementation
+
+    We use these class as internal member to support small memory requirements.
+    You can create the container if it is neccessary. The class which use these mechanism
+    is faster and smaller then a complete implementation!
+*/
 class SvtSlideSorterBarOptions_Impl;
 class Link;
 
-  /*@short          collect informations about sidebar group
-    @ATTENTION      This class is partially threadsafe.
-    @devstatus      ready to use*/
+/** collect informations about sidebar group
+
+    \attention This class is partially threadsafe.
+*/
 class SVT_DLLPUBLIC SvtSlideSorterBarOptions: public utl::detail::Options
 {
     public:
-          /*@short      standard constructor and destructor
-            @descr      This will initialize an instance with default values.
-                        We implement these class with a refcount mechanism! Every instance of this class increase it
-                        at create and decrease it at delete time - but all instances use the same data container!
-                        He is implemented as a static member ...
-            @seealso    member m_nRefCount
-            @seealso    member m_pDataContainer*/
-         SvtSlideSorterBarOptions();
+        /** standard constructor and destructor
+
+            This will initialize an instance with default values.
+            We implement these class with a refcount mechanism! Every instance of this class increase it
+            at create and decrease it at delete time - but all instances use the same data container!
+            He is implemented as a static member ...
+
+            \sa    member m_nRefCount
+            \sa    member m_pDataContainer
+        */
+        SvtSlideSorterBarOptions();
         virtual ~SvtSlideSorterBarOptions();
 
         void AddListenerLink( const Link& rLink );
         void RemoveListenerLink( const Link& rLink );
 
-        sal_Bool    GetVisibleImpressView() const;
-        void        SetVisibleImpressView( sal_Bool bVisible );
-        sal_Bool    GetVisibleOutlineView() const;
-        void        SetVisibleOutlineView( sal_Bool bVisible );
-        sal_Bool    GetVisibleNotesView() const;
-        void        SetVisibleNotesView( sal_Bool bVisible );
-        sal_Bool    GetVisibleHandoutView() const;
-        void        SetVisibleHandoutView( sal_Bool bVisible );
-        sal_Bool    GetVisibleSlideSorterView() const;
-        void        SetVisibleSlideSorterView( sal_Bool bVisible );
-        sal_Bool    GetVisibleDrawView() const;
-        void        SetVisibleDrawView( sal_Bool bVisible );
+        bool GetVisibleImpressView() const;
+        void SetVisibleImpressView( bool bVisible );
+        bool GetVisibleOutlineView() const;
+        void SetVisibleOutlineView( bool bVisible );
+        bool GetVisibleNotesView() const;
+        void SetVisibleNotesView( bool bVisible );
+        bool GetVisibleHandoutView() const;
+        void SetVisibleHandoutView( bool bVisible );
+        bool GetVisibleSlideSorterView() const;
+        void SetVisibleSlideSorterView( bool bVisible );
+        bool GetVisibleDrawView() const;
+        void SetVisibleDrawView( bool bVisible );
 
 
     private:
-          /*@short      return a reference to a static mutex
-            @descr      These class is partially threadsafe (for de-/initialization only).
-                        All access methods are'nt safe!
-                        We create a static mutex only for one ime and use at different times.
-            @return     A reference to a static mutex member.*/
+        /** return a reference to a static mutex
+
+            These class is partially threadsafe (for de-/initialization only).
+            All access methods are'nt safe!
+            We create a static mutex only for one ime and use at different times.
+
+            \return     A reference to a static mutex member.*/
         SVT_DLLPRIVATE static ::osl::Mutex& GetInitMutex();
 
     private:
 
-        /*Attention
-
+        /**
+            \attention
             Don't initialize these static member in these header!
-            a) Double dfined symbols will be detected ...
-            b) and unresolved externals exist at linking time.
+            \li Double defined symbols will be detected ...
+            \li and unresolved externals exist at linking time.
             Do it in your source only.
-         */
-        static SvtSlideSorterBarOptions_Impl* m_pDataContainer    ;   /// impl. data container as dynamic pointer for smaller memory requirements!
-        static sal_Int32                      m_nRefCount         ;   /// internal ref count mechanism
+        */
+        static SvtSlideSorterBarOptions_Impl* m_pDataContainer    ;   ///< impl. data container as dynamic pointer for smaller memory requirements!
+        static sal_Int32                      m_nRefCount         ;   ///< internal ref count mechanism
 
-};      // class SvtSlideSorterBarOptions
+};
 
-#endif  // #ifndef INCLUDED_SVTOOLS_SLIDESORTERBAROPT_HXX
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

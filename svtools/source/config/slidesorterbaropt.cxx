@@ -34,26 +34,25 @@
 
 #include <list>
 
-using namespace ::utl                   ;
-using namespace ::rtl                   ;
-using namespace ::osl                   ;
-using namespace ::com::sun::star::uno   ;
+using namespace ::utl;
+using namespace ::rtl;
+using namespace ::osl;
+using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 
-#define ASCII_STR(s)                        OUString( RTL_CONSTASCII_USTRINGPARAM(s) )
-#define ROOTNODE_SLIDESORTERBAR             ASCII_STR("Office.Impress/MultiPaneGUI/SlideSorterBar/Visible")
+#define ROOTNODE_SLIDESORTERBAR                OUString("Office.Impress/MultiPaneGUI/SlideSorterBar/Visible")
 
-#define PROPERTYNAME_VISIBLE_IMPRESSVIEW       ASCII_STR("ImpressView")
+#define PROPERTYNAME_VISIBLE_IMPRESSVIEW       OUString("ImpressView")
 #define PROPERTYHANDLE_VISIBLE_IMPRESSVIEW     0
-#define PROPERTYNAME_VISIBLE_OUTLINEVIEW       ASCII_STR("OutlineView")
+#define PROPERTYNAME_VISIBLE_OUTLINEVIEW       OUString("OutlineView")
 #define PROPERTYHANDLE_VISIBLE_OUTLINEVIEW     1
-#define PROPERTYNAME_VISIBLE_NOTESVIEW         ASCII_STR("NotesView")
+#define PROPERTYNAME_VISIBLE_NOTESVIEW         OUString("NotesView")
 #define PROPERTYHANDLE_VISIBLE_NOTESVIEW       2
-#define PROPERTYNAME_VISIBLE_HANDOUTVIEW       ASCII_STR("HandoutView")
+#define PROPERTYNAME_VISIBLE_HANDOUTVIEW       OUString("HandoutView")
 #define PROPERTYHANDLE_VISIBLE_HANDOUTVIEW     3
-#define PROPERTYNAME_VISIBLE_SLIDESORTERVIEW   ASCII_STR("SlideSorterView")
+#define PROPERTYNAME_VISIBLE_SLIDESORTERVIEW   OUString("SlideSorterView")
 #define PROPERTYHANDLE_VISIBLE_SLIDESORTERVIEW 4
-#define PROPERTYNAME_VISIBLE_DRAWVIEW          ASCII_STR("DrawView")
+#define PROPERTYNAME_VISIBLE_DRAWVIEW          OUString("DrawView")
 #define PROPERTYHANDLE_VISIBLE_DRAWVIEW        5
 
 #define PROPERTYCOUNT                          6
@@ -62,83 +61,59 @@ class SvtSlideSorterBarOptions_Impl : public ConfigItem
 {
     private:
     ::std::list<Link> aList;
-    sal_Bool    m_bVisibleImpressView;
-    sal_Bool    m_bVisibleOutlineView;
-    sal_Bool    m_bVisibleNotesView;
-    sal_Bool    m_bVisibleHandoutView;
-    sal_Bool    m_bVisibleSlideSorterView;
-    sal_Bool    m_bVisibleDrawView;
+    Sequence< OUString > m_seqPropertyNames;
 
     public:
 
          SvtSlideSorterBarOptions_Impl();
         ~SvtSlideSorterBarOptions_Impl();
 
-          /*@short      called for notify of configmanager
-            @descr      These method is called from the ConfigManager before application ends or from the
-                         PropertyChangeListener if the sub tree broadcasts changes. You must update your
-                        internal values.
-            @seealso    baseclass ConfigItem
-            @param      "seqPropertyNames" is the list of properties which should be updated.*/
+        /** called for notify of configmanager
 
+            These method is called from the ConfigManager before application ends or from the
+            PropertyChangeListener if the sub tree broadcasts changes. You must update your
+            internal values.
+
+            \sa baseclass ConfigItem
+            \param[in,out] seqPropertyNames is the list of properties which should be updated.
+        */
         virtual void Notify( const Sequence< OUString >& seqPropertyNames );
 
-        /** loads required data from the configuration. It's called in the constructor to
-         read all entries and form ::Notify to re-read changed setting */
+        /**
+         loads required data from the configuration. It's called in the constructor to
+         read all entries and form ::Notify to re-read changed setting
+        */
         void Load( const Sequence< OUString >& rPropertyNames );
 
-          /*@short      write changes to configuration
-            @descr      These method writes the changed values into the sub tree
-                        and should always called in our destructor to guarantee consistency of config data.
-            @seealso    baseclass ConfigItem*/
+        /** write changes to configuration
+
+            These method writes the changed values into the sub tree
+            and should always called in our destructor to guarantee consistency of config data.
+
+            \sa baseclass ConfigItem
+        */
         virtual void Commit();
 
         //  public interface
-        void SetVisibleImpressView( sal_Bool bSet )
-        {  m_bVisibleImpressView = bSet; SetModified(); }
-
-        sal_Bool GetVisibleImpressView() const
-        { return m_bVisibleImpressView; }
-
-        void SetVisibleOutlineView( sal_Bool bSet )
-        {  m_bVisibleOutlineView = bSet; SetModified(); }
-
-        sal_Bool GetVisibleOutlineView() const
-        { return m_bVisibleOutlineView; }
-
-        void SetVisibleNotesView( sal_Bool bSet )
-        {  m_bVisibleNotesView = bSet; SetModified(); }
-
-        sal_Bool GetVisibleNotesView() const
-        { return m_bVisibleNotesView; }
-
-        void SetVisibleHandoutView( sal_Bool bSet )
-        {  m_bVisibleHandoutView = bSet; SetModified(); }
-
-        sal_Bool GetVisibleHandoutView() const
-        { return m_bVisibleHandoutView; }
-
-        void SetVisibleSlideSorterView( sal_Bool bSet )
-        {  m_bVisibleSlideSorterView = bSet; SetModified(); }
-
-        sal_Bool GetVisibleSlideSorterView() const
-        { return m_bVisibleSlideSorterView; }
-
-        void SetVisibleDrawView( sal_Bool bSet )
-        {  m_bVisibleDrawView = bSet; SetModified(); }
-
-        sal_Bool GetVisibleDrawView() const
-        { return m_bVisibleDrawView; }
+        bool m_bVisibleImpressView;
+        bool m_bVisibleOutlineView;
+        bool m_bVisibleNotesView;
+        bool m_bVisibleHandoutView;
+        bool m_bVisibleSlideSorterView;
+        bool m_bVisibleDrawView;
 
         void AddListenerLink( const Link& rLink );
         void RemoveListenerLink( const Link& rLink );
         void CallListeners();
 
     private:
-          /*@short      return list of key names of our configuration management which represent oue module tree
-            @descr      These methods return a static const list of key names. We need it to get needed values from our
-                        configuration management.
-            @return     A list of needed configuration keys is returned.*/
+        /** return list of key names of our configuration management which represent oue module tree
+
+            These methods return a static const list of key names. We need it to get needed values from our
+            configuration management.
+
+            \return A list of needed configuration keys is returned.
+        */
         static Sequence< OUString > GetPropertyNames();
 
     protected:
@@ -148,28 +123,27 @@ SvtSlideSorterBarOptions_Impl::SvtSlideSorterBarOptions_Impl()
     // Init baseclasses first
     : ConfigItem( ROOTNODE_SLIDESORTERBAR )
 
-    , m_bVisibleImpressView( sal_False )
-    , m_bVisibleOutlineView( sal_False )
-    , m_bVisibleNotesView( sal_False )
-    , m_bVisibleHandoutView( sal_False )
-    , m_bVisibleSlideSorterView( sal_False )
-    , m_bVisibleDrawView( sal_False )
+    , m_bVisibleImpressView( false )
+    , m_bVisibleOutlineView( false )
+    , m_bVisibleNotesView( false )
+    , m_bVisibleHandoutView( false )
+    , m_bVisibleSlideSorterView( false )
+    , m_bVisibleDrawView( false )
 
 {
+    m_seqPropertyNames = GetPropertyNames( );
+
     // Use our static list of configuration keys to get his values.
-    Sequence< OUString >    seqNames    = GetPropertyNames  (           );
-    Load( seqNames );
-    Sequence< Any >         seqValues   = GetProperties     ( seqNames  );
-    Sequence< sal_Bool >    seqRO       = GetReadOnlyStates ( seqNames  );
+    Sequence< Any > seqValues = GetProperties( m_seqPropertyNames  );
 
     // Safe impossible cases.
     // We need values from ALL configuration keys.
     // Follow assignment use order of values in relation to our list of key names!
-    DBG_ASSERT( !(seqNames.getLength()!=seqValues.getLength()), "SvtSlideSorterBarOptions_Impl::SvtSlideSorterBarOptions_Impl()\nI miss some values of configuration keys!\n" );
+    DBG_ASSERT( !(m_seqPropertyNames.getLength()!=seqValues.getLength()),
+                "SvtSlideSorterBarOptions_Impl::SvtSlideSorterBarOptions_Impl()\nI miss some values of configuration keys!\n" );
 
     // Copy values from list in right order to our internal member.
-    sal_Int32 nPropertyCount = seqValues.getLength();
-    for( sal_Int32 nProperty=0; nProperty<nPropertyCount; ++nProperty )
+    for( sal_Int32 nProperty=0; nProperty<seqValues.getLength(); ++nProperty )
     {
         if (seqValues[nProperty].hasValue()==sal_False)
             continue;
@@ -216,16 +190,12 @@ SvtSlideSorterBarOptions_Impl::SvtSlideSorterBarOptions_Impl()
 
     // Enable notification mechanism of our baseclass.
     // We need it to get information about changes outside these class on our used configuration keys!
-    EnableNotification( seqNames );
+    EnableNotification( m_seqPropertyNames );
 }
 
 SvtSlideSorterBarOptions_Impl::~SvtSlideSorterBarOptions_Impl()
 {
-    // We must save our current values .. if user forgets it!
-    if( IsModified() == sal_True )
-    {
-        Commit();
-    }
+    Commit();
 }
 
 static int lcl_MapPropertyName( const ::rtl::OUString rCompare,
@@ -247,11 +217,11 @@ void SvtSlideSorterBarOptions_Impl::Load( const Sequence< OUString >& rPropertyN
     // Safe impossible cases.
     // We need values from ALL configuration keys.
     // Follow assignment use order of values in relation to our list of key names!
-    DBG_ASSERT( !(rPropertyNames.getLength()!=seqValues.getLength()), "SvtSlideSorterBarOptions_Impl::SvtSlideSorterBarOptions_Impl()\nI miss some values of configuration keys!\n" );
+    DBG_ASSERT( !(rPropertyNames.getLength()!=seqValues.getLength()),
+                "SvtSlideSorterBarOptions_Impl::SvtSlideSorterBarOptions_Impl()\nI miss some values of configuration keys!\n" );
 
     // Copy values from list in right order to our internal member.
-    sal_Int32 nPropertyCount = seqValues.getLength();
-    for( sal_Int32 nProperty=0; nProperty<nPropertyCount; ++nProperty )
+    for( sal_Int32 nProperty=0; nProperty<seqValues.getLength(); ++nProperty )
     {
         if (seqValues[nProperty].hasValue()==sal_False)
             continue;
@@ -330,8 +300,7 @@ void SvtSlideSorterBarOptions_Impl::Notify( const Sequence< OUString >& rPropert
 void SvtSlideSorterBarOptions_Impl::Commit()
 {
     // Get names of supported properties, create a list for values and copy current values to it.
-    Sequence< OUString >    seqNames    = GetPropertyNames  ();
-    sal_Int32               nCount      = seqNames.getLength();
+    sal_Int32               nCount      = m_seqPropertyNames.getLength();
     Sequence< Any >         seqValues   ( nCount );
     for( sal_Int32 nProperty=0; nProperty<nCount; ++nProperty )
     {
@@ -371,13 +340,13 @@ void SvtSlideSorterBarOptions_Impl::Commit()
         }
     }
     // Set properties in configuration.
-    PutProperties( seqNames, seqValues );
+    PutProperties( m_seqPropertyNames, seqValues );
 }
 
 Sequence< OUString > SvtSlideSorterBarOptions_Impl::GetPropertyNames()
 {
     // Build list of configuration key names.
-    const OUString pProperties[] =
+    OUString pProperties[] =
     {
         PROPERTYNAME_VISIBLE_IMPRESSVIEW,
         PROPERTYNAME_VISIBLE_OUTLINEVIEW,
@@ -388,8 +357,7 @@ Sequence< OUString > SvtSlideSorterBarOptions_Impl::GetPropertyNames()
     };
 
     // Initialize return sequence with these list and run
-    const Sequence< OUString > seqPropertyNames( pProperties, SAL_N_ELEMENTS( pProperties ) );
-    return seqPropertyNames;
+    return Sequence< OUString >( pProperties, SAL_N_ELEMENTS( pProperties ) );
 }
 
 //  initialize static member, see definition for further information
@@ -423,64 +391,64 @@ SvtSlideSorterBarOptions::~SvtSlideSorterBarOptions()
     }
 }
 
-sal_Bool SvtSlideSorterBarOptions::GetVisibleImpressView() const
+bool SvtSlideSorterBarOptions::GetVisibleImpressView() const
 {
-    return m_pDataContainer->GetVisibleImpressView();
+    return m_pDataContainer->m_bVisibleImpressView;
 }
 
-void SvtSlideSorterBarOptions::SetVisibleImpressView(sal_Bool bVisible)
+void SvtSlideSorterBarOptions::SetVisibleImpressView(bool bVisible)
 {
-    return m_pDataContainer->SetVisibleImpressView(bVisible);
+    m_pDataContainer->m_bVisibleImpressView = bVisible;
 }
 
-sal_Bool SvtSlideSorterBarOptions::GetVisibleOutlineView() const
+bool SvtSlideSorterBarOptions::GetVisibleOutlineView() const
 {
-    return m_pDataContainer->GetVisibleOutlineView();
+    return m_pDataContainer->m_bVisibleOutlineView;
 }
 
-void SvtSlideSorterBarOptions::SetVisibleOutlineView(sal_Bool bVisible)
+void SvtSlideSorterBarOptions::SetVisibleOutlineView(bool bVisible)
 {
-    return m_pDataContainer->SetVisibleOutlineView(bVisible);
+    m_pDataContainer->m_bVisibleOutlineView = bVisible;
 }
 
-sal_Bool SvtSlideSorterBarOptions::GetVisibleNotesView() const
+bool SvtSlideSorterBarOptions::GetVisibleNotesView() const
 {
-    return m_pDataContainer->GetVisibleNotesView();
+    return m_pDataContainer->m_bVisibleNotesView;
 }
 
-void SvtSlideSorterBarOptions::SetVisibleNotesView(sal_Bool bVisible)
+void SvtSlideSorterBarOptions::SetVisibleNotesView(bool bVisible)
 {
-    return m_pDataContainer->SetVisibleNotesView(bVisible);
+    m_pDataContainer->m_bVisibleNotesView = bVisible;
 }
 
-sal_Bool SvtSlideSorterBarOptions::GetVisibleHandoutView() const
+bool SvtSlideSorterBarOptions::GetVisibleHandoutView() const
 {
-    return m_pDataContainer->GetVisibleHandoutView();
+    return m_pDataContainer->m_bVisibleHandoutView;
 }
 
-void SvtSlideSorterBarOptions::SetVisibleHandoutView(sal_Bool bVisible)
+void SvtSlideSorterBarOptions::SetVisibleHandoutView(bool bVisible)
 {
-    return m_pDataContainer->SetVisibleHandoutView(bVisible);
+    m_pDataContainer->m_bVisibleHandoutView = bVisible;
 }
 
-sal_Bool SvtSlideSorterBarOptions::GetVisibleSlideSorterView() const
+bool SvtSlideSorterBarOptions::GetVisibleSlideSorterView() const
 {
-    return m_pDataContainer->GetVisibleSlideSorterView();
+    return m_pDataContainer->m_bVisibleSlideSorterView;
 }
 
-void SvtSlideSorterBarOptions::SetVisibleSlideSorterView(sal_Bool bVisible)
+void SvtSlideSorterBarOptions::SetVisibleSlideSorterView(bool bVisible)
 {
-    return m_pDataContainer->SetVisibleSlideSorterView(bVisible);
+    m_pDataContainer->m_bVisibleSlideSorterView = bVisible;
 }
 
-sal_Bool SvtSlideSorterBarOptions::GetVisibleDrawView() const
+bool SvtSlideSorterBarOptions::GetVisibleDrawView() const
 {
-    return m_pDataContainer->GetVisibleDrawView();
+    return m_pDataContainer->m_bVisibleDrawView;
 }
 
-void SvtSlideSorterBarOptions::SetVisibleDrawView(sal_Bool bVisible)
+void SvtSlideSorterBarOptions::SetVisibleDrawView(bool bVisible)
 {
-    return m_pDataContainer->SetVisibleDrawView(bVisible);
+    m_pDataContainer->m_bVisibleDrawView = bVisible;
 }
 
 namespace
