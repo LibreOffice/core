@@ -161,11 +161,6 @@ void AbstractScImportAsciiDlg_Impl::GetOptions( ScAsciiOptions& rOpt )
     pDlg->GetOptions( rOpt );
 }
 
-void AbstractScImportAsciiDlg_Impl::SetTextToColumnsMode()
-{
-    pDlg->SetTextToColumnsMode();
-}
-
 void AbstractScImportAsciiDlg_Impl::SaveParameters()
 {
     pDlg->SaveParameters();
@@ -657,13 +652,13 @@ bool AbstractScTextImportOptionsDlg_Impl::IsDateConversionSet() const
 
 
 AbstractScImportAsciiDlg * ScAbstractDialogFactory_Impl::CreateScImportAsciiDlg ( Window* pParent, String aDatName,
-                                                    SvStream* pInStream, int nId, sal_Unicode cSep )
+                                                    SvStream* pInStream, int nId, ScImportAsciiCall eCall )
 {
     ScImportAsciiDlg* pDlg=NULL;
     switch ( nId )
     {
         case RID_SCDLG_ASCII :
-            pDlg = new ScImportAsciiDlg( pParent, aDatName,pInStream, cSep );
+            pDlg = new ScImportAsciiDlg( pParent, aDatName,pInStream, eCall );
             break;
         default:
             break;

@@ -1070,8 +1070,7 @@
                 <prop oor:name="QuotedFieldAsText" oor:type="xs:boolean" oor:nillable="false">
                     <info>
                         <author>kyoshida</author>
-                        <desc>If true, quoted field is always imported as text 
-                            with no exception.</desc>
+                        <desc>If true, quoted field is always imported as text with no exception.</desc>
                         <label>QuotedFieldAsText</label>
                     </info>
                     <value>false</value>
@@ -1131,6 +1130,136 @@
                         <label>CharSet</label>
                     </info>
                     <value>-1</value>
+                </prop>
+                <prop oor:name="FixedWidthList" oor:type="xs:string" oor:nillable="false">
+                    <info>
+                        <author>muthusuba</author>
+                        <desc>Fixed Width List of separators</desc>
+                        <label>FixedWidthList</label>
+                    </info>
+                    <value></value>
+                </prop>
+            </group>
+            <group oor:name="ClipboardTextImport">
+                <info>
+                    <desc>Contains setting for Unformatted Text Import from Clipboard</desc>
+                </info>
+                <prop oor:name="MergeDelimiters" oor:type="xs:boolean" oor:nillable="false">
+                    <info>
+                        <author>muthusuba</author>
+                        <desc>Merge Delimiter check box status</desc>
+                        <label>MergeDelimiters</label>
+                    </info>
+                    <value>false</value>
+                </prop>
+                <prop oor:name="QuotedFieldAsText" oor:type="xs:boolean" oor:nillable="false">
+                    <info>
+                        <author>kyoshida</author>
+                        <desc>If true, quoted field is always imported as text with no exception.</desc>
+                        <label>QuotedFieldAsText</label>
+                    </info>
+                    <value>false</value>
+                </prop>
+                <prop oor:name="DetectSpecialNumbers" oor:type="xs:boolean" oor:nillable="false">
+                    <info>
+                        <author>kyoshida</author>
+                        <desc>If true, Calc tries to detect special number format, such as date and scientific notation.</desc>
+                        <label>DetectSpecialNumbers</label>
+                    </info>
+                    <value>true</value>
+                </prop>
+                <prop oor:name="Language" oor:type="xs:int" oor:nillable="false">
+                    <info>
+                        <author>kyoshida</author>
+                        <desc>Language to use for CSV import.  This determines how the numbers are parsed.</desc>
+                        <label>Language</label>
+                    </info>
+                    <value>0</value>
+                </prop>
+                <prop oor:name="Separators" oor:type="xs:string" oor:nillable="false">
+                    <info>
+                        <author>muthusuba</author>
+                        <desc>List of Separators - as a String</desc>
+                        <label>Separators</label>
+                    </info>
+                    <value>&#9;</value>
+                </prop>
+                <prop oor:name="TextSeparators" oor:type="xs:string" oor:nillable="false">
+                    <info>
+                        <author>muthusuba</author>
+                        <desc>Text Separators</desc>
+                        <label>TextSeparators</label>
+                    </info>
+                    <value>"</value>
+                </prop>
+                <prop oor:name="FixedWidth" oor:type="xs:boolean" oor:nillable="false">
+                    <info>
+                        <author>muthusuba</author>
+                        <desc>Fixed width</desc>
+                        <label>FixedWidth</label>
+                    </info>
+                    <value>false</value>
+                </prop>
+                <prop oor:name="FromRow" oor:type="xs:int" oor:nillable="false">
+                    <info>
+                        <author>muthusuba</author>
+                        <desc>From Row</desc>
+                        <label>FromRow</label>
+                    </info>
+                    <value>1</value>
+                </prop>
+                <prop oor:name="CharSet" oor:type="xs:int" oor:nillable="false">
+                    <info>
+                        <author>muthusuba</author>
+                        <desc>Char Set</desc>
+                        <label>CharSet</label>
+                    </info>
+                    <value>-1</value>
+                </prop>
+                <prop oor:name="FixedWidthList" oor:type="xs:string" oor:nillable="false">
+                    <info>
+                        <author>muthusuba</author>
+                        <desc>Fixed Width List of separators</desc>
+                        <label>FixedWidthList</label>
+                    </info>
+                    <value></value>
+                </prop>
+            </group>
+            <group oor:name="TextToColumnsImport">
+                <info>
+                    <desc>Contains setting for Text to Columns Import</desc>
+                </info>
+                <prop oor:name="MergeDelimiters" oor:type="xs:boolean" oor:nillable="false">
+                    <info>
+                        <author>muthusuba</author>
+                        <desc>Merge Delimiter check box status</desc>
+                        <label>MergeDelimiters</label>
+                    </info>
+                    <value>false</value>
+                </prop>
+                <prop oor:name="Separators" oor:type="xs:string" oor:nillable="false">
+                    <info>
+                        <author>muthusuba</author>
+                        <desc>List of Separators - as a String</desc>
+                        <label>Separators</label>
+                    </info>
+                    <value>&#9;</value>
+                </prop>
+                <prop oor:name="TextSeparators" oor:type="xs:string" oor:nillable="false">
+                    <info>
+                        <author>muthusuba</author>
+                        <desc>Text Separators</desc>
+                        <label>TextSeparators</label>
+                    </info>
+                    <value>"</value>
+                </prop>
+                <prop oor:name="FixedWidth" oor:type="xs:boolean" oor:nillable="false">
+                    <info>
+                        <author>muthusuba</author>
+                        <desc>Fixed width</desc>
+                        <label>FixedWidth</label>
+                    </info>
+                    <value>false</value>
                 </prop>
                 <prop oor:name="FixedWidthList" oor:type="xs:string" oor:nillable="false">
                     <info>

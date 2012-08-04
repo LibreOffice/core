@@ -936,9 +936,8 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                     OSL_ENSURE( pFact, "ScCellShell::ExecuteDB: SID_TEXT_TO_COLUMNS - pFact is null!" );
                     AbstractScImportAsciiDlg *pDlg = pFact->CreateScImportAsciiDlg(
-                        NULL, String(), &aStream, RID_SCDLG_ASCII );
+                        NULL, String(), &aStream, RID_SCDLG_ASCII,SC_TEXTTOCOLUMNS);
                     OSL_ENSURE( pDlg, "ScCellShell::ExecuteDB: SID_TEXT_TO_COLUMNS - pDlg is null!" );
-                    pDlg->SetTextToColumnsMode();
 
                     if ( pDlg->Execute() == RET_OK )
                     {
@@ -951,6 +950,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                         ScImportExport aImport( pDoc, aRange.aStart );
                         ScAsciiOptions aOptions;
                         pDlg->GetOptions( aOptions );
+                        pDlg->SaveParameters();
                         aImport.SetExtOptions( aOptions );
                         aImport.SetApi( false );
                         aStream.Seek( 0 );

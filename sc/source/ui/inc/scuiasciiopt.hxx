@@ -94,21 +94,22 @@ class ScImportAsciiDlg : public ModalDialog
 
     CharSet                     meCharSet;          /// Selected char set.
     bool                        mbCharSetSystem;    /// Is System char set selected?
-    bool                        mbFileImport;       /// Is this dialog involked for csv file import ?
+    ScImportAsciiCall           meCall;             /// How the dialog is called (see asciiopt.hxx)
 
 public:
                                 ScImportAsciiDlg(
                                     Window* pParent, String aDatName,
-                                    SvStream* pInStream, sal_Unicode cSep = '\t' );
+                                    SvStream* pInStream, ScImportAsciiCall eCall );
                                 ~ScImportAsciiDlg();
 
     void                        GetOptions( ScAsciiOptions& rOpt );
-    void                        SetTextToColumnsMode();
     void                        SaveParameters();
 
 private:
     /** Sets the selected char set data to meCharSet and mbCharSetSystem. */
     void                        SetSelectedCharSet();
+    /** Set separators in ui from maFieldSeparators    */
+    void                        SetSeparators();
     /** Returns all separator characters in a string. */
     String                      GetSeparators() const;
 

@@ -211,19 +211,12 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute() throw(uno::RuntimeException)
         //  ascii import is special...
 
         INetURLObject aURL( aFileName );
-        String aExt(aURL.getExtension());
         String aPrivDatName(aURL.getName());
-        sal_Unicode cAsciiDel;
-        if (aExt.EqualsIgnoreCaseAscii("CSV"))
-            cAsciiDel = ',';
-        else
-            cAsciiDel = '\t';
-
         SvStream* pInStream = NULL;
         if ( xInputStream.is() )
             pInStream = utl::UcbStreamHelper::CreateStream( xInputStream );
 
-        AbstractScImportAsciiDlg* pDlg = pFact->CreateScImportAsciiDlg( NULL, aPrivDatName, pInStream, RID_SCDLG_ASCII, cAsciiDel);
+        AbstractScImportAsciiDlg* pDlg = pFact->CreateScImportAsciiDlg( NULL, aPrivDatName, pInStream, RID_SCDLG_ASCII,SC_IMPORTFILE);
         OSL_ENSURE(pDlg, "Dialog create fail!");
         if ( pDlg->Execute() == RET_OK )
         {

@@ -340,12 +340,13 @@ sal_Bool ScViewFunc::PasteDataFormat( sal_uLong nFormatId,
                         ScAbstractDialogFactory::Create();
                     AbstractScImportAsciiDlg *pDlg =
                         pFact->CreateScImportAsciiDlg( NULL, String(), &aStrm,
-                                RID_SCDLG_ASCII);
+                                RID_SCDLG_ASCII, SC_PASTETEXT);
 
                     if (pDlg->Execute() == RET_OK)
                     {
                         ScAsciiOptions aOptions;
                         pDlg->GetOptions( aOptions );
+                        pDlg->SaveParameters();
                         aObj.SetExtOptions( aOptions );
 
                         bRet = aObj.ImportString( aStr, nFormatId );

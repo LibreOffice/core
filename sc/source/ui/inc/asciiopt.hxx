@@ -107,6 +107,12 @@ public:
     void    SetColumnInfo( const ScCsvExpDataVec& rDataVec );
 };
 
+/// How ScImportAsciiDlg is called
+enum ScImportAsciiCall {
+        SC_IMPORTFILE,           // with File > Open: Text - CSV
+        SC_PASTETEXT,            // with Paste > Unformatted Text
+        SC_TEXTTOCOLUMNS };      // with Data > Text to Columns
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

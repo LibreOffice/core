@@ -119,7 +119,6 @@ class AbstractScImportAsciiDlg_Impl : public AbstractScImportAsciiDlg  //add for
 {
     DECL_ABSTDLG_BASE(AbstractScImportAsciiDlg_Impl, ScImportAsciiDlg)
     virtual void                        GetOptions( ScAsciiOptions& rOpt );
-    virtual void                        SetTextToColumnsMode();
     virtual void                        SaveParameters();
 };
 
@@ -412,7 +411,7 @@ public:
 
     virtual     AbstractScImportAsciiDlg * CreateScImportAsciiDlg( Window* pParent, String aDatName, //add for ScImportAsciiDlg
                                                                     SvStream* pInStream, int nId,
-                                                                    sal_Unicode cSep = '\t');
+                                                                    ScImportAsciiCall eCall);
 
     virtual AbstractScTextImportOptionsDlg * CreateScTextImportOptionsDlg( Window* pParent, int nId );
 

@@ -38,6 +38,7 @@
 #include "global.hxx"
 #include "pivot.hxx"
 #include "i18npool/lang.h"
+#include "asciiopt.hxx"
 
 #include <tabvwsh.hxx>
 
@@ -65,7 +66,6 @@ class AbstractScImportAsciiDlg : public VclAbstractDialog  //add for ScImportAsc
 {
 public:
     virtual void                        GetOptions( ScAsciiOptions& rOpt ) = 0;
-    virtual void                        SetTextToColumnsMode() = 0;
     virtual void                        SaveParameters() = 0;
 };
 
@@ -342,7 +342,7 @@ public:
 
     virtual     AbstractScImportAsciiDlg * CreateScImportAsciiDlg( Window* pParent, String aDatName, //add for ScImportAsciiDlg
                                                                     SvStream* pInStream, int nId,
-                                                                    sal_Unicode cSep = '\t') = 0;
+                                                                    ScImportAsciiCall eCall) = 0;
 
     virtual     AbstractScTextImportOptionsDlg * CreateScTextImportOptionsDlg( Window* pParent, int nId ) = 0;
 

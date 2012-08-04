@@ -43,6 +43,7 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include "miscuno.hxx"
+#include <tools/urlobj.hxx>
 
 //! TODO make dynamic
 const SCSIZE ASCIIDLG_MAXROWS                = MAXROWCOUNT;
@@ -63,6 +64,8 @@ using ::rtl::OUString;
 #define DETECT_SPECIAL_NUM  "DetectSpecialNumbers"
 #define LANGUAGE            "Language"
 #define SEP_PATH            "Office.Calc/Dialogs/CSVImport"
+#define SEP_PATH_CLPBRD     "Office.Calc/Dialogs/ClipboardTextImport"
+#define SEP_PATH_TEXT2COL   "Office.Calc/Dialogs/TextToColumnsImport"
 
 // ============================================================================
 
@@ -114,13 +117,24 @@ sal_Unicode lcl_CharFromCombo( ComboBox& rCombo, const String& rList )
 static void load_Separators( OUString &sFieldSeparators, OUString &sTextSeparators,
                              bool &bMergeDelimiters, bool& bQuotedAsText, bool& bDetectSpecialNum,
                              bool &bFixedWidth, sal_Int32 &nFromRow, sal_Int32 &nCharSet,
-                             sal_Int32& nLanguage )
+                             sal_Int32& nLanguage, ScImportAsciiCall eCall )
 {
     Sequence<Any>aValues;
     const Any *pProperties;
     Sequence<OUString> aNames(9);
     OUString* pNames = aNames.getArray();
-    ScLinkConfigItem aItem( OUString(RTL_CONSTASCII_USTRINGPARAM( SEP_PATH )) );
+    OUString aSepPath;
+    switch(eCall)
+    {
+     case SC_IMPORTFILE : aSepPath=OUString(RTL_CONSTASCII_USTRINGPARAM(SEP_PATH));
+                          break;
+     case SC_PASTETEXT  : aSepPath=OUString(RTL_CONSTASCII_USTRINGPARAM(SEP_PATH_CLPBRD));
+                          break;
+     case SC_TEXTTOCOLUMNS :
+     default            : aSepPath=OUString(RTL_CONSTASCII_USTRINGPARAM(SEP_PATH_TEXT2COL));
+                          break;
+    }
+    ScLinkConfigItem aItem( aSepPath );
 
     pNames[0] = OUString(RTL_CONSTASCII_USTRINGPARAM( MERGE_DELIMITERS ));
     pNames[1] = OUString(RTL_CONSTASCII_USTRINGPARAM( SEPARATORS ));
@@ -163,7 +177,7 @@ static void load_Separators( OUString &sFieldSeparators, OUString &sTextSeparato
 
 static void save_Separators(
     String maSeparators, String maTxtSep, bool bMergeDelimiters, bool bQuotedAsText,
-    bool bDetectSpecialNum, bool bFixedWidth, sal_Int32 nFromRow, sal_Int32 nCharSet, sal_Int32 nLanguage )
+    bool bDetectSpecialNum, bool bFixedWidth, sal_Int32 nFromRow, sal_Int32 nCharSet, sal_Int32 nLanguage, ScImportAsciiCall eCall )
 {
     OUString sFieldSeparators = OUString( maSeparators );
     OUString sTextSeparators = OUString( maTxtSep );
@@ -171,7 +185,18 @@ static void save_Separators(
     Any *pProperties;
     Sequence<OUString> aNames(9);
     OUString* pNames = aNames.getArray();
-    ScLinkConfigItem aItem( OUString(RTL_CONSTASCII_USTRINGPARAM( SEP_PATH )) );
+    OUString aSepPath;
+    switch(eCall)
+    {
+     case SC_IMPORTFILE : aSepPath=OUString(RTL_CONSTASCII_USTRINGPARAM(SEP_PATH));
+                          break;
+     case SC_PASTETEXT  : aSepPath=OUString(RTL_CONSTASCII_USTRINGPARAM(SEP_PATH_CLPBRD));
+                          break;
+     case SC_TEXTTOCOLUMNS :
+     default            : aSepPath=OUString(RTL_CONSTASCII_USTRINGPARAM(SEP_PATH_TEXT2COL));
+                          break;
+    }
+    ScLinkConfigItem aItem( aSepPath );
 
     pNames[0] = OUString(RTL_CONSTASCII_USTRINGPARAM( MERGE_DELIMITERS ));
     pNames[1] = OUString(RTL_CONSTASCII_USTRINGPARAM( SEPARATORS ));
@@ -200,7 +225,7 @@ static void save_Separators(
 // ----------------------------------------------------------------------------
 
 ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,String aDatName,
-                                    SvStream* pInStream, sal_Unicode cSep ) :
+                                    SvStream* pInStream, ScImportAsciiCall eCall ) :
         ModalDialog ( pParent, ScResId( RID_SCDLG_ASCII ) ),
         mpDatStream  ( pInStream ),
         mnStreamPos( pInStream ? pInStream->Tell() : 0 ),
@@ -251,41 +276,39 @@ ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,String aDatName,
         aTextSepList( ScResId( SCSTR_TEXTSEP ) ),
         mcTextSep   ( ScAsciiOptions::cDefaultTextSep ),
         maStrTextToColumns( ScResId( STR_TEXTTOCOLUMNS ) ),
-        mbFileImport(true)
+        meCall(eCall)
 {
     FreeResource();
-    mbFileImport = aDatName.Len() > 0;
 
     String aName = GetText();
-    // aDatName is empty if invoked during paste from clipboard.
-    if (mbFileImport)
+    if (meCall==SC_IMPORTFILE)
     {
         aName.AppendAscii(RTL_CONSTASCII_STRINGPARAM(" - ["));
         aName += aDatName;
         aName += ']';
     }
-    SetText( aName );
+    if(meCall == SC_TEXTTOCOLUMNS)
+    {
+     SetText( maStrTextToColumns );
+    }
+    else
+    {
+     SetText( aName );
+    }
 
-    // Default options
+    // Default options are set in officecfg/registry/schema/org/openoffice/Office/Calc.xcs
     OUString sFieldSeparators(RTL_CONSTASCII_USTRINGPARAM(",;\t"));
     OUString sTextSeparators(mcTextSep);
     bool bMergeDelimiters = false;
     bool bFixedWidth = false;
     bool bQuotedFieldAsText = false;
-    bool bDetectSpecialNum = false;
+    bool bDetectSpecialNum = true;
     sal_Int32 nFromRow = 1;
     sal_Int32 nCharSet = -1;
     sal_Int32 nLanguage = 0;
-    if (mbFileImport)
-        // load separators only when importing csv files.
-        load_Separators (sFieldSeparators, sTextSeparators, bMergeDelimiters,
-                         bQuotedFieldAsText, bDetectSpecialNum, bFixedWidth, nFromRow, nCharSet, nLanguage);
-    else
-    {
-        // #i115474# otherwise use sensible defaults
-        sFieldSeparators = OUString( cSep );
-        sTextSeparators = OUString( ScAsciiOptions::cDefaultTextSep );
-    }
+    load_Separators (sFieldSeparators, sTextSeparators, bMergeDelimiters,
+                         bQuotedFieldAsText, bDetectSpecialNum, bFixedWidth, nFromRow, nCharSet, nLanguage, meCall);
+    // load from saved settings
     maFieldSeparators = String(sFieldSeparators);
 
     if( bMergeDelimiters )
@@ -299,29 +322,14 @@ ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,String aDatName,
     if( nFromRow != 1 )
         aNfRow.SetValue( nFromRow );
 
-    rtl::OString sString(rtl::OUStringToOString(maFieldSeparators,
-        RTL_TEXTENCODING_MS_1252));
-    const sal_Char *aSep = sString.getStr();
-    int len = maFieldSeparators.Len();
-    for (int i = 0; i < len; ++i)
-    {
-        switch( aSep[i] )
-        {
-            case '\t':  aCkbTab.Check();        break;
-            case ';':   aCkbSemicolon.Check();  break;
-            case ',':   aCkbComma.Check();      break;
-            case ' ':   aCkbSpace.Check();      break;
-            default:
-                aCkbOther.Check();
-                aEdOther.SetText( aEdOther.GetText() + OUString( aSep[i] ) );
-        }
-    }
+    // Set Separators in the dialog from maFieldSeparators (empty are not set)
+    SetSeparators();
 
-    // Get Separators from the dialog
+    // Get Separators from the dialog (empty are set from default)
     maFieldSeparators = GetSeparators();
 
     // Clipboard is always Unicode, else detect.
-    rtl_TextEncoding ePreselectUnicode = (mbFileImport ?
+    rtl_TextEncoding ePreselectUnicode = (meCall == SC_IMPORTFILE ?
             RTL_TEXTENCODING_DONTKNOW : RTL_TEXTENCODING_UNICODE);
     // Sniff for Unicode / not
     if( ePreselectUnicode == RTL_TEXTENCODING_DONTKNOW && mpDatStream )
@@ -430,6 +438,25 @@ ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,String aDatName,
 
     aEdOther.SetAccessibleName(aCkbOther.GetText());
     aEdOther.SetAccessibleRelationLabeledBy(&aCkbOther);
+
+    if(meCall == SC_TEXTTOCOLUMNS)
+    {
+     aFtCharSet.Disable();
+     aLbCharSet.Disable();
+     aFtCustomLang.Disable();
+     aLbCustomLang.SelectLanguage(LANGUAGE_SYSTEM);
+     aLbCustomLang.Disable();
+     aFtRow.Disable();
+     aNfRow.Disable();
+
+    // Quoted field as text option is not used for text-to-columns mode.
+     aCkbQuotedAsText.Check(false);
+     aCkbQuotedAsText.Disable();
+
+    // Always detect special numbers for text-to-columns mode.
+     aCkbDetectNumber.Check();
+     aCkbDetectNumber.Disable();
+    }
 }
 
 
@@ -527,38 +554,35 @@ void ScImportAsciiDlg::GetOptions( ScAsciiOptions& rOpt )
     rOpt.SetDetectSpecialNumber(aCkbDetectNumber.IsChecked());
 }
 
-void ScImportAsciiDlg::SetTextToColumnsMode()
-{
-    SetText( maStrTextToColumns );
-    aFtCharSet.Disable();
-    aLbCharSet.Disable();
-    aFtCustomLang.Disable();
-    aLbCustomLang.SelectLanguage(LANGUAGE_SYSTEM);
-    aLbCustomLang.Disable();
-    aFtRow.Disable();
-    aNfRow.Disable();
-
-    // Quoted field as text option is not used for text-to-columns mode.
-    aCkbQuotedAsText.Check(false);
-    aCkbQuotedAsText.Disable();
-
-    // Always detect special numbers for text-to-columns mode.
-    aCkbDetectNumber.Check();
-    aCkbDetectNumber.Disable();
-}
-
 void ScImportAsciiDlg::SaveParameters()
 {
-    if (!mbFileImport)
-        // We save parameters only for file import.
-        return;
-
     save_Separators( maFieldSeparators, aCbTextSep.GetText(), aCkbAsOnce.IsChecked(),
                      aCkbQuotedAsText.IsChecked(), aCkbDetectNumber.IsChecked(),
                      aRbFixed.IsChecked(),
                      static_cast<sal_Int32>(aNfRow.GetValue()),
                      static_cast<sal_Int32>(aLbCharSet.GetSelectEntryPos()),
-                     static_cast<sal_Int32>(aLbCustomLang.GetSelectLanguage()) );
+                     static_cast<sal_Int32>(aLbCustomLang.GetSelectLanguage()), meCall );
+}
+
+void ScImportAsciiDlg::SetSeparators()
+{
+    rtl::OString sString(rtl::OUStringToOString(maFieldSeparators,
+        RTL_TEXTENCODING_MS_1252));
+    const sal_Char *aSep = sString.getStr();
+    int len = maFieldSeparators.Len();
+    for (int i = 0; i < len; ++i)
+    {
+        switch( aSep[i] )
+        {
+            case '\t':  aCkbTab.Check();        break;
+            case ';':   aCkbSemicolon.Check();  break;
+            case ',':   aCkbComma.Check();      break;
+            case ' ':   aCkbSpace.Check();      break;
+            default:
+                aCkbOther.Check();
+               aEdOther.SetText( aEdOther.GetText() + OUString( aSep[i] ) );
+        }
+    }
 }
 
 void ScImportAsciiDlg::SetSelectedCharSet()
