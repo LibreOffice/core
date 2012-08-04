@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <string.h>
+
 #include "rtl/alloc.h"
 #include "registry/writer.hxx"
 
@@ -316,7 +318,7 @@ void* getTypeBlob(Reference< XHierarchicalNameAccess > xTDmgr,
 
         const void* p = writer.getBlob(blobsize);
         pBlob = (sal_uInt8*)rtl_allocateMemory(*blobsize);
-        rtl_copyMemory(pBlob, p, *blobsize);
+        memcpy(pBlob, p, *blobsize);
     }
     break;
     case TypeClass_MODULE:
@@ -358,7 +360,7 @@ void* getTypeBlob(Reference< XHierarchicalNameAccess > xTDmgr,
 
         const void* p = writer.getBlob(blobsize);
         pBlob = (sal_uInt8*)rtl_allocateMemory(*blobsize);
-        rtl_copyMemory(pBlob, p, *blobsize);
+        memcpy(pBlob, p, *blobsize);
     }
     break;
     case TypeClass_INTERFACE:
@@ -470,7 +472,7 @@ void* getTypeBlob(Reference< XHierarchicalNameAccess > xTDmgr,
 
         const void* p = writer.getBlob(blobsize);
         pBlob = (sal_uInt8*)rtl_allocateMemory(*blobsize);
-        rtl_copyMemory(pBlob, p, *blobsize);
+        memcpy(pBlob, p, *blobsize);
     }
     break;
     case TypeClass_STRUCT:
@@ -530,7 +532,7 @@ void* getTypeBlob(Reference< XHierarchicalNameAccess > xTDmgr,
 
         const void* p = writer.getBlob(blobsize);
         pBlob = (sal_uInt8*)rtl_allocateMemory(*blobsize);
-        rtl_copyMemory(pBlob, p, *blobsize);
+        memcpy(pBlob, p, *blobsize);
         }
     break;
     case TypeClass_EXCEPTION:
@@ -572,7 +574,7 @@ void* getTypeBlob(Reference< XHierarchicalNameAccess > xTDmgr,
 
         const void* p = writer.getBlob(blobsize);
         pBlob = (sal_uInt8*)rtl_allocateMemory(*blobsize);
-        rtl_copyMemory(pBlob, p, *blobsize);
+        memcpy(pBlob, p, *blobsize);
     }
     break;
     case TypeClass_ENUM:
@@ -603,7 +605,7 @@ void* getTypeBlob(Reference< XHierarchicalNameAccess > xTDmgr,
 
         const void* p = writer.getBlob(blobsize);
         pBlob = (sal_uInt8*)rtl_allocateMemory(*blobsize);
-        rtl_copyMemory(pBlob, p, *blobsize);
+        memcpy(pBlob, p, *blobsize);
     }
     break;
     case TypeClass_TYPEDEF:
@@ -623,7 +625,7 @@ void* getTypeBlob(Reference< XHierarchicalNameAccess > xTDmgr,
 
         const void* p = writer.getBlob(blobsize);
         pBlob = (sal_uInt8*)rtl_allocateMemory(*blobsize);
-        rtl_copyMemory(pBlob, p, *blobsize);
+        memcpy(pBlob, p, *blobsize);
     }
     break;
     case TypeClass_SERVICE:
@@ -760,7 +762,7 @@ void* getTypeBlob(Reference< XHierarchicalNameAccess > xTDmgr,
 
         const void* p = writer.getBlob(blobsize);
         pBlob = (sal_uInt8*)rtl_allocateMemory(*blobsize);
-        rtl_copyMemory(pBlob, p, *blobsize);
+        memcpy(pBlob, p, *blobsize);
     }
     break;
     case TypeClass_SINGLETON:
@@ -785,7 +787,7 @@ void* getTypeBlob(Reference< XHierarchicalNameAccess > xTDmgr,
 
         const void* p = writer.getBlob(blobsize);
         pBlob = (sal_uInt8*)rtl_allocateMemory(*blobsize);
-        rtl_copyMemory(pBlob, p, *blobsize);
+        memcpy(pBlob, p, *blobsize);
     }
     break;
     default:
