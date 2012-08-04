@@ -22,6 +22,7 @@
 #include <sfx2/templateonlineviewitem.hxx>
 #include <sfx2/templateviewitem.hxx>
 #include <sfx2/thumbnailviewitem.hxx>
+#include <svtools/PlaceEditDialog.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <vcl/edit.hxx>
@@ -585,6 +586,17 @@ IMPL_LINK(SfxTemplateManagerDlg, RepositoryMenuSelectHdl, Menu*, pMenu)
     }
     else if (nMenuId == MNI_REPOSITORY_NEW)
     {
+        PlaceEditDialog dlg(this);
+
+        if (dlg.Execute())
+        {
+            boost::shared_ptr<Place> pPlace = dlg.GetPlace();
+
+            mpOnlineView->insertRepository(pPlace->GetName(),pPlace->GetUrl());
+
+            // update repository list menu.
+            createRepositoryMenu();
+        }
     }
     else
     {

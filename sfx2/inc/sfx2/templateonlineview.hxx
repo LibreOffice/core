@@ -36,6 +36,8 @@ public:
 
     const std::vector<TemplateOnlineViewItem*>& getRepositories () const { return maRepositories; }
 
+    void insertRepository (const OUString &rName, const OUString &rURL);
+
     void setItemDimensions (long ItemWidth, long ThumbnailHeight, long DisplayHeight, int itemPadding);
 
 private:

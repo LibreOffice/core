@@ -242,6 +242,17 @@ bool TemplateOnlineView::loadRepository (const sal_uInt16 nRepositoryId, bool bR
     return true;
 }
 
+void TemplateOnlineView::insertRepository(const OUString &rName, const OUString &rURL)
+{
+    TemplateOnlineViewItem *pItem = new TemplateOnlineViewItem(*this,this);
+
+    pItem->mnId = maRepositories.size()+1;
+    pItem->maTitle = rName;
+    pItem->setURL(rURL);
+
+    maRepositories.push_back(pItem);
+}
+
 void TemplateOnlineView::setItemDimensions(long ItemWidth, long ThumbnailHeight, long DisplayHeight, int itemPadding)
 {
     ThumbnailView::setItemDimensions(ItemWidth,ThumbnailHeight,DisplayHeight,itemPadding);
