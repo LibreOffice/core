@@ -1311,9 +1311,9 @@ RegError ORegistry::mergeModuleValue(OStoreStream& rTargetValue,
         sal_uInt8   type = (sal_uInt8)RG_VALUETYPE_BINARY;
         sal_uInt8*  pBuffer = (sal_uInt8*)rtl_allocateMemory(VALUE_HEADERSIZE + aBlopSize);
 
-        rtl_copyMemory(pBuffer, &type, 1);
+        memcpy(pBuffer, &type, 1);
         writeUINT32(pBuffer+VALUE_TYPEOFFSET, aBlopSize);
-        rtl_copyMemory(pBuffer+VALUE_HEADEROFFSET, pBlop, aBlopSize);
+        memcpy(pBuffer+VALUE_HEADEROFFSET, pBlop, aBlopSize);
 
         sal_uInt32  rwBytes;
         if (rTargetValue.writeAt(0, pBuffer, VALUE_HEADERSIZE+aBlopSize, rwBytes))

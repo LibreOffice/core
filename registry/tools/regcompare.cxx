@@ -1407,7 +1407,7 @@ static sal_uInt32 checkValueDifference(
             std::vector< sal_uInt8 > value2(size2);
             key2.getValue(tmpName, &value2[0]);
 
-            bEqual = (rtl_compareMemory(&value1[0], &value2[0], value1.size()) == 0 );
+            bEqual = (memcmp(&value1[0], &value2[0], value1.size()) == 0 );
             if ( !bEqual && valueType1 == RG_VALUETYPE_BINARY && valueType2 == RG_VALUETYPE_BINARY )
             {
                 typereg::Reader reader1(&value1[0], value1.size(), false, TYPEREG_VERSION_1);

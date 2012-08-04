@@ -18,11 +18,12 @@
  */
 
 
+#include <string.h>
+
 #include "keyimpl.hxx"
 
 #include "reflcnst.hxx"
 #include "rtl/alloc.h"
-#include "rtl/memory.h"
 #include "rtl/ustrbuf.hxx"
 
 using rtl::OUString;
@@ -316,14 +317,14 @@ RegError ORegKey::setValue(const OUString& valueName, RegValueType vType, RegVal
 
     sal_uInt8 type = (sal_uInt8)vType;
     pBuffer = (sal_uInt8*)rtl_allocateMemory(VALUE_HEADERSIZE + size);
-    rtl_copyMemory(pBuffer, &type, 1);
+    memcpy(pBuffer, &type, 1);
 
     writeUINT32(pBuffer+VALUE_TYPEOFFSET, size);
 
     switch (vType)
     {
         case RG_VALUETYPE_NOT_DEFINED:
-            rtl_copyMemory(pBuffer+VALUE_HEADEROFFSET, value, size);
+            memcpy(pBuffer+VALUE_HEADEROFFSET, value, size);
             break;
         case RG_VALUETYPE_LONG:
             writeINT32(pBuffer+VALUE_HEADEROFFSET, *((sal_Int32*)value));
@@ -335,7 +336,7 @@ RegError ORegKey::setValue(const OUString& valueName, RegValueType vType, RegVal
             writeString(pBuffer+VALUE_HEADEROFFSET, (const sal_Unicode*)value);
             break;
         case RG_VALUETYPE_BINARY:
-            rtl_copyMemory(pBuffer+VALUE_HEADEROFFSET, value, size);
+            memcpy(pBuffer+VALUE_HEADEROFFSET, value, size);
             break;
         default:
             OSL_ASSERT(false);
@@ -388,7 +389,7 @@ RegError ORegKey::setLongListValue(const OUString& valueName, sal_Int32* pValueL
 
     sal_uInt8 type = (sal_uInt8)RG_VALUETYPE_LONGLIST;
     pBuffer = (sal_uInt8*)rtl_allocateMemory(VALUE_HEADERSIZE + size);
-    rtl_copyMemory(pBuffer, &type, 1);
+    memcpy(pBuffer, &type, 1);
 
     writeUINT32(pBuffer+VALUE_TYPEOFFSET, size);
     writeUINT32(pBuffer+VALUE_HEADEROFFSET, len);
@@ -451,7 +452,7 @@ RegError ORegKey::setStringListValue(const OUString& valueName, sal_Char** pValu
 
     sal_uInt8 type = (sal_uInt8)RG_VALUETYPE_STRINGLIST;
     pBuffer = (sal_uInt8*)rtl_allocateMemory(VALUE_HEADERSIZE + size);
-    rtl_copyMemory(pBuffer, &type, 1);
+    memcpy(pBuffer, &type, 1);
 
     writeUINT32(pBuffer+VALUE_TYPEOFFSET, size);
     writeUINT32(pBuffer+VALUE_HEADEROFFSET, len);
@@ -519,7 +520,7 @@ RegError ORegKey::setUnicodeListValue(const OUString& valueName, sal_Unicode** p
 
     sal_uInt8 type = (sal_uInt8)RG_VALUETYPE_UNICODELIST;
     pBuffer = (sal_uInt8*)rtl_allocateMemory(VALUE_HEADERSIZE + size);
-    rtl_copyMemory(pBuffer, &type, 1);
+    memcpy(pBuffer, &type, 1);
 
     writeUINT32(pBuffer+VALUE_TYPEOFFSET, size);
     writeUINT32(pBuffer+VALUE_HEADEROFFSET, len);
@@ -621,7 +622,7 @@ RegError ORegKey::getValue(const OUString& valueName, RegValue value) const
     switch (valueType)
     {
         case RG_VALUETYPE_NOT_DEFINED:
-            rtl_copyMemory(value, pBuffer, valueSize);
+            memcpy(value, pBuffer, valueSize);
             break;
         case RG_VALUETYPE_LONG:
             readINT32(pBuffer, *((sal_Int32*)value));
@@ -633,12 +634,12 @@ RegError ORegKey::getValue(const OUString& valueName, RegValue value) const
             readString(pBuffer, (sal_Unicode*)value, valueSize);
             break;
         case RG_VALUETYPE_BINARY:
-            rtl_copyMemory(value, pBuffer, valueSize);
+            memcpy(value, pBuffer, valueSize);
             break;
         case RG_VALUETYPE_LONGLIST:
         case RG_VALUETYPE_STRINGLIST:
         case RG_VALUETYPE_UNICODELIST:
-            rtl_copyMemory(value, pBuffer, valueSize);
+            memcpy(value, pBuffer, valueSize);
             break;
     }
 

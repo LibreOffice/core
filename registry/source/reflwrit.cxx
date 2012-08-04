@@ -403,7 +403,7 @@ void FieldEntry::setData(const OString&    name,
     if (constValueType == RT_TYPE_STRING && constValue.aString != 0) {
         sal_Int32 n = rtl_ustr_getLength(constValue.aString) + 1;
         newValue = new sal_Unicode[n];
-        rtl_copyMemory(newValue, constValue.aString, n * sizeof (sal_Unicode));
+        memcpy(newValue, constValue.aString, n * sizeof (sal_Unicode));
     }
 
     m_name = name;
