@@ -338,6 +338,7 @@ include $(foreach class, \
 	JavaClassSet \
 	JunitTest \
 	Module \
+	UI \
 	UnoApiTarget \
 	UnoApi \
 	UnoApiMerge \
