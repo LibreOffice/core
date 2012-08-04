@@ -35,6 +35,8 @@ $(eval $(call gb_Module_add_targets,sw,\
     Library_swd \
     Library_swui \
     Package_uiconfig \
+	UI_sw \
+	UI_swriter \
 ))
 
 ifneq ($(DISABLE_SCRIPTING),TRUE)
