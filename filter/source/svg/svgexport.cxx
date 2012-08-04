@@ -371,6 +371,13 @@ sal_Bool SVGExport::IsEmbedFonts() const
 
 // -----------------------------------------------------------------------------
 
+sal_Bool SVGExport::IsUsePositionedCharacters() const
+{
+    return false;
+}
+
+// -----------------------------------------------------------------------------
+
 sal_Bool SVGExport::IsUseNativeTextDecoration() const
 {
     sal_Bool bRet = !IsUseTinyProfile();
@@ -1566,6 +1573,8 @@ sal_Bool SVGFilter::implExportShape( const Reference< XShape >& rxShape )
                     }
 
                     {
+                        Reference< XText > xText( rxShape, UNO_QUERY );
+                        mpSVGWriter->bIsTextShape = xText.is();
                         SvXMLElementExport aExp2( *mpSVGExport, XML_NAMESPACE_NONE, "g", sal_True, sal_True );
                         mpSVGWriter->WriteMetaFile( aTopLeft, aSize, rMtf, SVGWRITER_WRITE_ALL, pElementId );
                     }

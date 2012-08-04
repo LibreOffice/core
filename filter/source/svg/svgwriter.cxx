@@ -51,6 +51,7 @@ static const char   aXMLElemRect[] = "rect";
 static const char   aXMLElemEllipse[] = "ellipse";
 static const char   aXMLElemPath[] = "path";
 static const char   aXMLElemText[] = "text";
+static const char   aXMLElemTspan[] = "tspan";
 static const char   aXMLElemImage[] = "image";
 static const char   aXMLElemMask[] = "mask";
 static const char   aXMLElemPattern[] = "pattern";
@@ -63,6 +64,8 @@ static const char   aXMLElemStop[] = "stop";
 static const char   aXMLAttrTransform[] = "transform";
 static const char   aXMLAttrStyle[] = "style";
 static const char   aXMLAttrId[] = "id";
+static const char   aXMLAttrDX[] = "dx";
+static const char   aXMLAttrDY[] = "dy";
 static const char   aXMLAttrD[] = "d";
 static const char   aXMLAttrX[] = "x";
 static const char   aXMLAttrY[] = "y";
@@ -112,8 +115,10 @@ SVGAttributeWriter::SVGAttributeWriter( SVGExport& rExport, SVGFontExport& rFont
 
 SVGAttributeWriter::~SVGAttributeWriter()
 {
-    delete mpElemPaint;
-    delete mpElemFont;
+    if( mpElemPaint )
+        delete mpElemPaint;
+    if( mpElemFont )
+        delete mpElemFont;
 }
 
 // -----------------------------------------------------------------------------
@@ -314,17 +319,15 @@ void SVGAttributeWriter::AddGradientDef( const Rectangle& rObjRect, const Gradie
 
 void SVGAttributeWriter::SetFontAttr( const Font& rFont )
 {
-    if( !mpElemFont || ( rFont != maCurFont ) )
+    if( rFont != maCurFont )
     {
         ::rtl::OUString  aFontStyle, aFontWeight, aTextDecoration;
         sal_Int32        nFontWeight;
 
-        delete mpElemPaint, mpElemPaint = NULL;
-        delete mpElemFont;
         maCurFont = rFont;
 
         // Font Family
-        mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrFontFamily, mrFontExport.GetMappedFontName( rFont.GetName() ) );
+        setFontFamily();
 
         // Font Size
         mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrFontSize,
@@ -377,8 +380,698 @@ void SVGAttributeWriter::SetFontAttr( const Font& rFont )
             mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrTextDecoration, aTextDecoration );
         }
 
+        startFontSettings();
+    }
+}
+
+void SVGAttributeWriter::startFontSettings()
+{
+    endFontSettings();
+    if( mrExport.IsUsePositionedCharacters() )
+    {
         mpElemFont = new SvXMLElementExport( mrExport, XML_NAMESPACE_NONE, aXMLElemG, sal_True, sal_True );
     }
+    else
+    {
+        mpElemFont = new SvXMLElementExport( mrExport, XML_NAMESPACE_NONE, aXMLElemTspan, sal_True, sal_True );
+    }
+}
+
+void SVGAttributeWriter::endFontSettings()
+{
+    if( mpElemFont )
+    {
+        delete mpElemFont;
+        mpElemFont = NULL;
+    }
+}
+
+void SVGAttributeWriter::setFontFamily()
+{
+    if( mrExport.IsUsePositionedCharacters() )
+    {
+        mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrFontFamily, mrFontExport.GetMappedFontName( maCurFont.GetName() ) );
+    }
+    else
+    {
+        sal_Int32       nNextTokenPos( 0 );
+        const ::rtl::OUString& rsFontName = maCurFont.GetName();
+        ::rtl::OUString sFontFamily( rsFontName.getToken( 0, ';', nNextTokenPos ) );
+        FontPitch ePitch = maCurFont.GetPitch();
+        if( ePitch == PITCH_FIXED )
+        {
+            sFontFamily += B2UCONST( ", monospace" );
+        }
+        else
+        {
+            FontFamily eFamily = maCurFont.GetFamily();
+            if( eFamily == FAMILY_ROMAN )
+                sFontFamily += B2UCONST( ", serif" );
+            else if( eFamily == FAMILY_SWISS )
+                sFontFamily += B2UCONST( ", sans-serif" );
+        }
+        mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrFontFamily, sFontFamily );
+    }
+}
+
+// -------------------
+// - SVGTextWriter -
+// -------------------
+
+SVGTextWriter::SVGTextWriter( SVGExport& rExport, SVGFontExport& rFontExport )
+    :   mrExport( rExport ),
+        mrFontExport( rFontExport ),
+        mpContext( NULL ),
+        mpVDev( NULL ),
+        mpTargetMapMode( NULL ),
+        mpTextShapeElem( NULL ),
+        mpTextParagraphElem( NULL ),
+        mpTextPositionElem( NULL ),
+        maTextPos(0,0),
+        mnTextWidth(0),
+        mbIsPlacehlolderShape( sal_False ),
+        mbIWS( sal_False ),
+        maCurrentFont(),
+        maParentFont()
+{
+}
+
+// -----------------------------------------------------------------------------
+
+SVGTextWriter::~SVGTextWriter()
+{
+    endTextParagraph();
+}
+
+// -----------------------------------------------------------------------------
+
+void SVGTextWriter::implMap( const Size& rSz, Size& rDstSz ) const
+{
+    if( mpVDev && mpTargetMapMode )
+        rDstSz = mpVDev->LogicToLogic( rSz, mpVDev->GetMapMode(), *mpTargetMapMode );
+    else
+        OSL_FAIL( "SVGTextWriter::implMap: invalid virtual device or map mode." );
+}
+
+// -----------------------------------------------------------------------------
+
+void SVGTextWriter::implMap( const Point& rPt, Point& rDstPt ) const
+{
+    if( mpVDev && mpTargetMapMode )
+        rDstPt = mpVDev->LogicToLogic( rPt, mpVDev->GetMapMode(), *mpTargetMapMode );
+    else
+        OSL_FAIL( "SVGTextWriter::implMap: invalid virtual device or map mode." );
+}
+
+// -----------------------------------------------------------------------------
+
+void SVGTextWriter::implSetCurrentFont()
+{
+    if( mpVDev )
+    {
+        maCurrentFont = mpVDev->GetFont();
+        Size aSz;
+
+        implMap( Size( 0, maCurrentFont.GetHeight() ), aSz );
+
+        maCurrentFont.SetHeight( aSz.Height() );
+    }
+    else
+    {
+        OSL_FAIL( "SVGTextWriter::implSetCorrectFontHeight: invalid virtual device." );
+    }
+}
+// -----------------------------------------------------------------------------
+
+template< typename SubType >
+sal_Bool SVGTextWriter::implGetTextPosition( const MetaAction* pAction, Point& raPos, sal_Bool& rbEmpty )
+{
+    const SubType* pA = (const SubType*) pAction;
+    sal_uInt16 nLength = pA->GetLen();
+    rbEmpty = ( nLength == 0 );
+    if( !rbEmpty )
+    {
+        raPos = pA->GetPoint();
+        return sal_True;
+    }
+    return sal_False;
+}
+
+// -----------------------------------------------------------------------------
+
+template<>
+sal_Bool SVGTextWriter::implGetTextPosition<MetaTextRectAction>( const MetaAction* pAction, Point& raPos, sal_Bool& rbEmpty )
+{
+    const MetaTextRectAction* pA = (const MetaTextRectAction*) pAction;
+    sal_uInt16 nLength = pA->GetText().getLength();
+    rbEmpty = ( nLength == 0 );
+    if( !rbEmpty )
+    {
+        raPos = pA->GetRect().TopLeft();
+        return sal_True;
+    }
+    return sal_False;
+}
+
+// -----------------------------------------------------------------------------
+
+/** setTextPosition
+ *  Set the start position of the next line of text. In case no text is found
+ *  the current action index is updated to the index value we reached while
+ *  searching for text.
+ *
+ *  @returns {sal_Int32}
+ *    -2 if no text found and end of line is reached
+ *    -1 if no text found and end of paragraph is reached
+ *     0 if no text found and end of text shape is reached
+ *     1 if text found!
+ */
+sal_Int32 SVGTextWriter::setTextPosition( const GDIMetaFile& rMtf, sal_uLong& nCurAction )
+{
+    Point aPos;
+    sal_uLong nCount = rMtf.GetActionSize();
+    sal_Bool bEOL = sal_False;
+    sal_Bool bEOP = sal_False;
+    sal_Bool bETS = sal_False;
+    sal_Bool bConfigured = sal_False;
+    sal_Bool bEmpty = sal_True;
+
+    sal_uLong nActionIndex = nCurAction + 1;
+    for( ; nActionIndex < nCount; ++nActionIndex )
+    {
+        const MetaAction*   pAction = rMtf.GetAction( nActionIndex );
+        const sal_uInt16    nType = pAction->GetType();
+
+        switch( nType )
+        {
+            case( META_TEXT_ACTION ):
+            {
+                bConfigured = implGetTextPosition<MetaTextAction>( pAction, aPos, bEmpty );
+            }
+            break;
+
+            case( META_TEXTRECT_ACTION ):
+            {
+                bConfigured = implGetTextPosition<MetaTextRectAction>( pAction, aPos, bEmpty );
+            }
+            break;
+
+            case( META_TEXTARRAY_ACTION ):
+            {
+                bConfigured = implGetTextPosition<MetaTextArrayAction>( pAction, aPos, bEmpty );
+            }
+            break;
+
+            case( META_STRETCHTEXT_ACTION ):
+            {
+                bConfigured = implGetTextPosition<MetaStretchTextAction>( pAction, aPos, bEmpty );
+            }
+            break;
+
+            // If we reach the end of the current line, paragraph or text shape
+            // without finding any text we stop searching
+            case( META_COMMENT_ACTION ):
+            {
+                const MetaCommentAction* pA = (const MetaCommentAction*) pAction;
+                const ::rtl::OString& rsComment = pA->GetComment();
+                if( rsComment.equalsIgnoreAsciiCaseL( RTL_CONSTASCII_STRINGPARAM( "XTEXT_EOL" ) ) )
+                {
+                    bEOL = true;
+                }
+                else if( rsComment.equalsIgnoreAsciiCaseL( RTL_CONSTASCII_STRINGPARAM( "XTEXT_EOP" ) ) )
+                {
+                    bEOP = true;
+                }
+                else if( rsComment.equalsIgnoreAsciiCaseL( RTL_CONSTASCII_STRINGPARAM( "XTEXT_PAINTSHAPE_END" ) ) )
+                {
+                    bETS = true;
+                }
+            }
+            break;
+        }
+        if( bConfigured || bEOL || bEOP || bETS ) break;
+    }
+    implMap( aPos, maTextPos );
+
+    if( bEmpty )
+    {
+        nCurAction = nActionIndex;
+        return ( (bEOL) ? -2 : ( (bEOP) ? -1 : 0 ) );
+    }
+    else
+    {
+        return 1;
+    }
+}
+
+// -----------------------------------------------------------------------------
+
+void SVGTextWriter::setTextProperties( const GDIMetaFile& rMtf, sal_uLong nCurAction )
+{
+    sal_uLong nCount = rMtf.GetActionSize();
+    sal_Bool bEOP = sal_False;
+    sal_Bool bConfigured = sal_False;
+    for( sal_uLong nActionIndex = nCurAction + 1; nActionIndex < nCount; ++nActionIndex )
+    {
+        const MetaAction*   pAction = rMtf.GetAction( nActionIndex );
+        const sal_uInt16    nType = pAction->GetType();
+        switch( nType )
+        {
+            case( META_TEXTLINECOLOR_ACTION ):
+            case( META_TEXTFILLCOLOR_ACTION ):
+            case( META_TEXTCOLOR_ACTION ):
+            case( META_TEXTALIGN_ACTION ):
+            case( META_FONT_ACTION ):
+            case( META_LAYOUTMODE_ACTION ):
+            {
+                ( (MetaAction*) pAction )->Execute( mpVDev );
+            }
+            break;
+
+            case( META_TEXT_ACTION ):
+            {
+                const MetaTextAction* pA = (const MetaTextAction*) pAction;
+                if( pA->GetLen() > 2 )
+                    bConfigured = true;
+            }
+            break;
+            case( META_TEXTRECT_ACTION ):
+            {
+                const MetaTextRectAction* pA = (const MetaTextRectAction*) pAction;
+                if( pA->GetText().getLength() > 2 )
+                    bConfigured = true;
+            }
+            break;
+            case( META_TEXTARRAY_ACTION ):
+            {
+                const MetaTextArrayAction* pA = (const MetaTextArrayAction*) pAction;
+                if( pA->GetLen() > 2 )
+                    bConfigured = true;
+            }
+            break;
+            case( META_STRETCHTEXT_ACTION ):
+            {
+                const MetaStretchTextAction* pA = (const MetaStretchTextAction*) pAction;
+                if( pA->GetLen() > 2 )
+                    bConfigured = true;
+            }
+            break;
+            // If we reach the end of the paragraph without finding any text
+            // we stop searching
+            case( META_COMMENT_ACTION ):
+            {
+                const MetaCommentAction* pA = (const MetaCommentAction*) pAction;
+                const ::rtl::OString& rsComment = pA->GetComment();
+                if( rsComment.equalsIgnoreAsciiCaseL( RTL_CONSTASCII_STRINGPARAM( "XTEXT_EOP" ) ) )
+                {
+                    bEOP = true;
+                }
+            }
+            break;
+        }
+        if( bConfigured || bEOP ) break;
+    }
+}
+
+// -----------------------------------------------------------------------------
+
+void SVGTextWriter::addFontAttributes( sal_Bool bIsTextContainer )
+{
+    implSetCurrentFont();
+
+    if( maCurrentFont !=  maParentFont )
+    {
+        const String& rsCurFontName                 = maCurrentFont.GetName();
+        long int nCurFontSize                       = maCurrentFont.GetHeight();
+        FontItalic eCurFontItalic                   = maCurrentFont.GetItalic();
+        FontWeight eCurFontWeight                   = maCurrentFont.GetWeight();
+
+        const String& rsParFontName                 = maParentFont.GetName();
+        long int nParFontSize                       = maParentFont.GetHeight();
+        FontItalic eParFontItalic                   = maParentFont.GetItalic();
+        FontWeight eParFontWeight                   = maParentFont.GetWeight();
+
+
+        // Font Family
+        if( rsCurFontName != rsParFontName )
+        {
+            implSetFontFamily();
+        }
+
+        // Font Size
+        if( nCurFontSize != nParFontSize )
+        {
+            mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrFontSize,
+                                   ::rtl::OUString::valueOf( nCurFontSize ) +  B2UCONST( "px" ) );
+        }
+
+        // Font Style
+        if( eCurFontItalic != eParFontItalic )
+        {
+            ::rtl::OUString sFontStyle;
+            if( eCurFontItalic != ITALIC_NONE )
+            {
+                if( eCurFontItalic == ITALIC_OBLIQUE )
+                    sFontStyle = B2UCONST( "oblique" );
+                else
+                    sFontStyle = B2UCONST( "italic" );
+            }
+            else
+            {
+                sFontStyle = B2UCONST( "normal" );
+            }
+            mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrFontStyle, sFontStyle );
+        }
+
+        // Font Weight
+        if( eCurFontWeight != eParFontWeight )
+        {
+            sal_Int32 nFontWeight;
+            switch( eCurFontWeight )
+            {
+                case WEIGHT_THIN:           nFontWeight = 100; break;
+                case WEIGHT_ULTRALIGHT:     nFontWeight = 200; break;
+                case WEIGHT_LIGHT:          nFontWeight = 300; break;
+                case WEIGHT_SEMILIGHT:      nFontWeight = 400; break;
+                case WEIGHT_NORMAL:         nFontWeight = 400; break;
+                case WEIGHT_MEDIUM:         nFontWeight = 500; break;
+                case WEIGHT_SEMIBOLD:       nFontWeight = 600; break;
+                case WEIGHT_BOLD:           nFontWeight = 700; break;
+                case WEIGHT_ULTRABOLD:      nFontWeight = 800; break;
+                case WEIGHT_BLACK:          nFontWeight = 900; break;
+                default:                    nFontWeight = 400; break;
+            }
+            mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrFontWeight, ::rtl::OUString::valueOf( nFontWeight ) );
+        }
+
+        if( bIsTextContainer )
+            maParentFont = maCurrentFont;
+    }
+
+    if( mrExport.IsUseNativeTextDecoration() )
+    {
+        FontUnderline eCurFontUnderline         = maCurrentFont.GetUnderline();
+        FontStrikeout eCurFontStrikeout         = maCurrentFont.GetStrikeout();
+
+        FontUnderline eParFontUnderline         = maParentFont.GetUnderline();
+        FontStrikeout eParFontStrikeout         = maParentFont.GetStrikeout();
+
+        ::rtl::OUString sTextDecoration;
+
+        if( eCurFontUnderline != eParFontUnderline )
+        {
+            if( eCurFontUnderline != UNDERLINE_NONE )
+                sTextDecoration = B2UCONST( "underline " );
+        }
+        if( eCurFontStrikeout != eParFontStrikeout )
+        {
+            if( eCurFontStrikeout != STRIKEOUT_NONE )
+                sTextDecoration += B2UCONST( "line-through " );
+        }
+        if( !sTextDecoration.isEmpty() )
+            mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrTextDecoration, sTextDecoration );
+    }
+}
+
+// -----------------------------------------------------------------------------
+
+void SVGTextWriter::implSetFontFamily()
+{
+    sal_Int32       nNextTokenPos( 0 );
+    const ::rtl::OUString& rsFontName = maCurrentFont.GetName();
+    ::rtl::OUString sFontFamily( rsFontName.getToken( 0, ';', nNextTokenPos ) );
+    FontPitch ePitch = maCurrentFont.GetPitch();
+    if( ePitch == PITCH_FIXED )
+    {
+        sFontFamily += B2UCONST( ", monospace" );
+    }
+    else
+    {
+        FontFamily eFamily = maCurrentFont.GetFamily();
+        if( eFamily == FAMILY_ROMAN )
+            sFontFamily += B2UCONST( ", serif" );
+        else if( eFamily == FAMILY_SWISS )
+            sFontFamily += B2UCONST( ", sans-serif" );
+    }
+    mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrFontFamily, sFontFamily );
+}
+
+// -----------------------------------------------------------------------------
+
+void SVGTextWriter::startTextShape()
+{
+    if( mpTextShapeElem )
+    {
+        OSL_FAIL( "SVGTextWriter::startTextShape: text shape already defined." );
+    }
+    else
+    {
+        maParentFont = Font();
+        mpTextShapeElem = new SvXMLElementExport( mrExport, XML_NAMESPACE_NONE, aXMLElemText, sal_True, mbIWS );
+        startTextParagraph();
+    }
+}
+
+// -----------------------------------------------------------------------------
+
+void SVGTextWriter::endTextShape()
+{
+    endTextParagraph();
+    if( mpTextShapeElem )
+    {
+        delete mpTextShapeElem;
+        mpTextShapeElem = NULL;
+    }
+}
+
+// -----------------------------------------------------------------------------
+
+void SVGTextWriter::startTextParagraph()
+{
+    endTextParagraph();
+    mrExport.AddAttribute( XML_NAMESPACE_NONE, "class", B2UCONST( "TextParagraph" ) );
+    maParentFont = Font();
+    addFontAttributes( /* isTexTContainer: */ true );
+    mpTextParagraphElem = new SvXMLElementExport( mrExport, XML_NAMESPACE_NONE, aXMLElemTspan, mbIWS, mbIWS );
+    startTextPosition();
+}
+
+// -----------------------------------------------------------------------------
+
+void SVGTextWriter::endTextParagraph()
+{
+    endTextPosition();
+    if( mpTextParagraphElem )
+    {
+        delete mpTextParagraphElem;
+        mpTextParagraphElem = NULL;
+    }
+}
+
+// -----------------------------------------------------------------------------
+
+void SVGTextWriter::startTextPosition( sal_Bool bExportX, sal_Bool bExportY )
+{
+    endTextPosition();
+    mnTextWidth = 0;
+    mrExport.AddAttribute( XML_NAMESPACE_NONE, "class", B2UCONST( "TextPosition" ) );
+    if( bExportX )
+        mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrX, ::rtl::OUString::valueOf( maTextPos.X() ) );
+    if( bExportY )
+        mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrY, ::rtl::OUString::valueOf( maTextPos.Y() ) );
+    mpTextPositionElem = new SvXMLElementExport( mrExport, XML_NAMESPACE_NONE, aXMLElemTspan, mbIWS, mbIWS );
+}
+
+// -----------------------------------------------------------------------------
+
+void SVGTextWriter::endTextPosition()
+{
+    if( mpTextPositionElem )
+    {
+        delete mpTextPositionElem;
+        mpTextPositionElem = NULL;
+    }
+}
+
+// -----------------------------------------------------------------------------
+
+void SVGTextWriter::writeTextPortion( const Point& rPos,
+                                      const String& rText,
+                                      sal_Bool bApplyMapping )
+{
+    if( !mpVDev )
+        OSL_FAIL( "SVGTextWriter::writeTextPortion: invalid virtual device." );
+
+    const FontMetric aMetric( mpVDev->GetFontMetric() );
+
+    bool bTextSpecial = aMetric.IsShadow() || aMetric.IsOutline() || (aMetric.GetRelief() != RELIEF_NONE);
+
+    if( true || !bTextSpecial )
+    {
+        implWriteTextPortion( rPos, rText, mpVDev->GetTextColor(), bApplyMapping );
+    }
+//    else
+//    {
+//        if( aMetric.GetRelief() != RELIEF_NONE )
+//        {
+//            Color aReliefColor( COL_LIGHTGRAY );
+//            Color aTextColor( mpVDev->GetTextColor() );
+//
+//            if ( aTextColor.GetColor() == COL_BLACK )
+//                aTextColor = Color( COL_WHITE );
+//
+//            if ( aTextColor.GetColor() == COL_WHITE )
+//                aReliefColor = Color( COL_BLACK );
+//
+//
+//            Point aPos( rPos );
+//            Point aOffset( 6, 6 );
+//
+//            if ( aMetric.GetRelief() == RELIEF_ENGRAVED )
+//            {
+//                aPos -= aOffset;
+//            }
+//            else
+//            {
+//                aPos += aOffset;
+//            }
+//
+//            ImplWriteText( aPos, rText, pDXArray, nWidth, aReliefColor, bApplyMapping );
+//            ImplWriteText( rPos, rText, pDXArray, nWidth, aTextColor, bApplyMapping );
+//        }
+//        else
+//        {
+//            if( aMetric.IsShadow() )
+//            {
+//                long nOff = 1 + ((aMetric.GetLineHeight()-24)/24);
+//                if ( aMetric.IsOutline() )
+//                    nOff += 6;
+//
+//                Color aTextColor( mpVDev->GetTextColor() );
+//                Color aShadowColor = Color( COL_BLACK );
+//
+//                if ( (aTextColor.GetColor() == COL_BLACK) || (aTextColor.GetLuminance() < 8) )
+//                    aShadowColor = Color( COL_LIGHTGRAY );
+//
+//                Point aPos( rPos );
+//                aPos += Point( nOff, nOff );
+//                ImplWriteText( aPos, rText, pDXArray, nWidth, aShadowColor, bApplyMapping );
+//
+//                if( !aMetric.IsOutline() )
+//                {
+//                    ImplWriteText( rPos, rText, pDXArray, nWidth, aTextColor, bApplyMapping );
+//                }
+//            }
+//
+//            if( aMetric.IsOutline() )
+//            {
+//                Point aPos = rPos + Point( -6, -6 );
+//                ImplWriteText( aPos, rText, pDXArray, nWidth, mpVDev->GetTextColor(), bApplyMapping );
+//                aPos = rPos + Point( +6, +6);
+//                ImplWriteText( aPos, rText, pDXArray, nWidth, mpVDev->GetTextColor(), bApplyMapping );
+//                aPos = rPos + Point( -6, +0);
+//                ImplWriteText( aPos, rText, pDXArray, nWidth, mpVDev->GetTextColor(), bApplyMapping );
+//                aPos = rPos + Point( -6, +6);
+//                ImplWriteText( aPos, rText, pDXArray, nWidth, mpVDev->GetTextColor(), bApplyMapping );
+//                aPos = rPos + Point( +0, +6);
+//                ImplWriteText( aPos, rText, pDXArray, nWidth, mpVDev->GetTextColor(), bApplyMapping );
+//                aPos = rPos + Point( +0, -6);
+//                ImplWriteText( aPos, rText, pDXArray, nWidth, mpVDev->GetTextColor(), bApplyMapping );
+//                aPos = rPos + Point( +6, -1);
+//                ImplWriteText( aPos, rText, pDXArray, nWidth, mpVDev->GetTextColor(), bApplyMapping );
+//                aPos = rPos + Point( +6, +0);
+//                ImplWriteText( aPos, rText, pDXArray, nWidth, mpVDev->GetTextColor(), bApplyMapping );
+//
+//                ImplWriteText( rPos, rText, pDXArray, nWidth, Color( COL_WHITE ), bApplyMapping );
+//            }
+//        }
+//    }
+
+}
+
+// -----------------------------------------------------------------------------
+
+void SVGTextWriter::implWriteTextPortion( const Point& rPos,
+                                          const String& rText,
+                                          Color aTextColor,
+                                          sal_Bool bApplyMapping )
+{
+    if( !mpContext )
+        OSL_FAIL( "SVGTextWriter::implWriteTextPortion: invalid context object." );
+
+    Point                                   aPos;
+    Point                                   aBaseLinePos( rPos );
+    const FontMetric                        aMetric( mpVDev->GetFontMetric() );
+    const Font&                             rFont = mpVDev->GetFont();
+
+    if( rFont.GetAlign() == ALIGN_TOP )
+        aBaseLinePos.Y() += aMetric.GetAscent();
+    else if( rFont.GetAlign() == ALIGN_BOTTOM )
+        aBaseLinePos.Y() -= aMetric.GetDescent();
+
+    if( bApplyMapping )
+        implMap( rPos, aPos );
+    else
+        aPos = rPos;
+
+
+    if( maTextPos.Y() != aPos.Y() )
+    {
+        // In case the text position moved backward we could have a line break
+        // so we end the current line and start a new one.
+        if( ( maTextPos.X() + mnTextWidth ) > aPos.X() )
+        {
+            maTextPos.setX( aPos.X() );
+            maTextPos.setY( aPos.Y() );
+            startTextPosition();
+        }
+        else // superscript, subscript, bullets
+        {
+            //mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrY, ::rtl::OUString::valueOf( aPos.Y() ) );
+            maTextPos.setY( aPos.Y() );
+            startTextPosition( sal_False /* do not export x attribute */ );
+        }
+    }
+
+
+    addFontAttributes( /* isTexTContainer: */ false );
+    mpContext->AddPaintAttr( COL_TRANSPARENT, aTextColor );
+
+    SvXMLElementExport aSVGTspanElem( mrExport, XML_NAMESPACE_NONE, aXMLElemTspan, mbIWS, mbIWS );
+
+    sal_Bool bIsPlaceholderField = sal_False;
+
+    if( false && mbIsPlacehlolderShape )
+    {
+        OUString sTextContent = rText;
+        bIsPlaceholderField = sTextContent.match( sPlaceholderTag );
+        // for a placeholder text field we export only one <text> svg element
+        if( bIsPlaceholderField )
+        {
+            OUString sCleanTextContent;
+            static const sal_Int32 nFrom = sPlaceholderTag.getLength();
+            if( sTextContent.getLength() > nFrom )
+            {
+                sCleanTextContent = sTextContent.copy( nFrom );
+            }
+            mrExport.AddAttribute( XML_NAMESPACE_NONE, "class", B2UCONST( "PlaceholderText" ) );
+            mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrX, ::rtl::OUString::valueOf( aPos.X() ) );
+            mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrY, ::rtl::OUString::valueOf( aPos.Y() ) );
+            {
+                //SvXMLElementExport aElem( mrExport, XML_NAMESPACE_NONE, aXMLElemSpan, sal_True, sal_False );
+                // At least for the single slide case we need really to  export placeholder text
+                mrExport.GetDocHandler()->characters( sCleanTextContent );
+            }
+        }
+    }
+
+    if( !bIsPlaceholderField )
+    {
+        OUString sTextContent = rText;
+        mrExport.GetDocHandler()->characters( sTextContent );
+        mnTextWidth += mpVDev->GetTextWidth( sTextContent );
+    }
+
 }
 
 // -------------------
@@ -392,12 +1085,14 @@ SVGActionWriter::SVGActionWriter( SVGExport& rExport, SVGFontExport& rFontExport
     mrExport( rExport ),
     mrFontExport( rFontExport ),
     mpContext( NULL ),
+    maTextWriter( rExport, rFontExport ),
     mnInnerMtfCount( 0 ),
     mbClipAttrChanged( sal_False )
 {
     mpVDev = new VirtualDevice;
     mpVDev->EnableOutput( sal_False );
     maTargetMapMode = MAP_100TH_MM;
+    maTextWriter.setVirtualDevice( mpVDev, maTargetMapMode );
 }
 
 // -----------------------------------------------------------------------------
@@ -1354,9 +2049,11 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
         nWriteFlags |= SVGWRITER_NO_SHAPE_COMMENTS;
 
     mbIsPlacehlolderShape = false;
+    maTextWriter.setPlaceholderShapeFlag( false );
     if( pElementId != NULL && ( *pElementId == sPlaceholderTag ) )
     {
         mbIsPlacehlolderShape = true;
+        maTextWriter.setPlaceholderShapeFlag( true );
         // since we utilize pElementId in an improper way we reset it to NULL before to go on
         pElementId = NULL;
     }
@@ -1365,6 +2062,51 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
     {
         const MetaAction*   pAction = rMtf.GetAction( nCurAction );
         const sal_uInt16        nType = pAction->GetType();
+
+        if( bIsTextShape )
+        {
+            try
+            {
+
+            SvXMLElementExport aElem( mrExport, XML_NAMESPACE_NONE, "desc", sal_False, sal_False );
+            ::rtl::OUString sType = ::rtl::OUString::valueOf( ( (sal_Int32) nType ) );
+            if( pAction && ( nType == META_COMMENT_ACTION ) )
+            {
+                sType += B2UCONST( ": " );
+                const MetaCommentAction* pA = (const MetaCommentAction*) pAction;
+                rtl::OString sComment = pA->GetComment();
+                if( !sComment.isEmpty() )
+                {
+                    OUString ssComment = OUString( sComment.getStr(), sComment.getLength(), RTL_TEXTENCODING_UTF8 );
+                    sType += ssComment;
+                }
+                if( sComment.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("FIELD_SEQ_BEGIN")) )
+                {
+                    const sal_uInt8* pData = NULL;
+                    pData = pA->GetData();
+                    if( pData && ( pA->GetDataSize() ) )
+                    {
+                        sal_uInt16 sz = (sal_uInt16)( ( pA->GetDataSize() ) / 2 );
+                        if( sz )
+                        {
+                            String sData( ( (const sal_Unicode*) pData ), sz );
+                            OUString ssData = OUString::valueOf( (sal_Int32) pA->GetDataSize() );
+                            sType += B2UCONST( "; " );
+                            sType += sData;
+                        }
+                    }
+                }
+            }
+            if( !sType.isEmpty() )
+                mrExport.GetDocHandler()->characters( sType );
+            }
+            catch( ... )
+            {
+                const MetaCommentAction* pA = (const MetaCommentAction*) pAction;
+                OSL_FAIL( pA->GetComment().getStr() );
+            }
+
+        }
 
         switch( nType )
         {
@@ -1773,6 +2515,107 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                         }
                     }
                 }
+                else if( !mrExport.IsUsePositionedCharacters() && ( nWriteFlags & SVGWRITER_WRITE_TEXT ) )
+                {
+                    if( ( pA->GetComment().equalsIgnoreAsciiCaseL( RTL_CONSTASCII_STRINGPARAM( "XTEXT_PAINTSHAPE_BEGIN" ) ) ) )
+                    {
+                        // nTextFound == -1 => no text found
+                        // nTextFound ==  0 => no text found and end of text shape reached
+                        // nTextFound ==  1 => text found!
+                        sal_Int32 nTextFound = -1;
+                        while( ( nTextFound < 0 ) && ( nCurAction < nCount ) )
+                        {
+                            nTextFound = maTextWriter.setTextPosition( rMtf, nCurAction );
+                        }
+                        // We found some text in the current text shape.
+                        if( nTextFound > 0 )
+                        {
+                            maTextWriter.setTextProperties( rMtf, nCurAction );
+                            //ImplSetCorrectFontHeight();
+                            maTextWriter.startTextShape();
+                        }
+                        // We reached the end of the current text shape
+                        // without finding any text. So we need to go back
+                        // by one action in order to handle the
+                        // XTEXT_PAINTSHAPE_END action because on the next
+                        // loop the nCurAction is incremented by one.
+                        else
+                        {
+                            --nCurAction;
+                        }
+                    }
+                    else if( ( pA->GetComment().equalsIgnoreAsciiCaseL( RTL_CONSTASCII_STRINGPARAM( "XTEXT_PAINTSHAPE_END" ) ) ) )
+                    {
+                        maTextWriter.endTextShape();
+                    }
+                    else if( ( pA->GetComment().equalsIgnoreAsciiCaseL( RTL_CONSTASCII_STRINGPARAM( "XTEXT_EOP" ) ) ) )
+                    {
+                        const MetaAction* pNextAction = rMtf.GetAction( nCurAction + 1 );
+                        if( !( ( pNextAction->GetType() == META_COMMENT_ACTION ) &&
+                               ( ( (const MetaCommentAction*) pNextAction )->GetComment().equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("XTEXT_PAINTSHAPE_END") ) )  ))
+                        {
+                            // nTextFound == -1 => no text found and end of paragraph reached
+                            // nTextFound ==  0 => no text found and end of text shape reached
+                            // nTextFound ==  1 => text found!
+                            sal_Int32 nTextFound = -1;
+                            while( ( nTextFound < 0 ) && ( nCurAction < nCount ) )
+                            {
+                                nTextFound = maTextWriter.setTextPosition( rMtf, nCurAction );
+                            }
+                            // We found a paragraph with some text in the
+                            // current text shape.
+                            if( nTextFound > 0 )
+                            {
+                                maTextWriter.setTextProperties( rMtf, nCurAction );
+                                //ImplSetCorrectFontHeight();
+                                maTextWriter.startTextParagraph();
+                            }
+                            // We reached the end of the current text shape
+                            // without finding any text. So we need to go back
+                            // by one action in order to handle the
+                            // XTEXT_PAINTSHAPE_END action because on the next
+                            // loop the nCurAction is incremented by one.
+                            else
+                            {
+                                --nCurAction;
+                            }
+
+                        }
+                    }
+                    else if( ( pA->GetComment().equalsIgnoreAsciiCaseL( RTL_CONSTASCII_STRINGPARAM( "XTEXT_EOL" ) ) ) )
+                    {
+                        const MetaAction* pNextAction = rMtf.GetAction( nCurAction + 1 );
+                        if( !( ( pNextAction->GetType() == META_COMMENT_ACTION ) &&
+                               ( ( (const MetaCommentAction*) pNextAction )->GetComment().equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("XTEXT_EOP") ) ) ) )
+                        {
+                            // nTextFound == -2 => no text found and end of line reached
+                            // nTextFound == -1 => no text found and end of paragraph reached
+                            // nTextFound ==  1 => text found!
+                            sal_Int32 nTextFound = -2;
+                            while( ( nTextFound < -1 ) && ( nCurAction < nCount ) )
+                            {
+                                nTextFound = maTextWriter.setTextPosition( rMtf, nCurAction );
+                            }
+                            // We found a line with some text in the current
+                            // paragraph.
+                            if( nTextFound > 0 )
+                            {
+                                //maTextWriter.setTextProperties( rMtf, nCurAction );
+                                //ImplSetCorrectFontHeight();
+                                maTextWriter.startTextPosition();
+                            }
+                            // We reached the end of the current paragraph
+                            // without finding any text. So we need to go back
+                            // by one action in order to handle the XTEXT_EOP
+                            // action because on the next loop the nCurAction is
+                            // incremented by one.
+                            else
+                            {
+                                --nCurAction;
+                            }
+                        }
+                    }
+                }
             }
             break;
 
@@ -1863,18 +2706,17 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
 
                     if( aText.Len() )
                     {
-                        Font    aFont( mpVDev->GetFont() );
-                        Size    aSz;
+                        if( mrExport.IsUsePositionedCharacters() )
+                        {
+                            Font aFont = ImplSetCorrectFontHeight();
+                            mpContext->SetFontAttr( aFont );
+                            ImplWriteText( pA->GetPoint(), aText, NULL, 0 );
+                        }
+                        else
+                        {
+                            maTextWriter.writeTextPortion( pA->GetPoint(), aText );
+                        }
 
-                        ImplMap( Size( 0, aFont.GetHeight() ), aSz );
-
-                        aFont.SetHeight( aSz.Height() );
-                        // lead to a browser error since it duplicates the stroke and
-                        // the fill attributes on the first glyph of each line when
-                        // the text font is the same
-                        //mpContext->AddPaintAttr( COL_TRANSPARENT, mpVDev->GetTextColor() );
-                        mpContext->SetFontAttr( aFont );
-                        ImplWriteText( pA->GetPoint(), aText, NULL, 0 );
                     }
                 }
             }
@@ -1888,15 +2730,15 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
 
                     if (!pA->GetText().isEmpty())
                     {
-                        Font    aFont( mpVDev->GetFont() );
-                        Size    aSz;
-
-                        ImplMap( Size( 0, aFont.GetHeight() ), aSz );
-
-                        aFont.SetHeight( aSz.Height() );
-                        //mpContext->AddPaintAttr( COL_TRANSPARENT, mpVDev->GetTextColor() );
-                        mpContext->SetFontAttr( aFont );
-                        ImplWriteText( pA->GetRect().TopLeft(), pA->GetText(), NULL, 0 );
+                        if( mrExport.IsUsePositionedCharacters() )
+                        {
+                            Font aFont = ImplSetCorrectFontHeight();
+                            mpContext->SetFontAttr( aFont );
+                            ImplWriteText( pA->GetRect().TopLeft(), pA->GetText(), NULL, 0 );
+                        }
+                        {
+                            maTextWriter.writeTextPortion( pA->GetRect().TopLeft(), pA->GetText() );
+                        }
                     }
                 }
             }
@@ -1911,15 +2753,16 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
 
                     if( aText.Len() )
                     {
-                        Font    aFont( mpVDev->GetFont() );
-                        Size    aSz;
-
-                        ImplMap( Size( 0, aFont.GetHeight() ), aSz );
-
-                        aFont.SetHeight( aSz.Height() );
-                        //mpContext->AddPaintAttr( COL_TRANSPARENT, mpVDev->GetTextColor() );
-                        mpContext->SetFontAttr( aFont );
-                        ImplWriteText( pA->GetPoint(), aText, pA->GetDXArray(), 0 );
+                        if( mrExport.IsUsePositionedCharacters() )
+                        {
+                            Font aFont = ImplSetCorrectFontHeight();
+                            mpContext->SetFontAttr( aFont );
+                            ImplWriteText( pA->GetPoint(), aText, pA->GetDXArray(), 0 );
+                        }
+                        else
+                        {
+                            maTextWriter.writeTextPortion( pA->GetPoint(), aText );
+                        }
                     }
                 }
             }
@@ -1934,15 +2777,16 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
 
                     if( aText.Len() )
                     {
-                        Font    aFont( mpVDev->GetFont() );
-                        Size    aSz;
-
-                        ImplMap( Size( 0, aFont.GetHeight() ), aSz );
-
-                        aFont.SetHeight( aSz.Height() );
-                        //mpContext->AddPaintAttr( COL_TRANSPARENT, mpVDev->GetTextColor() );
-                        mpContext->SetFontAttr( aFont );
-                        ImplWriteText( pA->GetPoint(), aText, NULL, pA->GetWidth() );
+                        if( mrExport.IsUsePositionedCharacters() )
+                        {
+                            Font aFont = ImplSetCorrectFontHeight();
+                            mpContext->SetFontAttr( aFont );
+                            ImplWriteText( pA->GetPoint(), aText, NULL, pA->GetWidth() );
+                        }
+                        else
+                        {
+                            maTextWriter.writeTextPortion( pA->GetPoint(), aText );
+                        }
                     }
                 }
             }
@@ -2009,6 +2853,19 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
             break;
         }
     }
+}
+
+// -----------------------------------------------------------------------------
+Font SVGActionWriter::ImplSetCorrectFontHeight() const
+{
+    Font    aFont( mpVDev->GetFont() );
+    Size    aSz;
+
+    ImplMap( Size( 0, aFont.GetHeight() ), aSz );
+
+    aFont.SetHeight( aSz.Height() );
+
+    return aFont;
 }
 
 // -----------------------------------------------------------------------------
