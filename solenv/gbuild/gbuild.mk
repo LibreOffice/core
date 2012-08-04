@@ -320,6 +320,7 @@ include $(foreach class, \
 	InternalUnoApi \
 	Zip \
 	Configuration \
+	ExtensionTarget \
 	Extension \
 	InstallModuleTarget \
 	InstallModule \
