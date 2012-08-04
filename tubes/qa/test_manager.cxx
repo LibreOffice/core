@@ -63,7 +63,6 @@ public:
     void testDestroyTeleTubes();
     void testFailAlways();
 
-    void ReceiverCallback( const OString &rPacket );
     static void FileSent( bool success, void *user_data);
 
     // Order is significant.
@@ -91,7 +90,6 @@ static TpContact*           mpAccepterContact = NULL;
 static GMainLoop*           mpMainLoop = NULL;
 static bool                 maFileSentSuccess = false;
 static sal_uInt32           mnSentPackets = 0;
-static sal_uInt32           mnPacketReceivedEmissions = 0;
 static OUString             maTestConfigIniURL;
 static OString              maOffererIdentifier;
 static OString              maAccepterIdentifier;
@@ -185,16 +183,6 @@ void TestTeleTubes::testPrepareAccountManager()
     CPPUNIT_ASSERT( eStatus == TeleManager::AMS_PREPARED);
 }
 
-void TestTeleTubes::ReceiverCallback( const OString & rPacket )
-{
-    SAL_INFO( "tubes", "TestTeleTubes::ReceiverCallback: " << rPacket.getStr());
-    if (!rPacket.isEmpty())
-    {
-        // we could pop a packet here
-        mnPacketReceivedEmissions++;
-    }
-}
-
 void TestTeleTubes::testStartBuddySession()
 {
     TpAccount *pAcc1 = mpManager->getAccount(maOffererIdentifier);
@@ -221,11 +209,9 @@ void TestTeleTubes::testSendPacket()
 {
     OString aPacket( "from 1 to 2" );
 
-    mpConference1->sigPacketReceived.connect( boost::bind( &TestTeleTubes::ReceiverCallback, this, _1 ) );
     bool bSentPacket = mpConference1->sendPacket( aPacket );
     CPPUNIT_ASSERT( bSentPacket );
     mnSentPackets++;
-    CPPUNIT_ASSERT( mnPacketReceivedEmissions == 1 );
 }
 
 void TestTeleTubes::testReceivePacket()

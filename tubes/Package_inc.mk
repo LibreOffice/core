@@ -31,6 +31,5 @@ $(eval $(call gb_Package_add_file,tubes_inc,inc/tubes/conference.hxx,tubes/confe
 $(eval $(call gb_Package_add_file,tubes_inc,inc/tubes/contacts.hxx,tubes/contacts.hxx))
 $(eval $(call gb_Package_add_file,tubes_inc,inc/tubes/manager.hxx,tubes/manager.hxx))
 $(eval $(call gb_Package_add_file,tubes_inc,inc/tubes/tubesdllapi.h,tubes/tubesdllapi.h))
-$(eval $(call gb_Package_add_file,tubes_inc,inc/tubes/warnings_guard_boost_signals2.hpp,tubes/warnings_guard_boost_signals2.hpp))
 
 # vim: set noet sw=4 ts=4:

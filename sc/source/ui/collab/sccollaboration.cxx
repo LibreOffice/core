@@ -46,6 +46,13 @@ sal_uInt64 ScCollaboration::GetId()
     return reinterpret_cast<sal_uInt64> (mpScDocShell);
 }
 
+void ScCollaboration::PacketReceived( const OString& rPacket )
+{
+    ScDocFuncSend* pSender = GetScDocFuncSend();
+    if (pSender)
+        return pSender->RecvMessage( rPacket );
+}
+
 void ScCollaboration::SetCollaboration( TeleConference* pConference )
 {
     ScDocFunc* pDocFunc = &mpScDocShell->GetDocFunc();

@@ -86,11 +86,6 @@ void ScDocFuncSend::RecvMessage( const rtl::OString &rString )
     }
 }
 
-void ScDocFuncSend::packetReceived( const OString &rPacket )
-{
-    RecvMessage( rPacket );
-}
-
 extern "C"
 {
     static void file_sent_cb( bool aSuccess, void* /* pUserData */ )
@@ -159,9 +154,6 @@ ScDocFuncSend::~ScDocFuncSend()
 void ScDocFuncSend::SetCollaboration( TeleConference* pConference )
 {
     mpConference = pConference;
-    if (mpConference)
-        mpConference->sigPacketReceived.connect( boost::bind(
-                    &ScDocFuncSend::packetReceived, this, _1 ) );
 }
 
 TeleConference* ScDocFuncSend::GetConference()

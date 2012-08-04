@@ -209,8 +209,6 @@ class ScDocFuncSend : public ScDocFunc
     ScDocFuncDirect     *mpDirect;
     TeleConference      *mpConference;
 
-    void packetReceived( const OString &rPacket );
-    void RecvMessage( const rtl::OString &rString );
     void SendMessage( ScChangeOpWriter &rOp );
 
 public:
@@ -219,6 +217,7 @@ public:
     ScDocFuncSend( ScDocShell& rDocSh, ScDocFuncDirect *pDirect );
     virtual ~ScDocFuncSend();
 
+    void                RecvMessage( const rtl::OString &rString );
     void                SetCollaboration( TeleConference* pConference );
     TeleConference*     GetConference();
     // TODO: I think this could be moved to TeleManager later.

@@ -24,6 +24,7 @@ public:
     virtual void            ContactLeft();
     virtual TeleConference* GetConference();
     virtual sal_uInt64      GetId();
+    virtual void            PacketReceived( const OString& rPacket );
     virtual void            SetCollaboration( TeleConference* pConference );
     virtual void            SendFile( TpContact* pContact, const OUString& rURL );
 private:

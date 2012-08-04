@@ -32,7 +32,6 @@
 #include <sal/config.h>
 #include "tubes/tubesdllapi.h"
 #include <rtl/ustring.hxx>
-#include <tubes/warnings_guard_boost_signals2.hpp>
 
 class Collaboration;
 class TeleConferenceImpl;
@@ -64,9 +63,6 @@ public:
     bool                    popPacket( OString& rPacket );
 
     void                    invite( TpContact *pContact );
-
-    /** Emitted when a packet is received. */
-    boost::signals2::signal<void (const OString&)> sigPacketReceived;
 
     typedef void          (*FileSentCallback)( bool aSuccess, void* pUserData);
     TUBES_DLLPUBLIC void    sendFile( TpContact* pContact, rtl::OUString &localUri, FileSentCallback pCallback, void* pUserData);

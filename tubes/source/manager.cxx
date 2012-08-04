@@ -236,7 +236,7 @@ void TeleManager::broadcastPacket( const OString& rPacket )
     INFO_LOGGER_F( "TeleManager::broadcastPacket" );
     for (TeleManagerImpl::DemoConferences::iterator it = pImpl->maDemoConferences.begin();
             it != pImpl->maDemoConferences.end(); ++it)
-        (*it)->sigPacketReceived( rPacket );
+        (*it)->queue( rPacket );
 }
 
 bool TeleManager::hasWaitingConference()
@@ -296,7 +296,7 @@ static void TeleManager_TransferDone( EmpathyFTHandler *handler, TpFileTransferC
     SAL_INFO( "tubes", "TeleManager_TransferDone: hooray!");
     GFile *gfile = empathy_ft_handler_get_gfile( handler);
     char *uri = g_file_get_uri( gfile);
-    rtl::OUString aUri( uri, strlen( uri), RTL_TEXTENCODING_UTF8);
+    rtl::OUString aUri( OUString::createFromAscii( uri ) );
     g_free( uri);
 
     TeleManager_fileReceived( aUri );

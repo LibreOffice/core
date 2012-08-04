@@ -27,9 +27,11 @@
  */
 
 #include <tubes/conference.hxx>
-#include <tubes/manager.hxx>
+
+#include <tubes/collaboration.hxx>
 #include <tubes/constants.h>
 #include <tubes/file-transfer-helper.h>
+#include <tubes/manager.hxx>
 
 #include <telepathy-glib/telepathy-glib.h>
 #include <queue>
@@ -230,6 +232,7 @@ static void TeleConference_TubeAcceptedHandler(
 TeleConference::TeleConference( TpAccount* pAccount,
         TpDBusTubeChannel* pChannel, const OString sUuid, bool bMaster )
     :
+        mpCollaboration( NULL ),
         mpAccount( NULL ),
         mpChannel( NULL ),
         msUuid( sUuid ),
@@ -461,7 +464,8 @@ void TeleConference::queue( const OString &rPacket )
 
     pImpl->maPacketQueue.push( rPacket);
 
-    sigPacketReceived( rPacket );
+    if (mpCollaboration)
+        mpCollaboration->PacketReceived( rPacket );
 }
 
 
