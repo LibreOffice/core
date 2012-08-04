@@ -46,6 +46,7 @@
 
 #include <telepathy-glib/telepathy-glib.h>
 #include <map>
+#include <set>
 
 namespace css = ::com::sun::star;
 
@@ -100,6 +101,8 @@ public:
     OString                             msCurrentUUID;
     typedef std::map< OString, TeleConference* > MapStringConference;
     MapStringConference                 maAcceptedConferences;
+    typedef std::set< TeleConference* > DemoConferences;
+    DemoConferences                     maDemoConferences;
 
                             TeleManagerImpl();
                             ~TeleManagerImpl();
@@ -218,6 +221,24 @@ TeleConference* TeleManager::getConference()
     return pConference;
 }
 
+void TeleManager::registerDemoConference( TeleConference* pConference )
+{
+    pImpl->maDemoConferences.insert( pConference );
+}
+
+void TeleManager::unregisterDemoConference( TeleConference* pConference )
+{
+    pImpl->maDemoConferences.erase( pConference );
+}
+
+void TeleManager::broadcastPacket( const OString& rPacket )
+{
+    INFO_LOGGER_F( "TeleManager::broadcastPacket" );
+    for (TeleManagerImpl::DemoConferences::iterator it = pImpl->maDemoConferences.begin();
+            it != pImpl->maDemoConferences.end(); ++it)
+        (*it)->sigPacketReceived( rPacket );
+}
+
 bool TeleManager::hasWaitingConference()
 {
     return pImpl && !pImpl->msCurrentUUID.isEmpty();
@@ -232,6 +253,23 @@ void TeleManager::setCurrentUuid( const OString& rUuid )
 SAL_DLLPUBLIC_EXPORT void TeleManager_fileReceived( const rtl::OUString &rStr )
 {
     SAL_INFO( "tubes", "TeleManager_fileReceived: incoming file: " << rStr );
+
+    sal_Int32 first = rStr.indexOf('_');
+    sal_Int32 last = rStr.lastIndexOf('_');
+    SAL_WARN_IF( first == last, "tubes", "No UUID to associate with the file!" );
+    if (first != last)
+    {
+        OString sUuid( OUStringToOString( rStr.copy( first + 1, last - first - 1),
+                RTL_TEXTENCODING_UTF8));
+        if (sUuid == "demo")
+        {
+            sUuid = TeleManager::createUuid();
+            TeleConference* pConference = new TeleConference( NULL, NULL, NULL, sUuid );
+            TeleManager::addConference( pConference );
+            TeleManager::registerDemoConference( pConference );
+        }
+        TeleManager::setCurrentUuid( sUuid );
+    }
 
     css::uno::Reference< css::lang::XMultiServiceFactory > rFactory =
         ::comphelper::getProcessServiceFactory();
@@ -261,15 +299,6 @@ void TeleManager_TransferDone( EmpathyFTHandler *handler, TpFileTransferChannel 
     rtl::OUString aUri( uri, strlen( uri), RTL_TEXTENCODING_UTF8);
     g_free( uri);
 
-    sal_Int32 first = aUri.indexOf('_');
-    sal_Int32 last = aUri.lastIndexOf('_');
-    SAL_WARN_IF( first == last, "tubes", "No UUID to associate with the file!" );
-    if (first != last)
-    {
-        OString sUuid( OUStringToOString( aUri.copy( first + 1, last - first - 1),
-                RTL_TEXTENCODING_UTF8));
-        TeleManager::setCurrentUuid( sUuid );
-    }
     TeleManager_fileReceived( aUri );
 
     g_object_unref( handler);
@@ -595,6 +624,15 @@ bool TeleManager::registerClients()
     return true;
 }
 
+TeleConference* TeleManager::startDemoSession()
+{
+    INFO_LOGGER( "TeleManager::startDemoSession");
+
+    TeleConference* pConference = new TeleConference( NULL, NULL, NULL, "demo" );
+    registerDemoConference( pConference );
+
+    return pConference;
+}
 
 /* TODO: factor out common code with startBuddySession() */
 TeleConference* TeleManager::startGroupSession( TpAccount *pAccount,

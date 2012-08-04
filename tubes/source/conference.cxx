@@ -376,6 +376,8 @@ void TeleConference::close()
 {
     INFO_LOGGER( "TeleConference::close");
 
+    TeleManager::unregisterDemoConference( this );
+
     if (mpChannel)
         tp_cli_channel_call_close( TP_CHANNEL( mpChannel), 5000, TeleConference_ChannelCloseHandler, this, NULL, NULL);
     else
@@ -414,6 +416,12 @@ void TeleConference::finalize()
 bool TeleConference::sendPacket( const OString& rPacket )
 {
     INFO_LOGGER( "TeleConference::sendPacket");
+
+    if (!mpChannel && !pImpl->mpTube)
+    {
+        TeleManager::broadcastPacket( rPacket );
+        return true;
+    }
 
     OSL_ENSURE( mpManager, "tubes: TeleConference::sendPacket: no TeleManager");
     SAL_WARN_IF( !pImpl->mpTube, "tubes", "TeleConference::sendPacket: no tube");

@@ -18,6 +18,12 @@ ModelessDialog RID_TUBES_DLG_CONTACTS
         Size = MAP_APPFONT ( 198 , 8 ) ;
         Text [ en-US ] = "Select a contact to collaborate with" ;
     };
+    PushButton BTN_DEMO
+    {
+        Pos = MAP_APPFONT( 8, 212 );
+        Size = MAP_APPFONT( 50 , 10 );
+        Text [ en-US ] = "startDemoSession";
+    };
     PushButton BTN_CONNECT
     {
         Pos = MAP_APPFONT( 70 , 200 );

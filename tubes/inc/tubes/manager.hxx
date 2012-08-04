@@ -94,6 +94,9 @@ public:
      */
     ContactList*            getContactList() const;
 
+    /** Start a demo session where all local documents are shared to each other */
+    TeleConference*         startDemoSession();
+
     /** Start a group session in a MUC.
 
         @param pAccount
@@ -125,6 +128,11 @@ public:
     /** Get a conference with current UUID to set a session. */
     TUBES_DLLPUBLIC static TeleConference*  getConference();
 
+    static void                             registerDemoConference( TeleConference* pConference );
+    static void                             unregisterDemoConference( TeleConference* pConference );
+    /** Broadcast packet to all conferences. Used for demo mode. */
+    static void                             broadcastPacket( const OString& rPacket );
+
     /** True if there has been tube channel received and is still not used. */
     TUBES_DLLPUBLIC static bool             hasWaitingConference();
     static void                             setCurrentUuid( const OString& rUuid );
@@ -135,7 +143,7 @@ public:
 
 
     // Only for callbacks.
-    void                    addConference( TeleConference* pConference );
+    static void             addConference( TeleConference* pConference );
     void                    setChannelReadyHandlerInvoked( bool b );
     bool                    isChannelReadyHandlerInvoked() const;
     void                    setAccountManagerReadyHandlerInvoked( bool b );

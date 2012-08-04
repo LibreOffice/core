@@ -62,6 +62,7 @@ ResId TubesResId( sal_uInt32 nId )
 class TubeContacts : public ModelessDialog
 {
     FixedLine               maLabel;
+    PushButton              maBtnDemo;
     PushButton              maBtnConnect;
     PushButton              maBtnGroup;
     PushButton              maBtnInvite;
@@ -71,6 +72,7 @@ class TubeContacts : public ModelessDialog
     TeleManager*            mpManager;
     Collaboration*          mpCollaboration;
 
+    DECL_LINK( BtnDemoHdl, void * );
     DECL_LINK( BtnConnectHdl, void * );
     DECL_LINK( BtnGroupHdl, void * );
     DECL_LINK( BtnInviteHdl, void * );
@@ -106,6 +108,20 @@ class TubeContacts : public ModelessDialog
     {
         if (!mpManager->registerClients())
             SAL_INFO( "sc.tubes", "Could not register client handlers." );
+    }
+
+    void StartDemoSession()
+    {
+        TeleConference* pConference = mpManager->startDemoSession();
+        if (!pConference)
+            SAL_WARN( "tubes", "Could not start demo session!" );
+        else
+        {
+            pConference->setCollaboration( mpCollaboration );
+            mpCollaboration->SetCollaboration( pConference );
+            mpCollaboration->SendFile( NULL, OStringToOUString(
+                        pConference->getUuid(), RTL_TEXTENCODING_UTF8 ) );
+        }
     }
 
     void StartBuddySession()
@@ -157,6 +173,7 @@ public:
     TubeContacts( Collaboration* pCollaboration ) :
         ModelessDialog( NULL, TubesResId( RID_TUBES_DLG_CONTACTS ) ),
         maLabel( this, TubesResId( FL_LABEL ) ),
+        maBtnDemo( this, TubesResId( BTN_DEMO ) ),
         maBtnConnect( this, TubesResId( BTN_CONNECT ) ),
         maBtnGroup( this, TubesResId( BTN_GROUP ) ),
         maBtnInvite( this, TubesResId( BTN_INVITE ) ),
@@ -167,6 +184,7 @@ public:
         mpCollaboration( pCollaboration )
     {
         Hide();
+        maBtnDemo.SetClickHdl( LINK( this, TubeContacts, BtnDemoHdl ) );
         maBtnConnect.SetClickHdl( LINK( this, TubeContacts, BtnConnectHdl ) );
         maBtnGroup.SetClickHdl( LINK( this, TubeContacts, BtnGroupHdl ) );
         maBtnInvite.SetClickHdl( LINK( this, TubeContacts, BtnInviteHdl ) );
@@ -236,6 +254,12 @@ public:
         Show();
     }
 };
+
+IMPL_LINK_NOARG( TubeContacts, BtnDemoHdl )
+{
+    StartDemoSession();
+    return 0;
+}
 
 IMPL_LINK_NOARG( TubeContacts, BtnConnectHdl )
 {
