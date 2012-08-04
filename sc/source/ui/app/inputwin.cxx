@@ -976,9 +976,6 @@ void ScInputBarGroup::Resize()
         aScrollBar.SetLineSize( aMultiTextWnd.GetTextHeight() );
         aScrollBar.SetRange( Range( 0, aMultiTextWnd.GetEditEngTxtHeight() ) );
 
-        if ( aMultiTextWnd.GetEditView() )
-            aScrollBar.SetThumbPos( 0 );
-
         aScrollBar.Resize();
         aScrollBar.Show();
     }
