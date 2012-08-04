@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <string.h>
 
 #ifdef _MSC_VER
 #pragma warning(push,1)
@@ -47,8 +48,6 @@
 #include <rtl/locale.h>
 #include <osl/nlsupport.h>
 #include <osl/process.h>
-
-#include <rtl/memory.h>
 
 #include "../diagnose.hxx"
 
@@ -211,7 +210,7 @@ Reference< XSingleServiceFactory > SecurityEnvironment_MSCryptImpl :: impl_creat
 sal_Int64 SAL_CALL SecurityEnvironment_MSCryptImpl :: getSomething( const Sequence< sal_Int8 >& aIdentifier )
     throw( RuntimeException )
 {
-    if( aIdentifier.getLength() == 16 && 0 == rtl_compareMemory( getUnoTunnelId().getConstArray(), aIdentifier.getConstArray(), 16 ) ) {
+    if( aIdentifier.getLength() == 16 && 0 == memcmp( getUnoTunnelId().getConstArray(), aIdentifier.getConstArray(), 16 ) ) {
         return ( sal_Int64 )this ;
     }
     return 0 ;
@@ -947,7 +946,7 @@ sal_Int32 SecurityEnvironment_MSCryptImpl :: verifyCertificate(
     CERT_ENHKEY_USAGE   enhKeyUsage ;
     CERT_USAGE_MATCH    certUsage ;
     CERT_CHAIN_PARA     chainPara ;
-    rtl_zeroMemory(&chainPara, sizeof(CERT_CHAIN_PARA));
+    memset(&chainPara, 0, sizeof(CERT_CHAIN_PARA));
 
     //Prepare parameter for CertGetCertificateChain
     enhKeyUsage.cUsageIdentifier = 0 ;

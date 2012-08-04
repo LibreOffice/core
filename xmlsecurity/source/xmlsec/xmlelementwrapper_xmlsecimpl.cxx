@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <string.h>
 
 #include "xmlelementwrapper_xmlsecimpl.hxx"
 #include <cppuhelper/typeprovider.hxx>
@@ -56,7 +57,7 @@ sal_Int64 SAL_CALL XMLElementWrapper_XmlSecImpl::getSomething( const cssu::Seque
     throw (cssu::RuntimeException)
 {
     if (aIdentifier.getLength() == 16 &&
-        0 == rtl_compareMemory(
+        0 == memcmp(
             getUnoTunnelImplementationId().getConstArray(),
             aIdentifier.getConstArray(),
             16 ))

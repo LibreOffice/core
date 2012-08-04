@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <string.h>
+
 #include <sal/config.h>
 #include <comphelper/servicehelper.hxx>
 #include "x509certificate_mscryptimpl.hxx"
@@ -471,7 +473,7 @@ void X509Certificate_MSCryptImpl :: setRawCert( Sequence< sal_Int8 > rawCert ) t
 
 /* XUnoTunnel */
 sal_Int64 SAL_CALL X509Certificate_MSCryptImpl :: getSomething( const Sequence< sal_Int8 >& aIdentifier ) throw( RuntimeException ) {
-    if( aIdentifier.getLength() == 16 && 0 == rtl_compareMemory( getUnoTunnelId().getConstArray(), aIdentifier.getConstArray(), 16 ) ) {
+    if( aIdentifier.getLength() == 16 && 0 == memcmp( getUnoTunnelId().getConstArray(), aIdentifier.getConstArray(), 16 ) ) {
         return ( sal_Int64 )this ;
     }
     return 0 ;

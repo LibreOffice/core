@@ -130,23 +130,23 @@ uno::Sequence< ::sal_Int8 > SAL_CALL OCipherContext::convertWithCipherContext( c
         if ( nToConvertLen == 0 )
         {
             m_aLastBlock.realloc( nOldLastBlockLen + aData.getLength() );
-            rtl_copyMemory( m_aLastBlock.getArray() + nOldLastBlockLen, aData.getConstArray(), aData.getLength() );
+            memcpy( m_aLastBlock.getArray() + nOldLastBlockLen, aData.getConstArray(), aData.getLength() );
             // aToConvert stays empty
         }
         else if ( nToConvertLen < nOldLastBlockLen )
         {
-            rtl_copyMemory( aToConvert.getArray(), m_aLastBlock.getConstArray(), nToConvertLen );
-            rtl_copyMemory( m_aLastBlock.getArray(), m_aLastBlock.getConstArray() + nToConvertLen, nOldLastBlockLen - nToConvertLen );
+            memcpy( aToConvert.getArray(), m_aLastBlock.getConstArray(), nToConvertLen );
+            memcpy( m_aLastBlock.getArray(), m_aLastBlock.getConstArray() + nToConvertLen, nOldLastBlockLen - nToConvertLen );
             m_aLastBlock.realloc( nOldLastBlockLen - nToConvertLen + aData.getLength() );
-            rtl_copyMemory( m_aLastBlock.getArray() + nOldLastBlockLen - nToConvertLen, aData.getConstArray(), aData.getLength() );
+            memcpy( m_aLastBlock.getArray() + nOldLastBlockLen - nToConvertLen, aData.getConstArray(), aData.getLength() );
         }
         else
         {
-            rtl_copyMemory( aToConvert.getArray(), m_aLastBlock.getConstArray(), nOldLastBlockLen );
+            memcpy( aToConvert.getArray(), m_aLastBlock.getConstArray(), nOldLastBlockLen );
             if ( nToConvertLen > nOldLastBlockLen )
-                rtl_copyMemory( aToConvert.getArray() + nOldLastBlockLen, aData.getConstArray(), nToConvertLen - nOldLastBlockLen );
+                memcpy( aToConvert.getArray() + nOldLastBlockLen, aData.getConstArray(), nToConvertLen - nOldLastBlockLen );
             m_aLastBlock.realloc( nAvailableData - nToConvertLen );
-            rtl_copyMemory( m_aLastBlock.getArray(), aData.getConstArray() + nToConvertLen - nOldLastBlockLen, nAvailableData - nToConvertLen );
+            memcpy( m_aLastBlock.getArray(), aData.getConstArray() + nToConvertLen - nOldLastBlockLen, nAvailableData - nToConvertLen );
         }
     }
 
