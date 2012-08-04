@@ -47,9 +47,6 @@
 
 namespace css = ::com::sun::star;
 
-// FIXME: this is only meant for demo I think
-extern void TeleManager_fileReceived( const OUString& );
-
 void ScDocFuncSend::RecvMessage( const rtl::OString &rString )
 {
     try {
@@ -135,10 +132,7 @@ void ScDocFuncSend::SendFile( TpContact* pContact, const rtl::OUString &sUuid )
     fprintf( stderr, "Temp file is '%s'\n",
              rtl::OUStringToOString( aFileURL, RTL_TEXTENCODING_UTF8 ).getStr() );
 
-    if (pContact)
-        mpConference->sendFile( pContact, aFileURL, file_sent_cb, NULL );
-    else
-        TeleManager_fileReceived( aFileURL );
+    mpConference->sendFile( pContact, aFileURL, file_sent_cb, NULL );
 
     // FIXME: unlink the file after send ...
 }

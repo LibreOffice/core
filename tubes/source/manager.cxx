@@ -249,8 +249,8 @@ void TeleManager::setCurrentUuid( const OString& rUuid )
     pImpl->msCurrentUUID = rUuid;
 }
 
-// FIXME this is exported only because of ScDocFuncDemo
-SAL_DLLPUBLIC_EXPORT void TeleManager_fileReceived( const rtl::OUString &rStr )
+// FIXME: should be static and not used in conference.cxx
+void TeleManager_fileReceived( const rtl::OUString &rStr )
 {
     SAL_INFO( "tubes", "TeleManager_fileReceived: incoming file: " << rStr );
 
@@ -291,7 +291,7 @@ SAL_DLLPUBLIC_EXPORT void TeleManager_fileReceived( const rtl::OUString &rStr )
     }
 }
 
-void TeleManager_TransferDone( EmpathyFTHandler *handler, TpFileTransferChannel *, gpointer )
+static void TeleManager_TransferDone( EmpathyFTHandler *handler, TpFileTransferChannel *, gpointer )
 {
     SAL_INFO( "tubes", "TeleManager_TransferDone: hooray!");
     GFile *gfile = empathy_ft_handler_get_gfile( handler);

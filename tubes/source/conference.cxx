@@ -526,10 +526,18 @@ static void TeleConference_FTReady( EmpathyFTHandler *handler, GError *error, gp
     }
 }
 
-
+// TODO: move sending file to TeleManager
+extern void TeleManager_fileReceived( const OUString& );
 void TeleConference::sendFile( TpContact* pContact, rtl::OUString &localUri, FileSentCallback pCallback, void* pUserData)
 {
     INFO_LOGGER( "TeleConference::sendFile");
+
+    if (!pContact)
+    {
+        // used in demo mode
+        TeleManager_fileReceived( localUri );
+        return;
+    }
 
     SAL_WARN_IF( ( !mpAccount || !mpChannel), "tubes",
         "can't send a file before the tube is set up");
