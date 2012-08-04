@@ -925,13 +925,6 @@ rtl::OString TeleManager::getFullObjectPath()
     return aStr;
 }
 
-
-void TeleManager::iterateLoop()
-{
-    g_main_context_iteration( NULL, TRUE );
-}
-
-
 void TeleManager::iterateLoop( CallBackInvokedFunc pFunc )
 {
     while (!(*pFunc)())
@@ -948,16 +941,6 @@ void TeleManager::iterateLoop( ManagerCallBackInvokedFunc pFunc )
         g_main_context_iteration( NULL, TRUE );
     }
 }
-
-
-void TeleManager::iterateLoop( const TeleConference* pConference, ConferenceCallBackInvokedFunc pFunc )
-{
-    while (!(pConference->*pFunc)())
-    {
-        g_main_context_iteration( NULL, TRUE );
-    }
-}
-
 
 // static
 rtl::OString TeleManager::createUuid()

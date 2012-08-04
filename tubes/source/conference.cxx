@@ -273,7 +273,10 @@ void TeleConference::setChannel( TpAccount *pAccount, TpDBusTubeChannel* pChanne
 
 bool TeleConference::spinUntilTubeEstablished()
 {
-    mpManager->iterateLoop( this, &TeleConference::isTubeOfferedHandlerInvoked);
+    while (!isTubeOfferedHandlerInvoked())
+    {
+        g_main_context_iteration( NULL, TRUE );
+    }
 
     bool bOpen = pImpl->mpTube != NULL;
     SAL_INFO( "tubes", "TeleConference::spinUntilTubeEstablished: tube open: " << bOpen);

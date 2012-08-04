@@ -152,9 +152,6 @@ public:
     /** Only the callback of prepareAccountManager() is to set this. */
     void                    setAccountManagerReady( bool bPrepared);
 
-    /** Iterate our GMainLoop, blocking, unconditionally. */
-    void                    iterateLoop();
-
     typedef bool (*CallBackInvokedFunc)();
     /** Iterate our GMainLoop, blocking, until the callback is done. */
     void                    iterateLoop( CallBackInvokedFunc pFunc );
@@ -162,10 +159,6 @@ public:
     typedef bool (TeleManager::*ManagerCallBackInvokedFunc)() const;
     /** Iterate our GMainLoop, blocking, until the callback is done. */
     void                    iterateLoop( ManagerCallBackInvokedFunc pFunc );
-
-    typedef bool (TeleConference::*ConferenceCallBackInvokedFunc)() const;
-    /** Iterate our GMainLoop, blocking, until the callback is done. */
-    void                    iterateLoop( const TeleConference* pConference, ConferenceCallBackInvokedFunc pFunc );
 
     /// "LibreOfficeWhatEver"
     static rtl::OString     getFullClientName();
