@@ -1156,9 +1156,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                     aDistLR.SetRight((sal_uInt16)rBox.GetDistance(BOX_LINE_RIGHT));
 
                     //add the border distance of the paragraph
-                    SfxItemSet aCoreSet1( GetPool(),
-                                            RES_BOX, RES_BOX,
-                                            0 );
+                    SfxItemSet aCoreSet1( GetPool(), RES_BOX, RES_BOX );
                     rSh.GetCurAttr( aCoreSet1 );
                     const SvxBoxItem& rParaBox = (const SvxBoxItem&)aCoreSet1.Get(RES_BOX);
                     aDistLR.SetLeft(aDistLR.GetLeft() + (sal_uInt16)rParaBox.GetDistance(BOX_LINE_LEFT ));

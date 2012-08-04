@@ -200,9 +200,7 @@ sal_Bool lcl_RstAttr( const SwNodePtr& rpNd, void* pArgs )
         std::vector<sal_uInt16> aClearWhichIds;
         // restoring all paragraph list attributes
         {
-            SfxItemSet aListAttrSet( pDoc->GetAttrPool(),
-                                     RES_PARATR_LIST_BEGIN, RES_PARATR_LIST_END - 1,
-                                     0 );
+            SfxItemSet aListAttrSet( pDoc->GetAttrPool(), RES_PARATR_LIST_BEGIN, RES_PARATR_LIST_END - 1 );
             aListAttrSet.Set( *pSet );
             if ( aListAttrSet.Count() )
             {

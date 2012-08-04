@@ -240,9 +240,7 @@ SfxItemSet& ScStyleSheet::GetItemSet()
 
             case SFX_STYLE_FAMILY_PARA:
             default:
-                pSet = new SfxItemSet( GetPool().GetPool(),
-                                       ATTR_PATTERN_START, ATTR_PATTERN_END,
-                                       0 );
+                pSet = new SfxItemSet( GetPool().GetPool(), ATTR_PATTERN_START, ATTR_PATTERN_END );
                 break;
         }
         bMySet = true;

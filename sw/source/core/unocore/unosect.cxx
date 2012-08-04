@@ -838,8 +838,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
                 if (pFmt)
                 {
                     const SfxItemSet& rOldAttrSet = pFmt->GetAttrSet();
-                    pItemSet.reset( new SfxItemSet(*rOldAttrSet.GetPool(),
-                                pEntry->nWID, pEntry->nWID, 0));
+                    pItemSet.reset( new SfxItemSet(*rOldAttrSet.GetPool(), pEntry->nWID, pEntry->nWID));
                     pItemSet->Put(rOldAttrSet);
                     m_rPropSet.setPropertyValue(*pEntry,
                             pValues[nProperty], *pItemSet);
@@ -1607,8 +1606,7 @@ throw (beans::UnknownPropertyException, uno::RuntimeException)
                 if (pFmt)
                 {
                     const SfxItemSet& rOldAttrSet = pFmt->GetAttrSet();
-                    pNewAttrSet.reset( new SfxItemSet(*rOldAttrSet.GetPool(),
-                                        pEntry->nWID, pEntry->nWID, 0));
+                    pNewAttrSet.reset( new SfxItemSet(*rOldAttrSet.GetPool(), pEntry->nWID, pEntry->nWID));
                     pNewAttrSet->ClearItem(pEntry->nWID);
                 }
                 else
