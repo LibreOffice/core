@@ -236,7 +236,8 @@ void TeleManager::broadcastPacket( const OString& rPacket )
     INFO_LOGGER_F( "TeleManager::broadcastPacket" );
     for (TeleManagerImpl::DemoConferences::iterator it = pImpl->maDemoConferences.begin();
             it != pImpl->maDemoConferences.end(); ++it)
-        (*it)->queue( rPacket );
+        if ((*it)->getCollaboration())
+            (*it)->getCollaboration()->PacketReceived( rPacket );
 }
 
 bool TeleManager::hasWaitingConference()

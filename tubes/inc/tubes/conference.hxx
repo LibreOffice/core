@@ -59,17 +59,14 @@ public:
 
     TUBES_DLLPUBLIC bool    sendPacket( const OString& rPacket );
 
-    /** Pop a received packet. */
-    bool                    popPacket( OString& rPacket );
-
     void                    invite( TpContact *pContact );
 
     typedef void          (*FileSentCallback)( bool aSuccess, void* pUserData);
     TUBES_DLLPUBLIC void    sendFile( TpContact* pContact, rtl::OUString &localUri, FileSentCallback pCallback, void* pUserData);
     const OString&          getUuid() const { return msUuid; }
 
-    Collaboration*          getCollaboration() const { return mpCollaboration; }
-    void                    setCollaboration( Collaboration* pCollaboration ) { mpCollaboration = pCollaboration; }
+    Collaboration*          getCollaboration() const;
+    void                    setCollaboration( Collaboration* pCollaboration );
 
     // --- following only to be called only by manager's callbacks ---
     // TODO: make friends instead
@@ -82,8 +79,6 @@ public:
     void                    setTubeOfferedHandlerInvoked( bool b );
     bool                    isTubeOfferedHandlerInvoked() const;
     bool                    isMaster() const;
-    /** Queue incoming data as OString */
-    void                    queue( const OString& rPacket );
     void                    setUuid( const OString& rUuid ) { msUuid = rUuid; }
 
 private:

@@ -34,7 +34,6 @@
 #include <tubes/manager.hxx>
 
 #include <telepathy-glib/telepathy-glib.h>
-#include <queue>
 
 #if defined SAL_LOG_INFO
 namespace
@@ -65,11 +64,8 @@ struct InfoLogger
 
 class TeleConferenceImpl
 {
-    typedef ::std::queue<OString> TelePacketQueue;
-
 public:
     guint                   maObjectRegistrationId;
-    TelePacketQueue         maPacketQueue;
     GDBusConnection*        mpTube;
     bool                    mbTubeOfferedHandlerInvoked : 1;
 
@@ -129,7 +125,8 @@ static void TeleConference_MethodCallHandler(
     SAL_INFO( "tubes", "TeleConference_MethodCallHandler: received packet from sender "
             << (pSender ? pSender : "(null)") << " with size " << nPacketSize);
     OString aPacket( pPacketData, nPacketSize );
-    pConference->queue( aPacket );
+    if (pConference->getCollaboration())
+        pConference->getCollaboration()->PacketReceived( aPacket );
     // Master needs to send the packet back to impose ordering,
     // so the slave can execute his command.
     if (pConference->isMaster())
@@ -447,8 +444,8 @@ bool TeleConference::sendPacket( const OString& rPacket )
             -1, NULL, NULL, NULL);
 
     // If we started the session, we can execute commands immediately.
-    if (mbMaster)
-        queue( rPacket );
+    if (mbMaster && mpCollaboration)
+        mpCollaboration->PacketReceived( rPacket );
 
     return true;
 }
@@ -458,16 +455,15 @@ bool TeleConference::isMaster() const
     return mbMaster;
 }
 
-void TeleConference::queue( const OString &rPacket )
+Collaboration* TeleConference::getCollaboration() const
 {
-    INFO_LOGGER( "TeleConference::queue");
-
-    pImpl->maPacketQueue.push( rPacket);
-
-    if (mpCollaboration)
-        mpCollaboration->PacketReceived( rPacket );
+    return mpCollaboration;
 }
 
+void TeleConference::setCollaboration( Collaboration* pCollaboration )
+{
+    mpCollaboration = pCollaboration;
+}
 
 void TeleConference::invite( TpContact *pContact )
 {
@@ -557,18 +553,6 @@ void TeleConference::sendFile( TpContact* pContact, rtl::OUString &localUri, Fil
         pSource,
         0,
         TeleConference_FTReady, pReq);
-}
-
-
-bool TeleConference::popPacket( OString& rPacket )
-{
-    INFO_LOGGER( "TeleConference::popPacket");
-
-    if (pImpl->maPacketQueue.empty())
-        return false;
-    rPacket = pImpl->maPacketQueue.front();
-    pImpl->maPacketQueue.pop();
-    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

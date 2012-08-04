@@ -221,22 +221,7 @@ void TestTeleTubes::testReceivePacket()
      * and extracting UUID from the name.
      */
 
-    sal_uInt32 nReceivedPackets = 0;
-    /* We expect to get every packet we send pushed
-     * onto the queue to be echoed locally.
-     */
-    bool bOk;
-    do
-    {
-        OString aReceived;
-        bOk = mpConference1->popPacket( aReceived );
-        if (bOk)
-        {
-            ++nReceivedPackets;
-            CPPUNIT_ASSERT( "from 1 to 2" == aReceived );
-        }
-    } while (bOk);
-    CPPUNIT_ASSERT( nReceivedPackets == mnSentPackets );
+    // TODO implement me
 }
 
 void TestTeleTubes::FileSent( bool success, void * )
