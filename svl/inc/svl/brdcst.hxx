@@ -33,7 +33,7 @@ class SVL_DLLPUBLIC SfxBroadcaster
     friend class SfxListener;
     typedef std::vector<SfxListener*> SfxListenerArr_Impl;
 
-    SfxListenerArr_Impl     aListeners;
+    SfxListenerArr_Impl     m_Listeners;
 
 private:
     void                    AddListener( SfxListener& rListener );
@@ -52,17 +52,14 @@ public:
     virtual                 ~SfxBroadcaster();
 
     void                    Broadcast( const SfxHint &rHint );
-    bool                    HasListeners() const
-    {
-        return !aListeners.empty();
-    }
+    bool                    HasListeners() const;
     size_t                  GetListenerCount() const
     {
-        return aListeners.size();
+        return m_Listeners.size();
     }
     SfxListener*            GetListener( sal_uInt16 nNo ) const
     {
-        return aListeners[nNo];
+        return m_Listeners[nNo];
     }
 };
 

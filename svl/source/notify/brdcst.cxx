@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <assert.h>
 
 #include <tools/debug.hxx>
-#include <osl/diagnose.h>
 
 #include <svl/hint.hxx>
 #include <svl/smplhint.hxx>
@@ -37,16 +37,17 @@ TYPEINIT0(SfxBroadcaster);
 //====================================================================
 // broadcast immediately
 
-
 void SfxBroadcaster::Broadcast( const SfxHint &rHint )
 {
     DBG_CHKTHIS(SfxBroadcaster, 0);
 
     // notify all registered listeners exactly once
-    for (size_t n = 0; n < aListeners.size(); ++n)
+    for (size_t n = 0; n < m_Listeners.size(); ++n)
     {
-        SfxListener* pListener = aListeners[n];
-        pListener->Notify( *this, rHint );
+        SfxListener *const pListener = m_Listeners[n];
+        if (pListener) {
+            pListener->Notify( *this, rHint );
+        }
     }
 }
 
@@ -59,10 +60,12 @@ SfxBroadcaster::~SfxBroadcaster()
     Broadcast( SfxSimpleHint(SFX_HINT_DYING) );
 
     // remove all still registered listeners
-    for (size_t nPos = 0; nPos < aListeners.size(); ++nPos)
+    for (size_t nPos = 0; nPos < m_Listeners.size(); ++nPos)
     {
-        SfxListener *pListener = aListeners[nPos];
-        pListener->RemoveBroadcaster_Impl(*this);
+        SfxListener *const pListener = m_Listeners[nPos];
+        if (pListener) {
+            pListener->RemoveBroadcaster_Impl(*this);
+        }
     }
 }
 
@@ -84,10 +87,12 @@ SfxBroadcaster::SfxBroadcaster( const SfxBroadcaster &rBC )
 {
     DBG_CTOR(SfxBroadcaster, 0);
 
-    for (size_t n = 0; n < rBC.aListeners.size(); ++n)
+    for (size_t n = 0; n < rBC.m_Listeners.size(); ++n)
     {
-        SfxListener *pListener = rBC.aListeners[n];
-        pListener->StartListening( *this );
+        SfxListener *const pListener = rBC.m_Listeners[n];
+        if (pListener) {
+            pListener->StartListening( *this );
+        }
     }
 }
 
@@ -99,7 +104,15 @@ void SfxBroadcaster::AddListener( SfxListener& rListener )
 {
     DBG_CHKTHIS(SfxBroadcaster, 0);
 
-    aListeners.push_back(&rListener);
+    for (size_t i = 0; i < m_Listeners.size(); ++i)
+    {
+        if (!m_Listeners[i]) // removed by RemoveListener?
+        {
+            m_Listeners[i] = &rListener;
+            return;
+        }
+    }
+    m_Listeners.push_back(&rListener);
 }
 
 //--------------------------------------------------------------------
@@ -117,10 +130,12 @@ void SfxBroadcaster::ListenersGone()
 
 void SfxBroadcaster::Forward(SfxBroadcaster& rBC, const SfxHint& rHint)
 {
-    for (size_t i = 0; i < aListeners.size(); ++i)
+    for (size_t i = 0; i < m_Listeners.size(); ++i)
     {
-        SfxListener *pListener = aListeners[i];
-        pListener->Notify( rBC, rHint );
+        SfxListener *const pListener = m_Listeners[i];
+        if (pListener) {
+            pListener->Notify( rBC, rHint );
+        }
     }
 }
 
@@ -131,14 +146,26 @@ void SfxBroadcaster::Forward(SfxBroadcaster& rBC, const SfxHint& rHint)
 void SfxBroadcaster::RemoveListener( SfxListener& rListener )
 {
     {DBG_CHKTHIS(SfxBroadcaster, 0);}
-    const SfxListener *pListener = &rListener;
-
-    SfxListenerArr_Impl::iterator aIter = std::remove(aListeners.begin(), aListeners.end(), pListener);
-    DBG_ASSERT( aIter != aListeners.end(), "RemoveListener: Listener unknown" );
-    aListeners.erase(aIter, aListeners.end());
+    SfxListenerArr_Impl::iterator aIter = std::find(
+            m_Listeners.begin(), m_Listeners.end(), &rListener);
+    assert(aIter != m_Listeners.end()); // "RemoveListener: Listener unknown"
+    // DO NOT erase the listener, set the pointer to 0
+    // because the current continuation may contain this->Broadcast
+    *aIter = 0;
 
     if ( !HasListeners() )
         ListenersGone();
+}
+
+bool SfxBroadcaster::HasListeners() const
+{
+    for (size_t i = 0; i < m_Listeners.size(); ++i)
+    {
+        if (m_Listeners[i]) {
+            return true;
+        }
+    }
+    return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
