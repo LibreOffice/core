@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAMn///rA\u003d",
+        "filename": "sw/source/core/docnode/ndcopy.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 1000112
+      },
+      "writtenOn": "2012-08-04T12:52:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAMn///so\u003d",
+      "revId": "0b78137920ff60955ee0db4d8ba2f320be04bd17",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAMn///sk\u003d",
         "filename": "sw/source/core/docnode/ndcopy.cxx",
         "patchSetId": 2
@@ -30,6 +48,24 @@
       "writtenOn": "2012-08-03T20:44:43Z",
       "side": 1,
       "message": "Why do you add spaces between text and question marks?",
+      "revId": "0b78137920ff60955ee0db4d8ba2f320be04bd17",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///q8\u003d",
+        "filename": "sw/source/core/docnode/ndcopy.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 287,
+      "author": {
+        "id": 1000112
+      },
+      "writtenOn": "2012-08-04T12:52:13Z",
+      "side": 1,
+      "message": "I\u0027m just used to different typography conventions.\nDone",
+      "parentUuid": "AAAAMn///sk\u003d",
       "revId": "0b78137920ff60955ee0db4d8ba2f320be04bd17",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAMn///q4\u003d",
+        "filename": "sw/source/core/docnode/ndcopy.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 292,
+      "author": {
+        "id": 1000112
+      },
+      "writtenOn": "2012-08-04T12:52:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAMn///sg\u003d",
+      "revId": "0b78137920ff60955ee0db4d8ba2f320be04bd17",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAMn///sc\u003d",
         "filename": "sw/source/core/docnode/ndcopy.cxx",
         "patchSetId": 2
@@ -64,6 +118,24 @@
       "writtenOn": "2012-08-03T20:44:43Z",
       "side": 1,
       "message": "This line can be removed",
+      "revId": "0b78137920ff60955ee0db4d8ba2f320be04bd17",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///q0\u003d",
+        "filename": "sw/source/core/docnode/ndcopy.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 295,
+      "author": {
+        "id": 1000112
+      },
+      "writtenOn": "2012-08-04T12:52:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAMn///sc\u003d",
       "revId": "0b78137920ff60955ee0db4d8ba2f320be04bd17",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -87,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAMn///qw\u003d",
+        "filename": "sw/source/core/docnode/ndcopy.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 300,
+      "author": {
+        "id": 1000112
+      },
+      "writtenOn": "2012-08-04T12:52:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAMn///sY\u003d",
+      "revId": "0b78137920ff60955ee0db4d8ba2f320be04bd17",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAMn///sU\u003d",
         "filename": "sw/source/core/docnode/ndcopy.cxx",
         "patchSetId": 2
@@ -98,6 +188,24 @@
       "writtenOn": "2012-08-03T20:44:43Z",
       "side": 1,
       "message": "This line can be removed",
+      "revId": "0b78137920ff60955ee0db4d8ba2f320be04bd17",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///qs\u003d",
+        "filename": "sw/source/core/docnode/ndcopy.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 309,
+      "author": {
+        "id": 1000112
+      },
+      "writtenOn": "2012-08-04T12:52:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAMn///sU\u003d",
       "revId": "0b78137920ff60955ee0db4d8ba2f320be04bd17",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -121,6 +229,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAMn///qo\u003d",
+        "filename": "sw/source/core/docnode/ndcopy.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 335,
+      "author": {
+        "id": 1000112
+      },
+      "writtenOn": "2012-08-04T12:52:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAMn///sQ\u003d",
+      "revId": "0b78137920ff60955ee0db4d8ba2f320be04bd17",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAMn///sM\u003d",
         "filename": "sw/source/core/docnode/ndcopy.cxx",
         "patchSetId": 2
@@ -132,6 +258,24 @@
       "writtenOn": "2012-08-03T20:44:43Z",
       "side": 1,
       "message": "Why do you add spaces between text and question mark?",
+      "revId": "0b78137920ff60955ee0db4d8ba2f320be04bd17",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///qk\u003d",
+        "filename": "sw/source/core/docnode/ndcopy.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 397,
+      "author": {
+        "id": 1000112
+      },
+      "writtenOn": "2012-08-04T12:52:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAMn///sM\u003d",
       "revId": "0b78137920ff60955ee0db4d8ba2f320be04bd17",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -155,6 +299,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAMn///qg\u003d",
+        "filename": "sw/source/core/docnode/ndcopy.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 461,
+      "author": {
+        "id": 1000112
+      },
+      "writtenOn": "2012-08-04T12:52:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAMn///sI\u003d",
+      "revId": "0b78137920ff60955ee0db4d8ba2f320be04bd17",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAMn///sE\u003d",
         "filename": "sw/source/core/docnode/ndcopy.cxx",
         "patchSetId": 2
@@ -166,6 +328,24 @@
       "writtenOn": "2012-08-03T20:44:43Z",
       "side": 1,
       "message": "This line can be removed",
+      "revId": "0b78137920ff60955ee0db4d8ba2f320be04bd17",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///qc\u003d",
+        "filename": "sw/source/core/docnode/ndcopy.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 514,
+      "author": {
+        "id": 1000112
+      },
+      "writtenOn": "2012-08-04T12:52:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAMn///sE\u003d",
       "revId": "0b78137920ff60955ee0db4d8ba2f320be04bd17",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -189,6 +369,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAMn///qY\u003d",
+        "filename": "sw/source/core/docnode/ndcopy.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 522,
+      "author": {
+        "id": 1000112
+      },
+      "writtenOn": "2012-08-04T12:52:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAMn///sA\u003d",
+      "revId": "0b78137920ff60955ee0db4d8ba2f320be04bd17",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAMn///r8\u003d",
         "filename": "sw/source/core/docnode/ndcopy.cxx",
         "patchSetId": 2
@@ -200,6 +398,24 @@
       "writtenOn": "2012-08-03T20:44:43Z",
       "side": 1,
       "message": "Does the markup (\"-----\") really provide additional benefit or can it be removed as well?",
+      "revId": "0b78137920ff60955ee0db4d8ba2f320be04bd17",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///qU\u003d",
+        "filename": "sw/source/core/docnode/ndcopy.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 540,
+      "author": {
+        "id": 1000112
+      },
+      "writtenOn": "2012-08-04T12:52:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAMn///r8\u003d",
       "revId": "0b78137920ff60955ee0db4d8ba2f320be04bd17",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -223,6 +439,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAMn///qQ\u003d",
+        "filename": "sw/source/core/docnode/ndcopy.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 541,
+      "author": {
+        "id": 1000112
+      },
+      "writtenOn": "2012-08-04T12:52:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAMn///r4\u003d",
+      "revId": "0b78137920ff60955ee0db4d8ba2f320be04bd17",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAMn///r0\u003d",
         "filename": "sw/source/core/docnode/ndcopy.cxx",
         "patchSetId": 2
@@ -234,6 +468,24 @@
       "writtenOn": "2012-08-03T20:44:43Z",
       "side": 1,
       "message": "Why adding extra lines here and not just a translation in place?",
+      "revId": "0b78137920ff60955ee0db4d8ba2f320be04bd17",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///qM\u003d",
+        "filename": "sw/source/core/docnode/ndcopy.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 772,
+      "author": {
+        "id": 1000112
+      },
+      "writtenOn": "2012-08-04T12:52:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAMn///r0\u003d",
       "revId": "0b78137920ff60955ee0db4d8ba2f320be04bd17",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -257,6 +509,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAMn///qI\u003d",
+        "filename": "sw/source/core/docnode/ndcopy.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 961,
+      "author": {
+        "id": 1000112
+      },
+      "writtenOn": "2012-08-04T12:52:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAMn///rs\u003d",
+      "revId": "0b78137920ff60955ee0db4d8ba2f320be04bd17",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAMn///ro\u003d",
         "filename": "sw/source/core/docnode/ndcopy.cxx",
         "patchSetId": 2
@@ -274,6 +544,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAMn///qE\u003d",
+        "filename": "sw/source/core/docnode/ndcopy.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 965,
+      "author": {
+        "id": 1000112
+      },
+      "writtenOn": "2012-08-04T12:52:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAMn///ro\u003d",
+      "revId": "0b78137920ff60955ee0db4d8ba2f320be04bd17",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAMn///rk\u003d",
         "filename": "sw/source/core/docnode/ndcopy.cxx",
         "patchSetId": 2
@@ -285,6 +573,24 @@
       "writtenOn": "2012-08-03T20:44:43Z",
       "side": 1,
       "message": "better: \"The end was also moved\"\n\nWouldn\u0027t it be better to move the comment into the code block instead of above the else statement?",
+      "revId": "0b78137920ff60955ee0db4d8ba2f320be04bd17",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///qA\u003d",
+        "filename": "sw/source/core/docnode/ndcopy.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1014,
+      "author": {
+        "id": 1000112
+      },
+      "writtenOn": "2012-08-04T12:52:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAMn///rk\u003d",
       "revId": "0b78137920ff60955ee0db4d8ba2f320be04bd17",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -325,6 +631,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAMn///p8\u003d",
+        "filename": "sw/source/core/docnode/ndcopy.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1327,
+      "author": {
+        "id": 1000112
+      },
+      "writtenOn": "2012-08-04T12:52:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAMn///rg\u003d",
+      "revId": "0b78137920ff60955ee0db4d8ba2f320be04bd17",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAMn///rc\u003d",
         "filename": "sw/source/core/docnode/ndcopy.cxx",
         "patchSetId": 2
@@ -336,6 +660,24 @@
       "writtenOn": "2012-08-03T20:44:43Z",
       "side": 1,
       "message": "This line can be removed",
+      "revId": "0b78137920ff60955ee0db4d8ba2f320be04bd17",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///p4\u003d",
+        "filename": "sw/source/core/docnode/ndcopy.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1328,
+      "author": {
+        "id": 1000112
+      },
+      "writtenOn": "2012-08-04T12:52:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAMn///rc\u003d",
       "revId": "0b78137920ff60955ee0db4d8ba2f320be04bd17",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -359,6 +701,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAMn///p0\u003d",
+        "filename": "sw/source/core/docnode/ndcopy.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1360,
+      "author": {
+        "id": 1000112
+      },
+      "writtenOn": "2012-08-04T12:52:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAMn///rU\u003d",
+      "revId": "0b78137920ff60955ee0db4d8ba2f320be04bd17",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAMn///rQ\u003d",
         "filename": "sw/source/core/docnode/ndcopy.cxx",
         "patchSetId": 2
@@ -376,6 +736,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAMn///pw\u003d",
+        "filename": "sw/source/core/docnode/ndcopy.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1407,
+      "author": {
+        "id": 1000112
+      },
+      "writtenOn": "2012-08-04T12:52:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAMn///rQ\u003d",
+      "revId": "0b78137920ff60955ee0db4d8ba2f320be04bd17",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAMn///rM\u003d",
         "filename": "sw/source/core/docnode/ndcopy.cxx",
         "patchSetId": 2
@@ -387,6 +765,24 @@
       "writtenOn": "2012-08-03T20:44:43Z",
       "side": 1,
       "message": "The content in this line still fits in the line above ;-)",
+      "revId": "0b78137920ff60955ee0db4d8ba2f320be04bd17",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///ps\u003d",
+        "filename": "sw/source/core/docnode/ndcopy.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1573,
+      "author": {
+        "id": 1000112
+      },
+      "writtenOn": "2012-08-04T12:52:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAMn///rM\u003d",
       "revId": "0b78137920ff60955ee0db4d8ba2f320be04bd17",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false

@@ -16,6 +16,24 @@
       "revId": "216e13dd4b1f4599f10fd274f55d39cddcb49d74",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///rE\u003d",
+        "filename": "sw/source/core/docnode/ndcopy.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 802,
+      "author": {
+        "id": 1000112
+      },
+      "writtenOn": "2012-08-04T12:52:13Z",
+      "side": 0,
+      "message": "It is the same as the comment in line 670, and doesn\u0027t really make sense here, and neither does the line below. So I\u0027m guessing it\u0027s just a leftover from some copy/paste",
+      "parentUuid": "AAAAMn///rw\u003d",
+      "revId": "216e13dd4b1f4599f10fd274f55d39cddcb49d74",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
