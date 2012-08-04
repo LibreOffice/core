@@ -2033,7 +2033,7 @@ sal_Int64 SAL_CALL OOo2OasisTransformer::getSomething( const Sequence< sal_Int8 
     throw(RuntimeException)
 {
     if( rId.getLength() == 16
-        && 0 == rtl_compareMemory( getUnoTunnelId().getConstArray(),
+        && 0 == memcmp( getUnoTunnelId().getConstArray(),
                                         rId.getConstArray(), 16 ) )
     {
         return reinterpret_cast< sal_Int64 >( this );

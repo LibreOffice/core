@@ -27,10 +27,10 @@
  ************************************************************************/
 
 
+#include <string.h>
 #include <vector>
 #include <osl/mutex.hxx>
 #include <xmloff/xmltoken.hxx>
-#include <rtl/memory.h>
 #include <comphelper/servicehelper.hxx>
 
 #include <xmloff/attrlist.hxx>
@@ -276,7 +276,7 @@ SvXMLAttributeList* SvXMLAttributeList::getImplementation( uno::Reference< uno::
 sal_Int64 SAL_CALL SvXMLAttributeList::getSomething( const uno::Sequence< sal_Int8 >& rId )
     throw( uno::RuntimeException )
 {
-    if( rId.getLength() == 16 && 0 == rtl_compareMemory( getUnoTunnelId().getConstArray(),
+    if( rId.getLength() == 16 && 0 == memcmp( getUnoTunnelId().getConstArray(),
                                                          rId.getConstArray(), 16 ) )
     {
         return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_uIntPtr>(this));

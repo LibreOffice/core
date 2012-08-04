@@ -26,8 +26,9 @@
  *
  ************************************************************************/
 
+#include <string.h>
+
 #include <osl/mutex.hxx>
-#include <rtl/memory.h>
 #include <comphelper/servicehelper.hxx>
 
 #include "StyleMap.hxx"
@@ -74,7 +75,7 @@ sal_Int64 SAL_CALL StyleMap::getSomething(
     throw( RuntimeException )
 {
     if( rId.getLength() == 16 &&
-        0 == rtl_compareMemory( getUnoTunnelId().getConstArray(),
+        0 == memcmp( getUnoTunnelId().getConstArray(),
                                              rId.getConstArray(), 16 ) )
     {
         return reinterpret_cast<sal_Int64>( this );

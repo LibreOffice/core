@@ -26,9 +26,9 @@
  *
  ************************************************************************/
 
+#include <string.h>
 #include <com/sun/star/xml/AttributeData.hpp>
 #include <rtl/ustrbuf.hxx>
-#include <rtl/memory.h>
 #include <comphelper/servicehelper.hxx>
 #include <limits.h>
 
@@ -119,7 +119,7 @@ const ::com::sun::star::uno::Sequence< sal_Int8 > & SvUnoAttributeContainer::get
 
 sal_Int64 SAL_CALL SvUnoAttributeContainer::getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rId ) throw(::com::sun::star::uno::RuntimeException)
 {
-    if( rId.getLength() == 16 && 0 == rtl_compareMemory( getUnoTunnelId().getConstArray(),
+    if( rId.getLength() == 16 && 0 == memcmp( getUnoTunnelId().getConstArray(),
                                                          rId.getConstArray(), 16 ) )
     {
         return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_uIntPtr>(this));

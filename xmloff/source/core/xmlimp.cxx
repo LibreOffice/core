@@ -26,11 +26,12 @@
  *
  ************************************************************************/
 
+#include <string.h>
+
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 #include <osl/mutex.hxx>
-#include <rtl/memory.h>
 #include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmluconv.hxx>
@@ -419,7 +420,7 @@ const uno::Sequence< sal_Int8 > & SvXMLImport::getUnoTunnelId() throw()
 sal_Int64 SAL_CALL SvXMLImport::getSomething( const uno::Sequence< sal_Int8 >& rId )
     throw( uno::RuntimeException )
 {
-    if( rId.getLength() == 16 && 0 == rtl_compareMemory( getUnoTunnelId().getConstArray(),
+    if( rId.getLength() == 16 && 0 == memcmp( getUnoTunnelId().getConstArray(),
                                                          rId.getConstArray(), 16 ) )
     {
         return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_uIntPtr>(this));
