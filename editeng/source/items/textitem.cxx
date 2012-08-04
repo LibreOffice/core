@@ -3504,15 +3504,10 @@ SvxScriptSetItem::SvxScriptSetItem( sal_uInt16 nSlotId, SfxItemPool& rPool )
 {
     sal_uInt16 nLatin, nAsian, nComplex;
     GetWhichIds( nLatin, nAsian, nComplex );
-
-    sal_uInt16 aIds[ 9 ] = { 0 };
-    aIds[ 0 ] = aIds[ 1 ] = nLatin;
-    aIds[ 2 ] = aIds[ 3 ] = nAsian;
-    aIds[ 4 ] = aIds[ 5 ] = nComplex;
-    aIds[ 6 ] = aIds[ 7 ] = SID_ATTR_CHAR_SCRIPTTYPE;
-    aIds[ 8 ] = 0;
-
-    GetItemSet().SetRanges( aIds );
+    GetItemSet().MergeRange( nLatin, nLatin );
+    GetItemSet().MergeRange( nAsian, nAsian );
+    GetItemSet().MergeRange( nComplex, nComplex );
+    GetItemSet().MergeRange( SID_ATTR_CHAR_SCRIPTTYPE, SID_ATTR_CHAR_SCRIPTTYPE );
 }
 
 SfxPoolItem* SvxScriptSetItem::Clone( SfxItemPool * ) const
