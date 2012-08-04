@@ -1197,8 +1197,16 @@ void ScMultiTextWnd::Resize()
     if(pEditView)
     {
         Size aOutputSize = GetOutputSizePixel();
+        Rectangle aOutputArea = PixelToLogic( Rectangle( Point(), aOutputSize ));
+        pEditView->SetOutputArea( aOutputArea );
 
-        pEditView->SetOutputArea( PixelToLogic( Rectangle( Point(), aOutputSize ) ) );
+        // Don't leave an empty area at the bottom if we can move the text down.
+        long nMaxVisAreaTop = pEditEngine->GetTextHeight() - aOutputArea.GetHeight();
+        if (pEditView->GetVisArea().Top() > nMaxVisAreaTop)
+        {
+            pEditView->Scroll(0, pEditView->GetVisArea().Top() - nMaxVisAreaTop);
+        }
+
         pEditEngine->SetPaperSize( PixelToLogic( Size( aOutputSize.Width(), 10000 ) ) );
     }
 
