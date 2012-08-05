@@ -39,7 +39,7 @@ public:
     sal_Bool        Import();
     sal_Bool        Export();
 
-    /// restaures the original basic storage
+    /// restores the original basic storage
     void                    PreSaveBasic();
 
 private:

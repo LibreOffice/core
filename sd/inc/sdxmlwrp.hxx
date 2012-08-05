@@ -28,9 +28,9 @@
 
 enum SdXMLFilterMode
 {
-    SDXMLMODE_Normal,           /// standard load and save of the complete document
-    SDXMLMODE_Preview,          /// only for import, only the first draw page and its master page is loaded
-    SDXMLMODE_Organizer         /// only for import, only the styles are loaded
+    SDXMLMODE_Normal,   ///< standard load and save of the complete document
+    SDXMLMODE_Preview,  ///< only for import, only the first draw page and its master page is loaded
+    SDXMLMODE_Organizer ///< only for import, only the styles are loaded
 };
 
 class SdXMLFilter : public SdFilter

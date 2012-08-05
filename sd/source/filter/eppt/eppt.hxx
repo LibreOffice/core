@@ -134,8 +134,8 @@ enum PPTExOleObjEntryType
 struct PPTExOleObjEntry
 {
     PPTExOleObjEntryType    eType;
-    sal_uInt32              nOfsA;          // offset to the EPP_ExOleObjAtom in mpExEmbed (set at creation)
-    sal_uInt32              nOfsB;          // offset to the EPP_ExOleObjStg
+    sal_uInt32              nOfsA; ///< offset to the EPP_ExOleObjAtom in mpExEmbed (set at creation)
+    sal_uInt32              nOfsB; ///< offset to the EPP_ExOleObjStg
 
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >    xControlModel;
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >       xShape;

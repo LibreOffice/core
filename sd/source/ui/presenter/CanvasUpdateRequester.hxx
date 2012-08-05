@@ -41,7 +41,7 @@ namespace sd { namespace presenter {
 class CanvasUpdateRequester : private ::boost::noncopyable
 {
 public:
-    /** Return the Canvas UpdateRequester object for the given shared
+    /** @return the Canvas UpdateRequester object for the given shared
         canvas.  A new object is created when it does not already exist.
     */
     static ::boost::shared_ptr<CanvasUpdateRequester> Instance (

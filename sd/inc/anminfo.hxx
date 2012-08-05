@@ -37,26 +37,26 @@ public:
     PresObjKind             mePresObjKind;
 
     /* deprecated animation infos */
-    ::com::sun::star::presentation::AnimationEffect meEffect;       ///< Animation effect
-    ::com::sun::star::presentation::AnimationEffect meTextEffect;   ///< Animation effect for text
-    ::com::sun::star::presentation::AnimationSpeed  meSpeed;        ///< Speed of the animation
+    ::com::sun::star::presentation::AnimationEffect meEffect;     ///< Animation effect
+    ::com::sun::star::presentation::AnimationEffect meTextEffect; ///< Animation effect for text content
+    ::com::sun::star::presentation::AnimationSpeed  meSpeed;      ///< Speed of the animation
     sal_Bool                    mbActive;       ///< turned on?
-    sal_Bool                    mbDimPrevious;  ///< Object Dim
-    sal_Bool                    mbIsMovie;      ///< wenn Gruppenobjekt, dann Sequenz aus den
+    sal_Bool                    mbDimPrevious;  ///< Object fade out
+    sal_Bool                    mbIsMovie;      ///< if group object than it is a sequence of them.
     sal_Bool                    mbDimHide;      ///< hide rather than dim
     Color                       maBlueScreen;   ///< identifies "background pixels"
-    Color                       maDimColor;     ///< zum Abblenden des Objekts
+    Color                       maDimColor;     ///< for fading the object
     String                      maSoundFile;    ///< Path to the sound file in MS DOS notation
     sal_Bool                    mbSoundOn;      ///< Sound on / off
-    sal_Bool                    mbPlayFull;     ///< Play sound quite
+    sal_Bool                    mbPlayFull;     ///< play sound completely.
     SdrPathObj*                 mpPathObj;      ///< The path object
     ::com::sun::star::presentation::ClickAction     meClickAction;  ///< Action at mouse click
-    ::com::sun::star::presentation::AnimationEffect meSecondEffect; ///< for  Hidden  object
-    ::com::sun::star::presentation::AnimationSpeed  meSecondSpeed;  ///< for  Hidden  object
-    String                      maSecondSoundFile; ///< for  Hidden  object
-    sal_Bool                    mbSecondSoundOn;    ///< for  Hidden  object
-    sal_Bool                    mbSecondPlayFull;///< ffor  Hidden  object
-    sal_uInt16                  mnVerb;         ///< for OLE object
+    ::com::sun::star::presentation::AnimationEffect meSecondEffect; ///< for object fading.
+    ::com::sun::star::presentation::AnimationSpeed  meSecondSpeed;  ///< for object fading.
+    String                      maSecondSoundFile; ///< for object fading.
+    sal_Bool                    mbSecondSoundOn;   ///< for object fading.
+    sal_Bool                    mbSecondPlayFull;  ///< for object fading.
+    sal_uInt16                  mnVerb;            ///< for OLE object
     sal_uLong                   mnPresOrder;
     SdrObject&              mrObject;
 
