@@ -1,6 +1,5 @@
 FontSelectPattern::FontSelectPattern(PhysicalFontFace const&, Size const&, float, int, bool)
 PopupMenu::SetSelectedEntry(unsigned short)
-RtfAttributeOutput::WriteHex(rtl::OString)
 SanExtensionImpl::setCertExtn(com::sun::star::uno::Sequence<signed char>, com::sun::star::uno::Sequence<signed char>, unsigned char)
 SanExtensionImpl::setCertExtn(unsigned char*, unsigned int, unsigned char*, unsigned int, unsigned char)
 ScCompressedArray<int, unsigned char>::GetEntryCount() const

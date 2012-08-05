@@ -589,7 +589,6 @@ public:
     /// Writes binary data as a hex dump.
     static rtl::OString WriteHex(const sal_uInt8* pData, sal_uInt32 nSize, SvStream* pStream = 0, sal_uInt32 nLimit = 64);
     static rtl::OString WriteHex(sal_Int32 nNum);
-    static rtl::OString WriteHex(rtl::OString sString);
 };
 
 #endif // _RTFATTRIBUTEOUTPUT_HXX_

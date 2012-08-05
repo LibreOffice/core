@@ -3230,16 +3230,6 @@ OString RtfAttributeOutput::WriteHex(sal_Int32 nNum)
     return RtfAttributeOutput::WriteHex((sal_uInt8*)&nNum, sizeof(sal_Int32));
 }
 
-OString RtfAttributeOutput::WriteHex(OString sString)
-{
-    RtfStringBuffer aRet;
-
-    aRet->append(WriteHex(sString.getLength()+1));
-    aRet->append(RtfAttributeOutput::WriteHex((sal_uInt8*)sString.getStr(), sString.getLength()+1));
-
-    return aRet.makeStringAndClear();
-}
-
 void lcl_AppendSP( OStringBuffer& rBuffer,
     const char cName[],
     const ::rtl::OUString& rValue,
