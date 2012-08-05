@@ -721,20 +721,6 @@ SmViewShell * SmCmdBoxWindow::GetView()
 void SmCmdBoxWindow::Resize()
 {
     Rectangle aRect = Rectangle(Point(0, 0), GetOutputSizePixel());
-
-    if (! IsFloatingMode())
-    {
-        switch (GetAlignment())
-        {
-            case SFX_ALIGN_TOP:     aRect.Bottom()--;   break;
-            case SFX_ALIGN_BOTTOM:  aRect.Top()++;      break;
-            case SFX_ALIGN_LEFT:    aRect.Right()--;    break;
-            case SFX_ALIGN_RIGHT:   aRect.Left()++;     break;
-            default:
-                break;
-        }
-    }
-
     DecorationView aView(this);
     aRect.Left() += 8; aRect.Top()   += 8;
     aRect.Right()-= 8; aRect.Bottom()-= 8;
@@ -750,38 +736,6 @@ void SmCmdBoxWindow::Paint(const Rectangle& /*rRect*/)
 {
     Rectangle aRect = Rectangle(Point(0, 0), GetOutputSizePixel());
     DecorationView aView(this);
-
-    if (! IsFloatingMode())
-    {
-        Point aFrom, aTo;
-        switch (GetAlignment())
-        {
-            case SFX_ALIGN_TOP:
-                aFrom = aRect.BottomLeft(); aTo = aRect.BottomRight();
-                aRect.Bottom()--;
-                break;
-
-            case SFX_ALIGN_BOTTOM:
-                aFrom = aRect.TopLeft(); aTo = aRect.TopRight();
-                aRect.Top()++;
-                break;
-
-            case SFX_ALIGN_LEFT:
-                aFrom = aRect.TopRight(); aTo = aRect.BottomRight();
-                aRect.Right()--;
-                break;
-
-            case SFX_ALIGN_RIGHT:
-                aFrom = aRect.TopLeft(); aTo = aRect.BottomLeft();
-                aRect.Left()++;
-                break;
-
-            default:
-                break;
-        }
-        DrawLine( aFrom, aTo );
-        aView.DrawFrame(aRect, FRAME_DRAW_OUT);
-    }
     aRect.Left() += 8; aRect.Top()   += 8;
     aRect.Right()-= 8; aRect.Bottom()-= 8;
     aRect = aView.DrawFrame( aRect, FRAME_DRAW_DOUBLEIN );
