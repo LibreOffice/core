@@ -16,7 +16,6 @@
 #define TEMPLATE_VIEW               7
 
 #define TBX_ACTION_VIEW             8
-#define TBI_TEMPLATE_CREATE         9
 #define TBI_TEMPLATE_IMPORT         10
 
 #define TBX_ACTION_ACTION           11
@@ -29,22 +28,12 @@
 #define TBI_TEMPLATE_MOVE           17
 #define TBI_TEMPLATE_DELETE         18
 
-#define MNI_CREATE_TEXT             19
-#define MNI_CREATE_SHEET            20
-#define MNI_CREATE_PRESENT          21
-#define MNI_CREATE_DRAW             22
-
 #define MNI_ACTION_SORT_NAME        23
 
 #define BTN_TEMPLATE_CLOSE          24
 
 #define TBI_TEMPLATE_FOLDER_DEL     25
 #define TBI_TEMPLATE_REPOSITORY     26
-
-#define STR_CREATE_TEXT             260
-#define STR_CREATE_SHEET            261
-#define STR_CREATE_PRESENT          262
-#define STR_CREATE_DRAW             263
 
 #define STR_ACTION_SORT_NAME        264
 

@@ -109,13 +109,6 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
     maButtonSelMode.SetStyle(maButtonSelMode.GetStyle() | WB_TOGGLE);
 
     // Create popup menus
-    mpCreateMenu = new PopupMenu;
-    mpCreateMenu->InsertItem(MNI_CREATE_TEXT,SfxResId(STR_CREATE_TEXT).toString(),SfxResId(IMG_CREATE_TEXT));
-    mpCreateMenu->InsertItem(MNI_CREATE_SHEET,SfxResId(STR_CREATE_SHEET).toString(),SfxResId(IMG_CREATE_SHEET));
-    mpCreateMenu->InsertItem(MNI_CREATE_PRESENT,SfxResId(STR_CREATE_PRESENT).toString(),SfxResId(IMG_CREATE_PRESENT));
-    mpCreateMenu->InsertItem(MNI_CREATE_DRAW,SfxResId(STR_CREATE_DRAW).toString(),SfxResId(IMG_CREATE_DRAW));
-    mpCreateMenu->SetSelectHdl(LINK(this, SfxTemplateManagerDlg, MenuSelectHdl));
-
     mpActionMenu = new PopupMenu;
     mpActionMenu->InsertItem(MNI_ACTION_SORT_NAME,SfxResId(STR_ACTION_SORT_NAME).toString(),SfxResId(IMG_ACTION_SORT));
     mpActionMenu->SetSelectHdl(LINK(this,SfxTemplateManagerDlg,MenuSelectHdl));
@@ -154,7 +147,6 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
 
     // Set toolbox button bits
     mpViewBar->EnableItem(TBI_TEMPLATE_IMPORT,false);
-    mpViewBar->SetItemBits(TBI_TEMPLATE_CREATE, TIB_DROPDOWNONLY);
     mpViewBar->SetItemBits(TBI_TEMPLATE_REPOSITORY, TIB_DROPDOWNONLY);
     mpActionBar->SetItemBits(TBI_TEMPLATE_ACTION, TIB_DROPDOWNONLY);
     mpTemplateBar->SetItemBits(TBI_TEMPLATE_MOVE,TIB_DROPDOWNONLY);
@@ -268,7 +260,6 @@ SfxTemplateManagerDlg::~SfxTemplateManagerDlg ()
     delete mpSearchView;
     delete maView;
     delete mpOnlineView;
-    delete mpCreateMenu;
     delete mpActionMenu;
     delete mpRepositoryMenu;
 }
@@ -398,16 +389,6 @@ IMPL_LINK(SfxTemplateManagerDlg, TBXDropdownHdl, ToolBox*, pBox)
 
     switch(nCurItemId)
     {
-    case TBI_TEMPLATE_CREATE:
-        pBox->SetItemDown( nCurItemId, true );
-
-        mpCreateMenu->Execute(pBox,pBox->GetItemRect(TBI_TEMPLATE_CREATE),
-                              POPUPMENU_EXECUTE_DOWN);
-
-        pBox->SetItemDown( nCurItemId, false );
-        pBox->EndSelection();
-        pBox->Invalidate();
-        break;
     case TBI_TEMPLATE_ACTION:
         pBox->SetItemDown( nCurItemId, true );
 
@@ -527,22 +508,6 @@ IMPL_LINK(SfxTemplateManagerDlg, MenuSelectHdl, Menu*, pMenu)
 
     switch(nMenuId)
     {
-    case MNI_CREATE_TEXT:
-        lcl_createTemplate(mxDesktop,FILTER_APP_WRITER);
-        Close( );
-        break;
-    case MNI_CREATE_SHEET:
-        lcl_createTemplate(mxDesktop,FILTER_APP_CALC);
-        Close( );
-        break;
-    case MNI_CREATE_PRESENT:
-        lcl_createTemplate(mxDesktop,FILTER_APP_IMPRESS);
-        Close( );
-        break;
-    case MNI_CREATE_DRAW:
-        lcl_createTemplate(mxDesktop,FILTER_APP_DRAW);
-        Close( );
-        break;
     case MNI_ACTION_SORT_NAME:
         if (maView->isOverlayVisible())
             maView->sortOverlayItems(SortView_Name());
@@ -1085,36 +1050,6 @@ void SfxTemplateManagerDlg::localSearchMoveTo(sal_uInt16 nMenuId)
     mpSearchView->unselectItems();
 
     SearchUpdateHdl(mpSearchEdit);
-}
-
-void lcl_createTemplate(uno::Reference< com::sun::star::frame::XComponentLoader > xDesktop,
-                        const FILTER_APPLICATION eApp)
-{
-    rtl::OUString aURL;
-
-    switch(eApp)
-    {
-    case FILTER_APP_WRITER:
-        aURL = "private:factory/swriter";
-        break;
-    case FILTER_APP_CALC:
-        aURL = "private:factory/scalc";
-        break;
-    case FILTER_APP_IMPRESS:
-        aURL = "private:factory/simpress";
-        break;
-    case FILTER_APP_DRAW:
-        aURL = "private:factory/sdraw";
-        break;
-    default:
-        break;
-    }
-
-    if (!aURL.isEmpty())
-    {
-        uno::Sequence<PropertyValue> aArgs;
-        xDesktop->loadComponentFromURL(aURL,rtl::OUString("_default"), 0, aArgs );
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

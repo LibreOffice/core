@@ -120,7 +120,6 @@ private:
     TemplateAbstractView *mpCurView;
     TemplateLocalView *maView;
     TemplateOnlineView *mpOnlineView;
-    PopupMenu *mpCreateMenu;
     PopupMenu *mpActionMenu;
     PopupMenu *mpRepositoryMenu;
 

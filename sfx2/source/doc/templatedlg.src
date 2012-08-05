@@ -10,26 +10,6 @@
 #include "templatedlg.hrc"
 #include "helpid.hrc"
 
-String STR_CREATE_TEXT
-{
-    Text [ en-US ] = "Text Document Template";
-};
-
-String STR_CREATE_SHEET
-{
-    Text [ en-US ] = "Spreedsheet Template";
-};
-
-String STR_CREATE_PRESENT
-{
-    Text [ en-US ] = "Presentation Template";
-};
-
-String STR_CREATE_DRAW
-{
-    Text [ en-US ] = "Drawing Template";
-};
-
 String STR_ACTION_SORT_NAME
 {
     Text [ en-US ] = "Sort by name";
@@ -135,38 +115,6 @@ ModelessDialog DLG_TEMPLATE_MANAGER
         TabStop = TRUE;
     };
 
-    Image IMG_CREATE_TEXT
-    {
-        ImageBitmap = Bitmap
-        {
-            File = "create_text.png";
-        };
-    };
-
-    Image IMG_CREATE_SHEET
-    {
-        ImageBitmap = Bitmap
-        {
-            File = "create_sheet.png";
-        };
-    };
-
-    Image IMG_CREATE_PRESENT
-    {
-        ImageBitmap = Bitmap
-        {
-            File = "create_present.png";
-        };
-    };
-
-    Image IMG_CREATE_DRAW
-    {
-        ImageBitmap = Bitmap
-        {
-            File = "create_draw.png";
-        };
-    };
-
     Image IMG_ACTION_SORT
     {
         ImageBitmap = Bitmap
@@ -184,17 +132,6 @@ ModelessDialog DLG_TEMPLATE_MANAGER
 
         ItemList =
         {
-            ToolBoxItem
-            {
-                Identifier = TBI_TEMPLATE_CREATE;
-                Text [ en-US ] = "Create" ;
-
-                ItemImage = Image
-                {
-                    ImageBitmap = Bitmap { File = "create_text.png" ; };
-                };
-            };
-
             ToolBoxItem
             {
                 Identifier = TBI_TEMPLATE_REPOSITORY;
