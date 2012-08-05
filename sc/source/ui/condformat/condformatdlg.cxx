@@ -320,8 +320,11 @@ void ScCondFrmtEntry::Init()
     maLbEntryTypeMin.SetSelectHdl( LINK( this, ScCondFrmtEntry, EntryTypeHdl ) );
     maLbEntryTypeMax.SetSelectHdl( LINK( this, ScCondFrmtEntry, EntryTypeHdl ) );
     maLbEntryTypeMiddle.SetSelectHdl( LINK( this, ScCondFrmtEntry, EntryTypeHdl ) );
+    maEdVal1.SetStyle( maEdVal1.GetStyle() | WB_FORCECTRLBACKGROUND );
+    maEdVal2.SetStyle( maEdVal2.GetStyle() | WB_FORCECTRLBACKGROUND );
 
-
+    maEdVal1.SetModifyHdl( LINK( this, ScCondFrmtEntry, EdModifyHdl ) );
+    maEdVal2.SetModifyHdl( LINK( this, ScCondFrmtEntry, EdModifyHdl ) );
 
     SfxStyleSheetIterator aStyleIter( mpDoc->GetStyleSheetPool(), SFX_STYLE_FAMILY_PARA );
     for ( SfxStyleSheetBase* pStyle = aStyleIter.First(); pStyle; pStyle = aStyleIter.Next() )
@@ -810,6 +813,23 @@ IMPL_LINK_NOARG(ScCondFrmtEntry, TypeListHdl)
             break;
     }
     SetHeight();
+    return 0;
+}
+
+IMPL_LINK(ScCondFrmtEntry, EdModifyHdl, Edit*, pEdit)
+{
+    rtl::OUString aFormula = pEdit->GetText();
+    ScCompiler aComp( mpDoc, maPos );
+    aComp.SetGrammar( mpDoc->GetGrammar() );
+    boost::scoped_ptr<ScTokenArray> mpCode(aComp.CompileString(aFormula));
+    if(mpCode->GetCodeError())
+    {
+        pEdit->SetControlBackground(GetSettings().GetStyleSettings().GetHighlightColor());
+    }
+    else
+    {
+        pEdit->SetControlBackground(GetSettings().GetStyleSettings().GetWindowColor());
+    }
     return 0;
 }
 

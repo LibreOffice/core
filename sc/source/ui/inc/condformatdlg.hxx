@@ -125,6 +125,7 @@ private:
     DECL_LINK( DataBarTypeSelectHdl, void* );
     DECL_LINK( ConditionTypeSelectHdl, void* );
     DECL_LINK( EntryTypeHdl, ListBox* );
+    DECL_LINK( EdModifyHdl, Edit* );
 
 public:
     ScCondFrmtEntry( Window* pParent, ScDocument* pDoc, const ScAddress& rPos );
