@@ -74,6 +74,9 @@
 #define MINZOOM         25
 #define MAXZOOM         800
 
+// space around the edit window, in pixels
+#define CMD_BOX_PADDING 4
+
 #define SmViewShell
 #include "smslots.hxx"
 
@@ -721,9 +724,12 @@ SmViewShell * SmCmdBoxWindow::GetView()
 void SmCmdBoxWindow::Resize()
 {
     Rectangle aRect = Rectangle(Point(0, 0), GetOutputSizePixel());
+    aRect.Left()   += CMD_BOX_PADDING;
+    aRect.Top()    += CMD_BOX_PADDING;
+    aRect.Right()  -= CMD_BOX_PADDING;
+    aRect.Bottom() -= CMD_BOX_PADDING;
+
     DecorationView aView(this);
-    aRect.Left() += 8; aRect.Top()   += 8;
-    aRect.Right()-= 8; aRect.Bottom()-= 8;
     aRect = aView.DrawFrame( aRect, FRAME_DRAW_DOUBLEIN | FRAME_DRAW_NODRAW );
 
     aEdit.SetPosSizePixel(aRect.TopLeft(), aRect.GetSize());
@@ -735,10 +741,13 @@ void SmCmdBoxWindow::Resize()
 void SmCmdBoxWindow::Paint(const Rectangle& /*rRect*/)
 {
     Rectangle aRect = Rectangle(Point(0, 0), GetOutputSizePixel());
+    aRect.Left()   += CMD_BOX_PADDING;
+    aRect.Top()    += CMD_BOX_PADDING;
+    aRect.Right()  -= CMD_BOX_PADDING;
+    aRect.Bottom() -= CMD_BOX_PADDING;
+
     DecorationView aView(this);
-    aRect.Left() += 8; aRect.Top()   += 8;
-    aRect.Right()-= 8; aRect.Bottom()-= 8;
-    aRect = aView.DrawFrame( aRect, FRAME_DRAW_DOUBLEIN );
+    aView.DrawFrame( aRect, FRAME_DRAW_DOUBLEIN );
 }
 
 
