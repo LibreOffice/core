@@ -389,6 +389,9 @@ public:
 
 private:
     ScBaseCell* CloneCell(SCSIZE nIndex, sal_uInt16 nFlags, ScDocument& rDestDoc, const ScAddress& rDestPos);
+
+    SCROW FindNextVisibleRowWithContent(SCROW nRow, bool bForward) const;
+    SCROW FindNextVisibleRow(SCROW nRow, bool bForward) const;
 };
 
 

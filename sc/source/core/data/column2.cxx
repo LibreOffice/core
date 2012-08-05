@@ -1307,11 +1307,102 @@ bool ScColumn::GetNextDataPos(SCROW& rRow) const        // greater than rRow
     return bMore;
 }
 
+SCROW ScColumn::FindNextVisibleRow(SCROW nRow, bool bForward) const
+{
+    if(bForward)
+    {
+        nRow++;
+        SCROW nEndRow = 0;
+        bool bHidden = pDocument->RowHidden(nRow, nTab, NULL, &nEndRow);
+        if(bHidden)
+            return std::min<SCROW>(MAXROW, nEndRow + 1);
+        else
+            return nRow;
+    }
+    else
+    {
+        nRow--;
+        SCROW nStartRow = MAXROW;
+        bool bHidden = pDocument->RowHidden(nRow, nTab, &nStartRow, NULL);
+        if(bHidden)
+            return std::max<SCROW>(0, nStartRow - 1);
+        else
+            return nRow;
+    }
+}
+
+SCROW ScColumn::FindNextVisibleRowWithContent(SCROW nRow, bool bForward) const
+{
+    if(bForward)
+    {
+        bool bFound = false;
+        do
+        {
+            nRow++;
+            SCROW nEndRow = 0;
+            bool bHidden = pDocument->RowHidden(nRow, nTab, NULL, &nEndRow);
+            if(bHidden)
+            {
+                nRow = nEndRow + 1;
+                if(nRow >= MAXROW)
+                    return MAXROW;
+            }
+
+            SCSIZE nIndex;
+            bool bThere = Search( nRow, nIndex );
+            if( bThere && !maItems[nIndex].pCell->IsBlank())
+                return nRow;
+            else if(nIndex >= maItems.size())
+                return MAXROW;
+            else
+            {
+                if(bThere)
+                    nRow = maItems[nIndex+1].nRow - 1;
+                else
+                    nRow = maItems[nIndex].nRow - 1;
+            }
+        }
+        while(!bFound && nRow < MAXROW);
+
+        return MAXROW;
+    }
+    else
+    {
+        bool bFound = false;
+        do
+        {
+            nRow--;
+            SCROW nStartRow = MAXROW;
+            bool bHidden = pDocument->RowHidden(nRow, nTab, &nStartRow, NULL);
+            if(bHidden)
+            {
+                nRow = nStartRow - 1;
+                if(nRow <= 0)
+                    return 0;
+            }
+
+            SCSIZE nIndex;
+            bool bThere = Search( nRow, nIndex );
+            if(bThere && !maItems[nIndex].pCell->IsBlank())
+                return nRow;
+            else if(nIndex == 0)
+                return 0;
+            else
+                nRow = maItems[nIndex-1].nRow + 1;
+        }
+        while(!bFound && nRow > 0);
+
+        return 0;
+    }
+}
+
 void ScColumn::FindDataAreaPos(SCROW& rRow, long nMovY) const
 {
-    if (!nMovY) return;
+    if (!nMovY)
+       return;
     bool bForward = (nMovY>0);
 
+    // check if we are in a data area
     SCSIZE nIndex;
     bool bThere = Search(rRow, nIndex);
     if (bThere && maItems[nIndex].pCell->IsBlank())
@@ -1320,69 +1411,37 @@ void ScColumn::FindDataAreaPos(SCROW& rRow, long nMovY) const
     size_t nLastIndex = maItems.size() - 1;
     if (bThere)
     {
-        SCROW nLast = rRow;
-        SCSIZE nOldIndex = nIndex;
-        if (bForward)
-        {
-            if (nIndex<nLastIndex)
-            {
-                ++nIndex;
-                while (nIndex<nLastIndex && maItems[nIndex].nRow==nLast+1
-                                        && !maItems[nIndex].pCell->IsBlank())
-                {
-                    ++nIndex;
-                    ++nLast;
-                }
-                if (nIndex==nLastIndex)
-                    if (maItems[nIndex].nRow==nLast+1 && !maItems[nIndex].pCell->IsBlank())
-                        ++nLast;
-            }
-        }
-        else
-        {
-            if (nIndex>0)
-            {
-                --nIndex;
-                while (nIndex>0 && maItems[nIndex].nRow+1==nLast
-                                        && !maItems[nIndex].pCell->IsBlank())
-                {
-                    --nIndex;
-                    --nLast;
-                }
-                if (nIndex==0)
-                    if (maItems[nIndex].nRow+1==nLast && !maItems[nIndex].pCell->IsBlank())
-                        --nLast;
-            }
-        }
-        if (nLast==rRow)
-        {
-            bThere = false;
-            nIndex = bForward ? nOldIndex+1 : nOldIndex;
-        }
-        else
-            rRow = nLast;
-    }
+        SCROW nNextRow = FindNextVisibleRow(rRow, bForward);
+        SCSIZE nNewIndex;
+        bool bNextThere = Search(nNextRow, nNewIndex);
+        if(bNextThere && maItems[nNewIndex].pCell->IsBlank())
+            bNextThere = false;
 
-    if (!bThere)
-    {
-        if (bForward)
+        if(bNextThere)
         {
-            while (nIndex<nLastIndex+1 && maItems[nIndex].pCell->IsBlank())
-                ++nIndex;
-            if (nIndex<nLastIndex+1)
-                rRow = maItems[nIndex].nRow;
-            else
-                rRow = MAXROW;
+            SCROW nLastRow;
+            nLastRow = nNextRow;
+            do
+            {
+                nNextRow = FindNextVisibleRow(nLastRow, bForward);
+                bNextThere = Search(nNextRow, nNewIndex);
+                if(!bNextThere || maItems[nNewIndex].pCell->IsBlank())
+                    bNextThere = false;
+                else
+                    nLastRow = nNextRow;
+            }
+            while(bNextThere && nNewIndex < nLastIndex && nNewIndex > 0);
+
+            rRow = nLastRow;
         }
         else
         {
-            while (nIndex>0 && maItems[nIndex-1].pCell->IsBlank())
-                --nIndex;
-            if (nIndex>0)
-                rRow = maItems[nIndex-1].nRow;
-            else
-                rRow = 0;
+            rRow = FindNextVisibleRowWithContent(nNextRow, bForward);
         }
+    }
+    else
+    {
+        rRow = FindNextVisibleRowWithContent(rRow, bForward);
     }
 }
 
