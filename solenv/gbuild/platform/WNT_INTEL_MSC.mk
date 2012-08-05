@@ -237,6 +237,8 @@ define gb_create_deps
 endef
 endif
 
+gb_COMPILER_LTOFLAGS := $(if $(filter TRUE,$(ENABLE_LTO)),-GL)
+
 # Helper class
 
 gb_Helper_OUTDIRLIBDIR := $(OUTDIR)/bin
@@ -275,6 +277,7 @@ $(call gb_Helper_abbreviate_dirs,\
 	unset INCLUDE && \
 	$(gb_CC) \
 		$(DEFS) \
+		$(if $(filter Library,$(TARGETTYPE)),$(gb_COMPILER_LTOFLAGS)) \
 		$(T_CFLAGS) \
 		$(if $(WARNINGS_NOT_ERRORS),,$(gb_CFLAGS_WERROR)) \
 		-Fd$(PDBFILE) \
@@ -296,6 +299,7 @@ $(call gb_Helper_abbreviate_dirs,\
 	unset INCLUDE && \
 	$(if $(filter YES,$(CXXOBJECT_X64)), $(CXX_X64_BINARY), $(gb_CXX)) \
 		$(DEFS) \
+		$(if $(filter Library,$(TARGETTYPE)),$(gb_COMPILER_LTOFLAGS)) \
 		$(T_CXXFLAGS) \
 		$(if $(WARNINGS_NOT_ERRORS),,$(gb_CXXFLAGS_WERROR)) \
 		-Fd$(PDBFILE) \
@@ -385,6 +389,10 @@ gb_Library_DEFS := -D_DLL
 gb_Library_TARGETTYPEFLAGS := \
 	-DLL \
 	$(gb_Windows_PE_TARGETTYPEFLAGS)
+
+ifeq ($(ENABLE_LTO),TRUE)
+gb_Library_TARGETTYPEFLAGS += -LTCG
+endif
 
 gb_Library_get_rpath :=
 
