@@ -53,27 +53,27 @@ typedef enum
 
   /* POSIX regcomp return error codes.  (In the order listed in the
      standard.)  */
-  REG_BADPAT,       /* Invalid pattern.  */
-  REG_ECOLLATE,     /* Not implemented.  */
-  REG_ECTYPE,       /* Invalid character class name.  */
-  REG_EESCAPE,      /* Trailing backslash.  */
-  REG_ESUBREG,      /* Invalid back reference.  */
-  REG_EBRACK,       /* Unmatched left bracket.  */
-  REG_EPAREN,       /* Parenthesis imbalance.  */
-  REG_EBRACE,       /* Unmatched \{.  */
-  REG_BADBR,        /* Invalid contents of \{\}.  */
-  REG_ERANGE,       /* Invalid range end.  */
-  REG_ESPACE,       /* Ran out of memory.  */
-  REG_BADRPT,       /* No preceding re for repetition op.  */
+  REG_BADPAT,       ///< Invalid pattern.
+  REG_ECOLLATE,     ///< Not implemented.
+  REG_ECTYPE,       ///< Invalid character class name.
+  REG_EESCAPE,      ///< Trailing backslash.
+  REG_ESUBREG,      ///< Invalid back reference.
+  REG_EBRACK,       ///< Unmatched left bracket.
+  REG_EPAREN,       ///< Parenthesis imbalance.
+  REG_EBRACE,       ///< Unmatched \{.
+  REG_BADBR,        ///< Invalid contents of \{\}.
+  REG_ERANGE,       ///< Invalid range end.
+  REG_ESPACE,       ///< Ran out of memory.
+  REG_BADRPT,       ///< No preceding re for repetition op.
 
   /* Error codes we've added.  */
-  REG_EEND,         /* Premature end.  */
-  REG_ESIZE,        /* Compiled pattern bigger than 2^16 bytes.  */
-  REG_ERPAREN       /* Unmatched ) or \); not returned from regcomp.  */
+  REG_EEND,         ///< Premature end.
+  REG_ESIZE,        ///< Compiled pattern bigger than 2^16 bytes.
+  REG_ERPAREN       ///< Unmatched ) or \); not returned from regcomp.
 } reg_errcode_t;
 
 
-/* This data structure represents a compiled pattern.  Before calling
+/** This data structure represents a compiled pattern.  Before calling
    the pattern compiler, the fields `buffer', `allocated', `fastmap',
    can be set.  After the pattern has been
    compiled, the `re_nsub' field is available.  All other fields are
@@ -87,19 +87,19 @@ struct REGEXP_DLLPUBLIC re_pattern_buffer
            sometimes used as array indexes.  */
   sal_Unicode *buffer;
 
-    /* Number of bytes to which `buffer' points.  */
+   /// Number of bytes to which `buffer' points.
   sal_uInt32 allocated;
 
-    /* Number of bytes actually used in `buffer'.  */
+    /// Number of bytes actually used in `buffer'.
   sal_uInt32 used;
 
-        /* Pointer to a fastmap, if any, otherwise zero.  re_search uses
+        /** Pointer to a fastmap, if any, otherwise zero.  re_search uses
            the fastmap, if there is one, to skip over impossible
            starting points for matches.  */
   sal_Unicode *fastmap;
 
 
-    /* Number of subexpressions found by the compiler.  */
+    /// Number of subexpressions found by the compiler.
   size_t re_nsub;
 
         /* Zero if this pattern cannot match the empty string, one else.
@@ -135,16 +135,16 @@ typedef enum
 {
     no_op = 0,
 
-    /* Succeed right away--no more backtracking.  */
+    /// Succeed right away--no more backtracking.
     succeed,
 
-    /* Followed by one byte giving n, then by n literal bytes.  */
+    /// Followed by one byte giving n, then by n literal bytes.
     exactn,
 
-    /* Matches any (more or less) character.  */
+    /// Matches any (more or less) character.
     anychar,
 
-    /* Matches any one char belonging to specified set.  First
+    /** Matches any one char belonging to specified set.  First
        following byte is number of bitmap bytes.  Then come bytes
        for a bitmap saying which chars are in.  Bits in each byte
        are ordered low-bit-first.  A character is in the set if its
@@ -152,11 +152,11 @@ typedef enum
        automatically not in the set.  */
     charset,
 
-    /* Same parameters as charset, but match any character that is
+    /** Same parameters as charset, but match any character that is
        not one of those specified.  */
     charset_not,
 
-    /* Start remembering the text that is matched, for storing in a
+    /** Start remembering the text that is matched, for storing in a
        register.  Followed by one byte with the register number, in
        the range 0 to one less than the pattern buffer's re_nsub
        field.  Then followed by one byte with the number of groups
@@ -164,7 +164,7 @@ typedef enum
        start_memory only because we need it in the on_failure_jump
        of re_match2.)  */
     start_memory,
-    /* Stop remembering the text that is matched and store it in a
+    /** Stop remembering the text that is matched and store it in a
        memory register.  Followed by one byte with the register
        number, in the range 0 to one less than `re_nsub' in the
        pattern buffer, and one byte with the number of inner groups,
@@ -173,42 +173,42 @@ typedef enum
        corresponding start_memory when we're at a stop_memory.)  */
     stop_memory,
 
-    /* Match a duplicate of something remembered. Followed by one
+    /** Match a duplicate of something remembered. Followed by one
        byte containing the register number.  */
     duplicate,
 
-    /* Fail unless at beginning of line.  */
+    /// Fail unless at beginning of line.
     begline,
 
-    /* Fail unless at end of line.  */
+    /// Fail unless at end of line.
     endline,
 
-    /* Succeeds if at beginning of buffer (if emacs) or at beginning
+    /** Succeeds if at beginning of buffer (if emacs) or at beginning
        of string to be matched (if not).  */
     begbuf,
 
-    /* Analogously, for end of buffer/string.  */
+    /// Analogously, for end of buffer/string.
     endbuf,
 
-    /* Followed by two byte relative address to which to jump.  */
+    /// Followed by two byte relative address to which to jump.
     jump,
 
-    /* Same as jump, but marks the end of an alternative.  */
+    /// Same as jump, but marks the end of an alternative.
     jump_past_alt,
 
-    /* Followed by two-byte relative address of place to resume at
-       in case of failure.  */
+    /// Followed by two-byte relative address of place to resume at
+       in case of failure.
     on_failure_jump,
 
-    /* Like on_failure_jump, but pushes a placeholder instead of the
+    /** Like on_failure_jump, but pushes a placeholder instead of the
        current string position when executed.  */
     on_failure_keep_string_jump,
 
-    /* Throw away latest failure point and then jump to following
+    /** Throw away latest failure point and then jump to following
        two-byte relative address.  */
     pop_failure_jump,
 
-    /* Change to pop_failure_jump if know won't have to backtrack to
+    /** Change to pop_failure_jump if know won't have to backtrack to
        match; otherwise change to jump.  This is used to jump
        back to the beginning of a repeat.  If what follows this jump
        clearly won't match what the repeat does, such that we can be
@@ -217,41 +217,41 @@ typedef enum
        Followed by two-byte address.  */
     maybe_pop_jump,
 
-    /* Jump to following two-byte address, and push a dummy failure
+    /** Jump to following two-byte address, and push a dummy failure
        point. This failure point will be thrown away if an attempt
        is made to use it for a failure.  A `+' construct makes this
        before the first repeat.  Also used as an intermediary kind
        of jump when compiling an alternative.  */
     dummy_failure_jump,
 
-    /* Push a dummy failure point and continue.  Used at the end of
+    /** Push a dummy failure point and continue.  Used at the end of
        alternatives.  */
     push_dummy_failure,
 
-    /* Followed by two-byte relative address and two-byte number n.
+    /** Followed by two-byte relative address and two-byte number n.
        After matching N times, jump to the address upon failure.  */
     succeed_n,
 
-    /* Followed by two-byte relative address, and two-byte number n.
+    /** Followed by two-byte relative address, and two-byte number n.
        Jump to the address N times, then fail.  */
     jump_n,
 
-    /* Set the following two-byte relative address to the
+    /** Set the following two-byte relative address to the
        subsequent two-byte number.  The address *includes* the two
        bytes of number.  */
     set_number_at,
 
-    wordbeg,      /* Succeeds if at word beginning.  */
-    wordend       /* Succeeds if at word end.  */
+    wordbeg,      ///< Succeeds if at word beginning.
+    wordend       ///< Succeeds if at word end.
 
 } re_opcode_t;
 
 typedef struct re_pattern_buffer regex_t;
 
-/* Type for byte offsets within the string.  POSIX mandates this.  */
+/// Type for byte offsets within the string.  POSIX mandates this.
 typedef sal_Int32 regoff_t;
 
-/* This is the structure we store register match data in.  See
+/** This is the structure we store register match data in.  See
    regex.texinfo for a full description of what registers match.  */
 struct REGEXP_DLLPUBLIC re_registers
 {
@@ -287,7 +287,7 @@ typedef struct
 {
     fail_stack_elt_t *stack;
     sal_uInt32 size;
-    sal_uInt32 avail;              /* Offset of next open position.  */
+    sal_uInt32 avail;              ///< Offset of next open position.
 } fail_stack_type;
 
 typedef union
@@ -311,17 +311,17 @@ class REGEXP_DLLPUBLIC Regexpr
     ::com::sun::star::uno::Reference<
     ::com::sun::star::i18n::XExtendedTransliteration > translit;
 
-    const sal_Unicode *line;                // line to search in
-    sal_Int32   linelen;            // length of search string
+    const sal_Unicode *line;                ///< line to search in
+    sal_Int32   linelen;            ///< length of search string
 
-    sal_Unicode *pattern;           // RE pattern to match
-    sal_Int32   patsize;            // Length of pattern
+    sal_Unicode *pattern;           ///</ RE pattern to match
+    sal_Int32   patsize;            ///< Length of pattern
 
     struct re_pattern_buffer *bufp;
 
     sal_Bool isIgnoreCase;
 
-    /* Either a translate table to apply to all characters before
+    /** Either a translate table to apply to all characters before
        comparing them, or zero for no translation.  The translation
        is applied to a pattern when it is compiled and to a string
        when it is matched.  */
@@ -330,13 +330,11 @@ class REGEXP_DLLPUBLIC Regexpr
     sal_uInt32 failure_id;
     sal_uInt32 nfailure_points_pushed;
     sal_uInt32 nfailure_points_popped;
-    /* Counts the total number of registers pushed.  */
-    sal_uInt32 num_regs_pushed;
+    sal_uInt32 num_regs_pushed; ///< Counts the total number of registers pushed.
 
     sal_uInt32 re_max_failures;
 
-    /* Registers are set to a sentinel when they haven't yet matched.  */
-    sal_Unicode reg_unset_dummy;
+    sal_Unicode reg_unset_dummy; ///< Registers are set to a sentinel when they haven't yet matched.
 
     // private instance functions
     inline void store_number( sal_Unicode * destination, sal_Int32 number );
@@ -385,7 +383,7 @@ public:
 
     void set_line( const sal_Unicode *line, sal_Int32 len );
 
-    // function returning pointers to occurrences in regs
+    /// function returning pointers to occurrences in regs
     sal_Int32 re_search(struct re_registers *regs, sal_Int32 pOffset);  // find pattern in line
 };
 

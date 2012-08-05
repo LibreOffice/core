@@ -48,10 +48,10 @@ public:
 
     SdrPathObj* getPathObj() const { return mpPathObj; }
 
-    /** returns true if the SmartTag handled the event. */
+    /** @return true if the SmartTag handled the event. */
     virtual bool MouseButtonDown( const MouseEvent&, SmartHdl& );
 
-    /** returns true if the SmartTag consumes this event. */
+    /** @return true if the SmartTag consumes this event. */
     virtual bool KeyInput( const KeyEvent& rKEvt );
 
     // callbacks from sdr view
