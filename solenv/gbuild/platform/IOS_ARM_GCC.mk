@@ -322,6 +322,10 @@ gb_ScpConvertTarget_ScpConvertTarget_platform :=
 
 gb_InstallScript_EXT := .ins
 
+# ExtensionTarget class
+
+gb_ExtensionTarget_LICENSEFILE_DEFAULT := $(OUTDIR)/bin/osl/LICENSE
+
 # Python
 gb_PYTHON_PRECOMMAND := DYLD_LIBRARY_PATH=$(OUTDIR_FOR_BUILD)/lib
 

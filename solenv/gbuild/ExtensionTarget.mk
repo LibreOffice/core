@@ -27,12 +27,10 @@
 
 # ExtensionTarget class
 
+# platform
+#  gb_ExtensionTarget_LICENSEFILE_DEFAULT
+
 gb_ExtensionTarget_ZIPCOMMAND := zip $(if $(findstring s,$(MAKEFLAGS)),-q)
-ifeq ($(GUI),WNT)
-gb_ExtensionTarget_LICENSEFILE_DEFAULT := $(OUTDIR)/bin/osl/license.txt
-else
-gb_ExtensionTarget_LICENSEFILE_DEFAULT := $(OUTDIR)/bin/osl/LICENSE
-endif
 gb_ExtensionTarget_XRMEXTARGET := $(call gb_Executable_get_target_for_build,xrmex)
 gb_ExtensionTarget_XRMEXCOMMAND := \
 	$(gb_Helper_set_ld_path) $(gb_ExtensionTarget_XRMEXTARGET)

@@ -430,6 +430,10 @@ gb_ScpConvertTarget_ScpConvertTarget_platform :=
 
 gb_InstallScript_EXT := .ins
 
+# ExtensionTarget class
+
+gb_ExtensionTarget_LICENSEFILE_DEFAULT := $(OUTDIR)/bin/osl/LICENSE
+
 # Python
 gb_PYTHON_PRECOMMAND := $(gb_Helper_set_ld_path) PYTHONHOME=$(OUTDIR)/lib/python PYTHONPATH=$(OUTDIR)/lib/python:$(OUTDIR)/lib/python/lib-dynload
 
