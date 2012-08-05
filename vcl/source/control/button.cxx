@@ -86,13 +86,9 @@ public:
 };
 
 // -----------------------------------------------------------------------
-ImplCommonButtonData::ImplCommonButtonData()
+ImplCommonButtonData::ImplCommonButtonData() : maFocusRect(), mnSeparatorX(0), mnButtonState(0),
+mbSmallSymbol(sal_False), maImage(), meImageAlign(IMAGEALIGN_TOP), meSymbolAlign(SYMBOLALIGN_LEFT)
 {
-    mnButtonState   = 0;
-    mbSmallSymbol = sal_False;
-
-    meImageAlign = IMAGEALIGN_TOP;
-    meSymbolAlign = SYMBOLALIGN_LEFT;
 }
 
 // -----------------------------------------------------------------------
