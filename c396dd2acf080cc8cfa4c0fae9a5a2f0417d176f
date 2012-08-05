@@ -1,0 +1,361 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAMn///nU\u003d",
+        "filename": "regexp/inc/regexp/reclass.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-05T11:51:50Z",
+      "side": 1,
+      "message": "please fix indentation",
+      "revId": "c396dd2acf080cc8cfa4c0fae9a5a2f0417d176f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///nQ\u003d",
+        "filename": "regexp/inc/regexp/reclass.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-05T11:51:50Z",
+      "side": 1,
+      "message": "please fix indentation",
+      "revId": "c396dd2acf080cc8cfa4c0fae9a5a2f0417d176f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///nM\u003d",
+        "filename": "regexp/inc/regexp/reclass.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-05T11:51:50Z",
+      "side": 1,
+      "message": "please fix indentation",
+      "revId": "c396dd2acf080cc8cfa4c0fae9a5a2f0417d176f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///nI\u003d",
+        "filename": "regexp/inc/regexp/reclass.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-05T11:51:50Z",
+      "side": 1,
+      "message": "please fix indentation",
+      "revId": "c396dd2acf080cc8cfa4c0fae9a5a2f0417d176f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///nE\u003d",
+        "filename": "regexp/inc/regexp/reclass.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-05T11:51:50Z",
+      "side": 1,
+      "message": "please fix indentation",
+      "revId": "c396dd2acf080cc8cfa4c0fae9a5a2f0417d176f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///nA\u003d",
+        "filename": "regexp/inc/regexp/reclass.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-05T11:51:50Z",
+      "side": 1,
+      "message": "please check the existing comments as well and remove the unnecessary space between text and \" */\" in them",
+      "revId": "c396dd2acf080cc8cfa4c0fae9a5a2f0417d176f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///m8\u003d",
+        "filename": "regexp/inc/regexp/reclass.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-05T11:51:50Z",
+      "side": 1,
+      "message": "please reduce indentation of the comment (less spaces between word and comment)",
+      "revId": "c396dd2acf080cc8cfa4c0fae9a5a2f0417d176f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///m4\u003d",
+        "filename": "regexp/inc/regexp/reclass.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 290,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-05T11:51:50Z",
+      "side": 1,
+      "message": "please reduce indentation of the comment",
+      "revId": "c396dd2acf080cc8cfa4c0fae9a5a2f0417d176f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///m0\u003d",
+        "filename": "regexp/inc/regexp/reclass.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 314,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-05T11:51:50Z",
+      "side": 1,
+      "message": "please reduce indentation and align all comments",
+      "revId": "c396dd2acf080cc8cfa4c0fae9a5a2f0417d176f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///mw\u003d",
+        "filename": "regexp/inc/regexp/reclass.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 317,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-05T11:51:50Z",
+      "side": 1,
+      "message": "typo?",
+      "revId": "c396dd2acf080cc8cfa4c0fae9a5a2f0417d176f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///mo\u003d",
+        "filename": "sd/inc/sdpage.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-05T11:51:50Z",
+      "side": 1,
+      "message": "please reduce indentation",
+      "revId": "c396dd2acf080cc8cfa4c0fae9a5a2f0417d176f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///ms\u003d",
+        "filename": "sd/inc/sdpage.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-05T11:51:50Z",
+      "side": 1,
+      "message": "this line can be removed",
+      "revId": "c396dd2acf080cc8cfa4c0fae9a5a2f0417d176f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///mk\u003d",
+        "filename": "sd/inc/sdpage.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 274,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-05T11:51:50Z",
+      "side": 1,
+      "message": "this (now blank) line can be removed",
+      "revId": "c396dd2acf080cc8cfa4c0fae9a5a2f0417d176f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///mg\u003d",
+        "filename": "sd/inc/sdxmlwrp.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-05T11:51:50Z",
+      "side": 1,
+      "message": "please reduce indentation of the comments here",
+      "revId": "c396dd2acf080cc8cfa4c0fae9a5a2f0417d176f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///mc\u003d",
+        "filename": "sd/source/filter/eppt/eppt.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-05T11:51:50Z",
+      "side": 1,
+      "message": "please reduce indentation of the comments here as well",
+      "revId": "c396dd2acf080cc8cfa4c0fae9a5a2f0417d176f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///mY\u003d",
+        "filename": "sd/source/filter/eppt/escherex.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-05T11:51:50Z",
+      "side": 1,
+      "message": "this line can be removed",
+      "revId": "c396dd2acf080cc8cfa4c0fae9a5a2f0417d176f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///mQ\u003d",
+        "filename": "sd/source/filter/eppt/escherex.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-05T11:51:50Z",
+      "side": 1,
+      "message": "\"Values for the sal_uLong in PPT_PST_TextHeaderAtom\"",
+      "revId": "c396dd2acf080cc8cfa4c0fae9a5a2f0417d176f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///mU\u003d",
+        "filename": "sd/source/filter/eppt/escherex.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-05T11:51:50Z",
+      "side": 1,
+      "message": "this line and also the next one (L48+L49) can be removed",
+      "revId": "c396dd2acf080cc8cfa4c0fae9a5a2f0417d176f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///mM\u003d",
+        "filename": "sd/source/filter/html/htmlex.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-05T11:51:50Z",
+      "side": 1,
+      "message": "please remove \"border\" and hence reduce comment to one line",
+      "revId": "c396dd2acf080cc8cfa4c0fae9a5a2f0417d176f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///mI\u003d",
+        "filename": "sd/source/filter/html/htmlex.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-05T11:51:50Z",
+      "side": 1,
+      "message": "doxygen comment does currently not make sense here...\n\nTranslation: \"The following colors are used for the \u003cbody\u003e tag if mbUserAttr is true\"\n\nSo please (1) use existing comment for maTextColor line and (2) write a second comment for the mbUserAttr line ;-)",
+      "revId": "c396dd2acf080cc8cfa4c0fae9a5a2f0417d176f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///mE\u003d",
+        "filename": "sd/source/filter/html/htmlex.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-05T11:51:50Z",
+      "side": 1,
+      "message": "\"output directory or URL\"",
+      "revId": "c396dd2acf080cc8cfa4c0fae9a5a2f0417d176f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
