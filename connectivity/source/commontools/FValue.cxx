@@ -18,6 +18,7 @@
  */
 
 
+#include <string.h>
 #include <stdio.h>
 #include "connectivity/FValue.hxx"
 #include "connectivity/CommonTools.hxx"
@@ -1648,7 +1649,7 @@ Sequence<sal_Int8>  ORowSetValue::getSequence() const
                             {
                                 const sal_uInt32 nOldLength = aSeq.getLength();
                                 aSeq.realloc( nOldLength + nRead );
-                                rtl_copyMemory( aSeq.getArray() + nOldLength, aReadSeq.getConstArray(), aReadSeq.getLength() );
+                                memcpy( aSeq.getArray() + nOldLength, aReadSeq.getConstArray(), aReadSeq.getLength() );
                             }
                         }
                         while( nBytesToRead == nRead );

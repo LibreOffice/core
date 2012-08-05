@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <string.h>
 #include "hsqldb/HTable.hxx"
 #include "hsqldb/HTables.hxx"
 #include <com/sun/star/sdbc/XRow.hpp>
@@ -144,7 +145,7 @@ Sequence< sal_Int8 > OHSQLTable::getUnoTunnelImplementationId()
 //------------------------------------------------------------------
 sal_Int64 OHSQLTable::getSomething( const Sequence< sal_Int8 > & rId ) throw (RuntimeException)
 {
-    return (rId.getLength() == 16 && 0 == rtl_compareMemory(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
+    return (rId.getLength() == 16 && 0 == memcmp(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
                 ? reinterpret_cast< sal_Int64 >( this )
                 : OTable_TYPEDEF::getSomething(rId);
 }

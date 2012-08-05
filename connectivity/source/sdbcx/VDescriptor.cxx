@@ -22,6 +22,7 @@
 
 #include <functional>
 #include <algorithm>
+#include <string.h>
 
 namespace connectivity
 {
@@ -46,7 +47,7 @@ namespace connectivity
         // com::sun::star::lang::XUnoTunnel
         sal_Int64 SAL_CALL ODescriptor::getSomething( const Sequence< sal_Int8 >& rId ) throw(RuntimeException)
         {
-            return (rId.getLength() == 16 && 0 == rtl_compareMemory(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
+            return (rId.getLength() == 16 && 0 == memcmp(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
                 ? reinterpret_cast< sal_Int64 >( this )
                 : 0;
         }

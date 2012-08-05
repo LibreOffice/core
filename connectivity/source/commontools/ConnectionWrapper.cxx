@@ -27,6 +27,7 @@
 #include <com/sun/star/reflection/XProxyFactory.hpp>
 #include <rtl/digest.h>
 #include <algorithm>
+#include <string.h>
 
 using namespace connectivity;
 //------------------------------------------------------------------------------
@@ -153,7 +154,7 @@ Sequence< Type > SAL_CALL OConnectionWrapper::getTypes(  ) throw (::com::sun::st
 // com::sun::star::lang::XUnoTunnel
 sal_Int64 SAL_CALL OConnectionWrapper::getSomething( const Sequence< sal_Int8 >& rId ) throw(RuntimeException)
 {
-    if (rId.getLength() == 16 && 0 == rtl_compareMemory(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
+    if (rId.getLength() == 16 && 0 == memcmp(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
         return reinterpret_cast< sal_Int64 >( this );
 
     if(m_xUnoTunnel.is())

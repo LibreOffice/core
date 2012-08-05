@@ -91,7 +91,7 @@ sal_Int32 SAL_CALL java_io_InputStream::readBytes( ::com::sun::star::uno::Sequen
         {
             jboolean p = sal_False;
             aData.realloc ( out );
-            rtl_copyMemory(aData.getArray(),t.pEnv->GetByteArrayElements(pByteArray,&p),out);
+            memcpy(aData.getArray(),t.pEnv->GetByteArrayElements(pByteArray,&p),out);
         }
         t.pEnv->DeleteLocalRef((jbyteArray)pByteArray);
     } //t.pEnv

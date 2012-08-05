@@ -92,7 +92,7 @@ Sequence< sal_Int8 > OAdoIndex::getUnoTunnelImplementationId()
 //------------------------------------------------------------------
 sal_Int64 OAdoIndex::getSomething( const Sequence< sal_Int8 > & rId ) throw (RuntimeException)
 {
-    return (rId.getLength() == 16 && 0 == rtl_compareMemory(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
+    return (rId.getLength() == 16 && 0 == memcmp(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
                 ? reinterpret_cast< sal_Int64 >( this )
                 : OIndex_ADO::getSomething(rId);
 }
