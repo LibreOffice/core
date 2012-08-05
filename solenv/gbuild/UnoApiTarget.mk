@@ -225,6 +225,7 @@ endef
 define gb_UnoApiTarget_add_idlfiles
 $(foreach idl,$(3),$(call gb_UnoApiTarget_add_idlfile,$(1),$(2),$(idl)))
 $(call gb_UnoApiTarget__add_idlfiles,$(1),$(2),$(3))
+$(call gb_UnoApiTarget_get_target,$(1)) : $(gb_UnoApiTarget_REGMERGETARGET)
 
 endef
 
