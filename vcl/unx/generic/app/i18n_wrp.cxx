@@ -235,7 +235,7 @@ Status XvaCloseIM(XIM)
 {
       Status s = False;
 
-    if (!g_dlmodule)
+    if (g_dlmodule)
     {
         /* assuming one XvaOpenIM call */
         dlclose(g_dlmodule);
