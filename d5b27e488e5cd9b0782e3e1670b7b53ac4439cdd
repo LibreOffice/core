@@ -1,0 +1,514 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAMn///pY\u003d",
+        "filename": "cui/source/inc/connect.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-05T11:36:24Z",
+      "side": 1,
+      "message": "Here it would be better to completely delete the \"border\" (plus the empty line 48) and just write the sinlge line:\n\n/// Dialog for changing connectors.\n\ninstead directly ontop of the class definition (currently line 49)",
+      "revId": "d5b27e488e5cd9b0782e3e1670b7b53ac4439cdd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///pU\u003d",
+        "filename": "cui/source/inc/connect.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-05T11:36:24Z",
+      "side": 1,
+      "message": "Please remove \"border\" and just write the comment itself in \"/** ... */\" directly above the \"class\" statement (see comment above).",
+      "revId": "d5b27e488e5cd9b0782e3e1670b7b53ac4439cdd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///pA\u003d",
+        "filename": "cui/source/inc/cuicharmap.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-05T11:36:24Z",
+      "side": 1,
+      "message": "line 44 and  45 can be removed since they do not provide any additional benefit for the reader",
+      "revId": "d5b27e488e5cd9b0782e3e1670b7b53ac4439cdd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///pE\u003d",
+        "filename": "cui/source/inc/cuicharmap.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-05T11:36:24Z",
+      "side": 1,
+      "message": "please remove \"\u003d\u003d\u003d\u003d\" behind text",
+      "revId": "d5b27e488e5cd9b0782e3e1670b7b53ac4439cdd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///pI\u003d",
+        "filename": "cui/source/inc/cuicharmap.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-05T11:36:24Z",
+      "side": 1,
+      "message": "please remove blank line",
+      "revId": "d5b27e488e5cd9b0782e3e1670b7b53ac4439cdd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///pM\u003d",
+        "filename": "cui/source/inc/cuicharmap.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-05T11:36:24Z",
+      "side": 1,
+      "message": "please remove \"-----\" behind text",
+      "revId": "d5b27e488e5cd9b0782e3e1670b7b53ac4439cdd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///pQ\u003d",
+        "filename": "cui/source/inc/cuicharmap.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-05T11:36:24Z",
+      "side": 1,
+      "message": "please remove empty line",
+      "revId": "d5b27e488e5cd9b0782e3e1670b7b53ac4439cdd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///o0\u003d",
+        "filename": "cui/source/inc/dlgname.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-05T11:36:24Z",
+      "side": 1,
+      "message": "please remove this line",
+      "revId": "d5b27e488e5cd9b0782e3e1670b7b53ac4439cdd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///os\u003d",
+        "filename": "cui/source/inc/dlgname.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-05T11:36:24Z",
+      "side": 1,
+      "message": "please integrate the bug id (currently line 90) also into this comment",
+      "revId": "d5b27e488e5cd9b0782e3e1670b7b53ac4439cdd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///ow\u003d",
+        "filename": "cui/source/inc/dlgname.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-05T11:36:24Z",
+      "side": 1,
+      "message": "can be removed as well",
+      "revId": "d5b27e488e5cd9b0782e3e1670b7b53ac4439cdd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///ok\u003d",
+        "filename": "cui/source/inc/dlgname.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-05T11:36:24Z",
+      "side": 1,
+      "message": "can be removed as well",
+      "revId": "d5b27e488e5cd9b0782e3e1670b7b53ac4439cdd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///og\u003d",
+        "filename": "cui/source/inc/dlgname.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-05T11:36:24Z",
+      "side": 1,
+      "message": "please include bug id here (line 135)",
+      "revId": "d5b27e488e5cd9b0782e3e1670b7b53ac4439cdd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///oo\u003d",
+        "filename": "cui/source/inc/dlgname.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-05T11:36:24Z",
+      "side": 1,
+      "message": "can be removed as well",
+      "revId": "d5b27e488e5cd9b0782e3e1670b7b53ac4439cdd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///oc\u003d",
+        "filename": "cui/source/inc/dlgname.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-05T11:36:24Z",
+      "side": 1,
+      "message": "can be removed",
+      "revId": "d5b27e488e5cd9b0782e3e1670b7b53ac4439cdd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///oY\u003d",
+        "filename": "cui/source/inc/dlgname.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-05T11:36:24Z",
+      "side": 1,
+      "message": "please remove \"border\" and thus reduce comment to single line (\"///\" or \"/** */\")",
+      "revId": "d5b27e488e5cd9b0782e3e1670b7b53ac4439cdd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///oU\u003d",
+        "filename": "cui/source/inc/hlinettp.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-05T11:36:24Z",
+      "side": 1,
+      "message": "please remove unnecessary spaces between semicolon and beginning of comment (one space should be enough) for this line and also the following 7 ones",
+      "revId": "d5b27e488e5cd9b0782e3e1670b7b53ac4439cdd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///oQ\u003d",
+        "filename": "cui/source/inc/hlmailtp.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-05T11:36:24Z",
+      "side": 1,
+      "message": "please remove unnecessary spaces between semicolon and beginning of comment (one space should be enough) for this line and also the following 2 ones",
+      "revId": "d5b27e488e5cd9b0782e3e1670b7b53ac4439cdd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///oM\u003d",
+        "filename": "cui/source/inc/hltpbase.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-05T11:36:24Z",
+      "side": 1,
+      "message": "please remove \"border\" and blank line between class definition and comment and thus reduce it to a single line",
+      "revId": "d5b27e488e5cd9b0782e3e1670b7b53ac4439cdd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///oI\u003d",
+        "filename": "cui/source/inc/hltpbase.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-05T11:36:24Z",
+      "side": 1,
+      "message": "see comment above",
+      "revId": "d5b27e488e5cd9b0782e3e1670b7b53ac4439cdd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///oE\u003d",
+        "filename": "cui/source/inc/hltpbase.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-05T11:36:24Z",
+      "side": 1,
+      "message": "see comment above",
+      "revId": "d5b27e488e5cd9b0782e3e1670b7b53ac4439cdd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///oA\u003d",
+        "filename": "cui/source/inc/iconcdlg.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-05T11:36:24Z",
+      "side": 1,
+      "message": "please remove \"border\" and blank line between class definition and comment and consequently reduce it to a single line",
+      "revId": "d5b27e488e5cd9b0782e3e1670b7b53ac4439cdd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///n8\u003d",
+        "filename": "cui/source/inc/iconcdlg.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-05T11:36:24Z",
+      "side": 1,
+      "message": "please fix indentation (so that the comment starts below \"K\")",
+      "revId": "d5b27e488e5cd9b0782e3e1670b7b53ac4439cdd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///n4\u003d",
+        "filename": "cui/source/inc/iconcdlg.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-05T11:36:24Z",
+      "side": 1,
+      "message": "please fix indentation",
+      "revId": "d5b27e488e5cd9b0782e3e1670b7b53ac4439cdd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///n0\u003d",
+        "filename": "cui/source/inc/iconcdlg.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 223,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-05T11:36:24Z",
+      "side": 1,
+      "message": "all three lines of this comment can be removed",
+      "revId": "d5b27e488e5cd9b0782e3e1670b7b53ac4439cdd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///nw\u003d",
+        "filename": "cui/source/inc/insdlg.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-05T11:36:24Z",
+      "side": 1,
+      "message": "this line can be removed at all",
+      "revId": "d5b27e488e5cd9b0782e3e1670b7b53ac4439cdd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///ns\u003d",
+        "filename": "cui/source/inc/insdlg.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-05T11:36:24Z",
+      "side": 1,
+      "message": "this line can be removed as well",
+      "revId": "d5b27e488e5cd9b0782e3e1670b7b53ac4439cdd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///no\u003d",
+        "filename": "cui/source/inc/measure.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-05T11:36:24Z",
+      "side": 1,
+      "message": "please remove \"border\" and blank line between class definition and comment and thus reduce it to a single line",
+      "revId": "d5b27e488e5cd9b0782e3e1670b7b53ac4439cdd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///nk\u003d",
+        "filename": "cui/source/inc/measure.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-05T11:36:24Z",
+      "side": 1,
+      "message": "please remove \"border\" and blank line between class definition and comment and thus reduce it to just one or two lines",
+      "revId": "d5b27e488e5cd9b0782e3e1670b7b53ac4439cdd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///ng\u003d",
+        "filename": "cui/source/inc/numfmt.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-05T11:36:24Z",
+      "side": 1,
+      "message": "please also adjust indentation of this line and the one below (L135+L136)",
+      "revId": "d5b27e488e5cd9b0782e3e1670b7b53ac4439cdd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///nc\u003d",
+        "filename": "cui/source/inc/numpages.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-05T11:36:24Z",
+      "side": 1,
+      "message": "please reduce comment to one line",
+      "revId": "d5b27e488e5cd9b0782e3e1670b7b53ac4439cdd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
