@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAMn///l8\u003d",
+        "filename": "svtools/inc/svtools/slidesorterbaropt.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-05T12:11:50Z",
+      "side": 1,
+      "message": "I would remove the \"@short\" and use the text directly as description for the class. Then I would put the \"short\" form in the same line with the \"/**\" add a blank line and afterwards write the \"normal/long\" description (also without \"@descr\" infront)",
+      "revId": "859000fef44b992fc369838b4286fd22c44886e6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///l4\u003d",
+        "filename": "svtools/inc/svtools/slidesorterbaropt.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-05T12:11:50Z",
+      "side": 1,
+      "message": "i would write the command in lower case",
+      "revId": "859000fef44b992fc369838b4286fd22c44886e6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///lw\u003d",
+        "filename": "svtools/inc/svtools/slidesorterbaropt.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-05T12:11:50Z",
+      "side": 1,
+      "message": "Maybe it might be better here to provide a short description of the field first and then use @attention or @warning to describe the content currently in this comment?",
+      "revId": "859000fef44b992fc369838b4286fd22c44886e6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///lg\u003d",
+        "filename": "svtools/source/config/slidesorterbaropt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-05T12:11:50Z",
+      "side": 1,
+      "message": "here the indentation is wrong ;-)\n\nHowever, the main question is if the assignments should be aligned in a line or if a single space would be enough indentation...",
+      "revId": "859000fef44b992fc369838b4286fd22c44886e6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///lc\u003d",
+        "filename": "svtools/source/config/slidesorterbaropt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-05T12:11:50Z",
+      "side": 1,
+      "message": "the format for @param is different (see \u003chttp://www.stack.nl/~dimitri/doxygen/commands.html#cmdparam\u003e)\n\nFor the other keywords see my comments at the previous file.",
+      "revId": "859000fef44b992fc369838b4286fd22c44886e6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAMn///l0\u003d",
+        "filename": "svtools/inc/svtools/slidesorterbaropt.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-05T12:11:50Z",
+      "side": 0,
+      "message": "@seealso is no doxygen command, for referencing see either \u003chttp://www.stack.nl/~dimitri/doxygen/autolink.html\u003e or \u003chttp://www.stack.nl/~dimitri/doxygen/commands.html#cmdsa\u003e",
+      "revId": "03720cfb47870d5bf1619cae8c6ed66204b6415b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///ls\u003d",
+        "filename": "svtools/inc/svtools/slidesorterbaropt.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-05T12:11:50Z",
+      "side": 0,
+      "message": "if a comment is behind the field it describes, doxygen needs \"///\u003c\" (with a symbolized left arrow) to realize it correctly",
+      "revId": "03720cfb47870d5bf1619cae8c6ed66204b6415b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///lo\u003d",
+        "filename": "svtools/inc/svtools/slidesorterbaropt.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-05T12:11:50Z",
+      "side": 0,
+      "message": "I think these ending comments can be removed as well...",
+      "revId": "03720cfb47870d5bf1619cae8c6ed66204b6415b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///lk\u003d",
+        "filename": "svtools/inc/svtools/slidesorterbaropt.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1000041
+      },
+      "writtenOn": "2012-08-05T12:11:50Z",
+      "side": 0,
+      "message": "I would also remove this comment",
+      "revId": "03720cfb47870d5bf1619cae8c6ed66204b6415b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
