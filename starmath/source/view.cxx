@@ -724,7 +724,7 @@ void SmCmdBoxWindow::Resize()
     DecorationView aView(this);
     aRect.Left() += 8; aRect.Top()   += 8;
     aRect.Right()-= 8; aRect.Bottom()-= 8;
-    aRect = aView.DrawFrame( aRect, FRAME_DRAW_DOUBLEIN );
+    aRect = aView.DrawFrame( aRect, FRAME_DRAW_DOUBLEIN | FRAME_DRAW_NODRAW );
 
     aEdit.SetPosSizePixel(aRect.TopLeft(), aRect.GetSize());
     SfxDockingWindow::Resize();
