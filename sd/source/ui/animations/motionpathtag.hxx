@@ -34,12 +34,7 @@ namespace sd {
 class View;
 class CustomAnimationPane;
 
-/*************************************************************************
-|*
-|* Basisklasse fuer alle Funktionen
-|*
-\************************************************************************/
-
+/// Base class for all functions.
 class MotionPathTag : public SmartTag, public IPolyPolygonEditorController, public SfxListener, public ::com::sun::star::util::XChangesListener
 {
 public:
@@ -48,10 +43,10 @@ public:
 
     SdrPathObj* getPathObj() const { return mpPathObj; }
 
-    /** returns true if the SmartTag handled the event. */
+    /// @return true if the SmartTag handled the event.
     virtual bool MouseButtonDown( const MouseEvent&, SmartHdl& );
 
-    /** returns true if the SmartTag consumes this event. */
+    /// @return true if the SmartTag consumes this event.
     virtual bool KeyInput( const KeyEvent& rKEvt );
 
     // callbacks from sdr view

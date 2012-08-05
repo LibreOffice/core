@@ -87,9 +87,7 @@ public:
     void            SetContext( sal_uInt16 nResId, const String& rURL1, const String& rURL2 );
 };
 
-// =====================================================================
-// this class exports an Impress Document as a HTML Presentation
-// =====================================================================
+/// this class exports an Impress Document as a HTML Presentation.
 class HtmlExport
 {
     std::vector< SdPage* > maPages;
@@ -133,8 +131,8 @@ class HtmlExport
     bool mbHiddenSlides;
     bool mbEndless;
 
-    bool mbUserAttr;            // die folgenden Farben werden fuer das <body>
-    Color maTextColor;          // tag genutzt, wenn mbUserAttr true ist
+    bool mbUserAttr;
+    Color maTextColor; ///< The following colors are used for the <body> tag if mbUserAttr is true.
     Color maBackColor;
     Color maLinkColor;
     Color maVLinkColor;
@@ -149,7 +147,7 @@ class HtmlExport
     String** mpPageNames;
     String** mpTextFiles;
 
-    String maExportPath;            // Das Ausgabeverzeichnes bzw. die URL
+    String maExportPath; ///< output directory or URL.
     String maIndexUrl;
     String maURLPath;
     String maCGIPath;

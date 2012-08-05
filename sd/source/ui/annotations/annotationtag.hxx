@@ -39,16 +39,16 @@ public:
     AnnotationTag( AnnotationManagerImpl& rManager, ::sd::View& rView, const css::uno::Reference< css::office::XAnnotation >& xAnnotation, Color& rColor, int nIndex, const Font& rFont );
     virtual ~AnnotationTag();
 
-    /** returns true if the SmartTag handled the event. */
+    /// @return true if the SmartTag handled the event.
     virtual bool MouseButtonDown( const MouseEvent&, SmartHdl& );
 
-    /** returns true if the SmartTag consumes this event. */
+    /// @return true if the SmartTag consumes this event.
     virtual bool KeyInput( const KeyEvent& rKEvt );
 
-    /** returns true if the SmartTag consumes this event. */
+    /// @return true if the SmartTag consumes this event.
     virtual bool RequestHelp( const HelpEvent& rHEvt );
 
-    /** returns true if the SmartTag consumes this event. */
+    /// @return true if the SmartTag consumes this event.
     virtual bool Command( const CommandEvent& rCEvt );
 
     // callbacks from sdr view
@@ -60,8 +60,6 @@ public:
 
     void Move( int nDX, int nDY );
     bool OnMove( const KeyEvent& rKEvt );
-
-    // ---
 
     BitmapEx CreateAnnotationBitmap(bool);
 
