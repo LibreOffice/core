@@ -30,6 +30,7 @@
 define gb_Extension_Extension
 $(call gb_ExtensionTarget_ExtensionTarget,$(1),$(2))
 $(call gb_ExtensionTarget_use_default_license,$(1))
+$(call gb_ExtensionTarget_use_default_description,$(1),$(2))
 
 $(call gb_Extension_get_target,$(1)) : $(call gb_ExtensionTarget_get_target,$(1))
 $(call gb_Extension_get_clean_target,$(1)) : $(call gb_ExtensionTarget_get_clean_target,$(1))

@@ -93,7 +93,7 @@ $(call gb_ExtensionTarget_get_target,%) : \
 		$(call gb_ExtensionTarget__subst_platform,$(call gb_ExtensionTarget_get_workdir,$*)/description.xml,$(call gb_ExtensionTarget_get_rootdir,$*)/description.xml) && \
 		$(call gb_ExtensionTarget__subst_platform,$(LOCATION)/manifest.xml,$(call gb_ExtensionTarget_get_rootdir,$*)/META-INF/manifest.xml) && \
 		$(if $(LICENSE),cp -f $(LICENSE) $(call gb_ExtensionTarget_get_rootdir,$*)/registration &&) \
-		$(if $(gb_WITH_LANG),cp $(foreach lang,$(gb_ExtensionTarget_LANGS),$(call gb_ExtensionTarget_get_workdir,$*)/description-$(lang).txt) $(call gb_ExtensionTarget_get_rootdir,$*) &&) \
+		$(if $(and $(gb_WITH_LANG),$(DESCRIPTION)),cp $(foreach lang,$(gb_ExtensionTarget_LANGS),$(call gb_ExtensionTarget_get_workdir,$*)/description-$(lang).txt) $(call gb_ExtensionTarget_get_rootdir,$*) &&) \
 		cd $(call gb_ExtensionTarget_get_rootdir,$*) && \
 		$(gb_ExtensionTarget_ZIPCOMMAND) -rX --filesync \
 			$(call gb_ExtensionTarget_get_target,$*) \
@@ -104,6 +104,7 @@ $(call gb_ExtensionTarget_get_target,%) : \
 # add deliverable
 # add dependency for outdir target to workdir target (pattern rule for delivery is in Package.mk)
 define gb_ExtensionTarget_ExtensionTarget
+$(call gb_ExtensionTarget_get_target,$(1)) : DESCRIPTION :=
 $(call gb_ExtensionTarget_get_target,$(1)) : FILES := META-INF description.xml
 $(call gb_ExtensionTarget_get_target,$(1)) : LICENSE :=
 $(call gb_ExtensionTarget_get_target,$(1)) : LOCATION := $(SRCDIR)/$(2)
@@ -111,11 +112,9 @@ $(call gb_ExtensionTarget_get_target,$(1)) : PLATFORM :=
 $(call gb_ExtensionTarget_get_target,$(1)) : PRJNAME := $(firstword $(subst /, ,$(2)))
 $(call gb_ExtensionTarget_get_workdir,$(1))/description.xml : $(SRCDIR)/$(2)/description.xml
 ifneq ($(strip $(gb_WITH_LANG)),)
-$(call gb_ExtensionTarget_get_target,$(1)) : FILES += $(foreach lang,$(gb_ExtensionTarget_LANGS),description-$(lang).txt)
 $(call gb_ExtensionTarget_get_target,$(1)) : SDF := $(gb_SDFLOCATION)/$(2)/localize.sdf
 $(call gb_ExtensionTarget_get_workdir,$(1))/description.xml : $$(SDF)
 endif
-$(call gb_ExtensionTarget_add_file,$(1),description-en-US.txt,$(SRCDIR)/$(2)/description-en-US.txt)
 
 endef
 
@@ -132,6 +131,16 @@ define gb_ExtensionTarget_use_default_license
 $(call gb_ExtensionTarget_get_target,$(1)) : FILES += registration
 $(call gb_ExtensionTarget_get_target,$(1)) : LICENSE := $(gb_ExtensionTarget_LICENSEFILE_DEFAULT)
 $(call gb_ExtensionTarget_get_target,$(1)) : $(gb_ExtensionTarget_LICENSEFILE_DEFAULT)
+
+endef
+
+# Use the default description file
+define gb_ExtensionTarget_use_default_description
+$(call gb_ExtensionTarget_add_file,$(1),description-en-US.txt,$(SRCDIR)/$(2)/description-en-US.txt)
+$(call gb_ExtensionTarget_get_target,$(1)) : DESCRIPTION := $(true)
+ifneq ($(strip $(gb_WITH_LANG)),)
+$(call gb_ExtensionTarget_get_target,$(1)) : FILES += $(foreach lang,$(gb_ExtensionTarget_LANGS),description-$(lang).txt)
+endif
 
 endef
 
