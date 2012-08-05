@@ -102,7 +102,7 @@ public class ComponentBase_Test
         {
             try
             {
-                Thread.currentThread().sleep(100);
+                Thread.sleep(100);
                 System.gc();
                 System.runFinalization();
             }catch (InterruptedException ie)

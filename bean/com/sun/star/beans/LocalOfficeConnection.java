@@ -242,7 +242,7 @@ public class LocalOfficeConnection
                     try
                     {
                         // try to connect to soffice
-                        Thread.currentThread().sleep( 500 );
+                        Thread.sleep( 500 );
                         aInitialObject = xUrlResolver.resolve( mURL );
                     }
                     catch( com.sun.star.connection.NoConnectException aEx )

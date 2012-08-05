@@ -752,7 +752,7 @@ public class utils {
      */
     public static void shortWait(int milliseconds) {
         try {
-            Thread.currentThread().sleep(milliseconds);
+            Thread.sleep(milliseconds);
         } catch (InterruptedException e) {
             System.out.println("While waiting :" + e);
         }

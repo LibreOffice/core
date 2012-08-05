@@ -69,9 +69,8 @@ class MyCallMe implements XCallMe
     public void callOneway( /*IN*/String s, /*IN*/int nToDo ) throws com.sun.star.uno.RuntimeException
         {
             System.out.println( "entering callOneway" );
-//              this.wait( 5 );
             try {
-                Thread.currentThread().sleep( 4000 );
+                Thread.sleep( 4000 );
             }
             catch ( java.lang.Exception e )
             {
@@ -125,12 +124,8 @@ public class testclient
                         new Object[]{"iiop", xConnection, new MyInstanceProvider()});
 
                     System.out.println( "after building bridge" );
-//                  Object rInitialObject = m_bridge.mapInterfaceFrom(rootOid, XInterface.class);
-//                  XTestFactory rFactory =
-//                      UnoRuntime.queryInterface(XTestFactory.class,rInitialObject );
 
-//                  XCallMe callMerFactory->
-                    Thread.currentThread().sleep( 100000 );
+                    Thread.sleep( 100000 );
                 }
             }
             catch( com.sun.star.uno.Exception e)

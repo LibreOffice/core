@@ -270,7 +270,7 @@ public class AccessibleTabPage extends TestCase {
     */
     private void shortWait() {
         try {
-            Thread.currentThread().sleep(1000);
+            Thread.sleep(1000);
         } catch (InterruptedException e) {
             System.out.println("While waiting :" + e);
         }

@@ -264,7 +264,7 @@ public class AccessibleTabControl extends TestCase {
     */
     private void shortWait() {
         try {
-            Thread.currentThread().sleep(500);
+            Thread.sleep(500);
         } catch (InterruptedException e) {
             System.out.println("While waiting :" + e);
         }

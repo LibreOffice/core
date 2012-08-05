@@ -81,7 +81,7 @@ public void run()
     // wait for the message box to appear
     try
     {
-        Thread.currentThread().sleep(4000) ;
+        Thread.sleep(4000) ;
     }
     catch (InterruptedException e)
     {

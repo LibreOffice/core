@@ -201,7 +201,7 @@ public final class OfficeConnection {
         Thread t2 = new Thread("waitForProcess") {
                 public void run() {
                     try {
-                        Thread.currentThread().sleep(millis);
+                        Thread.sleep(millis);
                     } catch (InterruptedException e) {}
                     t1.interrupt();
                 }

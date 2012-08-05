@@ -893,7 +893,7 @@ public class ViewForwarder {
         }
 
         try {
-            Thread.currentThread().sleep(500) ;
+            Thread.sleep(500) ;
         } catch (InterruptedException e) {
             System.out.println("While waiting :" + e) ;
         }
@@ -996,7 +996,7 @@ public class ViewForwarder {
         }
 
         try {
-            Thread.currentThread().sleep(500) ;
+            Thread.sleep(500) ;
         } catch (InterruptedException e) {
             System.out.println("While waiting :" + e) ;
         }
@@ -1038,7 +1038,7 @@ public class ViewForwarder {
         }
 
         try {
-            Thread.currentThread().sleep(500) ;
+            Thread.sleep(500) ;
         } catch (InterruptedException e) {
             System.out.println("While waiting :" + e) ;
         }

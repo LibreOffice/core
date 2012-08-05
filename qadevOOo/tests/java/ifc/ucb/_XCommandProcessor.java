@@ -211,7 +211,7 @@ public class _XCommandProcessor extends MultiMethodTest {
         aborter.start();
 
         try {
-            Thread.currentThread().sleep(15);
+            Thread.sleep(15);
         } catch (InterruptedException e) {
         }
 

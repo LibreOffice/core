@@ -124,7 +124,7 @@ public class _XEnhancedMouseClickBroadcaster extends MultiMethodTest {
 
     private void shortWait() {
         try {
-            Thread.currentThread().sleep(2000);
+            Thread.sleep(2000);
         } catch (InterruptedException e) {
             System.out.println("While waiting :" + e);
         }

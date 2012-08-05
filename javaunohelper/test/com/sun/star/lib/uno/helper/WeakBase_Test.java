@@ -128,7 +128,7 @@ public class WeakBase_Test
         {
             try
             {
-                Thread.currentThread().sleep(100);
+                Thread.sleep(100);
                 System.gc();
                 System.runFinalization();
             }catch (InterruptedException ie)
@@ -157,7 +157,7 @@ public class WeakBase_Test
         {
             try
             {
-                Thread.currentThread().sleep(100);
+                Thread.sleep(100);
                 System.gc();
                 System.runFinalization();
             }catch (InterruptedException ie)

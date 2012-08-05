@@ -133,7 +133,7 @@ public class SelectionChangeListener implements XSelectionChangeListener {
             }
 
             try {
-                Thread.currentThread().sleep( 500 );
+                Thread.sleep( 500 );
             } catch( InterruptedException ex ) {
             }
         }

@@ -282,7 +282,7 @@ public class Bootstrap {
                     if (i == 600) {
                         throw new BootstrapException(ex.toString());
                     }
-                    Thread.currentThread().sleep( 500 );
+                    Thread.sleep( 500 );
                 }
             }
         } catch ( BootstrapException e ) {
