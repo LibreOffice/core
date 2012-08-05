@@ -29,9 +29,9 @@
 
 gb_ExtensionTarget_ZIPCOMMAND := zip $(if $(findstring s,$(MAKEFLAGS)),-q)
 ifeq ($(GUI),WNT)
-gb_ExtensionTarget_LICENSEFILE := license.txt
+gb_ExtensionTarget_LICENSEFILE_DEFAULT := $(OUTDIR)/bin/osl/license.txt
 else
-gb_ExtensionTarget_LICENSEFILE := LICENSE
+gb_ExtensionTarget_LICENSEFILE_DEFAULT := $(OUTDIR)/bin/osl/LICENSE
 endif
 gb_ExtensionTarget_XRMEXTARGET := $(call gb_Executable_get_target_for_build,xrmex)
 gb_ExtensionTarget_XRMEXCOMMAND := \
@@ -91,25 +91,23 @@ $(call gb_ExtensionTarget_get_target,%) : \
 	$(call gb_Output_announce,$*,$(true),OXT,3)
 	$(call gb_Helper_abbreviate_dirs,\
 		mkdir -p $(call gb_ExtensionTarget_get_rootdir,$*)/META-INF \
-			$(call gb_ExtensionTarget_get_rootdir,$*)/registration && \
+			$(if $(LICENSE),$(call gb_ExtensionTarget_get_rootdir,$*)/registration) && \
 		$(call gb_ExtensionTarget__subst_platform,$(call gb_ExtensionTarget_get_workdir,$*)/description.xml,$(call gb_ExtensionTarget_get_rootdir,$*)/description.xml) && \
 		$(call gb_ExtensionTarget__subst_platform,$(LOCATION)/manifest.xml,$(call gb_ExtensionTarget_get_rootdir,$*)/META-INF/manifest.xml) && \
-		cp -f $(OUTDIR)/bin/osl/$(gb_ExtensionTarget_LICENSEFILE) $(call gb_ExtensionTarget_get_rootdir,$*)/registration && \
+		$(if $(LICENSE),cp -f $(LICENSE) $(call gb_ExtensionTarget_get_rootdir,$*)/registration &&) \
 		$(if $(gb_WITH_LANG),cp $(foreach lang,$(gb_ExtensionTarget_LANGS),$(call gb_ExtensionTarget_get_workdir,$*)/description-$(lang).txt) $(call gb_ExtensionTarget_get_rootdir,$*) &&) \
 		cd $(call gb_ExtensionTarget_get_rootdir,$*) && \
 		$(gb_ExtensionTarget_ZIPCOMMAND) -rX --filesync \
 			$(call gb_ExtensionTarget_get_target,$*) \
 			$(FILES))
 
-# TODO: needs dependency on $(OUTDIR)/bin/osl/$(gb_ExtensionTarget_LICENSEFILE) once readlicense_oo will be gbuildized
-# or just another simpler solution
-
 # set file list and location of manifest and description files
 # register target and clean target
 # add deliverable
 # add dependency for outdir target to workdir target (pattern rule for delivery is in Package.mk)
 define gb_ExtensionTarget_ExtensionTarget
-$(call gb_ExtensionTarget_get_target,$(1)) : FILES := META-INF description.xml registration
+$(call gb_ExtensionTarget_get_target,$(1)) : FILES := META-INF description.xml
+$(call gb_ExtensionTarget_get_target,$(1)) : LICENSE :=
 $(call gb_ExtensionTarget_get_target,$(1)) : LOCATION := $(SRCDIR)/$(2)
 $(call gb_ExtensionTarget_get_target,$(1)) : PLATFORM :=
 $(call gb_ExtensionTarget_get_target,$(1)) : PRJNAME := $(firstword $(subst /, ,$(2)))
@@ -128,6 +126,14 @@ endef
 # Only use this if the extension is platform-dependent.
 define gb_ExtensionTarget_set_platform
 $(call gb_ExtensionTarget_get_target,$(1)) : PLATFORM := $(2)
+
+endef
+
+# Use the default license file
+define gb_ExtensionTarget_use_default_license
+$(call gb_ExtensionTarget_get_target,$(1)) : FILES += registration
+$(call gb_ExtensionTarget_get_target,$(1)) : LICENSE := $(gb_ExtensionTarget_LICENSEFILE_DEFAULT)
+$(call gb_ExtensionTarget_get_target,$(1)) : $(gb_ExtensionTarget_LICENSEFILE_DEFAULT)
 
 endef
 
