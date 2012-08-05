@@ -122,22 +122,16 @@ const sal_Char ScHTMLExport::sIndentSource[nIndentMax+1] =
 //========================================================================
 // Makros fuer HTML-Export
 //========================================================================
-#define OUT_PROLOGUE()      (rStrm << sHTML30_Prologue << ScExportBase::sNewLine \
-                                << ScExportBase::sNewLine)
 #define TAG_ON( tag )       HTMLOutFuncs::Out_AsciiTag( rStrm, tag )
 #define TAG_OFF( tag )      HTMLOutFuncs::Out_AsciiTag( rStrm, tag, false )
 #define OUT_STR( str )      HTMLOutFuncs::Out_String( rStrm, str, eDestEnc, &aNonConvertibleChars )
-#define OUT_STR_NO_CONV( str )  HTMLOutFuncs::Out_String( rStrm, str, eDestEnc )
 #define OUT_LF()            rStrm << ScExportBase::sNewLine << GetIndentStr()
-#define lcl_OUT_LF()        rStrm << ScExportBase::sNewLine
 #define TAG_ON_LF( tag )    (TAG_ON( tag ) << ScExportBase::sNewLine << GetIndentStr())
 #define TAG_OFF_LF( tag )   (TAG_OFF( tag ) << ScExportBase::sNewLine << GetIndentStr())
 #define OUT_HR()            TAG_ON_LF( OOO_STRING_SVTOOLS_HTML_horzrule )
 #define OUT_COMMENT( comment )  (rStrm << sMyBegComment, OUT_STR( comment ) \
                                 << sMyEndComment << ScExportBase::sNewLine \
                                 << GetIndentStr())
-#define lcl_OUT_COMMENT( comment )  (rStrm << sMyBegComment, OUT_STR_NO_CONV( comment ) \
-                                << sMyEndComment << ScExportBase::sNewLine)
 
 #define OUT_SP_CSTR_ASS( s )    rStrm << ' ' << s << '='
 #define APPEND_SPACE( s )   s.AppendAscii(" ")

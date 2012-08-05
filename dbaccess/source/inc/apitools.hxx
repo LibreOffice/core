@@ -395,34 +395,6 @@ public:
     }                                                                             \
     _rGuard.reset();
 
-#define NOTIFY_LISTERNERS1(_rListeners,T,method,arg1)                             \
-    Sequence< Reference< XInterface > > aListenerSeq = _rListeners.getElements(); \
-                                                                                  \
-    const Reference< XInterface >* pxIntBegin = aListenerSeq.getConstArray();     \
-    const Reference< XInterface >* pxInt = pxIntBegin + aListenerSeq.getLength(); \
-                                                                                  \
-    _rGuard.clear();                                                              \
-    while( pxInt > pxIntBegin )                                                   \
-    {                                                                             \
-        try                                                                       \
-        {                                                                         \
-            while( pxInt > pxIntBegin )                                           \
-            {                                                                     \
-                --pxInt;                                                          \
-                static_cast< T* >( pxInt->get() )->method(aEvt,arg1);             \
-            }                                                                     \
-        }                                                                         \
-        catch( RuntimeException& )                                                \
-        {                                                                         \
-        }                                                                         \
-    }                                                                             \
-    _rGuard.reset();
-
-
-//==================================================================================
-// miscellaneous
-#define UNUSED(x)   x;
-
 #endif // _DBASHARED_APITOOLS_HXX_
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

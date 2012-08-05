@@ -322,13 +322,6 @@ inline void      ClassName##MemberList::Append( const ClassName##MemberList & rL
 inline sal_uIntPtr   ClassName##MemberList::GetPos( const EntryName p) const\
             {return BaseList::GetPos( p );}
 
-#define SV_DECL_MEMBER_LIST(ClassName,EntryName)\
-class ClassName##MemberList : public SvRefBaseMemberList\
-{\
-public:\
-    PRV_SV_DECL_MEMBER_LIST(ClassName,EntryName)\
-};
-
 /************************** S v R e f B a s e ****************************/
 #define SV_NO_DELETE_REFCOUNT  0x80000000
 class TOOLS_DLLPUBLIC SvRefBase

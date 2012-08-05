@@ -49,16 +49,8 @@ enum
 };
 typedef int WriteAttribute;
 
-#define SV_DECL_META_FACTORY( Class, CLASS_ID )                         \
-    SV_DECL_PERSIST( Class, CLASS_ID )
-
-
 #define SV_DECL_META_FACTORY1( Class, Super1, CLASS_ID )                \
     SV_DECL_PERSIST1( Class, Super1, CLASS_ID )
-
-#define SV_IMPL_META_FACTORY( Class )                                   \
-    SV_IMPL_PERSIST( Class )
-
 
 #define SV_IMPL_META_FACTORY1( Class, Super1 )                          \
     SV_IMPL_PERSIST1( Class, Super1 )

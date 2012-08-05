@@ -241,10 +241,6 @@ ________________________________________________________________________________
     PRIVATE_DEFINE_XSERVICEINFO_NEWSTYLE( CLASS, XINTERFACECAST, SERVICENAME, IMPLEMENTATIONNAME )              \
     PRIVATE_DEFINE_SINGLEFACTORY( CLASS )
 
-#define DEFINE_XSERVICEINFO_ONEINSTANCESERVICE_2( CLASS, XINTERFACECAST, SERVICENAME, IMPLEMENTATIONNAME )      \
-    PRIVATE_DEFINE_XSERVICEINFO_NEWSTYLE( CLASS, XINTERFACECAST, SERVICENAME, IMPLEMENTATIONNAME )              \
-    PRIVATE_DEFINE_ONEINSTANCEFACTORY( CLASS )
-
 //*****************************************************************************************************************
 //  public
 //  implementation of service initialize!
@@ -261,15 +257,6 @@ ________________________________________________________________________________
     void SAL_CALL CLASS::impl_initService()                                                                     \
     {                                                                                                           \
         FUNCTIONBODY                                                                                            \
-    }
-
-#define DEFINE_INIT_SERVICE_WITH_BASECLASS( CLASS, BASECLASS, FUNCTIONBODY )                                    \
-    void SAL_CALL CLASS::impl_initService()                                                                     \
-    {                                                                                                           \
-        BASECLASS::impl_initService();                                                                          \
-        {                                                                                                       \
-            FUNCTIONBODY                                                                                        \
-        }                                                                                                       \
     }
 
 }       //  namespace framework

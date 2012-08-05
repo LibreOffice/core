@@ -398,20 +398,6 @@ namespace ftp {
                      CURLOPT_URL,                                 \
                      urlParAscii.getStr());
 
-        // Setting username:password
-#define SET_USER_PASSWORD(username,password)                      \
-   rtl::OUString combi(username  +                                \
-                       rtl::OUString(":") +      \
-                       password);                                 \
-   rtl::OString aUserPsswd(combi.getStr(),                        \
-                           combi.getLength(),                     \
-                           RTL_TEXTENCODING_UTF8);                \
-   curl_easy_setopt(curl,                                         \
-                    CURLOPT_USERPWD,                              \
-                    aUserPsswd.getStr())
-
-
-
 FILE* FTPURL::open()
     throw(curl_exception)
 {

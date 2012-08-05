@@ -661,17 +661,12 @@ const char OHTMLImportExport::sIndentSource[nIndentMax+1] = "\t\t\t\t\t\t\t\t\t\
 //========================================================================
 // Macros for HTML-Export
 //========================================================================
-#define OUT_PROLOGUE()      ((*m_pStream) << sHTML30_Prologue << ODatabaseImportExport::sNewLine << ODatabaseImportExport::sNewLine)
 #define TAG_ON( tag )       HTMLOutFuncs::Out_AsciiTag( (*m_pStream), tag )
 #define TAG_OFF( tag )      HTMLOutFuncs::Out_AsciiTag( (*m_pStream), tag, sal_False )
 #define OUT_STR( str )      HTMLOutFuncs::Out_String( (*m_pStream), str )
 #define OUT_LF()            (*m_pStream) << ODatabaseImportExport::sNewLine << GetIndentStr()
-#define lcl_OUT_LF()        (*m_pStream) << ODatabaseImportExport::sNewLine
 #define TAG_ON_LF( tag )    (TAG_ON( tag ) << ODatabaseImportExport::sNewLine << GetIndentStr())
 #define TAG_OFF_LF( tag )   (TAG_OFF( tag ) << ODatabaseImportExport::sNewLine << GetIndentStr())
-#define OUT_HR()            TAG_ON_LF( OOO_STRING_SVTOOLS_HTML_horzrule )
-#define OUT_COMMENT( comment )  ((*m_pStream) << sMyBegComment, OUT_STR( comment ) << sMyEndComment << ODatabaseImportExport::sNewLine << GetIndentStr())
-#define lcl_OUT_COMMENT( comment )  ((*m_pStream) << sMyBegComment, OUT_STR( comment ) << sMyEndComment << ODatabaseImportExport::sNewLine)
 
 //-------------------------------------------------------------------
 OHTMLImportExport::OHTMLImportExport(const ::svx::ODataAccessDescriptor& _aDataDescriptor,

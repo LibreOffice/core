@@ -59,11 +59,8 @@
 #define _PQ_CONNECTION_HXX_
 #include <boost/unordered_map.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-
 #include <com/sun/star/lang/XInitialization.hpp>
-
 #include <com/sun/star/script/XTypeConverter.hpp>
-
 #include <com/sun/star/sdbc/XWarningsSupplier.hpp>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/sdbcx/XUsersSupplier.hpp>
@@ -87,10 +84,8 @@ namespace pq_sdbc_driver
 {
 #ifdef POSTGRE_TRACE
 #define POSTGRE_TRACE( x ) printf( "%s\n" , x )
-#define POSTGRE_TRACE_1( x ,y) printf( "%s %s\n" , x ,y )
 #else
 #define POSTGRE_TRACE(x) ((void)0)
-#define POSTGRE_TRACE_1(x,y) ((void)0)
 #endif
 
 class RefCountedMutex : public salhelper::SimpleReferenceObject

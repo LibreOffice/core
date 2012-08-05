@@ -33,14 +33,6 @@
 
 #include "dbfunc.hxx"
 
-#define DECL_WRAPPER(Class) \
-    class Class : public SfxChildWindow                                         \
-    {                                                                           \
-    public:                                                                     \
-        Class( Window*, sal_uInt16, SfxBindings*, SfxChildWinInfo* );           \
-        SFX_DECL_CHILDWINDOW(Class);                                            \
-    };
-
 #define DECL_WRAPPER_WITHID(Class) \
     class Class : public SfxChildWindow                                         \
     {                                                                           \

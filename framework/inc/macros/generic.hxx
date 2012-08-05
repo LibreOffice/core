@@ -52,7 +52,6 @@ ________________________________________________________________________________
 
 /*_________________________________________________________________________________________________________________
     U2B( SUNICODEVALUE )
-    B2U( SASCIIVALUE )
 
     Use it to convert unicode strings to ascii values and reverse ...
     We use UTF8 as default textencoding.
@@ -60,9 +59,6 @@ ________________________________________________________________________________
 
 #define U2B( SUNICODEVALUE )                                                                                    \
     ::rtl::OUStringToOString( SUNICODEVALUE, RTL_TEXTENCODING_UTF8 )
-
-#define B2U( SASCIIVALUE )                                                                                      \
-    ::rtl::OStringToOUString( SASCIIVALUE, RTL_TEXTENCODING_UTF8 )
 
 #endif  //  #ifndef __FRAMEWORK_MACROS_GENERIC_HXX_
 

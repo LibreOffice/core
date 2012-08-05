@@ -86,10 +86,6 @@ SV_DECL_IMPL_REF(SvRttiBase)
                         return rStm;                                \
                     }
 
-#define SV_IMPL_PERSIST( Class )                                    \
-    TYPEINIT0( Class )                                              \
-    PRV_SV_IMPL_PERSIST( Class )
-
 #define SV_IMPL_PERSIST1( Class, Super1 )                           \
     TYPEINIT1( Class, Super1 )                                      \
     PRV_SV_IMPL_PERSIST( Class )

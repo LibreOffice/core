@@ -1033,22 +1033,6 @@ void ScFormatShell::ExecuteNumFormat( SfxRequest& rReq )
 
 //------------------------------------------------------------------
 
-#define APPLY_HOR_JUSTIFY(j) \
-    {                                                                       \
-        if ( !pHorJustify || (eHorJustify != (j) ) )                        \
-            pTabViewShell->ApplyAttr( SvxHorJustifyItem( (j) ) );                          \
-        else                                                                \
-            pTabViewShell->ApplyAttr( SvxHorJustifyItem( SVX_HOR_JUSTIFY_STANDARD ) );     \
-    }
-
-#define APPLY_VER_JUSTIFY(j) \
-    {                                                                       \
-        if ( !pVerJustify || (eVerJustify != (j) ) )                        \
-            pTabViewShell->ApplyAttr( SvxVerJustifyItem( (j) ) );                          \
-        else                                                                \
-            pTabViewShell->ApplyAttr( SvxVerJustifyItem( SVX_VER_JUSTIFY_STANDARD ) );     \
-    }
-
 void ScFormatShell::ExecuteAlignment( SfxRequest& rReq )
 {
     ScTabViewShell* pTabViewShell       = GetViewData()->GetViewShell();
@@ -1395,9 +1379,6 @@ void ScFormatShell::ExecuteTextAttr( SfxRequest& rReq )
     }
 
 }
-
-#undef APPLY_HOR_JUSTIFY
-#undef APPLY_VER_JUSTIFY
 
 //------------------------------------------------------------------
 

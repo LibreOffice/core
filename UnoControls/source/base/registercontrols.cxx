@@ -67,18 +67,6 @@ using namespace ::com::sun::star::registry                      ;
     }
 
 //******************************************************************************************************************************
-#define CREATEFACTORY_ONEINSTANCE(CLASS)                                                                                \
-                                                                                                                        \
-    /* Create right factory ... */                                                                                      \
-    xFactory = Reference< XSingleServiceFactory >                                                                       \
-                    (                                                                                                   \
-                        cppu::createOneInstanceFactory  (   xServiceManager                                     ,       \
-                                                            CLASS::impl_getStaticImplementationName     ()  ,       \
-                                                            CLASS##_createInstance                              ,       \
-                                                            CLASS::impl_getStaticSupportedServiceNames  ()  )       \
-                    ) ;                                                                                                 \
-
-//******************************************************************************************************************************
 #define CREATEFACTORY_SINGLE(CLASS)                                                                                     \
                                                                                                                         \
     /* Create right factory ... */                                                                                      \
@@ -89,14 +77,6 @@ using namespace ::com::sun::star::registry                      ;
                                                         CLASS##_createInstance                              ,           \
                                                         CLASS::impl_getStaticSupportedServiceNames  ()  )           \
                     ) ;                                                                                                 \
-
-//******************************************************************************************************************************
-#define IF_NAME_CREATECOMPONENTFACTORY_ONEINSTANCE(CLASS)                                                               \
-                                                                                                                        \
-    if ( CLASS::impl_getStaticImplementationName().equals( OUString::createFromAscii( pImplementationName ) ) )     \
-    {                                                                                                                   \
-        CREATEFACTORY_ONEINSTANCE ( CLASS )                                                                         \
-    }
 
 //******************************************************************************************************************************
 #define IF_NAME_CREATECOMPONENTFACTORY_SINGLE(CLASS)                                                                    \

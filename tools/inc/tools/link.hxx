@@ -44,9 +44,6 @@ typedef long (*PSTUB)( void*, void* );
 #define DECL_DLLPRIVATE_STATIC_LINK(Class, Method, ArgType) \
     SAL_DLLPRIVATE static long Method(Class *, ArgType)
 
-#define IMPL_METHOD( Class, Method, ArgType, ArgName ) \
-    long Class::Method( ArgType ArgName )
-
 #define IMPL_STUB(Class, Method, ArgType) \
     long Class::LinkStub##Method( void* pThis, void* pCaller) \
     { \

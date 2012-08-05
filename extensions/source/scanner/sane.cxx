@@ -81,14 +81,6 @@ inline void dbg_msg( const char* pString, ... )
                  y, x, p_strstatus( x ) );                  \
     }
 
-#define CHECK_STATE( x, y ) \
-    if( x != SANE_STATUS_GOOD )                             \
-    {                                                       \
-        dump_state( "%s returned error %d (%s)\n",          \
-                 y, x, p_strstatus( x ) );                  \
-    }                                                       \
-    else
-
 int             Sane::nRefCount = 0;
 oslModule       Sane::pSaneLib = 0;
 SANE_Int        Sane::nVersion = 0;

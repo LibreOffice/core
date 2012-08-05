@@ -53,11 +53,6 @@ class UniString;
 #define BYTESTRING_TO_UNISTRING_CVTFLAGS    (RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_MAPTOPRIVATE |\
                                              RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_DEFAULT |\
                                              RTL_TEXTTOUNICODE_FLAGS_INVALID_DEFAULT)
-#define UNISTRING_TO_BYTESTRING_CVTFLAGS    (RTL_UNICODETOTEXT_FLAGS_UNDEFINED_DEFAULT |\
-                                             RTL_UNICODETOTEXT_FLAGS_INVALID_DEFAULT |\
-                                             RTL_UNICODETOTEXT_FLAGS_UNDEFINED_REPLACE |\
-                                             RTL_UNICODETOTEXT_FLAGS_PRIVATE_MAPTO0 |\
-                                             RTL_UNICODETOTEXT_FLAGS_NOCOMPOSITE)
 
 // -----------------------------------------------------------------------
 
