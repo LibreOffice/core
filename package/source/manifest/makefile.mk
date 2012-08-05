@@ -41,7 +41,6 @@ SLOFILES= \
         $(SLO)$/ManifestWriter.obj \
         $(SLO)$/ManifestImport.obj \
         $(SLO)$/ManifestExport.obj \
-        $(SLO)$/Base64Codec.obj \
         $(SLO)$/UnoRegister.obj
 
 .ENDIF # L10N_framework
