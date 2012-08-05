@@ -39,7 +39,7 @@ class SvxJSearchOptionsDialog : public SfxSingleTabDialog
     sal_Int32                   nInitialTlFlags;
     SvxJSearchOptionsPage  *pPage;
 
-    // disallow copy-constructor and assignment-operator for now
+    /// disallow copy-constructor and assignment-operator for now
     SvxJSearchOptionsDialog( const SvxJSearchOptionsDialog & );
     SvxJSearchOptionsDialog & operator == ( const SvxJSearchOptionsDialog & );
 

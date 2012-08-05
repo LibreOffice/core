@@ -88,8 +88,8 @@ public:
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
 // #i68101#
-// Dialog for editing Object Title and Description
-// plus uniqueness-callback-linkHandler
+/** Dialog for editing Object Title and Description
+    plus uniqueness-callback-linkHandler */
 
 class SvxObjectNameDialog : public ModalDialog
 {
@@ -133,7 +133,7 @@ public:
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
 // #i68101#
-// Dialog for editing Object Title and Description
+/// Dialog for editing Object Title and Description
 
 class SvxObjectTitleDescDialog : public ModalDialog
 {
@@ -165,9 +165,9 @@ public:
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
-/*************************************************************************
+/***********************************************************************//**
 |*
-|* Dialog zum Abbrechen, Speichern oder Hinzufuegen
+|* Dialog to cancel, save, or add
 |*
 \************************************************************************/
 class SvxMessDialog : public ModalDialog

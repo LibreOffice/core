@@ -38,7 +38,7 @@
 
 class SdrView;
 
-/*************************************************************************
+/***********************************************************************//**
 |*
 |* Dialog for changing TextAtrributes
 |*
@@ -108,7 +108,7 @@ public:
     virtual void PageCreated (SfxAllItemSet aSet);
 };
 
-/*************************************************************************
+/***********************************************************************//**
 |*
 |* Derived from SfxSingleTabDialog, in order to be able to be
 |* informed about virtual methods by the control.

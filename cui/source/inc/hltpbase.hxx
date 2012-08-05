@@ -56,7 +56,7 @@
 #include "iconcdlg.hxx"
 
 
-/*************************************************************************
+/***********************************************************************//**
 |*
 |* ComboBox-Control, wich is filled with all current framenames
 |*
@@ -69,7 +69,7 @@ public:
     ~SvxFramesComboBox ();
 };
 
-/*************************************************************************
+/***********************************************************************//**
 |*
 |* ComboBox-Control for URL's with History and Autocompletion
 |*
@@ -94,7 +94,7 @@ public:
 
 };
 
-/*************************************************************************
+/***********************************************************************//**
 |*
 |* Tabpage : Basisclass
 |*
@@ -142,7 +142,7 @@ protected:
                                           String& aStrIntName, String& aStrFrame,
                                           SvxLinkInsertMode& eMode );
 
-    DECL_LINK (ClickScriptHdl_Impl, void * );       // Button : Script
+    DECL_LINK (ClickScriptHdl_Impl, void * );       ///< Button : Script
 
     String              aEmptyStr;
 

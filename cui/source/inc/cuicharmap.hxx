@@ -49,9 +49,6 @@ namespace svx
 {
     struct SvxShowCharSetItem;
 }
-// class SvxCharacterMap -------------------------------------------------
-// the main purpose of this dialog is to enable the use of characters
-// that are not easily accesible from the keyboard
 
 // class SvxShowText =====================================================
 
@@ -112,6 +109,10 @@ friend class SvxCharacterMap;
     DECL_LINK(CharPreSelectHdl, void *);
     DECL_LINK(DeleteHdl, void *);
 };
+
+/** class SvxCharacterMap -------------------------------------------------
+    the main purpose of this dialog is to enable the use of characters
+    that are not easily accesible from the keyboard. */
 
 class SvxCharacterMap : public SfxModalDialog
 {

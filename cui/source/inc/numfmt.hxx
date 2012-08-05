@@ -132,7 +132,7 @@ private:
     sal_uLong                   nInitFormat;
     Link                    fnOkHdl;
 
-    sal_Bool                    bNumItemFlag; // for handling with DocShell
+    sal_Bool                    bNumItemFlag; ///< for handling with DocShell
     sal_Bool                    bOneAreaFlag;
     short                   nFixedCategory;
 

@@ -127,7 +127,7 @@ class SvxTransparenceTabPage : public SvxTabPage
     RadioButton         aRbtTransLinear;
     RadioButton         aRbtTransGradient;
 
-    // linear transparency
+    /// linear transparency
     MetricField         aMtrTransparent;
 
     // gradient transparency
@@ -648,7 +648,7 @@ public:
     virtual Window* GetParentLabeledBy( const Window* pLabeled ) const;
 };
 
-// Load save embed functionality
+/// Load save embed functionality
 class SvxLoadSaveEmbed {
     XPropertyListType   meType;
     XOutdevItemPool*    mpXPool;
