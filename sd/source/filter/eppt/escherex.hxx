@@ -30,22 +30,19 @@
 #define _PptEscherEX_HXX
 #include <filter/msfilter/escherex.hxx>
 
-// ---------------------------------------------------------------------------------------------
-// Werte fuer den sal_uLong im PPT_PST_TextHeaderAtom
+/// Values for the sal_uLong in PPT_PST_TextHeaderAtom.
 enum PPT_TextHeader
 {
     PPTTH_TITLE,
     PPTTH_BODY,
     PPTTH_NOTES,
     PPTTH_NOTUSED,
-    PPTTH_OTHER,       // Text in a Shape
-    PPTTH_CENTERBODY,  // Subtitle in Title-Slide
-    PPTTH_CENTERTITLE, // Title in Title-Slide
-    PPTTH_HALFBODY,    // Body in two-column slide
-    PPTTH_QUARTERBODY  // Body in four-body slide
+    PPTTH_OTHER,       ///< Text in a Shape
+    PPTTH_CENTERBODY,  ///< Subtitle in Title-Slide
+    PPTTH_CENTERTITLE, ///< Title in Title-Slide
+    PPTTH_HALFBODY,    ///< Body in two-column slide
+    PPTTH_QUARTERBODY  ///< Body in four-body slide
 };
-
-// ---------------------------------------------------------------------------------------------
 
 class PptEscherEx : public EscherEx
 {
@@ -73,7 +70,6 @@ class PptEscherEx : public EscherEx
 
         using EscherEx::EnterGroup;
 };
-
 
 #endif
 
