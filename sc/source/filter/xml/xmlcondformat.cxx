@@ -313,7 +313,7 @@ void GetConditionData(const rtl::OUString& rValue, ScConditionMode& eMode, rtl::
     else if(rValue.indexOf("between") == 0)
     {
         const sal_Unicode* pStr = rValue.getStr();
-        const sal_Unicode* pStart = pStr + 7;
+        const sal_Unicode* pStart = pStr + 8;
         const sal_Unicode* pEnd = pStr + rValue.getLength();
         rExpr1 = ScXMLConditionHelper::getExpression( pStart, pEnd, ',');
         rExpr2 = ScXMLConditionHelper::getExpression( pStart, pEnd, ')');
