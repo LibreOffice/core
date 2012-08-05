@@ -105,6 +105,7 @@ private:
     SAL_DLLPRIVATE void        ImplInsertText( const rtl::OUString& rStr, const Selection* pNewSelection = 0, sal_Bool bIsUserInput = sal_False );
     SAL_DLLPRIVATE String      ImplGetValidString( const String& rString ) const;
     SAL_DLLPRIVATE void        ImplClearBackground( long nXStart, long nXEnd );
+    SAL_DLLPRIVATE void        ImplPaintBorder( long nXStart, long nXEnd );
     SAL_DLLPRIVATE void        ImplShowCursor( sal_Bool bOnlyIfVisible = sal_True );
     SAL_DLLPRIVATE void        ImplAlign();
     SAL_DLLPRIVATE void        ImplAlignAndPaint();

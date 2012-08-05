@@ -556,7 +556,7 @@ void Edit::ImplRepaint( xub_StrLen nStart, xub_StrLen nEnd, bool bLayout )
         Push( PUSH_FILLCOLOR | PUSH_LINECOLOR );
         SetLineColor();
         SetFillColor( GetControlBackground() );
-        DrawRect( Rectangle( aPos, Size( GetOutputSizePixel().Width() - 2*mnXOffset, nTH ) ) );
+        DrawRect( Rectangle( aPos, Size( GetOutputSizePixel().Width() - 2*mnXOffset, GetOutputSizePixel().Height() ) ) );
         Pop();
 
         SetTextFillColor( GetControlBackground() );
@@ -565,6 +565,8 @@ void Edit::ImplRepaint( xub_StrLen nStart, xub_StrLen nEnd, bool bLayout )
         SetTextFillColor();
     else
         SetTextFillColor( IsControlBackground() ? GetControlBackground() : rStyleSettings.GetFieldColor() );
+
+    ImplPaintBorder( 0, GetOutputSizePixel().Width() );
 
     sal_Bool bDrawSelection = maSelection.Len() && ( HasFocus() || ( GetStyle() & WB_NOHIDESELECTION ) || mbActivePopup );
 
@@ -1095,6 +1097,17 @@ void Edit::ImplClearBackground( long nXStart, long nXEnd )
     aRect.Left() = nXStart;
     aRect.Right() = nXEnd;
 
+    if( !(ImplUseNativeBorder( GetStyle() ) || IsPaintTransparent()) )
+        Erase( aRect );
+}
+
+void Edit::ImplPaintBorder( long nXStart, long nXEnd )
+{
+    Point aTmpPoint;
+    Rectangle aRect( aTmpPoint, GetOutputSizePixel() );
+    aRect.Left() = nXStart;
+    aRect.Right() = nXEnd;
+
     if( ImplUseNativeBorder( GetStyle() ) || IsPaintTransparent() )
     {
         // draw the inner part by painting the whole control using its border window
@@ -1150,8 +1163,6 @@ void Edit::ImplClearBackground( long nXStart, long nXEnd )
 
         }
     }
-    else
-        Erase( aRect );
 }
 
 // -----------------------------------------------------------------------
