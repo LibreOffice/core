@@ -199,7 +199,7 @@ typedef enum
     on_failure_keep_string_jump,
 
     /** Throw away latest failure point and then
-        jump to following two-byte relative address.
+        jump to following two-byte relative address. */
     pop_failure_jump,
 
     /** Change to pop_failure_jump if know won't have to backtrack to match;
