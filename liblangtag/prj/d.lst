@@ -2,6 +2,7 @@ mkdir: %_DEST%\inc\liblangtag
 
 ..\%__SRC%\misc\install\include\liblangtag\*    %_DEST%\inc\liblangtag\
 ..\%__SRC%\misc\install\lib\liblangtag.so*      %_DEST%\lib\
+..\%__SRC%\misc\install\lib\liblangtag*.dylib   %_DEST%\lib\
 ..\%__SRC%\misc\install\lib\langtag.lib*        %_DEST%\lib\
 ..\%__SRC%\misc\liblangtag_data.zip             %_DEST%\pck\
 
