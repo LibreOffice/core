@@ -20,17 +20,15 @@ gb_CliLibraryTarget_CSCFLAGS_DEBUG := \
 	-define:DEBUG \
 	-define:TRACE \
 
-define gb_CliLibraryTarget__get_csflags
 ifeq ($(strip $(debug)),)
 ifeq ($(strip $(PRODUCT)),)
-$(gb_CliLibraryTarget_CSCFLAGS) $(gb_CliLibraryTarget_CSCFLAGS_DEBUG)
+gb_CliLibraryTarget__get_csflags = $(gb_CliLibraryTarget_CSCFLAGS) $(gb_CliLibraryTarget_CSCFLAGS_DEBUG)
 else
-$(gb_CliLibraryTarget_CSCFLAGS) -o
+gb_CliLibraryTarget__get_csflags = $(gb_CliLibraryTarget_CSCFLAGS) -o
 endif
 else
-$(gb_CliLibraryTarget_CSCFLAGS) $(gb_CliLibraryTarget_CSCFLAGS_DEBUG) -debug+
+gb_CliLibraryTarget__get_csflags = $(gb_CliLibraryTarget_CSCFLAGS) $(gb_CliLibraryTarget_CSCFLAGS_DEBUG) -debug+
 endif
-endef
 
 gb_CliLibraryTarget__get_source = $(SRCDIR)/$(1).cs
 gb_CliLibraryTarget__get_generated_source = $(WORKDIR)/$(1).cs
