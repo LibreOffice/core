@@ -102,7 +102,7 @@ namespace connectivity
             /* Get the length, and make sure that there is actually a string
              * here.
              */
-            if(_originalLabel.indexOf(::rtl::OUString("_$!<")) == 0)
+            if(_originalLabel.indexOf("_$!<") == 0)
             {
                 return _originalLabel.copy(4,_originalLabel.getLength()-8);
             }

@@ -258,8 +258,7 @@ UUIInteractionHelper::replaceMessageWithArguments(
 {
     for (sal_Int32 i = 0;;)
     {
-        i = aMessage.
-        indexOf(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("$(ARG")), i);
+        i = aMessage.indexOf("$(ARG", i);
         if (i == -1)
             break;
         if (aMessage.getLength() - i >= RTL_CONSTASCII_LENGTH("$(ARGx)")

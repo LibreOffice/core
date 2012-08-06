@@ -241,7 +241,7 @@ css::uno::Reference< css::container::XEnumeration > SAL_CALL FilterFactory::crea
 
     // convert "_query_xxx:..." to "getByDocService=xxx:..."
     ::rtl::OUString sNewQuery(sQuery);
-    sal_Int32 pos = sNewQuery.indexOf(::rtl::OUString( "_query_" ),0);
+    sal_Int32 pos = sNewQuery.indexOf("_query_");
     if (pos != -1)
     {
         OSL_FAIL("DEPRECATED!\nPlease use new query format: 'matchByDocumentService=...'");

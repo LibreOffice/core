@@ -237,11 +237,11 @@ struct OleComponentNative_Impl {
 //----------------------------------------------
 DWORD GetAspectFromFlavor( const datatransfer::DataFlavor& aFlavor )
 {
-    if ( aFlavor.MimeType.indexOf( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ";Aspect=THUMBNAIL" )) ) != -1 )
+    if ( aFlavor.MimeType.indexOf( ";Aspect=THUMBNAIL" ) != -1 )
         return DVASPECT_THUMBNAIL;
-    else if ( aFlavor.MimeType.indexOf( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ";Aspect=ICON" )) ) != -1 )
+    else if ( aFlavor.MimeType.indexOf( ";Aspect=ICON" ) != -1 )
         return DVASPECT_ICON;
-    else if ( aFlavor.MimeType.indexOf( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ";Aspect=DOCPRINT" )) ) != -1 )
+    else if ( aFlavor.MimeType.indexOf( ";Aspect=DOCPRINT" ) != -1 )
         return DVASPECT_DOCPRINT;
     else
         return DVASPECT_CONTENT;

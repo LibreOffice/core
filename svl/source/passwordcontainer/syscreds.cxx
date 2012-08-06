@@ -110,8 +110,7 @@ namespace
         if( aInd > 0  )
         {
             sal_Int32 aPrevInd = aURL.lastIndexOf( sal_Unicode( '/' ), aInd );
-            if ( aURL.indexOf( ::rtl::OUString("://") )
-                    != aPrevInd - 2 ||
+            if ( aURL.indexOf( "://" ) != aPrevInd - 2 ||
                  aInd != aURL.getLength() - 1 )
             {
                 aURL = aURL.copy( 0, aInd );

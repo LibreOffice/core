@@ -556,7 +556,7 @@ void SAL_CALL RecoveryCore::statusChanged(const css::frame::FeatureStateEvent& a
     aNew.RecoveryState = E_NOT_RECOVERED_YET;
 
     // patch DisplayName! Because the document title contain more then the file name ...
-    sal_Int32 i = aNew.DisplayName.indexOf(::rtl::OUString(" - "));
+    sal_Int32 i = aNew.DisplayName.indexOf(" - ");
     if (i > 0)
         aNew.DisplayName = aNew.DisplayName.copy(0, i);
 

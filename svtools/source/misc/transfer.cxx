@@ -2112,7 +2112,7 @@ sal_Bool TransferableDataHelper::GetFileList(
 
             if( GetSotStorageStream( aFlavor, xStm ) )
             {
-                if( aFlavor.MimeType.indexOf( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "text/uri-list" )) ) > -1 )
+                if( aFlavor.MimeType.indexOf( "text/uri-list" ) > -1 )
                 {
                     rtl::OString aDiskString;
 

@@ -1149,7 +1149,7 @@ Any SAL_CALL SdStyleSheet::getPropertyValue( const OUString& PropertyName ) thro
             if( nFamily == SD_STYLE_FAMILY_MASTERPAGE )
             {
                 const OUString aLayoutName( GetName() );
-                aAny <<= aLayoutName.copy( 0, aLayoutName.indexOf(OUString( SD_LT_SEPARATOR) ) );
+                aAny <<= aLayoutName.copy( 0, aLayoutName.indexOf( SD_LT_SEPARATOR) );
             }
             else
             {
