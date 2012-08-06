@@ -148,14 +148,7 @@ $(eval $(call gb_Library_add_exception_objects,svt,\
     svtools/source/edit/svmedit \
     svtools/source/edit/svmedit2 \
     svtools/source/edit/syntaxhighlight \
-    svtools/source/edit/textdata \
-    svtools/source/edit/textdoc \
-    svtools/source/edit/texteng \
-    svtools/source/edit/textundo \
-    svtools/source/edit/textview \
     svtools/source/edit/textwindowpeer \
-    svtools/source/edit/txtattr \
-    svtools/source/edit/xtextedt \
     svtools/source/filter/FilterConfigCache \
     svtools/source/filter/FilterConfigItem \
     svtools/source/filter/SvFilterOptionsDialog \

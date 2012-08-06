@@ -29,8 +29,8 @@
 #ifndef _TEXTVIEW_HXX
 #define _TEXTVIEW_HXX
 
-#include "svtools/svtdllapi.h"
-#include <svtools/textdata.hxx>
+#include <vcl/dllapi.h>
+#include <vcl/textdata.hxx>
 #include <tools/gen.hxx>
 #include <vcl/dndhelp.hxx>
 
@@ -56,7 +56,7 @@ namespace clipboard {
 
 struct ImpTextView;
 
-class SVT_DLLPUBLIC TextView : public vcl::unohelper::DragAndDropClient
+class VCL_DLLPUBLIC TextView : public vcl::unohelper::DragAndDropClient
 {
     friend class        TextEngine;
     friend class        TextUndo;

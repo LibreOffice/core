@@ -29,8 +29,8 @@
 #include "baside2.hxx"
 #include "linenumberwindow.hxx"
 
-#include <svtools/xtextedt.hxx>
-#include <svtools/textview.hxx>
+#include <vcl/xtextedt.hxx>
+#include <vcl/textview.hxx>
 
 LineNumberWindow::LineNumberWindow( Window* pParent, ModulWindow* pModulWin ) :
     Window( pParent, WB_BORDER ),

@@ -29,7 +29,7 @@
 #ifndef _TXTATTR_HXX
 #define _TXTATTR_HXX
 
-#include "svtools/svtdllapi.h"
+#include <vcl/dllapi.h>
 #include <tools/color.hxx>
 #include <vcl/vclenum.hxx>
 #include <tools/string.hxx>
@@ -46,7 +46,7 @@ class Font;
 #define TEXTATTR_PROTECTED  4
 
 
-class SVT_DLLPUBLIC TextAttrib
+class VCL_DLLPUBLIC TextAttrib
 {
 private:
     sal_uInt16                  mnWhich;
@@ -70,7 +70,7 @@ public:
 
 
 
-class SVT_DLLPUBLIC TextAttribFontColor : public TextAttrib
+class VCL_DLLPUBLIC TextAttribFontColor : public TextAttrib
 {
 private:
     Color   maColor;
@@ -88,7 +88,7 @@ public:
 
 };
 
-class SVT_DLLPUBLIC TextAttribFontWeight : public TextAttrib
+class VCL_DLLPUBLIC TextAttribFontWeight : public TextAttrib
 {
 private:
     FontWeight  meWeight;
@@ -131,7 +131,7 @@ public:
     virtual int             operator==( const TextAttrib& rAttr ) const;
 };
 
-class SVT_DLLPUBLIC TextAttribProtect : public TextAttrib
+class VCL_DLLPUBLIC TextAttribProtect : public TextAttrib
 {
 public:
                             TextAttribProtect();

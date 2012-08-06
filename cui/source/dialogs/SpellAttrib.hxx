@@ -28,7 +28,7 @@
 #ifndef _SVX_SPELL_ATTRIB
 #define _SVX_SPELL_ATTRIB
 
-#include <svtools/txtattr.hxx>
+#include <vcl/txtattr.hxx>
 #include <i18npool/lang.h>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Sequence.h>

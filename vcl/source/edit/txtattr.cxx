@@ -27,7 +27,7 @@
  ************************************************************************/
 
 
-#include <svtools/txtattr.hxx>
+#include <vcl/txtattr.hxx>
 #include <vcl/font.hxx>
 
 

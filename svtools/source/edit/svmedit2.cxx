@@ -19,7 +19,7 @@
 
 
 #include <svtools/svmedit2.hxx>
-#include <svtools/xtextedt.hxx>
+#include <vcl/xtextedt.hxx>
 
 ExtMultiLineEdit::ExtMultiLineEdit( Window* pParent, WinBits nWinStyle ) :
 

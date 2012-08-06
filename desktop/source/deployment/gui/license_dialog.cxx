@@ -40,7 +40,7 @@
 #include "com/sun/star/task/XJobExecutor.hpp"
 #include "svtools/svmedit.hxx"
 #include "svl/lstner.hxx"
-#include "svtools/xtextedt.hxx"
+#include "vcl/xtextedt.hxx"
 #include <vcl/scrbar.hxx>
 #include "vcl/threadex.hxx"
 

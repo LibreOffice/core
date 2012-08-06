@@ -48,7 +48,7 @@
 #include <svtools/svmedit.hxx>
 #include <svl/lstner.hxx>
 #include <svtools/fixedhyper.hxx>
-#include <svtools/xtextedt.hxx>
+#include <vcl/xtextedt.hxx>
 #include <editeng/SpellPortions.hxx>
 
 #include <set>

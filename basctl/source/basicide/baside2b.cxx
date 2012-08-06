@@ -38,8 +38,8 @@
 #include <sfx2/viewfrm.hxx>
 #include <vcl/msgbox.hxx>
 #include <svl/urihelper.hxx>
-#include <svtools/xtextedt.hxx>
-#include <svtools/txtattr.hxx>
+#include <vcl/xtextedt.hxx>
+#include <vcl/txtattr.hxx>
 #include <svtools/textwindowpeer.hxx>
 #include <vcl/taskpanelist.hxx>
 #include <vcl/help.hxx>

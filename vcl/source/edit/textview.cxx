@@ -26,10 +26,10 @@
  *
  ************************************************************************/
 
-#include <svtools/textview.hxx>
-#include <svtools/texteng.hxx>
+#include <vcl/textview.hxx>
+#include <vcl/texteng.hxx>
 #include <textdoc.hxx>
-#include <svtools/textdata.hxx>
+#include <vcl/textdata.hxx>
 #include <textdat2.hxx>
 
 #include <svl/undo.hxx>

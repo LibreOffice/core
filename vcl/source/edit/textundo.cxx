@@ -27,11 +27,11 @@
  ************************************************************************/
 
 
-#include <svtools/texteng.hxx>
-#include <svtools/textview.hxx>
+#include <vcl/texteng.hxx>
+#include <vcl/textview.hxx>
 #include <textundo.hxx>
 #include <textund2.hxx>
-#include <svtools/textdata.hxx>
+#include <vcl/textdata.hxx>
 #include <textdoc.hxx>
 #include <textdat2.hxx>
 

@@ -38,13 +38,13 @@
 #include <rtl/oustringostreaminserter.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
-#include <svtools/textview.hxx>
+#include <vcl/textview.hxx>
 #include <svx/svxids.hrc>
 #include <vcl/scrbar.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/app.hxx>
 #include <svtools/htmltokn.h>
-#include <svtools/txtattr.hxx>
+#include <vcl/txtattr.hxx>
 #include <svtools/colorcfg.hxx>
 #include <editeng/flstitem.hxx>
 #include <vcl/metric.hxx>

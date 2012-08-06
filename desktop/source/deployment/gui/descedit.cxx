@@ -19,8 +19,8 @@
 
 
 #include <vcl/scrbar.hxx>
-#include <svtools/txtattr.hxx>
-#include <svtools/xtextedt.hxx>
+#include <vcl/txtattr.hxx>
+#include <vcl/xtextedt.hxx>
 
 #include "descedit.hxx"
 

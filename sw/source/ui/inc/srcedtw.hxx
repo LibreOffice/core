@@ -32,7 +32,7 @@
 #include <svl/lstner.hxx>
 #include <vcl/timer.hxx>
 
-#include <svtools/xtextedt.hxx>
+#include <vcl/xtextedt.hxx>
 #include <set>
 
 namespace com { namespace sun { namespace star { namespace beans {

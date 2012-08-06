@@ -38,6 +38,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/fixed.hxx>
+#include <vcl/vclmedit.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/button.hxx>
 #include <vcl/mnemonic.hxx>
@@ -66,7 +67,7 @@ static void ImplInitMsgBoxImageList()
 
 void MessBox::ImplInitMessBoxData()
 {
-    mpFixedText         = NULL;
+    mpVCLMultiLineEdit  = NULL;
     mpFixedImage        = NULL;
     mbHelpBtn           = sal_False;
     mpCheckBox          = NULL;
@@ -203,7 +204,7 @@ void MessBox::ImplLoadRes( const ResId& )
 
 MessBox::~MessBox()
 {
-    delete mpFixedText;
+    delete mpVCLMultiLineEdit;
     delete mpFixedImage;
     delete mpCheckBox;
 }
@@ -236,16 +237,16 @@ void MessBox::ImplPosControls()
     Point           aTextPos( IMPL_DIALOG_OFFSET, IMPL_DIALOG_OFFSET+IMPL_MSGBOX_OFFSET_EXTRA_Y );
     Size            aImageSize;
     Size            aPageSize;
-    Size            aFixedSize;
+    Size            aMEditSize;
     long            nTitleWidth;
     long            nButtonSize = ImplGetButtonSize();
     long            nMaxWidth = GetDesktopRectPixel().GetWidth()-8;
     long            nMaxLineWidth;
     long            nWidth;
-    WinBits         nWinStyle = WB_LEFT | WB_WORDBREAK | WB_NOLABEL | WB_INFO;
+    WinBits         nWinStyle = WB_LEFT | WB_WORDBREAK | WB_NOLABEL;
     sal_uInt16          nTextStyle = TEXT_DRAW_MULTILINE | TEXT_DRAW_TOP | TEXT_DRAW_LEFT;
 
-    delete mpFixedText;
+    delete mpVCLMultiLineEdit;
     if ( mpFixedImage )
     {
         delete mpFixedImage;
@@ -325,25 +326,27 @@ void MessBox::ImplPosControls()
         aFormatRect = GetTextRect( aRect, aMessText, nTextStyle, &aTextInfo );
     }
 
-    // Style fuer FixedText ermitteln
+    // Style fuer VCLMultiLineEdit ermitteln
+    mpVCLMultiLineEdit = new VCLMultiLineEdit( this, nWinStyle );
+    mpVCLMultiLineEdit->SetText( aMessText );
+    aMEditSize = mpVCLMultiLineEdit->CalcMinimumSize();
+
     aPageSize.Width()   = aImageSize.Width();
-    aFixedSize.Width()  = aTextInfo.GetMaxLineWidth()+1;
-    aFixedSize.Height() = aFormatRect.GetHeight();
-    if ( aFixedSize.Height() < aImageSize.Height() )
+    if ( aMEditSize.Height() < aImageSize.Height() )
     {
         nWinStyle |= WB_VCENTER;
         aPageSize.Height()  = aImageSize.Height();
-        aFixedSize.Height() = aImageSize.Height();
+        aMEditSize.Height() = aImageSize.Height();
     }
     else
     {
         nWinStyle |= WB_TOP;
-        aPageSize.Height()  = aFixedSize.Height();
+        aPageSize.Height()  = aMEditSize.Height();
     }
     if ( aImageSize.Width() )
         aPageSize.Width() += IMPL_SEP_MSGBOX_IMAGE;
     aPageSize.Width()  += (IMPL_DIALOG_OFFSET*2)+(IMPL_MSGBOX_OFFSET_EXTRA_X*2);
-    aPageSize.Width()  += aFixedSize.Width()+1;
+    aPageSize.Width()  += aMEditSize.Width()+1;
     aPageSize.Height() += (IMPL_DIALOG_OFFSET*2)+(IMPL_MSGBOX_OFFSET_EXTRA_Y*2);
 
     if ( aPageSize.Width() < IMPL_MINSIZE_MSGBOX_WIDTH )
@@ -353,7 +356,7 @@ void MessBox::ImplPosControls()
 
     if ( maCheckBoxText.Len() )
     {
-        Size aMinCheckboxSize ( aFixedSize );
+        Size aMinCheckboxSize ( aMEditSize );
         if ( aPageSize.Width() < IMPL_MINSIZE_MSGBOX_WIDTH+80 )
         {
             aPageSize.Width() = IMPL_MINSIZE_MSGBOX_WIDTH+80;
@@ -388,7 +391,7 @@ void MessBox::ImplPosControls()
         mpCheckBox->SetText( maCheckBoxText );
 
         Point aPos( aTextPos );
-        aPos.Y() += aFixedSize.Height() + (IMPL_DIALOG_OFFSET)+(IMPL_MSGBOX_OFFSET_EXTRA_Y*2);
+        aPos.Y() += aMEditSize.Height() + (IMPL_DIALOG_OFFSET)+(IMPL_MSGBOX_OFFSET_EXTRA_Y*2);
 
         // increase messagebox
         aPageSize.Height() += aSize.Height() + (IMPL_DIALOG_OFFSET*2)+(IMPL_MSGBOX_OFFSET_EXTRA_Y*2);
@@ -397,12 +400,10 @@ void MessBox::ImplPosControls()
         mpCheckBox->Show();
     }
 
-    mpFixedText = new FixedText( this, nWinStyle );
-    if( mpFixedText->GetStyle() & WB_EXTRAOFFSET ) // TODO: use CalcMinimumSize() instead
-        aFixedSize.Width() += 2;
-    mpFixedText->SetPosSizePixel( aTextPos, aFixedSize );
-    mpFixedText->SetText( aMessText );
-    mpFixedText->Show();
+
+    mpVCLMultiLineEdit->SetPosSizePixel( aTextPos, aMEditSize );
+    mpVCLMultiLineEdit->Show();
+    mpVCLMultiLineEdit->SetPaintTransparent(sal_True);
     SetPageSizePixel( aPageSize );
 }
 

@@ -31,7 +31,7 @@
 
 #include <memory>
 #include <tools/solar.h>
-#include <svtools/textdata.hxx>
+#include <vcl/textdata.hxx>
 #include <svl/hint.hxx>
 #include <tools/gen.hxx>
 #include "editeng/editengdllapi.h"

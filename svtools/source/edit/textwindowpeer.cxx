@@ -19,7 +19,7 @@
 
 
 #include <svtools/textwindowpeer.hxx>
-#include <svtools/textview.hxx>
+#include <vcl/textview.hxx>
 #include "svtaccessiblefactory.hxx"
 
 namespace css = ::com::sun::star;

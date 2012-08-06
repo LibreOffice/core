@@ -28,9 +28,9 @@
 
 
 #include <svtools/svmedit.hxx>
-#include <svtools/xtextedt.hxx>
+#include <vcl/xtextedt.hxx>
 #include <svtools/editsyntaxhighlighter.hxx>
-#include <svtools/txtattr.hxx>
+#include <vcl/txtattr.hxx>
 
 
 MultiLineEditSyntaxHighlight::MultiLineEditSyntaxHighlight( Window* pParent, WinBits nWinStyle,

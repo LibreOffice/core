@@ -27,7 +27,7 @@
  ************************************************************************/
 
 
-#include <svtools/xtextedt.hxx>
+#include <vcl/xtextedt.hxx>
 #include <vcl/svapp.hxx>  // International
 #include <unotools/textsearch.hxx>
 #include <com/sun/star/util/SearchOptions.hpp>

@@ -29,7 +29,7 @@
 #include <svtools/editbrowsebox.hxx>
 #include <vcl/decoview.hxx>
 #include <svtools/fmtfield.hxx>
-#include <svtools/xtextedt.hxx>
+#include <vcl/xtextedt.hxx>
 
 #include <algorithm>
 

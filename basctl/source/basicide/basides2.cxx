@@ -29,9 +29,9 @@
 #include <baside2.hxx>
 #include <basdoc.hxx>
 #include <basobj.hxx>
-#include <svtools/texteng.hxx>
-#include <svtools/textview.hxx>
-#include <svtools/xtextedt.hxx>
+#include <vcl/texteng.hxx>
+#include <vcl/textview.hxx>
+#include <vcl/xtextedt.hxx>
 #include <tools/diagnose_ex.h>
 #include <sfx2/childwin.hxx>
 #include <sfx2/dispatch.hxx>

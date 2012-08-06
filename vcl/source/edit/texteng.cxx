@@ -28,8 +28,8 @@
 
 #include <tools/stream.hxx>
 
-#include <svtools/texteng.hxx>
-#include <svtools/textview.hxx>
+#include <vcl/texteng.hxx>
+#include <vcl/textview.hxx>
 #include <textdoc.hxx>
 #include <textdat2.hxx>
 #include <textundo.hxx>

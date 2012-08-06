@@ -28,7 +28,7 @@
 #ifndef _TEXTENG_HXX
 #define _TEXTENG_HXX
 
-#include "svtools/svtdllapi.h"
+#include <vcl/dllapi.h>
 
 class TextDoc;
 class TextView;
@@ -81,7 +81,7 @@ enum TxtAlign { TXTALIGN_LEFT, TXTALIGN_CENTER, TXTALIGN_RIGHT };
 
 typedef std::vector<TextView*> TextViews;
 
-class SVT_DLLPUBLIC TextEngine : public SfxBroadcaster
+class VCL_DLLPUBLIC TextEngine : public SfxBroadcaster
 {
     friend class        TextView;
     friend class        TextSelFunctionSet;

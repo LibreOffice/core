@@ -36,7 +36,7 @@
 #include <rtl/tencinfo.h>
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
-#include <svtools/textview.hxx>
+#include <vcl/textview.hxx>
 #include <vcl/scrbar.hxx>
 #include <tools/stream.hxx>
 #include <tools/time.hxx>
@@ -44,7 +44,7 @@
 #include <vcl/msgbox.hxx>
 #include <svtools/colorcfg.hxx>
 #include <svtools/htmltokn.h>
-#include <svtools/txtattr.hxx>
+#include <vcl/txtattr.hxx>
 
 #include "xmlfilterdialogstrings.hrc"
 #include "xmlfiltersettingsdialog.hxx"

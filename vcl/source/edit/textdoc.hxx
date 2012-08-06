@@ -29,8 +29,8 @@
 #ifndef _TEXTDOC_HXX
 #define _TEXTDOC_HXX
 
-#include <svtools/textdata.hxx>
-#include <svtools/txtattr.hxx>
+#include <vcl/textdata.hxx>
+#include <vcl/txtattr.hxx>
 
 #include <tools/string.hxx>
 #include <vector>

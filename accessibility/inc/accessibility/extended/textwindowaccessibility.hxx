@@ -31,10 +31,10 @@
 
 #include <toolkit/awt/vclxaccessiblecomponent.hxx>
 #include <svl/lstner.hxx>
-#include <svtools/textdata.hxx>
-#include <svtools/texteng.hxx>
-#include <svtools/textview.hxx>
-#include <svtools/txtattr.hxx>
+#include <vcl/textdata.hxx>
+#include <vcl/texteng.hxx>
+#include <vcl/textview.hxx>
+#include <vcl/txtattr.hxx>
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/lang/EventObject.hpp>
 #include <com/sun/star/uno/Reference.hxx>

@@ -40,7 +40,7 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/string.hxx>
 #include <svtools/imagemgr.hxx>
-#include <svtools/xtextedt.hxx>
+#include <vcl/xtextedt.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>

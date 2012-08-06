@@ -19,7 +19,7 @@
 
 #include "svtools/svmedit2.hxx"
 #include "svl/lstner.hxx"
-#include "svtools/xtextedt.hxx"
+#include "vcl/xtextedt.hxx"
 #include "vcl/scrbar.hxx"
 
 #include "dp_gui_autoscrolledit.hxx"

@@ -27,7 +27,7 @@
  ************************************************************************/
 
 
-#include <svtools/textdata.hxx>
+#include <vcl/textdata.hxx>
 #include <textdat2.hxx>
 
 #include <tools/debug.hxx>

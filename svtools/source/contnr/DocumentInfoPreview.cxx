@@ -38,7 +38,7 @@
 #include "svl/inettype.hxx"
 #include "svtools/DocumentInfoPreview.hxx"
 #include "svtools/imagemgr.hxx"
-#include "svtools/txtattr.hxx"
+#include "vcl/txtattr.hxx"
 #include "tools/datetime.hxx"
 #include "tools/urlobj.hxx"
 #include "unotools/pathoptions.hxx"

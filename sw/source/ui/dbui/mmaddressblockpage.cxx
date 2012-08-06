@@ -33,8 +33,8 @@
 #include <mailmergewizard.hxx>
 #include <swtypes.hxx>
 #include <addresslistdialog.hxx>
-#include <svtools/xtextedt.hxx>
-#include <svtools/txtattr.hxx>
+#include <vcl/xtextedt.hxx>
+#include <vcl/txtattr.hxx>
 #include <vcl/msgbox.hxx>
 #include <mmconfigitem.hxx>
 #include <com/sun/star/container/XNameAccess.hpp>

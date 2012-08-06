@@ -33,13 +33,13 @@
 #include <unotools/pathoptions.hxx>
 #include <unotools/dynamicmenuoptions.hxx>
 #include <unotools/extendedsecurityoptions.hxx>
-#include <svtools/xtextedt.hxx>
+#include <vcl/xtextedt.hxx>
 #include <svl/inettype.hxx>
 #include <svtools/imagemgr.hxx>
 #include <svtools/miscopt.hxx>
 #include <svtools/templatefoldercache.hxx>
 #include <svtools/imgdef.hxx>
-#include <svtools/txtattr.hxx>
+#include <vcl/txtattr.hxx>
 #include <svtools/svtools.hrc>
 #include "templwin.hrc"
 #include <svtools/helpid.hrc>

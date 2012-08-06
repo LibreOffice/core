@@ -42,7 +42,7 @@
 #include <svl/aeitem.hxx>
 #include <svl/srchitem.hxx>
 #include <svl/whiter.hxx>
-#include <svtools/xtextedt.hxx>
+#include <vcl/xtextedt.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/msgbox.hxx>
 

@@ -50,7 +50,7 @@
 #include <svl/srchitem.hxx>
 #include <svl/visitem.hxx>
 #include <svl/whiter.hxx>
-#include <svtools/xtextedt.hxx>
+#include <vcl/xtextedt.hxx>
 #include <vcl/msgbox.hxx>
 
 using namespace ::com::sun::star;

@@ -62,7 +62,7 @@
 #include <rtl/string.hxx>
 #include <unotools/bootstrap.hxx>
 #include <osl/file.hxx>
-#include <svtools/xtextedt.hxx>
+#include <vcl/xtextedt.hxx>
 #include <vcl/svapp.hxx>
 #include <comphelper/processfactory.hxx>
 #include <tools/date.hxx>

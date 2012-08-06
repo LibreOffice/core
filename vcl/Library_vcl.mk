@@ -68,6 +68,7 @@ $(eval $(call gb_Library_add_defs,vcl,\
 $(eval $(call gb_Library_use_sdk_api,vcl))
 
 $(eval $(call gb_Library_use_libraries,vcl,\
+    svl \
     tl \
     utl \
     sot \
@@ -143,6 +144,14 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/control/spinfld \
     vcl/source/control/tabctrl \
     vcl/source/control/throbber \
+    vcl/source/edit/vclmedit \
+    vcl/source/edit/textdata \
+    vcl/source/edit/textdoc \
+    vcl/source/edit/texteng \
+    vcl/source/edit/textundo \
+    vcl/source/edit/textview \
+    vcl/source/edit/txtattr \
+    vcl/source/edit/xtextedt \
     vcl/source/fontsubset/cff \
     vcl/source/fontsubset/fontsubset \
     vcl/source/fontsubset/gsub \

@@ -158,9 +158,6 @@ $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/table/tabletypes.hxx,s
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/table/tablesort.hxx,svtools/table/tablesort.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/templatefoldercache.hxx,svtools/templatefoldercache.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/templdlg.hxx,svtools/templdlg.hxx))
-$(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/textdata.hxx,svtools/textdata.hxx))
-$(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/texteng.hxx,svtools/texteng.hxx))
-$(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/textview.hxx,svtools/textview.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/textwindowpeer.hxx,svtools/textwindowpeer.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/toolbarmenu.hxx,svtools/toolbarmenu.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/toolboxcontroller.hxx,svtools/toolboxcontroller.hxx))
@@ -175,7 +172,6 @@ $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/toolpanel/toolpanel.hx
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/toolpanel/toolpaneldeck.hxx,svtools/toolpanel/toolpaneldeck.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/transfer.hxx,svtools/transfer.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/treelist.hxx,svtools/treelist.hxx))
-$(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/txtattr.hxx,svtools/txtattr.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/txtcmp.hxx,svtools/txtcmp.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/unitconv.hxx,svtools/unitconv.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/unoevent.hxx,svtools/unoevent.hxx))
@@ -186,7 +182,6 @@ $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/wallitem.hxx,svtools/w
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/wizardmachine.hxx,svtools/wizardmachine.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/wizdlg.hxx,svtools/wizdlg.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/wmf.hxx,svtools/wmf.hxx))
-$(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/xtextedt.hxx,svtools/xtextedt.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/xwindowitem.hxx,svtools/xwindowitem.hxx))
 
 # vim: set noet sw=4 ts=4:

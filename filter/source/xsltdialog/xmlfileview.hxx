@@ -32,7 +32,7 @@
 #include <svl/lstner.hxx>
 #include <vcl/timer.hxx>
 
-#include <svtools/xtextedt.hxx>
+#include <vcl/xtextedt.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/ctrl.hxx>
 #include <vcl/button.hxx>

@@ -20,7 +20,7 @@
 #ifndef _TEXTDATA_HXX
 #define _TEXTDATA_HXX
 
-#include "svtools/svtdllapi.h"
+#include <vcl/dllapi.h>
 #include <svl/brdcst.hxx>
 #include <svl/smplhint.hxx>
 #include <tools/string.hxx>
@@ -72,7 +72,7 @@ inline sal_Bool TextPaM::operator > ( const TextPaM& rPaM ) const
              ( ( mnPara == rPaM.mnPara ) && mnIndex > rPaM.mnIndex ) ) ? sal_True : sal_False;
 }
 
-class SVT_DLLPUBLIC TextSelection
+class VCL_DLLPUBLIC TextSelection
 {
 private:
     TextPaM         maStartPaM;
@@ -122,7 +122,7 @@ inline sal_Bool TextSelection::operator != ( const TextSelection& rSel ) const
 #define TEXT_HINT_VIEWSCROLLED          100
 #define TEXT_HINT_VIEWSELECTIONCHANGED  101
 
-class SVT_DLLPUBLIC TextHint : public SfxSimpleHint
+class VCL_DLLPUBLIC TextHint : public SfxSimpleHint
 {
 private:
     sal_uLong   mnValue;

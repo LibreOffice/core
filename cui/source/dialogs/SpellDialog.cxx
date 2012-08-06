@@ -36,7 +36,7 @@
 #include <sfx2/bindings.hxx>
 #include <svl/undo.hxx>
 #include <unotools/lingucfg.hxx>
-#include <svtools/textdata.hxx>
+#include <vcl/textdata.hxx>
 #include <svtools/filter.hxx>
 #include <editeng/unolingu.hxx>
 #include <editeng/splwrap.hxx>

@@ -19,9 +19,9 @@
 #ifndef _XTEXTEDT_HXX
 #define _XTEXTEDT_HXX
 
-#include "svtools/svtdllapi.h"
-#include <svtools/texteng.hxx>
-#include <svtools/textview.hxx>
+#include <vcl/dllapi.h>
+#include <vcl/texteng.hxx>
+#include <vcl/textview.hxx>
 
 namespace com {
 namespace sun {
@@ -30,7 +30,7 @@ namespace util {
     struct SearchOptions;
 }}}}
 
-class SVT_DLLPUBLIC ExtTextEngine : public TextEngine
+class VCL_DLLPUBLIC ExtTextEngine : public TextEngine
 {
 private:
     String              maGroupChars;
@@ -46,7 +46,7 @@ public:
     sal_Bool                Search( TextSelection& rSel, const ::com::sun::star::util::SearchOptions& rSearchOptions, sal_Bool bForward = sal_True );
 };
 
-class SVT_DLLPUBLIC ExtTextView : public TextView
+class VCL_DLLPUBLIC ExtTextView : public TextView
 {
 protected:
     sal_Bool                ImpIndentBlock( sal_Bool bRight );
