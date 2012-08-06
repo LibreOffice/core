@@ -109,7 +109,7 @@ endef
 # gb_Library__get_final_target has been invented for that purpose...
 define gb_Library_set_componentfile
 $(call gb_Library_get_target,$(gb_Library__get_name)) : \
-	COMPONENT := $$(if $$(COMPONENT),\
+	COMPONENT := $$(if $$(and $$(COMPONENT),$(filter-out $(gb_MERGEDLIBS),$(1))),\
 	  $$(call gb_Output_error,$(1) already has a component file $$(COMPONENT)))$(2)
 $(call gb_ComponentTarget_ComponentTarget,$(2),\
 	$(call gb_Library__get_componentprefix,$(gb_Library__get_name)),\
