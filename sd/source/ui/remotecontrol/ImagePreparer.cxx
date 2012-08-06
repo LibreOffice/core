@@ -117,7 +117,7 @@ void ImagePreparer::sendPreview( sal_uInt32 aSlideNumber )
     aBuffer.append( aEncodedShortString.getStr() );
     aBuffer.append( "\n\n" );
     pTransmitter->addMessage( aBuffer.makeStringAndClear(),
-        Transmitter::Priority::LOW );
+        Transmitter::PRIORITY_LOW );
 
 }
 
@@ -219,7 +219,7 @@ void ImagePreparer::sendNotes( sal_uInt32 aSlideNumber )
     aBuffer.append( "</html></body>" );
     aBuffer.append( "\n\n" );
     pTransmitter->addMessage( aBuffer.makeStringAndClear(),
-        Transmitter::Priority::LOW );
+        Transmitter::PRIORITY_LOW );
 }
 
 sal_Bool ExportTo( uno::Reference< drawing::XDrawPage>& aNotesPage, String aUrl );

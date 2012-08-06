@@ -24,7 +24,7 @@ class Transmitter
 : public salhelper::Thread
 {
 public:
-    enum Priority { LOW = 1, HIGH };
+    enum Priority { PRIORITY_LOW = 1, PRIORITY_HIGH };
     Transmitter( osl::StreamSocket &aSocket );
     ~Transmitter();
     void addMessage( const rtl::OString& aMessage, const Priority aPriority );

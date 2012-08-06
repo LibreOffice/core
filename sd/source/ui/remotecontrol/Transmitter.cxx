@@ -61,10 +61,10 @@ void Transmitter::addMessage( const OString& aMessage, const Priority aPriority 
     ::osl::MutexGuard aQueueGuard( mQueueMutex );
     switch ( aPriority )
     {
-        case Priority::LOW:
+        case PRIORITY_LOW:
             mLowPriority.push( aMessage );
             break;
-        case Priority::HIGH:
+        case PRIORITY_HIGH:
             mHighPriority.push( aMessage );
             break;
     }

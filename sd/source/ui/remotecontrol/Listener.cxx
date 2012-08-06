@@ -50,7 +50,7 @@ void Listener::init( const css::uno::Reference< css::presentation::XSlideShowCon
 	       .append( OString::valueOf( aCurrentSlide ) ).append( "\n\n" );
 
         pTransmitter->addMessage( aBuffer.makeStringAndClear(),
-                                  Transmitter::Priority::HIGH );
+                                  Transmitter::PRIORITY_HIGH );
 
         mPreparer.set( new ImagePreparer( aController, pTransmitter, mPreparer ) );
         mPreparer->launch();
@@ -118,7 +118,7 @@ void SAL_CALL Listener::slideTransitionStarted (void)
     if ( pTransmitter )
     {
         pTransmitter->addMessage( aBuilder.makeStringAndClear(),
-                               Transmitter::Priority::HIGH );
+                               Transmitter::PRIORITY_HIGH );
     }
 }
 
