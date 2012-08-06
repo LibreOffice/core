@@ -10967,6 +10967,7 @@ else
     esac
 fi
 AC_SUBST(SYSTEM_GLIB)
+BUILD_TYPE="$BUILD_TYPE GLIB"
 
 dnl Get system's glib flags and libs.
 dnl The i18npool LanguageTag wrapper uses it for liblangtag.
