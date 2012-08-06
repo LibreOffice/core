@@ -1843,11 +1843,13 @@ void SdrModel::setLock( bool bLock )
 {
     if( mbModelLocked != bLock )
     {
+        // #i120437# need to set first, else ImpReformatAllEdgeObjects will do nothing
+        mbModelLocked = bLock;
+
         if( sal_False == bLock )
         {
             ImpReformatAllEdgeObjects();
         }
-        mbModelLocked = bLock;
     }
 }
 

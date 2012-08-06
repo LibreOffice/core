@@ -4508,6 +4508,9 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
 
                             RotatePoint(aPoint1, aCenter, ss, cc);
                             RotatePoint(aPoint2, aCenter, ss, cc);
+
+                            // #i120437# reset rotation, it is part of the path and shall not be applied again
+                            nObjectRotation = 0;
                         }
 
                         // rotate/mirror line within the area as we need it
@@ -4516,14 +4519,19 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                             sal_Int32 n = aPoint1.X();
                             aPoint1.X() = aPoint2.X();
                             aPoint2.X() = n;
+
+                            // #i120437# reset hor filp
+                            nSpFlags &= ~SP_FFLIPH;
                         }
                         if ( nSpFlags & SP_FFLIPV )
                         {
                             sal_Int32 n = aPoint1.Y();
                             aPoint1.Y() = aPoint2.Y();
                             aPoint2.Y() = n;
+
+                            // #i120437# reset ver filp
+                            nSpFlags &= ~SP_FFLIPV;
                         }
-                        nSpFlags &= ~( SP_FFLIPV | SP_FFLIPH );
 
                         pRet->NbcSetPoint(aPoint1, 0L); // start point
                         pRet->NbcSetPoint(aPoint2, 1L); // endpoint
