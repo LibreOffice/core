@@ -16,13 +16,13 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 
-$(eval $(call gb_Configuration_Configuration,registry))
+$(eval $(call gb_Configuration_Configuration,officecfg))
 
-$(eval $(call gb_Configuration_add_schemas,registry,officecfg/registry/schema,\
+$(eval $(call gb_Configuration_add_schemas,officecfg,officecfg/registry/schema,\
 	$(addprefix org/openoffice/,$(addsuffix .xcs,$(officecfg_XCSFILES))) \
 ))
 
-$(eval $(call gb_Configuration_add_datas,registry,officecfg/registry/data,\
+$(eval $(call gb_Configuration_add_datas,officecfg,officecfg/registry/data,\
 	org/openoffice/Inet.xcu \
 	org/openoffice/System.xcu \
 	org/openoffice/UserProfile.xcu \
@@ -52,7 +52,7 @@ $(eval $(call gb_Configuration_add_datas,registry,officecfg/registry/data,\
 	org/openoffice/ucb/Configuration.xcu \
 ))
 
-$(eval $(call gb_Configuration_add_spool_modules,registry,officecfg/registry/data,\
+$(eval $(call gb_Configuration_add_spool_modules,officecfg,officecfg/registry/data,\
 	org/openoffice/Inet-macosx.xcu \
 	org/openoffice/Inet-unixdesktop.xcu \
 	org/openoffice/Inet-wnt.xcu \
@@ -113,11 +113,11 @@ $(eval $(call gb_Configuration_add_spool_modules,registry,officecfg/registry/dat
 ))
 
 # perhaps this file should be moved 2 levels up?
-$(eval $(call gb_Configuration_add_spool_langpack,registry,officecfg/registry/data/org/openoffice,\
+$(eval $(call gb_Configuration_add_spool_langpack,officecfg,officecfg/registry/data/org/openoffice,\
 	Langpack.xcu \
 ))
 
-$(eval $(call gb_Configuration_add_localized_datas,registry,officecfg/registry/data,\
+$(eval $(call gb_Configuration_add_localized_datas,officecfg,officecfg/registry/data,\
 	org/openoffice/Setup.xcu \
 	org/openoffice/Office/Accelerators.xcu \
 	org/openoffice/Office/Common.xcu \
