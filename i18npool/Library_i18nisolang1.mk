@@ -31,6 +31,7 @@ $(eval $(call gb_Library_Library,i18nisolang1))
 $(eval $(call gb_Library_use_package,i18nisolang1,i18npool_inc))
 
 $(eval $(call gb_Library_set_include,i18nisolang1,\
+	-I$(SRCDIR)/i18npool/inc \
 	$$(INCLUDE) \
 ))
 
@@ -49,6 +50,11 @@ $(eval $(call gb_Library_add_exception_objects,i18nisolang1,\
 	i18npool/source/isolang/insys \
 	i18npool/source/isolang/isolang \
 	i18npool/source/isolang/mslangid \
+	i18npool/source/languagetag/languagetag \
 ))
+
+$(eval $(call gb_Library_use_external,i18nisolang1,glib))
+
+$(eval $(call gb_Library_use_external,i18nisolang1,liblangtag))
 
 # vim: set noet sw=4 ts=4:

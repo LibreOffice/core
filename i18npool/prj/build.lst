@@ -1,2 +1,2 @@
-inp  i18npool    :   bridges sax stoc comphelper CPPUNIT:cppunit ICU:icu i18nutil regexp cpputools LIBXSLT:libxslt udkapi offapi ure unotest NULL
+inp  i18npool    :   bridges sax stoc comphelper CPPUNIT:cppunit ICU:icu i18nutil regexp cpputools LIBXSLT:libxslt LIBXML2:libxml2 LIBLANGTAG:liblangtag udkapi offapi ure unotest NULL
 inp  i18npool\prj       nmake   -   all inp_prj NULL

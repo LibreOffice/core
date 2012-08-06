@@ -427,6 +427,67 @@ endef
 endif # SYSTEM_LIBXSLT
 
 
+ifeq ($(SYSTEM_GLIB),YES)
+
+define gb_LinkTarget__use_glib
+$(call gb_LinkTarget_set_include,$(1),\
+	$$(INCLUDE) \
+	$(GLIB_CFLAGS) \
+)
+
+$(call gb_LinkTarget_add_libs,$(1),$(GLIB_LIBS))
+
+endef
+
+else # !SYSTEM_GLIB
+
+$(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
+	glib \
+))
+
+define gb_LinkTarget__use_glib
+$(call gb_LinkTarget_set_include,$(1),\
+	$$(INCLUDE) \
+	-I$(OUTDIR)/inc/external/glib-2.0 \
+)
+
+$(call gb_LinkTarget_use_libraries,$(1),\
+	glib-2.0 \
+)
+
+endef
+
+endif # SYSTEM_GLIB
+
+
+ifeq ($(SYSTEM_LIBLANGTAG),YES)
+
+define gb_LinkTarget__use_liblangtag
+$(call gb_LinkTarget_set_include,$(1),\
+	$$(INCLUDE) \
+	$(LIBLANGTAG_CFLAGS) \
+)
+
+$(call gb_LinkTarget_add_libs,$(1),$(LIBLANGTAG_LIBS))
+
+endef
+
+else # !SYSTEM_LIBLANGTAG
+
+$(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
+	langtag \
+))
+
+define gb_LinkTarget__use_liblangtag
+$(call gb_LinkTarget_use_libraries,$(1),\
+	langtag \
+)
+
+endef
+
+endif # SYSTEM_LIBLANGTAG
+
+
 ifeq ($(SYSTEM_NEON),YES)
 
 define gb_LinkTarget__use_neon
