@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Package_Package,cli_ure_cliuno,$(SRCDIR)/cli_ure/source))
 
-$(eval $(call gb_Package_add_files,bin,\
+$(eval $(call gb_Package_add_files,cli_ure_cliuno,bin,\
 	climaker/climaker.exe.config \
 	cliuno.snk \
 ))
