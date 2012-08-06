@@ -3752,9 +3752,19 @@ void DocxAttributeOutput::ParaTabStop( const SvxTabStopItem& rTabStop )
     const SfxPoolItem* pLR = m_rExport.HasItem( RES_LR_SPACE );
     long nCurrentLeft = pLR ? ((const SvxLRSpaceItem*)pLR)->GetTxtLeft() : 0;
 
+    sal_uInt16 nCount = rTabStop.Count();
+
+    // <w:tabs> must contain at least one <w:tab>, so don't write it empty
+    if( nCount == 0 )
+        return;
+    if( nCount == 1 && rTabStop[ 0 ].GetAdjustment() == SVX_TAB_ADJUST_DEFAULT )
+    {
+        GetExport().setDefaultTabStop( rTabStop[ 0 ].GetTabPos());
+        return;
+    }
+
     m_pSerializer->startElementNS( XML_w, XML_tabs, FSEND );
 
-    sal_uInt16 nCount = rTabStop.Count();
     for (sal_uInt16 i = 0; i < nCount; i++ )
     {
         if( rTabStop[i].GetAdjustment() != SVX_TAB_ADJUST_DEFAULT )
