@@ -53,6 +53,11 @@ define gb_Helper_native_path
 $(call gb_Output_error,gb_Helper_native_path: Do not use. Should not be necessary.)
 endef
 
+# cygwin seems to eat one backslash when executing command, thus replace with '\\'
+define gb_Helper_windows_path
+$(subst /,\\,$(1))
+endef
+
 define gb_Helper_make_clean_target
 gb_$(1)_get_clean_target = $(WORKDIR)/Clean/$(1)/$$(1)
 

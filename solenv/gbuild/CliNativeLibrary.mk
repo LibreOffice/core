@@ -35,7 +35,7 @@ $(call gb_CliNativeLibraryTarget_get_target,%) :
 $(call gb_CliNativeLibraryTarget_get_clean_target,%) :
 	$(call gb_Output_announce,$*,$(false),SN ,4)
 	$(call gb_Helper_abbreviate_dirs,\
-		rm -r $(call gb_CliNativeLibraryTarget_get_target,$*) \
+		rm -rf $(call gb_CliNativeLibraryTarget_get_target,$*) \
 	)
 
 define gb_CliNativeLibraryTarget_CliNativeLibraryTarget
