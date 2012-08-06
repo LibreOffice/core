@@ -1152,6 +1152,7 @@ private:
 protected:
     std::vector<WW8_CP> aCps;
     std::vector<const void*> aCntnt;                // PTRARR of SwFmtFtn/PostIts/..
+    std::vector<const SwFrmFmt*> aSpareFmts;        //a backup for aCntnt: if there's no SdrObject, stores the fmt directly here
     WW8_WrPlc0* pTxtPos;            // positions of the individual texts
 
     WW8_WrPlcSubDoc();
@@ -1226,6 +1227,7 @@ public:
     bool WriteTxt( WW8Export& rWrt );
     void WritePlc( WW8Export& rWrt ) const;
     void Append( const SdrObject& rObj, sal_uInt32 nShapeId );
+    void Append( const SwFrmFmt* pFmt, sal_uInt32 nShapeId );
     sal_uInt16 Count() const { return aCntnt.size(); }
     sal_uInt16 GetPos( const void* p ) const
     {

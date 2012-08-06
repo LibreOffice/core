@@ -763,6 +763,16 @@ void WW8_WrPlcTxtBoxes::Append( const SdrObject& rObj, sal_uInt32 nShapeId )
 {
     aCntnt.push_back( &rObj );
     aShapeIds.push_back( nShapeId );
+    //save NULL, if we have an actual SdrObject
+    aSpareFmts.push_back(NULL);
+}
+
+void WW8_WrPlcTxtBoxes::Append( const SwFrmFmt* pFmt, sal_uInt32 nShapeId )
+{
+    //no sdr object, we insert a NULL in the aCntnt and save the real fmt in aSpareFmts.
+    aCntnt.push_back( NULL );
+    aShapeIds.push_back( nShapeId );
+    aSpareFmts.push_back(pFmt);
 }
 
 const std::vector<sal_uInt32>* WW8_WrPlcTxtBoxes::GetShapeIdArr() const
@@ -2702,6 +2712,24 @@ sal_Int32 SwEscherEx::WriteFlyFrm(const DrawObj &rObj, sal_uInt32 &rShapeId,
 
                 nBorderThick = WriteTxtFlyFrame(rObj, rShapeId, nTxtId, rPVec);
             }
+
+            //In browse mode the sdr object doesn't always exist. For example, the
+            //object is in the hidden header/footer. We save the fmt directly
+            //in such cases; we copy most of the logic from the block above
+            const bool bBrowseMode = (rFmt.getIDocumentSettingAccess())->get(IDocumentSettingAccess::BROWSE_MODE);
+            if( bBrowseMode && rFmt.GetDoc())
+            {
+                if( !rFmt.GetChain().GetPrev() )//obj in header/footer?
+                {
+                    rShapeId = GetFlyShapeId(rFmt, rObj.mnHdFtIndex, rPVec);
+                    pTxtBxs->Append( &rFmt, rShapeId );
+                    sal_uInt32 nTxtId = pTxtBxs->Count();
+
+                    nTxtId *= 0x10000;
+                    nBorderThick = WriteTxtFlyFrame(rObj, rShapeId, nTxtId, rPVec);
+                }
+            }
+
         }
     }
     return nBorderThick;
