@@ -57,4 +57,6 @@ $(eval $(call gb_Library_use_external,i18nisolang1,glib))
 
 $(eval $(call gb_Library_use_external,i18nisolang1,liblangtag))
 
+$(eval $(call gb_Library_use_external,i18nisolang1,libxml2))
+
 # vim: set noet sw=4 ts=4:

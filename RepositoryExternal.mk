@@ -442,7 +442,8 @@ endef
 else # !SYSTEM_GLIB
 
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
-	glib \
+	glib-2.0 \
+	gmodule-2.0 \
 ))
 
 define gb_LinkTarget__use_glib
@@ -453,6 +454,7 @@ $(call gb_LinkTarget_set_include,$(1),\
 
 $(call gb_LinkTarget_use_libraries,$(1),\
 	glib-2.0 \
+	gmodule-2.0 \
 )
 
 endef
