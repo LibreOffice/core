@@ -108,6 +108,9 @@ endef
 # But the component target also must be delivered, so a new phony target
 # gb_Library__get_final_target has been invented for that purpose...
 define gb_Library_set_componentfile
+$(call gb_Library_get_target,$(gb_Library__get_name)) : \
+	COMPONENT := $$(if $$(COMPONENT),\
+	  $$(call gb_Output_error,$(1) already has a component file $$(COMPONENT)))$(2)
 $(call gb_ComponentTarget_ComponentTarget,$(2),\
 	$(call gb_Library__get_componentprefix,$(gb_Library__get_name)),\
 	$(call gb_Library_get_runtime_filename,$(gb_Library__get_name)))
