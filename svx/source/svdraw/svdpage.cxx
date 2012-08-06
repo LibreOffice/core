@@ -727,14 +727,17 @@ void SdrObjList::ReformatAllTextObjects()
 */
 void SdrObjList::ReformatAllEdgeObjects()
 {
-    const sal_uInt32 nCount=GetObjCount();
-    sal_uInt32 nObj;
+    // #120437# go over whole hierarchy, not only over object level null (seen from grouping)
+    SdrObjListIter aIter(*this, IM_DEEPNOGROUPS);
 
-    for( nObj = 0; nObj < nCount; nObj++ )
+    while(aIter.IsMore())
     {
-        SdrObject* pObj = GetObj(nObj);
-        if( pObj->ISA(SdrEdgeObj) )
-            static_cast<SdrEdgeObj*>(pObj)->Reformat();
+        SdrEdgeObj* pSdrEdgeObj = dynamic_cast< SdrEdgeObj* >(aIter.Next());
+
+        if(pSdrEdgeObj)
+        {
+            pSdrEdgeObj->Reformat();
+        }
     }
 }
 
@@ -1815,7 +1818,9 @@ void SdrPage::SetInserted( bool bIns )
     {
         mbInserted = bIns;
 
-        SdrObjListIter aIter( *this, IM_FLAT );
+        // #120437# go over whole hierarchy, not only over object level null (seen from grouping)
+        SdrObjListIter aIter(*this, IM_DEEPNOGROUPS);
+
          while ( aIter.IsMore() )
         {
             SdrObject* pObj = aIter.Next();

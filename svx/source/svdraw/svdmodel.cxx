@@ -1899,13 +1899,15 @@ void SdrModel::setLock( sal_Bool bLock )
 {
     if( mbModelLocked != bLock )
     {
+        // #120437# need to set first, else ImpReformatAllEdgeObjects will do nothing
+        mbModelLocked = bLock;
+
         if( sal_False == bLock )
         {
             // ReformatAllTextObjects(); #103122# due to a typo in the above if, this code was never
             //                           executed, so I remove it until we discover that we need it here
             ImpReformatAllEdgeObjects();    // #103122#
         }
-        mbModelLocked = bLock;
     }
 }
 
