@@ -43,20 +43,20 @@ $(call gb_CustomTarget_get_workdir,cli_ure/source)/ure/assembly.cs : \
 $(call gb_CustomTarget_get_workdir,cli_ure/source)/basetypes/assembly.cs :
 	$(GNUCOPY) $< $@.tmp && \
 	echo '[assembly:System.Reflection.AssemblyVersion( "$(CLI_BASETYPES_NEW_VERSION)" )]' >> $@.tmp && \
-	$(if $(cli_ure_CCNUMVER_GOOD),echo '[assembly:System.Reflection.AssemblyKeyFile( @"$(OUTDIR)/bin/cliuno.snk" )]' >> $@.tmp &&) \
+	$(if $(cli_ure_CCNUMVER_GOOD),echo '[assembly:System.Reflection.AssemblyKeyFile( @"$(call gb_Helper_windows_path,$(OUTDIR)/bin/cliuno.snk)" )]' >> $@.tmp &&) \
 	mv $@.tmp $@
 
 # TODO use macros for this
 $(call gb_CustomTarget_get_workdir,cli_ure/source)/native/assembly.cxx :
 	$(GNUCOPY) $< $@.tmp && \
 	echo '[assembly:System::Reflection::AssemblyVersion( "$(CLI_CPPUHELPER_NEW_VERSION)" )];' >> $@.tmp && \
-	echo '[assembly:System::Reflection::AssemblyKeyFile( "$(OUTDIR)/bin/cliuno.snk" )];' >> $@.tmp && \
+	echo '[assembly:System::Reflection::AssemblyKeyFile( "$(call gb_Helper_windows_path,$(OUTDIR)/bin/cliuno.snk)" )];' >> $@.tmp && \
 	mv $@.tmp $@
 
 $(call gb_CustomTarget_get_workdir,cli_ure/source)/ure/assembly.cs :
 	$(GNUCOPY) $< $@.tmp && \
 	echo '[assembly:System.Reflection.AssemblyVersion( "$(CLI_URE_NEW_VERSION)" )]' >> $@.tmp && \
-	$(if $(cli_ure_CCNUMVER_GOOD),echo '[assembly:System.Reflection.AssemblyKeyFile( @"$(OUTDIR)/bin/cliuno.snk" )]' >> $@.tmp &&) \
+	$(if $(cli_ure_CCNUMVER_GOOD),echo '[assembly:System.Reflection.AssemblyKeyFile( @"$(call gb_Helper_windows_path,$(OUTDIR)/bin/cliuno.snk)" )]' >> $@.tmp &&) \
 	mv $@.tmp $@
 
 # vim: set noet sw=4 ts=4:

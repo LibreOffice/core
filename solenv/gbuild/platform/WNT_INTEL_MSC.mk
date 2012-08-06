@@ -740,7 +740,7 @@ gb_InstallScript_EXT := .inf
 # CliAssemblyTarget class
 
 gb_CliAssemblyTarget_POLICYEXT := $(gb_Library_DLLEXT)
-gb_CliAssemblyTarget_get_dll = $(gb_Library_OUTDIRLOCATION)/$(1)$(gb_CliAssemblyTarget_POLICYEXT)
+gb_CliAssemblyTarget_get_dll = $(OUTDIR)/bin/$(1)$(gb_CliAssemblyTarget_POLICYEXT)
 
 # ExtensionTarget class
 

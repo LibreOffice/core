@@ -30,7 +30,7 @@
 
 namespace cli_ure {
 
-WCHAR * filename(WCHAR * path) {
+SAL_DLLPUBLIC_EXPORT WCHAR * filename(WCHAR * path) {
     WCHAR * f = path;
     for (WCHAR * p = path;;) {
         switch (*p++) {
