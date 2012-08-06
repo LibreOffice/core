@@ -19,61 +19,14 @@
 #include <objdlg.hrc>
 #include <helpid.hrc>
 
-#define MASKCOLOR   MaskColor = Color { Red = 0xFFFF; Green = 0x0000; Blue = 0xFFFF; };
-
-DockingWindow RID_BASICIDE_OBJCAT
+Control RID_TLB_MACROS
 {
-    HelpID = "basctl:FloatingWindow:RID_BASICIDE_OBJCAT";
-    OutputSize = TRUE ;
-    SVLook = TRUE ;
-    Size = MAP_APPFONT ( 191 , 179 ) ;
-    Text [ en-US ] = "Object Catalog" ;
-    Closeable = TRUE ;
-    Moveable = TRUE ;
-    Sizeable = TRUE ;
-    Zoomable = TRUE ;
-    Hide = TRUE ;
-    ClipChildren = TRUE ;
-    Border = TRUE ;
-    Control RID_TLB_MACROS
-    {
-        HelpId = HID_BASICIDE_OBJECTCAT ;
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 3 , 24 ) ;
-        Size = MAP_APPFONT ( 185 , 126 ) ;
-        TabStop = TRUE ;
-    };
-    ToolBox RID_TB_TOOLBOX
-    {
-        HelpId = HID_BASICIDE_OBJECTS ;
-        SVLook = TRUE ;
-        Align = BOXALIGN_TOP ;
-        Pos = MAP_APPFONT ( 4 , 6 ) ;
-        ItemImageList = ImageList
-        {
-            Prefix = "im";
-            MASKCOLOR
-            IdList =
-            {
-                TBITEM_SHOW ;
-            };
-        };
-        ItemList =
-        {
-            ToolBoxItem
-            {
-                Identifier = TBITEM_SHOW ;
-                HelpId = HID_BASICIDE_OBJCAT_SHOW ;
-                Text [ en-US ] = "Show" ;
-            };
-        };
-    };
-    FixedText RID_FT_MACRODESCR
-    {
-        WordBreak = TRUE ;
-        Pos = MAP_APPFONT ( 3 , 156 ) ;
-        Size = MAP_APPFONT ( 185 , 18 ) ;
-    };
+    TabStop = TRUE ;
+};
+
+String RID_BASICIDE_OBJCAT
+{
+    Text [en-US] = "Object Catalog";
 };
 
 String RID_STR_TLB_MACROS

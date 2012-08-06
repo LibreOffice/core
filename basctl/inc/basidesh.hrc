@@ -21,9 +21,6 @@
 
 #include <svx/svxids.hrc>
 
-// Width of Object Catalog pane in pixels
-#define OBJCAT_PANE_WIDTH 240
-
 // Resource-ID's...
 #ifndef _SVX_NOIDERESIDS
 

@@ -151,7 +151,7 @@ BasicIDEData* BasicIDEDLL::GetExtraData()
     return m_pExtraData;
 }
 
-BasicIDEData::BasicIDEData() : aObjCatPos( INVPOSITION, INVPOSITION )
+BasicIDEData::BasicIDEData()
 {
     nBasicDialogCount = 0;
     bChoosingMacro = false;

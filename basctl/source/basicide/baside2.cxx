@@ -49,9 +49,6 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-#define SPLIT_MARGIN    5
-#define SPLIT_HEIGHT    2
-
 #define LMARGPRN        1700
 #define RMARGPRN         900
 #define TMARGPRN        2000
@@ -1402,23 +1399,25 @@ sal_Bool ModulWindow::IsPasteAllowed()
 }
 
 ModulWindowLayout::ModulWindowLayout( Window* pParent ) :
-    Window( pParent, WB_CLIPCHILDREN ),
-    aVSplitter( this, WinBits( WB_VSCROLL ) ),
-    aHSplitter( this, WinBits( WB_HSCROLL ) ),
-    aWatchWindow( this ),
-    aStackWindow( this ),
-    aObjectCatalog( this ),
-    bVSplitted(false),
-    bHSplitted(false),
+    Window(pParent, WB_CLIPCHILDREN),
+    bFirstArrange(true),
+    aLeftSplit(this, WB_HSCROLL),
+    aBottomSplit(this, WB_VSCROLL),
+    aVertSplit(this, WB_HSCROLL),
+    aObjectCatalog(this),
+    aWatchWindow(this),
+    aStackWindow(this),
     m_pModulWindow(0),
     m_aImagesNormal(IDEResId(RID_IMGLST_LAYOUT))
 {
     SetBackground(GetSettings().GetStyleSettings().GetWindowColor());
 
-    aVSplitter.SetSplitHdl( LINK( this, ModulWindowLayout, SplitHdl ) );
-    aHSplitter.SetSplitHdl( LINK( this, ModulWindowLayout, SplitHdl ) );
-    aVSplitter.Show();
-    aHSplitter.Show();
+    aLeftSplit.Show();
+    aBottomSplit.Show();
+    aVertSplit.Show();
+    aLeftSplit.SetSplitHdl( LINK(this, ModulWindowLayout, SplitHdl) );
+    aBottomSplit.SetSplitHdl( LINK(this, ModulWindowLayout, SplitHdl) );
+    aVertSplit.SetSplitHdl( LINK(this, ModulWindowLayout, SplitHdl) );
 
     aWatchWindow.Show();
     aStackWindow.Show();
@@ -1473,158 +1472,179 @@ void ModulWindowLayout::Paint( const Rectangle& )
 
 void ModulWindowLayout::ArrangeWindows()
 {
-    Size aSz = GetOutputSizePixel();
+    static long const nSplitThickness = 2;
+    static float const
+        fDefaultLeftSplit = 0.2,
+        fDefaultBottomSplit = 0.75,
+        fDefaultVertSplit = 0.67;
 
-    // test whether the splitter is in a valid area...
-    long nMinPos = SPLIT_MARGIN;
-    long nMaxPos = aSz.Height() - SPLIT_MARGIN;
+    Size const aSize = GetOutputSizePixel();
+    long const nWidth = aSize.Width(), nHeight = aSize.Height();
+    if (!nWidth || !nHeight) // empty size
+        return;
 
-    long nVSplitPos = aVSplitter.GetSplitPosPixel();
-    long nHSplitPos = aHSplitter.GetSplitPosPixel();
-    if ( !bVSplitted )
+    // When ArrangeWindows() is called first,
+    // the initial positions of the splitter lines are set.
+    if (bFirstArrange)
     {
-        nVSplitPos = aSz.Height() * 3 / 4;
-        aVSplitter.SetSplitPosPixel( nVSplitPos );
+        aLeftSplit.SetSplitPosPixel(aSize.Width()  * fDefaultLeftSplit);
+        aBottomSplit.SetSplitPosPixel(aSize.Height() * fDefaultBottomSplit);
+        aVertSplit.SetSplitPosPixel(aSize.Width()  * fDefaultVertSplit);
+        bFirstArrange = false;
     }
-    if ( !bHSplitted )
-    {
-        nHSplitPos = aSz.Width() * 2 / 3;
-        aHSplitter.SetSplitPosPixel( nHSplitPos );
-    }
-    if ( ( nVSplitPos < nMinPos ) || ( nVSplitPos > nMaxPos ) )
-        nVSplitPos = ( nVSplitPos < nMinPos ) ? 0 : ( aSz.Height() - SPLIT_HEIGHT );
 
-    if ( m_pModulWindow )
+    // resizing windows to the splitting lines
+    long const nLeftSplitPos = aLeftSplit.GetSplitPosPixel();
+    long const nBottomSplitPos = aBottomSplit.GetSplitPosPixel();
+    long const nVertSplitPos = aVertSplit.GetSplitPosPixel();
+    // which window is docked?
+    bool const bObjCat = !aObjectCatalog.IsFloatingMode() && aObjectCatalog.IsVisible();
+    bool const bWatchWin = !aWatchWindow.IsFloatingMode() && aWatchWindow.IsVisible();
+    bool const bStackWin = !aStackWindow.IsFloatingMode() && aStackWindow.IsVisible();
+    long const nBottom = bStackWin || bWatchWin ? nBottomSplitPos : nHeight;
+    // left splitting line
+    if (bObjCat)
     {
-        DBG_CHKOBJ( m_pModulWindow, ModulWindow, 0 );
-        bool const bObjCat = aObjectCatalog.IsVisible();
+        aLeftSplit.SetDragRectPixel(Rectangle(Point(0, 0), Size(nWidth, nBottom)));
+        aLeftSplit.SetPosPixel(Point(nLeftSplitPos, 0));
+        aLeftSplit.SetSizePixel(Size(nSplitThickness, nBottom));
+        aLeftSplit.Show();
+    }
+    else
+        aLeftSplit.Hide();
+    // bottom splitting line
+    if (bWatchWin || bStackWin)
+    {
+        aBottomSplit.SetDragRectPixel(Rectangle(Point(0, 0), aSize));
+        aBottomSplit.SetPosPixel(Point(0, nBottomSplitPos));
+        aBottomSplit.SetSizePixel(Size(nWidth, nSplitThickness));
+        aBottomSplit.Show();
+    }
+    else
+        aBottomSplit.Hide();
+    // vertical (bottom) splitting line
+    if (bWatchWin || bStackWin)
+    {
+        Point const aPos(nVertSplitPos, nBottomSplitPos + nSplitThickness);
+        aVertSplit.SetDragRectPixel(Rectangle(Point(0, aPos.Y()), Size(nWidth, nHeight - aPos.Y())));
+        aVertSplit.SetPosSizePixel(aPos, Size(nSplitThickness, nHeight - aPos.Y()));
+        aVertSplit.Show();
+    }
+    else
+        aVertSplit.Hide();
+    // editor window
+    if (m_pModulWindow)
+    {
+        DBG_CHKOBJ(m_pModulWindow, ModulWindow, 0);
+        long const nLeft = bObjCat ? nLeftSplitPos + nSplitThickness : 0;
         m_pModulWindow->SetPosSizePixel(
-            Point(bObjCat ? OBJCAT_PANE_WIDTH : 0, 0),
-            Size(bObjCat ? aSz.Width() - OBJCAT_PANE_WIDTH : aSz.Width(), nVSplitPos + 1)
+            Point(nLeft, 0),
+            Size(nWidth - nLeft, nBottom)
         );
     }
-
-    aVSplitter.SetDragRectPixel( Rectangle( Point( 0, 0 ), Size( aSz.Width(), aSz.Height() ) ) );
-    aVSplitter.SetPosPixel( Point( 0, nVSplitPos ) );
-    aVSplitter.SetSizePixel( Size( aSz.Width(), SPLIT_HEIGHT ) );
-
-    aHSplitter.SetDragRectPixel( Rectangle( Point( 0, nVSplitPos+SPLIT_HEIGHT ), Size( aSz.Width(), aSz.Height() - nVSplitPos - SPLIT_HEIGHT ) ) );
-    aHSplitter.SetPosPixel( Point( nHSplitPos, nVSplitPos ) );
-    aHSplitter.SetSizePixel( Size( SPLIT_HEIGHT, aSz.Height() - nVSplitPos ) );
-
-    Size aWWSz;
-    Point aWWPos( 0, nVSplitPos+SPLIT_HEIGHT );
-    aWWSz.Width() = nHSplitPos;
-    aWWSz.Height() = aSz.Height() - aWWPos.Y();
-    if ( !aWatchWindow.IsFloatingMode() )
-        aWatchWindow.SetPosSizePixel( aWWPos, aWWSz );
-
-    Size aSWSz;
-    Point aSWPos( nHSplitPos+SPLIT_HEIGHT, nVSplitPos+SPLIT_HEIGHT );
-    aSWSz.Width() = aSz.Width() - aSWPos.X();
-    aSWSz.Height() = aSz.Height() - aSWPos.Y();
-    if ( !aStackWindow.IsFloatingMode() )
-        aStackWindow.SetPosSizePixel( aSWPos, aSWSz );
-
-    if ( !aObjectCatalog.IsFloatingMode() )
+    // object catalog (left)
+    if (bObjCat)
     {
-        Size aOCSz( OBJCAT_PANE_WIDTH, aSz.Height() - aSWSz.Height() - 3 );
-        Point aOCPos( 0, 0 );
-        aObjectCatalog.SetPosSizePixel( aOCPos, aOCSz );
+        aObjectCatalog.SetPosPixel(Point(0, 0));
+        aObjectCatalog.SetSizePixel(Size(nLeftSplitPos, nBottom));
     }
-
-    if ( aStackWindow.IsFloatingMode() && aWatchWindow.IsFloatingMode() )
-        aHSplitter.Hide();
-    else
-        aHSplitter.Show();
-
-    long nHDoubleClickSplitPosX = aSz.Width()-aHSplitter.GetSizePixel().Width();
-    if ( aHSplitter.GetSplitPosPixel() < nHDoubleClickSplitPosX )
-        aHSplitter.SetLastSplitPosPixel( nHDoubleClickSplitPosX );
-
-
-    long nHDoubleClickSplitPosY = aSz.Height()-aVSplitter.GetSizePixel().Height();
-    if ( aVSplitter.GetSplitPosPixel() < nHDoubleClickSplitPosY )
-        aVSplitter.SetLastSplitPosPixel( nHDoubleClickSplitPosY );
+    // watch (bottom left)
+    if (bWatchWin)
+    {
+        Point const aPos(0, nBottomSplitPos + nSplitThickness);
+        aWatchWindow.SetPosPixel(aPos);
+        aWatchWindow.SetSizePixel(Size(nVertSplitPos, nHeight - aPos.Y()));
+    }
+    // call stack (bottom right)
+    if (bStackWin)
+    {
+        Point const aPos(nVertSplitPos + nSplitThickness, nBottomSplitPos + nSplitThickness);
+        aStackWindow.SetPosPixel(aPos);
+        aStackWindow.SetSizePixel(Size(nWidth - aPos.X(), nHeight - aPos.Y()));
+    }
 }
 
 IMPL_LINK( ModulWindowLayout, SplitHdl, Splitter *, pSplitter )
 {
-    if ( pSplitter == &aVSplitter )
-        bVSplitted = true;
-    else
-        bHSplitted = true;
-
+    // The split line cannot be closer to the edges than nMargin pixels.
+    static long const nMargin = 16;
+    // Checking margins:
+    if (long const nSize = pSplitter->IsHorizontal() ?
+        GetOutputSizePixel().Width() :
+        GetOutputSizePixel().Height()
+    ) {
+        long const nPos = pSplitter->GetSplitPosPixel();
+        if (nPos < nMargin)
+            pSplitter->SetSplitPosPixel(nMargin);
+        if (nPos > nSize - nMargin)
+            pSplitter->SetSplitPosPixel(nSize - nMargin);
+    }
     ArrangeWindows();
     return 0;
 }
 
-sal_Bool ModulWindowLayout::IsToBeDocked( DockingWindow* pDockingWindow, const Point& rPos, Rectangle& rRect )
-{
-    // test whether dock or child:
-    // TRUE:    Floating
-    // FALSE:   Child
-    Point aPosInMe = ScreenToOutputPixel( rPos );
-    Size aSz = GetOutputSizePixel();
-    if ( ( aPosInMe.X() > 0 ) && ( aPosInMe.X() < aSz.Width() ) &&
-         ( aPosInMe.Y() > 0 ) && ( aPosInMe.Y() < aSz.Height() ) )
+//
+// IsToBeDocked() -- test whether dock or child:
+// true:  Floating
+// false: Child
+//
+bool ModulWindowLayout::IsToBeDocked (
+    DockingWindow* pDockingWindow, Point const& rPos, Rectangle& rRect
+) {
+    Point const aPos = ScreenToOutputPixel(rPos);
+    Size const aSize = GetOutputSizePixel();
+    long const nWidth = aSize.Width(), nHeight = aSize.Height();
+
+    if (aPos.X() > 0 && aPos.X() < nWidth && aPos.Y() > 0 && aPos.Y() < nHeight)
     {
-        long nVSplitPos = aVSplitter.GetSplitPosPixel();
-        long nHSplitPos = aHSplitter.GetSplitPosPixel();
-        if ( pDockingWindow == &aWatchWindow )
+        long const nLeftSplit = aLeftSplit.GetSplitPosPixel();
+        long const nBottomSplit = aBottomSplit.GetSplitPosPixel();
+        long const nVertSplit = aVertSplit.GetSplitPosPixel();
+        if (pDockingWindow == &aObjectCatalog)
         {
-            if ( ( aPosInMe.Y() > nVSplitPos ) && ( aPosInMe.X() < nHSplitPos ) )
+            if (aPos.Y() < nBottomSplit && aPos.X() < nLeftSplit)
             {
-                rRect.SetSize( Size( nHSplitPos, aSz.Height() - nVSplitPos ) );
-                rRect.SetPos( OutputToScreenPixel( Point( 0, nVSplitPos ) ) );
-                return sal_True;
+                rRect = Rectangle(
+                    OutputToScreenPixel(Point(0, 0)),
+                    Size(nLeftSplit, nBottomSplit)
+                );
+                return true;
             }
         }
-        if ( pDockingWindow == &aStackWindow )
+        else if (pDockingWindow == &aWatchWindow)
         {
-            if ( ( aPosInMe.Y() > nVSplitPos ) && ( aPosInMe.X() > nHSplitPos ) )
+            if (aPos.Y() > nBottomSplit && aPos.X() < nVertSplit)
             {
-                rRect.SetSize( Size( aSz.Width() - nHSplitPos, aSz.Height() - nVSplitPos ) );
-                rRect.SetPos( OutputToScreenPixel( Point( nHSplitPos, nVSplitPos ) ) );
-                return sal_True;
+                rRect = Rectangle(
+                    OutputToScreenPixel(Point(0, nBottomSplit)),
+                    Size(nVertSplit, nHeight - nBottomSplit)
+                );
+                return true;
             }
         }
-        if ( pDockingWindow == &aObjectCatalog )
+        else if (pDockingWindow == &aStackWindow)
         {
-            if ( ( aPosInMe.Y() > nVSplitPos ) && ( aPosInMe.X() > nHSplitPos ) )
+            if (aPos.Y() > nBottomSplit && aPos.X() > nVertSplit)
             {
-                rRect.SetSize( Size( aSz.Width() - nHSplitPos, aSz.Height() - nVSplitPos ) );
-                rRect.SetPos( OutputToScreenPixel( Point( nHSplitPos, nVSplitPos ) ) );
-                return sal_True;
+                rRect = Rectangle(
+                    OutputToScreenPixel(Point(nVertSplit, nBottomSplit)),
+                    Size(nWidth - nVertSplit, nHeight - nBottomSplit)
+                );
+                return true;
             }
         }
     }
-    return sal_False;
+    return false;
 }
 
-void ModulWindowLayout::DockaWindow( DockingWindow* pDockingWindow )
+void ModulWindowLayout::DockaWindow (DockingWindow*)
 {
-    if ( pDockingWindow == &aWatchWindow )
-    {
-        ArrangeWindows();
-    }
-    else if ( pDockingWindow == &aStackWindow )
-    {
-        ArrangeWindows();
-    }
-    else if ( pDockingWindow == &aObjectCatalog )
-    {
-        ArrangeWindows();
-    }
-#if OSL_DEBUG_LEVEL > 0
-    else
-        OSL_FAIL( "Wer will sich denn hier andocken ?" );
-#endif
+    ArrangeWindows();
 }
 
-void ModulWindowLayout::SetModulWindow( ModulWindow* pModWin )
+void ModulWindowLayout::SetModulWindow (ModulWindow* pModulWindow)
 {
-    m_pModulWindow = pModWin;
+    m_pModulWindow = pModulWindow;
     ArrangeWindows();
 }
 
@@ -1731,6 +1751,12 @@ void ModulWindowLayout::ToggleObjectCatalog ()
         m_pModulWindow->SetObjectCatalogDisplay(bShow);
     // refreshing
     ArrangeWindows();
+}
+
+// Updates the Object Catalog window.
+void ModulWindowLayout::UpdateObjectCatalog ()
+{
+    aObjectCatalog.UpdateEntries();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

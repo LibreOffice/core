@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _BASIDE2_HXX
-#define _BASIDE2_HXX
+#ifndef BASCTL_BASIDE2_HXX
+#define BASCTL_BASIDE2_HXX
 
 #include <svheader.hxx>
 
@@ -427,18 +427,18 @@ public:
 class ModulWindowLayout: public Window, public utl::ConfigurationListener
 {
 private:
+    // is ArrangeWindows() called first in this object?
+    bool bFirstArrange;
 
-    Splitter        aVSplitter;
-    Splitter        aHSplitter;
+    // splitter lines
+    Splitter aLeftSplit, aBottomSplit, aVertSplit;
 
-    WatchWindow     aWatchWindow;
-    StackWindow     aStackWindow;
-    ObjectCatalog   aObjectCatalog;
+    // dockable windows
+    ObjectCatalog aObjectCatalog;
+    WatchWindow aWatchWindow;
+    StackWindow aStackWindow;
 
-    bool            bVSplitted;
-    bool            bHSplitted;
-
-    ModulWindow * m_pModulWindow;
+    ModulWindow* m_pModulWindow;
 
     Color m_aSyntaxColors[TT_KEYWORDS + 1];
     svtools::ColorConfig m_aColorConfig;
@@ -464,14 +464,14 @@ public:
                     ~ModulWindowLayout();
 
     void            DockaWindow( DockingWindow* pDockingWin );
-    sal_Bool            IsToBeDocked( DockingWindow* pDockingWin, const Point& rPos, Rectangle& rRect );
+    bool            IsToBeDocked( DockingWindow* pDockingWin, const Point& rPos, Rectangle& rRect );
 
     void            SetModulWindow( ModulWindow* pModWin );
     ModulWindow*    GetModulWindow() const { return m_pModulWindow; }
 
     WatchWindow&    GetWatchWindow()    { return aWatchWindow; }
     StackWindow&    GetStackWindow()    { return aStackWindow; }
-    ObjectCatalog&    GetObjectCatalog()    { return aObjectCatalog; }
+    ObjectCatalog&  GetObjectCatalog()  { return aObjectCatalog; }
 
     Image getImage(sal_uInt16 nId) const;
 
@@ -479,8 +479,10 @@ public:
     { return m_aSyntaxColors[eType]; }
 
     void ToggleObjectCatalog ();
+    bool HasObjectCatalog () const { return aObjectCatalog.IsVisible(); }
+    void UpdateObjectCatalog ();
 };
 
-#endif  // _BASIDE2_HXX
+#endif // BASCTL_BASIDE2_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

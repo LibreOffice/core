@@ -40,7 +40,6 @@ class ModulWindow;
 class ModulWindowLayout;
 class DialogWindow;
 class SdrView;
-class ObjectCatalog;
 class BasicIDETabBar;
 class TabBar;
 class IDEBaseWindow;
@@ -69,8 +68,6 @@ friend class LocalizationMgr;
     friend bool implImportDialog( Window* pWin, const ::rtl::OUString& rCurPath, const ScriptDocument& rDocument, const ::rtl::OUString& aLibName );
     friend bool BasicIDE::RemoveDialog( const ScriptDocument& rDocument, const ::rtl::OUString& rLibName, const ::rtl::OUString& rDlgName );
 
-    ObjectCatalog*      pObjectCatalog;
-
     IDEWindowTable      aIDEWindowTable;
     sal_uInt16              nCurKey;
     IDEBaseWindow*      pCurWin;
@@ -98,7 +95,6 @@ friend class ContainerListenerImpl;
     void                CheckWindows();
     void                RemoveWindows( const ScriptDocument& rDocument, const ::rtl::OUString& rLibName, bool bDestroy );
     void                UpdateWindows();
-    void                ShowObjectDialog( bool bShow, bool bCreateOrDestroy );
     void                InvalidateBasicIDESlots();
     void                StoreAllWindowData( bool bPersistent = true );
     void                SetMDITitle();
@@ -109,7 +105,6 @@ friend class ContainerListenerImpl;
     void                ImplStartListening( StarBASIC* pBasic );
 
     DECL_LINK( TabBarHdl, TabBar* );
-    DECL_LINK(ObjectDialogCancelHdl, void *);
     DECL_LINK( TabBarSplitHdl, TabBar * );
 #endif
 
@@ -167,7 +162,6 @@ public:
     const ScriptDocument&
                         GetCurDocument() const { return m_aCurDocument; }
     const ::rtl::OUString&       GetCurLibName() const { return m_aCurLibName; }
-    ObjectCatalog*      GetObjectCatalog() const    { return pObjectCatalog; }
     boost::shared_ptr<LocalizationMgr> GetCurLocalizationMgr() const { return m_pCurLocalizationMgr; }
 
     ScrollBar&          GetHScrollBar()         { return aHScrollBar; }
@@ -220,6 +214,8 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >
                         GetCurrentDocument() const;
     bool SourceLinesDisplayed();
+
+    void UpdateObjectCatalog ();
 
 };
 

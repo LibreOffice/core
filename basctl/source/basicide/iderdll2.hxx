@@ -40,9 +40,6 @@ private:
 
     BasicEntryDescriptor    m_aLastEntryDesc;
 
-    Point           aObjCatPos;
-    Size            aObjCatSize;
-
     String          aAddLibPath;
     String          aAddLibFilter;
 
@@ -72,16 +69,6 @@ public:
 
     SvxSearchItem&          GetSearchItem() const;
     void                    SetSearchItem( const SvxSearchItem& rItem );
-
-    void                    SetObjectCatalogPos( const Point& rPnt )
-                                { aObjCatPos = rPnt; }
-    const Point&            GetObjectCatalogPos() const
-                                { return aObjCatPos; }
-
-    void                    SetObjectCatalogSize( const Size& rSize )
-                                { aObjCatSize = rSize; }
-    const Size&             GetObjectCatalogSize() const
-                                { return aObjCatSize; }
 
     const String&           GetAddLibPath() const   { return aAddLibPath; }
     void                    SetAddLibPath( const String& rPath ) { aAddLibPath = rPath; }

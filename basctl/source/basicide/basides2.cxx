@@ -45,13 +45,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 namespace css = ::com::sun::star;
 
-IMPL_LINK_NOARG_INLINE_START(BasicIDEShell, ObjectDialogCancelHdl)
-{
-    ShowObjectDialog( false, true );
-    return 0;
-}
-IMPL_LINK_NOARG_INLINE_END(BasicIDEShell, ObjectDialogCancelHdl)
-
 Reference< view::XRenderable > BasicIDEShell::GetRenderable()
 {
     return Reference< view::XRenderable >( new basicide::BasicRenderable( pCurWin ) );

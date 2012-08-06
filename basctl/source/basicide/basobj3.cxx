@@ -306,11 +306,9 @@ void MarkDocumentModified( const ScriptDocument& rDocument )
         pBindings->Update( SID_SAVEDOC );
     }
 
-    // Objectcatalog updaten...
-    BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
-    ObjectCatalog* pObjCatalog = pIDEShell ? pIDEShell->GetObjectCatalog() : 0;
-    if ( pObjCatalog )
-        pObjCatalog->UpdateEntries();
+    // updating the Object Catalog
+    if (BasicIDEShell* pIdeShell = BasicIDEGlobals::GetShell())
+        pIdeShell->UpdateObjectCatalog();
 }
 
 //----------------------------------------------------------------------------

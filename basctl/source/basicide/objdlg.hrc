@@ -15,18 +15,13 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _OBJDLG_HRC
-#define _OBJDLG_HRC
+#ifndef BASCTL_OBJDLG_HRC
+#define BASCTL_OBJDLG_HRC
 
 #include <svl/solar.hrc>
 
 #define RID_BASICIDE_OBJCAT     ( RID_BASICIDE_START + 70 )
-#define RID_FT_MACRODESCR   8
-#define RID_TLB_MACROS     10
-#define RID_TB_TOOLBOX     11
-
-#define TBITEM_SHOW     1
-
 #define RID_STR_TLB_MACROS      ( RID_BASICIDE_START + 71 )
+#define RID_TLB_MACROS          ( RID_BASICIDE_START + 72 )
 
-#endif // _OBJDLG_HXX
+#endif // BASCTL_OBJDLG_HRR

@@ -442,6 +442,9 @@ void BasicIDEShell::ExecuteGlobal( SfxRequest& rReq )
 
         case SID_BASICIDE_OBJCAT:
             pModulLayout->ToggleObjectCatalog();
+            // refresh the button state
+            if (SfxBindings* pBindings = BasicIDE::GetBindingsPtr())
+                pBindings->Invalidate(nSlot);
             break;
 
         case SID_BASICIDE_NAMECHANGEDONTAB:
@@ -883,9 +886,14 @@ void BasicIDEShell::GetState(SfxItemSet &rSet)
                     rSet.Put(SfxVisibilityItem(nWh, sal_False));
                 }
                 else
-                    rSet.Put(SfxVisibilityItem(nWh, sal_True));
+                {
+                    if (nWh == SID_BASICIDE_OBJCAT)
+                        rSet.Put(SfxBoolItem(nWh, pModulLayout && pModulLayout->HasObjectCatalog()));
+                    else
+                        rSet.Put(SfxVisibilityItem(nWh, sal_True));
+                }
+                break;
             }
-            break;
             case SID_BASICIDE_SHOWSBX:
             case SID_BASICIDE_CREATEMACRO:
             case SID_BASICIDE_EDITMACRO:
@@ -1424,8 +1432,6 @@ void BasicIDEShell::Activate( sal_Bool bMDI )
     {
         if( pCurWin && pCurWin->IsA( TYPE( DialogWindow ) ) )
             ((DialogWindow*)pCurWin)->UpdateBrowser();
-
-        ShowObjectDialog( true, false );
     }
 }
 
@@ -1456,8 +1462,6 @@ void BasicIDEShell::Deactivate( sal_Bool bMDI )
                 break;
             }
         }
-
-        ShowObjectDialog( false, false );
     }
 }
 

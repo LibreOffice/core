@@ -17,57 +17,42 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _OBJDLG_HXX
-#define _OBJDLG_HXX
+#ifndef BASCTL_OBJDLG_HXX
+#define BASCTL_OBJDLG_HXX
 
 #include <svheader.hxx>
 #include <vcl/floatwin.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/fixed.hxx>
-#include "vcl/image.hxx"
+#include <vcl/image.hxx>
 
 #include <bastype2.hxx>
 
-class ObjectCatalogToolBox_Impl: public ToolBox
-{
-public:
-    ObjectCatalogToolBox_Impl(Window * pParent, ResId const & rResId);
-
-private:
-    virtual void DataChanged(DataChangedEvent const & rDCEvt);
-
-    void setImages();
-
-    ImageList m_aImagesNormal;
-};
-
+//
+// ObjectCatalog -- a docking window that contains the currently loaded macros
+// in a tree structure.
+//
 class ObjectCatalog : public BasicDockingWindow
 {
-private:
-    BasicTreeListBox   aMacroTreeList;
-    ObjectCatalogToolBox_Impl aToolBox;
-    FixedText           aMacroDescr;
-    Link                aCancelHdl;
-
-protected:
-    DECL_LINK( ToolBoxHdl, ToolBox* );
-    void                CheckButtons();
-    DECL_LINK( TreeListHighlightHdl, SvTreeListBox * );
-    void                UpdateFields();
-    virtual void        Move();
-    virtual sal_Bool        Close();
-    virtual void        Resize();
-    virtual void    Paint( const Rectangle& rRect );
-
 public:
-    ObjectCatalog( Window * pParent );
-    virtual ~ObjectCatalog();
+    ObjectCatalog (Window* pParent);
+    virtual ~ObjectCatalog ();
+public:
+    void UpdateEntries () { aTree.UpdateEntries(); }
+    void SetCurrentEntry (IDEBaseWindow* pCurWin);
 
-    void                UpdateEntries();
-    void                SetCurrentEntry (IDEBaseWindow* pCurWin);
-    void                SetCancelHdl( const Link& rLink ) { aCancelHdl = rLink; }
+private:
+    // title: "Object Catalog"
+    FixedText aTitle;
+    // the tree-list of the objects
+    BasicTreeListBox aTree;
+
+private:
+    virtual void Resize (); // Window
+    virtual void ToggleFloatingMode (); // DockingWindow
+    void ArrangeWindows ();
 };
 
-#endif  //_OBJDLG_HXX
+#endif // BASCTL_OBJDLG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

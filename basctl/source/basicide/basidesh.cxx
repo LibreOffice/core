@@ -190,7 +190,6 @@ void BasicIDEShell::Init()
 
     pCurWin = 0;
     m_aCurDocument = ScriptDocument::getApplicationScriptDocument();
-    pObjectCatalog = 0;
     bCreatingWindow = false;
 
     pTabBar = new BasicIDETabBar( &GetViewFrame()->GetWindow() );
@@ -238,7 +237,6 @@ BasicIDEShell::~BasicIDEShell()
 
     aIDEWindowTable.clear();
     delete pTabBar;
-    delete pObjectCatalog;
     DestroyModulWindowLayout();
 
         ContainerListenerImpl* pListener = static_cast< ContainerListenerImpl* >( m_xLibListener.get() );
@@ -531,46 +529,6 @@ void BasicIDEShell::ArrangeTabBar()
 
 
 
-void BasicIDEShell::ShowObjectDialog( bool bShow, bool bCreateOrDestroy )
-{
-    if ( bShow )
-    {
-        if ( !pObjectCatalog && bCreateOrDestroy )
-        {
-            pObjectCatalog = new ObjectCatalog( &GetViewFrame()->GetWindow() );
-            // position is memorized in BasicIDEData and adjusted by the Dlg
-            if ( pObjectCatalog )
-            {
-                pObjectCatalog->SetCancelHdl( LINK( this, BasicIDEShell, ObjectDialogCancelHdl ) );
-                pObjectCatalog->SetCurrentEntry(pCurWin);
-            }
-        }
-
-        // the very last changes...
-        if ( pCurWin )
-            pCurWin->StoreData();
-
-        if ( pObjectCatalog )
-        {
-            pObjectCatalog->UpdateEntries();
-            pObjectCatalog->Show();
-        }
-    }
-    else if ( pObjectCatalog )
-    {
-        pObjectCatalog->Hide();
-        if ( bCreateOrDestroy )
-        {
-            // pObjectCatalog to NULL before the delete because of OS/2-focus-problem
-            ObjectCatalog* pTemp = pObjectCatalog;
-            pObjectCatalog = 0;
-            delete pTemp;
-        }
-    }
-}
-
-
-
 void BasicIDEShell::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId&,
                                         const SfxHint& rHint, const TypeId& )
 {
@@ -583,8 +541,8 @@ void BasicIDEShell::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId&,
                 case SFX_HINT_DYING:
                 {
                     EndListening( rBC, sal_True /* log off all */ );
-                    if ( pObjectCatalog )
-                        pObjectCatalog->UpdateEntries();
+                    //if ( pObjectCatalog )
+                        //pObjectCatalog->UpdateEntries();
                 }
                 break;
             }
@@ -1022,6 +980,12 @@ void BasicIDEShell::SetCurLibForLocalization( const ScriptDocument& rDocument, :
 void BasicIDEShell::ImplStartListening( StarBASIC* pBasic )
 {
     StartListening( pBasic->GetBroadcaster(), sal_True /* log on only once */ );
+}
+
+// Updates the "Object Catalog" window.
+void BasicIDEShell::UpdateObjectCatalog ()
+{
+    pModulLayout->UpdateObjectCatalog();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

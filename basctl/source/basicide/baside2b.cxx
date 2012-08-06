@@ -47,8 +47,11 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
+namespace
+{
 long nVirtToolBoxHeight;    // inited in WatchWindow, used in Stackwindow
 long nHeaderBarHeight;
+} // namespace
 
 #define SCROLL_LINE     12
 #define SCROLL_PAGE     60
@@ -1515,7 +1518,7 @@ StackWindow::StackWindow( Window* pParent ) :
     aTreeListBox( this, WB_BORDER | WB_3DLOOK | WB_HSCROLL | WB_TABSTOP ),
     aStackStr( IDEResId( RID_STR_STACK ) )
 {
-       aTreeListBox.SetHelpId(HID_BASICIDE_STACKWINDOW_LIST);
+    aTreeListBox.SetHelpId(HID_BASICIDE_STACKWINDOW_LIST);
     aTreeListBox.SetAccessibleName(String( IDEResId(RID_STR_STACKNAME)));
     aTreeListBox.SetPosPixel( Point( DWBORDER, nVirtToolBoxHeight ) );
     aTreeListBox.SetHighlightRange();
