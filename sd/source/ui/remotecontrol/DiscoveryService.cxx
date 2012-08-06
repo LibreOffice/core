@@ -50,6 +50,9 @@ DiscoveryService::DiscoveryService()
     multicastRequest.imr_interface.s_addr = htonl(INADDR_ANY);
 
     setsockopt( mSocket, IPPROTO_IP, IP_ADD_MEMBERSHIP,
+#ifdef WNT
+        (const char*)
+#endif
         &multicastRequest, sizeof(multicastRequest));
 }
 
