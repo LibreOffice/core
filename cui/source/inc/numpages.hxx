@@ -137,10 +137,9 @@ class SvxBulletPickTabPage : public SfxTabPage
     virtual void        PageCreated(SfxAllItemSet aSet);
 };
 
-/*--------------------------------------------------
-    TabPage for complete numeration
---------------------------------------------------*/
 #define NUM_VALUSET_COUNT 16
+
+/// TabPage for complete numeration
 class SvxNumPickTabPage : public SfxTabPage
 {
     using TabPage::ActivatePage;
@@ -151,7 +150,7 @@ class SvxNumPickTabPage : public SfxTabPage
     String              sNumCharFmtName;
     String              sBulletCharFmtName;
 
-    SvxNumSettingsArr_Impl  aNumSettingsArrays[NUM_VALUSET_COUNT];  // is initialized with the five formats
+    SvxNumSettingsArr_Impl  aNumSettingsArrays[NUM_VALUSET_COUNT];  ///< is initialized with the five formats
 
     SvxNumRule*         pActNum;
     SvxNumRule*         pSaveNum;
@@ -300,6 +299,10 @@ class SvxNumOptionsTabPage : public SfxTabPage
     SfxMapUnit          eCoreUnit;
 
     void                InitControls();
+    /** To switch between the numbering type
+        0 - Number;
+        1 - Bullet;
+        2 - Bitmap; */
     void                SwitchNumberType( sal_uInt8 nType, sal_Bool bBmp = sal_False );
     void                CheckForStartValue_Impl(sal_uInt16 nNumberingType);
 
@@ -410,7 +413,7 @@ class SvxNumPositionTabPage : public SfxTabPage
 
     sal_Bool                bModified           : 1;
     sal_Bool                bPreset             : 1;
-    sal_Bool                bInInintControl     : 1;  // workaround for Modify-error, is said to be correctet from 391 on
+    sal_Bool                bInInintControl     : 1;  ///< workaround for Modify-error, is said to be correctet from 391 on
     bool                bLabelAlignmentPosAndSpaceModeActive;
 
     void                InitControls();

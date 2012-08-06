@@ -55,13 +55,7 @@
 #include "hlmarkwn.hxx"
 #include "iconcdlg.hxx"
 
-
-/*************************************************************************
-|*
-|* ComboBox-Control, wich is filled with all current framenames
-|*
-\************************************************************************/
-
+/// ComboBox-Control, wich is filled with all current framenames
 class SvxFramesComboBox : public ComboBox
 {
 public:
@@ -69,12 +63,7 @@ public:
     ~SvxFramesComboBox ();
 };
 
-/*************************************************************************
-|*
-|* ComboBox-Control for URL's with History and Autocompletion
-|*
-\************************************************************************/
-
+/// ComboBox-Control for URL's with History and Autocompletion
 class SvxHyperURLBox : public SvtURLBox, public DropTargetHelper
 {
 private:
@@ -94,12 +83,7 @@ public:
 
 };
 
-/*************************************************************************
-|*
-|* Tabpage : Basisclass
-|*
-\************************************************************************/
-
+/// Tabpage : Basisclass
 class SvxHyperlinkTabPageBase : public IconChoicePage
 {
 private:
@@ -142,7 +126,7 @@ protected:
                                           String& aStrIntName, String& aStrFrame,
                                           SvxLinkInsertMode& eMode );
 
-    DECL_LINK (ClickScriptHdl_Impl, void * );       // Button : Script
+    DECL_LINK (ClickScriptHdl_Impl, void * ); ///< Button : Script
 
     String              aEmptyStr;
 

@@ -28,8 +28,6 @@
 #ifndef _CUI_CHARMAP_HXX
 #define _CUI_CHARMAP_HXX
 
-// include ---------------------------------------------------------------
-
 #include <vcl/ctrl.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/button.hxx>
@@ -41,19 +39,12 @@
 class SubsetMap;
 class SvxCharMapData;
 
-// define ----------------------------------------------------------------
-
 #define CHARMAP_MAXLEN  32
 
 namespace svx
 {
     struct SvxShowCharSetItem;
 }
-// class SvxCharacterMap -------------------------------------------------
-// the main purpose of this dialog is to enable the use of characters
-// that are not easily accesible from the keyboard
-
-// class SvxShowText =====================================================
 
 class SvxShowText : public Control
 {
@@ -113,6 +104,9 @@ friend class SvxCharacterMap;
     DECL_LINK(DeleteHdl, void *);
 };
 
+/** class SvxCharacterMap
+    the main purpose of this dialog is to enable the use of characters
+    that are not easily accesible from the keyboard. */
 class SvxCharacterMap : public SfxModalDialog
 {
 private:

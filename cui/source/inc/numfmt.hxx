@@ -82,9 +82,9 @@ public:
 
     static SfxTabPage*      Create( Window* pParent,
                                     const SfxItemSet& rAttrSet );
-    static sal_uInt16*          GetRanges();
+    static sal_uInt16*      GetRanges();
 
-    virtual sal_Bool            FillItemSet( SfxItemSet& rSet );
+    virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
     virtual void            Reset( const SfxItemSet& rSet );
     virtual int             DeactivatePage  ( SfxItemSet* pSet = NULL );
 
@@ -129,11 +129,11 @@ private:
 
     SvxNumberInfoItem*      pNumItem;
     SvxNumberFormatShell*   pNumFmtShell;
-    sal_uLong                   nInitFormat;
+    sal_uLong               nInitFormat;
     Link                    fnOkHdl;
 
-    sal_Bool                    bNumItemFlag; // for handling with DocShell
-    sal_Bool                    bOneAreaFlag;
+    sal_Bool                bNumItemFlag; ///< for handling with DocShell
+    sal_Bool                bOneAreaFlag;
     short                   nFixedCategory;
 
     long                    nCatHeight;
