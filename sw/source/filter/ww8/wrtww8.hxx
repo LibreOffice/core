@@ -1162,6 +1162,7 @@ protected:
     SvULongs aCps;                  // PTRARR CP-Pos der Verweise
     SvPtrarr aCntnt;                // PTRARR von SwFmtFtn/PostIts/..
     WW8_WrPlc0* pTxtPos;            // Pos der einzelnen Texte
+    SvPtrarr aSpareFmts;            //a backup for aCntnt: if there's no SdrObject, stores the fmt directly here
 
     WW8_WrPlcSubDoc();
     virtual ~WW8_WrPlcSubDoc();
@@ -1235,6 +1236,7 @@ public:
     bool WriteTxt( WW8Export& rWrt );
     void WritePlc( WW8Export& rWrt ) const;
     void Append( const SdrObject& rObj, sal_uInt32 nShapeId );
+    void Append( const SwFrmFmt* pFmt, sal_uInt32 nShapeId );
     sal_uInt16 Count() const { return aCntnt.Count(); }
     sal_uInt16 GetPos( const VoidPtr& p ) const { return aCntnt.GetPos( p ); }
 };
