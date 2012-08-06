@@ -56,8 +56,23 @@
 
 using namespace sfx2;
 
-SV_DECL_REF_LIST(SvBaseLink,SvBaseLink*)
-SV_IMPL_REF_LIST(SvBaseLink,SvBaseLink*)
+class SvBaseLinkMemberList : private std::vector<SvBaseLink*> {
+public:
+    ~SvBaseLinkMemberList()
+    {
+        for( const_iterator it = begin(); it != end(); ++it )
+        {
+            SvBaseLink* p = *it;
+            if( p )
+                p->ReleaseReference();
+        }
+    }
+
+    using std::vector<SvBaseLink*>::size;
+    using std::vector<SvBaseLink*>::operator[];
+
+    void push_back(SvBaseLink* p) { std::vector<SvBaseLink*>::push_back(p); p->AddRef(); }
+};
 
 // attention, this array is indexed directly (0, 1, ...) in the code
 static long nTabs[] =
@@ -442,13 +457,13 @@ IMPL_LINK( SvBaseLinksDlg, BreakLinkClickHdl, PushButton *, pPushButton )
             {
                 void * pUD = pEntry->GetUserData();
                 if( pUD )
-                    aLinkList.Append( (SvBaseLink*)pUD );
+                    aLinkList.push_back( (SvBaseLink*)pUD );
                 pEntry = Links().NextSelected(pEntry);
             }
             Links().RemoveSelection();
-            for( sal_uLong i = 0; i < aLinkList.Count(); i++ )
+            for( sal_uLong i = 0; i < aLinkList.size(); i++ )
             {
-                SvBaseLinkRef xLink = aLinkList.GetObject( i );
+                SvBaseLinkRef xLink = aLinkList[i];
                 // tell the link that it will be resolved!
                 xLink->Closed();
 
