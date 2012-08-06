@@ -56,7 +56,8 @@
 
 using namespace sfx2;
 
-SV_DECL_IMPL_REF_LIST(SvBaseLink,SvBaseLink*)
+SV_DECL_REF_LIST(SvBaseLink,SvBaseLink*)
+SV_IMPL_REF_LIST(SvBaseLink,SvBaseLink*)
 
 // attention, this array is indexed directly (0, 1, ...) in the code
 static long nTabs[] =

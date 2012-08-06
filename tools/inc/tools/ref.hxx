@@ -257,11 +257,6 @@ inline void CN##MemberList::Append( const CN##MemberList & rList )\
         Append( rList.GetObject( i ) );\
 }
 
-/************************** S V _ D E C L _ R E F _ L I S T **************/
-#define SV_DECL_IMPL_REF_LIST(ClassName,EntryName) \
-    SV_DECL_REF_LIST(ClassName,EntryName) \
-    SV_IMPL_REF_LIST(ClassName,EntryName)
-
 /************************** S v M e m b e r L i s t **********************/
 #define PRV_SV_DECL_MEMBER_LIST(Class,EntryName)        \
        Class##MemberList() {}                           \
