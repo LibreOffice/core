@@ -83,7 +83,7 @@ void DiscoveryService::execute()
         sockaddr_in aAddr;
         socklen_t aLen = sizeof( aAddr );
         fprintf( stderr, "DiscoveryService waiting for packet\n" );
-        recvfrom( mSocket, &aBuffer, BUFFER_SIZE, 0, (sockaddr*) &aAddr, &aLen );
+        recvfrom( mSocket, aBuffer, BUFFER_SIZE, 0, (sockaddr*) &aAddr, &aLen );
         fprintf( stderr, "DiscoveryService received a packet.\n" );
         for (int i = 0; i < BUFFER_SIZE; i++ ) {
             if ( aBuffer[i] == '\n' )
