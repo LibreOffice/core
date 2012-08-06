@@ -55,7 +55,7 @@ void Receiver::parseCommand( std::vector<OString> aCommand )
         xSlideShowController =  uno::Reference<presentation::XSlideShowController>(
            xPresentation->getController(), uno::UNO_QUERY_THROW );
     }
-    catch ( com::sun::star::uno::RuntimeException &e )
+    catch (uno::RuntimeException &)
     {
         fprintf( stderr, "Error in retrieving Controller\n" );
         //return;

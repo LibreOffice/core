@@ -54,7 +54,7 @@ void RemoteServer::listenThread()
             presentationStarted( xPresentation->getController() );
         }
     }
-    catch ( com::sun::star::uno::RuntimeException &e )
+    catch (uno::RuntimeException &)
     {
     }
 
