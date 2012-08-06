@@ -118,6 +118,11 @@ public:
     GraphicZOrderHelper* graphicZOrderHelper();
 
     bool IsInHeaderFooter() const;
+    /**
+     @see DomainMapper_Impl::processDeferredCharacterProperties()
+    */
+    void processDeferredCharacterProperties(
+        const std::map< sal_Int32, com::sun::star::uno::Any >& deferredCharacterProperties );
 
 private:
     // Stream

@@ -406,7 +406,12 @@ void    DomainMapper_Impl::PopProperties(ContextType eId)
         m_pLastSectionContext = m_aPropertyStacks[eId].top( );
     }
     else if (eId == CONTEXT_CHARACTER)
+    {
         m_pLastCharacterContext = m_aPropertyStacks[eId].top();
+        // Sadly an assert about deferredCharacterProperties being empty is not possible
+        // here, becase appendTextPortion() may not be called for every character section.
+        deferredCharacterProperties.clear();
+    }
 
     m_aPropertyStacks[eId].pop();
     m_aContextStack.pop();
@@ -1127,6 +1132,8 @@ void DomainMapper_Impl::appendTextPortion( const ::rtl::OUString& rString, Prope
 {
     if (m_aTextAppendStack.empty())
         return;
+    if( pPropertyMap == m_pTopContext && !deferredCharacterProperties.empty())
+        processDeferredCharacterProperties();
     uno::Reference< text::XTextAppend >  xTextAppend = m_aTextAppendStack.top().xTextAppend;
     if(xTextAppend.is() && ! getTableManager( ).isIgnore())
     {
@@ -3720,6 +3727,21 @@ SectionPropertyMap * DomainMapper_Impl::GetSectionContext()
     }
 
     return pSectionContext;
+}
+
+void DomainMapper_Impl::deferCharacterProperty( sal_Int32 id, com::sun::star::uno::Any value )
+{
+    deferredCharacterProperties[ id ] = value;
+}
+
+void DomainMapper_Impl::processDeferredCharacterProperties()
+{
+    // ACtually process in DomainMapper, so that it's the same source file like normal processing.
+    if( !deferredCharacterProperties.empty())
+    {
+        m_rDMapper.processDeferredCharacterProperties( deferredCharacterProperties );
+        deferredCharacterProperties.clear();
+    }
 }
 
 }}
