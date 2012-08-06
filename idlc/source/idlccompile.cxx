@@ -303,7 +303,7 @@ sal_Int32 compileFile(const OString * pathname)
         OSL_ASSERT(false);
     }
 
-    sal_Int32 idx= cpp.lastIndexOf(OUString( RTL_CONSTASCII_USTRINGPARAM("idlc")) );
+    sal_Int32 idx= cpp.lastIndexOf("idlc");
     cpp = cpp.copy(0, idx);
 
 #if defined(SAL_W32)

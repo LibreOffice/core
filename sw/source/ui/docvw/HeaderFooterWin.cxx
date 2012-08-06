@@ -204,7 +204,7 @@ void SwHeaderFooterWin::SetOffset( Point aOffset, long nXLineStart, long nXLineE
     m_sLabel = SW_RESSTR( STR_HEADER_TITLE );
     if ( !m_bIsHeader )
         m_sLabel = SW_RESSTR( STR_FOOTER_TITLE );
-    sal_Int32 nPos = m_sLabel.lastIndexOf( rtl::OUString::createFromAscii( "%1" ) );
+    sal_Int32 nPos = m_sLabel.lastIndexOf( "%1" );
     m_sLabel = m_sLabel.replaceAt( nPos, 2, GetPageFrame()->GetPageDesc()->GetName() );
 
     // Compute the text size and get the box position & size from it

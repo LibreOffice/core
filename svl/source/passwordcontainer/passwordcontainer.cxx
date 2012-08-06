@@ -134,7 +134,7 @@ static vector< ::rtl::OUString > getInfoFromInd( ::rtl::OUString aInd )
 static sal_Bool shorterUrl( ::rtl::OUString& aURL )
 {
     sal_Int32 aInd = aURL.lastIndexOf( sal_Unicode( '/' ) );
-    if( aInd > 0  && aURL.indexOf( ::rtl::OUString("://") ) != aInd-2 )
+    if( aInd > 0 && aURL.indexOf( "://" ) != aInd-2 )
     {
         aURL = aURL.copy( 0, aInd );
         return sal_True;
