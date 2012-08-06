@@ -256,13 +256,13 @@ public:
                 const std::string &entryName, const Hashtable &bytesToAdd);
 private:
     xmlDocPtr getSourceDocument(const fs::path &filePath);
-    HashSet switchFind(xmlDocPtr doc);
     xmlNodePtr clone(xmlNodePtr node, const std::string& appl);
     StreamTable &streamTable;
     const fs::path inputFile, src;
     const std::string module, lang;
     const fs::path resEmbStylesheet;
     bool bExtensionMode;
+    std::string gui;
 };
 
 inline char tocharlower(char c)
