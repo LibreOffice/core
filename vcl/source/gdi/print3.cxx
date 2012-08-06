@@ -1254,6 +1254,7 @@ void PrinterController::triggerAppToFreeResources()
     mpImplData->mpProgress = NULL;
     GDIMetaFile aMtf;
     getPageFile( 0, aMtf, false );
+    setLastPage( sal_False );
 }
 
 void PrinterController::abortJob()
