@@ -84,8 +84,7 @@ $(eval $(call gb_CppunitTest_use_ure,sc_subsequent_filters_test))
 
 $(eval $(call gb_CppunitTest_use_components,sc_subsequent_filters_test,\
     chart2/source/controller/chartcontroller \
-    chart2/source/tools/charttools \
-    chart2/source/model/chartmodel \
+    chart2/source/chartcore \
     comphelper/util/comphelp \
     configmgr/source/configmgr \
     dbaccess/util/dba \
