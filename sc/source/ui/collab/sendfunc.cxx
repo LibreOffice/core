@@ -26,26 +26,16 @@
  * instead of those above.
  */
 
-#include "sal/config.h"
-
-#include <vector>
+#include "sendfunc.hxx"
 
 #include "cell.hxx"
 #include "docsh.hxx"
 #include "docfunc.hxx"
 #include "sccollaboration.hxx"
-#include "sendfunc.hxx"
-#include <tubes/conference.hxx>
 #include <tubes/contacts.hxx>
 #include <tubes/manager.hxx>
 
-#include <com/sun/star/uno/Sequence.hxx>
-#include <unotools/tempfile.hxx>
-#include <unotools/localfilehelper.hxx>
-#include <comphelper/mediadescriptor.hxx>
-#include <com/sun/star/document/XDocumentRecovery.hpp>
-
-namespace css = ::com::sun::star;
+#include <vector>
 
 void ScDocFuncSend::RecvMessage( const rtl::OString &rString )
 {
@@ -86,58 +76,18 @@ void ScDocFuncSend::RecvMessage( const rtl::OString &rString )
     }
 }
 
-extern "C"
-{
-    static void file_sent_cb( bool aSuccess, void* /* pUserData */ )
-    {
-        fprintf( stderr, "File send %s\n", aSuccess ? "success" : "failed" );
-    }
-}
-
 void ScDocFuncSend::SendMessage( ScChangeOpWriter &rOp )
 {
     fprintf( stderr, "Op: '%s'\n", rOp.toString().getStr() );
-    if (mpConference)
-        mpConference->sendPacket( rOp.toString() );
-}
-
-void ScDocFuncSend::SendFile( TpContact* pContact, const rtl::OUString &sUuid )
-{
-    String aTmpPath = utl::TempFile::CreateTempName();
-    aTmpPath.Append( OUString("_") );
-    aTmpPath.Append( sUuid );
-    aTmpPath.Append( OUString("_") );
-    aTmpPath.Append( OUString(".ods") );
-
-    rtl::OUString aFileURL;
-    ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aTmpPath, aFileURL );
-
-    ::comphelper::MediaDescriptor aDescriptor;
-    // some issue with hyperlinks:
-    aDescriptor[::comphelper::MediaDescriptor::PROP_DOCUMENTBASEURL()] <<= ::rtl::OUString();
-    try {
-        css::uno::Reference< css::document::XDocumentRecovery > xDocRecovery(
-                    rDocShell.GetBaseModel(), css::uno::UNO_QUERY_THROW);
-
-        xDocRecovery->storeToRecoveryFile( aFileURL, aDescriptor.getAsConstPropertyValueList() );
-    } catch (const css::uno::Exception &ex) {
-        fprintf( stderr, "exception foo !\n" );
-    }
-
-    fprintf( stderr, "Temp file is '%s'\n",
-             rtl::OUStringToOString( aFileURL, RTL_TEXTENCODING_UTF8 ).getStr() );
-
-    mpConference->sendFile( pContact, aFileURL, file_sent_cb, NULL );
-
-    // FIXME: unlink the file after send ...
+    mpCollaboration->SendPacket( rOp.toString() );
 }
 
 // FIXME: really ScDocFunc should be an abstract base, so
 // we don't need the rDocSh hack/pointer
-ScDocFuncSend::ScDocFuncSend( ScDocShell& rDocSh, ScDocFuncDirect *pDirect )
+ScDocFuncSend::ScDocFuncSend( ScDocShell& rDocSh, ScDocFuncDirect *pDirect, ScCollaboration* pCollaboration )
         : ScDocFunc( rDocSh ),
         mpDirect( pDirect ),
-        mpConference( NULL )
+        mpCollaboration( pCollaboration )
 {
     fprintf( stderr, "Sender created !\n" );
 }
@@ -145,20 +95,7 @@ ScDocFuncSend::ScDocFuncSend( ScDocShell& rDocSh, ScDocFuncDirect *pDirect )
 ScDocFuncSend::~ScDocFuncSend()
 {
     fprintf( stderr, "Sender destroyed !\n" );
-    if (mpConference)
-        mpConference->close();
-
     delete mpDirect;
-}
-
-void ScDocFuncSend::SetCollaboration( TeleConference* pConference )
-{
-    mpConference = pConference;
-}
-
-TeleConference* ScDocFuncSend::GetConference()
-{
-    return mpConference;
 }
 
 void ScDocFuncSend::EnterListAction( sal_uInt16 nNameResId )
@@ -187,7 +124,7 @@ sal_Bool ScDocFuncSend::SetNormalString( bool& o_rbNumFmtSet, const ScAddress& r
     o_rbNumFmtSet = false;
 
     if ( rtl::OUString( rText ) == "saveme" )
-        SendFile( NULL, rText );
+        mpCollaboration->SaveAndSendFile( NULL, rText );
 
     if ( rtl::OUString( rText ) == "contacts" )
         tubes::createContacts( rDocShell.GetCollaboration() );
@@ -280,14 +217,14 @@ ScDocFunc *ScDocShell::CreateDocFunc()
 {
     if (TeleManager::hasWaitingConference())
     {
-        ScDocFuncSend *pSender = new ScDocFuncSend( *this, new ScDocFuncDirect( *this ) );
         TeleConference* pConference = TeleManager::getConference();
-        pConference->setCollaboration( mpCollaboration );
-        pSender->SetCollaboration( pConference );
-        return pSender;
+        if (pConference)
+        {
+            mpCollaboration->SetConference( pConference );
+            return new ScDocFuncSend( *this, new ScDocFuncDirect( *this ), mpCollaboration );
+        }
     }
-    else
-        return new ScDocFuncDirect( *this );
+    return new ScDocFuncDirect( *this );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

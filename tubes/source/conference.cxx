@@ -489,7 +489,8 @@ static void TeleConference_TransferDone( EmpathyFTHandler *handler, TpFileTransf
 {
     SendFileRequest *request = reinterpret_cast<SendFileRequest *>(user_data);
 
-    request->mpCallback(true, request->mpUserData);
+    if (request->mpCallback)
+        request->mpCallback(true, request->mpUserData);
     delete request;
     g_object_unref (handler);
 }
@@ -500,7 +501,8 @@ static void TeleConference_TransferError( EmpathyFTHandler *handler, const GErro
 
     SAL_INFO( "tubes", "TeleConference_TransferError: " << error->message);
 
-    request->mpCallback(false, request->mpUserData);
+    if (request->mpCallback)
+        request->mpCallback(false, request->mpUserData);
     delete request;
     g_object_unref (handler);
 }
@@ -511,7 +513,8 @@ static void TeleConference_FTReady( EmpathyFTHandler *handler, GError *error, gp
 
     if ( error != 0 )
     {
-        request->mpCallback(error == 0, request->mpUserData);
+        if (request->mpCallback)
+            request->mpCallback(error == 0, request->mpUserData);
         delete request;
         g_object_unref (handler);
     }
@@ -528,7 +531,7 @@ static void TeleConference_FTReady( EmpathyFTHandler *handler, GError *error, gp
 
 // TODO: move sending file to TeleManager
 extern void TeleManager_fileReceived( const OUString& );
-void TeleConference::sendFile( TpContact* pContact, rtl::OUString &localUri, FileSentCallback pCallback, void* pUserData)
+void TeleConference::sendFile( TpContact* pContact, const OUString& localUri, FileSentCallback pCallback, void* pUserData)
 {
     INFO_LOGGER( "TeleConference::sendFile");
 

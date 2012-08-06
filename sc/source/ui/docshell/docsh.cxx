@@ -2509,7 +2509,7 @@ ScDocFunc *ScDocShell::CreateDocFunc()
     return new ScDocFuncDirect( *this );
 }
 #else
-Collaboration* ScDocShell::GetCollaboration()
+ScCollaboration* ScDocShell::GetCollaboration()
 {
     return mpCollaboration;
 }

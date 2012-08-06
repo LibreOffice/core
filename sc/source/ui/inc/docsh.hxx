@@ -73,7 +73,7 @@ class ScSheetSaveData;
 class ScFlatBoolRowSegments;
 struct ScColWidthParam;
 #ifdef ENABLE_TELEPATHY
-class Collaboration;
+class ScCollaboration;
 #endif
 
 namespace sfx2 { class FileDialogHelper; }
@@ -124,7 +124,7 @@ class SC_DLLPUBLIC ScDocShell: public SfxObjectShell, public SfxListener
 
     ScDocShellModificator* pModificator; // #109979#; is used to load XML (created in BeforeXMLLoading and destroyed in AfterXMLLoading)
 #ifdef ENABLE_TELEPATHY
-    Collaboration*      mpCollaboration;
+    ScCollaboration*      mpCollaboration;
 #endif
 
     SC_DLLPRIVATE void          InitItems();
@@ -192,7 +192,7 @@ public:
     using SfxObjectShell::Print;        // print styles
 
 #ifdef ENABLE_TELEPATHY
-    SC_DLLPRIVATE Collaboration* GetCollaboration();
+    SC_DLLPRIVATE ScCollaboration* GetCollaboration();
 #endif
     virtual void    Activate();
     virtual void    Deactivate();

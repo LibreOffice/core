@@ -10,6 +10,8 @@
 #ifndef INCLUDED_SC_COLLABORATION_HXX
 #define INCLUDED_SC_COLLABORATION_HXX
 
+#include <sal/config.h>
+
 #include <tubes/collaboration.hxx>
 class ScDocFuncSend;
 class ScDocShell;
@@ -18,17 +20,16 @@ class ScCollaboration : public Collaboration
 {
     ScDocShell* mpScDocShell;
 public:
-                            ScCollaboration( ScDocShell* pScDocShell );
-    virtual                 ~ScCollaboration();
+            ScCollaboration( ScDocShell* pScDocShell );
+    virtual ~ScCollaboration();
 
-    virtual void            ContactLeft();
-    virtual TeleConference* GetConference();
-    virtual sal_uInt64      GetId();
-    virtual void            PacketReceived( const OString& rPacket );
-    virtual void            SetCollaboration( TeleConference* pConference );
-    virtual void            SendFile( TpContact* pContact, const OUString& rURL );
+    virtual void  ContactLeft() const;
+    virtual void  PacketReceived( const OString& rPacket ) const;
+    virtual void  SaveAndSendFile( TpContact* pContact, const OUString& rURL ) const;
+    virtual void  StartCollaboration( TeleConference* pConference );
 private:
-    ScDocFuncSend*          GetScDocFuncSend();
+    friend class ScDocShell;
+    ScDocFuncSend* GetScDocFuncSend() const;
 };
 
 #endif // INCLUDED_SC_COLLABORATION_HXX

@@ -13,23 +13,29 @@
 #include <sal/config.h>
 
 #include <rtl/ustring.hxx>
+#include <tubes/tubesdllapi.h>
 
 class TeleConference;
 typedef struct _TpContact TpContact;
 
-class Collaboration
+class TUBES_DLLPUBLIC Collaboration
 {
+    TeleConference* mpConference;
 public:
-            Collaboration() {}
-    virtual ~Collaboration() {}
+            Collaboration();
+    virtual ~Collaboration();
 
-    virtual void                ContactLeft() = 0;
-    virtual TeleConference*     GetConference() = 0;
-    virtual sal_uInt64          GetId() = 0;
-    virtual void                PacketReceived( const OString& rPacket ) = 0;
-    virtual void                SetCollaboration( TeleConference* pConference ) = 0;
-    // TODO: I think this could be moved to TeleManager later.
-    virtual void                SendFile( TpContact* pContact, const OUString& rURL ) = 0;
+    virtual void ContactLeft() const = 0;
+    virtual void PacketReceived( const OString& rPacket ) const = 0;
+    virtual void SaveAndSendFile( TpContact* pContact, const OUString& rURL ) const = 0;
+    virtual void StartCollaboration( TeleConference* pConference ) = 0;
+
+    TUBES_DLLPRIVATE TeleConference* GetConference() const;
+    TUBES_DLLPRIVATE sal_uInt64 GetId() const;
+
+    void SendFile( TpContact* pContact, const OUString& rURL ) const;
+    void SendPacket( const OString& rPacket ) const;
+    void SetConference( TeleConference* pConference );
 };
 
 #endif // INCLUDED_TUBES_COLLABORATION_HXX

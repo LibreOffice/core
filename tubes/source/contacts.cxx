@@ -98,7 +98,7 @@ class TubeContacts : public ModelessDialog
             {
                 TpContact* pContact = pAC->mpContact;
                 mpCollaboration->GetConference()->invite( pContact );
-                mpCollaboration->SendFile( pContact, OStringToOUString(
+                mpCollaboration->SaveAndSendFile( pContact, OStringToOUString(
                             mpCollaboration->GetConference()->getUuid(), RTL_TEXTENCODING_UTF8 ) );
             }
         }
@@ -117,9 +117,8 @@ class TubeContacts : public ModelessDialog
             SAL_WARN( "tubes", "Could not start demo session!" );
         else
         {
-            pConference->setCollaboration( mpCollaboration );
-            mpCollaboration->SetCollaboration( pConference );
-            mpCollaboration->SendFile( NULL, OStringToOUString(
+            mpCollaboration->StartCollaboration( pConference );
+            mpCollaboration->SaveAndSendFile( NULL, OStringToOUString(
                         pConference->getUuid(), RTL_TEXTENCODING_UTF8 ) );
         }
     }
@@ -140,9 +139,8 @@ class TubeContacts : public ModelessDialog
                         tp_contact_get_identifier( pContact ) );
             else
             {
-                pConference->setCollaboration( mpCollaboration );
-                mpCollaboration->SetCollaboration( pConference );
-                mpCollaboration->SendFile( pContact, OStringToOUString(
+                mpCollaboration->StartCollaboration( pConference );
+                mpCollaboration->SaveAndSendFile( pContact, OStringToOUString(
                             pConference->getUuid(), RTL_TEXTENCODING_UTF8 ) );
             }
         }
@@ -163,8 +161,7 @@ class TubeContacts : public ModelessDialog
                 SAL_WARN( "tubes", "Could not start group session." );
             else
             {
-                pConference->setCollaboration( mpCollaboration );
-                mpCollaboration->SetCollaboration( pConference );
+                mpCollaboration->StartCollaboration( pConference );
             }
         }
     }

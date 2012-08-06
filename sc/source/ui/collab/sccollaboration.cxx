@@ -11,6 +11,12 @@
 
 #include "docsh.hxx"
 #include "sendfunc.hxx"
+#include <com/sun/star/document/XDocumentRecovery.hpp>
+#include <comphelper/mediadescriptor.hxx>
+#include <unotools/tempfile.hxx>
+#include <unotools/localfilehelper.hxx>
+
+namespace css = ::com::sun::star;
 
 ScCollaboration::ScCollaboration( ScDocShell* pScDocShell ) :
     mpScDocShell( pScDocShell )
@@ -21,7 +27,7 @@ ScCollaboration::~ScCollaboration()
 {
 }
 
-void ScCollaboration::ContactLeft()
+void ScCollaboration::ContactLeft() const
 {
     SAL_INFO( "sc.tubes", "Contact has left the collaboration" );
     ScDocFuncSend* pSender = GetScDocFuncSend();
@@ -32,48 +38,60 @@ void ScCollaboration::ContactLeft()
     }
 }
 
-TeleConference* ScCollaboration::GetConference()
-{
-    ScDocFuncSend* pSender = GetScDocFuncSend();
-    if (pSender)
-        return pSender->GetConference();
-
-    return NULL;
-}
-
-sal_uInt64 ScCollaboration::GetId()
-{
-    return reinterpret_cast<sal_uInt64> (mpScDocShell);
-}
-
-void ScCollaboration::PacketReceived( const OString& rPacket )
+void ScCollaboration::PacketReceived( const OString& rPacket ) const
 {
     ScDocFuncSend* pSender = GetScDocFuncSend();
     if (pSender)
         return pSender->RecvMessage( rPacket );
 }
 
-void ScCollaboration::SetCollaboration( TeleConference* pConference )
+void ScCollaboration::SaveAndSendFile( TpContact* pContact, const OUString& sUuid ) const
 {
+    String aTmpPath = utl::TempFile::CreateTempName();
+    aTmpPath.Append( OUString("_") );
+    aTmpPath.Append( sUuid );
+    aTmpPath.Append( OUString("_") );
+    aTmpPath.Append( OUString(".ods") );
+
+    rtl::OUString aFileURL;
+    ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aTmpPath, aFileURL );
+
+    ::comphelper::MediaDescriptor aDescriptor;
+    // some issue with hyperlinks:
+    aDescriptor[::comphelper::MediaDescriptor::PROP_DOCUMENTBASEURL()] <<= ::rtl::OUString();
+    try {
+        css::uno::Reference< css::document::XDocumentRecovery > xDocRecovery(
+                    mpScDocShell->GetBaseModel(), css::uno::UNO_QUERY_THROW);
+
+        xDocRecovery->storeToRecoveryFile( aFileURL, aDescriptor.getAsConstPropertyValueList() );
+    } catch (const css::uno::Exception &ex) {
+        fprintf( stderr, "exception foo !\n" );
+    }
+
+    fprintf( stderr, "Temp file is '%s'\n",
+             rtl::OUStringToOString( aFileURL, RTL_TEXTENCODING_UTF8 ).getStr() );
+
+    SendFile( pContact, aFileURL );
+
+    // FIXME: unlink the file after send ...
+}
+
+void ScCollaboration::StartCollaboration( TeleConference* pConference )
+{
+    SetConference( pConference );
     ScDocFunc* pDocFunc = &mpScDocShell->GetDocFunc();
     ScDocFuncSend* pSender = dynamic_cast<ScDocFuncSend*> (pDocFunc);
     if (!pSender)
     {
         // This means pDocFunc has to be ScDocFuncDirect* and we are not collaborating yet.
-        pSender = new ScDocFuncSend( *mpScDocShell, dynamic_cast<ScDocFuncDirect*> (pDocFunc) );
+        pSender = new ScDocFuncSend( *mpScDocShell, dynamic_cast<ScDocFuncDirect*> (pDocFunc), this );
         mpScDocShell->SetDocFunc( pSender );
     }
-    pSender->SetCollaboration( pConference );
 }
 
-void ScCollaboration::SendFile( TpContact* pContact, const OUString& rURL )
-{
-    ScDocFuncSend* pSender = GetScDocFuncSend();
-    if (pSender)
-        pSender->SendFile( pContact, rURL );
-}
+// --- private ---
 
-ScDocFuncSend* ScCollaboration::GetScDocFuncSend()
+ScDocFuncSend* ScCollaboration::GetScDocFuncSend() const
 {
     return dynamic_cast<ScDocFuncSend*> (&mpScDocShell->GetDocFunc());
 }

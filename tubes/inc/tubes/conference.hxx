@@ -30,7 +30,6 @@
 #define INCLUDED_TUBES_CONFERENCE_HXX
 
 #include <sal/config.h>
-#include "tubes/tubesdllapi.h"
 #include <rtl/ustring.hxx>
 
 class Collaboration;
@@ -52,21 +51,21 @@ public:
     ~TeleConference();
 
     /// Close channel and call finalize()
-    TUBES_DLLPUBLIC void    close();
+    void                    close();
 
     /// Unrefs, unregisters from manager and calls dtor if last reference!
     void                    finalize();
 
-    TUBES_DLLPUBLIC bool    sendPacket( const OString& rPacket );
+    bool                    sendPacket( const OString& rPacket );
 
     void                    invite( TpContact *pContact );
 
     typedef void          (*FileSentCallback)( bool aSuccess, void* pUserData);
-    TUBES_DLLPUBLIC void    sendFile( TpContact* pContact, rtl::OUString &localUri, FileSentCallback pCallback, void* pUserData);
+    void                    sendFile( TpContact* pContact, const OUString& rURL, FileSentCallback pCallback, void* pUserData);
     const OString&          getUuid() const { return msUuid; }
 
     Collaboration*          getCollaboration() const;
-    TUBES_DLLPUBLIC void    setCollaboration( Collaboration* pCollaboration );
+    void                    setCollaboration( Collaboration* pCollaboration );
 
     // --- following only to be called only by manager's callbacks ---
     // TODO: make friends instead

@@ -115,12 +115,13 @@ static void account_presence_changed_cb( TpAccount* pAccount,
                                          guint      /* type */,
                                          gchar*     /* status */,
                                          gchar*     /* message */,
-                                         gpointer   pConference )
+                                         gpointer   pUserData )
 {
     if (!tb_account_is_online( pAccount ))
     {
-        Collaboration* pCollaboration =
-            reinterpret_cast<TeleConference*> (pConference)->getCollaboration();
+        TeleConference* pConference = reinterpret_cast<TeleConference*> (pUserData);
+        pConference->close();
+        Collaboration* pCollaboration = pConference->getCollaboration();
         if (pCollaboration)
             pCollaboration->ContactLeft();
     }
@@ -130,12 +131,13 @@ static void contact_presence_changed_cb( TpContact* pContact,
                                          guint      /* type */,
                                          gchar*     /* status */,
                                          gchar*     /* message */,
-                                         gpointer   pConference )
+                                         gpointer   pUserData )
 {
     if (!tb_contact_is_online( pContact ))
     {
-        Collaboration* pCollaboration =
-            reinterpret_cast<TeleConference*> (pConference)->getCollaboration();
+        TeleConference* pConference = reinterpret_cast<TeleConference*> (pUserData);
+        pConference->close();
+        Collaboration* pCollaboration = pConference->getCollaboration();
         if (pCollaboration)
             pCollaboration->ContactLeft();
     }
@@ -205,6 +207,8 @@ void TeleManager_DBusChannelHandler(
 
 void TeleManager::addConference( TeleConference* pConference )
 {
+    SAL_WARN_IF( pConference->getUuid().isEmpty(), "tubes",
+            "Adding conference with empty UUID should not happen!" );
     pImpl->maAcceptedConferences[ pConference->getUuid() ] = pConference;
 }
 

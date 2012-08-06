@@ -12,10 +12,9 @@
 
 #include <sal/config.h>
 
-#include "cell.hxx"
 #include "docfunc.hxx"
-class TeleConference;
-typedef struct _TpContact TpContact;
+class ScCollaboration;
+class ScBaseCell;
 
 namespace {
 
@@ -206,22 +205,17 @@ public:
 
 class ScDocFuncSend : public ScDocFunc
 {
-    ScDocFuncDirect     *mpDirect;
-    TeleConference      *mpConference;
+    ScDocFuncDirect*    mpDirect;
+    ScCollaboration*    mpCollaboration;
 
-    void SendMessage( ScChangeOpWriter &rOp );
-
+    friend class ScCollaboration;
+    void                RecvMessage( const rtl::OString &rString );
+    void                SendMessage( ScChangeOpWriter &rOp );
 public:
     // FIXME: really ScDocFunc should be an abstract base, so
     // we don't need the rDocSh hack/pointer
-    ScDocFuncSend( ScDocShell& rDocSh, ScDocFuncDirect *pDirect );
+    ScDocFuncSend( ScDocShell& rDocSh, ScDocFuncDirect* pDirect, ScCollaboration* pCollaboration );
     virtual ~ScDocFuncSend();
-
-    void                RecvMessage( const rtl::OString &rString );
-    void                SetCollaboration( TeleConference* pConference );
-    TeleConference*     GetConference();
-    // TODO: I think this could be moved to TeleManager later.
-    void                SendFile( TpContact* pContact, const rtl::OUString &rURL );
 
     virtual void        EnterListAction( sal_uInt16 nNameResId );
     virtual void        EndListAction();
