@@ -11,7 +11,12 @@ $(eval $(call gb_Module_Module,ucpp))
 
 $(eval $(call gb_Module_add_targets,ucpp,\
 	CustomTarget_source \
+))
+
+ifneq ($(CROSS_COMPILING),YES)
+$(eval $(call gb_Module_add_targets,ucpp,\
     Executable_ucpp \
 ))
+endif
 
 # vim: set noet sw=4 ts=4:

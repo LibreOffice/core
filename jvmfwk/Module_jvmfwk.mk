@@ -42,9 +42,11 @@ $(eval $(call gb_Module_add_targets,jvmfwk,\
 ))
 
 ifneq ($(OS),MACOSX)
+ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
 $(eval $(call gb_Module_add_targets,jvmfwk,\
     Executable_javaldx \
 ))
+endif
 endif
 
 endif

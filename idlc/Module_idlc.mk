@@ -8,6 +8,9 @@
 #
 
 $(eval $(call gb_Module_Module,idlc))
+
+ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
 $(eval $(call gb_Module_add_targets,idlc,Executable_idlc))
+endif
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:

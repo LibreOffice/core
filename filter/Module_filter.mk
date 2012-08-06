@@ -26,7 +26,6 @@ $(eval $(call gb_Module_add_targets,filter,\
 	AllLangResTarget_xsltdlg \
 	Configuration_filter \
 	CustomTarget_svg \
-	Executable_svg2odf \
 	Library_PptImporter \
 	Library_egi \
 	Library_eme \
@@ -68,6 +67,12 @@ $(eval $(call gb_Module_add_targets,filter,\
 	Package_docbook \
 	Package_xslt \
 ))
+
+ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
+$(eval $(call gb_Module_add_targets,filter,\
+	Executable_svg2odf \
+))
+endif
 
 ifneq ($(SOLAR_JAVA),)
 $(eval $(call gb_Module_add_targets,filter,\

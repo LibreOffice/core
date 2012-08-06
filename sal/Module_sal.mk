@@ -31,8 +31,6 @@ $(eval $(call gb_Module_Module,sal))
 $(eval $(call gb_Module_add_targets,sal,\
 	CustomTarget_generated \
 	CustomTarget_sal_allheaders \
-	$(if $(filter $(OS),IOS),, \
-		Executable_osl_process_child) \
 	Executable_cppunittester \
 	$(if $(filter $(OS),ANDROID), \
 		Library_lo-bootstrap) \
@@ -46,6 +44,13 @@ $(eval $(call gb_Module_add_targets,sal,\
 	StaticLibrary_salcpprt \
 ))
 
+ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
+$(eval $(call gb_Module_add_targets,sal,\
+		Executable_osl_process_child \
+		CppunitTest_sal_osl_process \
+))
+endif
+
 $(eval $(call gb_Module_add_check_targets,sal,\
 	CppunitTest_Module_DLL \
 	CppunitTest_sal_bytesequence \
@@ -57,8 +62,6 @@ $(eval $(call gb_Module_add_check_targets,sal,\
 	CppunitTest_sal_osl_old_test_file \
 	CppunitTest_sal_osl_security \
 	CppunitTest_sal_osl_thread \
-	$(if $(filter $(OS),IOS),, \
-		CppunitTest_sal_osl_process) \
 	CppunitTest_sal_rtl_alloc \
 	CppunitTest_sal_rtl_cipher \
 	CppunitTest_sal_rtl_crc32 \

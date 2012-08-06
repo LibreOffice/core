@@ -41,7 +41,7 @@ $(eval $(call gb_Module_add_targets,svx,\
     Package_sdi \
 ))
 
-ifneq ($(OS),IOS)
+ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
 $(eval $(call gb_Module_add_targets,svx,\
     Executable_gengal.bin \
     Package_gengal \
