@@ -1127,11 +1127,7 @@ public class DocumentLoader
             bmp.compress(Bitmap.CompressFormat.PNG, 40, bytes);
             thumbnailFile.createNewFile();
             FileOutputStream fo = new FileOutputStream( thumbnailFile );
-            fo.write(bytes.toByteArray());*/
-            if( !thumbnailFile.isFile() )
-                thumbnailFile.createNewFile();
-            FileOutputStream fo = new FileOutputStream( thumbnailFile );
-            bmp.compress(Bitmap.CompressFormat.PNG, 40, fo);
+            fo.write(bytes.toByteArray());
         } catch (IOException e) {
             // TODO: handle exception
         }
