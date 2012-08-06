@@ -45,8 +45,9 @@ $(eval $(call gb_Library_use_libraries,chartcore,\
     $(gb_STDLIBS) \
 ))
 
+$(eval $(call gb_Library_set_componentfile,chartcore,chart2/source/chartcore))
+
 # view pieces ...
-$(eval $(call gb_Library_set_componentfile,chartcore,chart2/source/view/chartview))
 $(eval $(call gb_Library_add_exception_objects,chartcore,\
     chart2/source/view/axes/DateHelper \
     chart2/source/view/axes/DateScaling \
@@ -100,7 +101,6 @@ $(eval $(call gb_Library_add_exception_objects,chartcore,\
 ))
 
 # model pieces ...
-$(eval $(call gb_Library_set_componentfile,chartcore,chart2/source/model/chartmodel))
 $(eval $(call gb_Library_add_exception_objects,chartcore,\
     chart2/source/model/filter/XMLFilter \
     chart2/source/model/main/Axis \
@@ -154,7 +154,6 @@ $(eval $(call gb_Library_add_exception_objects,chartcore,\
 ))
 
 # tools pieces
-$(eval $(call gb_Library_set_componentfile,chartcore,chart2/source/tools/charttools))
 $(eval $(call gb_Library_add_exception_objects,chartcore,\
     chart2/source/tools/AxisHelper \
     chart2/source/tools/BaseGFXHelper \

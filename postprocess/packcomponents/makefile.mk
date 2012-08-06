@@ -35,9 +35,7 @@ my_components = \
     component/animations/source/animcore/animcore \
     component/avmedia/util/avmedia \
     component/chart2/source/controller/chartcontroller \
-    component/chart2/source/model/chartmodel \
-    component/chart2/source/tools/charttools \
-    component/chart2/source/view/chartview \
+    component/chart2/source/chartcore \
     component/canvas/source/factory/canvasfactory \
     component/canvas/source/simplecanvas/simplecanvas \
     component/canvas/source/vcl/vclcanvas \
