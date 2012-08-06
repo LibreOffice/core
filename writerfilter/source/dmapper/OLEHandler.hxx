@@ -41,7 +41,6 @@ namespace com{ namespace sun{ namespace star{
 namespace writerfilter {
 namespace dmapper
 {
-//class PropertyMap;
 /** Handler for OLE objects
  */
 class WRITERFILTER_DLLPRIVATE OLEHandler : public LoggedProperties

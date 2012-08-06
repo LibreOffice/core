@@ -653,18 +653,6 @@ void SAL_CALL CURI::initFromConstant(const sal_Int16 i_Constant)
             ln = "hasPart";
             break;
 
-/* REMOVED
-        case css::rdf::URIs::PKG_IDREF:
-            ns = s_nsPkg;
-            ln = "idref";
-            break;
-
-        case css::rdf::URIs::PKG_PATH:
-            ns = s_nsPkg;
-            ln = "path";
-            break;
-*/
-
         case css::rdf::URIs::PKG_MIMETYPE:
             ns = s_nsPkg;
             ln = "mimeType";
@@ -719,13 +707,6 @@ void SAL_CALL CURI::initFromConstant(const sal_Int16 i_Constant)
             ns = s_nsODF;
             ln = "StylesFile";
             break;
-
-/* REMOVED
-        case css::rdf::URIs::ODF_METADATAFILE:
-            ns = s_nsODF;
-            ln = "MetadataFile";
-            break;
-*/
 
         default:
             throw css::lang::IllegalArgumentException(

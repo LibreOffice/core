@@ -22,8 +22,6 @@
 
 #include "fudraw.hxx"
 
-//class Outliner;
-//class OutlinerView;
 class SdrPageView;
 
 
@@ -53,8 +51,6 @@ public:
     void    ActivateNoteHandles(SdrObject* pObj);
 
 protected:
-//  Outliner*       pOutliner;
-//  OutlinerView*   pOutlinerView;
     sal_Bool            bVCAction;
 
 private:

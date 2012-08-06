@@ -39,7 +39,6 @@
 #include <vector>
 
 // forward declaration
-//class CWinClipbImpl;
 class EnumFormatEtc;
 
 /*--------------------------------------------------------------------------

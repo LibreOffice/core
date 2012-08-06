@@ -39,7 +39,6 @@
 #include <cppuhelper/implbase1.hxx> // helper for implementations
 
 
-//class XResultListenerRef;
 typedef ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XResultListener >* XResultListenerPtr;
 typedef boost::ptr_vector<XResultListenerPtr> XResultListenerArr_Impl;
 
@@ -60,11 +59,6 @@ private:
 public:
                             ScAddInResult(const String& rStr);
     virtual                 ~ScAddInResult();
-
-//                          SMART_UNO_DECLARATION( ScAddInResult, UsrObject );
-
-//  virtual BOOL            queryInterface( Uik, XInterfaceRef& );
-//  virtual XIdlClassRef    getIdlClass(void);
 
                             // XVolatileResult
     virtual void SAL_CALL addResultListener( const ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XResultListener >& aListener ) throw(::com::sun::star::uno::RuntimeException);

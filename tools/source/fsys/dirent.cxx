@@ -1234,16 +1234,6 @@ DirEntry DirEntry::operator+( const DirEntry& rEntry ) const
         const DirEntry *pEntryTop = rEntry.ImpGetTopPtr();
         const DirEntry *pThisTop = ImpGetTopPtr();
 
-        // "." + irgendwas oder irgendwas + "d:irgendwas"
-/* TPF:org
-    if ( ( eFlag == FSYS_FLAG_RELROOT && !aName ) ||
-                 ( pEntryTop->aName.Len() &&
-                        ( pEntryTop->eFlag == FSYS_FLAG_ABSROOT ||
-                      pEntryTop->eFlag == FSYS_FLAG_RELROOT ||
-                          pEntryTop->eFlag == FSYS_FLAG_VOLUME ) ) )
-                return rEntry;
-*/
-
     if (
         (eFlag == FSYS_FLAG_RELROOT && aName.isEmpty()) ||
         (

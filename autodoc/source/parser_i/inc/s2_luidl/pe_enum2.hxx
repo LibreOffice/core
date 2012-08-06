@@ -20,23 +20,14 @@
 #ifndef ADC_UIDL_PE_ENUM2_HXX
 #define ADC_UIDL_PE_ENUM2_HXX
 
-
-
-// USED SERVICES
-    // BASE CLASSES
 #include <s2_luidl/parsenv2.hxx>
 #include <s2_luidl/pestate.hxx>
-    // COMPONENTS
-    // PARAMETERS
-
 
 
 namespace csi
 {
 namespace uidl
 {
-
-// class Enum;
 
 class PE_Value;
 

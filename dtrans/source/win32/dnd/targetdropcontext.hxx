@@ -50,13 +50,6 @@ public:
     virtual void SAL_CALL rejectDrop(  )
         throw( RuntimeException);
 
-
-/*  virtual Sequence< DataFlavor > SAL_CALL getCurrentDataFlavors(  )
-        throw( RuntimeException);
-    virtual sal_Bool SAL_CALL isDataFlavorSupported( const DataFlavor& df )
-        throw( RuntimeException);
-*/
-
     // XDropTargetDropContext (inherits XDropTargetDragContext)
     virtual void SAL_CALL dropComplete( sal_Bool success )
         throw(  RuntimeException);

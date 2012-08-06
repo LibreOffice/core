@@ -33,8 +33,6 @@ namespace autodoc
 
 class HtmlDisplay_Idl_Ifc;
 
-// class TextDisplay_FunctionList_Ifc;
-
 
 /** Interface for parsing code of a programming language and
     delivering the information into an Autodoc Repository.
@@ -45,9 +43,6 @@ class DisplayToolsFactory_Ifc
     virtual             ~DisplayToolsFactory_Ifc() {}
     static DisplayToolsFactory_Ifc &
                         GetIt_();
-
-//    virtual DYN autodoc::TextDisplay_FunctionList_Ifc *
-//                        Create_TextDisplay_FunctionList() const = 0;
 
     virtual DYN autodoc::HtmlDisplay_Idl_Ifc *
                         Create_HtmlDisplay_Idl() const = 0;

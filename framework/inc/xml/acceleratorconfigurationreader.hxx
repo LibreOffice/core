@@ -122,9 +122,6 @@ class AcceleratorConfigurationReader : public  css::xml::sax::XDocumentHandler
           */
         css::uno::Reference< css::xml::sax::XLocator > m_xLocator;
 
-/*        SfxAcceleratorItemList& m_aReadAcceleratorList;
-*/
-
     //-------------------------------------------
     // interface
 
