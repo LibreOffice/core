@@ -1005,7 +1005,4 @@ namespace drawinglayer
     } // end of namespace processor2d
 } // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
-// eof
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

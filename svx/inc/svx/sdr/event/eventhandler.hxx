@@ -129,6 +129,4 @@ namespace sdr
 
 #endif //_SDR_EVENT_EVENTHANDLER_HXX
 
-// eof
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

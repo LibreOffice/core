@@ -472,7 +472,4 @@ namespace sdr
     } // end of namespace contact
 } // end of namespace sdr
 
-//////////////////////////////////////////////////////////////////////////////
-// eof
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

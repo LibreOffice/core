@@ -177,6 +177,4 @@ namespace drawinglayer
 
 #endif //INCLUDED_DRAWINGLAYER_GEOMETRY_VIEWINFORMATION3D_HXX
 
-// eof
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

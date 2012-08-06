@@ -67,6 +67,4 @@ E3dPolyScene* E3dPolyScene::Clone() const
     return CloneHelper< E3dPolyScene >();
 }
 
-// eof
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

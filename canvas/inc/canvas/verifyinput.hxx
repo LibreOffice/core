@@ -673,6 +673,5 @@ namespace canvas
 }
 
 #endif /* INCLUDED_CANVAS_VERIFYINPUT_HXX */
-// eof
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

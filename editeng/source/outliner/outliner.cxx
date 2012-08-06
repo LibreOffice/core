@@ -2140,6 +2140,4 @@ sal_Bool DrawPortionInfo::IsRTL() const
     return (1 == (mnBiDiLevel % 2));
 }
 
-// eof
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

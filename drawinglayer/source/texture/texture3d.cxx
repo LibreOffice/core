@@ -247,7 +247,4 @@ namespace drawinglayer
     } // end of namespace texture
 } // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
-// eof
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -88,6 +88,5 @@ namespace sdr { namespace contact {
 //........................................................................
 
 #endif // SVX_SDR_CONTACT_VIEWCONTACTOFUNOCONTROL_HXX
-// eof
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

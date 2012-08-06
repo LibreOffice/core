@@ -140,9 +140,6 @@ namespace basegfx
     } // end of namespace tools
 } // end of namespace basegfx
 
-//////////////////////////////////////////////////////////////////////////////
-
 #endif /* _BGFX_POLYGON_B2DLINEGEOMETRY_HXX */
-// eof
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

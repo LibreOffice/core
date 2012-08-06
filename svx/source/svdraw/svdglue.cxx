@@ -402,6 +402,4 @@ void SdrGluePointList::Shear(const Point& rRef, long nWink, double tn, bool bVSh
     }
 }
 
-// eof
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

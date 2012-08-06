@@ -61,6 +61,4 @@ namespace drawinglayer
 
 #endif //_PROCESSOR_FROM_OUTPUTDEVICE_HXX
 
-// eof
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -234,6 +234,4 @@ bool ConstCustomShape::doConstructOrthogonal() const
     return SdrObjCustomShape::doConstructOrthogonal(aCustomShape);
 }
 
-// eof
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

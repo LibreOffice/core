@@ -5052,6 +5052,4 @@ SvStream& XFillAttrSetItem::Store( SvStream& rStream, sal_uInt16 nItemVersion ) 
     return SfxSetItem::Store( rStream, nItemVersion );
 }
 
-// eof
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

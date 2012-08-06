@@ -65,7 +65,4 @@ SVX_DLLPUBLIC bool ViewObjectContactPrimitiveHit(
 
 #endif //_SDRHITTESTHELPER_HXX
 
-/////////////////////////////////////////////////////////////////////
-// eof
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

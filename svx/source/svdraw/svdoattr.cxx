@@ -173,6 +173,4 @@ sal_Bool SdrAttrObj::HasLine() const
     return ((XLineStyleItem&)(GetProperties().GetObjectItemSet().Get(XATTR_LINESTYLE))).GetValue()!=XLINE_NONE;
 }
 
-// eof
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

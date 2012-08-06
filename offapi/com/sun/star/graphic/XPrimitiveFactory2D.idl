@@ -86,6 +86,4 @@ interface XPrimitiveFactory2D : ::com::sun::star::uno::XInterface
 
 #endif
 
-// eof
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

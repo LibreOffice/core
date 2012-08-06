@@ -49,9 +49,6 @@ public:
     static void TakeItemName(sal_uInt16 nWhich, String& rItemName);
 };
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
 #endif // _SVDPOOL_HXX
-// eof
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

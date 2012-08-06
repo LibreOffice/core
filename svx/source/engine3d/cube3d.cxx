@@ -140,6 +140,4 @@ void E3dCubeObj::TakeObjNamePlural(XubString& rName) const
     rName=ImpGetResStr(STR_ObjNamePluralCube3d);
 }
 
-// eof
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

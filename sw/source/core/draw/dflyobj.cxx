@@ -992,6 +992,4 @@ SdrObject* SwVirtFlyDrawObj::getFullDragClone() const
     return SdrVirtObj::getFullDragClone();
 }
 
-// eof
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -141,7 +141,4 @@ namespace basegfx
 
 #endif // _BGFX_COLOR_BCOLORMODIFIER_HXX
 
-//////////////////////////////////////////////////////////////////////////////
-// eof
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

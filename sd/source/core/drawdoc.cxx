@@ -1035,6 +1035,4 @@ sal_uInt16 SdDrawDocument::GetAnnotationAuthorIndex( const rtl::OUString& rAutho
     return idx;
 }
 
-// eof
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

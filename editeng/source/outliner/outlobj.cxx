@@ -271,7 +271,4 @@ void OutlinerParaObject::SetStyleSheets(sal_uInt16 nLevel, const XubString rNewN
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// eof
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

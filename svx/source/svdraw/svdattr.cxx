@@ -2319,6 +2319,4 @@ sal_uInt16 SdrGrafCropItem::GetVersion( sal_uInt16 /*nFileVersion*/) const
     return GRFCROP_VERSION_MOVETOSVX;
 }
 
-// eof
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

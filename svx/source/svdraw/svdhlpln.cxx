@@ -126,6 +126,4 @@ sal_uInt16 SdrHelpLineList::HitTest(const Point& rPnt, sal_uInt16 nTolLog, const
     return SDRHELPLINE_NOTFOUND;
 }
 
-// eof
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

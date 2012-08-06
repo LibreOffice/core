@@ -154,6 +154,4 @@ namespace sdr
 
 #endif //_SDR_ANIMATION_SCHEDULER_HXX
 
-// eof
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

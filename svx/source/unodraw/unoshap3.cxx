@@ -1200,6 +1200,4 @@ uno::Sequence< OUString > SAL_CALL Svx3DPolygonObject::getSupportedServiceNames(
     return aSeq;
 }
 
-// eof
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

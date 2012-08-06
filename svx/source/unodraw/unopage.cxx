@@ -929,6 +929,4 @@ SdrPage* GetSdrPageFromXDrawPage( uno::Reference< drawing::XDrawPage > xDrawPage
     return NULL;
 }
 
-// eof
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

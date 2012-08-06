@@ -276,6 +276,4 @@ void ContourWindow::Paint( const Rectangle& rRect )
     pView->EndCompleteRedraw(*pPaintWindow, true);
 }
 
-// eof
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

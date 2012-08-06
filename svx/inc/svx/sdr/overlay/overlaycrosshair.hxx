@@ -48,6 +48,4 @@ namespace sdr
 
 #endif //_SDR_OVERLAY_OVERLAYCROSSHAIR_HXX
 
-// eof
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

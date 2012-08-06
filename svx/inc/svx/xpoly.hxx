@@ -189,6 +189,4 @@ public:
 
 #endif      // _XPOLY_HXX
 
-// eof
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

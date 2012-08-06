@@ -48,6 +48,4 @@ double getMinimalDepthInViewCoordinates(const E3dCompoundObject& rObject);
 
 #endif // INCLUDED_SVX_HELPERMINIMALDEPTH_HXX
 
-// eof
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

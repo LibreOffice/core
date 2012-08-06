@@ -741,6 +741,4 @@ Pointer E3dDragMove::GetSdrDragPointer() const
     return Pointer(POINTER_MOVE);
 }
 
-// eof
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

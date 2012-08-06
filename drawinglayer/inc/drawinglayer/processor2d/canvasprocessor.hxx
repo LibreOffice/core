@@ -134,6 +134,4 @@ namespace drawinglayer
 
 #endif //_DRAWINGLAYER_PROCESSOR_CANVASPROCESSOR_HXX
 
-// eof
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

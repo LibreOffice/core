@@ -2069,6 +2069,4 @@ Polygon::Polygon(const basegfx::B2DPolygon& rPolygon)
     }
 }
 
-// eof
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

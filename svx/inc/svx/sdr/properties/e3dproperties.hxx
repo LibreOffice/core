@@ -61,6 +61,4 @@ namespace sdr
 
 #endif // _SDR_PROPERTIES_E3DPROPERTIES_HXX
 
-// eof
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

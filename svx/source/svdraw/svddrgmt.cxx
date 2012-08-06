@@ -3641,7 +3641,4 @@ Pointer SdrDragCrop::GetSdrDragPointer() const
     return Pointer(POINTER_CROP);
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-// eof
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

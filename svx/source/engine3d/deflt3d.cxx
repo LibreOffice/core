@@ -72,6 +72,4 @@ void E3dDefaultAttributes::Reset()
     bDefaultExtrudeCloseBack = sal_True;
 }
 
-// eof
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

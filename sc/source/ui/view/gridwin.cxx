@@ -5981,7 +5981,4 @@ void ScGridWindow::flushOverlayManager()
         xOverlayManager->flush();
 }
 
-// ---------------------------------------------------------------------------
-// eof
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -533,6 +533,4 @@ SdrObject* FuConstructBezierPolygon::CreateDefaultObject(const sal_uInt16 nID, c
 
 } // end of namespace sd
 
-// eof
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

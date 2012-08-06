@@ -345,7 +345,4 @@ namespace basegfx
     } // end of namespace tools
 } // end of namespace basegfx
 
-///////////////////////////////////////////////////////////////////////////////
-// eof
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

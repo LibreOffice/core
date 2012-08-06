@@ -266,6 +266,4 @@ namespace drawinglayer
 
 #endif //_DRAWINGLAYER_TEXTURE_TEXTURE_HXX
 
-// eof
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

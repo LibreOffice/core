@@ -443,7 +443,4 @@ void SdrPageWindow::SetDesignMode( bool _bDesignMode ) const
         pOC->SetUNOControlsDesignMode( _bDesignMode );
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-// eof
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

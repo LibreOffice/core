@@ -61,6 +61,4 @@ namespace drawinglayer
 
 #endif // _SDR_ATTRIBUTE_SDRSHADOWTEXTATTRIBUTE_HXX
 
-// eof
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

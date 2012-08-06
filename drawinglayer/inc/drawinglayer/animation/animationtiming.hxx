@@ -148,6 +148,4 @@ namespace drawinglayer
 
 #endif //INCLUDED_DRAWINGLAYER_ANIMATION_ANIMATIONTIMING_HXX
 
-// eof
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

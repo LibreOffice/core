@@ -157,6 +157,4 @@ void E3dSphereObj::TakeObjNamePlural(XubString& rName) const
     rName=ImpGetResStr(STR_ObjNamePluralSphere3d);
 }
 
-// eof
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

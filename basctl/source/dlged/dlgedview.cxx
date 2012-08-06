@@ -198,7 +198,4 @@ SdrObject* DlgEdView::CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nTol
     return pRetval;
 }
 
-//----------------------------------------------------------------------------
-// eof
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -62,7 +62,4 @@ namespace EEngineData
 
 #endif // _EEDATA_HXX
 
-//////////////////////////////////////////////////////////////////////////////
-// eof
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

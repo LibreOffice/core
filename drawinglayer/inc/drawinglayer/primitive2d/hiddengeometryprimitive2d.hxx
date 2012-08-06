@@ -72,7 +72,4 @@ namespace drawinglayer
 
 #endif //INCLUDED_DRAWINGLAYER_PRIMITIVE2D_HIDDENGEOMETRYPRIMITIVE2D_HXX
 
-//////////////////////////////////////////////////////////////////////////////
-// eof
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -61,6 +61,4 @@ typedef ::std::vector< ParagraphData > ParagraphDataVector;
 
 #endif // _PARAGRAPH_DATA_HXX
 
-// eof
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

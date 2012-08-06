@@ -198,7 +198,4 @@ double getMinimalDepthInViewCoordinates(const E3dCompoundObject& rObject)
     return fRetval;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// eof
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1560,6 +1560,4 @@ sd::UndoManager* SdDrawDocument::GetUndoManager() const
     return mpDocSh ? dynamic_cast< sd::UndoManager* >(mpDocSh->GetUndoManager()) : 0;
 }
 
-// eof
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -351,6 +351,4 @@ SdrObject* FuConstPolygon::CreateDefaultObject(const sal_uInt16 nID, const Recta
     return pObj;
 }
 
-// eof
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

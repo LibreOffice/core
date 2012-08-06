@@ -2178,6 +2178,4 @@ SdXMLImExSvgDElement::SdXMLImExSvgDElement(const OUString& rNew,
     basegfx::unotools::b2DPolyPolygonToPolyPolygonBezier(aPoly,maPoly);
 }
 
-// eof
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

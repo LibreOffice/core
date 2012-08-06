@@ -246,6 +246,4 @@ void E3dPolygonObj::SetLineOnly(sal_Bool bNew)
     }
 }
 
-// eof
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -99,6 +99,4 @@ bool checkHitSingle3DObject(
 
 #endif // INCLUDED_SVX_HELPERHITTEST_HXX
 
-// eof
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

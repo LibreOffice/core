@@ -164,7 +164,4 @@ void ViewObjectContactOfSdrMediaObj::executeMediaItem( const ::avmedia::MediaIte
 
 }} // end of namespace sdr::contact
 
-//////////////////////////////////////////////////////////////////////////////
-// eof
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -525,6 +525,4 @@ void GradTransformer::VecToGrad(GradTransVector& rV, GradTransGradient& rG, Grad
     }
 }
 
-// eof
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

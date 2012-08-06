@@ -574,6 +574,4 @@ sal_Bool B3dCamera::CalcFocalLength()
     return bRetval;
 }
 
-// eof
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

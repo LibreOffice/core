@@ -25,6 +25,4 @@ namespace basegfx
     double ::basegfx::fTools::mfSmallValue = 0.000000001;
 } // end of namespace basegfx
 
-// eof
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -231,6 +231,4 @@ XOutdevItemPool::~XOutdevItemPool()
     }
 }
 
-// eof
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

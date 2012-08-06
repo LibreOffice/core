@@ -81,6 +81,4 @@ namespace drawinglayer
 
 #endif //_DRAWINGLAYER_PROCESSOR3D_BASEPROCESSOR3D_HXX
 
-// eof
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

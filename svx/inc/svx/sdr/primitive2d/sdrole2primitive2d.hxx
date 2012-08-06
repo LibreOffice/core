@@ -67,6 +67,4 @@ namespace drawinglayer
 
 #endif //INCLUDED_SDR_PRIMITIVE2D_SDROLE2PRIMITIVE2D_HXX
 
-// eof
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

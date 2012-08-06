@@ -32,7 +32,4 @@
 
 #endif // INCLUDED_SW_PRIMITIVETYPES2D_HXX
 
-//////////////////////////////////////////////////////////////////////////////
-// eof
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

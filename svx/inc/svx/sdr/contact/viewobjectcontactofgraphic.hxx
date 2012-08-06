@@ -70,6 +70,4 @@ namespace sdr
 
 #endif //_SDR_CONTACT_VIEWOBJECTCONTACTOFGRAPHIC_HXX
 
-// eof
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1086,6 +1086,4 @@ void SdXMLImport::AddDateTimeDecl( const ::rtl::OUString& rName, const ::rtl::OU
     return aDecl.maStrText;
 }
 
-// eof
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

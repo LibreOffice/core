@@ -162,9 +162,6 @@ public:
     const Rectangle& GetScaleRect() const { return aScaleRect; }
 };
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
 #endif //_SVDFMTF_HXX
-// eof
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

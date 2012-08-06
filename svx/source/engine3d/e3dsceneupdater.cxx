@@ -116,7 +116,4 @@ E3DModifySceneSnapRectUpdater::~E3DModifySceneSnapRectUpdater()
     delete mpViewInformation3D;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// eof
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

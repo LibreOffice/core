@@ -151,7 +151,4 @@ namespace sdr
     } // end of namespace properties
 } // end of namespace sdr
 
-//////////////////////////////////////////////////////////////////////////////
-// eof
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

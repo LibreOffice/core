@@ -644,6 +644,4 @@ const Point SdrVirtObj::GetOffset() const
     return aAnchor;
 }
 
-// eof
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

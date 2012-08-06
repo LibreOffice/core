@@ -58,6 +58,4 @@ namespace sdr
 
 #endif //_SDR_CONTACT_VIEWCONTACTOFE3DPOLYGON_HXX
 
-// eof
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

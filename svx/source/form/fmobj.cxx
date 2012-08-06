@@ -723,6 +723,4 @@ void FmFormObj::NbcSetLayer(SdrLayerID nLayer)
     return SdrUnoObj::NbcSetLayer(nLayer);
 }
 
-// eof
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

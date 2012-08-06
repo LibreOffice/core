@@ -204,6 +204,4 @@ SdrAttrObj* E3dLatheObj::GetBreakObj()
     return pPathObj;
 }
 
-// eof
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
