@@ -3237,6 +3237,26 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
 }
 
 
+void DomainMapper::processDeferredCharacterProperties( const std::map< sal_Int32, uno::Any >& deferredCharacterProperties )
+{
+    for( std::map< sal_Int32, uno::Any >::const_iterator it = deferredCharacterProperties.begin();
+         it != deferredCharacterProperties.end();
+         ++it )
+    {
+        sal_Int32 Id = it->first;
+        sal_Int32 nIntValue = 0;
+        OUString sStringValue;
+        it->second >>= nIntValue;
+        it->second >>= sStringValue;
+        switch( Id )
+        {
+        default:
+            SAL_WARN( "writerfilter", "Unhandled property in processDeferredCharacterProperty()" );
+            break;
+        }
+    }
+}
+
 void DomainMapper::lcl_entry(int /*pos*/,
                          writerfilter::Reference<Properties>::Pointer_t ref)
 {
