@@ -229,7 +229,7 @@ OString ImagePreparer::notesToHtml( sal_uInt32 aSlideNumber )
 
     OUString aFileURL;
     FileBase::createTempFile( 0, 0, &aFileURL );
-    fprintf( stderr, OUStringToOString( aFileURL, RTL_TEXTENCODING_UTF8).getStr() );
+    fprintf( stderr, "%s", OUStringToOString( aFileURL, RTL_TEXTENCODING_UTF8).getStr() );
 
     if ( !xController->isRunning() )
         return "";
