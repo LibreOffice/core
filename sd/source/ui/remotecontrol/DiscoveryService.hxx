@@ -24,6 +24,7 @@ namespace css = ::com::sun::star;
 * The port for use for the main communication between LibO and remote control app.
 */
 #define PORT_DISCOVERY 1598
+#define BUFFER_SIZE 200
 
 #define CHARSET RTL_TEXTENCODING_UTF8
 

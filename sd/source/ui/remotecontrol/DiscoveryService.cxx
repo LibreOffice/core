@@ -12,6 +12,7 @@
 
 #include <comphelper/processfactory.hxx>
 #include <rtl/strbuf.hxx>
+#include <string.h>
 
 #include "DiscoveryService.hxx"
 
@@ -73,37 +74,26 @@ void DiscoveryService::replyTo( sockaddr_in& rAddr )
 void DiscoveryService::execute()
 {
     fprintf( stderr, "Discovery service is listening\n" );;
-    sal_uInt64 aRet(0);
-    sal_uInt64 aRead(0);
-    vector<char> aBuffer;
+
+    char aBuffer[BUFFER_SIZE];
 
     while ( true )
     {
-        aBuffer.resize( aRead + 100 );
-
+        memset( aBuffer, 0, sizeof(char) * BUFFER_SIZE );
         sockaddr_in aAddr;
         socklen_t aLen = sizeof( aAddr );
         fprintf( stderr, "DiscoveryService waiting for packet\n" );
-//         aRet = mSocket.recvFrom( &aBuffer[aRead], 100 );
-        recvfrom( mSocket, &aBuffer[aRead], 100, 0, (sockaddr*) &aAddr, &aLen );
+        recvfrom( mSocket, &aBuffer, BUFFER_SIZE, 0, (sockaddr*) &aAddr, &aLen );
         fprintf( stderr, "DiscoveryService received a packet.\n" );
-//         if ( aRet == 0 )
-//         {
-//             fprintf( stderr, "Socket returned 0\n" );
-// //             break; // I.e. transmission finished.
-//         }
-        aRead += aRet;
-        vector<char>::iterator aIt;
-        while ( (aIt = find( aBuffer.begin(), aBuffer.end(), '\n' ))
-            != aBuffer.end() )
-        {
-            sal_uInt64 aLocation = aIt - aBuffer.begin();
-            OString aString( &(*aBuffer.begin()), aLocation );
-            if ( aString.compareTo( "LOREMOTE_SEARCH" ) == 0 ) {
-                replyTo( aAddr );
+        for (int i = 0; i < BUFFER_SIZE; i++ ) {
+            if ( aBuffer[i] == '\n' )
+            {
+                OString aString( aBuffer, i );
+                if ( aString.compareTo( "LOREMOTE_SEARCH" ) == 0 ) {
+                    replyTo( aAddr );
+                }
+                break;
             }
-            aBuffer.erase( aBuffer.begin(), aIt + 1 ); // Also delete the newline
-            aRead -= (aLocation + 1);
         }
     }
 }
