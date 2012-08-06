@@ -3,15 +3,7 @@ mkdir: %_DEST%\inc\liblangtag
 ..\%__SRC%\misc\install\include\liblangtag\*    %_DEST%\inc\liblangtag\
 ..\%__SRC%\misc\install\lib\liblangtag.so*      %_DEST%\lib\
 ..\%__SRC%\misc\install\lib\langtag.lib*        %_DEST%\lib\
+..\%__SRC%\misc\liblangtag_data.zip             %_DEST%\pck\
 
 symlink: %_DEST%\lib\liblangtag.so.0.1.0    %_DEST%\lib\liblangtag.so.0
 symlink: %_DEST%\lib\liblangtag.so.0.1.0    %_DEST%\lib\liblangtag.so
-
-mkdir: %_DEST%\share
-mkdir: %_DEST%\share\liblangtag
-mkdir: %_DEST%\share\liblangtag\common
-mkdir: %_DEST%\share\liblangtag\common\bcp47
-
-..\%__SRC%\misc\install\share\liblangtag\*              %_DEST%\share\liblangtag\
-..\%__SRC%\misc\install\share\liblangtag\common\*       %_DEST%\share\liblangtag\common\
-..\%__SRC%\misc\install\share\liblangtag\common\bcp47\* %_DEST%\share\liblangtag\common\bcp47\

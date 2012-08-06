@@ -760,19 +760,21 @@ End
 
 #ifndef SYSTEM_LIBLANGTAG
 
-#ifdef UNX
 File gid_File_Lib_Langtag
     LIB_FILE_BODY;
-    // FIXME: use version vars; NOTE: currently it's 0.1.0 despite of being 0.2.0 ...
-    Name = STRING(CONCAT8(liblangtag,UNXSUFFIX,.,0,.,1,.,0));
-    Dir = SCP2_OOO_BIN_DIR;
     Styles = (PACKED);
+    Dir = SCP2_OOO_BIN_DIR;
+  #ifdef MACOSX
+    Name = STRING(CONCAT4(liblangtag,.,0,UNXSUFFIX));
+  #elif defined WNT
+    // Nothing, statically linked to libi18nisolang1
+  #else
+    // FIXME: use version vars
+    Name = STRING(CONCAT4(liblangtag,UNXSUFFIX,.,0));
+  #endif
 End
-#else
-  // WNT statically linked to libi18nisolang1
-#endif
 
-#endif
+#endif  // SYSTEM_LIBLANGTAG
 
 
 #ifdef SOLAR_JAVA

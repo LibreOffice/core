@@ -16,6 +16,9 @@ LIBLANGTAG_MINOR=2
 LIBLANGTAG_MICRO=0
 # Currently liblangtag.so.0.1.0 is generated instead of 0.2.0, presumably a bug?
 # For new versions adapt symlink in prj/d.lst
+# Version is currently hardcoded in scp2/source/ooo/file_library_ooo.scp
+# section gid_File_Lib_Langtag, adapt for new versions, or introduce
+# LIBLANGTAG_M* in configure!
 
 # --- Settings -----------------------------------------------------
 
@@ -41,7 +44,11 @@ PATCH_FILES+=liblangtag-0.2-datadir.patch
 CONFIGURE_DIR=.
 BUILD_DIR=$(CONFIGURE_DIR)
 
-CONFIGURE_FLAGS+= --prefix=$(SRC_ROOT)$/$(PRJNAME)$/$(MISC)$/install
+my_misc='$(SRC_ROOT)$/$(PRJNAME)$/$(MISC)'
+my_prefix='$(my_misc)$/install'
+my_data='$(my_prefix)$/share/liblangtag'
+
+CONFIGURE_FLAGS+= --prefix='$(my_prefix)'
 
 .IF "$(SYSTEM_LIBXML)"!="YES"
 CONFIGURE_FLAGS+= LIBXML2_CFLAGS='-I$(SOLARINCDIR)$/external$/libxml'
@@ -92,6 +99,13 @@ PATCH_FILES+=liblangtag-0.2-msc-configure.patch
 
 # --- Targets ------------------------------------------------------
 
+ALLTAR: $(MISC)/liblangtag_data.zip
+
 .INCLUDE : set_ext.mk
 .INCLUDE :	target.mk
 .INCLUDE :	tg_ext.mk
+
+$(MISC)/liblangtag_data.zip: $(PACKAGE_DIR)/$(PREDELIVER_FLAG_FILE)
+	@-rm -f $@
+	@echo creating $@
+	$(COMMAND_ECHO)cd $(my_data) && zip $(ZIP_VERBOSITY) -r $(my_misc)$/$(@:f) *

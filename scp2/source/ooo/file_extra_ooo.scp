@@ -144,6 +144,15 @@ File gid_File_Extra_Glas_Red_Zip
     Name = "glas-red.zip";
 End
 
+#ifndef SYSTEM_LIBLANGTAG
+File gid_File_Extra_Liblangtag
+    Dir = gid_Dir_Share_Liblangtag;
+    USER_FILE_BODY;
+    Styles = (ARCHIVE);
+    Name = "liblangtag_data.zip";
+End
+#endif
+
 File gid_File_Extra_Round_Gorilla_Zip
     Dir = gid_Dir_Share_Config_Wizard_Web_Buttons;
     USER_FILE_BODY;
