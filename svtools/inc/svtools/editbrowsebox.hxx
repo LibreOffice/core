@@ -77,8 +77,6 @@
 //==================================================================
 
 class Edit;
-class ListBoxFrame;
-class ButtonCtrl;
 class SpinField;
 class FormattedField;
 

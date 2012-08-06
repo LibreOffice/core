@@ -28,8 +28,6 @@
 #include <cppuhelper/implbase3.hxx>
 #include "svx/svxdllapi.h"
 
-class XShapeList;
-
 class SvxShapeCollectionMutex
 {
 public:

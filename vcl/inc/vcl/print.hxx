@@ -225,7 +225,6 @@ public:
 class VCL_DLLPUBLIC Printer : public OutputDevice
 {
     friend class OutputDevice;
-    friend class ImplQPrinter;
 
 private:
     SalInfoPrinter*             mpInfoPrinter;

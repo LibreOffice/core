@@ -24,7 +24,6 @@
 
 class SvData;
 class SotDataObject;
-class SotDataMemberObject;
 
 //=========================================================================
 

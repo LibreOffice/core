@@ -669,8 +669,6 @@ template<typename prefix> sal_Size write_lenPrefixed_uInt8s_FromOUString(SvStrea
 
 class TOOLS_DLLPUBLIC SvFileStream : public SvStream
 {
-    friend class ImpEaMgr;
-    friend class CORmFileStream;
     friend class FileCopier;
 
 private:

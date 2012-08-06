@@ -35,7 +35,6 @@
 
 #include <cmdid.h>
 
-class SwWriterApp;
 class SwModule;
 #ifdef DBG_UTIL
 class SwTestTabPage;
@@ -46,7 +45,6 @@ class ViewShell;
 class SwViewOption;
 class SwContentOptPage;
 class SwShdwCrsrOptionsTabPage;
-class SwDocEditDialog;
 
 SfxPrinter* GetPrt( ViewShell* );
 void        SetPrt( SfxPrinter* );
@@ -56,7 +54,6 @@ Item for settings dialog - document view
 --------------------------------------------------------- */
 class SW_DLLPUBLIC SwDocDisplayItem : public SfxPoolItem
 {
-    friend class SwWriterApp;
     friend class SwShdwCrsrOptionsTabPage;
     friend class SwModule;
 
@@ -210,9 +207,7 @@ Item for settings dialog - test settings
 class SW_DLLPUBLIC SwTestItem : public SfxPoolItem
 {
     friend class SwModule;
-    friend class SwWriterApp;
     friend class SwTestTabPage;
-    friend class SwDocEditDialog;
 
     sal_Bool    bTest1:1;
     sal_Bool    bTest2:1;

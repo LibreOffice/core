@@ -38,7 +38,6 @@
 class SdModule;
 class SdPrintOptions : public SfxTabPage
 {
- friend class SdOptionsDlg;
  friend class SdModule;
 
 private:

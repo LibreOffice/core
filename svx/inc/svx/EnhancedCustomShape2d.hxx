@@ -56,7 +56,6 @@ class SfxItemSet;
 struct SvxMSDffVertPair;
 struct SvxMSDffCalculationData;
 struct SvxMSDffTextRectangles;
-class SvxMSDffAdjustmentHandle;
 
 #define HANDLE_FLAGS_MIRRORED_X             0x0001
 #define HANDLE_FLAGS_MIRRORED_Y             0x0002

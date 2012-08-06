@@ -209,8 +209,6 @@ public:
 class SalI18N_InputMethod;
 class SalI18N_KeyboardExtension;
 class AttributeProvider;
-class SalUnicodeConverter;
-class SalConverterCache;
 
 extern "C" {
     struct SnDisplay;

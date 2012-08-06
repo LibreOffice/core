@@ -26,8 +26,6 @@
     Management of (automatic) styles
  --------------------------------------------------------------------*/
 
-class SwStyleHandle;
-
 class IStyleAccess
 {
 public:

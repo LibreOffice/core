@@ -32,7 +32,6 @@
 struct SfxFormalArgument;
 struct SfxTypeLibImpl;
 struct SfxInterface_Impl;
-class  SfxConfigManager;
 class  SfxConfigItem;
 class  SfxIFConfig_Impl;
 class  SfxObjectUIArr_Impl ;

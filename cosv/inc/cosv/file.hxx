@@ -32,9 +32,6 @@
 #include <cosv/ploc.hxx>
 
 
-class FileStrategy;
-
-
 namespace csv
 {
 

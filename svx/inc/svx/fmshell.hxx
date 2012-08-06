@@ -45,7 +45,6 @@
 //========================================================================
 class FmFormModel;
 class FmFormPage;
-class SvxFmTabWin;
 class FmXFormShell;
 class FmFormView;
 class SdrView;

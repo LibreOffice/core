@@ -43,7 +43,6 @@ class SvxMacroTableDtor;
 class SwBlockName
 {
     friend class SwImpBlocks;
-    friend class Sw2TextBlocks;
     sal_uInt16 nHashS, nHashL;          // Hash-Codes zum Checken
     long   nPos;                        // Dateiposition (SW2-Format)
 public:

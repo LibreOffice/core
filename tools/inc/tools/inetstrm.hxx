@@ -25,7 +25,6 @@
 
 class INetMessage;
 class INetMIMEMessage;
-class INetHTTPMessage;
 class SvMemoryStream;
 class SvStream;
 

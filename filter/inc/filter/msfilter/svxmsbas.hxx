@@ -57,8 +57,6 @@ typedef boost::unordered_map< sal_Int32, String >  ObjIdToName;
 
 typedef std::map< String, ObjIdToName >  ControlAttributeInfo;
 
-class VBA_Impl;
-
 class MSFILTER_DLLPUBLIC SvxImportMSVBasic
 {
 public:

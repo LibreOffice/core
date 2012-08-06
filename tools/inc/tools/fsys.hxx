@@ -141,7 +141,6 @@ enum FSysExact
 struct dirent;
 class TOOLS_DLLPUBLIC FileStat
 {
-    friend class    CORmFSys;
     friend class    Dir;
     friend struct   DirReader_Impl;
     friend void     ImpInitFileStat( FileStat&, dirent* );
@@ -373,7 +372,6 @@ struct DirReader_Impl;
 class TOOLS_DLLPUBLIC Dir : public DirEntry
 {
 friend struct DirReader_Impl;
-friend class CORmFSys;
 
     DirReader_Impl* pReader;        // systemabhaengig
     DirEntryList*   pLst;

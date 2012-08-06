@@ -162,7 +162,6 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
     // exhibition hack (MA,MBA)
     friend void lcl_SelectShellForDrop( SwView &rView );
 
-    friend class TestTemplateItem;
     friend class SwHHCWrapper;
     friend class SwHyphWrapper;
     friend class SwView_Impl;

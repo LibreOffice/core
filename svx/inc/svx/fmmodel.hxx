@@ -34,7 +34,6 @@
 
 class SfxObjectShell;
 class SfxItemPool;
-class VCItemPool;
 class FmXUndoEnvironment;
 class SfxObjectShell;
 class SbxObject;

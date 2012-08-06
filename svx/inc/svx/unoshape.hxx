@@ -85,7 +85,6 @@ protected:
 struct SvxShapeImpl;
 class SvxShapeMaster;
 class SvxItemPropertySet;
-class SvxItemPropertySimpleEntry;
 class SfxItemSet;
 
 void SVX_DLLPUBLIC SvxItemPropertySet_setPropertyValue( const SvxItemPropertySet& rPropSet, const SfxItemPropertySimpleEntry* pMap,

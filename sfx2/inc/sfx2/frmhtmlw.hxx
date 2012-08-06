@@ -31,7 +31,6 @@
 #include <svtools/htmlout.hxx>
 #include <svtools/htmlkywd.hxx>
 
-class SfxFrameSetObjectShell;
 class SfxFrame;
 
 namespace com { namespace sun { namespace star {

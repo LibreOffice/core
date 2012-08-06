@@ -51,7 +51,6 @@ class SdrUnoObj;
 class SdrPaintWindow;
 class SdrView;
 class SdrPageObj;
-class B2dIAOManager;
 class SdrPageView;
 
 // #110094#

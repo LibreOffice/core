@@ -80,7 +80,6 @@ namespace framework
 #define WINDOWSTATE_PROPERTY_SOFTCLOSE      "SoftClose"
 #define WINDOWSTATE_PROPERTY_CONTEXTACTIVE  "ContextActive"
 
-class ConfigurationAccess_Windows;
 class WindowStateConfiguration :  private ThreadHelpBase                        ,   // Struct for right initalization of mutex member! Must be first of baseclasses.
                                   public ::cppu::WeakImplHelper2< ::com::sun::star::container::XNameAccess, css::lang::XServiceInfo>
 {

@@ -58,7 +58,6 @@ class SvxBulletItem;
 class SvxFont;
 class SvxSearchItem;
 class SvxFieldItem;
-class OLUndoRemove;
 class Window;
 class KeyEvent;
 class MouseEvent;
@@ -130,7 +129,6 @@ private:
     friend class OutlinerView;
     friend class OutlinerParaObject;
     friend class OutlinerEditEng;
-    friend class OLUndoDepth;
     friend class OutlinerUndoCheckPara;
     friend class OutlinerUndoChangeParaFlags;
 

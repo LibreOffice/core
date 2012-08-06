@@ -141,7 +141,6 @@ namespace nsUseOnPage
 class SW_DLLPUBLIC SwPageDesc : public SwModify
 {
     friend class SwDoc;
-    friend class SwUndoPageDescExt;
 
     String      aDescName;
     SvxNumberType   aNumType;

@@ -287,9 +287,7 @@ class VCL_DLLPUBLIC OutputDevice : public Resource
     friend class Application;
     friend class Bitmap;
     friend class ImplImageBmp;
-    friend class ImplQPrinter;
     friend class Printer;
-    friend class SalGraphicsLayout;
     friend class System;
     friend class VirtualDevice;
     friend class Window;

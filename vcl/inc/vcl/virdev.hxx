@@ -39,7 +39,6 @@
 // -----------------
 
 class SalVirtualDevice;
-class RmVirtualDevice;
 struct SystemGraphicsData;
 
 class VCL_DLLPUBLIC VirtualDevice : public OutputDevice

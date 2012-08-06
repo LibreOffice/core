@@ -1594,9 +1594,6 @@ class ImplIntrospection : public XIntrospection
                         , public OIntrospectionMutex
                         , public OComponentHelper
 {
-    friend class ImplMergeIntrospection;
-    friend class ImplMVCIntrospection;
-
     // Implementation der Introspection.
     rtl::Reference< IntrospectionAccessStatic_Impl > implInspect(const Any& aToInspectObj);
 

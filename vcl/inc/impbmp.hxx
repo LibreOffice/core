@@ -40,7 +40,6 @@ struct BitmapBuffer;
 class SalBitmap;
 class BitmapPalette;
 class SalGraphics;
-class ImplServerBitmap;
 class Bitmap;
 class OutputDevice;
 class Color;

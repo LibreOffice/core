@@ -51,7 +51,6 @@ namespace lang {
 }
 namespace awt {
     struct WindowDescriptor;
-    class XDataTransfer;
 } } } }
 
 extern "C" {

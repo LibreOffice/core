@@ -47,7 +47,6 @@ class _SetGetExpFlds;
 class SwViewOption;
 class OutputDevice;
 class SwViewOptionAdjust_Impl;
-class SwPrtOptions;
 class ViewShell;
 class SfxViewShell;
 

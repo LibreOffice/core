@@ -112,7 +112,6 @@ class SVX_DLLPUBLIC SdrTableObj : public ::SdrTextObj
 {
     friend class Cell;
     friend class SdrTableObjImpl;
-    friend class SdrTableModifyGuard;
 
 public:
     SdrTableObj(SdrModel* _pModel);

@@ -63,7 +63,6 @@ namespace BasicIDE
 class BasicIDEShell :public SfxViewShell
                     ,public ::basctl::DocumentEventListener
 {
-friend class JavaDebuggingListenerImpl;
 friend class LocalizationMgr;
     friend bool implImportDialog( Window* pWin, const ::rtl::OUString& rCurPath, const ScriptDocument& rDocument, const ::rtl::OUString& aLibName );
     friend bool BasicIDE::RemoveDialog( const ScriptDocument& rDocument, const ::rtl::OUString& rLibName, const ::rtl::OUString& rDlgName );

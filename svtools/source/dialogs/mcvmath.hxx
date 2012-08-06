@@ -32,7 +32,6 @@
 #include <tools/solar.h>
 
 class FixCpx;
-class ColWheel;
 
 // No of fractal bits
 // allowed range 0..14, must be even
@@ -73,7 +72,6 @@ class Fix
 {
 private:
     friend  class FixCpx;
-    friend  class ColWheel;
 
 public:
     long            x;

@@ -49,7 +49,6 @@ class Image;
 class PopupMenu;
 class KeyCode;
 class KeyEvent;
-class AppBarWindow;
 class MenuFloatingWindow;
 class Window;
 class SalMenu;

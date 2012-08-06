@@ -30,7 +30,6 @@
 #define _E3D_UNDO_HXX
 
 #include <svx/svdundo.hxx>
-class E3DObject;
 #include <svx/scene3d.hxx>
 #include "svx/svxdllapi.h"
 

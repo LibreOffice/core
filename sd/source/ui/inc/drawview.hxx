@@ -67,8 +67,6 @@ protected:
     virtual void ModelHasChanged();
 
 private:
-    friend class DrawViewRedirector;
-
     DrawDocShell*   mpDocShell;
     DrawViewShell*  mpDrawViewShell;
     VirtualDevice*  mpVDev;

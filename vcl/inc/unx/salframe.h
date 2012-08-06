@@ -47,7 +47,6 @@
 // -=-= forwards -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class   SalDisplay;
 class   X11SalGraphics;
-class SalGraphicsLayout;
 class   SalI18N_InputContext;
 
 namespace vcl_sal { class WMAdaptor; class NetWMAdaptor; class GnomeWMAdaptor; }

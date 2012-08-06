@@ -27,15 +27,11 @@
 #include <sfx2/sfxhtml.hxx>
 
 class SfxFrameHTMLParser;
-class _SfxFrameHTMLContexts;
-class SfxFrameSetObjectShell;
 class SfxMedium;
 namespace svtools { class AsynchronLink; }
 
 class SFX2_DLLPUBLIC SfxFrameHTMLParser : public SfxHTMLParser
 {
-    friend class _SfxFrameHTMLContext;
-
 protected:
    SfxFrameHTMLParser( SvStream& rStream, sal_Bool bIsNewDoc=sal_True, SfxMedium *pMediumPtr=0 ):
    SfxHTMLParser( rStream, bIsNewDoc, pMediumPtr ) {};

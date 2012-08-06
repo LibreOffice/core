@@ -58,7 +58,6 @@ class SfxItemSet;
 class Outliner;
 class Graphic;
 class SvxMSDffManager;
-class PptTextMetaCharList;
 class PPTTextObj;
 class DffRecordHeader;
 struct PptCharAttrSet;

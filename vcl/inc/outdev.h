@@ -39,7 +39,6 @@
 class Size;
 class Font;
 class VirtualDevice;
-class ImplServerGraphics;
 class ImplGetDevFontList;
 class GetDevSizeList;
 

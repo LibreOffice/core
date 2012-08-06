@@ -26,7 +26,6 @@
 
 class SwTxtNode;
 class SwIndex;
-class SpellCheck;
 class Font;
 #include <com/sun/star/linguistic2/XSpellAlternatives.hpp>
 #include <com/sun/star/linguistic2/XSpellChecker1.hpp>

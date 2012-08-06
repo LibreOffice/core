@@ -25,7 +25,6 @@
 #include <svx/svdobj.hxx>
 
 class SdrTextObj;
-class SdrPaintInfoRec;
 class SdrPage;
 
 class SVX_DLLPUBLIC SdrOutliner : public Outliner

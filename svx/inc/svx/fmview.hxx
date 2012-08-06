@@ -44,7 +44,6 @@ namespace com { namespace sun { namespace star {
 
 class OutputDevice;
 class FmFormModel;
-class FmPageViewWinRec;
 class FmFormObj;
 class FmFormPage;
 class FmFormShell;

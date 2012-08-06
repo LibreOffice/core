@@ -72,7 +72,6 @@ class SfxViewFrame;
 class SfxFrameDescriptor;
 class SfxFrameSetDescriptor;
 class SfxMedium;
-class SfxFrameHistory_Impl;
 class SfxDispatcher;
 class SfxMedium;
 class Rectangle;
@@ -229,7 +228,6 @@ public:
 
 //--------------------------------------------------------------------
 
-class SfxFrameItem_Impl;
 class SFX2_DLLPUBLIC SfxFrameItem: public SfxPoolItem
 {
     SfxFrame*               pFrame;

@@ -41,9 +41,7 @@
 //  forwards, typedefs, declarations
 //________________________________________________________________________________________________________________
 
-class SfxConfigManager;
 class SystemWindow;
-class SfxArg;
 class SfxSlot;
 class SfxSlotServer;
 class SfxControllerItem;

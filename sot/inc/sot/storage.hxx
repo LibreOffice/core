@@ -55,7 +55,6 @@ class BaseStorageStream;
 class SOT_DLLPUBLIC SotStorageStream : virtual public SotObject, public SvStream
 {
 friend class SotStorage;
-friend class ImpStream;
     BaseStorageStream * pOwnStm;// Zeiger auf den eigenen Stream
 protected:
     virtual sal_uLong       GetData( void* pData, sal_uLong nSize );

@@ -216,7 +216,6 @@ class LayoutManagerListener : public ::com::sun::star::frame::XLayoutManagerList
 
 class SfxWorkWindow
 {
-    friend class UIElementWrapper;
     friend class LayoutManagerListener;
 
 protected:

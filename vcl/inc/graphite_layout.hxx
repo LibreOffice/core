@@ -48,10 +48,6 @@
 // Module
 
 // Module type definitions and forward declarations.
-//
-class TextSourceAdaptor;
-class GraphiteFontAdaptor;
-class GrSegRecord;
 // SAL/VCL types
 class ServerFont;
 

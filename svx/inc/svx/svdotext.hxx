@@ -166,7 +166,6 @@ private:
     friend class sdr::properties::TextProperties;
     friend class sdr::properties::CellProperties;
 
-    friend class                ImpTextPortionHandler;
     friend class                ImpSdrObjTextLink;
     friend class                ImpSdrObjTextLinkUserData;
     friend class                SdrPowerPointImport; // fuer PowerPointImport

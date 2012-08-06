@@ -69,7 +69,6 @@ namespace basegfx
     class B2DRange;
 } // end of namespace basegfx
 
-class SdrUnoControlList;
 class SdrPaintWindow;
 class Link;
 

@@ -51,7 +51,6 @@ class SfxShell;
 struct SfxShell_Impl;
 struct SfxTypeLibImpl;
 class SfxShellObject;
-class SfxShellSubObject;
 class SfxDispatcher;
 class SfxViewFrame;
 class SfxSlot;

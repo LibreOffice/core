@@ -161,7 +161,6 @@ class SAL_DLLPRIVATE FmXFormShell   :public FmXFormShell_BASE
 {
     friend class FmFormView;
     friend class FmXFormView;
-    friend class WizardUsageConfigItem;
 
     class SuspendPropertyTracking;
     friend class SuspendPropertyTracking;

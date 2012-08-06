@@ -39,7 +39,6 @@
 
 //------------------------------------------------------------------
 
-class SfxUnoToolBoxControl;
 class SfxToolBoxControl;
 class SfxBindings;
 class SfxModule;
@@ -102,7 +101,6 @@ class SfxFrameStatusListener : public svt::FrameStatusListener
 
 class SFX2_DLLPUBLIC SfxPopupWindow: public FloatingWindow, public SfxStatusListenerInterface
 {
-friend class SfxToolBox_Impl;
     sal_Bool                                                                             m_bFloating;
     sal_uIntPtr                                                                            m_nEventId;
     sal_Bool                                                                             m_bCascading;
@@ -184,8 +182,6 @@ class SFX2_DLLPUBLIC SfxToolBoxControl:
 
 {
 friend class SfxToolbox;
-friend class SfxToolBox_Impl;
-friend class SfxToolboxCustomizer;
 friend class SfxPopupWindow;
 friend struct SfxTbxCtrlFactory;
 

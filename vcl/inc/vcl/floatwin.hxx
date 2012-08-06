@@ -34,7 +34,6 @@
 #include <vcl/syswin.hxx>
 
 class ToolBox;
-class PopupModeEvent;
 
 // ------------------------
 // - FloatingWindow-Types -

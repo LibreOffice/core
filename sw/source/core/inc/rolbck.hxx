@@ -359,7 +359,6 @@ public:
 class SwHistory
 {
     friend class SwDoc;         // actually only SwDoc::DelUndoObj may access
-    friend class SwUndoWriter;  // for Undo/Redo Writer
     friend class SwRegHistory;  // for inserting History attributes
 
     SwpHstry m_SwpHstry;

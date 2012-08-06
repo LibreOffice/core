@@ -37,7 +37,6 @@
 
 class Window;
 class SfxFilter;
-class SfxObjectFacArr_Impl;
 class SfxObjectFactory;
 class SfxMedium;
 class SfxFilterContainer_Impl;

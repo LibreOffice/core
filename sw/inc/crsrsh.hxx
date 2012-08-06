@@ -156,7 +156,6 @@ class SW_DLLPUBLIC SwCrsrShell
     friend class SwCallLink;
     friend class SwVisCrsr;
     friend class SwSelPaintRects;
-    friend class SwChgLinkFlag;
 
     // requires the Crsr as InternalCrsr
     friend sal_Bool GetAutoSumSel( const SwCrsrShell&, SwCellFrms& );

@@ -32,7 +32,6 @@ typedef char * CLASS_DATA;  // Zeiger auf die Daten einer Klasse
 class RscCompiler;
 class RscTop;
 class RscTypCont;
-class RscIncList;
 
 /******************* G l o b a l   V a r i a b l e s *********************/
 extern rtl::OString* pStdParType;

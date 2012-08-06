@@ -34,7 +34,6 @@
 class Link;
 class ResMgr;
 class SdrEngineDefaults;
-class ImpSdrStrCache;
 
 //************************************************************
 //   Defines

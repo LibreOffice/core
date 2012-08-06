@@ -38,7 +38,6 @@
 // forward ---------------------------------------------------------------
 
 class SvxBoxEntry;
-class SvxListBase;
 
 typedef std::vector<SvxBoxEntry*> SvxEntryLst;
 

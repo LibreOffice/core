@@ -105,8 +105,6 @@ public:
     //---------------------------------------------------------------------
 #ifndef _SFXITEMS_HXX
 
-friend class SfxPoolWhichMap;
-
 private:
     sal_uInt16                      GetIndex_Impl(sal_uInt16 nWhich) const;
     sal_uInt16                      GetSize_Impl() const;

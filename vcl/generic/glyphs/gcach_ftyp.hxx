@@ -33,7 +33,6 @@
 
 #include <rtl/textcvt.h>
 
-class FreetypeServerFont;
 #ifdef ENABLE_GRAPHITE
 class GraphiteFaceWrapper;
 #endif

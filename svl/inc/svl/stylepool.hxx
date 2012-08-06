@@ -24,7 +24,6 @@
 #include <svl/itemset.hxx>
 
 class StylePoolImpl;
-class StylePoolIterImpl;
 class IStylePoolIteratorAccess;
 
 class SVL_DLLPUBLIC StylePool

@@ -56,8 +56,6 @@ typedef ::std::vector< SwXMLTableLines_Impl* > SwXMLTableLinesCache_Impl;
 
 class SwXMLExport : public SvXMLExport
 {
-    friend class SwXMLExpContext;
-
     SvXMLUnitConverter*         pTwipUnitConv;
     SvXMLExportItemMapper*      pTableItemMapper;
     SwXMLTableLinesCache_Impl*  pTableLines;

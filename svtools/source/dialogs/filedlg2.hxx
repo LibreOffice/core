@@ -73,8 +73,6 @@ virtual long    PreNotify( NotifyEvent& rNEvt );
 
 class ImpPathDialog
 {
-    friend class ImpFileDialog;
-
 private:
     PathDialog*         pSvPathDialog;
     Edit*               pEdit;

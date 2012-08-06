@@ -72,8 +72,6 @@ protected:
     // "Singleton Pattern"
     static salhelper::TimerManager* m_pManager;
 
-    friend class TimerManagerCleanup;
-
 };
 
 using namespace salhelper;

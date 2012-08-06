@@ -40,7 +40,6 @@ class TextCharAttrib;
 class TextUndo;
 class TextUndoManager;
 class EditSelFunctionSet;
-class EditSelEngine;
 class IdleFormatter;
 class TextNode;
 class OutputDevice;

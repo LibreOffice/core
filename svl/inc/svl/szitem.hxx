@@ -23,7 +23,6 @@
 
 #include <svl/poolitem.hxx>
 
-class SfxArguments;
 class SvStream;
 
 DBG_NAMEEX(SfxSizeItem)

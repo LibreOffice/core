@@ -55,7 +55,6 @@ class PspSalPrinter;
 class PspSalInfoPrinter;
 class ServerFont;
 class ImplLayoutArgs;
-class X11FontLayout;
 class ServerFontLayout;
 
 namespace basegfx {
@@ -96,7 +95,6 @@ public:
 
 class VCLPLUG_GEN_PUBLIC X11SalGraphics : public SalGraphics
 {
-    friend class            X11FontLayout;
     friend class            ServerFontLayout;
 protected:
     SalFrame*               m_pFrame; // the SalFrame which created this Graphics or NULL

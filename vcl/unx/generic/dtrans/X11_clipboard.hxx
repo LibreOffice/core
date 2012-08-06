@@ -54,7 +54,6 @@ namespace x11 {
 
 
         friend class SelectionManager;
-        friend class X11_Transferable;
 
         void fireChangedContentsEvent();
         void clearContents();

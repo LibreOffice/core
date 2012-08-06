@@ -41,7 +41,6 @@
 
 class E3dObject;
 class E3dScene;
-class SceneList;
 class Impl3DMirrorConstructOverlay;
 
 /*************************************************************************

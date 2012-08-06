@@ -61,8 +61,6 @@ class SfxStyleSheet;
 class SdrOle2Obj;
 class SdrModel;
 class SdrObject;
-class SdrViewUserMarker;
-class B2dIAOManager;
 
 #ifdef DBG_UTIL
 class SdrItemBrowser;
@@ -129,7 +127,6 @@ typedef ::std::vector< SdrPaintWindow* > SdrPaintWindowVector;
 class SVX_DLLPUBLIC SdrPaintView : public SfxListener, public SfxRepeatTarget, public SfxBroadcaster, public ::utl::ConfigurationListener
 {
     friend class                SdrPageView;
-    friend class                FrameAnimator;
     friend class                SdrGrafObj;
 
     SdrPageView*                mpPageView;

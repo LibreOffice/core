@@ -38,7 +38,6 @@
 
 class SwTxtFld;
 class SwRootFrm;
-class SwPostIt;
 class String;
 class SwPostItMgr;
 class SwEditWin;

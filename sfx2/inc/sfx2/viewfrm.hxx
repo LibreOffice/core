@@ -41,7 +41,6 @@ class SfxBindings;
 class SfxProgress;
 class SvData;
 class SfxViewShell;
-class SvPseudoObject;
 class SystemWindow;
 class Fraction;
 class Point;

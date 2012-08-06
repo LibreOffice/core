@@ -51,7 +51,6 @@ class SfxModule;
 class SfxViewFrame;
 class SfxItemPool;
 class SfxTabPage;
-class SfxPrintMonitor;
 class SfxFrameSetDescriptor;
 class Printer;
 class SfxPrinter;
@@ -130,7 +129,6 @@ class SFX2_DLLPUBLIC SfxViewShell: public SfxShell, public SfxListener
 {
 #ifdef _SFXVIEWSH_HXX
 friend class SfxViewFrame;
-friend class SfxPlugInFrame;
 friend class SfxBaseController;
 friend class SfxPrinterController;
 #endif

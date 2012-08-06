@@ -914,7 +914,6 @@ friend WW8PLCFx_Cp_FKP::WW8PLCFx_Cp_FKP( SvStream*, SvStream*, SvStream*,
 
 #ifndef DUMP
 friend WW8PLCFMan::WW8PLCFMan(WW8ScannerBase*, ManTypes, long, bool);
-friend class SwWw8ImplReader;
 friend class SwWW8FltControlStack;
 #endif
 

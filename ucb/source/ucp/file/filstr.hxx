@@ -39,8 +39,6 @@ namespace fileaccess {
 
     // forward:
     class shell;
-    class XInputStreamForStream;
-    class XOutputStreamForStream;
 
     class XStream_impl
         : public cppu::OWeakObject,
@@ -52,8 +50,6 @@ namespace fileaccess {
           public com::sun::star::io::XTruncate,
           public com::sun::star::io::XAsyncOutputMonitor
     {
-        friend class XInputStreamForStream;
-        friend class XOutputStreamForStream;
 
     public:
 

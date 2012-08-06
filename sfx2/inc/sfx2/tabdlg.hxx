@@ -39,7 +39,6 @@ class SfxBindings;
 typedef SfxTabPage* (*CreateTabPage)(Window *pParent, const SfxItemSet &rAttrSet);
 typedef sal_uInt16*     (*GetTabPageRanges)(); // provides international Which-value
 struct TabPageImpl;
-class SfxUs_Impl;
 
 struct TabDlg_Impl;
 

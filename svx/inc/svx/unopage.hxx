@@ -54,11 +54,9 @@ class SdrModel;
 class SdrView;
 class SdrPageView;
 class SdrObject;
-class SvxShapeDescriptor;
 class SvxShape;
 class SvxShapeGroup;
 class SvxShapeConnector;
-class SvxShapeList;
 
 /***********************************************************************
 * Macros fuer Umrechnung Twips<->100tel mm                             *

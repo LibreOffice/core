@@ -41,7 +41,6 @@ class String;
 class SvStream;
 class SvxMacroTableDtor;
 class SvNumberFormatter;
-class SvDataObject;
 
 struct HTMLOutEvent
 {

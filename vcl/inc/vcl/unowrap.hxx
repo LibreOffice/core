@@ -35,7 +35,6 @@
 
 class XWindowPeer;
 class XToolkit;
-class XVclToolkit;
 class EventList;
 class Window;
 class OutputDevice;
@@ -43,7 +42,6 @@ class MouseEvent;
 class CommandEvent;
 class KeyEvent;
 class Rectangle;
-class XVclComponentPeer;
 class Menu;
 
 namespace com {

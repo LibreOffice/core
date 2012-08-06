@@ -44,7 +44,6 @@ namespace com { namespace sun { namespace star {
 }}}
 
 class SdrView;
-class SfxJSArray;
 class HelpEvent;
 
 class SVX_DLLPUBLIC FmFormPage : public SdrPage

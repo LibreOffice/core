@@ -87,7 +87,6 @@ public:
 class SdModule;
 class SdTpOptionsMisc : public SfxTabPage
 {
- friend class SdOptionsDlg;
  friend class SdModule;
 
 private:

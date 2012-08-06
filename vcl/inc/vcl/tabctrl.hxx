@@ -35,7 +35,6 @@
 
 struct ImplTabItem;
 struct ImplTabCtrlData;
-class ImplTabItemList;
 class TabPage;
 class PushButton;
 class ListBox;
