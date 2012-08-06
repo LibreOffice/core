@@ -10967,7 +10967,6 @@ else
     esac
 fi
 AC_SUBST(SYSTEM_GLIB)
-BUILD_TYPE="$BUILD_TYPE GLIB"
 
 dnl Get system's glib flags and libs.
 dnl The i18npool LanguageTag wrapper uses it for liblangtag.
@@ -10976,6 +10975,8 @@ GLIB_CFLAGS=''
 GLIB_LIBS=''
 if test "$SYSTEM_GLIB" = YES; then
     PKG_CHECK_MODULES( GLIB, glib-2.0 )
+else
+    BUILD_TYPE="$BUILD_TYPE GLIB"
 fi
 AC_SUBST(GLIB_CFLAGS)
 AC_SUBST(GLIB_LIBS)
