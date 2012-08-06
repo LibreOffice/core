@@ -73,9 +73,9 @@ void DiscoveryService::replyTo( sockaddr_in& rAddr )
 void DiscoveryService::execute()
 {
     fprintf( stderr, "Discovery service is listening\n" );;
-    sal_uInt64 aRet, aRead;
+    sal_uInt64 aRet(0);
+    sal_uInt64 aRead(0);
     vector<char> aBuffer;
-    aRead = 0;
 
     while ( true )
     {
