@@ -94,8 +94,7 @@ void SbiScanner::GenError( SbError code )
             }
             bRes = pBasic->CError( code, aError, nLine, nc, nCol2 );
         }
-        bAbort |= !bRes |
-             ( code == SbERR_NO_MEMORY || code == SbERR_PROG_TOO_LARGE );
+        bAbort = bAbort || !bRes  || ( code == SbERR_NO_MEMORY || code == SbERR_PROG_TOO_LARGE );
     }
     if( bErrors )
         nErrors++;
