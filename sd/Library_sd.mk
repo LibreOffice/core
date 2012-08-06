@@ -35,7 +35,6 @@ $(eval $(call gb_SdiTarget_set_include,sd/sdi/sdslots,\
     $$(INCLUDE) \
 ))
 
-
 $(eval $(call gb_SdiTarget_SdiTarget,sd/sdi/sdgslots,sd/sdi/sdgslots))
 
 $(eval $(call gb_SdiTarget_set_include,sd/sdi/sdgslots,\
@@ -59,6 +58,10 @@ $(eval $(call gb_Library_set_include,sd,\
     -I$(SRCDIR)/sd/source/ui/inc \
     -I$(SRCDIR)/sd/source/ui/slidesorter/inc \
     -I$(WORKDIR)/SdiTarget/sd/sdi \
+))
+
+$(eval $(call gb_Library_use_externals,sd,\
+ libxml2 \
 ))
 
 $(eval $(call gb_Library_add_defs,sd,\
@@ -102,6 +105,7 @@ $(eval $(call gb_Library_use_libraries,sd,\
     ucbhelper \
     utl \
     vcl \
+    xmlsecurity \
     $(gb_STDLIBS) \
 ))
 

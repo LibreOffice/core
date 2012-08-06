@@ -58,9 +58,6 @@ void RemoteServer::listenThread()
     {
     }
 
-
-    // TODO: decryption
-
     sal_uInt64 aRet, aRead;
     vector<char> aBuffer;
     vector<OString> aCommand;
@@ -86,7 +83,7 @@ void RemoteServer::listenThread()
                 aReceiver.parseCommand( aCommand );
                 aCommand.clear();
             }
-            aBuffer.erase( aBuffer.begin(), aIt + 1 ); // Also delete the newline
+            aBuffer.erase( aBuffer.begin(), aIt + 1 ); // Also delete the empty line
             aRead -= (aLocation + 1);
         }
     }

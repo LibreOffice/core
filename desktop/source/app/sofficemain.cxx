@@ -99,6 +99,7 @@ extern "C" int DESKTOP_DLLPUBLIC soffice_main()
 #endif
         throw; // to get exception type printed
     }
+#endif
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
