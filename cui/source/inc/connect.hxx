@@ -38,12 +38,7 @@
 
 class SdrView;
 
-/*************************************************************************
-|*
-|* Dialog for changing connectors.
-|*
-\************************************************************************/
-
+/// Dialog for changing connectors.
 class SvxConnectionPage : public SfxTabPage
 {
 private:
@@ -97,13 +92,8 @@ public:
     virtual void PageCreated (SfxAllItemSet aSet);
 };
 
-/*************************************************************************
-|*
-|* Derived from SfxSingleTabDialog, in order to be informed about
-|* virtual methods by the control.
-|*
-\************************************************************************/
-
+/* Derived from SfxSingleTabDialog, in order to be informed about
+   virtual methods by the control. */
 class SvxConnectionDialog : public SfxSingleTabDialog
 {
 public:

@@ -55,20 +55,15 @@ typedef sal_uInt16*         (*GetPageRanges)(); // gives international Which-val
 // position of iconchoicectrl
 enum EIconChoicePos { PosLeft, PosRight, PosTop, PosBottom };
 
-/**********************************************************************
-|
-| Data-structure for pages in dialog
-|
-\**********************************************************************/
-
+/// Data-structure for pages in dialog
 struct IconChoicePageData
 {
     sal_uInt16 nId;
-    CreatePage fnCreatePage;    // pointer to the factory
-    GetPageRanges fnGetRanges;  // pointer to the ranges-function
-    IconChoicePage* pPage;      // the TabPage itself
-    sal_Bool bOnDemand;         // Flag: ItemSet onDemand
-    sal_Bool bRefresh;          // Flag: page has to be newly initialized
+    CreatePage fnCreatePage;    ///< pointer to the factory
+    GetPageRanges fnGetRanges;  ///< pointer to the ranges-function
+    IconChoicePage* pPage;      ///< the TabPage itself
+    sal_Bool bOnDemand;         ///< Flag: ItemSet onDemand
+    sal_Bool bRefresh;          ///< Flag: page has to be newly initialized
 
     // constructor
     IconChoicePageData( sal_uInt16 Id, CreatePage fnPage, GetPageRanges fnRanges, sal_Bool bDemand )
@@ -80,12 +75,6 @@ struct IconChoicePageData
           bRefresh      ( sal_False )
     {}
 };
-
-/**********************************************************************
-|
-| IconChoicePage
-|
-\**********************************************************************/
 
 class IconChoicePage : public TabPage
 {
@@ -124,11 +113,11 @@ public :
     void                SetExchangeSupport( sal_Bool bNew = sal_True )  { bHasExchangeSupport = bNew; }
 
     enum {
-        KEEP_PAGE = 0x0000,     // error handling
-            // 2nd filling of an ItemSet for updating superior examples;
-            // this pointer can always be NULL!!
+        KEEP_PAGE = 0x0000, ///< error handling
+        /** 2nd filling of an ItemSet for updating superior examples;
+            this pointer can always be NULL!! */
         LEAVE_PAGE = 0x0001,
-            // refresh set and update other pages
+        /// refresh set and update other pages
         REFRESH_SET = 0x0002
     };
 
@@ -143,12 +132,6 @@ public :
     void                StateChanged( StateChangedType nType );
     void                DataChanged( const DataChangedEvent& rDCEvt );
 };
-
-/**********************************************************************
-|
-| IconChoiceDialog
-|
-\**********************************************************************/
 
 class IconChoiceDialog : public ModalDialog
 {
@@ -215,21 +198,14 @@ protected :
 public :
 
     // the IconChoiceCtrl's could also be set in the Ctor
-
     IconChoiceDialog ( Window* pParent, const ResId &rResId,
                        const EIconChoicePos ePos = PosLeft, const SfxItemSet * pItemSet = 0 );
     ~IconChoiceDialog ();
 
-    ///////////////////////////////////////////////////////////////////////////////////
-    // virtual methods
-    //
     virtual void        Paint( const Rectangle& rRect );
     virtual void        Resize();
 
-    ///////////////////////////////////////////////////////////////////////////////////
     // interface
-    //
-
     SvxIconChoiceCtrlEntry* AddTabPage(
         sal_uInt16 nId, const String& rIconText, const Image& rChoiceIcon,
         CreatePage pCreateFunc /* != NULL */, GetPageRanges pRangesFunc = NULL /* NULL allowed*/,
@@ -239,8 +215,8 @@ public :
     sal_uInt16              GetCurPageId() const       { return mnCurrentPageId; }
     void                ShowPage( sal_uInt16 nId );
 
-                        // gives via map converted local slots if applicable
-    const sal_uInt16*       GetInputRanges( const SfxItemPool& );
+    /// gives via map converted local slots if applicable
+    const sal_uInt16*   GetInputRanges( const SfxItemPool& );
     void                SetInputSet( const SfxItemSet* pInSet );
     const SfxItemSet*   GetOutputItemSet() const { return pOutSet; }
 

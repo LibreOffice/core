@@ -94,11 +94,9 @@ public:
                             const SvObjectServerList* pServers = NULL );
     virtual short       Execute();
 
-    // get replacement for the iconified embedded object and the mediatype of the replacement
+    /// get replacement for the iconified embedded object and the mediatype of the replacement
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > GetIconIfIconified( ::rtl::OUString* pGraphicMediaType );
 };
-
-// class SvInsertPlugInDialog --------------------------------------------
 
 class SvInsertPlugInDialog : public InsertObjectDialog_Impl
 {

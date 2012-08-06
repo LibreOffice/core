@@ -61,7 +61,7 @@ public :
 class SvxHpLinkDlg : public IconChoiceDialog
 {
 private:
-    SvxHlinkCtrl        maCtrl;         // Controler
+    SvxHlinkCtrl        maCtrl;         ///< Controler
     SfxBindings*        mpBindings;
     SfxItemSet*         mpItemSet;
 

@@ -37,11 +37,7 @@
 // #i68101#
 #include <svtools/svmedit.hxx>
 
-/*************************************************************************
-|*
-|* Dialog zum Editieren eines Namens
-|*
-\************************************************************************/
+/// Dialog for editing a name
 class SvxNameDialog : public ModalDialog
 {
 private:
@@ -86,11 +82,9 @@ public:
     void    SetEditHelpId( const rtl::OString& aHelpId) {aEdtName.SetHelpId(aHelpId);}
 };
 
-///////////////////////////////////////////////////////////////////////////////////////////////
-// #i68101#
-// Dialog for editing Object Title and Description
-// plus uniqueness-callback-linkHandler
-
+/** #i68101#
+    Dialog for editing Object Title and Description
+    plus uniqueness-callback-linkHandler */
 class SvxObjectNameDialog : public ModalDialog
 {
 private:
@@ -131,10 +125,8 @@ public:
     }
 };
 
-///////////////////////////////////////////////////////////////////////////////////////////////
-// #i68101#
-// Dialog for editing Object Title and Description
-
+/** #i68101#
+    Dialog for editing Object Title and Description */
 class SvxObjectTitleDescDialog : public ModalDialog
 {
 private:
@@ -163,13 +155,7 @@ public:
     void GetDescription(String& rDescription) {rDescription = aEdtDescription.GetText(); }
 };
 
-///////////////////////////////////////////////////////////////////////////////////////////////
-
-/*************************************************************************
-|*
-|* Dialog zum Abbrechen, Speichern oder Hinzufuegen
-|*
-\************************************************************************/
+/// Dialog to cancel, save, or add
 class SvxMessDialog : public ModalDialog
 {
 private:

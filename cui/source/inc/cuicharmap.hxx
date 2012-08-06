@@ -39,19 +39,12 @@
 class SubsetMap;
 class SvxCharMapData;
 
-// define ----------------------------------------------------------------
-
 #define CHARMAP_MAXLEN  32
 
 namespace svx
 {
     struct SvxShowCharSetItem;
 }
-// class SvxCharacterMap -------------------------------------------------
-// the main purpose of this dialog is to enable the use of characters
-// that are not easily accesible from the keyboard
-
-// class SvxShowText =====================================================
 
 class SvxShowText : public Control
 {
@@ -111,6 +104,8 @@ friend class SvxCharacterMap;
     DECL_LINK(DeleteHdl, void *);
 };
 
+/** The main purpose of this dialog is to enable the use of characters
+    that are not easily accesible from the keyboard. */
 class SvxCharacterMap : public SfxModalDialog
 {
 private:

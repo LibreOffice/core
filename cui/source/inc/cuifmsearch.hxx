@@ -47,14 +47,11 @@ namespace svxform {
     class FmSearchConfigItem;
 }
 
-// ===================================================================================================
-// = class FmSearchDialog - Dialog for searching in Forms/Tables
-// ===================================================================================================
-
 struct FmSearchProgress;
 
 class FmSearchEngine;
 
+/// Dialog for searching in Forms/Tables
 class FmSearchDialog : public ModalDialog
 {
     friend class FmSearchEngine;
@@ -97,18 +94,18 @@ class FmSearchDialog : public ModalDialog
 
     Window*         m_pPreSearchFocus;
 
-    Link    m_lnkFoundHandler;          // Handler for "found"
-    Link    m_lnkCanceledNotFoundHdl;   // Handler for Positioning the Cursors
+    Link    m_lnkFoundHandler;          ///< Handler for "found"
+    Link    m_lnkCanceledNotFoundHdl;   ///< Handler for Positioning the Cursors
 
-    Link    m_lnkContextSupplier;       // for search in contexts
+    Link    m_lnkContextSupplier;       ///< for search in contexts
 
-    // memorize the currently selected field for every context
+    /// memorize the currently selected field for every context
     ::std::vector<String> m_arrContextFields;
 
     FmSearchEngine* m_pSearchEngine;
 
     Timer           m_aDelayedPaint;
-        // see EnableSearchUI
+    // see EnableSearchUI
 
     ::svxform::FmSearchConfigItem*      m_pConfig;
 public:
@@ -153,18 +150,16 @@ protected:
     virtual sal_Bool Close();
 
     void Init(const String& strVisibleFields, const String& strInitialText);
-        // only to be used out of the constructors
+    // only to be used out of the constructors
 
     void OnFound(const ::com::sun::star::uno::Any& aCursorPos, sal_Int16 nFieldPos);
-
-    void EnableSearchUI(sal_Bool bEnable);
-
-    /*  When searching in an own thread I naturally want to disable the UI for starting the search and for setting search
-        parameters. If bEnalbe == sal_False, for all affected controls painting is turned off and shortly after turned on
+    /** When searching in an own thread I naturally want to disable the UI for starting the search and for setting search
+        parameters. If bEnable == sal_False, for all affected controls painting is turned off and shortly after turned on
         again using m_aDelayedPaint. If there is a demand with bEnable == sal_True inbetween, the timer is stopped and
         painting is turned on immediately. As a consequence for this intricateness there is no flickering when turning
         off and on quickly.
     */
+    void EnableSearchUI(sal_Bool bEnable);
 
     void EnableSearchForDependees(sal_Bool bEnable);
 
@@ -192,8 +187,7 @@ private:
 
     DECL_LINK( OnSearchProgress, FmSearchProgress* );
 
-    DECL_LINK( OnDelayedPaint, void* );
-        // see EnableSearchUI
+    DECL_LINK( OnDelayedPaint, void* ); ///< see EnableSearchUI
 
     void implMoveControls(Control** _ppControls, sal_Int32 _nControls, sal_Int32 _nUp, Control* _pToResize);
 

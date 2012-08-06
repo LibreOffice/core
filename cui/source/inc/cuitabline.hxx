@@ -126,12 +126,16 @@ private:
     LineEndLB           maLBEdgeStyle;
 
     //#58425# symbols on a line (e. g. StarChart) ->
-    SdrObjList*         pSymbolList; //a list of symbols to be shown in menu. Symbol at position SID_ATTR_SYMBOLTYPE is to be shown in preview. The list position is to be used cyclic.
+    /** a list of symbols to be shown in menu. Symbol at position SID_ATTR_SYMBOLTYPE is to be shown in preview.
+        The list position is to be used cyclic. */
+    SdrObjList*         pSymbolList;
     bool                bNewSize;
-    Graphic             aAutoSymbolGraphic; //a graphic to be displayed in the preview in case that an automatic symbol is choosen
+    /// a graphic to be displayed in the preview in case that an automatic symbol is choosen
+    Graphic             aAutoSymbolGraphic;
     long                nNumMenuGalleryItems;
     long                nSymbolType;
-    SfxItemSet*         pSymbolAttr; //attributes for the shown symbols; only necessary if not equal to line properties
+    /// attributes for the shown symbols; only necessary if not equal to line properties
+    SfxItemSet*         pSymbolAttr;
     FixedLine           aFlSymbol;
     MenuButton          aSymbolMB;
     FixedText           aSymbolWidthFT;

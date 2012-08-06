@@ -39,11 +39,10 @@ public:
     inline SvHeaderTabListBox&  GetListBox( void );
     inline HeaderBar&           GetHeaderBar( void );
 
-    void                        ConnectElements( void );
-                                    // should be called after all manipulations on elements are done
-                                    // calcs real sizes depending on sizes of this
-    void                        Show( sal_Bool bVisible = sal_True, sal_uInt16 nFlags = 0 );    // same meaning as Windows::Show()
-    void                        Enable( bool bEnable = true, bool bChild = true );  // same meaning as Windows::Enable()
+    void                        ConnectElements( void );/**< should be called after all manipulations on elements are done
+                                                             calcs real sizes depending on sizes of this */
+    void                        Show( sal_Bool bVisible = sal_True, sal_uInt16 nFlags = 0 );    ///< same meaning as Windows::Show()
+    void                        Enable( bool bEnable = true, bool bChild = true );  ///< same meaning as Windows::Enable()
 };
 
 inline SvHeaderTabListBox& _HeaderTabListBox::GetListBox( void )

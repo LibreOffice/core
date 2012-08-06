@@ -136,11 +136,11 @@ namespace svx
         CheckBox        m_aReplaceByChar;
 
         CheckBox*       m_pIgnoreNonPrimary;
+        /** are we working for a document? This is normally true, but in case
+            the user uses the "find" functionality, we switch to working
+            with what the user entered, which then does not have any relation to
+            the document anymore. Some functionality must be disabled then */
         bool            m_bDocumentMode;
-                            // are we working for a document? This is normally true, but in case
-                            // the user uses the "find" functionality, we switch to working
-                            // with what the user entered, which then does not have any relation to
-                            // the document anymore. Some functionality must be disabled then
 
         Link            m_aOptionsChangedLink;
         Link            m_aClickByCharacterLink;
@@ -171,7 +171,7 @@ namespace svx
 
         void    FocusSuggestion( );
 
-        // retrieves the current suggestion
+        /// retrieves the current suggestion
         String  GetCurrentSuggestion( ) const;
 
         void        SetConversionFormat( editeng::HangulHanjaConversion::ConversionFormat _eType );
@@ -180,14 +180,14 @@ namespace svx
         void            SetByCharacter( sal_Bool _bByCharacter );
         void            SetConversionDirectionState( sal_Bool _bTryBothDirections, editeng::HangulHanjaConversion::ConversionDirection _ePrimaryConversionDirection );
 
-        // should text which does not match the primary conversion direction be ignored?
+        /// should text which does not match the primary conversion direction be ignored?
         sal_Bool        GetUseBothDirections( ) const;
 
-        // get current conversion direction to use
-        // (return argument if GetUseBothDirections is true)
+        /** get current conversion direction to use
+            (return argument if GetUseBothDirections is true) */
         editeng::HangulHanjaConversion::ConversionDirection GetDirection( editeng::HangulHanjaConversion::ConversionDirection eDefaultDirection ) const;
 
-        // enables or disbales the checkboxes for ruby formatted replacements
+        /// enables or disbales the checkboxes for ruby formatted replacements
         void            EnableRubySupport( sal_Bool bVal );
 
     private:
@@ -198,7 +198,7 @@ namespace svx
         DECL_LINK( OnConversionDirectionClicked, CheckBox* );
         DECL_LINK( ClickByCharacterHdl, CheckBox* );
 
-        // fill the suggestion list box with suggestions for the actual input
+        /// fill the suggestion list box with suggestions for the actual input
         void FillSuggestions( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rSuggestions );
     };
 
@@ -235,7 +235,7 @@ namespace svx
         DECL_LINK( EditDictHdl, void* );
         DECL_LINK( DeleteDictHdl, void* );
 
-        void                Init( void );       // reads settings from core and init controls
+        void                Init( void );       ///< reads settings from core and init controls
     public:
                             HangulHanjaOptionsDialog( Window* _pParent );
         virtual             ~HangulHanjaOptionsDialog();

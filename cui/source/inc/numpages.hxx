@@ -135,10 +135,9 @@ class SvxBulletPickTabPage : public SfxTabPage
     virtual void        PageCreated(SfxAllItemSet aSet);
 };
 
-/*--------------------------------------------------
-    TabPage for complete numeration
---------------------------------------------------*/
 #define NUM_VALUSET_COUNT 16
+
+/// TabPage for complete numeration
 class SvxNumPickTabPage : public SfxTabPage
 {
     using TabPage::ActivatePage;
@@ -298,6 +297,10 @@ class SvxNumOptionsTabPage : public SfxTabPage
     SfxMapUnit          eCoreUnit;
 
     void                InitControls();
+    /** To switch between the numbering type
+        0 - Number;
+        1 - Bullet;
+        2 - Bitmap; */
     void                SwitchNumberType( sal_uInt8 nType, sal_Bool bBmp = sal_False );
     void                CheckForStartValue_Impl(sal_uInt16 nNumberingType);
 

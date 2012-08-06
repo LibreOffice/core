@@ -59,15 +59,15 @@ private:
 
     sal_Bool                mbMarkWndOpen;
 
-    DECL_LINK (Click_SmartProtocol_Impl  , void * );        // Radiobutton clicked: Type HTTP or FTP
-    DECL_LINK (ClickAnonymousHdl_Impl    , void * );        // Checkbox : Anonymous User
-    DECL_LINK (ClickBrowseHdl_Impl       , void * );        // Button : Browse
-    DECL_LINK (ClickTargetHdl_Impl       , void * );        // Button : Target
-    DECL_LINK (ModifiedLoginHdl_Impl     , void * );        // Contens of editfield "Login" modified
-    DECL_LINK (LostFocusTargetHdl_Impl   , void * );        // Combobox "Target" lost its focus
-    DECL_LINK (ModifiedTargetHdl_Impl    , void * );        // Contens of editfield "Target" modified
+    DECL_LINK (Click_SmartProtocol_Impl  , void * ); ///< Radiobutton clicked: Type HTTP or FTP
+    DECL_LINK (ClickAnonymousHdl_Impl    , void * ); ///< Checkbox : Anonymous User
+    DECL_LINK (ClickBrowseHdl_Impl       , void * ); ///< Button : Browse
+    DECL_LINK (ClickTargetHdl_Impl       , void * ); ///< Button : Target
+    DECL_LINK (ModifiedLoginHdl_Impl     , void * ); ///< Contens of editfield "Login" modified
+    DECL_LINK (LostFocusTargetHdl_Impl   , void * ); ///< Combobox "Target" lost its focus
+    DECL_LINK (ModifiedTargetHdl_Impl    , void * ); ///< Contens of editfield "Target" modified
 
-    DECL_LINK(TimeoutHdl_Impl           , void *);       // Handler for timer -timeout
+    DECL_LINK(TimeoutHdl_Impl           , void *); ///< Handler for timer -timeout
 
 
     void    SetScheme( const String& aScheme );

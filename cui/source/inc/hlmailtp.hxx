@@ -39,9 +39,9 @@ private:
     FixedText           maFtSubject;
     Edit                maEdSubject;
 
-    DECL_LINK (Click_SmartProtocol_Impl, void * );      // Radiobutton clicked: Type EMAIl or News
-    DECL_LINK (ClickAdrBookHdl_Impl  , void * );        // Button : Address book
-    DECL_LINK (ModifiedReceiverHdl_Impl, void * );      // Combobox "receiver" modified
+    DECL_LINK (Click_SmartProtocol_Impl, void * ); ///< Radiobutton clicked: Type EMAIl or News
+    DECL_LINK (ClickAdrBookHdl_Impl  , void * ); ///< Button : Address book
+    DECL_LINK (ModifiedReceiverHdl_Impl, void * ); ///< Combobox "receiver" modified
 
     void    SetScheme( const String& aScheme );
     void    RemoveImproperProtocol(const String& aProperScheme);

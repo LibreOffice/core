@@ -125,7 +125,7 @@ public:
 
             ~SvxCaptionTabDialog();
 
-            //link for the Writer to validate positions
+            /// link for the Writer to validate positions
             void SetValidateFramePosLink( const Link& rLink );
 };
 
