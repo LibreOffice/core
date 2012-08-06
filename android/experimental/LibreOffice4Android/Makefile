@@ -58,7 +58,6 @@ copy-stuff:
 		   jvmaccessgcc3 \
 		   jvmfwk \
 		   libotouchlo \
-		   lnglo \
 		   lnthlo \
 		   lo-bootstrap \
 		   localebe1.uno \
@@ -241,4 +240,4 @@ build-ant: copy-stuff properties
 
 run:
 # /data/local/tmp/sample-document.odt
-	adb shell am start -n $(APP_PACKAGE)/.ui.LibreOfficeUIActivity -e input /assets/test1.odt
+	adb shell am start -n $(APP_PACKAGE)/.ui.LibreOfficeUIActivity -e input /assets/test1.odt -e lo-main-delay 20

@@ -491,8 +491,12 @@ LngSvcMgr::LngSvcMgr()
     // request to be notified if an extension has been added/removed
     uno::Reference<uno::XComponentContext> xContext(comphelper::getProcessComponentContext());
 
-    uno::Reference<deployment::XExtensionManager> xExtensionManager(
-        deployment::ExtensionManager::get(xContext));
+    uno::Reference<deployment::XExtensionManager> xExtensionManager;
+    try {
+        xExtensionManager = deployment::ExtensionManager::get(xContext);
+    } catch ( const deployment::DeploymentException & ) {
+        SAL_WARN( "linguistic", "no extension manager - should fire on mobile only" );
+    }
     if (xExtensionManager.is())
     {
         xMB = uno::Reference<util::XModifyBroadcaster>(xExtensionManager, uno::UNO_QUERY_THROW);

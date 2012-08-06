@@ -116,7 +116,6 @@ copy-stuff: buildrcs
 		  jvmaccessgcc3 \
 		  jvmfwk \
 		  libotouchlo \
-		  lnglo \
 		  introspection.uno \
 		  lnthlo \
 		  localebe1.uno \
