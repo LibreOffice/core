@@ -28,6 +28,10 @@ $(eval $(call gb_Library_use_internal_bootstrap_api,cli_cppuhelper_native,\
 	udkapi \
 ))
 
+$(eval $(call gb_Library_use_packages,cli_cppuhelper_native,\
+	cli_ure_cliuno \
+))
+
 $(eval $(call gb_Library_use_libraries,cli_cppuhelper_native,\
 	advapi32 \
 	cppu \
