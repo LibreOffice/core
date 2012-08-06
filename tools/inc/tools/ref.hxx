@@ -365,8 +365,6 @@ public:
 
 SV_DECL_IMPL_REF(SvRefBase)
 
-SV_DECL_REF_LIST(SvRefBase,SvRefBase*)
-
 class SvCompatWeakHdl : public SvRefBase
 {
     friend class SvCompatWeakBase;
