@@ -109,6 +109,12 @@ $(eval $(call gb_Library_use_libraries,sd,\
     $(gb_STDLIBS) \
 ))
 
+ifeq ($(OS),WNT)
+$(eval $(call gb_Library_use_libraries,sd,\
+	ws2_32 \
+))
+endif
+
 $(eval $(call gb_Library_set_componentfile,sd,sd/util/sd))
 
 $(eval $(call gb_Library_add_exception_objects,sd,\

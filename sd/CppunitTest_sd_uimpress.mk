@@ -74,6 +74,12 @@ $(eval $(call gb_CppunitTest_use_libraries,sd_uimpress,\
     $(gb_STDLIBS) \
 ))
 
+ifeq ($(OS),WNT)
+$(eval $(call gb_CppunitTest_use_libraries,sd_uimpress,\
+	ws2_32 \
+))
+endif
+
 $(eval $(call gb_CppunitTest_add_exception_objects,sd_uimpress,\
     sd/qa/unit/uimpress \
 ))
