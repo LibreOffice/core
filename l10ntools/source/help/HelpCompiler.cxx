@@ -54,6 +54,10 @@ HelpCompiler::HelpCompiler(StreamTable &in_streamTable, const fs::path &in_input
     bExtensionMode( in_bExtensionMode )
 {
     xmlKeepBlanksDefaultValue = 0;
+    char* guitmp = getenv("GUI");
+    gui = (strcmp(guitmp, "UNX") ? gui : "UNIX");
+    gui = (strcmp(guitmp, "MAC") ? gui : "MAC");
+    gui = (strcmp(guitmp, "WNT") ? gui : "WIN");
 }
 
 xmlDocPtr HelpCompiler::getSourceDocument(const fs::path &filePath)
@@ -103,125 +107,79 @@ xmlDocPtr HelpCompiler::getSourceDocument(const fs::path &filePath)
     return res;
 }
 
-HashSet HelpCompiler::switchFind(xmlDocPtr doc)
-{
-    HashSet hs;
-    xmlChar *xpath = (xmlChar*)"//switchinline";
-
-    xmlXPathContextPtr context = xmlXPathNewContext(doc);
-    xmlXPathObjectPtr result = xmlXPathEvalExpression(xpath, context);
-    xmlXPathFreeContext(context);
-    if (result)
-    {
-        xmlNodeSetPtr nodeset = result->nodesetval;
-        for (int i = 0; i < nodeset->nodeNr; i++)
-        {
-            xmlNodePtr el = nodeset->nodeTab[i];
-            xmlChar *select = xmlGetProp(el, (xmlChar*)"select");
-            if (select)
-            {
-                if (!strcmp((const char*)select, "appl"))
-                {
-                    xmlNodePtr n1 = el->xmlChildrenNode;
-                    while (n1)
-                    {
-                        if ((!xmlStrcmp(n1->name, (const xmlChar*)"caseinline")))
-                        {
-                            xmlChar *appl = xmlGetProp(n1, (xmlChar*)"select");
-                            hs.push_back(std::string((const char*)appl));
-                            xmlFree(appl);
-                        }
-                        else if ((!xmlStrcmp(n1->name, (const xmlChar*)"defaultinline")))
-                            hs.push_back(std::string("DEFAULT"));
-                        n1 = n1->next;
-                    }
-                }
-                xmlFree(select);
-            }
-        }
-        xmlXPathFreeObject(result);
-    }
-    hs.push_back(std::string("DEFAULT"));
-    return hs;
-}
-
 // returns a node representing the whole stuff compiled for the current
 // application.
 xmlNodePtr HelpCompiler::clone(xmlNodePtr node, const std::string& appl)
 {
-    xmlNodePtr parent = xmlCopyNode(node, 2);
-    xmlNodePtr n = node->xmlChildrenNode;
-    while (n != NULL)
+    xmlNodePtr root = xmlCopyNode(node, 2);
+    if (node->xmlChildrenNode)
     {
-        bool isappl = false;
-        if ( (!strcmp((const char*)n->name, "switchinline")) ||
-             (!strcmp((const char*)n->name, "switch")) )
+        xmlNodePtr list = node->xmlChildrenNode;
+        while (list)
         {
-            xmlChar *select = xmlGetProp(n, (xmlChar*)"select");
-            if (select)
+            if (strcmp((const char*)list->name, "switchinline") == 0 || strcmp((const char*)list->name, "switch") == 0)
             {
-                if (!strcmp((const char*)select, "appl"))
-                    isappl = true;
-                xmlFree(select);
-            }
-        }
-        if (isappl)
-        {
-            xmlNodePtr caseNode = n->xmlChildrenNode;
-            if (appl == "DEFAULT")
-            {
-                while (caseNode)
+                std::string tmp="";
+                if (strcmp((const char*)xmlGetProp(list, (xmlChar*)"select"), "sys"))
                 {
-                    if (!strcmp((const char*)caseNode->name, "defaultinline"))
+                    tmp = gui;
+                }
+                if (strcmp((const char*)xmlGetProp(list, (xmlChar*)"select"), "appl"))
+                {
+                    tmp = appl;
+                }
+                if (tmp.compare("") != 0)
+                {
+                    bool isCase=false;
+                    xmlNodePtr caseList=list->xmlChildrenNode;
+                    while (caseList)
                     {
-                        xmlNodePtr cnl = caseNode->xmlChildrenNode;
-                        while (cnl)
+                        xmlChar *select = xmlGetProp(caseList, (xmlChar*)"select");
+                        if (select)
                         {
-                            xmlAddChild(parent, clone(cnl, appl));
-                            cnl = cnl->next;
+                            if (!strcmp((const char*)select, tmp.c_str()) && !isCase)
+                            {
+                                isCase=true;
+                                xmlNodePtr clp = caseList->xmlChildrenNode;
+                                while (clp)
+                                {
+                                    xmlAddChild(root, clone(clp, appl));
+                                    clp = clp->next;
+                                }
+                            }
+                            xmlFree(select);
                         }
-                        break;
+                        else
+                        {
+                            if ((strcmp((const char*)caseList->name, "defaultinline") != 0) && (strcmp((const char*)caseList->name, "default") != 0))
+                            {
+                                xmlAddChild(root, clone(caseList, appl));
+                            }
+                            else
+                            {
+                                if (!isCase)
+                                {
+                                    xmlNodePtr clp = caseList->xmlChildrenNode;
+                                    while (clp)
+                                    {
+                                        xmlAddChild(root, clone(clp, appl));
+                                        clp = clp->next;
+                                    }
+                                }
+                            }
+                        }
+                        caseList = caseList->next;
                     }
-                    caseNode = caseNode->next;
                 }
             }
             else
             {
-                while (caseNode)
-                {
-                    isappl=false;
-                    if (!strcmp((const char*)caseNode->name, "caseinline"))
-                    {
-                        xmlChar *select = xmlGetProp(n, (xmlChar*)"select");
-                        if (select)
-                        {
-                            if (!strcmp((const char*)select, appl.c_str()))
-                                isappl = true;
-                            xmlFree(select);
-                        }
-                        if (isappl)
-                        {
-                            xmlNodePtr cnl = caseNode->xmlChildrenNode;
-                            while (cnl)
-                            {
-                                xmlAddChild(parent, clone(cnl, appl));
-                                cnl = cnl->next;
-                            }
-                            break;
-                        }
-
-                    }
-                    caseNode = caseNode->next;
-                }
+                xmlAddChild(root, clone(list, appl));
             }
-
+            list = list->next;
         }
-        else
-            xmlAddChild(parent, clone(n, appl));
-
-        n = n->next;
     }
-    return parent;
+    return root;
 }
 
 class myparser
@@ -246,6 +204,7 @@ public:
     }
     void traverse( xmlNodePtr parentNode );
 private:
+    std::string module;
     std::string dump(xmlNodePtr node);
 };
 
@@ -386,15 +345,13 @@ void myparser::traverse( xmlNodePtr parentNode )
             std::string name;
 
             HashSet::const_iterator aEnd = extendedHelpText.end();
-            for (HashSet::const_iterator iter = extendedHelpText.begin(); iter != aEnd;
-                ++iter)
+            for (HashSet::const_iterator iter = extendedHelpText.begin(); iter != aEnd; ++iter)
             {
                 name = *iter;
                 (*helptexts)[name] = text;
             }
             extendedHelpText.clear();
         }
-
         // traverse children
         traverse(test);
     }
@@ -409,6 +366,7 @@ bool HelpCompiler::compile( void ) throw( HelpProcessingException )
 
     // now add path to the document
     // resolve the dom
+
     if (!docResolvedOrg)
     {
         impl_sleep( 3 );
@@ -421,62 +379,38 @@ bool HelpCompiler::compile( void ) throw( HelpProcessingException )
         }
     }
 
-    // now find all applications for which one has to compile
     std::string documentId;
     std::string fileName;
     std::string title;
-    // returns all applications for which one has to compile
-    HashSet applications = switchFind(docResolvedOrg);
-
-    HashSet::const_iterator aEnd = applications.end();
-    for (HashSet::const_iterator aI = applications.begin(); aI != aEnd; ++aI)
+    // returns a clone of the document with switch-cases resolved
+    std::string appl = module.substr(1);
+    for (unsigned int i = 0; i < appl.length(); ++i)
     {
-        std::string appl = *aI;
-        std::string modulename = appl;
-        if (modulename[0] == 'S')
-        {
-            modulename = modulename.substr(1);
-            std::transform(modulename.begin(), modulename.end(), modulename.begin(), tocharlower);
-        }
-        if (modulename != "DEFAULT" && modulename != module)
-            continue;
+        appl[i]=toupper(appl[i]);
+    }
+    xmlNodePtr docResolved = clone(xmlDocGetRootElement(docResolvedOrg), appl);
+    myparser aparser(documentId, fileName, title);
+    aparser.traverse(docResolved);
+    documentId = aparser.documentId;
+    fileName = aparser.fileName;
+    title = aparser.title;
 
-        // returns a clone of the document with swich-cases resolved
-        xmlNodePtr docResolved = clone(xmlDocGetRootElement(docResolvedOrg), appl);
-        myparser aparser(documentId, fileName, title);
-        aparser.traverse(docResolved);
+    HCDBG(std::cerr << documentId << " : " << fileName << " : " << title << std::endl);
 
-        documentId = aparser.documentId;
-        fileName = aparser.fileName;
-        title = aparser.title;
+    xmlDocPtr docResolvedDoc = xmlCopyDoc(docResolvedOrg, false);
+    xmlDocSetRootElement(docResolvedDoc, docResolved);
 
-        HCDBG(std::cerr << documentId << " : " << fileName << " : " << title << std::endl);
-
-        xmlDocPtr docResolvedDoc = xmlCopyDoc(docResolvedOrg, false);
-        xmlDocSetRootElement(docResolvedDoc, docResolved);
-
-        if (modulename == "DEFAULT")
-        {
-            streamTable.dropdefault();
-            streamTable.default_doc = docResolvedDoc;
-            streamTable.default_hidlist = aparser.hidlist;
-            streamTable.default_helptexts = aparser.helptexts;
-            streamTable.default_keywords = aparser.keywords;
-        }
-        else
-        {
-            streamTable.dropappl();
-            streamTable.appl_doc = docResolvedDoc;
-            streamTable.appl_hidlist = aparser.hidlist;
-            streamTable.appl_helptexts = aparser.helptexts;
-            streamTable.appl_keywords = aparser.keywords;
-        }
-    } // end iteration over all applications
+    streamTable.dropappl();
+    streamTable.appl_doc = docResolvedDoc;
+    streamTable.appl_hidlist = aparser.hidlist;
+    streamTable.appl_helptexts = aparser.helptexts;
+    streamTable.appl_keywords = aparser.keywords;
 
     streamTable.document_id = documentId;
     streamTable.document_path = fileName;
     streamTable.document_title = title;
     std::string actMod = module;
+
     if ( !bExtensionMode && !fileName.empty())
     {
         if (fileName.find("/text/") == 0)
@@ -487,7 +421,6 @@ bool HelpCompiler::compile( void ) throw( HelpProcessingException )
         }
     }
     streamTable.document_module = actMod;
-
     xmlFreeDoc(docResolvedOrg);
     return true;
 }
