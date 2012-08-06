@@ -125,7 +125,7 @@ ifneq ($(nodep),)
 gb_FULLDEPS := $(false)
 else
 # for clean, setuplocal and removelocal goals we switch off dependencies
-ifneq ($(filter cleanpackmodule clean setuplocal removelocal showdeliverables help debugrun,$(MAKECMDGOALS)),)
+ifneq ($(filter clean setuplocal removelocal showdeliverables help debugrun,$(MAKECMDGOALS)),)
 gb_FULLDEPS := $(false)
 else
 gb_FULLDEPS := $(true)
