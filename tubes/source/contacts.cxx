@@ -43,7 +43,6 @@
 
 #include <map>
 #include <vector>
-#include <boost/ptr_container/ptr_vector.hpp>
 #include <telepathy-glib/telepathy-glib.h>
 
 namespace {
@@ -76,25 +75,18 @@ class TubeContacts : public ModelessDialog
     DECL_LINK( BtnInviteHdl, void * );
     DECL_LINK( BtnListenHdl, void * );
 
-    struct AccountContact
-    {
-        TpAccount* mpAccount;
-        TpContact* mpContact;
-        AccountContact( TpAccount* pAccount, TpContact* pContact ):
-            mpAccount(pAccount), mpContact(pContact) {}
-    };
-    boost::ptr_vector<AccountContact> maACs;
+    AccountContactPairV maACs;
 
     void Invite()
     {
-        AccountContact *pAC = NULL;
+        AccountContactPair *pAC = NULL;
         if (maList.FirstSelected())
-            pAC = static_cast<AccountContact*> (maList.FirstSelected()->GetUserData());
+            pAC = static_cast<AccountContactPair*> (maList.FirstSelected()->GetUserData());
         if (pAC)
         {
             if (mpCollaboration->GetConference())
             {
-                TpContact* pContact = pAC->mpContact;
+                TpContact* pContact = pAC->second;
                 mpCollaboration->GetConference()->invite( pContact );
                 mpCollaboration->SaveAndSendFile( pContact, OStringToOUString(
                             mpCollaboration->GetConference()->getUuid(), RTL_TEXTENCODING_UTF8 ) );
@@ -123,13 +115,13 @@ class TubeContacts : public ModelessDialog
 
     void StartBuddySession()
     {
-        AccountContact *pAC = NULL;
+        AccountContactPair *pAC = NULL;
         if (maList.FirstSelected())
-            pAC = static_cast<AccountContact*> (maList.FirstSelected()->GetUserData());
+            pAC = static_cast<AccountContactPair*> (maList.FirstSelected()->GetUserData());
         if (pAC)
         {
-            TpAccount* pAccount = pAC->mpAccount;
-            TpContact* pContact = pAC->mpContact;
+            TpAccount* pAccount = pAC->first;
+            TpContact* pContact = pAC->second;
             SAL_INFO( "tubes", "picked " << tp_contact_get_identifier( pContact ) );
             TeleConference* pConference = TeleManager::startBuddySession( pAccount, pContact );
             if (!pConference)
@@ -146,12 +138,12 @@ class TubeContacts : public ModelessDialog
 
     void StartGroupSession()
     {
-        AccountContact *pAC = NULL;
+        AccountContactPair *pAC = NULL;
         if (maList.FirstSelected())
-            pAC = static_cast<AccountContact*> (maList.FirstSelected()->GetUserData());
+            pAC = static_cast<AccountContactPair*> (maList.FirstSelected()->GetUserData());
         if (pAC)
         {
-            TpAccount* pAccount = pAC->mpAccount;
+            TpAccount* pAccount = pAC->first;
             SAL_INFO( "tubes", "picked " << tp_account_get_display_name( pAccount ) );
             TeleConference* pConference = TeleManager::startGroupSession( pAccount,
                     rtl::OUString("liboroom"), rtl::OUString("conference.jabber.org") );
@@ -211,11 +203,15 @@ public:
     {
         SAL_INFO( "sc.tubes", "Populating contact list dialog" );
         maList.Clear();
+        maACs.clear();
         ContactList *pContacts = TeleManager::getContactList();
         if ( pContacts )
         {
             AccountContactPairV aPairs = pContacts->getContacts();
             AccountContactPairV::iterator it;
+            // make sure we have enough memory to not need re-allocation
+            // which would invalidate pointers stored in maList entries
+            maACs.reserve( aPairs.size() );
             for( it = aPairs.begin(); it != aPairs.end(); ++it )
             {
                 Image aImage;
@@ -240,7 +236,7 @@ public:
                 aEntry.append( sal_Unicode( '\t' ) );
                 SvLBoxEntry* pEntry = maList.InsertEntry( aEntry.makeStringAndClear(), aImage, aImage );
                 // FIXME: ref the TpAccount, TpContact ...
-                maACs.push_back( new AccountContact( it->first, it->second ) );
+                maACs.push_back( AccountContactPair( it->first, it->second ) );
                 pEntry->SetUserData( &maACs.back() );
             }
         }
