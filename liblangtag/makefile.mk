@@ -51,7 +51,7 @@ my_data='$(my_prefix)$/share/liblangtag'
 CONFIGURE_FLAGS+= --prefix='$(my_prefix)'
 
 .IF "$(SYSTEM_LIBXML)"!="YES"
-CONFIGURE_FLAGS+= LIBXML2_CFLAGS='-I$(SOLARINCDIR)$/external$/libxml'
+CONFIGURE_FLAGS+= LIBXML2_CFLAGS='-I$(SOLARINCDIR)$/external'
 .IF "$(GUI)"=="WNT" && "$(COM)"!="GCC"
 CONFIGURE_FLAGS+= LIBXML2_LIBS='$(SOLARLIBDIR)$/libxml2.lib'
 .ELSE
