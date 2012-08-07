@@ -370,6 +370,24 @@ class SizePrinter(object):
         children = [('width', width), ('height', height)]
         return children.__iter__()
 
+class RectanglePrinter(object):
+    '''Prints a Rectangle.'''
+
+    def __init__(self, typename, value):
+        self.typename = typename
+        self.value = value
+
+    def to_string(self):
+        return "%s" % (self.typename)
+
+    def children(self):
+        left = self.value['nLeft']
+        top = self.value['nTop']
+        right = self.value['nRight']
+        bottom = self.value['nBottom']
+        children = [('left', left), ('top', top), ('right', right), ('bottom', bottom)]
+        return children.__iter__()
+
 printer = None
 
 def build_pretty_printers():
@@ -396,6 +414,7 @@ def build_pretty_printers():
     printer.add('Time', TimePrinter)
     printer.add('Point', PointPrinter)
     printer.add('Size', SizePrinter)
+    printer.add('Rectangle', RectanglePrinter)
 
 def register_pretty_printers(obj):
     printing.register_pretty_printer(printer, obj)
