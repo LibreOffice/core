@@ -85,7 +85,6 @@ public:
 
 // static, not members, so they actually survive cppunit test iteration
 static TeleConference*      mpConference1 = NULL;
-static TeleManager*         mpManager = NULL;
 static TpContact*           mpAccepterContact = NULL;
 static GMainLoop*           mpMainLoop = NULL;
 static bool                 maFileSentSuccess = false;
@@ -126,16 +125,13 @@ void TestTeleTubes::testInitialize()
 
     mpMainLoop = g_main_loop_new (NULL, FALSE);
     g_timeout_add_seconds (10, timed_out, mpMainLoop);
-
-    mpManager = new TeleManager();
 }
 
 void TestTeleTubes::testContactList()
 {
-    CPPUNIT_ASSERT( mpManager);
-    CPPUNIT_ASSERT( mpManager->getAccountManagerStatus() == TeleManager::AMS_PREPARED);
+    CPPUNIT_ASSERT( TeleManager::getAccountManagerStatus() == TeleManager::AMS_PREPARED);
 
-    ContactList *cl = mpManager->getContactList();
+    ContactList *cl = TeleManager::getContactList();
 
     AccountContactPairV pairs;
 
@@ -178,30 +174,30 @@ void TestTeleTubes::testContactList()
 
 void TestTeleTubes::testPrepareAccountManager()
 {
-    mpManager->prepareAccountManager();
-    TeleManager::AccountManagerStatus eStatus = mpManager->getAccountManagerStatus();
+    TeleManager::prepareAccountManager();
+    TeleManager::AccountManagerStatus eStatus = TeleManager::getAccountManagerStatus();
     CPPUNIT_ASSERT( eStatus == TeleManager::AMS_PREPARED);
 }
 
 void TestTeleTubes::testStartBuddySession()
 {
-    TpAccount *pAcc1 = mpManager->getAccount(maOffererIdentifier);
+    TpAccount *pAcc1 = TeleManager::getAccount(maOffererIdentifier);
     CPPUNIT_ASSERT( pAcc1 != 0);
     /* This has to run after testContactList has run successfully. */
     CPPUNIT_ASSERT( mpAccepterContact != 0);
-    mpConference1 = mpManager->startBuddySession( pAcc1, mpAccepterContact);
+    mpConference1 = TeleManager::startBuddySession( pAcc1, mpAccepterContact);
     CPPUNIT_ASSERT( mpConference1 != NULL);
 }
 
 void TestTeleTubes::testCreateAccountManager()
 {
-    bool bConnected = mpManager->createAccountManager();
+    bool bConnected = TeleManager::createAccountManager();
     CPPUNIT_ASSERT( bConnected == true);
 }
 
 void TestTeleTubes::testRegisterClients()
 {
-    bool bRegistered = mpManager->registerClients();
+    bool bRegistered = TeleManager::registerClients();
     CPPUNIT_ASSERT( bRegistered == true);
 }
 
@@ -254,7 +250,7 @@ void TestTeleTubes::testDestroyTeleTubes()
     if (mpConference1)
         mpConference1->close();
     delete mpConference1;
-    delete mpManager;
+    TeleManager::finalize();
 }
 
 void TestTeleTubes::testFailAlways()

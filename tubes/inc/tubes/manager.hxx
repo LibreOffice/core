@@ -55,6 +55,8 @@ typedef struct _TpContact TpContact;
 
 class TeleManager
 {
+    TeleManager();
+    ~TeleManager();
 public:
 
     enum AccountManagerStatus
@@ -68,16 +70,21 @@ public:
     /** Prepare tube manager with account and service to be offered/listened
         to.
      */
-    TUBES_DLLPUBLIC                         TeleManager();
-    TUBES_DLLPUBLIC                         ~TeleManager();
+    TUBES_DLLPUBLIC static bool             init( bool bListen );
 
-    TUBES_DLLPUBLIC bool                    init( bool bListen );
+    TUBES_DLLPUBLIC static void             finalize();
+
+    /** True if there has been tube channel received and is still not used. */
+    TUBES_DLLPUBLIC static bool             hasWaitingConference();
+
+    /** Get a conference with current UUID to set a session. */
+    TUBES_DLLPUBLIC static TeleConference*  getConference();
 
     /** Connect to DBus and create AccountManager. */
-    bool                    createAccountManager();
+    static bool             createAccountManager();
 
     /** Setup client handlers. */
-    bool                    registerClients();
+    static bool             registerClients();
 
     /** Prepare the Telepathy Account Manager.
         Requires createAccountManager() to have succeeded.
@@ -87,16 +94,16 @@ public:
 
         TODO: this needs some signalling mechanism
      */
-    void                    prepareAccountManager();
-    AccountManagerStatus    getAccountManagerStatus() const;
+    static void             prepareAccountManager();
+    static AccountManagerStatus getAccountManagerStatus();
 
     /** Fetches the contact list. Returns 0 before connect() is called successfully.
         Is non-functional until prepareAccountManager().
      */
-    ContactList*            getContactList() const;
+    static ContactList*     getContactList();
 
     /** Start a demo session where all local documents are shared to each other */
-    TeleConference*         startDemoSession();
+    static TeleConference*  startDemoSession();
 
     /** Start a group session in a MUC.
 
@@ -112,7 +119,7 @@ public:
             empty, only the conference's UUID is used and rConferenceRoom is
             ignored, hopefully resulting in a local DBus tube.
      */
-    TeleConference*         startGroupSession( TpAccount *pAccount,
+    static TeleConference*  startGroupSession( TpAccount *pAccount,
                                                 const rtl::OUString& rConferenceRoom,
                                                 const rtl::OUString& rConferenceServer );
 
@@ -124,47 +131,30 @@ public:
         @param pBuddy
             The buddy to be connected. Must be a contact of pAccount.
      */
-    TeleConference*         startBuddySession( TpAccount *pAccount, TpContact *pBuddy );
+    static TeleConference*  startBuddySession( TpAccount *pAccount, TpContact *pBuddy );
 
-    /** Get a conference with current UUID to set a session. */
-    TUBES_DLLPUBLIC static TeleConference*  getConference();
-
-    static void                             registerCollaboration( Collaboration* pCollaboration );
-    static void                             unregisterCollaboration( Collaboration* pCollaboration );
+    static void             registerCollaboration( Collaboration* pCollaboration );
+    static void             unregisterCollaboration( Collaboration* pCollaboration );
     /** Display contact list dialog for all documents. */
-    static void                             displayAllContacts();
+    static void             displayAllContacts();
 
-    static void                             registerDemoConference( TeleConference* pConference );
-    static void                             unregisterDemoConference( TeleConference* pConference );
+    static void             registerDemoConference( TeleConference* pConference );
+    static void             unregisterDemoConference( TeleConference* pConference );
     /** Broadcast packet to all conferences. Used for demo mode. */
-    static void                             broadcastPacket( const OString& rPacket );
+    static void             broadcastPacket( const OString& rPacket );
 
-    /** True if there has been tube channel received and is still not used. */
-    TUBES_DLLPUBLIC static bool             hasWaitingConference();
-    static void                             setCurrentUuid( const OString& rUuid );
-
-    void                    disconnect();
-
+    static void             setCurrentUuid( const OString& rUuid );
     static rtl::OString     createUuid();
-
 
     // Only for callbacks.
     static void             addConference( TeleConference* pConference );
     static void             setChannelReadyHandlerInvoked( bool b );
-    bool                    isChannelReadyHandlerInvoked() const;
-    void                    setAccountManagerReadyHandlerInvoked( bool b );
-    bool                    isAccountManagerReadyHandlerInvoked() const;
+    static bool             isChannelReadyHandlerInvoked();
+    static void             setAccountManagerReadyHandlerInvoked( bool b );
+    static bool             isAccountManagerReadyHandlerInvoked();
 
     /** Only the callback of prepareAccountManager() is to set this. */
-    void                    setAccountManagerReady( bool bPrepared);
-
-    typedef bool (*CallBackInvokedFunc)();
-    /** Iterate our GMainLoop, blocking, until the callback is done. */
-    void                    iterateLoop( CallBackInvokedFunc pFunc );
-
-    typedef bool (TeleManager::*ManagerCallBackInvokedFunc)() const;
-    /** Iterate our GMainLoop, blocking, until the callback is done. */
-    void                    iterateLoop( ManagerCallBackInvokedFunc pFunc );
+    static void             setAccountManagerReady( bool bPrepared);
 
     /// "LibreOfficeWhatEver"
     static rtl::OString     getFullClientName();
@@ -186,18 +176,13 @@ public:
      */
     static void             addSuffixToNames( const char* pName );
 
-    TpAccount*              getAccount( const rtl::OString& rAccountID );
+    static TpAccount*       getAccount( const rtl::OString& rAccountID );
 
 private:
-    void                    ensureLegacyChannel( TpAccount* pAccount, TpContact* pBuddy );
-
     static TeleManagerImpl* pImpl;
-    static sal_uInt32       nRefCount;
-    static rtl::OString     aNameSuffix;
 
     static ::osl::Mutex&    GetMutex();
 };
-
 
 #endif // INCLUDED_TUBES_MANAGER_HXX
 

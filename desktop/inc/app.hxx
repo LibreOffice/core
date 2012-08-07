@@ -42,10 +42,6 @@
 #include <com/sun/star/uno/Reference.h>
 #include <osl/mutex.hxx>
 
-#ifdef ENABLE_TELEPATHY
-class TeleManager;
-#endif
-
 using namespace com::sun::star::task;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -209,9 +205,6 @@ class Desktop : public Application
         sal_uInt16                          m_nAppEvents;
         BootstrapError                  m_aBootstrapError;
         BootstrapStatus                 m_aBootstrapStatus;
-#ifdef ENABLE_TELEPATHY
-        TeleManager*                    m_pTeleManager;
-#endif
 
         std::auto_ptr< Lockfile > m_pLockfile;
         Timer    m_firstRunTimer;

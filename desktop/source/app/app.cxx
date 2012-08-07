@@ -618,9 +618,6 @@ throw()
 Desktop::Desktop()
 : m_bServicesRegistered( false )
 , m_aBootstrapError( BE_OK )
-#ifdef ENABLE_TELEPATHY
-, m_pTeleManager( NULL )
-#endif
 {
     RTL_LOGFILE_TRACE( "desktop (cd100003) ::Desktop::Desktop" );
 }
@@ -628,7 +625,7 @@ Desktop::Desktop()
 Desktop::~Desktop()
 {
 #ifdef ENABLE_TELEPATHY
-    delete m_pTeleManager;
+    TeleManager::finalize();
 #endif
 }
 
@@ -1711,9 +1708,8 @@ int Desktop::Main()
     SetSplashScreenProgress(60);
 
 #ifdef ENABLE_TELEPATHY
-    m_pTeleManager = new TeleManager();
     bool bListen = rCmdLineArgs.IsInvisible();
-    m_pTeleManager->init( bListen );
+    TeleManager::init( bListen );
 #endif
 
     if ( !pExecGlobals->bRestartRequested )

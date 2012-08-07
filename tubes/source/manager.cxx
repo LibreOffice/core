@@ -71,20 +71,13 @@ struct InfoLogger
 };
 }
 #define INFO_LOGGER_F(s)    InfoLogger aLogger(0,(s))
-#define INFO_LOGGER(s)      InfoLogger aLogger(this,(s))
 #else
 #define INFO_LOGGER_F(s)
-#define INFO_LOGGER(s)
 #endif // SAL_LOG_INFO
 
 
 using namespace rtl;
 using namespace osl;
-
-
-TeleManagerImpl* TeleManager::pImpl     = NULL;
-sal_uInt32       TeleManager::nRefCount = 0;
-rtl::OString     TeleManager::aNameSuffix;
 
 /** Refcounted singleton implementation class. */
 class TeleManagerImpl
@@ -99,6 +92,7 @@ public:
     bool                                mbChannelReadyHandlerInvoked : 1;
     ContactList*                        mpContactList;
     OString                             msCurrentUUID;
+    OString                             msNameSuffix;
     typedef std::map< OString, TeleConference* > MapStringConference;
     MapStringConference                 maAcceptedConferences;
     typedef std::set< TeleConference* > DemoConferences;
@@ -109,6 +103,8 @@ public:
                             TeleManagerImpl();
                             ~TeleManagerImpl();
 };
+
+TeleManagerImpl* TeleManager::pImpl = new TeleManagerImpl();
 
 bool tb_account_is_online( TpAccount* pAccount );
 bool tb_contact_is_online( TpContact* pContact );
@@ -145,7 +141,7 @@ static void contact_presence_changed_cb( TpContact* pContact,
     }
 }
 
-void TeleManager_DBusChannelHandler(
+static void TeleManager_DBusChannelHandler(
         TpSimpleHandler*            /*handler*/,
         TpAccount*                  pAccount,
         TpConnection*               /*connection*/,
@@ -153,15 +149,10 @@ void TeleManager_DBusChannelHandler(
         GList*                      /*requests_satisfied*/,
         gint64                      /*user_action_time*/,
         TpHandleChannelsContext*    pContext,
-        gpointer                    pUserData)
+        gpointer                    /*pUserData*/ )
 {
     bool aAccepted = false;
     INFO_LOGGER_F( "TeleManager_DBusChannelHandler");
-
-    TeleManager* pManager = reinterpret_cast<TeleManager*>(pUserData);
-    SAL_WARN_IF( !pManager, "tubes", "TeleManager_DBusChannelHandler: no manager");
-    if (!pManager)
-        return;
 
     for (GList* p = pChannels; p; p = p->next)
     {
@@ -179,7 +170,7 @@ void TeleManager_DBusChannelHandler(
 
             TeleConference* pConference = new TeleConference( pAccount, TP_DBUS_TUBE_CHANNEL( pChannel ) );
             pConference->acceptTube();
-            pManager->addConference( pConference );
+            TeleManager::addConference( pConference );
 
             g_signal_connect( pAccount, "presence-changed",
                     G_CALLBACK (account_presence_changed_cb), pConference );
@@ -209,6 +200,8 @@ void TeleManager_DBusChannelHandler(
 
 void TeleManager::addConference( TeleConference* pConference )
 {
+    MutexGuard aGuard( GetMutex());
+
     SAL_WARN_IF( pConference->getUuid().isEmpty(), "tubes",
             "Adding conference with empty UUID should not happen!" );
     pImpl->maAcceptedConferences[ pConference->getUuid() ] = pConference;
@@ -216,6 +209,8 @@ void TeleManager::addConference( TeleConference* pConference )
 
 TeleConference* TeleManager::getConference()
 {
+    MutexGuard aGuard( GetMutex());
+
     TeleManagerImpl::MapStringConference::const_iterator it =
             pImpl->maAcceptedConferences.find( pImpl->msCurrentUUID );
     TeleConference* pConference = NULL;
@@ -229,16 +224,22 @@ TeleConference* TeleManager::getConference()
 
 void TeleManager::registerCollaboration( Collaboration* pCollaboration )
 {
+    MutexGuard aGuard( GetMutex());
+
     pImpl->maCollaborations.insert( pCollaboration );
 }
 
 void TeleManager::unregisterCollaboration( Collaboration* pCollaboration )
 {
+    MutexGuard aGuard( GetMutex());
+
     pImpl->maCollaborations.erase( pCollaboration );
 }
 
 void TeleManager::displayAllContacts()
 {
+    MutexGuard aGuard( GetMutex());
+
     for (TeleManagerImpl::Collaborations::iterator it = pImpl->maCollaborations.begin();
             it != pImpl->maCollaborations.end(); ++it)
         (*it)->DisplayContacts();
@@ -246,16 +247,22 @@ void TeleManager::displayAllContacts()
 
 void TeleManager::registerDemoConference( TeleConference* pConference )
 {
+    MutexGuard aGuard( GetMutex());
+
     pImpl->maDemoConferences.insert( pConference );
 }
 
 void TeleManager::unregisterDemoConference( TeleConference* pConference )
 {
+    MutexGuard aGuard( GetMutex());
+
     pImpl->maDemoConferences.erase( pConference );
 }
 
 void TeleManager::broadcastPacket( const OString& rPacket )
 {
+    MutexGuard aGuard( GetMutex());
+
     INFO_LOGGER_F( "TeleManager::broadcastPacket" );
     for (TeleManagerImpl::DemoConferences::iterator it = pImpl->maDemoConferences.begin();
             it != pImpl->maDemoConferences.end(); ++it)
@@ -265,11 +272,15 @@ void TeleManager::broadcastPacket( const OString& rPacket )
 
 bool TeleManager::hasWaitingConference()
 {
-    return pImpl && !pImpl->msCurrentUUID.isEmpty();
+    MutexGuard aGuard( GetMutex());
+
+    return !pImpl->msCurrentUUID.isEmpty();
 }
 
 void TeleManager::setCurrentUuid( const OString& rUuid )
 {
+    MutexGuard aGuard( GetMutex());
+
     pImpl->msCurrentUUID = rUuid;
 }
 
@@ -335,14 +346,19 @@ static void TeleManager_TransferError( EmpathyFTHandler *handler, const GError *
     g_object_unref( handler);
 }
 
-static void
-TeleManager_IncomingHandlerReady (
+static void lcl_iterateLoop( bool (*pFunc)() )
+{
+    while (!(*pFunc)())
+    {
+        g_main_context_iteration( NULL, TRUE );
+    }
+}
+
+static void lcl_IncomingHandlerReady (
     EmpathyFTHandler*   pHandler,
     GError*             pError,
-    void*               pUserData)
+    void*               /*pUserData*/ )
 {
-    TeleManager* pManager = reinterpret_cast<TeleManager*>(pUserData);
-
     if (pError)
     {
         SAL_INFO ("tubes", "failed to prepare incoming transfer: " << pError->message);
@@ -361,8 +377,8 @@ TeleManager_IncomingHandlerReady (
     empathy_ft_handler_incoming_set_destination( pHandler, pDestination);
     g_object_unref( pDestination);
 
-    g_signal_connect( pHandler, "transfer-done", G_CALLBACK (TeleManager_TransferDone), pManager);
-    g_signal_connect( pHandler, "transfer-error", G_CALLBACK (TeleManager_TransferError), pManager);
+    g_signal_connect( pHandler, "transfer-done", G_CALLBACK (TeleManager_TransferDone), NULL);
+    g_signal_connect( pHandler, "transfer-error", G_CALLBACK (TeleManager_TransferError), NULL);
     empathy_ft_handler_start_transfer( pHandler);
 }
 
@@ -374,15 +390,10 @@ static void TeleManager_FileTransferHandler(
         GList*                      /*requests_satisfied*/,
         gint64                      /*user_action_time*/,
         TpHandleChannelsContext*    pContext,
-        gpointer                    pUserData)
+        gpointer                    /*pUserData*/ )
 {
     bool aAccepted = false;
     INFO_LOGGER_F( "TeleManager_FileTransferHandler");
-
-    TeleManager* pManager = reinterpret_cast<TeleManager*>(pUserData);
-    SAL_WARN_IF( !pManager, "tubes", "TeleManager_FileTransferHandler: no manager");
-    if (!pManager)
-        return;
 
     for (GList* p = pChannels; p; p = p->next)
     {
@@ -395,7 +406,7 @@ static void TeleManager_FileTransferHandler(
         {
             SAL_INFO( "tubes", "accepting file transfer");
             empathy_ft_handler_new_incoming( TP_FILE_TRANSFER_CHANNEL( pChannel),
-                TeleManager_IncomingHandlerReady, pManager);
+                lcl_IncomingHandlerReady, NULL);
             aAccepted = true;
         }
         else
@@ -452,15 +463,10 @@ static void TeleManager_ChannelReadyHandler(
 static void TeleManager_AccountManagerReadyHandler(
         GObject*        pSourceObject,
         GAsyncResult*   pResult,
-        gpointer        pUserData
+        gpointer        /*pUserData*/
         )
 {
     INFO_LOGGER_F( "TeleManager_AccountManagerReadyHandler");
-
-    TeleManager* pManager = reinterpret_cast<TeleManager*>(pUserData);
-    SAL_WARN_IF( !pManager, "tubes", "TeleManager_AccountManagerReadyHandler: no manager");
-    if (!pManager)
-        return;
 
     GError* pError = NULL;
     gboolean bPrepared = tp_proxy_prepare_finish( pSourceObject, pResult, &pError);
@@ -471,35 +477,8 @@ static void TeleManager_AccountManagerReadyHandler(
         g_error_free( pError);
     }
 
-    pManager->setAccountManagerReady( bPrepared);
-    pManager->setAccountManagerReadyHandlerInvoked( true);
-}
-
-
-TeleManager::TeleManager()
-{
-    SAL_INFO( "tubes", "TeleManager::get: count: " << nRefCount );
-    // The glib object types need to be initialized, else we aren't going
-    // anywhere.
-    g_type_init();
-
-    MutexGuard aGuard( GetMutex());
-    ++nRefCount;
-    if (!pImpl)
-        pImpl = new TeleManagerImpl;
-}
-
-TeleManager::~TeleManager()
-{
-    MutexGuard aGuard( GetMutex());
-    if (!--nRefCount)
-    {
-        disconnect();
-
-        delete pImpl;
-        pImpl = NULL;
-    }
-    SAL_INFO( "tubes", "TeleManager::unref: count: " << nRefCount );
+    TeleManager::setAccountManagerReady( bPrepared);
+    TeleManager::setAccountManagerReadyHandlerInvoked( true);
 }
 
 bool TeleManager::init( bool bListen )
@@ -518,9 +497,14 @@ bool TeleManager::init( bool bListen )
     return false;
 }
 
+void TeleManager::finalize()
+{
+    delete pImpl;
+}
+
 bool TeleManager::createAccountManager()
 {
-    INFO_LOGGER( "TeleManager::createAccountManager");
+    INFO_LOGGER_F( "TeleManager::createAccountManager");
 
     MutexGuard aGuard( GetMutex());
 
@@ -558,7 +542,7 @@ bool TeleManager::createAccountManager()
 
 bool TeleManager::registerClients()
 {
-    INFO_LOGGER( "TeleManager::registerClients");
+    INFO_LOGGER_F( "TeleManager::registerClients");
 
     MutexGuard aGuard( GetMutex());
 
@@ -574,7 +558,7 @@ bool TeleManager::registerClients()
             getFullClientName().getStr(),   // name
             FALSE,                          // uniquify
             TeleManager_DBusChannelHandler, // callback
-            this,                           // user_data
+            NULL,                           // user_data
             NULL                            // destroy
             );
     SAL_WARN_IF( !pImpl->mpClient, "tubes", "TeleManager::registerClients: no client");
@@ -622,7 +606,7 @@ bool TeleManager::registerClients()
             getFullClientName().getStr(),                   // name
             TRUE,                                           // uniquify to get a different bus name to the main client, above
             TeleManager_FileTransferHandler,                // callback
-            this,                                           // user_data, unused
+            NULL,                                           // user_data
             NULL                                            // destroy
             );
     tp_base_client_take_handler_filter( pImpl->mpFileTransferClient,
@@ -645,7 +629,7 @@ bool TeleManager::registerClients()
 
 TeleConference* TeleManager::startDemoSession()
 {
-    INFO_LOGGER( "TeleManager::startDemoSession");
+    INFO_LOGGER_F( "TeleManager::startDemoSession");
 
     TeleConference* pConference = new TeleConference( NULL, NULL, "demo" );
     registerDemoConference( pConference );
@@ -658,7 +642,7 @@ TeleConference* TeleManager::startGroupSession( TpAccount *pAccount,
                                      const rtl::OUString& rUConferenceRoom,
                                      const rtl::OUString& rUConferenceServer )
 {
-    INFO_LOGGER( "TeleManager::startGroupSession");
+    INFO_LOGGER_F( "TeleManager::startGroupSession");
 
     OString aSessionId( TeleManager::createUuid());
 
@@ -705,7 +689,7 @@ TeleConference* TeleManager::startGroupSession( TpAccount *pAccount,
     tp_account_channel_request_create_and_handle_channel_async(
             pChannelRequest, NULL, TeleManager_ChannelReadyHandler, pConference);
 
-    iterateLoop( &TeleManager::isChannelReadyHandlerInvoked);
+    lcl_iterateLoop( &TeleManager::isChannelReadyHandlerInvoked);
 
     g_object_unref( pChannelRequest);
     g_hash_table_unref( pRequest);
@@ -720,7 +704,7 @@ TeleConference* TeleManager::startGroupSession( TpAccount *pAccount,
 }
 
 
-void TeleManager::ensureLegacyChannel( TpAccount* pAccount, TpContact* pBuddy )
+static void lcl_ensureLegacyChannel( TpAccount* pAccount, TpContact* pBuddy )
 {
     /* This is a workaround for a Telepathy bug.
      * <https://bugs.freedesktop.org/show_bug.cgi?id=47760>. The first time you
@@ -751,9 +735,9 @@ void TeleManager::ensureLegacyChannel( TpAccount* pAccount, TpContact* pBuddy )
 /* TODO: factor out common code with startGroupSession() */
 TeleConference* TeleManager::startBuddySession( TpAccount *pAccount, TpContact *pBuddy )
 {
-    INFO_LOGGER( "TeleManager::startBuddySession");
+    INFO_LOGGER_F( "TeleManager::startBuddySession");
 
-    ensureLegacyChannel( pAccount, pBuddy );
+    lcl_ensureLegacyChannel( pAccount, pBuddy );
 
     const char *pIdentifier = tp_contact_get_identifier( pBuddy);
     SAL_INFO( "tubes", "TeleManager::startBuddySession: creating channel request from "
@@ -783,7 +767,7 @@ TeleConference* TeleManager::startBuddySession( TpAccount *pAccount, TpContact *
     tp_account_channel_request_create_and_handle_channel_async(
             pChannelRequest, NULL, TeleManager_ChannelReadyHandler, pConference );
 
-    iterateLoop( &TeleManager::isChannelReadyHandlerInvoked);
+    lcl_iterateLoop( &TeleManager::isChannelReadyHandlerInvoked);
 
     g_object_unref( pChannelRequest);
     g_hash_table_unref( pRequest);
@@ -802,7 +786,7 @@ TeleConference* TeleManager::startBuddySession( TpAccount *pAccount, TpContact *
 
 void TeleManager::prepareAccountManager()
 {
-    INFO_LOGGER( "TeleManager::prepareAccountManager");
+    INFO_LOGGER_F( "TeleManager::prepareAccountManager");
 
     MutexGuard aGuard( GetMutex());
 
@@ -827,13 +811,13 @@ void TeleManager::prepareAccountManager()
     pImpl->meAccountManagerStatus = AMS_INPREPARATION;
     setAccountManagerReadyHandlerInvoked( false);
 
-    tp_proxy_prepare_async( pImpl->mpAccountManager, NULL, TeleManager_AccountManagerReadyHandler, this);
+    tp_proxy_prepare_async( pImpl->mpAccountManager, NULL, TeleManager_AccountManagerReadyHandler, NULL);
 
-    iterateLoop( &TeleManager::isAccountManagerReadyHandlerInvoked);
+    lcl_iterateLoop( &TeleManager::isAccountManagerReadyHandlerInvoked);
 }
 
 
-TeleManager::AccountManagerStatus TeleManager::getAccountManagerStatus() const
+TeleManager::AccountManagerStatus TeleManager::getAccountManagerStatus()
 {
     return pImpl->meAccountManagerStatus;
 }
@@ -844,7 +828,7 @@ void TeleManager::setAccountManagerReadyHandlerInvoked( bool b )
     pImpl->mbAccountManagerReadyHandlerInvoked = b;
 }
 
-bool TeleManager::isAccountManagerReadyHandlerInvoked() const
+bool TeleManager::isAccountManagerReadyHandlerInvoked()
 {
     return pImpl->mbAccountManagerReadyHandlerInvoked;
 }
@@ -854,19 +838,19 @@ void TeleManager::setChannelReadyHandlerInvoked( bool b )
     pImpl->mbChannelReadyHandlerInvoked = b;
 }
 
-bool TeleManager::isChannelReadyHandlerInvoked() const
+bool TeleManager::isChannelReadyHandlerInvoked()
 {
     return pImpl->mbChannelReadyHandlerInvoked;
 }
 
-ContactList* TeleManager::getContactList() const
+ContactList* TeleManager::getContactList()
 {
     return pImpl->mpContactList;
 }
 
 TpAccount* TeleManager::getAccount( const rtl::OString& rAccountID )
 {
-    INFO_LOGGER( "TeleManager::getMyAccount");
+    INFO_LOGGER_F( "TeleManager::getMyAccount");
 
     SAL_WARN_IF( pImpl->meAccountManagerStatus != AMS_PREPARED, "tubes",
             "TeleManager::getMyAccount: Account Manager not prepared");
@@ -899,21 +883,6 @@ TpAccount* TeleManager::getAccount( const rtl::OString& rAccountID )
     return pAccount;
 }
 
-void TeleManager::disconnect()
-{
-    INFO_LOGGER( "TeleManager::disconnect");
-
-    if (!pImpl->mpClient)
-        return;
-
-    tp_base_client_unregister( pImpl->mpClient);
-    pImpl->mpClient = NULL;
-
-    tp_base_client_unregister( pImpl->mpFileTransferClient);
-    pImpl->mpFileTransferClient = NULL;
-}
-
-
 void TeleManager::setAccountManagerReady( bool bPrepared)
 {
     pImpl->meAccountManagerStatus = (bPrepared ? AMS_PREPARED : AMS_UNPREPARABLE);
@@ -923,7 +892,7 @@ void TeleManager::setAccountManagerReady( bool bPrepared)
 rtl::OString TeleManager::getFullClientName()
 {
     OStringBuffer aBuf(64);
-    aBuf.append( RTL_CONSTASCII_STRINGPARAM( LIBO_CLIENT_SUFFIX)).append( aNameSuffix);
+    aBuf.append( RTL_CONSTASCII_STRINGPARAM( LIBO_CLIENT_SUFFIX)).append( pImpl->msNameSuffix);
     return aBuf.makeStringAndClear();
 }
 
@@ -931,7 +900,7 @@ rtl::OString TeleManager::getFullClientName()
 rtl::OString TeleManager::getFullServiceName()
 {
     OStringBuffer aBuf(64);
-    aBuf.append( RTL_CONSTASCII_STRINGPARAM( LIBO_DTUBE_SERVICE)).append( aNameSuffix);
+    aBuf.append( RTL_CONSTASCII_STRINGPARAM( LIBO_DTUBE_SERVICE)).append( pImpl->msNameSuffix);
     return aBuf.makeStringAndClear();
 }
 
@@ -939,29 +908,11 @@ rtl::OString TeleManager::getFullServiceName()
 rtl::OString TeleManager::getFullObjectPath()
 {
     OStringBuffer aBuf(64);
-    aBuf.append( '/').append( RTL_CONSTASCII_STRINGPARAM( LIBO_DTUBE_SERVICE)).append( aNameSuffix);
+    aBuf.append( '/').append( RTL_CONSTASCII_STRINGPARAM( LIBO_DTUBE_SERVICE)).append( pImpl->msNameSuffix);
     OString aStr( aBuf.makeStringAndClear().replace( '.', '/'));
     return aStr;
 }
 
-void TeleManager::iterateLoop( CallBackInvokedFunc pFunc )
-{
-    while (!(*pFunc)())
-    {
-        g_main_context_iteration( NULL, TRUE );
-    }
-}
-
-
-void TeleManager::iterateLoop( ManagerCallBackInvokedFunc pFunc )
-{
-    while (!(this->*pFunc)())
-    {
-        g_main_context_iteration( NULL, TRUE );
-    }
-}
-
-// static
 rtl::OString TeleManager::createUuid()
 {
     sal_uInt8 nId[16];
@@ -975,8 +926,6 @@ rtl::OString TeleManager::createUuid()
     return rtl::OString( aBuf);
 }
 
-
-// static
 Mutex& TeleManager::GetMutex()
 {
     static Mutex* pMutex = NULL;
@@ -989,10 +938,9 @@ Mutex& TeleManager::GetMutex()
     return *pMutex;
 }
 
-// static
 void TeleManager::addSuffixToNames( const char* pName )
 {
-    aNameSuffix = pName;
+    pImpl->msNameSuffix = pName;
 }
 
 // ===========================================================================
@@ -1007,8 +955,8 @@ TeleManagerImpl::TeleManagerImpl()
         mbAccountManagerReadyHandlerInvoked( false),
         mbChannelReadyHandlerInvoked( false)
 {
+    g_type_init();
 }
-
 
 TeleManagerImpl::~TeleManagerImpl()
 {
@@ -1017,12 +965,18 @@ TeleManagerImpl::~TeleManagerImpl()
     for (MapStringConference::iterator it = maAcceptedConferences.begin();
             it != maAcceptedConferences.end(); ++it)
         it->second->close();
+    if (mpClient)
+    {
+        tp_base_client_unregister( mpClient);
+        g_object_unref( mpClient);
+    }
+    if (mpFileTransferClient)
+    {
+        tp_base_client_unregister( mpFileTransferClient);
+        g_object_unref( mpFileTransferClient);
+    }
     if (mpFactory)
         g_object_unref( mpFactory);
-    if (mpClient)
-        g_object_unref( mpClient);
-    if (mpFileTransferClient)
-        g_object_unref( mpFileTransferClient);
     if (mpAccountManager)
         g_object_unref( mpAccountManager);
     if (mpContactList)

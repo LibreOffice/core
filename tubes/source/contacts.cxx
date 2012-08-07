@@ -68,7 +68,6 @@ class TubeContacts : public ModelessDialog
     PushButton              maBtnListen;
     SvxSimpleTableContainer maListContainer;
     SvxSimpleTable          maList;
-    TeleManager*            mpManager;
     Collaboration*          mpCollaboration;
 
     DECL_LINK( BtnDemoHdl, void * );
@@ -105,13 +104,13 @@ class TubeContacts : public ModelessDialog
 
     void Listen()
     {
-        if (!mpManager->registerClients())
+        if (!TeleManager::registerClients())
             SAL_INFO( "sc.tubes", "Could not register client handlers." );
     }
 
     void StartDemoSession()
     {
-        TeleConference* pConference = mpManager->startDemoSession();
+        TeleConference* pConference = TeleManager::startDemoSession();
         if (!pConference)
             SAL_WARN( "tubes", "Could not start demo session!" );
         else
@@ -132,7 +131,7 @@ class TubeContacts : public ModelessDialog
             TpAccount* pAccount = pAC->mpAccount;
             TpContact* pContact = pAC->mpContact;
             SAL_INFO( "tubes", "picked " << tp_contact_get_identifier( pContact ) );
-            TeleConference* pConference = mpManager->startBuddySession( pAccount, pContact );
+            TeleConference* pConference = TeleManager::startBuddySession( pAccount, pContact );
             if (!pConference)
                 SAL_WARN( "tubes", "Could not start session with " <<
                         tp_contact_get_identifier( pContact ) );
@@ -154,7 +153,7 @@ class TubeContacts : public ModelessDialog
         {
             TpAccount* pAccount = pAC->mpAccount;
             SAL_INFO( "tubes", "picked " << tp_account_get_display_name( pAccount ) );
-            TeleConference* pConference = mpManager->startGroupSession( pAccount,
+            TeleConference* pConference = TeleManager::startGroupSession( pAccount,
                     rtl::OUString("liboroom"), rtl::OUString("conference.jabber.org") );
             if (!pConference)
                 SAL_WARN( "tubes", "Could not start group session." );
@@ -176,7 +175,6 @@ public:
         maBtnListen( this, TubesResId( BTN_LISTEN ) ),
         maListContainer( this, TubesResId( CTL_LIST ) ),
         maList( maListContainer ),
-        mpManager( new TeleManager() ),
         mpCollaboration( pCollaboration )
     {
         Hide();
@@ -201,7 +199,6 @@ public:
     }
     virtual ~TubeContacts()
     {
-        delete mpManager;
     }
 
     static rtl::OUString fromUTF8( const char *pStr )
@@ -214,7 +211,7 @@ public:
     {
         SAL_INFO( "sc.tubes", "Populating contact list dialog" );
         maList.Clear();
-        ContactList *pContacts = mpManager->getContactList();
+        ContactList *pContacts = TeleManager::getContactList();
         if ( pContacts )
         {
             AccountContactPairV aPairs = pContacts->getContacts();
