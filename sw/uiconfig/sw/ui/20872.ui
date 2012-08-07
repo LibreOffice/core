@@ -22,10 +22,10 @@
         <col id="0" translatable="yes">Left</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Centered</col>
+        <col id="1" translatable="yes">Centered</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Right</col>
+        <col id="2" translatable="yes">Right</col>
       </row>
     </data>
   </object>
@@ -435,10 +435,10 @@
         <col id="0" translatable="yes">Tap stop</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Space</col>
+        <col id="1" translatable="yes">Space</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Nothing</col>
+        <col id="2" translatable="yes">Nothing</col>
       </row>
     </data>
   </object>
