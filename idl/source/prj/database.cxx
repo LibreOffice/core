@@ -47,15 +47,15 @@ SvIdlDataBase::~SvIdlDataBase()
 }
 
 #define ADD_TYPE( Name, OdlName, ParserChar, CName, BasName, BasPost )            \
-    aTypeList.Append( new SvMetaType( SvHash_##Name()->GetName(),   \
+    aTypeList.push_back( new SvMetaType( SvHash_##Name()->GetName(),   \
                      BasName, OdlName, ParserChar, CName, BasName, BasPost ) );
 
 SvMetaTypeMemberList & SvIdlDataBase::GetTypeList()
 {
-    if( aTypeList.Count() == 0 )
+    if( aTypeList.empty() )
     { // fill initially
-        aTypeList.Append( new SvMetaTypeString() );
-        aTypeList.Append( new SvMetaTypevoid() );
+        aTypeList.push_back( new SvMetaTypeString() );
+        aTypeList.push_back( new SvMetaTypevoid() );
 
         // MI: IDispatch::Invoke can not unsigned
         ADD_TYPE( UINT16,    "long", 'h', "unsigned short", "Long", "&" );
@@ -78,9 +78,9 @@ SvMetaTypeMemberList & SvIdlDataBase::GetTypeList()
 
 SvMetaModule * SvIdlDataBase::GetModule( const rtl::OString& rName )
 {
-    for( sal_uLong n = 0; n < aModuleList.Count(); n++ )
-        if( aModuleList.GetObject( n )->GetName().getString().equals(rName) )
-            return aModuleList.GetObject( n );
+    for( sal_uLong n = 0; n < aModuleList.size(); n++ )
+        if( aModuleList[n]->GetName().getString().equals(rName) )
+            return aModuleList[n];
     return NULL;
 }
 
@@ -98,7 +98,7 @@ sal_Bool SvIdlDataBase::IsBinaryFormat( SvStream & rStm )
 
 void SvIdlDataBase::Load( SvStream & rStm )
 {
-    DBG_ASSERT( aTypeList.Count() == 0, "type list already initialized" );
+    DBG_ASSERT( aTypeList.empty(), "type list already initialized" );
     SvPersistStream aPStm( *IDLAPP->pClassMgr, &rStm );
 
     sal_uInt16  nVersion = 0;
@@ -141,11 +141,11 @@ void SvIdlDataBase::Save( SvStream & rStm, sal_uInt32 nFlags )
     if( bOnlyStreamedObjs )
     {
         SvMetaClassMemberList aList;
-        for( sal_uLong n = 0; n < GetModuleList().Count(); n++ )
+        for( sal_uLong n = 0; n < GetModuleList().size(); n++ )
         {
-            SvMetaModule * pModule = GetModuleList().GetObject( n );
+            SvMetaModule * pModule = GetModuleList()[n];
             if( !pModule->IsImported() )
-                aList.Append( pModule->GetClassList() );
+                aList.insert( pModule->GetClassList() );
         }
         aPStm << aList;
     }
@@ -347,18 +347,18 @@ sal_Bool SvIdlDataBase::ReadIdFile( const String & rFileName )
 SvMetaType * SvIdlDataBase::FindType( const SvMetaType * pPType,
                                     SvMetaTypeMemberList & rList )
 {
-    SvMetaType * pType = rList.First();
-    while( pType && pPType != pType )
-        pType = rList.Next();
-    return pType;
+    for( SvMetaTypeMemberList::const_iterator it = rList.begin(); it != rList.end(); ++it )
+        if( *it == pPType )
+            return *it;
+    return NULL;
 }
 
 SvMetaType * SvIdlDataBase::FindType( const rtl::OString& rName )
 {
-    SvMetaType * pType = aTypeList.First();
-    while( pType && !rName.equals(pType->GetName().getString()) )
-        pType = aTypeList.Next();
-    return pType;
+    for( SvMetaTypeMemberList::const_iterator it = aTypeList.begin(); it != aTypeList.end(); ++it )
+        if( rName.equals((*it)->GetName().getString()) )
+            return *it;
+    return NULL;
 }
 
 SvMetaType * SvIdlDataBase::ReadKnownType( SvTokenStream & rInStm )
@@ -404,12 +404,16 @@ SvMetaType * SvIdlDataBase::ReadKnownType( SvTokenStream & rInStm )
     {
         rtl::OString aName = pTok->GetString();
         SvMetaTypeMemberList & rList = GetTypeList();
-        SvMetaType * pType = rList.First();
-        while( pType )
+        SvMetaTypeMemberList::const_iterator it = rList.begin();
+        SvMetaType * pType = NULL;
+        while( it != rList.end() )
         {
-            if( pType->GetName().getString().equals(aName) )
+            if( (*it)->GetName().getString().equals(aName) )
+            {
+                pType = *it;
                 break;
-            pType = rList.Next();
+            }
+            ++it;
         }
         if( pType )
         {
@@ -436,7 +440,7 @@ SvMetaType * SvIdlDataBase::ReadKnownType( SvTokenStream & rInStm )
                 // is exactly this type
                 return pType;
 
-            DBG_ASSERT( aTmpTypeList.First(), "mindestens ein Element" );
+            DBG_ASSERT( aTmpTypeList.front(), "mindestens ein Element" );
             SvMetaTypeRef xType = new SvMetaType( pType->GetName().getString(), 'h', "dummy" );
             xType->SetRef( pType );
             xType->SetIn( bIn );
@@ -444,7 +448,7 @@ SvMetaType * SvIdlDataBase::ReadKnownType( SvTokenStream & rInStm )
             xType->SetCall0( nCall0 );
             xType->SetCall1( nCall1 );
 
-            aTmpTypeList.Append( xType );
+            aTmpTypeList.push_back( xType );
             return xType;
         }
     }
@@ -473,9 +477,9 @@ SvMetaAttribute * SvIdlDataBase::ReadKnownAttr
             sal_uLong n;
             if( FindId( pTok->GetString(), &n ) )
             {
-                for( sal_uLong i = 0; i < aAttrList.Count(); i++ )
+                for( sal_uLong i = 0; i < aAttrList.size(); i++ )
                 {
-                    SvMetaAttribute * pAttr = aAttrList.GetObject( i );
+                    SvMetaAttribute * pAttr = aAttrList[i];
                     if( pAttr->GetSlotId().getString().equals(pTok->GetString()) )
                         return pAttr;
                 }
@@ -499,9 +503,9 @@ SvMetaAttribute* SvIdlDataBase::SearchKnownAttr
     sal_uLong n;
     if( FindId( rId.getString(), &n ) )
     {
-        for( sal_uLong i = 0; i < aAttrList.Count(); i++ )
+        for( sal_uLong i = 0; i < aAttrList.size(); i++ )
         {
-            SvMetaAttribute * pAttr = aAttrList.GetObject( i );
+            SvMetaAttribute * pAttr = aAttrList[i];
             if( pAttr->GetSlotId().getString() == rId.getString() )
                 return pAttr;
         }
@@ -516,9 +520,9 @@ SvMetaClass * SvIdlDataBase::ReadKnownClass( SvTokenStream & rInStm )
     SvToken * pTok = rInStm.GetToken_Next();
 
     if( pTok->IsIdentifier() )
-        for( sal_uLong n = 0; n < aClassList.Count(); n++ )
+        for( sal_uLong n = 0; n < aClassList.size(); n++ )
         {
-            SvMetaClass * pClass = aClassList.GetObject( n );
+            SvMetaClass * pClass = aClassList[n];
             if( pClass->GetName().getString().equals(pTok->GetString()) )
                 return pClass;
         }
@@ -681,7 +685,7 @@ sal_Bool SvIdlWorkingBase::ReadSvIdl( SvTokenStream & rInStm, sal_Bool bImported
         {
             SvMetaModuleRef aModule = new SvMetaModule( rInStm.GetFileName(), bImported );
             if( aModule->ReadSvIdl( *this, rInStm ) )
-                GetModuleList().Append( aModule );
+                GetModuleList().push_back( aModule );
             else
                 bOk = sal_False;
         }
@@ -717,9 +721,9 @@ sal_Bool SvIdlWorkingBase::WriteSvIdl( SvStream & rOutStm )
         }
     }
 
-    for( sal_uLong n = 0; n < GetModuleList().Count(); n++ )
+    for( sal_uLong n = 0; n < GetModuleList().size(); n++ )
     {
-        SvMetaModule * pModule = GetModuleList().GetObject( n );
+        SvMetaModule * pModule = GetModuleList()[n];
         pModule->WriteSvIdl( *this, rOutStm, 0 );
     }
     return sal_True;
@@ -734,19 +738,19 @@ sal_Bool SvIdlWorkingBase::WriteSfx( SvStream & rOutStm )
     WriteReset();
     SvMemoryStream aTmpStm( 256000, 256000 );
     sal_uLong n;
-    for( n = 0; n < GetModuleList().Count(); n++ )
+    for( n = 0; n < GetModuleList().size(); n++ )
     {
-        SvMetaModule * pModule = GetModuleList().GetObject( n );
+        SvMetaModule * pModule = GetModuleList()[n];
         if( !pModule->IsImported() )
             pModule->WriteSfx( *this, aTmpStm );
         aTmpStm.Seek( 0 );
     }
-    for( n = 0; n < aUsedTypes.Count(); n++ )
+    for( n = 0; n < aUsedTypes.size(); n++ )
     {
-        SvMetaType * pType = aUsedTypes.GetObject( n );
+        SvMetaType * pType = aUsedTypes[n];
         pType->WriteSfx( *this, rOutStm );
     }
-    aUsedTypes.Clear();
+    aUsedTypes.clear();
     rOutStm << aTmpStm;
     return sal_True;
 }
@@ -758,16 +762,16 @@ sal_Bool SvIdlWorkingBase::WriteHelpIds( SvStream& rOutStm )
 
     HelpIdTable aIdTable;
     sal_uLong n;
-    for( n = 0; n < GetModuleList().Count(); n++ )
+    for( n = 0; n < GetModuleList().size(); n++ )
     {
-        SvMetaModule * pModule = GetModuleList().GetObject( n );
+        SvMetaModule * pModule = GetModuleList()[n];
         pModule->WriteHelpIds( *this, rOutStm, aIdTable );
     }
 
     const SvMetaAttributeMemberList & rAttrList = GetAttrList();
-    for( n = 0; n < rAttrList.Count(); n++ )
+    for( n = 0; n < rAttrList.size(); n++ )
     {
-        SvMetaAttribute * pAttr = rAttrList.GetObject( n );
+        SvMetaAttribute * pAttr = rAttrList[n];
         pAttr->WriteHelpId( *this, rOutStm, aIdTable );
     }
 
@@ -786,7 +790,7 @@ void SvIdlDataBase::StartNewFile( const String& rName )
 
 void SvIdlDataBase::AppendAttr( SvMetaAttribute *pAttr )
 {
-    aAttrList.Append( pAttr );
+    aAttrList.push_back( pAttr );
     if ( bExport )
         pAttr->SetNewAttribute( sal_True );
 }
@@ -794,12 +798,12 @@ void SvIdlDataBase::AppendAttr( SvMetaAttribute *pAttr )
 sal_Bool SvIdlWorkingBase::WriteCSV( SvStream& rStrm )
 {
     SvMetaAttributeMemberList &rList = GetAttrList();
-    sal_uLong nCount = rList.Count();
+    sal_uLong nCount = rList.size();
     for ( sal_uLong n=0; n<nCount; n++ )
     {
-        if ( rList.GetObject(n)->IsNewAttribute() )
+        if ( rList[n]->IsNewAttribute() )
         {
-            rList.GetObject(n)->WriteCSV( *this, rStrm );
+            rList[n]->WriteCSV( *this, rStrm );
         }
     }
 
@@ -814,9 +818,9 @@ sal_Bool SvIdlWorkingBase::WriteDocumentation( SvStream & rOutStm )
     if( rOutStm.GetError() != SVSTREAM_OK )
         return sal_False;
 
-    for( sal_uLong n = 0; n < GetModuleList().Count(); n++ )
+    for( sal_uLong n = 0; n < GetModuleList().size(); n++ )
     {
-        SvMetaModule * pModule = GetModuleList().GetObject( n );
+        SvMetaModule * pModule = GetModuleList()[n];
         if( !pModule->IsImported() )
             pModule->Write( *this, rOutStm, 0, WRITE_DOCU );
     }

@@ -31,6 +31,7 @@
 
 #include <tools/string.hxx>
 #include <tools/stream.hxx>
+#include <tools/contnr.hxx>
 #include <svx/svdsob.hxx>
 #include <svx/svdtypes.hxx> // fuer typedef SdrLayerID
 #include "svx/svxdllapi.h"

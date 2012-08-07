@@ -90,7 +90,8 @@ public:
                                     HelpIdTable& rTable );
 };
 SV_DECL_IMPL_REF(SvMetaModule)
-SV_DECL_IMPL_PERSIST_LIST(SvMetaModule,SvMetaModule *)
+
+class SvMetaModuleMemberList : public SvDeclPersistList<SvMetaModule *> {};
 
 
 #endif // _MODULE_HXX

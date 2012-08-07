@@ -254,7 +254,8 @@ public:
     virtual void        WriteCSV( SvIdlDataBase&, SvStream& );
 };
 SV_DECL_IMPL_REF(SvMetaSlot)
-SV_DECL_IMPL_PERSIST_LIST(SvMetaSlot,SvMetaSlot *)
+
+class SvMetaSlotMemberList : public SvDeclPersistList<SvMetaSlot *> {};
 
 #endif // _SLOT_HXX
 

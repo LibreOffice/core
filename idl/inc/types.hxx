@@ -33,7 +33,9 @@ typedef std::map<sal_uLong, SvMetaSlot*> HelpIdTable;
 
 SV_DECL_REF(SvMetaType)
 SV_DECL_REF(SvMetaAttribute)
-SV_DECL_PERSIST_LIST(SvMetaAttribute,SvMetaAttribute *)
+
+class SvMetaAttributeMemberList : public SvDeclPersistList<SvMetaAttribute *> {};
+
 class SvMetaAttribute : public SvMetaReference
 {
     SvMetaTypeRef       aType;
@@ -119,7 +121,6 @@ public:
     rtl::OString        Compare( SvMetaAttribute *pAttr );
 };
 SV_IMPL_REF(SvMetaAttribute)
-SV_IMPL_PERSIST_LIST(SvMetaAttribute,SvMetaAttribute *)
 
 
 enum { CALL_VALUE, CALL_POINTER, CALL_REFERENCE };
@@ -175,11 +176,11 @@ public:
     SvMetaAttributeMemberList & GetAttrList() const;
     sal_uLong               GetAttrCount() const
                         {
-                            return pAttrList ? pAttrList->Count() : 0L;
+                            return pAttrList ? pAttrList->size() : 0L;
                         }
     void                AppendAttr( SvMetaAttribute * pAttr )
                         {
-                            GetAttrList().Append( pAttr );
+                            GetAttrList().push_back( pAttr );
                         }
 
     void                SetType( int nT );
@@ -236,8 +237,8 @@ public:
                                         const rtl::OString& rChief );
 };
 SV_IMPL_REF(SvMetaType)
-SV_DECL_IMPL_PERSIST_LIST(SvMetaType,SvMetaType *)
 
+class SvMetaTypeMemberList : public SvDeclPersistList<SvMetaType *> {};
 
 class SvMetaTypeString : public SvMetaType
 {
@@ -246,8 +247,8 @@ public:
             SvMetaTypeString();
 };
 SV_DECL_IMPL_REF(SvMetaTypeString)
-SV_DECL_IMPL_PERSIST_LIST(SvMetaTypeString,SvMetaTypeString *)
 
+class SvMetaTypeStringMemberList : public SvDeclPersistList<SvMetaTypeString *> {};
 
 class SvMetaEnumValue : public SvMetaName
 {
@@ -262,8 +263,8 @@ public:
                                   WriteType, WriteAttribute = 0 );
 };
 SV_DECL_IMPL_REF(SvMetaEnumValue)
-SV_DECL_IMPL_PERSIST_LIST(SvMetaEnumValue,SvMetaEnumValue *)
 
+class SvMetaEnumValueMemberList : public SvDeclPersistList<SvMetaEnumValue *> {};
 
 class SvMetaTypeEnum : public SvMetaType
 {
@@ -280,10 +281,10 @@ public:
             SvMetaTypeEnum();
 
     sal_uInt16              GetMaxValue() const;
-    sal_uLong               Count() const { return aEnumValueList.Count(); }
+    sal_uLong               Count() const { return aEnumValueList.size(); }
     const rtl::OString&     GetPrefix() const { return aPrefix; }
     SvMetaEnumValue *   GetObject( sal_uLong n ) const
-                        { return aEnumValueList.GetObject( n ); }
+                        { return aEnumValueList[n]; }
 
     virtual sal_Bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
     virtual void        WriteSvIdl( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab );
@@ -293,8 +294,8 @@ public:
                                   WriteType, WriteAttribute = 0 );
 };
 SV_DECL_IMPL_REF(SvMetaTypeEnum)
-SV_DECL_IMPL_PERSIST_LIST(SvMetaTypeEnum,SvMetaTypeEnum *)
 
+class SvMetaTypeEnumMemberList : public SvDeclPersistList<SvMetaTypeEnum *> {};
 
 class SvMetaTypevoid : public SvMetaType
 {
@@ -303,7 +304,7 @@ public:
             SvMetaTypevoid();
 };
 SV_DECL_IMPL_REF(SvMetaTypevoid)
-SV_DECL_IMPL_PERSIST_LIST(SvMetaTypevoid,SvMetaTypevoid *)
+class SvMetaTypevoidMemberList : public SvDeclPersistList<SvMetaTypevoid *> {};
 
 
 #endif // _TYPES_HXX

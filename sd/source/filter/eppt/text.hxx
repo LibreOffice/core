@@ -35,6 +35,7 @@
 #include <rtl/textenc.h>
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/lang/Locale.hpp>
+#include <tools/list.hxx>
 
 namespace com { namespace sun { namespace star {
 namespace awt { struct FontDescriptor; }

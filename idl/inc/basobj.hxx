@@ -73,9 +73,8 @@ public:
                                 WriteType, WriteAttribute = 0 );
 };
 SV_DECL_IMPL_REF(SvMetaObject)
-SV_DECL_PERSIST_LIST(SvMetaObject,SvMetaObject *)
-SV_IMPL_PERSIST_LIST(SvMetaObject,SvMetaObject *)
 
+class SvMetaObjectMemberList : public SvDeclPersistList<SvMetaObject *> {};
 
 class SvMetaObjectMemberStack
 {
@@ -84,21 +83,17 @@ public:
             SvMetaObjectMemberStack() {;}
 
     void            Push( SvMetaObject * pObj )
-                    { aList.Insert( pObj, LIST_APPEND ); }
-    SvMetaObject *  Pop() { return aList.Remove( aList.Count() -1 ); }
-    SvMetaObject *  Top() const { return aList.GetObject( aList.Count() -1 ); }
-    void            Clear() { aList.Clear(); }
-    sal_uLong     Count() const { return aList.Count(); }
+                    { aList.push_back( pObj ); }
+    SvMetaObject *  Pop() { return aList.pop_back(); }
+    SvMetaObject *  Top() const { return aList.back(); }
+    void            Clear() { aList.clear(); }
+    sal_uLong     Count() const { return aList.size(); }
 
     SvMetaObject *  Get( TypeId nType )
                     {
-                        SvMetaObject * pObj = aList.Last();
-                        while( pObj )
-                        {
-                            if( pObj->IsA( nType ) )
-                                return pObj;
-                            pObj = aList.Prev();
-                        }
+                        for( SvMetaObjectMemberList::reverse_iterator it = aList.rbegin(); it != aList.rend(); ++it )
+                            if( (*it)->IsA( nType ) )
+                                return *it;
                         return NULL;
                     }
 };
@@ -147,7 +142,8 @@ public:
     void                WriteDescription( SvStream& rOutStm );
 };
 SV_DECL_IMPL_REF(SvMetaName)
-SV_DECL_IMPL_PERSIST_LIST(SvMetaName,SvMetaName *)
+
+class SvMetaNameMemberList : public SvDeclPersistList<SvMetaName *> {};
 
 
 SV_DECL_REF(SvMetaReference)
@@ -195,7 +191,8 @@ public:
                         { aRef = pRef; }
 };
 SV_IMPL_REF(SvMetaReference)
-SV_DECL_IMPL_PERSIST_LIST(SvMetaReference,SvMetaReference *)
+
+class SvMetaReferenceMemberList : public SvDeclPersistList<SvMetaReference *> {};
 
 
 class SvMetaModule;
@@ -229,8 +226,8 @@ protected:
                                           WriteType, WriteAttribute = 0);
 };
 SV_DECL_IMPL_REF(SvMetaExtern)
-SV_DECL_IMPL_PERSIST_LIST(SvMetaExtern,SvMetaExtern *)
 
+class SvMetaExternMemberList : public SvDeclPersistList<SvMetaExtern *> {};
 
 #endif // _BASOBJ_HXX
 

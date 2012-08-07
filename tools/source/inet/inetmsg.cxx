@@ -22,6 +22,7 @@
 #include <tools/inetmime.hxx>
 #include <tools/inetmsg.hxx>
 #include <tools/inetstrm.hxx>
+#include <tools/list.hxx>
 #include <rtl/instance.hxx>
 #include <rtl/strbuf.hxx>
 #include <comphelper/string.hxx>

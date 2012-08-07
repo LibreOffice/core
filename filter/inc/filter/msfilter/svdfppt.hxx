@@ -33,6 +33,7 @@
 #include <tools/string.hxx>
 #include <tools/gen.hxx>
 #include <tools/color.hxx>
+#include <tools/list.hxx>
 #include <svx/svdobj.hxx>
 #include <editeng/numitem.hxx>
 #include <editeng/editdata.hxx>

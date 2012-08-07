@@ -79,7 +79,7 @@ protected:
     SvIdlError                  aError;
     void WriteReset()
     {
-        aUsedTypes.Clear();
+        aUsedTypes.clear();
         aIFaceName = rtl::OString();
     }
 public:

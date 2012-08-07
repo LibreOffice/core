@@ -66,9 +66,11 @@ public:
 };
 
 SV_DECL_IMPL_REF(SvClassElement)
-SV_DECL_IMPL_PERSIST_LIST(SvClassElement,SvClassElement *)
 
-SV_DECL_PERSIST_LIST(SvMetaClass,SvMetaClass *)
+class SvClassElementMemberList : public SvDeclPersistList<SvClassElement *> {};
+
+class SvMetaClassMemberList : public SvDeclPersistList<SvMetaClass *> {};
+
 class SvMetaClass : public SvMetaType
 {
     SvMetaAttributeMemberList   aAttrList;
@@ -133,7 +135,6 @@ public:
                                 HelpIdTable& rTable );
 };
 SV_IMPL_REF(SvMetaClass)
-SV_IMPL_PERSIST_LIST(SvMetaClass,SvMetaClass *)
 
 
 #endif // _OBJECT_HXX

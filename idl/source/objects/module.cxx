@@ -184,9 +184,9 @@ void SvMetaModule::ReadContextSvIdl( SvIdlDataBase & rBase,
         SvMetaClassRef aClass = new SvMetaClass();
         if( aClass->ReadSvIdl( rBase, rInStm ) )
         {
-            aClassList.Append( aClass );
+            aClassList.push_back( aClass );
             // announce globally
-            rBase.GetClassList().Append( aClass );
+            rBase.GetClassList().push_back( aClass );
         }
     }
     else if( rInStm.GetToken()->Is( SvHash_enum() ) )
@@ -196,9 +196,9 @@ void SvMetaModule::ReadContextSvIdl( SvIdlDataBase & rBase,
         if( aEnum->ReadSvIdl( rBase, rInStm ) )
         {
             // declared in module
-            aTypeList.Append( aEnum );
+            aTypeList.push_back( aEnum );
             // announce globally
-            rBase.GetTypeList().Append( aEnum );
+            rBase.GetTypeList().push_back( aEnum );
         }
     }
     else if( rInStm.GetToken()->Is( SvHash_item() )
@@ -210,9 +210,9 @@ void SvMetaModule::ReadContextSvIdl( SvIdlDataBase & rBase,
         if( xItem->ReadSvIdl( rBase, rInStm ) )
         {
             // declared in module
-            aTypeList.Append( xItem );
+            aTypeList.push_back( xItem );
             // announce globally
-            rBase.GetTypeList().Append( xItem );
+            rBase.GetTypeList().push_back( xItem );
         }
     }
     else if( rInStm.GetToken()->Is( SvHash_include() ) )
@@ -280,7 +280,7 @@ void SvMetaModule::ReadContextSvIdl( SvIdlDataBase & rBase,
             if( xSlot->Test( rBase, rInStm ) )
             {
                 // declared in module
-                aAttrList.Append( xSlot );
+                aAttrList.push_back( xSlot );
                 // announce globally
                 rBase.AppendAttr( xSlot );
             }
@@ -294,22 +294,22 @@ void SvMetaModule::WriteContextSvIdl( SvIdlDataBase & rBase,
 {
     SvMetaExtern::WriteContextSvIdl( rBase, rOutStm, nTab );
     sal_uLong n;
-    for( n = 0; n < aTypeList.Count(); n++ )
+    for( n = 0; n < aTypeList.size(); n++ )
     {
         WriteTab( rOutStm, nTab );
-        aTypeList.GetObject( n )->WriteSvIdl( rBase, rOutStm, nTab );
+        aTypeList[n]->WriteSvIdl( rBase, rOutStm, nTab );
     }
     rOutStm << endl;
-    for( n = 0; n < aAttrList.Count(); n++ )
+    for( n = 0; n < aAttrList.size(); n++ )
     {
         WriteTab( rOutStm, nTab );
-        aAttrList.GetObject( n )->WriteSvIdl( rBase, rOutStm, nTab );
+        aAttrList[n]->WriteSvIdl( rBase, rOutStm, nTab );
     }
     rOutStm << endl;
-    for( n = 0; n < aClassList.Count(); n++ )
+    for( n = 0; n < aClassList.size(); n++ )
     {
         WriteTab( rOutStm, nTab );
-        aClassList.GetObject( n )->WriteSvIdl( rBase, rOutStm, nTab );
+        aClassList[n]->WriteSvIdl( rBase, rOutStm, nTab );
     }
 }
 
@@ -368,9 +368,9 @@ void SvMetaModule::WriteSvIdl( SvIdlDataBase & rBase, SvStream & rOutStm,
 
 void SvMetaModule::WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm )
 {
-    for( sal_uLong n = 0; n < aClassList.Count(); n++ )
+    for( sal_uLong n = 0; n < aClassList.size(); n++ )
     {
-        SvMetaClass * pClass = aClassList.GetObject( n );
+        SvMetaClass * pClass = aClassList[n];
         pClass->WriteSfx( rBase, rOutStm );
     }
 }
@@ -378,9 +378,9 @@ void SvMetaModule::WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm )
 void SvMetaModule::WriteHelpIds( SvIdlDataBase & rBase, SvStream & rOutStm,
                             HelpIdTable& rTable )
 {
-    for( sal_uLong n = 0; n < aClassList.Count(); n++ )
+    for( sal_uLong n = 0; n < aClassList.size(); n++ )
     {
-        SvMetaClass * pClass = aClassList.GetObject( n );
+        SvMetaClass * pClass = aClassList[n];
         pClass->WriteHelpIds( rBase, rOutStm, rTable );
     }
 }
@@ -422,15 +422,15 @@ void SvMetaModule::Write( SvIdlDataBase & rBase, SvStream & rOutStm,
         WriteTab( rOutStm, nTab );
         rOutStm << "importlib(\"STDOLE.TLB\");" << endl;
 
-        for( sal_uLong n = 0; n < aClassList.Count(); n++ )
+        for( sal_uLong n = 0; n < aClassList.size(); n++ )
         {
-            SvMetaClass * pClass = aClassList.GetObject( n );
+            SvMetaClass * pClass = aClassList[n];
             if( !pClass->IsShell() && pClass->GetAutomation() )
             {
                 WriteTab( rOutStm, nTab );
                 WriteStars( rOutStm );
                 pClass->Write( rBase, rOutStm, nTab +1, nT, nA );
-                if( n +1 < aClassList.Count() )
+                if( n +1 < aClassList.size() )
                     rOutStm << endl;
             }
         }
@@ -446,9 +446,9 @@ void SvMetaModule::Write( SvIdlDataBase & rBase, SvStream & rOutStm,
         rOutStm << "</MODULE>" << endl << endl;
 
         rOutStm << "<CLASSES>" << endl;
-        for( sal_uLong n = 0; n < aClassList.Count(); n++ )
+        for( sal_uLong n = 0; n < aClassList.size(); n++ )
         {
-            SvMetaClass * pClass = aClassList.GetObject( n );
+            SvMetaClass * pClass = aClassList[n];
             if( !pClass->IsShell() )
             {
                 rOutStm << pClass->GetName().getString().getStr();
@@ -458,16 +458,16 @@ void SvMetaModule::Write( SvIdlDataBase & rBase, SvStream & rOutStm,
 
                 // imported classes
                 const SvClassElementMemberList& rClassList = pClass->GetClassList();
-                if ( rClassList.Count() )
+                if ( !rClassList.empty() )
                 {
                     rOutStm << " ( ";
 
-                    for( sal_uLong m=0; m<rClassList.Count(); ++m )
+                    for( sal_uLong m=0; m<rClassList.size(); ++m )
                     {
-                        SvClassElement *pEle = rClassList.GetObject(m);
+                        SvClassElement *pEle = rClassList[m];
                         SvMetaClass *pCl = pEle->GetClass();
                         rOutStm << pCl->GetName().getString().getStr();
-                        if ( m+1 == rClassList.Count() )
+                        if ( m+1 == rClassList.size() )
                             rOutStm << " )";
                         else
                             rOutStm << " , ";
@@ -484,9 +484,9 @@ void SvMetaModule::Write( SvIdlDataBase & rBase, SvStream & rOutStm,
     case WRITE_C_SOURCE:
     case WRITE_C_HEADER:
     {
-        for( sal_uLong n = 0; n < aClassList.Count(); n++ )
+        for( sal_uLong n = 0; n < aClassList.size(); n++ )
         {
-            SvMetaClass * pClass = aClassList.GetObject( n );
+            SvMetaClass * pClass = aClassList[n];
             if( !pClass->IsShell() )
                 pClass->Write( rBase, rOutStm, nTab, nT, nA );
         }

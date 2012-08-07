@@ -104,35 +104,50 @@ public:
 SV_DECL_IMPL_REF(SvPersistBase)
 
 /*************************************************************************/
-// Damit die Liste, anders benannt wird
-typedef SvPersistBase SuperSvPersistBase;
-SV_DECL_REF_LIST_VISIBILITY(SuperSvPersistBase,SuperSvPersistBase*,TOOLS_DLLPUBLIC)
-SV_IMPL_REF_LIST(SuperSvPersistBase,SuperSvPersistBase*)
 
-class TOOLS_DLLPUBLIC SvPersistBaseMemberList : public SuperSvPersistBaseMemberList
+class SvPersistListWriteable
 {
 public:
-    SvPersistBaseMemberList();
-
-    void   WriteObjects( SvPersistStream &, sal_Bool bOnlyStreamedObj = sal_False ) const;
-    TOOLS_DLLPUBLIC friend SvPersistStream& operator << (SvPersistStream &, const SvPersistBaseMemberList &);
-    TOOLS_DLLPUBLIC friend SvPersistStream& operator >> (SvPersistStream &, SvPersistBaseMemberList &);
+    virtual ~SvPersistListWriteable() {}
+    virtual size_t size() const = 0;
+    virtual SvPersistBase* GetPersistBase(size_t idx) const = 0;
+};
+class SvPersistListReadable
+{
+public:
+    virtual ~SvPersistListReadable() {}
+    virtual void push_back(SvPersistBase* p) = 0;
 };
 
-/*************************************************************************/
-#define SV_DECL_PERSIST_LIST(ClassName,EntryName)\
-class ClassName##MemberList : public SvPersistBaseMemberList\
-{\
-public:\
-    PRV_SV_DECL_MEMBER_LIST(ClassName,EntryName)\
+void TOOLS_DLLPUBLIC WritePersistListObjects(const SvPersistListWriteable& rList, SvPersistStream & rStm, bool bOnlyStreamed = false );
+
+void TOOLS_DLLPUBLIC ReadObjects( SvPersistListReadable& rLst, SvPersistStream & rStm);
+
+// T has to be a subtype of "SvPersistBase*"
+template<typename T>
+class SvDeclPersistList : public SvRefMemberList<T>, public SvPersistListWriteable, public SvPersistListReadable
+{
+public:
+   // implement the reader/writer adapter methods
+    size_t size() const { return SvRefMemberList<T>::size(); }
+    SvPersistBase* GetPersistBase(size_t idx) const { return SvRefMemberList<T>::operator[](idx); }
+    void push_back(SvPersistBase* p) { SvRefMemberList<T>::push_back(static_cast<T>(p)); }
+    void WriteObjects(SvPersistStream & rStm, bool bOnlyStreamed ) const { WritePersistListObjects(*this, rStm, bOnlyStreamed); }
 };
 
-#define SV_IMPL_PERSIST_LIST(ClassName,EntryName)\
-    PRV_SV_IMPL_MEMBER_LIST(ClassName,EntryName,SvPersistBaseMemberList)
+template<typename T>
+TOOLS_DLLPUBLIC SvPersistStream& operator << (SvPersistStream &rStm, const SvDeclPersistList<T> &rLst)
+{
+    WritePersistListObjects( rLst, rStm );
+    return rStm;
+};
 
-#define SV_DECL_IMPL_PERSIST_LIST(ClassName,EntryName)\
-SV_DECL_PERSIST_LIST(ClassName,EntryName)\
-SV_IMPL_PERSIST_LIST(ClassName,EntryName)
+template<typename T>
+TOOLS_DLLPUBLIC SvPersistStream& operator >> (SvPersistStream &rStm, SvDeclPersistList<T> &rLst)
+{
+    ReadObjects( rLst, rStm );
+    return rStm;
+};
 
 typedef UniqueIndex<SvPersistBase> SvPersistUIdx;
 

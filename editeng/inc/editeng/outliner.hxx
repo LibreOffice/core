@@ -36,6 +36,7 @@
 #include <editeng/editdata.hxx>
 #include <i18npool/lang.h>
 #include <tools/color.hxx>
+#include <tools/list.hxx>
 #include <vcl/graph.hxx>
 #include <tools/link.hxx>
 #include <rsc/rscsfx.hxx>

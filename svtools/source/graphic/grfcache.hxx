@@ -31,6 +31,7 @@
 
 #include <vcl/graph.hxx>
 #include <vcl/timer.hxx>
+#include <tools/list.hxx>
 #include <svtools/grfmgr.hxx>
 #include <list>
 

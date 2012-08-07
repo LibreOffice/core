@@ -109,9 +109,9 @@ void SvMetaClass::Save( SvPersistStream & rStm )
 
     // create mask
     sal_uInt8 nMask = 0;
-    if( aAttrList.Count() )         nMask |= 0x1;
+    if( !aAttrList.empty() )        nMask |= 0x1;
     if( aSuperClass.Is() )          nMask |= 0x2;
-    if( aClassList.Count() )        nMask |= 0x4;
+    if( !aClassList.empty() )       nMask |= 0x4;
     if( xAutomationInterface.Is() ) nMask |= 0x8;
     if( aAutomation.IsSet() )       nMask |= 0x10;
 
@@ -162,7 +162,7 @@ void SvMetaClass::ReadContextSvIdl( SvIdlDataBase & rBase,
         {
             SvClassElementRef xEle = new SvClassElement();
             xEle->SetClass( pClass );
-            aClassList.Append( xEle );
+            aClassList.push_back( xEle );
 
             if( rInStm.Read( '[' ) )
             {
@@ -241,7 +241,7 @@ void SvMetaClass::ReadContextSvIdl( SvIdlDataBase & rBase,
                 aI.SetValue( rBase.GetUniqueId() );
                 xAttr->SetSlotId( aI );
             }
-            aAttrList.Append( xAttr );
+            aAttrList.push_back( xAttr );
             return;
         }
     }
@@ -256,15 +256,15 @@ void SvMetaClass::WriteContextSvIdl
 )
 {
     sal_uLong n;
-    for( n = 0; n < aAttrList.Count(); n++ )
+    for( n = 0; n < aAttrList.size(); n++ )
     {
         WriteTab( rOutStm, nTab );
-        aAttrList.GetObject( n )->WriteSvIdl( rBase, rOutStm, nTab );
+        aAttrList[n]->WriteSvIdl( rBase, rOutStm, nTab );
         rOutStm << ';' << endl;
     }
-    for( n = 0; n < aClassList.Count(); n++ )
+    for( n = 0; n < aClassList.size(); n++ )
     {
-        SvClassElement * pEle = aClassList.GetObject( n );
+        SvClassElement * pEle = aClassList[n];
         WriteTab( rOutStm, nTab );
         rOutStm << SvHash_import()->GetName().getStr() << ' '
                 << pEle->GetPrefix().getStr();
@@ -316,9 +316,9 @@ sal_Bool SvMetaClass::TestAttribute( SvIdlDataBase & rBase, SvTokenStream & rInS
         OSL_FAIL( rAttr.GetSlotId().getString().getStr() );
     }
 
-    for( sal_uLong n = 0; n < aAttrList.Count(); n++ )
+    for( sal_uLong n = 0; n < aAttrList.size(); n++ )
     {
-        SvMetaAttribute * pS = aAttrList.GetObject( n );
+        SvMetaAttribute * pS = aAttrList[n];
         if( pS->GetName().getString() == rAttr.GetName().getString() )
         {
             // values have to match
@@ -407,9 +407,9 @@ void SvMetaClass::Write( SvIdlDataBase & rBase, SvStream & rOutStm,
 
             // write all attributes
             sal_uLong n;
-            for( n = 0; n < aAttrList.Count(); n++ )
+            for( n = 0; n < aAttrList.size(); n++ )
             {
-                SvMetaAttribute * pAttr = aAttrList.GetObject( n );
+                SvMetaAttribute * pAttr = aAttrList[n];
                 if( !pAttr->GetHidden() )
                 {
                     if( pAttr->IsMethod() )
@@ -473,9 +473,9 @@ void SvMetaClass::InsertSlots( SvSlotElementList& rList, std::vector<sal_uLong>&
 
     // write all direct attributes
     sal_uLong n;
-    for( n = 0; n < aAttrList.Count(); n++ )
+    for( n = 0; n < aAttrList.size(); n++ )
     {
-        SvMetaAttribute * pAttr = aAttrList.GetObject( n );
+        SvMetaAttribute * pAttr = aAttrList[n];
 
         sal_uLong nId = pAttr->GetSlotId().GetValue();
 
@@ -500,9 +500,9 @@ void SvMetaClass::InsertSlots( SvSlotElementList& rList, std::vector<sal_uLong>&
 
     // Write all attributes of the imported classes, as long as they have
     // not already been imported by the superclass.
-    for( n = 0; n < aClassList.Count(); n++ )
+    for( n = 0; n < aClassList.size(); n++ )
     {
-        SvClassElement * pEle = aClassList.GetObject( n );
+        SvClassElement * pEle = aClassList[n];
         SvMetaClass * pCl = pEle->GetClass();
         rtl::OStringBuffer rPre(rPrefix);
         if( rPre.getLength() && pEle->GetPrefix().getLength() )
@@ -531,9 +531,9 @@ void SvMetaClass::FillClasses( SvMetaClassList & rList )
     rList.push_back( this );
 
     // my imports
-    for( sal_uInt32 n = 0; n < aClassList.Count(); n++ )
+    for( sal_uInt32 n = 0; n < aClassList.size(); n++ )
     {
-        SvClassElement * pEle = aClassList.GetObject( n );
+        SvClassElement * pEle = aClassList[n];
         SvMetaClass * pCl = pEle->GetClass();
         pCl->FillClasses( rList );
     }
@@ -645,9 +645,9 @@ void SvMetaClass::WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm )
 void SvMetaClass::WriteHelpIds( SvIdlDataBase & rBase, SvStream & rOutStm,
                             HelpIdTable& rTable )
 {
-    for( sal_uLong n=0; n<aAttrList.Count(); n++ )
+    for( sal_uLong n=0; n<aAttrList.size(); n++ )
     {
-        SvMetaAttribute * pAttr = aAttrList.GetObject( n );
+        SvMetaAttribute * pAttr = aAttrList[n];
         pAttr->WriteHelpId( rBase, rOutStm, rTable );
     }
 }

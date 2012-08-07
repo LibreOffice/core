@@ -1013,9 +1013,9 @@ void SvMetaSlot::Insert( SvSlotElementList& rList, const rtl::OString& rPrefix,
             rtl::OString aSId = aBuf.makeStringAndClear();
 
             xEnumSlot = NULL;
-            for( m=0; m<rBase.GetAttrList().Count(); m++ )
+            for( m=0; m<rBase.GetAttrList().size(); m++ )
             {
-                SvMetaAttribute * pAttr = rBase.GetAttrList().GetObject( m );
+                SvMetaAttribute * pAttr = rBase.GetAttrList()[m];
                 if (aSId.equals(pAttr->GetSlotId().getString()))
                 {
                     SvMetaSlot* pSlot = PTR_CAST( SvMetaSlot, pAttr );
@@ -1024,7 +1024,7 @@ void SvMetaSlot::Insert( SvSlotElementList& rList, const rtl::OString& rPrefix,
                 }
             }
 
-            if ( m == rBase.GetAttrList().Count() )
+            if ( m == rBase.GetAttrList().size() )
             {
                 OSL_FAIL("Invalid EnumSlot!");
                 xEnumSlot = Clone();
@@ -1347,7 +1347,7 @@ void SvMetaSlot::WriteSlot( const rtl::OString& rShellName, sal_uInt16 nCount,
         {
             rOutStm << pT->GetName().getString().getStr();
             if( !rBase.FindType( pT, rBase.aUsedTypes ) )
-                rBase.aUsedTypes.Append( pT );
+                rBase.aUsedTypes.push_back( pT );
         }
         else
             rOutStm << "SfxVoidItem not defined";
@@ -1356,7 +1356,7 @@ void SvMetaSlot::WriteSlot( const rtl::OString& rShellName, sal_uInt16 nCount,
     {
         SvMetaType *pT = rBase.FindType( "SfxBoolItem" );
         if ( pT && !rBase.FindType( pT, rBase.aUsedTypes ) )
-            rBase.aUsedTypes.Append( pT );
+            rBase.aUsedTypes.push_back( pT );
     }
 
     if( !bIsEnumSlot )
@@ -1436,13 +1436,13 @@ sal_uInt16 SvMetaSlot::WriteSlotParamArray( SvIdlDataBase & rBase, SvStream & rO
             pType = GetType();
 
         if( !rBase.FindType( pType, rBase.aUsedTypes ) )
-            rBase.aUsedTypes.Append( pType );
+            rBase.aUsedTypes.push_back( pType );
 
         const SvMetaAttributeMemberList & rList =
                     pType->GetAttrList();
-        for( sal_uLong n = 0; n < rList.Count(); n++ )
+        for( sal_uLong n = 0; n < rList.size(); n++ )
         {
-            SvMetaAttribute * pPar  = rList.GetObject( n );
+            SvMetaAttribute * pPar  = rList[n];
             SvMetaType * pPType     = pPar->GetType();
             WriteTab( rOutStm, 1 );
             rOutStm << "SFX_ARGUMENT("
@@ -1452,9 +1452,9 @@ sal_uInt16 SvMetaSlot::WriteSlotParamArray( SvIdlDataBase & rBase, SvStream & rO
                 // item name
                 << pPType->GetName().getString().getStr() << ")," << endl;
             if( !rBase.FindType( pPType, rBase.aUsedTypes ) )
-                rBase.aUsedTypes.Append( pPType );
+                rBase.aUsedTypes.push_back( pPType );
         }
-        return (sal_uInt16)rList.Count();
+        return (sal_uInt16)rList.size();
     }
     return 0;
 }
@@ -1624,15 +1624,16 @@ void SvMetaSlot::WriteCSV( SvIdlDataBase& rBase, SvStream& rStrm )
            if ( GetMethod() )
             pList = &GetMethod()->GetType()->GetAttrList();
 
-        if( pList && pList->Count() )
+        if( pList && !pList->empty() )
         {
             rStrm << "\"(";
-            SvMetaAttribute* pAttr = pList->First();
-            while( pAttr )
+            SvMetaAttributeMemberList::const_iterator it = pList->begin();
+            while( it != pList->end() )
             {
+                SvMetaAttribute* pAttr = *it;
                 pAttr->WriteCSV( rBase, rStrm );
-                pAttr = pList->Next();
-                if( pAttr )
+                ++it;
+                if( it != pList->end() )
                     rStrm << ',';
             }
             rStrm << ")\"";

@@ -52,16 +52,13 @@ TYPEINIT0( SvRttiBase );
 
 /****************** SvPersistBaseMemberList ******************************/
 
-SvPersistBaseMemberList::SvPersistBaseMemberList(){}
-
 #define PERSIST_LIST_VER        (sal_uInt8)0
 #define PERSIST_LIST_DBGUTIL    (sal_uInt8)0x80
 
 /************************************************************************
-|*    SvPersistBaseMemberList::WriteOnlyStreamedObjects()
+|*    WritePersistListObjects()
 *************************************************************************/
-void SvPersistBaseMemberList::WriteObjects( SvPersistStream & rStm,
-                                            sal_Bool bOnlyStreamed ) const
+void TOOLS_DLLPUBLIC WritePersistListObjects(const SvPersistListWriteable& rList, SvPersistStream & rStm, bool bOnlyStreamed )
 {
 #ifdef STOR_NO_OPTIMIZE
     rStm << (sal_uInt8)(PERSIST_LIST_VER | PERSIST_LIST_DBGUTIL);
@@ -70,7 +67,7 @@ void SvPersistBaseMemberList::WriteObjects( SvPersistStream & rStm,
     sal_uInt8 bTmp = PERSIST_LIST_VER;
     rStm << bTmp;
 #endif
-    sal_uInt32 nCountMember = Count();
+    sal_uInt32 nCountMember = rList.size();
     sal_uIntPtr  nCountPos = rStm.Tell();
     sal_uInt32 nWriteCount = 0;
     rStm << nCountMember;
@@ -78,10 +75,10 @@ void SvPersistBaseMemberList::WriteObjects( SvPersistStream & rStm,
     //wegen Seiteneffekten beim Save
     for( sal_uIntPtr n = 0; n < nCountMember; n++ )
     {
-        SvPersistBase * pObj = GetObject( n );
+        SvPersistBase * pObj = rList.GetPersistBase( n );
         if( !bOnlyStreamed || rStm.IsStreamed( pObj ) )
         { // Objekt soll geschrieben werden
-            rStm << GetObject( n );
+            rStm << pObj;
             nWriteCount++;
         }
     }
@@ -99,20 +96,9 @@ void SvPersistBaseMemberList::WriteObjects( SvPersistStream & rStm,
 }
 
 /************************************************************************
-|*    operator << ()
+|*    ReadObjects()
 *************************************************************************/
-SvPersistStream& operator << ( SvPersistStream & rStm,
-                               const SvPersistBaseMemberList & rLst )
-{
-    rLst.WriteObjects( rStm );
-    return rStm;
-}
-
-/************************************************************************
-|*    operator >> ()
-*************************************************************************/
-SvPersistStream& operator >> ( SvPersistStream & rStm,
-                               SvPersistBaseMemberList & rLst )
+void TOOLS_DLLPUBLIC ReadObjects( SvPersistListReadable& rLst, SvPersistStream & rStm )
 {
     sal_uInt8 nVer;
     rStm >> nVer;
@@ -134,7 +120,7 @@ SvPersistStream& operator >> ( SvPersistStream & rStm,
         SvPersistBase * pObj;
         rStm >> pObj;
         if( pObj )
-            rLst.Append( pObj );
+            rLst.push_back( pObj );
     }
 #ifdef DBG_UTIL
             if( nObjLen + nObjPos != rStm.Tell() )
@@ -149,7 +135,6 @@ SvPersistStream& operator >> ( SvPersistStream & rStm,
 #else
             (void)nObjLen;
 #endif
-    return rStm;
 }
 
 //=========================================================================
