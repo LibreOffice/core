@@ -93,6 +93,10 @@ void empathy_ft_handler_new_outgoing (
 void empathy_ft_handler_set_service_name (
     EmpathyFTHandler *self,
     const gchar *service_name);
+void empathy_ft_handler_set_description (
+    EmpathyFTHandler *self,
+    const gchar *description);
+
 
 void empathy_ft_handler_new_incoming (TpFileTransferChannel *channel,
     EmpathyFTHandlerReadyCallback callback,
@@ -108,6 +112,7 @@ const char * empathy_ft_handler_get_filename (EmpathyFTHandler *handler);
 const char * empathy_ft_handler_get_content_type (EmpathyFTHandler *handler);
 TpContact * empathy_ft_handler_get_contact (EmpathyFTHandler *handler);
 GFile * empathy_ft_handler_get_gfile (EmpathyFTHandler *handler);
+const char *empathy_ft_handler_get_description(EmpathyFTHandler*);
 gboolean empathy_ft_handler_get_use_hash (EmpathyFTHandler *handler);
 gboolean empathy_ft_handler_is_incoming (EmpathyFTHandler *handler);
 guint64 empathy_ft_handler_get_transferred_bytes (EmpathyFTHandler *handler);

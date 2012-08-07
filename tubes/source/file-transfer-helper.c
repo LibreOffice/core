@@ -923,6 +923,9 @@ ft_handler_populate_outgoing_request (EmpathyFTHandler *handler)
   if (priv->service_name != NULL)
     tp_asv_set_string (priv->request, TP_PROP_CHANNEL_INTERFACE_FILE_TRANSFER_METADATA_SERVICE_NAME, priv->service_name);
 
+  if (priv->description != NULL)
+    tp_asv_set_string (priv->request, TP_PROP_CHANNEL_TYPE_FILE_TRANSFER_DESCRIPTION, priv->description);
+
   g_free (uri);
 }
 
@@ -1455,6 +1458,15 @@ empathy_ft_handler_set_service_name (
   self->priv->service_name = g_strdup (service_name);
 }
 
+void
+empathy_ft_handler_set_description (
+    EmpathyFTHandler *self,
+    const gchar *description)
+{
+  g_free (self->priv->description);
+  self->priv->description = g_strdup (description);
+}
+
 /**
  * empathy_ft_handler_new_incoming:
  * @channel: the #TpFileTransferChannel proxy to the incoming channel
@@ -1614,6 +1626,18 @@ empathy_ft_handler_get_filename (EmpathyFTHandler *handler)
   priv = handler->priv;
 
   return priv->filename;
+}
+
+const char *
+empathy_ft_handler_get_description (EmpathyFTHandler *handler)
+{
+  EmpathyFTHandlerPriv *priv;
+
+  g_return_val_if_fail (EMPATHY_IS_FT_HANDLER (handler), NULL);
+
+  priv = handler->priv;
+
+  return priv->description;
 }
 
 /**

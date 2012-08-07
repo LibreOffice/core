@@ -474,16 +474,20 @@ void TeleConference::invite( TpContact *pContact )
             -1, &handles, NULL, NULL, NULL, NULL, NULL );
 }
 
-
+namespace {
 class SendFileRequest {
 public:
-    SendFileRequest( TeleConference::FileSentCallback pCallback, void* pUserData)
+    SendFileRequest( TeleConference::FileSentCallback pCallback, void* pUserData, const char* sUuid )
         : mpCallback(pCallback)
-        , mpUserData(pUserData) {};
+        , mpUserData(pUserData)
+        , msUuid(sUuid)
+    {}
 
     TeleConference::FileSentCallback    mpCallback;
     void*                               mpUserData;
+    const char*                         msUuid;
 };
+}
 
 static void TeleConference_TransferDone( EmpathyFTHandler *handler, TpFileTransferChannel *, gpointer user_data)
 {
@@ -525,6 +529,7 @@ static void TeleConference_FTReady( EmpathyFTHandler *handler, GError *error, gp
         g_signal_connect(handler, "transfer-error",
             G_CALLBACK (TeleConference_TransferError), request);
         empathy_ft_handler_set_service_name(handler, TeleManager::getFullServiceName().getStr());
+        empathy_ft_handler_set_description(handler, request->msUuid);
         empathy_ft_handler_start_transfer(handler);
     }
 }
@@ -549,7 +554,7 @@ void TeleConference::sendFile( TpContact* pContact, const OUString& localUri, Fi
 
     GFile *pSource = g_file_new_for_uri(
         OUStringToOString( localUri, RTL_TEXTENCODING_UTF8).getStr() );
-    SendFileRequest *pReq = new SendFileRequest( pCallback, pUserData);
+    SendFileRequest *pReq = new SendFileRequest( pCallback, pUserData, msUuid.getStr() );
 
     empathy_ft_handler_new_outgoing( mpAccount,
         pContact,
