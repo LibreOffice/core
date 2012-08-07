@@ -198,13 +198,13 @@ void IDEBaseWindow::UpdateData()
     return aName.makeStringAndClear();
 }
 
-void IDEBaseWindow::SetReadOnly( sal_Bool )
+void IDEBaseWindow::SetReadOnly (bool)
 {
 }
 
-sal_Bool IDEBaseWindow::IsReadOnly()
+bool IDEBaseWindow::IsReadOnly ()
 {
-    return sal_False;
+    return false;
 }
 
 void IDEBaseWindow::BasicStarted()
@@ -215,14 +215,14 @@ void IDEBaseWindow::BasicStopped()
 {
 }
 
-sal_Bool IDEBaseWindow::IsModified()
+bool IDEBaseWindow::IsModified ()
 {
-    return sal_True;
+    return true;
 }
 
-sal_Bool IDEBaseWindow::IsPasteAllowed()
+bool IDEBaseWindow::IsPasteAllowed ()
 {
-    return sal_False;
+    return false;
 }
 
 Window* IDEBaseWindow::GetLayoutWindow()
@@ -264,7 +264,7 @@ sal_Bool BasicDockingWindow::Docking( const Point& rPos, Rectangle& rRect )
 {
     ModulWindowLayout* pLayout = (ModulWindowLayout*)GetParent();
     Rectangle aTmpRec( rRect );
-    sal_Bool bDock = IsDockingPrevented() ? sal_False : pLayout->IsToBeDocked( this, rPos, aTmpRec );
+    bool const bDock = !IsDockingPrevented() && pLayout->IsToBeDocked( this, rPos, aTmpRec );
     if ( bDock )
     {
         rRect.SetSize( aTmpRec.GetSize() );
@@ -285,7 +285,7 @@ void BasicDockingWindow::EndDocking( const Rectangle& rRect, sal_Bool bFloatMode
         DockingWindow::EndDocking( rRect, bFloatMode );
     else
     {
-        SetFloatingMode( sal_False );
+        SetFloatingMode(false);
         ModulWindowLayout* pLayout = (ModulWindowLayout*)GetParent();
         pLayout->DockaWindow( this );
     }
@@ -315,7 +315,7 @@ sal_Bool BasicDockingWindow::PrepareToggleFloatingMode()
         aFloatingPosAndSize.SetPos( GetParent()->OutputToScreenPixel( GetPosPixel() ) );
         aFloatingPosAndSize.SetSize( GetSizePixel() );
     }
-    return sal_True;
+    return true;
 }
 
 
@@ -376,7 +376,7 @@ struct TabBarDDInfo
 BasicIDETabBar::BasicIDETabBar( Window* pParent ) :
     TabBar( pParent, WinBits( WB_3DLOOK | WB_SCROLL | WB_BORDER | WB_SIZEABLE | WB_DRAG ) )
 {
-    EnableEditMode( sal_True );
+    EnableEditMode(true);
 
     SetHelpId( HID_BASICIDE_TABBAR );
 }
@@ -414,15 +414,15 @@ void BasicIDETabBar::Command( const CommandEvent& rCEvt )
         PopupMenu aPopup( IDEResId( RID_POPUP_TABBAR ) );
         if ( GetPageCount() == 0 )
         {
-            aPopup.EnableItem( SID_BASICIDE_DELETECURRENT, sal_False );
-            aPopup.EnableItem( SID_BASICIDE_RENAMECURRENT, sal_False );
-            aPopup.EnableItem( SID_BASICIDE_HIDECURPAGE, sal_False );
+            aPopup.EnableItem(SID_BASICIDE_DELETECURRENT, false);
+            aPopup.EnableItem(SID_BASICIDE_RENAMECURRENT, false);
+            aPopup.EnableItem(SID_BASICIDE_HIDECURPAGE, false);
         }
 
         if ( StarBASIC::IsRunning() )
         {
             aPopup.EnableItem(SID_BASICIDE_DELETECURRENT, false);
-            aPopup.EnableItem( SID_BASICIDE_RENAMECURRENT, false);
+            aPopup.EnableItem(SID_BASICIDE_RENAMECURRENT, false);
             aPopup.EnableItem(SID_BASICIDE_MODULEDLG, false);
         }
 
@@ -436,9 +436,9 @@ void BasicIDETabBar::Command( const CommandEvent& rCEvt )
             if ( ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) && xModLibContainer->isLibraryReadOnly( aOULibName ) ) ||
                  ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aOULibName ) && xDlgLibContainer->isLibraryReadOnly( aOULibName ) ) )
             {
-                aPopup.EnableItem( aPopup.GetItemId( 0 ), sal_False );
-                aPopup.EnableItem( SID_BASICIDE_DELETECURRENT, sal_False );
-                aPopup.EnableItem( SID_BASICIDE_RENAMECURRENT, sal_False );
+                aPopup.EnableItem(aPopup.GetItemId( 0 ), false);
+                aPopup.EnableItem(SID_BASICIDE_DELETECURRENT, false);
+                aPopup.EnableItem(SID_BASICIDE_RENAMECURRENT, false);
                 aPopup.RemoveDisabledEntries();
             }
              if ( aDocument.isInVBAMode() )
@@ -457,8 +457,8 @@ void BasicIDETabBar::Command( const CommandEvent& rCEvt )
                             SbModule* pActiveModule = (SbModule*)pBasic->FindModule( it->second->GetName() );
                             if( pActiveModule && ( pActiveModule->GetModuleType() == script::ModuleType::DOCUMENT ) )
                             {
-                                aPopup.EnableItem( SID_BASICIDE_DELETECURRENT, sal_False );
-                                aPopup.EnableItem( SID_BASICIDE_RENAMECURRENT, sal_False );
+                                aPopup.EnableItem(SID_BASICIDE_DELETECURRENT, false);
+                                aPopup.EnableItem(SID_BASICIDE_RENAMECURRENT, false);
                             }
                         }
                     }
@@ -476,7 +476,7 @@ void BasicIDETabBar::Command( const CommandEvent& rCEvt )
 
 long BasicIDETabBar::AllowRenaming()
 {
-    sal_Bool bValid = BasicIDE::IsValidSbxName( GetEditText() );
+    bool const bValid = BasicIDE::IsValidSbxName( GetEditText() );
 
     if ( !bValid )
         ErrorBox( this, WB_OK | WB_DEF_OK, String( IDEResId( RID_STR_BADSBXNAME ) ) ).Execute();

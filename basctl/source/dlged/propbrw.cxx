@@ -165,7 +165,7 @@ void PropBrw::ImplReCreateController()
         );
         if ( !m_xBrowserController.is() )
         {
-            ShowServiceNotAvailableError( GetParent(), s_sControllerServiceName, sal_True );
+            ShowServiceNotAvailableError( GetParent(), s_sControllerServiceName, true );
         }
         else
         {
@@ -194,7 +194,7 @@ void PropBrw::ImplReCreateController()
             m_xBrowserComponentWindow->setPosSize(aPropWinPos.X(), aPropWinPos.Y(), aPropWinSize.Width(), aPropWinSize.Height(),
                 ::com::sun::star::awt::PosSize::WIDTH | ::com::sun::star::awt::PosSize::HEIGHT |
                 ::com::sun::star::awt::PosSize::X | ::com::sun::star::awt::PosSize::Y);
-            m_xBrowserComponentWindow->setVisible(sal_True);
+            m_xBrowserComponentWindow->setVisible(true);
         }
     }
     catch (const Exception&)
@@ -257,9 +257,7 @@ sal_Bool PropBrw::Close()
     if( IsRollUp() )
         RollDown();
 
-    sal_Bool bClose = SfxFloatingWindow::Close();
-
-    return bClose;
+    return SfxFloatingWindow::Close();
 }
 
 
@@ -452,7 +450,7 @@ void PropBrw::implSetNewObject( const Reference< XPropertySet >& _rxObject )
 
 void PropBrw::FillInfo( SfxChildWinInfo& rInfo ) const
 {
-    rInfo.bVisible = sal_False;
+    rInfo.bVisible = false;
 }
 
 

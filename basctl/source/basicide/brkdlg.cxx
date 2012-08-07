@@ -70,7 +70,7 @@ BreakPointDialog::BreakPointDialog( Window* pParent, BreakPointList& rBrkPntList
 {
     FreeResource();
 
-    aComboBox.SetUpdateMode( sal_False );
+    aComboBox.SetUpdateMode(false);
     for ( size_t i = 0, n = m_aModifiedBreakPointList.size(); i < n; ++i )
     {
         BreakPoint* pBrk = m_aModifiedBreakPointList.at( i );
@@ -78,7 +78,7 @@ BreakPointDialog::BreakPointDialog( Window* pParent, BreakPointList& rBrkPntList
         aEntryStr += String::CreateFromInt32( pBrk->nLine );
         aComboBox.InsertEntry( aEntryStr, COMBOBOX_APPEND );
     }
-    aComboBox.SetUpdateMode( sal_True );
+    aComboBox.SetUpdateMode(true);
 
     aOKButton.SetClickHdl( LINK( this, BreakPointDialog, ButtonHdl ) );
     aNewButton.SetClickHdl( LINK( this, BreakPointDialog, ButtonHdl ) );
@@ -92,7 +92,7 @@ BreakPointDialog::BreakPointDialog( Window* pParent, BreakPointList& rBrkPntList
     aNumericField.SetMin( 0 );
     aNumericField.SetMax( 0x7FFFFFFF );
     aNumericField.SetSpinSize( 1 );
-    aNumericField.SetStrictFormat( sal_True );
+    aNumericField.SetStrictFormat(true);
     aNumericField.SetModifyHdl( LINK( this, BreakPointDialog, EditModifyHdl ) );
 
     aComboBox.SetText( aComboBox.GetEntry( 0 ) );

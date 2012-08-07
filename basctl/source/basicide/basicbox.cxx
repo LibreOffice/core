@@ -201,7 +201,7 @@ void BasicLibBox::ReleaseFocus()
 
 void BasicLibBox::FillBox()
 {
-    SetUpdateMode( sal_False );
+    SetUpdateMode(false);
     bIgnoreSelect = true;
 
     aCurText = GetSelectEntry();
@@ -224,7 +224,7 @@ void BasicLibBox::FillBox()
         InsertEntries( *doc, LIBRARY_LOCATION_DOCUMENT );
     }
 
-    SetUpdateMode( sal_True );
+    SetUpdateMode(true);
 
     SelectEntry( aCurText );
     if ( !GetSelectEntryCount() )
@@ -290,7 +290,7 @@ long BasicLibBox::PreNotify( NotifyEvent& rNEvt )
     }
     else if( rNEvt.GetType() == EVENT_LOSEFOCUS )
     {
-        if ( !HasChildPathFocus( sal_True ) )
+        if ( !HasChildPathFocus(true) )
         {
             bIgnoreSelect = true;
             bFillBox = true;
@@ -407,7 +407,7 @@ BasicLanguageBox::~BasicLanguageBox()
 
 void BasicLanguageBox::FillBox()
 {
-    SetUpdateMode( sal_False );
+    SetUpdateMode(false);
     m_bIgnoreSelect = true;
     m_sCurrentText = GetSelectEntry();
     ClearBox();
@@ -454,7 +454,7 @@ void BasicLanguageBox::FillBox()
         Disable();
     }
 
-    SetUpdateMode( sal_True );
+    SetUpdateMode(true);
     m_bIgnoreSelect = false;
 }
 

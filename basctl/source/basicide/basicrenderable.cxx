@@ -45,7 +45,7 @@ BasicRenderable::BasicRenderable( IDEBaseWindow* pWin )
     // create Subgroup for print range
     vcl::PrinterOptionsHelper::UIControlOptions aPrintRangeOpt;
     aPrintRangeOpt.maGroupHint = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintRange" ) );
-    aPrintRangeOpt.mbInternalOnly = sal_True;
+    aPrintRangeOpt.mbInternalOnly = true;
     m_aUIProperties[0].Value = getSubgroupControlOpt( rtl::OUString( aStrings.GetString( 0 ) ),
                                                       rtl::OUString(),
                                                       aPrintRangeOpt
@@ -66,7 +66,7 @@ BasicRenderable::BasicRenderable( IDEBaseWindow* pWin )
                                                     0 );
 
     // create a an Edit dependent on "Pages" selected
-    vcl::PrinterOptionsHelper::UIControlOptions aPageRangeOpt( aPrintContentName, 1, sal_True );
+    vcl::PrinterOptionsHelper::UIControlOptions aPageRangeOpt(aPrintContentName, 1, true);
     m_aUIProperties[2].Value = getEditControlOpt( rtl::OUString(),
                                                   rtl::OUString(),
                                                   rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PageRange" ) ),

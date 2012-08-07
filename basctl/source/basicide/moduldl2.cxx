@@ -228,27 +228,24 @@ SvLBoxEntry* BasicCheckBox::FindEntry( const String& rName )
 
 //----------------------------------------------------------------------------
 
-void BasicCheckBox::CheckEntryPos( sal_uLong nPos, sal_Bool bCheck )
+void BasicCheckBox::CheckEntryPos( sal_uLong nPos, bool bCheck )
 {
     if ( nPos < GetEntryCount() )
     {
         SvLBoxEntry* pEntry = GetEntry( nPos );
 
         if ( bCheck != GetCheckButtonState( pEntry ) )
-            SetCheckButtonState( pEntry,
-                                 bCheck
-                                    ? SvButtonState(SV_BUTTON_CHECKED)
-                                    : SvButtonState(SV_BUTTON_UNCHECKED) );
+            SetCheckButtonState( pEntry, SvButtonState(bCheck ? SV_BUTTON_CHECKED : SV_BUTTON_UNCHECKED) );
     }
 }
 
 //----------------------------------------------------------------------------
 
-sal_Bool BasicCheckBox::IsChecked( sal_uLong nPos ) const
+bool BasicCheckBox::IsChecked( sal_uLong nPos ) const
 {
     if ( nPos < GetEntryCount() )
-        return (GetCheckButtonState( GetEntry( nPos ) ) == SV_BUTTON_CHECKED);
-    return sal_False;
+        return GetCheckButtonState(GetEntry(nPos)) == SV_BUTTON_CHECKED;
+    return false;
 }
 
 //----------------------------------------------------------------------------
@@ -275,7 +272,7 @@ void BasicCheckBox::InitEntry( SvLBoxEntry* pEntry, const XubString& rTxt, const
 sal_Bool BasicCheckBox::EditingEntry( SvLBoxEntry* pEntry, Selection& )
 {
     if ( nMode != NEWOBJECTMODE_MOD )
-        return sal_False;
+        return false;
 
     DBG_ASSERT( pEntry, "Kein Eintrag?" );
 
@@ -284,7 +281,7 @@ sal_Bool BasicCheckBox::EditingEntry( SvLBoxEntry* pEntry, Selection& )
     if ( aLibName.equalsIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM( "Standard" ) ) )
     {
         ErrorBox( this, WB_OK | WB_DEF_OK, IDE_RESSTR(RID_STR_CANNOTCHANGENAMESTDLIB) ).Execute();
-        return sal_False;
+        return false;
     }
 
     // check, if library is readonly
@@ -294,11 +291,11 @@ sal_Bool BasicCheckBox::EditingEntry( SvLBoxEntry* pEntry, Selection& )
          ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aLibName ) && xDlgLibContainer->isLibraryReadOnly( aLibName ) && !xDlgLibContainer->isLibraryLink( aLibName ) ) )
     {
         ErrorBox( this, WB_OK | WB_DEF_OK, IDE_RESSTR(RID_STR_LIBISREADONLY) ).Execute();
-        return sal_False;
+        return false;
     }
 
     // i24094: Password verification necessary for renaming
-    sal_Bool bOK = sal_True;
+    bool bOK = true;
     if ( xModLibContainer.is() && xModLibContainer->hasByName( aLibName ) && !xModLibContainer->isLibraryLoaded( aLibName ) )
     {
         // check password
@@ -310,19 +307,19 @@ sal_Bool BasicCheckBox::EditingEntry( SvLBoxEntry* pEntry, Selection& )
             bOK = QueryPassword( xModLibContainer1, aLibName, aPassword );
         }
         if ( !bOK )
-            return sal_False;
+            return false;
     }
 
     // TODO: check if library is reference/link
 
-    return sal_True;
+    return true;
 }
 
 //----------------------------------------------------------------------------
 
 sal_Bool BasicCheckBox::EditedEntry( SvLBoxEntry* pEntry, const rtl::OUString& rNewName )
 {
-    sal_Bool bValid = ( rNewName.getLength() <= 30 ) && BasicIDE::IsValidSbxName( rNewName );
+    bool bValid = ( rNewName.getLength() <= 30 ) && BasicIDE::IsValidSbxName( rNewName );
     rtl::OUString aOldName( GetEntryText( pEntry, 0 ) );
     if ( bValid && ( aOldName != rNewName ) )
     {
@@ -347,12 +344,12 @@ sal_Bool BasicCheckBox::EditedEntry( SvLBoxEntry* pEntry, const rtl::OUString& r
         catch (const container::ElementExistException& )
         {
             ErrorBox( this, WB_OK | WB_DEF_OK, IDE_RESSTR(RID_STR_SBXNAMEALLREADYUSED) ).Execute();
-            return sal_False;
+            return false;
         }
         catch (const container::NoSuchElementException& )
         {
             DBG_UNHANDLED_EXCEPTION();
-            return sal_False;
+            return false;
         }
     }
 
@@ -520,7 +517,7 @@ LibPage::LibPage( Window * pParent )
     aBasicsBox.SetSelectHdl( LINK( this, LibPage, BasicSelectHdl ) );
 
     aLibBox.SetMode( NEWOBJECTMODE_MOD );
-    aLibBox.EnableInplaceEditing( sal_True );
+    aLibBox.EnableInplaceEditing(true);
     aLibBox.SetStyle( WB_HSCROLL | WB_BORDER | WB_TABSTOP );
     aCloseButton.GrabFocus();
 
@@ -711,15 +708,15 @@ IMPL_LINK( LibPage, ButtonHdl, Button *, pButton )
             Reference< script::XLibraryContainerPassword > xPasswd( xModLibContainer, UNO_QUERY );
             if ( xPasswd.is() )
             {
-                sal_Bool bProtected = xPasswd->isLibraryPasswordProtected( aLibName );
+                bool const bProtected = xPasswd->isLibraryPasswordProtected( aLibName );
 
                 // change password dialog
-                SvxPasswordDialog* pDlg = new SvxPasswordDialog( this, sal_True, !bProtected );
+                SvxPasswordDialog* pDlg = new SvxPasswordDialog( this, true, !bProtected );
                 pDlg->SetCheckPasswordHdl( LINK( this, LibPage, CheckPasswordHdl ) );
 
                 if ( pDlg->Execute() == RET_OK )
                 {
-                    sal_Bool bNewProtected = xPasswd->isLibraryPasswordProtected( aLibName );
+                    bool const bNewProtected = xPasswd->isLibraryPasswordProtected( aLibName );
 
                     if ( bNewProtected != bProtected )
                     {
@@ -898,7 +895,7 @@ void LibPage::InsertLib()
                 {
                     SvLBoxEntry* pEntry = pLibDlg->GetLibBox().DoInsertEntry( aLibName );
                     sal_uInt16 nPos = (sal_uInt16) pLibDlg->GetLibBox().GetModel()->GetAbsPos( pEntry );
-                    pLibDlg->GetLibBox().CheckEntryPos( nPos, sal_True);
+                    pLibDlg->GetLibBox().CheckEntryPos(nPos, true);
                 }
             }
 
@@ -913,14 +910,14 @@ void LibPage::InsertLib()
 
                 // disable reference checkbox for documents and sbls
                 if ( aExtension != aLibExtension && aExtension != aContExtension )
-                    pLibDlg->EnableReference( sal_False );
+                    pLibDlg->EnableReference(false);
 
                 if ( pLibDlg->Execute() )
                 {
                     sal_uLong nNewPos = aLibBox.GetEntryCount();
                     bool bRemove = false;
-                    sal_Bool bReplace = pLibDlg->IsReplace();
-                    sal_Bool bReference = pLibDlg->IsReference();
+                    bool bReplace = pLibDlg->IsReplace();
+                    bool bReference = pLibDlg->IsReference();
                     for ( sal_uInt16 nLib = 0; nLib < pLibDlg->GetLibBox().GetEntryCount(); nLib++ )
                     {
                         if ( pLibDlg->GetLibBox().IsChecked( nLib ) )
@@ -975,14 +972,14 @@ void LibPage::InsertLib()
                             }
 
                             // check, if the library is password protected
-                            sal_Bool bOK = sal_False;
+                            bool bOK = false;
                             ::rtl::OUString aPassword;
                             if ( xModLibContImport.is() && xModLibContImport->hasByName( aLibName ) )
                             {
                                 Reference< script::XLibraryContainerPassword > xPasswd( xModLibContImport, UNO_QUERY );
                                 if ( xPasswd.is() && xPasswd->isLibraryPasswordProtected( aLibName ) && !xPasswd->isLibraryPasswordVerified( aLibName ) && !bReference )
                                 {
-                                    bOK = QueryPassword( xModLibContImp, aLibName, aPassword, sal_True, sal_True );
+                                    bOK = QueryPassword( xModLibContImp, aLibName, aPassword, true, true );
 
                                     if ( !bOK )
                                     {
@@ -1029,7 +1026,7 @@ void LibPage::InsertLib()
                                     ::rtl::OUString aModStorageURL( aModStorageURLObj.GetMainURL( INetURLObject::NO_DECODE ) );
 
                                     // create library link
-                                    xModLib = Reference< container::XNameContainer >( xModLibContainer->createLibraryLink( aLibName, aModStorageURL, sal_True ), UNO_QUERY);
+                                    xModLib = Reference< container::XNameContainer >( xModLibContainer->createLibraryLink( aLibName, aModStorageURL, true ), UNO_QUERY);
                                 }
                                 else
                                 {
@@ -1098,7 +1095,7 @@ void LibPage::InsertLib()
                                     ::rtl::OUString aDlgStorageURL( aDlgStorageURLObj.GetMainURL( INetURLObject::NO_DECODE ) );
 
                                     // create library link
-                                    xDlgLib = Reference< container::XNameContainer >( xDlgLibContainer->createLibraryLink( aLibName, aDlgStorageURL, sal_True ), UNO_QUERY);
+                                    xDlgLib = Reference< container::XNameContainer >( xDlgLibContainer->createLibraryLink( aLibName, aDlgStorageURL, true ), UNO_QUERY);
                                 }
                                 else
                                 {
@@ -1164,7 +1161,7 @@ void LibPage::Export( void )
 
     if ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) && !xModLibContainer->isLibraryLoaded( aOULibName ) )
     {
-        sal_Bool bOK = sal_True;
+        bool bOK = true;
 
         // check password
         Reference< script::XLibraryContainerPassword > xPasswd( xModLibContainer, UNO_QUERY );
@@ -1303,7 +1300,7 @@ void LibPage::ExportAsPackage( const String& aLibName )
 
         String aTmpPath = SvtPathOptions().GetTempPath();
         INetURLObject aInetObj( aTmpPath );
-        aInetObj.insertName( aLibName, sal_True, INetURLObject::LAST_SEGMENT, sal_True, INetURLObject::ENCODE_ALL );
+        aInetObj.insertName( aLibName, true, INetURLObject::LAST_SEGMENT, true, INetURLObject::ENCODE_ALL );
         OUString aSourcePath = aInetObj.GetMainURL( INetURLObject::NO_DECODE );
         if( xSFA->exists( aSourcePath ) )
             xSFA->kill( aSourcePath );
@@ -1334,7 +1331,7 @@ void LibPage::ExportAsPackage( const String& aLibName )
 
         INetURLObject aMetaInfInetObj( aTmpPath );
         aMetaInfInetObj.insertName( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "META-INF" ) ),
-            sal_True, INetURLObject::LAST_SEGMENT, sal_True, INetURLObject::ENCODE_ALL );
+            true, INetURLObject::LAST_SEGMENT, true, INetURLObject::ENCODE_ALL );
         OUString aMetaInfFolder = aMetaInfInetObj.GetMainURL( INetURLObject::NO_DECODE );
         if( xSFA->exists( aMetaInfFolder ) )
             xSFA->kill( aMetaInfFolder );
@@ -1366,7 +1363,7 @@ void LibPage::ExportAsPackage( const String& aLibName )
                 &manifest[ 0 ], manifest.size() ) );
 
         aMetaInfInetObj.insertName( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "manifest.xml" ) ),
-            sal_True, INetURLObject::LAST_SEGMENT, sal_True, INetURLObject::ENCODE_ALL );
+            true, INetURLObject::LAST_SEGMENT, true, INetURLObject::ENCODE_ALL );
 
         // write buffered pipe data to content:
         ::ucbhelper::Content manifestContent( aMetaInfInetObj.GetMainURL( INetURLObject::NO_DECODE ), xCmdEnv );
@@ -1545,7 +1542,7 @@ void LibPage::SetCurLib()
 SvLBoxEntry* LibPage::ImpInsertLibEntry( const String& rLibName, sal_uLong nPos )
 {
     // check, if library is password protected
-    sal_Bool bProtected = sal_False;
+    bool bProtected = false;
     ::rtl::OUString aOULibName( rLibName );
     Reference< script::XLibraryContainer2 > xModLibContainer( m_aCurDocument.getLibraryContainer( E_SCRIPTS ), UNO_QUERY );
     if ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) )
@@ -1642,7 +1639,7 @@ void createLibImpl( Window* pWin, const ScriptDocument& rDocument,
                 // create a module
                 String aModName = rDocument.createObjectName( E_SCRIPTS, aLibName );
                 ::rtl::OUString sModuleCode;
-                if ( !rDocument.createModule( aLibName, aModName, sal_True, sModuleCode ) )
+                if ( !rDocument.createModule( aLibName, aModName, true, sModuleCode ) )
                     throw Exception();
 
                 SbxItem aSbxItem( SID_BASICIDE_ARG_SBX, rDocument, aLibName, aModName, BASICIDE_TYPE_MODULE );

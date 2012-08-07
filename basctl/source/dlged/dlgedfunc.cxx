@@ -100,31 +100,31 @@ DlgEdFunc::~DlgEdFunc()
 
 //----------------------------------------------------------------------------
 
-sal_Bool DlgEdFunc::MouseButtonDown( const MouseEvent& )
+bool DlgEdFunc::MouseButtonDown( const MouseEvent& )
 {
-    return sal_True;
+    return true;
 }
 
 //----------------------------------------------------------------------------
 
-sal_Bool DlgEdFunc::MouseButtonUp( const MouseEvent& )
+bool DlgEdFunc::MouseButtonUp( const MouseEvent& )
 {
     aScrollTimer.Stop();
-    return sal_True;
+    return true;
 }
 
 //----------------------------------------------------------------------------
 
-sal_Bool DlgEdFunc::MouseMove( const MouseEvent& )
+bool DlgEdFunc::MouseMove( const MouseEvent& )
 {
-    return sal_True;
+    return true;
 }
 
 //----------------------------------------------------------------------------
 
-sal_Bool DlgEdFunc::KeyInput( const KeyEvent& rKEvt )
+bool DlgEdFunc::KeyInput( const KeyEvent& rKEvt )
 {
-    sal_Bool bReturn = sal_False;
+    bool bReturn = false;
 
     SdrView* pView = pParent->GetView();
     Window* pWindow = pParent->GetWindow();
@@ -139,7 +139,7 @@ sal_Bool DlgEdFunc::KeyInput( const KeyEvent& rKEvt )
             if ( pView->IsAction() )
             {
                 pView->BrkAction();
-                bReturn = sal_True;
+                bReturn = true;
             }
             else if ( pView->AreObjectsMarked() )
             {
@@ -150,7 +150,7 @@ sal_Bool DlgEdFunc::KeyInput( const KeyEvent& rKEvt )
                 else
                     pView->UnmarkAll();
 
-                bReturn = sal_True;
+                bReturn = true;
             }
         }
         break;
@@ -169,7 +169,7 @@ sal_Bool DlgEdFunc::KeyInput( const KeyEvent& rKEvt )
                 if ( pView->AreObjectsMarked() )
                     pView->MakeVisible( pView->GetAllMarkedRect(), *pWindow );
 
-                bReturn = sal_True;
+                bReturn = true;
             }
             else if ( aCode.IsMod1() )
             {
@@ -186,7 +186,7 @@ sal_Bool DlgEdFunc::KeyInput( const KeyEvent& rKEvt )
                     pView->MakeVisible( aVisRect, *pWindow );
                 }
 
-                bReturn = sal_True;
+                bReturn = true;
             }
         }
         break;
@@ -292,14 +292,14 @@ sal_Bool DlgEdFunc::KeyInput( const KeyEvent& rKEvt )
 
                         if ( pView->IsDragObj() )
                         {
-                            bool bWasNoSnap = rDragStat.IsNoSnap();
-                            sal_Bool bWasSnapEnabled = pView->IsSnapEnabled();
+                            bool const bWasNoSnap = rDragStat.IsNoSnap();
+                            bool const bWasSnapEnabled = pView->IsSnapEnabled();
 
                             // switch snapping off
                             if ( !bWasNoSnap )
-                                ((SdrDragStat&)rDragStat).SetNoSnap( sal_True );
+                                ((SdrDragStat&)rDragStat).SetNoSnap(true);
                             if ( bWasSnapEnabled )
-                                pView->SetSnapEnabled( sal_False );
+                                pView->SetSnapEnabled(false);
 
                             pView->MovAction( aEndPoint );
                             pView->EndDragObj();
@@ -335,7 +335,7 @@ sal_Bool DlgEdFunc::KeyInput( const KeyEvent& rKEvt )
                 }
             }
 
-            bReturn = sal_True;
+            bReturn = true;
         }
         break;
         default:
@@ -355,22 +355,22 @@ sal_Bool DlgEdFunc::KeyInput( const KeyEvent& rKEvt )
 DlgEdFuncInsert::DlgEdFuncInsert( DlgEditor* pParent_ ) :
     DlgEdFunc( pParent_ )
 {
-    pParent_->GetView()->SetCreateMode( sal_True );
+    pParent_->GetView()->SetCreateMode(true);
 }
 
 //----------------------------------------------------------------------------
 
 DlgEdFuncInsert::~DlgEdFuncInsert()
 {
-    pParent->GetView()->SetEditMode( sal_True );
+    pParent->GetView()->SetEditMode( true );
 }
 
 //----------------------------------------------------------------------------
 
-sal_Bool DlgEdFuncInsert::MouseButtonDown( const MouseEvent& rMEvt )
+bool DlgEdFuncInsert::MouseButtonDown( const MouseEvent& rMEvt )
 {
     if( !rMEvt.IsLeft() )
-        return sal_True;
+        return true;
 
     SdrView* pView  = pParent->GetView();
     Window*  pWindow= pParent->GetWindow();
@@ -403,12 +403,12 @@ sal_Bool DlgEdFuncInsert::MouseButtonDown( const MouseEvent& rMEvt )
             pParent->ShowProperties();
     }
 
-    return sal_True;
+    return true;
 }
 
 //----------------------------------------------------------------------------
 
-sal_Bool DlgEdFuncInsert::MouseButtonUp( const MouseEvent& rMEvt )
+bool DlgEdFuncInsert::MouseButtonUp( const MouseEvent& rMEvt )
 {
     DlgEdFunc::MouseButtonUp( rMEvt );
 
@@ -430,22 +430,19 @@ sal_Bool DlgEdFuncInsert::MouseButtonUp( const MouseEvent& rMEvt )
             pView->MarkObj(aPos, nHitLog);
         }
 
-        if( pView->AreObjectsMarked() )
-            return sal_True;
-        else
-            return sal_False;
+        return pView->AreObjectsMarked();
     }
     else
     {
         if ( pView->IsDragObj() )
              pView->EndDragObj( rMEvt.IsMod1() );
-        return sal_True;
+        return true;
     }
 }
 
 //----------------------------------------------------------------------------
 
-sal_Bool DlgEdFuncInsert::MouseMove( const MouseEvent& rMEvt )
+bool DlgEdFuncInsert::MouseMove( const MouseEvent& rMEvt )
 {
     SdrView* pView  = pParent->GetView();
     Window*  pWindow= pParent->GetWindow();
@@ -462,7 +459,7 @@ sal_Bool DlgEdFuncInsert::MouseMove( const MouseEvent& rMEvt )
 
     pWindow->SetPointer( pView->GetPreferedPointer( aPos, pWindow, nHitLog ) );
 
-    return sal_True;
+    return true;
 }
 
 //----------------------------------------------------------------------------
@@ -481,7 +478,7 @@ DlgEdFuncSelect::~DlgEdFuncSelect()
 
 //----------------------------------------------------------------------------
 
-sal_Bool DlgEdFuncSelect::MouseButtonDown( const MouseEvent& rMEvt )
+bool DlgEdFuncSelect::MouseButtonDown( const MouseEvent& rMEvt )
 {
     // get view from parent
     SdrView* pView   = pParent->GetView();
@@ -540,12 +537,12 @@ sal_Bool DlgEdFuncSelect::MouseButtonDown( const MouseEvent& rMEvt )
             pParent->ShowProperties();
     }
 
-    return sal_True;
+    return true;
 }
 
 //----------------------------------------------------------------------------
 
-sal_Bool DlgEdFuncSelect::MouseButtonUp( const MouseEvent& rMEvt )
+bool DlgEdFuncSelect::MouseButtonUp( const MouseEvent& rMEvt )
 {
     DlgEdFunc::MouseButtonUp( rMEvt );
 
@@ -577,12 +574,12 @@ sal_Bool DlgEdFuncSelect::MouseButtonUp( const MouseEvent& rMEvt )
     pWindow->SetPointer( pView->GetPreferedPointer( aPnt, pWindow, nHitLog ) );
     pWindow->ReleaseMouse();
 
-    return sal_True;
+    return true;
 }
 
 //----------------------------------------------------------------------------
 
-sal_Bool DlgEdFuncSelect::MouseMove( const MouseEvent& rMEvt )
+bool DlgEdFuncSelect::MouseMove( const MouseEvent& rMEvt )
 {
     SdrView* pView  = pParent->GetView();
     Window*  pWindow= pParent->GetWindow();
@@ -602,7 +599,7 @@ sal_Bool DlgEdFuncSelect::MouseMove( const MouseEvent& rMEvt )
 
     pWindow->SetPointer( pView->GetPreferedPointer( aPnt, pWindow, nHitLog ) );
 
-    return sal_True;
+    return true;
 }
 
 //----------------------------------------------------------------------------

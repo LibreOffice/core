@@ -92,10 +92,10 @@ DialogWindow::DialogWindow( Window* pParent, const ScriptDocument& rDocument, ::
     // set readonly mode for readonly libraries
     Reference< script::XLibraryContainer2 > xDlgLibContainer( GetDocument().getLibraryContainer( E_DIALOGS ), UNO_QUERY );
     if ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aLibName ) && xDlgLibContainer->isLibraryReadOnly( aLibName ) )
-        SetReadOnly( sal_True );
+        SetReadOnly(true);
 
     if ( rDocument.isDocument() && rDocument.isReadOnly() )
-        SetReadOnly( sal_True );
+        SetReadOnly(true);
 }
 
 DialogWindow::~DialogWindow()
@@ -311,13 +311,9 @@ void DialogWindow::GetState( SfxItemSet& rSet )
             case SID_DIALOG_TESTMODE:
             {
                 // is the IDE still active?
-                if( BasicIDEGlobals::GetShell()->GetFrame() )
-                {
-                    rSet.Put( SfxBoolItem( SID_DIALOG_TESTMODE,
-                              (pEditor->GetMode() == DLGED_TEST) ? sal_True : sal_False) );
-                }
-                else
-                    rSet.Put( SfxBoolItem( SID_DIALOG_TESTMODE,sal_False ));
+                bool const bBool = BasicIDEGlobals::GetShell()->GetFrame() &&
+                    pEditor->GetMode() == DLGED_TEST;
+                rSet.Put(SfxBoolItem(SID_DIALOG_TESTMODE, bBool));
             }
             break;
 
@@ -709,9 +705,9 @@ bool DialogWindow::SaveDialog()
     }
 
     Reference< XFilePickerControlAccess > xFPControl(xFP, UNO_QUERY);
-    xFPControl->enableControl(ExtendedFilePickerElementIds::CHECKBOX_PASSWORD, sal_False);
+    xFPControl->enableControl(ExtendedFilePickerElementIds::CHECKBOX_PASSWORD, false);
     Any aValue;
-    aValue <<= (sal_Bool) sal_True;
+    aValue <<= sal_True;
     xFPControl->setValue(ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION, 0, aValue);
 
     if ( !aCurPath.isEmpty() )
@@ -796,7 +792,7 @@ bool DialogWindow::SaveDialog()
                 ::rtl::OUString aDialogName( aURLObj.getName() );
                 aURLObj.removeSegment();
                 ::rtl::OUString aURL( aURLObj.GetMainURL( INetURLObject::NO_DECODE ) );
-                sal_Bool bReadOnly = sal_False;
+                bool bReadOnly = false;
                 ::rtl::OUString aComment( RTL_CONSTASCII_USTRINGPARAM( "# " ));
                 aComment += aDialogName;
                 aComment += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( " strings" ));
@@ -971,9 +967,9 @@ bool implImportDialog( Window* pWin, const ::rtl::OUString& rCurPath, const Scri
     }
 
     Reference< XFilePickerControlAccess > xFPControl(xFP, UNO_QUERY);
-    xFPControl->enableControl(ExtendedFilePickerElementIds::CHECKBOX_PASSWORD, sal_False);
+    xFPControl->enableControl(ExtendedFilePickerElementIds::CHECKBOX_PASSWORD, false);
     Any aValue;
-    aValue <<= (sal_Bool) sal_True;
+    aValue <<= sal_True;
     xFPControl->setValue(ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION, 0, aValue);
 
     ::rtl::OUString aCurPath( rCurPath );
@@ -1088,7 +1084,7 @@ bool implImportDialog( Window* pWin, const ::rtl::OUString& rCurPath, const Scri
             Sequence< lang::Locale > aImportLocaleSeq = xImportStringResource->getLocales();
             sal_Int32 nImportLocaleCount = aImportLocaleSeq.getLength();
 
-            Reference< container::XNameContainer > xDialogLib( rDocument.getLibrary( E_DIALOGS, aLibName, sal_True ) );
+            Reference< container::XNameContainer > xDialogLib( rDocument.getLibrary( E_DIALOGS, aLibName, true ) );
             Reference< resource::XStringResourceManager > xLibStringResourceManager = LocalizationMgr::getStringResourceFromDialogLibrary( xDialogLib );
             sal_Int32 nLibLocaleCount = 0;
             Sequence< lang::Locale > aLibLocaleSeq;
@@ -1280,7 +1276,7 @@ DlgEdView* DialogWindow::GetView() const
     return pEditor ? pEditor->GetView() : NULL;
 }
 
-sal_Bool DialogWindow::IsModified()
+bool DialogWindow::IsModified()
 {
     return pEditor->IsModified();
 }
@@ -1304,30 +1300,20 @@ BasicEntryDescriptor DialogWindow::CreateEntryDescriptor()
     return BasicEntryDescriptor( aDocument, eLocation, aLibName, aLibSubName, GetName(), OBJ_TYPE_DIALOG );
 }
 
-void DialogWindow::SetReadOnly( sal_Bool b )
+void DialogWindow::SetReadOnly (bool bReadOnly)
 {
-    if ( pEditor )
-    {
-        if ( b )
-            pEditor->SetMode( DLGED_READONLY );
-        else
-            pEditor->SetMode( DLGED_SELECT );
-    }
+    if (pEditor)
+        pEditor->SetMode(bReadOnly ? DLGED_READONLY : DLGED_SELECT);
 }
 
-sal_Bool DialogWindow::IsReadOnly()
+bool DialogWindow::IsReadOnly ()
 {
-    sal_Bool bReadOnly = sal_False;
-
-    if ( pEditor && pEditor->GetMode() == DLGED_READONLY )
-        bReadOnly = sal_True;
-
-    return bReadOnly;
+    return pEditor && pEditor->GetMode() == DLGED_READONLY;
 }
 
-sal_Bool DialogWindow::IsPasteAllowed()
+bool DialogWindow::IsPasteAllowed()
 {
-    return pEditor ? pEditor->IsPasteAllowed() : sal_False;
+    return pEditor && pEditor->IsPasteAllowed();
 }
 
 void DialogWindow::StoreData()

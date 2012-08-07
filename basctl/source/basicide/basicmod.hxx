@@ -28,7 +28,7 @@ class BasicIDEModule : public SfxModule
 {
 public:
     BasicIDEModule( ResMgr *pMgr, SfxObjectFactory *pObjFact) :
-       SfxModule( pMgr, sal_False, pObjFact, NULL )
+       SfxModule( pMgr, false, pObjFact, NULL )
        {}
 };
 

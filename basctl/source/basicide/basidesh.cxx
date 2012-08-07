@@ -78,7 +78,7 @@ public:
     {
         try
         {
-            uno::Reference< container::XContainer > xContainer( rScriptDocument.getLibrary( E_SCRIPTS, aLibName, sal_False ), uno::UNO_QUERY );
+            uno::Reference< container::XContainer > xContainer( rScriptDocument.getLibrary( E_SCRIPTS, aLibName, false ), uno::UNO_QUERY );
             if ( xContainer.is() )
             {
                 uno::Reference< container::XContainerListener > xContainerListener( this );
@@ -91,7 +91,7 @@ public:
     {
         try
         {
-            uno::Reference< container::XContainer > xContainer( rScriptDocument.getLibrary( E_SCRIPTS, aLibName, sal_False ), uno::UNO_QUERY );
+            uno::Reference< container::XContainer > xContainer( rScriptDocument.getLibrary( E_SCRIPTS, aLibName, false ), uno::UNO_QUERY );
             if ( xContainer.is() )
             {
                 uno::Reference< container::XContainerListener > xContainerListener( this );
@@ -155,7 +155,7 @@ BasicIDEShell::BasicIDEShell( SfxViewFrame* pFrame_, SfxViewShell* /* pOldShell 
         aHScrollBar( &GetViewFrame()->GetWindow(), WinBits( WB_HSCROLL | WB_DRAG ) ),
         aVScrollBar( &GetViewFrame()->GetWindow(), WinBits( WB_VSCROLL | WB_DRAG ) ),
         aScrollBarBox( &GetViewFrame()->GetWindow(), WinBits( WB_SIZEABLE ) ),
-        m_bAppBasicModified( sal_False ),
+        m_bAppBasicModified( false ),
         m_aNotifier( *this )
 {
     m_xLibListener = new ContainerListenerImpl( this );
@@ -174,7 +174,7 @@ void BasicIDEShell::Init()
     SvxSimpleUndoRedoController::RegisterControl( SID_UNDO );
     SvxSimpleUndoRedoController::RegisterControl( SID_REDO );
 
-    SvxSearchDialogWrapper::RegisterChildWindow( sal_False );
+    SvxSearchDialogWrapper::RegisterChildWindow(false);
 
     BasicIDEGlobals::GetExtraData()->ShellInCriticalSection() = true;
 
@@ -342,7 +342,7 @@ void BasicIDEShell::onDocumentTitleChanged( const ScriptDocument& /*_rDocument*/
 {
     SfxBindings* pBindings = BasicIDE::GetBindingsPtr();
     if ( pBindings )
-        pBindings->Invalidate( SID_BASICIDE_LIBSELECTOR, sal_True, sal_False );
+        pBindings->Invalidate( SID_BASICIDE_LIBSELECTOR, true, false );
     SetMDITitle();
 }
 
@@ -369,7 +369,7 @@ void BasicIDEShell::StoreAllWindowData( bool bPersistent )
     if ( bPersistent  )
     {
         SFX_APP()->SaveBasicAndDialogContainer();
-        SetAppBasicModified( sal_False );
+        SetAppBasicModified(false);
 
         SfxBindings* pBindings = BasicIDE::GetBindingsPtr();
         if ( pBindings )
@@ -386,7 +386,7 @@ sal_uInt16 BasicIDEShell::PrepareClose( sal_Bool bUI, sal_Bool bForBrowsing )
     (void)bForBrowsing;
 
     // reset here because it's modified after printing etc. (DocInfo)
-    GetViewFrame()->GetObjectShell()->SetModified(sal_False);
+    GetViewFrame()->GetObjectShell()->SetModified(false);
 
     if ( StarBASIC::IsRunning() )
     {
@@ -395,11 +395,11 @@ sal_uInt16 BasicIDEShell::PrepareClose( sal_Bool bUI, sal_Bool bForBrowsing )
             Window *pParent = &GetViewFrame()->GetWindow();
             InfoBox( pParent, IDE_RESSTR(RID_STR_CANNOTCLOSE)).Execute();
         }
-        return sal_False;
+        return false;
     }
     else
     {
-        sal_Bool bCanClose = sal_True;
+        bool bCanClose = true;
         for (IDEWindowTable::const_iterator it = aIDEWindowTable.begin(); bCanClose && (it != aIDEWindowTable.end()); ++it)
         {
             IDEBaseWindow* pWin = it->second;
@@ -408,7 +408,7 @@ sal_uInt16 BasicIDEShell::PrepareClose( sal_Bool bUI, sal_Bool bForBrowsing )
                 if ( !m_aCurLibName.isEmpty() && ( pWin->IsDocument( m_aCurDocument ) || pWin->GetLibName() != m_aCurLibName ) )
                     SetCurLib( ScriptDocument::getApplicationScriptDocument(), ::rtl::OUString(), false );
                 SetCurWindow( pWin, true );
-                bCanClose = sal_False;
+                bCanClose = false;
             }
         }
 
@@ -540,9 +540,8 @@ void BasicIDEShell::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId&,
             {
                 case SFX_HINT_DYING:
                 {
-                    EndListening( rBC, sal_True /* log off all */ );
-                    //if ( pObjectCatalog )
-                        //pObjectCatalog->UpdateEntries();
+                    EndListening( rBC, true /* log off all */ );
+                    UpdateObjectCatalog();
                 }
                 break;
             }
@@ -698,7 +697,7 @@ void BasicIDEShell::UpdateWindows()
             ++doc
         )
     {
-        StartListening( *doc->getBasicManager(), sal_True /* log on only once */ );
+        StartListening( *doc->getBasicManager(), true /* log on only once */ );
 
         // libraries
         Sequence< ::rtl::OUString > aLibNames( doc->getLibraryNames() );
@@ -966,7 +965,7 @@ void BasicIDEShell::SetCurLibForLocalization( const ScriptDocument& rDocument, :
     {
         if( !aLibName.isEmpty() )
         {
-            Reference< container::XNameContainer > xDialogLib( rDocument.getLibrary( E_DIALOGS, aLibName, sal_True ) );
+            Reference< container::XNameContainer > xDialogLib( rDocument.getLibrary( E_DIALOGS, aLibName, true ) );
             xStringResourceManager = LocalizationMgr::getStringResourceFromDialogLibrary( xDialogLib );
         }
     }
@@ -979,7 +978,7 @@ void BasicIDEShell::SetCurLibForLocalization( const ScriptDocument& rDocument, :
 
 void BasicIDEShell::ImplStartListening( StarBASIC* pBasic )
 {
-    StartListening( pBasic->GetBroadcaster(), sal_True /* log on only once */ );
+    StartListening( pBasic->GetBroadcaster(), true /* log on only once */ );
 }
 
 // Updates the "Object Catalog" window.

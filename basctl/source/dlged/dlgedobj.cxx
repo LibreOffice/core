@@ -54,7 +54,7 @@ DBG_NAME(DlgEdObj);
 //----------------------------------------------------------------------------
 
 DlgEdObj::DlgEdObj()
-          :SdrUnoObj(String(), sal_False)
+          :SdrUnoObj(String(), false)
           ,bIsListening(false)
           ,pDlgEdForm( NULL )
 {
@@ -65,7 +65,7 @@ DlgEdObj::DlgEdObj()
 
 DlgEdObj::DlgEdObj(const ::rtl::OUString& rModelName,
                    const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rxSFac)
-          :SdrUnoObj(rModelName, rxSFac, sal_False)
+          :SdrUnoObj(rModelName, rxSFac, false)
           ,bIsListening(false)
           ,pDlgEdForm( NULL )
 {
@@ -556,8 +556,8 @@ void DlgEdObj::UpdateStep()
     sal_Int32 nStep = GetStep();
 
     SdrLayerAdmin& rLayerAdmin = GetModel()->GetLayerAdmin();
-    SdrLayerID nHiddenLayerId   = rLayerAdmin.GetLayerID( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "HiddenLayer" ) ), sal_False );
-    SdrLayerID nControlLayerId   = rLayerAdmin.GetLayerID( rLayerAdmin.GetControlLayerName(), sal_False );
+    SdrLayerID nHiddenLayerId   = rLayerAdmin.GetLayerID( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "HiddenLayer" ) ), false );
+    SdrLayerID nControlLayerId   = rLayerAdmin.GetLayerID( rLayerAdmin.GetControlLayerName(), false );
 
     if( nCurStep )
     {
@@ -677,7 +677,7 @@ void DlgEdObj::TabIndexChange( const beans::PropertyChangeEvent& evt ) throw (Ru
 
 sal_Bool DlgEdObj::supportsService( const sal_Char* _pServiceName ) const
 {
-    sal_Bool bSupports = sal_False;
+    bool bSupports = false;
 
     Reference< lang::XServiceInfo > xServiceInfo( GetUnoControlModel() , UNO_QUERY );
         // TODO: cache xServiceInfo as member?
@@ -999,7 +999,7 @@ void DlgEdObj::NbcMove( const Size& rSize )
     StartListening();
 
     // dialog model changed
-    GetDlgEdForm()->GetDlgEditor()->SetDialogModelChanged(sal_True);
+    GetDlgEdForm()->GetDlgEditor()->SetDialogModelChanged(true);
 }
 
 //----------------------------------------------------------------------------
@@ -1018,7 +1018,7 @@ void DlgEdObj::NbcResize(const Point& rRef, const Fraction& xFract, const Fracti
     StartListening();
 
     // dialog model changed
-    GetDlgEdForm()->GetDlgEditor()->SetDialogModelChanged(sal_True);
+    GetDlgEdForm()->GetDlgEditor()->SetDialogModelChanged(true);
 }
 
 //----------------------------------------------------------------------------
@@ -1117,7 +1117,7 @@ void DlgEdObj::SetDefaults()
         }
 
         // dialog model changed
-        pDlgEdForm->GetDlgEditor()->SetDialogModelChanged( sal_True );
+        pDlgEdForm->GetDlgEditor()->SetDialogModelChanged(true);
     }
 }
 
@@ -1212,7 +1212,7 @@ void SAL_CALL DlgEdObj::_propertyChange( const  ::com::sun::star::beans::Propert
             return;
 
         // dialog model changed
-        pDlgEditor->SetDialogModelChanged(sal_True);
+        pDlgEditor->SetDialogModelChanged(true);
 
         // update position and size
         if ( evt.PropertyName == DLGED_PROP_POSITIONX || evt.PropertyName == DLGED_PROP_POSITIONY ||
@@ -1262,11 +1262,11 @@ void SAL_CALL DlgEdObj::_elementInserted(const ::com::sun::star::container::Cont
         // dialog model changed
         if ( ISA(DlgEdForm) )
         {
-            ((DlgEdForm*)this)->GetDlgEditor()->SetDialogModelChanged(sal_True);
+            ((DlgEdForm*)this)->GetDlgEditor()->SetDialogModelChanged(true);
         }
         else
         {
-            GetDlgEdForm()->GetDlgEditor()->SetDialogModelChanged(sal_True);
+            GetDlgEdForm()->GetDlgEditor()->SetDialogModelChanged(true);
         }
     }
 }
@@ -1280,11 +1280,11 @@ void SAL_CALL DlgEdObj::_elementReplaced(const ::com::sun::star::container::Cont
         // dialog model changed
         if ( ISA(DlgEdForm) )
         {
-            ((DlgEdForm*)this)->GetDlgEditor()->SetDialogModelChanged(sal_True);
+            ((DlgEdForm*)this)->GetDlgEditor()->SetDialogModelChanged(true);
         }
         else
         {
-            GetDlgEdForm()->GetDlgEditor()->SetDialogModelChanged(sal_True);
+            GetDlgEdForm()->GetDlgEditor()->SetDialogModelChanged(true);
         }
     }
 }
@@ -1298,11 +1298,11 @@ void SAL_CALL DlgEdObj::_elementRemoved(const ::com::sun::star::container::Conta
         // dialog model changed
         if ( ISA(DlgEdForm) )
         {
-            ((DlgEdForm*)this)->GetDlgEditor()->SetDialogModelChanged(sal_True);
+            ((DlgEdForm*)this)->GetDlgEditor()->SetDialogModelChanged(true);
         }
         else
         {
-            GetDlgEdForm()->GetDlgEditor()->SetDialogModelChanged(sal_True);
+            GetDlgEdForm()->GetDlgEditor()->SetDialogModelChanged(true);
         }
     }
 }
@@ -1758,7 +1758,7 @@ void DlgEdForm::NbcMove( const Size& rSize )
     }
 
     // dialog model changed
-    GetDlgEditor()->SetDialogModelChanged(sal_True);
+    GetDlgEditor()->SetDialogModelChanged(true);
 }
 
 //----------------------------------------------------------------------------
@@ -1782,7 +1782,7 @@ void DlgEdForm::NbcResize(const Point& rRef, const Fraction& xFract, const Fract
     }
 
     // dialog model changed
-    GetDlgEditor()->SetDialogModelChanged(sal_True);
+    GetDlgEditor()->SetDialogModelChanged(true);
 }
 
 //----------------------------------------------------------------------------
@@ -1798,7 +1798,7 @@ bool DlgEdForm::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
     SetPropsFromRect();
 
     // dialog model changed
-    GetDlgEditor()->SetDialogModelChanged(sal_True);
+    GetDlgEditor()->SetDialogModelChanged(true);
 
     // start listening
     StartListening();

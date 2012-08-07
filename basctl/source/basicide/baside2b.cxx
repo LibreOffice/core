@@ -288,7 +288,7 @@ void EditorWindow::RequestHelp( const HelpEvent& rHEvt )
                 Point aWindowPos = rHEvt.GetMousePosPixel();
                 aWindowPos = ScreenToOutputPixel( aWindowPos );
                 Point aDocPos = GetEditView()->GetDocPos( aWindowPos );
-                TextPaM aCursor = GetEditView()->GetTextEngine()->GetPaM( aDocPos, sal_False );
+                TextPaM aCursor = GetEditView()->GetTextEngine()->GetPaM(aDocPos, false);
                 TextPaM aStartOfWord;
                 String aWord = GetEditView()->GetTextEngine()->GetWord( aCursor, &aStartOfWord );
                 if ( aWord.Len() && !comphelper::string::isdigitAsciiString(aWord) )
@@ -414,7 +414,7 @@ bool EditorWindow::ImpCanModify()
         // Remove markers in the modules in Notify at Basic::Stoped
         if ( QueryBox( 0, WB_OK_CANCEL, String( IDEResId( RID_STR_WILLSTOPPRG ) ) ).Execute() == RET_OK )
         {
-            pModulWindow->GetBasicStatus().bIsRunning = sal_False;
+            pModulWindow->GetBasicStatus().bIsRunning = false;
             BasicIDE::StopBasic();
         }
         else
@@ -435,14 +435,14 @@ void EditorWindow::KeyInput( const KeyEvent& rKEvt )
     long nLinSz = pModulWindow->GetHScrollBar()->GetLineSize(); (void)nLinSz;
     long nThumb = pModulWindow->GetHScrollBar()->GetThumbPos(); (void)nThumb;
 #endif
-    sal_Bool bWasModified = pEditEngine->IsModified();
+    bool const bWasModified = pEditEngine->IsModified();
     // see if there is an accelerator to be processed first
-    sal_Bool bDone = SfxViewShell::Current()->KeyInput( rKEvt );
+    bool bDone = SfxViewShell::Current()->KeyInput( rKEvt );
 
     if ( !bDone && ( !TextEngine::DoesKeyChangeText( rKEvt ) || ImpCanModify()  ) )
     {
         if ( ( rKEvt.GetKeyCode().GetCode() == KEY_Y ) && rKEvt.GetKeyCode().IsMod1() )
-            bDone = sal_True;
+            bDone = true;
         else
         {
             if ( ( rKEvt.GetKeyCode().GetCode() == KEY_TAB ) && !rKEvt.GetKeyCode().IsMod1() &&
@@ -457,7 +457,7 @@ void EditorWindow::KeyInput( const KeyEvent& rKEvt )
                     else
                         pEditView->UnindentBlock();
                     bDelayHighlight = true;
-                    bDone = sal_True;
+                    bDone = true;
                 }
             }
             if ( !bDone )
@@ -528,7 +528,7 @@ bool EditorWindow::SetSourceInBasic()
             String aName = pModulWindow->GetName();
             OSL_VERIFY( aDocument.updateModule( aLibName, aName, aModule ) );
 
-            pEditEngine->SetModified( sal_False );
+            pEditEngine->SetModified(false);
             BasicIDE::MarkDocumentModified( aDocument );
             bChanged = true;
         }
@@ -563,8 +563,8 @@ void EditorWindow::CreateEditEngine()
 
     pEditEngine = new ExtTextEngine;
     pEditView = new ExtTextView( pEditEngine, this );
-    pEditView->SetAutoIndentMode( sal_True );
-    pEditEngine->SetUpdateMode( sal_False );
+    pEditView->SetAutoIndentMode(true);
+    pEditEngine->SetUpdateMode(false);
     pEditEngine->InsertView( pEditView );
 
     ImplSetFont();
@@ -596,15 +596,15 @@ void EditorWindow::CreateEditEngine()
     pEditView->SetSelection( TextSelection() );
     pModulWindow->GetBreakPointWindow().GetCurYOffset() = 0;
     pModulWindow->GetLineNumberWindow().GetCurYOffset() = 0;
-    pEditEngine->SetUpdateMode( sal_True );
-    Update();   // has only been invalidated at UpdateMode = sal_True
+    pEditEngine->SetUpdateMode(true);
+    Update();   // has only been invalidated at UpdateMode = true
 
     pModulWindow->GetLayout()->GetWatchWindow().Update();
     pModulWindow->GetLayout()->GetStackWindow().Update();
     pModulWindow->GetBreakPointWindow().Update();
     pModulWindow->GetLineNumberWindow().Update();
 
-    pEditView->ShowCursor( sal_True, sal_True );
+    pEditView->ShowCursor( true, true );
 
     StartListening( *pEditEngine );
 
@@ -619,8 +619,8 @@ void EditorWindow::CreateEditEngine()
     DELETEZ( pProgress );
 
     pEditView->EraseVirtualDevice();
-    pEditEngine->SetModified( sal_False );
-    pEditEngine->EnableUndo( sal_True );
+    pEditEngine->SetModified( false );
+    pEditEngine->EnableUndo( true );
 
     InitScrollBars();
 
@@ -636,11 +636,11 @@ void EditorWindow::CreateEditEngine()
     Reference< script::XLibraryContainer2 > xModLibContainer( aDocument.getLibraryContainer( E_SCRIPTS ), UNO_QUERY );
     if ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) && xModLibContainer->isLibraryReadOnly( aOULibName ) )
     {
-        pModulWindow->SetReadOnly( sal_True );
+        pModulWindow->SetReadOnly(true);
     }
 
     if ( aDocument.isDocument() && aDocument.isReadOnly() )
-        pModulWindow->SetReadOnly( sal_True );
+        pModulWindow->SetReadOnly(true);
 }
 
 // virtual
@@ -781,8 +781,8 @@ void EditorWindow::ImpDoHighlight( sal_uLong nLine )
             aSyntaxIdleTimer.Start();
         }
 
-        sal_Bool bWasModified = pEditEngine->IsModified();
-        pEditEngine->RemoveAttribs( nLine, sal_True );
+        bool const bWasModified = pEditEngine->IsModified();
+        pEditEngine->RemoveAttribs( nLine, true );
         HighlightPortions aPortions;
         aHighlighter.getHighlightPortions( nLine, aLine, aPortions );
 
@@ -790,7 +790,7 @@ void EditorWindow::ImpDoHighlight( sal_uLong nLine )
         {
             HighlightPortion& r = aPortions[i];
             const Color& rColor = dynamic_cast<ModulWindowLayout*>(pModulWindow->GetLayoutWindow())->getSyntaxColor(r.tokenType);
-            pEditEngine->SetAttrib( TextAttribFontColor( rColor ), nLine, r.nBegin, r.nEnd, sal_True );
+            pEditEngine->SetAttrib( TextAttribFontColor( rColor ), nLine, r.nBegin, r.nEnd, true );
         }
 
         pEditEngine->SetModified( bWasModified );
@@ -822,7 +822,7 @@ void EditorWindow::ImplSetFont()
 
     if ( pEditEngine )
     {
-        sal_Bool bModified = pEditEngine->IsModified();
+        bool const bModified = pEditEngine->IsModified();
         pEditEngine->SetFont( aFont );
         pEditEngine->SetModified( bModified );
     }
@@ -864,8 +864,8 @@ IMPL_LINK_NOARG(EditorWindow, SyntaxTimerHdl)
 {
     DBG_ASSERT( pEditView, "Noch keine View, aber Syntax-Highlight ?!" );
 
-    sal_Bool bWasModified = pEditEngine->IsModified();
-    // pEditEngine->SetUpdateMode( sal_False );
+    bool const bWasModified = pEditEngine->IsModified();
+    //pEditEngine->SetUpdateMode(false);
 
     bHighlightning = true;
     for ( SyntaxLineSet::const_iterator it = aSyntaxLineTable.begin();
@@ -877,7 +877,7 @@ IMPL_LINK_NOARG(EditorWindow, SyntaxTimerHdl)
 
     // #i45572#
     if ( pEditView )
-        pEditView->ShowCursor( sal_False, sal_True );
+        pEditView->ShowCursor( false, true );
 
     pEditEngine->SetModified( bWasModified );
 
@@ -1095,7 +1095,7 @@ void BreakPointWindow::Command( const CommandEvent& rCEvt )
             {
                 case RID_ACTIV:
                 {
-                    pBrk->bEnabled = pBrk->bEnabled ? sal_False : sal_True;
+                    pBrk->bEnabled = !pBrk->bEnabled;
                     pModulWindow->UpdateBreakPoint( *pBrk );
                     Invalidate();
                 }
@@ -1207,7 +1207,7 @@ WatchWindow::WatchWindow( Window* pParent ) :
     nHeaderBarHeight = 16;
 
     aTreeListBox.SetHelpId(HID_BASICIDE_WATCHWINDOW_LIST);
-    aTreeListBox.EnableInplaceEditing( sal_True );
+    aTreeListBox.EnableInplaceEditing(true);
     aTreeListBox.SetSelectHdl( LINK( this, WatchWindow, TreeListHdl ) );
     aTreeListBox.SetPosPixel( Point( DWBORDER, nVirtToolBoxHeight + nHeaderBarHeight ) );
     aTreeListBox.SetHighlightRange( 1, 5 );
@@ -1390,11 +1390,11 @@ void WatchWindow::AddWatch( const String& rVName )
 
     String aWatchStr_( aVar );
     aWatchStr_ += String( RTL_CONSTASCII_USTRINGPARAM( "\t\t" ) );
-    SvLBoxEntry* pNewEntry = aTreeListBox.InsertEntry( aWatchStr_, 0, sal_True, LIST_APPEND );
+    SvLBoxEntry* pNewEntry = aTreeListBox.InsertEntry( aWatchStr_, 0, true, LIST_APPEND );
     pNewEntry->SetUserData( pWatchItem );
 
-    aTreeListBox.Select( pNewEntry, sal_True );
-    aTreeListBox.MakeVisible( pNewEntry );
+    aTreeListBox.Select(pNewEntry, true);
+    aTreeListBox.MakeVisible(pNewEntry);
     aRemoveWatchButton.Enable();
 }
 
@@ -1523,7 +1523,7 @@ StackWindow::StackWindow( Window* pParent ) :
     aTreeListBox.SetPosPixel( Point( DWBORDER, nVirtToolBoxHeight ) );
     aTreeListBox.SetHighlightRange();
     aTreeListBox.SetSelectionMode( NO_SELECTION );
-    aTreeListBox.InsertEntry( String(), 0, sal_False, LIST_APPEND );
+    aTreeListBox.InsertEntry( String(), 0, false, LIST_APPEND );
     aTreeListBox.Show();
 
     SetText( String( IDEResId( RID_STR_STACKNAME ) ) );
@@ -1568,7 +1568,7 @@ void StackWindow::Resize()
 
 void StackWindow::UpdateCalls()
 {
-    aTreeListBox.SetUpdateMode( sal_False );
+    aTreeListBox.SetUpdateMode(false);
     aTreeListBox.Clear();
 
     if ( StarBASIC::IsRunning() )
@@ -1614,7 +1614,7 @@ void StackWindow::UpdateCalls()
                 }
                 aEntry += ')';
             }
-            aTreeListBox.InsertEntry( aEntry, 0, sal_False, LIST_APPEND );
+            aTreeListBox.InsertEntry( aEntry, 0, false, LIST_APPEND );
             nScope++;
             pMethod = StarBASIC::GetActiveMethod( nScope );
         }
@@ -1626,10 +1626,10 @@ void StackWindow::UpdateCalls()
     else
     {
         aTreeListBox.SetSelectionMode( NO_SELECTION );
-        aTreeListBox.InsertEntry( String(), 0, sal_False, LIST_APPEND );
+        aTreeListBox.InsertEntry( String(), 0, false, LIST_APPEND );
     }
 
-    aTreeListBox.SetUpdateMode( sal_True );
+    aTreeListBox.SetUpdateMode(true);
 }
 
 ComplexEditorWindow::ComplexEditorWindow( ModulWindow* pParent ) :
@@ -1691,7 +1691,7 @@ IMPL_LINK( ComplexEditorWindow, ScrollHdl, ScrollBar *, pCurScrollBar )
         aEdtWindow.GetEditView()->Scroll( 0, nDiff );
         aBrkWindow.DoScroll( 0, nDiff );
         aLineNumberWindow.DoScroll(0, nDiff);
-        aEdtWindow.GetEditView()->ShowCursor( sal_False, sal_True );
+        aEdtWindow.GetEditView()->ShowCursor(false, true);
         pCurScrollBar->SetThumbPos( aEdtWindow.GetEditView()->GetStartDocPos().Y() );
     }
 
@@ -1921,7 +1921,7 @@ sal_Bool WatchTreeListBox::EditingEntry( SvLBoxEntry* pEntry, Selection& )
 {
     WatchItem* pItem = (WatchItem*)pEntry->GetUserData();
 
-    sal_Bool bEdit = sal_False;
+    bool bEdit = false;
     if ( StarBASIC::IsRunning() && StarBASIC::GetActiveMethod() && !SbxBase::IsError() )
     {
         // No out of scope entries
@@ -1934,7 +1934,7 @@ sal_Bool WatchTreeListBox::EditingEntry( SvLBoxEntry* pEntry, Selection& )
             {
                 aEditingRes = SvHeaderTabListBox::GetEntryText( pEntry, ITEM_ID_VALUE-1 );
                 aEditingRes = comphelper::string::strip(aEditingRes, ' ');
-                bEdit = sal_True;
+                bEdit = true;
             }
         }
     }
@@ -1955,16 +1955,10 @@ sal_Bool WatchTreeListBox::EditedEntry( SvLBoxEntry* pEntry, const rtl::OUString
     if( cFirst == '\"' && cLast == '\"' )
         aResult = aResult.Copy( 1, nResultLen - 2 );
 
-    bool bResModified = ( aResult != aEditingRes );
-    sal_Bool bRet = sal_False;
-
-    if ( bResModified )
-        bRet = ImplBasicEntryEdited( pEntry, aResult );
-
-    return bRet;
+    return aResult != aEditingRes && ImplBasicEntryEdited(pEntry, aResult);
 }
 
-sal_Bool WatchTreeListBox::ImplBasicEntryEdited( SvLBoxEntry* pEntry, const String& rResult )
+bool WatchTreeListBox::ImplBasicEntryEdited( SvLBoxEntry* pEntry, const String& rResult )
 {
     bool bArrayElement;
     SbxBase* pSBX = ImplGetSBXForEntry( pEntry, bArrayElement );
@@ -1991,7 +1985,7 @@ sal_Bool WatchTreeListBox::ImplBasicEntryEdited( SvLBoxEntry* pEntry, const Stri
 
     // The text should never be taken/copied 1:1,
     // as the UpdateWatches will be lost
-    return sal_False;
+    return false;
 }
 
 

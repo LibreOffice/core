@@ -81,7 +81,7 @@ private:
     OKButton        maOKButton;
     CancelButton    maCancelButton;
 
-    sal_Bool        mbExportAsPackage;
+    bool            mbExportAsPackage;
 
     DECL_LINK(OkButtonHandler, void *);
 
@@ -89,7 +89,7 @@ public:
     ExportDialog( Window * pParent );
     ~ExportDialog();
 
-    sal_Bool        isExportAsPackage( void ) { return mbExportAsPackage; }
+    bool isExportAsPackage () { return mbExportAsPackage; }
 };
 
 
@@ -132,8 +132,8 @@ public:
     SvLBoxEntry*    DoInsertEntry( const String& rStr, sal_uLong nPos = LISTBOX_APPEND );
     SvLBoxEntry*    FindEntry( const String& rName );
 
-    void            CheckEntryPos( sal_uLong nPos, sal_Bool bCheck = sal_True );
-    sal_Bool            IsChecked( sal_uLong nPos ) const;
+    void            CheckEntryPos( sal_uLong nPos, bool bCheck = true );
+    bool            IsChecked( sal_uLong nPos ) const;
 
     virtual void    InitEntry( SvLBoxEntry*, const XubString&, const Image&, const Image&, SvLBoxButtonKind eButtonKind );
     virtual sal_Bool    EditingEntry( SvLBoxEntry* pEntry, Selection& rSel );
@@ -163,11 +163,11 @@ public:
     void            SetStorageName( const ::rtl::OUString& rName );
 
     BasicCheckBox&  GetLibBox()                 { return aLibBox; }
-    sal_Bool            IsReference() const         { return aReferenceBox.IsChecked(); }
-    sal_Bool            IsReplace() const           { return aReplaceBox.IsChecked(); }
+    bool            IsReference() const         { return aReferenceBox.IsChecked(); }
+    bool            IsReplace() const           { return aReplaceBox.IsChecked(); }
 
-    void            EnableReference( sal_Bool b )   { aReferenceBox.Enable( b ); }
-    void            EnableReplace( sal_Bool b )     { aReplaceBox.Enable( b ); }
+    void            EnableReference (bool b)    { aReferenceBox.Enable(b); }
+    void            EnableReplace (bool b)      { aReplaceBox.Enable(b); }
 };
 
 

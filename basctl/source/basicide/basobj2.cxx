@@ -93,19 +93,21 @@ void Organize( sal_Int16 tabId )
 
 //----------------------------------------------------------------------------
 
-sal_Bool IsValidSbxName( const String& rName )
+bool IsValidSbxName( const String& rName )
 {
     for ( sal_uInt16 nChar = 0; nChar < rName.Len(); nChar++ )
     {
         sal_Unicode c = rName.GetChar(nChar);
-        sal_Bool bValid = ( ( c >= 'A' && c <= 'Z' ) ||
-                            ( c >= 'a' && c <= 'z' ) ||
-                            ( c >= '0' && c <= '9' && nChar ) ||
-                            ( c == '_' ) );
+        bool bValid = (
+            ( c >= 'A' && c <= 'Z' ) ||
+            ( c >= 'a' && c <= 'z' ) ||
+            ( c >= '0' && c <= '9' && nChar ) ||
+            ( c == '_' )
+        );
         if ( !bValid )
-            return sal_False;
+            return false;
     }
-    return sal_True;
+    return true;
 }
 
 static bool StringCompareLessThan( const String& rStr1, const String& rStr2 )
@@ -259,7 +261,7 @@ namespace
 
 //----------------------------------------------------------------------------
 
-::rtl::OUString ChooseMacro( const uno::Reference< frame::XModel >& rxLimitToDocument, sal_Bool bChooseOnly, const ::rtl::OUString& rMacroDesc )
+::rtl::OUString ChooseMacro( const uno::Reference< frame::XModel >& rxLimitToDocument, bool bChooseOnly, const ::rtl::OUString& rMacroDesc )
 {
     (void)rMacroDesc;
 

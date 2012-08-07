@@ -377,7 +377,7 @@ void BasicStopped( bool* pbAppWindowDisabled,
     Window* pDefParent = Application::GetDefDialogParent();
     if ( pDefParent && !pDefParent->IsEnabled() )
     {
-        pDefParent->Enable( sal_True );
+        pDefParent->Enable(true);
         if ( pbAppWindowDisabled )
             *pbAppWindowDisabled = true;
     }

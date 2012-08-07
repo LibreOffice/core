@@ -82,7 +82,7 @@ friend class LocalizationMgr;
     bool                bTabBarSplitted;
     bool                bCreatingWindow;
     ModulWindowLayout*  pModulLayout;
-    sal_Bool                m_bAppBasicModified;
+    bool                m_bAppBasicModified;
     ::basctl::DocumentEventNotifier
                         m_aNotifier;
 friend class ContainerListenerImpl;
@@ -202,8 +202,8 @@ public:
     IDEBaseWindow*      FindApplicationWindow();
     bool                NextPage( bool bPrev = false );
 
-    sal_Bool                IsAppBasicModified() const { return m_bAppBasicModified; }
-    void                SetAppBasicModified( sal_Bool bModified = sal_True ) { m_bAppBasicModified = bModified; }
+    bool                IsAppBasicModified () const { return m_bAppBasicModified; }
+    void                SetAppBasicModified (bool bModified = true) { m_bAppBasicModified = bModified; }
 
     // For Dialog Drag&Drop in Dialog Organizer
     static void CopyDialogResources(

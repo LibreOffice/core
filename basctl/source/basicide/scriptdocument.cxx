@@ -543,7 +543,7 @@ namespace basctl
         {
             try
             {
-                Reference< XNameContainer > xLib( getLibrary( _eType, _rLibName, sal_True ) );
+                Reference< XNameContainer > xLib( getLibrary( _eType, _rLibName, true ) );
                 if ( xLib.is() )
                 {
                     xLib->removeByName( _rModuleName );
@@ -567,7 +567,7 @@ namespace basctl
 
         try
         {
-            Reference< XNameContainer > xLib( getLibrary( _eType, _rLibName, sal_True ) );
+            Reference< XNameContainer > xLib( getLibrary( _eType, _rLibName, true ) );
             if ( xLib.is() )
                 return xLib->hasByName( _rModName );
         }
@@ -588,7 +588,7 @@ namespace basctl
         _out_rModuleOrDialog.clear();
         try
         {
-            Reference< XNameContainer > xLib( getLibrary( _eType, _rLibName, sal_True ), UNO_QUERY_THROW );
+            Reference< XNameContainer > xLib( getLibrary( _eType, _rLibName, true ), UNO_QUERY_THROW );
             if ( xLib->hasByName( _rObjectName ) )
             {
                 _out_rModuleOrDialog = xLib->getByName( _rObjectName );
@@ -612,7 +612,7 @@ namespace basctl
 
         try
         {
-            Reference< XNameContainer > xLib( getLibrary( _eType, _rLibName, sal_True ), UNO_QUERY_THROW );
+            Reference< XNameContainer > xLib( getLibrary( _eType, _rLibName, true ), UNO_QUERY_THROW );
 
             // get element
             Any aElement( xLib->getByName( _rOldName ) );
@@ -676,7 +676,7 @@ namespace basctl
         _out_rNewModuleCode = ::rtl::OUString();
         try
         {
-            Reference< XNameContainer > xLib( getLibrary( E_SCRIPTS, _rLibName, sal_True ) );
+            Reference< XNameContainer > xLib( getLibrary( E_SCRIPTS, _rLibName, true ) );
             if ( !xLib.is() || xLib->hasByName( _rModName ) )
                 return false;
 
@@ -739,7 +739,7 @@ namespace basctl
     {
         try
         {
-            Reference< XNameContainer > xLib( getLibrary( E_DIALOGS, _rLibName, sal_True ), UNO_QUERY_THROW );
+            Reference< XNameContainer > xLib( getLibrary( E_DIALOGS, _rLibName, true ), UNO_QUERY_THROW );
 
             // create dialog
             _out_rDialogProvider.clear();
@@ -778,7 +778,7 @@ namespace basctl
         {
             try
             {
-                m_xDocModify->setModified( sal_True );
+                m_xDocModify->setModified( true );
             }
             catch( const Exception& )
             {
@@ -1308,7 +1308,7 @@ namespace basctl
             aObjectName += ::rtl::OUString::valueOf( i );
 
             if ( aUsedNamesCheck.find( aObjectName ) == aUsedNamesCheck.end() )
-                bValid = sal_True;
+                bValid = true;
 
             ++i;
         }

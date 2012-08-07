@@ -123,7 +123,7 @@ private:
 
     virtual
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >
-    GetComponentInterface(sal_Bool bCreate = sal_True);
+    GetComponentInterface(sal_Bool bCreate = true);
 
 protected:
     virtual void    Paint( const Rectangle& );
@@ -213,7 +213,7 @@ protected:
     virtual sal_Bool    EditingEntry( SvLBoxEntry* pEntry, Selection& rSel  );
     virtual sal_Bool    EditedEntry( SvLBoxEntry* pEntry, const rtl::OUString& rNewText );
 
-    sal_Bool            ImplBasicEntryEdited( SvLBoxEntry* pEntry, const String& rResult );
+    bool            ImplBasicEntryEdited( SvLBoxEntry* pEntry, const String& rResult );
     SbxBase*        ImplGetSBXForEntry( SvLBoxEntry* pEntry, bool& rbArrayElement );
 
 public:
@@ -359,8 +359,8 @@ public:
     virtual ::rtl::OUString  GetTitle();
     virtual BasicEntryDescriptor CreateEntryDescriptor();
     virtual bool    AllowUndo();
-    virtual void    SetReadOnly( sal_Bool bReadOnly );
-    virtual sal_Bool    IsReadOnly();
+    virtual void    SetReadOnly (bool bReadOnly);
+    virtual bool    IsReadOnly();
 
     void SetLineNumberDisplay(bool);
     void SetObjectCatalogDisplay(bool);
@@ -371,7 +371,7 @@ public:
     void            SetSbModule( SbModule* pModule ) { xModule = pModule; }
     ::rtl::OUString GetSbModuleName();
 
-    sal_Bool            CompileBasic();
+    bool            CompileBasic();
     bool            BasicRun();
     bool            BasicStepOver();
     bool            BasicStepInto();
@@ -394,8 +394,8 @@ public:
 
     BasicStatus&    GetBasicStatus() { return aStatus; }
 
-    virtual sal_Bool    IsModified();
-    virtual sal_Bool    IsPasteAllowed();
+    virtual bool    IsModified ();
+    virtual bool    IsPasteAllowed ();
 
     void            FrameWindowMoved();
     void            ShowCursor( bool bOn );

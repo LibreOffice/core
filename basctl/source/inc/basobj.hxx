@@ -47,7 +47,7 @@ namespace BasicIDE
     void            BasicStopped( bool* pbAppWindowDisabled = 0, bool* pbDispatcherLocked = 0, sal_uInt16* pnWaitCount = 0,
                             SfxUInt16Item** ppSWActionCount = 0, SfxUInt16Item** ppSWLockViewCount = 0 );
 
-    sal_Bool            IsValidSbxName( const String& rName );
+    bool            IsValidSbxName( const String& rName );
 
     BasicManager*       FindBasicManager( StarBASIC* pLib );
 
@@ -78,7 +78,7 @@ namespace BasicIDE
     // new methods for macros
 
     ::rtl::OUString     ChooseMacro( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rxLimitToDocument,
-        sal_Bool bChooseOnly, const ::rtl::OUString& rMacroDesc );
+        bool bChooseOnly, const ::rtl::OUString& rMacroDesc );
 
     ::com::sun::star::uno::Sequence< ::rtl::OUString > GetMethodNames(
         const ScriptDocument& rDocument, const ::rtl::OUString& rLibName, const ::rtl::OUString& rModName )

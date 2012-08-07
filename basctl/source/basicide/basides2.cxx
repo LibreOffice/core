@@ -52,12 +52,12 @@ Reference< view::XRenderable > BasicIDEShell::GetRenderable()
 
 sal_Bool BasicIDEShell::HasSelection( sal_Bool /* bText */ ) const
 {
-    sal_Bool bSel = sal_False;
+    bool bSel = false;
     if ( pCurWin && pCurWin->ISA( ModulWindow ) )
     {
         TextView* pEditView = ((ModulWindow*)pCurWin)->GetEditView();
         if ( pEditView && pEditView->HasSelection() )
-            bSel = sal_True;
+            bSel = true;
     }
     return bSel;
 }
@@ -134,7 +134,7 @@ void BasicIDEShell::SetMDITitle()
         if ( pShell && !pShell->GetTitle( SFX_TITLE_CAPTION ).Equals(aTitle) )
         {
             pShell->SetTitle( aTitle );
-            pShell->SetModified( sal_False );
+            pShell->SetModified(false);
         }
 
         css::uno::Reference< css::frame::XController > xController = GetController ();
@@ -193,7 +193,7 @@ ModulWindow* BasicIDEShell::CreateBasWin( const ScriptDocument& rDocument, const
         if ( rDocument.hasModule( aLibName, aModName ) )
             bSuccess = rDocument.getModule( aLibName, aModName, aModule );
         else
-            bSuccess = rDocument.createModule( aLibName, aModName, sal_True, aModule );
+            bSuccess = rDocument.createModule( aLibName, aModName, true, aModule );
 
         if ( bSuccess )
         {

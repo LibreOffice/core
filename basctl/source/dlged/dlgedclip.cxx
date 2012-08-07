@@ -51,7 +51,7 @@ DlgEdTransferableImpl::~DlgEdTransferableImpl()
 
 sal_Bool DlgEdTransferableImpl::compareDataFlavors( const DataFlavor& lFlavor, const DataFlavor& rFlavor )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     // compare mime content types
     Reference< lang::XMultiServiceFactory >  xMSF = getProcessServiceFactory();
@@ -112,18 +112,10 @@ sal_Bool SAL_CALL DlgEdTransferableImpl::isDataFlavorSupported( const DataFlavor
 {
     const SolarMutexGuard aGuard;
 
-    sal_Bool bRet = sal_False;
-
     for ( sal_Int32 i = 0; i < m_SeqFlavors.getLength(); i++ )
-    {
         if ( compareDataFlavors( m_SeqFlavors[i] , rFlavor ) )
-        {
-            bRet = sal_True;
-            break;
-        }
-    }
-
-    return bRet;
+            return true;
+    return false;
 }
 
 // XClipboardOwner

@@ -215,7 +215,7 @@ void BasicTreeListBox::ScanEntry( const ScriptDocument& rDocument, LibraryLocati
     // can be called multiple times for updating!
 
     // actually test if basic's in the tree already?!
-    SetUpdateMode( sal_False );
+    SetUpdateMode(false);
 
     // level 1: BasicManager (application, document, ...)
     SvLBoxEntry* pDocumentRootEntry = FindRootEntry( rDocument, eLocation );
@@ -235,7 +235,7 @@ void BasicTreeListBox::ScanEntry( const ScriptDocument& rDocument, LibraryLocati
         SAL_WNODEPRECATED_DECLARATIONS_POP
     }
 
-    SetUpdateMode( sal_True );
+    SetUpdateMode(true);
 }
 
 void BasicTreeListBox::ImpCreateLibEntries( SvLBoxEntry* pDocumentRootEntry, const ScriptDocument& rDocument, LibraryLocation eLocation )
@@ -651,7 +651,7 @@ SvLBoxEntry* BasicTreeListBox::FindEntry( SvLBoxEntry* pParent, const ::rtl::OUS
 long BasicTreeListBox::ExpandingHdl()
 {
     // expanding or collapsing?
-    sal_Bool bOK = sal_True;
+    bool bOK = true;
     if ( GetModel()->GetDepth( GetHdlEntry() ) == 1 )
     {
         SvLBoxEntry* pCurEntry = GetCurEntry();
@@ -787,7 +787,7 @@ void BasicTreeListBox::GetRootEntryBitmaps( const ScriptDocument& rDocument, Ima
 
         if ( !sFactoryURL.isEmpty() )
         {
-            rImage = SvFileInformationManager::GetFileImage( INetURLObject( sFactoryURL ), sal_False );
+            rImage = SvFileInformationManager::GetFileImage( INetURLObject( sFactoryURL ), false );
         }
         else
         {

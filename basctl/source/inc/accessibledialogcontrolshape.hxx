@@ -54,18 +54,18 @@ private:
     VCLExternalSolarLock*   m_pExternalLock;
     DialogWindow*           m_pDialogWindow;
     DlgEdObj*               m_pDlgEdObj;
-    sal_Bool                m_bFocused;
-    sal_Bool                m_bSelected;
+    bool                    m_bFocused;
+    bool                    m_bSelected;
 
     ::com::sun::star::awt::Rectangle                                            m_aBounds;
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   m_xControlModel;
 
 protected:
-    sal_Bool                IsFocused();
-    sal_Bool                IsSelected();
+    bool                    IsFocused();
+    bool                    IsSelected();
 
-    void                    SetFocused( sal_Bool bFocused );
-    void                    SetSelected( sal_Bool bSelected );
+    void                    SetFocused (bool bFocused);
+    void                    SetSelected (bool bSelected);
 
     ::com::sun::star::awt::Rectangle GetBounds();
     void                    SetBounds( const ::com::sun::star::awt::Rectangle& aBounds );

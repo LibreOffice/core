@@ -58,7 +58,7 @@ void BasicTreeListBox::RequestingChildren( SvLBoxEntry* pEntry )
         ::rtl::OUString aOULibName( aDesc.GetLibName() );
 
         // check password
-        sal_Bool bOK = sal_True;
+        bool bOK = true;
         Reference< script::XLibraryContainer > xModLibContainer( aDocument.getLibraryContainer( E_SCRIPTS ) );
         if ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) )
         {
@@ -73,7 +73,7 @@ void BasicTreeListBox::RequestingChildren( SvLBoxEntry* pEntry )
         if ( bOK )
         {
             // load module library
-            sal_Bool bModLibLoaded = sal_False;
+            bool bModLibLoaded = false;
             if ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) )
             {
                 if ( !xModLibContainer->isLibraryLoaded( aOULibName ) )
@@ -86,7 +86,7 @@ void BasicTreeListBox::RequestingChildren( SvLBoxEntry* pEntry )
             }
 
             // load dialog library
-            sal_Bool bDlgLibLoaded = sal_False;
+            bool bDlgLibLoaded = false;
             Reference< script::XLibraryContainer > xDlgLibContainer( aDocument.getLibraryContainer( E_DIALOGS ), UNO_QUERY );
             if ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aOULibName ) )
             {

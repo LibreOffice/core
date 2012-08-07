@@ -79,7 +79,7 @@ void BasicIDEShell::ExecuteCurrent( SfxRequest& rReq )
     {
         case SID_SHOWLINES:
         {
-            SFX_REQUEST_ARG(rReq, pItem, SfxBoolItem, rReq.GetSlot(), sal_False);
+            SFX_REQUEST_ARG(rReq, pItem, SfxBoolItem, rReq.GetSlot(), false);
             bool bValue = false;
             if ( pItem )
                 bValue = pItem->GetValue();
@@ -317,7 +317,8 @@ void BasicIDEShell::ExecuteGlobal( SfxRequest& rReq )
                 {
                     uno::Reference< task::XStatusIndicator > xStatusIndicator;
 
-                    SFX_REQUEST_ARG( rReq, pStatusIndicatorItem, SfxUnoAnyItem, SID_PROGRESS_STATUSBAR_CONTROL, sal_False );
+                    SFX_REQUEST_ARG( rReq, pStatusIndicatorItem, SfxUnoAnyItem,
+                        SID_PROGRESS_STATUSBAR_CONTROL, false );
                     if ( pStatusIndicatorItem )
                         OSL_VERIFY( pStatusIndicatorItem->GetValue() >>= xStatusIndicator );
                     else
@@ -379,7 +380,7 @@ void BasicIDEShell::ExecuteGlobal( SfxRequest& rReq )
         break;
         case SID_BASICIDE_CHOOSEMACRO:
         {
-            BasicIDE::ChooseMacro( NULL, sal_False, ::rtl::OUString() );
+            BasicIDE::ChooseMacro( NULL, false, ::rtl::OUString() );
         }
         break;
         case SID_BASICIDE_CREATEMACRO:
@@ -392,7 +393,7 @@ void BasicIDEShell::ExecuteGlobal( SfxRequest& rReq )
 
             ScriptDocument aDocument( ScriptDocument::getDocumentForBasicManager( pBasMgr ) );
 
-            StartListening( *pBasMgr, sal_True /* log on only once */ );
+            StartListening( *pBasMgr, true /* log on only once */ );
             ::rtl::OUString aLibName( rInfo.GetLib() );
             if ( aLibName.isEmpty() )
                 aLibName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Standard"));
@@ -420,7 +421,7 @@ void BasicIDEShell::ExecuteGlobal( SfxRequest& rReq )
                         ::rtl::OUString aModName = rInfo.GetModule();
 
                         ::rtl::OUString sModuleCode;
-                        if ( aDocument.createModule( aLibName, aModName, sal_False, sModuleCode ) )
+                        if ( aDocument.createModule( aLibName, aModName, false, sModuleCode ) )
                             pModule = pBasic->FindModule( aModName );
                     }
                     else
@@ -552,7 +553,7 @@ void BasicIDEShell::ExecuteGlobal( SfxRequest& rReq )
                 aDocument.loadLibraryIfExists( E_DIALOGS, aLibName );
 
                 // check password, if library is password protected and not verified
-                sal_Bool bOK = sal_True;
+                bool bOK = true;
                 Reference< script::XLibraryContainer > xModLibContainer( aDocument.getLibraryContainer( E_SCRIPTS ) );
                 if ( xModLibContainer.is() && xModLibContainer->hasByName( aLibName ) )
                 {
@@ -573,7 +574,7 @@ void BasicIDEShell::ExecuteGlobal( SfxRequest& rReq )
                     // adjust old value...
                     SfxBindings* pBindings = BasicIDE::GetBindingsPtr();
                     if ( pBindings )
-                        pBindings->Invalidate( SID_BASICIDE_LIBSELECTOR, sal_True, sal_False );
+                        pBindings->Invalidate(SID_BASICIDE_LIBSELECTOR, true, false);
                 }
             }
             else if ( nSlot == SID_BASICIDE_LIBREMOVED )
@@ -678,7 +679,7 @@ void BasicIDEShell::ExecuteGlobal( SfxRequest& rReq )
         {
             ::std::auto_ptr< ScriptDocument > pDocument;
 
-            SFX_REQUEST_ARG( rReq, pDocumentItem, SfxStringItem, SID_BASICIDE_ARG_DOCUMENT, sal_False );
+            SFX_REQUEST_ARG( rReq, pDocumentItem, SfxStringItem, SID_BASICIDE_ARG_DOCUMENT, false );
             if ( pDocumentItem )
             {
                 ::rtl::OUString sDocumentCaption = pDocumentItem->GetValue();
@@ -686,7 +687,7 @@ void BasicIDEShell::ExecuteGlobal( SfxRequest& rReq )
                     pDocument.reset( new ScriptDocument( ScriptDocument::getDocumentWithURLOrCaption( sDocumentCaption ) ) );
             }
 
-            SFX_REQUEST_ARG( rReq, pDocModelItem, SfxUsrAnyItem, SID_BASICIDE_ARG_DOCUMENT_MODEL, sal_False );
+            SFX_REQUEST_ARG( rReq, pDocModelItem, SfxUsrAnyItem, SID_BASICIDE_ARG_DOCUMENT_MODEL, false );
             if ( !pDocument.get() && pDocModelItem )
             {
                 uno::Reference< frame::XModel > xModel( pDocModelItem->GetValue(), UNO_QUERY );
@@ -697,21 +698,21 @@ void BasicIDEShell::ExecuteGlobal( SfxRequest& rReq )
             if ( !pDocument.get() )
                 break;
 
-            SFX_REQUEST_ARG( rReq, pLibNameItem, SfxStringItem, SID_BASICIDE_ARG_LIBNAME, sal_False );
+            SFX_REQUEST_ARG( rReq, pLibNameItem, SfxStringItem, SID_BASICIDE_ARG_LIBNAME, false );
             if ( !pLibNameItem )
                 break;
 
             ::rtl::OUString aLibName( pLibNameItem->GetValue() );
             pDocument->loadLibraryIfExists( E_SCRIPTS, aLibName );
             SetCurLib( *pDocument, aLibName );
-            SFX_REQUEST_ARG( rReq, pNameItem, SfxStringItem, SID_BASICIDE_ARG_NAME, sal_False );
+            SFX_REQUEST_ARG( rReq, pNameItem, SfxStringItem, SID_BASICIDE_ARG_NAME, false );
             if ( pNameItem )
             {
                 ::rtl::OUString aName( pNameItem->GetValue() );
                 ::rtl::OUString aModType(RTL_CONSTASCII_USTRINGPARAM("Module"));
                 ::rtl::OUString aDlgType(RTL_CONSTASCII_USTRINGPARAM("Dialog"));
                 ::rtl::OUString aType( aModType );
-                SFX_REQUEST_ARG( rReq, pTypeItem, SfxStringItem, SID_BASICIDE_ARG_TYPE, sal_False );
+                SFX_REQUEST_ARG( rReq, pTypeItem, SfxStringItem, SID_BASICIDE_ARG_TYPE, false );
                 if ( pTypeItem )
                     aType = pTypeItem->GetValue();
 
@@ -730,7 +731,7 @@ void BasicIDEShell::ExecuteGlobal( SfxRequest& rReq )
                     if ( pWin->ISA( ModulWindow ) )
                     {
                         ModulWindow* pModWin = (ModulWindow*)pWin;
-                        SFX_REQUEST_ARG( rReq, pLineItem, SfxUInt32Item, SID_BASICIDE_ARG_LINE, sal_False );
+                        SFX_REQUEST_ARG( rReq, pLineItem, SfxUInt32Item, SID_BASICIDE_ARG_LINE, false );
                         if ( pLineItem )
                         {
                             pModWin->AssertValidEditEngine();
@@ -759,11 +760,11 @@ void BasicIDEShell::ExecuteGlobal( SfxRequest& rReq )
                                         long nNewY = nLine * pTextEngine->GetCharHeight() - nVisHeight / 2;
                                         nNewY = ::std::min( nNewY, nMaxY );
                                         pTextView->Scroll( 0, -( nNewY - nOldY ) );
-                                        pTextView->ShowCursor( sal_False, sal_True );
+                                        pTextView->ShowCursor( false, true );
                                         pModWin->GetEditVScrollBar().SetThumbPos( pTextView->GetStartDocPos().Y() );
                                     }
                                     sal_uInt16 nCol1 = 0, nCol2 = 0;
-                                    SFX_REQUEST_ARG( rReq, pCol1Item, SfxUInt16Item, SID_BASICIDE_ARG_COLUMN1, sal_False );
+                                    SFX_REQUEST_ARG( rReq, pCol1Item, SfxUInt16Item, SID_BASICIDE_ARG_COLUMN1, false );
                                     if ( pCol1Item )
                                     {
                                         nCol1 = pCol1Item->GetValue();
@@ -771,7 +772,7 @@ void BasicIDEShell::ExecuteGlobal( SfxRequest& rReq )
                                             --nCol1;
                                         nCol2 = nCol1;
                                     }
-                                    SFX_REQUEST_ARG( rReq, pCol2Item, SfxUInt16Item, SID_BASICIDE_ARG_COLUMN2, sal_False );
+                                    SFX_REQUEST_ARG( rReq, pCol2Item, SfxUInt16Item, SID_BASICIDE_ARG_COLUMN2, false );
                                     if ( pCol2Item )
                                     {
                                         nCol2 = pCol2Item->GetValue();
@@ -819,7 +820,7 @@ void BasicIDEShell::GetState(SfxItemSet &rSet)
                 if( pCurWin && !pCurWin->IsA( TYPE( ModulWindow ) ) )
                 {
                     rSet.DisableItem( nWh );
-                    rSet.Put(SfxVisibilityItem(nWh, sal_False));
+                    rSet.Put(SfxVisibilityItem(nWh, false));
                 }
                 else
                     rSet.Put( SfxBoolItem( nWh, lcl_GetSourceLinesEnabledValue() ) );
@@ -832,7 +833,7 @@ void BasicIDEShell::GetState(SfxItemSet &rSet)
             break;
             case SID_SAVEDOC:
             {
-                sal_Bool bDisable = sal_False;
+                bool bDisable = false;
 
                 if ( pCurWin )
                 {
@@ -845,7 +846,7 @@ void BasicIDEShell::GetState(SfxItemSet &rSet)
                 }
                 else
                 {
-                    bDisable = sal_True;
+                    bDisable = true;
                 }
 
                 if ( bDisable )
@@ -883,14 +884,14 @@ void BasicIDEShell::GetState(SfxItemSet &rSet)
                 if( pCurWin && !pCurWin->IsA( TYPE( ModulWindow ) ) )
                 {
                     rSet.DisableItem( nWh );
-                    rSet.Put(SfxVisibilityItem(nWh, sal_False));
+                    rSet.Put(SfxVisibilityItem(nWh, false));
                 }
                 else
                 {
                     if (nWh == SID_BASICIDE_OBJCAT)
                         rSet.Put(SfxBoolItem(nWh, pModulLayout && pModulLayout->HasObjectCatalog()));
                     else
-                        rSet.Put(SfxVisibilityItem(nWh, sal_True));
+                        rSet.Put(SfxVisibilityItem(nWh, true));
                 }
                 break;
             }
@@ -983,7 +984,7 @@ void BasicIDEShell::GetState(SfxItemSet &rSet)
             break;
             case SID_SEARCH_ITEM:
             {
-                ::rtl::OUString aSelected = GetSelectionText( sal_True );
+                ::rtl::OUString aSelected = GetSelectionText(true);
                 SvxSearchItem& rItem = BasicIDEGlobals::GetExtraData()->GetSearchItem();
                 rItem.SetSearchString( aSelected );
                 rSet.Put( rItem );
@@ -998,12 +999,12 @@ void BasicIDEShell::GetState(SfxItemSet &rSet)
             break;
             case SID_DOC_MODIFIED:
             {
-                sal_Bool bModified = sal_False;
+                bool bModified = false;
 
                 if ( pCurWin )
                 {
                     if ( pCurWin->IsModified() )
-                        bModified = sal_True;
+                        bModified = true;
                     else
                     {
                         ScriptDocument aDocument( pCurWin->GetDocument() );
@@ -1094,7 +1095,7 @@ void BasicIDEShell::GetState(SfxItemSet &rSet)
                 if( pCurWin && !pCurWin->IsA( TYPE( ModulWindow ) ) )
                 {
                     rSet.DisableItem( nWh );
-                    rSet.Put(SfxVisibilityItem(nWh, sal_False));
+                    rSet.Put(SfxVisibilityItem(nWh, false));
                 }
                 break;
             }
@@ -1106,13 +1107,13 @@ void BasicIDEShell::GetState(SfxItemSet &rSet)
 
 sal_Bool BasicIDEShell::HasUIFeature( sal_uInt32 nFeature )
 {
-    sal_Bool bResult = sal_False;
+    bool bResult = false;
 
     if ( (nFeature & BASICIDE_UI_FEATURE_SHOW_BROWSER) == BASICIDE_UI_FEATURE_SHOW_BROWSER )
     {
         // fade out (in) property browser in module (dialog) windows
         if ( pCurWin && pCurWin->IsA( TYPE( DialogWindow ) ) && !pCurWin->IsReadOnly() )
-            bResult = sal_True;
+            bResult = true;
     }
 
     return bResult;
@@ -1325,7 +1326,7 @@ long BasicIDEShell::CallBasicBreakHdl( StarBASIC* pBasic )
         if ( StarBASIC::IsRunning() )   // if cancelled...
         {
             if ( bAppWindowDisabled )
-                Application::GetDefDialogParent()->Enable( sal_False );
+                Application::GetDefDialogParent()->Enable(false);
 
             if ( nWaitCount )
             {
@@ -1369,7 +1370,7 @@ ModulWindow* BasicIDEShell::ShowActiveModuleWindow( StarBASIC* pBasic )
         }
         BasicManager* pBasicMgr = BasicIDE::FindBasicManager( pBasic );
         if ( pBasicMgr )
-            StartListening( *pBasicMgr, sal_True /* log on only once */ );
+            StartListening( *pBasicMgr, true /* log on only once */ );
         return pWin;
     }
     return 0;
@@ -1437,8 +1438,8 @@ void BasicIDEShell::Activate( sal_Bool bMDI )
 
 void BasicIDEShell::Deactivate( sal_Bool bMDI )
 {
-    // bMDI sal_True means that another MDI has been activated; in case of a
-    // deactivate due to a MessageBox bMDI is FALSE
+    // bMDI == true means that another MDI has been activated; in case of a
+    // deactivate due to a MessageBox bMDI is false
     if ( bMDI )
     {
         if( pCurWin && pCurWin->IsA( TYPE( DialogWindow ) ) )

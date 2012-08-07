@@ -85,12 +85,12 @@ public:
 
     virtual ::rtl::OUString      GetTitle();
     virtual BasicEntryDescriptor CreateEntryDescriptor();
-    virtual void        SetReadOnly( sal_Bool bReadOnly );
-    virtual sal_Bool        IsReadOnly();
+    virtual void        SetReadOnly (bool bReadOnly);
+    virtual bool        IsReadOnly();
 
     virtual void        StoreData();
-    virtual sal_Bool        IsModified();
-    virtual sal_Bool        IsPasteAllowed();
+    virtual bool        IsModified();
+    virtual bool        IsPasteAllowed();
 
     virtual ::svl::IUndoManager*
                         GetUndoManager();

@@ -999,7 +999,7 @@ sal_Bool AccessibleDialogWindow::isAccessibleChildSelected( sal_Int32 nChildInde
     if ( nChildIndex < 0 || nChildIndex >= getAccessibleChildCount() )
         throw IndexOutOfBoundsException();
 
-    sal_Bool bSelected = sal_False;
+    bool bSelected = false;
     if ( m_pDialogWindow )
     {
         DlgEdObj* pDlgEdObj = m_aAccessibleChildren[nChildIndex].pDlgEdObj;
@@ -1101,7 +1101,7 @@ void AccessibleDialogWindow::deselectAccessibleChild( sal_Int32 nChildIndex ) th
             {
                 SdrPageView* pPgView = pSdrView->GetSdrPageView();
                 if ( pPgView )
-                    pSdrView->MarkObj( pDlgEdObj, pPgView, sal_True );
+                    pSdrView->MarkObj( pDlgEdObj, pPgView, true );
             }
         }
     }

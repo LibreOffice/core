@@ -160,13 +160,13 @@ public:
     ::rtl::OUString          CreateQualifiedName();
     virtual BasicEntryDescriptor CreateEntryDescriptor() = 0;
 
-    virtual sal_Bool    IsModified();
-    virtual sal_Bool    IsPasteAllowed();
+    virtual bool    IsModified();
+    virtual bool    IsPasteAllowed();
 
     virtual bool    AllowUndo();
 
-    virtual void    SetReadOnly( sal_Bool bReadOnly );
-    virtual sal_Bool    IsReadOnly();
+    virtual void    SetReadOnly (bool bReadOnly);
+    virtual bool    IsReadOnly();
 
     int GetStatus() { return nStatus; }
     void SetStatus(int n) { nStatus = n; }

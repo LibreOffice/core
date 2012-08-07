@@ -40,7 +40,7 @@ protected:
                                String * pFullTypeName,
                                String * pShortTypeName,
                                sal_Int32 nVersion,
-                               sal_Bool bTemplate = sal_False ) const;
+                               sal_Bool bTemplate = false ) const;
 
 public:
                         TYPEINFO();
@@ -51,7 +51,7 @@ public:
                         BasicDocShell();
                         ~BasicDocShell();
 
-    SfxPrinter*         GetPrinter( sal_Bool bCreate );
+    SfxPrinter*         GetPrinter( bool bCreate );
     void                SetPrinter( SfxPrinter* pPrinter );
 };
 

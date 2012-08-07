@@ -250,13 +250,13 @@ void ModulWindow::CheckCompileBasic()
     if ( XModule().Is() )
     {
         // never compile while running!
-        sal_Bool bRunning = StarBASIC::IsRunning();
-        sal_Bool bModified = ( !xModule->IsCompiled() ||
+        bool const bRunning = StarBASIC::IsRunning();
+        bool const bModified = ( !xModule->IsCompiled() ||
             ( GetEditEngine() && GetEditEngine()->IsModified() ) );
 
         if ( !bRunning && bModified )
         {
-            sal_Bool bDone = sal_False;
+            bool bDone = false;
 
             BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
             pIDEShell->GetViewFrame()->GetWindow().EnterWait();
@@ -267,11 +267,11 @@ void ModulWindow::CheckCompileBasic()
                 GetEditorWindow().SetSourceInBasic();
             }
 
-            sal_Bool bWasModified = GetBasic()->IsModified();
+            bool bWasModified = GetBasic()->IsModified();
 
             bDone = GetBasic()->Compile( xModule );
             if ( !bWasModified )
-                GetBasic()->SetModified( sal_False );
+                GetBasic()->SetModified(false);
 
             if ( bDone )
             {
@@ -333,16 +333,16 @@ bool ModulWindow::BasicExecute()
             if ( !pMethod )
             {
                 // If not in a method then prompt the user
-                return ( !BasicIDE::ChooseMacro( uno::Reference< frame::XModel >(), sal_False, rtl::OUString() ).isEmpty() );
+                return ( !BasicIDE::ChooseMacro( uno::Reference< frame::XModel >(), false, rtl::OUString() ).isEmpty() );
             }
             if ( pMethod )
             {
                 pMethod->SetDebugFlags( aStatus.nBasicFlags );
-                BasicDLL::SetDebugMode( sal_True );
+                BasicDLL::SetDebugMode( true );
                 BasicIDE::RunMethod( pMethod );
-                BasicDLL::SetDebugMode( sal_False );
-                // if cancelled during Interactive=sal_False
-                BasicDLL::EnableBreak( sal_True );
+                BasicDLL::SetDebugMode( false );
+                // if cancelled during Interactive=false
+                BasicDLL::EnableBreak( true );
             }
             ClearStatus( BASWIN_RUNNINGBASIC );
         }
@@ -355,16 +355,12 @@ bool ModulWindow::BasicExecute()
     return bDone;
 }
 
-sal_Bool ModulWindow::CompileBasic()
+bool ModulWindow::CompileBasic()
 {
     DBG_CHKTHIS( ModulWindow, 0 );
     CheckCompileBasic();
 
-    sal_Bool bIsCompiled = sal_False;
-    if ( XModule().Is() )
-        bIsCompiled = xModule->IsCompiled();
-
-    return bIsCompiled;
+    return XModule().Is() && xModule->IsCompiled();
 }
 
 bool ModulWindow::BasicRun()
@@ -372,16 +368,14 @@ bool ModulWindow::BasicRun()
     DBG_CHKTHIS( ModulWindow, 0 );
 
     aStatus.nBasicFlags = 0;
-    bool bDone = BasicExecute();
-    return bDone;
+    return BasicExecute();
 }
 
 bool ModulWindow::BasicStepOver()
 {
     DBG_CHKTHIS( ModulWindow, 0 );
     aStatus.nBasicFlags = SbDEBUG_STEPINTO | SbDEBUG_STEPOVER;
-    bool bDone = BasicExecute();
-    return bDone;
+    return BasicExecute();
 }
 
 
@@ -390,8 +384,7 @@ bool ModulWindow::BasicStepInto()
     DBG_CHKTHIS( ModulWindow, 0 );
 
     aStatus.nBasicFlags = SbDEBUG_STEPINTO;
-    bool bDone = BasicExecute();
-    return bDone;
+    return BasicExecute();
 }
 
 bool ModulWindow::BasicStepOut()
@@ -399,8 +392,7 @@ bool ModulWindow::BasicStepOut()
     DBG_CHKTHIS( ModulWindow, 0 );
 
     aStatus.nBasicFlags = SbDEBUG_STEPOUT;
-    bool bDone = BasicExecute();
-    return bDone;
+    return BasicExecute();
 }
 
 
@@ -448,9 +440,9 @@ bool ModulWindow::LoadBasic()
             sal_uLong nLines = CalcLineCount( *pStream );
             // nLines*4: ReadText/Formatting/Highlighting/Formatting
             GetEditorWindow().CreateProgress( String( IDEResId( RID_STR_GENERATESOURCE ) ), nLines*4 );
-            GetEditEngine()->SetUpdateMode( sal_False );
+            GetEditEngine()->SetUpdateMode( false );
             GetEditView()->Read( *pStream );
-            GetEditEngine()->SetUpdateMode( sal_True );
+            GetEditEngine()->SetUpdateMode( true );
             GetEditorWindow().Update();
             GetEditorWindow().ForceSyntaxTimeout();
             GetEditorWindow().DestroyProgress();
@@ -483,9 +475,9 @@ bool ModulWindow::SaveBasicSource()
     }
 
     Reference< XFilePickerControlAccess > xFPControl(xFP, UNO_QUERY);
-    xFPControl->enableControl(ExtendedFilePickerElementIds::CHECKBOX_PASSWORD, sal_False);
+    xFPControl->enableControl(ExtendedFilePickerElementIds::CHECKBOX_PASSWORD, false);
     Any aValue;
-    aValue <<= (sal_Bool) sal_True;
+    aValue <<= sal_True;
     xFPControl->setValue(ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION, 0, aValue);
 
     if ( !aCurPath.isEmpty() )
@@ -627,7 +619,7 @@ void ModulWindow::BasicToggleBreakPointEnabled()
             BreakPoint* pBrk = rList.FindBreakPoint( nLine );
             if ( pBrk )
             {
-                pBrk->bEnabled = pBrk->bEnabled ? sal_False : sal_True;
+                pBrk->bEnabled = !pBrk->bEnabled;
                 UpdateBreakPoint( *pBrk );
             }
         }
@@ -676,9 +668,9 @@ long ModulWindow::BasicErrorHdl( StarBASIC * pBasic )
     }
     ::rtl::OUString aErrorTextPrefix(aErrorTextPrefixBuf.makeStringAndClear());
     // if other basic, the IDE should try to display the correct module
-    sal_Bool bMarkError = ( pBasic == GetBasic() ) ? sal_True : sal_False;
+    bool const bMarkError = pBasic == GetBasic();
     if ( bMarkError )
-        aXEditorWindow.GetBrkWindow().SetMarkerPos( nErrorLine, sal_True );
+        aXEditorWindow.GetBrkWindow().SetMarkerPos(nErrorLine, true);
 
     // #i47002#
     Reference< awt::XWindow > xWindow = VCLUnoHelper::GetInterface( this );
@@ -688,11 +680,11 @@ long ModulWindow::BasicErrorHdl( StarBASIC * pBasic )
     // #i47002#
     Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
     if ( !pWindow )
-        return sal_False;
+        return false;
 
     if ( bMarkError )
         aXEditorWindow.GetBrkWindow().SetMarkerPos( MARKER_NOMARKER );
-    return sal_False;
+    return false;
 }
 
 long ModulWindow::BasicBreakHdl( StarBASIC* pBasic )
@@ -746,7 +738,7 @@ void ModulWindow::BasicAddWatch()
     DBG_CHKTHIS( ModulWindow, 0 );
     String aWatchStr;
     AssertValidEditEngine();
-    sal_Bool bAdd = sal_True;
+    bool bAdd = true;
     if ( !GetEditView()->HasSelection() )
     {
         TextPaM aWordStart;
@@ -757,7 +749,7 @@ void ModulWindow::BasicAddWatch()
             sal_uInt16& rIndex = aSel.GetEnd().GetIndex();
             rIndex = rIndex + aWord.getLength();
             GetEditView()->SetSelection( aSel );
-            bAdd = sal_True;
+            bAdd = true;
         }
     }
     if ( bAdd )
@@ -814,7 +806,7 @@ void ModulWindow::EditMacro( const String& rMacroName )
                     long nNewStartY = nStart * pView->GetTextEngine()->GetCharHeight();
                     nNewStartY = Min( nNewStartY, nMaxY );
                     pView->Scroll( 0, -(nNewStartY-nOldStartY) );
-                    pView->ShowCursor( sal_False, sal_True );
+                    pView->ShowCursor( false, true );
                     GetEditVScrollBar().SetThumbPos( pView->GetStartDocPos().Y() );
                 }
                 pView->SetSelection( aSel );
@@ -864,7 +856,7 @@ void ModulWindow::UpdateData()
             TextSelection aSel = GetEditView()->GetSelection();
             setTextEngineText( GetEditEngine(), xModule->GetSource32() );
             GetEditView()->SetSelection( aSel );
-            GetEditEngine()->SetModified( sal_False );
+            GetEditEngine()->SetModified( false );
             BasicIDE::MarkDocumentModified( GetDocument() );
         }
     }
@@ -897,7 +889,7 @@ sal_Int32 ModulWindow::FormatAndPrint( Printer* pPrinter, sal_Int32 nPrintPage )
 
     Font aFont( GetEditEngine()->GetFont() );
     aFont.SetAlign( ALIGN_BOTTOM );
-    aFont.SetTransparent( sal_True );
+    aFont.SetTransparent( true );
     aFont.SetSize( Size( 0, 360 ) );
     pPrinter->SetFont( aFont );
     pPrinter->SetMapMode( MAP_100TH_MM );
@@ -1145,16 +1137,16 @@ void ModulWindow::DoScroll( ScrollBar* pCurScrollBar )
         // don't scroll with the value but rather use the Thumb-Pos for the VisArea:
         long nDiff = GetEditView()->GetStartDocPos().X() - pCurScrollBar->GetThumbPos();
         GetEditView()->Scroll( nDiff, 0 );
-        GetEditView()->ShowCursor( sal_False, sal_True );
+        GetEditView()->ShowCursor( false, true );
         pCurScrollBar->SetThumbPos( GetEditView()->GetStartDocPos().X() );
 
     }
 }
 
 
-sal_Bool ModulWindow::IsModified()
+bool ModulWindow::IsModified()
 {
-    return GetEditEngine() ? GetEditEngine()->IsModified() : sal_False;
+    return GetEditEngine() && GetEditEngine()->IsModified();
 }
 
 
@@ -1231,7 +1223,7 @@ sal_uInt16 ModulWindow::StartSearchAndReplace( const SvxSearchItem& rSearchItem,
             pView->SetSelection( TextSelection( TextPaM( 0xFFFFFFFF, 0xFFFF ), TextPaM( 0xFFFFFFFF, 0xFFFF ) ) );
     }
 
-    sal_Bool bForward = !rSearchItem.GetBackward();
+    bool const bForward = !rSearchItem.GetBackward();
     sal_uInt16 nFound = 0;
     if ( ( rSearchItem.GetCommand() == SVX_SEARCHCMD_FIND ) ||
          ( rSearchItem.GetCommand() == SVX_SEARCHCMD_FIND_ALL ) )
@@ -1243,7 +1235,7 @@ sal_uInt16 ModulWindow::StartSearchAndReplace( const SvxSearchItem& rSearchItem,
     {
         if ( !IsReadOnly() )
         {
-            sal_Bool bAll = rSearchItem.GetCommand() == SVX_SEARCHCMD_REPLACE_ALL;
+            bool const bAll = rSearchItem.GetCommand() == SVX_SEARCHCMD_REPLACE_ALL;
             nFound = pView->Replace( rSearchItem.GetSearchOptions() , bAll , bForward );
         }
     }
@@ -1346,20 +1338,15 @@ BasicEntryDescriptor ModulWindow::CreateEntryDescriptor()
     return BasicEntryDescriptor( aDocument, eLocation, aLibName, aLibSubName, aModName, OBJ_TYPE_MODULE );
 }
 
-void ModulWindow::SetReadOnly( sal_Bool b )
+void ModulWindow::SetReadOnly (bool b)
 {
     if ( GetEditView() )
         GetEditView()->SetReadOnly( b );
 }
 
-sal_Bool ModulWindow::IsReadOnly()
+bool ModulWindow::IsReadOnly()
 {
-    sal_Bool bReadOnly = sal_False;
-
-    if ( GetEditView() )
-        bReadOnly = GetEditView()->IsReadOnly();
-
-    return bReadOnly;
+    return GetEditView() && GetEditView()->IsReadOnly();
 }
 
 void ModulWindow::SetLineNumberDisplay(bool b)
@@ -1372,9 +1359,9 @@ void ModulWindow::SetObjectCatalogDisplay(bool b)
     aXEditorWindow.SetObjectCatalogDisplay(b);
 }
 
-sal_Bool ModulWindow::IsPasteAllowed()
+bool ModulWindow::IsPasteAllowed()
 {
-    sal_Bool bPaste = sal_False;
+    bool bPaste = false;
 
     // get clipboard
     Reference< datatransfer::clipboard::XClipboard > xClipboard = GetClipboard();
@@ -1389,9 +1376,7 @@ sal_Bool ModulWindow::IsPasteAllowed()
             datatransfer::DataFlavor aFlavor;
             SotExchange::GetFormatDataFlavor( SOT_FORMAT_STRING, aFlavor );
             if ( xTransf->isDataFlavorSupported( aFlavor ) )
-            {
-                bPaste = sal_True;
-            }
+                bPaste = true;
         }
     }
 

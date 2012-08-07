@@ -556,10 +556,10 @@ IMPL_LINK( MacroChooser, BasicSelectHdl, SvTreeListBox *, pBox )
             aMacros.insert( map< sal_uInt16, SbMethod*>::value_type( nStart, pMethod ) );
         }
 
-        aMacroBox.SetUpdateMode( sal_False );
+        aMacroBox.SetUpdateMode(false);
         for ( map< sal_uInt16, SbMethod* >::iterator it = aMacros.begin(); it != aMacros.end(); ++it )
             aMacroBox.InsertEntry( (*it).second->GetName() );
-        aMacroBox.SetUpdateMode( sal_True );
+        aMacroBox.SetUpdateMode(true);
 
         if ( aMacroBox.GetEntryCount() )
         {
@@ -626,7 +626,7 @@ IMPL_LINK( MacroChooser, EditModifyHdl, Edit *, pEdit )
                 SvLBoxEntry* pEntry = aMacroBox.FirstSelected();
                 // if the entry exists ->Select ->Desription...
                 if ( pEntry )
-                    aMacroBox.Select( pEntry, sal_False );
+                    aMacroBox.Select( pEntry, false );
             }
         }
     }
@@ -663,8 +663,7 @@ IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton )
         }
         else if ( nMode == MACROCHOOSER_RECORDING )
         {
-            sal_Bool bValid = BasicIDE::IsValidSbxName( aMacroNameEdit.GetText() );
-            if ( !bValid )
+            if ( !BasicIDE::IsValidSbxName(aMacroNameEdit.GetText()) )
             {
                 ErrorBox( this, WB_OK | WB_DEF_OK, String( IDEResId( RID_STR_BADSBXNAME ) ) ).Execute();
                 aMacroNameEdit.SetSelection( Selection( 0, aMacroNameEdit.GetText().Len() ) );
@@ -740,8 +739,7 @@ IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton )
             }
             else
             {
-                sal_Bool bValid = BasicIDE::IsValidSbxName( aMacroNameEdit.GetText() );
-                if ( !bValid )
+                if ( !BasicIDE::IsValidSbxName(aMacroNameEdit.GetText()) )
                 {
                     ErrorBox( this, WB_OK | WB_DEF_OK, String( IDEResId( RID_STR_BADSBXNAME ) ) ).Execute();
                     aMacroNameEdit.SetSelection( Selection( 0, aMacroNameEdit.GetText().Len() ) );

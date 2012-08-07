@@ -60,7 +60,7 @@ namespace {
         sal_Int32 nStartPos = 0;
         const Locale aLocale = Application::GetSettings().GetUILocale();
         Boundary aBoundary = xBreakIter->getWordBoundary(
-            rText, nStartPos, aLocale, WordType::ANYWORD_IGNOREWHITESPACES, sal_True );
+            rText, nStartPos, aLocale, WordType::ANYWORD_IGNOREWHITESPACES, true );
 
         while ( aBoundary.startPos != aBoundary.endPos )
         {
@@ -120,7 +120,7 @@ void ManageLanguageDialog::Init()
     m_aMakeDefPB.SetClickHdl( LINK( this, ManageLanguageDialog, MakeDefHdl ) );
     m_aLanguageLB.SetSelectHdl( LINK( this, ManageLanguageDialog, SelectHdl ) );
 
-    m_aLanguageLB.EnableMultiSelection( sal_True );
+    m_aLanguageLB.EnableMultiSelection( true );
     CalcInfoSize();
 }
 
@@ -317,7 +317,7 @@ SetDefaultLanguageDialog::~SetDefaultLanguageDialog()
 void SetDefaultLanguageDialog::FillLanguageBox()
 {
     // fill list with all languages
-    m_pLanguageLB->SetLanguageList( LANG_LIST_ALL, sal_False );
+    m_pLanguageLB->SetLanguageList( LANG_LIST_ALL, false );
     // remove the already localized languages
     Sequence< Locale > aLocaleSeq = m_pLocalizationMgr->getStringResourceManager()->getLocales();
     const Locale* pLocale = aLocaleSeq.getConstArray();

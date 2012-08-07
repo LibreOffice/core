@@ -843,7 +843,7 @@ void LocalizationMgr::setControlResourceIDsForNewEditorObject( DlgEditor* pEdito
     if ( !aDocument.isValid() )
         return;
     const String& rLibName = pDlgWin->GetLibName();
-    Reference< container::XNameContainer > xDialogLib( aDocument.getLibrary( E_DIALOGS, rLibName, sal_True ) );
+    Reference< container::XNameContainer > xDialogLib( aDocument.getLibrary( E_DIALOGS, rLibName, true ) );
     Reference< XStringResourceManager > xStringResourceManager =
         LocalizationMgr::getStringResourceFromDialogLibrary( xDialogLib );
 
@@ -873,7 +873,7 @@ void LocalizationMgr::renameControlResourceIDsForEditorObject( DlgEditor* pEdito
     if ( !aDocument.isValid() )
         return;
     const String& rLibName = pDlgWin->GetLibName();
-    Reference< container::XNameContainer > xDialogLib( aDocument.getLibrary( E_DIALOGS, rLibName, sal_True ) );
+    Reference< container::XNameContainer > xDialogLib( aDocument.getLibrary( E_DIALOGS, rLibName, true ) );
     Reference< XStringResourceManager > xStringResourceManager =
         LocalizationMgr::getStringResourceFromDialogLibrary( xDialogLib );
 
@@ -901,7 +901,7 @@ void LocalizationMgr::deleteControlResourceIDsForDeletedEditorObject( DlgEditor*
     if ( !aDocument.isValid() )
         return;
     const String& rLibName = pDlgWin->GetLibName();
-    Reference< container::XNameContainer > xDialogLib( aDocument.getLibrary( E_DIALOGS, rLibName, sal_True ) );
+    Reference< container::XNameContainer > xDialogLib( aDocument.getLibrary( E_DIALOGS, rLibName, true ) );
     Reference< XStringResourceManager > xStringResourceManager =
         LocalizationMgr::getStringResourceFromDialogLibrary( xDialogLib );
 
@@ -921,7 +921,7 @@ void LocalizationMgr::setStringResourceAtDialog( const ScriptDocument& rDocument
     static ::rtl::OUString aResourceResolverPropName( RTL_CONSTASCII_USTRINGPARAM( "ResourceResolver" ));
 
     // Get library
-    Reference< container::XNameContainer > xDialogLib( rDocument.getLibrary( E_DIALOGS, aLibName, sal_True ) );
+    Reference< container::XNameContainer > xDialogLib( rDocument.getLibrary( E_DIALOGS, aLibName, true ) );
     Reference< XStringResourceManager > xStringResourceManager =
         LocalizationMgr::getStringResourceFromDialogLibrary( xDialogLib );
 
@@ -951,7 +951,7 @@ void LocalizationMgr::renameStringResourceIDs( const ScriptDocument& rDocument, 
     const ::rtl::OUString& aDlgName, Reference< container::XNameContainer > xDialogModel )
 {
     // Get library
-    Reference< container::XNameContainer > xDialogLib( rDocument.getLibrary( E_DIALOGS, aLibName, sal_True ) );
+    Reference< container::XNameContainer > xDialogLib( rDocument.getLibrary( E_DIALOGS, aLibName, true ) );
     Reference< XStringResourceManager > xStringResourceManager =
         LocalizationMgr::getStringResourceFromDialogLibrary( xDialogLib );
     if( !xStringResourceManager.is() )
@@ -982,7 +982,7 @@ void LocalizationMgr::removeResourceForDialog( const ScriptDocument& rDocument, 
     const ::rtl::OUString& aDlgName, Reference< container::XNameContainer > xDialogModel )
 {
     // Get library
-    Reference< container::XNameContainer > xDialogLib( rDocument.getLibrary( E_DIALOGS, aLibName, sal_True ) );
+    Reference< container::XNameContainer > xDialogLib( rDocument.getLibrary( E_DIALOGS, aLibName, true ) );
     Reference< XStringResourceManager > xStringResourceManager =
         LocalizationMgr::getStringResourceFromDialogLibrary( xDialogLib );
     if( !xStringResourceManager.is() )
@@ -1076,7 +1076,7 @@ void LocalizationMgr::copyResourcesForPastedEditorObject( DlgEditor* pEditor,
     if ( !aDocument.isValid() )
         return;
     const String& rLibName = pDlgWin->GetLibName();
-    Reference< container::XNameContainer > xDialogLib( aDocument.getLibrary( E_DIALOGS, rLibName, sal_True ) );
+    Reference< container::XNameContainer > xDialogLib( aDocument.getLibrary( E_DIALOGS, rLibName, true ) );
     Reference< XStringResourceManager > xStringResourceManager =
         LocalizationMgr::getStringResourceFromDialogLibrary( xDialogLib );
 

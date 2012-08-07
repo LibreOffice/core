@@ -39,10 +39,10 @@ public:
     DlgEdFunc( DlgEditor* pParent );
     virtual ~DlgEdFunc();
 
-    virtual sal_Bool MouseButtonDown( const MouseEvent& rMEvt );
-    virtual sal_Bool MouseButtonUp( const MouseEvent& rMEvt );
-    virtual sal_Bool MouseMove( const MouseEvent& rMEvt );
-    virtual sal_Bool KeyInput( const KeyEvent& rKEvt );
+    virtual bool MouseButtonDown( const MouseEvent& rMEvt );
+    virtual bool MouseButtonUp( const MouseEvent& rMEvt );
+    virtual bool MouseMove( const MouseEvent& rMEvt );
+    virtual bool KeyInput( const KeyEvent& rKEvt );
 };
 
 //============================================================================
@@ -55,9 +55,9 @@ public:
     DlgEdFuncInsert( DlgEditor* pParent );
     ~DlgEdFuncInsert();
 
-    virtual sal_Bool MouseButtonDown( const MouseEvent& rMEvt );
-    virtual sal_Bool MouseButtonUp( const MouseEvent& rMEvt );
-    virtual sal_Bool MouseMove( const MouseEvent& rMEvt );
+    virtual bool MouseButtonDown( const MouseEvent& rMEvt );
+    virtual bool MouseButtonUp( const MouseEvent& rMEvt );
+    virtual bool MouseMove( const MouseEvent& rMEvt );
 };
 
 //============================================================================
@@ -73,9 +73,9 @@ public:
     DlgEdFuncSelect( DlgEditor* pParent );
     ~DlgEdFuncSelect();
 
-    virtual sal_Bool MouseButtonDown( const MouseEvent& rMEvt );
-    virtual sal_Bool MouseButtonUp( const MouseEvent& rMEvt );
-    virtual sal_Bool MouseMove( const MouseEvent& rMEvt );
+    virtual bool MouseButtonDown( const MouseEvent& rMEvt );
+    virtual bool MouseButtonUp( const MouseEvent& rMEvt );
+    virtual bool MouseMove( const MouseEvent& rMEvt );
 };
 
 

@@ -42,7 +42,7 @@ DlgEdFactory::~DlgEdFactory()
 
 IMPL_LINK( DlgEdFactory, MakeObject, SdrObjFactory *, pObjFactory )
 {
-    static sal_Bool bNeedsInit = sal_True;
+    static bool bNeedsInit = true;
     static uno::Reference< lang::XMultiServiceFactory > xDialogSFact;
 
     if( bNeedsInit )
@@ -54,7 +54,7 @@ IMPL_LINK( DlgEdFactory, MakeObject, SdrObjFactory *, pObjFactory )
             uno::Reference< lang::XMultiServiceFactory > xModFact( xC, uno::UNO_QUERY );
             xDialogSFact = xModFact;
         }
-        bNeedsInit = sal_False;
+        bNeedsInit = false;
     }
 
     if( (pObjFactory->nInventor == DlgInventor) &&
@@ -111,7 +111,7 @@ IMPL_LINK( DlgEdFactory, MakeObject, SdrObjFactory *, pObjFactory )
                     uno::Reference< beans::XPropertySet >  xPSet(pNew->GetUnoControlModel(), uno::UNO_QUERY);
                     if (xPSet.is())
                     {
-                        sal_Bool bB = sal_True;
+                        sal_Bool bB = true;
                         xPSet->setPropertyValue( DLGED_PROP_DROPDOWN, uno::Any(&bB,::getBooleanCppuType()));
                     }
                  }
