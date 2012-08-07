@@ -358,7 +358,8 @@ void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, ::oo
     aFillProperties.pushToPropMap( aPropMap, rFilterBase.getGraphicHelper() );
     PropertySet( xPropSet ).setProperties( aPropMap );
 
-    getTextBody()->insertAt( rFilterBase, xText, xAt, aTextStyleProps, pMasterTextListStyle );
+    if( getTextBody() )
+        getTextBody()->insertAt( rFilterBase, xText, xAt, aTextStyleProps, pMasterTextListStyle );
 }
 
 } } }
