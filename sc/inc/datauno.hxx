@@ -494,7 +494,7 @@ public:
 };
 
 
-class ScDatabaseRangeObj : public cppu::WeakImplHelper6<
+class SC_DLLPUBLIC ScDatabaseRangeObj : public cppu::WeakImplHelper6<
                                 com::sun::star::sheet::XDatabaseRange,
                                 com::sun::star::util::XRefreshable,
                                 com::sun::star::container::XNamed,

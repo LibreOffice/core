@@ -76,6 +76,10 @@
 #include "rangenam.hxx"
 #include "tokenarray.hxx"
 #include "tokenuno.hxx"
+#include "convuno.hxx"
+#include "dbdata.hxx"
+#include "datauno.hxx"
+#include "globalnames.hxx"
 
 #include "formulabuffer.hxx"
 namespace oox {
@@ -464,12 +468,20 @@ Reference< XDatabaseRange > WorkbookGlobals::createUnnamedDatabaseRangeObject( c
 
     // create database range and insert it into the Calc document
     Reference< XDatabaseRange > xDatabaseRange;
-    PropertySet aDocProps( mxDoc );
-    Reference< XUnnamedDatabaseRanges > xDatabaseRanges( aDocProps.getAnyProperty( PROP_UnnamedDatabaseRanges ), UNO_QUERY_THROW );
     if( bValidRange ) try
     {
-        xDatabaseRanges->setByTable( aDestRange );
-        xDatabaseRange.set( xDatabaseRanges->getByTable( aDestRange.Sheet ), UNO_QUERY );
+        ScDocument& rDoc =  getScDocument();
+        if( rDoc.GetTableCount() <= aDestRange.Sheet )
+            throw ::com::sun::star::lang::IndexOutOfBoundsException();
+        ScRange aScRange;
+        ScUnoConversion::FillScRange(aScRange, aDestRange);
+        ScDBData* pNewDBData = new ScDBData( STR_DB_LOCAL_NONAME, aScRange.aStart.Tab(),
+                                       aScRange.aStart.Col(), aScRange.aStart.Row(),
+                                       aScRange.aEnd.Col(), aScRange.aEnd.Row() );
+        rDoc.SetAnonymousDBData( aScRange.aStart.Tab() , pNewDBData );
+        ScDocShell* pDocSh = static_cast< ScDocShell* >(rDoc.GetDocumentShell());
+        ScDatabaseRangeObj* pDBRangeObj = new ScDatabaseRangeObj( pDocSh, aScRange.aStart.Tab() );
+        xDatabaseRange.set( pDBRangeObj );
     }
     catch( Exception& )
     {
