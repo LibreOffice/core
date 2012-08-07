@@ -122,7 +122,8 @@ SdrTextObj::SdrTextObj(const Rectangle& rNewRect)
     aRect(rNewRect),
     mpText(NULL),
     pEdtOutl(NULL),
-    pFormTextBoundRect(NULL)
+    pFormTextBoundRect(NULL),
+    eTextKind(OBJ_TEXT)
 {
     bTextSizeDirty=sal_False;
     bTextFrame=sal_False;
