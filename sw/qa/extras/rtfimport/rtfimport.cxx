@@ -380,7 +380,7 @@ void Test::testFdo43965()
     uno::Reference<beans::XPropertySet> xPropertySet(xRangeEnum->nextElement(), uno::UNO_QUERY);
     sal_Int32 nValue;
     xPropertySet->getPropertyValue("CharEscapement") >>= nValue;
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(58), nValue);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(36), nValue);
     xPropertySet->getPropertyValue("CharEscapementHeight") >>= nValue;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(100), nValue);
 
