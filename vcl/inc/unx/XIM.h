@@ -22,11 +22,6 @@
 #include <X11/Xlib.h>
 #include <X11/Xresource.h>
 
-#ifdef __cplusplus
-extern "C"
-#endif
-XIM XvaOpenIM( Display*, XrmDatabase, char*, char*, ... );
-
 extern Status XCloseIM(XIM);
 
 #ifndef XIMCallback1
@@ -110,21 +105,9 @@ typedef struct  _XIMSwitchIMNotifyCallbackStruct {
   XIMUnicodeCharacterSubset *to;
 } XIMSwitchIMNotifyCallbackStruct;
 
-/* XIM attributes for multilingual IM extension */
-#define XNMultiLingualInput "multiLingualInput"
-#define XNQueryUnicodeCharacterSubset "unicodeCharacterSubset"
-
 /* XIC attributes for multilingual IM extension */
 
 #define XNUnicodeCharacterSubset "UnicodeChararcterSubset"
-
-#define XNSwitchIMNotifyCallback "switchIMNotifyCallback"
-#define XNCommitStringCallback "commitStringCallback"
-#define XNForwardEventCallback "forwardEventCallback"
-
-#define XNLookupStartCallback "lookupStartCallback"
-#define XNLookupDrawCallback "lookupDrawCallback"
-#define XNLookupDoneCallback "lookupDoneCallback"
 
 #endif
 
