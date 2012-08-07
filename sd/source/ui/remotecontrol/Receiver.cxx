@@ -17,9 +17,7 @@
 
 #include <comphelper/processfactory.hxx>
 #include <osl/file.hxx>
-#include <xmlsec/base64.h>
 #include <rtl/ustrbuf.hxx>
-#include <sax/tools/converter.hxx>
 #include <rtl/strbuf.hxx>
 
 using namespace sd;
