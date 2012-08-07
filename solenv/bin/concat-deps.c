@@ -720,7 +720,8 @@ char* token;
     token = strtok(line," ");
     while(token != NULL)
     {
-        if(*token == ':' || *token == '\\' || *token == '/' || *token == '$')
+        if(*token == ':' || *token == '\\' || *token == '/' || *token == '$'
+            || ':' == token[1])
         {
             fputs(token, stdout);
         }
