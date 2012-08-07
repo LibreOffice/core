@@ -26,14 +26,18 @@ Collaboration::~Collaboration()
         mpConference->close();
 }
 
-TeleConference* Collaboration::GetConference() const
-{
-    return mpConference;
-}
-
 sal_uInt64 Collaboration::GetId() const
 {
     return reinterpret_cast<sal_uInt64> (this);
+}
+
+void Collaboration::Invite( TpContact* pContact ) const
+{
+    if (mpConference)
+    {
+        mpConference->invite( pContact );
+        SaveAndSendFile( pContact );
+    }
 }
 
 void Collaboration::SendFile( TpContact* pContact, const OUString& rURL ) const

@@ -32,8 +32,8 @@ public:
     virtual void SaveAndSendFile( TpContact* pContact ) const = 0;
     virtual void StartCollaboration( TeleConference* pConference ) = 0;
 
-    TUBES_DLLPRIVATE TeleConference* GetConference() const;
     TUBES_DLLPRIVATE sal_uInt64 GetId() const;
+    TUBES_DLLPRIVATE void Invite( TpContact* pContact ) const;
 
     void DisplayContacts();
     void SendFile( TpContact* pContact, const OUString& rURL ) const;

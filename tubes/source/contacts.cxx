@@ -84,12 +84,7 @@ class TubeContacts : public ModelessDialog
             pAC = static_cast<AccountContactPair*> (maList.FirstSelected()->GetUserData());
         if (pAC)
         {
-            if (mpCollaboration->GetConference())
-            {
-                TpContact* pContact = pAC->second;
-                mpCollaboration->GetConference()->invite( pContact );
-                mpCollaboration->SaveAndSendFile( pContact );
-            }
+            mpCollaboration->Invite( pAC->second );
         }
     }
 
