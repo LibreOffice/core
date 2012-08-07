@@ -163,7 +163,7 @@ protected:
     }
 
     // Get paragraph (counted from 1), optionally check it contains the given text.
-    uno::Reference< text::XTextRange > getParagraph( int number, rtl::OUString content = OUString() ) const
+    uno::Reference< text::XTextRange > getParagraph( int number, OUString content = OUString() ) const
     {
         uno::Reference<text::XTextDocument> textDocument(mxComponent, uno::UNO_QUERY);
         uno::Reference<container::XEnumerationAccess> paraEnumAccess(textDocument->getText(), uno::UNO_QUERY);
@@ -178,14 +178,16 @@ protected:
         return paragraph;
     }
 
-    /// Get run (counted from 1) of a paragraph.
-    uno::Reference<text::XTextRange> getRun(uno::Reference<text::XTextRange> xParagraph, int number) const
+    /// Get run (counted from 1) of a paragraph, optionally check it contains the given text.
+    uno::Reference<text::XTextRange> getRun(uno::Reference<text::XTextRange> xParagraph, int number, OUString content = OUString()) const
     {
         uno::Reference<container::XEnumerationAccess> xRunEnumAccess(xParagraph, uno::UNO_QUERY);
         uno::Reference<container::XEnumeration> xRunEnum = xRunEnumAccess->createEnumeration();
         for (int i = 1; i < number; ++i)
             xRunEnum->nextElement();
         uno::Reference<text::XTextRange> xRun(xRunEnum->nextElement(), uno::UNO_QUERY);
+        if( !content.isEmpty())
+            CPPUNIT_ASSERT_EQUAL( content, xRun->getString());
         return xRun;
     }
 
