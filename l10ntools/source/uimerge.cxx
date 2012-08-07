@@ -118,33 +118,8 @@ void GetOutputFile( int argc, char* argv[])
     }
 }
 
-SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
+int extractTranslations()
 {
-    int nRetValue = 0;
-    xsltStylesheetPtr stylesheet = 0;
-
-    GetOutputFile( argc, argv );
-
-    if (sOutputFile.isEmpty())
-    {
-        fprintf( stdout, "Syntax: UIEX[-p Prj][-r PrjRoot]-i FileIn [-o FileOut][-m DataBase][-e][-L l1,l2,...]\n" );
-        fprintf( stdout, " Prj:      Project\n" );
-        fprintf( stdout, " PrjRoot:  Path to project root (..\\.. etc.)\n" );
-        fprintf( stdout, " FileIn:   Source files (*.src)\n" );
-        fprintf( stdout, " FileOut:  Destination file (*.*)\n" );
-        fprintf( stdout, " DataBase: Mergedata (*.sdf)\n" );
-        fprintf( stdout, " -e: Disable writing errorlog\n" );
-        fprintf( stdout, " -b: Break when Token \"HelpText\" found in source\n" );
-        fprintf( stdout, " -L: Restrict the handled languages. l1,l2,... are elements of (de,en-US,es...)\n" );
-        return 1;
-    }
-
-    if (Export::sLanguages != "en-US")
-    {
-        fprintf(stderr, "can only extract en-US\n");
-        return 1;
-    }
-
     FILE *pOutFile = fopen(sOutputFile.getStr(), "w");
     if (!pOutFile)
     {
@@ -156,7 +131,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 
     rtl::OString sStyleSheet = rtl::OString(getenv("SRC_ROOT"))  + rtl::OString("/solenv/bin/uilangfilter.xslt");
 
-    stylesheet = xsltParseStylesheetFile ((const xmlChar *)sStyleSheet.getStr());
+    xsltStylesheetPtr stylesheet = xsltParseStylesheetFile ((const xmlChar *)sStyleSheet.getStr());
 
     xmlDocPtr doc = xmlParseFile(sInputFileName.getStr());
 
@@ -187,6 +162,97 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     xsltFreeStylesheet(stylesheet);
 
     fclose(pOutFile);
+
+    return 0;
+}
+
+
+bool Merge(
+    const rtl::OString &rSDFFile,
+    const rtl::OString &rSourceFile,
+    const rtl::OString &rDestinationFile)
+{
+    Export::InitLanguages( true );
+    std::ofstream aDestination(
+        rDestinationFile.getStr(), std::ios_base::out | std::ios_base::trunc);
+    if (!aDestination.is_open()) {
+        return false;
+    }
+
+    aDestination << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+    aDestination << "<t>\n";
+
+    MergeDataFile aMergeDataFile( rSDFFile, rSourceFile, sal_False );
+    rtl::OString sTmp( Export::sLanguages );
+    if( sTmp.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("ALL")) )
+        Export::SetLanguages( aMergeDataFile.GetLanguages() );
+
+    std::vector<rtl::OString> aLanguages = Export::GetLanguages();
+
+    const MergeDataHashMap& rMap = aMergeDataFile.getMap();
+
+    for(size_t n = 0; n < aLanguages.size(); ++n)
+    {
+        rtl::OString sCur = aLanguages[ n ];
+        if (sCur.isEmpty() || sCur.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("en-US")))
+            continue;
+        for (MergeDataHashMap::const_iterator aI = rMap.begin(), aEnd = rMap.end(); aI != aEnd; ++aI)
+        {
+            if (aI->second->sGID.isEmpty())
+                continue;
+
+            PFormEntrys* pFoo = aI->second->GetPFormEntries();
+            rtl::OString sOut;
+            pFoo->GetText( sOut, STRING_TYP_TEXT, sCur);
+
+            if (sOut.isEmpty())
+                continue;
+
+            aDestination << " <e "
+                << "g=\"" << aI->second->sGID.getStr() << "\" "
+                << "i=\"" << aI->second->sLID.getStr() << "\">"
+                << sOut.getStr() << "</e>\n";
+        }
+    }
+
+    aDestination << "</t>";
+    aDestination.close();
+    return sal_True;
+}
+
+SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
+{
+    int nRetValue = 0;
+
+    GetOutputFile( argc, argv );
+
+    if (sOutputFile.isEmpty())
+    {
+        fprintf( stdout, "Syntax: UIEX[-p Prj][-r PrjRoot]-i FileIn [-o FileOut][-m DataBase][-e][-L l1,l2,...]\n" );
+        fprintf( stdout, " Prj:      Project\n" );
+        fprintf( stdout, " PrjRoot:  Path to project root (..\\.. etc.)\n" );
+        fprintf( stdout, " FileIn:   Source files (*.src)\n" );
+        fprintf( stdout, " FileOut:  Destination file (*.*)\n" );
+        fprintf( stdout, " DataBase: Mergedata (*.sdf)\n" );
+        fprintf( stdout, " -e: Disable writing errorlog\n" );
+        fprintf( stdout, " -L: Restrict the handled languages. l1,l2,... are elements of (de,en-US,es...)\n" );
+        return 1;
+    }
+
+    if (!bMergeMode)
+    {
+        if (Export::sLanguages != "en-US")
+        {
+            fprintf(stderr, "only en-US can exist in source .ui files\n");
+            nRetValue = 1;
+        }
+        else
+            nRetValue = extractTranslations();
+    }
+    else
+    {
+        Merge(sMergeSrc, sInputFileName, sOutputFile);
+    }
 
     return nRetValue;
 }

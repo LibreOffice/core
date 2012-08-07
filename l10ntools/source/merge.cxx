@@ -190,7 +190,7 @@ MergeDataFile::~MergeDataFile()
         delete aI->second;
 }
 
-std::vector<rtl::OString> MergeDataFile::GetLanguages()
+std::vector<rtl::OString> MergeDataFile::GetLanguages() const
 {
     return std::vector<rtl::OString>(aLanguageSet.begin(),aLanguageSet.end());
 }
