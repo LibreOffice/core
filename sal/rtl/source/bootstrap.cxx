@@ -794,68 +794,67 @@ rtl::OUString expandMacros(
                 for (int j = 0; j < n; ++j) {
                     seg[j] = expandMacros(file, seg[j], mode, requestStack);
                 }
-                if (n == 3 && seg[1].isEmpty()) {
-                    // For backward compatibility, treat ${file::key} the same
-                    // as just ${file:key}:
-                    seg[1] = seg[2];
-                    n = 2;
-                }
                 if (n == 1) {
                     buf.append(lookup(file, mode, false, seg[0], requestStack));
-                } else if (n == 2) {
-                    if ( seg[0] == ".link" )
+                } else if (n == 2 && seg[0] == ".link") {
+                    osl::File f(seg[1]);
+                    rtl::ByteSequence seq;
+                    rtl::OUString line;
+                    rtl::OUString url;
+                    // Silently ignore any errors (is that good?):
+                    if ((f.open(osl_File_OpenFlag_Read) ==
+                         osl::FileBase::E_None) &&
+                        f.readLine(seq) == osl::FileBase::E_None &&
+                        rtl_convertStringToUString(
+                            &line.pData,
+                            reinterpret_cast< char const * >(
+                                seq.getConstArray()),
+                            seq.getLength(), RTL_TEXTENCODING_UTF8,
+                            (RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR |
+                             RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR |
+                             RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR)) &&
+                        (osl::File::getFileURLFromSystemPath(line, url) ==
+                         osl::FileBase::E_None))
                     {
-                        osl::File f(seg[1]);
-                        rtl::ByteSequence seq;
-                        rtl::OUString line;
-                        rtl::OUString url;
-                        // Silently ignore any errors (is that good?):
-                        if (f.open(osl_File_OpenFlag_Read) == osl::FileBase::E_None &&
-                            f.readLine(seq) == osl::FileBase::E_None &&
-                            rtl_convertStringToUString(
-                                &line.pData,
-                                reinterpret_cast< char const * >(
-                                    seq.getConstArray()),
-                                seq.getLength(), RTL_TEXTENCODING_UTF8,
-                                (RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR |
-                                 RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR |
-                                 RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR)) &&
-                            (osl::File::getFileURLFromSystemPath(line, url) ==
-                             osl::FileBase::E_None))
-                        {
-                            try {
-                                buf.append(
-                                    rtl::Uri::convertRelToAbs(seg[1], url));
-                            } catch (const rtl::MalformedUriException &) {}
-                        }
-                    } else {
-                        buf.append(
-                            lookup(
-                                static_cast< Bootstrap_Impl * >(
-                                    rtl::Bootstrap(seg[0]).getHandle()),
-                                mode, false, seg[1], requestStack));
+                        try {
+                            buf.append(
+                                rtl::Uri::convertRelToAbs(seg[1], url));
+                        } catch (const rtl::MalformedUriException &) {}
                     }
-                } else if ( seg[0] == ".override" )
-                {
+                } else if (n == 3 && seg[0] == ".override") {
                     rtl::Bootstrap b(seg[1]);
                     Bootstrap_Impl * f = static_cast< Bootstrap_Impl * >(
                         b.getHandle());
                     buf.append(
                         lookup(f, mode, f != NULL, seg[2], requestStack));
                 } else {
-                    // Going through osl::Profile, this code erroneously does
-                    // not recursively expand macros in the resulting
-                    // replacement text (and if it did, it would fail to detect
-                    // cycles that pass through here):
-                    buf.append(
-                        rtl::OStringToOUString(
-                            osl::Profile(seg[0]).readString(
-                                rtl::OUStringToOString(
-                                    seg[1], RTL_TEXTENCODING_UTF8),
-                                rtl::OUStringToOString(
-                                    seg[2], RTL_TEXTENCODING_UTF8),
-                                rtl::OString()),
-                            RTL_TEXTENCODING_UTF8));
+                    if (n == 3 && seg[1].isEmpty()) {
+                        // For backward compatibility, treat ${file::key} the
+                        // same as just ${file:key}:
+                        seg[1] = seg[2];
+                        n = 2;
+                    }
+                    if (n == 2) {
+                        buf.append(
+                            lookup(
+                                static_cast< Bootstrap_Impl * >(
+                                    rtl::Bootstrap(seg[0]).getHandle()),
+                                mode, false, seg[1], requestStack));
+                    } else {
+                        // Going through osl::Profile, this code erroneously
+                        // does not recursively expand macros in the resulting
+                        // replacement text (and if it did, it would fail to
+                        // detect cycles that pass through here):
+                        buf.append(
+                            rtl::OStringToOUString(
+                                osl::Profile(seg[0]).readString(
+                                    rtl::OUStringToOString(
+                                        seg[1], RTL_TEXTENCODING_UTF8),
+                                    rtl::OUStringToOString(
+                                        seg[2], RTL_TEXTENCODING_UTF8),
+                                    rtl::OString()),
+                                RTL_TEXTENCODING_UTF8));
+                    }
                 }
             } else {
                 rtl::OUStringBuffer kbuf;
