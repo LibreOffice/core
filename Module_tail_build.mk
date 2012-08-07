@@ -46,6 +46,9 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
     cui \
     dbaccess \
     desktop \
+	$(if $(filter DICTIONARIES,$(BUILD_TYPE)),\
+		dictionaries \
+	) \
     dtrans \
     drawinglayer \
     editeng \
