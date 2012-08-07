@@ -144,7 +144,7 @@ MergeDataFile::MergeDataFile(
     std::ifstream aInputStream(rFileName.getStr());
     const ::rtl::OString sHACK(RTL_CONSTASCII_STRINGPARAM("HACK"));
     const ::rtl::OString sFileNormalized(lcl_NormalizeFilename(rFile));
-    const bool isFileEmpty = !sFileNormalized.isEmpty();
+    const bool isFileEmpty = sFileNormalized.isEmpty();
 
     if (!aInputStream.is_open())
     {
@@ -160,7 +160,7 @@ MergeDataFile::MergeDataFile(
         sal_Int32 n = 0;
         // Skip all wrong filenames
         const ::rtl::OString filename = lcl_NormalizeFilename(sLine.getToken(1, '\t', n)); // token 1
-        if(isFileEmpty || sFileNormalized.equals("") || (!isFileEmpty && filename.equals(sFileNormalized)) )
+        if (isFileEmpty || (!isFileEmpty && filename.equals(sFileNormalized)) )
         {
             const rtl::OString sTYP = sLine.getToken( 1, '\t', n ); // token 3
             const rtl::OString sGID = sLine.getToken( 0, '\t', n ); // token 4
