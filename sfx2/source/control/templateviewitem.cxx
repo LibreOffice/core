@@ -19,6 +19,8 @@
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <vcl/button.hxx>
 
+#define SUBTITLE_SCALE_FACTOR 0.85
+
 using namespace basegfx;
 using namespace basegfx::tools;
 using namespace drawinglayer::attribute;
@@ -52,7 +54,8 @@ void TemplateViewItem::calculateItemsPosition(sal_uInt32 nMaxTextLength)
 
         // Set subtitle position
         maSubTitlePos.setY(maTextPos.getY() + nSpace);
-        maSubTitlePos.setX(maDrawArea.Left() + (aRectSize.Width() - aTextDev.getTextWidth(maSubTitle,0,nMaxTextLength))/2);
+        maSubTitlePos.setX(maDrawArea.Left() +
+                           (aRectSize.Width() - aTextDev.getTextWidth(maSubTitle,0,nMaxTextLength)*SUBTITLE_SCALE_FACTOR)/2);
     }
 }
 
@@ -101,7 +104,7 @@ void TemplateViewItem::Paint(drawinglayer::processor2d::BaseProcessor2D *pProces
     if (!maSubTitle.isEmpty())
     {
         basegfx::B2DHomMatrix aSubTitleMatrix( createScaleTranslateB2DHomMatrix(
-                    pAttrs->aFontSize.getX(), pAttrs->aFontSize.getY(),
+                    pAttrs->aFontSize.getX()*SUBTITLE_SCALE_FACTOR, pAttrs->aFontSize.getY()*SUBTITLE_SCALE_FACTOR,
                     double( maSubTitlePos.X() ), double( maSubTitlePos.Y() ) ) );
 
         aSeq[3] = Primitive2DReference(
