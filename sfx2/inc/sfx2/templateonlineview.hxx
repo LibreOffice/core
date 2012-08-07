@@ -46,6 +46,10 @@ public:
 
 private:
 
+    DECL_LINK(ChangeNameHdl, TemplateView*);
+
+private:
+
     bool mbIsSynced;
     std::vector<TemplateOnlineViewItem*> maRepositories;
     com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment > m_xCmdEnv;

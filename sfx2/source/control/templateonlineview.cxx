@@ -56,6 +56,7 @@ TemplateOnlineView::TemplateOnlineView (Window *pParent, WinBits nWinStyle, bool
     , mbIsSynced(true)
 {
     mpItemView->SetColor(Color(COL_WHITE));
+    mpItemView->setChangeNameHdl(LINK(this,TemplateOnlineView,ChangeNameHdl));
 
     Reference< XMultiServiceFactory > xFactory = comphelper::getProcessServiceFactory();
     Reference< XInteractionHandler >  xGlobalInteractionHandler = Reference< XInteractionHandler >(
@@ -290,6 +291,25 @@ void TemplateOnlineView::setItemDimensions(long ItemWidth, long ThumbnailHeight,
     ThumbnailView::setItemDimensions(ItemWidth,ThumbnailHeight,DisplayHeight,itemPadding);
 
     mpItemView->setItemDimensions(ItemWidth,ThumbnailHeight,DisplayHeight,itemPadding);
+}
+
+IMPL_LINK (TemplateOnlineView, ChangeNameHdl, TemplateView*, pView)
+{
+    bool bRet = true;
+    mbIsSynced = false;
+
+    // check if there isnt another repository with the same name.
+    for (size_t i = 0, n = maRepositories.size(); i < n; ++i)
+    {
+        if (maRepositories[i]->maTitle == pView->getName())
+        {
+            bRet = false;
+            mbIsSynced = true;
+            break;
+        }
+    }
+
+    return bRet;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
