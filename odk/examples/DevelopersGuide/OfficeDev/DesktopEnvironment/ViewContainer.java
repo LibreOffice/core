@@ -50,7 +50,6 @@ import java.util.*;
  * this demo application.
  *
  * @author     Andreas Schl&uuml;ns
- * @created    01.03.2002 08:42
  */
 public class ViewContainer extends Thread
 {

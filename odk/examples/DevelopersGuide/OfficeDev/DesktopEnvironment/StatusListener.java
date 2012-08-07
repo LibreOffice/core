@@ -61,7 +61,6 @@ import java.util.Vector;
  * So we must start threads for updating something internaly.
  *
  * @author     Andreas Schl&uuml;ns
- * @created    15.07.2002 12:36
  */
 class StatusListener implements com.sun.star.frame.XStatusListener,
                                 com.sun.star.frame.XFrameActionListener,

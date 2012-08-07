@@ -30,7 +30,6 @@ import com.sun.star.script.provider.XScriptContext;
  *  Description of the Class
  *
  * @author     Noel Power
- * @created    August 2, 2002
  */
 public class EditorScriptContext implements XScriptContext
 {

@@ -85,8 +85,6 @@ DEFINE_XTYPEPROVIDER_2( DispatchProvider             ,
                     reference to servicemanager to create new services.
     @param      xFrame
                     reference to our owner frame.
-
-    @modified   17.05.2002 10:07, as96863
 */
 DispatchProvider::DispatchProvider( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory  ,
                                     const css::uno::Reference< css::frame::XFrame >&              xFrame    )
@@ -102,8 +100,6 @@ DispatchProvider::DispatchProvider( const css::uno::Reference< css::lang::XMulti
 /**
     @short      protected(!) dtor for deinitializing
     @descr      We made it protected to prevent using of us as base class instead as a member.
-
-    @modified   17.05.2002 10:05, as96863
  */
 DispatchProvider::~DispatchProvider()
 {
@@ -127,7 +123,6 @@ DispatchProvider::~DispatchProvider()
     @return     A reference to a dispatch object for this URL (if someone was found!).
 
     @threadsafe yes
-    @modified   17.05.2002 10:59, as96863
 */
 css::uno::Reference< css::frame::XDispatch > SAL_CALL DispatchProvider::queryDispatch( const css::util::URL&  aURL             ,
                                                                                        const ::rtl::OUString& sTargetFrameName ,
@@ -165,7 +160,6 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL DispatchProvider::queryDis
     @return     A reference a list of dispatch objects for these URLs - may with some <NULL/> values inside.
 
     @threadsafe yes
-    @modified   17.05.2002 09:55, as96863
 */
 css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL DispatchProvider::queryDispatches( const css::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptions ) throw( css::uno::RuntimeException )
 {
@@ -196,7 +190,6 @@ css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL Disp
                 in another way. So we implement different specialized metods for every one.
 
     @threadsafe yes
-    @modified   20.08.2003 08:32, as96863
  */
 css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryDesktopDispatch( const css::uno::Reference< css::frame::XFrame > xDesktop         ,
                                                                                             const css::util::URL&                           aURL             ,
@@ -521,7 +514,6 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryFrame
     @return     A dispatch object if a handler was found and agree with the given URL or <NULL/> otherwhise.
 
     @threadsafe yes
-    @modified   05.09.2002 13:43, as96863
 */
 css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_searchProtocolHandler( const css::util::URL& aURL )
 {
@@ -598,7 +590,6 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_searchProt
     @return     A reference to a dispatch helper.
 
     @threadsafe yes
-    @modified   20.08.2003 10:22, as96863
 */
 css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_getOrCreateDispatchHelper( EDispatchHelper                                  eHelper     ,
                                                                                                  const css::uno::Reference< css::frame::XFrame >& xOwner      ,
@@ -699,7 +690,6 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_getOrCreat
     @return     <TRUE/> if somewhere could handle that - <FALSE/> otherwise.
 
     @threadsafe yes
-    @modified   17.05.2002 09:47, as96863
 */
 sal_Bool DispatchProvider::implts_isLoadableContent( const css::util::URL& aURL )
 {

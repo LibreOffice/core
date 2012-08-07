@@ -128,8 +128,6 @@ typedef BaseHash< ProtocolHandler > HandlerHash;
 
     @devstatus      ready to use
     @threadsafe     yes
-
-    @modified       30.04.2002 11:19, as96863
 */
 
 class HandlerCFGAccess;
@@ -174,8 +172,6 @@ class FWI_DLLPUBLIC HandlerCache
 
     @devstatus      ready to use
     @threadsafe     no
-
-    @modified       30.04.2002 09:58, as96863
 */
 class FWI_DLLPUBLIC HandlerCFGAccess : public ::utl::ConfigItem
 {

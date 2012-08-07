@@ -77,7 +77,6 @@ namespace framework{
 
     @devstatus      ready
     @threadsafe     yes
-    @modified       06.08.2004 08:41, as96863
 *//*-*************************************************************************************************************/
 class PersistentWindowState :   // interfaces
                                 public css::lang::XTypeProvider,

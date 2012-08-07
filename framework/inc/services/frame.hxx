@@ -138,7 +138,6 @@ class WindowCommandDispatch;
 
     @devstatus  ready to use
     @threadsafe yes
-    @modified   04.10.2004 10:47, as96863
 *//*-*************************************************************************************************************/
 class Frame :   // interfaces
                 public  css::lang::XTypeProvider                    ,

@@ -24,7 +24,6 @@ package com.sun.star.script.framework.provider.java;
  * for a particular ScriptDescriptor and Class
  *
  * @author     Tomas O'Connor
- * @created    August 2, 2002
  */
 
 public interface Resolver {

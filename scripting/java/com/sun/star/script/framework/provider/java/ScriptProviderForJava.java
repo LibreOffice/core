@@ -46,7 +46,6 @@ import com.sun.star.script.framework.log.LogUtils;
  *  Description of the Class
  *
  * @author     Noel Power
- * @created    August 2, 2002
  */
 public class ScriptProviderForJava
 {
@@ -54,7 +53,6 @@ public class ScriptProviderForJava
      *  Description of the Class
      *
      * @author     Noel Power
-     * @created    August 2, 2002
      */
     public static class _ScriptProviderForJava extends ScriptProvider
     {

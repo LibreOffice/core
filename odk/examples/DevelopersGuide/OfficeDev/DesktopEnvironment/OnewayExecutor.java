@@ -46,7 +46,6 @@ import java.util.Vector;
  * which method was used and which parameters must be handled.
  *
  * @author     Andreas Schl&uuml;ns
- * @created    17.07.2002 08:18
  */
 class OnewayExecutor extends Thread
 {

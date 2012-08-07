@@ -2306,9 +2306,7 @@ bool SwDoc::RemoveInvisibleContent()
     GetIDocumentUndoRedo().EndUndo( UNDO_UI_DELETE_INVISIBLECNTNT, NULL );
     return bRet;
 }
-/*-- 25.08.2010 14:18:12---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 bool SwDoc::HasInvisibleContent() const
 {
     sal_Bool bRet = sal_False;

@@ -61,7 +61,6 @@ import java.net.*;
  *      (a) getting file names by using a file chosser
  *
  * @author     Andreas Schl&uuml;ns
- * @created    28.02.2002 15:31
  */
 public class FunctionHelper
 {

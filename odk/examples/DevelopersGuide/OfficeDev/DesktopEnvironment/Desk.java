@@ -44,7 +44,6 @@ import java.lang.String;
  * TODO
  *
  * @author     Andreas Schl&uuml;ns
- * @created    08.02.2002 14:05
  */
 public class Desk
 {

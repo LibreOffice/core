@@ -66,7 +66,6 @@ namespace framework{
                     - InteractiveAugmentedIOException
                 All other requests will be aborted.
 
-    @modified   12.07.2002 14:06
     @by         Andreas Schlüns
  */
 class QuietInteraction : public  css::lang::XTypeProvider

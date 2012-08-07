@@ -72,7 +72,6 @@ namespace framework{
 
     @devstatus      draft
     @threadsafe     yes
-    @modified       as96863
 *//*-*************************************************************************************************************/
 class TagWindowAsModified :   // interfaces
                               public css::lang::XTypeProvider,

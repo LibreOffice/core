@@ -87,8 +87,6 @@ namespace framework{
                         provides XWeak and ref count mechanism
 
     @devstatus      ready to use
-
-    @modified       02.05.2002 08:13, as96863
 */
 class ServiceHandler : // interfaces
                        public  css::lang::XTypeProvider      ,

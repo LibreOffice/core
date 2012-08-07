@@ -46,7 +46,6 @@ import java.util.Vector;
  * parameter of the original request.
  *
  * @author     Andreas Schl&uuml;ns
- * @created    17.07.2002 08:09
  */
 public interface IOnewayLink
 {

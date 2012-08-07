@@ -50,8 +50,6 @@ import java.lang.String;
  * times only.
  *
  * @author      Andreas Schl&uuml;ns
- * @created     7. Februar 2002
- * @modified    05.02.2002 12:10
  */
 public class OfficeConnect
 {

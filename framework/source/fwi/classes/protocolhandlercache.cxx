@@ -81,8 +81,6 @@ namespace framework{
 
     @return     An iterator which points to the found item inside the hash or PatternHash::end()
                 if no pattern match this given <var>sURL</var>.
-
-    @modified   30.04.2002 09:52, as96863
  */
 PatternHash::iterator PatternHash::findPatternKey( const ::rtl::OUString& sURL )
 {
@@ -104,8 +102,6 @@ PatternHash::iterator PatternHash::findPatternKey( const ::rtl::OUString& sURL )
     @descr      We use a singleton pattern to implement this handler cache.
                 That means it use two static member list to hold all neccessary informations
                 and a ref count mechanism to create/destroy it on demand.
-
-    @modified   30.04.2002 11:13, as96863
  */
 HandlerHash* HandlerCache::m_pHandler  = NULL;
 PatternHash* HandlerCache::m_pPattern  = NULL;
@@ -120,8 +116,6 @@ HandlerCFGAccess* HandlerCache::m_pConfig = NULL;
                 and fill the internal structures. After that the cache can be
                 used for read access on this data and perform some search
                 operations on it.
-
-    @modified   30.04.2002 10:02, as96863
  */
 HandlerCache::HandlerCache()
 {
@@ -147,8 +141,6 @@ HandlerCache::HandlerCache()
     @short      dtor of the cache
     @descr      It frees all used memory. In further implementations (may if we support write access too)
                 it's a good place to flush changes back to the configuration - but not needed yet.
-
-    @modified   30.04.2002 09:54, as96863
  */
 HandlerCache::~HandlerCache()
 {
@@ -179,8 +171,6 @@ HandlerCache::~HandlerCache()
     @short      dtor of the cache
     @descr      It frees all used memory. In further implementations (may if we support write access too)
                 it's a good place to flush changes back to the configuration - but not needed yet.
-
-    @modified   30.04.2002 09:54, as96863
  */
 sal_Bool HandlerCache::search( const ::rtl::OUString& sURL, ProtocolHandler* pReturn ) const
 {
@@ -204,8 +194,6 @@ sal_Bool HandlerCache::search( const ::rtl::OUString& sURL, ProtocolHandler* pRe
     @descr      We combine neccessary parts of this struct to a valid URL string
                 and call our other search method ...
                 It's a helper for outside code.
-
-    @modified   30.04.2002 09:54, as96863
  */
 sal_Bool HandlerCache::search( const css::util::URL& aURL, ProtocolHandler* pReturn ) const
 {
@@ -242,8 +230,6 @@ void HandlerCache::takeOver(HandlerHash* pHandler, PatternHash* pPattern)
 
     @param      sPackage
                 specifies the package name of the configuration data which should be used
-
-    @modified   30.04.2002 10:06, as96863
  */
 HandlerCFGAccess::HandlerCFGAccess( const ::rtl::OUString& sPackage )
     : ConfigItem( sPackage )
@@ -265,8 +251,6 @@ HandlerCFGAccess::HandlerCFGAccess( const ::rtl::OUString& sPackage )
 
     @param      pPattern
                 reverse map of handler pattern to her uno names
-
-    @modified   30.04.2002 09:54, as96863
  */
 void HandlerCFGAccess::read( HandlerHash** ppHandler ,
                              PatternHash** ppPattern )

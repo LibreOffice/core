@@ -69,7 +69,6 @@ namespace framework{
     @descr      The container will be empty then - special features (e.g. the async quit mechanism) are disabled.
 
     @threadsafe not neccessary - its not a singleton
-    @modified   01.07.2002 14:42,as96863
  *****************************************************************************************************************/
 FrameContainer::FrameContainer()
         // initialize base classes first.
@@ -87,7 +86,6 @@ FrameContainer::FrameContainer()
     @descr      Special features (if the currently are running) will be dsiabled and we free all used other resources.
 
     @threadsafe not neccessary - its not a singleton
-    @modified   01.07.2002 14:43,as96863
  *****************************************************************************************************************/
 FrameContainer::~FrameContainer()
 {
@@ -105,7 +103,6 @@ FrameContainer::~FrameContainer()
                     Must be a valid reference.
 
     @threadsafe yes
-    @modified   01.07.2002 14:44,as96863
  *****************************************************************************************************************/
 void FrameContainer::append( const css::uno::Reference< css::frame::XFrame >& xFrame )
 {
@@ -129,7 +126,6 @@ void FrameContainer::append( const css::uno::Reference< css::frame::XFrame >& xF
                     Must be a valid reference.
 
     @threadsafe yes
-    @modified   01.07.2002 14:52,as96863
  *****************************************************************************************************************/
 void FrameContainer::remove( const css::uno::Reference< css::frame::XFrame >& xFrame )
 {
@@ -166,7 +162,6 @@ void FrameContainer::remove( const css::uno::Reference< css::frame::XFrame >& xF
                 <FALSE/> otherwhise
 
     @threadsafe yes
-    @modified   01.07.2002 14:55,as96863
  *****************************************************************************************************************/
 sal_Bool FrameContainer::exist( const css::uno::Reference< css::frame::XFrame >& xFrame ) const
 {
@@ -181,7 +176,6 @@ sal_Bool FrameContainer::exist( const css::uno::Reference< css::frame::XFrame >&
     @descr      -
 
     @threadsafe yes
-    @modified   01.07.2002 15:00,as96863
  *****************************************************************************************************************/
 void FrameContainer::clear()
 {
@@ -209,7 +203,6 @@ void FrameContainer::clear()
     @return     the count of existing container items
 
     @threadsafe yes
-    @modified   01.07.2002 15:00,as96863
  *****************************************************************************************************************/
 sal_uInt32 FrameContainer::getCount() const
 {
@@ -232,7 +225,6 @@ sal_uInt32 FrameContainer::getCount() const
     @return     a reference to a frame inside the container, which match with given index
 
     @threadsafe yes
-    @modified   01.07.2002 15:03,as96863
  *****************************************************************************************************************/
 css::uno::Reference< css::frame::XFrame > FrameContainer::operator[]( sal_uInt32 nIndex ) const
 {
@@ -264,7 +256,6 @@ css::uno::Reference< css::frame::XFrame > FrameContainer::operator[]( sal_uInt32
     @return     a list of all frame refrences inside this container
 
     @threadsafe yes
-    @modified   01.07.2002 15:09,as96863
  *****************************************************************************************************************/
 css::uno::Sequence< css::uno::Reference< css::frame::XFrame > > FrameContainer::getAllElements() const
 {
@@ -291,7 +282,6 @@ css::uno::Sequence< css::uno::Reference< css::frame::XFrame > > FrameContainer::
                     Must be a valid reference and already part of this container.
 
     @threadsafe yes
-    @modified   01.07.2002 15:11,as96863
  *****************************************************************************************************************/
 void FrameContainer::setActive( const css::uno::Reference< css::frame::XFrame >& xFrame )
 {
@@ -314,7 +304,6 @@ void FrameContainer::setActive( const css::uno::Reference< css::frame::XFrame >&
                 Value can be NULL!
 
     @threadsafe yes
-    @modified   01.07.2002 15:11,as96863
  *****************************************************************************************************************/
 css::uno::Reference< css::frame::XFrame > FrameContainer::getActive() const
 {
@@ -334,7 +323,6 @@ css::uno::Reference< css::frame::XFrame > FrameContainer::getActive() const
     @return     reference to the found frame or NULL if not.
 
     @threadsafe yes
-    @modified   01.07.2002 15:22,as96863
  *****************************************************************************************************************/
 css::uno::Reference< css::frame::XFrame > FrameContainer::searchOnAllChildrens( const ::rtl::OUString& sName ) const
 {
@@ -373,7 +361,6 @@ css::uno::Reference< css::frame::XFrame > FrameContainer::searchOnAllChildrens( 
     @return     reference to the found frame or NULL if not.
 
     @threadsafe yes
-    @modified   01.07.2002 15:22,as96863
  *****************************************************************************************************************/
 css::uno::Reference< css::frame::XFrame > FrameContainer::searchOnDirectChildrens( const ::rtl::OUString& sName ) const
 {

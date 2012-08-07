@@ -25,7 +25,6 @@ import java.lang.reflect.InvocationTargetException;
  * A ScriptProxy object acts as a proxy for a Java <code>Method</code>
  *
  * @author     Tomas O'Connor
- * @created    August 2, 2002
  * @see        java.lang.reflect.Method
  */
 public class ScriptProxy

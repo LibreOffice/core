@@ -34,7 +34,6 @@ import java.awt.event.*;
  * Otherwise they can make some trouble.
  *
  * @author  Andreas Schl&uuml;ns
- * @created 22.02.2002 08:47
  */
 
 public class NativeView extends java.awt.Canvas

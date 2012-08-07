@@ -648,7 +648,6 @@ css::uno::Reference< css::awt::XWindow > SAL_CALL Frame::getContainerWindow() th
                     valid reference to our new owner frame, which should implement a supplier interface
 
     @threadsafe yes
-    @modified   08.05.2002 09:35, as96863
 *//*-*****************************************************************************************************/
 void SAL_CALL Frame::setCreator( const css::uno::Reference< css::frame::XFramesSupplier >& xCreator ) throw( css::uno::RuntimeException )
 {
@@ -756,7 +755,6 @@ void SAL_CALL Frame::setName( const ::rtl::OUString& sName ) throw( css::uno::Ru
 
     @return     A reference to found or may be new created frame.
     @threadsafe yes
-    @modified   16.05.2002 11:08, as96863
 *//*-*****************************************************************************************************/
 css::uno::Reference< css::frame::XFrame > SAL_CALL Frame::findFrame( const ::rtl::OUString&  sTargetFrameName,
                                                                            sal_Int32         nSearchFlags    ) throw( css::uno::RuntimeException )
@@ -1317,7 +1315,6 @@ void SAL_CALL Frame::contextChanged() throw( css::uno::RuntimeException )
 
     @onerror    We return <FALSE/>.
     @threadsafe yes
-    @modified   06.05.2002 11:39, as96863
 *//*-*****************************************************************************************************/
 sal_Bool SAL_CALL Frame::setComponent(  const   css::uno::Reference< css::awt::XWindow >&       xComponentWindow ,
                                         const   css::uno::Reference< css::frame::XController >& xController      ) throw( css::uno::RuntimeException )
@@ -1586,7 +1583,6 @@ void SAL_CALL Frame::removeFrameActionListener( const css::uno::Reference< css::
                     if any internal things willn't be closed
 
     @threadsafe yes
-    @modified   06.05.2002 08:33, as96863
 *//*-*****************************************************************************************************/
 void SAL_CALL Frame::close( sal_Bool bDeliverOwnerShip ) throw( css::util::CloseVetoException,
                                                                 css::uno::RuntimeException   )
@@ -1684,7 +1680,6 @@ void SAL_CALL Frame::close( sal_Bool bDeliverOwnerShip ) throw( css::util::Close
     @onerror    Listener is ignored.
 
     @threadsafe yes
-    @modified   06.05.2002 10:03, as96863
 *//*-*****************************************************************************************************/
 void SAL_CALL Frame::addCloseListener( const css::uno::Reference< css::util::XCloseListener >& xListener ) throw (css::uno::RuntimeException)
 {
@@ -2372,7 +2367,6 @@ void SAL_CALL Frame::windowClosing( const css::lang::EventObject& ) throw( css::
                     We are not interested on this information. We are interested on the visible state only.
 
     @threadsafe yes
-    @modified   31.07.2002 07:56, as96863
 *//*-*****************************************************************************************************/
 void SAL_CALL Frame::windowShown( const css::lang::EventObject& ) throw(css::uno::RuntimeException)
 {
@@ -3010,7 +3004,6 @@ void Frame::implts_stopWindowListening()
     @seealso    m_nExternalLockCount
 
     @threadsafe yes
-    @modified   06.05.2002 09:31, as96863
 *//*-*****************************************************************************************************/
 void Frame::implts_checkSuicide()
 {

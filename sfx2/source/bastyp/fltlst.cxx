@@ -95,8 +95,6 @@ class SfxRefreshListener : public ::cppu::WeakImplHelper1<com::sun::star::util::
     @onerror        We show some assertions in non product version.
                     Otherwise we do nothing!
     @threadsafe     yes
-
-    @last_change    17.10.2001 10:27
 *//*-*************************************************************************************************************/
 SfxFilterListener::SfxFilterListener()
 {

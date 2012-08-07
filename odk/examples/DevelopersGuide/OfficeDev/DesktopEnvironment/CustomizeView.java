@@ -48,7 +48,6 @@ import java.awt.*;
  * document (e.g. enable/disable menubar, toolbar, objectbar)
  *
  * @author     Andreas Schl&uuml;ns
- * @created    20.06.2002 09:28
  */
 public class CustomizeView extends    JPanel
                            implements IShutdownListener

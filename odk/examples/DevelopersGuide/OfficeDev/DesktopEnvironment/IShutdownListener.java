@@ -39,7 +39,6 @@
  * if java virtual machine dies.
  *
  * @author     Andreas Schl&uuml;ns
- * @created    03.05.2002 13:51
  */
 public interface IShutdownListener
 {

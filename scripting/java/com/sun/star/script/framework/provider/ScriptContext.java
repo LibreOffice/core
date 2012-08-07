@@ -36,7 +36,6 @@ import com.sun.star.script.framework.log.LogUtils;
  *  Description of the Class
  *
  * @author     Noel Power
- * @created    August 2, 2002
  */
 public class ScriptContext extends PropertySet implements XScriptContext
 {
@@ -44,7 +43,6 @@ public class ScriptContext extends PropertySet implements XScriptContext
      *  Description of the Class
      *
      * @author     John Rice
-     * @created    18/09/02
      */
 
     public final static String HM_DOC_REF = "DocumentReference";

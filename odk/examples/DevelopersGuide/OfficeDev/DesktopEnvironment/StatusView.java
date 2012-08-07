@@ -60,7 +60,6 @@ import java.lang.String;
  * for this constallation.
  *
  * @author     Andreas Schl&uuml;ns
- * @created    20.06.2002 15:08
  */
 public class StatusView extends    JPanel
                         implements IShutdownListener

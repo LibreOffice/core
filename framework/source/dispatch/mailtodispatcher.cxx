@@ -110,8 +110,6 @@ DEFINE_INIT_SERVICE(MailToDispatcher,
 
     @param      xFactory
                     reference to uno servicemanager for creation of new services
-
-    @modified   30.04.2002 14:10, as96863
 */
 MailToDispatcher::MailToDispatcher( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory )
         //  Init baseclasses first
@@ -127,8 +125,6 @@ MailToDispatcher::MailToDispatcher( const css::uno::Reference< css::lang::XMulti
 /**
     @short      standard dtor
     @descr      -
-
-    @modified   30.04.2002 14:10, as96863
 */
 MailToDispatcher::~MailToDispatcher()
 {
@@ -145,8 +141,6 @@ MailToDispatcher::~MailToDispatcher()
                 instance or disagree by returning <NULL/>.
                 We don't create new dispatch instances here realy - we return THIS as result to handle it
                 at the same implementation.
-
-    @modified   02.05.2002 15:25, as96863
 */
 css::uno::Reference< css::frame::XDispatch > SAL_CALL MailToDispatcher::queryDispatch( const css::util::URL&  aURL    ,
                                                                                        const ::rtl::OUString& /*sTarget*/ ,
@@ -163,8 +157,6 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL MailToDispatcher::queryDis
 /**
     @short      do the same like dispatch() but for multiple requests at the same time
     @descr      -
-
-    @modified   02.05.2002 15:27, as96863
 */
 css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL MailToDispatcher::queryDispatches( const css::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptor ) throw( css::uno::RuntimeException )
 {
@@ -192,8 +184,6 @@ css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL Mail
                     mail URL which should be executed
     @param      lArguments
                     list of optional arguments for this mail request
-
-    @modified   30.04.2002 14:15, as96863
 */
 void SAL_CALL MailToDispatcher::dispatch( const css::util::URL&                                  aURL       ,
                                           const css::uno::Sequence< css::beans::PropertyValue >& lArguments ) throw( css::uno::RuntimeException )
@@ -218,8 +208,6 @@ void SAL_CALL MailToDispatcher::dispatch( const css::util::URL&                 
                     list of optional arguments for this mail request
     @param      xListener
                     reference to a valid listener for state events
-
-    @modified   30.04.2002 14:49, as96863
 */
 void SAL_CALL MailToDispatcher::dispatchWithNotification( const css::util::URL&                                             aURL      ,
                                                           const css::uno::Sequence< css::beans::PropertyValue >&            lArguments,
@@ -261,8 +249,6 @@ void SAL_CALL MailToDispatcher::dispatchWithNotification( const css::util::URL& 
                 Note: Our internal used shell executor doesn't return any state value - so we must
                 belive that call was successfully.
                 <FALSE/> if neccessary resource couldn't be created or an exception was thrown.
-
-    @modified   30.04.2002 14:49, as96863
 */
 sal_Bool MailToDispatcher::implts_dispatch( const css::util::URL&                                  aURL       ,
                                             const css::uno::Sequence< css::beans::PropertyValue >& /*lArguments*/ ) throw( css::uno::RuntimeException )
@@ -309,8 +295,6 @@ sal_Bool MailToDispatcher::implts_dispatch( const css::util::URL&               
                     reference to a valid listener for state events
     @param      aURL
                     URL about listener will be informed, if something occurred
-
-    @modified   30.04.2002 14:49, as96863
 */
 void SAL_CALL MailToDispatcher::addStatusListener( const css::uno::Reference< css::frame::XStatusListener >& /*xListener*/ ,
                                                    const css::util::URL&                                     /*aURL*/      ) throw( css::uno::RuntimeException )

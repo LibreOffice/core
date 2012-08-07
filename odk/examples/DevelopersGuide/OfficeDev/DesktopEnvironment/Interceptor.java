@@ -57,7 +57,6 @@ import java.util.Vector;
  * be synchronous then. => deadlocks are possible
  *
  * @author     Andreas Schl&uuml;ns
- * @created    06.03.2002 09:38
  */
 public class Interceptor implements com.sun.star.frame.XFrameActionListener,
                                     com.sun.star.frame.XDispatchProviderInterceptor,

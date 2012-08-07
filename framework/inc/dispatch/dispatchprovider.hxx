@@ -86,7 +86,6 @@ enum EDispatchHelper
 
     @devstatus      ready to use
     @threadsafe     yes
-    @modified       17.05.2002 07:56, as96863
 */
 class DispatchProvider  :   // interfaces
                             public  css::lang::XTypeProvider            ,

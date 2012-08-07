@@ -329,8 +329,6 @@ class SvtViewOptionsBase_Impl
 
     @param          -
     @return         -
-
-    @last change    19.10.2001 07:54
 *//*-*************************************************************************************************************/
 SvtViewOptionsBase_Impl::SvtViewOptionsBase_Impl( const ::rtl::OUString& sList )
         :   m_sListName  ( sList )    // we must know, which view type we must support
@@ -373,8 +371,6 @@ SvtViewOptionsBase_Impl::SvtViewOptionsBase_Impl( const ::rtl::OUString& sList )
 
     @param          -
     @return         -
-
-    @last change    19.10.2001 08:02
 *//*-*************************************************************************************************************/
 SvtViewOptionsBase_Impl::~SvtViewOptionsBase_Impl()
 {
@@ -749,8 +745,6 @@ void SvtViewOptionsBase_Impl::SetVisible( const ::rtl::OUString& sName    ,
 
     @param          "sNode", name of new entry
     @return         -
-
-    @last change    19.10.2001 08:42
 *//*-*************************************************************************************************************/
 css::uno::Reference< css::uno::XInterface > SvtViewOptionsBase_Impl::impl_getSetNode( const ::rtl::OUString& sNode           ,
                                                                                             sal_Bool         bCreateIfMissing)

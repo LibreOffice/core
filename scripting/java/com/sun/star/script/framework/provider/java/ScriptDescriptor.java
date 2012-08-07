@@ -27,7 +27,6 @@ import java.util.StringTokenizer;
  * criteria that should be used for finding a particular script
  *
  * @author     Tomas O'Connor
- * @created    August 2, 2002
  */
 public class ScriptDescriptor
 {

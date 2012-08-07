@@ -106,22 +106,15 @@ public:
         bool IsSet() const {return m_bState;}
 };
 
-/*-- 25.08.2010 14:32:49---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 PrepareListener_Impl::PrepareListener_Impl() :
     m_bState( false )
 {
 }
-/*-- 25.08.2010 14:32:51---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 PrepareListener_Impl::~PrepareListener_Impl()
 {
 }
-/*-- 25.08.2010 14:32:51---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void PrepareListener_Impl::statusChanged(const css::frame::FeatureStateEvent& rEvent) throw(css::uno::RuntimeException)
 {
     if( rEvent.IsEnabled )
@@ -129,9 +122,7 @@ void PrepareListener_Impl::statusChanged(const css::frame::FeatureStateEvent& rE
     else
         m_bState = sal_False;
 }
-/*-- 25.08.2010 14:32:52---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void PrepareListener_Impl::disposing(const css::lang::EventObject& /*rEvent*/) throw(css::uno::RuntimeException)
 {
 }

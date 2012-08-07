@@ -28,7 +28,6 @@ import com.sun.star.uno.XComponentContext;
  *  Class Loader Factory
  *
  * @author     Noel Power
- * @created    August 2, 2002
  */
 public class ClassLoaderFactory
 {

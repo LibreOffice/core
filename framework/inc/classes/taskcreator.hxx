@@ -63,7 +63,6 @@ namespace framework{
 
     @devstatus      ready to use
     @threadsafe     yes
-    @modified       20.08.2003 08:37, as96863
 *//*-*************************************************************************************************************/
 class TaskCreator : private ThreadHelpBase
 {

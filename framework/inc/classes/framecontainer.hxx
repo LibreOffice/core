@@ -90,7 +90,6 @@ typedef TFrameContainer::const_iterator                             TConstFrameI
 
     @devstatus      ready to use
     @threadsafe     yes
-    @modified       01.07.2002 14:39, as96863
 *//*-*************************************************************************************************************/
 class FrameContainer : private ThreadHelpBase
 {

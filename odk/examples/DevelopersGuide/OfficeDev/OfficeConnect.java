@@ -60,8 +60,6 @@ import java.lang.String;
  * to open or use internal set connection which is created one times only.
  *
  * @author      Andreas Schl&uuml;ns
- * @created     7. Februar 2002
- * @modified    05.02.2002 12:10
  */
 public class OfficeConnect
 {

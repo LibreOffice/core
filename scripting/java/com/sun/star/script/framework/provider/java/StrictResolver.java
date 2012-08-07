@@ -29,7 +29,6 @@ import com.sun.star.script.framework.log.LogUtils;
  * can be found in the Class.
  *
  * @author     Tomas O'Connor
- * @created    August 2, 2002
  */
 public class StrictResolver implements Resolver
 {

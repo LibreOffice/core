@@ -83,8 +83,6 @@ namespace framework{
                         provides XWeak and ref count mechanism
 
     @devstatus      ready to use
-
-    @modified       02.05.2002 08:12, as96863
 */
 class MailToDispatcher : // interfaces
                          public  css::lang::XTypeProvider      ,
