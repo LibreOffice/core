@@ -55,9 +55,12 @@ HelpCompiler::HelpCompiler(StreamTable &in_streamTable, const fs::path &in_input
 {
     xmlKeepBlanksDefaultValue = 0;
     char* guitmp = getenv("GUI");
-    gui = (strcmp(guitmp, "UNX") ? gui : "UNIX");
-    gui = (strcmp(guitmp, "MAC") ? gui : "MAC");
-    gui = (strcmp(guitmp, "WNT") ? gui : "WIN");
+    if (guitmp)
+    {
+        gui = (strcmp(guitmp, "UNX") ? gui : "UNIX");
+        gui = (strcmp(guitmp, "MAC") ? gui : "MAC");
+        gui = (strcmp(guitmp, "WNT") ? gui : "WIN");
+    }
 }
 
 xmlDocPtr HelpCompiler::getSourceDocument(const fs::path &filePath)
