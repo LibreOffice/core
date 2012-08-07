@@ -226,8 +226,7 @@ void FocusManager::RemoveLinks (::Window* pWindow)
     pWindow->RemoveEventListener (LINK (this, FocusManager, WindowEventListener));
 
     // Remove the links from the given window.
-    ::std::pair<LinkMap::iterator,LinkMap::iterator> aCandidates(mpLinks->equal_range(pWindow));
-    mpLinks->erase(aCandidates.first, aCandidates.second);
+    mpLinks->erase(pWindow);
 
     // Remove links to the given window.
     bool bLinkRemoved;
