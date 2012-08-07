@@ -9,6 +9,8 @@
 
 #include <sal/main.h>
 
+#include <rtl/strbuf.hxx>
+
 #include <libxslt/transform.h>
 #include <libxslt/xslt.h>
 #include <libxslt/xsltutils.h>
@@ -166,6 +168,52 @@ int extractTranslations()
     return 0;
 }
 
+namespace
+{
+    rtl::OString QuotHTML(const rtl::OString &rString)
+    {
+        rtl::OStringBuffer sReturn;
+        for (sal_Int32 i = 0; i < rString.getLength(); ++i) {
+            switch (rString[i]) {
+            case '\\':
+                if (i < rString.getLength()) {
+                    switch (rString[i + 1]) {
+                    case '"':
+                    case '<':
+                    case '>':
+                    case '\\':
+                        ++i;
+                        break;
+                    }
+                }
+                // fall through
+            default:
+                sReturn.append(rString[i]);
+                break;
+
+            case '<':
+                sReturn.append("&lt;");
+                break;
+
+            case '>':
+                sReturn.append("&gt;");
+                break;
+
+            case '"':
+                sReturn.append("&quot;");
+                break;
+
+            case '&':
+                if (rString.matchL(RTL_CONSTASCII_STRINGPARAM("&amp;"), i))
+                    sReturn.append('&');
+                else
+                    sReturn.append(RTL_CONSTASCII_STRINGPARAM("&amp;"));
+                break;
+            }
+        }
+        return sReturn.makeStringAndClear();
+    }
+}
 
 bool Merge(
     const rtl::OString &rSDFFile,
@@ -211,7 +259,7 @@ bool Merge(
             aDestination << " <e "
                 << "g=\"" << aI->second->sGID.getStr() << "\" "
                 << "i=\"" << aI->second->sLID.getStr() << "\">"
-                << sOut.getStr() << "</e>\n";
+                << QuotHTML(sOut).getStr() << "</e>\n";
         }
     }
 
