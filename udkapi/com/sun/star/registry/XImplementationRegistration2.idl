@@ -58,9 +58,6 @@ interface XImplementationRegistration2: com::sun::star::registry::XImplementatio
 
 }; }; }; };
 
-/*=============================================================================
-
-=============================================================================*/
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

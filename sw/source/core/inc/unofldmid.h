@@ -26,9 +26,6 @@ namespace com { namespace sun { namespace star { namespace uno {
     class Any;
 } } } }
 
-/******************************************************************************
- *
- ******************************************************************************/
 //Abbildung der Properties auf den Descriptor
 #define FIELD_PROP_PAR1             10
 #define FIELD_PROP_PAR2             11

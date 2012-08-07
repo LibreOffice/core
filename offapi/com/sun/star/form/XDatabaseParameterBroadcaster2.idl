@@ -63,9 +63,6 @@ interface XDatabaseParameterBroadcaster2: XDatabaseParameterBroadcaster
 
 }; }; }; };
 
-/*=============================================================================
-
-=============================================================================*/
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

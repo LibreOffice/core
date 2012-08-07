@@ -42,9 +42,6 @@ published exception ServiceNotRegisteredException: com::sun::star::uno::Exceptio
 
 }; }; }; };
 
-/*=============================================================================
-
-=============================================================================*/
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

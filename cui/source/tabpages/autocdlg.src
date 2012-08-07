@@ -156,11 +156,7 @@ TabPage RID_OFAPAGE_AUTOCORR_OPTIONS
     };
     COMMON_CLB_ENTRIES
 };
-/**************************************************************************/
-/*                                                                        */
-/*                                                                        */
-/*                                                                        */
-/**************************************************************************/
+
 TabPage RID_OFAPAGE_AUTOFMT_APPLY
 {
     HelpID = HID_OFAPAGE_AUTOFMT_OPTIONS ;

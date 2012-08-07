@@ -51,9 +51,6 @@ exception DocumentSaveRequest: com::sun::star::task::ClassifiedInteractionReques
 
 }; }; }; };
 
-/*=============================================================================
-
-=============================================================================*/
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

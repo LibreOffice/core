@@ -40,9 +40,6 @@ published exception NotConnectedException: com::sun::star::io::IOException
 
 }; }; }; };
 
-/*=============================================================================
-
-=============================================================================*/
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -40,9 +40,6 @@ exception NoRouteToHostException: com::sun::star::io::SocketException
 
 }; }; }; };
 
-/*=============================================================================
-
-=============================================================================*/
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

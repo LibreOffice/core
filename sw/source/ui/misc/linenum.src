@@ -32,9 +32,7 @@
 #include "misc.hrc"
 #include "linenum.hrc"
 #include "helpid.h"
-/**************************************************************************/
-/*                                                                        */
-/**************************************************************************/
+
 TabPage TP_LINENUMBERING
 {
     HelpID = HID_LINENUMBERING ;

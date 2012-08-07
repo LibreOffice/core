@@ -43,9 +43,6 @@ published service SimpleRegistry : com::sun::star::registry::XSimpleRegistry;
 
 }; }; }; };
 
-/*=============================================================================
-
-=============================================================================*/
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

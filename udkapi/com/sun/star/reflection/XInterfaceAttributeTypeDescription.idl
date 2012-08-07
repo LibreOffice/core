@@ -59,9 +59,6 @@ published interface XInterfaceAttributeTypeDescription: com::sun::star::reflecti
 
 }; }; }; };
 
-/*=============================================================================
-
-=============================================================================*/
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

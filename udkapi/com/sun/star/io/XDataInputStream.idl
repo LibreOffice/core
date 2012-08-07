@@ -116,9 +116,6 @@ published interface XDataInputStream: com::sun::star::io::XInputStream
 
 }; }; }; };
 
-/*=============================================================================
-
-=============================================================================*/
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

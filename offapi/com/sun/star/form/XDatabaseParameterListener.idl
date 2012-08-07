@@ -54,9 +54,6 @@ published interface XDatabaseParameterListener: com::sun::star::lang::XEventList
 
 }; }; }; };
 
-/*=============================================================================
-
-=============================================================================*/
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

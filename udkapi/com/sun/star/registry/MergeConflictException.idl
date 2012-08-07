@@ -40,9 +40,6 @@ published exception MergeConflictException: com::sun::star::uno::Exception
 
 }; }; }; };
 
-/*=============================================================================
-
-=============================================================================*/
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

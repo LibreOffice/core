@@ -58,9 +58,6 @@ published exception ParametersRequest: com::sun::star::task::ClassifiedInteracti
 
 }; }; }; };
 
-/*=============================================================================
-
-=============================================================================*/
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

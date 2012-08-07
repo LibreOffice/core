@@ -54,9 +54,6 @@ published interface XImplicitIDContainer: com::sun::star::container::XImplicitID
 
 }; }; }; };
 
-/*=============================================================================
-
-=============================================================================*/
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

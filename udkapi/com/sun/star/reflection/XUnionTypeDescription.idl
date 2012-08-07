@@ -84,9 +84,6 @@ published interface XUnionTypeDescription: com::sun::star::reflection::XTypeDesc
 
 }; }; }; };
 
-/*=============================================================================
-
-=============================================================================*/
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

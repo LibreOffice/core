@@ -67,9 +67,6 @@ published interface XStyle: com::sun::star::container::XNamed
 
 }; }; }; };
 
-/*=============================================================================
-
-=============================================================================*/
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

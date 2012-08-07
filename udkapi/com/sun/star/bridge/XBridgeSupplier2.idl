@@ -103,9 +103,6 @@ published interface XBridgeSupplier2: com::sun::star::uno::XInterface
 
 }; }; }; };
 
-/*=============================================================================
-
-=============================================================================*/
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

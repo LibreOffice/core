@@ -48,9 +48,6 @@ published exception CannotRegisterImplementationException: com::sun::star::uno::
 
 }; }; }; };
 
-/*=============================================================================
-
-=============================================================================*/
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

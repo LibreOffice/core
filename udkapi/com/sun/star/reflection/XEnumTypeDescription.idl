@@ -58,9 +58,6 @@ published interface XEnumTypeDescription: com::sun::star::reflection::XTypeDescr
 
 }; }; }; };
 
-/*=============================================================================
-
-=============================================================================*/
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

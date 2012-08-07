@@ -46,9 +46,6 @@ published exception CannotActivateFactoryException: com::sun::star::uno::Excepti
 
 }; }; }; };
 
-/*=============================================================================
-
-=============================================================================*/
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

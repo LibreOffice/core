@@ -47,9 +47,7 @@ String STR_FILE_NOT_FOUND
 {
     Text [ en-US ] = "The file, \"%1\" in the \"%2\" path could not be found.";
 };
-/*************************************************************************
 
-*************************************************************************/
 TabDialog DLG_MULTI_TOX
 {
     HelpID = HID_MULTI_TOX_DLG;
@@ -1257,9 +1255,7 @@ ModalDialog DLG_ADD_IDX_STYLES
     };
     Text [ en-US ] = "Assign Styles";
 };
-/*-----------------------------------------------------------
 
------------------------------------------------------------*/
 ModalDialog DLG_CREATE_AUTOMARK
 {
     HelpId = HID_DLG_CREATE_AUTOMARK;

@@ -32,9 +32,7 @@
 #include "config.hrc"
 #include "redlopt.hrc"
 #include "helpid.h"
-/**************************************************************************/
-/*                                                                        */
-/**************************************************************************/
+
 TabPage TP_REDLINE_OPT
 {
     HelpID = HID_REDLINE_OPT ;

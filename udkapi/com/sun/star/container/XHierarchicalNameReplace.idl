@@ -55,9 +55,6 @@ published interface XHierarchicalNameReplace : com::sun::star::container::XHiera
 
 }; }; }; };
 
-/*=============================================================================
-
-=============================================================================*/
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -55,9 +55,6 @@ published interface XInterfaceMemberTypeDescription: com::sun::star::reflection:
 
 }; }; }; };
 
-/*=============================================================================
-
-=============================================================================*/
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -51,9 +51,6 @@ published interface XDatabaseEnvironment: com::sun::star::sdbc::XDriverManager
 
 }; }; }; };
 
-/*=============================================================================
-
-=============================================================================*/
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

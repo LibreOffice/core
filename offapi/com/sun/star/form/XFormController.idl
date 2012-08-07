@@ -47,9 +47,6 @@ published interface XFormController: com::sun::star::awt::XTabController
 
 }; }; }; };
 
-/*=============================================================================
-
-=============================================================================*/
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

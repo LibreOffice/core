@@ -41,9 +41,6 @@ published exception InvocationTargetException: com::sun::star::lang::WrappedTarg
 
 }; }; }; };
 
-/*=============================================================================
-
-=============================================================================*/
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

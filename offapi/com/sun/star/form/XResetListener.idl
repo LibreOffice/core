@@ -82,9 +82,6 @@ published interface XResetListener: com::sun::star::lang::XEventListener
 
 }; }; }; };
 
-/*=============================================================================
-
-=============================================================================*/
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

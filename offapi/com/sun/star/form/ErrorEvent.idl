@@ -44,9 +44,6 @@ published struct ErrorEvent: com::sun::star::lang::EventObject
 
 }; }; }; };
 
-/*=============================================================================
-
-=============================================================================*/
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

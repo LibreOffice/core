@@ -375,9 +375,6 @@ typedef struct tagSQL_INTERVAL_STRUCT
 
 #endif
 
-/****************************
- *
- ***************************/
 #ifndef ODBCINT64
 # if (ODBCVER >= 0x0300)
 # if (SIZEOF_LONG_INT == 8)

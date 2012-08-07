@@ -40,9 +40,6 @@ published interface XInteractionRetry: com::sun::star::task::XInteractionContinu
 
 }; }; }; };
 
-/*=============================================================================
-
-=============================================================================*/
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

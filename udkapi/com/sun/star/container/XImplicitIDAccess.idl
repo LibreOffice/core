@@ -48,9 +48,6 @@ published interface XImplicitIDAccess: com::sun::star::container::XElementAccess
 
 }; }; }; };
 
-/*=============================================================================
-
-=============================================================================*/
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

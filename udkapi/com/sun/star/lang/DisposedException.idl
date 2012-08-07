@@ -44,9 +44,6 @@ published exception DisposedException: com::sun::star::uno::RuntimeException
 
 }; }; }; };
 
-/*=============================================================================
-
-=============================================================================*/
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

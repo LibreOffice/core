@@ -47,9 +47,6 @@ published interface XIndirectTypeDescription: com::sun::star::reflection::XTypeD
 
 }; }; }; };
 
-/*=============================================================================
-
-=============================================================================*/
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -59,9 +59,6 @@ published interface XIdlField: com::sun::star::reflection::XIdlMember
 
 }; }; }; };
 
-/*=============================================================================
-
-=============================================================================*/
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
