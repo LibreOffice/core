@@ -32,17 +32,11 @@ namespace css = ::com::sun::star;
 //_______________________________________________
 // definitions
 
-/*-----------------------------------------------
-    04.11.2003 09:29
------------------------------------------------*/
 SequenceAsHashMap::SequenceAsHashMap()
     : SequenceAsHashMapBase()
 {
 }
 
-/*-----------------------------------------------
-    04.11.2003 08:30
------------------------------------------------*/
 SequenceAsHashMap::SequenceAsHashMap(const css::uno::Any& aSource)
 {
     (*this) << aSource;
@@ -54,32 +48,20 @@ SequenceAsHashMap::SequenceAsHashMap(const css::uno::Sequence< css::uno::Any >& 
     (*this) << lSource;
 }
 
-/*-----------------------------------------------
-    04.11.2003 08:30
------------------------------------------------*/
 SequenceAsHashMap::SequenceAsHashMap(const css::uno::Sequence< css::beans::PropertyValue >& lSource)
 {
     (*this) << lSource;
 }
 
-/*-----------------------------------------------
-    04.11.2003 08:30
------------------------------------------------*/
 SequenceAsHashMap::SequenceAsHashMap(const css::uno::Sequence< css::beans::NamedValue >& lSource)
 {
     (*this) << lSource;
 }
 
-/*-----------------------------------------------
-    04.11.2003 09:04
------------------------------------------------*/
 SequenceAsHashMap::~SequenceAsHashMap()
 {
 }
 
-/*-----------------------------------------------
-    04.11.2003 10:21
------------------------------------------------*/
 void SequenceAsHashMap::operator<<(const css::uno::Any& aSource)
 {
     // An empty Any reset this instance!
@@ -152,9 +134,6 @@ void SequenceAsHashMap::operator<<(const css::uno::Sequence< css::uno::Any >& lS
     }
 }
 
-/*-----------------------------------------------
-    04.11.2003 08:30
------------------------------------------------*/
 void SequenceAsHashMap::operator<<(const css::uno::Sequence< css::beans::PropertyValue >& lSource)
 {
     clear();
@@ -166,9 +145,6 @@ void SequenceAsHashMap::operator<<(const css::uno::Sequence< css::beans::Propert
         (*this)[pSource[i].Name] = pSource[i].Value;
 }
 
-/*-----------------------------------------------
-    04.11.2003 08:30
------------------------------------------------*/
 void SequenceAsHashMap::operator<<(const css::uno::Sequence< css::beans::NamedValue >& lSource)
 {
     clear();
@@ -180,9 +156,6 @@ void SequenceAsHashMap::operator<<(const css::uno::Sequence< css::beans::NamedVa
         (*this)[pSource[i].Name] = pSource[i].Value;
 }
 
-/*-----------------------------------------------
-    04.11.2003 08:30
------------------------------------------------*/
 void SequenceAsHashMap::operator>>(css::uno::Sequence< css::beans::PropertyValue >& lDestination) const
 {
     sal_Int32 c = (sal_Int32)size();
@@ -200,9 +173,6 @@ void SequenceAsHashMap::operator>>(css::uno::Sequence< css::beans::PropertyValue
     }
 }
 
-/*-----------------------------------------------
-    04.11.2003 08:30
------------------------------------------------*/
 void SequenceAsHashMap::operator>>(css::uno::Sequence< css::beans::NamedValue >& lDestination) const
 {
     sal_Int32 c = (sal_Int32)size();
@@ -220,9 +190,6 @@ void SequenceAsHashMap::operator>>(css::uno::Sequence< css::beans::NamedValue >&
     }
 }
 
-/*-----------------------------------------------
-    30.07.2007 14:10
------------------------------------------------*/
 const css::uno::Any SequenceAsHashMap::getAsConstAny(::sal_Bool bAsPropertyValueList) const
 {
     css::uno::Any aDestination;
@@ -233,9 +200,6 @@ const css::uno::Any SequenceAsHashMap::getAsConstAny(::sal_Bool bAsPropertyValue
     return aDestination;
 }
 
-/*-----------------------------------------------
-    04.11.2003 08:30
------------------------------------------------*/
 const css::uno::Sequence< css::beans::NamedValue > SequenceAsHashMap::getAsConstNamedValueList() const
 {
     css::uno::Sequence< css::beans::NamedValue > lReturn;
@@ -243,9 +207,6 @@ const css::uno::Sequence< css::beans::NamedValue > SequenceAsHashMap::getAsConst
     return lReturn;
 }
 
-/*-----------------------------------------------
-    04.11.2003 08:30
------------------------------------------------*/
 const css::uno::Sequence< css::beans::PropertyValue > SequenceAsHashMap::getAsConstPropertyValueList() const
 {
     css::uno::Sequence< css::beans::PropertyValue > lReturn;
@@ -253,9 +214,6 @@ const css::uno::Sequence< css::beans::PropertyValue > SequenceAsHashMap::getAsCo
     return lReturn;
 }
 
-/*-----------------------------------------------
-    07.03.2007 12:45
------------------------------------------------*/
 sal_Bool SequenceAsHashMap::match(const SequenceAsHashMap& rCheck) const
 {
     const_iterator pCheck;
@@ -278,9 +236,6 @@ sal_Bool SequenceAsHashMap::match(const SequenceAsHashMap& rCheck) const
     return sal_True;
 }
 
-/*-----------------------------------------------
-    30.07.2007 14:30
------------------------------------------------*/
 void SequenceAsHashMap::update(const SequenceAsHashMap& rUpdate)
 {
     const_iterator pUpdate;

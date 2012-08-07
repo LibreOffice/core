@@ -32,32 +32,20 @@ namespace css = ::com::sun::star;
 //_______________________________________________
 // definitions
 
-/*-----------------------------------------------
-    17.03.2004 11:00
------------------------------------------------*/
 InterceptedInteraction::InterceptedInteraction()
 {
 }
 
-/*-----------------------------------------------
-    17.03.2004 14:55
------------------------------------------------*/
 void InterceptedInteraction::setInterceptedHandler(const css::uno::Reference< css::task::XInteractionHandler >& xInterceptedHandler)
 {
     m_xInterceptedHandler = xInterceptedHandler;
 }
 
-/*-----------------------------------------------
-    17.03.2004 14:55
------------------------------------------------*/
 void InterceptedInteraction::setInterceptions(const ::std::vector< InterceptedRequest >& lInterceptions)
 {
     m_lInterceptions = lInterceptions;
 }
 
-/*-----------------------------------------------
-    18.03.2004 10:10
------------------------------------------------*/
 InterceptedInteraction::EInterceptionState InterceptedInteraction::intercepted(
     const InterceptedRequest&,
     const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionRequest >&)
@@ -66,9 +54,6 @@ InterceptedInteraction::EInterceptionState InterceptedInteraction::intercepted(
     return E_NOT_INTERCEPTED;
 }
 
-/*-----------------------------------------------
-    18.03.2004 09:46
------------------------------------------------*/
 css::uno::Reference< css::task::XInteractionContinuation > InterceptedInteraction::extractContinuation(const css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > >& lContinuations,
                                                                                                        const css::uno::Type&                                                                   aType         )
 {
@@ -87,18 +72,12 @@ css::uno::Reference< css::task::XInteractionContinuation > InterceptedInteractio
     return css::uno::Reference< css::task::XInteractionContinuation >();
 }
 
-/*-----------------------------------------------
-    18.03.2004 10:03
------------------------------------------------*/
 void SAL_CALL InterceptedInteraction::handle(const css::uno::Reference< css::task::XInteractionRequest >& xRequest)
     throw(css::uno::RuntimeException)
 {
     impl_handleDefault(xRequest);
 }
 
-/*-----------------------------------------------
-    18.03.2004 10:02
------------------------------------------------*/
 void InterceptedInteraction::impl_handleDefault(const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionRequest >& xRequest)
 {
     EInterceptionState eState = impl_interceptRequest(xRequest);
@@ -128,9 +107,6 @@ void InterceptedInteraction::impl_handleDefault(const ::com::sun::star::uno::Ref
     }
 }
 
-/*-----------------------------------------------
-    18.03.2004 09:48
------------------------------------------------*/
 InterceptedInteraction::EInterceptionState InterceptedInteraction::impl_interceptRequest(const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionRequest >& xRequest)
 {
     css::uno::Any                                                                    aRequest       = xRequest->getRequest();

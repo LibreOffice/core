@@ -1237,9 +1237,6 @@ namespace
     return ::rtl::OUString();
 }
 
-/*-----------------------------------------------
-    07.03.2004 15:03
------------------------------------------------*/
 SvtModuleOptions::EFactory SvtModuleOptions::ClassifyFactoryByShortName(const ::rtl::OUString& sName)
 {
     if ( sName == "swriter" )
@@ -1266,9 +1263,6 @@ SvtModuleOptions::EFactory SvtModuleOptions::ClassifyFactoryByShortName(const ::
     return E_UNKNOWN_FACTORY;
 }
 
-/*-----------------------------------------------
-    31.07.2003 10:41
------------------------------------------------*/
 SvtModuleOptions::EFactory SvtModuleOptions::ClassifyFactoryByServiceName(const ::rtl::OUString& sName)
 {
     if (sName.equals(FACTORYNAME_WRITERGLOBAL))
@@ -1293,9 +1287,6 @@ SvtModuleOptions::EFactory SvtModuleOptions::ClassifyFactoryByServiceName(const 
     return E_UNKNOWN_FACTORY;
 }
 
-/*-----------------------------------------------
-    31.07.2003 14:39
------------------------------------------------*/
 SvtModuleOptions::EFactory SvtModuleOptions::ClassifyFactoryByURL(const ::rtl::OUString&                                 sURL            ,
                                                                   const css::uno::Sequence< css::beans::PropertyValue >& lMediaDescriptor)
 {
@@ -1373,9 +1364,6 @@ SvtModuleOptions::EFactory SvtModuleOptions::ClassifyFactoryByURL(const ::rtl::O
     return E_UNKNOWN_FACTORY;
 }
 
-/*-----------------------------------------------
-    31.07.2003 10:41
------------------------------------------------*/
 SvtModuleOptions::EFactory SvtModuleOptions::ClassifyFactoryByModel(const css::uno::Reference< css::frame::XModel >& xModel)
 {
     css::uno::Reference< css::lang::XServiceInfo > xInfo(xModel, css::uno::UNO_QUERY);
