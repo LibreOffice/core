@@ -51,7 +51,7 @@ public class SortDialogSetting {
 
     @Before
     public void setUp() throws Exception {
-        app.start();
+        app.start(true);
 
         // Create a new spreadsheet document
         app.dispatch("private:factory/scalc");

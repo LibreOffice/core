@@ -43,7 +43,7 @@ public class ValiditySampleFile {
 
     @Before
     public void setUp() throws Exception {
-        app.start();
+        app.start(true);
     }
 
     @After

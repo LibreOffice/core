@@ -43,7 +43,7 @@ public class InsertSheet {
 
     @Before
     public void setUp() throws Exception {
-        app.start();
+        app.start(true);
         app.dispatch("private:factory/scalc");
         calc.waitForExistence(10, 3);
     }

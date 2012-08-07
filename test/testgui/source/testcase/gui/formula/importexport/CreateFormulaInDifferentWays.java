@@ -48,7 +48,7 @@ public class CreateFormulaInDifferentWays {
 
     @Before
     public void setUp() throws Exception {
-        app.start();
+        app.start(true);
 
         // New a formula document
         app.dispatch("private:factory/smath");

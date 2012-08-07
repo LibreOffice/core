@@ -282,7 +282,7 @@ public class UIMap {
     public static final VclButton DataPilotButton = button("59270");
     public static final VclDockingWin DataPilotPanel = dockingwin("3643260928");
     public static final VclListBox SCSubTotalsGroupByListBox = listbox("SC_HID_SC_SUBT_GROUP");
-    public static final VclControl SCCalcSubTotalForColumns = control("SC_HID_SC_SUBT_COLS");
+    public static final VclTreeListBox SCCalcSubTotalForColumns = tree("SC_HID_SC_SUBT_COLS");
     public static final VclTabPage SCSubTotalsGroup1Dialog = tabpage("SC_HID_SCPAGE_SUBT_GROUP1");
     public static final VclButton SCSubtotalsInsertPageBreakCheckBox = button("sc:CheckBox:RID_SCPAGE_SUBT_OPTIONS:BTN_PAGEBREAK");
     public static final VclButton SCSubtotalsCaseSensitiveCheckBox = button("sc:CheckBox:RID_SCPAGE_SUBT_OPTIONS:BTN_CASE");

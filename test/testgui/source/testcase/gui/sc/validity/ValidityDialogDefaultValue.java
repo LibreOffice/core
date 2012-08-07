@@ -41,7 +41,7 @@ public class ValidityDialogDefaultValue {
 
     @Before
     public void setUp() throws Exception {
-        app.start();
+        app.start(true);
 
         // New a spreadsheet, open Validity dialog
         app.dispatch("private:factory/scalc");

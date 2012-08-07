@@ -46,6 +46,7 @@ public class HeaderAndFooterSetting{
 
     @Before
     public void setUp() throws Exception {
+//      app.start(true);    // Bug 120476
         app.start();
 
         // New a impress, insert some slides

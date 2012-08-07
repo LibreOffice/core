@@ -49,7 +49,7 @@ public class SubtotalsFunctions {
 
     @Before
     public void setUp() throws Exception {
-        app.start();
+        app.start(true);
         String file = prepareData("sc/SubtotalsSampleFile.ods");
         app.dispatch(".uno:Open");
         submitOpenDlg(file);
@@ -70,7 +70,10 @@ public class SubtotalsFunctions {
     @Test
     public void testAverage() {
         SCSubTotalsGroupByListBox.select(4);    // "Team"
-        SCCalcSubTotalForColumns.click(10, 25);
+//      SCCalcSubTotalForColumns.click(10, 25); // In different platform, can not focus on same checkbox
+        SCCalcSubTotalForColumns.select(1);
+        SCCalcSubTotalForColumns.check(1);  // "Code"
+        sleep(1);
         SCCalcSubTotolsFuncionList.select(2);   // "Average"
         SCSubTotalsGroup1Dialog.ok();
         sleep(1);
@@ -87,7 +90,9 @@ public class SubtotalsFunctions {
      */
     @Test
     public void testCountNumbersOnly() {
-        SCCalcSubTotalForColumns.click(10, 45);
+//      SCCalcSubTotalForColumns.click(10, 45);
+        SCCalcSubTotalForColumns.select(2);
+        SCCalcSubTotalForColumns.check(2);  // "No."
         SCCalcSubTotolsFuncionList.select(6);   // "Count (numbers only)"
         SCSubTotalsGroup1Dialog.ok();
         sleep(1);
@@ -104,7 +109,9 @@ public class SubtotalsFunctions {
      */
     @Test
     public void testMax() {
-        SCCalcSubTotalForColumns.click(10, 45);
+//      SCCalcSubTotalForColumns.click(10, 45);
+        SCCalcSubTotalForColumns.select(2);
+        SCCalcSubTotalForColumns.check(2);  // "No."
         SCCalcSubTotolsFuncionList.select(3);   // "Max"
         SCSubTotalsGroup1Dialog.ok();
         sleep(1);
@@ -121,7 +128,9 @@ public class SubtotalsFunctions {
      */
     @Test
     public void testMin() {
-        SCCalcSubTotalForColumns.click(10, 45);
+//      SCCalcSubTotalForColumns.click(10, 45);
+        SCCalcSubTotalForColumns.select(2);
+        SCCalcSubTotalForColumns.check(2);  // "No."
         SCCalcSubTotolsFuncionList.select(4);   // "Min"
         SCSubTotalsGroup1Dialog.ok();
         sleep(1);
@@ -138,7 +147,9 @@ public class SubtotalsFunctions {
      */
     @Test
     public void testProduct() {
-        SCCalcSubTotalForColumns.click(10, 45);
+//      SCCalcSubTotalForColumns.click(10, 45);
+        SCCalcSubTotalForColumns.select(2);
+        SCCalcSubTotalForColumns.check(2);  // "No."
         SCCalcSubTotolsFuncionList.select(5);   // "Product"
         SCSubTotalsGroup1Dialog.ok();
         sleep(1);
@@ -155,7 +166,9 @@ public class SubtotalsFunctions {
      */
     @Test
     public void testStDevPPopulation() {
-        SCCalcSubTotalForColumns.click(10, 45);
+//      SCCalcSubTotalForColumns.click(10, 45);
+        SCCalcSubTotalForColumns.select(2);
+        SCCalcSubTotalForColumns.check(2);  // "No."
         SCCalcSubTotolsFuncionList.select(8);   // "StDevP (Population)"
         SCSubTotalsGroup1Dialog.ok();
         sleep(1);
@@ -172,7 +185,9 @@ public class SubtotalsFunctions {
      */
     @Test
     public void testSum() {
-        SCCalcSubTotalForColumns.click(10, 45);
+//      SCCalcSubTotalForColumns.click(10, 45);
+        SCCalcSubTotalForColumns.select(2);
+        SCCalcSubTotalForColumns.check(2);  // "No."
         SCCalcSubTotolsFuncionList.select(0);   // "Sum"
         SCSubTotalsGroup1Dialog.ok();
         sleep(1);
@@ -189,7 +204,9 @@ public class SubtotalsFunctions {
      */
     @Test
     public void testVarSample() {
-        SCCalcSubTotalForColumns.click(10, 45);
+//      SCCalcSubTotalForColumns.click(10, 45);
+        SCCalcSubTotalForColumns.select(2);
+        SCCalcSubTotalForColumns.check(2);  // "No."
         SCCalcSubTotolsFuncionList.select(9);   // "Var (Sample)"
         SCSubTotalsGroup1Dialog.ok();
         sleep(1);
@@ -207,7 +224,9 @@ public class SubtotalsFunctions {
     @Test
     public void testDoNotSortOption() {
         SCSubTotalsGroupByListBox.select(4);    // "Team"
-        SCCalcSubTotalForColumns.click(10, 25);
+//      SCCalcSubTotalForColumns.click(10, 25);
+        SCCalcSubTotalForColumns.select(1);
+        SCCalcSubTotalForColumns.check(1);  // "Code"
         SCSubTotalsOptionsTabPage.select();
         SCSubtotalsPreSortToGroupCheckBox.uncheck();
         SCSubTotalsOptionsTabPage.ok();
@@ -247,14 +266,20 @@ public class SubtotalsFunctions {
     public void testUsingAllGroup() {
         SCSubTotalsGroup1Dialog.select();
         SCSubTotalsGroupByListBox.select(1);    // "Level"
-        SCCalcSubTotalForColumns.click(10, 45);
+//      SCCalcSubTotalForColumns.click(10, 45);
+        SCCalcSubTotalForColumns.select(2);
+        SCCalcSubTotalForColumns.check(2);  // "No."
         SCSubTotalsGroup2Dialog.select();
         SCSubTotalsGroupByListBox.select(4);    // "Team"
-        SCCalcSubTotalForColumns.click(10, 25);
+//      SCCalcSubTotalForColumns.click(10, 25);
+        SCCalcSubTotalForColumns.select(1);
+        SCCalcSubTotalForColumns.check(1);  // "Code"
         SCCalcSubTotolsFuncionList.select(3);   // "Max"
         SCSubTotalsGroup3Dialog.select();
         SCSubTotalsGroupByListBox.select(5);    // "Name"
-        SCCalcSubTotalForColumns.click(10, 25);
+//      SCCalcSubTotalForColumns.click(10, 25);
+        SCCalcSubTotalForColumns.select(1);
+        SCCalcSubTotalForColumns.check(1);  // "Code"
         SCSubTotalsGroup1Dialog.select();
         SCSubTotalsGroup1Dialog.ok();
         sleep(1);
@@ -275,7 +300,9 @@ public class SubtotalsFunctions {
      */
     @Test
     public void testRecalculateAfterRowDeleted() {
-        SCCalcSubTotalForColumns.click(10,45);
+//      SCCalcSubTotalForColumns.click(10,45);
+        SCCalcSubTotalForColumns.select(2);
+        SCCalcSubTotalForColumns.check(2);  // "No."
         SCSubTotalsGroup1Dialog.ok();
         sleep(1);
 
@@ -303,7 +330,9 @@ public class SubtotalsFunctions {
     @Test
     public void testRecalculateWhenDataChanged() {
         SCSubTotalsGroupByListBox.select(4);    // "Team"
-        SCCalcSubTotalForColumns.click(10,25);
+//      SCCalcSubTotalForColumns.click(10,25);
+        SCCalcSubTotalForColumns.select(1);
+        SCCalcSubTotalForColumns.check(1);  // "Code"
         SCCalcSubTotolsFuncionList.select(2);   // "Average"
         SCSubTotalsGroup1Dialog.ok();
         sleep(1);

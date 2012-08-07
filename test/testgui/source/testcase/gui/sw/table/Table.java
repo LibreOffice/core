@@ -47,7 +47,7 @@ public class Table {
 
     @Before
     public void setUp() throws Exception {
-        app.start();
+        app.start(true);
     }
 
     @After
@@ -75,7 +75,8 @@ public class Table {
         // Convert table to text
         app.dispatch(".uno:ConvertTableToText");
         assertTrue("Convert Table to Text dialog pop up", writer_ConvertTableToTextDlg.exists());
-        typeKeys("<enter>");
+//      typeKeys("<enter>");
+        writer_ConvertTableToTextDlg.ok();  // "Enter" does not work on linux
 
         // Verify if text is converted successfully
         app.dispatch(".uno:SelectAll");

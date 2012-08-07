@@ -45,6 +45,7 @@ public class OpenDocumentWithHeaderFooter {
 
     @Before
     public void setUp() throws Exception {
+//      app.start(true);    // Bug 120476
         app.start();
     }
 

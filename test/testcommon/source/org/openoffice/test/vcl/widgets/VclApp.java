@@ -81,6 +81,18 @@ public class VclApp {
         communicationManager.start();
     }
 
+    public void start(boolean isCleanUserInstallation) {    // Default to clean user installation
+        if (openOffice != null) {
+            if (isCleanUserInstallation) {
+                openOffice.cleanUserInstallation();
+            }
+
+            openOffice.start();
+        }
+
+        communicationManager.start();
+    }
+
     public OpenOffice getOpenOffice() {
         return this.openOffice;
     }

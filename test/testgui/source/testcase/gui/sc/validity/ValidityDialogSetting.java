@@ -52,7 +52,7 @@ public class ValidityDialogSetting {
 
     @Before
     public void setUp() throws Exception {
-        app.start();
+        app.start(true);
 
         // New a spreadsheet, select cell range, open Validity dialog
         app.dispatch("private:factory/scalc");
@@ -309,10 +309,15 @@ public class ValidityDialogSetting {
         SC_ValidityCriteriaTabpage.select();
         SC_ValidityCriteriaTabpage.ok();
 
-        calc.rightClick(1, 1);
-        typeKeys("<shift s>");
-        typeKeys("<down><enter>");  // Choose a
-        sleep(2);   // if no sleep, error occur
+        // These codes are not stable: start
+//      calc.rightClick(1, 1);
+//      typeKeys("<shift s>");
+//      typeKeys("<down><enter>");  // Choose a
+//      sleep(2);   // if no sleep, error occur
+        // These codes are not stable: end
+        CalcUtil.selectRange("A1");
+        SC_InputBar_Input.activate();
+        typeKeys("a<enter>");
         assertEquals("a",CalcUtil.getCellText("A1"));
 
         CalcUtil.selectRange("B2");

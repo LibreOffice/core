@@ -47,8 +47,9 @@ public class SmokeTest {
 
     @Before
     public void setUp() throws Exception {
-        app.getOpenOffice().cleanUserInstallation();
-        app.start();
+//      app.getOpenOffice().cleanUserInstallation();
+//      app.start();
+        app.start(true);    // Default to clean user installation
         smoketestOutput = new File(oo.getUserInstallation(), "user/temp");
     }
 
