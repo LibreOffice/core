@@ -162,6 +162,7 @@ bool TemplateOnlineView::loadRepository (const sal_uInt16 nRepositoryId, bool bR
         {
             pItem->clearTemplates();
             mpItemView->Clear();
+            mpItemView->setId(nRepositoryId);
 
             uno::Reference< XRow > xRow( xResultSet, UNO_QUERY );
             uno::Reference< XContentAccess > xContentAccess( xResultSet, UNO_QUERY );
