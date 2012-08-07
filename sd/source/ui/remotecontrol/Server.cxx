@@ -90,7 +90,8 @@ void RemoteServer::listenThread()
     // TODO: deal with transmision errors gracefully.
     presentationStopped();
 
-    delete pTransmitter;
+    pTransmitter->notifyFinished();
+    pTransmitter->join();
     pTransmitter = NULL;
     fprintf( stderr, "Finished listening\n" );
 }

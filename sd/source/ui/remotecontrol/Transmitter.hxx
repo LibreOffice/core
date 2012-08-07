@@ -28,6 +28,7 @@ public:
     Transmitter( osl::StreamSocket &aSocket );
     ~Transmitter();
     void addMessage( const rtl::OString& aMessage, const Priority aPriority );
+    void notifyFinished();
 
 private:
     void execute();
@@ -35,6 +36,7 @@ private:
     ::osl::StreamSocket mStreamSocket;
 
     ::osl::Condition mQueuesNotEmpty;
+    ::osl::Condition mFinishRequested;
 
     ::osl::Mutex mQueueMutex;
 

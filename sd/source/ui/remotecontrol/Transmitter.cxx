@@ -17,6 +17,7 @@ Transmitter::Transmitter( StreamSocket &aSocket )
   : Thread( "TransmitterThread" ),
     mStreamSocket( aSocket ),
     mQueuesNotEmpty(),
+    mFinishRequested(),
     mQueueMutex(),
     mLowPriority(),
     mHighPriority()
@@ -28,6 +29,9 @@ void Transmitter::execute()
     while ( true )
     {
         mQueuesNotEmpty.wait();
+
+        if ( mFinishRequested.check() )
+            return;
 
         ::osl::MutexGuard aQueueGuard( mQueueMutex );
         if ( !mHighPriority.empty() )
@@ -49,6 +53,12 @@ void Transmitter::execute()
         }
     }
 
+}
+
+void Transmitter::notifyFinished()
+{
+    mFinishRequested.set();
+    mQueuesNotEmpty.set();
 }
 
 Transmitter::~Transmitter()
