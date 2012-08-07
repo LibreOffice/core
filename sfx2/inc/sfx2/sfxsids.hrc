@@ -275,8 +275,9 @@
 #define SID_GOTOLINE                        (SID_SFX_START + 1724)
 #define SID_SHOWLINES                       (SID_SFX_START + 1725)
 #define	SID_BLUETOOTH_SENDDOC				(SID_SFX_START + 1726)
+#define SID_TEMPLATE_MANAGER                (SID_SFX_START + 1727)
 
-//      SID_SFX_free_START                  (SID_SFX_START + 1727)
+//      SID_SFX_free_START                  (SID_SFX_START + 1728)
 //      SID_SFX_free_END                    (SID_SFX_START + 3999)
 
 #define SID_OPEN_NEW_VIEW                   (SID_SFX_START + 520)
@@ -329,8 +330,6 @@
 
 // Floating Window Template
 #define SID_STYLE_DESIGNER                  (SID_SFX_START + 539)
-
-#define SID_TEMPLATE_MANAGER                (SID_SFX_START + 1726)
 
 // Organizer
 #define SID_ORGANIZER                       (SID_SFX_START + 540)
