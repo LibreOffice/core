@@ -97,6 +97,12 @@ void RemoteServer::listenThread()
     fprintf( stderr, "Finished listening\n" );
 }
 
+void RemoteServer::pairClient()
+{
+    // Pairing: client sends PIN, server asks user, replies with accepted/rejected.
+    // We have to wait here until the user opens the dialog via the menu,
+    // typs in the pin etc.
+}
 
 void RemoteServer::execute()
 {

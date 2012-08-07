@@ -51,6 +51,7 @@ namespace sd
             static RemoteServer *spServer;
             osl::AcceptorSocket mSocket;
             osl::StreamSocket mStreamSocket;
+            void pairClient();
             void listenThread();
             void execute();
             static Transmitter *pTransmitter;

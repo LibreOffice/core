@@ -93,6 +93,7 @@
 #define CMD_SID_OUTLINE_TEXT_AUTOFIT                ".uno.OutlineTextAutofit"
 #define CMD_SID_PAGESETUP                           ".uno:PageSetup"
 #define CMD_SID_PRESENTATION                        ".uno:Presentation"
+#define CMD_SID_REMOTE                              ".uno:Remote"
 #define CMD_SID_PRESENTATION_LAYOUT                 ".uno:PresentationLayout"
 #define CMD_SID_RENAMELAYER                         ".uno:RenameLayer"
 #define CMD_SID_RENAMEPAGE                          ".uno:RenamePage"

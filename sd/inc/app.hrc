@@ -355,6 +355,7 @@
 #define SID_CUSTOM_ANIMATION_SCHEMES_PANEL  (SID_SD_START+333)
 #define SID_SLIDE_TRANSITIONS_PANEL         (SID_SD_START+334)
 // free
+#define SID_REMOTE_DLG                      (SID_SD_START+337)
 #define SID_CONNECTION_DLG                  (SID_SD_START+338)
 #define SID_PRESENTATION_DLG                (SID_SD_START+339)
 #define SID_HYPHENATION                     (SID_SD_START+340)

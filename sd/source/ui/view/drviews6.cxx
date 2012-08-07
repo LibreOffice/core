@@ -58,6 +58,7 @@
 #include "NavigatorChildWindow.hxx"
 #include "LayerDialogChildWindow.hxx"
 #include "sdresid.hxx"
+// #include "sdabstdlg.hxx"
 #include "fupoor.hxx"
 #include "fusldlg.hxx"
 #include "drawdoc.hxx"
@@ -629,6 +630,15 @@ void DrawViewShell::FuTemp04(SfxRequest& rReq)
         {
             SetCurrentFunction( FuSlideShowDlg::Create( this, GetActiveWindow(), mpDrawView, GetDoc(), rReq ) );
             Cancel();
+        }
+        break;
+
+        case SID_REMOTE_DLG:
+        {
+//                 SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
+//                 VclAbstractDialog* pDlg = pFact ? pFact->CreateSdRemoteDlg(GetActiveWindow()) : 0;
+//                 if (pDlg)
+//                     pDlg->Execute();
         }
         break;
 

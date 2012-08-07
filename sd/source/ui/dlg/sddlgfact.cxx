@@ -49,6 +49,7 @@
 #include "OutlineBulletDlg.hxx"
 #include "paragr.hxx"
 #include "present.hxx"
+#include "RemoteDialog.hxx"
 #include "prltempl.hxx"
 #include "sdpreslt.hxx"
 #include "tabtempl.hxx"
@@ -322,7 +323,6 @@ void AbstractSdStartPresDlg_Impl::GetAttr( SfxItemSet& rOutAttrs )
 {
     pDlg->GetAttr( rOutAttrs );
 }
-// AbstractSdStartPresDlg_Impl end
 
 //AbstractSdPresLayoutDlg_Impl begin
 void AbstractSdPresLayoutDlg_Impl::GetAttr( SfxItemSet& rOutAttrs )
@@ -490,6 +490,13 @@ AbstractSdStartPresDlg *  SdAbstractDialogFactory_Impl::CreateSdStartPresentatio
     return new AbstractSdStartPresDlg_Impl( new SdStartPresentationDlg( pWindow, rInAttrs, rPageNames, pCSList ) );
 }
 // add for SdStartPresentationDlg end
+
+// add for SdRemoteDlg begin
+// VclAbstractDialog * SdAbstractDialogFactory_Impl::CreateSdRemoteDlg( ::Window* pWindow )
+// {
+//      return new VclAbstractDialog_Impl( new SdRemoteDlg( pWindow ) );
+// }
+// add for SdRemoteDlg end
 
 // add for SdPresLayoutTemplateDlg begin
 SfxAbstractTabDialog *  SdAbstractDialogFactory_Impl::CreateSdPresLayoutTemplateDlg( SfxObjectShell* pDocSh, ::Window* pParent, SdResId DlgId, SfxStyleSheetBase& rStyleBase, PresentationObjects ePO, SfxStyleSheetBasePool* pSSPool )

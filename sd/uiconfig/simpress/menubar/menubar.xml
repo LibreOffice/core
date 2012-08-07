@@ -289,6 +289,7 @@
             <menu:menuitem menu:id=".uno:Presentation"/>
             <menu:menuitem menu:id=".uno:PresentationDialog"/>
             <menu:menuitem menu:id=".uno:RehearseTimings"/>
+            <menu:menuitem menu:id=".uno:Remote"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:AnimationEffects"/>
             <!--menu:menuitem menu:id=".uno:CustomAnimationSchemes" / -->
