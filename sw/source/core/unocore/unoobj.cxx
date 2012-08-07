@@ -27,7 +27,7 @@
  ************************************************************************/
 
 #include <com/sun/star/table/TableSortField.hpp>
-
+#include <comphelper/string.hxx>
 #include <osl/endian.h>
 #include <rtl/ustrbuf.hxx>
 #include <unotools/collatorwrapper.hxx>
@@ -211,30 +211,13 @@ void SwUnoCursorHelper::GetTextFromPam(SwPaM & rPam, OUString & rBuffer)
         {
             aStream << (sal_Unicode)'\0';
 
-            long lUniLen = (lLen / sizeof( sal_Unicode ));
-            ::rtl::OUStringBuffer aStrBuffer( lUniLen );
             aStream.Seek( 0 );
             aStream.ResetError();
-            while(lUniLen)
-            {
-                String sBuf;
-                sal_Int32 nLocalLen = 0;
-                if( lUniLen >= STRING_MAXLEN )
-                {
-                    nLocalLen =  STRING_MAXLEN - 1;
-                }
-                else
-                {
-                    nLocalLen = lUniLen;
-                }
-                sal_Unicode *const pStrBuf =
-                    sBuf.AllocBuffer( xub_StrLen( nLocalLen + 1));
-                aStream.Read( pStrBuf, 2 * nLocalLen );
-                pStrBuf[ nLocalLen ] = '\0';
-                aStrBuffer.append( pStrBuf, nLocalLen );
-                lUniLen -= nLocalLen;
-            }
-            rBuffer = aStrBuffer.makeStringAndClear();
+
+            long lUniLen = (lLen / sizeof( sal_Unicode ));
+            rtl_uString *pStr = comphelper::string::rtl_uString_alloc(lUniLen);
+            aStream.Read(pStr->buffer, lUniLen * sizeof(sal_Unicode));
+            rBuffer = rtl::OUString(pStr, SAL_NO_ACQUIRE);
         }
         xWrt->bShowProgress = bOldShowProgress;
     }

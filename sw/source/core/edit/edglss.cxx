@@ -26,6 +26,7 @@
  *
  ************************************************************************/
 
+#include <comphelper/string.hxx>
 #include <osl/endian.h>
 #include <hintids.hxx>
 #include <svl/urihelper.hxx>
@@ -344,15 +345,16 @@ sal_Bool SwEditShell::GetSelectedText( String &rBuf, int nHndlParaBrk )
 
                 const sal_Unicode *p = (sal_Unicode*)aStream.GetBuffer();
                 if( p )
-                    rBuf = p;
+                    rBuf = rtl::OUString(p);
                 else
                 {
-                    sal_Unicode* pStrBuf = rBuf.AllocBuffer( xub_StrLen(
-                                    ( lLen / sizeof( sal_Unicode ))) );
+                    using comphelper::string::rtl_uString_alloc;
+                    rtl_uString *pStr = rtl_uString_alloc(lLen / sizeof( sal_Unicode ));
                     aStream.Seek( 0 );
                     aStream.ResetError();
-                    aStream.Read( pStrBuf, lLen );
-                    pStrBuf[ lLen / sizeof( sal_Unicode ) ] = '\0';
+                    //endian specific?, yipes!
+                    aStream.Read(pStr->buffer, lLen);
+                    rBuf = rtl::OUString(pStr, SAL_NO_ACQUIRE);
                 }
             }
         }

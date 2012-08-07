@@ -1399,32 +1399,7 @@ rtl::OUString SvStream::ReadUniOrByteString( rtl_TextEncoding eSrcCharSet )
 {
     // read UTF-16 string directly from stream ?
     if (eSrcCharSet == RTL_TEXTENCODING_UNICODE)
-    {
-        String aStr;
-        sal_uInt32 nLen(0);
-        operator>> (nLen);
-        if (nLen)
-        {
-            if (nLen > STRING_MAXLEN)
-            {
-                SetError(SVSTREAM_GENERALERROR);
-                return aStr;
-            }
-            sal_Unicode *pStr = aStr.AllocBuffer(
-                static_cast< xub_StrLen >(nLen));
-            BOOST_STATIC_ASSERT(STRING_MAXLEN <= SAL_MAX_SIZE / 2);
-            Read( pStr, nLen << 1 );
-
-            if (bSwap)
-            {
-                for (sal_Unicode *pEnd = pStr + nLen; pStr < pEnd; pStr++)
-                    SwapUShort(*pStr);
-            }
-        }
-
-        return aStr;
-    }
-
+        return read_lenPrefixed_uInt16s_ToOUString<sal_uInt32>(*this);
     return read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(*this, eSrcCharSet);
 }
 
@@ -1434,31 +1409,9 @@ SvStream& SvStream::WriteUniOrByteString( const rtl::OUString& rStr, rtl_TextEnc
 {
     // write UTF-16 string directly into stream ?
     if (eDestCharSet == RTL_TEXTENCODING_UNICODE)
-    {
-        sal_Int32 nLen = rStr.getLength();
-        operator<< (nLen);
-        if (nLen)
-        {
-            if (bSwap)
-            {
-                const sal_Unicode *pStr = rStr.getStr();
-                const sal_Unicode *pEnd = pStr + nLen;
-
-                for (; pStr < pEnd; pStr++)
-                {
-                    sal_Unicode c = *pStr;
-                    SwapUShort(c);
-                    WRITENUMBER_WITHOUT_SWAP(sal_uInt16,c)
-                }
-            }
-            else
-                Write( rStr.getStr(), nLen << 1 );
-        }
-
-        return *this;
-    }
-
-    write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(*this, rStr, eDestCharSet);
+        write_lenPrefixed_uInt16s_FromOUString<sal_uInt32>(*this, rStr);
+    else
+        write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(*this, rStr, eDestCharSet);
     return *this;
 }
 

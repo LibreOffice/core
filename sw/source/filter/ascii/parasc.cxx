@@ -26,7 +26,7 @@
  *
  ************************************************************************/
 
-
+#include <boost/scoped_array.hpp>
 #include <tools/stream.hxx>
 #include <hintids.hxx>
 #include <rtl/tencinfo.h>
@@ -303,7 +303,7 @@ sal_uLong SwASCIIParser::ReadChars()
         bSwapUnicode = rInput.IsEndianSwap();
     }
 
-    String sWork;
+    boost::scoped_array<sal_Unicode> aWork;
     sal_uLong nArrOffset = 0;
 
     do {
@@ -331,7 +331,8 @@ sal_uLong SwASCIIParser::ReadChars()
             {
                 sal_uInt32 nInfo;
                 sal_Size nNewLen = lGCount, nCntBytes;
-                sal_Unicode* pBuf = sWork.AllocBuffer( static_cast< xub_StrLen >(nNewLen) );
+                aWork.reset(new sal_Unicode[nNewLen]);
+                sal_Unicode* pBuf = aWork.get();
 
                 nNewLen = rtl_convertTextToUnicode( hConverter, hContext,
                                 pArr, lGCount, pBuf, nNewLen,
@@ -345,9 +346,8 @@ sal_uLong SwASCIIParser::ReadChars()
                                 &nCntBytes );
                 if( 0 != ( nArrOffset = lGCount - nCntBytes ) )
                     memmove( pArr, pArr + nCntBytes, nArrOffset );
-                sWork.ReleaseBufferAccess( static_cast< xub_StrLen >(nNewLen) );
 
-                pStt = pLastStt = sWork.GetBufferAccess();
+                pStt = pLastStt = aWork.get();
                 pEnd = pStt + nNewLen;
             }
             else

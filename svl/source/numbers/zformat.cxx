@@ -170,9 +170,9 @@ void ImpSvNumberformatInfo::Save(SvStream& rStream, sal_uInt16 nAnz) const
 
 void ImpSvNumberformatInfo::Load(SvStream& rStream, sal_uInt16 nAnz)
 {
-    for (sal_uInt16 i = 0; i < nAnz; i++)
+    for (sal_uInt16 i = 0; i < nAnz; ++i)
     {
-        SvNumberformat::LoadString( rStream, sStrArray[i] );
+        sStrArray[i] = SvNumberformat::LoadString( rStream );
         rStream >> nTypeArray[i];
     }
     sal_Bool bStreamThousand;
@@ -1565,7 +1565,7 @@ NfHackConversion SvNumberformat::Load( SvStream& rStream,
 {
     rHdr.StartEntry();
     sal_uInt16 nOp1, nOp2;
-    SvNumberformat::LoadString( rStream, sFormatstring );
+    sFormatstring = SvNumberformat::LoadString( rStream );
     sal_Bool bStreamStandard, bStreamUsed;
     rStream >> eType >> fLimit1 >> fLimit2
             >> nOp1 >> nOp2 >> bStreamStandard >> bStreamUsed;
@@ -1623,7 +1623,7 @@ NfHackConversion SvNumberformat::Load( SvStream& rStream,
     String aComment;        // wird nach dem NewCurrency-Geraffel richtig gesetzt
     if ( rHdr.BytesLeft() )
     {   // ab SV_NUMBERFORMATTER_VERSION_NEWSTANDARD
-        SvNumberformat::LoadString( rStream, aComment );
+        aComment = SvNumberformat::LoadString( rStream );
         rStream >> nNewStandardDefined;
     }
 
@@ -1752,32 +1752,27 @@ void SvNumberformat::ConvertLanguage( SvNumberFormatter& rConverter,
 }
 
 // static
-void SvNumberformat::LoadString( SvStream& rStream, String& rStr )
+rtl::OUString SvNumberformat::LoadString( SvStream& rStream )
 {
     CharSet eStream = rStream.GetStreamCharSet();
     rtl::OString aStr = read_lenPrefixed_uInt8s_ToOString<sal_uInt16>(rStream);
     sal_Char cStream = NfCurrencyEntry::GetEuroSymbol( eStream );
     if (aStr.indexOf(cStream) == -1)
     {   // simple conversion to unicode
-        rStr = rtl::OStringToOUString(aStr, eStream);
+        return rtl::OStringToOUString(aStr, eStream);
     }
-    else
+
+    sal_Unicode cTarget = NfCurrencyEntry::GetEuroSymbol();
+    rtl::OUStringBuffer aBuf(aStr.getLength());
+    for (sal_Int32 i = 0; i < aStr.getLength(); ++i)
     {
-        sal_Unicode cTarget = NfCurrencyEntry::GetEuroSymbol();
-        register const sal_Char* p = aStr.getStr();
-        register const sal_Char* const pEnd = p + aStr.getLength();
-        register sal_Unicode* pUni = rStr.AllocBuffer(aStr.getLength());
-        while ( p < pEnd )
-        {
-            if ( *p == cStream )
-                *pUni = cTarget;
-            else
-                *pUni = rtl::OUString(p, 1, eStream).toChar();
-            ++p;
-            ++pUni;
-        }
-        *pUni = 0;
+        if (aStr[i] == cStream)
+            aBuf.append(cTarget);
+        else
+            aBuf.append(rtl::OUString(aStr.getStr()+i, 1, eStream).toChar());
     }
+
+    return aBuf.makeStringAndClear();
 }
 
 void SvNumberformat::Save( SvStream& rStream, ImpSvNumMultipleWriteHeader& rHdr ) const
@@ -4735,16 +4730,17 @@ String SvNumberformat::ImpGetNatNumString( const SvNumberNatNum& rNum,
         {   // speed up the most common case
             if ( 0 <= nVal && nVal < 10 )
             {
-                sal_Unicode* p = aStr.AllocBuffer( 2 );
-                *p++ = '0';
-                *p = sal_Unicode( '0' + nVal );
+                sal_Unicode aBuf[2];
+                aBuf[0] = '0';
+                aBuf[1] = '0' + nVal;
+                aStr = rtl::OUString(aBuf, SAL_N_ELEMENTS(aBuf));
             }
             else
-                aStr = String::CreateFromInt32( nVal );
+                aStr = rtl::OUString::valueOf( nVal );
         }
         else
         {
-            String aValStr( String::CreateFromInt32( nVal ) );
+            String aValStr( rtl::OUString::valueOf( nVal ) );
             if ( aValStr.Len() >= nMinDigits )
                 aStr = aValStr;
             else
@@ -4755,7 +4751,7 @@ String SvNumberformat::ImpGetNatNumString( const SvNumberNatNum& rNum,
         }
     }
     else
-        aStr = String::CreateFromInt32( nVal );
+        aStr = rtl::OUString::valueOf( nVal );
     ImpTransliterate( aStr, rNum );
     return aStr;
 }

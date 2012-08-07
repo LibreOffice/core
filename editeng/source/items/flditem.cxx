@@ -26,6 +26,7 @@
  *
  ************************************************************************/
 
+#include <comphelper/string.hxx>
 #include <vcl/metaact.hxx>
 #include <svl/zforlist.hxx>
 #include <tools/urlobj.hxx>
@@ -550,25 +551,28 @@ int SvxURLField::operator==( const SvxFieldData& rOther ) const
 
 // -----------------------------------------------------------------------
 
-static void write_unicode( SvPersistStream & rStm, const String& rString )
+static void write_unicode( SvPersistStream & rStm, const rtl::OUString& rString )
 {
-    sal_uInt16 nL = rString.Len();
+    sal_uInt16 nL =  sal::static_int_cast<sal_uInt16>(rString.getLength());
     rStm << nL;
-    rStm.Write( rString.GetBuffer(), nL*sizeof(sal_Unicode) );
+    //endian specific?, yipes!
+    rStm.Write( rString.getStr(), nL*sizeof(sal_Unicode) );
 }
 
-static void read_unicode( SvPersistStream & rStm, rtl::OUString& rString )
+static rtl::OUString read_unicode( SvPersistStream & rStm )
 {
+    rtl_uString *pStr = NULL;
     sal_uInt16 nL = 0;
     rStm >> nL;
-    String aStr;
     if ( nL )
     {
-        aStr.AllocBuffer( nL );
-        rStm.Read( aStr.GetBufferAccess(), nL*sizeof(sal_Unicode) );
-        aStr.ReleaseBufferAccess( nL );
+        using comphelper::string::rtl_uString_alloc;
+        pStr = rtl_uString_alloc(nL);
+        //endian specific?, yipes!
+        rStm.Read(pStr->buffer, nL*sizeof(sal_Unicode));
     }
-    rString = aStr;
+    //take ownership of buffer and return, otherwise return empty string
+    return pStr ? rtl::OUString(pStr, SAL_NO_ACQUIRE) : rtl::OUString();
 }
 
 void SvxURLField::Load( SvPersistStream & rStm )
@@ -578,9 +582,9 @@ void SvxURLField::Load( SvPersistStream & rStm )
     rStm >> nFormat;
     eFormat= (SvxURLFormat)nFormat;
 
-    read_unicode( rStm, aURL );
-    read_unicode( rStm, aRepresentation );
-    read_unicode( rStm, aTargetFrame );
+    aURL = read_unicode( rStm );
+    aRepresentation = read_unicode( rStm );
+    aTargetFrame = read_unicode( rStm );
 }
 
 // -----------------------------------------------------------------------
@@ -1088,9 +1092,9 @@ void SvxAuthorField::Load( SvPersistStream & rStm )
 {
     sal_uInt16 nType = 0, nFormat = 0;
 
-    read_unicode( rStm, aName );
-    read_unicode( rStm, aFirstName );
-    read_unicode( rStm, aShortName );
+    aName = read_unicode( rStm );
+    aFirstName = read_unicode( rStm );
+    aShortName = read_unicode( rStm );
 
     rStm >> nType;
     rStm >> nFormat;

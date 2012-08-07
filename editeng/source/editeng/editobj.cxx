@@ -26,7 +26,7 @@
  *
  ************************************************************************/
 
-
+#include <comphelper/string.hxx>
 #include <rtl/strbuf.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/dialog.hxx>
@@ -1444,6 +1444,8 @@ void BinTextObject::CreateData( SvStream& rIStream )
         rIStream >> bUnicodeStrings;
         if ( bUnicodeStrings )
         {
+            using comphelper::string::rtl_uString_alloc;
+
             for ( sal_uInt16 nPara = 0; nPara < nParagraphs; nPara++ )
             {
                 ContentInfo& rC = aContents[nPara];
@@ -1453,18 +1455,18 @@ void BinTextObject::CreateData( SvStream& rIStream )
                 rIStream >> nL;
                 if ( nL )
                 {
-                    rC.GetText().AllocBuffer( nL );
-                    rIStream.Read(rC.GetText().GetBufferAccess(), nL*sizeof(sal_Unicode));
-                    rC.GetText().ReleaseBufferAccess(nL);
+                    rtl_uString *pStr = rtl_uString_alloc(nL);
+                    rIStream.Read(pStr->buffer, nL*sizeof(sal_Unicode));
+                    rC.GetText() = rtl::OUString(pStr, SAL_NO_ACQUIRE);
                 }
 
                 // StyleSheetName
                 rIStream >> nL;
                 if ( nL )
                 {
-                    rC.GetStyle().AllocBuffer(nL);
-                    rIStream.Read(rC.GetStyle().GetBufferAccess(), nL*sizeof(sal_Unicode) );
-                    rC.GetStyle().ReleaseBufferAccess(nL);
+                    rtl_uString *pStr = rtl_uString_alloc(nL);
+                    rIStream.Read(pStr->buffer, nL*sizeof(sal_Unicode) );
+                    rC.GetStyle() = rtl::OUString(pStr, SAL_NO_ACQUIRE);
                 }
             }
         }

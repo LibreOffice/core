@@ -302,18 +302,14 @@ void ImplWriteRasterOpAction( SvStream& rOStm, sal_Int16 nRasterOp )
 
 sal_Bool ImplWriteUnicodeComment( SvStream& rOStm, const String& rString )
 {
-    xub_StrLen i, nStringLen = rString.Len();
+    xub_StrLen nStringLen = rString.Len();
     if ( nStringLen )
     {
         sal_uInt32  nSize = ( nStringLen << 1 ) + 4;
         sal_uInt16  nType = GDI_UNICODE_COMMENT;
 
         rOStm << nType << nSize;
-        for ( i = 0; i < nStringLen; i++ )
-        {
-            sal_Unicode nUni = rString.GetChar( i );
-            rOStm << nUni;
-        }
+        write_uInt16s_FromOUString(rOStm, rString);
     }
     return nStringLen != 0;
 }
@@ -336,11 +332,7 @@ void ImplReadUnicodeComment( sal_uInt32 nStrmPos, SvStream& rIStm, String& rStri
         nStringLen = sal::static_int_cast<xub_StrLen>(( nActionSize - 4 ) >> 1);
 
         if ( nStringLen && ( nType == GDI_UNICODE_COMMENT ) )
-        {
-            sal_Unicode* pBuffer = rString.AllocBuffer( nStringLen );
-            while ( nStringLen-- )
-                rIStm >> *pBuffer++;
-        }
+            rString = read_uInt16s_ToOUString(rIStm, nStringLen);
     }
     rIStm.Seek( nOld );
 }

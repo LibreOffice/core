@@ -239,7 +239,7 @@ public:
 
     // Load a string which might contain an Euro symbol,
     // in fact that could be any string used in number formats.
-    static void LoadString( SvStream& rStream, String& rStr );
+    static rtl::OUString LoadString( SvStream& rStream );
 
     /**
      * Get output string from a numeric value that fits the number of

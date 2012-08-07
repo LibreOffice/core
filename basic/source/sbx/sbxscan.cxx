@@ -785,9 +785,10 @@ void SbxValue::Format( XubString& rRes, const XubString* pFmt ) const
                 if( nMin < 10 && aFmtStr.EqualsIgnoreCaseAscii( VBAFORMAT_NN ) )
                 {
                     // Minute in two digits
-                     sal_Unicode* p = rRes.AllocBuffer( 2 );
-                     *p++ = '0';
-                     *p = sal_Unicode( '0' + nMin );
+                     sal_Unicode aBuf[2];
+                     aBuf[0] = '0';
+                     aBuf[1] = '0' + nMin;
+                     rRes = rtl::OUString(aBuf, SAL_N_ELEMENTS(aBuf));
                 }
                 else
                 {

@@ -28,7 +28,7 @@
 
 
 #include <iodetect.hxx>
-
+#include <boost/scoped_array.hpp>
 #include <osl/endian.h>
 #include <sot/storage.hxx>
 #include <svtools/parhtml.hxx>
@@ -450,8 +450,8 @@ bool SwIoSystem::IsDetectableText(const sal_Char* pBuf, sal_uLong &rLen,
 
     if (eCharSet != RTL_TEXTENCODING_DONTKNOW)
     {
-        String sWork;
-        sal_Unicode *pNewBuf = sWork.AllocBuffer( static_cast< xub_StrLen >(rLen));
+        boost::scoped_array<sal_Unicode> aWork(new sal_Unicode[rLen]);
+        sal_Unicode *pNewBuf = aWork.get();
         sal_Size nNewLen;
         if (eCharSet != RTL_TEXTENCODING_UCS2)
         {
@@ -494,9 +494,6 @@ bool SwIoSystem::IsDetectableText(const sal_Char* pBuf, sal_uLong &rLen,
                 }
             }
         }
-
-        sWork.ReleaseBufferAccess( static_cast< xub_StrLen >(nNewLen) );
-        pNewBuf = sWork.GetBufferAccess();
 
         for (sal_uLong nCnt = 0; nCnt < nNewLen; ++nCnt, ++pNewBuf)
         {

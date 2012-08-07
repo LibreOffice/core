@@ -576,12 +576,11 @@ namespace streamdetail
     template<typename prefix, typename S, sal_Size (*writeOper)(SvStream&, const S&, sal_Size)>
         sal_Size write_lenPrefixed_seq_From_str(SvStream& rStrm, const S &rStr)
     {
-        SAL_WARN_IF(rStr.getLength() > std::numeric_limits<prefix>::max(),
-            "tools.stream",
-            "string too long for prefix count to fit in output type");
-
         sal_Size nWritten = 0;
         prefix nUnits = std::min<sal_Size>(rStr.getLength(), std::numeric_limits<prefix>::max());
+        SAL_WARN_IF(static_cast<sal_Size>(nUnits) != static_cast<sal_Size>(rStr.getLength()),
+            "tools.stream",
+            "string too long for prefix count to fit in output type");
         rStrm << nUnits;
         if (rStrm.good())
         {
