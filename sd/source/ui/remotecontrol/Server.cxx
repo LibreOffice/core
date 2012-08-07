@@ -10,6 +10,7 @@
 #include <algorithm>
 #include <vector>
 
+#include "officecfg/Office/Common.hxx"
 #include <comphelper/processfactory.hxx>
 
 #include "sddll.hxx"
@@ -161,9 +162,13 @@ void RemoteServer::setup()
 
 void SdDLL::RegisterRemotes()
 {
-  fprintf( stderr, "Register our remote control goodness\n" );
-  sd::RemoteServer::setup();
-  sd::DiscoveryService::setup();
+    // Disable unless in experimental mode for now
+    uno::Reference< uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
+    if (!xContext.is() || !officecfg::Office::Common::Misc::ExperimentalMode::get(xContext))
+        return;
+
+    sd::RemoteServer::setup();
+    sd::DiscoveryService::setup();
 
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
