@@ -28,6 +28,7 @@
 #define TBI_TEMPLATE_MOVE           17
 #define TBI_TEMPLATE_DELETE         18
 
+#define MNI_ACTION_REFRESH          22
 #define MNI_ACTION_SORT_NAME        23
 
 #define BTN_TEMPLATE_CLOSE          24
@@ -35,6 +36,7 @@
 #define TBI_TEMPLATE_FOLDER_DEL     25
 #define TBI_TEMPLATE_REPOSITORY     26
 
+#define STR_ACTION_REFRESH          263
 #define STR_ACTION_SORT_NAME        264
 
 #define MNI_MOVE_NEW                265
@@ -56,3 +58,4 @@
 #define IMG_CREATE_PRESENT          302
 #define IMG_CREATE_DRAW             303
 #define IMG_ACTION_SORT             304
+#define IMG_ACTION_REFRESH          305

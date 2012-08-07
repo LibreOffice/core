@@ -28,6 +28,8 @@ public:
     // Load repositories from user settings.
     virtual void Populate ();
 
+    virtual void reload ();
+
     virtual void filterTemplatesByApp (const FILTER_APPLICATION &eApp);
 
     virtual void showOverlay (bool bVisible);

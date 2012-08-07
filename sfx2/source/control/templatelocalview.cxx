@@ -174,6 +174,30 @@ void TemplateLocalView::Populate ()
         Invalidate();
 }
 
+void TemplateLocalView::reload ()
+{
+    mpDocTemplates->Update();
+
+    Clear();
+
+    Populate();
+
+    if (mpItemView->IsVisible())
+    {
+        sal_uInt16 nItemId = mpItemView->getId() + 1;
+
+        for (size_t i = 0; i < mItemList.size(); ++i)
+        {
+            if (mItemList[i]->mnId == nItemId)
+            {
+                mpItemView->Clear();
+                mpItemView->InsertItems(static_cast<TemplateLocalViewItem*>(mItemList[i])->maTemplates);
+                break;
+            }
+        }
+    }
+}
+
 std::vector<rtl::OUString> TemplateLocalView::getFolderNames()
 {
     size_t n = mItemList.size();

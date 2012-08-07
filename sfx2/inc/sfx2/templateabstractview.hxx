@@ -68,6 +68,8 @@ public:
     // Fill view with template folders thumbnails
     virtual void Populate () = 0;
 
+    virtual void reload () = 0;
+
     virtual void filterTemplatesByApp (const FILTER_APPLICATION &eApp) = 0;
 
     virtual void showOverlay (bool bVisible) = 0;

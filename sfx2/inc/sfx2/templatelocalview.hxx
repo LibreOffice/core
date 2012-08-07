@@ -29,6 +29,8 @@ public:
     // Fill view with template folders thumbnails
     virtual void Populate ();
 
+    virtual void reload ();
+
     std::vector<rtl::OUString> getFolderNames ();
 
     virtual void showOverlay (bool bVisible);

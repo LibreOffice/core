@@ -111,6 +111,7 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
     // Create popup menus
     mpActionMenu = new PopupMenu;
     mpActionMenu->InsertItem(MNI_ACTION_SORT_NAME,SfxResId(STR_ACTION_SORT_NAME).toString(),SfxResId(IMG_ACTION_SORT));
+    mpActionMenu->InsertItem(MNI_ACTION_REFRESH,SfxResId(STR_ACTION_REFRESH).toString(),SfxResId(IMG_ACTION_REFRESH));
     mpActionMenu->SetSelectHdl(LINK(this,SfxTemplateManagerDlg,MenuSelectHdl));
 
     mpRepositoryMenu = new PopupMenu;
@@ -513,6 +514,9 @@ IMPL_LINK(SfxTemplateManagerDlg, MenuSelectHdl, Menu*, pMenu)
             maView->sortOverlayItems(SortView_Name());
         else
             maView->sortItems(SortView_Name());
+        break;
+    case MNI_ACTION_REFRESH:
+        mpCurView->reload();
         break;
     default:
         break;

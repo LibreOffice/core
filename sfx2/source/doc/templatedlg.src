@@ -15,6 +15,11 @@ String STR_ACTION_SORT_NAME
     Text [ en-US ] = "Sort by name";
 };
 
+String STR_ACTION_REFRESH
+{
+    Text [ en-US ] = "Refresh";
+};
+
 String STR_MOVE_NEW
 {
     Text [ en-US ] = "New folder";
@@ -120,6 +125,14 @@ ModelessDialog DLG_TEMPLATE_MANAGER
         ImageBitmap = Bitmap
         {
             File = "sortascending.png";
+        };
+    };
+
+    Image IMG_ACTION_REFRESH
+    {
+        ImageBitmap = Bitmap
+        {
+            File = "reload.png";
         };
     };
 

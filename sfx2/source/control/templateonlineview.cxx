@@ -93,6 +93,11 @@ void TemplateOnlineView::Populate()
     }
 }
 
+void TemplateOnlineView::reload ()
+{
+    loadRepository(mpItemView->getId(),true);
+}
+
 void TemplateOnlineView::filterTemplatesByApp(const FILTER_APPLICATION &eApp)
 {
     if (mpItemView->IsVisible())
