@@ -266,7 +266,7 @@ endef
 
 # Use standard configuration.
 define gb_CppunitTest_use_configuration
-$(call gb_CppunitTest_get_target,$(1)) : $(call gb_Configuration_get_target,officecfg)
+$(call gb_CppunitTest_get_target,$(1)) : $(call gb_Configuration_get_target,registry)
 $(call gb_CppunitTest__use_configuration,$(1),xcsxcu,$(gb_Configuration_registry))
 
 endef

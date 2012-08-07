@@ -505,7 +505,7 @@ endef
 #
 # Example:
 # # foo needs schemas from the main configuration
-# $(eval $(call gb_Configuration_use_configuration,foo,officecfg))
+# $(eval $(call gb_Configuration_use_configuration,foo,registry))
 define gb_Configuration_use_configuration
 $(call gb_Configuration_get_preparation_target,$(1)) : $(call gb_Configuration_get_target,$(2))
 $(call gb_Configuration_get_target,$(1)) : SCHEMA_ROOT := $(gb_Configuration_registry)/schema

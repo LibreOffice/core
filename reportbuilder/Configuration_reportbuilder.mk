@@ -27,7 +27,7 @@
 
 $(eval $(call gb_Configuration_Configuration,sun-report-builder,nodeliver))
 
-$(eval $(call gb_Configuration_use_configuration,sun-report-builder,officecfg))
+$(eval $(call gb_Configuration_use_configuration,sun-report-builder,registry))
 
 $(eval $(call gb_Configuration_add_schemas,sun-report-builder,reportbuilder/registry/schema,\
 	org/openoffice/Office/ReportDesign.xcs \
