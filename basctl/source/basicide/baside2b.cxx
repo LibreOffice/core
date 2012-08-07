@@ -49,8 +49,19 @@ using namespace ::com::sun::star::uno;
 
 namespace
 {
+
 long nVirtToolBoxHeight;    // inited in WatchWindow, used in Stackwindow
 long nHeaderBarHeight;
+
+// Returns pBase converted to SbxVariable if valid and is not an SbxMethod.
+SbxVariable const* IsSbxVariable (SbxBase const* pBase)
+{
+    if (SbxVariable const* pVar = dynamic_cast<SbxVariable const*>(pBase))
+        if (!dynamic_cast<SbxMethod const*>(pVar))
+            return pVar;
+    return 0;
+}
+
 } // namespace
 
 #define SCROLL_LINE     12
@@ -297,9 +308,8 @@ void EditorWindow::RequestHelp( const HelpEvent& rHEvt )
                     if ( strchr( cSuffixes, aWord.GetChar( nLastChar ) ) )
                         aWord.Erase( nLastChar, 1 );
                     SbxBase* pSBX = StarBASIC::FindSBXInCurrentScope( aWord );
-                    if ( pSBX && pSBX->ISA( SbxVariable ) && !pSBX->ISA( SbxMethod ) )
+                    if (SbxVariable const* pVar = IsSbxVariable(pSBX))
                     {
-                        SbxVariable* pVar = (SbxVariable*)pSBX;
                         SbxDataType eType = pVar->GetType();
                         if ( (sal_uInt8)eType == (sal_uInt8)SbxOBJECT )
                             // might cause a crash e. g. at the selections-object
@@ -673,9 +683,9 @@ void EditorWindow::DataChanged(DataChangedEvent const & rDCEvt)
 
 void EditorWindow::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 {
-    if ( rHint.ISA( TextHint ) )
+    if (TextHint const* pTextHint = dynamic_cast<TextHint const*>(&rHint))
     {
-        const TextHint& rTextHint = (const TextHint&)rHint;
+        TextHint const& rTextHint = *pTextHint;
         if( rTextHint.GetId() == TEXT_HINT_VIEWSCROLLED )
         {
             if ( pModulWindow->GetHScrollBar() )
@@ -1891,10 +1901,7 @@ SbxBase* WatchTreeListBox::ImplGetSBXForEntry( SvLBoxEntry* pEntry, bool& rbArra
         if( pObj )
         {
             pSBX = pObj->Find( aVName, SbxCLASS_DONTCARE );
-
-            SbxVariable* pVar;
-            if ( pSBX && (pVar = PTR_CAST( SbxVariable, pSBX )) != NULL
-                        && !pSBX->ISA( SbxMethod ) )
+            if (SbxVariable const* pVar = IsSbxVariable(pSBX))
             {
                 // Force getting value
                 SbxValues aRes;
@@ -1926,8 +1933,8 @@ sal_Bool WatchTreeListBox::EditingEntry( SvLBoxEntry* pEntry, Selection& )
     {
         // No out of scope entries
         bool bArrayElement;
-        SbxBase* pSBX = ImplGetSBXForEntry( pEntry, bArrayElement );
-        if ( ( pSBX && pSBX->ISA( SbxVariable ) && !pSBX->ISA( SbxMethod ) ) || bArrayElement )
+        SbxBase const* pSbx = ImplGetSBXForEntry( pEntry, bArrayElement );
+        if (IsSbxVariable(pSbx) || bArrayElement)
         {
             // Accept no objects and only end nodes of arrays for editing
             if( !pItem->mpObject && (pItem->mpArray == NULL || pItem->nDimLevel == pItem->nDimCount) )
@@ -1963,9 +1970,8 @@ bool WatchTreeListBox::ImplBasicEntryEdited( SvLBoxEntry* pEntry, const String& 
     bool bArrayElement;
     SbxBase* pSBX = ImplGetSBXForEntry( pEntry, bArrayElement );
 
-    if ( pSBX && pSBX->ISA( SbxVariable ) && !pSBX->ISA( SbxMethod ) )
+    if (SbxVariable const* pVar = IsSbxVariable(pSBX))
     {
-        SbxVariable* pVar = (SbxVariable*)pSBX;
         SbxDataType eType = pVar->GetType();
         if ( (sal_uInt8)eType != (sal_uInt8)SbxOBJECT
              && ( eType & SbxARRAY ) == 0 )
@@ -2082,18 +2088,15 @@ void WatchTreeListBox::UpdateWatches( bool bBasicStopped )
             }
 
             bool bCollapse = false;
-            if ( pSBX && pSBX->ISA( SbxVariable ) && !pSBX->ISA( SbxMethod ) )
+            if (SbxVariable const* pVar = IsSbxVariable(pSBX))
             {
-                SbxVariable* pVar = (SbxVariable*)pSBX;
                 // extra treatment of arrays
                 SbxDataType eType = pVar->GetType();
                 if ( eType & SbxARRAY )
                 {
                     // consider multidimensinal arrays!
-                    SbxBase* pBase = pVar->GetObject();
-                    if ( pBase && pBase->ISA( SbxDimArray ) )
+                    if (SbxDimArray* pNewArray = dynamic_cast<SbxDimArray*>(pVar->GetObject()))
                     {
-                        SbxDimArray* pNewArray = (SbxDimArray*)pBase;
                         SbxDimArray* pOldArray = pItem->mpArray;
 
                         bool bArrayChanged = false;
@@ -2154,12 +2157,7 @@ void WatchTreeListBox::UpdateWatches( bool bBasicStopped )
                 }
                 else if ( (sal_uInt8)eType == (sal_uInt8)SbxOBJECT )
                 {
-                    SbxObject* pObj = NULL;
-                    SbxBase* pBase = pVar->GetObject();
-                    if( pBase && pBase->ISA( SbxObject ) )
-                        pObj = (SbxObject*)pBase;
-
-                    if( pObj )
+                    if (SbxObject* pObj = dynamic_cast<SbxObject*>(pVar->GetObject()))
                     {
                         // Check if member list has changed
                         bool bObjChanged = false;

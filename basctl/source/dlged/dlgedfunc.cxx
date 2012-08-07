@@ -509,7 +509,7 @@ bool DlgEdFuncSelect::MouseButtonDown( const MouseEvent& rMEvt )
             {
                 if( pView->PickObj( aMDPos, nHitLog, pObj, pPV ) )
                 {
-                    //if( pObj->ISA( DlgEdForm ) )
+                    //if (dynamic_cast<DlgEdForm*>(pObj))
                     //  pView->UnmarkAll();
                     //else
                     //  pParent->UnmarkDialog();

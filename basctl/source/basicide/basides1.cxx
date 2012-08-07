@@ -80,14 +80,10 @@ void BasicIDEShell::ExecuteCurrent( SfxRequest& rReq )
         case SID_SHOWLINES:
         {
             SFX_REQUEST_ARG(rReq, pItem, SfxBoolItem, rReq.GetSlot(), false);
-            bool bValue = false;
-            if ( pItem )
-                bValue = pItem->GetValue();
+            bool const bValue = pItem && pItem->GetValue();
             lcl_GetSourceLinesEnabledValue() = bValue;
-            if ( pCurWin && pCurWin->IsA( TYPE( ModulWindow ) ) )
-            {
-                dynamic_cast<ModulWindow*>(pCurWin)->SetLineNumberDisplay( bValue );
-            }
+            if (ModulWindow* pMCurWin = dynamic_cast<ModulWindow*>(pCurWin))
+                pMCurWin->SetLineNumberDisplay(bValue);
         }
         break;
 
@@ -103,7 +99,7 @@ void BasicIDEShell::ExecuteCurrent( SfxRequest& rReq )
             ::rtl::OUString aLibName = pCurWin->GetLibName();
             ::rtl::OUString aName = pCurWin->GetName();
 
-            if ( pCurWin->ISA( ModulWindow ) )
+            if (dynamic_cast<ModulWindow*>(pCurWin))
             {
                 if ( QueryDelModule( aName, pCurWin ) )
                 {
@@ -133,7 +129,7 @@ void BasicIDEShell::ExecuteCurrent( SfxRequest& rReq )
         break;
         case FID_SEARCH_NOW:
         {
-            if ( pCurWin->ISA( ModulWindow ) )
+            if (ModulWindow* pMCurWin = dynamic_cast<ModulWindow*>(pCurWin))
             {
                 DBG_ASSERT( rReq.GetArgs(), "arguments expected" );
                 const SfxItemSet* pArgs = rReq.GetArgs();
@@ -141,35 +137,35 @@ void BasicIDEShell::ExecuteCurrent( SfxRequest& rReq )
                 sal_uInt16 nWhich = pArgs->GetWhichByPos( 0 );
                 DBG_ASSERT( nWhich, "Wich fuer SearchItem ?" );
                 const SfxPoolItem& rItem = pArgs->Get( nWhich );
-                DBG_ASSERT( rItem.ISA( SvxSearchItem ), "Kein Searchitem!" );
                 IDEWindowTable::const_iterator it;
-                if ( rItem.ISA( SvxSearchItem ) )
+                if (SvxSearchItem const* pSearchItem = dynamic_cast<SvxSearchItem const*>(&rItem))
                 {
                     // memorize item because of the adjustments...
-                    BasicIDEGlobals::GetExtraData()->SetSearchItem( (const SvxSearchItem&)rItem );
+                    BasicIDEGlobals::GetExtraData()->SetSearchItem(*pSearchItem);
                     sal_Int32 nFound = 0;
                     bool bCanceled = false;
-                    if ( ((const SvxSearchItem&)rItem).GetCommand() == SVX_SEARCHCMD_REPLACE_ALL )
+                    if (pSearchItem->GetCommand() == SVX_SEARCHCMD_REPLACE_ALL)
                     {
                         sal_uInt16 nActModWindows = 0;
                         for( it = aIDEWindowTable.begin(); it != aIDEWindowTable.end(); ++it )
                         {
                             IDEBaseWindow* pWin = it->second;
-                            if ( !pWin->IsSuspended() && pWin->IsA( TYPE( ModulWindow ) ) )
+                            if (!pWin->IsSuspended() && dynamic_cast<ModulWindow*>(pWin))
                                 nActModWindows++;
                         }
 
-                        if ( ( nActModWindows <= 1 ) || ( !((const SvxSearchItem&)rItem).GetSelection() && QueryBox( pCurWin, WB_YES_NO|WB_DEF_YES, String( IDEResId( RID_STR_SEARCHALLMODULES ) ) ).Execute() == RET_YES ) )
+                        if ( ( nActModWindows <= 1 ) || ( !pSearchItem->GetSelection() && QueryBox( pCurWin, WB_YES_NO|WB_DEF_YES, String( IDEResId( RID_STR_SEARCHALLMODULES ) ) ).Execute() == RET_YES ) )
                         {
                             for( it = aIDEWindowTable.begin(); it != aIDEWindowTable.end(); ++it )
                             {
                                 IDEBaseWindow* pWin = it->second;
-                                if ( !pWin->IsSuspended() && pWin->IsA( TYPE( ModulWindow ) ) )
-                                    nFound = nFound + ((ModulWindow*)pWin)->StartSearchAndReplace( (const SvxSearchItem&)rItem );
+                                if (!pWin->IsSuspended())
+                                    if (pModulWindow* pMWin = dynamic_cast<ModulWindow*>(pWin))
+                                        nFound += pMWin->StartSearchAndReplace(*pSearchItem);
                             }
                         }
                         else
-                            nFound = ((ModulWindow*)pCurWin)->StartSearchAndReplace( (const SvxSearchItem&)rItem );
+                            nFound = pMCurWin->StartSearchAndReplace(*pSearchItem);
 
                         ::rtl::OUString aReplStr(IDE_RESSTR(RID_STR_SEARCHREPLACES));
                         aReplStr = aReplStr.replaceAll("XX", rtl::OUString::valueOf(nFound));
@@ -177,8 +173,8 @@ void BasicIDEShell::ExecuteCurrent( SfxRequest& rReq )
                     }
                     else
                     {
-                        nFound = ((ModulWindow*)pCurWin)->StartSearchAndReplace( (const SvxSearchItem&)rItem );
-                        if ( !nFound && !((const SvxSearchItem&)rItem).GetSelection() )
+                        nFound = pMCurWin->StartSearchAndReplace(*pSearchItem);
+                        if ( !nFound && !pSearchItem->GetSelection() )
                         {
                             // search other modules...
                             bool bChangeCurWindow = false;
@@ -211,20 +207,21 @@ void BasicIDEShell::ExecuteCurrent( SfxRequest& rReq )
                                         bCanceled = true;
                                 }
 
-                                if ( pWin && !pWin->IsSuspended() && pWin->IsA( TYPE( ModulWindow ) ) )
-                                {
-                                    if ( pWin != pCurWin )
+                                if (ModulWindow* pMWin = dynamic_cast<ModulWindow*>(pWin))
+                                    if (!pWin->IsSuspended())
                                     {
-                                        if ( pCurWin )
-                                            pWin->SetSizePixel( pCurWin->GetSizePixel() );
-                                        nFound = ((ModulWindow*)pWin)->StartSearchAndReplace( (const SvxSearchItem&)rItem, true );
+                                        if ( pWin != pCurWin )
+                                        {
+                                            if ( pCurWin )
+                                                pWin->SetSizePixel( pCurWin->GetSizePixel() );
+                                            nFound = pMWin->StartSearchAndReplace(*pSearchItem, true);
+                                        }
+                                        if ( nFound )
+                                        {
+                                            bChangeCurWindow = true;
+                                            break;
+                                        }
                                     }
-                                    if ( nFound )
-                                    {
-                                        bChangeCurWindow = true;
-                                        break;
-                                    }
-                                }
                                 if ( pWin && ( pWin != pCurWin ) )
                                 {
                                     if ( it != aIDEWindowTable.end() )
@@ -238,7 +235,7 @@ void BasicIDEShell::ExecuteCurrent( SfxRequest& rReq )
                                     pWin = 0;
                             }
                             if ( !nFound && bSearchedFromStart )
-                                nFound = ((ModulWindow*)pCurWin)->StartSearchAndReplace( (const SvxSearchItem&)rItem, true );
+                                nFound = pMCurWin->StartSearchAndReplace(*pSearchItem, true);
                             if ( bChangeCurWindow )
                                 SetCurWindow( pWin, true );
                         }
@@ -248,12 +245,14 @@ void BasicIDEShell::ExecuteCurrent( SfxRequest& rReq )
 
                     rReq.Done();
                 }
+                else
+                    DBG_ASSERT(false, "no searchitem!");
             }
         }
         break;
         case FID_SEARCH_OFF:
         {
-            if ( pCurWin && pCurWin->ISA( ModulWindow ) )
+            if (dynamic_cast<ModulWindow*>(pCurWin))
                 pCurWin->GrabFocus();
         }
         break;
@@ -268,7 +267,7 @@ void BasicIDEShell::ExecuteCurrent( SfxRequest& rReq )
         break;
         case SID_GOTOLINE:
         {
-            if ( pCurWin && pCurWin->IsA( TYPE( ModulWindow ) ) )
+            if (ModulWindow* pMCurWin = dynamic_cast<ModulWindow*>(pCurWin))
             {
                 std::auto_ptr< GotoLineDialog > xGotoDlg( new GotoLineDialog( pCurWin ) );
                 if ( xGotoDlg->Execute() )
@@ -298,8 +297,8 @@ void BasicIDEShell::ExecuteGlobal( SfxRequest& rReq )
         case SID_BASICSTOP:
         {
             // maybe do not simply stop if on breakpoint!
-            if ( pCurWin && pCurWin->IsA( TYPE( ModulWindow ) ) )
-                ((ModulWindow*)pCurWin)->BasicStop();
+            if (ModulWindow* pMCurWin = dynamic_cast<ModulWindow*>(pCurWin))
+                pMCurWin->BasicStop();
             BasicIDE::StopBasic();
         }
         break;
@@ -461,13 +460,12 @@ void BasicIDEShell::ExecuteGlobal( SfxRequest& rReq )
                 if ( aNewName != aOldName )
                 {
                     bool bRenameOk = false;
-                    if ( pWin->IsA( TYPE( ModulWindow ) ) )
+                    if (ModulWindow* pModWin = dynamic_cast<ModulWindow*>(pWin))
                     {
-                        ModulWindow* pModWin = (ModulWindow*)pWin;
-                        ::rtl::OUString aLibName = ( pModWin->GetLibName() );
+                        rtl::OUString aLibName = pModWin->GetLibName();
                         ScriptDocument aDocument( pWin->GetDocument() );
 
-                        if ( BasicIDE::RenameModule( pModWin, aDocument, aLibName,  aOldName, aNewName ) )
+                        if ( BasicIDE::RenameModule( pModWin, aDocument, aLibName, aOldName, aNewName ) )
                         {
                             bRenameOk = true;
                             // Because we listen for container events for script
@@ -477,9 +475,8 @@ void BasicIDEShell::ExecuteGlobal( SfxRequest& rReq )
                         }
 
                     }
-                    else if ( pWin->IsA( TYPE( DialogWindow ) ) )
+                    else if (DialogWindow* pDlgWin = dynamic_cast<DialogWindow*>(pWin))
                     {
-                        DialogWindow* pDlgWin = (DialogWindow*)pWin;
                         bRenameOk = pDlgWin->RenameDialog( aNewName );
                     }
                     if ( bRenameOk )
@@ -525,7 +522,7 @@ void BasicIDEShell::ExecuteGlobal( SfxRequest& rReq )
             for( IDEWindowTable::const_iterator it = aIDEWindowTable.begin(); it != aIDEWindowTable.end(); ++it )
             {
                 IDEBaseWindow* pWin = it->second;
-                if ( !pWin->IsSuspended() && pWin->IsA( TYPE( ModulWindow ) ) )
+                if (!pWin->IsSuspended() && dynamic_cast<ModulWindow*>(pWin))
                 {
                     if ( rReq.GetSlot() == SID_BASICIDE_STOREALLMODULESOURCES )
                         pWin->StoreData();
@@ -728,9 +725,8 @@ void BasicIDEShell::ExecuteGlobal( SfxRequest& rReq )
                     if ( pTabBar )
                         pTabBar->MakeVisible( pTabBar->GetCurPageId() );
 
-                    if ( pWin->ISA( ModulWindow ) )
+                    if (ModulWindow* pModWin = dynamic_cast<ModulWindow*>(pWin))
                     {
-                        ModulWindow* pModWin = (ModulWindow*)pWin;
                         SFX_REQUEST_ARG( rReq, pLineItem, SfxUInt32Item, SID_BASICIDE_ARG_LINE, false );
                         if ( pLineItem )
                         {
@@ -817,7 +813,7 @@ void BasicIDEShell::GetState(SfxItemSet &rSet)
                 // if this is not a module window hide the
                 // setting, doesn't make sense for example if the
                 // dialog editor is open
-                if( pCurWin && !pCurWin->IsA( TYPE( ModulWindow ) ) )
+                if(pCurWin && !dynamic_cast<ModulWindow*>(pCurWin))
                 {
                     rSet.DisableItem( nWh );
                     rSet.Put(SfxVisibilityItem(nWh, false));
@@ -881,7 +877,7 @@ void BasicIDEShell::GetState(SfxItemSet &rSet)
             {
                 // FIXME: hide Object Catalog icon from the toolbar,
                 // when window type is not macro editor.
-                if( pCurWin && !pCurWin->IsA( TYPE( ModulWindow ) ) )
+                if(pCurWin && !dynamic_cast<ModulWindow*>(pCurWin))
                 {
                     rSet.DisableItem( nWh );
                     rSet.Put(SfxVisibilityItem(nWh, false));
@@ -910,7 +906,7 @@ void BasicIDEShell::GetState(SfxItemSet &rSet)
             case SID_BASICSAVEAS:
             case SID_BASICIDE_MATCHGROUP:
             {
-                if ( !pCurWin || !pCurWin->IsA( TYPE( ModulWindow ) ) )
+                if (!dynamic_cast<ModulWindow*>(pCurWin))
                     rSet.DisableItem( nWh );
                 else if ( ( nWh == SID_BASICLOAD ) && ( StarBASIC::IsRunning() || ( pCurWin && pCurWin->IsReadOnly() ) ) )
                     rSet.DisableItem( nWh );
@@ -923,22 +919,25 @@ void BasicIDEShell::GetState(SfxItemSet &rSet)
             case SID_BASICIDE_TOGGLEBRKPNT:
             case SID_BASICIDE_MANAGEBRKPNTS:
             {
-                if ( !pCurWin || !pCurWin->IsA( TYPE( ModulWindow ) ) )
-                    rSet.DisableItem( nWh );
-                else if ( StarBASIC::IsRunning() && !((ModulWindow*)pCurWin)->GetBasicStatus().bIsInReschedule )
+                if (ModulWindow* pMCurWin = dynamic_cast<ModulWindow*>(pCurWin))
+                {
+                    if (StarBASIC::IsRunning() && !pMCurWin->GetBasicStatus().bIsInReschedule)
+                        rSet.DisableItem(nWh);
+                }
+                else
                     rSet.DisableItem( nWh );
             }
             break;
             case SID_BASICCOMPILE:
             {
-                if ( !pCurWin || !pCurWin->IsA( TYPE( ModulWindow ) ) || StarBASIC::IsRunning() )
+                if (StarBASIC::IsRunning() || !dynamic_cast<ModulWindow*>(pCurWin))
                     rSet.DisableItem( nWh );
             }
             break;
             case SID_BASICSTOP:
             {
                 // stop is always possible when some Basic is running...
-                if ( !StarBASIC::IsRunning() )
+                if (!StarBASIC::IsRunning())
                     rSet.DisableItem( nWh );
             }
             break;
@@ -952,7 +951,7 @@ void BasicIDEShell::GetState(SfxItemSet &rSet)
             case SID_INSERT_FORM_HSCROLL:
             case SID_INSERT_FORM_SPIN:
             {
-                if( !pCurWin || !pCurWin->IsA( TYPE( DialogWindow ) ) )
+                if (!dynamic_cast<DialogWindow*>(pCurWin))
                     rSet.DisableItem( nWh );
             }
             break;
@@ -1092,7 +1091,7 @@ void BasicIDEShell::GetState(SfxItemSet &rSet)
                 // if this is not a module window hide the
                 // setting, doesn't make sense for example if the
                 // dialog editor is open
-                if( pCurWin && !pCurWin->IsA( TYPE( ModulWindow ) ) )
+                if (pCurWin && !dynamic_cast<ModulWindow*>(pCurWin))
                 {
                     rSet.DisableItem( nWh );
                     rSet.Put(SfxVisibilityItem(nWh, false));
@@ -1112,7 +1111,7 @@ sal_Bool BasicIDEShell::HasUIFeature( sal_uInt32 nFeature )
     if ( (nFeature & BASICIDE_UI_FEATURE_SHOW_BROWSER) == BASICIDE_UI_FEATURE_SHOW_BROWSER )
     {
         // fade out (in) property browser in module (dialog) windows
-        if ( pCurWin && pCurWin->IsA( TYPE( DialogWindow ) ) && !pCurWin->IsReadOnly() )
+        if (dynamic_cast<DialogWindow*>(pCurWin) && !pCurWin->IsReadOnly())
             bResult = true;
     }
 
@@ -1140,9 +1139,9 @@ void BasicIDEShell::SetCurWindow( IDEBaseWindow* pNewWin, bool bUpdateTabBar, bo
             pPrevCurWin->Hide();
             pPrevCurWin->Deactivating();
 //          pPrevCurWin->GetLayoutWindow()->Hide();
-            if( pPrevCurWin->IsA( TYPE( DialogWindow ) ) )
+            if (DialogWindow* pDialogWin = dynamic_cast<DialogWindow*>(pPrevCurWin))
             {
-                ((DialogWindow*)pPrevCurWin)->DisableBrowser();
+                pDialogWin->DisableBrowser();
             }
             else
             {
@@ -1152,11 +1151,11 @@ void BasicIDEShell::SetCurWindow( IDEBaseWindow* pNewWin, bool bUpdateTabBar, bo
         if ( pCurWin )
         {
             AdjustPosSizePixel( Point( 0, 0 ), GetViewFrame()->GetWindow().GetOutputSizePixel() );
-            if( pCurWin->IsA( TYPE( ModulWindow ) ) )
+            if (ModulWindow* pMCurWin = dynamic_cast<ModulWindow*>(pCurWin))
             {
-                dynamic_cast<ModulWindow*>(pCurWin)->SetLineNumberDisplay(SourceLinesDisplayed());
+                pMCurWin->SetLineNumberDisplay(SourceLinesDisplayed());
                 GetViewFrame()->GetWindow().SetHelpId( HID_BASICIDE_MODULWINDOW );
-                pModulLayout->SetModulWindow( (ModulWindow*)pCurWin );
+                pModulLayout->SetModulWindow(pMCurWin);
                 pModulLayout->Show();
             }
             else
@@ -1170,7 +1169,8 @@ void BasicIDEShell::SetCurWindow( IDEBaseWindow* pNewWin, bool bUpdateTabBar, bo
                 BasicIDEData* pData = BasicIDEGlobals::GetExtraData();
                 if ( pData )
                 {
-                    sal_uInt16 nCurrentType = pCurWin->IsA( TYPE( ModulWindow ) ) ? BASICIDE_TYPE_MODULE : BASICIDE_TYPE_DIALOG;
+                    sal_uInt16 nCurrentType = dynamic_cast<ModulWindow*>(pCurWin) ?
+                        BASICIDE_TYPE_MODULE : BASICIDE_TYPE_DIALOG;
                     LibInfoItem* pLibInfoItem = new LibInfoItem( pCurWin->GetDocument(), pCurWin->GetLibName(), pCurWin->GetName(), nCurrentType );
                     pData->GetLibInfos().InsertInfo( pLibInfoItem );
                 }
@@ -1190,8 +1190,8 @@ void BasicIDEShell::SetCurWindow( IDEBaseWindow* pNewWin, bool bUpdateTabBar, bo
                 if ( pFocusWindow ) // Focus in BasicIDE
                     pNewWin->GrabFocus();
             }
-            if( pCurWin->IsA( TYPE( DialogWindow ) ) )
-                ((DialogWindow*)pCurWin)->UpdateBrowser();
+            if (DialogWindow* pDCurWin = dynamic_cast<DialogWindow*>(pCurWin))
+                pDCurWin->UpdateBrowser();
         }
         if ( bUpdateTabBar )
         {
@@ -1251,7 +1251,7 @@ void BasicIDEShell::ManageToolbars()
         if ( xLayoutManager.is() )
         {
             xLayoutManager->lock();
-            if( pCurWin->IsA( TYPE( DialogWindow ) ) )
+            if (dynamic_cast<DialogWindow*>(pCurWin))
             {
                 xLayoutManager->destroyElement( aMacroBarResName );
 
@@ -1290,8 +1290,8 @@ IDEBaseWindow* BasicIDEShell::FindWindow( const ScriptDocument& rDocument, const
                 return pWin;
             }
             else if ( pWin->IsDocument( rDocument ) && pWin->GetLibName() == rLibName && pWin->GetName() == rName &&
-                      ( ( pWin->IsA( TYPE( ModulWindow ) )  && nType == BASICIDE_TYPE_MODULE ) ||
-                        ( pWin->IsA( TYPE( DialogWindow ) ) && nType == BASICIDE_TYPE_DIALOG ) ) )
+                      ( ( dynamic_cast<ModulWindow*>(pWin)  && nType == BASICIDE_TYPE_MODULE ) ||
+                        ( dynamic_cast<DialogWindow*>(pWin) && nType == BASICIDE_TYPE_DIALOG ) ) )
             {
                 return pWin;
             }
@@ -1344,18 +1344,15 @@ ModulWindow* BasicIDEShell::ShowActiveModuleWindow( StarBASIC* pBasic )
     SetCurLib( ScriptDocument::getApplicationScriptDocument(), ::rtl::OUString(), false );
 
     SbModule* pActiveModule = StarBASIC::GetActiveModule();
-    SbClassModuleObject* pClassModuleObject = PTR_CAST(SbClassModuleObject,pActiveModule);
-    if( pClassModuleObject != NULL )
-        pActiveModule = pClassModuleObject->getClassModule();
+    if (SbClassModuleObject* pCMO = dynamic_cast<SbClassModuleObject*>(pActiveModule))
+        pActiveModule = pCMO->getClassModule();
 
     DBG_ASSERT( pActiveModule, "Kein aktives Modul im ErrorHdl?!" );
     if ( pActiveModule )
     {
         ModulWindow* pWin = 0;
         SbxObject* pParent = pActiveModule->GetParent();
-        DBG_ASSERT( pParent && pParent->ISA( StarBASIC ), "Kein BASIC!" );
-        StarBASIC* pLib = static_cast< StarBASIC* >( pParent );
-        if ( pLib )
+        if (StarBASIC* pLib = dynamic_cast<StarBASIC*>(pParent))
         {
             BasicManager* pBasMgr = BasicIDE::FindBasicManager( pLib );
             if ( pBasMgr )
@@ -1368,6 +1365,8 @@ ModulWindow* BasicIDEShell::ShowActiveModuleWindow( StarBASIC* pBasic )
                 SetCurWindow( pWin, true );
             }
         }
+        else
+            DBG_ASSERT(false, "Kein BASIC!");
         BasicManager* pBasicMgr = BasicIDE::FindBasicManager( pBasic );
         if ( pBasicMgr )
             StartListening( *pBasicMgr, true /* log on only once */ );
@@ -1407,14 +1406,8 @@ void BasicIDEShell::AdjustPosSizePixel( const Point &rPos, const Size &rSize )
         pTabBar->SetPosSizePixel( Point( rPos.X(), rPos.Y()+aSz.Height() ), Size( aSz.Width()/2, aScrollBarBoxSz.Height() ) );
     }
 
-    Window* pEdtWin = pCurWin ? pCurWin->GetLayoutWindow() : pModulLayout;
-    if ( pEdtWin )
-    {
-        if( pCurWin && pCurWin->IsA( TYPE( DialogWindow ) ) )
-            pEdtWin->SetPosSizePixel( rPos, aSz );  // without ScrollBar
-        else
-            pEdtWin->SetPosSizePixel( rPos, aOutSz );
-    }
+    if (Window* pEdtWin = pCurWin ? pCurWin->GetLayoutWindow() : pModulLayout)
+        pEdtWin->SetPosSizePixel(rPos, dynamic_cast<DialogWindow*>(pCurWin) ? aSz : aOutSz);
 }
 
 Reference< XModel > BasicIDEShell::GetCurrentDocument() const
@@ -1431,8 +1424,8 @@ void BasicIDEShell::Activate( sal_Bool bMDI )
 
     if ( bMDI )
     {
-        if( pCurWin && pCurWin->IsA( TYPE( DialogWindow ) ) )
-            ((DialogWindow*)pCurWin)->UpdateBrowser();
+        if (DialogWindow* pDCurWin = dynamic_cast<DialogWindow>(pCurWin))
+            pDCurWin->UpdateBrowser();
     }
 }
 
@@ -1442,9 +1435,8 @@ void BasicIDEShell::Deactivate( sal_Bool bMDI )
     // deactivate due to a MessageBox bMDI is false
     if ( bMDI )
     {
-        if( pCurWin && pCurWin->IsA( TYPE( DialogWindow ) ) )
+        if (DialogWindow* pXDlgWin = dynamic_cast<DialogWindow*>(pCurWin))
         {
-            DialogWindow* pXDlgWin = (DialogWindow*)pCurWin;
             pXDlgWin->DisableBrowser();
             if( pXDlgWin->IsModified() )
                 BasicIDE::MarkDocumentModified( pXDlgWin->GetDocument() );

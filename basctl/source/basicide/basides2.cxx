@@ -52,23 +52,21 @@ Reference< view::XRenderable > BasicIDEShell::GetRenderable()
 
 sal_Bool BasicIDEShell::HasSelection( sal_Bool /* bText */ ) const
 {
-    bool bSel = false;
-    if ( pCurWin && pCurWin->ISA( ModulWindow ) )
+    if (ModulWindow* pMCurWin = dynamic_cast<ModulWindow*>(pCurWin))
     {
-        TextView* pEditView = ((ModulWindow*)pCurWin)->GetEditView();
+        TextView* pEditView = pMCurWin->GetEditView();
         if ( pEditView && pEditView->HasSelection() )
-            bSel = true;
+            return true;
     }
-    return bSel;
+    return false;
 }
 
 String BasicIDEShell::GetSelectionText( sal_Bool bWholeWord )
 {
     String aText;
-    if ( pCurWin && pCurWin->ISA( ModulWindow ) )
+    if (ModulWindow* pMCurWin = dynamic_cast<ModulWindow*>(pCurWin))
     {
-        TextView* pEditView = ((ModulWindow*)pCurWin)->GetEditView();
-        if ( pEditView )
+        if (TextView* pEditView = pMCurWin->GetEditView())
         {
             if ( bWholeWord && !pEditView->HasSelection() )
             {
@@ -87,7 +85,7 @@ String BasicIDEShell::GetSelectionText( sal_Bool bWholeWord )
 
 SfxPrinter* BasicIDEShell::GetPrinter( sal_Bool bCreate )
 {
-    if ( pCurWin ) // && pCurWin->ISA( ModulWindow ) )
+    if ( pCurWin )
     {
         BasicDocShell* pDocShell = (BasicDocShell*)GetViewFrame()->GetObjectShell();
         DBG_ASSERT( pDocShell, "DocShell ?!" );
@@ -242,41 +240,30 @@ ModulWindow* BasicIDEShell::CreateBasWin( const ScriptDocument& rDocument, const
 
 ModulWindow* BasicIDEShell::FindBasWin( const ScriptDocument& rDocument, const ::rtl::OUString& rLibName, const ::rtl::OUString& rModName, bool bCreateIfNotExist, bool bFindSuspended )
 {
-    ModulWindow* pModWin = 0;
     for( IDEWindowTable::const_iterator it = aIDEWindowTable.begin();
          it != aIDEWindowTable.end(); ++it )
     {
         IDEBaseWindow* pWin = it->second;
-        if ( ( !pWin->IsSuspended() || bFindSuspended ) && pWin->IsA( TYPE( ModulWindow ) ) )
-        {
-            if ( rLibName.isEmpty() )
+        if (!pWin->IsSuspended() || bFindSuspended)
+            if (rLibName.isEmpty() || (pWin->IsDocument(rDocument) && pWin->GetLibName() == rLibName && pWin->GetName() == rModName))
             {
-                pModWin = (ModulWindow*)pWin;
-                break;
+                if (ModulWindow* pModWin = dynamic_cast<ModulWindow*>(pWin))
+                    return pModWin;
             }
-            else if ( pWin->IsDocument( rDocument ) && pWin->GetLibName() == rLibName && pWin->GetName() == rModName )
-            {
-                pModWin = (ModulWindow*)pWin;
-                break;
-            }
-        }
     }
-    if ( !pModWin && bCreateIfNotExist )
-        pModWin = CreateBasWin( rDocument, rLibName, rModName );
-
-    return pModWin;
+    return bCreateIfNotExist ? CreateBasWin(rDocument, rLibName, rModName) : 0;
 }
 
 void BasicIDEShell::Move()
 {
-    if ( pCurWin && pCurWin->ISA( ModulWindow ) )
-        ((ModulWindow*)pCurWin)->FrameWindowMoved();
+    if (ModulWindow* pMCurWin = dynamic_cast<ModulWindow*>(pCurWin))
+        pMCurWin->FrameWindowMoved();
 }
 
 void BasicIDEShell::ShowCursor( bool bOn )
 {
-    if ( pCurWin && pCurWin->ISA( ModulWindow ) )
-        ((ModulWindow*)pCurWin)->ShowCursor( bOn );
+    if (ModulWindow* pMCurWin = dynamic_cast<ModulWindow*>(pCurWin))
+        pMCurWin->ShowCursor(bOn);
 }
 
 // Hack for #101048
@@ -285,7 +272,7 @@ sal_Int32 getBasicIDEShellCount( void );
 // only if basic window above:
 void BasicIDEShell::ExecuteBasic( SfxRequest& rReq )
 {
-    if ( !pCurWin || !pCurWin->IsA( TYPE( ModulWindow ) ) )
+    if (!dynamic_cast<ModulWindow*>(pCurWin))
         return;
 
     pCurWin->ExecuteCommand( rReq );

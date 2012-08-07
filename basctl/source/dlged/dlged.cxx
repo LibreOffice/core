@@ -561,12 +561,9 @@ IMPL_LINK_NOARG(DlgEditor, PaintTimeout)
                 if ( pDlgEdPage && ( ( nObjCount = pDlgEdPage->GetObjCount() ) > 0 ) )
                 {
                     for ( sal_uLong i = 0 ; i < nObjCount ; i++ )
-                    {
-                        SdrObject* pObj = pDlgEdPage->GetObj(i);
-                        DlgEdObj* pDlgEdObj = PTR_CAST(DlgEdObj, pObj);
-                        if ( pDlgEdObj && !pDlgEdObj->ISA(DlgEdForm) )
-                            pDlgEdObj->SetRectFromProps();
-                    }
+                        if (DlgEdObj* pDlgEdObj = dynamic_cast<DlgEdObj*>(pDlgEdPage->GetObj(i)))
+                            if (!dynamic_cast<DlgEdForm*>(pDlgEdObj))
+                                pDlgEdObj->SetRectFromProps();
                 }
             }
         }
@@ -668,8 +665,7 @@ void DlgEditor::CreateDefaultObject()
     // create object by factory
     SdrObject* pObj = SdrObjFactory::MakeNewObject( pDlgEdView->GetCurrentObjInventor(), pDlgEdView->GetCurrentObjIdentifier(), pDlgEdPage );
 
-    DlgEdObj* pDlgEdObj = PTR_CAST( DlgEdObj, pObj );
-    if ( pDlgEdObj )
+    if (DlgEdObj* pDlgEdObj = dynamic_cast<DlgEdObj*>(pObj))
     {
         // set position and size
         Size aSize = pWindow->PixelToLogic( Size( 96, 24 ) );
@@ -746,9 +742,9 @@ void DlgEditor::Copy()
     for( sal_uLong i = 0; i < nMark; i++ )
     {
         SdrObject* pObj = pDlgEdView->GetMarkedObjectList().GetMark(i)->GetMarkedSdrObj();
-        DlgEdObj* pDlgEdObj = PTR_CAST(DlgEdObj, pObj);
+        DlgEdObj* pDlgEdObj = dynamic_cast<DlgEdObj*>(pObj);
 
-        if (pDlgEdObj && !pDlgEdObj->ISA(DlgEdForm) )
+        if (pDlgEdObj && !dynamic_cast<DlgEdForm*>(pDlgEdObj))
         {
             ::rtl::OUString aName;
             Reference< beans::XPropertySet >  xMarkPSet(pDlgEdObj->GetUnoControlModel(), uno::UNO_QUERY);
@@ -1070,9 +1066,9 @@ void DlgEditor::Delete()
     for( sal_uLong i = 0; i < nMark; i++ )
     {
         SdrObject* pObj = pDlgEdView->GetMarkedObjectList().GetMark(i)->GetMarkedSdrObj();
-        DlgEdObj* pDlgEdObj = PTR_CAST(DlgEdObj, pObj);
+        DlgEdObj* pDlgEdObj = dynamic_cast<DlgEdObj*>(pObj);
 
-        if ( pDlgEdObj && !pDlgEdObj->ISA(DlgEdForm) )
+        if ( pDlgEdObj && !dynamic_cast<DlgEdForm*>(pDlgEdObj) )
         {
             // get name from property
             ::rtl::OUString aName;

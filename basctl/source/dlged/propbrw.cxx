@@ -281,8 +281,7 @@ Sequence< Reference< XInterface > >
 
         while (pCurrent)
         {
-            DlgEdObj* pDlgEdObj = PTR_CAST(DlgEdObj, pCurrent);
-            if (pDlgEdObj)
+            if (DlgEdObj* pDlgEdObj = dynamic_cast<DlgEdObj*>(pCurrent))
             {
                 Reference< XInterface > xControlInterface(pDlgEdObj->GetUnoControlModel(), UNO_QUERY);
                 if (xControlInterface.is())
@@ -525,8 +524,7 @@ void PropBrw::ImplUpdate( const Reference< XModel >& _rxContextDocument, SdrView
         Sequence< Reference< XInterface > > aNewObjects;
         if ( nMarkCount == 1 )
         {
-            DlgEdObj* pDlgEdObj = PTR_CAST( DlgEdObj, rMarkList.GetMark(0)->GetMarkedSdrObj() );
-            if ( pDlgEdObj )
+            if (DlgEdObj* pDlgEdObj = dynamic_cast<DlgEdObj*>(rMarkList.GetMark(0)->GetMarkedSdrObj()))
             {
                 if ( pDlgEdObj->IsGroupObject() ) // group object
                     aNewObjects = CreateMultiSelectionSequence( rMarkList );

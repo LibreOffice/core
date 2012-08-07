@@ -69,11 +69,7 @@ void LibBoxControl::StateChanged( sal_uInt16, SfxItemState eState, const SfxPool
     else
     {
         pBox->Enable();
-
-        if ( pState->ISA(SfxStringItem) )
-            pBox->Update( (const SfxStringItem*)pState );
-        else
-            pBox->Update( NULL );
+        pBox->Update(dynamic_cast<SfxStringItem const*>(pState));
     }
 }
 
@@ -357,23 +353,17 @@ LanguageBoxControl::~LanguageBoxControl()
 {
 }
 
-void LanguageBoxControl::StateChanged( sal_uInt16 _nID, SfxItemState _eState, const SfxPoolItem* _pItem )
+void LanguageBoxControl::StateChanged( sal_uInt16 nID, SfxItemState eState, const SfxPoolItem* pItem )
 {
-    (void)_nID;
-
-    BasicLanguageBox* pBox = (BasicLanguageBox*)( GetToolBox().GetItemWindow( GetId() ) );
-
-    if ( pBox )
+    (void)nID;
+    if (BasicLanguageBox* pBox = static_cast<BasicLanguageBox*>(GetToolBox().GetItemWindow(GetId())))
     {
-        if ( _eState != SFX_ITEM_AVAILABLE )
+        if (eState != SFX_ITEM_AVAILABLE)
             pBox->Disable();
         else
         {
             pBox->Enable();
-            if ( _pItem->ISA(SfxStringItem) )
-                pBox->Update( (const SfxStringItem*)_pItem );
-            else
-                pBox->Update( NULL );
+            pBox->Update(dynamic_cast<SfxStringItem const*>(pItem));
         }
     }
 }

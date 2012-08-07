@@ -444,15 +444,13 @@ void BasicIDETabBar::Command( const CommandEvent& rCEvt )
              if ( aDocument.isInVBAMode() )
             {
                 // disable to delete or remove object modules in IDE
-                BasicManager* pBasMgr = aDocument.getBasicManager();
-                if ( pBasMgr )
+                if (BasicManager* pBasMgr = aDocument.getBasicManager())
                 {
-                    StarBASIC* pBasic = pBasMgr->GetLib( aOULibName );
-                    if( pBasic )
+                    if (StarBASIC* pBasic = pBasMgr->GetLib(aOULibName))
                     {
                         IDEWindowTable& aIDEWindowTable = pIDEShell->GetIDEWindowTable();
                         IDEWindowTable::const_iterator it = aIDEWindowTable.find( GetCurPageId() );
-                        if( it != aIDEWindowTable.end() && it->second->ISA( ModulWindow ) )
+                        if (it != aIDEWindowTable.end() && dynamic_cast<ModulWindow*>(it->second))
                         {
                             SbModule* pActiveModule = (SbModule*)pBasic->FindModule( it->second->GetName() );
                             if( pActiveModule && ( pActiveModule->GetModuleType() == script::ModuleType::DOCUMENT ) )
@@ -467,10 +465,10 @@ void BasicIDETabBar::Command( const CommandEvent& rCEvt )
         }
 
 
-        SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
-        SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
-        if ( pDispatcher )
-            pDispatcher->Execute( aPopup.Execute( this, aPos ) );
+        if (pIDEShell)
+            if (SfxViewFrame* pViewFrame = pIDEShell->GetViewFrame())
+                if (SfxDispatcher* pDispatcher = pViewFrame->GetDispatcher())
+                    pDispatcher->Execute(aPopup.Execute(this, aPos));
     }
 }
 
@@ -523,11 +521,11 @@ void BasicIDETabBar::Sort()
             aTabBarSortHelper.aPageText = GetPageText( nId );
             IDEBaseWindow* pWin = aIDEWindowTable[ nId ];
 
-            if ( pWin->IsA( TYPE( ModulWindow ) ) )
+            if (dynamic_cast<ModulWindow*>(pWin))
             {
                 aModuleList.push_back( aTabBarSortHelper );
             }
-            else if ( pWin->IsA( TYPE( DialogWindow ) ) )
+            else if (dynamic_cast<DialogWindow*>(pWin))
             {
                 aDialogList.push_back( aTabBarSortHelper );
             }

@@ -55,13 +55,15 @@ SfxPoolItem *SbxItem::Clone(SfxItemPool*) const
 
 int SbxItem::operator==(const SfxPoolItem& rCmp) const
 {
-    DBG_ASSERT( rCmp.ISA( SbxItem ), "==: Kein SbxItem!" );
-    return (SfxPoolItem::operator==(rCmp) &&
-	    m_aDocument == ((const SbxItem&)rCmp).m_aDocument &&
-	    m_aLibName == ((const SbxItem&)rCmp).m_aLibName &&
-	    m_aName == ((const SbxItem&)rCmp).m_aName &&
-	    m_aMethodName == ((const SbxItem&)rCmp).m_aMethodName &&
-	    m_nType == ((const SbxItem&)rCmp).m_nType);
+    SbxItem const* pSbxItem = dynamic_cast<SbxItem const*>(&rCmp);
+    DBG_ASSERT(pSbxItem, "==: no SbxItem!" );
+    return
+        SfxPoolItem::operator==(rCmp) &&
+        m_aDocument == pSbxItem->m_aDocument &&
+        m_aLibName == pSbxItem->m_aLibName &&
+        m_aName == pSbxItem->m_aName &&
+        m_aMethodName == pSbxItem->m_aMethodName &&
+        m_nType == pSbxItem->m_nType;
 }
 
 const ScriptDocument& SbxItem::GetDocument() const

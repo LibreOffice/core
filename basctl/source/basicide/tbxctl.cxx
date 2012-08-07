@@ -67,12 +67,10 @@ void TbxControls::StateChanged( sal_uInt16 nSID, SfxItemState eState,
 {
     if( pState )
     {
-        SfxAllEnumItem* pItem = PTR_CAST(SfxAllEnumItem, pState);
-        if( pItem )
+        if (SfxAllEnumItem* pItem = dynamic_cast<SfxAllEnumItem*>(pState))
         {
-            sal_uInt16 nLastEnum = pItem->GetValue();
             sal_uInt16 nTemp = 0;
-            switch( nLastEnum )
+            switch (sal_uInt16 nLastEnum = pItem->GetValue())
             {
                 case SVX_SNAP_PUSHBUTTON:       nTemp = SID_INSERT_PUSHBUTTON; break;
                 case SVX_SNAP_CHECKBOX:         nTemp = SID_INSERT_CHECKBOX; break;

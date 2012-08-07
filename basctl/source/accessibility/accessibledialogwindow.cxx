@@ -121,9 +121,7 @@ AccessibleDialogWindow::AccessibleDialogWindow( DialogWindow* pDialogWindow )
 
             for ( sal_uLong i = 0; i < nCount; ++i )
             {
-                SdrObject* pObj = pSdrPage->GetObj( i );
-                DlgEdObj* pDlgEdObj = PTR_CAST( DlgEdObj, pObj );
-                if ( pDlgEdObj )
+                if (DlgEdObj* pDlgEdObj = dynamic_cast<DlgEdObj*>(pSdrPage->GetObj(i)))
                 {
                     ChildDescriptor aDesc( pDlgEdObj );
                     if ( IsChildVisible( aDesc ) )
@@ -341,16 +339,11 @@ void AccessibleDialogWindow::UpdateChildren()
 {
     if ( m_pDialogWindow )
     {
-        SdrPage* pSdrPage = m_pDialogWindow->GetPage();
-        if ( pSdrPage )
+        if (SdrPage* pSdrPage = m_pDialogWindow->GetPage())
         {
             for ( sal_uLong i = 0, nCount = pSdrPage->GetObjCount(); i < nCount; ++i )
-            {
-                SdrObject* pObj = pSdrPage->GetObj( i );
-                DlgEdObj* pDlgEdObj = PTR_CAST( DlgEdObj, pObj );
-                if ( pDlgEdObj )
+                if (DlgEdObj* pDlgEdObj = dynamic_cast<DlgEdObj*>(pSdrPage->GetObj(i)))
                     UpdateChild( ChildDescriptor( pDlgEdObj ) );
-            }
         }
     }
 }
@@ -368,17 +361,15 @@ void AccessibleDialogWindow::SortChildren()
 IMPL_LINK( AccessibleDialogWindow, WindowEventListener, VclSimpleEvent*, pEvent )
 {
     DBG_CHKTHIS( AccessibleDialogWindow, 0 );
-    DBG_ASSERT( pEvent && pEvent->ISA( VclWindowEvent ), "AccessibleDialogWindow::WindowEventListener: unknown window event!" );
 
-    if ( pEvent && pEvent->ISA( VclWindowEvent ) )
+    if (VclWindowEvent* pWinEvent = dynamic_cast<VclWindowEvent*>(pEvent))
     {
-        DBG_ASSERT( ((VclWindowEvent*)pEvent)->GetWindow(), "AccessibleDialogWindow::WindowEventListener: no window!" );
-        if ( !((VclWindowEvent*)pEvent)->GetWindow()->IsAccessibilityEventsSuppressed() || ( pEvent->GetId() == VCLEVENT_OBJECT_DYING ) )
-        {
-            ProcessWindowEvent( *(VclWindowEvent*)pEvent );
-        }
+        DBG_ASSERT(pWinEvent->GetWindow(), "AccessibleDialogWindow::WindowEventListener: no window!");
+        if (!pWinEvent->GetWindow()->IsAccessibilityEventsSuppressed() || pEvent->GetId() == VCLEVENT_OBJECT_DYING)
+            ProcessWindowEvent(*pWinEvent);
     }
-
+    else
+        DBG_ASSERT(false, "AccessibleDialogWindow::WindowEventListener: unknown window event!");
     return 0;
 }
 
@@ -522,16 +513,13 @@ awt::Rectangle AccessibleDialogWindow::implGetBounds() throw (RuntimeException)
 
 void AccessibleDialogWindow::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    if ( rHint.ISA( SdrHint ) )
+    if (SdrHint* pSdrHint = dynamic_cast<SdrHint*>(&rHint))
     {
-        SdrHint* pSdrHint = (SdrHint*)&rHint;
         switch ( pSdrHint->GetKind() )
         {
             case HINT_OBJINSERTED:
             {
-                SdrObject* pObj = (SdrObject*)pSdrHint->GetObject();
-                DlgEdObj* pDlgEdObj = PTR_CAST( DlgEdObj, pObj );
-                if ( pDlgEdObj )
+                if (DlgEdObj* pDlgEdObj = dynamic_cast<DlgEdObj*>(pSdrHint->GetObject()))
                 {
                     ChildDescriptor aDesc( pDlgEdObj );
                     if ( IsChildVisible( aDesc ) )
@@ -541,18 +529,15 @@ void AccessibleDialogWindow::Notify( SfxBroadcaster&, const SfxHint& rHint )
             break;
             case HINT_OBJREMOVED:
             {
-                SdrObject* pObj = (SdrObject*)pSdrHint->GetObject();
-                DlgEdObj* pDlgEdObj = PTR_CAST( DlgEdObj, pObj );
-                if ( pDlgEdObj )
+                if (DlgEdObj* pDlgEdObj = dynamic_cast<DlgEdObj*>(pSdrHint->GetObject()))
                     RemoveChild( ChildDescriptor( pDlgEdObj ) );
             }
             break;
             default: ;
         }
     }
-    else if ( rHint.ISA( DlgEdHint ) )
+    else if (DlgEdHint* pDlgEdHint = dynamic_cast<DlgEdHint*>(&rHint))
     {
-        DlgEdHint* pDlgEdHint = (DlgEdHint*)&rHint;
         switch ( pDlgEdHint->GetKind() )
         {
             case DLGED_HINT_WINDOWSCROLLED:
@@ -563,8 +548,7 @@ void AccessibleDialogWindow::Notify( SfxBroadcaster&, const SfxHint& rHint )
             break;
             case DLGED_HINT_LAYERCHANGED:
             {
-                DlgEdObj* pDlgEdObj = pDlgEdHint->GetObject();
-                if ( pDlgEdObj )
+                if (DlgEdObj* pDlgEdObj = pDlgEdHint->GetObject())
                     UpdateChild( ChildDescriptor( pDlgEdObj ) );
             }
             break;

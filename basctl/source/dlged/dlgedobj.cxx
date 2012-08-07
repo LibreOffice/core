@@ -51,6 +51,14 @@ using ::rtl::OUString;
 TYPEINIT1(DlgEdObj, SdrUnoObj);
 DBG_NAME(DlgEdObj);
 
+DlgEditor* DlgEdObj::GetDialogEditor ()
+{
+    if (DlgEdForm* pFormThis = dynamic_cast<DlgEdForm*>(this))
+        return pFormThis->GetDlgEditor();
+    else
+        return pDlgEdForm->GetDlgEditor();
+}
+
 //----------------------------------------------------------------------------
 
 DlgEdObj::DlgEdObj()
@@ -512,12 +520,9 @@ void SAL_CALL DlgEdObj::NameChange( const  ::com::sun::star::beans::PropertyChan
                     xCont->removeByName( aOldName );
                     xCont->insertByName( aNewName , aAny );
 
-                    DlgEditor* pEditor;
-                    if ( ISA(DlgEdForm) )
-                        pEditor = ((DlgEdForm*)this)->GetDlgEditor();
-                    else
-                        pEditor = GetDlgEdForm()->GetDlgEditor();
-                    LocalizationMgr::renameControlResourceIDsForEditorObject( pEditor, aAny, aNewName );
+                    LocalizationMgr::renameControlResourceIDsForEditorObject(
+                        GetDialogEditor(), aAny, aNewName
+                    );
                 }
             }
             else
@@ -1104,12 +1109,9 @@ void DlgEdObj::SetDefaults()
                 aAny <<= xCtrl;
                 xCont->insertByName( aOUniqueName , aAny );
 
-                DlgEditor* pEditor;
-                if ( ISA(DlgEdForm) )
-                    pEditor = ((DlgEdForm*)this)->GetDlgEditor();
-                else
-                    pEditor = GetDlgEdForm()->GetDlgEditor();
-                LocalizationMgr::setControlResourceIDsForNewEditorObject( pEditor, aAny, aOUniqueName );
+                LocalizationMgr::setControlResourceIDsForNewEditorObject(
+                    GetDialogEditor(), aAny, aOUniqueName
+                );
 
                 // #110559#
                 pDlgEdForm->UpdateTabOrderAndGroups();
@@ -1222,20 +1224,13 @@ void SAL_CALL DlgEdObj::_propertyChange( const  ::com::sun::star::beans::Propert
             PositionAndSizeChange( evt );
 
             if ( evt.PropertyName == DLGED_PROP_DECORATION )
-            {
-                if ( ISA(DlgEdForm) )
-                    ((DlgEdForm*)this)->GetDlgEditor()->ResetDialog();
-                else
-                    GetDlgEdForm()->GetDlgEditor()->ResetDialog();
-            }
+                GetDialogEditor()->ResetDialog();
         }
         // change name of control in dialog model
         else if ( evt.PropertyName == DLGED_PROP_NAME )
         {
-            if ( !ISA(DlgEdForm) )
-            {
+            if (!dynamic_cast<DlgEdForm*>(this))
                 NameChange(evt);
-            }
         }
         // update step
         else if ( evt.PropertyName == DLGED_PROP_STEP )
@@ -1245,10 +1240,8 @@ void SAL_CALL DlgEdObj::_propertyChange( const  ::com::sun::star::beans::Propert
         // change tabindex
         else if ( evt.PropertyName == DLGED_PROP_TABINDEX )
         {
-            if ( !ISA(DlgEdForm) )
-            {
+            if (!dynamic_cast<DlgEdForm>(this))
                 TabIndexChange(evt);
-            }
         }
     }
 }
@@ -1260,14 +1253,7 @@ void SAL_CALL DlgEdObj::_elementInserted(const ::com::sun::star::container::Cont
     if (isListening())
     {
         // dialog model changed
-        if ( ISA(DlgEdForm) )
-        {
-            ((DlgEdForm*)this)->GetDlgEditor()->SetDialogModelChanged(true);
-        }
-        else
-        {
-            GetDlgEdForm()->GetDlgEditor()->SetDialogModelChanged(true);
-        }
+        GetDialogEditor()->SetDialogModelChanged(true);
     }
 }
 
@@ -1278,14 +1264,7 @@ void SAL_CALL DlgEdObj::_elementReplaced(const ::com::sun::star::container::Cont
     if (isListening())
     {
         // dialog model changed
-        if ( ISA(DlgEdForm) )
-        {
-            ((DlgEdForm*)this)->GetDlgEditor()->SetDialogModelChanged(true);
-        }
-        else
-        {
-            GetDlgEdForm()->GetDlgEditor()->SetDialogModelChanged(true);
-        }
+        GetDialogEditor()->SetDialogModelChanged(true);
     }
 }
 
@@ -1296,14 +1275,7 @@ void SAL_CALL DlgEdObj::_elementRemoved(const ::com::sun::star::container::Conta
     if (isListening())
     {
         // dialog model changed
-        if ( ISA(DlgEdForm) )
-        {
-            ((DlgEdForm*)this)->GetDlgEditor()->SetDialogModelChanged(true);
-        }
-        else
-        {
-            GetDlgEdForm()->GetDlgEditor()->SetDialogModelChanged(true);
-        }
+        GetDialogEditor()->SetDialogModelChanged(true);
     }
 }
 
@@ -1567,9 +1539,8 @@ void DlgEdForm::UpdateStep()
     {
         for ( sal_uLong i = 0 ; i < nObjCount ; i++ )
         {
-            SdrObject* pObj = pSdrPage->GetObj(i);
-            DlgEdObj* pDlgEdObj = PTR_CAST(DlgEdObj, pObj);
-            if ( pDlgEdObj && !pDlgEdObj->ISA(DlgEdForm) )
+            DlgEdObj* pDlgEdObj = dynamic_cast<DlgEdObj*>(pSdrPage->GetObj(i));
+            if (pDlgEdObj && !dynamic_cast<DlgEdForm*>(pDlgEdObj))
                 pDlgEdObj->UpdateStep();
         }
     }

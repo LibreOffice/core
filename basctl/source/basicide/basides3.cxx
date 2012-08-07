@@ -117,28 +117,15 @@ DialogWindow* BasicIDEShell::CreateDlgWin( const ScriptDocument& rDocument, cons
 
 DialogWindow* BasicIDEShell::FindDlgWin( const ScriptDocument& rDocument, const ::rtl::OUString& rLibName, const ::rtl::OUString& rDlgName, bool bCreateIfNotExist, bool bFindSuspended )
 {
-    DialogWindow* pDlgWin = 0;
     for( IDEWindowTable::const_iterator it = aIDEWindowTable.begin(); it != aIDEWindowTable.end(); ++it )
     {
         IDEBaseWindow* pWin = it->second;
-        if ( ( !pWin->IsSuspended() || bFindSuspended ) && pWin->IsA( TYPE( DialogWindow ) ) )
-        {
-            if ( rLibName.isEmpty() )
-            {
-                pDlgWin = (DialogWindow*)pWin;
-                break;
-            }
-            else if ( pWin->IsDocument( rDocument ) && pWin->GetLibName() == rLibName && pWin->GetName() == rDlgName )
-            {
-                pDlgWin = (DialogWindow*)pWin;
-                break;
-            }
-        }
+        if (!pWin->IsSuspended() || bFindSuspended)
+            if (rLibName.isEmpty() || (pWin->IsDocument(rDocument) && pWin->GetLibName() == rLibName && pWin->GetName() == rDlgName))
+                if (DialogWindow* pDlgWin = dynamic_cast<DialogWindow*>(pWin))
+                    return pDlgWin;
     }
-    if ( !pDlgWin && bCreateIfNotExist )
-        pDlgWin = CreateDlgWin( rDocument, rLibName, rDlgName );
-
-    return pDlgWin;
+    return bCreateIfNotExist ? CreateDlgWin(rDocument, rLibName, rDlgName) : 0;
 }
 
 sal_uInt16 BasicIDEShell::GetIDEWindowId(const IDEBaseWindow* pWin) const
@@ -151,18 +138,17 @@ sal_uInt16 BasicIDEShell::GetIDEWindowId(const IDEBaseWindow* pWin) const
 
 SdrView* BasicIDEShell::GetCurDlgView() const
 {
-    if ( !pCurWin || !pCurWin->IsA( TYPE( DialogWindow ) ) )
-        return NULL;
-
-    DialogWindow* pWin = (DialogWindow*)pCurWin;
-    return pWin->GetView();
+    if (DialogWindow* pDCurWin = dynamic_cast<DialogWindow*>(pCurWin))
+        return pDCurWin->GetView();
+    else
+        return 0;
 }
 
 // only if dialogue window above:
 void BasicIDEShell::ExecuteDialog( SfxRequest& rReq )
 {
-    if ( pCurWin && ( pCurWin->IsA( TYPE( DialogWindow) ) ||
-        (rReq.GetSlot() == SID_IMPORT_DIALOG &&pCurWin->IsA( TYPE( ModulWindow) ) ) ) )
+    if (pCurWin && (dynamic_cast<DialogWindow*>(pCurWin) ||
+        (rReq.GetSlot() == SID_IMPORT_DIALOG && dynamic_cast<ModulWindow*>(pCurWin))))
     {
         pCurWin->ExecuteCommand( rReq );
     }

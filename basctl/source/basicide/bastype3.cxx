@@ -183,7 +183,7 @@ SbxVariable* BasicTreeListBox::FindVariable( SvLBoxEntry* pEntry )
             break;
             case 0:
             {
-                aDocument = ((BasicDocumentEntry*)pEntry->GetUserData())->GetDocument();
+                aDocument = static_cast<BasicDocumentEntry*>(pEntry->GetUserData())->GetDocument();
             }
             break;
         }
@@ -198,7 +198,7 @@ SbxVariable* BasicTreeListBox::FindVariable( SvLBoxEntry* pEntry )
         {
             SvLBoxEntry* pLE = aEntries[n];
             DBG_ASSERT( pLE, "Can not find entry in array" );
-            BasicEntry* pBE = (BasicEntry*)pLE->GetUserData();
+            BasicEntry* pBE = static_cast<BasicEntry*>(pLE->GetUserData());
             DBG_ASSERT( pBE, "The data in the entry not found!" );
             String aName( GetEntryText( pLE ) );
 
@@ -206,27 +206,26 @@ SbxVariable* BasicTreeListBox::FindVariable( SvLBoxEntry* pEntry )
             {
                 case OBJ_TYPE_LIBRARY:
                 {
-                    BasicManager* pBasMgr = aDocument.getBasicManager();
-                    if ( pBasMgr )
+                    if (BasicManager* pBasMgr = aDocument.getBasicManager())
                         pVar = pBasMgr->GetLib( aName );
                 }
                 break;
                 case OBJ_TYPE_MODULE:
                 {
-                    DBG_ASSERT( pVar && pVar->IsA( TYPE(StarBASIC) ), "FindVariable: Ungueltiges Basic" );
+                    DBG_ASSERT(dynamic_cast<StarBASIC*>(pVar), "FindVariable: invalid Basic");
                     // extract the module name from the string like "Sheet1 (Example1)"
                     if( bDocumentObjects )
                     {
                         sal_uInt16 nIndex = 0;
                         aName = aName.GetToken( 0, ' ', nIndex );
                     }
-                    pVar = ((StarBASIC*)pVar)->FindModule( aName );
+                    pVar = static_cast<StarBASIC*>(pVar)->FindModule( aName );
                 }
                 break;
                 case OBJ_TYPE_METHOD:
                 {
-                    DBG_ASSERT( pVar && ( (pVar->IsA( TYPE(SbModule) )) || (pVar->IsA( TYPE(SbxObject) )) ), "FindVariable: Ungueltiges Modul/Objekt" );
-                    pVar = ((SbxObject*)pVar)->GetMethods()->Find( aName, SbxCLASS_METHOD );
+                    DBG_ASSERT(dynamic_cast<SbxObject*>(pVar), "FindVariable: invalid modul/object");
+                    pVar = static_cast<SbxObject*>(pVar)->GetMethods()->Find(aName, SbxCLASS_METHOD);
                 }
                 break;
                 case OBJ_TYPE_DIALOG:
@@ -288,8 +287,7 @@ BasicEntryDescriptor BasicTreeListBox::GetEntryDescriptor( SvLBoxEntry* pEntry )
             break;
             case 0:
             {
-                BasicDocumentEntry* pBasicDocumentEntry = (BasicDocumentEntry*)pEntry->GetUserData();
-                if ( pBasicDocumentEntry )
+                if (BasicDocumentEntry* pBasicDocumentEntry = static_cast<BasicDocumentEntry*>(pEntry->GetUserData()))
                 {
                     aDocument = pBasicDocumentEntry->GetDocument();
                     eLocation = pBasicDocumentEntry->GetLocation();
@@ -307,7 +305,7 @@ BasicEntryDescriptor BasicTreeListBox::GetEntryDescriptor( SvLBoxEntry* pEntry )
         {
             SvLBoxEntry* pLE = aEntries[n];
             DBG_ASSERT( pLE, "Entrie im Array nicht gefunden" );
-            BasicEntry* pBE = (BasicEntry*)pLE->GetUserData();
+            BasicEntry* pBE = static_cast<BasicEntry*>(pLE->GetUserData());
             DBG_ASSERT( pBE, "Keine Daten im Eintrag gefunden!" );
 
             switch ( pBE->GetType() )
@@ -455,10 +453,7 @@ bool BasicTreeListBox::IsValidEntry( SvLBoxEntry* pEntry )
 
 SbModule* BasicTreeListBox::FindModule( SvLBoxEntry* pEntry )
 {
-    SbxVariable* pVar = FindVariable( pEntry );
-    if ( pVar && pVar->IsA( TYPE(SbModule ) ) )
-        return (SbModule*)pVar;
-    return 0;
+    return dynamic_cast<SbModule*>(FindVariable(pEntry));
 }
 
 SvLBoxEntry* BasicTreeListBox::FindRootEntry( const ScriptDocument& rDocument, LibraryLocation eLocation )
@@ -468,9 +463,9 @@ SvLBoxEntry* BasicTreeListBox::FindRootEntry( const ScriptDocument& rDocument, L
     SvLBoxEntry* pRootEntry = GetEntry( nRootPos );
     while ( pRootEntry )
     {
-        DBG_ASSERT( (((BasicEntry*)pRootEntry->GetUserData())->GetType() == OBJ_TYPE_DOCUMENT ), "Kein Shelleintrag?" );
-        BasicDocumentEntry* pBasicDocumentEntry = (BasicDocumentEntry*)pRootEntry->GetUserData();
-        if ( pBasicDocumentEntry && ( pBasicDocumentEntry->GetDocument() == rDocument ) && pBasicDocumentEntry->GetLocation() == eLocation )
+        DBG_ASSERT( static_cast<BasicEntry*>(pRootEntry->GetUserData())->GetType() == OBJ_TYPE_DOCUMENT, "Kein Shelleintrag?" );
+        BasicDocumentEntry* pBDEntry = static_cast<BasicDocEntry*>(pRootEntry->GetUserData());
+        if (pBDEntry && pBDEntry->GetDocument() == rDocument && pBDEntry->GetLocation() == eLocation)
             return pRootEntry;
         pRootEntry = GetEntry( ++nRootPos );
     }

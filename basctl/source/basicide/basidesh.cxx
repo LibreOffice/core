@@ -251,19 +251,15 @@ BasicIDEShell::~BasicIDEShell()
 
 void BasicIDEShell::onDocumentCreated( const ScriptDocument& /*_rDocument*/ )
 {
-    if(pCurWin && pCurWin->IsA( TYPE(ModulWindow)))
-    {
-        dynamic_cast<ModulWindow*>(pCurWin)->SetLineNumberDisplay(SourceLinesDisplayed());
-    }
+    if (ModulWindow* pMCurWin = dynamic_cast<ModulWindow*>(pCurWin))
+        pMCurWin->SetLineNumberDisplay(SourceLinesDisplayed());
     UpdateWindows();
 }
 
 void BasicIDEShell::onDocumentOpened( const ScriptDocument& /*_rDocument*/ )
 {
-    if(pCurWin && pCurWin->IsA( TYPE(ModulWindow)))
-    {
-        dynamic_cast<ModulWindow*>(pCurWin)->SetLineNumberDisplay(SourceLinesDisplayed());
-    }
+    if (ModulWindow* pMCurWin = dynamic_cast<ModulWindow*>(pCurWin))
+        pMCurWin->SetLineNumberDisplay(SourceLinesDisplayed());
     UpdateWindows();
 }
 
@@ -534,9 +530,9 @@ void BasicIDEShell::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId&,
 {
     if ( BasicIDEGlobals::GetShell() )
     {
-        if ( rHint.IsA( TYPE( SfxSimpleHint ) ) )
+        if (SfxSimpleHint* pSimpleHint = dynamic_cast<SfxSimpleHint*>(&rHint))
         {
-            switch ( ((SfxSimpleHint&)rHint).GetId() )
+            switch (pSimpleHint->GetId())
             {
                 case SFX_HINT_DYING:
                 {
@@ -546,15 +542,13 @@ void BasicIDEShell::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId&,
                 break;
             }
 
-            if ( rHint.IsA( TYPE( SbxHint ) ) )
+            if (SbxHint* pSbxHint = dynamic_cast<SbxHint*>(&rHint))
             {
-                SbxHint& rSbxHint = (SbxHint&)rHint;
-                sal_uLong nHintId = rSbxHint.GetId();
+                sal_uLong nHintId = pSbxHint->GetId();
                 if (    ( nHintId == SBX_HINT_BASICSTART ) ||
                         ( nHintId == SBX_HINT_BASICSTOP ) )
                 {
-                    SfxBindings* pBindings = BasicIDE::GetBindingsPtr();
-                    if ( pBindings )
+                    if (SfxBindings* pBindings = BasicIDE::GetBindingsPtr())
                     {
                         pBindings->Invalidate( SID_BASICRUN );
                         pBindings->Update( SID_BASICRUN );

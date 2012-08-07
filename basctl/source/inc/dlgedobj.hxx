@@ -51,6 +51,9 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener> m_xPropertyChangeListener;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener>  m_xContainerListener;
 
+private:
+    DlgEditor* GetDialogEditor ();
+
 protected:
     DlgEdObj();
     DlgEdObj(const ::rtl::OUString& rModelName,

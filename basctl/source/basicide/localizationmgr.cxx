@@ -135,9 +135,8 @@ void LocalizationMgr::implEnableDisableResourceForAllLibraryDialogs( HandleResou
     {
         String aDlgName = pDlgNames[ i ];
         DialogWindow* pWin = m_pIDEShell->FindDlgWin( m_aDocument, m_aLibName, aDlgName, false );
-        if( pWin && pWin->IsA( TYPE( DialogWindow ) ) )
+        if (DialogWindow* pDialogWin = dynamic_cast<DialogWindow*>(pWin))
         {
-            DialogWindow* pDialogWin = static_cast< DialogWindow* >( pWin );
             Reference< container::XNameContainer > xDialog = pDialogWin->GetDialog();
             if( xDialog.is() )
             {
@@ -778,14 +777,10 @@ void LocalizationMgr::handleSetCurrentLocale( ::com::sun::star::lang::Locale aLo
         if ( pBindings )
             pBindings->Invalidate( SID_BASICIDE_CURRENT_LANG );
 
-        IDEBaseWindow* pCurWin = m_pIDEShell->GetCurWindow();
-        if ( pCurWin && !pCurWin->IsSuspended() && pCurWin->IsA( TYPE( DialogWindow ) ) )
-        {
-            DialogWindow* pDlgWin = (DialogWindow*)pCurWin;
-            DlgEditor* pWinEditor = pDlgWin->GetEditor();
-            if( pWinEditor )
-                pWinEditor->UpdatePropertyBrowserDelayed();
-        }
+        if (DialogWindow* pDlgWin = dynamic_cast<DialogWindow*>(m_pIDEShell->GetCurWindow()))
+            if (!pDlgWin->IsSuspended())
+                if (DlgEditor* pWinEditor = pDlgWin->GetEditor())
+                    pWinEditor->UpdatePropertyBrowserDelayed();
     }
 }
 
@@ -812,22 +807,18 @@ DialogWindow* FindDialogWindowForEditor( DlgEditor* pEditor )
 {
     BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
     IDEWindowTable& aIDEWindowTable = pIDEShell->GetIDEWindowTable();
-    DialogWindow* pFoundDlgWin = NULL;
     for( IDEWindowTable::const_iterator it = aIDEWindowTable.begin(); it != aIDEWindowTable.end(); ++it )
     {
         IDEBaseWindow* pWin = it->second;
-        if ( !pWin->IsSuspended() && pWin->IsA( TYPE( DialogWindow ) ) )
-        {
-            DialogWindow* pDlgWin = (DialogWindow*)pWin;
-            DlgEditor* pWinEditor = pDlgWin->GetEditor();
-            if( pWinEditor == pEditor )
+        if (!pWin->IsSuspended())
+            if (DialogWindow* pDlgWin = dynamic_cast<DialogWindow*>(pWin))
             {
-                pFoundDlgWin = pDlgWin;
-                break;
+                DlgEditor* pWinEditor = pDlgWin->GetEditor();
+                if( pWinEditor == pEditor )
+                    return pFoundDlgWin;
             }
-        }
     }
-    return pFoundDlgWin;
+    return 0;
 }
 
 
