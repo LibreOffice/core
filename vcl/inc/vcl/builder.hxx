@@ -113,6 +113,12 @@ private:
     Adjustment *get_adjustment_by_name(rtl::OString sID);
     static void mungeadjustment(MetricField &rTarget, Adjustment &rAdjustment);
 
+    typedef std::map<rtl::OString, rtl::OString> WidgetTranslations;
+    typedef std::map<rtl::OString, WidgetTranslations> Translations;
+    Translations m_aTranslations;
+
+    rtl::OString getTranslation(const rtl::OString &rId, const rtl::OString &rProperty) const;
+
     rtl::OString m_sID;
     Window *m_pParent;
 public:
@@ -133,11 +139,13 @@ private:
     bool extractModel(const rtl::OString &id, stringmap &rVec);
     bool extractAdjustment(const rtl::OString &id, stringmap &rVec);
 
+    void handleTranslations(xmlreader::XmlReader &reader);
+
     void handleChild(Window *pParent, xmlreader::XmlReader &reader);
     Window* handleObject(Window *pParent, xmlreader::XmlReader &reader);
     void handlePacking(Window *pCurrent, xmlreader::XmlReader &reader);
     void applyPackingProperty(Window *pCurrent, xmlreader::XmlReader &reader);
-    void collectProperty(xmlreader::XmlReader &reader, stringmap &rVec);
+    void collectProperty(xmlreader::XmlReader &reader, const rtl::OString &rID, stringmap &rVec);
 
     void handleListStore(xmlreader::XmlReader &reader, const rtl::OString &rID);
     void handleAdjustment(const rtl::OString &rID, stringmap &rProperties);

@@ -34,6 +34,7 @@
 #include <vcl/fixed.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/lstbox.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/tabctrl.hxx>
 #include <vcl/tabpage.hxx>
 #include <window.h>
@@ -42,6 +43,33 @@ VclBuilder::VclBuilder(Window *pParent, rtl::OUString sUri, rtl::OString sID)
     : m_sID(sID)
     , m_pParent(pParent)
 {
+    ::com::sun::star::lang::Locale aLocale = Application::GetSettings().GetUILocale();
+    for (int i = aLocale.Country.isEmpty() ? 1 : 0; i < 2; ++i)
+    {
+        rtl::OUStringBuffer aTransBuf;
+        sal_Int32 nLastSlash = sUri.lastIndexOf('/');
+        aTransBuf.append(sUri.copy(0, nLastSlash)).append("/res/").append(aLocale.Language);
+        switch (i)
+        {
+            case 0:
+                aTransBuf.append('-').append(aLocale.Country);
+                break;
+            default:
+                break;
+        }
+        aTransBuf.append(sUri.copy(nLastSlash));
+
+        rtl::OUString sTransUri = aTransBuf.makeStringAndClear();
+        try
+        {
+            xmlreader::XmlReader reader(sTransUri);
+            handleTranslations(reader);
+        }
+        catch (const ::com::sun::star::uno::Exception &)
+        {
+        }
+    }
+
     xmlreader::XmlReader reader(sUri);
 
     handleChild(pParent, reader);
@@ -92,6 +120,9 @@ VclBuilder::VclBuilder(Window *pParent, rtl::OUString sUri, rtl::OString sID)
     std::vector<SpinButtonAdjustmentMap>().swap(m_aAdjustmentMaps);
     std::vector<AdjustmentAndId>().swap(m_aAdjustments);
 
+    //drop maps now
+    Translations().swap(m_aTranslations);
+
     //auto-show (really necessary ?, maybe drop it when complete)
     for (std::vector<WinAndId>::iterator aI = m_aChildren.begin(),
          aEnd = m_aChildren.end(); aI != aEnd; ++aI)
@@ -111,6 +142,53 @@ VclBuilder::~VclBuilder()
     {
         if (aI->m_bOwned)
             delete aI->m_pWindow;
+    }
+}
+
+void VclBuilder::handleTranslations(xmlreader::XmlReader &reader)
+{
+    xmlreader::Span name;
+    int nsId;
+    rtl::OString sType;
+
+    rtl::OString sID, sProperty;
+
+    while(1)
+    {
+        xmlreader::XmlReader::Result res = reader.nextItem(
+            xmlreader::XmlReader::TEXT_NORMALIZED, &name, &nsId);
+
+        if (res == xmlreader::XmlReader::RESULT_BEGIN)
+        {
+            if (name.equals(RTL_CONSTASCII_STRINGPARAM("e")))
+            {
+                while (reader.nextAttribute(&nsId, &name))
+                {
+                    if (name.equals(RTL_CONSTASCII_STRINGPARAM("g")))
+                    {
+                        name = reader.getAttributeValue(false);
+                        sID = rtl::OString(name.begin, name.length);
+                    }
+                    else if (name.equals(RTL_CONSTASCII_STRINGPARAM("i")))
+                    {
+                        name = reader.getAttributeValue(false);
+                        sProperty = rtl::OString(name.begin, name.length);
+                    }
+                }
+            }
+        }
+
+        if (res == xmlreader::XmlReader::RESULT_TEXT && !sID.isEmpty())
+        {
+            rtl::OString sTranslation(name.begin, name.length);
+            m_aTranslations[sID][sProperty] = sTranslation;
+        }
+
+        if (res == xmlreader::XmlReader::RESULT_END)
+            sID = rtl::OString();
+
+        if (res == xmlreader::XmlReader::RESULT_DONE)
+            break;
     }
 }
 
@@ -407,9 +485,7 @@ void VclBuilder::handleTabChild(Window *pParent, xmlreader::XmlReader &reader)
         if (res == xmlreader::XmlReader::RESULT_BEGIN)
         {
             ++nLevel;
-            if (name.equals(RTL_CONSTASCII_STRINGPARAM("property")))
-                collectProperty(reader, aProperties);
-            else if (name.equals(RTL_CONSTASCII_STRINGPARAM("object")))
+            if (name.equals(RTL_CONSTASCII_STRINGPARAM("object")))
             {
                 while (reader.nextAttribute(&nsId, &name))
                 {
@@ -420,6 +496,8 @@ void VclBuilder::handleTabChild(Window *pParent, xmlreader::XmlReader &reader)
                     }
                 }
             }
+            else if (name.equals(RTL_CONSTASCII_STRINGPARAM("property")))
+                collectProperty(reader, sID, aProperties);
         }
 
         if (res == xmlreader::XmlReader::RESULT_END)
@@ -588,9 +666,29 @@ void VclBuilder::handleListStore(xmlreader::XmlReader &reader, const rtl::OStrin
             ++nLevel;
             if (name.equals(RTL_CONSTASCII_STRINGPARAM("col")))
             {
+                bool bTranslated = false;
+                rtl::OString sProperty, sValue;
+
+                while (reader.nextAttribute(&nsId, &name))
+                {
+                    if (name.equals(RTL_CONSTASCII_STRINGPARAM("id")))
+                    {
+                        name = reader.getAttributeValue(false);
+                        sProperty = rtl::OString(name.begin, name.length);
+                    }
+                    else if (name.equals(RTL_CONSTASCII_STRINGPARAM("translatable")) && reader.getAttributeValue(false).equals(RTL_CONSTASCII_STRINGPARAM("yes")))
+                    {
+                        sValue = getTranslation(rID, sProperty);
+                        bTranslated = !sValue.isEmpty();
+                    }
+                }
+
                 reader.nextItem(
                     xmlreader::XmlReader::TEXT_NORMALIZED, &name, &nsId);
-                rtl::OString sValue(name.begin, name.length);
+
+                if (!bTranslated)
+                    sValue = rtl::OString(name.begin, name.length);
+
                 m_aModels.back().m_pModel->m_aEntries.push_back(sValue);
             }
         }
@@ -659,7 +757,7 @@ Window* VclBuilder::handleObject(Window *pParent, xmlreader::XmlReader &reader)
             {
                 ++nLevel;
                 if (name.equals(RTL_CONSTASCII_STRINGPARAM("property")))
-                    collectProperty(reader, aProperties);
+                    collectProperty(reader, sID, aProperties);
             }
         }
 
@@ -766,29 +864,58 @@ void VclBuilder::applyPackingProperty(Window *pCurrent,
     }
 }
 
-void VclBuilder::collectProperty(xmlreader::XmlReader &reader, stringmap &rMap)
+rtl::OString VclBuilder::getTranslation(const rtl::OString &rID, const rtl::OString &rProperty) const
+{
+    Translations::const_iterator aWidgetFind = m_aTranslations.find(rID);
+    if (aWidgetFind != m_aTranslations.end())
+    {
+        const WidgetTranslations &rWidgetTranslations = aWidgetFind->second;
+        WidgetTranslations::const_iterator aPropertyFind = rWidgetTranslations.find(rProperty);
+        if (aPropertyFind != rWidgetTranslations.end())
+            return aPropertyFind->second;
+    }
+    return rtl::OString();
+}
+
+void VclBuilder::collectProperty(xmlreader::XmlReader &reader, const rtl::OString &rID, stringmap &rMap)
 {
     xmlreader::Span name;
     int nsId;
+
+    rtl::OString sProperty;
+    rtl::OString sValue;
+
+    bool bTranslated = false;
 
     while (reader.nextAttribute(&nsId, &name))
     {
         if (name.equals(RTL_CONSTASCII_STRINGPARAM("name")))
         {
             name = reader.getAttributeValue(false);
-            rtl::OString sProperty(name.begin, name.length);
-            sProperty = sProperty.replace('_', '-');
-            reader.nextItem(
-                xmlreader::XmlReader::TEXT_NORMALIZED, &name, &nsId);
-            rtl::OString sValue(name.begin, name.length);
-            //replace '_' with '-' except for property values that
-            //refer to widget ids themselves. TO-DO, drop conversion
-            //and just use foo_bar properties throughout
-            if (sProperty.equalsL(RTL_CONSTASCII_STRINGPARAM("group")))
-                rMap[sProperty] = sValue;
-            else
-                rMap[sProperty] = sValue.replace('_', '-');
+            sProperty = rtl::OString(name.begin, name.length);
         }
+        else if (name.equals(RTL_CONSTASCII_STRINGPARAM("translatable")) && reader.getAttributeValue(false).equals(RTL_CONSTASCII_STRINGPARAM("yes")))
+        {
+            sValue = getTranslation(rID, sProperty);
+            bTranslated = !sValue.isEmpty();
+        }
+
+    }
+
+    reader.nextItem(xmlreader::XmlReader::TEXT_NORMALIZED, &name, &nsId);
+    if (!bTranslated)
+        sValue = rtl::OString(name.begin, name.length);
+
+    if (!sProperty.isEmpty())
+    {
+        sProperty = sProperty.replace('_', '-');
+        //replace '_' with '-' except for property values that
+        //refer to widget ids themselves. TO-DO, drop conversion
+        //and just use foo_bar properties throughout
+        if (sProperty.equalsL(RTL_CONSTASCII_STRINGPARAM("group")))
+            rMap[sProperty] = sValue;
+        else
+            rMap[sProperty] = sValue.replace('_', '-');
     }
 }
 
