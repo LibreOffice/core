@@ -10975,8 +10975,14 @@ GLIB_CFLAGS=''
 GLIB_LIBS=''
 if test "$SYSTEM_GLIB" = YES; then
     PKG_CHECK_MODULES( GLIB, glib-2.0 )
-elif test "$enable_librsvg" = fully-internal; then
-    BUILD_TYPE="$BUILD_TYPE GLIB"
+else
+    case "$_os" in
+    iOS|Android)
+        ;;
+    *)
+        BUILD_TYPE="$BUILD_TYPE GLIB"
+        ;;
+    esac
 fi
 AC_SUBST(GLIB_CFLAGS)
 AC_SUBST(GLIB_LIBS)
