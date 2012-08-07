@@ -51,10 +51,6 @@ class IStyleAccess;
 class SfxItemSet;
 typedef boost::shared_ptr<SfxItemSet> SfxItemSet_Pointer_t;
 
-/******************************************************************************
- *
- ******************************************************************************/
-
 class SwXStyleFamilies :  public cppu::WeakImplHelper4
 <
     ::com::sun::star::container::XIndexAccess,

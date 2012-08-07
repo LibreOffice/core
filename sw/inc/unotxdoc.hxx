@@ -134,12 +134,6 @@ class ViewShell;
 
 typedef std::deque<UnoActionContext*> ActionContextArr;
 
-
-/******************************************************************************
- *
- ******************************************************************************/
-
-
 typedef cppu::WeakImplHelper32
 <
     css::text::XTextDocument,

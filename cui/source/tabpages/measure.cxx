@@ -622,33 +622,15 @@ SfxTabPage* SvxMeasurePage::Create( Window* pWindow,
     return( new SvxMeasurePage( pWindow, rAttrs ) );
 }
 
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
-
 sal_uInt16* SvxMeasurePage::GetRanges()
 {
     return( pRanges );
 }
 
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
-
 void SvxMeasurePage::PointChanged( Window* pWindow, RECT_POINT /*eRP*/ )
 {
     ChangeAttrHdl_Impl( pWindow );
 }
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
 
 IMPL_LINK( SvxMeasurePage, ClickAutoPosHdl_Impl, void *, p )
 {
@@ -698,12 +680,6 @@ IMPL_LINK( SvxMeasurePage, ClickAutoPosHdl_Impl, void *, p )
 
     return( 0L );
 }
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
 
 IMPL_LINK( SvxMeasurePage, ChangeAttrHdl_Impl, void *, p )
 {
@@ -835,12 +811,6 @@ IMPL_LINK( SvxMeasurePage, ChangeAttrHdl_Impl, void *, p )
 
     return( 0L );
 }
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
 
 void SvxMeasurePage::FillUnitLB()
 {

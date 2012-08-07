@@ -32,12 +32,6 @@
 #include <svl/metitem.hxx>
 #include "svx/svxdllapi.h"
 
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
-
 class SVX_DLLPUBLIC XFillBmpSizeXItem : public SfxMetricItem
 {
 public:
@@ -58,12 +52,6 @@ public:
     // wir hier beruecksichtigen
     SVX_DLLPRIVATE virtual bool HasMetrics() const;
 };
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
 
 class SVX_DLLPUBLIC XFillBmpSizeYItem : public SfxMetricItem
 {

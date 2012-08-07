@@ -39,12 +39,6 @@
 
 sal_uInt8* ImplSearchEntry( sal_uInt8* , sal_uInt8* , sal_uLong , sal_uLong  );
 
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
-
 GraphicDescriptor::GraphicDescriptor( const INetURLObject& rPath ) :
     pFileStm( ::utl::UcbStreamHelper::CreateStream( rPath.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ ) ),
     aPathExt( rPath.GetFileExtension().toAsciiLowerCase() ),
@@ -52,12 +46,6 @@ GraphicDescriptor::GraphicDescriptor( const INetURLObject& rPath ) :
 {
     ImpConstruct();
 }
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
 
 GraphicDescriptor::GraphicDescriptor( SvStream& rInStream, const String* pPath) :
     pFileStm    ( &rInStream ),
@@ -72,23 +60,11 @@ GraphicDescriptor::GraphicDescriptor( SvStream& rInStream, const String* pPath) 
     }
 }
 
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
-
 GraphicDescriptor::~GraphicDescriptor()
 {
     if ( bOwnStream )
         delete pFileStm;
 }
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
 
 sal_Bool GraphicDescriptor::Detect( sal_Bool bExtendedInfo )
 {
@@ -129,12 +105,6 @@ sal_Bool GraphicDescriptor::Detect( sal_Bool bExtendedInfo )
     return bRet;
 }
 
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
-
 void GraphicDescriptor::ImpConstruct()
 {
     nFormat = GFF_NOT;
@@ -142,13 +112,6 @@ void GraphicDescriptor::ImpConstruct()
     nPlanes = 0;
     bCompressed = sal_False;
 }
-
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
 
 sal_Bool GraphicDescriptor::ImpDetectBMP( SvStream& rStm, sal_Bool bExtendedInfo )
 {
@@ -224,13 +187,6 @@ sal_Bool GraphicDescriptor::ImpDetectBMP( SvStream& rStm, sal_Bool bExtendedInfo
     return bRet;
 }
 
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
-
 sal_Bool GraphicDescriptor::ImpDetectGIF( SvStream& rStm, sal_Bool bExtendedInfo )
 {
     sal_uInt32  n32;
@@ -271,13 +227,6 @@ sal_Bool GraphicDescriptor::ImpDetectGIF( SvStream& rStm, sal_Bool bExtendedInfo
     rStm.Seek( nStmPos );
     return bRet;
 }
-
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
 
 // returns the next jpeg marker, a return value of 0 represents an error
 sal_uInt8 ImpDetectJPG_GetNextMarker( SvStream& rStm )
@@ -462,13 +411,6 @@ sal_Bool GraphicDescriptor::ImpDetectJPG( SvStream& rStm,  sal_Bool bExtendedInf
     return bRet;
 }
 
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
-
 sal_Bool GraphicDescriptor::ImpDetectPCD( SvStream& rStm, sal_Bool )
 {
     sal_Bool    bRet = sal_False;
@@ -495,13 +437,6 @@ sal_Bool GraphicDescriptor::ImpDetectPCD( SvStream& rStm, sal_Bool )
     rStm.Seek( nStmPos );
     return bRet;
 }
-
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
 
 sal_Bool GraphicDescriptor::ImpDetectPCX( SvStream& rStm, sal_Bool bExtendedInfo )
 {
@@ -584,13 +519,6 @@ sal_Bool GraphicDescriptor::ImpDetectPCX( SvStream& rStm, sal_Bool bExtendedInfo
     rStm.Seek( nStmPos );
     return bRet;
 }
-
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
 
 sal_Bool GraphicDescriptor::ImpDetectPNG( SvStream& rStm, sal_Bool bExtendedInfo )
 {
@@ -681,13 +609,6 @@ sal_Bool GraphicDescriptor::ImpDetectPNG( SvStream& rStm, sal_Bool bExtendedInfo
     rStm.Seek( nStmPos );
     return bRet;
 }
-
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
 
 sal_Bool GraphicDescriptor::ImpDetectTIF( SvStream& rStm, sal_Bool bExtendedInfo )
 {
@@ -820,13 +741,6 @@ sal_Bool GraphicDescriptor::ImpDetectTIF( SvStream& rStm, sal_Bool bExtendedInfo
     return bRet;
 }
 
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
-
 sal_Bool GraphicDescriptor::ImpDetectXBM( SvStream&, sal_Bool )
 {
     sal_Bool bRet = aPathExt.CompareToAscii( "xbm", 3 ) == COMPARE_EQUAL;
@@ -836,13 +750,6 @@ sal_Bool GraphicDescriptor::ImpDetectXBM( SvStream&, sal_Bool )
     return bRet;
 }
 
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
-
 sal_Bool GraphicDescriptor::ImpDetectXPM( SvStream&, sal_Bool )
 {
     sal_Bool bRet = aPathExt.CompareToAscii( "xpm", 3 ) == COMPARE_EQUAL;
@@ -851,12 +758,6 @@ sal_Bool GraphicDescriptor::ImpDetectXPM( SvStream&, sal_Bool )
 
     return bRet;
 }
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
 
 sal_Bool GraphicDescriptor::ImpDetectPBM( SvStream& rStm, sal_Bool )
 {
@@ -883,12 +784,6 @@ sal_Bool GraphicDescriptor::ImpDetectPBM( SvStream& rStm, sal_Bool )
     return bRet;
 }
 
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
-
 sal_Bool GraphicDescriptor::ImpDetectPGM( SvStream& rStm, sal_Bool )
 {
     sal_Bool bRet = sal_False;
@@ -910,12 +805,6 @@ sal_Bool GraphicDescriptor::ImpDetectPGM( SvStream& rStm, sal_Bool )
 
     return bRet;
 }
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
 
 sal_Bool GraphicDescriptor::ImpDetectPPM( SvStream& rStm, sal_Bool )
 {
@@ -939,12 +828,6 @@ sal_Bool GraphicDescriptor::ImpDetectPPM( SvStream& rStm, sal_Bool )
     return bRet;
 }
 
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
-
 sal_Bool GraphicDescriptor::ImpDetectRAS( SvStream& rStm, sal_Bool )
 {
     sal_uInt32 nMagicNumber;
@@ -961,12 +844,6 @@ sal_Bool GraphicDescriptor::ImpDetectRAS( SvStream& rStm, sal_Bool )
     return bRet;
 }
 
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
-
 sal_Bool GraphicDescriptor::ImpDetectTGA( SvStream&, sal_Bool )
 {
     sal_Bool bRet = aPathExt.CompareToAscii( "tga", 3 ) == COMPARE_EQUAL;
@@ -975,12 +852,6 @@ sal_Bool GraphicDescriptor::ImpDetectTGA( SvStream&, sal_Bool )
 
     return bRet;
 }
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
 
 sal_Bool GraphicDescriptor::ImpDetectPSD( SvStream& rStm, sal_Bool bExtendedInfo )
 {
@@ -1035,12 +906,6 @@ sal_Bool GraphicDescriptor::ImpDetectPSD( SvStream& rStm, sal_Bool bExtendedInfo
     return bRet;
 }
 
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
-
 sal_Bool GraphicDescriptor::ImpDetectEPS( SvStream& rStm, sal_Bool )
 {
     // es wird die EPS mit Vorschaubild Variante und die Extensionuebereinstimmung
@@ -1067,12 +932,6 @@ sal_Bool GraphicDescriptor::ImpDetectEPS( SvStream& rStm, sal_Bool )
     return bRet;
 }
 
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
-
 sal_Bool GraphicDescriptor::ImpDetectDXF( SvStream&, sal_Bool )
 {
     sal_Bool bRet = aPathExt.CompareToAscii( "dxf", 3 ) == COMPARE_EQUAL;
@@ -1082,12 +941,6 @@ sal_Bool GraphicDescriptor::ImpDetectDXF( SvStream&, sal_Bool )
     return bRet;
 }
 
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
-
 sal_Bool GraphicDescriptor::ImpDetectMET( SvStream&, sal_Bool )
 {
     sal_Bool bRet = aPathExt.CompareToAscii( "met", 3 ) == COMPARE_EQUAL;
@@ -1096,13 +949,6 @@ sal_Bool GraphicDescriptor::ImpDetectMET( SvStream&, sal_Bool )
 
     return bRet;
 }
-
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
 
 extern bool isPCT(SvStream& rStream, sal_uLong nStreamPos, sal_uLong nStreamLen);
 
@@ -1125,13 +971,6 @@ sal_Bool GraphicDescriptor::ImpDetectPCT( SvStream& rStm, sal_Bool )
 
     return bRet;
 }
-
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
 
 sal_Bool GraphicDescriptor::ImpDetectSGF( SvStream& rStm, sal_Bool )
 {
@@ -1158,13 +997,6 @@ sal_Bool GraphicDescriptor::ImpDetectSGF( SvStream& rStm, sal_Bool )
     return bRet;
 }
 
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
-
 sal_Bool GraphicDescriptor::ImpDetectSGV( SvStream&, sal_Bool )
 {
     sal_Bool bRet = aPathExt.CompareToAscii( "sgv", 3 ) == COMPARE_EQUAL;
@@ -1173,13 +1005,6 @@ sal_Bool GraphicDescriptor::ImpDetectSGV( SvStream&, sal_Bool )
 
     return bRet;
 }
-
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
 
 sal_Bool GraphicDescriptor::ImpDetectSVM( SvStream& rStm, sal_Bool bExtendedInfo )
 {
@@ -1253,13 +1078,6 @@ sal_Bool GraphicDescriptor::ImpDetectSVM( SvStream& rStm, sal_Bool bExtendedInfo
     return bRet;
 }
 
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
-
 sal_Bool GraphicDescriptor::ImpDetectWMF( SvStream&, sal_Bool )
 {
     sal_Bool bRet = aPathExt.CompareToAscii( "wmf",3 ) == COMPARE_EQUAL;
@@ -1268,12 +1086,6 @@ sal_Bool GraphicDescriptor::ImpDetectWMF( SvStream&, sal_Bool )
 
     return bRet;
 }
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
 
 sal_Bool GraphicDescriptor::ImpDetectEMF( SvStream&, sal_Bool )
 {
@@ -1284,12 +1096,6 @@ sal_Bool GraphicDescriptor::ImpDetectEMF( SvStream&, sal_Bool )
     return bRet;
 }
 
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
-
 sal_Bool GraphicDescriptor::ImpDetectSVG( SvStream& /*rStm*/, sal_Bool /*bExtendedInfo*/ )
 {
     sal_Bool bRet = aPathExt.CompareToAscii( "svg", 3 ) == COMPARE_EQUAL;
@@ -1298,12 +1104,6 @@ sal_Bool GraphicDescriptor::ImpDetectSVG( SvStream& /*rStm*/, sal_Bool /*bExtend
 
     return bRet;
 }
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
 
 String GraphicDescriptor::GetImportFormatShortName( sal_uInt16 nFormat )
 {

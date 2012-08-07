@@ -485,12 +485,6 @@ sal_Bool SvxTextAttrPage::FillItemSet( SfxItemSet& rAttrs)
     return( sal_True );
 }
 
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
-
 void SvxTextAttrPage::Construct()
 {
     DBG_ASSERT( pView, "Keine gueltige View Uebergeben!" );
@@ -553,22 +547,10 @@ SfxTabPage* SvxTextAttrPage::Create( Window* pWindow,
     return( new SvxTextAttrPage( pWindow, rAttrs ) );
 }
 
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
-
 sal_uInt16* SvxTextAttrPage::GetRanges()
 {
     return( pRanges );
 }
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
 
 /** Check whether we have to uncheck the "Full width" check box.
 */

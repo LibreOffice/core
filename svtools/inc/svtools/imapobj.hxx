@@ -59,12 +59,6 @@ class SvStream;
 #define IMAP_ERR_OK         0x00000000L
 #define IMAP_ERR_FORMAT     0x00000001L
 
-/******************************************************************************
-|*
-|*
-|*
-\******************************************************************************/
-
 class SVT_DLLPUBLIC IMapObject
 {
     friend class        ImageMap;

@@ -78,12 +78,6 @@ class SVX_DLLPUBLIC SvxIMapDlgChildWindow : public SfxChildWindow
 #ifndef _REDUCED_IMAPDLG_HXX_
 #define _REDUCED_IMAPDLG_HXX_
 
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
-
 class SvxIMapDlg;
 
 class SvxIMapDlgItem : public SfxControllerItem
@@ -101,13 +95,6 @@ public:
 
     SvxIMapDlgItem( sal_uInt16 nId, SvxIMapDlg& rIMapDlg, SfxBindings& rBindings );
 };
-
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
 
 class IMapOwnData;
 class IMapWindow;

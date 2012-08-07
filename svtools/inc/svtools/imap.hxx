@@ -40,12 +40,6 @@ class Size;
 class Fraction;
 class IMapObject;
 
-/******************************************************************************
-|*
-|*
-|*
-\******************************************************************************/
-
 typedef ::std::vector< IMapObject* > IMapObjectList_impl;
 
 class SVT_DLLPUBLIC ImageMap
@@ -142,12 +136,6 @@ public:
     void                Write( SvStream& rOStm, sal_uLong nFormat, const String& rBaseURL ) const;
     sal_uLong               Read( SvStream& rIStm, sal_uLong nFormat, const String& rBaseURL );
 };
-
-/******************************************************************************
-|*
-|*
-|*
-\******************************************************************************/
 
 class IMapCompat
 {

@@ -492,21 +492,9 @@ sal_Bool SvxTextAnimationPage::FillItemSet( SfxItemSet& rAttrs)
     return( bModified );
 }
 
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
-
 void SvxTextAnimationPage::Construct()
 {
 }
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
 
 sal_uInt16* SvxTextAnimationPage::GetRanges()
 {
@@ -524,12 +512,6 @@ SfxTabPage* SvxTextAnimationPage::Create( Window* pWindow,
 {
     return( new SvxTextAnimationPage( pWindow, rAttrs ) );
 }
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
 
 IMPL_LINK_NOARG(SvxTextAnimationPage, SelectEffectHdl_Impl)
 {
@@ -623,12 +605,6 @@ IMPL_LINK_NOARG(SvxTextAnimationPage, SelectEffectHdl_Impl)
     return( 0L );
 }
 
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
-
 IMPL_LINK_NOARG(SvxTextAnimationPage, ClickEndlessHdl_Impl)
 {
 
@@ -649,12 +625,6 @@ IMPL_LINK_NOARG(SvxTextAnimationPage, ClickEndlessHdl_Impl)
     return( 0L );
 }
 
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
-
 IMPL_LINK_NOARG(SvxTextAnimationPage, ClickAutoHdl_Impl)
 {
     TriState eState = aTsbAuto.GetState();
@@ -671,12 +641,6 @@ IMPL_LINK_NOARG(SvxTextAnimationPage, ClickAutoHdl_Impl)
 
     return( 0L );
 }
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
 
 IMPL_LINK_NOARG(SvxTextAnimationPage, ClickPixelHdl_Impl)
 {
@@ -717,12 +681,6 @@ IMPL_LINK_NOARG(SvxTextAnimationPage, ClickPixelHdl_Impl)
     return( 0L );
 }
 
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
-
 IMPL_LINK( SvxTextAnimationPage, ClickDirectionHdl_Impl, ImageButton *, pBtn )
 {
     aBtnUp.Check( pBtn == &aBtnUp );
@@ -733,12 +691,6 @@ IMPL_LINK( SvxTextAnimationPage, ClickDirectionHdl_Impl, ImageButton *, pBtn )
     return( 0L );
 }
 
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
-
 void SvxTextAnimationPage::SelectDirection( SdrTextAniDirection nValue )
 {
     aBtnUp.Check( nValue == SDRTEXTANI_UP );
@@ -746,12 +698,6 @@ void SvxTextAnimationPage::SelectDirection( SdrTextAniDirection nValue )
     aBtnRight.Check( nValue == SDRTEXTANI_RIGHT );
     aBtnDown.Check( nValue == SDRTEXTANI_DOWN );
 }
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
 
 sal_uInt16 SvxTextAnimationPage::GetSelectedDirection()
 {

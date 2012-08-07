@@ -58,10 +58,6 @@ class SwXBodyText;
 SV_DECL_REF( SwDocShell )
 #endif
 
-
-/******************************************************************************
- *
- ******************************************************************************/
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
     SAL_CALL SwXAutoTextContainer_createInstance(
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & ) throw ( ::com::sun::star::uno::Exception );

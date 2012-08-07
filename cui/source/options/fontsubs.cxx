@@ -154,10 +154,6 @@ SvxFontSubstTabPage::SvxFontSubstTabPage( Window* pParent,
         aFontHeightLB.InsertEntry(String::CreateFromInt32(nHeight));
 }
 
-/*********************************************************************/
-/*                                                                   */
-/*********************************************************************/
-
 SvLBoxEntry* SvxFontSubstTabPage::CreateEntry(String& rFont1, String& rFont2)
 {
     SvLBoxEntry* pEntry = new SvLBoxEntry;
@@ -180,30 +176,17 @@ SvLBoxEntry* SvxFontSubstTabPage::CreateEntry(String& rFont1, String& rFont2)
     return pEntry;
 }
 
-/*********************************************************************/
-/*                                                                   */
-/*********************************************************************/
-
-
  SvxFontSubstTabPage::~SvxFontSubstTabPage()
 {
     delete pCheckButtonData;
     delete pConfig;
 }
 
-/*********************************************************************/
-/*                                                                   */
-/*********************************************************************/
-
 SfxTabPage*  SvxFontSubstTabPage::Create( Window* pParent,
                                 const SfxItemSet& rAttrSet)
 {
     return new SvxFontSubstTabPage(pParent, rAttrSet);
 }
-
-/*********************************************************************/
-/*                                                                   */
-/*********************************************************************/
 
 sal_Bool  SvxFontSubstTabPage::FillItemSet( SfxItemSet& )
 {
@@ -246,11 +229,6 @@ sal_Bool  SvxFontSubstTabPage::FillItemSet( SfxItemSet& )
 
     return sal_False;
 }
-
-/*********************************************************************/
-/*                                                                   */
-/*********************************************************************/
-
 
 void  SvxFontSubstTabPage::Reset( const SfxItemSet& )
 {
@@ -298,10 +276,6 @@ void  SvxFontSubstTabPage::Reset( const SfxItemSet& )
     aNonPropFontsOnlyCB.SaveValue();
     aFontHeightLB.SaveValue();
 }
-
-/*********************************************************************/
-/*                                                                   */
-/*********************************************************************/
 
 IMPL_LINK(SvxFontSubstTabPage, SelectHdl, Window*, pWin)
 {

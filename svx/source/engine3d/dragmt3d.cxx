@@ -129,10 +129,6 @@ E3dDragMethod::E3dDragMethod (
     }
 }
 
-/*************************************************************************
-|*
-\************************************************************************/
-
 void E3dDragMethod::TakeSdrDragComment(XubString& /*rStr*/) const
 {
 }
@@ -454,10 +450,6 @@ void E3dDragRotate::MoveSdrDrag(const Point& rPnt)
     }
 }
 
-/*************************************************************************
-|*
-\************************************************************************/
-
 Pointer E3dDragRotate::GetSdrDragPointer() const
 {
     return Pointer(POINTER_ROTATE);
@@ -731,10 +723,6 @@ void E3dDragMove::MoveSdrDrag(const Point& rPnt)
         DragStat().NextMove(rPnt);
     }
 }
-
-/*************************************************************************
-|*
-\************************************************************************/
 
 Pointer E3dDragMove::GetSdrDragPointer() const
 {

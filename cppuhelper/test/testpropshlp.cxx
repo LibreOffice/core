@@ -52,11 +52,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 
-
-
-/**********************
-*
-**********************/
 static Property * getPropertyTable1()
 {
     static Property *pTable = 0;

@@ -23,12 +23,6 @@
 #include <svl/intitem.hxx>
 #include "svx/svxdllapi.h"
 
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
-
 class SVX_DLLPUBLIC XFillBmpPosOffsetXItem : public SfxUInt16Item
 {
 public:
@@ -44,13 +38,6 @@ public:
                                     SfxMapUnit ePresMetric,
                                     String &rText, const IntlWrapper * = 0 ) const;
 };
-
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
 
 class SVX_DLLPUBLIC XFillBmpPosOffsetYItem : public SfxUInt16Item
 {

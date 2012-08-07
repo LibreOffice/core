@@ -695,11 +695,6 @@ SfxItemPresentation XFillBmpSizeYItem::GetPresentation
     }
 }
 
-
-/*************************************************************************
-|*
-\*************************************************************************/
-
 bool XFillBmpSizeYItem::HasMetrics() const
 {
     return GetValue() > 0L;

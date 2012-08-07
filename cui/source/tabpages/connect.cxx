@@ -396,12 +396,6 @@ sal_Bool SvxConnectionPage::FillItemSet( SfxItemSet& rAttrs)
     return( bModified );
 }
 
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
-
 void SvxConnectionPage::Construct()
 {
     DBG_ASSERT( pView, "Keine gueltige View Uebergeben!" );
@@ -422,22 +416,10 @@ SfxTabPage* SvxConnectionPage::Create( Window* pWindow,
     return( new SvxConnectionPage( pWindow, rAttrs ) );
 }
 
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
-
 sal_uInt16* SvxConnectionPage::GetRanges()
 {
     return( pRanges );
 }
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
 
 IMPL_LINK( SvxConnectionPage, ChangeAttrHdl_Impl, void *, p )
 {
@@ -525,12 +507,6 @@ IMPL_LINK( SvxConnectionPage, ChangeAttrHdl_Impl, void *, p )
 
     return( 0L );
 }
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
 
 void SvxConnectionPage::FillTypeLB()
 {

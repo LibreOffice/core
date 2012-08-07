@@ -23,12 +23,6 @@
 #include <svl/eitem.hxx>
 #include "svx/svxdllapi.h"
 
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
-
 class SVX_DLLPUBLIC XFillBmpStretchItem : public SfxBoolItem
 {
 public:

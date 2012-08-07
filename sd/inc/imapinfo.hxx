@@ -25,13 +25,6 @@
 #include <svx/svdobj.hxx>
 #include <svtools/imap.hxx>
 
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
-
 class SdIMapInfo : public SdrObjUserData, public SfxListener
 {
 

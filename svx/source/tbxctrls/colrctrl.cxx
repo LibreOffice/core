@@ -216,12 +216,6 @@ void SvxColorValueSet::DoDrag()
     }
 }
 
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
-
 IMPL_STATIC_LINK(SvxColorValueSet, ExecDragHdl, void*, EMPTYARG)
 {
     // Als Link, damit asynchron ohne ImpMouseMoveMsg auf dem Stack auch die

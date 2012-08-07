@@ -32,10 +32,7 @@
 #include <IMark.hxx>
 #include <unobaseclass.hxx>
 #include "swdllapi.h"
-/***************************************************
- ***************************************************
- *
- ***************************************************/
+
 class SwDoc;
 class SwFrmFmt;
 namespace com{namespace sun {namespace star {namespace text

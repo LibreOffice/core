@@ -65,10 +65,6 @@ ConstCustomShape::ConstCustomShape( SwWrtShell* pWrtShell, SwEditWin* pEditWin, 
     aCustomShape = ConstCustomShape::GetShapeTypeFromRequest( rReq );
 }
 
-/*************************************************************************
-|*
-\************************************************************************/
-
 rtl::OUString ConstCustomShape::GetShapeType() const
 {
     return aCustomShape;

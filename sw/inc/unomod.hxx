@@ -37,9 +37,6 @@ class SwViewOption;
 class SwPrintData;
 class SwDoc;
 
-/******************************************************************************
- *
- ******************************************************************************/
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  SAL_CALL SwXModule_CreateInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & );
 
 class SwXModule : public cppu::WeakImplHelper4

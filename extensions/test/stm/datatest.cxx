@@ -367,14 +367,6 @@ UString     ODataStreamTest_getImplementationName( int i) THROWS(())
     }
 }
 
-
-/**------------------------------------------------------
-*
-*
-*
-*
-*
-*------------------------------------------------------*/
 class MyPersistObject :
             public XPersistObject,
             public XPropertySet,

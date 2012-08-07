@@ -25,9 +25,6 @@
 #include <cppuhelper/implbase3.hxx> // helper for implementations
 #include <tools/string.hxx>
 
-/******************************************************************************
- *
- ******************************************************************************/
 class SfxItemPropertySet;
 class SwXTextDocument;
 class SwSearchProperties_Impl;

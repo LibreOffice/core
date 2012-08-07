@@ -195,11 +195,6 @@ sal_uInt16  SwGlossaryList::GetGroupCount()
     return aGroupArr.size();
 }
 
-/********************************************************************
-
-********************************************************************/
-
-
 String SwGlossaryList::GetGroupName(sal_uInt16 nPos, sal_Bool bNoPath, String* pTitle)
 {
     OSL_ENSURE(aGroupArr.size() > nPos, "group not available");
@@ -217,11 +212,6 @@ String SwGlossaryList::GetGroupName(sal_uInt16 nPos, sal_Bool bNoPath, String* p
 
 }
 
-/********************************************************************
-
-********************************************************************/
-
-
 sal_uInt16  SwGlossaryList::GetBlockCount(sal_uInt16 nGroup)
 {
     OSL_ENSURE(aGroupArr.size() > nGroup, "group not available");
@@ -232,11 +222,6 @@ sal_uInt16  SwGlossaryList::GetBlockCount(sal_uInt16 nGroup)
     }
     return 0;
 }
-
-/********************************************************************
-
-********************************************************************/
-
 
 String  SwGlossaryList::GetBlockName(sal_uInt16 nGroup, sal_uInt16 nBlock, String& rShortName)
 {
@@ -249,11 +234,6 @@ String  SwGlossaryList::GetBlockName(sal_uInt16 nGroup, sal_uInt16 nBlock, Strin
     }
     return aEmptyStr;
 }
-
-/********************************************************************
-
-********************************************************************/
-
 
 void SwGlossaryList::Update()
 {
@@ -366,22 +346,12 @@ void SwGlossaryList::Update()
     }
 }
 
-/********************************************************************
-
-********************************************************************/
-
-
 void SwGlossaryList::Timeout()
 {
     // nur, wenn eine SwView den Fokus hat, wird automatisch upgedated
     if(::GetActiveView())
         Update();
 }
-
-/********************************************************************
-
-********************************************************************/
-
 
 AutoTextGroup*  SwGlossaryList::FindGroup(const String& rGroupName)
 {
@@ -393,11 +363,6 @@ AutoTextGroup*  SwGlossaryList::FindGroup(const String& rGroupName)
     }
     return 0;
 }
-
-/********************************************************************
-
-********************************************************************/
-
 
 void SwGlossaryList::FillGroup(AutoTextGroup* pGroup, SwGlossaries* pGlossaries)
 {
@@ -450,9 +415,6 @@ bool SwGlossaryList::HasLongName(const String& rBegin, std::vector<String> *pLon
     return nFound > 0;
 }
 
-/********************************************************************
-
-********************************************************************/
 void    SwGlossaryList::ClearGroups()
 {
     sal_uInt16 nCount = aGroupArr.size();

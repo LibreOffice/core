@@ -76,12 +76,6 @@ using namespace ::com::sun::star;
 
 TYPEINIT1_AUTOFACTORY(NameOrIndex, SfxStringItem);
 
-/*************************************************************************
-|*
-|*
-|*
-\*************************************************************************/
-
 long ScaleMetricValue( long nVal, long nMul, long nDiv )
 {
     BigInt aVal( nVal );
@@ -4193,22 +4187,10 @@ SfxPoolItem* XFormTextStyleItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) cons
     return new XFormTextStyleItem(rIn);
 }
 
-/*************************************************************************
-|*
-|*
-|*
-\*************************************************************************/
-
 sal_uInt16 XFormTextStyleItem::GetValueCount() const
 {
     return 5;
 }
-
-/*************************************************************************
-|*
-|*
-|*
-\*************************************************************************/
 
 // #FontWork#
 bool XFormTextStyleItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
@@ -4216,12 +4198,6 @@ bool XFormTextStyleItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/) co
     rVal <<= (sal_Int32)GetValue();
     return true;
 }
-
-/*************************************************************************
-|*
-|*
-|*
-\*************************************************************************/
 
 // #FontWork#
 bool XFormTextStyleItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/)
@@ -4282,22 +4258,10 @@ SfxPoolItem* XFormTextAdjustItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) con
     return new XFormTextAdjustItem(rIn);
 }
 
-/*************************************************************************
-|*
-|*
-|*
-\*************************************************************************/
-
 sal_uInt16 XFormTextAdjustItem::GetValueCount() const
 {
     return 4;
 }
-
-/*************************************************************************
-|*
-|*
-|*
-\*************************************************************************/
 
 // #FontWork#
 bool XFormTextAdjustItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
@@ -4305,12 +4269,6 @@ bool XFormTextAdjustItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/) c
     rVal <<= (sal_Int32)GetValue();
     return true;
 }
-
-/*************************************************************************
-|*
-|*
-|*
-\*************************************************************************/
 
 // #FontWork#
 bool XFormTextAdjustItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/)
@@ -4571,23 +4529,10 @@ SfxPoolItem* XFormTextShadowItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) con
     return new XFormTextShadowItem(rIn);
 }
 
-
-/*************************************************************************
-|*
-|*
-|*
-\*************************************************************************/
-
 sal_uInt16 XFormTextShadowItem::GetValueCount() const
 {
     return 3;
 }
-
-/*************************************************************************
-|*
-|*
-|*
-\*************************************************************************/
 
 // #FontWork#
 bool XFormTextShadowItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
@@ -4595,12 +4540,6 @@ bool XFormTextShadowItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/) c
     rVal <<= (sal_Int32)GetValue();
     return true;
 }
-
-/*************************************************************************
-|*
-|*
-|*
-\*************************************************************************/
 
 // #FontWork#
 bool XFormTextShadowItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/)
@@ -4810,23 +4749,10 @@ SfxPoolItem* XFormTextStdFormItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) co
     return new XFormTextStdFormItem(rIn);
 }
 
-
-/*************************************************************************
-|*
-|*
-|*
-\*************************************************************************/
-
 sal_uInt16 XFormTextStdFormItem::GetValueCount() const
 {
     return 3;
 }
-
-/*************************************************************************
-|*
-|*
-|*
-\*************************************************************************/
 
 // #FontWork#
 bool XFormTextStdFormItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
@@ -4834,12 +4760,6 @@ bool XFormTextStdFormItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/) 
     rVal <<= (sal_Int32)GetValue();
     return true;
 }
-
-/*************************************************************************
-|*
-|*
-|*
-\*************************************************************************/
 
 // #FontWork#
 bool XFormTextStdFormItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/)

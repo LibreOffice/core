@@ -184,13 +184,6 @@ Font& lcl_GetDefaultBulletFont()
     return aDefBulletFont;
 }
 
-
-/**************************************************************************/
-/*                                                                        */
-/*                                                                        */
-/**************************************************************************/
-
-
 SvxSingleNumPickTabPage::SvxSingleNumPickTabPage(Window* pParent,
                                const SfxItemSet& rSet)  :
     SfxTabPage( pParent, CUI_RES( RID_SVXPAGE_PICK_SINGLE_NUM ), rSet ),

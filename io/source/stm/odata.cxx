@@ -941,12 +941,6 @@ typedef boost::unordered_map
     equalObjectContainer_Impl
 > ObjectContainer_Impl;
 
-/*---------------------------------------------
-*
-*
-*
-*
-*--------------------------------------------*/
 class OObjectOutputStream:
     public ImplInheritanceHelper2<
             ODataOutputStream, /* parent */

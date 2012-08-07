@@ -33,10 +33,6 @@
 #include <vcl/fixed.hxx>
 #include <svx/dstribut_enum.hxx>
 
-/*************************************************************************
-|*
-\************************************************************************/
-
 class SvxDistributePage : public SvxTabPage
 {
     SvxDistributeHorizontal     meDistributeHor;
@@ -79,10 +75,6 @@ public:
     SvxDistributeHorizontal GetDistributeHor() const { return meDistributeHor; }
     SvxDistributeVertical GetDistributeVer() const { return meDistributeVer; }
 };
-
-/*************************************************************************
-|*
-\************************************************************************/
 
 class SvxDistributeDialog : public SfxSingleTabDialog
 {

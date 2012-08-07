@@ -131,22 +131,10 @@ SfxTabPage* SvxDistributePage::Create(Window* pWindow, const SfxItemSet& rAttrs,
     return(new SvxDistributePage(pWindow, rAttrs, eHor, eVer));
 }
 
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
-
 sal_uInt16* SvxDistributePage::GetRanges()
 {
     return(pRanges);
 }
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
 
 void SvxDistributePage::PointChanged(Window* /*pWindow*/, RECT_POINT /*eRP*/)
 {

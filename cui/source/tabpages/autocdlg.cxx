@@ -346,11 +346,6 @@ public:
                                             SvLBoxEntry* pEntry);
 };
 
-/*********************************************************************/
-/*                                                                   */
-/*********************************************************************/
-
-
 void OfaImpBrwString::Paint( const Point& rPos, SvLBox& rDev, sal_uInt16 /*nFlags*/,
     SvLBoxEntry* pEntry )
 {
@@ -483,10 +478,6 @@ OfaSwAutoFmtOptionsPage::OfaSwAutoFmtOptionsPage( Window* pParent,
     aEditPB.SetClickHdl(LINK(this, OfaSwAutoFmtOptionsPage, EditHdl));
 }
 
-/*********************************************************************/
-/*                                                                   */
-/*********************************************************************/
-
 SvLBoxEntry* OfaSwAutoFmtOptionsPage::CreateEntry(String& rTxt, sal_uInt16 nCol)
 {
     SvLBoxEntry* pEntry = new SvLBoxEntry;
@@ -514,11 +505,6 @@ SvLBoxEntry* OfaSwAutoFmtOptionsPage::CreateEntry(String& rTxt, sal_uInt16 nCol)
     return pEntry;
 }
 
-/*********************************************************************/
-/*                                                                   */
-/*********************************************************************/
-
-
 OfaSwAutoFmtOptionsPage::~OfaSwAutoFmtOptionsPage()
 {
     delete (ImpUserData*) aCheckLB.GetUserData( REPLACE_BULLETS );
@@ -527,19 +513,11 @@ OfaSwAutoFmtOptionsPage::~OfaSwAutoFmtOptionsPage()
     delete pCheckButtonData;
 }
 
-/*********************************************************************/
-/*                                                                   */
-/*********************************************************************/
-
 SfxTabPage* OfaSwAutoFmtOptionsPage::Create( Window* pParent,
                                 const SfxItemSet& rAttrSet)
 {
     return new OfaSwAutoFmtOptionsPage(pParent, rAttrSet);
 }
-
-/*********************************************************************/
-/*                                                                   */
-/*********************************************************************/
 
 sal_Bool OfaSwAutoFmtOptionsPage::FillItemSet( SfxItemSet&  )
 {
@@ -662,11 +640,6 @@ void    OfaSwAutoFmtOptionsPage::ActivatePage( const SfxItemSet& )
     ((OfaAutoCorrDlg*)GetTabDialog())->EnableLanguage(sal_False);
 }
 
-/*********************************************************************/
-/*                                                                   */
-/*********************************************************************/
-
-
 void OfaSwAutoFmtOptionsPage::Reset( const SfxItemSet& )
 {
     SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
@@ -747,19 +720,11 @@ void OfaSwAutoFmtOptionsPage::Reset( const SfxItemSet& )
     aCheckLB.SetUpdateMode(sal_True);
 }
 
-/*********************************************************************/
-/*                                                                   */
-/*********************************************************************/
-
 IMPL_LINK(OfaSwAutoFmtOptionsPage, SelectHdl, OfaACorrCheckListBox*, pBox)
 {
     aEditPB.Enable(0 != pBox->FirstSelected()->GetUserData());
     return 0;
 }
-
-/*********************************************************************/
-/*                                                                   */
-/*********************************************************************/
 
 IMPL_LINK_NOARG(OfaSwAutoFmtOptionsPage, EditHdl)
 {
@@ -799,10 +764,6 @@ IMPL_LINK_NOARG(OfaSwAutoFmtOptionsPage, EditHdl)
     return 0;
 }
 
-/*********************************************************************/
-/*                                                                   */
-/*********************************************************************/
-
 void OfaACorrCheckListBox::SetTabs()
 {
     SvxSimpleTable::SetTabs();
@@ -822,10 +783,6 @@ void OfaACorrCheckListBox::SetTabs()
     }
 }
 
-/*********************************************************************/
-/*                                                                   */
-/*********************************************************************/
-
 void OfaACorrCheckListBox::CheckEntryPos(sal_uLong nPos, sal_uInt16 nCol, sal_Bool bChecked)
 {
     if ( nPos < GetEntryCount() )
@@ -836,18 +793,10 @@ void OfaACorrCheckListBox::CheckEntryPos(sal_uLong nPos, sal_uInt16 nCol, sal_Bo
                                        SvButtonState( SV_BUTTON_UNCHECKED ) );
 }
 
-/*********************************************************************/
-/*                                                                   */
-/*********************************************************************/
-
 sal_Bool OfaACorrCheckListBox::IsChecked(sal_uLong nPos, sal_uInt16 nCol)
 {
     return GetCheckButtonState( GetEntry(nPos), nCol ) == SV_BUTTON_CHECKED;
 }
-
-/*********************************************************************/
-/*                                                                   */
-/*********************************************************************/
 
 void OfaACorrCheckListBox::SetCheckButtonState( SvLBoxEntry* pEntry, sal_uInt16 nCol, SvButtonState eState)
 {
@@ -873,10 +822,6 @@ void OfaACorrCheckListBox::SetCheckButtonState( SvLBoxEntry* pEntry, sal_uInt16 
         InvalidateEntry( pEntry );
     }
 }
-
-/*********************************************************************/
-/*                                                                   */
-/*********************************************************************/
 
 SvButtonState OfaACorrCheckListBox::GetCheckButtonState( SvLBoxEntry* pEntry, sal_uInt16 nCol ) const
 {

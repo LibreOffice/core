@@ -29,13 +29,6 @@
 
 SFX_IMPL_TOOLBOX_CONTROL( SwTableOptimizeCtrl, SfxUInt16Item );
 
-/**********************************************************************
-
-**********************************************************************/
-
-
-
-
 SwTableOptimizeCtrl::SwTableOptimizeCtrl(
     sal_uInt16 nSlotId,
     sal_uInt16 nId,
@@ -44,33 +37,16 @@ SwTableOptimizeCtrl::SwTableOptimizeCtrl(
 {
     rTbx.SetItemBits( nId, TIB_DROPDOWNONLY | rTbx.GetItemBits( nId ) );
 }
-/**********************************************************************
-
-**********************************************************************/
-
-
 
 SwTableOptimizeCtrl::~SwTableOptimizeCtrl()
 {
 }
-
-/**********************************************************************
-
-**********************************************************************/
-
-
 
 SfxPopupWindow* SwTableOptimizeCtrl::CreatePopupWindow()
 {
     createAndPositionSubToolBar("private:resource/toolbar/optimizetablebar");
     return NULL;
 }
-
-/**********************************************************************
-
-**********************************************************************/
-
-
 
 SfxPopupWindowType  SwTableOptimizeCtrl::GetPopupWindowType() const
 {

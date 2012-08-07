@@ -31,13 +31,6 @@
 #include <sfx2/frame.hxx>
 #include <svtools/svmedit.hxx>
 
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
-
 class URLDlg : public ModalDialog
 {
     FixedText           maFtURL;

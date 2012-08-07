@@ -257,10 +257,6 @@ IMPL_LINK( SwConvertTableDlg, BtnHdl, Button*, pButton )
     return 0;
 }
 
-/*********************************************************************/
-/*                                                                   */
-/*********************************************************************/
-
 IMPL_LINK_NOARG(SwConvertTableDlg, CheckBoxHdl)
 {
     aRepeatHeaderCB.Enable(aHeaderCB.IsChecked());
