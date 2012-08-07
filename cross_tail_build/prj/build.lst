@@ -1,2 +1,2 @@
-ctb	cross_tail_build	::	BERKELEYDB:berkeleydb BOOST:boost bridges cli_ure CLUCENE:clucene DESKTOP:codemaker comphelper cppu cppuhelper CPPUNIT:cppunit EXPAT:expat external ICU:icu jurt LIBXSLT:libxslt offapi DESKTOP:rdbmaker ridljar sal salhelper solenv stoc ucbhelper udkapi ZLIB:zlib NULL
+ctb	cross_tail_build	::	BERKELEYDB:berkeleydb BOOST:boost bridges cli_ure CLUCENE:clucene DESKTOP:codemaker comphelper cppu cppuhelper CPPUNIT:cppunit EXPAT:expat external ICU:icu jurt LIBLANGTAG:liblangtag LIBXSLT:libxslt offapi DESKTOP:rdbmaker ridljar sal salhelper solenv stoc ucbhelper udkapi ZLIB:zlib NULL
 ctb tail_build\prj nmake - all ctb_prj   NULL
