@@ -112,7 +112,10 @@ void RemoteServer::execute()
     while ( true )
     {
         fprintf( stderr, "Awaiting a connection.\n" );
-        mSocket.acceptConnection( mStreamSocket );
+        if ( mSocket.acceptConnection( mStreamSocket ) == osl_Socket_Error ) {
+            // Socket closed or other problem
+            return;
+        }
         fprintf( stderr, "Accepted a connection!\n" );
         listenThread();
     }
