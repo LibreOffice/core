@@ -53,6 +53,7 @@ cpputools\
 cui\
 dbaccess\
 desktop\
+dictionaries \
 drawinglayer\
 dtrans\
 editeng\
@@ -177,7 +178,6 @@ cppunit\
 crashrep\
 ct2n\
 curl\
-dictionaries \
 epm\
 expat\
 external\
