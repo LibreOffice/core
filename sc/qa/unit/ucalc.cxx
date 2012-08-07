@@ -4629,9 +4629,7 @@ void Test::testFindAreaPosRowDown()
 
     pDoc->FindAreaPos(nCol, nRow, 0, 0, 1);
 
-    // BUG! This returns right now 4 because FindAreaPos does
-    // not yet work correctly with hidden rows
-    //CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(5), nRow);
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(5), nRow);
     CPPUNIT_ASSERT_EQUAL(static_cast<SCCOL>(0), nCol);
 
     pDoc->FindAreaPos(nCol, nRow, 0, 0, 1);
@@ -4649,9 +4647,7 @@ void Test::testFindAreaPosRowDown()
 
     pDoc->FindAreaPos(nCol, nRow, 0, 0, 1);
 
-    // BUG! This returns right now 4 because FindAreaPos does
-    // not yet work correctly with hidden rows
-    //CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(3), nRow);
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(3), nRow);
     CPPUNIT_ASSERT_EQUAL(static_cast<SCCOL>(1), nCol);
 
     pDoc->FindAreaPos(nCol, nRow, 0, 0, 1);
