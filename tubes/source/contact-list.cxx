@@ -101,16 +101,13 @@ bool tb_contact_is_online( TpContact *contact )
     return tb_presence_is_online (tp_contact_get_presence_type (contact));
 }
 
-namespace tubes {
-    void reDrawAllContacts();
-}
 static void presence_changed_cb( TpContact* /* contact */,
                                  guint      /* type */,
                                  gchar*     /* status */,
                                  gchar*     /* message */,
                                  gpointer   /* pContactList*/ )
 {
-    tubes::reDrawAllContacts();
+    TeleManager::displayAllContacts();
 }
 
 AccountContactPairV ContactList::getContacts()

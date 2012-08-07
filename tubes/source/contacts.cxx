@@ -35,7 +35,6 @@
 #include <tubes/conference.hxx>
 #include <tubes/collaboration.hxx>
 #include <tubes/contact-list.hxx>
-#include <tubes/contacts.hxx>
 #include <tubes/manager.hxx>
 #include <unotools/confignode.hxx>
 #include <vcl/fixed.hxx>
@@ -282,34 +281,13 @@ IMPL_LINK_NOARG( TubeContacts, BtnListenHdl )
     return 0;
 }
 
-// Mapping contacts dialog instance for each document
-typedef std::map< sal_uInt64, TubeContacts* > DialogsMap;
-static DialogsMap aDialogsMap;
-
-TubeContacts* ContactsFactory( Collaboration* pCollaboration )
-{
-    sal_uInt64 Id = pCollaboration->GetId();
-    if (aDialogsMap.find( Id ) == aDialogsMap.end())
-        aDialogsMap[ Id ] = new TubeContacts( pCollaboration );
-    return aDialogsMap[ Id ];
-}
-
 } // anonymous namespace
 
-namespace tubes {
-void createContacts( Collaboration* pCollaboration )
+void Collaboration::DisplayContacts()
 {
-    TubeContacts* pContacts = ContactsFactory( pCollaboration );
-    pContacts->Populate();
-}
-
-void reDrawAllContacts()
-{
-    for (DialogsMap::const_iterator it = aDialogsMap.begin();
-            it != aDialogsMap.end(); ++it)
-        it->second->Populate();
-}
-
+    if (!mpContacts)
+        mpContacts = new TubeContacts( this );
+    reinterpret_cast<TubeContacts*> (mpContacts)->Populate();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

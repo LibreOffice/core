@@ -39,6 +39,7 @@
 #define LIBO_TUBES_DBUS_PATH "/org/libreoffice/calc"
 
 namespace osl { class Mutex; }
+class Collaboration;
 class ContactList;
 class TeleConference;
 class TeleManagerImpl;
@@ -127,6 +128,11 @@ public:
 
     /** Get a conference with current UUID to set a session. */
     TUBES_DLLPUBLIC static TeleConference*  getConference();
+
+    static void                             registerCollaboration( Collaboration* pCollaboration );
+    static void                             unregisterCollaboration( Collaboration* pCollaboration );
+    /** Display contact list dialog for all documents. */
+    static void                             displayAllContacts();
 
     static void                             registerDemoConference( TeleConference* pConference );
     static void                             unregisterDemoConference( TeleConference* pConference );

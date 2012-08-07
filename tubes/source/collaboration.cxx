@@ -10,13 +10,18 @@
 #include <tubes/collaboration.hxx>
 
 #include <tubes/conference.hxx>
+#include <tubes/manager.hxx>
 
-Collaboration::Collaboration()
+Collaboration::Collaboration() :
+    mpConference( NULL ),
+    mpContacts( NULL )
 {
+    TeleManager::registerCollaboration( this );
 }
 
 Collaboration::~Collaboration()
 {
+    TeleManager::unregisterCollaboration( this );
     if (mpConference)
         mpConference->close();
 }

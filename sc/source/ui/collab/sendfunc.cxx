@@ -32,10 +32,7 @@
 #include "docsh.hxx"
 #include "docfunc.hxx"
 #include "sccollaboration.hxx"
-#include <tubes/contacts.hxx>
 #include <tubes/manager.hxx>
-
-#include <vector>
 
 void ScDocFuncSend::RecvMessage( const rtl::OString &rString )
 {
@@ -127,7 +124,7 @@ sal_Bool ScDocFuncSend::SetNormalString( bool& o_rbNumFmtSet, const ScAddress& r
         mpCollaboration->SaveAndSendFile( NULL, rText );
 
     if ( rtl::OUString( rText ) == "contacts" )
-        tubes::createContacts( rDocShell.GetCollaboration() );
+        mpCollaboration->DisplayContacts();
 
     return true; // needs some code auditing action
 }

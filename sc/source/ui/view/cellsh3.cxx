@@ -54,7 +54,6 @@
 
 #ifdef ENABLE_TELEPATHY
 #include "sccollaboration.hxx"
-#include <tubes/contacts.hxx>
 #endif
 
 #define IS_EDITMODE() GetViewData()->HasEditView( GetViewData()->GetActivePart() )
@@ -118,7 +117,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
 
         case SID_COLLABORATION:
 #ifdef ENABLE_TELEPATHY
-            tubes::createContacts( GetViewData()->GetDocShell()->GetCollaboration() );
+            GetViewData()->GetDocShell()->GetCollaboration()->DisplayContacts();
 #endif
             break;
 

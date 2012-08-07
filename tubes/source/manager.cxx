@@ -103,6 +103,8 @@ public:
     MapStringConference                 maAcceptedConferences;
     typedef std::set< TeleConference* > DemoConferences;
     DemoConferences                     maDemoConferences;
+    typedef std::set< Collaboration* >  Collaborations;
+    Collaborations                      maCollaborations;
 
                             TeleManagerImpl();
                             ~TeleManagerImpl();
@@ -223,6 +225,23 @@ TeleConference* TeleManager::getConference()
             << pImpl->msCurrentUUID.getStr() << " not found!" );
     pImpl->msCurrentUUID = OString();
     return pConference;
+}
+
+void TeleManager::registerCollaboration( Collaboration* pCollaboration )
+{
+    pImpl->maCollaborations.insert( pCollaboration );
+}
+
+void TeleManager::unregisterCollaboration( Collaboration* pCollaboration )
+{
+    pImpl->maCollaborations.erase( pCollaboration );
+}
+
+void TeleManager::displayAllContacts()
+{
+    for (TeleManagerImpl::Collaborations::iterator it = pImpl->maCollaborations.begin();
+            it != pImpl->maCollaborations.end(); ++it)
+        (*it)->DisplayContacts();
 }
 
 void TeleManager::registerDemoConference( TeleConference* pConference )

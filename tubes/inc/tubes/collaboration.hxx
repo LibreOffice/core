@@ -21,6 +21,8 @@ typedef struct _TpContact TpContact;
 class TUBES_DLLPUBLIC Collaboration
 {
     TeleConference* mpConference;
+    // This is in fact of type TubeContacts* from anonymous namespace
+    void* mpContacts;
 public:
             Collaboration();
     virtual ~Collaboration();
@@ -33,6 +35,7 @@ public:
     TUBES_DLLPRIVATE TeleConference* GetConference() const;
     TUBES_DLLPRIVATE sal_uInt64 GetId() const;
 
+    void DisplayContacts();
     void SendFile( TpContact* pContact, const OUString& rURL ) const;
     void SendPacket( const OString& rPacket ) const;
     void SetConference( TeleConference* pConference );
