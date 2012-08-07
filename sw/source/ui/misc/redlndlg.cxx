@@ -723,7 +723,7 @@ void SwRedlineAcceptDlg::RemoveParents(sal_uInt16 nStart, sal_uInt16 nEnd)
     // unfortunately by Remove it was selected from the TLB always again ...
     pTable->SelectAll(sal_False);
 
-    aRedlineParents.erase( aRedlineParents.begin() + nStart, aRedlineParents.begin() + nEnd);
+    aRedlineParents.erase( aRedlineParents.begin() + nStart, aRedlineParents.begin() + nEnd + 1);
 }
 
 void SwRedlineAcceptDlg::InsertParents(sal_uInt16 nStart, sal_uInt16 nEnd)
