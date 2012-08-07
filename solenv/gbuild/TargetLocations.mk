@@ -29,6 +29,7 @@
 # outdir target pattern
 
 gb_ComponentTarget_get_outdir_target = $(OUTDIR)/xml/component/$(1).component
+gb_Dictionary_get_target = $(OUTDIR)/pck/$(1).oxt
 gb_Executable_get_target = $(OUTDIR)/bin/$(1)$(gb_Executable_EXT)
 gb_Executable_get_target_for_build = $(OUTDIR_FOR_BUILD)/bin/$(1)$(gb_Executable_EXT_for_build)
 gb_Extension_get_target = $(OUTDIR)/bin/$(1).oxt
@@ -143,6 +144,7 @@ gb_SrsTarget_get_target = $(WORKDIR)/SrsTarget/$(1).srs
 gb_SrsTemplatePartTarget_get_target = $(WORKDIR)/SrsTemplatePartTarget/$(firstword $(subst /, ,$(1)))/$(subst _tmpl,,$(notdir $(1)))
 gb_SrsTemplateTarget_get_include_dir = $(WORKDIR)/SrsTemplatePartTarget/$(firstword $(subst /, ,$(1)))
 gb_SrsTemplateTarget_get_target = $(WORKDIR)/SrsTemplateTarget/$(1)
+gb_ThesaurusIndexTarget_get_target = $(WORKDIR)/ThesaurusIndexTarget/$(basename $(1)).idx
 gb_UnoApiTarget_get_target = $(WORKDIR)/UnoApiTarget/$(1).rdb
 gb_UnoApiHeadersTarget_get_bootstrap_dir = $(WORKDIR)/UnoApiHeadersTarget/$(1)/bootstrap$(2)
 gb_UnoApiHeadersTarget_get_comprehensive_dir = $(WORKDIR)/UnoApiHeadersTarget/$(1)/comprehensive$(2)
@@ -215,6 +217,7 @@ $(eval $(call gb_Helper_make_clean_targets,\
 	SdiTarget \
 	SrsTarget \
 	SrsTemplateTarget \
+	ThesaurusIndexTarget \
 	CppunitTest \
 	CustomTarget \
 	ExternalLib \
@@ -234,6 +237,7 @@ $(eval $(call gb_Helper_make_clean_targets,\
 ))
 
 $(eval $(call gb_Helper_make_outdir_clean_targets,\
+	Dictionary \
 	Executable \
 	Extension \
 	InstallScript \

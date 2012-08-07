@@ -321,6 +321,7 @@ include $(foreach class, \
 	Zip \
 	Configuration \
 	ExtensionTarget \
+	Dictionary \
 	Extension \
 	InstallModuleTarget \
 	InstallModule \
