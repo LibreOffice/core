@@ -77,6 +77,7 @@ public:
     void testN766487();
     void testN693238();
     void testNumbering1();
+    void testBnc773061();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -102,6 +103,7 @@ public:
     CPPUNIT_TEST(testN766487);
     CPPUNIT_TEST(testN693238);
     CPPUNIT_TEST(testNumbering1);
+    CPPUNIT_TEST(testBnc773061);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -687,6 +689,21 @@ note that the indexes may get off as the implementation evolves, C++ code seache
             }
         }
     CPPUNIT_ASSERT_EQUAL( style::NumberingType::ARABIC, numberingType );
+}
+
+void Test::testBnc773061()
+{
+    load( "bnc773061.docx" );
+    uno::Reference< text::XTextRange > paragraph = getParagraph( 1 );
+    uno::Reference< text::XTextRange > normal = getRun( paragraph, 1, "Normal " );
+    uno::Reference< text::XTextRange > raised = getRun( paragraph, 2, "Raised" );
+    uno::Reference< text::XTextRange > lowered = getRun( paragraph, 4, "Lowered" );
+    CPPUNIT_ASSERT_EQUAL( sal_Int32( 0 ), getProperty< sal_Int32 >( normal, "CharEscapement" ));
+    CPPUNIT_ASSERT_EQUAL( sal_Int32( 50 ), getProperty< sal_Int32 >( raised, "CharEscapement" ));
+    CPPUNIT_ASSERT_EQUAL( sal_Int32( -25 ), getProperty< sal_Int32 >( lowered, "CharEscapement" ));
+    CPPUNIT_ASSERT_EQUAL( sal_Int32( 100 ), getProperty< sal_Int32 >( normal, "CharEscapementHeight" ));
+    CPPUNIT_ASSERT_EQUAL( sal_Int32( 100 ), getProperty< sal_Int32 >( raised, "CharEscapementHeight" ));
+    CPPUNIT_ASSERT_EQUAL( sal_Int32( 100 ), getProperty< sal_Int32 >( lowered, "CharEscapementHeight" ));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
