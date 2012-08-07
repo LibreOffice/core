@@ -61,16 +61,6 @@ DiscoveryService::~DiscoveryService()
 {
 }
 
-
-void DiscoveryService::replyTo( sockaddr_in& rAddr )
-{
-    OStringBuffer aBuffer("LOREMOTE_ADVERTISE\n");
-    aBuffer.append( OUStringToOString( osl::SocketAddr::getLocalHostname(),
-            RTL_TEXTENCODING_UTF8 ) ).append( "\n\n" );
-    sendto( mSocket, aBuffer.getStr(), aBuffer.getLength(), 0,
-            (sockaddr*) &rAddr, sizeof(rAddr) );
-}
-
 void DiscoveryService::execute()
 {
     fprintf( stderr, "Discovery service is listening\n" );;
@@ -85,14 +75,20 @@ void DiscoveryService::execute()
         fprintf( stderr, "DiscoveryService waiting for packet\n" );
         recvfrom( mSocket, aBuffer, BUFFER_SIZE, 0, (sockaddr*) &aAddr, &aLen );
         fprintf( stderr, "DiscoveryService received a packet.\n" );
-        for (int i = 0; i < BUFFER_SIZE; i++ ) {
-            if ( aBuffer[i] == '\n' )
+
+        OString aString( aBuffer, strlen( "LOREMOTE_SEARCH" ) );
+        if ( aString.compareTo( "LOREMOTE_SEARCH" ) == 0 )
+        {
+            OStringBuffer aStringBuffer("LOREMOTE_ADVERTISE\n");
+            aStringBuffer.append( OUStringToOString(
+                osl::SocketAddr::getLocalHostname(), RTL_TEXTENCODING_UTF8 ) )
+                .append( "\n\n" );
+            if ( sendto( mSocket, aStringBuffer.getStr(),
+                aStringBuffer.getLength(), 0, (sockaddr*) &aAddr,
+                         sizeof(aAddr) ) <= 0 )
             {
-                OString aString( aBuffer, i );
-                if ( aString.compareTo( "LOREMOTE_SEARCH" ) == 0 ) {
-                    replyTo( aAddr );
-                }
-                break;
+                // Read error or closed socket -- we are done.
+                return;
             }
         }
     }

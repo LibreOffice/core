@@ -49,7 +49,6 @@ namespace sd
 
 //             osl::DatagramSocket mSocket;
             int mSocket;
-            void replyTo( sockaddr_in& rAddr );
 
     };
 }
