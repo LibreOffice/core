@@ -28,6 +28,10 @@
 
 $(eval $(call gb_StaticLibrary_StaticLibrary,vclmain))
 
+$(eval $(call gb_StaticLibrary_use_packages,vclmain,\
+	tools_inc \
+))
+
 ifeq ($(OS),IOS)
 $(eval $(call gb_StaticLibrary_add_cxxflags,vclmain,\
     $(gb_OBJCXXFLAGS) \
