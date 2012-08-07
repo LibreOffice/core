@@ -238,8 +238,9 @@ void FocusManager::RemoveLinks (::Window* pWindow)
         {
             if (iLink->second.mpTargetWindow == pWindow)
             {
-                RemoveUnusedEventListener(iLink->first);
+                ::Window* const pSourceWindow(iLink->first);
                 mpLinks->erase(iLink);
+                RemoveUnusedEventListener(pSourceWindow);
                 bLinkRemoved = true;
                 break;
             }
