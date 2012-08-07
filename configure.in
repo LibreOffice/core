@@ -10975,16 +10975,23 @@ GLIB_CFLAGS=''
 GLIB_LIBS=''
 if test "$SYSTEM_GLIB" = YES; then
     PKG_CHECK_MODULES( GLIB, glib-2.0 )
-else
+elif test "$enable_librsvg" = fully-internal; then
     BUILD_TYPE="$BUILD_TYPE GLIB"
 fi
 AC_SUBST(GLIB_CFLAGS)
 AC_SUBST(GLIB_LIBS)
 
 dnl So far AFAIK no system has liblangtag, set this unconditionally for now.
+dnl Except for Android and iOS where we don't want liblangtag.
 
 SYSTEM_LIBLANGTAG=NO
-BUILD_TYPE="$BUILD_TYPE LIBLANGTAG"
+case "$_os" in
+iOS|Android)
+    ;;
+*)
+    BUILD_TYPE="$BUILD_TYPE LIBLANGTAG"
+    ;;
+esac
 AC_SUBST(SYSTEM_LIBLANGTAG)
 
 
