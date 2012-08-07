@@ -47,7 +47,6 @@ class SbxObject;
 class SbModule;
 class StarBASIC;
 class LocalizationMgr;
-struct BasicIDEShell_Impl;
 
 #if _SOLAR__PRIVATE
 typedef std::map<sal_uInt16, IDEBaseWindow*> IDEWindowTable;

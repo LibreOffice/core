@@ -49,7 +49,6 @@ namespace rtl
 
 struct SystemParentData;
 struct SalPrinterQueueInfo;
-struct SalStatus;
 struct ImplJobSetup;
 class SalGraphics;
 class SalFrame;

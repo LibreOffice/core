@@ -30,7 +30,6 @@
 #include <sfx2/msg.hxx>
 
 struct SfxFormalArgument;
-struct SfxTypeLibImpl;
 struct SfxInterface_Impl;
 class  SfxConfigItem;
 class  SfxIFConfig_Impl;

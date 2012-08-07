@@ -60,7 +60,6 @@ class Graphic;
 class SvxMSDffManager;
 class PPTTextObj;
 class DffRecordHeader;
-struct PptCharAttrSet;
 class SvxBulletItem;
 
 #define PPT_IMPORTFLAGS_NO_TEXT_ASSERT  1

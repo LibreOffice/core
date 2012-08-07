@@ -53,7 +53,6 @@
 class ScEditEngineDefaulter;
 class SfxStyleSheetBasePool;
 class SfxStyleSheetHint;
-struct ChartSelectionInfo;
 class INetURLObject;
 
 class ScViewData;

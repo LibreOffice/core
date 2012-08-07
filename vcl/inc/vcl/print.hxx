@@ -48,7 +48,6 @@
 #include <boost/unordered_map.hpp>
 #include <set>
 
-struct SalPrinterInfoQueue;
 class SalInfoPrinter;
 struct SalPrinterQueueInfo;
 class SalPrinter;

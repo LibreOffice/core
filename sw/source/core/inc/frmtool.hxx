@@ -49,7 +49,6 @@ class SdrMarkList;
 class SwNodeIndex;
 class OutputDevice;
 class SwPageDesc;
-struct SwFindRowSpanCacheObj;
 
 #define FAR_AWAY LONG_MAX - 20000  // initial position of a Fly
 #define BROWSE_HEIGHT 56700L * 10L // 10 Meters

@@ -58,7 +58,6 @@ namespace com { namespace sun { namespace star { namespace lang {
 } } } }
 
 struct ImplTimerData;
-struct ImplFileImageCacheData;
 struct ImplConfigData;
 class ImplDirectFontSubstitution;
 struct ImplHotKey;

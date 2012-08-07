@@ -470,7 +470,6 @@ do                                          \
 // ---------------
 
 struct DbgData;
-struct DbgGUIData;
 struct DbgDataType;
 
 typedef void (*DbgPrintLine)( const sal_Char* pLine );

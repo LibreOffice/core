@@ -99,7 +99,6 @@ typedef ::std::vector< String* > TargetList;
 // from their parent frames.
 //==========================================================================
 
-struct SfxFramePickEntry_Impl;
 class SFX2_DLLPUBLIC SfxFrame
 {
     friend class SfxFrameIterator;

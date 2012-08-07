@@ -51,7 +51,6 @@ class SwDrawView;
 class SdrPageView;
 class SwPageFrm;
 class SwRegionRects;
-struct SdrPaintProcRec;
 class SwAccessibleMap;
 class SdrObject;
 class Fraction;

@@ -49,7 +49,6 @@
 class Window;
 class VclSimpleEvent;
 class VclWindowEvent;
-struct AccessibilityInfos;
 struct SystemParentData;
 
 namespace toolkit

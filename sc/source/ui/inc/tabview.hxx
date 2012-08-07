@@ -56,7 +56,6 @@ class SdrView;
 class SdrObject;
 class ScHintWindow;
 class ScPageBreakData;
-struct ChartSelectionInfo;
 class SdrHdlList;
 
 namespace com { namespace sun { namespace star {

@@ -82,7 +82,6 @@ class SfxModule;
 typedef ::std::vector<SfxModule*> SfxModuleArr_Impl;
 class Window;
 class INetURLObject;
-struct SfxConstant;
 struct SfxChildWinFactory;
 struct SfxMenuCtrlFactory;
 struct SfxStbCtrlFactory;

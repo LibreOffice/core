@@ -49,7 +49,6 @@ class SvGlobalName;
 class SfxShellObject;
 class SfxShell;
 struct SfxShell_Impl;
-struct SfxTypeLibImpl;
 class SfxShellObject;
 class SfxDispatcher;
 class SfxViewFrame;

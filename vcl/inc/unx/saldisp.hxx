@@ -211,8 +211,6 @@ class SalI18N_KeyboardExtension;
 class AttributeProvider;
 
 extern "C" {
-    struct SnDisplay;
-    struct SnLauncheeContext;
     typedef Bool(*X_if_predicate)(Display*,XEvent*,XPointer);
 }
 

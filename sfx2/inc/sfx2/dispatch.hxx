@@ -40,7 +40,6 @@ class SfxItemSet;
 class SfxPopupMenuManager;
 class SfxModule;
 struct SfxDispatcher_Impl;
-struct SfxPlugInInfo_Impl;
 
 namespace com
 {

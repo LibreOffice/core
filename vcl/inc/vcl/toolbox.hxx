@@ -39,7 +39,6 @@
 class UserDrawEvent;
 
 struct ImplToolItem;
-struct ImplToolSizeArray;
 struct ImplToolSize;
 struct ImplToolBoxPrivateData;
 class  ImplTrackRect;

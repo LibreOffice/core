@@ -27,8 +27,6 @@
 // This class reads in the image that's been produced by the compiler
 // and manages the access to the single elements.
 
-struct SbPublicEntry;
-
 class SbiImage {
     friend class SbiCodeGen;            // compiler classes, that the private-
 
