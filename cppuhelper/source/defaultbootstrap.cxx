@@ -1028,7 +1028,8 @@ css::uno::Type ServiceManager::getElementType()
 }
 
 sal_Bool ServiceManager::hasElements() throw (css::uno::RuntimeException) {
-    return
+    osl::MutexGuard g(rBHelper.rMutex);
+    return (isDisposed()) ? sal_False :
         !(data_.namedImplementations.empty()
           && data_.dynamicImplementations.empty());
 }
@@ -1165,6 +1166,9 @@ ServiceManager::createContentEnumeration(rtl::OUString const & aServiceName)
     std::vector< boost::shared_ptr< Implementation > > impls;
     {
         osl::MutexGuard g(rBHelper.rMutex);
+        if (isDisposed()) {
+            return 0;
+        }
         ImplementationMap::const_iterator i(data_.services.find(aServiceName));
         if (i != data_.services.end()) {
             impls = i->second;
@@ -1730,6 +1734,9 @@ void ServiceManager::removeRdbFiles(std::vector< rtl::OUString > const & uris) {
     // but the assumption is that it is rarely called (and that if it is called,
     // it is called with a uris vector of size one):
     osl::MutexGuard g(rBHelper.rMutex);
+    if (isDisposed()) {
+        return;
+    }
     for (std::vector< rtl::OUString >::const_iterator i(uris.begin());
          i != uris.end(); ++i)
     {
@@ -1762,6 +1769,9 @@ bool ServiceManager::removeLegacyFactory(
     css::uno::Reference< css::lang::XComponent > comp;
     {
         osl::MutexGuard g(rBHelper.rMutex);
+        if (isDisposed()) {
+            return false;
+        }
         DynamicImplementations::iterator i(
             data_.dynamicImplementations.find(factoryInfo));
         if (i == data_.dynamicImplementations.end()) {
@@ -1825,6 +1835,9 @@ boost::shared_ptr< Implementation > ServiceManager::findServiceImplementation(
     bool loaded;
     {
         osl::MutexGuard g(rBHelper.rMutex);
+        if (isDisposed()) {
+            return boost::shared_ptr< Implementation >();
+        }
         ImplementationMap::const_iterator i(data_.services.find(specifier));
         if (i == data_.services.end()) {
             NamedImplementations::const_iterator j(
