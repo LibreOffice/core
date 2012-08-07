@@ -2109,26 +2109,13 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
                 if (xCharStyle.is())
                     xCharStyle->setPropertyValue(rPropNameSupplier.GetName(PROP_CHAR_HEIGHT), aVal);
             }
+            m_pImpl->deferCharacterProperty( nSprmId, uno::makeAny( nIntValue ));
         }
         break;
     case NS_sprm::LN_CHpsInc:
         break;  // sprmCHpsInc
     case NS_sprm::LN_CHpsPos:
-        {
-        // FIXME: ww8 filter in ww8par6.cxx has a Read_SubSuperProp function
-        // that counts the escapement from this value and font size. So it will be
-        // on our TODO list
-            sal_Int16 nEscapement = 0;
-            sal_Int8 nProp  = 100;
-            if (nIntValue < 0)
-                nEscapement = -58;
-            else if (nIntValue > 0)
-                nEscapement = 58;
-            else /* (nIntValue == 0) */
-                nProp = 0;
-            rContext->Insert(PROP_CHAR_ESCAPEMENT,         true, uno::makeAny( nEscapement ) );
-            rContext->Insert(PROP_CHAR_ESCAPEMENT_HEIGHT,  true, uno::makeAny( nProp ) );
-        }
+        m_pImpl->deferCharacterProperty( nSprmId, uno::makeAny( nIntValue ));
         break;  // sprmCHpsPos
     case NS_sprm::LN_CHpsPosAdj:
         break;  // sprmCHpsPosAdj
@@ -3239,6 +3226,8 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
 
 void DomainMapper::processDeferredCharacterProperties( const std::map< sal_Int32, uno::Any >& deferredCharacterProperties )
 {
+    assert( m_pImpl->GetTopContextType() == CONTEXT_CHARACTER );
+    PropertyMapPtr rContext = m_pImpl->GetTopContext();
     for( std::map< sal_Int32, uno::Any >::const_iterator it = deferredCharacterProperties.begin();
          it != deferredCharacterProperties.end();
          ++it )
@@ -3250,6 +3239,35 @@ void DomainMapper::processDeferredCharacterProperties( const std::map< sal_Int32
         it->second >>= sStringValue;
         switch( Id )
         {
+        case NS_sprm::LN_CHps:
+        case NS_sprm::LN_CHpsBi:
+        break; // only for use by other properties, ignore here
+        case NS_sprm::LN_CHpsPos:
+        {
+            sal_Int16 nEscapement = 0;
+            sal_Int8 nProp  = 100;
+            if(nIntValue == 0)
+                nProp = 0;
+            else
+            {
+                std::map< sal_Int32, uno::Any >::const_iterator font = deferredCharacterProperties.find( NS_sprm::LN_CHps );
+                if( font != deferredCharacterProperties.end())
+                {
+                    double fontSize = 0;
+                    font->second >>= fontSize;
+                    nEscapement = nIntValue * 100 / fontSize;
+                }
+                else
+                { // TODO: Find out the font size. The 58/-58 values were here previous, but I have
+                  // no idea what they are (they are probably some random guess that did fit whatever
+                  // specific case somebody was trying to fix).
+                    nEscapement = ( nIntValue > 0 ) ? 58: -58;
+                }
+            }
+            rContext->Insert(PROP_CHAR_ESCAPEMENT,         true, uno::makeAny( nEscapement ) );
+            rContext->Insert(PROP_CHAR_ESCAPEMENT_HEIGHT,  true, uno::makeAny( nProp ) );
+        }
+        break;  // sprmCHpsPos
         default:
             SAL_WARN( "writerfilter", "Unhandled property in processDeferredCharacterProperty()" );
             break;
