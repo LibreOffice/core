@@ -54,10 +54,10 @@ long nVirtToolBoxHeight;    // inited in WatchWindow, used in Stackwindow
 long nHeaderBarHeight;
 
 // Returns pBase converted to SbxVariable if valid and is not an SbxMethod.
-SbxVariable const* IsSbxVariable (SbxBase const* pBase)
+SbxVariable* IsSbxVariable (SbxBase* pBase)
 {
-    if (SbxVariable const* pVar = dynamic_cast<SbxVariable const*>(pBase))
-        if (!dynamic_cast<SbxMethod const*>(pVar))
+    if (SbxVariable* pVar = dynamic_cast<SbxVariable*>(pBase))
+        if (!dynamic_cast<SbxMethod*>(pVar))
             return pVar;
     return 0;
 }
@@ -1933,7 +1933,7 @@ sal_Bool WatchTreeListBox::EditingEntry( SvLBoxEntry* pEntry, Selection& )
     {
         // No out of scope entries
         bool bArrayElement;
-        SbxBase const* pSbx = ImplGetSBXForEntry( pEntry, bArrayElement );
+        SbxBase* pSbx = ImplGetSBXForEntry( pEntry, bArrayElement );
         if (IsSbxVariable(pSbx) || bArrayElement)
         {
             // Accept no objects and only end nodes of arrays for editing
@@ -1970,7 +1970,7 @@ bool WatchTreeListBox::ImplBasicEntryEdited( SvLBoxEntry* pEntry, const String& 
     bool bArrayElement;
     SbxBase* pSBX = ImplGetSBXForEntry( pEntry, bArrayElement );
 
-    if (SbxVariable const* pVar = IsSbxVariable(pSBX))
+    if (SbxVariable* pVar = IsSbxVariable(pSBX))
     {
         SbxDataType eType = pVar->GetType();
         if ( (sal_uInt8)eType != (sal_uInt8)SbxOBJECT

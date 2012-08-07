@@ -244,10 +244,10 @@ bool RemoveDialog( const ScriptDocument& rDocument, const ::rtl::OUString& rLibN
 
 StarBASIC* FindBasic( const SbxVariable* pVar )
 {
-    const SbxVariable* pSbx = pVar;
-    while (pSbx && !dynamic_cast<StarBASIC*>(pSbx))
+    SbxVariable const* pSbx = pVar;
+    while (pSbx && !dynamic_cast<StarBASIC const*>(pSbx))
         pSbx = pSbx->GetParent();
-    return static_cast<StarBASIC*>(pSbx);
+    return (StarBASIC*)pSbx;
 }
 
 //----------------------------------------------------------------------------

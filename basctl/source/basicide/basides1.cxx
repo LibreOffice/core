@@ -160,7 +160,7 @@ void BasicIDEShell::ExecuteCurrent( SfxRequest& rReq )
                             {
                                 IDEBaseWindow* pWin = it->second;
                                 if (!pWin->IsSuspended())
-                                    if (pModulWindow* pMWin = dynamic_cast<ModulWindow*>(pWin))
+                                    if (ModulWindow* pMWin = dynamic_cast<ModulWindow*>(pWin))
                                         nFound += pMWin->StartSearchAndReplace(*pSearchItem);
                             }
                         }
@@ -277,7 +277,7 @@ void BasicIDEShell::ExecuteCurrent( SfxRequest& rReq )
                     sal_Int32 nLine = xGotoDlg->GetLineNumber();
 
                     if ( nLine )
-                        ((ModulWindow*)pCurWin)->GetEditView()->SetSelection( TextSelection( TextPaM( nLine - 1 , 0 ), TextPaM( nLine - 1, 0 ) ) );
+                        pMCurWin->GetEditView()->SetSelection( TextSelection( TextPaM( nLine - 1 , 0 ), TextPaM( nLine - 1, 0 ) ) );
                 }
             }
         }
@@ -1424,7 +1424,7 @@ void BasicIDEShell::Activate( sal_Bool bMDI )
 
     if ( bMDI )
     {
-        if (DialogWindow* pDCurWin = dynamic_cast<DialogWindow>(pCurWin))
+        if (DialogWindow* pDCurWin = dynamic_cast<DialogWindow*>(pCurWin))
             pDCurWin->UpdateBrowser();
     }
 }

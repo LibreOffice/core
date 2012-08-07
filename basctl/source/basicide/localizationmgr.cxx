@@ -815,7 +815,7 @@ DialogWindow* FindDialogWindowForEditor( DlgEditor* pEditor )
             {
                 DlgEditor* pWinEditor = pDlgWin->GetEditor();
                 if( pWinEditor == pEditor )
-                    return pFoundDlgWin;
+                    return pDlgWin;
             }
     }
     return 0;

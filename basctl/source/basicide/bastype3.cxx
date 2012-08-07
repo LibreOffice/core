@@ -464,7 +464,7 @@ SvLBoxEntry* BasicTreeListBox::FindRootEntry( const ScriptDocument& rDocument, L
     while ( pRootEntry )
     {
         DBG_ASSERT( static_cast<BasicEntry*>(pRootEntry->GetUserData())->GetType() == OBJ_TYPE_DOCUMENT, "Kein Shelleintrag?" );
-        BasicDocumentEntry* pBDEntry = static_cast<BasicDocEntry*>(pRootEntry->GetUserData());
+        BasicDocumentEntry* pBDEntry = static_cast<BasicDocumentEntry*>(pRootEntry->GetUserData());
         if (pBDEntry && pBDEntry->GetDocument() == rDocument && pBDEntry->GetLocation() == eLocation)
             return pRootEntry;
         pRootEntry = GetEntry( ++nRootPos );

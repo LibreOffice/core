@@ -513,15 +513,15 @@ awt::Rectangle AccessibleDialogWindow::implGetBounds() throw (RuntimeException)
 
 void AccessibleDialogWindow::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    if (SdrHint* pSdrHint = dynamic_cast<SdrHint*>(&rHint))
+    if (SdrHint const* pSdrHint = dynamic_cast<SdrHint const*>(&rHint))
     {
         switch ( pSdrHint->GetKind() )
         {
             case HINT_OBJINSERTED:
             {
-                if (DlgEdObj* pDlgEdObj = dynamic_cast<DlgEdObj*>(pSdrHint->GetObject()))
+                if (DlgEdObj const* pDlgEdObj = dynamic_cast<DlgEdObj const*>(pSdrHint->GetObject()))
                 {
-                    ChildDescriptor aDesc( pDlgEdObj );
+                    ChildDescriptor aDesc(const_cast<DlgEdObj*>(pDlgEdObj));
                     if ( IsChildVisible( aDesc ) )
                         InsertChild( aDesc );
                 }
@@ -529,14 +529,14 @@ void AccessibleDialogWindow::Notify( SfxBroadcaster&, const SfxHint& rHint )
             break;
             case HINT_OBJREMOVED:
             {
-                if (DlgEdObj* pDlgEdObj = dynamic_cast<DlgEdObj*>(pSdrHint->GetObject()))
-                    RemoveChild( ChildDescriptor( pDlgEdObj ) );
+                if (DlgEdObj const* pDlgEdObj = dynamic_cast<DlgEdObj const*>(pSdrHint->GetObject()))
+                    RemoveChild( ChildDescriptor(const_cast<DlgEdObj*>(pDlgEdObj)) );
             }
             break;
             default: ;
         }
     }
-    else if (DlgEdHint* pDlgEdHint = dynamic_cast<DlgEdHint*>(&rHint))
+    else if (DlgEdHint const* pDlgEdHint = dynamic_cast<DlgEdHint const*>(&rHint))
     {
         switch ( pDlgEdHint->GetKind() )
         {

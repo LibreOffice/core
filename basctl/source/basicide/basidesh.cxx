@@ -530,7 +530,7 @@ void BasicIDEShell::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId&,
 {
     if ( BasicIDEGlobals::GetShell() )
     {
-        if (SfxSimpleHint* pSimpleHint = dynamic_cast<SfxSimpleHint*>(&rHint))
+        if (SfxSimpleHint const* pSimpleHint = dynamic_cast<SfxSimpleHint const*>(&rHint))
         {
             switch (pSimpleHint->GetId())
             {
@@ -542,7 +542,7 @@ void BasicIDEShell::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId&,
                 break;
             }
 
-            if (SbxHint* pSbxHint = dynamic_cast<SbxHint*>(&rHint))
+            if (SbxHint const* pSbxHint = dynamic_cast<SbxHint const*>(&rHint))
             {
                 sal_uLong nHintId = pSbxHint->GetId();
                 if (    ( nHintId == SBX_HINT_BASICSTART ) ||

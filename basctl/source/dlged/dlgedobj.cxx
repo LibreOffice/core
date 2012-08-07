@@ -1240,7 +1240,7 @@ void SAL_CALL DlgEdObj::_propertyChange( const  ::com::sun::star::beans::Propert
         // change tabindex
         else if ( evt.PropertyName == DLGED_PROP_TABINDEX )
         {
-            if (!dynamic_cast<DlgEdForm>(this))
+            if (!dynamic_cast<DlgEdForm*>(this))
                 TabIndexChange(evt);
         }
     }
