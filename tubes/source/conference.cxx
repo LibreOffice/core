@@ -535,7 +535,7 @@ static void TeleConference_FTReady( EmpathyFTHandler *handler, GError *error, gp
 }
 
 // TODO: move sending file to TeleManager
-extern void TeleManager_fileReceived( const OUString& );
+extern void TeleManager_fileReceived( const OUString&, const OString& );
 void TeleConference::sendFile( TpContact* pContact, const OUString& localUri, FileSentCallback pCallback, void* pUserData)
 {
     INFO_LOGGER( "TeleConference::sendFile");
@@ -543,7 +543,7 @@ void TeleConference::sendFile( TpContact* pContact, const OUString& localUri, Fi
     if (!pContact)
     {
         // used in demo mode
-        TeleManager_fileReceived( localUri );
+        TeleManager_fileReceived( localUri, "demo" );
         return;
     }
 

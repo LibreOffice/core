@@ -285,26 +285,19 @@ void TeleManager::setCurrentUuid( const OString& rUuid )
 }
 
 // FIXME: should be static and not used in conference.cxx
-void TeleManager_fileReceived( const rtl::OUString &rStr )
+void TeleManager_fileReceived( const OUString& rStr, const OString& rUuid )
 {
     SAL_INFO( "tubes", "TeleManager_fileReceived: incoming file: " << rStr );
 
-    sal_Int32 first = rStr.indexOf('_');
-    sal_Int32 last = rStr.lastIndexOf('_');
-    SAL_WARN_IF( first == last, "tubes", "No UUID to associate with the file!" );
-    if (first != last)
+    OString sUuid( rUuid );
+    if (sUuid == "demo")
     {
-        OString sUuid( OUStringToOString( rStr.copy( first + 1, last - first - 1),
-                RTL_TEXTENCODING_UTF8));
-        if (sUuid == "demo")
-        {
-            sUuid = TeleManager::createUuid();
-            TeleConference* pConference = new TeleConference( NULL, NULL, sUuid );
-            TeleManager::addConference( pConference );
-            TeleManager::registerDemoConference( pConference );
-        }
-        TeleManager::setCurrentUuid( sUuid );
+        sUuid = TeleManager::createUuid();
+        TeleConference* pConference = new TeleConference( NULL, NULL, sUuid );
+        TeleManager::addConference( pConference );
+        TeleManager::registerDemoConference( pConference );
     }
+    TeleManager::setCurrentUuid( sUuid );
 
     css::uno::Reference< css::lang::XMultiServiceFactory > rFactory =
         ::comphelper::getProcessServiceFactory();
@@ -334,7 +327,7 @@ static void TeleManager_TransferDone( EmpathyFTHandler *handler, TpFileTransferC
     rtl::OUString aUri( OUString::createFromAscii( uri ) );
     g_free( uri);
 
-    TeleManager_fileReceived( aUri );
+    TeleManager_fileReceived( aUri, empathy_ft_handler_get_description( handler ) );
 
     g_object_unref( handler);
 }

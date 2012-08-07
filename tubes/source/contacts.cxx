@@ -88,8 +88,7 @@ class TubeContacts : public ModelessDialog
             {
                 TpContact* pContact = pAC->second;
                 mpCollaboration->GetConference()->invite( pContact );
-                mpCollaboration->SaveAndSendFile( pContact, OStringToOUString(
-                            mpCollaboration->GetConference()->getUuid(), RTL_TEXTENCODING_UTF8 ) );
+                mpCollaboration->SaveAndSendFile( pContact );
             }
         }
     }
@@ -108,8 +107,7 @@ class TubeContacts : public ModelessDialog
         else
         {
             mpCollaboration->StartCollaboration( pConference );
-            mpCollaboration->SaveAndSendFile( NULL, OStringToOUString(
-                        pConference->getUuid(), RTL_TEXTENCODING_UTF8 ) );
+            mpCollaboration->SaveAndSendFile( NULL );
         }
     }
 
@@ -130,8 +128,7 @@ class TubeContacts : public ModelessDialog
             else
             {
                 mpCollaboration->StartCollaboration( pConference );
-                mpCollaboration->SaveAndSendFile( pContact, OStringToOUString(
-                            pConference->getUuid(), RTL_TEXTENCODING_UTF8 ) );
+                mpCollaboration->SaveAndSendFile( pContact );
             }
         }
     }

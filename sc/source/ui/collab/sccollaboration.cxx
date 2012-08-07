@@ -45,13 +45,10 @@ void ScCollaboration::PacketReceived( const OString& rPacket ) const
         return pSender->RecvMessage( rPacket );
 }
 
-void ScCollaboration::SaveAndSendFile( TpContact* pContact, const OUString& sUuid ) const
+void ScCollaboration::SaveAndSendFile( TpContact* pContact ) const
 {
-    String aTmpPath = utl::TempFile::CreateTempName();
-    aTmpPath.Append( OUString("_") );
-    aTmpPath.Append( sUuid );
-    aTmpPath.Append( OUString("_") );
-    aTmpPath.Append( OUString(".ods") );
+    OUString aTmpPath = utl::TempFile::CreateTempName();
+    aTmpPath += ".ods";
 
     rtl::OUString aFileURL;
     ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aTmpPath, aFileURL );

@@ -25,7 +25,7 @@ public:
 
     virtual void  ContactLeft() const;
     virtual void  PacketReceived( const OString& rPacket ) const;
-    virtual void  SaveAndSendFile( TpContact* pContact, const OUString& rURL ) const;
+    virtual void  SaveAndSendFile( TpContact* pContact ) const;
     virtual void  StartCollaboration( TeleConference* pConference );
 private:
     friend class ScDocShell;

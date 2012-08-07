@@ -121,7 +121,7 @@ sal_Bool ScDocFuncSend::SetNormalString( bool& o_rbNumFmtSet, const ScAddress& r
     o_rbNumFmtSet = false;
 
     if ( rtl::OUString( rText ) == "saveme" )
-        mpCollaboration->SaveAndSendFile( NULL, rText );
+        mpCollaboration->SaveAndSendFile( NULL );
 
     if ( rtl::OUString( rText ) == "contacts" )
         mpCollaboration->DisplayContacts();
