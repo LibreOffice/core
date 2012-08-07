@@ -357,20 +357,20 @@ sal_uInt32 RscTypCont :: PutSysName( sal_uInt32 nRscTyp, char * pFileName,
 *************************************************************************/
 void RscTypCont :: WriteInc( FILE * fOutput, sal_uLong lFileKey )
 {
-    RscFile   * pFName;
 
     if( NOFILE_INDEX == lFileKey )
     {
-        pFName = aFileTab.First();
-        while( pFName )
+        sal_uIntPtr aIndex = aFileTab.FirstIndex();
+        while( aIndex != UNIQUEINDEX_ENTRY_NOTFOUND )
         {
-            if( pFName && pFName->IsIncFile() )
+            RscFile   * pFName = aFileTab.Get( aIndex );
+            if( pFName->IsIncFile() )
             {
                 fprintf( fOutput, "#include " );
                 fprintf( fOutput, "\"%s\"\n",
                                   pFName->aFileName.getStr() );
             }
-            pFName = aFileTab.Next();
+            aIndex = aFileTab.NextIndex( aIndex );
         }
     }
     else
@@ -378,7 +378,7 @@ void RscTypCont :: WriteInc( FILE * fOutput, sal_uLong lFileKey )
         RscDepend *     pDep;
         RscFile   *     pFile;
 
-        pFName = aFileTab.Get( lFileKey );
+        RscFile   *     pFName = aFileTab.Get( lFileKey );
         if( pFName )
         {
             for ( size_t i = 0, n = pFName->aDepLst.size(); i < n; ++i )
@@ -723,12 +723,13 @@ void RscTypCont :: WriteSrc( FILE * fOutput, sal_uLong nFileKey,
 
         if( NOFILE_INDEX == nFileKey )
         {
-            pFName = aFileTab.First();
-            while( pFName  ){
+            sal_uIntPtr aIndex = aFileTab.FirstIndex();
+            while( aIndex != UNIQUEINDEX_ENTRY_NOTFOUND ) {
+                pFName = aFileTab.Get( aIndex );
                 if( !pFName->IsIncFile() )
                     pFName->aDefLst.WriteAll( fOutput );
-                aEnumRef.WriteSrc( aFileTab.GetIndex( pFName ) );
-                pFName = aFileTab.Next();
+                aEnumRef.WriteSrc( aIndex );
+                aIndex = aFileTab.NextIndex( aIndex );
             };
         }
         else
@@ -745,11 +746,11 @@ void RscTypCont :: WriteSrc( FILE * fOutput, sal_uLong nFileKey,
         RscId::SetNames( sal_False );
         if( NOFILE_INDEX == nFileKey )
         {
-            pFName = aFileTab.First();
-            while( pFName  )
+            sal_uIntPtr aIndex = aFileTab.FirstIndex();
+            while( aIndex != UNIQUEINDEX_ENTRY_NOTFOUND )
             {
-                aEnumRef.WriteSrc( aFileTab.GetIndex( pFName ) );
-                pFName = aFileTab.Next();
+                aEnumRef.WriteSrc( aIndex );
+                aIndex = aFileTab.NextIndex( aIndex );
             };
         }
         else
@@ -805,13 +806,11 @@ ERRTYPE RscTypCont :: WriteHxx( FILE * fOutput, sal_uLong nFileKey )
 
     if( NOFILE_INDEX == nFileKey )
     {
-        RscFile     *   pFName;
-
-        pFName = aFileTab.First();
-        while( pFName  )
+        sal_uIntPtr aIndex = aFileTab.FirstIndex();
+        while( aIndex != UNIQUEINDEX_ENTRY_NOTFOUND )
         {
-            aError = aEnumRef.WriteHxx( aFileTab.GetIndex( pFName ) );
-            pFName = aFileTab.Next();
+            aError = aEnumRef.WriteHxx( aIndex );
+            aIndex = aFileTab.NextIndex( aIndex );
         };
     }
     else
@@ -838,13 +837,11 @@ ERRTYPE RscTypCont::WriteCxx( FILE * fOutput, sal_uLong nFileKey,
 
     if( NOFILE_INDEX == nFileKey )
     {
-        RscFile     *   pFName;
-
-        pFName = aFileTab.First();
-        while( pFName  )
+        sal_uIntPtr aIndex = aFileTab.FirstIndex();
+        while( aIndex != UNIQUEINDEX_ENTRY_NOTFOUND )
         {
-            aError = aEnumRef.WriteCxx( aFileTab.GetIndex( pFName ) );
-            pFName = aFileTab.Next();
+            aError = aEnumRef.WriteCxx( aIndex );
+            aIndex = aFileTab.NextIndex( aIndex );
         };
     }
     else

@@ -20,36 +20,6 @@
 #include <impcont.hxx>
 #include <tools/unqidx.hxx>
 
-/*************************************************************************
-|*
-|*    UniqueIndex::UniqueIndex()
-|*
-*************************************************************************/
-
-UniqueIndex::UniqueIndex( sal_uIntPtr _nStartIndex,
-                          sal_uIntPtr _nInitSize, sal_uIntPtr _nReSize ) :
-                 Container( _nInitSize )
-{
-    nReSize         = _nReSize;
-    nStartIndex     = _nStartIndex;
-    nUniqIndex      = 0;
-    nCount          = 0;
-}
-
-/*************************************************************************
-|*
-|*    UniqueIndex::UniqueIndex()
-|*
-*************************************************************************/
-
-UniqueIndex::UniqueIndex( const UniqueIndex& rIdx ) :
-                 Container( rIdx )
-{
-    nReSize     = rIdx.nReSize;
-    nStartIndex = rIdx.nStartIndex;
-    nUniqIndex  = rIdx.nUniqIndex;
-    nCount      = rIdx.nCount;
-}
 
 /*************************************************************************
 |*
@@ -57,25 +27,26 @@ UniqueIndex::UniqueIndex( const UniqueIndex& rIdx ) :
 |*
 *************************************************************************/
 
-sal_uIntPtr UniqueIndex::Insert( void* p )
+sal_uIntPtr UniqueIndexImpl::Insert( void* p )
 {
     // NULL-Pointer ist nicht erlaubt
     if ( !p )
         return UNIQUEINDEX_ENTRY_NOTFOUND;
 
-    // Ist Array voll, dann expandieren
-    if ( nCount == Container::GetSize() )
-        SetSize( nCount + nReSize );
+   // Ist Array voll, dann expandieren
+    sal_uIntPtr nTmp = size();
+    if( nTmp == nCount )
+        nTmp++;
 
     // Damit UniqIndex nicht ueberlaeuft, wenn Items geloescht wurden
-    nUniqIndex = nUniqIndex % Container::GetSize();
+    nUniqIndex = nUniqIndex % nTmp;
 
     // Leeren Eintrag suchen
-    while ( Container::ImpGetObject( nUniqIndex ) != NULL )
-        nUniqIndex = (nUniqIndex+1) % Container::GetSize();
+    while ( find( nUniqIndex ) != end() )
+        nUniqIndex = (nUniqIndex+1) % nTmp;
 
     // Object im Array speichern
-    Container::Replace( p, nUniqIndex );
+    (*this)[ nUniqIndex ] = p;
 
     // Anzahl der Eintraege erhoehen und Index zurueckgeben
     nCount++;
@@ -85,222 +56,129 @@ sal_uIntPtr UniqueIndex::Insert( void* p )
 
 /*************************************************************************
 |*
-|*    UniqueIndex::Insert()
+|*    UniqueIndexImpl::Insert()
 |*
 *************************************************************************/
 
-sal_uIntPtr UniqueIndex::Insert( sal_uIntPtr nIndex, void* p )
+void UniqueIndexImpl::Insert( sal_uIntPtr nIndex, void* p )
 {
     // NULL-Pointer ist nicht erlaubt
     if ( !p )
-        return UNIQUEINDEX_ENTRY_NOTFOUND;
+        return;
 
     sal_uIntPtr nContIndex = nIndex - nStartIndex;
-    // Ist Array voll, dann expandieren
-    if ( nContIndex >= Container::GetSize() )
-        SetSize( nContIndex + nReSize );
+
+    bool bFound = find( nContIndex ) != end();
 
     // Object im Array speichern
-    Container::Replace( p, nContIndex );
+    (*this)[ nContIndex ] = p;
 
-    // Anzahl der Eintraege erhoehen und Index zurueckgeben
-    nCount++;
-    return nIndex;
+    if( !bFound )
+        nCount++;
 }
 
 /*************************************************************************
 |*
-|*    UniqueIndex::Remove()
+|*    UniqueIndexImpl::Remove()
 |*
 *************************************************************************/
 
-void* UniqueIndex::Remove( sal_uIntPtr nIndex )
+void* UniqueIndexImpl::Remove( sal_uIntPtr nIndex )
 {
     // Ist Index zulaessig
     if ( (nIndex >= nStartIndex) &&
-         (nIndex < (Container::GetSize()+nStartIndex)) )
+         (nIndex < (size() + nStartIndex)) )
     {
         // Index-Eintrag als leeren Eintrag setzen und Anzahl der
         // gespeicherten Indexe erniedriegen, wenn Eintrag belegt war
-        void* p = Container::Replace( NULL, nIndex-nStartIndex );
-        if ( p )
+        iterator it = find( nIndex - nStartIndex );
+        if( it != end() )
+        {
+            void* p = it->second;
+            erase( it );
             nCount--;
-        return p;
+            return p;
+        }
     }
-    else
-        return NULL;
+    return NULL;
 }
 
 /*************************************************************************
 |*
-|*    UniqueIndex::Get()
+|*    UniqueIndexImpl::Get()
 |*
 *************************************************************************/
 
-void* UniqueIndex::Get( sal_uIntPtr nIndex ) const
+void* UniqueIndexImpl::Get( sal_uIntPtr nIndex ) const
 {
     // Ist Index zulaessig
     if ( (nIndex >= nStartIndex) &&
-         (nIndex < (Container::GetSize()+nStartIndex)) )
-        return Container::ImpGetObject( nIndex-nStartIndex );
-    else
-        return NULL;
+         (nIndex < (size() + nStartIndex)) )
+    {
+        const_iterator it = find( nIndex - nStartIndex );
+        if( it != end() )
+            return it->second;
+    }
+    return NULL;
 }
 
 /*************************************************************************
 |*
-|*    UniqueIndex::GetCurIndex()
+|*    UniqueIndexImpl::FirstIndex()
 |*
 *************************************************************************/
 
-sal_uIntPtr UniqueIndex::GetCurIndex() const
+sal_uIntPtr UniqueIndexImpl::FirstIndex() const
 {
-    sal_uIntPtr nPos = Container::GetCurPos();
-
-    // Ist der Current-Index nicht belegt, dann gibt es keinen Current-Index
-    if ( !Container::ImpGetObject( nPos ) )
-        return UNIQUEINDEX_ENTRY_NOTFOUND;
-    else
-        return nPos+nStartIndex;
-}
-
-/*************************************************************************
-|*
-|*    UniqueIndex::GetIndex()
-|*
-*************************************************************************/
-
-sal_uIntPtr UniqueIndex::GetIndex( const void* p ) const
-{
-    // Wird ein NULL-Pointer uebergeben, dann wurde Pointer nicht gefunden
-    if ( !p )
+    if ( empty() )
         return UNIQUEINDEX_ENTRY_NOTFOUND;
 
-    sal_uIntPtr nIndex = Container::GetPos( p );
+    return begin()->first;
+}
 
-    if ( nIndex != CONTAINER_ENTRY_NOTFOUND )
-        return nIndex+nStartIndex;
-    else
+/*************************************************************************
+|*
+|*    UniqueIndexImpl::LastIndex()
+|*
+*************************************************************************/
+
+sal_uIntPtr UniqueIndexImpl::LastIndex() const
+{
+    if ( empty() )
         return UNIQUEINDEX_ENTRY_NOTFOUND;
+
+    return rbegin()->first;
 }
 
 /*************************************************************************
 |*
-|*    UniqueIndex::Seek()
+|*    UniqueIndexImpl::NextIndex()
 |*
 *************************************************************************/
 
-void* UniqueIndex::Seek( void* p )
+sal_uIntPtr UniqueIndexImpl::NextIndex(sal_uIntPtr aIndex) const
 {
-    // Wird ein NULL-Pointer uebergeben, dann wurde Pointer nicht gefunden
-    if ( !p )
-        return NULL;
-
-    sal_uIntPtr nIndex = GetIndex( p );
-
-    // Ist Index vorhanden, dann als aktuellen Eintrag setzen
-    if ( nIndex != UNIQUEINDEX_ENTRY_NOTFOUND )
-        return Container::Seek( nIndex-nStartIndex );
-    else
-        return NULL;
+    const_iterator it = find( aIndex );
+    if ( it == end() )
+        return UNIQUEINDEX_ENTRY_NOTFOUND;
+    it++;
+    if ( it == end() )
+        return UNIQUEINDEX_ENTRY_NOTFOUND;
+    return it->first;
 }
 
 /*************************************************************************
 |*
-|*    UniqueIndex::First()
+|*    UniqueIndexImpl::GetIndexOf()
 |*
 *************************************************************************/
 
-void* UniqueIndex::First()
+sal_uIntPtr UniqueIndexImpl::GetIndexOf(void* p) const
 {
-    void* p = Container::First();
-
-    while ( !p && (Container::GetCurPos() < (Container::GetSize()-1)) )
-        p = Container::Next();
-
-    return p;
-}
-
-/*************************************************************************
-|*
-|*    UniqueIndex::Last()
-|*
-*************************************************************************/
-
-void* UniqueIndex::Last()
-{
-    void* p = Container::Last();
-
-    while ( !p && Container::GetCurPos() )
-        p = Container::Prev();
-
-    return p;
-}
-
-/*************************************************************************
-|*
-|*    UniqueIndex::Next()
-|*
-*************************************************************************/
-
-void* UniqueIndex::Next()
-{
-    void* p = NULL;
-
-    while ( !p && (Container::GetCurPos() < (Container::GetSize()-1)) )
-        p = Container::Next();
-
-    return p;
-}
-
-/*************************************************************************
-|*
-|*    UniqueIndex::Prev()
-|*
-*************************************************************************/
-
-void* UniqueIndex::Prev()
-{
-    void* p = NULL;
-
-    while ( !p && Container::GetCurPos() )
-        p = Container::Prev();
-
-    return p;
-}
-
-/*************************************************************************
-|*
-|*    UniqueIndex::operator =()
-|*
-*************************************************************************/
-
-UniqueIndex& UniqueIndex::operator =( const UniqueIndex& rIdx )
-{
-    // Neue Werte zuweisen
-    Container::operator =( rIdx );
-    nReSize     = rIdx.nReSize;
-    nStartIndex = rIdx.nStartIndex;
-    nUniqIndex  = rIdx.nUniqIndex;
-    nCount      = rIdx.nCount;
-    return *this;
-}
-
-/*************************************************************************
-|*
-|*    UniqueIndex::operator ==()
-|*
-*************************************************************************/
-
-sal_Bool UniqueIndex::operator ==( const UniqueIndex& rIdx ) const
-{
-    // Neue Werte zuweisen
-    if ( (nStartIndex == rIdx.nStartIndex) &&
-         (nCount      == rIdx.nCount)      &&
-         (Container::operator ==( rIdx )) )
-        return sal_True;
-    else
-        return sal_False;
+    for( const_iterator it = begin(); it != end(); ++it )
+        if( it->second == p )
+            return it->first;
+    return UNIQUEINDEX_ENTRY_NOTFOUND;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -210,7 +210,7 @@ public:
     sal_Bool            IsIncFile(){  return bIncFile; };
 };
 
-DECLARE_UNIQUEINDEX( RscSubFileTab, RscFile * )
+typedef UniqueIndex<RscFile> RscSubFileTab;
 #define NOFILE_INDEX UNIQUEINDEX_ENTRY_NOTFOUND
 
 class RscDefTree {

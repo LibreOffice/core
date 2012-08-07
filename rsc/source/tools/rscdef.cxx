@@ -653,15 +653,13 @@ RscFileTab::RscFileTab(){
 |*
 *************************************************************************/
 RscFileTab :: ~RscFileTab(){
-    RscFile * pFile;
 
     aDefTree.Remove();
 
-    pFile = Last();
-    while( pFile ){
-        Remove( GetIndex( pFile ) );
-        delete pFile;
-        pFile = Prev();
+    sal_uIntPtr aIndex = LastIndex();
+    while( aIndex != UNIQUEINDEX_ENTRY_NOTFOUND ) {
+        delete Remove( aIndex );
+        aIndex = LastIndex();
     };
 }
 
@@ -672,16 +670,14 @@ RscFileTab :: ~RscFileTab(){
 *************************************************************************/
 sal_uLong  RscFileTab :: Find( const rtl::OString& rName )
 {
-    RscFile * pFName;
+    sal_uIntPtr aIndex = FirstIndex();
+    while( aIndex != UNIQUEINDEX_ENTRY_NOTFOUND && (Get(aIndex)->aFileName != rName) )
+        aIndex = NextIndex(aIndex);
 
-    pFName = First();
-    while( pFName && (pFName->aFileName != rName) )
-        pFName = Next();
-
-    if( pFName )
-        return( GetIndex( pFName ) );
+    if( aIndex != UNIQUEINDEX_ENTRY_NOTFOUND )
+        return aIndex;
     else
-        return( NOFILE_INDEX );
+        return NOFILE_INDEX;
 }
 
 /*************************************************************************
@@ -702,13 +698,14 @@ sal_Bool RscFileTab::Depend( sal_uLong lDepend, sal_uLong lFree ){
     if( lDepend == lFree )
         return sal_True;
 
-    RscFile * pFile = First();
-    while( pFile ){
+    sal_uIntPtr aIndex = FirstIndex();
+    while( aIndex != UNIQUEINDEX_ENTRY_NOTFOUND ){
+        RscFile * pFile = Get(aIndex);
         if( !pFile->IsIncFile() ){
             if( !pFile->Depend( lDepend, lFree ) )
                 return sal_False;
         };
-        pFile = Next();
+        aIndex = NextIndex(aIndex);
     };
 
     return sal_True;

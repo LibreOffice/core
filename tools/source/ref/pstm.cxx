@@ -792,14 +792,14 @@ SvStream& operator <<
     rThis << bTmp;    // Version
     sal_uInt32 nCount = (sal_uInt32)rThis.aPUIdx.Count();
     rThis << nCount;
-    SvPersistBase * pEle = rThis.aPUIdx.First();
+    sal_uIntPtr aIndex = rThis.aPUIdx.FirstIndex();
     for( sal_uInt32 i = 0; i < nCount; i++ )
     {
+        SvPersistBase * pEle = rThis.aPUIdx.Get(aIndex);
         sal_uInt8 nP = P_OBJ | P_ID | P_STD;
-        WriteId( rThis, nP, rThis.aPUIdx.GetCurIndex(),
-                        pEle->GetClassId() );
+        WriteId( rThis, nP, aIndex, pEle->GetClassId() );
         rThis.WriteObj( nP, pEle );
-        pEle = rThis.aPUIdx.Next();
+        aIndex = rThis.aPUIdx.NextIndex( aIndex );
     }
     rThis.SetStream( pOldStm );
     return rStm;

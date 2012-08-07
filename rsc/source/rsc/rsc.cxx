@@ -453,18 +453,17 @@ ERRTYPE RscCompiler::Start()
 
             pTC->pEH->SetListFile( NULL );
 
-            pFName = pTC->aFileTab.First();
-            while( pFName && aError.IsOk() )
+            sal_uIntPtr aIndex = pTC->aFileTab.FirstIndex();
+            while( aIndex != UNIQUEINDEX_ENTRY_NOTFOUND && aError.IsOk() )
             {
+                pFName = pTC->aFileTab.Get( aIndex );
                 if( !pFName->bScanned && !pFName->IsIncFile() )
                 {
-                    aError = IncludeParser(
-                                 pTC->aFileTab.GetIndex( pFName )
-                             );
+                    aError = IncludeParser( aIndex );
                     // Currentzeiger richtig setzen
-                    pTC->aFileTab.Seek( pFName );
+                    aIndex = pTC->aFileTab.GetIndexOf( pFName );
                 };
-                pFName = pTC->aFileTab.Next();
+                aIndex = pTC->aFileTab.NextIndex( aIndex );
             };
 
             pTC->pEH->SetListFile( fListing );
@@ -474,12 +473,13 @@ ERRTYPE RscCompiler::Start()
     if ( pTC->pEH->GetVerbosity() >= RscVerbosityVerbose )
     {
         pTC->pEH->StdOut( "Files: " );
-        pFName = pTC->aFileTab.First();
-        while( pFName )
+        sal_uIntPtr aIndex = pTC->aFileTab.FirstIndex();
+        while( aIndex != UNIQUEINDEX_ENTRY_NOTFOUND )
         {
+            pFName = pTC->aFileTab.Get( aIndex );
             pTC->pEH->StdOut( pFName->aFileName.getStr() );
             pTC->pEH->StdOut( " " );
-            pFName = pTC->aFileTab.Next();
+            aIndex = pTC->aFileTab.NextIndex( aIndex );
         };
         pTC->pEH->StdOut( "\n" );
     }
@@ -522,9 +522,10 @@ void RscCompiler::EndCompile()
             else
             {
                 // Schreibe Datei
-                pFN = pTC->aFileTab.First();
-                while( pFN )
+                sal_uIntPtr aIndex = pTC->aFileTab.FirstIndex();
+                while( aIndex != UNIQUEINDEX_ENTRY_NOTFOUND )
                 {
+                    pFN = pTC->aFileTab.Get( aIndex );
                     if( !pFN->IsIncFile() )
                     {
                         pTC->WriteSrc( foutput, NOFILE_INDEX, sal_False );
@@ -788,12 +789,15 @@ ERRTYPE RscCompiler::Link()
         for( it = pCL->m_aOutputFiles.begin(); it != pCL->m_aOutputFiles.end(); ++it )
         {
             // cleanup nodes
-            for( pFName = pTC->aFileTab.First(); pFName && aError.IsOk(); pFName = pTC->aFileTab.Next() )
+            for( sal_uIntPtr aIndex = pTC->aFileTab.FirstIndex();
+                 aIndex != UNIQUEINDEX_ENTRY_NOTFOUND && aError.IsOk();
+                 aIndex = pTC->aFileTab.NextIndex( aIndex ) )
             {
+                pFName = pTC->aFileTab.Get( aIndex );
                 if( !pFName->IsIncFile() )
                 {
-                    pTC->Delete( pTC->aFileTab.GetIndex( pFName ) );
-                    pTC->aFileTab.Seek( pFName );
+                    pTC->Delete( aIndex );
+                    aIndex = pTC->aFileTab.GetIndexOf( pFName );
                     pFName->bLoaded = sal_False;
                 }
             }
@@ -886,12 +890,15 @@ ERRTYPE RscCompiler::Link()
             }
 
             // parse files for specific language
-            for( pFName = pTC->aFileTab.First(); pFName && aError.IsOk(); pFName = pTC->aFileTab.Next() )
+            for( sal_uIntPtr aIndex = pTC->aFileTab.FirstIndex();
+                 aIndex != UNIQUEINDEX_ENTRY_NOTFOUND && aError.IsOk();
+                 aIndex = pTC->aFileTab.NextIndex( aIndex ) )
             {
+                pFName = pTC->aFileTab.Get( aIndex );
                 if( !pFName->IsIncFile() )
                 {
-                    aError = ParseOneFile( pTC->aFileTab.GetIndex( pFName ), &*it, &aContext );
-                    pTC->aFileTab.Seek( pFName );
+                    aError = ParseOneFile( aIndex, &*it, &aContext );
+                    aIndex = pTC->aFileTab.GetIndexOf( pFName );
                 }
             };
 
@@ -935,12 +942,15 @@ ERRTYPE RscCompiler::Link()
     else
     {
         // parse files
-        for( pFName = pTC->aFileTab.First(); pFName && aError.IsOk(); pFName = pTC->aFileTab.Next() )
+        for( sal_uIntPtr aIndex = pTC->aFileTab.FirstIndex();
+             aIndex != UNIQUEINDEX_ENTRY_NOTFOUND && aError.IsOk();
+             aIndex = pTC->aFileTab.NextIndex( aIndex ) )
         {
+            pFName = pTC->aFileTab.Get( aIndex );
             if( !pFName->IsIncFile() )
             {
-                aError = ParseOneFile( pTC->aFileTab.GetIndex( pFName ), NULL, NULL );
-                pTC->aFileTab.Seek( pFName );
+                aError = ParseOneFile( aIndex, NULL, NULL );
+                aIndex = pTC->aFileTab.GetIndexOf( pFName );
             }
         };
     }

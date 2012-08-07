@@ -134,7 +134,7 @@ public:\
 SV_DECL_PERSIST_LIST(ClassName,EntryName)\
 SV_IMPL_PERSIST_LIST(ClassName,EntryName)
 
-DECLARE_UNIQUEINDEX( SvPersistUIdx,SvPersistBase *)
+typedef UniqueIndex<SvPersistBase> SvPersistUIdx;
 
 typedef std::map<SvPersistBase*, sal_uIntPtr> PersistBaseMap;
 

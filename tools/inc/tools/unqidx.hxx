@@ -22,6 +22,7 @@
 #include "tools/toolsdllapi.h"
 #include <tools/solar.h>
 #include <tools/contnr.hxx>
+#include <map>
 
 // ---------------
 // - UniqueIndex -
@@ -29,109 +30,46 @@
 
 #define UNIQUEINDEX_ENTRY_NOTFOUND   CONTAINER_ENTRY_NOTFOUND
 
-class TOOLS_DLLPUBLIC UniqueIndex : private Container
+class TOOLS_DLLPUBLIC UniqueIndexImpl : public std::map<sal_uInt32, void*>
 {
 private:
-    sal_uIntPtr           nReSize;
     sal_uIntPtr           nStartIndex;
     sal_uIntPtr           nUniqIndex;
     sal_uIntPtr           nCount;
 
-    void*           Seek( sal_uIntPtr nIndex ); //not implemented
-
 public:
-                    using Container::GetCurObject;
+    UniqueIndexImpl( sal_uIntPtr _nStartIndex = 0 )
+        : std::map<sal_uInt32, void*>(),
+          nStartIndex(_nStartIndex), nUniqIndex(_nStartIndex), nCount(0) {}
 
-                    UniqueIndex( sal_uIntPtr nStartIndex = 0,
-                                 sal_uIntPtr nInitSize = 16,
-                                 sal_uIntPtr nReSize = 16 );
-                    UniqueIndex( const UniqueIndex& rIdx );
+    sal_uIntPtr   Insert( void* p );
+    // insert value with key, replacing existing entry if necessary
+    void          Insert( sal_uIntPtr aIndex, void* p );
+    void*         Remove( sal_uIntPtr aIndex );
+    void*         Get( sal_uIntPtr aIndex ) const;
 
-    sal_uIntPtr           Insert( sal_uIntPtr nIndex, void* p );
-    sal_uIntPtr           Insert( void* p );
-    void*           Remove( sal_uIntPtr nIndex );
-    void*           Get( sal_uIntPtr nIndex ) const;
-
-    void            Clear();
-    sal_uIntPtr           Count() const { return nCount; }
-
-    sal_uIntPtr           GetCurIndex() const;
-    sal_uIntPtr           GetIndex( const void* p ) const;
-
-    void*           Seek( void* p );
-    void*           First();
-    void*           Last();
-    void*           Next();
-    void*           Prev();
-
-    sal_uIntPtr           GetStartIndex() const { return nStartIndex; }
-    sal_uIntPtr           GetCurMaxIndex() const
-                        { return (nStartIndex + Container::GetSize()); }
-
-    UniqueIndex&    operator =( const UniqueIndex& rIdx );
-
-    sal_Bool            operator ==( const UniqueIndex& rIdx ) const;
-    sal_Bool            operator !=( const UniqueIndex& rIdx ) const
-                        { return !(UniqueIndex::operator==( rIdx )); }
+    sal_uIntPtr   GetIndexOf( void* p ) const;
+    sal_uIntPtr   FirstIndex() const;
+    sal_uIntPtr   LastIndex() const;
+    sal_uIntPtr   NextIndex( sal_uIntPtr aCurrIndex ) const;
 };
 
-inline void UniqueIndex::Clear()
+template<typename T>
+class UniqueIndex : private UniqueIndexImpl
 {
-    Container::Clear();
-    nCount     = 0;
-    nUniqIndex = 0;
-}
+public:
+    UniqueIndex<T>( sal_uIntPtr _nStartIndex = 0 ) : UniqueIndexImpl(_nStartIndex) {}
 
-// -----------------------
-// - DECLARE_UNIQUEINDEX -
-// -----------------------
+    sal_uIntPtr Insert(T* p) { return UniqueIndexImpl::Insert(p); }
+    void        Insert(sal_uIntPtr aIdx, T* p) { return UniqueIndexImpl::Insert(aIdx, p); }
+    T*          Get(sal_uIntPtr idx) const { return static_cast<T*>( UniqueIndexImpl::Get(idx) ); }
+    T*          Remove(sal_uIntPtr idx) { return static_cast<T*>( UniqueIndexImpl::Remove(idx) ); }
+    sal_uIntPtr Count() const { return UniqueIndexImpl::size(); }
+    sal_uIntPtr GetIndexOf(T* p) const { return UniqueIndexImpl::GetIndexOf(p); }
 
-#define DECLARE_UNIQUEINDEX( ClassName, Type )                          \
-class ClassName : private UniqueIndex                                   \
-{                                                                       \
-    Type        Seek( sal_uIntPtr nKey );                               \
-public:                                                                 \
-                using UniqueIndex::Clear;                                       \
-                using UniqueIndex::Count;                                       \
-                using UniqueIndex::GetCurIndex;                             \
-                using UniqueIndex::GetStartIndex;                               \
-                using UniqueIndex::GetCurMaxIndex;                          \
-                                                                        \
-                ClassName( sal_uIntPtr _nStartIndex = 0,                      \
-                           sal_uIntPtr _nInitSize = 16, sal_uIntPtr _nReSize = 16 ):\
-                    UniqueIndex( _nStartIndex, _nInitSize, _nReSize ) {}\
-                ClassName( const ClassName& rClassName ) :              \
-                    UniqueIndex( rClassName ) {}                        \
-                                                                        \
-    sal_uIntPtr       Insert( sal_uIntPtr nIndex, Type p )                          \
-                    { return UniqueIndex::Insert( nIndex, (void*)p ); } \
-    sal_uIntPtr       Insert( Type p )                                        \
-                    { return UniqueIndex::Insert( (void*)p ); }         \
-    Type        Remove( sal_uIntPtr nIndex )                                  \
-                    { return (Type)UniqueIndex::Remove( nIndex ); }     \
-    Type        Get( sal_uIntPtr nIndex ) const                               \
-                    { return (Type)UniqueIndex::Get( nIndex ); }        \
-                                                                        \
-    Type        GetCurObject() const                                    \
-                    { return (Type)UniqueIndex::GetCurObject(); }       \
-    sal_uIntPtr       GetIndex( const Type p ) const                          \
-                    { return UniqueIndex::GetIndex( (const void*)p ); } \
-                                                                        \
-    Type        Seek( Type p )                                          \
-                    { return (Type)UniqueIndex::Seek( (void*)p ); }     \
-    Type        First()  { return (Type)UniqueIndex::First(); }         \
-    Type        Last()   { return (Type)UniqueIndex::Last(); }          \
-    Type        Next()   { return (Type)UniqueIndex::Next(); }          \
-    Type        Prev()   { return (Type)UniqueIndex::Prev(); }          \
-                                                                        \
-    ClassName&  operator =( const ClassName& rClassName )               \
-                    { UniqueIndex::operator =( rClassName );            \
-                      return *this; }                                   \
-                                                                        \
-    sal_Bool        operator ==( const ClassName& rIdx ) const              \
-                    { return UniqueIndex::operator ==( rIdx ); }        \
-    sal_Bool        operator !=( const ClassName& rIdx ) const              \
-                    { return UniqueIndex::operator !=( rIdx ); }        \
+    using UniqueIndexImpl::FirstIndex;
+    using UniqueIndexImpl::LastIndex;
+    using UniqueIndexImpl::NextIndex;
 };
 
 #endif // _UNQIDX_HXX
