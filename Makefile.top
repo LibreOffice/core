@@ -375,7 +375,7 @@ endif
 #
 bootstrap: $(WORKDIR)/bootstrap
 
-$(WORKDIR)/bootstrap:
+$(WORKDIR)/bootstrap: solenv/bin/concat-deps.c
 	@cd $(SRCDIR) && ./bootstrap
 	@mkdir -p $(dir $@) && touch $@
 
