@@ -921,7 +921,7 @@ ft_handler_populate_outgoing_request (EmpathyFTHandler *handler)
       NULL);
 
   if (priv->service_name != NULL)
-    tp_asv_set_string (priv->request, TP_PROP_CHANNEL_TYPE_FILE_TRANSFER_DESCRIPTION, priv->service_name);
+    tp_asv_set_string (priv->request, TP_PROP_CHANNEL_INTERFACE_FILE_TRANSFER_METADATA_SERVICE_NAME, priv->service_name);
 
   g_free (uri);
 }

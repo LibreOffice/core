@@ -613,7 +613,7 @@ bool TeleManager::registerClients()
             tp_asv_new(
                 TP_PROP_CHANNEL_CHANNEL_TYPE, G_TYPE_STRING, TP_IFACE_CHANNEL_TYPE_FILE_TRANSFER,
                 TP_PROP_CHANNEL_TARGET_HANDLE_TYPE, G_TYPE_UINT, TP_HANDLE_TYPE_CONTACT,
-                TP_PROP_CHANNEL_TYPE_FILE_TRANSFER_DESCRIPTION, G_TYPE_STRING, getFullServiceName().getStr(),
+                TP_PROP_CHANNEL_INTERFACE_FILE_TRANSFER_METADATA_SERVICE_NAME, G_TYPE_STRING, getFullServiceName().getStr(),
                 NULL));
 
     if (!tp_base_client_register( pImpl->mpFileTransferClient, &pError))
