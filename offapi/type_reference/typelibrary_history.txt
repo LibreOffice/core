@@ -1,5 +1,5 @@
 Example of updating an incompatibly-changed type (com.sun.star.script.Converter,
-in this example) in the accompanying types.rdb:
+in this example) in the accompanying types.rdb (see also update-rdb.sh):
 
 .../core> mkdir tmp
 .../core> LD_LIBRARY_PATH=.../core/solver/unxlngx6/lib \
