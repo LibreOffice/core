@@ -102,11 +102,8 @@ private:
     }
     static char const * const services[] = {
         "com.sun.star.beans.Introspection",
-        "com.sun.star.bridge.Bridge",
         "com.sun.star.bridge.BridgeFactory",
-        "com.sun.star.bridge.IiopBridge",
         "com.sun.star.bridge.UnoUrlResolver",
-        "com.sun.star.bridge.UrpBridge",
         "com.sun.star.connection.Acceptor",
         "com.sun.star.connection.Connector",
         "com.sun.star.io.DataInputStream",
@@ -152,10 +149,10 @@ private:
             static_cast< ::cppu::OWeakObject * >(this));
     }
     for (::std::size_t i = 0; i < SAL_N_ELEMENTS(services); ++i) {
+        ::rtl::OUString name(::rtl::OUString::createFromAscii(services[i]));
         ::css::uno::Reference< ::css::uno::XInterface > instance;
         try {
-            instance = manager->createInstanceWithContext(
-                ::rtl::OUString::createFromAscii(services[i]), context_);
+            instance = manager->createInstanceWithContext(name, context_);
         } catch (::css::uno::RuntimeException &) {
             throw;
         } catch (::css::uno::Exception &) {
@@ -166,7 +163,7 @@ private:
         }
         if (!instance.is()) {
             throw ::css::uno::RuntimeException(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("no instance")),
+                "no instance: " + name,
                 static_cast< ::cppu::OWeakObject * >(this));
         }
     }
@@ -243,7 +240,7 @@ namespace CppMain {
 
 }
 
-extern "C" ::sal_Bool SAL_CALL component_writeInfo(
+extern "C" SAL_DLLPUBLIC_EXPORT ::sal_Bool SAL_CALL component_writeInfo(
     void * serviceManager, void * registryKey)
 {
     return ::cppu::component_writeInfoHelper(

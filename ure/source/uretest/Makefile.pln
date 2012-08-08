@@ -79,62 +79,60 @@ clean:
 	rm -rf out.pln
 
 
-out.pln/cppmain.uno.so: out.pln/cppmain.o version.map | out.pln \
-            out.pln/lib/libuno_cppu.so out.pln/lib/libuno_cppuhelpergcc3.so \
-            out.pln/lib/libuno_sal.so out.pln/lib/libuno_salhelpergcc3.so \
-            out.pln/lib/libstlport_gcc.so
-	g++ -shared -o $@ -Wl,-z,defs -Wl,--fatal-warnings \
-            -Wl,--version-script=version.map $< -Lout.pln/lib -luno_cppu \
-            -luno_cppuhelpergcc3 -luno_sal -luno_salhelpergcc3 -lstlport_gcc
+out.pln/cppmain.uno.so: out.pln/cppmain.o | out.pln out.pln/lib/libuno_cppu.so \
+            out.pln/lib/libuno_cppuhelpergcc3.so out.pln/lib/libuno_sal.so \
+            out.pln/lib/libuno_salhelpergcc3.so
+	g++ -shared -o $@ -Wl,-z,defs -Wl,--fatal-warnings $< -Lout.pln/lib \
+            -luno_cppu -luno_cppuhelpergcc3 -luno_sal -luno_salhelpergcc3
 
 out.pln/cppmain.o: cppmain.cc out.pln/cpputypes.cppumaker.flag \
             out.pln/types.cppumaker.flag | out.pln
-	g++ -c -o $@ -fpic -Wall -Wno-ctor-dtor-privacy -I $(SDK_HOME)/include/stl \
-            -I $(SDK_HOME)/include -I out.pln/include/cpputypes \
-            -I out.pln/include/types -DCPPU_ENV=gcc3 \
-            -DGXX_INCLUDE_PATH=$(GXX_INCLUDE_PATH) -DLINUX -DUNX $<
+	g++ -c -o $@ -fpic -fvisibility=hidden -Wall -Wno-ctor-dtor-privacy \
+            -I $(SDK_HOME)/include/stl -I $(SDK_HOME)/include \
+            -I out.pln/include/cpputypes -I out.pln/include/types \
+            -DCPPU_ENV=gcc3 -DGXX_INCLUDE_PATH=$(GXX_INCLUDE_PATH) -DLINUX \
+            -DUNX $<
 
 
-out.pln/cpptest.uno.so: out.pln/cpptest.o version.map | out.pln \
-            out.pln/lib/libuno_cppu.so out.pln/lib/libuno_cppuhelpergcc3.so \
-            out.pln/lib/libuno_sal.so
-	g++ -shared -o $@ -Wl,-z,defs -Wl,--fatal-warnings \
-            -Wl,--version-script=version.map $< -Lout.pln/lib -luno_cppu \
-            -luno_cppuhelpergcc3 -luno_sal
+out.pln/cpptest.uno.so: out.pln/cpptest.o | out.pln out.pln/lib/libuno_cppu.so \
+            out.pln/lib/libuno_cppuhelpergcc3.so out.pln/lib/libuno_sal.so
+	g++ -shared -o $@ -Wl,-z,defs -Wl,--fatal-warnings $< -Lout.pln/lib \
+            -luno_cppu -luno_cppuhelpergcc3 -luno_sal
 
 out.pln/cpptest.o: cpptest.cc out.pln/cpputypes.cppumaker.flag \
             out.pln/types.cppumaker.flag | out.pln
-	g++ -c -o $@ -fpic -Wall -Wno-ctor-dtor-privacy -I $(SDK_HOME)/include/stl \
-            -I $(SDK_HOME)/include -I out.pln/include/cpputypes \
-            -I out.pln/include/types -DCPPU_ENV=gcc3 \
-            -DGXX_INCLUDE_PATH=$(GXX_INCLUDE_PATH) -DLINUX -DUNX $<
+	g++ -c -o $@ -fpic -fvisibility=hidden -Wall -Wno-ctor-dtor-privacy \
+            -I $(SDK_HOME)/include/stl -I $(SDK_HOME)/include \
+            -I out.pln/include/cpputypes -I out.pln/include/types \
+            -DCPPU_ENV=gcc3 -DGXX_INCLUDE_PATH=$(GXX_INCLUDE_PATH) -DLINUX \
+            -DUNX $<
 
 
-out.pln/cppserver.uno.so: out.pln/cppserver.o version.map | out.pln \
+out.pln/cppserver.uno.so: out.pln/cppserver.o | out.pln \
             out.pln/lib/libuno_cppu.so out.pln/lib/libuno_cppuhelpergcc3.so \
             out.pln/lib/libuno_sal.so
-	g++ -shared -o $@ -Wl,-z,defs -Wl,--fatal-warnings \
-            -Wl,--version-script=version.map $< -Lout.pln/lib -luno_cppu \
-            -luno_cppuhelpergcc3 -luno_sal
+	g++ -shared -o $@ -Wl,-z,defs -Wl,--fatal-warnings $< -Lout.pln/lib \
+            -luno_cppu -luno_cppuhelpergcc3 -luno_sal
 
 out.pln/cppserver.o: cppserver.cc out.pln/cpputypes.cppumaker.flag \
             out.pln/types.cppumaker.flag | out.pln
-	g++ -c -o $@ -fpic -Wall -Wno-ctor-dtor-privacy -I $(SDK_HOME)/include/stl \
-            -I $(SDK_HOME)/include -I out.pln/include/cpputypes \
-            -I out.pln/include/types -DCPPU_ENV=gcc3 \
-            -DGXX_INCLUDE_PATH=$(GXX_INCLUDE_PATH) -DLINUX -DUNX $<
+	g++ -c -o $@ -fpic -fvisibility=hidden -Wall -Wno-ctor-dtor-privacy \
+            -I $(SDK_HOME)/include/stl -I $(SDK_HOME)/include \
+            -I out.pln/include/cpputypes -I out.pln/include/types \
+            -DCPPU_ENV=gcc3 -DGXX_INCLUDE_PATH=$(GXX_INCLUDE_PATH) -DLINUX \
+            -DUNX $<
 
 
 out.pln/cpputypes.cppumaker.flag: | out.pln
 	LD_LIBRARY_PATH=$(URE_HOME)/lib $(SDK_HOME)/bin/cppumaker \
             -O./out.pln/include/cpputypes \
             '-Tcom.sun.star.lang.DisposedException;com.sun.star.lang.EventObject;com.sun.star.lang.XMain;com.sun.star.lang.XMultiComponentFactory;com.sun.star.lang.XMultiServiceFactory;com.sun.star.lang.XSingleComponentFactory;com.sun.star.lang.XSingleServiceFactory;com.sun.star.lang.XTypeProvider;com.sun.star.registry.XRegistryKey;com.sun.star.uno.DeploymentException;com.sun.star.uno.Exception;com.sun.star.uno.RuntimeException;com.sun.star.uno.XAggregation;com.sun.star.uno.XComponentContext;com.sun.star.uno.XCurrentContext;com.sun.star.uno.XInterface;com.sun.star.uno.XWeak' \
-            -B/UCR $(URE_HOME)/share/misc/types.rdb
+            -BUCR $(URE_HOME)/share/misc/types.rdb
 	touch $@
 
 out.pln/types.cppumaker.flag: out.pln/types.rdb | out.pln
 	LD_LIBRARY_PATH=$(URE_HOME)/lib $(SDK_HOME)/bin/cppumaker \
-            -O./out.pln/include/types -B/UCR $< \
+            -O./out.pln/include/types -BUCR $< \
             -X$(URE_HOME)/share/misc/types.rdb
 	touch $@
 
@@ -258,7 +256,7 @@ out.pln/types.mf: types.mf.template | out.pln
 out.pln/types.javamaker.flag: out.pln/types.rdb | out.pln out.pln/class
 	rm -rf out.pln/class/types
 	LD_LIBRARY_PATH=$(URE_HOME)/lib $(SDK_HOME)/bin/javamaker \
-            -O./out.pln/class/types -B/UCR $< -X$(URE_HOME)/share/misc/types.rdb
+            -O./out.pln/class/types -BUCR $< -X$(URE_HOME)/share/misc/types.rdb
 	touch $@
 
 
@@ -291,9 +289,6 @@ out.pln/lib/libuno_sal.so: | out.pln/lib
 
 out.pln/lib/libuno_salhelpergcc3.so: | out.pln/lib
 	ln -fs $(URE_HOME)/lib/libuno_salhelpergcc3.so.3 $@
-
-out.pln/lib/libstlport_gcc.so: | out.pln/lib
-	ln -fs $(URE_HOME)/lib/libstlport_gcc.so $@
 
 
 out.pln:

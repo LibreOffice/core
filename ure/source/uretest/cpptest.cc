@@ -95,7 +95,7 @@ cppu::ImplementationEntry entries[] = {
 
 }
 
-extern "C" sal_Bool SAL_CALL component_writeInfo(
+extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo(
     void * serviceManager, void * registryKey)
 {
     return cppu::component_writeInfoHelper(
