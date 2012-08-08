@@ -48,6 +48,7 @@ $(eval $(call gb_Library_use_externals,merged,\
 	icuuc \
 	jpeg \
 	libxml2 \
+	telepathy \
 	zlib \
 ))
 
@@ -86,10 +87,6 @@ $(eval $(call gb_Library_use_libraries,merged,\
     objc \
     Cocoa \
 ))
-endif
-
-ifeq ($(ENABLE_TELEPATHY),TRUE)
-$(eval $(call gb_Library_use_libraries,merged,tubes))
 endif
 
 # vim: set noet sw=4 ts=4:

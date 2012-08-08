@@ -58,6 +58,8 @@ gb_MERGEDLIBS := \
 	xmlscript \
 	xo \
 
+gb_MERGEDLIBS += $(if $(filter TRUE,$(ENABLE_TELEPATHY)),tubes)
+
 endif
 
 # vim: set noet sw=4 ts=4:

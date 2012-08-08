@@ -1166,9 +1166,7 @@ endef
 
 else # !ENABLE_TELEPATHY
 
-define gb_LinkTarget__use_telepathy
-
-endef
+gb_LinkTarget__use_telepathy :=
 
 endif # ENABLE_TELEPATHY
 
