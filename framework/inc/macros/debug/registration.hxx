@@ -73,10 +73,6 @@
 
 #endif  // #ifdef ENABLE_REGISTRATIONDEBUG
 
-//*****************************************************************************************************************
-//  end of file
-//*****************************************************************************************************************
-
 #endif  // #ifndef __FRAMEWORK_MACROS_DEBUG_REGISTRATION_HXX_
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
