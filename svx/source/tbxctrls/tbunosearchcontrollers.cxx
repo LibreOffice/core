@@ -246,6 +246,24 @@ SearchToolbarControllersManager& SearchToolbarControllersManager::createControll
     return theSearchToolbarControllersManager::get();
 }
 
+void SearchToolbarControllersManager::saveSearchHistory(const FindTextFieldControl* m_pFindTextFieldControl)
+{
+    sal_uInt16 nECount( m_pFindTextFieldControl->GetEntryCount() );
+    aSearchStrings.resize( nECount );
+    for( sal_uInt16 i=0; i<nECount; ++i )
+    {
+        aSearchStrings[i] = m_pFindTextFieldControl->GetEntry(i);
+    }
+}
+
+void SearchToolbarControllersManager::loadSearchHistory(FindTextFieldControl* m_pFindTextFieldControl)
+{
+    for( sal_uInt16 i=0; i<aSearchStrings.size(); ++i )
+    {
+       m_pFindTextFieldControl->InsertEntry(aSearchStrings[i],i);
+    }
+}
+
 void SearchToolbarControllersManager::registryController( const css::uno::Reference< css::frame::XFrame >& xFrame, const css::uno::Reference< css::frame::XStatusListener >& xStatusListener, const ::rtl::OUString& sCommandURL )
 {
     SearchToolbarControllersMap::iterator pIt = aSearchToolbarControllersMap.find(xFrame);
@@ -382,6 +400,7 @@ void SAL_CALL FindTextToolbarController::dispose() throw ( css::uno::RuntimeExce
     SearchToolbarControllersManager::createControllersManager().freeController(m_xFrame, css::uno::Reference< css::frame::XStatusListener >(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY), m_aCommandURL);
 
     svt::ToolboxController::dispose();
+    SearchToolbarControllersManager::createControllersManager().saveSearchHistory(m_pFindTextFieldControl);
     delete m_pFindTextFieldControl;
     m_pFindTextFieldControl = 0;
 }
@@ -428,6 +447,7 @@ css::uno::Reference< css::awt::XWindow > SAL_CALL FindTextToolbarController::cre
         Size aSize(250, m_pFindTextFieldControl->GetTextHeight() + 200);
         m_pFindTextFieldControl->SetSizePixel( aSize );
         m_pFindTextFieldControl->SetModifyHdl(LINK(this, FindTextToolbarController, EditModifyHdl));
+        SearchToolbarControllersManager::createControllersManager().loadSearchHistory(m_pFindTextFieldControl);
     }
     xItemWindow = VCLUnoHelper::GetInterface( m_pFindTextFieldControl );
 

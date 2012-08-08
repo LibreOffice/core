@@ -46,6 +46,7 @@
 #include <vcl/window.hxx>
 
 #include <map>
+#include <vector>
 
 namespace css = ::com::sun::star        ;
 namespace svx
@@ -86,11 +87,15 @@ public:
     void freeController ( const css::uno::Reference< css::frame::XFrame >& xFrame, const css::uno::Reference< css::frame::XStatusListener >& xStatusListener, const ::rtl::OUString& sCommandURL );
     css::uno::Reference< css::frame::XStatusListener > findController( const css::uno::Reference< css::frame::XFrame >& xFrame, const ::rtl::OUString& sCommandURL );
 
+    void saveSearchHistory(const FindTextFieldControl* m_pFindTextFieldControl);
+    void loadSearchHistory(FindTextFieldControl* m_pFindTextFieldControl);
+
 private:
 
     typedef ::comphelper::SequenceAsVector< css::beans::PropertyValue > SearchToolbarControllersVec;
     typedef ::std::map< css::uno::Reference< css::frame::XFrame >, SearchToolbarControllersVec > SearchToolbarControllersMap;
     SearchToolbarControllersMap aSearchToolbarControllersMap;
+    std::vector<rtl::OUString>    aSearchStrings;
 
 };
 
