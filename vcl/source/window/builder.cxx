@@ -649,6 +649,7 @@ void VclBuilder::handleListStore(xmlreader::XmlReader &reader, const rtl::OStrin
     m_aModels.push_back(ModelAndId(rID, new ListStore));
 
     int nLevel = 1;
+    sal_Int32 nIndex = 0;
 
     while(1)
     {
@@ -671,14 +672,9 @@ void VclBuilder::handleListStore(xmlreader::XmlReader &reader, const rtl::OStrin
 
                 while (reader.nextAttribute(&nsId, &name))
                 {
-                    if (name.equals(RTL_CONSTASCII_STRINGPARAM("id")))
+                    if (name.equals(RTL_CONSTASCII_STRINGPARAM("translatable")) && reader.getAttributeValue(false).equals(RTL_CONSTASCII_STRINGPARAM("yes")))
                     {
-                        name = reader.getAttributeValue(false);
-                        sProperty = rtl::OString(name.begin, name.length);
-                    }
-                    else if (name.equals(RTL_CONSTASCII_STRINGPARAM("translatable")) && reader.getAttributeValue(false).equals(RTL_CONSTASCII_STRINGPARAM("yes")))
-                    {
-                        sValue = getTranslation(rID, sProperty);
+                        sValue = getTranslation(rID, rtl::OString::valueOf(nIndex));
                         bTranslated = !sValue.isEmpty();
                     }
                 }
@@ -690,6 +686,8 @@ void VclBuilder::handleListStore(xmlreader::XmlReader &reader, const rtl::OStrin
                     sValue = rtl::OString(name.begin, name.length);
 
                 m_aModels.back().m_pModel->m_aEntries.push_back(sValue);
+
+                ++nIndex;
             }
         }
 
