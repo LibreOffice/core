@@ -1,6 +1,31 @@
 ------------------------------------------------------------------------
 
-             For all new, original source files created by
+                          * Stop / Think *
+
+	You need to choose either a pure MPLv2 header (from the top),
+or an MPLv2 on ALv2 header (from the bottom).
+
+	If the new module you created is based in any way on an
+existing module, then:
+
+	a) if that module has an LGPLv3+ header - please retain that
+	   in the new code, it will get updated when that module is
+	   re-based.
+
+	b) if that module has an MPLv2 on ALv2 header - please use
+	   this option or
+
+	c) if the module is entirely your own work, and/or based on an
+	   existing MPLv2 header - please use that header.
+
+	For any questions please contact me directly:
+			    michael.meeks@suse.com.
+
+	Thanks !
+
+------------------------------------------------------------------------
+
+             For all entirely new, original source files created by
                         LibreOffice hackers:
 
 ------------------------------------------------------------------------
@@ -46,8 +71,8 @@ For XML / .component:
 
 ------------------------------------------------------------------------
 
-             Only for source files which may contain code
-                 from the Apache Software Foundation:
+             For source files which may contain code
+               from the Apache Software Foundation:
 
 ------------------------------------------------------------------------
 
