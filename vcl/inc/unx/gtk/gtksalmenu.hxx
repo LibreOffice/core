@@ -56,6 +56,7 @@ public:
     GActionEntry*                           mpActionEntry;
 
     Menu*                   mpVCLMenu;
+    GtkSalMenu*             mpParentSalMenu;
     const GtkSalFrame*      mpFrame;
     gchar*                  aDBusMenubarPath;
     GDBusConnection*        pSessionBus;
@@ -82,6 +83,8 @@ public:
     virtual void SetItemCommand( unsigned nPos, SalMenuItem* pSalMenuItem, const rtl::OUString& aCommandStr );
     virtual bool ShowNativePopupMenu(FloatingWindow * pWin, const Rectangle& rRect, sal_uLong nFlags);
     virtual void Freeze();
+
+    virtual const GtkSalFrame* getFrame() const;
 };
 
 class GtkSalMenuItem;

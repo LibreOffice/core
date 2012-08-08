@@ -23,12 +23,22 @@ dispatchAction (GSimpleAction   *action,
         GtkSalMenuItem *pSalMenuItem = static_cast< GtkSalMenuItem* >( user_data );
 
         if ( !pSalMenuItem->mpSubMenu ) {
-            if ( !pSalMenuItem->mpVCLMenu->IsMenuBar() ) {
-//                ((PopupMenu*) pSalMenuItem->mpVCLMenu)->SetSelectedEntry( pSalMenuItem->mnId );
-//                pSalMenuItem->mpVCLMenu->Select();
-//                pSalMenuItem->mpVCLMenu->DeSelect();
+            const GtkSalFrame *pFrame = pSalMenuItem->mpParentMenu ? pSalMenuItem->mpParentMenu->getFrame() : NULL;
+
+            if ( pFrame ) {
+                ((PopupMenu*) pSalMenuItem->mpVCLMenu)->SetSelectedEntry( pSalMenuItem->mnId );
+                SalMenuEvent aMenuEvt( pSalMenuItem->mnId, pSalMenuItem->mpVCLMenu );
+                pFrame->CallCallback( SALEVENT_MENUCOMMAND, &aMenuEvt );
             }
         }
+
+//        if ( !pSalMenuItem->mpSubMenu ) {
+//            if ( !pSalMenuItem->mpVCLMenu->IsMenuBar() ) {
+////                ((PopupMenu*) pSalMenuItem->mpVCLMenu)->SetSelectedEntry( pSalMenuItem->mnId );
+////                pSalMenuItem->mpVCLMenu->Select();
+////                pSalMenuItem->mpVCLMenu->DeSelect();
+//            }
+//        }
     }
 }
 
@@ -223,6 +233,7 @@ void GtkSalMenu::publishMenu( GMenuModel *pMenu, GActionGroup *pActionGroup )
 GtkSalMenu::GtkSalMenu( sal_Bool bMenuBar ) :
     mbMenuBar( bMenuBar ),
     mpVCLMenu( NULL ),
+    mpParentSalMenu( NULL ),
     aDBusMenubarPath( NULL ),
     pSessionBus( NULL ),
     mpActionEntry( NULL ),
@@ -313,7 +324,13 @@ void GtkSalMenu::SetSubMenu( SalMenuItem* pSalMenuItem, SalMenu* pSubMenu, unsig
     GtkSalMenuItem *pGtkSalMenuItem = static_cast<GtkSalMenuItem*>( pSalMenuItem );
     GtkSalMenu *pGtkSubMenu = static_cast<GtkSalMenu*>( pSubMenu );
 
-    pGtkSalMenuItem->mpSubMenu = pGtkSubMenu;
+    if ( pGtkSubMenu ) {
+        pGtkSalMenuItem->mpSubMenu = pGtkSubMenu;
+
+        if ( !pGtkSubMenu->mpParentSalMenu ) {
+            pGtkSubMenu->mpParentSalMenu = this;
+        }
+    }
 }
 
 void GtkSalMenu::SetFrame( const SalFrame* pFrame )
@@ -342,6 +359,14 @@ void GtkSalMenu::SetFrame( const SalFrame* pFrame )
         g_free( aWindowObjectPath );
         g_free( aMenubarObjectPath );
     }
+}
+
+const GtkSalFrame* GtkSalMenu::getFrame() const
+{
+    const GtkSalMenu* pMenu = this;
+    while( pMenu && ! pMenu->mpFrame )
+        pMenu = pMenu->mpParentSalMenu;
+    return pMenu ? pMenu->mpFrame : NULL;
 }
 
 void GtkSalMenu::CheckItem( unsigned nPos, sal_Bool bCheck )
@@ -410,7 +435,9 @@ void GtkSalMenu::SetItemCommand( unsigned nPos, SalMenuItem* pSalMenuItem, const
     // Disable action by default.
 //    g_simple_action_set_enabled( pAction, FALSE );
 
-    g_signal_connect(pAction, "activate", G_CALLBACK( dispatchAction ), pGtkSalMenuItem);
+//    if ( !pGtkSalMenuItem->mpVCLMenu->GetPopupMenu( pGtkSalMenuItem->mnId ) ) {
+        g_signal_connect(pAction, "activate", G_CALLBACK( dispatchAction ), pGtkSalMenuItem);
+//    }
 
     pGtkSalMenuItem->mpAction = G_ACTION( pAction );
 
