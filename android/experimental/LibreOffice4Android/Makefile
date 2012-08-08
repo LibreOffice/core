@@ -223,7 +223,9 @@ copy-stuff:
 
 build-ant: copy-stuff properties
 	echo sdk.dir=$(ANDROID_SDK_HOME) >../../abs-lib/local.properties
-
+# ActionBarSherlock uses the v4 support library, apparently one needs to copy
+# it like this for it to be found
+	cp $(ANDROID_SDK_HOME)/extras/android/support/v4/android-support-v4.jar ../../abs-lib/libs
 #
 # Copy jar files we need
 #
