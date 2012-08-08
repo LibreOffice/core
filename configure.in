@@ -7047,8 +7047,8 @@ if test "$ENABLE_MYSQLC" = "YES"; then
                     [AC_MSG_ERROR(mysql_driver.h not found. install MySQL C++ Connectivity)], [])
         AC_CHECK_LIB([mysqlcppconn], [main], [:],
                     [AC_MSG_ERROR(MySQL C++ Connectivity lib not found or functional)], [])
-        save_LDFLAGS=$LDFLAGS
-        LDFLAGS="$LDFLAGS -lmysqlcppconn"
+        save_LIBS=$LIBS
+        LIBS="$LIBS -lmysqlcppconn"
         AC_MSG_CHECKING([version])
         AC_RUN_IFELSE([AC_LANG_SOURCE([[
 #include <mysql_driver.h>
@@ -7066,7 +7066,7 @@ int main(int argc, char **argv) {
       ]])],[AC_MSG_RESULT(OK)],[AC_MSG_ERROR([not suitable, we need >= 1.0.6])],[])
 
         AC_LANG_POP([C++])
-        LDFLAGS=$save_LDFLAGS
+        LIBS=$save_LIBS
     else
         AC_MSG_RESULT([internal])
         AC_MSG_CHECKING([for mysqlcppconn module])
