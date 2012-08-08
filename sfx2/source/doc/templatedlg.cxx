@@ -921,6 +921,8 @@ void SfxTemplateManagerDlg::switchMainView(bool bDisplayLocal)
     {
         mpCurView = maView;
 
+        mpViewBar->HideItem(TBI_TEMPLATE_FOLDER_DEL);
+
         // Enable deleting items from the filesystem
         mpTemplateBar->ShowItem(TBI_TEMPLATE_DELETE);
 
@@ -930,6 +932,8 @@ void SfxTemplateManagerDlg::switchMainView(bool bDisplayLocal)
     else
     {
         mpCurView = mpOnlineView;
+
+        mpViewBar->ShowItem(TBI_TEMPLATE_FOLDER_DEL);
 
         // Disable deleting items from remote repositories
         mpTemplateBar->HideItem(TBI_TEMPLATE_DELETE);
