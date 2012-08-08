@@ -113,11 +113,11 @@ public:
     using base_t::operator[];
     using base_t::begin;
     using base_t::end;
-    using base_t::iterator;
-    using base_t::const_iterator;
+    using typename base_t::iterator;
+    using typename base_t::const_iterator;
     using base_t::rbegin;
     using base_t::rend;
-    using base_t::reverse_iterator;
+    using typename base_t::reverse_iterator;
     using base_t::empty;
 
     inline ~SvRefMemberList() { clear(); }
