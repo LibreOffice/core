@@ -136,14 +136,14 @@ public:
 };
 
 template<typename T>
-TOOLS_DLLPUBLIC SvPersistStream& operator << (SvPersistStream &rStm, const SvDeclPersistList<T> &rLst)
+SvPersistStream& operator << (SvPersistStream &rStm, const SvDeclPersistList<T> &rLst)
 {
     WritePersistListObjects( rLst, rStm );
     return rStm;
 };
 
 template<typename T>
-TOOLS_DLLPUBLIC SvPersistStream& operator >> (SvPersistStream &rStm, SvDeclPersistList<T> &rLst)
+SvPersistStream& operator >> (SvPersistStream &rStm, SvDeclPersistList<T> &rLst)
 {
     ReadObjects( rLst, rStm );
     return rStm;
