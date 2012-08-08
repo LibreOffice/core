@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAMn///kU\u003d",
+        "filename": "svl/inc/svl/itemset.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2012-08-08T08:16:24Z",
+      "side": 1,
+      "message": "Yes, it would. But it would also open other can of worms. std::pair is _not_ guaranteed to be compatible with a simple two-element array/struct, and since we still expose the sequence of sal_uInt16 with the GetRanges() function we would then either need to:\n1) just hope that all implementations \"do the Right Thing\"\n2) or create another vector of sal_uInt16s there on the fly (as a vector is binary compatible)\n\n1) seems a valid assumption, but given the recent gcc ABI breakages (hitting std::list and std::pair) I am a bit more careful\n2) is tricky too as client code may assume to get the pointer from GetRanges and see its contents being updated when calling MergeRange and fun like that.\n\nSo, I would suggest to either stay with a simple vector for now, or with a vector of a plain POD struct which is guaranteed to be binary compatible.",
+      "parentUuid": "AAAAMn///kk\u003d",
+      "revId": "41d80f1df0cff4771b7607b7c90a46759cafdc69",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAMn///ks\u003d",
         "filename": "svl/source/items/itemset.cxx",
         "patchSetId": 2
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAMn///kQ\u003d",
+        "filename": "svl/source/items/itemset.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2012-08-08T08:16:24Z",
+      "side": 1,
+      "message": "Indeed.",
+      "parentUuid": "AAAAMn///ks\u003d",
+      "revId": "41d80f1df0cff4771b7607b7c90a46759cafdc69",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAMn///kg\u003d",
         "filename": "svl/source/items/itemset.cxx",
         "patchSetId": 2
@@ -47,6 +83,24 @@
       "writtenOn": "2012-08-06T18:40:24Z",
       "side": 1,
       "message": "why do we copy a pointer from rASet here?\nvery non-obvious, either it\u0027s a bug or needs a comment",
+      "revId": "41d80f1df0cff4771b7607b7c90a46759cafdc69",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAMn///j4\u003d",
+        "filename": "svl/source/items/itemset.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 464,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2012-08-08T08:16:24Z",
+      "side": 1,
+      "message": "As the WhichRanges can still be the FrozenWhichRanges from the pool. I will add a comment/explainationary assertion.",
+      "parentUuid": "AAAAMn///kg\u003d",
       "revId": "41d80f1df0cff4771b7607b7c90a46759cafdc69",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
