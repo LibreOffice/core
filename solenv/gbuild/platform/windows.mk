@@ -25,8 +25,6 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-GUI := WNT
-
 gb_Helper_get_rcfile = $(1).ini
 
 gb_Helper_LIBRARY_PATH_VAR := PATH

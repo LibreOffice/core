@@ -26,8 +26,6 @@
 #
 #*************************************************************************
 
-GUI := UNX
-
 gb_Executable_EXT:=
 
 include $(GBUILDDIR)/platform/com_GCC_defs.mk
