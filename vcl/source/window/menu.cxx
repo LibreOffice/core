@@ -1947,10 +1947,15 @@ sal_Bool Menu::GetItemImageMirrorMode( sal_uInt16 nItemId ) const
 
 void Menu::SetItemCommand( sal_uInt16 nItemId, const String& rCommand )
 {
-    MenuItemData* pData = pItemList->GetData( nItemId );
+    size_t        nPos;
+    MenuItemData* pData = pItemList->GetData( nItemId, nPos );
 
     if ( pData )
         pData->aCommandStr = rCommand;
+
+    // update native menu
+    if( ImplGetSalMenu() && pData->pSalMenuItem )
+        ImplGetSalMenu()->SetItemCommand( nPos, pData->pSalMenuItem, rCommand );
 }
 
 const XubString& Menu::GetItemCommand( sal_uInt16 nItemId ) const

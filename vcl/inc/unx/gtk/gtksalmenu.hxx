@@ -34,6 +34,7 @@
 #include <unx/gtk/gtkframe.hxx>
 #include <unx/salmenu.h>
 #include <gio/gio.h>
+#include "gloactiongroup.h"
 
 #include <vector>
 
@@ -43,15 +44,16 @@ class GtkSalMenuSection;
 class GtkSalMenu : public SalMenu
 {
 private:
-
+//    static GLOActionGroup*  pCurrentActionGroup;
     sal_Bool                mbMenuBar;
 
-    virtual void publishMenu( GMenuModel* );
+    virtual void publishMenu( GMenuModel*, GActionGroup* );
 
 public:
     std::vector< GtkSalMenuSection* >       maSections;
     std::vector< GtkSalMenuItem* >          maItems;
     GtkSalMenuSection*                      mpCurrentSection;
+    GActionEntry*                           mpActionEntry;
 
     Menu*                   mpVCLMenu;
     const GtkSalFrame*      mpFrame;
@@ -59,6 +61,7 @@ public:
     GDBusConnection*        pSessionBus;
     sal_Int32               mBusId;
     sal_Int32               mMenubarId;
+    sal_Int32               mActionGroupId;
 
     GtkSalMenu( sal_Bool bMenuBar );
     virtual ~GtkSalMenu();
@@ -76,6 +79,8 @@ public:
     virtual void SetItemImage( unsigned nPos, SalMenuItem* pSalMenuItem, const Image& rImage);
     virtual void SetAccelerator( unsigned nPos, SalMenuItem* pSalMenuItem, const KeyCode& rKeyCode, const rtl::OUString& rKeyName );
     virtual void GetSystemMenuData( SystemMenuData* pData );
+    virtual void SetItemCommand( unsigned nPos, SalMenuItem* pSalMenuItem, const rtl::OUString& aCommandStr );
+    virtual bool ShowNativePopupMenu(FloatingWindow * pWin, const Rectangle& rRect, sal_uLong nFlags);
     virtual void Freeze();
 };
 
@@ -100,6 +105,7 @@ public:
     GtkSalMenu*         mpParentMenu;         // The menu in which this menu item is inserted
     GtkSalMenu*         mpSubMenu;            // Sub menu of this item (if defined)
     GMenuItem*          mpMenuItem;           // The GMenuItem
+    GAction*            mpAction;             // The GAction associated with this item
 };
 
 #endif // GTKSALMENU_HXX

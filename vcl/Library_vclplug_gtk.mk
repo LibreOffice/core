@@ -89,7 +89,9 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_gtk,\
     vcl/unx/gtk/gdi/salnativewidgets-gtk \
     vcl/unx/gtk/window/gtkframe \
     vcl/unx/gtk/window/gtkobject \
+    vcl/unx/gtk/window/gloactiongroup \
     vcl/unx/gtk/window/gtksalmenu \
+    vcl/unx/gtk/window/glomenu \
     vcl/unx/gtk/fpicker/resourceprovider \
     vcl/unx/gtk/fpicker/SalGtkPicker \
     vcl/unx/gtk/fpicker/SalGtkFilePicker \

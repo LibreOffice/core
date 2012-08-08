@@ -1,87 +1,125 @@
 
 #include "unx/gtk/gtksalmenu.hxx"
 
-#include <gtk/gtk.h>
+//#include <gtk/gtk.h>
+#include <unx/gtk/glomenu.h>
+#include <unx/gtk/gloactiongroup.h>
+
 #include <iostream>
 
 using namespace std;
 
-
-//const GtkSalMenu * GtkSalMenu::pCurrentMenubar = NULL;
-
-#define BUS_NAME "org.gtk.LibreOffice"
-#define OBJ_PATH "/org/gtk/LibreOffice"
+#define GTK_MENU_BUS_NAME   "org.libreoffice"
+#define GTK_MENU_OBJ_PATH   "/org/libreoffice"
 
 static void
-quit (GSimpleAction *action,
-      GVariant      *parameter,
-      gpointer       user_data)
+dispatchAction (GSimpleAction   *action,
+                GVariant        *parameter,
+                gpointer        user_data)
 {
-    exit(1);
-}
+    cout << "ACTION: " << g_action_get_name( G_ACTION( action ) ) << " triggered." << endl;
 
-GMenuModel* generateMenuModel2( Menu *pVCLMenu )
-{
-    if (!pVCLMenu)
-        return NULL;
+    if ( user_data ) {
+        GtkSalMenuItem *pSalMenuItem = static_cast< GtkSalMenuItem* >( user_data );
 
-    GMenu *pMenuModel = g_menu_new();
-    GMenu *pSectionMenuModel = g_menu_new();
-
-    for (int i = 0; i < pVCLMenu->GetItemCount(); i++) {
-        MenuItemType itemType = pVCLMenu->GetItemType( i );
-
-        if ( itemType == MENUITEM_SEPARATOR ) {
-            g_menu_append_section( pMenuModel, NULL, G_MENU_MODEL( pSectionMenuModel ) );
-            pSectionMenuModel = g_menu_new();
-        } else {
-            sal_Int16 nId = pVCLMenu->GetItemId( i );
-
-            // Menu item label
-            rtl::OUString aTextLabel = pVCLMenu->GetItemText( nId );
-            rtl::OUString aText = aTextLabel.replace( '~', '_' );
-            rtl::OString aConvertedText = OUStringToOString(aText, RTL_TEXTENCODING_UTF8);
-
-            // Menu item accelerator key
-//            KeyCode accelKey = pVCLMenu->GetAccelKey( nId );
-
-            GMenuItem *menuItem = g_menu_item_new( (char*) aConvertedText.getStr(), NULL);
-
-            GMenuModel *pSubmenu = generateMenuModel2( pVCLMenu->GetPopupMenu( nId ) );
-
-            g_menu_item_set_submenu( menuItem, pSubmenu );
-
-            g_menu_append_item( pSectionMenuModel, menuItem );
+        if ( !pSalMenuItem->mpSubMenu ) {
+            if ( !pSalMenuItem->mpVCLMenu->IsMenuBar() ) {
+//                ((PopupMenu*) pSalMenuItem->mpVCLMenu)->SetSelectedEntry( pSalMenuItem->mnId );
+//                pSalMenuItem->mpVCLMenu->Select();
+//                pSalMenuItem->mpVCLMenu->DeSelect();
+            }
         }
     }
-
-    g_menu_append_section( pMenuModel, NULL, G_MENU_MODEL( pSectionMenuModel ) );
-
-    return G_MENU_MODEL( pMenuModel );
 }
+
+//GMenuModel* generateMenuModel2( Menu *pVCLMenu )
+//{
+//    if (!pVCLMenu)
+//        return NULL;
+
+//    GMenu *pMenuModel = g_menu_new();
+//    GMenu *pSectionMenuModel = g_menu_new();
+
+//    for (int i = 0; i < pVCLMenu->GetItemCount(); i++) {
+//        MenuItemType itemType = pVCLMenu->GetItemType( i );
+
+//        if ( itemType == MENUITEM_SEPARATOR ) {
+//            g_menu_append_section( pMenuModel, NULL, G_MENU_MODEL( pSectionMenuModel ) );
+//            pSectionMenuModel = g_menu_new();
+//        } else {
+//            sal_Int16 nId = pVCLMenu->GetItemId( i );
+
+//            // Menu item label
+//            rtl::OUString aTextLabel = pVCLMenu->GetItemText( nId );
+//            rtl::OUString aText = aTextLabel.replace( '~', '_' );
+//            rtl::OString aConvertedText = OUStringToOString(aText, RTL_TEXTENCODING_UTF8);
+
+//            // Menu item accelerator key
+////            KeyCode accelKey = pVCLMenu->GetAccelKey( nId );
+
+//            GMenuItem *menuItem = g_menu_item_new( (char*) aConvertedText.getStr(), NULL);
+
+//            GMenuModel *pSubmenu = generateMenuModel2( pVCLMenu->GetPopupMenu( nId ) );
+
+//            g_menu_item_set_submenu( menuItem, pSubmenu );
+
+//            g_menu_append_item( pSectionMenuModel, menuItem );
+//        }
+//    }
+
+//    g_menu_append_section( pMenuModel, NULL, G_MENU_MODEL( pSectionMenuModel ) );
+
+//    return G_MENU_MODEL( pMenuModel );
+//}
 
 GMenuModel *generateMockMenuModel()
 {
-    GMenu *menu = g_menu_new ();
-    //            g_menu_append (menu, "Add", "app.add");
-    //            g_menu_append (menu, "Del", "app.del");
+//    GLOMenu *menu = g_lo_menu_new ();
+
+//    GLOMenu *fileMenu = g_lo_menu_new();
+//    GLOMenu *fileSubmenu = g_lo_menu_new ();
+//    g_lo_menu_append( fileSubmenu, "NewMenuOption1", NULL );
+//    g_lo_menu_append_submenu( fileMenu, "New", G_MENU_MODEL( fileSubmenu ) );
+//    g_lo_menu_append( fileMenu, "Quit", "app.quit" );
+
+//    GLOMenu *editMenu = g_lo_menu_new();
+//    GLOMenu *editSubmenu = g_lo_menu_new ();
+//    g_lo_menu_append( editSubmenu, "EditMenuOption1", NULL );
+//    g_lo_menu_append_item( editSubmenu, editMenuItem );
+//    g_lo_menu_append_submenu( editMenu, "Format", G_MENU_MODEL( editSubmenu ) );
+
+//    g_lo_menu_append_submenu( menu, "File", G_MENU_MODEL( fileMenu ) );
+//    g_lo_menu_append_submenu( menu, "Edit", G_MENU_MODEL( editMenu ) );
+
+    GMenu *menu = g_menu_new();
+
     GMenu *fileMenu = g_menu_new();
-    GMenu *submenu = g_menu_new ();
-    g_menu_append( submenu, "Option1", NULL );
-    g_menu_append( submenu, "Option2", NULL );
+    GMenu *fileSubmenu = g_menu_new();
+    g_menu_append( fileSubmenu, "Text Document", "app.private:factory/swriter" );
+    g_menu_append_submenu( fileMenu, "New", G_MENU_MODEL( fileSubmenu ) );
+    g_menu_append( fileMenu, "Exit", "app..uno:Quit" );
 
-    g_menu_append_section( fileMenu, NULL, G_MENU_MODEL(submenu));
+//    g_lo_menu_append_section( fileMenu, NULL, G_MENU_MODEL(submenu));
+//    GMenu *editMenu = g_menu_new();
+//    GMenu *editSubmenu = g_menu_new();
+//    g_menu_append( editSubmenu, "EditMenuOption1", "app.dispatch" );
+//    g_lo_menu_append_item( editSubmenu, editMenuItem );
+//    g_menu_append_submenu( editMenu, "Format", G_MENU_MODEL( editSubmenu ) );
+//    g_lo_menu_append( editMenu, "Quit", "app.quit" );
 
-    g_menu_append (fileMenu, "Quit", "app.quit");
 
-    g_menu_append_submenu( menu, "Test", G_MENU_MODEL( fileMenu ));
+    g_menu_append_submenu( menu, "File", G_MENU_MODEL( fileMenu ) );
+//    g_menu_append_submenu( menu, "Edit", G_MENU_MODEL( editMenu ) );
+
+//    g_menu_append_submenu( menu, "Test", G_MENU_MODEL( fileMenu ));
+
 
     return G_MENU_MODEL( menu );
 }
 
-GMenuModel *generateMenuModel( GtkSalMenu* );
+GMenuModel *generateMenuModelAndActions( GtkSalMenu*, GLOActionGroup* );
 
-GMenuModel *generateSectionMenuModel( GtkSalMenuSection *pSection )
+GMenuModel *generateSectionMenuModel( GtkSalMenuSection *pSection, GLOActionGroup *pActionGroup )
 {
     if ( !pSection )
         return NULL;
@@ -93,17 +131,21 @@ GMenuModel *generateSectionMenuModel( GtkSalMenuSection *pSection )
         GMenuItem *pMenuItem = pSalMenuItem->mpMenuItem;
 
         if (pSalMenuItem->mpSubMenu) {
-            GMenuModel *pSubmenu = generateMenuModel( pSalMenuItem->mpSubMenu );
+            GMenuModel *pSubmenu = generateMenuModelAndActions( pSalMenuItem->mpSubMenu, pActionGroup );
             g_menu_item_set_submenu( pMenuItem, pSubmenu );
         }
 
         g_menu_append_item( pSectionMenuModel, pMenuItem );
+
+        if (pSalMenuItem->mpAction) {
+            g_lo_action_group_insert( pActionGroup, pSalMenuItem->mpAction );
+        }
     }
 
     return G_MENU_MODEL( pSectionMenuModel );
 }
 
-GMenuModel *generateMenuModel( GtkSalMenu *pMenu )
+GMenuModel *generateMenuModelAndActions( GtkSalMenu *pMenu, GLOActionGroup *pActionGroup )
 {
     if ( !pMenu )
         return NULL;
@@ -115,17 +157,18 @@ GMenuModel *generateMenuModel( GtkSalMenu *pMenu )
         GMenuItem *pMenuItem = pSalMenuItem->mpMenuItem;
 
         if (pSalMenuItem->mpSubMenu) {
-            GMenuModel *pSubmenu = generateMenuModel( pSalMenuItem->mpSubMenu );
+            GMenuModel *pSubmenu = generateMenuModelAndActions( pSalMenuItem->mpSubMenu, pActionGroup );
             g_menu_item_set_submenu( pMenuItem, pSubmenu );
         }
 
         g_menu_append_item( pMenuModel, pMenuItem );
+        g_lo_action_group_insert( pActionGroup, pSalMenuItem->mpAction );
     }
 
     for (int i=0; i < pMenu->maSections.size(); i++) {
         GtkSalMenuSection *pSection = pMenu->maSections[ i ];
 
-        GMenuModel *pSectionMenuModel = generateSectionMenuModel( pSection );
+        GMenuModel *pSectionMenuModel = generateSectionMenuModel( pSection, pActionGroup );
 
         g_menu_append_section( pMenuModel, NULL, pSectionMenuModel );
     }
@@ -161,19 +204,20 @@ gdk_x11_window_set_utf8_property  (GdkWindow *window,
     }
 }
 
-void GtkSalMenu::publishMenu( GMenuModel *pMenu )
+void GtkSalMenu::publishMenu( GMenuModel *pMenu, GActionGroup *pActionGroup )
 {
-    pSessionBus = g_bus_get_sync (G_BUS_TYPE_SESSION, NULL, NULL);
-    if(!pSessionBus) puts ("Fail bus get");
-    mBusId = g_bus_own_name_on_connection (pSessionBus, "org.libreoffice", G_BUS_NAME_OWNER_FLAGS_NONE, NULL, NULL, NULL, NULL);
-    if(!mBusId) puts ("Fail own name");
-
 //        guint appmenuID = g_dbus_connection_export_menu_model (bus, "/org/libreoffice/menus/appmenu", mpMenuModel, NULL);
 //        if(!appmenuID) puts("Fail export appmenu");
+
+    if ( mMenubarId ) {
+        g_dbus_connection_unexport_menu_model( pSessionBus, mMenubarId );
+        mbMenuBar = 0;
+    }
+
     mMenubarId = g_dbus_connection_export_menu_model (pSessionBus, "/org/libreoffice/menus/menubar", pMenu, NULL);
     if(!mMenubarId) puts("Fail export menubar");
 
-//        g_object_unref (menu);
+    g_dbus_connection_export_action_group( pSessionBus, GTK_MENU_OBJ_PATH, pActionGroup, NULL);
 }
 
 GtkSalMenu::GtkSalMenu( sal_Bool bMenuBar ) :
@@ -181,13 +225,22 @@ GtkSalMenu::GtkSalMenu( sal_Bool bMenuBar ) :
     mpVCLMenu( NULL ),
     aDBusMenubarPath( NULL ),
     pSessionBus( NULL ),
+    mpActionEntry( NULL ),
     mBusId( 0 ),
-    mMenubarId( 0 )
+    mMenubarId( 0 ),
+    mActionGroupId ( 0 )
 {
     if (!bMenuBar) {
         mpCurrentSection = new GtkSalMenuSection();
         maSections.push_back( mpCurrentSection );
+    } else {
+        pSessionBus = g_bus_get_sync (G_BUS_TYPE_SESSION, NULL, NULL);
+        if(!pSessionBus) puts ("Fail bus get");
+
+        mBusId = g_bus_own_name_on_connection (pSessionBus, GTK_MENU_BUS_NAME, G_BUS_NAME_OWNER_FLAGS_NONE, NULL, NULL, NULL, NULL);
+        if(!mBusId) puts ("Fail own name");
     }
+
 }
 
 GtkSalMenu::~GtkSalMenu()
@@ -274,12 +327,20 @@ void GtkSalMenu::SetFrame( const SalFrame* pFrame )
     GdkWindow *gdkWindow = gtk_widget_get_window( widget );
 
     if (gdkWindow) {
-        gdk_x11_window_set_utf8_property (gdkWindow, "_GTK_APPLICATION_ID", "org.libreoffice");
-        gdk_x11_window_set_utf8_property (gdkWindow, "_GTK_UNIQUE_BUS_NAME", "org.libreoffice");
-        gdk_x11_window_set_utf8_property (gdkWindow, "_GTK_APPLICATION_OBJECT_PATH", "/org/libreoffice");
-        gdk_x11_window_set_utf8_property (gdkWindow, "_GTK_WINDOW_OBJECT_PATH", "/org/libreoffice/windows");
+        XLIB_Window windowId = GDK_WINDOW_XID( gdkWindow );
+
+        gchar *aWindowObjectPath = g_strdup_printf( "%s/window/%u", GTK_MENU_OBJ_PATH, windowId );
+        gchar *aMenubarObjectPath = g_strconcat( GTK_MENU_OBJ_PATH, "/menus/menubar", NULL );
+
+//        gdk_x11_window_set_utf8_property (gdkWindow, "_GTK_APPLICATION_ID", "org.libreoffice");
+        gdk_x11_window_set_utf8_property ( gdkWindow, "_GTK_UNIQUE_BUS_NAME", g_dbus_connection_get_unique_name( pSessionBus ) );
+        gdk_x11_window_set_utf8_property ( gdkWindow, "_GTK_APPLICATION_OBJECT_PATH", GTK_MENU_OBJ_PATH );
+        gdk_x11_window_set_utf8_property ( gdkWindow, "_GTK_WINDOW_OBJECT_PATH", aWindowObjectPath );
 //        gdk_x11_window_set_utf8_property (gdkWindow, "_GTK_APP_MENU_OBJECT_PATH", "/org/libreoffice/menus/appmenu");
-        gdk_x11_window_set_utf8_property (gdkWindow, "_GTK_MENUBAR_OBJECT_PATH", "/org/libreoffice/menus/menubar");
+        gdk_x11_window_set_utf8_property ( gdkWindow, "_GTK_MENUBAR_OBJECT_PATH", aMenubarObjectPath );
+
+        g_free( aWindowObjectPath );
+        g_free( aMenubarObjectPath );
     }
 }
 
@@ -291,6 +352,14 @@ void GtkSalMenu::CheckItem( unsigned nPos, sal_Bool bCheck )
 void GtkSalMenu::EnableItem( unsigned nPos, sal_Bool bEnable )
 {
     cout << __FUNCTION__ << endl;
+
+    if (nPos < maItems.size()) {
+        GtkSalMenuItem *pSalMenuItem = maItems[ nPos ];
+
+        if ( pSalMenuItem->mpAction ) {
+            g_simple_action_set_enabled( G_SIMPLE_ACTION( pSalMenuItem->mpAction ), (gboolean) bEnable );
+        }
+    }
 }
 
 void GtkSalMenu::SetItemText( unsigned nPos, SalMenuItem* pSalMenuItem, const rtl::OUString& rText )
@@ -318,7 +387,7 @@ void GtkSalMenu::SetAccelerator( unsigned nPos, SalMenuItem* pSalMenuItem, const
 {
     cout << __FUNCTION__ << " KeyName: " << rKeyName << endl;
 
-//    GtkSalMenuItem *pMenuItem = static_cast< GtkSalMenuItem* >( pSalMenuItem );
+    GtkSalMenuItem *pMenuItem = static_cast< GtkSalMenuItem* >( pSalMenuItem );
 
 //    rtl::OString aConvertedKeyName = OUStringToOString( rKeyName, RTL_TEXTENCODING_UTF8 );
 
@@ -326,63 +395,53 @@ void GtkSalMenu::SetAccelerator( unsigned nPos, SalMenuItem* pSalMenuItem, const
 //    g_menu_item_set_attribute_value( pMenuItem->mpMenuItem, "accel", gaKeyCode );
 }
 
+void GtkSalMenu::SetItemCommand( unsigned nPos, SalMenuItem* pSalMenuItem, const rtl::OUString& aCommandStr )
+{
+    GtkSalMenuItem* pGtkSalMenuItem = static_cast< GtkSalMenuItem* >( pSalMenuItem );
+
+    if ( pGtkSalMenuItem->mpAction ) {
+        g_object_unref( pGtkSalMenuItem->mpAction );
+    }
+
+    rtl::OString aOCommandStr = rtl::OUStringToOString( aCommandStr, RTL_TEXTENCODING_UTF8 );
+
+    GSimpleAction *pAction = g_simple_action_new( aOCommandStr.getStr(), NULL );
+
+    // Disable action by default.
+//    g_simple_action_set_enabled( pAction, FALSE );
+
+    g_signal_connect(pAction, "activate", G_CALLBACK( dispatchAction ), pGtkSalMenuItem);
+
+    pGtkSalMenuItem->mpAction = G_ACTION( pAction );
+
+
+    rtl::OString aItemCommand = "app." + aOCommandStr;
+    g_menu_item_set_action_and_target( pGtkSalMenuItem->mpMenuItem, aItemCommand.getStr(), NULL );
+//    g_object_unref( aGCommand );
+}
+
 void GtkSalMenu::GetSystemMenuData( SystemMenuData* pData )
 {
     cout << __FUNCTION__ << endl;
 }
 
-void printMenu( GtkSalMenu * );
-
-void printSection ( GtkSalMenuSection *pSection )
+bool GtkSalMenu::ShowNativePopupMenu(FloatingWindow * pWin, const Rectangle& rRect, sal_uLong nFlags)
 {
-    if (pSection) {
-        for (int i = 0; i < pSection->maItems.size(); i++) {
-            GtkSalMenuItem *pSalMenuItem = static_cast< GtkSalMenuItem* >(pSection->maItems[ i ]);
-            cout << pSalMenuItem->mpVCLMenu->GetItemText( pSalMenuItem->mnId ) << endl;
-
-            if (pSalMenuItem->mpSubMenu) {
-                cout << "--- Submenu ---" << endl;
-                printMenu( pSalMenuItem->mpSubMenu);
-                cout << "---------------" << endl;
-            }
-        }
-    }
-}
-
-void printMenu( GtkSalMenu *pMenu )
-{
-    if ( pMenu ) {
-        for (int i = 0; i < pMenu->maItems.size(); i++) {
-            GtkSalMenuItem *pSalMenuItem = static_cast< GtkSalMenuItem* >(pMenu->maItems[ i ]);
-            cout << pSalMenuItem->mpVCLMenu->GetItemText( pSalMenuItem->mnId ) << endl;
-
-            if (pSalMenuItem->mpSubMenu) {
-                cout << "--- Submenu ---" << endl;
-                printMenu( pSalMenuItem->mpSubMenu);
-                cout << "---------------" << endl;
-            }
-        }
-
-        for (int i = 0; i < pMenu->maSections.size(); i++) {
-            GtkSalMenuSection *pSalMenuSection = static_cast< GtkSalMenuSection* >(pMenu->maSections[ i ]);
-
-            cout << "--- Submenu ---" << endl;
-            printSection( pSalMenuSection );
-            cout << "---------------" << endl;
-        }
-    }
+    cout << __FUNCTION__ << endl;
+    return TRUE;
 }
 
 void GtkSalMenu::Freeze()
 {
     cout << __FUNCTION__ << endl;
-    GMenuModel *mpMenuModel = generateMenuModel( this );
-    this->publishMenu( mpMenuModel );
-    g_object_unref( mpMenuModel );
+    GLOActionGroup *mpActionGroup = g_lo_action_group_new();
 
-    cout << "==================== MENUBAR ===================" << endl;
-    printMenu( this );
-    cout << "================================================" << endl;
+    GMenuModel *mpMenuModel = generateMenuModelAndActions( this, mpActionGroup );
+//    GMenuModel *mpMenuModel = generateMockMenuModel();
+
+//    this->publishMenu( mpMenuModel, G_ACTION_GROUP( mpActionGroup ) );
+    this->publishMenu( mpMenuModel, G_ACTION_GROUP( mpActionGroup ) );
+    g_object_unref( mpMenuModel );
 }
 
 // =======================================================================
@@ -407,7 +466,8 @@ GtkSalMenuItem::GtkSalMenuItem( const SalItemParams* pItemData ) :
     mpVCLMenu( pItemData->pMenu ),
     mpParentMenu( NULL ),
     mpSubMenu( NULL ),
-    mpMenuItem( NULL )
+    mpMenuItem( NULL ),
+    mpAction( NULL )
 {
     cout << __FUNCTION__ << "Type: " << pItemData->eType << endl;
 

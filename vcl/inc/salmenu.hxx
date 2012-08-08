@@ -81,6 +81,8 @@ public:
     virtual bool ShowNativePopupMenu(FloatingWindow * pWin, const Rectangle& rRect, sal_uLong nFlags);
     virtual bool AddMenuBarButton( const SalMenuButtonItem& ); // return false if not implemented or failure
     virtual void RemoveMenuBarButton( sal_uInt16 nId );
+
+    virtual void SetItemCommand( unsigned nPos, SalMenuItem* pSalMenuItem, const rtl::OUString& aCommandStr ) {}
     virtual void Freeze() {}
 
     // return an empty rectangle if not implemented
