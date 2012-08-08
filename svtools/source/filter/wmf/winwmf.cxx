@@ -28,6 +28,7 @@
 
 
 #include "winmtf.hxx"
+#include <boost/scoped_array.hpp>
 #include <vcl/gdimtf.hxx>
 #include <svtools/wmf.hxx>
 #include <rtl/crc.h>
@@ -354,28 +355,55 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
 
         case W_META_POLYPOLYGON:
         {
+            bool bRecordOk = true;
             sal_uInt16  nPoly = 0;
             Point*  pPtAry;
             // Number of polygons:
             *pWMF >> nPoly;
             // Number of points of each polygon. Determine total number of points
-            sal_uInt16* pnPoints = new sal_uInt16[ nPoly ];
+            boost::scoped_array<sal_uInt16> xPolygonPointCounts(new sal_uInt16[nPoly]);
+            sal_uInt16* pnPoints = xPolygonPointCounts.get();
             sal_uInt16 nPoints = 0;
             for(sal_uInt16 i = 0; i < nPoly; i++ )
             {
                 *pWMF >> pnPoints[i];
+
+                if (pnPoints[i] > SAL_MAX_UINT16 - nPoints)
+                {
+                    bRecordOk = false;
+                    break;
+                }
+
                 nPoints += pnPoints[i];
             }
+
+            SAL_WARN_IF(!bRecordOk, "svtools", "polypolygon record has more polygons that we can handle");
+
+            bRecordOk &= pWMF->good();
+
+            if (!bRecordOk)
+            {
+                pWMF->SetError( SVSTREAM_FILEFORMAT_ERROR );
+                break;
+            }
+
             // Polygon points are:
-            pPtAry  = new Point[nPoints];
+            boost::scoped_array<Point> xPolygonPoints(new Point[nPoints]);
+            pPtAry = xPolygonPoints.get();
             for (sal_uInt16 i = 0; i < nPoints; i++ )
                 pPtAry[ i ] = ReadPoint();
+
+            bRecordOk &= pWMF->good();
+
+            if (!bRecordOk)
+            {
+                pWMF->SetError( SVSTREAM_FILEFORMAT_ERROR );
+                break;
+            }
 
             // Produce PolyPolygon Actions
             PolyPolygon aPolyPoly( nPoly, pnPoints, pPtAry );
             pOut->DrawPolyPolygon( aPolyPoly );
-            delete[] pPtAry;
-            delete[] pnPoints;
         }
         break;
 
@@ -1329,16 +1357,43 @@ sal_Bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pSt
 
                 case W_META_POLYPOLYGON:
                 {
+                    bool bRecordOk = true;
                     sal_uInt16 nPoly, nPoints = 0;
                     *pStm >> nPoly;
                     for(sal_uInt16 i = 0; i < nPoly; i++ )
                     {
-                        sal_uInt16 nP;
+                        sal_uInt16 nP = 0;
                         *pStm >> nP;
-                        nPoints = nPoints + nP;
+                        if (nP > SAL_MAX_UINT16 - nPoints)
+                        {
+                            bRecordOk = false;
+                            break;
+                        }
+                        nPoints += nP;
                     }
+
+                    SAL_WARN_IF(!bRecordOk, "svtools", "polypolygon record has more polygons that we can handle");
+
+                    bRecordOk &= pStm->good();
+
+                    if (!bRecordOk)
+                    {
+                        pStm->SetError( SVSTREAM_FILEFORMAT_ERROR );
+                        bRet = sal_False;
+                        break;
+                    }
+
                     for (sal_uInt16 i = 0; i < nPoints; i++ )
                         GetWinExtMax( ReadPoint(), rPlaceableBound, nMapMode );
+
+                    bRecordOk &= pStm->good();
+
+                    if (!bRecordOk)
+                    {
+                        pStm->SetError( SVSTREAM_FILEFORMAT_ERROR );
+                        bRet = sal_False;
+                        break;
+                    }
                 }
                 break;
 
