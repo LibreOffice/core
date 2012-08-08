@@ -76,6 +76,7 @@ private:
     void OnTemplateProperties ();
     void OnTemplateDelete ();
     void OnFolderDelete ();
+    void OnRepositoryDelete ();
 
     void centerTopButtons ();
 

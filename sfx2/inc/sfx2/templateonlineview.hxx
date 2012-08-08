@@ -40,6 +40,8 @@ public:
 
     void insertRepository (const OUString &rName, const OUString &rURL);
 
+    bool deleteRepository (const sal_uInt16 nRepositoryId);
+
     void syncRepositories () const;
 
     void setItemDimensions (long ItemWidth, long ThumbnailHeight, long DisplayHeight, int itemPadding);

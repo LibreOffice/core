@@ -340,7 +340,10 @@ IMPL_LINK_NOARG(SfxTemplateManagerDlg,TBXViewHdl)
         OnTemplateImport();
         break;
     case TBI_TEMPLATE_FOLDER_DEL:
-        OnFolderDelete();
+        if (mpCurView == maView)
+            OnFolderDelete();
+        else
+            OnRepositoryDelete();
         break;
     default:
         break;
@@ -867,6 +870,17 @@ void SfxTemplateManagerDlg::OnFolderDelete()
     {
         mpViewBar->HideItem(TBI_TEMPLATE_IMPORT);
         mpViewBar->HideItem(TBI_TEMPLATE_FOLDER_DEL);
+    }
+}
+
+void SfxTemplateManagerDlg::OnRepositoryDelete()
+{
+    if(mpOnlineView->deleteRepository(mpOnlineView->getOverlayRegionId()))
+    {
+        // close overlay and switch to local view
+        switchMainView(true);
+
+        createRepositoryMenu();
     }
 }
 
