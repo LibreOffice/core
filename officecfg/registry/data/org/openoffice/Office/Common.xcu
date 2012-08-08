@@ -590,6 +590,12 @@
       <value oor:external=
           "com.sun.star.configuration.backend.GconfBackend SymbolSet"/>
     </prop>
+    <prop oor:name="TemplateRepositoryUrls">
+      <value/>
+    </prop>
+    <prop oor:name="TemplateRepositoryNames">
+      <value/>
+    </prop>
     <prop oor:name="FilePickerPlacesUrls">
       <value/>
     </prop>

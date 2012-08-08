@@ -6767,6 +6767,16 @@
         </info>
         <value>true</value>
       </prop>
+      <prop oor:name="TemplateRepositoryUrls" oor:type="oor:string-list" oor:nillable="false">
+        <info>
+          <desc>List of template repositories URLs bookmarked in the template manager dialog.</desc>
+        </info>
+      </prop>
+      <prop oor:name="TemplateRepositoryNames" oor:type="oor:string-list" oor:nillable="false">
+        <info>
+          <desc>List of template repositories names bookmarked in the template manager dialog.</desc>
+        </info>
+      </prop>
       <prop oor:name="FilePickerPlacesUrls" oor:type="oor:string-list" oor:nillable="false">
         <info>
           <desc>List of URLs of the places the user bookmarked in the file picker dialog.</desc>

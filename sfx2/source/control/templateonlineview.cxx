@@ -77,10 +77,10 @@ void TemplateOnlineView::Populate()
 
     // Load from user settings
     com::sun::star::uno::Sequence< rtl::OUString >  aUrls =
-            officecfg::Office::Common::Misc::FilePickerPlacesUrls::get(m_context);
+            officecfg::Office::Common::Misc::TemplateRepositoryUrls::get(m_context);
 
     com::sun::star::uno::Sequence< rtl::OUString > aNames =
-            officecfg::Office::Common::Misc::FilePickerPlacesNames::get(m_context);
+            officecfg::Office::Common::Misc::TemplateRepositoryNames::get(m_context);
 
     for (sal_Int32 i = 0; i < aUrls.getLength() && i < aNames.getLength(); ++i)
     {
@@ -284,8 +284,8 @@ void TemplateOnlineView::syncRepositories() const
             aNames[i] = maRepositories[i]->maTitle;
         }
 
-        officecfg::Office::Common::Misc::FilePickerPlacesUrls::set(aUrls, batch, pContext);
-        officecfg::Office::Common::Misc::FilePickerPlacesNames::set(aNames, batch, pContext);
+        officecfg::Office::Common::Misc::TemplateRepositoryUrls::set(aUrls, batch, pContext);
+        officecfg::Office::Common::Misc::TemplateRepositoryNames::set(aNames, batch, pContext);
         batch->commit();
     }
 }
