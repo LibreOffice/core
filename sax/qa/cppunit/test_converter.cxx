@@ -50,11 +50,13 @@ public:
     void testDuration();
     void testDateTime();
     void testDouble();
+    void testMeasure();
 
     CPPUNIT_TEST_SUITE(ConverterTest);
     CPPUNIT_TEST(testDuration);
     CPPUNIT_TEST(testDateTime);
     CPPUNIT_TEST(testDouble);
+    CPPUNIT_TEST(testMeasure);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -310,6 +312,20 @@ void ConverterTest::testDouble()
     doTestDouble("700", 70.0, MeasureUnit::MM_100TH, MeasureUnit::MM_10TH);
 }
 
+void doTestStringToMeasure(sal_Int32 rValue, char const*const pis, sal_Int16 nTargetUnit, sal_Int32 nMin, sal_Int32 nMax)
+{
+    ::rtl::OUString const is(::rtl::OUString::createFromAscii(pis));
+    sal_Int32 nVal;
+    bool bSuccess(Converter::convertMeasure(nVal, is, nTargetUnit, nMin, nMax));
+    OSL_TRACE("%i", nVal);
+    CPPUNIT_ASSERT(bSuccess);
+    CPPUNIT_ASSERT_EQUAL(rValue, nVal);
+}
+
+void ConverterTest::testMeasure()
+{
+    doTestStringToMeasure(1000, "10mm", MeasureUnit::MM_100TH, 1, 4321);
+}
 CPPUNIT_TEST_SUITE_REGISTRATION(ConverterTest);
 
 }
