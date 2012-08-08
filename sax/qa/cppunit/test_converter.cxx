@@ -324,7 +324,26 @@ void doTestStringToMeasure(sal_Int32 rValue, char const*const pis, sal_Int16 nTa
 
 void ConverterTest::testMeasure()
 {
-    doTestStringToMeasure(1000, "10mm", MeasureUnit::MM_100TH, 1, 4321);
+    doTestStringToMeasure(1000, "10mm", MeasureUnit::MM_100TH, -1, 4321);
+    doTestStringToMeasure(200, "20mm", MeasureUnit::MM_10TH, 12, 4567);
+    doTestStringToMeasure(300, "300", MeasureUnit::MM, 31, 555);
+    doTestStringToMeasure(400, "400", MeasureUnit::CM, 10, 4321);
+    doTestStringToMeasure(120, "120", MeasureUnit::INCH_1000TH, 10, 4321);
+    doTestStringToMeasure(111, "111", MeasureUnit::INCH_100TH, 10, 4321);
+    doTestStringToMeasure(22, "22", MeasureUnit::INCH_10TH, 10, 4321);
+    doTestStringToMeasure(27, "27", MeasureUnit::INCH, 10, 4321);
+    doTestStringToMeasure(52, "52", MeasureUnit::POINT, 10, 4321);
+    doTestStringToMeasure(120, "120", MeasureUnit::TWIP, 10, 4321);
+    doTestStringToMeasure(666, "666", MeasureUnit::M, 10, 4321);
+    doTestStringToMeasure(42, "42", MeasureUnit::KM, 10, 4321);
+    doTestStringToMeasure(30, "30", MeasureUnit::PICA, 10, 4321);
+    doTestStringToMeasure(20, "20", MeasureUnit::FOOT, 10, 4321);
+    doTestStringToMeasure(40, "40", MeasureUnit::MILE, 10, 4321);
+    doTestStringToMeasure(40, "40%", MeasureUnit::PERCENT, 10, 4321);
+    doTestStringToMeasure(800, "800", MeasureUnit::PIXEL, 10, 4321);
+    doTestStringToMeasure(600, "600px", MeasureUnit::PIXEL, 10, 4321);
+    doTestStringToMeasure(777, "777", MeasureUnit::APPFONT, 10, 4321);
+    doTestStringToMeasure(80000, "80000", MeasureUnit::SYSFONT, 10, 432100);
 }
 CPPUNIT_TEST_SUITE_REGISTRATION(ConverterTest);
 
