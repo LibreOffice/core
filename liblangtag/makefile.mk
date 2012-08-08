@@ -48,7 +48,7 @@ my_misc='$(SRC_ROOT)$/$(PRJNAME)$/$(MISC)'
 my_prefix='$(my_misc)$/install'
 my_data='$(my_prefix)$/share/liblangtag'
 
-CONFIGURE_FLAGS+= --prefix='$(my_prefix)'
+CONFIGURE_FLAGS+= --prefix='$(my_prefix)' --libdir='$(my_prefix)/lib'
 
 .IF "$(SYSTEM_LIBXML)"!="YES"
 CONFIGURE_FLAGS+= LIBXML2_CFLAGS='-I$(SOLARINCDIR)$/external'
