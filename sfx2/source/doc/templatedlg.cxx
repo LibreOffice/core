@@ -497,6 +497,8 @@ IMPL_LINK(SfxTemplateManagerDlg, TVTemplateStateHdl, const ThumbnailViewItem*, p
             mpActionBar->Show(false);
             mpTemplateBar->Show();
         }
+        else
+            mpTemplateBar->HideItem(TBI_TEMPLATE_DEFAULT);
 
         maSelTemplates.insert(pItem);
     }
@@ -512,6 +514,8 @@ IMPL_LINK(SfxTemplateManagerDlg, TVTemplateStateHdl, const ThumbnailViewItem*, p
                 mpViewBar->Show();
                 mpActionBar->Show();
             }
+            else if (maSelTemplates.size() == 1)
+                mpTemplateBar->ShowItem(TBI_TEMPLATE_DEFAULT);
         }
     }
 
