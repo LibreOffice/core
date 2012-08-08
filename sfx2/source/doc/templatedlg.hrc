@@ -27,6 +27,7 @@
 #define TBI_TEMPLATE_PROPERTIES     16
 #define TBI_TEMPLATE_MOVE           17
 #define TBI_TEMPLATE_DELETE         18
+#define TBI_TEMPLATE_DEFAULT        19
 
 #define MNI_ACTION_REFRESH          22
 #define MNI_ACTION_SORT_NAME        23

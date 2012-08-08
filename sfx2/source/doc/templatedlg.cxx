@@ -14,6 +14,10 @@
 #include "templatesearchviewitem.hxx"
 
 #include <comphelper/processfactory.hxx>
+#include <comphelper/storagehelper.hxx>
+#include <sfx2/app.hxx>
+#include <sfx2/docfac.hxx>
+#include <sfx2/fcontnr.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/templatelocalview.hxx>
@@ -22,6 +26,7 @@
 #include <sfx2/templateonlineviewitem.hxx>
 #include <sfx2/templateviewitem.hxx>
 #include <sfx2/thumbnailviewitem.hxx>
+#include <sot/storage.hxx>
 #include <svtools/PlaceEditDialog.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/moduleoptions.hxx>
@@ -30,6 +35,8 @@
 #include <vcl/toolbox.hxx>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/embed/XStorage.hpp>
+#include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
@@ -54,9 +61,12 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::embed;
 using namespace ::com::sun::star::frame;
 
 void lcl_createTemplate(uno::Reference<XComponentLoader> xDesktop, const FILTER_APPLICATION eApp);
+
+bool lcl_getServiceName (const OUString &rFileURL, OUString &rName );
 
 // Sort by name in ascending order
 class SortView_Name
@@ -378,6 +388,9 @@ IMPL_LINK_NOARG(SfxTemplateManagerDlg,TBXTemplateHdl)
         break;
     case TBI_TEMPLATE_DELETE:
         OnTemplateDelete();
+        break;
+    case TBI_TEMPLATE_DEFAULT:
+        OnTemplateAsDefault();
         break;
     default:
         break;
@@ -855,6 +868,19 @@ void SfxTemplateManagerDlg::OnTemplateDelete ()
     }
 }
 
+void SfxTemplateManagerDlg::OnTemplateAsDefault ()
+{
+    assert(!maSelTemplates.empty());
+
+    const TemplateViewItem *pItem = static_cast<const TemplateViewItem*>(*(maSelTemplates.begin()));
+
+    OUString aServiceName;
+    if (lcl_getServiceName(pItem->getPath(),aServiceName))
+    {
+        SfxObjectFactory::SetStandardTemplate(aServiceName,pItem->getPath());
+    }
+}
+
 void SfxTemplateManagerDlg::OnFolderDelete()
 {
     std::set<const ThumbnailViewItem*>::const_iterator pIter;
@@ -1071,6 +1097,34 @@ void SfxTemplateManagerDlg::localSearchMoveTo(sal_uInt16 nMenuId)
     mpSearchView->unselectItems();
 
     SearchUpdateHdl(mpSearchEdit);
+}
+
+bool lcl_getServiceName ( const OUString &rFileURL, OUString &rName )
+{
+    bool bRet = false;
+
+    if ( !rFileURL.isEmpty() )
+    {
+        try
+        {
+            uno::Reference< embed::XStorage > xStorage =
+                    comphelper::OStorageHelper::GetStorageFromURL( rFileURL, embed::ElementModes::READ );
+
+            sal_uIntPtr nFormat = SotStorage::GetFormatID( xStorage );
+
+            const SfxFilter* pFilter = SFX_APP()->GetFilterMatcher().GetFilter4ClipBoardId( nFormat );
+
+            if ( pFilter )
+            {
+                rName = pFilter->GetServiceName();
+                bRet = true;
+            }
+        }
+        catch( uno::Exception& )
+        {}
+    }
+
+    return bRet;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
