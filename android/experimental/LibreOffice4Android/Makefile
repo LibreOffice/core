@@ -225,7 +225,7 @@ build-ant: copy-stuff properties
 	echo sdk.dir=$(ANDROID_SDK_HOME) >../../abs-lib/local.properties
 
 #
-# Copy jar files we need, and even construct one.
+# Copy jar files we need
 #
 	for F in $(strip \
 		   java_uno \
