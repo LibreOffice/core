@@ -52,10 +52,5 @@
 #define MNI_REPOSITORY_NEW          275
 #define MNI_REPOSITORY_BASE         276
 
-#define IMG_ONLINE_REPOSITORY       100
-#define IMG_CREATE_TEXT             300
-#define IMG_CREATE_SHEET            301
-#define IMG_CREATE_PRESENT          302
-#define IMG_CREATE_DRAW             303
 #define IMG_ACTION_SORT             304
 #define IMG_ACTION_REFRESH          305
