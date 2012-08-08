@@ -23,7 +23,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <comphelper/stl_types.hxx>
 #include <sfx2/basedlgs.hxx>
-#include <sfx2/childwin.hxx>
+#include <sfx2/dockwin.hxx>
 #include <svl/lstner.hxx>
 #include <svx/svdmark.hxx>
 
@@ -45,7 +45,7 @@ public:
 class SfxBindings;
 class SdrView;
 
-class PropBrw : public SfxFloatingWindow , public SfxListener, public SfxBroadcaster
+class PropBrw : public SfxDockingWindow , public SfxListener, public SfxBroadcaster
 {
 private:
     bool        m_bInitialStateChange;

@@ -62,7 +62,7 @@ PropBrwMgr::PropBrwMgr( Window* _pParent, sal_uInt16 nId,
         );
 
     eChildAlignment = SFX_ALIGN_NOALIGNMENT;
-    ((SfxFloatingWindow*)pWindow)->Initialize( pInfo );
+    ((SfxDockingWindow*)pWindow)->Initialize( pInfo );
 
     ((PropBrw*)pWindow)->Update( pShell );
 }
@@ -100,7 +100,7 @@ DBG_NAME(PropBrw)
 
 PropBrw::PropBrw( const Reference< XMultiServiceFactory >& _xORB, SfxBindings* _pBindings, PropBrwMgr* _pMgr, Window* _pParent,
             const Reference< XModel >& _rxContextDocument )
-    :SfxFloatingWindow( _pBindings, _pMgr, _pParent, WinBits( WB_STDMODELESS | WB_SIZEABLE | WB_3DLOOK | WB_ROLLABLE ) )
+    :SfxDockingWindow( _pBindings, _pMgr, _pParent, WinBits( WB_DOCKABLE | WB_STDMODELESS | WB_SIZEABLE | WB_3DLOOK | WB_ROLLABLE ) )
     ,m_bInitialStateChange(true)
     ,m_xORB(_xORB)
     ,m_xContextDocument( _rxContextDocument )
@@ -257,7 +257,7 @@ sal_Bool PropBrw::Close()
     if( IsRollUp() )
         RollDown();
 
-    return SfxFloatingWindow::Close();
+    return SfxDockingWindow::Close();
 }
 
 
@@ -455,7 +455,7 @@ void PropBrw::FillInfo( SfxChildWinInfo& rInfo ) const
 
 void PropBrw::Resize()
 {
-    SfxFloatingWindow::Resize();
+    SfxDockingWindow::Resize();
 
     // adjust size
     Size aSize_ = GetOutputSizePixel();
