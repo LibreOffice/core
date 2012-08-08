@@ -2812,22 +2812,50 @@ void SmAttributNode::CreateTextFromNode(String &rText)
             nLast = aStr.GetChar(0);
             switch (nLast)
             {
-            case 0xAF:
+            case 0xAF: // MACRON
                 APPEND(rText,"overline ");
                 break;
-            case 0x2d9:
+            case 0x2d9: // DOT ABOVE
                 APPEND(rText,"dot ");
                 break;
-            case 0x2dc:
+            case 0x2dc: // SMALL TILDE
                 APPEND(rText,"widetilde ");
                 break;
-            case 0xA8:
+            case 0xA8: // DIAERESIS
                 APPEND(rText,"ddot ");
                 break;
             case 0xE082:
                 break;
             case 0xE09B:
+            case 0x20DB: // COMBINING THREE DOTS ABOVE
                 APPEND(rText,"dddot ");
+                break;
+            case 0x301: // COMBINING ACUTE ACCENT
+                APPEND(rText,"acute ");
+                break;
+            case 0x300: // COMBINING GRAVE ACCENT
+                APPEND(rText,"grave ");
+                break;
+            case 0x30C: // COMBINING CARON
+                APPEND(rText,"check ");
+                break;
+            case 0x306: // COMBINING BREVE
+                APPEND(rText,"breve ");
+                break;
+            case 0x30A: // COMBINING RING ABOVE
+                APPEND(rText,"circle ");
+                break;
+            case 0x20D7: // COMBINING RIGHT ARROW ABOVE
+                APPEND(rText,"vec ");
+                break;
+            case 0x303: // COMBINING TILDE
+                APPEND(rText,"tilde ");
+                break;
+            case 0x302: // COMBINING CIRCUMFLEX ACCENT
+                APPEND(rText,"hat ");
+                break;
+            case 0x304: // COMBINING MACRON
+                APPEND(rText,"bar ");
                 break;
             default:
                 rText.Append(nLast);
