@@ -16,7 +16,6 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 class HelpIds:
-class HelpIds:
     array1 = [
     "HID:WIZARDS_HID0_WEBWIZARD", # HID:34200
     "HID:WIZARDS_HID0_HELP", # HID:34201
