@@ -154,6 +154,7 @@ ModelessDialog DLG_TEMPLATE_MANAGER
             ToolBoxItem
             {
                 Identifier = TBI_TEMPLATE_IMPORT ;
+                Hide = TRUE;
                 Text [ en-US ] = "Import" ;
 
                 ItemImage = Image

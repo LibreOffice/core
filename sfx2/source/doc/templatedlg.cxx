@@ -147,7 +147,6 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
     mpTemplateBar->SetButtonType(BUTTON_SYMBOLTEXT);
 
     // Set toolbox button bits
-    mpViewBar->EnableItem(TBI_TEMPLATE_IMPORT,false);
     mpViewBar->SetItemBits(TBI_TEMPLATE_REPOSITORY, TIB_DROPDOWNONLY);
     mpActionBar->SetItemBits(TBI_TEMPLATE_ACTION, TIB_DROPDOWNONLY);
     mpTemplateBar->SetItemBits(TBI_TEMPLATE_MOVE,TIB_DROPDOWNONLY);
@@ -452,7 +451,7 @@ IMPL_LINK(SfxTemplateManagerDlg, TVFolderStateHdl, const ThumbnailViewItem*, pIt
     {
         if (maSelFolders.empty())
         {
-            mpViewBar->EnableItem(TBI_TEMPLATE_IMPORT,true);
+            mpViewBar->ShowItem(TBI_TEMPLATE_IMPORT);
             mpViewBar->ShowItem(TBI_TEMPLATE_FOLDER_DEL);
         }
 
@@ -464,7 +463,7 @@ IMPL_LINK(SfxTemplateManagerDlg, TVFolderStateHdl, const ThumbnailViewItem*, pIt
 
         if (maSelFolders.empty())
         {
-            mpViewBar->EnableItem(TBI_TEMPLATE_IMPORT,false);
+            mpViewBar->HideItem(TBI_TEMPLATE_IMPORT);
             mpViewBar->HideItem(TBI_TEMPLATE_FOLDER_DEL);
         }
     }
@@ -866,7 +865,7 @@ void SfxTemplateManagerDlg::OnFolderDelete()
 
     if (maSelFolders.empty())
     {
-        mpViewBar->EnableItem(TBI_TEMPLATE_IMPORT,false);
+        mpViewBar->HideItem(TBI_TEMPLATE_IMPORT);
         mpViewBar->HideItem(TBI_TEMPLATE_FOLDER_DEL);
     }
 }
