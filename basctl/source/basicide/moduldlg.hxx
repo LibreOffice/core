@@ -132,7 +132,7 @@ public:
     SvLBoxEntry*    DoInsertEntry( const String& rStr, sal_uLong nPos = LISTBOX_APPEND );
     SvLBoxEntry*    FindEntry( const String& rName );
 
-    void            CheckEntryPos( sal_uLong nPos, bool bCheck = true );
+    void            CheckEntryPos( sal_uLong nPos );
     bool            IsChecked( sal_uLong nPos ) const;
 
     virtual void    InitEntry( SvLBoxEntry*, const XubString&, const Image&, const Image&, SvLBoxButtonKind eButtonKind );

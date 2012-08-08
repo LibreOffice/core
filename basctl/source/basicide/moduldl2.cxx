@@ -228,14 +228,14 @@ SvLBoxEntry* BasicCheckBox::FindEntry( const String& rName )
 
 //----------------------------------------------------------------------------
 
-void BasicCheckBox::CheckEntryPos( sal_uLong nPos, bool bCheck )
+void BasicCheckBox::CheckEntryPos( sal_uLong nPos )
 {
     if ( nPos < GetEntryCount() )
     {
         SvLBoxEntry* pEntry = GetEntry( nPos );
 
-        if ( bCheck != GetCheckButtonState( pEntry ) )
-            SetCheckButtonState( pEntry, SvButtonState(bCheck ? SV_BUTTON_CHECKED : SV_BUTTON_UNCHECKED) );
+        if ( GetCheckButtonState( pEntry ) != SV_BUTTON_CHECKED )
+            SetCheckButtonState( pEntry, SvButtonState(SV_BUTTON_CHECKED) );
     }
 }
 
@@ -895,7 +895,7 @@ void LibPage::InsertLib()
                 {
                     SvLBoxEntry* pEntry = pLibDlg->GetLibBox().DoInsertEntry( aLibName );
                     sal_uInt16 nPos = (sal_uInt16) pLibDlg->GetLibBox().GetModel()->GetAbsPos( pEntry );
-                    pLibDlg->GetLibBox().CheckEntryPos(nPos, true);
+                    pLibDlg->GetLibBox().CheckEntryPos(nPos);
                 }
             }
 

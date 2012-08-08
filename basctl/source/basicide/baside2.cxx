@@ -1458,7 +1458,7 @@ void ModulWindowLayout::Paint( const Rectangle& )
 void ModulWindowLayout::ArrangeWindows()
 {
     static long const nSplitThickness = 2;
-    static float const
+    static double const
         fDefaultLeftSplit = 0.2,
         fDefaultBottomSplit = 0.75,
         fDefaultVertSplit = 0.67;
