@@ -2,15 +2,15 @@ Example of updating an incompatibly-changed type (com.sun.star.script.Converter,
 in this example) in the accompanying types.rdb:
 
 .../core> mkdir tmp
+.../core> LD_LIBRARY_PATH=.../core/solver/unxlngi6.pro/lib \
+ solver/unxlngi6.pro/bin/regmerge tmp/out1.rdb /UCR \
+ workdir/unxlngi6.pro/UnoApiPartTarget/udkapi/com/sun/star/script/Converter.urd
 .../core> LD_LIBRARY_PATH=.../core/solver/unxlngx6/lib \
- solver/unxlngx6/bin/regmerge tmp/out1.rdb /UCR \
- workdir/unxlngx6/UnoApiPartTarget/udkapi/com/sun/star/script/Converter.urd
-.../core> LD_LIBRARY_PATH=.../core/solver/unxlngx6/lib \
- solver/unxlngx6/bin/regmerge tmp/out2.rdb / offapi/type_reference/types.rdb \
+ solver/unxlngi6.pro/bin/regmerge tmp/out2.rdb / offapi/type_reference/types.rdb \
  tmp/out1.rdb
-.../core> diff <(LD_LIBRARY_PATH=.../core/solver/unxlngx6/lib \
- solver/unxlngx6/bin/regview offapi/type_reference/types.rdb) \
- <(LD_LIBRARY_PATH=.../core/solver/unxlngx6/lib solver/unxlngx6/bin/regview \
+.../core> diff <(LD_LIBRARY_PATH=.../core/solver/unxlngi6.pro/lib \
+ solver/unxlngi6.pro/bin/regview offapi/type_reference/types.rdb) \
+ <(LD_LIBRARY_PATH=.../core/solver/unxlngi6.pro/lib solver/unxlngi6.pro/bin/regview \
  tmp/out2.rdb) # sanity check
 .../core> mv tmp/out2.rdb offapi/type_reference/types.rdb
 .../core> rm -rf tmp
