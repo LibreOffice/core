@@ -1718,11 +1718,10 @@ WW8ScannerBase::WW8ScannerBase( SvStream* pSt, SvStream* pTblSt,
             if (pWwFib->fcAtrdExtra && pWwFib->lcbAtrdExtra)
             {
                 sal_Size nOldPos = pTblSt->Tell();
-                if (checkSeek(*pTblSt, pWwFib->fcAtrdExtra))
+                if (checkSeek(*pTblSt, pWwFib->fcAtrdExtra) && (pTblSt->remainingSize() >= pWwFib->lcbAtrdExtra))
                 {
                     pExtendedAtrds = new sal_uInt8[pWwFib->lcbAtrdExtra];
-                    pWwFib->lcbAtrdExtra = pTblSt->Read(pExtendedAtrds,
-                        pWwFib->lcbAtrdExtra);
+                    pWwFib->lcbAtrdExtra = pTblSt->Read(pExtendedAtrds, pWwFib->lcbAtrdExtra);
                 }
                 else
                     pWwFib->lcbAtrdExtra = 0;
