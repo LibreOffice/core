@@ -45,11 +45,20 @@ PATCH_FILES+=liblangtag-0.2-msvc-warning.patch
 CONFIGURE_DIR=.
 BUILD_DIR=$(CONFIGURE_DIR)
 
-my_misc='$(SRC_ROOT)$/$(PRJNAME)$/$(MISC)'
-my_prefix='$(my_misc)$/install'
-my_data='$(my_prefix)$/share/liblangtag'
+.IF "$(OS)" == "MACOSX"
+my_prefix = @__________________________________________________$(EXTRPATH)
+.ELSE
+my_prefix = install-liblangtag
+.END
+my_misc = $(shell @pwd)$/$(MISC)
+my_install_sub = install
+my_destdir = $(my_misc)$/$(my_install_sub)
+my_install = $(my_destdir)$/$(my_prefix)
+# relative to $(MISC)/build/liblangtag/ for OUT2LIB, OUT2INC
+my_install_relative = ..$/..$/$(my_install_sub)$/$(my_prefix)
+my_data = $(my_install)$/share$/liblangtag
 
-CONFIGURE_FLAGS+= --prefix='$(my_prefix)' --libdir='$(my_prefix)/lib'
+CONFIGURE_FLAGS+= --prefix='/$(my_prefix)' --libdir='/$(my_prefix)/lib'
 
 .IF "$(SYSTEM_LIBXML)"!="YES"
 CONFIGURE_FLAGS+= LIBXML2_CFLAGS='-I$(SOLARINCDIR)$/external'
@@ -78,7 +87,7 @@ CONFIGURE_FLAGS+= --disable-glibtest
 CONFIGURE_ACTION=$(AUGMENT_LIBRARY_PATH) .$/configure
 
 BUILD_ACTION=$(AUGMENT_LIBRARY_PATH) $(GNUMAKE) && \
-			 $(AUGMENT_LIBRARY_PATH) $(GNUMAKE) install
+			 $(AUGMENT_LIBRARY_PATH) $(GNUMAKE) install DESTDIR=$(my_destdir)
 
 
 .IF "$(GUI)"=="WNT"
@@ -96,6 +105,19 @@ PATCH_FILES+=liblangtag-0.2-msc-configure.patch
 
 .ENDIF	# "$(COM)"=="GCC"
 .ENDIF	# "$(GUI)"=="WNT"
+
+
+OUT2INC += $(my_install_relative)$/include$/liblangtag$/*
+
+.IF "$(GUI)"=="WNT" && "$(COM)"!="GCC"
+OUT2LIB += $(my_install_relative)$/lib$/langtag.lib*
+.ELSE
+.IF "$(OS)" == "MACOSX"
+OUT2LIB += $(my_install_relative)$/lib$/liblangtag*.dylib
+.ELSE
+OUT2LIB += $(my_install_relative)$/lib$/liblangtag.so*
+.ENDIF
+.ENDIF
 
 
 # --- Targets ------------------------------------------------------
