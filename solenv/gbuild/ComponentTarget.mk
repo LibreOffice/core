@@ -27,7 +27,7 @@
 #*************************************************************************
 
 gb_ComponentTarget_XSLTCOMMANDFILE := $(SOLARENV)/bin/createcomponent.xslt
-gb_ComponentTarget_get_source = $(1)/$(2).component
+gb_ComponentTarget_get_source = $(SRCDIR)/$(1).component
 
 # In the DISABLE_DYNLOADING case we don't need any COMPONENTPREFIX, we
 # put just the static library filename into the uri parameter. For
@@ -52,11 +52,8 @@ $(call gb_ComponentTarget_get_clean_target,%) :
 
 
 $(call gb_ComponentTarget_get_target,%) : \
-		$(call gb_ComponentTarget_get_source,$(SRCDIR),%) $(gb_XSLTPROCTARGET)
+		$(call gb_ComponentTarget_get_source,%) $(gb_XSLTPROCTARGET)
 	$(call gb_ComponentTarget__command,$@,$<,$*)
-
-$(call gb_ComponentTarget_get_target,%) :
-	$(eval $(call gb_Outpt_error,Unable to find component file $(call gb_ComponentTarget_get_source,,$*) in the repositories: $(gb_ComponentTarget_REPOS) or xsltproc is missing.))
 
 # the .dir is for make 3.81, which ignores trailing /
 $(dir $(call gb_ComponentTarget_get_outdir_target,))%/.dir :
