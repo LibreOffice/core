@@ -2474,9 +2474,22 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
 
             if( bOutChar )
             {
-                sal_Unicode c = rStr.GetChar( nStrPos );
-                // versuche nach ungefaehr 255 Zeichen eine neue Zeile zu
-                // beginnen, aber nicht in PRE und nur bei Spaces
+                // #i120442#: get the UTF-32 codepoint by converting an eventual UTF-16 unicode surrogate pair
+                sal_uInt64 c = rStr.GetChar( nStrPos );
+                if( nStrPos < nEnde - 1 )
+                {
+                    const sal_Unicode d = rStr.GetChar( nStrPos + 1 );
+                    if( (c >= 0xd800 && c <= 0xdbff) && (d >= 0xdc00 && d <= 0xdfff) )
+                    {
+                        sal_uInt64 templow = d&0x03ff;
+                        sal_uInt64 temphi = ((c&0x03ff) + 0x0040)<<10;
+                        c = temphi|templow;
+                        nStrPos++;
+                    }
+                }
+
+                // try to split a line after about 255 characters
+                // at a space character unless in a PRE-context
                 if( ' '==c && !rHTMLWrt.nLastParaToken  )
                 {
                     xub_StrLen nLineLen;
@@ -2488,7 +2501,7 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
                     xub_StrLen nWordLen = rStr.Search( ' ', nStrPos+1 );
                     if( nWordLen == STRING_NOTFOUND )
                         nWordLen = nEnde;
-                    nWordLen = nWordLen - nStrPos;
+                    nWordLen -= nStrPos;
 
                     if( nLineLen >= rHTMLWrt.nWhishLineLen ||
                         (nLineLen+nWordLen) >= rHTMLWrt.nWhishLineLen )
@@ -2508,13 +2521,20 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
                         HTMLOutFuncs::FlushToAscii( rWrt.Strm(), aContext );
                         HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_linebreak );
                     }
+                    // #i120442#: if c is outside the unicode base plane output it as "&#******;"
+                    else if( c > 0xffff)
+                    {
+                        OUString sOut("&#");
+                        sOut += OUString::number( (sal_uInt64)c );
+                        sOut += ";";
+                        rWrt.Strm() << sOut.getStr();
+                    }
                     else
-                        HTMLOutFuncs::Out_Char( rWrt.Strm(), c, aContext, &rHTMLWrt.aNonConvertableCharacters );
+                        HTMLOutFuncs::Out_Char( rWrt.Strm(), (sal_Unicode)c, aContext, &rHTMLWrt.aNonConvertableCharacters );
 
-                    // Wenn das letzte Zeichen eines Absatzed ein harter
-                    // Zeilen-Umbruch ist brauchen wir noch ein <BR> mehr, weil
-                    // Netscape & Co in diesem Fall fuer den naechsten Absatz
-                    // nicht in die naechste Zeile gehen.
+                    // if a paragraph's last character is a hard line break
+                    // then we need to add an extra <br>
+                    // because browsers like Mozilla wouldn't add a line for the next paragraph
                     bWriteBreak = (0x0a == c) &&
                                   (HTML_PREFORMTXT_ON != rHTMLWrt.nLastParaToken);
                 }
