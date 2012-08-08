@@ -59,10 +59,6 @@ using namespace ::com::sun::star::lang  ;
 using namespace std                     ;
 using namespace com::sun::star::system;
 
-//--------------------------------------------------------------
-//  defines
-//--------------------------------------------------------------
-
 #ifdef WNT
 
 #define RDB_SYSPATH "D:\\Projects\\gsl\\shell\\wntmsci7\\bin\\applicat.rdb"

@@ -31,10 +31,6 @@
 
 namespace unocontrols{
 
-//____________________________________________________________________________________________________________
-//  defines
-//____________________________________________________________________________________________________________
-
 #define SERVICENAME_PROGRESSBAR             "com.sun.star.awt.XProgressBar"
 #define IMPLEMENTATIONNAME_PROGRESSBAR      "stardiv.UnoControls.ProgressBar"
 #define PROGRESSBAR_FREESPACE               4
@@ -48,10 +44,6 @@ namespace unocontrols{
 #define PROGRESSBAR_DEFAULT_VALUE           PROGRESSBAR_DEFAULT_MINRANGE
 #define PROGRESSBAR_LINECOLOR_BRIGHT        TRGB_COLORDATA( 0x00, 0xFF, 0xFF, 0xFF )    // white
 #define PROGRESSBAR_LINECOLOR_SHADOW        TRGB_COLORDATA( 0x00, 0x00, 0x00, 0x00 )    // black
-
-//____________________________________________________________________________________________________________
-//  classes
-//____________________________________________________________________________________________________________
 
 class ProgressBar   : public ::com::sun::star::awt::XControlModel
                     , public ::com::sun::star::awt::XProgressBar

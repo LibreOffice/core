@@ -47,15 +47,11 @@
 
 #include <rtl/ustrbuf.hxx>
 
-//_______________________________________________
-// namespace
 
 namespace comphelper{
 
 namespace css = ::com::sun::star;
 
-//_______________________________________________
-// definitions
 
 const ::rtl::OUString& MediaDescriptor::PROP_ABORTED()
 {

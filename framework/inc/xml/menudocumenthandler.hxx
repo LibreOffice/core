@@ -42,10 +42,6 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <framework/fwedllapi.h>
 
-//_________________________________________________________________________________________________________________
-//  namespace
-//_________________________________________________________________________________________________________________
-
 namespace framework{
 
 class FWE_DLLPUBLIC ReadMenuDocumentHandlerBase : public ThreadHelpBase,    // Struct for right initalization of mutex member! Must be first of baseclasses.

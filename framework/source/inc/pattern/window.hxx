@@ -51,8 +51,6 @@ namespace css = ::com::sun::star;
 
 namespace framework{
 
-//_______________________________________________
-// definitions
 
 class WindowHelper
 {

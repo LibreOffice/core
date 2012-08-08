@@ -39,13 +39,9 @@
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/weakref.hxx>
 
-//_______________________________________________
-// namespace
 
 namespace framework{
 
-//_______________________________________________
-// definitions
 
 //_______________________________________________
 /**

@@ -25,13 +25,9 @@
 #include "osl/diagnose.h"
 #include "osl/getglobalmutex.hxx"
 
-//_______________________________________________
-// namespace
 
 namespace salhelper{
 
-//_______________________________________________
-// definitions
 
 /** @short  template for implementing singleton classes.
 

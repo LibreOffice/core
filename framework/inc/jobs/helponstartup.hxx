@@ -33,13 +33,9 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/frame/XModuleManager.hpp>
 
-//_______________________________________________
-// namespace
 
 namespace framework{
 
-//_______________________________________________
-// declarations
 
 //_______________________________________________
 /** @short  implements a job component, which handle the special

@@ -35,16 +35,12 @@
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 
-//_______________________________________________
-// namespace
 
 namespace filter{
     namespace config{
 
 namespace css = ::com::sun::star;
 
-//_______________________________________________
-// definitions
 
 
 

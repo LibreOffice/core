@@ -112,10 +112,6 @@ struct IMPL_MutexContainer
     ::osl::Mutex m_aMutex ;
 };
 
-//____________________________________________________________________________________________________________
-//  classes
-//____________________________________________________________________________________________________________
-
 class BaseControl   : public ::com::sun::star::lang::XServiceInfo
                     , public ::com::sun::star::awt::XPaintListener
                     , public ::com::sun::star::awt::XWindowListener

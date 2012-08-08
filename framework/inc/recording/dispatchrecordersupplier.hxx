@@ -20,9 +20,6 @@
 #ifndef __FRAMEWORK_RECORDING_DISPATCHRECORDERSUPPLIER_HXX_
 #define __FRAMEWORK_RECORDING_DISPATCHRECORDERSUPPLIER_HXX_
 
-//_________________________________________________________________________________________________________________
-// include own things
-
 #include <threadhelp/threadhelpbase.hxx>
 #include <macros/xinterface.hxx>
 #include <macros/xtypeprovider.hxx>
@@ -32,31 +29,15 @@
 #include <general.h>
 #include <stdtypes.h>
 
-//_________________________________________________________________________________________________________________
-// include interfaces
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/frame/XDispatchRecorderSupplier.hpp>
-
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 
-//_________________________________________________________________________________________________________________
-// include other projects
 #include <cppuhelper/weak.hxx>
 
-//_________________________________________________________________________________________________________________
-//  namespace
-
 namespace framework{
-
-//_________________________________________________________________________________________________________________
-//  exported const
-
-//_________________________________________________________________________________________________________________
-//  exported definitions
-
-//_______________________________________________
 
 /** @short          implement a supplier for dispatch recorder
     @descr          This supplier can be set on property "DispatchRecorderSupplier" on a frame.

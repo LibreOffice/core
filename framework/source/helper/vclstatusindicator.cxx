@@ -34,13 +34,9 @@
 #include <toolkit/unohlp.hxx>
 #include <vcl/svapp.hxx>
 
-//-----------------------------------------------
-// namespace
 
 namespace framework {
 
-//-----------------------------------------------
-// definitions
 
 //-----------------------------------------------
 DEFINE_XINTERFACE_1(VCLStatusIndicator                           ,

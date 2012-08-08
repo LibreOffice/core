@@ -33,13 +33,8 @@
 #include <salhelper/singletonref.hxx>
 #include <comphelper/locale.hxx>
 
-//__________________________________________
-// definition
-
 namespace framework
 {
-
-//__________________________________________
 /**
     TODO document me
 
@@ -57,8 +52,7 @@ namespace framework
  */
 class PresetHandler : private ThreadHelpBase // attention! Must be the first base class to guarentee right initialize lock ...
 {
-    //-------------------------------------------
-    // const
+
 
     public:
 

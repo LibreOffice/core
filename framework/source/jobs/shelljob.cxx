@@ -51,13 +51,9 @@
 #include <com/sun/star/util/PathSubstitution.hpp>
 #include <com/sun/star/util/XStringSubstitution.hpp>
 
-//_______________________________________________
-// namespace
 
 namespace framework{
 
-//_______________________________________________
-// definitions
 
 /** address job configuration inside argument set provided on method execute(). */
 static const ::rtl::OUString PROP_JOBCONFIG("JobConfig");

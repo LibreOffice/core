@@ -95,10 +95,6 @@
 
 #include <svl/lstner.hxx>
 
-//________________________________________________________________________________________________________
-//  defines
-//________________________________________________________________________________________________________
-
 // Some defines to write better code :-)
 #define XCHILD                  ::com::sun::star::container::XChild
 #define XNAMECONTAINER          ::com::sun::star::container::XNameContainer
@@ -167,10 +163,6 @@
 #define XTITLE ::com::sun::star::frame::XTitle
 #define XTITLECHANGEBROADCASTER ::com::sun::star::frame::XTitleChangeBroadcaster
 #define XUNTITLEDNUMBERS ::com::sun::star::frame::XUntitledNumbers
-
-//________________________________________________________________________________________________________
-//  namespace
-//________________________________________________________________________________________________________
 
 namespace css = ::com::sun::star;
 

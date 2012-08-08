@@ -43,13 +43,9 @@
 #include <rtl/ustrbuf.hxx>
 #include <vcl/svapp.hxx>
 
-//________________________________
-//  namespace
 
 namespace framework{
 
-//________________________________
-//  exported const
 
 const sal_Char* JobData::JOBCFG_ROOT              = "/org.openoffice.Office.Jobs/Jobs/"   ;
 const sal_Char* JobData::JOBCFG_PROP_SERVICE      = "Service"                             ;
@@ -74,11 +70,7 @@ const sal_Char* JobData::PROP_MODEL               = "Model"                     
 const sal_Char* JobData::PROP_SERVICE             = "Service"                             ;
 const sal_Char* JobData::PROP_CONTEXT             = "Context"                             ;
 
-//________________________________
-//  non exported definitions
 
-//________________________________
-//  declarations
 
 //________________________________
 /**

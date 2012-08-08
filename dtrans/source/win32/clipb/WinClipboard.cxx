@@ -39,10 +39,6 @@ using namespace com::sun::star::lang;
 
 using ::rtl::OUString;
 
-//------------------------------------------------------------------------
-// defines
-//------------------------------------------------------------------------
-
 #define WINCLIPBOARD_IMPL_NAME  "com.sun.star.datatransfer.clipboard.ClipboardW32"
 
 //------------------------------------------------------------------------

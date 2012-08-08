@@ -25,10 +25,6 @@
 
 #include <rtl/ustring>
 
-//------------------------------------------------------------------------
-// deklarations
-//------------------------------------------------------------------------
-
 class CResourceProvider_Impl;
 
 class CResourceProvider

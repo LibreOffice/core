@@ -31,10 +31,6 @@
 #include <ocidl.h>
 #include <olectl.h>
 
-//------------------------------------------------------------------------
-// defines
-//------------------------------------------------------------------------
-
 #define PREVIEWWND_CLASS_NAME TEXT("PreviewWnd###")
 
 #define HIMETRIC_INCH 2540

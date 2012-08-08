@@ -39,8 +39,6 @@
 #include <vcl/svapp.hxx>
 #include <rtl/ustrbuf.hxx>
 
-//_______________________________________________
-// namespace
 
 namespace framework{
 

@@ -36,10 +36,6 @@
 
 #include <vector>
 
-//------------------------------------------------------------------------
-// defines
-//------------------------------------------------------------------------
-
 #define FORMATETC_EXACT_MATCH    1
 #define FORMATETC_PARTIAL_MATCH -1
 #define FORMATETC_NO_MATCH       0

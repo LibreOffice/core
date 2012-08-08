@@ -26,8 +26,6 @@
 
 #include "comphelper/comphelperdllapi.h"
 
-//_______________________________________________
-// namespace
 
 namespace comphelper{
 class COMPHELPER_DLLPUBLIC StillReadWriteInteraction : public ::ucbhelper::InterceptedInteraction

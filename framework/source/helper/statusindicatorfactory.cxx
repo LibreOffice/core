@@ -55,13 +55,9 @@
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 
-//-----------------------------------------------
-// namespace
 
 namespace framework{
 
-//-----------------------------------------------
-// definitions
 
 sal_Int32 StatusIndicatorFactory::m_nInReschedule = 0;  /// static counter for rescheduling
 const char PROGRESS_RESOURCE[] = "private:resource/progressbar/progressbar";

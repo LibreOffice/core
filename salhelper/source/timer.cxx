@@ -237,8 +237,7 @@ TTimeValue Timer::getRemainingTime() const
 /////////////////////////////////////////////////////////////////////////////
 //
 // Timer manager
-//
-namespace
+
 {
     // Synchronize access to TimerManager
     struct theTimerManagerMutex : public rtl::Static< osl::Mutex, theTimerManagerMutex> {};

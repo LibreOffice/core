@@ -31,7 +31,6 @@
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  *************************************************************************/
-// __________ Imports __________
 
 import com.sun.star.uno.UnoRuntime;
 
@@ -40,8 +39,6 @@ import javax.swing.*;
 import java.lang.String;
 import java.awt.event.*;
 import java.awt.*;
-
-// __________ Implementation __________
 
 /**
  * Makes it possible to change some states of currently loaded
@@ -52,9 +49,6 @@ import java.awt.*;
 public class CustomizeView extends    JPanel
                            implements IShutdownListener
 {
-    // ____________________
-    // const
-
     /**
      * These const URL's describe feature for toggling some properties of loaded document.
      * Dispatch it with the corresponding parameter to the frame.

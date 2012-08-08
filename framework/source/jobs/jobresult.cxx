@@ -24,26 +24,12 @@
 #include <general.h>
 #include <services.h>
 
-
 #include <rtl/ustrbuf.hxx>
 #include <vcl/svapp.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 
-//________________________________
-//  namespace
-
 namespace framework{
 
-//________________________________
-//  non exported const
-
-//________________________________
-//  non exported definitions
-
-//________________________________
-//  declarations
-
-//________________________________
 /**
     @short      standard dtor
     @descr      It does nothing else ...

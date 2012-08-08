@@ -32,8 +32,6 @@
 #include <macros/generic.hxx>
 #include <general.h>
 
-//_______________________________________________
-//  namespace
 
 namespace framework{
 

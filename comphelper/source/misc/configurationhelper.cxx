@@ -25,15 +25,11 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 
-//_______________________________________________
-// namespace
 
 namespace comphelper{
 
 namespace css = ::com::sun::star;
 
-//_______________________________________________
-// definitions
 
 //-----------------------------------------------
 css::uno::Reference< css::uno::XInterface > ConfigurationHelper::openConfig(const css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR   ,

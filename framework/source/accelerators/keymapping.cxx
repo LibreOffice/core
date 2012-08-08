@@ -32,7 +32,6 @@
 
 #include <com/sun/star/awt/Key.hpp>
 
-// namespace
 
 namespace framework
 {

@@ -36,8 +36,6 @@
 #include <osl/diagnose.h>
 #include <rtl/instance.hxx>
 
-//_______________________________________________
-// namespace
 
 #define LOAD_IMPLICIT
 
@@ -46,8 +44,6 @@ namespace css = ::com::sun::star;
 namespace filter{
     namespace config{
 
-//_______________________________________________
-// definitions
 
 namespace
 {

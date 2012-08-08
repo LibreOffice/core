@@ -32,10 +32,6 @@
 #pragma warning(pop)
 #endif
 
-//------------------------------------------------------------------------
-// deklarations
-//------------------------------------------------------------------------
-
 // target device and formatetc helper
 void      SAL_CALL DeleteTargetDevice(DVTARGETDEVICE* ptd);
 sal_Bool  SAL_CALL CopyFormatEtc(LPFORMATETC petcDest, LPFORMATETC petcSrc);

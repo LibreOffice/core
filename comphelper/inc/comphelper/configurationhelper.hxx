@@ -44,8 +44,6 @@
 
 namespace comphelper{
 
-//_______________________________________________
-// definitions
 
 //-----------------------------------------------
 class COMPHELPER_DLLPUBLIC ConfigurationHelper

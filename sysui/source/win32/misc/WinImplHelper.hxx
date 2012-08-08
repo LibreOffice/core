@@ -29,10 +29,6 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
-//------------------------------------------------------------------------
-// deklarations
-//------------------------------------------------------------------------
-
 sal_Bool SAL_CALL IsWin2000( );
 
 // set actions

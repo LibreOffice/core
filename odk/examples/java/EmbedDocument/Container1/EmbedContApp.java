@@ -254,7 +254,6 @@ public class EmbedContApp extends Applet implements MouseListener, XEmbeddedClie
         // for now nothing to do
     }
 
-    // classes
     class NewMenuItem extends MenuItem implements ActionListener // Menu New
     {
         public NewMenuItem()

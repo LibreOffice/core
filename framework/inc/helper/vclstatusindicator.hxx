@@ -32,8 +32,6 @@
 #include <cppuhelper/weak.hxx>
 #include <vcl/status.hxx>
 
-//-----------------------------------------------
-// namespace
 
 namespace framework {
 

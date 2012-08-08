@@ -54,8 +54,6 @@
 
 #include <comphelper/sequenceashashmap.hxx>
 
-//_______________________________________________
-// const
 
 namespace framework
 {

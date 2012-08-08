@@ -37,16 +37,12 @@
 #include <comphelper/configurationhelper.hxx>
 #include <rtl/ustrbuf.hxx>
 
-//_______________________________________________
-// namespace
 
 namespace filter{
     namespace config{
 
 namespace css = ::com::sun::star;
 
-//_______________________________________________
-// definitions
 
 /** @short  can be used to query for filters related to its application module.
  */

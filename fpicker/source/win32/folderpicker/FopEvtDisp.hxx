@@ -23,9 +23,6 @@
 
 #include <com/sun/star/lang/EventObject.hpp>
 
-//------------------------------------------------------------------------
-// deklarations
-//------------------------------------------------------------------------
 class CFOPEventDispatcher
 {
 public:

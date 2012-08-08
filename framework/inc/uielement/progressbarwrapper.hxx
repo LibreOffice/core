@@ -33,10 +33,6 @@
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/weakref.hxx>
 
-//_________________________________________________________________________________________________________________
-//  namespace
-//_________________________________________________________________________________________________________________
-
 namespace framework{
 
 class ProgressBarWrapper : public UIElementWrapperBase

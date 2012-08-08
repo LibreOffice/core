@@ -18,14 +18,10 @@
 
 package com.sun.star.filter.config.tools.merge;
 
-//_______________________________________________
-
 import java.lang.*;
 import java.util.*;
 import java.io.*;
 import com.sun.star.filter.config.tools.utils.*;
-
-//_______________________________________________
 
 /**
  *  Its a simple command line tool, which can merge different XML fragments
@@ -36,9 +32,6 @@ import com.sun.star.filter.config.tools.utils.*;
  */
 public class FCFGMerge
 {
-    //___________________________________________
-    // const
-
     private static final java.lang.String CFGFILE = "com/sun/star/filter/config/tools/merge/FCFGMerge.cfg";
     private static final java.lang.String PROP_LOGLEVEL = "loglevel";
 

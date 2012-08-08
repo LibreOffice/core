@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <sal/main.h>
 #include <osl/diagnose.h>
 
@@ -42,7 +41,6 @@
 
 #include <stdio.h>
 
-
 using namespace cppu;
 using namespace osl;
 using namespace ModuleA;
@@ -60,7 +58,6 @@ using namespace com::sun::star::container;
 using ::rtl::OUString;
 using ::rtl::OUStringToOString;
 using ::rtl::OString;
-
 
 //==================================================================================================
 class OInterfaceA : public WeakImplHelper1< XInterfaceA >
@@ -95,7 +92,7 @@ static sal_Bool test_corefl( const Reference< XIdlReflection > & xRefl )
     OSL_ENSURE(xRefl->forName(OUString("ModuleA.StructA"))->getName() == OUString("ModuleA.StructA"), "test_RegCoreReflection(): error 2b");
     OSL_ENSURE(xRefl->forName(OUString("ModuleA.ExceptionB"))->getTypeClass() == TypeClass_EXCEPTION, "test_RegCoreReflection(): error 2c");
     OSL_ENSURE(xRefl->forName(OUString("ModuleA.ModuleB.EnumA")).is(), "test_RegCoreReflection(): error 2e");
-    // const
+
 
     OSL_ENSURE(*(const sal_Bool *)xHNameAccess->getByHierarchicalName(OUString("ModuleC.aConstBoolean")).getValue() == aConstBoolean, "test_RegCoreReflection(): error 4c");
     OSL_ENSURE(*(const sal_Int8 *)xHNameAccess->getByHierarchicalName(OUString("ModuleC.aConstByte")).getValue() == aConstByte, "test_RegCoreReflection(): error 4e");

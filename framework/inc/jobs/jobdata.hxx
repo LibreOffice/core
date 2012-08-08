@@ -33,16 +33,10 @@
 
 #include <rtl/ustring.hxx>
 
-//_______________________________________
-// namespace
-
 namespace framework{
 
-//_______________________________________
-// public const
 
-//_______________________________________
-// definitions
+
 
 /**
     @short  holds all neccessary informations about a job and
@@ -53,9 +47,6 @@ namespace framework{
  */
 class JobData : private ThreadHelpBase
 {
-    //___________________________________
-    // const
-
     public:
 
         /// specifies the root package and key to find registered jobs

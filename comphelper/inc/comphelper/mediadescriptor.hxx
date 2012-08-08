@@ -28,13 +28,7 @@ namespace com { namespace sun { namespace star { namespace io {
     class XInputStream;
 } } } }
 
-//_______________________________________________
-// namespace
-
 namespace comphelper{
-
-//_______________________________________________
-// definitions
 
 /** @short  can be used to work with a <type scope="::com::sun::star::document">MediaDescriptor</type>
             struct.
@@ -48,8 +42,6 @@ namespace comphelper{
  */
 class COMPHELPER_DLLPUBLIC MediaDescriptor : public SequenceAsHashMap
 {
-    //-------------------------------------------
-    // const
     public:
 
         //---------------------------------------

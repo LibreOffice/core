@@ -39,14 +39,10 @@
 
 #include <boost/scoped_ptr.hpp>
 
-//===============================================
-// const
 
 #define IMPLEMENTATIONNAME_RECOVERYUI       ::rtl::OUString("com.sun.star.comp.svx.RecoveryUI")
 #define SERVICENAME_RECOVERYUI              ::rtl::OUString("com.sun.star.dialog.RecoveryUI")
 
-//===============================================
-// namespace
 
 namespace svx
 {

@@ -61,10 +61,6 @@ using osl::Mutex;
 using osl::MutexGuard;
 using osl::ClearableMutexGuard;
 
-//----------------------------------------------------------------
-//  defines
-//----------------------------------------------------------------
-
 namespace /* private */
 {
     char CLIPSRV_DLL_NAME[] = "sysdtrans.dll";

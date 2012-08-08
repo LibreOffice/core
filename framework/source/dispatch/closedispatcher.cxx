@@ -49,8 +49,6 @@
 #include <osl/mutex.hxx>
 #include <unotools/moduleoptions.hxx>
 
-//_______________________________________________
-// namespace
 
 using namespace com::sun::star;
 
@@ -65,8 +63,6 @@ const char URL_CLOSEDOC[] = ".uno:CloseDoc";
 const char URL_CLOSEWIN[] = ".uno:CloseWin";
 const char URL_CLOSEFRAME[] = ".uno:CloseFrame";
 
-//_______________________________________________
-// declarations
 
 DEFINE_XINTERFACE_4(CloseDispatcher                                           ,
                     OWeakObject                                               ,

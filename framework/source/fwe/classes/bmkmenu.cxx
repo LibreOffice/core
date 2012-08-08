@@ -47,10 +47,6 @@
 #include <svtools/menuoptions.hxx>
 #include <rtl/logfile.hxx>
 
-//_________________________________________________________________________________________________________________
-//  namespace
-//_________________________________________________________________________________________________________________
-
 using namespace ::comphelper;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;

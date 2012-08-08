@@ -19,15 +19,11 @@
 
 #include <comphelper/sequenceashashmap.hxx>
 
-//_______________________________________________
-// namespace
 
 namespace comphelper{
 
 namespace css = ::com::sun::star;
 
-//_______________________________________________
-// definitions
 
 SequenceAsHashMap::SequenceAsHashMap()
     : SequenceAsHashMapBase()

@@ -36,16 +36,7 @@
 #include <cppuhelper/implbase3.hxx>
 #include <osl/conditn.hxx>
 
-//_______________________________________________
-// namespace
-
 namespace framework{
-
-//_______________________________________________
-// exported const
-
-//_______________________________________________
-// exported definitions
 
 /**
     @short      implements an easy way for dispatches

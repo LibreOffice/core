@@ -24,13 +24,9 @@
 #include <threadhelp/readguard.hxx>
 #include <threadhelp/writeguard.hxx>
 
-//_______________________________________________
-// namespace
 
 namespace framework{
 
-//_______________________________________________
-// declarations
 
 //***********************************************
 // XInterface

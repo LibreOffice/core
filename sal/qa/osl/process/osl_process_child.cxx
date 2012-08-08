@@ -58,7 +58,7 @@
 #endif
 
 //########################################
-// defines
+
 
 #ifdef WNT
 #   define SLEEP(t) (Sleep((t)*1000))

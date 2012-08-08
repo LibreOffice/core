@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-
 #include "framework/framelistanalyzer.hxx"
 
 #include <threadhelp/writeguard.hxx>
@@ -43,21 +42,7 @@
 #include <vcl/svapp.hxx>
 #include <tools/diagnose_ex.h>
 
-//_______________________________________________
-//  namespace
-
 namespace framework{
-
-//_______________________________________________
-//  non exported const
-
-//_______________________________________________
-//  non exported definitions
-
-//_______________________________________________
-//  declarations
-
-//_______________________________________________
 
 /**
  */
@@ -72,16 +57,12 @@ FrameListAnalyzer::FrameListAnalyzer( const css::uno::Reference< css::frame::XFr
     impl_analyze();
 }
 
-//_______________________________________________
-
 /**
  */
 
 FrameListAnalyzer::~FrameListAnalyzer()
 {
 }
-
-//_______________________________________________
 
 /** returns an analyzed list of all currently opened (top!) frames inside the desktop tree.
 

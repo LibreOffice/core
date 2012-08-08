@@ -26,8 +26,6 @@
 
 #include <com/sun/star/document/XActionLockable.hpp>
 
-//_______________________________________________
-// namespace
 
 namespace framework{
 
@@ -35,8 +33,6 @@ namespace framework{
 namespace css = ::com::sun::star;
 #endif
 
-//_______________________________________________
-// definitions
 
 /** @short  implements a guard, which can use the interface
             <type scope="com::sun::star::document">XActionLockable</type>.

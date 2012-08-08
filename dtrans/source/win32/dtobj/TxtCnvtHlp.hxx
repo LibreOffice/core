@@ -34,10 +34,6 @@
 #pragma warning(pop)
 #endif
 
-//------------------------------------------------------------------------
-// deklarations
-//------------------------------------------------------------------------
-
 int MultiByteToWideCharEx( UINT cp_src,
                            LPCSTR lpMultiByteString,
                            sal_uInt32 lenStr,

@@ -30,10 +30,6 @@
 
 class CFolderPicker;
 
-//------------------------------------------------------------------------
-// deklarations
-//------------------------------------------------------------------------
-
 class CWinFolderPickerImpl : public CMtaFolderPicker
 {
 public:

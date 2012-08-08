@@ -50,8 +50,6 @@
 
 #include <rtl/logfile.h>
 
-//_______________________________________________
-// const
 
 namespace framework
 {

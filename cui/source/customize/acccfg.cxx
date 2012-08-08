@@ -86,8 +86,6 @@
 
 using namespace com::sun::star;
 
-//-----------------------------------------------
-// definitions
 
 //-----------------------------------------------
 static ::rtl::OUString SERVICE_STORAGEFACTORY           (RTL_CONSTASCII_USTRINGPARAM("com.sun.star.embed.StorageFactory"                        ));

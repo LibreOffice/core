@@ -29,10 +29,6 @@
 
 #include <map>
 
-//------------------------------------------------------------------------
-// deklarations
-//------------------------------------------------------------------------
-
 class CMimeContentType : public
     cppu::WeakImplHelper1< com::sun::star::datatransfer::XMimeContentType >
 {

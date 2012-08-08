@@ -21,10 +21,6 @@
 #ifndef _APNDATAOBJECT_HXX_
 #define _APNDATAOBJECT_HXX_
 
-//------------------------------------------------------------------------
-// deklarations
-//------------------------------------------------------------------------
-
 /*
     an APartment Neutral dataobject wrapper; this wrapper of a IDataObject
     pointer can be used from any apartment without RPC_E_WRONG_THREAD

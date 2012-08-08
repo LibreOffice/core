@@ -44,8 +44,6 @@
 #include <osl/mutex.hxx>
 #include <tools/urlobj.hxx>
 
-//_______________________________________________
-// namespace
 
 namespace framework{
 

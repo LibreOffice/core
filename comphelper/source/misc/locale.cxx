@@ -21,8 +21,6 @@
 
 #include <rtl/ustrbuf.hxx>
 
-//_______________________________________________
-// namespace
 
 namespace comphelper{
 

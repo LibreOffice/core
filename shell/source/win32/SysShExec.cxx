@@ -64,10 +64,6 @@ using com::sun::star::system::SystemShellExecuteException;
 using namespace ::com::sun::star::system::SystemShellExecuteFlags;
 using namespace cppu;
 
-//------------------------------------------------------------------------
-// defines
-//------------------------------------------------------------------------
-
 #define SYSSHEXEC_IMPL_NAME  "com.sun.star.sys.shell.SystemShellExecute"
 
 //------------------------------------------------------------------------

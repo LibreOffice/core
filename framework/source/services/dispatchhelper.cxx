@@ -37,19 +37,7 @@
 
 #include <comphelper/componentcontext.hxx>
 
-//_______________________________________________
-// namespace
-
 namespace framework{
-
-//_______________________________________________
-// non exported const
-
-//_______________________________________________
-// non exported definitions
-
-//_______________________________________________
-// declarations
 
 //_______________________________________________
 // XInterface, XTypeProvider, XServiceInfo

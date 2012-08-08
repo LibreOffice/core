@@ -36,8 +36,7 @@ import java.io.*;
  */
 public class Cache
 {
-    //___________________________________________
-    // public const
+
 
     /** identifies a file type item of this cache. */
     public static final int E_TYPE = 0;

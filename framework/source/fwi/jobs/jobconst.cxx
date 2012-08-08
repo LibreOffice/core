@@ -28,18 +28,7 @@
 
 #include <jobs/jobconst.hxx>
 
-//  namespace
-
 namespace framework{
-
-//________________________________
-//  non exported const
-
-//________________________________
-//  non exported definitions
-
-//________________________________
-//  declarations
 
 const ::rtl::OUString JobConst::ANSWER_DEACTIVATE_JOB()
 {

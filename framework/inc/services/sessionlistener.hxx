@@ -53,16 +53,7 @@
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/interfacecontainer.h>
 
-//_______________________________________________
-// namespace
-
 namespace framework{
-
-//_______________________________________________
-// exported const
-
-//_______________________________________________
-// exported definitions
 
 /// @HTML
 /** @short  implements flat/deep detection of file/stream formats and provides

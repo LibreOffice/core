@@ -30,13 +30,9 @@
 #include <com/sun/star/beans/IllegalTypeException.hpp>
 #include "comphelper/comphelperdllapi.h"
 
-//_______________________________________________
-// namespace
 
 namespace comphelper{
 
-//_______________________________________________
-// definitions
 
 /** @short  Implements a stl hash map on top of some
             specialized sequence from type PropertyValue

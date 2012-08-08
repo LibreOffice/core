@@ -58,10 +58,6 @@ class SfxUnoControllerItem;
 
 typedef std::vector<SfxUnoControllerItem*> SfxUnoControllerArr_Impl;
 
-//________________________________________________________________________________________________________________
-//  defines
-//________________________________________________________________________________________________________________
-
 #define SFX_CALLMODE_SLOT               0x00    // sync/async from Slot
 #define SFX_CALLMODE_SYNCHRON           0x01    // synchronously in the same Stackframe
 #define SFX_CALLMODE_ASYNCHRON          0x02    // asynchronously via AppEvent

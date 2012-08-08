@@ -43,10 +43,6 @@ using namespace ::rtl                   ;
 using namespace ::osl                   ;
 using namespace ::com::sun::star::uno   ;
 
-//_________________________________________________________________________________________________________________
-//  const
-//_________________________________________________________________________________________________________________
-
 #define ROOTNODE_SECURITY               OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Common/Security/Scripting"))
 #define DEFAULT_SECUREURL               Sequence< OUString >()
 #define DEFAULT_TRUSTEDAUTHORS          Sequence< SvtSecurityOptions::Certificate >()
@@ -259,10 +255,6 @@ private:
         EBasicSecurityMode      GetBasicMode    (                                               ) const ;
         void                    SetBasicMode    (           EBasicSecurityMode      eMode       )       ;
 };
-
-//_________________________________________________________________________________________________________________
-//  definitions
-//_________________________________________________________________________________________________________________
 
 //*****************************************************************************************************************
 //  constructor

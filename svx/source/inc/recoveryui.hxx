@@ -28,8 +28,6 @@
 #include <vcl/window.hxx>
 #include "docrecovery.hxx"
 
-//===============================================
-// namespace
 
 namespace svx
 {
@@ -38,8 +36,6 @@ namespace svx
 namespace css   = ::com::sun::star;
 namespace svxdr = ::svx::DocRecovery;
 
-//===============================================
-// declarations
 
 class RecoveryUI : public ::cppu::WeakImplHelper2< css::lang::XServiceInfo        ,
                                                    css::frame::XSynchronousDispatch > // => XDispatch!

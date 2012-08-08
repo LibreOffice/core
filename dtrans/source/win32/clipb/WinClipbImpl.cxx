@@ -52,10 +52,6 @@ using namespace com::sun::star::datatransfer::clipboard::RenderingCapabilities;
 
 using ::rtl::OUString;
 
-//------------------------------------------------------------------------
-// deklarations
-//------------------------------------------------------------------------
-
 // definition of static members
 CWinClipbImpl* CWinClipbImpl::s_pCWinClipbImpl = NULL;
 osl::Mutex     CWinClipbImpl::s_aMutex;

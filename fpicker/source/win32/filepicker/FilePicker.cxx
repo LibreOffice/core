@@ -41,10 +41,6 @@ using namespace com::sun::star;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::ui::dialogs::TemplateDescription;
 
-//------------------------------------------------------------------------
-// defines
-//------------------------------------------------------------------------
-
 #define FILE_PICKER_DLL_NAME  TEXT("fps.dll")
 
 //------------------------------------------------------------------------

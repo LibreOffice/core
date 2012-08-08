@@ -26,13 +26,9 @@
 
 #include <com/sun/star/beans/IllegalTypeException.hpp>
 
-//_______________________________________________
-// namespace
 
 namespace comphelper{
 
-//_______________________________________________
-// definitions
 
 /** @short  Implements a stl vector on top of any
             uno sequence.

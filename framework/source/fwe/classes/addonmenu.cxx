@@ -42,9 +42,6 @@
 #include <vcl/svapp.hxx>
 #include <svtools/menuoptions.hxx>
 #include <svl/solar.hrc>
-//_________________________________________________________________________________________________________________
-//  namespace
-//_________________________________________________________________________________________________________________
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;

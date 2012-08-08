@@ -29,8 +29,6 @@
 
 namespace css = ::com::sun::star;
 
-//-----------------------------------------------
-// definitions
 
 class ItemHolder2 : private ItemHolderMutexBase
                   , public  ::cppu::WeakImplHelper1< css::lang::XEventListener >

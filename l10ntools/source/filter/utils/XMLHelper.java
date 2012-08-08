@@ -35,8 +35,7 @@ import java.io.*;
  */
 public class XMLHelper
 {
-    //___________________________________________
-    // public const
+
 
     /** its a possible value of the xml attribute "oor:type" and identify an integer type. */
     public static final java.lang.String XMLTYPE_INTEGER = "xs:int";

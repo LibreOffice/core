@@ -35,14 +35,10 @@
 #include <salhelper/singletonref.hxx>
 #include <cppuhelper/implbase1.hxx>
 
-//_______________________________________________
-// namespace
 
 namespace filter{
     namespace config{
 
-//_______________________________________________
-// definitions
 
 //_______________________________________________
 

@@ -39,18 +39,9 @@
 #include <cppuhelper/implbase1.hxx>
 #include <tools/link.hxx>
 
-//_______________________________________________
-// namespace
-
 namespace framework{
 
 namespace css = ::com::sun::star;
-
-//_______________________________________________
-// exported const
-
-//_______________________________________________
-// exported definitions
 
 /** @short  internal helper to bind e.g. MAC-Menu events to our internal dispatch API.
 

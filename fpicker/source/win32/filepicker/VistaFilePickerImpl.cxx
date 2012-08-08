@@ -51,10 +51,6 @@ HWND choose_parent_window()
     return hwnd_parent;
 }
 
-//-----------------------------------------------------------------------------
-// namespace
-//-----------------------------------------------------------------------------
-
 namespace fpicker{
 namespace win32{
 namespace vista{

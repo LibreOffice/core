@@ -55,8 +55,6 @@
 
 #include <fwkdllapi.h>
 
-// ______________________________________________
-//  non exported const
 
 #define CFGPROP_USERPATHS rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UserPaths"))
 #define CFGPROP_WRITEPATH rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("WritePath"))
@@ -84,8 +82,6 @@ sal_Int32 impl_getPropGroup(sal_Int32 nID)
     return (nID % IDGROUP_COUNT);
 }
 
-// ______________________________________________
-//  namespace
 
 namespace framework
 {

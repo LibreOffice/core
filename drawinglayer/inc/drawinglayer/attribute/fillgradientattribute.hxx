@@ -46,8 +46,6 @@ namespace drawinglayer { namespace attribute {
     class ImpFillGradientAttribute;
 }}
 
-//////////////////////////////////////////////////////////////////////////////
-// declarations
 
 namespace drawinglayer
 {

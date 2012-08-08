@@ -32,10 +32,6 @@
 #pragma warning(pop)
 #endif
 
-//------------------------------------------------------------------------
-// defines
-//------------------------------------------------------------------------
-
 #define IMPL_NAME  "com.sun.star.datatransfer.DataFormatTranslator"
 
 #define MODULE_PRIVATE

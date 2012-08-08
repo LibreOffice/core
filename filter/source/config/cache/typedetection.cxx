@@ -43,8 +43,6 @@
 #include <unotools/localfilehelper.hxx>
 #include <comphelper/componentcontext.hxx>
 
-//_______________________________________________
-// namespace
 
 namespace filter{
     namespace config{

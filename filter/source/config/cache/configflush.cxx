@@ -32,16 +32,12 @@
 
 #include <osl/diagnose.h>
 
-//_______________________________________________
-// namespace
 
 namespace css = ::com::sun::star;
 
 namespace filter{
     namespace config{
 
-//_______________________________________________
-// definitions
 
 //-----------------------------------------------
 ConfigFlush::ConfigFlush(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR)

@@ -32,14 +32,10 @@
 #include <boost/unordered_map.hpp>
 #include <rtl/ustring.hxx>
 
-//_______________________________________________
-// namespace
 
 namespace filter{
     namespace config{
 
-//_______________________________________________
-// definitions
 
 /** @short      It can be used to split any query string (which can be used at the
                 related interface <type scope="com::sun::star::container">XContainerQuery</type>)

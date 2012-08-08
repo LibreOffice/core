@@ -29,13 +29,8 @@
 #include <rtl/ustring.hxx>
 #include <fwidllapi.h>
 
-//_______________________________________
-// namespace
-
 namespace framework{
 
-//_______________________________________
-// public const
 
 //_______________________________________
 /**
@@ -46,8 +41,7 @@ namespace framework{
  */
 class FWI_DLLPUBLIC ConfigAccess : public ThreadHelpBase
 {
-    //___________________________________
-    // const
+
 
     public:
 

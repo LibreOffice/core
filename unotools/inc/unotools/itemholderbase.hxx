@@ -25,8 +25,6 @@
 
 namespace utl { namespace detail { class Options; } }
 
-//-----------------------------------------------
-// definitions
 
 struct ItemHolderMutexBase
 {

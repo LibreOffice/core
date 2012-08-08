@@ -39,8 +39,6 @@
 #include <vector>
 #include <algorithm>
 
-//////////////////////////////////////////////////////////////////////////////
-// defines
 
 #define SUBDIVIDE_FOR_CUT_TEST_COUNT        (50)
 

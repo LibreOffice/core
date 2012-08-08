@@ -41,10 +41,6 @@ using osl::MutexGuard;
 using namespace cppu;
 using namespace com::sun::star::ui::dialogs;
 
-//------------------------------------------------------------------------
-// defines
-//------------------------------------------------------------------------
-
 #define FOLDERPICKER_IMPL_NAME  "com.sun.star.ui.dialogs.Win32FolderPicker"
 
 //------------------------------------------------------------------------

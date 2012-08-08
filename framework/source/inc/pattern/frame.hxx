@@ -39,8 +39,6 @@ namespace framework{
     namespace pattern{
         namespace frame{
 
-//_______________________________________________
-// definitions
 
 //-----------------------------------------------
 inline css::uno::Reference< css::frame::XModel > extractFrameModel(const css::uno::Reference< css::frame::XFrame >& xFrame)

@@ -45,8 +45,6 @@
 #include <comphelper/locale.hxx>
 #include <comphelper/configurationhelper.hxx>
 
-//_______________________________________________
-// const
 
 namespace framework
 {

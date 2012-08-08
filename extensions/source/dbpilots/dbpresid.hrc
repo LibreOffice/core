@@ -204,8 +204,6 @@
 #define IMG_TABLE                   1
 #define IMG_QUERY                   3
 
-//========================================================================
-// defines
 
 #define WINDOW_SIZE_X       260
 #define WINDOW_SIZE_Y       185

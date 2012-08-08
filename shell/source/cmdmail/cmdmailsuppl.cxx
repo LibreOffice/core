@@ -67,10 +67,6 @@ using namespace com::sun::star::system::SimpleMailClientFlags;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 
-//------------------------------------------------------------------------
-// defines
-//------------------------------------------------------------------------
-
 #define COMP_IMPL_NAME  "com.sun.star.comp.system.SimpleCommandMail2"
 
 //------------------------------------------------------------------------

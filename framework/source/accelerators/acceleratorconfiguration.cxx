@@ -62,8 +62,6 @@
 #include <svtools/acceleratorexecute.hxx>
 #include <stdio.h>
 
-//_______________________________________________
-// const
 
 namespace framework
 {

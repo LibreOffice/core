@@ -42,14 +42,10 @@
 #include <cppuhelper/weakref.hxx>
 #include <rtl/ustring.hxx>
 
-//_______________________________________________
-// namespace
 
 namespace filter{
     namespace config{
 
-//_______________________________________________
-// definitions
 
 //_______________________________________________
 

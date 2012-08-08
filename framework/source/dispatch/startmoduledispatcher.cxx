@@ -51,8 +51,6 @@
 #include <osl/mutex.hxx>
 #include <unotools/moduleoptions.hxx>
 
-//_______________________________________________
-// namespace
 
 namespace framework{
 
@@ -61,8 +59,6 @@ namespace framework{
 #endif
 namespace fpf = ::framework::pattern::frame;
 
-//_______________________________________________
-// declarations
 
 DEFINE_XINTERFACE_4(StartModuleDispatcher                                     ,
                     OWeakObject                                               ,

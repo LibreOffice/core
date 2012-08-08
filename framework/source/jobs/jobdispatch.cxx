@@ -43,19 +43,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <vcl/svapp.hxx>
 
-//________________________________
-//  namespace
-
 namespace framework{
-
-//________________________________
-//  non exported const
-
-//________________________________
-//  non exported definitions
-
-//________________________________
-//  declarations
 
 DEFINE_XINTERFACE_6( JobDispatch                                     ,
                      OWeakObject                                     ,

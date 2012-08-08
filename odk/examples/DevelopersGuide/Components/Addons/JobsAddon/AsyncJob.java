@@ -32,8 +32,6 @@
  *
  *************************************************************************/
 
-//_______________________________________________
-// imports
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.lib.uno.helper.Factory;
 import com.sun.star.lib.uno.helper.WeakBase;
@@ -45,9 +43,6 @@ import com.sun.star.uno.*;
 import java.lang.*;
 import javax.swing.*;
 
-//_______________________________________________
-// implementation
-
 /** it implements a simple job component.
  *
  *  Such jobs are executable in different ways:
@@ -58,8 +53,6 @@ import javax.swing.*;
  */
 public class AsyncJob extends    WeakBase implements XServiceInfo, XAsyncJob
 {
-    //___________________________________________
-    // const
     public final XComponentContext m_xCmpCtx;
 
     /** the const list of supported uno service names. */

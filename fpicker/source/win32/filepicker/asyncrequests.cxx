@@ -21,10 +21,6 @@
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 
-//-----------------------------------------------------------------------------
-// namespace
-//-----------------------------------------------------------------------------
-
 namespace fpicker{
 namespace win32{
 namespace vista{

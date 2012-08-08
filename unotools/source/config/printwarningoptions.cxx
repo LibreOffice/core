@@ -36,10 +36,6 @@ using namespace ::rtl                   ;
 using namespace ::osl                   ;
 using namespace ::com::sun::star::uno   ;
 
-//_________________________________________________________________________________________________________________
-//  const
-//_________________________________________________________________________________________________________________
-
 #define ROOTNODE_START                  OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Common/Print"))
 
 #define PROPERTYNAME_PAPERSIZE          OUString(RTL_CONSTASCII_USTRINGPARAM("Warning/PaperSize"))
@@ -110,10 +106,6 @@ private:
     sal_Bool    m_bTransparency;
     sal_Bool    m_bModifyDocumentOnPrintingAllowed;
 };
-
-//_________________________________________________________________________________________________________________
-//  definitions
-//_________________________________________________________________________________________________________________
 
 //*****************************************************************************************************************
 //  constructor

@@ -59,10 +59,6 @@
 #include <vcl/button.hxx>
 #include <vcl/morebtn.hxx>
 
-//_________________________________________________________________________________________________________________
-//  namespace
-//_________________________________________________________________________________________________________________
-
 namespace framework{
 
 #define ANY                                 ::com::sun::star::uno::Any
@@ -85,10 +81,6 @@ namespace framework{
 #define LOCALE                              ::com::sun::star::lang::Locale
 #define XFLUSHABLE                          ::com::sun::star::util::XFlushable
 #define XFLUSHLISTENER                      ::com::sun::star::util::XFlushListener
-
-//_________________________________________________________________________________________________________________
-//  exported const
-//_________________________________________________________________________________________________________________
 
 #ifdef WNT
     #define ININAME                             DECLARE_ASCII("login.ini")
@@ -120,10 +112,6 @@ namespace framework{
 #define SECTION_GLOBAL                          "Global"
 #define SECTION_DEFAULTPORTS                    "DefaultPorts"
 #define SECTION_SERVERHISTORY                   "ServerHistory"
-
-//_________________________________________________________________________________________________________________
-//  exported definitions
-//_________________________________________________________________________________________________________________
 
 struct tIMPL_DialogData
 {

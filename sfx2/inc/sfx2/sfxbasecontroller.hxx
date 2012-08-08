@@ -48,10 +48,6 @@
 #include <sfx2/viewsh.hxx>
 #include <sfx2/sfxuno.hxx>
 
-//________________________________________________________________________________________________________
-//  defines
-//________________________________________________________________________________________________________
-
 // Some defines to write better code :-)
 #define REFERENCE               ::com::sun::star::uno::Reference
 #define ANY                     ::com::sun::star::uno::Any

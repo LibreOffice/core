@@ -29,23 +29,16 @@
 #ifndef __FRAMEWORK_LOADENV_LOADENVEXCEPTION_HXX_
 #define __FRAMEWORK_LOADENV_LOADENVEXCEPTION_HXX_
 
-
 #include <com/sun/star/uno/Any.h>
 #include <com/sun/star/uno/Exception.hpp>
 
 #include <rtl/string.hxx>
-
-//_______________________________________________
-// namespace
 
 namespace framework{
 
 #ifndef css // conflict with define :-(
 namespace css = ::com::sun::star;
 #endif
-
-//_______________________________________________
-// definitions
 
 /** @short  specify an exception, which can be used inside the
             load environment only.
@@ -57,8 +50,7 @@ namespace css = ::com::sun::star;
  */
 class LoadEnvException
 {
-    //___________________________________________
-    // const
+
 
     public:
 

@@ -34,8 +34,6 @@
 #include <vector>
 #include <boost/unordered_map.hpp>
 
-//_______________________________________________
-// namespace
 
 namespace comphelper{
 
@@ -45,8 +43,6 @@ namespace comphelper{
     #define css ::com::sun::star
 #endif
 
-//_______________________________________________
-// definitions
 
 /** @short  defines a collection of UNO components, where every component will get it's own unique number.
 

@@ -24,13 +24,9 @@
 #include <threadhelp/readguard.hxx>
 #include <threadhelp/writeguard.hxx>
 
-//_______________________________________________
-// namespace
 
 namespace framework{
 
-//_______________________________________________
-// declarations
 
 //***********************************************
 WakeUpThread::WakeUpThread(const css::uno::Reference< css::util::XUpdatable >& xListener)

@@ -36,14 +36,10 @@
 #include "frameloaderfactory.hxx"
 #include "configflush.hxx"
 
-//_______________________________________________
-// namespace
 
 namespace filter{
     namespace config{
 
-//_______________________________________________
-// definitions
 
 extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL
     filterconfig1_component_getFactory( const sal_Char* pImplementationName,

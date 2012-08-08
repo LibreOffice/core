@@ -21,10 +21,6 @@
 #include "mcnttfactory.hxx"
 #include "mcnttype.hxx"
 
-//------------------------------------------------------------------------
-// defines
-//------------------------------------------------------------------------
-
 #define MIMECONTENTTYPEFACTORY_IMPL_NAME  "com.sun.star.datatransfer.MimeCntTypeFactory"
 
 //------------------------------------------------------------------------

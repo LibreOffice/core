@@ -27,14 +27,6 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/datatransfer/XMimeContentTypeFactory.hpp>
 
-//------------------------------------------------------------------------
-// defines
-//------------------------------------------------------------------------
-
-//------------------------------------------------------------------------
-// deklarations
-//------------------------------------------------------------------------
-
 class CMimeContentTypeFactory : public
     cppu::WeakImplHelper2< com::sun::star::datatransfer::XMimeContentTypeFactory, \
     com::sun::star::lang::XServiceInfo >

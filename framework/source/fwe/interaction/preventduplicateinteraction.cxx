@@ -17,31 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "framework/preventduplicateinteraction.hxx"
 
 #include <com/sun/star/task/XInteractionAbort.hpp>
 #include <com/sun/star/task/XInteractionRetry.hpp>
 
-//_________________________________________________________________________________________________________________
-//  namespace
-//_________________________________________________________________________________________________________________
-
 namespace framework{
 
 namespace css = ::com::sun::star;
 
-//_________________________________________________________________________________________________________________
-//  exported const
-//_________________________________________________________________________________________________________________
-
 #define IMPLEMENTATIONNAME_UIINTERACTIONHANDLER                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.uui.UUIInteractionHandler"))
-
-//_________________________________________________________________________________________________________________
-//  exported definitions
-//_________________________________________________________________________________________________________________
-
-//_________________________________________________________________________________________________________________
 
 PreventDuplicateInteraction::PreventDuplicateInteraction(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR)
     : ThreadHelpBase2()

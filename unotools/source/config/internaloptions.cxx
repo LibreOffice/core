@@ -41,10 +41,6 @@ using namespace ::std                   ;
 using namespace ::com::sun::star::uno   ;
 using namespace ::com::sun::star::beans ;
 
-//_________________________________________________________________________________________________________________
-//  const
-//_________________________________________________________________________________________________________________
-
 #define ROOTNODE_INTERNAL                   OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Common/Internal"   ))
 #define DEFAULT_SLOTCFG                     sal_False
 #define DEFAULT_SENDCRASHMAIL               sal_False
@@ -177,10 +173,6 @@ class SvtInternalOptions_Impl : public ConfigItem
 
         Sequence< OUString > impl_GetPropertyNames();
 };
-
-//_________________________________________________________________________________________________________________
-//  definitions
-//_________________________________________________________________________________________________________________
 
 //*****************************************************************************************************************
 //  constructor

@@ -65,10 +65,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::system::SystemShellExecuteFlags;
 using namespace cppu;
 
-//------------------------------------------------------------------------
-// defines
-//------------------------------------------------------------------------
-
 #define SHELLEXEC_IMPL_NAME  "com.sun.star.comp.system.SystemShellExecute2"
 
 //------------------------------------------------------------------------

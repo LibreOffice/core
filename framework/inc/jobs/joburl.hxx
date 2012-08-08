@@ -27,13 +27,9 @@
 
 #include <rtl/ustring.hxx>
 
-//_______________________________________
-// namespace
 
 namespace framework{
 
-//_______________________________________
-// const
 
 #define JOBURL_PROTOCOL_STR        "vnd.sun.star.job:"
 #define JOBURL_PROTOCOL_LEN        17

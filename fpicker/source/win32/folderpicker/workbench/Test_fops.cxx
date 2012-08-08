@@ -53,10 +53,6 @@ using namespace ::com::sun::star::lang  ;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace std                     ;
 
-//--------------------------------------------------------------
-//  defines
-//--------------------------------------------------------------
-
 #define RDB_SYSPATH "D:\\Projects\\gsl\\sysui\\wntmsci7\\bin\\applicat.rdb"
 
 //--------------------------------------------------------------

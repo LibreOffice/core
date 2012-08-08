@@ -49,10 +49,6 @@ using namespace ::rtl                   ;
 using namespace ::osl                   ;
 using namespace ::com::sun::star::uno   ;
 
-//_________________________________________________________________________________________________________________
-//  const
-//_________________________________________________________________________________________________________________
-
 #define ROOTNODE_MENU                           OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Common/View/Menu"  ))
 #define DEFAULT_DONTHIDEDISABLEDENTRIES         sal_False
 #define DEFAULT_FOLLOWMOUSE                     sal_True
@@ -213,10 +209,6 @@ class SvtMenuOptions_Impl : public ConfigItem
 
         static Sequence< OUString > impl_GetPropertyNames();
 };
-
-//_________________________________________________________________________________________________________________
-//  definitions
-//_________________________________________________________________________________________________________________
 
 //*****************************************************************************************************************
 //  constructor

@@ -31,10 +31,6 @@
 
 #include <systools/win32/comtools.hxx>
 
-//------------------------------------------------------------------------
-// deklarations
-//------------------------------------------------------------------------
-
 // forward
 class CDTransObjFactory;
 class CFormatEtc;

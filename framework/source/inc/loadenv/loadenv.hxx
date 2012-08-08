@@ -49,8 +49,6 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <cppuhelper/implbase2.hxx>
 
-//_______________________________________________
-// namespace
 
 namespace framework {
 

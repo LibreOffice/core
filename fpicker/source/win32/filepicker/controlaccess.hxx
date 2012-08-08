@@ -33,10 +33,6 @@
 #endif
 #include <com/sun/star/uno/Any.hxx>
 
-//------------------------------------------------------------------------
-// deklarations
-//------------------------------------------------------------------------
-
 typedef void ( SAL_CALL *CTRL_SETVALUE_FUNCTION_T)( HWND, const ::com::sun::star::uno::Any&, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >&, sal_Int16 );
 typedef ::com::sun::star::uno::Any ( SAL_CALL *CTRL_GETVALUE_FUNCTION_T )( HWND );
 

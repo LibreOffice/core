@@ -24,13 +24,7 @@
 #include <rtl/ustring.hxx>
 #include "comphelper/comphelperdllapi.h"
 
-//_______________________________________________
-// namespace
-
 namespace comphelper{
-
-//_______________________________________________
-// definitions
 
 /** @short  A Locale object represents a specific geographical, political, or cultural region.
 
@@ -41,9 +35,6 @@ namespace comphelper{
  */
 class COMPHELPER_DLLPUBLIC Locale
 {
-    //-------------------------------------------
-    // const
-
     public:
 
         /** @short seperates LANGUAGE and COUNTRY part of an ISO formated Locale. */

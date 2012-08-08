@@ -23,10 +23,6 @@
 #include "comptr.hxx"
 #include <shobjidl.h>
 
-//-----------------------------------------------------------------------------
-// namespace
-//-----------------------------------------------------------------------------
-
 #ifdef css
     #error "Clash on using CSS as namespace define."
 #else

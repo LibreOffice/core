@@ -44,16 +44,12 @@
 #include <vcl/evntpost.hxx>
 #include <osl/mutex.h>
 
-//===============================================
-// namespace
 
 namespace css = ::com::sun::star;
 
 namespace svt
 {
 
-//===============================================
-// definitions
 
 struct TMutexInit
 {

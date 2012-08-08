@@ -40,10 +40,6 @@
 #include <cppuhelper/interfacecontainer.h>
 #include <osl/interlck.h>
 
-//-----------------------------------------------------------------------------
-// namespace
-//-----------------------------------------------------------------------------
-
 namespace css = ::com::sun::star;
 
 namespace fpicker{

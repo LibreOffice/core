@@ -41,16 +41,11 @@
 #include <cppuhelper/weak.hxx>
 #include <rtl/ustring.hxx>
 
-//_______________________________________
-// namespace
 
 namespace framework{
 
-//_______________________________________
-// public const
 
-//_______________________________________
-// definitions
+
 
 /**
     @short  it represent a job; execute it and control it's lifetime

@@ -35,7 +35,6 @@
 
 #include <osl/thread.h>
 
-
 #include <vcl/svapp.hxx>
 #include <unotools/tempfile.hxx>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
@@ -67,8 +66,6 @@
 
 #include <com/sun/star/uno/Sequence.hxx>
 
-// namespace
-
 using namespace com::sun::star::uno;
 using namespace com::sun::star::util;
 using namespace com::sun::star::frame;
@@ -78,16 +75,8 @@ using namespace com::sun::star::container;
 
 using ::rtl::OUString;
 using ::rtl::OString;
+
 namespace framework{
-
-//_______________________________________________
-// non exported const
-
-//_______________________________________________
-// non exported definitions
-
-//_______________________________________________
-// declarations
 
 //***********************************************
 // XInterface, XTypeProvider, XServiceInfo

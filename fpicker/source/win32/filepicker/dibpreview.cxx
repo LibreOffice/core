@@ -47,10 +47,6 @@ namespace /* private */
     const LPCTSTR CURRENT_INSTANCE = TEXT("CurrInst");
 };
 
-//------------------------------------------------------------------------
-// defines
-//------------------------------------------------------------------------
-
 #define PREVIEWWND_CLASS_NAME TEXT("DIBPreviewWnd###")
 
 // means 3 pixel left and 3 pixel right

@@ -39,10 +39,6 @@ namespace /* private */
 
 };
 
-//------------------------------------------------------------------------
-// defines
-//------------------------------------------------------------------------
-
 #define HELPPOPUPWND_CLASS_NAME TEXT("hlppopupwnd###")
 
 const sal_Int32 MAX_CHARS_PER_LINE = 55;

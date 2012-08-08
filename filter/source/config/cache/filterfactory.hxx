@@ -26,16 +26,12 @@
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <cppuhelper/implbase1.hxx>
 
-//_______________________________________________
-// namespace
 
 namespace filter{
     namespace config{
 
 namespace css = ::com::sun::star;
 
-//_______________________________________________
-// definitions
 
 //_______________________________________________
 

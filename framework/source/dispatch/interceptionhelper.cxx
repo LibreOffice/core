@@ -32,21 +32,13 @@
 
 #include <vcl/svapp.hxx>
 
-//_______________________________________________
-//  namespace
 
 namespace framework{
 
-//_______________________________________________
-//  non exported const
 
 sal_Bool InterceptionHelper::m_bPreferrFirstInterceptor = sal_True;
 
-//_______________________________________________
-//  non exported definitions
 
-//_______________________________________________
-//  declarations
 
 DEFINE_XINTERFACE_3(InterceptionHelper                                         ,
                     OWeakObject                                                ,

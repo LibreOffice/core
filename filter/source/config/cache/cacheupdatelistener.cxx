@@ -36,16 +36,12 @@
 #include <unotools/configpaths.hxx>
 #include <rtl/ustring.hxx>
 
-//_______________________________________________
-// namespace
 
 namespace filter{
     namespace config{
 
 namespace css = ::com::sun::star;
 
-//_______________________________________________
-// definitions
 
 
 

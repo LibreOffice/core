@@ -34,21 +34,8 @@
 #include <rtl/ustrbuf.hxx>
 #include <vcl/svapp.hxx>
 
-//________________________________
-//  namespace
-
 namespace framework{
 
-//________________________________
-//  non exported const
-
-//________________________________
-//  non exported definitions
-
-//________________________________
-//  declarations
-
-//________________________________
 /**
     @short      special ctor
     @descr      It initialize this new instance with a (hopyfully) valid job URL.

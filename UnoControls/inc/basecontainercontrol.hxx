@@ -50,10 +50,6 @@ struct IMPL_ControlInfo
     ::rtl::OUString                         sName    ;
 };
 
-//____________________________________________________________________________________________________________
-//  classes
-//____________________________________________________________________________________________________________
-
 class BaseContainerControl  : public ::com::sun::star::awt::XControlModel
                             , public ::com::sun::star::awt::XControlContainer
                             , public BaseControl

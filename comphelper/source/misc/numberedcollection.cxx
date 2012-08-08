@@ -22,15 +22,11 @@
 
 #include <com/sun/star/frame/UntitledNumbersConst.hpp>
 
-//_______________________________________________
-// namespace
 
 namespace comphelper{
 
 namespace css = ::com::sun::star;
 
-//_______________________________________________
-// definitions
 
 static const char ERRMSG_INVALID_COMPONENT_PARAM[] = "NULL as component reference not allowed.";
 

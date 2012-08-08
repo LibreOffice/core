@@ -40,16 +40,12 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <osl/mutex.hxx>
 
-//_______________________________________________
-// namespace
 
 namespace filter{
     namespace config{
 
 namespace css = ::com::sun::star;
 
-//_______________________________________________
-// definitions
 
 /** @short  Must be used as first derived base class
             to get a full initialized mutex member,

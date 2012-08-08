@@ -67,13 +67,9 @@
 #include <cppuhelper/weak.hxx>
 #include <osl/thread.hxx>
 
-//_______________________________________________
-// namespace
 
 namespace framework{
 
-//_______________________________________________
-// definitions
 
 //===============================================
 /**

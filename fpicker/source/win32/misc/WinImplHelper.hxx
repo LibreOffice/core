@@ -34,10 +34,6 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
-//------------------------------------------------------------------------
-// deklarations
-//------------------------------------------------------------------------
-
 bool SAL_CALL IsWindowsVistaOrNewer();
 
 // set actions

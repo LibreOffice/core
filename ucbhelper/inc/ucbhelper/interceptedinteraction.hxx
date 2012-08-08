@@ -28,13 +28,9 @@
 #include <cppuhelper/implbase1.hxx>
 #include "ucbhelper/ucbhelperdllapi.h"
 
-//_______________________________________________
-// namespace
 
 namespace ucbhelper{
 
-//_______________________________________________
-// definitions
 
 /** @short  it wraps any other interaction handler and intercept
             its handle() requests.

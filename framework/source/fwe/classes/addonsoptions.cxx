@@ -57,10 +57,6 @@ using namespace ::com::sun::star::uno   ;
 using namespace ::com::sun::star::beans ;
 using namespace ::com::sun::star::lang  ;
 
-//_________________________________________________________________________________________________________________
-//  const
-//_________________________________________________________________________________________________________________
-
 #define ROOTNODE_ADDONMENU                              ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Addons" ))
 #define PATHDELIMITER                                   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"             ))
 #define SEPARATOR_URL_STR                               "private:separator"
@@ -370,10 +366,6 @@ class AddonsOptions_Impl : public ConfigItem
         MergeMenuInstructionContainer                     m_aCachedMergeMenuInsContainer;
         ToolbarMergingInstructions                        m_aCachedToolbarMergingInstructions;
 };
-
-//_________________________________________________________________________________________________________________
-//  definitions
-//_________________________________________________________________________________________________________________
 
 //*****************************************************************************************************************
 //  constructor

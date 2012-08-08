@@ -35,16 +35,12 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <comphelper/enumhelper.hxx>
 
-//_______________________________________________
-// namespace
 
 namespace filter{
     namespace config{
 
 namespace css = ::com::sun::star;
 
-//_______________________________________________
-// definitions
 
 
 

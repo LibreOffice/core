@@ -34,16 +34,12 @@
 #include "lateinitlistener.hxx"
 #include "lateinitthread.hxx"
 
-//_______________________________________________
-// namespace
 
 namespace filter{
     namespace config{
 
 namespace css = ::com::sun::star;
 
-//_______________________________________________
-// definitions
 
 
 

@@ -46,8 +46,6 @@ namespace drawinglayer { namespace attribute {
     class ImpFillHatchAttribute;
 }}
 
-//////////////////////////////////////////////////////////////////////////////
-// declarations
 
 namespace drawinglayer
 {

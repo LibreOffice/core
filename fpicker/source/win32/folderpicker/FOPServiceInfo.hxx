@@ -21,10 +21,6 @@
 #ifndef _FOPSERVICEINFO_HXX_
 #define _FOPSERVICEINFO_HXX_
 
-//------------------------------------------------------------------------
-// defines
-//------------------------------------------------------------------------
-
 // the service name is a description of a set of
 // interfaces (is the same as component categories in COM)
 

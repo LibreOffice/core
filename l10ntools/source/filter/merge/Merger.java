@@ -17,14 +17,10 @@
  */
 package com.sun.star.filter.config.tools.merge;
 
-//_______________________________________________
-
 import java.lang.*;
 import java.util.*;
 import java.io.*;
 import com.sun.star.filter.config.tools.utils.*;
-
-//_______________________________________________
 
 /** can merge different xml fragments together.
  *
@@ -32,9 +28,6 @@ import com.sun.star.filter.config.tools.utils.*;
  */
 public class Merger
 {
-    //___________________________________________
-    // const
-
     private static final java.lang.String PROP_XMLVERSION      = "xmlversion"               ; // <= global cfg file
     private static final java.lang.String PROP_XMLENCODING     = "xmlencoding"              ; // <= global cfg file
     private static final java.lang.String PROP_XMLPATH         = "xmlpath"                  ; // <= global cfg file

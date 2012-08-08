@@ -47,10 +47,6 @@ namespace fpicker{
 namespace win32{
 namespace vista{
 
-//------------------------------------------------------------------------
-// defines
-//------------------------------------------------------------------------
-
 //-----------------------------------------------------------------------------------------
 VistaFilePickerEventHandler::VistaFilePickerEventHandler(IVistaFilePickerInternalNotify* pInternalNotify)
     : m_nRefCount           (0       )

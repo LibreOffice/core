@@ -35,9 +35,6 @@ import com.sun.star.filter.config.tools.utils.*;
 public class Splitter
 {
     //___________________________________________
-    // const
-
-    //___________________________________________
     // member
 
     /** contains all real member of this instance.

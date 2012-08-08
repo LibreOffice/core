@@ -41,8 +41,6 @@
 #include <cppuhelper/weak.hxx>
 #include <vcl/evntpost.hxx>
 
-//_______________________________________________
-// namespace
 
 namespace framework{
 

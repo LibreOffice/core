@@ -37,10 +37,6 @@
 #include <vector>
 #include <osl/conditn.hxx>
 
-//------------------------------------------------------------------------
-// deklarations
-//------------------------------------------------------------------------
-
 // forward declaration
 class CFilePicker;
 class CFilePickerState;

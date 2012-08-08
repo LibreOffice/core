@@ -42,7 +42,6 @@
 #include <vcl/svapp.hxx>
 #include <toolkit/unohlp.hxx>
 
-// namespace
 using namespace com::sun::star;
 
 namespace framework

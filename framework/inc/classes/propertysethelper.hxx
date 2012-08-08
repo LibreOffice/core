@@ -35,8 +35,6 @@
 #include <cppuhelper/weakref.hxx>
 #include <fwidllapi.h>
 
-//_________________________________________________________________________________________________________________
-//  namespace
 
 namespace framework{
 

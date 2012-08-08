@@ -43,16 +43,12 @@
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
 
-//_______________________________________________
-// namespace
 
 namespace filter{
     namespace config{
 
 class CacheUpdateListener;
 
-//_______________________________________________
-// definitions
 
 //_______________________________________________
 

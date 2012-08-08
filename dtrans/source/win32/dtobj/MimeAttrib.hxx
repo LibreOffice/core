@@ -23,10 +23,6 @@
 
 #include <rtl/ustring.hxx>
 
-//------------------------------------------------------------------------
-// deklarations
-//------------------------------------------------------------------------
-
 const rtl::OUString TEXTPLAIN_PARAM_CHARSET("charset");
 
 const rtl::OUString PRE_WINDOWS_CODEPAGE ("windows");

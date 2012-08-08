@@ -30,19 +30,10 @@
 #endif
 #include "../misc/WinClip.hxx"
 
-//------------------------------------------------------------------------
-// defines
-//------------------------------------------------------------------------
-
 #define AUTO_INIT                 TRUE
 #define NO_AUTO_INIT              FALSE
 #define MEM_DESTROY_ON_RELEASE    TRUE
 #define NO_MEM_DESTROY_ON_RELEASE FALSE
-
-//------------------------------------------------------------------------
-// deklarations
-//------------------------------------------------------------------------
-
 
 //-------------------------------------------------------------------------
 // a helper class to manage a global memory area, the clients can write

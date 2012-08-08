@@ -40,10 +40,6 @@
 #include <cppuhelper/basemutex.hxx>
 #include <rtl/ustring.hxx>
 
-//-----------------------------------------------------------------------------
-// namespace
-//-----------------------------------------------------------------------------
-
 namespace css = ::com::sun::star;
 
 namespace fpicker{

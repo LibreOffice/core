@@ -57,23 +57,11 @@
 #include <rtl/ustring.hxx>
 #include <rtl/logfile.hxx>
 
-//_________________________________________________________________________________________________________________
-//  namespace
-//_________________________________________________________________________________________________________________
-
 namespace framework{
-
-//_________________________________________________________________________________________________________________
-//  exported const
-//_________________________________________________________________________________________________________________
 
 #define DEFAULT_FILTERCACHE_VERSION                 6                                                                   /// these implmentation of FilterCache support different version of TypeDetection.xml! This define the current set default one.
 
 #define DEFAULT_FILTERCACHE_MODE                    CONFIG_MODE_DELAYED_UPDATE | CONFIG_MODE_ALL_LOCALES                                          /// ConfigItems could run in different modes: supported values are ... { CONFIG_MODE_IMMEDIATE_UPDATE, CONFIG_MODE_DELAYED_UPDATE, CONFIG_MODE_ALL_LOCALES }
-
-//_________________________________________________________________________________________________________________
-//  exported definitions
-//_________________________________________________________________________________________________________________
 
 enum EModifyState
 {

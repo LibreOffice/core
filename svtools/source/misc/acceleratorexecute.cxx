@@ -46,16 +46,12 @@
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 
-//===============================================
-// namespace
 
 namespace  css = ::com::sun::star;
 
 namespace svt
 {
 
-//===============================================
-// definitions
 
 //-----------------------------------------------
 class SVT_DLLPRIVATE AsyncAccelExec

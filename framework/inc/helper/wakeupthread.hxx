@@ -39,13 +39,9 @@
 #include <cppuhelper/weakref.hxx>
 #include <osl/thread.hxx>
 
-//_______________________________________________
-// namespace
 
 namespace framework{
 
-//_______________________________________________
-// definitions
 
 //===============================================
 /** @short  implements a "sleeping" thread, which try to sleep

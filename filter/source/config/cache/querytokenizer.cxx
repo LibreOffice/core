@@ -29,13 +29,10 @@
 
 #include "querytokenizer.hxx"
 
-// namespace
 
 namespace filter{
     namespace config{
 
-//_______________________________________________
-// definitions
 
 
 

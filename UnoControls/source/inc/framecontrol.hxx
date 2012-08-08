@@ -39,10 +39,6 @@
 
 namespace unocontrols{
 
-//______________________________________________________________________________________________________________
-//  defines
-//______________________________________________________________________________________________________________
-
 #define SERVICENAME_FRAMECONTROL                        "com.sun.star.frame.FrameControl"
 #define IMPLEMENTATIONNAME_FRAMECONTROL                 "stardiv.UnoControls.FrameControl"
 #define PROPERTYNAME_LOADERARGUMENTS                    "LoaderArguments"

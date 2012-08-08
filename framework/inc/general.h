@@ -38,8 +38,6 @@
 
 #include <rtl/ustring.hxx>
 
-//=============================================================================
-// namespace
 
 //-----------------------------------------------------------------------------
 /** will make our code more readable if we can use such short name css instead

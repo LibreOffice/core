@@ -45,8 +45,6 @@
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 
-//===============================================
-// const
 
 #define RECOVERY_CMDPART_PROTOCOL                   rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.autorecovery:"))
 
@@ -91,8 +89,6 @@
 #define DLG_RET_BACK                                    100
 #define DLG_RET_OK_AUTOLUNCH                            101
 
-//===============================================
-// namespace
 
 namespace css = ::com::sun::star;
 

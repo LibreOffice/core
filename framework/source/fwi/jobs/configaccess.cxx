@@ -42,21 +42,8 @@
 #include <unotools/configpaths.hxx>
 #include <rtl/ustrbuf.hxx>
 
-//________________________________
-//  namespace
-
 namespace framework{
 
-//________________________________
-//  non exported const
-
-//________________________________
-//  non exported definitions
-
-//________________________________
-//  declarations
-
-//________________________________
 /**
     @short  open the configuration of this job
     @descr  We open the configuration of this job only. Not the whole package or the whole

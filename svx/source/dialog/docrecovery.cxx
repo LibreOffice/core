@@ -65,8 +65,6 @@
 #include <unotools/pathoptions.hxx>
 #include <unotools/localfilehelper.hxx>
 
-//===============================================
-// namespace
 namespace svx{
     namespace DocRecovery{
 

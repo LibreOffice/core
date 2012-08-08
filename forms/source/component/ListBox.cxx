@@ -437,7 +437,7 @@ namespace frm
             // Note that this is the only reliable way, since one of the properties is implemented
             // by ourself, and one is implemented by the aggregate, we cannot rely on any particular
             // results when setting them both - too many undocumented behavior in all the involved
-            // classes
+
         }
     }
 

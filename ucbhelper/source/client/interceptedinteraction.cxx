@@ -19,14 +19,11 @@
 
 #include <ucbhelper/interceptedinteraction.hxx>
 
-// namespace
 
 namespace ucbhelper{
 
 namespace css = ::com::sun::star;
 
-//_______________________________________________
-// definitions
 
 InterceptedInteraction::InterceptedInteraction()
 {

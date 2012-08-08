@@ -27,18 +27,9 @@
 
 #include <cppuhelper/implbase2.hxx>
 
-//_______________________________________________
-// namespace
-
 namespace framework{
 
 namespace css = ::com::sun::star;
-
-//_______________________________________________
-// exported const
-
-//_______________________________________________
-// exported definitions
 
 /** @short      implements a dispatch object which can be used to load
                 non-visible components (by using the mechanism of ContentHandler)

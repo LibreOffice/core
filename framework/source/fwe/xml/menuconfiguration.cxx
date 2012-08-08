@@ -40,10 +40,6 @@
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 
-//_________________________________________________________________________________________________________________
-//  namespace
-//_________________________________________________________________________________________________________________
-
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;

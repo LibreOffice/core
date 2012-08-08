@@ -49,13 +49,9 @@
 #include <cppuhelper/weak.hxx>
 #include <rtl/ustring.hxx>
 
-//_______________________________________
-// namespace
 
 namespace framework{
 
-//_______________________________________
-// public const
 
 //_______________________________________
 /**

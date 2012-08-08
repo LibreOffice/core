@@ -24,16 +24,7 @@
 
 #include <framework/fwedllapi.h>
 
-//_______________________________________________
-//  namespace
-
 namespace framework{
-
-//_______________________________________________
-//  exported const
-
-//_______________________________________________
-//  exported definitions
 
 /** analyze and split the current available frame list of a given frames supplier
     into different parts.

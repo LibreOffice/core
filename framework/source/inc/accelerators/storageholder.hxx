@@ -38,15 +38,12 @@
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
-// namespace
 
 namespace css = ::com::sun::star;
 
 namespace framework
 {
 
-//===============================================
-// definitions
 
 //-----------------------------------------------
 /**

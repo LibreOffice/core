@@ -55,14 +55,11 @@
 #include <vcl/wrkwin.hxx>
 #include <tools/diagnose_ex.h>
 
-//  namespace
 namespace framework{
 
-//  const
 static const ::sal_Int32 INVALID_ICON_ID = -1;
 static const ::sal_Int32 DEFAULT_ICON_ID =  0;
 
-//  definitions
 
 //*****************************************************************************************************************
 //  XInterface, XTypeProvider

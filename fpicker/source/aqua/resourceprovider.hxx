@@ -34,10 +34,6 @@
 #define FILE_PICKER_FILE_TYPE         504
 #define FILE_PICKER_OVERWRITE         505
 
-//------------------------------------------------------------------------
-// declarations
-//------------------------------------------------------------------------
-
 class CResourceProvider_Impl;
 
 class CResourceProvider

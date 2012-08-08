@@ -41,9 +41,6 @@
 #include <comphelper/attributelist.hxx>
 
 
-//_______________________________________________
-// namespace
-
 namespace framework{
 
 

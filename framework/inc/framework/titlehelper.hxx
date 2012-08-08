@@ -51,15 +51,11 @@
 #include <boost/unordered_map.hpp>
 #include <framework/fwedllapi.h>
 
-//_______________________________________________
-// namespace
 
 namespace css = ::com::sun::star;
 
 namespace framework{
 
-//_______________________________________________
-// definitions
 
 /** @short  can be used as implementation helper of interface css.frame.XTitle
 

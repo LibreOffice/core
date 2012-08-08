@@ -91,7 +91,6 @@
 const char PROP_TYPES[] = "Types";
 const char PROP_NAME[] = "Name";
 
-// namespace
 
 namespace framework{
 
@@ -100,8 +99,6 @@ namespace framework{
 namespace css = ::com::sun::star;
 #endif
 
-//_______________________________________________
-// declarations
 
 class LoadEnvListener : private ThreadHelpBase
                       , public ::cppu::WeakImplHelper2< css::frame::XLoadEventListener      ,

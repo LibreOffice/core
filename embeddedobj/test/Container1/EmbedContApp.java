@@ -976,7 +976,6 @@ public class EmbedContApp extends Applet
     public void mouseExited( MouseEvent e ){};
     public void mouseReleased( MouseEvent e ){};
 
-    // classes
     class NewMenuItem extends MenuItem implements ActionListener // Menu New
     {
         public NewMenuItem()

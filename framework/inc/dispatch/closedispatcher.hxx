@@ -50,8 +50,6 @@
 #include <cppuhelper/weak.hxx>
 #include <vcl/evntpost.hxx>
 
-//_______________________________________________
-// namespace
 
 class SystemWindow;
 

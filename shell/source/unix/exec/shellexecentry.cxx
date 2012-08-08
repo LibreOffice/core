@@ -41,10 +41,6 @@ using namespace ::com::sun::star::registry;
 using namespace ::cppu;
 using com::sun::star::system::XSystemShellExecute;
 
-//-----------------------------------------------------------------------
-// defines
-//-----------------------------------------------------------------------
-
 #define SHELLEXEC_SERVICE_NAME  "com.sun.star.system.SystemShellExecute"
 #define SHELLEXEC_IMPL_NAME     "com.sun.star.comp.system.SystemShellExecute"
 

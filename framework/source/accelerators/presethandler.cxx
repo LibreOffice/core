@@ -47,8 +47,6 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include <rtl/ustrbuf.hxx>
 
-//_______________________________________________
-// const
 
 #define SUBSTORAGE_GLOBAL       DECLARE_ASCII("global" )
 #define SUBSTORAGE_MODULES      DECLARE_ASCII("modules")
@@ -67,8 +65,6 @@ static const ::sal_Int32 ID_CORRUPT_UICONFIG_SHARE   = 1;
 static const ::sal_Int32 ID_CORRUPT_UICONFIG_USER    = 2;
 static const ::sal_Int32 ID_CORRUPT_UICONFIG_GENERAL = 3;
 
-//_______________________________________________
-// namespace
 
 namespace framework
 {

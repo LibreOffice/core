@@ -27,13 +27,9 @@
 #include <rtl/ustring.hxx>
 #include <fwidllapi.h>
 
-//_______________________________________
-// namespace
 
 namespace framework{
 
-//_______________________________________
-// public const
 
 //_______________________________________
 /**

@@ -28,10 +28,6 @@
 #define __uuidof(I) IID_##I
 #endif
 
-//------------------------------------------------------------------------
-// defines
-//------------------------------------------------------------------------
-
 #define FREE_HGLOB_ON_RELEASE   TRUE
 #define KEEP_HGLOB_ON_RELEASE   FALSE
 

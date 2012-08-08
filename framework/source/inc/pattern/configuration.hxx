@@ -41,9 +41,6 @@
 
 #include <rtl/ustrbuf.hxx>
 
-//_______________________________________________
-// namespaces
-
 #ifndef css
 namespace css = ::com::sun::star;
 #endif
@@ -52,14 +49,10 @@ namespace framework{
     namespace pattern{
         namespace configuration{
 
-//_______________________________________________
-// definitions
-
 //-----------------------------------------------
 class ConfigurationHelper
 {
-    //-------------------------------------------
-    // const
+
     public:
 
         //---------------------------------------

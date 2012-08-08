@@ -75,9 +75,6 @@ import com.sun.star.lang.IllegalArgumentException;
 
 public class AsciiReplaceFilter
 {
-
-
-
     public static class _AsciiReplaceFilter extends     WeakBase
                                             implements  XInitialization ,
                                                         XServiceInfo    ,
@@ -86,8 +83,7 @@ public class AsciiReplaceFilter
                                                         XExporter       ,
                                                         XFilter
     {
-        //______________________________
-        // const
+
 
         // the supported service names, the first one being the service name of the component itself
         public static final String[] m_serviceNames = { "com.sun.star.comp.ansifilter.AsciiReplaceFilter" , "com.sun.star.document.ImportFilter", "com.sun.star.document.ExportFilter" };

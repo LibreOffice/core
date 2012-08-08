@@ -49,13 +49,9 @@
 #include <com/sun/star/frame/XFramesSupplier.hpp>
 #include <com/sun/star/frame/XDesktop.hpp>
 
-//_______________________________________________
-// namespace
 
 namespace framework{
 
-//_______________________________________________
-// definitions
 
 // path to module config
 static ::rtl::OUString CFG_PACKAGE_MODULES     ("/org.openoffice.Setup/Office/Factories");

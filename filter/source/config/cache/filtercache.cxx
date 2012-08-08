@@ -61,16 +61,12 @@
 
 #include <comphelper/configurationhelper.hxx>
 
-//_______________________________________________
-// namespace
 
 namespace filter{
     namespace config{
 
 namespace css = ::com::sun::star;
 
-//_______________________________________________
-// definitions
 
 // Error message in case filter config seems to be corrupted.
 // Note: Dont tell user something about "setup -repair"!

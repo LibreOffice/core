@@ -42,10 +42,6 @@ using namespace ::osl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 
-//_________________________________________________________________________________________________________________
-//  const
-//_________________________________________________________________________________________________________________
-
 #define ROOTNODE_OPTIONS        OUString( RTL_CONSTASCII_USTRINGPARAM( "Office.Compatibility/" ) )
 #define PATHDELIMITER           OUString( RTL_CONSTASCII_USTRINGPARAM( "/" ) )
 #define SETNODE_ALLFILEFORMATS  OUString( RTL_CONSTASCII_USTRINGPARAM( "AllFileFormats" ) )
@@ -360,10 +356,6 @@ class SvtCompatibilityOptions_Impl : public ConfigItem
         SvtCompatibility        m_aOptions;
         SvtCompatibilityEntry   m_aDefOptions;
 };
-
-//_________________________________________________________________________________________________________________
-//  definitions
-//_________________________________________________________________________________________________________________
 
 //*****************************************************************************************************************
 //  constructor

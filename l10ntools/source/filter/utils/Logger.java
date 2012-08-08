@@ -18,14 +18,8 @@
 
 package com.sun.star.filter.config.tools.utils;
 
-//_______________________________________________
-// imports
-
 import java.lang.*;
 import java.util.*;
-
-//_______________________________________________
-// definition
 
 /** can be used to print out some debug messages
  *  and group it into warnings/errors or info statements.
@@ -34,9 +28,6 @@ import java.util.*;
  */
 public class Logger
 {
-    //___________________________________________
-    // const
-
     /** only error message will be shown. */
     public static final int LEVEL_ERRORS = 1;
 

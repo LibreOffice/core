@@ -32,13 +32,8 @@
 #include <threadhelp/writeguard.hxx>
 
 
-//_________________________________________________________________________________________________________________
-//  namespace
-
 namespace framework{
 
-//_________________________________________________________________________________________________________________
-//  non exported definitions
 
 //-----------------------------------------------------------------------------
 PropertySetHelper::PropertySetHelper(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR                       ,
