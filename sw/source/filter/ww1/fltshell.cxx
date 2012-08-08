@@ -223,7 +223,7 @@ namespace
         return (pExtendCandidate &&
                 !pExtendCandidate->bConsumedByField &&
                 //potentially more, but lets keep it simple
-                (isPARATR_LIST(rAttr.Which()) || isCHRATR(rAttr.Which())) &&
+                (isPARATR_LIST(rAttr.Which()) || (isCHRATR(rAttr.Which()) && rAttr.Which() != RES_CHRATR_FONT && rAttr.Which() != RES_CHRATR_FONTSIZE)) &&
                 *(pExtendCandidate->pAttr) == rAttr);
     }
 }
