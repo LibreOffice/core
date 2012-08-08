@@ -26,7 +26,8 @@
 
 <xsl:template match="col">
   <xsl:text> </xsl:text>
-  <t r="stringlist" g="{../../../@id}" l="{count(preceding::col)}">
+  <xsl:variable name="groupid" select="../../../@id"/>
+  <t r="stringlist" g="{$groupid}" l="{count(preceding::col[../../../@id=$groupid])}">
   <xsl:copy-of select="text()" />
   </t><xsl:text>&#10;</xsl:text>
 </xsl:template>
