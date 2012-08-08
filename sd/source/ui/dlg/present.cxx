@@ -35,6 +35,7 @@
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <comphelper/processfactory.hxx>
 #include <svl/itemset.hxx>
+#include <tools/list.hxx>
 
 #include "sdattr.hxx"
 #include "present.hxx"

@@ -36,7 +36,7 @@
 #include <editeng/editdata.hxx>
 #include <i18npool/lang.h>
 #include <tools/color.hxx>
-#include <tools/list.hxx>
+#include <tools/contnr.hxx>
 #include <vcl/graph.hxx>
 #include <tools/link.hxx>
 #include <rsc/rscsfx.hxx>
@@ -699,7 +699,7 @@ public:
     OutlinerView*   GetView( size_t nIndex ) const;
     size_t          GetViewCount() const;
 
-    Paragraph*      Insert( const String& rText, sal_uLong nAbsPos = LIST_APPEND, sal_Int16 nDepth = 0 );
+    Paragraph*      Insert( const String& rText, sal_uLong nAbsPos = CONTAINER_APPEND, sal_Int16 nDepth = 0 );
     void            SetText( const OutlinerParaObject& );
     void            AddText( const OutlinerParaObject& );
     void            SetText( const String& rText, Paragraph* pParagraph );
