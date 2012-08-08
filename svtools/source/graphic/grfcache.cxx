@@ -867,7 +867,7 @@ GraphicCache::GraphicCache( GraphicManager& rMgr, sal_uLong nDisplayCacheSize, s
 GraphicCache::~GraphicCache()
 {
     DBG_ASSERT( !maGraphicCache.size(), "GraphicCache::~GraphicCache(): there are some GraphicObjects in cache" );
-    DBG_ASSERT( !maDisplayCache.Count(), "GraphicCache::~GraphicCache(): there are some GraphicObjects in display cache" );
+    DBG_ASSERT( maDisplayCache.empty(), "GraphicCache::~GraphicCache(): there are some GraphicObjects in display cache" );
 }
 
 // -----------------------------------------------------------------------------
@@ -993,19 +993,18 @@ void GraphicCache::ReleaseGraphicObject( const GraphicObject& rObj )
             {
                 // if graphic cache entry has no more references,
                 // the corresponding display cache object can be removed
-                GraphicDisplayCacheEntry* pDisplayEntry = (GraphicDisplayCacheEntry*) maDisplayCache.First();
-
-                while( pDisplayEntry )
+                GraphicDisplayCacheEntryList::iterator it2 = maDisplayCache.begin();
+                while( it2 != maDisplayCache.end() )
                 {
+                    GraphicDisplayCacheEntry* pDisplayEntry = *it2;
                     if( pDisplayEntry->GetReferencedCacheEntry() == *it )
                     {
                         mnUsedDisplaySize -= pDisplayEntry->GetCacheSize();
-                        maDisplayCache.Remove( pDisplayEntry );
+                        it2 = maDisplayCache.erase( it2 );
                         delete pDisplayEntry;
-                        pDisplayEntry = (GraphicDisplayCacheEntry*) maDisplayCache.GetCurObject();
                     }
                     else
-                        pDisplayEntry = (GraphicDisplayCacheEntry*) maDisplayCache.Next();
+                        ++it2;
                 }
 
                 // delete graphic cache entry
@@ -1082,19 +1081,18 @@ void GraphicCache::SetMaxObjDisplayCacheSize( sal_uLong nNewMaxObjSize, sal_Bool
 
     if( bDestroy )
     {
-        GraphicDisplayCacheEntry* pCacheObj = (GraphicDisplayCacheEntry*) maDisplayCache.First();
-
-        while( pCacheObj )
+        GraphicDisplayCacheEntryList::iterator it = maDisplayCache.begin();
+        while( it != maDisplayCache.end() )
         {
+            GraphicDisplayCacheEntry* pCacheObj = *it;
             if( pCacheObj->GetCacheSize() > mnMaxObjDisplaySize )
             {
                 mnUsedDisplaySize -= pCacheObj->GetCacheSize();
-                maDisplayCache.Remove( pCacheObj );
+                it = maDisplayCache.erase( it );
                 delete pCacheObj;
-                pCacheObj = (GraphicDisplayCacheEntry*) maDisplayCache.GetCurObject();
             }
             else
-                pCacheObj = (GraphicDisplayCacheEntry*) maDisplayCache.Next();
+                ++it;
         }
     }
 }
@@ -1105,7 +1103,6 @@ void GraphicCache::SetCacheTimeout( sal_uLong nTimeoutSeconds )
 {
     if( mnReleaseTimeoutSeconds != nTimeoutSeconds )
     {
-        GraphicDisplayCacheEntry*   pDisplayEntry = (GraphicDisplayCacheEntry*) maDisplayCache.First();
         ::salhelper::TTimeValue           aReleaseTime;
 
         if( ( mnReleaseTimeoutSeconds = nTimeoutSeconds ) != 0 )
@@ -1114,10 +1111,10 @@ void GraphicCache::SetCacheTimeout( sal_uLong nTimeoutSeconds )
             aReleaseTime.addTime( ::salhelper::TTimeValue( nTimeoutSeconds, 0 ) );
         }
 
-        while( pDisplayEntry )
+        for( GraphicDisplayCacheEntryList::const_iterator it = maDisplayCache.begin();
+             it != maDisplayCache.end(); ++it )
         {
-            pDisplayEntry->SetReleaseTime( aReleaseTime );
-            pDisplayEntry = (GraphicDisplayCacheEntry*) maDisplayCache.Next();
+            (*it)->SetReleaseTime( aReleaseTime );
         }
     }
 }
@@ -1139,14 +1136,16 @@ sal_Bool GraphicCache::IsInDisplayCache( OutputDevice* pOut, const Point& rPt, c
     const Point                 aPtPixel( pOut->LogicToPixel( rPt ) );
     const Size                  aSzPixel( pOut->LogicToPixel( rSz ) );
     const GraphicCacheEntry*    pCacheEntry = ( (GraphicCache*) this )->ImplGetCacheEntry( rObj );
-    //GraphicDisplayCacheEntry* pDisplayEntry = (GraphicDisplayCacheEntry*) ( (GraphicCache*) this )->maDisplayCache.First(); // -Wall removed ....
     sal_Bool                        bFound = sal_False;
 
     if( pCacheEntry )
     {
-        for( long i = 0, nCount = maDisplayCache.Count(); !bFound && ( i < nCount ); i++ )
-            if( ( (GraphicDisplayCacheEntry*) maDisplayCache.GetObject( i ) )->Matches( pOut, aPtPixel, aSzPixel, pCacheEntry, rAttr ) )
+        for( GraphicDisplayCacheEntryList::const_iterator it = maDisplayCache.begin();
+             !bFound && ( it != maDisplayCache.end() ); ++it )
+        {
+            if( (*it)->Matches( pOut, aPtPixel, aSzPixel, pCacheEntry, rAttr ) )
                 bFound = sal_True;
+        }
     }
 
     return bFound;
@@ -1198,7 +1197,7 @@ sal_Bool GraphicCache::CreateDisplayCacheObj( OutputDevice* pOut, const Point& r
             pNewEntry->SetReleaseTime( aReleaseTime );
         }
 
-        maDisplayCache.Insert( pNewEntry, LIST_APPEND );
+        maDisplayCache.push_back( pNewEntry );
         mnUsedDisplaySize += pNewEntry->GetCacheSize();
         bRet = sal_True;
     }
@@ -1232,7 +1231,7 @@ sal_Bool GraphicCache::CreateDisplayCacheObj( OutputDevice* pOut, const Point& r
             pNewEntry->SetReleaseTime( aReleaseTime );
         }
 
-        maDisplayCache.Insert( pNewEntry, LIST_APPEND );
+        maDisplayCache.push_back( pNewEntry );
         mnUsedDisplaySize += pNewEntry->GetCacheSize();
         bRet = sal_True;
     }
@@ -1248,17 +1247,20 @@ sal_Bool GraphicCache::DrawDisplayCacheObj( OutputDevice* pOut, const Point& rPt
     const Point                 aPtPixel( pOut->LogicToPixel( rPt ) );
     const Size                  aSzPixel( pOut->LogicToPixel( rSz ) );
     const GraphicCacheEntry*    pCacheEntry = ImplGetCacheEntry( rObj );
-    GraphicDisplayCacheEntry*   pDisplayCacheEntry = (GraphicDisplayCacheEntry*) maDisplayCache.First();
-    sal_Bool                        bRet = sal_False;
+    GraphicDisplayCacheEntry*   pDisplayCacheEntry = NULL;
+    GraphicDisplayCacheEntryList::iterator it = maDisplayCache.begin();
+    sal_Bool                    bRet = sal_False;
 
-    while( !bRet && pDisplayCacheEntry )
+    while( !bRet && it != maDisplayCache.end() )
     {
+        pDisplayCacheEntry = *it;
         if( pDisplayCacheEntry->Matches( pOut, aPtPixel, aSzPixel, pCacheEntry, rAttr ) )
         {
             ::salhelper::TTimeValue aReleaseTime;
 
             // put found object at last used position
-            maDisplayCache.Insert( maDisplayCache.Remove( pDisplayCacheEntry ), LIST_APPEND );
+            it = maDisplayCache.erase( it );
+            maDisplayCache.push_back( pDisplayCacheEntry );
 
             if( GetCacheTimeout() )
             {
@@ -1270,7 +1272,7 @@ sal_Bool GraphicCache::DrawDisplayCacheObj( OutputDevice* pOut, const Point& rPt
             bRet = sal_True;
         }
         else
-            pDisplayCacheEntry = (GraphicDisplayCacheEntry*) maDisplayCache.Next();
+            ++it;
     }
 
     if( bRet )
@@ -1287,24 +1289,22 @@ sal_Bool GraphicCache::ImplFreeDisplayCacheSpace( sal_uLong nSizeToFree )
 
     if( nSizeToFree )
     {
-        void* pObj = maDisplayCache.First();
+        GraphicDisplayCacheEntryList::iterator it = maDisplayCache.begin();
 
         if( nSizeToFree > mnUsedDisplaySize )
             nSizeToFree = mnUsedDisplaySize;
 
-        while( pObj )
+        while( it != maDisplayCache.end() )
         {
-            GraphicDisplayCacheEntry* pCacheObj = (GraphicDisplayCacheEntry*) pObj;
+            GraphicDisplayCacheEntry* pCacheObj = *it;
 
             nFreedSize += pCacheObj->GetCacheSize();
             mnUsedDisplaySize -= pCacheObj->GetCacheSize();
-            maDisplayCache.Remove( pObj );
+            it = maDisplayCache.erase( it );
             delete pCacheObj;
 
             if( nFreedSize >= nSizeToFree )
                 break;
-            else
-                pObj = maDisplayCache.GetCurObject();
         }
     }
 
@@ -1337,23 +1337,23 @@ IMPL_LINK( GraphicCache, ReleaseTimeoutHdl, Timer*, pTimer )
     pTimer->Stop();
 
     ::salhelper::TTimeValue           aCurTime;
-    GraphicDisplayCacheEntry*   pDisplayEntry = (GraphicDisplayCacheEntry*) maDisplayCache.First();
+    GraphicDisplayCacheEntryList::iterator it = maDisplayCache.begin();
 
     osl_getSystemTime( &aCurTime );
 
-    while( pDisplayEntry )
+    while( it != maDisplayCache.end() )
     {
+        GraphicDisplayCacheEntry*   pDisplayEntry = *it;
         const ::salhelper::TTimeValue& rReleaseTime = pDisplayEntry->GetReleaseTime();
 
         if( !rReleaseTime.isEmpty() && ( rReleaseTime < aCurTime ) )
         {
             mnUsedDisplaySize -= pDisplayEntry->GetCacheSize();
-            maDisplayCache.Remove( pDisplayEntry );
+            it = maDisplayCache.erase( it );
             delete pDisplayEntry;
-            pDisplayEntry = (GraphicDisplayCacheEntry*) maDisplayCache.GetCurObject();
         }
         else
-            pDisplayEntry = (GraphicDisplayCacheEntry*) maDisplayCache.Next();
+            ++it;
     }
 
     pTimer->Start();

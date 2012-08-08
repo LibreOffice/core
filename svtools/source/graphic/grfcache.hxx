@@ -31,7 +31,6 @@
 
 #include <vcl/graph.hxx>
 #include <vcl/timer.hxx>
-#include <tools/list.hxx>
 #include <svtools/grfmgr.hxx>
 #include <list>
 
@@ -40,16 +39,18 @@
 // -----------------------
 
 class GraphicCacheEntry;
+class GraphicDisplayCacheEntry;
 
 class GraphicCache
 {
 private:
     typedef std::list< GraphicCacheEntry* > GraphicCacheEntryList;
+    typedef std::list< GraphicDisplayCacheEntry* > GraphicDisplayCacheEntryList;
 
     GraphicManager&         mrMgr;
     Timer                   maReleaseTimer;
     GraphicCacheEntryList   maGraphicCache;
-    List                    maDisplayCache;
+    GraphicDisplayCacheEntryList maDisplayCache;
     sal_uLong               mnReleaseTimeoutSeconds;
     sal_uLong               mnMaxDisplaySize;
     sal_uLong               mnMaxObjDisplaySize;
