@@ -1204,6 +1204,8 @@ void Ruler::ImplFormat()
 
 void Ruler::ImplInitExtraField( sal_Bool bUpdate )
 {
+    Size aWinSize = GetOutputSizePixel();
+
     // Extra-Field beruecksichtigen
     if ( mnWinStyle & WB_EXTRAFIELD )
     {
@@ -1213,7 +1215,6 @@ void Ruler::ImplInitExtraField( sal_Bool bUpdate )
         maExtraRect.Bottom() = RULER_OFF+mnVirHeight-1;
         if(mpData->bTextRTL)
         {
-            Size aWinSize = GetOutputSizePixel();
             if(mnWinStyle & WB_HORZ)
                 maExtraRect.Move(aWinSize.Width() - maExtraRect.GetWidth() - maExtraRect.Left(), 0);
             else
@@ -1228,6 +1229,19 @@ void Ruler::ImplInitExtraField( sal_Bool bUpdate )
     {
         maExtraRect.SetEmpty();
         mnVirOff = 0;
+    }
+
+    // mnVirWidth depends on mnVirOff
+    if ( (mnVirWidth > RULER_MIN_SIZE) ||
+     ((aWinSize.Width() > RULER_MIN_SIZE) && (aWinSize.Height() > RULER_MIN_SIZE)) )
+    {
+        if ( mnWinStyle & WB_HORZ )
+            mnVirWidth = aWinSize.Width()-mnVirOff;
+        else
+            mnVirWidth = aWinSize.Height()-mnVirOff;
+
+        if ( mnVirWidth < RULER_MIN_SIZE )
+            mnVirWidth = 0;
     }
 
     if ( bUpdate )
