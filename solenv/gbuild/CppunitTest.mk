@@ -258,31 +258,6 @@ $(foreach component,$(call gb_CppunitTest__filter_not_built_components,$(2)),$(c
 
 endef
 
-define gb_CppunitTest_add_old_component
-$$(call gb_Output_error,\
- gb_CppunitTest_add_old_component: use gb_CppunitTest_use_old_component instead.)
-endef
-
-define gb_CppunitTest_use_old_component
-$(call gb_CppunitTest_get_target,$(1)) : \
-    $(call gb_CppunitTest__get_old_component_target,$(2))
-$(call gb_CppunitTest_get_target,$(1)) : \
-    UNO_SERVICES += $(call gb_ComponentTarget__get_old_component_target,$(2))
-
-endef
-
-define gb_CppunitTest_add_old_components
-$$(call gb_Output_error,\
- gb_CppunitTest_add_old_components: use gb_CppunitTest_use_old_components instead.)
-endef
-
-define gb_CppunitTest_use_old_components
-$(foreach component,$(2),$(call gb_CppunitTest_use_old_component,$(1),$(component)))
-
-endef
-
-gb_ComponentTarget__get_old_component_target = $(OUTDIR)/xml/$(1).component
-
 define gb_CppunitTest__use_configuration
 $(call gb_CppunitTest_get_target,$(1)) : CONFIGURATION_LAYERS += $(2):$(call gb_Helper_make_url,$(3))
 

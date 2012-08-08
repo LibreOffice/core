@@ -25,24 +25,12 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-# Component paths created by the old build system does not contain any
-# directories.
-gb_Rdb__is_old_component_target = $(if $(findstring /,$(1)),$(false),$(true))
-
-gb_Rdb__get_old_component_target = $(OUTDIR)/xml/$(1).component
-
-define gb_Rdb__get_component_target
-$(strip $(if $(call gb_Rdb__is_old_component_target,$(component))\
-	,$(call gb_Rdb__get_old_component_target,$(component))\
-	,$(call gb_ComponentTarget_get_outdir_target,$(component))))
-endef
-
 define gb_Rdb__command
 $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $@) && \
 	(\
 		echo '<list>' && \
-		$(foreach component,$(COMPONENTS),echo "<filename>$(call gb_Rdb__get_component_target,$(component))</filename>" &&) \
+		$(foreach component,$(COMPONENTS),echo "<filename>$(call gb_ComponentTarget_get_outdir_target,$(component))</filename>" &&) \
 		echo '</list>' \
 	) > $(1).input && \
 	$(gb_XSLTPROC) --nonet -o $(1) $(SOLARENV)/bin/packcomponents.xslt $(1).input && \
@@ -78,7 +66,7 @@ $$(eval $$(call gb_Module_register_target,$(call gb_Rdb_get_outdir_target,$(1)),
 endef
 
 define gb_Rdb_add_component
-$(call gb_Rdb_get_target,$(1)) : $(call gb_Rdb__get_component_target,$(2))
+$(call gb_Rdb_get_target,$(1)) : $(call gb_ComponentTarget_get_outdir_target,$(2))
 $(call gb_Rdb_get_target,$(1)) : COMPONENTS += $(2)
 $(call gb_Rdb_get_clean_target,$(1)) : COMPONENTS += $(2)
 
