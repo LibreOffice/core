@@ -36,11 +36,15 @@ $(eval $(call gb_Module_add_targets,scripting,\
 		Jar_Highlight \
 		Jar_MemoryUsage \
 		Jar_ScriptFramework \
-        $(if $(filter $(ENABLE_SCRIPTING_BEANSHELL),YES),\
-            Jar_ScriptProviderForBeanShell) \
+		$(if $(filter $(ENABLE_SCRIPTING_BEANSHELL),YES),\
+			Jar_ScriptProviderForBeanShell \
+			Rdb_scriptproviderforbeanshell \
+		) \
 		Jar_ScriptProviderForJava \
-        $(if $(filter $(ENABLE_SCRIPTING_JAVASCRIPT),YES),\
-            Jar_ScriptProviderForJavaScript) \
+		$(if $(filter $(ENABLE_SCRIPTING_JAVASCRIPT),YES),\
+			Jar_ScriptProviderForJavaScript \
+			Rdb_scriptproviderforjavascript \
+		) \
 		Zip_ScriptsJava \
 	) \
 	$(if $(filter $(ENABLE_SCRIPTING_PYTHON),YES),\

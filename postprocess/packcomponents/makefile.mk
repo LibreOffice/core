@@ -412,36 +412,3 @@ $(MISC)/services.input : makefile.mk
         '<list>$(my_components:^"<filename>":+".component</filename>")</list>' \
         > $@
 
-.IF "$(ENABLE_SCRIPTING_BEANSHELL)" == "YES"
-ALLTAR : $(MISC)/scriptproviderforbeanshell.rdb
-
-$(MISC)/scriptproviderforbeanshell.rdb .ERRREMOVE : \
-        $(SOLARENV)/bin/packcomponents.xslt \
-        $(MISC)/scriptproviderforbeanshell.input \
-        $(SOLARXMLDIR)/component/scripting/java/ScriptProviderForBeanShell.component
-    $(XSLTPROC) --nonet --stringparam prefix $(SOLARXMLDIR)/ -o $@ \
-        $(SOLARENV)/bin/packcomponents.xslt \
-        $(MISC)/scriptproviderforbeanshell.input
-
-$(MISC)/scriptproviderforbeanshell.input : makefile.mk
-    echo \
-        '<list><filename>component/scripting/java/ScriptProviderForBeanShell.component</filename></list>' \
-        > $@
-.END
-
-.IF "$(ENABLE_SCRIPTING_JAVASCRIPT)" == "YES"
-ALLTAR : $(MISC)/scriptproviderforjavascript.rdb
-
-$(MISC)/scriptproviderforjavascript.rdb .ERRREMOVE : \
-        $(SOLARENV)/bin/packcomponents.xslt \
-        $(MISC)/scriptproviderforjavascript.input \
-        $(SOLARXMLDIR)/component/scripting/java/ScriptProviderForJavaScript.component
-    $(XSLTPROC) --nonet --stringparam prefix $(SOLARXMLDIR)/ -o $@ \
-        $(SOLARENV)/bin/packcomponents.xslt \
-        $(MISC)/scriptproviderforjavascript.input
-
-$(MISC)/scriptproviderforjavascript.input : makefile.mk
-    echo \
-        '<list><filename>component/scripting/java/ScriptProviderForJavaScript.component</filename></list>' \
-        > $@
-.END
