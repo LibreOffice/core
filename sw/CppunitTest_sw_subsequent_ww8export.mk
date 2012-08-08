@@ -37,6 +37,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sw_subsequent_ww8export, \
 $(eval $(call gb_CppunitTest_use_libraries,sw_subsequent_ww8export, \
     cppu \
     cppuhelper \
+    emboleobj \
     sal \
     test \
     unotest \
