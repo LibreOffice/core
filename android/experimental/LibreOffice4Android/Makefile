@@ -222,6 +222,8 @@ copy-stuff:
 	echo set solib-search-path ./obj/local/$(ABI_PATH) >$(SODEST)/gdb.setup
 
 build-ant: copy-stuff properties
+	echo sdk.dir=$(ANDROID_SDK_HOME) >../../abs-lib/local.properties
+
 #
 # Copy jar files we need, and even construct one.
 #
