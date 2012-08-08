@@ -492,10 +492,10 @@ AbstractSdStartPresDlg *  SdAbstractDialogFactory_Impl::CreateSdStartPresentatio
 // add for SdStartPresentationDlg end
 
 // add for SdRemoteDlg begin
-// VclAbstractDialog * SdAbstractDialogFactory_Impl::CreateSdRemoteDlg( ::Window* pWindow )
-// {
-//      return new VclAbstractDialog_Impl( new SdRemoteDlg( pWindow ) );
-// }
+VclAbstractDialog * SdAbstractDialogFactory_Impl::CreateRemoteDialog( ::Window* pWindow )
+{
+     return new VclAbstractDialog_Impl( new ::sd::RemoteDialog( pWindow ) );
+}
 // add for SdRemoteDlg end
 
 // add for SdPresLayoutTemplateDlg begin

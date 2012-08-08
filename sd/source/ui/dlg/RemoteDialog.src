@@ -13,12 +13,13 @@
 ModalDialog DLG_PAIR_REMOTE
 {
 
-    HelpID = CMD_SID_REMOTE ;
+    HelpID = CMD_SID_REMOTE_DLG ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 256, 205 ) ;
     Text [ en-US ] = "Impress Remote" ;
     Moveable = TRUE ;
+    Closeable = TRUE ;
 
     OKButton BTN_CONNECT
     {

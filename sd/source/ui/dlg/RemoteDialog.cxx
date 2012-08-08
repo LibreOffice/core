@@ -16,10 +16,16 @@
 #include "RemoteDialog.hxx"
 #include "RemoteDialog.hrc"
 
-SdRemoteDlg::SdRemoteDlg( Window *pWindow ) :
+using namespace sd;
+
+RemoteDialog::RemoteDialog( Window *pWindow ) :
     ModalDialog     ( pWindow, SdResId( DLG_PAIR_REMOTE ) )
 {
 FreeResource();
+}
+
+RemoteDialog::~RemoteDialog()
+{
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

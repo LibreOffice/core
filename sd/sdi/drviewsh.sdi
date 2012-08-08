@@ -110,6 +110,10 @@ interface ImpressEditView : DrawView
     [
         ExecMethod = FuTemporary ;
     ]
+    SID_REMOTE_DLG
+    [
+        ExecMethod = FuTemporary ;
+    ]
     SID_CUSTOMSHOW_DLG
     [
         ExecMethod = FuTemporary ;

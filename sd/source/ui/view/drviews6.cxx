@@ -58,7 +58,6 @@
 #include "NavigatorChildWindow.hxx"
 #include "LayerDialogChildWindow.hxx"
 #include "sdresid.hxx"
-// #include "sdabstdlg.hxx"
 #include "fupoor.hxx"
 #include "fusldlg.hxx"
 #include "drawdoc.hxx"
@@ -69,6 +68,7 @@
 #include "FrameView.hxx"
 #include "Window.hxx"
 #include "DrawDocShell.hxx"
+#include "sdabstdlg.hxx"
 #include "framework/FrameworkHelper.hxx"
 
 namespace sd {
@@ -635,10 +635,10 @@ void DrawViewShell::FuTemp04(SfxRequest& rReq)
 
         case SID_REMOTE_DLG:
         {
-//                 SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-//                 VclAbstractDialog* pDlg = pFact ? pFact->CreateSdRemoteDlg(GetActiveWindow()) : 0;
-//                 if (pDlg)
-//                     pDlg->Execute();
+             SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
+             VclAbstractDialog* pDlg = pFact ? pFact->CreateRemoteDialog(GetActiveWindow()) : 0;
+             if (pDlg)
+                 pDlg->Execute();
         }
         break;
 

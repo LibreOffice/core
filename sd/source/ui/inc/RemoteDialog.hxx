@@ -15,13 +15,19 @@
 #include <vcl/dialog.hxx>
 #include <vcl/field.hxx>
 
-class SdRemoteDlg : public ModalDialog
+namespace sd
+{
+
+class RemoteDialog : public ModalDialog
 {
 
 public:
-    SdRemoteDlg( Window* pWindow );
+    RemoteDialog( Window* pWindow );
+    ~RemoteDialog();
 
 };
+
+}
 
 #endif // _SD_REMOTEDIALOG_HXX_
 

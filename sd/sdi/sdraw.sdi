@@ -5204,6 +5204,31 @@ SfxVoidItem PresentationDialog SID_PRESENTATION_DLG
 ]
 
 //--------------------------------------------------------------------------
+SfxVoidItem Remote SID_REMOTE_DLG
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = TRUE,
+    HasCoreId = FALSE,
+    HasDialog = TRUE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerItem;
+    Synchron;
+
+    /* config: */
+    AccelConfig = FALSE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_OPTIONS;
+]
+
+//--------------------------------------------------------------------------
 SfxVoidItem PresentationEnd SID_PRESENTATION_END
 ()
 [
