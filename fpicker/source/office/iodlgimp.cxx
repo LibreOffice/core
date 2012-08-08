@@ -70,7 +70,7 @@ namespace
     {
         ResMgr * operator ()()
         {
-            return ResMgr::CreateResMgr ("svs");
+            return ResMgr::CreateResMgr ("svl");
         }
         static ResMgr * getOrCreate()
         {
