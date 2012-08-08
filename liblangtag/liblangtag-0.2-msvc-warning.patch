@@ -1,0 +1,21 @@
+--- misc/liblangtag-0.2/liblangtag/lt-ext-module.h	2012-02-02 06:02:45.000000000 +0100
++++ misc/build/liblangtag-0.2/liblangtag/lt-ext-module.h	2012-08-08 08:46:57.810860044 +0200
+@@ -151,12 +151,12 @@
+  * and #lt_ext_module_t and extend features.
+  */
+ struct _lt_ext_module_funcs_t {
+-	const lt_ext_module_singleton_func_t get_singleton;
+-	const lt_ext_module_data_new_func_t  create_data;
+-	const lt_ext_module_precheck_func_t  precheck_tag;
+-	const lt_ext_module_parse_func_t     parse_tag;
+-	const lt_ext_module_get_tag_func_t   get_tag;
+-	const lt_ext_module_validate_func_t  validate_tag;
++	lt_ext_module_singleton_func_t get_singleton;
++	lt_ext_module_data_new_func_t  create_data;
++	lt_ext_module_precheck_func_t  precheck_tag;
++	lt_ext_module_parse_func_t     parse_tag;
++	lt_ext_module_get_tag_func_t   get_tag;
++	lt_ext_module_validate_func_t  validate_tag;
+ };
+ 
+ 
