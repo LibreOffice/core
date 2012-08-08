@@ -135,7 +135,10 @@ bool TemplateOnlineView::loadRepository (const sal_uInt16 nRepositoryId, bool bR
         return false;
 
     if (!pItem->getTemplates().empty() && !bRefresh)
+    {
+        mpItemView->InsertItems(pItem->getTemplates());
         return true;
+    }
 
     rtl::OUString aURL = static_cast<TemplateOnlineViewItem*>(pItem)->getURL();
 
