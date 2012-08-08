@@ -140,6 +140,10 @@ bool TemplateOnlineView::loadRepository (const sal_uInt16 nRepositoryId, bool bR
         return true;
     }
 
+    mpItemView->Clear();
+    mpItemView->setId(nRepositoryId);
+    mpItemView->setName(pItem->maTitle);
+
     rtl::OUString aURL = static_cast<TemplateOnlineViewItem*>(pItem)->getURL();
 
     try
@@ -170,8 +174,6 @@ bool TemplateOnlineView::loadRepository (const sal_uInt16 nRepositoryId, bool bR
         if ( xResultSet.is() )
         {
             pItem->clearTemplates();
-            mpItemView->Clear();
-            mpItemView->setId(nRepositoryId);
 
             uno::Reference< XRow > xRow( xResultSet, UNO_QUERY );
             uno::Reference< XContentAccess > xContentAccess( xResultSet, UNO_QUERY );
@@ -236,7 +238,6 @@ bool TemplateOnlineView::loadRepository (const sal_uInt16 nRepositoryId, bool bR
                 }
             }
 
-            mpItemView->setName(pItem->maTitle);
             mpItemView->InsertItems(aItems);
         }
     }
