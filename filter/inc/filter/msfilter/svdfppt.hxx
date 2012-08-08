@@ -33,7 +33,6 @@
 #include <tools/string.hxx>
 #include <tools/gen.hxx>
 #include <tools/color.hxx>
-#include <tools/list.hxx>
 #include <svx/svdobj.hxx>
 #include <editeng/numitem.hxx>
 #include <editeng/editdata.hxx>
@@ -1037,11 +1036,14 @@ struct StyleTextProp9
     void Read( SvStream& rSt );
 };
 
+typedef std::vector<PPTParaPropSet*> PPTParaPropSetList;
+typedef std::vector<PPTCharPropSet*> PPTCharPropSetList;
+
 struct PPTStyleTextPropReader
 {
-    ::std::vector< sal_uInt32 > aSpecMarkerList;    // hiword -> Flags, loword -> Position
-    List    aParaPropList;
-    List    aCharPropList;
+    std::vector< sal_uInt32 >  aSpecMarkerList;    // hiword -> Flags, loword -> Position
+    PPTParaPropSetList         aParaPropList;
+    PPTCharPropSetList         aCharPropList;
 
             PPTStyleTextPropReader(
                 SvStream& rIn,
@@ -1160,6 +1162,7 @@ public:
                             );
                             PPTParagraphObj(
                                 PPTStyleTextPropReader&,
+                                sal_uInt32 nCurPos,
                                 const PPTStyleSheet&,
                                 sal_uInt32 nInstance,
                                 PPTTextRulerInterpreter& rRuler
