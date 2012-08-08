@@ -4351,7 +4351,7 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
 
                     if ((drawobj->u.freeform.npt > 2) &&
                         (static_cast<size_t>(drawobj->u.freeform.npt) <
-                         (::std::numeric_limits<int>::max() / sizeof(double))))
+                         ((::std::numeric_limits<int>::max)() / sizeof(double))))
                     {
                               int n, i;
                               n = drawobj->u.freeform.npt;
