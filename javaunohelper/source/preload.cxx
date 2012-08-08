@@ -105,7 +105,7 @@ static bool inited_juhx( JNIEnv * jni_env )
 }
 
 //==================================================================================================
-JNIEXPORT jboolean JNICALL
+SAL_DLLPUBLIC_EXPORT jboolean JNICALL
 Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1writeInfo(
     JNIEnv * pJEnv, jclass jClass, jstring jLibName, jobject jSMgr,
     jobject jRegKey, jobject loader )
@@ -116,7 +116,7 @@ Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1writeInfo(
     return JNI_FALSE;
 }
 //==================================================================================================
-JNIEXPORT jobject JNICALL
+SAL_DLLPUBLIC_EXPORT jobject JNICALL
 Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1getFactory(
     JNIEnv * pJEnv, jclass jClass, jstring jLibName, jstring jImplName,
     jobject jSMgr, jobject jRegKey, jobject loader )
@@ -127,7 +127,7 @@ Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1getFactory(
     return 0;
 }
 //==================================================================================================
-JNIEXPORT jobject JNICALL
+SAL_DLLPUBLIC_EXPORT jobject JNICALL
 Java_com_sun_star_comp_helper_RegistryServiceFactory_createRegistryServiceFactory(
     JNIEnv * pJEnv, jclass jClass, jstring jWriteRegFile,
     jstring jReadRegFile, jboolean jbReadOnly, jobject loader )
@@ -140,7 +140,7 @@ Java_com_sun_star_comp_helper_RegistryServiceFactory_createRegistryServiceFactor
     return 0;
 }
 //==================================================================================================
-JNIEXPORT jobject JNICALL
+SAL_DLLPUBLIC_EXPORT jobject JNICALL
 Java_com_sun_star_comp_helper_Bootstrap_cppuhelper_1bootstrap(
     JNIEnv * jni_env, jclass jClass, jstring juno_rc, jobjectArray jpairs,
     jobject loader )

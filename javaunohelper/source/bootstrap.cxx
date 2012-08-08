@@ -66,7 +66,7 @@ inline ::rtl::OUString jstring_to_oustring( jstring jstr, JNIEnv * jni_env )
 }
 
 //==================================================================================================
-extern "C" JNIEXPORT jobject JNICALL Java_com_sun_star_comp_helper_Bootstrap_cppuhelper_1bootstrap(
+extern "C" SAL_DLLPUBLIC_EXPORT jobject JNICALL Java_com_sun_star_comp_helper_Bootstrap_cppuhelper_1bootstrap(
     JNIEnv * jni_env, SAL_UNUSED_PARAMETER jclass, jstring juno_rc, jobjectArray jpairs,
     jobject loader )
 {
