@@ -26,7 +26,7 @@
  *
  ************************************************************************/
 
-
+#include <boost/scoped_ptr.hpp>
 #include <tools/solar.h>
 #include <vcl/vclenum.hxx>
 #include <vcl/font.hxx>
@@ -3915,20 +3915,20 @@ void WW8RStyle::Import1Style( sal_uInt16 nNr )
     short nSkip, cbStd;
     String sName;
 
-    WW8_STD* pStd = Read1Style( nSkip, &sName, &cbStd );// lies Style
+    boost::scoped_ptr<WW8_STD> xStd(Read1Style(nSkip, &sName, &cbStd));// lies Style
 
-    if (pStd)
-        rSI.SetOrgWWIdent( sName, pStd->sti );
+    if (xStd)
+        rSI.SetOrgWWIdent( sName, xStd->sti );
 
     // either no Name or unused Slot or unknown Style
 
-    if ( !pStd || (0 == sName.Len()) || ((1 != pStd->sgc) && (2 != pStd->sgc)) )
+    if ( !xStd || (0 == sName.Len()) || ((1 != xStd->sgc) && (2 != xStd->sgc)) )
     {
         pStStrm->SeekRel( nSkip );
         return;
     }
 
-    bool bOldNoImp = PrepareStyle(rSI, static_cast<ww::sti>(pStd->sti), nNr, pStd->istdNext);
+    bool bOldNoImp = PrepareStyle(rSI, static_cast<ww::sti>(xStd->sti), nNr, xStd->istdNext);
 
     // falls etwas falsch interpretiert wird, gehts danach wieder richtig
     long nPos = pStStrm->Tell();
@@ -3940,12 +3940,11 @@ void WW8RStyle::Import1Style( sal_uInt16 nNr )
     //offset
 
     //Import of the Style Contents
-    ImportGrupx(nSkip, pStd->sgc == 1, rSI.nFilePos & 1);
+    ImportGrupx(nSkip, xStd->sgc == 1, rSI.nFilePos & 1);
 
     PostStyle(rSI, bOldNoImp);
 
     pStStrm->Seek( nPos+nSkip );
-    delete pStd;
 }
 
 void WW8RStyle::RecursiveReg(sal_uInt16 nNr)
