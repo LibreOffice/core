@@ -46,7 +46,7 @@ CONFIGURE_DIR=.
 BUILD_DIR=$(CONFIGURE_DIR)
 
 .IF "$(OS)" == "MACOSX"
-my_prefix = @__________________________________________________$(EXTRPATH)
+my_prefix = @.__________________________________________________$(EXTRPATH)
 .ELSE
 my_prefix = install-liblangtag
 .END
