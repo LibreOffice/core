@@ -25,7 +25,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-// local includes
+
 #include "export.hxx"
 #include "xmlparse.hxx"
 #include <rtl/ustring.hxx>

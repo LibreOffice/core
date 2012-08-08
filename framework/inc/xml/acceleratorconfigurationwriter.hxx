@@ -20,21 +20,13 @@
 #ifndef _FRAMEWORK_XML_ACCELERATORCONFIGURATIONWRITER_HXX_
 #define _FRAMEWORK_XML_ACCELERATORCONFIGURATIONWRITER_HXX_
 
-//_______________________________________________
-// own includes
-
 #include <accelerators/acceleratorcache.hxx>
 #include <accelerators/keymapping.hxx>
 #include <threadhelp/threadhelpbase.hxx>
 #include <general.h>
 
-//_______________________________________________
-// interface includes
-
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 
-//_______________________________________________
-// other includes
 #include <salhelper/singletonref.hxx>
 #include <rtl/ustring.hxx>
 

@@ -21,10 +21,6 @@
 #ifndef _DATAFMTTRANSL_HXX_
 #define _DATAFMTTRANSL_HXX_
 
-//-----------------------------------------------
-// includes
-//-----------------------------------------------
-
 #include <cppuhelper/servicefactory.hxx>
 #include <com/sun/star/datatransfer/XDataFormatTranslator.hpp>
 #include <com/sun/star/datatransfer/XTransferable.hpp>

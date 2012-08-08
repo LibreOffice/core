@@ -20,16 +20,9 @@
 #ifndef __FRAMEWORK_UIELEMENT_TOOLBARSMENUCONTROLLER_HXX_
 #define __FRAMEWORK_UIELEMENT_TOOLBARSMENUCONTROLLER_HXX_
 
-//_________________________________________________________________________________________________________________
-//  my own includes
-//_________________________________________________________________________________________________________________
-
 #include <macros/xserviceinfo.hxx>
 #include <stdtypes.h>
 
-//_________________________________________________________________________________________________________________
-//  interface includes
-//_________________________________________________________________________________________________________________
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -43,9 +36,6 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/ui/XUIConfigurationManager.hpp>
 
-//_________________________________________________________________________________________________________________
-//  includes of other projects
-//_________________________________________________________________________________________________________________
 #include <svtools/popupmenucontrollerbase.hxx>
 #include <toolkit/awt/vclxmenu.hxx>
 #include <cppuhelper/weak.hxx>

@@ -26,18 +26,10 @@
  *
  ************************************************************************/
 
-
-//_______________________________________________
-//  my own includes
-
 #include <dispatch/interceptionhelper.hxx>
 
-//_______________________________________________
-//  interface includes
 #include <com/sun/star/frame/XInterceptorInfo.hpp>
 
-//_______________________________________________
-//  includes of other projects
 #include <vcl/svapp.hxx>
 
 //_______________________________________________

@@ -17,10 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-//________________________________
-//  my own includes
-
 #include <jobs/jobresult.hxx>
 #include <jobs/jobconst.hxx>
 #include <threadhelp/readguard.hxx>
@@ -28,11 +24,6 @@
 #include <general.h>
 #include <services.h>
 
-//________________________________
-//  interface includes
-
-//________________________________
-//  includes of other projects
 
 #include <rtl/ustrbuf.hxx>
 #include <vcl/svapp.hxx>

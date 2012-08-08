@@ -20,10 +20,6 @@
 #ifndef _HELPPOPUPWINDOW_HXX_
 #define _HELPPOPUPWINDOW_HXX_
 
-//------------------------------------------------------------------------
-// includes
-//------------------------------------------------------------------------
-
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
 #include <osl/mutex.hxx>

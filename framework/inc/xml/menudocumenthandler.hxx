@@ -29,10 +29,6 @@
 #ifndef __FRAMEWORK_XML_MENUDOCUMENTHANDLER_HXX_
 #define __FRAMEWORK_XML_MENUDOCUMENTHANDLER_HXX_
 
-//_________________________________________________________________________________________________________________
-//  interface includes
-//_________________________________________________________________________________________________________________
-
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
@@ -40,9 +36,6 @@
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-//_________________________________________________________________________________________________________________
-//  other includes
-//_________________________________________________________________________________________________________________
 #include <threadhelp/threadhelpbase.hxx>
 #include <rtl/ustring.hxx>
 #include <cppuhelper/implbase1.hxx>

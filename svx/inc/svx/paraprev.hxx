@@ -28,8 +28,6 @@
 #ifndef _SVX_PARAPREV_HXX
 #define _SVX_PARAPREV_HXX
 
-// include ---------------------------------------------------------------
-
 #include <vcl/window.hxx>
 #include <editeng/svxenum.hxx>
 #include "svx/svxdllapi.h"

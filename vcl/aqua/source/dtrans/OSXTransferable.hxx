@@ -21,10 +21,6 @@
 #ifndef _TRANSFERABLE_HXX_
 #define _TRANSFERABLE_HXX_
 
-//------------------------------------------------------------------------
-// includes
-//------------------------------------------------------------------------
-
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/datatransfer/XMimeContentTypeFactory.hpp>

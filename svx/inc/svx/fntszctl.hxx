@@ -19,8 +19,6 @@
 #ifndef _SVX_FNTSZCTL_HXX
 #define _SVX_FNTSZCTL_HXX
 
-// include ---------------------------------------------------------------
-
 #include <sfx2/mnuitem.hxx>
 #include "svx/svxdllapi.h"
 

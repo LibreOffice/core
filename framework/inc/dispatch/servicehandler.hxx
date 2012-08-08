@@ -29,10 +29,6 @@
 #ifndef __FRAMEWORK_DISPATCH_SERVICEHANDLER_HXX_
 #define __FRAMEWORK_DISPATCH_SERVICEHANDLER_HXX_
 
-//_________________________________________________________________________________________________________________
-//  my own includes
-//_________________________________________________________________________________________________________________
-
 #include <macros/generic.hxx>
 #include <macros/xinterface.hxx>
 #include <macros/xtypeprovider.hxx>
@@ -42,9 +38,6 @@
 #include <general.h>
 #include <stdtypes.h>
 
-//_________________________________________________________________________________________________________________
-//  interface includes
-//_________________________________________________________________________________________________________________
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/frame/XNotifyingDispatch.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
@@ -53,9 +46,6 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/frame/XStatusListener.hpp>
 
-//_________________________________________________________________________________________________________________
-//  other includes
-//_________________________________________________________________________________________________________________
 #include <cppuhelper/weak.hxx>
 
 //_________________________________________________________________________________________________________________

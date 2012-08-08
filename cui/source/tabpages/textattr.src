@@ -24,7 +24,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
- // include ---------------------------------------------------------------
+
 #include <svtools/controldims.hrc>
 #include <cuires.hrc>
 #include "textattr.hrc"

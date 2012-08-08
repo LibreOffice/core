@@ -29,9 +29,6 @@
 
 #include <dispatch/startmoduledispatcher.hxx>
 
-//_______________________________________________
-// my own includes
-
 #include <pattern/frame.hxx>
 #include <threadhelp/readguard.hxx>
 #include <threadhelp/writeguard.hxx>
@@ -41,8 +38,6 @@
 #include <services.h>
 #include <general.h>
 
-//_______________________________________________
-// interface includes
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/CommandGroup.hpp>
@@ -50,8 +45,6 @@
 #include "com/sun/star/beans/XFastPropertySet.hpp"
 #include <com/sun/star/frame/XModuleManager.hpp>
 
-//_______________________________________________
-// includes of other projects
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>

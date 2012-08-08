@@ -29,8 +29,6 @@
 #ifndef _SVTOOLS_INETTBC_HXX
 #define _SVTOOLS_INETTBC_HXX
 
-// includes *****************************************************************
-
 #include "rtl/ref.hxx"
 #include "svtools/svtdllapi.h"
 #include <tools/string.hxx>

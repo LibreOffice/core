@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-// includes *******************************************************************
 #include <com/sun/star/frame/XDispatchRecorderSupplier.hpp>
 #include <com/sun/star/frame/XModuleManager.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>

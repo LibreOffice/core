@@ -28,9 +28,6 @@
 #ifndef _SVX_NLBKITEM_HXX
 #define _SVX_NLBKITEM_HXX
 
-// include ---------------------------------------------------------------
-
-
 #include <svl/eitem.hxx>
 #include "editeng/editengdllapi.h"
 

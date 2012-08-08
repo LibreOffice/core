@@ -29,9 +29,6 @@
 #ifndef __FRAMEWORK_ACCELERATORS_ACCELERATORCONFIGURATION_HXX_
 #define __FRAMEWORK_ACCELERATORS_ACCELERATORCONFIGURATION_HXX_
 
-//__________________________________________
-// own includes
-
 #include <accelerators/istoragelistener.hxx>
 #include <accelerators/presethandler.hxx>
 #include <accelerators/acceleratorcache.hxx>
@@ -41,9 +38,6 @@
 #include <threadhelp/threadhelpbase.hxx>
 #include <general.h>
 #include <stdtypes.h>
-
-//__________________________________________
-// interface includes
 
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
@@ -61,8 +55,6 @@
 // TODO use XPresetHandler interface instead if available
 #include <com/sun/star/form/XReset.hpp>
 
-//__________________________________________
-// other includes
 #include <cppuhelper/propshlp.hxx>
 #include <cppuhelper/weak.hxx>
 #include <comphelper/locale.hxx>

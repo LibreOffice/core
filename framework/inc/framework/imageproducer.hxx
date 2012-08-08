@@ -29,9 +29,6 @@
 #ifndef __FRAMEWORK_HELPER_IMAGEPRODUCER_HXX_
 #define __FRAMEWORK_HELPER_IMAGEPRODUCER_HXX_
 
-//_________________________________________________________________________________________________________________
-//  interface includes
-//_________________________________________________________________________________________________________________
 #include <sal/types.h>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <vcl/image.hxx>

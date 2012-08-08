@@ -29,26 +29,16 @@
 #ifndef __FRAMEWORK_UIELEMENT_ITEMCONTAINER_HXX_
 #define __FRAMEWORK_UIELEMENT_ITEMCONTAINER_HXX_
 
-//_________________________________________________________________________________________________________________
-//  my own includes
-//_________________________________________________________________________________________________________________
-
 #include <threadhelp/threadhelpbase.hxx>
 #include <macros/generic.hxx>
 #include <macros/xinterface.hxx>
 #include <macros/xtypeprovider.hxx>
 #include <helper/shareablemutex.hxx>
 
-//_________________________________________________________________________________________________________________
-//  interface includes
-//_________________________________________________________________________________________________________________
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 
-//_________________________________________________________________________________________________________________
-//  other includes
-//_________________________________________________________________________________________________________________
 #include <rtl/ustring.hxx>
 #include <cppuhelper/implbase1.hxx>
 

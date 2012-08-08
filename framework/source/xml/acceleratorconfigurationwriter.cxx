@@ -28,19 +28,13 @@
 
 #include <xml/acceleratorconfigurationwriter.hxx>
 
-//_______________________________________________
-// own includes
 #include <acceleratorconst.h>
 #include <threadhelp/readguard.hxx>
 
-//_______________________________________________
-// interface includes
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <com/sun/star/awt/KeyModifier.hpp>
 
-//_______________________________________________
-// other includes
 #include <vcl/svapp.hxx>
 #include <rtl/ustrbuf.hxx>
 

@@ -26,10 +26,6 @@
  *
  ************************************************************************/
 
-
-//-----------------------------------------------
-// my own includes
-
 #include <algorithm>
 #include <helper/statusindicatorfactory.hxx>
 #include <helper/statusindicator.hxx>
@@ -39,8 +35,6 @@
 #include <services.h>
 #include <properties.h>
 
-//-----------------------------------------------
-// interface includes
 #include <com/sun/star/awt/Rectangle.hpp>
 
 #include <com/sun/star/awt/XControl.hpp>
@@ -55,8 +49,6 @@
 
 #include <toolkit/unohlp.hxx>
 
-//-----------------------------------------------
-// includes of other projects
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/mediadescriptor.hxx>
 #include <comphelper/configurationhelper.hxx>

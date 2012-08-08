@@ -19,8 +19,6 @@
 #ifndef _SVX_STDDLG_HXX
 #define _SVX_STDDLG_HXX
 
-// include ---------------------------------------------------------------
-
 #include <sfx2/basedlgs.hxx>
 #include "svx/svxdllapi.h"
 

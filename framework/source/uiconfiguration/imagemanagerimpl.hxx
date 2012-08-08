@@ -37,9 +37,6 @@
 #include <list>
 #include <boost/unordered_map.hpp>
 
-//_________________________________________________________________________________________________________________
-//  my own includes
-//_________________________________________________________________________________________________________________
 #include <threadhelp/threadhelpbase.hxx>
 #include <macros/generic.hxx>
 #include <macros/xinterface.hxx>
@@ -48,9 +45,6 @@
 #include <stdtypes.h>
 #include <uiconfiguration/imagetype.hxx>
 
-//_________________________________________________________________________________________________________________
-//  interface includes
-//_________________________________________________________________________________________________________________
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
@@ -63,9 +57,6 @@
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/ui/XImageManager.hpp>
 
-//_________________________________________________________________________________________________________________
-//  other includes
-//_________________________________________________________________________________________________________________
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <rtl/ustring.hxx>

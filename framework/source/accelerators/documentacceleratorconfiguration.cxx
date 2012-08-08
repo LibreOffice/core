@@ -34,16 +34,11 @@
 
 #include <xml/saxnamespacefilter.hxx>
 
-//_______________________________________________
-// own includes
 #include <threadhelp/readguard.hxx>
 #include <threadhelp/writeguard.hxx>
 
 #include <acceleratorconst.h>
 #include <services.h>
-
-//_______________________________________________
-// interface includes
 
 #include <com/sun/star/io/XActiveDataSource.hpp>
 
@@ -56,9 +51,6 @@
 #include <com/sun/star/xml/sax/InputSource.hpp>
 
 #include <com/sun/star/xml/sax/XParser.hpp>
-
-//_______________________________________________
-// other includes
 
 #include <comphelper/sequenceashashmap.hxx>
 

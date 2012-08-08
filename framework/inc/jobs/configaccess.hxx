@@ -20,19 +20,12 @@
 #ifndef __FRAMEWORK_CONFIG_CONFIGACCESS_HXX_
 #define __FRAMEWORK_CONFIG_CONFIGACCESS_HXX_
 
-//_______________________________________
-// my own includes
-
 #include <threadhelp/threadhelpbase.hxx>
 #include <macros/debug.hxx>
 #include <general.h>
 
-//_______________________________________
-// interface includes
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
-//_______________________________________
-// other includes
 #include <rtl/ustring.hxx>
 #include <fwidllapi.h>
 

@@ -28,8 +28,6 @@
 #ifndef _SVX_TXENCBOX_HXX
 #define _SVX_TXENCBOX_HXX
 
-// include ---------------------------------------------------------------
-
 #include <vcl/lstbox.hxx>
 #include <rtl/textenc.h>
 #include "svx/svxdllapi.h"

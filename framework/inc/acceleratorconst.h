@@ -20,16 +20,8 @@
 #ifndef _FRAMEWORK_ACCELERATORCONST_H_
 #define _FRAMEWORK_ACCELERATORCONST_H_
 
-//_______________________________________________
-// own includes
-
 #include <general.h>
 
-//_______________________________________________
-// interface includes
-
-//_______________________________________________
-// other includes
 
 namespace framework{
 

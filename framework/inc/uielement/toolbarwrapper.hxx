@@ -20,23 +20,12 @@
 #ifndef __FRAMEWORK_UIELEMENT_TOOLBARWRAPPER_HXX_
 #define __FRAMEWORK_UIELEMENT_TOOLBARWRAPPER_HXX_
 
-//_________________________________________________________________________________________________________________
-//  my own includes
-//_________________________________________________________________________________________________________________
-
 #include <helper/uiconfigelementwrapperbase.hxx>
 
-//_________________________________________________________________________________________________________________
-//  interface includes
-//_________________________________________________________________________________________________________________
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/ui/XUIFunctionListener.hpp>
-
-//_________________________________________________________________________________________________________________
-//  other includes
-//_________________________________________________________________________________________________________________
 
 namespace framework
 {

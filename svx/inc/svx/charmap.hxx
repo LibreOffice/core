@@ -28,8 +28,6 @@
 #ifndef _SVX_CHARMAP_HXX
 #define _SVX_CHARMAP_HXX
 
-// include ---------------------------------------------------------------
-
 #include <vcl/ctrl.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/scrbar.hxx>

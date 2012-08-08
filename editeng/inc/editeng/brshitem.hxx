@@ -28,8 +28,6 @@
 #ifndef _SVX_BRSHITEM_HXX
 #define _SVX_BRSHITEM_HXX
 
-// include ---------------------------------------------------------------
-
 #include <svl/poolitem.hxx>
 #include <vcl/wall.hxx>
 #include <tools/link.hxx>

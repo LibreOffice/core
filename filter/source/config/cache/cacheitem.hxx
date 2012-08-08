@@ -29,9 +29,6 @@
 #ifndef __FILTER_CONFIG_CACHEITEM_HXX_
 #define __FILTER_CONFIG_CACHEITEM_HXX_
 
-//_______________________________________________
-// includes
-
 #include <boost/unordered_map.hpp>
 #include <deque>
 #include <list>

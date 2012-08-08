@@ -29,22 +29,16 @@
 
 #include "framework/framelistanalyzer.hxx"
 
-//_______________________________________________
-//  my own includes
 #include <threadhelp/writeguard.hxx>
 #include <threadhelp/readguard.hxx>
 #include <targets.h>
 #include <properties.h>
 #include <services.h>
 
-//_______________________________________________
-//  interface includes
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/frame/XModuleManager.hpp>
 
-//_______________________________________________
-//  includes of other projects
 #include <comphelper/processfactory.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/diagnose_ex.h>

@@ -21,11 +21,6 @@
 #ifndef _XTDATAOBJECT_HXX_
 #define _XTDATAOBJECT_HXX_
 
-
-//------------------------------------------------------------------------
-// includes
-//------------------------------------------------------------------------
-
 #if defined _MSC_VER
 #pragma warning(push,1)
 #endif

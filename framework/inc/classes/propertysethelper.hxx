@@ -20,25 +20,17 @@
 #ifndef __FRAMEWORK_CLASSES_PROPERTYSETHELPER_HXX_
 #define __FRAMEWORK_CLASSES_PROPERTYSETHELPER_HXX_
 
-//_________________________________________________________________________________________________________________
-//  my own includes
-
 #include <threadhelp/threadhelpbase.hxx>
 #include <threadhelp/transactionbase.hxx>
 #include <macros/debug.hxx>
 #include <general.h>
 #include <stdtypes.h>
 
-//_________________________________________________________________________________________________________________
-//  interface includes
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/beans/PropertyExistException.hpp>
 #include <com/sun/star/beans/UnknownPropertyException.hpp>
-
-//_________________________________________________________________________________________________________________
-//  other includes
 
 #include <cppuhelper/weakref.hxx>
 #include <fwidllapi.h>

@@ -29,12 +29,10 @@
 #ifndef __FRAMEWORK_LAYOUTMANAGER_HELPERS_HXX_
 #define __FRAMEWORK_LAYOUTMANAGER_HELPERS_HXX_
 
-// my own includes
 #include <macros/generic.hxx>
 #include <stdtypes.h>
 #include <properties.h>
 
-// interface includes
 #include <com/sun/star/awt/XWindowPeer.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
@@ -43,7 +41,6 @@
 #include <com/sun/star/ui/DockingArea.hpp>
 #include <com/sun/star/awt/Point.hpp>
 
-// other includes
 #include <vcl/window.hxx>
 #include <vcl/toolbox.hxx>
 

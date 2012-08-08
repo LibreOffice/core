@@ -20,10 +20,6 @@
 #ifndef _SALAQUAFPICKER_HXX_
 #define _SALAQUAFPICKER_HXX_
 
-//_____________________________________________________________________________
-//  includes of other projects
-//_____________________________________________________________________________
-
 #include <osl/mutex.hxx>
 
 #include <rtl/ustring.hxx>

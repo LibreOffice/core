@@ -28,7 +28,6 @@
 #ifndef _SC_DLGFACT_HXX
 #define _SC_DLGFACT_HXX
 
-// include ---------------------------------------------------------------
 #include "scabstdlg.hxx"
 class Dialog;
 class ScImportAsciiDlg;

@@ -28,8 +28,6 @@
 #ifndef _SVX_ULSPITEM_HXX
 #define _SVX_ULSPITEM_HXX
 
-// include ---------------------------------------------------------------
-
 #include <svl/poolitem.hxx>
 #include <editeng/editengdllapi.h>
 

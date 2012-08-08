@@ -28,8 +28,6 @@
 
 #include <accelerators/acceleratorconfiguration.hxx>
 
-//_______________________________________________
-// own includes
 #include <pattern/configuration.hxx>
 #include <accelerators/presethandler.hxx>
 
@@ -43,8 +41,6 @@
 #include <acceleratorconst.h>
 #include <services.h>
 
-//_______________________________________________
-// interface includes
 #include <com/sun/star/xml/sax/XParser.hpp>
 #include <com/sun/star/xml/sax/InputSource.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
@@ -53,8 +49,6 @@
 #include <com/sun/star/io/XTruncate.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
-//_______________________________________________
-// other includes
 #include <vcl/svapp.hxx>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>

@@ -35,9 +35,6 @@
 #include <macros/xserviceinfo.hxx>
 #include <stdtypes.h>
 
-//_________________________________________________________________________________________________________________
-//  interface includes
-//_________________________________________________________________________________________________________________
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/container/XContainerListener.hpp>
@@ -45,9 +42,6 @@
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/frame/XUIControllerRegistration.hpp>
 
-//_________________________________________________________________________________________________________________
-//  other includes
-//_________________________________________________________________________________________________________________
 #include <cppuhelper/implbase1.hxx>
 #include <rtl/ustring.hxx>
 

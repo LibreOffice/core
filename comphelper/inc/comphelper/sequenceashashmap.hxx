@@ -20,9 +20,6 @@
 #ifndef _COMPHELPER_SEQUENCEASHASHMAP_HXX_
 #define _COMPHELPER_SEQUENCEASHASHMAP_HXX_
 
-//_______________________________________________
-// includes
-
 #include <boost/unordered_map.hpp>
 
 #include <algorithm>

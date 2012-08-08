@@ -32,9 +32,6 @@
 #undef _LINUX_SOURCE_COMPAT
 #endif
 
-//------------------------------------------------------------------------
-// includes
-//------------------------------------------------------------------------
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/uri/XExternalUriReferenceTranslator.hpp>

@@ -19,8 +19,6 @@
 #ifndef _SVTOOLS_IMAGEMGR_HRC
 #define _SVTOOLS_IMAGEMGR_HRC
 
-// includes ******************************************************************
-
 #define IMAGELIST_START                 3076  // must match to old Id's in SFX!
 
 #define IMG_IMPRESS                     (IMAGELIST_START + 47)

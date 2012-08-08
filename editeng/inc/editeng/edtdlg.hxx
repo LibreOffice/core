@@ -19,8 +19,6 @@
 #ifndef _EDT_ABSTDLG_HXX
 #define _EDT_ABSTDLG_HXX
 
-// include ---------------------------------------------------------------
-
 #include <tools/solar.h>
 #include <tools/string.hxx>
 #include <editeng/editengdllapi.h>

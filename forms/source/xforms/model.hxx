@@ -29,8 +29,6 @@
 #ifndef _MODEL_HXX
 #define _MODEL_HXX
 
-
-// include for parent class(es)
 #include <cppuhelper/implbase4.hxx>
 #include <propertysetbase.hxx>
 #include <com/sun/star/xforms/XModel.hpp>
@@ -38,8 +36,6 @@
 #include <com/sun/star/util/XUpdatable.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 
-
-// includes for member variables
 #include <com/sun/star/uno/Reference.hxx>
 #include <map>
 

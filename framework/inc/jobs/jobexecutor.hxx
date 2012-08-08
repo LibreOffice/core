@@ -29,9 +29,6 @@
 #ifndef __FRAMEWORK_JOBS_JOBEXECUTOR_HXX_
 #define __FRAMEWORK_JOBS_JOBEXECUTOR_HXX_
 
-//_______________________________________
-// my own includes
-
 #include <jobs/configaccess.hxx>
 #include <threadhelp/threadhelpbase.hxx>
 #include <macros/xinterface.hxx>
@@ -41,8 +38,6 @@
 #include <stdtypes.h>
 #include <general.h>
 
-//_______________________________________
-// interface includes
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/task/XJobExecutor.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
@@ -51,8 +46,6 @@
 #include <com/sun/star/document/XEventListener.hpp>
 #include <com/sun/star/frame/XModuleManager.hpp>
 
-//_______________________________________
-// other includes
 #include <cppuhelper/weak.hxx>
 #include <rtl/ustring.hxx>
 

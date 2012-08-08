@@ -28,8 +28,6 @@
 #ifndef _SVX_CHRTITEM_HXX
 #define _SVX_CHRTITEM_HXX
 
-// include ---------------------------------------------------------------
-
 #include <svl/eitem.hxx>
 #include "svx/svxdllapi.h"
 

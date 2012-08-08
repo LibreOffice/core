@@ -30,10 +30,6 @@
 #pragma hdrstop
 #endif
 
-//_________________________________________________________________________________________________________________
-//  includes
-//_________________________________________________________________________________________________________________
-
 #include <svtools/optionsdrawinglayer.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/configitem.hxx>

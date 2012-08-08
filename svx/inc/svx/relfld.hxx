@@ -28,8 +28,6 @@
 #ifndef _SVX_RELFLD_HXX
 #define _SVX_RELFLD_HXX
 
-// include ---------------------------------------------------------------
-
 #include <vcl/field.hxx>
 #include "svx/svxdllapi.h"
 

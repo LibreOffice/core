@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-
-//________________________________
-//  my own includes
 #include <jobs/configaccess.hxx>
 #include <threadhelp/readguard.hxx>
 #include <threadhelp/writeguard.hxx>
@@ -36,16 +33,12 @@
 #include <general.h>
 #include <services.h>
 
-//________________________________
-//  interface includes
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XMultiHierarchicalPropertySet.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/util/XChangesBatch.hpp>
 
-//________________________________
-//  includes of other projects
 #include <unotools/configpaths.hxx>
 #include <rtl/ustrbuf.hxx>
 

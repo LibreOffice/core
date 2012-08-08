@@ -28,9 +28,6 @@
 #ifndef _SVX_BORDER_HXX
 #define _SVX_BORDER_HXX
 
-// include ---------------------------------------------------------------
-
-
 #include <svtools/ctrlbox.hxx>
 #include <vcl/group.hxx>
 #include <vcl/field.hxx>

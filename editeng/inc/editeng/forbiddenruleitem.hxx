@@ -19,8 +19,6 @@
 #ifndef _SVX_FORBIDDENRULEITEM_HXX
 #define _SVX_FORBIDDENRULEITEM_HXX
 
-// include ---------------------------------------------------------------
-
 #include <svl/eitem.hxx>
 #include <editeng/editengdllapi.h>
 

@@ -28,8 +28,6 @@
 #ifndef _SVX_BULITEM_HXX
 #define _SVX_BULITEM_HXX
 
-// include ---------------------------------------------------------------
-
 #include "editeng/editengdllapi.h"
 
 

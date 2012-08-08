@@ -20,23 +20,12 @@
 #ifndef __FRAMEWORK_UIELEMENT_STATUSBARWRAPPER_HXX_
 #define __FRAMEWORK_UIELEMENT_STATUSBARWRAPPER_HXX_
 
-//_________________________________________________________________________________________________________________
-//  my own includes
-//_________________________________________________________________________________________________________________
-
 #include <helper/uiconfigelementwrapperbase.hxx>
 #include <uielement/statusbarmanager.hxx>
 
-//_________________________________________________________________________________________________________________
-//  interface includes
-//_________________________________________________________________________________________________________________
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-
-//_________________________________________________________________________________________________________________
-//  other includes
-//_________________________________________________________________________________________________________________
 
 namespace framework
 {

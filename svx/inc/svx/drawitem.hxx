@@ -28,8 +28,6 @@
 #ifndef _SVX_DRAWITEM_HXX
 #define _SVX_DRAWITEM_HXX
 
-// include ---------------------------------------------------------------
-
 #include <svl/poolitem.hxx>
 #include <svx/xtable.hxx>
 #include <com/sun/star/uno/Sequence.hxx>

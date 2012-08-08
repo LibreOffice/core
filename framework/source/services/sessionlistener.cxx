@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-//_______________________________________________
-// my own includes
-
 #include <services/sessionlistener.hxx>
 #include <services/desktop.hxx>
 #include <threadhelp/readguard.hxx>
@@ -65,15 +62,11 @@
 #include <unotools/pathoptions.hxx>
 #include <unotools/internaloptions.hxx>
 #include <stdio.h>
-//_______________________________________________
-// interface includes
+
 #include <com/sun/star/uno/Any.hxx>
 
 #include <com/sun/star/uno/Sequence.hxx>
-//_______________________________________________
-// includes of other projects
 
-//_______________________________________________
 // namespace
 
 using namespace com::sun::star::uno;

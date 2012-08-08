@@ -29,8 +29,6 @@
 #ifndef _COMPUTEDEXPRESSION_HXX
 #define _COMPUTEDEXPRESSION_HXX
 
-
-// includes for member variables
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 

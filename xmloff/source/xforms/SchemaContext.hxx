@@ -20,11 +20,6 @@
 #ifndef _XMLOFF_SCHEMACONTEXT_HXX
 #define _XMLOFF_SCHEMACONTEXT_HXX
 
-
-//
-// include for parent class and members
-//
-
 #include "TokenContext.hxx"
 #include <com/sun/star/uno/Reference.hxx>
 

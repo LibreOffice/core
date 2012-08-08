@@ -26,17 +26,10 @@
  *
  ************************************************************************/
 
-
-//_________________________________________________________________________________________________________________
-//  my own includes
-//_________________________________________________________________________________________________________________
 #include "uiconfiguration/globalsettings.hxx"
 #include <threadhelp/resetableguard.hxx>
 #include "services.h"
 
-//_________________________________________________________________________________________________________________
-//  interface includes
-//_________________________________________________________________________________________________________________
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -45,9 +38,6 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
 
-//_________________________________________________________________________________________________________________
-//  includes of other projects
-//_________________________________________________________________________________________________________________
 #include <rtl/ustrbuf.hxx>
 #include <rtl/instance.hxx>
 #include <cppuhelper/weak.hxx>

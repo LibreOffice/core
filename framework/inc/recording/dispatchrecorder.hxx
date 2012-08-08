@@ -25,7 +25,6 @@
 */
 #include <vector>
 
-// own includes
 #include <threadhelp/threadhelpbase.hxx>
 #include <macros/xinterface.hxx>
 #include <macros/xtypeprovider.hxx>

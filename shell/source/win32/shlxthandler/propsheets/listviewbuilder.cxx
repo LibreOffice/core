@@ -31,9 +31,6 @@
 #pragma warning (disable : 4786 4503)
 #endif
 
-//------------------------------------
-// include
-//------------------------------------
 #include "listviewbuilder.hxx"
 #include "document_statistic.hxx"
 #include "internal/utilities.hxx"

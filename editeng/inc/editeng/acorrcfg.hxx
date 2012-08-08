@@ -28,8 +28,6 @@
 #ifndef _SVXACCFG_HXX
 #define _SVXACCFG_HXX
 
-// include ---------------------------------------------------------------
-
 #include "editeng/editengdllapi.h"
 #include <unotools/configitem.hxx>
 

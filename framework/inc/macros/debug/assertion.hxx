@@ -29,10 +29,6 @@
 #ifndef __FRAMEWORK_MACROS_DEBUG_ASSERTION_HXX_
 #define __FRAMEWORK_MACROS_DEBUG_ASSERTION_HXX_
 
-//_________________________________________________________________________________________________________________
-//  includes
-//_________________________________________________________________________________________________________________
-
 #if defined( ENABLE_ASSERTIONS ) || defined( ENABLE_WARNINGS )
 
     #ifndef _OSL_DIAGNOSE_H_

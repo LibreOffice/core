@@ -28,8 +28,6 @@
 #ifndef _SVX_SCRIPTTYPEITEM_HXX
 #define _SVX_SCRIPTTYPEITEM_HXX
 
-// include ---------------------------------------------------------------
-
 #include <svl/intitem.hxx>
 #include <svl/languageoptions.hxx>
 #include <editeng/editengdllapi.h>

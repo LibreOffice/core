@@ -20,8 +20,6 @@
 #ifndef _SUBMISSION_HXX
 #define _SUBMISSION_HXX
 
-
-// includes for parent classes
 #include <cppuhelper/implbase2.hxx>
 #include <propertysetbase.hxx>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
@@ -34,7 +32,6 @@
 #include <com/sun/star/xml/xpath/XXPathObject.hpp>
 #include <com/sun/star/xforms/XSubmission.hpp>
 
-// includes for member variables
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <computedexpression.hxx>

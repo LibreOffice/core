@@ -28,8 +28,6 @@
 #ifndef _SVX_ESCPITEM_HXX
 #define _SVX_ESCPITEM_HXX
 
-// include ---------------------------------------------------------------
-
 #include <svl/eitem.hxx>
 #include <editeng/svxenum.hxx>
 #include <editeng/editengdllapi.h>

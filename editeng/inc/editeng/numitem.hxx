@@ -28,8 +28,6 @@
 #ifndef _SVX_NUMITEM_HXX
 #define _SVX_NUMITEM_HXX
 
-// include ---------------------------------------------------------------
-
 #include <tools/link.hxx>
 #include <tools/string.hxx>
 #include <svl/poolitem.hxx>

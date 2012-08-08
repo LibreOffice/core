@@ -17,10 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-//_________________________________________________________________________________________________________________
-//  my own includes
-//_________________________________________________________________________________________________________________
 #include <uielement/toolbar.hxx>
 #include <uielement/toolbarmanager.hxx>
 #include <rtl/logfile.hxx>

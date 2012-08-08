@@ -20,10 +20,6 @@
 #ifndef FPICKER_WIN32_VISTA_FILEPICKER_INTERNALNOTIFY_HXX
 #define FPICKER_WIN32_VISTA_FILEPICKER_INTERNALNOTIFY_HXX
 
-//-----------------------------------------------------------------------------
-// includes
-//-----------------------------------------------------------------------------
-
 #include "comptr.hxx"
 #include "vistatypes.h"
 

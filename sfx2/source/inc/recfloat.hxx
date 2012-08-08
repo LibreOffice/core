@@ -20,8 +20,6 @@
 #ifndef _RECFLOAT_HXX
 #define _RECFLOAT_HXX
 
-// includes *******************************************************************
-
 #include <sfx2/childwin.hxx>
 #include <sfx2/basedlgs.hxx>
 

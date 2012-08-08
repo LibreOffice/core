@@ -20,10 +20,6 @@
 #ifndef _UNOCONTROLS_MULTIPLEXER_HXX
 #define _UNOCONTROLS_MULTIPLEXER_HXX
 
-//____________________________________________________________________________________________________________
-//  includes of other projects
-//____________________________________________________________________________________________________________
-
 #include <com/sun/star/awt/XKeyListener.hpp>
 #include <com/sun/star/awt/XPaintListener.hpp>
 #include <com/sun/star/awt/KeyEvent.hpp>
@@ -49,9 +45,6 @@
 #include <com/sun/star/awt/PosSize.hpp>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
-//____________________________________________________________________________________________________________
-//  includes of my own project
-//____________________________________________________________________________________________________________
 
 //____________________________________________________________________________________________________________
 //  "namespaces"

@@ -29,10 +29,6 @@
 #ifndef __FRAMEWORK_UIELEMENT_TOOLBARMANAGER_HXX_
 #define __FRAMEWORK_UIELEMENT_TOOLBARMANAGER_HXX_
 
-//_________________________________________________________________________________________________________________
-//  my own includes
-//_________________________________________________________________________________________________________________
-
 #include <threadhelp/threadhelpbase.hxx>
 #include <macros/generic.hxx>
 #include <macros/xinterface.hxx>
@@ -40,9 +36,6 @@
 #include <stdtypes.h>
 #include <uielement/commandinfo.hxx>
 
-//_________________________________________________________________________________________________________________
-//  interface includes
-//_________________________________________________________________________________________________________________
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XStatusListener.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
@@ -63,9 +56,6 @@
 
 #include <com/sun/star/frame/XToolbarController.hpp>
 
-//_________________________________________________________________________________________________________________
-//  other includes
-//_________________________________________________________________________________________________________________
 #include <rtl/ustring.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/interfacecontainer.hxx>

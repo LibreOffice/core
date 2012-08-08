@@ -18,8 +18,6 @@
 #ifndef _SFX_HELPID_HRC
 #define _SFX_HELPID_HRC
 
-// include ------------------------------------------------------------------
-
 #include <sfx2/sfxcommands.h>
 
 // Help-Ids -----------------------------------------------------------------

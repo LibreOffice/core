@@ -28,8 +28,6 @@
 #ifndef _SVX_KEEPITEM_HXX
 #define _SVX_KEEPITEM_HXX
 
-// include ---------------------------------------------------------------
-
 #include <svl/eitem.hxx>
 #include <editeng/editengdllapi.h>
 

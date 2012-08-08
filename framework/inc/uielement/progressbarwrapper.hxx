@@ -20,10 +20,6 @@
 #ifndef _FRAMEWORK_UIELEMENT_PROGRESSBARWRAPPER_HXX_
 #define _FRAMEWORK_UIELEMENT_PROGRESSBARWRAPPER_HXX_
 
-//_________________________________________________________________________________________________________________
-//  my own includes
-//_________________________________________________________________________________________________________________
-
 #include <helper/uielementwrapperbase.hxx>
 #include <threadhelp/threadhelpbase.hxx>
 #include <macros/generic.hxx>
@@ -31,15 +27,9 @@
 #include <macros/xtypeprovider.hxx>
 #include <macros/debug.hxx>
 
-//_________________________________________________________________________________________________________________
-//  interface includes
-//_________________________________________________________________________________________________________________
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 
-//_________________________________________________________________________________________________________________
-//  other includes
-//_________________________________________________________________________________________________________________
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/weakref.hxx>
 

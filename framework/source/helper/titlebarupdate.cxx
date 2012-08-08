@@ -28,9 +28,6 @@
 
 #include <helper/titlebarupdate.hxx>
 
-//_________________________________________________________________________________________________________________
-//  my own includes
-//_________________________________________________________________________________________________________________
 #include <pattern/window.hxx>
 #include <threadhelp/writeguard.hxx>
 #include <threadhelp/readguard.hxx>
@@ -38,7 +35,6 @@
 #include <services.h>
 #include <properties.h>
 
-//  interface includes
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
@@ -49,7 +45,6 @@
 #include <com/sun/star/frame/XTitleChangeBroadcaster.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 
-//  other includes
 #include <comphelper/sequenceashashmap.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/bootstrap.hxx>

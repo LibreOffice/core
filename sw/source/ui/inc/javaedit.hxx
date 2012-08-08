@@ -28,8 +28,6 @@
 #ifndef _SW_JAVAEDIT_HXX
 #define _SW_JAVAEDIT_HXX
 
-// include ---------------------------------------------------------------
-
 #include <svx/stddlg.hxx>
 
 #include <vcl/fixed.hxx>

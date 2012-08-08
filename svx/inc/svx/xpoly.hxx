@@ -28,8 +28,6 @@
 #ifndef _XPOLY_HXX
 #define _XPOLY_HXX
 
-// include ---------------------------------------------------------------
-
 #include <tools/solar.h>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include "svx/svxdllapi.h"

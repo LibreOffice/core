@@ -26,18 +26,11 @@
  *
  ************************************************************************/
 
-
-//_________________________________________________________________________________________________________________
-//  my own includes
-//_________________________________________________________________________________________________________________
 #include <uielement/menubarwrapper.hxx>
 #include <threadhelp/resetableguard.hxx>
 #include <framework/actiontriggerhelper.hxx>
 #include <services.h>
 
-//_________________________________________________________________________________________________________________
-//  interface includes
-//_________________________________________________________________________________________________________________
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/awt/XSystemDependentMenuPeer.hpp>
@@ -48,9 +41,6 @@
 #include <com/sun/star/frame/XModuleManager.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 
-//_________________________________________________________________________________________________________________
-//  other includes
-//_________________________________________________________________________________________________________________
 #include <comphelper/componentcontext.hxx>
 #include <comphelper/processfactory.hxx>
 #include <tools/solar.h>

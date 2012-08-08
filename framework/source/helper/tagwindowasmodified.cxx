@@ -17,10 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-//_________________________________________________________________________________________________________________
-//  my own includes
-//_________________________________________________________________________________________________________________
 #include <helper/tagwindowasmodified.hxx>
 #include <pattern/window.hxx>
 #include <threadhelp/writeguard.hxx>
@@ -28,19 +24,12 @@
 #include <macros/generic.hxx>
 #include <services.h>
 
-//_________________________________________________________________________________________________________________
-//  interface includes
-//_________________________________________________________________________________________________________________
 #include <com/sun/star/awt/XWindow.hpp>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/frame/FrameAction.hpp>
-
-//_________________________________________________________________________________________________________________
-//  other includes
-//_________________________________________________________________________________________________________________
 
 #include <toolkit/unohlp.hxx>
 #include <vcl/window.hxx>

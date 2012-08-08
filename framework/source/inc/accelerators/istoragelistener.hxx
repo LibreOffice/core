@@ -29,17 +29,9 @@
 #ifndef __FRAMEWORK_ACCELERATORS_ISTORAGELISTENER_HXX_
 #define __FRAMEWORK_ACCELERATORS_ISTORAGELISTENER_HXX_
 
-//__________________________________________
-// own includes
-
 #include <general.h>
 #include <stdtypes.h>
 
-//__________________________________________
-// interface includes
-
-//__________________________________________
-// other includes
 
 //__________________________________________
 // definition

@@ -17,11 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-//------------------------------------------------------------------------
-// includes
-//------------------------------------------------------------------------
-
 #include "WinFOPImpl.hxx"
 #include <osl/diagnose.h>
 #include <com/sun/star/lang/EventObject.hpp>

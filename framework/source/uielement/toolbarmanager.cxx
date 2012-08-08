@@ -28,11 +28,6 @@
 
 #include <uielement/toolbarmanager.hxx>
 
-//_________________________________________________________________________________________________________________
-//  my own includes
-//_________________________________________________________________________________________________________________
-
-
 #include <uielement/toolbar.hxx>
 #include <uielement/generictoolbarcontroller.hxx>
 #include <threadhelp/resetableguard.hxx>
@@ -46,9 +41,6 @@
 #include <framework/addonsoptions.hxx>
 #include <uielement/toolbarmerger.hxx>
 
-//_________________________________________________________________________________________________________________
-//  interface includes
-//_________________________________________________________________________________________________________________
 #include <com/sun/star/ui/ItemType.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -69,9 +61,6 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 
-//_________________________________________________________________________________________________________________
-//  other includes
-//_________________________________________________________________________________________________________________
 #include <svtools/imgdef.hxx>
 #include <svtools/toolboxcontroller.hxx>
 #include <unotools/cmdoptions.hxx>

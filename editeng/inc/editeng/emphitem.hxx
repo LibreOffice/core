@@ -28,8 +28,6 @@
 #ifndef _SVX_EMPHITEM_HXX
 #define _SVX_EMPHITEM_HXX
 
-// include ---------------------------------------------------------------
-
 #include <vcl/vclenum.hxx>
 #include <svl/intitem.hxx>
 #include <editeng/editengdllapi.h>

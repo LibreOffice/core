@@ -28,16 +28,8 @@
 
 #include <helper/vclstatusindicator.hxx>
 
-//-----------------------------------------------
-// includes of own modules
 #include <threadhelp/readguard.hxx>
 #include <threadhelp/writeguard.hxx>
-
-//-----------------------------------------------
-// includes of interfaces
-
-//-----------------------------------------------
-// includes of external modules
 
 #include <toolkit/unohlp.hxx>
 #include <vcl/svapp.hxx>

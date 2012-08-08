@@ -26,10 +26,6 @@
  *
  ************************************************************************/
 
-
-//_______________________________________________
-// includes
-
 #include <framework/titlehelper.hxx>
 #include <services.h>
 #include <properties.h>

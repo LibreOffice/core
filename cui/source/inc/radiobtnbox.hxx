@@ -28,8 +28,6 @@
 #ifndef _SVX_RADIOBTNBOX_HXX
 #define _SVX_RADIOBTNBOX_HXX
 
-// include ---------------------------------------------------------------
-
 #include <svx/simptabl.hxx>
 
 namespace svx {

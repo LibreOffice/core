@@ -20,17 +20,9 @@
 #ifndef __FRAMEWORK_JOBS_JOBCONST_HXX_
 #define __FRAMEWORK_JOBS_JOBCONST_HXX_
 
-//_______________________________________
-// my own includes
-
 #include <stdtypes.h>
 #include <general.h>
 
-//_______________________________________
-// interface includes
-
-//_______________________________________
-// other includes
 
 #include <rtl/ustring.hxx>
 #include <fwidllapi.h>

@@ -28,9 +28,6 @@
 
 #include <uielement/newmenucontroller.hxx>
 
-//_________________________________________________________________________________________________________________
-//  my own includes
-//_________________________________________________________________________________________________________________
 #include <threadhelp/resetableguard.hxx>
 #include "services.h"
 #include <classes/resource.hrc>
@@ -39,9 +36,6 @@
 #include <framework/imageproducer.hxx>
 #include <framework/menuconfiguration.hxx>
 
-//_________________________________________________________________________________________________________________
-//  interface includes
-//_________________________________________________________________________________________________________________
 #include <com/sun/star/awt/XDevice.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/awt/MenuItemStyle.hpp>
@@ -51,9 +45,6 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/document/CorruptedFilterConfigurationException.hpp>
 
-//_________________________________________________________________________________________________________________
-//  includes of other projects
-//_________________________________________________________________________________________________________________
 #include <vcl/svapp.hxx>
 #include <vcl/i18nhelp.hxx>
 #include <rtl/ustrbuf.hxx>

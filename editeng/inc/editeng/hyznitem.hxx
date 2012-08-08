@@ -28,8 +28,6 @@
 #ifndef _SVX_HYZNITEM_HXX
 #define _SVX_HYZNITEM_HXX
 
-// include ---------------------------------------------------------------
-
 #include <svl/poolitem.hxx>
 #include <editeng/editengdllapi.h>
 

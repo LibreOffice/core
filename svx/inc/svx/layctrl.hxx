@@ -28,9 +28,6 @@
 #ifndef _SVX_LAYCTRL_HXX
 #define _SVX_LAYCTRL_HXX
 
-// include ---------------------------------------------------------------
-
-
 #include <sfx2/tbxctrl.hxx>
 #include "svx/svxdllapi.h"
 

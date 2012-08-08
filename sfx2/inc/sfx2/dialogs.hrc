@@ -18,8 +18,6 @@
 #ifndef _SFX2_DIALOGS_HRC
 #define _SFX2_DIALOGS_HRC
 
-// include ------------------------------------------------------------------
-
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/tabpage.hrc>
 

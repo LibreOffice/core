@@ -20,10 +20,6 @@
 #ifndef _AUTO_BUFFER_HXX_
 #define _AUTO_BUFFER_HXX_
 
-//------------------------------------------------------------------------
-// includes
-//------------------------------------------------------------------------
-
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
 

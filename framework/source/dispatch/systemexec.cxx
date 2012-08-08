@@ -26,27 +26,16 @@
  *
  ************************************************************************/
 
-
-//_________________________________________________________________________________________________________________
-//  my own includes
-//_________________________________________________________________________________________________________________
 #include <dispatch/systemexec.hxx>
 #include <threadhelp/readguard.hxx>
 #include <general.h>
 #include <services.h>
 
-//_________________________________________________________________________________________________________________
-//  interface includes
-//_________________________________________________________________________________________________________________
 #include <com/sun/star/system/XSystemShellExecute.hpp>
 #include <com/sun/star/util/PathSubstitution.hpp>
 #include <com/sun/star/util/XStringSubstitution.hpp>
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <com/sun/star/frame/DispatchResultState.hpp>
-
-//_________________________________________________________________________________________________________________
-//  includes of other projects
-//_________________________________________________________________________________________________________________
 
 #include <vcl/svapp.hxx>
 #include <comphelper/componentcontext.hxx>

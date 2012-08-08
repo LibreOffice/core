@@ -28,8 +28,6 @@
 #ifndef _SVX_AKRNITEM_HXX
 #define _SVX_AKRNITEM_HXX
 
-// include ---------------------------------------------------------------
-
 #include <svl/eitem.hxx>
 #include <editeng/editengdllapi.h>
 

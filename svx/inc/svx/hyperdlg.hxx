@@ -20,8 +20,6 @@
 #ifndef _SVX_TAB_HYPERLINK_HXX
 #define _SVX_TAB_HYPERLINK_HXX
 
-// include ---------------------------------------------------------------
-
 #include <sfx2/childwin.hxx>
 #include "svx/svxdllapi.h"
 

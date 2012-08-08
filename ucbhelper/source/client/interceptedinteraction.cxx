@@ -19,10 +19,6 @@
 
 #include <ucbhelper/interceptedinteraction.hxx>
 
-//_______________________________________________
-// includes
-
-//_______________________________________________
 // namespace
 
 namespace ucbhelper{

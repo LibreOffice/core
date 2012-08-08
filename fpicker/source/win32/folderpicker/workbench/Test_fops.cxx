@@ -17,18 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-
-//-----------------------------------------------------------
-//  interface includes
-//-----------------------------------------------------------
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/registry/XSimpleRegistry.hpp>
 #include <osl/file.hxx>
 
-//--------------------------------------------------------------
-//  other includes
-//--------------------------------------------------------------
 #include <cppuhelper/servicefactory.hxx>
 
 #include <rtl/ustring.hxx>

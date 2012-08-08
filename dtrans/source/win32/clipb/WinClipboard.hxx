@@ -21,11 +21,6 @@
 #ifndef _WINCLIPBOARD_HXX_
 #define _WINCLIPBOARD_HXX_
 
-
-//------------------------------------------------------------------------
-// includes
-//------------------------------------------------------------------------
-
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 #include <cppuhelper/compbase4.hxx>

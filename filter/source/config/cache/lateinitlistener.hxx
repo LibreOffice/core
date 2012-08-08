@@ -20,9 +20,6 @@
 #ifndef __FILTER_CONFIG_LATEINITLISTENER_HXX_
 #define __FILTER_CONFIG_LATEINITLISTENER_HXX_
 
-//_______________________________________________
-// includes
-
 #include "cacheitem.hxx"
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>

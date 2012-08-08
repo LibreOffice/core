@@ -28,8 +28,6 @@
 #ifndef _SVX_CHARDLG_HXX
 #define _SVX_CHARDLG_HXX
 
-// include ---------------------------------------------------------------
-
 #include <svtools/ctrlbox.hxx>
 #include <svtools/stdctrl.hxx>
 #include <sfx2/tabdlg.hxx>

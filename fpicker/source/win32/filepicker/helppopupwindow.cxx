@@ -17,11 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-//------------------------------------------------------------------------
-// includes
-//------------------------------------------------------------------------
-
 #include <tchar.h>
 #include "helppopupwindow.hxx"
 #include <osl/diagnose.h>

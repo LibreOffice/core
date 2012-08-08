@@ -30,8 +30,6 @@
 #include "services/autorecovery.hxx"
 #include <loadenv/loadenv.hxx>
 
-//_______________________________________________
-// own includes
 #include <loadenv/targethelper.hxx>
 #include <pattern/frame.hxx>
 #include <threadhelp/readguard.hxx>
@@ -45,8 +43,6 @@
 
 #include "helper/mischelper.hxx"
 
-//_______________________________________________
-// interface includes
 #include <com/sun/star/ucb/NameClash.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/frame/XLoadable.hpp>
@@ -77,8 +73,6 @@
 #include <com/sun/star/awt/XWindow2.hpp>
 #include <com/sun/star/task/XStatusIndicatorFactory.hpp>
 
-//_______________________________________________
-// other includes
 #include <comphelper/componentcontext.hxx>
 #include <comphelper/configurationhelper.hxx>
 #include <comphelper/mediadescriptor.hxx>

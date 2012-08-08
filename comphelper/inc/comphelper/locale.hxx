@@ -20,9 +20,6 @@
 #ifndef _COMPHELPER_LOCALE_HXX_
 #define _COMPHELPER_LOCALE_HXX_
 
-//_______________________________________________
-// includes
-
 #include <vector>
 #include <rtl/ustring.hxx>
 #include "comphelper/comphelperdllapi.h"

@@ -19,8 +19,6 @@
 #ifndef _BOOKCTRL_HXX
 #define _BOOKCTRL_HXX
 
-// include ---------------------------------------------------------------
-
 #include <sfx2/stbitem.hxx>
 #include <tools/string.hxx>
 

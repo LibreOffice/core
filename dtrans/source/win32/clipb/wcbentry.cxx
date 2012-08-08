@@ -17,9 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-//______________________________________________________________________________________________________________
-//  includes of other projects
-//______________________________________________________________________________________________________________
 #include <cppuhelper/factory.hxx>
 #include <com/sun/star/container/XSet.hpp>
 #include <osl/diagnose.h>

@@ -29,10 +29,6 @@
 #ifndef __FRAMEWORK_DISPATCH_MENUDISPATCHER_HXX_
 #define __FRAMEWORK_DISPATCH_MENUDISPATCHER_HXX_
 
-//_________________________________________________________________________________________________________________
-//  my own includes
-//_________________________________________________________________________________________________________________
-
 #include <classes/taskcreator.hxx>
 #include <services/frame.hxx>
 #include <macros/generic.hxx>
@@ -44,9 +40,6 @@
 #include <general.h>
 #include <stdtypes.h>
 
-//_________________________________________________________________________________________________________________
-//  interface includes
-//_________________________________________________________________________________________________________________
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/util/URL.hpp>
@@ -59,9 +52,6 @@
 #include <com/sun/star/frame/FeatureStateEvent.hpp>
 #include <com/sun/star/frame/XFrameActionListener.hpp>
 
-//_________________________________________________________________________________________________________________
-//  other includes
-//_________________________________________________________________________________________________________________
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <cppuhelper/interfacecontainer.h>

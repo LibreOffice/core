@@ -20,10 +20,6 @@
 #ifndef __FRAMEWORK_HELPER_OCOMPONENTACCESS_HXX_
 #define __FRAMEWORK_HELPER_OCOMPONENTACCESS_HXX_
 
-//_________________________________________________________________________________________________________________
-//  my own includes
-//_________________________________________________________________________________________________________________
-
 #include <threadhelp/threadhelpbase.hxx>
 #include <macros/generic.hxx>
 #include <macros/xinterface.hxx>
@@ -31,9 +27,6 @@
 #include <macros/debug.hxx>
 #include <general.h>
 
-//_________________________________________________________________________________________________________________
-//  interface includes
-//_________________________________________________________________________________________________________________
 #include <com/sun/star/frame/XFramesSupplier.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/container/XElementAccess.hpp>
@@ -41,9 +34,6 @@
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 
-//_________________________________________________________________________________________________________________
-//  other includes
-//_________________________________________________________________________________________________________________
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/weakref.hxx>
 

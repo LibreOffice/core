@@ -28,8 +28,6 @@
 #ifndef _SVX_TSPTITEM_HXX
 #define _SVX_TSPTITEM_HXX
 
-// include ---------------------------------------------------------------
-
 #include <svl/poolitem.hxx>
 #include <editeng/svxenum.hxx>
 #include <editeng/editengdllapi.h>

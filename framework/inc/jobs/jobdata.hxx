@@ -20,9 +20,6 @@
 #ifndef __FRAMEWORK_JOBS_JOBDATA_HXX_
 #define __FRAMEWORK_JOBS_JOBDATA_HXX_
 
-//_______________________________________
-// my own includes
-
 #include <jobs/configaccess.hxx>
 #include <jobs/jobresult.hxx>
 #include <threadhelp/threadhelpbase.hxx>
@@ -30,14 +27,10 @@
 #include <stdtypes.h>
 #include <general.h>
 
-//_______________________________________
-// interface includes
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/frame/DispatchResultEvent.hpp>
 
-//_______________________________________
-// other includes
 #include <rtl/ustring.hxx>
 
 //_______________________________________

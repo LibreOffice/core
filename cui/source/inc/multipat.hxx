@@ -28,8 +28,6 @@
 #ifndef _SVX_MULTIPAT_HXX
 #define _SVX_MULTIPAT_HXX
 
-// include ---------------------------------------------------------------
-
 #include <vcl/dialog.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/button.hxx>

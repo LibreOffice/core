@@ -26,11 +26,6 @@
  *
  ************************************************************************/
 
-
-
-//-----------------------------------------------------------
-//  interface includes
-//-----------------------------------------------------------
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/registry/XSimpleRegistry.hpp>
 #include <com/sun/star/system/XSimpleMailClientSupplier.hpp>

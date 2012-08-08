@@ -35,9 +35,6 @@
 
 #include "properties.h"
 
-//_________________________________________________________________________________________________________________
-//  interface includes
-//_________________________________________________________________________________________________________________
 #include <com/sun/star/ui/UIElementType.hpp>
 #include <com/sun/star/ui/ConfigurationEvent.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
@@ -46,10 +43,6 @@
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/ui/ImageType.hpp>
-
-//_________________________________________________________________________________________________________________
-//  other includes
-//_________________________________________________________________________________________________________________
 
 #include <vcl/svapp.hxx>
 #include <rtl/ustrbuf.hxx>

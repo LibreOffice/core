@@ -20,10 +20,6 @@
 #ifndef __FRAMEWORK_SERVICES_CONTENTHANDLERFACTORY_HXX_
 #define __FRAMEWORK_SERVICES_CONTENTHANDLERFACTORY_HXX_
 
-//_________________________________________________________________________________________________________________
-//  my own includes
-//_________________________________________________________________________________________________________________
-
 #include <classes/filtercache.hxx>
 #include <macros/generic.hxx>
 #include <macros/debug.hxx>
@@ -35,9 +31,6 @@
 #include <threadhelp/transactionbase.hxx>
 #include <general.h>
 
-//_________________________________________________________________________________________________________________
-//  interface includes
-//_________________________________________________________________________________________________________________
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/WrappedTargetException.hpp>
@@ -49,9 +42,6 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/util/XFlushable.hpp>
 
-//_________________________________________________________________________________________________________________
-//  other includes
-//_________________________________________________________________________________________________________________
 #include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/weak.hxx>
 

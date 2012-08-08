@@ -17,7 +17,6 @@
  */
 #ifndef _SVX_EXTHELPID_HRC
 #define _SVX_EXTHELPID_HRC
-// include ---------------------------------------------------------------
 
 // these HIDs are used in SVX and also in other modules, mainly CUI
 // the reason is that different controls have the same help texts assigned

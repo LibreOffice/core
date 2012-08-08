@@ -33,17 +33,10 @@
 #include <xml/imagesdocumenthandler.hxx>
 #include <xml/saxnamespacefilter.hxx>
 
-//_________________________________________________________________________________________________________________
-//  interface includes
-//_________________________________________________________________________________________________________________
 #include <com/sun/star/xml/sax/XParser.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-
-//_________________________________________________________________________________________________________________
-//  other includes
-//_________________________________________________________________________________________________________________
 
 #include <comphelper/processfactory.hxx>
 #include <unotools/streamwrap.hxx>

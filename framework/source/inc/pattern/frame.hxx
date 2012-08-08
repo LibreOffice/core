@@ -20,13 +20,8 @@
 #ifndef __FRAMEWORK_PATTERN_FRAME_HXX_
 #define __FRAMEWORK_PATTERN_FRAME_HXX_
 
-//_______________________________________________
-// own includes
-
 #include <general.h>
 
-//_______________________________________________
-// interface includes
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/XModel.hpp>
@@ -34,10 +29,6 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 
-//_______________________________________________
-// other includes
-
-//_______________________________________________
 // namespaces
 
 #ifndef css

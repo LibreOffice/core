@@ -36,9 +36,6 @@
 #include <vector>
 #include <iterator>
 
-//_________________________________________________________________________________________________________________
-//  my own includes
-//_________________________________________________________________________________________________________________
 #include <classes/checkediterator.hxx>
 #include <classes/wildcard.hxx>
 #include <classes/converter.hxx>
@@ -47,9 +44,6 @@
 #include <macros/debug.hxx>
 #include <general.h>
 
-//_________________________________________________________________________________________________________________
-//  interface includes
-//_________________________________________________________________________________________________________________
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
@@ -58,9 +52,6 @@
 #include <com/sun/star/util/XChangesListener.hpp>
 #include <com/sun/star/util/XChangesNotifier.hpp>
 
-//_________________________________________________________________________________________________________________
-//  other includes
-//_________________________________________________________________________________________________________________
 #include <unotools/configitem.hxx>
 #include <cppuhelper/weak.hxx>
 #include <rtl/ustring.hxx>

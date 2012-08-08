@@ -18,8 +18,6 @@
 #ifndef _EDIT_RIDS_HRC
 #define _EDIT_RIDS_HRC
 
-// include ------------------------------------------------------------------
-
 #include <svl/solar.hrc>
 
 // strings also used in cui

@@ -28,8 +28,6 @@
 #ifndef _SVX_TEXTANIM_HXX
 #define _SVX_TEXTANIM_HXX
 
-// include ---------------------------------------------------------------
-
 #include <vcl/field.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <svx/svdattr.hxx>

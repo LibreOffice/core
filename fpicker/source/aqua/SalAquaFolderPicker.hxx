@@ -20,10 +20,6 @@
 #ifndef _SALAQUAFOLDERPICKER_HXX_
 #define _SALAQUAFOLDERPICKER_HXX_
 
-//_______________________________________________________________________________________________________________________
-//  includes of other projects
-//_______________________________________________________________________________________________________________________
-
 #include <cppuhelper/implbase4.hxx>
 #include <com/sun/star/util/XCancellable.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>

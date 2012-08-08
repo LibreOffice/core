@@ -28,8 +28,6 @@
 #ifndef SVX_OPTCOLOR_HXX
 #define SVX_OPTCOLOR_HXX
 
-// include ---------------------------------------------------------------
-
 #include <sfx2/tabdlg.hxx>
 #include <vcl/group.hxx>
 #include <vcl/fixed.hxx>

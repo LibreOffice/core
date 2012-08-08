@@ -28,15 +28,11 @@
 #ifndef __FRAMEWORK_LOADENV_LOADENV_HXX_
 #define __FRAMEWORK_LOADENV_LOADENV_HXX_
 
-//_______________________________________________
-// includes of own project
 
 #include <loadenv/loadenvexception.hxx>
 #include <loadenv/actionlockguard.hxx>
 #include <threadhelp/threadhelpbase.hxx>
 
-//_______________________________________________
-// includes of uno interface
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/frame/XFrameLoader.hpp>
@@ -49,8 +45,6 @@
 
 #include <com/sun/star/io/IOException.hpp>
 
-//_______________________________________________
-// includes of an other project
 #include <comphelper/mediadescriptor.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <cppuhelper/implbase2.hxx>

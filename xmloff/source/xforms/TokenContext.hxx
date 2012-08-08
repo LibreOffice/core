@@ -20,11 +20,6 @@
 #ifndef _XMLOFF_TOKENCONTEXT_HXX
 #define _XMLOFF_TOKENCONTEXT_HXX
 
-
-//
-// include for parent class and members
-//
-
 #include <xmloff/xmlictxt.hxx>
 
 

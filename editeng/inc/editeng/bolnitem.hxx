@@ -28,10 +28,6 @@
 #ifndef _SVX_BOLNITEM_HXX
 #define _SVX_BOLNITEM_HXX
 
-// include ---------------------------------------------------------------
-
-
-
 #include <svl/poolitem.hxx>
 #include "editeng/editengdllapi.h"
 

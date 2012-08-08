@@ -29,10 +29,6 @@
 #ifndef _SALGTKFILEPICKER_HXX_
 #define _SALGTKFILEPICKER_HXX_
 
-//_______________________________________________________________________________________________________________________
-//  includes of other projects
-//_______________________________________________________________________________________________________________________
-
 #include <cppuhelper/compbase9.hxx>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerNotifier.hpp>

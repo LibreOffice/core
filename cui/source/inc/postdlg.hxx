@@ -28,8 +28,6 @@
 #ifndef _SVX_POSTDLG_HXX
 #define _SVX_POSTDLG_HXX
 
-// include ---------------------------------------------------------------
-
 #include <vcl/group.hxx>
 #include <vcl/button.hxx>
 #include <vcl/edit.hxx>

@@ -29,10 +29,6 @@
 #ifndef __FRAMEWORK_SERVICES_DESKTOP_HXX_
 #define __FRAMEWORK_SERVICES_DESKTOP_HXX_
 
-//_________________________________________________________________________________________________________________
-//  my own includes
-//_________________________________________________________________________________________________________________
-
 #include <classes/framecontainer.hxx>
 #include <threadhelp/threadhelpbase.hxx>
 #include <helper/oframes.hxx>
@@ -41,10 +37,6 @@
 #include <macros/xinterface.hxx>
 #include <macros/xtypeprovider.hxx>
 #include <macros/xserviceinfo.hxx>
-
-//_________________________________________________________________________________________________________________
-//  interface includes
-//_________________________________________________________________________________________________________________
 
 #include <com/sun/star/frame/XUntitledNumbers.hpp>
 
@@ -74,9 +66,6 @@
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/frame/XDispatchRecorderSupplier.hpp>
 
-//_________________________________________________________________________________________________________________
-//  other includes
-//_________________________________________________________________________________________________________________
 #include <unotools/cmdoptions.hxx>
 #include <cppuhelper/propshlp.hxx>
 #include <cppuhelper/interfacecontainer.hxx>

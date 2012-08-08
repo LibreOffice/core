@@ -19,8 +19,6 @@
 #ifndef _SVX_DIALMGR_HXX
 #define _SVX_DIALMGR_HXX
 
-// include ---------------------------------------------------------------
-
 #include <tools/resid.hxx>
 #include "svx/svxdllapi.h"
 

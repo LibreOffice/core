@@ -28,9 +28,6 @@
 #ifndef __FILTER_CONFIG_CACHEUPDATELISTENER_HXX_
 #define __FILTER_CONFIG_CACHEUPDATELISTENER_HXX_
 
-//_______________________________________________
-// includes
-
 #include "filtercache.hxx"
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>

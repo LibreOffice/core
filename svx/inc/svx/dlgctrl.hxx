@@ -28,8 +28,6 @@
 #ifndef _SVX_DLG_CTRL_HXX
 #define _SVX_DLG_CTRL_HXX
 
-// include ---------------------------------------------------------------
-
 #include <svtools/ctrlbox.hxx>
 #include <sfx2/tabdlg.hxx>
 #include "svx/svxdllapi.h"

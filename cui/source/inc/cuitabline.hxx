@@ -28,7 +28,6 @@
 #ifndef _CUI_TAB_LINE_HXX
 #define _CUI_TAB_LINE_HXX
 
-// include ---------------------------------------------------------------
 #include <vector>
 #include <svx/tabline.hxx>
 

@@ -31,15 +31,9 @@
 
 #include <framework/toolboxconfiguration.hxx>
 
-//_________________________________________________________________________________________________________________
-//  interface includes
-//_________________________________________________________________________________________________________________
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 
-//_________________________________________________________________________________________________________________
-//  other includes
-//_________________________________________________________________________________________________________________
 #include <threadhelp/threadhelpbase.hxx>
 #include <rtl/ustring.hxx>
 #include <cppuhelper/implbase1.hxx>

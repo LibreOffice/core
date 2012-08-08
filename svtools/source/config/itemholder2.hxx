@@ -29,9 +29,6 @@
 #ifndef INCLUDED_SVTOOLS_ITEMHOLDER2_HXX_
 #define INCLUDED_SVTOOLS_ITEMHOLDER2_HXX_
 
-//-----------------------------------------------
-// includes
-
 #include <unotools/itemholderbase.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/lang/XEventListener.hpp>

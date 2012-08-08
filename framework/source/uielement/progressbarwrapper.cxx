@@ -29,22 +29,13 @@
 
 #include <uielement/progressbarwrapper.hxx>
 
-//_________________________________________________________________________________________________________________
-//  my own includes
-//_________________________________________________________________________________________________________________
 #include <helper/statusindicator.hxx>
 #include <threadhelp/resetableguard.hxx>
 #include <uielement/statusindicatorinterfacewrapper.hxx>
 
-//_________________________________________________________________________________________________________________
-//  interface includes
-//_________________________________________________________________________________________________________________
 #include <com/sun/star/ui/UIElementType.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 
-//_________________________________________________________________________________________________________________
-//  includes of other projects
-//_________________________________________________________________________________________________________________
 #include <vcl/svapp.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 

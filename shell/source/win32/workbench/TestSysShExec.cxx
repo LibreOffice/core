@@ -26,11 +26,6 @@
  *
  ************************************************************************/
 
-
-
-//-----------------------------------------------------------
-//  interface includes
-//-----------------------------------------------------------
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/registry/XSimpleRegistry.hpp>
 
@@ -40,9 +35,6 @@
 
 #include <osl/file.hxx>
 
-//--------------------------------------------------------------
-//  other includes
-//--------------------------------------------------------------
 #include <cppuhelper/servicefactory.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>

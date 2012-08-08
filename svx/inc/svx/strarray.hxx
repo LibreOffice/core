@@ -28,8 +28,6 @@
 #ifndef _SVX_STRARRAY_HXX
 #define _SVX_STRARRAY_HXX
 
-// include ---------------------------------------------------------------
-
 #include <tools/resary.hxx>
 #include "svx/svxdllapi.h"
 

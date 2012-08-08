@@ -20,11 +20,6 @@
 #ifndef _FILEPICKER_HXX_
 #define _FILEPICKER_HXX_
 
-//_______________________________________________________________________________________________________________________
-//  includes of other projects
-//_______________________________________________________________________________________________________________________
-
-
 #include <cppuhelper/compbase10.hxx>
 #include <osl/mutex.hxx>
 #include <com/sun/star/lang/XInitialization.hpp>

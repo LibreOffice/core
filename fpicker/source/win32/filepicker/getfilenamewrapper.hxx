@@ -20,10 +20,6 @@
 #ifndef _GETFILENAMEWRAPPER_HXX_
 #define _GETFILENAMEWRAPPER_HXX_
 
-//------------------------------------------------------------------------
-// includes
-//------------------------------------------------------------------------
-
 #include <sal/types.h>
 
 #define WIN32_LEAN_AND_MEAN

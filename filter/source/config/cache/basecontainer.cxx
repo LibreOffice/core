@@ -30,8 +30,6 @@
 #include "basecontainer.hxx"
 #include "constant.hxx"
 
-//_______________________________________________
-// includes
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/uno/Type.h>
 #include <comphelper/enumhelper.hxx>

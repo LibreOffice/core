@@ -16,8 +16,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
- // include ------------------------------------------------------------------
-
 #include <sfx2/sfx.hrc>
 #include "app.hrc"
 #include "helpid.hrc"

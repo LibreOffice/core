@@ -37,8 +37,6 @@
 #define AS_ENABLE_FILTER_UINAMES
 #define WORKAROUND_EXCEPTION_PROBLEM
 
-//_______________________________________________
-// includes
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/util/XChangesBatch.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>

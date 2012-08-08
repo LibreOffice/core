@@ -29,10 +29,6 @@
 #ifndef _SYSSHEXEC_HXX_
 #define _SYSSHEXEC_HXX_
 
-//_______________________________________________________________________________________________________________________
-//  includes of other projects
-//_______________________________________________________________________________________________________________________
-
 #include <cppuhelper/compbase2.hxx>
 #include <osl/mutex.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>

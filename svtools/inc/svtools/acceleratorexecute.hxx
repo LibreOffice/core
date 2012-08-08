@@ -29,9 +29,6 @@
 #ifndef INCLUDED_SVTOOLS_ACCELERATOREXECUTE_HXX
 #define INCLUDED_SVTOOLS_ACCELERATOREXECUTE_HXX
 
-//===============================================
-// includes
-
 #include "svtools/svtdllapi.h"
 
 #include <vector>

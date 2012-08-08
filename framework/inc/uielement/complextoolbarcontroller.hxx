@@ -26,9 +26,6 @@
 #include <com/sun/star/frame/ControlCommand.hpp>
 #include <com/sun/star/frame/XControlNotificationListener.hpp>
 
-//_________________________________________________________________________________________________________________
-//  includes of other projects
-//_________________________________________________________________________________________________________________
 #include <svtools/toolboxcontroller.hxx>
 
 #include <vcl/toolbox.hxx>

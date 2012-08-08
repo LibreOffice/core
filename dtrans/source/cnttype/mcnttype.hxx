@@ -21,10 +21,6 @@
 #ifndef _MCNTTYPE_HXX_
 #define _MCNTTYPE_HXX_
 
-//------------------------------------------------------------------------
-// includes
-//------------------------------------------------------------------------
-
 #include <cppuhelper/compbase1.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>

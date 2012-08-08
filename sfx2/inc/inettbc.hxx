@@ -20,7 +20,6 @@
 #ifndef _SFX_INETTBC_HXX
 #define _SFX_INETTBC_HXX
 
-// includes *****************************************************************
 #include <tools/string.hxx>
 
 #include <vcl/combobox.hxx>

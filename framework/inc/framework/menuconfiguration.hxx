@@ -29,10 +29,6 @@
 #ifndef __FRAMEWORK_XML_MENUCONFIGURATION_HXX_
 #define __FRAMEWORK_XML_MENUCONFIGURATION_HXX_
 
-//_________________________________________________________________________________________________________________
-//  interface includes
-//_________________________________________________________________________________________________________________
-
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/WrappedTargetException.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
@@ -42,10 +38,6 @@
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <framework/fwedllapi.h>
-
-//_________________________________________________________________________________________________________________
-//  includes of other projects
-//_________________________________________________________________________________________________________________
 
 #include <cppuhelper/weak.hxx>
 #include <vcl/menu.hxx>

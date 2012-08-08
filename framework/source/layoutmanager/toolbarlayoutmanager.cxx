@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-// my own includes
 #include <toolbarlayoutmanager.hxx>
 #include <helpers.hxx>
 #include <services.h>
@@ -35,7 +33,6 @@
 #include <classes/fwkresid.hxx>
 #include <uiconfiguration/windowstateconfiguration.hxx>
 
-// interface includes
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/ui/UIElementType.hpp>
 #include <com/sun/star/container/XNameReplace.hpp>
@@ -43,7 +40,6 @@
 #include <com/sun/star/ui/XUIElementSettings.hpp>
 #include <com/sun/star/ui/XUIFunctionListener.hpp>
 
-// other includes
 #include <unotools/cmdoptions.hxx>
 #include <toolkit/unohlp.hxx>
 #include <toolkit/helper/convert.hxx>

@@ -19,8 +19,6 @@
 #ifndef _SVX_NUMPAGES_HXX
 #define _SVX_NUMPAGES_HXX
 
-// include ---------------------------------------------------------------
-
 #include <vector>
 #include <boost/ptr_container/ptr_vector.hpp>
 

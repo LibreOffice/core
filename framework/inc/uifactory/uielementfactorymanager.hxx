@@ -35,9 +35,6 @@
 #include <vector>
 #include <list>
 
-//_________________________________________________________________________________________________________________
-//  my own includes
-//_________________________________________________________________________________________________________________
 #include <threadhelp/threadhelpbase.hxx>
 #include <macros/generic.hxx>
 #include <macros/xinterface.hxx>
@@ -45,9 +42,6 @@
 #include <macros/xserviceinfo.hxx>
 #include <stdtypes.h>
 
-//_________________________________________________________________________________________________________________
-//  interface includes
-//_________________________________________________________________________________________________________________
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/ui/XUIElementFactory.hpp>
 #include <com/sun/star/ui/XUIElementFactoryRegistration.hpp>
@@ -55,9 +49,6 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include "com/sun/star/frame/XModuleManager.hpp"
 
-//_________________________________________________________________________________________________________________
-//  other includes
-//_________________________________________________________________________________________________________________
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase3.hxx>
 #include <rtl/ustring.hxx>

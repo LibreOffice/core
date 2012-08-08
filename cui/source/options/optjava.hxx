@@ -28,8 +28,6 @@
 #ifndef _SVX_OPTJAVA_HXX
 #define _SVX_OPTJAVA_HXX
 
-// include ---------------------------------------------------------------
-
 #include <vector>
 #include <ucbhelper/content.hxx>
 #include <vcl/button.hxx>

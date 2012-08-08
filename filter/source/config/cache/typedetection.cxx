@@ -29,8 +29,6 @@
 #include "typedetection.hxx"
 #include "constant.hxx"
 
-//_______________________________________________
-// includes
 #include <com/sun/star/document/XExtendedFilterDetection.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>

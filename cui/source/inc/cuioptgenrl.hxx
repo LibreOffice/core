@@ -19,8 +19,6 @@
 #ifndef _SVX_CUIOPTGENRL_HXX
 #define _SVX_CUIOPTGENRL_HXX
 
-// include ---------------------------------------------------------------
-
 #include <svx/optgenrl.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <vcl/fixed.hxx>

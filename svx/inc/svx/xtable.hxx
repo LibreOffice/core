@@ -28,8 +28,6 @@
 #ifndef _XTABLE_HXX
 #define _XTABLE_HXX
 
-// include ---------------------------------------------------------------
-
 #include <rtl/ref.hxx>
 #include <svx/xpoly.hxx>
 #include <svx/xdash.hxx>

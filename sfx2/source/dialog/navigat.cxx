@@ -17,9 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-// includes *******************************************************************
-
 #include <sfx2/navigat.hxx>
 #include <sfx2/sfx.hrc>
 #include <sfx2/app.hxx>

@@ -28,8 +28,6 @@
 #ifndef _SVX_OPTPATH_HXX
 #define _SVX_OPTPATH_HXX
 
-// include ---------------------------------------------------------------
-
 #include <sfx2/tabdlg.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/group.hxx>

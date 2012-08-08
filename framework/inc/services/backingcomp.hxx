@@ -20,15 +20,10 @@
 #ifndef __FRAMEWORK_SERVICES_BACKINGCOMP_HXX_
 #define __FRAMEWORK_SERVICES_BACKINGCOMP_HXX_
 
-//__________________________________________
-// own includes
-
 #include <threadhelp/threadhelpbase.hxx>
 #include <general.h>
 #include <stdtypes.h>
 
-//__________________________________________
-// interface includes
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -43,8 +38,6 @@
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 
-//__________________________________________
-// other includes
 #include <cppuhelper/weak.hxx>
 
 //__________________________________________

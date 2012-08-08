@@ -20,10 +20,6 @@
 #ifndef FPICKER_WIN32_VISTA_FILEPICKER_HXX
 #define FPICKER_WIN32_VISTA_FILEPICKER_HXX
 
-//-----------------------------------------------------------------------------
-// includes
-//-----------------------------------------------------------------------------
-
 #include "asyncrequests.hxx"
 #include "VistaFilePickerImpl.hxx"
 #include "VistaFilePickerEventHandler.hxx"

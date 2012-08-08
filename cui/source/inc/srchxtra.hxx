@@ -28,8 +28,6 @@
 #ifndef _SVX_SRCHXTRA_HXX
 #define _SVX_SRCHXTRA_HXX
 
-// include ---------------------------------------------------------------
-
 #include <vcl/field.hxx>
 #include <svtools/ctrltool.hxx>
 #include <sfx2/tabdlg.hxx>

@@ -20,10 +20,6 @@
 #ifndef _FILEOPENDLG_HXX_
 #define _FILEOPENDLG_HXX_
 
-//------------------------------------------------------------------------
-// includes
-//------------------------------------------------------------------------
-
 #include <sal/types.h>
 
 #include <rtl/ustring.hxx>

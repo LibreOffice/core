@@ -34,9 +34,6 @@
 */
 #include <vector>
 
-//_________________________________________________________________________________________________________________
-//  my own includes
-//_________________________________________________________________________________________________________________
 #include <threadhelp/threadhelpbase.hxx>
 #include <threadhelp/resetableguard.hxx>
 #include <threadhelp/writeguard.hxx>
@@ -54,9 +51,6 @@
 #include <uielement/uielement.hxx>
 #include <helper/ilayoutnotifications.hxx>
 
-//_________________________________________________________________________________________________________________
-//  interface includes
-//_________________________________________________________________________________________________________________
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
@@ -74,9 +68,6 @@
 #include <com/sun/star/frame/XMenuBarMergingAcceptor.hpp>
 #include <com/sun/star/frame/XLayoutManagerEventBroadcaster.hpp>
 
-//_________________________________________________________________________________________________________________
-//  other includes
-//_________________________________________________________________________________________________________________
 #include <cppuhelper/propshlp.hxx>
 #include <cppuhelper/implbase7.hxx>
 #include <cppuhelper/interfacecontainer.hxx>

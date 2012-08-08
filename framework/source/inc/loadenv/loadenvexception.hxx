@@ -29,17 +29,10 @@
 #ifndef __FRAMEWORK_LOADENV_LOADENVEXCEPTION_HXX_
 #define __FRAMEWORK_LOADENV_LOADENVEXCEPTION_HXX_
 
-//_______________________________________________
-// includes of own project
-
-//_______________________________________________
-// includes of uno interface
 
 #include <com/sun/star/uno/Any.h>
 #include <com/sun/star/uno/Exception.hpp>
 
-//_______________________________________________
-// includes of an other project
 #include <rtl/string.hxx>
 
 //_______________________________________________

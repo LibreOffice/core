@@ -19,8 +19,6 @@
 #ifndef _SVX_TAB_LINE_HXX
 #define _SVX_TAB_LINE_HXX
 
-// include ---------------------------------------------------------------
-
 #include <vcl/button.hxx>
 #include <vcl/group.hxx>
 #include <svtools/stdctrl.hxx>

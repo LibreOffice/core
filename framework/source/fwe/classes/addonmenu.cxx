@@ -26,10 +26,6 @@
  *
  ************************************************************************/
 
-
-//_________________________________________________________________________________________________________________
-//  my own includes
-//_________________________________________________________________________________________________________________
 #include "framework/addonmenu.hxx"
 #include "framework/addonsoptions.hxx"
 #include <general.h>
@@ -37,17 +33,11 @@
 #include <framework/imageproducer.hxx>
 #include <framework/menuconfiguration.hxx>
 
-//_________________________________________________________________________________________________________________
-//  interface includes
-//_________________________________________________________________________________________________________________
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
-//_________________________________________________________________________________________________________________
-//  includes of other projects
-//_________________________________________________________________________________________________________________
 #include <tools/config.hxx>
 #include <vcl/svapp.hxx>
 #include <svtools/menuoptions.hxx>

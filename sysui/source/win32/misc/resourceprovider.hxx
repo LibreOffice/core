@@ -21,10 +21,6 @@
 #ifndef _RESOURCEPROVIDER_HXX_
 #define _RESOURCEPROVIDER_HXX_
 
-//------------------------------------------------------------------------
-// includes
-//------------------------------------------------------------------------
-
 #include <sal/types.h>
 
 #include <rtl/ustring>

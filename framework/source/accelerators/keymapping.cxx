@@ -28,19 +28,10 @@
 
 #include <accelerators/keymapping.hxx>
 
-//_______________________________________________
-// own includes
-
 #include <macros/generic.hxx>
 
-//_______________________________________________
-// interface includes
 #include <com/sun/star/awt/Key.hpp>
 
-//_______________________________________________
-// other includes
-
-//_______________________________________________
 // namespace
 
 namespace framework

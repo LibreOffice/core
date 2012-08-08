@@ -29,10 +29,6 @@
 #ifndef __FRAMEWORK_SERVICES_FRAME_HXX_
 #define __FRAMEWORK_SERVICES_FRAME_HXX_
 
-//_________________________________________________________________________________________________________________
-//  my own includes
-//_________________________________________________________________________________________________________________
-
 #include <classes/framecontainer.hxx>
 #include <classes/propertysethelper.hxx>
 #include <threadhelp/resetableguard.hxx>
@@ -48,9 +44,6 @@
 #include <macros/xserviceinfo.hxx>
 #include <general.h>
 
-//_________________________________________________________________________________________________________________
-//  interface includes
-//_________________________________________________________________________________________________________________
 #include <com/sun/star/frame/XDispatchInformationProvider.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/frame/XController.hpp>
@@ -79,9 +72,6 @@
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 
-//_________________________________________________________________________________________________________________
-//  other includes
-//_________________________________________________________________________________________________________________
 #include <unotools/cmdoptions.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/weak.hxx>

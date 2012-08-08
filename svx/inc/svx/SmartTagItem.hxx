@@ -28,8 +28,6 @@
 #ifndef _SVX_SMARTTAGITEM_HXX
 #define _SVX_SMARTTAGITEM_HXX
 
-// include ---------------------------------------------------------------
-
 #include <svl/poolitem.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>

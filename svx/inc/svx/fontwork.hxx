@@ -28,8 +28,6 @@
 #ifndef _SVX_FONTWORK_HXX
 #define _SVX_FONTWORK_HXX
 
-// include ---------------------------------------------------------------
-
 #include <vcl/toolbox.hxx>
 #include <vcl/fixed.hxx>
 #include <svtools/valueset.hxx>

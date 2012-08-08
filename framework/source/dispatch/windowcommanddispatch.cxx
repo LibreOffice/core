@@ -26,26 +26,16 @@
  *
  ************************************************************************/
 
-
-//_______________________________________________
-// my own includes
-
 #include <dispatch/windowcommanddispatch.hxx>
 #include <threadhelp/readguard.hxx>
 #include <threadhelp/writeguard.hxx>
 #include <targets.h>
 #include <services.h>
 
-//_______________________________________________
-// interface includes
-
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
-
-//_______________________________________________
-// includes of other projects
 
 #include <comphelper/componentcontext.hxx>
 #include <vcl/window.hxx>

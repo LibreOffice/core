@@ -35,7 +35,6 @@ class   SalColormap;
 class   SalVisual;
 class   SalXLib;
 
-// -=-= #includes =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <unx/salunx.h>
 #include <unx/saltype.h>
 #include <vcl/salgtype.hxx>

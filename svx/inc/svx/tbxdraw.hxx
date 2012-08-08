@@ -19,8 +19,6 @@
 #ifndef _TBXDRAW_HXX
 #define _TBXDRAW_HXX
 
-// include ---------------------------------------------------------------
-
 #include <sfx2/tbxctrl.hxx>
 
 // class SvxPopupWindowTbxMgr --------------------------------------------

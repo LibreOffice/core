@@ -20,12 +20,8 @@
 #ifndef __FRAMEWORK_CLASSES_FRAMELISTANALYZER_HXX_
 #define __FRAMEWORK_CLASSES_FRAMELISTANALYZER_HXX_
 
-//_______________________________________________
-//  interface includes
 #include <com/sun/star/frame/XFrame.hpp>
 
-//_______________________________________________
-//  other includes
 #include <framework/fwedllapi.h>
 
 //_______________________________________________

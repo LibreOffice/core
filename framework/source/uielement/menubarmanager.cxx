@@ -26,11 +26,6 @@
  *
  ************************************************************************/
 
-
-
-//_________________________________________________________________________________________________________________
-//  my own includes
-//_________________________________________________________________________________________________________________
 #include <uielement/menubarmanager.hxx>
 #include <framework/menuconfiguration.hxx>
 #include <framework/bmkmenu.hxx>
@@ -45,9 +40,6 @@
 #include <classes/resource.hrc>
 #include <services.h>
 
-//_________________________________________________________________________________________________________________
-//  interface includes
-//_________________________________________________________________________________________________________________
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
@@ -71,9 +63,6 @@
 #include <com/sun/star/frame/status/Visibility.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 
-//_________________________________________________________________________________________________________________
-//  includes of other projects
-//_________________________________________________________________________________________________________________
 #include <comphelper/componentcontext.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/extract.hxx>

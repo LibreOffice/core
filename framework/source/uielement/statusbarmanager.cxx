@@ -29,9 +29,6 @@
 
 #include <uielement/statusbarmanager.hxx>
 
-//_________________________________________________________________________________________________________________
-//  my own includes
-//_________________________________________________________________________________________________________________
 #include <threadhelp/threadhelpbase.hxx>
 #include <threadhelp/resetableguard.hxx>
 #include <framework/sfxhelperfunctions.hxx>
@@ -44,9 +41,6 @@
 #include "properties.h"
 #include <helper/mischelper.hxx>
 
-//_________________________________________________________________________________________________________________
-//  interface includes
-//_________________________________________________________________________________________________________________
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XStatusListener.hpp>
 #include <com/sun/star/util/XUpdatable.hpp>
@@ -56,10 +50,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/awt/Command.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
-
-//_________________________________________________________________________________________________________________
-//  other includes
-//_________________________________________________________________________________________________________________
 
 #include <toolkit/unohlp.hxx>
 #include <svtools/statusbarcontroller.hxx>

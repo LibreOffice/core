@@ -28,8 +28,6 @@
 #ifndef _SVX_WIDWITEM_HXX
 #define _SVX_WIDWITEM_HXX
 
-// include ---------------------------------------------------------------
-
 #include <svl/intitem.hxx>
 #include <editeng/editengdllapi.h>
 

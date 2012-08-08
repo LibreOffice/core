@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-
-//===============================================
-// includes
 #include "recoveryui.hxx"
 #include "docrecovery.hxx"
 #include <com/sun/star/lang/XInitialization.hpp>

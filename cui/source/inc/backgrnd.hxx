@@ -28,8 +28,6 @@
 #ifndef _SVX_BACKGRND_HXX
 #define _SVX_BACKGRND_HXX
 
-// include ---------------------------------------------------------------
-
 #include <vcl/group.hxx>
 #include <svtools/stdctrl.hxx>
 #include <vcl/graph.hxx>

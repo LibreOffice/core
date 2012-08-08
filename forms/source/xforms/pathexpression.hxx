@@ -20,11 +20,8 @@
 #ifndef _PATHEXPRESSION_HXX
 #define _PATHEXPRESSION_HXX
 
-
-// include for parent class
 #include "computedexpression.hxx"
 
-// includes for member variables
 #include <vector>
 
 // forward declaractions

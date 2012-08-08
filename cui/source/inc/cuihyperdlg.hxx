@@ -20,8 +20,6 @@
 #ifndef _CUI_TAB_HYPERLINK_HXX
 #define _CUI_TAB_HYPERLINK_HXX
 
-// include ---------------------------------------------------------------
-
 #include <svx/hlnkitem.hxx>
 #include <sfx2/childwin.hxx>
 #include <sfx2/ctrlitem.hxx>

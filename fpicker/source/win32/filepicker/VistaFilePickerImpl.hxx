@@ -20,10 +20,6 @@
 #ifndef FPICKER_WIN32_VISTA_FILEPICKERIMPL_HXX
 #define FPICKER_WIN32_VISTA_FILEPICKERIMPL_HXX
 
-//-----------------------------------------------------------------------------
-// includes
-//-----------------------------------------------------------------------------
-
 #if defined(_MSC_VER) && (_MSC_VER >= 1400)
 #pragma warning( disable : 4917 )
 #endif

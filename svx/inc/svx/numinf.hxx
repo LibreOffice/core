@@ -28,8 +28,6 @@
 #ifndef _SVX_NUMINF_HXX
 #define _SVX_NUMINF_HXX
 
-// include ---------------------------------------------------------------
-
 #include <svl/itempool.hxx>
 #include <svx/numfmtsh.hxx>
 #include "svx/svxdllapi.h"

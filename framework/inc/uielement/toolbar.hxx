@@ -17,11 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-//_________________________________________________________________________________________________________________
-//  my own includes
-//_________________________________________________________________________________________________________________
-
-
 #ifndef __FRAMEWORK_UIELEMENT_TOOLBAR_HXX_
 #define __FRAMEWORK_UIELEMENT_TOOLBAR_HXX_
 

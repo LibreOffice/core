@@ -20,10 +20,6 @@
 #ifndef _SALAQUAFILEPICKER_HXX_
 #define _SALAQUAFILEPICKER_HXX_
 
-//_______________________________________________________________________________________________________________________
-//  includes of other projects
-//_______________________________________________________________________________________________________________________
-
 #include <cppuhelper/compbase8.hxx>
 #include <com/sun/star/util/XCancellable.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>

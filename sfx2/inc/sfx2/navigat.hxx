@@ -20,8 +20,6 @@
 #ifndef _SFXNAVI_HXX
 #define _SFXNAVI_HXX
 
-// includes *******************************************************************
-
 #include <sfx2/childwin.hxx>
 #include <sfx2/dockwin.hxx>
 

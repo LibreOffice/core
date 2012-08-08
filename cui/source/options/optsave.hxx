@@ -28,8 +28,6 @@
 #ifndef _SVX_OPTSAVE_HXX
 #define _SVX_OPTSAVE_HXX
 
-// include ---------------------------------------------------------------
-
 #include <vcl/group.hxx>
 #include <vcl/field.hxx>
 #include <vcl/fixed.hxx>

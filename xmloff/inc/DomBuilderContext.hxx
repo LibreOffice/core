@@ -29,11 +29,6 @@
 #ifndef _XMLOFF_DOMBUILDERCONTEXT_HXX
 #define _XMLOFF_DOMBUILDERCONTEXT_HXX
 
-
-//
-// include for parent class and members
-//
-
 #include <xmloff/xmlictxt.hxx>
 
 

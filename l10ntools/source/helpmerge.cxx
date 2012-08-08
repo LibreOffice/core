@@ -33,7 +33,7 @@
 
 #include <osl/file.hxx>
 #include <sal/log.hxx>
-// local includes
+
 #include <stdio.h>
 #include <stdlib.h>
 #include "helpmerge.hxx"

@@ -20,9 +20,6 @@
 #ifndef INCLUDED_unotools_ITEMHOLDER1_HXX_
 #define INCLUDED_unotools_ITEMHOLDER1_HXX_
 
-//-----------------------------------------------
-// includes
-
 #include <unotools/itemholderbase.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/lang/XEventListener.hpp>

@@ -28,8 +28,6 @@
 #ifndef _SVX_UDLNITEM_HXX
 #define _SVX_UDLNITEM_HXX
 
-// include ---------------------------------------------------------------
-
 #include <svl/eitem.hxx>
 #include <vcl/vclenum.hxx>
 #include <tools/color.hxx>

@@ -28,8 +28,6 @@
 #ifndef _SVX_CONNECT_HXX
 #define _SVX_CONNECT_HXX
 
-// include ---------------------------------------------------------------
-
 #include <svx/connctrl.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <vcl/fixed.hxx>

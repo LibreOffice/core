@@ -29,7 +29,6 @@
 #ifndef _SV_SALVD_H
 #define _SV_SALVD_H
 
-// -=-= #includes -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 #include <unx/salstd.hxx>
 #include <unx/saltype.h>
 #include <salvd.hxx>

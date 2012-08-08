@@ -20,10 +20,6 @@
 #ifndef FPICKER_WIN32_VISTA_ASYNCREQUESTS_HXX
 #define FPICKER_WIN32_VISTA_ASYNCREQUESTS_HXX
 
-//-----------------------------------------------------------------------------
-// includes
-//-----------------------------------------------------------------------------
-
 #include <cppuhelper/basemutex.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <osl/conditn.hxx>

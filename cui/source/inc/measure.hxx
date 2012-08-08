@@ -28,8 +28,6 @@
 #ifndef _SVX_MEASURE_HXX
 #define _SVX_MEASURE_HXX
 
-// include ---------------------------------------------------------------
-
 #include <vcl/fixed.hxx>
 #include <vcl/group.hxx>
 #include <sfx2/basedlgs.hxx>

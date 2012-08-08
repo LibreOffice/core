@@ -19,7 +19,6 @@
 #ifndef _VIEWLAYOUTCTRL_HXX
 #define _VIEWLAYOUTCTRL_HXX
 
-// include ---------------------------------------------------------------
 #include <sfx2/stbitem.hxx>
 
 // class SwViewLayoutControl ----------------------------------------------

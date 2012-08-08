@@ -28,9 +28,6 @@
 #ifndef _SVX_CHECKLBX_HXX
 #define _SVX_CHECKLBX_HXX
 
-// include ---------------------------------------------------------------
-
-
 #include <svtools/svtreebx.hxx>
 #include <svtools/svlbitm.hxx>
 

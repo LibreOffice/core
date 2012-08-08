@@ -28,8 +28,6 @@
 #ifndef _SVX_SPELLDDIALOG_HXX
 #define _SVX_SPELLDDIALOG_HXX
 
-// include ---------------------------------------------------------------
-
 #include <sfx2/basedlgs.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/edit.hxx>

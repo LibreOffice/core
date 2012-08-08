@@ -17,11 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-//_________________________________________________________________________________________________________________
-//  includes
-//_________________________________________________________________________________________________________________
-
 #include <unotools/compatibility.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/configitem.hxx>

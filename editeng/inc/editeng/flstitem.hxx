@@ -28,8 +28,6 @@
 #ifndef _SVX_FLSTITEM_HXX
 #define _SVX_FLSTITEM_HXX
 
-// include ---------------------------------------------------------------
-
 #include <svl/poolitem.hxx>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Sequence.h>

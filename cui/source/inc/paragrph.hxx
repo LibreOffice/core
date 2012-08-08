@@ -28,8 +28,6 @@
 #ifndef _SVX_PARAGRPH_HXX
 #define _SVX_PARAGRPH_HXX
 
-// include ---------------------------------------------------------------
-
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
 #include <sfx2/tabdlg.hxx>

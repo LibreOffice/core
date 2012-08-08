@@ -28,8 +28,6 @@
 #ifndef _SVX_FNTCTRL_HXX
 #define _SVX_FNTCTRL_HXX
 
-// include ---------------------------------------------------------------
-
 #include <vcl/window.hxx>
 #include <editeng/svxfont.hxx>
 #include "svx/svxdllapi.h"

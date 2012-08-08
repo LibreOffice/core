@@ -31,8 +31,6 @@
 //#undef SVX_DLLIMPLEMENTATION
 //#endif
 
-// include ---------------------------------------------------------------
-
 #include <svx/dialmgr.hxx>
 #include <svl/solar.hrc>
 #include <vcl/svapp.hxx>

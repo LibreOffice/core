@@ -20,18 +20,11 @@
 #ifndef __FRAMEWORK_LOADENV_ACTIONLOCKGUARD_HXX_
 #define __FRAMEWORK_LOADENV_ACTIONLOCKGUARD_HXX_
 
-//_______________________________________________
-// includes of own project
 
 #include <threadhelp/threadhelpbase.hxx>
 #include <threadhelp/resetableguard.hxx>
 
-//_______________________________________________
-// includes of uno interface
 #include <com/sun/star/document/XActionLockable.hpp>
-
-//_______________________________________________
-// includes of an other project
 
 //_______________________________________________
 // namespace

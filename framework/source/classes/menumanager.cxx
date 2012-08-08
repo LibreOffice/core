@@ -26,11 +26,6 @@
  *
  ************************************************************************/
 
-
-
-//_________________________________________________________________________________________________________________
-//  my own includes
-//_________________________________________________________________________________________________________________
 #include <classes/menumanager.hxx>
 #include <framework/menuconfiguration.hxx>
 #include <framework/bmkmenu.hxx>
@@ -42,9 +37,6 @@
 #include <services.h>
 #include "classes/resource.hrc"
 
-//_________________________________________________________________________________________________________________
-//  interface includes
-//_________________________________________________________________________________________________________________
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
@@ -56,9 +48,6 @@
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/util/XStringWidth.hpp>
 
-//_________________________________________________________________________________________________________________
-//  includes of other projects
-//_________________________________________________________________________________________________________________
 #include <comphelper/processfactory.hxx>
 #include <comphelper/componentcontext.hxx>
 

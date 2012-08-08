@@ -28,8 +28,6 @@
 #ifndef _SVX_KERNITEM_HXX
 #define _SVX_KERNITEM_HXX
 
-// include ---------------------------------------------------------------
-
 #include <svl/intitem.hxx>
 #include <editeng/editengdllapi.h>
 

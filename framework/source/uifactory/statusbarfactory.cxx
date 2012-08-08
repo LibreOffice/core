@@ -20,15 +20,9 @@
 #include <uifactory/statusbarfactory.hxx>
 #include <uifactory/menubarfactory.hxx>
 
-//_________________________________________________________________________________________________________________
-//  my own includes
-//_________________________________________________________________________________________________________________
 #include <uielement/statusbarwrapper.hxx>
 #include <threadhelp/resetableguard.hxx>
 
-//_________________________________________________________________________________________________________________
-//  interface includes
-//_________________________________________________________________________________________________________________
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XModel.hpp>
@@ -37,9 +31,6 @@
 
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
 
-//_________________________________________________________________________________________________________________
-//  includes of other projects
-//_________________________________________________________________________________________________________________
 #include <vcl/svapp.hxx>
 #include <rtl/ustrbuf.hxx>
 

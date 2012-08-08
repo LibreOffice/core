@@ -17,11 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-//------------------------------------------------------------------------
-// includes
-//------------------------------------------------------------------------
-
 #ifdef _MSC_VER
 #pragma warning (disable:4917)
 #endif

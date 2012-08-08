@@ -25,8 +25,6 @@
  *
  ************************************************************************/
 
- // includes ------------------------------------------------------------------
-
 #include "templwin.hrc"
 #include <svtools/controldims.hrc>
 #include <svtools/helpid.hrc>

@@ -21,10 +21,6 @@
 #ifndef _CONTROLACCESS_HXX_
 #define _CONTROLACCESS_HXX_
 
-//------------------------------------------------------------------------
-// includes
-//------------------------------------------------------------------------
-
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
 

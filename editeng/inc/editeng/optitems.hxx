@@ -19,8 +19,6 @@
 #ifndef _EDITENG_OPTITEMS_HXX
 #define _EDITENG_OPTITEMS_HXX
 
-// include ---------------------------------------------------------------
-
 #include <svl/poolitem.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <editeng/editengdllapi.h>

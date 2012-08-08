@@ -28,8 +28,6 @@
 #ifndef _SVX_ALIGN_HXX
 #define _SVX_ALIGN_HXX
 
-// include ---------------------------------------------------------------
-
 #include <svx/orienthelper.hxx>
 #include <vcl/field.hxx>
 #include <vcl/button.hxx>

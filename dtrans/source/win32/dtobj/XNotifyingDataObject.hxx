@@ -21,11 +21,6 @@
 #ifndef _XNOTIFYINGDATAOBJECT_HXX_
 #define _XNOTIFYINGDATAOBJECT_HXX_
 
-
-//------------------------------------------------------------------------
-// includes
-//------------------------------------------------------------------------
-
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboardOwner.hpp>
 

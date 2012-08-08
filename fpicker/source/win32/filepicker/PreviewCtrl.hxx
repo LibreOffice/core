@@ -20,10 +20,6 @@
 #ifndef _PREVIEWCTRL_HXX_
 #define _PREVIEWCTRL_HXX_
 
-//------------------------------------------------------------------------
-// includes
-//------------------------------------------------------------------------
-
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
 

@@ -20,9 +20,6 @@
 #ifndef __FILTER_CONFIG_CONTENTHANDLERFACTORY_HXX_
 #define __FILTER_CONFIG_CONTENTHANDLERFACTORY_HXX_
 
-//_______________________________________________
-// includes
-
 #include "basecontainer.hxx"
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>

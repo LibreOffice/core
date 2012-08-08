@@ -28,8 +28,6 @@
 #ifndef _SVX_TXENCTAB_HXX
 #define _SVX_TXENCTAB_HXX
 
-// include ---------------------------------------------------------------
-
 #include <tools/resary.hxx>
 #include <rtl/textenc.h>
 #include "svx/svxdllapi.h"

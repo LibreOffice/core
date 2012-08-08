@@ -20,9 +20,6 @@
 #ifndef _RECOVERYUI_HXX
 #define _RECOVERYUI_HXX
 
-//===============================================
-// includes
-
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/frame/XSynchronousDispatch.hpp>

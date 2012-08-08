@@ -29,8 +29,6 @@
 #ifndef _SVTOOLS_IMAGEMGR_HXX
 #define _SVTOOLS_IMAGEMGR_HXX
 
-// includes ******************************************************************
-
 #include "svtools/svtdllapi.h"
 #include "sal/types.h"
 

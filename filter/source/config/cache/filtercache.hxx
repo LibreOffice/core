@@ -29,9 +29,6 @@
 #ifndef __FILTER_CONFIG_FILTERCACHE_HXX_
 #define __FILTER_CONFIG_FILTERCACHE_HXX_
 
-//_______________________________________________
-// includes
-
 #include "cacheitem.hxx"
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/util/URL.hpp>

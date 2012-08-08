@@ -26,11 +26,6 @@
  *
  ************************************************************************/
 
-
-//_________________________________________________________________________________________________________________
-//  my own includes
-//_________________________________________________________________________________________________________________
-
 #include <limits.h>
 
 #include "framework/bmkmenu.hxx"
@@ -39,9 +34,6 @@
 #include <framework/imageproducer.hxx>
 #include <framework/menuconfiguration.hxx>
 
-//_________________________________________________________________________________________________________________
-//  interface includes
-//_________________________________________________________________________________________________________________
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -50,9 +42,6 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 
-//_________________________________________________________________________________________________________________
-//  includes of other projects
-//_________________________________________________________________________________________________________________
 #include <vcl/svapp.hxx>
 #include <unotools/dynamicmenuoptions.hxx>
 #include <svtools/menuoptions.hxx>

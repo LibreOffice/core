@@ -28,8 +28,6 @@
 #ifndef _SVX_LANGITEM_HXX
 #define _SVX_LANGITEM_HXX
 
-// include ---------------------------------------------------------------
-
 #include <svl/eitem.hxx>
 #include <i18npool/lang.h>
 #include <editeng/editengdllapi.h>

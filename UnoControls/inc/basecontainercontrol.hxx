@@ -20,10 +20,6 @@
 #ifndef _UNOCONTROLS_BASECONTAINERCONTROL_CTRL_HXX
 #define _UNOCONTROLS_BASECONTAINERCONTROL_CTRL_HXX
 
-//____________________________________________________________________________________________________________
-//  includes of other projects
-//____________________________________________________________________________________________________________
-
 #include <com/sun/star/lang/XServiceName.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/container/XContainer.hpp>
@@ -36,9 +32,6 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <vector>
 
-//____________________________________________________________________________________________________________
-//  includes of my own project
-//____________________________________________________________________________________________________________
 #include "basecontrol.hxx"
 
 //____________________________________________________________________________________________________________

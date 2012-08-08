@@ -31,9 +31,6 @@
 
 #include "svtools/svtdllapi.h"
 
-//_________________________________________________________________________________________________________________
-//  interface includes
-//_________________________________________________________________________________________________________________
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -46,9 +43,7 @@
 #include <com/sun/star/uri/XUriReferenceFactory.hpp>
 #include <com/sun/star/uri/XUriReference.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
-//_________________________________________________________________________________________________________________
-//  includes of other projects
-//_________________________________________________________________________________________________________________
+
 #include <toolkit/awt/vclxmenu.hxx>
 #include <cppuhelper/compbase7.hxx>
 #include <comphelper/broadcasthelper.hxx>

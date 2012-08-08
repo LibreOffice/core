@@ -29,10 +29,6 @@
 #ifndef _SMPLMAILMSG_HXX_
 #define _SMPLMAILMSG_HXX_
 
-//_______________________________________________________________________________________________________________________
-//  includes of other projects
-//_______________________________________________________________________________________________________________________
-
 #include <cppuhelper/compbase1.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>

@@ -26,25 +26,18 @@
  *
  ************************************************************************/
 
-
-//________________________________
-//  my own includes
 #include <jobs/job.hxx>
 #include <threadhelp/readguard.hxx>
 #include <threadhelp/writeguard.hxx>
 #include <general.h>
 #include <services.h>
 
-//________________________________
-//  interface includes
 #include <com/sun/star/task/XJob.hpp>
 #include <com/sun/star/task/XAsyncJob.hpp>
 #include <com/sun/star/util/XCloseBroadcaster.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 
-//________________________________
-//  includes of other projects
 #include <rtl/ustrbuf.hxx>
 #include <vcl/svapp.hxx>
 

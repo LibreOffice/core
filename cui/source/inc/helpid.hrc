@@ -26,7 +26,6 @@
  ************************************************************************/
 #ifndef _CUI_HELPID_HRC
 #define _CUI_HELPID_HRC
-// include ---------------------------------------------------------------
 
 #include <svx/svxcommands.h>
 #include <sfx2/sfxcommands.h>

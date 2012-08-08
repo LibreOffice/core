@@ -31,8 +31,6 @@
 
 #include "backingwindow.hxx"
 
-//_______________________________________________
-// own includes
 #include <threadhelp/readguard.hxx>
 #include <threadhelp/writeguard.hxx>
 #include <classes/droptargetlistener.hxx>
@@ -42,8 +40,6 @@
 
 #include <helpid.hrc>
 
-//_______________________________________________
-// interface includes
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
@@ -55,8 +51,6 @@
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 
-//_______________________________________________
-// other includes
 #include <comphelper/componentcontext.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/factory.hxx>

@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-
-//________________________________
-//  my own includes
 #include <jobs/jobexecutor.hxx>
 #include <jobs/job.hxx>
 #include <jobs/joburl.hxx>
@@ -42,14 +39,10 @@
 
 #include "helper/mischelper.hxx"
 
-//________________________________
-//  interface includes
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XContainer.hpp>
 
-//________________________________
-//  includes of other projects
 #include <unotools/configpaths.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <vcl/svapp.hxx>

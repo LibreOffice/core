@@ -29,10 +29,6 @@
 
 #include "querytokenizer.hxx"
 
-//_______________________________________________
-// includes
-
-//_______________________________________________
 // namespace
 
 namespace filter{

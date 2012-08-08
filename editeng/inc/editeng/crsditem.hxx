@@ -28,8 +28,6 @@
 #ifndef _SVX_CRSDITEM_HXX
 #define _SVX_CRSDITEM_HXX
 
-// include ---------------------------------------------------------------
-
 #include <vcl/vclenum.hxx>
 #include <svl/eitem.hxx>
 #include <editeng/editengdllapi.h>

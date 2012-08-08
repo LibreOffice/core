@@ -31,8 +31,6 @@
 #undef SW_DLLIMPLEMENTATION
 #endif
 
-// include ---------------------------------------------------------------
-
 #include "dialmgr.hxx"
 #include "tools/string.hxx"
 #include <sfx2/app.hxx>

@@ -28,8 +28,6 @@
 #ifndef _SVX_OPAQITEM_HXX
 #define _SVX_OPAQITEM_HXX
 
-// include ---------------------------------------------------------------
-
 #include <svl/eitem.hxx>
 #include "editeng/editengdllapi.h"
 

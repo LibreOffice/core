@@ -29,9 +29,6 @@
 #ifndef _FILTER_CONFIG_QUERYTOKENIZER_HXX_
 #define _FILTER_CONFIG_QUERYTOKENIZER_HXX_
 
-//_______________________________________________
-// includes
-
 #include <boost/unordered_map.hpp>
 #include <rtl/ustring.hxx>
 

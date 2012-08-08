@@ -28,8 +28,6 @@
 #ifndef _OFF_OFAITEM_HXX
 #define _OFF_OFAITEM_HXX
 
-// include ----------------------------------------------------------------
-
 #include <svl/poolitem.hxx>
 #include <rtl/ref.hxx>
 #include "svx/svxdllapi.h"

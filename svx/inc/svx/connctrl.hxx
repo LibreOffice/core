@@ -19,8 +19,6 @@
 #ifndef _SVX_CONNCTRL_HXX
 #define _SVX_CONNCTRL_HXX
 
-// include ---------------------------------------------------------------
-
 #include <vcl/ctrl.hxx>
 #include "svx/svxdllapi.h"
 

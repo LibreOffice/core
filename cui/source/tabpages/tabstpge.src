@@ -24,7 +24,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
- // include ---------------------------------------------------------------
+
 #include "helpid.hrc"
 #include <cuires.hrc>
 #include "tabstpge.hrc"

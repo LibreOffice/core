@@ -20,9 +20,6 @@
 #ifndef INCLUDED_unotools_ITEMHOLDERBASE_HXX_
 #define INCLUDED_unotools_ITEMHOLDERBASE_HXX_
 
-//-----------------------------------------------
-// includes
-
 #include <vector>
 #include <osl/mutex.hxx>
 

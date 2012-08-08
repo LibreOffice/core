@@ -20,20 +20,13 @@
 #ifndef __FRAMEWORK_JOBS_SHELLJOB_HXX_
 #define __FRAMEWORK_JOBS_SHELLJOB_HXX_
 
-//_______________________________________________
-// my own includes
-
 #include <threadhelp/threadhelpbase.hxx>
 #include <macros/xinterface.hxx>
 #include <macros/xtypeprovider.hxx>
 #include <macros/xserviceinfo.hxx>
 
-//_______________________________________________
-// other includes
 #include <cppuhelper/implbase2.hxx>
 
-//_______________________________________________
-// uno includes
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/task/XJob.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>

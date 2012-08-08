@@ -33,23 +33,12 @@
     - may its a good idea to replace struct ProtocolHandler by css::beans::NamedValue type?!
 */
 
-//_________________________________________________________________________________________________________________
-//  my own includes
-//_________________________________________________________________________________________________________________
-
 #include <classes/protocolhandlercache.hxx>
 #include <classes/converter.hxx>
 #include <threadhelp/readguard.hxx>
 #include <threadhelp/writeguard.hxx>
 #include <threadhelp/lockhelper.hxx>
 
-//_________________________________________________________________________________________________________________
-//  interface includes
-//_________________________________________________________________________________________________________________
-
-//_________________________________________________________________________________________________________________
-//  other includes
-//_________________________________________________________________________________________________________________
 #include <tools/wldcrd.hxx>
 #include <unotools/configpaths.hxx>
 #include <rtl/ustrbuf.hxx>

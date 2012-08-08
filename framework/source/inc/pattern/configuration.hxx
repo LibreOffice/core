@@ -29,14 +29,9 @@
 #ifndef __FRAMEWORK_PATTERN_CONFIGURATION_HXX_
 #define __FRAMEWORK_PATTERN_CONFIGURATION_HXX_
 
-//_______________________________________________
-// own includes
-
 #include <services.h>
 #include <general.h>
 
-//_______________________________________________
-// interface includes
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Any.hxx>
 
@@ -44,8 +39,6 @@
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
-//_______________________________________________
-// other includes
 #include <rtl/ustrbuf.hxx>
 
 //_______________________________________________

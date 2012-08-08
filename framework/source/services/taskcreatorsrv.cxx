@@ -28,8 +28,6 @@
 
 #include "services/taskcreatorsrv.hxx"
 
-//_______________________________________________
-// own includes
 #include <helper/persistentwindowstate.hxx>
 #include <helper/tagwindowasmodified.hxx>
 #include <helper/titlebarupdate.hxx>
@@ -38,8 +36,6 @@
 #include <loadenv/targethelper.hxx>
 #include <services.h>
 
-//_______________________________________________
-// interface includes
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/XModel.hpp>
@@ -49,8 +45,6 @@
 #include <com/sun/star/awt/WindowAttribute.hpp>
 #include <com/sun/star/awt/VclWindowPeerAttribute.hpp>
 
-//_______________________________________________
-// other includes
 #include <svtools/colorcfg.hxx>
 #include <vcl/svapp.hxx>
 

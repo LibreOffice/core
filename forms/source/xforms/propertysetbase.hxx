@@ -28,8 +28,6 @@
 #ifndef _PROPERTYSETBASE_HXX
 #define _PROPERTYSETBASE_HXX
 
-
-// include for parent class
 #include <cppuhelper/weak.hxx>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <comphelper/propstate.hxx>

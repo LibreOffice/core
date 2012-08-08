@@ -21,10 +21,6 @@
 #ifndef _FTRANSL_HXX_
 #define _FTRANSL_HXX_
 
-//------------------------------------------------------------------------
-// includes
-//------------------------------------------------------------------------
-
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 #include <cppuhelper/compbase2.hxx>

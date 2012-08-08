@@ -17,16 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-//________________________________________________________________________________________________________
-//  my own includes
-//________________________________________________________________________________________________________
-
 #include <sfx2/sfxbasemodel.hxx>
-
-//________________________________________________________________________________________________________
-//  include of other projects
-//________________________________________________________________________________________________________
 
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/task/ErrorCodeRequest.hpp>
@@ -88,10 +79,6 @@
 #include <comphelper/numberedcollection.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/ucbhelper.hxx>
-
-//________________________________________________________________________________________________________
-//  includes of my own project
-//________________________________________________________________________________________________________
 
 #include <sfx2/sfxbasecontroller.hxx>
 #include "sfx2/viewfac.hxx"

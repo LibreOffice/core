@@ -20,9 +20,6 @@
 #ifndef __FRAMEWORK_TARGETHELPER_HXX_
 #define __FRAMEWORK_TARGETHELPER_HXX_
 
-//_______________________________________________
-// own includes
-
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
 #include <targets.h>

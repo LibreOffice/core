@@ -28,8 +28,6 @@
 #ifndef _SVX_TEXTATTR_HXX
 #define _SVX_TEXTATTR_HXX
 
-// include ---------------------------------------------------------------
-
 #include <svx/dlgctrl.hxx>
 
 #include <vcl/group.hxx>

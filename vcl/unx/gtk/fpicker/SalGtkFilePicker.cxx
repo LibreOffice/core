@@ -32,9 +32,6 @@
 #undef _LINUX_SOURCE_COMPAT
 #endif
 
-//------------------------------------------------------------------------
-// includes
-//------------------------------------------------------------------------
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/ui/dialogs/CommonFilePickerElementIds.hpp>

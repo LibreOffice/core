@@ -28,7 +28,6 @@
 #ifndef _SD_DLGFACT_HXX
 #define _SD_DLGFACT_HXX
 
-// include ---------------------------------------------------------------
 #include "sdabstdlg.hxx"
 #include <sfx2/basedlgs.hxx>
 

@@ -29,10 +29,6 @@
 #ifndef __FRAMEWORK_HANDLER_SOUNDHANDLER_HXX_
 #define __FRAMEWORK_HANDLER_SOUNDHANDLER_HXX_
 
-//_________________________________________________________________________________________________________________
-//  interface includes
-//_________________________________________________________________________________________________________________
-
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/frame/XNotifyingDispatch.hpp>
@@ -46,9 +42,6 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 
-//_________________________________________________________________________________________________________________
-//  other includes
-//_________________________________________________________________________________________________________________
 #include <cppuhelper/weak.hxx>
 
 #include <vcl/timer.hxx>

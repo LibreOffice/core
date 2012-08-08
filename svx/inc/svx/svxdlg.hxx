@@ -27,7 +27,6 @@
  ************************************************************************/
 #ifndef _SVX_DIALOG_HXX
 #define _SVX_DIALOG_HXX
-// include ---------------------------------------------------------------
 
 #include <sfx2/sfxdlg.hxx>
 #include <editeng/edtdlg.hxx>

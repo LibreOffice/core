@@ -28,9 +28,6 @@
 #ifndef _SVX_PROTITEM_HXX
 #define _SVX_PROTITEM_HXX
 
-// include ---------------------------------------------------------------
-
-
 #include <svl/poolitem.hxx>
 #include "editeng/editengdllapi.h"
 

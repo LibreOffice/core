@@ -21,10 +21,6 @@
 #ifndef _WINIMPLHELPER_HXX_
 #define _WINIMPLHELPER_HXX_
 
-//------------------------------------------------------------------------
-// includes
-//------------------------------------------------------------------------
-
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
 

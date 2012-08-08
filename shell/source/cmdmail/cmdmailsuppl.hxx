@@ -20,10 +20,6 @@
 #ifndef _CMDMAILSUPPL_HXX_
 #define _CMDMAILSUPPL_HXX_
 
-//----------------------------------------------------------
-//  includes of other projects
-//----------------------------------------------------------
-
 #include <cppuhelper/implbase3.hxx>
 #include <osl/mutex.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>

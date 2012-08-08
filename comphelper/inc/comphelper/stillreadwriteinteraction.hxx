@@ -20,8 +20,6 @@
 #ifndef _COMPHELPER_STILLREADWRITEINTERACTION_HXX_
 #define _COMPHELPER_STRILLREADWRITEINTERACTION_HXX_
 
-//_______________________________________________
-// includes
 #include <ucbhelper/interceptedinteraction.hxx>
 
 #include <com/sun/star/task/XInteractionHandler.hpp>

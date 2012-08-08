@@ -22,11 +22,6 @@
 #endif
 #define _WIN32_WINNT 0x0500
 
-
-//------------------------------------------------------------------------
-// includes
-//------------------------------------------------------------------------
-
 #include <tchar.h>
 #include <osl/diagnose.h>
 #include "../misc/WinImplHelper.hxx"

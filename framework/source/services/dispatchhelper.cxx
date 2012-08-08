@@ -26,22 +26,15 @@
  *
  ************************************************************************/
 
-
-//_______________________________________________
-// my own includes
 #include <services/dispatchhelper.hxx>
 #include <threadhelp/readguard.hxx>
 #include <threadhelp/writeguard.hxx>
 #include <services.h>
 
-//_______________________________________________
-// interface includes
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/frame/XNotifyingDispatch.hpp>
 
-//_______________________________________________
-// includes of other projects
 #include <comphelper/componentcontext.hxx>
 
 //_______________________________________________

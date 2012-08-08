@@ -20,18 +20,10 @@
 #ifndef __FRAMEWORK_DISPATCH_LOADDISPATCHER_HXX_
 #define __FRAMEWORK_DISPATCH_LOADDISPATCHER_HXX_
 
-//_______________________________________________
-// my own includes
-
 #include <loadenv/loadenv.hxx>
 
-//_______________________________________________
-// interface includes
 #include <com/sun/star/frame/XNotifyingDispatch.hpp>
 #include <com/sun/star/frame/XSynchronousDispatch.hpp>
-
-//_______________________________________________
-// other includes
 
 #include <cppuhelper/implbase2.hxx>
 

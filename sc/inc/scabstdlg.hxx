@@ -28,8 +28,6 @@
 #ifndef _SC_ABSTDLG_HXX
 #define _SC_ABSTDLG_HXX
 
-// include ---------------------------------------------------------------
-
 #include <tools/solar.h>
 #include <tools/string.hxx>
 #include <sfx2/sfxdlg.hxx>

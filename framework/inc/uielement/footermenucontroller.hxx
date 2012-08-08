@@ -20,9 +20,6 @@
 #ifndef __FRAMEWORK_UIELEMENT_FOOTERMENUCONTROLLER_HXX_
 #define __FRAMEWORK_UIELEMENT_FOOTERMENUCONTROLLER_HXX_
 
-//_________________________________________________________________________________________________________________
-//  my own includes
-//_________________________________________________________________________________________________________________
 #include <uielement/headermenucontroller.hxx>
 
 namespace framework

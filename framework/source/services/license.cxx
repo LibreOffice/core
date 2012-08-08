@@ -26,10 +26,6 @@
  *
  ************************************************************************/
 
-
-//_________________________________________________________________________________________________________________
-//  my own includes
-//_________________________________________________________________________________________________________________
 #include <services/license.hxx>
 #include <threadhelp/resetableguard.hxx>
 #include <macros/debug.hxx>
@@ -39,10 +35,6 @@
 #include "services/licensedlg.hxx"
 #include "classes/resource.hrc"
 
-//_________________________________________________________________________________________________________________
-//  interface includes
-//_________________________________________________________________________________________________________________
-
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -50,11 +42,6 @@
 #include <com/sun/star/util/XChangesBatch.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
-
-
-//_________________________________________________________________________________________________________________
-//  includes of other projects
-//_________________________________________________________________________________________________________________
 
 #include <rtl/ustrbuf.hxx>
 #include <rtl/strbuf.hxx>

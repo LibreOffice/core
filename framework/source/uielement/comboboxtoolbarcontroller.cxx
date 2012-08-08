@@ -29,15 +29,8 @@
 
 #include "uielement/comboboxtoolbarcontroller.hxx"
 
-//_________________________________________________________________________________________________________________
-//  my own includes
-//_________________________________________________________________________________________________________________
-
 #include "uielement/toolbar.hxx"
 
-//_________________________________________________________________________________________________________________
-//  interface includes
-//_________________________________________________________________________________________________________________
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -47,9 +40,6 @@
 #include <com/sun/star/frame/XControlNotificationListener.hpp>
 #include <com/sun/star/util/Color.hpp>
 
-//_________________________________________________________________________________________________________________
-//  other includes
-//_________________________________________________________________________________________________________________
 #include <svtools/toolboxcontroller.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>

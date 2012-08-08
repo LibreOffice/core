@@ -28,8 +28,6 @@
 #ifndef _SVX_LANGBOX_HXX
 #define _SVX_LANGBOX_HXX
 
-// include ---------------------------------------------------------------
-
 #include <com/sun/star/uno/Sequence.hxx>
 #include <vcl/lstbox.hxx>
 #include "svx/svxdllapi.h"

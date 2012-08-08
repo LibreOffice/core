@@ -28,8 +28,6 @@
 #ifndef _SVX_CHARRELIEFITEM_HXX
 #define _SVX_CHARRELIEFITEM_HXX
 
-// include ---------------------------------------------------------------
-
 #include <svl/eitem.hxx>
 #include <vcl/fntstyle.hxx>
 #include <editeng/editengdllapi.h>

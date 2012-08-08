@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-// ______________________________________________
-// my own includes
-
 /** Attention: stl headers must(!) be included at first. Otherwhise it can make trouble
                with solaris headers ...
 */
@@ -40,8 +37,6 @@
 
 #include "helper/mischelper.hxx"
 
-// ______________________________________________
-// interface includes
 #include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/beans/XProperty.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -50,8 +45,6 @@
 #include <com/sun/star/util/XChangesNotifier.hpp>
 #include <com/sun/star/util/PathSubstitution.hpp>
 
-// ______________________________________________
-// includes of other projects
 #include <tools/urlobj.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/logfile.hxx>

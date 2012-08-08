@@ -28,8 +28,6 @@
 #ifndef _SVX_SPLWRAP_HXX
 #define _SVX_SPLWRAP_HXX
 
-// include ---------------------------------------------------------------
-
 #include <editeng/svxenum.hxx>
 #include <tools/string.hxx>
 #include <com/sun/star/uno/Reference.hxx>

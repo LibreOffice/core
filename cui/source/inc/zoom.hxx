@@ -28,8 +28,6 @@
 #ifndef _SVX_ZOOM_HXX
 #define _SVX_ZOOM_HXX
 
-// include ---------------------------------------------------------------
-
 #include <sfx2/basedlgs.hxx>
 #include <vcl/button.hxx>
 #include <vcl/field.hxx>

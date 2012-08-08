@@ -20,26 +20,16 @@
 #ifndef __FRAMEWORK_THREADHELP_TRANSACTIONMANAGER_HXX_
 #define __FRAMEWORK_THREADHELP_TRANSACTIONMANAGER_HXX_
 
-//_________________________________________________________________________________________________________________
-//  my own includes
-//_________________________________________________________________________________________________________________
-
 #include <threadhelp/inoncopyable.h>
 #include <threadhelp/itransactionmanager.h>
 #include <threadhelp/gate.hxx>
 #include <macros/debug.hxx>
 
-//_________________________________________________________________________________________________________________
-//  interface includes
-//_________________________________________________________________________________________________________________
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 
-//_________________________________________________________________________________________________________________
-//  other includes
-//_________________________________________________________________________________________________________________
 #include <osl/mutex.hxx>
 #include <fwidllapi.h>
 

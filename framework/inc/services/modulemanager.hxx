@@ -20,9 +20,6 @@
 #ifndef __FRAMEWORK_SERVICES_MODULEMANAGER_HXX_
 #define __FRAMEWORK_SERVICES_MODULEMANAGER_HXX_
 
-//_______________________________________________
-// own includes
-
 #include <threadhelp/threadhelpbase.hxx>
 #include <macros/xinterface.hxx>
 #include <macros/xtypeprovider.hxx>
@@ -31,8 +28,6 @@
 #include <general.h>
 #include <stdtypes.h>
 
-//_______________________________________________
-// interface includes
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -41,8 +36,6 @@
 #include <com/sun/star/container/XNameReplace.hpp>
 #include <com/sun/star/container/XContainerQuery.hpp>
 
-//_______________________________________________
-// other includes
 #include <cppuhelper/weak.hxx>
 
 //_______________________________________________

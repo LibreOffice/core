@@ -28,8 +28,6 @@
 #ifndef _SVX_ITEMTYPE_HXX
 #define _SVX_ITEMTYPE_HXX
 
-// include ---------------------------------------------------------------
-
 #include <editeng/editrids.hrc>
 #include <editeng/eerdll.hxx>
 

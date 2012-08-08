@@ -20,10 +20,6 @@
 #ifndef _UNOCONTROLS_STATUSINDICATOR_CTRL_HXX
 #define _UNOCONTROLS_STATUSINDICATOR_CTRL_HXX
 
-//____________________________________________________________________________________________________________
-//  includes of other projects
-//____________________________________________________________________________________________________________
-
 #include <com/sun/star/awt/XControlModel.hpp>
 #include <com/sun/star/awt/XFixedText.hpp>
 #include <com/sun/star/awt/XGraphics.hpp>
@@ -34,9 +30,6 @@
 #include <com/sun/star/awt/XWindowPeer.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
-//____________________________________________________________________________________________________________
-//  includes of my own project
-//____________________________________________________________________________________________________________
 #include "basecontainercontrol.hxx"
 
 //____________________________________________________________________________________________________________

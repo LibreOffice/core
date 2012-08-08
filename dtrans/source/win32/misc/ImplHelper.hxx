@@ -21,10 +21,6 @@
 #ifndef _IMPLHELPER_HXX_
 #define _IMPLHELPER_HXX_
 
-//------------------------------------------------------------------------
-// includes
-//------------------------------------------------------------------------
-
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
 

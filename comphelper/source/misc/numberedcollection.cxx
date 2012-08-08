@@ -20,9 +20,6 @@
 
 #include <comphelper/numberedcollection.hxx>
 
-//_______________________________________________
-// includes
-
 #include <com/sun/star/frame/UntitledNumbersConst.hpp>
 
 //_______________________________________________

@@ -29,9 +29,6 @@
 #ifndef __FRAMEWORK_SERVICES_SESSIONLISTENER_HXX_
 #define __FRAMEWORK_SERVICES_SESSIONLISTENER_HXX_
 
-//_______________________________________________
-// my own includes
-
 #include <classes/filtercache.hxx>
 #include <threadhelp/threadhelpbase.hxx>
 #include <macros/generic.hxx>
@@ -41,8 +38,6 @@
 #include <macros/xserviceinfo.hxx>
 #include <general.h>
 
-//_______________________________________________
-// interface includes
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 
@@ -55,8 +50,6 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Any.hxx>
 
-//_______________________________________________
-// other includes
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/interfacecontainer.h>
 

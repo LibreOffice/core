@@ -20,8 +20,6 @@
 #ifndef _ZOOMSLIDER_STBCONTRL_HXX
 #define _ZOOMSLIDER_STBCONTRL_HXX
 
-// include ---------------------------------------------------------------
-
 #include <sfx2/stbitem.hxx>
 #include "svx/svxdllapi.h"
 

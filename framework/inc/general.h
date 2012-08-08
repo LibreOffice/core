@@ -29,9 +29,6 @@
 #ifndef __FRAMEWORK_GENERAL_H_
 #define __FRAMEWORK_GENERAL_H_
 
-//=============================================================================
-// includes
-
 #include <macros/generic.hxx>
 
 /* Normaly XInterface isnt used here ...

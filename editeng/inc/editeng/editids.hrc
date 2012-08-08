@@ -18,8 +18,6 @@
 #ifndef _EDIT_SVXIDS_HRC
 #define _EDIT_SVXIDS_HRC
 
-// include ------------------------------------------------------------------
-
 #include <svl/solar.hrc>
 
 #define SID_ATTR_BRUSH                                  ( SID_SVX_START + 1 )

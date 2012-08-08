@@ -28,8 +28,6 @@
 #ifndef _SVX_PARAVERTALIGNITEM_HXX
 #define _SVX_PARAVERTALIGNITEM_HXX
 
-// include ---------------------------------------------------------------
-
 #include <svl/intitem.hxx>
 #include <editeng/editengdllapi.h>
 

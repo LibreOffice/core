@@ -20,8 +20,6 @@
 #ifndef _SVX_SMARTTAGSCONTROL_HXX
 #define _SVX_SMARTTAGSCONTROL_HXX
 
-// include ---------------------------------------------------------------
-
 #include <tools/link.hxx>
 #include <sfx2/mnuitem.hxx>
 #include "svx/svxdllapi.h"

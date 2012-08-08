@@ -26,10 +26,6 @@
  *
  ************************************************************************/
 
-
-//_________________________________________________________________________________________________________________
-//  my own includes
-//_________________________________________________________________________________________________________________
 #include <pattern/window.hxx>
 #include <helper/persistentwindowstate.hxx>
 #include <threadhelp/writeguard.hxx>
@@ -37,18 +33,12 @@
 #include <macros/generic.hxx>
 #include <services.h>
 
-//_________________________________________________________________________________________________________________
-//  interface includes
-//_________________________________________________________________________________________________________________
 #include <com/sun/star/awt/XWindow.hpp>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/frame/XModuleManager.hpp>
 
-//_________________________________________________________________________________________________________________
-//  other includes
-//_________________________________________________________________________________________________________________
 #include <comphelper/configurationhelper.hxx>
 #include <vcl/window.hxx>
 #include <vcl/syswin.hxx>

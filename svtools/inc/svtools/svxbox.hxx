@@ -28,8 +28,6 @@
 #ifndef _SVX_BOX_HXX
 #define _SVX_BOX_HXX
 
-// include ---------------------------------------------------------------
-
 #include <tools/string.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/combobox.hxx>

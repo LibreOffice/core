@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-//_______________________________________________
-// includes of own project
 #include <loadenv/loadenv.hxx>
 
 #include <loadenv/targethelper.hxx>
@@ -44,8 +42,6 @@
 #include <comphelper/interaction.hxx>
 #include <framework/interaction.hxx>
 
-//_______________________________________________
-// includes of uno interface
 #include <com/sun/star/task/ErrorCodeRequest.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/frame/DispatchResultState.hpp>
@@ -78,8 +74,6 @@
 #include <com/sun/star/document/MacroExecMode.hpp>
 #include <com/sun/star/document/UpdateDocMode.hpp>
 
-//_______________________________________________
-// includes of an other project
 #include <vcl/window.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/syswin.hxx>

@@ -28,8 +28,6 @@
 
 #include <accelerators/moduleacceleratorconfiguration.hxx>
 
-//_______________________________________________
-// own includes
 #include <threadhelp/readguard.hxx>
 #include <threadhelp/writeguard.hxx>
 #include "helper/mischelper.hxx"
@@ -37,14 +35,9 @@
 #include <acceleratorconst.h>
 #include <services.h>
 
-//_______________________________________________
-// interface includes
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
-
-//_______________________________________________
-// other includes
 
 #include <comphelper/sequenceashashmap.hxx>
 #include <vcl/svapp.hxx>

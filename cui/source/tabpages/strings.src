@@ -24,7 +24,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
- // include ------------------------------------------------------------------
+
 #include <cuires.hrc>
 
 String RID_SVXSTR_DESC_GRADIENT

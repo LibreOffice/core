@@ -28,8 +28,6 @@
 #ifndef _SVX_SRIPTSPACEITEM_HXX
 #define _SVX_SRIPTSPACEITEM_HXX
 
-// include ---------------------------------------------------------------
-
 #include <svl/eitem.hxx>
 #include <editeng/editengdllapi.h>
 

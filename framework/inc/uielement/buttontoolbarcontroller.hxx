@@ -33,10 +33,6 @@
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/frame/XToolbarController.hpp>
 
-//_________________________________________________________________________________________________________________
-//  includes of other projects
-//_________________________________________________________________________________________________________________
-
 #include <comphelper/broadcasthelper.hxx>
 #include <cppuhelper/weak.hxx>
 #include <vcl/toolbox.hxx>

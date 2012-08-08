@@ -29,7 +29,6 @@
 #ifndef _SV_SALGDI_H
 #define _SV_SALGDI_H
 
-// -=-= includes -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "tools/fract.hxx"
 
 #include "vcl/salgtype.hxx"

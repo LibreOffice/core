@@ -28,8 +28,6 @@
 #ifndef _SVX_TRANSFRM_HXX
 #define _SVX_TRANSFRM_HXX
 
-// include ---------------------------------------------------------------
-
 #include <svx/dlgctrl.hxx>
 
 #include <vcl/fixed.hxx>

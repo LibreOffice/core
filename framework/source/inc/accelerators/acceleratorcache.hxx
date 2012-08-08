@@ -29,20 +29,12 @@
 #ifndef __FRAMEWORK_ACCELERATORS_ACCELERATORCACHE_HXX_
 #define __FRAMEWORK_ACCELERATORS_ACCELERATORCACHE_HXX_
 
-//__________________________________________
-// own includes
-
 #include <threadhelp/threadhelpbase.hxx>
 #include <general.h>
 #include <stdtypes.h>
 
-//__________________________________________
-// interface includes
-
 #include <com/sun/star/awt/KeyEvent.hpp>
 
-//__________________________________________
-// other includes
 #include <comphelper/sequenceasvector.hxx>
 
 //__________________________________________

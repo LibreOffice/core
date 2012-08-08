@@ -29,9 +29,6 @@
 #ifndef __FRAMEWORK_ACCELERATORS_MODULEACCELERATORCONFIGURATION_HXX_
 #define __FRAMEWORK_ACCELERATORS_MODULEACCELERATORCONFIGURATION_HXX_
 
-//__________________________________________
-// own includes
-
 #include <accelerators/acceleratorconfiguration.hxx>
 #include <accelerators/presethandler.hxx>
 
@@ -39,14 +36,8 @@
 #include <macros/xtypeprovider.hxx>
 #include <macros/xserviceinfo.hxx>
 
-//__________________________________________
-// interface includes
 #include <com/sun/star/lang/XInitialization.hpp>
 
-//__________________________________________
-// other includes
-
-//__________________________________________
 // definition
 
 namespace framework

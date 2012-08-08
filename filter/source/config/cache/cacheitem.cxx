@@ -31,8 +31,6 @@
 #include "macros.hxx"
 #include "constant.hxx"
 
-//_______________________________________________
-// includes
 #include <com/sun/star/uno/Sequence.h>
 
 #include <com/sun/star/beans/PropertyValue.hpp>

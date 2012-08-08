@@ -20,9 +20,6 @@
 #ifndef __FRAMEWORK_DISPATCH_STARTMODULEDISPATCHER_HXX_
 #define __FRAMEWORK_DISPATCH_STARTMODULEDISPATCHER_HXX_
 
-//_______________________________________________
-// my own includes
-
 #include <threadhelp/threadhelpbase.hxx>
 #include <macros/xinterface.hxx>
 #include <macros/xtypeprovider.hxx>
@@ -31,8 +28,6 @@
 #include <stdtypes.h>
 #include <general.h>
 
-//_______________________________________________
-// interface includes
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XStatusListener.hpp>
@@ -43,8 +38,6 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/frame/DispatchResultState.hpp>
 
-//_______________________________________________
-// other includes
 #include <cppuhelper/weak.hxx>
 #include <vcl/evntpost.hxx>
 

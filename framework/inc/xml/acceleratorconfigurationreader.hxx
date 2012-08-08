@@ -20,24 +20,16 @@
 #ifndef _FRAMEWORK_XML_ACCELERATORCONFIGURATIONREADER_HXX_
 #define _FRAMEWORK_XML_ACCELERATORCONFIGURATIONREADER_HXX_
 
-//_______________________________________________
-// own includes
-
 #include <accelerators/acceleratorcache.hxx>
 #include <accelerators/keymapping.hxx>
 #include <macros/xinterface.hxx>
 #include <threadhelp/threadhelpbase.hxx>
 #include <general.h>
 
-//_______________________________________________
-// interface includes
-
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 
 #include <com/sun/star/xml/sax/XLocator.hpp>
 
-//_______________________________________________
-// other includes
 #include <salhelper/singletonref.hxx>
 #include <cppuhelper/weak.hxx>
 #include <rtl/ustring.hxx>

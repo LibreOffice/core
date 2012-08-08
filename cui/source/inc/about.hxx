@@ -28,8 +28,6 @@
 #ifndef _ABOUT_HXX
 #define _ABOUT_HXX
 
-// include ---------------------------------------------------------------
-
 #include <vcl/button.hxx>
 #include <vcl/accel.hxx>
 #include <svtools/svmedit.hxx>

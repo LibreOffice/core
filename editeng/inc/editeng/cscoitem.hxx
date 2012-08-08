@@ -28,8 +28,6 @@
 #ifndef _SVX_CSCOITEM_HXX
 #define _SVX_CSCOITEM_HXX
 
-// include ---------------------------------------------------------------
-
 #include <tools/string.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/editengdllapi.h>

@@ -29,18 +29,10 @@
 #ifndef __FRAMEWORK_PATTERN_WINDOW_HXX_
 #define __FRAMEWORK_PATTERN_WINDOW_HXX_
 
-//_______________________________________________
-// own includes
-
 #include <general.h>
 
-//_______________________________________________
-// interface includes
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/awt/XTopWindow.hpp>
-
-//_______________________________________________
-// other includes
 
 #include <toolkit/unohlp.hxx>
 #include <vcl/window.hxx>

@@ -17,9 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-//------------------------------------------------------------------------
-// includes
-//------------------------------------------------------------------------
 #include <osl/diagnose.h>
 #include "WinClipboard.hxx"
 #include <com/sun/star/datatransfer/clipboard/ClipboardEvent.hpp>

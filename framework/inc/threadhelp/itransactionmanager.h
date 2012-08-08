@@ -29,10 +29,6 @@
 #ifndef __FRAMEWORK_THREADHELP_ITRANSACTIONMANAGER_H_
 #define __FRAMEWORK_THREADHELP_ITRANSACTIONMANAGER_H_
 
-//_________________________________________________________________________________________________________________
-//  includes
-//_________________________________________________________________________________________________________________
-
 #include <general.h>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>

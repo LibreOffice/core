@@ -28,8 +28,6 @@
 #ifndef _SVX_HDFT_HXX
 #define _SVX_HDFT_HXX
 
-// include ---------------------------------------------------------------
-
 #include <sfx2/tabdlg.hxx>
 
 #include <vcl/fixed.hxx>

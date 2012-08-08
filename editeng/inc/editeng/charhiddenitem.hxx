@@ -28,8 +28,6 @@
 #ifndef _SVX_CHARHIDDENITEM_HXX
 #define _SVX_CHARHIDDENITEM_HXX
 
-// include ---------------------------------------------------------------
-
 #include <svl/poolitem.hxx>
 #include <svl/eitem.hxx>
 #include "editeng/editengdllapi.h"

@@ -26,10 +26,6 @@
  *
  ************************************************************************/
 
-//////////////////////////////////////////////////////////////////////////
-// includes
-//////////////////////////////////////////////////////////////////////////
-
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <cppuhelper/interfacecontainer.h>

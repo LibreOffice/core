@@ -20,23 +20,15 @@
 #ifndef __FRAMEWORK_ACCELERATORS_PRESETHANDLER_HXX_
 #define __FRAMEWORK_ACCELERATORS_PRESETHANDLER_HXX_
 
-//__________________________________________
-// own includes
-
 #include <accelerators/storageholder.hxx>
 #include <threadhelp/threadhelpbase.hxx>
 #include <general.h>
 #include <stdtypes.h>
 
-//__________________________________________
-// interface includes
-
 #include <com/sun/star/embed/XStorage.hpp>
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
-//__________________________________________
-// other includes
 #include <comphelper/processfactory.hxx>
 #include <salhelper/singletonref.hxx>
 #include <comphelper/locale.hxx>

@@ -20,10 +20,6 @@
 #ifndef _FILEPICKERSTATE_HXX_
 #define _FILEPICKERSTATE_HXX_
 
-//------------------------------------------------------------------------
-// includes
-//------------------------------------------------------------------------
-
 #include <sal/types.h>
 #include "controlcommand.hxx"
 #include <com/sun/star/uno/Any.hxx>

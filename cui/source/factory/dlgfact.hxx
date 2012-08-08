@@ -28,7 +28,6 @@
 #ifndef _CUI_DLGFACT_HXX
 #define _CUI_DLGFACT_HXX
 
-// include ---------------------------------------------------------------
 #include <svx/svxdlg.hxx>
 #include <com/sun/star/container/XNameReplace.hpp>
 

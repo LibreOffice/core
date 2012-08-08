@@ -20,10 +20,6 @@
 #ifndef LISTVIEWBUILDER_HXX_INCLUDED
 #define LISTVIEWBUILDER_HXX_INCLUDED
 
-//------------------------------------
-// include
-//------------------------------------
-
 #if defined _MSC_VER
 #pragma warning(push, 1)
 #endif

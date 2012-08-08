@@ -19,22 +19,14 @@
 
 #include <accelerators/acceleratorcache.hxx>
 
-//_______________________________________________
-// own includes
-
 #include <xml/acceleratorconfigurationreader.hxx>
 #include <threadhelp/readguard.hxx>
 #include <threadhelp/writeguard.hxx>
-
-//_______________________________________________
-// interface includes
 
 #include <com/sun/star/container/ElementExistException.hpp>
 
 #include <com/sun/star/container/NoSuchElementException.hpp>
 
-//_______________________________________________
-// other includes
 #include <vcl/svapp.hxx>
 
 namespace framework

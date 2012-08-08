@@ -20,21 +20,14 @@
 #ifndef __FRAMEWORK_JOBS_JOBRESULT_HXX_
 #define __FRAMEWORK_JOBS_JOBRESULT_HXX_
 
-//_______________________________________
-// my own includes
-
 #include <threadhelp/threadhelpbase.hxx>
 #include <macros/debug.hxx>
 #include <stdtypes.h>
 #include <general.h>
 
-//_______________________________________
-// interface includes
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/frame/DispatchResultEvent.hpp>
 
-//_______________________________________
-// other includes
 #include <rtl/ustring.hxx>
 
 //_______________________________________

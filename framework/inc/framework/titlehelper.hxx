@@ -29,9 +29,6 @@
 #ifndef _FRAMEWORK_TITLEHELPER_HXX_
 #define _FRAMEWORK_TITLEHELPER_HXX_
 
-//_______________________________________________
-// includes
-
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>

@@ -28,8 +28,6 @@
 #ifndef _SVX_TABSTPGE_HXX
 #define _SVX_TABSTPGE_HXX
 
-// include ---------------------------------------------------------------
-
 #include <vcl/group.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/field.hxx>

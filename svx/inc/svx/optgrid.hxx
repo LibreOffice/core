@@ -28,8 +28,6 @@
 #ifndef _SVX_OPTGRID_HXX
 #define _SVX_OPTGRID_HXX
 
-// include ---------------------------------------------------------------
-
 #include <sfx2/tabdlg.hxx>
 #include <svl/eitem.hxx>
 #include <vcl/group.hxx>

@@ -29,20 +29,11 @@
 #ifndef __FRAMEWORK_ACCELERATORS_KEYMAPPING_HXX_
 #define __FRAMEWORK_ACCELERATORS_KEYMAPPING_HXX_
 
-//__________________________________________
-// own includes
-
 #include <general.h>
 #include <stdtypes.h>
 
-//__________________________________________
-// interface includes
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
-//__________________________________________
-// other includes
-
-//__________________________________________
 // definition
 
 namespace framework

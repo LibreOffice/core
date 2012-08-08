@@ -22,9 +22,6 @@
 
 #include <stdtypes.h>
 
-//_________________________________________________________________________________________________________________
-//  interface includes
-//_________________________________________________________________________________________________________________
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <cppuhelper/implbase1.hxx>

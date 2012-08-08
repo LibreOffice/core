@@ -28,8 +28,6 @@
 #ifndef _SVX_PASSWD_HXX
 #define _SVX_PASSWD_HXX
 
-// include ---------------------------------------------------------------
-
 #include <sfx2/basedlgs.hxx>
 
 #include <vcl/fixed.hxx>

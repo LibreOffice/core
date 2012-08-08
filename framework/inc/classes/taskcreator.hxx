@@ -20,24 +20,14 @@
 #ifndef __FRAMEWORK_CLASSES_TASKCREATOR_HXX_
 #define __FRAMEWORK_CLASSES_TASKCREATOR_HXX_
 
-//_________________________________________________________________________________________________________________
-//  my own includes
-//_________________________________________________________________________________________________________________
-
 #include <threadhelp/threadhelpbase.hxx>
 #include <macros/generic.hxx>
 #include <macros/debug.hxx>
 #include <general.h>
 
-//_________________________________________________________________________________________________________________
-//  interface includes
-//_________________________________________________________________________________________________________________
 #include <com/sun/star/frame/XFramesSupplier.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
-//_________________________________________________________________________________________________________________
-//  other includes
-//_________________________________________________________________________________________________________________
 #include <com/sun/star/uno/Reference.hxx>
 #include <rtl/ustring.hxx>
 

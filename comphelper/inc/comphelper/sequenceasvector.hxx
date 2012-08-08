@@ -20,9 +20,6 @@
 #ifndef _COMPHELPER_SEQUENCEASVECTOR_HXX_
 #define _COMPHELPER_SEQUENCEASVECTOR_HXX_
 
-//_______________________________________________
-// includes
-
 #include <vector>
 #include <algorithm>
 #include <com/sun/star/uno/Sequence.hxx>

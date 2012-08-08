@@ -17,9 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-//------------------------------------------------------------------------
-// includes
-//------------------------------------------------------------------------
 #include <rtl/ustring.h>
 #include <osl/diagnose.h>
 #include "DTransHelper.hxx"

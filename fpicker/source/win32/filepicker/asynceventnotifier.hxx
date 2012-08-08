@@ -20,10 +20,6 @@
 #ifndef _ASYNCEVENTNOTIFIER_HXX_
 #define _ASYNCEVENTNOTIFIER_HXX_
 
-//------------------------------------------------------------------------
-// includes
-//------------------------------------------------------------------------
-
 #include <osl/mutex.hxx>
 #include <osl/conditn.hxx>
 #include <cppuhelper/interfacecontainer.h>

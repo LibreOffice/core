@@ -28,7 +28,6 @@
 #ifndef _SV_SALFRAME_H
 #define _SV_SALFRAME_H
 
-// -=-= #includes -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 #include <unx/salstd.hxx>
 #include <unx/salunx.h>
 #include <unx/saltype.h>

@@ -20,18 +20,11 @@
 #ifndef _OCONNECTIONPOINTHELPER_HXX
 #define _OCONNECTIONPOINTHELPER_HXX
 
-//______________________________________________________________________________________________________________
-//  includes of other projects
-//______________________________________________________________________________________________________________
-
 #include <com/sun/star/lang/XConnectionPointContainer.hpp>
 #include <com/sun/star/lang/XConnectionPoint.hpp>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/propshlp.hxx>
 
-//______________________________________________________________________________________________________________
-//  includes of my own project
-//______________________________________________________________________________________________________________
 #include "OConnectionPointContainerHelper.hxx"
 
 //______________________________________________________________________________________________________________

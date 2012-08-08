@@ -30,8 +30,6 @@
 #include "configflush.hxx"
 #include "constant.hxx"
 
-//_______________________________________________
-// includes
 #include <osl/diagnose.h>
 
 //_______________________________________________

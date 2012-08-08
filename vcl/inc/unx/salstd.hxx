@@ -20,7 +20,6 @@
 #ifndef _SALSTD_HXX
 #define _SALSTD_HXX
 
-// -=-= includes -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <tools/gen.hxx>
 #include <tools/solar.h>
 

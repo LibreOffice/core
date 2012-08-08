@@ -29,10 +29,6 @@
 #ifndef _SALGTKFPICKER_HXX_
 #define _SALGTKFPICKER_HXX_
 
-//_____________________________________________________________________________
-//  includes of other projects
-//_____________________________________________________________________________
-
 #include <osl/mutex.hxx>
 #include <cppuhelper/compbase2.hxx>
 #include <com/sun/star/ui/dialogs/XFilePicker.hpp>

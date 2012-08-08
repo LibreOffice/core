@@ -29,19 +29,12 @@
 #ifndef __FRAMEWORK_UIELEMENT_ADDONSTOOLBARMANAGER_HXX_
 #define __FRAMEWORK_UIELEMENT_ADDONSTOOLBARMANAGER_HXX_
 
-//_________________________________________________________________________________________________________________
-//  my own includes
-//_________________________________________________________________________________________________________________
-
 #include <uielement/toolbarmanager.hxx>
 #include <threadhelp/threadhelpbase.hxx>
 #include <macros/generic.hxx>
 #include <macros/xinterface.hxx>
 #include <macros/xtypeprovider.hxx>
 
-//_________________________________________________________________________________________________________________
-//  interface includes
-//_________________________________________________________________________________________________________________
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XStatusListener.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
@@ -50,9 +43,6 @@
 #include <com/sun/star/frame/XModuleManager.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
-//_________________________________________________________________________________________________________________
-//  other includes
-//_________________________________________________________________________________________________________________
 #include <rtl/ustring.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/interfacecontainer.hxx>

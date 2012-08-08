@@ -20,10 +20,6 @@
 #ifndef __FRAMEWORK_TABWIN_TABWINFACTORY_HXX_
 #define __FRAMEWORK_TABWIN_TABWINFACTORY_HXX_
 
-//_________________________________________________________________________________________________________________
-//  my own includes
-//_________________________________________________________________________________________________________________
-
 #include <stdtypes.h>
 #include <threadhelp/threadhelpbase.hxx>
 #include <macros/generic.hxx>
@@ -32,9 +28,6 @@
 #include <macros/xserviceinfo.hxx>
 #include <services.h>
 
-//_________________________________________________________________________________________________________________
-//  interface includes
-//_________________________________________________________________________________________________________________
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -42,9 +35,6 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/awt/XToolkit.hpp>
 
-//_________________________________________________________________________________________________________________
-//  includes of other projects
-//_________________________________________________________________________________________________________________
 #include <cppuhelper/implbase2.hxx>
 #include <rtl/ustring.hxx>
 

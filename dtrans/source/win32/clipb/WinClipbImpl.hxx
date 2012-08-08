@@ -21,10 +21,6 @@
 #ifndef _WINCLIPBIMPL_HXX_
 #define _WINCLIPBIMPL_HXX_
 
-//------------------------------------------------------------------------
-// includes
-//------------------------------------------------------------------------
-
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/datatransfer/XTransferable.hpp>

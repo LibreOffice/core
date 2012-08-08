@@ -20,11 +20,6 @@
 #ifndef _XMLOFF_XFORMSBINDCONTEXT_HXX
 #define _XMLOFF_XFORMSBINDCONTEXT_HXX
 
-
-//
-// include for parent class and members
-//
-
 #include "TokenContext.hxx"
 #include <com/sun/star/uno/Reference.hxx>
 

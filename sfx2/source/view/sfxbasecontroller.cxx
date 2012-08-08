@@ -17,17 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-//________________________________________________________________________________________________________
-//  my own includes
-//________________________________________________________________________________________________________
-
 #include <time.h>
 #include <sfx2/sfxbasecontroller.hxx>
 
-//________________________________________________________________________________________________________
-//  include of other projects
-//________________________________________________________________________________________________________
 #include <com/sun/star/awt/KeyEvent.hpp>
 #include <com/sun/star/awt/KeyModifier.hpp>
 #include <com/sun/star/awt/MouseEvent.hpp>

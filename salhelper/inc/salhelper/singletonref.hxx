@@ -20,9 +20,6 @@
 #ifndef _SALHELPER_SINGLETONREF_HXX_
 #define _SALHELPER_SINGLETONREF_HXX_
 
-//_______________________________________________
-// includes
-
 #include <osl/mutex.hxx>
 #include "rtl/instance.hxx"
 #include "osl/diagnose.h"

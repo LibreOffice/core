@@ -20,9 +20,6 @@
 #ifndef __FRAMEWORK_HANDLER_OXT_HANDLER_HXX_
 #define __FRAMEWORK_HANDLER_OXT_HANDLER_HXX_
 
-//_________________________________________________________________________________________________________________
-//  my own includes
-//_________________________________________________________________________________________________________________
 #include <threadhelp/threadhelpbase.hxx>
 #include <threadhelp/resetableguard.hxx>
 #include <macros/xinterface.hxx>
@@ -33,9 +30,6 @@
 #include <general.h>
 #include <stdtypes.h>
 
-//_________________________________________________________________________________________________________________
-//  interface includes
-//_________________________________________________________________________________________________________________
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/frame/XNotifyingDispatch.hpp>
@@ -45,9 +39,6 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/util/URL.hpp>
 
-//_________________________________________________________________________________________________________________
-//  other includes
-//_________________________________________________________________________________________________________________
 #include <cppuhelper/weak.hxx>
 
 //_________________________________________________________________________________________________________________

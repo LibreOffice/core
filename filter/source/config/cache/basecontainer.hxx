@@ -28,9 +28,6 @@
 #ifndef __FILTER_CONFIG_BASECONTAINER_HXX_
 #define __FILTER_CONFIG_BASECONTAINER_HXX_
 
-//_______________________________________________
-// includes
-
 #include "filtercache.hxx"
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>

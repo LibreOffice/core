@@ -29,9 +29,6 @@
 #ifndef __FRAMEWORK_PROPERTIES_H_
 #define __FRAMEWORK_PROPERTIES_H_
 
-//_______________________________________________
-// includes
-
 #include <macros/generic.hxx>
 #include <general.h>
 

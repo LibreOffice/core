@@ -28,8 +28,6 @@
 #ifndef _SVX_OPTDICT_HXX
 #define _SVX_OPTDICT_HXX
 
-// include ---------------------------------------------------------------
-
 #include <vcl/dialog.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/lstbox.hxx>

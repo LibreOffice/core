@@ -20,17 +20,11 @@
 
 #include "interaction/quietinteraction.hxx"
 
-//_________________________________________________________________________________________________________________
-//  my own includes
-//_________________________________________________________________________________________________________________
 #include <threadhelp/readguard.hxx>
 #include <threadhelp/writeguard.hxx>
 #include <macros/generic.hxx>
 #include <macros/debug.hxx>
 
-//_________________________________________________________________________________________________________________
-//  interface includes
-//_________________________________________________________________________________________________________________
 #include <com/sun/star/task/XInteractionAbort.hpp>
 #include <com/sun/star/task/XInteractionApprove.hpp>
 #include <com/sun/star/document/XInteractionFilterSelect.hpp>
@@ -41,9 +35,6 @@
 
 #include <com/sun/star/document/LockedDocumentRequest.hpp>
 
-//_________________________________________________________________________________________________________________
-//  other includes
-//_________________________________________________________________________________________________________________
 #include <vcl/svapp.hxx>
 
 #ifndef __RSC

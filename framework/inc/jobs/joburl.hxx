@@ -20,19 +20,11 @@
 #ifndef __FRAMEWORK_JOBS_JOBURL_HXX_
 #define __FRAMEWORK_JOBS_JOBURL_HXX_
 
-//_______________________________________
-// my own includes
-
 #include <threadhelp/threadhelpbase.hxx>
 #include <macros/debug.hxx>
 #include <stdtypes.h>
 #include <general.h>
 
-//_______________________________________
-// interface includes
-
-//_______________________________________
-// other includes
 #include <rtl/ustring.hxx>
 
 //_______________________________________

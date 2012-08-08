@@ -28,9 +28,6 @@
 #ifndef __FILTER_CONFIG_TYPEDETECTION_HXX_
 #define __FILTER_CONFIG_TYPEDETECTION_HXX_
 
-//_______________________________________________
-// includes
-
 #include "basecontainer.hxx"
 #include <com/sun/star/document/XTypeDetection.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>

@@ -26,19 +26,11 @@
  *
  ************************************************************************/
 
-
-//________________________________
-//  my own includes
 #include <jobs/joburl.hxx>
 #include <threadhelp/readguard.hxx>
 #include <threadhelp/writeguard.hxx>
 #include <general.h>
 
-//________________________________
-//  interface includes
-
-//________________________________
-//  includes of other projects
 #include <rtl/ustrbuf.hxx>
 #include <vcl/svapp.hxx>
 

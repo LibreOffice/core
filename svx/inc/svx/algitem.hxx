@@ -28,8 +28,6 @@
 #ifndef _SVX_ALGITEM_HXX
 #define _SVX_ALGITEM_HXX
 
-// include ---------------------------------------------------------------
-
 #include <svx/svxids.hrc>
 #include <svl/poolitem.hxx>
 #include <svl/eitem.hxx>

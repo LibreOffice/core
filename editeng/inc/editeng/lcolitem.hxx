@@ -28,8 +28,6 @@
 #ifndef _SVX_LCOLITEM_HXX
 #define _SVX_LCOLITEM_HXX
 
-// include ---------------------------------------------------------------
-
 #include <editeng/colritem.hxx>
 #include <editeng/editengdllapi.h>
 

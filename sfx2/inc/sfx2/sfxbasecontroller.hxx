@@ -45,9 +45,6 @@
 #include <com/sun/star/awt/XKeyHandler.hpp>
 #include <com/sun/star/awt/XUserInputInterception.hpp>
 
-//________________________________________________________________________________________________________
-//  include of my own project
-//________________________________________________________________________________________________________
 #include <sfx2/viewsh.hxx>
 #include <sfx2/sfxuno.hxx>
 

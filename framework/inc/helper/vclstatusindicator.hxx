@@ -20,22 +20,15 @@
 #ifndef __FRAMEWORK_HELPER_VCLSTATUSINDICATOR_HXX_
 #define __FRAMEWORK_HELPER_VCLSTATUSINDICATOR_HXX_
 
-//-----------------------------------------------
-// includes of own modules
-
 #include <threadhelp/threadhelpbase.hxx>
 #include <macros/generic.hxx>
 #include <macros/xinterface.hxx>
 #include <general.h>
 
-//-----------------------------------------------
-// includes of interfaces
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 
-//-----------------------------------------------
-// includes of external modules
 #include <cppuhelper/weak.hxx>
 #include <vcl/status.hxx>
 

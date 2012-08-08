@@ -19,8 +19,6 @@
 #ifndef _SVX_HYPHEN_HXX
 #define _SVX_HYPHEN_HXX
 
-// include ---------------------------------------------------------------
-
 #include <memory>
 
 #include <vcl/edit.hxx>

@@ -19,10 +19,6 @@
 #ifndef INCLUDED_unotools_COMPATIBILITY_HXX
 #define INCLUDED_unotools_COMPATIBILITY_HXX
 
-//_________________________________________________________________________________________________________________
-//  includes
-//_________________________________________________________________________________________________________________
-
 #include "unotools/unotoolsdllapi.h"
 #include <sal/types.h>
 #include <osl/mutex.hxx>

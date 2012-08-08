@@ -17,9 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-//_______________________________________________
-// includes
 #include <comphelper/sequenceashashmap.hxx>
 
 //_______________________________________________

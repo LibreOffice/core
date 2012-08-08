@@ -20,9 +20,6 @@
 #ifndef __FILTER_CONFIG_FILTERFACTORY_HXX_
 #define __FILTER_CONFIG_FILTERFACTORY_HXX_
 
-//_______________________________________________
-// includes
-
 #include "basecontainer.hxx"
 #include "querytokenizer.hxx"
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>

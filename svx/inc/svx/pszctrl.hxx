@@ -28,8 +28,6 @@
 #ifndef _SVX_PSZCTRL_HXX
 #define _SVX_PSZCTRL_HXX
 
-// include ---------------------------------------------------------------
-
 #include <sfx2/stbitem.hxx>
 #include "svx/svxdllapi.h"
 

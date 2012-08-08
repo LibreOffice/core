@@ -20,10 +20,6 @@
 #ifndef FPICKER_WIN32_VISTA_TYPES_HXX
 #define FPICKER_WIN32_VISTA_TYPES_HXX
 
-//-----------------------------------------------------------------------------
-// includes
-//-----------------------------------------------------------------------------
-
 #include "comptr.hxx"
 #include <shobjidl.h>
 

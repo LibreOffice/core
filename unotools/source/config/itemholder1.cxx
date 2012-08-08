@@ -20,8 +20,6 @@
 
 #include "itemholder1.hxx"
 
-//-----------------------------------------------
-// includes
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
 

@@ -19,8 +19,6 @@
 #ifndef _SVX_PAGECTRL_HXX
 #define _SVX_PAGECTRL_HXX
 
-// include ---------------------------------------------------------------
-
 #include <vcl/window.hxx>
 #include "svx/svxdllapi.h"
 

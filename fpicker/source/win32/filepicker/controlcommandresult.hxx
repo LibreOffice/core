@@ -20,10 +20,6 @@
 #ifndef _CONTROLCOMMANDRESULT_HXX_
 #define _CONTROLCOMMANDRESULT_HXX_
 
-//------------------------------------------------------------------------
-// includes
-//------------------------------------------------------------------------
-
 #include <sal/types.h>
 #include <com/sun/star/uno/Any.hxx>
 #include <rtl/ustring.hxx>

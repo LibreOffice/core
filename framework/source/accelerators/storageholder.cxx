@@ -28,14 +28,9 @@
 
 #include <accelerators/storageholder.hxx>
 
-//===============================================
-// own includes
 #include <threadhelp/readguard.hxx>
 #include <threadhelp/writeguard.hxx>
 #include <services.h>
-
-//===============================================
-// interface includes
 
 #include <com/sun/star/container/NoSuchElementException.hpp>
 
@@ -53,8 +48,6 @@
 
 #include <com/sun/star/io/XSeekable.hpp>
 
-//===============================================
-// other includes
 #include <comphelper/processfactory.hxx>
 
 //===============================================

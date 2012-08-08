@@ -28,8 +28,6 @@
 #ifndef _SVX_ADJITEM_HXX
 #define _SVX_ADJITEM_HXX
 
-// include ---------------------------------------------------------------
-
 #include <svl/eitem.hxx>
 #include <editeng/svxenum.hxx>
 #include <editeng/eeitem.hxx>

@@ -30,8 +30,6 @@
 #include "cacheupdatelistener.hxx"
 #include "constant.hxx"
 
-//_______________________________________________
-// includes
 #include <com/sun/star/util/XChangesNotifier.hpp>
 #include <com/sun/star/util/XRefreshable.hpp>
 #include <salhelper/singletonref.hxx>

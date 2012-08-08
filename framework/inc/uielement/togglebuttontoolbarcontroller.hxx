@@ -24,10 +24,6 @@
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/ControlCommand.hpp>
 
-//_________________________________________________________________________________________________________________
-//  includes of other projects
-//_________________________________________________________________________________________________________________
-
 #include <uielement/complextoolbarcontroller.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/image.hxx>

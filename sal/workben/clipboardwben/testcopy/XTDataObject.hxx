@@ -21,11 +21,6 @@
 #ifndef _XTDATAOBJECT_HXX_
 #define _XTDATAOBJECT_HXX_
 
-
-//------------------------------------------------------------------------
-// includes
-//------------------------------------------------------------------------
-
 /*
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboardOwner.hpp>

@@ -19,9 +19,6 @@
 #ifndef __FILTER_CONFIG_CONFIGFLUSH_HXX_
 #define __FILTER_CONFIG_CONFIGFLUSH_HXX_
 
-//_______________________________________________
-// includes
-
 #include "cacheitem.hxx"
 #include <com/sun/star/util/XRefreshable.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>

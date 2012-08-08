@@ -28,7 +28,6 @@
 #ifndef _SVX_DLGUTIL_HXX
 #define _SVX_DLGUTIL_HXX
 
-// include ---------------------------------------------------------------
 #include <svtools/unitconv.hxx>
 #include <svx/svxdllapi.h>
 

@@ -29,10 +29,6 @@
 #ifndef __FRAMEWORK_HELPER_OFRAMES_HXX_
 #define __FRAMEWORK_HELPER_OFRAMES_HXX_
 
-//_________________________________________________________________________________________________________________
-//  my own includes
-//_________________________________________________________________________________________________________________
-
 #include <classes/framecontainer.hxx>
 #include <threadhelp/threadhelpbase.hxx>
 #include <macros/generic.hxx>
@@ -41,16 +37,10 @@
 #include <macros/debug.hxx>
 #include <general.h>
 
-//_________________________________________________________________________________________________________________
-//  interface includes
-//_________________________________________________________________________________________________________________
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/frame/XFrames.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 
-//_________________________________________________________________________________________________________________
-//  other includes
-//_________________________________________________________________________________________________________________
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/weakref.hxx>
 

@@ -28,8 +28,6 @@
 #ifndef _SVX_PAGEITEM_HXX
 #define _SVX_PAGEITEM_HXX
 
-// include ---------------------------------------------------------------
-
 #include <svl/poolitem.hxx>
 #include <tools/string.hxx>
 #include "svx/svxdllapi.h"

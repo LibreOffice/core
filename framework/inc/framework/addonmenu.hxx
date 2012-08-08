@@ -28,17 +28,9 @@
 #ifndef __FRAMEWORK_CLASSES_ADDONMENU_HXX_
 #define __FRAMEWORK_CLASSES_ADDONMENU_HXX_
 
-//_________________________________________________________________________________________________________________
-//  interface includes
-//_________________________________________________________________________________________________________________
-
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
-
-//_________________________________________________________________________________________________________________
-//  includes of other projects
-//_________________________________________________________________________________________________________________
 
 #include <vcl/menu.hxx>
 #include <framework/fwedllapi.h>

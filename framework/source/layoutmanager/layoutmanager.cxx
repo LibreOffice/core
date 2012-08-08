@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-//      my own includes
 #include <services/layoutmanager.hxx>
 #include <helpers.hxx>
 #include <threadhelp/resetableguard.hxx>
@@ -43,7 +42,6 @@
 #include <uiconfiguration/globalsettings.hxx>
 #include <toolbarlayoutmanager.hxx>
 
-//      interface includes
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/frame/XModel.hpp>
@@ -68,7 +66,6 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 
-//      other includes
 #include <comphelper/componentcontext.hxx>
 #include <svtools/imgdef.hxx>
 #include <tools/diagnose_ex.h>

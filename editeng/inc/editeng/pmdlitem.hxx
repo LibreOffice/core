@@ -28,8 +28,6 @@
 #ifndef _SVX_PMDLITEM_HXX
 #define _SVX_PMDLITEM_HXX
 
-// include ---------------------------------------------------------------
-
 #include <svl/stritem.hxx>
 #include <editeng/editengdllapi.h>
 

@@ -28,8 +28,6 @@
 #ifndef _SVX_SIZEITEM_HXX
 #define _SVX_SIZEITEM_HXX
 
-// include ---------------------------------------------------------------
-
 #include <tools/gen.hxx>
 #include <svl/poolitem.hxx>
 #include <editeng/editengdllapi.h>

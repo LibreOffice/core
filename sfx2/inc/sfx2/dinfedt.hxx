@@ -19,8 +19,6 @@
 #ifndef _SFX_DINFEDT_HXX
 #define _SFX_DINFEDT_HXX
 
-// include ---------------------------------------------------------------
-
 #include <vcl/button.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/edit.hxx>

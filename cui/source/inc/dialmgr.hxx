@@ -19,8 +19,6 @@
 #ifndef _CUI_DIALMGR_HXX
 #define _CUI_DIALMGR_HXX
 
-// include ---------------------------------------------------------------
-
 #include <tools/resid.hxx>
 
 // forward ---------------------------------------------------------------

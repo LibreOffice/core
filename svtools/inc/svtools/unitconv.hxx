@@ -28,7 +28,6 @@
 #ifndef _SVT_UNITCONV_HXX
 #define _SVT_UNITCONV_HXX
 
-// include ---------------------------------------------------------------
 #include <vcl/field.hxx>
 #include "svtools/svtdllapi.h"
 #include <svl/poolitem.hxx>

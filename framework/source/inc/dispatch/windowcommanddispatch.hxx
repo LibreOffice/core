@@ -29,21 +29,12 @@
 #ifndef __FRAMEWORK_DISPATCH_WINDOWCOMMANDDISPATCH_HXX_
 #define __FRAMEWORK_DISPATCH_WINDOWCOMMANDDISPATCH_HXX_
 
-//_______________________________________________
-// my own includes
-
 #include <threadhelp/threadhelpbase.hxx>
-
-//_______________________________________________
-// interface includes
 
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-
-//_______________________________________________
-// other includes
 
 #include <cppuhelper/implbase1.hxx>
 #include <tools/link.hxx>

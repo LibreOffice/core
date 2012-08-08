@@ -28,17 +28,12 @@
 
 #include <accelerators/presethandler.hxx>
 
-//_______________________________________________
-// own includes
 #include <classes/fwkresid.hxx>
 
 #include "classes/resource.hrc"
 #include <threadhelp/readguard.hxx>
 #include <threadhelp/writeguard.hxx>
 #include <services.h>
-
-//_______________________________________________
-// interface includes
 
 #include <com/sun/star/configuration/CorruptedUIConfigurationException.hpp>
 #include <com/sun/star/container/NoSuchElementException.hpp>
@@ -48,8 +43,6 @@
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 
-//_______________________________________________
-// other includes
 #include <vcl/svapp.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <rtl/ustrbuf.hxx>

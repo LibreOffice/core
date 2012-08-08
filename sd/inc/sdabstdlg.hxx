@@ -28,8 +28,6 @@
 #ifndef _SD_ABSTDLG_HXX
 #define _SD_ABSTDLG_HXX
 
-// include ---------------------------------------------------------------
-
 #include <vector>
 
 #include <rtl/ref.hxx>

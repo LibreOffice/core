@@ -28,8 +28,6 @@
 #ifndef _SVX_OPTLINGU_HXX
 #define _SVX_OPTLINGU_HXX
 
-// include ---------------------------------------------------------------
-
 #include <vcl/group.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/toolbox.hxx>

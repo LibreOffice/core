@@ -19,7 +19,6 @@
 #ifndef _TMPLCTRL_HXX
 #define _TMPLCTRL_HXX
 
-// include ---------------------------------------------------------------
 #include <sfx2/stbitem.hxx>
 
 // class BookmarkToolBoxControl -------------------------------------------

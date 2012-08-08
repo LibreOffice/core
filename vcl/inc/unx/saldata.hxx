@@ -29,7 +29,6 @@
 #ifndef _SV_SALDATA_HXX
 #define _SV_SALDATA_HXX
 
-// -=-= includes -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <unx/salunx.h>
 #include <vcl/salgtype.hxx>
 #include <unx/salstd.hxx>

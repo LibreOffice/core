@@ -20,25 +20,14 @@
 #ifndef __FRAMEWORK_UIELEMENT_MENUBARWRAPPER_HXX_
 #define __FRAMEWORK_UIELEMENT_MENUBARWRAPPER_HXX_
 
-//_________________________________________________________________________________________________________________
-//  my own includes
-//_________________________________________________________________________________________________________________
-
 #include <helper/uiconfigelementwrapperbase.hxx>
 #include <uielement/menubarmanager.hxx>
 
-//_________________________________________________________________________________________________________________
-//  interface includes
-//_________________________________________________________________________________________________________________
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
-
-//_________________________________________________________________________________________________________________
-//  other includes
-//_________________________________________________________________________________________________________________
 
 #include <boost/unordered_map.hpp>
 

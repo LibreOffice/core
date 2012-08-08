@@ -30,9 +30,6 @@
 #include <threadhelp/resetableguard.hxx>
 #include <services.h>
 
-//_________________________________________________________________________________________________________________
-//  interface includes
-//_________________________________________________________________________________________________________________
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -42,9 +39,6 @@
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/embed/XPackageStructureCreator.hpp>
 
-//_________________________________________________________________________________________________________________
-//  other includes
-//_________________________________________________________________________________________________________________
 #include <rtl/logfile.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <vcl/svapp.hxx>

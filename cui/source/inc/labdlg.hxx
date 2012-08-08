@@ -28,9 +28,6 @@
 #ifndef _SVX_LABDLG_HXX
 #define _SVX_LABDLG_HXX
 
-// include ---------------------------------------------------------------
-
-
 #include <vcl/field.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/fixed.hxx>

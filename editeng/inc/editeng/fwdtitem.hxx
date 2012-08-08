@@ -28,9 +28,6 @@
 #ifndef _SVX_FWDTITEM_HXX
 #define _SVX_FWDTITEM_HXX
 
-// include ---------------------------------------------------------------
-
-
 #include <svl/poolitem.hxx>
 
 

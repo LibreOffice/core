@@ -26,19 +26,12 @@
  *
  ************************************************************************/
 
-
-//_________________________________________________________________________________________________________________
-//  my own includes
-//_________________________________________________________________________________________________________________
 #include "uiconfiguration/windowstateconfiguration.hxx"
 #include <threadhelp/resetableguard.hxx>
 #include "services.h"
 
 #include "helper/mischelper.hxx"
 
-//_________________________________________________________________________________________________________________
-//  interface includes
-//_________________________________________________________________________________________________________________
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -49,9 +42,6 @@
 #include <com/sun/star/ui/DockingArea.hpp>
 #include <com/sun/star/util/XChangesBatch.hpp>
 
-//_________________________________________________________________________________________________________________
-//  includes of other projects
-//_________________________________________________________________________________________________________________
 #include <rtl/ustrbuf.hxx>
 #include <cppuhelper/weak.hxx>
 #include <tools/debug.hxx>

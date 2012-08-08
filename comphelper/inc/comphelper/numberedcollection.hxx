@@ -20,9 +20,6 @@
 #ifndef _COMPHELPER_NUMBEREDCOLLECTION_HXX_
 #define _COMPHELPER_NUMBEREDCOLLECTION_HXX_
 
-//_______________________________________________
-// includes
-
 #include "comphelper/comphelperdllapi.h"
 
 #include <com/sun/star/uno/Reference.hxx>

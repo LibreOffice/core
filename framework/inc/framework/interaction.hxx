@@ -31,9 +31,6 @@
 #include <com/sun/star/document/AmbigousFilterRequest.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
 
-//_________________________________________________________________________________________________________________
-//  includes of other projects
-//_________________________________________________________________________________________________________________
 #include <rtl/ustring.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/uno/Reference.hxx>

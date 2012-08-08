@@ -21,10 +21,6 @@
 #ifndef _MCNTTFACTORY_HXX_
 #define _MCNTTFACTORY_HXX_
 
-//------------------------------------------------------------------------
-// includes
-//------------------------------------------------------------------------
-
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 #include <cppuhelper/compbase2.hxx>

@@ -21,10 +21,6 @@
 #ifndef _DTOBJFACTORY_HXX_
 #define _DTOBJFACTORY_HXX_
 
-//------------------------------------------------------------------------
-// includes
-//------------------------------------------------------------------------
-
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 #include <cppuhelper/servicefactory.hxx>
 

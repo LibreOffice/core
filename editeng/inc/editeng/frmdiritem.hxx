@@ -28,8 +28,6 @@
 #ifndef _SVX_FRMDIRITEM_HXX
 #define _SVX_FRMDIRITEM_HXX
 
-// include ---------------------------------------------------------------
-
 #include <svl/intitem.hxx>
 #include <editeng/frmdir.hxx>
 #include <editeng/editengdllapi.h>

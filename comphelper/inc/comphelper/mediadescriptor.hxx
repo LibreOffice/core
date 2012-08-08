@@ -20,9 +20,6 @@
 #ifndef _COMPHELPER_MEDIADESCRIPTOR_HXX_
 #define _COMPHELPER_MEDIADESCRIPTOR_HXX_
 
-//_______________________________________________
-// includes
-
 #include <comphelper/sequenceashashmap.hxx>
 #include <rtl/ustring.hxx>
 #include "comphelper/comphelperdllapi.h"

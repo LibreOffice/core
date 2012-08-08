@@ -17,10 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-//______________________________________________________________________________________________________________
-//  includes of other projects
-//______________________________________________________________________________________________________________
-
 #include <cppuhelper/factory.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
@@ -28,10 +24,6 @@
 #include <com/sun/star/container/XSet.hpp>
 
 #include <stdio.h>
-
-//______________________________________________________________________________________________________________
-//  includes of my own project
-//______________________________________________________________________________________________________________
 
 //=============================================================================
 //  Add new include line to use new services.

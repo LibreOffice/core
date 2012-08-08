@@ -18,8 +18,6 @@
 #ifndef _SFXSIDS_HRC
 #define _SFXSIDS_HRC
 
-// include ---------------------------------------------------------------
-
 #include <svl/solar.hrc>
 #include <sfx2/cntids.hrc>
 #include <svl/memberid.hrc>

@@ -51,7 +51,6 @@ namespace com { namespace sun { namespace star {
     namespace xsd { class XDataType; }
 } } }
 
-// includes for parent classes
 #include <cppuhelper/implbase8.hxx>
 #include <propertysetbase.hxx>
 #include <com/sun/star/form/binding/XValueBinding.hpp>
@@ -63,7 +62,6 @@ namespace com { namespace sun { namespace star {
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
 
-// includes for member variables
 #include "pathexpression.hxx"
 #include "boolexpression.hxx"
 #include "mip.hxx"

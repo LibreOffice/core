@@ -26,19 +26,12 @@
  *
  ************************************************************************/
 
-
-//_________________________________________________________________________________________________________________
-//  my own includes
-//_________________________________________________________________________________________________________________
 #include <dispatch/menudispatcher.hxx>
 #include <general.h>
 #include <framework/menuconfiguration.hxx>
 #include <framework/addonmenu.hxx>
 #include <services.h>
 
-//_________________________________________________________________________________________________________________
-//  interface includes
-//_________________________________________________________________________________________________________________
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/awt/XToolkit.hpp>
 #include <com/sun/star/awt/WindowAttribute.hpp>
@@ -59,10 +52,6 @@
 #include <osl/mutex.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <rtl/logfile.hxx>
-
-//_________________________________________________________________________________________________________________
-//  includes of other projects
-//_________________________________________________________________________________________________________________
 
 #include <ucbhelper/content.hxx>
 

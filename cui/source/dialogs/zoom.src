@@ -15,7 +15,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
- // include ---------------------------------------------------------------
+
 #include <cuires.hrc>
 #include "zoom.hrc"
 #include <svx/dialogs.hrc> // for RID_SVXDLG_ZOOM

@@ -28,8 +28,6 @@
 #ifndef _SVX_CHARSCALEITEM_HXX
 #define _SVX_CHARSCALEITEM_HXX
 
-// include ---------------------------------------------------------------
-
 #include <svl/intitem.hxx>
 #include <editeng/editengdllapi.h>
 

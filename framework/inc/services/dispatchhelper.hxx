@@ -20,9 +20,6 @@
 #ifndef __FRAMEWORK_SERVICES_DISPATCHHELPER_HXX_
 #define __FRAMEWORK_SERVICES_DISPATCHHELPER_HXX_
 
-//_______________________________________________
-// my own includes
-
 #include <threadhelp/threadhelpbase.hxx>
 #include <macros/generic.hxx>
 #include <macros/debug.hxx>
@@ -31,15 +28,11 @@
 #include <macros/xserviceinfo.hxx>
 #include <general.h>
 
-//_______________________________________________
-// interface includes
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/frame/XDispatchHelper.hpp>
 #include <com/sun/star/frame/XDispatchResultListener.hpp>
 #include <com/sun/star/frame/DispatchResultEvent.hpp>
 
-//_______________________________________________
-// other includes
 #include <cppuhelper/implbase3.hxx>
 #include <osl/conditn.hxx>
 

@@ -26,10 +26,6 @@
  *
  ************************************************************************/
 
-
-//_________________________________________________________________________________________________________________
-//  my own includes
-//_________________________________________________________________________________________________________________
 #include <uifactory/uielementfactorymanager.hxx>
 #include <uifactory/windowcontentfactorymanager.hxx>
 #include <threadhelp/resetableguard.hxx>
@@ -37,9 +33,6 @@
 
 #include "helper/mischelper.hxx"
 
-//_________________________________________________________________________________________________________________
-//  interface includes
-//_________________________________________________________________________________________________________________
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -47,9 +40,6 @@
 #include <com/sun/star/container/XContainer.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 
-//_________________________________________________________________________________________________________________
-//  includes of other projects
-//_________________________________________________________________________________________________________________
 #include <rtl/ustrbuf.hxx>
 #include <cppuhelper/weak.hxx>
 #include <vcl/svapp.hxx>

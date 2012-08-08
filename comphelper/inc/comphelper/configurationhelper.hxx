@@ -20,9 +20,6 @@
 #ifndef _COMPHELPER_CONFIGURATIONHELPER_HXX_
 #define _COMPHELPER_CONFIGURATIONHELPER_HXX_
 
-//_______________________________________________
-// includes
-
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>

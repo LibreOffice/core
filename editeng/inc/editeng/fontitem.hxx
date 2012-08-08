@@ -28,8 +28,6 @@
 #ifndef _SVX_FONTITEM_HXX
 #define _SVX_FONTITEM_HXX
 
-// include ---------------------------------------------------------------
-
 #include <svl/poolitem.hxx>
 #include <tools/string.hxx>
 #include <vcl/font.hxx>

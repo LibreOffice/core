@@ -21,10 +21,6 @@
 #ifndef _FETCLIST_HXX_
 #define _FETCLIST_HXX_
 
-//------------------------------------------------------------------------
-// includes
-//------------------------------------------------------------------------
-
 #include <sal/types.h>
 #include <cppuhelper/servicefactory.hxx>
 #include <com/sun/star/datatransfer/XTransferable.hpp>

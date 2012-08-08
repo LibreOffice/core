@@ -29,8 +29,6 @@
 #ifndef _SVX_OPTUPDT_HXX
 #define _SVX_OPTUPDT_HXX
 
-// include ---------------------------------------------------------------
-
 #include <sfx2/tabdlg.hxx>
 #include <vcl/fixed.hxx>
 #include <com/sun/star/container/XNameReplace.hpp>

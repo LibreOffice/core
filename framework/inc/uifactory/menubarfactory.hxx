@@ -20,10 +20,6 @@
 #ifndef __FRAMEWORK_UIFACTORY_MENUBARFACTORY_HXX_
 #define __FRAMEWORK_UIFACTORY_MENUBARFACTORY_HXX_
 
-//_________________________________________________________________________________________________________________
-//  my own includes
-//_________________________________________________________________________________________________________________
-
 #include <stdtypes.h>
 #include <threadhelp/threadhelpbase.hxx>
 #include <macros/generic.hxx>
@@ -31,9 +27,6 @@
 #include <macros/xtypeprovider.hxx>
 #include <macros/xserviceinfo.hxx>
 
-//_________________________________________________________________________________________________________________
-//  interface includes
-//_________________________________________________________________________________________________________________
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -41,9 +34,6 @@
 #include <com/sun/star/ui/XUIElementFactory.hpp>
 #include <com/sun/star/frame/XModuleManager.hpp>
 
-//_________________________________________________________________________________________________________________
-//  includes of other projects
-//_________________________________________________________________________________________________________________
 #include <toolkit/awt/vclxmenu.hxx>
 #include <cppuhelper/implbase2.hxx>
 #include <rtl/ustring.hxx>

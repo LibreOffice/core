@@ -19,10 +19,6 @@
 #ifndef INCLUDED_unotools_WORKINGSETOPTIONS_HXX
 #define INCLUDED_unotools_WORKINGSETOPTIONS_HXX
 
-//_________________________________________________________________________________________________________________
-//  includes
-//_________________________________________________________________________________________________________________
-
 #include <sal/types.h>
 #include <osl/mutex.hxx>
 #include <com/sun/star/uno/Sequence.h>

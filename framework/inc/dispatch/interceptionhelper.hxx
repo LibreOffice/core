@@ -20,10 +20,6 @@
 #ifndef __FRAMEWORK_HELPER_INTERCEPTIONHELPER_HXX_
 #define __FRAMEWORK_HELPER_INTERCEPTIONHELPER_HXX_
 
-//_________________________________________________________________________________________________________________
-//  my own includes
-//_________________________________________________________________________________________________________________
-
 #include <services/frame.hxx>
 #include <threadhelp/threadhelpbase.hxx>
 #include <macros/xinterface.hxx>
@@ -31,9 +27,6 @@
 #include <macros/debug.hxx>
 #include <general.h>
 
-//_________________________________________________________________________________________________________________
-//  interface includes
-//_________________________________________________________________________________________________________________
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/frame/XDispatchProviderInterception.hpp>
 #include <com/sun/star/frame/XDispatchProviderInterceptor.hpp>
@@ -42,9 +35,6 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/DispatchDescriptor.hpp>
 
-//_________________________________________________________________________________________________________________
-//  other includes
-//_________________________________________________________________________________________________________________
 #include <tools/wldcrd.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/weakref.hxx>

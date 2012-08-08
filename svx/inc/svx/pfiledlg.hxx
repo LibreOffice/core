@@ -28,8 +28,6 @@
 #ifndef _SVX_PFILEDLG_HXX
 #define _SVX_PFILEDLG_HXX
 
-// include ---------------------------------------------------------------
-
 #include <sfx2/filedlghelper.hxx>
 #include "svx/svxdllapi.h"
 

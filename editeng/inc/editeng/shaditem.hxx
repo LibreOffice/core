@@ -28,8 +28,6 @@
 #ifndef _SVX_SHADITEM_HXX
 #define _SVX_SHADITEM_HXX
 
-// include ---------------------------------------------------------------
-
 #include <tools/color.hxx>
 #include <svl/eitem.hxx>
 #include <editeng/svxenum.hxx>

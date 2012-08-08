@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-
-//________________________________
-//  my own includes
 #include <jobs/jobdispatch.hxx>
 #include <jobs/joburl.hxx>
 #include <jobs/job.hxx>
@@ -39,14 +36,10 @@
 #include <general.h>
 #include <services.h>
 
-//________________________________
-//  interface includes
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/DispatchResultState.hpp>
 #include <com/sun/star/frame/XModuleManager.hpp>
 
-//________________________________
-//  includes of other projects
 #include <rtl/ustrbuf.hxx>
 #include <vcl/svapp.hxx>
 

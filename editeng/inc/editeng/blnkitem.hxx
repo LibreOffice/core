@@ -28,8 +28,6 @@
 #ifndef _SVX_BLNKITEM_HXX
 #define _SVX_BLNKITEM_HXX
 
-// include ---------------------------------------------------------------
-
 #include <svl/poolitem.hxx>
 #include <svl/eitem.hxx>
 #include <editeng/editengdllapi.h>

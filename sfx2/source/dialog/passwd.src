@@ -16,7 +16,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
- // include ---------------------------------------------------------------
 #include "helpid.hrc"
 #include "dialog.hrc"
 #include "passwd.hrc"

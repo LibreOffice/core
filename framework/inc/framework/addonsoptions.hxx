@@ -28,10 +28,6 @@
 #ifndef __FRAMEWORK_CLASSES_ADDONSOPTIONS_HXX_
 #define __FRAMEWORK_CLASSES_ADDONSOPTIONS_HXX_
 
-//_________________________________________________________________________________________________________________
-//  includes
-//_________________________________________________________________________________________________________________
-
 #include <sal/types.h>
 #include <osl/mutex.hxx>
 #include <vcl/image.hxx>

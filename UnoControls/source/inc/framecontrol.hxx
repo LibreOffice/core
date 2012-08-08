@@ -20,10 +20,6 @@
 #ifndef _UNOCONTROLS_FRAMECONTROL_CTRL_HXX
 #define _UNOCONTROLS_FRAMECONTROL_CTRL_HXX
 
-//______________________________________________________________________________________________________________
-//  includes of other projects
-//______________________________________________________________________________________________________________
-
 #include <com/sun/star/frame/XFrameActionListener.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
@@ -34,9 +30,6 @@
 #include <com/sun/star/lang/XConnectionPointContainer.hpp>
 #include <cppuhelper/propshlp.hxx>
 
-//______________________________________________________________________________________________________________
-//  includes of my own project
-//______________________________________________________________________________________________________________
 #include "basecontrol.hxx"
 #include "OConnectionPointContainerHelper.hxx"
 

@@ -20,7 +20,6 @@
 #ifndef _BOOLEXPRESSION_HXX
 #define _BOOLEXPRESSION_HXX
 
-// include for parent class
 #include "computedexpression.hxx"
 
 namespace xforms

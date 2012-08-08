@@ -19,8 +19,6 @@
 #ifndef _XMLSEC_HELPIDS_HRC
 #define _XMLSEC_HELPIDS_HRC
 
-// include ---------------------------------------------------------------
-
 #include <svl/solar.hrc>
 
 // Help-Ids --------------------------------------------------------------

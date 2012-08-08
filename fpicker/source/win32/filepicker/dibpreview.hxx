@@ -20,10 +20,6 @@
 #ifndef _DIBPREVIEW_HXX_
 #define _DIBPREVIEW_HXX_
 
-//------------------------------------------------------------------------
-// includes
-//------------------------------------------------------------------------
-
 #include "previewbase.hxx"
 #include <osl/mutex.hxx>
 

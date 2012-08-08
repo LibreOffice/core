@@ -28,8 +28,6 @@
 #ifndef _GRAPHCTL_HXX
 #define _GRAPHCTL_HXX
 
-// include ---------------------------------------------------------------
-
 #include <vcl/ctrl.hxx>
 #include <vcl/graph.hxx>
 #include "svx/svxdllapi.h"

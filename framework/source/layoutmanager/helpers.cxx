@@ -26,13 +26,10 @@
  *
  ************************************************************************/
 
-
-// my own includes
 #include "helpers.hxx"
 #include <threadhelp/resetableguard.hxx>
 #include <services.h>
 
-// interface includes
 #include <com/sun/star/ui/DockingArea.hpp>
 #include <com/sun/star/awt/XTopWindow.hpp>
 #include <com/sun/star/frame/XDispatchHelper.hpp>
@@ -41,7 +38,6 @@
 #include <com/sun/star/awt/XWindowListener.hpp>
 #include <com/sun/star/ui/XUIElement.hpp>
 
-// other includes
 #include <comphelper/mediadescriptor.hxx>
 #include <vcl/svapp.hxx>
 #include <toolkit/unohlp.hxx>

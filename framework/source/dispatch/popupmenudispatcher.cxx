@@ -26,11 +26,6 @@
  *
  ************************************************************************/
 
-
-//_________________________________________________________________________________________________________________
-//  my own includes
-//_________________________________________________________________________________________________________________
-
 #include <dispatch/popupmenudispatcher.hxx>
 #include <general.h>
 #include <framework/menuconfiguration.hxx>
@@ -38,9 +33,6 @@
 #include <services.h>
 #include <properties.h>
 
-//_________________________________________________________________________________________________________________
-//  interface includes
-//_________________________________________________________________________________________________________________
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/awt/XToolkit.hpp>
 #include <com/sun/star/awt/WindowAttribute.hpp>
@@ -51,10 +43,6 @@
 #include <com/sun/star/lang/WrappedTargetException.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
-
-//_________________________________________________________________________________________________________________
-//  includes of other projects
-//_________________________________________________________________________________________________________________
 
 #include <ucbhelper/content.hxx>
 #include <osl/mutex.hxx>

@@ -28,8 +28,6 @@
 #ifndef _SVX_POSTATTR_HXX
 #define _SVX_POSTATTR_HXX
 
-// include ---------------------------------------------------------------
-
 #include <svl/stritem.hxx>
 #include "svx/svxdllapi.h"
 

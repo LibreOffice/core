@@ -17,9 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-//_________________________________________________________________________________________________________________________
-//  other includes
-//_________________________________________________________________________________________________________________________
 #include <cppuhelper/servicefactory.hxx>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>

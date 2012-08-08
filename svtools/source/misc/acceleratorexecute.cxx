@@ -28,8 +28,6 @@
 
 #include <svtools/acceleratorexecute.hxx>
 
-//===============================================
-// includes
 #include <com/sun/star/frame/XModuleManager.hpp>
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/ui/XUIConfigurationManager.hpp>

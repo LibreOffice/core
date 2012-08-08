@@ -19,8 +19,6 @@
 #ifndef _SFX_HELPER_HXX
 #define _SFX_HELPER_HXX
 
-// include ---------------------------------------------------------------
-
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/ucb/NameClash.hpp>
 

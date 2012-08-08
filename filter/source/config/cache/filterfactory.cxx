@@ -32,8 +32,6 @@
 #include "constant.hxx"
 #include "versions.hxx"
 
-//_______________________________________________
-// includes
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <comphelper/enumhelper.hxx>
 #include <comphelper/configurationhelper.hxx>

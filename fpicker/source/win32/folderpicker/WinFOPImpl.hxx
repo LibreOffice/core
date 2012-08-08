@@ -21,11 +21,6 @@
 #ifndef _WINFOPIMPL_HXX_
 #define _WINFOPIMPL_HXX_
 
-
-//------------------------------------------------------------------------
-// includes
-//------------------------------------------------------------------------
-
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include "MtaFop.hxx"
 

@@ -29,11 +29,6 @@
 #include <uielement/addonstoolbarmanager.hxx>
 #include <uielement/toolbarmerger.hxx>
 
-//_________________________________________________________________________________________________________________
-//  my own includes
-//_________________________________________________________________________________________________________________
-
-
 #include <uielement/toolbar.hxx>
 #include <uielement/generictoolbarcontroller.hxx>
 #include <threadhelp/resetableguard.hxx>
@@ -52,9 +47,6 @@
 #include <uielement/dropdownboxtoolbarcontroller.hxx>
 #include <uielement/toolbarmerger.hxx>
 
-//_________________________________________________________________________________________________________________
-//  interface includes
-//_________________________________________________________________________________________________________________
 #include <com/sun/star/ui/ItemType.hpp>
 #include <com/sun/star/frame/XToolbarController.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
@@ -64,9 +56,6 @@
 #include <com/sun/star/ui/DockingArea.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 
-//_________________________________________________________________________________________________________________
-//  other includes
-//_________________________________________________________________________________________________________________
 #include <svtools/imgdef.hxx>
 #include <svtools/toolboxcontroller.hxx>
 #include <toolkit/unohlp.hxx>

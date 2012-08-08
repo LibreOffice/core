@@ -28,8 +28,6 @@
 
 #include <tools/shl.hxx>
 
-// include ---------------------------------------------------------------
-
 #include <svx/dialogs.hrc> // -> RID_SVXSTR_LANGUAGE_TABLE
 #include <svx/dialmgr.hxx>
 #include <svx/strarray.hxx>

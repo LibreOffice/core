@@ -21,10 +21,6 @@
 #ifndef _DOTRANSFERABLE_HXX_
 #define _DOTRANSFERABLE_HXX_
 
-//------------------------------------------------------------------------
-// includes
-//------------------------------------------------------------------------
-
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 
 #include <cppuhelper/implbase2.hxx>

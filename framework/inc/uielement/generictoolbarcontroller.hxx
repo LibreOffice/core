@@ -20,10 +20,6 @@
 #ifndef __FRAMEWORK_UIELEMENT_GENERICTOOLBARCONTROLLER_HXX_
 #define __FRAMEWORK_UIELEMENT_GENERICTOOLBARCONTROLLER_HXX_
 
-//_________________________________________________________________________________________________________________
-//  includes of other projects
-//_________________________________________________________________________________________________________________
-
 #include <svtools/toolboxcontroller.hxx>
 #include <vcl/toolbox.hxx>
 #include <memory>

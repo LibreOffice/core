@@ -29,10 +29,6 @@
 #ifndef __FRAMEWORK_LOGINDIALOG_LOGINDIALOG_HXX_
 #define __FRAMEWORK_LOGINDIALOG_LOGINDIALOG_HXX_
 
-//_________________________________________________________________________________________________________________
-//  my own includes
-//_________________________________________________________________________________________________________________
-
 #include <threadhelp/threadhelpbase.hxx>
 #include <macros/generic.hxx>
 #include <macros/debug.hxx>
@@ -42,9 +38,6 @@
 
 #include <services/logindialog.hrc>
 
-//_________________________________________________________________________________________________________________
-//  interface includes
-//_________________________________________________________________________________________________________________
 #include <com/sun/star/awt/XDialog.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
@@ -53,9 +46,6 @@
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/util/XFlushable.hpp>
 
-//_________________________________________________________________________________________________________________
-//  other includes
-//_________________________________________________________________________________________________________________
 #include <tools/config.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/propshlp.hxx>

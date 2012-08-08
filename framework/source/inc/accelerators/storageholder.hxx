@@ -29,26 +29,15 @@
 #ifndef __FRAMEWORK_ACCELERATORS_STORAGEHOLDER_HXX_
 #define __FRAMEWORK_ACCELERATORS_STORAGEHOLDER_HXX_
 
-//===============================================
-// own includes
-
 #include <accelerators/istoragelistener.hxx>
 #include <threadhelp/threadhelpbase.hxx>
 #include <general.h>
 #include <stdtypes.h>
 
-//===============================================
-// interface includes
-
 #include <com/sun/star/embed/XStorage.hpp>
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
-//===============================================
-// other includes
-
-
-//===============================================
 // namespace
 
 namespace css = ::com::sun::star;

@@ -19,9 +19,6 @@
 #ifndef _SVX_SRCHCTRL_HXX
 #define _SVX_SRCHCTRL_HXX
 
-// include ---------------------------------------------------------------
-
-
 #include <sfx2/ctrlitem.hxx>
 // class SvxSearchFamilyController ---------------------------------------
 

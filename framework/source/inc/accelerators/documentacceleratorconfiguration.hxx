@@ -20,9 +20,6 @@
 #ifndef __FRAMEWORK_ACCELERATORS_DOCUMENTACCELERATORCONFIGURATION_HXX_
 #define __FRAMEWORK_ACCELERATORS_DOCUMENTACCELERATORCONFIGURATION_HXX_
 
-//__________________________________________
-// own includes
-
 #include <accelerators/acceleratorconfiguration.hxx>
 #include <accelerators/istoragelistener.hxx>
 #include <accelerators/presethandler.hxx>
@@ -31,15 +28,9 @@
 #include <macros/xtypeprovider.hxx>
 #include <macros/xserviceinfo.hxx>
 
-//__________________________________________
-// interface includes
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/ui/XUIConfigurationStorage.hpp>
 
-//__________________________________________
-// other includes
-
-//__________________________________________
 // definition
 
 namespace framework

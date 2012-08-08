@@ -29,15 +29,8 @@
 
 #include "uielement/complextoolbarcontroller.hxx"
 
-//_________________________________________________________________________________________________________________
-//  my own includes
-//_________________________________________________________________________________________________________________
-
 #include "uielement/toolbar.hxx"
 
-//_________________________________________________________________________________________________________________
-//  interface includes
-//_________________________________________________________________________________________________________________
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
@@ -48,9 +41,6 @@
 #include <com/sun/star/frame/status/Visibility.hpp>
 #include <com/sun/star/frame/XControlNotificationListener.hpp>
 
-//_________________________________________________________________________________________________________________
-//  other includes
-//_________________________________________________________________________________________________________________
 #include <comphelper/componentcontext.hxx>
 #include <svtools/toolboxcontroller.hxx>
 #include <osl/mutex.hxx>

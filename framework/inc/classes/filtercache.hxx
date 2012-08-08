@@ -27,10 +27,6 @@
 #ifndef __FRAMEWORK_CLASSES_FILTERCACHE_HXX_
 #define __FRAMEWORK_CLASSES_FILTERCACHE_HXX_
 
-//_________________________________________________________________________________________________________________
-//  my own includes
-//_________________________________________________________________________________________________________________
-
 #include <classes/filtercachedata.hxx>
 #include <threadhelp/threadhelpbase.hxx>
 
@@ -38,9 +34,6 @@
 #include <general.h>
 #include <queries.h>
 
-//_________________________________________________________________________________________________________________
-//  interface includes
-//_________________________________________________________________________________________________________________
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -49,9 +42,6 @@
 #include <com/sun/star/container/ElementExistException.hpp>
 #include <com/sun/star/container/NoSuchElementException.hpp>
 
-//_________________________________________________________________________________________________________________
-//  other includes
-//_________________________________________________________________________________________________________________
 #include <rtl/ustring.hxx>
 
 #ifdef ENABLE_GENERATEFILTERCACHE

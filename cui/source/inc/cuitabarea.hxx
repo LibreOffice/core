@@ -28,8 +28,6 @@
 #ifndef _CUI_TAB_AREA_HXX
 #define _CUI_TAB_AREA_HXX
 
-// include ---------------------------------------------------------------
-
 #include <svtools/valueset.hxx>
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>

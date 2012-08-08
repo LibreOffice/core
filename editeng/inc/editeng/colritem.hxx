@@ -28,8 +28,6 @@
 #ifndef _SVX_COLRITEM_HXX
 #define _SVX_COLRITEM_HXX
 
-// include ---------------------------------------------------------------
-
 #include <svl/poolitem.hxx>
 #include <tools/color.hxx>
 #include <editeng/editengdllapi.h>

@@ -36,25 +36,16 @@
 #include <stdexcept>
 #include <algorithm>
 
-//_________________________________________________________________________________________________________________
-//  my own includes
-//_________________________________________________________________________________________________________________
 #include <threadhelp/threadhelpbase.hxx>
 
 #include <threadhelp/transactionbase.hxx>
 #include <macros/debug.hxx>
 #include <general.h>
 
-//_________________________________________________________________________________________________________________
-//  interface includes
-//_________________________________________________________________________________________________________________
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 
-//_________________________________________________________________________________________________________________
-//  other includes
-//_________________________________________________________________________________________________________________
 #include <cppuhelper/weakref.hxx>
 #include <rtl/ustring.hxx>
 #include <vcl/evntpost.hxx>

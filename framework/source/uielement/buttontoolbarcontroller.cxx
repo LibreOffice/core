@@ -29,15 +29,8 @@
 
 #include "uielement/buttontoolbarcontroller.hxx"
 
-//_________________________________________________________________________________________________________________
-//  my own includes
-//_________________________________________________________________________________________________________________
-
 #include "uielement/toolbar.hxx"
 
-//_________________________________________________________________________________________________________________
-//  interface includes
-//_________________________________________________________________________________________________________________
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
@@ -46,10 +39,6 @@
 #include "com/sun/star/util/XMacroExpander.hpp"
 #include "com/sun/star/uno/XComponentContext.hpp"
 #include "com/sun/star/beans/XPropertySet.hpp"
-
-//_________________________________________________________________________________________________________________
-//  other includes
-//_________________________________________________________________________________________________________________
 
 #include <rtl/uri.hxx>
 #include <osl/mutex.hxx>

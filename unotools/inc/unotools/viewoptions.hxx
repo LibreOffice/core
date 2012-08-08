@@ -19,10 +19,6 @@
 #ifndef INCLUDED_unotools_VIEWOPTIONS_HXX
 #define INCLUDED_unotools_VIEWOPTIONS_HXX
 
-//_________________________________________________________________________________________________________________
-//  includes
-//_________________________________________________________________________________________________________________
-
 #include "unotools/unotoolsdllapi.h"
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/NamedValue.hpp>

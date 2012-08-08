@@ -26,12 +26,6 @@
  *
  ************************************************************************/
 
-
-//_________________________________________________________________________________________________________________
-//  my own includes
-//_________________________________________________________________________________________________________________
-
-
 #include <uielement/addonstoolbarwrapper.hxx>
 #include <threadhelp/resetableguard.hxx>
 #include <framework/actiontriggerhelper.hxx>
@@ -41,9 +35,6 @@
 
 #include <uielement/toolbar.hxx>
 
-//_________________________________________________________________________________________________________________
-//  interface includes
-//_________________________________________________________________________________________________________________
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -52,10 +43,6 @@
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/ui/UIElementType.hpp>
-
-//_________________________________________________________________________________________________________________
-//  other includes
-//_________________________________________________________________________________________________________________
 
 #include <toolkit/unohlp.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
