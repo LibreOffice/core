@@ -71,6 +71,7 @@ class Window;
 class SdPage;
 class TabPage;
 class ViewShell;
+class SdCustomShowList;
 
 class AbstractCopyDlg : public VclAbstractDialog  //add for CopyDlg
 {
@@ -201,7 +202,7 @@ public:
     virtual SfxAbstractTabDialog*       CreateSdOutlineBulletTabDlg ( ::Window* pParent, const SfxItemSet* pAttr, ::sd::View* pView = NULL ) = 0;
     virtual SfxAbstractTabDialog*       CreateSdParagraphTabDlg ( ::Window* pParent, const SfxItemSet* pAttr ) = 0;
     virtual AbstractSdStartPresDlg*     CreateSdStartPresentationDlg( ::Window* pWindow, const SfxItemSet& rInAttrs,
-                                                                     const std::vector<String> &rPageNames, List* pCSList ) = 0;
+                                                                     const std::vector<String> &rPageNames, SdCustomShowList* pCSList ) = 0;
     virtual VclAbstractDialog*          CreateRemoteDialog( ::Window* pWindow ) = 0;
     virtual SfxAbstractTabDialog*       CreateSdPresLayoutTemplateDlg( SfxObjectShell* pDocSh, ::Window* pParent, SdResId DlgId, SfxStyleSheetBase& rStyleBase, PresentationObjects ePO, SfxStyleSheetBasePool* pSSPool ) = 0;
     virtual AbstractSdPresLayoutDlg*    CreateSdPresLayoutDlg( ::sd::DrawDocShell* pDocShell, ::sd::ViewShell* pViewShell, ::Window* pWindow, const SfxItemSet& rInAttrs) = 0;

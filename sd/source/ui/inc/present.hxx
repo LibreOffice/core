@@ -38,6 +38,7 @@
 
 class SfxItemSet;
 class List;
+class SdCustomShowList;
 
 /*************************************************************************
 |* Dialog zum Festlegen von Optionen und Starten der Praesentation
@@ -77,7 +78,7 @@ private:
     CancelButton        aBtnCancel;
     HelpButton          aBtnHelp;
 
-    List*               pCustomShowList;
+    SdCustomShowList*   pCustomShowList;
     const SfxItemSet&   rOutAttrs;
     sal_Int32           mnMonitors;
 
@@ -95,7 +96,7 @@ public:
                         SdStartPresentationDlg( Window* pWindow,
                                 const SfxItemSet& rInAttrs,
                                 const std::vector<String> &rPageNames,
-                                List* pCSList );
+                                SdCustomShowList* pCSList );
 
     void                GetAttr( SfxItemSet& rOutAttrs );
 };

@@ -103,7 +103,7 @@ void FuSlideShowDlg::DoExecute( SfxRequest& )
         else if ( pPage->IsSelected() && !aFirstPage.Len() )
             aFirstPage = aStr;
     }
-    List* pCustomShowList = mpDoc->GetCustomShowList(); // No Create
+    SdCustomShowList* pCustomShowList = mpDoc->GetCustomShowList(); // No Create
 
     sal_Bool bStartWithActualPage = SD_MOD()->GetSdOptions( mpDoc->GetDocumentType() )->IsStartWithActualPage();
     if( !aFirstPage.Len() && pPage )
@@ -129,7 +129,7 @@ void FuSlideShowDlg::DoExecute( SfxRequest& )
     aDlgSet.Put( SfxInt32Item( ATTR_PRESENT_DISPLAY, pOptions->GetDisplay() ) );
 
     SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-    AbstractSdStartPresDlg* pDlg = pFact ? pFact->CreateSdStartPresentationDlg(mpWindow, aDlgSet, aPageNameList, pCustomShowList ) : 0;
+    AbstractSdStartPresDlg* pDlg = pFact ? pFact->CreateSdStartPresentationDlg(mpWindow, aDlgSet, aPageNameList, pCustomShowList) : 0;
     if( pDlg && (pDlg->Execute() == RET_OK) )
     {
         rtl::OUString aPage;

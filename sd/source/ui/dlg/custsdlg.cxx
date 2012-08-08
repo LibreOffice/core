@@ -41,6 +41,7 @@
 #include "sdpage.hxx"
 #include "cusshow.hxx"
 #include "app.hxx"
+#include "customshowlist.hxx"
 #include <vcl/msgbox.hxx>
 
 
@@ -89,9 +90,9 @@ SdCustomShowDlg::SdCustomShowDlg( Window* pWindow,
     {
         long nPosToSelect = pCustomShowList->GetCurPos();
         // ListBox mit CustomShows fuellen
-        for( pCustomShow = (SdCustomShow*) pCustomShowList->First();
+        for( pCustomShow = pCustomShowList->First();
              pCustomShow != NULL;
-             pCustomShow = (SdCustomShow*) pCustomShowList->Next() )
+             pCustomShow = pCustomShowList->Next() )
         {
             aLbCustomShows.InsertEntry( pCustomShow->GetName() );
         }
@@ -146,7 +147,7 @@ IMPL_LINK( SdCustomShowDlg, ClickButtonHdl, void *, p )
                 if( !pCustomShowList )
                     pCustomShowList = rDoc.GetCustomShowList( sal_True );
 
-                pCustomShowList->Insert( pCustomShow, LIST_APPEND );
+                pCustomShowList->push_back( pCustomShow );
                 pCustomShowList->Last();
                 aLbCustomShows.InsertEntry( pCustomShow->GetName() );
                 aLbCustomShows.SelectEntry( pCustomShow->GetName() );
@@ -165,14 +166,14 @@ IMPL_LINK( SdCustomShowDlg, ClickButtonHdl, void *, p )
         if( nPos != LISTBOX_ENTRY_NOTFOUND )
         {
             DBG_ASSERT( pCustomShowList, "pCustomShowList existiert nicht" );
-            pCustomShow = (SdCustomShow*) pCustomShowList->GetObject( nPos );
+            pCustomShow = (*pCustomShowList)[ nPos ];
             SdDefineCustomShowDlg aDlg( this, rDoc, pCustomShow );
 
             if( aDlg.Execute() == RET_OK )
             {
                 if( pCustomShow )
                 {
-                    pCustomShowList->Replace( pCustomShow, nPos );
+                    (*pCustomShowList)[nPos] = pCustomShow;
                     pCustomShowList->Seek( nPos );
                     aLbCustomShows.RemoveEntry( nPos );
                     aLbCustomShows.InsertEntry( pCustomShow->GetName(), nPos );
@@ -189,7 +190,7 @@ IMPL_LINK( SdCustomShowDlg, ClickButtonHdl, void *, p )
         sal_uInt16 nPos = aLbCustomShows.GetSelectEntryPos();
         if( nPos != LISTBOX_ENTRY_NOTFOUND )
         {
-            delete (SdCustomShow*) pCustomShowList->Remove( nPos );
+            delete *pCustomShowList->erase( pCustomShowList->begin() + nPos );
             aLbCustomShows.RemoveEntry( nPos );
             aLbCustomShows.SelectEntryPos( nPos == 0 ? nPos : nPos - 1 );
             bModified = sal_True;
@@ -201,7 +202,7 @@ IMPL_LINK( SdCustomShowDlg, ClickButtonHdl, void *, p )
         sal_uInt16 nPos = aLbCustomShows.GetSelectEntryPos();
         if( nPos != LISTBOX_ENTRY_NOTFOUND )
         {
-            SdCustomShow* pShow = new SdCustomShow( *(SdCustomShow*) pCustomShowList->GetObject( nPos ) );
+            SdCustomShow* pShow = new SdCustomShow( *(*pCustomShowList)[nPos] );
             String aStr( pShow->GetName() );
             String aStrCopy( SdResId( STR_COPY_CUSTOMSHOW ) );
 
@@ -250,7 +251,7 @@ IMPL_LINK( SdCustomShowDlg, ClickButtonHdl, void *, p )
             //pCustomShowList->Seek( nPosToSelect );
             pShow->SetName( aStr );
 
-            pCustomShowList->Insert( pShow, LIST_APPEND );
+            pCustomShowList->push_back( pShow );
             pCustomShowList->Last();
             aLbCustomShows.InsertEntry( pShow->GetName() );
             aLbCustomShows.SelectEntry( pShow->GetName() );
@@ -523,16 +524,16 @@ IMPL_LINK_NOARG(SdDefineCustomShowDlg, OKHdl)
 {
     // Name ueberpruefen...
     sal_Bool bDifferent = sal_True;
-    List* pCustomShowList = rDoc.GetCustomShowList();
+    SdCustomShowList* pCustomShowList = rDoc.GetCustomShowList();
     if( pCustomShowList )
     {
         String aName( aEdtName.GetText() );
         SdCustomShow* pCustomShow;
 
         long nPosToSelect = pCustomShowList->GetCurPos();
-        for( pCustomShow = (SdCustomShow*) pCustomShowList->First();
+        for( pCustomShow = pCustomShowList->First();
              pCustomShow != NULL;
-             pCustomShow = (SdCustomShow*) pCustomShowList->Next() )
+             pCustomShow = pCustomShowList->Next() )
         {
             if( aName == pCustomShow->GetName() && aName != aOldName )
                 bDifferent = sal_False;

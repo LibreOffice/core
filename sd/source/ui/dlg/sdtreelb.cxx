@@ -50,6 +50,7 @@
 #include "navigatr.hxx"
 #include "strings.hrc"
 #include "res_bmp.hrc"
+#include "customshowlist.hxx"
 
 #include <com/sun/star/embed/XEmbedPersist.hpp>
 #include <svtools/embedtransfer.hxx>
@@ -1175,12 +1176,11 @@ bool SdPageObjsTLB::PageBelongsToCurrentShow (const SdPage* pPage) const
     {
         // Get the current custom show.
         SdCustomShow* pCustomShow = NULL;
-        List* pShowList = const_cast<SdDrawDocument*>(mpDoc)->GetCustomShowList();
+        SdCustomShowList* pShowList = const_cast<SdDrawDocument*>(mpDoc)->GetCustomShowList();
         if (pShowList != NULL)
         {
             sal_uLong nCurrentShowIndex = pShowList->GetCurPos();
-            void* pObject = pShowList->GetObject(nCurrentShowIndex);
-            pCustomShow = static_cast<SdCustomShow*>(pObject);
+            pCustomShow = (*pShowList)[nCurrentShowIndex];
         }
 
         // Check whether the given page is part of that custom show.

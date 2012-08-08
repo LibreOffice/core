@@ -42,6 +42,7 @@
 #include "present.hrc"
 #include "sdresid.hxx"
 #include "cusshow.hxx"
+#include "customshowlist.hxx"
 
 using ::rtl::OUString;
 using namespace ::com::sun::star::uno;
@@ -54,7 +55,7 @@ using namespace ::com::sun::star::beans;
 \************************************************************************/
 SdStartPresentationDlg::SdStartPresentationDlg( Window* pWindow,
                                   const SfxItemSet& rInAttrs,
-                                  const std::vector<String> &rPageNames, List* pCSList ) :
+                                  const std::vector<String> &rPageNames, SdCustomShowList* pCSList ) :
                 ModalDialog     ( pWindow, SdResId( DLG_START_PRESENTATION ) ),
                 aGrpRange               ( this, SdResId( GRP_RANGE ) ),
                 aRbtAll                 ( this, SdResId( RBT_ALL ) ),

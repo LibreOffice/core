@@ -113,7 +113,7 @@ private:
     SdXImpressDocument& mrModel;
 
     // intern
-    inline List* GetCustomShowList() const throw();
+    inline SdCustomShowList* GetCustomShowList() const throw();
     SdCustomShow * getSdCustomShow( const ::rtl::OUString& Name ) const throw();
 
 public:
@@ -146,7 +146,7 @@ public:
     virtual sal_Bool SAL_CALL hasElements() throw(::com::sun::star::uno::RuntimeException);
 };
 
-inline List * SdXCustomPresentationAccess::GetCustomShowList() const throw()
+inline SdCustomShowList* SdXCustomPresentationAccess::GetCustomShowList() const throw()
 {
     if(mrModel.GetDoc())
         return mrModel.GetDoc()->GetCustomShowList(sal_False);

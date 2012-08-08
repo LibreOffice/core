@@ -82,6 +82,7 @@
 #include "sdiocmpt.hxx"
 #include "sdresid.hxx"
 #include "cusshow.hxx"
+#include "customshowlist.hxx"
 #include "../ui/inc/DrawDocShell.hxx"
 #include "../ui/inc/GraphicDocShell.hxx"
 #include "../ui/inc/sdxfer.hxx"
@@ -414,10 +415,10 @@ SdDrawDocument::~SdDrawDocument()
 
     if (mpCustomShowList)
     {
-        for (sal_uLong j = 0; j < mpCustomShowList->Count(); j++)
+        for (sal_uLong j = 0; j < mpCustomShowList->size(); j++)
         {
             // Ggf. CustomShows loeschen
-            SdCustomShow* pCustomShow = (SdCustomShow*) mpCustomShowList->GetObject(j);
+            SdCustomShow* pCustomShow = (*mpCustomShowList)[j];
             delete pCustomShow;
         }
 

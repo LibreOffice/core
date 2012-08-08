@@ -60,6 +60,7 @@
 #include "ViewShell.hxx"
 #include "SlideShowRestarter.hxx"
 #include "DrawController.hxx"
+#include "customshowlist.hxx"
 #include <boost/bind.hpp>
 
 using ::com::sun::star::presentation::XSlideShowController;
@@ -385,11 +386,11 @@ void SAL_CALL SlideShow::setPropertyValue( const OUString& aPropertyName, const 
 
             const String aShowName( aShow );
 
-            List* pCustomShowList = mpDoc->GetCustomShowList(sal_False);
+            SdCustomShowList* pCustomShowList = mpDoc->GetCustomShowList(sal_False);
             if(pCustomShowList)
             {
                 SdCustomShow* pCustomShow;
-                for( pCustomShow = (SdCustomShow*) pCustomShowList->First(); pCustomShow != NULL; pCustomShow = (SdCustomShow*) pCustomShowList->Next() )
+                for( pCustomShow = pCustomShowList->First(); pCustomShow != NULL; pCustomShow = pCustomShowList->Next() )
                 {
                     if( pCustomShow->GetName() == aShowName )
                         break;
@@ -605,8 +606,8 @@ Any SAL_CALL SlideShow::getPropertyValue( const OUString& PropertyName ) throw(U
         return Any( rPresSettings.mbAnimationAllowed );
     case ATTR_PRESENT_CUSTOMSHOW:
         {
-            List* pList = mpDoc->GetCustomShowList(sal_False);
-            SdCustomShow* pShow = (pList && rPresSettings.mbCustomShow)?(SdCustomShow*)pList->GetCurObject():NULL;
+            SdCustomShowList* pList = mpDoc->GetCustomShowList(sal_False);
+            SdCustomShow* pShow = (pList && rPresSettings.mbCustomShow) ? pList->GetCurObject() : NULL;
             OUString aShowName;
 
             if(pShow)

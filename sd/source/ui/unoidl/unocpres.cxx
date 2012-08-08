@@ -41,6 +41,7 @@
 #include "unocpres.hxx"
 #include "cusshow.hxx"
 #include "unopage.hxx"
+#include "customshowlist.hxx"
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -342,7 +343,7 @@ void SAL_CALL SdXCustomPresentationAccess::insertByName( const OUString& aName, 
     SolarMutexGuard aGuard;
 
     // get the documents custom show list
-    List* pList = 0;
+    SdCustomShowList* pList = 0;
     if(mrModel.GetDoc())
         pList = mrModel.GetDoc()->GetCustomShowList(sal_True);
 
@@ -377,15 +378,15 @@ void SAL_CALL SdXCustomPresentationAccess::insertByName( const OUString& aName, 
     pShow->SetName( aName);
 
     // check if this or another customshow with the same name already exists
-    for( SdCustomShow* pCompare = (SdCustomShow*)pList->First();
+    for( SdCustomShow* pCompare = pList->First();
          pCompare;
-         pCompare = (SdCustomShow*)pList->Next() )
+         pCompare = pList->Next() )
     {
         if( pCompare == pShow || pCompare->GetName() == pShow->GetName() )
             throw container::ElementExistException();
     }
 
-    pList->Insert(pShow);
+    pList->push_back(pShow);
 
     mrModel.SetModified();
 }
@@ -397,9 +398,9 @@ void SAL_CALL SdXCustomPresentationAccess::removeByName( const OUString& Name )
 
     SdCustomShow* pShow = getSdCustomShow(Name);
 
-    List* pList = GetCustomShowList();
+    SdCustomShowList* pList = GetCustomShowList();
     if(pList && pShow)
-        delete (SdCustomShow*)pList->Remove( pShow );
+        delete pList->Remove( pShow );
     else
         throw container::NoSuchElementException();
 
@@ -441,8 +442,8 @@ uno::Sequence< OUString > SAL_CALL SdXCustomPresentationAccess::getElementNames(
 {
     SolarMutexGuard aGuard;
 
-    List* pList = GetCustomShowList();
-    const sal_uInt32 nCount = pList?pList->Count():0;
+    SdCustomShowList* pList = GetCustomShowList();
+    const sal_uInt32 nCount = pList ? pList->size() : 0;
 
     uno::Sequence< OUString > aSequence( nCount );
     OUString* pStringList = aSequence.getArray();
@@ -450,7 +451,7 @@ uno::Sequence< OUString > SAL_CALL SdXCustomPresentationAccess::getElementNames(
     sal_uInt32 nIdx = 0;
     while( nIdx < nCount )
     {
-        const SdCustomShow* pShow = (const SdCustomShow*)pList->GetObject(nIdx);
+        const SdCustomShow* pShow = (*pList)[nIdx];
         pStringList[nIdx] = pShow->GetName();
         nIdx++;
     }
@@ -478,22 +479,22 @@ sal_Bool SAL_CALL SdXCustomPresentationAccess::hasElements()
 {
     SolarMutexGuard aGuard;
 
-    List* pList = GetCustomShowList();
-    return pList && pList->Count() > 0;
+    SdCustomShowList* pList = GetCustomShowList();
+    return pList && !pList->empty();
 }
 
 SdCustomShow * SdXCustomPresentationAccess::getSdCustomShow( const OUString& Name ) const throw()
 {
     sal_uInt32 nIdx = 0;
 
-    List* pList = GetCustomShowList();
-    const sal_uInt32 nCount = pList?pList->Count():0;
+    SdCustomShowList* pList = GetCustomShowList();
+    const sal_uInt32 nCount = pList ? pList->size() : 0;
 
     const String aName( Name );
 
     while( nIdx < nCount )
     {
-        SdCustomShow* pShow = (SdCustomShow*)pList->GetObject(nIdx);
+        SdCustomShow* pShow = (*pList)[nIdx];
         if( pShow->GetName() == aName )
             return pShow;
         nIdx++;

@@ -77,6 +77,7 @@
 #include "propread.hxx"
 #include <cusshow.hxx>
 #include <vcl/bmpacc.hxx>
+#include "customshowlist.hxx"
 
 #include "../../ui/inc/DrawDocShell.hxx"
 #include "../../ui/inc/FrameView.hxx"
@@ -1276,7 +1277,7 @@ sal_Bool ImplSdPPTImport::Import()
                             sal_uInt32 nSCount = aContent.nRecLen >> 2;
                             if ( pPageList && nSCount )
                             {
-                                List* pList = mpDoc->GetCustomShowList( sal_True );
+                                SdCustomShowList* pList = mpDoc->GetCustomShowList( sal_True );
                                 if ( pList )
                                 {
                                     SdCustomShow* pSdCustomShow = new SdCustomShow( mpDoc );
@@ -1300,7 +1301,7 @@ sal_Bool ImplSdPPTImport::Import()
                                             }
                                         }
                                         if ( nFound )
-                                            pList->Insert( pSdCustomShow, LIST_APPEND );
+                                            pList->push_back( pSdCustomShow );
                                         else
                                             delete pSdCustomShow;
                                     }
@@ -1345,13 +1346,13 @@ sal_Bool ImplSdPPTImport::Import()
         // set the current custom show
         if ( aCustomShow.Len() )
         {
-            void* pPtr;
-            List* pList = mpDoc->GetCustomShowList( sal_False );
+            SdCustomShowList* pList = mpDoc->GetCustomShowList( sal_False );
             if ( pList )
             {
-                for ( pPtr = pList->First(); pPtr; pPtr = pList->Next() )
+                SdCustomShow* pPtr = NULL;
+                for( pPtr = pList->First(); pPtr; pPtr = pList->Next() )
                 {
-                    if ( ((SdCustomShow*)pPtr)->GetName() == aCustomShow )
+                    if ( pPtr->GetName() == aCustomShow )
                         break;
                 }
                 if ( !pPtr )

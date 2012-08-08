@@ -80,6 +80,8 @@
 #include "avmedia/mediawindow.hxx"
 #include  "svtools/colrdlg.hxx"
 #include "RemoteServer.hxx"
+#include "customshowlist.hxx"
+
 #include <boost/bind.hpp>
 
 using ::rtl::OUString;
@@ -2469,7 +2471,7 @@ void SlideshowImpl::createSlideList( bool bAll, bool bStartWithActualSlide, cons
         SdCustomShow*   pCustomShow;
 
         if( !bStartWithActualSlide && mpDoc->GetCustomShowList() && maPresSettings.mbCustomShow )
-            pCustomShow = (SdCustomShow*) mpDoc->GetCustomShowList()->GetCurObject();
+            pCustomShow = mpDoc->GetCustomShowList()->GetCurObject();
         else
             pCustomShow = NULL;
 

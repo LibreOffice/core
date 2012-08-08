@@ -39,6 +39,7 @@
 
 class SdDrawDocument;
 class SdCustomShow;
+class SdCustomShowList;
 
 //------------------------------------------------------------------------
 
@@ -56,7 +57,7 @@ private:
     OKButton        aBtnOK;
 
     SdDrawDocument& rDoc;
-    List*           pCustomShowList;
+    SdCustomShowList* pCustomShowList;
     SdCustomShow*   pCustomShow;
     sal_Bool            bModified;
 

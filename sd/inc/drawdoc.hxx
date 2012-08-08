@@ -85,6 +85,8 @@ class SdTransferable;
 struct SpellCallbackInfo;
 struct StyleRequestData;
 class SdDrawDocument;
+class SdCustomShow;
+class SdCustomShowList;
 
 namespace sd
 {
@@ -139,6 +141,7 @@ namespace sd
     };
 }
 
+
 // ------------------
 // - SdDrawDocument -
 // ------------------
@@ -153,7 +156,7 @@ private:
     sd::ShapeList*      mpOnlineSpellingList;
     SvxSearchItem*      mpOnlineSearchItem;
     std::vector<sd::FrameView*> maFrameViewList;
-    List*               mpCustomShowList;
+    SdCustomShowList*   mpCustomShowList;
     ::sd::DrawDocShell* mpDocSh;
     SdTransferable *    mpCreatingTransferable;
     sal_Bool                mbHasOnlineSpellErrors;
@@ -394,7 +397,7 @@ public:
     sal_uLong               GetLinkCount();
 
     std::vector<sd::FrameView*>& GetFrameViewList() { return maFrameViewList; }
-    SD_DLLPUBLIC List*  GetCustomShowList(sal_Bool bCreate = sal_False);
+    SD_DLLPUBLIC SdCustomShowList* GetCustomShowList(sal_Bool bCreate = sal_False);
 
     void                NbcSetChanged(sal_Bool bFlag = sal_True);
 

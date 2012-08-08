@@ -58,6 +58,7 @@
 #include "sdiocmpt.hxx"
 #include "strmname.h"
 #include "anminfo.hxx"
+#include "customshowlist.hxx"
 
 #include "../ui/inc/unmovss.hxx"
 #include "../ui/inc/unchss.hxx"
@@ -1190,15 +1191,15 @@ void SdDrawDocument::SetAllocDocSh(sal_Bool bAlloc)
 |*
 \************************************************************************/
 
-List* SdDrawDocument::GetCustomShowList(sal_Bool bCreate)
+SdCustomShowList* SdDrawDocument::GetCustomShowList(sal_Bool bCreate)
 {
     if (!mpCustomShowList && bCreate)
     {
         // Liste erzeugen
-        mpCustomShowList = new List();
+        mpCustomShowList = new SdCustomShowList;
     }
 
-    return(mpCustomShowList);
+    return mpCustomShowList;
 }
 
 /*************************************************************************

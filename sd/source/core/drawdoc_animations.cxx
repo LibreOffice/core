@@ -29,6 +29,7 @@
 
 #include "drawdoc.hxx"
 #include "cusshow.hxx"
+#include "customshowlist.hxx"
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::presentation;
@@ -40,9 +41,9 @@ void SdDrawDocument::ReplacePageInCustomShows( const SdPage* pOldPage, const SdP
 {
     if ( mpCustomShowList )
     {
-        for (sal_uLong i = 0; i < mpCustomShowList->Count(); i++)
+        for (sal_uLong i = 0; i < mpCustomShowList->size(); i++)
         {
-            SdCustomShow* pCustomShow = (SdCustomShow*) mpCustomShowList->GetObject(i);
+            SdCustomShow* pCustomShow = (*mpCustomShowList)[i];
             pCustomShow->ReplacePage(pOldPage, pNewPage);
         }
     }

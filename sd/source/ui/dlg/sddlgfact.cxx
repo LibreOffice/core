@@ -485,7 +485,7 @@ SfxAbstractTabDialog *  SdAbstractDialogFactory_Impl::CreateSdParagraphTabDlg( :
 
 // add for SdStartPresentationDlg begin
 AbstractSdStartPresDlg *  SdAbstractDialogFactory_Impl::CreateSdStartPresentationDlg( ::Window* pWindow, const SfxItemSet& rInAttrs,
-                                                                                     const std::vector<String> &rPageNames, List* pCSList )
+                                                                                     const std::vector<String> &rPageNames, SdCustomShowList* pCSList )
 {
     return new AbstractSdStartPresDlg_Impl( new SdStartPresentationDlg( pWindow, rInAttrs, rPageNames, pCSList ) );
 }
