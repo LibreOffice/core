@@ -611,6 +611,7 @@ public:
     Data const & getData() const { return data_; }
 
     void loadImplementation(
+        css::uno::Reference< css::uno::XComponentContext > const & context,
         boost::shared_ptr< ImplementationInfo > const & info,
         css::uno::Reference< css::lang::XSingleComponentFactory > * factory1,
         css::uno::Reference< css::lang::XSingleServiceFactory > * factory2);
@@ -784,6 +785,7 @@ private:
     void removeImplementation(rtl::OUString name);
 
     boost::shared_ptr< Implementation > findServiceImplementation(
+        css::uno::Reference< css::uno::XComponentContext > const & context,
         rtl::OUString const & specifier);
 
     css::uno::Reference< css::uno::XComponentContext > context_;
@@ -834,7 +836,8 @@ private:
     virtual css::uno::Sequence< rtl::OUString > SAL_CALL
     getSupportedServiceNames() throw (css::uno::RuntimeException);
 
-    void loadImplementation();
+    void loadImplementation(
+        css::uno::Reference< css::uno::XComponentContext > const & context);
 
     rtl::Reference< ServiceManager > manager_;
     boost::shared_ptr< ImplementationInfo > info_;
@@ -846,6 +849,7 @@ private:
 };
 
 void ServiceManager::loadImplementation(
+        css::uno::Reference< css::uno::XComponentContext > const & context,
         boost::shared_ptr< ImplementationInfo > const & info,
         css::uno::Reference< css::lang::XSingleComponentFactory > * factory1,
         css::uno::Reference< css::lang::XSingleServiceFactory > * factory2)
@@ -887,8 +891,8 @@ void ServiceManager::loadImplementation(
             smgr = css::uno::Reference< css::lang::XMultiComponentFactory >(
                 ctxt->getServiceManager(), css::uno::UNO_SET_THROW);
         } else {
-            assert(context_.is());
-            ctxt = context_;
+            assert(context.is());
+            ctxt = context;
             smgr = this;
         }
         css::uno::Reference< css::loader::XImplementationLoader > loader(
@@ -982,7 +986,7 @@ ServiceManager::createInstanceWithContext(
     throw (css::uno::Exception, css::uno::RuntimeException)
 {
     boost::shared_ptr< Implementation > impl(
-        findServiceImplementation(aServiceSpecifier));
+        findServiceImplementation(Context, aServiceSpecifier));
     if (impl.get() == 0) {
         return css::uno::Reference< css::uno::XInterface >();
     }
@@ -1005,7 +1009,7 @@ ServiceManager::createInstanceWithArgumentsAndContext(
     throw (css::uno::Exception, css::uno::RuntimeException)
 {
     boost::shared_ptr< Implementation > impl(
-        findServiceImplementation(ServiceSpecifier));
+        findServiceImplementation(Context, ServiceSpecifier));
     if (impl.get() == 0) {
         return css::uno::Reference< css::uno::XInterface >();
     }
@@ -1819,6 +1823,7 @@ void ServiceManager::removeImplementation(rtl::OUString name) {
 }
 
 boost::shared_ptr< Implementation > ServiceManager::findServiceImplementation(
+    css::uno::Reference< css::uno::XComponentContext > const & context,
     rtl::OUString const & specifier)
 {
     boost::shared_ptr< Implementation > impl;
@@ -1851,7 +1856,7 @@ boost::shared_ptr< Implementation > ServiceManager::findServiceImplementation(
     if (!loaded) {
         css::uno::Reference< css::lang::XSingleComponentFactory > f1;
         css::uno::Reference< css::lang::XSingleServiceFactory > f2;
-        loadImplementation(impl->info, &f1, &f2);
+        loadImplementation(context, impl->info, &f1, &f2);
         osl::MutexGuard g(rBHelper.rMutex);
         if (!(isDisposed() || impl->loaded)) {
             impl->loaded = true;
@@ -1867,7 +1872,7 @@ FactoryWrapper::createInstanceWithContext(
     css::uno::Reference< css::uno::XComponentContext > const & Context)
     throw (css::uno::Exception, css::uno::RuntimeException)
 {
-    loadImplementation();
+    loadImplementation(Context);
     return factory1_.is()
         ? factory1_->createInstanceWithContext(Context)
         : factory2_->createInstance();
@@ -1879,7 +1884,7 @@ FactoryWrapper::createInstanceWithArgumentsAndContext(
     css::uno::Reference< css::uno::XComponentContext > const & Context)
     throw (css::uno::Exception, css::uno::RuntimeException)
 {
-    loadImplementation();
+    loadImplementation(Context);
     return factory1_.is()
         ? factory1_->createInstanceWithArgumentsAndContext(Arguments, Context)
         : factory2_->createInstanceWithArguments(Arguments);
@@ -1888,7 +1893,7 @@ FactoryWrapper::createInstanceWithArgumentsAndContext(
 css::uno::Reference< css::uno::XInterface > FactoryWrapper::createInstance()
     throw (css::uno::Exception, css::uno::RuntimeException)
 {
-    loadImplementation();
+    loadImplementation(manager_->getContext());
     return factory1_.is()
         ? factory1_->createInstanceWithContext(manager_->getContext())
         : factory2_->createInstance();
@@ -1899,7 +1904,7 @@ FactoryWrapper::createInstanceWithArguments(
     css::uno::Sequence< css::uno::Any > const & Arguments)
     throw (css::uno::Exception, css::uno::RuntimeException)
 {
-    loadImplementation();
+    loadImplementation(manager_->getContext());
     return factory1_.is()
         ? factory1_->createInstanceWithArgumentsAndContext(
             Arguments, manager_->getContext())
@@ -1944,7 +1949,9 @@ css::uno::Sequence< rtl::OUString > FactoryWrapper::getSupportedServiceNames()
     return names;
 }
 
-void FactoryWrapper::loadImplementation() {
+void FactoryWrapper::loadImplementation(
+    css::uno::Reference< css::uno::XComponentContext > const & context)
+{
     {
         osl::MutexGuard g(mutex_);
         if (loaded_) {
@@ -1956,7 +1963,7 @@ void FactoryWrapper::loadImplementation() {
     //TODO: There is a race here, as the relevant service factory can already
     // have been removed and loading can thus fail, as the entity from which to
     // load can disappear once the service factory is removed:
-    manager_->loadImplementation(info_, &f1, &f2);
+    manager_->loadImplementation(context, info_, &f1, &f2);
     if (!(f1.is() || f2.is())) {
         throw css::uno::DeploymentException(
             "Implementation " + info_->name + " does not provide a factory",
