@@ -65,6 +65,7 @@ private:
     DECL_LINK(MenuSelectHdl, Menu*);
     DECL_LINK(MoveMenuSelectHdl, Menu*);
     DECL_LINK(RepositoryMenuSelectHdl, Menu*);
+    DECL_LINK(DefaultTemplateMenuSelectHdl, Menu*);
 
     DECL_LINK(OpenTemplateHdl, ThumbnailViewItem*);
 
@@ -82,6 +83,8 @@ private:
     void centerTopButtons ();
 
     void createRepositoryMenu ();
+
+    void createDefaultTemplateMenu ();
 
     // Exchange view between local/online view.
     void switchMainView (bool bDisplayLocal);
@@ -124,6 +127,7 @@ private:
     TemplateOnlineView *mpOnlineView;
     PopupMenu *mpActionMenu;
     PopupMenu *mpRepositoryMenu;
+    PopupMenu *mpTemplateDefaultMenu;
 
     int mnSelectionCount;
     std::set<const ThumbnailViewItem*> maSelTemplates;

@@ -37,6 +37,8 @@
 #define TBI_TEMPLATE_FOLDER_DEL     25
 #define TBI_TEMPLATE_REPOSITORY     26
 
+#define MNI_ACTION_DEFAULT          27
+
 #define STR_ACTION_REFRESH          263
 #define STR_ACTION_SORT_NAME        264
 
@@ -52,6 +54,8 @@
 #define MNI_REPOSITORY_LOCAL        274
 #define MNI_REPOSITORY_NEW          275
 #define MNI_REPOSITORY_BASE         276
+
+#define STR_ACTION_DEFAULT          277
 
 #define IMG_ACTION_SORT             304
 #define IMG_ACTION_REFRESH          305

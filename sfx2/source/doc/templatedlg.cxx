@@ -27,6 +27,7 @@
 #include <sfx2/templateviewitem.hxx>
 #include <sfx2/thumbnailviewitem.hxx>
 #include <sot/storage.hxx>
+#include <svtools/imagemgr.hxx>
 #include <svtools/PlaceEditDialog.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/moduleoptions.hxx>
@@ -67,6 +68,8 @@ using namespace ::com::sun::star::frame;
 void lcl_createTemplate(uno::Reference<XComponentLoader> xDesktop, const FILTER_APPLICATION eApp);
 
 bool lcl_getServiceName (const OUString &rFileURL, OUString &rName );
+
+std::vector<OUString> lcl_getAllFactoryURLs ();
 
 // Sort by name in ascending order
 class SortView_Name
@@ -122,10 +125,15 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
     mpActionMenu = new PopupMenu;
     mpActionMenu->InsertItem(MNI_ACTION_SORT_NAME,SfxResId(STR_ACTION_SORT_NAME).toString(),SfxResId(IMG_ACTION_SORT));
     mpActionMenu->InsertItem(MNI_ACTION_REFRESH,SfxResId(STR_ACTION_REFRESH).toString(),SfxResId(IMG_ACTION_REFRESH));
+    mpActionMenu->InsertItem(MNI_ACTION_DEFAULT,SfxResId(STR_ACTION_DEFAULT).toString());
     mpActionMenu->SetSelectHdl(LINK(this,SfxTemplateManagerDlg,MenuSelectHdl));
 
     mpRepositoryMenu = new PopupMenu;
     mpRepositoryMenu->SetSelectHdl(LINK(this,SfxTemplateManagerDlg,RepositoryMenuSelectHdl));
+
+    mpTemplateDefaultMenu = new PopupMenu;
+    mpTemplateDefaultMenu->SetSelectHdl(LINK(this,SfxTemplateManagerDlg,DefaultTemplateMenuSelectHdl));
+    mpActionMenu->SetPopupMenu(MNI_ACTION_DEFAULT,mpTemplateDefaultMenu);
 
     Size aWinSize = GetOutputSize();
 
@@ -252,6 +260,7 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg (Window *parent)
     mpOnlineView->Populate();
 
     createRepositoryMenu();
+    createDefaultTemplateMenu();
 
     maView->Populate();
     maView->Show();
@@ -272,6 +281,7 @@ SfxTemplateManagerDlg::~SfxTemplateManagerDlg ()
     delete mpOnlineView;
     delete mpActionMenu;
     delete mpRepositoryMenu;
+    delete mpTemplateDefaultMenu;
 }
 
 IMPL_LINK_NOARG(SfxTemplateManagerDlg,ViewAllHdl)
@@ -602,6 +612,18 @@ IMPL_LINK(SfxTemplateManagerDlg, RepositoryMenuSelectHdl, Menu*, pMenu)
     return 0;
 }
 
+IMPL_LINK(SfxTemplateManagerDlg, DefaultTemplateMenuSelectHdl, Menu*, pMenu)
+{
+    sal_uInt16 nId = pMenu->GetCurItemId();
+
+    OUString aServiceName = SfxObjectShell::GetServiceNameFromFactory( mpTemplateDefaultMenu->GetItemCommand(nId));
+    SfxObjectFactory::SetStandardTemplate( aServiceName, OUString() );
+
+    createDefaultTemplateMenu();
+
+    return 0;
+}
+
 IMPL_LINK(SfxTemplateManagerDlg, OpenTemplateHdl, ThumbnailViewItem*, pItem)
 {
     uno::Sequence< PropertyValue > aArgs(1);
@@ -882,6 +904,8 @@ void SfxTemplateManagerDlg::OnTemplateAsDefault ()
     if (lcl_getServiceName(pItem->getPath(),aServiceName))
     {
         SfxObjectFactory::SetStandardTemplate(aServiceName,pItem->getPath());
+
+        createDefaultTemplateMenu();
     }
 }
 
@@ -957,6 +981,29 @@ void SfxTemplateManagerDlg::createRepositoryMenu()
 
     mpRepositoryMenu->InsertSeparator();
     mpRepositoryMenu->InsertItem(MNI_REPOSITORY_NEW,SfxResId(STR_REPOSITORY_NEW).toString());
+}
+
+void SfxTemplateManagerDlg::createDefaultTemplateMenu ()
+{
+    std::vector<OUString> aList = lcl_getAllFactoryURLs();
+
+    if (!aList.empty())
+    {
+        mpTemplateDefaultMenu->Clear();
+
+        sal_uInt16 nItemId = MNI_ACTION_DEFAULT + 1;
+        for( std::vector<OUString>::const_iterator i = aList.begin(); i != aList.end(); ++i )
+        {
+            INetURLObject aObj(*i);
+            OUString aTitle = SvFileInformationManager::GetDescription(aObj);
+            mpTemplateDefaultMenu->InsertItem(nItemId, aTitle, SvFileInformationManager::GetImage(aObj, false));
+            mpTemplateDefaultMenu->SetItemCommand(nItemId++, *i);
+        }
+
+        mpActionMenu->ShowItem(MNI_ACTION_DEFAULT);
+    }
+    else
+        mpActionMenu->HideItem(MNI_ACTION_DEFAULT);
 }
 
 void SfxTemplateManagerDlg::switchMainView(bool bDisplayLocal)
@@ -1129,6 +1176,25 @@ bool lcl_getServiceName ( const OUString &rFileURL, OUString &rName )
     }
 
     return bRet;
+}
+
+std::vector<OUString> lcl_getAllFactoryURLs ()
+{
+    SvtModuleOptions aModOpt;
+    std::vector<OUString> aList;
+    const ::com::sun::star::uno::Sequence<OUString> &aServiceNames = aModOpt.GetAllServiceNames();
+
+    for( sal_Int32 i=0, nCount = aServiceNames.getLength(); i < nCount; ++i )
+    {
+        if ( SfxObjectFactory::GetStandardTemplate( aServiceNames[i] ).Len() > 0 )
+        {
+            SvtModuleOptions::EFactory eFac = SvtModuleOptions::E_WRITER;
+            SvtModuleOptions::ClassifyFactoryByName( aServiceNames[i], eFac );
+            aList.push_back(aModOpt.GetFactoryEmptyDocumentURL(eFac));
+        }
+    }
+
+    return aList;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

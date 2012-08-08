@@ -20,6 +20,11 @@ String STR_ACTION_REFRESH
     Text [ en-US ] = "Refresh";
 };
 
+String STR_ACTION_DEFAULT
+{
+    Text [ en-US ] = "Reset Default Template "; /* leave ending space */
+};
+
 String STR_MOVE_NEW
 {
     Text [ en-US ] = "New folder";
