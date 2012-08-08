@@ -687,52 +687,58 @@ int fd;
     return buffer;
 }
 
-static inline void print_nodotdot(char* path)
+static void _cancel_relative(char* base, char** ref_cursor, char** ref_cursor_out, char* end)
 {
-char* pathpart;
-char* lastnondotdot;
-    pathpart = path;
-    lastnondotdot = NULL;
-    while(pathpart != NULL)
+    char* cursor = *ref_cursor;
+    char* cursor_out = *ref_cursor_out;
+
+    do
     {
-        if(strncmp(pathpart, "/../", 4) == 0)
-        {
-            if(!lastnondotdot)
-                break; /* this should never happen with abs. paths */
-            memmove(lastnondotdot, pathpart+4, strlen(pathpart)-3);
-            lastnondotdot = NULL;
-            pathpart = path;
-        }
-        else
-        {
-            lastnondotdot = pathpart+1;
-            pathpart = strchr(pathpart+1,'/');
-        }
+        cursor += 3;
+        while(cursor_out > base && cursor_out[-1] == '/')
+            cursor_out--;
+        while(cursor_out > base && *--cursor_out != '/');
     }
-    fputs(path, stdout);
+    while(cursor + 3 < end && !memcmp(cursor, "/../", 4));
+    *ref_cursor = cursor;
+    *ref_cursor_out = cursor_out;
+}
+
+static inline void eat_space(char ** token)
+{
+    while ((' ' == **token) || ('\t' == **token)) {
+        ++(*token);
+    }
 }
 
 /* prefix paths to absolute */
 static inline void print_fullpaths(char* line)
 {
 char* token;
+char* end;
 
-    token = strtok(line," ");
-    while(token != NULL)
+    token = line;
+    eat_space(&token);
+    while (*token)
     {
+        end = token;
+        while (*end && (' ' != *end) && ('\t' != *end)) {
+            ++end;
+        }
         if(*token == ':' || *token == '\\' || *token == '/' || *token == '$'
             || ':' == token[1])
         {
-            fputs(token, stdout);
+            fwrite(token, end - token, 1, stdout);
         }
         else
         {
             fputs(base_dir_var, stdout);
             fputc('/', stdout);
-            print_nodotdot(token);
+            fwrite(token, end - token, 1, stdout);
         }
         fputc(' ', stdout);
-        token = strtok(NULL," ");
+        token = end;
+        eat_space(&token);
     }
 }
 
@@ -767,6 +773,13 @@ off_t size;
             }
             else if(*cursor == '/')
             {
+                if(cursor + 3 < end)
+                {
+                    if(!memcmp(cursor, "/../", 4))
+                    {
+                        _cancel_relative(base, &cursor, &cursor_out, end);
+                    }
+                }
                 *cursor_out++ = *cursor++;
             }
             else if(*cursor == '\n')
@@ -785,6 +798,8 @@ off_t size;
                              */
                             if(hash_store(dep_hash, base, (int)(cursor_out - base)))
                             {
+                                /* DO NOT modify base after it has been added
+                                   as key by hash_store */
                                 print_fullpaths(base);
                                 putc('\n', stdout);
                             }
