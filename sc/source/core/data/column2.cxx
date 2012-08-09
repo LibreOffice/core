@@ -1335,7 +1335,6 @@ SCROW ScColumn::FindNextVisibleRowWithContent(SCROW nRow, bool bForward) const
 {
     if(bForward)
     {
-        bool bFound = false;
         do
         {
             nRow++;
@@ -1362,13 +1361,12 @@ SCROW ScColumn::FindNextVisibleRowWithContent(SCROW nRow, bool bForward) const
                     nRow = maItems[nIndex].nRow - 1;
             }
         }
-        while(!bFound && nRow < MAXROW);
+        while(nRow < MAXROW);
 
         return MAXROW;
     }
     else
     {
-        bool bFound = false;
         do
         {
             nRow--;
@@ -1390,7 +1388,7 @@ SCROW ScColumn::FindNextVisibleRowWithContent(SCROW nRow, bool bForward) const
             else
                 nRow = maItems[nIndex-1].nRow + 1;
         }
-        while(!bFound && nRow > 0);
+        while(nRow > 0);
 
         return 0;
     }
