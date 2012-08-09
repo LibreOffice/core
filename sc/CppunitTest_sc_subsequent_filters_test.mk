@@ -135,9 +135,4 @@ $(eval $(call gb_CppunitTest_use_configuration,sc_subsequent_filters_test))
 
 $(eval $(call gb_CppunitTest_use_filter_configuration,sc_subsequent_filters_test))
 
-# we need to
-# - explicitly depend on the sc resource files needed at unit-test runtime
-$(call gb_CppunitTest_get_target,sc_subsequent_filters_test) : \
-    $(WORKDIR)/AllLangRes/sc \
-
 # vim: set noet sw=4 ts=4:

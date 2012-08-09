@@ -103,10 +103,4 @@ $(eval $(call gb_CppunitTest_use_components,sw_swdoc_test,\
 
 $(eval $(call gb_CppunitTest_use_configuration,sw_swdoc_test))
 
-# we need to explicitly depend on the sw resource files needed at unit-test
-# runtime
-$(call gb_CppunitTest_get_target,sw_swdoc_test) : \
-    $(WORKDIR)/AllLangRes/sw \
-    $(call gb_AllLangResTarget_get_target,sw) \
-
 # vim: set noet sw=4 ts=4:

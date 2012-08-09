@@ -126,9 +126,4 @@ $(eval $(call gb_CppunitTest_use_extra_configuration,sc_editfieldobj_header,\
     $(OUTDIR)/unittest/registry \
 ))
 
-# we need to
-# - explicitly depend on the sc resource files needed at unit-test runtime
-$(call gb_CppunitTest_get_target,sc_editfieldobj_header) : \
-    $(WORKDIR)/AllLangRes/sc \
-
 # vim: set noet sw=4 ts=4:

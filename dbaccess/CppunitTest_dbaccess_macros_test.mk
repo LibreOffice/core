@@ -126,9 +126,4 @@ $(eval $(call gb_CppunitTest_use_extra_configuration,dbaccess_macros_test,\
 	$(OUTDIR)/unittest/registry \
 ))
 
-# we need to
-# - explicitly depend on the dbaccess resource files needed at unit-test runtime
-$(call gb_CppunitTest_get_target,dbaccess_macros_test) : \
-    $(WORKDIR)/AllLangRes/dbaccess \
-
 # vim: set noet sw=4 ts=4:
