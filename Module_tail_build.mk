@@ -172,6 +172,7 @@ $(if $(strip $(1)),\
 $(call tailbuild_serialize,$(wordlist 2,$(words $(1)),$(1))))
 endef
 
+ifeq (all,$(filter all,$(MAKECMDGOALS)))
 $(eval $(call tailbuild_serialize,\
 	scfilt \
 	$(if $(filter SCRIPTING,$(BUILD_TYPE)),vbaobj) \
@@ -181,5 +182,6 @@ $(eval $(call tailbuild_serialize,\
 	$(if $(filter TRUE,$(MERGELIBS)),merged,svxcore) \
 	vcl xo \
 ))
+endif
 
 # vim: set noet sw=4 ts=4:
