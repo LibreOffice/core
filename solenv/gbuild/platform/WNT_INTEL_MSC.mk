@@ -248,6 +248,12 @@ define gb_Helper_make_url
 file:///$(strip $(1))
 endef
 
+# for source files in non-core repositories, the cygwin symlink is not
+# understood by native tools, so find the real path to the file
+define gb_Helper_symlinked_native
+$(shell cygpath -m $(realpath $(1)))
+endef
+
 # YaccTarget class
 
 define gb_YaccTarget__command
