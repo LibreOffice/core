@@ -80,6 +80,5 @@
          in order to avoid having your file be overridden by tools such as "android update project"
     -->
     <!-- version-tag: custom -->
-    <import file="${sdk.dir}/tools/ant/build.xml" />
     <import file="${android.library.reference.1}/no-resource-compress.xml" />
 </project>
