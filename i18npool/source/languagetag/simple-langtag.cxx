@@ -387,6 +387,7 @@ static const gchar *lt_region_get_tag(const lt_region_t *region)
     return region ? region->mpStr : NULL;
 }
 
+#ifdef erDEBUG
 static void lt_tag_dump(const lt_tag_t *tag)
 {
     fprintf( stderr, "\n");
@@ -395,7 +396,7 @@ static void lt_tag_dump(const lt_tag_t *tag)
     fprintf( stderr, "SimpleLangtag   script: %s\n", tag->maScript.mpStr);
     fprintf( stderr, "SimpleLangtag   region: %s\n", tag->maRegion.mpStr);
 }
-
+#endif
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
