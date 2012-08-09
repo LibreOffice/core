@@ -353,7 +353,6 @@ CXX_FOR_BUILD=xcrun clang++ -arch i386
 --with-android-sdk=/Users/tml/android-sdk-macosx
 --with-build-platform-configure-options=--with-macosx-sdk=10.8 --with-macosx-version-min-required=10.8 --with-macosx-version-max-allowed=10.8
 --with-distro=LibreOfficeAndroid
---with-external-tar=/Users/tml/lo/10.4/src
 --without-doxygen
 --without-helppack-integration
 --without-myspell-dicts
