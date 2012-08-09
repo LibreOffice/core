@@ -333,6 +333,7 @@ void doTestMeasureToString(char const*const pis, sal_Int32 nMeasure, sal_Int16 c
 
 void ConverterTest::testMeasure()
 {
+    //check all the measure units
     doTestStringToMeasure(1000, "10mm", MeasureUnit::MM_100TH, -1, 4321);
     doTestStringToMeasure(200, "20mm", MeasureUnit::MM_10TH, 12, 4567);
     doTestStringToMeasure(300, "300", MeasureUnit::MM, 31, 555);
@@ -353,7 +354,22 @@ void ConverterTest::testMeasure()
     doTestStringToMeasure(600, "600px", MeasureUnit::PIXEL, 10, 4321);
     doTestStringToMeasure(777, "777", MeasureUnit::APPFONT, 10, 4321);
     doTestStringToMeasure(80000, "80000", MeasureUnit::SYSFONT, 10, 432100);
-    doTestMeasureToString("60mm", 6000, MeasureUnit::MM_100TH, MeasureUnit::MM_10TH);
+    //strange values (negative, too large etc.)
+    doTestStringToMeasure(-539222987, "1234567890mm", MeasureUnit::MM_10TH, 12, 12345678901);
+    doTestStringToMeasure(-300, "-300", MeasureUnit::MM, -1000, 555);
+    doTestStringToMeasure(1305424328, "-999999999999999px", MeasureUnit::PIXEL, -88888888888, 555);   //really crazy numbers...
+
+    doTestMeasureToString("6mm", 600, MeasureUnit::MM_100TH, MeasureUnit::MM);
+    doTestMeasureToString("0.005cm", 000000005, MeasureUnit::MM_100TH, MeasureUnit::CM);    // zeros in the front doesn't count
+    doTestMeasureToString("3mm", 30, MeasureUnit::MM_10TH, MeasureUnit::MM);
+    doTestMeasureToString("6.66cm", 666, MeasureUnit::MM_10TH, MeasureUnit::CM);
+    doTestMeasureToString("-157.3pt", -555, MeasureUnit::MM_10TH, MeasureUnit::POINT);
+    doTestMeasureToString("174976.378in", 44444000, MeasureUnit::MM_10TH, MeasureUnit::INCH);    //let's check accuracy
+    doTestMeasureToString("40%", 40, MeasureUnit::PERCENT, MeasureUnit::PERCENT);
+    doTestMeasureToString("70.56mm", 4000, MeasureUnit::TWIP, MeasureUnit::MM);
+    doTestMeasureToString("979.928cm", 555550, MeasureUnit::TWIP, MeasureUnit::CM);
+    doTestMeasureToString("111.1pt", 2222, MeasureUnit::TWIP, MeasureUnit::POINT);
+    doTestMeasureToString("385.7986in", 555550, MeasureUnit::TWIP, MeasureUnit::INCH);
 }
 CPPUNIT_TEST_SUITE_REGISTRATION(ConverterTest);
 
