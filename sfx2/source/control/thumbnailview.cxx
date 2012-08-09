@@ -1057,7 +1057,7 @@ void ThumbnailView::deselectItem(const sal_uInt16 nItemId)
     }
 }
 
-void ThumbnailView::unselectItems()
+void ThumbnailView::deselectItems()
 {
     for (size_t i = 0, n = mItemList.size(); i < n; ++i)
     {

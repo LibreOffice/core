@@ -1154,7 +1154,7 @@ void SfxTemplateManagerDlg::localSearchMoveTo(sal_uInt16 nMenuId)
     }
 
     // Deselect all items and update search results
-    mpSearchView->unselectItems();
+    mpSearchView->deselectItems();
 
     SearchUpdateHdl(mpSearchEdit);
 }

@@ -225,11 +225,11 @@ public:
 
     /**
      *
-     * @brief unselect all current selected items.
+     * @brief deselect all current selected items.
      *
      **/
 
-    void unselectItems ();
+    void deselectItems ();
 
     rtl::OUString GetItemText( sal_uInt16 nItemId ) const;
 
