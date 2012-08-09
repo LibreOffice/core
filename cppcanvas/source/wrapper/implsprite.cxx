@@ -64,27 +64,6 @@ namespace cppcanvas
             OSL_ENSURE( mpTransformArbiter.get(), "ImplSprite::ImplSprite(): Invalid transformation arbiter");
         }
 
-        ImplSprite::ImplSprite( const uno::Reference< rendering::XSpriteCanvas >&       rParentCanvas,
-                                const uno::Reference< rendering::XAnimatedSprite >&     rSprite,
-                                const ImplSpriteCanvas::TransformationArbiterSharedPtr& rTransformArbiter ) :
-            mxGraphicDevice(),
-            mxSprite( uno::Reference< rendering::XSprite >(rSprite,
-                                                           uno::UNO_QUERY) ),
-            mxAnimatedSprite( rSprite ),
-            mpTransformArbiter( rTransformArbiter )
-        {
-            // Avoiding ternary operator in initializer list (Solaris
-            // compiler bug, when function call and temporary is
-            // involved)
-            if( rParentCanvas.is() )
-                mxGraphicDevice = rParentCanvas->getDevice();
-
-            OSL_ENSURE( rParentCanvas.is() , "ImplSprite::ImplSprite(): Invalid canvas");
-            OSL_ENSURE( mxGraphicDevice.is(), "ImplSprite::ImplSprite(): Invalid graphic device");
-            OSL_ENSURE( mxSprite.is(), "ImplSprite::ImplSprite(): Invalid sprite");
-            OSL_ENSURE( mpTransformArbiter.get(), "ImplSprite::ImplSprite(): Invalid transformation arbiter");
-        }
-
         ImplSprite::~ImplSprite()
         {
             // hide the sprite on the canvas. If we don't hide the

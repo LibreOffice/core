@@ -51,11 +51,6 @@ namespace cppcanvas
                         const ::com::sun::star::uno::Reference<
                                   ::com::sun::star::rendering::XSprite >&       rSprite,
                         const ImplSpriteCanvas::TransformationArbiterSharedPtr&         rTransformArbiter );
-            ImplSprite( const ::com::sun::star::uno::Reference<
-                                  ::com::sun::star::rendering::XSpriteCanvas >&     rParentCanvas,
-                        const ::com::sun::star::uno::Reference<
-                                  ::com::sun::star::rendering::XAnimatedSprite >& rSprite,
-                        const ImplSpriteCanvas::TransformationArbiterSharedPtr&         rTransformArbiter );
             virtual ~ImplSprite();
 
             virtual void setAlpha( const double& rAlpha );
