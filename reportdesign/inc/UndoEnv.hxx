@@ -23,6 +23,8 @@
 #include <com/sun/star/beans/PropertyChangeEvent.hpp>
 #include <com/sun/star/container/XContainerListener.hpp>
 #include <com/sun/star/report/XReportDefinition.hpp>
+
+#include <cppuhelper/compbase3.hxx>
 #include <memory>
 #include <svl/lstner.hxx>
 

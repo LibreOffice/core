@@ -143,8 +143,6 @@ OSection::OSection(const uno::Reference< report::XReportDefinition >& _xParent
 OSection::~OSection()
 {
     DBG_DTOR( rpt_OSection,NULL);
-    if ( m_xProxy.is() )
-        m_xProxy->setDelegator( NULL );
 }
 //--------------------------------------------------------------------------
 //IMPLEMENT_FORWARD_XINTERFACE2(OSection,SectionBase,SectionPropertySet)
@@ -159,7 +157,7 @@ uno::Any SAL_CALL OSection::queryInterface( const uno::Type& _rType ) throw (uno
     if ( !aReturn.hasValue() && OReportControlModel::isInterfaceForbidden(_rType) )
         return aReturn;
 
-    return aReturn.hasValue() ? aReturn : (m_xProxy.is() ? m_xProxy->queryAggregation(_rType) : aReturn);
+    return aReturn;
 }
 
 // -----------------------------------------------------------------------------
@@ -206,33 +204,18 @@ void OSection::init()
 {
     uno::Reference< report::XReportDefinition> xReport = getReportDefinition();
     ::boost::shared_ptr<rptui::OReportModel> pModel = OReportDefinition::getSdrModel(xReport);
-    OSL_ENSURE(pModel,"No odel set at the report definition!");
+    assert(pModel); //"No model set at the report definition!"
     if ( pModel )
     {
-// DO NOT TOUCH THIS BLOCKS, WE HAVE A COMPILER PROBLEM UNDER SOLARIS X86
-        osl_incrementInterlockedCount( &m_refCount );
-        {
-            uno::Reference<report::XSection> xTemp = this;
-            {
-                {
-                    m_xProxy.set(pModel->createNewPage(xTemp)->getUnoPage(),uno::UNO_QUERY);
-                }
-                {
-                    ::comphelper::query_aggregation(m_xProxy,m_xDrawPage);
-                }
-
-                // set ourself as delegator
-                {
-                    if ( m_xProxy.is() )
-                    {
-                        m_xProxy->setDelegator( xTemp );
-                    }
-                }
-            }
-            xTemp.clear();
-        }
-// DO NOT TOUCH THIS BLOCKS, WE HAVE A COMPILER PROBLEM UNDER SOLARIS X86
-        osl_decrementInterlockedCount( &m_refCount );
+        uno::Reference<report::XSection> const xSection(this);
+        m_xDrawPage.set(pModel->createNewPage(xSection)->getUnoPage(),
+                uno::UNO_QUERY_THROW);
+        m_xDrawPage_ShapeGrouper.set(m_xDrawPage, uno::UNO_QUERY_THROW);
+        // apparently we may also get OReportDrawPage which doesn't support this
+        m_xDrawPage_FormSupplier.set(m_xDrawPage, uno::UNO_QUERY);
+        // createNewPage _should_ have stored away 2 uno::References to this,
+        // so our ref count cannot be 1 here, so this isn't destroyed here
+        assert(m_refCount > 1);
     }
 }
 // -----------------------------------------------------------------------------
@@ -546,14 +529,14 @@ uno::Type SAL_CALL OSection::getElementType(  ) throw (uno::RuntimeException)
 uno::Any SAL_CALL OSection::getByIndex( ::sal_Int32 Index ) throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    return m_xDrawPage->getByIndex(Index);
+    return m_xDrawPage.is() ? m_xDrawPage->getByIndex(Index) : uno::Any();
 }
 // -----------------------------------------------------------------------------
 // XEnumerationAccess
 uno::Reference< container::XEnumeration > SAL_CALL OSection::createEnumeration(  ) throw (uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    return new ::comphelper::OEnumerationByIndex(static_cast<XIndexAccess*>(this));
+    return new ::comphelper::OEnumerationByIndex(static_cast<XSection*>(this));
 }
 // -----------------------------------------------------------------------------
 uno::Reference< beans::XPropertySetInfo > SAL_CALL OSection::getPropertySetInfo(  ) throw(uno::RuntimeException)
@@ -633,7 +616,45 @@ void SAL_CALL OSection::remove( const uno::Reference< drawing::XShape >& xShape 
     }
     notifyElementRemoved(xShape);
 }
-// -----------------------------------------------------------------------------
+
+// XShapeGrouper
+uno::Reference< drawing::XShapeGroup > SAL_CALL
+OSection::group(uno::Reference< drawing::XShapes > const& xShapes)
+    throw (uno::RuntimeException)
+{
+    // no lock because m_xDrawPage_ShapeGrouper is const
+    return (m_xDrawPage_ShapeGrouper.is())
+        ? m_xDrawPage_ShapeGrouper->group(xShapes)
+        : 0;
+}
+void SAL_CALL
+OSection::ungroup(uno::Reference<drawing::XShapeGroup> const& xGroup)
+    throw (uno::RuntimeException)
+{
+    // no lock because m_xDrawPage_ShapeGrouper is const
+    if (m_xDrawPage_ShapeGrouper.is()) {
+        m_xDrawPage_ShapeGrouper->ungroup(xGroup);
+    }
+}
+
+// XFormsSupplier
+uno::Reference<container::XNameContainer> SAL_CALL OSection::getForms()
+    throw (uno::RuntimeException)
+{
+    // no lock because m_xDrawPage_FormSupplier is const
+    return (m_xDrawPage_FormSupplier.is())
+        ? m_xDrawPage_FormSupplier->getForms()
+        : 0;
+}
+// XFormsSupplier2
+sal_Bool SAL_CALL OSection::hasForms() throw (uno::RuntimeException)
+{
+    // no lock because m_xDrawPage_FormSupplier is const
+    return (m_xDrawPage_FormSupplier.is())
+        ? m_xDrawPage_FormSupplier->hasForms()
+        : 0;
+}
+
 // -----------------------------------------------------------------------------
 // com::sun::star::lang::XUnoTunnel
 //------------------------------------------------------------------
@@ -641,9 +662,7 @@ sal_Int64 OSection::getSomething( const uno::Sequence< sal_Int8 > & rId ) throw 
 {
     if (rId.getLength() == 16 && 0 == rtl_compareMemory(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
         return reinterpret_cast<sal_Int64>(this);
-    uno::Reference< lang::XUnoTunnel> xTunnel;
-    ::comphelper::query_aggregation(m_xProxy,xTunnel);
-    return xTunnel->getSomething(rId);
+    return (m_xDrawPage_Tunnel.is()) ? m_xDrawPage_Tunnel->getSomething(rId) : 0;
 }
 
 // -----------------------------------------------------------------------------

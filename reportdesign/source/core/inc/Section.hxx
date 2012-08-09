@@ -20,14 +20,16 @@
 #define REPORTDESIGN_API_SECTION_HXX
 
 #include <com/sun/star/report/XSection.hpp>
-#include <cppuhelper/compbase3.hxx>
+#include <cppuhelper/compbase6.hxx>
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/uno3.hxx>
 #include <comphelper/types.hxx>
 #include <cppuhelper/propertysetmixin.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/drawing/XDrawPage.hpp>
+#include <com/sun/star/drawing/XShapeGrouper.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
-#include <com/sun/star/uno/XAggregation.hpp>
+#include <com/sun/star/form/XFormsSupplier2.hpp>
 #include <comphelper/stl_types.hxx>
 #include <comphelper/implementationreference.hxx>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
@@ -35,9 +37,16 @@
 
 namespace reportdesign
 {
-    typedef ::cppu::WeakComponentImplHelper3<   ::com::sun::star::report::XSection
-                                            ,   ::com::sun::star::lang::XServiceInfo
-                                            ,   ::com::sun::star::lang::XUnoTunnel> SectionBase;
+    typedef ::cppu::WeakComponentImplHelper6
+        <   ::com::sun::star::report::XSection
+        ,   ::com::sun::star::lang::XServiceInfo
+        ,   ::com::sun::star::lang::XUnoTunnel
+        // SvxDrawPage forward
+        ,   ::com::sun::star::drawing::XDrawPage
+        ,   ::com::sun::star::drawing::XShapeGrouper
+        // SvxFmDrawPage forward
+        ,   ::com::sun::star::form::XFormsSupplier2
+        > SectionBase;
     typedef ::cppu::PropertySetMixin<com::sun::star::report::XSection> SectionPropertySet;
 
     class OSection : public comphelper::OMutexAndBroadcastHelper,
@@ -46,8 +55,10 @@ namespace reportdesign
     {
         ::cppu::OInterfaceContainerHelper                                                   m_aContainerListeners;
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >        m_xContext;
-        ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >              m_xDrawPage;
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation >             m_xProxy;
+        ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >            m_xDrawPage;
+        ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapeGrouper >        m_xDrawPage_ShapeGrouper;
+        ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormsSupplier2 >         m_xDrawPage_FormSupplier;
+        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XUnoTunnel >               m_xDrawPage_Tunnel;
         ::com::sun::star::uno::WeakReference< ::com::sun::star::report::XGroup >            m_xGroup;
         ::com::sun::star::uno::WeakReference< ::com::sun::star::report::XReportDefinition > m_xReportDefinition;
         ::rtl::OUString                                                                     m_sName;
@@ -168,6 +179,15 @@ namespace reportdesign
         // XShapes
         virtual void SAL_CALL add( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& xShape ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL remove( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& xShape ) throw (::com::sun::star::uno::RuntimeException);
+        // XShapeGrouper
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapeGroup > SAL_CALL group( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& xShapes ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL ungroup( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapeGroup >& aGroup ) throw (::com::sun::star::uno::RuntimeException);
+
+        // XFormsSupplier
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > SAL_CALL getForms() throw (::com::sun::star::uno::RuntimeException);
+        // XFormsSupplier2
+        virtual sal_Bool SAL_CALL hasForms() throw (::com::sun::star::uno::RuntimeException);
+
         // XIndexAccess
         virtual ::sal_Int32 SAL_CALL getCount(  ) throw (::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
