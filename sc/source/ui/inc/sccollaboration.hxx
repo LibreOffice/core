@@ -23,7 +23,7 @@ public:
             ScCollaboration( ScDocShell* pScDocShell );
     virtual ~ScCollaboration();
 
-    virtual void  ContactLeft() const;
+    virtual void  EndCollaboration() const;
     virtual void  PacketReceived( const OString& rPacket ) const;
     virtual void  SaveAndSendFile( TpContact* pContact ) const;
     virtual void  StartCollaboration( TeleConference* pConference );

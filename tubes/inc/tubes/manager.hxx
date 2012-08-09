@@ -135,6 +135,7 @@ public:
 
     static void             registerCollaboration( Collaboration* pCollaboration );
     static void             unregisterCollaboration( Collaboration* pCollaboration );
+    static bool             existsCollaboration( Collaboration* pCollaboration );
     /** Display contact list dialog for all documents. */
     static void             displayAllContacts();
 

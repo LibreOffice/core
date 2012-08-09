@@ -27,9 +27,8 @@ ScCollaboration::~ScCollaboration()
 {
 }
 
-void ScCollaboration::ContactLeft() const
+void ScCollaboration::EndCollaboration() const
 {
-    SAL_INFO( "sc.tubes", "Contact has left the collaboration" );
     ScDocFuncSend* pSender = GetScDocFuncSend();
     if (pSender)
     {

@@ -106,41 +106,6 @@ public:
 
 TeleManagerImpl* TeleManager::pImpl = new TeleManagerImpl();
 
-bool tb_account_is_online( TpAccount* pAccount );
-bool tb_contact_is_online( TpContact* pContact );
-
-static void account_presence_changed_cb( TpAccount* pAccount,
-                                         guint      /* type */,
-                                         gchar*     /* status */,
-                                         gchar*     /* message */,
-                                         gpointer   pUserData )
-{
-    if (!tb_account_is_online( pAccount ))
-    {
-        TeleConference* pConference = reinterpret_cast<TeleConference*> (pUserData);
-        pConference->close();
-        Collaboration* pCollaboration = pConference->getCollaboration();
-        if (pCollaboration)
-            pCollaboration->ContactLeft();
-    }
-}
-
-static void contact_presence_changed_cb( TpContact* pContact,
-                                         guint      /* type */,
-                                         gchar*     /* status */,
-                                         gchar*     /* message */,
-                                         gpointer   pUserData )
-{
-    if (!tb_contact_is_online( pContact ))
-    {
-        TeleConference* pConference = reinterpret_cast<TeleConference*> (pUserData);
-        pConference->close();
-        Collaboration* pCollaboration = pConference->getCollaboration();
-        if (pCollaboration)
-            pCollaboration->ContactLeft();
-    }
-}
-
 static void TeleManager_DBusChannelHandler(
         TpSimpleHandler*            /*handler*/,
         TpAccount*                  pAccount,
@@ -171,14 +136,6 @@ static void TeleManager_DBusChannelHandler(
             TeleConference* pConference = new TeleConference( pAccount, TP_DBUS_TUBE_CHANNEL( pChannel ) );
             pConference->acceptTube();
             TeleManager::addConference( pConference );
-
-            g_signal_connect( pAccount, "presence-changed",
-                    G_CALLBACK (account_presence_changed_cb), pConference );
-
-            TpContact* pContact = tp_channel_get_target_contact( pChannel );
-            if (pContact)
-                g_signal_connect( pContact, "presence-changed",
-                        G_CALLBACK (contact_presence_changed_cb), pConference );
         }
         else
         {
@@ -234,6 +191,13 @@ void TeleManager::unregisterCollaboration( Collaboration* pCollaboration )
     MutexGuard aGuard( GetMutex());
 
     pImpl->maCollaborations.erase( pCollaboration );
+}
+
+bool TeleManager::existsCollaboration( Collaboration* pCollaboration )
+{
+    MutexGuard aGuard( GetMutex());
+
+    return pImpl->maCollaborations.find( pCollaboration ) != pImpl->maCollaborations.end();
 }
 
 void TeleManager::displayAllContacts()
@@ -447,7 +411,6 @@ static void TeleManager_ChannelReadyHandler(
         g_error_free( pError);
         return;
     }
-
     pConference->setChannel( tp_account_channel_request_get_account( pChannelRequest),
             TP_DBUS_TUBE_CHANNEL (pChannel));
     pConference->offerTube();
@@ -690,9 +653,6 @@ TeleConference* TeleManager::startGroupSession( TpAccount *pAccount,
     if (!pConference->isReady())
         return NULL;
 
-    g_signal_connect( pAccount, "presence-changed",
-            G_CALLBACK (account_presence_changed_cb), pConference );
-
     return pConference;
 }
 
@@ -767,12 +727,6 @@ TeleConference* TeleManager::startBuddySession( TpAccount *pAccount, TpContact *
 
     if (!pConference->isReady())
         return NULL;
-
-    g_signal_connect( pAccount, "presence-changed",
-            G_CALLBACK (account_presence_changed_cb), pConference );
-
-    g_signal_connect( pBuddy, "presence-changed",
-            G_CALLBACK (contact_presence_changed_cb), pConference );
 
     return pConference;
 }

@@ -71,7 +71,7 @@ ContactList::~ContactList()
     mpAccountManager = NULL;
 }
 
-bool tb_presence_is_online( const TpConnectionPresenceType& presence )
+static bool tb_presence_is_online( const TpConnectionPresenceType& presence )
 {
     switch (presence)
     {
@@ -91,12 +91,7 @@ bool tb_presence_is_online( const TpConnectionPresenceType& presence )
     }
 }
 
-bool tb_account_is_online( TpAccount *account )
-{
-    return tb_presence_is_online (tp_account_get_current_presence (account, NULL, NULL));
-}
-
-bool tb_contact_is_online( TpContact *contact )
+static bool tb_contact_is_online( TpContact *contact )
 {
     return tb_presence_is_online (tp_contact_get_presence_type (contact));
 }

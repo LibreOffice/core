@@ -27,7 +27,7 @@ public:
             Collaboration();
     virtual ~Collaboration();
 
-    virtual void ContactLeft() const = 0;
+    virtual void EndCollaboration() const = 0;
     virtual void PacketReceived( const OString& rPacket ) const = 0;
     virtual void SaveAndSendFile( TpContact* pContact ) const = 0;
     virtual void StartCollaboration( TeleConference* pConference ) = 0;

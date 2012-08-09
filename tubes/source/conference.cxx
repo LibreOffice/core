@@ -33,6 +33,7 @@
 #include <tubes/file-transfer-helper.h>
 #include <tubes/manager.hxx>
 
+#include <gtk/gtk.h>
 #include <telepathy-glib/telepathy-glib.h>
 
 #if defined SAL_LOG_INFO
@@ -246,6 +247,23 @@ TeleConference::~TeleConference()
     delete pImpl;
 }
 
+static void channel_closed_cb( TpChannel *channel, gpointer user_data, GObject * /* weak_object */ )
+{
+    Collaboration* pCollaboration = reinterpret_cast<Collaboration*> (user_data);
+    if (TeleManager::existsCollaboration( pCollaboration ))
+    {
+        GtkWidget *dialog = gtk_message_dialog_new( NULL, static_cast<GtkDialogFlags> (0),
+                GTK_MESSAGE_WARNING, GTK_BUTTONS_CLOSE,
+                "Contact %s lost, you'll now be working locally.",
+                tp_contact_get_alias (tp_channel_get_target_contact (channel)) );
+        g_signal_connect_swapped (dialog, "response",
+                G_CALLBACK (gtk_widget_destroy), dialog);
+        gtk_widget_show_all (dialog);
+
+        pCollaboration->EndCollaboration();
+    }
+}
+
 
 void TeleConference::setChannel( TpAccount *pAccount, TpDBusTubeChannel* pChannel )
 {
@@ -373,8 +391,6 @@ void TeleConference::close()
 {
     INFO_LOGGER( "TeleConference::close");
 
-    TeleManager::unregisterDemoConference( this );
-
     if (mpChannel)
         tp_cli_channel_call_close( TP_CHANNEL( mpChannel), 5000, TeleConference_ChannelCloseHandler, this, NULL, NULL);
     else
@@ -385,6 +401,8 @@ void TeleConference::close()
 void TeleConference::finalize()
 {
     INFO_LOGGER( "TeleConference::finalize");
+
+    TeleManager::unregisterDemoConference( this );
 
     if (mpChannel)
     {
@@ -463,6 +481,16 @@ Collaboration* TeleConference::getCollaboration() const
 void TeleConference::setCollaboration( Collaboration* pCollaboration )
 {
     mpCollaboration = pCollaboration;
+    if (mpChannel)
+    {
+        GError *error = NULL;
+        if (!tp_cli_channel_connect_to_closed( TP_CHANNEL (mpChannel),
+                    channel_closed_cb, mpCollaboration, NULL, NULL, &error ))
+        {
+            SAL_WARN( "tubes", "Error when connecting to signal closed: " << error->message );
+            g_error_free (error);
+        }
+    }
 }
 
 void TeleConference::invite( TpContact *pContact )
