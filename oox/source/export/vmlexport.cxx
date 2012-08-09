@@ -534,7 +534,7 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRect 
                     }
 
                     if ( rProps.GetOpt( ESCHER_Prop_fillColor, nValue ) )
-                        impl_AddColor( pAttrList, XML_color, nValue );
+                        impl_AddColor( m_pShapeAttrList, XML_fillcolor, nValue );
 
                     if ( rProps.GetOpt( ESCHER_Prop_fillBackColor, nValue ) )
                         impl_AddColor( pAttrList, XML_color2, nValue );
@@ -668,6 +668,32 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRect 
             case ESCHER_Prop_fHidden:
                 if ( !it->nPropValue )
                     m_pShapeStyle->append( ";visibility:hidden" );
+                break;
+            case ESCHER_Prop_shadowColor:
+            case ESCHER_Prop_fshadowObscured:
+                {
+                    sal_uInt32 nValue = 0;
+                    bool bShadow = false;
+                    bool bObscured = false;
+                    if ( rProps.GetOpt( ESCHER_Prop_fshadowObscured, nValue ) )
+                    {
+                        bShadow = (( nValue & 0x20002 ) == 0x20002 );
+                        bObscured = (( nValue & 0x10001 ) == 0x10001 );
+                    }
+                    if ( bShadow )
+                    {
+                        sax_fastparser::FastAttributeList *pAttrList = m_pSerializer->createAttrList();
+                        impl_AddBool( pAttrList, XML_on, bShadow );
+                        impl_AddBool( pAttrList, XML_obscured, bObscured );
+
+                        if ( rProps.GetOpt( ESCHER_Prop_shadowColor, nValue ) )
+                            impl_AddColor( pAttrList, XML_color, nValue );
+
+                        m_pSerializer->singleElementNS( XML_v, XML_shadow, XFastAttributeListRef( pAttrList ) );
+                        bAlreadyWritten[ ESCHER_Prop_fshadowObscured ] = true;
+                        bAlreadyWritten[ ESCHER_Prop_shadowColor ] = true;
+                    }
+                }
                 break;
             default:
 #if OSL_DEBUG_LEVEL > 0
