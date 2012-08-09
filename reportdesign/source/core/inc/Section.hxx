@@ -115,9 +115,17 @@ namespace reportdesign
     public:
         typedef ::comphelper::ImplementationReference< OSection ,::com::sun::star::report::XSection,::com::sun::star::uno::XWeak > TSection;
 
-        OSection(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportDefinition >& _xParent
+    private:
+        OSection(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportDefinition >& xParentDef
+                ,const ::com::sun::star::uno::Reference< ::com::sun::star::report::XGroup >& xParentGroup
+                ,const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& context,
+                ::com::sun::star::uno::Sequence< ::rtl::OUString> const&);
+    public:
+        static ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection>
+        createOSection(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportDefinition >& _xParent
                 ,const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& context,bool _bPageSection=false);
-        OSection(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XGroup >& _xParent
+        static ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection>
+        createOSection(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XGroup >& _xParent
                 ,const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& context,bool _bPageSection=false);
 
         DECLARE_XINTERFACE( )

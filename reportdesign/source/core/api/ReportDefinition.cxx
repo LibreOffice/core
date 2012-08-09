@@ -661,7 +661,7 @@ OReportDefinition::OReportDefinition(uno::Reference< uno::XComponentContext > co
     {
         init();
         m_pImpl->m_xGroups = new OGroups(this,m_aProps->m_xContext);
-        m_pImpl->m_xDetail = new OSection(this,m_aProps->m_xContext);
+        m_pImpl->m_xDetail = OSection::createOSection(this,m_aProps->m_xContext);
         m_pImpl->m_xDetail->setName(RPT_RESSTRING(RID_STR_DETAIL,m_aProps->m_xContext->getServiceManager()));
     }
     osl_decrementInterlockedCount( &m_refCount );
@@ -682,7 +682,7 @@ OReportDefinition::OReportDefinition(uno::Reference< uno::XComponentContext > co
         m_aProps->setShape(_xShape,this,m_refCount);
         init();
         m_pImpl->m_xGroups = new OGroups(this,m_aProps->m_xContext);
-        m_pImpl->m_xDetail = new OSection(this,m_aProps->m_xContext);
+        m_pImpl->m_xDetail = OSection::createOSection(this,m_aProps->m_xContext);
         m_pImpl->m_xDetail->setName(RPT_RESSTRING(RID_STR_DETAIL,m_aProps->m_xContext->getServiceManager()));
     }
     osl_decrementInterlockedCount( &m_refCount );
@@ -703,7 +703,7 @@ OReportDefinition::OReportDefinition(const OReportDefinition& _rCopy)
         OGroups* pGroups = new OGroups(this,m_aProps->m_xContext);
         m_pImpl->m_xGroups = pGroups;
         pGroups->copyGroups(_rCopy.m_pImpl->m_xGroups);
-        m_pImpl->m_xDetail = new OSection(this,m_aProps->m_xContext);
+        m_pImpl->m_xDetail = OSection::createOSection(this,m_aProps->m_xContext);
         OSection::lcl_copySection(_rCopy.m_pImpl->m_xDetail,m_pImpl->m_xDetail);
 
         setPageHeaderOn(_rCopy.m_pImpl->m_xPageHeader.is());

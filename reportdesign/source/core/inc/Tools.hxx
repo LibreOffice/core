@@ -47,7 +47,7 @@ namespace reportdesign
     template <class T> void lcl_createSectionIfNeeded(sal_Bool _bOn,const T& _xParent,::com::sun::star::uno::Reference< ::com::sun::star::report::XSection>& _xSection/*in/out*/,bool _bPageSection = false)
     {
         if ( _bOn && !_xSection.is() )
-            _xSection = new OSection(_xParent,_xParent->getContext(),_bPageSection);
+            _xSection = OSection::createOSection(_xParent,_xParent->getContext(),_bPageSection);
         else if ( !_bOn )
             ::comphelper::disposeComponent(_xSection);
     }

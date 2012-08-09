@@ -52,6 +52,7 @@ namespace reportdesign
     using namespace com::sun::star;
     using namespace comphelper;
 DBG_NAME( rpt_OSection )
+
 // -----------------------------------------------------------------------------
 uno::Sequence< ::rtl::OUString> lcl_getGroupAbsent()
 {
@@ -63,31 +64,6 @@ uno::Sequence< ::rtl::OUString> lcl_getGroupAbsent()
     return uno::Sequence< ::rtl::OUString >(pProps,sizeof(pProps)/sizeof(pProps[0]));
 }
 
-// -----------------------------------------------------------------------------
-OSection::OSection( const uno::Reference< report::XGroup >& _xParent
-                   ,const uno::Reference< uno::XComponentContext >& context
-                   ,bool /*_bPageSection*/)
-:SectionBase(m_aMutex)
-,SectionPropertySet(context,static_cast< Implements >(IMPLEMENTS_PROPERTY_SET),lcl_getGroupAbsent())
-,m_aContainerListeners(m_aMutex)
-,m_xContext(context)
-,m_xGroup(_xParent)
-,m_nHeight(3000)
-,m_nBackgroundColor(COL_TRANSPARENT)
-,m_nForceNewPage(report::ForceNewPage::NONE)
-,m_nNewRowOrCol(report::ForceNewPage::NONE)
-,m_bKeepTogether(sal_False)
-,m_bCanGrow(sal_False)
-,m_bCanShrink(sal_False)
-,m_bRepeatSection(sal_False)
-,m_bVisible(sal_True)
-,m_bBacktransparent(sal_True)
-,m_bInRemoveNotify(false)
-,m_bInInsertNotify(false)
-{
-    DBG_CTOR( rpt_OSection,NULL);
-    init();
-}
 // -----------------------------------------------------------------------------
 uno::Sequence< ::rtl::OUString> lcl_getAbsent(bool _bPageSection)
 {
@@ -112,15 +88,40 @@ uno::Sequence< ::rtl::OUString> lcl_getAbsent(bool _bPageSection)
 
     return uno::Sequence< ::rtl::OUString >(pProps,sizeof(pProps)/sizeof(pProps[0]));
 }
+
+uno::Reference<report::XSection> OSection::createOSection(
+    const uno::Reference< report::XReportDefinition >& xParentDef,
+    const uno::Reference< uno::XComponentContext >& context,
+    bool const bPageSection)
+{
+    OSection *const pNew =
+        new OSection(xParentDef, 0, context, lcl_getAbsent(bPageSection));
+    pNew->init();
+    return pNew;
+}
+
+uno::Reference<report::XSection> OSection::createOSection(
+    const uno::Reference< report::XGroup >& xParentGroup,
+    const uno::Reference< uno::XComponentContext >& context,
+    bool const)
+{
+    OSection *const pNew =
+        new OSection(0, xParentGroup, context, lcl_getGroupAbsent());
+    pNew->init();
+    return pNew;
+}
+
 // -----------------------------------------------------------------------------
-OSection::OSection(const uno::Reference< report::XReportDefinition >& _xParent
+OSection::OSection(const uno::Reference< report::XReportDefinition >& xParentDef
+                   ,const uno::Reference< report::XGroup >& xParentGroup
                    ,const uno::Reference< uno::XComponentContext >& context
-                   ,bool _bPageSection)
+                   ,uno::Sequence< ::rtl::OUString> const& rStrings)
 :SectionBase(m_aMutex)
-,SectionPropertySet(context,SectionPropertySet::IMPLEMENTS_PROPERTY_SET,lcl_getAbsent(_bPageSection))
+,SectionPropertySet(context,SectionPropertySet::IMPLEMENTS_PROPERTY_SET,rStrings)
 ,m_aContainerListeners(m_aMutex)
 ,m_xContext(context)
-,m_xReportDefinition(_xParent)
+,m_xGroup(xParentGroup)
+,m_xReportDefinition(xParentDef)
 ,m_nHeight(3000)
 ,m_nBackgroundColor(COL_TRANSPARENT)
 ,m_nForceNewPage(report::ForceNewPage::NONE)
@@ -135,7 +136,6 @@ OSection::OSection(const uno::Reference< report::XReportDefinition >& _xParent
 ,m_bInInsertNotify(false)
 {
     DBG_CTOR( rpt_OSection,NULL);
-    init();
 }
 //--------------------------------------------------------------------------
 // TODO: VirtualFunctionFinder: This is virtual function!
