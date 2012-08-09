@@ -92,6 +92,7 @@ import com.sun.star.view.XRenderable;
 import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.util.ArrayList;
 
 import org.libreoffice.android.Bootstrap;
 import org.libreoffice.ui.LibreOfficeUIActivity;
@@ -126,8 +127,6 @@ public class DocumentLoader
 
     ViewGroup.LayoutParams matchParent;
 
-    ViewFlipper flipper;
-    
     DocumentViewer documentViewer;
 
     Bundle extras;
@@ -145,6 +144,7 @@ public class DocumentLoader
                                float velocityY)
         {
             Log.i(TAG, "onFling: " + event1 + " " + event2);
+            ViewFlipper flipper = documentViewer.getFlipper();
             if (event1.getX() - event2.getX() > 120) {
                 if (((PageViewer)flipper.getCurrentView()).currentPageNumber == pageCount-1)
                     return false;
@@ -280,7 +280,7 @@ public class DocumentLoader
             // Use dummySmallDevice with no scale of offset just to find out
             // the paper size of this page.
             Log.i( TAG , "Render( " + Integer.toString( number ) + " )");
-
+            ViewFlipper flipper = documentViewer.getFlipper();
             if (renderable == null) {
                 Log.i( TAG , "no renderable");
                 return null;
@@ -757,7 +757,7 @@ public class DocumentLoader
             //matchParent = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
             //flipper.removeViewAt( 0 );
             documentViewer = new DocumentViewer( (ViewFlipper)findViewById( R.id.page_flipper ) );
-            documentViewer.open(0);
+            //documentViewer.open(0);
 
             //currentPage = 0;
             //openPageWithPrefetching( currentPage );
@@ -796,6 +796,7 @@ public class DocumentLoader
 
     class DocumentViewer
     {
+        private String TAG = "DocumentViewer";
         private int currentPage;
         private ViewFlipper viewFlipper;
         //int pageCount;
@@ -806,128 +807,91 @@ public class DocumentLoader
         private ViewGroup.LayoutParams matchParent = new ViewGroup.LayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT,
             ViewGroup.LayoutParams.MATCH_PARENT);
+        private ArrayList<Integer> pageNumbers = new ArrayList<Integer>();
+        private ArrayList<PageViewer> pageViews = new ArrayList<PageViewer>();
 
         public DocumentViewer(ViewFlipper viewFlipper ){
+            //Log.i( TAG , "[ " + Integer.toString( rangeStart ) + " , " + Integer.toString( rangeEnd ) + " ]" );
             this.currentPage = 0;
             this.viewFlipper = viewFlipper;
             this.lastPage = pageCount-1;
-            //viewFlipper.removeAllViews();
-            //Not doing this here doesn't sit right can have uninit viewFlipper
+            Log.i( TAG , "pages [0," + Integer.toString( lastPage) + "]" );
             viewFlipper.removeAllViews();
-            //need to pre-fetch
-            for( int i = 0 ; i < this.CACHE_PLUSMINUS + 1 ; i++ ){//Load 0 + cache+- next pages
-                if( i > lastPage)
-                    break;
-                viewFlipper.addView( new PageViewer( i , viewFlipper.getWidth() , viewFlipper.getHeight()) , i );
+            for( int i = 0 ; i < Math.min( lastPage, this.CACHE_SIZE) ; i++){//perhaps loading backwards is best? LRU -> end not start?
+                pageNumbers.add( new Integer(i) );
+                pageViews.add( new PageViewer( i , viewFlipper.getWidth() , viewFlipper.getHeight()) );
             }
-        }
-
-        public DocumentViewer(ViewFlipper viewFlipper, int n ){
-            this.currentPage = n;
-            this.viewFlipper = viewFlipper;
-            this.lastPage = pageCount-1;
-            //viewFlipper.removeAllViews();
-            //need to pre-fetch
-            int pos = 0;
-            for(int i = n - this.CACHE_PLUSMINUS ; i < n + this.CACHE_PLUSMINUS ; i++, pos++ ){
-                if( i < firstPage || i > lastPage)
-                    continue;//Perhaps should continue on < and break on > but this seems neater
-                viewFlipper.addView( new PageViewer( i , viewFlipper.getWidth() , viewFlipper.getHeight()) , pos );
-            }
+            viewFlipper.addView( pageViews.get(0) );
+            viewFlipper.setDisplayedChild( 0 );
         }
 
         public void nextPage(){
-            if( this.currentPage == lastPage ){
-                return;
-            }
-            this.currentPage++;
-            if( !( this.currentPage + this.CACHE_PLUSMINUS > lastPage) ){//don't remove view's if there are no more to add
-                viewFlipper.removeViewAt( 0 );
-                viewFlipper.addView(
-                new PageViewer( this.currentPage + this.CACHE_PLUSMINUS, viewFlipper.getWidth() , viewFlipper.getHeight())
-                    , this.CACHE_SIZE -1 );
-            }
-            viewFlipper.showNext();
+            open( currentPage + 1 );
         }
 
         public void prevPage(){
-            if( this.currentPage == firstPage ){
-                return;
-            }
-            this.currentPage--;
-            if( !( this.currentPage - this.CACHE_PLUSMINUS < 0) ){//don't remove view's if there are no more to add
-                viewFlipper.removeViewAt( CACHE_SIZE - 1 );
-                viewFlipper.addView(
-                    new PageViewer( this.currentPage - this.CACHE_PLUSMINUS , viewFlipper.getWidth() , viewFlipper.getHeight())
-                    , 0 );
-            }
-            viewFlipper.showPrevious();
+            open( currentPage - 1 );
         }
 
         public void open( int newPage ){
-            int diff = newPage - this.currentPage;
-            Log.i( TAG , "open( N )");
-            Log.i( TAG , "current page : " + Integer.toString( this.currentPage) );
-            Log.i( TAG , "opening : " + Integer.toString( newPage ) + " of " + Integer.toString( pageCount ) );
-            //diff = 0 -> do nothing
-            //abs(diff) >= cachesize -> fill as in constructor
-            //if curr > n : new_low foreach in cache ? # < new_low remove : from >n_upper add to end
-            //else : upbound foreach in cache ? # >= upbound remove ; add to start
-            if( diff == 0 )
+            if( newPage == currentPage ){
+                Log.i( TAG , "Page " + Integer.toString( newPage ) + " is the current page" );
                 return;
-            if( Math.abs(diff) >= CACHE_SIZE ){
-                int pos = 0;
-                viewFlipper.removeAllViews();
-                for(int i = newPage - this.CACHE_PLUSMINUS ; i < newPage + this.CACHE_PLUSMINUS ; i++, pos++ ){
-                    if( i < firstPage || i > lastPage)
-                        continue;//Perhaps should continue on < and break on > but this seems neater
-                    viewFlipper.addView( new PageViewer( i , viewFlipper.getWidth() , viewFlipper.getHeight()) , pos );
-                }
             }
+            if( newPage > lastPage || newPage < firstPage ){
+                Log.i( TAG , "Page " + Integer.toString( newPage ) + " is out of Bounds [0," + Integer.toString(lastPage) + "]" );
+                return;
+            }
+            viewFlipper.addView( fetch( newPage ) );
+            viewFlipper.setDisplayedChild( 1 );//remove after so that transition has two pages.
+            viewFlipper.removeViewAt( 0 );
+            preFetch( newPage - 1 );
+            preFetch( newPage +1 );
+            currentPage = newPage;
+        }
 
-            if( diff > 0 ){ // new > curr
-                int lowerBound = newPage - this.CACHE_PLUSMINUS;// of the new range
-                int pos = 0;
-                for(int i = 0 ; i < this.CACHE_SIZE ; i++ ){
-                    if( i >= viewFlipper.getChildCount() )
-                        break;
-                    PageViewer page = (PageViewer)viewFlipper.getChildAt( i );
-                    if( page.getPage() < lowerBound )
-                        viewFlipper.removeViewAt( i );
-                }
-                //for others add to end.
-                int numberRecycled = viewFlipper.getChildCount();
-                for(int i = lowerBound ; i < newPage + this.CACHE_PLUSMINUS ; i++, pos++ ){
-                    if( pos < numberRecycled)
-                        continue;
-                    if( i < firstPage || i > lastPage)
-                        continue;
-                    viewFlipper.addView( new PageViewer( i  , viewFlipper.getWidth() , viewFlipper.getHeight()), pos , matchParent );
-                }
+        private PageViewer fetch( int page ){
+            int cacheIndex = pageNumbers.indexOf( page );
+            if( cacheIndex != -1 ){
+                //move item to most recently accessed position
+                pageNumbers.add( pageNumbers.get( cacheIndex ) );
+                pageViews.add( pageViews.get( cacheIndex ) );
+                pageNumbers.remove( cacheIndex );
+                pageViews.remove( cacheIndex );
+                return pageViews.get( pageViews.size() -1 );
+            }else{
+                pageNumbers.remove( 0 );
+                pageViews.remove( 0 );
+                pageNumbers.add( page );
+                pageViews.add( new PageViewer( page , viewFlipper.getWidth() , viewFlipper.getHeight()) );
+                return pageViews.get( pageViews.size() -1 );
             }
+        }
 
-            if( diff < 0 ){ // new < curr
-                //FIXME The first 5 thumbnails are forwards only.
-                int upperBound = newPage + this.CACHE_PLUSMINUS;
-                int pos = 0;
-                for(int i = 0 ; i < this.CACHE_SIZE ; i++ ){
-                    if( i >= viewFlipper.getChildCount() )
-                        break;
-                    PageViewer page = (PageViewer)viewFlipper.getChildAt( i );
-                    if( page.getPage() > upperBound )
-                        viewFlipper.removeViewAt( i );
-                }
-                int numberRecycled = viewFlipper.getChildCount();
-                for(int i = newPage - this.CACHE_PLUSMINUS ; i < upperBound ; i++, pos++ ){
-                    if( this.CACHE_SIZE - pos < numberRecycled)
-                        continue;
-                    if( i < firstPage || i > lastPage)
-                        continue;
-                    viewFlipper.addView( new PageViewer( i , viewFlipper.getWidth() , viewFlipper.getHeight()), 0 , matchParent );
-                }
+        private void preFetch( int page ){
+            if( page == currentPage ){
+                Log.i( TAG , "Page " + Integer.toString( page ) + " is the current page" );
+                return;
             }
-            viewFlipper.setDisplayedChild( this.CACHE_PLUSMINUS );
-//            viewFlipper.showNext();
+            if( page > lastPage || page < firstPage ){
+                Log.i( TAG , "Cannot pre-fetch: " + Integer.toString( page ) + " is out of Bounds [0," + Integer.toString(lastPage) + "]" );
+                return;
+            }
+            int cacheIndex = pageNumbers.indexOf( page );
+            if( cacheIndex != -1 ){
+                //move item to most recently accessed position
+                pageNumbers.add( pageNumbers.get( cacheIndex ) );
+                pageViews.add( pageViews.get( cacheIndex ) );
+                pageNumbers.remove( cacheIndex );
+                pageViews.remove( cacheIndex );
+                return ;
+            }else{
+                pageNumbers.remove( 0 );
+                pageViews.remove( 0 );
+                pageNumbers.add( page );
+                pageViews.add( new PageViewer( page , viewFlipper.getWidth() , viewFlipper.getHeight()) );
+                return;
+            }
         }
 
         public ViewFlipper getFlipper(){
