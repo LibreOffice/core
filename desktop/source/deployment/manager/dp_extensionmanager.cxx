@@ -1223,7 +1223,7 @@ void ExtensionManager::reinstallDeployedExtensions(
         xPackageManager->reinstallDeployedPackages(xAbortChannel, xCmdEnv);
         //We must sync here, otherwise we will get exceptions when extensions
         //are removed.
-        dp_misc::syncRepositories(false, xCmdEnv);
+        dp_misc::syncRepositories(xCmdEnv);
         const uno::Sequence< Reference<deploy::XPackage> > extensions(
             xPackageManager->getDeployedPackages(xAbortChannel, xCmdEnv));
 
@@ -1278,7 +1278,7 @@ void ExtensionManager::synchronizeBundledPrereg(
 
         Reference<deploy::XPackageManager> xMgr =
             xPackageManagerFactory->getPackageManager(OUSTR("bundled_prereg"));
-        xMgr->synchronize(false, xAbortChannel, xCmdEnv);
+        xMgr->synchronize(xAbortChannel, xCmdEnv);
         progressBundled.update(OUSTR("\n\n"));
 
         uno::Sequence<Reference<deploy::XPackage> > extensions = xMgr->getDeployedPackages(
@@ -1317,7 +1317,6 @@ void ExtensionManager::synchronizeBundledPrereg(
 }
 
 sal_Bool ExtensionManager::synchronize(
-    sal_Bool forceBundled,
     Reference<task::XAbortChannel> const & xAbortChannel,
     Reference<ucb::XCommandEnvironment> const & xCmdEnv )
     throw (deploy::DeploymentException,
@@ -1334,13 +1333,13 @@ sal_Bool ExtensionManager::synchronize(
         String sSynchronizingShared(StrSyncRepository::get());
         sSynchronizingShared.SearchAndReplaceAllAscii( "%NAME", OUSTR("shared"));
         dp_misc::ProgressLevel progressShared(xCmdEnv, sSynchronizingShared);
-        bModified = getSharedRepository()->synchronize(false, xAbortChannel, xCmdEnv);
+        bModified = getSharedRepository()->synchronize(xAbortChannel, xCmdEnv);
         progressShared.update(OUSTR("\n\n"));
 
         String sSynchronizingBundled(StrSyncRepository::get());
         sSynchronizingBundled.SearchAndReplaceAllAscii( "%NAME", OUSTR("bundled"));
         dp_misc::ProgressLevel progressBundled(xCmdEnv, sSynchronizingBundled);
-        bModified |= getBundledRepository()->synchronize(forceBundled, xAbortChannel, xCmdEnv);
+        bModified |= getBundledRepository()->synchronize(xAbortChannel, xCmdEnv);
         progressBundled.update(OUSTR("\n\n"));
 
         //Always determine the active extension. This is necessary for the

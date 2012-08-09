@@ -1248,7 +1248,6 @@ void PackageManagerImpl::reinstallDeployedPackages(
     return m_readOnly;
 }
 bool PackageManagerImpl::synchronizeRemovedExtensions(
-    bool force,
     Reference<task::XAbortChannel> const & xAbortChannel,
     Reference<css::ucb::XCommandEnvironment> const & xCmdEnv)
 {
@@ -1272,19 +1271,15 @@ bool PackageManagerImpl::synchronizeRemovedExtensions(
             if (bShared)
                 url = makeURLAppendSysPathSegment( url + OUSTR("_"), i->second.fileName);
 
-            bool bRemoved = force;
-
+            bool bRemoved = false;
             //Check if the URL to the extension is still the same
-            if (!bRemoved)
-            {
-                ::ucbhelper::Content contentExtension;
+            ::ucbhelper::Content contentExtension;
 
-                if (!create_ucb_content(
-                        &contentExtension, url,
-                        Reference<XCommandEnvironment>(), false))
-                {
-                    bRemoved = true;
-                }
+            if (!create_ucb_content(
+                    &contentExtension, url,
+                    Reference<XCommandEnvironment>(), false))
+            {
+                bRemoved = true;
             }
 
             //The folder is in the extension database, but it can still be deleted.
@@ -1469,7 +1464,6 @@ bool PackageManagerImpl::synchronizeAddedExtensions(
 }
 
 sal_Bool PackageManagerImpl::synchronize(
-    sal_Bool force,
     Reference<task::XAbortChannel> const & xAbortChannel,
     Reference<css::ucb::XCommandEnvironment> const & xCmdEnv)
     throw (css::deployment::DeploymentException,
@@ -1482,7 +1476,7 @@ sal_Bool PackageManagerImpl::synchronize(
     if (m_context.equals(OUSTR("user")))
         return bModified;
     bModified |=
-        synchronizeRemovedExtensions(force, xAbortChannel, xCmdEnv);
+        synchronizeRemovedExtensions(xAbortChannel, xCmdEnv);
     bModified |= synchronizeAddedExtensions(xAbortChannel, xCmdEnv);
 
     return bModified;
