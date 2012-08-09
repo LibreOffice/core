@@ -100,17 +100,17 @@ class CommandLineArgs: private boost::noncopyable
         bool                    HasSplashPipe() const;
         std::vector< rtl::OUString > const & GetAccept() const;
         std::vector< rtl::OUString > const & GetUnaccept() const;
-        std::vector< rtl::OUString > const & GetOpenList() const;
-        std::vector< rtl::OUString > const & GetViewList() const;
-        std::vector< rtl::OUString > const & GetStartList() const;
-        std::vector< rtl::OUString > const & GetForceOpenList() const;
-        std::vector< rtl::OUString > const & GetForceNewList() const;
-        std::vector< rtl::OUString > const & GetPrintList() const;
-        std::vector< rtl::OUString > const & GetPrintToList() const;
+        std::vector< rtl::OUString > GetOpenList() const;
+        std::vector< rtl::OUString > GetViewList() const;
+        std::vector< rtl::OUString > GetStartList() const;
+        std::vector< rtl::OUString > GetForceOpenList() const;
+        std::vector< rtl::OUString > GetForceNewList() const;
+        std::vector< rtl::OUString > GetPrintList() const;
+        std::vector< rtl::OUString > GetPrintToList() const;
         rtl::OUString       GetPrinterName() const;
         rtl::OUString       GetLanguage() const;
         std::vector< rtl::OUString > const & GetInFilter() const;
-        std::vector< rtl::OUString > const & GetConversionList() const;
+        std::vector< rtl::OUString > GetConversionList() const;
         rtl::OUString       GetConversionParams() const;
         rtl::OUString       GetConversionOut() const;
 
@@ -160,17 +160,17 @@ class CommandLineArgs: private boost::noncopyable
         bool m_bDocumentArgs; // A document creation/open/load arg is used
         std::vector< rtl::OUString > m_accept;
         std::vector< rtl::OUString > m_unaccept;
-        std::vector< rtl::OUString > m_openlist;
-        std::vector< rtl::OUString > m_viewlist;
-        std::vector< rtl::OUString > m_startlist;
-        std::vector< rtl::OUString > m_forceopenlist;
-        std::vector< rtl::OUString > m_forcenewlist;
-        std::vector< rtl::OUString > m_printlist;
-        std::vector< rtl::OUString > m_printtolist;
+        std::vector< rtl::OUString > m_openlist; // contains external URIs
+        std::vector< rtl::OUString > m_viewlist; // contains external URIs
+        std::vector< rtl::OUString > m_startlist; // contains external URIs
+        std::vector< rtl::OUString > m_forceopenlist; // contains external URIs
+        std::vector< rtl::OUString > m_forcenewlist; // contains external URIs
+        std::vector< rtl::OUString > m_printlist; // contains external URIs
+        std::vector< rtl::OUString > m_printtolist; // contains external URIs
         rtl::OUString m_printername;
-        std::vector< rtl::OUString > m_conversionlist;
+        std::vector< rtl::OUString > m_conversionlist; // contains external URIs
         rtl::OUString m_conversionparams;
-        rtl::OUString m_conversionout;
+        rtl::OUString m_conversionout; // contains external URIs
         std::vector< rtl::OUString > m_infilter;
         rtl::OUString m_language;
 };
