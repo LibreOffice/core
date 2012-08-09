@@ -85,6 +85,11 @@ bool TemplateAbstractView::isOverlayVisible () const
     return mpItemView->IsVisible();
 }
 
+void TemplateAbstractView::deselectOverlayItem(const sal_uInt16 nItemId)
+{
+    mpItemView->deselectItem(nItemId);
+}
+
 void TemplateAbstractView::sortOverlayItems(const boost::function<bool (const ThumbnailViewItem*,
                                                                         const ThumbnailViewItem*) > &func)
 {
