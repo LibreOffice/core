@@ -15,128 +15,13 @@
 
 #if !defined(ANDROID) && !defined(IOS)
 #include <liblangtag/langtag.h>
-
-#elif defined(ANDROID) || defined(IOS)
-
-// Completely dummy implementation, once this actually starts getting used at
-// run-time will need to do something.
-
-// For iOS probably can use NSLocale, that should have more or less required
-// functionality. If it is good enough, it could be used for Mac OS X,
-// too. For Android, maybe java.util.Locale, although it definitely lacks in
-// functionality.
-
-typedef char gchar;
-typedef struct {
-    char *message;
-} GError;
-
-static void g_free(void *p)
-{
-    free(p);
-}
-
-static void g_error_free(GError *error)
-{
-    (void) error;
-}
-
-typedef void lt_tag_t;
-typedef void lt_lang_t;
-typedef void lt_script_t;
-typedef void lt_region_t;
-
-static void lt_db_initialize(void)
-{
-}
-
-static void lt_db_finalize(void)
-{
-}
-
-static void lt_db_set_datadir(const char *dir)
-{
-    (void) dir;
-}
-
-static lt_tag_t *lt_tag_new(void)
-{
-    return NULL;
-}
-
-static lt_tag_t *lt_tag_copy(lt_tag_t *tag)
-{
-    (void) tag;
-    return NULL;
-}
-
-static void lt_tag_unref(lt_tag_t *tag)
-{
-    (void) tag;
-}
-
-static int lt_tag_parse(lt_tag_t *tag,
-                        const char *tag_string,
-                        GError **error)
-{
-    (void) tag;
-    (void) tag_string;
-    (void) error;
-
-    return -1;
-}
-
-static char *lt_tag_canonicalize(lt_tag_t *tag,
-                                 GError **error)
-{
-    (void) tag;
-    (void) error;
-
-    return NULL;
-}
-
-static const lt_lang_t *lt_tag_get_language(const lt_tag_t  *tag)
-{
-    (void) tag;
-
-    return NULL;
-}
-
-static const lt_script_t *lt_tag_get_script(const lt_tag_t  *tag)
-{
-    (void) tag;
-
-    return NULL;
-}
-
-static const lt_region_t *lt_tag_get_region(const lt_tag_t  *tag)
-{
-    (void) tag;
-
-    return NULL;
-}
-
-static const gchar *lt_lang_get_tag(const lt_lang_t *lang)
-{
-    (void) lang;
-
-    return NULL;
-}
-
-static const gchar *lt_script_get_tag(const lt_script_t *script)
-{
-    (void) script;
-
-    return NULL;
-}
-
-static const gchar *lt_region_get_tag(const lt_region_t *region)
-{
-    (void) region;
-
-    return NULL;
-}
-
+#else
+/* Replacement code for LGPL phobic and Android systems.
+ * For iOS we could probably use NSLocale instead, that should have more or
+ * less required functionality. If it is good enough, it could be used for Mac
+ * OS X, too.
+ */
+#include "simple-langtag.cxx"
 #endif
 
 //#define erDEBUG
