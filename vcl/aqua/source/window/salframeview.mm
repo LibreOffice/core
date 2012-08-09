@@ -1596,7 +1596,7 @@ private:
     return 0;
 }
 
-#if MAC_OS_X_VERSION_MIN_REQUIRED < 1050
+#if MACOSX_SDK_VERSION < 1050
 - (long)conversationIdentifier
 #else
 - (NSInteger)conversationIdentifier
