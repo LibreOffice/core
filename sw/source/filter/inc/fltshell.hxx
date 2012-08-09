@@ -652,7 +652,7 @@ public:
     sal_Bool IsFlagSet(SwFltControlStack::Flags no) const
         { return aStack.IsFlagSet(no); }
     void ConvertUStr( String& rInOut );
-    String QuoteStr( const String& rIn );
+    OUString QuoteStr( const OUString& rIn );
 
     // folgende status kann die shell verwalten:
     const SfxPoolItem& GetNodeOrStyAttr(sal_uInt16 nWhich);
