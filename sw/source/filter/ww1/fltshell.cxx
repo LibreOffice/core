@@ -1049,7 +1049,7 @@ void SwFltShell::ConvertUStr( String& rInOut )
 // QuoteString() wandelt CRs abhaengig von nFieldIniFlags in '\n' oder "\0x0d"
 OUString SwFltShell::QuoteStr( const OUString& rIn )
 {
-    OUString sOut( rIn );
+    OUStringBuffer sOut( rIn );
     sal_Bool bAllowCr = aStack.IsFlagSet( SwFltControlStack::ALLOW_FLD_CR );
 
     for( sal_Int32 n = 0; n < sOut.getLength(); ++n )
@@ -1057,21 +1057,18 @@ OUString SwFltShell::QuoteStr( const OUString& rIn )
         switch( sOut[ n ] )
         {
         case 0x0a:
-            sOut = sOut.replaceAt( n, 1, OUString() );             // 0xd 0xa wird zu \n
+            sOut.remove( n, 1 );             // 0xd 0xa wird zu \n
             break;
 
         case 0x0b:
         case 0x0c:
         case 0x0d:
             if( bAllowCr )
-            {
-                sal_Unicode* pStr = (sal_Unicode*)sOut.getStr();
-                pStr[n] = (sal_Unicode)'\n';
-            }
+                sOut[n] = '\n';
             break;
         }
     }
-    return sOut;
+    return sOut.makeStringAndClear();
 }
 
 SwFltShell& SwFltShell::operator << ( const sal_Unicode c )
