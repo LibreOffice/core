@@ -85,6 +85,9 @@ CONFIGURE_FLAGS+= GLIB_CFLAGS='-I$(SOLARINCDIR)/external/glib-2.0'
 CONFIGURE_FLAGS+= GLIB_LIBS='$(SOLARLIBDIR)$/gio-2.0.lib $(SOLARLIBDIR)$/gobject-2.0.lib $(SOLARLIBDIR)$/gthread-2.0.lib $(SOLARLIBDIR)$/gmodule-2.0.lib $(SOLARLIBDIR)$/glib-2.0.lib'
 .ELSE
 CONFIGURE_FLAGS+= GLIB_LIBS='-L$(SOLARLIBDIR) -lgio-2.0 -lgobject-2.0 -lgthread-2.0 -lgmodule-2.0 -lglib-2.0'
+.IF "$(OS)" == "MACOSX"
+EXTRA_LINKFLAGS+=-Wl,-dylib_file,@loader_path/libglib-2.0.0.dylib:$(SOLARLIBDIR)/libglib-2.0.0.dylib
+.ENDIF
 .ENDIF
 CONFIGURE_FLAGS+= GLIB_GENMARSHAL=glib-genmarshal
 CONFIGURE_FLAGS+= GLIB_MKENUMS=glib-mkenums

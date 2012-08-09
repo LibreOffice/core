@@ -485,6 +485,12 @@ $(call gb_LinkTarget_use_libraries,$(1),\
 	langtag \
 )
 
+ifeq ($(OS),MACOSX)
+
+$(call gb_LinkTarget_add_libs,$(1),$(foreach replaceme,libglib-2.0.0 libgmodule-2.0.0,-dylib_file @loader_path/$(replaceme).dylib:$(gb_Library_OUTDIRLOCATION)/$(replaceme).dylib))
+
+endif
+
 endef
 
 endif # SYSTEM_LIBLANGTAG
