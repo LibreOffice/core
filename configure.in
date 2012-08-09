@@ -66,14 +66,6 @@ dnl do this before argument processing to allow for platform dependent defaults
 dnl ===================================================================
 AC_CANONICAL_HOST
 
-if test "$cross_compiling" = "yes"; then
-    CROSS_COMPILING=YES
-else
-    CROSS_COMPILING=
-    BUILD_TYPE="$BUILD_TYPE NATIVE"
-fi
-AC_SUBST(CROSS_COMPILING)
-
 AC_PROG_EGREP
 # AC_PROG_EGREP doesn't set GREP on all systems as well
 AC_PATH_PROG(GREP, grep)
@@ -2760,6 +2752,14 @@ AC_SUBST(CL_X64)
 AC_SUBST(ENABLE_DIRECTX)
 AC_SUBST(DISABLE_ACTIVEX)
 AC_SUBST(DISABLE_ATL)
+
+if test "$cross_compiling" = "yes"; then
+    CROSS_COMPILING=YES
+else
+    CROSS_COMPILING=
+    BUILD_TYPE="$BUILD_TYPE NATIVE"
+fi
+AC_SUBST(CROSS_COMPILING)
 
 dnl ===================================================================
 dnl  Test the gcc version
