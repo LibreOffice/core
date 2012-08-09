@@ -1124,7 +1124,7 @@ void ExtensionCmdQueue::acceptLicense( const uno::Reference< deployment::XPackag
 
 void ExtensionCmdQueue::syncRepositories( const uno::Reference< uno::XComponentContext > &xContext )
 {
-    dp_misc::syncRepositories( false, new ProgressCmdEnv( xContext, NULL, OUSTR("Extension Manager") ) );
+    dp_misc::syncRepositories( new ProgressCmdEnv( xContext, NULL, OUSTR("Extension Manager") ) );
 }
 
 void ExtensionCmdQueue::stop()

@@ -591,7 +591,7 @@ void TRACE(::rtl::OString const & sText)
 }
 
 void syncRepositories(
-    bool force, Reference<ucb::XCommandEnvironment> const & xCmdEnv)
+    Reference<ucb::XCommandEnvironment> const & xCmdEnv)
 {
     OUString sDisable;
     ::rtl::Bootstrap::get( OUSTR( "DISABLE_EXTENSION_SYNCHRONIZATION" ), sDisable, OUString() );
@@ -602,8 +602,7 @@ void syncRepositories(
     //synchronize shared before bundled otherewise there are
     //more revoke and registration calls.
     sal_Bool bModified = false;
-    if (force
-        || needToSyncRepostitory(OUString(RTL_CONSTASCII_USTRINGPARAM("shared")))
+    if (needToSyncRepostitory(OUString(RTL_CONSTASCII_USTRINGPARAM("shared")))
         || needToSyncRepostitory(OUString(RTL_CONSTASCII_USTRINGPARAM("bundled"))))
     {
         xExtensionManager =

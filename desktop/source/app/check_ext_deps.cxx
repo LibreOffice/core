@@ -347,9 +347,9 @@ static void impl_setNeedsCompatCheck()
 // to check if we need checking the dependencies of the extensions again, we compare
 // the build id of the office with the one of the last check
 //------------------------------------------------------------------------------
-bool Desktop::newInstallation()
+static bool impl_needsCompatCheck()
 {
-    bool bNewInst = false;
+    bool bNeedsCheck = false;
     rtl::OUString aLastCheckBuildID;
     rtl::OUString aCurrentBuildID( UNISTRING( "${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE("version") ":buildid}" ) );
     rtl::Bootstrap::expandMacros( aCurrentBuildID );
@@ -371,18 +371,18 @@ bool Desktop::newInstallation()
         result >>= aLastCheckBuildID;
         if ( aLastCheckBuildID != aCurrentBuildID )
         {
-            bNewInst = true;
+            bNeedsCheck = true;
             result <<= aCurrentBuildID;
             pset->setPropertyValue( OUString("LastCompatibilityCheckID"), result );
             Reference< util::XChangesBatch >( pset, UNO_QUERY_THROW )->commitChanges();
         }
 #ifdef DEBUG
-        bNewInst = true;
+        bNeedsCheck = true;
 #endif
     }
     catch (const com::sun::star::uno::Exception&) {}
 
-    return bNewInst;
+    return bNeedsCheck;
 }
 
 //------------------------------------------------------------------------------
@@ -390,6 +390,11 @@ bool Desktop::newInstallation()
 // When there are unresolved issues, we can't continue with startup
 sal_Bool Desktop::CheckExtensionDependencies()
 {
+    if (!impl_needsCompatCheck())
+    {
+        return false;
+    }
+
     uno::Reference< uno::XComponentContext > xContext = comphelper_getProcessComponentContext();
 
     bool bDependenciesValid = impl_checkDependencies( xContext );
@@ -408,10 +413,10 @@ sal_Bool Desktop::CheckExtensionDependencies()
         return false;
 }
 
-void Desktop::SynchronizeExtensionRepositories(bool force)
+void Desktop::SynchronizeExtensionRepositories()
 {
     RTL_LOGFILE_CONTEXT(aLog,"desktop (jl) ::Desktop::SynchronizeExtensionRepositories");
-    dp_misc::syncRepositories( force, new SilentCommandEnv( this ) );
+    dp_misc::syncRepositories( new SilentCommandEnv( this ) );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

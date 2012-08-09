@@ -432,7 +432,7 @@ extern "C" DESKTOP_DLLPUBLIC int unopkg_main()
         if (!subcmd_gui && ! subCommand.equals(OUSTR("reinstall"))
             && ! subCommand.equals(OUSTR("sync"))
             && ! dp_misc::office_is_running())
-            dp_misc::syncRepositories(false, xCmdEnv);
+            dp_misc::syncRepositories(xCmdEnv);
 
         if ( subcmd_add || subCommand == "remove" )
         {
