@@ -1053,7 +1053,7 @@ void ScTable::LimitChartArea( SCCOL& rStartCol, SCROW& rStartRow, SCCOL& rEndCol
         --rEndRow;
 }
 
-SCCOL ScTable::FindNextVisibleCol( SCCOL nCol, bool bRight )
+SCCOL ScTable::FindNextVisibleCol( SCCOL nCol, bool bRight ) const
 {
     if(bRight)
     {
@@ -1077,7 +1077,7 @@ SCCOL ScTable::FindNextVisibleCol( SCCOL nCol, bool bRight )
     }
 }
 
-SCCOL ScTable::FindNextVisibleColWithContent( SCCOL nCol, bool bRight, SCROW nRow )
+SCCOL ScTable::FindNextVisibleColWithContent( SCCOL nCol, bool bRight, SCROW nRow ) const
 {
     if(bRight)
     {
@@ -1129,7 +1129,7 @@ SCCOL ScTable::FindNextVisibleColWithContent( SCCOL nCol, bool bRight, SCROW nRo
     }
 }
 
-void ScTable::FindAreaPos( SCCOL& rCol, SCROW& rRow, ScMoveDirection eDirection )
+void ScTable::FindAreaPos( SCCOL& rCol, SCROW& rRow, ScMoveDirection eDirection ) const
 {
     if (eDirection == SC_MOVE_LEFT || eDirection == SC_MOVE_RIGHT)
     {

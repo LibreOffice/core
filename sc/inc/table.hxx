@@ -424,7 +424,7 @@ public:
     SCSIZE      GetEmptyLinesInBlock( SCCOL nStartCol, SCROW nStartRow,
                                         SCCOL nEndCol, SCROW nEndRow, ScDirection eDir );
 
-    void        FindAreaPos( SCCOL& rCol, SCROW& rRow, ScMoveDirection eDirection );
+    void        FindAreaPos( SCCOL& rCol, SCROW& rRow, ScMoveDirection eDirection ) const;
     void        GetNextPos( SCCOL& rCol, SCROW& rRow, SCsCOL nMovX, SCsROW nMovY,
                                 bool bMarked, bool bUnprotected, const ScMarkData& rMark );
 
@@ -913,9 +913,9 @@ private:
 
     void        CopyPrintRange(const ScTable& rTable);
 
-    SCCOL       FindNextVisibleColWithContent(SCCOL nCol, bool bRight, SCROW nRow);
+    SCCOL       FindNextVisibleColWithContent(SCCOL nCol, bool bRight, SCROW nRow) const;
 
-    SCCOL       FindNextVisibleCol(SCCOL nCol, bool bRight);
+    SCCOL       FindNextVisibleCol(SCCOL nCol, bool bRight) const;
 
     /**
      * Use this to iterate through non-empty visible cells in a single column.
