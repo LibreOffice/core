@@ -342,16 +342,12 @@ will probably drive you insane.
 Here is an autogen.lastrun for Android, when cross-compiling from Mac
 OS X 10.8 with Xcode 4.4.1:
 
-CC_FOR_BUILD=xcrun clang -arch i386
-CXX_FOR_BUILD=xcrun clang++ -arch i386
---build=x86_64-apple-darwin11
 --disable-zenity
 --enable-debug
 --enable-werror
 --with-android-ndk=/Users/tml/android-ndk-r8b
 --with-android-ndk-toolchain-version=4.6
 --with-android-sdk=/Users/tml/android-sdk-macosx
---with-build-platform-configure-options=--with-macosx-sdk=10.8 --with-macosx-version-min-required=10.8 --with-macosx-version-max-allowed=10.8
 --with-distro=LibreOfficeAndroid
 --without-doxygen
 --without-helppack-integration
