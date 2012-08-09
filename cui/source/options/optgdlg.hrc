@@ -49,8 +49,8 @@
 #define ROW11                   (ROW10+RSC_CD_CHECKBOX_HEIGHT+ROWSPACE)
 #define ROW12                   (ROW11+RSC_CD_CHECKBOX_HEIGHT+ROWSPACE)
 #define ROW13                   (ROW12+RSC_CD_FIXEDLINE_HEIGHT+ROWSPACE)
-#define ROW14                   (ROW13+RSC_CD_CHECKBOX_HEIGHT+ROWSPACE+6)
-#define ROW15                   (ROW14+RSC_CD_CHECKBOX_HEIGHT+ROWSPACE)
+#define ROW14                   (ROW13+RSC_CD_TEXTBOX_HEIGHT+ROWSPACE)
+#define ROW15                   (ROW14+RSC_CD_FIXEDLINE_HEIGHT+ROWSPACE)
 #define ROW16                   (ROW15+RSC_CD_CHECKBOX_HEIGHT)
 
 #define DIFF(v1,v2)                     (v2-v1)
