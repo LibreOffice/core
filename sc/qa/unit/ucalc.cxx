@@ -4617,27 +4617,27 @@ void Test::testFindAreaPosRowDown()
 
     SCCOL nCol = 0;
     SCROW nRow = 0;
-    pDoc->FindAreaPos(nCol, nRow, 0, 0, 1);
+    pDoc->FindAreaPos(nCol, nRow, 0, SC_MOVE_DOWN);
 
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(1), nRow);
     CPPUNIT_ASSERT_EQUAL(static_cast<SCCOL>(0), nCol);
 
-    pDoc->FindAreaPos(nCol, nRow, 0, 0, 1);
+    pDoc->FindAreaPos(nCol, nRow, 0, SC_MOVE_DOWN);
 
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(2), nRow);
     CPPUNIT_ASSERT_EQUAL(static_cast<SCCOL>(0), nCol);
 
-    pDoc->FindAreaPos(nCol, nRow, 0, 0, 1);
+    pDoc->FindAreaPos(nCol, nRow, 0, SC_MOVE_DOWN);
 
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(5), nRow);
     CPPUNIT_ASSERT_EQUAL(static_cast<SCCOL>(0), nCol);
 
-    pDoc->FindAreaPos(nCol, nRow, 0, 0, 1);
+    pDoc->FindAreaPos(nCol, nRow, 0, SC_MOVE_DOWN);
 
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(6), nRow);
     CPPUNIT_ASSERT_EQUAL(static_cast<SCCOL>(0), nCol);
 
-    pDoc->FindAreaPos(nCol, nRow, 0, 0, 1);
+    pDoc->FindAreaPos(nCol, nRow, 0, SC_MOVE_DOWN);
 
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(MAXROW), nRow);
     CPPUNIT_ASSERT_EQUAL(static_cast<SCCOL>(0), nCol);
@@ -4645,12 +4645,12 @@ void Test::testFindAreaPosRowDown()
     nCol = 1;
     nRow = 2;
 
-    pDoc->FindAreaPos(nCol, nRow, 0, 0, 1);
+    pDoc->FindAreaPos(nCol, nRow, 0, SC_MOVE_DOWN);
 
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(3), nRow);
     CPPUNIT_ASSERT_EQUAL(static_cast<SCCOL>(1), nCol);
 
-    pDoc->FindAreaPos(nCol, nRow, 0, 0, 1);
+    pDoc->FindAreaPos(nCol, nRow, 0, SC_MOVE_DOWN);
 
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(6), nRow);
     CPPUNIT_ASSERT_EQUAL(static_cast<SCCOL>(1), nCol);
@@ -4678,29 +4678,27 @@ void Test::testFindAreaPosColRight()
 
     SCCOL nCol = 0;
     SCROW nRow = 0;
-    pDoc->FindAreaPos(nCol, nRow, 0, 1, 0);
+    pDoc->FindAreaPos(nCol, nRow, 0, SC_MOVE_RIGHT);
 
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(0), nRow);
     CPPUNIT_ASSERT_EQUAL(static_cast<SCCOL>(1), nCol);
 
-    pDoc->FindAreaPos(nCol, nRow, 0, 1, 0);
+    pDoc->FindAreaPos(nCol, nRow, 0, SC_MOVE_RIGHT);
 
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(0), nRow);
     CPPUNIT_ASSERT_EQUAL(static_cast<SCCOL>(2), nCol);
 
-    pDoc->FindAreaPos(nCol, nRow, 0, 1, 0);
+    pDoc->FindAreaPos(nCol, nRow, 0, SC_MOVE_RIGHT);
 
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(0), nRow);
-    // BUG! This returns right now 4 because FindAreaPos does
-    // not yet work correctly with hidden rows
-    //CPPUNIT_ASSERT_EQUAL(static_cast<SCCOL>(5), nCol);
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCCOL>(5), nCol);
 
-    pDoc->FindAreaPos(nCol, nRow, 0, 1, 0);
+    pDoc->FindAreaPos(nCol, nRow, 0, SC_MOVE_RIGHT);
 
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(0), nRow);
     CPPUNIT_ASSERT_EQUAL(static_cast<SCCOL>(6), nCol);
 
-    pDoc->FindAreaPos(nCol, nRow, 0, 1, 0);
+    pDoc->FindAreaPos(nCol, nRow, 0, SC_MOVE_RIGHT);
 
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(0), nRow);
     CPPUNIT_ASSERT_EQUAL(static_cast<SCCOL>(MAXCOL), nCol);
@@ -4708,14 +4706,12 @@ void Test::testFindAreaPosColRight()
     nCol = 2;
     nRow = 1;
 
-    pDoc->FindAreaPos(nCol, nRow, 0, 1, 0);
+    pDoc->FindAreaPos(nCol, nRow, 0, SC_MOVE_RIGHT);
 
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(1), nRow);
-    // BUG! This returns right now 4 because FindAreaPos does
-    // not yet work correctly with hidden rows
-    //CPPUNIT_ASSERT_EQUAL(static_cast<SCCOL>(3), nCol);
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCCOL>(3), nCol);
 
-    pDoc->FindAreaPos(nCol, nRow, 0, 1, 0);
+    pDoc->FindAreaPos(nCol, nRow, 0, SC_MOVE_RIGHT);
 
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(1), nRow);
     CPPUNIT_ASSERT_EQUAL(static_cast<SCCOL>(6), nCol);
