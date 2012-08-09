@@ -128,9 +128,7 @@ $(eval $(call gb_CppunitTest_use_configuration,sc_chart_regression_test))
 
 $(eval $(call gb_CppunitTest_use_filter_configuration,sc_chart_regression_test))
 
-$(eval $(call gb_CppunitTest_use_extra_configuration,sc_chart_regression_test,\
-	$(OUTDIR)/unittest/registry \
-))
+$(eval $(call gb_CppunitTest_use_unittest_configuration,sc_chart_regression_test))
 
 $(eval $(call gb_CppunitTest_use_external,sc_chart_regression_test,libxml2))
 

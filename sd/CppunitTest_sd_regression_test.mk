@@ -124,9 +124,7 @@ $(eval $(call gb_CppunitTest_use_configuration,sd_regression_test))
 
 $(eval $(call gb_CppunitTest_use_filter_configuration,sd_regression_test))
 
-$(eval $(call gb_CppunitTest_use_extra_configuration,sd_regression_test,\
-	$(OUTDIR)/unittest/registry \
-))
+$(eval $(call gb_CppunitTest_use_unittest_configuration,sd_regression_test))
 
 $(eval $(call gb_CppunitTest_add_arguments,sd_regression_test,\
     "-env:SVG_DISABLE_FONT_EMBEDDING=YEAH" \

@@ -122,9 +122,7 @@ $(eval $(call gb_CppunitTest_use_configuration,sc_editfieldobj_cell))
 
 $(eval $(call gb_CppunitTest_use_filter_configuration,sc_editfieldobj_cell))
 
-$(eval $(call gb_CppunitTest_use_extra_configuration,sc_editfieldobj_cell,\
-    $(OUTDIR)/unittest/registry \
-))
+$(eval $(call gb_CppunitTest_use_unittest_configuration,sc_editfieldobj_cell))
 
 # we need to
 # - explicitly depend on the sc resource files needed at unit-test runtime

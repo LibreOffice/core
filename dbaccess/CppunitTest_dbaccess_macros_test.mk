@@ -122,9 +122,7 @@ $(eval $(call gb_CppunitTest_use_configuration,dbaccess_macros_test))
 
 $(eval $(call gb_CppunitTest_use_filter_configuration,dbaccess_macros_test))
 
-$(eval $(call gb_CppunitTest_use_extra_configuration,dbaccess_macros_test,\
-	$(OUTDIR)/unittest/registry \
-))
+$(eval $(call gb_CppunitTest_use_unittest_configuration,dbaccess_macros_test))
 
 # we need to
 # - explicitly depend on the dbaccess resource files needed at unit-test runtime
