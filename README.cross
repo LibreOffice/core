@@ -345,7 +345,6 @@ OS X 10.8 with Xcode 4.4.1:
 CC_FOR_BUILD=xcrun clang -arch i386
 CXX_FOR_BUILD=xcrun clang++ -arch i386
 --build=x86_64-apple-darwin11
---disable-python
 --disable-zenity
 --enable-debug
 --enable-werror
