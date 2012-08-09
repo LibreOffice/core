@@ -28,7 +28,7 @@ LIBLANGTAG_MICRO=0
 
 .IF "$(SYSTEM_LIBLANGTAG)" == "YES"
 @all:
-    @echo "Using system liblangtag."
+	@echo "Using system liblangtag."
 .ENDIF
 
 TARFILE_NAME=liblangtag-$(LIBLANGTAG_MAJOR).$(LIBLANGTAG_MINOR)
@@ -50,13 +50,13 @@ my_prefix = @.__________________________________________________$(EXTRPATH)
 .ELSE
 my_prefix = install-liblangtag
 .END
-my_misc = $(shell @pwd)$/$(MISC)
+my_misc = $(shell @pwd)/$(MISC)
 my_install_sub = install
-my_destdir = $(my_misc)$/$(my_install_sub)
-my_install = $(my_destdir)$/$(my_prefix)
+my_destdir = $(my_misc)/$(my_install_sub)
+my_install = $(my_destdir)/$(my_prefix)
 # relative to $(MISC)/build/liblangtag/ for OUT2LIB, OUT2INC
-my_install_relative = ..$/..$/$(my_install_sub)$/$(my_prefix)
-my_data = $(my_install)$/share$/liblangtag
+my_install_relative = ../../$(my_install_sub)/$(my_prefix)
+my_data = $(my_install)/share/liblangtag
 
 CONFIGURE_FLAGS+= --prefix='/$(my_prefix)' --libdir='/$(my_prefix)/lib'
 
@@ -65,9 +65,9 @@ CONFIGURE_FLAGS+= --prefix='/$(my_prefix)' --libdir='/$(my_prefix)/lib'
 CONFIGURE_FLAGS+= --disable-introspection
 
 .IF "$(SYSTEM_LIBXML)"!="YES"
-CONFIGURE_FLAGS+= LIBXML2_CFLAGS='-I$(SOLARINCDIR)$/external'
+CONFIGURE_FLAGS+= LIBXML2_CFLAGS='-I$(SOLARINCDIR)/external'
 .IF "$(GUI)"=="WNT" && "$(COM)"!="GCC"
-CONFIGURE_FLAGS+= LIBXML2_LIBS='$(SOLARLIBDIR)$/libxml2.lib'
+CONFIGURE_FLAGS+= LIBXML2_LIBS='$(SOLARLIBDIR)/libxml2.lib'
 .ELSE
 CONFIGURE_FLAGS+= LIBXML2_LIBS='-L$(SOLARLIBDIR) -lxml2'
 .ENDIF
@@ -82,7 +82,7 @@ CONFIGURE_FLAGS+= LIBXML2_CFLAGS='$(LIBXML_CFLAGS)' LIBXML2_LIBS='$(LIBXML_LIBS)
 CONFIGURE_FLAGS+= LIBO_GLIB_CHEAT=YES
 CONFIGURE_FLAGS+= GLIB_CFLAGS='-I$(SOLARINCDIR)/external/glib-2.0'
 .IF "$(GUI)"=="WNT" && "$(COM)"!="GCC"
-CONFIGURE_FLAGS+= GLIB_LIBS='$(SOLARLIBDIR)$/gio-2.0.lib $(SOLARLIBDIR)$/gobject-2.0.lib $(SOLARLIBDIR)$/gthread-2.0.lib $(SOLARLIBDIR)$/gmodule-2.0.lib $(SOLARLIBDIR)$/glib-2.0.lib'
+CONFIGURE_FLAGS+= GLIB_LIBS='$(SOLARLIBDIR)/gio-2.0.lib $(SOLARLIBDIR)/gobject-2.0.lib $(SOLARLIBDIR)/gthread-2.0.lib $(SOLARLIBDIR)/gmodule-2.0.lib $(SOLARLIBDIR)/glib-2.0.lib'
 .ELSE
 CONFIGURE_FLAGS+= GLIB_LIBS='-L$(SOLARLIBDIR) -lgio-2.0 -lgobject-2.0 -lgthread-2.0 -lgmodule-2.0 -lglib-2.0'
 .IF "$(OS)" == "MACOSX"
@@ -95,7 +95,7 @@ CONFIGURE_FLAGS+= GOBJECT_QUERY=gobject-query
 CONFIGURE_FLAGS+= --disable-glibtest
 .ENDIF
 
-CONFIGURE_ACTION=$(AUGMENT_LIBRARY_PATH) .$/configure
+CONFIGURE_ACTION=$(AUGMENT_LIBRARY_PATH) ./configure
 
 BUILD_ACTION=$(AUGMENT_LIBRARY_PATH) $(GNUMAKE) && \
 			 $(AUGMENT_LIBRARY_PATH) $(GNUMAKE) install DESTDIR=$(my_destdir)
@@ -118,15 +118,15 @@ PATCH_FILES+=liblangtag-0.2-msc-configure.patch
 .ENDIF	# "$(GUI)"=="WNT"
 
 
-OUT2INC += $(my_install_relative)$/include$/liblangtag$/*
+OUT2INC += $(my_install_relative)/include/liblangtag/*
 
 .IF "$(GUI)"=="WNT" && "$(COM)"!="GCC"
-OUT2LIB += $(my_install_relative)$/lib$/langtag.lib*
+OUT2LIB += $(my_install_relative)/lib/langtag.lib*
 .ELSE
 .IF "$(OS)" == "MACOSX"
-OUT2LIB += $(my_install_relative)$/lib$/liblangtag*.dylib
+OUT2LIB += $(my_install_relative)/lib/liblangtag*.dylib
 .ELSE
-OUT2LIB += $(my_install_relative)$/lib$/liblangtag.so*
+OUT2LIB += $(my_install_relative)/lib/liblangtag.so*
 .ENDIF
 .ENDIF
 
@@ -142,4 +142,4 @@ ALLTAR: $(MISC)/liblangtag_data.zip
 $(MISC)/liblangtag_data.zip: $(PACKAGE_DIR)/$(PREDELIVER_FLAG_FILE)
 	@-rm -f $@
 	@echo creating $@
-	$(COMMAND_ECHO)cd $(my_data) && zip $(ZIP_VERBOSITY) -r $(my_misc)$/$(@:f) *
+	$(COMMAND_ECHO)cd $(my_data) && zip $(ZIP_VERBOSITY) -r $(my_misc)/$(@:f) *
