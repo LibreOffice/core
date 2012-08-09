@@ -95,7 +95,7 @@ private:
     typedef ::comphelper::SequenceAsVector< css::beans::PropertyValue > SearchToolbarControllersVec;
     typedef ::std::map< css::uno::Reference< css::frame::XFrame >, SearchToolbarControllersVec > SearchToolbarControllersMap;
     SearchToolbarControllersMap aSearchToolbarControllersMap;
-    std::vector<rtl::OUString>    aSearchStrings;
+    std::vector<rtl::OUString> m_aSearchStrings;
 
 };
 
