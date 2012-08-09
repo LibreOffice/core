@@ -33,19 +33,23 @@ $(eval $(call gb_Library_use_libraries,mork, \
 $(eval $(call gb_Library_use_sdk_api,mork))
 
 $(eval $(call gb_Library_add_exception_objects,mork, \
+    connectivity/source/drivers/mork/MColumns \
     connectivity/source/drivers/mork/MNSFolders \
     connectivity/source/drivers/mork/MNSINIParser \
     connectivity/source/drivers/mork/MNSProfileDiscover \
     connectivity/source/drivers/mork/MorkParser \
-    connectivity/source/drivers/mork/MDriver \
+    connectivity/source/drivers/mork/MCatalog \
     connectivity/source/drivers/mork/MConnection \
     connectivity/source/drivers/mork/MDatabaseMetaData \
     connectivity/source/drivers/mork/MDatabaseMetaDataHelper \
+    connectivity/source/drivers/mork/MDriver \
     connectivity/source/drivers/mork/MStatement \
     connectivity/source/drivers/mork/MResultSet \
     connectivity/source/drivers/mork/MResultSetMetaData \
     connectivity/source/drivers/mork/MPreparedStatement \
     connectivity/source/drivers/mork/MServices \
+    connectivity/source/drivers/mork/MTable \
+    connectivity/source/drivers/mork/MTables \
 ))
 
 # vim: set noet sw=4 ts=4:

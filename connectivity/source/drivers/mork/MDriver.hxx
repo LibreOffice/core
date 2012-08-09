@@ -25,6 +25,7 @@
 #include "com/sun/star/uno/RuntimeException.hpp"
 #include "com/sun/star/uno/Sequence.hxx"
 #include "com/sun/star/uno/XComponentContext.hpp"
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include "cppuhelper/implbase2.hxx"
 #include "cppuhelper/weak.hxx"
 #include "rtl/ustring.hxx"
@@ -57,6 +58,8 @@ public:
         throw(css::uno::RuntimeException);
     static css::uno::Sequence< ::rtl::OUString > getSupportedServiceNames_Static()
         throw (css::uno::RuntimeException);
+
+    css::uno::Reference< com::sun::star::lang::XMultiServiceFactory > getFactory(){return m_xFactory;}
 private:
 
     ProfileAccess* m_ProfileAccess;
@@ -93,6 +96,7 @@ private:
         throw (css::uno::RuntimeException);
 
     css::uno::Reference< css::uno::XComponentContext > context_;
+    css::uno::Reference< com::sun::star::lang::XMultiServiceFactory > m_xFactory;
 };
 
 } }

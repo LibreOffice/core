@@ -25,9 +25,11 @@ namespace connectivity
 }
 
 MorkDriver::MorkDriver(css::uno::Reference< css::uno::XComponentContext > const context):
-    context_(context)
+    context_(context),
+    m_xFactory(context_->getServiceManager(), css::uno::UNO_QUERY)
 {
     SAL_INFO("connectivity.mork", "=> MorkDriver::MorkDriver()" );
+//    css::uno::Reference< com::sun::star::lang::XMultiServiceFactory > xServiceFactory(;
     m_ProfileAccess = new ProfileAccess();
     assert(context.is());
 }

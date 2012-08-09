@@ -99,6 +99,13 @@ namespace connectivity
             virtual void SAL_CALL clearWarnings() throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 
             static ::rtl::OUString getDriverImplementationName();
+
+            sal_Bool getForceLoadTables() {return true;}
+
+            // Added to enable me to use SQLInterpreter which requires an
+            // XNameAccess i/f to access tables.
+            ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XTablesSupplier > SAL_CALL createCatalog();
+
         };
     }
 }

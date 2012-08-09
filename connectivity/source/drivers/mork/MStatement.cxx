@@ -76,17 +76,13 @@ OCommonStatement::OCommonStatement(OConnection* _pConnection )
     ,OCommonStatement_SBASE((::cppu::OWeakObject*)_pConnection, this)
     ,m_pTable(NULL)
     ,m_pConnection(_pConnection)
-//    ,m_aParser(NULL)//_pConnection->getDriver()->getMSFactory())
-     // TODO
+    ,m_aParser(_pConnection->getDriver()->getFactory())
+    ,m_pSQLIterator( new OSQLParseTreeIterator( _pConnection, _pConnection->createCatalog()->getTables(), m_aParser, NULL ) )
     ,rBHelper(OCommonStatement_IBASE::rBHelper)
 {
     SAL_INFO("connectivity.mork", "=>  OCommonStatement::OCommonStatement()" );
     m_xDBMetaData = _pConnection->getMetaData();
-
     m_pParseTree = NULL;
-
-    //m_pSQLIterator = ( new OSQLParseTreeIterator( _pConnection, _pConnection->getMorkDriver()->getTables(), m_aParser, NULL ) )
-
     m_pConnection->acquire();
 }
 
@@ -194,11 +190,10 @@ OCommonStatement::StatementType OCommonStatement::parseSql( const ::rtl::OUStrin
     throw ( SQLException, RuntimeException )
 {
     SAL_INFO("connectivity.mork", "=>  OCommonStatement::parseSql()" );
-    SAL_WARN("connectivity.mork", "m_aParser is not set!");
 
     ::rtl::OUString aErr;
 
-    m_pParseTree = NULL;//m_aParser.parseTree(aErr,sql);
+    m_pParseTree = m_aParser.parseTree(aErr,sql);
 
 #if OSL_DEBUG_LEVEL > 0
     {

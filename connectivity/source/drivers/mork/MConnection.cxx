@@ -12,6 +12,7 @@
 #include "MConnection.hxx"
 #include "MDriver.hxx"
 #include "MDatabaseMetaData.hxx"
+#include "MCatalog.hxx"
 #include "MPreparedStatement.hxx"
 #include "MorkParser.hxx"
 
@@ -327,6 +328,23 @@ void OConnection::disposing()
     dispose_ChildImpl();
 }
 // -----------------------------------------------------------------------------
+
+Reference< XTablesSupplier > SAL_CALL OConnection::createCatalog()
+{
+    OSL_TRACE("IN OConnection::createCatalog()" );
+    ::osl::MutexGuard aGuard( m_aMutex );
+    Reference< XTablesSupplier > xTab = m_xCatalog;
+    if(!m_xCatalog.is())
+    {
+        OCatalog *pCat = new OCatalog(this);
+        xTab = pCat;
+        m_xCatalog = xTab;
+    }
+    OSL_TRACE( "\tOUT OConnection::createCatalog()" );
+    return xTab;
+}
+// -----------------------------------------------------------------------------
+
 
 
 } } // namespace connectivity::mork
