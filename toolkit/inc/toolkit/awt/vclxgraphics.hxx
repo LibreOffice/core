@@ -61,7 +61,8 @@ class VCLXGraphics :    public ::com::sun::star::awt::XGraphics,
                         public ::cppu::OWeakObject
 {
 private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDevice> mxDevice; // nur um bei getDevice() immer das gleiche zurueckzugeben
+    // used to return same reference on each call to getDevice()
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDevice> mxDevice;
 
     OutputDevice*   mpOutputDevice;
     Font            maFont;

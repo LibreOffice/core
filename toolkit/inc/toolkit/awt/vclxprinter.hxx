@@ -34,7 +34,7 @@
 
 #include "vcl/oldprintadaptor.hxx"
 
-// Fuer den Drucker relevante Properties:
+// relevant properties for the printer:
 /*
      sal_Bool   Horizontal
      sal_uInt16 CopyCount;

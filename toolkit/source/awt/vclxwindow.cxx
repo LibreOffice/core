@@ -349,7 +349,7 @@ Reference< XStyleSettings > VCLXWindowImpl::getStyleSettings()
 //====================================================================
 //====================================================================
 
-// Mit Out-Parameter besser als Rueckgabewert, wegen Ref-Objekt...
+// Uses an out-parameter instead of return value, due to the object reference
 
 void ImplInitWindowEvent( ::com::sun::star::awt::WindowEvent& rEvent, Window* pWindow )
 {
@@ -650,7 +650,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
                     Window* pNext = Application::GetFocusWindow();
                     if ( pNext )
                     {
-                        // Bei zusammengesetzten Controls interessiert sich keiner fuer das Innenleben:
+                        // Don't care about internals if this control is compound
                         Window* pNextC = pNext;
                         while ( pNextC && !pNextC->IsCompoundControl() )
                             pNextC = pNextC->GetParent();
@@ -962,7 +962,7 @@ void VCLXWindow::dispose(  ) throw(::com::sun::star::uno::RuntimeException)
         if ( GetWindow() )
         {
             OutputDevice* pOutDev = GetOutputDevice();
-            SetWindow( NULL );  // Damit ggf. Handler abgemeldet werden (virtuell).
+            SetWindow( NULL );  // so that handlers are logged off, if necessary (virtual)
             SetOutputDevice( pOutDev );
             DestroyOutputDevice();
         }
@@ -1671,7 +1671,7 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
                             pWindow->SetPaintTransparent( sal_False );
                         default: ;
                     }
-                    pWindow->Invalidate();  // Falls das Control nicht drauf reagiert
+                    pWindow->Invalidate();  // Invalidate if control does not respond to it
                 }
             }
         break;
@@ -2177,9 +2177,8 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
 {
     SolarMutexGuard aGuard;
 
-    // Diese Methode sollte nur fuer Componenten gerufen werden, die zwar
-    // ueber das ::com::sun::star::awt::Toolkit erzeugt werden koennen, aber fuer die es
-    // kein Interface gibt.
+    // Use this method only for those components which can be created through
+    // ::com::sun::star::awt::Toolkit , but do not have an interface
 
     Size aSz;
     if ( GetWindow() )
@@ -2315,9 +2314,9 @@ void VCLXWindow::draw( sal_Int32 nX, sal_Int32 nY ) throw(::com::sun::star::uno:
 
                 pWindow->SetPosPixel( aPos );
 
-                // Erstmal ein Update auf den Parent, damit nicht beim Update
-                // auf dieses Fenster noch ein Paint vom Parent abgearbeitet wird,
-                // wo dann ggf. dieses Fenster sofort wieder gehidet wird.
+                // Update parent first to avoid painting the parent upon the update
+                // of this window, as it may otherwise cause the parent
+                // to hide this window again
                 if( pWindow->GetParent() )
                     pWindow->GetParent()->Update();
 

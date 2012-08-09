@@ -445,8 +445,8 @@ void UnoControlContainer::dispose(  ) throw(uno::RuntimeException)
     lang::EventObject aDisposeEvent;
     aDisposeEvent.Source = static_cast< uno::XAggregation* >( this );
 
-    // DG: zuerst der Welt mitteilen, dass der Container wegfliegt. Dieses ist um einiges
-    // schneller wenn die Welt sowohl an den Controls als auch am Container horcht
+    // Notify listeners about disposal of this Container (This is much faster if they
+    // listen on the controls and the container).
     maDisposeListeners.disposeAndClear( aDisposeEvent );
     maCListeners.disposeAndClear( aDisposeEvent );
 
@@ -458,12 +458,12 @@ void UnoControlContainer::dispose(  ) throw(uno::RuntimeException)
     for( ; pCtrls < pCtrlsEnd; ++pCtrls )
     {
         removingControl( *pCtrls );
-        // Control wegwerfen
+        // Delete control
         (*pCtrls)->dispose();
     }
 
 
-    // alle Strukturen entfernen
+    // Delete all structures
     DELETEZ( mpControls );
     mpControls = new UnoControlHolderList;
 
@@ -601,7 +601,7 @@ void UnoControlContainer::setStatusText( const ::rtl::OUString& rStatusText ) th
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
-    // In der Parenthierarchie nach unten gehen
+    // Descend the parent hierarchy
     uno::Reference< awt::XControlContainer >  xContainer( mxContext, uno::UNO_QUERY );
     if( xContainer.is() )
         xContainer->setStatusText( rStatusText );
@@ -771,10 +771,10 @@ void UnoControlContainer::createPeer( const uno::Reference< awt::XToolkit >& rxT
         sal_Bool bVis = maComponentInfos.bVisible;
         if( bVis )
             UnoControl::setVisible( sal_False );
-        // eigenes Peer erzeugen
+        // Create a new peer
         UnoControl::createPeer( rxToolkit, rParent );
 
-        // alle Peers der Children erzeugen
+        // Create all children's peers
         if ( !mbCreatingCompatiblePeer )
         {
             // Evaluate "Step" property
@@ -823,7 +823,7 @@ void UnoControlContainer::setVisible( sal_Bool bVisible ) throw(uno::RuntimeExce
 
     UnoControl::setVisible( bVisible );
     if( !mxContext.is() && bVisible )
-        // Es ist ein TopWindow, also automatisch anzeigen
+        // This is a Topwindow, thus show it automatically
         createPeer( uno::Reference< awt::XToolkit > (), uno::Reference< awt::XWindowPeer > () );
 }
 

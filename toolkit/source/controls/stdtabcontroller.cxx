@@ -67,7 +67,7 @@ sal_Bool StdTabController::ImplCreateComponentSequence(
 {
     sal_Bool bOK = sal_True;
 
-    // nur die wirklich geforderten Controls
+    // Get only the requested controls
     sal_Int32 nModels = rModels.getLength();
     if (nModels != rControls.getLength())
     {
@@ -106,7 +106,7 @@ sal_Bool StdTabController::ImplCreateComponentSequence(
 
     for ( sal_uInt32 n = 0; bOK && ( n < nCtrls ); n++ )
     {
-        // Zum Model passendes Control suchen
+        // Get the matching control for this model
         Reference< XControl >  xCtrl(pControls[n]);
         if ( xCtrl.is() )
         {
@@ -118,7 +118,7 @@ sal_Bool StdTabController::ImplCreateComponentSequence(
             // TabStop-Property
             if ( pTabs )
             {
-                // opt: String fuer TabStop als Konstante
+                // opt: Constant String for TabStop name
                 static const ::rtl::OUString aTabStopName( "Tabstop" );
 
                 Reference< XPropertySet >  xPSet( xCtrl->getModel(), UNO_QUERY );
@@ -140,7 +140,7 @@ sal_Bool StdTabController::ImplCreateComponentSequence(
 
 void StdTabController::ImplActivateControl( sal_Bool bFirst ) const
 {
-    // HACK wegen #53688#, muss auf ein Interface abgebildet werden, wenn Controls Remote liegen koennen.
+    // HACK due to bug #53688#, map controls onto an interface if remote controls may occur
     Reference< XTabController >  xTabController(const_cast< ::cppu::OWeakObject* >(static_cast< const ::cppu::OWeakObject* >(this)), UNO_QUERY);
     Sequence< Reference< XControl > > aCtrls = xTabController->getControls();
     const Reference< XControl > * pControls = aCtrls.getConstArray();
@@ -228,7 +228,7 @@ Sequence< Reference< XControl > > StdTabController::getControls(  ) throw(Runtim
         for ( sal_uInt32 n = 0; n < nCtrls; n++ )
         {
             Reference< XControlModel >  xCtrlModel = pModels[n];
-            // Zum Model passendes Control suchen
+            // Search matching Control for this Model
             Reference< XControl >  xCtrl = FindControl( xCtrls, xCtrlModel );
             aSeq.getArray()[n] = xCtrl;
         }
@@ -247,13 +247,12 @@ void StdTabController::autoTabOrder(  ) throw(RuntimeException)
     Sequence< Reference< XControlModel > > aSeq = mxModel->getControlModels();
     Sequence< Reference< XWindow > > aCompSeq;
 
-    // vieleicht erhalte ich hier einen TabController,
-    // der schneller die Liste meiner Controls ermittelt
+    // This may return a TabController, which returns desired list of controls faster
     Reference< XTabController >  xTabController(static_cast< ::cppu::OWeakObject* >(this), UNO_QUERY);
     Sequence< Reference< XControl > > aControls = xTabController->getControls();
 
-    // #58317# Es sind ggf. noch nicht alle Controls fuer die Models im Container,
-    // dann kommt spaeter nochmal ein autoTabOrder...
+    // #58317# Some Models may be missing from the Container. Plus there is a
+    // autoTabOrder call later on.
     if( !ImplCreateComponentSequence( aControls, aSeq, aCompSeq, NULL, sal_False ) )
         return;
 
@@ -306,7 +305,7 @@ void StdTabController::activateTabOrder(  ) throw(RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
-    // Am Container die Tab-Reihenfolge aktivieren...
+    // Activate tab order for the control container
 
     Reference< XControl >  xC( mxControlContainer, UNO_QUERY );
     Reference< XVclContainerPeer >  xVclContainerPeer;
@@ -315,22 +314,21 @@ void StdTabController::activateTabOrder(  ) throw(RuntimeException)
      if ( !xC.is() || !xVclContainerPeer.is() )
         return;
 
-    // vieleicht erhalte ich hier einen TabController,
-    // der schneller die Liste meiner Controls ermittelt
+    // This may return a TabController, which returns desired list of controls faster
     Reference< XTabController >  xTabController(static_cast< ::cppu::OWeakObject* >(this), UNO_QUERY);
 
-    // Flache Liste besorgen...
+    // Get a flattened list of controls sequences
     Sequence< Reference< XControlModel > > aModels = mxModel->getControlModels();
     Sequence< Reference< XWindow > > aCompSeq;
     Sequence< Any> aTabSeq;
 
-    // DG: Aus Optimierungsgruenden werden die Controls mittels getControls() geholt,
-    // dieses hoert sich zwar wiedersinning an, fuehrt aber im konkreten Fall (Forms) zu sichtbaren
-    // Geschwindigkeitsvorteilen
+    // DG: For the sake of optimization, retrieve Controls from getControls(),
+    // this may sound counterproductive, but leads to performance improvements
+    // in practical scenarios (Forms)
     Sequence< Reference< XControl > > aControls = xTabController->getControls();
 
-    // #58317# Es sind ggf. noch nicht alle Controls fuer die Models im Container,
-    // dann kommt spaeter nochmal ein activateTabOrder...
+    // #58317# Some Models may be missing from the Container. Plus there is a
+    // autoTabOrder call later on.
     if( !ImplCreateComponentSequence( aControls, aModels, aCompSeq, &aTabSeq, sal_True ) )
         return;
 

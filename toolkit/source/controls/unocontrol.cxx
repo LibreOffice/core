@@ -208,7 +208,7 @@ Reference< XWindowPeer >    UnoControl::ImplGetCompatiblePeer( sal_Bool bAcceptE
 
     if ( !xCompatiblePeer.is() )
     {
-        // Peer unsichtbar erzeugen...
+        // Create the pair as invisible
         sal_Bool bVis = maComponentInfos.bVisible;
         if( bVis )
             maComponentInfos.bVisible = sal_False;
@@ -349,7 +349,7 @@ Reference< XWindow >    UnoControl::getParentPeer() const
 
 void UnoControl::updateFromModel()
 {
-    // Alle standard Properties werden ausgelesen und in das Peer uebertragen
+    // Read default properties and hand over to peer
     if( getPeer().is() )
     {
         Reference< XMultiPropertySet >  xPropSet( mxModel, UNO_QUERY );
@@ -414,7 +414,7 @@ void UnoControl::dispose(  ) throw(RuntimeException)
     maPaintListeners.disposeAndClear( aDisposeEvent );
     maModeChangeListeners.disposeAndClear( aDisposeEvent );
 
-    // Model wieder freigeben
+    // release Model again
     setModel( Reference< XControlModel > () );
     setContext( Reference< XInterface > () );
 }
@@ -569,9 +569,9 @@ void UnoControl::ImplModelPropertiesChanged( const Sequence< PropertyChangeEvent
 
             if ( nPType && ( nLen > 1 ) && DoesDependOnOthers( nPType ) )
             {
-                // Properties die von anderen abhaengen erst hinterher einstellen,
-                // weil sie von anderen Properties abhaengig sind, die aber erst spaeter
-                // eingestellt werden, z.B. VALUE nach VALUEMIN/MAX.
+                // Add properties with dependencies on other properties last
+                // since they're dependent on properties added later (such as
+                // VALUE dependency on VALUEMIN/MAX)
                 aPeerPropertiesToSet.push_back(PropertyValue(pEvents->PropertyName, 0, pEvents->NewValue, PropertyState_DIRECT_VALUE));
             }
             else
@@ -661,7 +661,7 @@ void UnoControl::ImplModelPropertiesChanged( const Sequence< PropertyChangeEvent
                 // I have no other idea than locking the SolarMutex here ....
                 // I really hate the fact that VCL is not theadsafe ....
 
-            // Funktioniert beim Container nicht!
+            // Doesn't work for Container!
             getPeer()->dispose();
             mxPeer.clear();
             mxVclWindowPeer = NULL;
@@ -699,7 +699,7 @@ void UnoControl::ImplModelPropertiesChanged( const Sequence< PropertyChangeEvent
 void UnoControl::disposing( const EventObject& rEvt ) throw(RuntimeException)
 {
     ::osl::ClearableMutexGuard aGuard( GetMutex() );
-    // bei "Multible Inheritance" nicht unterschiedliche Typen vergleichen.
+    // do not compare differing types in case of multible inheritance
 
     if ( maAccessibleContext.get() == rEvt.Source )
     {
@@ -817,7 +817,7 @@ void UnoControl::setVisible( sal_Bool bVisible ) throw(RuntimeException)
     {
         ::osl::MutexGuard aGuard( GetMutex() );
 
-        // Visible status ist Sache der View
+        // Visible status is handled by View
         maComponentInfos.bVisible = bVisible;
         xWindow = xWindow.query( getPeer() );
     }
@@ -831,7 +831,7 @@ void UnoControl::setEnable( sal_Bool bEnable ) throw(RuntimeException)
     {
         ::osl::MutexGuard aGuard( GetMutex() );
 
-        // Enable status ist Sache der View
+        // Enable status is handled by View
         maComponentInfos.bEnable = bEnable;
         xWindow = xWindow.query( getPeer() );
     }
@@ -1141,13 +1141,13 @@ void UnoControl::createPeer( const Reference< XToolkit >& rxToolkit, const Refer
             Reference< XControlContainer > xC;
             aAny >>= xC;
             if( xC.is() )
-                // Es ist ein Container
+                // It's a container
                 eType = WindowClass_CONTAINER;
             else
                 eType = WindowClass_SIMPLE;
         }
         else
-        { // Nur richtig, wenn es sich um ein Top Window handelt
+        { // This is only correct for Top Window
             if( rParentPeer.is() )
             {
                 if ( !xToolkit.is() )
@@ -1308,7 +1308,7 @@ void UnoControl::createPeer( const Reference< XToolkit >& rxToolkit, const Refer
             }
         }
 
-        // Ableitungen die Moeglichkeit geben die Attribute zu manipulieren
+        // Allow derivates to manipulate attributes
         PrepareWindowDescriptor(aDescr);
 
         // create the peer
@@ -1343,7 +1343,7 @@ void UnoControl::createPeer( const Reference< XToolkit >& rxToolkit, const Refer
         setPosSize( aComponentInfos.nX, aComponentInfos.nY, aComponentInfos.nWidth, aComponentInfos.nHeight, aComponentInfos.nFlags );
 
         if( aComponentInfos.bVisible && !bDesignMode )
-            // Erst nach dem setzen der Daten anzeigen
+            // Show only after setting the data
             xWindow->setVisible( aComponentInfos.bVisible );
 
         if( !aComponentInfos.bEnable )

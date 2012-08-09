@@ -90,7 +90,7 @@ void VCLXContainer::removeVclContainerListener( const ::com::sun::star::uno::Ref
 {
     SolarMutexGuard aGuard;
 
-    // Bei allen Children das Container-Interface abfragen...
+    // Request container interface from all children
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > > aSeq;
     Window* pWindow = GetWindow();
     if ( pWindow )
@@ -144,11 +144,11 @@ void VCLXContainer::setTabOrder( const ::com::sun::star::uno::Sequence< ::com::s
     {
         // ::com::sun::star::style::TabStop
         Window* pWin = VCLUnoHelper::GetWindow( pComps[n] );
-        // NULL kann vorkommen, wenn die ::com::sun::star::uno::Sequence vom TabController kommt und eine Peer fehlt!
+        // May be NULL if a ::com::sun::star::uno::Sequence is originated from TabController and is missing a peer!
         if ( pWin )
         {
-            // Reihenfolge der Fenster vor der Manipulation des Styles,
-            // weil z.B. der RadioButton in StateChanged das PREV-Window beruecksichtigt.
+            // Order windows before manipulating their style, because elements such as the
+            // RadioButton considers the PREV-window in StateChanged.
             if ( pPrevWin )
                 pWin->SetZOrder( pPrevWin, WINDOW_ZORDER_BEHIND );
 
@@ -190,13 +190,14 @@ void VCLXContainer::setGroup( const ::com::sun::star::uno::Sequence< ::com::sun:
         if ( pWin )
         {
             Window* pSortBehind = pPrevWin;
-            // #57096# Alle Radios hintereinander sortieren...
+            // #57096# Sort all radios consecutively
             sal_Bool bNewPrevWin = sal_True;
             if ( pWin->GetType() == WINDOW_RADIOBUTTON )
             {
                 if ( pPrevRadio )
                 {
-                    bNewPrevWin = ( pPrevWin == pPrevRadio );   // Radio-Button wurde vor das PreWin sortiert....
+                    // This RadioButton was sorted before PrevWin
+                    bNewPrevWin = ( pPrevWin == pPrevRadio );
                     pSortBehind = pPrevRadio;
                 }
                 pPrevRadio = pWin;
@@ -213,7 +214,7 @@ void VCLXContainer::setGroup( const ::com::sun::star::uno::Sequence< ::com::sun:
                 nStyle &= (~WB_GROUP);
             pWin->SetStyle( nStyle );
 
-            // Ein WB_GROUP hinter die Gruppe, falls keine Gruppe mehr folgt.
+            // Add WB_GROUP after the last group
             if ( n == ( nCount - 1 ) )
             {
                 Window* pBehindLast = pWin->GetWindow( WINDOW_NEXT );

@@ -279,7 +279,7 @@ ImpXMLAutoLayoutInfo::ImpXMLAutoLayoutInfo(sal_uInt16 nTyp, ImpXMLEXPPageMasterI
         Size aPartArea = aTitleSize;
         Size aSize;
 
-        // tatsaechliche Seitengroesse in das Handout-Rechteck skalieren
+        // scale handout rectangle using actual page size
         double fH = (double) aPartArea.Width()  / aPageSize.Width();
         double fV = (double) aPartArea.Height() / aPageSize.Height();
 

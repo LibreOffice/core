@@ -51,7 +51,7 @@ SearchParam::SearchParam( const String &rText,
 
     nTransliterationFlags = 0;
 
-    // Werte fuer "Gewichtete Levenshtein-Distanz"
+    // Parameters for weighted Levenshtein distance
     bLEV_Relaxed    = sal_True;
     nLEV_OtherX     = 2;
     nLEV_ShorterY   = 1;
@@ -207,9 +207,9 @@ TextSearch::~TextSearch()
 }
 
 /*
- * Die allgemeinen Methoden zu Suchen. Diese rufen dann die entpsrecheden
- * Methoden fuer die normale Suche oder der Suche nach Regular-Expressions
- * ueber die MethodenPointer auf.
+ * General search methods. These methods will call the respective
+ * methods, such as ordinary string searching or regular expression
+ * matching, using the method pointer.
  */
 #if defined _MSC_VER
 #pragma optimize("", off)

@@ -55,7 +55,7 @@ namespace rtl {
 #define BASEPROPERTY_LINECOLOR                       5  // sal_Int32
 #define BASEPROPERTY_BORDER                          6  // sal_Int16
 #define BASEPROPERTY_ALIGN                           7  // sal_Int16
-#define BASEPROPERTY_FONTDESCRIPTOR                  8  // ::com::sun::star::awt::FontDescriptor, war mal Font, aber nie gespeichert...
+#define BASEPROPERTY_FONTDESCRIPTOR                  8  // ::com::sun::star::awt::FontDescriptor
 #define BASEPROPERTY_DROPDOWN                        9  // sal_Bool
 #define BASEPROPERTY_MULTILINE                       10 // sal_Bool
 #define BASEPROPERTY_STRINGITEMLIST                  11 // UStringSequence
@@ -213,7 +213,7 @@ namespace rtl {
 #define BASEPROPERTY_USE_GRID_LINES                 160
 
 
-// Keine gebundenen Properties, werden immer aus der Property BASEPROPERTY_FONTDESCRIPTOR entnommen.
+// These properties are not bound, they are always extracted from the BASEPROPERTY_FONTDESCRIPTOR property
 #define BASEPROPERTY_FONTDESCRIPTORPART_START           1000
 #define BASEPROPERTY_FONTDESCRIPTORPART_NAME            1000    // ::rtl::OUString, not bound
 #define BASEPROPERTY_FONTDESCRIPTORPART_STYLENAME       1001    // ::rtl::OUString, not bound

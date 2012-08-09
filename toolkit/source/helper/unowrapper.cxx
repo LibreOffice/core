@@ -215,10 +215,10 @@ void UnoWrapper::ReleaseAllGraphics( OutputDevice* pOutDev )
 
 }
 
-// MT: Wurde im Window-CTOR gerufen, damit Container-Listener
-// vom Parent reagieren, aber hat sowieso nicht richtig funktioniert,
-// weil im Window-CTOR das Interface noch nicht da ist!
-// => Nur Listener rufen, wenn ueber das ::com::sun::star::awt::Toolkit erzeugt
+// It was once called in the Window-CTOR to make listeners of the Container
+// to react. This didn't really work, as the interface within the Window-CTOR
+// was not ready.
+// => Call only the listener, when created through ::com::sun::star::awt::Toolkit
 
 /*
 void ImplSmartWindowCreated( Window* pNewWindow )

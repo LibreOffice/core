@@ -129,8 +129,8 @@ UnoControlModel::UnoControlModel( const Reference< XMultiServiceFactory >& i_fac
     ,maDisposeListeners( *this )
     ,maContext( i_factory )
 {
-    // Die Properties muessen vom Model in die Tabelle gestopft werden,
-    // nur vorhandene Properties sind gueltige Properties, auch wenn VOID.
+    // Insert properties from Model into table,
+    // only existing properties are valid, even if they're VOID
 }
 
 UnoControlModel::UnoControlModel( const UnoControlModel& rModel )
@@ -560,8 +560,8 @@ void UnoControlModel::write( const ::com::sun::star::uno::Reference< ::com::sun:
 
     sal_uInt32 nProps = aProps.size();
 
-    // FontProperty wegen fehlender Unterscheidung zwischen 5.0 / 5.1
-    // immer im alten Format mitspeichern.
+    // Save FontProperty always in the old format (due to missing distinction
+    // between 5.0 and 5.1)
     OutStream->writeLong( (long) ( aProps.find( BASEPROPERTY_FONTDESCRIPTOR ) != aProps.end() ) ? ( nProps + 3 ) : nProps );
     for ( std::set<sal_uInt16>::const_iterator it = aProps.begin(); it != aProps.end(); ++it )
     {
@@ -702,8 +702,7 @@ void UnoControlModel::write( const ::com::sun::star::uno::Reference< ::com::sun:
     if ( aProps.find( BASEPROPERTY_FONTDESCRIPTOR ) != aProps.end() )
     {
         const ::com::sun::star::uno::Any* pProp = &maData[ BASEPROPERTY_FONTDESCRIPTOR ];
-        // Solange wir keinen 5.0-Export haben, muss das alte
-        // Format mit rausgeschrieben werden...
+        // Until 5.0 export arrives, write old format..
         ::com::sun::star::awt::FontDescriptor aFD;
         (*pProp) >>= aFD;
 
@@ -770,11 +769,10 @@ void UnoControlModel::read( const ::com::sun::star::uno::Reference< ::com::sun::
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any> aValues( nProps );
     sal_Bool bInvalidEntries = sal_False;
 
-    // Dummerweise kein Mark fuer den gesamten Block, es koennen also
-    // nur Properties geaendert werden, es koennen aber nicht spaeter mal Daten
-    // fuer das Model hinter den Properties geschrieben werden.
+    // Unfortunately, there's no mark for the whole block, thus only properties may be changed.
+    // No data for the model may be added following the properties
 
-    // Fuer den Import der alten ::com::sun::star::awt::FontDescriptor-Teile
+    // Used for import of old parts in ::com::sun::star::awt::FontDescriptor
     ::com::sun::star::awt::FontDescriptor* pFD = NULL;
 
     sal_uInt32 i;
@@ -893,11 +891,11 @@ void UnoControlModel::read( const ::com::sun::star::uno::Reference< ::com::sun::
             }
             else
             {
-                // Altes Geraffel aus 5.0
+                // Old trash from 5.0
                 if ( nPropId == BASEPROPERTY_FONT_TYPE )
                 {
-                    // Sonst ist es nur die redundante Info fuer alte Versionen
-                    // Daten werden durch MarkableStream geskippt.
+                    // Redundant information for older versions
+                    // is skipped by MarkableStream
                     if ( nVersion < 2 )
                     {
                         if ( !pFD )
@@ -920,12 +918,13 @@ void UnoControlModel::read( const ::com::sun::star::uno::Reference< ::com::sun::
                         if ( !pFD )
                         {
                             pFD = new ::com::sun::star::awt::FontDescriptor;
-                            if ( maData.find(BASEPROPERTY_FONTDESCRIPTOR) != maData.end() ) // wegen den Defaults...
+                            if ( maData.find(BASEPROPERTY_FONTDESCRIPTOR) != maData.end() ) // due to defaults...
                                 maData[BASEPROPERTY_FONTDESCRIPTOR] >>= *pFD;
                         }
                         pFD->Width = (sal_Int16)InStream->readLong();
                         pFD->Height = (sal_Int16)InStream->readLong();
-                        InStream->readShort();  // ::com::sun::star::awt::FontWidth ignorieren - wurde mal falsch geschrieben und wird nicht gebraucht.
+                        InStream->readShort(); // ignore ::com::sun::star::awt::FontWidth - it was
+                                               // misspelled and is no longer needed
                         pFD->CharacterWidth = ::com::sun::star::awt::FontWidth::DONTKNOW;
                     }
                 }
@@ -936,7 +935,7 @@ void UnoControlModel::read( const ::com::sun::star::uno::Reference< ::com::sun::
                          if ( !pFD )
                         {
                             pFD = new ::com::sun::star::awt::FontDescriptor;
-                            if ( maData.find(BASEPROPERTY_FONTDESCRIPTOR) != maData.end() ) // wegen den Defaults...
+                            if ( maData.find(BASEPROPERTY_FONTDESCRIPTOR) != maData.end() ) // due to defaults...
                                 maData[BASEPROPERTY_FONTDESCRIPTOR] >>= *pFD;
                         }
                         pFD->Weight = VCLUnoHelper::ConvertFontWeight( (FontWeight) InStream->readShort() );
@@ -973,7 +972,7 @@ void UnoControlModel::read( const ::com::sun::star::uno::Reference< ::com::sun::
             bInvalidEntries = sal_True;
         }
 
-        // Falls bereits mehr drinsteht als diese Version kennt:
+        // Skip rest of input if there is more data in stream than this version can handle
         xMark->jumpToMark( nPropDataBeginMark );
         InStream->skipBytes( nPropDataLen );
         xMark->deleteMark(nPropDataBeginMark);
@@ -1177,7 +1176,7 @@ sal_Bool UnoControlModel::convertFastPropertyValue( Any & rConvertedValue, Any &
 
 void UnoControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 nPropId, const ::com::sun::star::uno::Any& rValue ) throw (::com::sun::star::uno::Exception)
 {
-    // Fehlt: Die gefakten Einzelproperties des FontDescriptors...
+    // Missing: the fake solo properties of the FontDescriptor
 
     ImplPropertyTable::const_iterator it = maData.find( nPropId );
     const ::com::sun::star::uno::Any* pProp = it == maData.end() ? NULL : &(it->second);
@@ -1353,7 +1352,7 @@ void UnoControlModel::setPropertyValues( const ::com::sun::star::uno::Sequence< 
             aGuard.clear();
             // same as a few lines above
 
-        // FD-Propertie nicht in das Array mergen, weil sortiert...
+        // Don't merge FD property into array, as it is sorted
         if ( pFD.get() )
         {
             ::com::sun::star::uno::Any aValue;

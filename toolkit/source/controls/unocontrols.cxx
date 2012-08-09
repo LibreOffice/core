@@ -2911,7 +2911,8 @@ void UnoComboBoxControl::removeItemListener(const uno::Reference < awt::XItemLis
 {
     if( getPeer().is() && maItemListeners.getLength() == 1 )
     {
-        uno::Reference < awt::XComboBox >  xComboBox( getPeer(), uno::UNO_QUERY );  // MT: Mal alles so umstellen, schoener als Ref anlegen und query rufen
+        // This call is prettier than creating a Ref and calling query
+        uno::Reference < awt::XComboBox >  xComboBox( getPeer(), uno::UNO_QUERY );
         xComboBox->removeItemListener( &maItemListeners );
     }
     maItemListeners.removeInterface( l );
@@ -3020,15 +3021,15 @@ void UnoComboBoxControl::addItems( const uno::Sequence< ::rtl::OUString>& aItems
         nPos = (sal_uInt16) nOldLen;
 
     sal_uInt16 n;
-    // Items vor der Einfuege-Position
+    // items before the insert position
     for ( n = 0; n < nPos; n++ )
         pNewData[n] = pOldData[n];
 
-    // Neue Items
+    // New items
     for ( n = 0; n < nNewItems; n++ )
         pNewData[nPos+n] = aItems.getConstArray()[n];
 
-    // Rest der alten Items
+    // remainder of old items
     for ( n = nPos; n < nOldLen; n++ )
         pNewData[nNewItems+n] = pOldData[n];
 
@@ -3055,11 +3056,11 @@ void UnoComboBoxControl::removeItems( sal_Int16 nPos, sal_Int16 nCount ) throw(u
         ::rtl::OUString* pOldData = aSeq.getArray();
 
         sal_uInt16 n;
-        // Items vor der Entfern-Position
+        // items before the deletion position
         for ( n = 0; n < nPos; n++ )
             pNewData[n] = pOldData[n];
 
-        // Rest der Items
+        // remainder of old items
         for ( n = nPos; n < (nOldLen-nCount); n++ )
             pNewData[n] = pOldData[n+nCount];
 
@@ -4105,7 +4106,7 @@ void UnoPatternFieldControl::ImplSetPeerProperty( const ::rtl::OUString& rPropNa
     sal_uInt16 nType = GetPropertyId( rPropName );
     if ( ( nType == BASEPROPERTY_TEXT ) || ( nType == BASEPROPERTY_EDITMASK ) || ( nType == BASEPROPERTY_LITERALMASK ) )
     {
-        // Die Masken koennen nicht nacheinander gesetzt werden.
+        // These masks cannot be set consecutively
         ::rtl::OUString Text = ImplGetPropertyValue_UString( BASEPROPERTY_TEXT );
         ::rtl::OUString EditMask = ImplGetPropertyValue_UString( BASEPROPERTY_EDITMASK );
         ::rtl::OUString LiteralMask = ImplGetPropertyValue_UString( BASEPROPERTY_LITERALMASK );

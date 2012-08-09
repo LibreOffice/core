@@ -27,7 +27,6 @@
 #include <com/sun/star/util/XTextSearch.hpp>
 #include <com/sun/star/util/SearchOptions.hpp>
 
-// Forward-Deklaration
 class CharClass;
 
 namespace com {
@@ -45,7 +44,7 @@ namespace utl
 {
 // ............................................................................
 
-// SS - Klasse fuers Suchen
+// Utility class for searching
 class UNOTOOLS_DLLPUBLIC SearchParam
 {
 public:
@@ -109,13 +108,13 @@ public:
     void SetTransliterationFlags( long nValue ) { nTransliterationFlags = nValue; }
 };
 
-//  Klasse zum Suchen eines Strings in einem String.
-//  Unterstuetzt werden folgende Verfahren:
-//      - normalen Text (Bayer/Moore)
-//      - regulaere Ausdruecke
-//      - gewichtete Levenshtein Distanz
+//  Utility class for searching a substring in a string.
+//  The following metrics are supported
+//      - ordinary text (Bayer/Moore)
+//      - regular expressions
+//      - weighted Levenshtein distance
 //
-//  Es kann Vorwaerts und Rueckwaerts gesucht werden!
+//  This class allows forward and backward searching!
 
 class UNOTOOLS_DLLPUBLIC TextSearch
 {
@@ -129,7 +128,7 @@ class UNOTOOLS_DLLPUBLIC TextSearch
                const ::com::sun::star::lang::Locale& rLocale );
 
 public:
-    // rText ist der zusuchende String
+    // rText is the string being searched for
     // this first two CTORs are deprecated!
     TextSearch( const SearchParam & rPara, LanguageType nLanguage );
     TextSearch( const SearchParam & rPara, const CharClass& rCClass );

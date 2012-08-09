@@ -90,7 +90,7 @@ void UnoControlBase::ImplSetPropertyValues( const ::com::sun::star::uno::Sequenc
 
 void UnoControlBase::ImplSetPropertyValue( const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Any& aValue, sal_Bool bUpdateThis )
 {
-    // Model ggf. schon abgemeldet, aber ein Event schlaegt noch zu...
+    // Model might be logged off already but an event still fires
     if ( mxModel.is() )
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xPSet( mxModel, ::com::sun::star::uno::UNO_QUERY );

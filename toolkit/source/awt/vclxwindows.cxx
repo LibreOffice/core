@@ -1810,7 +1810,7 @@ void VCLXListBox::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
                 sal_Bool bDropDown = ( pListBox->GetStyle() & WB_DROPDOWN ) ? sal_True : sal_False;
                 if ( bDropDown && !IsSynthesizingVCLEvent() && maActionListeners.getLength() )
                 {
-                    // Bei DropDown den ActionListener rufen...
+                    // Call ActionListener on DropDown event
                     ::com::sun::star::awt::ActionEvent aEvent;
                     aEvent.Source = (::cppu::OWeakObject*)this;
                     aEvent.ActionCommand = pListBox->GetSelectEntry();
@@ -2051,7 +2051,7 @@ void VCLXListBox::ImplCallItemListeners()
         aEvent.Source = (::cppu::OWeakObject*)this;
         aEvent.Highlighted = sal_False;
 
-        // Bei Mehrfachselektion 0xFFFF, sonst die ID
+        // Set to 0xFFFF on multiple selection, selected entry ID otherwise
         aEvent.Selected = (pListBox->GetSelectEntryCount() == 1 ) ? pListBox->GetSelectEntryPos() : 0xFFFF;
 
         maItemListeners.itemStateChanged( aEvent );
@@ -4498,7 +4498,7 @@ void VCLXComboBox::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
                         aEvent.Source = (::cppu::OWeakObject*)this;
                         aEvent.Highlighted = sal_False;
 
-                        // Bei Mehrfachselektion 0xFFFF, sonst die ID
+                        // Set to 0xFFFF on multiple selection, selected entry ID otherwise
                         aEvent.Selected = pComboBox->GetEntryPos( pComboBox->GetText() );
 
                         maItemListeners.itemStateChanged( aEvent );
@@ -5505,8 +5505,9 @@ void VCLXNumericField::setValue( double Value ) throw(::com::sun::star::uno::Run
     NumericFormatter* pNumericFormatter = (NumericFormatter*) GetFormatter();
     if ( pNumericFormatter )
     {
-        // z.B. 105, 2 Digits => 1,05
-        // ein float 1,05 muss also eine 105 einstellen...
+        // shift long value using decimal digits
+        // (e.g., input 105 using 2 digits returns 1,05)
+        // Thus, to set a value of 1,05, insert 105 and 2 digits
         pNumericFormatter->SetValue(
             (long)ImplCalcLongValue( Value, pNumericFormatter->GetDecimalDigits() ) );
 
@@ -6100,8 +6101,9 @@ void VCLXCurrencyField::setValue( double Value ) throw(::com::sun::star::uno::Ru
     LongCurrencyFormatter* pCurrencyFormatter = (LongCurrencyFormatter*) GetFormatter();
     if ( pCurrencyFormatter )
     {
-        // z.B. 105, 2 Digits => 1,05
-        // ein float 1,05 muss also eine 105 einstellen...
+        // shift long value using decimal digits
+        // (e.g., input 105 using 2 digits returns 1,05)
+        // Thus, to set a value of 1,05, insert 105 and 2 digits
         pCurrencyFormatter->SetValue(
             ImplCalcLongValue( Value, pCurrencyFormatter->GetDecimalDigits() ) );
 

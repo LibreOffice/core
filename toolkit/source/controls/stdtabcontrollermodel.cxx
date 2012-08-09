@@ -212,7 +212,7 @@ void ImplWriteControls( const ::com::sun::star::uno::Reference< ::com::sun::star
         aSeq.getArray()[n] = xI;
     }
 
-    // Falls bereits mehr drinsteht als diese Version kennt:
+    // Skip remainder if more data exists than this version recognizes
     xMark->jumpToMark( nDataBeginMark );
     InStream->skipBytes( nDataLen );
     xMark->deleteMark(nDataBeginMark);
@@ -274,11 +274,9 @@ void StdTabControllerModel::setGroup( const ::com::sun::star::uno::Sequence< ::c
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
-    // Die Controls stehen eventuel flach in der Liste und werden jetzt gruppiert.
-    // Verschachtelte Gruppen sind erstmal nicht moeglich...
-    // Das erste Element der Gruppe welches auch schon in der flachen Liste
-    // stand bestimmt die Position der Gruppe.
-
+    // The controls might occur as a flat list and will be grouped.
+    // Nested groups are not possible.
+    // The first element of a group determines its position.
     UnoControlModelEntry* pNewEntry = new UnoControlModelEntry;
     pNewEntry->bGroup = sal_True;
     pNewEntry->pGroup = new UnoControlModelEntryList;
@@ -293,7 +291,7 @@ void StdTabControllerModel::setGroup( const ::com::sun::star::uno::Sequence< ::c
         if ( !pEntry->bGroup )
         {
             sal_uInt32 nPos = ImplGetControlPos( *pEntry->pxControl, maControls );
-            // Eigentlich sollten alle Controls vorher in der flachen Liste stehen
+            // At the beginning, all Controls should be in a flattened list
             DBG_ASSERT( nPos != CONTROLPOS_NOTFOUND, "setGroup - Element not found" );
             if ( nPos != CONTROLPOS_NOTFOUND )
             {
@@ -314,9 +312,8 @@ sal_Int32 StdTabControllerModel::getGroupCount(  ) throw(::com::sun::star::uno::
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
-    // erstmal nur eine Ebene...
-    // Das Model und die Impl-Methoden arbeiten zwar rekursiv, aber das wird
-    // erstmal nich nach aussen gegeben.
+    // Start with only one group layer, even though Model and Impl-methods
+    // work recursively, this is not presented to the outside.
 
     sal_Int32 nGroups = 0;
     size_t nEntries = maControls.size();
