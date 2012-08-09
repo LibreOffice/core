@@ -566,7 +566,20 @@ VmlCommentExporter::VmlCommentExporter( sax_fastparser::FSHelperPtr p, ScAddress
 void VmlCommentExporter::Commit( EscherPropertyContainer& rProps, const Rectangle& rRect )
 {
     lcl_FillProps( rProps, mpCaption, mbVisible );
-    rProps.AddOpt( ESCHER_Prop_fHidden, 1 );            // bool field
+    rProps.AddOpt( ESCHER_Prop_fHidden, mbVisible );            // bool field
+
+    // shadow property value for comment ( set in lcl_FillProps [*] ) has been
+    // overwritten by new value ( 0x20000 ) in the generic part of the export
+    // ( see  EscherPropertyContainer::CreateShadowProperties )
+    // Safer option here is to just force the needed value here for oox vml
+    // export alone ( and avoid potential problems with binary export )
+    // #TODO investigate value of ESCHER_Prop_fshadowObscured generally
+    // in binary export ( if indeed this value is good for binary export )
+    // we can change the heuristics and/or initialisation path and get
+    // rid of line below.
+    // [*] lcl_FillProps seems to be called twice when exporting to xlsx
+    // once from XclObjComment::ProcessEscherObj #TODO look into that also
+    rProps.AddOpt( ESCHER_Prop_fshadowObscured, 0x00030003 ); // force value for comments
 
     VMLExport::Commit( rProps, rRect );
 }
