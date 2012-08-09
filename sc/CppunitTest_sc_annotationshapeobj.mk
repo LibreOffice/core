@@ -122,9 +122,7 @@ $(eval $(call gb_CppunitTest_use_configuration,sc_annonationshapeobj))
 
 $(eval $(call gb_CppunitTest_use_filter_configuration,sc_annonationshapeobj))
 
-$(eval $(call gb_CppunitTest_use_extra_configuration,sc_annonationshapeobj,\
-    $(OUTDIR)/unittest/registry \
-))
+$(eval $(call gb_CppunitTest_use_unittest_configuration,sc_annonationshapeobj))
 
 # we need to
 # - explicitly depend on the sc resource files needed at unit-test runtime

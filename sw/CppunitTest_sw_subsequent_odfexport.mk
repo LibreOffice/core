@@ -91,8 +91,6 @@ $(eval $(call gb_CppunitTest_use_configuration,sw_subsequent_odfexport))
 
 $(eval $(call gb_CppunitTest_use_filter_configuration,sw_subsequent_odfexport))
 
-$(eval $(call gb_CppunitTest_use_extra_configuration,sw_subsequent_odfexport,\
-	$(OUTDIR)/unittest/registry \
-))
+$(eval $(call gb_CppunitTest_use_unittest_configuration,sw_subsequent_odfexport))
 
 # vim: set noet sw=4 ts=4:
