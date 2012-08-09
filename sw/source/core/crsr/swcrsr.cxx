@@ -57,6 +57,7 @@
 #include <mdiexp.hxx>
 #include <statstr.hrc>
 #include <redline.hxx>
+#include <xmloff/odffields.hxx>
 
 using namespace ::com::sun::star::i18n;
 
@@ -1341,8 +1342,8 @@ sal_Bool SwCursor::SelectWordWT( ViewShell* pViewShell, sal_Int16 nWordType, con
     {
         // Should we select the whole fieldmark?
         const IDocumentMarkAccess* pMarksAccess = GetDoc()->getIDocumentMarkAccess( );
-        sw::mark::IMark* pMark = GetPoint() ? pMarksAccess->getFieldmarkFor( *GetPoint( ) ) : NULL;
-        if ( pMark )
+        sw::mark::IFieldmark* pMark = GetPoint() ? pMarksAccess->getFieldmarkFor( *GetPoint( ) ) : NULL;
+        if ( pMark && pMark->GetFieldname() != ODF_COMMENTRANGE )
         {
             const SwPosition rStart = pMark->GetMarkStart();
             GetPoint()->nNode = rStart.nNode;
