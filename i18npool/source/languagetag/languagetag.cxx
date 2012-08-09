@@ -13,6 +13,8 @@
 #include <rtl/bootstrap.hxx>
 #include <osl/file.hxx>
 
+//#define erDEBUG
+
 #if !defined(ANDROID) && !defined(IOS)
 #include <liblangtag/langtag.h>
 #else
@@ -23,8 +25,6 @@
  */
 #include "simple-langtag.cxx"
 #endif
-
-//#define erDEBUG
 
 using rtl::OUString;
 using rtl::OString;

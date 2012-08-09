@@ -397,6 +397,7 @@ static void lt_tag_dump(const lt_tag_t *tag)
     fprintf( stderr, "SimpleLangtag   region: %s\n", tag->maRegion.mpStr);
 }
 #endif
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
