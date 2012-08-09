@@ -16,7 +16,6 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 from threading import RLock
-from threading import RLock
 from CGTopic import CGTopic
 from wizards.ui.ControlScroller import *
 from AgendaWizardDialogConst import LAST_HID

@@ -16,7 +16,6 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 from AgendaWizardDialog import *
-from AgendaWizardDialog import *
 from AgendaTemplate import *
 from CGAgenda import CGAgenda
 from wizards.ui.PathSelection import PathSelection

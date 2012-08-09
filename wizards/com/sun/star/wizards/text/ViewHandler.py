@@ -16,7 +16,6 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 class ViewHandler(object):
-class ViewHandler(object):
     '''Creates a new instance of View '''
 
     def __init__ (self, xMSF, xTextDocument):

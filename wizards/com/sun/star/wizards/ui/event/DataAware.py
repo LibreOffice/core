@@ -16,7 +16,6 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 import traceback
-import traceback
 from abc import ABCMeta, abstractmethod
 from wizards.common.PropertyNames import *
 from wizards.ui.event.CommonListener import *

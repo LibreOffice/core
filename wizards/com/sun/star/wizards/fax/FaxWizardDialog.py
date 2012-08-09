@@ -16,7 +16,6 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 import wizards.ui.UIConsts
-import wizards.ui.UIConsts
 from wizards.ui.WizardDialog import *
 from wizards.fax.FaxWizardDialogResources import FaxWizardDialogResources
 from wizards.fax.FaxWizardDialogConst import *

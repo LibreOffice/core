@@ -16,7 +16,6 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 class UIConsts():
-class UIConsts():
 
     RID_COMMON = 500
     RID_DB_COMMON = 1000

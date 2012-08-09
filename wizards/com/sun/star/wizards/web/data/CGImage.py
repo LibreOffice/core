@@ -16,7 +16,6 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 from common.ConfigGroup import ConfigGroup
-from common.ConfigGroup import ConfigGroup
 
 class CGImage(ConfigGroup):
     cp_Href = str()

@@ -16,7 +16,6 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 import traceback
-import traceback
 from common.Resource import Resource
 from common.Configuration import Configuration
 from common.Properties import Properties

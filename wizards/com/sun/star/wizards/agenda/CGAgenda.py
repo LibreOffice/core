@@ -16,7 +16,6 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 from wizards.common.ConfigGroup import ConfigGroup
-from wizards.common.ConfigGroup import ConfigGroup
 from wizards.common.ConfigSet import ConfigSet
 from CGTopic import CGTopic
 

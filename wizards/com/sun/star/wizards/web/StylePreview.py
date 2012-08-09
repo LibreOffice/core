@@ -16,7 +16,6 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 from common.FileAccess import FileAccess
-from common.FileAccess import FileAccess
 import traceback
 
 '''

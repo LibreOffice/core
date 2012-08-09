@@ -16,7 +16,6 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 from os import sep as separator
-from os import sep as separator
 from common.ConfigGroup import ConfigGroup
 from document.OfficeDocument import OfficeDocument
 from common.Properties import Properties

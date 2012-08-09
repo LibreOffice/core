@@ -16,7 +16,6 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 from wizards.common.Resource import Resource
-from wizards.common.Resource import Resource
 
 class FaxWizardDialogResources(Resource):
     MODULE_NAME = "dbw"

@@ -16,7 +16,6 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 import uno
-import uno
 import traceback
 import unohelper
 from wizards.ui.event.CommonListener import TerminateListenerProcAdapter

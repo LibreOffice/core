@@ -16,7 +16,6 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 import uno
-import uno
 import traceback
 import wizards.ui.UIConsts
 from wizards.common.PropertyNames import PropertyNames

@@ -16,7 +16,6 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 import uno
-import uno
 from TemplateConsts import *
 from threading import RLock
 from wizards.text.TextDocument import *

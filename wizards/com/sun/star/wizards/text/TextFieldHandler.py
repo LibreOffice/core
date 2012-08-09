@@ -16,7 +16,6 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 import traceback
-import traceback
 import time
 import unicodedata
 from wizards.common.PropertyNames import PropertyNames

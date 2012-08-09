@@ -16,7 +16,6 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 '''
-'''
 a document which will open in writer.
 '''
 WRITER_DOC = "writer"

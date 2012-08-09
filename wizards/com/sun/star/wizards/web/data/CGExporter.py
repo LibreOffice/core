@@ -16,7 +16,6 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 from common.ConfigSet import ConfigSet
-from common.ConfigSet import ConfigSet
 from CGArgument import CGArgument
 from common.ConfigGroup import ConfigGroup
 

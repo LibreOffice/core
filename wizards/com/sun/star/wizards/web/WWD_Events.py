@@ -16,7 +16,6 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 import traceback
-import traceback
 from common.Desktop import Desktop
 from WWD_Startup import *
 from BackgroundsDialog import BackgroundsDialog
