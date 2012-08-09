@@ -11,8 +11,6 @@ ScCompressedArray<int, unsigned short>::Remove(int, unsigned long)
 ScCompressedArray<int, unsigned short>::ScCompressedArray(int, unsigned short const&, unsigned long)
 ScCompressedArray<int, unsigned short>::ScCompressedArray(int, unsigned short const*, unsigned long)
 ScCompressedArray<int, unsigned short>::SetValue(int, unsigned short const&)
-ScDocument::GetFormattedAndUsedArea(short, short&, int&) const
-ScDocument::InitializeAllNoteCaptions(bool)
 ScTabView::HideCursor()
 ScVbaFormat<ooo::vba::excel::XRange>::setNumberFormat(com::sun::star::lang::Locale, rtl::OUString const&)
 ScVbaFormat<ooo::vba::excel::XStyle>::getAddIndent()

@@ -816,9 +816,6 @@ public:
     /** Creates the captions of all uninitialized cell notes in the specified sheet.
         @param bForced  True = always create all captions, false = skip when Undo is disabled. */
     void            InitializeNoteCaptions( SCTAB nTab, bool bForced = false );
-    /** Creates the captions of all uninitialized cell notes in all sheets.
-        @param bForced  True = always create all captions, false = skip when Undo is disabled. */
-    void            InitializeAllNoteCaptions( bool bForced = false );
 
     void            SetDrawPageSize(SCTAB nTab);
 
@@ -935,7 +932,6 @@ public:
                                     SCCOL& rEndCol, SCROW& rEndRow, bool bIncludeOld, bool bOnlyDown ) const;
     SC_DLLPUBLIC bool           GetCellArea( SCTAB nTab, SCCOL& rEndCol, SCROW& rEndRow ) const;
     SC_DLLPUBLIC bool           GetTableArea( SCTAB nTab, SCCOL& rEndCol, SCROW& rEndRow ) const;
-    SC_DLLPUBLIC void           GetFormattedAndUsedArea( SCTAB nTab, SCCOL& rEndCol, SCROW& rEndRow ) const;
     SC_DLLPUBLIC bool           GetPrintArea( SCTAB nTab, SCCOL& rEndCol, SCROW& rEndRow,
                                     bool bNotes = true ) const;
     SC_DLLPUBLIC bool           GetPrintAreaHor( SCTAB nTab, SCROW nStartRow, SCROW nEndRow,

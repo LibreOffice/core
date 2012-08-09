@@ -940,19 +940,6 @@ bool ScDocument::GetTableArea( SCTAB nTab, SCCOL& rEndCol, SCROW& rEndRow ) cons
     return false;
 }
 
-void ScDocument::GetFormattedAndUsedArea( SCTAB nTab, SCCOL& rEndCol, SCROW& rEndRow ) const
-{
-    if (VALIDTAB(nTab) && nTab < static_cast<SCTAB> (maTabs.size()))
-        if (maTabs[nTab])
-        {
-            maTabs[nTab]->GetPrintArea( rEndCol, rEndRow, true, true );
-            return;
-        }
-
-    rEndCol = 0;
-    rEndRow = 0;
-}
-
 bool ScDocument::ShrinkToDataArea(SCTAB nTab, SCCOL& rStartCol, SCROW& rStartRow, SCCOL& rEndCol, SCROW& rEndRow) const
 {
     if (!ValidTab(nTab) || nTab >= static_cast<SCTAB> (maTabs.size()) || !maTabs[nTab])
@@ -3264,12 +3251,6 @@ void ScDocument::InitializeNoteCaptions( SCTAB nTab, bool bForced )
 {
     if( ValidTab( nTab ) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[ nTab ] )
         maTabs[ nTab ]->InitializeNoteCaptions( bForced );
-}
-
-void ScDocument::InitializeAllNoteCaptions( bool bForced )
-{
-    for( SCTAB nTab = 0; nTab < static_cast<SCTAB>(maTabs.size()); ++nTab )
-        InitializeNoteCaptions( nTab, bForced );
 }
 
 void ScDocument::SetDirty()
