@@ -512,7 +512,6 @@ SbiExprNode* SbiExpression::Operand( bool bUsedForTypeOf )
                 }
             }
             nParenLevel--;
-            pRes->bComposite = sal_True;
             break;
         default:
             // keywords here are OK at the moment!

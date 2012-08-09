@@ -42,7 +42,6 @@ SbiExprNode::SbiExprNode( SbiParser* p, SbiExprNode* l, SbiToken t, SbiExprNode*
     nVal      = 0;
     eType     = SbxVARIANT;     // Nodes are always Variant
     eNodeType = SbxNODE;
-    bComposite= sal_True;
 }
 
 SbiExprNode::SbiExprNode( SbiParser* p, double n, SbxDataType t )
@@ -73,9 +72,6 @@ SbiExprNode::SbiExprNode( SbiParser* p, const SbiSymDef& r, SbxDataType t, SbiEx
     aVar.pPar = l;
     aVar.pvMorePar = NULL;
     aVar.pNext= NULL;
-
-    // Results of functions are at no time fixed
-    bComposite= sal_Bool( aVar.pDef->GetProcDef() != NULL );
 }
 
 // #120061 TypeOf
@@ -107,7 +103,6 @@ void SbiExprNode::BaseInit( SbiParser* p )
     pLeft       = NULL;
     pRight      = NULL;
     pWithParent = NULL;
-    bComposite  = sal_False;
     bError      = sal_False;
 }
 
@@ -222,7 +217,7 @@ void SbiExprNode::Optimize()
     CollectBits();
 }
 
-// Lifting of the composite- and error-bits
+// Lifting of the error-bits
 
 void SbiExprNode::CollectBits()
 {
@@ -230,13 +225,11 @@ void SbiExprNode::CollectBits()
     {
         pLeft->CollectBits();
         bError |= pLeft->bError;
-        bComposite |= pLeft->bComposite;
     }
     if( pRight )
     {
         pRight->CollectBits();
         bError |= pRight->bError;
-        bComposite |= pRight->bComposite;
     }
 }
 
@@ -267,7 +260,6 @@ void SbiExprNode::FoldConstants()
                 String rr( pRight->GetString() );
                 delete pLeft; pLeft = NULL;
                 delete pRight; pRight = NULL;
-                bComposite = sal_False;
                 if( eTok == PLUS || eTok == CAT )
                 {
                     eTok = CAT;
@@ -341,7 +333,6 @@ void SbiExprNode::FoldConstants()
                 nVal = 0;
                 eType = SbxDOUBLE;
                 eNodeType = SbxNUMVAL;
-                bComposite = sal_False;
                 sal_Bool bCheckType = sal_False;
                 switch( eTok )
                 {
@@ -431,7 +422,6 @@ void SbiExprNode::FoldConstants()
         pLeft = NULL;
         eType = SbxDOUBLE;
         eNodeType = SbxNUMVAL;
-        bComposite = sal_False;
         switch( eTok )
         {
             case NEG:

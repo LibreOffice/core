@@ -102,7 +102,6 @@ class SbiExprNode {                  // operators (and operands)
     SbiNodeType  eNodeType;
     SbxDataType eType;
     SbiToken     eTok;
-    sal_Bool  bComposite;               // sal_True: composite expression
     sal_Bool  bError;                   // sal_True: error
     void  FoldConstants();
     void  CollectBits();            // converting numbers to strings
