@@ -6830,7 +6830,10 @@ no|disable)
         dnl MinGW cross-compilation setups.)
         AC_MSG_RESULT([internal])
         enable_python=internal
-    elif test $_os = Darwin -a \( "$with_macosx_version_min_required" = 10.4 -o "$with_macosx_version_min_required" = 10.5 \); then
+    elif test $_os = Darwin -a \( "$with_macosx_version_min_required" = 10.4 -o "$with_macosx_version_min_required" = 10.5 \) \
+                            -a \( "$with_macosx_sdk" = 10.4 -o "$with_macosx_sdk" = 10.5 \); then
+        # When building against a more recent SDK the ionternal Python can't be compiled, I can't be bothered to fix that for now,
+        # building against a recent SDK is only for developer's own builds anyway.
         AC_MSG_RESULT([internal, the Python in Mac OS X $with_macosx_version_min_required is incompatible with Python3-ified pyuno])
         enable_python=internal
     else
