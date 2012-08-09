@@ -2688,8 +2688,8 @@ void CharAttribList::OptimizeRanges( SfxItemPool& rItemPool )
                 if (*rNext.GetItem() == *rAttr.GetItem())
                 {
                     rAttr.GetEnd() = rNext.GetEnd();
-                    aAttribs.erase(aAttribs.begin()+nNext);
                     rItemPool.Remove(*rNext.GetItem());
+                    aAttribs.erase(aAttribs.begin()+nNext);
                 }
                 break;  // only 1 attr with same which can start here.
             }
