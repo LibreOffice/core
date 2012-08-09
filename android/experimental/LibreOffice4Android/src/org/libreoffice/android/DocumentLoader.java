@@ -671,9 +671,9 @@ public class DocumentLoader
             progressView.setProgress( 10 );
 
             //flipper = new ViewFlipper(DocumentLoader.this);
-            //flipper = (ViewFlipper)findViewById( R.id.page_flipper );
-            //flipper.addView( waitView , 0 , matchParent);
-            //flipper.showNext();
+            ViewFlipper flipper = (ViewFlipper)findViewById( R.id.page_flipper );
+            flipper.addView( waitView , 0 , matchParent);
+            flipper.showNext();
             currentPage = 0;
     	}
         
