@@ -119,7 +119,7 @@ void FindTextFieldControl::Remember_Impl(const String& rStr)
 
 void FindTextFieldControl::SetTextToSelected_Impl()
 {
-    OUString aString;
+    rtl::OUString aString;
 
     try
     {
@@ -212,7 +212,7 @@ long FindTextFieldControl::PreNotify( NotifyEvent& rNEvt )
         case EVENT_GETFOCUS:
             if ( m_bToClearTextField )
             {
-                SetText( OUString() );
+                SetText( rtl::OUString() );
                 m_bToClearTextField = sal_False;
             }
             SetSelection( Selection( SELECTION_MIN, SELECTION_MAX ) );
@@ -257,21 +257,21 @@ SearchToolbarControllersManager& SearchToolbarControllersManager::createControll
     return theSearchToolbarControllersManager::get();
 }
 
-void SearchToolbarControllersManager::saveSearchHistory(const FindTextFieldControl* m_pFindTextFieldControl)
+void SearchToolbarControllersManager::saveSearchHistory(const FindTextFieldControl* pFindTextFieldControl)
 {
-    sal_uInt16 nECount( m_pFindTextFieldControl->GetEntryCount() );
-    aSearchStrings.resize( nECount );
+    sal_uInt16 nECount( pFindTextFieldControl->GetEntryCount() );
+    m_aSearchStrings.resize( nECount );
     for( sal_uInt16 i=0; i<nECount; ++i )
     {
-        aSearchStrings[i] = m_pFindTextFieldControl->GetEntry(i);
+        m_aSearchStrings[i] = pFindTextFieldControl->GetEntry(i);
     }
 }
 
-void SearchToolbarControllersManager::loadSearchHistory(FindTextFieldControl* m_pFindTextFieldControl)
+void SearchToolbarControllersManager::loadSearchHistory(FindTextFieldControl* pFindTextFieldControl)
 {
-    for( sal_uInt16 i=0; i<aSearchStrings.size(); ++i )
+    for( sal_uInt16 i=0; i<m_aSearchStrings.size(); ++i )
     {
-       m_pFindTextFieldControl->InsertEntry(aSearchStrings[i],i);
+        pFindTextFieldControl->InsertEntry(m_aSearchStrings[i],i);
     }
 }
 
