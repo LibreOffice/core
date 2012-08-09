@@ -65,6 +65,7 @@
 #include <unotools/localfilehelper.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/moduleoptions.hxx>
+#include <svtools/miscopt.hxx>
 #include <svtools/templdlg.hxx>
 #include <osl/file.hxx>
 #include <unotools/extendedsecurityoptions.hxx>
@@ -98,6 +99,7 @@
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/docfac.hxx>
 #include <sfx2/event.hxx>
+#include "templatedlg.hxx"
 #include "openuriexternally.hxx"
 
 using namespace ::com::sun::star;
@@ -563,22 +565,43 @@ void SfxApplication::NewDocExec_Impl( SfxRequest& rReq )
     SfxErrorContext aEc(ERRCTX_SFX_NEWDOC);
     if ( !pTemplNameItem && !pTemplFileNameItem )
     {
-        Window* pTopWin = GetTopWindow();
-        SvtDocumentTemplateDialog* pDocTemplDlg = new SvtDocumentTemplateDialog( NULL );
-        int nRet = pDocTemplDlg->Execute();
         sal_Bool bNewWin = sal_False;
-        if ( nRet == RET_OK )
+        Window* pTopWin = GetTopWindow();
+
+        SvtMiscOptions aMiscOptions;
+        if ( !aMiscOptions.IsExperimentalMode() )
         {
-            rReq.Done();
-            if ( pTopWin != GetTopWindow() )
+            SvtDocumentTemplateDialog* pDocTemplDlg = new SvtDocumentTemplateDialog( NULL );
+            int nRet = pDocTemplDlg->Execute();
+            if ( nRet == RET_OK )
             {
-                // the dialogue opens a document -> a new TopWindow appears
-                pTopWin = GetTopWindow();
-                bNewWin = sal_True;
+                rReq.Done();
+                if ( pTopWin != GetTopWindow() )
+                {
+                    // the dialogue opens a document -> a new TopWindow appears
+                    pTopWin = GetTopWindow();
+                    bNewWin = sal_True;
+                }
+            }
+
+            delete pDocTemplDlg;
+        }
+        else
+        {
+            SfxTemplateManagerDlg aTemplDlg(NULL);
+            int nRet = aTemplDlg.Execute();
+            if ( nRet == RET_OK )
+            {
+                rReq.Done();
+                if ( pTopWin != GetTopWindow() )
+                {
+                    // the dialogue opens a document -> a new TopWindow appears
+                    pTopWin = GetTopWindow();
+                    bNewWin = sal_True;
+                }
             }
         }
 
-        delete pDocTemplDlg;
         if ( bNewWin && pTopWin )
             // after the destruction of the dialogue its parent comes to top,
             // but we want that the new document is on top
