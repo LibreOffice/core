@@ -452,11 +452,6 @@ ThumbnailViewItem* ThumbnailView::ImplGetItem( size_t nPos )
     return ( nPos < mItemList.size() ) ? mItemList[nPos] : NULL;
 }
 
-ThumbnailViewItem* ThumbnailView::ImplGetFirstItem()
-{
-    return mItemList.empty() ? NULL : mItemList[0];
-}
-
 sal_uInt16 ThumbnailView::ImplGetVisibleItemCount() const
 {
     sal_uInt16 nRet = 0;

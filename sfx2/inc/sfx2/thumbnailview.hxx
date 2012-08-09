@@ -312,7 +312,6 @@ protected:
     SFX2_DLLPRIVATE bool         ImplScroll( const Point& rPos );
     SFX2_DLLPRIVATE size_t       ImplGetItem( const Point& rPoint, bool bMove = false ) const;
     SFX2_DLLPRIVATE ThumbnailViewItem*    ImplGetItem( size_t nPos );
-    SFX2_DLLPRIVATE ThumbnailViewItem*    ImplGetFirstItem();
     SFX2_DLLPRIVATE sal_uInt16          ImplGetVisibleItemCount() const;
     SFX2_DLLPRIVATE ThumbnailViewItem*    ImplGetVisibleItem( sal_uInt16 nVisiblePos );
     SFX2_DLLPRIVATE void         ImplInsertItem( ThumbnailViewItem *const pItem, const size_t nPos );

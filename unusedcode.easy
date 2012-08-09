@@ -29,7 +29,6 @@ SvxPositionSizeTabPage::GetRect()
 TempFile::IsValid() const
 TextEngine::GetLeftMargin() const
 ThumbnailView::GetItemCount() const
-ThumbnailView::ImplGetFirstItem()
 ThumbnailView::InsertItem(unsigned short, BitmapEx const&, rtl::OUString const&, unsigned long)
 ThumbnailView::LinkStubImplTimerHdl(void*, void*)
 ThumbnailView::SetColCount(unsigned short)
