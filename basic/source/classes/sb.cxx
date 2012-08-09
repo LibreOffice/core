@@ -230,10 +230,9 @@ SbxObject* StarBASIC::getVBAGlobals( )
 }
 
 //  i#i68894#
-SbxVariable* StarBASIC::VBAFind( const String& rName, SbxClassType t )
+SbxVariable* StarBASIC::VBAFind( const rtl::OUString& rName, SbxClassType t )
 {
-    const static String aThisComponent( RTL_CONSTASCII_USTRINGPARAM("ThisComponent") );
-    if( rName == aThisComponent )
+    if( rName == "ThisComponent" )
         return NULL;
     // rename to init globals
     if ( getVBAGlobals( ) )
@@ -778,15 +777,13 @@ SbxVariable* SbClassModuleObject::Find( const rtl::OUString& rName, SbxClassType
 
 void SbClassModuleObject::triggerInitializeEvent( void )
 {
-    static String aInitMethodName( RTL_CONSTASCII_USTRINGPARAM("Class_Initialize") );
-
     if( mbInitializeEventDone )
         return;
 
     mbInitializeEventDone = true;
 
     // Search method
-    SbxVariable* pMeth = SbxObject::Find( aInitMethodName, SbxCLASS_METHOD );
+    SbxVariable* pMeth = SbxObject::Find(rtl::OUString("Class_Initialize"), SbxCLASS_METHOD);
     if( pMeth )
     {
         SbxValues aVals;
@@ -796,13 +793,11 @@ void SbClassModuleObject::triggerInitializeEvent( void )
 
 void SbClassModuleObject::triggerTerminateEvent( void )
 {
-    static String aTermMethodName( RTL_CONSTASCII_USTRINGPARAM("Class_Terminate") );
-
     if( !mbInitializeEventDone || GetSbData()->bRunInit )
         return;
 
     // Search method
-    SbxVariable* pMeth = SbxObject::Find( aTermMethodName, SbxCLASS_METHOD );
+    SbxVariable* pMeth = SbxObject::Find( rtl::OUString("Class_Terminate"), SbxCLASS_METHOD );
     if( pMeth )
     {
         SbxValues aVals;
@@ -1264,8 +1259,6 @@ void StarBASIC::DeInitAllModules( void )
 // If this fails again a conventional search over objects is performend.
 SbxVariable* StarBASIC::Find( const rtl::OUString& rName, SbxClassType t )
 {
-    static String aMainStr( RTL_CONSTASCII_USTRINGPARAM("Main") );
-
     SbxVariable* pRes = NULL;
     SbModule* pNamed = NULL;
     // "Extended" search in Runtime Lib
@@ -1314,6 +1307,7 @@ SbxVariable* StarBASIC::Find( const rtl::OUString& rName, SbxClassType t )
                 break;
         }
     }
+    rtl::OUString aMainStr("Main");
     if( !pRes && pNamed && ( t == SbxCLASS_METHOD || t == SbxCLASS_DONTCARE ) &&
         !pNamed->GetName().EqualsIgnoreCaseAscii( aMainStr ) )
             pRes = pNamed->Find( aMainStr, SbxCLASS_METHOD );

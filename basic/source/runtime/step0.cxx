@@ -30,6 +30,7 @@
 #include "image.hxx"
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/util/SearchOptions.hpp>
+#include <rtl/instance.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/textsearch.hxx>
 
@@ -459,13 +460,14 @@ struct SbxVariablePtrHash
 typedef boost::unordered_map< SbxVariable*, DimAsNewRecoverItem,
                               SbxVariablePtrHash >  DimAsNewRecoverHash;
 
-static DimAsNewRecoverHash      GaDimAsNewRecoverHash;
+class GaDimAsNewRecoverHash : public rtl::Static<DimAsNewRecoverHash, GaDimAsNewRecoverHash> {};
 
 void removeDimAsNewRecoverItem( SbxVariable* pVar )
 {
-    DimAsNewRecoverHash::iterator it = GaDimAsNewRecoverHash.find( pVar );
-    if( it != GaDimAsNewRecoverHash.end() )
-        GaDimAsNewRecoverHash.erase( it );
+    DimAsNewRecoverHash &rDimAsNewRecoverHash = GaDimAsNewRecoverHash::get();
+    DimAsNewRecoverHash::iterator it = rDimAsNewRecoverHash.find( pVar );
+    if( it != rDimAsNewRecoverHash.end() )
+        rDimAsNewRecoverHash.erase( it );
 }
 
 
@@ -620,8 +622,9 @@ void SbiRuntime::StepSET_Impl( SbxVariableRef& refVal, SbxVariableRef& refVar, b
                     if( xPrevVarObj.Is() )
                     {
                         // Object is overwritten with NULL, instantiate init object
-                        DimAsNewRecoverHash::iterator it = GaDimAsNewRecoverHash.find( refVar );
-                        if( it != GaDimAsNewRecoverHash.end() )
+                        DimAsNewRecoverHash &rDimAsNewRecoverHash = GaDimAsNewRecoverHash::get();
+                        DimAsNewRecoverHash::iterator it = rDimAsNewRecoverHash.find( refVar );
+                        if( it != rDimAsNewRecoverHash.end() )
                         {
                             const DimAsNewRecoverItem& rItem = it->second;
                             if( rItem.m_pClassModule != NULL )
@@ -654,15 +657,16 @@ void SbiRuntime::StepSET_Impl( SbxVariableRef& refVal, SbxVariableRef& refVar, b
                             String aObjClass = pValObj->GetClassName();
 
                             SbClassModuleObject* pClassModuleObj = PTR_CAST(SbClassModuleObject,pValObjBase);
+                            DimAsNewRecoverHash &rDimAsNewRecoverHash = GaDimAsNewRecoverHash::get();
                             if( pClassModuleObj != NULL )
                             {
                                 SbModule* pClassModule = pClassModuleObj->getClassModule();
-                                GaDimAsNewRecoverHash[refVar] =
+                                rDimAsNewRecoverHash[refVar] =
                                     DimAsNewRecoverItem( aObjClass, pValObj->GetName(), pValObj->GetParent(), pClassModule );
                             }
                             else if( aObjClass.EqualsIgnoreCaseAscii( "Collection" ) )
                             {
-                                GaDimAsNewRecoverHash[refVar] =
+                                rDimAsNewRecoverHash[refVar] =
                                     DimAsNewRecoverItem( aObjClass, pValObj->GetName(), pValObj->GetParent(), NULL );
                             }
                         }

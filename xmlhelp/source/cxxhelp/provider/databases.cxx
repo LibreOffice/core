@@ -82,8 +82,6 @@ using namespace com::sun::star::deployment;
 using namespace com::sun::star::beans;
 
 
-static rtl::OUString aSlash("/");
-
 rtl::OUString Databases::expandURL( const rtl::OUString& aURL )
 {
     osl::MutexGuard aGuard( m_aMutex );
@@ -600,7 +598,7 @@ Db* Databases::getBerkeley( const rtl::OUString& Database,
 
 
     rtl::OUString aFileExt( helpText ? rtl::OUString(".ht") : rtl::OUString(".db") );
-    rtl::OUString dbFileName = aSlash + Database + aFileExt;
+    rtl::OUString dbFileName = rtl::OUStringBuffer().append('/').append(Database).append(aFileExt).makeStringAndClear();
     rtl::OUString key;
     if( pExtensionPath == NULL )
         key = processLang( Language ) + dbFileName;
@@ -1027,7 +1025,7 @@ Reference< XHierarchicalNameAccess > Databases::jarFile( const rtl::OUString& ja
     {
         return Reference< XHierarchicalNameAccess >( 0 );
     }
-    rtl::OUString key = processLang(Language) + aSlash + jar;
+    rtl::OUString key = rtl::OUStringBuffer(processLang(Language)).append('/').append(jar).makeStringAndClear();
 
     osl::MutexGuard aGuard( m_aMutex );
 
@@ -1049,7 +1047,7 @@ Reference< XHierarchicalNameAccess > Databases::jarFile( const rtl::OUString& ja
 
                 rtl::OUStringBuffer aStrBuf;
                 aStrBuf.append( aExtensionPath );
-                aStrBuf.append( aSlash );
+                aStrBuf.append( '/' );
                 aStrBuf.append( aPureJar );
 
                 zipFile = expandURL( aStrBuf.makeStringAndClear() );
@@ -1618,11 +1616,11 @@ rtl::OUString ExtensionIteratorBase::implGetFileFromPackage(
     {
         rtl::OUStringBuffer aStrBuf;
         aStrBuf.append( xPackage->getRegistrationDataURL().Value);
-        aStrBuf.append( aSlash );
+        aStrBuf.append( '/' );
         aStrBuf.append( aLanguage );
         if( !bLangFolderOnly )
         {
-            aStrBuf.append( aSlash );
+            aStrBuf.append( '/' );
             aStrBuf.append( "help" );
             aStrBuf.append( rFileExtension );
         }
@@ -1765,8 +1763,7 @@ Db* DataBaseIterator::implGetDbFromPackage( Reference< deployment::XPackage > xP
     Db* pRetDb = NULL;
     if (optRegData.IsPresent && !optRegData.Value.isEmpty())
     {
-        rtl::OUString aRegDataUrl(optRegData.Value);
-        aRegDataUrl += aSlash;
+        rtl::OUString aRegDataUrl = rtl::OUStringBuffer(optRegData.Value).append('/').makeStringAndClear();
 
         rtl::OUString aHelpFilesBaseName("help");
 
@@ -1798,7 +1795,7 @@ Db* DataBaseIterator::implGetDbFromPackage( Reference< deployment::XPackage > xP
             *o_pExtensionPath = aRegDataUrl + aUsedLanguage;
 
         if( o_pExtensionRegistryPath )
-            *o_pExtensionRegistryPath = xPackage->getURL() + aSlash + aUsedLanguage;
+            *o_pExtensionRegistryPath = rtl::OUStringBuffer(xPackage->getURL()).append('/').append(aUsedLanguage).makeStringAndClear();
     }
 
     return pRetDb;
@@ -1818,10 +1815,9 @@ rtl::OUString KeyDataBaseFileIterator::nextDbFile( bool& o_rbExtension )
         switch( m_eState )
         {
             case INITIAL_MODULE:
-                aRetFile =
-                    m_rDatabases.getInstallPathAsURL() +
-                    m_rDatabases.processLang( m_aLanguage ) + aSlash + m_aInitialModule +
-                    rtl::OUString( ".key" );
+                aRetFile = rtl::OUStringBuffer(m_rDatabases.getInstallPathAsURL()).
+                    append(m_rDatabases.processLang(m_aLanguage)).append('/').
+                    append(m_aInitialModule).append(".key").makeStringAndClear();
 
                 o_rbExtension = false;
 
@@ -2022,10 +2018,9 @@ rtl::OUString IndexFolderIterator::nextIndexFolder( bool& o_rbExtension, bool& o
         switch( m_eState )
         {
             case INITIAL_MODULE:
-                aIndexFolder =
-                    m_rDatabases.getInstallPathAsURL() +
-                    m_rDatabases.processLang( m_aLanguage ) + aSlash + m_aInitialModule +
-                    rtl::OUString( ".idxl" );
+                aIndexFolder = rtl::OUStringBuffer(m_rDatabases.getInstallPathAsURL()).
+                    append(m_rDatabases.processLang(m_aLanguage)).append('/').
+                    append(m_aInitialModule).append(".idxl").makeStringAndClear();
 
                 o_rbTemporary = false;
                 o_rbExtension = false;

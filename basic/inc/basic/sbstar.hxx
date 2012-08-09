@@ -172,7 +172,7 @@ public:
 
     SbxObjectRef getRTL( void ) { return pRtl; }
     sal_Bool IsDocBasic() { return bDocBasic; }
-    SbxVariable* VBAFind( const String& rName, SbxClassType t );
+    SbxVariable* VBAFind( const rtl::OUString& rName, SbxClassType t );
     bool GetUNOConstant( const sal_Char* _pAsciiName, ::com::sun::star::uno::Any& aOut );
     void QuitAndExitApplication();
     sal_Bool IsQuitApplication() { return bQuit; };

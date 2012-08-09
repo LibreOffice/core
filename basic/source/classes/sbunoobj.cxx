@@ -30,8 +30,9 @@
 #include <comphelper/extract.hxx>
 #include <comphelper/processfactory.hxx>
 
-#include <rtl/ustrbuf.hxx>
+#include <rtl/instance.hxx>
 #include <rtl/strbuf.hxx>
+#include <rtl/ustrbuf.hxx>
 
 #include <com/sun/star/script/ArrayWrapper.hpp>
 #include <com/sun/star/script/NativeObjectWrapper.hpp>
@@ -530,31 +531,34 @@ struct ObjectItem
         : m_xNativeObj( pNativeObj )
     {}
 };
-static std::vector< ObjectItem >    GaNativeObjectWrapperVector;
+
+typedef std::vector< ObjectItem > NativeObjectWrapperVector;
+class GaNativeObjectWrapperVector : public rtl::Static<NativeObjectWrapperVector, GaNativeObjectWrapperVector> {};
 
 void clearNativeObjectWrapperVector( void )
 {
-    GaNativeObjectWrapperVector.clear();
+    GaNativeObjectWrapperVector::get().clear();
 }
 
 sal_uInt32 lcl_registerNativeObjectWrapper( SbxObject* pNativeObj )
 {
-    sal_uInt32 nIndex = GaNativeObjectWrapperVector.size();
-    GaNativeObjectWrapperVector.push_back( ObjectItem( pNativeObj ) );
+    NativeObjectWrapperVector &rNativeObjectWrapperVector = GaNativeObjectWrapperVector::get();
+    sal_uInt32 nIndex = rNativeObjectWrapperVector.size();
+    rNativeObjectWrapperVector.push_back( ObjectItem( pNativeObj ) );
     return nIndex;
 }
 
 SbxObject* lcl_getNativeObject( sal_uInt32 nIndex )
 {
     SbxObjectRef xRetObj;
-    if( nIndex < GaNativeObjectWrapperVector.size() )
+    NativeObjectWrapperVector &rNativeObjectWrapperVector = GaNativeObjectWrapperVector::get();
+    if( nIndex < rNativeObjectWrapperVector.size() )
     {
-        ObjectItem& rItem = GaNativeObjectWrapperVector[ nIndex ];
+        ObjectItem& rItem = rNativeObjectWrapperVector[ nIndex ];
         xRetObj = rItem.m_xNativeObj;
     }
     return xRetObj;
 }
-
 
 // convert from Uno to Sbx
 SbxDataType unoToSbxType( TypeClass eType )

@@ -31,7 +31,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XTitle.hpp>
 #include <osl/mutex.hxx>
-
+#include <rtl/instance.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/svapp.hxx>
@@ -115,7 +115,7 @@ DBG_NAME(SfxObjectShell)
 
 namespace {
 
-static WeakReference< XInterface > s_xCurrentComponent;
+class theCurrentComponent : public rtl::Static< WeakReference< XInterface >, theCurrentComponent > {};
 
 #ifndef DISABLE_SCRIPTING
 
@@ -932,7 +932,9 @@ sal_uInt16 SfxObjectShell::GetAutoStyleFilterIndex()
 
 void SfxObjectShell::SetCurrentComponent( const Reference< XInterface >& _rxComponent )
 {
-    Reference< XInterface > xOldCurrentComp(s_xCurrentComponent);
+    WeakReference< XInterface >& rTheCurrentComponent = theCurrentComponent::get();
+
+    Reference< XInterface > xOldCurrentComp(rTheCurrentComponent);
     if ( _rxComponent == xOldCurrentComp )
         // nothing to do
         return;
@@ -943,7 +945,7 @@ void SfxObjectShell::SetCurrentComponent( const Reference< XInterface >& _rxComp
 
 #ifndef DISABLE_SCRIPTING
     BasicManager* pAppMgr = SFX_APP()->GetBasicManager();
-    s_xCurrentComponent = _rxComponent;
+    rTheCurrentComponent = _rxComponent;
     if ( pAppMgr )
     {
         // set "ThisComponent" for Basic
@@ -975,7 +977,7 @@ void SfxObjectShell::SetCurrentComponent( const Reference< XInterface >& _rxComp
 
 Reference< XInterface > SfxObjectShell::GetCurrentComponent()
 {
-    return s_xCurrentComponent;
+    return theCurrentComponent::get();
 }
 
 
