@@ -38,22 +38,23 @@
 
 #include <vector>
 
+
 class GtkSalMenuItem;
-class GtkSalMenuSection;
+
+typedef std::vector< GtkSalMenuItem* > GtkSalMenuSection;
 
 class GtkSalMenu : public SalMenu
 {
 private:
-//    static GLOActionGroup*  pCurrentActionGroup;
     sal_Bool                mbMenuBar;
 
     virtual void publishMenu( GMenuModel*, GActionGroup* );
 
+    GtkSalMenuItem* GetSalMenuItem( sal_uInt16 nId );
+
 public:
     std::vector< GtkSalMenuSection* >       maSections;
-    std::vector< GtkSalMenuItem* >          maItems;
     GtkSalMenuSection*                      mpCurrentSection;
-    GActionEntry*                           mpActionEntry;
 
     Menu*                   mpVCLMenu;
     GtkSalMenu*             mpParentSalMenu;
@@ -85,16 +86,6 @@ public:
     virtual void Freeze();
 
     virtual const GtkSalFrame* getFrame() const;
-};
-
-class GtkSalMenuItem;
-
-class GtkSalMenuSection
-{
-public:
-    std::vector< GtkSalMenuItem* >          maItems;
-
-    virtual ~GtkSalMenuSection();
 };
 
 class GtkSalMenuItem : public SalMenuItem
