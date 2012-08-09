@@ -70,6 +70,7 @@ private:
 
     String              aStrDateInfo;
 
+    FixedLine           aExperimentalFL;
     CheckBox            aExperimentalCB;
     CheckBox            aMacroRecorderCB;
 

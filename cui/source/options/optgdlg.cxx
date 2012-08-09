@@ -213,6 +213,7 @@ OfaMiscTabPage::OfaMiscTabPage(Window* pParent, const SfxItemSet& rSet ) :
     aInterpretFT        ( this, CUI_RES( FT_INTERPRET ) ),
     aYearValueField     ( this, CUI_RES( NF_YEARVALUE ) ),
     aToYearFT           ( this, CUI_RES( FT_TOYEAR ) ),
+    aExperimentalFL     ( this, CUI_RES( FL_EXPERIMENTAL ) ),
     aExperimentalCB     ( this, CUI_RES( CB_EXPERIMENTAL ) ),
     aMacroRecorderCB    ( this, CUI_RES( CB_MACRORECORDER ) )
 {
@@ -244,7 +245,7 @@ OfaMiscTabPage::OfaMiscTabPage(Window* pParent, const SfxItemSet& rSet ) :
         Window* pWins[] =
         {
             &aPrintDlgFL, &aPrintDlgCB, &aDocStatusFL, &aDocStatusCB, &aSaveAlwaysCB,
-            &aTwoFigureFL, &aInterpretFT, &aYearValueField, &aToYearFT, &aExperimentalCB, &aMacroRecorderCB
+            &aTwoFigureFL, &aInterpretFT, &aYearValueField, &aToYearFT, &aExperimentalFL, &aExperimentalCB, &aMacroRecorderCB
         };
         Window** pCurrent = pWins;
         const sal_Int32 nCount = SAL_N_ELEMENTS( pWins );
@@ -265,7 +266,7 @@ OfaMiscTabPage::OfaMiscTabPage(Window* pParent, const SfxItemSet& rSet ) :
         Window* pWins[] =
         {
             &aPrintDlgFL, &aPrintDlgCB, &aDocStatusFL, &aDocStatusCB, &aSaveAlwaysCB,
-            &aTwoFigureFL, &aInterpretFT, &aYearValueField, &aToYearFT, &aExperimentalCB, &aMacroRecorderCB
+            &aTwoFigureFL, &aInterpretFT, &aYearValueField, &aToYearFT, &aExperimentalFL, &aExperimentalCB, &aMacroRecorderCB
         };
         Window** pCurrent = pWins;
         const sal_Int32 nCount = SAL_N_ELEMENTS( pWins );
@@ -291,7 +292,7 @@ OfaMiscTabPage::OfaMiscTabPage(Window* pParent, const SfxItemSet& rSet ) :
         Window* pWins[] =
         {
             &aDocStatusFL, &aDocStatusCB, &aSaveAlwaysCB, &aTwoFigureFL,
-            &aInterpretFT, &aYearValueField, &aToYearFT, &aExperimentalCB, &aMacroRecorderCB
+            &aInterpretFT, &aYearValueField, &aToYearFT, &aExperimentalFL, &aExperimentalCB, &aMacroRecorderCB
         };
         Window** pCurrent = pWins;
         const sal_Int32 nCount = SAL_N_ELEMENTS( pWins );
