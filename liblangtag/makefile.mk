@@ -60,6 +60,10 @@ my_data = $(my_install)$/share$/liblangtag
 
 CONFIGURE_FLAGS+= --prefix='/$(my_prefix)' --libdir='/$(my_prefix)/lib'
 
+# g-ir-scanner is dumb enough to turn CC=ccache gcc into trying
+# to execve an app literal of "ccache gcc" including the space.
+CONFIGURE_FLAGS+= --disable-introspection
+
 .IF "$(SYSTEM_LIBXML)"!="YES"
 CONFIGURE_FLAGS+= LIBXML2_CFLAGS='-I$(SOLARINCDIR)$/external'
 .IF "$(GUI)"=="WNT" && "$(COM)"!="GCC"
