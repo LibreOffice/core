@@ -8041,17 +8041,12 @@ void ScInterpreter::ScRept()
             PushString( EMPTY_STRING );
         else
         {
-            xub_StrLen n = (xub_StrLen) fAnz;
             const xub_StrLen nLen = aStr.Len();
-            String aRes;
-            const sal_Unicode* const pSrc = aStr.GetBuffer();
-            sal_Unicode* pDst = aRes.AllocBuffer( n * nLen );
+            xub_StrLen n = (xub_StrLen) fAnz;
+            rtl::OUStringBuffer aRes(n*nLen);
             while( n-- )
-            {
-                memcpy( pDst, pSrc, nLen * sizeof(sal_Unicode) );
-                pDst += nLen;
-            }
-            PushString( aRes );
+                aRes.append(aStr);
+            PushString( aRes.makeStringAndClear() );
         }
     }
 }
