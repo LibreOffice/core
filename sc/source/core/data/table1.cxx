@@ -1182,7 +1182,7 @@ void ScTable::FindAreaPos( SCCOL& rCol, SCROW& rRow, ScMoveDirection eDirection 
 }
 
 bool ScTable::ValidNextPos( SCCOL nCol, SCROW nRow, const ScMarkData& rMark,
-                                bool bMarked, bool bUnprotected )
+                                bool bMarked, bool bUnprotected ) const
 {
     if (!ValidCol(nCol) || !ValidRow(nRow))
         return false;
@@ -1215,7 +1215,7 @@ bool ScTable::ValidNextPos( SCCOL nCol, SCROW nRow, const ScMarkData& rMark,
 }
 
 void ScTable::GetNextPos( SCCOL& rCol, SCROW& rRow, SCsCOL nMovX, SCsROW nMovY,
-                                bool bMarked, bool bUnprotected, const ScMarkData& rMark )
+                                bool bMarked, bool bUnprotected, const ScMarkData& rMark ) const
 {
     if (bUnprotected && !IsProtected())     // Tabelle ueberhaupt geschuetzt?
         bUnprotected = false;

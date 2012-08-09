@@ -5310,7 +5310,7 @@ SCSIZE ScDocument::GetEmptyLinesInBlock( SCCOL nStartCol, SCROW nStartRow, SCTAB
 }
 
 
-void ScDocument::FindAreaPos( SCCOL& rCol, SCROW& rRow, SCTAB nTab, ScMoveDirection eDirection )
+void ScDocument::FindAreaPos( SCCOL& rCol, SCROW& rRow, SCTAB nTab, ScMoveDirection eDirection ) const
 {
     if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
         maTabs[nTab]->FindAreaPos( rCol, rRow, eDirection );
@@ -5318,7 +5318,7 @@ void ScDocument::FindAreaPos( SCCOL& rCol, SCROW& rRow, SCTAB nTab, ScMoveDirect
 
 
 void ScDocument::GetNextPos( SCCOL& rCol, SCROW& rRow, SCTAB nTab, SCsCOL nMovX, SCsROW nMovY,
-                                bool bMarked, bool bUnprotected, const ScMarkData& rMark )
+                                bool bMarked, bool bUnprotected, const ScMarkData& rMark ) const
 {
     OSL_ENSURE( !nMovX || !nMovY, "GetNextPos: nur X oder Y" );
 

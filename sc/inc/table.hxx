@@ -426,7 +426,7 @@ public:
 
     void        FindAreaPos( SCCOL& rCol, SCROW& rRow, ScMoveDirection eDirection ) const;
     void        GetNextPos( SCCOL& rCol, SCROW& rRow, SCsCOL nMovX, SCsROW nMovY,
-                                bool bMarked, bool bUnprotected, const ScMarkData& rMark );
+                                bool bMarked, bool bUnprotected, const ScMarkData& rMark ) const;
 
     void        LimitChartArea( SCCOL& rStartCol, SCROW& rStartRow, SCCOL& rEndCol, SCROW& rEndRow );
 
@@ -813,7 +813,7 @@ private:
                         sal_uLong nFillCount, FillDir eFillDir, ScProgress* pProgress );
 
     bool        ValidNextPos( SCCOL nCol, SCROW nRow, const ScMarkData& rMark,
-                                bool bMarked, bool bUnprotected );
+                                bool bMarked, bool bUnprotected ) const;
 
     void        AutoFormatArea(SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
                                 const ScPatternAttr& rAttr, sal_uInt16 nFormatNo);
