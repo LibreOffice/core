@@ -63,6 +63,7 @@
 #include <svtools/colorcfg.hxx>
 #include <vcl/svapp.hxx>
 #include <svx/sdrpaintwindow.hxx>
+#include <svx/sdrundomanager.hxx>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -87,7 +88,8 @@ void SdrObjEditView::ImpClearVars()
 }
 
 SdrObjEditView::SdrObjEditView(SdrModel* pModel1, OutputDevice* pOut):
-    SdrGlueEditView(pModel1,pOut)
+    SdrGlueEditView(pModel1,pOut),
+    mpOldTextEditUndoManager(0)
 {
     ImpClearVars();
 }
@@ -95,8 +97,10 @@ SdrObjEditView::SdrObjEditView(SdrModel* pModel1, OutputDevice* pOut):
 SdrObjEditView::~SdrObjEditView()
 {
     pTextEditWin = NULL;            // so there's no ShowCursor in SdrEndTextEdit
-    if (IsTextEdit()) SdrEndTextEdit();
+    if (IsTextEdit())
+        SdrEndTextEdit();
     delete pTextEditOutliner;
+    delete mpOldTextEditUndoManager;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -516,6 +520,12 @@ IMPL_LINK(SdrObjEditView,ImpOutlinerCalcFieldValueHdl,EditFieldInfo*,pFI)
     return 0;
 }
 
+IMPL_LINK(SdrObjEditView, EndTextEditHdl, SdrUndoManager*, /*pUndoManager*/)
+{
+    SdrEndTextEdit();
+    return 0;
+}
+
 sal_Bool SdrObjEditView::SdrBeginTextEdit(
     SdrObject* pObj, SdrPageView* pPV, Window* pWin,
     sal_Bool bIsNewObj, SdrOutliner* pGivenOutliner,
@@ -742,6 +752,31 @@ sal_Bool SdrObjEditView::SdrBeginTextEdit(
             if( mxSelectionController.is() )
                 mxSelectionController->onSelectionHasChanged();
 
+            if(IsUndoEnabled())
+            {
+                SdrUndoManager* pSdrUndoManager = dynamic_cast< SdrUndoManager* >(GetModel()->GetSdrUndoManager());
+
+                if(pSdrUndoManager)
+                {
+                    // we have an outliner, undo manager and it's an EditUndoManager, exchange
+                    // the document undo manager and the default one from the outliner and tell
+                    // it that text edit starts by setting a callback if it needs to end text edit mode.
+                    if(mpOldTextEditUndoManager)
+                    {
+                        // should not happen, delete it
+                        delete mpOldTextEditUndoManager;
+                        mpOldTextEditUndoManager = 0;
+                    }
+
+                    mpOldTextEditUndoManager = pTextEditOutliner->SetUndoManager(pSdrUndoManager);
+                    pSdrUndoManager->SetEndTextEditHdl(LINK(this, SdrObjEditView, EndTextEditHdl));
+                }
+                else
+                {
+                    OSL_ENSURE(false, "The document undo manager is not derived from SdrUndoManager (!)");
+                }
+            }
+
             return sal_True; // ran fine, let TextEdit run now
         }
         else
@@ -795,6 +830,42 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(sal_Bool bDontDeleteReally)
     SdrOutliner*  pTEOutliner    =pTextEditOutliner;
     OutlinerView* pTEOutlinerView=pTextEditOutlinerView;
     Cursor*       pTECursorMerker=pTextEditCursorMerker;
+    SdrUndoManager* pExtraUndoEditUndoManager = 0;
+
+    if(IsUndoEnabled() && GetModel() && pTEObj && pTEOutliner)
+    {
+        // change back the UndoManager to the remembered original one
+        ::svl::IUndoManager* pOriginal = pTEOutliner->SetUndoManager(mpOldTextEditUndoManager);
+        mpOldTextEditUndoManager = 0;
+
+        if(pOriginal)
+        {
+            // check if we got back our document undo manager
+            SdrUndoManager* pSdrUndoManager = dynamic_cast< SdrUndoManager* >(GetModel()->GetSdrUndoManager());
+
+            if(pSdrUndoManager && dynamic_cast< SdrUndoManager* >(pOriginal) == pSdrUndoManager)
+            {
+                // We are ending text edit; execute all redos to create a complete text change
+                // undo action for the redo buffer. Also mark this state when at least one redo was
+                // executed; the created TextChange needs to be undone plus the first real undo
+                // outside the text edit changes
+                while(pSdrUndoManager->GetRedoActionCount())
+                {
+                    pExtraUndoEditUndoManager = pSdrUndoManager;
+                    pSdrUndoManager->Redo();
+                }
+
+                // reset the callback link and let the undo manager cleanup all text edit
+                // undo actions to get the stack back to the form before the text edit
+                pSdrUndoManager->SetEndTextEditHdl(Link());
+            }
+            else
+            {
+                OSL_ENSURE(false, "´Got UndoManager back in SdrEndTextEdit which is NOT the expected document UndoManager (!)");
+                delete pOriginal;
+            }
+        }
+    }
 
     if( GetModel() && mxTextEditObj.is() )
     {
@@ -986,6 +1057,14 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(sal_Bool bDontDeleteReally)
         SdrHint aHint(HINT_ENDEDIT);
         aHint.SetObject(pTEObj);
         ((SfxBroadcaster*)pTEObj->GetBroadcaster())->Broadcast(aHint);
+    }
+
+    if(pExtraUndoEditUndoManager)
+    {
+        // undo the text edit action since it was created as part of a EndTextEdit
+        // callback from undo itself. This needs to be done after the call to
+        // FmFormView::SdrEndTextEdit since it gets created there
+        pExtraUndoEditUndoManager->Undo();
     }
 
     return eRet;

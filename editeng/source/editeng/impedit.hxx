@@ -681,6 +681,7 @@ public:
                             ~ImpEditEngine();
 
     inline EditUndoManager& GetUndoManager();
+    inline ::svl::IUndoManager* SetUndoManager(::svl::IUndoManager* pNew);
 
     void                    SetUpdateMode( bool bUp, EditView* pCurView = 0, sal_Bool bForceUpdate = sal_False );
     bool                    GetUpdateMode() const   { return bUpdate; }
@@ -1072,8 +1073,30 @@ inline void ImpEditEngine::IdleFormatAndUpdate( EditView* pCurView )
 inline EditUndoManager& ImpEditEngine::GetUndoManager()
 {
     if ( !pUndoManager )
-        pUndoManager = new EditUndoManager(pEditEngine);
+    {
+        pUndoManager = new EditUndoManager();
+        pUndoManager->SetEditEngine(pEditEngine);
+    }
     return *pUndoManager;
+}
+
+inline ::svl::IUndoManager* ImpEditEngine::SetUndoManager(::svl::IUndoManager* pNew)
+{
+    ::svl::IUndoManager* pRetval = pUndoManager;
+
+    if(pUndoManager)
+    {
+        pUndoManager->SetEditEngine(0);
+    }
+
+    pUndoManager = dynamic_cast< EditUndoManager* >(pNew);
+
+    if(pUndoManager)
+    {
+        pUndoManager->SetEditEngine(pEditEngine);
+    }
+
+    return pRetval;
 }
 
 inline const ParaPortion* ImpEditEngine::FindParaPortion( const ContentNode* pNode ) const

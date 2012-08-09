@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "undo/undomanager.hxx"
+#include <undo/undomanager.hxx>
 
 using namespace sd;
 
 UndoManager::UndoManager( sal_uInt16 nMaxUndoActionCount /* = 20 */ )
-: SfxUndoManager( nMaxUndoActionCount )
+: SdrUndoManager( nMaxUndoActionCount )
 , mpLinkedUndoManager(NULL)
 {
 }
@@ -32,7 +32,7 @@ void UndoManager::EnterListAction(const OUString &rComment, const OUString& rRep
     if( !IsDoing() )
     {
         ClearLinkedRedoActions();
-        SfxUndoManager::EnterListAction( rComment, rRepeatComment, nId );
+        SdrUndoManager::EnterListAction( rComment, rRepeatComment, nId );
     }
 }
 
@@ -41,7 +41,7 @@ void UndoManager::AddUndoAction( SfxUndoAction *pAction, sal_Bool bTryMerg /* = 
     if( !IsDoing() )
     {
         ClearLinkedRedoActions();
-        SfxUndoManager::AddUndoAction( pAction, bTryMerg );
+        SdrUndoManager::AddUndoAction( pAction, bTryMerg );
     }
     else
     {

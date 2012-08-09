@@ -37,11 +37,20 @@ static void lcl_DoSetSelection( EditView* pView, sal_uInt16 nPara )
     pView->GetImpEditView()->SetEditSelection( aSel );
 }
 
-EditUndoManager::EditUndoManager(EditEngine* pEE) : mpEditEngine(pEE) {}
+EditUndoManager::EditUndoManager(sal_uInt16 nMaxUndoActionCount )
+:   SfxUndoManager(nMaxUndoActionCount),
+    mpEditEngine(0)
+{
+}
+
+void EditUndoManager::SetEditEngine(EditEngine* pNew)
+{
+    mpEditEngine = pNew;
+}
 
 sal_Bool EditUndoManager::Undo()
 {
-    if ( GetUndoActionCount() == 0 )
+    if ( !mpEditEngine || GetUndoActionCount() == 0 )
         return sal_False;
 
     DBG_ASSERT( mpEditEngine->GetActiveView(), "Active View?" );
@@ -76,7 +85,7 @@ sal_Bool EditUndoManager::Undo()
 
 sal_Bool EditUndoManager::Redo()
 {
-    if ( GetRedoActionCount() == 0 )
+    if ( !mpEditEngine || GetRedoActionCount() == 0 )
         return sal_False;
 
     DBG_ASSERT( mpEditEngine->GetActiveView(), "Active View?" );

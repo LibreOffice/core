@@ -303,8 +303,8 @@ public:
 
     void            ShowParagraph( sal_Int32 nParagraph, sal_Bool bShow = sal_True );
 
-    ::svl::IUndoManager&
-                    GetUndoManager();
+    ::svl::IUndoManager& GetUndoManager();
+    ::svl::IUndoManager* SetUndoManager(::svl::IUndoManager* pNew);
     void            UndoActionStart( sal_uInt16 nId );
     void            UndoActionStart(sal_uInt16 nId, const ESelection& rSel);
     void            UndoActionEnd( sal_uInt16 nId );

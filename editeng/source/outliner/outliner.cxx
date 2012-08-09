@@ -1218,6 +1218,12 @@ void Outliner::ImpFilterIndents( sal_Int32 nFirstPara, sal_Int32 nLastPara )
     return pEditEngine->GetUndoManager();
 }
 
+::svl::IUndoManager* Outliner::SetUndoManager(::svl::IUndoManager* pNew)
+{
+    DBG_CHKTHIS(Outliner,0);
+    return pEditEngine->SetUndoManager(pNew);
+}
+
 void Outliner::ImpTextPasted( sal_Int32 nStartPara, sal_Int32 nCount )
 {
     DBG_CHKTHIS(Outliner,0);

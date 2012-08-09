@@ -20,13 +20,13 @@
 #ifndef _SD_UNDOMANAGER_HXX
 #define _SD_UNDOMANAGER_HXX
 
-#include "misc/scopelock.hxx"
-#include <svl/undo.hxx>
+#include <misc/scopelock.hxx>
+#include <svx/sdrundomanager.hxx>
 
 namespace sd
 {
 
-class UndoManager : public SfxUndoManager
+class UndoManager : public SdrUndoManager
 {
 public:
     UndoManager( sal_uInt16 nMaxUndoActionCount = 20 );
@@ -40,8 +40,8 @@ public:
     void SetLinkedUndoManager (::svl::IUndoManager* pLinkedUndoManager);
 
 private:
-    using SfxUndoManager::Undo;
-    using SfxUndoManager::Redo;
+    using SdrUndoManager::Undo;
+    using SdrUndoManager::Redo;
 
     /** Used when the outline view is visible as a last resort to
         synchronize the undo managers.

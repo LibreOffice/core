@@ -625,11 +625,6 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// service routine for Undo/Redo implementation
-extern SfxUndoManager* ImpGetUndoManagerFromViewShell(DrawViewShell& rDViewShell);
-
-
 void DrawViewShell::FuSupport(SfxRequest& rReq)
 {
     if( rReq.GetSlot() == SID_STYLE_FAMILY && rReq.GetArgs())

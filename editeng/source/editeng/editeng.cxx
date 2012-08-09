@@ -134,6 +134,12 @@ sal_Bool EditEngine::IsInUndo()
     return pImpEditEngine->GetUndoManager();
 }
 
+::svl::IUndoManager* EditEngine::SetUndoManager(::svl::IUndoManager* pNew)
+{
+    DBG_CHKTHIS( EditEngine, 0 );
+    return pImpEditEngine->SetUndoManager(pNew);
+}
+
 void EditEngine::UndoActionStart( sal_uInt16 nId )
 {
     DBG_CHKTHIS( EditEngine, 0 );
