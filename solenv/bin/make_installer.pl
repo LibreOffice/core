@@ -625,7 +625,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
     if (!($installer::globals::is_copy_only_project))
     {
-        if ((( $installer::globals::iswindowsbuild ) && ( $installer::globals::packageformat ne "archive" ) && ( $installer::globals::packageformat ne "installed" ) ) || $insaller::globals::packageformat eq 'msi' )
+        if ((( $installer::globals::iswindowsbuild ) && ( $installer::globals::packageformat ne "archive" ) && ( $installer::globals::packageformat ne "installed" ) ) || $installer::globals::packageformat eq 'msi' )
         {
             installer::windows::msiglobal::set_global_code_variables($languagesarrayref, $languagestringref, $allvariableshashref, $alloldproperties);
         }
