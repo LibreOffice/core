@@ -495,12 +495,6 @@ void SAL_CALL CMtaFolderPicker::setSelection( const rtl::OUString& aDirectory )
 {
     OSL_ASSERT( IsWindow( m_hwnd ) );
 
-#ifdef _MSC_VER
-#pragma message( "#######################################" )
-#pragma message( "SendMessageW wrapper has to be extended" )
-#pragma message( "#######################################" )
-#endif
-
     SendMessageW(
         m_hwnd,
         BFFM_SETSELECTIONW,
