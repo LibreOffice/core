@@ -32,9 +32,7 @@
 #include <rtl/ustring.hxx>
 #include "rtl/process.h"
 #include <comphelper/processfactory.hxx>
-#include <com/sun/star/uri/XExternalUriReferenceTranslator.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uri/ExternalUriReferenceTranslator.hpp>
 #include "tools/getprocessworkingdir.hxx"
 
 #include <svl/documentlockfile.hxx>
@@ -51,6 +49,26 @@ namespace desktop
 {
 
 namespace {
+
+OUString translateExternalUris(OUString const & input) {
+    OUString t(
+        com::sun::star::uri::ExternalUriReferenceTranslator::create(
+            comphelper::getProcessComponentContext())->
+        translateToInternal(input));
+    return t.isEmpty() ? input : t;
+}
+
+std::vector< OUString > translateExternalUris(
+    std::vector< OUString > const & input)
+{
+    std::vector< OUString > t;
+    for (std::vector< OUString >::const_iterator i(input.begin());
+         i != input.end(); ++i)
+    {
+        t.push_back(translateExternalUris(*i));
+    }
+    return t;
+}
 
 class ExtCommandLineSupplier: public CommandLineArgs::Supplier {
 public:
@@ -117,14 +135,6 @@ CommandLineArgs::CommandLineArgs( Supplier& supplier )
 void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
 {
     m_cwdUrl = supplier.getCwdUrl();
-    Reference<XMultiServiceFactory> xMS(comphelper::getProcessServiceFactory(), UNO_QUERY);
-    OSL_ENSURE(xMS.is(), "CommandLineArgs: no ProcessServiceFactory.");
-
-    Reference< XExternalUriReferenceTranslator > xTranslator(
-        xMS->createInstance(
-        OUString(
-        "com.sun.star.uri.ExternalUriReferenceTranslator")),
-        UNO_QUERY);
 
     // parse command line arguments
     bool bOpenEvent(true);
@@ -149,14 +159,6 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
         if ( !supplier.next( &aArg ) )
         {
             break;
-        }
-        // convert file URLs to internal form
-        if (aArg.indexOfAsciiL(RTL_CONSTASCII_STRINGPARAM("file:"))==0 &&
-            xTranslator.is())
-        {
-            OUString tmp(xTranslator->translateToInternal(aArg));
-            if (!tmp.isEmpty())
-                aArg = tmp;
         }
 
         if ( !aArg.isEmpty() )
@@ -785,39 +787,39 @@ std::vector< rtl::OUString > const & CommandLineArgs::GetUnaccept() const
     return m_unaccept;
 }
 
-std::vector< rtl::OUString > const & CommandLineArgs::GetOpenList() const
+std::vector< rtl::OUString > CommandLineArgs::GetOpenList() const
 {
-    return m_openlist;
+    return translateExternalUris(m_openlist);
 }
 
-std::vector< rtl::OUString > const & CommandLineArgs::GetViewList() const
+std::vector< rtl::OUString > CommandLineArgs::GetViewList() const
 {
-    return m_viewlist;
+    return translateExternalUris(m_viewlist);
 }
 
-std::vector< rtl::OUString > const & CommandLineArgs::GetStartList() const
+std::vector< rtl::OUString > CommandLineArgs::GetStartList() const
 {
-    return m_startlist;
+    return translateExternalUris(m_startlist);
 }
 
-std::vector< rtl::OUString > const & CommandLineArgs::GetForceOpenList() const
+std::vector< rtl::OUString > CommandLineArgs::GetForceOpenList() const
 {
-    return m_forceopenlist;
+    return translateExternalUris(m_forceopenlist);
 }
 
-std::vector< rtl::OUString > const & CommandLineArgs::GetForceNewList() const
+std::vector< rtl::OUString > CommandLineArgs::GetForceNewList() const
 {
-    return m_forcenewlist;
+    return translateExternalUris(m_forcenewlist);
 }
 
-std::vector< rtl::OUString > const & CommandLineArgs::GetPrintList() const
+std::vector< rtl::OUString > CommandLineArgs::GetPrintList() const
 {
-    return m_printlist;
+    return translateExternalUris(m_printlist);
 }
 
-std::vector< rtl::OUString > const & CommandLineArgs::GetPrintToList() const
+std::vector< rtl::OUString > CommandLineArgs::GetPrintToList() const
 {
-    return m_printtolist;
+    return translateExternalUris(m_printtolist);
 }
 
 rtl::OUString CommandLineArgs::GetPrinterName() const
@@ -835,9 +837,9 @@ std::vector< rtl::OUString > const & CommandLineArgs::GetInFilter() const
     return m_infilter;
 }
 
-std::vector< rtl::OUString > const & CommandLineArgs::GetConversionList() const
+std::vector< rtl::OUString > CommandLineArgs::GetConversionList() const
 {
-    return m_conversionlist;
+    return translateExternalUris(m_conversionlist);
 }
 
 rtl::OUString CommandLineArgs::GetConversionParams() const
@@ -846,7 +848,7 @@ rtl::OUString CommandLineArgs::GetConversionParams() const
 }
 rtl::OUString CommandLineArgs::GetConversionOut() const
 {
-    return m_conversionout;
+    return translateExternalUris(m_conversionout);
 }
 
 bool CommandLineArgs::IsEmpty() const

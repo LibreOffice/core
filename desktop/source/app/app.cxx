@@ -278,7 +278,6 @@ namespace
 
 CommandLineArgs& Desktop::GetCommandLineArgs()
 {
-    ensureProcessServiceFactory();
     return theCommandLineArgs::get();
 }
 
