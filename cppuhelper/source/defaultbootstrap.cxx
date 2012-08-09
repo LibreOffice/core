@@ -1346,7 +1346,7 @@ void ServiceManager::disposing(css::lang::EventObject const & Source)
 
 void ServiceManager::disposing() {
     std::vector< css::uno::Reference< css::lang::XComponent > > comps;
-    css::uno::Reference< css::lang::XEventListener > listener;
+    Data clear;
     {
         osl::MutexGuard g(rBHelper.rMutex);
         for (DynamicImplementations::const_iterator i(
@@ -1358,10 +1358,10 @@ void ServiceManager::disposing() {
                 comps.push_back(i->second->component);
             }
         }
-        data_.namedImplementations.clear();
-        data_.dynamicImplementations.clear();
-        data_.services.clear();
-        data_.singletons.clear();
+        data_.namedImplementations.swap(clear.namedImplementations);
+        data_.dynamicImplementations.swap(clear.dynamicImplementations);
+        data_.services.swap(clear.services);
+        data_.singletons.swap(clear.singletons);
     }
     for (std::vector<
              css::uno::Reference< css::lang::XComponent > >::const_iterator i(
@@ -1733,25 +1733,30 @@ void ServiceManager::removeRdbFiles(std::vector< rtl::OUString > const & uris) {
     // The underlying data structures make this function somewhat inefficient,
     // but the assumption is that it is rarely called (and that if it is called,
     // it is called with a uris vector of size one):
-    osl::MutexGuard g(rBHelper.rMutex);
-    for (std::vector< rtl::OUString >::const_iterator i(uris.begin());
-         i != uris.end(); ++i)
+    std::vector< boost::shared_ptr< Implementation > > clear;
     {
-        for (NamedImplementations::iterator j(
-                 data_.namedImplementations.begin());
-             j != data_.namedImplementations.end();)
+        osl::MutexGuard g(rBHelper.rMutex);
+        for (std::vector< rtl::OUString >::const_iterator i(uris.begin());
+             i != uris.end(); ++i)
         {
-            assert(j->second.get() != 0);
-            if (j->second->info->uri == *i) {
-                //TODO: The below leaves data_ in an inconsistent state upon
-                // exceptions:
-                removeFromImplementationMap(
-                    &data_.services, j->second->info->services, j->second);
-                removeFromImplementationMap(
-                    &data_.singletons, j->second->info->singletons, j->second);
-                data_.namedImplementations.erase(j++);
-            } else {
-                ++j;
+            for (NamedImplementations::iterator j(
+                     data_.namedImplementations.begin());
+                 j != data_.namedImplementations.end();)
+            {
+                assert(j->second.get() != 0);
+                if (j->second->info->uri == *i) {
+                    clear.push_back(j->second);
+                    //TODO: The below leaves data_ in an inconsistent state upon
+                    // exceptions:
+                    removeFromImplementationMap(
+                        &data_.services, j->second->info->services, j->second);
+                    removeFromImplementationMap(
+                        &data_.singletons, j->second->info->singletons,
+                        j->second);
+                    data_.namedImplementations.erase(j++);
+                } else {
+                    ++j;
+                }
             }
         }
     }
@@ -1763,6 +1768,7 @@ bool ServiceManager::removeLegacyFactory(
     bool removeListener)
 {
     assert(factoryInfo.is());
+    boost::shared_ptr< Implementation > clear;
     css::uno::Reference< css::lang::XComponent > comp;
     {
         osl::MutexGuard g(rBHelper.rMutex);
@@ -1772,6 +1778,7 @@ bool ServiceManager::removeLegacyFactory(
             return isDisposed();
         }
         assert(i->second.get() != 0);
+        clear = i->second;
         //TODO: The below leaves data_ in an inconsistent state upon exceptions:
         removeFromImplementationMap(
             &data_.services, i->second->info->services, i->second);
@@ -1794,32 +1801,36 @@ bool ServiceManager::removeLegacyFactory(
 void ServiceManager::removeImplementation(rtl::OUString name) {
     // The underlying data structures make this function somewhat inefficient,
     // but the assumption is that it is rarely called:
-    osl::MutexGuard g(rBHelper.rMutex);
-    if (isDisposed()) {
-        return;
-    }
-    NamedImplementations::iterator i(data_.namedImplementations.find(name));
-    if (i == data_.namedImplementations.end()) {
-        throw css::container::NoSuchElementException(
-            "Remove non-inserted implementation " + name,
-            static_cast< cppu::OWeakObject * >(this));
-    }
-    assert(i->second.get() != 0);
-    //TODO: The below leaves data_ in an inconsistent state upon exceptions:
-    removeFromImplementationMap(
-        &data_.services, i->second->info->services, i->second);
-    removeFromImplementationMap(
-        &data_.singletons, i->second->info->singletons, i->second);
-    for (DynamicImplementations::iterator j(
-             data_.dynamicImplementations.begin());
-         j != data_.dynamicImplementations.end(); ++j)
+    boost::shared_ptr< Implementation > clear;
     {
-        if (j->second == i->second) {
-            data_.dynamicImplementations.erase(j);
-            break;
+        osl::MutexGuard g(rBHelper.rMutex);
+        if (isDisposed()) {
+            return;
         }
+        NamedImplementations::iterator i(data_.namedImplementations.find(name));
+        if (i == data_.namedImplementations.end()) {
+            throw css::container::NoSuchElementException(
+                "Remove non-inserted implementation " + name,
+                static_cast< cppu::OWeakObject * >(this));
+        }
+        assert(i->second.get() != 0);
+        clear = i->second;
+        //TODO: The below leaves data_ in an inconsistent state upon exceptions:
+        removeFromImplementationMap(
+            &data_.services, i->second->info->services, i->second);
+        removeFromImplementationMap(
+            &data_.singletons, i->second->info->singletons, i->second);
+        for (DynamicImplementations::iterator j(
+                 data_.dynamicImplementations.begin());
+             j != data_.dynamicImplementations.end(); ++j)
+        {
+            if (j->second == i->second) {
+                data_.dynamicImplementations.erase(j);
+                break;
+            }
+        }
+        data_.namedImplementations.erase(i);
     }
-    data_.namedImplementations.erase(i);
 }
 
 boost::shared_ptr< Implementation > ServiceManager::findServiceImplementation(
