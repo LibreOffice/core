@@ -23,13 +23,14 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sd.hxx"
+
 #include <tools/debug.hxx>
-#include "undo/undomanager.hxx"
+#include <undo/undomanager.hxx>
 
 using namespace sd;
 
 UndoManager::UndoManager( sal_uInt16 nMaxUndoActionCount /* = 20 */ )
-: SfxUndoManager( nMaxUndoActionCount )
+: SdrUndoManager( nMaxUndoActionCount )
 , mpLinkedUndoManager(NULL)
 {
 }
@@ -39,7 +40,7 @@ void UndoManager::EnterListAction(const UniString &rComment, const UniString& rR
     if( !IsDoing() )
     {
         ClearLinkedRedoActions();
-        SfxUndoManager::EnterListAction( rComment, rRepeatComment, nId );
+        SdrUndoManager::EnterListAction( rComment, rRepeatComment, nId );
     }
 }
 
@@ -48,7 +49,7 @@ void UndoManager::AddUndoAction( SfxUndoAction *pAction, sal_Bool bTryMerg /* = 
     if( !IsDoing() )
     {
         ClearLinkedRedoActions();
-        SfxUndoManager::AddUndoAction( pAction, bTryMerg );
+        SdrUndoManager::AddUndoAction( pAction, bTryMerg );
     }
     else
     {

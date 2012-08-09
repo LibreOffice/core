@@ -939,8 +939,8 @@ public:
     // nFormat muss ein Wert aus dem enum EETextFormat sein (wg.CLOOKS)
     sal_uLong           Read( SvStream& rInput, const String& rBaseURL, sal_uInt16, SvKeyValueIterator* pHTTPHeaderAttrs = NULL );
 
-    ::svl::IUndoManager&
-                    GetUndoManager();
+    ::svl::IUndoManager& GetUndoManager();
+    ::svl::IUndoManager* SetUndoManager(::svl::IUndoManager* pNew);
 
     void            QuickSetAttribs( const SfxItemSet& rSet, const ESelection& rSel );
     void            QuickInsertField( const SvxFieldItem& rFld, const ESelection& rSel );

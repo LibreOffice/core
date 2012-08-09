@@ -65,22 +65,28 @@ void lcl_DoSetSelection( EditView* pView, sal_uInt16 nPara )
 // -----------------------------------------------------------------------
 // EditUndoManager
 // ------------------------------------------------------------------------
-EditUndoManager::EditUndoManager( ImpEditEngine* p )
+EditUndoManager::EditUndoManager(sal_uInt16 nMaxUndoActionCount )
+:   SfxUndoManager(nMaxUndoActionCount),
+    mpImpEE(0)
 {
-    pImpEE = p;
+}
+
+void EditUndoManager::SetImpEditEngine(ImpEditEngine* pNew)
+{
+    mpImpEE = pNew;
 }
 
 sal_Bool __EXPORT EditUndoManager::Undo()
 {
-    if ( GetUndoActionCount() == 0 )
+    if ( !mpImpEE || GetUndoActionCount() == 0 )
         return sal_False;
 
-    DBG_ASSERT( pImpEE->GetActiveView(), "Active View?" );
+    DBG_ASSERT( mpImpEE->GetActiveView(), "Active View?" );
 
-    if ( !pImpEE->GetActiveView() )
+    if ( !mpImpEE->GetActiveView() )
     {
-        if ( pImpEE->GetEditViews().Count() )
-            pImpEE->SetActiveView( pImpEE->GetEditViews().GetObject(0) );
+        if ( mpImpEE->GetEditViews().Count() )
+            mpImpEE->SetActiveView( mpImpEE->GetEditViews().GetObject(0) );
         else
         {
             DBG_ERROR( "Undo in Engine ohne View nicht moeglich!" );
@@ -88,34 +94,34 @@ sal_Bool __EXPORT EditUndoManager::Undo()
         }
     }
 
-    pImpEE->GetActiveView()->GetImpEditView()->DrawSelection(); // alte Selektion entfernen
+    mpImpEE->GetActiveView()->GetImpEditView()->DrawSelection();    // alte Selektion entfernen
 
-    pImpEE->SetUndoMode( sal_True );
+    mpImpEE->SetUndoMode( sal_True );
     sal_Bool bDone = SfxUndoManager::Undo();
-    pImpEE->SetUndoMode( sal_False );
+    mpImpEE->SetUndoMode( sal_False );
 
-    EditSelection aNewSel( pImpEE->GetActiveView()->GetImpEditView()->GetEditSelection() );
+    EditSelection aNewSel( mpImpEE->GetActiveView()->GetImpEditView()->GetEditSelection() );
     DBG_ASSERT( !aNewSel.IsInvalid(), "Ungueltige Selektion nach Undo()" );
-    DBG_ASSERT( !aNewSel.DbgIsBuggy( pImpEE->GetEditDoc() ), "Kaputte Selektion nach Undo()" );
+    DBG_ASSERT( !aNewSel.DbgIsBuggy( mpImpEE->GetEditDoc() ), "Kaputte Selektion nach Undo()" );
 
     aNewSel.Min() = aNewSel.Max();
-    pImpEE->GetActiveView()->GetImpEditView()->SetEditSelection( aNewSel );
-    pImpEE->FormatAndUpdate( pImpEE->GetActiveView() );
+    mpImpEE->GetActiveView()->GetImpEditView()->SetEditSelection( aNewSel );
+    mpImpEE->FormatAndUpdate( mpImpEE->GetActiveView() );
 
     return bDone;
 }
 
 sal_Bool __EXPORT EditUndoManager::Redo()
 {
-    if ( GetRedoActionCount() == 0 )
+    if ( !mpImpEE || GetRedoActionCount() == 0 )
         return sal_False;
 
-    DBG_ASSERT( pImpEE->GetActiveView(), "Active View?" );
+    DBG_ASSERT( mpImpEE->GetActiveView(), "Active View?" );
 
-    if ( !pImpEE->GetActiveView() )
+    if ( !mpImpEE->GetActiveView() )
     {
-        if ( pImpEE->GetEditViews().Count() )
-            pImpEE->SetActiveView( pImpEE->GetEditViews().GetObject(0) );
+        if ( mpImpEE->GetEditViews().Count() )
+            mpImpEE->SetActiveView( mpImpEE->GetEditViews().GetObject(0) );
         else
         {
             DBG_ERROR( "Redo in Engine ohne View nicht moeglich!" );
@@ -123,19 +129,19 @@ sal_Bool __EXPORT EditUndoManager::Redo()
         }
     }
 
-    pImpEE->GetActiveView()->GetImpEditView()->DrawSelection(); // alte Selektion entfernen
+    mpImpEE->GetActiveView()->GetImpEditView()->DrawSelection();    // alte Selektion entfernen
 
-    pImpEE->SetUndoMode( sal_True );
+    mpImpEE->SetUndoMode( sal_True );
     sal_Bool bDone = SfxUndoManager::Redo();
-    pImpEE->SetUndoMode( sal_False );
+    mpImpEE->SetUndoMode( sal_False );
 
-    EditSelection aNewSel( pImpEE->GetActiveView()->GetImpEditView()->GetEditSelection() );
+    EditSelection aNewSel( mpImpEE->GetActiveView()->GetImpEditView()->GetEditSelection() );
     DBG_ASSERT( !aNewSel.IsInvalid(), "Ungueltige Selektion nach Undo()" );
-    DBG_ASSERT( !aNewSel.DbgIsBuggy( pImpEE->GetEditDoc() ), "Kaputte Selektion nach Redo()" );
+    DBG_ASSERT( !aNewSel.DbgIsBuggy( mpImpEE->GetEditDoc() ), "Kaputte Selektion nach Redo()" );
 
     aNewSel.Min() = aNewSel.Max();
-    pImpEE->GetActiveView()->GetImpEditView()->SetEditSelection( aNewSel );
-    pImpEE->FormatAndUpdate( pImpEE->GetActiveView() );
+    mpImpEE->GetActiveView()->GetImpEditView()->SetEditSelection( aNewSel );
+    mpImpEE->FormatAndUpdate( mpImpEE->GetActiveView() );
 
     return bDone;
 }

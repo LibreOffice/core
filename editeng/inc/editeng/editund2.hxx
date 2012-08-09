@@ -29,15 +29,18 @@
 
 class ImpEditEngine;
 
-class EDITENG_DLLPRIVATE EditUndoManager : public SfxUndoManager
+class EDITENG_DLLPUBLIC EditUndoManager : public SfxUndoManager
 {
+private:
     using SfxUndoManager::Undo;
     using SfxUndoManager::Redo;
+    friend class ImpEditEngine;
 
-private:
-    ImpEditEngine*  pImpEE;
+    ImpEditEngine*  mpImpEE;
+    void SetImpEditEngine(ImpEditEngine* pNew);
+
 public:
-                    EditUndoManager( ImpEditEngine* pImpEE );
+    EditUndoManager(sal_uInt16 nMaxUndoActionCount = 20);
 
     virtual sal_Bool Undo();
     virtual sal_Bool Redo();

@@ -266,8 +266,8 @@ public:
     void            ShowParagraph( sal_uInt16 nParagraph, sal_Bool bShow = sal_True );
     sal_Bool            IsParagraphVisible( sal_uInt16 nParagraph );
 
-    ::svl::IUndoManager&
-                    GetUndoManager();
+    ::svl::IUndoManager& GetUndoManager();
+    ::svl::IUndoManager* SetUndoManager(::svl::IUndoManager* pNew);
     void            UndoActionStart( sal_uInt16 nId );
     void            UndoActionEnd( sal_uInt16 nId );
     sal_Bool        IsInUndo();

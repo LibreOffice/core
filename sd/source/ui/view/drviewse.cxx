@@ -639,10 +639,6 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// service routine for Undo/Redo implementation
-extern SfxUndoManager* ImpGetUndoManagerFromViewShell(DrawViewShell& rDViewShell);
-
 /*************************************************************************
 |*
 |* SfxRequests fuer Support-Funktionen

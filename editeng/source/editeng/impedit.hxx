@@ -709,6 +709,7 @@ public:
     const EditDoc&          GetEditDoc() const      { return aEditDoc; }
 
     inline EditUndoManager& GetUndoManager();
+    inline ::svl::IUndoManager* SetUndoManager(::svl::IUndoManager* pNew);
 
     void                    SetUpdateMode( sal_Bool bUp, EditView* pCurView = 0, sal_Bool bForceUpdate = sal_False );
     sal_Bool                GetUpdateMode() const   { return bUpdate; }
@@ -1097,14 +1098,35 @@ inline void ImpEditEngine::IdleFormatAndUpdate( EditView* pCurView )
     aIdleFormatter.DoIdleFormat( pCurView );
 }
 
-#ifndef SVX_LIGHT
 inline EditUndoManager& ImpEditEngine::GetUndoManager()
 {
     if ( !pUndoManager )
-        pUndoManager = new EditUndoManager( this );
+    {
+        pUndoManager = new EditUndoManager();
+        pUndoManager->SetImpEditEngine(this);
+    }
     return *pUndoManager;
 }
-#endif
+
+inline ::svl::IUndoManager* ImpEditEngine::SetUndoManager(::svl::IUndoManager* pNew)
+{
+    ::svl::IUndoManager* pRetval = pUndoManager;
+    EditUndoManager* pNewEditUndoManager = dynamic_cast< EditUndoManager* >(pNew);
+
+    if(pUndoManager)
+    {
+        pUndoManager->SetImpEditEngine(0);
+    }
+
+    pUndoManager = dynamic_cast< EditUndoManager* >(pNew);
+
+    if(pUndoManager)
+    {
+        pUndoManager->SetImpEditEngine(this);
+    }
+
+    return pRetval;
+}
 
 inline ParaPortion* ImpEditEngine::FindParaPortion( ContentNode* pNode ) const
 {
