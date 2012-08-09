@@ -16,7 +16,6 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 class DebugHelper(object):
-class DebugHelper(object):
 
     @classmethod
     def exception(self, ex):

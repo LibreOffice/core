@@ -16,7 +16,6 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 from abc import ABCMeta, abstractmethod
-from abc import ABCMeta, abstractmethod
 
 class ConfigNode(object):
 

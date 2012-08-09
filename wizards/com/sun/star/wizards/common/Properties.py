@@ -16,7 +16,6 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 from com.sun.star.beans import PropertyValue
-from com.sun.star.beans import PropertyValue
 
 '''
 Simplifies handling Arrays of PropertyValue.

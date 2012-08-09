@@ -16,7 +16,6 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 class PropertyNames:
-class PropertyNames:
     PROPERTY_ENABLED = "Enabled"
     PROPERTY_HEIGHT = "Height"
     PROPERTY_HELPURL = "HelpURL"

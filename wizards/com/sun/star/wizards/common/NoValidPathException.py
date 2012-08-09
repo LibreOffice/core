@@ -16,7 +16,6 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 class NoValidPathException(Exception):
-class NoValidPathException(Exception):
 
     def __init__(self, xMSF, _sText):
         super(NoValidPathException,self).__init__(_sText)

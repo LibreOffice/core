@@ -16,7 +16,6 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 import traceback
-import traceback
 import inspect
 from wizards.common.ConfigNode import *
 from wizards.common.Configuration import Configuration
