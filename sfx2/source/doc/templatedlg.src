@@ -47,7 +47,6 @@ String STR_REPOSITORY_NEW
 
 ModelessDialog DLG_TEMPLATE_MANAGER
 {
-    HelpId = CMD_SID_TEMPLATE_MANAGER;
     OutputSize = TRUE;
     SVLook = TRUE;
     Moveable = TRUE;

@@ -46,7 +46,6 @@
 #define CMD_SID_OPENTEMPLATE                        ".uno:OpenTemplate"
 #define CMD_SID_OPENURL                             ".uno:OpenUrl"
 #define CMD_SID_OPTIONS                             ".uno:Options"
-#define CMD_SID_TEMPLATE_MANAGER                    ".uno:TemplateManager"
 #define CMD_SID_ORGANIZER                           ".uno:Organizer"
 #define CMD_SID_PASTE                               ".uno:Paste"
 #define CMD_SID_PASTE_SPECIAL                       ".uno:PasteSpecial"
