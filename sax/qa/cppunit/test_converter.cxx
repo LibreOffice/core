@@ -322,6 +322,15 @@ void doTestStringToMeasure(sal_Int32 rValue, char const*const pis, sal_Int16 nTa
     CPPUNIT_ASSERT_EQUAL(rValue, nVal);
 }
 
+void doTestMeasureToString(char const*const pis, sal_Int32 nMeasure, sal_Int16 const nSourceUnit, sal_Int16 const nTargetUnit)
+{
+    ::rtl::OUString const is(::rtl::OUString::createFromAscii(pis));
+    ::rtl::OUStringBuffer buf;
+    Converter::convertMeasure(buf, nMeasure, nSourceUnit, nTargetUnit);
+    OSL_TRACE("%s", ::rtl::OUStringToOString(buf.getStr(), RTL_TEXTENCODING_UTF8).getStr());
+    CPPUNIT_ASSERT_EQUAL(is, buf.makeStringAndClear());
+}
+
 void ConverterTest::testMeasure()
 {
     doTestStringToMeasure(1000, "10mm", MeasureUnit::MM_100TH, -1, 4321);
@@ -344,6 +353,7 @@ void ConverterTest::testMeasure()
     doTestStringToMeasure(600, "600px", MeasureUnit::PIXEL, 10, 4321);
     doTestStringToMeasure(777, "777", MeasureUnit::APPFONT, 10, 4321);
     doTestStringToMeasure(80000, "80000", MeasureUnit::SYSFONT, 10, 432100);
+    doTestMeasureToString("60mm", 6000, MeasureUnit::MM_100TH, MeasureUnit::MM_10TH);
 }
 CPPUNIT_TEST_SUITE_REGISTRATION(ConverterTest);
 
