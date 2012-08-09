@@ -1,4 +1,4 @@
-2dnl -*- Mode: Autoconf; tab-width: 4; indent-tabs-mode: nil -*-
+2dnl -*- Mode: Autoconf; tab-width: 4; indent-tabs-mode: nil; fill-column: 102 -*-
 dnl configure.in serves as input for the GNU autoconf package
 dnl in order to create a configure script.
 
@@ -2048,24 +2048,25 @@ AC_ARG_WITH(macosx-sdk,
 
                           e. g.: --with-macosx-sdk=10.4
 
-                          there are 3 options to controle the MacOSX build:
-                          --with-macosx-sdk (refered as 'sdl' below)
+                          there are 3 options to control the MacOSX build:
+                          --with-macosx-sdk (refered as 'sdk' below)
                           --with-macosx-version-min-required (refered as 'min' below)
                           --with-macosx-version-max-allowed (refered as 'max' below)
 
                           the connection between these value and the default they take is as follow:
-                          ( ? means not specified on the command line, constraint: x <= y <= z)
+                          ( ? means not specified on the command line, s means the SDK version found,
+                          constraint: x <= y <= z)
 
                           ==========================================
                            command line      || config result
                           ==========================================
                           min  | max  | sdk  || min  | max  | sdk  |
-                          ?    | ?    | ?    || 10.4 | 10.4 | 10.4 |
-                          ?    | ?    | 10.x || 10.4 | 10.4 | 10.x |
-                          ?    | 10.x | ?    || 10.4 | 10.x | 10.x |
+                          ?    | ?    | ?    || 10.4 | 10.s | 10.s |
+                          ?    | ?    | 10.x || 10.4 | 10.x | 10.x |
+                          ?    | 10.x | ?    || 10.4 | 10.s | 10.s |
                           ?    | 10.x | 10.y || 10.4 | 10.x | 10.y |
-                          10.x | ?    | ?    || 10.x | 10.x | 10.x |
-                          10.x | ?    | 10.y || 10.x | 10.x | 10.y |
+                          10.x | ?    | ?    || 10.x | 10.s | 10.s |
+                          10.x | ?    | 10.y || 10.x | 10.y | 10.y |
                           10.x | 10.y | ?    || 10.x | 10.y | 10.y |
                           10.x | 10.y | 10.z || 10.x | 10.y | 10.z |
 
@@ -2075,6 +2076,12 @@ AC_ARG_WITH(macosx-sdk,
 
                           Note: MACOSX_DEPLOYMENT_TARGET will be set to the value of 'min'.
 
+                          Note that even if in theory using a --with-macosx-version-max-allowed
+                          (i.e. the MAC_OS_X_VERSION_MAX_ALLOWED macro) less than the SDK version
+                          should work, in practice Apple doesn't seem to test that, and at least
+                          compiling with -DMAC_OS_X_VERSION_MAX_ALLOWED=1060 against the 10.7 SDK
+                          fails in a couple of places. Just because of oversights in ifdefs in the SDK
+                          headers, but still.
     ],
 ,)
 
@@ -2452,121 +2459,201 @@ fi
 
 
 dnl ===================================================================
-dnl  Test MacOSX sdk and version requirement
+dnl Check / find MacOSX SDK and compiler, version checks
 dnl ===================================================================
 if test "$_os" = "Darwin"; then
+
+    # If no --with-macox-sdk option is given, first look for the 10.4u
+    # SDK (which is distributed with the obsolete Xcode 3), then the
+    # 10.6, 10.7 and 10.8 SDKs, in that order. (Don't bother looking
+    # for the 10.5 SDK, unlikely somebody would have that but not
+    # 10.6, I think.) If not found in some (old) default locations,
+    # try the xcode-select tool.
+
+    # The intent is that for "most" Mac-based developers, a suitable
+    # SDK will be found automatically without any configure options.
+
+    # For developers still using Xcode 2 or 3, in /Developer, either
+    # because it is the only Xcode they have, or they have that in
+    # addition to Xcode 4 in /Applications/Xcode.app, the 10.4 SDK
+    # should be found.
+
+    # For developers with a current Xcode 4 installed from the Mac App
+    # Store, the 10.6, 10.7 or 10.8 SDK should be found.
+
+    AC_MSG_CHECKING([what Mac OS X SDK to use])
+
+    if test -z "$with_macosx_sdk"; then
+        if test -d /Developer/SDKs/MacOSX10.4u.sdk; then
+            with_macosx_sdk=10.4
+        elif test -d /Developer-old/SDKs/MacOSX10.4u.sdk; then
+            with_macosx_sdk=10.4
+        elif test -d /Xcode3/SDKs/MacOSX10.4u.sdk; then
+            with_macosx_sdk=10.4
+        elif test -d /Developer/SDKs/MacOSX10.6.sdk; then
+            with_macosx_sdk=10.6
+        elif test -d /Developer/SDKs/MacOSX10.7.sdk; then
+            with_macosx_sdk=10.7
+        elif test -x /usr/bin/xcode-select; then
+            xcodepath="`xcode-select -print-path`"
+            if test -d "$xcodepath/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.6.sdk"; then
+                with_macosx_sdk=10.6
+            elif test -d "$xcodepath/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.7.sdk"; then
+                with_macosx_sdk=10.7
+            elif test -d "$xcodepath/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk"; then
+                with_macosx_sdk=10.8
+            fi
+        fi
+        if test -z "with_$macosx_sdk"; then
+            AC_MSG_ERROR([Could not figure out the location of a Mac OS X SDK and its version])
+        fi
+    fi
+
+    case $with_macosx_sdk in
+    10.4)
+        MACOSX_SDK_VERSION=1040
+        ;;
+    10.5)
+        MACOSX_SDK_VERSION=1050
+        ;;
+    10.6)
+        MACOSX_SDK_VERSION=1060
+        ;;
+    10.7)
+        MACOSX_SDK_VERSION=1070
+        ;;
+    10.8)
+        MACOSX_SDK_VERSION=1080
+        ;;
+    *)
+        AC_MSG_ERROR([with-macosx-sdk $with_macosx_sdk is not a supported value, supported value are 10.4--8])
+        ;;
+    esac
+
+    # Next find it (again, if we deduced its version above by finding
+    # it... but we need to look for it once more in case
+    # --with-macosx-sdk was given so that the aboce search did not
+    # happen).
+    if test -z "$MACOSX_SDK_PATH"; then
+        case $with_macosx_sdk in
+        10.4)
+            if test -d /Developer/SDKs/MacOSX10.4u.sdk; then
+                MACOSX_SDK_PATH=/Developer/SDKs/MacOSX10.4u.sdk
+            elif test -d /Developer-old/SDKs/MacOSX10.4u.sdk; then
+                MACOSX_SDK_PATH=/Developer-old/SDKs/MacOSX10.4u.sdk
+            elif test -d /Xcode3/SDKs/MacOSX10.4u.sdk; then
+                MACOSX_SDK_PATH=/Xcode3/SDKs/MacOSX10.4u.sdk
+            fi
+            ;;
+        10.6)
+            if test -d /Developer/SDKs/MacOSX10.6.sdk; then
+                MACOSX_SDK_PATH=/Developer/SDKs/MacOSX10.6.sdk
+            fi
+            ;;
+        10.7|10.8)
+            if test -d /Developer/SDKs/MacOSX$with_macosx_sdk.sdk; then
+                MACOSX_SDK_PATH=/Developer/SDKs/MacOSX$with_macosx_sdk.sdk
+            elif test -x /usr/bin/xcode-select; then
+                xcodepath="`xcode-select -print-path`"
+                if test -d "$xcodepath/Platforms/MacOSX.platform/Developer/SDKs/MacOSX$with_macosx_sdk.sdk"; then
+                    MACOSX_SDK_PATH="$xcodepath/Platforms/MacOSX.platform/Developer/SDKs/MacOSX$with_macosx_sdk.sdk"
+                fi
+            fi
+            ;;
+        esac
+        if test -z "$MACOSX_SDK_PATH"; then
+            AC_MSG_ERROR([Could not figure out the location of Mac OS X $with_macosx_sdk SDK])
+        fi
+    fi
+    AC_MSG_RESULT([SDK $with_macosx_sdk at $MACOSX_SDK_PATH])
 
     if test "$with_macosx_version_min_required" = ""; then
         with_macosx_version_min_required="10.4"
     fi
 
     if test "$with_macosx_version_max_allowed" = ""; then
-        with_macosx_version_max_allowed="$with_macosx_version_min_required"
+        with_macosx_version_max_allowed="$with_macosx_sdk"
     fi
 
-    if test "$with_macosx_sdk" = ""; then
-        with_macosx_sdk="$with_macosx_version_max_allowed"
-    fi
-
-    case "$with_macosx_sdk" in
-
-    10.4)
-        MACOSX_SDK_PATH="/Developer/SDKs/MacOSX10.4u.sdk"
-        if test ! -d "$MACOSX_SDK_PATH"; then
-            MACOSX_SDK_PATH="/Developer-old/SDKs/MacOSX10.4u.sdk"
-        fi
-        if test ! -d "$MACOSX_SDK_PATH"; then
-            MACOSX_SDK_PATH="/Xcode3/SDKs/MacOSX10.4u.sdk"
-        fi
-        MACOSX_SDK_VERSION="1040"
-        ;;
-    10.5)
-        MACOSX_SDK_PATH="/Developer/SDKs/MacOSX10.5.sdk"
-        if test ! -d "$MACOSX_SDK_PATH"; then
-            MACOSX_SDK_PATH="/Developer-old/SDKs/MacOSX10.5.sdk"
-        fi
-        if test ! -d "$MACOSX_SDK_PATH"; then
-            MACOSX_SDK_PATH="/Xcode3/SDKs/MacOSX10.5.sdk"
-        fi
-        MACOSX_SDK_VERSION="1050"
-        AC_MSG_WARN([Building with a SDK > 10.4 is experimental])
-        echo "Building with a SDK > 10.4 is experimental" >> warn
-        ;;
-    10.6)
-        MACOSX_SDK_PATH="`xcode-select -print-path`/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.6.sdk"
-        MACOSX_SDK_VERSION="1060"
-        AC_MSG_WARN([Building with a SDK > 10.4 is experimental])
-        echo "Building with a SDK > 10.4 is experimental" >> warn
-        ;;
-    10.7)
-        MACOSX_SDK_PATH="`xcode-select -print-path`/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.7.sdk"
-        MACOSX_SDK_VERSION="1070"
-        ;;
-    10.8)
-        MACOSX_SDK_PATH="`xcode-select -print-path`/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk"
-        MACOSX_SDK_VERSION="1080"
-        ;;
-    *)
-        AC_MSG_ERROR([$with_macosx_sdk is not a supported SDK value, supported value are 10.4--8])
-        ;;
-    esac
-    AC_MSG_CHECKING([the presence of the SDK $with_macosx_sdk])
-    if test -d "$MACOSX_SDK_PATH"; then
-        AC_MSG_RESULT([$MACOSX_SDK_PATH ok])
-    else
-        AC_MSG_ERROR([$MACOSX_SDK_PATH not found])
-    fi
     FRAMEWORKSHOME="$MACOSX_SDK_PATH/System/Library/Frameworks"
     MACOSX_DEPLOYMENT_TARGET="$with_macosx_version_min_required"
 
     case "$with_macosx_version_min_required" in
-
     10.4)
         MAC_OS_X_VERSION_MIN_REQUIRED="1040"
         ;;
     10.5)
         MAC_OS_X_VERSION_MIN_REQUIRED="1050"
-        AC_MSG_WARN([Building with a minimum version requirement > 10.4 break 10.4 compatibility. do not use for deliverable build])
-        echo "Building with a minimum version requirement > 10.4 break 10.4 compatibility. do not use for deliverable build" >>warn
-        if test -z "$save_CC"; then
-            CC="gcc-4.2 -m32"
-            CXX="g++-4.2 -m32"
-        fi
         ;;
     10.6)
         MAC_OS_X_VERSION_MIN_REQUIRED="1060"
-        AC_MSG_WARN([Building with a minimum version requirement > 10.4 break 10.4 compatibility. do not use for deliverable build])
-        echo "Building with a minimum version requirement > 10.4 break 10.4 compatibility. do not use for deliverable build" >>warn
-        if test -z "$save_CC"; then
-            CC="gcc-4.2 -m32"
-            CXX="g++-4.2 -m32"
-        fi
         ;;
     10.7)
         MAC_OS_X_VERSION_MIN_REQUIRED="1070"
-        AC_MSG_WARN([Building with a minimum version requirement > 10.4 break 10.4 compatibility. do not use for deliverable build])
-        echo "Building with a minimum version requirement > 10.4 break 10.4 compatibility. do not use for deliverable build" >>warn
-        if test -z "$save_CC"; then
-            CC="gcc-4.2 -m32"
-            CXX="g++-4.2 -m32"
-        fi
         ;;
     10.8)
         MAC_OS_X_VERSION_MIN_REQUIRED="1080"
-        AC_MSG_WARN([Building with a minimum version requirement > 10.4 break 10.4 compatibility. do not use for deliverable build])
-        echo "Building with a minimum version requirement > 10.4 break 10.4 compatibility. do not use for deliverable build" >>warn
-        if test -z "$save_CC"; then
-            CC="gcc-4.2 -m32"
-            CXX="g++-4.2 -m32"
-        fi
         ;;
     *)
         AC_MSG_ERROR([with-macosx-version-min-required $with_macosx_version_min_required is not a supported value, supported value are 10.4--8])
         ;;
     esac
 
-    case "$with_macosx_version_max_allowed" in
+    case "$with_macosx_version_min_required" in
+    10.4)
+        case "$with_macosx_sdk" in
+        10.4)
+            ;;
+        *)
+            AC_MSG_WARN([Building with a SDK > 10.4 possibly breaks 10.4 compatibility. Do not use for deliverable build until verified that it really works])
+            echo "Building with a SDK > 10.4 possibly breaks 10.4 compatibility. Do not use for deliverable build until verified that it really works" >>warn
+            ;;
+        esac
+        ;;
+    *)
+        AC_MSG_WARN([Building with a minimum version requirement > 10.4 breaks 10.4 compatibility. Do not use for deliverable build])
+        echo "Building with a minimum version requirement > 10.4 breaks 10.4 compatibility. Do not use for deliverable build" >>warn
+        ;;
+    esac
 
+    # If no CC and CXX environment vars, try to guess where the compiler is
+    if test -z "$save_CC"; then
+        AC_MSG_CHECKING([what compiler to use]) 
+        case $with_macosx_sdk in
+        10.4)
+            case "$MACOSX_SDK_PATH" in
+            /Developer/*)
+                gccprefix=""
+                ;;
+            /Developer.old/*)
+                gccprefix=/Developer.old/usr/bin/
+                ;;
+            /Xcode3/*)
+                gccprefix=/Xcode3/usr/bin/
+                ;;
+            *)
+                AC_MSG_ERROR([Cannot guess gcc location for this SDK])
+                ;;
+            esac
+            CC="${gccprefix}gcc-4.0 -mmacosx-version-min=$with_macosx_version_min_required"
+            CXX="${gccprefix}g++-4.0 -mmacosx-version-min=$with_macosx_version_min_required"
+            ;;
+        10.6)
+            # Is similar logic as above needed? Is it likely somebody
+            # has both an older Xcode with the 10.6 SDK and a current
+            # Xcode?
+            CC="gcc-4.2 -m32 -mmacosx-version-min=$with_macosx_version_min_required"
+            CXX="g++-4.2 -m32 -mmacosx-version-min=$with_macosx_version_min_required"
+            ;;
+        10.7|10.8)
+            CC="`xcrun -find clang` -m32 -mmacosx-version-min=$with_macosx_version_min_required"
+            CXX="`xcrun -find clang++` -m32 -mmacosx-version-min=$with_macosx_version_min_required"
+            ;;
+        esac
+        AC_MSG_RESULT([$CC and $CXX])
+    fi
+    
+    case "$with_macosx_version_max_allowed" in
     10.4)
         MAC_OS_X_VERSION_MAX_ALLOWED="1040"
         ;;
@@ -2594,7 +2681,7 @@ if test "$_os" = "Darwin"; then
         AC_MSG_RESULT([ok])
     fi
 
-    AC_MSG_CHECKING([that macosx-version-max-allowed is coherent macos-with-sdk])
+    AC_MSG_CHECKING([that macosx-version-max-allowed is coherent with macos-with-sdk])
     if test $MAC_OS_X_VERSION_MAX_ALLOWED -gt $MACOSX_SDK_VERSION; then
         AC_MSG_ERROR([the version maximum allowed cannot be greater thatn the sdk level])
     else
