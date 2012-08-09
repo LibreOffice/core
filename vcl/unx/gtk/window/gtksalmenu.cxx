@@ -4,6 +4,8 @@
 //#include <gtk/gtk.h>
 #include <unx/gtk/glomenu.h>
 #include <unx/gtk/gloactiongroup.h>
+#include <vcl/menu.hxx>
+#include <unx/gtk/gtkinst.hxx>
 
 #include <iostream>
 
@@ -18,6 +20,7 @@ dispatchAction (GSimpleAction   *action,
                 gpointer        user_data)
 {
     cout << "ACTION: " << g_action_get_name( G_ACTION( action ) ) << " triggered." << endl;
+    GTK_YIELD_GRAB();
 
     if ( user_data ) {
         GtkSalMenuItem *pSalMenuItem = static_cast< GtkSalMenuItem* >( user_data );
@@ -25,20 +28,43 @@ dispatchAction (GSimpleAction   *action,
         if ( !pSalMenuItem->mpSubMenu ) {
             const GtkSalFrame *pFrame = pSalMenuItem->mpParentMenu ? pSalMenuItem->mpParentMenu->getFrame() : NULL;
 
-            if ( pFrame ) {
+            if ( pFrame && !pFrame->GetParent() ) {
                 ((PopupMenu*) pSalMenuItem->mpVCLMenu)->SetSelectedEntry( pSalMenuItem->mnId );
                 SalMenuEvent aMenuEvt( pSalMenuItem->mnId, pSalMenuItem->mpVCLMenu );
                 pFrame->CallCallback( SALEVENT_MENUCOMMAND, &aMenuEvt );
             }
-        }
+            else if ( pSalMenuItem->mpVCLMenu )
+            {
+                // if an item from submenu was selected. the corresponding Window does not exist because
+                // we use native popup menus, so we have to set the selected menuitem directly
+                // incidentally this of course works for top level popup menus, too
+                PopupMenu * pPopupMenu = dynamic_cast<PopupMenu *>(pSalMenuItem->mpVCLMenu);
+                if( pPopupMenu )
+                {
+                    // FIXME: revise this ugly code
 
-//        if ( !pSalMenuItem->mpSubMenu ) {
-//            if ( !pSalMenuItem->mpVCLMenu->IsMenuBar() ) {
-////                ((PopupMenu*) pSalMenuItem->mpVCLMenu)->SetSelectedEntry( pSalMenuItem->mnId );
-////                pSalMenuItem->mpVCLMenu->Select();
-////                pSalMenuItem->mpVCLMenu->DeSelect();
-//            }
-//        }
+                    // select handlers in vcl are dispatch on the original menu
+                    // if not consumed by the select handler of the current menu
+                    // however since only the starting menu ever came into Execute
+                    // the hierarchy is not build up. Workaround this by getting
+                    // the menu it should have been
+
+                    // get started from hierarchy in vcl menus
+                    GtkSalMenu* pParentMenu = pSalMenuItem->mpParentMenu;
+                    Menu* pCurMenu = pSalMenuItem->mpVCLMenu;
+                    while( pParentMenu && pParentMenu->mpVCLMenu )
+                    {
+                        pCurMenu = pParentMenu->mpVCLMenu;
+                        pParentMenu = pParentMenu->mpParentSalMenu;
+                    }
+
+                    pPopupMenu->SetSelectedEntry( pSalMenuItem->mnId );
+                    pPopupMenu->ImplSelectWithStart( pCurMenu );
+                }
+                else
+                    OSL_FAIL( "menubar item without frame !" );
+            }
+        }
     }
 }
 
@@ -82,50 +108,6 @@ dispatchAction (GSimpleAction   *action,
 //    return G_MENU_MODEL( pMenuModel );
 //}
 
-GMenuModel *generateMockMenuModel()
-{
-//    GLOMenu *menu = g_lo_menu_new ();
-
-//    GLOMenu *fileMenu = g_lo_menu_new();
-//    GLOMenu *fileSubmenu = g_lo_menu_new ();
-//    g_lo_menu_append( fileSubmenu, "NewMenuOption1", NULL );
-//    g_lo_menu_append_submenu( fileMenu, "New", G_MENU_MODEL( fileSubmenu ) );
-//    g_lo_menu_append( fileMenu, "Quit", "app.quit" );
-
-//    GLOMenu *editMenu = g_lo_menu_new();
-//    GLOMenu *editSubmenu = g_lo_menu_new ();
-//    g_lo_menu_append( editSubmenu, "EditMenuOption1", NULL );
-//    g_lo_menu_append_item( editSubmenu, editMenuItem );
-//    g_lo_menu_append_submenu( editMenu, "Format", G_MENU_MODEL( editSubmenu ) );
-
-//    g_lo_menu_append_submenu( menu, "File", G_MENU_MODEL( fileMenu ) );
-//    g_lo_menu_append_submenu( menu, "Edit", G_MENU_MODEL( editMenu ) );
-
-    GMenu *menu = g_menu_new();
-
-    GMenu *fileMenu = g_menu_new();
-    GMenu *fileSubmenu = g_menu_new();
-    g_menu_append( fileSubmenu, "Text Document", "app.private:factory/swriter" );
-    g_menu_append_submenu( fileMenu, "New", G_MENU_MODEL( fileSubmenu ) );
-    g_menu_append( fileMenu, "Exit", "app..uno:Quit" );
-
-//    g_lo_menu_append_section( fileMenu, NULL, G_MENU_MODEL(submenu));
-//    GMenu *editMenu = g_menu_new();
-//    GMenu *editSubmenu = g_menu_new();
-//    g_menu_append( editSubmenu, "EditMenuOption1", "app.dispatch" );
-//    g_lo_menu_append_item( editSubmenu, editMenuItem );
-//    g_menu_append_submenu( editMenu, "Format", G_MENU_MODEL( editSubmenu ) );
-//    g_lo_menu_append( editMenu, "Quit", "app.quit" );
-
-
-    g_menu_append_submenu( menu, "File", G_MENU_MODEL( fileMenu ) );
-//    g_menu_append_submenu( menu, "Edit", G_MENU_MODEL( editMenu ) );
-
-//    g_menu_append_submenu( menu, "Test", G_MENU_MODEL( fileMenu ));
-
-
-    return G_MENU_MODEL( menu );
-}
 
 GMenuModel *generateMenuModelAndActions( GtkSalMenu*, GLOActionGroup* );
 
@@ -136,7 +118,7 @@ GMenuModel *generateSectionMenuModel( GtkSalMenuSection *pSection, GLOActionGrou
 
     GMenu *pSectionMenuModel = g_menu_new();
 
-    for (int i=0; i < pSection->maItems.size(); i++) {
+    for (sal_uInt16 i = 0; i < pSection->maItems.size(); i++) {
         GtkSalMenuItem *pSalMenuItem = pSection->maItems[ i ];
         GMenuItem *pMenuItem = pSalMenuItem->mpMenuItem;
 
@@ -162,7 +144,7 @@ GMenuModel *generateMenuModelAndActions( GtkSalMenu *pMenu, GLOActionGroup *pAct
 
     GMenu *pMenuModel = g_menu_new();
 
-    for (int i=0; i < pMenu->maItems.size(); i++) {
+    for (sal_uInt16 i = 0; i < pMenu->maItems.size(); i++) {
         GtkSalMenuItem *pSalMenuItem = pMenu->maItems[ i ];
         GMenuItem *pMenuItem = pSalMenuItem->mpMenuItem;
 
@@ -175,7 +157,7 @@ GMenuModel *generateMenuModelAndActions( GtkSalMenu *pMenu, GLOActionGroup *pAct
         g_lo_action_group_insert( pActionGroup, pSalMenuItem->mpAction );
     }
 
-    for (int i=0; i < pMenu->maSections.size(); i++) {
+    for (sal_uInt16 i = 0; i < pMenu->maSections.size(); i++) {
         GtkSalMenuSection *pSection = pMenu->maSections[ i ];
 
         GMenuModel *pSectionMenuModel = generateSectionMenuModel( pSection, pActionGroup );
@@ -233,6 +215,7 @@ void GtkSalMenu::publishMenu( GMenuModel *pMenu, GActionGroup *pActionGroup )
 GtkSalMenu::GtkSalMenu( sal_Bool bMenuBar ) :
     mbMenuBar( bMenuBar ),
     mpVCLMenu( NULL ),
+    mpFrame( NULL ),
     mpParentSalMenu( NULL ),
     aDBusMenubarPath( NULL ),
     pSessionBus( NULL ),
@@ -346,7 +329,7 @@ void GtkSalMenu::SetFrame( const SalFrame* pFrame )
     if (gdkWindow) {
         XLIB_Window windowId = GDK_WINDOW_XID( gdkWindow );
 
-        gchar *aWindowObjectPath = g_strdup_printf( "%s/window/%u", GTK_MENU_OBJ_PATH, windowId );
+        gchar *aWindowObjectPath = g_strdup_printf( "%s/window/%lu", GTK_MENU_OBJ_PATH, windowId );
         gchar *aMenubarObjectPath = g_strconcat( GTK_MENU_OBJ_PATH, "/menus/menubar", NULL );
 
 //        gdk_x11_window_set_utf8_property (gdkWindow, "_GTK_APPLICATION_ID", "org.libreoffice");
