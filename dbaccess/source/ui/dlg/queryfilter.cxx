@@ -103,14 +103,14 @@ DlgFilterCrit::DlgFilterCrit(Window * pParent,
     ,m_aPredicateInput( _rxORB, _rxConnection, getParseContext() )
 {
     DBG_CTOR(DlgFilterCrit,NULL);
-    // Den String fuer noEntry in die ListBoxen der Feldnamen schreiben
+    // Write the String for noEntry into the ListBoxes of the field names
     aLB_WHEREFIELD1.InsertEntry( aSTR_NOENTRY );
     aLB_WHEREFIELD2.InsertEntry( aSTR_NOENTRY );
     aLB_WHEREFIELD3.InsertEntry( aSTR_NOENTRY );
 
     try
     {
-        // ... sowie auch die restlichen Felder
+        // ... also write it into the remaining fields
         Sequence< ::rtl::OUString> aNames = m_xColumns->getElementNames();
         const ::rtl::OUString* pIter = aNames.getConstArray();
         const ::rtl::OUString* pEnd   = pIter + aNames.getLength();
@@ -590,7 +590,7 @@ void DlgFilterCrit::SelectField( ListBox& rBox, const String& rField )
 void DlgFilterCrit::EnableLines()
 {
     DBG_CHKTHIS(DlgFilterCrit,NULL);
-    // Enablen/Disablen ganzer Zeilen
+    // enabling/disabling of whole lines
     if( LbPos(aLB_WHEREFIELD1) == 0 )
     {
         aLB_WHEREFIELD2.Disable();
@@ -631,7 +631,7 @@ void DlgFilterCrit::EnableLines()
         aET_WHEREVALUE3.Enable();
     }
 
-    // Vergleichsfeld gleich NOENTRY
+    // comparison field equal to NOENTRY
     if( LbPos(aLB_WHEREFIELD1) == 0 )
     {
         aLB_WHERECOMP1.Disable();
@@ -673,7 +673,7 @@ void DlgFilterCrit::EnableLines()
         aET_WHEREVALUE3.Enable();
     }
 
-    // Vergleichsoperator gleich ISNULL oder ISNOTNULL
+    // comparison operator equal to ISNULL or ISNOTNULL
     if(aLB_WHERECOMP1.GetEntryCount() > 2 &&
         ((LbPos(aLB_WHERECOMP1) == aLB_WHERECOMP1.GetEntryCount()-1) ||
          (LbPos(aLB_WHERECOMP1) == aLB_WHERECOMP1.GetEntryCount()-2)) )

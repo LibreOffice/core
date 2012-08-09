@@ -134,7 +134,7 @@ void OSqlEdit::KeyInput( const KeyEvent& rKEvt )
     rController.InvalidateFeature(SID_CUT);
     rController.InvalidateFeature(SID_COPY);
 
-    // Ist dies ein Cut, Copy, Paste Event?
+    // Is this a cut, copy, paste event?
     KeyFuncType aKeyFunc = rKEvt.GetKeyCode().GetFunction();
     if( (aKeyFunc==KEYFUNC_CUT)||(aKeyFunc==KEYFUNC_COPY)||(aKeyFunc==KEYFUNC_PASTE) )
         m_bAccelAction = sal_True;
@@ -149,10 +149,9 @@ void OSqlEdit::KeyInput( const KeyEvent& rKEvt )
 sal_Bool OSqlEdit::IsInAccelAct()
 {
     DBG_CHKTHIS(OSqlEdit,NULL);
-    // Das Cut, Copy, Paste per Accel. fuehrt neben der Aktion im Edit im View
-    // auch die entsprechenden Slots aus. Die  Aktionen finden also zweimal statt.
-    // Um dies zu verhindern, kann im View beim SlotExec diese Funktion
-    // aufgerufen werden.
+    // Cut, Copy, Paste by Accel. runs the action in the Edit but also the
+    // corresponding slot in the View. Therefore, the action occurs twice.
+    // To prevent this, SlotExec in View can call this function.
 
     return m_bAccelAction;
 }
@@ -220,7 +219,7 @@ void OSqlEdit::SetText(const String& rNewText)
 {
     DBG_CHKTHIS(OSqlEdit,NULL);
     if (m_timerUndoActionCreation.IsActive())
-    {   // die noch anstehenden Undo-Action erzeugen
+    {   // create the trailing undo-actions
         m_timerUndoActionCreation.Stop();
         LINK(this, OSqlEdit, OnUndoActionTimer).Call(NULL);
     }

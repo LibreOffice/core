@@ -320,47 +320,47 @@ DBG_NAME(OTextConnectionHelper)
         Control* pErrorWin = NULL;
         String aDelText(m_aFieldSeparator.GetText());
         if(!aDelText.Len())
-        {   // Kein FeldTrenner
+        {   // No FieldSeparator
             aErrorText = String(ModuleRes(STR_AUTODELIMITER_MISSING));
             aErrorText.SearchAndReplaceAscii("#1",m_aFieldSeparatorLabel.GetText());
             pErrorWin = &m_aFieldSeparator;
         }
         else if (!m_aDecimalSeparator.GetText().Len())
-        {   // kein Decimaltrenner
+        {   // No DecimalSeparator
             aErrorText = String(ModuleRes(STR_AUTODELIMITER_MISSING));
             aErrorText.SearchAndReplaceAscii("#1",m_aDecimalSeparatorLabel.GetText());
             pErrorWin = &m_aDecimalSeparator;
         }
         else if (m_aTextSeparator.GetText() == m_aFieldSeparator.GetText())
-        {   // Feld und TextTrenner duerfen nicht gleich sein
+        {   // Field and TextSeparator must not be the same
             aErrorText = String(ModuleRes(STR_AUTODELIMITER_MUST_DIFFER));
             aErrorText.SearchAndReplaceAscii("#1",m_aTextSeparatorLabel.GetText());
             aErrorText.SearchAndReplaceAscii("#2",m_aFieldSeparatorLabel.GetText());
             pErrorWin = &m_aTextSeparator;
         }
         else if (m_aDecimalSeparator.GetText() == m_aThousandsSeparator.GetText())
-        {   // Tausender und DecimalTrenner duerfen nicht gleich sein
+        {   // Thousands and DecimalSeparator must not be the same
             aErrorText = String(ModuleRes(STR_AUTODELIMITER_MUST_DIFFER));
             aErrorText.SearchAndReplaceAscii("#1",m_aDecimalSeparatorLabel.GetText());
             aErrorText.SearchAndReplaceAscii("#2",m_aThousandsSeparatorLabel.GetText());
             pErrorWin = &m_aDecimalSeparator;
         }
         else if (m_aFieldSeparator.GetText() == m_aThousandsSeparator.GetText())
-        {   // Tausender und FeldTrenner duerfen nicht gleich sein
+        {   // Thousands and FieldSeparator must not be the same
             aErrorText = String(ModuleRes(STR_AUTODELIMITER_MUST_DIFFER));
             aErrorText.SearchAndReplaceAscii("#1",m_aFieldSeparatorLabel.GetText());
             aErrorText.SearchAndReplaceAscii("#2",m_aThousandsSeparatorLabel.GetText());
             pErrorWin = &m_aFieldSeparator;
         }
         else if (m_aFieldSeparator.GetText() == m_aDecimalSeparator.GetText())
-        {   // Zehner und FeldTrenner duerfen nicht gleich sein
+        {   // Tenner and FieldSeparator must not be the same
             aErrorText = String(ModuleRes(STR_AUTODELIMITER_MUST_DIFFER));
             aErrorText.SearchAndReplaceAscii("#1",m_aFieldSeparatorLabel.GetText());
             aErrorText.SearchAndReplaceAscii("#2",m_aDecimalSeparatorLabel.GetText());
             pErrorWin = &m_aFieldSeparator;
         }
         else if (m_aTextSeparator.GetText() == m_aThousandsSeparator.GetText())
-        {   // Tausender und TextTrenner duerfen nicht gleich sein
+        {   // Thousands and TextSeparator must not be the same
             aErrorText = String(ModuleRes(STR_AUTODELIMITER_MUST_DIFFER));
             aErrorText.SearchAndReplaceAscii("#1",m_aTextSeparatorLabel.GetText());
             aErrorText.SearchAndReplaceAscii("#2",m_aThousandsSeparatorLabel.GetText());

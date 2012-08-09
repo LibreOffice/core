@@ -301,10 +301,10 @@ void ODbaseIndexDialog::Init()
     aIB_RemoveAll.Disable();
 
     ///////////////////////////////////////////////////////////////////////////
-    // Alle Indizes werden erst einmal zur Liste der freien Indizes hinzugefuegt.
-    // Dann wird fuer jede Tabelle in der Inf-Datei nachgeschaut, welche Indizes sie besitzt.
-    // Diese Indizes werden aus der Liste der freien Indizes entfernt
-    // und in die Indexliste der Tabelle eingetragen
+    // All indizes are first added to a list of free indizes.
+    // Afterwards, check the index of each table in the Inf-file.
+    // These indizes are removed from the list of free indizes and
+    // entered in the indexlist of the the table.
 
     ///////////////////////////////////////////////////////////////////////////
     // if the string does not contain a path, cut the string
@@ -423,13 +423,13 @@ void ODbaseIndexDialog::SetCtrls()
         )
         aCB_Tables.InsertEntry( aLoop->aTableName );
 
-    // Den ersten Datensatz ins Edit stellen
+    // put the first dataset into Edit
     if( m_aTableInfoList.size() )
     {
         const OTableInfo& rTabInfo = m_aTableInfoList.front();
         aCB_Tables.SetText( rTabInfo.aTableName );
 
-        // ListBox der Tabellenindizes aufbauen
+        // build ListBox of the table indizes
         for (   ConstTableIndexListIterator aIndex = rTabInfo.aIndexList.begin();
                 aIndex != rTabInfo.aIndexList.end();
                 ++aIndex
@@ -441,7 +441,7 @@ void ODbaseIndexDialog::SetCtrls()
 
     }
 
-    // ListBox freie Indizes
+    // ListBox of the free indizes
     for (   ConstTableIndexListIterator aFree = m_aFreeIndexList.begin();
             aFree != m_aFreeIndexList.end();
             ++aFree
@@ -457,7 +457,7 @@ void ODbaseIndexDialog::SetCtrls()
 }
 
 //////////////////////////////////////////////////////////////////////////
-// Klasse OTableInfo
+// Class OTableInfo
 //-------------------------------------------------------------------------
 void OTableInfo::WriteInfFile( const String& rDSN ) const
 {
@@ -477,18 +477,18 @@ void OTableInfo::WriteInfFile( const String& rDSN ) const
     Config aInfFile( aTransformer.get(OFileNotation::N_SYSTEM) );
     aInfFile.SetGroup( aGroupIdent );
 
-    // Erst einmal alle Tabellenindizes loeschen
+    // first, delete all table indizes
     rtl::OString aNDX;
     sal_uInt16 nKeyCnt = aInfFile.GetKeyCount();
     sal_uInt16 nKey = 0;
 
     while( nKey < nKeyCnt )
     {
-        // Verweist der Key auf ein Indexfile?...
+        // Does the key point to an index file?...
         rtl::OString aKeyName = aInfFile.GetKeyName( nKey );
         aNDX = aKeyName.copy(0,3);
 
-        //...wenn ja, Indexfile loeschen, nKey steht dann auf nachfolgendem Key
+        //...if yes, delete index file, nKey is at subsequent key
         if (aNDX.equalsL(RTL_CONSTASCII_STRINGPARAM("NDX")))
         {
             aInfFile.DeleteKey(aKeyName);
@@ -499,7 +499,7 @@ void OTableInfo::WriteInfFile( const String& rDSN ) const
 
     }
 
-    // Jetzt alle gespeicherten Indizes hinzufuegen
+    // now add all saved indizes
     sal_uInt16 nPos = 0;
     for (   ConstTableIndexListIterator aIndex = aIndexList.begin();
             aIndex != aIndexList.end();
@@ -507,7 +507,7 @@ void OTableInfo::WriteInfFile( const String& rDSN ) const
         )
     {
         rtl::OStringBuffer aKeyName(RTL_CONSTASCII_STRINGPARAM("NDX"));
-        if( nPos > 0 )  // Erster Index erhaelt keine Ziffer
+        if( nPos > 0 )  // first index contains no number
             aKeyName.append(static_cast<sal_Int32>(nPos));
         aInfFile.WriteKey(
             aKeyName.makeStringAndClear(),
@@ -517,7 +517,7 @@ void OTableInfo::WriteInfFile( const String& rDSN ) const
 
     aInfFile.Flush();
 
-    // Falls nur noch [dbase] in INF-File steht, Datei loeschen
+    // if only [dbase] is left in INF-file, delete file
     if(!nPos)
     {
         try

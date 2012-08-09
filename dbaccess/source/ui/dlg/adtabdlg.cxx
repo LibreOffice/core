@@ -344,8 +344,8 @@ OAddTableDlg::OAddTableDlg( Window* pParent, IAddTableDialogContext& _rContext )
              ,aHelpButton( this, ModuleRes( PB_HELP ) )
              ,m_rContext( _rContext )
 {
-    // der Close-Button hat schon einen Standard-Help-Text, den ich aber hier nicht haben moechte, also den Text ruecksetzen
-    // und eine neue ID verteilen
+    // the Close-Button already has a standard help text which should not
+    // occur here. Therefore, resetting the text and giving a new ID
     aCloseButton.SetHelpText(String());
     aCloseButton.SetHelpId(HID_JOINSH_ADDTAB_CLOSE);
 

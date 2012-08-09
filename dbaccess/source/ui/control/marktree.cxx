@@ -193,7 +193,7 @@ void OMarkableTreeListBox::CheckButtonHdl()
 void OMarkableTreeListBox::checkedButton_noBroadcast(SvLBoxEntry* _pEntry)
 {
     SvButtonState eState = GetCheckButtonState( _pEntry);
-    if (GetModel()->HasChildren(_pEntry)) // Falls Kinder, dann diese auch checken
+    if (GetModel()->HasChildren(_pEntry)) // if it has children, check those too
     {
         SvLBoxEntry* pChildEntry = GetModel()->Next(_pEntry);
         SvLBoxEntry* pSiblingEntry = GetModel()->NextSibling(_pEntry);
@@ -208,7 +208,7 @@ void OMarkableTreeListBox::checkedButton_noBroadcast(SvLBoxEntry* _pEntry)
     while(pEntry)
     {
         SetCheckButtonState(pEntry,eState);
-        if(GetModel()->HasChildren(pEntry))   // Falls Kinder, dann diese auch checken
+        if(GetModel()->HasChildren(pEntry))   // if it has children, check those too
         {
             SvLBoxEntry* pChildEntry = GetModel()->Next(pEntry);
             SvLBoxEntry* pSiblingEntry = GetModel()->NextSibling(pEntry);

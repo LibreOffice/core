@@ -103,7 +103,7 @@ DlgOrderCrit::DlgOrderCrit( Window * pParent,
     }
     try
     {
-        // ... sowie auch die restlichen Felder
+        // ... also the remaining fields
         Sequence< ::rtl::OUString> aNames = m_xColumns->getElementNames();
         const ::rtl::OUString* pIter = aNames.getConstArray();
         const ::rtl::OUString* pEnd   = pIter + aNames.getLength();
