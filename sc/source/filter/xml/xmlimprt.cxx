@@ -3199,43 +3199,6 @@ void ScXMLImport::ProgressBarIncrement(bool bEditCell, sal_Int32 nInc)
     }
 }
 
-SCTAB ScXMLImport::GetVisibleSheet()
-{
-    // Get the visible sheet number from model's view data (after settings were loaded),
-    // or 0 (default: first sheet) if no settings available.
-
-    uno::Reference<document::XViewDataSupplier> xSupp(GetModel(), uno::UNO_QUERY);
-    if (xSupp.is())
-    {
-        uno::Reference<container::XIndexAccess> xIndex = xSupp->getViewData();
-        if ( xIndex.is() && xIndex->getCount() > 0 )
-        {
-            uno::Any aAny( xIndex->getByIndex(0) );
-            uno::Sequence<beans::PropertyValue> aViewSettings;  // settings for (first) view
-            if ( aAny >>= aViewSettings )
-            {
-                sal_Int32 nCount = aViewSettings.getLength();
-                for (sal_Int32 i = 0; i < nCount; ++i)
-                {
-                    if ( aViewSettings[i].Name.compareToAscii(SC_ACTIVETABLE) == 0 )
-                    {
-                        rtl::OUString sValue;
-                        if(aViewSettings[i].Value >>= sValue)
-                        {
-                            String sTabName(sValue);
-                            SCTAB nTab = 0;
-                            if (pDoc->GetTable(sTabName, nTab))
-                                return nTab;
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    return 0;
-}
-
 void ScXMLImport::ExtractFormulaNamespaceGrammar(
         OUString& rFormula, OUString& rFormulaNmsp, FormulaGrammar::Grammar& reGrammar,
         const OUString& rAttrValue, bool bRestrictToExternalNmsp ) const

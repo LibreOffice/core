@@ -1105,7 +1105,6 @@ public:
     void SetLabelRanges();
     void AddDefaultNote( const com::sun::star::table::CellAddress& aCell );
 
-    SCTAB   GetVisibleSheet();
     /** Extracts the formula string, the formula grammar namespace URL, and a
         grammar enum value from the passed formula attribute value.
 
