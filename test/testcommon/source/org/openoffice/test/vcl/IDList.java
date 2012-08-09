@@ -84,6 +84,9 @@ public class IDList {
         map.clear();
         ArrayList<File> validFiles = new ArrayList<File>();
         File[] files = dir.listFiles();
+        if (files == null)
+            return;
+
         for (File file : files) {
             if (file.isFile() && file.getName().endsWith(".lst")) {
                 validFiles.add(file);

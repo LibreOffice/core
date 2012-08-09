@@ -51,7 +51,7 @@ import org.openoffice.test.vcl.widgets.VclTreeListBox;
  *
  */
 public class UIMap {
-    private static IDList idList = new IDList(new File("./ids"));
+    private static IDList idList = new IDList(new File("./idsd"));
     public static final VclMessageBox ActiveMsgBox = new VclMessageBox(Constant.UID_ACTIVE);
     public static final VclMessageBox MsgBox_AdditionalRowsNotSaved = new VclMessageBox(Constant.UID_ACTIVE, "Additional rows were not saved.");
     public static final VclTabControl ActiveTabControl = new VclTabControl(Constant.UID_ACTIVE);
