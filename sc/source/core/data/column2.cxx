@@ -1396,12 +1396,8 @@ SCROW ScColumn::FindNextVisibleRowWithContent(SCROW nRow, bool bForward) const
     }
 }
 
-void ScColumn::FindDataAreaPos(SCROW& rRow, long nMovY) const
+void ScColumn::FindDataAreaPos(SCROW& rRow, bool bDown) const
 {
-    if (!nMovY)
-       return;
-    bool bForward = (nMovY>0);
-
     // check if we are in a data area
     SCSIZE nIndex;
     bool bThere = Search(rRow, nIndex);
@@ -1411,7 +1407,7 @@ void ScColumn::FindDataAreaPos(SCROW& rRow, long nMovY) const
     size_t nLastIndex = maItems.size() - 1;
     if (bThere)
     {
-        SCROW nNextRow = FindNextVisibleRow(rRow, bForward);
+        SCROW nNextRow = FindNextVisibleRow(rRow, bDown);
         SCSIZE nNewIndex;
         bool bNextThere = Search(nNextRow, nNewIndex);
         if(bNextThere && maItems[nNewIndex].pCell->IsBlank())
@@ -1423,7 +1419,7 @@ void ScColumn::FindDataAreaPos(SCROW& rRow, long nMovY) const
             nLastRow = nNextRow;
             do
             {
-                nNextRow = FindNextVisibleRow(nLastRow, bForward);
+                nNextRow = FindNextVisibleRow(nLastRow, bDown);
                 bNextThere = Search(nNextRow, nNewIndex);
                 if(!bNextThere || maItems[nNewIndex].pCell->IsBlank())
                     bNextThere = false;
@@ -1436,12 +1432,12 @@ void ScColumn::FindDataAreaPos(SCROW& rRow, long nMovY) const
         }
         else
         {
-            rRow = FindNextVisibleRowWithContent(nNextRow, bForward);
+            rRow = FindNextVisibleRowWithContent(nNextRow, bDown);
         }
     }
     else
     {
-        rRow = FindNextVisibleRowWithContent(rRow, bForward);
+        rRow = FindNextVisibleRowWithContent(rRow, bDown);
     }
 }
 

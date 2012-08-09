@@ -650,16 +650,16 @@ void ScTabView::GetAreaMoveEndPosition(SCsCOL nMovX, SCsROW nMovY, ScFollowMode 
     SCsCOLROW i;
     if ( nMovX > 0 )
         for ( i=0; i<nMovX; i++ )
-            pDoc->FindAreaPos( nNewX, nCurY, nTab,  1,  0 );
+            pDoc->FindAreaPos( nNewX, nCurY, nTab,  SC_MOVE_RIGHT );
     if ( nMovX < 0 )
         for ( i=0; i<-nMovX; i++ )
-            pDoc->FindAreaPos( nNewX, nCurY, nTab, -1,  0 );
+            pDoc->FindAreaPos( nNewX, nCurY, nTab, SC_MOVE_LEFT );
     if ( nMovY > 0 )
         for ( i=0; i<nMovY; i++ )
-            pDoc->FindAreaPos( nCurX, nNewY, nTab,  0,  1 );
+            pDoc->FindAreaPos( nCurX, nNewY, nTab,  SC_MOVE_DOWN );
     if ( nMovY < 0 )
         for ( i=0; i<-nMovY; i++ )
-            pDoc->FindAreaPos( nCurX, nNewY, nTab,  0, -1 );
+            pDoc->FindAreaPos( nCurX, nNewY, nTab,  SC_MOVE_UP );
 
     if (eMode==SC_FOLLOW_JUMP)                  // unten/rechts nicht zuviel grau anzeigen
     {

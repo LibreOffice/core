@@ -167,7 +167,7 @@ public:
     SCROW              GetFirstVisDataPos() const;
     bool               GetPrevDataPos(SCROW& rRow) const;
     bool               GetNextDataPos(SCROW& rRow) const;
-    void               FindDataAreaPos(SCROW& rRow, long nMovY) const; // (without Broadcaster)
+    void               FindDataAreaPos(SCROW& rRow, bool bDown) const; // (without Broadcaster)
     void               FindUsed( SCROW nStartRow, SCROW nEndRow, bool* pUsed ) const;
 
     SCSIZE             VisibleCount( SCROW nStartRow, SCROW nEndRow ) const;

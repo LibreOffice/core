@@ -329,6 +329,14 @@ enum FillCmd
         FILL_AUTO
     };
 
+enum ScMoveDirection
+{
+    SC_MOVE_RIGHT,
+    SC_MOVE_LEFT,
+    SC_MOVE_UP,
+    SC_MOVE_DOWN
+};
+
 enum FillDateCmd
     {
         FILL_DAY,

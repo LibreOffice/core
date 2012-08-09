@@ -1471,7 +1471,7 @@ void ScViewFunc::FillCrossDblClick()
             if ( pDoc->HasData( nMovX, nStartY, nTab ) &&
                  pDoc->HasData( nMovX, nStartY + 1, nTab ) )
             {
-                pDoc->FindAreaPos( nMovX, nMovY, nTab, 0, 1 );
+                pDoc->FindAreaPos( nMovX, nMovY, nTab, SC_MOVE_DOWN );
 
                 if ( nMovY > nEndY )
                 {
@@ -1490,7 +1490,7 @@ void ScViewFunc::FillCrossDblClick()
             if ( pDoc->HasData( nMovX, nStartY, nTab ) &&
                  pDoc->HasData( nMovX, nStartY + 1, nTab ) )
             {
-                pDoc->FindAreaPos( nMovX, nMovY, nTab, 0, 1 );
+                pDoc->FindAreaPos( nMovX, nMovY, nTab, SC_MOVE_DOWN );
 
                 if ( nMovY > nEndY )
                 {

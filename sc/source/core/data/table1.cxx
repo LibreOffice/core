@@ -1053,44 +1053,132 @@ void ScTable::LimitChartArea( SCCOL& rStartCol, SCROW& rStartRow, SCCOL& rEndCol
         --rEndRow;
 }
 
-void ScTable::FindAreaPos( SCCOL& rCol, SCROW& rRow, SCsCOL nMovX, SCsROW nMovY )
+SCCOL ScTable::FindNextVisibleCol( SCCOL nCol, bool bRight )
 {
-    if (nMovX)
+    if(bRight)
     {
-        SCsCOL nNewCol = (SCsCOL) rCol;
+        nCol++;
+        SCCOL nEnd = 0;
+        bool bHidden = pDocument->ColHidden(nCol, nTab, NULL, &nEnd);
+        if(bHidden)
+            nCol = nEnd +1;
+
+        return std::min<SCCOL>(MAXCOL, nCol);
+    }
+    else
+    {
+        nCol--;
+        SCCOL nStart = MAXCOL;
+        bool bHidden = pDocument->ColHidden(nCol, nTab, &nStart, NULL);
+        if(bHidden)
+            nCol = nStart - 1;
+
+        return std::max<SCCOL>(0, nCol);
+    }
+}
+
+SCCOL ScTable::FindNextVisibleColWithContent( SCCOL nCol, bool bRight, SCROW nRow )
+{
+    if(bRight)
+    {
+        if(nCol == MAXCOL)
+            return MAXCOL;
+
+        do
+        {
+            nCol++;
+            SCCOL nEndCol = 0;
+            bool bHidden = pDocument->ColHidden( nCol, nTab, NULL, &nEndCol );
+            if(bHidden)
+            {
+                nCol = nEndCol +1;
+                if(nEndCol >= MAXCOL)
+                    return MAXCOL;
+            }
+
+            if(aCol[nCol].HasVisibleDataAt(nRow))
+                return nCol;
+        }
+        while(nCol < MAXCOL);
+
+        return MAXCOL;
+    }
+    else
+    {
+        if(nCol == 0)
+            return 0;
+
+        do
+        {
+            nCol--;
+            SCCOL nStartCol = MAXCOL;
+            bool bHidden = pDocument->ColHidden( nCol, nTab, &nStartCol, NULL );
+            if(bHidden)
+            {
+                nCol = nStartCol -1;
+                if(nCol <= 0)
+                    return 0;
+            }
+
+            if(aCol[nCol].HasVisibleDataAt(nRow))
+                return nCol;
+        }
+        while(nCol > 0);
+
+        return 0;
+    }
+}
+
+void ScTable::FindAreaPos( SCCOL& rCol, SCROW& rRow, ScMoveDirection eDirection )
+{
+    if (eDirection == SC_MOVE_LEFT || eDirection == SC_MOVE_RIGHT)
+    {
+        SCCOL nNewCol = rCol;
         bool bThere = aCol[nNewCol].HasVisibleDataAt(rRow);
-        bool bFnd;
+        bool bRight = (eDirection == SC_MOVE_RIGHT);
         if (bThere)
         {
-            do
+            if(nNewCol >= MAXCOL && eDirection == SC_MOVE_RIGHT)
+                return;
+            else if(nNewCol == 0 && eDirection == SC_MOVE_LEFT)
+                return;
+
+            SCCOL nNextCol = FindNextVisibleCol( nNewCol, bRight );
+
+            if(aCol[nNextCol].HasVisibleDataAt(rRow))
             {
-                nNewCol = sal::static_int_cast<SCsCOL>( nNewCol + nMovX );
-                bFnd = (nNewCol>=0 && nNewCol<=MAXCOL) ? aCol[nNewCol].HasVisibleDataAt(rRow) : false;
+                bool bFound = false;
+                nNewCol = nNextCol;
+                do
+                {
+                    nNextCol = FindNextVisibleCol( nNewCol, bRight );
+                    if(aCol[nNextCol].HasVisibleDataAt(rRow))
+                        nNewCol = nNextCol;
+                    else
+                        bFound = true;
+                }
+                while(!bFound && nNextCol > 0 && nNextCol < MAXCOL);
             }
-            while (bFnd);
-            nNewCol = sal::static_int_cast<SCsCOL>( nNewCol - nMovX );
-
-            if (nNewCol == (SCsCOL)rCol)
-                bThere = false;
+            else
+            {
+                nNewCol = FindNextVisibleColWithContent(nNewCol, bRight, rRow);
+            }
         }
-
-        if (!bThere)
+        else
         {
-            do
-            {
-                nNewCol = sal::static_int_cast<SCsCOL>( nNewCol + nMovX );
-                bFnd = (nNewCol>=0 && nNewCol<=MAXCOL) ? aCol[nNewCol].HasVisibleDataAt(rRow) : true;
-            }
-            while (!bFnd);
+            nNewCol = FindNextVisibleColWithContent(nNewCol, bRight, rRow);
         }
 
-        if (nNewCol<0) nNewCol=0;
-        if (nNewCol>MAXCOL) nNewCol=MAXCOL;
-        rCol = (SCCOL) nNewCol;
+        if (nNewCol<0)
+            nNewCol=0;
+        if (nNewCol>MAXCOL)
+            nNewCol=MAXCOL;
+        rCol = nNewCol;
     }
-
-    if (nMovY)
-        aCol[rCol].FindDataAreaPos(rRow,nMovY);
+    else
+    {
+        aCol[rCol].FindDataAreaPos(rRow,eDirection == SC_MOVE_DOWN);
+    }
 }
 
 bool ScTable::ValidNextPos( SCCOL nCol, SCROW nRow, const ScMarkData& rMark,

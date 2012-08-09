@@ -3705,21 +3705,20 @@ ScVbaRange::End( ::sal_Int32 Direction )  throw (uno::RuntimeException)
     ScDocShell* pDocShell = getScDocShell();
     ScDocument* pDoc = pDocShell->GetDocument();
 
-    SCsCOL nMoveX = 0;
-    SCsROW nMoveY = 0;
+    ScMoveDirection eDirection;
     switch ( Direction )
     {
     case excel::XlDirection::xlDown:
-        nMoveY = 1;
+        eDirection = SC_MOVE_DOWN;
         break;
     case excel::XlDirection::xlUp:
-        nMoveY = -1;
+        eDirection = SC_MOVE_UP;
         break;
     case excel::XlDirection::xlToLeft:
-        nMoveX = -1;
+        eDirection = SC_MOVE_LEFT;
         break;
     case excel::XlDirection::xlToRight:
-        nMoveX = 1;
+        eDirection = SC_MOVE_RIGHT;
         break;
     default:
         throw uno::RuntimeException( ::rtl::OUString(  "Invalid Direction"  ), uno::Reference< uno::XInterface >() );
@@ -3727,7 +3726,7 @@ ScVbaRange::End( ::sal_Int32 Direction )  throw (uno::RuntimeException)
 
     if ( pDoc )
     {
-        pDoc->FindAreaPos( nNewX, nNewY, nTab, nMoveX, nMoveY );
+        pDoc->FindAreaPos( nNewX, nNewY, nTab, eDirection );
     }
 
     ScRange aNewRange( (SCCOL)nNewX, (SCROW)nNewY, nTab, (SCCOL)nNewX, (SCROW)nNewY, nTab );
