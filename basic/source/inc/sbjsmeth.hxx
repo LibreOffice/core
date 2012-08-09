@@ -37,10 +37,7 @@ public:
     TYPEINFO();
 };
 
-#ifndef __SB_SBJSCRIPTMETHODREF_HXX
-#define __SB_SBJSCRIPTMETHODREF_HXX
 SV_DECL_IMPL_REF(SbJScriptMethod)
-#endif
 
 #endif
 
