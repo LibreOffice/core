@@ -102,6 +102,12 @@ static void lcl_putNestedAttribute(RTFSprms& rSprms, Id nParent, Id nId, RTFValu
     if (!pParent.get())
     {
         RTFSprms aAttributes;
+        if (nParent == NS_ooxml::LN_CT_TcPrBase_shd)
+        {
+            // RTF default is 'auto', see writerfilter::dmapper::CellColorHandler
+            aAttributes.set(NS_ooxml::LN_CT_Shd_color, RTFValue::Pointer_t(new RTFValue(0x0a)));
+            aAttributes.set(NS_ooxml::LN_CT_Shd_fill, RTFValue::Pointer_t(new RTFValue(0x0a)));
+        }
         RTFValue::Pointer_t pParentValue(new RTFValue(aAttributes));
         rSprms.set(nParent, pParentValue, bOverwrite);
         pParent = pParentValue;
@@ -3025,6 +3031,40 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             // So set the direct formatting to zero, if we don't have such direct formatting yet.
             if (!m_aStates.top().aParagraphSprms.find(NS_sprm::LN_PDxaLeft1).get())
                 m_aStates.top().aParagraphSprms.set(NS_sprm::LN_PDxaLeft1, RTFValue::Pointer_t(new RTFValue(0)));
+            break;
+        case RTF_CLSHDNG:
+            {
+                int nValue = -1;
+                switch (nParam)
+                {
+                    case 500: nValue = 2; break;
+                    case 1000: nValue = 3; break;
+                    case 1200: nValue = 27; break;
+                    case 1500: nValue = 28; break;
+                    case 2000: nValue = 4; break;
+                    case 2500: nValue = 5; break;
+                    case 3000: nValue = 6; break;
+                    case 3500: nValue = 43; break;
+                    case 3700: nValue = 44; break;
+                    case 4000: nValue = 7; break;
+                    case 4500: nValue = 46; break;
+                    case 5000: nValue = 8; break;
+                    case 5500: nValue = 49; break;
+                    case 6000: nValue = 9; break;
+                    case 6200: nValue = 51; break;
+                    case 6500: nValue = 52; break;
+                    case 7000: nValue = 10; break;
+                    case 7500: nValue = 11; break;
+                    case 8000: nValue = 12; break;
+                    case 8500: nValue = 57; break;
+                    case 8700: nValue = 58; break;
+                    case 9000: nValue = 13; break;
+                    case 9500: nValue = 60; break;
+                    default: break;
+                }
+                if (nValue != -1)
+                    lcl_putNestedAttribute(m_aStates.top().aTableCellSprms, NS_ooxml::LN_CT_TcPrBase_shd, NS_ooxml::LN_CT_Shd_val, RTFValue::Pointer_t(new RTFValue(nValue)));
+            }
             break;
         default:
             SAL_INFO("writerfilter", OSL_THIS_FUNC << ": TODO handle value '" << lcl_RtfToString(nKeyword) << "'");
