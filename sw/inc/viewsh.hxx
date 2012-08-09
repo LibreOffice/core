@@ -324,10 +324,6 @@ public:
     const IDocumentLayoutAccess* getIDocumentLayoutAccess() const;
           IDocumentLayoutAccess* getIDocumentLayoutAccess();
 
-    /** Provides access to the document fields administration interface
-     */
-    const IDocumentFieldsAccess* getIDocumentFieldsAccess() const;
-
     /** Provides access to the content operations interface
      */
     IDocumentContentOperations* getIDocumentContentOperations();

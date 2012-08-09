@@ -2471,7 +2471,6 @@ const IDocumentRedlineAccess* ViewShell::getIDocumentRedlineAccess() const { ret
 IDocumentRedlineAccess* ViewShell::getIDocumentRedlineAccess() { return pDoc; }
 const IDocumentLayoutAccess* ViewShell::getIDocumentLayoutAccess() const { return pDoc; }
 IDocumentLayoutAccess* ViewShell::getIDocumentLayoutAccess() { return pDoc; }
-const IDocumentFieldsAccess* ViewShell::getIDocumentFieldsAccess() const { return pDoc; }
 IDocumentContentOperations* ViewShell::getIDocumentContentOperations() { return pDoc; }
 IDocumentStylePoolAccess* ViewShell::getIDocumentStylePoolAccess() { return pDoc; }
 const IDocumentStatistics* ViewShell::getIDocumentStatistics() const { return pDoc; }

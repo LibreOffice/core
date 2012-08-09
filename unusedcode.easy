@@ -36,7 +36,6 @@ ThumbnailViewItemAcc::getImplementation(com::sun::star::uno::Reference<com::sun:
 TransferableDataHelper::GetInterface(com::sun::star::datatransfer::DataFlavor const&, com::sun::star::uno::Reference<com::sun::star::uno::XInterface>&)
 VCLXPrinterServer::getImplementationId()
 VCLXPrinterServer::getTypes()
-ViewShell::getIDocumentFieldsAccess() const
 VirtualDevice::SetOutputSizePixelScaleOffsetAndBuffer(Size const&, Fraction const&, Point const&, boost::shared_array<unsigned char> const&)
 Window::PostUserEvent(unsigned long&, unsigned long, void*)
 X11SalGraphics::SetMask(int&, int&, unsigned int&, unsigned int&, int&, int&, unsigned long)
