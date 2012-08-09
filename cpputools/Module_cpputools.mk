@@ -35,18 +35,20 @@ $(eval $(call gb_Module_add_targets,cpputools,\
     StaticLibrary_uno \
 ))
 else
+
 ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
 $(eval $(call gb_Module_add_targets,cpputools,\
     Executable_regcomp \
     Executable_regsingleton \
     Executable_uno \
 ))
-endif
 
 ifneq ($(OS),WNT)
 $(eval $(call gb_Module_add_targets,cpputools,\
     Package_bin \
 ))
+endif
+
 endif
 endif
 
