@@ -132,9 +132,4 @@ $(eval $(call gb_CppunitTest_use_unittest_configuration,sc_chart_regression_test
 
 $(eval $(call gb_CppunitTest_use_external,sc_chart_regression_test,libxml2))
 
-# we need to
-# - explicitly depend on the sc resource files needed at unit-test runtime
-$(call gb_CppunitTest_get_target,sc_chart_regression_test) : \
-    $(WORKDIR)/AllLangRes/sc \
-
 # vim: set noet sw=4 ts=4:

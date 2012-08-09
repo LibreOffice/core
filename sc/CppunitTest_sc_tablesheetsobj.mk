@@ -124,7 +124,4 @@ $(eval $(call gb_CppunitTest_use_filter_configuration,sc_spreadsheetsobj))
 
 $(eval $(call gb_CppunitTest_use_unittest_configuration,sc_spreadsheetsobj))
 
-# we need to explicitly depend on the sc resource files needed at unit-test runtime
-$(call gb_CppunitTest_get_target,sc_spreadsheetsobj) : $(WORKDIR)/AllLangRes/sc
-
 # vim: set noet sw=4 ts=4:

@@ -41,8 +41,6 @@ $(eval $(call gb_CppunitTest_use_library_objects,starmath_qa_cppunit,\
     sm \
 ))
 
-$(call gb_CxxObject_get_target,starmath/qa/cppunit/test_starmath): $(WORKDIR)/AllLangRes/sm
-
 $(eval $(call gb_CppunitTest_use_libraries,starmath_qa_cppunit,\
     comphelper \
     cppu \

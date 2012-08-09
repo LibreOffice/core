@@ -416,7 +416,9 @@ $(call gb_AllLangResTarget_get_target,%) :
 	$(call gb_Helper_abbreviate_dirs,\
 		mkdir -p $(dir $@) && touch $@)
 
+# We need to explicitly depend on the resource files needed at unit-test runtime
 define gb_AllLangResTarget_AllLangResTarget
+$(call gb_LinkTarget_get_target,$(call gb_Library_get_linktargetname,$(1))) : $(call gb_AllLangResTarget_get_target,$(1))
 $(foreach lang,$(gb_AllLangResTarget_LANGS),\
 	$(call gb_ResTarget_ResTarget,$(1)$(lang),$(1),$(lang)))
 $$(eval $$(call gb_Module_register_target,$(call gb_AllLangResTarget_get_target,$(1)),$(call gb_AllLangResTarget_get_clean_target,$(1))))
