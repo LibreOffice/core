@@ -336,7 +336,7 @@ XclImpDrawObjRef XclImpDrawObjBase::ReadObj8( const XclImpRoot& rRoot, XclImpStr
 
     if( rStrm.GetRecLeft() >= 10 )
     {
-        sal_uInt16 nSubRecId, nSubRecSize, nObjType;
+        sal_uInt16 nSubRecId(0), nSubRecSize(0), nObjType(0);
         rStrm >> nSubRecId >> nSubRecSize >> nObjType;
         OSL_ENSURE( nSubRecId == EXC_ID_OBJCMO, "XclImpDrawObjBase::ReadObj8 - OBJCMO subrecord expected" );
         if( (nSubRecId == EXC_ID_OBJCMO) && (nSubRecSize >= 6) )
@@ -379,9 +379,14 @@ XclImpDrawObjRef XclImpDrawObjBase::ReadObj8( const XclImpRoot& rRoot, XclImpStr
                 default:
                     OSL_TRACE( "XclImpDrawObjBase::ReadObj8 - unknown object type 0x%04hX", nObjType );
                     rRoot.GetTracer().TraceUnsupportedObjects();
-                    xDrawObj.reset( new XclImpPhObj( rRoot ) );
             }
         }
+    }
+
+    if (!xDrawObj) //ensure placeholder for unknown or broken records
+    {
+        SAL_WARN( "sc", "XclImpDrawObjBase::ReadObj8 import failed, substituting placeholder");
+        xDrawObj.reset( new XclImpPhObj( rRoot ) );
     }
 
     xDrawObj->mnTab = rRoot.GetCurrScTab();
