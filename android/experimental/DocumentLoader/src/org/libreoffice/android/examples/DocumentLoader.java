@@ -928,7 +928,8 @@ public class DocumentLoader
 
             Bootstrap.setup(this);
 
-            Bootstrap.putenv("SAL_LOG=yes");
+            // Avoid all the old style OSL_TRACE calls especially in vcl
+            Bootstrap.putenv("SAL_LOG=+WARN+INFO-INFO.legacy.osl");
 
             // Load a lot of shlibs here explicitly in advance because that
             // makes debugging work better, sigh
