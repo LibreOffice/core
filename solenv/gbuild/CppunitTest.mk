@@ -280,8 +280,9 @@ $(call gb_CppunitTest__use_configuration,$(1),module,$(gb_Configuration_registry
 
 endef
 
-# Use extra configuration dir(s).
+# Use extra configuration dir(s). Used for $(OUTDIR)/unittest/registry.
 define gb_CppunitTest_use_extra_configuration
+$(call gb_CppunitTest_get_target,$(1)) : $(call gb_Package_get_target,test_unittest)
 $(foreach extra,$(2),$(call gb_CppunitTest__use_configuration,$(1),xcsxcu,$(extra)))
 
 endef
