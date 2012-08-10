@@ -230,9 +230,10 @@ void Outliner::Init( sal_uInt16 nMode )
 
     pEditEngine->SetControlWord( nCtrl );
 
+    EnableUndo(false);
     ImplInitDepth( 0, GetMinDepth(), sal_False );
-
     GetUndoManager().Clear();
+    EnableUndo(true);
 }
 
 void Outliner::SetMaxDepth( sal_Int16 nDepth, sal_Bool bCheckParagraphs )
