@@ -81,7 +81,6 @@ public:
     void*       Replace( void* pNew, void* pOld )
                     { return Replace( pNew, GetPos( pOld ) ); }
 
-    void        SetSize( sal_uIntPtr nNewSize );
     sal_uIntPtr       GetSize() const { return nCount; }
 
     sal_uIntPtr       Count() const { return nCount; }

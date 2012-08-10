@@ -507,13 +507,6 @@ void Splitter::SetSplitPosPixel( long nNewPos )
 
 // -----------------------------------------------------------------------
 
-void Splitter::SetLastSplitPosPixel( long nNewPos )
-{
-    mnLastSplitPos = nNewPos;
-}
-
-// -----------------------------------------------------------------------
-
 void Splitter::StartDrag()
 {
     if ( IsTracking() )

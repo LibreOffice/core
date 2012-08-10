@@ -157,7 +157,6 @@ private:
     DECL_LINK( ClickAutoHdl, void * );
 
     void        SetMaxSize( Rectangle aRect );
-    Rectangle   GetRect();
 #endif
 
 public:

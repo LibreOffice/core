@@ -1,5 +1,8 @@
+BasicDockingWindow::BasicDockingWindow(Window*, ResId const&)
 FontSelectPattern::FontSelectPattern(PhysicalFontFace const&, Size const&, float, int, bool)
+PlaceEditDialog::GetResId(unsigned short)
 PopupMenu::SetSelectedEntry(unsigned short)
+RtfAttributeOutput::WriteHex(int)
 SanExtensionImpl::setCertExtn(com::sun::star::uno::Sequence<signed char>, com::sun::star::uno::Sequence<signed char>, unsigned char)
 SanExtensionImpl::setCertExtn(unsigned char*, unsigned int, unsigned char*, unsigned int, unsigned char)
 ScCompressedArray<int, unsigned char>::GetEntryCount() const
@@ -22,7 +25,6 @@ SpinButton::SpinButton(Window*, ResId const&)
 StgCache::Pos2Page(int)
 SvtSlideSorterBarOptions::AddListenerLink(Link const&)
 SvtSlideSorterBarOptions::RemoveListenerLink(Link const&)
-SvxPositionSizeTabPage::GetRect()
 TempFile::IsValid() const
 TextEngine::GetLeftMargin() const
 ThumbnailView::GetItemCount() const
@@ -106,8 +108,10 @@ nullcanvas::SpriteCanvasHelper::opaqueUpdate(basegfx::B2DConnectedRanges<canvas:
 nullcanvas::SpriteCanvasHelper::scrollUpdate(basegfx::B2DRange const&, basegfx::B2DRange const&, basegfx::B2DConnectedRanges<canvas::SpriteRedrawManager::SpriteInfo>::ConnectedComponents const&)
 oox::drawingml::TextParagraphProperties::dump() const
 oox::xls::BiffDrawingObjectBase::BiffDrawingObjectBase(oox::xls::WorksheetHelper const&)
+sd::ImagePreparer::notesToHtml(unsigned int)
 sd::LeftDrawPaneShell::RegisterInterface(SfxModule*)
 sd::LeftImpressPaneShell::RegisterInterface(SfxModule*)
+sd::RemoteServer::pairClient()
 sd::ToolPanelPaneShell::RegisterInterface(SfxModule*)
 sd::ViewShellBase::RegisterFactory(unsigned short)
 std::__cxx1998::vector<SfxFilter*, std::allocator<SfxFilter*> >::~vector()

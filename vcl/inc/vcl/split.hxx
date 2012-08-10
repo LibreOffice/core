@@ -106,9 +106,6 @@ public:
     virtual void        SetSplitPosPixel( long nPos );
     long                GetSplitPosPixel() const { return mnSplitPos; }
 
-    void                SetLastSplitPosPixel( long nNewPos );
-    long                GetLastSplitPosPixel() const { return mnLastSplitPos; }
-
     sal_Bool                IsHorizontal() const { return mbHorzSplit; }
 
     // set the stepsize of the splitter for cursor movement
