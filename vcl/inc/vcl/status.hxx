@@ -101,7 +101,6 @@ private:
     sal_Bool                mbFormat;
     sal_Bool                mbProgressMode;
     sal_Bool                mbInUserDraw;
-    sal_Bool                mbBottomBorder;
     Link                maClickHdl;
     Link                maDoubleClickHdl;
 
@@ -172,9 +171,6 @@ public:
 
     void                SetHelpId( sal_uInt16 nItemId, const rtl::OString& rHelpId );
     rtl::OString        GetHelpId( sal_uInt16 nItemId ) const;
-
-    sal_Bool                IsBottomBorder() const { return mbBottomBorder; }
-    sal_Bool                IsTopBorder() const;
 
     void                StartProgressMode( const XubString& rText );
     void                SetProgressValue( sal_uInt16 nPercent );

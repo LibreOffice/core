@@ -60,14 +60,12 @@ public:
 
     VirtualDevice*      mpVirDev;
     long                mnItemBorderWidth;
-    bool                mbTopBorder:1;
     bool                mbDrawItemFrames:1;
 };
 
 StatusBar::ImplData::ImplData()
 {
     mpVirDev = NULL;
-    mbTopBorder = false;
     mbDrawItemFrames = false;
     mnItemBorderWidth = 0;
 }
@@ -152,7 +150,6 @@ void StatusBar::ImplInit( Window* pParent, WinBits nStyle )
     mbVisibleItems  = sal_True;
     mbProgressMode  = sal_False;
     mbInUserDraw    = sal_False;
-    mbBottomBorder  = sal_False;
     mnItemsWidth    = STATUSBAR_OFFSET_X;
     mnDX            = 0;
     mnDY            = 0;
@@ -335,8 +332,6 @@ Rectangle StatusBar::ImplGetItemRectPos( sal_uInt16 nPos ) const
             aRect.Right()  = aRect.Left() + pItem->mnWidth + pItem->mnExtraWidth;
             aRect.Top()    = mnItemY;
             aRect.Bottom() = mnCalcHeight - STATUSBAR_OFFSET_Y;
-            if( IsTopBorder() )
-                aRect.Bottom()+=2;
         }
     }
 
@@ -658,8 +653,6 @@ void StatusBar::ImplCalcProgressRect()
     maPrgsFrameRect.Left()      = maPrgsTxtPos.X()+aPrgsTxtSize.Width()+STATUSBAR_OFFSET;
     maPrgsFrameRect.Top()       = mnItemY;
     maPrgsFrameRect.Bottom()    = mnCalcHeight - STATUSBAR_OFFSET_Y;
-    if( IsTopBorder() )
-        maPrgsFrameRect.Bottom()+=2;
 
     // calculate size of progress rects
     mnPrgsSize = maPrgsFrameRect.Bottom()-maPrgsFrameRect.Top()-(STATUSBAR_PRGS_OFFSET*2);
@@ -767,24 +760,11 @@ void StatusBar::Paint( const Rectangle& )
         }
     }
 
-    // draw borders
-    if( IsTopBorder() )
-    {
-        const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-        SetLineColor( rStyleSettings.GetShadowColor() );
-        DrawLine( Point( 0, 0 ), Point( mnDX-1, 0 ) );
-        SetLineColor( rStyleSettings.GetLightColor() );
-        DrawLine( Point( 0, 1 ), Point( mnDX-1, 1 ) );
-    }
-
-    if ( IsBottomBorder() )
-    {
-        const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-        SetLineColor( rStyleSettings.GetShadowColor() );
-        DrawLine( Point( 0, mnDY-2 ), Point( mnDX-1, mnDY-2 ) );
-        SetLineColor( rStyleSettings.GetLightColor() );
-        DrawLine( Point( 0, mnDY-1 ), Point( mnDX-1, mnDY-1 ) );
-    }
+    // draw line at the top of the status bar (to visually distinguish it from
+    // shell / docking area)
+    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
+    SetLineColor( rStyleSettings.GetShadowColor() );
+    DrawLine( Point( 0, 0 ), Point( mnDX-1, 0 ) );
 }
 
 // -----------------------------------------------------------------------
@@ -803,18 +783,9 @@ void StatusBar::Resize()
     mnDX = aSize.Width() - ImplGetSVData()->maNWFData.mnStatusBarLowerRightOffset;
     mnDY = aSize.Height();
     mnCalcHeight = mnDY;
-    // subtract border
-    if( IsTopBorder() )
-        mnCalcHeight -= 2;
-    if ( IsBottomBorder() )
-        mnCalcHeight -= 2;
 
     mnItemY = STATUSBAR_OFFSET_Y;
-    if( IsTopBorder() )
-        mnItemY += 2;
     mnTextY = (mnCalcHeight-GetTextHeight())/2;
-    if( IsTopBorder() )
-        mnTextY += 2;
 
     // Formatierung neu ausloesen
     mbFormat = sal_True;
@@ -1338,13 +1309,6 @@ rtl::OString StatusBar::GetHelpId( sal_uInt16 nItemId ) const
     return aRet;
 }
 
-sal_Bool StatusBar::IsTopBorder() const
-{
-    return mpImplData->mbTopBorder;
-}
-
-// -----------------------------------------------------------------------
-
 void StatusBar::StartProgressMode( const XubString& rText )
 {
     DBG_ASSERT( !mbProgressMode, "StatusBar::StartProgressMode(): progress mode is active" );
@@ -1497,12 +1461,6 @@ Size StatusBar::CalcWindowSizePixel() const
     nCalcHeight = nMinHeight+nBarTextOffset + 2*mpImplData->mnItemBorderWidth;
     if( nCalcHeight < nProgressHeight+2 )
         nCalcHeight = nProgressHeight+2;
-
-    // add border
-    if( IsTopBorder() )
-        nCalcHeight += 2;
-    if ( IsBottomBorder() )
-        nCalcHeight += 2;
 
     return Size( nCalcWidth, nCalcHeight );
 }
