@@ -32,6 +32,10 @@ $(eval $(call gb_CppunitTest_use_externals,i18npool_test_languagetag,\
 endif
 endif
 
+$(eval $(call gb_CppunitTest_use_externals,i18npool_test_languagetag,\
+	libxml2 \
+))
+
 ifeq ($(SYSTEM_LIBLANGTAG),YES)
 $(eval $(call gb_CppunitTest_add_cxxflags,i18npool_test_languagetag,\
 	-DSYSTEM_LIBLANGTAG \
