@@ -43,8 +43,8 @@ namespace sd
 
     struct ClientInfo
     {
-        const rtl::OUString mName;
-        const rtl::OUString mAddress;
+        rtl::OUString mName;
+        rtl::OUString mAddress;
 
         enum PROTOCOL { NETWORK = 1, BLUETOOTH };
         ClientInfo( OUString rName, OUString rAddress) :
