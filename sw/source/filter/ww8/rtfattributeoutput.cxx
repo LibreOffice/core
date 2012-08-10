@@ -3225,11 +3225,6 @@ OString RtfAttributeOutput::WriteHex(const sal_uInt8* pData, sal_uInt32 nSize, S
     return aRet.makeStringAndClear();
 }
 
-OString RtfAttributeOutput::WriteHex(sal_Int32 nNum)
-{
-    return RtfAttributeOutput::WriteHex((sal_uInt8*)&nNum, sizeof(sal_Int32));
-}
-
 void lcl_AppendSP( OStringBuffer& rBuffer,
     const char cName[],
     const ::rtl::OUString& rValue,

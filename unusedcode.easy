@@ -2,7 +2,6 @@ BasicDockingWindow::BasicDockingWindow(Window*, ResId const&)
 FontSelectPattern::FontSelectPattern(PhysicalFontFace const&, Size const&, float, int, bool)
 PlaceEditDialog::GetResId(unsigned short)
 PopupMenu::SetSelectedEntry(unsigned short)
-RtfAttributeOutput::WriteHex(int)
 SanExtensionImpl::setCertExtn(com::sun::star::uno::Sequence<signed char>, com::sun::star::uno::Sequence<signed char>, unsigned char)
 SanExtensionImpl::setCertExtn(unsigned char*, unsigned int, unsigned char*, unsigned int, unsigned char)
 ScCompressedArray<int, unsigned char>::GetEntryCount() const
