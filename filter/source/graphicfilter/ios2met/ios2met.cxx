@@ -217,7 +217,7 @@ enum PenStyle { PEN_NULL, PEN_SOLID, PEN_DOT, PEN_DASH, PEN_DASHDOT };
 
 struct OSPalette {
     OSPalette * pSucc;
-    sal_uInt32 * p0RGB; // Darf auch NULL sein!
+    sal_uInt32 * p0RGB; // May be NULL!
     sal_uInt16 nSize;
 };
 
@@ -344,10 +344,10 @@ private:
 
     LineInfo aLineInfo;
 
-    OSArea   * pAreaStack; // Areas, die in Arbeit sind
+    OSArea   * pAreaStack; // Areas that are being worked on
 
-    OSPath   * pPathStack; // Paths, die in Arbeit sind
-    OSPath   * pPathList;  // Vollendete Paths
+    OSPath   * pPathStack; // Paths that are being worked on
+    OSPath   * pPathList;  // finished Paths
 
     OSFont   * pFontList;
 
@@ -413,11 +413,11 @@ public:
     ~OS2METReader();
 
     void ReadOS2MET( SvStream & rStreamOS2MET, GDIMetaFile & rGDIMetaFile );
-        // Liesst aus dem Stream eine OS2MET-Datei und fuellt das GDIMetaFile
+        // Reads from the stream a OS2MET file und and fills up the GDIMetaFile
 
 };
 
-//=================== Methoda of OS2METReader ==============================
+//=================== Methods of OS2METReader ==============================
 
 sal_Bool OS2METReader::Callback(sal_uInt16 /*nPercent*/)
 {

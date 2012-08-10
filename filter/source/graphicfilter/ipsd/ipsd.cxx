@@ -118,7 +118,7 @@ sal_Bool PSDReader::ReadPSD(Graphic & rGraphic )
 
     m_rPSD.SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
 
-    // Kopf einlesen:
+    // read header:
 
     if ( ImplReadHeader() == sal_False )
         return sal_False;
@@ -143,7 +143,7 @@ sal_Bool PSDReader::ReadPSD(Graphic & rGraphic )
             mpWriteAcc->SetPaletteColor( i, Color( mpPalette[ i ], mpPalette[ i + 256 ], mpPalette[ i + 512 ] ) );
         }
     }
-    // read Bitmap-Daten
+    // read bitmap data
     if ( mbStatus && ImplReadBody() )
     {
         if ( mbTransparent )
@@ -363,7 +363,7 @@ sal_Bool PSDReader::ImplReadBody()
                 }
                 if ( nRunCount & 0x80 )     // a run length packet
                 {
-                    if ( nBitCount == -1 )  // bits left in nDat ?
+                    if ( nBitCount == -1 )  // bits left in nDat?
                     {
                         m_rPSD >> nDat;
                         nDat ^= 0xff;
@@ -725,7 +725,7 @@ sal_Bool PSDReader::ImplReadBody()
     return sal_True;
 }
 
-//================== GraphicImport - die exportierte Funktion ================
+//================== GraphicImport - the exported function ================
 
 extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool __LOADONCALLAPI
 GraphicImport(SvStream & rStream, Graphic & rGraphic, FilterConfigItem*, sal_Bool)
