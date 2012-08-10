@@ -2548,12 +2548,7 @@ if test "$_os" = "Darwin"; then
                 MACOSX_SDK_PATH=/Xcode3/SDKs/MacOSX10.4u.sdk
             fi
             ;;
-        10.6)
-            if test -d /Developer/SDKs/MacOSX10.6.sdk; then
-                MACOSX_SDK_PATH=/Developer/SDKs/MacOSX10.6.sdk
-            fi
-            ;;
-        10.7|10.8)
+        10.6|10.7|10.8)
             if test -d /Developer/SDKs/MacOSX$with_macosx_sdk.sdk; then
                 MACOSX_SDK_PATH=/Developer/SDKs/MacOSX$with_macosx_sdk.sdk
             elif test -x /usr/bin/xcode-select; then
