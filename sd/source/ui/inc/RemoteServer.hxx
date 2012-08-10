@@ -16,6 +16,7 @@
 #include <sys/types.h>
 #include <vector>
 
+#include <osl/mutex.hxx>
 #include <osl/socket.hxx>
 #include <rtl/ref.hxx>
 #include <salhelper/thread.hxx>
@@ -36,10 +37,7 @@ namespace css = ::com::sun::star;
 
 namespace sd
 {
-
-    class Transmitter;
-    class Listener;
-    class ImagePreparer;
+    class Communicator;
 
     struct ClientInfo
     {
@@ -47,33 +45,53 @@ namespace sd
         rtl::OUString mAddress;
 
         enum PROTOCOL { NETWORK = 1, BLUETOOTH };
-        ClientInfo( OUString rName, OUString rAddress) :
+        ClientInfo( const rtl::OUString rName, const rtl::OUString rAddress ) :
             mName( rName ),
             mAddress( rAddress ) {}
+    };
+
+    struct ClientInfoInternal:
+        ClientInfo
+    {
+        osl::StreamSocket mStreamSocket;
+        rtl::OUString mPin;
+
+        ClientInfoInternal( const rtl::OUString rName,
+                            const rtl::OUString rAddress,
+                            osl::StreamSocket &rSocket, rtl::OUString rPin ):
+                ClientInfo( rName, rAddress ),
+                mStreamSocket( rSocket ),
+                mPin( rPin ) {}
     };
 
     class RemoteServer : public salhelper::Thread
     {
         public:
+            // Internal setup
             static void setup();
+
+            // For slideshowimpl to inform us.
             static void presentationStarted( const css::uno::Reference<
                 css::presentation::XSlideShowController > &rController );
             static void presentationStopped();
-            void informListenerDestroyed();
 
-            SD_DLLPUBLIC static std::vector<ClientInfo> getClients();
+            // For the control dialog
+            SD_DLLPUBLIC static std::vector<ClientInfo*> getClients();
             SD_DLLPUBLIC static void connectClient( ClientInfo aClient, rtl::OString aPin );
+
+            // For the communicator
+            static void removeCommunicator( Communicator* pCommunicator );
         private:
             RemoteServer();
             ~RemoteServer();
             static RemoteServer *spServer;
             osl::AcceptorSocket mSocket;
-            osl::StreamSocket mStreamSocket;
-            void pairClient();
-            void listenThread();
+
+            ::osl::Mutex mDataMutex;
+            ::std::vector<Communicator*> mCommunicators;
+            ::std::vector<ClientInfoInternal*> mAvailableClients;
+
             void execute();
-            static Transmitter *pTransmitter;
-            static rtl::Reference<Listener> mListener;
     };
 }
 

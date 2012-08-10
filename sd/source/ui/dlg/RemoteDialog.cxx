@@ -26,12 +26,12 @@ RemoteDialog::RemoteDialog( Window *pWindow ) :
 {
      FreeResource();
 
-    vector<ClientInfo> aClients( RemoteServer::getClients() );
+    vector<ClientInfo*> aClients( RemoteServer::getClients() );
 
-    for ( vector<ClientInfo>::const_iterator aIt( aClients.begin() );
+    for ( vector<ClientInfo*>::const_iterator aIt( aClients.begin() );
         aIt < aClients.end(); aIt++ )
     {
-        mClientBox.addEntry( *aIt );
+        mClientBox.addEntry( **aIt );
     }
 
     mButtonConnect.SetClickHdl( LINK( this, RemoteDialog, HandleConnectButton ) );

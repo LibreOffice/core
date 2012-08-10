@@ -22,9 +22,10 @@ using rtl::OString;
 using rtl::OStringBuffer;
 
 
-Listener::Listener( const ::rtl::Reference<RemoteServer>& rServer, sd::Transmitter *aTransmitter  )
-    : ::cppu::WeakComponentImplHelper1< XSlideShowListener >( m_aMutex ),
-      mServer( rServer ),
+Listener::Listener( const ::rtl::Reference<Communicator>& rCommunicator,
+                    sd::Transmitter *aTransmitter  ):
+      ::cppu::WeakComponentImplHelper1< XSlideShowListener >( m_aMutex ),
+      mCommunicator( rCommunicator ),
       pTransmitter( NULL ),
       mPreparer()
 {
@@ -43,11 +44,11 @@ void Listener::init( const css::uno::Reference< css::presentation::XSlideShowCon
         aController->addSlideShowListener( this );
 
         sal_Int32 aSlides = aController->getSlideCount();
-	sal_Int32 aCurrentSlide = aController->getCurrentSlideIndex();
+        sal_Int32 aCurrentSlide = aController->getCurrentSlideIndex();
         OStringBuffer aBuffer;
         aBuffer.append( "slideshow_started\n" )
                .append( OString::valueOf( aSlides ) ).append("\n")
-	       .append( OString::valueOf( aCurrentSlide ) ).append( "\n\n" );
+        .append( OString::valueOf( aCurrentSlide ) ).append( "\n\n" );
 
         pTransmitter->addMessage( aBuffer.makeStringAndClear(),
                                   Transmitter::PRIORITY_HIGH );
@@ -146,7 +147,7 @@ void SAL_CALL Listener::disposing (void)
         mController->removeSlideShowListener( this );
         mController = NULL;
     }
-    mServer->informListenerDestroyed();
+    mCommunicator->informListenerDestroyed();
 }
 
 void SAL_CALL Listener::disposing (

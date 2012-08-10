@@ -25,83 +25,32 @@ using namespace std;
 using namespace sd;
 using namespace ::com::sun::star;
 using rtl::OString;
+using namespace ::osl;
 
-RemoteServer::RemoteServer()
-:  Thread( "RemoteServerThread" ), mSocket()
+// struct ClientInfoInternal:
+//     ClientInfo
+// {
+//     osl::StreamSocket mStreamSocket;
+//     rtl::OUString mPin;
+//     ClientInfoInternal( const rtl::OUString rName,
+//                         const rtl::OUString rAddress,
+//                         osl::StreamSocket &rSocket, rtl::OUString rPin ):
+//             ClientInfo( rName, rAddress ),
+//             mStreamSocket( rSocket ),
+//             mPin( rPin ) {}
+// };
+
+RemoteServer::RemoteServer() :
+    Thread( "RemoteServerThread" ),
+    mSocket(),
+    mDataMutex(),
+    mCommunicators(),
+    mAvailableClients()
 {
 }
 
 RemoteServer::~RemoteServer()
 {
-}
-
-// Run as a thread
-void RemoteServer::listenThread()
-{
-    pTransmitter = new Transmitter( mStreamSocket );
-    pTransmitter->launch();
-    Receiver aReceiver( pTransmitter );
-    try {
-        uno::Reference< lang::XMultiServiceFactory > xServiceManager(
-            ::comphelper::getProcessServiceFactory(), uno::UNO_QUERY_THROW );
-        uno::Reference< frame::XFramesSupplier > xFramesSupplier( xServiceManager->createInstance(
-        "com.sun.star.frame.Desktop" ) , uno::UNO_QUERY_THROW );
-        uno::Reference< frame::XFrame > xFrame ( xFramesSupplier->getActiveFrame(), uno::UNO_QUERY_THROW );
-        uno::Reference<presentation::XPresentationSupplier> xPS ( xFrame->getController()->getModel(), uno::UNO_QUERY_THROW);
-        uno::Reference<presentation::XPresentation2> xPresentation(
-            xPS->getPresentation(), uno::UNO_QUERY_THROW);
-        if ( xPresentation->isRunning() )
-        {
-            presentationStarted( xPresentation->getController() );
-        }
-    }
-    catch (uno::RuntimeException &)
-    {
-    }
-
-    sal_uInt64 aRet, aRead;
-    vector<char> aBuffer;
-    vector<OString> aCommand;
-    aRead = 0;
-    while ( true )
-    {
-        aBuffer.resize( aRead + 100 );
-        aRet = mStreamSocket.recv( &aBuffer[aRead], 100 );
-        if ( aRet == 0 )
-        {
-            break; // I.e. transmission finished.
-        }
-        aRead += aRet;
-        vector<char>::iterator aIt;
-        while ( (aIt = find( aBuffer.begin(), aBuffer.end(), '\n' ))
-            != aBuffer.end() )
-        {
-            sal_uInt64 aLocation = aIt - aBuffer.begin();
-
-            aCommand.push_back( OString( &(*aBuffer.begin()), aLocation ) );
-            if ( aIt == aBuffer.begin() )
-            {
-                aReceiver.parseCommand( aCommand );
-                aCommand.clear();
-            }
-            aBuffer.erase( aBuffer.begin(), aIt + 1 ); // Also delete the empty line
-            aRead -= (aLocation + 1);
-        }
-    }
-    // TODO: deal with transmision errors gracefully.
-    presentationStopped();
-
-    pTransmitter->notifyFinished();
-    pTransmitter->join();
-    pTransmitter = NULL;
-    fprintf( stderr, "Finished listening\n" );
-}
-
-void RemoteServer::pairClient()
-{
-    // Pairing: client sends PIN, server asks user, replies with accepted/rejected.
-    // We have to wait here until the user opens the dialog via the menu,
-    // typs in the pin etc.
 }
 
 void RemoteServer::execute()
@@ -118,60 +67,78 @@ void RemoteServer::execute()
     }
     while ( true )
     {
-        fprintf( stderr, "Awaiting a connection.\n" );
-        if ( mSocket.acceptConnection( mStreamSocket ) == osl_Socket_Error ) {
-            // Socket closed or other problem
-            return;
+        StreamSocket aSocket;
+        if ( mSocket.acceptConnection( aSocket ) == osl_Socket_Error ) {
+            MutexGuard aGuard( mDataMutex );
+            // FIXME: read one line in, parse the data.
+            mAvailableClients.push_back( new ClientInfoInternal( "A name",
+                                        "An address", aSocket, "0000" ) );
         }
-        fprintf( stderr, "Accepted a connection!\n" );
-        listenThread();
     }
 
-}
-
-void RemoteServer::informListenerDestroyed()
-{
-    mListener.clear();
-}
-
-void RemoteServer::presentationStarted( const css::uno::Reference<
-     css::presentation::XSlideShowController > &rController )
-{
-    if ( pTransmitter )
-    {
-        mListener = rtl::Reference<Listener>( new Listener( spServer, pTransmitter ) );
-        mListener->init( rController );
-    }
-}
-
-void RemoteServer::presentationStopped()
-{
-    if ( mListener.is() )
-    {
-        mListener->disposing();
-        mListener = NULL;
-    }
 }
 
 RemoteServer *sd::RemoteServer::spServer = NULL;
-Transmitter *sd::RemoteServer::pTransmitter = NULL;
-rtl::Reference<Listener> sd::RemoteServer::mListener = NULL;
 
 void RemoteServer::setup()
 {
-  if (spServer)
-    return;
+    if (spServer)
+        return;
 
-  spServer = new RemoteServer();
-  spServer->launch();
+    spServer = new RemoteServer();
+    spServer->launch();
 }
 
-std::vector<ClientInfo> RemoteServer::getClients()
+
+void RemoteServer::presentationStarted( const css::uno::Reference<
+                css::presentation::XSlideShowController > &rController )
 {
-    std::vector<ClientInfo> aV;
-    aV.push_back( ClientInfo( "A phone", "akaakaskj" ) );
-    aV.push_back( ClientInfo( "B phone", "iiiiiii" ) );
-    return aV;
+    if ( !spServer )
+        return;
+    MutexGuard aGuard( spServer->mDataMutex );
+    for ( vector<Communicator*>::const_iterator aIt = spServer->mCommunicators.begin();
+         aIt < spServer->mCommunicators.end(); aIt++ )
+    {
+        (*aIt)->presentationStarted( rController );
+    }
+}
+void RemoteServer::presentationStopped()
+{
+    if ( !spServer )
+        return;
+    MutexGuard aGuard( spServer->mDataMutex );
+    for ( vector<Communicator*>::const_iterator aIt = spServer->mCommunicators.begin();
+         aIt < spServer->mCommunicators.end(); aIt++ )
+    {
+        (*aIt)->disposeListener();
+    }
+}
+
+void RemoteServer::removeCommunicator( Communicator* mCommunicator )
+{
+    if ( !spServer )
+        return;
+    MutexGuard aGuard( spServer->mDataMutex );
+    for ( vector<Communicator*>::iterator aIt = spServer->mCommunicators.begin();
+         aIt < spServer->mCommunicators.end(); aIt++ )
+    {
+        if ( mCommunicator == *aIt )
+        {
+            spServer->mCommunicators.erase( aIt );
+            break;
+        }
+    }
+}
+
+std::vector<ClientInfo*> RemoteServer::getClients()
+{
+    if ( !spServer )
+        std::vector<ClientInfo*>();
+    MutexGuard aGuard( spServer->mDataMutex );
+    std::vector<ClientInfo*> aClients;
+    aClients.assign( spServer->mAvailableClients.begin(),
+                     spServer->mAvailableClients.end() );
+    return aClients;
 }
 
 void RemoteServer::connectClient( ClientInfo aClient, rtl::OString aPin )
