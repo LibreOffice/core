@@ -736,11 +736,6 @@ void ImplDrawFrame( OutputDevice *const pDev, Rectangle& rRect,
                     rRect.Bottom() -= 2;
                     break;
 
-                case FRAME_DRAW_TOPBOTTOM:
-                    ++rRect.Top();
-                    --rRect.Bottom();
-                    break;
-
                 case FRAME_DRAW_NWF:
                     // enough space for the native rendering
                     rRect.Left() += 4;
@@ -828,16 +823,6 @@ void ImplDrawFrame( OutputDevice *const pDev, Rectangle& rRect,
                                              rStyleSettings.GetLightColor(),
                                              rStyleSettings.GetShadowColor() );
                     }
-                    break;
-
-                case FRAME_DRAW_TOPBOTTOM:
-                    pDev->SetLineColor( rStyleSettings.GetShadowColor() );
-                    pDev->DrawLine( Point( rRect.Left(), rRect.Top() ), Point( rRect.Right(), rRect.Top() ) );
-                    pDev->DrawLine( Point( rRect.Left(), rRect.Bottom() ), Point( rRect.Right(), rRect.Bottom() ) );
-
-                    // adjust target rectangle
-                    ++rRect.Top();
-                    --rRect.Bottom();
                     break;
 
                 case FRAME_DRAW_NWF:

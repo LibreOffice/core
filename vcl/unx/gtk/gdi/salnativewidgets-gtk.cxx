@@ -1184,16 +1184,10 @@ sal_Bool GtkSalGraphics::getNativeControlRegion(  ControlType nType,
 
         if( nStyle & FRAME_DRAW_NODRAW )
         {
-            if( (nStyle & FRAME_DRAW_TOPBOTTOM) == FRAME_DRAW_TOPBOTTOM )
-                rNativeContentRegion = Rectangle(x1,
-                                                 y1+frameWidth,
-                                                 x2,
-                                                 y2-frameWidth);
-            else
-                rNativeContentRegion = Rectangle(x1+frameWidth,
-                                                 y1+frameWidth,
-                                                 x2-frameWidth,
-                                                 y2-frameWidth);
+            rNativeContentRegion = Rectangle(x1+frameWidth,
+                                             y1+frameWidth,
+                                             x2-frameWidth,
+                                             y2-frameWidth);
         }
         else
             rNativeContentRegion = rControlRegion;

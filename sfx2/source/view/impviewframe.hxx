@@ -78,7 +78,6 @@ public:
                             Window( &rParent, nBits | WB_BORDER | WB_CLIPCHILDREN ),
                             pFrame( p )
                         {
-                            SetBorderStyle( WINDOW_BORDER_TOPBOTTOM );
                             p->GetFrame().GetWindow().SetBorderStyle( WINDOW_BORDER_NOBORDER );
                         }
 

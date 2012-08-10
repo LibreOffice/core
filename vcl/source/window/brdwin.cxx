@@ -1200,8 +1200,6 @@ void ImplSmallBorderWindowView::Init( OutputDevice* pDev, long nWidth, long nHei
             // ist, dann Border nach aussen
             if ( mpBorderWindow->mbSmallOutBorder )
                 nStyle |= FRAME_DRAW_DOUBLEOUT;
-            else if ( nBorderStyle & WINDOW_BORDER_TOPBOTTOM )
-                nStyle |= FRAME_DRAW_TOPBOTTOM;
             else if ( nBorderStyle & WINDOW_BORDER_NWF )
                 nStyle |= FRAME_DRAW_NWF;
             else
@@ -1382,8 +1380,6 @@ void ImplSmallBorderWindowView::DrawWindow( sal_uInt16 nDrawFlags, OutputDevice*
         // ist, dann Border nach aussen
         if ( mpBorderWindow->mbSmallOutBorder )
             nStyle |= FRAME_DRAW_DOUBLEOUT;
-        else if ( nBorderStyle & WINDOW_BORDER_TOPBOTTOM )
-            nStyle |= FRAME_DRAW_TOPBOTTOM;
         else if ( nBorderStyle & WINDOW_BORDER_NWF )
             nStyle |= FRAME_DRAW_NWF;
         else
