@@ -61,16 +61,7 @@ binfilter::SdrUnoControlAccessArr::DeleteAndDestroy(unsigned short, unsigned sho
 binfilter::SdrViewUserMarker::SdrViewUserMarker(binfilter::SdrPaintView*)
 binfilter::ShellResource::~ShellResource()
 binfilter::SoDll::~SoDll()
-binfilter::String::EqualsIgnoreCaseAscii(binfilter::String const&, unsigned short, unsigned short) const
-binfilter::String::EqualsIgnoreCaseAscii(unsigned short const*) const
-binfilter::String::GetQuotedToken(unsigned short, binfilter::String const&, unsigned short, unsigned short&) const
-binfilter::String::GetQuotedTokenCount(binfilter::String const&, unsigned short) const
-binfilter::String::ReplaceAscii(unsigned short, unsigned short, char const*, unsigned short)
-binfilter::String::Reverse()
 binfilter::String::Search(unsigned short const*, unsigned short) const
-binfilter::String::SearchAndReplaceAll(binfilter::String const&, binfilter::String const&)
-binfilter::String::SearchAndReplaceAllAscii(char const*, binfilter::String const&)
-binfilter::String::SearchChar(unsigned short const*, unsigned short) const
 binfilter::SvObjectServerList::Remove(SvGlobalName const&)
 binfilter::SvStringsISort::DeleteAndDestroy(unsigned short, unsigned short)
 binfilter::SvStringsISort::Seek_Entry(binfilter::String*, unsigned short*) const
