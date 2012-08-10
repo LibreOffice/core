@@ -384,11 +384,24 @@ void doTestStringToBool(bool bBool, char const*const pis)
     CPPUNIT_ASSERT_EQUAL(bBool, bTemp);
 
 }
+
+void doTestBoolToString(char const*const pis, bool bValue )
+{
+    ::rtl::OUString const is(::rtl::OUString::createFromAscii(pis));
+    ::rtl::OUStringBuffer buf;
+    Converter::convertBool(buf, bValue);
+    OSL_TRACE("%s", ::rtl::OUStringToOString(buf.getStr(), RTL_TEXTENCODING_UTF8).getStr());
+    CPPUNIT_ASSERT_EQUAL(is, buf.makeStringAndClear());
+}
+
 void ConverterTest::testBool()
 {
     doTestStringToBool(true, "true");
     doTestStringToBool(false, "false");
+    doTestBoolToString("true", true);
+    doTestBoolToString("false", false);
 }
+
 CPPUNIT_TEST_SUITE_REGISTRATION(ConverterTest);
 
 }
