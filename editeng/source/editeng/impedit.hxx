@@ -1111,7 +1111,7 @@ inline EditUndoManager& ImpEditEngine::GetUndoManager()
 inline ::svl::IUndoManager* ImpEditEngine::SetUndoManager(::svl::IUndoManager* pNew)
 {
     ::svl::IUndoManager* pRetval = pUndoManager;
-    EditUndoManager* pNewEditUndoManager = dynamic_cast< EditUndoManager* >(pNew);
+  //    EditUndoManager* pNewEditUndoManager = dynamic_cast< EditUndoManager* >(pNew);
 
     if(pUndoManager)
     {
