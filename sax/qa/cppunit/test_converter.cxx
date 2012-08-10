@@ -52,6 +52,7 @@ public:
     void testDouble();
     void testMeasure();
     void testBool();
+    void testPercent();
 
     CPPUNIT_TEST_SUITE(ConverterTest);
     CPPUNIT_TEST(testDuration);
@@ -59,6 +60,7 @@ public:
     CPPUNIT_TEST(testDouble);
     CPPUNIT_TEST(testMeasure);
     CPPUNIT_TEST(testBool);
+    CPPUNIT_TEST(testPercent);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -402,6 +404,24 @@ void ConverterTest::testBool()
     doTestBoolToString("false", false);
 }
 
+void doTestStringToPercent(sal_Int32 nValue, char const*const pis)
+{
+    ::rtl::OUString const is(::rtl::OUString::createFromAscii(pis));
+    sal_Int32 nTemp;
+    bool bSuccess(Converter::convertPercent(nTemp, is));
+    OSL_TRACE("%i", nTemp);
+    CPPUNIT_ASSERT(bSuccess);
+    CPPUNIT_ASSERT_EQUAL(nValue, nTemp);
+}
+
+void ConverterTest::testPercent()
+{
+    doTestStringToPercent(40, "40%");
+    doTestStringToPercent(30, "30");
+    doTestStringToPercent(120, "120%");
+    doTestStringToPercent(-40, "-40%");
+    doTestStringToPercent(0, "0%");
+}
 CPPUNIT_TEST_SUITE_REGISTRATION(ConverterTest);
 
 }
