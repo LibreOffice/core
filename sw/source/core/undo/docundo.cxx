@@ -65,7 +65,7 @@ UndoManager::UndoManager(::std::auto_ptr<SwNodes> pUndoNodes,
     OSL_ASSERT(m_pUndoNodes.get());
     // writer expects it to be disabled initially
     // Undo is enabled by SwEditShell constructor
-    SfxUndoManager::EnableUndo(false);
+    SdrUndoManager::EnableUndo(false);
 }
 SAL_WNODEPRECATED_DECLARATIONS_POP
 
@@ -86,18 +86,28 @@ bool UndoManager::IsUndoNodes(SwNodes const& rNodes) const
 
 void UndoManager::DoUndo(bool const bDoUndo)
 {
-    EnableUndo(bDoUndo);
-
-    SdrModel *const pSdrModel = m_rDrawModelAccess.GetDrawModel();
-    if( pSdrModel )
+    if(!isTextEditActive())
     {
-        pSdrModel->EnableUndo(bDoUndo);
+        EnableUndo(bDoUndo);
+
+        SdrModel *const pSdrModel = m_rDrawModelAccess.GetDrawModel();
+        if( pSdrModel )
+        {
+            pSdrModel->EnableUndo(bDoUndo);
+        }
     }
 }
 
 bool UndoManager::DoesUndo() const
 {
-    return IsUndoEnabled();
+    if(isTextEditActive())
+    {
+        return false;
+    }
+    else
+    {
+        return IsUndoEnabled();
+    }
 }
 
 void UndoManager::DoGroupUndo(bool const bDoUndo)
@@ -156,11 +166,11 @@ void UndoManager::UnLockUndoNoModifiedPosition()
 
 SwUndo* UndoManager::GetLastUndo()
 {
-    if (!SfxUndoManager::GetUndoActionCount(CurrentLevel))
+    if (!SdrUndoManager::GetUndoActionCount(CurrentLevel))
     {
         return 0;
     }
-    SfxUndoAction *const pAction( SfxUndoManager::GetUndoAction(0) );
+    SfxUndoAction *const pAction( SdrUndoManager::GetUndoAction(0) );
     return dynamic_cast<SwUndo*>(pAction);
 }
 
@@ -171,14 +181,14 @@ void UndoManager::AppendUndo(SwUndo *const pUndo)
 
 void UndoManager::ClearRedo()
 {
-    return SfxUndoManager::ImplClearRedo_NoLock(TopLevel);
+    return SdrUndoManager::ImplClearRedo_NoLock(TopLevel);
 }
 
 void UndoManager::DelAllUndoObj()
 {
     ::sw::UndoGuard const undoGuard(*this);
 
-    SfxUndoManager::ClearAllLevels();
+    SdrUndoManager::ClearAllLevels();
 
     m_UndoSaveMark = MARK_INVALID;
 }
@@ -207,7 +217,7 @@ UndoManager::StartUndo(SwUndoId const i_eUndoId,
         comment = pRewriter->Apply(comment);
     }
 
-    SfxUndoManager::EnterListAction(comment, comment, eUndoId);
+    SdrUndoManager::EnterListAction(comment, comment, eUndoId);
 
     return eUndoId;
 }
@@ -227,8 +237,8 @@ UndoManager::EndUndo(SwUndoId const i_eUndoId, SwRewriter const*const pRewriter)
                 "EndUndo(): no Undo ID, but rewriter given?");
 
     SfxUndoAction *const pLastUndo(
-        (0 == SfxUndoManager::GetUndoActionCount(CurrentLevel))
-            ? 0 : SfxUndoManager::GetUndoAction(0) );
+        (0 == SdrUndoManager::GetUndoActionCount(CurrentLevel))
+            ? 0 : SdrUndoManager::GetUndoAction(0) );
 
     int const nCount = LeaveListAction();
 
@@ -236,7 +246,7 @@ UndoManager::EndUndo(SwUndoId const i_eUndoId, SwRewriter const*const pRewriter)
     {
         OSL_ASSERT(pLastUndo);
         OSL_ASSERT(UNDO_START != eUndoId);
-        SfxUndoAction *const pUndoAction(SfxUndoManager::GetUndoAction(0));
+        SfxUndoAction *const pUndoAction(SdrUndoManager::GetUndoAction(0));
         SfxListUndoAction *const pListAction(
             dynamic_cast<SfxListUndoAction*>(pUndoAction));
         OSL_ASSERT(pListAction);
@@ -283,12 +293,13 @@ UndoManager::GetLastUndoInfo(
 {
     // this is actually expected to work on the current level,
     // but that was really not obvious from the previous implementation...
-    if (!SfxUndoManager::GetUndoActionCount(CurrentLevel))
+    if (!SdrUndoManager::GetUndoActionCount(CurrentLevel))
     {
         return false;
     }
 
-    SfxUndoAction *const pAction( SfxUndoManager::GetUndoAction(0) );
+    SfxUndoAction *const pAction( SdrUndoManager::GetUndoAction(0) );
+
     if (o_pStr)
     {
         *o_pStr = pAction->GetComment();
@@ -304,15 +315,15 @@ UndoManager::GetLastUndoInfo(
 
 SwUndoComments_t UndoManager::GetUndoComments() const
 {
-    OSL_ENSURE(!SfxUndoManager::IsInListAction(),
+    OSL_ENSURE(!SdrUndoManager::IsInListAction(),
             "GetUndoComments() called while in list action?");
 
     SwUndoComments_t ret;
-    sal_uInt16 const nUndoCount(SfxUndoManager::GetUndoActionCount(TopLevel));
+    sal_uInt16 const nUndoCount(SdrUndoManager::GetUndoActionCount(TopLevel));
     for (sal_uInt16 n = 0; n < nUndoCount; ++n)
     {
         OUString const comment(
-                SfxUndoManager::GetUndoActionComment(n, TopLevel));
+                SdrUndoManager::GetUndoActionComment(n, TopLevel));
         ret.push_back(comment);
     }
 
@@ -323,14 +334,14 @@ SwUndoComments_t UndoManager::GetUndoComments() const
 /**************** REDO ******************/
 bool UndoManager::GetFirstRedoInfo(OUString *const o_pStr) const
 {
-    if (!SfxUndoManager::GetRedoActionCount(CurrentLevel))
+    if (!SdrUndoManager::GetRedoActionCount(CurrentLevel))
     {
         return false;
     }
 
     if (o_pStr)
     {
-        *o_pStr = SfxUndoManager::GetRedoActionComment(0, CurrentLevel);
+        *o_pStr = SdrUndoManager::GetRedoActionComment(0, CurrentLevel);
     }
 
     return true;
@@ -339,15 +350,15 @@ bool UndoManager::GetFirstRedoInfo(OUString *const o_pStr) const
 
 SwUndoComments_t UndoManager::GetRedoComments() const
 {
-    OSL_ENSURE(!SfxUndoManager::IsInListAction(),
+    OSL_ENSURE(!SdrUndoManager::IsInListAction(),
             "GetRedoComments() called while in list action?");
 
     SwUndoComments_t ret;
-    sal_uInt16 const nRedoCount(SfxUndoManager::GetRedoActionCount(TopLevel));
+    sal_uInt16 const nRedoCount(SdrUndoManager::GetRedoActionCount(TopLevel));
     for (sal_uInt16 n = 0; n < nRedoCount; ++n)
     {
         OUString const comment(
-                SfxUndoManager::GetRedoActionComment(n, TopLevel));
+                SdrUndoManager::GetRedoActionComment(n, TopLevel));
         ret.push_back(comment);
     }
 
@@ -373,19 +384,19 @@ SwUndoId UndoManager::GetRepeatInfo(OUString *const o_pStr) const
 
 SwUndo * UndoManager::RemoveLastUndo()
 {
-    if (SfxUndoManager::GetRedoActionCount(CurrentLevel) ||
-        SfxUndoManager::GetRedoActionCount(TopLevel))
+    if (SdrUndoManager::GetRedoActionCount(CurrentLevel) ||
+        SdrUndoManager::GetRedoActionCount(TopLevel))
     {
         OSL_ENSURE(false, "RemoveLastUndoAction(): there are Redo actions?");
         return 0;
     }
-    if (!SfxUndoManager::GetUndoActionCount(CurrentLevel))
+    if (!SdrUndoManager::GetUndoActionCount(CurrentLevel))
     {
         OSL_ENSURE(false, "RemoveLastUndoAction(): no Undo actions");
         return 0;
     }
     SfxUndoAction *const pLastUndo(GetUndoAction(0));
-    SfxUndoManager::RemoveLastUndoAction();
+    SdrUndoManager::RemoveLastUndoAction();
     return dynamic_cast<SwUndo *>(pLastUndo);
 }
 
@@ -393,9 +404,9 @@ SwUndo * UndoManager::RemoveLastUndo()
 
 void UndoManager::EnableUndo(bool bEnable)
 {
-    // SfxUndoManager does not have a counter anymore, but reverted to the old behavior of
+    // SdrUndoManager does not have a counter anymore, but reverted to the old behavior of
     // having a simple boolean flag for locking. So, simply forward.
-    SfxUndoManager::EnableUndo(bEnable);
+    SdrUndoManager::EnableUndo(bEnable);
 }
 
 void UndoManager::AddUndoAction(SfxUndoAction *pAction, sal_Bool bTryMerge)
@@ -408,7 +419,7 @@ void UndoManager::AddUndoAction(SfxUndoAction *pAction, sal_Bool bTryMerge)
             pUndo->SetRedlineMode( m_rRedlineAccess.GetRedlineMode() );
         }
     }
-    SfxUndoManager::AddUndoAction(pAction, bTryMerge);
+    SdrUndoManager::AddUndoAction(pAction, bTryMerge);
     // if the undo nodes array is too large, delete some actions
     while (UNDO_ACTION_LIMIT < GetUndoNodes().Count())
     {
@@ -473,17 +484,17 @@ bool UndoManager::impl_DoUndoRedo(UndoOrRedo_t const undoOrRedo)
     // N.B. these may throw!
     if (UNDO == undoOrRedo)
     {
-        bRet = SfxUndoManager::UndoWithContext(context);
+        bRet = SdrUndoManager::UndoWithContext(context);
     }
     else
     {
-        bRet = SfxUndoManager::RedoWithContext(context);
+        bRet = SdrUndoManager::RedoWithContext(context);
     }
 
     if (bRet)
     {
         // if we are at the "last save" position, the document is not modified
-        if (SfxUndoManager::HasTopUndoActionMark(m_UndoSaveMark))
+        if (SdrUndoManager::HasTopUndoActionMark(m_UndoSaveMark))
         {
             m_rState.ResetModified();
         }
@@ -500,31 +511,43 @@ bool UndoManager::impl_DoUndoRedo(UndoOrRedo_t const undoOrRedo)
 
 sal_Bool UndoManager::Undo()
 {
-    bool const bRet = impl_DoUndoRedo(UNDO);
-    return bRet;
+    if(isTextEditActive())
+    {
+        return SdrUndoManager::Undo();
+    }
+    else
+    {
+        return impl_DoUndoRedo(UNDO);
+    }
 }
 
 sal_Bool UndoManager::Redo()
 {
-    bool const bRet = impl_DoUndoRedo(REDO);
-    return bRet;
+    if(isTextEditActive())
+    {
+        return SdrUndoManager::Redo();
+    }
+    else
+    {
+        return impl_DoUndoRedo(REDO);
+    }
 }
 
-/** N.B.: this does _not_ call SfxUndoManager::Repeat because it is not
+/** N.B.: this does _not_ call SdrUndoManager::Repeat because it is not
           possible to wrap a list action around it:
-          calling EnterListAction here will cause SfxUndoManager::Repeat
+          calling EnterListAction here will cause SdrUndoManager::Repeat
           to repeat the list action!
  */
 bool
 UndoManager::Repeat(::sw::RepeatContext & rContext,
         sal_uInt16 const nRepeatCount)
 {
-    if (SfxUndoManager::IsInListAction())
+    if (SdrUndoManager::IsInListAction())
     {
         OSL_ENSURE(false, "repeat in open list action???");
         return false;
     }
-    if (!SfxUndoManager::GetUndoActionCount(TopLevel))
+    if (!SdrUndoManager::GetUndoActionCount(TopLevel))
     {
         return false;
     }
