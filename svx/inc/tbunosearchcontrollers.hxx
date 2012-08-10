@@ -65,6 +65,7 @@ public:
 
     void InitControls_Impl();
     void Remember_Impl(const String& rStr);
+    void SetTextToSelected_Impl();
 
 private:
 
