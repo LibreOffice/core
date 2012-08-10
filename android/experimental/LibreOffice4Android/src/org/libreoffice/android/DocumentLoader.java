@@ -160,7 +160,6 @@ public class DocumentLoader
                 flipper.setOutAnimation(outToLeft);
 
                 documentViewer.nextPage();
-                //((PageViewer)flipper.getChildAt((flipper.getDisplayedChild() + PAGECACHE_PLUSMINUS) % PAGECACHE_SIZE)).display(((PageViewer)flipper.getCurrentView()).currentPageNumber + PAGECACHE_PLUSMINUS);
                 return true;
             } else if (event2.getX() - event1.getX() > 120) {
                 if (((PageViewer)flipper.getCurrentView()).currentPageNumber == 0)
@@ -177,9 +176,6 @@ public class DocumentLoader
                 flipper.setOutAnimation(outToRight);
 
                 documentViewer.prevPage();
-
-                //((PageViewer)flipper.getChildAt((flipper.getDisplayedChild() + PAGECACHE_SIZE - PAGECACHE_PLUSMINUS) % PAGECACHE_SIZE)).display(((PageViewer)flipper.getCurrentView()).currentPageNumber - PAGECACHE_PLUSMINUS);
-
                 return true;
             }
             return false;
@@ -670,7 +666,6 @@ public class DocumentLoader
             progressView = new ProgressBar( DocumentLoader.this, null, android.R.attr.progressBarStyleHorizontal);
             progressView.setProgress( 10 );
 
-            //flipper = new ViewFlipper(DocumentLoader.this);
             ViewFlipper flipper = (ViewFlipper)findViewById( R.id.page_flipper );
             flipper.addView( waitView , 0 , matchParent);
             flipper.showNext();
@@ -752,30 +747,10 @@ public class DocumentLoader
             Log.i(TAG, "onPostExecute: " + result);
             if (result == -1)
                 return;
-            //flipper = new ViewFlipper(this);
-            //flipper = (ViewFlipper)findViewById( R.id.page_flipper );
-            //matchParent = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-            //flipper.removeViewAt( 0 );
             documentViewer = new DocumentViewer( (ViewFlipper)findViewById( R.id.page_flipper ) );
-            //documentViewer.open(0);
-
-            //currentPage = 0;
-            //openPageWithPrefetching( currentPage );
-
-            /*
-            //open method? set current page = 0?
-            flipper.addView(new PageViewer(0), 0, matchParent);
-            for (int i = 0; i < PAGECACHE_PLUSMINUS; i++)
-                flipper.addView(new PageViewer(i+1), i+1, matchParent);
-            for (int i = 0; i < PAGECACHE_PLUSMINUS; i++)
-                flipper.addView(new PageViewer(-1), PAGECACHE_PLUSMINUS + i+1, matchParent);
-              */  
             ll = (LinearLayout)findViewById( R.id.navigator);
             inflater = (LayoutInflater) getApplicationContext().getSystemService(
 				Context.LAYOUT_INFLATER_SERVICE);
-
-			
-			
 			for( int i = 0; i < result.intValue() ; i++ ){
 				ThumbnailView thumb = new ThumbnailView( i , (int)(120.0f / Math.sqrt(2) ) , 120 );
 				final int pos = i;
@@ -783,9 +758,6 @@ public class DocumentLoader
 			
 					@Override
 					public void onClick(View v) {
-						// TODO Auto-generated method stub
-						Log.d("nav" , Integer.toString( pos ) );
-                        //openPageWithPrefetching( pos );
                         documentViewer.open( pos );
 					}
 				});
@@ -799,11 +771,9 @@ public class DocumentLoader
         private String TAG = "DocumentViewer";
         private int currentPage;
         private ViewFlipper viewFlipper;
-        //int pageCount;
         private int lastPage;
         private final int firstPage = 0;
-        private final int CACHE_PLUSMINUS = 2;
-        private final int CACHE_SIZE = 2*CACHE_PLUSMINUS + 1;
+        private final int CACHE_SIZE = 5;
         private ViewGroup.LayoutParams matchParent = new ViewGroup.LayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT,
             ViewGroup.LayoutParams.MATCH_PARENT);
@@ -811,13 +781,12 @@ public class DocumentLoader
         private ArrayList<PageViewer> pageViews = new ArrayList<PageViewer>();
 
         public DocumentViewer(ViewFlipper viewFlipper ){
-            //Log.i( TAG , "[ " + Integer.toString( rangeStart ) + " , " + Integer.toString( rangeEnd ) + " ]" );
             this.currentPage = 0;
             this.viewFlipper = viewFlipper;
             this.lastPage = pageCount-1;
             Log.i( TAG , "pages [0," + Integer.toString( lastPage) + "]" );
             viewFlipper.removeAllViews();
-            for( int i = 0 ; i < Math.min( lastPage, this.CACHE_SIZE) ; i++){//perhaps loading backwards is best? LRU -> end not start?
+            for( int i = 0 ; i < Math.min( Math.max(lastPage,1), this.CACHE_SIZE) ; i++){//perhaps loading backwards is best? LRU -> end not start?
                 pageNumbers.add( new Integer(i) );
                 pageViews.add( new PageViewer( i , viewFlipper.getWidth() , viewFlipper.getHeight()) );
             }
