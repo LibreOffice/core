@@ -25,10 +25,10 @@
 
 
 //----------------------------------------------------------------------------
-//--------------------Nebensachen---------------------------------------------
+//--------------------Other stuff---------------------------------------------
 //----------------------------------------------------------------------------
 
-//-------------------Eine 3D-Min/Max-Box--------------------------------------
+//-------------------A 3D-Min/Max-Box-----------------------------------------
 
 class DXFBoundingBox {
 public:
@@ -45,7 +45,7 @@ public:
 };
 
 
-//-------------------Die (konstante) Palette fuer DXF-------------------------
+//-------------------The (constant) palette for DXF-------------------------
 
 class DXFPalette {
 
@@ -67,7 +67,7 @@ private:
 
 
 //----------------------------------------------------------------------------
-//-----------------DXF Datei lesen und repraesentieren------------------------
+//-----------------read and represent DXF file--------------------------------
 //----------------------------------------------------------------------------
 
 class DXFRepresentation {
@@ -75,20 +75,20 @@ class DXFRepresentation {
 public:
 
     DXFPalette aPalette;
-        // Die immer gleiche DXF-Farb-Palette
+        // The always equal DXF color palette
 
     DXFBoundingBox aBoundingBox;
-        // Ist gleich den AutoCAD-Variablen EXTMIN, EXTMAX sofern in DXF-Datei
-        // vorhanden, anderenfalls wird die BoundingBox berechnet (in Read()).
+        // is equal to the AutoCAD variables EXTMIN, EXTMAX if those exist
+        // within the DXF file. Otherwise the BoundingBox gets calculated (in Read())
 
     DXFTables aTables;
-        // Die Tabellen der DXF-Datei
+        // the tables of the DXF file
 
     DXFBlocks aBlocks;
-        // Die Bloecke der DXF-Datei
+        // the blocks of the DXF file
 
     DXFEntities aEntities;
-        // Die Entities (aus der Entities-Section) der DXF-Datei
+        // the entities (from the Entities-Section) of the DXF file
 
     rtl_TextEncoding mEnc;  // $DWGCODEPAGE
 

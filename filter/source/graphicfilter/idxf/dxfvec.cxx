@@ -83,7 +83,7 @@ DXFTransform::DXFTransform(double fScaleX, double fScaleY, double fScaleZ,
 DXFTransform::DXFTransform(const DXFVector & rExtrusion) :
     aMX(), aMY(), aMZ(), aMP(0.0, 0.0, 0.0)
 {
-    // 'Arbitrary Axis Algorithm' (siehe DXF-Doku von Autodesk)
+    // 'Arbitrary Axis Algorithm' (cf. DXF documentation by Autodesk)
     if ( fabs(rExtrusion.fx) < 1.0/64.0 && fabs(rExtrusion.fy) < 1.0/64.0) {
         aMX = DXFVector(0.0, 1.0, 0.0) * rExtrusion;
     }

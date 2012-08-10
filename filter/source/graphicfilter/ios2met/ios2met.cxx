@@ -258,8 +258,8 @@ struct OSBitmap {
     sal_uLong nID;
     Bitmap aBitmap;
 
-    // Waehrend des Lesens der Bitmap benoetigt:
-    SvStream * pBMP; // Zeiger auf temporaere Windows-BMP-Datei oder NULL
+    // required during reading of the bitmap:
+    SvStream * pBMP; // pointer to temporary Windows-BMP file or NULL
     sal_uInt32 nWidth, nHeight;
     sal_uInt16 nBitsPerPixel;
     sal_uLong nMapPos;
@@ -269,7 +269,7 @@ struct OSBitmap {
 struct OSAttr {
     OSAttr * pSucc;
     sal_uInt16 nPushOrder;
-    sal_uInt8 nIvAttrA, nIvAttrP; // Spezialvariablen fuer den Order "GOrdPIvAtr"
+    sal_uInt8 nIvAttrA, nIvAttrP; // special variables for the Order "GOrdPIvAtr"
 
     Color    aLinCol;
     Color    aLinBgCol;
@@ -330,14 +330,14 @@ private:
     long ErrorCode;
 
     SvStream    * pOS2MET;             // Die einzulesende OS2MET-Datei
-    VirtualDevice * pVirDev;         // Hier werden die Drawing-Methoden aufgerufen.
+    VirtualDevice * pVirDev;         // here the drawing methods are being called
                                      // Dabei findet ein Recording in das GDIMetaFile
                                      // statt.
     sal_uLong         nOrigPos;          // Anfaengliche Position in pOS2MET
     sal_uInt16        nOrigNumberFormat; // Anfaengliches Nummern-Format von pOS2MET
     Rectangle aBoundingRect; // Boundingrectangle wie in Datei angegeben
     Rectangle aCalcBndRect;  // selbst ermitteltes Boundingrectangle
-    MapMode aGlobMapMode;    // Aufloesung des Bildes
+    MapMode aGlobMapMode;    // resolution of the picture
     sal_Bool bCoord32;
 
     OSPalette  * pPaletteStack;
@@ -373,8 +373,8 @@ private:
 
     void SetPalette0RGB(sal_uInt16 nIndex, sal_uLong nCol);
     sal_uInt32 GetPalette0RGB(sal_uInt32 nIndex);
-        // Holt Farbe aus der Palette, oder, wenn nicht vorhanden,
-        // interpretiert nIndex als direkten RGB-Wert.
+        // gets color from palette, or, if it doesn't exist,
+        // interprets nIndex as immediate RGB value.
     Color GetPaletteColor(sal_uInt32 nIndex);
 
 
@@ -417,7 +417,7 @@ public:
 
 };
 
-//=================== Methoden von OS2METReader ==============================
+//=================== Methoda of OS2METReader ==============================
 
 sal_Bool OS2METReader::Callback(sal_uInt16 /*nPercent*/)
 {
@@ -1039,7 +1039,7 @@ void OS2METReader::ReadArc(sal_Bool bGivenPos)
     cy=( q*q*((x3*x3-x1*x1)*(x2-x1)+(x2*x2-x1*x1)*(x1-x3)) +
          p*p*((y3*y3-y1*y1)*(x2-x1)+(y2*y2-y1*y1)*(x1-x3)) ) / ncy;
     cx=( q*q*(x2*x2-x1*x1)+p*p*(y2*y2-y1*y1)+cy*2*p*p*(y1-y2) ) / ncx;
-    // Nun brauchen wir noch den Radius in x und y Richtung:
+    // now we still need the radius in x and y direction:
     r=sqrt(q*q*(x1-cx)*(x1-cx)+p*p*(y1-cy)*(y1-cy));
     rx=r/q; ry=r/p;
     // Jetzt stellt sich "nur noch" die Frage, wie Start- und Endpunkt
@@ -2148,7 +2148,7 @@ void OS2METReader::ReadDsc(sal_uInt16 nDscID, sal_uInt16 /*nDscLen*/)
 
 void OS2METReader::ReadImageData(sal_uInt16 nDataID, sal_uInt16 nDataLen)
 {
-    OSBitmap * p=pBitmapList; if (p==NULL) return; // Nanu ?
+    OSBitmap * p=pBitmapList; if (p==NULL) return;
 
     switch (nDataID) {
 
@@ -2190,12 +2190,12 @@ void OS2METReader::ReadImageData(sal_uInt16 nDataID, sal_uInt16 nDataLen)
                     ErrorCode=3;
                     return;
                 }
-                // Schreibe (Windows-)BITMAPINFOHEADER:
+                // write (Windows-)BITMAPINFOHEADER:
                 *(p->pBMP) << ((sal_uInt32)40) << p->nWidth << p->nHeight;
                 *(p->pBMP) << ((sal_uInt16)1) << p->nBitsPerPixel;
                 *(p->pBMP) << ((sal_uInt32)0) << ((sal_uInt32)0) << ((sal_uInt32)0) << ((sal_uInt32)0);
                 *(p->pBMP) << ((sal_uInt32)0) << ((sal_uInt32)0);
-                // Schreibe Farbtabelle:
+                // write color table:
                 if (p->nBitsPerPixel<=8) {
                     sal_uInt16 i, nColTabSize=1<<(p->nBitsPerPixel);
                     for (i=0; i<nColTabSize; i++) *(p->pBMP) << GetPalette0RGB(i);
@@ -2361,7 +2361,7 @@ void OS2METReader::ReadField(sal_uInt16 nFieldType, sal_uInt16 nFieldSize)
             pB->pSucc=pBitmapList; pBitmapList=pB;
             pB->pBMP=NULL; pB->nWidth=0; pB->nHeight=0; pB->nBitsPerPixel=0;
             pB->nMapPos=0;
-            // ID der Bitmap ermitteln:
+            // determine ID of the bitmap:
             sal_uInt8 i,nbyte,nbyte2;
             pB->nID=0;
             for (i=0; i<4; i++) {
@@ -2392,7 +2392,7 @@ void OS2METReader::ReadField(sal_uInt16 nFieldType, sal_uInt16 nFieldSize)
                 ErrorCode=6;
             }
             delete pBitmapList->pBMP; pBitmapList->pBMP=NULL;
-            // Palette vom Stack killen:
+            // kill palette from stack:
             OSPalette * pP=pPaletteStack;
             if (pP!=NULL) {
                 pPaletteStack=pP->pSucc;
@@ -2453,14 +2453,14 @@ void OS2METReader::ReadField(sal_uInt16 nFieldType, sal_uInt16 nFieldSize)
             nMaxPos=pOS2MET->Tell();
             pOS2MET->Seek(0);
 
-            // "Segmentheader":
+            // "Segment header":
             *pOS2MET >> nbyte;
-            if (nbyte==0x70) { // Header vorhanden
-                pOS2MET->SeekRel(15); // brauchen wir aber nicht
+            if (nbyte==0x70) { // header exists
+                pOS2MET->SeekRel(15); // but we don't need it
             }
-            else pOS2MET->SeekRel(-1); // Kein Header, Byte zurueck
+            else pOS2MET->SeekRel(-1); // no header, go back one byte
 
-            // Schleife ueber Order:
+            // loop through Order:
             while (pOS2MET->Tell()<nMaxPos && pOS2MET->GetError()==0) {
                 *pOS2MET >> nbyte; nOrderID=((sal_uInt16)nbyte) & 0x00ff;
                 if (nOrderID==0x00fe) {
@@ -2483,7 +2483,7 @@ void OS2METReader::ReadField(sal_uInt16 nFieldType, sal_uInt16 nFieldSize)
                 nPos=pOS2MET->Tell();
                 ReadOrder(nOrderID, nOrderLen);
                 if (nPos+nOrderLen < pOS2MET->Tell()) {
-                    OOODEBUG("Order kuerzer als er denkt! OrderID:",nOrderID);
+                    OOODEBUG("Order shorter than he assumes! OrderID:",nOrderID);
                     OOODEBUG("...und zwar bei Position (Parameteranfang):",nPos);
                 }
                 else if (nPos+nOrderLen != pOS2MET->Tell()) {

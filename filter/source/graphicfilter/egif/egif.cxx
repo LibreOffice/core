@@ -310,21 +310,21 @@ void GIFWriter::WriteGlobalHeader( const Size& rSize )
 {
     if( bStatus )
     {
-        // 256 Farben
+        // 256 colors
         const sal_uInt16    nWidth = (sal_uInt16) rSize.Width();
         const sal_uInt16    nHeight = (sal_uInt16) rSize.Height();
         const sal_uInt8     cFlags = 128 | ( 7 << 4 );
 
-        // Werte rausschreiben
+        // write values
         m_rGIF << nWidth;
         m_rGIF << nHeight;
         m_rGIF << cFlags;
         m_rGIF << (sal_uInt8) 0x00;
         m_rGIF << (sal_uInt8) 0x00;
-
-        // Dummy-Palette mit zwei Eintraegen (Schwarz/Weiss) schreiben;
-        // dieses nur wegen Photoshop-Bug, da die keine Bilder ohne
-        // globale Farbpalette lesen koennen
+        
+        // write dummy palette with two entries (black/white);
+        // we do this only because of a bug in Photoshop, since those can't
+        // read pictures without a global color palette
         m_rGIF << (sal_uInt16) 0;
         m_rGIF << (sal_uInt16) 255;
         m_rGIF << (sal_uInt16) 65535;
@@ -341,14 +341,14 @@ void GIFWriter::WriteLoopExtension( const Animation& rAnimation )
     DBG_ASSERT( rAnimation.Count() > 0, "Animation has no bitmaps!" );
 
     sal_uInt16 nLoopCount = (sal_uInt16) rAnimation.GetLoopCount();
-
-    // falls nur ein Durchlauf stattfinden soll,
-    // wird keine LoopExtension geschrieben;
-    // Default ist dann immer ein Durchlauf
+    
+    // if only one run should take place
+    // the LoopExtension won't be written
+    // The default in this case is a single run
     if( nLoopCount != 1 )
     {
-        // Netscape interpretiert den LoopCount
-        // als reine Anzahl der _Wiederholungen_
+        // Netscape interprets the LoopCount
+        // as the sole number of _repetitions_
         if( nLoopCount )
             nLoopCount--;
 
@@ -371,7 +371,7 @@ void GIFWriter::WriteLoopExtension( const Animation& rAnimation )
 
 void GIFWriter::WriteLogSizeExtension( const Size& rSize100 )
 {
-    // PrefSize in 100th-mm als ApplicationExtension schreiben
+    // writer PrefSize in 100th-mm as ApplicationExtension
     if( rSize100.Width() && rSize100.Height() )
     {
         m_rGIF << (sal_uInt8) 0x21;
@@ -395,11 +395,11 @@ void GIFWriter::WriteImageExtension( long nTimer, Disposal eDisposal )
         const sal_uInt16    nDelay = (sal_uInt16) nTimer;
         sal_uInt8           cFlags = 0;
 
-        // Transparent-Flag setzen
+        // set Transparency-Flag
         if( bTransparent )
             cFlags |= 1;
 
-        // Disposal-Wert setzen
+        // set Disposal-value
         if( eDisposal == DISPOSE_BACK )
             cFlags |= ( 2 << 2 );
         else if( eDisposal == DISPOSE_PREVIOUS )
@@ -430,11 +430,11 @@ void GIFWriter::WriteLocalHeader()
         const sal_uInt16    nHeight = (sal_uInt16) m_pAcc->Height();
         sal_uInt8       cFlags = (sal_uInt8) ( m_pAcc->GetBitCount() - 1 );
 
-        // Interlaced-Flag setzen
+        // set Interlaced-Flag
         if( nInterlaced )
             cFlags |= 0x40;
 
-        // Flag fuer lokale Farbpalette setzen
+        // set Flag for the local color palette
         cFlags |= 0x80;
 
         // alles rausschreiben
@@ -468,7 +468,7 @@ void GIFWriter::WritePalette()
             m_rGIF << rColor.GetBlue();
         }
 
-        // Rest mit 0 auffuellen
+        // fill up the rest with 0
         if( nCount < nMaxCount )
             m_rGIF.SeekRel( ( nMaxCount - nCount ) * 3 );
 

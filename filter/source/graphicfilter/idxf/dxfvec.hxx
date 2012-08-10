@@ -63,7 +63,7 @@ class DXFVector {
 
 public:
 
-    double fx,fy,fz; // public ! - Warum nicht ?
+    double fx,fy,fz; // public ! - why not?
 
     inline DXFVector(double fX=0.0, double fY=0.0, double fZ=0.0);
     inline DXFVector(const DXFVector & rV);
@@ -84,7 +84,7 @@ public:
     DXFVector & operator *= (double fs);
     DXFVector   operator *  (double fs) const;
 
-    // Laenge:
+    // length:
     double Abs() const;
 
     // Vektor gleicher Richtung und der Laenge 1:

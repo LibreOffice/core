@@ -59,20 +59,20 @@ DXFPalette::DXFPalette()
     pGreen=new sal_uInt8[256];
     pBlue =new sal_uInt8[256];
 
-    // Farben 0 - 9 (normale Farben)
-    SetColor(0, 0x00, 0x00, 0x00); // eigentlich nie benutzt
+    // colors 0 - 9 (normal colors)
+    SetColor(0, 0x00, 0x00, 0x00); // actually never being used
     SetColor(1, 0xff, 0x00, 0x00);
     SetColor(2, 0xff, 0xff, 0x00);
     SetColor(3, 0x00, 0xff, 0x00);
     SetColor(4, 0x00, 0xff, 0xff);
     SetColor(5, 0x00, 0x00, 0xff);
     SetColor(6, 0xff, 0x00, 0xff);
-    SetColor(7, 0x0f, 0x0f, 0x0f); // eigentlich weiss ???
+    SetColor(7, 0x0f, 0x0f, 0x0f); // actually white???
     SetColor(8, 0x80, 0x80, 0x80);
     SetColor(9, 0xc0, 0xc0, 0xc0);
 
-    // Farben 10 - 249
-    // (Universal-Palette: 24 Farbtoene * 5 Helligkeiten * 2 Saettigungen )
+    // colors 10 - 249
+    // (Universal-Palette: 24 hues * 5 lightnesses * 2 saturations )
     i=10;
     for (nHue=0; nHue<24; nHue++) {
         for (nVal=5; nVal>=1; nVal--) {
@@ -100,7 +100,7 @@ DXFPalette::DXFPalette()
         }
     }
 
-    // Farben 250 - 255 (Grautoenne)
+    // Farben 250 - 255 (shades of gray)
     for (i=0; i<6; i++) {
         nV=(sal_uInt8)(i*38+65);
         SetColor((sal_uInt8)(250+i),nV,nV,nV);

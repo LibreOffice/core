@@ -213,7 +213,7 @@ void EscherPropertyContainer::AddOpt( sal_uInt16 nPropID, sal_Bool bBlib, sal_uI
     sal_uInt32 i;
     for( i = 0; i < nSortCount; i++ )
     {
-        if ( ( pSortStruct[ i ].nPropId &~0xc000 ) == ( nPropID &~0xc000 ) )    // pruefen, ob Property nur ersetzt wird
+        if ( ( pSortStruct[ i ].nPropId &~0xc000 ) == ( nPropID &~0xc000 ) )    // check, whether the Property only gets replaced
         {
             pSortStruct[ i ].nPropId = nPropID;
             if ( pSortStruct[ i ].pBuf )
@@ -231,7 +231,7 @@ void EscherPropertyContainer::AddOpt( sal_uInt16 nPropID, sal_Bool bBlib, sal_uI
     }
     nCountCount++;
     nCountSize += 6;
-    if ( nSortCount == nSortBufSize )                                           // buffer vergroessern
+    if ( nSortCount == nSortBufSize )                                           // increase buffer
     {
         nSortBufSize <<= 1;
         EscherPropSortStruct* pTemp = new EscherPropSortStruct[ nSortBufSize ];
@@ -242,7 +242,7 @@ void EscherPropertyContainer::AddOpt( sal_uInt16 nPropID, sal_Bool bBlib, sal_uI
         delete pSortStruct;
         pSortStruct = pTemp;
     }
-    pSortStruct[ nSortCount ].nPropId = nPropID;                                // property einfuegen
+    pSortStruct[ nSortCount ].nPropId = nPropID;                                // insert property
     pSortStruct[ nSortCount ].pBuf = pProp;
     pSortStruct[ nSortCount ].nPropSize = nPropSize;
     pSortStruct[ nSortCount++ ].nPropValue = nPropValue;
@@ -343,9 +343,9 @@ sal_uInt32 EscherPropertyContainer::ImplGetColor( const sal_uInt32 nSOColor, sal
 {
     if ( bSwap )
     {
-        sal_uInt32 nColor = nSOColor & 0xff00;      // GRUEN
-        nColor |= (sal_uInt8)( nSOColor ) << 16;    // ROT
-        nColor |= (sal_uInt8)( nSOColor >> 16 );    // BLAU
+        sal_uInt32 nColor = nSOColor & 0xff00;      // green
+        nColor |= (sal_uInt8)( nSOColor ) << 16;    // red
+        nColor |= (sal_uInt8)( nSOColor >> 16 );    // blue
         return nColor;
     }
     else
@@ -873,7 +873,7 @@ void EscherPropertyContainer::CreateLineProperties(
                         {
                             case ::com::sun::star::drawing::DashStyle_ROUND :
                             case ::com::sun::star::drawing::DashStyle_ROUNDRELATIVE :
-                                AddOpt( ESCHER_Prop_lineEndCapStyle, 0 ); // Style Round setzen
+                                AddOpt( ESCHER_Prop_lineEndCapStyle, 0 ); // set Style Round
                             break;
                             default : break;
                         }
@@ -1743,7 +1743,7 @@ sal_Bool EscherPropertyContainer::CreatePolygonProperties(
             {
                 aPolygon = aPolyPolygon[ j ];
                 nPoints = aPolygon.GetSize();
-                for ( i = 0; i < nPoints; i++ )             // Punkte aus Polygon in Buffer schreiben
+                for ( i = 0; i < nPoints; i++ )             // write points from polygon to buffer
                 {
                     Point aPoint = aPolygon[ i ];
                     aPoint.X() -= rGeoRect.X;
@@ -1770,7 +1770,7 @@ sal_Bool EscherPropertyContainer::CreatePolygonProperties(
                 *pPtr++ = 0x40;
                 aPolygon = aPolyPolygon[ j ];
                 nPoints = aPolygon.GetSize();
-                for ( i = 0; i < nPoints; i++ )         // Polyflags in Buffer schreiben
+                for ( i = 0; i < nPoints; i++ )         // write Polyflags to Buffer
                 {
                     *pPtr++ = 0;
                     if ( bBezier )
@@ -2962,7 +2962,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                             if ( xText.is() )
                                 aText = xText->getString();
                             if ( aText.isEmpty() )
-                                aText = ::rtl::OUString( "your text" );   // todo: moving into a resource
+                                aText = ::rtl::OUString( "your text" );   // TODO: moving into a resource
                             AddOpt( DFF_Prop_gtextUNICODE, aText );
 
                             // FontWork Font
@@ -3503,7 +3503,7 @@ void EscherBlibEntry::WriteBlibEntry( SvStream& rSt, sal_Bool bWritePictureOffse
     switch ( meBlibType )
     {
         case EMF :
-        case WMF :  // EMF/WMF auf OS2 zu Pict Konvertieren
+        case WMF :  // converting EMF/WMF on OS2 to Pict
             rSt << (sal_uInt8)PICT;
         break;
         default:
@@ -3854,8 +3854,8 @@ sal_uInt32 EscherGraphicProvider::GetBlibID( SvStream& rPicOutStrm, const rtl::O
                         nHeight = aPrefSize.Height() * 360;
                     }
                     rPicOutStrm << nUncompressedSize // WMFSize without FileHeader
-                    << (sal_Int32)0     // da die Originalgroesse des WMF's (ohne FileHeader)
-                    << (sal_Int32)0     // nicht mehr feststellbar ist, schreiben wir 10cm / x
+                    << (sal_Int32)0     // since we can't find out anymore what the original size of
+                    << (sal_Int32)0     // the WMF (without Fileheader) was we write 10cm / x
                     << nPrefWidth
                     << nPrefHeight
                     << nWidth
@@ -3919,7 +3919,7 @@ sal_uInt32 EscherConnectorListEntry::GetClosestPoint( const Polygon& rPoly, cons
 };
 
 // ---------------------------------------------------------------------------------------------
-// bei Rechtecken           bei Ellipsen    bei Polygonen
+// for rectangles          for ellipses     for polygons
 //
 // nRule =  0 ->Top         0 ->Top         nRule = Index auf ein (Poly)Polygon Punkt
 //          1 ->Left        2 ->Left
@@ -4147,7 +4147,7 @@ sal_uInt32 EscherConnectorListEntry::GetConnectorRule( sal_Bool bFirst )
             nRule = GetClosestPoint( aPoly, aRefPoint );
 
             if (aType.equalsL(RTL_CONSTASCII_STRINGPARAM("drawing.Ellipse")))
-                nRule <<= 1;    // In PPT hat eine Ellipse 8 M?glichkeiten sich zu connecten
+                nRule <<= 1;    // In PPT an ellipse has 8 ways to connect
         }
     }
     return nRule;
@@ -4459,7 +4459,7 @@ void EscherEx::InsertAtCurrentPos( sal_uInt32 nBytes, bool bExpandEndOfAtom )
         }
     }
 
-    // container und atom sizes anpassen
+    // adapt container and atom sizes
     mpOutStrm->Seek( mnStrmStartOfs );
     while ( mpOutStrm->Tell() < nCurPos )
     {
@@ -4489,7 +4489,7 @@ void EscherEx::InsertAtCurrentPos( sal_uInt32 nBytes, bool bExpandEndOfAtom )
     }
     mpOutStrm->Seek( STREAM_SEEK_TO_END );
     nSource = mpOutStrm->Tell();
-    nToCopy = nSource - nCurPos;                        // Stream um nBytes vergroessern
+    nToCopy = nSource - nCurPos;                        // increase the size of the tream by nBytes
     pBuf = new sal_uInt8[ 0x40000 ];                            // 256KB Buffer
     while ( nToCopy )
     {
@@ -4718,7 +4718,7 @@ sal_uInt32 EscherEx::EnterGroup( const String& rShapeName, const Rectangle* pBou
     AddAtom( 16, ESCHER_Spgr, 1 );
     PtReplaceOrInsert( ESCHER_Persist_Grouping_Snap | mnGroupLevel,
                         mpOutStrm->Tell() );
-    *mpOutStrm  << (sal_Int32)aRect.Left()  // Bounding box fuer die Gruppierten shapes an die sie attached werden
+    *mpOutStrm  << (sal_Int32)aRect.Left()  // Bounding box for the grouped shapes the wich they will be attached
                 << (sal_Int32)aRect.Top()
                 << (sal_Int32)aRect.Right()
                 << (sal_Int32)aRect.Bottom();
@@ -4768,7 +4768,7 @@ sal_Bool EscherEx::SetGroupSnapRect( sal_uInt32 nGroupLevel, const Rectangle& rR
         sal_uInt32 nCurrentPos = mpOutStrm->Tell();
         if ( DoSeek( ESCHER_Persist_Grouping_Snap | ( nGroupLevel - 1 ) ) )
         {
-            *mpOutStrm  << (sal_Int32)rRect.Left()  // Bounding box fuer die Gruppierten shapes an die sie attached werden
+            *mpOutStrm  << (sal_Int32)rRect.Left()  // Bounding box for the grouped shapes the wich they will be attached
                         << (sal_Int32)rRect.Top()
                         << (sal_Int32)rRect.Right()
                         << (sal_Int32)rRect.Bottom();
@@ -4825,9 +4825,9 @@ sal_uInt32 EscherEx::GetColor( const sal_uInt32 nSOColor, sal_Bool bSwap )
 {
     if ( bSwap )
     {
-        sal_uInt32 nColor = nSOColor & 0xff00;      // GRUEN
-        nColor |= (sal_uInt8)( nSOColor ) << 16;        // ROT
-        nColor |= (sal_uInt8)( nSOColor >> 16 );        // BLAU
+        sal_uInt32 nColor = nSOColor & 0xff00;          // Green
+        nColor |= (sal_uInt8)( nSOColor ) << 16;        // Red
+        nColor |= (sal_uInt8)( nSOColor >> 16 );        // Blue
         return nColor;
     }
     else

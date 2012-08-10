@@ -77,12 +77,12 @@ class PictWriter {
 private:
 
     sal_Bool bStatus;
-    sal_uLong nLastPercent; // Mit welcher Zahl pCallback zuletzt aufgerufen wurde.
+    sal_uLong nLastPercent; // with wich number pCallback has been called the last time
     com::sun::star::uno::Reference< com::sun::star::task::XStatusIndicator > xStatusIndicator;
 
     SvStream * pPict;
 
-    // Aktuelle Attribute im Quell-Metafile:
+    // current attributes in the source-metafile:
     Color       aLineColor;
     Color       aFillColor;
     RasterOp    eSrcRasterOp;
@@ -92,7 +92,7 @@ private:
     Rectangle   aClipRect;
     PictWriterAttrStackMember * pAttrStack;
 
-    // Aktuelle Attribute im Ziel-Metafile, und ob sie gueltig sind
+    // current attributes in the target-metafile and whether they are valid
     sal_Bool        bDstBkPatVisible;   sal_Bool bDstBkPatValid;
     sal_uInt8        nDstTxFace;            sal_Bool bDstTxFaceValid;
     RasterOp    eDstTxMode;         sal_Bool bDstTxModeValid;
@@ -107,23 +107,23 @@ private:
     Point       aDstTextPosition;   sal_Bool bDstTextPositionValid;
     String      aDstFontName; sal_uInt16 nDstFontNameId; sal_Bool bDstFontNameValid;
 
-    sal_uLong nNumberOfActions;  // Anzahl der Actions im GDIMetafile
-    sal_uLong nNumberOfBitmaps;  // Anzahl der Bitmaps
-    sal_uLong nWrittenActions;   // Anzahl der bereits verarbeiteten Actions beim Schreiben der Opcodes
-    sal_uLong nWrittenBitmaps;   // Anzahl der bereits geschriebenen Bitmaps
-    sal_uLong nActBitmapPercent; // Wieviel Prozent die naechste Bitmap schon geschrieben ist.
+    sal_uLong nNumberOfActions;  // number of actions in the GDIMetafile
+    sal_uLong nNumberOfBitmaps;  // number of bitmaps
+    sal_uLong nWrittenActions;   // number of already processed actions during writing the Opcodes
+    sal_uLong nWrittenBitmaps;   // number of already written Bitmaps
+    sal_uLong nActBitmapPercent; // what percentage of the next bitmap is already written
 
     void MayCallback();
-        // Berechnet anhand der obigen 5 Parameter eine Prozentzahl
-        // und macht dann ggf. einen Callback. Setzt bStatus auf sal_False wenn User abbrechen
-        // moechte.
+        // calculates a percentage on the basis of the 5 parameters above
+        // and then does a Callback should the situation arise. Sets bStatus to sal_False
+        // if the user wants to cancel
 
     void CountActionsAndBitmaps(const GDIMetaFile & rMTF);
-        // Zaehlt die Bitmaps und Actions (nNumberOfActions und nNumberOfBitmaps muessen
-        // zu Anfang auf 0 gesetzt werden, weil diese Methode rekursiv ist)
+        // counts the bitmaps and actions (nNumberOfActions and nNumberOfBitmaps
+        // have to be set to 0 at the beginning, since this method is recursive)
 
     Polygon PolyPolygonToPolygon(const PolyPolygon & rPoly);
-        // Macht aus einem PolyPolygon ein halbwegs vernuenftiges Polygon
+        // generates a relatively sane polygon on the basis of a PolyPolygon
 
     Rectangle MapRectangle( const Rectangle& rRect );
     void WritePoint(const Point & rPoint);
@@ -184,7 +184,7 @@ public:
 };
 
 
-//========================== Methoden von PictWriter ==========================
+//========================== Methods of PictWriter ==========================
 
 
 void PictWriter::MayCallback()
@@ -248,11 +248,13 @@ Polygon PictWriter::PolyPolygonToPolygon(const PolyPolygon & rPolyPoly)
     for (np=1; np<nCount; np++) {
         aPoly2=rPolyPoly.GetObject(np);
 
-        //-----------------Folgendes verschmilzt aPoly1 und aPoly2 zu aPoly1-----------------
+        //-----------------The following code merges aPoly1 and aPoly2 to aPoly1-----------------
 
         nSize1=aPoly1.GetSize();
         nSize2=aPoly2.GetSize();
 
+        // At first we look for a point in aPoly1 (referenced by nBestIdx1) and a
+        // point in aPoly2 (referenced by nBestid2), which 
         // Zunaechst werden ein Punkt in aPoly1 (referenziert durch nBestIdx1) und ein
         // Punkt in aPoly2 (referenziert durch nBestIdx2) gesucht, die moeglichst dicht
         // beieinander liegen. Da dies mit quadratischem Aufwand einher geht, und somit
@@ -279,9 +281,8 @@ Polygon PictWriter::PolyPolygonToPolygon(const PolyPolygon & rPolyPoly)
             if (nCountdownTests<=0) break;
         }
 
-        // Nun werden aPoly1 und aPoly2 zu einem Polygon aPoly3 (spaeter aPoly1) zusammengefuegt.
-        // Die beiden Polygone werden verbunden durch zwei zusaetzliche Kanten zwischen den oben
-        // gefundenen Punkten.
+        // Now aPoly1 and aPoly2 are being merged to a polygon aPoly3 (later aPoly1)
+        // Both polygons are being connected by two additional edges between the points found above
         aPoly3.Clear();
         aPoly3.SetSize(nSize1+nSize2+2);
         i3=0;
@@ -898,7 +899,7 @@ void PictWriter::WriteOpcode_BitsRect(const Point & rPoint, const Size & rSize, 
 
     SetAttrForPaint();
 
-    // temopraere Windows-BMP-Datei erzeugen:
+    // generating a temporary Windows-BMP-File:
     nActBitmapPercent=30;
     MayCallback();
 
@@ -916,15 +917,14 @@ void PictWriter::WriteOpcode_BitsRect(const Point & rPoint, const Size & rSize, 
     nWidth = pAcc->Width();
     nHeight = pAcc->Height();
 
-    // Wenn 24-Bit, dann den Opcode 'DirectBitsRect' erzeugen:
+    // If 24-Bit, then create the Opcode 'DirectBitsRect':
     if ( nBitsPerPixel == 24 )
     {
-
-        // Anzahl Bytes einer (ungepackten) Zeile in Quelle und Ziel berechnen:
+:Anzahl Bytes einer (ungepackten) Zeile in Quelle und Ziel berechnen:
         nSrcRowBytes =( ( 3 * nWidth ) + 0x0003 ) & 0xfffc;
         nDstRowBytes = nWidth * 4;
 
-        // Opcode und BaseAddr (?) schreiben:
+        // writing Opcode and BaseAddr (?):
         *pPict << (sal_uInt16)0x009a << (sal_uInt32)0x000000ff;
 
         // Normalerweise wollen wir den Packing-Type 4 (Run length encoding
@@ -938,12 +938,12 @@ void PictWriter::WriteOpcode_BitsRect(const Point & rPoint, const Size & rSize, 
         else
             nPackType = 4;
 
-        // PixMap-Struktur schreiben:
-        *pPict << (sal_uInt16)(nDstRowBytes|0x8000) // Bytes pro Zeile und dass es eine 'PixMap' ist
-               << (sal_uInt16)0x0000                // Y1-Position der Bitmap in der Quelle
-               << (sal_uInt16)0x0000                // X1-Position der Bitmap in der Quelle
-               << (sal_uInt16)nHeight               // Y2-Position der Bitmap in der Quelle
-               << (sal_uInt16)nWidth                // X2-Position der Bitmap in der Quelle
+        // writing PixMap-Structure:
+        *pPict << (sal_uInt16)(nDstRowBytes|0x8000) // Bytes per row and the fact that it's a 'PixMap'
+               << (sal_uInt16)0x0000                // Y1-position of the bitmap in the source
+               << (sal_uInt16)0x0000                // X1-position of the bitmap in the source
+               << (sal_uInt16)nHeight               // Y2-position of the bitmap in the source
+               << (sal_uInt16)nWidth                // X2-position of the bitmap in the source
                << (sal_uInt16)0x0000                // Version
                << (sal_uInt16)nPackType             // Packing type
                << (sal_uInt32) 0x00000000            // Packing size (?)
@@ -951,48 +951,48 @@ void PictWriter::WriteOpcode_BitsRect(const Point & rPoint, const Size & rSize, 
                << (sal_uInt32) 0x00480000            // V-Res
                << (sal_uInt16)0x0010                // Pixel type (?)
                << (sal_uInt16)0x0020                // Pixel size: 32 bit
-               << (sal_uInt16)0x0004                // CmpCount: 4 Komponenten
-               << (sal_uInt16)0x0008                // CmpSize: 8 Bits
+               << (sal_uInt16)0x0004                // CmpCount: 4 components
+               << (sal_uInt16)0x0008                // CmpSize: 8 bits
                << (sal_uInt32) 0x00000000            // PlaneBytes (?)
                << (sal_uInt32) 0x00000000            // (?)
                << (sal_uInt32) 0x00000000;           // (?)
 
         // Source-Rectangle schreiben:
-        *pPict << (sal_uInt16)0x0000                // Y1-Position auf der Bitmap
-               << (sal_uInt16)0x0000                // X1-Position auf der Bitmap
-               << (sal_uInt16)nHeight               // Y2-Position auf der Bitmap
-               << (sal_uInt16)nWidth;               // X2-Position auf der Bitmap
+        *pPict << (sal_uInt16)0x0000                // Y1-position on the bitmap
+               << (sal_uInt16)0x0000                // X1-position on the bitmap
+               << (sal_uInt16)nHeight               // Y2-position on the bitmap
+               << (sal_uInt16)nWidth;               // X2-position on the bitmap
 
-        // Destination-Rectangle schreiben:
+        // writing the Destination-Rectangle:
         WritePoint( rPoint );
         WritePoint( Point( rPoint.X() + rSize.Width(), rPoint.Y() + rSize.Height() ) );
 
-        // Transfer mode schreiben:
+        // writing the Transfer mode:
         *pPict << (sal_uInt16)0x0000; // (?)
 
-        // Position der Map-Daten in Ziel merken:
+        // remember position of the Map-data in the target:
         nDstMapPos=pPict->Tell();
 
-        if ( nPackType == 1 )               // bei 24 bits nWidth == 1 !!
-        {                                   // nicht packen
+        if ( nPackType == 1 )               //  when 24 bits nWidth == 1 !!
+        {                                   // don't pack
             for ( ny = 0; ny < nHeight; ny++ )
             {
                 *pPict << (sal_uInt8)0;
                 *pPict << (sal_uInt8)pAcc->GetPixel( ny, 0 ).GetRed();
                 *pPict << (sal_uInt8)pAcc->GetPixel( ny, 0 ).GetGreen();
                 *pPict << (sal_uInt8)pAcc->GetPixel( ny, 0 ).GetBlue();
-                // Prozente zaehlen, Callback, Fehler pruefen:
-                nActBitmapPercent = ( ny * 70 / nHeight ) + 30; // (30% machten schon das Schreiben der Win-BMP-Datei aus)
+                // count percentages, Callback, check errors:
+                nActBitmapPercent = ( ny * 70 / nHeight ) + 30; // (30% already added up to the writing of the Win-BMP file)
                 MayCallback();
             }
         }
-        else    // packen ( PackType == 4 )
+        else    // packing ( PackType == 4 )
         {
             // Speicher fuer Zeilen-Zwischen-Datenstruktur allozieren:
             for ( nc = 0; nc < 4; nc++ )
                 pComp[ nc ] = new sal_uInt8[ nWidth ];
 
-            // Schleife ueber Zeilen:
+            // loop trough rows:
             for ( ny = 0; ny < nHeight; ny++ )
             {
                 // Zeil ny der Quelle in die Zwischen-Datenstrktur einlesen:
@@ -1005,25 +1005,25 @@ void PictWriter::WriteOpcode_BitsRect(const Point & rPoint, const Size & rSize, 
                     pComp[ 0 ][ nx ] = 0;
                 }
 
-                // Anfang der Zeile im Ziel merken:
+                // remember start of the row in the target:
                 nDstRowPos = pPict->Tell();
 
-                // ByteCount (das ist die Groesse der gepackten Zeile) zunaechst 0 (wird spaeter berichtigt):
+                // ByteCount (that's the size of the packed row) is at first 0 (will be corrected later):
                 if ( nDstRowBytes > 250 )
                     *pPict << (sal_uInt16)0;
                 else
                     *pPict << (sal_uInt8)0;
 
-                // Schleife ueber Componenten:
+                // loop trough components:
                 for ( nc = 0; nc < 4; nc++ )
                 {
-                    // Schleife ueber x:
+                    // loop through x:
                     nx = 0;
                     while ( nx < nWidth )
                     {
-                        // Die Position von 3 gleichen Bytes suchen und in nEqu3 merken.
-                        // wenn nicht gefunden, dann nEqu3=nWidth setzten.
-                        // Wenn doch gefunden, dann in nEquData den Wert der Bytes merken.
+                        // look up the position of 3 equal bytes and seve it in nEqu3
+                        // if it's not found, set nEqu3=nWidth
+                        // if it's found save the value of the bytes in nEquData
                         nEqu3 = nx;
                         for (;;)
                         {
@@ -1057,23 +1057,23 @@ void PictWriter::WriteOpcode_BitsRect(const Point & rPoint, const Size & rSize, 
                         // Jetzt einen Komprimierungs-Record erzeugen (falls oben mindestens 3
                         // gleiche Bytes gefunden):
                         if ( nx < nWidth )
-                        {               // Hinweis: es gilt nx==nEqu3 (hoffentlich)
-                            nCount=3;   // Drei Bytes sind gleich, wie weiter oben herausgefunden.
-                                        // Pruefen, ob es weitere gleiche Bytes gibts (dabei Max.-Record-Groesse beachten):
+                        {               // Hint: Then one has nx==nEqu3 (hopefully)
+                            nCount=3;   // Three bytes are equal, as we found out above
+                                        // Check, whether there are further equal bytes (and pay attention to Max.-Record-Size):
                             while ( nx + nCount < nWidth && nCount < 128 )
                             {
                                 if ( nEquData != pComp[ nc ][ nx + nCount ] )
                                     break;
                                 nCount++;
                             }
-                            // nCount gleiche Bytes komprimiert schreiben:
+                            // nCount write equal Bytes compressed:
                             nFlagCounterByte = (sal_uInt8)( 1 - (long)nCount );
                             *pPict << nFlagCounterByte << nEquData;
                             nx += nCount;
                         }
                     }
                 }
-                // ByteCount berichtigen:
+                // correct ByteCount:
                 nPos = pPict->Tell();
                 pPict->Seek( nDstRowPos );
                 if ( nDstRowBytes > 250 )
@@ -1082,17 +1082,17 @@ void PictWriter::WriteOpcode_BitsRect(const Point & rPoint, const Size & rSize, 
                     *pPict << ( (sal_uInt8)( nPos - nDstRowPos - 1 ) );
                 pPict->Seek( nPos );
 
-                // Prozente zaehlen, Callback, Fehler pruefen:
+                // count percentages, Callback, check errors:
                 nActBitmapPercent = ( ny * 70 / nHeight ) + 30; // (30% machten schon das Schreiben der Win-BMP-Datei aus)
                 MayCallback();
             }
-            // Aufraeumen:
+            // clean up:
             for ( nc = 0; nc < 4; nc++ )
                 delete pComp[ nc ];
         }
     }
     else
-    {   // nicht 24-Bit also Opcode 'PackBitsRect' erzeugen:
+    {   // don't generate 24-bit i.e. Opcode 'PackBitsRect':
 
         // Bei 1-Bit-Bildern ignorieren manche Import-Filter die Palette und nehmen statt
         // dessen die Vorder- und Hintergrundfarbe:
@@ -1111,7 +1111,7 @@ void PictWriter::WriteOpcode_BitsRect(const Point & rPoint, const Size & rSize, 
         nDstRowBytes = ( nWidth * nBitsPerPixel + 7 ) >> 3;
         nSrcRowBytes = ( nDstRowBytes + 3 ) & 0xfffffffc;
 
-        // Opcode schreiben:
+        // writing Opcode:
         *pPict << (sal_uInt16)0x0098;
 
         // Normalerweise wollen wir den Packing-Type 0 (default Packing) erzeugen.
@@ -1124,12 +1124,12 @@ void PictWriter::WriteOpcode_BitsRect(const Point & rPoint, const Size & rSize, 
         else
             nPackType = 0;
 
-        // PixMap-Struktur schreiben:
-        *pPict << (sal_uInt16)(nDstRowBytes|0x8000) // Bytes pro Zeile und dass es eine 'PixMap' ist
-               << (sal_uInt16)0x0000                // Y1-Position der Bitmap in der Quelle
-               << (sal_uInt16)0x0000                // X1-Position der Bitmap in der Quelle
-               << (sal_uInt16)nHeight               // Y2-Position der Bitmap in der Quelle
-               << (sal_uInt16)nWidth                // X2-Position der Bitmap in der Quelle
+        // write PixMap-Structure:
+        *pPict << (sal_uInt16)(nDstRowBytes|0x8000) // Bytes per row and the fact that it's a 'PixMap'
+               << (sal_uInt16)0x0000                // Y1-position of the bitmap in the source
+               << (sal_uInt16)0x0000                // X1-position of the bitmap in the source
+               << (sal_uInt16)nHeight               // Y2-position of the bitmap in the source
+               << (sal_uInt16)nWidth                // X2-position of the bitmap in the source
                << (sal_uInt16)0x0000                // Version
                << (sal_uInt16)nPackType             // Packing type
                << (sal_uInt32) 0x00000000            // Packing size (?)
@@ -1137,13 +1137,13 @@ void PictWriter::WriteOpcode_BitsRect(const Point & rPoint, const Size & rSize, 
                << (sal_uInt32) 0x00480000            // V-Res
                << (sal_uInt16)0x0000                // Pixel type (?)
                << (sal_uInt16)nBitsPerPixel         // Pixel size
-               << (sal_uInt16)0x0001                // CmpCount: 1 Komponente
+               << (sal_uInt16)0x0001                // CmpCount: 1 component
                << (sal_uInt16)nBitsPerPixel         // CmpSize
                << (sal_uInt32) 0x00000000            // PlaneBytes (?)
                << (sal_uInt32) 0x00000000            // (?)
                << (sal_uInt32) 0x00000000;           // (?)
 
-        // Palette lesen und schreiben:
+        // writing and reading the palette:
         nColTabSize = pAcc->GetPaletteEntryCount();
         *pPict << (sal_uInt32)0 << (sal_uInt16)0x8000 << (sal_uInt16)( nColTabSize - 1 );
 
@@ -1155,23 +1155,23 @@ void PictWriter::WriteOpcode_BitsRect(const Point & rPoint, const Size & rSize, 
             *pPict << (sal_uInt16)0 << nRed << nRed << nGreen << nGreen << nBlue << nBlue;
         }
 
-        // Source-Rectangle schreiben:
+        // writing Source-Rectangle:
         *pPict << (sal_uInt16)0 << (sal_uInt16)0 << (sal_uInt16)nHeight << (sal_uInt16)nWidth;
 
-        // Destination-Rectangle schreiben:
+        // writing Destination-Rectangle:
         WritePoint( rPoint );
         WritePoint( Point( rPoint.X() + rSize.Width(), rPoint.Y() + rSize.Height() ) );
 
-        // Transfer mode schreiben:
+        // writing Transfer mode:
         *pPict << (sal_uInt16)0;            // (?)
 
-        // Speicher fuer eine Zeile allozieren:
+        // allocate memory for a row:
         pPix = new sal_uInt8[ nSrcRowBytes ];
 
         // Position der Map-Daten in Ziel merken:
         nDstMapPos=pPict->Tell();
 
-        // Schleife ueber Zeilen:
+        // loop trough rows:
         for ( ny = 0; ny < nHeight; ny++ )
         {
 
@@ -1198,13 +1198,13 @@ void PictWriter::WriteOpcode_BitsRect(const Point & rPoint, const Size & rSize, 
             }
 
             if ( nPackType == 1 )
-            {   // nicht packen
+            {   // don't pack
                 pPict->Write( pPix, nDstRowBytes );
             }
             else
-            {   // Packen (nPackType==0)
+            {   // Ppacking (nPackType==0)
 
-                // Anfang der Zeile im Ziel merken:
+                // remeber start of the row in the target:
                 nDstRowPos = pPict->Tell();
 
                 // ByteCount (das ist die Groesse der gepackten Zeile) zunaechst 0 (wird spaeter berichtigt):
@@ -1213,7 +1213,7 @@ void PictWriter::WriteOpcode_BitsRect(const Point & rPoint, const Size & rSize, 
                 else
                     *pPict << (sal_uInt8)0;
 
-                // Schleife ueber Bytes der Zeile:
+                // loop trough bytes of the row:
                 nx=0;
                 while ( nx < nDstRowBytes && bStatus )
                 {
@@ -1268,7 +1268,7 @@ void PictWriter::WriteOpcode_BitsRect(const Point & rPoint, const Size & rSize, 
                     }
                 }
 
-                // ByteCount berichtigen:
+                // correct ByteCount:
                 nPos = pPict->Tell();
                 pPict->Seek( nDstRowPos );
                 if ( nDstRowBytes > 250 )
@@ -1278,21 +1278,21 @@ void PictWriter::WriteOpcode_BitsRect(const Point & rPoint, const Size & rSize, 
                 pPict->Seek( nPos );
             }
 
-            // Prozente zaehlen, Callback, Fehler pruefen:
+            // count percentages, Callback, check errors:
             nActBitmapPercent =( ny * 70 / nHeight ) + 30; // (30% machten schon das Schreiben der Win-BMP-Datei aus)
             MayCallback();
             if ( pPict->GetError() )
                 bStatus = sal_False;
         }
-        // Aufraeumen:
+        // cleaning up:
         delete[] pPix;
     }
 
-    // Map-Daten muessen gerade Anzahl von Bytes sein:
+    // Map-Data has to be an even number of bytes:
     if ( ( ( pPict->Tell() - nDstMapPos ) & 1 ) != 0 )
         *pPict << (sal_uInt8)0;
 
-    // Bitmaps zaehlen:
+    // counting Bitmaps:
     nWrittenBitmaps++;
     nActBitmapPercent = 0;
     if ( pAcc )
@@ -2183,13 +2183,13 @@ void PictWriter::WriteHeader(const GDIMetaFile & rMTF)
     Point aPoint;
     Rectangle   aRect( aPoint, aSize );
 
-    // 512 Bytes "Muell" am Anfang:
+    // 512 Bytes "trash" at the beginning:
     for (i=0;i<128;i++) *pPict << (sal_uInt32)0;
 
-    // Lo-16-Bits der Groesse der Datei ohne die 512 Bytes Muell:
-    *pPict << (sal_uInt16)0; // wird spaeter durch UpdateHeader() berichtigt
+    // Lo-16-Bits of the file size without the 512 bytes trash:
+    *pPict << (sal_uInt16)0; // gets corrected later on by UpdateHeader()
 
-    // Das Bounding-Rectangle (y1,x1,y2,x2 !):
+    // The Bounding-Rectangle (y1,x1,y2,x2 !):
     WriteRectangle( aRect );
 
     // Version 2:
@@ -2204,8 +2204,8 @@ void PictWriter::WriteHeader(const GDIMetaFile & rMTF)
     WriteRectangle( aRect );
     *pPict << (sal_uInt32)0x00000000;                        // Reserved
 
-    // viele Import-Filter verlangen die Angabe eines
-    // Clipping-Bereichs am Anfang
+    // many import filters demand the declaration
+    // of a clipping area at the beginning
 
     WriteOpcode_ClipRect( aRect );
 }
@@ -2215,7 +2215,7 @@ void PictWriter::UpdateHeader()
 {
     sal_uLong nPos;
 
-    // Lo-16-Bits der Groesse der Datei ohne die 512 Bytes Muell berichtigen:
+    // correct the Lo-16-Bits of the file size without the 512 bytes trash:
     nPos=pPict->Tell();
     pPict->Seek(512);
     *pPict << (sal_uInt16)((nPos-512)&0x0000ffff);
@@ -2296,7 +2296,7 @@ sal_Bool PictWriter::WritePict(const GDIMetaFile & rMTF, SvStream & rTargetStrea
     return bStatus;
 }
 
-//================== GraphicExport - die exportierte Funktion ================
+//================== GraphicExport - the exported Function ================
 
 extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool __LOADONCALLAPI
 GraphicExport(SvStream & rStream, Graphic & rGraphic, FilterConfigItem* pFilterConfigItem, sal_Bool)

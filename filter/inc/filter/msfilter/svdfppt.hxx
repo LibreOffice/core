@@ -179,14 +179,14 @@ const sal_uInt32 PPTInventor = sal_uInt32('P') * 0x00000001
 
 struct MSFILTER_DLLPUBLIC PptDocumentAtom
 {
-    Size            aSlidesPageSize;                    // Seitengroesse der Slides in 576DPI
-    Size            aNotesPageSize;                     // Seitengroesse der Notes in 576DPI
+    Size            aSlidesPageSize;                    // page size of the slides in 576DPI
+    Size            aNotesPageSize;                     // page size of the notes in 576DPI
     // RatioAtom erstmal weggelassen
-    sal_uInt32      nNotesMasterPersist;                // 0=nicht vorhanden
-    sal_uInt32      nHandoutMasterPersist;              // 0=nicht vorhanden
-    sal_uInt16      n1stPageNumber;                     // Seitennummer des ersten Slides
-    PptPageFormat   eSlidesPageFormat;                  // Seitenformat der Slides
-    sal_Bool        bEmbeddedTrueType           : 1;    // TrueType direkt im File?
+    sal_uInt32      nNotesMasterPersist;                // 0=non-existent
+    sal_uInt32      nHandoutMasterPersist;              // 0=non-existent
+    sal_uInt16      n1stPageNumber;                     // page number of the first slide
+    PptPageFormat   eSlidesPageFormat;                  // page format of the slides
+    sal_Bool        bEmbeddedTrueType           : 1;    // TrueType direcly within the File?
     sal_Bool        bTitlePlaceholdersOmitted   : 1;
     sal_Bool        bRightToLeft                : 1;
     sal_Bool        bShowComments               : 1;
@@ -292,7 +292,7 @@ struct PptUserEditAtom
     sal_uInt32          nOffsetLastEdit;         // File offset of prev PptUserEditAtom
     sal_uInt32          nOffsetPersistDirectory; // Offset to PersistPtrs for this file version.
     sal_uInt32          nDocumentRef;
-    sal_uInt32          nMaxPersistWritten;      // Gesamtanzahl der Persisteintraege bis hierher.
+    sal_uInt32          nMaxPersistWritten;      // total number of Persist entries up to this point
     sal_Int16           eLastViewType;           // enum view type
 
 public:
@@ -340,9 +340,9 @@ struct PptSlidePersistEntry
     void*               pDummy2;
     PptPageKind         ePageKind;              //
 
-    sal_Bool            bNotesMaster    : 1;    // fuer NotesMaster
-    sal_Bool            bHandoutMaster  : 1;    // fuer HandoutMaster
-    sal_Bool            bStarDrawFiller : 1;    // speziell fuer StarDraw
+    sal_Bool            bNotesMaster    : 1;    // for NotesMaster
+    sal_Bool            bHandoutMaster  : 1;    // for HandoutMaster
+    sal_Bool            bStarDrawFiller : 1;    // special for StarDraw
 public:
                         PptSlidePersistEntry();
                         ~PptSlidePersistEntry();

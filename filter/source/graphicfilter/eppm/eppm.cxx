@@ -62,7 +62,7 @@ public:
     sal_Bool                WritePPM( const Graphic& rGraphic, FilterConfigItem* pFilterConfigItem );
 };
 
-//=================== Methoden von PPMWriter ==============================
+//=================== Methods of PPMWriter ==============================
 
 PPMWriter::PPMWriter(SvStream &rStrm)
     : m_rOStm(rStrm)
@@ -217,7 +217,7 @@ void PPMWriter::ImplWriteBody()
 }
 
 // ------------------------------------------------------------------------
-// eine Dezimalzahl im ASCII format wird in den Stream geschrieben
+// a decimal number in ASCII format is being written into the stream
 
 void PPMWriter::ImplWriteNumber(sal_Int32 nNumber)
 {

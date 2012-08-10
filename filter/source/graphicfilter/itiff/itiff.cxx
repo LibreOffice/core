@@ -53,60 +53,60 @@ class TIFFReader
 
 private:
 
-    sal_Bool                bStatus;                    // Ob bisher kein Fehler auftrat
+    sal_Bool                bStatus;                    // Whether until now no error occurred
     Animation           aAnimation;
     sal_uLong               nLastPercent;
 
-    SvStream*           pTIFF;                      // Die einzulesende TIFF-Datei
+    SvStream*           pTIFF;                      // the TIFF file that should be read
     Bitmap              aBitmap;
     BitmapWriteAccess*  pAcc;
     sal_uInt16              nDstBitsPerPixel;
     AlphaMask*          pAlphaMask;
     BitmapWriteAccess*  pMaskAcc;
 
-    sal_uLong               nOrigPos;                   // Anfaengliche Position in pTIFF
-    sal_uInt16              nOrigNumberFormat;          // Anfaengliches Nummern-Format von pTIFF
+    sal_uLong               nOrigPos;                   // start position in pTIFF
+    sal_uInt16              nOrigNumberFormat;          // number format of pTIFF at the beginning
 
 
     sal_uInt16              nDataType;
     // Daten, die aus dem TIFF-Tags entnommen werden:
-    sal_Bool                bByteSwap;                  // sal_True wenn bits 0..7 -> 7..0 invertiert werden sollen ( FILLORDER = 2 );
-    sal_uInt8               nByte1;                     // 'I', wenn Format LittleEndian
+    sal_Bool                bByteSwap;                  // sal_True if bits 0..7 -> 7..0 should get converted ( FILLORDER = 2 );
+    sal_uInt8               nByte1;                     // 'I', if the format is LittleEndian
 
     sal_uLong               nNewSubFile;                //
     sal_uLong               nSubFile;                   //
-    sal_uLong               nImageWidth;                // Bildbreite in Pixel
-    sal_uLong               nImageLength;               // Bildhoehe in Pixel
-    sal_uLong               nBitsPerSample;             // Bits pro Pixel pro Ebene
-    sal_uLong               nCompression;               // Art der Kompriemierung
+    sal_uLong               nImageWidth;                // picture width in pixels
+    sal_uLong               nImageLength;               // picture heigth in pixels
+    sal_uLong               nBitsPerSample;             // bits per pixel per layer
+    sal_uLong               nCompression;               // kind of compression
     sal_uLong               nPhotometricInterpretation; //
     sal_uLong               nThresholding;              //
     sal_uLong               nCellWidth;                 //
     sal_uLong               nCellLength;                //
     sal_uLong               nFillOrder;                 //
     sal_uLong*              pStripOffsets;              // Feld von Offsets zu den Bitmap-Daten-"Strips"
-    sal_uLong               nNumStripOffsets;           // Groesse obigen Feldes
+    sal_uLong               nNumStripOffsets;           // size of the field above
     sal_uLong               nOrientation;               //
-    sal_uLong               nSamplesPerPixel;           // Anzahl der Ebenen
-    sal_uLong               nRowsPerStrip;              // Wenn nicht komprimiert: Zahl der Zeilen pro Strip
-    sal_uLong*              pStripByteCounts;           // Wenn komprimiert (bestimmte Art): Groesse der Strips
-    sal_uLong               nNumStripByteCounts;        // Anzahl der Eintraege in obiges Feld
+    sal_uLong               nSamplesPerPixel;           // number of layers
+    sal_uLong               nRowsPerStrip;              // if it's not compressed: number of rows per Strip
+    sal_uLong*              pStripByteCounts;           // if compressed (in a certain way): size of the strips
+    sal_uLong               nNumStripByteCounts;        // number of entries in the field above
     sal_uLong               nMinSampleValue;            //
     sal_uLong               nMaxSampleValue;            //
-    double              fXResolution;               // X-Aufloesung oder 0.0
-    double              fYResolution;               // Y-Aufloesung oder 0.0
+    double              fXResolution;                  // X-resolution or 0.0
+    double              fYResolution;                  // Y-resolution or 0.0
     sal_uLong               nPlanarConfiguration;       //
     sal_uLong               nGroup3Options;             //
     sal_uLong               nGroup4Options;             //
-    sal_uLong               nResolutionUnit;            // Einheit von fX/YResolution: 1=unbekannt, 2(default)=Zoll, 3=cm
+    sal_uLong               nResolutionUnit;            // unit of fX/YResolution: 1=unknown, 2(default)=inch, 3=cm
     sal_uLong               nPredictor;                 //
-    sal_uLong*              pColorMap;                  // Farb-Palette
-    sal_uLong               nNumColors;                 // Anzahl Farben in der Farbpalette
+    sal_uLong*              pColorMap;                  // color palette
+    sal_uLong               nNumColors;                 // number of colors within the color palette
 
-    sal_uLong               nPlanes;                    // Anzahl der Ebenen in der Tiff-Datei
-    sal_uLong               nStripsPerPlane;            // Anzahl der Strips pro Ebene
+    sal_uLong               nPlanes;                    // number of layers within the Tiff file
+    sal_uLong               nStripsPerPlane;            // number of Strips per layer
     sal_uLong               nBytesPerRow;               // Bytes pro Zeile pro Ebene in der Tiff-Datei ( unkomprimiert )
-    sal_uInt8*              pMap[ 4 ];                  // Temporaere Scanline
+    sal_uInt8*              pMap[ 4 ];                  // temporary Scanline
 
 
     void    MayCallback( sal_uLong nPercent );
@@ -128,7 +128,7 @@ private:
         // Erzeugt die Bitmap aus der temporaeren Bitmap pMap
         // und loescht dabei pMap teilweise
     sal_Bool    ConvertScanline( sal_uLong nY );
-        // Konvertiert eine Scanline in das Windows-BMP-Format
+        // converts a Scanline to the Windows-BMP format
 
     bool HasAlphaChannel() const;
 public:
@@ -147,7 +147,7 @@ public:
     sal_Bool ReadTIFF( SvStream & rTIFF, Graphic & rGraphic );
 };
 
-//=================== Methoden von TIFFReader ==============================
+//=================== Methods of TIFFReader ==============================
 
 void TIFFReader::MayCallback( sal_uLong /*nPercent*/ )
 {
@@ -746,7 +746,7 @@ sal_Bool TIFFReader::ConvertScanline( sal_uLong nY )
         {
             sal_uInt8*  pt = pMap[ 0 ];
 
-            // sind die Werte als Differenz abgelegt?
+            // are the values being saved as difference?
             if ( 2 == nPredictor )
             {
                 sal_uInt8  nLRed = 0;
@@ -838,7 +838,7 @@ sal_Bool TIFFReader::ConvertScanline( sal_uLong nY )
 
                 for( nx = 0; nx < nImageWidth; nx++ )
                 {
-                    // sind die Werte als Differenz abgelegt?
+                    // are the values being saved as difference?
                     if( 2 == nPredictor )
                     {
                         for( ns = 0; ns < 4; ns++ )
@@ -1140,10 +1140,10 @@ sal_Bool TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
 
     MayCallback( 0 );
 
-    // Kopf einlesen:
+    // read header:
     ReadHeader();
 
-    // Ersten IFD einlesen:
+    // read first IFD:
     *pTIFF >> nFirstIfd;
 
     if( !nFirstIfd || pTIFF->GetError() )
@@ -1167,7 +1167,7 @@ sal_Bool TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
 
             *pTIFF >> nNumTags;
 
-            // Schleife ueber Tags:
+            // loop through tags:
             for( i = 0; i < nNumTags; i++ )
             {
                 *pTIFF >> nTagType >> nDataType >> nDataLen >> nOffset;
@@ -1195,26 +1195,26 @@ sal_Bool TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
                 nSubFile = 0;
                 nImageWidth = 0;
                 nImageLength = 0;
-                nBitsPerSample = 1;                         // Defaultwert laut Doku
+                nBitsPerSample = 1;                         // default value according to the documentation
                 nCompression = 1;
                 nPhotometricInterpretation = 0;
-                nThresholding = 1;                          // Defaultwert laut Doku
+                nThresholding = 1;                          // default value according to the documentation
                 nCellWidth = 1;
                 nCellLength = 1;
-                nFillOrder = 1;                             // Defaultwert laut Doku
+                nFillOrder = 1;                             // default value according to the documentation
                 nNumStripOffsets = 0;
                 nOrientation = 1;
-                nSamplesPerPixel = 1;                       // Defaultwert laut Doku
-                nRowsPerStrip = 0xffffffff;                 // Defaultwert laut Doku
+                nSamplesPerPixel = 1;                       // default value according to the documentation
+                nRowsPerStrip = 0xffffffff;                 // default value according to the documentation
                 nNumStripByteCounts = 0;
-                nMinSampleValue = 0;                        // Defaultwert laut Doku
+                nMinSampleValue = 0;                        // default value according to the documentation
                 nMaxSampleValue = 0;
                 fXResolution = 0.0;
                 fYResolution = 0.0;
                 nPlanarConfiguration = 1;
-                nGroup3Options = 0;                         // Defaultwert laut Doku
-                nGroup4Options = 0;                         // Defaultwert laut Doku
-                nResolutionUnit = 2;                        // Defaultwert laut Doku
+                nGroup3Options = 0;                         // default value according to the documentation
+                nGroup4Options = 0;                         // default value according to the documentation
+                nResolutionUnit = 2;                        // default value according to the documentation
                 nPredictor = 1;
                 nNumColors = 0;
 
@@ -1280,7 +1280,7 @@ sal_Bool TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
                     else
                         nPlanes = nSamplesPerPixel;
 
-                    if ( ( nFillOrder == 2 ) && ( nCompression != 5 ) )     // im LZW Mode werden die bits schon invertiert
+                    if ( ( nFillOrder == 2 ) && ( nCompression != 5 ) )     // in the LZW mode bits are already being inverted
                         bByteSwap = sal_True;
 
                     nStripsPerPlane = ( nImageLength - 1 ) / nRowsPerStrip + 1;
@@ -1371,7 +1371,7 @@ sal_Bool TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
 }
 
 
-//================== GraphicImport - die exportierte Funktion ================
+//================== GraphicImport - the exported Function ================
 
 extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool __LOADONCALLAPI
 GraphicImport(SvStream & rStream, Graphic & rGraphic, FilterConfigItem*, sal_Bool)

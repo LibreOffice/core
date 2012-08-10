@@ -46,7 +46,7 @@
 #include <vcl/cvtgrf.hxx>
 #include "viscache.hxx"
 
-// SvxItem-Mapping. Wird benoetigt um die SvxItem-Header erfolgreich zu includen
+// SvxItem-Mapping. Is needed to successfully include the SvxItem-Header
 #include <editeng/eeitem.hxx>
 #include <editeng/editdata.hxx>
 #include <svl/urihelper.hxx>
@@ -113,7 +113,7 @@
 #include "svx/svditer.hxx"
 #include <svx/xpoly.hxx>
 #include "svx/xattr.hxx"
-#include <filter/msfilter/msdffimp.hxx> // extern sichtbare Header-Datei
+#include <filter/msfilter/msdffimp.hxx> // externally visible header file
 #include <editeng/outliner.hxx>
 #include <editeng/outlobj.hxx>
 #include <editeng/editobj.hxx>
@@ -162,11 +162,11 @@ static sal_uInt32 nMSOleObjCntr = 0;
 void Impl_OlePres::Write( SvStream & rStm )
 {
     WriteClipboardFormat( rStm, FORMAT_GDIMETAFILE );
-    rStm << (sal_Int32)(nJobLen +4);       // immer leeres TargetDevice
+    rStm << (sal_Int32)(nJobLen +4);       // a TargetDevice that's always empty
     if( nJobLen )
         rStm.Write( pJob, nJobLen );
     rStm << (sal_uInt32)nAspect;
-    rStm << (sal_Int32)-1;      //L-Index immer -1
+    rStm << (sal_Int32)-1;      //L-Index always -1
     rStm << (sal_Int32)nAdvFlags;
     rStm << (sal_Int32)0;       //Compression
     rStm << (sal_Int32)aSize.Width();
@@ -225,7 +225,7 @@ SvStream& operator>>( SvStream& rIn, DffRecordHeader& rRec )
     return rIn;
 }
 
-// Masse fuer dashed lines
+// measurements  dashed lines
 #define LLEN_MIDDLE         (450)
 #define LLEN_SPACE_MIDDLE   (360)
 #define LLEN_LONG           (LLEN_MIDDLE * 2)
@@ -241,7 +241,7 @@ SvStream& operator>>( SvStream& rIn, DffPropSet& rRec )
     rIn >> aHd;
     sal_uInt32 nPropCount = aHd.nRecInstance;
 
-    // FilePos der ComplexData merken
+    // remember FilePos of the ComplexData
     sal_uInt32 nComplexDataFilePos = rIn.Tell() + ( nPropCount * 6 );
 
     for( sal_uInt32 nPropNum = 0; nPropNum < nPropCount; nPropNum++ )
@@ -275,7 +275,7 @@ SvStream& operator>>( SvStream& rIn, DffPropSet& rRec )
                 // normally nContent is the complete size of the complex property,
                 // but this is not always true for IMsoArrays ( what the hell is a IMsoArray ? )
 
-                // I love special threatments :-(
+                // I love special treatments :-(
                 if ( ( nRecType == DFF_Prop_pVertices ) || ( nRecType == DFF_Prop_pSegmentInfo )
                     || ( nRecType == DFF_Prop_fillShadeColors ) || ( nRecType == DFF_Prop_lineDashStyle )
                         || ( nRecType == DFF_Prop_pWrapPolygonVertices ) || ( nRecType == DFF_Prop_connectorPoints )
@@ -1636,7 +1636,7 @@ void DffPropertyReader::ApplyFillAttributes( SvStream& rIn, SfxItemSet& rSet, co
         {
             sal_Int32 nAngle = 3600 - ( ( Fix16ToAngle( GetPropertyValue( DFF_Prop_fillAngle, 0 ) ) + 5 ) / 10 );
 
-            // Rotationswinkel in Bereich zwingen
+            // force rotation angle to be within a certain range
             while ( nAngle >= 3600 )
                 nAngle -= 3600;
             while ( nAngle < 0 )
@@ -1646,14 +1646,14 @@ void DffPropertyReader::ApplyFillAttributes( SvStream& rIn, SfxItemSet& rSet, co
             XGradientStyle eGrad = XGRAD_LINEAR;
             sal_Int32 nChgColors = 0;
 
-            if ( nFocus < 0 )       // Bei negativem Focus sind die Farben zu tauschen
+            if ( nFocus < 0 )       // If the focus is negative the colors need to be swapped
             {
                 nFocus = -nFocus;
                 nChgColors ^= 1;
             }
             if( nFocus > 40 && nFocus < 60 )
             {
-                eGrad = XGRAD_AXIAL;    // Besser gehts leider nicht
+                eGrad = XGRAD_AXIAL;    // Unfortunately there's no better solution
             }
 
             sal_uInt16 nFocusX = (sal_uInt16)nFocus;
@@ -1794,7 +1794,7 @@ void DffPropertyReader::ApplyCustomShapeTextAttributes( SfxItemSet& rSet ) const
         eTVA = SDRTEXTVERTADJUST_BLOCK;
         eTHA = SDRTEXTHORZADJUST_CENTER;
 
-        // Textverankerung lesen
+        // read text anchor
         MSO_Anchor eTextAnchor = (MSO_Anchor)GetPropertyValue( DFF_Prop_anchorText, mso_anchorTop );
 
         switch( eTextAnchor )
@@ -1839,7 +1839,7 @@ void DffPropertyReader::ApplyCustomShapeTextAttributes( SfxItemSet& rSet ) const
         eTVA = SDRTEXTVERTADJUST_CENTER;
         eTHA = SDRTEXTHORZADJUST_BLOCK;
 
-        // Textverankerung lesen
+        // read text anchor
         MSO_Anchor eTextAnchor = (MSO_Anchor)GetPropertyValue( DFF_Prop_anchorText, mso_anchorTop );
 
         switch( eTextAnchor )
@@ -1946,7 +1946,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         sal_Int32 nTextRotateAngle = 0;
         MSO_TextFlow eTextFlow = (MSO_TextFlow)( GetPropertyValue( DFF_Prop_txflTextFlow ) & 0xFFFF );
 
-        if ( eTextFlow == mso_txflBtoT )    // Bottom to Top non-@, unten -> oben
+        if ( eTextFlow == mso_txflBtoT )    // Bottom to Top non-@
             nTextRotateAngle += 90;
         switch( GetPropertyValue( DFF_Prop_cdirFont, mso_cdir0 ) )  // SJ: mso_cdir90 and mso_cdir270 will be simulated by
         {                                                           // activating vertical writing for the text objects
@@ -2943,9 +2943,8 @@ void DffPropertyReader::ApplyAttributes( SvStream& rIn, SfxItemSet& rSet, const 
                     //   mso_shadowDouble
                     //   mso_shadowRich
                     //   mso_shadowEmbossOrEngrave
-                    // koennen wir nicht, kreiere Default-Schatten mit default-
-                    // Abstand
-                    rSet.Put( SdrShadowXDistItem( 35 ) ); // 0,35 mm Schattendistanz
+                    // not possible in LibreOffice, create default shadow with default distance
+                    rSet.Put( SdrShadowXDistItem( 35 ) ); // 0,35 mm shadow distance
                     rSet.Put( SdrShadowYDistItem( 35 ) );
                 }
             }
@@ -3231,7 +3230,7 @@ DffRecordHeader* DffRecordManager::GetRecordHeader( sal_uInt16 nRecId, DffSeekTo
 }
 
 //---------------------------------------------------------------------------
-//  private Methoden
+//  private methods
 //---------------------------------------------------------------------------
 
 bool CompareSvxMSDffShapeInfoById::operator() (
@@ -3285,7 +3284,7 @@ sal_uInt32 SvxMSDffManager::ScalePt( sal_uInt32 nVal ) const
     Fraction aFact( GetMapFactor( MAP_POINT, eMap ).X() );
     long aMul = aFact.GetNumerator();
     long aDiv = aFact.GetDenominator() * 65536;
-    aFact = Fraction( aMul, aDiv ); // nochmal versuchen zu kuerzen
+    aFact = Fraction( aMul, aDiv ); // try again to shorten it
     return BigMulDiv( nVal, aFact.GetNumerator(), aFact.GetDenominator() );
 }
 
@@ -3300,30 +3299,30 @@ void SvxMSDffManager::SetModel(SdrModel* pModel, long nApplicationScale)
     if( pModel && (0 < nApplicationScale) )
     {
         // PPT arbeitet nur mit Einheiten zu 576DPI
-        // WW hingegen verwendet twips, dh. 1440DPI.
+        // WW hingegen verwendet twips, i.e. 1440DPI.
         MapUnit eMap = pSdrModel->GetScaleUnit();
         Fraction aFact( GetMapFactor(MAP_INCH, eMap).X() );
         long nMul=aFact.GetNumerator();
         long nDiv=aFact.GetDenominator()*nApplicationScale;
-        aFact=Fraction(nMul,nDiv); // nochmal versuchen zu kuerzen
-        // Bei 100TH_MM -> 2540/576=635/144
-        // Bei Twip     -> 1440/576=5/2
+        aFact=Fraction(nMul,nDiv); // try again to shorten it
+        // For 100TH_MM -> 2540/576=635/144
+        // For Twip     -> 1440/576=5/2
         nMapMul  = aFact.GetNumerator();
         nMapDiv  = aFact.GetDenominator();
         bNeedMap = nMapMul!=nMapDiv;
 
-        // MS-DFF-Properties sind grossteils in EMU (English Metric Units) angegeben
+        // MS-DFF-Properties are mostly given in EMU (English Metric Units)
         // 1mm=36000emu, 1twip=635emu
         aFact=GetMapFactor(MAP_100TH_MM,eMap).X();
         nMul=aFact.GetNumerator();
         nDiv=aFact.GetDenominator()*360;
-        aFact=Fraction(nMul,nDiv); // nochmal versuchen zu kuerzen
-        // Bei 100TH_MM ->                            1/360
-        // Bei Twip     -> 14,40/(25,4*360)=144/91440=1/635
+        aFact=Fraction(nMul,nDiv); // try again to shorten it
+        // For 100TH_MM ->                            1/360
+        // For Twip     -> 14,40/(25,4*360)=144/91440=1/635
         nEmuMul=aFact.GetNumerator();
         nEmuDiv=aFact.GetDenominator();
 
-        // Und noch was fuer typografische Points
+        // And something for typographic Points
         aFact=GetMapFactor(MAP_POINT,eMap).X();
         nPntMul=aFact.GetNumerator();
         nPntDiv=aFact.GetDenominator();
@@ -3417,7 +3416,7 @@ bool SvxMSDffManager::SeekToRec( SvStream& rSt, sal_uInt16 nRecId, sal_uLong nMa
     }
     while ( rSt.good() && rSt.Tell() < nMaxFilePos && !bRet );
     if ( !bRet )
-        rSt.Seek( nFPosMerk );  // FilePos restaurieren
+        rSt.Seek( nFPosMerk );  // restore FilePos
     return bRet;
 }
 
@@ -3447,7 +3446,7 @@ bool SvxMSDffManager::SeekToRec2( sal_uInt16 nRecId1, sal_uInt16 nRecId2, sal_uL
     }
     while ( rStCtrl.GetError() == 0 && rStCtrl.Tell() < nMaxFilePos && !bRet );
     if ( !bRet )
-        rStCtrl.Seek( nFPosMerk ); // FilePos restaurieren
+        rStCtrl.Seek( nFPosMerk ); // restore FilePos
     return bRet;
 }
 
@@ -3469,7 +3468,7 @@ bool SvxMSDffManager::GetColorFromPalette( sal_uInt16 /* nNum */, Color& rColor 
 // fill and line color
 Color SvxMSDffManager::MSO_TEXT_CLR_ToColor( sal_uInt32 nColorCode ) const
 {
-    // Fuer Textfarben: Header ist 0xfeRRGGBB
+    // for text colors: Header is 0xfeRRGGBB
     if ( ( nColorCode & 0xfe000000 ) == 0xfe000000 )
         nColorCode &= 0x00ffffff;
     else
@@ -3488,7 +3487,7 @@ Color SvxMSDffManager::MSO_CLR_ToColor( sal_uInt32 nColorCode, sal_uInt16 nConte
 {
     Color aColor( mnDefaultColor );
 
-    // Fuer Textfarben: Header ist 0xfeRRGGBB
+    // for text colors: Header is 0xfeRRGGBB
     if ( ( nColorCode & 0xfe000000 ) == 0xfe000000 )    // sj: it needs to be checked if 0xfe is used in
         nColorCode &= 0x00ffffff;                       // other cases than ppt text -> if not this code can be removed
 
@@ -3671,7 +3670,7 @@ Color SvxMSDffManager::MSO_CLR_ToColor( sal_uInt32 nColorCode, sal_uInt16 nConte
                     aColor = Color( (sal_uInt8)nR, (sal_uInt8)nG, (sal_uInt8)nB );
                 }
                 break;
-                case 0x05 :     // substract from grey level RGB(p,p,p)
+                case 0x05 :     // substract from gray level RGB(p,p,p)
                 {
                     sal_Int16 nR = (sal_Int16)nParameter - (sal_Int16)aColor.GetRed();
                     sal_Int16 nG = (sal_Int16)nParameter - (sal_Int16)aColor.GetGreen();
@@ -3817,8 +3816,8 @@ bool SvxMSDffManager::ReadObjText(SvStream& rSt, SdrObject* pObj)
             SdrOutliner& rOutliner=pText->ImpGetDrawOutliner();
             sal_uInt16 nOutlMode = rOutliner.GetMode();
 
-            { // Wohl 'nen kleiner Bug der EditEngine, das die
-              // Absastzattribute bei Clear() nicht entfernt werden.
+            {   // apparently a small bug in the EditEngine which causes
+                // the paragraph attributes not to be delted on Clear()
                 bool bClearParaAttribs = true;
                 rOutliner.SetStyleSheet( 0, NULL );
                 SfxItemSet aSet(rOutliner.GetEmptyItemSet());
@@ -3829,16 +3828,16 @@ bool SvxMSDffManager::ReadObjText(SvStream& rSt, SdrObject* pObj)
                 bClearParaAttribs = sal_False;
                 if( bClearParaAttribs )
                 {
-                    // Wohl 'nen kleiner Bug der EditEngine, dass die
-                    // Absastzattribute bei Clear() nicht entfernt werden.
+                    // apparently a small bug in the EditEngine which causes
+                    // the paragraph attributes not to be delted on Clear()
                     rOutliner.SetParaAttribs(0,rOutliner.GetEmptyItemSet());
                 }
             }
             rOutliner.Init( OUTLINERMODE_TEXTOBJECT );
 
-            ////////////////////////////////////
-            // TextString und MetaChars lesen //
-            ////////////////////////////////////
+            ///////////////////////////////////
+            // read TextString and MetaChars //
+            ///////////////////////////////////
             do
             {
                 if( !ReadCommonRecordHeader(aHd, rSt) )
@@ -3939,7 +3938,7 @@ bool SvxMSDffManager::ReadObjText(SvStream& rSt, SdrObject* pObj)
             while ( rSt.GetError() == 0 && rSt.Tell() < nRecEnd );
 
             ////////////////////////
-            // SHIFT-Ret ersetzen //
+            // replace SHIFT-Ret  //
             ////////////////////////
             if ( aText.Len() )
             {
@@ -3947,7 +3946,7 @@ bool SvxMSDffManager::ReadObjText(SvStream& rSt, SdrObject* pObj)
                 aText.SetChar( aText.Len()-1, 0x0D );
                 rOutliner.SetText( aText, rOutliner.GetParagraph( 0 ) );
 
-                // SHIFT-Ret ersetzen im Outliner
+                // replace SHIFT-Ret in the Outliner
                 if (comphelper::string::getTokenCount(aText, 0x0B) > 1)
                 {
                     sal_uInt32 nParaCount = rOutliner.GetParagraphCount();
@@ -4078,15 +4077,15 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, cons
     sal_uInt32 nBlipId = GetPropertyValue( DFF_Prop_pib, 0 );
     sal_Bool bGrfRead = sal_False,
 
-    // Grafik verlinkt
+    // Graphic linked
     bLinkGrf = 0 != ( eFlags & mso_blipflagLinkToFile );
     {
         Graphic aGraf;  // be sure this graphic is deleted before swapping out
         if( SeekToContent( DFF_Prop_pibName, rSt ) )
             aFileName = MSDFFReadZString( rSt, GetPropertyValue( DFF_Prop_pibName ), sal_True );
 
-        //   UND, ODER folgendes:
-        if( !( eFlags & mso_blipflagDoNotSave ) ) // Grafik embedded
+        //   AND, OR the following:
+        if( !( eFlags & mso_blipflagDoNotSave ) ) // Graphic embedded
         {
             bGrfRead = GetBLIP( nBlipId, aGraf, &aVisArea );
             if ( !bGrfRead )
@@ -4242,7 +4241,7 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, cons
             }
         }
 
-        // sollte es ein OLE-Object sein?
+        // should it be an OLE object?
         if( bGrfRead && !bLinkGrf && IsProperty( DFF_Prop_pictureId ) )
         {
             // TODO/LATER: in future probably the correct aspect should be provided here
@@ -4282,7 +4281,7 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, cons
             pRet->SetBLIPSizeRectangle( aVisArea );
 
         if (pRet->GetName().isEmpty())                   // SJ 22.02.00 : PPT OLE IMPORT:
-        {                                               // name is already set in ImportOLE !!
+        {                                                // name is already set in ImportOLE !!
             // JP 01.12.99: SetName before SetModel - because in the other order the Bug 70098 is active
             if ( ( eFlags & mso_blipflagType ) != mso_blipflagComment )
             {
@@ -4294,7 +4293,7 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, cons
                 pRet->SetName( aFileName );
         }
     }
-    pRet->SetModel( pSdrModel ); // fuer GraphicLink erforderlich
+    pRet->SetModel( pSdrModel ); // required for GraphicLink
     pRet->SetLogicRect( rObjData.aBoundRect );
 
     if ( pRet->ISA( SdrGrafObj ) )
@@ -4329,7 +4328,7 @@ SdrObject* SvxMSDffManager::ImportObj( SvStream& rSt, void* pClientData,
     {
         pRet = ImportShape( aObjHd, rSt, pClientData, rClientRect, rGlobalChildRect, nCalledByGroup, pShapeId );
     }
-    aObjHd.SeekToBegOfRecord( rSt );    // FilePos restaurieren
+    aObjHd.SeekToBegOfRecord( rSt );    // restore FilePos
     return pRet;
 }
 
@@ -4527,7 +4526,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
 
     Rectangle aTextRect;
     if ( !aObjData.aBoundRect.IsEmpty() )
-    {   // Rotation auf BoundingBox anwenden, BEVOR ien Objekt generiert wurde
+    {   // apply rotation to the BoundingBox BEFORE an object has been generated
         if( mnFix16Angle )
         {
             long nAngle = mnFix16Angle;
@@ -4894,7 +4893,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                             double a = nObjectRotation * nPi180;
                             pRet->NbcRotate( aObjData.aBoundRect.Center(), nObjectRotation, sin( a ), cos( a ) );
                         }
-                        // Horizontal gespiegelt?
+                        // mirrored horizontally?
                         if ( nSpFlags & SP_FFLIPH )
                         {
                             Rectangle aBndRect( pRet->GetSnapRect() );
@@ -4902,7 +4901,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                             Point aBottom( aTop.X(), aTop.Y() + 1000 );
                             pRet->NbcMirror( aTop, aBottom );
                         }
-                        // Vertikal gespiegelt?
+                        // mirrored vertically?
                         if ( nSpFlags & SP_FFLIPV )
                         {
                             Rectangle aBndRect( pRet->GetSnapRect() );
@@ -4918,7 +4917,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                         pRet->SetLogicRect( aObjData.aBoundRect );
                         pRet->SetMergedItemSet(aSet);
 
-                        // Konnektoren
+                        // connectors
                         MSO_ConnectorStyle eConnectorStyle = (MSO_ConnectorStyle)GetPropertyValue( DFF_Prop_cxstyle, mso_cxstyleStraight );
 
                         ((SdrEdgeObj*)pRet)->ConnectToNode(sal_True, NULL);
@@ -4927,7 +4926,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                         Point aPoint1( aObjData.aBoundRect.TopLeft() );
                         Point aPoint2( aObjData.aBoundRect.BottomRight() );
 
-                        // Rotationen beachten
+                        // pay attention to the rotations
                         if ( nObjectRotation )
                         {
                             double a = nObjectRotation * nPi180;
@@ -4939,7 +4938,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                             RotatePoint(aPoint2, aCenter, ss, cc);
                         }
 
-                        // Linie innerhalb des Bereiches zurechtdrehen/spiegeln
+                        // rotate/mirror line within the area as we need it
                         if ( nSpFlags & SP_FFLIPH )
                         {
                             sal_Int32 n = aPoint1.X();
@@ -4954,8 +4953,8 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                         }
                         nSpFlags &= ~( SP_FFLIPV | SP_FFLIPH );
 
-                        pRet->NbcSetPoint(aPoint1, 0L); // Startpunkt
-                        pRet->NbcSetPoint(aPoint2, 1L); // Endpunkt
+                        pRet->NbcSetPoint(aPoint1, 0L); // start point
+                        pRet->NbcSetPoint(aPoint2, 1L); // endpoint
 
                         sal_Int32 n1HorzDist, n1VertDist, n2HorzDist, n2VertDist;
                         n1HorzDist = n1VertDist = n2HorzDist = n2VertDist = 0;
@@ -4992,7 +4991,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                     double a = nObjectRotation * nPi180;
                     pRet->NbcRotate( aObjData.aBoundRect.Center(), nObjectRotation, sin( a ), cos( a ) );
                 }
-                // Horizontal gespiegelt?
+                // mirrored horizontally?
                 if ( nSpFlags & SP_FFLIPH )
                 {
                     Rectangle aBndRect( pRet->GetSnapRect() );
@@ -5000,7 +4999,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                     Point aBottom( aTop.X(), aTop.Y() + 1000 );
                     pRet->NbcMirror( aTop, aBottom );
                 }
-                // Vertikal gespiegelt?
+                // mirrored vertically?
                 if ( nSpFlags & SP_FFLIPV )
                 {
                     Rectangle aBndRect( pRet->GetSnapRect() );
@@ -5066,7 +5065,7 @@ Rectangle SvxMSDffManager::GetGlobalChildAnchor( const DffRecordHeader& rHd, SvS
                         else
                         {
                             sal_Int16 ls, ts, rs, bs;
-                            rSt >> ts >> ls >> rs >> bs; // etwas seltsame Koordinatenreihenfolge ...
+                            rSt >> ts >> ls >> rs >> bs; // the order of coordinates is a bit strange...
                             l = ls, t = ts, r = rs, b = bs;
                         }
                         Scale( l );
@@ -5251,7 +5250,7 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
             }
         }
 
-        //  Textrahmen, auch Title oder Outline
+        //  text frame, also Title or Outline
         SdrObject*  pOrgObj  = pObj;
         SdrRectObj* pTextObj = 0;
         sal_uInt32 nTextId = GetPropertyValue( DFF_Prop_lTxid, 0 );
@@ -5372,14 +5371,14 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
             pTextObj = new SdrRectObj(OBJ_TEXT, rTextRect);
             pTextImpRec = new SvxMSDffImportRec(*pImpRec);
 
-            // Die vertikalen Absatzeinrueckungen sind im BoundRect mit drin,
-            // hier rausrechnen
+            // the vertical paragraph indents are part of the BoundRect,
+            // here we 'remove' them by calculating
             Rectangle aNewRect(rTextRect);
             aNewRect.Bottom() -= nTextTop + nTextBottom;
             aNewRect.Right() -= nTextLeft + nTextRight;
 
-            // Nur falls es eine einfache Textbox ist, darf der Writer
-            // das Objekt durch einen Rahmen ersetzen, ansonsten
+            // Only if it's a simple textbox may Writer replace
+            // the object with a frame, otherwise
             if( bTextFrame )
             {
                 ::boost::shared_ptr<SvxMSDffShapeInfo> const pTmpRec(
@@ -5431,7 +5430,7 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
                 default: break;
             }
 
-            // Abstaende an den Raendern der Textbox setzen
+            // set margins at the border of the textbox
             aSet.Put( SdrTextLeftDistItem( nTextLeft ) );
             aSet.Put( SdrTextRightDistItem( nTextRight ) );
             aSet.Put( SdrTextUpperDistItem( nTextTop ) );
@@ -5441,7 +5440,7 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
             pTextImpRec->nDxTextRight   = nTextRight;
             pTextImpRec->nDyTextBottom  = nTextBottom;
 
-            // Textverankerung lesen
+            // read text anchor
             if ( IsProperty( DFF_Prop_anchorText ) )
             {
                 MSO_Anchor eTextAnchor =
@@ -5492,7 +5491,7 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
                     break;
                     default : break;
                 }
-                // Einsetzen
+                // insert
                 if ( bTVASet )
                     aSet.Put( SdrTextVertAdjustItem( eTVA ) );
                 if ( bTHASet )
@@ -5517,7 +5516,7 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
                 pTextObj->NbcRotate(aPivot, nTextRotationAngle, sin(a), cos(a));
             }
 
-            // rotate text with shape ?
+            // rotate text with shape?
             if ( mnFix16Angle )
             {
                 double a = mnFix16Angle * nPi180;
@@ -5659,7 +5658,7 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
                 rImportData.aRecords.insert( pTextImpRec );
             }
 
-            // Eintrag in Z-Order-Liste um Zeiger auf dieses Objekt ergaenzen
+            // entry in the z-order-list in order to complement the pointer to this object
             /*Only store objects which are not deep inside the tree*/
             if( ( rObjData.nCalledByGroup == 0 )
                 ||
@@ -5760,8 +5759,8 @@ SvxMSDffManager::SvxMSDffManager(SvStream& rStCtrl_,
      nOffsDgg( nOffsDgg_ ),
      nBLIPCount(  USHRT_MAX ),              // initialize with error, since we fist check if the
      nShapeCount( USHRT_MAX ),              // control stream has correct data
-     nGroupShapeFlags(0),                   //ensure initialization here, as some corrupted
-                                            //files may yield to this being unitialized
+     nGroupShapeFlags(0),                   // ensure initialization here, as some corrupted
+                                            // files may yield to this being unitialized
      maBaseURL( rBaseURL ),
      rStCtrl(  rStCtrl_  ),
      pStData(  pStData_  ),
@@ -5773,24 +5772,24 @@ SvxMSDffManager::SvxMSDffManager(SvStream& rStCtrl_,
 {
     SetModel( pSdrModel_, nApplicationScale );
 
-    // FilePos des/der Stream(s) merken
+    // remember FilePos of the stream(s)
     sal_uLong nOldPosCtrl = rStCtrl.Tell();
     sal_uLong nOldPosData = pStData ? pStData->Tell() : nOldPosCtrl;
 
-    // Falls kein Datenstream angegeben, gehen wir davon aus,
-    // dass die BLIPs im Steuerstream stehen.
+    // if no data stream is given we assume that the BLIPs
+    // are in the control stream
     if( !pStData )
         pStData = &rStCtrl;
 
     SetDefaultPropSet( rStCtrl, nOffsDgg );
 
-    // Steuer Stream auslesen, im Erfolgsfall nBLIPCount setzen
+    // read control stream, if successful set nBLIPCount
     GetCtrlData( nOffsDgg );
 
-    // Text-Box-Story-Ketten-Infos ueberpruefen
+    // check Text-Box-Story-Chain-Infos
     CheckTxBxStoryChain();
 
-    // alte FilePos des/der Stream(s) restaurieren
+    // restore old FilePos of the stream(s)
     rStCtrl.Seek( nOldPosCtrl );
     if( &rStCtrl != pStData )
         pStData->Seek( nOldPosData );
@@ -5804,8 +5803,8 @@ SvxMSDffManager::SvxMSDffManager( SvStream& rStCtrl_, const String& rBaseURL )
      pShapeOrders( new SvxMSDffShapeOrders ),
      nDefaultFontHeight( 24 ),
      nOffsDgg( 0 ),
-     nBLIPCount(  USHRT_MAX ),              // mit Error initialisieren, da wir erst pruefen,
-     nShapeCount( USHRT_MAX ),              // ob Kontroll-Stream korrekte Daten enthaellt
+     nBLIPCount(  USHRT_MAX ),              // initialize with error, since we first have to check
+     nShapeCount( USHRT_MAX ),              // whether the control stream contains the correct data
      maBaseURL( rBaseURL ),
      rStCtrl(  rStCtrl_  ),
      pStData( 0 ),
@@ -5831,7 +5830,7 @@ void SvxMSDffManager::InitSvxMSDffManager( sal_uInt32 nOffsDgg_, SvStream* pStDa
     pStData = pStData_;
     nSvxMSDffOLEConvFlags = nOleConvFlags;
 
-    // FilePos des/der Stream(s) merken
+    // remember FilePos of the stream(s)
     sal_uLong nOldPosCtrl = rStCtrl.Tell();
 
     SetDefaultPropSet( rStCtrl, nOffsDgg );
@@ -5839,13 +5838,13 @@ void SvxMSDffManager::InitSvxMSDffManager( sal_uInt32 nOffsDgg_, SvStream* pStDa
     // insert fidcl cluster table
     GetFidclData( nOffsDgg );
 
-    // Steuer Stream auslesen, im Erfolgsfall nBLIPCount setzen
+    // read control stream, if successful, set nBLIPCount
     GetCtrlData( nOffsDgg );
 
-    // Text-Box-Story-Ketten-Infos ueberpruefen
+    // check Text-Box-Story-Chain-Infos
     CheckTxBxStoryChain();
 
-    // alte FilePos des/der Stream(s) restaurieren
+    // restore old FilePos of the stream(s)
     rStCtrl.Seek( nOldPosCtrl );
 }
 
@@ -5977,19 +5976,19 @@ void SvxMSDffManager::CheckTxBxStoryChain()
 
 /*****************************************************************************
 
-    Einlesen der Shape-Infos im Ctor:
+    Reading the Shape-Infos in the Ctor:
     ---------------------------------
-    merken der Shape-Ids und zugehoerigen Blip-Nummern und TextBox-Infos
-               =========                  ============     =============
-    und merken des File-Offsets fuer jedes Blip
-                   ============
+    remembering the Shape-Ids and the associated Blip-Numbers und TextBox-Infos
+                    =========                    ============     =============
+    and remebering the File-Offsets for each Blip
+                       ============
 ******************************************************************************/
 void SvxMSDffManager::GetCtrlData( sal_uInt32 nOffsDgg_ )
 {
-    // Start Offset unbedingt merken, falls wir nochmal aufsetzen muessen
+    // absolutely remember Start Offset, in case we have to position again
     sal_uInt32 nOffsDggL = nOffsDgg_;
 
-    // Kontroll Stream positionieren
+    // position control stream
     if (nOffsDggL != rStCtrl.Seek(nOffsDggL))
         return;
 
@@ -6002,7 +6001,7 @@ void SvxMSDffManager::GetCtrlData( sal_uInt32 nOffsDgg_ )
     sal_Bool bOk;
     sal_uLong nPos = nOffsDggL + DFF_COMMON_RECORD_HEADER_SIZE;
 
-    // Fall A: erst Drawing Group Container, dann n Mal Drawing Container
+    // case A: first Drawing Group Container, then n times Drawing Container
     if( DFF_msofbtDggContainer == nFbt )
     {
         GetDrawingGroupContainerData( rStCtrl, nLength );
@@ -6039,7 +6038,7 @@ void SvxMSDffManager::GetCtrlData( sal_uInt32 nOffsDgg_ )
 }
 
 
-// ab hier: Drawing Group Container  d.h. Dokument - weit gueltige Daten
+// from here on: Drawing Group Container  i.e. Ddocument-wide valid data
 //                      =======================           ========
 //
 void SvxMSDffManager::GetDrawingGroupContainerData( SvStream& rSt, sal_uLong nLenDgg )
@@ -6051,7 +6050,7 @@ void SvxMSDffManager::GetDrawingGroupContainerData( SvStream& rSt, sal_uLong nLe
 
     sal_uLong nLenBStoreCont = 0, nLenFBSE = 0, nRead = 0;
 
-    // Nach einem BStore Container suchen
+    // search for a  BStore Container
     do
     {
         if(!this->ReadCommonRecordHeader( rSt, nVer, nInst, nFbt, nLength)) return;
@@ -6083,7 +6082,7 @@ void SvxMSDffManager::GetDrawingGroupContainerData( SvStream& rSt, sal_uLong nLe
         if( DFF_msofbtBSE == nFbt )
         {
             nLenFBSE = nLength;
-            // ist FBSE gross genug fuer unsere Daten
+            // is FBSE big enough for our data
             sal_Bool bOk = ( nSkipBLIPLen + 4 + nSkipBLIPPos + 4 <= nLenFBSE );
 
             if( bOk )
@@ -6105,7 +6104,7 @@ void SvxMSDffManager::GetDrawingGroupContainerData( SvStream& rSt, sal_uLong nLe
                 if( (!nBLIPPos) && (nBLIPLen < nLenFBSE) )
                     nBLIPPos = rSt.Tell() + 4;
 
-                // Das hat ja fein geklappt!
+                // That worked great!
                 // Wir merken uns, dass wir einen FBSE mehr im Pointer Array haben.
                 nBLIPPos = Calc_nBLIPPos(nBLIPPos, rSt.Tell());
 
@@ -6114,7 +6113,7 @@ void SvxMSDffManager::GetDrawingGroupContainerData( SvStream& rSt, sal_uLong nLe
                 else
                     nBLIPCount++;
 
-                // Jetzt die Infos fuer spaetere Zugriffe speichern
+                // now save the info for later access
                 pBLIPInfos->push_back( new SvxMSDffBLIPInfo( nInst, nBLIPPos, nBLIPLen ) );
             }
         }
@@ -6176,7 +6175,7 @@ sal_Bool SvxMSDffManager::GetShapeGroupContainerData( SvStream& rSt,
         if( !this->ReadCommonRecordHeader( rSt, nVer, nInst, nFbt, nLength ) )
             return sal_False;
         nReadSpGrCont += DFF_COMMON_RECORD_HEADER_SIZE;
-        // Shape Container ?
+        // Shape Container?
         if( DFF_msofbtSpContainer == nFbt )
         {
             sal_uLong nGroupOffs = bFirst ? nStartShapeGroupCont - DFF_COMMON_RECORD_HEADER_SIZE : ULONG_MAX;
@@ -6226,10 +6225,10 @@ sal_Bool SvxMSDffManager::GetShapeContainerData( SvStream& rSt,
     //  und der Text nicht gedreht ist)
     sal_Bool bCanBeReplaced = (ULONG_MAX > nPosGroup) ? sal_False : sal_True;
 
-    // wir wissen noch nicht, ob es eine TextBox ist
+    // we don't knwo yet whether it's a TextBox
     MSO_SPT         eShapeType      = mso_sptNil;
 
-    // Shape analysieren
+    // analyze Shape
     //
     do
     {
@@ -6238,7 +6237,7 @@ sal_Bool SvxMSDffManager::GetShapeContainerData( SvStream& rSt,
         // FSP ?
         if( ( DFF_msofbtSp == nFbt ) && ( 4 <= nLength ) )
         {
-            // Wir haben den FSP gefunden: Shape Typ und Id vermerken!
+            // we've found the FSP gefunden: note Shape Type and Id!
             eShapeType = (MSO_SPT)nInst;
             rSt >> aInfo.nShapeId;
             rSt.SeekRel( nLength - 4 );
@@ -6246,8 +6245,8 @@ sal_Bool SvxMSDffManager::GetShapeContainerData( SvStream& rSt,
         }
         else if( DFF_msofbtOPT == nFbt ) // Shape Property Table ?
         {
-            // Wir haben die Property Table gefunden:
-            // nach der Blip Property suchen!
+            // We've found the Property Table:
+            // search for the Blip Property!
             sal_uLong  nPropRead = 0;
             sal_uInt16 nPropId;
             sal_uInt32  nPropVal;
@@ -6310,20 +6309,20 @@ sal_Bool SvxMSDffManager::GetShapeContainerData( SvStream& rSt,
                     break;
 
                     case DFF_Prop_WrapText :
-                        //TO-DO: eWrapMode = (MSO_WrapMode)nPropVal;
+                        //TODO: eWrapMode = (MSO_WrapMode)nPropVal;
                     break;
 
                     default:
                     {
-                        // Bit gesetzt und gueltig?
+                        // is the Bit set and valid?
                         if( 0x4000 == ( nPropId & 0xC000 ) )
                         {
-                            // Blip Property gefunden: BStore Idx vermerken!
+                            // Blip Property found: remember BStore Idx!
                             nPropRead = nLenShapePropTbl;
                         }
                         else if( 0x8000 & nPropId )
                         {
-                            // komplexe Prop gefunden:
+                            // complex Prop found:
                             // Laenge ist immer 6, nur die Laenge der nach der
                             // eigentlichen Prop-Table anhaengenden Extra-Daten
                             // ist unterschiedlich
@@ -6337,7 +6336,7 @@ sal_Bool SvxMSDffManager::GetShapeContainerData( SvStream& rSt,
             rSt.Seek( nStartShapePropTbl + nLenShapePropTbl );
             nReadSpCont += nLenShapePropTbl;
         }
-        else if( ( DFF_msofbtClientTextbox == nFbt ) && ( 4 == nLength ) )  // Text-Box-Story-Eintrag gefunden
+        else if( ( DFF_msofbtClientTextbox == nFbt ) && ( 4 == nLength ) )  // Text-Box-Story-Entry found
         {
             rSt >> aInfo.nTxBxComp;
             // Add internal drawing container id to text id.
@@ -6379,7 +6378,7 @@ sal_Bool SvxMSDffManager::GetShapeContainerData( SvStream& rSt,
         pShapeOrders->push_back( new SvxMSDffShapeOrder( aInfo.nShapeId ) );
     }
 
-    // und den Stream wieder korrekt positionieren
+    // and position the Stream correctly again
     rSt.Seek( nStartShapeCont + nLenShapeCont );
     return sal_True;
 }
@@ -6388,8 +6387,8 @@ sal_Bool SvxMSDffManager::GetShapeContainerData( SvStream& rSt,
 
 /*****************************************************************************
 
-    Zugriff auf ein Shape zur Laufzeit (ueber die Shape-Id)
-    ----------------------------------
+    Access to a shape at runtime (via the Shape-Id)
+    ----------------------------
 ******************************************************************************/
 sal_Bool SvxMSDffManager::GetShape(sal_uLong nId, SdrObject*&         rpShape,
                                           SvxMSDffImportData& rData)
@@ -6411,13 +6410,13 @@ sal_Bool SvxMSDffManager::GetShape(sal_uLong nId, SdrObject*&         rpShape,
         sal_uLong const nFilePos((*it)->nFilePos);
         bool bSeeked = (nFilePos == rStCtrl.Seek(nFilePos));
 
-        // Falls missglueckt, den Fehlerstatus zuruecksetzen und Pech gehabt!
+        // if it failed, reset error statusF
         if (!bSeeked || rStCtrl.GetError())
             rStCtrl.ResetError();
         else
             rpShape = ImportObj( rStCtrl, &rData, rData.aParentRect, rData.aParentRect );
 
-        // alte FilePos des/der Stream(s) restaurieren
+        // restore old alte FilePos of the stream(s)
         rStCtrl.Seek( nOldPosCtrl );
         if( &rStCtrl != pStData )
             pStData->Seek( nOldPosData );
@@ -6428,12 +6427,12 @@ sal_Bool SvxMSDffManager::GetShape(sal_uLong nId, SdrObject*&         rpShape,
 
 
 
-/*      Zugriff auf ein BLIP zur Laufzeit (bei bereits bekannter Blip-Nr)
-    ---------------------------------
+/*      access to a BLIP at runtime (if the Blip-Number is already known)
+        ---------------------------
 ******************************************************************************/
 sal_Bool SvxMSDffManager::GetBLIP( sal_uLong nIdx_, Graphic& rData, Rectangle* pVisArea )
 {
-    sal_Bool bOk = sal_False;       // Ergebnisvariable initialisieren
+    sal_Bool bOk = sal_False;       // initialize result variable
     if ( pStData )
     {
         // check if a graphic for this blipId is already imported
@@ -6465,14 +6464,13 @@ sal_Bool SvxMSDffManager::GetBLIP( sal_uLong nIdx_, Graphic& rData, Rectangle* p
                 && pStData->GetError() )
                 pStData->ResetError();
 
-            // FilePos des/der Stream(s) merken
+            // remember FilePos of the stream(s)
             sal_uLong nOldPosCtrl = rStCtrl.Tell();
             sal_uLong nOldPosData = pStData ? pStData->Tell() : nOldPosCtrl;
 
             // passende Info-Struct aus unserem Pointer Array nehmen
             SvxMSDffBLIPInfo& rInfo = (*pBLIPInfos)[ nIdx-1 ];
-
-            // das BLIP Atom im Daten Stream anspringen
+in the data streamim Daten Stream anspringen
             pStData->Seek( rInfo.nFilePos );
             // ggfs. Fehlerstatus zuruecksetzen
             if( pStData->GetError() )
@@ -6493,7 +6491,7 @@ sal_Bool SvxMSDffManager::GetBLIP( sal_uLong nIdx_, Graphic& rData, Rectangle* p
                     pStData2->ResetError();
                 else
                     bOk = GetBLIPDirect( *pStData2, rData, pVisArea );
-                // alte FilePos des zweiten Daten-Stream restaurieren
+                // restore olf FilePos of the second data stream
                 pStData2->Seek( nOldPosData2 );
             }
             // alte FilePos des/der Stream(s) restaurieren
@@ -6512,16 +6510,16 @@ sal_Bool SvxMSDffManager::GetBLIP( sal_uLong nIdx_, Graphic& rData, Rectangle* p
     return bOk;
 }
 
-/*      Zugriff auf ein BLIP zur Laufzeit (mit korrekt positioniertem Stream)
+/*      access to a BLIP at runtime (with correctly positioned stream)
     ---------------------------------
 ******************************************************************************/
 sal_Bool SvxMSDffManager::GetBLIPDirect( SvStream& rBLIPStream, Graphic& rData, Rectangle* pVisArea ) const
 {
     sal_uLong nOldPos = rBLIPStream.Tell();
 
-    int nRes = GRFILTER_OPENERROR;  // Fehlervariable initialisieren
+    int nRes = GRFILTER_OPENERROR;  // initialize error variable
 
-    // nachschauen, ob es sich auch wirklich um ein BLIP handelt
+    // check whether it's really a BLIP
     sal_uInt32 nLength;
     sal_uInt16 nInst, nFbt( 0 );
     sal_uInt8   nVer;
@@ -6530,7 +6528,7 @@ sal_Bool SvxMSDffManager::GetBLIPDirect( SvStream& rBLIPStream, Graphic& rData, 
         Size        aMtfSize100;
         sal_Bool        bMtfBLIP = sal_False;
         sal_Bool        bZCodecCompression = sal_False;
-        // Nun exakt auf den Beginn der eingebetteten Grafik positionieren
+        // now position it exactly at the beinning of the embedded graphic
         sal_uLong nSkip = ( nInst & 0x0001 ) ? 32 : 16;
 
         switch( nInst & 0xFFFE )
@@ -6639,7 +6637,7 @@ sal_Bool SvxMSDffManager::GetBLIPDirect( SvStream& rBLIPStream, Graphic& rData, 
 #endif
 
         if( ( nInst & 0xFFFE ) == 0x7A8 )
-        {   // DIBs direkt holen
+        {   // getting the DIBs immediately
             Bitmap aNew;
             if( aNew.Read( *pGrStream, sal_False ) )
             {
@@ -6648,7 +6646,7 @@ sal_Bool SvxMSDffManager::GetBLIPDirect( SvStream& rBLIPStream, Graphic& rData, 
             }
         }
         else
-        {   // und unsere feinen Filter darauf loslassen
+        {   // and unleash our filter
             GraphicFilter& rGF = GraphicFilter::GetGraphicFilter();
             String aEmptyStr;
             nRes = rGF.ImportGraphic( rData, aEmptyStr, *pGrStream, GRFILTER_FORMAT_DONTKNOW );
@@ -6683,7 +6681,7 @@ sal_Bool SvxMSDffManager::GetBLIPDirect( SvStream& rBLIPStream, Graphic& rData, 
           pGrStream->ResetError();
         delete pOut;
     }
-    rBLIPStream.Seek( nOldPos );    // alte FilePos des Streams restaurieren
+    rBLIPStream.Seek( nOldPos );    // restore old FilePos of the strem
 
     return ( GRFILTER_OK == nRes ); // Ergebniss melden
 }
@@ -6983,7 +6981,7 @@ sal_Bool SvxMSDffManager::ConvertToOle2( SvStream& rStm, sal_uInt32 nReadLen,
                 String aShort, aFull;
                 if( pIds->nId )
                 {
-                    // gefunden!
+                    // found!
                     sal_uLong nCbFmt = SotExchange::RegisterFormatName( aSvrName );
                     rDest->SetClass( SvGlobalName( pIds->nId, 0, 0, 0xc0,0,0,0,0,0,0,0x46 ), nCbFmt,
                                     String( pIds->pDspName, RTL_TEXTENCODING_ASCII_US ) );
@@ -7296,9 +7294,9 @@ SdrOle2Obj* SvxMSDffManager::CreateSdrOLEFromStorage(
     if( rSrcStorage.Is() && xDestStorage.is() && rStorageName.Len() )
     {
         comphelper::EmbeddedObjectContainer aCnt( xDestStorage );
-        // Ist der 01Ole-Stream ueberhaupt vorhanden ?
-        // ( ist er z.B. bei FontWork nicht )
-        // Wenn nicht -> Einbindung als Grafik
+        // does the 01Ole-Stream exist at all?
+        // (that's not the case for e.g. Fontwork )
+        // If that's not the case -> include it as graphic
         sal_Bool bValidStorage = sal_False;
         rtl::OUString aDstStgName(MSO_OLE_Obj);
 

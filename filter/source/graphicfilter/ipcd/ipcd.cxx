@@ -37,13 +37,13 @@
 
 //============================ PCDReader ==================================
 
-// Diese Aufloesungen sind in einer PCD-Datei enthalten:
+// these resolutions are contained in a PCD file:
 enum PCDResolution {
     PCDRES_BASE16,  //  192 x  128
     PCDRES_BASE4,   //  384 x  256
     PCDRES_BASE,    //  768 x  512
-    // Die folgenden sind komprimiert und koennen
-    // von uns NICHT gelesen werden:
+    // the following ones are compressed 
+    // and CANNOT be read by us
     PCDRES_4BASE,   // 1536 x 1024
     PCDRES_16BASE   // 3072 x 3072
 };
@@ -59,29 +59,29 @@ private:
     SvStream &m_rPCD;
     BitmapWriteAccess*  mpAcc;
 
-    sal_uInt8               nOrientation;   // Ausrichtung des Bildes in der PCD-Datei:
-                                        // 0 - Turmspitze zeigt nach oben
-                                        // 1 - Turmspitze zeigt nach rechts
-                                        // 2 - Turmspitze zeigt nach unten
-                                        // 3 - Turmspitze zeigt nach links
+    sal_uInt8               nOrientation;   // orientation of the picture withinthe PCD file:
+                                        // 0 - spire point up
+                                        // 1 - spire points to the right
+                                        // 2 - spire points down
+                                        // 3 - spire points to the left
 
-    PCDResolution       eResolution;    // Welche Aufloesung wir haben wollen
+    PCDResolution       eResolution;    // which resolution we want
 
-    sal_uLong               nWidth;         // Breite des PCD-Bildes
-    sal_uLong               nHeight;        // Hoehe des PCD-Bildes
-    sal_uLong               nImagePos;      // Position des Bildes in der PCD-Datei
+    sal_uLong               nWidth;         // width of the PCD picture
+    sal_uLong               nHeight;        // heigth of the PCD picture
+    sal_uLong               nImagePos;      // position of the picture within the PCD file
 
-    // Temporare BLue-Green-Red-Bitmap
+    // temporary lLue-Green-Red-Bitmap
     sal_uLong               nBMPWidth;
     sal_uLong               nBMPHeight;
 
     void    MayCallback(sal_uLong nPercent);
 
     void    CheckPCDImagePacFile();
-        // Prueft, ob es eine Photo-CD-Datei mit 'Image Pac' ist.
+        // checks whether it's a Photo-CD file with 'Image Pac'
 
     void    ReadOrientation();
-        // Liest die Ausrichtung und setzt nOrientation
+        // reads the orientation and sets nOrientation
 
     void    ReadImage(sal_uLong nMinPercent, sal_uLong nMaxPercent);
 
@@ -96,7 +96,7 @@ public:
     sal_Bool ReadPCD( Graphic & rGraphic, FilterConfigItem* pConfigItem );
 };
 
-//=================== Methoden von PCDReader ==============================
+//=================== Methods of PCDReader ==============================
 
 sal_Bool PCDReader::ReadPCD( Graphic & rGraphic, FilterConfigItem* pConfigItem )
 {
@@ -107,13 +107,13 @@ sal_Bool PCDReader::ReadPCD( Graphic & rGraphic, FilterConfigItem* pConfigItem )
 
     MayCallback( 0 );
 
-    // Ist es eine PCD-Datei mit Bild ? ( setzt bStatus == sal_False, wenn nicht ):
+    // is it a PCD file with a picture? ( sets bStatus == sal_False, if that's not the case):
     CheckPCDImagePacFile();
 
-    // Orientierung des Bildes einlesen:
+    // read orientation of the picture:
     ReadOrientation();
 
-    // Welche Aufloesung wollen wir ?:
+    // which resolution do we want?:
     eResolution = PCDRES_BASE;
     if ( pConfigItem )
     {
@@ -123,7 +123,7 @@ sal_Bool PCDReader::ReadPCD( Graphic & rGraphic, FilterConfigItem* pConfigItem )
         else if ( nResolution == 0 )
             eResolution = PCDRES_BASE16;
     }
-    // Groesse und Position (Position in PCD-Datei) des Bildes bestimmen:
+    // determine size and position (position within the PCD file) of the picture:
     switch (eResolution)
     {
         case PCDRES_BASE16 :
@@ -208,11 +208,11 @@ void PCDReader::ReadImage(sal_uLong nMinPercent, sal_uLong nMaxPercent)
     sal_uLong  nx,ny,nW2,nH2,nYPair,ndy,nXPair;
     long   nL,nCb,nCr,nRed,nGreen,nBlue;
     sal_uInt8 * pt;
-    sal_uInt8 * pL0; // Luminanz fuer jeden Pixel der 1. Zeile des aktuellen Zeilen-Paars
-    sal_uInt8 * pL1; // Luminanz fuer jeden Pixel der 2. Zeile des aktuellen Zeilen-Paars
-    sal_uInt8 * pCb; // Blau-Chrominanz fuer je 2x2 Pixel des aktuellen Zeilen-Paars
-    sal_uInt8 * pCr; // Rot-Chrominanz fuer je 2x2 Pixel des aktuellen Zeilen-Paars
-    sal_uInt8 * pL0N, * pL1N, * pCbN, * pCrN; // wie oben, nur fuer das naechste Zeilen-Paar
+    sal_uInt8 * pL0; // luminance for each pixel of the 1st row of the current pair of rows
+    sal_uInt8 * pL1; // luminance for each pixel of the 2nd row of the current pair of rows
+    sal_uInt8 * pCb; // blue chrominance for each 2x2 pixel of the current pair of rows
+    sal_uInt8 * pCr; // red chrominance fuer je 2x2 pixel of the current pair of rows
+    sal_uInt8 * pL0N, * pL1N, * pCbN, * pCrN; // like above, but for the next pair of rows
 
     if ( bStatus == sal_False )
         return;
@@ -246,7 +246,7 @@ void PCDReader::ReadImage(sal_uLong nMinPercent, sal_uLong nMaxPercent)
 
     m_rPCD.Seek( nImagePos );
 
-    // naechstes Zeilen-Paar := erstes Zeile-Paar:
+    // next pair of rows := first pair of rows:
     m_rPCD.Read( pL0N, nWidth );
     m_rPCD.Read( pL1N, nWidth );
     m_rPCD.Read( pCbN, nW2 );
@@ -256,13 +256,13 @@ void PCDReader::ReadImage(sal_uLong nMinPercent, sal_uLong nMaxPercent)
 
     for ( nYPair = 0; nYPair < nH2; nYPair++ )
     {
-        // aktuelles Zeilen-Paar := naechstes Zeilen-Paar
+        // current pair of rows := next pair of rows:
         pt=pL0; pL0=pL0N; pL0N=pt;
         pt=pL1; pL1=pL1N; pL1N=pt;
         pt=pCb; pCb=pCbN; pCbN=pt;
         pt=pCr; pCr=pCrN; pCrN=pt;
 
-        // naechstes Zeilen-Paar holen:
+        // get the next pair of rows:
         if ( nYPair < nH2 - 1 )
         {
             m_rPCD.Read( pL0N, nWidth );
@@ -281,15 +281,15 @@ void PCDReader::ReadImage(sal_uLong nMinPercent, sal_uLong nMaxPercent)
             }
         }
 
-        // Schleife uber die beiden Zeilen des Zeilen-Paars:
+        // loop trough both rows of the pair of rows:
         for ( ndy = 0; ndy < 2; ndy++ )
         {
             ny = ( nYPair << 1 ) + ndy;
 
-            // Schleife ueber X:
+            // loop trough X:
             for ( nx = 0; nx < nWidth; nx++ )
             {
-                // nL,nCb,nCr fuer den Pixel nx,ny holen/berechenen:
+                // get/calculate nL,nCb,nCr for the pixel nx,ny:
                 nXPair = nx >> 1;
                 if ( ndy == 0 )
                 {
@@ -340,7 +340,7 @@ void PCDReader::ReadImage(sal_uLong nMinPercent, sal_uLong nMaxPercent)
                 if ( nBlue > 255 )
                     nBlue = 255;
 
-                // Farbwert in pBMPMap eintragen:
+                // register color value in pBMPMap:
                 if ( nOrientation < 2 )
                 {
                     if ( nOrientation == 0 )
@@ -374,7 +374,7 @@ void PCDReader::ReadImage(sal_uLong nMinPercent, sal_uLong nMaxPercent)
     rtl_freeMemory((void*)pCrN);
 }
 
-//================== GraphicImport - die exportierte Funktion ================
+//================== GraphicImport - the exported Function ================
 
 extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool __LOADONCALLAPI
 GraphicImport(SvStream & rStream, Graphic & rGraphic, FilterConfigItem* pConfigItem, sal_Bool)

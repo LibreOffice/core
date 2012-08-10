@@ -87,7 +87,7 @@ public:
     sal_Bool ReadPSD(Graphic & rGraphic);
 };
 
-//=================== Methoden von PSDReader ==============================
+//=================== Methods of PSDReader ==============================
 
 PSDReader::PSDReader(SvStream &rStream)
     : m_rPSD(rStream)
@@ -143,7 +143,7 @@ sal_Bool PSDReader::ReadPSD(Graphic & rGraphic )
             mpWriteAcc->SetPaletteColor( i, Color( mpPalette[ i ], mpPalette[ i + 256 ], mpPalette[ i + 512 ] ) );
         }
     }
-    // Bitmap-Daten einlesen
+    // read Bitmap-Daten
     if ( mbStatus && ImplReadBody() )
     {
         if ( mbTransparent )
@@ -253,7 +253,7 @@ sal_Bool PSDReader::ImplReadHeader()
         }
         break;
 
-        case PSD_DUOTONE :                  // we'll handle the doutone color like a normal grayscale picture
+        case PSD_DUOTONE :                  // we'll handle the duotone color like a normal grayscale picture
             m_rPSD.SeekRel( nColorLength );
             nColorLength = 0;
         case PSD_GRAYSCALE :

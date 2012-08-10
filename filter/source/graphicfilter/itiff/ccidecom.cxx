@@ -29,7 +29,7 @@
 
 #include "ccidecom.hxx"
 
-//=============================== Huffman-Tabellen ========================
+//=============================== Huffman tables ========================
 
 //---------------------------- White-Run ------------------------------
 
@@ -316,18 +316,15 @@ const CCIHuffmanTableEntry CCIUncompTable[CCIUncompTableSize]={
 };
 
 
-//================== Sicherheitskopie der Huffman-Tabellen ================
-// Um sicher zugehen, dass die Huffman-Tabellen keine Fehler enthalten,
-// wurden sie zweimal von unterschiedlichen Quellen eingegeben (Uff) und
-// verglichen.
-// Da sich aber im Laufe der Pflege des Source-Codes mal ein Fehler
-// einschleichen koennte (z.B. versehentlicher druck einer Taste im Editor)
-// werden die Tablellen hier weiterhin zweimal aufgefuehrt und zur Laufzeit
-// verglichen. (Wenn der Vergleich fehlschlaegt, liefert CCIDecompressor
-// immer einen Fehler). Das Ganze mag etwas wahnsinnig erscheinen, aber ein Fehler
-// in den Tabellen waere sonst sehr sehr schwer zu erkennen, zumal es
-// unwahrscheinlich ist, dass eine oder mehere Beispieldateien alle Codes
-// durchlaufen.
+//================== backup of the Huffman tables ============================
+// To make sure that the Huffman tables do not contain errors they were entered
+// from two different sources (Phew) and compared.
+// Since an error could creep in to the source code while maintaining it
+// (e.g. an accidentaly key press in the editor) the tables are listed twice
+// and are compared during runtime. (If the comparison fails CCIDcompressor
+// throws an error) The whole thing may appear insane, but an error within the
+// tables would otherwise be really hard to discover and it's very unlikely that 
+// one or more sample files run through all codes.
 
 const CCIHuffmanTableEntry CCIWhiteTableSave[CCIWhiteTableSize]={
     {    0, 0x0035,  8 },
@@ -638,7 +635,7 @@ sal_Bool CCIDecompressor::DecompressScanline( sal_uInt8 * pTarget, sal_uLong nTa
     sal_uInt8 * pSrc,* pDst;
     sal_Bool b2D;
 
-    if ( nEOLCount >= 5 )   // RTC( Return To Controller )
+    if ( nEOLCount >= 5 )   // RTC (Return To Controller)
         return sal_True;
 
     if ( bStatus == sal_False )
@@ -672,10 +669,10 @@ sal_Bool CCIDecompressor::DecompressScanline( sal_uInt8 * pTarget, sal_uLong nTa
         }
     }
 
-    if ( nEOLCount >= 5 )   // RTC( Return To Controller )
+    if ( nEOLCount >= 5 )   // RTC (Return To Controller)
         return sal_True;
 
-    // ggf. eine weisse vorherige Zeile herstellen fuer 2D:
+    // should the situation arise, generate a white previous line for 2D:
     if ( nOptions & CCI_OPTION_2D )
     {
         if ( pLastLine == NULL || nLastLineSize != ( ( nTargetBits + 7 ) >> 3 ) )
@@ -692,7 +689,7 @@ sal_Bool CCIDecompressor::DecompressScanline( sal_uInt8 * pTarget, sal_uLong nTa
     if ( nOptions & CCI_OPTION_BYTEALIGNROW )
         nInputBitsBufSize &= 0xfff8;
 
-    // Ist es eine 2D-Zeile ?:
+    // is it a 2D row?
     if ( nOptions & CCI_OPTION_2D )
     {
         if ( nOptions & CCI_OPTION_EOL )
@@ -703,13 +700,13 @@ sal_Bool CCIDecompressor::DecompressScanline( sal_uInt8 * pTarget, sal_uLong nTa
     else
         b2D = sal_False;
 
-    // Zeile einlesen:
+    // read scanline:
     if ( b2D )
         Read2DScanlineData( pTarget, (sal_uInt16)nTargetBits );
     else
         Read1DScanlineData( pTarget, (sal_uInt16)nTargetBits );
 
-    // Wenn wir im 2D-Modus sind, muessen wir uns die Zeile merken:
+    // if we're in 2D mode we have to remember the line:
     if ( nOptions & CCI_OPTION_2D && bStatus == sal_True )
     {
         pSrc = pTarget;
@@ -775,7 +772,7 @@ sal_Bool CCIDecompressor::ReadEOL( sal_uInt32 /*nMaxFillBits*/ )
     // oder es gibt tatsaechlich gemeine Export-Filter, die immer ein Align machen.
     // Ausserdem wurden Dateien gefunden, in denen mehr als die maximal 7 noetigen
     // Fuellbits vor dem EOL-Code stehen. Daher akzeptieren wir nun grundsaetzlich
-    // bis zu 32-Bloedsinn-Bits vor dem EOL-Code:
+    // bis zu 32-nonsense-Bits vor dem EOL-Code:
     // und ich habe eine Datei gefunden in der bis zu ??? Bloedsinn Bits stehen, zudem ist dort die Bit Reihenfolge verdreht (SJ);
 
     sal_uInt32 nMaxPos = pIStream->Tell();
@@ -814,7 +811,7 @@ sal_Bool CCIDecompressor::Read2DTag()
 {
     sal_uInt8 nByte;
 
-    // Ein Bit einlesen und sal_True liefern, wenn es 0 ist, sonst sal_False
+    // read abit and return sal_True if it's 0, otherwise return sal_False
     if (nInputBitsBufSize==0) {
         *pIStream >> nByte;
         if ( nOptions & CCI_OPTION_INVERSEBITORDER )
@@ -832,7 +829,7 @@ sal_uInt8 CCIDecompressor::ReadBlackOrWhite()
 {
     sal_uInt8 nByte;
 
-    // Ein Bit einlesen und 0x00 liefern, wenn es 0 ist, sonst 0xff
+    // read a bit and deliver 0x00 if it's 0, otherwise 0xff
     if (nInputBitsBufSize==0) {
         *pIStream >> nByte;
         if ( nOptions & CCI_OPTION_INVERSEBITORDER )
@@ -849,7 +846,7 @@ sal_uInt8 CCIDecompressor::ReadBlackOrWhite()
 sal_uInt16 CCIDecompressor::ReadCodeAndDecode(const CCILookUpTableEntry * pLookUp,
                                           sal_uInt16 nMaxCodeBits)
 {
-    // Einen Huffman-Code einlesen und dekodieren:
+    // read a Huffman code and decode it:
     while (nInputBitsBufSize<nMaxCodeBits)
     {
         sal_uInt8 nByte(0);
@@ -899,9 +896,9 @@ sal_uInt16 CCIDecompressor::CountBits(const sal_uInt8 * pData, sal_uInt16 nDataS
     sal_uInt16 nPos,nLo;
     sal_uInt8 nData;
 
-    // Hier wird die Anzahl der zusammenhaengenden Bits gezaehlt, die
-    // ab Position nBitPos in pTarget alle die Farbe nBlackOrWhite
-    // (0xff oder 0x00) haben.
+    // here the number of bits belonging together is being counted
+    // which all have the color nBlackOrWhite (0xff oder 0x00)
+    // from the position nBitPos on
 
     nPos=nBitPos;
     for (;;) {
@@ -926,16 +923,16 @@ void CCIDecompressor::Read1DScanlineData(sal_uInt8 * pTarget, sal_uInt16 nTarget
 {
     sal_uInt16 nCode,nCodeBits,nDataBits,nTgtFreeByteBits;
     sal_uInt8 nByte;
-    sal_uInt8 nBlackOrWhite; // ist 0xff fuer Black oder 0x00 fuer White
+    sal_uInt8 nBlackOrWhite; // is 0xff for black or 0x00 for white
     sal_Bool bTerminatingCode;
 
-    // Der erste Code ist immer eine "White-Code":
+    // the first code is always a "white-code":
     nBlackOrWhite=0x00;
 
-    // Anzahl der Bits, die im Byte *pTarget noch nicht geschrieben sind:
+    // number of bits that aren't written in the byte *pTarget yet:
     nTgtFreeByteBits=8;
 
-    // Schleife ueber Codes aus dem Eingabe-Stream:
+    // loop through codes from the input stream:
     do {
 
         // die naechsten 13 Bits nach nCode holen, aber noch nicht
@@ -949,7 +946,7 @@ void CCIDecompressor::Read1DScanlineData(sal_uInt8 * pTarget, sal_uInt16 nTarget
         }
         nCode=(sal_uInt16)((nInputBitsBuf>>(nInputBitsBufSize-13))&0x1fff);
 
-        // Anzahl der DatenBits und Anzahl der CodeBits ermitteln:
+        // determine the number of DataBits CodeBits:
         if (nBlackOrWhite) {
             nCodeBits=pBlackLookUp[nCode].nCodeBits;
             nDataBits=pBlackLookUp[nCode].nValue;
@@ -958,7 +955,7 @@ void CCIDecompressor::Read1DScanlineData(sal_uInt8 * pTarget, sal_uInt16 nTarget
             nCodeBits=pWhiteLookUp[nCode].nCodeBits;
             nDataBits=pWhiteLookUp[nCode].nValue;
         }
-        // Ist es ein Ungueltiger Code ?
+        // is that an invalid code?
         if ( nDataBits == 9999 )
         {
             return;
@@ -968,20 +965,20 @@ void CCIDecompressor::Read1DScanlineData(sal_uInt8 * pTarget, sal_uInt16 nTarget
             return;             // das koennen sich jetzt um FuellBits handeln
         }
         nEOLCount = 0;
-        // Zuviele Daten ?
+        // too much data?
         if (nDataBits>nTargetBits) {
             // Ja, koennte ein Folge-Fehler durch ungueltigen Code sein,
             // daher irdenwie weitermachen:
             nDataBits=nTargetBits;
         }
 
-        // Ist es ein 'Terminating-Code' ?
+        // is that a 'Terminating-Code'?
         if (nDataBits<64) bTerminatingCode=sal_True; else bTerminatingCode=sal_False;
 
-        // Die gelesenen Bits aus dem Eingabe-Buffer entfernen:
+        // remove the read bits from the input buffer:
         nInputBitsBufSize = nInputBitsBufSize - nCodeBits;
 
-        // Die Anzahl Daten-Bits in die Scanline schreiben:
+        // write the number of data bits into the scanline:
         if (nDataBits>0) {
             nTargetBits = nTargetBits - nDataBits;
             if (nBlackOrWhite==0x00) *pTarget &= 0xff << nTgtFreeByteBits;
@@ -1008,7 +1005,7 @@ void CCIDecompressor::Read1DScanlineData(sal_uInt8 * pTarget, sal_uInt16 nTarget
             }
         }
 
-        // ggf. Umschaltung Black <-> White:
+        // should the situation arise, switch Black <-> White:
         if (bTerminatingCode==sal_True) nBlackOrWhite=~nBlackOrWhite;
 
     } while (nTargetBits>0 || bTerminatingCode==sal_False);
@@ -1095,7 +1092,7 @@ void CCIDecompressor::Read2DScanlineData(sal_uInt8 * pTarget, sal_uInt16 nTarget
             nBitPos = nBitPos + nRun2;
         }
 
-        else { // Es ist einer der Modi CCI2DMODE_VERT_...
+        else { // it's one of the modes CCI2DMODE_VERT_...
             if (nBitPos==0 && nBlackOrWhite==0x00 && CountBits(pLastLine,nTargetBits,0,0xff)!=0) nRun=0;
             else {
                 nRun=CountBits(pLastLine,nTargetBits,nBitPos,~nBlackOrWhite);

@@ -115,10 +115,10 @@ void GIFImageDataOutputStream::FlushBlockBuf()
 struct GIFLZWCTreeNode
 {
 
-    GIFLZWCTreeNode*    pBrother;       // naechster Knoten, der den selben Vater hat
-    GIFLZWCTreeNode*    pFirstChild;    // erster Sohn
-    sal_uInt16              nCode;          // Der Code fuer den String von Pixelwerten, der sich ergibt, wenn
-    sal_uInt16              nValue;         // Der Pixelwert
+    GIFLZWCTreeNode*    pBrother;       // next node which has the same father
+    GIFLZWCTreeNode*    pFirstChild;    // first 
+    sal_uInt16              nCode;          // the code for the string of pixel values which comes about
+    sal_uInt16              nValue;         // the pixel value
 };
 
 // --------------------

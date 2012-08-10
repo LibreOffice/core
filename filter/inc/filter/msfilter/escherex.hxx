@@ -49,7 +49,7 @@
 #include "filter/msfilter/msfilterdllapi.h"
 
         /*Record Name       FBT-Value   Instance                  Contents                                                          Wrd Exl PPt Ver*/
-// In der Mickysoft-Doku heissen die msofbt... statt ESCHER_...
+// In the Microsoft documentation the naming scheme is msofbt... instead of ESCHER_...
 #define ESCHER_DggContainer     0xF000  /*                           per-document data                                                  X   X   X     */
 #define ESCHER_Dgg              0xF006  /*                           an FDGG and several FIDCLs                                         X   X   X   0 */
 #define ESCHER_CLSID            0xF016  /*                           the CLSID of the application that put the data on the clipboard    C   C   C   0 */
@@ -1042,7 +1042,7 @@ class EscherBlibEntry
 protected:
 
     sal_uInt32      mnIdentifier[ 4 ];
-    sal_uInt32      mnPictureOffset;        // offset auf die grafik im PictureStreams
+    sal_uInt32      mnPictureOffset;        // offset to the graphic im PictureStreams
     sal_uInt32      mnSize;                 // size of real graphic
 
     sal_uInt32      mnRefCount;             // !! reference count
@@ -1594,12 +1594,12 @@ public:
         class ImplEscherExSdr.
      */
     inline SvStream*    QueryPictureStream() { return mxGlobal->QueryPictureStream(); }
-
-                /// Fuegt in den EscherStream interne Daten ein, dieser Vorgang
-                /// darf und muss nur einmal ausgefuehrt werden.
-                /// Wenn pPicStreamMergeBSE angegeben ist, werden die BLIPs
-                /// aus diesem Stream in die MsofbtBSE Records des EscherStream
-                /// gemerged, wie es fuer Excel (und Word?) benoetigt wird.
+    
+                /// Inserts internal data into the EscherStream, this process
+                /// may and has to be executed only once
+                /// If pPicStreamMergeBSE is known, the BLIPs from this stream are being
+                /// merged into the MsofbtBSE Records of the EscherStream like it's
+                /// required for Excel (and maybe Word?)
         virtual void Flush( SvStream* pPicStreamMergeBSE = NULL );
 
     /** Inserts the passed number of bytes at the current position of the
@@ -1622,22 +1622,22 @@ public:
      */
     void            InsertAtCurrentPos( sal_uInt32 nBytes, bool bExpandEndOfAtom );
 
-    void            InsertPersistOffset( sal_uInt32 nKey, sal_uInt32 nOffset ); // Es wird nicht geprueft, ob sich jener schluessel schon in der PersistantTable befindet
+    void            InsertPersistOffset( sal_uInt32 nKey, sal_uInt32 nOffset ); // It is not being checked if this key is already in the PersistantTable
     void            ReplacePersistOffset( sal_uInt32 nKey, sal_uInt32 nOffset );
     sal_uInt32      GetPersistOffset( sal_uInt32 nKey );
     sal_Bool        SeekToPersistOffset( sal_uInt32 nKey );
-    virtual sal_Bool InsertAtPersistOffset( sal_uInt32 nKey, sal_uInt32 nValue );// nValue wird im Stream an entrsprechender Stelle eingefuegt(overwrite modus), ohne dass sich die
-                                                                    // aktuelle StreamPosition aendert
+    virtual sal_Bool InsertAtPersistOffset( sal_uInt32 nKey, sal_uInt32 nValue );   // nValue is being inserted into the Stream where it's appropriate (overwrite modus), without that the
+                                                                                    // current StreamPosition changes
 
     SvStream&       GetStream() const   { return *mpOutStrm; }
     sal_uLong       GetStreamPos() const    { return mpOutStrm->Tell(); }
 
-    virtual sal_Bool SeekBehindRecHeader( sal_uInt16 nRecType );                // der stream muss vor einem gueltigen Record Header oder Atom stehen
+    virtual sal_Bool SeekBehindRecHeader( sal_uInt16 nRecType );                // the stream has to be in front of a valid Record Headeror Atom
 
-                // features beim erzeugen folgender Container:
+                // features during the creation of the following Containers:
                 //
-                //      ESCHER_DggContainer:    ein EscherDgg Atom wird automatisch erzeugt und verwaltet
-                //      ESCHER_DgContainer:     ein EscherDg Atom wird automatisch erzeugt und verwaltet
+                //      ESCHER_DggContainer:    a EscherDgg Atom is automatically being created and managed
+                //      ESCHER_DgContainer:     a EscherDg Atom is automatically being created and managed
                 //      ESCHER_SpgrContainer:
                 //      ESCHER_SpContainer:
 
@@ -1657,7 +1657,7 @@ public:
     virtual sal_Bool SetGroupLogicRect( sal_uInt32 nGroupLevel, const Rectangle& rRect );
     virtual void LeaveGroup();
 
-                // ein ESCHER_Sp wird geschrieben ( Ein ESCHER_DgContainer muss dazu geoeffnet sein !!)
+                // a ESCHER_Sp is being written ( a ESCHER_DgContainer has to be opened for this purpose!)
     virtual void AddShape( sal_uInt32 nShpInstance, sal_uInt32 nFlagIds, sal_uInt32 nShapeID = 0 );
 
     virtual void Commit( EscherPropertyContainer& rProps, const Rectangle& rRect );

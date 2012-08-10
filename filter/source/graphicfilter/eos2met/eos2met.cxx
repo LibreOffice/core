@@ -47,7 +47,7 @@
 #include <svl/solar.hrc>
 
 
-// -----------------------------Feld-Typen-------------------------------
+// -----------------------------Field Types-------------------------------
 
 #define BegDocumnMagic 0xA8A8 /* Begin Document */
 #define EndDocumnMagic 0xA8A9 /* End Document   */
@@ -134,19 +134,19 @@ class METWriter
 private:
 
     sal_Bool                bStatus;
-    sal_uLong               nLastPercent; // Mit welcher Zahl pCallback zuletzt aufgerufen wurde.
+    sal_uLong               nLastPercent; // with which number pCallback has been called the last time
     SvStream*           pMET;
     Rectangle           aPictureRect;
     MapMode             aPictureMapMode;
     MapMode             aTargetMapMode;
-    sal_uLong               nActualFieldStartPos;     // Anfangs-Position des aktuellen 'Field'
-    sal_uLong               nNumberOfDataFields;  // Anzahl der angefangenen 'Graphcis Data Fields'
+    sal_uLong               nActualFieldStartPos;     // start position of the current 'Field'
+    sal_uLong               nNumberOfDataFields;  // number of commenced 'Graphcis Data Fields'
     Color               aGDILineColor;
     Color               aGDIFillColor;
     RasterOp            eGDIRasterOp;
     Font                aGDIFont;
-    MapMode             aGDIMapMode;   // derzeit unbenutzt!
-    Rectangle           aGDIClipRect; // derzeit unbenutzt!
+    MapMode             aGDIMapMode;   // currently ununsed!
+    Rectangle           aGDIClipRect; // currently ununsed!
     METGDIStackMember*  pGDIStack;
     Color               aMETColor;
     Color               aMETBackgroundColor;
@@ -156,14 +156,14 @@ private:
     Size                aMETChrCellSize;
     short               nMETChrAngle;
     sal_uInt8               nMETChrSet;
-    METChrSet*          pChrSetList; // Liste der Character-Sets
-    sal_uInt8               nNextChrSetId; // die erste unbenutzte ChrSet-Id
-    sal_uLong               nActBitmapId; // Field-Id der naechsten Bitmap
-    sal_uLong               nNumberOfActions; // Anzahl der Actions im GDIMetafile
-    sal_uLong               nNumberOfBitmaps; // Anzahl der Bitmaps
-    sal_uLong               nWrittenActions;  // Anzahl der bereits verarbeiteten Actions beim Schreiben der Orders
-    sal_uLong               nWrittenBitmaps;  // Anzahl der bereits geschriebenen Bitmaps
-    sal_uLong               nActBitmapPercent; // Wieviel Prozent die naechste Bitmap schon geschrieben ist.
+    METChrSet*          pChrSetList; // list of Character-Sets
+    sal_uInt8               nNextChrSetId; // the first unused ChrSet-Id
+    sal_uLong               nActBitmapId; // Field-Id of the next Bitmap
+    sal_uLong               nNumberOfActions; // number of Actions in the GDIMetafile
+    sal_uLong               nNumberOfBitmaps; // number of Bitmaps
+    sal_uLong               nWrittenActions;  // number of already processed actions during the writing of the orders
+    sal_uLong               nWrittenBitmaps;  // number of already written Bitmaps
+    sal_uLong               nActBitmapPercent; // percentage of the next bitmap that's already written
 
     ::std::auto_ptr< VirtualDevice >    apDummyVDev;
     OutputDevice*                       pCompDev;
@@ -171,13 +171,12 @@ private:
     com::sun::star::uno::Reference< com::sun::star::task::XStatusIndicator > xStatusIndicator;
 
     void MayCallback();
-        // Berechnet anhand der obigen 5 Parameter eine Prozentzahl
-        // und macht dann ggf. einen Callback. Setzt bStatus auf sal_False wenn User abbrechen
-        // moechte.
+        // calculates a percentage based on the 5 parameters above and then does a
+        // Callback as the case may be. Sets bStatus to sal_False if the user wants to cancel
 
     void CountActionsAndBitmaps(const GDIMetaFile * pMTF);
-        // Zaehlt die Bitmaps und Actions (nNumberOfActions und nNumberOfBitmaps muessen
-        // zu Anfang auf 0 gesetzt werden, weil diese Methode rekursiv ist)
+        // Counts the bitmaps and actions (nNumberOfActions and nNumberOfBitmaps have to 
+        // be set to 0 at the beginning, since this method is recursive)
 
     void WriteBigEndianShort(sal_uInt16 nWord);
     void WriteBigEndianLong(sal_uLong nLong);
@@ -264,7 +263,7 @@ public:
 };
 
 
-//========================== Methoden von METWriter ==========================
+//========================== Methods of METWriter ==========================
 
 void METWriter::MayCallback()
 {
@@ -508,11 +507,11 @@ void METWriter::WriteColorAttributeTable(sal_uLong nFieldId, BitmapPalette* pPal
 
     if (bStatus==sal_False) return;
 
-    //--- Das Feld 'Begin Color Attribute Table':
+    //--- The Field 'Begin Color Attribute Table':
     WriteFieldIntroducer(16,BegColAtrMagic,0,0);
     WriteFieldId(nFieldId);
 
-    //--- Das Feld 'Color Attribute Table':
+    //--- The Field 'Color Attribute Table':
     WriteFieldIntroducer(0,BlkColAtrMagic,0,0);
     *pMET << nBasePartFlags << (sal_uInt8)0x00 << nBasePartLCTID; // 'Base Part'
     if (pPalette!=NULL)
@@ -522,11 +521,11 @@ void METWriter::WriteColorAttributeTable(sal_uLong nFieldId, BitmapPalette* pPal
         {
             nNumI=pPalette->GetEntryCount()-nIndex;
             if (nNumI>81) nNumI=81;
-            *pMET << (sal_uInt8)(11+nNumI*3);                   // Laenge des Parameters
+            *pMET << (sal_uInt8)(11+nNumI*3);                   // length of the parameter
             *pMET << (sal_uInt8)1 << (sal_uInt8)0 << (sal_uInt8)1;        // typ: element list, Reserved, Format: RGB
-            *pMET << (sal_uInt8)0; WriteBigEndianShort(nIndex); // Start-Index (3 Bytes)
-            *pMET << (sal_uInt8)8 << (sal_uInt8)8 << (sal_uInt8)8;        // Bits je Komponente R,G,B
-            *pMET << (sal_uInt8)3;                              // Anzahl Bytes je Eintrag
+            *pMET << (sal_uInt8)0; WriteBigEndianShort(nIndex); // start-Index (3 Bytes)
+            *pMET << (sal_uInt8)8 << (sal_uInt8)8 << (sal_uInt8)8;        // Bits per component R,G,B
+            *pMET << (sal_uInt8)3;                              // number of bytes per entry
             for (i=0; i<nNumI; i++)
             {
                 const BitmapColor& rCol = (*pPalette)[ nIndex ];
@@ -546,7 +545,7 @@ void METWriter::WriteColorAttributeTable(sal_uLong nFieldId, BitmapPalette* pPal
     }
     UpdateFieldSize();
 
-    //--- Das Feld 'End Color Attribute Table':
+    //--- The Field 'End Color Attribute Table':
     WriteFieldIntroducer(16,EndColAtrMagic,0,0);
     WriteFieldId(nFieldId);
 
@@ -570,14 +569,14 @@ void METWriter::WriteImageObject(const Bitmap & rBitmap)
     nActColMapId=((nActBitmapId>>24)&0x000000ff) | ((nActBitmapId>> 8)&0x0000ff00) |
                  ((nActBitmapId<< 8)&0x00ff0000) | ((nActBitmapId<<24)&0xff000000);
 
-    //--- Das Feld 'Begin Image Object':
+    //--- The Field 'Begin Image Object':
     WriteFieldIntroducer(16,BegImgObjMagic,0,0);
     WriteFieldId(nActBitmapId);
 
-    // Windows-BMP-Datei erzeugen:
+    // generate Windows-BMP file
     aTemp << rBitmap;
 
-    // Header der Windows-BMP-Datei einlesen:
+    // read header of the Windows-BMP file:
     aTemp.SetNumberFormatInt(NUMBERFORMAT_INT_LITTLEENDIAN);
     aTemp.Seek(18);
     aTemp >> nWidth >> nHeight;
@@ -590,7 +589,7 @@ void METWriter::WriteImageObject(const Bitmap & rBitmap)
     nNumColors=1<<nBitsPerPixel;
     nBytesPerLine=((nWidth*nBitsPerPixel+0x0000001f) & 0xffffffe0 ) >> 3;
 
-    // ggf. Farbpalette einlesen und in die MET-Datei schreiben:
+    // read color palette as the case may be and write it to the MET file:
     if (nBitsPerPixel<=8)
     {
         BitmapPalette   aPal( (sal_uInt16) nNumColors );
@@ -602,34 +601,34 @@ void METWriter::WriteImageObject(const Bitmap & rBitmap)
             aPal[ (sal_uInt16) i ] = BitmapColor( nr, ng, nb );
         }
 
-        //--- Das Feld 'Begin Resource Group':
+        //--- The Field 'Begin Resource Group':
         WriteFieldIntroducer(16,BegResGrpMagic,0,0);
         WriteFieldId(nActColMapId);
 
-        //--- Farbtabelle schreiben:
+        //--- writer color table:
         WriteColorAttributeTable(nActColMapId,&aPal,0,1);
 
-        //--- Das Feld 'End Resource Group':
+        //--- The Field 'End Resource Group':
         WriteFieldIntroducer(16,EndResGrpMagic,0,0);
         WriteFieldId(nActColMapId);
 
-        //--- Das Feld 'Begin Object Environment Group':
+        //--- The Field 'Begin Object Environment Group':
         WriteFieldIntroducer(16,BegObjEnvMagic,0,0);
         WriteFieldId(nActBitmapId);
 
-        //--- Das Feld 'Map Color Attribute Table':
+        //--- The Field 'Map Color Attribute Table':
         WriteFieldIntroducer(26,MapColAtrMagic,0,0);
         WriteBigEndianShort(0x0012);
         *pMET << (sal_uInt8)0x0c << (sal_uInt8)0x02 << (sal_uInt8)0x84 << (sal_uInt8)0x00;
         WriteFieldId(nActColMapId);
         *pMET << (sal_uInt8)0x04 << (sal_uInt8)0x24 << (sal_uInt8)0x07 << (sal_uInt8)0x01;
 
-        //--- Das Feld 'End Object Environment Group':
+        //--- The Field 'End Object Environment Group':
         WriteFieldIntroducer(16,EndObjEnvMagic,0,0);
         WriteFieldId(nActBitmapId);
     }
 
-    //--- Das Feld 'Image Data Descriptor':
+    //--- The Field 'Image Data Descriptor':
     WriteFieldIntroducer(17,DscImgObjMagic,0,0);
     *pMET << (sal_uInt8)0x01; // Unit of measure: tens of centimeters
     WriteBigEndianShort((sal_uInt16)nResX);
@@ -637,7 +636,7 @@ void METWriter::WriteImageObject(const Bitmap & rBitmap)
     WriteBigEndianShort((sal_uInt16)nWidth);
     WriteBigEndianShort((sal_uInt16)nHeight);
 
-    //--- Das erste Feld 'Image Picture Data':
+    //--- The first Field 'Image Picture Data':
     WriteFieldIntroducer(0,DatImgObjMagic,0,0);
 
     // Begin Segment:
@@ -673,13 +672,13 @@ void METWriter::WriteImageObject(const Bitmap & rBitmap)
     ny=0;
     while (ny<nHeight) {
 
-        // Abschliessen des vorherigen Feldes 'Image Picture Data':
+        // finalize the previous field 'Image Picture Data':
         UpdateFieldSize();
 
-        // Und ein neues Feld 'Image Picture Data' anfangen:
+        // and start a new field 'Image Picture Data':
         WriteFieldIntroducer(0,DatImgObjMagic,0,0);
 
-        // Einige Scanlines lesen und schreiben:
+        // read and write several Scanlines:
         nLines=nHeight-ny;
         if (nLines*nBytesPerLine>30000) nLines=30000/nBytesPerLine;
         if (nLines<1) nLines=1;
@@ -708,17 +707,17 @@ void METWriter::WriteImageObject(const Bitmap & rBitmap)
     // End Segment:
     *pMET << (sal_uInt8)0x71 << (sal_uInt8)0x00;
 
-    // Abschliessen des letzten Feldes 'Image Picture Data':
+    // finalize the last field 'Image Picture Data':
     UpdateFieldSize();
 
-    //--- Das Feld 'End Image Object':
+    //--- The Field 'End Image Object':
     WriteFieldIntroducer(16,EndImgObjMagic,0,0);
     WriteFieldId(nActBitmapId);
 
-    // Ids erhoehen:
+    // increase Ids:
     nActBitmapId++;
 
-    // Bitmaps zaehlen:
+    // count Bitmaps:
     nWrittenBitmaps++;
     nActBitmapPercent=0;
 
@@ -829,7 +828,7 @@ void METWriter::WriteDataDescriptor(const GDIMetaFile *)
     WriteFieldIntroducer(0,DscGrfObjMagic,0,0);
 
     //------------------------------------------------------------------------------
-    // Im Folgenden die OS2-Orginal-Dokumentation und die Implementation dazu (uff)
+    // The following is the OS2 original documentation and the associated implementation
     //------------------------------------------------------------------------------
 
     //  Parameters (all required and in this order)
@@ -2359,17 +2358,17 @@ void METWriter::WriteObjectEnvironmentGroup(const GDIMetaFile * pMTF)
 {
     sal_uLong i, nId;
 
-    //--- Das Feld 'Begin Object Environment Group':
+    //--- The Field 'Begin Object Environment Group':
     WriteFieldIntroducer(16,BegObjEnvMagic,0,0);
     WriteFieldId(7);
 
-    //--- Das Feld 'Map Color Attribute Table':
+    //--- The Field 'Map Color Attribute Table':
     WriteFieldIntroducer(22,MapColAtrMagic,0,0);
     WriteBigEndianShort(0x000e);
     *pMET << (sal_uInt8)0x0c << (sal_uInt8)0x02 << (sal_uInt8)0x84 << (sal_uInt8)0x00;
     WriteFieldId(4);
 
-    //--- Das erste Feld 'Map Coded Font':
+    //--- The first Field 'Map Coded Font':
     WriteFieldIntroducer(32,MapCodFntMagic,0,0);
     WriteBigEndianShort(0x0018);
     *pMET << (sal_uInt8)0x0c << (sal_uInt8)0x02 << (sal_uInt8)0x84 << (sal_uInt8)0x00;
@@ -2383,7 +2382,7 @@ void METWriter::WriteObjectEnvironmentGroup(const GDIMetaFile * pMTF)
     CreateChrSets(pMTF);
     WriteChrSets();
 
-    //--- Die Felder 'Map Data Resource':
+    //--- The Fields 'Map Data Resource':
     nId=nActBitmapId;
     for (i=0; i<nNumberOfBitmaps; i++)
     {
@@ -2413,49 +2412,49 @@ void METWriter::WriteGraphicsObject(const GDIMetaFile * pMTF)
     WriteFieldIntroducer(16,BegGrfObjMagic,0,0);
     WriteFieldId(7);
 
-    // Map Color Attribute Table, Fonts und anderes:
+    // Map Color Attribute Table, Fonts and other stuff:
     WriteObjectEnvironmentGroup(pMTF);
 
-    //--- Das Feld 'Graphics Data Descriptor':
+    //--- The Field 'Graphics Data Descriptor':
     WriteDataDescriptor(pMTF);
 
-    // Zaehler fuer Data Fields initialisieren:
+    // initialise the counter for Data Fields:
     nNumberOfDataFields=0;
 
-    // Und Position des ersten Data Fields merken:
+    // and remember the position of the first Data Field:
     nDataFieldsStartPos=pMET->Tell();
 
-    //--- Anfang des ersten Feldes 'Graphics Data'
+    //--- start of the first Field 'Graphics Data'
     WriteFieldIntroducer(0,DatGrfObjMagic,0,0);
     nNumberOfDataFields++;
 
-    // Nun schreiben wir zunaechst den Kopf des Segments:
+    // now at first we write the head of the segment:
     *pMET << (sal_uInt8)0x70 << (sal_uInt8)0x0e << (sal_uInt32)0;
     *pMET << (sal_uInt8)0x70 << (sal_uInt8)0x10; // Flags
-    *pMET << (sal_uInt16)0; // Lo-Wort der Laenge der Segementdaten (Big Endian)
+    *pMET << (sal_uInt16)0; // Lo-Word of the length of the segment data  (Big Endian)
     *pMET << (sal_uInt32)0;  // Reserved
-    *pMET << (sal_uInt16)0; // Hi-Wort der Laenge der Segementdaten (Big Endian) (Ohh Ohh OS2)
-    // Anmerkung: die richtige Daten-Laenge schreiben wir weiter unten nochmal
+    *pMET << (sal_uInt16)0; // Hi-Word of the length of the segment (Big Endian) (Ohh Ohh OS2)
+    // Annotation: we're writing the correct data length again below
 
-    // Jetzt werden alle Orders rausgeschrieben:
+    // now all orders are being written out:
     // (wobei die Sache ggf. in mehrere 'Graphics Data Fields' aufgeteilt
     // wird, per Methode WillWriteOrder(..))
     WriteOrders(pMTF);
 
-    //--- Das letzte Feld 'Graphic Data' beenden:
+    //--- terminate the last Field 'Graphic Data':
     UpdateFieldSize();
 
-    //--- Und schliesslich die Segmentgroesse richtigstellen:
+    //--- and finally correct the segment size:
     nPos=pMET->Tell();
     nSegmentSize=nPos-nDataFieldsStartPos;
-    nSegmentSize-=nNumberOfDataFields*8; // Structured Field Introducers zaehlen nicht mit
-    pMET->Seek(nDataFieldsStartPos+16); // Zum Lo-Wort der Segmentgroesse seeken
+    nSegmentSize-=nNumberOfDataFields*8; // Structured Field Introducers are not counted
+    pMET->Seek(nDataFieldsStartPos+16); // seek to the Lo-Word of the segment size
     WriteBigEndianShort((sal_uInt16)(nSegmentSize&0x0000ffff)); // Und schreiben
-    pMET->Seek(nDataFieldsStartPos+22); // Zum Hi-Wort der Segmentgroesse seeken
-    WriteBigEndianShort((sal_uInt16)(nSegmentSize>>16)); // Und schreiben
-    pMET->Seek(nPos); // Zurueck zur Tagesordnung
+    pMET->Seek(nDataFieldsStartPos+22); // seek to the Hi-Word of the segment size
+    WriteBigEndianShort((sal_uInt16)(nSegmentSize>>16)); // and writing it
+    pMET->Seek(nPos); // back to business as usual
 
-    //--- Das Feld 'End Graphic Objects':
+    //--- The Field 'End Graphic Objects':
     WriteFieldIntroducer(16,EndGrfObjMagic,0,0);
     WriteFieldId(7);
 
@@ -2469,18 +2468,18 @@ void METWriter::WriteResourceGroup(const GDIMetaFile * pMTF)
     if( bStatus==sal_False )
         return;
 
-    //--- Das Feld 'Begin Resource Group':
+    //--- The Field 'Begin Resource Group':
     WriteFieldIntroducer(16,BegResGrpMagic,0,0);
     WriteFieldId(2);
 
-    //--- Der Inhalt:
+    //--- The Content:
     WriteColorAttributeTable();
     nActBitmapId=0x77777700;
     WriteImageObjects(pMTF);
     nActBitmapId=0x77777700;
     WriteGraphicsObject(pMTF);
 
-    //--- Das Feld 'End Resource Group':
+    //--- The Field 'End Resource Group':
     WriteFieldIntroducer(16,EndResGrpMagic,0,0);
     WriteFieldId(2);
 
@@ -2494,7 +2493,7 @@ void METWriter::WriteDocument(const GDIMetaFile * pMTF)
     if( bStatus==sal_False )
         return;
 
-    //--- Das Feld 'Begin Document':
+    //--- The Field 'Begin Document':
     WriteFieldIntroducer(0,BegDocumnMagic,0,0);
     WriteFieldId(1);
     *pMET << (sal_uInt8)0x00 << (sal_uInt8)0x00;
@@ -2503,10 +2502,10 @@ void METWriter::WriteDocument(const GDIMetaFile * pMTF)
     *pMET << (sal_uInt8)0x03 << (sal_uInt8)0x65 << (sal_uInt8)0x00;
     UpdateFieldSize();
 
-    //--- Der Inhalt:
+    //--- The Content:
     WriteResourceGroup(pMTF);
 
-    //--- Das Feld 'End Document':
+    //--- The Field 'End Document':
     WriteFieldIntroducer(16,EndDocumnMagic,0,0);
     WriteFieldId(1);
 
@@ -2584,7 +2583,7 @@ sal_Bool METWriter::WriteMET( const GDIMetaFile& rMTF, SvStream& rTargetStream, 
     return bStatus;
 }
 
-//================== GraphicExport - die exportierte Funktion ================
+//================== GraphicExport - the exported Function ================
 
 extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool __LOADONCALLAPI
 GraphicExport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* pFilterConfigItem, sal_Bool )

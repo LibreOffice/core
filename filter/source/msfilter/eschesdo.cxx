@@ -438,7 +438,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
             //i27942: Poly/Lines/Bezier do not support text.
 
             mpEscherEx->OpenContainer( ESCHER_SpContainer );
-            sal_uInt32 nFlags = 0xa00;          // Flags: Connector | HasSpt
+            sal_uInt32 nFlags = 0xa00;      // Flags: Connector | HasSpt
             if( aNewRect.Height < 0 )
                 nFlags |= 0x80;             // Flags: VertMirror
             if( aNewRect.Width < 0 )
@@ -507,7 +507,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
         {
             mpEscherEx->OpenContainer( ESCHER_SpContainer );
 
-            // ein GraphicObject kann auch ein ClickMe Element sein
+            // a GraphicObject can also be a ClickMe element
             if( rObj.IsEmptyPresObj() && ( ePageType == NORMAL ) )
             {
                 ADD_SHAPE( ESCHER_ShpInst_Rectangle, 0x220 );               // Flags: HaveAnchor | HaveMaster
@@ -1114,7 +1114,7 @@ const SdrObject* ImplEESdrObject::GetSdrObject() const
     return EscherEx::GetSdrObject( mXShape );
 }
 
-//  laedt und konvertiert text aus shape, ergebnis ist mnTextSize gespeichert
+//  loads and  converts text from shape, result is being saved in mnTextSize respeichert
 sal_uInt32 ImplEESdrObject::ImplGetText()
 {
     Reference< XText > xXText( mXShape, UNO_QUERY );
