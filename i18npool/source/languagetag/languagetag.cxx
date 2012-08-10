@@ -567,7 +567,8 @@ bool LanguageTag::isIsoLanguage( const rtl::OUString& rLanguage )
 bool LanguageTag::isIsoCountry( const rtl::OUString& rRegion )
 {
     /* TODO: ignore case? For now let's see where rubbish is used. */
-    if (rRegion.getLength() == 2 && isUpperAscii( rRegion[0]) && isUpperAscii( rRegion[1]))
+    if (rRegion.isEmpty() ||
+            (rRegion.getLength() == 2 && isUpperAscii( rRegion[0]) && isUpperAscii( rRegion[1])))
         return true;
     SAL_WARN_IF( rRegion.getLength() == 2 && (isLowerAscii( rRegion[0]) || isLowerAscii( rRegion[1])),
             "i18npool.langtag", "LanguageTag::isIsoCountry: rejecting lower case");
