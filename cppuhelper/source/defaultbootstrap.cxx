@@ -1032,6 +1032,7 @@ css::uno::Type ServiceManager::getElementType()
 }
 
 sal_Bool ServiceManager::hasElements() throw (css::uno::RuntimeException) {
+    osl::MutexGuard g(rBHelper.rMutex);
     return
         !(data_.namedImplementations.empty()
           && data_.dynamicImplementations.empty());
