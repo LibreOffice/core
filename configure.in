@@ -9245,7 +9245,7 @@ if test "$build_gstreamer_0_10" = "yes"; then
     if test "x$enable_gstreamer_0_10" != "xno"; then
         ENABLE_GSTREAMER_0_10="TRUE"
         AC_MSG_RESULT([yes])
-        PKG_CHECK_MODULES( GSTREAMER_0_10, gstreamer-0.10 gstreamer-plugins-base-0.10 )
+        PKG_CHECK_MODULES( GSTREAMER_0_10, gstreamer-0.10 gstreamer-plugins-base-0.10 gstreamer-interfaces-0.10 )
     else
         AC_MSG_RESULT([no])
     fi

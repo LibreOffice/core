@@ -50,10 +50,12 @@
 #  define AVVERSION "gst 1.0: "
 #endif
 
-#if 1 //OSL_DEBUG_LEVEL > 2
+#if !defined DBG
+#if OSL_DEBUG_LEVEL > 2
 #define DBG(...) do { fprintf (stderr, "%s", AVVERSION); fprintf (stderr, __VA_ARGS__); fprintf (stderr, "\n"); } while (0);
 #else
 #define DBG(...)
+#endif
 #endif
 
 using namespace ::com::sun::star;
@@ -192,7 +194,7 @@ GstBusSyncReply Player::processSyncMessage( GstMessage *message )
 {
 //    DBG( "%p processSyncMessage has handle: %s", this, GST_MESSAGE_TYPE_NAME( message ) );
 
-#if 1 // OSL_DEBUG_LEVEL > 0
+#if OSL_DEBUG_LEVEL > 0
     if ( GST_MESSAGE_TYPE( message ) == GST_MESSAGE_ERROR )
     {
         GError* error;
@@ -575,7 +577,7 @@ awt::Size SAL_CALL Player::getPreferredPlayerWindowSize()
     DBG( "%p Player::getPreferredPlayerWindowSize, member %d x %d", this, mnWidth, mnHeight );
 
     TimeValue aTimeout = { 10, 0 };
-#if 1 // OSL_DEBUG_LEVEL > 2
+#if OSL_DEBUG_LEVEL > 2
     osl::Condition::Result aResult =
 #endif
                                  maSizeCondition.wait( &aTimeout );
