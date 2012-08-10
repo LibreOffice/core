@@ -118,7 +118,7 @@ void ScTable::SetCalcNotification( bool bSet )
 }
 
 
-bool ScTable::TestInsertRow( SCCOL nStartCol, SCCOL nEndCol, SCSIZE nSize )
+bool ScTable::TestInsertRow( SCCOL nStartCol, SCCOL nEndCol, SCSIZE nSize ) const
 {
     bool bTest = true;
 
@@ -297,7 +297,7 @@ void ScTable::DeleteRow( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCSIZE
 }
 
 
-bool ScTable::TestInsertCol( SCROW nStartRow, SCROW nEndRow, SCSIZE nSize )
+bool ScTable::TestInsertCol( SCROW nStartRow, SCROW nEndRow, SCSIZE nSize ) const
 {
     bool bTest = true;
 
@@ -2549,7 +2549,7 @@ sal_uInt16 ScTable::GetOriginalWidth( SCCOL nCol ) const        // immer die ein
 }
 
 
-sal_uInt16 ScTable::GetCommonWidth( SCCOL nEndCol )
+sal_uInt16 ScTable::GetCommonWidth( SCCOL nEndCol ) const
 {
     //  get the width that is used in the largest continuous column range (up to nEndCol)
 
@@ -2706,7 +2706,7 @@ sal_uInt16 ScTable::GetOriginalHeight( SCROW nRow ) const       // non-0 even if
 //  Spalten-/Zeilen-Flags
 
 
-SCROW ScTable::GetHiddenRowCount( SCROW nRow )
+SCROW ScTable::GetHiddenRowCount( SCROW nRow ) const
 {
     if (!ValidRow(nRow))
         return 0;

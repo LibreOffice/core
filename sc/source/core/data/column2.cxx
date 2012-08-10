@@ -1006,7 +1006,7 @@ void ScColumn::RemoveEditAttribs( SCROW nStartRow, SCROW nEndRow )
 
 // =========================================================================================
 
-bool ScColumn::TestTabRefAbs(SCTAB nTable)
+bool ScColumn::TestTabRefAbs(SCTAB nTable) const
 {
     bool bRet = false;
     if ( !maItems.empty() )

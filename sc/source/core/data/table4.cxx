@@ -2026,7 +2026,7 @@ void ScTable::RemoveAutoSpellObj()
         aCol[i].RemoveAutoSpellObj();
 }
 
-bool ScTable::TestTabRefAbs(SCTAB nTable)
+bool ScTable::TestTabRefAbs(SCTAB nTable) const
 {
     for (SCCOL i=0; i <= MAXCOL; i++)
         if (aCol[i].TestTabRefAbs(nTable))

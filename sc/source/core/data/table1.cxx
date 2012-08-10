@@ -997,7 +997,7 @@ bool ScTable::ShrinkToUsedDataArea( bool& o_bShrunk, SCCOL& rStartCol, SCROW& rS
 
 
 SCSIZE ScTable::GetEmptyLinesInBlock( SCCOL nStartCol, SCROW nStartRow,
-                                        SCCOL nEndCol, SCROW nEndRow, ScDirection eDir )
+                                        SCCOL nEndCol, SCROW nEndRow, ScDirection eDir ) const
 {
     SCSIZE nCount = 0;
     SCCOL nCol;
@@ -1029,7 +1029,7 @@ SCSIZE ScTable::GetEmptyLinesInBlock( SCCOL nStartCol, SCROW nStartRow,
     return nCount;
 }
 
-bool ScTable::IsEmptyLine( SCROW nRow, SCCOL nStartCol, SCCOL nEndCol )
+bool ScTable::IsEmptyLine( SCROW nRow, SCCOL nStartCol, SCCOL nEndCol ) const
 {
     bool bFound = false;
     for (SCCOL i=nStartCol; i<=nEndCol && !bFound; i++)
@@ -1038,7 +1038,7 @@ bool ScTable::IsEmptyLine( SCROW nRow, SCCOL nStartCol, SCCOL nEndCol )
     return !bFound;
 }
 
-void ScTable::LimitChartArea( SCCOL& rStartCol, SCROW& rStartRow, SCCOL& rEndCol, SCROW& rEndRow )
+void ScTable::LimitChartArea( SCCOL& rStartCol, SCROW& rStartRow, SCCOL& rEndCol, SCROW& rEndRow ) const
 {
     while ( rStartCol<rEndCol && aCol[rStartCol].IsEmptyBlock(rStartRow,rEndRow) )
         ++rStartCol;
@@ -1379,7 +1379,7 @@ void ScTable::GetNextPos( SCCOL& rCol, SCROW& rRow, SCsCOL nMovX, SCsROW nMovY,
     }
 }
 
-bool ScTable::GetNextMarkedCell( SCCOL& rCol, SCROW& rRow, const ScMarkData& rMark )
+bool ScTable::GetNextMarkedCell( SCCOL& rCol, SCROW& rRow, const ScMarkData& rMark ) const
 {
     const ScMarkArray* pMarkArray = rMark.GetArray();
     OSL_ENSURE(pMarkArray,"GetNextMarkedCell ohne MarkArray");

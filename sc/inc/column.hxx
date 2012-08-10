@@ -366,7 +366,7 @@ public:
     bool GetDataEntries(SCROW nRow, std::set<ScTypedStrData>& rStrings, bool bLimit);
 
     void UpdateInsertTabAbs(SCTAB nNewPos);
-    bool    TestTabRefAbs(SCTAB nTable);
+    bool    TestTabRefAbs(SCTAB nTable) const;
     bool    GetNextSpellingCell(SCROW& nRow, bool bInSel, const ScMarkData& rData) const;
 
     void        RemoveAutoSpellObj();

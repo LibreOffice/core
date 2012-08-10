@@ -345,12 +345,12 @@ public:
         @param bForced  True = always create all captions, false = skip when Undo is disabled. */
     void        InitializeNoteCaptions( bool bForced = false );
 
-    bool        TestInsertRow( SCCOL nStartCol, SCCOL nEndCol, SCSIZE nSize );
+    bool        TestInsertRow( SCCOL nStartCol, SCCOL nEndCol, SCSIZE nSize ) const;
     void        InsertRow( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCSIZE nSize );
     void        DeleteRow( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCSIZE nSize,
                             bool* pUndoOutline = NULL );
 
-    bool        TestInsertCol( SCROW nStartRow, SCROW nEndRow, SCSIZE nSize );
+    bool        TestInsertCol( SCROW nStartRow, SCROW nEndRow, SCSIZE nSize ) const;
     void        InsertCol( SCCOL nStartCol, SCROW nStartRow, SCROW nEndRow, SCSIZE nSize );
     void        DeleteCol( SCCOL nStartCol, SCROW nStartRow, SCROW nEndRow, SCSIZE nSize,
                             bool* pUndoOutline = NULL );
@@ -422,13 +422,13 @@ public:
                                       SCCOL& rEndCol, SCROW& rEndRow, bool bColumnsOnly ) const;
 
     SCSIZE      GetEmptyLinesInBlock( SCCOL nStartCol, SCROW nStartRow,
-                                        SCCOL nEndCol, SCROW nEndRow, ScDirection eDir );
+                                        SCCOL nEndCol, SCROW nEndRow, ScDirection eDir ) const;
 
     void        FindAreaPos( SCCOL& rCol, SCROW& rRow, ScMoveDirection eDirection ) const;
     void        GetNextPos( SCCOL& rCol, SCROW& rRow, SCsCOL nMovX, SCsROW nMovY,
                                 bool bMarked, bool bUnprotected, const ScMarkData& rMark ) const;
 
-    void        LimitChartArea( SCCOL& rStartCol, SCROW& rStartRow, SCCOL& rEndCol, SCROW& rEndRow );
+    void        LimitChartArea( SCCOL& rStartCol, SCROW& rStartRow, SCCOL& rEndCol, SCROW& rEndRow ) const;
 
     bool        HasData( SCCOL nCol, SCROW nRow ) const;
     bool        HasStringData( SCCOL nCol, SCROW nRow ) const;
@@ -653,9 +653,9 @@ public:
     sal_uInt16      GetOriginalWidth( SCCOL nCol ) const;
     sal_uInt16      GetOriginalHeight( SCROW nRow ) const;
 
-    sal_uInt16      GetCommonWidth( SCCOL nEndCol );
+    sal_uInt16      GetCommonWidth( SCCOL nEndCol ) const;
 
-    SCROW       GetHiddenRowCount( SCROW nRow );
+    SCROW       GetHiddenRowCount( SCROW nRow ) const;
 
     void        ShowCol(SCCOL nCol, bool bShow);
     void        ShowRow(SCROW nRow, bool bShow);
@@ -765,8 +765,8 @@ public:
     void GetFilteredFilterEntries(SCCOL nCol, SCROW nRow1, SCROW nRow2, const ScQueryParam& rParam, std::vector<ScTypedStrData>& rStrings, bool& rHasDates );
     bool GetDataEntries(SCCOL nCol, SCROW nRow, std::set<ScTypedStrData>& rStrings, bool bLimit);
 
-    bool        HasColHeader( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow );
-    bool        HasRowHeader( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow );
+    bool        HasColHeader( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow ) const;
+    bool        HasRowHeader( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow ) const;
 
     void        DoColResize( SCCOL nCol1, SCCOL nCol2, SCSIZE nAdd );
 
@@ -777,7 +777,7 @@ public:
                                        SCCOL nCol,
                                        SCROW nRowStart, SCROW nRowEnd ) const;
 
-    void        FindConditionalFormat( sal_uLong nKey, ScRangeList& rRanges );
+    void        FindConditionalFormat( sal_uLong nKey, ScRangeList& rRanges ) const;
 
     void        IncRecalcLevel();
     void        DecRecalcLevel( bool bUpdateNoteCaptionPos = true );
@@ -871,7 +871,7 @@ private:
 
     bool        RefVisible(ScFormulaCell* pCell);
 
-    bool        IsEmptyLine(SCROW nRow, SCCOL nStartCol, SCCOL nEndCol);
+    bool        IsEmptyLine(SCROW nRow, SCCOL nStartCol, SCCOL nEndCol) const;
 
     void        IncDate(double& rVal, sal_uInt16& nDayOfMonth, double nStep, FillDateCmd eCmd);
     void        FillFormula(sal_uLong& nFormulaCounter, bool bFirst, ScFormulaCell* pSrcCell,
@@ -879,8 +879,8 @@ private:
     void        UpdateInsertTabAbs(SCTAB nNewPos);
     bool        GetNextSpellingCell(SCCOL& rCol, SCROW& rRow, bool bInSel,
                                     const ScMarkData& rMark) const;
-    bool        GetNextMarkedCell( SCCOL& rCol, SCROW& rRow, const ScMarkData& rMark );
-    bool        TestTabRefAbs(SCTAB nTable);
+    bool        GetNextMarkedCell( SCCOL& rCol, SCROW& rRow, const ScMarkData& rMark ) const;
+    bool        TestTabRefAbs(SCTAB nTable) const;
     void        CompileDBFormula();
     void        CompileDBFormula( bool bCreateFormulaString );
     void        CompileNameFormula( bool bCreateFormulaString );

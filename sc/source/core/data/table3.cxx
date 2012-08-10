@@ -2155,7 +2155,7 @@ bool ScTable::CreateQueryParam(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow
     return bValid;
 }
 
-bool ScTable::HasColHeader( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW /* nEndRow */ )
+bool ScTable::HasColHeader( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW /* nEndRow */ ) const
 {
     for (SCCOL nCol=nStartCol; nCol<=nEndCol; nCol++)
     {
@@ -2166,7 +2166,7 @@ bool ScTable::HasColHeader( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCR
     return true;
 }
 
-bool ScTable::HasRowHeader( SCCOL nStartCol, SCROW nStartRow, SCCOL /* nEndCol */, SCROW nEndRow )
+bool ScTable::HasRowHeader( SCCOL nStartCol, SCROW nStartRow, SCCOL /* nEndCol */, SCROW nEndRow ) const
 {
     for (SCROW nRow=nStartRow; nRow<=nEndRow; nRow++)
     {
@@ -2290,7 +2290,7 @@ void ScTable::UpdateSelectionFunction( ScFunctionData& rData,
                 aCol[nCol].UpdateAreaFunction( rData, *mpHiddenRows, nStartRow, nEndRow );
 }
 
-void ScTable::FindConditionalFormat( sal_uLong nKey, ScRangeList& rList )
+void ScTable::FindConditionalFormat( sal_uLong nKey, ScRangeList& rList ) const
 {
     SCROW nStartRow = 0, nEndRow = 0;
     for (SCCOL nCol=0; nCol<=MAXCOL; nCol++)
