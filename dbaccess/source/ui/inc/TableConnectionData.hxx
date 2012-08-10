@@ -62,12 +62,13 @@ namespace dbaui
         OTableConnectionData( const OTableConnectionData& rConnData );
         virtual ~OTableConnectionData();
 
-        // sich aus einer Quelle initialisieren (das ist mir irgendwie angenehmer als ein virtueller Zuweisungsoperator)
+        // initialise from a source (more comfortable than a virtual assignment operator)
         virtual void CopyFrom(const OTableConnectionData& rSource);
 
-        // eine neue Instanz meines eigenen Typs liefern (braucht NICHT initialisiert sein)
+        // deliver a new instance of my own type (does NOT have to be initialised)
         virtual OTableConnectionData* NewInstance() const;
-            // (von OTableConnectionData abgeleitete Klasse muessen entsprechend eine Instanz ihrer Klasse liefern)
+            // classes derived from OTableConnectionData correspondingly
+            // have to deliver an instance of their own type
 
         sal_Bool SetConnLine( sal_uInt16 nIndex, const String& rSourceFieldName, const String& rDestFieldName );
         sal_Bool AppendConnLine( const ::rtl::OUString& rSourceFieldName, const ::rtl::OUString& rDestFieldName );
@@ -76,7 +77,8 @@ namespace dbaui
         /** normalizeLines moves the empty lines to the back
         */
         void normalizeLines();
-            // loescht die Liste der ConnLines, bei bUseDefaults == sal_True werden danach MAX_CONN_COUNT neue Dummy-Linien eingefuegt
+            // deletes list of ConnLines, if bUseDefaults == sal_True
+            // MAX_CONN_COUNT new dummy lines will be inserted
 
         OConnectionLineDataVec* GetConnLineDataList(){ return &m_vConnLineData; }
 

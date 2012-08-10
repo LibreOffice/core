@@ -36,12 +36,12 @@ namespace dbaui
         String              m_sCurrent;
         sal_Int32           m_nTableCount;
         sal_Int16           m_nWidth;
-        sal_Int16           m_nColumnWidth;     // max. Spaltenbreite
-        sal_Bool            m_bMetaOptions;     // true when we scaned the meta information
+        sal_Int16           m_nColumnWidth;     // maximum column width
+        sal_Bool            m_bMetaOptions;     // true when we scanned the meta information
         sal_Bool            m_bSDNum;
 
     protected:
-        virtual void        NextToken( int nToken ); // Basisklasse
+        virtual void        NextToken( int nToken ); // base class
         virtual sal_Bool    CreateTable(int nToken);
         virtual TypeSelectionPageFactory
                              getTypeSelectionPageFactory();
@@ -59,7 +59,7 @@ namespace dbaui
                     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM,
                     const TColumnVector* rList = 0,
                     const OTypeInfoMap* _pInfoMap = 0);
-        // wird f"ur auto. Typ-Erkennung gebraucht
+        // required for automatic type recognition
         OHTMLReader(SvStream& rIn,
                     sal_Int32 nRows,
                     const TPositions &_rColumnPositions,
@@ -69,9 +69,9 @@ namespace dbaui
                     const OTypeInfoMap* _pInfoMap,
                     sal_Bool _bAutoIncrementEnabled);
 
-        virtual     SvParserState CallParser();// Basisklasse
+        virtual     SvParserState CallParser();// base class
         virtual     void          release();
-        // birgt nur korrekte Daten, wenn der 1. CTOR benutzt wurde
+        // recovers only valid data if 1. CTOR has been used
     };
 
     SV_DECL_IMPL_REF( OHTMLReader );

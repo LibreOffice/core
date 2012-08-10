@@ -30,7 +30,7 @@ namespace dbaui
 {
     //==================================================================
     // OJoinExchObj :
-    // Zusaetzliche Daten fuer das Erzeugen von Joins in der JoinShell
+    // Additional data to create Joins in the JoinShell
     //==================================================================
 
     typedef ::cppu::ImplHelper1< ::com::sun::star::lang::XUnoTunnel > OJoinExchObj_Base;

@@ -27,9 +27,8 @@
 class MultiLineEdit;
 namespace dbaui
 {
-    //==================================================================
-    // Ableitung von TabPage ist ein Trick von TH,
-    // um Aenderungen der Systemfarben zu bemerken
+    // Deriving from TabPage is a trick to notice changes
+    // of the system colors
     class OTableDesignHelpBar : public TabPage
                                 ,public IClipboardTest
     {

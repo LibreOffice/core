@@ -62,8 +62,8 @@ namespace dbaui
         virtual void ReSync();
 
         void AddNewRelation();
-            // reisst den Dialog fuer eine voellig neue Relation hoch
-        // wird vom AddTabDlg benutzt, um festzustellen, ob noch Tabellen hinzugefuegt werden duerfen
+            // Creates a dialogue for a completely new relation.
+        // used by AddTabDlg to check if tables can be added
         virtual sal_Bool IsAddAllowed();
 
         virtual void lookForUiActivities();

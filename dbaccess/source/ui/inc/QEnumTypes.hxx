@@ -35,7 +35,8 @@ namespace dbaui
         FKT_AGGREGATE   =0x00000002,
         FKT_CONDITION   =0x00000004,
         FKT_NUMERIC     =0x00000008
-        // wenn dieser Fkt.Typ gesetzt handelt es sich um EXISTS oder UNIQUE, der FieldName enthält das gesamte Statement
+        // if this function type is set, it is either EXISTS oder UNIQUE,
+        // the FieldName contains the complete statement
     };
 
     enum EConnectionSide

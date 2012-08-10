@@ -131,7 +131,7 @@ namespace dbaui
         virtual void AddTabWin(const ::rtl::OUString& _rComposedName, const ::rtl::OUString& rWinName, sal_Bool bNewTable = sal_False);
         virtual void RemoveTabWin( OTableWindow* pTabWin );
 
-        // alle TabWins verstecken (NICHT loeschen, sie werden in eine Undo-Action gepackt)
+        // hide all TabWins (does NOT delete them; they are put in an UNDO action)
         virtual void    HideTabWins();
 
         virtual void AddConnection(const OJoinExchangeData& jxdSource, const OJoinExchangeData& jxdDest) = 0;
@@ -200,13 +200,16 @@ namespace dbaui
         // set the focus to that tab win which most recently had it (or to the first available one)
         void GrabTabWinFocus();
 
-        // ReSync ist dazu gedacht, aus dem Dokument alle WinData und ConnData zu holen und entsprechend Wins und Conns anzulegen
+        // ReSync is meant to get all WinData and ConnData from the document
+        // and create the corresponding Wins and Conns
         virtual void ReSync() { }
-        // ClearAll implementiert ein hartes Loeschen, es werden alle Conns und alle Wins aus ihren jeweiligen Listen geloescht
-        // sowie die entsprechenden Datas aus dem Dokument ausgetragen
+
+        // ClearAll implements hart deletion, all Conns and Wins are deleted
+        // from their respective lists and the corresponding Datas removed
+        // from the document
         virtual void ClearAll();
 
-        // wird vom AddTabDlg benutzt, um festzustellen, ob noch Tabellen hinzugefuegt werden duerfen
+        // used by AddTabDlg to see if more tables can be added
         virtual sal_Bool IsAddAllowed();
         virtual long PreNotify(NotifyEvent& rNEvt);
 
@@ -221,18 +224,18 @@ namespace dbaui
         */
         virtual void lookForUiActivities();
 
-        // wird nach Verschieben/Groessenaenderung der TabWins aufgerufen (die Standardimplementation reicht die neuen Daten einfach
-        // an die Daten des Wins weiter)
+        // called after moving/resizing TabWins
+        // (the standard implementation just passes the new data to the Wins)
         virtual void TabWinMoved(OTableWindow* ptWhich, const Point& ptOldPosition);
-            // die Position ist "virtuell" : der Container hat sozusagen eine virtuelle Flaeche, von der immer nur ein bestimmter Bereich
-            // - der mittels der Scrollbar veraendert werden kann - zu sehen ist. Insbesondere hat ptOldPosition immer positive Koordinaten,
-            // auch wenn er einen Punkt oberhalb des aktuell sichtbaren Bereichs bezeichnet, dessen physische Ordinate eigentlich
-            // negativ ist.
+            // the position is 'virtual': the container has a virtual area
+            // of which only a part - changeable by scroll bar - is visible
+            // therefore: ptOldPosition is always positive, even if it represents
+            // a point with a negative physical ordinate above the visible area
         virtual void TabWinSized(OTableWindow* ptWhich, const Point& ptOldPosition, const Size& szOldSize);
 
         void modified();
 
-        /** returns if teh given window is visible.
+        /** check if the given window is visible.
             @param  _rPoint
                 The Point to check
             @param  _rSize
@@ -266,7 +269,8 @@ namespace dbaui
         virtual void Resize();
 
         virtual void dragFinished( );
-        // hier ist die Position (die sich waehrend des Sizings aendern kann) physisch, da waehrend des Sizens nicht gescrollt wird
+        // here the physical position (that can be changed while resizing)
+        // is used, as no scrolling can take place while resizing
         virtual void Command(const CommandEvent& rEvt);
 
         virtual OTableWindowData* CreateImpl(const ::rtl::OUString& _rComposedName

@@ -57,10 +57,11 @@ namespace dbaui
     public:
         OTableConnection( OJoinTableView* pContainer, const TTableConnectionData::value_type& pTabConnData );
         OTableConnection( const OTableConnection& rConn );
-            // WICHTIG : normalerweise bekomme ich von aussen einen Zeiger auf OTableConnectionData mitgegeben, hier aber muss ich
-            // mir (ueber OTableConnectionData::NewInstance) selber eine INstanz anlegen, die ich aber - wie in allen anderen Faellen auch -
-            // NIE loesche. Der Aufrufer ist also bei Benutzung dieses Constructors dafuer verantwortlich, meine Daten abzufragen und
-            // sich irgendwo zu merken, um sie dann irgendwann zu loeschen.
+        // IMPORTANT: Normally a pointer to OTableConnectionData is given but
+        // here, however, one has to create an instance (with
+        // OTableConnectionDate::NewInstance) which is never deleted (same like
+        // in other cases). Thus, the caller is responsible to check and save
+        // the data for deleting it eventually.
         virtual ~OTableConnection();
 
         OTableConnection& operator=( const OTableConnection& rConn );

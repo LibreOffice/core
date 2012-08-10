@@ -60,57 +60,60 @@ namespace dbaui
         OQueryTableView(Window* pParent,OQueryDesignView* pView);
         virtual ~OQueryTableView();
 
-        // Basisklasse ueberschrieben : Fenster kreieren und loeschen
-        // (eigentlich nicht wirklich LOESCHEN, es geht in die Verantwortung einer UNDO-Action ueber)
+        // base class overwritten: create and delete windows
+        // (not really delete, as it becomes an UNDO action)
         virtual void AddTabWin( const ::rtl::OUString& _rTableName, const ::rtl::OUString& _rAliasName, sal_Bool bNewTable = sal_False );
         virtual void RemoveTabWin(OTableWindow* pTabWin);
 
-        // und ein AddTabWin, das einen Alias vorgibt
+        // AddTabWin, setting an alias
         void    AddTabWin(const ::rtl::OUString& strDatabase, const ::rtl::OUString& strTableName, const ::rtl::OUString& strAlias, sal_Bool bNewTable = sal_False);
         // TabWin suchen
         OQueryTableWindow*  FindTable(const String& rAliasName);
         sal_Bool            FindTableFromField(const String& rFieldName, OTableFieldDescRef& rInfo, sal_uInt16& rCnt);
 
-        // Basisklasse ueberschrieben : Connections kreieren und loeschen
+        // base class overwritten: create and delete Connections
         virtual void AddConnection(const OJoinExchangeData& jxdSource, const OJoinExchangeData& jxdDest);
 
         virtual bool RemoveConnection( OTableConnection* _pConn ,sal_Bool _bDelete);
 
-        // Transfer von Connections von/zu einer UndoAction
+        // transfer of connections from and to UndoAction
         void GetConnection(OQueryTableConnection* pConn);
-            // Einfuegen einer Connection in meine Struktur
+            // Inserting a connection into the structure
         void DropConnection(OQueryTableConnection* pConn);
-            // Entfernen einer Connection aus meiner Struktur
+            // Removing a connection from the structure
 
-            // das resultiert effektiv in einem voelligen Leeren des Abfrageentwurfs, da alle Fenster versteckt werden, und dabei
-            // natuerlich alle Connections an diesen Fenstern und alle Abfrage-Spalten, die auf diesen Tabellen basierten.
+            // results in complete reset of request form, as
+            // all windows are hidden, as are all Connections to these windows
+            // and all request columns based on those tables
 
-        // TabWin anzeigen oder verstecken (NICHT kreieren oder loeschen)
+        // show and hide TabWin (NOT create or delete)
         sal_Bool    ShowTabWin(OQueryTableWindow* pTabWin, OQueryTabWinUndoAct* pUndoAction,sal_Bool _bAppend);
         void    HideTabWin(OQueryTableWindow* pTabWin, OQueryTabWinUndoAct* pUndoAction);
 
-        // Sichbarkeit eines TabWins sicherstellen (+ Invalidieren der Connections)
+        // ensure visibility of TabWins (+ and invalidate connections)
         virtual void EnsureVisible(const OTableWindow* _pWin);
 
-        // wieviel Tabellen mit einem bestimmten Namen habe ich schon ?
+        // how many tables with a certain alias do I already have?
         sal_Int32   CountTableAlias(const String& rName, sal_Int32& rMax);
 
         // ein Feld einfuegen (wird einfach an das Elter weitergereicht
         void InsertField(const OTableFieldDescRef& rInfo);
 
-        // alles (TabWins, Connections) neu aufbauen (PRECONDITION : vorher wurde ClearAll gerufen)
+        // rebuild everything (TabWins, Connections)
+        // (PRECONDITION: ClearAll was called previously)
         virtual void ReSync();
-        // alles (TabWins, Connections) loeschen, und zwar hart, es erfolgen also keinerlei Notifications
+
+        // delete everything hard (TabWins, Connections), without any notifications
         virtual void ClearAll();
 
-        // wird vom AddTabDlg benutzt, um festzustellen, ob noch Tabellen hinzugefuegt werden duerfen
+        // used by AddTabDlg to see if tables can still be added
         //virtual sal_Bool IsAddAllowed();
 
-        // eine neu Connection bekanntgeben und einfuegen lassen, wenn nicht schon existent
+        // announce new Connection and insert it, if not existant yet
         void NotifyTabConnection(const OQueryTableConnection& rNewConn, sal_Bool _bCreateUndoAction = sal_True);
 
         Link    SetTabWinsChangeHandler(const Link& lnk) { Link lnkRet = m_lnkTabWinsChangeHandler; m_lnkTabWinsChangeHandler = lnk; return lnkRet; }
-            // der Handler bekommt einen Zeiger auf eine TabWinsChangeNotification-Struktur
+            // the Handler receives a pointer to a TabWinsChangeNotification struct
 
         sal_Bool ExistsAVisitedConn(const OQueryTableWindow* pFrom) const;
 

@@ -26,7 +26,7 @@
 #include "TypeInfo.hxx"
 
 //------------------------------------------------------------------
-// die Spalten einer Feld-Beschreibung einer Tabelle
+// field description columns of a table
 #define FIELD_NAME                      1
 #define FIELD_TYPE                      2
 #define HELP_TEXT                       3
@@ -122,7 +122,7 @@ namespace dbaui
         DECL_LINK( FormatClickHdl, Button * );
         DECL_LINK( ChangeHdl, ListBox * );
 
-            // von ActivatePropertyField benutzt
+            // used by ActivatePropertyField
         DECL_LINK( OnControlFocusLost, Control* );
         DECL_LINK( OnControlFocusGot, Control* );
 
@@ -155,7 +155,6 @@ namespace dbaui
         virtual void        DeactivateAggregate( EControlType eType );
         virtual sal_Bool        IsReadOnly() { return sal_False; };
 
-        // Sind von den abgeleiteten Klassen zu impl.
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter > GetFormatter() const = 0;
 
         virtual ::com::sun::star::lang::Locale  GetLocale() const = 0;
@@ -189,7 +188,7 @@ namespace dbaui
         String              GetControlText( sal_uInt16 nControlId );
         void                SetReadOnly( sal_Bool bReadOnly );
 
-        // Resize aufegrufen
+        // when resize is called
         void                CheckScrollBars();
         sal_Bool            isCutAllowed();
         sal_Bool            isCopyAllowed();

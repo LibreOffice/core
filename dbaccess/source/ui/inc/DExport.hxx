@@ -60,8 +60,8 @@ namespace dbaui
         typedef ::std::vector< ::std::pair<sal_Int32,sal_Int32> >   TPositions;
 
     protected:
-        TPositions                      m_vColumns;     // Welche Spalten "ubernommen werden sollen
-        ::std::vector<sal_Int32>        m_vColumnTypes; // FeldTypen f"ur schnelleren Zugriff
+        TPositions                      m_vColumns;     // columns to be used
+        ::std::vector<sal_Int32>        m_vColumnTypes; // ColumnTypes for faster access
         ::std::vector<sal_Int32>        m_vColumnSize;
         ::std::vector<sal_Int16>        m_vNumberFormat;
         ::com::sun::star::lang::Locale  m_aLocale;
@@ -84,20 +84,20 @@ namespace dbaui
         //for save the selected tablename
         ::rtl::OUString     m_sDefaultTableName;
 
-        String              m_sTextToken;       // Zellen Inhalt
+        String              m_sTextToken;       /// cell content
         String              m_sNumToken;        /// SDNUM value
         String              m_sValToken;        /// SDVAL value
         TOTypeInfoSP        m_pTypeInfo;    // contains the default type
         const TColumnVector* m_pColumnList;
         const OTypeInfoMap* m_pInfoMap;
-        sal_Int32           m_nColumnPos;       // aktuelle Spaltenposition
-        sal_Int32           m_nRows;        // Anzahl der Zeilen die durchsucht werden sollen
+        sal_Int32           m_nColumnPos;       // current column position
+        sal_Int32           m_nRows;        // number of rows to be searched
         sal_Int32           m_nRowCount;    // current count of rows
-        rtl_TextEncoding    m_nDefToken;        // Sprache
-        sal_Bool            m_bError;           // Fehler und Abbruchstatus
-        sal_Bool            m_bInTbl;           // Ist gesetzt, wenn der Parser sich in der RTF Tabelle befindet
-        sal_Bool            m_bHead;        // ist true, wenn die Kopfzeile noch nicht gelesen wurde
-        sal_Bool            m_bDontAskAgain;// Falls beim Einf"ugen ein Fehler auftritt, soll die Fehlermeldung nicht
+        rtl_TextEncoding    m_nDefToken;        // language
+        sal_Bool            m_bError;           // error and termination code
+        sal_Bool            m_bInTbl;           // true, if parser is in RTF table
+        sal_Bool            m_bHead;        // true, if the header hasn't been read yet
+        sal_Bool            m_bDontAskAgain;// if there is an error when pasting, don't show it again
         sal_Bool            m_bIsAutoIncrement; // if PKey is set by user
         sal_Bool            m_bFoundTable;      // set to true when a table was found
         sal_Bool            m_bCheckOnly;
@@ -139,7 +139,7 @@ namespace dbaui
             SvStream& _rInputStream
         );
 
-        // wird f"ur auto. Typ-Erkennung gebraucht
+        // required for automatic type recognition
         ODatabaseExport(
             sal_Int32 nRows,
             const TPositions& _rColumnPositions,

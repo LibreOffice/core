@@ -35,7 +35,7 @@ namespace dbaui
         //  void insertValueIntoColumn();
     protected:
         virtual sal_Bool        CreateTable(int nToken);
-        virtual void            NextToken( int nToken ); // Basisklasse
+        virtual void            NextToken( int nToken ); // base class
         virtual TypeSelectionPageFactory
                                 getTypeSelectionPageFactory();
 
@@ -47,7 +47,7 @@ namespace dbaui
                     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM,
                     const TColumnVector* rList = 0,
                     const OTypeInfoMap* _pInfoMap = 0);
-        // wird f"ur auto. Typ-Erkennung gebraucht
+        // required for automatic type recognition
         ORTFReader( SvStream& rIn,
                     sal_Int32 nRows,
                     const TPositions &_rColumnPositions,
@@ -57,10 +57,10 @@ namespace dbaui
                     const OTypeInfoMap* _pInfoMap,
                     sal_Bool _bAutoIncrementEnabled);
 
-        virtual SvParserState   CallParser();// Basisklasse
+        virtual SvParserState   CallParser();// base class
         virtual void            release();
-        // birgt nur korrekte Daten, wenn der 2. CTOR benutzt wurde
-        // ansonsten wird die SbaColumnList ohne "Anderung zur"uckgegeben
+        // Only recovers correct data if 2. CTOR has been used.
+        // Otherwise, the SbaColumnList will be returned without changes.
     };
 
     SV_DECL_IMPL_REF( ORTFReader );

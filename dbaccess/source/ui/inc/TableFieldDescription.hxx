@@ -46,7 +46,7 @@ namespace dbaui
         ::rtl::OUString             m_aAliasName;       // table range
         ::rtl::OUString             m_aFieldName;       // column
         ::rtl::OUString             m_aFieldAlias;  // column alias
-        ::rtl::OUString             m_aFunctionName;    // enth"alt den Funktionsnamen, nur wenn m_eFunctionType != FKT_NONE gesetzt
+        ::rtl::OUString             m_aFunctionName;    // contains the function name (only if m_eFunctionType != FKT_NONE)
 
         Window*                     m_pTabWindow;
 
@@ -60,7 +60,7 @@ namespace dbaui
         sal_Bool                    m_bGroupBy;
         sal_Bool                    m_bVisible;
 
-        // !!!! bitte bei Erweiterung um neue Felder auch IsEmpty mitpflegen !!!!
+        // when adding new fields, please take care of IsEmpty!
 
     public:
         OTableFieldDesc();
