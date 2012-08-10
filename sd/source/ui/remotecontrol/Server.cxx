@@ -166,6 +166,20 @@ void RemoteServer::setup()
   spServer->launch();
 }
 
+std::vector<ClientInfo> RemoteServer::getClients()
+{
+    std::vector<ClientInfo> aV;
+    aV.push_back( ClientInfo( "A phone", "akaakaskj" ) );
+    aV.push_back( ClientInfo( "B phone", "iiiiiii" ) );
+    return aV;
+}
+
+void RemoteServer::connectClient( ClientInfo aClient, rtl::OString aPin )
+{
+    (void) aClient;
+    (void) aPin;
+}
+
 void SdDLL::RegisterRemotes()
 {
     // Disable unless in experimental mode for now

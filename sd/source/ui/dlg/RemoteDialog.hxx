@@ -14,13 +14,21 @@
 #include <vcl/button.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/field.hxx>
+#include <svtools/svtreebx.hxx>
+
+#include "RemoteDialogClientBox.hxx"
 
 namespace sd
 {
 
 class RemoteDialog : public ModalDialog
 {
+private:
+    OKButton        mButtonConnect;
+    CancelButton    mButtonCancel;
+    ClientBox       mClientBox;
 
+    DECL_DLLPRIVATE_LINK( HandleConnectButton, void * );
 public:
     RemoteDialog( Window* pWindow );
     ~RemoteDialog();

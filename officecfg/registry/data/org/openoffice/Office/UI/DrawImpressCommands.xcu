@@ -45,7 +45,7 @@
       <node oor:name=".uno:Remote" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
 
-          <value xml:lang="en-US">Impress ~Remote</value>
+          <value xml:lang="en-US">Impress R~emote</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>

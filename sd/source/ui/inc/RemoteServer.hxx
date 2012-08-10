@@ -14,12 +14,15 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <sys/types.h>
+#include <vector>
 
 #include <osl/socket.hxx>
 #include <rtl/ref.hxx>
 #include <salhelper/thread.hxx>
 
 #include <com/sun/star/presentation/XSlideShowController.hpp>
+
+#include "sddllapi.h"
 
 namespace css = ::com::sun::star;
 
@@ -29,6 +32,7 @@ namespace css = ::com::sun::star;
 #define PORT 1599
 
 #define CHARSET RTL_TEXTENCODING_UTF8
+namespace css = ::com::sun::star;
 
 namespace sd
 {
@@ -36,6 +40,17 @@ namespace sd
     class Transmitter;
     class Listener;
     class ImagePreparer;
+
+    struct ClientInfo
+    {
+        const rtl::OUString mName;
+        const rtl::OUString mAddress;
+
+        enum PROTOCOL { NETWORK = 1, BLUETOOTH };
+        ClientInfo( OUString rName, OUString rAddress) :
+            mName( rName ),
+            mAddress( rAddress ) {}
+    };
 
     class RemoteServer : public salhelper::Thread
     {
@@ -45,6 +60,9 @@ namespace sd
                 css::presentation::XSlideShowController > &rController );
             static void presentationStopped();
             void informListenerDestroyed();
+
+            SD_DLLPUBLIC static std::vector<ClientInfo> getClients();
+            SD_DLLPUBLIC static void connectClient( ClientInfo aClient, rtl::OString aPin );
         private:
             RemoteServer();
             ~RemoteServer();

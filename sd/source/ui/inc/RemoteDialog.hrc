@@ -10,5 +10,8 @@
 
 #define DLG_PAIR_REMOTE  RID_APP_START+700
 
-#define BTN_CONNECT 1
-
+#define BTN_CONNECT     1
+#define BTN_CANCEL      2
+#define LB_SERVERS      3
+#define INPUT_PIN       4
+#define TEXT_PIN        5

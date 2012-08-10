@@ -16,17 +16,35 @@ ModalDialog DLG_PAIR_REMOTE
     HelpID = CMD_SID_REMOTE_DLG ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 256, 205 ) ;
+    Size = MAP_APPFONT ( 200, 160 ) ;
     Text [ en-US ] = "Impress Remote" ;
     Moveable = TRUE ;
     Closeable = TRUE ;
 
+    Control LB_SERVERS
+    {
+//;         HelpId = HID_SD_SLIDETRANSITIONPANE_LB_SLIDE_TRANSITIONS;
+        Border = TRUE ;
+        TabStop = TRUE ;
+//;         AutoVScroll = TRUE ;
+//;         Pos = MAP_APPFONT ( 0, 0 ) ;
+        Size = MAP_APPFONT( 200, 140 );
+    };
+
     OKButton BTN_CONNECT
     {
-        Pos = MAP_APPFONT ( 200, 6 ) ;
+        Pos = MAP_APPFONT ( 100, 146 ) ;
         Size = MAP_APPFONT ( 50, 14 ) ;
         TabStop = TRUE ;
+        Text [ en-US ] = "Connect" ;
         DefButton = TRUE ;
+    };
+    CancelButton BTN_CANCEL
+    {
+        Pos = MAP_APPFONT ( 150, 146 ) ;
+        Size = MAP_APPFONT ( 50, 14 ) ;
+        Text [ en-US ] = "Close" ;
+        TabStop = TRUE ;
     };
 
 };

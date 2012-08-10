@@ -1186,7 +1186,6 @@ void SlotManager::ChangeSlideExclusionState (
 
     SfxBindings& rBindings (mrSlideSorter.GetViewShell()->GetViewFrame()->GetBindings());
     rBindings.Invalidate(SID_PRESENTATION);
-    rBindings.Invalidate(SID_REMOTE_DLG);
     rBindings.Invalidate(SID_REHEARSE_TIMINGS);
     rBindings.Invalidate(SID_HIDE_SLIDE);
     rBindings.Invalidate(SID_SHOW_SLIDE);
