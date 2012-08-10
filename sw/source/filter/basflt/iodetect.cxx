@@ -450,7 +450,7 @@ bool SwIoSystem::IsDetectableText(const sal_Char* pBuf, sal_uLong &rLen,
 
     if (eCharSet != RTL_TEXTENCODING_DONTKNOW)
     {
-        boost::scoped_array<sal_Unicode> aWork(new sal_Unicode[rLen]);
+        boost::scoped_array<sal_Unicode> aWork(new sal_Unicode[rLen+1]);
         sal_Unicode *pNewBuf = aWork.get();
         sal_Size nNewLen;
         if (eCharSet != RTL_TEXTENCODING_UCS2)
