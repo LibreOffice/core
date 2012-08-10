@@ -186,10 +186,15 @@ void removeTree(OUString const & url) {
         } else {
             if (osl::File::remove(stat.getFileURL()) != osl::FileBase::E_None) {
                 throw css::uno::RuntimeException(
-                    "cannot remove " + stat.getFileURL(),
+                    "cannot remove file " + stat.getFileURL(),
                     css::uno::Reference< css::uno::XInterface >());
             }
         }
+    }
+    if (osl::Directory::remove(url) != osl::FileBase::E_None) {
+        throw css::uno::RuntimeException(
+            "cannot remove directory " + url,
+            css::uno::Reference< css::uno::XInterface >());
     }
 }
 
