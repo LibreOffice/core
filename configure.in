@@ -1066,6 +1066,12 @@ AC_ARG_ENABLE(winegcc,
          needed for MinGW cross-compilation.]),
 )
 
+AC_ARG_ENABLE(liblangtag,
+    AS_HELP_STRING([--disable-liblangtag],
+        [Disable use of liblangtag, and insted use an own simple
+         implementation.]),
+)
+
 dnl ===================================================================
 dnl Optional Packages (--with/without-)
 dnl ===================================================================
@@ -11084,37 +11090,33 @@ else
 fi
 AC_SUBST(SYSTEM_GLIB)
 
-dnl Get system's glib flags and libs.
-dnl The i18npool LanguageTag wrapper uses it for liblangtag.
 
+dnl ===================================================================
+dnl Test whether to use liblangtag
+dnl ===================================================================
+ENABLE_LIBLANGTAG=
+SYSTEM_LIBLANGTAG=
 GLIB_CFLAGS=''
 GLIB_LIBS=''
-if test "$SYSTEM_GLIB" = YES; then
-    PKG_CHECK_MODULES( GLIB, glib-2.0 )
-else
-    case "$_os" in
-    iOS|Android)
-        ;;
-    *)
+if test "$enable_liblangtag" = "yes" -o \( "$enable_liblangtag" = "" -a "$CROSS_COMPILING" != "YES" \); then
+    ENABLE_LIBLANGTAG=YES
+    dnl Get system's glib flags and libs.
+    dnl The i18npool LanguageTag wrapper uses it for liblangtag.
+
+    if test "$SYSTEM_GLIB" = YES; then
+        PKG_CHECK_MODULES( GLIB, glib-2.0 )
+    else
         BUILD_TYPE="$BUILD_TYPE GLIB"
-        ;;
-    esac
+    fi
+
+    dnl So far AFAIK no system has liblangtag, set this unconditionally for now.
+    dnl TODO Allow system liblangtag
+    BUILD_TYPE="$BUILD_TYPE LIBLANGTAG"
 fi
+AC_SUBST(ENABLE_LIBLANGTAG)
+AC_SUBST(SYSTEM_LIBLANGTAG)
 AC_SUBST(GLIB_CFLAGS)
 AC_SUBST(GLIB_LIBS)
-
-dnl So far AFAIK no system has liblangtag, set this unconditionally for now.
-dnl Except for Android and iOS where we don't want liblangtag.
-
-SYSTEM_LIBLANGTAG=NO
-case "$_os" in
-iOS|Android)
-    ;;
-*)
-    BUILD_TYPE="$BUILD_TYPE LIBLANGTAG"
-    ;;
-esac
-AC_SUBST(SYSTEM_LIBLANGTAG)
 
 
 dnl ===================================================================

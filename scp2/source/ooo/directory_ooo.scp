@@ -671,7 +671,7 @@ Directory gid_Dir_Share_Autocorr
     Styles = (WORKSTATION, CREATE);
 End
 
-#ifndef SYSTEM_LIBLANGTAG
+#if defined( ENABLE_LIBLANGTAG ) && !defined( SYSTEM_LIBLANGTAG )
 Directory gid_Dir_Share_Liblangtag
     ParentID = gid_Brand_Dir_Share;
     DosName = "liblangtag";

@@ -54,11 +54,10 @@ $(eval $(call gb_Library_add_exception_objects,i18nisolang1,\
 ))
 
 
-ifneq ($(OS),ANDROID)
-ifneq ($(OS),IOS)
+ifeq ($(ENABLE_LIBLANGTAG),YES)
+$(eval $(call gb_Library_add_defs,i18nisolang1,-DENABLE_LIBLANGTAG))
 $(eval $(call gb_Library_use_external,i18nisolang1,glib))
 $(eval $(call gb_Library_use_external,i18nisolang1,liblangtag))
-endif
 endif
 
 $(eval $(call gb_Library_use_external,i18nisolang1,libxml2))

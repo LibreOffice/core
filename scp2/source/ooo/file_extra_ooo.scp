@@ -144,7 +144,7 @@ File gid_File_Extra_Glas_Red_Zip
     Name = "glas-red.zip";
 End
 
-#ifndef SYSTEM_LIBLANGTAG
+#if defined( ENABLE_LIBLANGTAG ) && !defined( SYSTEM_LIBLANGTAG )
 File gid_File_Extra_Liblangtag
     Dir = gid_Dir_Share_Liblangtag;
     USER_FILE_BODY;

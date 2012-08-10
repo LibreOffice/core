@@ -758,7 +758,7 @@ End
 #endif
 
 
-#ifndef SYSTEM_LIBLANGTAG
+#if defined( ENABLE_LIBLANGTAG ) && !defined( SYSTEM_LIBLANGTAG )
 
 File gid_File_Lib_Langtag
     LIB_FILE_BODY;
@@ -774,7 +774,7 @@ File gid_File_Lib_Langtag
   #endif
 End
 
-#endif  // SYSTEM_LIBLANGTAG
+#endif  // ENABLE_LIBLANGTAG
 
 
 #ifdef SOLAR_JAVA

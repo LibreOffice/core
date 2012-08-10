@@ -26,9 +26,9 @@ LIBLANGTAG_MICRO=0
 
 # --- Files --------------------------------------------------------
 
-.IF "$(SYSTEM_LIBLANGTAG)" == "YES"
+.IF "$(ENABLE_LIBLANGTAG)" != "YES" || "$(SYSTEM_LIBLANGTAG)" == "YES"
 @all:
-	@echo "Using system liblangtag."
+	@echo "Not building liblangtag."
 .ENDIF
 
 TARFILE_NAME=liblangtag-$(LIBLANGTAG_MAJOR).$(LIBLANGTAG_MINOR)

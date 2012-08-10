@@ -462,6 +462,8 @@ endef
 endif # SYSTEM_GLIB
 
 
+ifeq ($(ENABLE_LIBLANGTAG),YES)
+
 ifeq ($(SYSTEM_LIBLANGTAG),YES)
 
 define gb_LinkTarget__use_liblangtag
@@ -494,6 +496,8 @@ endif
 endef
 
 endif # SYSTEM_LIBLANGTAG
+
+endif # ENABLE_LIBLANGTAG
 
 
 ifeq ($(SYSTEM_NEON),YES)
