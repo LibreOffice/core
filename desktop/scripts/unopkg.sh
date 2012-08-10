@@ -64,27 +64,18 @@ esac
 
 #collect all bootstrap variables specified on the command line
 #so that they can be passed as arguments to javaldx later on
-#Recognize the "sync" option. sync must be applied without any other
-#options except bootstrap variables or the verbose option
 for arg in $@
 do
   case "$arg" in
        -env:*) BOOTSTRAPVARS=$BOOTSTRAPVARS" ""$arg";;
-       sync) OPTSYNC=true;;
        -v) VERBOSE=true;;
        --verbose) VERBOSE=true;;
-       *) OPTOTHER=$arg;;
   esac
 done
 
-if [ "$OPTSYNC" = "true" ] && [ -z "$OPTOTHER" ]
-then
-    JVMFWKPARAMS='-env:UNO_JAVA_JFW_INSTALL_DATA=$BRAND_BASE_DIR/share/config/javasettingsunopkginstall.xml -env:JFW_PLUGIN_DO_NOT_CHECK_ACCESSIBILITY=1'
-fi
-
 # extend the ld_library_path for java: javaldx checks the sofficerc for us
 if [ -x "$sd_prog/../ure-link/bin/javaldx" ] ; then
-    my_path=`"$sd_prog/../ure-link/bin/javaldx" $BOOTSTRAPVARS $JVMFWKPARAMS \
+    my_path=`"$sd_prog/../ure-link/bin/javaldx" $BOOTSTRAPVARS \
         "-env:INIFILENAME=vnd.sun.star.pathname:$sd_prog/redirectrc"`
     if [ -n "$my_path" ] ; then
         sd_platform=`uname -s`
@@ -110,6 +101,6 @@ unset XENVIRONMENT
 # SAL_NO_XINITTHREADS=true; export SAL_NO_XINITTHREADS
 
 # execute binary
-exec "$sd_prog/unopkg.bin" "$@" $JVMFWKPARAMS \
+exec "$sd_prog/unopkg.bin" "$@" \
     "-env:INIFILENAME=vnd.sun.star.pathname:$sd_prog/redirectrc"
 

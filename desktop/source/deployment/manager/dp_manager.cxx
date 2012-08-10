@@ -391,24 +391,6 @@ Reference<deployment::XPackageManager> PackageManagerImpl::create(
         //No stamp file. We assume that bundled is always readonly. It must not be
         //modified from ExtensionManager but only by the installer
     }
-    else if ( context == "bundled_prereg" ) {
-        //This is a bundled repository but the registration data
-        //is in the brand layer: share/prereg
-        //It is special because the registration data are copied at the first startup
-        //into the user installation. The processed help and xcu files are not
-        //copied. Instead the backenddb.xml for the help backend references the help
-        //by using $BUNDLED_EXTENSION_PREREG instead $BUNDLED_EXTENSIONS_USER. The
-        //configmgr.ini also used $BUNDLED_EXTENSIONS_PREREG to refer to the xcu file
-        //which contain the replacement for %origin%.
-        that->m_activePackages = OUSTR(
-            "vnd.sun.star.expand:$BUNDLED_EXTENSIONS");
-        that->m_registrationData = OUSTR(
-            "vnd.sun.star.expand:$BUNDLED_EXTENSIONS_PREREG");
-        that->m_registryCache = OUSTR(
-            "vnd.sun.star.expand:$BUNDLED_EXTENSIONS_PREREG/registry");
-        logFile = OUSTR(
-            "vnd.sun.star.expand:$BUNDLED_EXTENSIONS_PREREG/log.txt");
-    }
     else if ( context == "tmp" ) {
         that->m_activePackages = OUSTR(
             "vnd.sun.star.expand:$TMP_EXTENSIONS/extensions");
@@ -989,8 +971,7 @@ OUString PackageManagerImpl::getDeployPath( ActivePackages::Data const & data )
     //The bundled extensions are not contained in an additional folder
     //with a unique name. data.temporaryName contains already the
     //UTF8 encoded folder name. See PackageManagerImpl::synchronize
-    if (!m_context.equals(OUSTR("bundled"))
-        && !m_context.equals(OUSTR("bundled_prereg")))
+    if (!m_context.equals(OUSTR("bundled")))
     {
         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("_/") );
         buf.append( ::rtl::Uri::encode( data.fileName, rtl_UriCharClassPchar,

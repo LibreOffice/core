@@ -300,7 +300,7 @@ protected:
     // currently only for library containers:
     enum {
         CONTEXT_UNKNOWN,
-        CONTEXT_USER, CONTEXT_SHARED,CONTEXT_BUNDLED, CONTEXT_TMP, CONTEXT_BUNDLED_PREREG,
+        CONTEXT_USER, CONTEXT_SHARED,CONTEXT_BUNDLED, CONTEXT_TMP,
         CONTEXT_DOCUMENT
     } m_eContext;
     bool m_readOnly;

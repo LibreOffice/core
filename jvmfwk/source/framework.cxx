@@ -610,7 +610,7 @@ javaFrameworkError SAL_CALL jfw_findAndSelectJRE(JavaInfo **pInfo)
         }
         if ((JavaInfo*) aCurrentInfo)
         {
-            jfw::NodeJava javaNode;
+            jfw::NodeJava javaNode(jfw::NodeJava::USER);
             javaNode.setJavaInfo(aCurrentInfo,true);
             javaNode.write();
 
@@ -871,7 +871,7 @@ javaFrameworkError SAL_CALL jfw_setSelectedJRE(JavaInfo const *pInfo)
 
         if (jfw_areEqualJavaInfo(currentInfo, pInfo) == sal_False)
         {
-            jfw::NodeJava node;
+            jfw::NodeJava node(jfw::NodeJava::USER);
             node.setJavaInfo(pInfo, false);
             node.write();
             //remember that the JRE was selected in this process
@@ -907,7 +907,7 @@ javaFrameworkError SAL_CALL jfw_setEnabled(sal_Bool bEnabled)
             if (settings.getEnabled() == sal_False)
                 g_bEnabledSwitchedOn = true;
         }
-        jfw::NodeJava node;
+        jfw::NodeJava node(jfw::NodeJava::USER);
         node.setEnabled(bEnabled);
         node.write();
     }
@@ -952,7 +952,7 @@ javaFrameworkError SAL_CALL jfw_setVMParameters(
         osl::MutexGuard guard(jfw::FwkMutex::get());
         if (jfw::getMode() == jfw::JFW_MODE_DIRECT)
             return JFW_E_DIRECT_MODE;
-        jfw::NodeJava node;
+        jfw::NodeJava node(jfw::NodeJava::USER);
         if (arOptions == NULL && nLen != 0)
             return JFW_E_INVALID_ARG;
         node.setVmParameters(arOptions, nLen);
@@ -1000,7 +1000,7 @@ javaFrameworkError SAL_CALL jfw_setUserClassPath(rtl_uString * pCp)
         osl::MutexGuard guard(jfw::FwkMutex::get());
         if (jfw::getMode() == jfw::JFW_MODE_DIRECT)
             return JFW_E_DIRECT_MODE;
-        jfw::NodeJava node;
+        jfw::NodeJava node(jfw::NodeJava::USER);
         if (pCp == NULL)
             return JFW_E_INVALID_ARG;
         node.setUserClassPath(pCp);
@@ -1046,7 +1046,7 @@ javaFrameworkError SAL_CALL jfw_addJRELocation(rtl_uString * sLocation)
         osl::MutexGuard guard(jfw::FwkMutex::get());
         if (jfw::getMode() == jfw::JFW_MODE_DIRECT)
             return JFW_E_DIRECT_MODE;
-        jfw::NodeJava node;
+        jfw::NodeJava node(jfw::NodeJava::USER);
         if (sLocation == NULL)
             return JFW_E_INVALID_ARG;
         node.load();
@@ -1073,7 +1073,7 @@ javaFrameworkError SAL_CALL jfw_setJRELocations(
         osl::MutexGuard guard(jfw::FwkMutex::get());
         if (jfw::getMode() == jfw::JFW_MODE_DIRECT)
             return JFW_E_DIRECT_MODE;
-        jfw::NodeJava node;
+        jfw::NodeJava node(jfw::NodeJava::USER);
         if (arLocations == NULL && nLen != 0)
             return JFW_E_INVALID_ARG;
         node.setJRELocations(arLocations, nLen);

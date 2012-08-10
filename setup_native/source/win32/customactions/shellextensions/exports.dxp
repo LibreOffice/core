@@ -5,8 +5,6 @@ RebuildShellIconCache
 ExecutePostUninstallScript
 CompleteInstallPath
 MigrateInstallPath
-RegisterExtensions
-RemoveExtensions
 CheckInstallDirectory
 SetAdminInstallProperty
 CreateLayerLinks

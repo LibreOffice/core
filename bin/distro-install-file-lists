@@ -554,7 +554,6 @@ if test "z$RPM_CONFIG_FILE_TAGS" != "z" ; then
 	    -e "s|^($INSTALLDIR/program/[a-zA-Z0-9_\.]*rc)\$|$RPM_CONFIG_FILE_TAGS \\1|;" \
 	    -e "s|^($INSTALLDIR/program/.*\.xsl)\$|$RPM_CONFIG_FILE_TAGS \\1|;" \
 	    -e "s|^($INSTALLDIR/share/config/[a-zA-Z0-9]*rc)\$|$RPM_CONFIG_FILE_TAGS \\1|;" \
-	    -e "s|^($INSTALLDIR/share/config/javasettingsunopkginstall.xml)\$|$RPM_CONFIG_FILE_TAGS \\1|;" \
 	    -e "s|^($INSTALLDIR/share/dict/ooo/.*\.lst)\$|$RPM_CONFIG_FILE_TAGS \\1|;" \
 	    -e "s|^($INSTALLDIR/share/psprint/.*\.conf)\$|$RPM_CONFIG_FILE_TAGS \\1|;" \
 	    -e "s|^($INSTALLDIR/share/registry/.*\.xcu)\$|$RPM_CONFIG_FILE_TAGS \\1|;" \

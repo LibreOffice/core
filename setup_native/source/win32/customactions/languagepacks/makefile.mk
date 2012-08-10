@@ -67,7 +67,6 @@ STDSHL+=	\
 
 
 SHL1OBJS = $(SLOFILES)              \
-    $(SLO)$/registerextensions.obj  \
     $(SLO)$/seterror.obj
 
 SHL1TARGET = $(TARGET)

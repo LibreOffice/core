@@ -27,8 +27,6 @@
 
 $(eval $(call gb_Package_Package,jvmfwk_rcfiles,$(SRCDIR)/jvmfwk))
 
-$(eval $(call gb_Package_add_file,jvmfwk_rcfiles,bin/javasettingsunopkginstall.xml,source/javasettingsunopkginstall.xml))
-
 # The below files (intended to be also used during the build) need to go into
 # the same directory as dynamic libraries (either bin or lib):
 

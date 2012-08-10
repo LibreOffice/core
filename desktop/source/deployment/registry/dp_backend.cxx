@@ -102,8 +102,6 @@ PackageRegistryBackend::PackageRegistryBackend(
         m_eContext = CONTEXT_BUNDLED;
     else if ( m_context == "tmp" )
         m_eContext = CONTEXT_TMP;
-    else if ( m_context == "bundled_prereg" )
-        m_eContext = CONTEXT_BUNDLED_PREREG;
     else if (m_context.matchIgnoreAsciiCaseAsciiL(
                  RTL_CONSTASCII_STRINGPARAM("vnd.sun.star.tdoc:/") ))
         m_eContext = CONTEXT_DOCUMENT;

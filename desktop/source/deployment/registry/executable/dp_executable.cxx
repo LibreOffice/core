@@ -256,8 +256,7 @@ void BackendImpl::ExecutablePackageImpl::processPackage_(
             else if (getMyBackend()->m_context.equals(OUSTR("shared")))
                 attributes |= (osl_File_Attribute_OwnExe | osl_File_Attribute_GrpExe
                                | osl_File_Attribute_OthExe);
-            else if (!getMyBackend()->m_context.equals(OUSTR("bundled"))
-                && !getMyBackend()->m_context.equals(OUSTR("bundled_prereg")))
+            else if (!getMyBackend()->m_context.equals(OUSTR("bundled")))
                 //Bundled extension are required to be in the properly
                 //installed. That is an executable must have the right flags
                 OSL_ASSERT(0);
@@ -286,8 +285,7 @@ bool BackendImpl::ExecutablePackageImpl::isUrlTargetInExtension()
         sExtensionDir = dp_misc::expandUnoRcTerm(OUSTR("$UNO_USER_PACKAGES_CACHE"));
     else if (getMyBackend()->m_context.equals(OUSTR("shared")))
         sExtensionDir = dp_misc::expandUnoRcTerm(OUSTR("$UNO_SHARED_PACKAGES_CACHE"));
-    else if (getMyBackend()->m_context.equals(OUSTR("bundled"))
-        || getMyBackend()->m_context.equals(OUSTR("bundled_prereg")))
+    else if (getMyBackend()->m_context.equals(OUSTR("bundled")))
         sExtensionDir = dp_misc::expandUnoRcTerm(OUSTR("$BUNDLED_EXTENSIONS"));
     else
         OSL_ASSERT(0);

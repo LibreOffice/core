@@ -11,4 +11,3 @@ InstallFinalize		400
 InstallInitialize		250
 InstallValidate		200
 ScheduleReboot	ISSCHEDULEREBOOT	375
-SetInstallLocation1		390

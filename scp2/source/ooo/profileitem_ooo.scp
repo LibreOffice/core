@@ -121,16 +121,6 @@ ProfileItem gid_Profileitem_Uno_Uno_Bundled_Extensions_User
     Value = "${$BRAND_BASE_DIR/program/" PROFILENAME(bootstrap) ":UserInstallation}/user/extensions/bundled";
 End
 
-ProfileItem gid_Profileitem_Uno_Uno_Bundled_Extensions_Prereg
-    ProfileID = gid_Profile_Uno_Ini;
-    ModuleID = gid_Module_Root;
-    Section = "Bootstrap";
-    Order = 1;
-    Key = "BUNDLED_EXTENSIONS_PREREG";
-    Value = "$BRAND_BASE_DIR/share/prereg/bundled";
-End
-
-
 ProfileItem gid_Profileitem_Uno_Uno_Shared_Packages
     ProfileID = gid_Profile_Uno_Ini;
     ModuleID = gid_Module_Root;

@@ -201,12 +201,6 @@ public:
                css::lang::IllegalArgumentException,
                css::uno::RuntimeException);
 
-    virtual void SAL_CALL synchronizeBundledPrereg(
-        css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
-        css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv )
-        throw (css::deployment::DeploymentException,
-               css::uno::RuntimeException);
-
     virtual css::uno::Sequence<css::uno::Reference<css::deployment::XPackage> > SAL_CALL
     getExtensionsWithUnacceptedLicenses(
         ::rtl::OUString const & repository,

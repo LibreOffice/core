@@ -310,11 +310,6 @@ void BackendImpl::PackageImpl:: initPackageHandler()
     {
         aContext  <<= OUSTR("bundled");
     }
-    else if ( that->m_eContext == CONTEXT_BUNDLED_PREREG )
-    {
-        aContext  <<= OUSTR("bundled_prereg");
-    }
-
     else
     {
         OSL_ASSERT( 0 );
