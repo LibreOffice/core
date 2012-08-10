@@ -33,6 +33,7 @@
 #include <svx/sdrpaintwindow.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <svx/sdrundomanager.hxx>
 
 #include "drawview.hxx"
 #include "global.hxx"
@@ -849,4 +850,11 @@ void ScDrawView::SyncForGrid( SdrObject* pObj )
         pObj->SetGridOffset( aGridOff );
     }
 }
+
+// support enhanced text edit for draw objects
+SdrUndoManager* ScDrawView::getSdrUndoManagerForEnhancedTextEdit() const
+{
+    return pDoc ? dynamic_cast< SdrUndoManager* >(pDoc->GetUndoManager()) : 0;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

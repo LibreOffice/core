@@ -25,6 +25,7 @@
 #include "editeng/editobj.hxx"
 #include <svx/pageitem.hxx>
 #include <editeng/editeng.hxx>
+#include <svx/sdrundomanager.hxx>
 #include <svx/svditer.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdocapt.hxx>
@@ -5869,7 +5870,11 @@ bool ScDocument::NeedPageResetAfterTab( SCTAB nTab ) const
 SfxUndoManager* ScDocument::GetUndoManager()
 {
     if (!mpUndoManager)
-        mpUndoManager = new SfxUndoManager;
+    {
+        // to support enhanced text edit for draw objects, use an SdrUndoManager
+        mpUndoManager = new SdrUndoManager;
+    }
+
     return mpUndoManager;
 }
 
