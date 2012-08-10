@@ -115,6 +115,32 @@ void FindTextFieldControl::Remember_Impl(const String& rStr)
     InsertEntry(rStr, 0);
 }
 
+void FindTextFieldControl::SetTextToSelected_Impl()
+{
+    OUString aString;
+
+    try
+    {
+        css::uno::Reference<css::frame::XController> xController(m_xFrame->getController(), css::uno::UNO_QUERY_THROW);
+        css::uno::Reference<css::frame::XModel> xModel(xController->getModel(), css::uno::UNO_QUERY_THROW);
+        css::uno::Reference<css::container::XIndexAccess> xIndexAccess(xModel->getCurrentSelection(), css::uno::UNO_QUERY_THROW);
+        if (xIndexAccess->getCount() > 0)
+        {
+            css::uno::Reference<css::text::XTextRange> xTextRange(xIndexAccess->getByIndex(0), css::uno::UNO_QUERY_THROW);
+            aString = xTextRange->getString();
+        }
+    }
+    catch ( ... )
+    {
+    }
+
+    if ( aString.getLength() != 0 )
+    {
+        SetText( aString );
+        m_bToClearTextField = sal_False;
+    }
+}
+
 void FindTextFieldControl::Modify()
 {
     ComboBox::Modify();
@@ -184,24 +210,7 @@ long FindTextFieldControl::PreNotify( NotifyEvent& rNEvt )
         case EVENT_GETFOCUS:
             if ( m_bToClearTextField )
             {
-                String aString;
-
-                try
-                {
-                    css::uno::Reference<css::frame::XController> xController(m_xFrame->getController(), css::uno::UNO_QUERY_THROW);
-                    css::uno::Reference<css::frame::XModel> xModel(xController->getModel(), css::uno::UNO_QUERY_THROW);
-                    css::uno::Reference<css::container::XIndexAccess> xIndexAccess(xModel->getCurrentSelection(), css::uno::UNO_QUERY_THROW);
-                    if (xIndexAccess->getCount() > 0)
-                    {
-                        css::uno::Reference<css::text::XTextRange> xTextRange(xIndexAccess->getByIndex(0), css::uno::UNO_QUERY_THROW);
-                        aString = xTextRange->getString();
-                    }
-                }
-                catch ( ... )
-                {
-                }
-
-                SetText( aString );
+                SetText( OUString() );
                 m_bToClearTextField = sal_False;
             }
             SetSelection( Selection( SELECTION_MIN, SELECTION_MAX ) );
@@ -758,11 +767,14 @@ void SAL_CALL FindbarDispatcher::dispatch( const css::util::URL& aURL, const css
             for ( sal_uInt16 i=0; i<nItemCount; ++i )
             {
                 ::rtl::OUString sItemCommand = pToolBox->GetItemCommand(i);
-                if ( sItemCommand == ".uno:FindText" )
+                if ( sItemCommand == COMMAND_FINDTEXT )
                 {
                     Window* pItemWin = pToolBox->GetItemWindow( i );
                     if ( pItemWin )
                     {
+                        FindTextFieldControl* pFindTextFieldControl = dynamic_cast<FindTextFieldControl*>(pItemWin);
+                        if ( pFindTextFieldControl )
+                            pFindTextFieldControl->SetTextToSelected_Impl();
                         pItemWin->GrabFocus();
                         return;
                     }
