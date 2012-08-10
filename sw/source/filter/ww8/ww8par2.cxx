@@ -3727,7 +3727,7 @@ void WW8RStyle::Set1StyleDefaults()
             pIo->pAktColl->SetFmtAttr(aAttr);
         }
 
-        if( pIo->pWDop->fWidowControl && !bWidowsChanged )  // Widows ?
+        if( /*pIo->pWDop->fWidowControl &&*/ !bWidowsChanged )  // Widows ?
         {
             pIo->pAktColl->SetFmtAttr( SvxWidowsItem( 2, RES_PARATR_WIDOWS ) );
             pIo->pAktColl->SetFmtAttr( SvxOrphansItem( 2, RES_PARATR_ORPHANS ) );
