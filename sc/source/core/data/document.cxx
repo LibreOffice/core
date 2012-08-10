@@ -45,6 +45,7 @@
 #include <unotools/charclass.hxx>
 #include <unotools/transliterationwrapper.hxx>
 #include <tools/tenccvt.hxx>
+#include <svx/sdrundomanager.hxx>
 
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/script/vba/XVBACompatibility.hpp>
@@ -5290,7 +5291,11 @@ sal_Bool ScDocument::NeedPageResetAfterTab( SCTAB nTab ) const
 SfxUndoManager* ScDocument::GetUndoManager()
 {
     if (!mpUndoManager)
-        mpUndoManager = new SfxUndoManager;
+    {
+        // to support enhanced text edit for draw objects, use an SdrUndoManager
+        mpUndoManager = new SdrUndoManager;
+    }
+
     return mpUndoManager;
 }
 

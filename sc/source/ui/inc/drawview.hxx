@@ -33,6 +33,7 @@ namespace com { namespace sun { namespace star { namespace datatransfer { class 
 class ScDocument;
 class ScViewData;
 class ScDrawObjData;
+class SdrUndoManager;
 
 class ScDrawView: public FmFormView
 {
@@ -57,6 +58,9 @@ protected:
     virtual void AddCustomHdl();
 
     void ImplClearCalcDropMarker();
+
+    // support enhanced text edit for draw objects
+    virtual SdrUndoManager* getSdrUndoManagerForEnhancedTextEdit() const;
 
 public:
                     ScDrawView( OutputDevice* pOut, ScViewData* pData );

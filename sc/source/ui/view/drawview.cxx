@@ -42,6 +42,7 @@
 #include <svx/sdrpaintwindow.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <svx/sdrundomanager.hxx>
 
 #include "drawview.hxx"
 #include "global.hxx"
@@ -59,6 +60,7 @@
 #include "userdat.hxx"
 #include "postit.hxx"
 #include "undocell.hxx"
+#include "document.hxx"
 
 #include "sc.hrc"
 
@@ -814,28 +816,10 @@ void ScDrawView::MarkDropObj( SdrObject* pObj )
     }
 }
 
-//UNUSED2009-05 void ScDrawView::CaptionTextDirection( sal_uInt16 nSlot )
-//UNUSED2009-05 {
-//UNUSED2009-05     if(nSlot != SID_TEXTDIRECTION_LEFT_TO_RIGHT && nSlot != SID_TEXTDIRECTION_TOP_TO_BOTTOM)
-//UNUSED2009-05         return;
-//UNUSED2009-05
-//UNUSED2009-05     SdrObject* pObject  = GetTextEditObject();
-//UNUSED2009-05     if ( ScDrawLayer::IsNoteCaption( pObject ) )
-//UNUSED2009-05     {
-//UNUSED2009-05         if( SdrCaptionObj* pCaption = dynamic_cast< SdrCaptionObj* >( pObject ) )
-//UNUSED2009-05         {
-//UNUSED2009-05             SfxItemSet aAttr(pCaption->GetMergedItemSet());
-//UNUSED2009-05             aAttr.Put( SvxWritingModeItem(
-//UNUSED2009-05                 nSlot == SID_TEXTDIRECTION_LEFT_TO_RIGHT ?
-//UNUSED2009-05                     com::sun::star::text::WritingMode_LR_TB : com::sun::star::text::WritingMode_TB_RL,
-//UNUSED2009-05                     SDRATTR_TEXTDIRECTION ) );
-//UNUSED2009-05             pCaption->SetMergedItemSet(aAttr);
-//UNUSED2009-05             FuPoor* pPoor = pViewData->GetView()->GetDrawFuncPtr();
-//UNUSED2009-05             if ( pPoor )
-//UNUSED2009-05             {
-//UNUSED2009-05                 FuText* pText = static_cast<FuText*>(pPoor);
-//UNUSED2009-05                 pText->StopEditMode(sal_True);
-//UNUSED2009-05             }
-//UNUSED2009-05         }
-//UNUSED2009-05     }
-//UNUSED2009-05 }
+// support enhanced text edit for draw objects
+SdrUndoManager* ScDrawView::getSdrUndoManagerForEnhancedTextEdit() const
+{
+    return pDoc ? dynamic_cast< SdrUndoManager* >(pDoc->GetUndoManager()) : 0;
+}
+
+// eof
