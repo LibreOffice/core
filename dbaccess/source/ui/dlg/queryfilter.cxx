@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "queryfilter.hxx"
 #include "moduledbu.hxx"
 #include <com/sun/star/sdbc/DataType.hpp>
@@ -52,14 +51,12 @@ using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::beans;
 
-//------------------------------------------------------------------------------
 void Replace_OS_PlaceHolder(String& aString)
 {
     while (aString.SearchAndReplace( '*', '%' ) != STRING_NOTFOUND) ;
     while (aString.SearchAndReplace( '?', '_' ) != STRING_NOTFOUND) ;
 }
 
-//------------------------------------------------------------------------------
 void Replace_SQL_PlaceHolder(String& aString)
 {
     while (aString.SearchAndReplace( '%', '*' ) != STRING_NOTFOUND) ;
@@ -67,7 +64,7 @@ void Replace_SQL_PlaceHolder(String& aString)
 }
 
 DBG_NAME(DlgFilterCrit);
-//------------------------------------------------------------------------------
+
 DlgFilterCrit::DlgFilterCrit(Window * pParent,
                              const Reference< XMultiServiceFactory >& _rxORB,
                              const Reference< XConnection>& _rxConnection,
@@ -202,7 +199,7 @@ DlgFilterCrit::DlgFilterCrit(Window * pParent,
 
     FreeResource();
 }
-//------------------------------------------------------------------------------
+
 DlgFilterCrit::~DlgFilterCrit()
 {
     DBG_DTOR(DlgFilterCrit,NULL);
@@ -211,7 +208,6 @@ DlgFilterCrit::~DlgFilterCrit()
 #define LbText(x)       ((x).GetSelectEntry())
 #define LbPos(x)        ((x).GetSelectEntryPos())
 
-//------------------------------------------------------------------------------
 sal_Int32 DlgFilterCrit::GetOSQLPredicateType( const String& _rSelectedPredicate ) const
 {
     sal_Int32 nPredicateIndex = -1;
@@ -262,7 +258,7 @@ sal_Int32 DlgFilterCrit::GetOSQLPredicateType( const String& _rSelectedPredicate
 
     return nPredicateType;
 }
-//------------------------------------------------------------------------------
+
 sal_uInt16 DlgFilterCrit::GetSelectionPos(sal_Int32 eType,const ListBox& rListBox) const
 {
     sal_uInt16 nPos;
@@ -305,7 +301,7 @@ sal_uInt16 DlgFilterCrit::GetSelectionPos(sal_Int32 eType,const ListBox& rListBo
     }
     return nPos;
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool DlgFilterCrit::getCondition(const ListBox& _rField,const ListBox& _rComp,const Edit& _rValue,PropertyValue& _rFilter) const
 {
     sal_Bool bHaving = sal_False;
@@ -325,7 +321,8 @@ sal_Bool DlgFilterCrit::getCondition(const ListBox& _rField,const ListBox& _rCom
                     xColumn->getPropertyValue(PROPERTY_TABLENAME)   >>= sTableName;
                     if ( !sTableName.isEmpty() )
                     {
-                        // properly quote all parts of the table name, so e.g. <schema>.<table> becomes "<schema>"."<table>"
+                        // properly quote all parts of the table name, so
+                        // e.g. <schema>.<table> becomes "<schema>"."<table>"
                         ::rtl::OUString aCatlog,aSchema,aTable;
                         ::dbtools::qualifiedNameComponents( m_xMetaData, sTableName, aCatlog, aSchema, aTable, ::dbtools::eInDataManipulation );
                         sTableName = ::dbtools::composeTableName( m_xMetaData, aCatlog, aSchema, aTable, sal_True, ::dbtools::eInDataManipulation );
@@ -367,7 +364,6 @@ sal_Bool DlgFilterCrit::getCondition(const ListBox& _rField,const ListBox& _rCom
     return bHaving;
 }
 
-//------------------------------------------------------------------------------
 Reference< XPropertySet > DlgFilterCrit::getColumn( const ::rtl::OUString& _rFieldName ) const
 {
     Reference< XPropertySet > xColumn;
@@ -406,7 +402,7 @@ Reference< XPropertySet > DlgFilterCrit::getColumn( const ::rtl::OUString& _rFie
 
     return xColumn;
 }
-//------------------------------------------------------------------------------
+
 Reference< XPropertySet > DlgFilterCrit::getQueryColumn( const ::rtl::OUString& _rFieldName ) const
 {
     Reference< XPropertySet > xColumn;
@@ -424,7 +420,6 @@ Reference< XPropertySet > DlgFilterCrit::getQueryColumn( const ::rtl::OUString& 
     return xColumn;
 }
 
-//------------------------------------------------------------------------------
 Reference< XPropertySet > DlgFilterCrit::getMatchingColumn( const Edit& _rValueInput ) const
 {
     // the name
@@ -449,7 +444,6 @@ Reference< XPropertySet > DlgFilterCrit::getMatchingColumn( const Edit& _rValueI
     return getColumn( sField );
 }
 
-//------------------------------------------------------------------------------
 IMPL_LINK( DlgFilterCrit, PredicateLoseFocus, Edit*, _pField )
 {
     OSL_ENSURE( _pField, "DlgFilterCrit::PredicateLoseFocus: invalid event source!" );
@@ -469,8 +463,6 @@ IMPL_LINK( DlgFilterCrit, PredicateLoseFocus, Edit*, _pField )
     return 0L;
 }
 
-//------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
 void DlgFilterCrit::SetLine( sal_uInt16 nIdx,const PropertyValue& _rItem,sal_Bool _bOr  )
 {
     DBG_CHKTHIS(DlgFilterCrit,NULL);
@@ -529,7 +521,6 @@ void DlgFilterCrit::SetLine( sal_uInt16 nIdx,const PropertyValue& _rItem,sal_Boo
             pPredicateListControl = &aLB_WHERECOMP1;
             pPredicateValueControl = &aET_WHEREVALUE1;
             break;
-
         case 1:
             aLB_WHERECOND2.SelectEntryPos( _bOr ? 1 : 0 );
 
@@ -537,7 +528,6 @@ void DlgFilterCrit::SetLine( sal_uInt16 nIdx,const PropertyValue& _rItem,sal_Boo
             pPredicateListControl = &aLB_WHERECOMP2;
             pPredicateValueControl = &aET_WHEREVALUE2;
             break;
-
         case 2:
             aLB_WHERECOND3.SelectEntryPos( _bOr ? 1 : 0 );
 
@@ -568,7 +558,6 @@ void DlgFilterCrit::SetLine( sal_uInt16 nIdx,const PropertyValue& _rItem,sal_Boo
     }
 }
 
-//------------------------------------------------------------------------------
 void DlgFilterCrit::SelectField( ListBox& rBox, const String& rField )
 {
     DBG_CHKTHIS(DlgFilterCrit,NULL);
@@ -586,7 +575,6 @@ void DlgFilterCrit::SelectField( ListBox& rBox, const String& rField )
     rBox.SelectEntryPos(0);
 }
 
-//------------------------------------------------------------------------------
 void DlgFilterCrit::EnableLines()
 {
     DBG_CHKTHIS(DlgFilterCrit,NULL);
@@ -688,10 +676,8 @@ void DlgFilterCrit::EnableLines()
         ((LbPos(aLB_WHERECOMP3) == aLB_WHERECOMP3.GetEntryCount()-1) ||
          (LbPos(aLB_WHERECOMP3) == aLB_WHERECOMP3.GetEntryCount()-2)) )
         aET_WHEREVALUE3.Disable();
-
 }
 
-//------------------------------------------------------------------------------
 IMPL_LINK( DlgFilterCrit, ListSelectHdl, ListBox *, pListBox )
 {
     String aName;
@@ -750,16 +736,13 @@ IMPL_LINK( DlgFilterCrit, ListSelectHdl, ListBox *, pListBox )
     return 0;
 }
 
-
-
-//------------------------------------------------------------------------------
 IMPL_LINK_INLINE_START( DlgFilterCrit, ListSelectCompHdl, ListBox *, /*pListBox*/ )
 {
     EnableLines();
     return 0;
 }
 IMPL_LINK_INLINE_END( DlgFilterCrit, ListSelectCompHdl, ListBox *, pListBox )
-//------------------------------------------------------------------------------
+
 void DlgFilterCrit::BuildWherePart()
 {
     DBG_CHKTHIS(DlgFilterCrit,NULL);
@@ -839,7 +822,7 @@ void DlgFilterCrit::BuildWherePart()
         DBG_UNHANDLED_EXCEPTION();
     }
 }
-// -----------------------------------------------------------------------------
+
 void DlgFilterCrit::fillLines(const Sequence<Sequence<PropertyValue > >& _aValues)
 {
     const Sequence<PropertyValue >* pOrIter = _aValues.getConstArray();

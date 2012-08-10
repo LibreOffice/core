@@ -17,9 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "dbfindex.hxx"
-
 #include <tools/config.hxx>
 #include <sfx2/app.hxx>
 #include "moduledbu.hxx"
@@ -33,22 +31,17 @@
 #include <svl/filenotation.hxx>
 #include <rtl/strbuf.hxx>
 
-
-//.........................................................................
 namespace dbaui
 {
-//.........................................................................
-
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ucb;
 using namespace ::svt;
 
 const rtl::OString aGroupIdent(RTL_CONSTASCII_STRINGPARAM("dBase III"));
 
-//////////////////////////////////////////////////////////////////////////
-// Klasse ODbaseIndexDialog
+// ODbaseIndexDialog ----------------------------------------------------------
 DBG_NAME(ODbaseIndexDialog)
-//-------------------------------------------------------------------------
+
 ODbaseIndexDialog::ODbaseIndexDialog( Window * pParent, String aDataSrcName )
     : ModalDialog( pParent, ModuleRes(DLG_DBASE_INDEXES) ),
     aPB_OK(             this, ModuleRes( PB_OK ) ),
@@ -86,14 +79,12 @@ ODbaseIndexDialog::ODbaseIndexDialog( Window * pParent, String aDataSrcName )
     FreeResource();
 }
 
-//-------------------------------------------------------------------------
 ODbaseIndexDialog::~ODbaseIndexDialog()
 {
 
     DBG_DTOR(ODbaseIndexDialog,NULL);
 }
 
-//-------------------------------------------------------------------------
 sal_Bool ODbaseIndexDialog::GetTable(const String& _rName, TableInfoListIterator& _rPosition)
 {
     for (   _rPosition = m_aTableInfoList.begin();
@@ -115,7 +106,6 @@ sal_Bool ODbaseIndexDialog::GetTable(const String& _rName, TableInfoListIterator
     return sal_False;
 }
 
-//-------------------------------------------------------------------------
 void ODbaseIndexDialog::checkButtons()
 {
     aIB_Add.Enable(0 != aLB_FreeIndexes.GetSelectEntryCount());
@@ -125,7 +115,6 @@ void ODbaseIndexDialog::checkButtons()
     aIB_RemoveAll.Enable(0 != aLB_TableIndexes.GetEntryCount());
 }
 
-//-------------------------------------------------------------------------
 OTableIndex ODbaseIndexDialog::implRemoveIndex(const String& _rName, TableIndexList& _rList, ListBox& _rDisplay, sal_Bool _bMustExist)
 {
     OTableIndex aReturn;
@@ -160,7 +149,6 @@ OTableIndex ODbaseIndexDialog::implRemoveIndex(const String& _rName, TableIndexL
     return aReturn;
 }
 
-//-------------------------------------------------------------------------
 void ODbaseIndexDialog::implInsertIndex(const OTableIndex& _rIndex, TableIndexList& _rList, ListBox& _rDisplay)
 {
     _rList.push_front( _rIndex );
@@ -168,7 +156,6 @@ void ODbaseIndexDialog::implInsertIndex(const OTableIndex& _rIndex, TableIndexLi
     _rDisplay.SelectEntryPos(0);
 }
 
-//-------------------------------------------------------------------------
 OTableIndex ODbaseIndexDialog::RemoveTableIndex( const String& _rTableName, const String& _rIndexName, sal_Bool _bMustExist )
 {
     OTableIndex aReturn;
@@ -181,7 +168,6 @@ OTableIndex ODbaseIndexDialog::RemoveTableIndex( const String& _rTableName, cons
     return implRemoveIndex(_rIndexName, aTablePos->aIndexList, aLB_TableIndexes, _bMustExist);
 }
 
-//-------------------------------------------------------------------------
 void ODbaseIndexDialog::InsertTableIndex( const String& _rTableName, const OTableIndex& _rIndex)
 {
     TableInfoListIterator aTablePos;
@@ -191,7 +177,6 @@ void ODbaseIndexDialog::InsertTableIndex( const String& _rTableName, const OTabl
     implInsertIndex(_rIndex, aTablePos->aIndexList, aLB_TableIndexes);
 }
 
-//-------------------------------------------------------------------------
 IMPL_LINK( ODbaseIndexDialog, OKClickHdl, PushButton*, /*pButton*/ )
 {
     // let all tables write their INF file
@@ -206,7 +191,6 @@ IMPL_LINK( ODbaseIndexDialog, OKClickHdl, PushButton*, /*pButton*/ )
     return 0;
 }
 
-//-------------------------------------------------------------------------
 IMPL_LINK( ODbaseIndexDialog, AddClickHdl, PushButton*, /*pButton*/ )
 {
     String aSelection = aLB_FreeIndexes.GetSelectEntry();
@@ -218,7 +202,6 @@ IMPL_LINK( ODbaseIndexDialog, AddClickHdl, PushButton*, /*pButton*/ )
     return 0;
 }
 
-//-------------------------------------------------------------------------
 IMPL_LINK( ODbaseIndexDialog, RemoveClickHdl, PushButton*, /*pButton*/ )
 {
     String aSelection = aLB_TableIndexes.GetSelectEntry();
@@ -230,7 +213,6 @@ IMPL_LINK( ODbaseIndexDialog, RemoveClickHdl, PushButton*, /*pButton*/ )
     return 0;
 }
 
-//-------------------------------------------------------------------------
 IMPL_LINK( ODbaseIndexDialog, AddAllClickHdl, PushButton*, /*pButton*/ )
 {
     sal_uInt16 nCnt = aLB_FreeIndexes.GetEntryCount();
@@ -243,7 +225,6 @@ IMPL_LINK( ODbaseIndexDialog, AddAllClickHdl, PushButton*, /*pButton*/ )
     return 0;
 }
 
-//-------------------------------------------------------------------------
 IMPL_LINK( ODbaseIndexDialog, RemoveAllClickHdl, PushButton*, /*pButton*/ )
 {
     sal_uInt16 nCnt = aLB_TableIndexes.GetEntryCount();
@@ -256,14 +237,12 @@ IMPL_LINK( ODbaseIndexDialog, RemoveAllClickHdl, PushButton*, /*pButton*/ )
     return 0;
 }
 
-//-------------------------------------------------------------------------
 IMPL_LINK( ODbaseIndexDialog, OnListEntrySelected, ListBox*, /*NOTINTERESTEDIN*/ )
 {
     checkButtons();
     return 0;
 }
 
-//-------------------------------------------------------------------------
 IMPL_LINK( ODbaseIndexDialog, TableSelectHdl, ComboBox*, pComboBox )
 {
     // search the table
@@ -286,7 +265,6 @@ IMPL_LINK( ODbaseIndexDialog, TableSelectHdl, ComboBox*, pComboBox )
     return 0;
 }
 
-//-------------------------------------------------------------------------
 void ODbaseIndexDialog::Init()
 {
     aPB_OK.Disable();
@@ -300,13 +278,11 @@ void ODbaseIndexDialog::Init()
     aIB_AddAll.Disable();
     aIB_RemoveAll.Disable();
 
-    ///////////////////////////////////////////////////////////////////////////
     // All indizes are first added to a list of free indizes.
     // Afterwards, check the index of each table in the Inf-file.
     // These indizes are removed from the list of free indizes and
     // entered in the indexlist of the the table.
 
-    ///////////////////////////////////////////////////////////////////////////
     // if the string does not contain a path, cut the string
     INetURLObject aURL;
     aURL.SetSmartProtocol(INET_PROT_FILE);
@@ -315,7 +291,6 @@ void ODbaseIndexDialog::Init()
         m_aDSN = aPathOptions.SubstituteVariable(m_aDSN);
     }
     aURL.SetSmartURL(m_aDSN);
-
 
     //  String aFileName = aURL.PathToFileName();
     m_aDSN = aURL.GetMainURL(INetURLObject::NO_DECODE);
@@ -331,7 +306,6 @@ void ODbaseIndexDialog::Init()
         return;
     }
 
-    ///////////////////////////////////////////////////////////////////////////
     // first assume for all indexes they're free
 
     Sequence< ::rtl::OUString> aFolderContent( ::utl::LocalFileHelper::GetFolderContents(m_aDSN,bFolder));
@@ -365,7 +339,6 @@ void ODbaseIndexDialog::Init()
             Config aInfFile( aTransformer.get(OFileNotation::N_SYSTEM) );
             aInfFile.SetGroup( aGroupIdent );
 
-            ///////////////////////////////////////////////////////////////////////////
             // fill the indexes list
             rtl::OString aNDX;
             sal_uInt16 nKeyCnt = aInfFile.GetKeyCount();
@@ -389,7 +362,6 @@ void ODbaseIndexDialog::Init()
                         // do this later below. We may not have encountered the index file, yet, thus we may not
                         // know the index as beeing free, yet
                 }
-
             }
         }
     }
@@ -413,7 +385,6 @@ void ODbaseIndexDialog::Init()
     checkButtons();
 }
 
-//-------------------------------------------------------------------------
 void ODbaseIndexDialog::SetCtrls()
 {
     // ComboBox Tabellen
@@ -438,7 +409,6 @@ void ODbaseIndexDialog::SetCtrls()
 
         if( rTabInfo.aIndexList.size() )
             aLB_TableIndexes.SelectEntryPos( 0 );
-
     }
 
     // ListBox of the free indizes
@@ -451,14 +421,11 @@ void ODbaseIndexDialog::SetCtrls()
     if( m_aFreeIndexList.size() )
         aLB_FreeIndexes.SelectEntryPos( 0 );
 
-
     TableSelectHdl(&aCB_Tables);
     checkButtons();
 }
 
-//////////////////////////////////////////////////////////////////////////
-// Class OTableInfo
-//-------------------------------------------------------------------------
+// OTableInfo ------------------------------------------------------------------
 void OTableInfo::WriteInfFile( const String& rDSN ) const
 {
     // INF-Datei oeffnen
@@ -528,15 +495,14 @@ void OTableInfo::WriteInfFile( const String& rDSN ) const
         catch (const Exception& e )
         {
             (void)e;  // make compiler happy
-            // simply silent this. The strange algorithm here does a lot of things even if no files at all were
-            // created or accessed, so it's possible that the file we're trying to delete does not even exist,
-            // and this is a valid condition.
+            // simply silent this. The strange algorithm here does a lot of
+            // things even if no files at all were created or accessed, so it's
+            // possible that the file we're trying to delete does not even
+            // exist, and this is a valid condition.
         }
     }
 }
 
-//.........................................................................
-}   // namespace dbaui
-//.........................................................................
+} // namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

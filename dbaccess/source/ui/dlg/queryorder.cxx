@@ -19,9 +19,7 @@
 
 #include "queryorder.hrc"
 #include "queryorder.hxx"
-
 #include "dbustrings.hrc"
-
 #include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
 #include <com/sun/star/sdbc/ColumnSearch.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -31,11 +29,8 @@
 #include <connectivity/dbtools.hxx>
 #include <comphelper/extract.hxx>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
-
 #include <tools/diagnose_ex.h>
-
 #include <algorithm>
-
 
 using namespace dbaui;
 using namespace connectivity;
@@ -48,7 +43,7 @@ using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::beans;
 
 DBG_NAME(DlgOrderCrit)
-//------------------------------------------------------------------------------
+
 DlgOrderCrit::DlgOrderCrit( Window * pParent,
                             const Reference< XConnection>& _rxConnection,
                             const Reference< XSingleSelectQueryComposer >& _rxComposer,
@@ -140,16 +135,13 @@ DlgOrderCrit::DlgOrderCrit( Window * pParent,
     aLB_ORDERFIELD2.SetSelectHdl(LINK(this,DlgOrderCrit,FieldListSelectHdl));
 
     FreeResource();
-
 }
 
-//------------------------------------------------------------------------------
 DlgOrderCrit::~DlgOrderCrit()
 {
     DBG_DTOR(DlgOrderCrit,NULL);
 }
 
-//------------------------------------------------------------------------------
 IMPL_LINK_INLINE_START( DlgOrderCrit, FieldListSelectHdl, ListBox *, /*pListBox*/ )
 {
     DBG_CHKTHIS(DlgOrderCrit,NULL);
@@ -158,7 +150,6 @@ IMPL_LINK_INLINE_START( DlgOrderCrit, FieldListSelectHdl, ListBox *, /*pListBox*
 }
 IMPL_LINK_INLINE_END( DlgOrderCrit, FieldListSelectHdl, ListBox *, pListBox )
 
-//------------------------------------------------------------------------------
 void DlgOrderCrit::impl_initializeOrderList_nothrow()
 {
     try
@@ -191,7 +182,6 @@ void DlgOrderCrit::impl_initializeOrderList_nothrow()
     }
 }
 
-//------------------------------------------------------------------------------
 void DlgOrderCrit::EnableLines()
 {
     DBG_CHKTHIS(DlgOrderCrit,NULL);
@@ -225,7 +215,6 @@ void DlgOrderCrit::EnableLines()
     }
 }
 
-//------------------------------------------------------------------------------
 ::rtl::OUString DlgOrderCrit::GetOrderList( ) const
 {
     DBG_CHKTHIS(DlgOrderCrit,NULL);
@@ -278,16 +267,10 @@ void DlgOrderCrit::EnableLines()
     return sOrder;
 }
 
-//------------------------------------------------------------------------------
 void DlgOrderCrit::BuildOrderPart()
 {
     DBG_CHKTHIS(DlgOrderCrit,NULL);
     m_xQueryComposer->setOrder(GetOrderList());
 }
-// -----------------------------------------------------------------------------
-
-
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

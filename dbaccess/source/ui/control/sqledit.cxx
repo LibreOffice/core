@@ -33,14 +33,9 @@
 #include "querycontroller.hxx"
 #include "undosqledit.hxx"
 #include "QueryDesignView.hxx"
-
 #include <svl/smplhint.hxx>
 
 namespace css = ::com::sun::star;
-
-//////////////////////////////////////////////////////////////////////////
-// OSqlEdit
-//------------------------------------------------------------------------------
 using namespace dbaui;
 
 class OSqlEdit::ChangesListener:
@@ -110,7 +105,6 @@ OSqlEdit::OSqlEdit( OQueryTextView* pParent,  WinBits nWinStyle ) :
     EnableFocusSelectionHide( sal_False );
 }
 
-//------------------------------------------------------------------------------
 OSqlEdit::~OSqlEdit()
 {
     DBG_DTOR(OSqlEdit,NULL);
@@ -126,7 +120,7 @@ OSqlEdit::~OSqlEdit()
     }
     m_ColorConfig.RemoveListener(this);
 }
-//------------------------------------------------------------------------------
+
 void OSqlEdit::KeyInput( const KeyEvent& rKEvt )
 {
     DBG_CHKTHIS(OSqlEdit,NULL);
@@ -145,7 +139,6 @@ void OSqlEdit::KeyInput( const KeyEvent& rKEvt )
         m_bAccelAction = sal_False;
 }
 
-//------------------------------------------------------------------------------
 sal_Bool OSqlEdit::IsInAccelAct()
 {
     DBG_CHKTHIS(OSqlEdit,NULL);
@@ -156,7 +149,6 @@ sal_Bool OSqlEdit::IsInAccelAct()
     return m_bAccelAction;
 }
 
-//------------------------------------------------------------------------------
 void OSqlEdit::GetFocus()
 {
     DBG_CHKTHIS(OSqlEdit,NULL);
@@ -164,7 +156,6 @@ void OSqlEdit::GetFocus()
     MultiLineEditSyntaxHighlight::GetFocus();
 }
 
-//------------------------------------------------------------------------------
 IMPL_LINK_NOARG(OSqlEdit, OnUndoActionTimer)
 {
     String aText  =GetText();
@@ -185,7 +176,7 @@ IMPL_LINK_NOARG(OSqlEdit, OnUndoActionTimer)
 
     return 0L;
 }
-//------------------------------------------------------------------------------
+
 IMPL_LINK_NOARG(OSqlEdit, OnInvalidateTimer)
 {
     OJoinController& rController = m_pView->getContainerWindow()->getDesignView()->getController();
@@ -195,7 +186,7 @@ IMPL_LINK_NOARG(OSqlEdit, OnInvalidateTimer)
         m_timerInvalidate.Start();
     return 0L;
 }
-//------------------------------------------------------------------------------
+
 IMPL_LINK(OSqlEdit, ModifyHdl, void*, /*EMPTYTAG*/)
 {
     if (m_timerUndoActionCreation.IsActive())
@@ -214,7 +205,6 @@ IMPL_LINK(OSqlEdit, ModifyHdl, void*, /*EMPTYTAG*/)
     return 0;
 }
 
-//------------------------------------------------------------------------------
 void OSqlEdit::SetText(const String& rNewText)
 {
     DBG_CHKTHIS(OSqlEdit,NULL);
@@ -227,14 +217,14 @@ void OSqlEdit::SetText(const String& rNewText)
     MultiLineEditSyntaxHighlight::SetText(rNewText);
     m_strOrigText  =rNewText;
 }
-// -----------------------------------------------------------------------------
+
 void OSqlEdit::stopTimer()
 {
     m_bStopTimer = sal_True;
     if (m_timerInvalidate.IsActive())
         m_timerInvalidate.Stop();
 }
-// -----------------------------------------------------------------------------
+
 void OSqlEdit::startTimer()
 {
     m_bStopTimer = sal_False;
@@ -268,6 +258,5 @@ void OSqlEdit::ImplSetFont()
     aSettings.SetStyleSettings(aStyleSettings);
     SetSettings(aSettings);
 }
-//==============================================================================
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

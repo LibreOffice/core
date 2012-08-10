@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "adtabdlg.hxx"
 #include "adtabdlg.hrc"
 #include "sqlmessage.hxx"
@@ -39,7 +38,6 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include "UITools.hxx"
 #include "imageprovider.hxx"
-
 #include <comphelper/containermultiplexer.hxx>
 #include "cppuhelper/basemutex.hxx"
 #include <algorithm>
@@ -54,16 +52,12 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
 using namespace dbtools;
 
-//==============================================================================
-//= TableObjectListFacade
-//==============================================================================
+// TableObjectListFacade -------------------------------------------------------
 TableObjectListFacade::~TableObjectListFacade()
 {
 }
 
-//==============================================================================
-//= TableListFacade
-//==============================================================================
+// TableListFacade -------------------------------------------------------------
 class TableListFacade : public ::cppu::BaseMutex
                     ,   public TableObjectListFacade
                     ,   public ::comphelper::OContainerListener
@@ -84,7 +78,6 @@ public:
     }
     virtual ~TableListFacade();
 
-
 private:
     virtual void    updateTableObjectList( bool _bAllowViews );
     virtual String  getSelectedName( String& _out_rAliasName ) const;
@@ -100,7 +93,7 @@ TableListFacade::~TableListFacade()
     if ( m_pContainerListener.is() )
         m_pContainerListener->dispose();
 }
-//------------------------------------------------------------------------------
+
 String TableListFacade::getSelectedName( String& _out_rAliasName ) const
 {
     SvLBoxEntry* pEntry = m_rTableList.FirstSelected();
@@ -142,21 +135,21 @@ String TableListFacade::getSelectedName( String& _out_rAliasName ) const
     _out_rAliasName = aTableName;
     return aComposedName;
 }
-// -----------------------------------------------------------------------------
+
 void TableListFacade::_elementInserted( const container::ContainerEvent& /*_rEvent*/ )  throw(::com::sun::star::uno::RuntimeException)
 {
     updateTableObjectList(m_bAllowViews);
 }
-// -----------------------------------------------------------------------------
+
 void TableListFacade::_elementRemoved( const container::ContainerEvent& /*_rEvent*/ ) throw(::com::sun::star::uno::RuntimeException)
 {
     updateTableObjectList(m_bAllowViews);
 }
-// -----------------------------------------------------------------------------
+
 void TableListFacade::_elementReplaced( const container::ContainerEvent& /*_rEvent*/ ) throw(::com::sun::star::uno::RuntimeException)
 {
 }
-//------------------------------------------------------------------------------
+
 void TableListFacade::updateTableObjectList( bool _bAllowViews )
 {
     m_bAllowViews = _bAllowViews;
@@ -222,16 +215,13 @@ void TableListFacade::updateTableObjectList( bool _bAllowViews )
     }
 }
 
-//------------------------------------------------------------------------------
 bool TableListFacade::isLeafSelected() const
 {
     SvLBoxEntry* pEntry = m_rTableList.FirstSelected();
     return pEntry && !m_rTableList.GetModel()->HasChildren( pEntry );
 }
 
-//==============================================================================
-//= QueryListFacade
-//==============================================================================
+// QueryListFacade -------------------------------------------------------------
 class QueryListFacade : public ::cppu::BaseMutex
                     ,   public TableObjectListFacade
                     ,   public ::comphelper::OContainerListener
@@ -249,6 +239,7 @@ public:
     {
     }
     virtual ~QueryListFacade();
+
 private:
     virtual void    updateTableObjectList( bool _bAllowViews );
     virtual String  getSelectedName( String& _out_rAliasName ) const;
@@ -258,29 +249,29 @@ private:
     virtual void _elementRemoved( const  ::com::sun::star::container::ContainerEvent& _rEvent ) throw(::com::sun::star::uno::RuntimeException);
     virtual void _elementReplaced( const ::com::sun::star::container::ContainerEvent& _rEvent ) throw(::com::sun::star::uno::RuntimeException);
 };
+
 QueryListFacade::~QueryListFacade()
 {
     if ( m_pContainerListener.is() )
         m_pContainerListener->dispose();
 }
-// -----------------------------------------------------------------------------
+
 void QueryListFacade::_elementInserted( const container::ContainerEvent& _rEvent )  throw(::com::sun::star::uno::RuntimeException)
 {
     ::rtl::OUString sName;
     if ( _rEvent.Accessor >>= sName )
         m_rQueryList.InsertEntry( sName );
 }
-// -----------------------------------------------------------------------------
+
 void QueryListFacade::_elementRemoved( const container::ContainerEvent& /*_rEvent*/ ) throw(::com::sun::star::uno::RuntimeException)
 {
     updateTableObjectList(true);
 }
-// -----------------------------------------------------------------------------
+
 void QueryListFacade::_elementReplaced( const container::ContainerEvent& /*_rEvent*/ ) throw(::com::sun::star::uno::RuntimeException)
 {
 }
 
-//------------------------------------------------------------------------------
 void QueryListFacade::updateTableObjectList( bool /*_bAllowViews*/ )
 {
     m_rQueryList.Clear();
@@ -312,7 +303,6 @@ void QueryListFacade::updateTableObjectList( bool /*_bAllowViews*/ )
     }
 }
 
-//------------------------------------------------------------------------------
 String QueryListFacade::getSelectedName( String& _out_rAliasName ) const
 {
     String sSelected;
@@ -322,17 +312,13 @@ String QueryListFacade::getSelectedName( String& _out_rAliasName ) const
     return sSelected;
 }
 
-//------------------------------------------------------------------------------
 bool QueryListFacade::isLeafSelected() const
 {
     SvLBoxEntry* pEntry = m_rQueryList.FirstSelected();
     return pEntry && !m_rQueryList.GetModel()->HasChildren( pEntry );
 }
 
-//==============================================================================
-//= OAddTableDlg
-//==============================================================================
-//------------------------------------------------------------------------------
+// OAddTableDlg ----------------------------------------------------------------
 OAddTableDlg::OAddTableDlg( Window* pParent, IAddTableDialogContext& _rContext )
              :ModelessDialog( pParent, ModuleRes(DLG_JOIN_TABADD) )
              ,m_aCaseTables( this, ModuleRes( RB_CASE_TABLES ) )
@@ -352,7 +338,6 @@ OAddTableDlg::OAddTableDlg( Window* pParent, IAddTableDialogContext& _rContext )
     m_aTableList.SetHelpId( HID_JOINSH_ADDTAB_TABLELIST );
     m_aQueryList.SetHelpId( HID_JOINSH_ADDTAB_QUERYLIST );
 
-    //////////////////////////////////////////////////////////////////////
     m_aCaseTables.SetClickHdl( LINK( this, OAddTableDlg, OnTypeSelected ) );
     m_aCaseQueries.SetClickHdl( LINK( this, OAddTableDlg, OnTypeSelected ) );
     aAddButton.SetClickHdl( LINK( this, OAddTableDlg, AddClickHdl ) );
@@ -362,7 +347,6 @@ OAddTableDlg::OAddTableDlg( Window* pParent, IAddTableDialogContext& _rContext )
     m_aQueryList.SetDoubleClickHdl( LINK( this, OAddTableDlg, TableListDoubleClickHdl ) );
     m_aQueryList.SetSelectHdl( LINK( this, OAddTableDlg, TableListSelectHdl ) );
 
-    //////////////////////////////////////////////////////////////////////
     m_aTableList.EnableInplaceEditing( sal_False );
     m_aTableList.SetStyle(m_aTableList.GetStyle() | WB_BORDER | WB_HASLINES |WB_HASBUTTONS | WB_HASBUTTONSATROOT | WB_HASLINESATROOT | WB_SORT | WB_HSCROLL );
     m_aTableList.EnableCheckButton( NULL ); // do not show any buttons
@@ -370,11 +354,9 @@ OAddTableDlg::OAddTableDlg( Window* pParent, IAddTableDialogContext& _rContext )
     m_aTableList.notifyHiContrastChanged();
     m_aTableList.suppressEmptyFolders();
 
-    //////////////////////////////////////////////////////////////////////
     m_aQueryList.EnableInplaceEditing( sal_False );
     m_aQueryList.SetSelectionMode( SINGLE_SELECTION );
 
-    //////////////////////////////////////////////////////////////////////
     if ( !m_rContext.allowQueries() )
     {
         m_aCaseTables.Hide();
@@ -396,13 +378,11 @@ OAddTableDlg::OAddTableDlg( Window* pParent, IAddTableDialogContext& _rContext )
     SetText( getDialogTitleForContext( m_rContext ) );
 }
 
-//------------------------------------------------------------------------------
 OAddTableDlg::~OAddTableDlg()
 {
     m_rContext.onWindowClosing( this );
 }
 
-//------------------------------------------------------------------------------
 void OAddTableDlg::impl_switchTo( ObjectList _eList )
 {
     switch ( _eList )
@@ -424,7 +404,6 @@ void OAddTableDlg::impl_switchTo( ObjectList _eList )
     m_pCurrentList->updateTableObjectList( m_rContext.allowViews() );
 }
 
-//------------------------------------------------------------------------------
 void OAddTableDlg::Update()
 {
     if ( !m_pCurrentList.get() )
@@ -433,7 +412,6 @@ void OAddTableDlg::Update()
         m_pCurrentList->updateTableObjectList( m_rContext.allowViews() );
 }
 
-//------------------------------------------------------------------------------
 void OAddTableDlg::impl_addTable()
 {
     if ( m_pCurrentList->isLeafSelected() )
@@ -445,14 +423,12 @@ void OAddTableDlg::impl_addTable()
     }
 }
 
-//------------------------------------------------------------------------------
 IMPL_LINK( OAddTableDlg, AddClickHdl, Button*, /*pButton*/ )
 {
     TableListDoubleClickHdl(NULL);
     return 0;
 }
 
-//------------------------------------------------------------------------------
 IMPL_LINK( OAddTableDlg, TableListDoubleClickHdl, void*, /*EMPTY_ARG*/ )
 {
     if ( impl_isAddAllowed() )
@@ -466,20 +442,17 @@ IMPL_LINK( OAddTableDlg, TableListDoubleClickHdl, void*, /*EMPTY_ARG*/ )
     return 0L;  // not handled
 }
 
-//------------------------------------------------------------------------------
 IMPL_LINK( OAddTableDlg, TableListSelectHdl, void*, /*EMPTY_ARG*/ )
 {
     aAddButton.Enable( m_pCurrentList->isLeafSelected() );
     return 0;
 }
 
-//------------------------------------------------------------------------------
 IMPL_LINK( OAddTableDlg, CloseClickHdl, Button*, /*pButton*/ )
 {
     return Close();
 }
 
-//------------------------------------------------------------------------------
 IMPL_LINK( OAddTableDlg, OnTypeSelected, void*, /*EMPTY_ARG*/ )
 {
     if ( m_aCaseTables.IsChecked() )
@@ -489,20 +462,17 @@ IMPL_LINK( OAddTableDlg, OnTypeSelected, void*, /*EMPTY_ARG*/ )
     return 0;
 }
 
-//------------------------------------------------------------------------------
 sal_Bool OAddTableDlg::Close()
 {
     m_rContext.onWindowClosing( this );
     return ModelessDialog::Close();
 }
 
-//------------------------------------------------------------------------------
 bool OAddTableDlg::impl_isAddAllowed()
 {
     return  m_rContext.allowAddition();
 }
 
-//------------------------------------------------------------------------------
 String OAddTableDlg::getDialogTitleForContext( IAddTableDialogContext& _rContext )
 {
     String sTitle;
@@ -515,7 +485,5 @@ String OAddTableDlg::getDialogTitleForContext( IAddTableDialogContext& _rContext
 
     return sTitle;
 }
-
-// -----------------------------------------------------------------------------
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,23 +17,19 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "marktree.hxx"
 #include "dbu_control.hrc"
 #include <vcl/svapp.hxx>
 
-//.........................................................................
 namespace dbaui
 {
     using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::lang;
-//.........................................................................
+    using namespace ::com::sun::star::lang;
+
 #define SPACEBETWEENENTRIES     4
-//========================================================================
-//= OMarkableTreeListBox
-//========================================================================
+
 DBG_NAME(OMarkableTreeListBox)
-//------------------------------------------------------------------------
+
 OMarkableTreeListBox::OMarkableTreeListBox( Window* pParent, const Reference< XMultiServiceFactory >& _rxORB, WinBits nWinStyle )
     : DBTreeListBox(pParent,_rxORB,nWinStyle)
 {
@@ -41,7 +37,7 @@ OMarkableTreeListBox::OMarkableTreeListBox( Window* pParent, const Reference< XM
 
     InitButtonData();
 }
-//------------------------------------------------------------------------
+
 OMarkableTreeListBox::OMarkableTreeListBox( Window* pParent, const Reference< XMultiServiceFactory >& _rxORB, const ResId& rResId)
     : DBTreeListBox(pParent,_rxORB,rResId)
 {
@@ -49,14 +45,14 @@ OMarkableTreeListBox::OMarkableTreeListBox( Window* pParent, const Reference< XM
 
     InitButtonData();
 }
-//------------------------------------------------------------------------
+
 OMarkableTreeListBox::~OMarkableTreeListBox()
 {
     delete m_pCheckButton;
 
     DBG_DTOR(OMarkableTreeListBox,NULL);
 }
-//------------------------------------------------------------------------
+
 void OMarkableTreeListBox::Paint(const Rectangle& _rRect)
 {
     if (!IsEnabled())
@@ -74,13 +70,13 @@ void OMarkableTreeListBox::Paint(const Rectangle& _rRect)
     else
         DBTreeListBox::Paint(_rRect);
 }
-//------------------------------------------------------------------------
+
 void OMarkableTreeListBox::InitButtonData()
 {
     m_pCheckButton = new SvLBoxButtonData( this );
     EnableCheckButton( m_pCheckButton );
 }
-//------------------------------------------------------------------------
+
 void OMarkableTreeListBox::KeyInput( const KeyEvent& rKEvt )
 {
     // nur wenn space
@@ -102,9 +98,8 @@ void OMarkableTreeListBox::KeyInput( const KeyEvent& rKEvt )
     }
     else
         DBTreeListBox::KeyInput(rKEvt);
-
 }
-//------------------------------------------------------------------------
+
 SvButtonState OMarkableTreeListBox::implDetermineState(SvLBoxEntry* _pEntry)
 {
     SvButtonState eState = GetCheckButtonState(_pEntry);
@@ -167,11 +162,9 @@ SvButtonState OMarkableTreeListBox::implDetermineState(SvLBoxEntry* _pEntry)
     // finally set the entry to the state we just determined
     SetCheckButtonState(_pEntry, eState);
 
-    // outta here
     return eState;
 }
 
-//------------------------------------------------------------------------
 void OMarkableTreeListBox::CheckButtons()
 {
     SvLBoxEntry* pEntry = GetModel()->First();
@@ -181,7 +174,7 @@ void OMarkableTreeListBox::CheckButtons()
         pEntry = GetModel()->NextSibling(pEntry);
     }
 }
-//------------------------------------------------------------------------
+
 void OMarkableTreeListBox::CheckButtonHdl()
 {
     checkedButton_noBroadcast(GetHdlEntry());
@@ -189,7 +182,6 @@ void OMarkableTreeListBox::CheckButtonHdl()
         m_aCheckButtonHandler.Call(this);
 }
 
-//------------------------------------------------------------------------
 void OMarkableTreeListBox::checkedButton_noBroadcast(SvLBoxEntry* _pEntry)
 {
     SvButtonState eState = GetCheckButtonState( _pEntry);
@@ -223,9 +215,6 @@ void OMarkableTreeListBox::checkedButton_noBroadcast(SvLBoxEntry* _pEntry)
     CheckButtons();
 }
 
-//------------------------------------------------------------------------
-//.........................................................................
-}   // namespace dbaui
-//.........................................................................
+} // namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

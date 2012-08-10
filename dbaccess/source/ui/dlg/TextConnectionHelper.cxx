@@ -16,15 +16,13 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+
 #include "moduledbu.hxx"
-
 #include "TextConnectionHelper.hxx"
-
 #include "sqlmessage.hxx"
 #include "dbu_dlg.hrc"
 #include "dbu_resource.hrc"
 #include "AutoControls.hrc"
-
 #include <svl/itemset.hxx>
 #include <svl/stritem.hxx>
 #include <svl/eitem.hxx>
@@ -42,32 +40,21 @@
 #include "dbadmin.hxx"
 #include <comphelper/string.hxx>
 #include <comphelper/types.hxx>
-
 #include <com/sun/star/ui/dialogs/XFolderPicker.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
-
 #include <svl/filenotation.hxx>
-
 #include <unotools/localfilehelper.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <ucbhelper/commandenvironment.hxx>
 #include "finteraction.hxx"
-
 #include "DBSetupConnectionPages.hxx"
-
 #include <unotools/pathoptions.hxx>
-
 #include <svtools/roadmapwizard.hxx>
-
 
 namespace dbaui
 {
-
-    //========================================================================
-    //= OTextConnectionPageSetup
-    //========================================================================
 DBG_NAME(OTextConnectionHelper)
-//------------------------------------------------------------------------
+
     OTextConnectionHelper::OTextConnectionHelper( Window* pParent, const short _nAvailableSections )
         :Control( pParent, WB_DIALOGCONTROL )
         ,m_aFTExtensionHeader       (this, ModuleRes(FT_AUTOEXTENSIONHEADER))
@@ -214,28 +201,23 @@ DBG_NAME(OTextConnectionHelper)
         Show();
     }
 
-    // -----------------------------------------------------------------------
     OTextConnectionHelper::~OTextConnectionHelper()
     {
 
         DBG_DTOR(OTextConnectionHelper,NULL);
     }
 
-
-    // -----------------------------------------------------------------------
     IMPL_LINK(OTextConnectionHelper, OnControlModified, Control*, /*EMPTYARG*/)
     {
         callModifiedHdl();
         return 0L;
     }
 
-    // -----------------------------------------------------------------------
     IMPL_LINK(OTextConnectionHelper, OnEditModified, Edit*, /*_pEdit*/)
     {
         m_aGetExtensionHandler.Call(this);
         return 0L;
     }
-
 
     IMPL_LINK(OTextConnectionHelper, OnSetExtensionHdl, RadioButton*, /*_pRadioButton*/)
     {
@@ -246,8 +228,6 @@ DBG_NAME(OTextConnectionHelper)
         return 0L;
     }
 
-
-    // -----------------------------------------------------------------------
     void OTextConnectionHelper::fillControls(::std::vector< ISaveValueWrapper* >& _rControlList)
     {
         _rControlList.push_back(new OSaveValueWrapper<ComboBox>(&m_aFieldSeparator));
@@ -257,7 +237,7 @@ DBG_NAME(OTextConnectionHelper)
         _rControlList.push_back(new OSaveValueWrapper<CheckBox>(&m_aRowHeader));
         _rControlList.push_back(new OSaveValueWrapper<ListBox>(&m_aCharSet));
     }
-    // -----------------------------------------------------------------------
+
     void OTextConnectionHelper::fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList)
     {
         _rControlList.push_back(new ODisableWrapper<FixedText>(&m_aFieldSeparatorLabel));
@@ -269,7 +249,6 @@ DBG_NAME(OTextConnectionHelper)
         _rControlList.push_back(new ODisableWrapper<ListBox>(&m_aCharSet));
     }
 
-    // -----------------------------------------------------------------------
     void OTextConnectionHelper::implInitControls(const SfxItemSet& _rSet, sal_Bool _bValid)
     {
         if ( !_bValid )
@@ -308,9 +287,6 @@ DBG_NAME(OTextConnectionHelper)
         }
     }
 
-
-
-    // -----------------------------------------------------------------------
     sal_Bool OTextConnectionHelper::prepareLeave()
     {
         LocalResourceAccess aStringResAccess(PAGE_TEXT, RSC_TABPAGE);
@@ -386,8 +362,6 @@ DBG_NAME(OTextConnectionHelper)
         return 0;
     }
 
-
-    // -----------------------------------------------------------------------
     sal_Bool OTextConnectionHelper::FillItemSet( SfxItemSet& rSet, const sal_Bool _bChangedSomething )
     {
         sal_Bool bChangedSomething = _bChangedSomething;
@@ -445,7 +419,6 @@ DBG_NAME(OTextConnectionHelper)
         return bChangedSomething;
     }
 
-
     void OTextConnectionHelper::SetExtension(const String& _rVal)
     {
         if (_rVal.EqualsAscii("txt"))
@@ -458,7 +431,6 @@ DBG_NAME(OTextConnectionHelper)
             m_aFTExtensionExample.SetText(_rVal);
         }
     }
-
 
     String OTextConnectionHelper::GetExtension()
     {
@@ -476,8 +448,6 @@ DBG_NAME(OTextConnectionHelper)
         return sExtension;
     }
 
-
-    //------------------------------------------------------------------------
     String OTextConnectionHelper::GetSeparator( const ComboBox& rBox, const String& rList )
     {
         sal_Unicode nTok = '\t';
@@ -494,7 +464,6 @@ DBG_NAME(OTextConnectionHelper)
         return rtl::OUString();
     }
 
-    //------------------------------------------------------------------------
     void OTextConnectionHelper::SetSeparator( ComboBox& rBox, const String& rList, const String& rVal )
     {
         char    nTok = '\t';
@@ -522,9 +491,6 @@ DBG_NAME(OTextConnectionHelper)
                 rBox.SetText( rVal.Copy(0, 1) );
         }
     }
-
-//.........................................................................
-}   // namespace dbaui
-//.........................................................................
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
