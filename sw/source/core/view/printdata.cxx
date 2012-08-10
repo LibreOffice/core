@@ -78,6 +78,7 @@ void SwRenderData::CreatePostItData( SwDoc *pDoc, const SwViewOption *pViewOpt, 
     m_pPostItFields = new _SetGetExpFlds;
     lcl_GetPostIts( pDoc, m_pPostItFields );
     m_pPostItDoc    = new SwDoc;
+    m_pPostItDoc->acquire();
 
     //!! Disable spell and grammar checking in the temporary document.
     //!! Otherwise the grammar checker might process it and crash if we later on
@@ -94,11 +95,15 @@ void SwRenderData::DeletePostItData()
     if (HasPostItData())
     {
         m_pPostItDoc->setPrinter( 0, false, false );  //damit am echten DOC der Drucker bleibt
-        delete m_pPostItShell;        //Nimmt das PostItDoc mit ins Grab.
-        delete m_pPostItFields;
-        m_pPostItDoc    = 0;
+        delete m_pPostItShell;
         m_pPostItShell  = 0;
+        delete m_pPostItFields;
         m_pPostItFields = 0;
+        if ( !m_pPostItDoc->release() )
+        {
+            delete m_pPostItDoc;
+        }
+        m_pPostItDoc    = 0;
     }
 }
 

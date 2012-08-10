@@ -2783,6 +2783,10 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
         }
         else
         {
+            if ( m_pRenderData->HasPostItData() )
+            {
+                m_pRenderData->DeletePostItData();
+            }
             const sal_Int16 nPostItMode = (sal_Int16) m_pPrintUIOptions->getIntValue( "PrintAnnotationMode", 0 );
             if (nPostItMode != POSTITS_NONE)
             {
