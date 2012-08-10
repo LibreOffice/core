@@ -926,7 +926,7 @@ UnoImageControlControl::UnoImageControlControl( const Reference< XMultiServiceFa
     :UnoImageControlControl_Base( i_factory )
     ,maActionListeners( *this )
 {
-    // Woher die Defaults nehmen?
+    // TODO: Where should I look for defaults?
     maComponentInfos.nWidth = 100;
     maComponentInfos.nHeight = 100;
 }

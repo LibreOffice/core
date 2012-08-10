@@ -258,8 +258,8 @@ sal_Bool lcl_ImplIsParent( Window* pParentWindow, Window* pPossibleChild )
 
 void UnoWrapper::WindowDestroyed( Window* pWindow )
 {
-    // ggf. existieren noch von ::com::sun::star::loader::Java erzeugte Children, die sonst erst
-    // im Garbage-Collector zerstoert werden...
+    // their still might be some children created with ::com::sun::star::loader::Java
+    // that would otherwise not be destroyed until the garbage collector cleans up
     Window* pChild = pWindow->GetWindow( WINDOW_FIRSTCHILD );
     while ( pChild )
     {

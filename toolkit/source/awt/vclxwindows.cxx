@@ -467,7 +467,7 @@ void VCLXButton::setActionCommand( const ::rtl::OUString& rCommand ) throw(::com
     if ( pButton )
     {
         Size aMinSz = pButton->CalcMinimumSize();
-        // Kein Text, also Image
+        // no text, thus image
         if ( !pButton->GetText().Len() )
         {
             if ( aSz.Width() < aMinSz.Width() )
