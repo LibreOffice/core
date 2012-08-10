@@ -2,7 +2,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -38,9 +38,31 @@ $(eval $(call gb_UnoApi_set_include,offapi,\
 	-I$(OUTDIR)/idl \
 ))
 
-
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/accessibility,\
+	AccessBridge \
+	Accessible \
+	AccessibleContext \
+))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/animations,\
 	TargetPropertiesCreator \
+))
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/auth,\
+	AuthenticationFailedException \
+	SSOExceptions \
+	SSOManagerFactory \
+	SSOPasswordCache \
+	InvalidArgumentException \
+	InvalidContextException \
+	InvalidCredentialException \
+	InvalidPrincipalException \
+	PersistenceFailureException \
+	UnsupportedException \
+	XSSOAcceptorContext \
+	XSSOContext \
+	XSSOInitiatorContext \
+	XSSOManager \
+	XSSOManagerFactory \
+	XSSOPasswordCache \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/awt,\
 	AsyncCallback \
@@ -289,16 +311,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/xml/sax,\
 
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star,\
 	modules \
-))
-$(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/accessibility,\
-	AccessBridge \
-	Accessible \
-	AccessibleContext \
-))
-$(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/auth,\
-	SSOExceptions \
-	SSOManagerFactory \
-	SSOPasswordCache \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/awt,\
 	AccessibleButton \
@@ -1619,21 +1631,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/animations,\
 	XTargetPropertiesCreator \
 	XTimeContainer \
 	XTransitionFilter \
-))
-$(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/auth,\
-	AuthenticationFailedException \
-	InvalidArgumentException \
-	InvalidContextException \
-	InvalidCredentialException \
-	InvalidPrincipalException \
-	PersistenceFailureException \
-	UnsupportedException \
-	XSSOAcceptorContext \
-	XSSOContext \
-	XSSOInitiatorContext \
-	XSSOManager \
-	XSSOManagerFactory \
-	XSSOPasswordCache \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/awt,\
 	ActionEvent \
