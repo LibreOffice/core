@@ -36,8 +36,6 @@
 
 const size_t nScCompressedArrayDelta = 4;
 
-template< typename A, typename D > class ScCompressedArrayIterator;
-
 /** Compressed array of row (or column) entries, e.g. heights, flags, ...
 
     The array stores ranges of values such that consecutive values occupy only
@@ -102,13 +100,8 @@ public:
     // methods public for the coupled array sum methods
     /** Obtain index into entries for nPos */
     SC_DLLPUBLIC size_t                      Search( A nPos ) const;
-    /** Get number of entries */
-    size_t                      GetEntryCount() const;
 
 protected:
-
-friend class ScCompressedArrayIterator<A,D>;
-
     size_t                      nCount;
     size_t                      nLimit;
     size_t                      nDelta;
@@ -164,184 +157,6 @@ const D& ScCompressedArray<A,D>::GetNextValue( size_t& nIndex, A& nEnd ) const
     nEnd = pData[nEntry].nEnd;
     return pData[nEntry].aValue;
 }
-
-
-template< typename A, typename D >
-size_t ScCompressedArray<A,D>::GetEntryCount() const
-{
-    return nCount;
-}
-
-
-// === ScCompressedArrayIterator =============================================
-
-/** Iterator for ScCompressedArray.
-
-    @ATTENTION: the iterator is not persistant if the underlying
-    ScCompressedArray happens to be changed by any means, for example by
-    setting new values or adding or removing or combining entries. If you do
-    such things inside a loop you MUST resynchronize the iterator by calling
-    <method>Resync()</method> with the row where resynchronization should
-    start. After doing so, <method>GetRangeStart()</method> and
-    <method>GetRangeEnd()</method> may not point to the previous access points
-    anymore. Use with care.
- */
-
-template< typename A, typename D > class ScCompressedArrayIterator
-{
-public:
-                                ScCompressedArrayIterator(
-                                        const ScCompressedArray<A,D> & rArray,
-                                        A nStart, A nEnd );
-    /// Set new start and end, position on start.
-    void                        NewLimits( A nStart, A nEnd );
-    A                           GetIterStart() const;
-    A                           GetIterEnd() const;
-    /// Advance by a single access point (e.g. row).
-    bool                        operator ++();
-    A                           GetPos() const;
-                                operator bool() const;
-    const D&                    operator *() const;
-    /// Advance an entire range, one entry of the array.
-    bool                        NextRange();
-    A                           GetRangeStart() const;
-    A                           GetRangeEnd() const;
-    /// Resync to underlying array, calling Search().
-    void                        Resync( A nPos );
-    /** Set position without resyncing, avoid calling Search() if possible.
-        Position obtained from steering coupled iterator is NOT checked for
-        iterator bounds. */
-    template< typename X >
-    void                        Follow( const ScCompressedArrayIterator<A,X>& );
-
-private:
-    const ScCompressedArray<A,D> &  rArray;
-    size_t                          nIndex;
-    A                               nIterStart;
-    A                               nIterEnd;
-    A                               nCurrent;
-    bool                            bEnd;
-};
-
-
-template< typename A, typename D >
-ScCompressedArrayIterator<A,D>::ScCompressedArrayIterator(
-        const ScCompressedArray<A,D> & rArrayP, A nStart, A nEnd )
-    : rArray( rArrayP )
-    // other values set in NewLimits()
-{
-    NewLimits( nStart, nEnd);
-}
-
-
-template< typename A, typename D >
-void ScCompressedArrayIterator<A,D>::NewLimits( A nStart, A nEnd )
-{
-    nIterStart = nStart;
-    nIterEnd = nEnd;
-    nIndex = rArray.Search( nStart);
-    nCurrent = GetRangeStart();
-    bEnd = (nIterEnd < nIterStart);
-}
-
-
-template< typename A, typename D >
-A ScCompressedArrayIterator<A,D>::GetIterStart() const
-{
-    return nIterStart;
-}
-
-
-template< typename A, typename D >
-A ScCompressedArrayIterator<A,D>::GetIterEnd() const
-{
-    return nIterEnd;
-}
-
-
-template< typename A, typename D >
-bool ScCompressedArrayIterator<A,D>::operator++()
-{
-    if (nCurrent < GetRangeEnd())
-    {
-        ++nCurrent;
-        return true;
-    }
-    else
-        return NextRange();
-}
-
-
-template< typename A, typename D >
-A ScCompressedArrayIterator<A,D>::GetPos() const
-{
-    return nCurrent;
-}
-
-
-template< typename A, typename D >
-bool ScCompressedArrayIterator<A,D>::NextRange()
-{
-    if (!operator bool())
-        return false;
-
-    if (rArray.pData[nIndex].nEnd >= nIterEnd)
-        bEnd = true;
-    else if (++nIndex >= rArray.GetEntryCount())
-    {
-        nIndex = rArray.GetEntryCount() - 1;
-        bEnd = true;
-    }
-    nCurrent = bEnd ? nIterEnd : GetRangeStart();
-    return operator bool();
-}
-
-
-template< typename A, typename D >
-ScCompressedArrayIterator<A,D>::operator bool() const
-{
-    return !bEnd;
-}
-
-
-template< typename A, typename D >
-const D& ScCompressedArrayIterator<A,D>::operator*() const
-{
-    return rArray.pData[nIndex].aValue;
-}
-
-
-template< typename A, typename D >
-A ScCompressedArrayIterator<A,D>::GetRangeStart() const
-{
-    if (nIndex == 0)
-        return nIterStart > 0 ? nIterStart : 0;
-    else
-        return nIterStart > rArray.pData[nIndex-1].nEnd ? nIterStart :
-            rArray.pData[nIndex-1].nEnd + 1;
-}
-
-
-template< typename A, typename D >
-A ScCompressedArrayIterator<A,D>::GetRangeEnd() const
-{
-    return nIterEnd < rArray.pData[nIndex].nEnd ? nIterEnd :
-        rArray.pData[nIndex].nEnd;
-}
-
-
-template< typename A, typename D >
-void ScCompressedArrayIterator<A,D>::Resync( A nPos )
-{
-    if (nPos < nIterStart)
-        nPos = nIterStart;
-    else if (nPos > nIterEnd)
-        nPos = nIterEnd;
-    nCurrent = nPos;
-    bEnd = (nIterEnd < nIterStart);
-    nIndex = rArray.Search( nPos);
-}
-
 
 // === ScBitMaskCompressedArray ==============================================
 

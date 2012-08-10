@@ -456,35 +456,8 @@ A ScBitMaskCompressedArray<A,D>::GetLastAnyBitAccess( A nStart,
     return nEnd;
 }
 
-
-// === ScCompressedArrayIterator =============================================
-
-template< typename A, typename D >
-template< typename X >
-void ScCompressedArrayIterator<A,D>::Follow(
-        const ScCompressedArrayIterator<A,X>& rIter )
-{
-    nCurrent = rIter.GetPos();
-    if (GetRangeStart() <= nCurrent && nCurrent <= GetRangeEnd())
-        ; // nothing
-    else if (nCurrent > GetRangeEnd())
-    {
-        A nPos = nCurrent;  // nCurrent gets changed in NextRange()
-        bool bAdv;
-        do
-        {
-            bAdv = NextRange();
-        } while (bAdv && GetRangeEnd() < nPos);
-        nCurrent = nPos;
-    }
-    else
-        nIndex = rArray.Search( nCurrent);
-}
-
-
 // === Force instantiation of specializations ================================
 
-template class ScCompressedArray< SCROW, sal_uInt16>;           // heights, base class
 template class ScCompressedArray< SCROW, sal_uInt8>;             // flags, base class
 template class ScBitMaskCompressedArray< SCROW, sal_uInt8>;      // flags
 

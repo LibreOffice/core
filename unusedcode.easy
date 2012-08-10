@@ -3,15 +3,6 @@ PlaceEditDialog::GetResId(unsigned short)
 PopupMenu::SetSelectedEntry(unsigned short)
 SanExtensionImpl::setCertExtn(com::sun::star::uno::Sequence<signed char>, com::sun::star::uno::Sequence<signed char>, unsigned char)
 SanExtensionImpl::setCertExtn(unsigned char*, unsigned int, unsigned char*, unsigned int, unsigned char)
-ScCompressedArray<int, unsigned char>::GetEntryCount() const
-ScCompressedArray<int, unsigned short>::CopyFrom(ScCompressedArray<int, unsigned short> const&, int, int, long)
-ScCompressedArray<int, unsigned short>::GetEntryCount() const
-ScCompressedArray<int, unsigned short>::GetValue(int) const
-ScCompressedArray<int, unsigned short>::Insert(int, unsigned long)
-ScCompressedArray<int, unsigned short>::Remove(int, unsigned long)
-ScCompressedArray<int, unsigned short>::ScCompressedArray(int, unsigned short const&, unsigned long)
-ScCompressedArray<int, unsigned short>::ScCompressedArray(int, unsigned short const*, unsigned long)
-ScCompressedArray<int, unsigned short>::SetValue(int, unsigned short const&)
 ScVbaFormat<ooo::vba::excel::XRange>::setNumberFormat(com::sun::star::lang::Locale, rtl::OUString const&)
 ScVbaFormat<ooo::vba::excel::XStyle>::getAddIndent()
 ScVbaFormat<ooo::vba::excel::XStyle>::setAddIndent(com::sun::star::uno::Any const&)
