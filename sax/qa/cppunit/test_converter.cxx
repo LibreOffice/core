@@ -54,6 +54,7 @@ public:
     void testBool();
     void testPercent();
     void testColor();
+    void testNumber();
 
     CPPUNIT_TEST_SUITE(ConverterTest);
     CPPUNIT_TEST(testDuration);
@@ -63,6 +64,7 @@ public:
     CPPUNIT_TEST(testBool);
     CPPUNIT_TEST(testPercent);
     CPPUNIT_TEST(testColor);
+    CPPUNIT_TEST(testNumber);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -467,6 +469,24 @@ void ConverterTest::testColor()
     doTestColorToString("#5bcd15", 123456789);
     doTestColorToString("#fffac7", -1337);
     doTestColorToString("#000000", 0);
+}
+
+void doTestNumberToString(char const*const pis, sal_Int32 nValue)
+{
+    ::rtl::OUString const is(::rtl::OUString::createFromAscii(pis));
+    ::rtl::OUStringBuffer buf;
+    Converter::convertNumber(buf, nValue);
+    OSL_TRACE("%s", ::rtl::OUStringToOString(buf.getStr(), RTL_TEXTENCODING_UTF8).getStr());
+    CPPUNIT_ASSERT_EQUAL(is, buf.makeStringAndClear());
+}
+
+void ConverterTest::testNumber()
+{
+    doTestNumberToString("333", 333);
+    doTestNumberToString("-1", -1);
+    doTestNumberToString("0", 0000);
+    doTestNumberToString("-1", -0001);
+    doTestNumberToString("0", -0);
 }
 CPPUNIT_TEST_SUITE_REGISTRATION(ConverterTest);
 
