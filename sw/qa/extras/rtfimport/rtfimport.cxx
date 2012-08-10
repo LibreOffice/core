@@ -102,6 +102,7 @@ public:
     void testFdo48033();
     void testFdo36089();
     void testFdo49892();
+    void testFdo48446();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -146,6 +147,7 @@ public:
     CPPUNIT_TEST(testFdo48033);
     CPPUNIT_TEST(testFdo36089);
     CPPUNIT_TEST(testFdo49892);
+    CPPUNIT_TEST(testFdo48446);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -884,6 +886,14 @@ void Test::testFdo49892()
             CPPUNIT_ASSERT_EQUAL(text::RelOrientation::PAGE_FRAME, getProperty<sal_Int16>(xDraws->getByIndex(i), "VertOrientRelation"));
         }
     }
+}
+
+void Test::testFdo48446()
+{
+    load("fdo48446.rtf");
+
+    OUString aExpected("Имя", 6, RTL_TEXTENCODING_UTF8);
+    getParagraph(1, aExpected);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

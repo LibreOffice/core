@@ -2490,6 +2490,9 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         case RTF_ANSICPG:
             m_aStates.top().nCurrentEncoding = rtl_getTextEncodingFromWindowsCodePage(nParam);
             break;
+        case RTF_CPG:
+            m_aFontEncodings[m_nCurrentFontIndex] = rtl_getTextEncodingFromWindowsCodePage(nParam);
+            break;
         case RTF_CF:
             {
                 // NS_sprm::LN_CIco won't work, that would be an index in a static table
