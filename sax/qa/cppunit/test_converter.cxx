@@ -471,6 +471,16 @@ void ConverterTest::testColor()
     doTestColorToString("#000000", 0);
 }
 
+void doTestStringToNumber(sal_Int32 nValue, char const*const pis, sal_Int32 nMin, sal_Int32 nMax)
+{
+    ::rtl::OUString const is(::rtl::OUString::createFromAscii(pis));
+    sal_Int32 nTemp;
+    bool bSuccess(Converter::convertNumber(nTemp, is, nMin, nMax));
+    OSL_TRACE("%i", nTemp);
+    CPPUNIT_ASSERT(bSuccess);
+    CPPUNIT_ASSERT_EQUAL(nValue, nTemp);
+}
+
 void doTestNumberToString(char const*const pis, sal_Int32 nValue)
 {
     ::rtl::OUString const is(::rtl::OUString::createFromAscii(pis));
@@ -482,6 +492,11 @@ void doTestNumberToString(char const*const pis, sal_Int32 nValue)
 
 void ConverterTest::testNumber()
 {
+    doTestStringToNumber(30, "30", 1, 40);
+    doTestStringToNumber(1, "-5", 1, 300);
+    doTestStringToNumber(-30, "7", -100, -30);
+    doTestStringToNumber(0, "-0", 0, 1);
+    doTestStringToNumber(0, "666", -0, 0);
     doTestNumberToString("333", 333);
     doTestNumberToString("-1", -1);
     doTestNumberToString("0", 0000);
