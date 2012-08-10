@@ -387,7 +387,7 @@ void ODbaseIndexDialog::Init()
 
 void ODbaseIndexDialog::SetCtrls()
 {
-    // ComboBox Tabellen
+    // ComboBox tables
     for (   ConstTableInfoListIterator aLoop = m_aTableInfoList.begin();
             aLoop != m_aTableInfoList.end();
             ++aLoop
@@ -428,7 +428,7 @@ void ODbaseIndexDialog::SetCtrls()
 // OTableInfo ------------------------------------------------------------------
 void OTableInfo::WriteInfFile( const String& rDSN ) const
 {
-    // INF-Datei oeffnen
+    // open INF file
     INetURLObject aURL;
     aURL.SetSmartProtocol(INET_PROT_FILE);
     String aDsn = rDSN;

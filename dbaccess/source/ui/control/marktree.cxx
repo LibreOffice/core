@@ -79,7 +79,7 @@ void OMarkableTreeListBox::InitButtonData()
 
 void OMarkableTreeListBox::KeyInput( const KeyEvent& rKEvt )
 {
-    // nur wenn space
+    // only if there are spaces
     if (rKEvt.GetKeyCode().GetCode() == KEY_SPACE && !rKEvt.GetKeyCode().IsShift() && !rKEvt.GetKeyCode().IsMod1())
     {
         SvLBoxEntry* pCurrentHandlerEntry = GetHdlEntry();

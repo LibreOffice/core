@@ -343,7 +343,7 @@ DBG_NAME(OTextConnectionHelper)
             pErrorWin = &m_aTextSeparator;
         }
         else if (m_aTextSeparator.GetText() == m_aDecimalSeparator.GetText())
-        {   // Zehner und TextTrenner duerfen nicht gleich sein
+        {   // Tenner and TextSeparator must not be the same
             aErrorText = String(ModuleRes(STR_AUTODELIMITER_MUST_DIFFER));
             aErrorText.SearchAndReplaceAscii("#1",m_aTextSeparatorLabel.GetText());
             aErrorText.SearchAndReplaceAscii("#2",m_aDecimalSeparatorLabel.GetText());

@@ -727,7 +727,7 @@ IMPL_LINK( DlgFilterCrit, ListSelectHdl, ListBox *, pListBox )
         }
         else
         {
-            OSL_FAIL("DlgFilterCrit::ListSelectHdl: Diese Column d�rfte garnicht vorhanden sein!");
+            OSL_FAIL("DlgFilterCrit::ListSelectHdl: This column should not exist at all.");
         }
     }
     pComp->SelectEntryPos(0);
