@@ -51,12 +51,14 @@ public:
     void testDateTime();
     void testDouble();
     void testMeasure();
+    void testBool();
 
     CPPUNIT_TEST_SUITE(ConverterTest);
     CPPUNIT_TEST(testDuration);
     CPPUNIT_TEST(testDateTime);
     CPPUNIT_TEST(testDouble);
     CPPUNIT_TEST(testMeasure);
+    CPPUNIT_TEST(testBool);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -370,6 +372,22 @@ void ConverterTest::testMeasure()
     doTestMeasureToString("979.928cm", 555550, MeasureUnit::TWIP, MeasureUnit::CM);
     doTestMeasureToString("111.1pt", 2222, MeasureUnit::TWIP, MeasureUnit::POINT);
     doTestMeasureToString("385.7986in", 555550, MeasureUnit::TWIP, MeasureUnit::INCH);
+}
+
+void doTestStringToBool(bool bBool, char const*const pis)
+{
+    ::rtl::OUString const is(::rtl::OUString::createFromAscii(pis));
+    bool bTemp;
+    bool bSuccess(Converter::convertBool(bTemp, is));
+    OSL_TRACE("%s", bTemp);
+    CPPUNIT_ASSERT(bSuccess);
+    CPPUNIT_ASSERT_EQUAL(bBool, bTemp);
+
+}
+void ConverterTest::testBool()
+{
+    doTestStringToBool(true, "true");
+    doTestStringToBool(false, "false");
 }
 CPPUNIT_TEST_SUITE_REGISTRATION(ConverterTest);
 
