@@ -38,6 +38,7 @@ namespace css = ::com::sun::star;
 namespace sd
 {
     class Communicator;
+    class BufferedStreamSocket;
 
     struct ClientInfo
     {
@@ -53,14 +54,14 @@ namespace sd
     struct ClientInfoInternal:
         ClientInfo
     {
-        osl::StreamSocket mStreamSocket;
+        BufferedStreamSocket *mpStreamSocket;
         rtl::OUString mPin;
 
         ClientInfoInternal( const rtl::OUString rName,
                             const rtl::OUString rAddress,
-                            osl::StreamSocket &rSocket, rtl::OUString rPin ):
+                            BufferedStreamSocket *pSocket, rtl::OUString rPin ):
                 ClientInfo( rName, rAddress ),
-                mStreamSocket( rSocket ),
+                mpStreamSocket( pSocket ),
                 mPin( rPin ) {}
     };
 
@@ -77,7 +78,8 @@ namespace sd
 
             // For the control dialog
             SD_DLLPUBLIC static std::vector<ClientInfo*> getClients();
-            SD_DLLPUBLIC static void connectClient( ClientInfo aClient, rtl::OString aPin );
+            SD_DLLPUBLIC static sal_Bool connectClient( ClientInfo *pClient,
+                                                        rtl::OUString aPin );
 
             // For the communicator
             static void removeCommunicator( Communicator* pCommunicator );

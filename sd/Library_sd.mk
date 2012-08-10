@@ -327,6 +327,7 @@ $(eval $(call gb_Library_add_exception_objects,sd,\
     sd/source/ui/presenter/PresenterPreviewCache \
     sd/source/ui/presenter/PresenterTextView \
     sd/source/ui/presenter/SlideRenderer \
+    sd/source/ui/remotecontrol/BufferedStreamSocket \
     sd/source/ui/remotecontrol/Communicator \
     sd/source/ui/remotecontrol/DiscoveryService \
     sd/source/ui/remotecontrol/ImagePreparer \

@@ -22,9 +22,9 @@ using namespace std;
 using namespace com::sun::star;
 using namespace osl;
 
-Communicator::Communicator( StreamSocket &aSocket ):
+Communicator::Communicator( BufferedStreamSocket *pSocket ):
     Thread( "CommunicatorThread" ),
-    mSocket( aSocket ),
+    mpSocket( pSocket ),
     pTransmitter( 0 ),
     mListener( 0 )
 {
@@ -37,8 +37,11 @@ Communicator::~Communicator()
 // Run as a thread
 void Communicator::execute()
 {
-    pTransmitter = new Transmitter( mSocket );
+    pTransmitter = new Transmitter( *mpSocket );
     pTransmitter->launch();
+
+    pTransmitter->addMessage( "LO_SERVER_SERVER_PAIRED\n\n",
+                              Transmitter::PRIORITY_HIGH );
     Receiver aReceiver( pTransmitter );
     try {
         uno::Reference< lang::XMultiServiceFactory > xServiceManager(
@@ -65,7 +68,7 @@ void Communicator::execute()
     while ( true )
     {
         aBuffer.resize( aRead + 100 );
-        aRet = mSocket.recv( &aBuffer[aRead], 100 );
+        aRet = mpSocket->recv( &aBuffer[aRead], 100 );
         if ( aRet == 0 )
         {
             break; // I.e. transmission finished.
@@ -93,6 +96,8 @@ void Communicator::execute()
     pTransmitter->notifyFinished();
     pTransmitter->join();
     pTransmitter = NULL;
+
+    delete mpSocket;
 
     RemoteServer::removeCommunicator( this );
 }

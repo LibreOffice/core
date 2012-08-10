@@ -68,11 +68,39 @@ void RemoteServer::execute()
     while ( true )
     {
         StreamSocket aSocket;
-        if ( mSocket.acceptConnection( aSocket ) == osl_Socket_Error ) {
+        if ( mSocket.acceptConnection( aSocket ) == osl_Socket_Error )
+        {
+            return; // Closed, or other issue.
+        }
+        BufferedStreamSocket *pSocket = new BufferedStreamSocket( aSocket);
+        OString aLine;
+        if ( pSocket->readLine( aLine)
+            && aLine.equals( "LO_SERVER_CLIENT_PAIR" ) &&
+            pSocket->readLine( aLine ) )
+        {
+            OString aName( aLine );
+
+            if ( ! pSocket->readLine( aLine ) ) delete pSocket;
+            OString aPin( aLine );
+
+            SocketAddr aClientAddr;
+            pSocket->getPeerAddr( aClientAddr );
+            OUString aAddress = aClientAddr.getHostname();
+
             MutexGuard aGuard( mDataMutex );
-            // FIXME: read one line in, parse the data.
-            mAvailableClients.push_back( new ClientInfoInternal( "A name",
-                                        "An address", aSocket, "0000" ) );
+            mAvailableClients.push_back( new ClientInfoInternal(
+                    OStringToOUString( aName, RTL_TEXTENCODING_UTF8 ),
+                    aAddress, pSocket, OStringToOUString( aPin,
+                    RTL_TEXTENCODING_UTF8 ) ) );
+
+            // Read off any additional non-empty lines
+            do
+            {
+                pSocket->readLine( aLine );
+            }
+            while ( aLine.getLength() > 0 );
+        } else {
+            delete pSocket;
         }
     }
 
@@ -141,10 +169,34 @@ std::vector<ClientInfo*> RemoteServer::getClients()
     return aClients;
 }
 
-void RemoteServer::connectClient( ClientInfo aClient, rtl::OString aPin )
+sal_Bool RemoteServer::connectClient( ClientInfo* pClient, rtl::OUString aPin )
 {
-    (void) aClient;
-    (void) aPin;
+    if ( !spServer )
+        return false;
+
+    ClientInfoInternal *apClient = (ClientInfoInternal*) pClient;
+    if ( apClient->mPin.equals( aPin ) )
+    {
+        Communicator* pCommunicator = new Communicator( apClient->mpStreamSocket );
+        MutexGuard aGuard( spServer->mDataMutex );
+
+        spServer->mCommunicators.push_back( pCommunicator );
+
+        for ( vector<ClientInfoInternal*>::iterator aIt = spServer->mAvailableClients.begin();
+            aIt < spServer->mAvailableClients.end(); aIt++ )
+        {
+            if ( pClient == *aIt )
+            {
+                spServer->mAvailableClients.erase( aIt );
+            break;
+            }
+        }
+        return true;
+    }
+    else
+    {
+        return false;
+    }
 }
 
 void SdDLL::RegisterRemotes()

@@ -22,6 +22,8 @@
 
 #include <com/sun/star/presentation/XSlideShowController.hpp>
 
+#include "BufferedStreamSocket.hxx"
+
 #define CHARSET RTL_TEXTENCODING_UTF8
 namespace css = ::com::sun::star;
 
@@ -40,7 +42,7 @@ namespace sd
     class Communicator : public salhelper::Thread
     {
         public:
-            Communicator( osl::StreamSocket &aSocket );
+            Communicator( BufferedStreamSocket *pSocket );
             ~Communicator();
 
             Transmitter* getTransmitter();
@@ -51,7 +53,7 @@ namespace sd
 
         private:
             void execute();
-            osl::StreamSocket mSocket;
+            BufferedStreamSocket *mpSocket;
 
             Transmitter *pTransmitter;
             rtl::Reference<Listener> mListener;
