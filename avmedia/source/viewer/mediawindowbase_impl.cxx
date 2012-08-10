@@ -76,7 +76,7 @@ uno::Reference< media::XPlayer > MediaWindowBaseImpl::createPlayer( const ::rtl:
                 xManager = uno::Reference< ::com::sun::star::media::XManager >(
                         xFactory->createInstance( AVMEDIA_MANAGER_SERVICE_NAME ),
                         uno::UNO_QUERY );
-            } catch ( const uno::Exception &e ) {
+            } catch ( const uno::Exception & ) {
             }
 
 // a fallback path just for gstreamer which has
