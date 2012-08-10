@@ -148,33 +148,11 @@ public class DocumentLoader
             if (event1.getX() - event2.getX() > 120) {
                 if (((PageViewer)flipper.getCurrentView()).currentPageNumber == pageCount-1)
                     return false;
-
-                Animation inFromRight = new TranslateAnimation(Animation.RELATIVE_TO_SELF, 1, Animation.RELATIVE_TO_SELF, 0,
-                                                               Animation.RELATIVE_TO_SELF, 0, Animation.RELATIVE_TO_SELF, 0);
-                inFromRight.setDuration(500);
-                flipper.setInAnimation(inFromRight);
-
-                Animation outToLeft = new TranslateAnimation(Animation.RELATIVE_TO_SELF, 0, Animation.RELATIVE_TO_SELF, -1,
-                                                             Animation.RELATIVE_TO_SELF, 0, Animation.RELATIVE_TO_SELF, 0);
-                outToLeft.setDuration(500);
-                flipper.setOutAnimation(outToLeft);
-
                 documentViewer.nextPage();
                 return true;
             } else if (event2.getX() - event1.getX() > 120) {
                 if (((PageViewer)flipper.getCurrentView()).currentPageNumber == 0)
                     return false;
-
-                Animation inFromLeft = new TranslateAnimation(Animation.RELATIVE_TO_SELF, -1, Animation.RELATIVE_TO_SELF, 0,
-                                                              Animation.RELATIVE_TO_SELF, 0, Animation.RELATIVE_TO_SELF, 0);
-                inFromLeft.setDuration(500);
-                flipper.setInAnimation(inFromLeft);
-
-                Animation outToRight = new TranslateAnimation(Animation.RELATIVE_TO_SELF, 0, Animation.RELATIVE_TO_SELF, 1,
-                                                              Animation.RELATIVE_TO_SELF, 0, Animation.RELATIVE_TO_SELF, 0);
-                outToRight.setDuration(500);
-                flipper.setOutAnimation(outToRight);
-
                 documentViewer.prevPage();
                 return true;
             }
@@ -811,12 +789,43 @@ public class DocumentLoader
                 Log.i( TAG , "Page " + Integer.toString( newPage ) + " is out of Bounds [0," + Integer.toString(lastPage) + "]" );
                 return;
             }
+            if( newPage - currentPage > 0 ){
+                setAnimationInFromRight();
+            }else{
+                setAnimationInFromLeft();
+            }
             viewFlipper.addView( fetch( newPage ) );
             viewFlipper.setDisplayedChild( 1 );//remove after so that transition has two pages.
             viewFlipper.removeViewAt( 0 );
             preFetch( newPage - 1 );
             preFetch( newPage +1 );
             currentPage = newPage;
+        }
+
+        private void setAnimationInFromRight(){//going forward
+            Animation inFromRight = new TranslateAnimation(Animation.RELATIVE_TO_SELF, 1, Animation.RELATIVE_TO_SELF, 0,
+                                                           Animation.RELATIVE_TO_SELF, 0, Animation.RELATIVE_TO_SELF, 0);
+            inFromRight.setDuration(500);
+            viewFlipper.setInAnimation(inFromRight);
+
+            Animation outToLeft = new TranslateAnimation(Animation.RELATIVE_TO_SELF, 0, Animation.RELATIVE_TO_SELF, -1,
+                                                         Animation.RELATIVE_TO_SELF, 0, Animation.RELATIVE_TO_SELF, 0);
+            outToLeft.setDuration(500);
+            viewFlipper.setOutAnimation(outToLeft);
+            return;
+        }
+
+        private void setAnimationInFromLeft(){
+            Animation inFromLeft = new TranslateAnimation(Animation.RELATIVE_TO_SELF, -1, Animation.RELATIVE_TO_SELF, 0,
+                                                          Animation.RELATIVE_TO_SELF, 0, Animation.RELATIVE_TO_SELF, 0);
+            inFromLeft.setDuration(500);
+            viewFlipper.setInAnimation(inFromLeft);
+
+            Animation outToRight = new TranslateAnimation(Animation.RELATIVE_TO_SELF, 0, Animation.RELATIVE_TO_SELF, 1,
+                                                          Animation.RELATIVE_TO_SELF, 0, Animation.RELATIVE_TO_SELF, 0);
+            outToRight.setDuration(500);
+            viewFlipper.setOutAnimation(outToRight);
+            return;
         }
 
         private PageViewer fetch( int page ){
