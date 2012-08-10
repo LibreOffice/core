@@ -8,3 +8,13 @@ mkdir: %_DEST%\inc\liblangtag
 
 symlink: %_DEST%\lib\liblangtag.so.0.1.0    %_DEST%\lib\liblangtag.so.0
 symlink: %_DEST%\lib\liblangtag.so.0.1.0    %_DEST%\lib\liblangtag.so
+
+# Unpacked data needed for test_languagetag in i18npool.
+mkdir: %_DEST%\share
+mkdir: %_DEST%\share\liblangtag
+mkdir: %_DEST%\share\liblangtag\common
+mkdir: %_DEST%\share\liblangtag\common\bcp47
+..\%__SRC%\misc\install\install-liblangtag\share\liblangtag\*               %_DEST%\share\liblangtag\
+..\%__SRC%\misc\install\install-liblangtag\share\liblangtag\common\bcp47\*  %_DEST%\share\liblangtag\common\bcp47\
+..\%__SRC%\misc\install\@.__________________________________________________OOO\share\liblangtag\*               %_DEST%\share\liblangtag\
+..\%__SRC%\misc\install\@.__________________________________________________OOO\share\liblangtag\common\bcp47\*  %_DEST%\share\liblangtag\common\bcp47\

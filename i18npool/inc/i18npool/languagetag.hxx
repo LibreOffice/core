@@ -119,6 +119,11 @@ public:
     /** If this is a valid BCP 47 language tag. */
     bool                            isValidBcp47() const;
 
+    /** Needed for unit test in build environment, must be called before any
+        LanguageTag is instanciated.
+     */
+    static void                     overrideDataPath( const rtl::OUString& rPath );
+
 private:
 
     enum Decision

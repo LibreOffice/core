@@ -61,6 +61,7 @@ public:
         if (mnRef != SAL_MAX_UINT32 && mnRef && !--mnRef)
             teardown();
     }
+    void presetDataPath( const rtl::OUString& rPath );
 private:
     rtl::OString maDataPath;   // path to liblangtag data, "|" if system
     sal_uInt32   mnRef;
@@ -100,6 +101,15 @@ void LiblantagDataRef::teardown()
     lt_db_finalize();
 }
 
+void LiblantagDataRef::presetDataPath( const rtl::OUString& rPath )
+{
+    if (maDataPath.isEmpty())
+    {
+        maDataPath = OUStringToOString( rPath, RTL_TEXTENCODING_UTF8);
+        lt_db_set_datadir( maDataPath.getStr());
+    }
+}
+
 void LiblantagDataRef::setupDataPath()
 {
     // maDataPath is assumed to be empty here.
@@ -121,6 +131,13 @@ void LiblantagDataRef::setupDataPath()
         maDataPath = "|";   // assume system
     else
         lt_db_set_datadir( maDataPath.getStr());
+}
+
+
+// static
+void LanguageTag::overrideDataPath( const rtl::OUString& rPath )
+{
+    theDataRef.presetDataPath( rPath);
 }
 
 
@@ -696,76 +713,6 @@ bool LanguageTag::isValidBcp47() const
     }
     return meIsValid == DECISION_YES;
 }
-
-
-#ifdef erDEBUG
-void dbg_languagetag()
-{
-    LanguageTag de_DE( "de-Latn-DE", true);
-    de_DE.getBcp47();
-    de_DE.getLocale();
-    de_DE.getLanguageType();
-    de_DE.getLanguage();
-    de_DE.getLanguageAndScript();
-    de_DE.getScript();
-    de_DE.getCountry();
-    de_DE.getRegion();
-    de_DE.isIsoLocale();
-    de_DE.isIsoODF();
-
-    LanguageTag SystemLocale( lang::Locale("","",""));
-    SystemLocale.getBcp47();
-    SystemLocale.getLocale();
-    SystemLocale.getLanguageType();
-    SystemLocale.getLanguage();
-    SystemLocale.getLanguageAndScript();
-    SystemLocale.getScript();
-    SystemLocale.getCountry();
-    SystemLocale.getRegion();
-    SystemLocale.isIsoLocale();
-    SystemLocale.isIsoODF();
-    SystemLocale.isValidBcp47();
-
-    LanguageTag SystemLang( LANGUAGE_SYSTEM);
-    SystemLang.getBcp47();
-    SystemLang.getLocale();
-    SystemLang.getLanguageType();
-    SystemLang.getLanguage();
-    SystemLang.getLanguageAndScript();
-    SystemLang.getScript();
-    SystemLang.getCountry();
-    SystemLang.getRegion();
-    SystemLang.isIsoLocale();
-    SystemLang.isIsoODF();
-    SystemLang.isValidBcp47();
-
-    LanguageTag SystemBcp47( "");
-    SystemBcp47.getBcp47();
-    SystemBcp47.getLocale();
-    SystemBcp47.getLanguageType();
-    SystemBcp47.getLanguage();
-    SystemBcp47.getLanguageAndScript();
-    SystemBcp47.getScript();
-    SystemBcp47.getCountry();
-    SystemBcp47.getRegion();
-    SystemBcp47.isIsoLocale();
-    SystemBcp47.isIsoODF();
-    SystemBcp47.isValidBcp47();
-
-    LanguageTag wab( "wrong-and-bad");
-    wab.getBcp47();
-    wab.getLocale();
-    wab.getLanguageType();
-    wab.getLanguage();
-    wab.getLanguageAndScript();
-    wab.getScript();
-    wab.getCountry();
-    wab.getRegion();
-    wab.isIsoLocale();
-    wab.isIsoODF();
-    wab.isValidBcp47();
-}
-#endif
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
