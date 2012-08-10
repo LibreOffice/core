@@ -2263,7 +2263,7 @@ void SwRefPageGetFieldType::UpdateField( SwTxtFld* pTxtFld,
 
         if( itLast != rSetList.begin() )
         {
-            itLast--;
+            --itLast;
             const SwTxtFld* pRefTxtFld = (*itLast)->GetFld();
             const SwRefPageSetField* pSetFld =
                         (SwRefPageSetField*)pRefTxtFld->GetFld().GetFld();
@@ -2353,7 +2353,7 @@ void SwRefPageGetField::ChangeExpansion( const SwFrm* pFrm,
 
     if( itLast == aTmpLst.begin() )
         return;        // es gibt kein entsprechendes Set - Feld vor mir
-    itLast--;
+    --itLast;
 
     const SwTxtFld* pRefTxtFld = (*itLast)->GetFld();
     const SwRefPageSetField* pSetFld =

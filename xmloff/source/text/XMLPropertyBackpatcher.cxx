@@ -88,7 +88,7 @@ void XMLPropertyBackpatcher<A>::ResolveId(
             // preserve version
             for(BackpatchListType::iterator aIter = pList->begin();
                 aIter != pList->end();
-                aIter++)
+                ++aIter)
             {
                 Reference<XPropertySet> xProp = (*aIter);
                 Any aPres = xProp->getPropertyValue(sPreservePropertyName);
@@ -101,7 +101,7 @@ void XMLPropertyBackpatcher<A>::ResolveId(
             // without preserve
             for(BackpatchListType::iterator aIter = pList->begin();
                 aIter != pList->end();
-                aIter++)
+                ++aIter)
             {
                 (*aIter)->setPropertyValue(sPropertyName, aAny);
             }

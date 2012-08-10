@@ -723,7 +723,7 @@ sal_Bool SwCrsrShell::MoveFldType( const SwFieldType* pFldType, sal_Bool bNext,
             {
                 if( it == aSrtLst.begin() )
                     return sal_False; // no more steps backward possible
-                it--;
+                --it;
             }
         }
         else // not found
@@ -737,7 +737,7 @@ sal_Bool SwCrsrShell::MoveFldType( const SwFieldType* pFldType, sal_Bool bNext,
             {
                 if( it == aSrtLst.begin() )
                     return sal_False; // no more steps backward possible
-                it--;
+                --it;
             }
         }
     }

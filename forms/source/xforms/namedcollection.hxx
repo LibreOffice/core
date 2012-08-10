@@ -57,7 +57,7 @@ public:
         std::vector<rtl::OUString> aNames;
         for( typename std::vector<T>::const_iterator aIter = maItems.begin();
              aIter != maItems.end();
-             aIter++ )
+             ++aIter )
         {
             com::sun::star::uno::Reference<com::sun::star::container::XNamed>
                 xNamed( *aIter, com::sun::star::uno::UNO_QUERY );
@@ -78,7 +78,7 @@ protected:
     {
         for( typename std::vector<T>::const_iterator aIter = maItems.begin();
              aIter != maItems.end();
-             aIter++ )
+             ++aIter )
         {
             com::sun::star::uno::Reference<com::sun::star::container::XNamed>
                 xNamed( *aIter, com::sun::star::uno::UNO_QUERY );

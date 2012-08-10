@@ -161,7 +161,7 @@ sal_uIntPtr UniqueIndexImpl::NextIndex(sal_uIntPtr aIndex) const
     const_iterator it = find( aIndex );
     if ( it == end() )
         return UNIQUEINDEX_ENTRY_NOTFOUND;
-    it++;
+    ++it;
     if ( it == end() )
         return UNIQUEINDEX_ENTRY_NOTFOUND;
     return it->first;
