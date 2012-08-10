@@ -538,11 +538,7 @@ sub add_bundled_extension_blobs
         {
             push @bundle_files, $bundlehttpsrc . $name;
         }
-        # file:// extensions are taken from the solver bin/ directory.
-        for my $name (ExtensionsLst::GetExtensionList("file", @installer::globals::languageproducts))
-        {
-            push @bundle_files, $bundlefilesrc . $name;
-        }
+        # file:// extensions are added as pre-registered in add_bundled_prereg_extension().
     }
 
     installer::logger::print_message(
@@ -606,11 +602,11 @@ sub add_bundled_prereg_extensions
     }
     else
     {
-        # Add the default rextensions for the current language set.
-
-        # file:// URLs are currently handled by add_bundled_extension_blobs(@), therefore
-        # we may not their handling here anmore.
-        # @bundle_files = ExtensionsLst::GetExtensionList("file", @installer::globals::languageproducts);
+        # Add extensions from file:// URLs.
+        for my $name (ExtensionsLst::GetExtensionList("file", @installer::globals::languageproducts))
+        {
+            push @bundle_files, $name;
+        }
     }
 
     installer::logger::print_message(
