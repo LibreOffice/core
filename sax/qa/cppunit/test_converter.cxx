@@ -438,6 +438,16 @@ void ConverterTest::testPercent()
     doTestPercentToString("1%", 00001);
 }
 
+void doTestStringToColor(sal_Int32 nValue, char const*const pis)
+{
+    ::rtl::OUString const is(::rtl::OUString::createFromAscii(pis));
+    sal_Int32 nTemp;
+    bool bSuccess(Converter::convertColor(nTemp, is));
+    OSL_TRACE("%i", nTemp);
+    CPPUNIT_ASSERT(bSuccess);
+    CPPUNIT_ASSERT_EQUAL(nValue, nTemp);
+}
+
 void doTestColorToString(char const*const pis, sal_Int32 nValue)
 {
     ::rtl::OUString const is(::rtl::OUString::createFromAscii(pis));
@@ -449,6 +459,10 @@ void doTestColorToString(char const*const pis, sal_Int32 nValue)
 
 void ConverterTest::testColor()
 {
+    doTestStringToColor(11259375, "#abcdef");
+    doTestStringToColor(160, "#0000a0");
+    doTestStringToColor(40960, "#00a000");
+    doTestStringToColor(0, "#000000");
     doTestColorToString("#000615", 1557);
     doTestColorToString("#5bcd15", 123456789);
     doTestColorToString("#fffac7", -1337);
