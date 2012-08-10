@@ -437,7 +437,6 @@ friend class ChXChartDocument;
     sal_Int32 nBordRgt; // Seitenrand rechts
     sal_Int32 nBordLwr; // Seitenrand unten
 
-    // this is a weak reference to a possible living api wrapper for this page
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > mxUnoPage;
 
 protected:
