@@ -3118,6 +3118,10 @@ void Desktop::DoFirstRunInitializations()
 
 void Desktop::ShowBackingComponent(Desktop * progress)
 {
+    if (GetCommandLineArgs().IsNoDefault())
+    {
+        return;
+    }
     Reference< XMultiServiceFactory > xSMgr(
         comphelper::getProcessServiceFactory(), UNO_SET_THROW);
     Reference< XFrame > xDesktopFrame(
