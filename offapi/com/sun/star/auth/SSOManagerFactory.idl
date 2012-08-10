@@ -58,16 +58,13 @@ module com { module sun { module star { module auth {
             send to the initiator side.</LI>
     </UL>
 
+    The interface supports the creation of <type>XSSOManager</type> instances
+    which can subsequently be used to create security contexts.
+
     @since OOo 1.1.2
  */
 
-published service SSOManagerFactory
-{
-   /** supports the creation of <type>XSSOManager</type> instances which can
-       subsequently be used to create security contexts.
-    */
-    interface XSSOManagerFactory;
-};
+published service SSOManagerFactory: XSSOManagerFactory;
 
 }; }; }; };
 
