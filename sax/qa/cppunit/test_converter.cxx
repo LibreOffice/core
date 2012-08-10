@@ -363,6 +363,9 @@ void ConverterTest::testMeasure()
     doTestStringToMeasure(777, "777", MeasureUnit::APPFONT, 10, 4321);
     doTestStringToMeasure(80000, "80000", MeasureUnit::SYSFONT, 10, 432100);
     //strange values (negative, too large etc.)
+    doTestStringToMeasure(555, "666", MeasureUnit::MM, -1000, 555);
+    doTestStringToMeasure(-1000, "-1001", MeasureUnit::MM, -1000, 555);
+    doTestStringToMeasure(0, "-0", MeasureUnit::MM, -1, 0);
     doTestStringToMeasure(-539222987, "1234567890mm", MeasureUnit::MM_10TH, 12, 12345678901);
     doTestStringToMeasure(-300, "-300", MeasureUnit::MM, -1000, 555);
     doTestStringToMeasure(1305424328, "-999999999999999px", MeasureUnit::PIXEL, -88888888888, 555);   //really crazy numbers...
