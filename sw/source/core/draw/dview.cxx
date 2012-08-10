@@ -19,8 +19,6 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
@@ -29,6 +27,9 @@
 #include <svx/svdpagv.hxx>
 #include <svx/fmmodel.hxx>
 #include <sot/exchange.hxx>
+#include <svx/sdrundomanager.hxx>
+#include <editeng/outliner.hxx>
+#include <com/sun/star/embed/EmbedMisc.hpp>
 
 #include "swtypes.hxx"
 #include "pagefrm.hxx"
@@ -49,25 +50,12 @@
 #include <fmtanchr.hxx>
 #include "shellres.hxx"
 #include <IDocumentUndoRedo.hxx>
-
-// #i7672#
-#include <editeng/outliner.hxx>
-
-#include <com/sun/star/embed/EmbedMisc.hpp>
-
-// OD 18.06.2003 #108784#
-//#ifndef _SVDVMARK_HXX //autogen
-//#include <svx/svdvmark.hxx>
-//#endif
 #include <vector>
-// --> OD 2004-06-24 #i28701#
 #include <sortedobjs.hxx>
 #include <flyfrms.hxx>
-// <--
-
+#include <UndoManager.hxx>
 
 using namespace com::sun::star;
-
 
 class SwSdrHdl : public SdrHdl
 {
@@ -1109,3 +1097,12 @@ void SwDrawView::DeleteMarked()
         pTmpRoot->EndAllAction();   //swmod 080218
 }
 
+// support enhanced text edit for draw objects
+SdrUndoManager* SwDrawView::getSdrUndoManagerForEnhancedTextEdit() const
+{
+    SwDoc* pDoc = Imp().GetShell()->GetDoc();
+
+    return pDoc ? dynamic_cast< SdrUndoManager* >(&(pDoc->GetUndoManager())) : 0;
+}
+
+// eof

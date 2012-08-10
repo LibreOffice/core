@@ -25,22 +25,18 @@
 #define SW_UNDO_MANAGER_HXX
 
 #include <IDocumentUndoRedo.hxx>
-
 #include <memory>
-
-#include <svl/undo.hxx>
-
+#include <svx/sdrundomanager.hxx>
 
 class IDocumentDrawModelAccess;
 class IDocumentRedlineAccess;
 class IDocumentState;
 
-
 namespace sw {
 
 class UndoManager
     : public IDocumentUndoRedo
-    , public SfxUndoManager
+    , public SdrUndoManager
 {
 public:
 
@@ -111,7 +107,7 @@ private:
     bool impl_DoUndoRedo(UndoOrRedo_t const undoOrRedo);
 
     // UGLY: should not be called
-    using SfxUndoManager::Repeat;
+    using SdrUndoManager::Repeat;
 };
 
 } // namespace sw
