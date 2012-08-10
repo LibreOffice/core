@@ -414,6 +414,15 @@ void doTestStringToPercent(sal_Int32 nValue, char const*const pis)
     CPPUNIT_ASSERT_EQUAL(nValue, nTemp);
 }
 
+void doTestPercentToString(char const*const pis, sal_Int32 nValue)
+{
+    ::rtl::OUString const is(::rtl::OUString::createFromAscii(pis));
+    ::rtl::OUStringBuffer buf;
+    Converter::convertPercent(buf, nValue);
+    OSL_TRACE("%s", ::rtl::OUStringToOString(buf.getStr(), RTL_TEXTENCODING_UTF8).getStr());
+    CPPUNIT_ASSERT_EQUAL(is, buf.makeStringAndClear());
+}
+
 void ConverterTest::testPercent()
 {
     doTestStringToPercent(40, "40%");
@@ -421,6 +430,10 @@ void ConverterTest::testPercent()
     doTestStringToPercent(120, "120%");
     doTestStringToPercent(-40, "-40%");
     doTestStringToPercent(0, "0%");
+    doTestPercentToString("12%", 12);
+    doTestPercentToString("-123%", -123);
+    doTestPercentToString("0%", 0);
+    doTestPercentToString("1%", 00001);
 }
 CPPUNIT_TEST_SUITE_REGISTRATION(ConverterTest);
 
