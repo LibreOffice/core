@@ -252,14 +252,6 @@ BasicDockingWindow::BasicDockingWindow( Window* pParent ) :
 {
 }
 
-BasicDockingWindow::BasicDockingWindow( Window* pParent, const ResId& rResId ) :
-    DockingWindow( pParent, rResId )
-{
-    SetStyle( WB_BORDER | WB_3DLOOK | WB_MOVEABLE |
-                            WB_SIZEABLE | WB_ROLLABLE |
-                            WB_DOCKABLE | WB_CLIPCHILDREN );
-}
-
 sal_Bool BasicDockingWindow::Docking( const Point& rPos, Rectangle& rRect )
 {
     ModulWindowLayout* pLayout = (ModulWindowLayout*)GetParent();

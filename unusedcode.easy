@@ -1,4 +1,3 @@
-BasicDockingWindow::BasicDockingWindow(Window*, ResId const&)
 FontSelectPattern::FontSelectPattern(PhysicalFontFace const&, Size const&, float, int, bool)
 PlaceEditDialog::GetResId(unsigned short)
 PopupMenu::SetSelectedEntry(unsigned short)
