@@ -280,6 +280,10 @@ $(call gb_CppunitTest__use_configuration,$(1),module,$(gb_Configuration_registry
 
 endef
 
+define gb_CppunitTest_use_extra_configuration
+$$(call gb_Output_error,gb_CppunitTest_use_extra_configuration: use gb_CppunitTest_use_unittest_configuration instead.))
+endef
+
 # Use configuration in $(OUTDIR)/unittest/registry.
 define gb_CppunitTest_use_unittest_configuration
 $(call gb_CppunitTest_get_target,$(1)) : $(call gb_Package_get_target,test_unittest)
