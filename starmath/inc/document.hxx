@@ -157,7 +157,7 @@ class SmDocShell : public SfxObjectShell, public SfxListener
 
     bool writeFormulaOoxml( ::sax_fastparser::FSHelperPtr pSerializer, oox::core::OoxmlVersion version );
     void writeFormulaRtf(OStringBuffer& rBuffer, rtl_TextEncoding nEncoding);
-    bool readFormulaOoxml( oox::formulaimport::XmlStream& stream );
+    void readFormulaOoxml( oox::formulaimport::XmlStream& stream );
 
 public:
     TYPEINFO();

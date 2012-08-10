@@ -993,13 +993,12 @@ void SmDocShell::writeFormulaRtf(OStringBuffer& rBuffer, rtl_TextEncoding nEncod
     aEquation.ConvertFromStarMath(rBuffer, nEncoding);
 }
 
-bool SmDocShell::readFormulaOoxml( oox::formulaimport::XmlStream& stream )
+void SmDocShell::readFormulaOoxml( oox::formulaimport::XmlStream& stream )
 {
     RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::readFormulaOoxml" );
 
     SmOoxmlImport aEquation( stream );
     SetText( aEquation.ConvertToStarMath());
-    return true; // TODO just void?
 }
 
 sal_Bool SmDocShell::SaveCompleted( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage )
