@@ -60,119 +60,6 @@ sub check_simple_packager_project
     }
 }
 
-####################################################
-# Detecting the directory with extensions
-####################################################
-
-sub get_extensions_dir
-{
-    my ( $subfolderdir ) = @_;
-
-    my $extensiondir = $subfolderdir . $installer::globals::separator;
-    if ( $installer::globals::officedirhostname ne "" ) { $extensiondir = $extensiondir . $installer::globals::officedirhostname . $installer::globals::separator; }
-    my $extensionsdir = $extensiondir . "share" . $installer::globals::separator . "extensions";
-    my $preregdir = $extensiondir . "share" . $installer::globals::separator . "prereg" . $installer::globals::separator . "bundled";
-
-    return ( $extensionsdir, $preregdir );
-}
-
-####################################################
-# Registering extensions
-####################################################
-
-sub register_extensions
-{
-    my ($officedir, $languagestringref, $preregdir) = @_;
-
-    my $infoline = "";
-
-    if ( $preregdir eq "" )
-    {
-        $infoline = "ERROR: Failed to determine directory \"prereg\" for extension registration! Please check your installation set.\n";
-        push( @installer::globals::logfileinfo, $infoline);
-        installer::exiter::exit_program($infoline, "register_extensions");
-    }
-
-    my $programdir = $officedir . $installer::globals::separator;
-    if ( $installer::globals::officedirhostname ne "" ) { $programdir = $programdir . $installer::globals::officedirhostname . $installer::globals::separator; }
-    $programdir = $programdir . "program";
-
-    my $from = cwd();
-    chdir($programdir);
-
-    my $unopkgfile = $installer::globals::unopkgfile;
-
-    my $unopkgexists = 1;
-    if (( $installer::globals::languagepack ) && ( ! -f $unopkgfile ))
-    {
-        $unopkgexists = 0;
-        $infoline = "Language packs do not contain unopkg!\n";
-        push( @installer::globals::logfileinfo, $infoline);
-    }
-
-    if (( $installer::globals::helppack ) && ( ! -f $unopkgfile ))
-    {
-        $unopkgexists = 0;
-        $infoline = "Help packs do not contain unopkg!\n";
-        push( @installer::globals::logfileinfo, $infoline);
-    }
-
-    if ( ! -f $unopkgfile )
-    {
-        $unopkgexists = 0;
-        $infoline = "Info: File $unopkgfile does not exist! Extensions cannot be registered.\n";
-        push( @installer::globals::logfileinfo, $infoline);
-    }
-
-    if ( $unopkgexists )
-    {
-        my $currentdir = cwd();
-        print "... current dir: $currentdir ...\n";
-        $infoline = "Current dir: $currentdir\n";
-        push( @installer::globals::logfileinfo, $infoline);
-
-        if ( ! -f $unopkgfile ) { installer::exiter::exit_program("ERROR: $unopkgfile not found!", "register_extensions"); }
-
-        my $systemcall = "JFW_PLUGIN_DO_NOT_CHECK_ACCESSIBILITY=1 " . $unopkgfile . " sync --verbose" . " -env:UNO_JAVA_JFW_ENV_JREHOME=true 2\>\&1 |";
-
-        print "... $systemcall ...\n";
-
-        $infoline = "Systemcall: $systemcall\n";
-        push( @installer::globals::logfileinfo, $infoline);
-
-        my @unopkgoutput = ();
-
-        open (UNOPKG, $systemcall);
-        while (<UNOPKG>)
-        {
-            my $lastline = $_;
-            push(@unopkgoutput, $lastline);
-        }
-        close (UNOPKG);
-
-        my $returnvalue = $?;   # $? contains the return value of the systemcall
-
-        if ($returnvalue)
-        {
-            # Writing content of @unopkgoutput only in the error case into the log file. Sometimes it
-            # contains strings like "Error" even in the case of success. This causes a packaging error
-            # when the log file is analyzed at the end, even if there is no real error.
-            for ( my $j = 0; $j <= $#unopkgoutput; $j++ ) { push( @installer::globals::logfileinfo, "$unopkgoutput[$j]"); }
-
-            $infoline = "ERROR: Could not execute \"$systemcall\"!\nExitcode: '$returnvalue'\n";
-            push( @installer::globals::logfileinfo, $infoline);
-            installer::exiter::exit_program("ERROR: $systemcall failed!", "register_extensions");
-        }
-        else
-        {
-            $infoline = "Success: Executed \"$systemcall\" successfully!\n";
-            push( @installer::globals::logfileinfo, $infoline);
-        }
-    }
-
-    chdir($from);
-}
-
 ########################################################################
 # Getting the translation file for the Mac Language Pack installer
 ########################################################################
@@ -783,15 +670,6 @@ sub create_simple_package
 
     installer::logger::print_message( "... removing superfluous directories ...\n" );
     installer::logger::include_header_into_logfile("Removing superfluous directories:");
-
-    my ( $extensionfolder, $preregdir ) = get_extensions_dir($subfolderdir);
-    installer::systemactions::remove_empty_dirs_in_folder($extensionfolder);
-
-    # Registering the extensions
-
-    installer::logger::print_message( "... registering extensions ...\n" );
-    installer::logger::include_header_into_logfile("Registering extensions:");
-    register_extensions($subfolderdir, $languagestringref, $preregdir);
 
     if ( $installer::globals::compiler =~ /^unxmacx/ )
     {

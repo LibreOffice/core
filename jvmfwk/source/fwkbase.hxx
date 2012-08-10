@@ -70,7 +70,6 @@ namespace  BootParams
 
 ::rtl::OUString getSharedData();
 
-::rtl::OUString getInstallData();
 /* returns the file URL to the vendor settings xml file.
  */
 ::rtl::OUString getVendorSettings();
@@ -81,12 +80,6 @@ namespace  BootParams
 ::rtl::OString getClasspath();
 
 ::rtl::OUString getClasspathUrls();
-
-/** returns the content of UNO_JAVA_JFW_INSTALL_EXPIRE or a pretermined
-    value. If the bootstrap variable contains a string that cannot be
-    converted by OUString then it returns the predetermined value.
-*/
-::sal_uInt32 getInstallDataExpiration();
 
 } //end namespace
 
@@ -115,8 +108,6 @@ JFW_MODE getMode();
    @throws FrameworkException
  */
 ::rtl::OString getUserSettingsPath();
-
-::rtl::OString getInstallSettingsPath();
 
 /** Returns the system path of the share settings file.
     Returns a valid string or throws an exception.

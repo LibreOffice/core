@@ -735,7 +735,6 @@ void BackendImpl::PackageImpl::processPackage_(
             //No need for live-deployment for bundled extension, because OOo
             //restarts after installation
             if (that->m_eContext != CONTEXT_BUNDLED
-                && that->m_eContext != CONTEXT_BUNDLED_PREREG
                 && !startup)
             {
                 if (m_isSchema)

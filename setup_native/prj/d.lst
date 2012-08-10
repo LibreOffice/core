@@ -14,12 +14,9 @@ mkdir: %_DEST%\bin\userscripts
 ..\%__SRC%\bin\uninstall %_DEST%\bin\userscripts\uninstall
 ..\%__SRC%\bin\noarch\fake-db-1.0-0.noarch.rpm %_DEST%\bin\openoffice.org-userland-1.0-0.noarch.rpm
 
-mkdir: %_DEST%\bin\osolsmf
 ..\%__SRC%\bin\langpackscript.sh %_DEST%\bin\langpackscript.sh
 ..\%__SRC%\bin\linuxpatchscript.sh %_DEST%\bin\linuxpatchscript.sh
 ..\%__SRC%\bin\downloadscript.sh %_DEST%\bin\downloadscript.sh
-..\%__SRC%\bin\register_extensions %_DEST%\bin\register_extensions
-..\%__SRC%\bin\deregister_extensions %_DEST%\bin\deregister_extensions
 ..\%__SRC%\bin\unpack_update.sh %_DEST%\bin\unpack_update
 ..\%__SRC%\bin\update.sh %_DEST%\bin\update
 ..\%__SRC%\bin\javaloader.sh %_DEST%\bin\javaloader.sh
@@ -34,10 +31,6 @@ mkdir: %_DEST%\bin\osolsmf
 ..\source\mac\ooo\DS_Store %_DEST%\bin\osl\DS_Store
 ..\source\mac\ooo\DS_Store_Dev %_DEST%\bin\osl\DS_Store_Dev
 ..\source\mac\ooo\DS_Store_Langpack %_DEST%\bin\osl\DS_Store_Langpack
-..\source\opensolaris\bundledextensions\installed %_DEST%\bin\osolsmf\installed
-..\source\opensolaris\bundledextensions\README %_DEST%\bin\osolsmf\README
-..\source\opensolaris\bundledextensions\ooo_bundled_extensions.xml %_DEST%\bin\osolsmf\ooo_bundled_extensions.xml
-..\source\opensolaris\bundledextensions\svc-ooo_bundled_extensions %_DEST%\bin\osolsmf\svc-ooo_bundled_extensions
 ..\source\packinfo\solariscopyrightfile %_DEST%\bin\solariscopyrightfile
 ..\source\packinfo\linuxcopyrightfile %_DEST%\bin\linuxcopyrightfile
 ..\source\packinfo\*.txt %_DEST%\bin\*.txt

@@ -233,10 +233,6 @@ cat > ${INSTALL_ROOT}/usr/lib/postrun << \EOF
 #!/bin/sh
 set -e
 
-# Override UserInstallation in bootstraprc for unopkg ..
-UserInstallation='$BRAND_BASE_DIR/../UserInstallation'
-export UserInstallation
-
 if [ -x /usr/bin/mktemp ]
 then
   CMD=`/usr/bin/mktemp /tmp/userinstall.XXXXXX`

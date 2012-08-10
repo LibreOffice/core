@@ -116,8 +116,7 @@ Module gid_Module_Root_Files_2
 	gid_File_Regcleanold,
 	gid_File_Exe_Regdeinstall,
 	gid_File_Tmp_Inf_Oldreg,
-	gid_File_Tmp_Userinstall_Inf,
-	gid_File_Config_Javasettingsunopkginstall);
+	gid_File_Tmp_Userinstall_Inf);
 End
 
 Module gid_Module_Root_Files_3

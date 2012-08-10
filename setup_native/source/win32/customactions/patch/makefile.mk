@@ -64,7 +64,6 @@ SHL1OBJS = $(SLOFILES)               \
     $(SLO)$/shutdown_quickstart.obj  \
     $(SLO)$/quickstarter.obj         \
     $(SLO)$/upgrade.obj              \
-        $(SLO)$/registerextensions.obj   \
     $(SLO)$/seterror.obj
 
 SHL1TARGET = $(TARGET)

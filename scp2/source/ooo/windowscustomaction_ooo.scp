@@ -176,25 +176,6 @@ WindowsCustomAction gid_Customaction_Shellextensionsdll7
 	Assignment1 = ("InstallExecuteSequence", "REMOVE=\"ALL\" And Not PATCH", "InstallValidate");
 End
 
-WindowsCustomAction gid_Customaction_Register_Extensions
-	Name = "RegisterExtensions";
-	Typ = "3585";
-	Source = "shlxtmsi.dll";
-	Target = "RegisterExtensions";
-	Inbinarytable = 1;
-	Assignment1 = ("InstallExecuteSequence", "Not REMOVE=\"ALL\"", "InstallFinalize");
-	Assignment2 = ("AdminExecuteSequence", "Not REMOVE=\"ALL\"", "InstallFinalize");
-End
-
-WindowsCustomAction gid_Customaction_Remove_Extensions
-	Name = "RemoveExtensions";
-	Typ = "3585";
-	Source = "shlxtmsi.dll";
-	Target = "RemoveExtensions";
-	Inbinarytable = 1;
-	Assignment1 = ("InstallExecuteSequence", "REMOVE=\"ALL\" And Not PATCH", "InstallFinalize");
-End
-
 WindowsCustomAction gid_Customaction_Set_Admininstall
 	Name = "SetAdminInstallProperty";
 	Typ = "65";

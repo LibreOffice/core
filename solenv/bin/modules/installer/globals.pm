@@ -456,7 +456,6 @@ BEGIN
     {
         $zippath = "zip";                   # Has to be in the path: /usr/bin/zip
         $checksumfile = "so_checksum";
-        $unopkgfile = "unopkg.exe";
         $separator = "/";
         $pathseparator = "\:";
         $libextension = "\.dll";
@@ -472,7 +471,6 @@ BEGIN
     {
         $zippath = "zip";                   # Has to be in the path: /usr/bin/zip
         $checksumfile = "so_checksum";
-        $unopkgfile = "unopkg";
         $separator = "/";
         $pathseparator = "\:";
         if ( $plat =~ /darwin/i )

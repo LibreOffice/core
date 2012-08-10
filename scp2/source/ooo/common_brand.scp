@@ -43,7 +43,6 @@ Module gid_Module_Root_Brand
             gid_Brand_Dir_Share_C05_Faq,
             gid_Brand_Dir_Share_Config,
             gid_Brand_Dir_Share_Extensions,            
-            gid_Brand_Dir_Share_Prereg,    
             gid_Brand_Dir_Share_Uno_Packages,
             gid_Brand_Dir_Share_Uno_Packages_Cache,
             gid_Brand_Dir_Share_Registry,
@@ -173,12 +172,6 @@ End
 Directory gid_Brand_Dir_Share_Extensions
     ParentID = gid_Brand_Dir_Share;
     DosName = "extensions";
-End
-
-Directory gid_Brand_Dir_Share_Prereg
-    ParentID = gid_Brand_Dir_Share;
-    DosName = "prereg";
-    Styles = (CREATE);
 End
 
 Directory gid_Brand_Dir_Share_Extensions_Dict_Af
@@ -1163,14 +1156,6 @@ ProfileItem gid_Brand_Profileitem_Fundamental_Uno_Bundled_Extensions_User
     Section = "Bootstrap";
     Key = "BUNDLED_EXTENSIONS_USER";
     Value = "${$ORIGIN/" PROFILENAME(uno) ":BUNDLED_EXTENSIONS_USER}";
-End
-
-ProfileItem gid_Brand_Profileitem_Fundamental_Uno_Bundled_Extensions_Prereg
-    ModuleID = gid_Module_Root_Brand;
-    ProfileID = gid_Brand_Profile_Fundamental_Ini;
-    Section = "Bootstrap";
-    Key = "BUNDLED_EXTENSIONS_PREREG";
-    Value = "${$ORIGIN/" PROFILENAME(uno) ":BUNDLED_EXTENSIONS_PREREG}";
 End
 
 ProfileItem gid_Brand_Profileitem_Fundamental_Uno_Shared_Packages_Cache

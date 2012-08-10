@@ -51,9 +51,6 @@ using ::rtl::OStringToOUString;
 #define UNO_JAVA_JFW_VENDOR_SETTINGS "UNO_JAVA_JFW_VENDOR_SETTINGS"
 #define UNO_JAVA_JFW_USER_DATA "UNO_JAVA_JFW_USER_DATA"
 #define UNO_JAVA_JFW_SHARED_DATA "UNO_JAVA_JFW_SHARED_DATA"
-#define UNO_JAVA_JFW_INSTALL_DATA "UNO_JAVA_JFW_INSTALL_DATA"
-#define UNO_JAVA_JFW_INSTALL_EXPIRE "UNO_JAVA_JFW_INSTALL_EXPIRE"
-#define DEFAULT_INSTALL_EXPIRATION 3600
 
 namespace jfw
 {
@@ -366,12 +363,6 @@ rtl::OUString BootParams::getSharedData()
     return getParamFirstUrl(UNO_JAVA_JFW_SHARED_DATA);
 }
 
-rtl::OUString BootParams::getInstallData()
-{
-    return getParam(UNO_JAVA_JFW_INSTALL_DATA);
-}
-
-
 rtl::OString BootParams::getClasspath()
 {
     rtl::OString sClassPath;
@@ -525,34 +516,6 @@ rtl::OUString BootParams::getClasspathUrls()
     return sParams;
 }
 
-::sal_uInt32 BootParams::getInstallDataExpiration()
-{
-    rtl::OUString sValue;
-    Bootstrap::get()->getFrom(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(UNO_JAVA_JFW_INSTALL_EXPIRE)),
-        sValue);
-
-#if OSL_DEBUG_LEVEL >=2
-    rtl::OString osValue = rtl::OUStringToOString(sValue, osl_getThreadTextEncoding());
-    fprintf(stderr,"[Java framework] Using bootstrap parameter "
-            UNO_JAVA_JFW_INSTALL_EXPIRE " = %s.\n", osValue.getStr());
-#endif
-
-    sal_Int64 nVal = sValue.toInt64();
-    if (0 == nVal)
-    {
-#if OSL_DEBUG_LEVEL >=2
-        fprintf(stderr,"[Java framework] Using default value for "
-                "UNO_JAVA_JFW_INSTALL_EXPIRE: %d  \n", DEFAULT_INSTALL_EXPIRATION);
-#endif
-        return DEFAULT_INSTALL_EXPIRATION;
-    }
-    else
-    {
-        return static_cast<sal_uInt32>(nVal);
-    }
-}
-
 JFW_MODE getMode()
 {
     static bool g_bMode = false;
@@ -671,11 +634,6 @@ rtl::OString getUserSettingsPath()
 rtl::OString getSharedSettingsPath()
 {
     return getSettingsPath(BootParams::getSharedData());
-}
-
-rtl::OString getInstallSettingsPath()
-{
-    return getSettingsPath(BootParams::getInstallData());
 }
 
 rtl::OString getSettingsPath( const rtl::OUString & sURL)

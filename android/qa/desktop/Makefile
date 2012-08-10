@@ -37,7 +37,6 @@ buildrcs:
 	echo 'URE_MORE_TYPES=file:///assets/ure/share/misc/types.rdb file:///assets/program/types/types.rdb' >> assets/program/fundamentalrc
 	echo 'URE_MORE_SERVICES= <$$BRAND_BASE_DIR/program/services>*' >> assets/program/fundamentalrc
 	echo 'BUNDLED_EXTENSIONS=$$BRAND_BASE_DIR/share/extensions' >> assets/program/fundamentalrc
-	echo 'BUNDLED_EXTENSIONS_PREREG=$$BRAND_BASE_DIR/share/prereg/bundled' >> assets/program/fundamentalrc
 	echo 'BUNDLED_EXTENSIONS_USER=$${$$BRAND_BASE_DIR/program/bootstraprc:UserInstallation}/user/extensions/bundled' >> assets/program/fundamentalrc
 	echo 'TMP_EXTENSIONS=$${$$BRAND_BASE_DIR/program/bootstraprc:UserInstallation}/user/extensions/tmp' >> assets/program/fundamentalrc
 	echo 'SHARED_EXTENSIONS_USER=$${$$BRAND_BASE_DIR/program/bootstraprc:UserInstallation}/user/extensions/shared' >> assets/program/fundamentalrc

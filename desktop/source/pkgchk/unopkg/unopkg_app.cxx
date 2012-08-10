@@ -374,45 +374,6 @@ extern "C" DESKTOP_DLLPUBLIC int unopkg_main()
             if (e != osl_File_E_None && e != osl_File_E_NOENT)
                 throw Exception(OUSTR("Could not delete ") + extensionUnorc, 0);
         }
-        else if (subCommand.equals(OUSTR("sync")))
-        {
-            //sync is private!!!! Only to be called from setup!!!
-            //The UserInstallation is diverted to the prereg folder. But only
-            //the lock file is written! This requires that
-            //-env:UNO_JAVA_JFW_INSTALL_DATA is passed to javaldx and unopkg otherwise the
-            //javasettings file is written to the prereg folder.
-            //
-            //For performance reasons unopkg sync is called during the setup and
-            //creates the registration data for the repository of the bundled
-            //extensions. It is then copied to the user installation during
-            //startup of OOo (userdata/extensions/bundled).  The registration
-            //data is in the brand installation and must be removed when
-            //uninstalling OOo.  We do this here, before UNO is
-            //bootstrapped. Otherwies files could be locked by this process.
-
-            //If there is no folder left in
-            //$BRAND_BASE_DIR/share/extensions
-            //then we can delete the registration data at
-            //$BUNDLED_EXTENSIONS_USER
-            if (hasNoFolder(OUSTR("$BRAND_BASE_DIR/share/extensions")))
-            {
-                removeFolder(OUSTR("$BUNDLED_EXTENSIONS_PREREG"));
-                //return otherwise we create the registration data again
-                return 0;
-            }
-            //redirect the UserInstallation, so we do not create a
-            //user installation for the admin and we also do not need
-            //to call unopkg with -env:UserInstallation
-            ::rtl::Bootstrap::set(OUSTR("UserInstallation"),
-                                  OUSTR("$BUNDLED_EXTENSIONS_PREREG/.."));
-            //Setting UNO_JAVA_JFW_INSTALL_DATA causes the javasettings to be written
-            //in the office installation. We do not want to create the user data folder
-            //for the admin. The value must also be set in the unopkg script (Linux, etc.)
-            //when calling javaldx
-            ::rtl::Bootstrap::set(OUSTR("UNO_JAVA_JFW_INSTALL_DATA"),
-                                  OUSTR("$BRAND_BASE_DIR/share/config/javasettingsunopkginstall.xml"));
-
-        }
 
         xComponentContext = getUNO(
             disposeGuard, option_verbose, option_shared, subcmd_gui,
@@ -430,7 +391,6 @@ extern "C" DESKTOP_DLLPUBLIC int unopkg_main()
         //prevent the deletion of the registry data folder
         //synching is done in XExtensionManager.reinstall
         if (!subcmd_gui && ! subCommand.equals(OUSTR("reinstall"))
-            && ! subCommand.equals(OUSTR("sync"))
             && ! dp_misc::office_is_running())
             dp_misc::syncRepositories(xCmdEnv);
 
@@ -620,18 +580,6 @@ extern "C" DESKTOP_DLLPUBLIC int unopkg_main()
 
             xDialog->startExecuteModal(xListener);
             dialogEnded.wait();
-        }
-        else if ( subCommand == "sync" )
-        {
-            if (! dp_misc::office_is_running())
-            {
-                xExtensionManager->synchronizeBundledPrereg(
-                    Reference<task::XAbortChannel>(), xCmdEnv);
-            }
-            else
-            {
-                dp_misc::writeConsoleError(OUSTR("\nError: office is running"));
-            }
         }
         else
         {

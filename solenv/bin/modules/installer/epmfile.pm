@@ -1437,46 +1437,6 @@ sub make_prototypefile_relocatable
     }
 }
 
-
-#########################################################################
-# In scp the flag VOLATEFILE can be used. This shall lead to style "v"
-# in Solaris prototype file. This is not supported by epm and has
-# therefore to be included in prototypefile, not in epm list file.
-#########################################################################
-
-sub set_volatilefile_into_prototypefile
-{
-    my ($prototypefile, $filesref) = @_;
-
-    for ( my $i = 0; $i <= $#{$filesref}; $i++ )
-    {
-        my $onefile = ${$filesref}[$i];
-
-        my $styles = "";
-        if ( $onefile->{'Styles'} ) { $styles = $onefile->{'Styles'}; }
-
-        if ( $styles =~ /\bVOLATILEFILE\b/ )
-        {
-            my $sourcepath = $onefile->{'sourcepath'};
-
-            for ( my $j = 0; $j <= $#{$prototypefile}; $j++ )
-            {
-                if (( ${$prototypefile}[$j] =~ /^\s*f\s+none\s+/ ) && ( ${$prototypefile}[$j] =~ /\=\Q$sourcepath\E\s+/ ))
-                {
-                    my $oldline = ${$prototypefile}[$j];
-                    ${$prototypefile}[$j] =~ s/^\s*f/v/;
-                    my $newline = ${$prototypefile}[$j];
-                    $oldline =~ s/\s*$//;
-                    $newline =~ s/\s*$//;
-                    my $infoline = "Volatile file: Changing content from \"$oldline\" to \"$newline\" .\n";
-                    push(@installer::globals::logfileinfo, $infoline);
-                    last;
-                }
-            }
-        }
-    }
-}
-
 #########################################################################
 # Replacing the variables in the Solaris patch shell scripts.
 # Taking care, that multiple slashes are not always removed.
@@ -2066,7 +2026,6 @@ sub prepare_packages
 
         my $prototypefile = installer::files::read_file($prototypefilename);
         make_prototypefile_relocatable($prototypefile, $relocatablepath);
-        set_volatilefile_into_prototypefile($prototypefile, $filesref);
         my $classesstring = set_tab_into_datafile($prototypefile, $filesref);
         if ($classesstring)
         {

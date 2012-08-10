@@ -440,8 +440,6 @@ sub copy_files_into_directory_structure
 {
     my ($fileorder, $filehash, $componenthash, $fullpathhash, $maxsequence, $unpackdir, $installdir, $dirhash) = @_;
 
-    my $unopkgfile = "";
-
     for ( my $i = 1; $i <= $maxsequence; $i++ )
     {
         if ( exists($fileorder->{$i}) )
@@ -491,12 +489,8 @@ sub copy_files_into_directory_structure
                 push(@installer::globals::logfileinfo, $infoline);
                 installer::exiter::exit_program($infoline, "copy_files_into_directory_structure");
             }
-
-            if ( $destfile =~ /unopkg\.exe\s*$/ ) { $unopkgfile = $destfile; }
         }
     }
-
-    return $unopkgfile;
 }
 
 
@@ -750,66 +744,6 @@ sub write_sis_info
     }
 }
 
-####################################################
-# Detecting the directory with extensions
-####################################################
-
-sub get_extensions_dir
-{
-    my ( $unopkgfile ) = @_;
-
-    my $localbranddir = $unopkgfile;
-    installer::pathanalyzer::get_path_from_fullqualifiedname(\$localbranddir); # "program" dir in brand layer
-    installer::pathanalyzer::get_path_from_fullqualifiedname(\$localbranddir); # root dir in brand layer
-    $localbranddir =~ s/\Q$installer::globals::separator\E\s*$//;
-    my $extensiondir = $localbranddir . $installer::globals::separator . "share" . $installer::globals::separator . "extensions";
-
-    return $extensiondir;
-}
-
-##############################################################
-# Removing all empty directories below a specified directory
-##############################################################
-
-sub remove_empty_dirs_in_folder
-{
-    my ( $dir, $firstrun ) = @_;
-
-    if ( $firstrun )
-    {
-        print "Removing superfluous directories\n";
-    }
-
-    my @content = ();
-
-    $dir =~ s/\Q$installer::globals::separator\E\s*$//;
-
-    if ( -d $dir )
-    {
-        opendir(DIR, $dir);
-        @content = readdir(DIR);
-        closedir(DIR);
-
-        my $oneitem;
-
-        foreach $oneitem (@content)
-        {
-            if ((!($oneitem eq ".")) && (!($oneitem eq "..")))
-            {
-                my $item = $dir . $installer::globals::separator . $oneitem;
-
-                if ( -d $item ) # recursive
-                {
-                    remove_empty_dirs_in_folder($item, 0);
-                }
-            }
-        }
-
-        # try to remove empty directory
-        my $returnvalue = rmdir $dir;
-    }
-}
-
 ####################################################################################
 # Simulating an administrative installation
 ####################################################################################
@@ -881,17 +815,10 @@ sub make_admin_install
     my $fullpathhash = create_directory_structure($dirhash, $targetdir);
 
     # Copying files
-    my $unopkgfile = copy_files_into_directory_structure($fileorder, $filehash, $componenthash, $fullpathhash, $maxsequence, $unpackdir, $installdir, $dirhash);
+    copy_files_into_directory_structure($fileorder, $filehash, $componenthash, $fullpathhash, $maxsequence, $unpackdir, $installdir, $dirhash);
 
     my $msidatabase = $targetdir . $installer::globals::separator . $databasefilename;
     installer::systemactions::copy_one_file($databasepath, $msidatabase);
-
-    if ( $unopkgfile ne "" )
-    {
-        # Removing empty dirs in extension folder
-        my $extensionfolder = get_extensions_dir($unopkgfile);
-        if ( -d $extensionfolder ) { remove_empty_dirs_in_folder($extensionfolder, 1); }
-    }
 
     # Editing registry table because of wrong Property value
     #   my $registryfilename = $helperdir . $installer::globals::separator . "Registry.idt";

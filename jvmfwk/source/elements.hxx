@@ -105,12 +105,8 @@ public:
     settings file.
 
     Which settings file is used is determined by the value passed into the
-    constructo and the values of the bootstrap parameters UNO_JAVA_JFW_USER_DATA,
-    UNO_JAVA_JFW_SHARED_DATA,_JAVA_JFW_INSTALL_DATA.
-
-    If the value is USER_OR_INSTALL then it depends of the bootstrap parameter
-    UNO_JAVA_JFW_INSTALL_DATA. If it has as value then it is used. Otherwise the
-    value from UNO_JAVA_JFW_USER_DATA is used.
+    constructor and the values of the bootstrap parameters
+    UNO_JAVA_JFW_USER_DATA and UNO_JAVA_JFW_SHARED_DATA.
 
     The method load reads the data from the settings file.
     The method write stores the data into the settings file.
@@ -118,16 +114,15 @@ public:
 class NodeJava
 {
 public:
-    enum Layer { USER_OR_INSTALL, USER, SHARED, INSTALL };
+    enum Layer { USER, SHARED };
 private:
 
     /** creates settings file and fills it with default values.
 
         When this function is called then it creates the
         settings file at the possition determined by the bootstrap parameters
-        (UNO_JAVA_JFW_USER_DATA, UNO_JAVA_JFW_SHARED_DATA,
-        UNO_JAVA_JFW_INSTALL_DATA) and m_layer, unless the file already exists
-        (see createSettingsDocument).
+        (UNO_JAVA_JFW_USER_DATA, UNO_JAVA_JFW_SHARED_DATA) and m_layer, unless
+        the file already exists (see createSettingsDocument).
 
         @return
         JFW_E_CONFIG_READWRITE
@@ -139,9 +134,8 @@ private:
     void createSettingsDocument() const;
 
     /** returns the system path to the data file which is to be used. The value
-        depends on
-        the the member m_layer and the bootstrap parameters UNO_JAVA_JFW_USER_DATA,
-        UNO_JAVA_JFW_SHARED_DATA and UNO_JAVA_JFW_INSTALL_DATA which this may be.
+        depends on the the member m_layer and the bootstrap parameters
+        UNO_JAVA_JFW_USER_DATA and UNO_JAVA_JFW_SHARED_DATA.
     */
     ::rtl::OString getSettingsPath() const;
 
@@ -149,9 +143,7 @@ private:
     */
     ::rtl::OUString getSettingsURL() const;
 
-    /** Verifies if the respective settings file exist. In case UNO_JAVA_JFW_INSTALL_DATA
-        is used, the age is checked. If the file is too old then we assume that it does not
-        exist and wipe its contents. Then still FILE_DOES_NOT_EXIST is returned.
+    /** Verifies if the respective settings file exist.
      */
     jfw::FileStatus checkSettingsFileStatus() const;
 
@@ -187,37 +179,9 @@ private:
     */
     boost::optional< ::std::vector< ::rtl::OUString> > m_JRELocations;
 
-    /** Only in INSTALL mode. Then NodeJava.write writes a <modified> element
-        which contains the seconds value of the TimeValue (osl/time.h), obtained
-        with osl_getSystemTime.
-        It returns 0 if the value cannot be obtained.
-        This is used to fix the problem that the modified time of the settings
-        file is incorrect because it resides on an NFS volume where the NFS
-        server and NFS client do not have the same system time. For example if
-        the server time is ahead of the client time then checkSettingsFileStatus
-        deleted the settings. So even if javaldx determined a Java
-        (jfw_findAndSelectJRE) then jfw_startVM returned a JFW_E_NO_SELECT. Then
-        it looked again for a java by calling jfw_findAndSelectJRE, which
-        returned a JFW_E_NONE. But the following jfw_startVM returned again
-        JFW_E_NO_SELECT. So it looped. (see issue i114509)
-
-        NFS server and NFS client should have the same time. It is common
-        practise to enforce this in networks. We actually should not work
-        around a malconfigured network. We must however, make sure that we do
-        not loop. Maybe a better approach is, that:
-        - assume that mtime and system time are reliable
-        - checkSettingsFile uses system time and mtime of the settings file,
-        instset of using getModifiedTime.
-        - allow a small error margin
-        - jfw_startVM must return a JFW_E_EXPIRED_SETTINGS
-        - XJavaVM::startVM should prevent the loop by processing the new return+        value
-
-    */
-    sal_uInt32 getModifiedTime() const;
-
 public:
 
-    NodeJava(Layer theLayer = USER_OR_INSTALL);
+    explicit NodeJava(Layer theLayer);
 
     /** sets m_enabled.
         /java/enabled@xsi:nil will be set to false when write is called.
@@ -300,7 +264,6 @@ public:
     bootstrap variables:
     UNO_JAVA_JFW_USER_DATA
     UNO_JAVA_JFW_SHARED_DATA
-    UNO_JAVA_JFW_INSTALL_DATA
 
     The class also determines useful default values for settings which have not been made.
 */

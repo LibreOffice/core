@@ -297,26 +297,6 @@ interface XExtensionManager
                 com::sun::star::ucb::CommandAbortedException,
                 com::sun::star::lang::IllegalArgumentException);
 
-
-    /** synchronizes the special bundled_prereg repository, which is based on
-       the bundled extensions and has its registration data folder at
-       $BUNDLED_EXTENSIONS_PREREG (for example openoffice.org3/share/prereg).
-
-       All bundled extensions are registered (<member>XPackage::registerPackage</member>).
-       The active extensions are NOT determined, because this function only works
-       with bundled extensions.
-
-       This function is intended to be called during the installation of OOo.
-       OOo will copy parts of the registration data folder to the user installation at the
-       first startup.
-    */
-
-    void synchronizeBundledPrereg(
-        [in] com::sun::star::task::XAbortChannel xAbortChannel,
-        [in] com::sun::star::ucb::XCommandEnvironment xCmdEnv )
-        raises (DeploymentException);
-
-
     /** returns all extensions which are currently not in use
         because the user did not accept the license.
 

@@ -40,8 +40,6 @@ UNIXTEXT= \
     $(BIN)$/langpackscript.sh \
     $(BIN)$/linuxpatchscript.sh \
     $(BIN)$/javaloader.sh \
-    $(BIN)$/register_extensions \
-    $(BIN)$/deregister_extensions \
     $(BIN)$/update.sh \
     $(BIN)$/downloadscript.sh
 

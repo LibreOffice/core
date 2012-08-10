@@ -1246,17 +1246,6 @@ File gid_File_Spotlight_Bundle
 End
 #endif
 
-File gid_File_Config_Javasettingsunopkginstall
-    USER_FILE_BODY;
-    Dir = gid_Brand_Dir_Share_Config;
-    Name = "javasettingsunopkginstall.xml";
-  #ifdef SOLARIS
-    Styles = (PACKED,VOLATILEFILE);
-  #else
-    Styles = (PACKED);
-  #endif
-End
-
 #ifdef THEME_DEFAULT
 File gid_File_Images_Zip
     TXT_FILE_BODY;

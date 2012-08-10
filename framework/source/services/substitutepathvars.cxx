@@ -1171,8 +1171,9 @@ void SubstitutePathVariables::SetPredefinedPathVariables( PredefinedPathVariable
     ::rtl::OUString              sVal  ;
 
     aState = utl::Bootstrap::locateUserData( sVal );
-    //There can be the valid case that there is no user installation. For example, "unopkg sync"
-    //is currently (OOo3.4) run as part of the setup. Then no user installation is required.
+    //There can be the valid case that there is no user installation.
+    //TODO: Is that still the case? (With OOo 3.4, "unopkg sync" was run as part
+    // of the setup. Then no user installation was required.)
     //Therefore we do not assert here.
     if( aState == ::utl::Bootstrap::PATH_EXISTS ) {
         aPreDefPathVariables.m_FixedVar[ PREDEFVAR_USERPATH ] = ConvertOSLtoUCBURL( sVal );

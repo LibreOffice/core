@@ -20,7 +20,6 @@
 #include "elements.hxx"
 #include "osl/mutex.hxx"
 #include "osl/file.hxx"
-#include "osl/time.h"
 #include "fwkutil.hxx"
 #include "fwkbase.hxx"
 #include "framework.hxx"
@@ -82,16 +81,6 @@ rtl::OString getElementUpdated()
     return getElement(jfw::getVendorSettingsPath(),
                       (xmlChar*)"/jf:javaSelection/jf:updated/text()", true);
 }
-
-// Use only in INSTALL mode !!!
-rtl::OString getElementModified()
-{
-    //The modified element is only written in INSTALL mode.
-    //That is NodeJava::m_layer = INSTALL
-    return getElement(jfw::getInstallSettingsPath(),
-                      (xmlChar*)"/jf:java/jf:modified/text()", false);
-}
-
 
 void createSettingsStructure(xmlDoc * document, bool * bNeedsSave)
 {
@@ -222,18 +211,6 @@ NodeJava::NodeJava(Layer layer):
         throw FrameworkException(
             JFW_E_DIRECT_MODE,
             "[Java framework] Trying to access settings files in direct mode.");
-
-    if (USER_OR_INSTALL == m_layer)
-    {
-        if (!BootParams::getInstallData().isEmpty())
-            m_layer = INSTALL;
-        else
-            m_layer = USER;
-    }
-    else
-    {
-        m_layer = layer;
-    }
 }
 
 
@@ -255,7 +232,7 @@ void NodeJava::load()
             //Writing shared data is not supported yet.
             return;
     }
-    else if (USER == m_layer || INSTALL == m_layer)
+    else if (USER == m_layer)
     {
         prepareSettingsDocument();
     }
@@ -386,7 +363,6 @@ void NodeJava::load()
     switch (m_layer)
     {
     case USER: ret = getUserSettingsPath(); break;
-    case INSTALL: ret = getInstallSettingsPath(); break;
     case SHARED: ret = getSharedSettingsPath(); break;
     default:
         OSL_FAIL("[Java framework] NodeJava::getSettingsPath()");
@@ -400,7 +376,6 @@ void NodeJava::load()
     switch (m_layer)
     {
     case USER: ret = BootParams::getUserData(); break;
-    case INSTALL: ret = BootParams::getInstallData(); break;
     case SHARED: ret = BootParams::getSharedData(); break;
     default:
         OSL_FAIL("[Java framework] NodeJava::getSettingsURL()");
@@ -589,20 +564,6 @@ void NodeJava::write() const
         }
     }
 
-    if (INSTALL == m_layer)
-    {
-        //now write the current system time
-        ::TimeValue curTime = {0,0};
-        if (::osl_getSystemTime(& curTime))
-        {
-            rtl::OUString sSeconds =
-                rtl::OUString::valueOf((sal_Int64) curTime.Seconds);
-            xmlNewTextChild(
-                root,NULL, (xmlChar*) "modified", CXmlCharPtr(sSeconds));
-            xmlNode * nodeCrLf = xmlNewText((xmlChar*) "\n");
-            xmlAddChild(root, nodeCrLf);
-        }
-    }
     if (xmlSaveFormatFile(sSettingsPath.getStr(), docUser, 1) == -1)
         throw FrameworkException(JFW_E_ERROR, sExcMsg);
 }
@@ -738,66 +699,11 @@ jfw::FileStatus NodeJava::checkSettingsFileStatus() const
     File::RC rc = ::osl::DirectoryItem::get(sURL, item);
     if (File::E_None == rc)
     {
-        ::osl::FileStatus stat(
-            osl_FileStatus_Mask_Validate
-            | osl_FileStatus_Mask_CreationTime
-            | osl_FileStatus_Mask_ModifyTime);
+        ::osl::FileStatus stat(osl_FileStatus_Mask_Validate);
         File::RC rc_stat = item.getFileStatus(stat);
         if (File::E_None == rc_stat)
         {
-            // This
-            //function may be called multiple times when a java is started.
-            //If the expiretime is too small then we may loop because everytime
-            //the file is deleted and we need to search for a java again.
-            if (INSTALL == m_layer)
-            {
-                //file exists. Check if it is too old
-                //Do not use the creation time. On Windows 2003 server I noticed
-                //that after removing the file and shortly later creating it again
-                //did not change the creation time. That is the newly created file
-                //had the creation time of the former file.
-                ::TimeValue curTime = {0,0};
-                ret = FILE_OK;
-                if (sal_True == ::osl_getSystemTime(& curTime))
-                {
-                    //get the modified time recorded in the <modified> element
-                    sal_uInt32 modified = getModifiedTime();
-                    OSL_ASSERT(modified <= curTime.Seconds);
-                    //Only if modified has a valued then NodeJava::write was called,
-                    //then the xml structure was filled with data.
-
-                    if ( modified && curTime.Seconds - modified >
-                         BootParams::getInstallDataExpiration())
-                    {
-#if OSL_DEBUG_LEVEL >=2
-                        fprintf(stderr, "[Java framework] Settings file is %d seconds old. \n",
-                                (int)( curTime.Seconds - modified));
-                        rtl::OString s = rtl::OUStringToOString(sURL, osl_getThreadTextEncoding());
-                        fprintf(stderr, "[Java framework] Settings file is exspired. Deleting settings file at \n%s\n", s.getStr());
-#endif
-                        //delete file
-                        File f(sURL);
-                        if (File::E_None == f.open(osl_File_OpenFlag_Write | osl_File_OpenFlag_Read)
-                            && File::E_None == f.setPos(0, 0)
-                            && File::E_None == f.setSize(0))
-                                    ret = FILE_DOES_NOT_EXIST;
-                        else
-                            ret = FILE_INVALID;
-                    }
-                    else
-                    {
-                        ret = FILE_OK;
-                    }
-                }
-                else // osl_getSystemTime
-                {
-                    ret = FILE_INVALID;
-                }
-            }
-            else // INSTALL == m_layer
-            {
-                ret = FILE_OK;
-            }
+            ret = FILE_OK;
         }
         else if (File::E_NOENT == rc_stat)
         {
@@ -1123,17 +1029,6 @@ JavaInfo * CNodeJavaInfo::makeJavaInfo() const
     return pInfo;
 }
 
-sal_uInt32 NodeJava::getModifiedTime() const
-{
-    if (m_layer != INSTALL)
-    {
-        OSL_ASSERT(0);
-        return 0;
-    }
-    rtl::OString modTimeSeconds = getElementModified();
-    return (sal_uInt32) modTimeSeconds.toInt64();
-}
-
 //================================================================================
 MergedSettings::MergedSettings():
     m_bEnabled(sal_False),
@@ -1142,23 +1037,11 @@ MergedSettings::MergedSettings():
     m_JRELocations(),
     m_javaInfo()
 {
-    NodeJava settings(NodeJava::USER_OR_INSTALL);
+    NodeJava settings(NodeJava::USER);
     settings.load();
-
-    //Check if UNO_JAVA_JFW_INSTALL_DATA is set. If so, then we need not use user and
-    //shared data.
-    const ::rtl::OUString sInstall = BootParams::getInstallData();
-
-    if (sInstall.isEmpty())
-    {
-        NodeJava sharedSettings(NodeJava::SHARED);
-        sharedSettings.load();
-        merge(sharedSettings, settings);
-    }
-    else
-    {
-        merge(NodeJava(), settings);
-    }
+    NodeJava sharedSettings(NodeJava::SHARED);
+    sharedSettings.load();
+    merge(sharedSettings, settings);
 }
 
 MergedSettings::~MergedSettings()
