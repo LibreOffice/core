@@ -1288,6 +1288,15 @@ void SwDoc::UpdateExpFlds( SwTxtFld* pUpdtFld, bool bUpdRefFlds )
     SwNewDBMgr* pMgr = GetNewDBMgr();
     pMgr->CloseAll(sal_False);
 
+    // Make sure we don't hide all sections, which would lead to a crash. First, count how many of them do we have.
+    int nShownSections = 0;
+    for( _SetGetExpFlds::const_iterator it = pUpdtFlds->GetSortLst()->begin(); it != pUpdtFlds->GetSortLst()->end(); ++it )
+    {
+        SwSection* pSect = (SwSection*)(*it)->GetSection();
+        if ( pSect && !pSect->IsCondHidden())
+            nShownSections++;
+    }
+
     String aNew;
     for( _SetGetExpFlds::const_iterator it = pUpdtFlds->GetSortLst()->begin(); it != pUpdtFlds->GetSortLst()->end(); ++it )
     {
@@ -1298,7 +1307,23 @@ void SwDoc::UpdateExpFlds( SwTxtFld* pUpdtFld, bool bUpdRefFlds )
             SwSbxValue aValue = aCalc.Calculate(
                                         pSect->GetCondition() );
             if(!aValue.IsVoidValue())
-                pSect->SetCondHidden( aValue.GetBool() );
+            {
+                // Do we want to hide this one?
+                bool bHide = aValue.GetBool();
+                if (bHide && !pSect->IsCondHidden())
+                {
+                    // This section will be hidden, but it wasn't before
+                    if (nShownSections == 1)
+                    {
+                        // This would be the last section, so set its condition to false, and avoid hiding it.
+                        OUString aCond("0");
+                        pSect->SetCondition(aCond);
+                        bHide = false;
+                    }
+                    nShownSections--;
+                }
+                pSect->SetCondHidden( bHide );
+            }
             continue;
         }
 
