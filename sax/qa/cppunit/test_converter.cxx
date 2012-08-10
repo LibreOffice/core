@@ -31,6 +31,7 @@
 #include <com/sun/star/util/MeasureUnit.hpp>
 
 #include "sax/tools/converter.hxx"
+#include "comphelper/sequenceasvector.hxx"
 
 
 using namespace ::com::sun::star;
@@ -55,6 +56,7 @@ public:
     void testPercent();
     void testColor();
     void testNumber();
+    void testBase64();
 
     CPPUNIT_TEST_SUITE(ConverterTest);
     CPPUNIT_TEST(testDuration);
@@ -65,6 +67,7 @@ public:
     CPPUNIT_TEST(testPercent);
     CPPUNIT_TEST(testColor);
     CPPUNIT_TEST(testNumber);
+    CPPUNIT_TEST(testBase64);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -506,6 +509,35 @@ void ConverterTest::testNumber()
     doTestNumberToString("-1", -0001);
     doTestNumberToString("0", -0);
 }
+
+void doTestEncodeBase64(char const*const pis, const uno::Sequence<sal_Int8> aPass)
+{
+    ::rtl::OUString const is(::rtl::OUString::createFromAscii(pis));
+    ::rtl::OUStringBuffer buf;
+    Converter::encodeBase64(buf, aPass);
+    OSL_TRACE("%s", ::rtl::OUStringToOString(buf.getStr(), RTL_TEXTENCODING_UTF8).getStr());
+    CPPUNIT_ASSERT_EQUAL(is, buf.makeStringAndClear());
+}
+void ConverterTest::testBase64()
+{
+    comphelper::SequenceAsVector< sal_Int8 > tempSeq(4);
+    for(sal_Int8 i = 0; i<4; ++i)
+        tempSeq.push_back(i);
+    uno::Sequence< sal_Int8 > tempSequence = tempSeq.getAsConstList();
+    doTestEncodeBase64("AAAAAAABAgM=", tempSequence);
+    tempSeq[0] = sal_Int8(5);
+    tempSeq[1] = sal_Int8(2);
+    tempSeq[2] = sal_Int8(3);
+    tempSequence = tempSeq.getAsConstList();
+    doTestEncodeBase64("BQIDAAABAgM=", tempSequence);
+    tempSeq[0] = sal_Int8(200);
+    tempSeq[1] = sal_Int8(31);
+    tempSeq[2] = sal_Int8(77);
+    tempSeq[3] = sal_Int8(111);
+    tempSequence = tempSeq.getAsConstList();
+    doTestEncodeBase64("yB9NbwABAgM=", tempSequence);
+}
+
 CPPUNIT_TEST_SUITE_REGISTRATION(ConverterTest);
 
 }

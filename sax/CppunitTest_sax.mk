@@ -17,6 +17,8 @@ $(eval $(call gb_CppunitTest_use_api,sax_cpputest,\
 $(eval $(call gb_CppunitTest_use_libraries,sax_cpputest, \
     sax \
     sal \
+    comphelper \
+    cppu \
     $(gb_STDLIBS) \
 ))
 
