@@ -87,7 +87,7 @@ namespace
         {
             // don't fade if we just move to the 'button'
             Point aEventPos( GetPosPixel() + rMEvt.GetPosPixel() );
-            if ( !m_pWin->Contains( aEventPos ) )
+            if ( !m_pWin->Contains( aEventPos ) || !m_pWin->IsVisible() )
                 m_pWin->Fade( false );
         }
         else if ( !m_pWin->IsVisible() )
