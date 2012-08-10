@@ -28,7 +28,8 @@
 SdrUndoManager::SdrUndoManager(sal_uInt16 nMaxUndoActionCount)
 :   EditUndoManager(nMaxUndoActionCount),
     maEndTextEditHdl(),
-    mpLastUndoActionBeforeTextEdit(0)
+    mpLastUndoActionBeforeTextEdit(0),
+    mbEndTextEditTriggeredFromUndo(false)
 {
 }
 
@@ -38,10 +39,10 @@ SdrUndoManager::~SdrUndoManager()
 
 sal_Bool SdrUndoManager::Undo()
 {
-    sal_Bool bRetval(sal_False);
-
-    if(maEndTextEditHdl.IsSet())
+    if(isTextEditActive())
     {
+        sal_Bool bRetval(sal_False);
+
         // we are in text edit mode
         if(GetUndoActionCount() && mpLastUndoActionBeforeTextEdit != GetUndoAction(0))
         {
@@ -51,24 +52,25 @@ sal_Bool SdrUndoManager::Undo()
         else
         {
             // no more text edit undo, end text edit
+            mbEndTextEditTriggeredFromUndo = true;
             maEndTextEditHdl.Call(this);
+            mbEndTextEditTriggeredFromUndo = false;
         }
-    }
 
-    if(!bRetval && GetUndoActionCount())
+        return bRetval;
+    }
+    else
     {
         // no undo triggered up to now, trigger local one
-        bRetval = SfxUndoManager::Undo();
+        return SfxUndoManager::Undo();
     }
-
-    return bRetval;
 }
 
 sal_Bool SdrUndoManager::Redo()
 {
     sal_Bool bRetval(sal_False);
 
-    if(maEndTextEditHdl.IsSet())
+    if(isTextEditActive())
     {
         // we are in text edit mode
         bRetval = EditUndoManager::Redo();
@@ -87,7 +89,7 @@ void SdrUndoManager::SetEndTextEditHdl(const Link& rLink)
 {
     maEndTextEditHdl = rLink;
 
-    if(maEndTextEditHdl.IsSet())
+    if(isTextEditActive())
     {
         // text edit start, remember last non-textedit action for later cleanup
         mpLastUndoActionBeforeTextEdit = GetUndoActionCount() ? GetUndoAction(0) : 0;
@@ -108,6 +110,11 @@ void SdrUndoManager::SetEndTextEditHdl(const Link& rLink)
         // forget marker again
         mpLastUndoActionBeforeTextEdit = 0;
     }
+}
+
+bool SdrUndoManager::isTextEditActive() const
+{
+    return maEndTextEditHdl.IsSet();
 }
 
 //////////////////////////////////////////////////////////////////////////////
