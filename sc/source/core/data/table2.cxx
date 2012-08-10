@@ -1294,7 +1294,7 @@ void ScTable::SetValue( SCCOL nCol, SCROW nRow, const double& rVal )
 }
 
 
-void ScTable::GetString( SCCOL nCol, SCROW nRow, rtl::OUString& rString )
+void ScTable::GetString( SCCOL nCol, SCROW nRow, rtl::OUString& rString ) const
 {
     if (ValidColRow(nCol,nRow))
         aCol[nCol].GetString( nRow, rString );

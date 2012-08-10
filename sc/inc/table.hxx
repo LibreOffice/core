@@ -311,7 +311,7 @@ public:
     void        SetValue( SCCOL nCol, SCROW nRow, const double& rVal );
     void        SetError( SCCOL nCol, SCROW nRow, sal_uInt16 nError);
 
-    void        GetString( SCCOL nCol, SCROW nRow, rtl::OUString& rString );
+    void        GetString( SCCOL nCol, SCROW nRow, rtl::OUString& rString ) const;
     void        GetInputString( SCCOL nCol, SCROW nRow, rtl::OUString& rString ) const;
     double      GetValue( const ScAddress& rPos ) const
                     {
@@ -852,15 +852,15 @@ private:
         ScRangeList& rMatchedRanges, rtl::OUString& rUndoStr, ScDocument* pUndoDoc);
 
                                 // use the global sort parameter:
-    bool        IsSorted(SCCOLROW nStart, SCCOLROW nEnd);
+    bool        IsSorted(SCCOLROW nStart, SCCOLROW nEnd) const;
     void        DecoladeRow( ScSortInfoArray*, SCROW nRow1, SCROW nRow2 );
     void        SwapCol(SCCOL nCol1, SCCOL nCol2);
     void        SwapRow(SCROW nRow1, SCROW nRow2);
     short       CompareCell( sal_uInt16 nSort,
                     ScBaseCell* pCell1, SCCOL nCell1Col, SCROW nCell1Row,
-                    ScBaseCell* pCell2, SCCOL nCell2Col, SCROW nCell2Row );
-    short       Compare(SCCOLROW nIndex1, SCCOLROW nIndex2);
-    short       Compare( ScSortInfoArray*, SCCOLROW nIndex1, SCCOLROW nIndex2);
+                    ScBaseCell* pCell2, SCCOL nCell2Col, SCROW nCell2Row ) const;
+    short       Compare(SCCOLROW nIndex1, SCCOLROW nIndex2) const;
+    short       Compare( ScSortInfoArray*, SCCOLROW nIndex1, SCCOLROW nIndex2) const;
     ScSortInfoArray*    CreateSortInfoArray( SCCOLROW nInd1, SCCOLROW nInd2 );
     void        QuickSort( ScSortInfoArray*, SCsCOLROW nLo, SCsCOLROW nHi);
     void        SortReorder( ScSortInfoArray*, ScProgress& );

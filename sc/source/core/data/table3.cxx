@@ -378,7 +378,7 @@ void ScTable::SortReorder( ScSortInfoArray* pArray, ScProgress& rProgress )
 
 short ScTable::CompareCell( sal_uInt16 nSort,
             ScBaseCell* pCell1, SCCOL nCell1Col, SCROW nCell1Row,
-            ScBaseCell* pCell2, SCCOL nCell2Col, SCROW nCell2Row )
+            ScBaseCell* pCell2, SCCOL nCell2Col, SCROW nCell2Row ) const
 {
     short nRes = 0;
 
@@ -490,7 +490,7 @@ short ScTable::CompareCell( sal_uInt16 nSort,
     return nRes;
 }
 
-short ScTable::Compare( ScSortInfoArray* pArray, SCCOLROW nIndex1, SCCOLROW nIndex2 )
+short ScTable::Compare( ScSortInfoArray* pArray, SCCOLROW nIndex1, SCCOLROW nIndex2 ) const
 {
     short nRes;
     sal_uInt16 nSort = 0;
@@ -681,7 +681,7 @@ void ScTable::SwapRow(SCROW nRow1, SCROW nRow2)
     }
 }
 
-short ScTable::Compare(SCCOLROW nIndex1, SCCOLROW nIndex2)
+short ScTable::Compare(SCCOLROW nIndex1, SCCOLROW nIndex2) const
 {
     short nRes;
     sal_uInt16 nSort = 0;
@@ -710,7 +710,7 @@ short ScTable::Compare(SCCOLROW nIndex1, SCCOLROW nIndex2)
     return nRes;
 }
 
-bool ScTable::IsSorted( SCCOLROW nStart, SCCOLROW nEnd )    // ueber aSortParam
+bool ScTable::IsSorted( SCCOLROW nStart, SCCOLROW nEnd ) const   // ueber aSortParam
 {
     for (SCCOLROW i=nStart; i<nEnd; i++)
     {
