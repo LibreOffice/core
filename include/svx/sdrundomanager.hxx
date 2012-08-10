@@ -33,6 +33,11 @@ private:
 
     Link            maEndTextEditHdl;
     SfxUndoAction*  mpLastUndoActionBeforeTextEdit;
+    bool            mbEndTextEditTriggeredFromUndo;
+
+protected:
+    // call to check for TextEdit active
+    bool isTextEditActive() const;
 
 public:
     SdrUndoManager(sal_uInt16 nMaxUndoActionCount = 20);
@@ -47,6 +52,11 @@ public:
     // reset all text edit actions will be removed from this undo manager to
     // restore the state before activation
     void SetEndTextEditHdl(const Link& rLink);
+
+    // check from outside if we are inside a callback for ending text edit. This
+    // is needed to detect inside end text edit if it is a regular one or triggered
+    // by a last undo during text edit
+    bool isEndTextEditTriggeredFromUndo() { return mbEndTextEditTriggeredFromUndo; }
 };
 
 //////////////////////////////////////////////////////////////////////////////

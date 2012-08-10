@@ -116,6 +116,12 @@ private:
     SVX_DLLPRIVATE void ImpClearVars();
 
 protected:
+    // central method to get an SdrUndoManager for enhanced TextEdit. Default will
+    // try to return a dynamic_casted GetModel()->GetSdrUndoManager(). Applications
+    // which want to use this feature will need to overload this virtual method,
+    // provide their document UndoManager and derive it from SdrUndoManager.
+    virtual SdrUndoManager* getSdrUndoManagerForEnhancedTextEdit() const;
+
     OutlinerView* ImpFindOutlinerView(Window* pWin) const;
 
     // Eine neue OutlinerView auf dem Heap anlegen und alle erforderlichen Parameter setzen.
