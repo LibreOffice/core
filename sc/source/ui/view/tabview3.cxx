@@ -191,11 +191,6 @@ void ScTabView::ShowAllCursors()
             }
 }
 
-void ScTabView::HideCursor()
-{
-    pGridWin[aViewData.GetActivePart()]->HideCursor();
-}
-
 void ScTabView::ShowCursor()
 {
     pGridWin[aViewData.GetActivePart()]->ShowCursor();

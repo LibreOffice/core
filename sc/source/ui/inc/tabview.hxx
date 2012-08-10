@@ -358,7 +358,6 @@ public:
 
     void            UpdateAutoFillMark();
 
-    void            HideCursor();               // nur aktiver Teil
     void            ShowCursor();
     void            HideAllCursors();
     void            ShowAllCursors();
