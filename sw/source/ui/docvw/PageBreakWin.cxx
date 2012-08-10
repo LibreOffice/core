@@ -95,7 +95,7 @@ namespace
             m_pWin->Fade( true );
         }
 
-        if ( !rMEvt.IsSynthetic() )
+        if ( !rMEvt.IsSynthetic() && !m_pWin->IsVisible() )
         {
             Point* pPtr = new Point( rMEvt.GetPosPixel() );
             m_pWin->UpdatePosition( pPtr );
