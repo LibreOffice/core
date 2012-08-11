@@ -232,16 +232,19 @@ ScColorScaleEntry* ConvertToModel( const ColorScaleRuleModelEntry& rEntry, ScDoc
         ScColorScaleEntry* pEntry = new ScColorScaleEntry(rEntry.mnVal, rEntry.maColor);
 
         if(rEntry.mbMin)
-            pEntry->SetMin(true);
+            pEntry->SetType(COLORSCALE_MIN);
         if(rEntry.mbMax)
-            pEntry->SetMax(true);
+            pEntry->SetType(COLORSCALE_MAX);
         if(rEntry.mbPercent)
-            pEntry->SetPercent(true);
+            pEntry->SetType(COLORSCALE_PERCENT);
         if(rEntry.mbPercentile)
-            pEntry->SetPercentile(true);
+            pEntry->SetType(COLORSCALE_PERCENTILE);
 
         if(!rEntry.maFormula.isEmpty())
+        {
+            pEntry->SetType(COLORSCALE_FORMULA);
             pEntry->SetFormula(rEntry.maFormula, pDoc, rAddr, formula::FormulaGrammar::GRAM_ENGLISH_XL_A1);
+        }
 
         return pEntry;
 }

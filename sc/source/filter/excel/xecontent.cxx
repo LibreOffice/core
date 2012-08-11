@@ -898,14 +898,19 @@ namespace {
 
 rtl::OString getColorScaleType( const ScColorScaleEntry& rEntry )
 {
-    if (rEntry.GetMin())
-        return "min";
-    if(rEntry.GetMax())
-        return "max";
-    if(rEntry.GetPercent())
-        return "percent";
-    if(rEntry.HasFormula())
-        return "formula";
+    switch(rEntry.GetType())
+    {
+        case COLORSCALE_MIN:
+            return "min";
+        case COLORSCALE_MAX:
+            return "max";
+        case COLORSCALE_PERCENT:
+            return "percent";
+        case COLORSCALE_FORMULA:
+            return "formula";
+        default:
+            break;
+    }
 
     return "num";
 }
@@ -917,7 +922,7 @@ void XclExpCfvo::SaveXml( XclExpXmlStream& rStrm )
     sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
 
     rtl::OString aValue;
-    if(mrEntry.HasFormula())
+    if(mrEntry.GetType() == COLORSCALE_FORMULA)
     {
         rtl::OUString aFormula = XclXmlUtils::ToOUString( GetRoot().GetDoc(), maSrcPos, mrEntry.GetFormula()->Clone() );
         aValue = rtl::OUStringToOString(aFormula, RTL_TEXTENCODING_UTF8 );

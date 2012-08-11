@@ -42,17 +42,24 @@ class ScFormulaCell;
 class ScTokenArray;
 struct ScDataBarInfo;
 
+enum ScColorScaleEntryType
+{
+    COLORSCALE_VALUE,
+    COLORSCALE_MIN,
+    COLORSCALE_MAX,
+    COLORSCALE_PERCENT,
+    COLORSCALE_PERCENTILE,
+    COLORSCALE_FORMULA
+};
+
 class SC_DLLPUBLIC ScColorScaleEntry
 {
 private:
     double mnVal;
     Color maColor;
     boost::scoped_ptr<ScFormulaCell> mpCell;
+    ScColorScaleEntryType meType;
 
-    bool mbMin;
-    bool mbMax;
-    bool mbPercent;
-    bool mbPercentile;
 public:
     ScColorScaleEntry(double nVal, const Color& rCol);
     ScColorScaleEntry();
@@ -69,19 +76,11 @@ public:
     void UpdateReference( UpdateRefMode eUpdateRefMode,
             const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
 
-    bool GetMin() const;
-    bool GetMax() const;
-    bool GetPercent() const;
-    bool GetPercentile() const;
-    bool HasFormula() const;
     const ScTokenArray* GetFormula() const;
     rtl::OUString GetFormula( formula::FormulaGrammar::Grammar eGrammar ) const;
-    void SetMin(bool bMin);
-    void SetMax(bool bMax);
-    void SetPercent(bool bPercent);
-    void SetPercentile(bool bPercentile);
 
-    void SetHasValue();
+    ScColorScaleEntryType GetType() const;
+    void SetType( ScColorScaleEntryType eType );
 };
 
 namespace databar

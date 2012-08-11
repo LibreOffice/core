@@ -34,10 +34,7 @@
 ScColorScaleEntry::ScColorScaleEntry():
     mnVal(0),
     mpCell(NULL),
-    mbMin(false),
-    mbMax(false),
-    mbPercent(false),
-    mbPercentile(false)
+    meType(COLORSCALE_VALUE)
 {
 }
 
@@ -45,10 +42,7 @@ ScColorScaleEntry::ScColorScaleEntry(double nVal, const Color& rCol):
     mnVal(nVal),
     maColor(rCol),
     mpCell(NULL),
-    mbMin(false),
-    mbMax(false),
-    mbPercent(false),
-    mbPercentile(false)
+    meType(COLORSCALE_VALUE)
 {
 }
 
@@ -56,10 +50,7 @@ ScColorScaleEntry::ScColorScaleEntry(const ScColorScaleEntry& rEntry):
     mnVal(rEntry.mnVal),
     maColor(rEntry.maColor),
     mpCell(),
-    mbMin(rEntry.mbMin),
-    mbMax(rEntry.mbMax),
-    mbPercent(rEntry.mbPercent),
-    mbPercentile(rEntry.mbPercentile)
+    meType(rEntry.meType)
 {
 }
 
@@ -67,10 +58,7 @@ ScColorScaleEntry::ScColorScaleEntry(ScDocument* pDoc, const ScColorScaleEntry& 
     mnVal(rEntry.mnVal),
     maColor(rEntry.maColor),
     mpCell(),
-    mbMin(rEntry.mbMin),
-    mbMax(rEntry.mbMax),
-    mbPercent(rEntry.mbPercent),
-    mbPercentile(rEntry.mbPercentile)
+    meType(rEntry.meType)
 {
     if(rEntry.mpCell)
     {
@@ -197,58 +185,16 @@ void ScColorScaleFormat::AddEntry( ScColorScaleEntry* pEntry )
     maColorScales.push_back( pEntry );
 }
 
-bool ScColorScaleEntry::GetMin() const
+void ScColorScaleEntry::SetType( ScColorScaleEntryType eType )
 {
-    return mbMin;
+    meType = eType;
+    if(eType != COLORSCALE_FORMULA)
+        mpCell.reset();
 }
 
-bool ScColorScaleEntry::GetMax() const
+ScColorScaleEntryType ScColorScaleEntry::GetType() const
 {
-    return mbMax;
-}
-
-bool ScColorScaleEntry::GetPercent() const
-{
-    return mbPercent;
-}
-
-bool ScColorScaleEntry::GetPercentile() const
-{
-    return mbPercentile;
-}
-
-bool ScColorScaleEntry::HasFormula() const
-{
-    return mpCell;
-}
-
-void ScColorScaleEntry::SetMin(bool bMin)
-{
-    mbMin = bMin;
-}
-
-void ScColorScaleEntry::SetMax(bool bMax)
-{
-    mbMax = bMax;
-}
-
-void ScColorScaleEntry::SetPercent(bool bPercent)
-{
-    mbPercent = bPercent;
-}
-
-void ScColorScaleEntry::SetPercentile(bool bPercentile)
-{
-    mbPercentile = bPercentile;
-}
-
-void ScColorScaleEntry::SetHasValue()
-{
-    mbPercentile = false;
-    mbPercent = false;
-    mbMin = false;
-    mbMax = false;
-    mpCell.reset();
+    return meType;
 }
 
 namespace {
@@ -352,7 +298,7 @@ double ScColorScaleFormat::GetMinValue() const
 {
     const_iterator itr = maColorScales.begin();
 
-    if(!itr->GetMin())
+    if(itr->GetType() != COLORSCALE_MIN)
         return itr->GetValue();
     else
     {
@@ -364,7 +310,7 @@ double ScColorScaleFormat::GetMaxValue() const
 {
     ColorScaleEntries::const_reverse_iterator itr = maColorScales.rbegin();
 
-    if(!itr->GetMax())
+    if(itr->GetType() != COLORSCALE_MAX)
         return itr->GetValue();
     else
     {
@@ -460,29 +406,29 @@ double GetPercentile( std::vector<double>& rArray, double fPercentile )
 
 double ScColorScaleFormat::CalcValue(double nMin, double nMax, ScColorScaleFormat::const_iterator& itr) const
 {
-    if(itr->GetPercent())
+    switch(itr->GetType())
     {
-        return nMin + (nMax-nMin)*(itr->GetValue()/100);
-    }
-    else if(itr->GetMin())
-    {
-        return nMin;
-    }
-    else if(itr->GetMax())
-    {
-        return nMax;
-    }
-    else if(itr->GetPercentile())
-    {
-        std::vector<double> aValues;
-        getValues(aValues);
-        if(aValues.size() == 1)
-            return aValues[0];
-        else
+        case COLORSCALE_PERCENT:
+            return nMin + (nMax-nMin)*(itr->GetValue()/100);
+        case COLORSCALE_MIN:
+            return nMin;
+        case COLORSCALE_MAX:
+            return nMax;
+        case COLORSCALE_PERCENTILE:
         {
-            double fPercentile = itr->GetValue()/100.0;
-            return GetPercentile(aValues, fPercentile);
+            std::vector<double> aValues;
+            getValues(aValues);
+            if(aValues.size() == 1)
+                return aValues[0];
+            else
+            {
+                double fPercentile = itr->GetValue()/100.0;
+                return GetPercentile(aValues, fPercentile);
+            }
         }
+
+        default:
+        break;
     }
 
     return itr->GetValue();
@@ -559,14 +505,18 @@ bool ScColorScaleFormat::CheckEntriesForRel(const ScRange& rRange) const
     bool bNeedUpdate = false;
     for(const_iterator itr = begin(); itr != end(); ++itr)
     {
-        if(itr->GetMin() || itr->GetMax())
+        ScColorScaleEntryType eType = itr->GetType();
+        switch(eType)
         {
-            bNeedUpdate = true;
-            break;
+            case COLORSCALE_MIN:
+            case COLORSCALE_MAX:
+                bNeedUpdate = true;
+                break;
+            case COLORSCALE_FORMULA:
+                return true;
+            default:
+                break;
         }
-
-        if(itr->HasFormula())
-            return true;
     }
 
     // TODO: check also if the changed value is the new min/max
@@ -661,14 +611,15 @@ namespace {
 
 bool NeedUpdate(ScColorScaleEntry* pEntry)
 {
-    if(pEntry->GetMin())
-        return true;
-
-    if(pEntry->GetMax())
-        return true;
-
-    if(pEntry->GetFormula())
-        return true;
+    switch(pEntry->GetType())
+    {
+        case COLORSCALE_MIN:
+        case COLORSCALE_MAX:
+        case COLORSCALE_FORMULA:
+            return true;
+        default:
+            return false;
+    }
 
     return false;
 }
@@ -704,16 +655,24 @@ void ScDataBarFormat::UpdateMoveTab(SCTAB nOldTab, SCTAB nNewTab)
 
 double ScDataBarFormat::getMin(double nMin, double nMax) const
 {
-    if(mpFormatData->mpLowerLimit->GetMin())
-        return nMin;
-    else if(mpFormatData->mpLowerLimit->GetPercent())
-        return nMin + (nMax-nMin)/100*mpFormatData->mpLowerLimit->GetValue();
-    else if(mpFormatData->mpLowerLimit->GetPercentile())
+    switch(mpFormatData->mpLowerLimit->GetType())
     {
-        double fPercentile = mpFormatData->mpLowerLimit->GetValue()/100.0;
-        std::vector<double> aValues;
-        getValues(aValues);
-        return GetPercentile(aValues, fPercentile);
+        case COLORSCALE_MIN:
+            return nMin;
+
+        case COLORSCALE_PERCENT:
+            return nMin + (nMax-nMin)/100*mpFormatData->mpLowerLimit->GetValue();
+
+        case COLORSCALE_PERCENTILE:
+        {
+            double fPercentile = mpFormatData->mpLowerLimit->GetValue()/100.0;
+            std::vector<double> aValues;
+            getValues(aValues);
+            return GetPercentile(aValues, fPercentile);
+        }
+
+        default:
+        break;
     }
 
     return mpFormatData->mpLowerLimit->GetValue();
@@ -721,16 +680,22 @@ double ScDataBarFormat::getMin(double nMin, double nMax) const
 
 double ScDataBarFormat::getMax(double nMin, double nMax) const
 {
-    if(mpFormatData->mpUpperLimit->GetMax())
-        return nMax;
-    else if(mpFormatData->mpUpperLimit->GetPercent())
-        return nMin + (nMax-nMin)/100*mpFormatData->mpUpperLimit->GetValue();
-    else if(mpFormatData->mpLowerLimit->GetPercentile())
+    switch(mpFormatData->mpUpperLimit->GetType())
     {
-        double fPercentile = mpFormatData->mpLowerLimit->GetValue()/100.0;
-        std::vector<double> aValues;
-        getValues(aValues);
-        return GetPercentile(aValues, fPercentile);
+        case COLORSCALE_MAX:
+            return nMax;
+        case COLORSCALE_PERCENT:
+            return nMin + (nMax-nMin)/100*mpFormatData->mpUpperLimit->GetValue();
+        case COLORSCALE_PERCENTILE:
+        {
+            double fPercentile = mpFormatData->mpLowerLimit->GetValue()/100.0;
+            std::vector<double> aValues;
+            getValues(aValues);
+            return GetPercentile(aValues, fPercentile);
+        }
+
+        default:
+            break;
     }
 
     return mpFormatData->mpUpperLimit->GetValue();
@@ -797,9 +762,9 @@ ScDataBarInfo* ScDataBarFormat::GetDataBarInfo(const ScAddress& rAddr) const
 
             // if max or min is used we may need to adjust it
             // for the length calculation
-            if (mpFormatData->mpLowerLimit->GetMin() && nMin > 0)
+            if (mpFormatData->mpLowerLimit->GetType() == COLORSCALE_MIN && nMin > 0)
                 nMinPositive = nMin;
-            if (mpFormatData->mpUpperLimit->GetMax() && nMax < 0)
+            if (mpFormatData->mpUpperLimit->GetType() == COLORSCALE_MAX && nMax < 0)
                 nMaxNegative = nMax;
         }
         else if( mpFormatData->meAxisPosition == databar::MIDDLE)

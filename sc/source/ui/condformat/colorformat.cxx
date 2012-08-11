@@ -71,18 +71,27 @@ namespace {
 
 void SetType(const ScColorScaleEntry* pEntry, ListBox& aLstBox)
 {
-    if(pEntry->GetMin())
-        aLstBox.SelectEntryPos(0);
-    else if(pEntry->GetMax())
-        aLstBox.SelectEntryPos(1);
-    else if(pEntry->GetPercentile())
-        aLstBox.SelectEntryPos(2);
-    else if(pEntry->GetPercent())
-        aLstBox.SelectEntryPos(3);
-    else if(pEntry->HasFormula())
-        aLstBox.SelectEntryPos(5);
-    else
-        aLstBox.SelectEntryPos(4);
+    switch(pEntry->GetType())
+    {
+        case COLORSCALE_MIN:
+            aLstBox.SelectEntryPos(0);
+            break;
+        case COLORSCALE_MAX:
+            aLstBox.SelectEntryPos(1);
+            break;
+        case COLORSCALE_PERCENTILE:
+            aLstBox.SelectEntryPos(2);
+            break;
+        case COLORSCALE_PERCENT:
+            aLstBox.SelectEntryPos(3);
+            break;
+        case COLORSCALE_FORMULA:
+            aLstBox.SelectEntryPos(5);
+            break;
+        case COLORSCALE_VALUE:
+            aLstBox.SelectEntryPos(4);
+            break;
+    }
 }
 
 void GetType(const ListBox& rLstBox, const Edit& rEd, ScColorScaleEntry* pEntry, SvNumberFormatter* pNumberFormatter )
@@ -92,24 +101,24 @@ void GetType(const ListBox& rLstBox, const Edit& rEd, ScColorScaleEntry* pEntry,
     switch(rLstBox.GetSelectEntryPos())
     {
         case 0:
-            pEntry->SetMin(true);
+            pEntry->SetType(COLORSCALE_MIN);
             break;
         case 1:
-            pEntry->SetMax(true);
+            pEntry->SetType(COLORSCALE_MAX);
             break;
         case 2:
-            pEntry->SetPercentile(true);
+            pEntry->SetType(COLORSCALE_PERCENTILE);
             pNumberFormatter->IsNumberFormat( rEd.GetText(), nIndex, nVal );
             pEntry->SetValue(nVal);
             break;
         case 3:
-            pEntry->SetPercent(true);
+            pEntry->SetType(COLORSCALE_PERCENT);
             pNumberFormatter->IsNumberFormat( rEd.GetText(), nIndex, nVal );
             pEntry->SetValue(nVal);
             break;
         case 4:
             pNumberFormatter->IsNumberFormat( rEd.GetText(), nIndex, nVal );
-            pEntry->SetHasValue();
+            pEntry->SetType(COLORSCALE_VALUE);
             pEntry->SetValue(nVal);
             break;
         case 5:
@@ -119,9 +128,9 @@ void GetType(const ListBox& rLstBox, const Edit& rEd, ScColorScaleEntry* pEntry,
 
 void SetValue( ScColorScaleEntry* pEntry, Edit& aEdit)
 {
-    if(pEntry->HasFormula())
+    if(pEntry->GetType() == COLORSCALE_FORMULA)
         aEdit.SetText(pEntry->GetFormula(formula::FormulaGrammar::GRAM_DEFAULT));
-    else if(!pEntry->GetMin() && !pEntry->GetMax())
+    else if(pEntry->GetType() != COLORSCALE_MIN && pEntry->GetType() != COLORSCALE_MAX)
         aEdit.SetText(rtl::OUString::valueOf(pEntry->GetValue()));
     else
         aEdit.Disable();

@@ -430,15 +430,16 @@ void setColorEntryType(const rtl::OUString& rType, ScColorScaleEntry* pEntry, co
         ScXMLImport& rImport)
 {
     if(rType == "minimum")
-        pEntry->SetMin(true);
+        pEntry->SetType(COLORSCALE_MIN);
     else if(rType == "maximum")
-        pEntry->SetMax(true);
+        pEntry->SetType(COLORSCALE_MAX);
     else if(rType == "percentile")
-        pEntry->SetPercentile(true);
+        pEntry->SetType(COLORSCALE_PERCENTILE);
     else if(rType == "percent")
-        pEntry->SetPercent(true);
+        pEntry->SetType(COLORSCALE_PERCENT);
     else if(rType == "formula")
     {
+        pEntry->SetType(COLORSCALE_FORMULA);
         //position does not matter, only table is important
         pEntry->SetFormula(rFormula, rImport.GetDocument(), ScAddress(0,0,rImport.GetTables().GetCurrentSheet()), formula::FormulaGrammar::GRAM_ODFF);
     }

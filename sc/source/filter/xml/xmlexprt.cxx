@@ -3786,18 +3786,22 @@ namespace {
 
 rtl::OUString getCondFormatEntryType(const ScColorScaleEntry& rEntry)
 {
-    if(rEntry.GetMin())
-        return rtl::OUString("minimum");
-    else if(rEntry.GetMax())
-        return rtl::OUString("maximum");
-    else if(rEntry.GetPercent())
-        return rtl::OUString("percent");
-    else if(rEntry.GetPercentile())
-        return rtl::OUString("percentile");
-    else if(rEntry.GetFormula())
-        return rtl::OUString("formula");
-    else
-        return rtl::OUString("number");
+    switch(rEntry.GetType())
+    {
+        case COLORSCALE_MIN:
+            return rtl::OUString("minimum");
+        case COLORSCALE_MAX:
+            return rtl::OUString("maximum");
+        case COLORSCALE_PERCENT:
+            return rtl::OUString("percent");
+        case COLORSCALE_PERCENTILE:
+            return rtl::OUString("percentile");
+        case COLORSCALE_FORMULA:
+            return rtl::OUString("formula");
+        case COLORSCALE_VALUE:
+            return rtl::OUString("number");
+    }
+    return rtl::OUString();
 }
 
 }
@@ -3901,7 +3905,7 @@ void ScXMLExport::ExportConditionalFormat(SCTAB nTab)
                         for(ScColorScaleFormat::const_iterator it = mrColorScale.begin();
                                 it != mrColorScale.end(); ++it)
                         {
-                            if(it->HasFormula())
+                            if(it->GetType() == COLORSCALE_FORMULA)
                             {
                                 rtl::OUString sFormula = it->GetFormula(formula::FormulaGrammar::GRAM_ODFF);
                                 AddAttribute(XML_NAMESPACE_CALC_EXT, XML_VALUE, sFormula);
@@ -3962,7 +3966,7 @@ void ScXMLExport::ExportConditionalFormat(SCTAB nTab)
                         SvXMLElementExport aElementDataBar(*this, XML_NAMESPACE_CALC_EXT, XML_DATA_BAR, true, true);
 
                         {
-                            if(pFormatData->mpLowerLimit->HasFormula())
+                            if(pFormatData->mpLowerLimit->GetType() == COLORSCALE_FORMULA)
                             {
                                 rtl::OUString sFormula = pFormatData->mpLowerLimit->GetFormula(formula::FormulaGrammar::GRAM_ODFF);
                                 AddAttribute(XML_NAMESPACE_CALC_EXT, XML_VALUE, sFormula);
@@ -3974,7 +3978,7 @@ void ScXMLExport::ExportConditionalFormat(SCTAB nTab)
                         }
 
                         {
-                            if(pFormatData->mpUpperLimit->HasFormula())
+                            if(pFormatData->mpUpperLimit->GetType() == COLORSCALE_FORMULA)
                             {
                                 rtl::OUString sFormula = pFormatData->mpUpperLimit->GetFormula(formula::FormulaGrammar::GRAM_ODFF);
                                 AddAttribute(XML_NAMESPACE_CALC_EXT, XML_VALUE, sFormula);

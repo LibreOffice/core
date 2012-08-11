@@ -56,58 +56,59 @@ namespace {
 
 void SetColorScaleEntryTypes( const ScColorScaleEntry& rEntry, ListBox& rLbType, Edit& rEdit, ColorListBox& rLbCol )
 {
-    if(rEntry.GetMin())
-        rLbType.SelectEntryPos(0);
-    else if(rEntry.GetMax())
-        rLbType.SelectEntryPos(1);
-    else if(rEntry.GetPercentile())
+    switch(rEntry.GetType())
     {
-        rEdit.SetText(rtl::OUString::valueOf(rEntry.GetValue()));
-        rLbType.SelectEntryPos(2);
-    }
-    else if(rEntry.GetPercent())
-    {
-        rEdit.SetText(rtl::OUString::valueOf(rEntry.GetValue()));
-        rLbType.SelectEntryPos(4);
-    }
-    else if(rEntry.HasFormula())
-    {
-        rEdit.SetText(rEntry.GetFormula(formula::FormulaGrammar::GRAM_DEFAULT));
-        rLbType.SelectEntryPos(5);
-    }
-    else
-    {
-        rEdit.SetText(rtl::OUString::valueOf(rEntry.GetValue()));
-        rLbType.SelectEntryPos(3);
+        case COLORSCALE_MIN:
+            rLbType.SelectEntryPos(0);
+            break;
+        case COLORSCALE_MAX:
+            rLbType.SelectEntryPos(1);
+            break;
+        case COLORSCALE_PERCENTILE:
+            rEdit.SetText(rtl::OUString::valueOf(rEntry.GetValue()));
+            rLbType.SelectEntryPos(2);
+            break;
+        case COLORSCALE_PERCENT:
+            rEdit.SetText(rtl::OUString::valueOf(rEntry.GetValue()));
+            rLbType.SelectEntryPos(4);
+            break;
+        case COLORSCALE_FORMULA:
+            rEdit.SetText(rEntry.GetFormula(formula::FormulaGrammar::GRAM_DEFAULT));
+            rLbType.SelectEntryPos(5);
+            break;
+        case COLORSCALE_VALUE:
+            rEdit.SetText(rtl::OUString::valueOf(rEntry.GetValue()));
+            rLbType.SelectEntryPos(3);
+            break;
     }
     rLbCol.SelectEntry(rEntry.GetColor());
 }
 
 void SetDataBarEntryTypes( const ScColorScaleEntry& rEntry, ListBox& rLbType, Edit& rEdit )
 {
-    if(rEntry.GetMin())
-        rLbType.SelectEntryPos(0);
-    else if(rEntry.GetMax())
-        rLbType.SelectEntryPos(1);
-    else if(rEntry.GetPercentile())
+    switch(rEntry.GetType())
     {
-        rEdit.SetText(rtl::OUString::valueOf(rEntry.GetValue()));
-        rLbType.SelectEntryPos(2);
-    }
-    else if(rEntry.GetPercent())
-    {
-        rEdit.SetText(rtl::OUString::valueOf(rEntry.GetValue()));
-        rLbType.SelectEntryPos(4);
-    }
-    else if(rEntry.HasFormula())
-    {
-        rEdit.SetText(rEntry.GetFormula(formula::FormulaGrammar::GRAM_DEFAULT));
-        rLbType.SelectEntryPos(5);
-    }
-    else
-    {
-        rEdit.SetText(rtl::OUString::valueOf(rEntry.GetValue()));
-        rLbType.SelectEntryPos(3);
+        case COLORSCALE_MIN:
+            rLbType.SelectEntryPos(0);
+            break;
+        case COLORSCALE_MAX:
+            rLbType.SelectEntryPos(1);
+        case COLORSCALE_PERCENTILE:
+            rEdit.SetText(rtl::OUString::valueOf(rEntry.GetValue()));
+            rLbType.SelectEntryPos(2);
+            break;
+        case COLORSCALE_PERCENT:
+            rEdit.SetText(rtl::OUString::valueOf(rEntry.GetValue()));
+            rLbType.SelectEntryPos(4);
+            break;
+        case COLORSCALE_FORMULA:
+            rEdit.SetText(rEntry.GetFormula(formula::FormulaGrammar::GRAM_DEFAULT));
+            rLbType.SelectEntryPos(5);
+            break;
+        case COLORSCALE_VALUE:
+            rEdit.SetText(rtl::OUString::valueOf(rEntry.GetValue()));
+            rLbType.SelectEntryPos(3);
+            break;
     }
 }
 
@@ -403,8 +404,8 @@ void ScCondFrmtEntry::Init()
     mpDataBarData.reset(new ScDataBarFormatData());
     mpDataBarData->mpUpperLimit.reset(new ScColorScaleEntry());
     mpDataBarData->mpLowerLimit.reset(new ScColorScaleEntry());
-    mpDataBarData->mpLowerLimit->SetMin(true);
-    mpDataBarData->mpUpperLimit->SetMax(true);
+    mpDataBarData->mpLowerLimit->SetType(COLORSCALE_MIN);
+    mpDataBarData->mpUpperLimit->SetType(COLORSCALE_MAX);
     mpDataBarData->maPositiveColor = COL_LIGHTBLUE;
 }
 
@@ -702,24 +703,24 @@ void SetColorScaleEntry( ScColorScaleEntry* pEntry, const ListBox& rType, const 
     switch(rType.GetSelectEntryPos())
     {
         case 0:
-            pEntry->SetMin(true);
+            pEntry->SetType(COLORSCALE_MIN);
             break;
         case 1:
-            pEntry->SetMax(true);
+            pEntry->SetType(COLORSCALE_MAX);
             break;
         case 2:
-            pEntry->SetPercentile(true);
+            pEntry->SetType(COLORSCALE_PERCENTILE);
             pEntry->SetValue(nVal);
             break;
         case 3:
-            pEntry->SetValue(nVal);
-            pEntry->SetHasValue();
+            pEntry->SetType(COLORSCALE_VALUE);
             break;
         case 4:
-            pEntry->SetPercent(true);
+            pEntry->SetType(COLORSCALE_PERCENT);
             pEntry->SetValue(nVal);
             break;
         case 5:
+            pEntry->SetType(COLORSCALE_FORMULA);
             pEntry->SetFormula(rValue.GetText(), pDoc, rPos);
             break;
         default:
