@@ -949,6 +949,14 @@ void SfxTemplateManagerDlg::OnTemplateDelete ()
             else
                 ++pIter;
         }
+
+        if (maSelTemplates.empty())
+        {
+            mpTemplateBar->SetItemDown(TBI_TEMPLATE_DELETE,false);
+            mpTemplateBar->Show(false);
+            mpViewBar->Show();
+            mpActionBar->Show();
+        }
     }
 }
 
