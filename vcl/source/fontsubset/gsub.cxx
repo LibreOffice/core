@@ -91,7 +91,6 @@ int ReadGSUB( struct _TrueTypeFont* pTTFile,
 
     typedef std::vector<sal_uInt16> UshortList;
     UshortList aFeatureIndexList;
-    UshortList aFeatureOffsetList;
 
     // parse Script Table
     const FT_Byte* pScriptHeader = pGsubBase + nOfsScriptList;
