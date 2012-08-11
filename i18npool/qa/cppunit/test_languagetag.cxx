@@ -26,7 +26,11 @@ using namespace com::sun::star;
 
 // To test the replacement code add '&& 0' and also in
 // source/languagetag/languagetag.cxx
-#define USE_LIBLANGTAG (!defined(ANDROID) && !defined(IOS))
+#if defined(ENABLE_LIBLANGTAG)
+#define USE_LIBLANGTAG 1
+#else
+#define USE_LIBLANGTAG 0
+#endif
 
 namespace {
 

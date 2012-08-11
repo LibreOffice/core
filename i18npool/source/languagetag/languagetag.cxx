@@ -15,7 +15,7 @@
 
 //#define erDEBUG
 
-#ifdef ENABLE_LIBLANGTAG
+#if defined(ENABLE_LIBLANGTAG)
 #include <liblangtag/langtag.h>
 #else
 /* Replacement code for LGPL phobic and Android systems.

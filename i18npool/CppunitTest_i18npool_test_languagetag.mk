@@ -23,23 +23,17 @@ $(eval $(call gb_CppunitTest_use_libraries,i18npool_test_languagetag,\
 	$(gb_STDLIBS) \
 ))
 
-ifneq ($(OS),ANDROID)
-ifneq ($(OS),IOS)
+ifeq ($(ENABLE_LIBLANGTAG),YES)
 $(eval $(call gb_CppunitTest_use_externals,i18npool_test_languagetag,\
 	liblangtag \
 	glib \
-))
-endif
-endif
-
-$(eval $(call gb_CppunitTest_use_externals,i18npool_test_languagetag,\
 	libxml2 \
 ))
+$(eval $(call gb_CppunitTest_add_defs,i18npool_test_languagetag,-DENABLE_LIBLANGTAG))
 
 ifeq ($(SYSTEM_LIBLANGTAG),YES)
-$(eval $(call gb_CppunitTest_add_cxxflags,i18npool_test_languagetag,\
-	-DSYSTEM_LIBLANGTAG \
-))
+$(eval $(call gb_CppunitTest_add_defs,i18npool_test_languagetag,-DSYSTEM_LIBLANGTAG))
+endif
 endif
 
 $(eval $(call gb_CppunitTest_set_include,i18npool_test_languagetag,\
