@@ -91,6 +91,12 @@ void SetType(const ScColorScaleEntry* pEntry, ListBox& aLstBox)
         case COLORSCALE_VALUE:
             aLstBox.SelectEntryPos(4);
             break;
+        case COLORSCALE_AUTOMIN:
+            aLstBox.SelectEntryPos(6);
+            break;
+        case COLORSCALE_AUTOMAX:
+            aLstBox.SelectEntryPos(7);
+            break;
     }
 }
 
@@ -122,6 +128,13 @@ void GetType(const ListBox& rLstBox, const Edit& rEd, ScColorScaleEntry* pEntry,
             pEntry->SetValue(nVal);
             break;
         case 5:
+            //TODO: moggi
+            break;
+        case 6:
+            pEntry->SetType(COLORSCALE_AUTOMIN);
+            break;
+        case 7:
+            pEntry->SetType(COLORSCALE_AUTOMAX);
             break;
     }
 }
@@ -257,7 +270,6 @@ void GetAxesPosition(ScDataBarFormatData* pData, const ListBox& rLbox)
     }
 }
 
-
 }
 
 ScDataBarFormatData* ScDataBarSettingsDlg::GetData()
@@ -281,9 +293,11 @@ IMPL_LINK_NOARG( ScDataBarSettingsDlg, OkBtnHdl )
 {
     //check that min < max
     bool bWarn = false;
-    if(maLbTypeMin.GetSelectEntryPos() == 1)
+    sal_Int32 nSelectMin = maLbTypeMin.GetSelectEntryPos();
+    if( nSelectMin == 1 || nSelectMin == 7)
         bWarn = true;
-    if(maLbTypeMax.GetSelectEntryPos() == 0)
+    sal_Int32 nSelectMax = maLbTypeMax.GetSelectEntryPos();
+    if( nSelectMax == 0 || nSelectMax == 6 )
         bWarn = true;
 
     if(!bWarn && maLbTypeMin.GetSelectEntryPos() == maLbTypeMax.GetSelectEntryPos())
@@ -319,7 +333,7 @@ IMPL_LINK_NOARG( ScDataBarSettingsDlg, OkBtnHdl )
 IMPL_LINK_NOARG( ScDataBarSettingsDlg, TypeSelectHdl )
 {
     sal_Int32 nSelectMin = maLbTypeMin.GetSelectEntryPos();
-    if( nSelectMin == 0 || nSelectMin == 1)
+    if( nSelectMin == 0 || nSelectMin == 1 || nSelectMin == 6 || nSelectMin == 7)
         maEdMin.Disable();
     else
     {
@@ -334,7 +348,7 @@ IMPL_LINK_NOARG( ScDataBarSettingsDlg, TypeSelectHdl )
     }
 
     sal_Int32 nSelectMax = maLbTypeMax.GetSelectEntryPos();
-    if(nSelectMax == 0 || nSelectMax == 1)
+    if(nSelectMax == 0 || nSelectMax == 1 || nSelectMax == 6 || nSelectMax == 7)
         maEdMax.Disable();
     else
     {

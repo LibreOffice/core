@@ -181,6 +181,8 @@ Control RID_COND_ENTRY
             "Value";
             "Percent";
             "Formula";
+            "AutoMin";
+            "AutoMax";
         };
     };
     Window WD_PREVIEW

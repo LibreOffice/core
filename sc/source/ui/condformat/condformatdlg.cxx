@@ -81,8 +81,10 @@ void SetColorScaleEntryTypes( const ScColorScaleEntry& rEntry, ListBox& rLbType,
             rLbType.SelectEntryPos(3);
             break;
         case COLORSCALE_AUTOMIN:
+            rLbType.SelectEntryPos(6);
             break;
         case COLORSCALE_AUTOMAX:
+            rLbType.SelectEntryPos(7);
             break;
     }
     rLbCol.SelectEntry(rEntry.GetColor());
@@ -97,6 +99,7 @@ void SetDataBarEntryTypes( const ScColorScaleEntry& rEntry, ListBox& rLbType, Ed
             break;
         case COLORSCALE_MAX:
             rLbType.SelectEntryPos(1);
+            break;
         case COLORSCALE_PERCENTILE:
             rEdit.SetText(rtl::OUString::valueOf(rEntry.GetValue()));
             rLbType.SelectEntryPos(2);
@@ -114,8 +117,10 @@ void SetDataBarEntryTypes( const ScColorScaleEntry& rEntry, ListBox& rLbType, Ed
             rLbType.SelectEntryPos(3);
             break;
         case COLORSCALE_AUTOMIN:
+            rLbType.SelectEntryPos(6);
             break;
         case COLORSCALE_AUTOMAX:
+            rLbType.SelectEntryPos(7);
             break;
     }
 }
@@ -730,6 +735,12 @@ void SetColorScaleEntry( ScColorScaleEntry* pEntry, const ListBox& rType, const 
         case 5:
             pEntry->SetType(COLORSCALE_FORMULA);
             pEntry->SetFormula(rValue.GetText(), pDoc, rPos);
+            break;
+        case 6:
+            pEntry->SetType(COLORSCALE_AUTOMIN);
+            break;
+        case 7:
+            pEntry->SetType(COLORSCALE_AUTOMAX);
             break;
         default:
             break;

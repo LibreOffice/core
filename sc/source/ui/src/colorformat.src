@@ -140,6 +140,8 @@ ModalDialog RID_SCDLG_DATABAR
             "Percent";
             "Value";
             "Formula";
+            "AutoMin";
+            "AutoMax";
         };
     };
     ListBox LB_AXIS_POSITION
