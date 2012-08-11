@@ -2475,7 +2475,6 @@ void OfaSmartTagOptionsTabPage::FillListBox( const SmartTagMgr& rSmartTagMgr )
     // fill list box:
     const sal_uInt32 nNumberOfRecognizers = rSmartTagMgr.NumberOfRecognizers();
     const lang::Locale aLocale( SvxCreateLocale( eLastDialogLanguage ) );
-    std::vector< ActionReference > aActionReferences;
 
     for ( sal_uInt32 i = 0; i < nNumberOfRecognizers; ++i )
     {

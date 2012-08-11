@@ -972,7 +972,6 @@ EventListener::firing_Impl(const ScriptEvent& evt, Any* pRet ) throw(RuntimeExce
         xScriptProvider =  xSPS->getScriptProvider();
     if ( xScriptProvider.is() && mpShell )
     {
-        std::list< TranslateInfo > matchingMethods;
         std::list< TranslateInfo >::const_iterator txInfo =
             eventInfo_it->second.begin();
         std::list< TranslateInfo >::const_iterator txInfo_end = eventInfo_it->second.end();

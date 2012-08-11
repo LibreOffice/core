@@ -696,7 +696,6 @@ static string get_script_string( const char *pFileName, const char *pKeyName )
     if ( fp )
     {
         string line;
-        string section;
 
         while ( read_line( fp, line ) )
         {

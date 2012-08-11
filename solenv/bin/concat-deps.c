@@ -868,7 +868,6 @@ off_t in_list_size = 0;
 char* in_list;
 char* in_list_cursor;
 char* in_list_base;
-char* buffer;
 struct hash* dep_hash;
 
     if(argc < 2)

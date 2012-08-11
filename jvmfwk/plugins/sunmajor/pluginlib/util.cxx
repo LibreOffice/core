@@ -693,7 +693,6 @@ bool getJREInfoFromBinPath(
     // file:///c:/jre/bin
     //map:       jre/bin/java.exe
     bool ret = false;
-    vector<pair<OUString, OUString> > props;
 
     for ( sal_Int32 pos = 0;
           gVendorMap[pos].sVendorName != NULL; ++pos )

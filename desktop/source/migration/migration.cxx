@@ -688,7 +688,6 @@ strings_vr MigrationImpl::compileFileList()
     strings_vr vrResult(new strings_v);
     strings_vr vrInclude;
     strings_vr vrExclude;
-    strings_vr vrTemp;
 
     // get a list of all files:
     strings_vr vrFiles = getAllFiles(m_aInfo.userdata);

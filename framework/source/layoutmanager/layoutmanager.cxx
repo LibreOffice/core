@@ -768,7 +768,6 @@ void LayoutManager::implts_updateUIElementsVisibleState( sal_Bool bSetVisible )
         implts_notifyListeners( frame::LayoutManagerEvents::VISIBLE, a );
     else
         implts_notifyListeners( frame::LayoutManagerEvents::INVISIBLE, a );
-    std::vector< Reference< awt::XWindow > > aWinVector;
 
     WriteGuard aWriteLock( m_aLock );
     Reference< XUIElement >   xMenuBar( m_xMenuBar, UNO_QUERY );

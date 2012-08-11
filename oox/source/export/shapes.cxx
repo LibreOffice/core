@@ -1163,9 +1163,6 @@ void ShapeExport::WriteTable( Reference< XShape > rXShape  )
         sal_uInt16 nRowCount = static_cast< sal_uInt16 >( xRows->getCount() );
         sal_uInt16 nColumnCount = static_cast< sal_uInt16 >( xColumns->getCount() );
 
-        std::vector< std::pair< sal_Int32, sal_Int32 > > aColumns;
-        std::vector< std::pair< sal_Int32, sal_Int32 > > aRows;
-
         mpFS->startElementNS( XML_a, XML_tblGrid, FSEND );
 
         for ( sal_Int32 x = 0; x < nColumnCount; x++ )

@@ -2402,7 +2402,6 @@ bool ServerFont::ApplyGSUB( const FontSelectPattern& rFSD )
 
     typedef std::vector<sal_uInt16> UshortList;
     UshortList aFeatureIndexList;
-    UshortList aFeatureOffsetList;
 
     // parse Script Table
     const FT_Byte* pScriptHeader = pGsubBase + nOfsScriptList;

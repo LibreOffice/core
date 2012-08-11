@@ -695,7 +695,6 @@ void SwDrawContact::GetTextObjectsFromFmt( std::list<SdrTextObj*>& rTextObjects,
         SwFrmFmt* pFly = (*pDoc->GetSpzFrmFmts())[n];
         if( pFly->IsA( TYPE(SwDrawFrmFmt) ) )
         {
-            std::list<SdrTextObj*> aTextObjs;
             SwDrawContact* pContact = SwIterator<SwDrawContact,SwFrmFmt>::FirstElement(*pFly);
             if( pContact )
             {

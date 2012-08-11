@@ -617,7 +617,6 @@ bool VCartesianAxis::createTextShapes(
         }
     }
 
-    std::vector< ComplexCategoryPlacement > aComplexCategoryPlacements;
     uno::Sequence< rtl::OUString >* pCategories = 0;
     if( m_bUseTextLabels && !m_aAxisProperties.m_bComplexCategories )
         pCategories = &m_aTextLabels;
