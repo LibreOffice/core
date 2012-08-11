@@ -81,10 +81,10 @@ typedef int NSColorRenderingIntent;
 - (void)prepareOpenGL
 {
     // for overriding to initialize OpenGL state, occurs after context creation
-#if MAC_OS_X_VERSION_MIN_REQUIRED < 1050
+#if MACOSX_SDK_VERSION < 1050
     long swapInt = 1;
 #else
-    NSInteger swapInt = 1;
+    GLint swapInt = 1;
 #endif
 
 
