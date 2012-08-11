@@ -85,16 +85,13 @@ EDcrData *EDcrData::GetData()
 
 void EDcr_Impl::RegisterEDcr(DynamicErrorInfo *pDcr)
 {
-    //Vergibt eine dynamische Id
-
+    // Register dynamic identifier
     EDcrData* pData=EDcrData::GetData();
     lErrId= (((sal_uIntPtr)pData->nNextDcr + 1) << ERRCODE_DYNAMIC_SHIFT) +
         pDcr->GetErrorCode();
     DynamicErrorInfo **ppDcr=pData->ppDcr;
     sal_uInt16 nNext=pData->nNextDcr;
 
-    // bei einem Ringbuffer koennen wir uns das ASSERT wohl sparen!
-    // DBG_ASSERT(ppDcr[nNext]==0,"ErrHdl: Alle Errors belegt");
     if(ppDcr[nNext])
     {
         delete ppDcr[nNext];
@@ -247,26 +244,27 @@ void ErrorHandler::RegisterDisplay(BasicDisplayErrorFunc *aDsp)
     pData->pDsp = reinterpret_cast< DisplayFnPtr >(aDsp);
 }
 
-sal_uInt16 ErrorHandler::HandleError_Impl(
-    sal_uIntPtr lId, sal_uInt16 nFlags, sal_Bool bJustCreateString, String & rError)
-{
+/** Handles an error.
 
-/*  [Beschreibung]
-    Handelt einen Fehler ab. lId ist die FehlerId, nFlags sind die
-    ErrorFlags. Werden nFlags nicht abgegeben, so werden die in
-    der DynamicErrorInfo angegebenen Flags bzw. die aus der Resource
-    verwendet.
-
-    Also:
+    If nFlags is not set, the DynamicErrorInfo flags or the
+    resource flags will be used.
+    Thus:
 
     1. nFlags,
     2. Resource Flags
     3. Dynamic Flags
     4. Default ERRCODE_BUTTON_OK, ERRCODE_MSG_ERROR
 
+    @param lId               error id
+    @param nFlags            error flags.
+    @param bJustCreateString ???
+    @param rError            ???
 
-    */
-
+    @return ???
+*/
+sal_uInt16 ErrorHandler::HandleError_Impl(
+    sal_uIntPtr lId, sal_uInt16 nFlags, sal_Bool bJustCreateString, String & rError)
+{
     String aErr;
     String aAction;
     if(!lId || lId == ERRCODE_ABORT)
@@ -277,7 +275,7 @@ sal_uInt16 ErrorHandler::HandleError_Impl(
     if(pCtx)
         pCtx->GetString(pInfo->GetErrorCode(), aAction);
     Window *pParent=0;
-    //Nimm den Parent aus dem Konext
+    // Remove parent from context
     for(;pCtx;pCtx=pCtx->pNext)
         if(pCtx->GetParent())
         {
@@ -336,7 +334,7 @@ sal_uInt16 ErrorHandler::HandleError_Impl(
         }
     }
     OSL_FAIL("Error nicht behandelt");
-    // Error 1 ist General Error im Sfx
+    // Error 1 is General Error in the Sfx
     if(pInfo->GetErrorCode()!=1)
     {
         HandleError_Impl(1, USHRT_MAX, bJustCreateString, rError);
@@ -355,25 +353,12 @@ sal_Bool ErrorHandler::GetErrorString(sal_uIntPtr lId, String& rStr)
     return (sal_Bool)HandleError_Impl( lId, USHRT_MAX, sal_True, rStr );
 }
 
+/** Handles an error.
+
+    @see ErrorHandler::HandleError_Impl
+*/
 sal_uInt16 ErrorHandler::HandleError(sal_uIntPtr lId, sal_uInt16 nFlags)
 {
-
-/*  [Beschreibung]
-    Handelt einen Fehler ab. lId ist die FehlerId, nFlags sind die
-    ErrorFlags. Werden nFlags nicht abgegeben, so werden die in
-    der DynamicErrorInfo angegebenen Flags bzw. die aus der Resource
-    verwendet.
-
-    Also:
-
-    1. nFlags,
-    2. Resource Flags
-    3. Dynamic Flags
-    4. Default ERRCODE_BUTTON_OK, ERRCODE_MSG_ERROR
-
-
-    */
-
     String aDummy;
     return HandleError_Impl( lId, nFlags, sal_False, aDummy );
 }

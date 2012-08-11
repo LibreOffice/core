@@ -60,20 +60,19 @@ void TOOLS_DLLPUBLIC WritePersistListObjects(const SvPersistListWriteable& rList
     sal_uIntPtr  nCountPos = rStm.Tell();
     sal_uInt32 nWriteCount = 0;
     rStm << nCountMember;
-    //bloss die Liste nicht veraendern,
-    //wegen Seiteneffekten beim Save
+    // Don't change the list, as it causes side-effects while saving
     for( sal_uIntPtr n = 0; n < nCountMember; n++ )
     {
         SvPersistBase * pObj = rList.GetPersistBase( n );
         if( !bOnlyStreamed || rStm.IsStreamed( pObj ) )
-        { // Objekt soll geschrieben werden
+        { // Object should be stored
             rStm << pObj;
             nWriteCount++;
         }
     }
     if( nWriteCount != nCountMember )
     {
-        // nicht alle Objekte geschrieben, Count anpassen
+        // Didn't write all members, adjust count
         sal_uIntPtr nPos = rStm.Tell();
         rStm.Seek( nCountPos );
         rStm << nWriteCount;
@@ -123,29 +122,24 @@ void TOOLS_DLLPUBLIC ReadObjects( SvPersistListReadable& rLst, SvPersistStream &
 #endif
 }
 
-SvPersistStream::SvPersistStream
-(
-    SvClassManager & rMgr,  /* Alle Factorys, deren Objekt geladen und
-                               gespeichert werdn k"onnen */
-    SvStream * pStream,     /* Dieser Stream wird als Medium genommen, auf
-                               dem der PersistStream arbeitet */
-    sal_uInt32 nStartIdxP       /* Ab diesem Index werden die Id's f"ur
-                               die Objekte vergeben, er muss gr"osser
-                               als Null sein. */
-)
+/** Constructor
+
+    @param rMgr       Stores factories for objects that can persisted
+    @param pStream    This stream is used as the medium for PersistStream
+    @param nStartIdxP Start value for object identifier (set > 0 )
+
+    @warning Objects rMgr and pStream must not be manipulated while used in
+             SvPersistStream. An Exception to this is pvStream
+             (cf. <SvPersistStream::SetStream>).
+    @see SvPersistStream::SetStream
+*/
+SvPersistStream::SvPersistStream( SvClassManager & rMgr, SvStream * pStream, sal_uInt32 nStartIdxP )
     : rClassMgr( rMgr )
     , pStm( pStream )
     , aPUIdx( nStartIdxP )
     , nStartIdx( nStartIdxP )
     , pRefStm( NULL )
     , nFlags( 0 )
-/*  [Beschreibung]
-
-    Der Konstruktor der Klasse SvPersistStream. Die Objekte rMgr und
-    pStream d"urfen nicht ver"andert werden, solange sie in einem
-    SvPersistStream eingesetzt sind. Eine Aussnahme gibt es f"ur
-    pStream (siehe <SvPersistStream::SetStream>).
-*/
 {
     DBG_ASSERT( nStartIdx != 0, "zero index not allowed" );
     bIsWritable = sal_True;
@@ -158,29 +152,19 @@ SvPersistStream::SvPersistStream
 }
 
 SvPersistStream::~SvPersistStream()
-/*  [Beschreibung]
-
-    Der Detruktor ruft die Methode <SvPersistStream::SetStream>
-    mit NULL.
-*/
 {
     SetStream( NULL );
 }
 
-void SvPersistStream::SetStream
-(
-    SvStream * pStream  /* auf diesem Stream arbeitet der PersistStream */
+/**
 
-)
-/*  [Beschreibung]
+    @param pStream    This stream is used as the medium for PersistStream
 
-    Es wird ein Medium (pStream) eingesetzt, auf dem PersistStream arbeitet.
-    Dieses darf nicht von aussen modifiziert werden, solange es
-     eingesetzt ist. Es sei denn, w"ahrend auf dem Medium gearbeitet
-    wird, wird keine Methode von SvPersistStream gerufen, bevor
-    nicht <SvPersistStream::SetStream> mit demselben Medium gerufen
-    wurde.
+    @warning pStream is used as the medium for PersistStream.
+             It must not be manipulated while used in SvPersistStream.
+             An Exception to this is pvStream (cf. <SvPersistStream::SetStream>).
 */
+void SvPersistStream::SetStream( SvStream * pStream )
 {
     if( pStm != pStream )
     {
@@ -199,20 +183,13 @@ void SvPersistStream::SetStream
     }
 }
 
-sal_uInt16 SvPersistStream::IsA() const
-/*  [Beschreibung]
+/** Returns the identifier of this stream class.
 
-    Gibt den Identifier dieses Streamklasse zur"uck.
+    @return ID_PERSISTSTREAM
 
-    [R"uckgabewert]
-
-    sal_uInt16      ID_PERSISTSTREAM wird zur"uckgegeben.
-
-
-    [Querverweise]
-
-    <SvStream::IsA>
+    @see SvStream::IsA
 */
+sal_uInt16 SvPersistStream::IsA() const
 {
     return ID_PERSISTSTREAM;
 }
@@ -278,23 +255,18 @@ SvPersistBase * SvPersistStream::GetObject( sal_uIntPtr nIdx ) const
 #define LEN_2           0x40
 #define LEN_4           0x20
 #define LEN_5           0x10
-sal_uInt32 SvPersistStream::ReadCompressed
-(
-    SvStream & rStm /* Aus diesem Stream werden die komprimierten Daten
-                       gelesen */
-)
-/*  [Beschreibung]
 
-    Ein im Stream komprimiert abgelegtes Wort wird gelesen. In welchem
-    Format komprimiert wird, siehe <SvPersistStream::WriteCompressed>.
+/** Reads a compressed word from the stream.
 
-    [R"uckgabewert]
+    For details on what format is used for compression, see
+    <SvPersistStream::WriteCompressed>.
 
-    sal_uInt32      Das nicht komprimierte Wort wird zur"uckgegeben.
+    @param rStm Source to read compressed data from
 
-    [Querverweise]
-
+    @return Uncompressed word
+    @see SvPersistStream::WriteCompressed
 */
+sal_uInt32 SvPersistStream::ReadCompressed( SvStream & rStm )
 {
     sal_uInt32 nRet(0);
     sal_uInt8   nMask;
@@ -336,25 +308,20 @@ sal_uInt32 SvPersistStream::ReadCompressed
     return nRet;
 }
 
-void SvPersistStream::WriteCompressed
-(
-    SvStream & rStm,/* Aus diesem Stream werden die komprimierten Daten
-                       gelesen */
-    sal_uInt32 nVal     /* Dieser Wert wird komprimiert geschrieben */
-)
-/*  [Beschreibung]
+/** Writes compressed stream
 
-    Das "ubergebene Wort wird komprimiert und in den Stream
-     geschrieben. Folgendermassen wir komprimiert.
-    nVal < 0x80         =>  0x80        + nVal ist 1 Byte gross.
-    nVal < 0x4000       =>  0x4000      + nVal ist 2 Byte gross.
-    nVal < 0x20000000   =>  0x20000000  + nVal ist 4 Byte gross.
-    nVal > 0x1FFFFFFF   =>  0x1000000000+ nVal ist 5 Byte gross.
+    @param rStm Source for writing compressed data
+    @param nVal This value will be compressed and written
 
-    [Querverweise]
+    nVal is compressed and written to stream using the following algorithm
+    nVal < 0x80         =>  0x80        + nVal of size 1 Byte.
+    nVal < 0x4000       =>  0x4000      + nVal of size 2 Byte.
+    nVal < 0x20000000   =>  0x20000000  + nVal of size 4 Byte.
+    nVal > 0x1FFFFFFF   =>  0x1000000000+ nVal of size 5 Byte.
 
-    <SvPersistStream::ReadCompressed>
+    @see SvPersistStream::ReadCompressed
 */
+void SvPersistStream::WriteCompressed( SvStream & rStm, sal_uInt32 nVal )
 {
 #ifdef STOR_NO_OPTIMIZE
     if( nVal < 0x80 )
@@ -366,9 +333,9 @@ void SvPersistStream::WriteCompressed
     }
     else if( nVal < 0x20000000 )
     {
-        // hoechstes sal_uInt8
+        // highest sal_uInt8
         rStm << (sal_uInt8)(LEN_4 | (nVal >> 24));
-        // 2. hoechstes sal_uInt8
+        // 2nd highest sal_uInt8
         rStm << (sal_uInt8)(nVal >> 16);
         rStm << (sal_uInt16)(nVal);
     }
@@ -380,89 +347,76 @@ void SvPersistStream::WriteCompressed
     }
 }
 
-sal_uInt32 SvPersistStream::WriteDummyLen()
-/*  [Beschreibung]
+/** This method writes length value of 4 Bytes to the stream and returns the
+    stream position.
 
-    Die Methode schreibt 4 Byte in den Stream und gibt die Streamposition
-    zur"uck.
-
-    [R"uckgabewert]
-
-    sal_uInt32      Die Position hinter der L"angenangabe wird zur"uckgegeben.
-
-    [Beispiel]
-
+    Example:
+    @code
     sal_uInt32 nObjPos = rStm.WriteDummyLen();
     ...
-    // Daten schreiben
+    // write data
     ...
     rStm.WriteLen( nObjPos );
+    @endcode
 
-    [Querverweise]
+    @return Position of stream behind length value
 
-    <SvPersistStream::ReadLen>, <SvPersistStream::WriteLen>
-
+    @see SvPersistStream::ReadLen
+    @see SvPersistStream::WriteLen
 */
+sal_uInt32 SvPersistStream::WriteDummyLen()
 {
 #ifdef DBG_UTIL
     sal_uInt32 nPos = Tell();
 #endif
     sal_uInt32 n0 = 0;
     *this << n0; // wegen Sun sp
-    // keine Assertion bei Streamfehler
+    // Don't assert on stream error
     DBG_ASSERT( GetError() != SVSTREAM_OK
                   || (sizeof( sal_uInt32 ) == Tell() -nPos),
                 "keine 4-Byte fuer Langenangabe" );
     return Tell();
 }
 
-void SvPersistStream::WriteLen
-(
-    sal_uInt32 nObjPos  /* die Position + 4, an der die L"ange geschrieben
-                       wird. */
-)
-/*  [Beschreibung]
+/** Write difference between current position and nObjPos
+    as sal_uInt32 to position nObjPos-4 in the stream.
 
-    Die Methode schreibt die Differenz zwischen der aktuellen und
-     nObjPos als sal_uInt32 an die Position nObjPos -4 im Stream. Danach
-    wird der Stream wieder auf die alte Position gestellt.
+    Afterwards, reset stream to old position.
 
-    [Beispiel]
-
-    Die Differenz enth"alt nicht die L"angenangabe.
-
+    Example: Difference does not contain length value
+    @code
     sal_uInt32 nObjPos = rStm.WriteDummyLen();
     ...
-    // Daten schreiben
+    // write data
     ...
     rStm.WriteLen( nObjPos );
-    // weitere Daten schreiben
+    // write more data
+    @endcode
 
-    [Querverweise]
+    @param nObjPos Position+4, on which length is written to
 
-    <SvPersistStream::ReadLen>, <SvPersistStream::WriteDummyLen>
+    @see SvPersistStream::ReadLen
+    @see SvPersistStream::WriteDummyLen
 */
+void SvPersistStream::WriteLen( sal_uInt32 nObjPos )
 {
     sal_uInt32 nPos = Tell();
     sal_uInt32 nLen = nPos - nObjPos;
-    // die Laenge mu� im stream 4-Byte betragen
+    // Length in stream must be 4 Bytes
     Seek( nObjPos - sizeof( sal_uInt32 ) );
-    // Laenge schreiben
+    // write length
     *this << nLen;
     Seek( nPos );
 }
 
-sal_uInt32 SvPersistStream::ReadLen
-(
-    sal_uInt32 * pTestPos   /* Die Position des Streams, nach dem Lesen der
-                           L"ange, wird zur"uckgegeben. Es darf auch NULL
-                           "ubergeben werden. */
-)
-/*  [Beschreibung]
+/** Read a length value written to stream
 
-    Liest die L"ange die vorher mit <SvPersistStream::WriteDummyLen>
-    und <SvPersistStream::WriteLen> geschrieben wurde.
+    @param pTestPos Position of the stream after reading length. May be NULL.
+
+    @see SvPersistStream::WriteDummyLen
+    @see SvPersistStream::WriteLen
 */
+sal_uInt32 SvPersistStream::ReadLen( sal_uInt32 * pTestPos )
 {
     sal_uInt32 nLen;
     *this >> nLen;
@@ -471,7 +425,7 @@ sal_uInt32 SvPersistStream::ReadLen
     return nLen;
 }
 
-// Dateirormat abw"arts kompatibel
+// File format backward-compatible
 #ifdef STOR_NO_OPTIMIZE
 #define P_VER       (sal_uInt8)0x00
 #else
@@ -503,7 +457,7 @@ static void WriteId
     if( nHdr & P_ID )
     {
         if( (nHdr & P_OBJ) || nId != 0 )
-        { // Id nur bei Zeiger, oder DBGUTIL
+        { // Id set only for pointers or DBGUTIL
             rStm << (sal_uInt8)(nHdr);
             SvPersistStream::WriteCompressed( rStm, nId );
         }
@@ -517,8 +471,8 @@ static void WriteId
         rStm << nHdr;
 
     if( (nHdr & P_DBGUTIL) || (nHdr & P_OBJ) )
-        // Objekte haben immer eine Klasse,
-        // Pointer nur bei DBG_UTIL und != NULL
+        // Objects always have a class id
+        // Pointers only for DBG_UTIL and != NULL
         SvPersistStream::WriteCompressed( rStm, nClassId );
 }
 
@@ -560,7 +514,7 @@ void SvPersistStream::WriteObj
 #ifdef STOR_NO_OPTIMIZE
     sal_uInt32 nObjPos = 0;
     if( nHdr & P_DBGUTIL )
-        // Position fuer Laenge merken
+        // remember position for length value
         nObjPos = WriteDummyLen();
 #endif
     pObj->Save( *this );
@@ -609,10 +563,10 @@ sal_uInt32 SvPersistStream::ReadObj
     sal_uInt32  nId = 0;
     sal_uInt16  nClassId;
 
-    rpObj = NULL;   // Spezifikation: Im Fehlerfall 0.
+    rpObj = NULL;   // specification: 0 in case of error
     ReadId( *this, nHdr, nId, nClassId );
 
-    // reine Versionsnummer durch maskieren
+    // get version nummer through masking
     if( P_VER < (nHdr & P_VER_MASK) )
     {
         SetError( SVSTREAM_FILEFORMAT_ERROR );
@@ -622,7 +576,7 @@ sal_uInt32 SvPersistStream::ReadObj
     if( !(nHdr & P_ID_0) && GetError() == SVSTREAM_OK )
     {
         if( P_OBJ & nHdr )
-        { // read object, nId nur bei P_DBGUTIL gesetzt
+        { // read object, nId only set for P_DBGUTIL
             DBG_ASSERT( !(nHdr & P_DBGUTIL) || NULL == aPUIdx.Get( nId ),
                         "object already exist" );
             SvCreateInstancePersist pFunc = rClassMgr.Get( nClassId );
@@ -645,19 +599,18 @@ sal_uInt32 SvPersistStream::ReadObj
                 return 0;
             }
             pFunc( &rpObj );
-            // Sichern
+            // Save reference
             rpObj->AddRef();
 
             if( bRegister )
             {
-                // unbedingt erst in Tabelle eintragen
+                // insert into table
                 sal_uIntPtr nNewId = aPUIdx.Insert( rpObj );
-                // um den gleichen Zustand, wie nach dem Speichern herzustellen
+                // in order to restore state after saving
                 aPTable[ rpObj ] = nNewId;
                 DBG_ASSERT( !(nHdr & P_DBGUTIL) || nId == nNewId,
                             "read write id conflict: not the same" );
             }
-            // und dann Laden
             rpObj->Load( *this );
 #ifdef DBG_UTIL
             if( nObjLen + nObjPos != Tell() )
@@ -754,12 +707,12 @@ SvStream& operator >>
         for( sal_uInt32 i = 0; i < nCount; i++ )
         {
             SvPersistBase * pEle;
-            // Lesen, ohne in die Tabellen einzutragen
+            // read, but don't insert into table
             sal_uIntPtr nId = rThis.ReadObj( pEle, sal_False );
             if( rThis.GetError() )
                 break;
 
-            // Die Id eines Objektes wird nie modifiziert
+            // Id of object is never modified
             rThis.aPUIdx.Insert( nId, pEle );
             rThis.aPTable[ pEle ] = nId;
         }

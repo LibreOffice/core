@@ -218,7 +218,7 @@ void ImplPolygon::ImplSplit( sal_uInt16 nPos, sal_uInt16 nSpace, ImplPolygon* pI
 
     if( nPos >= mnPoints )
     {
-        // Hinten anhaengen
+        // Append at the back
         nPos = mnPoints;
         ImplSetSize( nNewSize, sal_True );
 
@@ -232,7 +232,6 @@ void ImplPolygon::ImplSplit( sal_uInt16 nPos, sal_uInt16 nSpace, ImplPolygon* pI
     }
     else
     {
-        // PointArray ist in diesem Zweig immer vorhanden
         const sal_uInt16    nSecPos = nPos + nSpace;
         const sal_uInt16    nRest = mnPoints - nPos;
 
@@ -248,7 +247,7 @@ void ImplPolygon::ImplSplit( sal_uInt16 nPos, sal_uInt16 nSpace, ImplPolygon* pI
         memcpy( pNewAry + nSecPos, mpPointAry + nPos, nRest * sizeof( Point ) );
         delete[] (char*) mpPointAry;
 
-        // ggf. FlagArray beruecksichtigen
+        // consider FlagArray
         if( mpFlagAry )
         {
             sal_uInt8* pNewFlagAry = new sal_uInt8[ nNewSize ];
@@ -281,7 +280,7 @@ void ImplPolygon::ImplCreateFlagArray()
 
 inline void Polygon::ImplMakeUnique()
 {
-    // Falls noch andere Referenzen bestehen, dann kopieren
+    // copy references if any exist
     if ( mpImplPolygon->mnRefCount != 1 )
     {
         if ( mpImplPolygon->mnRefCount )
@@ -413,7 +412,7 @@ Polygon::Polygon( const Point& rCenter, long nRadX, long nRadY, sal_uInt16 nPoin
 
     if( nRadX && nRadY )
     {
-        // Default berechnen (abhaengig von Groesse)
+        // Compute default (depends on size)
         if( !nPoints )
         {
             nPoints = (sal_uInt16) ( F_PI * ( 1.5 * ( nRadX + nRadY ) -
@@ -425,7 +424,7 @@ Polygon::Polygon( const Point& rCenter, long nRadX, long nRadY, sal_uInt16 nPoin
                 nPoints >>= 1;
         }
 
-        // Anzahl der Punkte auf durch 4 teilbare Zahl aufrunden
+        // Ceil number of points until divisible by four
         mpImplPolygon = new ImplPolygon( nPoints = (nPoints + 3) & ~3 );
 
         Point* pPt;
@@ -481,7 +480,7 @@ Polygon::Polygon( const Rectangle& rBound, const Point& rStart, const Point& rEn
         if( ( nRadX > 32 ) && ( nRadY > 32 ) && ( nRadX + nRadY ) < 8192 )
             nPoints >>= 1;
 
-        // Winkel berechnen
+        // compute threshold
         const double    fRadX = nRadX;
         const double    fRadY = nRadY;
         const double    fCenterX = aCenter.X();
@@ -499,9 +498,7 @@ Polygon::Polygon( const Rectangle& rBound, const Point& rStart, const Point& rEn
         if ( bFullCircle )
             fDiff = F_2PI;
 
-        // Punktanzahl proportional verkleinern ( fDiff / (2PI) );
-        // ist eingentlich nur fuer einen Kreis richtig; wir
-        // machen es hier aber trotzdem
+        // Proportionally shrink number of points( fDiff / (2PI) );
         nPoints = Max( (sal_uInt16) ( ( fDiff * 0.1591549 ) * nPoints ), (sal_uInt16) 16 );
         fStep = fDiff / ( nPoints - 1 );
 
@@ -576,8 +573,7 @@ Polygon::~Polygon()
 {
     DBG_DTOR( Polygon, NULL );
 
-    // Wenn es keine statischen ImpDaten sind, dann loeschen, wenn es
-    // die letzte Referenz ist, sonst Referenzcounter decrementieren
+    // Remove if refcount == 0, otherwise decrement refcount
     if ( mpImplPolygon->mnRefCount )
     {
         if ( mpImplPolygon->mnRefCount > 1 )
@@ -1026,13 +1022,13 @@ void Polygon::Move( long nHorzMove, long nVertMove )
 {
     DBG_CHKTHIS( Polygon, NULL );
 
-    // Diese Abfrage sollte man fuer die DrawEngine durchfuehren
+    // This check is required for DrawEngine
     if ( !nHorzMove && !nVertMove )
         return;
 
     ImplMakeUnique();
 
-    // Punkte verschieben
+    // Move points
     sal_uInt16 nCount = mpImplPolygon->mnPoints;
     for ( sal_uInt16 i = 0; i < nCount; i++ )
     {
@@ -1109,7 +1105,7 @@ protected:
 class ImplPolygonPointFilter : public ImplPointFilter
 {
 public:
-    ImplPolygon*    mpPoly;     // Nicht loeschen, wird dem Polygon zugewiesen
+    ImplPolygon*    mpPoly;     // Don't remove, assigned by polygon
     sal_uInt16      mnSize;
 
                     ImplPolygonPointFilter( sal_uInt16 nDestSize ) :
@@ -1316,8 +1312,7 @@ void Polygon::Clip( const Rectangle& rRect, sal_Bool bPolygon )
     else
         aPolygon.LastPoint();
 
-    // Alte ImpPolygon-Daten loeschen und die vom ImpPolygonPointFilter
-    // zuweisen
+    // Delete old ImpPolygon-data and assign from ImpPolygonPointFilter
     if ( mpImplPolygon->mnRefCount )
     {
         if ( mpImplPolygon->mnRefCount > 1 )
@@ -1420,8 +1415,7 @@ sal_Bool Polygon::IsInside( const Point& rPoint ) const
 
             if ( aLine.Intersection( Line( aPt1, rPt2 ), aIntersection ) )
             {
-                // Hiermit verhindern wir das Einfuegen von
-                // doppelten Intersections, die gleich hintereinander folgen
+                // This avoids insertion of double intersections
                 if ( nPCounter )
                 {
                     if ( aIntersection != aLastIntersection )
@@ -1441,7 +1435,7 @@ sal_Bool Polygon::IsInside( const Point& rPoint ) const
         }
     }
 
-    // innerhalb, wenn die Anzahl der Schnittpunkte ungerade ist
+    // is inside, if number of intersection points is odd
     return ( ( nPCounter & 1 ) == 1 );
 }
 
@@ -1503,13 +1497,12 @@ Polygon& Polygon::operator=( const Polygon& rPoly )
     DBG_CHKOBJ( &rPoly, Polygon, NULL );
     DBG_ASSERT( rPoly.mpImplPolygon->mnRefCount < 0xFFFFFFFE, "Polygon: RefCount overflow" );
 
-    // Zuerst Referenzcounter erhoehen, damit man sich selbst zuweisen kann
-    // RefCount == 0 fuer statische Objekte
+    // Increase refcounter before assigning
+    // Note: RefCount == 0 for static objects
     if ( rPoly.mpImplPolygon->mnRefCount )
         rPoly.mpImplPolygon->mnRefCount++;
 
-    // Wenn es keine statischen ImpDaten sind, dann loeschen, wenn es
-    // die letzte Referenz ist, sonst Referenzcounter decrementieren
+    // Delete if recount == 0, otherwise decrement
     if ( mpImplPolygon->mnRefCount )
     {
         if ( mpImplPolygon->mnRefCount > 1 )
@@ -1562,7 +1555,7 @@ SvStream& operator>>( SvStream& rIStream, Polygon& rPoly )
     sal_uInt16          i;
     sal_uInt16          nPoints;
 
-    // Anzahl der Punkte einlesen und Array erzeugen
+    // read all points and create array
     rIStream >> nPoints;
     if ( rPoly.mpImplPolygon->mnRefCount != 1 )
     {
@@ -1574,7 +1567,7 @@ SvStream& operator>>( SvStream& rIStream, Polygon& rPoly )
         rPoly.mpImplPolygon->ImplSetSize( nPoints, sal_False );
 
     {
-        // Feststellen, ob ueber die Operatoren geschrieben werden muss
+        // Determine whether we need to write through operators
 #if (SAL_TYPES_SIZEOFLONG) != 4
         if ( 1 )
 #else
@@ -1609,11 +1602,11 @@ SvStream& operator<<( SvStream& rOStream, const Polygon& rPoly )
     sal_uInt16          i;
     sal_uInt16          nPoints = rPoly.GetSize();
 
-    // Anzahl der Punkte rausschreiben
+    // Write number of points
     rOStream << nPoints;
 
     {
-        // Feststellen, ob ueber die Operatoren geschrieben werden muss
+        // Determine whether we need to write through operators
 #if (SAL_TYPES_SIZEOFLONG) != 4
         if ( 1 )
 #else

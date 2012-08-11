@@ -41,7 +41,7 @@ static sal_Int32 TimeToSec100( const Time& rTime )
     sal_Int32   nSec    = rTime.GetSec();
     sal_Int32   n100Sec = rTime.Get100Sec();
 
-//  Wegen Interal Compiler Error bei MSC, etwas komplizierter
+//  Due to interal compiler error in MSC a little bit more complicated:
 //  return (n100Sec + (nSec*100) + (nMin*60*100) + (nHour*60*60*100) * nSign);
 
     sal_Int32 nRet = n100Sec;
@@ -74,7 +74,7 @@ Time::Time( TimeInitSystem )
     SYSTEMTIME aDateTime;
     GetLocalTime( &aDateTime );
 
-    // Zeit zusammenbauen
+    // construct time
     nTime = (((sal_Int32)aDateTime.wHour)*1000000) +
             (((sal_Int32)aDateTime.wMinute)*10000) +
             (((sal_Int32)aDateTime.wSecond)*100) +
@@ -83,10 +83,10 @@ Time::Time( TimeInitSystem )
     time_t     nTmpTime;
     struct tm aTime;
 
-    // Zeit ermitteln
+    // determine time
     nTmpTime = time( 0 );
 
-    // Zeit zusammenbauen
+    // construct time
     if ( localtime_r( &nTmpTime, &aTime ) )
     {
         nTime = (((sal_Int32)aTime.tm_hour)*1000000) +
@@ -105,7 +105,7 @@ Time::Time( const Time& rTime )
 
 Time::Time( sal_uIntPtr nHour, sal_uIntPtr nMin, sal_uIntPtr nSec, sal_uIntPtr n100Sec )
 {
-    // Zeit normalisieren
+    // normalize time
     nSec    += n100Sec / 100;
     n100Sec  = n100Sec % 100;
     nMin    += nSec / 60;
@@ -113,7 +113,7 @@ Time::Time( sal_uIntPtr nHour, sal_uIntPtr nMin, sal_uIntPtr nSec, sal_uIntPtr n
     nHour   += nMin / 60;
     nMin     = nMin % 60;
 
-    // Zeit zusammenbauen
+    // construct time
     nTime = (sal_Int32)(n100Sec + (nSec*100) + (nMin*10000) + (nHour*1000000));
 }
 
@@ -135,7 +135,7 @@ void Time::SetMin( sal_uInt16 nNewMin )
     sal_Int32   nSec      = GetSec();
     sal_Int32   n100Sec   = Get100Sec();
 
-    // kein Ueberlauf
+    // no overflow
     nNewMin = nNewMin % 60;
 
     nTime = (n100Sec + (nSec*100) + (((sal_Int32)nNewMin)*10000) +
@@ -149,7 +149,7 @@ void Time::SetSec( sal_uInt16 nNewSec )
     sal_Int32   nMin      = GetMin();
     sal_Int32   n100Sec   = Get100Sec();
 
-    // kein Ueberlauf
+    // no overflow
     nNewSec = nNewSec % 60;
 
     nTime = (n100Sec + (((sal_Int32)nNewSec)*100) + (nMin*10000) +
@@ -163,7 +163,7 @@ void Time::Set100Sec( sal_uInt16 nNew100Sec )
     sal_Int32   nMin      = GetMin();
     sal_Int32   nSec      = GetSec();
 
-    // kein Ueberlauf
+    // no overflow
     nNew100Sec = nNew100Sec % 100;
 
     nTime = (((sal_Int32)nNew100Sec) + (nSec*100) + (nMin*10000) +
@@ -271,7 +271,7 @@ Time Time::GetUTCOffset()
     sal_Int32           nUTC;
     short           nTempTime;
 
-    // Evt. Wert neu ermitteln
+    // determine value again if needed
     if ( (nCacheSecOffset == -1)            ||
          ((nTicks - nCacheTicks) > 360000)  ||
          ( nTicks < nCacheTicks ) // handle overflow

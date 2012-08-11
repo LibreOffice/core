@@ -19,12 +19,12 @@
 
 #include <tools/wldcrd.hxx>
 
-/* Diese Methode ueberprueft, ob die Wilde Karte in pWild mit dem String
- * in pStr matscht.
- * Vertragen sich die beiden, so wird 1 zurueckgegeben, sonst 0.
+/** Tests, whether a wildcard in pWild will match for pStr.
  *
- * ein '*' in pWild bedeutet n beliebige Zeichen, mit n>=0
- * ein '?' in pWild bedeutet genau ein beliebiges Zeichen
+ * If they match, return 1, otherwise 0.
+ *
+ * '*' in pWild means n chars for n > 0.
+ * '?' in pWild mean match exactly one character.
  *
  */
 sal_uInt16 WildCard::ImpMatch( const char *pWild, const char *pStr ) const
@@ -50,8 +50,8 @@ sal_uInt16 WildCard::ImpMatch( const char *pWild, const char *pStr ) const
                     else
                         pWild += pos;
                 else
-                    break;          // ACHTUNG laeuft unter bestimmten
-                                    // Umstaenden in den nachsten case rein!!
+                    break;          // WARNING: may cause execution of next case
+                                    // in some circumstances!
             case '*':
                 while ( *pWild == '*' )
                     pWild++;
@@ -97,12 +97,11 @@ sal_Bool WildCard::Matches( const String& rString ) const
     {
         while ( (nSepPos = aTmpWild.indexOf(cSepSymbol)) != -1 )
         {
-            // alle getrennten WildCard's pruefen
+            // Check all splitted wildcards
             if ( ImpMatch( aTmpWild.copy( 0, nSepPos ).getStr(), aString.getStr() ) )
                 return sal_True;
-            aTmpWild = aTmpWild.copy(nSepPos + 1); // Trennsymbol entfernen
+            aTmpWild = aTmpWild.copy(nSepPos + 1); // remove separator
         }
-        // und noch den hinter dem letzen Trennsymbol bzw. den einzigen
     }
 
     if ( ImpMatch( aTmpWild.getStr(), aString.getStr() ) )

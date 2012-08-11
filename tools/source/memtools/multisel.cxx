@@ -304,7 +304,7 @@ void MultiSelection::Select( const Range& rIndexRange, sal_Bool bSelect )
     DBG_ASSERT(aTotRange.IsInside(nTmpMax), "selected index out of range" );
     DBG_ASSERT(aTotRange.IsInside(nTmpMin), "selected index out of range" );
 
-    // gesamte Selektion ersetzen ?
+    // replace whole selection?
     if( nTmpMin <= nCurMin && nTmpMax >= nCurMax )
     {
         ImplClear();
@@ -315,12 +315,12 @@ void MultiSelection::Select( const Range& rIndexRange, sal_Bool bSelect )
         }
         return;
     }
-    // links erweitern ?
+    // expand on left side?
     if( nTmpMax < nCurMin )
     {
         if( bSelect )
         {
-            // ersten Range erweitern ?
+            // extend first range?
             if( nCurMin > (nTmpMax+1)  )
             {
                 pRange = new Range( rIndexRange );
@@ -338,12 +338,12 @@ void MultiSelection::Select( const Range& rIndexRange, sal_Bool bSelect )
         }
         return;
     }
-    // rechts erweitern ?
+    // expand on right side?
     else if( nTmpMin > nCurMax )
     {
         if( bSelect )
         {
-            // letzten Range erweitern ?
+            // extend last range?
             if( nTmpMin > (nCurMax+1) )
             {
                 pRange = new Range( rIndexRange );
@@ -362,7 +362,7 @@ void MultiSelection::Select( const Range& rIndexRange, sal_Bool bSelect )
         return;
     }
 
-    //HACK(Hier muss noch optimiert werden)
+    // TODO here is potential for optimization
     while( nTmpMin <= nTmpMax )
     {
         Select( nTmpMin, bSelect );
@@ -554,7 +554,7 @@ void MultiSelection::SetTotalRange( const Range& rTotRange )
 {
     aTotRange = rTotRange;
 
-    // die untere Bereichsgrenze anpassen
+    // adjust lower boundary
     Range* pRange = aSels.empty() ? NULL : aSels.front();
     while( pRange )
     {
@@ -574,7 +574,7 @@ void MultiSelection::SetTotalRange( const Range& rTotRange )
         pRange = aSels.empty() ? NULL : aSels.front();
     }
 
-    // die obere Bereichsgrenze anpassen
+    // adjust upper boundary
     size_t nCount = aSels.size();
     while( nCount )
     {
@@ -595,7 +595,7 @@ void MultiSelection::SetTotalRange( const Range& rTotRange )
         nCount = aSels.size();
     }
 
-    // Selection-Count neu berechnen
+    // re-calculate selection count
     nSelCount = 0;
     for ( size_t i = 0, n = aSels.size(); i < n; ++ i ) {
         nSelCount += pRange->Len();

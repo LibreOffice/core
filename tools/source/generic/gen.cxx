@@ -89,18 +89,18 @@ Rectangle& Rectangle::Intersection( const Rectangle& rRect )
         return *this;
     }
 
-    // nicht mit umgedrehten Rechtecken arbeiten
+    // Justify rectangle
     Rectangle aTmpRect( rRect );
     Justify();
     aTmpRect.Justify();
 
-    // Schnitt bilden
+    // Perform intersection
     nLeft  = Max( nLeft, aTmpRect.nLeft );
     nRight = Min( nRight, aTmpRect.nRight );
     nTop   = Max( nTop, aTmpRect.nTop );
     nBottom= Min( nBottom, aTmpRect.nBottom );
 
-    // Feststellen ob Schnitt leer
+    // Determine if intersection is empty
     if ( nRight < nLeft || nBottom < nTop )
         *this = Rectangle();
 
@@ -111,7 +111,6 @@ void Rectangle::Justify()
 {
     long nHelp;
 
-    // Abfrage, ob Right kleiner Left
     if ( (nRight < nLeft) && (nRight != RECT_EMPTY) )
     {
         nHelp = nLeft;
@@ -119,7 +118,6 @@ void Rectangle::Justify()
         nRight = nHelp;
     }
 
-    // Abfrage, ob Bottom kleiner Top
     if ( (nBottom < nTop) && (nBottom != RECT_EMPTY) )
     {
         nHelp = nBottom;
@@ -167,7 +165,7 @@ sal_Bool Rectangle::IsInside( const Rectangle& rRect ) const
 
 sal_Bool Rectangle::IsOver( const Rectangle& rRect ) const
 {
-    // Wenn sie sich nicht schneiden, ueberlappen sie auch nicht
+    // If there's no intersection, they don't overlap
     return !GetIntersection( rRect ).IsEmpty();
 }
 

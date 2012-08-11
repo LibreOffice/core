@@ -23,20 +23,16 @@
 #include <tools/stream.hxx>
 #include <tools/bigint.hxx>
 
-// Beschreibung: Berechnet den groessten gemeinsamen Teiler von
-//               nVal1 und nVal2
-// Parameter     long nVal1, long nVal2
+/** Compute greates common divisor using Euclidian algorithm
 
-// Die Funktion GetGGT berechnet den groessten gemeinsamen Teiler der
-// beiden als Parameter uebergebenen Werte nVal1 und nVal2 nach dem
-// Algorithmus von Euklid. Hat einer der beiden Parameter den Wert 0 oder
-// 1, so wird als Ergebnis der Wert 1 zur�ckgegeben. Da der Algorithmus
-// nur mit positiven Zahlen arbeitet, werden die beiden Parameter
-// entsprechend umgewandelt.
-// Zum Algorithmus: die beiden Parameter werden solange ducheinander
-//              geteilt, bis sie beide gleich sind oder bis bei der Division
-//              kein Rest bleibt. Der kleinere der beiden Werte ist dann der
-//              GGT.
+    As the algorithm works on positive values only, the absolute value
+    of each parameter is used.
+
+    @param nVal1
+    @param nVal2
+
+    @note: If one parameter is {0,1}, GetGGT returns 1.
+*/
 static long GetGGT( long nVal1, long nVal2 )
 {
     nVal1 = Abs( nVal1 );
@@ -101,11 +97,10 @@ static void Reduce( BigInt &rVal1, BigInt &rVal2 )
     rVal2 /= nB;
 }
 
-// Zur Initialisierung eines Bruches wird nNum dem Zaehler und nDen dem
-// Nenner zugewiesen. Da negative Werte des Nenners einen Bruch als
-// ungueltig kennzeichnen, wird bei der Eingabe eines negativen Nenners
-// sowohl das Vorzeichen des Nenners und des Zaehlers invertiert um wieder
-// einen gueltigen Wert fuer den Bruch zu erhalten.
+// Initialized by setting nNum as nominator and nDen as denominator
+// Negative values in the denominator are invalid and cause the
+// inversion of both nominator and denominator signs
+// in order to return the correct value.
 Fraction::Fraction( long nNum, long nDen )
 {
     nNumerator = nNum;
@@ -116,17 +111,15 @@ Fraction::Fraction( long nNum, long nDen )
         nNumerator   = -nNumerator;
     }
 
-    // Kuerzen ueber Groesste Gemeinsame Teiler
+    // Reduce through GCD
     long n = GetGGT( nNumerator, nDenominator );
     nNumerator   /= n;
     nDenominator /= n;
 }
 
-// Wenn der Wert von dVal groesser ist als LONG_MAX, dann wird der Bruch
-// auf den Wert ungueltig gesetzt, ansonsten werden dVal und der Nenner
-// solange mit 10 multipliziert, bis entweder der Zaehler oder der Nenner
-// groesser als LONG_MAX / 10 ist. Zum Schluss wird der so entstandene Bruch
-// gekuerzt.
+// If dVal > LONG_MAX, the fraction is set as invalid.
+// Otherwise, dVal and denominator are multiplied with 10, until one of them
+// is larger than (LONG_MAX / 10) and the fraction is reduced with GCD
 Fraction::Fraction( double dVal )
 {
     long nDen = 1;
@@ -147,7 +140,7 @@ Fraction::Fraction( double dVal )
     nNumerator   = (long)dVal;
     nDenominator = nDen;
 
-    // Kuerzen ueber Groesste Gemeinsame Teiler
+    // Reduce through GCD
     long n = GetGGT( nNumerator, nDenominator );
     nNumerator   /= n;
     nDenominator /= n;
@@ -161,15 +154,12 @@ Fraction::operator double() const
         return (double)0;
 }
 
-// Zunaechst werden die beiden Parameter auf ihre Gueltigkeit ueberprueft.
-// Ist einer der Parameter ungueltig, dann ist auch des Ergebnis
-// ungueltig. Zur Addition werden die beiden Brueche erst durch
-// Erweiterung mit den Nenner des jeweils anderen Bruches auf einen
-// gemeinsamen Nenner gebracht. Anschliessend werden die beiden Zaehler
-// addiert und das Ergebnis gekuerzt (durch Division von Zaehler und
-// Nenner mit nGGT). Innerhalb der Funktion wird mit dem Datentyp SLong
-// gerechnet, um einen Moeglichen Ueberlauf erkennen zu koennen. Bei
-// einem Ueberlauf wird das Ergebnis auf den Wert ungueltig gesetzt.
+// This methods first validates both values.
+// If one of the arguments is invalid, the whole operation is invalid.
+// For addition both fractions are extended to match the denominator,
+// then nominators are added and reduced (through GCD).
+// Internal datatype for computation is SLong to detect overflows,
+// which cause the operation to be marked as invalid
 Fraction& Fraction::operator += ( const Fraction& rVal )
 {
     if ( !rVal.IsValid() )
@@ -206,15 +196,12 @@ Fraction& Fraction::operator += ( const Fraction& rVal )
     return *this;
 }
 
-// Zunaechst werden die beiden Parameter auf ihre Gueltigkeit ueberprueft.
-// Ist einer der Parameter ungueltig, dann ist auch des Ergebnis
-// ungueltig. Zur Subtraktion werden die beiden Brueche erst durch
-// Erweiterung mit den Nenner des jeweils anderen Bruches auf einen
-// gemeinsamen Nenner gebracht. Anschliessend werden die beiden Zaehler
-// subtrahiert und das Ergebnis gekuerzt (durch Division von Zaehler und
-// Nenner mit nGGT). Innerhalb der Funktion wird mit dem Datentyp BigInt
-// gerechnet, um einen Moeglichen Ueberlauf erkennen zu koennen. Bei
-// einem Ueberlauf wird das Ergebnis auf den Wert ungueltig gesetzt.
+// This methods first validates both values.
+// If one of the arguments is invalid, the whole operation is invalid.
+// For substraction, both fractions are extended to match the denominator,
+// then nominators are substracted and reduced (through GCD).
+// Internal datatype for computation is SLong to detect overflows,
+// which cause the operation to be marked as invalid
 Fraction& Fraction::operator -= ( const Fraction& rVal )
 {
     if ( !rVal.IsValid() )
@@ -251,16 +238,12 @@ Fraction& Fraction::operator -= ( const Fraction& rVal )
     return *this;
 }
 
-// Zunaechst werden die beiden Parameter auf ihre Gueltigkeit ueberprueft.
-// Ist einer der Parameter ungueltig, dann ist auch des Ergebnis
-// ungueltig. Zur Multiplikation werden jeweils die beiden Zaehler und
-// Nenner miteinander multipliziert. Um Ueberlaufe zu vermeiden, werden
-// vorher jeweils der GGT zwischen dem Zaehler des einen und dem Nenner
-// des anderen Bruches bestimmt und bei der Multiplikation Zaehler und
-// Nenner durch die entsprechenden Werte geteilt.
-// Innerhalb der Funktion wird mit dem Datentyp BigInt gerechnet, um
-// einen Moeglichen Ueberlauf erkennen zu koennen. Bei einem Ueberlauf
-// wird das Ergebnis auf den Wert ungueltig gesetzt.
+// This methods first validates both values.
+// If one of the arguments is invalid, the whole operation is invalid.
+// For mutliplication, nominator and denominators are first reduced
+// (through GCD), and then multiplied.
+// Internal datatype for computation is BigInt to detect overflows,
+// which cause the operation to be marked as invalid
 Fraction& Fraction::operator *= ( const Fraction& rVal )
 {
     if ( !rVal.IsValid() )
@@ -292,19 +275,12 @@ Fraction& Fraction::operator *= ( const Fraction& rVal )
     return *this;
 }
 
-// Zunaechst werden die beiden Parameter auf ihre Gueltigkeit ueberprueft.
-// Ist einer der Parameter ungueltig, dann ist auch des Ergebnis
-// ungueltig.
-// Um den Bruch a durch b zu teilen, wird a mit dem Kehrwert von b
-// multipliziert. Analog zu Multiplikation wird jezt jeweils der Zaehler
-// des einen Bruches mit dem Nenner des anderen multipliziert.
-// Um Ueberlaufe zu vermeiden, werden vorher jeweils der GGT zwischen den
-// beiden Zaehlern und den beiden Nennern bestimmt und bei der
-// Multiplikation Zaehler und Nenner durch die entsprechenden Werte
-// geteilt.
-// Innerhalb der Funktion wird mit dem Datentyp BigInt gerechnet, um
-// einen Moeglichen Ueberlauf erkennen zu koennen. Bei einem Ueberlauf
-// wird das Ergebnis auf den Wert ungueltig gesetzt.
+// This methods first validates both values.
+// If one of the arguments is invalid, the whole operation is invalid.
+// For dividing a/b, we multiply a with the inverse of b.
+// To avoid overflows, we first reduce both fractions with GCD.
+// Internal datatype for computation is BigInt to detect overflows,
+// which cause the operation to be marked as invalid
 Fraction& Fraction::operator /= ( const Fraction& rVal )
 {
     if ( !rVal.IsValid() )
@@ -472,12 +448,9 @@ bool operator == ( const Fraction& rVal1, const Fraction& rVal2 )
            && rVal1.nDenominator == rVal2.nDenominator;
 }
 
-// Beide Operanden werden zunaechst auf ihre Gueltigkeit ueberprueft und
-// anschliessend zur Sicherheit noch einmal gekuerzt. Um die Brueche
-// (a/b) und (c/d) zu vergleichen, werden sie zunaechst auf einen
-// gemeinsamen Nenner gebracht (b*d), um dann die beiden Zaehler (a*d)
-// und (c*b) zu vergleichen. Das Ergebnis dieses Vergleichs wird
-// zurueckgegeben.
+// This methods first validates and reduces both values.
+// To compare (a/b) with (c/d), extend denominators (b*d), then return
+// the result of comparing the nominators (a < c)
 bool operator < ( const Fraction& rVal1, const Fraction& rVal2 )
 {
     if ( !rVal1.IsValid() || !rVal2.IsValid() )
@@ -491,12 +464,9 @@ bool operator < ( const Fraction& rVal1, const Fraction& rVal2 )
     return nN < nD;
 }
 
-// Beide Operanden werden zunaechst auf ihre Gueltigkeit ueberprueft und
-// anschliessend zur Sicherheit noch einmal gekuerzt. Um die Brueche
-// (a/b) und (c/d) zu vergleichen, werden sie zunaechst auf einen
-// gemeinsamen Nenner gebracht (b*d), um dann die beiden Zaehler (a*d)
-// und (c*b) zu vergleichen. Das Ergebnis dieses Vergleichs wird
-// zurueckgegeben.
+// This methods first validates and reduces both values.
+// To compare (a/b) with (c/d), extend denominators (b*d), then return
+// the result of comparing nominators (a > c)
 bool operator > ( const Fraction& rVal1, const Fraction& rVal2 )
 {
     if ( !rVal1.IsValid() || !rVal2.IsValid() )

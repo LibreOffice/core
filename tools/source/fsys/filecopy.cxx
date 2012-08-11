@@ -92,12 +92,12 @@ sal_Bool FileCopier::Progress()
 
 ErrCode FileCopier::Error( ErrCode eErr, const DirEntry* pSource, const DirEntry* pTarget )
 {
-    // kein Fehler oder kein ErrorHandler?
+    // No error or no error handler?
     if ( !eErr || !pImp->aErrorLink )
-        // => Error beibehalten
+        // => keep error
         return eErr;
 
-    // sonst gesetzten ErrorHandler fragen
+    // otherwise request from ErrorHandler
     pImp->pErrSource = pSource;
     pImp->pErrTarget = pTarget;
     pImp->eErr = eErr;
@@ -112,7 +112,7 @@ FSysError FileCopier::DoCopy_Impl( const DirEntry &rSource, const DirEntry &rTar
     FSysError eRet = FSYS_ERR_OK;
     ErrCode eWarn = FSYS_ERR_OK;
 
-    // Zieldateiname ggf. kuerzen
+    // shorten target name if necessary
     DirEntry aTgt;
     aTgt = rTarget;
 
@@ -199,9 +199,9 @@ FSysError FileCopier::DoCopy_Impl( const DirEntry &rSource, const DirEntry &rTar
             else
                 eRet = Error( aTargetStream.GetError(), 0, &aTgt );
 
-            // unvollstaendiges File wieder loeschen
             aTargetStream.Close();
 
+            // remove incomplete file
             if ( nBytesCopied != nBytesTotal )
             {
                 aTgt.Kill();
@@ -242,14 +242,14 @@ FSysError FileCopier::DoCopy_Impl( const DirEntry &rSource, const DirEntry &rTar
         }
     }
 #endif
-    // bei Move ggf. das File/Dir loeschen
+    // Remove File/Dir upon Move if necessary
     if ( FSYS_ERR_OK == ERRCODE_TOERROR(eRet) && ( pImp->nActions  & FSYS_ACTION_MOVE ) )
     {
         ErrCode eKillErr = Error( rSource.Kill() | ERRCODE_WARNING_MASK, &rSource, 0 );
         if ( eKillErr != ERRCODE_WARNING_MASK )
         {
             if ( rSource.Exists() )
-                // loeschen ging nicht => dann die Kopie wieder loeschen
+                // Removal failed => remove copy
                 aTgt.Kill( pImp->nActions );
             if ( !eWarn )
                 eWarn = eKillErr;

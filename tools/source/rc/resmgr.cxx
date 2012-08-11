@@ -568,10 +568,9 @@ sal_Bool InternalResMgr::Create()
         pStm->Read( pContentBuf, lContLen );
         // allocate ImpContent space (sizeof(ImpContent) per unit, not necessarily 12)
         pContent = (ImpContent *)rtl_allocateMemory( sizeof(ImpContent)*lContLen/12 );
-        // Auf die Anzahl der ImpContent k�rzen
+        // Shorten to number of ImpContent
         nEntries = (sal_uInt32)lContLen / 12;
-        bEqual2Content = sal_True;  // Die Daten der Resourcen liegen
-                                // genauso wie das Inhaltsverzeichnis
+        bEqual2Content = sal_True;
         sal_Bool bSorted = sal_True;
         if( nEntries )
         {
@@ -634,7 +633,7 @@ void* InternalResMgr::LoadGlobalRes( RESOURCE_TYPE nRT, sal_uInt32 nId,
     if( pResUseDump )
         pResUseDump->erase( (sal_uInt64(nRT) << 32) | nId );
 #endif
-    // Anfang der Strings suchen
+    // search beginning of string
     ImpContent aValue;
     aValue.nTypeAndId = ((sal_uInt64(nRT) << 32) | nId);
     ImpContent* pEnd = (pContent + nEntries);
@@ -646,10 +645,10 @@ void* InternalResMgr::LoadGlobalRes( RESOURCE_TYPE nRT, sal_uInt32 nId,
     {
         if( nRT == RSC_STRING && bEqual2Content )
         {
-            // String Optimierung
+            // string optimization
             if( !pStringBlock )
             {
-                // Anfang der Strings suchen
+                // search beginning of string
                 ImpContent * pFirst = pFind;
                 ImpContent * pLast = pFirst;
                 while( pFirst > pContent && ((pFirst -1)->nTypeAndId >> 32) == RSC_STRING )
@@ -684,14 +683,13 @@ void* InternalResMgr::LoadGlobalRes( RESOURCE_TYPE nRT, sal_uInt32 nId,
         }
     } // if( pFind && (pFind != pEnd) && (pFind->nTypeAndId == nValue) )
     *pResHandle = 0;
-    //Resource holen
     return NULL;
 }
 
 void InternalResMgr::FreeGlobalRes( void * pResHandle, void * pResource )
 {
     if ( !pResHandle )
-        // REsource wurde extra allokiert
+        // Free allocated resource
         rtl_freeMemory(pResource);
 }
 
@@ -699,7 +697,7 @@ void InternalResMgr::FreeGlobalRes( void * pResHandle, void * pResource )
 
 UniString GetTypeRes_Impl( const ResId& rTypeId )
 {
-    // Funktion verlassen, falls Resourcefehler in dieser Funktion
+    // Return on resource errors
     static int bInUse = sal_False;
     rtl::OUString aTypStr(OUString::valueOf(static_cast<sal_Int32>(rTypeId.GetId())));
 
@@ -716,7 +714,7 @@ UniString GetTypeRes_Impl( const ResId& rTypeId )
             if ( rTypeId.GetResMgr()->IsAvailable( rTypeId ) )
             {
                 aTypStr = rTypeId.toString();
-                // Versions Resource Klassenzeiger ans Ende setzen
+                // Set class pointer to the end
                 rTypeId.GetResMgr()->Increment( sizeof( RSHEADER_TYPE ) );
             }
         }
@@ -821,10 +819,9 @@ static RSHEADER_TYPE* LocalResource( const ImpRCStack* pStack,
                                      RESOURCE_TYPE nRTType,
                                      sal_uInt32 nId )
 {
-    // Gibt die Position der Resource zurueck, wenn sie gefunden wurde.
-    // Ansonsten gibt die Funktion Null zurueck.
-    RSHEADER_TYPE*  pTmp;   // Zeiger auf Kind-Resourceobjekte
-    RSHEADER_TYPE*  pEnd;   // Zeiger auf das Ende der Resource
+    // Returns position of the resource if found or NULL otherwise
+    RSHEADER_TYPE*  pTmp;   // Pointer to child resource
+    RSHEADER_TYPE*  pEnd;   // Pointer to the end of this resource
 
     if ( pStack->pResource && pStack->pClassRes )
     {
@@ -885,8 +882,8 @@ void ResMgr::Init( const OUString& rFileName )
 #ifdef DBG_UTIL
     else
     {
-        void* aResHandle = 0;     // Hilfvariable fuer Resource
-        void* pVoid;              // Zeiger auf die Resource
+        void* aResHandle = 0;     // Helper variable for resource handles
+        void* pVoid;              // Pointer on the resource
 
         pVoid = pImpRes->LoadGlobalRes( RSC_VERSIONCONTROL, RSCVERSION_ID,
                                         &aResHandle );
@@ -1034,7 +1031,6 @@ sal_Bool ResMgr::IsAvailable( const ResId& rId, const Resource* pResObj ) const
         }
     }
 
-    // vieleicht globale Resource
     if ( !pClassRes )
         bAvailable = pMgr->pImpRes->IsGlobalAvailable( nRT, nId );
 
@@ -1208,9 +1204,9 @@ void ResMgr::PopContext( const Resource* pResObj )
         }
 #endif
 
-        // Resource freigeben
+        // free resource
         if( (pTop->Flags & (RC_GLOBAL | RC_NOTFOUND)) == RC_GLOBAL )
-            // kann auch Fremd-Resource sein
+            // free global resource if resource is foreign
             InternalResMgr::FreeGlobalRes( pTop->aResHandle, pTop->pResource );
         decStack();
     }
@@ -1230,13 +1226,14 @@ RSHEADER_TYPE* ResMgr::CreateBlock( const ResId& rId )
     RSHEADER_TYPE* pHeader = NULL;
     if ( GetResource( rId ) )
     {
-        // Der Zeiger steht am Anfang, deswegen zeigt der Klassen-Pointer
-        // auf den Header und die restliche Groesse ist die Gesammte.
+        // Pointer is at the beginning of the resource, thus
+        // class pointer points to the header, and the remaining size
+        // equals to total size of allocated memory
         pHeader = (RSHEADER_TYPE*)rtl_allocateMemory( GetRemainSize() );
         memcpy( pHeader, GetClass(), GetRemainSize() );
         Increment( pHeader->GetLocalOff() ); //ans Ende setzen
         if ( pHeader->GetLocalOff() != pHeader->GetGlobOff() )
-            // Hat Sub-Resourcen, deshalb extra freigeben
+            // Has sub-resources, thus release them as well
             PopContext();
     }
 

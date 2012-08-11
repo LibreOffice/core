@@ -128,38 +128,37 @@ STRING& STRING::Insert( const STRING& rStr, xub_StrLen nPos, xub_StrLen nLen,
     DBG_CHKTHIS( STRING, DBGCHECKSTRING );
     DBG_CHKOBJ( &rStr, STRING, DBGCHECKSTRING );
 
-    // Stringlaenge ermitteln
+    // Determine string length
     if ( nPos > rStr.mpData->mnLen )
         nLen = 0;
     else
     {
-        // Laenge korrigieren, wenn noetig
+        // Correct length if necessary
         sal_Int32 nMaxLen = rStr.mpData->mnLen-nPos;
         if ( nLen > nMaxLen )
             nLen = static_cast< xub_StrLen >(nMaxLen);
     }
 
-    // Ueberlauf abfangen
+    // Detect overflow
     sal_Int32 nCopyLen = ImplGetCopyLen( mpData->mnLen, nLen );
 
-    // Ist der einzufuegende String ein Leerstring
     if ( !nCopyLen )
         return *this;
 
-    // Index groesser als Laenge
+    // Correct index if necessary
     if ( nIndex > mpData->mnLen )
         nIndex = static_cast< xub_StrLen >(mpData->mnLen);
 
-    // Neue Laenge ermitteln und neuen String anlegen
+    // Determine new length and allocate string
     STRINGDATA* pNewData = ImplAllocData( mpData->mnLen+nCopyLen );
 
-    // String kopieren
+    // copy string to newdata
     memcpy( pNewData->maStr, mpData->maStr, nIndex*sizeof( STRCODE ) );
     memcpy( pNewData->maStr+nIndex, rStr.mpData->maStr+nPos, nCopyLen*sizeof( STRCODE ) );
     memcpy( pNewData->maStr+nIndex+nCopyLen, mpData->maStr+nIndex,
             (mpData->mnLen-nIndex)*sizeof( STRCODE ) );
 
-    // Alte Daten loeschen und Neue zuweisen
+    // release old data
     STRING_RELEASE((STRING_TYPE *)mpData);
     mpData = pNewData;
 
@@ -177,7 +176,7 @@ static sal_Int32 ImplStringICompareWithoutZero( const STRCODE* pStr1, const STRC
         if ( !nCount )
             break;
 
-        // Ist das Zeichen zwischen 'A' und 'Z' dann umwandeln
+        // convert if char is between 'A' and 'Z'
         c1 = *pStr1;
         c2 = *pStr2;
         if ( (c1 >= 65) && (c1 <= 90) )
@@ -211,7 +210,6 @@ sal_Bool STRING::EqualsIgnoreCaseAscii( const STRING& rStr, xub_StrLen nIndex, x
         nLen = static_cast< xub_StrLen >(nMaxLen);
     }
 
-    // String vergleichen
     return (ImplStringICompareWithoutZero( mpData->maStr+nIndex, rStr.mpData->maStr, nLen ) == 0);
 }
 
@@ -221,20 +219,17 @@ StringCompare STRING::CompareIgnoreCaseToAscii( const STRING& rStr,
     DBG_CHKTHIS( STRING, DBGCHECKSTRING );
     DBG_CHKOBJ( &rStr, STRING, DBGCHECKSTRING );
 
-    // Auf Gleichheit der Pointer testen
     if ( mpData == rStr.mpData )
         return COMPARE_EQUAL;
 
-    // Maximale Laenge ermitteln
+    // determine maximal length
     if ( mpData->mnLen < nLen )
         nLen = static_cast< xub_StrLen >(mpData->mnLen+1);
     if ( rStr.mpData->mnLen < nLen )
         nLen = static_cast< xub_StrLen >(rStr.mpData->mnLen+1);
 
-    // String vergleichen
     sal_Int32 nCompare = ImplStringICompareWithoutZero( mpData->maStr, rStr.mpData->maStr, nLen );
 
-    // Rueckgabewert anpassen
     if ( nCompare == 0 )
         return COMPARE_EQUAL;
     else if ( nCompare < 0 )
@@ -250,10 +245,10 @@ STRING& STRING::Fill( xub_StrLen nCount, STRCODE cFillChar )
     if ( !nCount )
         return *this;
 
-    // Ist nCount groesser wie der jetzige String, dann verlaengern
+    // extend string if fill length is larger
     if ( nCount > mpData->mnLen )
     {
-        // dann neuen String mit der neuen Laenge anlegen
+        // allocate string of new length
         STRINGDATA* pNewData = ImplAllocData( nCount );
         STRING_RELEASE((STRING_TYPE *)mpData);
         mpData = pNewData;
@@ -277,25 +272,25 @@ STRING& STRING::Expand( xub_StrLen nCount, STRCODE cExpandChar )
 {
     DBG_CHKTHIS( STRING, DBGCHECKSTRING );
 
-    // Muss der String erweitert werden
+    // return if string doesn't need expanding
     sal_Int32 nLen = mpData->mnLen;
     if ( nCount <= nLen )
         return *this;
 
-    // Neuen String anlegen
+    // allocate string of new size
     STRINGDATA* pNewData = ImplAllocData( nCount );
 
-    // Alten String kopieren
+    // copy from old string
     memcpy( pNewData->maStr, mpData->maStr, nLen*sizeof( STRCODE ) );
 
-    // und initialisieren
+    // and expand using the given character
     STRCODE* pStr = pNewData->maStr;
     pStr += nLen;
     for (sal_Int32 i = nCount - nLen; i > 0; --i) {
         *pStr++ = cExpandChar;
     }
 
-    // Alte Daten loeschen und Neue zuweisen
+    // free old string
     STRING_RELEASE((STRING_TYPE *)mpData);
     mpData = pNewData;
 
@@ -306,17 +301,17 @@ STRCODE* STRING::GetBufferAccess()
 {
     DBG_CHKTHIS( STRING, DBGCHECKSTRING );
 
-    // Daten kopieren, wenn noetig
+    // Copy data if necessary
     if ( mpData->mnLen )
         ImplCopyData();
 
-    // Pointer auf den String zurueckgeben
+    // return pointer to string data
     return mpData->maStr;
 }
 
 void STRING::ReleaseBufferAccess( xub_StrLen nLen )
 {
-    // Hier ohne Funktionstest, da String nicht konsistent
+    // String not consinstent, thus no functionality test
     DBG_CHKTHIS( STRING, NULL );
     DBG_ASSERT( mpData->mnRefCount == 1, "String::ReleaseCharStr() called for String with RefCount" );
 
@@ -327,7 +322,7 @@ void STRING::ReleaseBufferAccess( xub_StrLen nLen )
     {
         STRING_NEW((STRING_TYPE **)&mpData);
     }
-    // Bei mehr als 8 Zeichen unterschied, kuerzen wir den Buffer
+    // shorten buffer is difference > 8 chars
     else if ( mpData->mnLen - nLen > 8 )
     {
         STRINGDATA* pNewData = ImplAllocData( nLen );
@@ -360,7 +355,7 @@ STRING::STRING( STRCODE c )
     DBG_CTOR( STRING, DBGCHECKSTRING );
     DBG_ASSERT( c, "String::String() - c is 0" );
 
-    // Verwaltungsdaten anlegen und initialisieren
+    // Initalize maintenance data
     mpData = ImplAllocData( 1 );
     mpData->maStr[0] = c;
 }
@@ -369,24 +364,24 @@ STRING& STRING::Insert( STRCODE c, xub_StrLen nIndex )
 {
     DBG_CHKTHIS( STRING, DBGCHECKSTRING );
 
-    // Ist es kein 0-Character
+    // Don't insert 0 char or string size is maximum
     if ( !c || (mpData->mnLen == STRING_MAXLEN) )
         return *this;
 
-    // Index groesser als Laenge
+    // Adjust string index
     if ( nIndex > mpData->mnLen )
         nIndex = static_cast< xub_StrLen >(mpData->mnLen);
 
-    // Neue Laenge ermitteln und neuen String anlegen
+    // allocate string of new size
     STRINGDATA* pNewData = ImplAllocData( mpData->mnLen+1 );
 
-    // String kopieren
+    // copy string
     memcpy( pNewData->maStr, mpData->maStr, nIndex*sizeof( STRCODE ) );
     pNewData->maStr[nIndex] = c;
     memcpy( pNewData->maStr+nIndex+1, mpData->maStr+nIndex,
             (mpData->mnLen-nIndex)*sizeof( STRCODE ) );
 
-    // Alte Daten loeschen und Neue zuweisen
+    // free old data
     STRING_RELEASE((STRING_TYPE *)mpData);
     mpData = pNewData;
 
@@ -402,10 +397,10 @@ STRING& STRING::ToUpperAscii()
     STRCODE*    pStr = mpData->maStr;
     while ( nIndex < nLen )
     {
-        // Ist das Zeichen zwischen 'a' und 'z' dann umwandeln
+        // convert char if between 'a' and 'z'
         if ( (*pStr >= 97) && (*pStr <= 122) )
         {
-            // Daten kopieren, wenn noetig
+            // allocate string of new size
             pStr = ImplCopyStringData( pStr );
             *pStr -= 32;
         }
@@ -422,20 +417,17 @@ StringCompare STRING::CompareTo( const STRING& rStr, xub_StrLen nLen ) const
     DBG_CHKTHIS( STRING, DBGCHECKSTRING );
     DBG_CHKOBJ( &rStr, STRING, DBGCHECKSTRING );
 
-    // Auf Gleichheit der Pointer testen
     if ( mpData == rStr.mpData )
         return COMPARE_EQUAL;
 
-    // Maximale Laenge ermitteln
+    // determine maximal length
     if ( mpData->mnLen < nLen )
         nLen = static_cast< xub_StrLen >(mpData->mnLen+1);
     if ( rStr.mpData->mnLen < nLen )
         nLen = static_cast< xub_StrLen >(rStr.mpData->mnLen+1);
 
-    // String vergleichen
     sal_Int32 nCompare = ImplStringCompareWithoutZero( mpData->maStr, rStr.mpData->maStr, nLen );
 
-    // Rueckgabewert anpassen
     if ( nCompare == 0 )
         return COMPARE_EQUAL;
     else if ( nCompare < 0 )
@@ -449,15 +441,12 @@ sal_Bool STRING::Equals( const STRING& rStr ) const
     DBG_CHKTHIS( STRING, DBGCHECKSTRING );
     DBG_CHKOBJ( &rStr, STRING, DBGCHECKSTRING );
 
-    // Sind die Daten gleich
     if ( mpData == rStr.mpData )
         return sal_True;
 
-    // Gleiche Laenge
     if ( mpData->mnLen != rStr.mpData->mnLen )
         return sal_False;
 
-    // String vergleichen
     return (ImplStringCompareWithoutZero( mpData->maStr, rStr.mpData->maStr, mpData->mnLen ) == 0);
 }
 
@@ -466,15 +455,13 @@ sal_Bool STRING::EqualsIgnoreCaseAscii( const STRING& rStr ) const
     DBG_CHKTHIS( STRING, DBGCHECKSTRING );
     DBG_CHKOBJ( &rStr, STRING, DBGCHECKSTRING );
 
-    // Sind die Daten gleich
     if ( mpData == rStr.mpData )
         return sal_True;
 
-    // Gleiche Laenge
     if ( mpData->mnLen != rStr.mpData->mnLen )
         return sal_False;
 
-    // String vergleichen
+    // compare string while ignoring case
     return (ImplStringICompareWithoutZero( mpData->maStr, rStr.mpData->maStr, mpData->mnLen ) == 0);
 }
 
@@ -494,7 +481,6 @@ sal_Bool STRING::Equals( const STRING& rStr, xub_StrLen nIndex, xub_StrLen nLen 
         nLen = static_cast< xub_StrLen >(nMaxLen);
     }
 
-    // String vergleichen
     return (ImplStringCompareWithoutZero( mpData->maStr+nIndex, rStr.mpData->maStr, nLen ) == 0);
 }
 
@@ -514,17 +500,17 @@ xub_StrLen STRING::Match( const STRING& rStr ) const
     DBG_CHKTHIS( STRING, DBGCHECKSTRING );
     DBG_CHKOBJ( &rStr, STRING, DBGCHECKSTRING );
 
-    // Ist dieser String leer
+    // return if string is empty
     if ( !mpData->mnLen )
         return STRING_MATCH;
 
-    // Suche bis Stringende nach dem ersten nicht uebereinstimmenden Zeichen
+    // Search the string for unmatching chars
     const STRCODE*  pStr1 = mpData->maStr;
     const STRCODE*  pStr2 = rStr.mpData->maStr;
     xub_StrLen      i = 0;
     while ( i < mpData->mnLen )
     {
-        // Stimmt das Zeichen nicht ueberein, dann abbrechen
+        // Abort on the first unmatching char
         if ( *pStr1 != *pStr2 )
             return i;
         ++pStr1,
@@ -583,11 +569,11 @@ void STRING::SetToken( xub_StrLen nToken, STRCODE cTok, const STRING& rStr,
     xub_StrLen      nFirstChar      = nIndex;
     xub_StrLen      i               = nFirstChar;
 
-    // Bestimme die Token-Position und Laenge
+    // Determine token position and length
     pStr += i;
     while ( i < nLen )
     {
-        // Stimmt das Tokenzeichen ueberein, dann erhoehe TokCount
+        // Increase token count if match
         if ( *pStr == cTok )
         {
             ++nTok;
@@ -619,11 +605,11 @@ STRING STRING::GetToken( xub_StrLen nToken, STRCODE cTok, xub_StrLen& rIndex ) c
     xub_StrLen      nFirstChar      = rIndex;
     xub_StrLen      i               = nFirstChar;
 
-    // Bestimme die Token-Position und Laenge
+    // Determine token position and length
     pStr += i;
     while ( i < nLen )
     {
-        // Stimmt das Tokenzeichen ueberein, dann erhoehe TokCount
+        // Increase token count if match
         if ( *pStr == cTok )
         {
             ++nTok;
@@ -677,21 +663,20 @@ STRING& STRING::Append( const STRCODE* pCharStr, xub_StrLen nCharLen )
     }
 #endif
 
-    // Ueberlauf abfangen
+    // Catch overflow
     sal_Int32 nLen = mpData->mnLen;
     sal_Int32 nCopyLen = ImplGetCopyLen( nLen, nCharLen );
 
-    // Ist es kein leerer String
     if ( nCopyLen )
     {
-        // Neue Datenstruktur und neuen String erzeugen
+        // allocate string of new size
         STRINGDATA* pNewData = ImplAllocData( nLen+nCopyLen );
 
-        // String kopieren
+        // copy string
         memcpy( pNewData->maStr, mpData->maStr, nLen*sizeof( STRCODE ) );
         memcpy( pNewData->maStr+nLen, pCharStr, nCopyLen*sizeof( STRCODE ) );
 
-        // Alte Daten loeschen und Neue zuweisen
+        // free old string
         STRING_RELEASE((STRING_TYPE *)mpData);
         mpData = pNewData;
     }
@@ -703,18 +688,18 @@ STRING& STRING::Append( STRCODE c )
 {
     DBG_CHKTHIS( STRING, DBGCHECKSTRING );
 
-    // kein 0-Character und maximale Stringlaenge nicht ueberschreiten
+    // don't append null characters and keep string length < maxlen
     sal_Int32 nLen = mpData->mnLen;
     if ( c && (nLen < STRING_MAXLEN) )
     {
-        // Neue Datenstruktur und neuen String erzeugen
+        // allocate string of new size
         STRINGDATA* pNewData = ImplAllocData( nLen+1 );
 
-        // String kopieren
+        // copy string
         memcpy( pNewData->maStr, mpData->maStr, nLen*sizeof( STRCODE ) );
         pNewData->maStr[nLen] = c;
 
-        // Alte Daten loeschen und Neue zuweisen
+        // free old string
         STRING_RELEASE((STRING_TYPE *)mpData);
         mpData = pNewData;
     }
@@ -749,15 +734,15 @@ STRING& STRING::Assign( const STRCODE* pCharStr, xub_StrLen nLen )
     }
     else
     {
-        // Wenn String genauso lang ist, wie der String, dann direkt kopieren
+        // copy without allocation if string length is identical
         if ( (nLen == mpData->mnLen) && (mpData->mnRefCount == 1) )
             memcpy( mpData->maStr, pCharStr, nLen*sizeof( STRCODE ) );
         else
         {
-            // Alte Daten loeschen
+            // free old string
             STRING_RELEASE((STRING_TYPE *)mpData);
 
-            // Daten initialisieren und String kopieren
+            // allocate string of new size and copy
             mpData = ImplAllocData( nLen );
             memcpy( mpData->maStr, pCharStr, nLen*sizeof( STRCODE ) );
         }
@@ -771,7 +756,7 @@ STRING& STRING::Assign( STRCODE c )
     DBG_CHKTHIS( STRING, DBGCHECKSTRING );
     DBG_ASSERT( c, "String::Assign() - c is 0" );
 
-    // Verwaltungsdaten anlegen und initialisieren
+    // initialize maintenance data
     STRING_RELEASE((STRING_TYPE *)mpData);
     mpData = ImplAllocData( 1 );
     mpData->maStr[0] = c;
@@ -799,7 +784,7 @@ static sal_Int32 ImplStringICompare( const STRCODE* pStr1, const STRCODE* pStr2 
     STRCODE     c2;
     do
     {
-        // Ist das Zeichen zwischen 'A' und 'Z' dann umwandeln
+        // Convert char if between 'A' and 'Z'
         c1 = *pStr1;
         c2 = *pStr2;
         if ( (c1 >= 65) && (c1 <= 90) )
@@ -830,7 +815,6 @@ STRING& STRING::Assign( const STRCODE* pCharStr )
     DBG_CHKTHIS( STRING, DBGCHECKSTRING );
     DBG_ASSERT( pCharStr, "String::Assign() - pCharStr is NULL" );
 
-    // Stringlaenge ermitteln
     xub_StrLen nLen = ImplStringLen( pCharStr );
 
     if ( !nLen )
@@ -839,15 +823,15 @@ STRING& STRING::Assign( const STRCODE* pCharStr )
     }
     else
     {
-        // Wenn String genauso lang ist, wie der String, dann direkt kopieren
+        // copy without allocation if string length is identical
         if ( (nLen == mpData->mnLen) && (mpData->mnRefCount == 1) )
             memcpy( mpData->maStr, pCharStr, nLen*sizeof( STRCODE ) );
         else
         {
-            // Alte Daten loeschen
+            // free old string
             STRING_RELEASE((STRING_TYPE *)mpData);
 
-            // Daten initialisieren und String kopieren
+            // allocate string of new size and copy
             mpData = ImplAllocData( nLen );
             memcpy( mpData->maStr, pCharStr, nLen*sizeof( STRCODE ) );
         }

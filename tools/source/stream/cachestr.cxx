@@ -77,7 +77,7 @@ sal_uIntPtr SvCacheStream::GetData( void* pData, sal_uIntPtr nSize )
 
 sal_uIntPtr SvCacheStream::PutData( const void* pData, sal_uIntPtr nSize )
 {
-    // lieber unnoetig auslagern als unnoetig umkopieren
+    // prefer swapping data instead copying it again
     if( pCurrentStream != pSwapStream
         && pCurrentStream->Tell() + nSize > nMaxSize )
         SwapOut();
@@ -113,8 +113,7 @@ void SvCacheStream::SetSize( sal_uIntPtr nSize )
 
 sal_uIntPtr SvCacheStream::GetSize()
 {
-    // ACHTUNG: SvMemoryStream::GetSize() gibt Groesse
-    // des allozierten Buffers zurueck
+    // CAUTION: SvMemoryStream::GetSize() returns size of the allocated buffer
     Flush();
     sal_uIntPtr nTemp = Tell();
     sal_uIntPtr nLength = Seek( STREAM_SEEK_TO_END );

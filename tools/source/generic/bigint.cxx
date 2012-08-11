@@ -31,14 +31,14 @@ static const long MY_MINLONG  = -MY_MAXLONG;
 static const long MY_MAXSHORT = 0x00007fff;
 static const long MY_MINSHORT = -MY_MAXSHORT;
 
-/* Die ganzen Algorithmen zur Addition, Subtraktion, Multiplikation und
- * Division von langen Zahlen stammen aus SEMINUMERICAL ALGORITHMS von
- * DONALD E. KNUTH aus der Reihe The Art of Computer Programming. Zu finden
- * sind diese Algorithmen im Kapitel 4.3.1. The Classical Algorithms.
+/*
+ * The algorithms for Addition, Substraction, Multiplication and Divison
+ * of large numbers originate from SEMINUMERICAL ALGORITHMS by
+ * DONALD E. KNUTH in the series The Art of Computer Programming:
+ * chapter 4.3.1. The Classical Algorithms.
  */
 
-// Muss auf sal_uInt16/INT16/sal_uInt32/sal_Int32 umgestellt werden !!! W.P.
-
+// TODO: Needs conversion to sal_uInt16/INT16/sal_uInt32/sal_Int32
 void BigInt::MakeBigInt( const BigInt& rVal )
 {
     if ( rVal.bIsBig )
@@ -91,9 +91,9 @@ void BigInt::Normalize()
             if ( bIsNeg )
                 nVal = -nVal;
         }
-        // else ist nVal undefiniert !!! W.P.
+        // else nVal is undefined !!! W.P.
     }
-    // wozu, nLen ist doch undefiniert ??? W.P.
+    // why? nVal is undefined ??? W.P.
     else if ( nVal & 0xFFFF0000L )
         nLen = 2;
     else
@@ -158,8 +158,8 @@ void BigInt::AddLong( BigInt& rB, BigInt& rErg )
         int  i;
         char len;
 
-        // wenn die Zahlen unterschiedlich lang sind, sollte zunaechst bei
-        // der kleineren Zahl die fehlenden Ziffern mit 0 initialisert werden
+        // if length of the two values differ, fill remaining positions
+        // of the smaller value with zeros.
         if (nLen >= rB.nLen)
         {
             len = nLen;
@@ -173,7 +173,7 @@ void BigInt::AddLong( BigInt& rB, BigInt& rErg )
                 nNum[i] = 0;
         }
 
-        // Die Ziffern werden von hinten nach vorne addiert
+        // Add numerals, starting from the back
         long k;
         long nZ = 0;
         for (i = 0, k = 0; i < len; i++) {
@@ -184,20 +184,18 @@ void BigInt::AddLong( BigInt& rB, BigInt& rErg )
                 k = 0;
             rErg.nNum[i] = (sal_uInt16)(nZ & 0xffffL);
         }
-        // Trat nach der letzten Addition ein Ueberlauf auf, muss dieser
-        // noch ins Ergebis uebernommen werden
-        if (nZ & 0xff0000L) // oder if(k)
+        // If an overflow occured, add to solution
+        if (nZ & 0xff0000L) // or if(k)
         {
             rErg.nNum[i] = 1;
             len++;
         }
-        // Die Laenge und das Vorzeichen setzen
+        // Set length and sign
         rErg.nLen   = len;
         rErg.bIsNeg = bIsNeg && rB.bIsNeg;
         rErg.bIsBig = sal_True;
     }
-    // Wenn nur einer der beiden Operanten negativ ist, wird aus der
-    // Addition eine Subtaktion
+    // If one of the values is negative, perform substraction instead
     else if (bIsNeg)
     {
         bIsNeg = sal_False;
@@ -220,8 +218,8 @@ void BigInt::SubLong( BigInt& rB, BigInt& rErg )
         char len;
         long nZ, k;
 
-        // wenn die Zahlen unterschiedlich lang sind, sollte zunaechst bei
-        // der kleineren Zahl die fehlenden Ziffern mit 0 initialisert werden
+        // if length of the two values differ, fill remaining positions
+        // of the smaller value with zeros.
         if (nLen >= rB.nLen)
         {
             len = nLen;
@@ -259,14 +257,13 @@ void BigInt::SubLong( BigInt& rB, BigInt& rErg )
                     k = 0;
                 rErg.nNum[i] = (sal_uInt16)(nZ & 0xffffL);
             }
-            // wenn a < b, dann Vorzeichen vom Ergebnis umdrehen
+            // if a < b, revert sign
             rErg.bIsNeg = !bIsNeg;
         }
         rErg.nLen   = len;
         rErg.bIsBig = sal_True;
     }
-    // Wenn nur einer der beiden Operanten negativ ist, wird aus der
-    // Subtaktion eine Addition
+    // If one of the values is negative, perform addition instead
     else if (bIsNeg)
     {
         bIsNeg = sal_False;
@@ -329,7 +326,7 @@ void BigInt::DivLong( const BigInt& rB, BigInt& rErg ) const
     aTmpB.Mult( rB, nMult );
 
     for (j = aTmpA.nLen - 1; j >= nLenB; j--)
-    { // Raten des Divisors
+    { // guess divisor
         nTmp = ( (long)aTmpA.nNum[j] << 16 ) + aTmpA.nNum[j - 1];
         if (aTmpA.nNum[j] == aTmpB.nNum[nLenB1])
             nQ = 0xFFFF;
@@ -339,7 +336,7 @@ void BigInt::DivLong( const BigInt& rB, BigInt& rErg ) const
         if ( ((sal_uInt32)aTmpB.nNum[nLenB1 - 1] * nQ) >
             ((((sal_uInt32)nTmp) - aTmpB.nNum[nLenB1] * nQ) << 16) + aTmpA.nNum[j - 2])
             nQ--;
-        // Und hier faengt das Teilen an
+        // Start division
         nK = 0;
         nTmp = 0;
         for (i = 0; i < nLenB; i++)
@@ -398,7 +395,7 @@ void BigInt::ModLong( const BigInt& rB, BigInt& rErg ) const
     aTmpB.Mult( rB, nMult);
 
     for (j = aTmpA.nLen - 1; j >= nLenB; j--)
-    { // Raten des Divisors
+    { // Guess divisor
         nTmp = ( (long)aTmpA.nNum[j] << 16 ) + aTmpA.nNum[j - 1];
         if (aTmpA.nNum[j] == aTmpB.nNum[nLenB1])
             nQ = 0xFFFF;
@@ -408,7 +405,7 @@ void BigInt::ModLong( const BigInt& rB, BigInt& rErg ) const
         if ( ((sal_uInt32)aTmpB.nNum[nLenB1 - 1] * nQ) >
             ((((sal_uInt32)nTmp) - aTmpB.nNum[nLenB1] * nQ) << 16) + aTmpA.nNum[j - 2])
             nQ--;
-        // Und hier faengt das Teilen an
+        // Start division
         nK = 0;
         nTmp = 0;
         for (i = 0; i < nLenB; i++)
@@ -669,13 +666,13 @@ BigInt& BigInt::operator+=( const BigInt& rVal )
     {
         if( nVal <= MY_MAXLONG && rVal.nVal <= MY_MAXLONG
             && nVal >= MY_MINLONG && rVal.nVal >= MY_MINLONG )
-        { // wir bewegen uns im ungefaehrlichem Bereich
+        { // No overflows may occur here
             nVal += rVal.nVal;
             return *this;
         }
 
         if( (nVal < 0) != (rVal.nVal < 0) )
-        { // wir bewegen uns im ungefaehrlichem Bereich
+        { // No overflows may occur here
             nVal += rVal.nVal;
             return *this;
         }
@@ -695,13 +692,13 @@ BigInt& BigInt::operator-=( const BigInt& rVal )
     {
         if ( nVal <= MY_MAXLONG && rVal.nVal <= MY_MAXLONG &&
              nVal >= MY_MINLONG && rVal.nVal >= MY_MINLONG )
-        { // wir bewegen uns im ungefaehrlichem Bereich
+        { // No overflows may occur here
             nVal -= rVal.nVal;
             return *this;
         }
 
         if ( (nVal < 0) == (rVal.nVal < 0) )
-        { // wir bewegen uns im ungefaehrlichem Bereich
+        { // No overflows may occur here
             nVal -= rVal.nVal;
             return *this;
         }
@@ -720,8 +717,8 @@ BigInt& BigInt::operator*=( const BigInt& rVal )
     if ( !bIsBig && !rVal.bIsBig
          && nVal <= MY_MAXSHORT && rVal.nVal <= MY_MAXSHORT
          && nVal >= MY_MINSHORT && rVal.nVal >= MY_MINSHORT )
-         // nicht optimal !!! W.P.
-    { // wir bewegen uns im ungefaehrlichem Bereich
+         // TODO: not optimal !!! W.P.
+    { // No overflows may occur here
         nVal *= rVal.nVal;
     }
     else
@@ -747,7 +744,7 @@ BigInt& BigInt::operator/=( const BigInt& rVal )
 
         if ( !bIsBig )
         {
-            // wir bewegen uns im ungefaehrlichem Bereich
+            // No overflows may occur here
             nVal /= rVal.nVal;
             return *this;
         }
@@ -763,7 +760,7 @@ BigInt& BigInt::operator/=( const BigInt& rVal )
 
         if ( rVal.nVal <= (long)0xFFFF && rVal.nVal >= -(long)0xFFFF )
         {
-            // ein BigInt durch ein sal_uInt16 teilen
+            // Divide BigInt with an sal_uInt16
             sal_uInt16 nTmp;
             if ( rVal.nVal < 0 )
             {
@@ -785,7 +782,7 @@ BigInt& BigInt::operator/=( const BigInt& rVal )
         return *this;
     }
 
-    // BigInt durch BigInt teilen
+    // Divide BigInt with BigInt
     BigInt aTmp1, aTmp2;
     aTmp1.MakeBigInt( *this );
     aTmp2.MakeBigInt( rVal );
@@ -806,14 +803,14 @@ BigInt& BigInt::operator%=( const BigInt& rVal )
 
         if ( !bIsBig )
         {
-            // wir bewegen uns im ungefaehrlichem Bereich
+            // No overflows may occur here
             nVal %= rVal.nVal;
             return *this;
         }
 
         if ( rVal.nVal <= (long)0xFFFF && rVal.nVal >= -(long)0xFFFF )
         {
-            // ein BigInt durch ein short teilen
+            // Divide Bigint by short
             sal_uInt16 nTmp;
             if ( rVal.nVal < 0 )
             {
@@ -832,7 +829,7 @@ BigInt& BigInt::operator%=( const BigInt& rVal )
     if ( ABS_IsLess( rVal ) )
         return *this;
 
-    // BigInt durch BigInt teilen
+    // Divide BigInt with BigInt
     BigInt aTmp1, aTmp2;
     aTmp1.MakeBigInt( *this );
     aTmp2.MakeBigInt( rVal );

@@ -55,7 +55,6 @@ SvGlobalName::SvGlobalName()
     pImp->nRefCount++;
 }
 
-// locker die Struktur von Windows kopiert
 #ifdef WNT
 struct _GUID
 #else
@@ -140,7 +139,7 @@ SvStream& operator << ( SvStream& rOStr, const SvGlobalName & rObj )
 
 SvStream& operator >> ( SvStream& rStr, SvGlobalName & rObj )
 {
-    rObj.NewImp(); // kopieren, falls noetig
+    rObj.NewImp(); // copy if necessary
 
     sal_uInt32 a;
     rStr >> a;

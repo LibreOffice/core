@@ -21,26 +21,25 @@
 
 sal_uIntPtr UniqueIndexImpl::Insert( void* p )
 {
-    // NULL-Pointer ist nicht erlaubt
+    // NULL-Pointer not allowed
     if ( !p )
         return UNIQUEINDEX_ENTRY_NOTFOUND;
 
-   // Ist Array voll, dann expandieren
+   // Expend array if full
     sal_uIntPtr nTmp = size();
     if( nTmp == nCount )
         nTmp++;
 
-    // Damit UniqIndex nicht ueberlaeuft, wenn Items geloescht wurden
+    // Avoid overflow of UniqIndex upon deletion
     nUniqIndex = nUniqIndex % nTmp;
 
-    // Leeren Eintrag suchen
+    // Search next empty index
     while ( find( nUniqIndex ) != end() )
         nUniqIndex = (nUniqIndex+1) % nTmp;
 
-    // Object im Array speichern
+    // Insert object to array
     (*this)[ nUniqIndex ] = p;
 
-    // Anzahl der Eintraege erhoehen und Index zurueckgeben
     nCount++;
     nUniqIndex++;
     return ( nUniqIndex + nStartIndex - 1 );
@@ -48,7 +47,7 @@ sal_uIntPtr UniqueIndexImpl::Insert( void* p )
 
 void UniqueIndexImpl::Insert( sal_uIntPtr nIndex, void* p )
 {
-    // NULL-Pointer ist nicht erlaubt
+    // NULL-Pointer not allowed
     if ( !p )
         return;
 
@@ -56,7 +55,7 @@ void UniqueIndexImpl::Insert( sal_uIntPtr nIndex, void* p )
 
     bool bFound = find( nContIndex ) != end();
 
-    // Object im Array speichern
+    // Insert object to array
     (*this)[ nContIndex ] = p;
 
     if( !bFound )
@@ -65,12 +64,12 @@ void UniqueIndexImpl::Insert( sal_uIntPtr nIndex, void* p )
 
 void* UniqueIndexImpl::Remove( sal_uIntPtr nIndex )
 {
-    // Ist Index zulaessig
+    // Check for valid index
     if ( (nIndex >= nStartIndex) &&
          (nIndex < (size() + nStartIndex)) )
     {
-        // Index-Eintrag als leeren Eintrag setzen und Anzahl der
-        // gespeicherten Indexe erniedriegen, wenn Eintrag belegt war
+        // insert index as empty entry, and reduce indexcount,
+        // if this entry was used
         iterator it = find( nIndex - nStartIndex );
         if( it != end() )
         {
@@ -85,7 +84,7 @@ void* UniqueIndexImpl::Remove( sal_uIntPtr nIndex )
 
 void* UniqueIndexImpl::Get( sal_uIntPtr nIndex ) const
 {
-    // Ist Index zulaessig
+    // check for valid index
     if ( (nIndex >= nStartIndex) &&
          (nIndex < (size() + nStartIndex)) )
     {

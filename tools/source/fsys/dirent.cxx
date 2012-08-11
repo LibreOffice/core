@@ -248,11 +248,11 @@ FSysError DirEntry::ImpParseName( const rtl::OString& rPfad )
 
     do
     {
-        // den Namen vor dem ersten "\\" abspalten,
-        // falls '\\' am Anfang, ist der Name '\\',
-        // der Rest immer ohne die fuehrenden '\\'.
-        // ein ":" trennt ebenfalls, gehoert aber zum Namen
-        // den ersten '\\', '/' oder ':' suchen
+        // split name before first "\\",
+        // if '\\' is at beginning of string, name is set to '\\'.
+        // ":" also splits the string and belongs to the name.
+
+        // search first occurance of '\\', '/' or ':'
         sal_uInt16 nPos;
         for ( nPos = 0;
               nPos < aPfad.Len() &&                             //?O
@@ -261,7 +261,7 @@ FSysError DirEntry::ImpParseName( const rtl::OString& rPfad )
               nPos++ )
             /* do nothing */;
 
-        // ist der Name ein UNC Pathname?
+        // is the name a UNC pathname?
         if ( nPos == 0 && aPfad.Len() > 1 &&
              ( ( aPfad.GetChar(0) == '\\' && aPfad.GetChar(1) == '\\' ) ||
                ( aPfad.GetChar(0) == '/' && aPfad.GetChar(1) == '/' ) ) )
@@ -272,37 +272,36 @@ FSysError DirEntry::ImpParseName( const rtl::OString& rPfad )
             aName = rtl::OUStringToOString(aPfad.Copy( 2, nPos-2 ), osl_getThreadTextEncoding());
             aStack.Push( new DirEntry( aName, FSYS_FLAG_ABSROOT ) );
         }
-        // ist der Name die Root des aktuellen Drives?
+        // Is the name the root of the current drive?
         else if ( nPos == 0 && aPfad.Len() > 0 &&
                   ( aPfad.GetChar(0) == '\\' || aPfad.GetChar(0) == '/' ) )
         {
-            // Root-Directory des aktuellen Drives
+            // Push root directory of current drive
             aStack.Push( new DirEntry( FSYS_FLAG_ABSROOT ) );
         }
         else
         {
-            // ist der Name ein Drive?
+            // Is the name itself a drive?
             if ( nPos < aPfad.Len() && aPfad.GetChar(nPos) == ':' )
             {
                 aName = rtl::OUStringToOString(aPfad.Copy( 0, nPos + 1 ), osl_getThreadTextEncoding());
 
-                // ist der Name die Root des Drives
+                // Is the name the root of a drive?
                 if ( (nPos + 1) < aPfad.Len() &&
                      ( aPfad.GetChar(nPos+1) == '\\' || aPfad.GetChar(nPos+1) == '/' ) )
                 {
-                    // schon was auf dem Stack?
-                    // oder Novell-Format? (not supported wegen URLs)
+                    // unsupported if stack not empty or is a Novell format (URL)
                     if ( !aStack.Empty() || aName.getLength() > 2 )
                     {
                         aName = rPfad;
                         return FSYS_ERR_MISPLACEDCHAR;
                     }
-                    // Root-Directory des Drive
+                    // Push as root directory of drive
                     aStack.Push( new DirEntry( aName, FSYS_FLAG_ABSROOT ) );
                 }
                 else
                 {
-                    // liegt ein anderes Drive auf dem Stack?
+                    // clear stack if another drive is currently on it
                     if ( !aStack.Empty() )
                     {
                         rtl::OString aThis(aStack.Bottom()->aName);
@@ -313,48 +312,45 @@ FSysError DirEntry::ImpParseName( const rtl::OString& rPfad )
                             aStack.Clear();
                     }
 
-                    // liegt jetzt nichts mehr auf dem Stack?
                     if ( aStack.Empty() )
                         aStack.Push( new DirEntry( aName, FSYS_FLAG_RELROOT ) );
                 }
             }
-
-            // es ist kein Drive
+            // Name is not a drive
             else
             {
-                // den Namen ohne Trenner abspalten
+                // split the name without seperator
                 aName = rtl::OUStringToOString(aPfad.Copy( 0, nPos ), osl_getThreadTextEncoding());
 
-                // stellt der Name die aktuelle Directory dar?
+                // Is the name the current directory?
                 if ( aName == "." )
                     /* do nothing */;
 
-                // stellt der Name die Parent-Directory dar?
+                // Is the name the parent directory?
                 else if ( aName == ".." )
                 {
-                    // ist nichts, ein Parent oder eine relative Root
-                    // auf dem Stack?
+                    // Is the stack empty, or a parent (or relative root) on it?
                     if ( ( aStack.Empty() ) ||
                          ( aStack.Top()->eFlag == FSYS_FLAG_PARENT ) ||
                          ( aStack.Top()->eFlag == FSYS_FLAG_RELROOT ) )
-                        // fuehrende Parents kommen auf den Stack
+                        // add leading parent to stack
                         aStack.Push( new DirEntry( FSYS_FLAG_PARENT ) );
 
-                    // ist es eine absolute Root
+                    // It's an absolute root path
                     else if ( aStack.Top()->eFlag == FSYS_FLAG_ABSROOT )
                     {
-                        // die hat keine Parent-Directory
+                        // Then there is no parent directory
                         aName = rPfad;
                         return FSYS_ERR_NOTEXISTS;
                     }
                     else
-                        // sonst hebt der Parent den TOS auf
+                        // Otherwise removee parent TOS
                         delete aStack.Pop();
                 }
 
                 else
                 {
-                    // normalen Entries kommen auf den Stack
+                    // add ordinary entries to the stack
                     DirEntry *pNew = new DirEntry( aName, FSYS_FLAG_NORMAL );
                     if ( !pNew->IsValid() )
                     {
@@ -368,7 +364,7 @@ FSysError DirEntry::ImpParseName( const rtl::OString& rPfad )
             }
         }
 
-        // den Restpfad bestimmen
+        // determine remainder of path
         aPfad.Erase( 0, nPos + 1 );
         while ( aPfad.Len() && ( aPfad.GetChar(0) == '\\' || aPfad.GetChar(0) == '/' ) )
             aPfad.Erase( 0, 1 );
@@ -376,7 +372,7 @@ FSysError DirEntry::ImpParseName( const rtl::OString& rPfad )
     while ( aPfad.Len() );
 
     sal_uIntPtr nErr = ERRCODE_NONE;
-    // Haupt-Entry (selbst) zuweisen
+    // Set the main entry itself
     if ( aStack.Empty() )
     {
         eFlag = FSYS_FLAG_CURRENT;
@@ -390,59 +386,59 @@ FSysError DirEntry::ImpParseName( const rtl::OString& rPfad )
         delete aStack.Pop();
     }
 
-    // die Parent-Entries vom Stack holen
-    DirEntry** pTemp = &pParent; // Zeiger auf den Member pParent setzen
+    // pop parent entry from stack
+    DirEntry** pTemp = &pParent;
     while ( !aStack.Empty() )
     {
         *pTemp = aStack.Pop();
 
-        // Zeiger auf den Member pParent des eigenen Parent setzen
+        // set member pointer to the pParent of the member's own parent
         pTemp = &( (*pTemp)->pParent );
     }
 
-    // wird damit ein Volume beschrieben?
+    // Does this describe a volume?
     if ( !pParent && eFlag == FSYS_FLAG_RELROOT && !aName.isEmpty() )
         eFlag = FSYS_FLAG_VOLUME;
 
-    // bei gesetztem ErrorCode den Namen komplett "ubernehmen
+    // use full aName if error code was set
     if ( nErr )
         aName = rPfad;
     return nErr;
 #else
     DBG_CHKTHIS( DirEntry, ImpCheckDirEntry );
 
-    // die einzelnen Namen auf einen Stack packen
+    // Add single names to the stack
     DirEntryStack   aStack;
     rtl::OString aPfad(rPfad);
     do
     {
-        // den Namen vor dem ersten "/" abspalten,
-        // falls '/' am Anfang, ist der Name '/',
-        // der Rest immer ohne die fuehrenden '/'.
-        // den ersten '/' suchen
+        // split names on the first occurance of "/",
+        // if '/' starts the string, it itself becomes the name
+
+        // search first occurance of "/"
         sal_uInt16 nPos;
         for ( nPos = 0;
               nPos < aPfad.getLength() && aPfad[nPos] != '/';
               nPos++ )
             /* do nothing */;
 
-            // ist der Name die Root des aktuellen Drives?
+        // is the name the root of the current drive?
         if ( nPos == 0 && !aPfad.isEmpty() && ( aPfad[0] == '/' ) )
         {
-            // Root-Directory des aktuellen Drives
+            // push root directory of current drive to stack
             aStack.Push( new DirEntry( FSYS_FLAG_ABSROOT ) );
         }
         else
         {
-            // den Namen ohne Trenner abspalten
+            // split name without seperator
             aName = aPfad.copy(0, nPos);
 
-                        // stellt der Name die aktuelle Directory dar?
+            // Is the name the current directory?
             if ( aName == "." )
                 /* do nothing */;
 
 #ifdef UNX
-            // stellt der Name das User-Dir dar?
+            // Is the name the user's home directory?
             else if ( aName == "~" )
             {
                 DirEntry aHome( String( (const char *) getenv( "HOME" ), osl_getThreadTextEncoding()) );
@@ -450,30 +446,29 @@ FSysError DirEntry::ImpParseName( const rtl::OString& rPfad )
                     aStack.Push( new DirEntry( aHome[ (sal_uInt16) n-1 ] ) );
             }
 #endif
-            // stellt der Name die Parent-Directory dar?
+            // Is the name the current parent directory?
             else if ( aName == ".." )
             {
-                // ist nichts, ein Parent oder eine relative Root
-                // auf dem Stack?
+                // Is the stack empty, or a parent (or relative root) is on top?
                 if ( ( aStack.Empty() ) || ( aStack.Top()->eFlag == FSYS_FLAG_PARENT ) )
                 {
-                    // fuehrende Parents kommen auf den Stack
+                    // push leading parents to stack
                     aStack.Push( new DirEntry(rtl::OString(), FSYS_FLAG_PARENT) );
                 }
-                // ist es eine absolute Root
+                // Is the name an absolute root?
                 else if ( aStack.Top()->eFlag == FSYS_FLAG_ABSROOT )
                 {
-                    // die hat keine Parent-Directory
+                    // they do not have parent directories
                     return FSYS_ERR_NOTEXISTS;
                 }
                 else
-                    // sonst hebt der Parent den TOS auf
+                    // otherwise remove parent TOS from stack
                     delete aStack.Pop();
             }
             else
             {
                 DirEntry *pNew = NULL;
-                // normalen Entries kommen auf den Stack
+                // push ordinary entries on the stack
                 pNew = new DirEntry( aName, FSYS_FLAG_NORMAL );
                 if ( !pNew->IsValid() )
                 {
@@ -486,7 +481,7 @@ FSysError DirEntry::ImpParseName( const rtl::OString& rPfad )
             }
         }
 
-        // den Restpfad bestimmen
+        // get remainder of path
         aPfad = nPos < aPfad.getLength()
             ? aPfad.copy(nPos + 1) : rtl::OString();
         while ( !aPfad.isEmpty() && ( aPfad[0] == '/' ) )
@@ -494,7 +489,7 @@ FSysError DirEntry::ImpParseName( const rtl::OString& rPfad )
     }
     while (!aPfad.isEmpty());
 
-    // Haupt-Entry (selbst) zuweisen
+    // insert main entry itself
     if ( aStack.Empty() )
     {
         eFlag = FSYS_FLAG_CURRENT;
@@ -507,7 +502,7 @@ FSysError DirEntry::ImpParseName( const rtl::OString& rPfad )
         delete aStack.Pop();
     }
 
-    // die Parent-Entries vom Stack holen
+    // Get parent entries from stack
     DirEntry** pTemp = &pParent;
     while ( !aStack.Empty() )
     {
@@ -530,7 +525,7 @@ static FSysPathStyle GetStyle( FSysPathStyle eStyle )
 /** Convert name to match OS norm. */
 void DirEntry::ImpTrim()
 {
-    // Wildcards werden nicht geclipt
+    // Do not trim wildcard characters
     if ( ( aName.indexOf( '*' ) != -1 ) ||
          ( aName.indexOf( '?' ) != -1 ) ||
          ( aName.indexOf( ';' ) != -1 ) )
@@ -598,7 +593,7 @@ DirEntry::DirEntry( const String& rInitName, FSysPathStyle eStyle )
 
     pParent         = NULL;
 
-    // schnelle Loesung fuer Leerstring
+    // faster check for empty string
     if ( !rInitName.Len())
     {
         eFlag                   = FSYS_FLAG_CURRENT;
@@ -652,7 +647,7 @@ DirEntry::DirEntry( const rtl::OString& rInitName, FSysPathStyle eStyle )
 
     pParent         = NULL;
 
-    // schnelle Loesung fuer Leerstring
+    // faster check for empty string
     if ( rInitName.isEmpty() )
     {
         eFlag                   = FSYS_FLAG_CURRENT;
@@ -757,7 +752,7 @@ sal_Bool DirEntry::Exists( FSysAccess nAccess ) const
                 return sal_False;
 
 #if defined WNT
-    // spezielle Filenamen sind vom System da
+    // get special file names from system
     if ( aName.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("CLOCK$")) ||
            aName.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("CON")) ||
            aName.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("AUX")) ||
@@ -853,7 +848,7 @@ String DirEntry::GetFull( FSysPathStyle eStyle, sal_Bool bWithDelimiter,
 
     rtl::OString aRet = aBuf.makeStringAndClear();
 
-    //! noch ein Hack
+    // HACK
     if ( nMaxChars < STRING_MAXLEN )
         aRet = ImplCutPath( aRet, nMaxChars, ACCESSDELIM_C(eStyle) );
 
@@ -881,7 +876,7 @@ String DirEntry::GetExtension( char cSep ) const
 
     if ( p1 >= p0 )
     {
-        // es wurde ein cSep an der Position p1 gefunden
+        // found a cSep at position p1
         return rtl::OStringToOUString(aName.copy(p1 - p0 + 1),
             osl_getThreadTextEncoding());
     }
@@ -900,12 +895,12 @@ String DirEntry::GetBase( char cSep ) const
 
     if ( p1 >= p0 )
     {
-        // es wurde ein cSep an der Position p1 gefunden
+        // found a cSep at position p1
         return rtl::OStringToOUString(aName.copy(0, p1 - p0),
             osl_getThreadTextEncoding());
 
     }
-    // es wurde kein cSep gefunden
+    // did not find a cSep
     return rtl::OStringToOUString(aName, osl_getThreadTextEncoding());
 }
 
@@ -1037,7 +1032,7 @@ DirEntry& DirEntry::operator=( const DirEntry& rEntry )
         return *this;
     }
 
-    // Name und Typ uebernehmen, Refs beibehalten
+    // set name and type, but keep refs
     aName                       = rEntry.aName;
     eFlag                       = rEntry.eFlag;
     nError                      = FSYS_ERR_OK;
@@ -1083,19 +1078,19 @@ DirEntry DirEntry::operator+( const DirEntry& rEntry ) const
                 return rEntry;
     }
 
-    // irgendwas + "." (=> pEntryTop == &rEntry)
+    // something + "." (=> pEntryTop == &rEntry)
     if (pEntryTop->eFlag == FSYS_FLAG_RELROOT && pEntryTop->aName.isEmpty())
     {
         DBG_ASSERT( pEntryTop == &rEntry, "DirEntry::op+ buggy" );
         return *this;
     }
 
-    // root += ".." (=> unmoeglich)
+    // root += ".." (=> impossible)
         if ( pEntryTop->eFlag == FSYS_FLAG_PARENT && pThisTop == this &&
                 ( eFlag == FSYS_FLAG_ABSROOT ) )
                 return DirEntry( FSYS_FLAG_INVALID );
 
-        // irgendwas += abs (=> nur Device uebernehmen falls vorhanden)
+        // something += abs (=> only append device if existant)
         if ( pEntryTop->eFlag == FSYS_FLAG_ABSROOT )
         {
                 rtl::OString aDevice;
@@ -1107,7 +1102,7 @@ DirEntry DirEntry::operator+( const DirEntry& rEntry ) const
                 return aRet;
         }
 
-        // irgendwas += ".." (=> aufloesen)
+        // something += ".." (=> break apart)
         if ( eFlag == FSYS_FLAG_NORMAL && pEntryTop->eFlag == FSYS_FLAG_PARENT )
         {
                 String aConcated( GetFull() );
@@ -1116,7 +1111,7 @@ DirEntry DirEntry::operator+( const DirEntry& rEntry ) const
                 return DirEntry( aConcated );
         }
 
-        // sonst einfach hintereinander haengen
+        // otherwise append consecutively
         DirEntry aRet( rEntry );
         DirEntry *pTop = aRet.ImpGetTopPtr();
         pTop->pParent = new DirEntry( *this );
@@ -1149,14 +1144,14 @@ void DirEntry::SetExtension( const String& rExtension, char cSep )
 
     rtl::OStringBuffer aBuf(aName);
 
-    // cSep im Namen suchen
+    // search cSep within aName
     const sal_Char *p0 = aBuf.getStr();
     const sal_Char *p1 = p0 + aBuf.getLength() - 1;
     while ( p1 >= p0 && *p1 != cSep )
         p1--;
     if ( p1 >= p0 )
     {
-        // es wurde ein cSep an der Position p1 gefunden
+        // found a cSep on position p1
 
         sal_Int32 n = static_cast<sal_Int32>(
                 p1 - p0 + 1 - ( rExtension.Len() ? 0 : 1 ));
@@ -1165,7 +1160,7 @@ void DirEntry::SetExtension( const String& rExtension, char cSep )
     }
     else if ( rExtension.Len() )
     {
-        // es wurde kein cSep gefunden
+        // no cSep was found
         aBuf.append(cSep);
     }
 
@@ -1265,7 +1260,7 @@ namespace
 
 DirEntry DirEntry::TempName( DirEntryKind eKind ) const
 {
-        // ggf. Base-Temp-Dir verwenden (macht Remote keinen Sinn => vorher)
+        // use base-temp-dir if necessary
         const DirEntry &rEntry = TempNameBase_Impl::get();
         if ( !pParent && FSYS_FLAG_CURRENT != rEntry.eFlag && FSYS_FLAG_ABSROOT != eFlag )
         {
@@ -1430,7 +1425,7 @@ sal_Bool DirEntry::MakeDir( sal_Bool bSloppy ) const
 {
     DBG_CHKTHIS( DirEntry, ImpCheckDirEntry );
 
-        // Schnellpruefung, ob vorhanden
+        // fast check if exists
         if ( FileStat( *this ).IsKind( FSYS_KIND_DIR ) )
                 return sal_True;
         if ( bSloppy && pParent )
@@ -1440,11 +1435,11 @@ sal_Bool DirEntry::MakeDir( sal_Bool bSloppy ) const
         const DirEntry *pNewDir = bSloppy ? pParent : this;
         if ( pNewDir )
         {
-                // den Path zum Dir erzeugen
+                // Create path to dir
                 if ( pNewDir->pParent && !pNewDir->pParent->MakeDir(sal_False) )
                         return sal_False;
 
-                // das Dir selbst erzeugen
+                // create dir ourselves
                 if ( pNewDir->eFlag == FSYS_FLAG_ABSROOT ||
                          pNewDir->eFlag == FSYS_FLAG_VOLUME )
                         return sal_True;
@@ -1465,7 +1460,6 @@ sal_Bool DirEntry::MakeDir( sal_Bool bSloppy ) const
                                 sal_Bool bResult = (0 == _mkdir(bDirName.getStr()));
                                 if ( !bResult )
                                 {
-                                    // Wer hat diese Methode const gemacht ?
 #ifdef WIN32
                                     ((DirEntry *)this)->SetError( Sys2SolarError_Impl(  GetLastError() ) );
 #else
@@ -1487,7 +1481,7 @@ FSysError DirEntry::CopyTo( const DirEntry& rDest, FSysAction nActions ) const
         if ( FSYS_ACTION_COPYFILE != (nActions & FSYS_ACTION_COPYFILE) )
 #ifdef UNX
     {
-        // Hardlink anlegen
+        // create hardlink
         HACK(redirection missing)
         rtl::OString aThis(rtl::OUStringToOString(GetFull(), osl_getThreadTextEncoding()));
         rtl::OString aDest(rtl::OUStringToOString(rDest.GetFull(), osl_getThreadTextEncoding()));
@@ -1539,19 +1533,18 @@ FSysError DirEntry::MoveTo( const DirEntry& rNewName ) const
         aFromDevice=aFromDevice.GetDevice();
         aToDevice=aToDevice.GetDevice();
 
-        //Quelle und Ziel auf gleichem device?
         if (aFromDevice==aToDevice)
         {
-            // ja, also intra-device-move mit MoveFile
+            // same device, use intra-device-move with MoveFile
             MoveFile( bFrom.getStr(), bTo.getStr() );
-            // MoveFile ist buggy bei cross-device operationen.
-            // Der R?ckgabewert ist auch dann sal_True, wenn nur ein Teil der Operation geklappt hat.
-            // Zudem zeigt MoveFile unterschiedliches Verhalten bei unterschiedlichen NT-Versionen.
+            // Note: MoveFile is buggy for cross-device operations.
+            // Return value is TRUE, even if the operation was only partially successful.
+            // MoveFile has varying behavior between differing NT-versions.
             return Sys2SolarError_Impl( GetLastError() );
         }
         else
         {
-            //nein, also inter-device-move mit copy/delete
+            // Not the same device, use inter-device-move with copy/delete
             FSysError nCopyError = CopyTo(rNewName, FSYS_ACTION_COPYFILE);
 
             DirEntry aKill(rtl::OStringToOUString(bTo, osl_getThreadTextEncoding()));
@@ -1589,7 +1582,7 @@ FSysError DirEntry::MoveTo( const DirEntry& rNewName ) const
 #else
         {
                 if( errno == EXDEV )
-// cross device geht latuernich nicht mit rename
+                // simple rename does not work cross device
                 {
                         FILE *fpIN  = fopen( bFrom.getStr(), "r" );
                         FILE *fpOUT = fopen( bTo.getStr(), "w" );
@@ -1601,7 +1594,7 @@ FSysError DirEntry::MoveTo( const DirEntry& rNewName ) const
                                 while( ( nBytes = fread( pBuf, 1, sizeof(pBuf), fpIN ) ) && ! nErr )
                                 {
                                     nWritten = fwrite( pBuf, 1, nBytes, fpOUT );
-                                    // Fehler im fwrite     ?
+                                    // Error in fwrite ?
                                     if( nWritten < nBytes )
                                     {
                                         nErr = errno;
@@ -1654,7 +1647,7 @@ FSysError DirEntry::Kill(  FSysAction nActions ) const
         FSysError eError = FSYS_ERR_OK;
         FSysFailOnErrorImpl();
 
-        // Name als doppelt 0-terminierter String
+        // Terminate name string with two '0'
         String aTmpName( GetFull() );
         rtl::OString bTmpName(rtl::OUStringToOString(aTmpName, osl_getThreadTextEncoding()));
 
@@ -1662,7 +1655,7 @@ FSysError DirEntry::Kill(  FSysAction nActions ) const
         strcpy( pName, bTmpName.getStr() );
         pName[bTmpName.getLength()+1] = (char) 0;
 
-        //read-only files sollen auch geloescht werden koennen
+        // delete read-only files as well
         sal_Bool isReadOnly = FileStat::GetReadOnlyFlag(*this);
         if (isReadOnly)
         {
@@ -1672,7 +1665,7 @@ FSysError DirEntry::Kill(  FSysAction nActions ) const
         // directory?
         if ( FileStat( *this ).IsKind(FSYS_KIND_DIR) )
         {
-                // Inhalte recursiv loeschen?
+                // Delete recursively?
                 if ( FSYS_ACTION_RECURSIVE == (nActions & FSYS_ACTION_RECURSIVE) )
                 {
                         Dir aDir( *this, FSYS_KIND_DIR|FSYS_KIND_FILE );
@@ -1685,13 +1678,13 @@ FSysError DirEntry::Kill(  FSysAction nActions ) const
                         }
                 }
 
-                // das Dir selbst loeschen
+                // remove Dir myself
 #ifdef WIN32
                 SetLastError(0);
 #endif
                 if ( eError == FSYS_ERR_OK && 0 != _rmdir( (char*) pName ) )
                 {
-                        // falls L"oschen nicht ging, CWD umsetzen
+                        // Change CWD if deletion failed
 #ifdef WIN32
                     eError = Sys2SolarError_Impl( GetLastError() );
 #else
@@ -1756,7 +1749,7 @@ FSysError DirEntry::Kill(  FSysAction nActions ) const
                 }
         }
 
-        //falls Fehler, originales read-only flag wieder herstellen
+        // restore original read-only flag upon error
         if ( isReadOnly && (eError!=ERRCODE_NONE) )
         {
             FileStat::SetReadOnlyFlag(*this, isReadOnly);

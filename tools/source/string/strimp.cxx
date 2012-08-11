@@ -62,7 +62,6 @@ const char* DBGCHECKSTRING( const void* pString )
 
 static STRINGDATA* ImplAllocData( sal_Int32 nLen )
 {
-    // Dann kopiere die Daten
     STRINGDATA* pData   = (STRINGDATA*)rtl_allocateMemory( sizeof(STRINGDATA)+(nLen*sizeof( STRCODE )) );
     pData->mnRefCount   = 1;
     pData->mnLen        = nLen;
@@ -84,14 +83,13 @@ inline void STRING::ImplCopyData()
 {
     DBG_ASSERT( (mpData->mnRefCount != 0), "String::ImplCopyData() - RefCount == 0" );
 
-    // ist es ein referenzierter String, dann die Daten abkoppeln
+    // Dereference data if this string is referenced
     if ( mpData->mnRefCount != 1 )
         mpData = _ImplCopyData( mpData );
 }
 
 inline STRCODE* STRING::ImplCopyStringData( STRCODE* pStr )
 {
-    // Ist der Referenzzaehler groesser 0
     if ( mpData->mnRefCount != 1 ) {
         DBG_ASSERT( (pStr >= mpData->maStr) &&
                     ((pStr-mpData->maStr) < mpData->mnLen),
@@ -124,8 +122,7 @@ STRING::STRING( const STRING& rStr )
     DBG_CTOR( STRING, DBGCHECKSTRING );
     DBG_CHKOBJ( &rStr, STRING, DBGCHECKSTRING );
 
-    // Pointer auf die Daten des uebergebenen Strings setzen und
-    // Referenzzaehler erhoehen
+    // Set pointer to argument string and increase reference counter
     STRING_ACQUIRE((STRING_TYPE *)rStr.mpData);
     mpData = rStr.mpData;
 }
@@ -136,21 +133,19 @@ STRING::STRING( const STRING& rStr, xub_StrLen nPos, xub_StrLen nLen )
     DBG_CTOR( STRING, DBGCHECKSTRING );
     DBG_CHKOBJ( &rStr, STRING, DBGCHECKSTRING );
 
-    // Stringlaenge ermitteln
     if ( nPos > rStr.mpData->mnLen )
         nLen = 0;
     else
     {
-        // Laenge korrigieren, wenn noetig
+        // correct length if necessary
         sal_Int32 nMaxLen = rStr.mpData->mnLen-nPos;
         if ( nLen > nMaxLen )
             nLen = static_cast< xub_StrLen >(nMaxLen);
     }
 
-    // Ist es kein leerer String
     if ( nLen )
     {
-        // Reicht ein einfaches erhoehen des Referenzcounters
+        // Increase reference counter if it suffices
         if ( (nPos == 0) && (nLen == rStr.mpData->mnLen) )
         {
             STRING_ACQUIRE((STRING_TYPE *)rStr.mpData);
@@ -158,7 +153,7 @@ STRING::STRING( const STRING& rStr, xub_StrLen nPos, xub_StrLen nLen )
         }
         else
         {
-            // Verwaltungsdaten anlegen und String kopieren
+            // otherwise, copy string
             mpData = ImplAllocData( nLen );
             memcpy( mpData->maStr, rStr.mpData->maStr+nPos, nLen*sizeof( STRCODE ) );
         }
@@ -173,7 +168,7 @@ STRING::~STRING()
 {
     DBG_DTOR( STRING, DBGCHECKSTRING );
 
-    // Daten loeschen
+    // free string data
     STRING_RELEASE((STRING_TYPE *)mpData);
 }
 
@@ -193,7 +188,7 @@ STRING& STRING::Append( const STRING& rStr )
     DBG_CHKTHIS( STRING, DBGCHECKSTRING );
     DBG_CHKOBJ( &rStr, STRING, DBGCHECKSTRING );
 
-    // Wenn String leer, dann reicht eine Zuweisung
+    // Assignment is sufficient if string is empty
     sal_Int32 nLen = mpData->mnLen;
     if ( !nLen )
     {
@@ -203,20 +198,19 @@ STRING& STRING::Append( const STRING& rStr )
     }
     else
     {
-        // Ueberlauf abfangen
+        // Detect overflow
         sal_Int32 nCopyLen = ImplGetCopyLen( nLen, rStr.mpData->mnLen );
 
-        // Ist der uebergebene String kein Leerstring
         if ( nCopyLen )
         {
-            // Neue Datenstruktur und neuen String erzeugen
+            // allocate string of new size
             STRINGDATA* pNewData = ImplAllocData( nLen+nCopyLen );
 
-            // String kopieren
+            // copy string
             memcpy( pNewData->maStr, mpData->maStr, nLen*sizeof( STRCODE ) );
             memcpy( pNewData->maStr+nLen, rStr.mpData->maStr, nCopyLen*sizeof( STRCODE ) );
 
-            // Alte Daten loeschen und Neue zuweisen
+            // free old string
             STRING_RELEASE((STRING_TYPE *)mpData);
             mpData = pNewData;
         }
@@ -230,24 +224,23 @@ STRING& STRING::Append( const STRCODE* pCharStr )
     DBG_CHKTHIS( STRING, DBGCHECKSTRING );
     DBG_ASSERT( pCharStr, "String::Append() - pCharStr is NULL" );
 
-    // Stringlaenge ermitteln
+    // determine string length
     sal_Int32 nLen = mpData->mnLen;
     sal_Int32 nCopyLen = ImplStringLen( pCharStr );
 
-    // Ueberlauf abfangen
+    // detect overflow
     nCopyLen = ImplGetCopyLen( nLen, nCopyLen );
 
-    // Ist es kein leerer String
     if ( nCopyLen )
     {
-        // Neue Datenstruktur und neuen String erzeugen
+        // allocate string of new size
         STRINGDATA* pNewData = ImplAllocData( nLen+nCopyLen );
 
-        // String kopieren
+        // copy string
         memcpy( pNewData->maStr, mpData->maStr, nLen*sizeof( STRCODE ) );
         memcpy( pNewData->maStr+nLen, pCharStr, nCopyLen*sizeof( STRCODE ) );
 
-        // Alte Daten loeschen und Neue zuweisen
+        // free old string
         STRING_RELEASE((STRING_TYPE *)mpData);
         mpData = pNewData;
     }
@@ -260,7 +253,7 @@ void STRING::SetChar( xub_StrLen nIndex, STRCODE c )
     DBG_CHKTHIS( STRING, DBGCHECKSTRING );
     DBG_ASSERT( nIndex < mpData->mnLen, "String::SetChar() - nIndex > String.Len()" );
 
-    // Daten kopieren, wenn noetig und Character zuweisen
+    // copy data if necessary
     ImplCopyData();
     mpData->maStr[nIndex] = c;
 }
@@ -270,27 +263,26 @@ STRING& STRING::Insert( const STRING& rStr, xub_StrLen nIndex )
     DBG_CHKTHIS( STRING, DBGCHECKSTRING );
     DBG_CHKOBJ( &rStr, STRING, DBGCHECKSTRING );
 
-    // Ueberlauf abfangen
+    // detect overflow
     sal_Int32 nCopyLen = ImplGetCopyLen( mpData->mnLen, rStr.mpData->mnLen );
 
-    // Ist der einzufuegende String ein Leerstring
     if ( !nCopyLen )
         return *this;
 
-    // Index groesser als Laenge
+    // adjust index if necessary
     if ( nIndex > mpData->mnLen )
         nIndex = static_cast< xub_StrLen >(mpData->mnLen);
 
-    // Neue Laenge ermitteln und neuen String anlegen
+    // allocate string of new size
     STRINGDATA* pNewData = ImplAllocData( mpData->mnLen+nCopyLen );
 
-    // String kopieren
+    // copy string
     memcpy( pNewData->maStr, mpData->maStr, nIndex*sizeof( STRCODE ) );
     memcpy( pNewData->maStr+nIndex, rStr.mpData->maStr, nCopyLen*sizeof( STRCODE ) );
     memcpy( pNewData->maStr+nIndex+nCopyLen, mpData->maStr+nIndex,
             (mpData->mnLen-nIndex)*sizeof( STRCODE ) );
 
-    // Alte Daten loeschen und Neue zuweisen
+    // free old string
     STRING_RELEASE((STRING_TYPE *)mpData);
     mpData = pNewData;
 
@@ -302,34 +294,33 @@ STRING& STRING::Replace( xub_StrLen nIndex, xub_StrLen nCount, const STRING& rSt
     DBG_CHKTHIS( STRING, DBGCHECKSTRING );
     DBG_CHKOBJ( &rStr, STRING, DBGCHECKSTRING );
 
-    // Wenn Index groessergleich Laenge ist, dann ist es ein Append
+    // Append if index > current length
     if ( nIndex >= mpData->mnLen )
     {
         Append( rStr );
         return *this;
     }
 
-    // Ist es eine Zuweisung
+    // assign if index = 0 and length >= stringlen
     if ( (nIndex == 0) && (nCount >= mpData->mnLen) )
     {
         Assign( rStr );
         return *this;
     }
 
-    // Reicht ein Erase
+    // Use erase if replacestring is empty
     sal_Int32 nStrLen = rStr.mpData->mnLen;
     if ( !nStrLen )
         return Erase( nIndex, nCount );
 
-    // nCount darf nicht ueber das Stringende hinnausgehen
+    // Adjust nCount if it's larger than the string
     if ( nCount > mpData->mnLen - nIndex )
         nCount = static_cast< xub_StrLen >(mpData->mnLen-nIndex);
 
-    // Reicht ein Insert
     if ( !nCount )
         return Insert( rStr, nIndex );
 
-    // Reicht eine zeichenweise Zuweisung
+    // Use character-based assignment if length is equal
     if ( nCount == nStrLen )
     {
         ImplCopyData();
@@ -337,19 +328,19 @@ STRING& STRING::Replace( xub_StrLen nIndex, xub_StrLen nCount, const STRING& rSt
         return *this;
     }
 
-    // Ueberlauf abfangen
+    // detect overflow
     nStrLen = ImplGetCopyLen( mpData->mnLen-nCount, nStrLen );
 
-    // Neue Daten anlegen
+    // allocate string of new size
     STRINGDATA* pNewData = ImplAllocData( mpData->mnLen-nCount+nStrLen );
 
-    // String kopieren
+    // copy string
     memcpy( pNewData->maStr, mpData->maStr, nIndex*sizeof( STRCODE ) );
     memcpy( pNewData->maStr+nIndex, rStr.mpData->maStr, nStrLen*sizeof( STRCODE ) );
     memcpy( pNewData->maStr+nIndex+nStrLen, mpData->maStr+nIndex+nCount,
             (mpData->mnLen-nIndex-nCount+1)*sizeof( STRCODE ) );
 
-    // Alte Daten loeschen und Neue zuweisen
+    // free old string
     STRING_RELEASE((STRING_TYPE *)mpData);
     mpData = pNewData;
 
@@ -360,26 +351,25 @@ STRING& STRING::Erase( xub_StrLen nIndex, xub_StrLen nCount )
 {
     DBG_CHKTHIS( STRING, DBGCHECKSTRING );
 
-    // Ist der Index ausserhalb des Strings oder ist nCount == 0
+    // Return if index outside string or count = 0
     if ( (nIndex >= mpData->mnLen) || !nCount )
         return *this;
 
-    // nCount darf nicht ueber das Stringende hinnausgehen
+    // Adjust nCount if it's larger than the string
     if ( nCount > mpData->mnLen - nIndex )
         nCount = static_cast< xub_StrLen >(mpData->mnLen-nIndex);
 
-    // Ist das Ergebnis kein Leerstring
     if ( mpData->mnLen - nCount )
     {
-        // Neue Daten anlegen
+        // allocate string of new size
         STRINGDATA* pNewData = ImplAllocData( mpData->mnLen-nCount );
 
-        // String kopieren
+        // copy string
         memcpy( pNewData->maStr, mpData->maStr, nIndex*sizeof( STRCODE ) );
         memcpy( pNewData->maStr+nIndex, mpData->maStr+nIndex+nCount,
                 (mpData->mnLen-nIndex-nCount+1)*sizeof( STRCODE ) );
 
-        // Alte Daten loeschen und Neue zuweisen
+        // free old string
         STRING_RELEASE((STRING_TYPE *)mpData);
         mpData = pNewData;
     }
@@ -400,10 +390,10 @@ STRING& STRING::ToLowerAscii()
     STRCODE*    pStr = mpData->maStr;
     while ( nIndex < nLen )
     {
-        // Ist das Zeichen zwischen 'A' und 'Z' dann umwandeln
+        // Convert if char is between 'A' and 'Z'
         if ( (*pStr >= 65) && (*pStr <= 90) )
         {
-            // Daten kopieren, wenn noetig
+            // allocate string of new size
             pStr = ImplCopyStringData( pStr );
             *pStr += 32;
         }
@@ -441,8 +431,8 @@ xub_StrLen STRING::Search( const STRING& rStr, xub_StrLen nIndex ) const
     sal_Int32 nLen = mpData->mnLen;
     sal_Int32 nStrLen = rStr.mpData->mnLen;
 
-    // Falls die Laenge des uebergebenen Strings 0 ist oder der Index
-    // hinter dem String liegt, dann wurde der String nicht gefunden
+    // rStr was not found if its length is zero
+    // or index is larger than searched string
     if ( !nStrLen || (nIndex >= nLen) )
         return STRING_NOTFOUND;
 
@@ -464,10 +454,10 @@ xub_StrLen STRING::Search( const STRING& rStr, xub_StrLen nIndex ) const
     {
         const STRCODE* pStr2 = rStr.mpData->maStr;
 
-        // Nur innerhalb des Strings suchen
+        // search only within string
         while ( nLen - nIndex >= nStrLen )
         {
-            // Stimmt der String ueberein
+            // increase match if found
             if ( ImplStringCompareWithoutZero( pStr1, pStr2, nStrLen ) == 0 )
                 return nIndex;
             ++pStr1,
@@ -485,8 +475,8 @@ xub_StrLen STRING::Search( const STRCODE* pCharStr, xub_StrLen nIndex ) const
     sal_Int32 nLen = mpData->mnLen;
     xub_StrLen nStrLen  = ImplStringLen( pCharStr );
 
-    // Falls die Laenge des uebergebenen Strings 0 ist oder der Index
-    // hinter dem String liegt, dann wurde der String nicht gefunden
+    // rStr was not found if its length is zero
+    // or index is larger than searched string
     if ( !nStrLen || (nIndex >= nLen) )
         return STRING_NOTFOUND;
 
@@ -506,10 +496,10 @@ xub_StrLen STRING::Search( const STRCODE* pCharStr, xub_StrLen nIndex ) const
     }
     else
     {
-        // Nur innerhalb des Strings suchen
+        // search only within string
         while ( nLen - nIndex >= nStrLen )
         {
-            // Stimmt der String ueberein
+            // increase match if found
             if ( ImplStringCompareWithoutZero( pStr, pCharStr, nStrLen ) == 0 )
                 return nIndex;
             ++pStr,

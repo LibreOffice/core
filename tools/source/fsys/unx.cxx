@@ -151,8 +151,7 @@ static sal_Bool GetMountEntry(dev_t dev, struct mymnttab *mytab)
                 continue;
         }
 #       ifdef LINUX
-        /* #61624# File mit setmntent oeffnen und mit fclose schliessen stoesst
-           bei der glibc-2.1 auf wenig Gegenliebe */
+        // #61624# Opening file with setmntent and closing with fclose fails for glibc-2.1
         endmntent( fp );
 #       else
         fclose (fp);
@@ -165,7 +164,7 @@ static sal_Bool GetMountEntry(dev_t dev, struct mymnttab *mytab)
         return sal_True;
     }
 #   ifdef LINUX
-    /* #61624# dito */
+    /* #61624# see above */
     endmntent( fp );
 #   else
     fclose (fp);
@@ -252,7 +251,7 @@ sal_uInt16 DirReader_Impl::Read()
         return 0;
     }
 
-    // Directories und Files auflisten?
+    // List directories and dirs
     if ( ( pDir->eAttrMask & FSYS_KIND_DIR || pDir->eAttrMask & FSYS_KIND_FILE ) &&
          ( ( pDosEntry = readdir( pDosDir ) ) != NULL ) )
     {
@@ -274,7 +273,7 @@ sal_uInt16 DirReader_Impl::Read()
                  !( pDir->eAttrMask & FSYS_KIND_VISIBLE &&
                     pDosEntry->d_name[0] == '.' ) )
             {
-                if ( pDir->pStatLst ) //Status fuer Sort gewuenscht?
+                if ( pDir->pStatLst ) // Does sorting criteria require status?
                     pDir->ImpSortedInsert( pTemp, new FileStat( aStat ) );
                 else
                     pDir->ImpSortedInsert( pTemp, NULL );
@@ -309,7 +308,7 @@ sal_Bool FileStat::Update( const DirEntry& rDirEntry, SAL_UNUSED_PARAMETER sal_B
         return sal_False;
     }
 
-    // Sonderbehandlung falls es sich um eine Root handelt
+    // Special case if DirEntry is root
     if ( rDirEntry.eFlag == FSYS_FLAG_ABSROOT )
     {
         nKindFlags = FSYS_KIND_DIR;
@@ -327,7 +326,7 @@ sal_Bool FileStat::Update( const DirEntry& rDirEntry, SAL_UNUSED_PARAMETER sal_B
         // note that this is not a solution, since filenames containing special characters
         // are handled badly across the whole Office
 
-        // Sonderbehandlung falls es sich um eine Wildcard handelt
+        // special treatment if name contains wildcards
         rtl::OString aTempName(rtl::OUStringToOString(rDirEntry.GetName(), osl_getThreadTextEncoding()));
         if ( aTempName.indexOf('?') != -1 ||
              aTempName.indexOf('*') != -1 ||
@@ -377,9 +376,9 @@ const char *TempDirImpl( char *pBuf )
     if ( pValue )
         strcpy( pBuf, pValue );
     else
-        // auf Solaris und Linux ist P_tmpdir vorgesehen
+        // P_tempdir exists in Solaris and Linux
         strcpy( pBuf, P_tmpdir );
-        // hart auf "/tmp"  sollte wohl nur im Notfall verwendet werden
+        // don't use "/tmp" as hard coded directory
         //strcpy( pBuf, "/tmp" );
 #endif /* MACOSX */
 

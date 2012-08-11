@@ -37,7 +37,6 @@ sal_Bool Dir::ImpInsertPointReached( const DirEntry& rNewEntry,
     ( ( FSYS_KIND_FILE | FSYS_KIND_DIR | FSYS_KIND_DEV | \
         FSYS_KIND_CHAR | FSYS_KIND_BLOCK ) & nKindFlags )
 
-    // einfache Dinge erfordern einfache Loesungen
     if ( pLst->empty() )
         return sal_True;
 
@@ -168,7 +167,6 @@ sal_Bool Dir::ImpInsertPointReached( const DirEntry& rNewEntry,
     if ( nSortIndex == ( pSortLst->size() - 1 ) )
         return sal_True;
     else
-        //Rekursion
         return ImpInsertPointReached( rNewEntry, rNewStat,
                                       nCurPos, nSortIndex + 1 );
 #undef VALUE
@@ -177,7 +175,7 @@ sal_Bool Dir::ImpInsertPointReached( const DirEntry& rNewEntry,
 /// Insert as sorted
 void Dir::ImpSortedInsert( const DirEntry *pNewEntry, const FileStat *pNewStat )
 {
-    //Sonderfall, keine Sortierung gewuenscht.
+    // special case: no sorting required
     if ( !pSortLst ) {
         pLst->push_back( (DirEntry*)pNewEntry );
         return;
@@ -231,11 +229,11 @@ void Dir::Construct( DirEntryKind nKindFlags )
 
 void Dir::Reset()
 {
-    // ggf. alten Reader l"oschen
+    // remove old Reader if necessary
     if ( pReader && pReader->bInUse )
         DELETEZ(pReader);
 
-    // alle DirEntries aus der Liste entfernen und deren Speicher freigeben
+    // Remove all DirEntries from List and free memory
     if ( pLst )
     {
         for ( size_t i = 0, n = pLst->size(); i < n; ++i ) {
@@ -246,7 +244,7 @@ void Dir::Reset()
     else
         pLst = new DirEntryList();
 
-    //  Alte File-Stat's Loeschen
+    //  Remove old File-Stats
     if ( pStatLst )
     {
         for ( size_t i = 0, n = pStatLst->size(); i < n; ++i ) {
@@ -257,7 +255,7 @@ void Dir::Reset()
         pStatLst = NULL;
     }
 
-    // Verlangen die Sortierkriterien FileStat's?
+    // Does sorting require FileStats?
     if ( pSortLst )
     {
         for ( size_t i = 0, n = pSortLst->size(); i < n; ++i ) {
@@ -272,11 +270,11 @@ void Dir::Reset()
         }
     }
 
-    // ggf. einen neuen Reader aufsetzen
+    // Create new reader if necessary
     if ( !pReader )
         pReader = new DirReader_Impl( *this );
 
-    // gibt es das zu oeffnende Verzeichnis ueberhaupt?
+    // Does the directory exist at all?
 #if !defined(UNX)   //explanation: see DirReader_Impl::Read() in unx.cxx
     if( !pReader->pDosDir )
     {
@@ -290,30 +288,30 @@ void Dir::Reset()
 sal_uInt16 Dir::Scan( sal_uInt16 nCount )
 {
 
-    sal_uInt16 nRead = 0; // Anzahl in dieser Runde gelesener Eintr"age
+    sal_uInt16 nRead = 0; // Number of read entries in this round
     FSysFailOnErrorImpl();
 
-    // noch nicht fertig gewesen
+    // did not complete
     if ( pReader )
     {
-        // frischer Reader?
+        // is this a new reader?
         if ( pLst->empty() )
         {
-            // dann ggf. Laufwerke scannen
+            // Scan directories
             pReader->bInUse = sal_True;
             nRead = pReader->Init();
         }
 
-        // weiterlesen...
+        // continue reading
         while ( nRead <= nCount && !pReader->bReady )
             nRead = nRead + pReader->Read();
 
-        // fertig?
+        // done?
         if ( pReader && pReader->bReady )
             DELETEZ( pReader );
     }
 
-    // Anzahl der gelesenen zur"uckgeben
+    // Return read entry count
     return nRead;
 }
 
@@ -331,7 +329,7 @@ Dir::~Dir()
 {
     DBG_DTOR( Dir, NULL );
 
-    // alle DirEntries aus der Liste entfernen und deren Speicher freigeben
+    // Remove all DirEntries and free memory
     if ( pLst )
     {
         for ( size_t i = 0, n = pLst->size(); i < n; ++i ) {
@@ -341,14 +339,14 @@ Dir::~Dir()
         delete pLst;
     }
 
-    // alle Sorts aus der Liste entfernen und deren Speicher freigeben
+    // Remove all Sorts from list and free memory
     if ( pSortLst )
     {
         pSortLst->clear();
         delete pSortLst;
     }
 
-    // alle FileStat's aus der Liste entfernen und deren Speicher freigeben
+    // Remove all FileStats from list and free memory
     if ( pStatLst )
     {
         for ( size_t i = 0, n = pStatLst->size(); i < n; ++i ) {
@@ -358,7 +356,6 @@ Dir::~Dir()
         delete pStatLst;
     }
 
-    // ggf. laufenden Reader freigeben
     delete pReader;
 }
 
@@ -372,16 +369,15 @@ DirEntry& Dir::operator[] ( size_t nIndex ) const
 
 Dir& Dir::operator+=( const Dir& rDir )
 {
-    // ggf. erst den Rest lesen
+    // Read the rest of the directory
     if ( pReader )
         Scan( USHRT_MAX );
     DBG_ASSERT( !rDir.pReader, "Dir::+= with incomplete Dir" );
 
-    // ggf. initiale Liste erzeugen
     if ( !pLst )
         pLst = new DirEntryList();
 
-    //Verlangen die Sortierkriterien FileStat's?
+    // FileStats required by sorting criteria?
     sal_Bool bStat = sal_False;
     if ( pSortLst ) {
         for ( size_t i = 0, n = pSortLst->size(); i < n && !bStat; ++i ) {
@@ -411,7 +407,7 @@ Dir& Dir::operator+=( const Dir& rDir )
 
 size_t Dir::Count( sal_Bool bUpdated ) const
 {
-    // ggf. erst den Rest lesen
+    // Read the rest of the directory
     if ( bUpdated && pReader )
         ((Dir*)this)->Scan( USHRT_MAX );
 

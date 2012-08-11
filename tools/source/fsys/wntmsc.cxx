@@ -63,7 +63,7 @@ struct dirent *readdir( DIR *pDir )
         char *pBuf = new char[ strlen( pDir->p ) + 5 ];
         if ( pBuf )
         {
-            // *.* dahinter, ggf mit "\\" abtrennen (falls nicht schon da)
+            // if string ends with *.*, seperate with "\\" (unless it exists)
             strcpy( pBuf, pDir->p );
             strcat( pBuf, "\\*.*" + ( *(pBuf + strlen( pBuf ) - 1 ) == '\\' ) );
             CharUpperBuff( pBuf, strlen(pBuf) );
@@ -145,12 +145,12 @@ String DirEntry::GetVolume() const
         rtl::OString aRootDir = pTop->aName;
         FSysFailOnErrorImpl();
 
-        // Network-Device zuerst probieren wegen langsamer Samba-Drives
+        // Try network device first due to slow samba drives
         if ( !WNetGetConnection( aRootDir.getStr(),
                                  sVolumeName, &nVolumeNameLen ) )
             aRet = String( sVolumeName, osl_getThreadTextEncoding());
 
-        // dann den VolumeNamen fuer lokale Drives
+        // Append volume name for local drives
         if ( aRet.Len() == 0 )
         {
             aRootDir += rtl::OString(RTL_CONSTASCII_STRINGPARAM("\\"));
@@ -190,14 +190,14 @@ sal_Bool DirEntry::SetCWD( sal_Bool bSloppy ) const
 
 USHORT DirReader_Impl::Init()
 {
-    // Block-Devices auflisten?
+    // List Block-devices?
     if ( pDir->eAttrMask & FSYS_KIND_BLOCK )
     {
-        // CWD merken
+        // remember CWD
         DirEntry aCurrentDir;
         aCurrentDir.ToAbs();
 
-        // einzeln auf Existenz und Masken-konformit"at pr"ufen
+        // Check for existence and conformity to flags
         USHORT nRead = 0;
         char sDrive[3] = { '?', ':', 0 };
         char sRoot[4] = { '?', ':', '\\', 0 };
@@ -208,7 +208,7 @@ USHORT DirReader_Impl::Init()
             DirEntry* pDrive = new DirEntry( sDrive, FSYS_FLAG_VOLUME );
             if ( pDir->aNameMask.Matches( String(rtl::OStringToOUString(sDrive, osl_getThreadTextEncoding())) ) && GetDriveType( sRoot ) != 1 )
             {
-                if ( pDir->pStatLst ) //Status fuer Sort gewuenscht?
+                if ( pDir->pStatLst ) // Status required by sorting criteria?
                 {
                     FileStat *pNewStat = new FileStat( *pDrive );
                     pDir->ImpSortedInsert( pDrive, pNewStat );
@@ -221,7 +221,7 @@ USHORT DirReader_Impl::Init()
                 delete pDrive;
         }
 
-        // CWD restaurieren
+        // restore CWD
         aCurrentDir.SetCWD();
         return nRead;
     }
@@ -231,19 +231,19 @@ USHORT DirReader_Impl::Init()
 
 USHORT DirReader_Impl::Read()
 {
-    // Directories und Files auflisten?
+    // List directories and Files?
     if ( ( pDir->eAttrMask & FSYS_KIND_DIR ||
            pDir->eAttrMask & FSYS_KIND_FILE ) &&
            ( ( pDosEntry = readdir( pDosDir ) ) != NULL ) )
     {
-        // Gross/Kleinschreibung nicht beruecksichtigen
+        // Do not distinguish between lower-/upper-case letters
         size_t nLen = strlen(pDosEntry->d_name);
         std::vector<char> aBuffer(nLen);
         memcpy(&aBuffer[0], pDosEntry->d_name, nLen);
         CharLowerBuff(&aBuffer[0], nLen);
         rtl::OString aLowerName(&aBuffer[0], nLen);
 
-        // Flags pruefen
+        // check Flags
         sal_Bool bIsDirAndWantsDir =
                 ( ( pDir->eAttrMask & FSYS_KIND_DIR ) &&
 #ifdef ICC
@@ -284,7 +284,7 @@ USHORT DirReader_Impl::Read()
 #endif
             if ( pParent )
                 pTemp->ImpChangeParent( new DirEntry( *pParent ), sal_False );
-            if ( pDir->pStatLst ) //Status fuer Sort gewuenscht?
+            if ( pDir->pStatLst ) // Status required by sorting criteria?
             {
                 FileStat *pNewStat = new FileStat( (void*) pDosDir );
                 pDir->ImpSortedInsert( pTemp, pNewStat );
@@ -585,8 +585,7 @@ sal_Bool FileStat::Update( const DirEntry& rDirEntry, sal_Bool bForceAccess )
             return sal_False;
         }
 
-        // Sonderbehandlung falls es sich um eine Root ohne Laufwerk handelt
-
+        // Special treatment if it's a root without device
         if ( !rDirEntry.aName.getLength() && rDirEntry.eFlag == FSYS_FLAG_ABSROOT )
         {
             nKindFlags = FSYS_KIND_DIR;
@@ -594,15 +593,15 @@ sal_Bool FileStat::Update( const DirEntry& rDirEntry, sal_Bool bForceAccess )
             return sal_True;
         }
 
-        // keine Error-Boxen anzeigen
+        // Don't show error boxes
         FSysFailOnErrorImpl();
 
         // Redirect
         String aPath( rDirEntry.GetFull() );
         DirEntry aDirEntry( aPath );
 
-        // ist ein Medium im Laufwerk?
-        HACK("wie?")
+        // Is a medium in this device?
+        HACK("How?")
         sal_Bool bAccess = sal_True;
         const DirEntry *pTop = aDirEntry.ImpGetTopPtr();
         rtl::OString aName = rtl::OString(pTop->aName).toAsciiLowerCase();
@@ -623,7 +622,7 @@ sal_Bool FileStat::Update( const DirEntry& rDirEntry, sal_Bool bForceAccess )
             DBG_WARNING( "floppy will clatter" );
         }
 
-        // Sonderbehandlung, falls es sich um ein Volume handelt
+        // Special treatment if it's a volume
         if ( aDirEntry.eFlag == FSYS_FLAG_VOLUME ||
              aDirEntry.eFlag == FSYS_FLAG_ABSROOT )
         {
@@ -667,18 +666,17 @@ sal_Bool FileStat::Update( const DirEntry& rDirEntry, sal_Bool bForceAccess )
             return sal_True;
         }
 
-        // Statusinformation vom Betriebssystem holen
+        // Get status data from OS
         HANDLE h; //()
         _WIN32_FIND_DATAA aEntry = INIT_WIN32_FIND_DATAA;
         DirEntry aAbsEntry( aDirEntry );
         if ( bAccess && aAbsEntry.ToAbs() )
         {
-            // im Namen k"onnen auch ';*?' als normale Zeichen vorkommen
+            // names can contain ';*?' as normal characters
             rtl::OString aFilePath(rtl::OUStringToOString(aAbsEntry.GetFull(), osl_getThreadTextEncoding()));
 
             OSL_TRACE( "FileStat: %s", aFilePath.getStr() );
             h = aFilePath.getLength() < 230
-                    // die Win32-API ist hier sehr schwammig
                     ? FindFirstFile( aFilePath.getStr(), &aEntry )//TPF: 2i
                     : INVALID_HANDLE_VALUE;
 
@@ -733,7 +731,7 @@ sal_Bool FileStat::Update( const DirEntry& rDirEntry, sal_Bool bForceAccess )
 
         if ( h == INVALID_HANDLE_VALUE )
         {
-            // Sonderbehandlung falls es sich um eine Wildcard handelt
+            // Special treatment if name contains wildcard
             rtl::OString aTempName(rtl::OUStringToOString(aDirEntry.GetName(), osl_getThreadTextEncoding()));
             if ( strchr( aTempName.getStr(), '?' ) ||
                  strchr( aTempName.getStr(), '*' ) ||

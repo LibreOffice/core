@@ -88,7 +88,7 @@ static sal_uIntPtr GetSvError( DWORD nWntError )
         { (DWORD)0xFFFFFFFF, SVSTREAM_GENERALERROR }
     };
 
-    sal_uIntPtr nRetVal = SVSTREAM_GENERALERROR;    // Standardfehler
+    sal_uIntPtr nRetVal = SVSTREAM_GENERALERROR;    // default error
     int i=0;
     do
     {
@@ -145,7 +145,7 @@ sal_uInt16 SvFileStream::IsA() const
     return ID_FILESTREAM;
 }
 
-// Beschreibung: Prueft nicht Eof; IsEof danach rufbar
+/// Does not check for EOF, makes isEof callable
 sal_uIntPtr SvFileStream::GetData( void* pData, sal_uIntPtr nSize )
 {
     DWORD nCount = 0;
@@ -178,7 +178,7 @@ sal_uIntPtr SvFileStream::SeekPos( sal_uIntPtr nPos )
     if( IsOpen() )
     {
         if( nPos != STREAM_SEEK_TO_END )
-            // 64-Bit files werden nicht unterstuetzt
+            // 64-Bit files are not supported
             nNewPos=SetFilePointer(pInstanceData->hFile,nPos,NULL,FILE_BEGIN);
         else
             nNewPos=SetFilePointer(pInstanceData->hFile,0L,NULL,FILE_END);
@@ -285,14 +285,14 @@ void SvFileStream::Open( const String& rFilename, StreamMode nMode )
     SvStream::ClearBuffer();
 
     eStreamMode = nMode;
-    eStreamMode &= ~STREAM_TRUNC; // beim ReOpen nicht cutten
+    eStreamMode &= ~STREAM_TRUNC; // don't truncate on reopen
 
-    //    !!! NoOp: Ansonsten ToAbs() verwendern
+    //    !!! NoOp: Use ToAbs() otherwise
     //    !!! DirEntry aDirEntry( rFilename );
     //    !!! aFilename = aDirEntry.GetFull();
     aFilename = aParsedFilename;
     rtl::OString aFileNameA(rtl::OUStringToOString(aFilename, osl_getThreadTextEncoding()));
-    SetLastError( ERROR_SUCCESS );  // ggf. durch Redirector geaendert!
+    SetLastError( ERROR_SUCCESS );  // might be changed by Redirector
 
     DWORD   nOpenAction;
     DWORD   nShareMode      = FILE_SHARE_READ | FILE_SHARE_WRITE;
@@ -314,9 +314,9 @@ void SvFileStream::Open( const String& rFilename, StreamMode nMode )
         nAccessMode |= GENERIC_WRITE;
 
     if( nAccessMode == GENERIC_READ )       // ReadOnly ?
-        nMode |= STREAM_NOCREATE;   // wenn ja, nicht erzeugen
+        nMode |= STREAM_NOCREATE;   // Don't create if readonly
 
-    // Zuordnung siehe obige Wahrheitstafel
+    // Assignment based on true/false table above
     if( !(nMode & STREAM_NOCREATE) )
     {
         if( nMode & STREAM_TRUNC )
@@ -343,17 +343,17 @@ void SvFileStream::Open( const String& rFilename, StreamMode nMode )
     );
 
     if(  pInstanceData->hFile!=INVALID_HANDLE_VALUE && (
-        // Hat Create Always eine existierende Datei ueberschrieben ?
+        // Did Create Always overwrite a file?
         GetLastError() == ERROR_ALREADY_EXISTS ||
-        // Hat Open Always eine neue Datei angelegt ?
+        // Did Create Always open a new file?
         GetLastError() == ERROR_FILE_NOT_FOUND  ))
     {
-        // wenn ja, dann alles OK
+        // If so, no error
         if( nOpenAction == OPEN_ALWAYS || nOpenAction == CREATE_ALWAYS )
             SetLastError( ERROR_SUCCESS );
     }
 
-    // Bei Fehler pruefen, ob wir lesen duerfen
+    // Otherwise, determine if we're allowed to read
     if( (pInstanceData->hFile==INVALID_HANDLE_VALUE) &&
          (nAccessMode & GENERIC_WRITE))
     {
@@ -362,8 +362,8 @@ void SvFileStream::Open( const String& rFilename, StreamMode nMode )
         {
             nMode &= (~STREAM_WRITE);
             nAccessMode = GENERIC_READ;
-            // OV, 28.1.97: Win32 setzt die Datei auf 0-Laenge, wenn
-            // die Openaction CREATE_ALWAYS ist!!!!
+            // OV, 28.1.97: Win32 sets file to length 0
+            // if Openaction is CREATE_ALWAYS
             nOpenAction = OPEN_EXISTING;
             SetLastError( ERROR_SUCCESS );
             pInstanceData->hFile = CreateFile(
@@ -414,7 +414,7 @@ void SvFileStream::Close()
     SvStream::ClearError();
 }
 
-// Beschreibung: Setzt Filepointer auf Dateianfang
+/// Reset filepointer to beginning of file
 void SvFileStream::ResetError()
 {
     SvStream::ClearError();

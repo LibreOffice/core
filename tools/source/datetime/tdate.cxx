@@ -238,7 +238,7 @@ sal_uInt16 Date::GetWeekOfYear( DayOfWeek eStartDay,
         // saturday
         else if ( n1WDay == nMinimumNumberOfDaysInWeek + 1 )
         {
-            // Jahr nach Schaltjahr
+            // Year after leapyear
             if ( Date( 1, 1, GetYear()-1 ).IsLeapYear() )
                 nWeek = 53;
             else
@@ -256,7 +256,7 @@ sal_uInt16 Date::GetWeekOfYear( DayOfWeek eStartDay,
                 nWeek = (nDayOfYear + n1WDay) / 7;
             if ( nWeek == 53 )
             {
-                // next x_Sonntag == first x_Sonntag in the new year
+                // next x_Sunday == first x_Sunday in the new year
                 // == still the same week!
                 long nTempDays = DateToDays( GetDay(), GetMonth(), GetYear() );
                 nTempDays +=  6 - (GetDayOfWeek()+(7-(short)eStartDay)) % 7;

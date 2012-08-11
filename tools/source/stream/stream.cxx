@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-// ToDo:
-//  - Read->RefreshBuffer->Auf Aenderungen von nBufActualLen reagieren
+// TODO: Read->RefreshBuffer-> React to changes from nBufActualLen
 
 #include <cstddef>
 
@@ -47,7 +46,7 @@ c |= nSwapTmp;
 
 DBG_NAME( Stream )
 
-// !!! Nicht inline, wenn Operatoren <<,>> inline sind
+// !!! Do not inline if already the operators <<,>> are inline
 inline static void SwapUShort( sal_uInt16& r )
     {   r = OSL_SWAPWORD(r);   }
 inline static void SwapShort( short& r )
@@ -125,10 +124,10 @@ inline static void SwapDouble( double& r )
             } s;
 
             s.d = r;
-            s.c[0] ^= s.c[1]; // zwei 32-Bit-Werte in situ vertauschen
+            s.c[0] ^= s.c[1]; // swap 32-bit values in situ
             s.c[1] ^= s.c[0];
             s.c[0] ^= s.c[1];
-            s.c[0] = OSL_SWAPDWORD(s.c[0]); // und die beiden 32-Bit-Werte selbst in situ drehen
+            s.c[0] = OSL_SWAPDWORD(s.c[0]); // swap dword itself in situ
             s.c[1] = OSL_SWAPDWORD(s.c[1]);
             r = s.d;
         }
@@ -481,7 +480,7 @@ void SvStream::SetBufferSize( sal_uInt16 nBufferSize )
     sal_Size nActualFilePos = Tell();
     sal_Bool bDontSeek = (sal_Bool)(pRWBuf == 0);
 
-    if( bIsDirty && bIsConsistent && bIsWritable )  // wg. Windows NT: Access denied
+    if( bIsDirty && bIsConsistent && bIsWritable )  // due to Windows NT: Access denied
         Flush();
 
     if( nBufSize )
@@ -547,16 +546,15 @@ sal_Bool SvStream::ReadLine( rtl::OString& rStr, sal_Int32 nMaxBytesToRead )
     sal_Size       nTotalLen   = 0;
 
     rtl::OStringBuffer aBuf(4096);
-    while( !bEnd && !GetError() )   // !!! nicht auf EOF testen,
-                                    // !!! weil wir blockweise
-                                    // !!! lesen
+    while( !bEnd && !GetError() )   // Don't test for EOF as we
+                                    // are reading block-wise!
     {
         sal_uInt16 nLen = (sal_uInt16)Read( buf, sizeof(buf)-1 );
         if ( !nLen )
         {
             if ( aBuf.getLength() == 0 )
             {
-                // der allererste Blockread hat fehlgeschlagen -> Abflug
+                // Exit on first block-read error
                 bIsEof = sal_True;
                 rStr = rtl::OString();
                 return sal_False;
@@ -595,9 +593,9 @@ sal_Bool SvStream::ReadLine( rtl::OString& rStr, sal_Int32 nMaxBytesToRead )
     nOldFilePos += nTotalLen;
     if( Tell() > nOldFilePos )
         nOldFilePos++;
-    Seek( nOldFilePos );  // seeken wg. obigem BlockRead!
+    Seek( nOldFilePos );  // Seek pointer due to BlockRead above
 
-    if ( bEnd && (c=='\r' || c=='\n') )  // Sonderbehandlung DOS-Dateien
+    if ( bEnd && (c=='\r' || c=='\n') )  // Special treatment for DOS files
     {
         char cTemp;
         sal_Size nLen = Read((char*)&cTemp , sizeof(cTemp) );
@@ -624,9 +622,8 @@ sal_Bool SvStream::ReadUniStringLine( rtl::OUString& rStr, sal_Int32 nMaxCodepoi
     DBG_ASSERT( sizeof(sal_Unicode) == sizeof(sal_uInt16), "ReadUniStringLine: swapping sizeof(sal_Unicode) not implemented" );
 
     rtl::OUStringBuffer aBuf(4096);
-    while( !bEnd && !GetError() )   // !!! nicht auf EOF testen,
-                                    // !!! weil wir blockweise
-                                    // !!! lesen
+    while( !bEnd && !GetError() )   // Don't test for EOF as we
+                                    // are reading block-wise!
     {
         sal_uInt16 nLen = (sal_uInt16)Read( (char*)buf, sizeof(buf)-sizeof(sal_Unicode) );
         nLen /= sizeof(sal_Unicode);
@@ -634,7 +631,7 @@ sal_Bool SvStream::ReadUniStringLine( rtl::OUString& rStr, sal_Int32 nMaxCodepoi
         {
             if ( aBuf.getLength() == 0 )
             {
-                // der allererste Blockread hat fehlgeschlagen -> Abflug
+                // exit on first BlockRead error
                 bIsEof = sal_True;
                 rStr = rtl::OUString();
                 return sal_False;
@@ -682,9 +679,9 @@ sal_Bool SvStream::ReadUniStringLine( rtl::OUString& rStr, sal_Int32 nMaxCodepoi
     nOldFilePos += nTotalLen * sizeof(sal_Unicode);
     if( Tell() > nOldFilePos )
         nOldFilePos += sizeof(sal_Unicode);
-    Seek( nOldFilePos );  // seeken wg. obigem BlockRead!
+    Seek( nOldFilePos );  // seek due to BlockRead above
 
-    if ( bEnd && (c=='\r' || c=='\n') )  // Sonderbehandlung DOS-Dateien
+    if ( bEnd && (c=='\r' || c=='\n') )  // special treatment for DOS files
     {
         sal_Unicode cTemp;
         Read( (char*)&cTemp, sizeof(cTemp) );
@@ -738,7 +735,7 @@ rtl::OString read_zeroTerminated_uInt8s_ToOString(SvStream& rStream)
 
     nFilePos += aOutput.getLength();
     if (rStream.Tell() > nFilePos)
-        rStream.Seek(nFilePos+1);  // seeken wg. obigem BlockRead!
+        rStream.Seek(nFilePos+1);  // seek due to FileRead above
     return aOutput.makeStringAndClear();
 }
 
@@ -995,7 +992,7 @@ SvStream& SvStream::operator>>( signed char& r )
     return *this;
 }
 
-// Sonderbehandlung fuer Chars wegen PutBack
+// Special treatment for Chars due to PutBack
 
 SvStream& SvStream::operator>>( char& r )
 {
@@ -1139,7 +1136,7 @@ SvStream& SvStream::operator<<  ( signed char v )
     return *this;
 }
 
-// Sonderbehandlung fuer chars wegen PutBack
+// Special treatment for Chars due to PutBack
 
 SvStream& SvStream::operator<<  ( char v )
 {
@@ -1265,11 +1262,11 @@ sal_Size SvStream::Read( void* pData, sal_Size nCount )
     }
     else
     {
-        // ist Block komplett im Puffer
+        // check if block is completely within buffer
         eIOMode = STREAM_IO_READ;
         if( nCount <= (sal_Size)(nBufActualLen - nBufActualPos ) )
         {
-            // Ja!
+            // => yes
             memcpy(pData, pBufPos, (size_t) nCount);
             nBufActualPos = nBufActualPos + (sal_uInt16)nCount;
             pBufPos += nCount;
@@ -1277,7 +1274,7 @@ sal_Size SvStream::Read( void* pData, sal_Size nCount )
         }
         else
         {
-            if( bIsDirty ) // Flushen ?
+            if( bIsDirty ) // Does stream require a flush?
             {
                 SeekPos( nBufFilePos );
                 if( nCryptMask )
@@ -1287,11 +1284,11 @@ sal_Size SvStream::Read( void* pData, sal_Size nCount )
                 bIsDirty = sal_False;
             }
 
-            // passt der Datenblock in den Puffer ?
+            // Does data block fit into buffer?
             if( nCount > nBufSize )
             {
-                // Nein! Deshalb ohne Umweg ueber den Puffer direkt
-                // in den Zielbereich einlesen
+                // => No! Thus read directly
+                // into target area without using the buffer
 
                 eIOMode = STREAM_IO_DONTKNOW;
 
@@ -1307,21 +1304,19 @@ sal_Size SvStream::Read( void* pData, sal_Size nCount )
             }
             else
             {
-                // Der Datenblock passt komplett in den Puffer. Deshalb
-                // Puffer fuellen und dann die angeforderten Daten in den
-                // Zielbereich kopieren.
+                // => Yes. Fill buffer first, then copy to target area
 
                 nBufFilePos += nBufActualPos;
                 SeekPos( nBufFilePos );
 
-                // TODO: Typecast vor GetData, sal_uInt16 nCountTmp
+                // TODO: Typecast before GetData, sal_uInt16 nCountTmp
                 sal_Size nCountTmp = GetData( pRWBuf, nBufSize );
                 if( nCryptMask )
                     EncryptBuffer(pRWBuf, nCountTmp);
                 nBufActualLen = (sal_uInt16)nCountTmp;
                 if( nCount > nCountTmp )
                 {
-                    nCount = nCountTmp;  // zurueckstutzen, Eof siehe unten
+                    nCount = nCountTmp;  // trim count back, EOF see below
                 }
                 memcpy( pData, pRWBuf, (size_t)nCount );
                 nBufActualPos = (sal_uInt16)nCount;
@@ -1348,7 +1343,7 @@ sal_Size SvStream::Write( const void* pData, sal_Size nCount )
         return 0;
     }
     if( !bIsConsistent )
-        RefreshBuffer();   // Aenderungen des Puffers durch PutBack loeschen
+        RefreshBuffer();   // Remove changes in buffer through PutBack
 
     if( !pRWBuf )
     {
@@ -1365,7 +1360,7 @@ sal_Size SvStream::Write( const void* pData, sal_Size nCount )
     {
         memcpy( pBufPos, pData, (size_t)nCount );
         nBufActualPos = nBufActualPos + (sal_uInt16)nCount;
-        // wurde der Puffer erweitert ?
+        // Update length if buffer was updated
         if( nBufActualPos > nBufActualLen )
             nBufActualLen = nBufActualPos;
 
@@ -1374,7 +1369,7 @@ sal_Size SvStream::Write( const void* pData, sal_Size nCount )
     }
     else
     {
-        // Flushen ?
+        // Does stream require flushing?
         if( bIsDirty )
         {
             SeekPos( nBufFilePos );
@@ -1385,7 +1380,7 @@ sal_Size SvStream::Write( const void* pData, sal_Size nCount )
             bIsDirty = sal_False;
         }
 
-        // passt der Block in den Puffer ?
+        // Does data block fit into buffer?
         if( nCount > nBufSize )
         {
             eIOMode = STREAM_IO_DONTKNOW;
@@ -1402,10 +1397,10 @@ sal_Size SvStream::Write( const void* pData, sal_Size nCount )
         }
         else
         {
-            // Block in Puffer stellen
+            // Copy block to buffer
             memcpy( pRWBuf, pData, (size_t)nCount );
 
-            // Reihenfolge!
+            // Mind the order!
             nBufFilePos += nBufActualPos;
             nBufActualPos = (sal_uInt16)nCount;
             pBufPos = pRWBuf + nCount;
@@ -1429,13 +1424,12 @@ sal_Size SvStream::Seek( sal_Size nFilePos )
         return nBufFilePos;
     }
 
-    // Ist Position im Puffer ?
+    // Is seek position within buffer?
     if( nFilePos >= nBufFilePos && nFilePos <= (nBufFilePos + nBufActualLen))
     {
         nBufActualPos = (sal_uInt16)(nFilePos - nBufFilePos);
         pBufPos = pRWBuf + nBufActualPos;
-        // nBufFree korrigieren, damit wir nicht von einem
-        // PutBack (ignoriert den StreamMode) getoetet werden
+        // Update nBufFree to avoid crash upon PutBack
         nBufFree = nBufActualLen - nBufActualPos;
     }
     else
@@ -1780,12 +1774,12 @@ sal_Size SvMemoryStream::PutData( const void* pData, sal_Size nCount )
 
     sal_Size nMaxCount = nSize-nPos;
 
-    // auf Ueberlauf testen
+    // check for overflow
     if( nCount > nMaxCount )
     {
         if( nResize == 0 )
         {
-            // soviel wie moeglich rueberschaufeln
+            // copy as much as possible
             nCount = nMaxCount;
             SetError( SVSTREAM_OUTOFMEMORY );
         }
@@ -1799,8 +1793,8 @@ sal_Size SvMemoryStream::PutData( const void* pData, sal_Size nCount )
 
             if( (nCount-nMaxCount) < nResize )
             {
-                // fehlender Speicher ist kleiner als Resize-Offset,
-                // deshalb um Resize-Offset vergroessern
+                // lacking memory is smaller than nResize,
+                // resize accordingly
                 if( !ReAllocateMemory( nNewResize) )
                 {
                     nCount = 0;
@@ -1809,8 +1803,8 @@ sal_Size SvMemoryStream::PutData( const void* pData, sal_Size nCount )
             }
             else
             {
-                // fehlender Speicher ist groesser als Resize-Offset
-                // deshalb um Differenz+ResizeOffset vergroessern
+                // lacking memory is larger than nResize,
+                // resize by (nCoount-nMaxCount) + resize offset
                 if( !ReAllocateMemory( nCount-nMaxCount+nNewResize ) )
                 {
                     nCount = 0;
@@ -1828,20 +1822,20 @@ sal_Size SvMemoryStream::PutData( const void* pData, sal_Size nCount )
     return nCount;
 }
 
-// nEndOfData: Erste Position im Stream, die nicht gelesen werden darf
-// nSize: Groesse des allozierten Speichers
-
 sal_Size SvMemoryStream::SeekPos( sal_Size nNewPos )
 {
+    // nEndOfData: First position in stream not allowed to read from
+    // nSize: Size of allocated buffer
+
     if( nNewPos < nEndOfData )
         nPos = nNewPos;
     else if( nNewPos == STREAM_SEEK_TO_END )
         nPos = nEndOfData;
     else
     {
-        if( nNewPos >= nSize ) // muss Buffer vergroessert werden ?
+        if( nNewPos >= nSize ) // Does buffer need extension?
         {
-            if( nResize )  // ist vergroeseern erlaubt ?
+            if( nResize )  // Is extension possible?
             {
                 long nDiff = (long)(nNewPos - nSize + 1);
                 nDiff += (long)nResize;
@@ -1849,13 +1843,13 @@ sal_Size SvMemoryStream::SeekPos( sal_Size nNewPos )
                 nPos = nNewPos;
                 nEndOfData = nNewPos;
             }
-            else  // vergroessern ist nicht erlaubt -> ans Ende setzen
+            else  // Extension not possible, set pos to end of data
             {
                 // SetError( SVSTREAM_OUTOFMEMORY );
                 nPos = nEndOfData;
             }
         }
-        else  // gueltigen Bereich innerhalb des Buffers vergroessern
+        else  // Expand buffer size
         {
             nPos = nNewPos;
             nEndOfData = nNewPos;
@@ -1894,7 +1888,7 @@ sal_Bool SvMemoryStream::ReAllocateMemory( long nDiff )
         if( pNewBuf )
         {
             bRetVal = sal_True; // Success!
-            if( nNewSize < nSize )      // Verkleinern ?
+            if( nNewSize < nSize )      // Are we shrinking?
             {
                 memcpy( pNewBuf, pBuf, (size_t)nNewSize );
                 if( nPos > nNewSize )
@@ -2036,21 +2030,21 @@ namespace
 {
     template <typename T, typename O> T tmpl_convertLineEnd(const T &rIn, LineEnd eLineEnd)
     {
-        // Zeilenumbrueche ermitteln und neue Laenge berechnen
-        bool            bConvert    = false;       	   // Muss konvertiert werden
+        // Determine linebreaks and compute length
+        bool            bConvert    = false;    // Needs conversion
         sal_Int32       nStrLen     = rIn.getLength();
         sal_Int32       nLineEndLen = (eLineEnd == LINEEND_CRLF) ? 2 : 1;
-        sal_Int32       nLen        = 0;               // Ziel-Laenge
-        sal_Int32       i           = 0;               // Source-Zaehler
+        sal_Int32       nLen        = 0;        // Target length
+        sal_Int32       i           = 0;        // Source counter
 
         while (i < nStrLen)
         {
-            // Bei \r oder \n gibt es neuen Zeilenumbruch
+            // \r or \n causes linebreak
             if ( (rIn[i] == _CR) || (rIn[i] == _LF) )
             {
                 nLen = nLen + nLineEndLen;
 
-                // Wenn schon gesetzt, dann brauchen wir keine aufwendige Abfrage
+                // If set already, skip expensive test
                 if ( !bConvert )
                 {
                     // Muessen wir Konvertieren
@@ -2063,7 +2057,7 @@ namespace
                         bConvert = true;
                 }
 
-                // \r\n oder \n\r, dann Zeichen ueberspringen
+                // skip char if \r\n oder \n\r
                 if ( ((rIn[i+1] == _CR) || (rIn[i+1] == _LF)) &&
                      (rIn[i] != rIn[i+1]) )
                     ++i;
@@ -2076,13 +2070,12 @@ namespace
         if (!bConvert)
             return rIn;
 
-        // Zeilenumbrueche konvertieren
-        // Neuen String anlegen
+        // convert linebreaks, insert string
         O aNewData(nLen);
         i = 0;
         while (i < nStrLen)
         {
-            // Bei \r oder \n gibt es neuen Zeilenumbruch
+            // \r or \n causes linebreak
             if ( (rIn[i] == _CR) || (rIn[i] == _LF) )
             {
                 if ( eLineEnd == LINEEND_CRLF )

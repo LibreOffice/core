@@ -21,7 +21,7 @@
 
 Rectangle & operator += ( Rectangle & rRect, const SvBorder & rBorder )
 {
-    // wegen Empty-Rect, GetSize muss als erstes gerufen werden
+    // call GetSize first due to Empty-Rect
     Size aS( rRect.GetSize() );
     aS.Width()  += rBorder.Left() + rBorder.Right();
     aS.Height() += rBorder.Top() + rBorder.Bottom();
@@ -34,7 +34,7 @@ Rectangle & operator += ( Rectangle & rRect, const SvBorder & rBorder )
 
 Rectangle & operator -= ( Rectangle & rRect, const SvBorder & rBorder )
 {
-    // wegen Empty-Rect, GetSize muss als erstes gerufen werden
+    // call GetSize first due to Empty-Rect
     Size aS( rRect.GetSize() );
     aS.Width()  -= rBorder.Left() + rBorder.Right();
     aS.Height() -= rBorder.Top() + rBorder.Bottom();

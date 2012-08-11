@@ -240,7 +240,7 @@ static sal_uInt32 GetSvError( int nErrno )
         { (int)0xFFFF,  SVSTREAM_GENERALERROR }
     };
 
-    sal_uInt32 nRetVal = SVSTREAM_GENERALERROR;    // Standardfehler
+    sal_uInt32 nRetVal = SVSTREAM_GENERALERROR; // default error
     int i=0;
     do
     {
@@ -280,7 +280,7 @@ static sal_uInt32 GetSvError( oslFileError nErrno )
         { (oslFileError)0xFFFF,   SVSTREAM_GENERALERROR }
     };
 
-    sal_uInt32 nRetVal = SVSTREAM_GENERALERROR;    // Standardfehler
+    sal_uInt32 nRetVal = SVSTREAM_GENERALERROR; // default error
     int i=0;
     do
     {
@@ -423,7 +423,7 @@ sal_Size SvFileStream::SeekPos( sal_Size nPos )
 
 void SvFileStream::FlushData()
 {
-// lokal gibt es nicht
+    // does not exist locally
 }
 
 sal_Bool SvFileStream::LockRange( sal_Size nByteOffset, sal_Size nBytes )
@@ -503,9 +503,9 @@ void SvFileStream::Open( const String& rFilename, StreamMode nOpenMode )
     Close();
     errno = 0;
     eStreamMode = nOpenMode;
-    eStreamMode &= ~STREAM_TRUNC; // beim ReOpen nicht cutten
+    eStreamMode &= ~STREAM_TRUNC; // don't truncat on reopen
 
-//    !!! NoOp: Ansonsten ToAbs() verwendern
+//    !!! NoOp: use ToAbs()
 //    !!! DirEntry aDirEntry( rFilename );
 //    !!! aFilename = aDirEntry.GetFull();
     aFilename = rFilename;
@@ -542,8 +542,8 @@ void SvFileStream::Open( const String& rFilename, StreamMode nOpenMode )
     else
         uFlags = osl_File_OpenFlag_Read | osl_File_OpenFlag_Write;
 
-    // Fix (MDA, 18.01.95): Bei RD_ONLY nicht mit O_CREAT oeffnen
-    // Wichtig auf Read-Only-Dateisystemen (wie CDROM)
+    // Fix (MDA, 18.01.95): Don't open with O_CREAT upon RD_ONLY
+    // Important for Read-Only-Filesystems (e.g,  CDROM)
     if ( (!( nOpenMode & STREAM_NOCREATE )) && ( uFlags != osl_File_OpenFlag_Read ) )
         uFlags |= osl_File_OpenFlag_Create;
     if ( nOpenMode & STREAM_TRUNC )
@@ -580,7 +580,7 @@ void SvFileStream::Open( const String& rFilename, StreamMode nOpenMode )
     {
         if ( uFlags & osl_File_OpenFlag_Write )
         {
-            // auf Lesen runterschalten
+            // Change to read-only
             uFlags &= ~osl_File_OpenFlag_Write;
             rc = osl_openFile( aFileURL.pData, &nHandleTmp, uFlags );
         }
@@ -592,7 +592,7 @@ void SvFileStream::Open( const String& rFilename, StreamMode nOpenMode )
         if ( uFlags & osl_File_OpenFlag_Write )
             bIsWritable = sal_True;
 
-        if ( !LockFile() ) // ganze Datei
+        if ( !LockFile() ) // whole file
         {
             rc = osl_closeFile( nHandleTmp );
             bIsOpen = sal_False;

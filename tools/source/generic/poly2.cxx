@@ -389,17 +389,16 @@ void PolyPolygon::Move( long nHorzMove, long nVertMove )
 {
     DBG_CHKTHIS( PolyPolygon, NULL );
 
-    // Diese Abfrage sollte man fuer die DrawEngine durchfuehren
+    // Required for DrawEngine
     if( nHorzMove || nVertMove )
     {
-        // Referenzcounter beruecksichtigen
         if ( mpImplPolyPolygon->mnRefCount > 1 )
         {
             mpImplPolyPolygon->mnRefCount--;
             mpImplPolyPolygon = new ImplPolyPolygon( *mpImplPolyPolygon );
         }
 
-        // Punkte verschieben
+        // move points
         sal_uInt16 nPolyCount = mpImplPolyPolygon->mnCount;
         for ( sal_uInt16 i = 0; i < nPolyCount; i++ )
             mpImplPolyPolygon->mpPolyAry[i]->Move( nHorzMove, nVertMove );
@@ -410,14 +409,13 @@ void PolyPolygon::Translate( const Point& rTrans )
 {
     DBG_CHKTHIS( PolyPolygon, NULL );
 
-    // Referenzcounter beruecksichtigen
     if( mpImplPolyPolygon->mnRefCount > 1 )
     {
         mpImplPolyPolygon->mnRefCount--;
         mpImplPolyPolygon = new ImplPolyPolygon( *mpImplPolyPolygon );
     }
 
-    // Punkte verschieben
+    // move points
     for ( sal_uInt16 i = 0, nCount = mpImplPolyPolygon->mnCount; i < nCount; i++ )
         mpImplPolyPolygon->mpPolyAry[ i ]->Translate( rTrans );
 }
@@ -426,14 +424,13 @@ void PolyPolygon::Scale( double fScaleX, double fScaleY )
 {
     DBG_CHKTHIS( PolyPolygon, NULL );
 
-    // Referenzcounter beruecksichtigen
     if( mpImplPolyPolygon->mnRefCount > 1 )
     {
         mpImplPolyPolygon->mnRefCount--;
         mpImplPolyPolygon = new ImplPolyPolygon( *mpImplPolyPolygon );
     }
 
-    // Punkte verschieben
+    // Move points
     for ( sal_uInt16 i = 0, nCount = mpImplPolyPolygon->mnCount; i < nCount; i++ )
         mpImplPolyPolygon->mpPolyAry[ i ]->Scale( fScaleX, fScaleY );
 }
@@ -454,35 +451,32 @@ void PolyPolygon::Rotate( const Point& rCenter, double fSin, double fCos )
 {
     DBG_CHKTHIS( PolyPolygon, NULL );
 
-    // Referenzcounter beruecksichtigen
     if( mpImplPolyPolygon->mnRefCount > 1 )
     {
         mpImplPolyPolygon->mnRefCount--;
         mpImplPolyPolygon = new ImplPolyPolygon( *mpImplPolyPolygon );
     }
 
-    // Punkte verschieben
+    // move points
     for ( sal_uInt16 i = 0, nCount = mpImplPolyPolygon->mnCount; i < nCount; i++ )
         mpImplPolyPolygon->mpPolyAry[ i ]->Rotate( rCenter, fSin, fCos );
 }
 
 void PolyPolygon::Clip( const Rectangle& rRect )
 {
-    // Polygon-Clippen
     sal_uInt16 nPolyCount = mpImplPolyPolygon->mnCount;
     sal_uInt16 i;
 
     if ( !nPolyCount )
         return;
 
-    // Referenzcounter beruecksichtigen
     if ( mpImplPolyPolygon->mnRefCount > 1 )
     {
         mpImplPolyPolygon->mnRefCount--;
         mpImplPolyPolygon = new ImplPolyPolygon( *mpImplPolyPolygon );
     }
 
-    // Erst jedes Polygon Clippen und dann die leeren entfernen
+    // Clip every polygon, deleting the empty ones
     for ( i = 0; i < nPolyCount; i++ )
         mpImplPolyPolygon->mpPolyAry[i]->Clip( rRect );
     while ( nPolyCount )
@@ -607,13 +601,11 @@ SvStream& operator>>( SvStream& rIStream, PolyPolygon& rPolyPoly )
     Polygon* pPoly;
     sal_uInt16   nPolyCount;
 
-    // Anzahl der Polygone einlesen
+    // read number of polygons
     rIStream >> nPolyCount;
 
-    // Daten anlegen
     if( nPolyCount )
     {
-        // Referenzcounter beruecksichtigen
         if ( rPolyPoly.mpImplPolyPolygon->mnRefCount > 1 )
             rPolyPoly.mpImplPolyPolygon->mnRefCount--;
         else
@@ -639,11 +631,11 @@ SvStream& operator<<( SvStream& rOStream, const PolyPolygon& rPolyPoly )
     DBG_CHKOBJ( &rPolyPoly, PolyPolygon, NULL );
     DBG_ASSERTWARNING( rOStream.GetVersion(), "PolyPolygon::<< - Solar-Version not set on rOStream" );
 
-    // Anzahl der Polygone rausschreiben
+    // Write number of polygons
     sal_uInt16 nPolyCount = rPolyPoly.mpImplPolyPolygon->mnCount;
     rOStream << nPolyCount;
 
-    // Die einzelnen Polygone ausgeben
+    // output polygons
     for ( sal_uInt16 i = 0; i < nPolyCount; i++ )
         rOStream << *(rPolyPoly.mpImplPolyPolygon->mpPolyAry[i]);
 
@@ -660,13 +652,11 @@ void PolyPolygon::Read( SvStream& rIStream )
     Polygon* pPoly;
     sal_uInt16   nPolyCount;
 
-    // Anzahl der Polygone einlesen
+    // Read number of polygons
     rIStream >> nPolyCount;
 
-    // Daten anlegen
     if( nPolyCount )
     {
-        // Referenzcounter beruecksichtigen
         if ( mpImplPolyPolygon->mnRefCount > 1 )
             mpImplPolyPolygon->mnRefCount--;
         else
@@ -692,11 +682,11 @@ void PolyPolygon::Write( SvStream& rOStream ) const
     DBG_CHKTHIS( PolyPolygon, NULL );
     DBG_ASSERTWARNING( rOStream.GetVersion(), "PolyPolygon::<< - Solar-Version not set on rOStream" );
 
-    // Anzahl der Polygone rausschreiben
+    // Write number of polygons
     sal_uInt16 nPolyCount = mpImplPolyPolygon->mnCount;
     rOStream << nPolyCount;
 
-    // Die einzelnen Polygone ausgeben
+    // Output polygons
     for ( sal_uInt16 i = 0; i < nPolyCount; i++ )
         mpImplPolyPolygon->mpPolyAry[i]->ImplWrite( rOStream );
 }
