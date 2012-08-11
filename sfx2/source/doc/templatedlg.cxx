@@ -31,6 +31,7 @@
 #include <svtools/PlaceEditDialog.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/moduleoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/toolbox.hxx>
@@ -42,7 +43,9 @@
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
+#include <com/sun/star/ui/dialogs/XFolderPicker.hpp>
 
 #include "doc.hrc"
 #include "templatedlg.hrc"
@@ -64,6 +67,8 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::embed;
 using namespace ::com::sun::star::frame;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::ui::dialogs;
 
 void lcl_createTemplate(uno::Reference<XComponentLoader> xDesktop, const FILTER_APPLICATION eApp);
 
@@ -383,6 +388,9 @@ IMPL_LINK_NOARG(SfxTemplateManagerDlg,TBXTemplateHdl)
         break;
     case TBI_TEMPLATE_DEFAULT:
         OnTemplateAsDefault();
+        break;
+    case TBI_TEMPLATE_EXPORT:
+        OnTemplateExport();
         break;
     default:
         break;
@@ -758,6 +766,52 @@ void SfxTemplateManagerDlg::OnTemplateImport ()
             }
 
             maView->Invalidate(INVALIDATE_NOERASE);
+        }
+    }
+}
+
+void SfxTemplateManagerDlg::OnTemplateExport()
+{
+    uno::Reference<XMultiServiceFactory> xFactory(comphelper::getProcessServiceFactory());
+    uno::Reference<XFolderPicker> xFolderPicker(xFactory->createInstance(FOLDER_PICKER_SERVICE_NAME),uno::UNO_QUERY);
+
+    xFolderPicker->setDisplayDirectory(SvtPathOptions().GetWorkPath());
+
+    sal_Int16 nResult = xFolderPicker->execute();
+
+    if( nResult == ExecutableDialogResults::OK )
+    {
+        INetURLObject aPathObj(xFolderPicker->getDirectory());
+        aPathObj.setFinalSlash();
+
+        if (mpSearchView->IsVisible())
+        {
+        }
+        else
+        {
+            // export templates from the current open overlay
+
+            sal_uInt16 i = 1;
+            sal_uInt16 nRegionItemId = maView->getOverlayRegionId() + 1;
+
+            std::set<const ThumbnailViewItem*>::const_iterator pIter = maSelTemplates.begin();
+            for (pIter = maSelTemplates.begin(); pIter != maSelTemplates.end(); ++pIter, ++i)
+            {
+                const TemplateViewItem *pItem = static_cast<const TemplateViewItem*>(*pIter);
+
+                INetURLObject aItemPath(pItem->getPath());
+
+                if ( 1 == i )
+                    aPathObj.Append(aItemPath.getName());
+                else
+                    aPathObj.setName(aItemPath.getName());
+
+                OUString aPath = aPathObj.GetMainURL( INetURLObject::NO_DECODE );
+
+                if (!maView->exportTo(pItem->mnId,nRegionItemId,aPath))
+                {
+                }
+            }
         }
     }
 }

@@ -76,6 +76,7 @@ private:
     void OnTemplateProperties ();
     void OnTemplateDelete ();
     void OnTemplateAsDefault ();
+    void OnTemplateExport ();
     void OnFolderDelete ();
     void OnRepositoryDelete ();
 

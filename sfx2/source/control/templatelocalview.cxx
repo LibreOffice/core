@@ -609,6 +609,36 @@ void TemplateLocalView::copyFrom (TemplateLocalViewItem *pItem, const rtl::OUStr
     }
 }
 
+bool TemplateLocalView::exportTo(const sal_uInt16 nItemId, const sal_uInt16 nRegionItemId, const OUString &rName)
+{
+    sal_uInt16 nRegionId = nRegionItemId - 1;
+
+    for (size_t i = 0, n = mItemList.size(); i < n; ++i)
+    {
+        if (mItemList[i]->mnId == nRegionItemId)
+        {
+            TemplateLocalViewItem *pRegItem =
+                    static_cast<TemplateLocalViewItem*>(mItemList[i]);
+
+            std::vector<TemplateItemProperties>::iterator aIter;
+            for (aIter = pRegItem->maTemplates.begin(); aIter != pRegItem->maTemplates.end(); ++aIter)
+            {
+                if (aIter->nId == nItemId)
+                {
+                    if (!mpDocTemplates->CopyTo(nRegionId,aIter->nDocId,rName))
+                        return false;
+
+                    return true;
+                }
+            }
+
+            break;
+        }
+    }
+
+    return false;
+}
+
 void TemplateLocalView::OnItemDblClicked (ThumbnailViewItem *pRegionItem)
 {
     // Fill templates

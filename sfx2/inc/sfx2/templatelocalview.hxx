@@ -55,6 +55,8 @@ public:
 
     void copyFrom (TemplateLocalViewItem *pItem, const rtl::OUString &rPath);
 
+    bool exportTo (const sal_uInt16 nItemId, const sal_uInt16 nRegionItemId, const OUString &rName);
+
 private:
 
     virtual void OnItemDblClicked (ThumbnailViewItem *pRegionItem);

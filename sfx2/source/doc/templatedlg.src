@@ -236,6 +236,12 @@ ModelessDialog DLG_TEMPLATE_MANAGER
 
             ToolBoxItem
             {
+                Identifier = TBI_TEMPLATE_EXPORT;
+                Text [ en-US ] = "Export";
+            };
+
+            ToolBoxItem
+            {
                 Identifier = TBI_TEMPLATE_DELETE;
                 Text [ en-US ] = "Delete";
             };
